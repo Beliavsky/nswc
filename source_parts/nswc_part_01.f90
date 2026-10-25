@@ -3,13 +3,13 @@ implicit none
 integer, intent(in) :: i
 !-----------------------------------------------------------------------
 !
-!     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
-!     THAT IS USED. IT IS ASSUMED THAT THE ARGUMENT I IS AN INTEGER
-!     HAVING ONE OF THE VALUES 1-10. IPMPAR(I) HAS THE VALUE ...
+!     IPMPAR provides the integer machine constants for the computer
+!     that is used. It is assumed that the argument I is an integer
+!     having one of the values 1-10. IPMPAR(I) has the value ...
 !
-!  INTEGERS.
+!  Integers.
 !
-!     ASSUME INTEGERS ARE REPRESENTED IN THE N-DIGIT, BASE-A FORM
+!     Assume integers are represented in the N-digit, base-A form
 !
 !               SIGN ( X(N-1)*A**(N-1) + ... + X(1)*A + X(0) )
 !
@@ -21,11 +21,11 @@ integer, intent(in) :: i
 !
 !     IPMPAR(3) = A**N - 1, THE LARGEST MAGNITUDE.
 !
-!  FLOATING-POINT NUMBERS.
+!  Floating-point numbers.
 !
-!     IT IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION FLOATING
-!     POINT ARITHMETICS HAVE THE SAME BASE, SAY B, AND THAT THE
-!     NONZERO NUMBERS ARE REPRESENTED IN THE FORM
+!     It is assumed that the single and double precision floating
+!     point arithmetics have the same base, say B, and that the
+!     nonzero numbers are represented in the form
 !
 !               SIGN (B**E) * (X(1)/B + ... + X(M)/B**M)
 !
@@ -34,7 +34,7 @@ integer, intent(in) :: i
 !
 !     IPMPAR(4) = B, THE BASE.
 !
-!  SINGLE-PRECISION
+!  Single-precision
 !
 !     IPMPAR(5) = M, THE NUMBER OF BASE-B DIGITS.
 !
@@ -42,7 +42,7 @@ integer, intent(in) :: i
 !
 !     IPMPAR(7) = EMAX, THE LARGEST EXPONENT E.
 !
-!  DOUBLE-PRECISION
+!  Double-precision
 !
 !     IPMPAR(8) = M, THE NUMBER OF BASE-B DIGITS.
 !
@@ -52,18 +52,18 @@ integer, intent(in) :: i
 !
 !-----------------------------------------------------------------------
 !
-!     TO DEFINE THIS FUNCTION FOR THE COMPUTER BEING USED, ACTIVATE
-!     THE DATA STATMENTS FOR THE COMPUTER BY REMOVING THE C FROM
-!     COLUMN 1. (ALL THE OTHER DATA STATEMENTS SHOULD HAVE C IN
-!     COLUMN 1.)
+!     To define this function for the computer being used, activate
+!     the data statments for the computer by removing the C from
+!     column 1. (All the other data statements should have C in
+!     column 1.)
 !
-!     IF DATA STATEMENTS ARE NOT GIVEN FOR THE COMPUTER BEING USED,
-!     THEN THE FORTRAN MANUAL FOR THE COMPUTER NORMALLY GIVES THE
-!     CONSTANTS IPMPAR(1), IPMPAR(2), AND IPMPAR(3) FOR THE INTEGER
-!     ARITHMETIC. HOWEVER, HELP MAY BE NEEDED TO OBTAIN THE CONSTANTS
-!     IPMPAR(4),...,IPMPAR(10) FOR THE SINGLE AND DOUBLE PRECISION
-!     ARITHMETICS. THE SUBROUTINES MACH AND RADIX ARE PROVIDED FOR
-!     THIS PURPOSE.
+!     If data statements are not given for the computer being used,
+!     then the Fortran manual for the computer normally gives the
+!     constants IPMPAR(1), IPMPAR(2), and IPMPAR(3) for the integer
+!     arithmetic. However, help may be needed to obtain the constants
+!     IPMPAR(4),...,IPMPAR(10) for the single and double precision
+!     arithmetics. The subroutines MACH and radix are provided for
+!     this purpose.
 !
 !-----------------------------------------------------------------------
 !
@@ -75,7 +75,7 @@ integer, intent(in) :: i
 !-----------------------------------------------------------------------
 integer :: imach(10)
 !
-!     MACHINE CONSTANTS FOR THE ALLIANT FX/8.
+!     Machine constants for the Alliant FX/8.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -88,7 +88,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE AMDAHL MACHINES.
+!     Machine constants for the Amdahl machines.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   31 /
@@ -101,8 +101,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) /  -64 /
 !     DATA IMACH(10) /   63 /
 !
-!     MACHINE CONSTANTS FOR THE AT&T 3B SERIES, AT&T
-!     PC 7300, AND AT&T 6300.
+!     Machine constants for the AT&T 3B series, AT&T
+!     PC 7300, and AT&T 6300.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -115,7 +115,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE BURROUGHS 1700 SYSTEM.
+!     Machine constants for the Burroughs 1700 system.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   33 /
@@ -128,7 +128,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -256 /
 !     DATA IMACH(10) /  255 /
 !
-!     MACHINE CONSTANTS FOR THE BURROUGHS 5700 SYSTEM.
+!     Machine constants for the Burroughs 5700 system.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   39 /
@@ -141,7 +141,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) /  -50 /
 !     DATA IMACH(10) /   76 /
 !
-!     MACHINE CONSTANTS FOR THE BURROUGHS 6700/7700 SYSTEMS.
+!     Machine constants for the Burroughs 6700/7700 systems.
 !
 !     DATA IMACH( 1) /      2 /
 !     DATA IMACH( 2) /     39 /
@@ -154,9 +154,9 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -32754 /
 !     DATA IMACH(10) /  32780 /
 !
-!     MACHINE CONSTANTS FOR THE CDC 6000/7000 SERIES
-!     COMPUTERS, AND THE CDC CYBER 990 AND 995 (NOS
-!     OPERATING SYSTEM).
+!     Machine constants for the CDC 6000/7000 series
+!     computers, and the CDC Cyber 990 and 995 (nos
+!     operating system).
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   48 /
@@ -169,8 +169,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -926 /
 !     DATA IMACH(10) / 1070 /
 !
-!     MACHINE CONSTANTS FOR THE CDC CYBER 990 AND 995
-!     (NOS/VE OPERATING SYSTEM).
+!     Machine constants for the CDC Cyber 990 and 995
+!     (nos/VE operating system).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    63 /
@@ -183,8 +183,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -4096 /
 !     DATA IMACH(10) /  4095 /
 !
-!     MACHINE CONSTANTS FOR THE CONVEX COMPUTERS
-!     (NATIVE MODE).
+!     Machine constants for the Convex computers
+!     (native mode).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -197,8 +197,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -1023 /
 !     DATA IMACH(10) /  1023 /
 !
-!     MACHINE CONSTANTS FOR THE CONVEX COMPUTERS
-!     (IEEE MODE).
+!     Machine constants for the Convex computers
+!     (IEEE mode).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -211,8 +211,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE CRAY 2, X-MP, AND Y-MP
-!     (CFT77 COMPILER USING THE 64 BIT INTEGER ARITHMETIC).
+!     Machine constants for the Cray 2, X-MP, and Y-MP
+!     (CFT77 compiler using the 64 bit integer arithmetic).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    63 /
@@ -225,8 +225,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -8188 /
 !     DATA IMACH(10) /  8189 /
 !
-!     MACHINE CONSTANTS FOR THE CRAY 2, X-MP, AND Y-MP
-!     (CFT77 COMPILER USING THE 46 BIT INTEGER ARITHMETIC).
+!     Machine constants for the Cray 2, X-MP, and Y-MP
+!     (CFT77 compiler using the 46 bit integer arithmetic).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    46 /
@@ -239,7 +239,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -8188 /
 !     DATA IMACH(10) /  8189 /
 !
-!     MACHINE CONSTANTS FOR THE DATA GENERAL ECLIPSE S/200.
+!     Machine constants for the Data General Eclipse S/200.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   15 /
@@ -252,7 +252,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) /  -64 /
 !     DATA IMACH(10) /   63 /
 !
-!     MACHINE CONSTANTS FOR THE HARRIS 220.
+!     Machine constants for the Harris 220.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   23 /
@@ -265,8 +265,8 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -127 /
 !     DATA IMACH(10) /  127 /
 !
-!     MACHINE CONSTANTS FOR THE HONEYWELL 600/6000
-!     AND DPS 8/70 SERIES.
+!     Machine constants for the Honeywell 600/6000
+!     and dps 8/70 series.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   35 /
@@ -279,7 +279,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -127 /
 !     DATA IMACH(10) /  127 /
 !
-!     MACHINE CONSTANTS FOR THE HP 9000.
+!     Machine constants for the HP 9000.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -292,9 +292,9 @@ integer :: imach(10)
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE IBM 360/370 SERIES,
-!     THE IBM 3033, THE ICL 2900, THE ITEL AS/6, THE
-!     XEROX SIGMA 5/7/9, AND THE SEL SYSTEMS 85/86.
+!     Machine constants for the IBM 360/370 series,
+!     the IBM 3033, the ICL 2900, the ITEL as/6, the
+!     xerox sigma 5/7/9, and the SEL systems 85/86.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   31 /
@@ -307,7 +307,7 @@ integer :: imach(10)
 !     DATA IMACH( 9) /  -64 /
 !     DATA IMACH(10) /   63 /
 !
-!     MACHINE CONSTANTS FOR THE IBM PC.
+!     Machine constants for the IBM PC.
 !
 data imach( 1) /     2 /
 data imach( 2) /    31 /
@@ -320,7 +320,7 @@ data imach( 8) /    53 /
 data imach( 9) / -1021 /
 data imach(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE MACINTOSH II - ABSOFT
+!     Machine constants for the Macintosh II - Absoft
 !     MACFORTRAN II.
 !
 !     DATA IMACH( 1) /     2 /
@@ -334,8 +334,8 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE PDP-11 FORTRAN SUPPORTING
-!     32-BIT INTEGER ARITHMETIC.
+!     Machine constants for the PDP-11 Fortran supporting
+!     32-bit integer arithmetic.
 !
 !     DATA IMACH( 1) /    2 /
 !     DATA IMACH( 2) /   31 /
@@ -348,7 +348,7 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -127 /
 !     DATA IMACH(10) /  127 /
 !
-!     MACHINE CONSTANTS FOR THE SEQUENT BALANCE 8000.
+!     Machine constants for the Sequent Balance 8000.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -361,8 +361,8 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE SILICON GRAPHICS IRIS-4D
-!     SERIES (MIPS R3000 PROCESSOR).
+!     Machine constants for the Silicon Graphics IRIS-4D
+!     series (mips R3000 processor).
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -375,7 +375,7 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE SUN 3.
+!     Machine constants for the Sun 3.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -388,7 +388,7 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -1021 /
 !     DATA IMACH(10) /  1024 /
 !
-!     MACHINE CONSTANTS FOR THE UNIVAC 1100 SERIES.
+!     Machine constants for the Univac 1100 series.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    35 /
@@ -401,8 +401,8 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) / -1024 /
 !     DATA IMACH(10) /  1023 /
 !
-!     MACHINE CONSTANTS FOR THE VAX AND MICROVAX
-!     COMPUTERS - F AND D FLOATING ARITHMETICS.
+!     Machine constants for the VAX and MicroVAX
+!     computers - F and D floating arithmetics.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -415,8 +415,8 @@ data imach(10) /  1024 /
 !     DATA IMACH( 9) /  -127 /
 !     DATA IMACH(10) /   127 /
 !
-!     MACHINE CONSTANTS FOR THE VAX AND MICROVAX
-!     COMPUTERS - F AND G FLOATING ARITHMETICS.
+!     Machine constants for the VAX and MicroVAX
+!     computers - F and G floating arithmetics.
 !
 !     DATA IMACH( 1) /     2 /
 !     DATA IMACH( 2) /    31 /
@@ -446,18 +446,18 @@ double precision, intent(inout) :: dmach(3)
 integer, intent(inout) :: imach(10)
 !-----------------------------------------------------------------------
 !
-!          COMPUTATION OF THE ENVIRONMENTAL CONSTANTS FOR THE
-!        SINGLE AND DOUBLE PRECISION FLOATING POINT ARITHMETICS
+!          Computation of the environmental constants for the
+!        single and double precision floating point arithmetics
 !
 !                           -----------
 !
-!     IT IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION FLOATING
-!     POINT ARITHMETICS HAVE THE SAME BASE, SAY IBETA, AND THAT
-!     THE NONZERO NUMBERS ARE REPRESENTED IN THE FORM
+!     It is assumed that the single and double precision floating
+!     point arithmetics have the same base, say IBETA, and that
+!     the nonzero numbers are represented in the form
 !
 !        SIGN (IBETA**K) * (X(1)/IBETA + ... + X(M)/IBETA ** M)
 !
-!     WHERE EACH X(I) IS AN INTEGER SUCH THAT
+!     Where each X(I) is an integer such that
 !
 !        0 .LE. X(I) .LT. IBETA
 !
@@ -465,177 +465,177 @@ integer, intent(inout) :: imach(10)
 !
 !        MINEXP .LE. K .LE. MAXEXP.
 !
-!     THE VALUES M, MINEXP, AND MAXEXP ARE NEEDED FOR BOTH THE
-!     SINGLE AND DOUBLE PRECISION ARITHMETICS IN ORDER TO DEFINE
-!     THE FUNCTION IPMPAR. THIS SUBROUTINE ATTEMPTS TO HELP THE
-!     USER IN OBTAINING THIS INFORMATION.
+!     The values M, MINEXP, and MAXEXP are needed for both the
+!     single and double precision arithmetics in order to define
+!     the function IPMPAR. This subroutine attempts to help the
+!     user in obtaining this information.
 !
 !-----------------------------------------------------------------------
-!                         INPUT AND OUTPUT
+!                         Input and output
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       MO    - MODE OF OPERATION OF THE ROUTINE.
 !
 !               MO = 0  OUTPUT UNIT N IS NOT USED. THE SINGLE
-!                       AND DOUBLE PRECISION ARITHMETICS ARE
-!                       EXAMINED.
+!                       and double precision arithmetics are
+!                       examined.
 !               MO = 1  IT IS ASSUMED THAT UNIT N IS USED.
-!                       MACH SEARCHES FOR THE MAXIMUM EXPONENT
-!                       MAXEXP FOR THE SINGLE PRECISION ARITH-
-!                       METIC. THE DOUBLE PRECISION ARITHMETIC
-!                       IS NOT EXAMINED.
+!                       Mach searches for the maximum exponent
+!                       MAXEXP for the single precision arith-
+!                       metic. The double precision arithmetic
+!                       is not examined.
 !               MO = 2  IT IS ASSUMED THAT UNIT N IS USED.
-!                       MACH SEARCHES FOR THE MAXIMUM EXPONENT
-!                       MAXEXP FOR THE DOUBLE PRECISION ARITH-
-!                       METIC. THE SINGLE PRECISION ARITHMETIC
-!                       IS NOT EXAMINED.
+!                       Mach searches for the maximum exponent
+!                       MAXEXP for the double precision arith-
+!                       metic. The single precision arithmetic
+!                       is not examined.
 !
 !       N     - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
-!               OUTPUT UNIT, WHERE ANY INFORMATION WRITTEN ON
-!               THE UNIT WILL BE AVAILABLE TO THE USER IF MACH
+!               output unit, where any information written on
+!               the unit will be available to the user if mach
 !               TERMINATES BECAUSE OF OVERFLOW. IF N .LE. 0
-!               THEN NO SUCH OUTPUT UNIT IS TO BE USED. (IF NO
+!               then no such output unit is to be used. (If no
 !               SUCH OUTPUT UNIT IS USED THEN SET MO = 0.)
 !
-!       IBETA - THE BASE OF THE FLOATING POINT ARITHMETICS. (IT
-!               IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION
-!               ARITHMETICS HAVE THE SAME BASE.) IF THIS VALUE
-!               IS NOT KNOWN THEN
+!       IBETA - the base of the floating point arithmetics. (It
+!               is assumed that the single and double precision
+!               arithmetics have the same base.) If this value
+!               is not known then
 !
 !                           CALL RADIX (IBETA)
 !
-!               WILL (HOPEFULLY) PROVIDE THE CORRECT VALUE. AS
-!               FAR AS IS KNOWN, THE SUBROUTINE RADIX OPERATES
-!               PROPERLY ON ALL COMPUTERS. NEVERTHELESS, THE
-!               VALUE OBTAINED FOR IBETA SHOULD BE CHECKED.
+!               Will (hopefully) provide the correct value. As
+!               far as is known, the subroutine RADIX operates
+!               properly on all computers. Nevertheless, the
+!               value obtained for IBETA should be checked.
 !
-!       IMAX  - IF IMAX IS POSITIVE THEN IMAX IS ASSUMED TO BE
-!               AN APPROXIMATION OF THE MAXIMUM EXPONENT MAXEXP
-!               FOR THE SINGLE PRECISION NUMBERS. OTHERWISE, IF
+!       Imax  - if imax is positive then imax is assumed to be
+!               an approximation of the maximum exponent MAXEXP
+!               for the single precision numbers. Otherwise, if
 !               IMAX .LE. 0, THEN THE ROUTINE DEFINES ITS OWN
-!               INITIAL APPROXIMATION FOR MAXEXP.
+!               initial approximation for MAXEXP.
 !
-!       IDMAX - IF IDMAX IS POSITIVE THEN IDMAX IS ASSUMED TO BE
-!               AN APPROXIMATION OF THE MAXIMUM EXPONENT MAXEXP
-!               FOR THE DOUBLE PRECISION NUMBERS. OTHERWISE, IF
+!       IDMAX - if IDMAX is positive then IDMAX is assumed to be
+!               an approximation of the maximum exponent MAXEXP
+!               for the double precision numbers. Otherwise, if
 !               IDMAX .LE. 0, THEN THE ROUTINE DEFINES ITS OWN
-!               INITIAL APPROXIMATION FOR MAXEXP.
+!               initial approximation for MAXEXP.
 !
 !
 !     OUTPUT (WHEN MO = 0) ...
 !
-!       IMACH - INTEGER ARRAY OF DIMENSION 10 APPEARING IN THE
-!               DEFINITION OF THE FUNCTION IPMPAR.
+!       IMACH - integer array of dimension 10 appearing in the
+!               definition of the function IPMPAR.
 !               IPMPAR(I) = IMACH(I)  I = 4,...,10
 !
-!       RMACH - REAL ARRAY OF DIMENSION 3 GIVING THE FOLLOWING
-!               CONSTANTS FOR THE SINGLE PRECISION ARITHMETIC.
+!       RMACH - real array of dimension 3 giving the following
+!               constants for the single precision arithmetic.
 !               RMACH(1) = B**(1-M), THE MACHINE PRECISION
 !               RMACH(2) = THE SMALLEST POSITIVE NUMBER
 !               RMACH(3) = THE LARGEST POSITIVE NUMBER
 !
-!       DMACH - DOUBLE PRECISION ARRAY OF DIMENSION 3 GIVING THE
-!               FOLLOWING CONSTANTS FOR THE DOUBLE PRECISION
-!               ARITHMETIC.
+!       DMACH - double precision array of dimension 3 giving the
+!               following constants for the double precision
+!               arithmetic.
 !               DMACH(1) = B**(1-M), THE MACHINE PRECISION
 !               DMACH(2) = THE SMALLEST POSITIVE NUMBER
 !               DMACH(3) = THE LARGEST POSITIVE NUMBER
 !
 !-----------------------------------------------------------------------
-!                              USAGE
+!                              Usage
 !-----------------------------------------------------------------------
 !
-!     THE FOLLOWING PROCEDURE IS RECOMMENDED FOR OBTAINING THE
-!     DATA NEEDED FOR DEFINING IPMPAR.
+!     The following procedure is recommended for obtaining the
+!     data needed for defining IPMPAR.
 !
 !
-!     STEP (1). IN THIS STEP WE SEARCH FOR THE MAXIMUM EXPONENT
-!     MAXEXP FOR THE SINGLE PRECISION ARITHMETIC. THE DOUBLE
-!     PRECISION ARITHMETIC IS NOT CONSIDERED. IT IS ASSUMED THAT
-!     AN OUTPUT UNIT N IS BEING USED. GIVEN N AND IBETA. SET
+!     Step (1). In this step we search for the maximum exponent
+!     MAXEXP for the single precision arithmetic. The double
+!     precision arithmetic is not considered. It is assumed that
+!     an output unit N is being used. Given N and IBETA. Set
 !     IMAX = 0 AND COMPUTE ...
 !
 !        CALL MACH (1, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 !
-!     WHEN THIS CODE IS RUN, INFORMATION IS GIVEN ON UNIT N FOR
-!     RESETTING IMAX. IF THE MAXIMUM EXPONENT HAS BEEN FOUND
-!     (IN THIS CASE, THE LAST INTEGER WRITTEN ON UNIT N WILL NOT
-!     BE FOLLOWED BY ANY STATEMENT EXCEPT POSSIBLY AN OVERFLOW
-!     STATEMENT), THEN SET IMAX TO THE LAST INTEGER WRITTEN ON
-!     UNIT N AND GO TO STEP (2). OTHERWISE, IF THE MAXIMUM
-!     EXPONENT HAS NOT BEEN FOUND, THEN RESET IMAX ACCORDING TO
-!     THE INSTRUCTIONS GIVEN ON UNIT N AND RERUN THE CODE. THE
-!     CODE MAY BE RERUN WITH DIFFERENT VALUES OF IMAX UNTIL THE
-!     THE MAXIMUM EXPONENT HAS BEEN FOUND OR A SATISFACTORY
-!     APPROXIMATION FOR THE MAXIMUM EXPONENT HAS BEEN OBTAINED.
-!     THEN SET IMAX TO THE MAXIMUM EXPONENT (OR THE APPROXIMATION)
-!     AND GO TO STEP (2).
+!     When this code is run, information is given on unit N for
+!     resetting imax. If the maximum exponent has been found
+!     (in this case, the last integer written on unit N will not
+!     be followed by any statement except possibly an overflow
+!     statement), then set imax to the last integer written on
+!     unit N and go to step (2). Otherwise, if the maximum
+!     exponent has not been found, then reset imax according to
+!     the instructions given on unit N and rerun the code. The
+!     code may be rerun with different values of imax until the
+!     the maximum exponent has been found or a satisfactory
+!     approximation for the maximum exponent has been obtained.
+!     Then set imax to the maximum exponent (or the approximation)
+!     and go to step (2).
 !
 !
-!     STEP (2). IN THIS STEP WE SEARCH FOR THE MAXIMUM EXPONENT
-!     MAXEXP FOR THE DOUBLE PRECISION ARITHMETIC. THE SINGLE
-!     PRECISION ARITHMETIC IS NOT CONSIDERED. IT IS ASSUMED THAT
-!     AN OUTPUT UNIT N IS BEING USED. GIVEN N AND IBETA. SET
+!     Step (2). In this step we search for the maximum exponent
+!     MAXEXP for the double precision arithmetic. The single
+!     precision arithmetic is not considered. It is assumed that
+!     an output unit N is being used. Given N and IBETA. Set
 !     IDMAX = 0 AND COMPUTE ...
 !
 !        CALL MACH (2, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 !
-!     THE PROCEDURE USED IN THIS STEP FOR FINDING THE MAXIMUM
-!     EXPONENT OR OBTAINING A SUITABLE APPROXIMATION FOR THE
-!     MAXIMUM EXPONENT IS THE SAME AS IN STEP (1), THE ONLY
-!     DIFFERENCE BEING THAT NOW ONE WORKS WITH IDMAX INSTEAD
-!     OF IMAX. WHEN THE MAXIMUM EXPONENT IS FOUND OR A SUITABLE
-!     APPROXIMATION IS OBTAINED, THEN RESET IDMAX TO THE MAXIMUM
-!     EXPONENT (OR THE APPROXIMATION) AND GO TO STEP (3).
+!     The procedure used in this step for finding the maximum
+!     exponent or obtaining a suitable approximation for the
+!     maximum exponent is the same as in step (1), the only
+!     difference being that now one works with IDMAX instead
+!     of imax. When the maximum exponent is found or a suitable
+!     approximation is obtained, then reset IDMAX to the maximum
+!     exponent (or the approximation) and go to step (3).
 !
 !
-!     STEP (3). GIVEN THE VALUES OBTAINED FOR IBETA, IMAX, AND
-!     IDMAX. THEN COMPUTE ...
+!     Step (3). Given the values obtained for IBETA, imax, and
+!     IDMAX. Then compute ...
 !
 !        CALL MACH (0, 0, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 !
-!     WHEN THIS CODE TERMINATES, ALL THE DATA NEEDED FOR DEFINING
-!     IPMPAR(4),...,IPMPAR(10) IS GIVEN IN THE ARRAY IMACH. THE
-!     DATA GIVEN IN THE ARRAYS RMACH AND DMACH ARE PROVIDED SO THAT
-!     THE USER CAN CHECK THE INFORMATION IN IMACH.
+!     When this code terminates, all the data needed for defining
+!     IPMPAR(4),...,IPMPAR(10) is given in the array IMACH. The
+!     data given in the arrays RMACH and DMACH are provided so that
+!     the user can check the information in IMACH.
 !
-!             RMACH(1)  DEPENDS ON IMACH(4) AND IMACH(5)
-!             RMACH(2)  DEPENDS ON IMACH(4) AND IMACH(6)
-!             RMACH(3)  DEPENDS ON IMACH(4) AND IMACH(7)
-!             DMACH(1)  DEPENDS ON IMACH(4) AND IMACH(8)
-!             DMACH(2)  DEPENDS ON IMACH(4) AND IMACH(9)
-!             DMACH(3)  DEPENDS ON IMACH(4) AND IMACH(10)
+!             RMACH(1)  depends on IMACH(4) and IMACH(5)
+!             RMACH(2)  depends on IMACH(4) and IMACH(6)
+!             RMACH(3)  depends on IMACH(4) and IMACH(7)
+!             DMACH(1)  depends on IMACH(4) and IMACH(8)
+!             DMACH(2)  depends on IMACH(4) and IMACH(9)
+!             DMACH(3)  depends on IMACH(4) and IMACH(10)
 !
-!     THE VALUES IN RMACH AND DMACH SHOULD BE CHECKED TO SEE IF
-!     THEY MAKE SENSE. (FOR EXAMPLE, RMACH(2) AND DMACH(2) SHOULD
-!     NEVER BE 0.)
+!     The values in RMACH and DMACH should be checked to see if
+!     they make sense. (For example, RMACH(2) and DMACH(2) should
+!     never be 0.)
 !
 !-----------------------------------------------------------------------
-!                       GENERAL INFORMATION
+!                       General information
 !-----------------------------------------------------------------------
 !
-!     THE VALUES IN IMACH(6) AND IMACH(9) ARE THE MINIMUM EXPONENTS
-!     FOR THE NUMBERS IN THE SINGLE AND DOUBLE PRECISION ARITHMETICS
-!     WHICH HAVE FULL ACCURACY. ON SOME COMPUTERS, ACCURACY IS LOST
-!     IN THE STORAGE OF SOME SMALL NUMBERS. THIS OCCURS IN THE DOUBLE
-!     PRECISION ARITHMETICS OF THE CDC 6000-7000 SERIES COMPUTES. ON
+!     The values in IMACH(6) and IMACH(9) are the minimum exponents
+!     for the numbers in the single and double precision arithmetics
+!     which have full accuracy. On some computers, accuracy is lost
+!     in the storage of some small numbers. This occurs in the double
+!     precision arithmetics of the CDC 6000-7000 series computes. On
 !     THESE MACHINES, THE DOUBLE PRECISION NUMBERS LESS THAT 2**(-927)
-!     NORMALLY HAVE ONLY SINGLE PRECISION ACCURACY. CONSEQUENTLY,
-!     IMACH(9) WILL HAVE THE COMPUTED VALUE -926 INSTEAD OF -974
-!     (WHICH ONE WOULD NORMALLY EXPECT). IN THIS CASE, -926 IS THE
-!     VALUE THAT IS CONSIDERED TO BE CORRECT.
+!     normally have only single precision accuracy. Consequently,
+!     IMACH(9) will have the computed value -926 instead of -974
+!     (which one would normally expect). In this case, -926 is the
+!     value that is considered to be correct.
 !
-!     THIS PACKAGE OF SUBROUTINES INCLUDES MACH, RADIX, MACH1, STORE2,
-!     MACH2, DSTOR2. THE PACKAGE IS EXPERIMENTAL. IT IS PROVIDED AS
-!     AN AID IN DEFINING THE FUNCTION IPMPAR. THE SUBROUTINES IN THE
-!     PACKAGE ARE NOT USED BY ANY OF THE FUNCTIONS OR SUBROUTINES IN
-!     THE NSWC LIBRARY.
+!     This package of subroutines includes mach, radix, MACH1, STORE2,
+!     MACH2, DSTOR2. The package is experimental. It is provided as
+!     an aid in defining the function IPMPAR. The subroutines in the
+!     package are not used by any of the functions or subroutines in
+!     the NSWC library.
 !
-!     THE PURPOSE OF THE SUBROUTINES STORE2 AND DSTOR2 IS TO FORCE
-!     DATA TO BE STORED IN MEMORY. THESE ROUTINES ARE NEEDED WHEN
-!     DATA ARE STORED IN OVERSIZED REGISTERS.
+!     The purpose of the subroutines STORE2 and DSTOR2 is to force
+!     data to be stored in memory. These routines are needed when
+!     data are stored in oversized registers.
 !
 !     THE ALGORITHM FOR THE SUBROUTINE RADIX WAS DEVELOPED BY M.A.
 !     MALCOLM (STANFORD UNIVERSITY). SEE REFERENCES (1) AND (2).
@@ -649,18 +649,18 @@ integer, intent(inout) :: imach(10)
 !
 !-----------------
 !
-!     REVISED ... MARCH 1992
+!     Revised ... march 1992
 !
 !-----------------
 !
 !     REFERENCES ...
 !
-!     (1) MALCOLM, M.A., ALGORITHMS TO REVEAL PROPERTIES OF FLOATING
-!         POINT ARITHMETIC, COMM. ACM (15), 1972, PP. 949-951.
+!     (1) Malcolm, M.A., Algorithms to reveal properties of floating
+!         point arithmetic, comm. ACM (15), 1972, PP. 949-951.
 !
-!     (2) GENTLEMEN, W.M. AND MAROVICH, S.B., MORE ON ALGORITHMS THAT
-!         REVEAL PROPERTIES OF FLOATING POINT ARITHMETIC UNITS,
-!         COMM. ACM (17), 1974, PP. 276-277.
+!     (2) Gentlemen, W.M. And Marovich, S.B., More on algorithms that
+!         reveal properties of floating point arithmetic units,
+!         comm. ACM (17), 1974, PP. 276-277.
 !
 !     (3) CODY, W.J. AND WAITE, W., SOFTWARE MANUAL FOR THE ELEMENTARY
 !         FUNCTIONS, PRENTICE-HALL, 1980, PP. 258-264.
@@ -680,7 +680,7 @@ n0 = n
 if (mo .le. 0) n0 = 0
 if (mo .ge. 2) go to 10
 !-----------------------------------------------------------------------
-!     OBTAIN THE SINGLE PRECISION INFORMATION
+!     Obtain the single precision information
 !-----------------------------------------------------------------------
 maxexp = imax
 call mach1 (n0, ibeta, m, minexp, maxexp, eps, xint, xmin, xmax)
@@ -693,7 +693,7 @@ imach(5) = m
 imach(6) = minexp
 imach(7) = maxexp
 !-----------------------------------------------------------------------
-!     OBTAIN THE DOUBLE PRECISION INFORMATION
+!     Obtain the double precision information
 !-----------------------------------------------------------------------
 10 maxexp = idmax
 call mach2 (n0, ibeta, m, minexp, maxexp, deps, dint, dmin, dmax)
@@ -742,79 +742,79 @@ integer :: j, k, km, l
 real :: eps, xint, xmin, xmax
 !-----------------------------------------------------------------------
 !
-!                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
-!             FOR THE SINGLE PRECISION FLOATING POINT ARITHMETIC
+!                 Computation of the environmental constants
+!             for the single precision floating point arithmetic
 !
 !                            -----------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N       - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
-!                 OUTPUT UNIT. IN THIS CASE IT IS ASSUMED THAT
-!                 ANY INFORMATION THAT IS WRITTEN ON THE UNIT
-!                 WILL BE AVAILABLE TO THE USER IF THE ROUTINE
-!                 TERMINATES BECAUSE OF OVERFLOW. UNIT N IS
-!                 USED ONLY FOR COMPUTING THE EXACT MAXIMUM
-!                 BASE IBETA EXPONENT FOR THE FLOATING POINT
-!                 NUMBERS (THIS EXPONENT IS STORED IN MAXEXP).
-!                 IF THE EXACT MAXIMUM EXPONENT IS NOT NEEDED
-!                 (OR HAS ALREADY BEEN OBTAINED) THEN SET N
-!                 TO 0 OR A NEGATIVE VALUE.
+!                 output unit. In this case it is assumed that
+!                 any information that is written on the unit
+!                 will be available to the user if the routine
+!                 terminates because of overflow. Unit N is
+!                 used only for computing the exact maximum
+!                 base IBETA exponent for the floating point
+!                 numbers (this exponent is stored in MAXEXP).
+!                 If the exact maximum exponent is not needed
+!                 (or has already been obtained) then set N
+!                 to 0 or a negative value.
 !
 !       IBETA   - THE BASE OF THE FLOATING POINT ARITHMETIC.
 !
-!       MAXEXP  - IF MAXEXP IS POSITIVE THEN MAXEXP IS ASSUMED TO
-!                 BE AN APPROXIMATION OF THE MAXIMUM (BASE IBETA)
-!                 EXPONENT FOR THE FLOATING POINT NUMBERS. OTHER-
+!       MAXEXP  - if MAXEXP is positive then MAXEXP is assumed to
+!                 be an approximation of the maximum (base IBETA)
+!                 exponent for the floating point numbers. Other-
 !                 WISE, IF MAXEXP .LE. 0, THEN AN APPROXIMATION
-!                 FOR THE MAXIMUM EXPONENT IS OBTAINED.
+!                 for the maximum exponent is obtained.
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       M       - THE NUMBER OF BASE IBETA DIGITS IN THE FLOATING
-!                 POINT REPRESENTATION.
+!                 point representation.
 !
-!       MINEXP  - THE LARGEST IN MAGNITUDE NEGATIVE INTEGER SUCH
+!       MINEXP  - the largest in magnitude negative integer such
 !                 THAT FLOAT(IBETA)**(MINEXP - 1) IS A POSITIVE
-!                 NUMBER.
+!                 number.
 !
 !       MAXEXP  - IF MAXEXP IS POSITIVE ON INPUT AND N .LE. 0
-!                 THEN MAXEXP IS NOT MODIFIED.
+!                 then MAXEXP is not modified.
 !
 !                 IF MAXEXP .LE. 0 ON INPUT AND N .LE. 0 THEN
 !                 ON OUTPUT MAXEXP = AN APPROXIMATION OF THE
-!                 MAXIMUM (BASE IBETA) EXPONENT FOR THE FLOATING
-!                 POINT NUMBERS.
+!                 maximum (base IBETA) exponent for the floating
+!                 point numbers.
 !
-!                 IF N IS POSITIVE THEN THE ROUTINE SEARCHES FOR
-!                 THE EXACT MAXIMUM EXPONENT FOR THE FLOATING
-!                 POINT NUMBERS. IF MAXEXP IS POSITIVE ON INPUT
-!                 THEN THE SEARCH BEGINS WITH MAXEXP. IF
+!                 If N is positive then the routine searches for
+!                 the exact maximum exponent for the floating
+!                 point numbers. If MAXEXP is positive on input
+!                 then the search begins with MAXEXP. If
 !                 MAXEXP .LE. 0 ON INPUT THEN THE ROUTINE BEGINS
-!                 THE SEARCH WITH ITS OWN INITIAL APPROXIMATION
-!                 FOR MAXEXP. THE FOLLOWING LOOP IS PERFORMED.
-!                     (1) CHECK THE CURRENT VALUE OF MAXEXP
-!                         FOR OVERFLOW. IF OVERFLOW OCCURS
-!                         THEN THE ROUTINE WILL (HOPEFULLY)
-!                         ABORT. OTHERWISE, IF OVERFLOW DOES
-!                         NOT OCCUR THEN GO TO (2).
-!                     (2) WRITE ON UNIT N THE CURRENT VALUE
-!                         OF MAXEXP AND GO TO (3).
-!                     (3) INCREASE THE VALUE OF MAXEXP BY 1
-!                         AND RETURN TO (1).
-!                 IF THE OVERFLOW TEST IN (1) FAILS THEN THE
-!                 ROUTINE ABORTS AFTER 500 PASSES THROUGH THE
-!                 LOOP. IF THE OVERFLOW TEST WORKS PROPERLY
-!                 THEN THE LAST INTEGER WRITTEN ON UNIT N IS
-!                 THE DESIRED MAXIMUM EXPONENT FOR THE FLOAT-
-!                 ING POINT NUMBERS. RESET MAXEXP TO THIS
+!                 the search with its own initial approximation
+!                 for MAXEXP. The following loop is performed.
+!                     (1) Check the current value of MAXEXP
+!                         for overflow. If overflow occurs
+!                         then the routine will (hopefully)
+!                         abort. Otherwise, if overflow does
+!                         not occur then go to (2).
+!                     (2) Write on unit N the current value
+!                         of MAXEXP and go to (3).
+!                     (3) Increase the value of MAXEXP by 1
+!                         and return to (1).
+!                 If the overflow test in (1) fails then the
+!                 routine aborts after 500 passes through the
+!                 loop. If the overflow test works properly
+!                 then the last integer written on unit N is
+!                 the desired maximum exponent for the float-
+!                 ing point numbers. Reset MAXEXP to this
 !                 INTEGER, SET N = 0, AND RERUN THE ROUTINE.
 !
 !       EPS     - THE RELATIVE PRECISION OF THE FLOATING ARITHMETIC.
 !                 EPS = FLOAT(IBETA)**(1 - M)
 !
 !       XINT    - THE LARGEST POSITIVE INTEGER THAT CAN
-!                 BE EXACTLY REPRESENTED AS A FLOATING
+!                 be exactly represented as a floating
 !                 POINT NUMBER. XINT = B**M - 1  WHERE
 !                 B = FLOAT(IBETA).
 !
@@ -822,14 +822,14 @@ real :: eps, xint, xmin, xmax
 !                 XMIN = FLOAT(IBETA)**(MINEXP - 1)
 !
 !       XMAX    - THE LARGEST FOATING POINT NUMBER THAT CAN
-!                 BE OBTAINED HAVING THE EXPONENT MAXEXP.
+!                 be obtained having the exponent MAXEXP.
 !                 XMAX = (1 - B**(-M)) * B**MAXEXP  WHERE
 !                 B = FLOAT(IBETA). IF MAXEXP IS THE MAXIMUM
-!                 EXPONENT FOR THE FLOATING POINT NUMBERS
-!                 THEN XMAX IS THE LARGEST FLOATING POINT
-!                 NUMBER THAT EXISTS. THE VALUE OBTAINED
-!                 FOR XMAX MAY BE AFFECTED SLIGHTLY BY
-!                 ROUNDOFF ERROR.
+!                 exponent for the floating point numbers
+!                 then xmax is the largest floating point
+!                 number that exists. The value obtained
+!                 for xmax may be affected slightly by
+!                 roundoff error.
 !
 !-----------------------------------------------------------------------
 real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
@@ -843,7 +843,7 @@ b2 = b*b
 bm1 = float(ibeta - 1)
 binv = one/b
 !-----------------------------------------------------------------------
-!     COMPUTE M AND EPS
+!     Compute M and eps
 !-----------------------------------------------------------------------
 m = 1
 t = b
@@ -864,12 +864,12 @@ if (xmax .lt. one) go to 20
    xmax = xint/t
 20 eps = one/z
 !-----------------------------------------------------------------------
-!     COMPUTE MINEXP AND XMIN
+!     Compute MINEXP and xmin
 !-----------------------------------------------------------------------
 p = one + eps
 q = one + eps*b2
 !
-!     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
+!     MINEXP must be found. This loop obtains the largest
 !     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 !
 k = 1
@@ -887,7 +887,7 @@ z = binv
 40 km = k + k
 j = 0
 !
-!     LOOP TO DETERMINE MINEXP AND XMIN.
+!     Loop to determine MINEXP and xmin.
 !
 50 xmin = x
    x = (x*binv)*one
@@ -899,9 +899,9 @@ j = 0
    k = k + 1
    go to 50
 !
-!     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
+!     If there is loss of accuracy not due to underflow
 !     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
-!     THIS LOSS OF ACCURACY.
+!     this loss of accuracy.
 !
 80 call store2 (x, q*x)
 if (t*d2 .ne. t*x) go to 90
@@ -914,7 +914,7 @@ if (t*d2 .ne. t*x) go to 90
 !
 90 minexp = 1 - k
 !-----------------------------------------------------------------------
-!     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMAX
+!     Define an initial approximation for MAXEXP and xmax
 !     WHEN MAXEXP .LE. 0 ON INPUT
 !-----------------------------------------------------------------------
 if (maxexp .gt. 0) go to 101
@@ -934,13 +934,13 @@ maxexp = km - k - 3
 t = b**(maxexp - 2)
 xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
-!     CHECK THE APPROXIMATION FOR MAXEXP
+!     Check the approximation for MAXEXP
 !-----------------------------------------------------------------------
 110 call store2 (t, t*p)
 if (d1 .eq.d2) go to 150
 if (n .le. 0) return
 !-----------------------------------------------------------------------
-!     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
+!     Loop to find the exact largest value for MAXEXP
 !-----------------------------------------------------------------------
 write (n,210) maxexp
 do l = 1,500
@@ -954,12 +954,12 @@ end do
 write (n,240)
 stop
 !-----------------------------------------------------------------------
-!     REPORTING OVERFLOW ON UNIT N
+!     Reporting overflow on unit N
 !-----------------------------------------------------------------------
 150 if (n .gt. 0) write (n,230)
 stop
 !-----------------------------------------------------------------------
-!     FORMAT STATEMENTS
+!     Format statements
 !-----------------------------------------------------------------------
 200 format (' THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS'// &
 &i25// &
@@ -983,7 +983,7 @@ implicit none
 real :: a, b
 real :: d1, d2
 !-----------------------------------------------------------------------
-!     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
+!     Storage of single precision information into memory
 !-----------------------------------------------------------------------
 common /spdata/ d1, d2
 d1 = a
@@ -999,79 +999,79 @@ integer :: j, k, km, l
 double precision :: eps, xint, xmin, xmax
 !-----------------------------------------------------------------------
 !
-!                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
-!             FOR THE DOUBLE PRECISION FLOATING POINT ARITHMETIC
+!                 Computation of the environmental constants
+!             for the double precision floating point arithmetic
 !
 !                            -----------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N       - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
-!                 OUTPUT UNIT. IN THIS CASE IT IS ASSUMED THAT
-!                 ANY INFORMATION THAT IS WRITTEN ON THE UNIT
-!                 WILL BE AVAILABLE TO THE USER IF THE ROUTINE
-!                 TERMINATES BECAUSE OF OVERFLOW. UNIT N IS
-!                 USED ONLY FOR COMPUTING THE EXACT MAXIMUM
-!                 BASE IBETA EXPONENT FOR THE FLOATING POINT
-!                 NUMBERS (THIS EXPONENT IS STORED IN MAXEXP).
-!                 IF THE EXACT MAXIMUM EXPONENT IS NOT NEEDED
-!                 (OR HAS ALREADY BEEN OBTAINED) THEN SET N
-!                 TO 0 OR A NEGATIVE VALUE.
+!                 output unit. In this case it is assumed that
+!                 any information that is written on the unit
+!                 will be available to the user if the routine
+!                 terminates because of overflow. Unit N is
+!                 used only for computing the exact maximum
+!                 base IBETA exponent for the floating point
+!                 numbers (this exponent is stored in MAXEXP).
+!                 If the exact maximum exponent is not needed
+!                 (or has already been obtained) then set N
+!                 to 0 or a negative value.
 !
 !       IBETA   - THE BASE OF THE FLOATING POINT ARITHMETIC.
 !
-!       MAXEXP  - IF MAXEXP IS POSITIVE THEN MAXEXP IS ASSUMED TO
-!                 BE AN APPROXIMATION OF THE MAXIMUM (BASE IBETA)
-!                 EXPONENT FOR THE FLOATING POINT NUMBERS. OTHER-
+!       MAXEXP  - if MAXEXP is positive then MAXEXP is assumed to
+!                 be an approximation of the maximum (base IBETA)
+!                 exponent for the floating point numbers. Other-
 !                 WISE, IF MAXEXP .LE. 0, THEN AN APPROXIMATION
-!                 FOR THE MAXIMUM EXPONENT IS OBTAINED.
+!                 for the maximum exponent is obtained.
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       M       - THE NUMBER OF BASE IBETA DIGITS IN THE FLOATING
-!                 POINT REPRESENTATION.
+!                 point representation.
 !
 !       MINEXP  - LET B = DBLE(FLOAT(IBETA)). THEN MINEXP IS THE
-!                 LARGEST IN MAGNITUDE NEGATIVE INTEGER SUCH THAT
+!                 largest in magnitude negative integer such that
 !                 B**(MINEXP - 1) IS A POSITIVE NUMBER.
 !
 !       MAXEXP  - IF MAXEXP IS POSITIVE ON INPUT AND N .LE. 0
-!                 THEN MAXEXP IS NOT MODIFIED.
+!                 then MAXEXP is not modified.
 !
 !                 IF MAXEXP .LE. 0 ON INPUT AND N .LE. 0 THEN
 !                 ON OUTPUT MAXEXP = AN APPROXIMATION OF THE
-!                 MAXIMUM (BASE IBETA) EXPONENT FOR THE FLOATING
-!                 POINT NUMBERS.
+!                 maximum (base IBETA) exponent for the floating
+!                 point numbers.
 !
-!                 IF N IS POSITIVE THEN THE ROUTINE SEARCHES FOR
-!                 THE EXACT MAXIMUM EXPONENT FOR THE FLOATING
-!                 POINT NUMBERS. IF MAXEXP IS POSITIVE ON INPUT
-!                 THEN THE SEARCH BEGINS WITH MAXEXP. IF
+!                 If N is positive then the routine searches for
+!                 the exact maximum exponent for the floating
+!                 point numbers. If MAXEXP is positive on input
+!                 then the search begins with MAXEXP. If
 !                 MAXEXP .LE. 0 ON INPUT THEN THE ROUTINE BEGINS
-!                 THE SEARCH WITH ITS OWN INITIAL APPROXIMATION
-!                 FOR MAXEXP. THE FOLLOWING LOOP IS PERFORMED.
-!                     (1) CHECK THE CURRENT VALUE OF MAXEXP
-!                         FOR OVERFLOW. IF OVERFLOW OCCURS
-!                         THEN THE ROUTINE WILL (HOPEFULLY)
-!                         ABORT. OTHERWISE, IF OVERFLOW DOES
-!                         NOT OCCUR THEN GO TO (2).
-!                     (2) WRITE ON UNIT N THE CURRENT VALUE
-!                         OF MAXEXP AND GO TO (3).
-!                     (3) INCREASE THE VALUE OF MAXEXP BY 1
-!                         AND RETURN TO (1).
-!                 IF THE OVERFLOW TEST IN (1) FAILS THEN THE
-!                 ROUTINE ABORTS AFTER 500 PASSES THROUGH THE
-!                 LOOP. IF THE OVERFLOW TEST WORKS PROPERLY
-!                 THEN THE LAST INTEGER WRITTEN ON UNIT N IS
-!                 THE DESIRED MAXIMUM EXPONENT FOR THE FLOAT-
-!                 ING POINT NUMBERS. RESET MAXEXP TO THIS
+!                 the search with its own initial approximation
+!                 for MAXEXP. The following loop is performed.
+!                     (1) Check the current value of MAXEXP
+!                         for overflow. If overflow occurs
+!                         then the routine will (hopefully)
+!                         abort. Otherwise, if overflow does
+!                         not occur then go to (2).
+!                     (2) Write on unit N the current value
+!                         of MAXEXP and go to (3).
+!                     (3) Increase the value of MAXEXP by 1
+!                         and return to (1).
+!                 If the overflow test in (1) fails then the
+!                 routine aborts after 500 passes through the
+!                 loop. If the overflow test works properly
+!                 then the last integer written on unit N is
+!                 the desired maximum exponent for the float-
+!                 ing point numbers. Reset MAXEXP to this
 !                 INTEGER, SET N = 0, AND RERUN THE ROUTINE.
 !
 !       EPS     - THE RELATIVE PRECISION OF THE FLOATING ARITHMETIC.
 !                 EPS = B**(1 - M) WHERE B = DBLE(FLOAT(IBETA)).
 !
 !       XINT    - THE LARGEST POSITIVE INTEGER THAT CAN
-!                 BE EXACTLY REPRESENTED AS A FLOATING
+!                 be exactly represented as a floating
 !                 POINT NUMBER. XINT = B**M - 1  WHERE
 !                 B = DBLE(FLOAT(IBETA)).
 !
@@ -1079,14 +1079,14 @@ double precision :: eps, xint, xmin, xmax
 !                 XMIN = B**(MINEXP-1) WHERE B=DBLE(FLOAT(IBETA)).
 !
 !       XMAX    - THE LARGEST FOATING POINT NUMBER THAT CAN
-!                 BE OBTAINED HAVING THE EXPONENT MAXEXP.
+!                 be obtained having the exponent MAXEXP.
 !                 XMAX = (1 - B**(-M)) * B**MAXEXP  WHERE
 !                 B = DBLE(FLOAT(IBETA)). IF MAXEXP IS THE
-!                 MAXIMUM EXPONENT FOR THE FLOATING POINT
-!                 NUMBERS THEN XMAX IS THE LARGEST FLOATING
-!                 POINT NUMBER THAT EXISTS. THE VALUE
-!                 OBTAINED FOR XMAX MAY BE AFFECTED SLIGHTLY
-!                 BY ROUNDOFF ERROR.
+!                 maximum exponent for the floating point
+!                 numbers then xmax is the largest floating
+!                 point number that exists. The value
+!                 obtained for xmax may be affected slightly
+!                 by roundoff error.
 !
 !-----------------------------------------------------------------------
 double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
@@ -1101,7 +1101,7 @@ b2 = b*b
 bm1 = dble(float(ibeta - 1))
 binv = one/b
 !-----------------------------------------------------------------------
-!     COMPUTE M AND EPS
+!     Compute M and eps
 !-----------------------------------------------------------------------
 m = 1
 t = b
@@ -1122,12 +1122,12 @@ if (xmax .lt. one) go to 20
    xmax = xint/t
 20 eps = one/z
 !-----------------------------------------------------------------------
-!     COMPUTE MINEXP AND XMIN
+!     Compute MINEXP and xmin
 !-----------------------------------------------------------------------
 p = one + eps
 q = one + eps*b2
 !
-!     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
+!     MINEXP must be found. This loop obtains the largest
 !     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 !
 k = 1
@@ -1145,7 +1145,7 @@ z = binv
 40 km = k + k
 j = 0
 !
-!     LOOP TO DETERMINE MINEXP AND XMIN
+!     Loop to determine MINEXP and xmin
 !
 50 xmin = x
    x = (x*binv)*one
@@ -1157,9 +1157,9 @@ j = 0
    k = k + 1
    go to 50
 !
-!     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
+!     If there is loss of accuracy not due to underflow
 !     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
-!     THIS LOSS OF ACCURACY.
+!     this loss of accuracy.
 !
 80 call dstor2 (x, q*x)
 if (t*d2 .ne. t*x) go to 90
@@ -1172,7 +1172,7 @@ if (t*d2 .ne. t*x) go to 90
 !
 90 minexp = 1 - k
 !-----------------------------------------------------------------------
-!     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMIN
+!     Define an initial approximation for MAXEXP and xmin
 !     WHEN MAXEXP .LE. 0 ON INPUT
 !-----------------------------------------------------------------------
 if (maxexp .gt. 0) go to 101
@@ -1192,13 +1192,13 @@ maxexp = km - k - 3
 t = b**(maxexp - 2)
 xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
-!     CHECK THE APPROXIMATION FOR MAXEXP
+!     Check the approximation for MAXEXP
 !-----------------------------------------------------------------------
 110 call dstor2 (t, t*p)
 if (d1 .eq.d2) go to 150
 if (n .le. 0) return
 !-----------------------------------------------------------------------
-!     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
+!     Loop to find the exact largest value for MAXEXP
 !-----------------------------------------------------------------------
 write (n,210) maxexp
 do l = 1,500
@@ -1212,12 +1212,12 @@ end do
 write (n,240)
 stop
 !-----------------------------------------------------------------------
-!     REPORTING OVERFLOW ON UNIT N
+!     Reporting overflow on unit N
 !-----------------------------------------------------------------------
 150 if (n .gt. 0) write (n,230)
 stop
 !-----------------------------------------------------------------------
-!     FORMAT STATEMENTS
+!     Format statements
 !-----------------------------------------------------------------------
 200 format (' THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS'// &
 &i25// &
@@ -1239,7 +1239,7 @@ end subroutine mach2
 subroutine dstor2 (a, b)
 implicit none
 !-----------------------------------------------------------------------
-!     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
+!     Storage of double precision information into memory
 !-----------------------------------------------------------------------
 double precision :: a, b, d1, d2
 common /dpdata/ d1, d2
@@ -1256,11 +1256,11 @@ real :: b, binv, bm1, one, w, z
 integer :: ipmpar
 !-----------------------------------------------------------------------
 !
-!     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
-!     THE COMPUTER BEING USED. IT IS ASSUMED THAT THE ARGUMENT
-!     I IS AN INTEGER HAVING ONE OF THE VALUES 1, 2, OR 3. IF THE
-!     SINGLE PRECISION ARITHMETIC BEING USED HAS M BASE B DIGITS AND
-!     ITS SMALLEST AND LARGEST EXPONENTS ARE EMIN AND EMAX, THEN
+!     SPMPAR provides the single precision machine constants for
+!     the computer being used. It is assumed that the argument
+!     I is an integer having one of the values 1, 2, or 3. If the
+!     single precision arithmetic being used has M base B digits and
+!     its smallest and largest exponents are EMIN and EMAX, then
 !
 !        SPMPAR(1) = B**(1 - M), THE MACHINE PRECISION,
 !
@@ -1313,11 +1313,11 @@ integer :: ibeta, m
 integer :: ipmpar
 !-----------------------------------------------------------------------
 !
-!     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
-!     THE COMPUTER BEING USED. IT IS ASSUMED THAT THE ARGUMENT
-!     I IS AN INTEGER HAVING ONE OF THE VALUES 1, 2, OR 3. IF THE
-!     DOUBLE PRECISION ARITHMETIC BEING USED HAS M BASE B DIGITS AND
-!     ITS SMALLEST AND LARGEST EXPONENTS ARE EMIN AND EMAX, THEN
+!     DPMPAR provides the double precision machine constants for
+!     the computer being used. It is assumed that the argument
+!     I is an integer having one of the values 1, 2, or 3. If the
+!     double precision arithmetic being used has M base B digits and
+!     its smallest and largest exponents are EMIN and EMAX, then
 !
 !        DPMPAR(1) = B**(1 - M), THE MACHINE PRECISION,
 !
@@ -1370,7 +1370,7 @@ integer, intent(in) :: l
 integer :: m
 integer :: ipmpar
 !--------------------------------------------------------------------
-!     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
+!     The evaluation of LN(EPS) where eps is the smallest number
 !     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
 integer :: b
@@ -1398,7 +1398,7 @@ implicit none
 integer, intent(in) :: l
 integer :: ipmpar
 !--------------------------------------------------------------------
-!     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
+!     The evaluation of LN(EPS) where eps is the smallest number
 !     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
 integer :: b
@@ -1429,12 +1429,12 @@ integer :: m
 integer :: ipmpar
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
-!     EXP(W) CAN BE COMPUTED.
+!     EXP(W) can be computed.
 !
 !     IF L IS NONZERO THEN  EXPARG(L) = THE LARGEST NEGATIVE W FOR
-!     WHICH THE COMPUTED VALUE OF EXP(W) IS NONZERO.
+!     which the computed value of EXP(W) is nonzero.
 !
-!     NOTE... ONLY AN APPROXIMATE VALUE FOR EXPARG(L) IS NEEDED.
+!     Note... only an approximate value for EXPARG(L) is needed.
 !--------------------------------------------------------------------
 integer :: b
 real :: lnb
@@ -1467,12 +1467,12 @@ integer :: m
 integer :: ipmpar
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
-!     DEXP(W) CAN BE COMPUTED.
+!     DEXP(W) can be computed.
 !
 !     IF L IS NONZERO THEN  DXPARG(L) = THE LARGEST NEGATIVE W FOR
-!     WHICH THE COMPUTED VALUE OF DEXP(W) IS NONZERO.
+!     which the computed value of DEXP(W) is nonzero.
 !
-!     NOTE... ONLY AN APPROXIMATE VALUE FOR DXPARG(L) IS NEEDED.
+!     Note... only an approximate value for DXPARG(L) is needed.
 !--------------------------------------------------------------------
 integer :: b
 double precision :: db, lnb
@@ -1504,7 +1504,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
 integer, intent(inout) :: a(n)
@@ -1523,13 +1523,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1554,7 +1554,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(n)
@@ -1573,13 +1573,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1604,7 +1604,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
@@ -1624,13 +1624,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1659,7 +1659,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(n)
@@ -1678,13 +1678,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1709,7 +1709,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
@@ -1731,13 +1731,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1766,7 +1766,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
@@ -1786,13 +1786,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1820,7 +1820,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(n)
@@ -1840,13 +1840,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1870,7 +1870,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
@@ -1893,13 +1893,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1927,7 +1927,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
-!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     The shell sorting procedure is used to reorder the elements of A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
@@ -1948,13 +1948,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    jmax = n - ki
@@ -1983,7 +1983,7 @@ integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 !-----------------------------------------------------------------------
-!     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
+!     The AORD sorting procedure is used to reorder the elements of
 !     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
 !     ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
@@ -2003,13 +2003,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !                 SO THAT ABS(A(J)) .LE. ABS(A(J+KI))
 !
    jmax = n - ki
@@ -2033,7 +2033,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
-!     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
+!     DAORD is used to reorder the elements of the double precision
 !     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
 !     IT IS ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
@@ -2054,13 +2054,13 @@ do 10 i = 3,10
    imax = imax + 1
 10 continue
 !
-!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!            Stepping through the increments K(IMAX),...,K(1)
 !
 20 i = imax
 do 40 ii = 1,imax
    ki = k(i)
 !
-!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!             Sorting elements that are KI positions apart
 !               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
 !
    jmax = n - ki
@@ -2086,45 +2086,45 @@ integer, intent(inout) :: ind(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
-! SORT AN INTEGER ARRAY X INTO INCREASING ORDER.  THE ALGOR-
-! ITHM IS AS FOLLOWS.  IND IS INITIALIZED TO THE ORDERED
-! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
-! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
-! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
-! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
-! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
-! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
-! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
-! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
-! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
-! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
-! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
-! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
-! UNSORTED PORTION.
+!   This subroutine uses an order N*LOG(N) quick sort to
+! sort an integer array X into increasing order.  The algor-
+! ithm is as follows.  Ind is initialized to the ordered
+! sequence of indices 1,...,N, and all interchanges are
+! applied to ind.  X is divided into two portions by picking
+! a central element T.  The first and last elements are com-
+! pared with T, and interchanges are applied as necessary so
+! that the three values are in ascending order.  Inter-
+! changes are then applied so that all elements greater than
+! T are in the upper portion of the array and all elements
+! less than T are in the lower portion.  The upper and lower
+! indices of one of the portions are saved in local arrays,
+! and the process is repeated iteratively on the other
+! portion.  When a portion is completely sorted, the process
+! begins again by retrieving the indices bounding another
+! unsorted portion.
 !
 ! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
 !
-!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!                      X - vector of length N to be sorted.
 !
 !                    IND - VECTOR OF LENGTH .GE. N.
 !
-! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+! N and X are not altered by this routine.
 !
-! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
-!                          PERMUTED IN THE SAME FASHION AS X
-!                          WOULD BE.  THUS, THE ORDERING ON
+! Output parameter - ind - sequence of indices 1,...,N
+!                          permuted in the same fashion as X
+!                          would be.  Thus, the ordering on
 !                          X IS DEFINED BY Y(I) = X(IND(I)).
 !
-! INTRINSIC FUNCTIONS CALLED BY QSORTI - IFIX, FLOAT
+! Intrinsic functions called by QSORTI - ifix, float
 !
 !***********************************************************
 !
 ! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
-!         LOG HAS BASE 2.
+!         log has base 2.
 !
 !***********************************************************
 !
@@ -2132,10 +2132,10 @@ integer :: iu(21), il(21)
 integer :: m, i, j, k, l, ij, it, itt, indx, t
 real :: r
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
-!            INDICES OF PORTIONS OF THE ARRAY X
+!            indices of portions of the array X
 ! M =      INDEX FOR IU AND IL
 ! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
 ! K,L =    INDICES IN THE RANGE I,...,J
@@ -2147,7 +2147,7 @@ real :: r
 !
 if (n .le. 0) return
 !
-! INITIALIZE IND, M, I, J, AND R
+! Initialize ind, M, I, J, and R
 !
 do 1 i = 1,n
 1 ind(i) = i
@@ -2156,7 +2156,7 @@ i = 1
 j = n
 r = .375
 !
-! TOP OF LOOP
+! Top of loop
 !
 2 if (i .ge. j) go to 10
 if (r .gt. .5898437) go to 3
@@ -2164,18 +2164,18 @@ r = r + .0390625
 go to 4
 3 r = r - .21875
 !
-! INITIALIZE K
+! Initialize K
 !
 4 k = i
 !
-! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+! Select a central element of X and save it in T
 !
 ij = i + ifix(r*float(j-i))
 it = ind(ij)
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 5
@@ -2184,12 +2184,12 @@ ind(i) = it
 it = indx
 t = x(it)
 !
-! INITIALIZE L
+! Initialize L
 !
 5 l = j
 !
-! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
-!   INTERCHANGE IT WITH T
+! If the last element of the array is less than T,
+!   interchange it with T
 !
 indx = ind(j)
 if (x(indx) .ge. t) go to 7
@@ -2198,8 +2198,8 @@ ind(j) = it
 it = indx
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 7
@@ -2209,21 +2209,21 @@ it = indx
 t = x(it)
 go to 7
 !
-! INTERCHANGE ELEMENTS K AND L
+! Interchange elements K and L
 !
 6 itt = ind(l)
 ind(l) = ind(k)
 ind(k) = itt
 !
-! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
-!   NOT LARGER THAN T
+! Find an element in the upper part of the array which is
+!   not larger than T
 !
 7 l = l - 1
 indx = ind(l)
 if (x(indx) .gt. t) go to 7
 !
-! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
-!   NOT SMALLER THAN T
+! Find an element in the lower part of the array whcih is
+!   not smaller than T
 !
 8 k = k + 1
 indx = ind(k)
@@ -2233,8 +2233,8 @@ if (x(indx) .lt. t) go to 8
 !
 if (k .le. l) go to 6
 !
-! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
-!   ARRAY YET TO BE SORTED
+! Save the upper and lower subscripts of the portion of the
+!   array yet to be sorted
 !
 if (l-i .le. j-k) go to 9
 il(m) = i
@@ -2249,7 +2249,7 @@ j = l
 m = m + 1
 go to 11
 !
-! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
 if (m .eq. 0) return
@@ -2288,45 +2288,45 @@ real, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
-! SORT THE REAL ARRAY X INTO INCREASING ORDER.  THE ALGOR-
-! ITHM IS AS FOLLOWS.  IND IS INITIALIZED TO THE ORDERED
-! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
-! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
-! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
-! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
-! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
-! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
-! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
-! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
-! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
-! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
-! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
-! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
-! UNSORTED PORTION.
+!   This subroutine uses an order N*LOG(N) quick sort to
+! sort the real array X into increasing order.  The algor-
+! ithm is as follows.  Ind is initialized to the ordered
+! sequence of indices 1,...,N, and all interchanges are
+! applied to ind.  X is divided into two portions by picking
+! a central element T.  The first and last elements are com-
+! pared with T, and interchanges are applied as necessary so
+! that the three values are in ascending order.  Inter-
+! changes are then applied so that all elements greater than
+! T are in the upper portion of the array and all elements
+! less than T are in the lower portion.  The upper and lower
+! indices of one of the portions are saved in local arrays,
+! and the process is repeated iteratively on the other
+! portion.  When a portion is completely sorted, the process
+! begins again by retrieving the indices bounding another
+! unsorted portion.
 !
 ! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
 !
-!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!                      X - vector of length N to be sorted.
 !
 !                    IND - VECTOR OF LENGTH .GE. N.
 !
-! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+! N and X are not altered by this routine.
 !
-! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
-!                          PERMUTED IN THE SAME FASHION AS X
-!                          WOULD BE.  THUS, THE ORDERING ON
+! Output parameter - ind - sequence of indices 1,...,N
+!                          permuted in the same fashion as X
+!                          would be.  Thus, the ordering on
 !                          X IS DEFINED BY Y(I) = X(IND(I)).
 !
-! INTRINSIC FUNCTIONS CALLED BY QSORTR - IFIX, FLOAT
+! Intrinsic functions called by QSORTR - ifix, float
 !
 !***********************************************************
 !
 ! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
-!         LOG HAS BASE 2.
+!         log has base 2.
 !
 !***********************************************************
 !
@@ -2334,10 +2334,10 @@ integer :: iu(21), il(21)
 integer :: m, i, j, k, l, ij, it, itt, indx
 real :: r, t
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
-!            INDICES OF PORTIONS OF THE ARRAY X
+!            indices of portions of the array X
 ! M =      INDEX FOR IU AND IL
 ! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
 ! K,L =    INDICES IN THE RANGE I,...,J
@@ -2349,7 +2349,7 @@ real :: r, t
 !
 if (n .le. 0) return
 !
-! INITIALIZE IND, M, I, J, AND R
+! Initialize ind, M, I, J, and R
 !
 do 1 i = 1,n
 1 ind(i) = i
@@ -2358,7 +2358,7 @@ i = 1
 j = n
 r = .375
 !
-! TOP OF LOOP
+! Top of loop
 !
 2 if (i .ge. j) go to 10
 if (r .gt. .5898437) go to 3
@@ -2366,18 +2366,18 @@ r = r + .0390625
 go to 4
 3 r = r - .21875
 !
-! INITIALIZE K
+! Initialize K
 !
 4 k = i
 !
-! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+! Select a central element of X and save it in T
 !
 ij = i + ifix(r*float(j-i))
 it = ind(ij)
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 5
@@ -2386,12 +2386,12 @@ ind(i) = it
 it = indx
 t = x(it)
 !
-! INITIALIZE L
+! Initialize L
 !
 5 l = j
 !
-! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
-!   INTERCHANGE IT WITH T
+! If the last element of the array is less than T,
+!   interchange it with T
 !
 indx = ind(j)
 if (x(indx) .ge. t) go to 7
@@ -2400,8 +2400,8 @@ ind(j) = it
 it = indx
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 7
@@ -2411,21 +2411,21 @@ it = indx
 t = x(it)
 go to 7
 !
-! INTERCHANGE ELEMENTS K AND L
+! Interchange elements K and L
 !
 6 itt = ind(l)
 ind(l) = ind(k)
 ind(k) = itt
 !
-! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
-!   NOT LARGER THAN T
+! Find an element in the upper part of the array which is
+!   not larger than T
 !
 7 l = l - 1
 indx = ind(l)
 if (x(indx) .gt. t) go to 7
 !
-! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
-!   NOT SMALLER THAN T
+! Find an element in the lower part of the array whcih is
+!   not smaller than T
 !
 8 k = k + 1
 indx = ind(k)
@@ -2435,8 +2435,8 @@ if (x(indx) .lt. t) go to 8
 !
 if (k .le. l) go to 6
 !
-! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
-!   ARRAY YET TO BE SORTED
+! Save the upper and lower subscripts of the portion of the
+!   array yet to be sorted
 !
 if (l-i .le. j-k) go to 9
 il(m) = i
@@ -2451,7 +2451,7 @@ j = l
 m = m + 1
 go to 11
 !
-! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
 if (m .eq. 0) return
@@ -2490,45 +2490,45 @@ double precision, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
-! SORT A DOUBLE PRECISION ARRAY X INTO INCREASING ORDER. THE
-! ALGORITHM IS AS FOLLOWS. IND IS INITIALIZED TO THE ORDERED
-! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
-! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
-! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
-! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
-! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
-! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
-! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
-! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
-! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
-! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
-! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
-! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
-! UNSORTED PORTION.
+!   This subroutine uses an order N*LOG(N) quick sort to
+! sort a double precision array X into increasing order. The
+! algorithm is as follows. Ind is initialized to the ordered
+! sequence of indices 1,...,N, and all interchanges are
+! applied to ind.  X is divided into two portions by picking
+! a central element T.  The first and last elements are com-
+! pared with T, and interchanges are applied as necessary so
+! that the three values are in ascending order.  Inter-
+! changes are then applied so that all elements greater than
+! T are in the upper portion of the array and all elements
+! less than T are in the lower portion.  The upper and lower
+! indices of one of the portions are saved in local arrays,
+! and the process is repeated iteratively on the other
+! portion.  When a portion is completely sorted, the process
+! begins again by retrieving the indices bounding another
+! unsorted portion.
 !
 ! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
 !
-!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!                      X - vector of length N to be sorted.
 !
 !                    IND - VECTOR OF LENGTH .GE. N.
 !
-! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+! N and X are not altered by this routine.
 !
-! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
-!                          PERMUTED IN THE SAME FASHION AS X
-!                          WOULD BE.  THUS, THE ORDERING ON
+! Output parameter - ind - sequence of indices 1,...,N
+!                          permuted in the same fashion as X
+!                          would be.  Thus, the ordering on
 !                          X IS DEFINED BY Y(I) = X(IND(I)).
 !
-! INTRINSIC FUNCTIONS CALLED BY QSORTD - IFIX, FLOAT
+! Intrinsic functions called by QSORTD - ifix, float
 !
 !***********************************************************
 !
 ! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
-!         LOG HAS BASE 2.
+!         log has base 2.
 !
 !***********************************************************
 !
@@ -2537,10 +2537,10 @@ integer :: m, i, j, k, l, ij, it, itt, indx
 real :: r
 double precision :: t
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
-!            INDICES OF PORTIONS OF THE ARRAY X
+!            indices of portions of the array X
 ! M =      INDEX FOR IU AND IL
 ! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
 ! K,L =    INDICES IN THE RANGE I,...,J
@@ -2552,7 +2552,7 @@ double precision :: t
 !
 if (n .le. 0) return
 !
-! INITIALIZE IND, M, I, J, AND R
+! Initialize ind, M, I, J, and R
 !
 do 1 i = 1,n
 1 ind(i) = i
@@ -2561,7 +2561,7 @@ i = 1
 j = n
 r = .375
 !
-! TOP OF LOOP
+! Top of loop
 !
 2 if (i .ge. j) go to 10
 if (r .gt. .5898437) go to 3
@@ -2569,18 +2569,18 @@ r = r + .0390625
 go to 4
 3 r = r - .21875
 !
-! INITIALIZE K
+! Initialize K
 !
 4 k = i
 !
-! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+! Select a central element of X and save it in T
 !
 ij = i + ifix(r*float(j-i))
 it = ind(ij)
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 5
@@ -2589,12 +2589,12 @@ ind(i) = it
 it = indx
 t = x(it)
 !
-! INITIALIZE L
+! Initialize L
 !
 5 l = j
 !
-! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
-!   INTERCHANGE IT WITH T
+! If the last element of the array is less than T,
+!   interchange it with T
 !
 indx = ind(j)
 if (x(indx) .ge. t) go to 7
@@ -2603,8 +2603,8 @@ ind(j) = it
 it = indx
 t = x(it)
 !
-! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
-!   INTERCHANGE IT WITH T
+! If the first element of the array is greater than T,
+!   interchange it with T
 !
 indx = ind(i)
 if (x(indx) .le. t) go to 7
@@ -2614,21 +2614,21 @@ it = indx
 t = x(it)
 go to 7
 !
-! INTERCHANGE ELEMENTS K AND L
+! Interchange elements K and L
 !
 6 itt = ind(l)
 ind(l) = ind(k)
 ind(k) = itt
 !
-! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
-!   NOT LARGER THAN T
+! Find an element in the upper part of the array which is
+!   not larger than T
 !
 7 l = l - 1
 indx = ind(l)
 if (x(indx) .gt. t) go to 7
 !
-! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
-!   NOT SMALLER THAN T
+! Find an element in the lower part of the array whcih is
+!   not smaller than T
 !
 8 k = k + 1
 indx = ind(k)
@@ -2638,8 +2638,8 @@ if (x(indx) .lt. t) go to 8
 !
 if (k .le. l) go to 6
 !
-! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
-!   ARRAY YET TO BE SORTED
+! Save the upper and lower subscripts of the portion of the
+!   array yet to be sorted
 !
 if (l-i .le. j-k) go to 9
 il(m) = i
@@ -2654,7 +2654,7 @@ j = l
 m = m + 1
 go to 11
 !
-! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
 if (m .eq. 0) return
@@ -2692,34 +2692,34 @@ integer, intent(inout) :: a(n), ip(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!   This routine applies a set of permutations to a vector.
 !
-! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+! Input parameters -  N - length of A and IP.
 !
-!                    IP - VECTOR CONTAINING THE SEQUENCE OF
-!                         INTEGERS 1,...,N PERMUTED IN THE
-!                         SAME FASHION THAT A IS TO BE PER-
-!                         MUTED.
+!                    IP - vector containing the sequence of
+!                         integers 1,...,N permuted in the
+!                         same fashion that A is to be per-
+!                         muted.
 !
-!                     A - VECTOR TO BE PERMUTED.
+!                     A - vector to be permuted.
 !
-! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+! N and IP are not altered by this routine.
 !
-! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
-!                         PERMUTATIONS DEFINED BY IP.
+! Output parameter -  A - reordered vector reflecting the
+!                         permutations defined by IP.
 !
 !***********************************************************
 !
 integer :: nn, k, j, ipj, temp
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =   LOCAL COPY OF N
 ! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
-!          PERMUTATION
+!          permutation
 ! J =    INDEX FOR IP AND A, J .GE. K
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
@@ -2728,13 +2728,13 @@ nn = n
 if (nn .lt. 2) return
 k = 1
 !
-! LOOP ON PERMUTATIONS
+! Loop on permutations
 !
 1 j = k
 temp = a(k)
 !
-! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
-!   AS BEING INCLUDED IN THE PERMUTATION.
+! Apply permutation to A.  IP(J) is marked (made negative)
+!   as being included in the permutation.
 !
 2 ipj = ip(j)
 ip(j) = -ipj
@@ -2744,14 +2744,14 @@ j = ipj
 go to 2
 3 a(j) = temp
 !
-! SEARCH FOR AN UNMARKED ELEMENT OF IP
+! Search for an unmarked element of IP
 !
 4 k = k + 1
 if (k .gt. nn) go to 5
 if (ip(k) .gt. 0) go to 1
 go to 4
 !
-! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+! All permutations have been applied.  Unmark IP.
 !
 5 do 6 k = 1,nn
 6 ip(k) = -ip(k)
@@ -2766,35 +2766,35 @@ real, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!   This routine applies a set of permutations to a vector.
 !
-! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+! Input parameters -  N - length of A and IP.
 !
-!                    IP - VECTOR CONTAINING THE SEQUENCE OF
-!                         INTEGERS 1,...,N PERMUTED IN THE
-!                         SAME FASHION THAT A IS TO BE PER-
-!                         MUTED.
+!                    IP - vector containing the sequence of
+!                         integers 1,...,N permuted in the
+!                         same fashion that A is to be per-
+!                         muted.
 !
-!                     A - VECTOR TO BE PERMUTED.
+!                     A - vector to be permuted.
 !
-! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+! N and IP are not altered by this routine.
 !
-! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
-!                         PERMUTATIONS DEFINED BY IP.
+! Output parameter -  A - reordered vector reflecting the
+!                         permutations defined by IP.
 !
 !***********************************************************
 !
 integer :: nn, k, j, ipj
 real :: temp
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =   LOCAL COPY OF N
 ! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
-!          PERMUTATION
+!          permutation
 ! J =    INDEX FOR IP AND A, J .GE. K
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
@@ -2803,13 +2803,13 @@ nn = n
 if (nn .lt. 2) return
 k = 1
 !
-! LOOP ON PERMUTATIONS
+! Loop on permutations
 !
 1 j = k
 temp = a(k)
 !
-! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
-!   AS BEING INCLUDED IN THE PERMUTATION.
+! Apply permutation to A.  IP(J) is marked (made negative)
+!   as being included in the permutation.
 !
 2 ipj = ip(j)
 ip(j) = -ipj
@@ -2819,14 +2819,14 @@ j = ipj
 go to 2
 3 a(j) = temp
 !
-! SEARCH FOR AN UNMARKED ELEMENT OF IP
+! Search for an unmarked element of IP
 !
 4 k = k + 1
 if (k .gt. nn) go to 5
 if (ip(k) .gt. 0) go to 1
 go to 4
 !
-! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+! All permutations have been applied.  Unmark IP.
 !
 5 do 6 k = 1,nn
 6 ip(k) = -ip(k)
@@ -2841,35 +2841,35 @@ double precision, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!   This routine applies a set of permutations to a vector.
 !
-! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+! Input parameters -  N - length of A and IP.
 !
-!                    IP - VECTOR CONTAINING THE SEQUENCE OF
-!                         INTEGERS 1,...,N PERMUTED IN THE
-!                         SAME FASHION THAT A IS TO BE PER-
-!                         MUTED.
+!                    IP - vector containing the sequence of
+!                         integers 1,...,N permuted in the
+!                         same fashion that A is to be per-
+!                         muted.
 !
-!                     A - VECTOR TO BE PERMUTED.
+!                     A - vector to be permuted.
 !
-! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+! N and IP are not altered by this routine.
 !
-! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
-!                         PERMUTATIONS DEFINED BY IP.
+! Output parameter -  A - reordered vector reflecting the
+!                         permutations defined by IP.
 !
 !***********************************************************
 !
 integer :: nn, k, j, ipj
 double precision :: temp
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =   LOCAL COPY OF N
 ! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
-!          PERMUTATION
+!          permutation
 ! J =    INDEX FOR IP AND A, J .GE. K
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
@@ -2878,13 +2878,13 @@ nn = n
 if (nn .lt. 2) return
 k = 1
 !
-! LOOP ON PERMUTATIONS
+! Loop on permutations
 !
 1 j = k
 temp = a(k)
 !
-! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
-!   AS BEING INCLUDED IN THE PERMUTATION.
+! Apply permutation to A.  IP(J) is marked (made negative)
+!   as being included in the permutation.
 !
 2 ipj = ip(j)
 ip(j) = -ipj
@@ -2894,14 +2894,14 @@ j = ipj
 go to 2
 3 a(j) = temp
 !
-! SEARCH FOR AN UNMARKED ELEMENT OF IP
+! Search for an unmarked element of IP
 !
 4 k = k + 1
 if (k .gt. nn) go to 5
 if (ip(k) .gt. 0) go to 1
 go to 4
 !
-! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+! All permutations have been applied.  Unmark IP.
 !
 5 do 6 k = 1,nn
 6 ip(k) = -ip(k)
@@ -2913,7 +2913,7 @@ implicit none
 real, intent(in) :: x
 real :: r
 !-----------------------------------------------------------------------
-!                   CUBE ROOT OF A REAL NUMBER
+!                   Cube root of a real number
 !-----------------------------------------------------------------------
 if (x) 30, 10, 20
 10 cbrt = 0.0
@@ -2929,7 +2929,7 @@ end function cbrt
 double precision function dcbrt (x)
 implicit none
 !-----------------------------------------------------------------------
-!                   CUBE ROOT OF A REAL NUMBER
+!                   Cube root of a real number
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: r
@@ -2991,7 +2991,7 @@ implicit none
 real, intent(in) :: x, y
 real :: a
 !     --------------------------------------
-!     EVALUATION OF SQRT(X*X + Y*Y)
+!     Evaluation of SQRT(X*X + Y*Y)
 !     --------------------------------------
 if (abs(x) .le. abs(y)) go to 10
    a = y/x
@@ -3009,7 +3009,7 @@ double precision function dcpabs(x, y)
 implicit none
 double precision, intent(in) :: x, y
 !     --------------------------------------
-!     EVALUATION OF SQRT(X*X + Y*Y)
+!     Evaluation of SQRT(X*X + Y*Y)
 !     --------------------------------------
 double precision :: a
 !
@@ -3140,10 +3140,10 @@ double precision, intent(inout) :: w(2)
 !
 !                         -----------
 !
-!     Z AND W ARE INTERPRETED AS DOUBLE PRECISION COMPLEX NUMBERS.
-!     IT IS ASSUMED THAT Z(1) AND Z(2) ARE THE REAL AND IMAGINARY
-!     PARTS OF THE COMPLEX NUMBER Z, AND THAT W(1) AND W(2) ARE
-!     THE REAL AND IMAGINARY PARTS OF W.
+!     Z and W are interpreted as double precision complex numbers.
+!     It is assumed that Z(1) and Z(2) are the real and imaginary
+!     parts of the complex number Z, and that W(1) and W(2) are
+!     the real and imaginary parts of W.
 ! ----------------------------------------------------------------------
 double precision :: x, y, r
 double precision :: dcpabs
@@ -3228,10 +3228,10 @@ implicit none
 real, intent(inout) :: sa, sb, sc, ss
 real :: r, u, v
 !
-!     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
+!     Designed by C.L.Lawson, JPL, 1977 sept 08
 !
 !
-!     CONSTRUCT THE GIVENS TRANSFORMATION
+!     Construct the Givens transformation
 !
 !         ( SC  SS )
 !     G = (        ) ,    SC**2 + SS**2 = 1 ,
@@ -3246,8 +3246,8 @@ real :: r, u, v
 !           IF ABS(Z) .LT. 1  SET  SC=SQRT(1-Z**2)  AND  SS=Z
 !           IF ABS(Z) .GT. 1  SET  SC=1/Z  AND  SS=SQRT(1-SC**2)
 !
-!     NORMALLY, THE SUBPROGRAM SROT(N,SX,INCX,SY,INCY,SC,SS) WILL
-!     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
+!     Normally, the subprogram SROT(N,SX,INCX,SY,INCY,SC,SS) will
+!     next be called to apply the transformation to A 2 by N matrix.
 !
 ! ------------------------------------------------------------------
 !
@@ -3258,11 +3258,11 @@ if (abs(sa) .le. abs(sb)) go to 10
 u = sa + sa
 v = sb / u
 !
-!     NOTE THAT U AND R HAVE THE SIGN OF SA
+!     Note that U and R have the sign of SA
 !
 r = sqrt(.25 + v**2) * u
 !
-!     NOTE THAT SC IS POSITIVE
+!     Note that SC is positive
 !
 sc = sa / r
 ss = v * (sc + sc)
@@ -3276,12 +3276,12 @@ return
 u = sb + sb
 v = sa / u
 !
-!     NOTE THAT U AND R HAVE THE SIGN OF SB
-!     (R IS IMMEDIATELY STORED IN SA)
+!     Note that U and R have the sign of SB
+!     (R is immediately stored in SA)
 !
 sa = sqrt(.25 + v**2) * u
 !
-!     NOTE THAT SS IS POSITIVE
+!     Note that SS is positive
 !
 ss = sb / sa
 sc = v * (ss + ss)
@@ -3302,10 +3302,10 @@ end subroutine srotg
 subroutine drotg(da,db,dc,ds)
 implicit none
 !
-!     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
+!     Designed by C.L.Lawson, JPL, 1977 sept 08
 !
 !
-!     CONSTRUCT THE GIVENS TRANSFORMATION
+!     Construct the Givens transformation
 !
 !         ( DC  DS )
 !     G = (        ) ,    DC**2 + DS**2 = 1 ,
@@ -3320,8 +3320,8 @@ implicit none
 !           IF DABS(Z) .LT. 1  SET  DC=DSQRT(1-Z**2)  AND  DS=Z
 !           IF DABS(Z) .GT. 1  SET  DC=1/Z  AND  DS=DSQRT(1-DC**2)
 !
-!     NORMALLY, THE SUBPROGRAM DROT(N,DX,INCX,DY,INCY,DC,DS) WILL
-!     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
+!     Normally, the subprogram DROT(N,DX,INCX,DY,INCY,DC,DS) will
+!     next be called to apply the transformation to A 2 by N matrix.
 !
 ! ------------------------------------------------------------------
 !
@@ -3334,11 +3334,11 @@ if (dabs(da) .le. dabs(db)) go to 10
 u = da + da
 v = db / u
 !
-!     NOTE THAT U AND R HAVE THE SIGN OF DA
+!     Note that U and R have the sign of DA
 !
 r = dsqrt(.25d0 + v**2) * u
 !
-!     NOTE THAT DC IS POSITIVE
+!     Note that DC is positive
 !
 dc = da / r
 ds = v * (dc + dc)
@@ -3352,12 +3352,12 @@ return
 u = db + db
 v = da / u
 !
-!     NOTE THAT U AND R HAVE THE SIGN OF DB
-!     (R IS IMMEDIATELY STORED IN DA)
+!     Note that U and R have the sign of DB
+!     (R is immediately stored in DA)
 !
 da = dsqrt(.25d0 + v**2) * u
 !
-!     NOTE THAT DS IS POSITIVE
+!     Note that DS is positive
 !
 ds = db / da
 dc = v * (ds + ds)
@@ -3403,7 +3403,7 @@ go to 20
 11 t = a(1,1)/a(2,1)
 r = abs(a(2,1))*sqrt(1.0 + t*t)
 !
-!     EVALUATION OF THE ANGLES
+!     Evaluation of the angles
 !
 20 theta(3) = atan2(a(2,1),a(1,1))
 theta(2) = atan2(a(3,1),r)
@@ -3426,29 +3426,29 @@ real, intent(out) :: cy, sy
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !
-!   THIS SUBROUTINE CONSTRUCTS THE ELEMENTS OF A 3 BY 3
-! ORTHOGONAL MATRIX R WHICH ROTATES A POINT (XK,YK,ZK) ON
-! THE UNIT SPHERE TO THE NORTH POLE, I.E.
+!   This subroutine constructs the elements of A 3 by 3
+! orthogonal matrix R which rotates a point (XK,YK,ZK) on
+! the unit sphere to the north pole, I.E.
 !
 !      (XK)     (CY  0 -SY)   (1   0   0)   (XK)     (0)
 !  R * (YK)  =  ( 0  1   0) * (0  CX -SX) * (YK)  =  (0)
 !      (ZK)     (SY  0  CY)   (0  SX  CX)   (ZK)     (1)
 !
-! INPUT PARAMETERS - XK,YK,ZK - COMPONENTS OF A UNIT VECTOR
-!                               TO BE ROTATED TO (0,0,1).
+! Input parameters - XK,YK,ZK - components of a unit vector
+!                               to be rotated to (0,0,1).
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! Input parameters are not altered by this routine.
 !
-! OUTPUT PARAMETERS - CX,SX,CY,SY - ELEMENTS OF R -- CX,SX
-!                                   DEFINE A ROTATION ABOUT
-!                                   THE X-AXIS AND CY,SY DE-
-!                                   FINE A ROTATION ABOUT
-!                                   THE Y-AXIS.
+! Output parameters - CX,SX,CY,SY - elements of R -- CX,SX
+!                                   define a rotation about
+!                                   the X-axis and CY,SY DE-
+!                                   fine a rotation about
+!                                   the Y-axis.
 !
-! INTRINSIC FUNCTION CALLED BY CONSTR - SQRT
+! Intrinsic function called by constr - sqrt
 !
 !***********************************************************
 !
@@ -3459,7 +3459,7 @@ cx = zk/cy
 sx = yk/cy
 return
 !
-! (XK,YK,ZK) LIES ON THE X-AXIS
+! (XK,YK,ZK) lies on the X-axis
 !
 1 cx = 1.
 sx = 0.
@@ -3473,7 +3473,7 @@ integer :: i
 real :: d, rx, ry
 real :: snrm2
 !-----------------------------------------------------------------------
-!           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
+!           Computation of the angle between two vectors
 !-----------------------------------------------------------------------
 real, intent(in) :: x(n), y(n)
 !
@@ -3498,7 +3498,7 @@ end do
 ang = acos((0.5*d - 0.5) - 0.5)
 return
 !
-!                           ERROR RETURN
+!                           Error return
 !
 30 ang = -1.0
 return
@@ -3545,7 +3545,7 @@ integer :: max, n
 real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
 integer :: ipmpar
 !-----------------------------------------------------------------------
-!                   EVALUATION  OF SIN(X*PI)
+!                   Evaluation  of SIN(X*PI)
 !-----------------------------------------------------------------------
 data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
 &a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
@@ -3557,7 +3557,7 @@ data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
-!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!            largest positive integer that may be used.
 !
                  max = ipmpar(3)
 !
@@ -3587,7 +3587,7 @@ go to 30
 sin1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 &+ a1)*t + a0)*a
 !
-!                        TERMINATION
+!                        Termination
 !
 30 if (x .lt. 0.0) sin1 = - sin1
 if (mod(n,2) .ne. 0) sin1 = - sin1
@@ -3601,7 +3601,7 @@ integer :: max, n
 real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
 integer :: ipmpar
 !-----------------------------------------------------------------------
-!                   EVALUATION  OF COS(X*PI)
+!                   Evaluation  of COS(X*PI)
 !-----------------------------------------------------------------------
 data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
 &a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
@@ -3613,7 +3613,7 @@ data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
-!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!            largest positive integer that may be used.
 !
                  max = ipmpar(3)
 !
@@ -3644,7 +3644,7 @@ n = n - 1
 cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 &+ b1)*t + 0.5) + 0.5
 !
-!                        TERMINATION
+!                        Termination
 !
 30 if (mod(n,2) .ne. 0) cos1 = - cos1
 return
@@ -3656,14 +3656,14 @@ integer :: max, n
 integer :: ipmpar
 !-----------------------------------------------------------------------
 !
-!                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
+!                Double precision evaluation of SIN(PI*X)
 !
 !                             --------------
 !
 !     THE EXPANSION FOR SIN(PI*A) (ABS(A) .LE. PI/4) USING A1,...,A13
-!     IS ACCURATE TO WITHIN 2 UNITS OF THE 40-TH SIGNIFICANT DIGIT, AND
+!     is accurate to within 2 units of the 40-TH significant digit, and
 !     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
-!     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
+!     is accurate to within 4 units of the 40-TH significant digit.
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -3705,7 +3705,7 @@ data b1  /-.3084251375340424568385778437461297229882d+00/, &
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
-!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!            largest positive integer that may be used.
 !
                  max = ipmpar(3)
 !
@@ -3740,7 +3740,7 @@ w = (((((((((((((a13*t + a12)*t + a11)*t + a10)*t + a9)*t + &
 &a2)*t + a1)*t + 0.5d0) + 0.5d0
 dsin1 = pi*a*w
 !
-!                        TERMINATION
+!                        Termination
 !
 30 if (x .lt. 0.0) dsin1 = - dsin1
 if (mod(n,2) .ne. 0) dsin1 = - dsin1
@@ -3753,14 +3753,14 @@ integer :: max, n
 integer :: ipmpar
 !-----------------------------------------------------------------------
 !
-!                DOUBLE PRECISION EVALUATION OF COS(PI*X)
+!                Double precision evaluation of COS(PI*X)
 !
 !                             --------------
 !
 !     THE EXPANSION FOR SIN(PI*A) (ABS(A) .LE. PI/4) USING A1,...,A13
-!     IS ACCURATE TO WITHIN 2 UNITS OF THE 40-TH SIGNIFICANT DIGIT, AND
+!     is accurate to within 2 units of the 40-TH significant digit, and
 !     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
-!     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
+!     is accurate to within 4 units of the 40-TH significant digit.
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -3802,7 +3802,7 @@ data b1  /-.3084251375340424568385778437461297229882d+00/, &
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
-!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!            largest positive integer that may be used.
 !
                  max = ipmpar(3)
 !
@@ -3838,7 +3838,7 @@ dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
 &b8)*t + b7)*t + b6)*t + b5)*t + b4)*t + b3)*t + &
 &b2)*t + b1)*t + 0.5d0) + 0.5d0
 !
-!                        TERMINATION
+!                        Termination
 !
 30 if (mod(n,2) .ne. 0) dcos1 = - dcos1
 return
@@ -3860,24 +3860,24 @@ real :: cut(5)
 !                              UNIVERSITY OF TEXAS AT AUSTIN
 !                          MODIFIED BY A.H. MORRIS (NSWC/DL)
 !
-! THIS SUBROUTINE RETURNS APPROXIMATIONS TO
+! This subroutine returns approximations to
 !       SINHM(X) = SINH(X)-X
 !       COSHM(X) = COSH(X)-1
-! AND
+! and
 !       COSHMM(X) = COSH(X)-1-X*X/2
 !
-! ON INPUT--
+! On input--
 !
-!   X CONTAINS THE VALUE OF THE INDEPENDENT VARIABLE.
+!   X contains the value of the independent variable.
 !
-!   ISW INDICATES THE FUNCTION DESIRED
+!   ISW indicates the function desired
 !           = -1 IF ONLY SINHM IS DESIRED,
 !           =  0 IF BOTH SINHM AND COSHM ARE DESIRED,
 !           =  1 IF ONLY COSHM IS DESIRED,
 !           =  2 IF ONLY COSHMM IS DESIRED,
 !           =  3 IF BOTH SINHM AND COSHMM ARE DESIRED.
 !
-! ON OUTPUT--
+! On output--
 !
 !   SINHM CONTAINS THE VALUE OF SINHM(X) IF ISW .LE. 0 OR
 !   ISW .EQ. 3 (SINHM IS UNALTERED IF ISW .EQ.1 OR ISW .EQ.
@@ -3887,9 +3887,9 @@ real :: cut(5)
 !   ISW .EQ. 1 AND CONTAINS THE VALUE OF COSHMM(X) IF ISW
 !   .GE. 2 (COSHM IS UNALTERED IF ISW .EQ. -1).
 !
-! AND
+! And
 !
-!   X AND ISW ARE UNALTERED.
+!   X and ISW are unaltered.
 !
 !-----------------------------------------------------------
 !
@@ -3956,7 +3956,7 @@ integer, intent(in) :: mu
 real, intent(in) :: x
 real :: w
 !-----------------------------------------------------------------------
-!                    EVALUATION OF EXP(MU + X)
+!                    Evaluation of EXP(MU + X)
 !-----------------------------------------------------------------------
 if (x .gt. 0.0) go to 10
 !
@@ -3981,7 +3981,7 @@ double precision function desum (mu, x)
 implicit none
 integer, intent(in) :: mu
 !-----------------------------------------------------------------------
-!                    EVALUATION OF EXP(MU + X)
+!                    Evaluation of EXP(MU + X)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: w
@@ -4010,7 +4010,7 @@ implicit none
 real, intent(in) :: x
 real :: e, p1, p2, q1, q2, q3, q4
 !-----------------------------------------------------------------------
-!            EVALUATION OF THE FUNCTION EXP(X) - 1
+!            Evaluation of the function EXP(X) - 1
 !-----------------------------------------------------------------------
 data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
 &q1/-.499999999085958e+00/, q2/ .107141568980644e+00/, &
@@ -4035,7 +4035,7 @@ end function rexp
 double precision function drexp (x)
 implicit none
 !-----------------------------------------------------------------------
-!            EVALUATION OF THE FUNCTION EXP(X) - 1
+!            Evaluation of the function EXP(X) - 1
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: e, w, z
@@ -4062,15 +4062,15 @@ data c1 / .1666666666666666666666666666666667d+00/, &
 !---------------------------
 if (dabs(x) .gt. 0.15d0) go to 10
 !
-!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!        Z is a minimax approximation of the series
 !
 !                C6 + C7*X + C8*X**2 + ....
 !
-!        THIS APPROXIMATION IS ACCURATE TO WITHIN
-!        1 UNIT OF THE 23-RD SIGNIFICANT DIGIT.
-!        THE RESULTING VALUE FOR W IS ACCURATE TO
-!        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
-!        DIGIT.
+!        This approximation is accurate to within
+!        1 unit of the 23-RD significant digit.
+!        The resulting value for W is accurate to
+!        within 1 unit of the 33-RD significant
+!        digit.
 !
 z = ((((a4*x + a3)*x + a2)*x + a1)*x + a0) / &
 &((((b4*x + b3)*x + b2)*x + b1)*x + 1.d0)
@@ -4101,7 +4101,7 @@ real :: p1, p2, q1, q2, q3, q4
 !
 !     E IS AN INPUT/OUTPUT VARIABLE. IF E .GE. 0 THEN IT IS ASSUMED
 !     THAT E = EXP(X). IN THIS CASE E IS NOT MODIFIED. IF E .LT. 0
-!     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
+!     then E is set to EXP(X) when this value is needed.
 !
 !-----------------------------------------------------------------------
 data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
@@ -4133,7 +4133,7 @@ implicit none
 !
 !     E IS AN INPUT/OUTPUT VARIABLE. IF E .GE. 0 THEN IT IS ASSUMED
 !     THAT E = EXP(X). IN THIS CASE E IS NOT MODIFIED. IF E .LT. 0
-!     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
+!     then E is set to EXP(X) when this value is needed.
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -4165,15 +4165,15 @@ w = 1.d0
 if (dabs(x) .lt. 1.d-33) return
 if (dabs(x) .gt. 0.15d0) go to 10
 !
-!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!        Z is a minimax approximation of the series
 !
 !                C6 + C7*X + C8*X**2 + ....
 !
-!        THIS APPROXIMATION IS ACCURATE TO WITHIN
-!        1 UNIT OF THE 23-RD SIGNIFICANT DIGIT.
-!        THE RESULTING VALUE FOR W IS ACCURATE TO
-!        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
-!        DIGIT.
+!        This approximation is accurate to within
+!        1 unit of the 23-RD significant digit.
+!        The resulting value for W is accurate to
+!        within 1 unit of the 33-RD significant
+!        digit.
 !
 z = ((((a4*x + a3)*x + a2)*x + a1)*x + a0) / &
 &((((b4*x + b3)*x + b2)*x + b1)*x + 1.d0)
@@ -4198,7 +4198,7 @@ implicit none
 real, intent(in) :: a
 real :: p1, p2, p3, q1, q2, q3, t, t2, w, x
 !-----------------------------------------------------------------------
-!            EVALUATION OF THE FUNCTION LN(1 + A)
+!            Evaluation of the function LN(1 + A)
 !-----------------------------------------------------------------------
 data p1/-.129418923021993e+01/, p2/.405303492862024e+00/, &
 &p3/-.178874546012214e-01/
@@ -4222,7 +4222,7 @@ end function alnrel
 double precision function dlnrel (a)
 implicit none
 !-----------------------------------------------------------------------
-!            EVALUATION OF THE FUNCTION LN(1 + A)
+!            Evaluation of the function LN(1 + A)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: t, t2, w, z
@@ -4252,15 +4252,15 @@ if (a .lt. 0.d0) t = 0.5d0 + (0.5d0 + a)
 dlnrel = dlog(t)
 return
 !
-!        W IS A MINIMAX APPROXIMATION OF THE SERIES
+!        W is a minimax approximation of the series
 !
 !               C6 + C7*T**2 + C8*T**4 + ...
 !
-!        THIS APPROXIMATION IS ACCURATE TO WITHIN
-!        1.6 UNITS OF THE 21-ST SIGNIFICANT DIGIT.
-!        THE RESULTING VALUE FOR 1.D0 + T2*Z IS
-!        ACCURATE TO WITHIN 1 UNIT OF THE 30-TH
-!        SIGNIFICANT DIGIT.
+!        This approximation is accurate to within
+!        1.6 units of the 21-ST significant digit.
+!        The resulting value for 1.D0 + T2*Z is
+!        accurate to within 1 unit of the 30-TH
+!        significant digit.
 !
 10 t = a/(a + 2.d0)
 t2 = t*t
@@ -4277,7 +4277,7 @@ implicit none
 real, intent(in) :: x
 real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE FUNCTION X - 1 - LN(X)
+!             Evaluation of the function X - 1 - LN(X)
 !-----------------------------------------------------------------------
 !     A = RLOG (0.7)
 !     B = RLOG (4/3)
@@ -4293,7 +4293,7 @@ if (x .lt. 0.61 .or. x .gt. 1.57) go to 100
 if (x .lt. 0.82) go to 10
 if (x .gt. 1.18) go to 20
 !
-!                 ARGUMENT REDUCTION
+!                 Argument reduction
 !
 u = (x - 0.5) - 0.5
 up2 = u + 2.0
@@ -4310,7 +4310,7 @@ u = t - 0.25
 up2 = t + 1.75
 w1 = b + u/3.0
 !
-!                  SERIES EXPANSION
+!                  Series expansion
 !
 30 r = u/up2
 t = r*r
@@ -4329,7 +4329,7 @@ implicit none
 real, intent(in) :: x
 real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE FUNCTION X - LN(1 + X)
+!             Evaluation of the function X - LN(1 + X)
 !-----------------------------------------------------------------------
 !     A = RLOG (0.7)
 !     B = RLOG (4/3)
@@ -4345,7 +4345,7 @@ if (x .lt. -0.39 .or. x .gt. 0.57) go to 100
 if (x .lt. -0.18) go to 10
 if (x .gt.  0.18) go to 20
 !
-!                 ARGUMENT REDUCTION
+!                 Argument reduction
 !
 u = x
 up2 = u + 2.0
@@ -4362,7 +4362,7 @@ u = t - 0.25
 up2 = t + 1.75
 w1 = b + u/3.0
 !
-!                  SERIES EXPANSION
+!                  Series expansion
 !
 30 r = u/up2
 t = r*r
@@ -4379,7 +4379,7 @@ end function rlog1
 double precision function drlog (x)
 implicit none
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE FUNCTION X - 1 - LN(X)
+!             Evaluation of the function X - 1 - LN(X)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: a, b, r, t, u, up2, w, w1, z
@@ -4413,7 +4413,7 @@ if (x .lt. 0.61d0 .or. x .gt. 1.57d0) go to 100
 if (x .lt. 0.82d0) go to 10
 if (x .gt. 1.18d0) go to 20
 !
-!                 ARGUMENT REDUCTION
+!                 Argument reduction
 !
 u = (x - 0.5d0) - 0.5d0
 up2 = u + 2.d0
@@ -4430,18 +4430,18 @@ u = t - 0.25d0
 up2 = t + 1.75d0
 w1 = b + u/3.d0
 !
-!                  SERIES EXPANSION
+!                  Series expansion
 !
 30 r = u/up2
 t = r*r
 !
-!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!        Z is a minimax approximation of the series
 !
 !               C6 + C7*R**2 + C8*R**4 + ...
 !
-!        FOR THE INTERVAL (0.0, 0.375). THE APPROX-
-!        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
-!        THE 21-ST SIGNIFICANT DIGIT.
+!        For the interval (0.0, 0.375). The approx-
+!        imation is accurate to within 1.6 units of
+!        the 21-ST significant digit.
 !
 z = (((p3*t + p2)*t + p1)*t + p0)/ &
 &((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
@@ -4459,7 +4459,7 @@ end function drlog
 double precision function drlog1 (x)
 implicit none
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE FUNCTION X - LN(1 + X)
+!             Evaluation of the function X - LN(1 + X)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: a, b, r, t, u, up2, w, w1, z
@@ -4493,7 +4493,7 @@ if (x .lt. -0.39d0 .or. x .gt. 0.57d0) go to 100
 if (x .lt. -0.18d0) go to 10
 if (x .gt.  0.18d0) go to 20
 !
-!                 ARGUMENT REDUCTION
+!                 Argument reduction
 !
 u = x
 up2 = u + 2.d0
@@ -4510,18 +4510,18 @@ u = t - 0.25d0
 up2 = t + 1.75d0
 w1 = b + u/3.d0
 !
-!                  SERIES EXPANSION
+!                  Series expansion
 !
 30 r = u/up2
 t = r*r
 !
-!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!        Z is a minimax approximation of the series
 !
 !               C6 + C7*R**2 + C8*R**4 + ...
 !
-!        FOR THE INTERVAL (0.0, 0.375). THE APPROX-
-!        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
-!        THE 21-ST SIGNIFICANT DIGIT.
+!        For the interval (0.0, 0.375). The approx-
+!        imation is accurate to within 1.6 units of
+!        the 21-ST significant digit.
 !
 z = (((p3*t + p2)*t + p1)*t + p0)/ &
 &((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
@@ -4546,21 +4546,21 @@ real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
 real :: spmpar
 real, intent(in) :: x(n), y(n)
 !-----------------------------------------------------------------------
-!     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
+!     Given a polygonal line connecting the vertices (X(I),Y(I))
 !     (I = 1,...,N) TAKEN IN THIS ORDER. IT IS ASSUMED THAT THE
 !     POLYGONAL PATH IS A LOOP, WHERE (X(N),Y(N)) = (X(1),Y(1))
-!     OR THERE IS AN ARC FROM (X(N),Y(N)) TO (X(1),Y(1)).
+!     or there is an arc from (X(N),Y(N)) to (X(1),Y(1)).
 !
-!     (X0,Y0) IS AN ARBITRARY POINT AND L AND M ARE VARIABLES.
-!     L AND M ARE ASSIGNED THE FOLLOWING VALUES ...
+!     (X0,Y0) is an arbitrary point and L and M are variables.
+!     L and M are assigned the following values ...
 !
 !        L = -1   IF (X0,Y0) IS OUTSIDE THE POLYGONAL PATH
 !        L =  0   IF (X0,Y0) LIES ON THE POLYGONAL PATH
 !        L =  1   IF (X0,Y0) IS INSIDE THE POLYGONAL PATH
 !
 !     M = 0 IF (X0,Y0) IS ON OR OUTSIDE THE PATH. IF (X0,Y0)
-!     IS INSIDE THE PATH THEN M IS THE WINDING NUMBER OF THE
-!     PATH AROUND THE POINT (X0,Y0).
+!     is inside the path then M is the winding number of the
+!     path around the point (X0,Y0).
 !
 !-----------------------
 !
@@ -4614,7 +4614,7 @@ l = 1
 if (sum .lt. 0.0) m = -m
 return
 !
-!     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
+!     (X0, Y0) is on the boundary of the path
 !
 20 l = 0
 return
@@ -4631,8 +4631,8 @@ real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, &
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!                 INTERSECTION OF A STRIGHT LINE
-!                       AND POLYGONAL PATH
+!                 Intersection of a stright line
+!                       and polygonal path
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: a(2), b(2), x(n), y(n)
@@ -4666,15 +4666,15 @@ do 100 i = 1, nm1
    if (hi .eq. 0.0 .and. ki .eq. 0.0) go to 100
    ind = 1
 !
-!           CHECK IF THE LINE FROM A TO B AND THE I-TH
-!                 LINE IN THE PATH ARE PARALLEL
+!           Check if the line from A to B and the I-TH
+!                 line in the path are parallel
 !
    s = hi*k
    t = h*ki
    d = s - t
    if (abs(d) .le. tol*amax1(abs(s),abs(t))) go to 40
 !-----------------------------------------------------------------------
-!                   THE LINES ARE NOT PARALLEL
+!                   The lines are not parallel
 !-----------------------------------------------------------------------
    p = x(i) - a(1)
    q = y(i) - a(2)
@@ -4694,7 +4694,7 @@ do 100 i = 1, nm1
    if (num .gt. 0 .and. t .eq. 0.0) go to 100
    if (s .gt. 0.0) go to 20
 !
-!                   POINT A IS ON THE I-TH LINE
+!                   Point A is on the I-TH line
 !
 10 num = num + 1
    if (num .gt. m) go to 210
@@ -4702,7 +4702,7 @@ do 100 i = 1, nm1
    v(num) = a(2)
    go to 100
 !
-!                   POINT B IS ON THE I-TH LINE
+!                   Point B is on the I-TH line
 !
 20 if (s .lt. onem) go to 30
 21 num = num + 1
@@ -4711,8 +4711,8 @@ do 100 i = 1, nm1
    v(num) = b(2)
    go to 100
 !
-!              THE INTERIOR OF THE LINE FROM A TO B
-!                 INTERSECTS WITH THE I-TH LINE
+!              The interior of the line from A to B
+!                 intersects with the I-TH line
 !
 30 num = num + 1
    if (num .gt. m) go to 210
@@ -4720,7 +4720,7 @@ do 100 i = 1, nm1
    v(num) = a(2) + s*k
    go to 100
 !-----------------------------------------------------------------------
-!                     THE LINES ARE PARALLEL
+!                     The lines are parallel
 !-----------------------------------------------------------------------
 40 if (abs(hi) .gt. abs(ki)) go to 50
 !
@@ -4749,8 +4749,8 @@ do 100 i = 1, nm1
    if (abs(d) .le. tol0*amax1(abs(b(1)),abs(x(i)))) d = 0.0
    t = d/hi
 !
-!              THE 2 LINES ARE PORTIONS OF THE SAME
-!                     STRAIGHT INFINITE LINE
+!              The 2 lines are portions of the same
+!                     straight infinite line
 !
 60 if (s .gt. 0.0 .and. s .lt. onem) go to 220
    if (t .gt. 0.0 .and. t .lt. onem) go to 220
@@ -4777,7 +4777,7 @@ if (u(num) .eq. x(1) .and. v(num) .eq. y(1)) &
 &num = num - 1
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 200 ierr = 1
 return
@@ -4799,7 +4799,7 @@ real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
 &ymax, ymin
 real :: spmpar
 !-----------------------------------------------------------------------
-!           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
+!           Obtaining the convex hull for a finite planar set
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(m), y(m)
 real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
@@ -4815,7 +4815,7 @@ logical :: ibeg
 mp1 = m + 1
 onep = 1.0 + 4.0*eps
 !
-!                       REORDER X AND Y
+!                       Reorder X and Y
 !
 call rrsort (y, x, m)
 ymin = y(1)
@@ -4838,7 +4838,7 @@ i = i + 1
 call rrsort (x(i), y(i), m - lmax)
 xm = x(m)
 !
-!                      FIND XMIN AND XMAX
+!                      Find xmin and xmax
 !
 xmin = x1
 xmax = x(l)
@@ -4849,7 +4849,7 @@ do 31 i = lmin,m
 30 if (x(i) .gt. xmax) xmax = x(i)
 31 continue
 !
-!                   GOING ALONG THE YMIN AXIS
+!                   Going along the ymin axis
 !
 k = l
 do i = 1,l
@@ -4865,7 +4865,7 @@ n = 2
 vx(2) = x(l)
 vy(2) = y(l)
 !
-!           GOING FROM THE YMIN AXIS TO THE XMAX AXIS
+!           Going from the ymin axis to the xmax axis
 !
 100 h = xmax - bx(k)
 if (h .eq. 0.0) go to 150
@@ -4902,7 +4902,7 @@ vx(n) = bx(k)
 vy(n) = by(k)
 go to 100
 !
-!                   GOING ALONG THE XMAX AXIS
+!                   Going along the xmax axis
 !
 150 if (l .eq. m) go to 250
 ksav = k
@@ -4934,8 +4934,8 @@ vx(n) = xm
 vy(n) = y(m)
 go to 250
 !
-!           GOING FROM THE YMAX AXIS TO THE XMAX AXIS
-!        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
+!           Going from the ymax axis to the xmax axis
+!        (here we are traversing the boundary clockwise)
 !
 200 j = mp1
 nn = mp1
@@ -4977,8 +4977,8 @@ vy(nn) = by(j)
 h = xmax - bx(j)
 if (h .gt. 0.0) go to 201
 !
-!          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
-!           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
+!          Update BX,by and VX,VY so that the boundary
+!           is again being traversed counterclockwise
 !
 if (i .eq. l .and. k .eq. ksav) nn = nn + 1
 do ii = nn,mp1
@@ -4995,7 +4995,7 @@ do ii = j,mp1
 end do
 l = m
 !
-!                   GOING ALONG THE YMAX AXIS
+!                   Going along the ymax axis
 !
 250 lbeg = lmax + 1
 if (lbeg .eq. m) go to 260
@@ -5017,7 +5017,7 @@ h = bx(k) - xmin
 if (h .gt. 0.0) go to 301
 go to 370
 !
-!           GOING FROM THE YMAX AXIS TO THE XMIN AXIS
+!           Going from the ymax axis to the xmin axis
 !
 300 h = bx(k) - xmin
 if (h .eq. 0.0) go to 350
@@ -5057,7 +5057,7 @@ if (l .eq. 1) return
 if (k .eq. m) go to 370
 go to 300
 !
-!                   GOING ALONG THE XMIN AXIS
+!                   Going along the xmin axis
 !
 350 ksav = k
 i = l
@@ -5087,8 +5087,8 @@ vx(n) = x1
 vy(n) = y(1)
 return
 !
-!           GOING FROM THE YMIN AXIS TO THE XMIN AXIS
-!        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
+!           Going from the ymin axis to the xmin axis
+!        (here we are traversing the boundary clockwise)
 !
 400 if (k .eq. m) go to 370
 kp1 = k + 1
@@ -5134,8 +5134,8 @@ if (j .eq. kp1) go to 450
 h = bx(j) - xmin
 if (h .gt. 0.0) go to 401
 !
-!          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
-!           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
+!          Update BX,by and VX,VY so that the boundary
+!           is again being traversed counterclockwise
 !
 450 if (nn .eq. n) go to 470
 if (i .eq. l) nn = nn + 1
@@ -5188,12 +5188,12 @@ real, intent(in) :: x(nb), y(nb)
 !
 !*****************************************************************
 !
-!   GIVEN A SEQUENCE OF NB POINTS (X(I),Y(I)). PAREA COMPUTES
-! THE AREA BOUNDED BY THE CLOSED POLYGONAL CURVE WHICH PASSES
-! THROUGH THE POINTS IN THE ORDER THAT THEY ARE INDEXED. THE
-! FINAL POINT OF THE CURVE IS ASSUMED TO BE THE FIRST POINT
-! GIVEN. THEREFORE, IT NEED NOT BE LISTED AT THE END OF X AND
-! Y. THE CURVE IS NOT REQUIRED TO BE SIMPLE.
+!   Given a sequence of NB points (X(I),Y(I)). PAREA computes
+! the area bounded by the closed polygonal curve which passes
+! through the points in the order that they are indexed. The
+! final point of the curve is assumed to be the first point
+! given. Therefore, it need not be listed at the end of X and
+! Y. The curve is not required to be simple.
 !
 !*****************************************************************
 !
@@ -5224,11 +5224,11 @@ integer, intent(inout) :: nb
 integer, intent(in) :: num
 integer :: i, ii, np1
 !
-! SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
+! Subroutine to find one or more hamiltonian circuits in A
 ! DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
-! BY THE INTEGERS  1, 2, ..., N  AND  M  ARCS.
+! by the integers  1, 2, ..., N  and  M  arcs.
 !
-! INPUT ...
+! Input ...
 !
 ! IND   = 0  ON AN INITIAL CALL TO HC.
 !       = 1  OBTAIN ANOTHER HAMILTONIAN CIRCUIT.
@@ -5239,49 +5239,49 @@ integer :: i, ii, np1
 ! PR(I) = SUM OF THE OUT-DEGREES OF VERTICES  1, ..., I-1
 !         (PR(1) = 0 ,  PR(N+1) = M).
 ! AR    = ADJACENCY LIST. THE ELEMENTS FROM  AR(PR(I)+1) TO
-!         AR(PR(I+1))  ARE A RECORD CONTAINING,IN ANY ORDER,
-!         ALL THE VERTICES  J  SUCH THAT ARC  (I,J)  EXISTS.
-!         THE GRAPH SHOULD NOT CONTAIN ARCS STARTING AND
-!         ENDING AT THE SAME VERTEX.
+!         AR(PR(I+1))  are a record containing,in any order,
+!         all the vertices  J  such that arc  (I,J)  exists.
+!         The graph should not contain arcs starting and
+!         ending at the same vertex.
 ! NB    = UPPER BOUND ON THE NUMBER OF BACK TRACKS TO BE
 !         PERFORMED. (NB = -1 IF NO LIMIT IS TO BE PLACED
-!         ON THE NUMBER OF BACK TRACKS TAKEN.)
+!         on the number of back tracks taken.)
 ! NUM   = DIMENSION OF THE WORK SPACE IWK. IT IS ASSUMED THAT
 !         NUM .GE. M + 8*N + 20.
 !
-! OUTPUT ...
+! Output ...
 !
 ! IND   = 1   A HAMILTONIAN CIRCUIT WAS FOUND. TO FIND ANOTHER
-!             CIRCUIT, RESET NB AND RECALL THE ROUTINE.
-!             THE ARRAY AR HAS BEEN MODIFIED. IF ONE DOES NOT
+!             circuit, reset NB and recall the routine.
+!             The array AR has been modified. If one does not
 !             WISH TO OBTAIN ANOTHER CIRCUIT, SET IND = 3 AND
-!             RECALL THE ROUTINE. THIS WILL RESTORE AR.
+!             recall the routine. This will restore AR.
 !       = 2   THE MAXIMUM NUMBER OF BACK TRACKS WERE PERFORMED.
-!             TO CONTINUE, RESET NB AND RECALL THE ROUTINE.
-!             THE ARRAY AR HAS BEEN MODIFIED. IF ONE DOES NOT
+!             To continue, reset NB and recall the routine.
+!             The array AR has been modified. If one does not
 !             WISH TO CONTINUE, SET IND = 3 AND RECALL THE
-!             ROUTINE. THIS WILL RESTORE AR.
+!             routine. This will restore AR.
 !       = 4   NO CIRCUITS WERE FOUND. THE ARRAY  AR  HAS BEEN
-!             RESTORED (SEE THE REMARK BELOW) AND THE PROCEDURE
-!             IS FINISHED.
+!             restored (see the remark below) and the procedure
+!             is finished.
 !       = -1  (INPUT ERROR) IND .LT. 0  OR IND .GT. 3 ON INPUT.
 !       = -2  (INPUT ERROR) IND WAS MODIFIED. RESET IND TO ITS
-!              PREVIOUS OUTPUT VALUE AND RERUN THE CODE.
+!              previous output value and rerun the code.
 !       = -3  (INPUT ERROR) THE INPUT SETTING IND = 3 CAN BE
-!              USED ONLY WHEN THE PREVIOUS OUTPUT VALUE FOR
-!              IND WAS 1 OR 2. IF THE PREVIOUS OUTPUT VALUE
-!              FOR IND WAS 4, THEN THE ARRAY AR HAS ALREADY
-!              BEEN RESTORED AND THERE IS NOTHING TO BE DONE.
+!              used only when the previous output value for
+!              ind was 1 or 2. If the previous output value
+!              for ind was 4, then the array AR has already
+!              been restored and there is nothing to be done.
 !       = -4  (INPUT ERROR) NUM .LT. M + 8*N + 20.
 !       = -5  (INPUT ERROR) PR(1) .NE. 0  OR  PR(N+1) .NE. M.
 !       = -6  (INPUT ERROR) PR(I) .GT. PR(I+1) FOR SOME I.
 ! NB    = NUMBER OF BACK TRACKS PERFORMED.
 ! S(I)  = I-TH  VERTEX IN THE HAMILTONIAN CIRCUIT FOUND.
 !
-! WORK SPACE ... IWK
+! Work space ... IWK
 !
-! REMARK. IN AR, THE ORDER OF THE ARCS IN EACH RECORD MAY BE
-! ALTERED BY THE ROUTINE.
+! Remark. In AR, the order of the arcs in each record may be
+! altered by the routine.
 !
 !     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
 !
@@ -5316,7 +5316,7 @@ do i = 1,n
 end do
 return
 !
-!                   ERROR RETURN
+!                   Error return
 !
 20 ind = -1
 return
@@ -5337,41 +5337,41 @@ integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
 &jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
 real :: dens, score
 !
-! MEANING OF THE WORK ARRAYS ...
+! Meaning of the work arrays ...
 !
 ! PC(I)   = SUM OF THE IN-DEGREES OF VERTICES  1, ..., I-1
 !           ( PC(1) = 0 ).
 ! AC      = ADJACENCY LIST (BACKWARD). THE ELEMENTS FROM
-!           AC(PC(I)+1)  TO  AC(PC(I+1))  CONTAIN, IN ANY
-!           ORDER, ALL THE VERTICES  J  SUCH THAT ARC  (J,I)
-!           EXISTS.
-! WHEN AN ARC IS REMOVED FROM THE GRAPH AT THE  K-TH  LEVEL
-! OF THE BRANCH-DECISION TREE, THE CORRESPONDING ELEMENTS
-! AR(Q)  AND  AC(T)  ARE SET TO  - (K*(N+1) + AR(Q))  AND
-! TO  - (K*(N+1) + AC(T)) , RESPECTIVELY.
+!           AC(PC(I)+1)  to  AC(PC(I+1))  contain, in any
+!           order, all the vertices  J  such that arc  (J,I)
+!           exists.
+! When an arc is removed from the graph at the  K-TH  level
+! of the branch-decision tree, the corresponding elements
+! AR(Q)  and  AC(T)  are set to  - (K*(N+1) + AR(Q))  and
+! to  - (K*(N+1) + AC(T)) , respectively.
 ! VR(I)   = CURRENT OUT-DEGREE OF VERTEX I .
 ! VC(I)   = CURRENT IN-DEGREE OF VERTEX I .
 ! SUBR(I) = - (K*(N+1) + J)  IF ARC  (I,J)  WAS IMPLIED AT
-!           THE  K-TH  LEVEL OF THE BRANCH-DECISION TREE.
+!           the  K-TH  level of the branch-decision tree.
 !         = 0  OTHERWISE.
 ! RBUS(I) = - J  IF ARC  (J,I)  IS CURRENTLY IMPLIED.
 !         = 0  OTHERWISE.
 ! TOR(K)  = Q*(M+1) + T  IF THE ARC GOING FROM  S(K)  TO THE
-!           ROOT, CORRESPONDING TO  AR(Q)  AND TO  AC(T),
-!           WAS REMOVED FROM THE GRAPH AT THE  K-TH  LEVEL
-!           OF THE BRANCH-DECISION TREE.
+!           root, corresponding to  AR(Q)  and to  AC(T),
+!           was removed from the graph at the  K-TH  level
+!           of the branch-decision tree.
 !         = 0  OTHERWISE.
 ! P(I)    = POINTER FOR THE FORWARD STEP. THE NEXT ARC
-!           STARTING FROM  I  TO BE CONSIDERED IN THE
-!           BRANCH-DECISION TREE IS  (I,AR(PR(I)+P(I)).
+!           starting from  I  to be considered in the
+!           branch-decision tree is  (I,AR(PR(I)+P(I)).
 !
-! MEANING OF THE MAIN SIMPLE VARIABLES ...
+! Meaning of the main simple variables ...
 !
 ! JR   = ROOT. THE HAMILTONIAN CIRCUITS ARE DETERMINED AS
-!        PATHS STARTING AND ENDING AT  JR .
+!        paths starting and ending at  JR .
 ! K    = CURRENT LEVEL OF THE BRANCH-DECISION TREE.
 ! IND0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
-!        THERE WERE NO INPUT ERRORS.
+!        there were no input errors.
 !
 integer, intent(in) :: pr(np1)
 integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
@@ -5417,8 +5417,8 @@ do i=1,n
     ac(ja) = i
   end do
 end do
-! SELECT AS ROOT  JR  THE VERTEX  I  WITH MAXIMUM  VC(I)
-! (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
+! Select as root  JR  the vertex  I  with maximum  VC(I)
+! (break ties by choosing  I  with minimum  VR(I) ).
 maxe = vc(1)
 minu = vr(1)
 jr = 1
@@ -5440,7 +5440,7 @@ s(1) = jr
   if (vr(j).eq.1) go to 130
   if (vc(j).eq.1) go to 170
 end do
-! NO FURTHER ARC CAN BE IMPLIED.
+! No further arc can be implied.
 go to 220
 ! ARC  (J,JL)  IS IMPLIED BECAUSE  VR(J) = 1 .
 130 l1 = pr(j) + 1
@@ -5449,18 +5449,18 @@ do l=l1,l2
   if (ar(l).gt.0) go to 150
 end do
 150 jl = ar(l)
-! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
-! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (J,JL) .
+! Find the starting vertex  IT1  and the ending vertex  IT2
+! of the largest path of implied arcs containing  (J,JL) .
 call ipath(j, jl, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
 &m, np1)
 if (np.eq.0) go to 160
 if (np.eq.(-1)) go to 340
-! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
+! Subroutine IPATH found a hamiltonian circuit.
 k = k + 1
 go to 320
 160 subr(j) = k1 - jl
 rbus(jl) = j
-! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT  JL .
+! Remove from the graph all arcs terminating at  JL .
 call iupd(j, jl, l, ac, ar, pc, pr, vc, vr, k1, n, m, np1)
 if (j.eq.0) go to 340
 go to 210
@@ -5471,22 +5471,22 @@ do l=l1,l2
   if (ac(l).gt.0) go to 190
 end do
 190 jl = ac(l)
-! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
-! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (JL,J) .
+! Find the starting vertex  IT1  and the ending vertex  IT2
+! of the largest path of implied arcs containing  (JL,J) .
 call ipath(jl, j, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
 &m, np1)
 if (np.eq.0) go to 200
 if (np.eq.(-1)) go to 340
-! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
+! Subroutine IPATH found a hamiltonian circuit.
 i = s(k)
 k = k + 1
 go to 320
 200 subr(jl) = k1 - j
 rbus(j) = jl
-! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  JL .
+! Remove from the graph all arcs emanating from  JL .
 call iupd(j, jl, l, ar, ac, pr, pc, vr, vc, k1, n, m, np1)
 if (j.eq.0) go to 340
-! IF ARC  (IT2,IT1)  IS IN THE GRAPH, REMOVE IT.
+! If arc  (IT2,IT1)  is in the graph, remove it.
 210 call rarc(it2, it1, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
 if (jj.eq.(-1)) go to 340
 go to 110
@@ -5508,7 +5508,7 @@ go to 340
 230 l1 = pr(i) + p(i)
 l2 = pr(i+1)
 if (l1.gt.l2) go to 340
-! FIND THE NEXT ARC  (I,JL)  TO BE ADDED TO  S .
+! Find the next arc  (I,JL)  to be added to  S .
 dens = n**3
 j1 = 0
 j2 = 0
@@ -5547,12 +5547,12 @@ p(i) = j2 - pr(i)
 k = k + 1
 s(k) = jl
 k1 = -k*np1
-! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  I .
+! Remove from the graph all arcs emanating from  I .
 call fupd(ar, ac, pr, pc, vr, vc, i, k1, n, m, np1)
-! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT JL .
+! Remove from the graph all arcs terminating at JL .
 call fupd(ac, ar, pc, pr, vc, vr, jl, k1, n, m, np1)
 tor(k) = 0
-! IF ARC  (JL,JR)  IS IN THE GRAPH, REMOVE IT.
+! If arc  (JL,JR)  is in the graph, remove it.
 call rarc(jl, jr, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
 if (jj.eq.0) go to 110
 if (jj.eq.(-1)) go to 340
@@ -5573,7 +5573,7 @@ ja = s(k)
 p(ja) = 1
 ja = s(k-1)
 if (subr(ja) .eq. 0) go to 350
-! BACKTRACKING FOR AN IMPLIED ARC.
+! Backtracking for an implied arc.
 k = k - 1
 go to 340
 350 if (nb .eq. nbo) go to 450
@@ -5581,7 +5581,7 @@ nb = nb + 1
 k1 = -k*np1
 k2 = -(k+1)*np1
 i = s(k-1)
-! BACKTRACKING FOR THE ARCS IMPLIED AT LEVEL  K .
+! Backtracking for the arcs implied at level  K .
 iff = 0
 do 360 j = 1,n
   if (subr(j).gt.k1) go to 360
@@ -5592,7 +5592,7 @@ do 360 j = 1,n
   iff = 1
 360 continue
 if (iff.eq.1) go to 370
-! NO ARC WAS IMPLIED AT LEVEL  K .
+! No arc was implied at level  K .
 call bupd(ar, ac, pr, pc, vr, vc, i, k1, k2, n, m, np1)
 call bupd(ac, ar, pc, pr, vc, vr, s(k), k1, k2, n, m, np1)
 if (tor(k).eq.0) go to 420
@@ -5604,7 +5604,7 @@ vr(ja) = vr(ja) + 1
 ac(j2) = s(k)
 vc(jr) = vc(jr) + 1
 go to 420
-! AT LEAST ONE ARC WAS IMPLIED AT LEVEL  K .
+! At least one arc was implied at level  K .
 370 do j=1,n
   l1 = pr(j) + 1
   l2 = pr(j+1)
@@ -5627,20 +5627,20 @@ end do
 420 k = k - 1
 go to 230
 !
-! RESTORE THE ORIGINAL VECTOR  AR
+! Restore the original vector  AR
 !
 430 do 431 j = 1,m
   if (ar(j) .gt. 0) go to 431
   ar(j) = -ar(j) + (ar(j)/np1)*np1
 431 continue
 !
-! THE ALGORITHM IS FINISHED
+! The algorithm is finished
 !
 440 ind = 4
 ind0 = 4
 return
 !
-! THE MAXIMUM NUMBER OF BACK TRACKS WERE PERFORMED
+! The maximum number of back tracks were performed
 !
 450 ind = 2
 ind0 = 2
@@ -5655,7 +5655,7 @@ return
 if (ind .eq. 1) go to 340
 go to 350
 !
-! ERROR RETURN
+! Error return
 !
 600 ind = -2
 return
@@ -5676,17 +5676,17 @@ integer, intent(out) :: np
 integer, intent(in) :: np1
 integer :: ja, k1, l, l1, l2
 !
-! SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
-! VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
+! Subroutine to find the starting vertex  I1  and the ending
+! vertex  I2  of the largest path of implied arcs containing
 ! ARC  (I,J) .
 !
-! MEANING OF THE OUTPUT PARAMETER  NP ...
+! Meaning of the output parameter  NP ...
 !
 ! NP =  0  IF THE PATH CONTAINS  L .LT. N  VERTICES.
 !    =  1  IF THE PATH CONTAINS  N  VERTICES AND ARC (I2,I1)
-!          EXISTS (THE HAMILTONIAN CIRCUIT IS STORED IN  S )
+!          exists (the hamiltonian circuit is stored in  S )
 !    = -1  IF THE PATH CONTAINS  N  VERTICES BUT ARC (I2,I1)
-!          DOES NOT EXIST.
+!          does not exist.
 !
 integer, intent(in) :: subr(n)
 integer, intent(inout) :: rbus(n)
@@ -5708,7 +5708,7 @@ l = l + 1
 go to 30
 40 continue
 if (l.lt.n) return
-! THE PATH CONTAINS  N  VERTICES.
+! The path contains  N  vertices.
 k1 = -k*np1
 l1 = pr(i2) + 1
 l2 = pr(i2+1)
@@ -5718,10 +5718,10 @@ do 60 l = l1,l2
   go to 60
 50 if (k1-ar(l).eq.i1) go to 70
 60 continue
-! NO HAMILTONIAN CIRCUIT CAN BE DETERMINED.
+! No hamiltonian circuit can be determined.
 np = -1
 return
-! A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
+! A hamiltonian circuit exists. Store it in  S .
 70 np = 1
 rbus(j) = i
 rbus(i1) = i2
@@ -5742,7 +5742,7 @@ implicit none
 integer, intent(in) :: i1, k1, m, n, np1
 integer :: ia, j, j1, j2, l, l1, l2
 !
-! FORWARD STEP UPDATING
+! Forward step updating
 !
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
@@ -5771,7 +5771,7 @@ implicit none
 integer, intent(in) :: ii, k1, k2, m, n, np1
 integer :: ia, l, l1, l2, ll, ll1, ll2
 !
-! BACKTRACKING STEP UPDATING
+! Backtracking step updating
 !
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
@@ -5802,7 +5802,7 @@ integer, intent(inout) :: ia
 integer, intent(in) :: ib, k1, l, m, n, np1
 integer :: iarc, j1, j2, jj, m1, m2, mm
 !
-! UPDATING FOR IMPLIED ARC
+! Updating for implied arc
 !
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
@@ -5842,15 +5842,15 @@ integer, intent(inout) :: ll
 integer, intent(in) :: m, n, np1
 integer :: j1, j2, l1, l2
 !
-! SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
+! Subroutine to remove arc  (IA,IB)  from the graph.
 !
-! MEANING OF THE OUTPUT PARAMETERS  JJ  AND  LL ...
+! Meaning of the output parameters  JJ  and  LL ...
 !
 ! JJ =  LOCATION OF THE ELEMENT OF  AR  CORRESPONDING TO THE
-!       REMOVED ARC.
+!       removed arc.
 !    =  0  IF ARC  (IA,IB)  IS NOT IN THE GRAPH.
 !    = -1  IF, AFTER THE REMOVAL OF ARC  (IA,IB) , THE GRAPH
-!          WOULD ADMIT NO HAMILTONIAN CIRCUIT.
+!          would admit no hamiltonian circuit.
 ! LL =  LOCATION OF THE ELEMENT OF  AC  CORRESPONDING TO THE
 !       REMOVED ARC (DEFINED ONLY IF  JJ .GT. 0 ).
 !
@@ -5869,7 +5869,7 @@ do 20 jj = j1,j2
     if (ac(ll).eq.ia) go to 30
   end do
 20 continue
-! ARC  (IA,IB)  IS NOT IN THE GRAPH.
+! Arc  (IA,IB)  is not in the graph.
 jj = 0
 return
 30 if (vr(ia).eq.1) go to 40
@@ -5879,7 +5879,7 @@ vr(ia) = vr(ia) - 1
 ac(ll) = k1 - ia
 vc(ib) = vc(ib) - 1
 return
-! ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
+! Arc  (IA,IB)  cannot be removed from the graph.
 40 jj = -1
 return
 end subroutine rarc
@@ -5891,7 +5891,7 @@ integer :: i
 real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 !-----------------------------------------------------------------------
 !
-!               COMPUTATION OF THE COMPLEX ERROR FUNCTION
+!               Computation of the complex error function
 !
 !                           ----------------
 !
@@ -5942,7 +5942,7 @@ if (r .le. 1.0) go to 20
 if (r .ge. 38.0) go to 60
 if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
 !
-!                       TAYLOR SERIES
+!                       Taylor series
 !
 20 c2 = c + c
 tm(1) = c2*x
@@ -5964,7 +5964,7 @@ pm = 0.0
    sm(2) = sm(2) + ts(2)
    go to 30
 !
-!                       TERMINATION
+!                       Termination
 !
 40 if (mo .ne. 0) go to 41
    w = cmplx(sn*sm(1), sn*sm(2))
@@ -5977,7 +5977,7 @@ pm = 0.0
 42 w = cmplx(1.0 + sm(1), sm(2))
 return
 !
-!              RATIONAL FUNCTION APPROXIMATION
+!              Rational function APPROXIMATION
 !
 50 sm(1) = 0.0
 sm(2) = 0.0
@@ -5999,7 +5999,7 @@ ef(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ef(2) = qf(1)*sm(2) + qf(2)*sm(1)
 go to 100
 !
-!                   ASYMPTOTIC EXPANSION
+!                   Asymptotic expansion
 !
 60 qf(1) =  sz(1)/(r*r)
 qf(2) = -sz(2)/(r*r)
@@ -6028,7 +6028,7 @@ pm = -0.5
 81 ef(1) = sm(1)
 ef(2) = sm(2)
 !
-!                       TERMINATION
+!                       Termination
 !
 100 if (mo .eq. 0) go to 101
    w = cmplx(ef(1), ef(2))
@@ -6049,7 +6049,7 @@ real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 real :: exparg
 !-----------------------------------------------------------------------
 !
-!              COMPUTATION OF THE COMPLEX COERROR FUNCTION
+!              Computation of the complex coerror function
 !
 !                           ----------------
 !
@@ -6102,7 +6102,7 @@ if (r .le. 1.0) go to 20
 if (r .ge. 38.0) go to 60
 if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
 !
-!                       TAYLOR SERIES
+!                       Taylor series
 !
 20 c2 = c + c
 tm(1) = c2*x
@@ -6124,7 +6124,7 @@ pm = 0.0
    sm(2) = sm(2) + ts(2)
    go to 30
 !
-!                       TERMINATION
+!                       Termination
 !
 40 if (sn .eq. 1.0) go to 41
    w = cmplx(1.0 + sm(1), sm(2))
@@ -6141,7 +6141,7 @@ ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
 w = cmplx(ts(1),ts(2))
 return
 !
-!              RATIONAL FUNCTION APPROXIMATION
+!              Rational function APPROXIMATION
 !
 50 sm(1) = 0.0
 sm(2) = 0.0
@@ -6160,7 +6160,7 @@ sm(1) = c*ts(1)
 sm(2) = c*ts(2)
 go to 100
 !
-!                   ASYMPTOTIC EXPANSION
+!                   Asymptotic expansion
 !
 60 call crec (x, y, tm(1), tm(2))
 sm(1) = tm(1)
@@ -6182,7 +6182,7 @@ pm = -0.5
 sm(2) = c*sm(2)
 if (x .lt. 0.01) go to 200
 !
-!                       TERMINATION
+!                       Termination
 !
 100 if (mo .ne. 0 .and. sn .eq. 1.0) go to 110
 qm = exp(-sz(1))
@@ -6199,7 +6199,7 @@ if (sn .eq. 1.0) go to 110
 110 w = cmplx(sm(1), sm(2))
 return
 !
-!               MODIFIED ASYMPTOTIC EXPANSION
+!               Modified asymptotic expansion
 !
 200 if (mo .ne. 0 .and. sn .eq. 1.0) go to 210
 qm = exp(-sz(1))
@@ -6226,7 +6226,7 @@ implicit none
 real, intent(in) :: x
 real :: ax, bot, c, t, top, x2
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE REAL ERROR FUNCTION
+!             Evaluation of the real error function
 !-----------------------------------------------------------------------
 real :: a(5), b(3), p(8), q(8), r(5), s(4)
 !-------------------------
@@ -6290,7 +6290,7 @@ real, intent(in) :: x
 real :: ax, bot, c, e, t, top
 real :: exparg
 !-----------------------------------------------------------------------
-!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
 real :: a(5), b(3), p(8), q(8), r(5), s(4)
 double precision :: w
@@ -6351,7 +6351,7 @@ top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
 bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
 erfc = (c - t*top/bot)/ax
 !
-!                      FINAL ASSEMBLY
+!                      Final assembly
 !
 30 w = dble(x)*dble(x)
 t = w
@@ -6360,12 +6360,12 @@ erfc = ((0.5 + (0.5 - e)) * exp(-t)) * erfc
 if (x .lt. 0.0) erfc = 2.0 - erfc
 return
 !
-!             LIMIT VALUE FOR LARGE NEGATIVE X
+!             Limit value for large negative X
 !
 40 erfc = 2.0
 return
 !
-!             LIMIT VALUE FOR LARGE POSITIVE X
+!             Limit value for large positive X
 !
 50 erfc = 0.0
 return
@@ -6378,7 +6378,7 @@ integer, intent(in) :: ind
 real, intent(in) :: x
 real :: ax, bot, c, e, t, top
 !-----------------------------------------------------------------------
-!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!         Evaluation of the complementary error function
 !
 !          ERFC1(IND,X) = ERFC(X)            IF IND = 0
 !          ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
@@ -6443,7 +6443,7 @@ top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
 bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
 erfc1 = (c - t*top/bot)/ax
 !
-!                      FINAL ASSEMBLY
+!                      Final assembly
 !
 40 if (ind .eq. 0) go to 41
    if (x .lt. 0.0) erfc1 = 2.0*exp(x*x) - erfc1
@@ -6455,13 +6455,13 @@ erfc1 = ((0.5 + (0.5 - e)) * exp(-t)) * erfc1
 if (x .lt. 0.0) erfc1 = 2.0 - erfc1
 return
 !
-!             LIMIT VALUE FOR LARGE NEGATIVE X
+!             Limit value for large negative X
 !
 50 erfc1 = 2.0
 if (ind .ne. 0) erfc1 = 2.0*exp(x*x)
 return
 !
-!             LIMIT VALUE FOR LARGE POSITIVE X
+!             Limit value for large positive X
 !                       WHEN IND = 0
 !
 60 erfc1 = 0.0
@@ -6473,7 +6473,7 @@ implicit none
 integer, intent(in) :: mo
 !-----------------------------------------------------------------------
 !
-!               COMPUTATION OF THE COMPLEX ERROR FUNCTION
+!               Computation of the complex error function
 !
 !                          -----------------
 !
@@ -6532,7 +6532,7 @@ d = x - 2.d0
 if (d*d + y*y .lt. 1.d0) go to 40
 go to 50
 !
-!                          TAYLOR SERIES
+!                          Taylor series
 !
 20 c2 = c + c
 tm(1) = c2*x
@@ -6579,8 +6579,8 @@ w(1) = 2.d0 - w(1)
 w(2) = - w(2)
 return
 !
-!            PADE APPROXIMATION FOR THE TAYLOR SERIES
-!                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
+!            Pade approximation for the Taylor series
+!                    for  (EXP(Z*Z)/Z)*ERF(Z)
 !
 50 d = 4.d0
 if (r .gt. 16.d0) d = 16.d0
@@ -6640,8 +6640,8 @@ w(1) = 1.d0 - w(1)
 w(2) = - w(2)
 return
 !
-!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
-!                    FOR  Z*EXP(Z*Z)*ERFC(Z)
+!         Pade approximation for the asymptotic expansion
+!                    for  Z*EXP(Z*Z)*ERFC(Z)
 !
 80 d = 4.d0*r
 if (r .lt. 16.d0) d = 16.d0*r
@@ -6690,7 +6690,7 @@ tm(2) = x*hn(2) + y*hn(1)
 call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
 go to 130
 !
-!                      ASYMPTOTIC EXPANSION
+!                      Asymptotic expansion
 !
 100 call dcrec (x, y, tm(1), tm(2))
 sm(1) = tm(1)
@@ -6711,7 +6711,7 @@ sm(1) = c*sm(1)
 sm(2) = c*sm(2)
 if (x .lt. 1.d-2) go to 200
 !
-!                       TERMINATION
+!                       Termination
 !
 130 e = dexp(-sz(1))
 qf(1) = e*dcos(-sz(2))
@@ -6733,7 +6733,7 @@ if (mo .ne. 0) go to 140
 w(2) = sm(2)
 return
 !
-!               MODIFIED ASYMPTOTIC EXPANSION
+!               Modified asymptotic expansion
 !
 200 e = dexp(-sz(1))
 qf(1) = e*dcos(-sz(2))
@@ -6755,7 +6755,7 @@ implicit none
 integer, intent(in) :: mo
 !-----------------------------------------------------------------------
 !
-!              COMPUTATION OF THE COMPLEX COERROR FUNCTION
+!              Computation of the complex coerror function
 !
 !                           ----------------
 !
@@ -6816,7 +6816,7 @@ d = x - 2.d0
 if (d*d + y*y .lt. 1.d0) go to 40
 go to 50
 !
-!                          TAYLOR SERIES
+!                          Taylor series
 !
 20 c2 = c + c
 tm(1) = c2*x
@@ -6864,8 +6864,8 @@ w(1) = 2.d0 - w(1)
 w(2) = - w(2)
 return
 !
-!            PADE APPROXIMATION FOR THE TAYLOR SERIES
-!                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
+!            Pade approximation for the Taylor series
+!                    for  (EXP(Z*Z)/Z)*ERF(Z)
 !
 50 d = 4.d0
 if (r .gt. 16.d0) d = 16.d0
@@ -6927,8 +6927,8 @@ w(1) = 1.d0 - sn*tm(1)
 w(2) = - sn*tm(2)
 return
 !
-!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
-!                    FOR  Z*EXP(Z*Z)*ERFC(Z)
+!         Pade approximation for the asymptotic expansion
+!                    for  Z*EXP(Z*Z)*ERFC(Z)
 !
 80 d = 4.d0*r
 if (r .lt. 16.d0) d = 16.d0*r
@@ -6977,7 +6977,7 @@ tm(2) = x*hn(2) + y*hn(1)
 call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
 go to 130
 !
-!                      ASYMPTOTIC EXPANSION
+!                      Asymptotic expansion
 !
 100 call dcrec (x, y, tm(1), tm(2))
 sm(1) = tm(1)
@@ -6998,7 +6998,7 @@ sm(1) = c*sm(1)
 sm(2) = c*sm(2)
 if (x .lt. 1.d-2) go to 200
 !
-!                       TERMINATION
+!                       Termination
 !
 130 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 140
 e = dexp(-sz(1))
@@ -7017,7 +7017,7 @@ if (sn .eq. 1.d0) go to 140
 w(2) = sm(2)
 return
 !
-!               MODIFIED ASYMPTOTIC EXPANSION
+!               Modified asymptotic expansion
 !
 200 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 210
 e = dexp(-sz(1))
@@ -7042,7 +7042,7 @@ implicit none
 integer, intent(in) :: mo
 integer :: j, n
 !-----------------------------------------------------------------------
-!           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
+!           Calculation of ERFC(Z) using the Taylor series
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
 double precision, intent(in) :: z(2)
@@ -7164,7 +7164,7 @@ w(2) = c*(h(1)*w(2) + h(2)*w(1))
 w(1) = e + x
 if (mo .eq. 0) return
 !
-!                     COMPUTE EXP(Z*Z)*ERFC(Z)
+!                     Compute EXP(Z*Z)*ERFC(Z)
 !
 x = z(1)*z(1) - z(2)*z(2)
 y = 2.d0*z(1)*z(2)
@@ -7182,7 +7182,7 @@ double precision function derf (x)
 implicit none
 integer :: i, k
 !-----------------------------------------------------------------------
-!        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
+!        Double precision evaluation of the error function
 !-----------------------------------------------------------------------
 double precision :: ax, t
 double precision, intent(in) :: x
@@ -7233,7 +7233,7 @@ derf = 0.5d0 + (0.5d0 - dexp(-x*x)*derfc0(ax))
 if (x .lt. 0.d0) derf = -derf
 return
 !
-!                 LIMIT VALUE FOR LARGE X
+!                 Limit value for large X
 !
 30 derf = dsign(1.d0,x)
 return
@@ -7243,7 +7243,7 @@ double precision function derfc (x)
 implicit none
 integer :: i, k
 !-----------------------------------------------------------------------
-!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: ax, t, w
@@ -7311,7 +7311,7 @@ integer, intent(in) :: ind
 integer :: i, k
 !-----------------------------------------------------------------------
 !
-!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!         Evaluation of the complementary error function
 !
 !          DERFC1(IND,X) = ERFC(X)           IF IND = 0
 !          DERFC1(IND,X) = EXP(X*X)*ERFC(X)  OTHERWISE
@@ -7381,7 +7381,7 @@ if (t .gt. -dxparg(1)) return
 derfc1 = dexp(-t) * derfc0(x)
 return
 !
-!             LIMIT VALUE FOR LARGE NEGATIVE X
+!             Limit value for large negative X
 !
 80 derfc1 = 2.d0
 if (ind .ne. 0) derfc1 = 2.d0*dexp(x*x)
@@ -7487,7 +7487,7 @@ data e0 / .540464821348814822409610122136d+00/, &
 &e2 /-.288573438386338758794591212600d-02/, &
 &e3 /-.529353396945788057720258856000d-03/
 !-------------------------------
-!     COEFFICIENTS FOR THE ASYMPTOTIC EXPANSION
+!     Coefficients for the asymptotic expansion
 !-------------------------------
 data s1  / .75000000000000000000d+00/, &
 &s2  /-.18750000000000000000d+01/, &
@@ -7558,13 +7558,13 @@ real :: c, c1, c2, eps, s, t, v, v1
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!              EVALUATION OF THE INVERSE ERROR FUNCTION
+!              Evaluation of the inverse error function
 !
 !                        ---------------
 !
 !     FOR 0 .LE. P .LT. 1,  W = ERFI(P,Q) WHERE ERF(W) = P. IT IS
 !     ASSUMED THAT Q = 1 - P.  IF P .LT. 0, Q .LE. 0, OR P + Q IS
-!     NOT 1, THEN ERFI(P,Q) IS SET TO A NEGATIVE VALUE.
+!     not 1, then ERFI(P,Q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
@@ -7577,7 +7577,7 @@ real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 data c /.5625/, c1 /.87890625/
 data c2 /-.2302585092994046e+03/
 !-----------------------------------------------------------------------
-!                            TABLE NO.16
+!                            Table no.16
 !-----------------------------------------------------------------------
 data a(1)/.1400216916161353e+03/,  a(2)/-.7204275515686407e+03/, &
 &a(3)/.1296708621660511e+04/,  a(4)/-.9697932901514031e+03/, &
@@ -7586,7 +7586,7 @@ data b(1)/.1291046303114685e+03/,  b(2)/-.7312308064260973e+03/, &
 &b(3)/.1494970492915789e+04/,  b(4)/-.1337793793683419e+04/, &
 &b(5)/.5033747142783567e+03/,  b(6)/-.6220205554529216e+02/
 !-----------------------------------------------------------------------
-!                            TABLE NO.36
+!                            Table no.36
 !-----------------------------------------------------------------------
 data a1(1)/-.1690478046781745e+00/, a1(2)/.3524374318100228e+01/, &
 &a1(3)/-.2698143370550352e+02/, a1(4)/.9340783041018743e+02/, &
@@ -7597,7 +7597,7 @@ data b1(1)/-.1203221171313429e+00/, b1(2)/.2684812231556632e+01/, &
 &b1(5)/-.1604352408444319e+03/, b1(6)/.1259117982101525e+03/, &
 &b1(7)/-.3184861786248824e+02/
 !-----------------------------------------------------------------------
-!                            TABLE NO.56
+!                            Table no.56
 !-----------------------------------------------------------------------
 data a2(1)/.3100808562552958e-04/, a2(2)/.4097487603011940e-02/, &
 &a2(3)/.1214902662897276e+00/, a2(4)/.1109167694639028e+01/, &
@@ -7609,7 +7609,7 @@ data b2(1)/.3100809298564522e-04/, b2(2)/.4097528678663915e-02/, &
 &b2(5)/.3432363984305290e+01/, b2(6)/.4140284677116202e+01/, &
 &b2(7)/.4119797271272204e+01/, b2(8)/.2162961962641435e+01/
 !-----------------------------------------------------------------------
-!                            TABLE NO.79
+!                            Table no.79
 !-----------------------------------------------------------------------
 data a3(1)/.3205405422062050e-08/, a3(2)/.1899479322632128e-05/, &
 &a3(3)/.2814223189858532e-03/, a3(4)/.1370504879067817e-01/, &
@@ -7665,7 +7665,7 @@ s = v * ((((((v + b3(6))*v + b3(5))*v + b3(4))*v + b3(3))*v &
 40 erfi = t/s
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 erfi = -1.0
 return
@@ -7677,14 +7677,14 @@ double precision function derfi (p, q)
 implicit none
 !-----------------------------------------------------------------------
 !
-!                  DOUBLE PRECISION COMPUTATION OF
-!                    THE INVERSE ERROR FUNCTION
+!                  Double precision computation of
+!                    the inverse error function
 !
 !                         ----------------
 !
 !     FOR 0 .LE. P .LE. 1,  W = DERFI(P,Q) WHERE ERF(W) = P. IT
 !     IS ASSUMED THAT Q = 1 - P. IF P .LT. 0, Q .LE. 0, OR P + Q
-!     IS NOT 1, THEN DERFI(P,Q) IS SET TO A NEGATIVE VALUE.
+!     is not 1, then DERFI(P,Q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
@@ -7728,7 +7728,7 @@ data b2(1)/.209004294324106981d+2/, b2(2)/.198607335199741185d+3/, &
 &b2(3)/.439311287748524270d+3/, b2(4)/.355415991280861051d+3/, &
 &b2(5)/.123303672628828521d+3/, b2(6)/.186060775181898848d+2/
 !-----------------------------------------------------------------------
-!                       MODIFIED TABLE NO.59
+!                       Modified table no.59
 !-----------------------------------------------------------------------
 data a3(1) /.237121026548776092d4/, a3(2) /.732899958728969905d6/, &
 &a3(3) /.182063754893444775d7/, a3(4) /.269191299062422172d7/, &
@@ -7742,7 +7742,7 @@ data b3(1) /.851911109952055378d6/, b3(2) /.194746720192729966d7/, &
 &b3(7) /.303357770911491406d6/, b3(8) /.459721480357533823d5/, &
 &b3(9) /.373762573565814355d4/, b3(10)/.118064334590001264d3/
 !-----------------------------------------------------------------------
-!                       MODIFIED TABLE NO.82
+!                       Modified table no.82
 !-----------------------------------------------------------------------
 data a4(1)/.154269429680540807d12/, a4(2)/.430207405012067454d12/, &
 &a4(3)/.182623446525965017d12/, a4(4)/.248740194409838713d11/, &
@@ -7829,7 +7829,7 @@ f = (dlog(t) - lnq) - x*x
 derfi = x + r*t*f
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 derfi = -1.d0
 return
@@ -7847,7 +7847,7 @@ real :: epsln
 real :: exparg
 real :: spmpar
 !-----------------------------------------------------------------------
-!             COMPUTATION OF ERF(X + H) - ERF(X - H)
+!             Computation of ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
 !     C = 2/SQRT(PI)
 !     P = LN(9*SQRT(PI))
@@ -7883,7 +7883,7 @@ if (ax .gt. 3.0*ah) go to 10
 if (xph .lt. 1.0) go to 110
 go to 130
 !-------------------------------------------------
-!        FOR (AX LESS THAN OR EQUAL TO .40)
+!        For (AX less than or equal to .40)
 !-------------------------------------------------
 10 e = amax1(1.e-15,eps)
 if (ax .gt. 0.40) go to 30
@@ -7908,7 +7908,7 @@ s = 0.5 + (s + 0.5)
 aerf = 2.0*c*ah*s
 go to 45
 !-------------------------------------------------
-!        FOR (AX GREATER THAN .40)
+!        For (AX greater than .40)
 !-------------------------------------------------
 30 n = 1
 j = 0
@@ -7933,7 +7933,7 @@ s = 0.
 45 if (h .lt. 0.0) aerf = -aerf
 return
 !-------------------------------------------------
-!        SPECIAL CASES
+!        Special cases
 !-------------------------------------------------
 100 if (xph .lt. 5.8) go to 110
 if (xmh .gt. -5.6) go to 120
@@ -7955,7 +7955,7 @@ return
 140 aerf = 2.0*c*h*(0.5 + (0.5 - (x*x + h*h/3.0)))
 return
 !
-!     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
+!     The value is  2.0*EXP(-X*X)*ERF(H)
 !
 150 t = 2.0
 x2 = x*x
@@ -7971,7 +7971,7 @@ double precision function daerf (x, h)
 implicit none
 integer :: j
 !-----------------------------------------------------------------------
-!             COMPUTATION OF ERF(X + H) - ERF(X - H)
+!             Computation of ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x, h
 double precision :: ah, ax, a2, c, dn2, e, eps, hf, hg, h2, h3, n, &
@@ -8013,7 +8013,7 @@ if (ax .gt. 3.d0*ah) go to 10
 if (xph .lt. 1.d0) go to 110
 go to 130
 !-------------------------------------------------
-!        FOR (AX LESS THAN OR EQUAL TO .40)
+!        For (AX less than or equal to .40)
 !-------------------------------------------------
 10 e = dmax1(1.d-30,eps)
 if (ax .gt. 0.4d0) go to 30
@@ -8038,7 +8038,7 @@ s = 0.5d0 + (0.5d0 + s)
 daerf = 2.d0*c*ah*s
 go to 45
 !-------------------------------------------------
-!        FOR (AX GREATER THAN .40)
+!        For (AX greater than .40)
 !-------------------------------------------------
 30 n = 1.d0
 j = 0
@@ -8063,7 +8063,7 @@ s = 0.d0
 45 if (h .lt. 0.d0) daerf = -daerf
 return
 !-------------------------------------------------
-!        SPECIAL CASES
+!        Special cases
 !-------------------------------------------------
 100 if (xph .lt. 8.5d0) go to 110
 if (xmh .gt. -8.3d0) go to 120
@@ -8085,7 +8085,7 @@ return
 140 daerf = 2.d0*c*h*(0.5d0 + (0.5d0 - (x*x + h*h/3.d0)))
 return
 !
-!     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
+!     The value is  2.0*EXP(-X*X)*ERF(H)
 !
 150 t = 2.d0
 x2 = x*x
@@ -8135,7 +8135,7 @@ real :: erfi
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
+!         Evaluation of the inverse normal distribution function
 !
 !                           ------------
 !
@@ -8143,11 +8143,11 @@ real :: spmpar
 !
 !        PROB(X) = INTEGRAL FROM MINUS INFINITY TO X OF F(T)
 !
-!     IS THE NORMAL DISTRIBUTION FUNCTION OF ZERO MEAN AND UNIT
+!     Is the normal distribution function of zero mean and unit
 !     VARIANCE. IT IS ASSUMED THAT P .GT. 0, Q .GT. 0, P + Q = 1,
 !     AND D = P - 0.5. THE VALUE W IS COMPUTED WHERE PROB(W) = P.
 !
-!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!     IERR is a variable that reports the status of the results.
 !
 !       IERR = 0  NO INPUT ERRORS WERE DETECTED. W WAS COMPUTED.
 !       IERR = 1  EITHER P OR Q IS INCORRECT.
@@ -8174,7 +8174,7 @@ w = rt2*w
 if (d .lt. 0.0) w = - w
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 10 ierr = 1
 return
@@ -8187,7 +8187,7 @@ implicit none
 integer, intent(inout) :: ierr
 !-----------------------------------------------------------------------
 !
-!         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
+!         Evaluation of the inverse normal distribution function
 !
 !                           ------------
 !
@@ -8195,11 +8195,11 @@ integer, intent(inout) :: ierr
 !
 !        PROB(X) = INTEGRAL FROM MINUS INFINITY TO X OF F(T)
 !
-!     IS THE NORMAL DISTRIBUTION FUNCTION OF ZERO MEAN AND UNIT
+!     Is the normal distribution function of zero mean and unit
 !     VARIANCE. IT IS ASSUMED THAT P .GT. 0, Q .GT. 0, P + Q = 1,
 !     AND D = P - 0.5. THE VALUE W IS COMPUTED WHERE PROB(W) = P.
 !
-!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!     IERR is a variable that reports the status of the results.
 !
 !       IERR = 0  NO INPUT ERRORS WERE DETECTED. W WAS COMPUTED.
 !       IERR = 1  EITHER P OR Q IS INCORRECT.
@@ -8231,7 +8231,7 @@ w = rt2*w
 if (d .lt. 0.d0) w = - w
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 10 ierr = 1
 return
@@ -8244,16 +8244,16 @@ implicit none
 integer :: i
 !-----------------------------------------------------------------------
 !
-!     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
-!     INTEGRAL,
+!     This function computes single precision values of dawsons
+!     integral,
 !
-!        EXP(-X*X) * INTEGRAL (FROM 0 TO X) EXP(T*T) DT,
+!        EXP(-X*X) * integral (from 0 to X) EXP(T*T) DT,
 !
-!     DEFINED FOR ALL REAL ARGUMENTS.
+!     Defined for all real arguments.
 !
-!     THE MAIN COMPUTATION INVOLVES EVALUATION OF RATIONAL CHEBYSHEV
-!     APPROXIMATIONS PUBLISHED IN MATH. COMP. 24, 171-178(1970) BY
-!     CODY, PACIOREK AND THACHER.
+!     The main computation involves evaluation of rational Chebyshev
+!     approximations published in math. Comp. 24, 171-178(1970) By
+!     cody, Paciorek and Thacher.
 !
 !-----------------------------------------------------------------------
 real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
@@ -8264,7 +8264,7 @@ real :: y, xlarge, xsmall
 data xlarge/16777216.0/, xsmall/.59604644775391e-07/
 !---------------
 !
-!           COEFFICIENTS FOR R(8,8) APPROXIMATION,
+!           Coefficients for R(8,8) approximation,
 !           USED FOR ABS(X)  .LT.  2.5
 !
 !---------------
@@ -8280,8 +8280,8 @@ data q1(1)/.100000000000000e+01/, q1(2)/.531067616851310e+00/, &
 &q1(9)/.574807177698046e-08/
 !---------------
 !
-!           COEFFICIENTS FOR R(7,7) APPROXIMATION,
-!           IN J-FRACTION FORM, USED FOR
+!           Coefficients for R(7,7) approximation,
+!           in J-fraction form, used for
 !           2.5 .LE. ABS(X) .LT. 3.5
 !
 !---------------
@@ -8295,8 +8295,8 @@ data q2(1)/-.673106069744813e+00/, q2(2)/ .124486788262252e+04/, &
 &q2(7)/ .226064666074309e+00/
 !---------------
 !
-!           COEFFICIENTS FOR R(7,7) APPROXIMATION,
-!           IN J-FRACTION FORM, USED FOR
+!           Coefficients for R(7,7) approximation,
+!           in J-fraction form, used for
 !           3.5 .LE. ABS(X) .LE. 5.0
 !
 !---------------
@@ -8310,7 +8310,7 @@ data q3(1)/ .287776122973187e+03/, q3(2)/ .256105722342226e+02/, &
 &q3(7)/ .250011459611839e+00/
 !---------------
 !
-!           COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!           Coefficients for R(6,6) approximation,
 !           IN J-FRACTION FORM, USED FOR ABS(X) .GT. 5.0
 !
 !---------------
@@ -8378,7 +8378,7 @@ go to 1000
 500 daw = 0.5e0 / x
 go to 1000
 !
-!     ---------- RETURN FOR SMALL X ----------
+!     ---------- Return for small X ----------
 !
 600 daw = x
 !
@@ -8389,7 +8389,7 @@ double precision function dpdaw (x)
 implicit none
 integer :: i, k
 !-----------------------------------------------------------------------
-!            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
+!            Double precision computation of dawsons integral
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: a(20), b(45), ax, eps, t, w
@@ -8498,7 +8498,7 @@ implicit none
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF X*DAW(X) FOR X .GE. 4
-!                WHERE DAW(X) IS THE DAWSON INTEGRAL
+!                where DAW(X) is the Dawson integral
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -8670,11 +8670,11 @@ u = (u*t + g1)*t + g0
 v = (((((((((h10*t + h9)*t + h8)*t + h7)*t + h6)*t + &
 &h5)*t + h4)*t + h3)*t + h2)*t + h1)*t + 1.d0
 !
-!          THE ABOVE FOUR MINIMAX APPROXIMATIONS U/V
-!          ARE ACCURATE TO WITHIN 1 UNIT OF THE 25-TH
-!          SIGNIFICANT DIGIT. THUS, THE APPROXIMATION
-!          FOR W IS ACCURATE TO WITHIN 1 UNIT OF THE
-!          29-TH SIGNIFICANT DIGIT.
+!          The above four minimax approximations U/V
+!          are accurate to within 1 unit of the 25-TH
+!          significant digit. Thus, the approximation
+!          for W is accurate to within 1 unit of the
+!          29-TH significant digit.
 !
 40 w = ((((((u/v)*t + s5)*t + s4)*t + s3)*t + s2)*t + &
 &s1)*t + s0
@@ -8701,7 +8701,7 @@ real :: exparg
 real :: cpabs
 !-----------------------------------------------------------------------
 !
-!            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
+!            Computation of the complex fresnel integral E(Z)
 !
 !                           ----------------
 !
@@ -8759,7 +8759,7 @@ if (r .le. 1.0) go to 20
 if (r .ge. 38.0) go to 60
 if (x .lt. 0.016*y*y) go to 50
 !
-!                       TAYLOR SERIES
+!                       Taylor series
 !
 20 sm(1) = 0.0
 sm(2) = 0.0
@@ -8788,7 +8788,7 @@ qf(1) = qm*cos(-y)
 qf(2) = qm*sin(-y)
 go to 110
 !
-!              RATIONAL FUNCTION APPROXIMATION
+!              Rational function APPROXIMATION
 !
 50 sm(1) = 0.0
 sm(2) = 0.0
@@ -8807,7 +8807,7 @@ sm(1) = 0.5*ts(1)
 sm(2) = 0.5*ts(2)
 go to 100
 !
-!                   ASYMPTOTIC EXPANSION
+!                   Asymptotic expansion
 !
 60 qf(1) = (x/r)/r
 qf(2) = -(y/r)/r
@@ -8832,7 +8832,7 @@ sm(1) = 0.5*ts(1)
 sm(2) = 0.5*ts(2)
 if (zr(2) .lt. 8.e-3) go to 210
 !
-!                       TERMINATION
+!                       Termination
 !
 100 if (mo .ne. 0) go to 120
 qm = exp(x)
@@ -8852,7 +8852,7 @@ return
 200 w = cmplx(0.0,c0)
 return
 !
-!               MODIFIED ASYMPTOTIC EXPANSION
+!               Modified asymptotic expansion
 !
 210 if (mo .ne. 0) go to 220
 qm = exp(x)
@@ -8881,7 +8881,7 @@ real :: sin1
 real :: cos1
 integer :: ipmpar
 !-----------------------------------------------------------------------
-!             EVALUATION OF THE REAL FRESNEL INTEGRALS
+!             Evaluation of the real fresnel integrals
 !-----------------------------------------------------------------------
 real :: n
 real :: a(6), b(6), cp(13), sp(13)
@@ -8969,7 +8969,7 @@ data q(1)/-13749310575.0/,  q(2)/34459425.0/,  q(3)/-135135.0/, &
 !--------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
-!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!            largest positive integer that may be used.
 !
                max = ipmpar(3)
 !
@@ -8999,7 +8999,7 @@ c = t*c
 s = t*xx*s
 return
 !-----------------------------------------------------------------------
-!          EVALUATION OF THE AUXILIARY FUNCTIONS F(X) AND G(X)
+!          Evaluation of the auxiliary functions F(X) and G(X)
 !                        FOR X .GE. 1.65
 !-----------------------------------------------------------------------
 20 if (x .ge. 2.0) go to 30
@@ -9058,8 +9058,8 @@ g = ((((q(1)*y + q(2))*y + q(3))*y + q(4))*y + q(5))*y + q(6)
 f = f/pix
 g = g/(pix*pixx)
 !-----------------------------------------------------------------------
-!           EVALUATION OF SIN(0.5*PI*X*X) AND COS(0.5*PI*X*X)
-!                 THE RESULTS ARE STORED IN SY AND CY
+!           Evaluation of SIN(0.5*PI*X*X) and COS(0.5*PI*X*X)
+!                 the results are stored in SY and CY
 !-----------------------------------------------------------------------
 70 m = x
 l = mod(m,2)
@@ -9076,7 +9076,7 @@ y = y + 0.5*r*r
 80 sy = sin1(y)
 cy = cos1(y)
 !-----------------------------------------------------------------------
-!                             TERMINATION
+!                             Termination
 !-----------------------------------------------------------------------
 90 c = 0.5 + (f*sy - g*cy)
 s = 0.5 - (f*cy + g*sy)
@@ -9103,7 +9103,7 @@ real :: anorm
 real :: spmpar
 real :: cpabs
 !-----------------------------------------------------------------------
-!           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
+!           Evaluation of the complex exponential integral
 !-----------------------------------------------------------------------
 complex, intent(in) :: z
 complex, intent(inout) :: w
@@ -9159,7 +9159,7 @@ if (r .lt. 4.0) go to 10
 10 if (x .lt. 0.09*y*y) go to 50
 if (r .gt. 3.6 .and. abs(y) .gt. 1.8*x) go to 60
 !
-!                        TAYLOR SERIES
+!                        Taylor series
 !
 20 sm(1) = 0.0
 sm(2) = 0.0
@@ -9184,7 +9184,7 @@ sm(1) = (euler + alog(r)) + sm(1)
 sm(2) = atan2(-y, -x) + sm(2)
 go to 110
 !
-!                      RATIONAL EXPANSION
+!                      Rational expansion
 !
 50 sm(1) = 0.0
 sm(2) = 0.0
@@ -9197,8 +9197,8 @@ do i = 1,18
 end do
 go to 100
 !
-!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
-!                       FOR EXP(-Z)*EI(Z)
+!         Pade approximation for the asymptotic expansion
+!                       for EXP(-Z)*EI(Z)
 !
 60 x = - x
 y = - y
@@ -9250,7 +9250,7 @@ w = w/z
 sm(1) = real(w)
 sm(2) = aimag(w)
 !
-!                         TERMINATION
+!                         Termination
 !
 100 ind = x .le. 0.0 .or. abs(y) .gt. 1.e-2
 if (ind .and. mo .ne. 0) go to 130
@@ -9302,19 +9302,19 @@ integer, intent(out) :: ierr
 double precision :: dx0
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE COMPUTES THE EXPONENTIAL INTEGRALS
+!     This subroutine computes the exponential integrals
 !
 !            EI(X),  E-SUB-1(X) = -EI(-X),  AND  EXP(-X)*EI(X)
 !
-!     WHERE
+!     Where
 !
 !             INTEGRAL (FROM T=-INFINITY TO T=X) (EXP(T)/T),  X .GT. 0,
 !     EI(X) =
 !             -INTEGRAL (FROM T=-X TO T=INFINITY) (EXP(-T)/T),
 !                                                         X .LT. 0,
 !
-!     AND WHERE THE FIRST INTEGRAL IS A PRINCIPAL VALUE INTEGRAL. THE
-!     ARGUMENTS INT, ARG, AND RESULT HAVE THE FOLLOWING USAGE ...
+!     And where the first integral is a principal value integral. The
+!     arguments int, arg, and result have the following usage ...
 !
 !            INT              ARG             RESULT
 !             1            X .NE. 0          EI(X)
@@ -9322,17 +9322,17 @@ double precision :: dx0
 !             3            X .NE. 0          EXP(-X)*EI(X)
 !
 !     THE EXPANSION FOR 4 .LE. X .LE. 8 IS DUE TO WAYNE FULLERTON (LOS
-!     ALAMOS). THE REMAINING EXPANSIONS ARE FROM MATH. COMP. 22, 641-649
-!     (1968), AND MATH. COMP. 23, 289-303(1969) BY CODY AND THACHER.
+!     alamos). The remaining expansions are from math. Comp. 22, 641-649
+!     (1968), and math. Comp. 23, 289-303(1969) By cody and Thacher.
 !
 !        ------------
 !
-!     ERROR MONITORING
+!     Error monitoring
 !
-!        THE PARAMETER IERR IS A VARIABLE THAT IS SET BY THE ROUTINE.
-!     IF NO ERRORS ARE DETECTED THEN IERR IS SET TO 0. THE FOLLOWING
-!     TABLE INDICATES THE TYPES OF ERRORS THAT MAY BE ENCOUNTERED IN
-!     THE ROUTINE AND THE FUNCTION VALUES SUPPLIED IN EACH CASE.
+!        The parameter IERR is a variable that is set by the routine.
+!     If no errors are detected then IERR is set to 0. The following
+!     table indicates the types of errors that may be encountered in
+!     the routine and the function values supplied in each case.
 !
 !     IERR    ERROR     ARGUMENT          FUNCTION VALUES FOR
 !                        RANGE        EI(X)  EXP(-X)*EI(X)  E-SUB-1(X)
@@ -9341,8 +9341,8 @@ double precision :: dx0
 !      3    ILLEGAL X     X = 0         T          T          T
 !      4    ILLEGAL X    X .LT. 0       -          -          T
 !
-!     T INDICATES THAT THE ROUTINE TERMINATES WITHOUT ASSIGNING A VALUE
-!     TO THE FUNCTION.
+!     T indicates that the routine terminates without assigning a value
+!     to the function.
 !
 !        ----------
 !
@@ -9352,25 +9352,25 @@ double precision :: dx0
 !
 !-----------------------------------------------------------------------
 !
-!     XMAX AND XMIN ARE MACHINE DEPENDENT CONSTANTS FOR DETECTING
-!     UNDERFLOW AND OVERFLOW. XMAX AND XMIN ARE GIVEN APPROXIMATE
-!     VALUES IN STATEMENTS 240 AND 340.
+!     Xmax and xmin are machine dependent constants for detecting
+!     underflow and overflow. Xmax and xmin are given approximate
+!     values in statements 240 and 340.
 !
 !-----------------------------------------------------------------------
 !
-!     VALUE OF EXP(40.0)
+!     Value of EXP(40.0)
 !
 !     ----------
 data dexp40/.235385266837020e+18/
 !     ----------
 !
-!     ZERO OF EI(X)
+!     Zero of EI(X)
 !
 !     ----------
 data x0/.372507410781366/,dx0/.37250741078136663446199186658d0/
 !     ----------
 !
-!     COEFFICIENTS FOR R(5,4) APPROXIMATION,
+!     Coefficients for R(5,4) approximation,
 !     USED FOR -1.0 .LE. X .LT. 0.0
 !
 !     ----------
@@ -9382,7 +9382,7 @@ data b(1) /.100000000000000e+01/, b(2) /.417810755380398e+00/, &
 &b(5) /.245134203588369e-03/
 !     ----------
 !
-!     COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!     Coefficients for R(6,6) approximation,
 !     USED FOR -4.0 .LE. X .LT. -1.0
 !
 !     ----------
@@ -9396,7 +9396,7 @@ data d(1) /.100000000000000e+01/, d(2) /.100411643829054e+02/, &
 &d(7) /.103400130404874e+00/
 !     ----------
 !
-!     COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!     Coefficients for R(6,6) approximation,
 !     USED FOR X .LT. -4.0
 !
 !     ----------
@@ -9410,8 +9410,8 @@ data f(1) /.100000000000000e+01/, f(2) /.286271060422192e+02/, &
 &f(7) /.631657483280800e+03/
 !     ----------
 !
-!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
-!     IN CHEBYSHEV POLYNOMIAL FORM, USED FOR
+!     Coefficients for R(7,7) approximation,
+!     in Chebyshev polynomial form, used for
 !     0.0 .LT. X .LT. 4.0
 !
 !     ----------
@@ -9425,7 +9425,7 @@ data q1(1) /.341718750000000e+02/, q1(2)/-.160708926587221e+04/, &
 &q1(7) /.891925767575612e+08/, q1(8)/-.826271498626055e+08/
 !     ----------
 !
-!     COEFFICIENTS FOR CHEBYSHEV EXPANSION FOR
+!     Coefficients for Chebyshev expansion for
 !     4.0 .LE. X .LE. 8.0
 !
 !     ----------
@@ -9440,8 +9440,8 @@ data r(1) / .636295897967470e+00/, r(2) /-.130811686750676e+00/, &
 &r(17)/-.119098228722226e-12/, r(18)/-.284386823892656e-14/, &
 &r(19)/ .250803270266868e-14/, r(20)/ .787296415285598e-15/
 !
-!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
-!     IN J-FRACTION FORM, USED FOR
+!     Coefficients for R(7,7) approximation,
+!     in J-fraction form, used for
 !     8.0 .LT. X .LT. 12.0
 !
 !     ----------
@@ -9455,8 +9455,8 @@ data q2(1)/ .393707701852715e+01/, q2(2) /.300892648372915e+03/, &
 &q2(7)/ .527468851962908e+00/
 !     ----------
 !
-!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
-!     IN J-FRACTION FORM, USED FOR
+!     Coefficients for R(7,7) approximation,
+!     in J-fraction form, used for
 !     12.0 .LE. X .LT. 24.0
 !
 !     ----------
@@ -9470,7 +9470,7 @@ data q3(1) /.695000655887434e+02/, q3(2) /.572837193837324e+02/, &
 &q3(7) /.100083867402639e+01/
 !     ----------
 !
-!     COEFFICIENTS FOR R(7.7) APPROXIMATION,
+!     Coefficients for R(7.7) approximation,
 !     IN J-FRACTION FORM, USED FOR X .GE. 24.0
 !
 !     ----------
@@ -9492,9 +9492,9 @@ if (x) 280, 640, 110
 if (x .gt. 8.e0) go to 160
 if (x .ge. 4.e0) go to 150
 !     ---------- 0.0 .LT. X .LT. 4.0.
-!                RATIONAL APPROXIMATION USED IS EXPRESSED
-!                IN TERMS OF CHEBYSHEV POLYNOMIALS TO
-!                IMPROVE CONDITIONING  ----------
+!                Rational approximation used is expressed
+!                in terms of Chebyshev polynomials to
+!                improve conditioning  ----------
 t = x + x
 t = t / 3.0e0 - 2.0e0
 px(1) = 0.0e0
@@ -9516,8 +9516,8 @@ xx0 = x / x0
 ei = alog(xx0) + xmx0 * frac
 if (int .eq. 3) ei = exp(-x) * ei
 go to 410
-!     ---------- EVALUATE APPROXIMATION FOR LN(X/X0)
-!                FOR X CLOSE TO X0 ----------
+!     ---------- Evaluate approximation for LN(X/X0)
+!                for X close to X0 ----------
 140 y = xmx0 / x0
 ei = alnrel(y) + xmx0 * frac
 if (int .eq. 3) ei = exp(-x) * ei
@@ -9564,12 +9564,12 @@ if (int .eq. 3) go to 410
 if (x .gt. 150.0e0) go to 270
 ei = ei * exp(x)
 go to 410
-!     ---------- CALCULATION REFORMULATED TO AVOID
-!                PREMATURE OVERFLOW ----------
+!     ---------- Calculation reformulated to avoid
+!                premature overflow ----------
 270 ei = (ei * exp(x-40.0e0)) * dexp40
 go to 410
-!     ---------- ORIGINAL X WAS NEGATIVE.  CALCULATION OF
-!                E-SUB-1 JOINS AT LABEL 300 ----------
+!     ---------- Original X was negative.  Calculation of
+!                E-sub-1 joins at label 300 ----------
 280 y = -x
 300 w = 1.0e0 / y
 if (y .gt. 4.0e0) go to 340
@@ -9607,20 +9607,20 @@ return
 450 y = x
 if (y) 660, 640, 300
 !     ---------- ERROR RETURN FOR X .LT. XMIN,
-!                CAUSING UNDERFLOW ----------
+!                causing underflow ----------
 600 ei = 0.0e0
 ierr = 1
 go to 410
 !     ---------- ERROR RETURN FOR X .GT. XMAX,
-!                CAUSING OVERFLOW ----------
+!                causing overflow ----------
 620 ierr = 2
 return
-!     ---------- ERROR RETURN FOR ILLEGAL
+!     ---------- Error return for illegal
 !                ARGUMENT, X = 0 ----------
 640 ierr = 3
 return
-!     ---------- ERROR RETURN FOR NEGATIVE
-!                ARGUMENT IN E-SUB-1 ----------
+!     ---------- Error return for negative
+!                argument in E-sub-1 ----------
 660 ierr = 4
 return
 end subroutine expli
@@ -9628,7 +9628,7 @@ end subroutine expli
 double precision function dei (x)
 implicit none
 !-----------------------------------------------------------------------
-!        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
+!        Double precision evaluation of the exponential integral
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: de1e
@@ -9641,7 +9641,7 @@ end function dei
 double precision function dei1 (x)
 implicit none
 !-----------------------------------------------------------------------
-!          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
+!          Double precision evaluation of EXP(-X)*EI(X)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: de1e
@@ -9657,9 +9657,9 @@ implicit none
 integer :: m
 !-----------------------------------------------------------------------
 !
-!     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
-!     THE CAUCHY PRINCIPAL VALUE FOR NEGATIVE X. IF X IS NONZERO
-!     THEN DE1E HAS THE VALUE ...
+!     Let E1(X) denote the exponential integral for positive X and
+!     the Cauchy principal value for negative X. If X is nonzero
+!     then DE1E has the value ...
 !
 !          DE1E(X) = E1(X)          IF -4 .LE. X .LE. 1
 !          DE1E(X) = EXP(X)*E1(X)   OTHERWISE
@@ -9675,51 +9675,51 @@ integer :: m
 !
 !     SERIES A             ON THE INTERVAL -3.12500E-02 TO  0.
 !                                        WITH WEIGHTED ERROR   4.62E-32
-!                                         LOG WEIGHTED ERROR  31.34
-!                               SIGNIFICANT FIGURES REQUIRED  29.70
-!                                    DECIMAL PLACES REQUIRED  32.18
+!                                         log weighted error  31.34
+!                               significant figures required  29.70
+!                                    decimal places required  32.18
 !
 !
 !     SERIES B             ON THE INTERVAL -1.25000E-01 TO -3.12500E-02
 !                                        WITH WEIGHTED ERROR   2.22E-32
-!                                         LOG WEIGHTED ERROR  31.65
-!                               SIGNIFICANT FIGURES REQUIRED  30.75
-!                                    DECIMAL PLACES REQUIRED  32.54
+!                                         log weighted error  31.65
+!                               significant figures required  30.75
+!                                    decimal places required  32.54
 !
 !
 !     SERIES D             ON THE INTERVAL -2.50000E-01 TO -1.25000E-01
 !                                        WITH WEIGHTED ERROR   5.19E-32
-!                                         LOG WEIGHTED ERROR  31.28
-!                               SIGNIFICANT FIGURES REQUIRED  30.82
-!                                    DECIMAL PLACES REQUIRED  32.09
+!                                         log weighted error  31.28
+!                               significant figures required  30.82
+!                                    decimal places required  32.09
 !
 !
 !     SERIES E             ON THE INTERVAL -4.00000E+00 TO -1.00000E+00
 !                                        WITH WEIGHTED ERROR   8.49E-34
-!                                         LOG WEIGHTED ERROR  33.07
-!                               SIGNIFICANT FIGURES REQUIRED  34.13
-!                                    DECIMAL PLACES REQUIRED  33.80
+!                                         log weighted error  33.07
+!                               significant figures required  34.13
+!                                    decimal places required  33.80
 !
 !
 !     SERIES R             ON THE INTERVAL -1.00000E+00 TO  1.00000E+00
 !                                        WITH WEIGHTED ERROR   8.08E-33
-!                                         LOG WEIGHTED ERROR  32.09
-!                        APPROX SIGNIFICANT FIGURES REQUIRED  30.4
-!                                    DECIMAL PLACES REQUIRED  32.79
+!                                         log weighted error  32.09
+!                        approx significant figures required  30.4
+!                                    decimal places required  32.79
 !
 !
 !     SERIES P             ON THE INTERVAL  2.50000E-01 TO  1.00000E+00
 !                                        WITH WEIGHTED ERROR   6.65E-32
-!                                         LOG WEIGHTED ERROR  31.18
-!                               SIGNIFICANT FIGURES REQUIRED  30.69
-!                                    DECIMAL PLACES REQUIRED  32.03
+!                                         log weighted error  31.18
+!                               significant figures required  30.69
+!                                    decimal places required  32.03
 !
 !
 !     SERIES Q             ON THE INTERVAL  0.          TO  2.50000E-01
 !                                        WITH WEIGHTED ERROR   5.07E-32
-!                                         LOG WEIGHTED ERROR  31.30
-!                               SIGNIFICANT FIGURES REQUIRED  30.40
-!                                    DECIMAL PLACES REQUIRED  32.20
+!                                         log weighted error  31.30
+!                               significant figures required  30.40
+!                                    decimal places required  32.20
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -10113,7 +10113,7 @@ if (eps .ge. 1.d-20) m = 35
 de1e = (1.d0 + dcsevl (8.d0/x-1.d0, q, m))/x
 return
 !
-!                   ASYMPTOTIC EXPANSION
+!                   Asymptotic expansion
 !
 80 t = -1.d0/x
 c = t
@@ -10132,9 +10132,9 @@ implicit none
 integer :: n
 !-----------------------------------------------------------------------
 !
-!            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
-!                  WHERE X0 IS THE ZERO OF EI(X).
-!                    EPS IS THE TOLERANCE USED.
+!            Taylor series expansion of EI(X) around X0,
+!                  where X0 is the zero of EI(X).
+!                    Eps is the tolerance used.
 !
 !-------------------------
 !     WRITTEN BY A.H. MORRIS
@@ -10196,17 +10196,17 @@ data a(31) / .6359981818273706257655285041587660739835d+12/, &
 !-------------------------
 !
 !     SET  H = X - X0  WHERE X0 IS THE ZERO OF EI(X). X0 HAS THE
-!     APPROXIMATE 60 DIGIT VALUE ...
+!     approximate 60 digit value ...
 !
 !      .37250741078136663446 19918665801191335356 89497771654051555657
 !
-!     A MORE ACCURATE VALUE IS GIVEN BY ...
+!     A more accurate value is given by ...
 !
 !            X0 = DK1/8**12 + DK2/8**24 + DK3/8**36 + DX
 !
-!     THE FOLLOWING CODE SHOULD YIELD THE CORRECT VALUE FOR H IF A
-!     BINARY, OCTAL, OR HEXADECIMAL DOUBLE PRECISION ARITHMETIC IS
-!     BEING USED.
+!     The following code should yield the correct value for H if A
+!     binary, octal, or hexadecimal double precision arithmetic is
+!     being used.
 !
 db2 = db*db
 h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
@@ -10242,16 +10242,16 @@ real :: spmpar
 !         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
 !         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
 !
-!     ABSTRACT
-!         SI COMPUTES THE INTEGRAL OF SIN(T)/T ON (0,X) BY MEANS
-!         OF CHEBYSHEV EXPANSIONS ON (0,5) AND (5,INFINITY).
+!     Abstract
+!         SI computes the integral of SIN(T)/T on (0,X) by means
+!         of Chebyshev expansions on (0,5) and (5,INFINITY).
 !
-!     DESCRIPTION OF ARGUMENTS
+!     Description of arguments
 !
-!         INPUT
+!         Input
 !           X      - LIMIT OF INTEGRATION, UNRESTRICTED
 !
-!         OUTPUT
+!         Output
 !           SI     - VALUE OF THE INTEGRAL
 !
 !
@@ -10363,16 +10363,16 @@ real :: spmpar
 !         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
 !         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
 !
-!     ABSTRACT
-!         CIN COMPUTES THE INTEGRAL OF (1-COS(T))/T ON (0,X) BY MEANS
-!         OF CHEBYSHEV EXPANSIONS ON (0,5) AND (5,INFINITY).
+!     Abstract
+!         CIN computes the integral of (1-COS(T))/T on (0,X) by means
+!         of Chebyshev expansions on (0,5) and (5,INFINITY).
 !
-!     DESCRIPTION OF ARGUMENTS
+!     Description of arguments
 !
-!         INPUT
+!         Input
 !           X      - LIMIT OF INTEGRATION, UNRESTRICTED
 !
-!         OUTPUT
+!         Output
 !           CIN    - VALUE OF THE INTEGRAL
 !
 !
@@ -10472,7 +10472,7 @@ implicit none
 integer :: i
 real :: const, euler, pm, qm, r, ss, x, y, zeta2
 !-----------------------------------------------------------------------
-!        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
+!        Computation of the exponential exponential integral
 !-----------------------------------------------------------------------
 complex, intent(in) :: z
 complex, intent(inout) :: w
@@ -10555,7 +10555,7 @@ if (r .ge. 1296.0) go to 10
 if (x .lt. 0.07*y*y) go to 30
 go to 40
 !-----------------------------------------------------------------------
-!                     ASYMPTOTIC EXPANSION
+!                     Asymptotic expansion
 !-----------------------------------------------------------------------
 10 qf(1) =  x/r
 qf(2) = -y/r
@@ -10578,7 +10578,7 @@ pm = 1.0
    if (pm .lt. 36.0) go to 20
 go to 130
 !-----------------------------------------------------------------------
-!                      RATIONAL EXPANSION
+!                      Rational expansion
 !-----------------------------------------------------------------------
 30 sm(1) = 0.0
 sm(2) = 0.0
@@ -10593,7 +10593,7 @@ do i = 1,18
 end do
 go to 130
 !-----------------------------------------------------------------------
-!                 EXPANSION INVOLVING EI AND DI
+!                 Expansion involving EI and DI
 !-----------------------------------------------------------------------
 40 zl(1) = euler + 0.5*alog(r)
 zl(2) = atan2(-y, -x)
@@ -10630,7 +10630,7 @@ end do
 ts(1) = -(x*sm(1) + y*sm(2))/r
 ts(2) = -(x*sm(2) - y*sm(1))/r
 !
-!                    COMPUTE THE EXPANSION
+!                    Compute the expansion
 !
 sr(1) = sr(1) - ts(1) - zeta2
 sr(2) = sr(2) - ts(2)
@@ -10656,7 +10656,7 @@ qm = zeta2
 80 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
 !
-!                      COMPUTE EXP(-Z)*SM
+!                      Compute EXP(-Z)*SM
 !
 qm = exp(-x)
 qf(1) = qm*cos(-y)
@@ -10696,7 +10696,7 @@ qm = 0.0
 120 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
 !-----------------------------------------------------------------------
-!                         TERMINATION
+!                         Termination
 !-----------------------------------------------------------------------
 130 w = cmplx(sm(1), sm(2))
 return

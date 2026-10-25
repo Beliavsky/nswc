@@ -44,7 +44,7 @@ end do
 k = 0
 rdx2 = 0.0
 rdr2 = 0.0
-! BEGIN K-TH ITERATION STEP.
+! Begin K-TH iteration step.
 30 if (k.lt.2) go to 40
 if (((64.*rdx2.lt.rdx1) .and. (rdx2.gt.eta2*rnx)) .or. &
 &((64.*rdr2.lt.rdr1) .and. (rdr2.gt.eta2*rnr))) go to 40
@@ -54,7 +54,7 @@ rdr1 = rdr2
 rdx2 = 0.0
 rdr2 = 0.0
 if (k.eq.0) go to 160
-! NEW RESIDUALS.
+! New residuals.
 do 50 i = 1,m
   wres(i) = wres(i) + f(i)*w(i)
   if (w(i).eq.0.0) go to 50
@@ -165,8 +165,8 @@ subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n1
 integer :: j, l, lmm, mh, mpl, mpn1, mv, ns, nsm1
-! SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
-! THIS SUBROUTINE CALCULATES NEW VALUES OF F.
+! Subroutine SOLVE3 is called only by subroutine SOLVE2.
+! This subroutine calculates new values of F.
 real :: c
 real, intent(in) :: d(*)
 real, intent(inout) :: f(*)
@@ -237,21 +237,21 @@ subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
 implicit none
 integer, intent(in) :: m1, n, n1, nn
 integer :: i, j, k, ka, l, n1p1
-! SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
-! STORED IN C, D AND IPIVOT TO COMPUTE THE UNSCALED COVARIANCE MATRIX
-! OF THE LEAST SQUARES COEFFICIENTS.
-! ON ENTRY, THE FIRST N ROWS AND THE FIRST N COLUMNS OF C CONTAIN THE
-! UPPER TRIANGULAR MATRIX OBTAINED FROM THE DECOMPOSITION.  THIS INPUT
-! MATRIX IS DESTROYED IN SUBSEQUENT CALCULATIONS.
-! ON EXIT, THE LOWER TRIANGULAR PORTION OF THE SYMMETRIC UNSCALED
-! COVARIANCE MATRIX IS CONTAINED IN
+! Subroutine COVAR uses results from the orthogonal decomposition
+! stored in C, D and IPIVOT to compute the unscaled covariance matrix
+! of the least squares coefficients.
+! On entry, the first N rows and the first N columns of C contain the
+! upper triangular matrix obtained from the decomposition.  This input
+! matrix is destroyed in subsequent calculations.
+! On exit, the lower triangular portion of the symmetric unscaled
+! covariance matrix is contained in
 !     C(1,1)
 !     C(2,1) C(2,2)
 !     . . .
 !     C(N,1) C(N,2) ... C(N,N)
-! IF N1 IS LESS THAN N, ONE OR MORE COLUMNS OF THE MATRIX
+! if N1 is less than N, one or more columns of the matrix
 ! H = (SQRT(W))*A WERE REJECTED AS BEING LINEARLY DEPENDENT.  WHENEVER
-! THE K-TH COLUMN OF H WAS SO REJECTED, C(I,J) IS SET EQUAL TO ZERO,
+! the K-TH column of H was so rejected, C(I,J) is set equal to zero,
 ! FOR I = K OR J = K, I.GE.J.
 integer, intent(in) :: ipivot(n)
 real, intent(inout) :: c(nn,n)
@@ -288,7 +288,7 @@ do i=1,n
     c(i,j) = 0.0
   end do
 end do
-! PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
+! Permute the columns and rows of matrix C to account for pivoting.
 90 do i=1,n
   do j=1,n
     k = ipivot(j)
@@ -326,56 +326,56 @@ real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ------------------------------------------------------------------
 !
-!     SPLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
+!     SPLSQ finds a solution X to the following problems ...
 !
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  A*X = B
 !
 !     2. LINEAR LEAST SQUARES  --    SOLVE  A*X = B
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
 !     3. DAMPED LEAST SQUARES  --    SOLVE  (   A    )*X = ( B )
 !                                           ( DAMP*I )     ( 0 )
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
-!     WHERE A IS A MATRIX WITH M ROWS AND N COLUMNS, B AN M-VECTOR,
-!     AND DAMP A SCALAR. (ALL QUANTITIES ARE REAL.) THE MATRIX A IS
-!     A SPARSE MATRIX STORED ROWWISE IN THE ARRAYS A,IA,JA.
+!     Where A is a matrix with M rows and N columns, B an M-vector,
+!     and damp A scalar. (All quantities are real.) The matrix A is
+!     a sparse matrix stored rowwise in the arrays A,IA,JA.
 !
-!     THE RHS VECTOR B IS INPUT VIA U, AND IS SUBSEQUENTLY OVERWRITTEN.
-!
-!
-!     NOTE. SPLSQ USES AN ITERATIVE METHOD TO APPROXIMATE THE SOLUTION.
-!     THE NUMBER OF ITERATIONS REQUIRED TO REACH A CERTAIN ACCURACY
-!     DEPENDS STRONGLY ON THE SCALING OF THE PROBLEM. POOR SCALING OF
-!     THE ROWS OR COLUMNS OF A SHOULD THEREFORE BE AVOIDED WHENEVER
-!     POSSIBLE.
-!
-!     FOR EXAMPLE, IN PROBLEM 1 THE SOLUTION IS UNALTERED BY
-!     ROW-SCALING.  IF A ROW OF A IS VERY SMALL OR LARGE COMPARED TO
-!     THE OTHER ROWS OF A, THE CORRESPONDING ROW OF (A  B) SHOULD BE
-!     SCALED UP OR DOWN.
-!
-!     IN PROBLEMS 1 AND 2, THE SOLUTION X IS EASILY RECOVERED
-!     FOLLOWING COLUMN SCALING. IN THE ABSENCE OF BETTER INFORMATION,
-!     THE NONZERO COLUMNS OF A SHOULD BE SCALED SO THAT THEY ALL HAVE
-!     THE SAME EUCLIDEAN NORM (E.G.  1.0).
-!
-!     IN PROBLEM 3, THERE IS NO FREEDOM TO RE-SCALE IF DAMP IS
-!     NONZERO. HOWEVER, THE VALUE OF DAMP SHOULD BE ASSIGNED ONLY
-!     AFTER ATTENTION HAS BEEN PAID TO THE SCALING OF A.
-!
-!     THE PARAMETER DAMP IS INTENDED TO HELP REGULARIZE
-!     ILL-CONDITIONED SYSTEMS, BY PREVENTING THE TRUE SOLUTION FROM
-!     BEING VERY LARGE. ANOTHER AID TO REGULARIZATION IS PROVIDED BY
-!     THE PARAMETER ACOND, WHICH MAY BE USED TO TERMINATE ITERATIONS
-!     BEFORE THE COMPUTED SOLUTION BECOMES VERY LARGE.
+!     The RHS vector B is input via U, and is subsequently overwritten.
 !
 !
-!     NOTATION
+!     Note. SPLSQ uses an iterative method to approximate the solution.
+!     The number of iterations required to reach a certain accuracy
+!     depends strongly on the scaling of the problem. Poor scaling of
+!     the rows or columns of A should therefore be avoided whenever
+!     possible.
+!
+!     For example, in problem 1 the solution is unaltered by
+!     row-scaling.  If a row of A is very small or large compared to
+!     the other rows of A, the corresponding row of (A  B) should be
+!     scaled up or down.
+!
+!     In problems 1 and 2, the solution X is easily recovered
+!     following column scaling. In the absence of better information,
+!     the nonzero columns of A should be scaled so that they all have
+!     the same Euclidean norm (E.G.  1.0).
+!
+!     In problem 3, there is no freedom to RE-scale if damp is
+!     nonzero. However, the value of damp should be assigned only
+!     after attention has been paid to the scaling of A.
+!
+!     The parameter DAMP is intended to help regularize
+!     ill-conditioned systems, by preventing the true solution from
+!     being very large. Another aid to regularization is provided by
+!     the parameter ACOND, which may be used to terminate iterations
+!     before the computed solution becomes very large.
+!
+!
+!     Notation
 !     --------
 !
-!     THE FOLLOWING QUANTITIES ARE USED IN DISCUSSING THE SUBROUTINE
-!     PARAMETERS...
+!     The following quantities are used in discussing the subroutine
+!     parameters...
 !
 !     ABAR   =  (   A    ),          BBAR  =  ( B )
 !               ( DAMP*I )                    ( 0 )
@@ -388,10 +388,10 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     RELPR  =  THE SMALLEST FLOATING POINT NUMBER FOR WHICH
 !               1 + RELPR .GT. 1.
 !
-!     SPLSQ  MINIMIZES THE FUNCTION RNORM WITH RESPECT TO X.
+!     SPLSQ  minimizes the function RNORM with respect to X.
 !
 !
-!     PARAMETERS
+!     Parameters
 !     ----------
 !
 !     M       INPUT      THE NUMBER OF ROWS IN A.
@@ -401,16 +401,16 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     A,IA,JA INPUT      THE MATRIX A STORED ROWWISE IN SPARSE FORM.
 !
 !     DAMP    INPUT      THE DAMPING PARAMETER FOR PROBLEM 3 ABOVE.
-!                        (DAMP  SHOULD BE 0.0 FOR PROBLEMS 1 AND 2.)
+!                        (Damp  should be 0.0 for problems 1 and 2.)
 !                        IF THE SYSTEM  A*X = B  IS INCOMPATIBLE, VALUES
-!                        OF DAMP IN THE RANGE 0 TO SQRT(RELPR)*NORM(A)
-!                        WILL PROBABLY HAVE A NEGLIGIBLE EFFECT.
-!                        LARGER VALUES OF DAMP WILL TEND TO DECREASE
-!                        THE NORM OF X AND TO REDUCE THE NUMBER OF
-!                        ITERATIONS REQUIRED BY SPLSQ.
+!                        of damp in the range 0 to SQRT(RELPR)*NORM(A)
+!                        will probably have a negligible effect.
+!                        Larger values of damp will tend to decrease
+!                        the norm of X and to reduce the number of
+!                        iterations required by SPLSQ.
 !
-!                        THE WORK PER ITERATION AND THE STORAGE NEEDED
-!                        BY SPLSQ ARE THE SAME FOR ALL VALUES OF DAMP.
+!                        The work per iteration and the storage needed
+!                        by SPLSQ are the same for all values of damp.
 !
 !     U(M)    INPUT      THE RHS VECTOR B. BE AWARE THAT U IS
 !                        OVER-WRITTEN BY SPLSQ.
@@ -418,73 +418,73 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     X(N)    OUTPUT     RETURNS THE COMPUTED SOLUTION X.
 !
 !     ATOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE MATRIX A. FOR EXAMPLE,
-!                        IF A IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the matrix A. For example,
+!                        if A is accurate to about 6 digits, set
 !                        ATOL = 1.0E-6 .
 !
 !     BTOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE RHS VECTOR B. FOR EXAMPLE,
-!                        IF B IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the RHS vector B. For example,
+!                        if B is accurate to about 6 digits, set
 !                        BTOL = 1.0E-6 .
 !
 !     CONLIM  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        CONDITION NUMBER OF THE MATRIX ABAR.
-!                        ITERATIONS WILL BE TERMINATED IF A COMPUTED
-!                        ESTIMATE OF COND(ABAR) EXCEEDS CONLIM.
-!                        THIS IS INTENDED TO PREVENT CERTAIN SMALL OR
-!                        ZERO SINGULAR VALUES OF A OR ABAR FROM
-!                        COMING INTO EFFECT AND CAUSING UNWANTED GROWTH
-!                        IN THE COMPUTED SOLUTION.
+!                        condition number of the matrix ABAR.
+!                        Iterations will be terminated if a computed
+!                        estimate of COND(ABAR) exceeds CONLIM.
+!                        This is intended to prevent certain small or
+!                        zero singular values of A or ABAR from
+!                        coming into effect and causing unwanted growth
+!                        in the computed solution.
 !
-!                        CONLIM AND DAMP MAY BE USED SEPARATELY OR
-!                        TOGETHER TO REGULARIZE ILL-CONDITIONED SYSTEMS.
+!                        CONLIM and damp may be used separately or
+!                        together to regularize ill-conditioned systems.
 !
-!                        NORMALLY, CONLIM SHOULD BE IN THE RANGE
+!                        Normally, CONLIM should be in the range
 !                        1000  TO  1/RELPR.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        CONLIM = 1/(100*RELPR)  FOR COMPATIBLE SYSTEMS,
 !                        CONLIM = 1/(10*SQRT(RELPR))  FOR LEAST SQUARES.
 !
-!             NOTE. IF THE USER IS NOT CONCERNED ABOUT THE PARAMETERS
-!             ATOL, BTOL, AND CONLIM, ANY OR ALL OF THEM MAY BE SET
-!             TO ZERO. THE EFFECT WILL BE THE SAME AS THE VALUES
+!             Note. If the user is not concerned about the parameters
+!             ATOL, BTOL, and CONLIM, any or all of them may be set
+!             to zero. The effect will be the same as the values
 !             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY.
 !
 !     ITNLIM  INPUT      AN UPPER LIMIT ON THE NUMBER OF ITERATIONS.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        ITNLIM = N/2     FOR WELL CONDITIONED SYSTEMS,
 !                        ITNLIM = 4*N     OTHERWISE.
 !
 !     ISTOP   OUTPUT     AN INTEGER GIVING THE REASON FOR TERMINATION...
 !
 !                0       X = 0  IS THE EXACT SOLUTION.
-!                        NO ITERATIONS WERE PERFORMED.
+!                        No iterations were performed.
 !
 !                1       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS SUFFICIENTLY
-!                        SMALL, GIVEN THE VALUES OF ATOL AND BTOL.
+!                        compatible. NORM(A*X - B) is sufficiently
+!                        small, given the values of ATOL and BTOL.
 !
 !                2       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS SUFFICIENTLY ACCURATE,
-!                        GIVEN THE VALUE OF ATOL.
+!                        compatible. A least-squares solution has
+!                        been obtained which is sufficiently accurate,
+!                        given the value of ATOL.
 !
 !                3       AN ESTIMATE OF COND(ABAR) HAS EXCEEDED
 !                        CONLIM. THE SYSTEM  A*X = B  APPEARS TO BE
-!                        ILL-CONDITIONED.
+!                        ill-conditioned.
 !
 !                4       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS AS SMALL AS
-!                        SEEMS REASONABLE ON THIS MACHINE.
+!                        compatible. NORM(A*X - B) is as small as
+!                        seems reasonable on this machine.
 !
 !                5       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS AS ACCURATE AS SEEMS
-!                        REASONABLE ON THIS MACHINE.
+!                        compatible. A least-squares solution has
+!                        been obtained which is as accurate as seems
+!                        reasonable on this machine.
 !
 !                6       COND(ABAR) SEEMS TO BE SO LARGE THAT THERE IS
-!                        NOT MUCH POINT IN DOING FURTHER ITERATIONS,
-!                        GIVEN THE PRECISION OF THIS MACHINE.
+!                        not much point in doing further iterations,
+!                        given the precision of this machine.
 !
 !                7       THE ITERATION LIMIT ITNLIM WAS REACHED.
 !
@@ -492,57 +492,57 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ITN     OUTPUT     THE NUMBER OF ITERATIONS THAT WERE PERFORMED.
 !
 !     ACOND   OUTPUT     AN ESTIMATE OF COND(ABAR), THE CONDITION
-!                        NUMBER OF ABAR.
+!                        number of ABAR.
 !
 !     RNORM   OUTPUT     AN ESTIMATE OF THE FINAL VALUE OF NORM(RBAR),
-!                        THE FUNCTION BEING MINIMIZED (SEE NOTATION
+!                        the function being minimized (see notation
 !                        ABOVE). THIS WILL BE SMALL IF  A*X = B  HAS
 !                        A SOLUTION.
 !
 !     XNORM   OUTPUT     AN ESTIMATE OF THE NORM OF THE FINAL
-!                        SOLUTION VECTOR X.
+!                        solution vector X.
 !
 !     W(2*N)             WORKSPACE
 !
 !     ANORM   LOCAL      AN ESTIMATE OF THE FROBENIUS NORM OF ABAR.
-!                        THIS IS THE SQUARE ROOT OF THE SUM OF SQUARES
-!                        OF THE ELEMENTS OF ABAR.
-!                        IF DAMP IS SMALL AND IF THE COLUMNS OF A
-!                        HAVE ALL BEEN SCALED TO HAVE LENGTH  1.0,
-!                        ANORM SHOULD INCREASE TO ROUGHLY SQRT(N).
+!                        This is the square root of the sum of squares
+!                        of the elements of ABAR.
+!                        If damp is small and if the columns of A
+!                        have all been scaled to have length  1.0,
+!                        ANORM should increase to roughly SQRT(N).
 !
 !     ARNORM  LOCAL      AN ESTIMATE OF THE FINAL VALUE OF
-!                        NORM( ABAR(TRANSPOSE)*RBAR ), THE NORM OF
-!                        THE RESIDUAL FOR THE USUAL NORMAL EQUATIONS.
-!                        THIS SHOULD BE SMALL IN ALL CASES. (ARNORM
-!                        WILL OFTEN BE SMALLER THAN THE TRUE VALUE
-!                        COMPUTED FROM THE OUTPUT VECTOR X.)
+!                        NORM( ABAR(TRANSPOSE)*RBAR ), the norm of
+!                        the residual for the usual normal equations.
+!                        This should be small in all cases. (ARNORM
+!                        will often be smaller than the true value
+!                        computed from the output vector X.)
 !
 !
-!     SUBROUTINES AND FUNCTIONS USED
+!     Subroutines and functions used
 !     ------------------------------
 !
 !                NORMLZ,MVPRD1,MTPRD1
 !     BLAS       SCOPY,SNRM2,SSCAL  (SEE LAWSON ET AL. BELOW)
-!                (SNRM2 IS USED ONLY IN NORMLZ)
+!                (SNRM2 is used only in NORMLZ)
 !     FORTRAN    ABS,SQRT
 !
 !
 !     REFERENCES
 !     ----------
 !
-!     PAIGE, C.C. AND SAUNDERS, M.A.  LSQR, AN ALGORITHM FOR SPARSE
-!        LINEAR EQUATIONS AND SPARSE LEAST SQUARES.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 8, 1 (MARCH 1982).
+!     Paige, C.C. And saunders, M.A.  LSQR, an algorithm for sparse
+!        linear equations and sparse least squares.
+!        ACM transactions on mathematical software 8, 1 (march 1982).
 !
-!     LAWSON, C.L., HANSON, R.J., KINCAID, D.R. AND KROGH, F.T.
-!        BASIC LINEAR ALGEBRA SUBPROGRAMS FOR FORTRAN USAGE.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 5, 3 (SEPT 1979),
-!        308-323 AND 324-325.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!        BASIC linear algebra subprograms for Fortran usage.
+!        ACM transactions on mathematical software 5, 3 (sept 1979),
+!        308-323 and 324-325.
 !
 !     ------------------------------------------------------------------
 !
-!     LOCAL VARIABLES
+!     Local variables
 !
 integer :: i
 integer, intent(inout) :: itn
@@ -554,7 +554,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 &zero
 !
 !
-!     INITIALIZE.
+!     Initialize.
 !
 zero   = 0.0
 one    = 1.0
@@ -580,7 +580,7 @@ do i = 1, n
    x(i) = zero
 end do
 !
-!     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
+!     Set up the first vectors for the bidiagonalization.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
 !
 call normlz(m,u,beta)
@@ -596,12 +596,12 @@ arnorm = alfa*beta
 if (arnorm .le. zero) go to 800
 !
 !     ------------------------------------------------------------------
-!     MAIN ITERATION LOOP.
+!     Main iteration loop.
 !     ------------------------------------------------------------------
 100 itn = itn + 1
 !
-!     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
-!     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
+!     Perform the next step of the bidiagonalization to obtain the
+!     next  beta, U, alfa, W.  These satisfy the relations
 !                BETA*U  =  A*W  -  ALFA*U,
 !                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
 !
@@ -614,8 +614,8 @@ call mtprd1(m,n,a,ia,ja,u,w)
 call normlz(n,w,alfa)
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
-!     THIS ALTERS THE DIAGONAL (RHOBAR) OF THE LOWER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the damping parameter.
+!     This alters the diagonal (RHOBAR) of the lower-bidiagonal matrix.
 !
 rhbar2 = rhobar**2 + dampsq
 rhbar1 = sqrt(rhbar2)
@@ -625,8 +625,8 @@ psi    = sn1*phibar
 phibar = cs1*phibar
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE SUBDIAGONAL ELEMENT (BETA)
-!     OF THE LOWER-BIDIAGONAL MATRIX, GIVING AN UPPER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the subdiagonal element (BETA)
+!     of the lower-bidiagonal matrix, giving an upper-bidiagonal matrix.
 !
 rho    = sqrt(rhbar2 + beta**2)
 cs     = rhbar1/rho
@@ -638,7 +638,7 @@ phibar =  sn*phibar
 tau    =  sn*phi
 !
 !
-!     UPDATE X AND W(N+1),...,W(2*N)
+!     Update X and W(N+1),...,W(2*N)
 !
 t1 =    phi/rho
 t2 = -theta/rho
@@ -654,9 +654,9 @@ do i = 1, n
 end do
 !
 !
-!     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
-!     SUPER-DIAGONAL ELEMENT (THETA) OF THE UPPER-BIDIAGONAL MATRIX.
-!     THEN USE THE RESULT TO ESTIMATE NORM(X).
+!     Use a plane rotation on the right to eliminate the
+!     super-diagonal element (THETA) of the upper-bidiagonal matrix.
+!     Then use the result to estimate NORM(X).
 !
 delta  =  sn2*rho
 gambar = -cs2*rho
@@ -670,9 +670,9 @@ z      = rhs/gamma
 xxnorm = xxnorm + z**2
 !
 !
-!     TEST FOR CONVERGENCE.
-!     FIRST, ESTIMATE THE NORM AND CONDITION OF THE MATRIX ABAR,
-!     AND THE NORMS OF RBAR AND ABAR(TRANSPOSE)*RBAR.
+!     Test for convergence.
+!     First, estimate the norm and condition of the matrix ABAR,
+!     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
 acond  = anorm*sqrt(ddnorm)
@@ -681,8 +681,8 @@ res2   = res2 + psi**2
 rnorm  = sqrt(res1 + res2)
 arnorm = alfa*abs(tau)
 !
-!     NOW USE THESE NORMS TO ESTIMATE CERTAIN OTHER QUANTITIES,
-!     SOME OF WHICH WILL BE SMALL NEAR A SOLUTION.
+!     Now use these norms to estimate certain other quantities,
+!     some of which will be small near a solution.
 !
 test1  = rnorm/bnorm
 test2  = arnorm/(anorm*rnorm)
@@ -690,10 +690,10 @@ test3  = one/acond
 t1     = test1/(one + anorm*xnorm/bnorm)
 rtol   = btol +  atol*anorm*xnorm/bnorm
 !
-!     THE FOLLOWING TESTS GUARD AGAINST EXTREMELY SMALL VALUES OF
-!     ATOL, BTOL, OR CTOL.  (THE USER MAY HAVE SET ANY OR ALL OF
-!     THE PARAMETERS ATOL, BTOL, CONLIM TO ZERO.)
-!     THE EFFECT IS EQUIVALENT TO THE NORMAL TESTS USING
+!     The following tests guard against extremely small values of
+!     ATOL, BTOL, or CTOL.  (The user may have set any or all of
+!     the parameters ATOL, BTOL, CONLIM to zero.)
+!     the effect is equivalent to the normal tests using
 !     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
 !
 t3 = one + test3
@@ -704,15 +704,15 @@ if (t3  .le. one   ) istop = 6
 if (t2  .le. one   ) istop = 5
 if (t1  .le. one   ) istop = 4
 !
-!     ALLOW FOR TOLERANCES SET BY THE USER.
+!     Allow for tolerances set by the user.
 !
 if (test3 .le. ctol) istop = 3
 if (test2 .le. atol) istop = 2
 if (test1 .le. rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
-!     THE CONVERGENCE CRITERIA ARE REQUIRED TO BE MET ON  NCONV
-!     CONSECUTIVE ITERATIONS, WHERE  NCONV  IS SET BELOW.
+!     The convergence criteria are required to be met on  NCONV
+!     consecutive iterations, where  NCONV  is set below.
 !     SUGGESTED VALUE --   NCONV = 1, 2  OR  3.
 !
 if (istop .eq. 0) nstop = 0
@@ -734,11 +734,11 @@ integer, intent(in) :: n
 real, intent(inout) :: x(n)
 real, intent(out) :: beta
 !
-!     NORMLZ COMPUTES THE EUCLIDEAN NORM OF X AND RETURNS THE
-!     VALUE IN BETA. IF X IS NONZERO, THEN X IS RESCALED SO
+!     NORMLZ computes the Euclidean norm of X and returns the
+!     value in beta. If X is nonzero, then X is rescaled so
 !     THAT NORM(X) = 1.
 !
-!     FUNCTIONS AND SUBROUTINES
+!     Functions and subroutines
 !
 !     BLAS       SNRM2,SSCAL
 !
@@ -768,57 +768,57 @@ real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ------------------------------------------------------------------
 !
-!     STLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
+!     STLSQ finds a solution X to the following problems ...
 !
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  A*X = B
 !
 !     2. LINEAR LEAST SQUARES  --    SOLVE  A*X = B
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
 !     3. DAMPED LEAST SQUARES  --    SOLVE  (   A    )*X = ( B )
 !                                           ( DAMP*I )     ( 0 )
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
-!     WHERE A IS A MATRIX WITH M ROWS AND N COLUMNS, B AN M-VECTOR,
-!     AND DAMP A SCALAR. (ALL QUANTITIES ARE REAL.) THE MATRIX A IS
-!     A SPARSE MATRIX WHOSE TRANSPOSE IS STORED ROWWISE IN THE ARRAYS
+!     Where A is a matrix with M rows and N columns, B an M-vector,
+!     and damp A scalar. (All quantities are real.) The matrix A is
+!     a sparse matrix whose transpose is stored rowwise in the arrays
 !     TA,ITA,JTA.
 !
-!     THE RHS VECTOR B IS INPUT VIA U, AND IS SUBSEQUENTLY OVERWRITTEN.
+!     The RHS vector B is input via U, and is subsequently overwritten.
 !
 !
-!     NOTE. STLSQ USES AN ITERATIVE METHOD TO APPROXIMATE THE SOLUTION.
-!     THE NUMBER OF ITERATIONS REQUIRED TO REACH A CERTAIN ACCURACY
-!     DEPENDS STRONGLY ON THE SCALING OF THE PROBLEM. POOR SCALING OF
-!     THE ROWS OR COLUMNS OF A SHOULD THEREFORE BE AVOIDED WHENEVER
-!     POSSIBLE.
+!     Note. STLSQ uses an iterative method to approximate the solution.
+!     The number of iterations required to reach a certain accuracy
+!     depends strongly on the scaling of the problem. Poor scaling of
+!     the rows or columns of A should therefore be avoided whenever
+!     possible.
 !
-!     FOR EXAMPLE, IN PROBLEM 1 THE SOLUTION IS UNALTERED BY
-!     ROW-SCALING.  IF A ROW OF A IS VERY SMALL OR LARGE COMPARED TO
-!     THE OTHER ROWS OF A, THE CORRESPONDING ROW OF (A  B) SHOULD BE
-!     SCALED UP OR DOWN.
+!     For example, in problem 1 the solution is unaltered by
+!     row-scaling.  If a row of A is very small or large compared to
+!     the other rows of A, the corresponding row of (A  B) should be
+!     scaled up or down.
 !
-!     IN PROBLEMS 1 AND 2, THE SOLUTION X IS EASILY RECOVERED
-!     FOLLOWING COLUMN SCALING. IN THE ABSENCE OF BETTER INFORMATION,
-!     THE NONZERO COLUMNS OF A SHOULD BE SCALED SO THAT THEY ALL HAVE
-!     THE SAME EUCLIDEAN NORM (E.G.  1.0).
+!     In problems 1 and 2, the solution X is easily recovered
+!     following column scaling. In the absence of better information,
+!     the nonzero columns of A should be scaled so that they all have
+!     the same Euclidean norm (E.G.  1.0).
 !
-!     IN PROBLEM 3, THERE IS NO FREEDOM TO RE-SCALE IF DAMP IS
-!     NONZERO. HOWEVER, THE VALUE OF DAMP SHOULD BE ASSIGNED ONLY
-!     AFTER ATTENTION HAS BEEN PAID TO THE SCALING OF A.
+!     In problem 3, there is no freedom to RE-scale if damp is
+!     nonzero. However, the value of damp should be assigned only
+!     after attention has been paid to the scaling of A.
 !
-!     THE PARAMETER DAMP IS INTENDED TO HELP REGULARIZE
-!     ILL-CONDITIONED SYSTEMS, BY PREVENTING THE TRUE SOLUTION FROM
-!     BEING VERY LARGE. ANOTHER AID TO REGULARIZATION IS PROVIDED BY
-!     THE PARAMETER ACOND, WHICH MAY BE USED TO TERMINATE ITERATIONS
-!     BEFORE THE COMPUTED SOLUTION BECOMES VERY LARGE.
+!     The parameter DAMP is intended to help regularize
+!     ill-conditioned systems, by preventing the true solution from
+!     being very large. Another aid to regularization is provided by
+!     the parameter ACOND, which may be used to terminate iterations
+!     before the computed solution becomes very large.
 !
 !
-!     NOTATION
+!     Notation
 !     --------
 !
-!     THE FOLLOWING QUANTITIES ARE USED IN DISCUSSING THE SUBROUTINE
-!     PARAMETERS...
+!     The following quantities are used in discussing the subroutine
+!     parameters...
 !
 !     ABAR   =  (   A    ),          BBAR  =  ( B )
 !               ( DAMP*I )                    ( 0 )
@@ -831,10 +831,10 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     RELPR  =  THE SMALLEST FLOATING POINT NUMBER FOR WHICH
 !               1 + RELPR .GT. 1.
 !
-!     STLSQ  MINIMIZES THE FUNCTION RNORM WITH RESPECT TO X.
+!     STLSQ  minimizes the function RNORM with respect to X.
 !
 !
-!     PARAMETERS
+!     Parameters
 !     ----------
 !
 !     M       INPUT      THE NUMBER OF ROWS IN A.
@@ -845,16 +845,16 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !      JTA               ROWWISE IN SPARSE FORM.
 !
 !     DAMP    INPUT      THE DAMPING PARAMETER FOR PROBLEM 3 ABOVE.
-!                        (DAMP  SHOULD BE 0.0 FOR PROBLEMS 1 AND 2.)
+!                        (Damp  should be 0.0 for problems 1 and 2.)
 !                        IF THE SYSTEM  A*X = B  IS INCOMPATIBLE, VALUES
-!                        OF DAMP IN THE RANGE 0 TO SQRT(RELPR)*NORM(A)
-!                        WILL PROBABLY HAVE A NEGLIGIBLE EFFECT.
-!                        LARGER VALUES OF DAMP WILL TEND TO DECREASE
-!                        THE NORM OF X AND TO REDUCE THE NUMBER OF
-!                        ITERATIONS REQUIRED BY STLSQ.
+!                        of damp in the range 0 to SQRT(RELPR)*NORM(A)
+!                        will probably have a negligible effect.
+!                        Larger values of damp will tend to decrease
+!                        the norm of X and to reduce the number of
+!                        iterations required by STLSQ.
 !
-!                        THE WORK PER ITERATION AND THE STORAGE NEEDED
-!                        BY STLSQ ARE THE SAME FOR ALL VALUES OF DAMP.
+!                        The work per iteration and the storage needed
+!                        by STLSQ are the same for all values of damp.
 !
 !     U(M)    INPUT      THE RHS VECTOR B. BE AWARE THAT U IS
 !                        OVER-WRITTEN BY STLSQ.
@@ -862,73 +862,73 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     X(N)    OUTPUT     RETURNS THE COMPUTED SOLUTION X.
 !
 !     ATOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE MATRIX A. FOR EXAMPLE,
-!                        IF A IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the matrix A. For example,
+!                        if A is accurate to about 6 digits, set
 !                        ATOL = 1.0E-6 .
 !
 !     BTOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE RHS VECTOR B. FOR EXAMPLE,
-!                        IF B IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the RHS vector B. For example,
+!                        if B is accurate to about 6 digits, set
 !                        BTOL = 1.0E-6 .
 !
 !     CONLIM  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        CONDITION NUMBER OF THE MATRIX ABAR.
-!                        ITERATIONS WILL BE TERMINATED IF A COMPUTED
-!                        ESTIMATE OF COND(ABAR) EXCEEDS CONLIM.
-!                        THIS IS INTENDED TO PREVENT CERTAIN SMALL OR
-!                        ZERO SINGULAR VALUES OF A OR ABAR FROM
-!                        COMING INTO EFFECT AND CAUSING UNWANTED GROWTH
-!                        IN THE COMPUTED SOLUTION.
+!                        condition number of the matrix ABAR.
+!                        Iterations will be terminated if a computed
+!                        estimate of COND(ABAR) exceeds CONLIM.
+!                        This is intended to prevent certain small or
+!                        zero singular values of A or ABAR from
+!                        coming into effect and causing unwanted growth
+!                        in the computed solution.
 !
-!                        CONLIM AND DAMP MAY BE USED SEPARATELY OR
-!                        TOGETHER TO REGULARIZE ILL-CONDITIONED SYSTEMS.
+!                        CONLIM and damp may be used separately or
+!                        together to regularize ill-conditioned systems.
 !
-!                        NORMALLY, CONLIM SHOULD BE IN THE RANGE
+!                        Normally, CONLIM should be in the range
 !                        1000  TO  1/RELPR.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        CONLIM = 1/(100*RELPR)  FOR COMPATIBLE SYSTEMS,
 !                        CONLIM = 1/(10*SQRT(RELPR))  FOR LEAST SQUARES.
 !
-!             NOTE. IF THE USER IS NOT CONCERNED ABOUT THE PARAMETERS
-!             ATOL, BTOL, AND CONLIM, ANY OR ALL OF THEM MAY BE SET
-!             TO ZERO. THE EFFECT WILL BE THE SAME AS THE VALUES
+!             Note. If the user is not concerned about the parameters
+!             ATOL, BTOL, and CONLIM, any or all of them may be set
+!             to zero. The effect will be the same as the values
 !             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY.
 !
 !     ITNLIM  INPUT      AN UPPER LIMIT ON THE NUMBER OF ITERATIONS.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        ITNLIM = N/2     FOR WELL CONDITIONED SYSTEMS,
 !                        ITNLIM = 4*N     OTHERWISE.
 !
 !     ISTOP   OUTPUT     AN INTEGER GIVING THE REASON FOR TERMINATION...
 !
 !                0       X = 0  IS THE EXACT SOLUTION.
-!                        NO ITERATIONS WERE PERFORMED.
+!                        No iterations were performed.
 !
 !                1       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS SUFFICIENTLY
-!                        SMALL, GIVEN THE VALUES OF ATOL AND BTOL.
+!                        compatible. NORM(A*X - B) is sufficiently
+!                        small, given the values of ATOL and BTOL.
 !
 !                2       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS SUFFICIENTLY ACCURATE,
-!                        GIVEN THE VALUE OF ATOL.
+!                        compatible. A least-squares solution has
+!                        been obtained which is sufficiently accurate,
+!                        given the value of ATOL.
 !
 !                3       AN ESTIMATE OF COND(ABAR) HAS EXCEEDED
 !                        CONLIM. THE SYSTEM  A*X = B  APPEARS TO BE
-!                        ILL-CONDITIONED.
+!                        ill-conditioned.
 !
 !                4       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS AS SMALL AS
-!                        SEEMS REASONABLE ON THIS MACHINE.
+!                        compatible. NORM(A*X - B) is as small as
+!                        seems reasonable on this machine.
 !
 !                5       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS AS ACCURATE AS SEEMS
-!                        REASONABLE ON THIS MACHINE.
+!                        compatible. A least-squares solution has
+!                        been obtained which is as accurate as seems
+!                        reasonable on this machine.
 !
 !                6       COND(ABAR) SEEMS TO BE SO LARGE THAT THERE IS
-!                        NOT MUCH POINT IN DOING FURTHER ITERATIONS,
-!                        GIVEN THE PRECISION OF THIS MACHINE.
+!                        not much point in doing further iterations,
+!                        given the precision of this machine.
 !
 !                7       THE ITERATION LIMIT ITNLIM WAS REACHED.
 !
@@ -936,57 +936,57 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ITN     OUTPUT     THE NUMBER OF ITERATIONS THAT WERE PERFORMED.
 !
 !     ACOND   OUTPUT     AN ESTIMATE OF COND(ABAR), THE CONDITION
-!                        NUMBER OF ABAR.
+!                        number of ABAR.
 !
 !     RNORM   OUTPUT     AN ESTIMATE OF THE FINAL VALUE OF NORM(RBAR),
-!                        THE FUNCTION BEING MINIMIZED (SEE NOTATION
+!                        the function being minimized (see notation
 !                        ABOVE). THIS WILL BE SMALL IF  A*X = B  HAS
 !                        A SOLUTION.
 !
 !     XNORM   OUTPUT     AN ESTIMATE OF THE NORM OF THE FINAL
-!                        SOLUTION VECTOR X.
+!                        solution vector X.
 !
 !     W(2*N)             WORKSPACE
 !
 !     ANORM   LOCAL      AN ESTIMATE OF THE FROBENIUS NORM OF ABAR.
-!                        THIS IS THE SQUARE ROOT OF THE SUM OF SQUARES
-!                        OF THE ELEMENTS OF ABAR.
-!                        IF DAMP IS SMALL AND IF THE COLUMNS OF A
-!                        HAVE ALL BEEN SCALED TO HAVE LENGTH  1.0,
-!                        ANORM SHOULD INCREASE TO ROUGHLY SQRT(N).
+!                        This is the square root of the sum of squares
+!                        of the elements of ABAR.
+!                        If damp is small and if the columns of A
+!                        have all been scaled to have length  1.0,
+!                        ANORM should increase to roughly SQRT(N).
 !
 !     ARNORM  LOCAL      AN ESTIMATE OF THE FINAL VALUE OF
-!                        NORM( ABAR(TRANSPOSE)*RBAR ), THE NORM OF
-!                        THE RESIDUAL FOR THE USUAL NORMAL EQUATIONS.
-!                        THIS SHOULD BE SMALL IN ALL CASES. (ARNORM
-!                        WILL OFTEN BE SMALLER THAN THE TRUE VALUE
-!                        COMPUTED FROM THE OUTPUT VECTOR X.)
+!                        NORM( ABAR(TRANSPOSE)*RBAR ), the norm of
+!                        the residual for the usual normal equations.
+!                        This should be small in all cases. (ARNORM
+!                        will often be smaller than the true value
+!                        computed from the output vector X.)
 !
 !
-!     SUBROUTINES AND FUNCTIONS USED
+!     Subroutines and functions used
 !     ------------------------------
 !
 !                NORMLZ,MVPRD1,MTPRD1
 !     BLAS       SCOPY,SNRM2,SSCAL  (SEE LAWSON ET AL. BELOW)
-!                (SNRM2 IS USED ONLY IN NORMLZ)
+!                (SNRM2 is used only in NORMLZ)
 !     FORTRAN    ABS,SQRT
 !
 !
 !     REFERENCES
 !     ----------
 !
-!     PAIGE, C.C. AND SAUNDERS, M.A.  LSQR, AN ALGORITHM FOR SPARSE
-!        LINEAR EQUATIONS AND SPARSE LEAST SQUARES.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 8, 1 (MARCH 1982).
+!     Paige, C.C. And saunders, M.A.  LSQR, an algorithm for sparse
+!        linear equations and sparse least squares.
+!        ACM transactions on mathematical software 8, 1 (march 1982).
 !
-!     LAWSON, C.L., HANSON, R.J., KINCAID, D.R. AND KROGH, F.T.
-!        BASIC LINEAR ALGEBRA SUBPROGRAMS FOR FORTRAN USAGE.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 5, 3 (SEPT 1979),
-!        308-323 AND 324-325.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!        BASIC linear algebra subprograms for Fortran usage.
+!        ACM transactions on mathematical software 5, 3 (sept 1979),
+!        308-323 and 324-325.
 !
 !     ------------------------------------------------------------------
 !
-!     LOCAL VARIABLES
+!     Local variables
 !
 integer :: i
 integer, intent(inout) :: itn
@@ -998,7 +998,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 &zero
 !
 !
-!     INITIALIZE.
+!     Initialize.
 !
 zero   = 0.0
 one    = 1.0
@@ -1024,7 +1024,7 @@ do i = 1, n
    x(i) = zero
 end do
 !
-!     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
+!     Set up the first vectors for the bidiagonalization.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
 !
 call normlz(m,u,beta)
@@ -1040,12 +1040,12 @@ arnorm = alfa*beta
 if (arnorm .le. zero) go to 800
 !
 !     ------------------------------------------------------------------
-!     MAIN ITERATION LOOP.
+!     Main iteration loop.
 !     ------------------------------------------------------------------
 100 itn = itn + 1
 !
-!     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
-!     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
+!     Perform the next step of the bidiagonalization to obtain the
+!     next  beta, U, alfa, W.  These satisfy the relations
 !                BETA*U  =  A*W  -  ALFA*U,
 !                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
 !
@@ -1058,8 +1058,8 @@ call mvprd1(n,m,ta,ita,jta,u,w)
 call normlz(n,w,alfa)
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
-!     THIS ALTERS THE DIAGONAL (RHOBAR) OF THE LOWER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the damping parameter.
+!     This alters the diagonal (RHOBAR) of the lower-bidiagonal matrix.
 !
 rhbar2 = rhobar**2 + dampsq
 rhbar1 = sqrt(rhbar2)
@@ -1069,8 +1069,8 @@ psi    = sn1*phibar
 phibar = cs1*phibar
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE SUBDIAGONAL ELEMENT (BETA)
-!     OF THE LOWER-BIDIAGONAL MATRIX, GIVING AN UPPER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the subdiagonal element (BETA)
+!     of the lower-bidiagonal matrix, giving an upper-bidiagonal matrix.
 !
 rho    = sqrt(rhbar2 + beta**2)
 cs     = rhbar1/rho
@@ -1082,7 +1082,7 @@ phibar =  sn*phibar
 tau    =  sn*phi
 !
 !
-!     UPDATE X AND W(N+1),...,W(2*N)
+!     Update X and W(N+1),...,W(2*N)
 !
 t1 =    phi/rho
 t2 = -theta/rho
@@ -1098,9 +1098,9 @@ do i = 1, n
 end do
 !
 !
-!     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
-!     SUPER-DIAGONAL ELEMENT (THETA) OF THE UPPER-BIDIAGONAL MATRIX.
-!     THEN USE THE RESULT TO ESTIMATE NORM(X).
+!     Use a plane rotation on the right to eliminate the
+!     super-diagonal element (THETA) of the upper-bidiagonal matrix.
+!     Then use the result to estimate NORM(X).
 !
 delta  =  sn2*rho
 gambar = -cs2*rho
@@ -1114,9 +1114,9 @@ z      = rhs/gamma
 xxnorm = xxnorm + z**2
 !
 !
-!     TEST FOR CONVERGENCE.
-!     FIRST, ESTIMATE THE NORM AND CONDITION OF THE MATRIX ABAR,
-!     AND THE NORMS OF RBAR AND ABAR(TRANSPOSE)*RBAR.
+!     Test for convergence.
+!     First, estimate the norm and condition of the matrix ABAR,
+!     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
 acond  = anorm*sqrt(ddnorm)
@@ -1125,8 +1125,8 @@ res2   = res2 + psi**2
 rnorm  = sqrt(res1 + res2)
 arnorm = alfa*abs(tau)
 !
-!     NOW USE THESE NORMS TO ESTIMATE CERTAIN OTHER QUANTITIES,
-!     SOME OF WHICH WILL BE SMALL NEAR A SOLUTION.
+!     Now use these norms to estimate certain other quantities,
+!     some of which will be small near a solution.
 !
 test1  = rnorm/bnorm
 test2  = arnorm/(anorm*rnorm)
@@ -1134,10 +1134,10 @@ test3  = one/acond
 t1     = test1/(one + anorm*xnorm/bnorm)
 rtol   = btol +  atol*anorm*xnorm/bnorm
 !
-!     THE FOLLOWING TESTS GUARD AGAINST EXTREMELY SMALL VALUES OF
-!     ATOL, BTOL, OR CTOL.  (THE USER MAY HAVE SET ANY OR ALL OF
-!     THE PARAMETERS ATOL, BTOL, CONLIM TO ZERO.)
-!     THE EFFECT IS EQUIVALENT TO THE NORMAL TESTS USING
+!     The following tests guard against extremely small values of
+!     ATOL, BTOL, or CTOL.  (The user may have set any or all of
+!     the parameters ATOL, BTOL, CONLIM to zero.)
+!     the effect is equivalent to the normal tests using
 !     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
 !
 t3 = one + test3
@@ -1148,15 +1148,15 @@ if (t3  .le. one   ) istop = 6
 if (t2  .le. one   ) istop = 5
 if (t1  .le. one   ) istop = 4
 !
-!     ALLOW FOR TOLERANCES SET BY THE USER.
+!     Allow for tolerances set by the user.
 !
 if (test3 .le. ctol) istop = 3
 if (test2 .le. atol) istop = 2
 if (test1 .le. rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
-!     THE CONVERGENCE CRITERIA ARE REQUIRED TO BE MET ON  NCONV
-!     CONSECUTIVE ITERATIONS, WHERE  NCONV  IS SET BELOW.
+!     The convergence criteria are required to be met on  NCONV
+!     consecutive iterations, where  NCONV  is set below.
 !     SUGGESTED VALUE --   NCONV = 1, 2  OR  3.
 !
 if (istop .eq. 0) nstop = 0
@@ -1187,56 +1187,56 @@ real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ------------------------------------------------------------------
 !
-!     BLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
+!     BLSQ finds a solution X to the following problems ...
 !
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  A*X = B
 !
 !     2. LINEAR LEAST SQUARES  --    SOLVE  A*X = B
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
 !     3. DAMPED LEAST SQUARES  --    SOLVE  (   A    )*X = ( B )
 !                                           ( DAMP*I )     ( 0 )
-!                                    IN THE LEAST-SQUARES SENSE
+!                                    in the least-squares sense
 !
-!     WHERE A IS A MATRIX WITH M ROWS AND N COLUMNS, B AN M-VECTOR,
-!     AND DAMP A SCALAR. (ALL QUANTITIES ARE REAL.) THE MATRIX A IS
-!     A BANDED MATRIX STORED IN BAND FORM.
+!     Where A is a matrix with M rows and N columns, B an M-vector,
+!     and damp A scalar. (All quantities are real.) The matrix A is
+!     a banded matrix stored in band form.
 !
-!     THE RHS VECTOR B IS INPUT VIA U, AND IS SUBSEQUENTLY OVERWRITTEN.
-!
-!
-!     NOTE. BLSQ USES AN ITERATIVE METHOD TO APPROXIMATE THE SOLUTION.
-!     THE NUMBER OF ITERATIONS REQUIRED TO REACH A CERTAIN ACCURACY
-!     DEPENDS STRONGLY ON THE SCALING OF THE PROBLEM. POOR SCALING OF
-!     THE ROWS OR COLUMNS OF A SHOULD THEREFORE BE AVOIDED WHENEVER
-!     POSSIBLE.
-!
-!     FOR EXAMPLE, IN PROBLEM 1 THE SOLUTION IS UNALTERED BY
-!     ROW-SCALING.  IF A ROW OF A IS VERY SMALL OR LARGE COMPARED TO
-!     THE OTHER ROWS OF A, THE CORRESPONDING ROW OF (A  B) SHOULD BE
-!     SCALED UP OR DOWN.
-!
-!     IN PROBLEMS 1 AND 2, THE SOLUTION X IS EASILY RECOVERED
-!     FOLLOWING COLUMN SCALING. IN THE ABSENCE OF BETTER INFORMATION,
-!     THE NONZERO COLUMNS OF A SHOULD BE SCALED SO THAT THEY ALL HAVE
-!     THE SAME EUCLIDEAN NORM (E.G.  1.0).
-!
-!     IN PROBLEM 3, THERE IS NO FREEDOM TO RE-SCALE IF DAMP IS
-!     NONZERO. HOWEVER, THE VALUE OF DAMP SHOULD BE ASSIGNED ONLY
-!     AFTER ATTENTION HAS BEEN PAID TO THE SCALING OF A.
-!
-!     THE PARAMETER DAMP IS INTENDED TO HELP REGULARIZE
-!     ILL-CONDITIONED SYSTEMS, BY PREVENTING THE TRUE SOLUTION FROM
-!     BEING VERY LARGE. ANOTHER AID TO REGULARIZATION IS PROVIDED BY
-!     THE PARAMETER ACOND, WHICH MAY BE USED TO TERMINATE ITERATIONS
-!     BEFORE THE COMPUTED SOLUTION BECOMES VERY LARGE.
+!     The RHS vector B is input via U, and is subsequently overwritten.
 !
 !
-!     NOTATION
+!     Note. BLSQ uses an iterative method to approximate the solution.
+!     The number of iterations required to reach a certain accuracy
+!     depends strongly on the scaling of the problem. Poor scaling of
+!     the rows or columns of A should therefore be avoided whenever
+!     possible.
+!
+!     For example, in problem 1 the solution is unaltered by
+!     row-scaling.  If a row of A is very small or large compared to
+!     the other rows of A, the corresponding row of (A  B) should be
+!     scaled up or down.
+!
+!     In problems 1 and 2, the solution X is easily recovered
+!     following column scaling. In the absence of better information,
+!     the nonzero columns of A should be scaled so that they all have
+!     the same Euclidean norm (E.G.  1.0).
+!
+!     In problem 3, there is no freedom to RE-scale if damp is
+!     nonzero. However, the value of damp should be assigned only
+!     after attention has been paid to the scaling of A.
+!
+!     The parameter DAMP is intended to help regularize
+!     ill-conditioned systems, by preventing the true solution from
+!     being very large. Another aid to regularization is provided by
+!     the parameter ACOND, which may be used to terminate iterations
+!     before the computed solution becomes very large.
+!
+!
+!     Notation
 !     --------
 !
-!     THE FOLLOWING QUANTITIES ARE USED IN DISCUSSING THE SUBROUTINE
-!     PARAMETERS...
+!     The following quantities are used in discussing the subroutine
+!     parameters...
 !
 !     ABAR   =  (   A    ),          BBAR  =  ( B )
 !               ( DAMP*I )                    ( 0 )
@@ -1252,7 +1252,7 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     BLSQ   MINIMIZES THE FUNCTION RNORM WITH RESPECT TO X.
 !
 !
-!     PARAMETERS
+!     Parameters
 !     ----------
 !
 !     M       INPUT      THE NUMBER OF ROWS IN A.
@@ -1262,23 +1262,23 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     A       INPUT      THE MATRIX A STORED IN BAND FORM.
 !
 !     KA      INPUT      THE NUMBER OF ROWS IN THE DIMENSION STATEMENT
-!                        FOR A IN THE CALLING PROGRAM.
+!                        for A in the calling program.
 !
 !     ML      INPUT      THE LOWER BAND WIDTH OF A.
 !
 !     MU      INPUT      THE UPPER BAND WIDTH OF A.
 !
 !     DAMP    INPUT      THE DAMPING PARAMETER FOR PROBLEM 3 ABOVE.
-!                        (DAMP  SHOULD BE 0.0 FOR PROBLEMS 1 AND 2.)
+!                        (Damp  should be 0.0 for problems 1 and 2.)
 !                        IF THE SYSTEM  A*X = B  IS INCOMPATIBLE, VALUES
-!                        OF DAMP IN THE RANGE 0 TO SQRT(RELPR)*NORM(A)
-!                        WILL PROBABLY HAVE A NEGLIGIBLE EFFECT.
-!                        LARGER VALUES OF DAMP WILL TEND TO DECREASE
-!                        THE NORM OF X AND TO REDUCE THE NUMBER OF
-!                        ITERATIONS REQUIRED BY BLSQ.
+!                        of damp in the range 0 to SQRT(RELPR)*NORM(A)
+!                        will probably have a negligible effect.
+!                        Larger values of damp will tend to decrease
+!                        the norm of X and to reduce the number of
+!                        iterations required by BLSQ.
 !
-!                        THE WORK PER ITERATION AND THE STORAGE NEEDED
-!                        BY BLSQ ARE THE SAME FOR ALL VALUES OF DAMP.
+!                        The work per iteration and the storage needed
+!                        by BLSQ are the same for all values of damp.
 !
 !     U(M)    INPUT      THE RHS VECTOR B. BE AWARE THAT U IS
 !                        OVER-WRITTEN BY BLSQ.
@@ -1286,73 +1286,73 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     X(N)    OUTPUT     RETURNS THE COMPUTED SOLUTION X.
 !
 !     ATOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE MATRIX A. FOR EXAMPLE,
-!                        IF A IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the matrix A. For example,
+!                        if A is accurate to about 6 digits, set
 !                        ATOL = 1.0E-6 .
 !
 !     BTOL    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        DEFINING THE RHS VECTOR B. FOR EXAMPLE,
-!                        IF B IS ACCURATE TO ABOUT 6 DIGITS, SET
+!                        defining the RHS vector B. For example,
+!                        if B is accurate to about 6 digits, set
 !                        BTOL = 1.0E-6 .
 !
 !     CONLIM  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        CONDITION NUMBER OF THE MATRIX ABAR.
-!                        ITERATIONS WILL BE TERMINATED IF A COMPUTED
-!                        ESTIMATE OF COND(ABAR) EXCEEDS CONLIM.
-!                        THIS IS INTENDED TO PREVENT CERTAIN SMALL OR
-!                        ZERO SINGULAR VALUES OF A OR ABAR FROM
-!                        COMING INTO EFFECT AND CAUSING UNWANTED GROWTH
-!                        IN THE COMPUTED SOLUTION.
+!                        condition number of the matrix ABAR.
+!                        Iterations will be terminated if a computed
+!                        estimate of COND(ABAR) exceeds CONLIM.
+!                        This is intended to prevent certain small or
+!                        zero singular values of A or ABAR from
+!                        coming into effect and causing unwanted growth
+!                        in the computed solution.
 !
-!                        CONLIM AND DAMP MAY BE USED SEPARATELY OR
-!                        TOGETHER TO REGULARIZE ILL-CONDITIONED SYSTEMS.
+!                        CONLIM and damp may be used separately or
+!                        together to regularize ill-conditioned systems.
 !
-!                        NORMALLY, CONLIM SHOULD BE IN THE RANGE
+!                        Normally, CONLIM should be in the range
 !                        1000  TO  1/RELPR.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        CONLIM = 1/(100*RELPR)  FOR COMPATIBLE SYSTEMS,
 !                        CONLIM = 1/(10*SQRT(RELPR))  FOR LEAST SQUARES.
 !
-!             NOTE. IF THE USER IS NOT CONCERNED ABOUT THE PARAMETERS
-!             ATOL, BTOL, AND CONLIM, ANY OR ALL OF THEM MAY BE SET
-!             TO ZERO. THE EFFECT WILL BE THE SAME AS THE VALUES
+!             Note. If the user is not concerned about the parameters
+!             ATOL, BTOL, and CONLIM, any or all of them may be set
+!             to zero. The effect will be the same as the values
 !             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY.
 !
 !     ITNLIM  INPUT      AN UPPER LIMIT ON THE NUMBER OF ITERATIONS.
-!                        SUGGESTED VALUE --
+!                        Suggested value --
 !                        ITNLIM = N/2     FOR WELL CONDITIONED SYSTEMS,
 !                        ITNLIM = 4*N     OTHERWISE.
 !
 !     ISTOP   OUTPUT     AN INTEGER GIVING THE REASON FOR TERMINATION...
 !
 !                0       X = 0  IS THE EXACT SOLUTION.
-!                        NO ITERATIONS WERE PERFORMED.
+!                        No iterations were performed.
 !
 !                1       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS SUFFICIENTLY
-!                        SMALL, GIVEN THE VALUES OF ATOL AND BTOL.
+!                        compatible. NORM(A*X - B) is sufficiently
+!                        small, given the values of ATOL and BTOL.
 !
 !                2       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS SUFFICIENTLY ACCURATE,
-!                        GIVEN THE VALUE OF ATOL.
+!                        compatible. A least-squares solution has
+!                        been obtained which is sufficiently accurate,
+!                        given the value of ATOL.
 !
 !                3       AN ESTIMATE OF COND(ABAR) HAS EXCEEDED
 !                        CONLIM. THE SYSTEM  A*X = B  APPEARS TO BE
-!                        ILL-CONDITIONED.
+!                        ill-conditioned.
 !
 !                4       THE EQUATIONS  A*X = B  ARE PROBABLY
-!                        COMPATIBLE. NORM(A*X - B) IS AS SMALL AS
-!                        SEEMS REASONABLE ON THIS MACHINE.
+!                        compatible. NORM(A*X - B) is as small as
+!                        seems reasonable on this machine.
 !
 !                5       THE SYSTEM  A*X = B  IS PROBABLY NOT
-!                        COMPATIBLE. A LEAST-SQUARES SOLUTION HAS
-!                        BEEN OBTAINED WHICH IS AS ACCURATE AS SEEMS
-!                        REASONABLE ON THIS MACHINE.
+!                        compatible. A least-squares solution has
+!                        been obtained which is as accurate as seems
+!                        reasonable on this machine.
 !
 !                6       COND(ABAR) SEEMS TO BE SO LARGE THAT THERE IS
-!                        NOT MUCH POINT IN DOING FURTHER ITERATIONS,
-!                        GIVEN THE PRECISION OF THIS MACHINE.
+!                        not much point in doing further iterations,
+!                        given the precision of this machine.
 !
 !                7       THE ITERATION LIMIT ITNLIM WAS REACHED.
 !
@@ -1360,57 +1360,57 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     ITN     OUTPUT     THE NUMBER OF ITERATIONS THAT WERE PERFORMED.
 !
 !     ACOND   OUTPUT     AN ESTIMATE OF COND(ABAR), THE CONDITION
-!                        NUMBER OF ABAR.
+!                        number of ABAR.
 !
 !     RNORM   OUTPUT     AN ESTIMATE OF THE FINAL VALUE OF NORM(RBAR),
-!                        THE FUNCTION BEING MINIMIZED (SEE NOTATION
+!                        the function being minimized (see notation
 !                        ABOVE). THIS WILL BE SMALL IF  A*X = B  HAS
 !                        A SOLUTION.
 !
 !     XNORM   OUTPUT     AN ESTIMATE OF THE NORM OF THE FINAL
-!                        SOLUTION VECTOR X.
+!                        solution vector X.
 !
 !     W(2*N)             WORKSPACE
 !
 !     ANORM   LOCAL      AN ESTIMATE OF THE FROBENIUS NORM OF ABAR.
-!                        THIS IS THE SQUARE ROOT OF THE SUM OF SQUARES
-!                        OF THE ELEMENTS OF ABAR.
-!                        IF DAMP IS SMALL AND IF THE COLUMNS OF A
-!                        HAVE ALL BEEN SCALED TO HAVE LENGTH  1.0,
-!                        ANORM SHOULD INCREASE TO ROUGHLY SQRT(N).
+!                        This is the square root of the sum of squares
+!                        of the elements of ABAR.
+!                        If damp is small and if the columns of A
+!                        have all been scaled to have length  1.0,
+!                        ANORM should increase to roughly SQRT(N).
 !
 !     ARNORM  LOCAL      AN ESTIMATE OF THE FINAL VALUE OF
-!                        NORM( ABAR(TRANSPOSE)*RBAR ), THE NORM OF
-!                        THE RESIDUAL FOR THE USUAL NORMAL EQUATIONS.
-!                        THIS SHOULD BE SMALL IN ALL CASES. (ARNORM
-!                        WILL OFTEN BE SMALLER THAN THE TRUE VALUE
-!                        COMPUTED FROM THE OUTPUT VECTOR X.)
+!                        NORM( ABAR(TRANSPOSE)*RBAR ), the norm of
+!                        the residual for the usual normal equations.
+!                        This should be small in all cases. (ARNORM
+!                        will often be smaller than the true value
+!                        computed from the output vector X.)
 !
 !
-!     SUBROUTINES AND FUNCTIONS USED
+!     Subroutines and functions used
 !     ------------------------------
 !
 !                NORMLZ,BVPRD1,BTPRD1
 !     BLAS       SCOPY,SNRM2,SSCAL  (SEE LAWSON ET AL. BELOW)
-!                (SNRM2 IS USED ONLY IN NORMLZ)
+!                (SNRM2 is used only in NORMLZ)
 !     FORTRAN    ABS,SQRT
 !
 !
 !     REFERENCES
 !     ----------
 !
-!     PAIGE, C.C. AND SAUNDERS, M.A.  LSQR, AN ALGORITHM FOR SPARSE
-!        LINEAR EQUATIONS AND SPARSE LEAST SQUARES.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 8, 1 (MARCH 1982).
+!     Paige, C.C. And saunders, M.A.  LSQR, an algorithm for sparse
+!        linear equations and sparse least squares.
+!        ACM transactions on mathematical software 8, 1 (march 1982).
 !
-!     LAWSON, C.L., HANSON, R.J., KINCAID, D.R. AND KROGH, F.T.
-!        BASIC LINEAR ALGEBRA SUBPROGRAMS FOR FORTRAN USAGE.
-!        ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE 5, 3 (SEPT 1979),
-!        308-323 AND 324-325.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!        BASIC linear algebra subprograms for Fortran usage.
+!        ACM transactions on mathematical software 5, 3 (sept 1979),
+!        308-323 and 324-325.
 !
 !     ------------------------------------------------------------------
 !
-!     LOCAL VARIABLES
+!     Local variables
 !
 integer :: i
 integer, intent(inout) :: itn
@@ -1422,7 +1422,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 &zero
 !
 !
-!     INITIALIZE.
+!     Initialize.
 !
 zero   = 0.0
 one    = 1.0
@@ -1448,7 +1448,7 @@ do i = 1, n
    x(i) = zero
 end do
 !
-!     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
+!     Set up the first vectors for the bidiagonalization.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
 !
 call normlz(m,u,beta)
@@ -1464,12 +1464,12 @@ arnorm = alfa*beta
 if (arnorm .le. zero) go to 800
 !
 !     ------------------------------------------------------------------
-!     MAIN ITERATION LOOP.
+!     Main iteration loop.
 !     ------------------------------------------------------------------
 100 itn = itn + 1
 !
-!     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
-!     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
+!     Perform the next step of the bidiagonalization to obtain the
+!     next  beta, U, alfa, W.  These satisfy the relations
 !                BETA*U  =  A*W  -  ALFA*U,
 !                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
 !
@@ -1482,8 +1482,8 @@ call btprd1(m,n,a,ka,ml,mu,u,w)
 call normlz(n,w,alfa)
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
-!     THIS ALTERS THE DIAGONAL (RHOBAR) OF THE LOWER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the damping parameter.
+!     This alters the diagonal (RHOBAR) of the lower-bidiagonal matrix.
 !
 rhbar2 = rhobar**2 + dampsq
 rhbar1 = sqrt(rhbar2)
@@ -1493,8 +1493,8 @@ psi    = sn1*phibar
 phibar = cs1*phibar
 !
 !
-!     USE A PLANE ROTATION TO ELIMINATE THE SUBDIAGONAL ELEMENT (BETA)
-!     OF THE LOWER-BIDIAGONAL MATRIX, GIVING AN UPPER-BIDIAGONAL MATRIX.
+!     Use a plane rotation to eliminate the subdiagonal element (BETA)
+!     of the lower-bidiagonal matrix, giving an upper-bidiagonal matrix.
 !
 rho    = sqrt(rhbar2 + beta**2)
 cs     = rhbar1/rho
@@ -1506,7 +1506,7 @@ phibar =  sn*phibar
 tau    =  sn*phi
 !
 !
-!     UPDATE X AND W(N+1),...,W(2*N)
+!     Update X and W(N+1),...,W(2*N)
 !
 t1 =    phi/rho
 t2 = -theta/rho
@@ -1522,9 +1522,9 @@ do i = 1, n
 end do
 !
 !
-!     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
-!     SUPER-DIAGONAL ELEMENT (THETA) OF THE UPPER-BIDIAGONAL MATRIX.
-!     THEN USE THE RESULT TO ESTIMATE NORM(X).
+!     Use a plane rotation on the right to eliminate the
+!     super-diagonal element (THETA) of the upper-bidiagonal matrix.
+!     Then use the result to estimate NORM(X).
 !
 delta  =  sn2*rho
 gambar = -cs2*rho
@@ -1538,9 +1538,9 @@ z      = rhs/gamma
 xxnorm = xxnorm + z**2
 !
 !
-!     TEST FOR CONVERGENCE.
-!     FIRST, ESTIMATE THE NORM AND CONDITION OF THE MATRIX ABAR,
-!     AND THE NORMS OF RBAR AND ABAR(TRANSPOSE)*RBAR.
+!     Test for convergence.
+!     First, estimate the norm and condition of the matrix ABAR,
+!     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
 acond  = anorm*sqrt(ddnorm)
@@ -1549,8 +1549,8 @@ res2   = res2 + psi**2
 rnorm  = sqrt(res1 + res2)
 arnorm = alfa*abs(tau)
 !
-!     NOW USE THESE NORMS TO ESTIMATE CERTAIN OTHER QUANTITIES,
-!     SOME OF WHICH WILL BE SMALL NEAR A SOLUTION.
+!     Now use these norms to estimate certain other quantities,
+!     some of which will be small near a solution.
 !
 test1  = rnorm/bnorm
 test2  = arnorm/(anorm*rnorm)
@@ -1558,10 +1558,10 @@ test3  = one/acond
 t1     = test1/(one + anorm*xnorm/bnorm)
 rtol   = btol +  atol*anorm*xnorm/bnorm
 !
-!     THE FOLLOWING TESTS GUARD AGAINST EXTREMELY SMALL VALUES OF
-!     ATOL, BTOL, OR CTOL.  (THE USER MAY HAVE SET ANY OR ALL OF
-!     THE PARAMETERS ATOL, BTOL, CONLIM TO ZERO.)
-!     THE EFFECT IS EQUIVALENT TO THE NORMAL TESTS USING
+!     The following tests guard against extremely small values of
+!     ATOL, BTOL, or CTOL.  (The user may have set any or all of
+!     the parameters ATOL, BTOL, CONLIM to zero.)
+!     the effect is equivalent to the normal tests using
 !     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
 !
 t3 = one + test3
@@ -1572,15 +1572,15 @@ if (t3  .le. one   ) istop = 6
 if (t2  .le. one   ) istop = 5
 if (t1  .le. one   ) istop = 4
 !
-!     ALLOW FOR TOLERANCES SET BY THE USER.
+!     Allow for tolerances set by the user.
 !
 if (test3 .le. ctol) istop = 3
 if (test2 .le. atol) istop = 2
 if (test1 .le. rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
-!     THE CONVERGENCE CRITERIA ARE REQUIRED TO BE MET ON  NCONV
-!     CONSECUTIVE ITERATIONS, WHERE  NCONV  IS SET BELOW.
+!     The convergence criteria are required to be met on  NCONV
+!     consecutive iterations, where  NCONV  is set below.
 !     SUGGESTED VALUE --   NCONV = 1, 2  OR  3.
 !
 if (istop .eq. 0) nstop = 0
@@ -1600,7 +1600,7 @@ subroutine fmin(f, a0, b0, x, w, aerr, rerr, error, ind)
 implicit none
 integer, intent(out) :: ind
 !     ******************************************************************
-!     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
+!     Golden section minimization of a function F(T)
 !     ******************************************************************
 real :: f
 real, intent(in) :: a0, b0
@@ -1637,7 +1637,7 @@ v = a + c2*e
 fu = f(u)
 fv = f(v)
 !
-!        LOCATION OF THE REGION OF A LOCAL MINIMUM
+!        Location of the region of a local minimum
 !
 10 if (e .le. eps0*(1.0 + abs(a))) go to 40
 if (fu - fv) 20,11,30
@@ -1673,7 +1673,7 @@ go to 10
    if (w .le. amin1(fu,fv)) go to 150
    go to 201
 !
-!              CHECK IF 0 IS A LOCAL MINIMUM
+!              Check if 0 is a local minimum
 !
 100 if (b .le. atol) go to 110
 x = 0.01*b
@@ -1691,7 +1691,7 @@ go to 110
 error = amax1(abs(a),b)
 return
 !
-!             CHECK IF A0 IS A LOCAL MINIMUM
+!             Check if A0 is a local minimum
 !
 130 tol = amax1(rtol*abs(a),atol)
 131 x = a + 0.01*e
@@ -1704,7 +1704,7 @@ x = a
 error = e
 return
 !
-!             CHECK IF B0 IS A LOCAL MINIMUM
+!             Check if B0 is a local minimum
 !
 150 tol = amax1(rtol*abs(b),atol)
 151 x = b - 0.01*e
@@ -1723,7 +1723,7 @@ v = a + c2*e
 fu = f(u)
 fv = f(v)
 !
-!             REFINEMENT OF THE LOCAL MINIMUM
+!             Refinement of the local minimum
 !
 200 ind = 0
 201 if (fu .gt. fv) go to 210
@@ -1743,7 +1743,7 @@ v = a + c2*e
 fu = fv
 fv = f(v)
 !
-!        CHECKING THE ACCURACY OF THE LOCAL MINIMUM
+!        Checking the accuracy of the local minimum
 !
 220 if (e .le. amax1(rtol*abs(a),atol)) go to 240
 if (abs(fv - fu) .gt. ftol*amax1(abs(fu),abs(fv))) go to 200
@@ -1751,7 +1751,7 @@ if (ind .eq. 1) go to 241
 ind = 1
 go to 201
 !
-!                    REPORT THE RESULTS
+!                    Report the results
 !
 240 ind = 0
 241 if (fu - fv) 242,243,244
@@ -1779,29 +1779,29 @@ integer :: i, itncnt, itnlim, mo
 real :: eps, fscale, gradtl, stepmx, steptl
 real :: spmpar
 !-----------------------------------------------------------------------
-!                 INTERFACE TO MINIMIZATION PACKAGE
+!                 Interface to minimization package
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       FCN        NAME OF ROUTINE TO EVALUATE MINIMIZATION FUNCTION.
-!                  MUST BE DECLARED EXTERNAL IN CALLING ROUTINE.
+!                  Must be declared external in calling routine.
 !       N          DIMENSION OF PROBLEM
 !       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN.
 !
-!     INPUT/OUTPUT ...
+!     Input/output ...
 !
 !       ITER       ON INPUT ITER IS THE MAXIMUM NUMBER OF ITERATIONS
-!                  THAT ARE PERMITTED. ON OUTPUT ITER IS THE NUMBER
-!                  OF ITERATIONS THAT WERE ACTUALLY PERFORMED.
+!                  that are permitted. On output iter is the number
+!                  of iterations that were actually performed.
 !       XPLS(N)    LOCAL MINIMUM
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       FPLS       FUNCTION VALUE AT LOCAL MINIMUM XPLS
 !       IERR       TERMINATION CODE
 !
-!     WORKSPACE ...
+!     Workspace ...
 !
 !       WRK(N,N+8)
 !
@@ -1820,7 +1820,7 @@ external fcn
 !                 WRK(N,9) = A(N,N)
 !
 !
-!     SET TOLERANCES
+!     Set tolerances
 !
 eps = amax1(spmpar(1),abs(rerr))
 gradtl = eps**0.4
@@ -1829,7 +1829,7 @@ steptl = eps
 if (eps .le. 1.e-10) steptl = 10.0*eps
 if (eps .lt. 1.e-13) steptl = 1.e2*eps
 !
-!     INITIALIZATION
+!     Initialization
 !
 mo = 0
 itnlim = iter
@@ -1873,39 +1873,39 @@ integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns
 real :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
 real :: spmpar
 !-----------------------------------------------------------------------
-!             DRIVER FOR NON-LINEAR OPTIMIZATION PROBLEM
+!             Driver for non-linear optimization problem
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       NR         ROW DIMENSION OF MATRIX
 !       N          DIMENSION OF PROBLEM
 !       FCN        SUBROUTINE.  FCN EVALUATES THE FUNCTION TO BE
-!                  OPTIMIZED. FCN MUST BE DECLARED EXTERNAL IN THE
-!                  CALLING PROGRAM. THE ROUTINE HAS THE FORMAT
+!                  optimized. FCN must be declared external in the
+!                  calling program. The routine HAS the format
 !                         CALL FCN (N, X, FVAL)
-!                  WHERE X IS A POINT AND FVAL IS THE VALUE OF THE
-!                  FUNCTION AT THE POINT.
+!                  where X is a point and FVAL is the value of the
+!                  function at the point.
 !       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN. IT IS
 !                  ASSUMED THAT RERR IS NONNEGATIVE. IF RERR = 0
-!                  THEN FCN IS ACCURATE TO MACHINE PRECISION.
+!                  then FCN is accurate to machine precision.
 !       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
 !       GRADTL     TOLERANCE AT WHICH THE GRADIENT IS CONSIDERED
-!                  CLOSE ENOUGH TO ZERO TO TERMINATE ALGORITHM.
-!                  (USED ONLY IN THE SUBROUTINE OPSTP.)
+!                  close enough to zero to terminate algorithm.
+!                  (Used only in the subroutine OPSTP.)
 !       STEPTL     RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                  CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
+!                  considered close enough to terminate algorithm
 !
-!     INPUT/OUTPUT ...
+!     Input/output ...
 !
 !       MO         NUMBER OF RESCALINGS OF THE VARIABLES.
 !       X(N)       ESTIMATE OF A LOCAL MINIMUM OF FCN
-!       TYPSIZ(N)  TYPICAL SIZE FOR EACH COMPONENT OF X
+!       TYPSIZ(N)  typical size for each component of X
 !       FSCALE     ESTIMATE OF SCALE OF MINIMUM VALUE OF FCN.
-!                  (USED ONLY IN THE SUBROUTINE OPSTP.)
+!                  (Used only in the subroutine OPSTP.)
 !       STEPMX     MAXIMUM ALLOWABLE STEP SIZE
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       ITNCNT     NUMBER OF ITERATIONS COMPLETED
 !       XPLS(N)    ESTIMATE OF A LOCAL MINIMUM OF FCN
@@ -1913,7 +1913,7 @@ real :: spmpar
 !       GPLS(N)    GRADIENT AT XPLS
 !       IERR       TERMINATION CODE
 !
-!     WORK SPACES ...
+!     Work spaces ...
 !
 !       A(N,N)     CHOLESKY DECOMPOSITION OF HESSIAN
 !       G(N)       GRADIENT AT THE CURRENT ITERATE
@@ -1923,11 +1923,11 @@ real :: spmpar
 !       WRK2(N)    WORKSPACE
 !
 !-----------------------------------------------------------------------
-!     INTERNAL PARAMETERS ...
+!     Internal parameters ...
 !
 !       RNF        NOISE IN THE SUBROUTINE FCN
 !       F          FUNCTION VALUE  FCN(X)
-!       FSTACK(NS) STACK OF PREVIOUS FUNCTION VALUES
+!       FSTACK(NS) stack of previous function values
 !       NS         LENGTH OF THE ARRAY FSTACK
 !       SPTR       POINTER TO AN ELEMENT IN FSTACK
 !-----------------------------------------------------------------------
@@ -1935,7 +1935,7 @@ integer :: sptr
 logical :: mxtake, noupdt
 external fcn
 !
-!     INITIALIZATION
+!     Initialization
 !     --------------
 ns = 30
 stmx = stepmx
@@ -1952,11 +1952,11 @@ iagflg = 0
 iretcd = -1
 icscmx = 0
 !
-!     EVALUATE FCN(X)
+!     Evaluate FCN(X)
 !
 call fcn(n,x,f)
 !
-!     EVALUATE FINITE DIFFERENCE GRADIENT
+!     Evaluate finite difference gradient
 !
 call fstofd (n, x, fcn, f, g, typsiz, sqrnf)
 !
@@ -1965,8 +1965,8 @@ call opstp (n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
 if (ierr .eq. 0) go to 10
 if (mo .ne. 0) go to 210
 !
-!        APPLY THE FIXED STEP COORDINATE DESCENT PROCEDURE
-!        FOR ONE STEP AND CHECK IF THE GRADIENT IS NONZERO
+!        Apply the fixed step coordinate descent procedure
+!        for one step and check if the gradient is nonzero
 !
    call fxdec (fcn, n, x, f, 10.0)
 !
@@ -1977,8 +1977,8 @@ if (mo .ne. 0) go to 210
 &typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
    if (ierr .ne. 0) go to 210
 !
-!     THE HESSIAN WILL BE OBTAINED BY SECANT UPDATES.
-!     SET A TO THE INITIAL HESSIAN.
+!     The hessian will be obtained by secant updates.
+!     Set A to the initial hessian.
 !
 10 nm1 = n - 1
 do j = 1,nm1
@@ -1992,7 +1992,7 @@ a(n,n) = 1.0/typsiz(n)
 go to 101
 !
 !
-!     ITERATION
+!     Iteration
 !     ---------
 100 if (mo .gt. 1) go to 101
 if (mod(itncnt,10) .ne. 0) go to 101
@@ -2010,42 +2010,42 @@ if (itncnt + 10 .ge. itnlim) go to 101
 end do
 call lltslv(nr,n,a,p,wrk1)
 !
-!     TAKE A STEP, ARRIVING AT THE POINT XPLS
+!     Take a step, arriving at the point XPLS
 !
 call lnsrch(n,x,f,g,p,xpls,fpls,fcn,mxtake,iretcd, &
 &stepmx,steptl,typsiz)
 !
-!     IF A SATISFACTORY STEP COULD NOT BE FOUND AND FORWARD DIFFERENCE
-!     GRADIENT WAS USED, RETRY USING A CENTRAL DIFFERENCE GRADIENT.
+!     If a satisfactory step could not be found and forward difference
+!     gradient was used, retry using a central difference gradient.
 !
 if (iretcd .ne. 1 .or. iagflg .ne. 0) go to 120
 !
-!        SET IAGFLG FOR CENTRAL DIFFERENCES
+!        Set IAGFLG for central differences
 !
    iagflg = -1
    cbrnf = rnf**(1.0/3.0)
    call fstocd (n, x, fcn, typsiz, cbrnf, g)
    go to 105
 !
-!     CALCULATE GRADIENT AT XPLS
+!     Calculate gradient at XPLS
 !
 120 if (iagflg .eq. 0) go to 130
    call fstocd (n, xpls, fcn, typsiz, cbrnf, gpls)
    go to 140
 130 call fstofd (n, xpls, fcn, fpls, gpls, typsiz, sqrnf)
 !
-!     CHECK WHETHER THE STOPPING CRITERIA SATISFIED
+!     Check whether the stopping criteria satisfied
 !
 140 call opstp (n,xpls,fpls,gpls,x,itncnt,icscmx,ierr,gradtl,steptl, &
 &typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
 if (ierr .ne. 0) go to 200
 !
-!     EVALUATE HESSIAN AT XPLS
+!     Evaluate hessian at XPLS
 !
 call secfac(nr,n,x,g,a,xpls,gpls,itncnt,sqrnf, &
 &noupdt,wrk0,wrk1,wrk2)
 !
-!     UPDATE F, X, AND G
+!     Update F, X, and G
 !
 f = fpls
 do i = 1,n
@@ -2054,9 +2054,9 @@ do i = 1,n
 end do
 go to 100
 !
-!     TERMINATION
+!     Termination
 !     -----------
-!     RESET XPLS,FPLS,GPLS  IF PREVIOUS ITERATE SOLUTION
+!     Reset XPLS,FPLS,GPLS  if previous iterate solution
 !
 200 if (ierr .ne. 3) return
 !
@@ -2079,25 +2079,25 @@ real, intent(inout) :: stepmx
 integer :: i
 real :: stpsiz
 !-----------------------------------------------------------------------
-!                  CHECK INPUT FOR REASONABLENESS
+!                  Check input for reasonableness
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N          DIMENSION OF PROBLEM
 !       X(N)       ESTIMATE OF MINIMUM OF FCN
 !       GRADTL     TOLERANCE AT WHICH GRADIENT CONSIDERED CLOSE
-!                  ENOUGH TO ZERO TO TERMINATE ALGORITHM
+!                  enough to zero to terminate algorithm
 !       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
 !       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN
 !
-!     INPUT/OUTPUT ...
+!     Input/output ...
 !
-!       TYPSIZ(N)  SCALING VECTOR FOR X
+!       TYPSIZ(N)  scaling vector for X
 !       FSCALE     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION FCN
 !       STEPMX     MAXIMUM STEP SIZE
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       IERR       ERROR INDICATOR
 !
@@ -2105,24 +2105,24 @@ real :: stpsiz
 real, intent(in) :: x(n)
 real, intent(inout) :: typsiz(n)
 !
-!     CHECK THAT PARAMETERS ONLY TAKE ON ACCEPTABLE VALUES.
-!     IF NOT, SET THEM TO DEFAULT VALUES.
+!     Check that parameters only take on acceptable values.
+!     If not, set them to default values.
 !
 ierr = 0
 !
-!     CHECK DIMENSION OF PROBLEM
+!     Check dimension of problem
 !
 if (n .le. 0) go to 805
 if (n .eq. 1) go to 810
 !
-!     COMPUTE SCALE MATRIX
+!     Compute scale matrix
 !
 do i = 1,n
   typsiz(i) = abs(typsiz(i))
   if (typsiz(i) .eq. 0.0) typsiz(i) = 1.0
 end do
 !
-!     CHECK MAXIMUM STEP SIZE
+!     Check maximum step size
 !
 if (stepmx .gt. 0.0) go to 20
 stpsiz = 0.0
@@ -2133,25 +2133,25 @@ stpsiz = sqrt(stpsiz)
 stepmx = amax1(1.0e3*stpsiz, 1.0e3)
 20 continue
 !
-!     CHECK FUNCTION SCALE
+!     Check function SCALE
 !
 fscale = abs(fscale)
 if (fscale .eq. 0.0) fscale = 1.0
 !
-!     CHECK GRADIENT TOLERANCE
+!     Check gradient tolerance
 !
 if (gradtl .lt. 0.0) go to 815
 !
-!     CHECK ITERATION LIMIT
+!     Check iteration limit
 !
 if (itnlim .le. 0) go to 820
 !
-!     CHECK THE ACCURACY OF FCN
+!     Check the accuracy of FCN
 !
 if (rerr .lt. 0.0 .or. rerr .gt. 1.e-4) go to 825
 return
 !
-!     ERROR EXITS
+!     Error exits
 !
 805 ierr = -1
 go to 895
@@ -2178,10 +2178,10 @@ real, intent(in) :: gradtl, steptl
 integer :: i, jerr
 real :: d, grd, relstp, rgx, rsx
 !-----------------------------------------------------------------------
-!            UNCONSTRAINED MINIMIZATION STOPPING CRITERIA
+!            Unconstrained minimization stopping criteria
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N          DIMENSION OF PROBLEM
 !       XPLS(N)    NEW ITERATE X(K)
@@ -2191,25 +2191,25 @@ real :: d, grd, relstp, rgx, rsx
 !       ITNCNT     CURRENT ITERATION K
 !       ICSCMX     NUMBER CONSECUTIVE STEPS .GE. STEPMX
 !       GRADTL     TOLERANCE AT WHICH RELATIVE GRADIENT CONSIDERED CLOSE
-!                  ENOUGH TO ZERO TO TERMINATE ALGORITHM
+!                  enough to zero to terminate algorithm
 !       STEPTL     RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                  CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
-!       TYPSIZ(N)  SCALING VECTOR FOR X
+!                  considered close enough to terminate algorithm
+!       TYPSIZ(N)  scaling vector for X
 !       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
 !       IRETCD     CODE WHICH WAS SET WHEN THE POINT XPLS WAS OBTAINED
 !       MXTAKE     BOOLEAN FLAG INDICATING STEP OF MAXIMUM LENGTH USED
 !       NS         LENGTH OF THE ARRAY FSTACK
 !
-!     INPUT/OUTPUT ...
+!     Input/output ...
 !
 !       FSCALE     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION
-!       FSTACK(NS) STACK OF PREVIOUS FUNCTION VALUES
+!       FSTACK(NS) stack of previous function values
 !       SPTR       POINTER TO AN ELEMENT IN FSTACK
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       ICSCMX     NUMBER CONSECUTIVE STEPS .GE. STEPMX
-!                  (RETAIN VALUE BETWEEN SUCCESSIVE CALLS)
+!                  (retain value between successive calls)
 !       IERR       TERMINATION CODE
 !
 !-----------------------------------------------------------------------
@@ -2220,15 +2220,15 @@ logical, intent(in) :: mxtake
 !
 ierr = 0
 !
-!     LAST GLOBAL STEP FAILED TO LOCATE A POINT LOWER THAN X
+!     Last global step failed to locate a point lower than X
 !
 if (iretcd .ne. 1) go to 10
    ierr = 3
    return
 10 continue
 !
-!     FIND DIRECTION IN WHICH RELATIVE GRADIENT MAXIMUM.
-!     CHECK WHETHER WITHIN TOLERANCE.
+!     Find direction in which relative gradient maximum.
+!     Check whether within tolerance.
 !
 d = amax1(abs(fpls),fscale)
 rgx = 0.0
@@ -2243,8 +2243,8 @@ if (rgx .gt. gradtl*d) go to 30
    fscale = abs(fpls)
 30 if (itncnt .eq. 0) return
 !
-!     FIND DIRECTION IN WHICH RELATIVE STEPSIZE MAXIMUM
-!     CHECK WHETHER WITHIN TOLERANCE.
+!     Find direction in which relative stepsize maximum
+!     check whether within tolerance.
 !
 rsx = 0.0
 do i = 1,n
@@ -2254,8 +2254,8 @@ end do
 jerr = 2
 if (rsx .le. steptl) go to 100
 !
-!     CHECK IF FPLS IS SUFFICIENTLY LESS THAN THE NS-TH
-!     PREVIOUS VALUE OF FCN.
+!     Check if FPLS is sufficiently less than the NS-TH
+!     previous value of FCN.
 !
 if (itncnt .gt. ns) go to 50
    sptr = itncnt
@@ -2268,12 +2268,12 @@ if (fpls .ge. (fstack(sptr) - 1.e-3*abs(fstack(sptr)))) &
 &go to 100
 fstack(sptr) = fpls
 !
-!     CHECK ITERATION LIMIT
+!     Check iteration limit
 !
 60 jerr = 4
 if (itncnt .ge. itnlim) go to 100
 !
-!     CHECK NUMBER OF CONSECUTIVE STEPS OF SIZE STEPMX
+!     Check number of consecutive steps of size STEPMX
 !
 if (mxtake) go to 70
    icscmx = 0
@@ -2282,7 +2282,7 @@ if (mxtake) go to 70
 if (icscmx .ge. 20) ierr = 5
 return
 !
-!     TERMINATE
+!     Terminate
 !
 100 ierr = jerr
 return
@@ -2296,7 +2296,7 @@ real, intent(in) :: r
 integer :: i
 real :: fminus, fplus, h, xi, xminus, xplus
 !-----------------------------------------------------------------------
-!     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
+!     Fixed step coordinate descent procedure / one iteration
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n)
 external fcn
@@ -2332,7 +2332,7 @@ real :: spmpar
 real, intent(in) :: x(n)
 real, intent(inout) :: typsiz(n)
 !-----------------------------------------------------------------------
-!     RESCALE THE VARIABLES
+!     Rescale the variables
 !-----------------------------------------------------------------------
 xmin = 1.e-5*spmpar(3)
 do 10 i = 1,n
@@ -2364,10 +2364,10 @@ integer :: i, ii, im1, ip1, j
 real :: sum
 !-----------------------------------------------------------------------
 !        SOLUTION OF AX = B WHERE A HAS THE FORM L(L-TRANSPOSE)
-!           BUT ONLY THE LOWER TRIANGULAR PART L IS STORED.
+!           but only the lower triangular part L is stored.
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       NR       ROW DIMENSION OF MATRIX
 !       N        ORDER OF THE MATRIX
@@ -2375,18 +2375,18 @@ real :: sum
 !                MODIFIED BY THE ROUTINE.
 !       B(N)     RIGHT-HAND SIDE VECTOR
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       X(N)     SOLUTION VECTOR
 !
 !-----------------------------------------------------------------------
-!     NOTE.  B AND X MAY SHARE THE SAME STORAGE AREA.
+!     Note.  B and X may share the same storage area.
 !-----------------------------------------------------------------------
 real, intent(in) :: a(nr,n)
 real, intent(inout) :: x(n)
 real, intent(in) :: b(n)
 !
-!                  FORWARD SOLVE, RESULT IN X
+!                  Forward solve, result in X
 !
 x(1) = b(1)/a(1,1)
 if (n .eq. 1) go to 30
@@ -2399,7 +2399,7 @@ do i = 2,n
    x(i) = (b(i) - sum)/a(i,i)
 end do
 !
-!                   BACK SOLVE, RESULT IN X
+!                   Back solve, result in X
 !
 30 x(n) = x(n)/a(n,n)
 if (n .eq. 1) return
@@ -2427,20 +2427,20 @@ real, intent(inout) :: x(n)
 integer :: j
 real :: fplus, stepsz, xtmpj
 !-----------------------------------------------------------------------
-!     FIND FORWARD DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
-!     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
+!     Find forward difference approximation G to the first derivative
+!     (gradient) of the function defined by FCN at the point X.
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N          DIMENSION OF PROBLEM
 !       X(N)       POINT AT WHICH THE GRADIENT IS TO BE APPROXIMATED
 !       FCN        NAME OF SUBROUTINE TO EVALUATE FUNCTION
 !       FX         VALUE OF FCN AT THE POINT X
-!       TYPSIZ(N)  SCALING VECTOR FOR X
+!       TYPSIZ(N)  scaling vector for X
 !       R          STEPSIZE FACTOR
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       G(N)       FINITE DIFFERENCE APPROXIMATION TO THE GRADIENT
 !
@@ -2465,19 +2465,19 @@ real, intent(in) :: r
 integer :: i
 real :: fminus, fplus, stepi, xtempi
 !-----------------------------------------------------------------------
-!     FIND CENTRAL DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
-!     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
+!     Find central difference approximation G to the first derivative
+!     (gradient) of the function defined by FCN at the point X.
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N          DIMENSION OF PROBLEM
 !       X(N)       POINT AT WHICH GRADIENT IS TO BE APPROXIMATED
 !       FCN        NAME OF SUBROUTINE TO EVALUATE FUNCTION
-!       TYPSIZ(N)  SCALING VECTOR FOR X
+!       TYPSIZ(N)  scaling vector for X
 !       R          STEPSIZE FACTOR
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       G(N)       CENTRAL DIFFERENCE APPROXIMATION TO GRADIENT
 !
@@ -2487,8 +2487,8 @@ real, intent(in) :: typsiz(n)
 real, intent(inout) :: g(n)
 external fcn
 !
-!     FIND I-TH  STEPSIZE, EVALUATE TWO NEIGHBORS IN DIRECTION OF
-!     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
+!     Find I-TH  stepsize, evaluate two neighbors in direction of
+!     I-TH unit vector, and evaluate I-TH  component of gradient.
 !
 do i = 1, n
    stepi = r * amax1(abs(x(i)),typsiz(i))
@@ -2516,10 +2516,10 @@ real :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, &
 &t2, t3, tlmbda, tmp, w
 real :: sdot
 !-----------------------------------------------------------------------
-!             FIND A NEXT NEWTON ITERATE BY LINE SEARCH
+!             Find a next Newton iterate by line search
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       N         DIMENSION OF PROBLEM
 !       X(N)      OLD ITERATE X(K-1)
@@ -2529,10 +2529,10 @@ real :: sdot
 !       FCN       NAME OF SUBROUTINE TO EVALUATE FUNCTION
 !       STEPMX    MAXIMUM ALLOWABLE STEP SIZE
 !       STEPTL    RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                 CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
-!       TYPSIZ(N) SCALING VECTOR FOR X
+!                 considered close enough to terminate algorithm
+!       TYPSIZ(N) scaling vector for X
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       XPLS(N)   NEW ITERATE X(K)
 !       FPLS      FUNCTION VALUE AT NEW ITERATE, F(XPLS)
@@ -2540,7 +2540,7 @@ real :: sdot
 !       MXTAKE    BOOLEAN FLAG INDICATING STEP OF MAXIMUM LENGTH USED
 !
 !-----------------------------------------------------------------------
-!     INTERNAL VARIABLES ...
+!     Internal variables ...
 !
 !       SLN      NEWTON LENGTH
 !       RLN      RELATIVE LENGTH OF NEWTON STEP
@@ -2562,7 +2562,7 @@ sln = sqrt(tmp)
 !
 if (sln .le. stepmx) go to 30
 !
-!     NEWTON STEP LONGER THAN MAXIMUM ALLOWED
+!     Newton step longer than maximum allowed
 !
    scl = stepmx/sln
    do i = 1,n
@@ -2578,7 +2578,7 @@ end do
 rmnlmb = steptl/rln
 lambda = 1.0
 !
-!     LOOP.  CHECK IF THE NEW ITERATE IS SATISFACTORY.
+!     Loop.  Check if the new iterate is satisfactory.
 !
 100 do i = 1,n
   xpls(i) = x(i) + lambda*p(i)
@@ -2586,20 +2586,20 @@ end do
 call fcn(n,xpls,fpls)
 if (fpls .le. f + slp*1.e-4*lambda) go to 200
 !
-!     SOLUTION NOT (YET) FOUND
+!     Solution not (yet) found
 !
   if (lambda .lt. rmnlmb) go to 210
 !
-!     CALCULATE NEW LAMBDA
+!     Calculate new lambda
 !
   if (lambda .ne. 1.0) go to 120
 !
-!     FIRST BACKTRACK. QUADRATIC FIT
+!     First backtrack. Quadratic fit
 !
       tlmbda = amin1(-slp/(2.0*(fpls - f - slp)), 0.9)
       go to 170
 !
-!     ALL SUBSEQUENT BACKTRACKS. CUBIC FIT
+!     All subsequent backtracks. Cubic fit
 !
 120 t1 = (fpls - f - lambda*slp)/(lambda*lambda)
       t2 = (pfpls - f - plmbda*slp)/(plmbda*plmbda)
@@ -2609,22 +2609,22 @@ if (fpls .le. f + slp*1.e-4*lambda) go to 200
       w = 10.0*abs(t1*t3)
       if ((abs(a) + w) .ne. w) go to 130
 !
-!     THE CUBIC FIT DEGENERATES TO A QUADRATIC FIT
+!     The cubic fit degenerates to a quadratic fit
 !
          tlmbda = -slp/(2.0*b)
          go to 160
 !
-!     THE CUBIC IS NONDEGENERATE
+!     The cubic is nondegenerate
 !
 130 disc = b*b - 3.0*a*slp
       if (disc .le. b*b) go to 140
 !
-!     ONLY ONE POSITIVE CRITICAL POINT, MUST BE MINIMUM
+!     Only one positive critical point, must be minimum
 !
          tlmbda = (-b + sign(1.0,a)*sqrt(disc))/(3.0*a)
          go to 160
 !
-!     BOTH CRITICAL POINTS POSITIVE, FIRST IS MINIMUM
+!     Both critical points positive, first is minimum
 !
 140 if (disc .gt. 0.0) go to 150
             tlmbda = -b/(3.0*a)
@@ -2642,13 +2642,13 @@ if (fpls .le. f + slp*1.e-4*lambda) go to 200
 180 lambda = tlmbda
     go to 100
 !
-!     A SUITABLE VALUE FOR XPLS HAS BEEN OBTAINED
+!     A suitable value for XPLS has been obtained
 !
 200 iretcd = 0
 if (lambda .eq. 1.0 .and. sln .gt. 0.99*stepmx) mxtake =.true.
 return
 !
-!     NO SATISFACTORY XPLS FOUND SUFFICIENTLY DISTINCT FROM X
+!     No satisfactory XPLS found sufficiently distinct from X
 !
 210 iretcd = 1
 return
@@ -2664,10 +2664,10 @@ real :: alp, den1, den2, snorm2, sum, ynrm2
 real :: snrm2
 real :: sdot
 !-----------------------------------------------------------------------
-!           UPDATE HESSIAN BY THE BFGS FACTORED METHOD
+!           Update hessian by the BFGS factored method
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       NR        ROW DIMENSION OF MATRIX
 !       N         ORDER OF THE MATRIX
@@ -2678,15 +2678,15 @@ real :: sdot
 !       ITNCNT    ITERATION COUNT
 !       TOL       RELATIVE TOLERANCE TO BE USED FOR NOISE
 !
-!     INPUT/OUTPUT ...
+!     Input/output ...
 !
 !       A(N,N)    ON ENTRY, CHOLESKY DECOMPOSITION OF HESSIAN IN
-!                    THE LOWER PART AND DIAGONAL.
-!                 ON EXIT,  UPDATED CHOLESKY DECOMPOSITION OF HESSIAN
-!                    IN THE LOWER TRIANGULAR PART AND DIAGONAL.
+!                    the lower part and diagonal.
+!                 On exit,  updated Cholesky decomposition of hessian
+!                    in the lower triangular part and diagonal.
 !       NOUPDT    BOOLEAN. NO UPDATE YET.
 !
-!     WORK SPACES ...  S(N), Y(N), W(N)
+!     Work spaces ...  S(N), Y(N), W(N)
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: x(n), xpls(n), g(n), gpls(n)
@@ -2722,7 +2722,7 @@ if (.not.noupdt) go to 40
 !
 !        ON THE INITIAL UPDATE SET L = ALP*L. THEN S MUST BE
 !        RESET TO ALP*S. AFTER THIS IS DONE THEN DEN2 = DEN1
-!        AND ALP HAS THE VALUE 1.
+!        and alp has the value 1.
 !
    do j = 1,n
       s(j) = alp*s(j)
@@ -2743,8 +2743,8 @@ if (.not.noupdt) go to 40
    w(i) = sum
 end do
 !
-!     IF ABS(Y(I) - W(I)) IS LESS THAN THE ESTIMATED NOISE IN Y(I)
-!     FOR EACH I, THEN THE UPDATE IS SKIPPED.
+!     If ABS(Y(I) - W(I)) is less than the estimated noise in Y(I)
+!     for each I, then the update is skipped.
 !
 do i = 1,n
 if (abs(y(i) - w(i)) .ge. tol*amax1(abs(g(i)),abs(gpls(i)))) &
@@ -2765,7 +2765,7 @@ do i = 1,n
    s(i) = alp*s(i)
 end do
 !
-!     COPY L INTO UPPER TRIANGULAR PART.  ZERO L.
+!     Copy L into upper triangular part.  Zero L.
 !
 do i = 2,n
    im1 = i - 1
@@ -2779,9 +2779,9 @@ end do
 !
 call qrupdt (nr, n, a, s, w)
 !
-!     UPPER TRIANGULAR PART AND DIAGONAL OF A NOW CONTAIN UPDATED
-!     CHOLESKY DECOMPOSITION OF HESSIAN.  COPY BACK TO LOWER
-!     TRIANGULAR PART.
+!     Upper triangular part and diagonal of a now contain updated
+!     Cholesky decomposition of hessian.  Copy back to lower
+!     triangular part.
 !
 do i = 2,n
    im1 = i - 1
@@ -2798,16 +2798,16 @@ integer, intent(in) :: n, nr
 integer :: i, ii, j, k, km1
 real :: r
 !-----------------------------------------------------------------------
-!     FIND AN ORTHOGONAL MATRIX (Q*) AND AN UPPER TRIANGULAR
+!     Find an orthogonal matrix (Q*) and an upper triangular
 !          MATRIX (R*) SUCH THAT (Q*)(R*) = R + U(V+)
 !-----------------------------------------------------------------------
 !
-!     PARAMETERS ...
+!     Parameters ...
 !
 !       NR      ROW DIMENSION OF THE MATRIX
 !       N       ORDER OF THE MATRIX
-!       A(N,N)  ON INPUT,  CONTAINS R
-!               ON OUTPUT, CONTAINS (R*)
+!       A(N,N)  on input,  contains R
+!               on output, contains (R*)
 !       U(N)    VECTOR
 !       V(N)    VECTOR
 !
@@ -2815,16 +2815,16 @@ real :: r
 real, intent(inout) :: a(nr,n), u(n)
 real, intent(in) :: v(n)
 !
-!                DETERMINE LAST NON-ZERO IN U
+!                Determine last non-zero in U
 !
 k = n
 10 if (u(k) .ne. 0.0 .or. k .eq. 1) go to 20
    k = k - 1
    go to 10
 !
-!               K-1 JACOBI ROTATIONS TRANSFORM
+!               K-1 Jacobi rotations transform
 !             R + U(V+)  TO  (R*) + (U(1)*E1)(V+)
-!                 WHICH IS UPPER HESSENBERG
+!                 which is upper Hessenberg
 !
 20 km1 = k - 1
 if (k .le. 1) go to 40
@@ -2841,8 +2841,8 @@ end do
 end do
 if (k .le. 1) return
 !
-!       K-1 JACOBI ROTATIONS TRANSFORM UPPER HESSENBERG R
-!                   TO UPPER TRIANGULAR R*
+!       K-1 Jacobi rotations transform upper Hessenberg R
+!                   to upper triangular R*
 !
 do i = 1,km1
    call jrot (nr,n,a,i,a(i,i),-a(i+1,i),r)
@@ -2858,21 +2858,21 @@ real, intent(inout) :: r
 integer :: j
 real :: c, s, t, z
 !-----------------------------------------------------------------------
-!         PRE-MULTIPLICATION OF AN UPPER HESSENBERG MATRIX H
-!               BY THE JACOBIAN ROTATION J(I,I+1,A,B)
+!         Pre-multiplication of an upper Hessenberg matrix H
+!               by the Jacobian rotation J(I,I+1,A,B)
 !-----------------------------------------------------------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       NR      ROW DIMENSION OF THE MATRIX
 !       N       ORDER OF THE MATRIX
-!       H(N,N)  UPPER HESSENBER MATRIX
+!       H(N,N)  upper hessenber matrix
 !       I       INDEX OF ROW
 !       A,B     SCALARS
 !
-!     OUTPUT ...
+!     Output ...
 !
-!       H(N,N)  THE MODIFIED HESSENBERG MATRIX
+!       H(N,N)  the modified Hessenberg matrix
 !       R       R = SQRT(A*A + B*B)
 !
 !-----------------------------------------------------------------------
@@ -2894,7 +2894,7 @@ s = sign(1.0/z, b)
 c = t*s
 r = z*abs(b)
 !
-!            APPLY THE ROTATION WHEN A IS NONZERO
+!            Apply the rotation when A is nonzero
 !
 20 do j = i,n
    t = h(i,j)
@@ -2929,104 +2929,104 @@ external fcn
 !
 !     SUBROUTINE LMDIFF
 !
-!     THE PURPOSE OF LMDIFF IS TO MINIMIZE THE SUM OF THE SQUARES OF
-!     M NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION OF THE
-!     LEVENBERG-MARQUARDT ALGORITHM. THIS IS DONE BY USING THE MORE
-!     GENERAL LEAST-SQUARES SOLVER LMDIF. THE USER MUST PROVIDE A
-!     SUBROUTINE WHICH CALCULATES THE FUNCTIONS. THE JACOBIAN IS
-!     THEN CALCULATED BY A FORWARD-DIFFERENCE APPROXIMATION.
+!     The purpose of LMDIFF is to minimize the sum of the squares of
+!     M nonlinear functions in N variables by a modification of the
+!     Levenberg-Marquardt algorithm. This is done by using the more
+!     general least-squares solver LMDIF. The user must provide A
+!     subroutine which calculates the functions. The Jacobian is
+!     then calculated by a forward-difference approximation.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE LMDIFF(FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(M,N,X,FVEC,IFLAG)
 !         INTEGER M,N,IFLAG
 !         REAL X(N),FVEC(M)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ----------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF LMDIFF.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate execution of LMDIFF.
+!         In this case set IFLAG to a negative integer.
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS.
+!       M is a positive integer input variable SET to the number
+!         of functions.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF VARIABLES. N MUST NOT EXCEED M.
+!       N is a positive integer input variable SET to the number
+!         of variables. N must not exceed M.
 !
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
+!       X is an array of length N. On input X must contain
+!         an initial estimate of the solution vector. On output X
+!         contains the final estimate of the solution vector.
 !
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH M WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
+!       FVEC is an output array of length M which contains
+!         the functions evaluated at the output X.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
-!       TOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION OCCURS
-!         WHEN THE ALGORITHM ESTIMATES EITHER THAT THE RELATIVE
-!         ERROR IN THE SUM OF SQUARES IS AT MOST TOL OR THAT
-!         THE RELATIVE ERROR BETWEEN X AND THE SOLUTION IS AT
+!       TOL is a nonnegative input variable. Termination occurs
+!         when the algorithm estimates either that the relative
+!         error in the sum of squares is at most TOL or that
+!         the relative error between X and the solution is at
 !         MOST TOL.
 !
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
+!       Info is an integer output variable. If the user has
+!         terminated execution, info is set to the (negative)
+!         value of IFLAG. See description of FCN. Otherwise,
+!         info is set as follows.
 !
 !         INFO = 0  IMPROPER INPUT PARAMETERS.
 !
 !         INFO = 1  ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!                   IN THE SUM OF SQUARES IS AT MOST TOL.
+!                   in the sum of squares is at most TOL.
 !
 !         INFO = 2  ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!                   BETWEEN X AND THE SOLUTION IS AT MOST TOL.
+!                   between X and the solution is at most TOL.
 !
 !         INFO = 3  CONDITIONS FOR INFO = 1 AND INFO = 2 BOTH HOLD.
 !
 !         INFO = 4  FVEC IS ORTHOGONAL TO THE COLUMNS OF THE
-!                   JACOBIAN TO MACHINE PRECISION.
+!                   Jacobian to machine precision.
 !
 !         INFO = 5  NUMBER OF CALLS TO FCN HAS REACHED OR
 !                   EXCEEDED 200*(N+1).
 !
 !         INFO = 6  TOL IS TOO SMALL. NO FURTHER REDUCTION IN
-!                   THE SUM OF SQUARES IS POSSIBLE.
+!                   the sum of squares is possible.
 !
 !         INFO = 7  TOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                   THE APPROXIMATE SOLUTION X IS POSSIBLE.
+!                   the approximate solution X is possible.
 !
-!       IWA IS AN INTEGER WORK ARRAY OF LENGTH N.
+!       IWA is an integer work array of length N.
 !
-!       WA IS A WORK ARRAY OF LENGTH LWA.
+!       WA is a work array of length LWA.
 !
-!       LWA IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
+!       LWA is a positive integer input variable NOT less than
 !         M*N+5*N+M.
 !
 !     SUBPROGRAMS CALLED
 !
-!       USER-SUPPLIED ...... FCN
+!       User-supplied ...... FCN
 !
-!       MINPACK-SUPPLIED ... LMDIF
+!       MINPACK-supplied ... LMDIF
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -3037,7 +3037,7 @@ real :: factor, ftol, gtol, xtol
 data factor /1.0e2/
 info = 0
 !
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
+!     Check the input parameters for errors.
 !
 if (n .le. 0 .or. m .lt. n .or. epsfcn .lt. 0.0 &
 &.or. tol .lt. 0.0 .or. lwa .lt. m*n + 5*n + m) go to 10
@@ -3076,177 +3076,177 @@ external fcn
 !
 !     SUBROUTINE LMDIF
 !
-!     THE PURPOSE OF LMDIF IS TO MINIMIZE THE SUM OF THE SQUARES OF
-!     M NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION OF
-!     THE LEVENBERG-MARQUARDT ALGORITHM. THE USER MUST PROVIDE A
-!     SUBROUTINE WHICH CALCULATES THE FUNCTIONS. THE JACOBIAN IS
-!     THEN CALCULATED BY A FORWARD-DIFFERENCE APPROXIMATION.
+!     The purpose of LMDIF is to minimize the sum of the squares of
+!     M nonlinear functions in N variables by a modification of
+!     the Levenberg-Marquardt algorithm. The user must provide A
+!     subroutine which calculates the functions. The Jacobian is
+!     then calculated by a forward-difference approximation.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN,
-!                        DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,
+!                        diag,mode,factor,NPRINT,info,NFEV,FJAC,
 !                        LDFJAC,IPVT,QTF,WA1,WA2,WA3,WA4)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(M,N,X,FVEC,IFLAG)
 !         INTEGER M,N,IFLAG
 !         REAL X(N),FVEC(M)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ----------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF LMDIF.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate execution of LMDIF.
+!         In this case set IFLAG to a negative integer.
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS.
+!       M is a positive integer input variable SET to the number
+!         of functions.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF VARIABLES. N MUST NOT EXCEED M.
+!       N is a positive integer input variable SET to the number
+!         of variables. N must not exceed M.
 !
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
+!       X is an array of length N. On input X must contain
+!         an initial estimate of the solution vector. On output X
+!         contains the final estimate of the solution vector.
 !
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH M WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
+!       FVEC is an output array of length M which contains
+!         the functions evaluated at the output X.
 !
-!       FTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN BOTH THE ACTUAL AND PREDICTED RELATIVE
-!         REDUCTIONS IN THE SUM OF SQUARES ARE AT MOST FTOL.
-!         THEREFORE, FTOL MEASURES THE RELATIVE ERROR DESIRED
-!         IN THE SUM OF SQUARES.
+!       FTOL is a nonnegative input variable. Termination
+!         occurs when both the actual and predicted relative
+!         reductions in the sum of squares are at most FTOL.
+!         Therefore, FTOL measures the relative error desired
+!         in the sum of squares.
 !
-!       XTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE RELATIVE ERROR BETWEEN TWO CONSECUTIVE
-!         ITERATES IS AT MOST XTOL. THEREFORE, XTOL MEASURES THE
-!         RELATIVE ERROR DESIRED IN THE APPROXIMATE SOLUTION.
+!       XTOL is a nonnegative input variable. Termination
+!         occurs when the relative error between two consecutive
+!         iterates is at most XTOL. Therefore, XTOL measures the
+!         relative error desired in the approximate solution.
 !
-!       GTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE COSINE OF THE ANGLE BETWEEN FVEC AND
-!         ANY COLUMN OF THE JACOBIAN IS AT MOST GTOL IN ABSOLUTE
-!         VALUE. THEREFORE, GTOL MEASURES THE ORTHOGONALITY
-!         DESIRED BETWEEN THE FUNCTION VECTOR AND THE COLUMNS
-!         OF THE JACOBIAN.
+!       GTOL is a nonnegative input variable. Termination
+!         occurs when the cosine of the angle between FVEC and
+!         any column of the Jacobian is at most GTOL in absolute
+!         value. Therefore, GTOL measures the orthogonality
+!         desired between the function vector and the columns
+!         of the Jacobian.
 !
-!       MAXFEV IS A POSITIVE INTEGER INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE NUMBER OF CALLS TO FCN IS AT LEAST
-!         MAXFEV BY THE END OF AN ITERATION.
+!       MAXFEV is a positive integer input variable. Termination
+!         occurs when the number of calls to FCN is at least
+!         MAXFEV by the end of an iteration.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
 !       DIAG IS AN ARRAY OF LENGTH N. IF MODE = 1 (SEE
 !         BELOW), DIAG IS INTERNALLY SET. IF MODE = 2, DIAG
-!         MUST CONTAIN POSITIVE ENTRIES THAT SERVE AS
-!         MULTIPLICATIVE SCALE FACTORS FOR THE VARIABLES.
+!         must contain positive entries that serve as
+!         multiplicative scale factors for the variables.
 !
 !       MODE IS AN INTEGER INPUT VARIABLE. IF MODE = 1, THE
 !         VARIABLES WILL BE SCALED INTERNALLY. IF MODE = 2,
-!         THE SCALING IS SPECIFIED BY THE INPUT DIAG. OTHER
+!         the scaling is specified by the input diag. Other
 !         VALUES OF MODE ARE EQUIVALENT TO MODE = 1.
 !
-!       FACTOR IS A POSITIVE INPUT VARIABLE USED IN DETERMINING THE
-!         INITIAL STEP BOUND. THIS BOUND IS SET TO THE PRODUCT OF
-!         FACTOR AND THE EUCLIDEAN NORM OF DIAG*X IF NONZERO, OR ELSE
-!         TO FACTOR ITSELF. IN MOST CASES FACTOR SHOULD LIE IN THE
-!         INTERVAL (.1,100.). 100. IS A GENERALLY RECOMMENDED VALUE.
+!       Factor is a positive input variable used in determining the
+!         initial step bound. This bound is set to the product of
+!         factor and the Euclidean norm of diag*X if nonzero, or else
+!         to factor itself. In most cases factor should lie in the
+!         interval (.1,100.). 100. Is a generally recommended value.
 !
-!       NPRINT IS AN INTEGER INPUT VARIABLE THAT ENABLES CONTROLLED
-!         PRINTING OF ITERATES IF IT IS POSITIVE. IN THIS CASE,
+!       NPRINT is an integer input variable that enables controlled
+!         printing of iterates if it is positive. In this case,
 !         FCN IS CALLED WITH IFLAG = 0 AT THE BEGINNING OF THE FIRST
-!         ITERATION AND EVERY NPRINT ITERATIONS THEREAFTER AND
-!         IMMEDIATELY PRIOR TO RETURN, WITH X AND FVEC AVAILABLE
-!         FOR PRINTING. IF NPRINT IS NOT POSITIVE, NO SPECIAL CALLS
+!         iteration and every NPRINT iterations thereafter and
+!         immediately prior to return, with X and FVEC available
+!         for printing. If NPRINT is not positive, no special calls
 !         OF FCN WITH IFLAG = 0 ARE MADE.
 !
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
+!       Info is an integer output variable. If the user has
+!         terminated execution, info is set to the (negative)
+!         value of IFLAG. See description of FCN. Otherwise,
+!         info is set as follows.
 !
 !         INFO = 0  IMPROPER INPUT PARAMETERS.
 !
 !         INFO = 1  BOTH ACTUAL AND PREDICTED RELATIVE REDUCTIONS
-!                   IN THE SUM OF SQUARES ARE AT MOST FTOL.
+!                   in the sum of squares are at most FTOL.
 !
 !         INFO = 2  RELATIVE ERROR BETWEEN TWO CONSECUTIVE ITERATES
-!                   IS AT MOST XTOL.
+!                   is at most XTOL.
 !
 !         INFO = 3  CONDITIONS FOR INFO = 1 AND INFO = 2 BOTH HOLD.
 !
 !         INFO = 4  THE COSINE OF THE ANGLE BETWEEN FVEC AND ANY
-!                   COLUMN OF THE JACOBIAN IS AT MOST GTOL IN
-!                   ABSOLUTE VALUE.
+!                   column of the Jacobian is at most GTOL in
+!                   absolute value.
 !
 !         INFO = 5  NUMBER OF CALLS TO FCN HAS REACHED OR
 !                   EXCEEDED MAXFEV.
 !
 !         INFO = 6  FTOL IS TOO SMALL. NO FURTHER REDUCTION IN
-!                   THE SUM OF SQUARES IS POSSIBLE.
+!                   the sum of squares is possible.
 !
 !         INFO = 7  XTOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                   THE APPROXIMATE SOLUTION X IS POSSIBLE.
+!                   the approximate solution X is possible.
 !
 !         INFO = 8  GTOL IS TOO SMALL. FVEC IS ORTHOGONAL TO THE
-!                   COLUMNS OF THE JACOBIAN TO MACHINE PRECISION.
+!                   columns of the Jacobian to machine precision.
 !
-!       NFEV IS AN INTEGER OUTPUT VARIABLE SET TO THE NUMBER OF
-!         CALLS TO FCN.
+!       NFEV is an integer output variable SET to the number of
+!         calls to FCN.
 !
-!       FJAC IS AN OUTPUT M BY N ARRAY. THE UPPER N BY N SUBMATRIX
-!         OF FJAC CONTAINS AN UPPER TRIANGULAR MATRIX R WITH
-!         DIAGONAL ELEMENTS OF NONINCREASING MAGNITUDE SUCH THAT
+!       FJAC is an output M by N array. The upper N by N submatrix
+!         of FJAC contains an upper triangular matrix R with
+!         diagonal elements of nonincreasing magnitude such that
 !
 !                T     T           T
 !               P *(JAC *JAC)*P = R *R,
 !
-!         WHERE P IS A PERMUTATION MATRIX AND JAC IS THE FINAL
-!         CALCULATED JACOBIAN. COLUMN J OF P IS COLUMN IPVT(J)
-!         (SEE BELOW) OF THE IDENTITY MATRIX. THE LOWER TRAPEZOIDAL
-!         PART OF FJAC CONTAINS INFORMATION GENERATED DURING
-!         THE COMPUTATION OF R.
+!         Where P is a permutation matrix and JAC is the final
+!         calculated Jacobian. Column J of P is column IPVT(J)
+!         (see below) of the identity matrix. The lower trapezoidal
+!         part of FJAC contains information generated during
+!         the computation of R.
 !
-!       LDFJAC IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY FJAC.
+!       LDFJAC is a positive integer input variable NOT less than M
+!         which specifies the leading dimension of the array FJAC.
 !
-!       IPVT IS AN INTEGER OUTPUT ARRAY OF LENGTH N. IPVT
+!       IPVT is an integer output array of length N. IPVT
 !         DEFINES A PERMUTATION MATRIX P SUCH THAT JAC*P = Q*R,
-!         WHERE JAC IS THE FINAL CALCULATED JACOBIAN, Q IS
-!         ORTHOGONAL (NOT STORED), AND R IS UPPER TRIANGULAR
-!         WITH DIAGONAL ELEMENTS OF NONINCREASING MAGNITUDE.
-!         COLUMN J OF P IS COLUMN IPVT(J) OF THE IDENTITY MATRIX.
+!         where JAC is the final calculated Jacobian, Q is
+!         orthogonal (not stored), and R is upper triangular
+!         with diagonal elements of nonincreasing magnitude.
+!         Column J of P is column IPVT(J) of the identity matrix.
 !
-!       QTF IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS
-!         THE FIRST N ELEMENTS OF THE VECTOR (Q TRANSPOSE)*FVEC.
+!       QTF is an output array of length N which contains
+!         the first N elements of the vector (Q transpose)*FVEC.
 !
-!       WA1, WA2, AND WA3 ARE WORK ARRAYS OF LENGTH N.
+!       WA1, WA2, and WA3 are work arrays of length N.
 !
-!       WA4 IS A WORK ARRAY OF LENGTH M.
+!       WA4 is a work array of length M.
 !
 !     SUBPROGRAMS CALLED
 !
-!       USER-SUPPLIED ...... FCN
+!       User-supplied ...... FCN
 !
-!       MINPACK-SUPPLIED ... SPMPAR,ENORM,FDJAC2,LMPAR,QRFAC
+!       MINPACK-supplied ... SPMPAR,ENORM,FDJAC2,LMPAR,QRFAC
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,AMIN1,SQRT,MOD
+!       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt,mod
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -3260,7 +3260,7 @@ real :: spmpar, enorm
 data p1,p5,p25,p75,p0001 &
 &/1.0e-1,5.0e-1,2.5e-1,7.5e-1,1.0e-4/
 !
-!     EPS IS THE MACHINE PRECISION.
+!     Eps is the machine precision.
 !
 eps = spmpar(1)
 !
@@ -3268,7 +3268,7 @@ info = 0
 iflag = 0
 nfev = 0
 !
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
+!     Check the input parameters for errors.
 !
 if (n .le. 0 .or. m .lt. n .or. ldfjac .lt. m &
 &.or. ftol .lt. 0.0 .or. xtol .lt. 0.0 .or. gtol .lt. 0.0 &
@@ -3279,8 +3279,8 @@ do j = 1, n
    end do
 20 continue
 !
-!     EVALUATE THE FUNCTION AT THE STARTING POINT
-!     AND CALCULATE ITS NORM.
+!     Evaluate the function at the starting point
+!     and calculate its norm.
 !
 iflag = 1
 call fcn(m,n,x,fvec,iflag)
@@ -3288,23 +3288,23 @@ nfev = 1
 if (iflag .lt. 0) go to 300
 fnorm = enorm(m,fvec)
 !
-!     INITIALIZE LEVENBERG-MARQUARDT PARAMETER AND ITERATION COUNTER.
+!     Initialize Levenberg-Marquardt parameter and iteration counter.
 !
 par = 0.0
 iter = 1
 !
-!     BEGINNING OF THE OUTER LOOP.
+!     Beginning of the outer loop.
 !
 30 continue
 !
-!        CALCULATE THE JACOBIAN MATRIX.
+!        Calculate the Jacobian matrix.
 !
    iflag = 2
    call fdjac2(fcn,m,n,x,fvec,fjac,ldfjac,iflag,epsfcn,wa4)
    nfev = nfev + n
    if (iflag .lt. 0) go to 300
 !
-!        IF REQUESTED, CALL FCN TO ENABLE PRINTING OF ITERATES.
+!        If requested, call FCN to enable printing of iterates.
 !
    if (nprint .le. 0) go to 40
    iflag = 0
@@ -3312,12 +3312,12 @@ iter = 1
    if (iflag .lt. 0) go to 300
 40 continue
 !
-!        COMPUTE THE QR FACTORIZATION OF THE JACOBIAN.
+!        Compute the QR factorization of the Jacobian.
 !
    call qrfac(m,n,fjac,ldfjac,.true.,ipvt,n,wa1,wa2,wa3)
 !
-!        ON THE FIRST ITERATION AND IF MODE IS 1, SCALE ACCORDING
-!        TO THE NORMS OF THE COLUMNS OF THE INITIAL JACOBIAN.
+!        On the first iteration and if mode is 1, scale according
+!        to the norms of the columns of the initial Jacobian.
 !
    if (iter .ne. 1) go to 80
    if (mode .eq. 2) go to 60
@@ -3327,8 +3327,8 @@ iter = 1
       end do
 60 continue
 !
-!        ON THE FIRST ITERATION, CALCULATE THE NORM OF THE SCALED X
-!        AND INITIALIZE THE STEP BOUND DELTA.
+!        On the first iteration, calculate the norm of the scaled X
+!        and initialize the step bound delta.
 !
    do j = 1, n
       wa3(j) = diag(j)*x(j)
@@ -3338,7 +3338,7 @@ iter = 1
    if (delta .eq. 0.0) delta = factor
 80 continue
 !
-!        FORM (Q TRANSPOSE)*FVEC AND STORE THE FIRST N COMPONENTS IN
+!        Form (Q transpose)*FVEC and store the first N components in
 !        QTF.
 !
    do i = 1, m
@@ -3359,7 +3359,7 @@ iter = 1
       qtf(j) = wa4(j)
       end do
 !
-!        COMPUTE THE NORM OF THE SCALED GRADIENT.
+!        Compute the norm of the scaled gradient.
 !
    gnorm = 0.0
    if (fnorm .eq. 0.0) go to 170
@@ -3375,12 +3375,12 @@ iter = 1
       end do
 170 continue
 !
-!        TEST FOR CONVERGENCE OF THE GRADIENT NORM.
+!        Test for convergence of the gradient norm.
 !
    if (gnorm .le. gtol) info = 4
    if (info .ne. 0) go to 300
 !
-!        RESCALE IF NECESSARY.
+!        Rescale if necessary.
 !
    if (mode .eq. 2) go to 190
    do j = 1, n
@@ -3388,16 +3388,16 @@ iter = 1
       end do
 190 continue
 !
-!        BEGINNING OF THE INNER LOOP.
+!        Beginning of the inner loop.
 !
 200 continue
 !
-!           DETERMINE THE LEVENBERG-MARQUARDT PARAMETER.
+!           Determine the Levenberg-Marquardt parameter.
 !
       call lmpar(n,fjac,ldfjac,ipvt,diag,qtf,delta,par,wa1,wa2, &
 &wa3,wa4)
 !
-!           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
+!           Store the direction P and X + P. Calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -3406,11 +3406,11 @@ iter = 1
          end do
       pnorm = enorm(n,wa3)
 !
-!           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
+!           On the first iteration, adjust the initial step bound.
 !
       if (iter .eq. 1) delta = amin1(delta,pnorm)
 !
-!           EVALUATE THE FUNCTION AT X + P AND CALCULATE ITS NORM.
+!           Evaluate the function at X + P and calculate its norm.
 !
       iflag = 1
       call fcn(m,n,wa2,wa4,iflag)
@@ -3418,13 +3418,13 @@ iter = 1
       if (iflag .lt. 0) go to 300
       fnorm1 = enorm(m,wa4)
 !
-!           COMPUTE THE SCALED ACTUAL REDUCTION.
+!           Compute the scaled actual reduction.
 !
       actred = -1.0
       if (p1*fnorm1 .lt. fnorm) actred = 1.0 - (fnorm1/fnorm)**2
 !
-!           COMPUTE THE SCALED PREDICTED REDUCTION AND
-!           THE SCALED DIRECTIONAL DERIVATIVE.
+!           Compute the scaled predicted reduction and
+!           the scaled directional derivative.
 !
       do j = 1, n
          wa3(j) = 0.0
@@ -3439,13 +3439,13 @@ iter = 1
       prered = temp1**2 + temp2**2/p5
       dirder = -(temp1**2 + temp2**2)
 !
-!           COMPUTE THE RATIO OF THE ACTUAL TO THE PREDICTED
-!           REDUCTION.
+!           Compute the ratio of the actual to the predicted
+!           reduction.
 !
       ratio = 0.0
       if (prered .ne. 0.0) ratio = actred/prered
 !
-!           UPDATE THE STEP BOUND.
+!           Update the step bound.
 !
       if (ratio .gt. p25) go to 240
          if (actred .ge. 0.0) temp = p5
@@ -3462,11 +3462,11 @@ iter = 1
 250 continue
 260 continue
 !
-!           TEST FOR SUCCESSFUL ITERATION.
+!           Test for successful iteration.
 !
       if (ratio .lt. p0001) go to 290
 !
-!           SUCCESSFUL ITERATION. UPDATE X, FVEC, AND THEIR NORMS.
+!           Successful iteration. Update X, FVEC, and their norms.
 !
       do j = 1, n
          x(j) = wa2(j)
@@ -3480,7 +3480,7 @@ iter = 1
       iter = iter + 1
 290 continue
 !
-!           TESTS FOR CONVERGENCE.
+!           Tests for convergence.
 !
       if (abs(actred) .le. ftol .and. prered .le. ftol &
 &.and. p5*ratio .le. 1.0) info = 1
@@ -3489,7 +3489,7 @@ iter = 1
 &.and. p5*ratio .le. 1.0 .and. info .eq. 2) info = 3
       if (info .ne. 0) go to 300
 !
-!           TESTS FOR TERMINATION AND STRINGENT TOLERANCES.
+!           Tests for termination and stringent tolerances.
 !
       if (nfev .ge. maxfev) info = 5
       if (abs(actred) .le. eps .and. prered .le. eps &
@@ -3507,7 +3507,7 @@ iter = 1
    go to 30
 300 continue
 !
-!     TERMINATION, EITHER NORMAL OR USER IMPOSED.
+!     Termination, either normal or user imposed.
 !
 if (iflag .lt. 0) info = iflag
 iflag = 0
@@ -3523,34 +3523,34 @@ real, intent(in) :: x(n)
 !
 !     FUNCTION ENORM
 !
-!     GIVEN AN N-VECTOR X, THIS FUNCTION CALCULATES THE
-!     EUCLIDEAN NORM OF X.
+!     Given an N-vector X, this function calculates the
+!     Euclidean norm of X.
 !
-!     THE EUCLIDEAN NORM IS COMPUTED BY ACCUMULATING THE SUM OF
-!     SQUARES IN THREE DIFFERENT SUMS. THE SUMS OF SQUARES FOR THE
-!     SMALL AND LARGE COMPONENTS ARE SCALED SO THAT NO OVERFLOWS
-!     OCCUR. NON-DESTRUCTIVE UNDERFLOWS ARE PERMITTED. UNDERFLOWS
-!     AND OVERFLOWS DO NOT OCCUR IN THE COMPUTATION OF THE UNSCALED
-!     SUM OF SQUARES FOR THE INTERMEDIATE COMPONENTS.
-!     THE DEFINITIONS OF SMALL, INTERMEDIATE AND LARGE COMPONENTS
-!     DEPEND ON TWO CONSTANTS, RDWARF AND RGIANT. THE MAIN
+!     The Euclidean norm is computed by accumulating the sum of
+!     squares in three different sums. The sums of squares for the
+!     small and large components are scaled so that no overflows
+!     occur. Non-destructive underflows are permitted. Underflows
+!     and overflows do not occur in the computation of the unscaled
+!     sum of squares for the intermediate components.
+!     The definitions of small, intermediate and large components
+!     depend on two constants, RDWARF and RGIANT. The main
 !     RESTRICTIONS ON THESE CONSTANTS ARE THAT RDWARF**2 NOT
 !     UNDERFLOW AND RGIANT**2 NOT OVERFLOW. THE CONSTANTS
-!     GIVEN HERE ARE SUITABLE FOR EVERY KNOWN COMPUTER.
+!     given here are suitable for every known computer.
 !
-!     THE FUNCTION STATEMENT IS
+!     The function statement is
 !
 !       REAL FUNCTION ENORM(N,X)
 !
-!     WHERE
+!     Where
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE.
+!       N is a positive integer input variable.
 !
-!       X IS AN INPUT ARRAY OF LENGTH N.
+!       X is an input array of length N.
 !
 !     SUBPROGRAMS CALLED
 !
-!       FORTRAN-SUPPLIED ... ABS,SQRT
+!       Fortran-supplied ... abs,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -3573,7 +3573,7 @@ do 90 i = 1, n
    if (xabs .gt. rdwarf .and. xabs .lt. agiant) go to 70
       if (xabs .le. rdwarf) go to 30
 !
-!              SUM FOR LARGE COMPONENTS.
+!              Sum for large components.
 !
          if (xabs .le. x1max) go to 10
             s1 = 1.0 + s1*(x1max/xabs)**2
@@ -3585,7 +3585,7 @@ do 90 i = 1, n
          go to 60
 30 continue
 !
-!              SUM FOR SMALL COMPONENTS.
+!              Sum for small components.
 !
          if (xabs .le. x3max) go to 40
             s3 = 1.0 + s3*(x3max/xabs)**2
@@ -3598,13 +3598,13 @@ do 90 i = 1, n
       go to 80
 70 continue
 !
-!           SUM FOR INTERMEDIATE COMPONENTS.
+!           Sum for intermediate components.
 !
       s2 = s2 + xabs**2
 80 continue
 90 continue
 !
-!     CALCULATION OF NORM.
+!     Calculation of norm.
 !
 if (s1 .eq. 0.0) go to 100
    enorm = x1max*sqrt(s1 + (s2/x1max)/x1max)
@@ -3631,56 +3631,56 @@ real, intent(in) :: r(lr), diag(n), qtb(n)
 real, intent(inout) :: x(n), wa1(n), wa2(n)
 !     **********
 !
-!     SUBROUTINE DOGLEG
+!     Subroutine DOGLEG
 !
-!     GIVEN AN M BY N MATRIX A, AN N BY N NONSINGULAR DIAGONAL
-!     MATRIX D, AN M-VECTOR B, AND A POSITIVE NUMBER DELTA, THE
-!     PROBLEM IS TO DETERMINE THE CONVEX COMBINATION X OF THE
-!     GAUSS-NEWTON AND SCALED GRADIENT DIRECTIONS THAT MINIMIZES
-!     (A*X - B) IN THE LEAST SQUARES SENSE, SUBJECT TO THE
-!     RESTRICTION THAT THE EUCLIDEAN NORM OF D*X BE AT MOST DELTA.
+!     Given an M by N matrix A, an N by N nonsingular diagonal
+!     matrix D, an M-vector B, and a positive number delta, the
+!     problem is to determine the convex combination X of the
+!     Gauss-Newton and scaled gradient directions that minimizes
+!     (A*X - B) in the least squares sense, subject to the
+!     restriction that the Euclidean norm of D*X be at most delta.
 !
-!     THIS SUBROUTINE COMPLETES THE SOLUTION OF THE PROBLEM
-!     IF IT IS PROVIDED WITH THE NECESSARY INFORMATION FROM THE
+!     This subroutine completes the solution of the problem
+!     if it is provided with the necessary information from the
 !     QR FACTORIZATION OF A. THAT IS, IF A = Q*R, WHERE Q HAS
-!     ORTHOGONAL COLUMNS AND R IS AN UPPER TRIANGULAR MATRIX,
-!     THEN DOGLEG EXPECTS THE FULL UPPER TRIANGLE OF R AND
-!     THE FIRST N COMPONENTS OF (Q TRANSPOSE)*B.
+!     orthogonal columns and R is an upper triangular matrix,
+!     then dogleg expects the full upper triangle of R and
+!     the first N components of (Q transpose)*B.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE DOGLEG(N,R,LR,DIAG,QTB,DELTA,X,WA1,WA2)
 !
-!     WHERE
+!     Where
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE ORDER OF R.
+!       N is a positive integer input variable SET to the order of R.
 !
-!       R IS AN INPUT ARRAY OF LENGTH LR WHICH MUST CONTAIN THE UPPER
-!         TRIANGULAR MATRIX R STORED BY ROWS.
+!       R is an input array of length LR which must contain the upper
+!         triangular matrix R stored by rows.
 !
-!       LR IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
+!       LR is a positive integer input variable NOT less than
 !         (N*(N+1))/2.
 !
-!       DIAG IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE
-!         DIAGONAL ELEMENTS OF THE MATRIX D.
+!       Diag is an input array of length N which must contain the
+!         diagonal elements of the matrix D.
 !
-!       QTB IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE FIRST
-!         N ELEMENTS OF THE VECTOR (Q TRANSPOSE)*B.
+!       QTB is an input array of length N which must contain the first
+!         N elements of the vector (Q transpose)*B.
 !
-!       DELTA IS A POSITIVE INPUT VARIABLE WHICH SPECIFIES AN UPPER
-!         BOUND ON THE EUCLIDEAN NORM OF D*X.
+!       Delta is a positive input variable which specifies an upper
+!         bound on the Euclidean norm of D*X.
 !
-!       X IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE DESIRED
-!         CONVEX COMBINATION OF THE GAUSS-NEWTON DIRECTION AND THE
-!         SCALED GRADIENT DIRECTION.
+!       X is an output array of length N which contains the desired
+!         convex combination of the Gauss-Newton direction and the
+!         scaled gradient direction.
 !
-!       WA1 AND WA2 ARE WORK ARRAYS OF LENGTH N.
+!       WA1 and WA2 are work arrays of length N.
 !
 !     SUBPROGRAMS CALLED
 !
-!       MINPACK-SUPPLIED ... SPMPAR,ENORM
+!       MINPACK-supplied ... SPMPAR,ENORM
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,AMIN1,SQRT
+!       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -3690,11 +3690,11 @@ integer :: i, j, jj, jp1, k, l
 real :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
 real :: spmpar, enorm
 !
-!     EPSMCH IS THE MACHINE PRECISION.
+!     EPSMCH is the machine precision.
 !
 epsmch = spmpar(1)
 !
-!     FIRST, CALCULATE THE GAUSS-NEWTON DIRECTION.
+!     First, calculate the Gauss-Newton direction.
 !
 jj = (n*(n + 1))/2 + 1
 do k = 1, n
@@ -3722,7 +3722,7 @@ do k = 1, n
    x(j) = (qtb(j) - sum)/temp
    end do
 !
-!     TEST WHETHER THE GAUSS-NEWTON DIRECTION IS ACCEPTABLE.
+!     Test whether the Gauss-Newton direction is acceptable.
 !
 do j = 1, n
    wa1(j) = 0.0
@@ -3731,8 +3731,8 @@ do j = 1, n
 qnorm = enorm(n,wa2)
 if (qnorm .le. delta) go to 140
 !
-!     THE GAUSS-NEWTON DIRECTION IS NOT ACCEPTABLE.
-!     NEXT, CALCULATE THE SCALED GRADIENT DIRECTION.
+!     The Gauss-Newton direction is not acceptable.
+!     Next, calculate the scaled gradient direction.
 !
 l = 1
 do j = 1, n
@@ -3744,16 +3744,16 @@ do j = 1, n
    wa1(j) = wa1(j)/diag(j)
    end do
 !
-!     CALCULATE THE NORM OF THE SCALED GRADIENT AND TEST FOR
-!     THE SPECIAL CASE IN WHICH THE SCALED GRADIENT IS ZERO.
+!     Calculate the norm of the scaled gradient and test for
+!     the special case in which the scaled gradient is zero.
 !
 gnorm = enorm(n,wa1)
 sgnorm = 0.0
 alpha = delta/qnorm
 if (gnorm .eq. 0.0) go to 120
 !
-!     CALCULATE THE POINT ALONG THE SCALED GRADIENT
-!     AT WHICH THE QUADRATIC IS MINIMIZED.
+!     Calculate the point along the scaled gradient
+!     at which the quadratic is minimized.
 !
 do j = 1, n
    wa1(j) = (wa1(j)/gnorm)/diag(j)
@@ -3770,14 +3770,14 @@ do j = 1, n
 temp = enorm(n,wa2)
 sgnorm = (gnorm/temp)/temp
 !
-!     TEST WHETHER THE SCALED GRADIENT DIRECTION IS ACCEPTABLE.
+!     Test whether the scaled gradient direction is acceptable.
 !
 alpha = 0.0
 if (sgnorm .ge. delta) go to 120
 !
-!     THE SCALED GRADIENT DIRECTION IS NOT ACCEPTABLE.
-!     FINALLY, CALCULATE THE POINT ALONG THE DOGLEG
-!     AT WHICH THE QUADRATIC IS MINIMIZED.
+!     The scaled gradient direction is not acceptable.
+!     Finally, calculate the point along the dogleg
+!     at which the quadratic is minimized.
 !
 bnorm = enorm(n,qtb)
 temp = (bnorm/gnorm)*(bnorm/qnorm)*(sgnorm/delta)
@@ -3787,8 +3787,8 @@ temp = temp - (delta/qnorm)*(sgnorm/delta)**2 &
 alpha = ((delta/qnorm)*(1.0 - (sgnorm/delta)**2))/temp
 120 continue
 !
-!     FORM APPROPRIATE CONVEX COMBINATION OF THE GAUSS-NEWTON
-!     DIRECTION AND THE SCALED GRADIENT DIRECTION.
+!     Form appropriate convex combination of the Gauss-Newton
+!     direction and the scaled gradient direction.
 !
 temp = (1.0 - alpha)*amin1(sgnorm,delta)
 do j = 1, n
@@ -3816,82 +3816,82 @@ external fcn
 !
 !     SUBROUTINE FDJAC1
 !
-!     THIS SUBROUTINE COMPUTES A FORWARD-DIFFERENCE APPROXIMATION
-!     TO THE N BY N JACOBIAN MATRIX ASSOCIATED WITH A SPECIFIED
-!     PROBLEM OF N FUNCTIONS IN N VARIABLES. IF THE JACOBIAN HAS
-!     A BANDED FORM, THEN FUNCTION EVALUATIONS ARE SAVED BY ONLY
-!     APPROXIMATING THE NONZERO TERMS.
+!     This subroutine computes a forward-difference approximation
+!     to the N by N Jacobian matrix associated with a specified
+!     problem of N functions in N variables. If the Jacobian has
+!     a banded form, then function evaluations are saved by only
+!     approximating the nonzero terms.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE FDJAC1(FCN,N,X,FVEC,FJAC,LDFJAC,IFLAG,ML,MU,EPSFCN,
 !                         WA1,WA2)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(N,X,FVEC,IFLAG)
 !         INTEGER N,IFLAG
 !         REAL X(N),FVEC(N)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ----------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF FDJAC1.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate execution of FDJAC1.
+!         In this case set IFLAG to a negative integer.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS AND VARIABLES.
+!       N is a positive integer input variable SET to the number
+!         of functions and variables.
 !
-!       X IS AN INPUT ARRAY OF LENGTH N.
+!       X is an input array of length N.
 !
-!       FVEC IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE
-!         FUNCTIONS EVALUATED AT X.
+!       FVEC is an input array of length N which must contain the
+!         functions evaluated at X.
 !
-!       FJAC IS AN OUTPUT N BY N ARRAY WHICH CONTAINS THE
-!         APPROXIMATION TO THE JACOBIAN MATRIX EVALUATED AT X.
+!       FJAC is an output N by N array which contains the
+!         approximation to the Jacobian matrix evaluated at X.
 !
-!       LDFJAC IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN N
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY FJAC.
+!       LDFJAC is a positive integer input variable NOT less than N
+!         which specifies the leading dimension of the array FJAC.
 !
-!       IFLAG IS AN INTEGER VARIABLE WHICH CAN BE USED TO TERMINATE
-!         THE EXECUTION OF FDJAC1. SEE DESCRIPTION OF FCN.
+!       IFLAG is an integer variable which can be used to terminate
+!         the execution of FDJAC1. See description of FCN.
 !
-!       ML IS A NONNEGATIVE INTEGER INPUT VARIABLE WHICH SPECIFIES
-!         THE NUMBER OF SUBDIAGONALS WITHIN THE BAND OF THE
-!         JACOBIAN MATRIX. IF THE JACOBIAN IS NOT BANDED, SET
-!         ML TO AT LEAST N - 1.
+!       ML is a nonnegative integer input variable which specifies
+!         the number of subdiagonals within the band of the
+!         Jacobian matrix. If the Jacobian is not banded, set
+!         ML to at least N - 1.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
-!       MU IS A NONNEGATIVE INTEGER INPUT VARIABLE WHICH SPECIFIES
-!         THE NUMBER OF SUPERDIAGONALS WITHIN THE BAND OF THE
-!         JACOBIAN MATRIX. IF THE JACOBIAN IS NOT BANDED, SET
-!         MU TO AT LEAST N - 1.
+!       Mu is a nonnegative integer input variable which specifies
+!         the number of superdiagonals within the band of the
+!         Jacobian matrix. If the Jacobian is not banded, set
+!         mu to at least N - 1.
 !
-!       WA1 AND WA2 ARE WORK ARRAYS OF LENGTH N. IF ML + MU + 1 IS AT
-!         LEAST N, THEN THE JACOBIAN IS CONSIDERED DENSE, AND WA2 IS
-!         NOT REFERENCED.
+!       WA1 and WA2 are work arrays of length N. If ML + mu + 1 is at
+!         least N, then the Jacobian is considered dense, and WA2 is
+!         not referenced.
 !
 !     SUBPROGRAMS CALLED
 !
-!       MINPACK-SUPPLIED ... SPMPAR
+!       MINPACK-supplied ... SPMPAR
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,SQRT
+!       Fortran-supplied ... abs,AMAX1,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -3902,7 +3902,7 @@ real :: eps, epsmch, h, temp, zero
 real :: spmpar
 data zero /0.0e0/
 !
-!     EPSMCH IS THE MACHINE PRECISION.
+!     EPSMCH is the machine precision.
 !
 epsmch = spmpar(1)
 !
@@ -3910,7 +3910,7 @@ eps = sqrt(amax1(epsfcn,epsmch))
 msum = ml + mu + 1
 if (msum .lt. n) go to 40
 !
-!        COMPUTATION OF DENSE APPROXIMATE JACOBIAN.
+!        Computation of dense approximate Jacobian.
 !
    do j = 1, n
       temp = x(j)
@@ -3928,7 +3928,7 @@ if (msum .lt. n) go to 40
    go to 110
 40 continue
 !
-!        COMPUTATION OF BANDED APPROXIMATE JACOBIAN.
+!        Computation of banded approximate Jacobian.
 !
    do k = 1, msum
       do j = k, n, msum
@@ -3954,7 +3954,7 @@ if (msum .lt. n) go to 40
 110 continue
 return
 !
-!     LAST CARD OF SUBROUTINE FDJAC1.
+!     Last card of subroutine FDJAC1.
 !
 end subroutine fdjac1
 
@@ -3973,72 +3973,72 @@ external fcn
 !
 !     SUBROUTINE FDJAC2
 !
-!     THIS SUBROUTINE COMPUTES A FORWARD-DIFFERENCE APPROXIMATION
-!     TO THE M BY N JACOBIAN MATRIX ASSOCIATED WITH A SPECIFIED
-!     PROBLEM OF M FUNCTIONS IN N VARIABLES.
+!     This subroutine computes a forward-difference approximation
+!     to the M by N Jacobian matrix associated with a specified
+!     problem of M functions in N variables.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(M,N,X,FVEC,IFLAG)
 !         INTEGER M,N,IFLAG
 !         REAL X(N),FVEC(M)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ----------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF FDJAC2.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate execution of FDJAC2.
+!         In this case set IFLAG to a negative integer.
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS.
+!       M is a positive integer input variable SET to the number
+!         of functions.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF VARIABLES. N MUST NOT EXCEED M.
+!       N is a positive integer input variable SET to the number
+!         of variables. N must not exceed M.
 !
-!       X IS AN INPUT ARRAY OF LENGTH N.
+!       X is an input array of length N.
 !
-!       FVEC IS AN INPUT ARRAY OF LENGTH M WHICH MUST CONTAIN THE
-!         FUNCTIONS EVALUATED AT X.
+!       FVEC is an input array of length M which must contain the
+!         functions evaluated at X.
 !
-!       FJAC IS AN OUTPUT M BY N ARRAY WHICH CONTAINS THE
-!         APPROXIMATION TO THE JACOBIAN MATRIX EVALUATED AT X.
+!       FJAC is an output M by N array which contains the
+!         approximation to the Jacobian matrix evaluated at X.
 !
-!       LDFJAC IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY FJAC.
+!       LDFJAC is a positive integer input variable NOT less than M
+!         which specifies the leading dimension of the array FJAC.
 !
-!       IFLAG IS AN INTEGER VARIABLE WHICH CAN BE USED TO TERMINATE
-!         THE EXECUTION OF FDJAC2. SEE DESCRIPTION OF FCN.
+!       IFLAG is an integer variable which can be used to terminate
+!         the execution of FDJAC2. See description of FCN.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
-!       WA IS A WORK ARRAY OF LENGTH M.
+!       WA is a work array of length M.
 !
 !     SUBPROGRAMS CALLED
 !
-!       USER-SUPPLIED ...... FCN
+!       User-supplied ...... FCN
 !
-!       MINPACK-SUPPLIED ... SPMPAR
+!       MINPACK-supplied ... SPMPAR
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,SQRT
+!       Fortran-supplied ... abs,AMAX1,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4049,7 +4049,7 @@ real :: eps, epsmch, h, temp, zero
 real :: spmpar
 data zero /0.0e0/
 !
-!     EPSMCH IS THE MACHINE PRECISION.
+!     EPSMCH is the machine precision.
 !
 epsmch = spmpar(1)
 !
@@ -4069,7 +4069,7 @@ do j = 1, n
 30 continue
 return
 !
-!     LAST CARD OF SUBROUTINE FDJAC2.
+!     Last card of subroutine FDJAC2.
 !
 end subroutine fdjac2
 
@@ -4087,91 +4087,91 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !
 !     SUBROUTINE LMPAR
 !
-!     GIVEN AN M BY N MATRIX A, AN N BY N NONSINGULAR DIAGONAL
-!     MATRIX D, AN M-VECTOR B, AND A POSITIVE NUMBER DELTA,
-!     THE PROBLEM IS TO DETERMINE A VALUE FOR THE PARAMETER
-!     PAR SUCH THAT IF X SOLVES THE SYSTEM
+!     Given an M by N matrix A, an N by N nonsingular diagonal
+!     matrix D, an M-vector B, and a positive number delta,
+!     the problem is to determine a value for the parameter
+!     par such that if X solves the system
 !
 !           A*X = B ,     SQRT(PAR)*D*X = 0 ,
 !
-!     IN THE LEAST SQUARES SENSE, AND DXNORM IS THE EUCLIDEAN
-!     NORM OF D*X, THEN EITHER PAR IS ZERO AND
+!     In the least squares sense, and DXNORM is the Euclidean
+!     norm of D*X, then either par is zero and
 !
 !           (DXNORM-DELTA) .LE. 0.1*DELTA ,
 !
-!     OR PAR IS POSITIVE AND
+!     Or par is positive and
 !
 !           ABS(DXNORM-DELTA) .LE. 0.1*DELTA .
 !
-!     THIS SUBROUTINE COMPLETES THE SOLUTION OF THE PROBLEM
-!     IF IT IS PROVIDED WITH THE NECESSARY INFORMATION FROM THE
-!     QR FACTORIZATION, WITH COLUMN PIVOTING, OF A. THAT IS, IF
+!     This subroutine completes the solution of the problem
+!     if it is provided with the necessary information from the
+!     QR factorization, with column pivoting, of A. That is, if
 !     A*P = Q*R, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
-!     COLUMNS, AND R IS AN UPPER TRIANGULAR MATRIX WITH DIAGONAL
-!     ELEMENTS OF NONINCREASING MAGNITUDE, THEN LMPAR EXPECTS
-!     THE FULL UPPER TRIANGLE OF R, THE PERMUTATION MATRIX P,
-!     AND THE FIRST N COMPONENTS OF (Q TRANSPOSE)*B. ON OUTPUT
-!     LMPAR ALSO PROVIDES AN UPPER TRIANGULAR MATRIX S SUCH THAT
+!     columns, and R is an upper triangular matrix with diagonal
+!     elements of nonincreasing magnitude, then LMPAR expects
+!     the full upper triangle of R, the permutation matrix P,
+!     and the first N components of (Q transpose)*B. On output
+!     LMPAR also provides an upper triangular matrix S such that
 !
 !            T   T                   T
 !           P *(A *A + PAR*D*D)*P = S *S .
 !
-!     S IS EMPLOYED WITHIN LMPAR AND MAY BE OF SEPARATE INTEREST.
+!     S is employed within LMPAR and may be of separate interest.
 !
-!     ONLY A FEW ITERATIONS ARE GENERALLY NEEDED FOR CONVERGENCE
-!     OF THE ALGORITHM. IF, HOWEVER, THE LIMIT OF 10 ITERATIONS
-!     IS REACHED, THEN THE OUTPUT PAR WILL CONTAIN THE BEST
-!     VALUE OBTAINED SO FAR.
+!     Only a few iterations are generally needed for convergence
+!     of the algorithm. If, however, the limit of 10 iterations
+!     is reached, then the output par will contain the best
+!     value obtained so far.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE LMPAR(N,R,LDR,IPVT,DIAG,QTB,DELTA,PAR,X,SDIAG,
 !                        WA1,WA2)
 !
-!     WHERE
+!     Where
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE ORDER OF R.
+!       N is a positive integer input variable SET to the order of R.
 !
-!       R IS AN N BY N ARRAY. ON INPUT THE FULL UPPER TRIANGLE
-!         MUST CONTAIN THE FULL UPPER TRIANGLE OF THE MATRIX R.
-!         ON OUTPUT THE FULL UPPER TRIANGLE IS UNALTERED, AND THE
-!         STRICT LOWER TRIANGLE CONTAINS THE STRICT UPPER TRIANGLE
-!         (TRANSPOSED) OF THE UPPER TRIANGULAR MATRIX S.
+!       R is an N by N array. On input the full upper triangle
+!         must contain the full upper triangle of the matrix R.
+!         On output the full upper triangle is unaltered, and the
+!         strict lower triangle contains the strict upper triangle
+!         (transposed) of the upper triangular matrix S.
 !
-!       LDR IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN N
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY R.
+!       LDR is a positive integer input variable NOT less than N
+!         which specifies the leading dimension of the array R.
 !
-!       IPVT IS AN INTEGER INPUT ARRAY OF LENGTH N WHICH DEFINES THE
+!       IPVT is an integer input array of length N which defines the
 !         PERMUTATION MATRIX P SUCH THAT A*P = Q*R. COLUMN J OF P
-!         IS COLUMN IPVT(J) OF THE IDENTITY MATRIX.
+!         is column IPVT(J) of the identity matrix.
 !
-!       DIAG IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE
-!         DIAGONAL ELEMENTS OF THE MATRIX D.
+!       Diag is an input array of length N which must contain the
+!         diagonal elements of the matrix D.
 !
-!       QTB IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE FIRST
-!         N ELEMENTS OF THE VECTOR (Q TRANSPOSE)*B.
+!       QTB is an input array of length N which must contain the first
+!         N elements of the vector (Q transpose)*B.
 !
-!       DELTA IS A POSITIVE INPUT VARIABLE WHICH SPECIFIES AN UPPER
-!         BOUND ON THE EUCLIDEAN NORM OF D*X.
+!       Delta is a positive input variable which specifies an upper
+!         bound on the Euclidean norm of D*X.
 !
-!       PAR IS A NONNEGATIVE VARIABLE. ON INPUT PAR CONTAINS AN
-!         INITIAL ESTIMATE OF THE LEVENBERG-MARQUARDT PARAMETER.
-!         ON OUTPUT PAR CONTAINS THE FINAL ESTIMATE.
+!       Par is a nonnegative variable. On input par contains an
+!         initial estimate of the Levenberg-Marquardt parameter.
+!         On output par contains the final estimate.
 !
-!       X IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE LEAST
+!       X is an output array of length N which contains the least
 !         SQUARES SOLUTION OF THE SYSTEM A*X = B, SQRT(PAR)*D*X = 0,
-!         FOR THE OUTPUT PAR.
+!         for the output par.
 !
-!       SDIAG IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE
-!         DIAGONAL ELEMENTS OF THE UPPER TRIANGULAR MATRIX S.
+!       SDIAG is an output array of length N which contains the
+!         diagonal elements of the upper triangular matrix S.
 !
-!       WA1 AND WA2 ARE WORK ARRAYS OF LENGTH N.
+!       WA1 and WA2 are work arrays of length N.
 !
 !     SUBPROGRAMS CALLED
 !
-!       MINPACK-SUPPLIED ... SPMPAR,ENORM,QRSOLV
+!       MINPACK-supplied ... SPMPAR,ENORM,QRSOLV
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,AMIN1,SQRT
+!       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4183,12 +4183,12 @@ real :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, p1, p001, sum, &
 real :: spmpar, enorm
 data p1,p001,zero /1.0e-1,1.0e-3,0.0e0/
 !
-!     DWARF IS THE SMALLEST POSITIVE MAGNITUDE.
+!     Dwarf is the smallest positive magnitude.
 !
 dwarf = spmpar(2)
 !
-!     COMPUTE AND STORE IN X THE GAUSS-NEWTON DIRECTION. IF THE
-!     JACOBIAN IS RANK-DEFICIENT, OBTAIN A LEAST SQUARES SOLUTION.
+!     Compute and store in X the Gauss-Newton direction. If the
+!     Jacobian is rank-deficient, obtain a least squares solution.
 !
 nsing = n
 do 10 j = 1, n
@@ -4214,9 +4214,9 @@ do j = 1, n
    x(l) = wa1(j)
    end do
 !
-!     INITIALIZE THE ITERATION COUNTER.
-!     EVALUATE THE FUNCTION AT THE ORIGIN, AND TEST
-!     FOR ACCEPTANCE OF THE GAUSS-NEWTON DIRECTION.
+!     Initialize the iteration counter.
+!     Evaluate the function at the origin, and test
+!     for acceptance of the Gauss-Newton direction.
 !
 iter = 0
 do j = 1, n
@@ -4226,9 +4226,9 @@ dxnorm = enorm(n,wa2)
 fp = dxnorm - delta
 if (fp .le. p1*delta) go to 220
 !
-!     IF THE JACOBIAN IS NOT RANK DEFICIENT, THE NEWTON
-!     STEP PROVIDES A LOWER BOUND, PARL, FOR THE ZERO OF
-!     THE FUNCTION. OTHERWISE SET THIS BOUND TO ZERO.
+!     If the Jacobian is not rank deficient, the Newton
+!     step provides a lower bound, parl, for the zero of
+!     the function. Otherwise set this bound to zero.
 !
 parl = zero
 if (nsing .lt. n) go to 120
@@ -4250,7 +4250,7 @@ temp = enorm(n,wa1)
 parl = ((fp/delta)/temp)/temp
 120 continue
 !
-!     CALCULATE AN UPPER BOUND, PARU, FOR THE ZERO OF THE FUNCTION.
+!     Calculate an upper bound, PARU, for the zero of the function.
 !
 do j = 1, n
    sum = zero
@@ -4264,19 +4264,19 @@ gnorm = enorm(n,wa1)
 paru = gnorm/delta
 if (paru .eq. zero) paru = dwarf/amin1(delta,p1)
 !
-!     IF THE INPUT PAR LIES OUTSIDE OF THE INTERVAL (PARL,PARU),
-!     SET PAR TO THE CLOSER ENDPOINT.
+!     If the input par lies outside of the interval (PARL,PARU),
+!     set par to the closer endpoint.
 !
 par = amax1(par,parl)
 par = amin1(par,paru)
 if (par .eq. zero) par = gnorm/dxnorm
 !
-!     BEGINNING OF AN ITERATION.
+!     Beginning of an iteration.
 !
 150 continue
    iter = iter + 1
 !
-!        EVALUATE THE FUNCTION AT THE CURRENT VALUE OF PAR.
+!        Evaluate the function at the current value of par.
 !
    if (par .eq. zero) par = amax1(dwarf,p001*paru)
    temp = sqrt(par)
@@ -4291,15 +4291,15 @@ if (par .eq. zero) par = gnorm/dxnorm
    temp = fp
    fp = dxnorm - delta
 !
-!        IF THE FUNCTION IS SMALL ENOUGH, ACCEPT THE CURRENT VALUE
-!        OF PAR. ALSO TEST FOR THE EXCEPTIONAL CASES WHERE PARL
-!        IS ZERO OR THE NUMBER OF ITERATIONS HAS REACHED 10.
+!        If the function is small enough, accept the current value
+!        of par. Also test for the exceptional cases where parl
+!        is zero or the number of iterations has reached 10.
 !
    if (abs(fp) .le. p1*delta &
 &.or. parl .eq. zero .and. fp .le. temp &
 &.and. temp .lt. zero .or. iter .eq. 10) go to 220
 !
-!        COMPUTE THE NEWTON CORRECTION.
+!        Compute the Newton correction.
 !
    do j = 1, n
       l = ipvt(j)
@@ -4318,12 +4318,12 @@ if (par .eq. zero) par = gnorm/dxnorm
    temp = enorm(n,wa1)
    parc = ((fp/delta)/temp)/temp
 !
-!        DEPENDING ON THE SIGN OF THE FUNCTION, UPDATE PARL OR PARU.
+!        Depending on the sign of the function, update parl or PARU.
 !
    if (fp .gt. zero) parl = amax1(parl,par)
    if (fp .lt. zero) paru = amin1(paru,par)
 !
-!        COMPUTE AN IMPROVED ESTIMATE FOR PAR.
+!        Compute an improved estimate for par.
 !
    par = amax1(parl,par+parc)
 !
@@ -4332,12 +4332,12 @@ if (par .eq. zero) par = gnorm/dxnorm
    go to 150
 220 continue
 !
-!     TERMINATION.
+!     Termination.
 !
 if (iter .eq. 0) par = zero
 return
 !
-!     LAST CARD OF SUBROUTINE LMPAR.
+!     Last card of subroutine LMPAR.
 !
 end subroutine lmpar
 
@@ -4349,34 +4349,34 @@ real, intent(inout) :: q(ldq,m), wa(m)
 !
 !     SUBROUTINE QFORM
 !
-!     THIS SUBROUTINE PROCEEDS FROM THE COMPUTED QR FACTORIZATION OF
-!     AN M BY N MATRIX A TO ACCUMULATE THE M BY M ORTHOGONAL MATRIX
-!     Q FROM ITS FACTORED FORM.
+!     This subroutine proceeds from the computed QR factorization of
+!     an M by N matrix A to accumulate the M by M orthogonal matrix
+!     Q from its factored form.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE QFORM(M,N,Q,LDQ,WA)
 !
-!     WHERE
+!     Where
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF ROWS OF A AND THE ORDER OF Q.
+!       M is a positive integer input variable SET to the number
+!         of rows of A and the order of Q.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF COLUMNS OF A.
+!       N is a positive integer input variable SET to the number
+!         of columns of A.
 !
-!       Q IS AN M BY M ARRAY. ON INPUT THE FULL LOWER TRAPEZOID IN
-!         THE FIRST MIN(M,N) COLUMNS OF Q CONTAINS THE FACTORED FORM.
-!         ON OUTPUT Q HAS BEEN ACCUMULATED INTO A SQUARE MATRIX.
+!       Q is an M by M array. On input the full lower trapezoid in
+!         the first MIN(M,N) columns of Q contains the factored form.
+!         On output Q has been accumulated into a square matrix.
 !
-!       LDQ IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY Q.
+!       LDQ is a positive integer input variable NOT less than M
+!         which specifies the leading dimension of the array Q.
 !
-!       WA IS A WORK ARRAY OF LENGTH M.
+!       WA is a work array of length M.
 !
 !     SUBPROGRAMS CALLED
 !
-!       FORTRAN-SUPPLIED ... MIN0
+!       Fortran-supplied ... MIN0
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4386,7 +4386,7 @@ integer :: i, j, jm1, k, l, minmn, np1
 real :: one, sum, temp, zero
 data one,zero /1.0e0,0.0e0/
 !
-!     ZERO OUT UPPER TRIANGLE OF Q IN THE FIRST MIN(M,N) COLUMNS.
+!     Zero out upper triangle of Q in the first MIN(M,N) columns.
 !
 minmn = min0(m,n)
 if (minmn .lt. 2) go to 30
@@ -4398,7 +4398,7 @@ do j = 2, minmn
    end do
 30 continue
 !
-!     INITIALIZE REMAINING COLUMNS TO THOSE OF THE IDENTITY MATRIX.
+!     Initialize remaining columns to those of the identity matrix.
 !
 np1 = n + 1
 if (m .lt. np1) go to 60
@@ -4410,7 +4410,7 @@ do j = np1, m
    end do
 60 continue
 !
-!     ACCUMULATE Q FROM ITS FACTORED FORM.
+!     Accumulate Q from its factored form.
 !
 do l = 1, minmn
    k = minmn - l + 1
@@ -4434,7 +4434,7 @@ do l = 1, minmn
    end do
 return
 !
-!     LAST CARD OF SUBROUTINE QFORM.
+!     Last card of subroutine QFORM.
 !
 end subroutine qform
 
@@ -4448,72 +4448,72 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !
 !     SUBROUTINE QRFAC
 !
-!     THIS SUBROUTINE USES HOUSEHOLDER TRANSFORMATIONS WITH COLUMN
-!     PIVOTING (OPTIONAL) TO COMPUTE A QR FACTORIZATION OF THE
-!     M BY N MATRIX A. THAT IS, QRFAC DETERMINES AN ORTHOGONAL
-!     MATRIX Q, A PERMUTATION MATRIX P, AND AN UPPER TRAPEZOIDAL
-!     MATRIX R WITH DIAGONAL ELEMENTS OF NONINCREASING MAGNITUDE,
+!     This subroutine uses Householder transformations with column
+!     pivoting (optional) to compute A QR factorization of the
+!     M by N matrix A. That is, QRFAC determines an orthogonal
+!     matrix Q, a permutation matrix P, and an upper trapezoidal
+!     matrix R with diagonal elements of nonincreasing magnitude,
 !     SUCH THAT A*P = Q*R. THE HOUSEHOLDER TRANSFORMATION FOR
 !     COLUMN K, K = 1,2,...,MIN(M,N), IS OF THE FORM
 !
 !                           T
 !           I - (1/U(K))*U*U
 !
-!     WHERE U HAS ZEROS IN THE FIRST K-1 POSITIONS. THE FORM OF
-!     THIS TRANSFORMATION AND THE METHOD OF PIVOTING FIRST
-!     APPEARED IN THE CORRESPONDING LINPACK SUBROUTINE.
+!     Where U has zeros in the first K-1 positions. The form of
+!     this transformation and the method of pivoting first
+!     appeared in the corresponding LINPACK subroutine.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE QRFAC(M,N,A,LDA,PIVOT,IPVT,LIPVT,RDIAG,ACNORM,WA)
 !
-!     WHERE
+!     Where
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF ROWS OF A.
+!       M is a positive integer input variable SET to the number
+!         of rows of A.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF COLUMNS OF A.
+!       N is a positive integer input variable SET to the number
+!         of columns of A.
 !
-!       A IS AN M BY N ARRAY. ON INPUT A CONTAINS THE MATRIX FOR
-!         WHICH THE QR FACTORIZATION IS TO BE COMPUTED. ON OUTPUT
-!         THE STRICT UPPER TRAPEZOIDAL PART OF A CONTAINS THE STRICT
-!         UPPER TRAPEZOIDAL PART OF R, AND THE LOWER TRAPEZOIDAL
-!         PART OF A CONTAINS A FACTORED FORM OF Q (THE NON-TRIVIAL
-!         ELEMENTS OF THE U VECTORS DESCRIBED ABOVE).
+!       A is an M by N array. On input a contains the matrix for
+!         which the QR factorization is to be computed. On output
+!         the strict upper trapezoidal part of a contains the strict
+!         upper trapezoidal part of R, and the lower trapezoidal
+!         part of a contains a factored form of Q (the non-trivial
+!         elements of the U vectors described above).
 !
-!       LDA IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY A.
+!       LDA is a positive integer input variable NOT less than M
+!         which specifies the leading dimension of the array A.
 !
-!       PIVOT IS A LOGICAL INPUT VARIABLE. IF PIVOT IS SET TRUE,
-!         THEN COLUMN PIVOTING IS ENFORCED. IF PIVOT IS SET FALSE,
-!         THEN NO COLUMN PIVOTING IS DONE.
+!       Pivot is a logical input variable. If pivot is set true,
+!         then column pivoting is enforced. If pivot is set false,
+!         then no column pivoting is done.
 !
-!       IPVT IS AN INTEGER OUTPUT ARRAY OF LENGTH LIPVT. IPVT
+!       IPVT is an integer output array of length LIPVT. IPVT
 !         DEFINES THE PERMUTATION MATRIX P SUCH THAT A*P = Q*R.
-!         COLUMN J OF P IS COLUMN IPVT(J) OF THE IDENTITY MATRIX.
-!         IF PIVOT IS FALSE, IPVT IS NOT REFERENCED.
+!         Column J of P is column IPVT(J) of the identity matrix.
+!         If pivot is false, IPVT is not referenced.
 !
-!       LIPVT IS A POSITIVE INTEGER INPUT VARIABLE. IF PIVOT IS FALSE,
-!         THEN LIPVT MAY BE AS SMALL AS 1. IF PIVOT IS TRUE, THEN
-!         LIPVT MUST BE AT LEAST N.
+!       LIPVT is a positive integer input variable. If pivot is false,
+!         then LIPVT may be as small as 1. If pivot is true, then
+!         LIPVT must be at least N.
 !
-!       RDIAG IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE
-!         DIAGONAL ELEMENTS OF R.
+!       RDIAG is an output array of length N which contains the
+!         diagonal elements of R.
 !
-!       ACNORM IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE
-!         NORMS OF THE CORRESPONDING COLUMNS OF THE INPUT MATRIX A.
-!         IF THIS INFORMATION IS NOT NEEDED, THEN ACNORM CAN COINCIDE
+!       ACNORM is an output array of length N which contains the
+!         norms of the corresponding columns of the input matrix A.
+!         If this information is not needed, then ACNORM can coincide
 !         WITH RDIAG.
 !
-!       WA IS A WORK ARRAY OF LENGTH N. IF PIVOT IS FALSE, THEN WA
-!         CAN COINCIDE WITH RDIAG.
+!       WA is a work array of length N. If pivot is false, then WA
+!         can coincide with RDIAG.
 !
 !     SUBPROGRAMS CALLED
 !
-!       MINPACK-SUPPLIED ... SPMPAR,ENORM
+!       MINPACK-supplied ... SPMPAR,ENORM
 !
-!       FORTRAN-SUPPLIED ... AMAX1,SQRT,MIN0
+!       Fortran-supplied ... AMAX1,sqrt,MIN0
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4524,11 +4524,11 @@ real :: ajnorm, epsmch, one, p05, sum, temp, zero
 real :: spmpar, enorm
 data one,p05,zero /1.0e0,5.0e-2,0.0e0/
 !
-!     EPSMCH IS THE MACHINE PRECISION.
+!     EPSMCH is the machine precision.
 !
 epsmch = spmpar(1)
 !
-!     COMPUTE THE INITIAL COLUMN NORMS AND INITIALIZE SEVERAL ARRAYS.
+!     Compute the initial column norms and initialize several arrays.
 !
 do j = 1, n
    acnorm(j) = enorm(m,a(1,j))
@@ -4537,13 +4537,13 @@ do j = 1, n
    if (pivot) ipvt(j) = j
    end do
 !
-!     REDUCE A TO R WITH HOUSEHOLDER TRANSFORMATIONS.
+!     Reduce A to R with Householder transformations.
 !
 minmn = min0(m,n)
 do j = 1, minmn
    if (.not.pivot) go to 40
 !
-!        BRING THE COLUMN OF LARGEST NORM INTO THE PIVOT POSITION.
+!        Bring the column of largest norm into the pivot position.
 !
    kmax = j
    do k = j, n
@@ -4562,8 +4562,8 @@ do j = 1, minmn
    ipvt(kmax) = k
 40 continue
 !
-!        COMPUTE THE HOUSEHOLDER TRANSFORMATION TO REDUCE THE
-!        J-TH COLUMN OF A TO A MULTIPLE OF THE J-TH UNIT VECTOR.
+!        Compute the Householder transformation to reduce the
+!        J-TH column of A to a multiple of the J-TH unit vector.
 !
    ajnorm = enorm(m-j+1,a(j,j))
    if (ajnorm .eq. zero) go to 100
@@ -4573,8 +4573,8 @@ do j = 1, minmn
       end do
    a(j,j) = a(j,j) + one
 !
-!        APPLY THE TRANSFORMATION TO THE REMAINING COLUMNS
-!        AND UPDATE THE NORMS.
+!        Apply the transformation to the remaining columns
+!        and update the norms.
 !
    jp1 = j + 1
    if (n .lt. jp1) go to 100
@@ -4600,7 +4600,7 @@ do j = 1, minmn
    end do
 return
 !
-!     LAST CARD OF SUBROUTINE QRFAC.
+!     Last card of subroutine QRFAC.
 !
 end subroutine qrfac
 
@@ -4615,74 +4615,74 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !
 !     SUBROUTINE QRSOLV
 !
-!     GIVEN AN M BY N MATRIX A, AN N BY N DIAGONAL MATRIX D,
-!     AND AN M-VECTOR B, THE PROBLEM IS TO DETERMINE AN X WHICH
-!     SOLVES THE SYSTEM
+!     Given an M by N matrix A, an N by N diagonal matrix D,
+!     and an M-vector B, the problem is to determine an X which
+!     solves the system
 !
 !           A*X = B ,     D*X = 0 ,
 !
-!     IN THE LEAST SQUARES SENSE.
+!     In the least squares sense.
 !
-!     THIS SUBROUTINE COMPLETES THE SOLUTION OF THE PROBLEM
-!     IF IT IS PROVIDED WITH THE NECESSARY INFORMATION FROM THE
-!     QR FACTORIZATION, WITH COLUMN PIVOTING, OF A. THAT IS, IF
+!     This subroutine completes the solution of the problem
+!     if it is provided with the necessary information from the
+!     QR factorization, with column pivoting, of A. That is, if
 !     A*P = Q*R, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
-!     COLUMNS, AND R IS AN UPPER TRIANGULAR MATRIX WITH DIAGONAL
-!     ELEMENTS OF NONINCREASING MAGNITUDE, THEN QRSOLV EXPECTS
-!     THE FULL UPPER TRIANGLE OF R, THE PERMUTATION MATRIX P,
-!     AND THE FIRST N COMPONENTS OF (Q TRANSPOSE)*B. THE SYSTEM
+!     columns, and R is an upper triangular matrix with diagonal
+!     elements of nonincreasing magnitude, then QRSOLV expects
+!     the full upper triangle of R, the permutation matrix P,
+!     and the first N components of (Q transpose)*B. The system
 !     A*X = B, D*X = 0, IS THEN EQUIVALENT TO
 !
 !                  T       T
 !           R*Z = Q *B ,  P *D*P*Z = 0 ,
 !
 !     WHERE X = P*Z. IF THIS SYSTEM DOES NOT HAVE FULL RANK,
-!     THEN A LEAST SQUARES SOLUTION IS OBTAINED. ON OUTPUT QRSOLV
-!     ALSO PROVIDES AN UPPER TRIANGULAR MATRIX S SUCH THAT
+!     then a least squares solution is obtained. On output QRSOLV
+!     also provides an upper triangular matrix S such that
 !
 !            T   T               T
 !           P *(A *A + D*D)*P = S *S .
 !
-!     S IS COMPUTED WITHIN QRSOLV AND MAY BE OF SEPARATE INTEREST.
+!     S is computed within QRSOLV and may be of separate interest.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE QRSOLV(N,R,LDR,IPVT,DIAG,QTB,X,SDIAG,WA)
 !
-!     WHERE
+!     Where
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE ORDER OF R.
+!       N is a positive integer input variable SET to the order of R.
 !
-!       R IS AN N BY N ARRAY. ON INPUT THE FULL UPPER TRIANGLE
-!         MUST CONTAIN THE FULL UPPER TRIANGLE OF THE MATRIX R.
-!         ON OUTPUT THE FULL UPPER TRIANGLE IS UNALTERED, AND THE
-!         STRICT LOWER TRIANGLE CONTAINS THE STRICT UPPER TRIANGLE
-!         (TRANSPOSED) OF THE UPPER TRIANGULAR MATRIX S.
+!       R is an N by N array. On input the full upper triangle
+!         must contain the full upper triangle of the matrix R.
+!         On output the full upper triangle is unaltered, and the
+!         strict lower triangle contains the strict upper triangle
+!         (transposed) of the upper triangular matrix S.
 !
-!       LDR IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN N
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY R.
+!       LDR is a positive integer input variable NOT less than N
+!         which specifies the leading dimension of the array R.
 !
-!       IPVT IS AN INTEGER INPUT ARRAY OF LENGTH N WHICH DEFINES THE
+!       IPVT is an integer input array of length N which defines the
 !         PERMUTATION MATRIX P SUCH THAT A*P = Q*R. COLUMN J OF P
-!         IS COLUMN IPVT(J) OF THE IDENTITY MATRIX.
+!         is column IPVT(J) of the identity matrix.
 !
-!       DIAG IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE
-!         DIAGONAL ELEMENTS OF THE MATRIX D.
+!       Diag is an input array of length N which must contain the
+!         diagonal elements of the matrix D.
 !
-!       QTB IS AN INPUT ARRAY OF LENGTH N WHICH MUST CONTAIN THE FIRST
-!         N ELEMENTS OF THE VECTOR (Q TRANSPOSE)*B.
+!       QTB is an input array of length N which must contain the first
+!         N elements of the vector (Q transpose)*B.
 !
-!       X IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE LEAST
+!       X is an output array of length N which contains the least
 !         SQUARES SOLUTION OF THE SYSTEM A*X = B, D*X = 0.
 !
-!       SDIAG IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS THE
-!         DIAGONAL ELEMENTS OF THE UPPER TRIANGULAR MATRIX S.
+!       SDIAG is an output array of length N which contains the
+!         diagonal elements of the upper triangular matrix S.
 !
-!       WA IS A WORK ARRAY OF LENGTH N.
+!       WA is a work array of length N.
 !
 !     SUBPROGRAMS CALLED
 !
-!       FORTRAN-SUPPLIED ... ABS,SQRT
+!       Fortran-supplied ... abs,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4692,8 +4692,8 @@ integer :: i, j, jp1, k, kp1, l, nsing
 real :: cos, cotan, p5, p25, qtbpj, sin, sum, tan, temp, zero
 data p5,p25,zero /5.0e-1,2.5e-1,0.0e0/
 !
-!     COPY R AND (Q TRANSPOSE)*B TO PRESERVE INPUT AND INITIALIZE S.
-!     IN PARTICULAR, SAVE THE DIAGONAL ELEMENTS OF R IN X.
+!     Copy R and (Q transpose)*B to preserve input and initialize S.
+!     In particular, save the diagonal elements of R in X.
 !
 do j = 1, n
    do i = j, n
@@ -4703,12 +4703,12 @@ do j = 1, n
    wa(j) = qtb(j)
    end do
 !
-!     ELIMINATE THE DIAGONAL MATRIX D USING A GIVENS ROTATION.
+!     Eliminate the diagonal matrix D using a Givens rotation.
 !
 do j = 1, n
 !
-!        PREPARE THE ROW OF D TO BE ELIMINATED, LOCATING THE
-!        DIAGONAL ELEMENT USING P FROM THE QR FACTORIZATION.
+!        Prepare the row of D to be eliminated, locating the
+!        diagonal element using P from the QR factorization.
 !
    l = ipvt(j)
    if (diag(l) .eq. zero) go to 90
@@ -4717,15 +4717,15 @@ do j = 1, n
       end do
    sdiag(j) = diag(l)
 !
-!        THE TRANSFORMATIONS TO ELIMINATE THE ROW OF D
-!        MODIFY ONLY A SINGLE ELEMENT OF (Q TRANSPOSE)*B
-!        BEYOND THE FIRST N, WHICH IS INITIALLY ZERO.
+!        The transformations to eliminate the row of D
+!        modify only a single element of (Q transpose)*B
+!        beyond the first N, which is initially zero.
 !
    qtbpj = zero
    do k = j, n
 !
-!           DETERMINE A GIVENS ROTATION WHICH ELIMINATES THE
-!           APPROPRIATE ELEMENT IN THE CURRENT ROW OF D.
+!           Determine a Givens rotation which eliminates the
+!           appropriate element in the current row of D.
 !
       if (sdiag(k) .eq. zero) go to 70
       if (abs(r(k,k)) .ge. abs(sdiag(k))) go to 40
@@ -4739,15 +4739,15 @@ do j = 1, n
          sin = cos*tan
 50 continue
 !
-!           COMPUTE THE MODIFIED DIAGONAL ELEMENT OF R AND
-!           THE MODIFIED ELEMENT OF ((Q TRANSPOSE)*B,0).
+!           Compute the modified diagonal element of R and
+!           the modified element of ((Q transpose)*B,0).
 !
       r(k,k) = cos*r(k,k) + sin*sdiag(k)
       temp = cos*wa(k) + sin*qtbpj
       qtbpj = -sin*wa(k) + cos*qtbpj
       wa(k) = temp
 !
-!           ACCUMULATE THE TRANFORMATION IN THE ROW OF S.
+!           Accumulate the tranformation in the row of S.
 !
       kp1 = k + 1
       if (n .lt. kp1) go to 70
@@ -4760,15 +4760,15 @@ do j = 1, n
       end do
 90 continue
 !
-!        STORE THE DIAGONAL ELEMENT OF S AND RESTORE
-!        THE CORRESPONDING DIAGONAL ELEMENT OF R.
+!        Store the diagonal element of S and restore
+!        the corresponding diagonal element of R.
 !
    sdiag(j) = r(j,j)
    r(j,j) = x(j)
    end do
 !
-!     SOLVE THE TRIANGULAR SYSTEM FOR Z. IF THE SYSTEM IS
-!     SINGULAR, THEN OBTAIN A LEAST SQUARES SOLUTION.
+!     Solve the triangular system for Z. If the system is
+!     singular, then obtain a least squares solution.
 !
 nsing = n
 do j = 1, n
@@ -4789,7 +4789,7 @@ do k = 1, nsing
    end do
 150 continue
 !
-!     PERMUTE THE COMPONENTS OF Z BACK TO COMPONENTS OF X.
+!     Permute the components of Z back to components of X.
 !
 do j = 1, n
    l = ipvt(j)
@@ -4797,7 +4797,7 @@ do j = 1, n
    end do
 return
 !
-!     LAST CARD OF SUBROUTINE QRSOLV.
+!     Last card of subroutine QRSOLV.
 !
 end subroutine qrsolv
 
@@ -4810,46 +4810,46 @@ real, intent(in) :: v(n), w(n)
 !
 !     SUBROUTINE R1MPYQ
 !
-!     GIVEN AN M BY N MATRIX A, THIS SUBROUTINE COMPUTES A*Q WHERE
-!     Q IS THE PRODUCT OF 2*(N - 1) TRANSFORMATIONS
+!     Given an M by N matrix A, this subroutine computes A*Q where
+!     Q is the product of 2*(N - 1) transformations
 !
 !           GV(N-1)*...*GV(1)*GW(1)*...*GW(N-1)
 !
-!     AND GV(I), GW(I) ARE GIVENS ROTATIONS IN THE (I,N) PLANE WHICH
-!     ELIMINATE ELEMENTS IN THE I-TH AND N-TH PLANES, RESPECTIVELY.
-!     Q ITSELF IS NOT GIVEN, RATHER THE INFORMATION TO RECOVER THE
+!     And GV(I), GW(I) are Givens rotations in the (I,N) plane which
+!     eliminate elements in the I-TH and N-TH planes, respectively.
+!     Q itself is not given, rather the information to recover the
 !     GV, GW ROTATIONS IS SUPPLIED.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE R1MPYQ(M,N,A,LDA,V,W)
 !
-!     WHERE
+!     Where
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF ROWS OF A.
+!       M is a positive integer input variable SET to the number
+!         of rows of A.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF COLUMNS OF A.
+!       N is a positive integer input variable SET to the number
+!         of columns of A.
 !
-!       A IS AN M BY N ARRAY. ON INPUT A MUST CONTAIN THE MATRIX
-!         TO BE POSTMULTIPLIED BY THE ORTHOGONAL MATRIX Q
-!         DESCRIBED ABOVE. ON OUTPUT A*Q HAS REPLACED A.
+!       A is an M by N array. On input A must contain the matrix
+!         to be postmultiplied by the orthogonal matrix Q
+!         described above. On output A*Q has replaced A.
 !
-!       LDA IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY A.
+!       LDA is a positive integer input variable NOT less than M
+!         which specifies the leading dimension of the array A.
 !
-!       V IS AN INPUT ARRAY OF LENGTH N. V(I) MUST CONTAIN THE
-!         INFORMATION NECESSARY TO RECOVER THE GIVENS ROTATION GV(I)
-!         DESCRIBED ABOVE.
+!       V is an input array of length N. V(I) must contain the
+!         information necessary to recover the Givens rotation GV(I)
+!         described above.
 !
-!       W IS AN INPUT ARRAY OF LENGTH N. W(I) MUST CONTAIN THE
-!         INFORMATION NECESSARY TO RECOVER THE GIVENS ROTATION GW(I)
-!         DESCRIBED ABOVE.
+!       W is an input array of length N. W(I) must contain the
+!         information necessary to recover the Givens rotation GW(I)
+!         described above.
 !
 !     SUBROUTINES CALLED
 !
-!       FORTRAN-SUPPLIED ... ABS,SQRT
+!       Fortran-supplied ... abs,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -4859,7 +4859,7 @@ integer :: i, j, nmj, nm1
 real :: cos, one, sin, temp
 data one /1.0e0/
 !
-!     APPLY THE FIRST SET OF GIVENS ROTATIONS TO A.
+!     Apply the first set of Givens rotations to A.
 !
 nm1 = n - 1
 if (nm1 .lt. 1) go to 50
@@ -4876,7 +4876,7 @@ do nmj = 1, nm1
       end do
    end do
 !
-!     APPLY THE SECOND SET OF GIVENS ROTATIONS TO A.
+!     Apply the second set of Givens rotations to A.
 !
 do j = 1, nm1
    if (abs(w(j)) .gt. one) cos = one/w(j)
@@ -4892,7 +4892,7 @@ do j = 1, nm1
 50 continue
 return
 !
-!     LAST CARD OF SUBROUTINE R1MPYQ.
+!     Last card of subroutine R1MPYQ.
 !
 end subroutine r1mpyq
 
@@ -4907,64 +4907,64 @@ real, intent(inout) :: v(n), w(m)
 !
 !     SUBROUTINE R1UPDT
 !
-!     GIVEN AN M BY N LOWER TRAPEZOIDAL MATRIX S, AN M-VECTOR U,
-!     AND AN N-VECTOR V, THE PROBLEM IS TO DETERMINE AN
-!     ORTHOGONAL MATRIX Q SUCH THAT
+!     Given an M by N lower trapezoidal matrix S, an M-vector U,
+!     and an N-vector V, the problem is to determine an
+!     orthogonal matrix Q such that
 !
 !                   T
 !           (S + U*V )*Q
 !
-!     IS AGAIN LOWER TRAPEZOIDAL.
+!     Is again lower trapezoidal.
 !
-!     THIS SUBROUTINE DETERMINES Q AS THE PRODUCT OF 2*(N - 1)
-!     TRANSFORMATIONS
+!     This subroutine determines Q as the product of 2*(N - 1)
+!     transformations
 !
 !           GV(N-1)*...*GV(1)*GW(1)*...*GW(N-1)
 !
-!     WHERE GV(I), GW(I) ARE GIVENS ROTATIONS IN THE (I,N) PLANE
-!     WHICH ELIMINATE ELEMENTS IN THE I-TH AND N-TH PLANES,
-!     RESPECTIVELY. Q ITSELF IS NOT ACCUMULATED, RATHER THE
-!     INFORMATION TO RECOVER THE GV, GW ROTATIONS IS RETURNED.
+!     Where GV(I), GW(I) are Givens rotations in the (I,N) plane
+!     which eliminate elements in the I-TH and N-TH planes,
+!     respectively. Q itself is not accumulated, rather the
+!     information to recover the GV, GW rotations is returned.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE R1UPDT(M,N,S,LS,U,V,W,SING)
 !
-!     WHERE
+!     Where
 !
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF ROWS OF S.
+!       M is a positive integer input variable SET to the number
+!         of rows of S.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF COLUMNS OF S. N MUST NOT EXCEED M.
+!       N is a positive integer input variable SET to the number
+!         of columns of S. N must not exceed M.
 !
-!       S IS AN ARRAY OF LENGTH LS. ON INPUT S MUST CONTAIN THE LOWER
-!         TRAPEZOIDAL MATRIX S STORED BY COLUMNS. ON OUTPUT S CONTAINS
-!         THE LOWER TRAPEZOIDAL MATRIX PRODUCED AS DESCRIBED ABOVE.
+!       S is an array of length LS. On input S must contain the lower
+!         trapezoidal matrix S stored by columns. On output S contains
+!         the lower trapezoidal matrix produced as described above.
 !
-!       LS IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
+!       LS is a positive integer input variable NOT less than
 !         (N*(2*M-N+1))/2.
 !
-!       U IS AN INPUT ARRAY OF LENGTH M WHICH MUST CONTAIN THE
+!       U is an input array of length M which must contain the
 !         VECTOR U.
 !
-!       V IS AN ARRAY OF LENGTH N. ON INPUT V MUST CONTAIN THE VECTOR
-!         V. ON OUTPUT V(I) CONTAINS THE INFORMATION NECESSARY TO
-!         RECOVER THE GIVENS ROTATION GV(I) DESCRIBED ABOVE.
+!       V is an array of length N. On input V must contain the vector
+!         V. On output V(I) contains the information necessary to
+!         recover the Givens rotation GV(I) described above.
 !
-!       W IS AN OUTPUT ARRAY OF LENGTH M. W(I) CONTAINS INFORMATION
-!         NECESSARY TO RECOVER THE GIVENS ROTATION GW(I) DESCRIBED
-!         ABOVE.
+!       W is an output array of length M. W(I) contains information
+!         necessary to recover the Givens rotation GW(I) described
+!         above.
 !
-!       SING IS A LOGICAL OUTPUT VARIABLE. SING IS SET TRUE IF ANY
-!         OF THE DIAGONAL ELEMENTS OF THE OUTPUT S ARE ZERO. OTHERWISE
-!         SING IS SET FALSE.
+!       Sing is a logical output variable. Sing is set true if any
+!         of the diagonal elements of the output S are zero. Otherwise
+!         sing is set false.
 !
 !     SUBPROGRAMS CALLED
 !
-!       MINPACK-SUPPLIED ... SPMPAR
+!       MINPACK-supplied ... SPMPAR
 !
-!       FORTRAN-SUPPLIED ... ABS,SQRT
+!       Fortran-supplied ... abs,sqrt
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE,
@@ -4976,15 +4976,15 @@ real :: cos, cotan, giant, one, p5, p25, sin, tan, tau, temp, zero
 real :: spmpar
 data one,p5,p25,zero /1.0e0,5.0e-1,2.5e-1,0.0e0/
 !
-!     GIANT IS THE LARGEST MAGNITUDE.
+!     Giant is the largest magnitude.
 !
 giant = spmpar(3)
 !
-!     INITIALIZE THE DIAGONAL ELEMENT POINTER.
+!     Initialize the diagonal element pointer.
 !
 jj = (n*(2*m - n + 1))/2 - (m - n)
 !
-!     MOVE THE NONTRIVIAL PART OF THE LAST COLUMN OF S INTO W.
+!     Move the nontrivial part of the last column of S into W.
 !
 l = jj
 do i = n, m
@@ -4992,8 +4992,8 @@ do i = n, m
    l = l + 1
    end do
 !
-!     ROTATE THE VECTOR V INTO A MULTIPLE OF THE N-TH UNIT VECTOR
-!     IN SUCH A WAY THAT A SPIKE IS INTRODUCED INTO W.
+!     Rotate the vector V into a multiple of the N-TH unit vector
+!     in such a way that a spike is introduced into W.
 !
 nm1 = n - 1
 if (nm1 .lt. 1) go to 70
@@ -5003,8 +5003,8 @@ do nmj = 1, nm1
    w(j) = zero
    if (v(j) .eq. zero) go to 50
 !
-!        DETERMINE A GIVENS ROTATION WHICH ELIMINATES THE
-!        J-TH ELEMENT OF V.
+!        Determine a Givens rotation which eliminates the
+!        J-TH element of V.
 !
    if (abs(v(n)) .ge. abs(v(j))) go to 20
       cotan = v(n)/v(j)
@@ -5020,13 +5020,13 @@ do nmj = 1, nm1
       tau = sin
 30 continue
 !
-!        APPLY THE TRANSFORMATION TO V AND STORE THE INFORMATION
-!        NECESSARY TO RECOVER THE GIVENS ROTATION.
+!        Apply the transformation to V and store the information
+!        necessary to recover the Givens rotation.
 !
    v(n) = sin*v(j) + cos*v(n)
    v(j) = tau
 !
-!        APPLY THE TRANSFORMATION TO S AND EXTEND THE SPIKE IN W.
+!        Apply the transformation to S and extend the spike in W.
 !
    l = jj
    do i = j, m
@@ -5039,21 +5039,21 @@ do nmj = 1, nm1
    end do
 70 continue
 !
-!     ADD THE SPIKE FROM THE RANK 1 UPDATE TO W.
+!     Add the spike from the rank 1 update to W.
 !
 do i = 1, m
    w(i) = w(i) + v(n)*u(i)
    end do
 !
-!     ELIMINATE THE SPIKE.
+!     Eliminate the spike.
 !
 sing = .false.
 if (nm1 .lt. 1) go to 140
 do j = 1, nm1
    if (w(j) .eq. zero) go to 120
 !
-!        DETERMINE A GIVENS ROTATION WHICH ELIMINATES THE
-!        J-TH ELEMENT OF THE SPIKE.
+!        Determine a Givens rotation which eliminates the
+!        J-TH element of the spike.
 !
    if (abs(s(jj)) .ge. abs(w(j))) go to 90
       cotan = s(jj)/w(j)
@@ -5069,7 +5069,7 @@ do j = 1, nm1
       tau = sin
 100 continue
 !
-!        APPLY THE TRANSFORMATION TO S AND REDUCE THE SPIKE IN W.
+!        Apply the transformation to S and reduce the spike in W.
 !
    l = jj
    do i = j, m
@@ -5079,20 +5079,20 @@ do j = 1, nm1
       l = l + 1
       end do
 !
-!        STORE THE INFORMATION NECESSARY TO RECOVER THE
-!        GIVENS ROTATION.
+!        Store the information necessary to recover the
+!        Givens rotation.
 !
    w(j) = tau
 120 continue
 !
-!        TEST FOR ZERO DIAGONAL ELEMENTS IN THE OUTPUT S.
+!        Test for zero diagonal elements in the output S.
 !
    if (s(jj) .eq. zero) sing = .true.
    jj = jj + (m - j + 1)
    end do
 140 continue
 !
-!     MOVE W BACK INTO THE LAST COLUMN OF THE OUTPUT S.
+!     Move W back into the last column of the output S.
 !
 l = jj
 do i = n, m
@@ -5102,7 +5102,7 @@ do i = n, m
 if (s(jj) .eq. zero) sing = .true.
 return
 !
-!     LAST CARD OF SUBROUTINE R1UPDT.
+!     Last card of subroutine R1UPDT.
 !
 end subroutine r1updt
 
@@ -5121,7 +5121,7 @@ integer :: ip
 real :: eps0, rerr, rerrmn, rerrmx
 real :: spmpar
 !-----------------------------------------------------------------------
-!     SIMPLEX PROCEDURE FOR SOLVING LINEAR PROGRAMMING PROBLEMS
+!     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS JR.
 !        NAVAL SURFACE WEAPONS CENTER
@@ -5137,7 +5137,7 @@ dimension ibasis(m)
 !------------------------
 !
 !     ********** EPS0 IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS0
-!                THE VALUE U WHERE U IS THE SMALLEST POSITIVE FLOATING
+!                the value U where U is the smallest positive floating
 !                POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
                     eps0 = spmpar(1)
@@ -5184,7 +5184,7 @@ real :: spmpar
 !----------------------
 !     THE ROUTINE ASSUMES THAT THE .LE. CONSTRAINTS PRECEDE THE .GE.
 !     CONSTRAINTS AND THAT THE .EQ. CONSTRAINTS COME LAST. THERE ARE
-!     M CONSTRAINTS. X(N0+I) IS THE SLACK, SURPLUS, OR ARTIFICIAL
+!     M constraints. X(N0+I) is the slack, surplus, or artificial
 !     VARIABLE FOR THE I-TH CONSTRAINT (I=1,...,M).
 !----------------------
 !     N0 = THE NUMBER OF ORGINAL VARIABLES
@@ -5196,18 +5196,18 @@ real :: spmpar
 !     RERRMX = THE LARGEST RELATIVE ERROR TOLERACE USED
 !     RERR   = THE ESTIMATED CURRENT RELATIVE ERROR
 !----------------------
-!     ASSUME THAT
+!     Assume that
 !         B0 = (B0(1),...,B0(M))
 !         C  = (C(1),...,C(N0))
 !         Z  = C(1)*X(1)+...+C(N0)*X(N0)
-!     THE PROBLEM IS TO MAXIMIZE Z SUBJECT TO
+!     the problem is to maximize Z subject to
 !         AX(LE,EQ,GE)B0
 !         X.GE.0
 !----------------------
-!     ON INPUT IND CAN HAVE THE VALUES
+!     On input ind can have the values
 !         IND = 0   NO BEGINNING BASIS IS PROVIDED BY THE USER
 !         IND = 1   THE ARRAY IBASIS HAS BEEN SET BY THE USER
-!     ON OUTPUT IND IS ASSIGNED ONE OF THE VALUES
+!     on output ind is assigned one of the values
 !         IND = 0   Z WAS SUCCESSFULLY MAXIMIZED
 !         IND = 1   THE PROBLEM HAS NO FEASIBLE SOLUTION
 !         IND = 2   MXITER ITERATIONS WERE PERFORMED
@@ -5219,16 +5219,16 @@ real :: spmpar
 !     BASIS IS AN INTEGER ARRAY OF DIMENSION N0+M. FOR J.LE.N
 !         BASIS(J) = 1  IF X(J) IS A BASIC VARIABLE
 !         BASIS(J) = 0  IF X(J) IS NOT A BASIC VARIABLE
-!     IF THE BASIC VARIABLES ARE X(I1),...,X(IM) THEN
+!     if the BASIC variables are X(I1),...,X(IM) then
 !         IBASIS = (I1,...,IM)
-!     ALSO XB(1),...,XB(M) ARE THE CORRESPONDING VALUES OF THE
-!     BASIC VARIABLES.
+!     also XB(1),...,XB(M) are the corresponding values of the
+!     BASIC variables.
 !----------------------
-!     BI IS AN MXM ARRAY CONTAINING THE INVERSE OF THE BASIS MATRIX.
+!     BI is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     R IS AN ARRAY OF DIMENSION N. ON OUTPUT R CONTAINS THE CURRENT
-!     VALUE OF X. DURING COMPUTATION R NORMALLY CONTAINS THE REDUCED
-!     COSTS USED FOR THE SELECTION OF THE VARIABLE TO BE MADE BASIC.
+!     R is an array of dimension N. On output R contains the current
+!     value of X. During computation R normally contains the reduced
+!     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: a(ka,n0), b0(m), c(n0)
 real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
@@ -5239,7 +5239,7 @@ double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
-!            LARGEST POSITIVE FLOATING POINT NUMBER.
+!            largest positive floating point number.
 !
            xmax = spmpar(3)
 !
@@ -5249,7 +5249,7 @@ icount = 0
 mcheck = min0(5,1 + m/15)
 z = 0.0
 !
-!                CHECK FOR INPUT ERRORS
+!                Check for input errors
 !
 ms = numle + numge
 if (m .lt. 2 .or. n0 .lt. 2 .or. ms .gt. m .or. ka .lt. m) &
@@ -5268,7 +5268,7 @@ go to 20
 return
 !
 !     FORMATION OF THE IBASIS AND BASIS ARRAYS. (IF IND = 1
-!     THEN THE IBASIS ARRAY IS DEFINED BY THE USER.)
+!     then the IBASIS array is defined by the user.)
 !
 20 ns = n0 + numle
 n = ns + numge
@@ -5309,7 +5309,7 @@ do j = jmin,ms
 end do
 go to 601
 !
-!                  REORDER THE BASIS
+!                  Reorder the basis
 !
 100 ibeg = 1
 iend = m
@@ -5354,7 +5354,7 @@ icount = 0
 call crout1 (bi, m, m, iend, index, y, jcol, ierr)
 if (ierr .ne. 0) go to 580
 !
-!         CHECK THE ACCURACY OF BI AND RESET RERR
+!         Check the accuracy of BI and reset RERR
 !
 bnorm = 0.0
 do 142 j = 1,m
@@ -5378,7 +5378,7 @@ rerr = amax1(rerrmn,eps0*bnorm*binorm)
 if (rerr .gt. 1.e-2) go to 580
 bflag = 0
 !
-!                 RECALCULATION OF XB
+!                 Recalculation of XB
 !
 180 do i = 1,m
    dsump = 0.d0
@@ -5398,8 +5398,8 @@ bflag = 0
 end do
 go to 601
 !
-!     FIND THE NEXT VECTOR A(--,JP) TO BE INSERTED INTO
-!                       THE BASIS
+!     Find the next vector A(--,JP) to be inserted into
+!                       the basis
 !
 200 jp = 0
 rmin = 0.0
@@ -5422,8 +5422,8 @@ do 202 j = jmin,n
 203 if (jp .ne. 0) go to 300
 if (nstep - 2) 800,230,250
 !
-!     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
-!             VARIABLES INTO R. THEN TERMINATE.
+!     Insert the values of the orginal, slack, and surplus
+!             variables into R. Then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -5454,9 +5454,9 @@ go to 220
 ind = 6
 go to 800
 !
-!     IF MXITER ITERATIONS HAVE NOT BEEN PERFORMED THEN
-!     BEGIN THE NEXT ITERATION. COMPUTE THE JP-TH COLUMN
-!               OF BI*A AND STORE IT IN Y.
+!     If MXITER iterations have not been performed then
+!     begin the next iteration. Compute the JP-TH column
+!               of BI*A and store it in Y.
 !
 300 if (iter .lt. mxiter) go to 301
    ind = 2
@@ -5517,7 +5517,7 @@ go to 200
 !
 360 if (nstep - 2) 400,430,440
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 1 CASE
 !
 400 npos = 0
@@ -5558,7 +5558,7 @@ go to 460
 421 continue
 go to 500
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 2 CASE
 !
 430 npos = 0
@@ -5576,7 +5576,7 @@ do 433 i = 1,m
 433 continue
 go to 450
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 3 CASE
 !
 440 npos = 0
@@ -5601,7 +5601,7 @@ if (icount .ge. 5) go to 100
 ind = 4
 go to 220
 !
-!              TIE BREAKING PROCEDURE
+!              Tie breaking procedure
 !
 460 ip = index(1)
 if (npos .eq. 1) go to 500
@@ -5635,7 +5635,7 @@ do 464 ii = 1,npos
 464 continue
 if (cmin .le. 0.0 .or. ip .eq. 0) ip = imin
 !
-!               TRANSFORMATION OF XB
+!               Transformation of XB
 !
 500 if (xb(ip) .eq. 0.0) go to 510
 const = xb(ip)/y(ip)
@@ -5647,7 +5647,7 @@ do 501 i = 1,m
 501 continue
 xb(ip) = const
 !
-!               TRANSFORMATION OF BI
+!               Transformation of BI
 !
 510 do 512 j = 1,m
    if (bi(ip,j) .eq. 0.0) go to 512
@@ -5657,7 +5657,7 @@ xb(ip) = const
    bi(ip,j) = const
 512 continue
 !
-!             UPDATING IBASIS AND BASIS
+!             Updating IBASIS and basis
 !
 iout = ibasis(ip)
 ibasis(ip) = jp
@@ -5665,7 +5665,7 @@ basis(iout) = 0
 basis(jp) = 1
 if (iout .gt. n) num = num - 1
 !
-!        CHECK THE ACCURACY OF BI AND RESET RERR
+!        Check the accuracy of BI and reset RERR
 !
 if (rerr .gt. 1.e-2) go to 530
 k = 0
@@ -5682,7 +5682,7 @@ do 521 j = 1,m
 521 continue
 522 if (rerr .le. 1.e-2) go to 600
 !
-!        THE ACCURACY CRITERIA ARE NOT SATISFIED
+!        The accuracy criteria are not satisfied
 !
 530 if (icount .lt. 5) go to 600
 bflag = 1
@@ -5855,7 +5855,7 @@ do 722 j = jmin,n
 722 continue
 go to 200
 !-----------------------------------------------------------------------
-!               REFINE XB AND STORE THE RESULT IN Y
+!               Refine XB and store the result in Y
 !-----------------------------------------------------------------------
 800 do i = 1,m
    y(i) = 0.0
@@ -5969,7 +5969,7 @@ integer :: ip
 real :: eps0, rerr, rerrmn, rerrmx
 real :: spmpar
 !-----------------------------------------------------------------------
-!     SIMPLEX PROCEDURE FOR SOLVING LINEAR PROGRAMMING PROBLEMS
+!     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS JR.
 !        NAVAL SURFACE WEAPONS CENTER
@@ -5985,7 +5985,7 @@ dimension ibasis(m)
 !------------------------
 !
 !     ********** EPS0 IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS0
-!                THE VALUE U WHERE U IS THE SMALLEST POSITIVE FLOATING
+!                the value U where U is the smallest positive floating
 !                POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
                     eps0 = spmpar(1)
@@ -6033,7 +6033,7 @@ real :: spmpar
 !----------------------
 !     THE ROUTINE ASSUMES THAT THE .LE. CONSTRAINTS PRECEDE THE .GE.
 !     CONSTRAINTS AND THAT THE .EQ. CONSTRAINTS COME LAST. THERE ARE
-!     M CONSTRAINTS. X(N0+I) IS THE SLACK, SURPLUS, OR ARTIFICIAL
+!     M constraints. X(N0+I) is the slack, surplus, or artificial
 !     VARIABLE FOR THE I-TH CONSTRAINT (I=1,...,M).
 !----------------------
 !     N0 = THE NUMBER OF ORGINAL VARIABLES
@@ -6045,19 +6045,19 @@ real :: spmpar
 !     RERRMX = THE LARGEST RELATIVE ERROR TOLERANCE USED
 !     RERR   = THE ESTIMATED CURRENT RELATIVE ERROR
 !----------------------
-!     LET A DENOTE AN MXN0 MATRIX. THE TRANSPOSE OF A IS STORED IN
-!     SPARSE FORM IN TA,ITA,JTA. ASSUME THAT
+!     Let a denote an MXN0 matrix. The transpose of A is stored in
+!     sparse form in TA,ITA,JTA. Assume that
 !         B0 = (B0(1),...,B0(M))
 !         C  = (C(1),...,C(N0))
 !         Z  = C(1)*X(1)+...+C(N0)*X(N0)
-!     THE PROBLEM IS TO MAXIMIZE Z SUBJECT TO
+!     the problem is to maximize Z subject to
 !         AX(LE,EQ,GE)B0
 !         X.GE.0
 !----------------------
-!     ON INPUT IND CAN HAVE THE VALUES
+!     On input ind can have the values
 !         IND = 0   NO BEGINNING BASIS IS PROVIDED BY THE USER
 !         IND = 1   THE ARRAY IBASIS HAS BEEN SET BY THE USER
-!     ON OUTPUT IND IS ASSIGNED ONE OF THE VALUES
+!     on output ind is assigned one of the values
 !         IND = 0   Z WAS SUCCESSFULLY MAXIMIZED
 !         IND = 1   THE PROBLEM HAS NO FEASIBLE SOLUTION
 !         IND = 2   MXITER ITERATIONS WERE PERFORMED
@@ -6069,16 +6069,16 @@ real :: spmpar
 !     BASIS IS AN INTEGER ARRAY OF DIMENSION N0+M. FOR J.LE.N
 !         BASIS(J) = 1  IF X(J) IS A BASIC VARIABLE
 !         BASIS(J) = 0  IF X(J) IS NOT A BASIC VARIABLE
-!     IF THE BASIC VARIABLES ARE X(I1),...,X(IM) THEN
+!     if the BASIC variables are X(I1),...,X(IM) then
 !         IBASIS = (I1,...,IM)
-!     ALSO XB(1),...,XB(M) ARE THE CORRESPONDING VALUES OF THE
-!     BASIC VARIABLES.
+!     also XB(1),...,XB(M) are the corresponding values of the
+!     BASIC variables.
 !----------------------
-!     BI IS AN MXM ARRAY CONTAINING THE INVERSE OF THE BASIS MATRIX.
+!     BI is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     R IS AN ARRAY OF DIMENSION N. ON OUTPUT R CONTAINS THE CURRENT
-!     VALUE OF X. DURING COMPUTATION R NORMALLY CONTAINS THE REDUCED
-!     COSTS USED FOR THE SELECTION OF THE VARIABLE TO BE MADE BASIC.
+!     R is an array of dimension N. On output R contains the current
+!     value of X. During computation R normally contains the reduced
+!     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: ta(*), b0(m), c(n0)
 real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
@@ -6090,7 +6090,7 @@ double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
-!            LARGEST POSITIVE FLOATING POINT NUMBER.
+!            largest positive floating point number.
 !
            xmax = spmpar(3)
 !
@@ -6100,7 +6100,7 @@ icount = 0
 mcheck = min0(5,1 + m/15)
 z = 0.0
 !
-!                CHECK FOR INPUT ERRORS
+!                Check for input errors
 !
 ms = numle + numge
 if (m .lt. 2 .or. n0 .lt. 2 .or. ms .gt. m) go to 12
@@ -6118,7 +6118,7 @@ go to 20
 return
 !
 !     FORMATION OF THE IBASIS AND BASIS ARRAYS. (IF IND = 1
-!     THEN THE IBASIS ARRAY IS DEFINED BY THE USER.)
+!     then the IBASIS array is defined by the user.)
 !
 20 ns = n0 + numle
 n = ns + numge
@@ -6159,7 +6159,7 @@ do j = jmin,ms
 end do
 go to 601
 !
-!                  REORDER THE BASIS
+!                  Reorder the basis
 !
 100 ibeg = 1
 iend = m
@@ -6210,7 +6210,7 @@ icount = 0
 call crout1 (bi, m, m, iend, index, y, jcol, ierr)
 if (ierr .ne. 0) go to 580
 !
-!         CHECK THE ACCURACY OF BI AND RESET RERR
+!         Check the accuracy of BI and reset RERR
 !
 bnorm = 0.0
 do 142 j = 1,m
@@ -6236,7 +6236,7 @@ rerr = amax1(rerrmn,eps0*bnorm*binorm)
 if (rerr .gt. 1.e-2) go to 580
 bflag = 0
 !
-!                 RECALCULATION OF XB
+!                 Recalculation of XB
 !
 180 do i = 1,m
    dsump = 0.d0
@@ -6256,8 +6256,8 @@ bflag = 0
 end do
 go to 601
 !
-!     FIND THE NEXT VECTOR A(--,JP) TO BE INSERTED INTO
-!                       THE BASIS
+!     Find the next vector A(--,JP) to be inserted into
+!                       the basis
 !
 200 jp = 0
 rmin = 0.0
@@ -6280,8 +6280,8 @@ do 202 j = jmin,n
 203 if (jp .ne. 0) go to 300
 if (nstep - 2) 800,230,250
 !
-!     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
-!             VARIABLES INTO R. THEN TERMINATE.
+!     Insert the values of the orginal, slack, and surplus
+!             variables into R. Then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -6312,9 +6312,9 @@ go to 220
 ind = 6
 go to 800
 !
-!     IF MXITER ITERATIONS HAVE NOT BEEN PERFORMED THEN
-!     BEGIN THE NEXT ITERATION. COMPUTE THE JP-TH COLUMN
-!               OF BI*A AND STORE IT IN Y.
+!     If MXITER iterations have not been performed then
+!     begin the next iteration. Compute the JP-TH column
+!               of BI*A and store it in Y.
 !
 300 if (iter .lt. mxiter) go to 301
    ind = 2
@@ -6373,7 +6373,7 @@ go to 200
 !
 360 if (nstep - 2) 400,430,440
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 1 CASE
 !
 400 npos = 0
@@ -6414,7 +6414,7 @@ go to 460
 421 continue
 go to 500
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 2 CASE
 !
 430 npos = 0
@@ -6432,7 +6432,7 @@ do 433 i = 1,m
 433 continue
 go to 450
 !
-!     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
+!     Finding the variable XB(IP) to be made nonbasic
 !               FOR THE NSTEP = 3 CASE
 !
 440 npos = 0
@@ -6457,7 +6457,7 @@ if (icount .ge. 5) go to 100
 ind = 4
 go to 220
 !
-!              TIE BREAKING PROCEDURE
+!              Tie breaking procedure
 !
 460 ip = index(1)
 if (npos .eq. 1) go to 500
@@ -6491,7 +6491,7 @@ do 464 ii = 1,npos
 464 continue
 if (cmin .le. 0.0 .or. ip .eq. 0) ip = imin
 !
-!               TRANSFORMATION OF XB
+!               Transformation of XB
 !
 500 if (xb(ip) .eq. 0.0) go to 510
 const = xb(ip)/y(ip)
@@ -6503,7 +6503,7 @@ do 501 i = 1,m
 501 continue
 xb(ip) = const
 !
-!               TRANSFORMATION OF BI
+!               Transformation of BI
 !
 510 do 512 j = 1,m
    if (bi(ip,j) .eq. 0.0) go to 512
@@ -6513,7 +6513,7 @@ xb(ip) = const
    bi(ip,j) = const
 512 continue
 !
-!             UPDATING IBASIS AND BASIS
+!             Updating IBASIS and basis
 !
 iout = ibasis(ip)
 ibasis(ip) = jp
@@ -6521,7 +6521,7 @@ basis(iout) = 0
 basis(jp) = 1
 if (iout .gt. n) num = num - 1
 !
-!        CHECK THE ACCURACY OF BI AND RESET RERR
+!        Check the accuracy of BI and reset RERR
 !
 if (rerr .gt. 1.e-2) go to 530
 k = 0
@@ -6541,7 +6541,7 @@ do 521 j = 1,m
 521 continue
 522 if (rerr .le. 1.e-2) go to 600
 !
-!        THE ACCURACY CRITERIA ARE NOT SATISFIED
+!        The accuracy criteria are not satisfied
 !
 530 if (icount .lt. 5) go to 600
 bflag = 1
@@ -6727,7 +6727,7 @@ do 722 j = jmin,n
 722 continue
 go to 200
 !-----------------------------------------------------------------------
-!               REFINE XB AND STORE THE RESULT IN Y
+!               Refine XB and store the result in Y
 !-----------------------------------------------------------------------
 800 do i = 1,m
    r(i) = 0.0
@@ -6840,24 +6840,24 @@ integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
 &nm1, nmj, nmk, nn
 real :: c, pmin, s
 !     ******************************************************************
-!     CROUT PROCEDURE FOR INVERTING MATRICES
+!     CROUT procedure for inverting matrices
 !     ******************************************************************
-!     A IS A MATRIX OF ORDER N WHERE N IS GREATER THAN OR EQUAL TO 1.
-!     THE INVERSE OF A IS COMPUTED AND STORED IN A.
+!     A is a matrix of order N where N is greater than or equal to 1.
+!     The inverse of A is computed and stored in A.
 !
 !     KA = LENGTH OF THE COLUMNS OF THE ARRAY A
 !     JP = THE NUMBER OF THE COLUMN THAT CONTAINS THE SMALLEST PIVOT
 !
-!     IEND MAY BE 0,1,...,N-1.  IT IS ASSUMED THAT EACH OF THE FIRST
-!     IEND COLUMNS OF THE MATRIX A CONTAINS ONLY ONE NONZERO ELEMENT
-!     AND THAT THE NONZERO ELEMENT IS 1 OR -1.
+!     IEND may be 0,1,...,N-1.  It is assumed that each of the first
+!     IEND columns of the matrix A contains only one nonzero element
+!     and that the nonzero element is 1 or -1.
 !
-!     INDEX IS AN ARRAY OF DIMENSION N-1 OR LARGER THAT IS USED BY THE
-!     ROUTINE FOR KEEPING TRACK OF THE ROW INTERCHANGES THAT ARE MADE.
+!     Index is an array of dimension N-1 or larger that is used by the
+!     routine for keeping track of the row interchanges that are made.
 !
-!     TEMP IS A TEMPORARY STORAGE ARRAY.
+!     Temp is a temporary storage array.
 !
-!     IERR REPORTS THE STATUS OF THE RESULTS. IF A IS NONSINGULAR THEN
+!     IERR reports the status of the results. If A is nonsingular then
 !     THE INVERSE OF A IS COMPUTED AND IERR=0. OTHERWISE IF A IS FOUND
 !     TO BE SINGULAR THEN IERR=1 AND THE ROUTINE TERMINATES.
 !     --------------------
@@ -6866,7 +6866,7 @@ max = ka*n
 mcol = iend*ka
 if (iend .eq. 0) go to 100
 !
-!           PROCESS THE FIRST IEND COLUMNS OF A
+!           Process the first IEND columns of A
 !
 kcol = 0
 do 32 k = 1,iend
@@ -6894,7 +6894,7 @@ a(lj) = c
 31 lj = lj + ka
 32 kcol = kcol + ka
 !
-!           PROCESS THE REMAINING COLUMNS OF A
+!           Process the remaining columns of A
 !
 100 nm1 = n - 1
 jp = 1
@@ -6927,7 +6927,7 @@ jp = k
 pmin = s
 if (s .eq. 0.0) go to 300
 !
-!              INTERCHANGING ROWS K AND L
+!              Interchanging rows K and L
 !
 120 index(k) = l
 if (k .eq. l) go to 130
@@ -6982,7 +6982,7 @@ dsum = 0.d0
 171 a(il) = dble(a(il)) - dsum
 end do
 !
-!           CHECK THE N-TH PIVOT ELEMENT
+!           Check the N-TH pivot element
 !
 190 ncol = max - ka
 nn = ncol + n
@@ -6991,7 +6991,7 @@ if (c .gt. pmin) go to 200
 jp = n
 if (c .eq. 0.0) go to 300
 !
-!          REPLACE L WITH THE INVERSE OF L
+!          Replace L with the inverse of L
 !
 200 if (ibeg .eq. n) go to 213
 jj = mcol + ibeg
@@ -7035,7 +7035,7 @@ kj0 = mcol + k
 241 a(kj) = -dsum
 end do
 !
-!                 COLUMN INTERCHANGES
+!                 Column interchanges
 !
 jcol = ncol - ka
 do 251 nmj = 1,nm1
@@ -7053,7 +7053,7 @@ ik = (k-1)*ka
 251 jcol = jcol - ka
 return
 !
-!                    ERROR RETURN
+!                    Error return
 !
 300 ierr = 1
 return
@@ -7065,7 +7065,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 integer :: i1, i2, i3, i4, i5, i6
 !     -------------------
-!     SOLUTION OF THE ASSIGNMENT PROBLEM
+!     Solution of the assignment problem
 !     -------------------
 integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
 !
@@ -7093,20 +7093,20 @@ integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
 integer :: h, q, r, s
 integer, intent(inout) :: t
 !
-! THIS SUBROUTINE SOLVES THE SQUARE ASSIGNMENT PROBLEM
-! THE MEANING OF THE INPUT PARAMETERS IS
+! This subroutine solves the square assignment problem
+! the meaning of the input parameters is
 ! N = NUMBER OF ROWS AND COLUMNS OF THE COST MATRIX
 ! A(I,J) = ELEMENT IN ROW I AND COLUMN J OF THE COST MATRIX
-! ( AT THE END OF COMPUTATION THE ELEMENTS OF A ARE CHANGED)
-! THE MEANING OF THE OUTPUT PARAMETERS IS
+! ( at the end of computation the elements of A are changed)
+! the meaning of the output parameters is
 ! C(J) = ROW ASSIGNED TO COLUMN J (J=1,N)
 ! T = COST OF THE OPTIMAL ASSIGNMENT
-! ALL PARAMETERS ARE INTEGER
-! THE MEANING OF THE LOCAL VARIABLES IS
+! all parameters are integer
+! the meaning of the local variables is
 ! A(I,J) = ELEMENT OF THE COST MATRIX IF A(I,J) IS POSITIVE,
-!          COLUMN OF THE UNASSIGNED ZERO FOLLOWING IN ROW I
+!          column of the unassigned zero following in row I
 !          (I=1,N) THE UNASSIGNED ZERO OF COLUMN J (J=1,N)
-!          IF A(I,J) IS NOT POSITIVE
+!          if A(I,J) is not positive
 ! A(I,N+1) = COLUMN OF THE FIRST UNASSIGNED ZERO OF ROW I
 !            (I=1,N)
 ! CH(I) = COLUMN OF THE NEXT UNEXPLORED AND UNASSIGNED ZERO
@@ -7119,22 +7119,22 @@ integer, intent(inout) :: t
 !         (I=1,N)
 ! RH(N+1) = FIRST UNEXPLORED ROW
 ! SLC(K) = K-TH ELEMENT CONTAINED IN THE SET OF THE LABELLED
-!          COLUMNS
+!          columns
 ! SLR(K) = K-TH ELEMENT CONTAINED IN THE SET OF THE LABELLED
-!          ROWS
+!          rows
 ! U(I) = UNASSIGNED ROW FOLLOWING THE UNASSIGNED ROW I
 !        (I=1,N)
 ! U(N+1) = FIRST UNASSIGNED ROW
 ! IERR = 0 IF THE ROUTINE TERMINATES SUCCESSFULLY. OTHERWISE
 !          IERR = 1
 !
-! THE VECTORS C,CH,LC,LR,LZ,NZ,SLC,SLR MUST BE DIMENSIONED
-! AT LEAST AT (N), THE VECTORS RH,U AT  LEAST AT (N+1),
-! AND THE MATRIX A AT LEAST AT (N,N+1). TO SAVE STORAGE
-! LZ AND RH MAY USE THE SAME STORAGE AREA, AND NZ AND CH
-! MAY USE THE SAME STORAGE AREA.
+! The vectors C,CH,LC,LR,LZ,NZ,SLC,slr must be dimensioned
+! at least at (N), the vectors RH,U at  least at (N+1),
+! and the matrix A at least at (N,N+1). To save storage
+! LZ and RH may use the same storage area, and NZ and CH
+! may use the same storage area.
 !
-! INITIALIZATION
+! Initialization
 maxnum = ipmpar(3)
 ierr = 0
 np1 = n+1
@@ -7146,7 +7146,7 @@ do j=1,n
 end do
 u(np1) = 0
 t = 0
-! REDUCTION OF THE INITIAL COST MATRIX
+! Reduction of the initial cost matrix
 do 40 j = 1,n
   s = a(1,j)
   do l=2,n
@@ -7184,7 +7184,7 @@ do i=1,n
     l = j
 60 continue
 end do
-! CHOICE OF THE INITIAL SOLUTION
+! Choice of the initial solution
 k = np1
 do 140 i = 1,n
   lj = np1
@@ -7221,7 +7221,7 @@ do 140 i = 1,n
   lz(i) = lj
   a(i,j) = 0
 140 continue
-! RESEARCH OF A NEW ASSIGNMENT
+! Research of a new assignment
 150 if ( u(np1) .eq. 0 ) return
 do i=1,n
   ch(i) = 0
@@ -7261,7 +7261,7 @@ slr(kslr) = r
 if ( a(r,np1) .ne. 0 ) go to 170
 210 continue
 if ( rh(np1) .gt. 0 ) go to 350
-! REDUCTION OF THE CURRENT COST MATRIX
+! Reduction of the current cost matrix
 220 h = maxnum
 do 240 j = 1,n
   if ( lc(j) .ne. 0 ) go to 240
@@ -7312,7 +7312,7 @@ do 340 i = 1,n
 340 continue
 350 r = rh(np1)
 go to 190
-! ASSIGNMENT OF A NEW ROW
+! Assignment of a new row
 360 c(l) = r
 m = np1
 370 nm = -a(r,m)
@@ -7330,7 +7330,7 @@ go to 360
 390 u(np1) = u(r)
 u(r) = 0
 go to 150
-! ERROR RETURN - INTEGER OVERFLOW OCCURS
+! Error return - integer overflow occurs
 400 ierr = 1
 return
 end subroutine assgn1
@@ -7342,23 +7342,23 @@ integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, &
 &n5, np1, npl
 real :: ap, aw
 !
-! SUBROUTINE TO SOLVE A 0-1 MULTIPLE KNAPSACK PROBLEM OF N
+! Subroutine to solve A 0-1 multiple knapsack problem of N
 ! ITEMS (WITH  N .GE. 2) AND  M  KNAPSACKS (WITH  M .GE. 1 ,
-! I.E. ALSO SUITABLE FOR A 0-1 SINGLE KNAPSACK PROBLEM).
-! THE PROBLEM TO BE SOLVED IS
+! I.E. Also suitable for A 0-1 single knapsack problem).
+! The problem to be solved is
 !
 ! MAXIMIZE  VSTAR = P(1)*(X(1,1) + ... + X(M,1)) + ...
 !                   ... + P(N)*(X(1,N) + ... + X(M,N))
-! SUBJECT TO
+! subject to
 ! W(1)*X(I,1) + ... + W(N)*X(I,N) .LE. K(I)   FOR  I=1,...,M
 ! X(1,J) + ... + X(M,J) .LE. 1   FOR  J=1,...,N
 ! X(I,J) = 0 OR 1   FOR  I=1,...,M ,  J=1,...,N ,
 !
-! WHERE ALL P(J), W(J), AND K(I) ARE POSITIVE INTEGERS.
-! BEFORE MKP IS CALLED, ARRAY K MUST BE SORTED SO THAT
+! Where all P(J), W(J), and K(I) are positive integers.
+! Before MKP is called, array K must be sorted so that
 ! K(1) .LE. K(2) .LE. ... .LE. K(M) .
 !
-! MEANING OF THE INPUT PARAMETERS ...
+! Meaning of the input parameters ...
 !
 ! N    = NUMBER OF ITEMS.
 ! M    = NUMBER OF KNAPSACKS.
@@ -7367,12 +7367,12 @@ real :: ap, aw
 ! K(I) = CAPACITY OF KNAPSACK  I  (I=1,...,M) .
 ! BCK  = -1  IF EXACT SOLUTION IS REQUIRED.
 !      = MAXIMUM NUMBER OF BACKTRACKINGS TO BE PERFORMED, IF
-!        HEURISTIC SOLUTION IS REQUIRED.
+!        heuristic solution is required.
 ! WK   = REAL WORK SPACE OF DIMENSION N.
 ! IWK  = WORK SPACE OF DIMENSION .GE. 5*M + 14*N + 4*M*N + 3
 ! NUM  = DIMENSION OF IWK
 !
-! MEANING OF THE OUTPUT PARAMETERS ...
+! Meaning of the output parameters ...
 !
 ! XSTAR(J) = 0  IF ITEM  J  IS NOT IN THE OPTIMAL SOLUTION
 !               (I.E. IF  X(I,J) = 0  FOR ALL  I ).
@@ -7383,19 +7383,19 @@ real :: ap, aw
 !            IN THE INPUT DATA IF  VSTAR .LT. 0 .
 !            = -1  IF  N .LT. 2  OR  M .LT. 1 .
 !            = -2  IF SOME  P(J) ,  W(J)  OR  K(I) ARE NOT
-!                  POSITIVE.
+!                  positive.
 !            = -3  IF A KNAPSACK CANNOT CONTAIN ANY ITEM.
 !            = -4  IF AN ITEM CANNOT FIT INTO ANY KNAPSACK.
 !            = -5  IF KNAPSACK  M  CONTAINS ALL THE ITEMS.
 !            = -7  IF ARRAY  K IS NOT CORRECTLY SORTED.
 !            = -8  IF NUM .LT. 5*M + 14*N + 4*M*N + 3.
 !
-!            (IN ALL THE ABOVE CASES ARRAY  XSTAR IS NOT
-!            DEFINED).
+!            (In all the above cases array  XSTAR is not
+!            defined).
 !
-! ALL THE PARAMETERS EXCEPT WK ARE OF INTEGER TYPE. WHEN MKP
-! TERMINATES, ALL THE INPUT PARAMETERS ARE UNCHANGED EXCEPT
-! BCK, WHICH GIVES THE NUMBER OF BACKTRACKINGS PERFORMED.
+! All the parameters except WK are of integer type. When MKP
+! terminates, all the input parameters are unchanged except
+! BCK, which gives the number of backtrackings performed.
 !
 integer, intent(inout) :: p(n), w(n)
 integer, intent(in) :: k(m)
@@ -7406,7 +7406,7 @@ integer :: b, ubb
 integer :: f, pbl, q, v
 integer :: bs, ps, ws, xs
 !
-!                    CHECK THE INPUT DATA
+!                    Check the input data
 !
 if (m .lt. 1 .or. n .lt. 2) go to 100
 mn = m*n
@@ -7441,7 +7441,7 @@ if (maxw .gt. k(m)) go to 130
 if (isumw .le. k(m)) go to 140
 vstar = 0
 !
-!             REORDER THE ARRAYS P AND W SO THAT
+!             Reorder the arrays P and W so that
 !                P(J)/W(J) .GE. P(J+1)/W(J+1)
 !
 n5 = 5*n
@@ -7465,7 +7465,7 @@ do j = 1,n
    w(j) = iwk(npl)
 end do
 !
-!                PARTITION THE WORK SPACE IWK
+!                Partition the work space IWK
 !
 lx =  jj + 1
 lxi = lx + n
@@ -7489,7 +7489,7 @@ xl = x + mn
 !
 bl = xl + mn
 !
-!                     SOLVE THE PROBLEM
+!                     Solve the problem
 !
 call mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
 &iwk(bb), iwk(bl), iwk(x), iwk(xl), &
@@ -7497,8 +7497,8 @@ call mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
 &iwk(f), iwk(pbl), iwk(q), iwk(v), &
 &iwk(bs), iwk(ps), iwk(ws), iwk(xs), iwk(1))
 !
-!           RESTORE THE INITIAL ORDERING TO P AND W,
-!                AND REORDER XSTAR ACCORDINGLY
+!           Restore the initial ordering to P and W,
+!                and reorder XSTAR accordingly
 !
 do j = 1,n
    iwk(j) = p(j)
@@ -7519,7 +7519,7 @@ do j = 1,n
 end do
 return
 !
-!                        ERROR RETURN
+!                        Error return
 !
 100 vstar = -1
 return
@@ -7545,29 +7545,29 @@ integer, intent(in) :: m, n, n5, np1
 integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, &
 &kub, lb, li, lj, lr, lri, lub, lubi, m1, n1
 !
-! MEANING OF THE MAIN INTERNAL VARIABLES AND ARRAYS ...
+! Meaning of the main internal variables and arrays ...
 !
 ! I       = KNAPSACK CURRENTLY CONSIDERED.
 ! LB      = LOWER BOUND ON THE OPTIMAL SOLUTION.
 ! UB      = UPPER BOUND ON THE OPTIMAL SOLUTION.
 ! VB      = VALUE OF THE CURRENT SOLUTION.
 ! X(I,J)  = 1  IF ITEM  J  IS INSERTED IN KNAPSACK  I  IN
-!              THE CURRENT SOLUTION.
+!              the current solution.
 !         = 0  OTHERWISE.
 ! F(I)    = POINTER TO THE LAST ITEM INSERTED IN KNAPSACK  I
 !           ( = -1  IF KNAPSACK  I  IS EMPTY).
 ! BB(I,J) = POINTER TO THE ITEM INSERTED IN KNAPSACK  I
 !           JUST BEFORE ITEM  J ( = -1  IF  J  IS THE FIRST
-!           ITEM INSERTED IN KNAPSACK  I ).
+!           item inserted in knapsack  I ).
 ! Q(I)    = CURRENT AVAILABLE CAPACITY OF KNAPSACK  I .
 ! B(J)    = 1  IF ITEM  J  IS NOT INSERTED IN ANY KNAPSACK.
 !         = 0  IF ITEM  J  IS INSERTED IN A KNAPSACK.
 ! PBL(I)  = NUMBER OF THE ITEMS WHICH CAN BE INSERTED IN
 !           KNAPSACK  I .
 ! BL(I,S) = POINTER TO THE  S-TH  ITEM WHICH CAN BE INSERTED
-!           IN KNAPSACK  I .
+!           in knapsack  I .
 ! XL(I,J) = 1  IF ITEM  J  WAS INSERTED IN KNAPSACK  I  IN
-!              THE LAST EXECUTION OF SUBROUTINE PI1.
+!              the last execution of subroutine PI1.
 !         = 0  OTHERWISE.
 ! IWK       WORK SPACE FOR THE SUBROUTINE SKNP.
 !
@@ -7581,7 +7581,7 @@ integer :: s, u, ub, vb
 !
 if (m .eq. 1) go to 250
 !
-! STEP 1 (INITIALIZATION)
+! Step 1 (initialization)
 !
 jbck = bck
 bck = 0
@@ -7613,7 +7613,7 @@ lri = lr
 lubi = ub
 iflag = 0
 !
-! STEP 2 (HEURISTIC)
+! Step 2 (heuristic)
 !
 70 kub = vstar - vb
 call pi1 (n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
@@ -7645,7 +7645,7 @@ do 130 ii = i1,m
 130 continue
 if ( ub .eq. lb ) go to 200
 !
-! STEP 3 (UPDATING)
+! Step 3 (updating)
 !
 140 if ( v(i) .eq. 0 ) go to 180
 iuv = ub + vb
@@ -7690,7 +7690,7 @@ lj = n1
 i = i + 1
 go to 140
 !
-! STEP 4 (BACKTRACKING)
+! Step 4 (backtracking)
 !
 200 if ( i .gt. 0 ) go to 210
 bck = bck - 1
@@ -7717,7 +7717,7 @@ ub = ubb(j) - vb
 iflag = 1
 go to 70
 !
-! PARTICULAR CASE (0-1 SINGLE KNAPSACK PROBLEM)
+! Particular case (0-1 single knapsack problem)
 !
 250 k1 = k(1)
 do j=1,n
@@ -7740,9 +7740,9 @@ integer, intent(inout) :: lr
 integer, intent(in) :: m, n, n5, np1
 integer :: j, jj, ns
 !
-! SUBROUTINE TO COMPUTE AN UPPER BOUND  UB  ON THE BEST
-! FINAL SOLUTION WHICH CAN BE OBTAINED FROM THE CURRENT
-! SOLUTION.
+! Subroutine to compute an upper bound  UB  on the best
+! final solution which can be obtained from the current
+! solution.
 !
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: ub, iwk(n5)
@@ -7790,9 +7790,9 @@ integer, intent(inout) :: kub, lb
 integer, intent(in) :: m, n, n5, np1
 integer :: ii, ikub, j, jb, jbs, jj, ns
 !
-! SUBROUTINE TO COMPUTE A FEASIBLE SOLUTION TO THE CURRENT
-! PROBLEM. THE SOLUTION IS STORED IN ARRAY  XL , THE
-! CORRESPONDING VALUE IN  LB .
+! Subroutine to compute a feasible solution to the current
+! problem. The solution is stored in array  XL , the
+! corresponding value in  LB .
 !
 integer, intent(in) :: bb(m,n)
 integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
@@ -7801,7 +7801,7 @@ integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
 integer :: pb, qs, sb, u
 !
-! STEP 1
+! Step 1
 !
 u = 0
 do 10 j = 1,n
@@ -7830,7 +7830,7 @@ do 30 j = 1,u
 30 continue
 ii = i
 !
-! STEP 2
+! Step 2
 !
 40 pbl(ii) = ns
 if ( sb .gt. q(ii) ) go to 60
@@ -7853,7 +7853,7 @@ ikub = ikub - pb
 v(ii) = pb
 bl(ii,ns+1) = n + 1
 !
-! STEP 3
+! Step 3
 !
 if ( ii .eq. m ) return
 jb = 1
@@ -7890,7 +7890,7 @@ integer, intent(out) :: iflag
 integer, intent(in) :: ii, li, lj, lr, lri, lub, lubi, m, n, np1
 integer :: i1, iq, j
 !
-! SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
+! Subroutine for parametric computation of the upper bounds.
 !
 integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
 integer, intent(inout) :: ub
@@ -7941,7 +7941,7 @@ implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
 integer :: i1, i2, i3, i4, i5
 !
-! SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
+! Subroutine to solve the 0-1 single knapsack problem
 !
 ! MAXIMIZE    VS = PS(1)*XS(1) + ... + PS(NS)*XS(NS)
 ! SUBJECT TO       WS(1)*XS(1) + ... + WS(NS)*XS(NS) .LE. QS
@@ -7972,7 +7972,7 @@ integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, &
 &mfirst, mink, ms, n1, nn
 real :: a, b, c
 !
-! SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
+! Subroutine to solve the 0-1 single knapsack problem
 !
 ! MAXIMIZE    VS = PS(1)*XS(1) + ... + PS(NS)*XS(NS)
 ! SUBJECT TO       WS(1)*XS(1) + ... + WS(NS)*XS(NS) .LE. QS
@@ -8189,76 +8189,76 @@ real :: a
 real :: exparg
 !-----------------------------------------------------------------------
 !
-!             COMPUTATION OF THE INVERSE LAPLACE TRANSFORM
-!              OF A FUNCTION WHICH IS NOT TOO OSCILLATORY
+!             Computation of the inverse Laplace transform
+!              of a function which is not too oscillatory
 !
 !                          ------------------
 !
-!     MO IS AN INPUT INTEGER WHICH SPECIFIES THE SEARCH PROCEDURE
-!     FOR DETERMINATION OF C.  A TWO-PASS PROCEDURE IS USED WHEN
+!     MO is an input integer which specifies the search procedure
+!     for determination of C.  A two-pass procedure is used when
 !     MO = 0 , AND A ONE-PASS PROCEDURE IS USED WHEN MO IS NOT ZERO.
 !     WHEN ALL SINGULARITIES OF F(Z) ARE EXPECTED TO BE REAL, MO = 0
-!     IS PREFERABLE.
+!     is preferable.
 !
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user.  The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
-!     T IS A POSITIVE VALUE OF THE INDEPENDENT VARIABLE FOR WHICH
-!     THE INVERSE LAPLACE TRANSFORM IS TO BE CALCULATED.
+!     T is a positive value of the independent variable for which
+!     the inverse Laplace transform is to be calculated.
 !
-!     C IS THE ABSCISSA OF CONVERGENCE.  IT MAY BE EITHER GIVEN
-!     OR CALCULATED BY LAINV.
+!     C is the abscissa of convergence.  It may be either given
+!     or calculated by LAINV.
 !
-!     Y IS THE CALCULATED VALUE OF THE INVERSE LAPLACE TRANSFORM.
+!     Y is the calculated value of the inverse Laplace transform.
 !
-!     AERR IS THE ABSOLUTE ACCURACY REQUESTED.
-!     RERR IS THE RELATIVE ACCURACY REQUESTED.  THE SUBROUTINE
-!     ATTEMPTS TO SATISFY THE LESS STRINGENT OF THE TWO REQUIREMENTS.
+!     AERR is the absolute accuracy requested.
+!     RERR is the relative accuracy requested.  The subroutine
+!     attempts to satisfy the less stringent of the two requirements.
 !     IT IS ASSUMED THAT AERR AND RERR ARE .GE. 0.  IF ONE WANTS
-!     ACCURACY TO K SIGNIFICANT FIGURES, THEN RERR SHOULD BE
+!     accuracy to K significant figures, then RERR should be
 !     SET = 10.0**(-K).
 !
-!     ERROR IS THE ESTIMATED ABSOLUTE ERROR OF Y.
+!     Error is the estimated absolute error of Y.
 !
-!     NUM IS THE NUMBER OF EVALUATIONS OF FUN IN LAINV.
+!     NUM is the number of evaluations of fun in LAINV.
 !
-!     IERR MAY BE EITHER AN INPUT INTEGER OR AN OUTPUT INTEGER.  WHEN
-!     IERR IS EQUAL TO ANY NEGATIVE INTEGER AT THE BEGINNING OF LAINV,
-!     THE ABSCISSA OF CONVERGENCE IS CALCULATED AND THE VALUE OBTAINED
-!     IS ASSIGNED TO THE ARGUMENT C.  OTHERWISE, C MUST BE INPUT BY
-!     THE USER.  AFTER COMPLETION OF LAINV, IERR HAS ONE OF THE
-!     FOLLOWING VALUES...
+!     IERR may be either an input integer or an output integer.  When
+!     IERR is equal to any negative integer at the beginning of LAINV,
+!     the abscissa of convergence is calculated and the value obtained
+!     is assigned to the argument C.  Otherwise, C must be input by
+!     the user.  After completion of LAINV, IERR has one of the
+!     following values...
 !
 !        IERR = 0   THE CALCULATION WAS SUCCESSFUL.
 !
 !        IERR = 1   THE CALCULATED VALUE OF Y MAY NOT BE ACCURATE
-!                   DUE TO POSSIBLE INACCURACY IN THE CALCULATION
-!                   OF C.  THIS VALUE OF IERR MAY OCCUR ONLY WHEN
-!                   IERR IS INITIALLY NEGATIVE.
+!                   due to possible inaccuracy in the calculation
+!                   of C.  This value of IERR may occur only when
+!                   IERR is initially negative.
 !
 !        IERR = 2   THE CALCULATION OF Y DID NOT CONVERGE, WHILE
-!                   THE GIVEN OR CALCULATED VALUE OF C MAY BE
-!                   CONSIDERED ACCURATE.
+!                   the given or calculated value of C may be
+!                   considered accurate.
 !
 !        IERR = 3   THE CALCULATION OF Y DID NOT CONVERGE, AND THE
-!                   CALCULATED VALUE OF C MAY BE INACCURATE.  THIS
-!                   VALUE OF IERR MAY OCCUR ONLY WHEN IERR IS
-!                   INITIALLY NEGATIVE.
+!                   calculated value of C may be inaccurate.  This
+!                   value of IERR may occur only when IERR is
+!                   initially negative.
 !
 !        IERR = 4   THE VALUE OF T IS LESS THAN OR EQUAL TO 0.
 !                   THE SPECIAL VALUES Y = 0.0 AND ERROR = 1.0
-!                   ARE ASSIGNED.
+!                   are assigned.
 !
 !        IERR = 5   C WAS NOT FOUND IN THE INTERVAL (-1.0E4,1.0E4).
 !                   THE SPECIAL VALUES C = 0.0, Y = 0.0, AND
 !                   ERROR = 1.0 ARE ASSIGNED.
-!                   THIS VALUE OF IERR MAY OCCUR ONLY WHEN
-!                   IERR IS INITIALLY NEGATIVE.
+!                   This value of IERR may occur only when
+!                   IERR is initially negative.
 !
 !        IERR = 6   T IS TOO LARGE FOR THE INVERSE TRANSFORM TO BE
 !                   COMPUTED. THE VALUES Y = 0.0 AND ERROR = 1.0
-!                   ARE ASSIGNED.
+!                   are assigned.
 !
 !-----------------------------------------------------------------------
 external fun
@@ -8267,7 +8267,7 @@ num = 0
 ierc = -1
 if (ierr .ge. 0) go to 10
 !
-!     CALCULATION OF THE ABSCISSA OF CONVERGENCE.
+!     Calculation of the abscissa of convergence.
 !
 if (mo .eq. 0) go to 5
    call abcon1 (fun,c,num,ierc)
@@ -8275,17 +8275,17 @@ if (mo .eq. 0) go to 5
 5 call abcon (fun,c,num,ierc)
 10 if (ierc .eq. 2) go to 100
 !
-!     CHECK IF T IS TOO LARGE
+!     Check if T is too large
 !
 a = c + 2.0/t
 if (a*t .gt. exparg(0)) go to 110
 !
-!     CALCULATION OF THE INVERSE LAPLACE TRANSFORM.
+!     Calculation of the inverse Laplace transform.
 !
 call lainv1 (fun,t,c,rerr,aerr,y,error,num1,ier)
 num = num + num1
 !
-!     REPORT THE STATUS OF THE RESULTS.
+!     Report the status of the results.
 !
 if (ierc .ge. 0) go to 20
 if (ier  .eq. 0) go to 30
@@ -8326,34 +8326,34 @@ integer :: num1
 real :: eta, x0, xmin
 !-----------------------------------------------------------------------
 !
-!             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
-!             OF A FUNCTION WHICH IS NOT TOO OSCILLATORY
+!             Computation of the abscissa of convergence
+!             of a function which is not too oscillatory
 !
 !                         -----------------
 !
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user.  The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
-!     C IS THE CALCULATED VALUE OF THE ABSCISSA OF CONVERGENCE.
+!     C is the calculated value of the abscissa of convergence.
 !
-!     NUM IS A VARIABLE. ON OUTPUT IT HAS FOR ITS VALUE THE NUMBER
-!     OF EVALUATIONS OF FUN THAT WERE PERFORMED.
+!     NUM is a variable. On output it has for its value the number
+!     of evaluations of fun that were performed.
 !
-!     IERR IS AN OUTPUT INTEGER REPORTING THE STATUS OF THE
-!     CALCULATION OF C.  IERR IS ASSIGNED VALUES AS FOLLOWS...
+!     IERR is an output integer reporting the status of the
+!     calculation of C.  IERR is assigned values as follows...
 !
 !        IERR = 0   THE CALCULATION WAS SUCCESSFUL.
 !
 !        IERR = 1   THE REQUESTED ACCURACY MAY NOT HAVE BEEN
-!                   OBTAINED.  MORE SUBINTERVALS MAY BE REQUIRED
-!                   IN THE NUMERICAL QUADRATURES IN SUBROUTINES
+!                   obtained.  More subintervals may be required
+!                   in the numerical quadratures in subroutines
 !                   ACOND AND XCOND.
 !
 !        IERR = 2   C COULD NOT BE CALCULATED WITH SUFFICIENT
-!                   ACCURACY, OR AN INTERVAL CONTAINING C COULD
+!                   accuracy, or an interval containing C could
 !                   NOT BE FOUND. THE SPECIAL VALUE C = 0.0 IS
-!                   ASSIGNED.
+!                   assigned.
 !
 !-----------------------------------------------------------------------
 logical :: find
@@ -8362,29 +8362,29 @@ external fun, acond, xcond
 eta = 0.01
 xmin = -1.00358e4
 !
-!     CALCULATION OF THE LOCATION OF THE SINGULARITY ON THE REAL
-!     AXIS WHICH IS FARTHEST TO THE RIGHT. SET THIS VALUE TO X0.
+!     Calculation of the location of the singularity on the real
+!     axis which is farthest to the right. Set this value to X0.
 !
 call srch(fun, xcond, xmin, eta, x0, num, ierr)
 c = x0
 if (ierr .eq. 2) go to 20
 if (ierr .eq. 3) go to 10
 !
-!     CHECK IF X0 IS ON THE RIGHT OR LEFT OF THE ABSCISSA OF
-!     CONVERGENCE. IF IT IS ON THE RIGHT THEN WE ARE DONE.
+!     Check if X0 is on the right or left of the abscissa of
+!     convergence. If it is on the right then we are done.
 !
 call acond(fun, x0, find, num1, ierr)
 num = num + num1
 if (find) go to 20
 !
-!     SEARCH TO THE RIGHT OF X0 TO FIND THE ABSCISSA OF
-!     CONVERGENCE.
+!     Search to the right of X0 to find the abscissa of
+!     convergence.
 !
 10 call srch(fun, acond, x0, eta, c, num1, ierr)
 num = num + num1
 if (ierr .eq. 3) c = 0.0
 !
-!     TERMINATION
+!     Termination
 !
 20 ierr = min0(ierr,2)
 return
@@ -8400,42 +8400,42 @@ real, intent(in) :: xl
 integer :: i, ier, num1
 real :: dx, tol, x1, x2, xbar, xm
 !-----------------------------------------------------------------------
-!     SRCH COMPUTES AN UPPER BOUND FOR THE SMALLEST NUMBER X SUCH
-!     THAT A GIVEN CONDITION IS SATISFIED. IT IS ASSUMED THAT THE
-!     CONDITION IS SATISFIED FOR SUFFICIENTLY LARGE X.
+!     SRCH computes an upper bound for the smallest number X such
+!     that a given condition is satisfied. It is assumed that the
+!     condition is satisfied for sufficiently large X.
 !-----------------------------------------------------------------------
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user.  The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
-!     COND IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR COND NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     COND HAS THE ARGUMENTS FUN, X, CND, AND IER, WHERE CND IS
-!     A LOGICAL VARIABLE.
+!     Cond is a real subroutine defined by the user.  The actual name
+!     for cond needs to be declared external in the driver program.
+!     Cond has the arguments fun, X, CND, and ier, where CND is
+!     a logical variable.
 !
-!     XL IS THE SMALLEST VALUE OF X FOR WHICH A SEARCH IS MADE.  IT
+!     XL is the smallest value of X for which a search is made.  It
 !     SHOULD LIE IN THE RANGE - 1.0E4 .LE. XL .LT. 1.0E4.  IT IS
-!     ASSUMED THAT THE LOGICAL VARIABLE CND CALCULATED BY COND IS
+!     assumed that the logical variable CND calculated by cond is
 !     .FALSE. WHEN X = XL.
 !
-!     ETA IS THE RELATIVE TOLERANCE TO WHICH THE RESULT IS TO BE
-!     DETERMINED. IT IS A POSITIVE REAL NUMBER. WHEN THIS SUBROUTINE
-!     IS USED TO CALCULATE C FOR USE IN THE PIESSENS CODE LAINV1
+!     Eta is the relative tolerance to which the result is to be
+!     determined. It is a positive real number. When this subroutine
+!     is used to calculate C for use in the piessens code LAINV1
 !     (ALGORITHM 619), IT IS USUALLY SUFFICIENT TO TAKE ETA = 0.01.
 !
-!     X IS THE CALCULATED RESULT.  IT IS LARGER THAN THE EXACT
-!     RESULT BY AN AMOUNT LESS THAN ETA*X.
+!     X is the calculated result.  It is larger than the exact
+!     result by an amount less than eta*X.
 !
-!     NUM IS A VARIABLE. ON OUTPUT IT HAS FOR ITS VALUE THE NUMBER
-!     OF EVALUATIONS OF FUN THAT WERE PERFORMED.
+!     NUM is a variable. On output it has for its value the number
+!     of evaluations of fun that were performed.
 !
-!     IERR IS AN OUTPUT INTEGER REPORTING THE STATUS OF THE
-!     CALCULATION OF X.  IERR IS ASSIGNED VALUES AS FOLLOWS...
+!     IERR is an output integer reporting the status of the
+!     calculation of X.  IERR is assigned values as follows...
 !
 !          IERR = 0     THE CALCULATION WAS FULLY SUCCESSFUL.
 !
 !          IERR = 1     X MAY BE IN ERROR DUE TO THE CALCULATION
-!                       OF COND.
+!                       of cond.
 !
 !          IERR = 2     CND IS .FALSE. WHEN X = 1.0E4.  X IS SET = 0.0.
 !
@@ -8445,7 +8445,7 @@ logical :: cnd
 external fun, cond
 ierr = 0
 !
-!     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
+!     Search for an interval (X1, X2) containing X where
 !     X1 .GE. 0.01269
 !
 x1 = amax1(.01269, xl)
@@ -8464,7 +8464,7 @@ if (cnd) go to 20
 !
 20 if (x1 .eq. xl) go to 400
 !
-!     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
+!     Search for an interval (X1, X2) containing X where
 !     X2 .LE. 0.01269
 !
    x2 = x1
@@ -8478,7 +8478,7 @@ if (cnd) go to 20
       if (x1 .eq. xl) go to 400
 30 x1 = 10.0*x1
 !
-!     SEARCH FOR X IN THE INTERVAL (X1, X2) BY BISECTION
+!     Search for X in the interval (X1, X2) by bisection
 !
 200 dx = x2 - x1
       xbar = x1 + dx/2.0
@@ -8494,7 +8494,7 @@ if (cnd) go to 20
 225 x2 = xbar
          go to 200
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 250 if(cnd) go to 275
          x = x2
@@ -8502,7 +8502,7 @@ if (cnd) go to 20
 275 x = xbar
       return
 !
-!     ERROR RETURN WHEN X COULD NOT BE FOUND IN THE INTERVAL
+!     Error return when X could not be found in the interval
 !     (-1.0E4, 1.OE4).
 !
 300 x = 0.0
@@ -8521,34 +8521,34 @@ integer :: i, num1
 real :: dx, eta, tol, x1, x2, xbar, xm
 !-----------------------------------------------------------------------
 !
-!             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
-!             OF A FUNCTION WHICH IS NOT TOO OSCILLATORY
+!             Computation of the abscissa of convergence
+!             of a function which is not too oscillatory
 !
 !                         -----------------
 !
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER. THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user. The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
-!     C IS THE CALCULATED VALUE OF THE ABSCISSA OF CONVERGENCE.
+!     C is the calculated value of the abscissa of convergence.
 !
-!     NUM IS A VARIABLE. ON OUTPUT IT HAS FOR ITS VALUE THE NUMBER
-!     OF EVALUATIONS OF FUN THAT WERE PERFORMED.
+!     NUM is a variable. On output it has for its value the number
+!     of evaluations of fun that were performed.
 !
-!     IERR IS AN OUTPUT INTEGER REPORTING THE STATUS OF THE
-!     CALCULATION OF C.  IERR IS ASSIGNED VALUES AS FOLLOWS...
+!     IERR is an output integer reporting the status of the
+!     calculation of C.  IERR is assigned values as follows...
 !
 !        IERR = 0   THE CALCULATION WAS SUCCESSFUL.
 !
 !        IERR = 1   THE REQUESTED ACCURACY MAY NOT HAVE BEEN
-!                   OBTAINED.  MORE SUBINTERVALS MAY BE REQUIRED
-!                   IN THE NUMERICAL QUADRATURES IN SUBROUTINES
+!                   obtained.  More subintervals may be required
+!                   in the numerical quadratures in subroutines
 !                   ACOND AND XCOND.
 !
 !        IERR = 2   C COULD NOT BE CALCULATED WITH SUFFICIENT
-!                   ACCURACY, OR AN INTERVAL CONTAINING C COULD
+!                   accuracy, or an interval containing C could
 !                   NOT BE FOUND. THE SPECIAL VALUE C = 0.0 IS
-!                   ASSIGNED.
+!                   assigned.
 !
 !-----------------------------------------------------------------------
 logical :: cmplex, iend, right
@@ -8565,7 +8565,7 @@ num = num + num1
 if (right) go to 30
 cmplex = .true.
 !
-!     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
+!     Search for an interval (X1, X2) containing X where
 !     X1 .GE. 0.01269
 !
 10 x2 = 10.1269
@@ -8583,7 +8583,7 @@ cmplex = .true.
    end do
    go to 100
 !
-!     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
+!     Search for an interval (X1, X2) containing X where
 !     X2 .LE. 0.01269
 !
 30 x2 = x1
@@ -8602,7 +8602,7 @@ cmplex = .true.
 !
 45 cmplex = .true.
 !
-!     SEARCH FOR X IN THE INTERVAL (X1, X2) BY BISECTION
+!     Search for X in the interval (X1, X2) by bisection
 !
 50 dx = x2 - x1
       xbar = x1 + dx/2.0
@@ -8629,12 +8629,12 @@ cmplex = .true.
 70 x2 = xbar
       if (.not. iend) go to 50
 !
-!     STANDARD TERMINATION
+!     Standard termination
 !
 80 c = x2
    return
 !
-!     ERROR RETURN WHEN X CANNOT BE FOUND IN (-1.E4, 1.E4)
+!     Error return when X cannot be found in (-1.E4, 1.E4)
 !
 100 c = 0.0
 ierr = 2
@@ -8651,31 +8651,31 @@ real :: acondg
 real :: acondf
 !-----------------------------------------------------------------------
 !
-!        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
-!        LIES TO THE RIGHT OF THE ABSCISSA OF CONVERGENCE OF THE
-!        COMPLEX FUNCTION DEFINED BY FUN WHEN NO SINGULARITIES LIE
-!        ON THE REAL AXIS.
+!        This subroutine tests whether or not a given value of X
+!        lies to the right of the abscissa of convergence of the
+!        complex function defined by fun when no singularities lie
+!        on the real axis.
 !
 !                      ----------------
 !
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user.  The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
 !     X IS A REAL NUMBER. THE LOGICAL VARIABLE COND = .TRUE. IF
 !     X .GT. C, WHERE C IS THE ABSCISSA OF CONVERGENCE, AND .FALSE.
 !     IF X .LT. C.
 !
-!     NUM IS A VARIABLE. ON OUTPUT IT HAS FOR ITS VALUE THE NUMBER
-!     OF EVALUATIONS OF FUN THAT WERE PERFORMED.
+!     NUM is a variable. On output it has for its value the number
+!     of evaluations of fun that were performed.
 !
-!     IERR IS AN OUTPUT INTEGER INDICATING THE STATUS OF THE
-!     CALCULATION. IT IS ASSIGNED VALUES AS FOLLOWS...
+!     IERR is an output integer indicating the status of the
+!     calculation. It is assigned values as follows...
 !
 !        IERR = 0   THE CALCULATION WAS SUCCESSFUL.
 !
 !        IERR = 1   THE CALCULATION OF COND MAY NOT BE
-!                   ACCURATE FOR ALL VALUES OF X.
+!                   accurate for all values of X.
 !
 !-----------------------------------------------------------------------
 logical, intent(inout) :: cond
@@ -8686,12 +8686,12 @@ data aerr /1.e-30/, rerr /1.e-4/, tol /1.e-4/
 !--------------------------
 c = x
 !
-!     CALCULATION OF THE INTEGRAL OF ACONDF FROM X TO INFINITY.
+!     Calculation of the integral of ACONDF from X to infinity.
 !
 call qagi1 (acondf,fun,y,c,x,1,aerr,rerr,z1,error1,num1,ier1, &
 &l,m,n,iwk,wk)
 !
-!     CALCULATION OF THE INTEGRAL OF ACONDG FROM 0 TO INFINITY.
+!     Calculation of the integral of ACONDG from 0 to infinity.
 !
 a = 0.0
 call qagi1 (acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
@@ -8699,12 +8699,12 @@ call qagi1 (acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
 num = num1 + num2
 ier = max0(ier1, ier2)
 !
-!     DETERMINATION OF COND.
+!     Determination of cond.
 !
 cond = .false.
 if (abs(z1 - z2) .le. tol*amax1(abs(z1),abs(z2))) cond = .true.
 !
-!     SET IERR AND RETURN
+!     Set IERR and return
 !
 ierr = 0
 if (ier .gt. 4) ierr = 1
@@ -8719,8 +8719,8 @@ real, intent(in) :: y
 real :: a, b, t
 real :: acondf
 !-----------------------------------------------------------------------
-!        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
-!        ACOND. Y IS A DUMMY VARIABLE.
+!        ACONDF is the function integrated along the X-axis in
+!        ACOND. Y is a dummy variable.
 !-----------------------------------------------------------------------
 external fun
 !
@@ -8738,7 +8738,7 @@ real :: a, b, s, t, u, v
 real :: acondg
 !-----------------------------------------------------------------------
 !        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
-!        IN ACOND. Y IS A DUMMY VARIABLE.
+!        in ACOND. Y is a dummy variable.
 !-----------------------------------------------------------------------
 external fun
 !
@@ -8760,31 +8760,31 @@ real :: xcondy
 real :: xcondx
 !-----------------------------------------------------------------------
 !
-!        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
-!        LIES TO THE RIGHT OF ALL SINGULARITIES OF THE COMPLEX
-!        FUNCTION DEFINED BY FUN WHICH LIE ON THE REAL AXIS.
+!        This subroutine tests whether or not a given value of X
+!        lies to the right of all singularities of the complex
+!        function defined by fun which lie on the real axis.
 !
 !                         ------------
 !
-!     FUN IS A REAL SUBROUTINE DEFINED BY THE USER.  THE ACTUAL NAME
-!     FOR FUN NEEDS TO BE DECLARED EXTERNAL IN THE DRIVER PROGRAM.
-!     FUN HAS THE ARGUMENTS X, Y, A, AND B.
+!     Fun is a real subroutine defined by the user.  The actual name
+!     for fun needs to be declared external in the driver program.
+!     Fun has the arguments X, Y, A, and B.
 !
 !     X IS A REAL NUMBER.  THE LOGICAL VARIABLE COND = .TRUE IF
 !     X .GT. C, WHERE C IS THE ABSCISSA OF THE SINGULARITY ON THE
 !     REAL AXIS WHICH LIES FARTHEST TO THE RIGHT, AND .FALSE. IF
 !     X .LT. C.
 !
-!     NUM IS A VARIABLE. ON OUTPUT IT HAS FOR ITS VALUE THE NUMBER
-!     OF EVALUATIONS OF FUN THAT WERE PERFORMED.
+!     NUM is a variable. On output it has for its value the number
+!     of evaluations of fun that were performed.
 !
-!     IERR IS AN OUTPUT INTEGER INDICATING THE STATUS OF THE
-!     CALCULATION.  IT IS ASSIGNED VALUES AS FOLLOWS...
+!     IERR is an output integer indicating the status of the
+!     calculation.  It is assigned values as follows...
 !
 !        IERR = 0   THE CALCULATION WAS SUCCESSFUL.
 !
 !        IERR = 1   THE CALCULATION OF COND MAY NOT BE
-!                   ACCURATE FOR ALL VALUES OF X.
+!                   accurate for all values of X.
 !
 !-----------------------------------------------------------------------
 logical, intent(out) :: cond
@@ -8798,14 +8798,14 @@ c = 1.0 - x
 y = epsr
 cond = .false.
 !
-!     NUMERICAL INTEGRATION OF THE IMAGINARY PART OF THE INTEGRAND
+!     Numerical integration of the imaginary part of the integrand
 !     ALONG THE LINE Y = EPSR.
 !
 call qagi1 (xcondy,fun,y,c,x,1,aerr,rerr,z,error,num,ierr, &
 &l,m,n,iwk,wk)
 if (ierr .ne. 0) go to 100
 !
-!     DETERMINATION OF COND.
+!     Determination of cond.
 !
 y1 = 0.5*y
 t = (xcondx(x,y,c,fun) + 4.0*xcondx(x,y1,c,fun) + &
@@ -8816,7 +8816,7 @@ if (abs(t + z) .gt. tol*amax1(abs(t), abs(z))) return
    cond = .true.
    return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -8829,7 +8829,7 @@ real :: x, y
 real :: a, b, s, t, u, v
 real :: xcondx
 !
-!     REAL PART OF THE INTEGRAND IN XCOND
+!     Real part of the integrand in XCOND
 !
 external fun
 !
@@ -8848,7 +8848,7 @@ real :: x, y
 real :: a, b, s, t, u, v
 real :: xcondy
 !
-!     IMAGINARY PART OF INTEGRAND IN XCOND
+!     Imaginary part of integrand in XCOND
 !
 external fun
 !
@@ -8877,87 +8877,87 @@ real :: spmpar
 !        INVERSION OF LAPLACE TRANSFORM USING THE DURBIN FORMULA
 !        IN COMBINATION WITH THE EPSILON ALGORITHM
 !
-!   2. PURPOSE
-!        THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO THE
-!        INVERSE LAPLACE TRANSFORM F(T) OF FUN, FOR THE VALUE
-!        OF THE INDEPENDENT VARIABLE EQUAL TO T, HOPEFULLY
-!        SATISFYING THE FOLLOWING CLAIM FOR ACCURACY ....
+!   2. Purpose
+!        the routine calculates an approximation result to the
+!        inverse Laplace transform F(T) of fun, for the value
+!        of the independent variable equal to T, hopefully
+!        satisfying the following claim for accuracy ....
 !        ABS(F(T)-RESULT).LE.MAX(EPSAB,EPSRE*ABS(F(T)))
 !
-!   3. CALLING SEQUENCE
+!   3. Calling sequence
 !        CALL LAINV1(FUN,T,C,EPSRE,EPSAB,RESULT,ESTERR,NUM,IER)
 !
-!      INPUT PARAMETERS
+!      Input parameters
 !        FUN    - REAL
-!                 SUBROUTINE DEFINING THE LAPLACE TRANSFORM AS
-!                 A COMPLEX FUNCTION.  THE CALLING SEQUENCE OF
-!                 FUN IS CALL FUN(A,B,C,D) WHERE
+!                 subroutine defining the Laplace transform as
+!                 a complex function.  The calling sequence of
+!                 fun is call FUN(A,B,C,D) where
 !                 A - REAL
-!                     REAL PART OF THE INDEPENDENT VARIABLE
-!                     OF THE LAPLACE TRANSFORM (INPUT)
+!                     real part of the independent variable
+!                     of the Laplace transform (input)
 !                 B - REAL
-!                     IMAGINARY PART OF THE INDEPENDENT
-!                     VARIABLE OF THE LAPLACE TRANSFORM (INPUT)
+!                     imaginary part of the independent
+!                     variable of the Laplace transform (input)
 !                 C - REAL
-!                     REAL PART OF THE VALUE OF THE LAPLACE
-!                     TRANSFORM (OUTPUT)
+!                     real part of the value of the Laplace
+!                     transform (OUTPUT)
 !                 D - REAL
-!                     IMAGINARY PART OF THE VALUE OF THE
-!                     LAPLACE TRANSFORM (OUTPUT)
-!                 THE ACTUAL NAME FOR FUN NEEDS TO BE DECLARED
-!                 EXTERNAL IN THE DRIVER PROGRAM.
+!                     imaginary part of the value of the
+!                     Laplace transform (OUTPUT)
+!                 the actual name for fun needs to be declared
+!                 external in the driver program.
 !
 !        T      - REAL
-!                 VALUE OF THE INDEPENDENT VARIABLE FOR WHICH THE
-!                 INVERSE LAPLACE TRANSFORM HAS TO BE COMPUTED.
-!                 T SHOULD BE GREATER THAN ZERO.
+!                 value of the independent variable for which the
+!                 inverse Laplace transform has to be computed.
+!                 T should be greater than zero.
 !
 !        C      - REAL
-!                 ABSCISSA OF CONVERGENCE OF THE LAPLACE TRANSFORM
+!                 abscissa of convergence of the Laplace transform
 !
 !        EPSRE  - REAL
-!                 RELATIVE ACCURACY REQUESTED.  IT IS ASSUMED THAT
+!                 relative accuracy requested.  It is assumed that
 !                 EPSRE .GE. 0.  IF ONE WANTS ACCURACY TO K SIGNIFICANT
 !                 FIGURES, THEN RERR SHOULD BE SET = 10.0**(-K).
 !
 !        EPSAB  - REAL
-!                 ABSOLUTE ACCURACY REQUESTED.  IT IS ASSUMED THAT
+!                 absolute accuracy requested.  It is assumed that
 !                 EPSAB .GE. 0.  THE ROUTINE TRIES TO SATISFY THE
-!                 LEAST STRINGENT OF BOTH ACCURACY REQUIREMENTS.
+!                 least stringent of both accuracy requirements.
 !
-!      OUTPUT PARAMETERS
-!        RESULT - REAL
-!                 INVERSE LAPLACE TRANSFORM
+!      Output parameters
+!        result - real
+!                 inverse Laplace transform
 !
 !        ESTERR - REAL
-!                 ESTIMATE OF THE ABSOLUTE ERROR ABS(F(T)-RESULT)
+!                 estimate of the absolute error ABS(F(T)-result)
 !
 !        NUM    - INTEGER
-!                 NUMBER OF EVALUATIONS OF FUN
+!                 number of evaluations of fun
 !
 !        IER    - INTEGER
-!                 PARAMETER GIVING INFORMATION ON THE TERMINATION
-!                 OF THE ALGORITHM
+!                 parameter giving information on the termination
+!                 of the algorithm
 !                 IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                         ROUTINE
+!                         routine
 !                 IER = 1 THE COMPUTATIONS ARE TERMINATED BECAUSE
-!                         THE BOUND ON THE NUMBER OF EVALUATIONS
-!                         OF FUN HAS BEEN ACHIEVED.  THIS BOUND
-!                         IS EQUAL TO 8*MAX+5 WHERE  MAX  IS A
-!                         NUMBER INITIALIZED IN A DATA
-!                         STATEMENT.  ONE CAN ALLOW MORE FUNCTION
-!                         EVALUATIONS BY INCREASING THE VALUE OF
-!                         MAX IN THE DATA-STATEMENT.
+!                         the bound on the number of evaluations
+!                         of fun has been achieved.  This bound
+!                         is equal to 8*max+5 where  max  is A
+!                         number initialized in a data
+!                         statement.  One can allow more function
+!                         evaluations by increasing the value of
+!                         max in the data-statement.
 !                 IER = 2 THE VALUE OF T IS LESS THAN OR EQUAL
-!                         TO ZERO.
+!                         to zero.
 !
-!   4. SUBROUTINES OR FUNCTIONS NEEDED
-!                FUN - USER PROVIDED SUBROUTINE
-!                CQEXT - EPSILON ALGORITHM
-!                SPMPAR - THIS FUNCTION IS CALLED BY
-!                          CQEXT, AND PROVIDES MACHINE CONSTANTS
-!                ATAN, EXP, AMAX1, SIN, ABS,
-!                DBLE, CMPLX, REAL - FORTRAN FUNCTIONS
+!   4. Subroutines or functions needed
+!                fun - user provided subroutine
+!                CQEXT - epsilon algorithm
+!                SPMPAR - this function is called by
+!                          CQEXT, and provides machine constants
+!                atan, exp, AMAX1, sin, abs,
+!                DBLE, cmplx, real - Fortran functions
 !
 ! ......................................................................
 !
@@ -8967,30 +8967,30 @@ integer, intent(out) :: ier
 integer :: k, kc, kk, ks, m, nex, nres
 integer, intent(out) :: num
 !
-!   THE ARRAY SI CONTAINS VALUES OF THE SINE AND COSINE FUNCTIONS
-!   REQUIRED IN THE DURBIN FORMULA. SI(8) AND SI(16) ARE GIVEN IN
-!   THE FOLLOWING DATA STATEMENT. THE OTHER VALUES ARE COMPUTED.
+!   The array SI contains values of the sine and cosine functions
+!   required in the Durbin formula. SI(8) and SI(16) are given in
+!   the following data statement. The other values are computed.
 !
 data si(8),si(16)/ 1.0e+00,0.0e+00/
 !
-!   MAX IS A BOUND ON THE NUMBER OF TERMS USED IN THE DURBIN
-!   FORMULA.
+!   Max is a bound on the number of terms used in the Durbin
+!   formula.
 !
 data max/500/
 ! ....................................................
 !
-!   EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!   Eps is a machine dependent constant.  Eps is the
 !   SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
 !
 eps = spmpar(1)
 ! ....................................................
 !
-!   CALCULATION OF THE RELATIVE TOLERANCE USED.
+!   Calculation of the relative tolerance used.
 !
 tol = 10.0*eps
 epsr1 = amax1(tol,epsre)
 !
-!   TEST ON VALIDITY OF THE INPUT PARAMETER T
+!   Test on validity of the input parameter T
 !
 ier = 2
 result = 0.0e+00
@@ -8998,11 +8998,11 @@ esterr = 1.0e+00
 num = 0
 if (t.le.0.0e+00) go to 999
 !
-!   PID16 IS EQUAL TO PI/16
+!   PID16 is equal to pi/16
 !
 pid16 = atan(1.0e+00)/4.0e+00
 !
-!   COMPUTATION OF THE ELEMENTS OF THE ARRAY SI
+!   Computation of the elements of the array SI
 !
 ak = 1.0e+00
 do 10 k = 1,7
@@ -9017,7 +9017,7 @@ do k=17,32
   si(k) = -si(k-16)
 end do
 !
-!   INITIALIZATION OF THE SUMMATION OF THE DURBIN FORMULA.
+!   Initialization of the summation of the Durbin formula.
 !
 arg = pid16/t
 are = c+2.0e+00/t
@@ -9031,7 +9031,7 @@ nex = 0
 kc = 8
 ks = 0
 !
-!   MAIN LOOP FOR THE SUMMATION
+!   Main loop for the summation
 !
 do 40 i = 1,max
   m = 8
@@ -9054,13 +9054,13 @@ s = dble(s) + dble(e) + dble(f)
   nex = nex+1
   rex(nex) = cmplx(r, s)
 !
-!   EXTRAPOLATION USING THE EPSILON ALGORITHM
+!   Extrapolation using the epsilon algorithm
 !
   if(nex.ge.3) call cqext(nex,rex,cres,esterr,res3la,nres)
   if(nres.lt.4) go to 40
 !
-!   COMPUTATION OF INTERMEDIATE RESULT AND ESTIMATE OF THE
-!   ABSOLUTE ERROR
+!   Computation of intermediate result and estimate of the
+!   absolute error
 !
   result = real(cres)
   result = result * bb
@@ -9069,8 +9069,8 @@ s = dble(s) + dble(e) + dble(f)
 &result).lt.5.0e-01*abs(result)) go to 999
 40 continue
 !
-!   SET ERROR FLAG IN THE CASE THAT THE NUMBER OF TERMS IN THE
-!   SUMMATION IS EQUAL TO MAX
+!   Set error flag in the case that the number of terms in the
+!   summation is equal to max
 !
 ier = 1
 999 return
@@ -9089,49 +9089,49 @@ real :: spmpar
 !              COMPLEX VERSION
 !
 ! 2.        PURPOSE
-!              THE ROUTINE DETERMINES THE LIMIT OF A GIVEN SEQUENCE OF
-!              APPROXIMATIONS, BY MEANS OF THE EPSILON ALGORITHM
-!              OF P. WYNN.
-!              AN ESTIMATE OF THE ABSOLUTE ERROR IS ALSO GIVEN.
-!              THE CONDENSED EPSILON TABLE IS COMPUTED. ONLY THOSE
-!              ELEMENTS NEEDED FOR THE COMPUTATION OF THE NEXT DIAGONAL
-!              ARE PRESERVED.
+!              the routine determines the limit of a given sequence of
+!              approximations, by means of the epsilon algorithm
+!              of P. Wynn.
+!              An estimate of the absolute error is also given.
+!              The condensed epsilon table is computed. Only those
+!              elements needed for the computation of the next diagonal
+!              are preserved.
 !
 ! 3.        CALLING SEQUENCE
 !              CALL CQEXT(N,EPSTAB,RESULT,ABSERR,RES3LA,NRES)
 !
-!           PARAMETERS
+!           Parameters
 !              N      - INTEGER
-!                       EPSTAB(N) CONTAINS THE NEW ELEMENT IN THE
-!                       FIRST COLUMN OF THE EPSILON TABLE.
+!                       EPSTAB(N) contains the new element in the
+!                       first column of the epsilon table.
 !
 !              EPSTAB - COMPLEX
-!                       VECTOR OF DIMENSION 52 CONTAINING THE ELEMENTS
-!                       OF THE TWO LOWER DIAGONALS OF THE
-!                       TRIANGULAR EPSILON TABLE
-!                       THE ELEMENTS ARE NUMBERED STARTING AT THE
-!                       RIGHT-HAND CORNER OF THE TRIANGLE.
+!                       vector of dimension 52 containing the elements
+!                       of the two lower diagonals of the
+!                       triangular epsilon table
+!                       the elements are numbered starting at the
+!                       right-hand corner of the triangle.
 !
-!              RESULT - COMPLEX
-!                       RESULTING APPROXIMATION TO THE INTEGRAL
+!              Result - complex
+!                       resulting approximation to the integral
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE ABSOLUTE ERROR OF THE REAL
-!                       PART OF RESULT COMPUTED FROM RESULT AND
-!                       THE 3 PREVIOUS RESULTS
+!                       estimate of the absolute error of the real
+!                       part of result computed from result and
+!                       the 3 previous results
 !
 !              RES3LA - COMPLEX
-!                       VECTOR OF DIMENSION 3 CONTAINING THE LAST 3
-!                       RESULTS
+!                       vector of dimension 3 containing the last 3
+!                       results
 !
 !              NRES   - INTEGER
-!                       NUMBER OF CALLS TO THE ROUTINE
-!                       (SHOULD BE ZERO AT FIRST CALL)
+!                       number of calls to the routine
+!                       (should be zero at first call)
 !
 ! 4.        SUBROUTINES OR FUNCTIONS NEEDED
 !                     - SPMPAR, CDIVID
-!                     - FORTRAN ABS, AMAX1, CABS, CMPLX,
-!                       REAL, AIMAG, SNGL
+!                     - Fortran abs, AMAX1, cabs, cmplx,
+!                       real, aimag, SNGL
 !
 !     ..................................................................
 !
@@ -9148,7 +9148,7 @@ integer :: newelm
 integer, intent(inout) :: nres
 integer :: num
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
 !           E0     - THE 4 ELEMENTS ON WHICH THE
@@ -9157,20 +9157,20 @@ integer :: num
 !           E3                 E0
 !                        E3    E1    NEW
 !                              E2
-!           NEWELM - NUMBER OF ELEMENTS TO BE COMPUTED IN THE NEW
-!                    DIAGONAL
+!           NEWELM - number of elements to be computed in the new
+!                    diagonal
 !           ERROR  - ERROR = ABS(E1-E0)+ABS(E2-E1)+ABS(NEW-E2)
-!           RESULT - THE ELEMENT IN THE NEW DIAGONAL WITH LEAST VALUE
-!                    OF ERROR
+!           result - the element in the new diagonal with least value
+!                    of error
 !
-!           MACHINE DEPENDENT CONSTANTS
+!           Machine dependent constants
 !           ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
-!           LIMEXP IS THE MAXIMUM NUMBER OF ELEMENTS THE EPSILON
-!           TABLE CAN CONTAIN. IF THIS NUMBER IS REACHED, THE UPPER
-!           DIAGONAL OF THE EPSILON TABLE IS DELETED.
+!           EPMACH is the largest relative spacing.
+!           OFLOW is the largest positive magnitude.
+!           LIMEXP is the maximum number of elements the epsilon
+!           table can contain. If this number is reached, the upper
+!           diagonal of the epsilon table is deleted.
 !
 !***FIRST EXECUTABLE STATEMENT
 oflow = spmpar(3)
@@ -9206,8 +9206,8 @@ do 40 i = 1,newelm
   if(abs(b1-c1) .gt. epmach*amax1(abs(b1),abs(c1)) .or. &
 &abs(b2-c2) .gt. epmach*amax1(abs(b2),abs(c2))) go to 10
 !
-!           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
-!           ACCURACY, CONVERGENCE IS ASSUMED.
+!           If E0, E1 and E2 are equal to within machine
+!           accuracy, convergence is assumed.
 !           RESULT = E2
 !           ABSERR = CABS(E1-E0)+CABS(E2-E1)
 !
@@ -9221,8 +9221,8 @@ do 40 i = 1,newelm
   d2 = aimag(e3)
   err1 = abs(b1 - d1)
 !
-!           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
-!           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
+!           If two elements are very close to each other, omit
+!           a part of the table by adjusting the value of N
 !
   delta1 = e1 - e3
   delta2 = e2 - e1
@@ -9244,8 +9244,8 @@ do 40 i = 1,newelm
   ss = cmplx(sngl(ss1), sngl(ss2))
   epsinf = cabs(ss*e1)
 !
-!           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
-!           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
+!           Test to detect irregular behaviour in the table, and
+!           eventually omit a part of the table adjusting the value
 !           OF N.
 !
   if(epsinf.gt.1.0e-04) go to 30
@@ -9253,8 +9253,8 @@ do 40 i = 1,newelm
 !***JUMP OUT OF DO-LOOP
   go to 50
 !
-!           COMPUTE A NEW ELEMENT AND EVENTUALLY ADJUST
-!           THE VALUE OF RESULT.
+!           Compute a new element and eventually adjust
+!           the value of result.
 !
 30 call cdivid(1.d0,0.d0,ss1,ss2,w1,w2)
   res1 = real(e1) + sngl(w1)
@@ -9268,7 +9268,7 @@ do 40 i = 1,newelm
   result = res
 40 continue
 !
-!           SHIFT THE TABLE.
+!           Shift the table.
 !
 50 if(n.eq.limexp) n = 2*(limexp/2)-1
 ib = 1
@@ -9290,7 +9290,7 @@ res3la(nres) = result
 abserr = oflow
 go to 100
 !
-!           COMPUTE ERROR ESTIMATE
+!           Compute error estimate
 !
 90 abserr = abs(real(result-res3la(3)))+abs(real(result-res3la(2))) &
 &+abs(real(result-res3la(1)))
@@ -9319,170 +9319,170 @@ integer :: l1, l2, l3
 real :: f
 !-----------------------------------------------------------------------
 !
-!                   INTEGRATION OVER INFINITE INTERVALS
+!                   Integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)). F HAS THE
-!           ARGUMENTS X AND PHI WHERE PHI IS A FUNCTION.
+!           arguments X and phi where phi is a function.
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!                     F HAS THE ARGUMENTS X AND PHI.
+!                     declared E X T E R N A L in the driver program.
+!                     F has the arguments X and phi.
 !
 !            PHI    - REAL
-!                     FUNCTION SUBPROGRAM HAVING A SINGLE REAL ARGUMENT.
-!                     THE ACTUAL NAME FOR PHI MUST BE DECLARED EXTERNAL
-!                     IN THE DRIVER PROGRAM.
+!                     function subprogram having a single real argument.
+!                     The actual name for phi must be declared external
+!                     in the driver program.
 !
-!            BOUND  - REAL
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - real
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            Y      - REAL
-!                     PARAMETER FOR USE IN XCOND.  ORDINATE OF
-!                     HORIZONTAL LINE ALONG WHICH INTEGRATION
-!                     IS PERFORMED.
+!                     parameter for use in XCOND.  Ordinate of
+!                     horizontal line along which integration
+!                     is performed.
 !
 !            C       - REAL
-!                      PARAMETER FOR USE IN ACOND AND XCOND.
+!                      parameter for use in ACOND and XCOND.
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
 !                             OR EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             OR LENW .LT. 4 * LIMIT.
-!                             RESULT, ABSERR, NEVAL, LAST ARE
-!                             SET TO ZERO.
+!                             Result, ABSERR, NEVAL, last are
+!                             set to zero.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER
-!                    OF SUBINTERVALS IN THE PARTITION OF THE GIVEN
+!         Dimensioning parameters
+!            limit - integer
+!                    dimensioning parameter for IWORK
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
 !                    INTEGRATION INTERVAL (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH
 !                    IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*4.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*4.
 !                    IF LENW.LT.LIMIT*4, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF
-!                    SUBINTERVALS PRODUCED IN THE SUBDIVISION
-!                    PROCESS, WHICH DETERMINES THE NUMBER OF SIGNIFICANT
-!                    ELEMENTS ACTUALLY IN THE WORK ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of significant
+!                    elements actually in the work arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                    K ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least limit, the first
+!                    K elements of which contain pointers
+!                    to the error estimates over the subintervals,
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                    K = LIMIT+1-LAST OTHERWISE
 !
-!            WORK  - REAL
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - real
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END POINTS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end points,
 !                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST)
-!                     CONTAIN THE INTEGRAL APPROXIMATIONS OVER
-!                     THE SUBINTERVALS,
+!                     contain the integral approximations over
+!                     the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
+!                     contain the error estimates.
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - QAGIE1
 !              - QK15I1
 !              - QPSRT
 !              - QELG
-!              - F (USER PROVIDED FUNCTION)
-!              - PHI (USER PROVIDED FUNCTION)
+!              - F (user provided function)
+!              - phi (user provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -9490,7 +9490,7 @@ real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f, phi
 !
-!         CHECK VALIDITY OF LIMIT AND LENW.
+!         Check validity of limit and LENW.
 !
 ier = 6
 neval = 0
@@ -9499,7 +9499,7 @@ result = 0.0
 abserr = 0.0
 if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
-!         PREPARE CALL FOR QAGIE1.
+!         Prepare call for QAGIE1.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -9538,165 +9538,165 @@ real :: spmpar
 real :: f
 !-----------------------------------------------------------------------
 !
-!                   INTEGRATION OVER INFINITE INTERVALS
+!                   Integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!                     F HAS THE ARGUMENTS X AND PHI.
+!                     declared E X T E R N A L in the driver program.
+!                     F has the arguments X and phi.
 !
 !            PHI    - REAL
-!                     FUNCTION SUBPROGRAM HAVING A SINGLE REAL ARGUMENT.
-!                     THE ACTUAL NAME FOR PHI MUST BE DECLARED EXTERNAL
-!                     IN THE DRIVER PROGRAM.
+!                     function subprogram having a single real argument.
+!                     The actual name for phi must be declared external
+!                     in the driver program.
 !
-!            BOUND  - REAL
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - real
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            Y      - REAL
-!                     PARAMETER FOR USE IN XCOND.  ORDINATE OF
-!                     HORIZONTAL LINE ALONG WHICH INTEGRATION
-!                     IS PERFORMED.
+!                     parameter for use in XCOND.  Ordinate of
+!                     horizontal line along which integration
+!                     is performed.
 !
 !            C      - REAL
-!                     PARAMETER FOR USE IN ACOND AND XCOND.
+!                     parameter for use in ACOND and XCOND.
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPER BOUND ON THE NUMBER OF
-!                     SUBINTERVALS IN THE PARTITION OF (A,B),
+!            Limit  - integer
+!                     gives an upper bound on the number of
+!                     subintervals in the partition of (A,B),
 !                     LIMIT.GE.1
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
-!                             OR EPSREL IS NEGATIVE.
-!                             RESULT, ABSERR, NEVAL, LAST, RLIST(1),
-!                             ELIST(1) AND IORD(1) ARE SET TO ZERO.
-!                             ALIST(1) AND BLIST(1) ARE SET TO 0
-!                             AND 1 RESPECTIVELY.
+!                             or EPSREL is negative.
+!                             Result, ABSERR, NEVAL, last, RLIST(1),
+!                             ELIST(1) and IORD(1) are set to zero.
+!                             ALIST(1) and BLIST(1) are set to 0
+!                             and 1 respectively.
 !
 !            ALIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
 !            BLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
 !            RLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
 !            ELIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT,  THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI
-!                     OF THE ABSOLUTE ERROR ESTIMATES ON THE
-!                     SUBINTERVALS
+!                     vector of dimension at least limit,  the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
+!                     subintervals
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
+!                     vector of dimension limit, the first K
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED
-!                     IN THE SUBDIVISION PROCESS
+!                     number of subintervals actually produced
+!                     in the subdivision process
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - QK15I1
 !              - QPSRT
 !              - QELG
-!              - F (USER-PROVIDED FUNCTION)
-!              - PHI (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
+!              - phi (user-provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -9706,28 +9706,28 @@ dimension iord(limit)
 !
 external f, phi
 !
-!            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
-!            LIMEXP IN SUBROUTINE QELG.
+!            The dimension of RLIST2 is determined by the value of
+!            LIMEXP in subroutine QELG.
 !
 !
-!            LIST OF MAJOR VARIABLES
+!            List of major variables
 !            -----------------------
 !
 !           ALIST     - LIST OF LEFT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
+!                       considered up to now
 !           BLIST     - LIST OF RIGHT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
-!           RLIST(I)  - APPROXIMATION TO THE INTEGRAL OVER
+!                       considered up to now
+!           RLIST(I)  - approximation to the integral over
 !                       (ALIST(I),BLIST(I))
 !           RLIST2    - ARRAY OF DIMENSION AT LEAST (LIMEXP+2),
-!                       CONTAINING THE PART OF THE EPSILON TABLE
-!                       WICH IS STILL NEEDED FOR FURTHER COMPUTATIONS
-!           ELIST(I)  - ERROR ESTIMATE APPLYING TO RLIST(I)
+!                       containing the part of the epsilon table
+!                       wich is still needed for further computations
+!           ELIST(I)  - error estimate applying to RLIST(I)
 !           MAXERR    - POINTER TO THE INTERVAL WITH LARGEST ERROR
-!                       ESTIMATE
+!                       estimate
 !           ERRMAX    - ELIST(MAXERR)
 !           ERLAST    - ERROR ON THE INTERVAL CURRENTLY SUBDIVIDED
-!                       (BEFORE THAT SUBDIVISION HAS TAKEN PLACE)
+!                       (before that subdivision has taken place)
 !           AREA      - SUM OF THE INTEGRALS OVER THE SUBINTERVALS
 !           ERRSUM    - SUM OF THE ERRORS OVER THE SUBINTERVALS
 !           ERRBND    - REQUESTED ACCURACY MAX(EPSABS,EPSREL*
@@ -9737,33 +9737,33 @@ external f, phi
 !           LAST      - INDEX FOR SUBDIVISION
 !           NRES      - NUMBER OF CALLS TO THE EXTRAPOLATION ROUTINE
 !           NUMRL2    - NUMBER OF ELEMENTS CURRENTLY IN RLIST2. IF AN
-!                       APPROPRIATE APPROXIMATION TO THE COMPOUNDED
-!                       INTEGRAL HAS BEEN OBTAINED, IT IS PUT IN
-!                       RLIST2(NUMRL2) AFTER NUMRL2 HAS BEEN INCREASED
-!                       BY ONE.
+!                       appropriate approximation to the compounded
+!                       integral has been obtained, it is put in
+!                       RLIST2(NUMRL2) after NUMRL2 has been increased
+!                       by one.
 !           SMALL     - LENGTH OF THE SMALLEST INTERVAL CONSIDERED UP
-!                       TO NOW, MULTIPLIED BY 1.5
+!                       to now, multiplied by 1.5
 !           ERLARG    - SUM OF THE ERRORS OVER THE INTERVALS LARGER
-!                       THAN THE SMALLEST INTERVAL CONSIDERED UP TO NOW
+!                       than the smallest interval considered up to now
 !           EXTRAP    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
-!                       IS ATTEMPTING TO PERFORM EXTRAPOLATION. I.E.
-!                       BEFORE SUBDIVIDING THE SMALLEST INTERVAL WE
-!                       TRY TO DECREASE THE VALUE OF ERLARG.
+!                       is attempting to perform extrapolation. I.E.
+!                       Before subdividing the smallest interval we
+!                       try to decrease the value of ERLARG.
 !           NOEXT     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
-!                       IS NO LONGER ALLOWED (TRUE-VALUE)
+!                       is no longer allowed (TRUE-VALUE)
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!           EPMACH is the largest relative spacing.
+!           UFLOW is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
 !
 epmach = spmpar(1)
 uflow = spmpar(2)
 oflow = spmpar(3)
 !
-!           TEST ON VALIDITY OF PARAMETERS
+!           Test on validity of parameters
 !           -----------------------------
 !
 neval = 0
@@ -9780,10 +9780,10 @@ if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
 ier = 0
 rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
-!           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
+!           Determine the interval to be mapped onto (0,1).
 !           IF INF = 2 THE INTEGRAL IS COMPUTED AS I = I1+I2, WHERE
 !           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 !           I2 = INTEGRAL OF F OVER (0,+INFINITY).
@@ -9793,7 +9793,7 @@ if (inf .eq. 2) boun = 0.0
 call qk15i1 (f, phi, y, c, boun, inf, 0.0, 1.0, result, abserr, &
 &defabs, resabs, epmach, uflow)
 !
-!           TEST ON ACCURACY
+!           Test on accuracy
 !
 last = 1
 rlist(1) = result
@@ -9807,7 +9807,7 @@ if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
 &.or. abserr .eq. 0.0) go to 130
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -9831,13 +9831,13 @@ ksgn = -1
 if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
 t = 1.0 + 100.0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH NRMAX-TH LARGEST
-!           ERROR ESTIMATE.
+!           Bisect the subinterval with NRMAX-TH largest
+!           error estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5*(alist(maxerr) + blist(maxerr))
@@ -9849,8 +9849,8 @@ do 90 last = 2,limit
   call qk15i1 (f, phi, y, c, boun, inf, a2, b2, area2, error2, &
 &resabs, defab2, epmach, uflow)
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -9866,24 +9866,24 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = amax1(epsabs,rerr*abs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
-!           SET ERROR FLAG.
+!           Test for roundoff error and eventually
+!           set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
-!           SUBINTERVALS EQUALS LIMIT.
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT SOME POINTS OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at some points of the integration range.
 !
   if (amax1(abs(a1),abs(b2)) .le. &
 &t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -9901,9 +9901,9 @@ do 90 last = 2,limit
   elist(last) = error1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
-!           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
-!           BISECTED NEXT).
+!           in the list of error estimates and select the
+!           subinterval with NRMAX-TH largest error estimate (to be
+!           bisected next).
 !
 30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
   if(errsum.le.errbnd) go to 115
@@ -9914,18 +9914,18 @@ do 90 last = 2,limit
   if(abs(b1-a1).gt.small) erlarg = erlarg+erro12
   if(extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if(abs(blist(maxerr)-alist(maxerr)).gt.small) go to 90
   extrap = .true.
   nrmax = 2
 40 if(ierro.eq.3.or.erlarg.le.ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
-!           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
-!           EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (ERLARG) and perform
+!           extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -9937,7 +9937,7 @@ do 90 last = 2,limit
     nrmax = nrmax+1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2+1
   rlist2(numrl2) = area
@@ -9953,7 +9953,7 @@ do 90 last = 2,limit
   ertest = amax1(epsabs,rerr*abs(reseps))
   if(abserr.le.ertest) go to 100
 !
-!            PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!            Prepare bisection of the smallest interval.
 !
 70 if(numrl2.eq.1) noext = .true.
   if(ier.eq.5) go to 100
@@ -9970,7 +9970,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -9983,7 +9983,7 @@ if (area .eq. 0.0) go to 130
 go to 110
 105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
-!           TEST ON DIVERGENCE
+!           Test on divergence
 !
 110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
 &defabs*0.1e-01) go to 130
@@ -9991,7 +9991,7 @@ if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
 &.or. errsum .gt. abs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
@@ -10023,28 +10023,28 @@ real :: f
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
-!              THE ORIGINAL (INFINITE) INTEGRATION RANGE IS MAPPED
-!              ONTO THE INTERVAL (0,1) AND (A,B) IS A PART OF (0,1).
-!              IT IS THE PURPOSE TO COMPUTE
+!              the original (infinite) integration range is mapped
+!              onto the interval (0,1) and (A,B) is a part of (0,1).
+!              It is the purpose to compute
 !              I = INTEGRAL OF TRANSFORMED INTEGRAND OVER (A,B),
 !              J = INTEGRAL OF ABS(TRANSFORMED INTEGRAND) OVER (A,B).
 !
 ! 2.        PARAMETERS
-!            ON ENTRY
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS
-!                       TO BE DECLARED E X T E R N A L IN THE
-!                       CALLING PROGRAM. F HAS THE ARGUMENTS X AND
-!                       PHI.
+!                       to be declared E X T E R N A L in the
+!                       calling program. F has the arguments X and
+!                       phi.
 !
 !              PHI    - REAL
-!                       FUNCTION SUBPROGRAM HAVING A SINGLE REAL
-!                       ARGUMENT. THE ACTUAL NAME FOR PHI MUST BE
-!                       DECHARED EXTERNAL IN THE DRIVER PROGRAM.
+!                       function subprogram having a single real
+!                       argument. The actual name for phi must be
+!                       dechared external in the driver program.
 !
 !              BOUN   - REAL
-!                       FINITE BOUND OF ORIGINAL INTEGRATION
+!                       finite bound of original integration
 !                       RANGE (SET TO ZERO IF INF = +2)
 !
 !              INF    - INTEGER
@@ -10053,70 +10053,70 @@ real :: f
 !                       IF INF = +1, THE ORIGINAL INTERVAL IS
 !                                   (BOUND,+INFINITY),
 !                       IF INF = +2, THE ORIGINAL INTERVAL IS
-!                                   (-INFINITY,+INFINITY) AND
-!                       THE INTEGRAL IS COMPUTED AS THE SUM OF TWO
-!                       INTEGRALS, ONE OVER (-INFINITY,0)
-!                       AND ONE OVER (0,+INFINITY).
+!                                   (-INFINITY,+INFINITY) and
+!                       the integral is computed as the sum of two
+!                       integrals, one over (-INFINITY,0)
+!                       and one over (0,+INFINITY).
 !
 !              A      - REAL
-!                       LOWER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       lower limit for integration over subrange
+!                       of (0,1)
 !
 !              B      - REAL
-!                       UPPER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       upper limit for integration over subrange
+!                       of (0,1)
 !
 !              EPMACH - REAL
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
 !              UFLOW  - REAL
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!                       the smallest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - REAL
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE 15-POINT
-!                       KRONROD RULE(RESK) OBTAINED BY OPTIMAL
-!                       ADDITION OF ABSCISSAE TO THE 7-POINT GAUSS
+!            On return
+!              result - real
+!                       approximation to the integral I
+!                       result is computed by applying the 15-point
+!                       Kronrod RULE(RESK) obtained by optimal
+!                       addition of abscissae to the 7-point Gauss
 !                       RULE(RESG).
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                       estimate of the modulus of the absolute error,
+!                       which should equal or exceed ABS(I-RESULT)
 !
 !              RESABS - REAL
-!                       APPROXIMATION TO THE INTEGRAL J
+!                       approximation to the integral J
 !
 !              RESASC - REAL
-!                       APPROXIMATION TO THE INTEGRAL OF
+!                       approximation to the integral of
 !                       ABS((TRANSFORMED INTEGRAND)-I/(B-A))
 !                       OVER (A,B)
 !
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - F (USER-PROVIDED FUNCTION)
-!                 - PHI (USER-PROVIDED FUNCTION)
+!                 - F (user-provided function)
+!                 - phi (user-provided function)
 !
 !-----------------------------------------------------------------------
 real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !
 external f, phi
 !
-!           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
-!           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
-!           THEIR CORRESPONDING WEIGHTS ARE GIVEN.
+!           The abscissae and weights are supplied for the interval
+!           (-1,1).  Because of symmetry only the positive abscissae and
+!           their corresponding weights are given.
 !
 !           XGK    - ABSCISSAE OF THE 15-POINT KRONROD RULE
-!                    XGK(2), XGK(4), ... ABSCISSAE OF THE 7-POINT
-!                    GAUSS RULE
-!                    XGK(1), XGK(3), ...  ABSCISSAE WHICH ARE OPTIMALLY
-!                    ADDED TO THE 7-POINT GAUSS RULE
+!                    XGK(2), XGK(4), ... abscissae of the 7-point
+!                    Gauss rule
+!                    XGK(1), XGK(3), ...  abscissae which are optimally
+!                    added to the 7-point Gauss rule
 !
 !           WGK    - WEIGHTS OF THE 15-POINT KRONROD RULE
 !
 !           WG     - WEIGHTS OF THE 7-POINT GAUSS RULE, CORRESPONDING
-!                    TO THE ABSCISSAE XGK(2), XGK(4), ...
-!                    WG(1), WG(3), ... ARE SET TO ZERO.
+!                    to the abscissae XGK(2), XGK(4), ...
+!                    WG(1), WG(3), ... are set to zero.
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
 &xgk(8)/ &
@@ -10139,18 +10139,18 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 &0.0000000000000000e+00,     0.4179591836734694e+00/
 !
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
-!           CENTR  - MID POINT OF THE INTERVAL
-!           HLGTH  - HALF-LENGTH OF THE INTERVAL
+!           CENTR  - mid point of the interval
+!           HLGTH  - half-length of the interval
 !           ABSC*  - ABSCISSA
-!           TABSC* - TRANSFORMED ABSCISSA
-!           FVAL*  - FUNCTION VALUE
+!           TABSC* - transformed abscissa
+!           FVAL*  - function VALUE
 !           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 !           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
-!           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
-!                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
+!           RESKH  - approximation to the mean value of the transformed
+!                    integrand over (A,B), I.E. To I/(B-A)
 !
 !
 dinf = min0(1,inf)
@@ -10162,8 +10162,8 @@ fval1 = f(tabsc1,y,c,phi)
 if (inf .eq. 2) fval1 = fval1 + f(-tabsc1,y,c,phi)
 fc = (fval1/centr)/centr
 !
-!           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
-!           THE INTEGRAL, AND ESTIMATE THE ERROR.
+!           Compute the 15-point Kronrod approximation to
+!           the integral, and estimate the error.
 !
 resg = wg(8)*fc
 resk = wgk(8)*fc
@@ -10210,9 +10210,9 @@ integer, intent(inout) :: ierr
 integer :: isn, n
 real, intent(inout) :: c(*)
 !-----------------------------------------------------------------------
-!     THE COMPLEX ARRAY C OF DIMENSION N IS INTERPRETED BY THE CODE
-!     AS A REAL ARRAY OF DIMENSION 2*N. IF THIS ASSOCIATION IS NOT
-!     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE THE
+!     The complex array C of dimension N is interpreted by the code
+!     as a real array of dimension 2*N. If this association is not
+!     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE FFT1.
 !-----------------------------------------------------------------------
 if (iabs(isn) .ne. 1) go to 10
@@ -10243,11 +10243,11 @@ integer :: i, isign, nspan, ntot
 real, intent(inout) :: c(*)
 integer :: n(ndim)
 !-----------------------------------------------------------------------
-!     LET NTOT DENOTE THE PRODUCT OF N(1),...,N(NDIM). THE COMPLEX
-!     ARRAY C OF DIMENSION NTOT IS INTERPRETED BY THE ROUTINE AS
-!     A REAL ARRAY OF DIMENSION 2*NTOT. IF THIS ASSOCIATION IS NOT
-!     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE
-!     THE SUBROUTINE MFFT1.
+!     Let NTOT denote the product of N(1),...,N(NDIM). The complex
+!     array C of dimension NTOT is interpreted by the routine as
+!     a real array of dimension 2*NTOT. If this association is not
+!     permitted by the Fortran being used, then the user may use
+!     the subroutine MFFT1.
 !-----------------------------------------------------------------------
 if (iabs(isn) .ne. 1) go to 40
 if (ndim .le. 0) go to 50
@@ -10369,11 +10369,11 @@ real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
 !    SQUARE-FREE FACTORS MUST BE .LE. 210
 !  ARRAY STORAGE FOR MAXIMUM PRIME FACTOR OF 23
 equivalence (i,ii)
-!  THE FOLLOWING CONSTANTS SHOULD AGREE WITH THE ARRAY DIMENSIONS.
+!  The following constants should agree with the array dimensions.
 maxn=15
 maxf=23
 maxp=209
-!  SET THE FOLLOWING CONSTANTS
+!  Set the following constants
 !     RAD=2.0*PI
 !     S72=SIN(RAD/5.0)
 !     C72=COS(RAD/5.0)
@@ -10399,7 +10399,7 @@ jc=ks/n
 radf=rad*float(jc)*0.5
 i=0
 jf=0
-!  DETERMINE THE FACTORS OF N
+!  Determine the factors of N
 m=0
 k=n
 max=maxn/2
@@ -10455,14 +10455,14 @@ go to 1002
 nfac(m)=nfac(j)
 j=j-1
 if(j .ne. 0) go to 90
-!  COMPUTE FOURIER TRANSFORM
+!  Compute Fourier transform
 100 sd=radf/float(kspan)
 cd=2.0*sin(sd)**2
 sd=sin(sd+sd)
 kk=1
 i=i+1
 if(nfac(i) .ne. 2) go to 400
-!  TRANSFORM FOR FACTOR OF 2 (INCLUDING ROTATION FACTOR)
+!  Transform for factor of 2 (including rotation factor)
 kspan=kspan/2
 k1=kspan+2
 210 k2=kk+kspan
@@ -10496,8 +10496,8 @@ u=sd*s1+cd*c1
 v=sd*c1-cd*s1
 ak=c1-u
 s1=s1+v
-!  THE FOLLOWING THREE STATEMENTS COMPENSATE FOR TRUNCATION ERROR.
-!    IF ROUNDED ARITHMETIC IS USED THEN ONE MAY SUBSTITUTE
+!  The following three statements compensate for truncation error.
+!    If rounded arithmetic is used then one may substitute
 !     C1=AK
 c1=1.5-0.5*(ak*ak+s1*s1)
 s1=c1*s1
@@ -10508,7 +10508,7 @@ k1=k1+inc+inc
 kk=(k1-kspan)/2+jc
 if(kk .le. jc+jc) go to 220
 go to 100
-!  TRANSFORM FOR FACTOR OF 3 (OPTIONAL CODE)
+!  Transform for factor of 3 (optional code)
 320 k1=kk+kspan
 k2=k1+kspan
 ak=a(kk)
@@ -10530,7 +10530,7 @@ if(kk .lt. nn) go to 320
 kk=kk-nn
 if(kk .le. kspan) go to 320
 go to 700
-!  TRANSFORM FOR FACTOR OF 4
+!  Transform for factor of 4
 400 if(nfac(i) .ne. 4) go to 600
 kspnn=kspan
 kspan=kspan/4
@@ -10569,8 +10569,8 @@ if(kk .le. nt) go to 420
 v=sd*c1-cd*s1
 c2=c1-u
 s1=s1+v
-!  THE FOLLOWING THREE STATEMENTS COMPENSATE FOR TRUNCATION ERROR.
-!    IF ROUNDED ARITHMETIC IS USED THEN ONE MAY SUBSTITUTE
+!  The following three statements compensate for truncation error.
+!    If rounded arithmetic is used then one may substitute
 !     C1=C2
 c1=1.5-0.5*(c2*c2+s1*s1)
 s1=c1*s1
@@ -10599,7 +10599,7 @@ b(k3)=bkm
 kk=k3+kspan
 if(kk .le. nt) go to 420
 go to 440
-!  TRANSFORM FOR FACTOR OF 5 (OPTIONAL CODE)
+!  Transform for factor of 5 (optional code)
 510 c2=c72**2-s72**2
 s2=2.0*c72*s72
 520 k1=kk+kspan
@@ -10639,7 +10639,7 @@ if(kk .lt. nn) go to 520
 kk=kk-nn
 if(kk .le. kspan) go to 520
 go to 700
-!  TRANSFORM FOR ODD FACTORS
+!  Transform for odd factors
 600 k=nfac(i)
 kspnn=kspan
 kspan=kspan/k
@@ -10712,7 +10712,7 @@ kk=kk+kspnn
 if(kk .le. nn) go to 640
 kk=kk-nn
 if(kk .le. kspan) go to 640
-!  MULTIPLY BY ROTATION FACTOR (EXCEPT FOR FACTORS OF 2 AND 4)
+!  Multiply by rotation factor (except for factors of 2 and 4)
 700 if(i .eq. m) go to 800
 kk=jc+1
 710 c2=1.0-cd
@@ -10734,9 +10734,9 @@ u=sd*s1+cd*c1
 v=sd*c1-cd*s1
 c2=c1-u
 s1=s1+v
-!  THE FOLLOWING THREE STATEMENTS COMPENSATE FOR TRUNCATION
-!    ERROR.  IF ROUNDED ARITHMETIC IS USED THEN THEY MAY
-!    BE DELETED.
+!  The following three statements compensate for truncation
+!    error.  If rounded arithmetic is used then they may
+!    be deleted.
 c1=1.5-0.5*(c2*c2+s1*s1)
 s1=c1*s1
 c2=c1*c2
@@ -10745,8 +10745,8 @@ if(kk .le. kspan) go to 720
 kk=kk-kspan+jc+inc
 if(kk .le. jc+jc) go to 710
 go to 100
-!  PERMUTE THE RESULTS TO NORMAL ORDER---DONE IN TWO STAGES
-!  PERMUTATION FOR SQUARE FACTORS OF N
+!  Permute the results to normal order---done in two stages
+!  permutation for square factors of N
 800 np(1)=ks
 if(kt .eq. 0) go to 890
 k=kt+kt+1
@@ -10764,7 +10764,7 @@ kk=jc+1
 k2=kspan+1
 j=1
 if(n .ne. ntot) go to 850
-!  PERMUTATION FOR SINGLE-VARIATE TRANSFORM (OPTIONAL CODE)
+!  Permutation for single-variate transform (optional code)
 820 ak=a(kk)
 a(kk)=a(k2)
 a(k2)=ak
@@ -10786,7 +10786,7 @@ if(k2 .lt. ks) go to 840
 if(kk .lt. ks) go to 830
 jc=k3
 go to 890
-!  PERMUTATION FOR MULTIVARIATE TRANSFORM
+!  Permutation for multivariate transform
 850 k=kk+jc
 860 ak=a(kk)
 a(kk)=a(k2)
@@ -10816,7 +10816,7 @@ if(kk .lt. ks) go to 870
 jc=k3
 890 if(2*kt+1 .ge. m) return
 kspnn=np(kt+1)
-!  PERMUTATION FOR SQUARE-FREE FACTORS OF N
+!  Permutation for square-free factors of N
 j=m-kt
 nfac(j+1)=1
 900 nfac(j)=nfac(j)*nfac(j+1)
@@ -10839,7 +10839,7 @@ k=kt+1
 kk=nfac(k)
 j=j+1
 if(j .le. nn) go to 904
-!  DETERMINE THE PERMUTATION CYCLES OF LENGTH GREATER THAN 1
+!  Determine the permutation cycles of length greater than 1
 j=0
 go to 914
 910 k=kk
@@ -10854,7 +10854,7 @@ if(kk .ne. j) go to 910
 np(j)=-j
 if(j .ne. nn) go to 914
 maxf=inc*maxf
-!  REORDER A AND B, FOLLOWING THE PERMUTATION CYCLES
+!  Reorder A and B, following the permutation cycles
 go to 950
 924 j=j-1
 if(np(j) .lt. 0) go to 924
@@ -10895,7 +10895,7 @@ nt=nt-kspnn
 ii=nt-inc+1
 if(nt .ge. 0) go to 924
 960 return
-!  ERROR FINISH - THERE IS AN INPUT ERROR
+!  Error finish - there is an input error
 1000 ierr=1
 return
 1001 ierr=2
@@ -10910,21 +10910,21 @@ end subroutine sfft
 !
 !     ******************************************************************
 !
-!     SUBROUTINE COSQI INITIALIZES THE ARRAY WSAVE WHICH IS USED IN
-!     BOTH COSQF AND COSQB. THE PRIME FACTORIZATION OF N TOGETHER WITH
-!     A TABULATION OF THE TRIGONOMETRIC FUNCTIONS ARE COMPUTED AND
-!     STORED IN WSAVE.
+!     Subroutine COSQI initializes the array WSAVE which is used in
+!     both COSQF and COSQB. The prime factorization of N together with
+!     a tabulation of the trigonometric functions are computed and
+!     stored in WSAVE.
 !
-!     INPUT PARAMETER
+!     Input parameter
 !
 !     N       THE LENGTH OF THE ARRAY TO BE TRANSFORMED.  THE METHOD
-!             IS MOST EFFICIENT WHEN N IS A PRODUCT OF SMALL PRIMES.
+!             is most efficient when N is a product of small primes.
 !
-!     OUTPUT PARAMETER
+!     Output parameter
 !
 !     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*N+15.
-!             THE SAME WORK ARRAY CAN BE USED FOR BOTH COSQF AND COSQB
-!             AS LONG AS N REMAINS UNCHANGED. DIFFERENT WSAVE ARRAYS
-!             ARE REQUIRED FOR DIFFERENT VALUES OF N. THE CONTENTS OF
-!             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
+!             The same work array can be used for both COSQF and COSQB
+!             as long as N remains unchanged. Different WSAVE arrays
+!             are required for different values of N. The contents of
+!             WSAVE must not be changed between calls of COSQF or COSQB.
 !

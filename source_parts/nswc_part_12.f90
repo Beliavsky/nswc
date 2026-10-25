@@ -14,10 +14,10 @@ real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     SEPEL1 SETS UP VECTORS AND ARRAYS FOR INPUT TO BLKTRI
-!     AND COMPUTES A SECOND ORDER SOLUTION IN USOL.  A RETURN JUMP TO
+!     SEPEL1 sets up vectors and arrays for input to BLKTRI
+!     and computes a second order solution in USOL.  A return jump to
 !     SEPELL OCCURRS IF IORDER=2.  IF IORDER=4 A FOURTH ORDER
-!     SOLUTION IS GENERATED IN USOL.
+!     solution is generated in USOL.
 !
 logical :: singlr
 external        cofx, cofy
@@ -28,7 +28,7 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
 &tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
-!     SET PARAMETERS INTERNALLY
+!     Set parameters internally
 !
 kswx = mbdcnd+1
 kswy = nbdcnd+1
@@ -39,8 +39,8 @@ bit = b
 cit = c
 dit = d
 !
-!     SET RIGHT HAND SIDE VALUES FROM GRHS IN USOL ON THE INTERIOR
-!     AND NON-SPECIFIED BOUNDARIES.
+!     Set right hand side values from GRHS in USOL on the interior
+!     and non-specified boundaries.
 !
 do i=2,m
    do j=2,n
@@ -77,15 +77,15 @@ if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.5) &
 &usol(k,l) = grhs(k,l)
 i1 = 1
 !
-!     SET SWITCHES FOR PERIODIC OR NON-PERIODIC BOUNDARIES
+!     Set switches for periodic or non-periodic boundaries
 !
 mp = 1
 np = 1
 if (kswx .eq. 1) mp = 0
 if (kswy .eq. 1) np = 0
 !
-!     SET DLX,DLY AND SIZE OF BLOCK TRI-DIAGONAL SYSTEM GENERATED
-!     IN NINT,MINT
+!     Set DLX,DLY and size of block TRI-diagonal system generated
+!     in NINT,mint
 !
 dlx = (bit-ait)/float(m)
 mit = k-1
@@ -100,7 +100,7 @@ dlx4 = dlx**4
 tdly3 = 2.0*dly**3
 dly4 = dly**4
 !
-!     SET SUBSCRIPT LIMITS FOR PORTION OF ARRAY TO INPUT TO BLKTRI
+!     Set subscript limits for portion of array to input to BLKTRI
 !
 is = 1
 js = 1
@@ -109,7 +109,7 @@ if (kswy.eq.2 .or. kswy.eq.3) js = 2
 ns = nit+js-1
 ms = mit+is-1
 !
-!     SET X - DIRECTION
+!     Set X - direction
 !
 do i=1,mit
    xi = ait+float(is+i-2)*dlx
@@ -122,7 +122,7 @@ do i=1,mit
    cm(i) = cxi
 end do
 !
-!     SET Y DIRECTION
+!     Set Y direction
 !
 do j=1,nit
    yj = cit+float(js+j-2)*dly
@@ -135,19 +135,19 @@ do j=1,nit
    cn(j) = fyj
 end do
 !
-!     ADJUST EDGES IN X DIRECTION UNLESS PERIODIC
+!     Adjust edges in X direction unless periodic
 !
 ax1 = am(1)
 cxm = cm(mit)
 go to (170,130,150,160,140),kswx
 !
-!     DIRICHLET-DIRICHLET IN X DIRECTION
+!     Dirichlet-Dirichlet in X direction
 !
 130 am(1) = 0.0
 cm(mit) = 0.0
 go to 170
 !
-!     MIXED-DIRICHLET IN X DIRECTION
+!     Mixed-Dirichlet in X direction
 !
 140 am(1) = 0.0
 bm(1) = bm(1)+2.*alpha*dlx*ax1
@@ -155,7 +155,7 @@ cm(1) = cm(1)+ax1
 cm(mit) = 0.0
 go to 170
 !
-!     DIRICHLET-MIXED IN X DIRECTION
+!     Dirichlet-mixed in X direction
 !
 150 am(1) = 0.0
 am(mit) = am(mit)+cxm
@@ -163,7 +163,7 @@ bm(mit) = bm(mit)-2.*beta*dlx*cxm
 cm(mit) = 0.0
 go to 170
 !
-!     MIXED - MIXED IN X DIRECTION
+!     Mixed - mixed in X direction
 !
 160 continue
 am(1) = 0.0
@@ -174,20 +174,20 @@ bm(mit) = bm(mit)-2.*dlx*beta*cxm
 cm(mit) = 0.0
 170 continue
 !
-!     ADJUST IN Y DIRECTION UNLESS PERIODIC
+!     Adjust in Y direction unless periodic
 !
 dy1 = an(1)
 fyn = cn(nit)
 go to (220,180,200,210,190),kswy
 !
-!     DIRICHLET-DIRICHLET IN Y DIRECTION
+!     Dirichlet-Dirichlet in Y direction
 !
 180 continue
 an(1) = 0.0
 cn(nit) = 0.0
 go to 220
 !
-!     MIXED-DIRICHLET IN Y DIRECTION
+!     Mixed-Dirichlet in Y direction
 !
 190 continue
 an(1) = 0.0
@@ -196,7 +196,7 @@ cn(1) = cn(1)+dy1
 cn(nit) = 0.0
 go to 220
 !
-!     DIRICHLET-MIXED IN Y DIRECTION
+!     Dirichlet-mixed in Y direction
 !
 200 an(1) = 0.0
 an(nit) = an(nit)+fyn
@@ -204,7 +204,7 @@ bn(nit) = bn(nit)-2.*dly*xnu*fyn
 cn(nit) = 0.0
 go to 220
 !
-!     MIXED - MIXED DIRECTION IN Y DIRECTION
+!     Mixed - mixed direction in Y direction
 !
 210 continue
 an(1) = 0.0
@@ -215,7 +215,7 @@ bn(nit) = bn(nit)-2.0*dly*xnu*fyn
 cn(nit) = 0.0
 220 if (kswx .eq. 1) go to 270
 !
-!     ADJUST USOL ALONG X EDGE
+!     Adjust USOL along X edge
 !
 do 260 j = js,ns
    if (kswx.ne.2 .and. kswx.ne.3) go to 230
@@ -229,7 +229,7 @@ do 260 j = js,ns
 260 continue
 270 if (kswy .eq. 1) go to 320
 !
-!     ADJUST USOL ALONG Y EDGE
+!     Adjust USOL along Y edge
 !
 do 310 i = is,ms
    if (kswy.ne.2 .and. kswy.ne.3) go to 280
@@ -258,35 +258,35 @@ end do
 iord = iorder
 pertrb = 0.0
 !
-!     CHECK IF OPERATOR IS SINGULAR
+!     Check if operator is singular
 !
 call chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
 !
-!     COMPUTE NON-ZERO EIGENVECTOR IN NULL SPACE OF TRANSPOSE
-!     IF SINGULAR
+!     Compute non-zero eigenvector in null space of transpose
+!     if singular
 !
 if (singlr) call trisp (mit,am,bm,cm,dm,um,zm)
 if (singlr) call trisp (nit,an,bn,cn,dn,un,zn)
 !
-!     MAKE INITIALIZATION CALL TO BLKTRI
+!     Make initialization call to BLKTRI
 !
 if (intl .eq. 0) &
 &call blktri (intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
 &usol(is,js),ierror,w)
 if (ierror .ne. 0) return
 !
-!     ADJUST RIGHT HAND SIDE IF NECESSARY
+!     Adjust right hand side if necessary
 !
 360 continue
 if (singlr) call orthg (usol,idmn,zn,zm,pertrb)
 !
-!     COMPUTE SOLUTION
+!     Compute solution
 !
 call blktri (i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
 &ierror,w)
 if (ierror .ne. 0) return
 !
-!     SET PERIODIC BOUNDARIES IF NECESSARY
+!     Set periodic boundaries if necessary
 !
 if (kswx .ne. 1) go to 380
 do j=1,l
@@ -298,18 +298,18 @@ do i=1,k
 end do
 400 continue
 !
-!     MINIMIZE SOLUTION WITH RESPECT TO WEIGHTED LEAST SQUARES
-!     NORM IF OPERATOR IS SINGULAR
+!     Minimize solution with respect to weighted least squares
+!     norm if operator is singular
 !
 if (singlr) call minsol (usol,idmn,zn,zm,prtrb)
 !
 !     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
-!     NOT FLAGGED
+!     not flagged
 !
 if (iord .eq. 2) return
 iord = 2
 !
-!     COMPUTE NEW RIGHT HAND SIDE FOR FOURTH ORDER SOLUTION
+!     Compute new right hand side for fourth order solution
 !
 call defer (cofx,cofy,usol,idmn,grhs,mn)
 go to 360
@@ -325,48 +325,48 @@ real, intent(in) :: a, b, c, d
 integer :: i, j
 real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !
-!     THIS PROGRAM CHECKS THE INPUT PARAMETERS FOR ERRORS
+!     This program checks the input parameters for errors
 !
 !
-!     CHECK DEFINITION OF SOLUTION REGION
+!     Check definition of solution region
 !
 ierror = 1
 if (a.ge.b .or. c.ge.d) return
 !
-!     CHECK BOUNDARY SWITCHES
+!     Check boundary switches
 !
 ierror = 2
 if (mbdcnd.lt.0 .or. mbdcnd.gt.4) return
 ierror = 3
 if (nbdcnd.lt.0 .or. nbdcnd.gt.4) return
 !
-!     CHECK FIRST DIMENSION IN CALLING ROUTINE
+!     Check first dimension in calling routine
 !
 ierror = 5
 if (mn .lt. 7 .or. idmn .lt. 7) return
 !
-!     CHECK M
+!     Check M
 !
 ierror = 6
 if (m .gt. (idmn-1) .or. m.lt.6) return
 if (m .gt. mn - 1) return
 !
-!     CHECK N
+!     Check N
 !
 ierror = 7
 if (n .lt. 5) return
 !
-!     CHECK IORDER
+!     Check IORDER
 !
 ierror = 8
 if (iorder.ne.2 .and. iorder.ne.4) return
 !
-!     CHECK INTL
+!     Check intl
 !
 ierror = 9
 if (intl.ne.0 .and. intl.ne.1) return
 !
-!     CHECK THAT EQUATION IS ELLIPTIC
+!     Check that equation is elliptic
 !
 dlx = (b-a)/float(m)
 dly = (d-c)/float(n)
@@ -383,7 +383,7 @@ do i=2,m
    end do
 end do
 !
-!     NO ERROR FOUND
+!     No error found
 !
 ierror = 0
 return
@@ -400,7 +400,7 @@ integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE CHECKS IF THE PDE   SEPELL
-!     MUST SOLVE IS A SINGULAR OPERATOR
+!     must solve is a singular operator
 !
 logical :: singlr
 common /splp/   kswx       ,kswy       ,k          ,l          , &
@@ -412,13 +412,13 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
 !
 singlr = .false.
 !
-!     CHECK IF THE BOUNDARY CONDITIONS ARE
-!     ENTIRELY PERIODIC AND/OR MIXED
+!     Check if the boundary conditions are
+!     entirely periodic and/or mixed
 !
 if ((mbdcnd.ne.0 .and. mbdcnd.ne.3) .or. &
 &(nbdcnd.ne.0 .and. nbdcnd.ne.3)) return
 !
-!     CHECK THAT MIXED CONDITIONS ARE PURE NEUMAN
+!     Check that mixed conditions are pure neuman
 !
 if (mbdcnd .ne. 3) go to  10
 if (alpha.ne.0.0 .or. beta.ne.0.0) return
@@ -426,8 +426,8 @@ if (alpha.ne.0.0 .or. beta.ne.0.0) return
 if (gama.ne.0.0 .or. xnu.ne.0.0) return
 20 continue
 !
-!     CHECK THAT NON-DERIVATIVE COEFFICIENT FUNCTIONS
-!     ARE ZERO
+!     Check that non-derivative coefficient functions
+!     are zero
 !
 do i=is,ms
    xi = ait+float(i-1)*dlx
@@ -440,7 +440,7 @@ do j=js,ns
    if (fj .ne. 0.0) return
 end do
 !
-!     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
+!     The operator must be singular if this point is reached
 !
 singlr = .true.
 return
@@ -455,8 +455,8 @@ real :: ete, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
-!     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
+!     This subroutine orthogonalizes the array USOL with respect to
+!     the constant array in a weighted least squares norm
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
@@ -469,7 +469,7 @@ ifnl = ms
 jstr = js
 jfnl = ns
 !
-!     COMPUTE WEIGHTED INNER PRODUCTS
+!     Compute weighted inner products
 !
 ute = 0.0
 ete = 0.0
@@ -482,11 +482,11 @@ do i=is,ms
    end do
 end do
 !
-!     SET PERTURBATION PARAMETER
+!     Set perturbation parameter
 !
 pertrb = ute/ete
 !
-!     SUBTRACT OFF CONSTANT PERTRB
+!     Subtract off constant PERTRB
 !
 do i=istr,ifnl
    do j=jstr,jfnl
@@ -505,8 +505,8 @@ real :: ete, pertrb, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
-!     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
+!     This subroutine orthogonalizes the array USOL with respect to
+!     the constant array in a weighted least squares norm
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
@@ -514,16 +514,16 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
 &js         ,ns         ,dlx        ,dly        , &
 &tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-!     ENTRY AT MINSOL OCCURRS WHEN THE FINAL SOLUTION IS
-!     TO BE MINIMIZED WITH RESPECT TO THE WEIGHTED
-!     LEAST SQUARES NORM
+!     Entry at MINSOL occurrs when the final solution is
+!     to be minimized with respect to the weighted
+!     least squares norm
 !
 istr = 1
 ifnl = k
 jstr = 1
 jfnl = l
 !
-!     COMPUTE WEIGHTED INNER PRODUCTS
+!     Compute weighted inner products
 !
 ute = 0.0
 ete = 0.0
@@ -536,11 +536,11 @@ do i=is,ms
    end do
 end do
 !
-!     SET PERTURBATION PARAMETER
+!     Set perturbation parameter
 !
 pertrb = ute/ete
 !
-!     SUBTRACT OFF CONSTANT PERTRB
+!     Subtract off constant PERTRB
 !
 do i=istr,ifnl
    do j=jstr,jfnl
@@ -558,11 +558,11 @@ real, intent(inout) :: d(n), u(n), z(n)
 integer :: j, k, nm1, nm2
 real :: an, bn, den, v
 !
-!     THIS SUBROUTINE SOLVES FOR A NON-ZERO EIGENVECTOR CORRESPONDING
-!     TO THE ZERO EIGENVALUE OF THE TRANSPOSE OF THE RANK
-!     DEFICIENT ONE MATRIX WITH SUBDIAGONAL A, DIAGONAL B, AND
-!     SUPERDIAGONAL C , WITH A(1) IN THE (1,N) POSITION, WITH
-!     C(N) IN THE (N,1) POSITION, AND ALL OTHER ELEMENTS ZERO.
+!     This subroutine solves for a non-zero eigenvector corresponding
+!     to the zero eigenvalue of the transpose of the rank
+!     deficient one matrix with subdiagonal A, diagonal B, and
+!     superdiagonal C , with A(1) in the (1,N) position, with
+!     C(N) in the (N,1) position, and all other elements zero.
 !
 !
 bn = b(n)
@@ -583,7 +583,7 @@ an = c(n-1)-v*d(n-2)
 bn = bn-v*u(n-2)
 den = bn-an*d(n-1)
 !
-!     SET LAST COMPONENT EQUAL TO ONE
+!     Set last component equal to one
 !
 z(n) = 1.0
 z(n-1) = -d(n-1)
@@ -605,20 +605,20 @@ real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     THIS SUBROUTINE FIRST APPROXIMATES THE TRUNCATION ERROR GIVEN
+!     This subroutine first approximates the truncation error given
 !     BY  TRUN1(X,Y)=DLX**2*TX+DLY**2*TY WHERE
 !     TX=AFUN(X)*UXXXX/12.0+BFUN(X)*UXXX/6.0 ON THE INTERIOR AND
-!     AT THE BOUNDARIES IF PERIODIC (HERE UXXX,UXXXX ARE THE THIRD
-!     AND FOURTH PARTIAL DERIVATIVES OF U WITH RESPECT TO X).
-!     TX IS OF THE FORM AFUN(X)/3.0*(UXXXX/4.0+UXXX/DLX)
+!     at the boundaries if periodic (here UXXX,UXXXX are the third
+!     and fourth partial derivatives of U with respect to X).
+!     TX is of the form AFUN(X)/3.0*(UXXXX/4.0+UXXX/DLX)
 !     AT X=A OR X=B IF THE BOUNDARY CONDITION THERE IS MIXED.
 !     TX=0.0 ALONG SPECIFIED BOUNDARIES.  TY HAS SYMMETRIC FORM
-!     IN Y WITH X,AFUN(X),BFUN(X) REPLACED BY Y,DFUN(Y),EFUN(Y).
-!     THE SECOND ORDER SOLUTION IN USOL IS USED TO APPROXIMATE
-!     (VIA SECOND ORDER FINITE DIFFERENCING) THE TRUN1ATION ERROR
-!     AND THE RESULT IS ADDED TO THE RIGHT HAND SIDE IN GRHS
-!     AND THEN TRANSFERRED TO USOL TO BE USED AS A NEW RIGHT
-!     HAND SIDE WHEN CALLING BLKTRI FOR A FOURTH ORDER SOLUTION.
+!     in Y with X,AFUN(X),BFUN(X) replaced by Y,DFUN(Y),EFUN(Y).
+!     The second order solution in USOL is used to approximate
+!     (via second order finite differencing) the TRUN1ATION error
+!     and the result is added to the right hand side in GRHS
+!     and then transferred to USOL to be used as a new right
+!     hand side when calling BLKTRI for a fourth order solution.
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
@@ -627,7 +627,7 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
 &tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
-!     COMPUTE TRUNCATION ERROR APPROXIMATION OVER THE ENTIRE MESH
+!     Compute truncation error approximation over the entire mesh
 !
 do j=js,ns
    yj = cit+float(j-1)*dly
@@ -636,14 +636,14 @@ do j=js,ns
       xi = ait+float(i-1)*dlx
       call cofx (xi,ai,bi,ci)
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT (XI,YJ)
+!     Compute partial derivative approximations at (XI,YJ)
 !
       call dxfn (usol,idmn,i,j,uxxx,uxxxx)
       call dyfn (usol,idmn,i,j,uyyy,uyyyy)
       tx = ai*uxxxx/12.0+bi*uxxx/6.0
       ty = dj*uyyyy/12.0+ej*uyyy/6.0
 !
-!     RESET FORM OF TRUNCATION IF AT BOUNDARY WHICH IS NON-PERIODIC
+!     Reset form of truncation if at boundary which is non-periodic
 !
       if (kswx.eq.1 .or. (i.gt.1 .and. i.lt.k)) go to  10
       tx = ai/3.0*(uxxxx/4.0+uxxx/dlx)
@@ -653,7 +653,7 @@ do j=js,ns
    end do
 end do
 !
-!     RESET THE RIGHT HAND SIDE IN USOL
+!     Reset the right hand side in USOL
 !
 do i=is,ms
    do j=js,ns
@@ -670,9 +670,9 @@ real :: u(idmn,*), uxxx, uxxxx
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
-!     APPROXIMATIONS TO THE THIRD AND FOURTH X
-!     PARTIAL DERIVATIVES OF U AT THE (I,J) MESH POINT
+!     This program computes second order finite difference
+!     approximations to the third and fourth X
+!     partial derivatives of U at the (I,J) mesh point
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
@@ -716,7 +716,7 @@ return
 uxxxx = (u(k-1,j)-4.0*u(1,j)+6.0*u(2,j)-4.0*u(3,j)+u(4,j))/dlx4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS ON THE INTERIOR
+!     Compute partial derivative approximations on the interior
 !
 50 continue
 uxxx = (-u(i-2,j)+2.0*u(i-1,j)-2.0*u(i+1,j)+u(i+2,j))/tdlx3
@@ -756,9 +756,9 @@ real :: u(idmn,*), uyyy, uyyyy
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
-!     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
-!     APPROXIMATIONS TO THE THIRD AND FOURTH Y
-!     PARTIAL DERIVATIVES OF U AT THE (I,J) MESH POINT
+!     This program computes second order finite difference
+!     approximations to the third and fourth Y
+!     partial derivatives of U at the (I,J) mesh point
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
@@ -802,7 +802,7 @@ return
 uyyyy = (u(i,l-1)-4.0*u(i,1)+6.0*u(i,2)-4.0*u(i,3)+u(i,4))/dly4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS ON THE INTERIOR
+!     Compute partial derivative approximations on the interior
 !
 50 continue
 uyyy = (-u(i,j-2)+2.0*u(i,j-1)-2.0*u(i,j+1)+u(i,j+2))/tdly3
@@ -850,26 +850,26 @@ real :: cnv, eps
 !
 !          VERSION  2  OCTOBER 1976  INCLUDING ERRATA  OCTOBER 1976
 !
-!         DOCUMENTATION FOR THIS PROGRAM IS GIVEN IN
+!         Documentation for this program is given in
 !
-!        EFFICIENT FORTRAN SUBPROGRAMS FOR THE SOLUTION OF
-!            ELLIPTIC PARTIAL DIFFERENTIAL EQUATIONS
+!        Efficient Fortran subprograms for the solution of
+!            elliptic partial differential equations
 !
-!                              BY
+!                              By
 !
 !          PAUL SWARZTRAUBER   AND  ROLAND SWEET
 !
 !             TECHNICAL NOTE TN/IA-109   JULY 1975
 !
-!       NATIONAL CENTER FOR ATMOSPHERIC RESEARCH  BOULDER,COLORADO 80307
+!       National center for atmospheric research  boulder,colorado 80307
 !
-!        WHICH IS SPONSORED BY THE NATIONAL SCIENCE FOUNDATION
+!        Which is sponsored by the national science foundation
 !
 !***********************************************************************
 !
 !
 !
-!     SUBROUTINE BLKTRI SOLVES A SYSTEM OF LINEAR EQUATIONS OF THE FORM
+!     Subroutine BLKTRI solves a system of linear equations of the form
 !
 !          AN(J)*X(I,J-1) + AM(I)*X(I-1,J) + (BN(J)+BM(I))*X(I,J)
 !
@@ -877,106 +877,106 @@ real :: cnv, eps
 !
 !               FOR I = 1,2,...,M  AND  J = 1,2,...,N.
 !
-!     I+1 AND I-1 ARE EVALUATED MODULO M AND J+1 AND J-1 MODULO N, I.E.,
+!     I+1 and I-1 are evaluated modulo M and J+1 and J-1 modulo N, I.E.,
 !
 !          X(I,0) = X(I,N),  X(I,N+1) = X(I,1),
 !          X(0,J) = X(M,J),  X(M+1,J) = X(1,J).
 !
-!     THESE EQUATIONS USUALLY RESULT FROM THE DISCRETIZATION OF
-!     SEPARABLE ELLIPTIC EQUATIONS.  BOUNDARY CONDITIONS MAY BE
-!     DIRICHLET, NEUMANN, OR PERIODIC.
+!     These equations usually result from the discretization of
+!     separable elliptic equations.  Boundary conditions may be
+!     Dirichlet, Neumann, or periodic.
 !
 !
 !     * * * * * * * * * *     ON INPUT     * * * * * * * * * *
 !
 !     IFLG
 !       = 0  INITIALIZATION ONLY.  CERTAIN QUANTITIES THAT DEPEND ON NP,
-!                                  N, AN, BN, AND CN ARE COMPUTED AND
-!                                  STOR1D IN THE WORK ARRAY  W.
+!                                  N, an, BN, and CN are computed and
+!                                  STOR1D in the work array  W.
 !       = 1  THE QUANTITIES THAT WERE COMPUTED IN THE INITIALIZATION ARE
-!            USED TO OBTAIN THE SOLUTION X(I,J).
+!            used to obtain the solution X(I,J).
 !
 !       NOTE   A CALL WITH IFLG=0 TAKES APPROXIMATELY ONE HALF THE TIME
 !              TIME AS A CALL WITH IFLG = 1  .  HOWEVER, THE
-!              INITIALIZATION DOES NOT HAVE TO BE REPEATED UNLESS NP, N,
-!              AN, BN, OR CN CHANGE.
+!              initialization does not have to be repeated unless NP, N,
+!              an, BN, or CN change.
 !
 !     NP
 !       = 0  IF AN(1) AND CN(N) ARE NOT ZERO, WHICH CORRESPONDS TO
-!            PERIODIC BOUNARY CONDITIONS.
+!            periodic bounary conditions.
 !       = 1  IF AN(1) AND CN(N) ARE ZERO.
 !
 !     N
-!       THE NUMBER OF UNKNOWNS IN THE J-DIRECTION. N MUST BE GREATER
-!       THAN 2. THE OPERATION COUNT IS PROPORTIONAL TO MNLOG2(N), HENCE
-!       N SHOULD BE SELECTED LESS THAN OR EQUAL TO M.
+!       the number of unknowns in the J-direction. N must be greater
+!       than 2. The operation count is proportional to MNLOG2(N), hence
+!       N should be selected less than or equal to M.
 !
 !     AN,BN,CN
-!       ONE-DIMENSIONAL ARRAYS OF LENGTH N THAT SPECIFY THE COEFFICIENTS
-!       IN THE LINEAR EQUATIONS GIVEN ABOVE.
+!       one-dimensional arrays of length N that specify the coefficients
+!       in the linear equations given above.
 !
 !     MP
 !       = 0  IF AM(1) AND CM(M) ARE NOT ZERO, WHICH CORRESPONDS TO
-!            PERIODIC BOUNDARY CONDITIONS.
+!            periodic boundary conditions.
 !       = 1  IF AM(1) = CM(M) = 0  .
 !
 !     M
-!       THE NUMBER OF UNKNOWNS IN THE I-DIRECTION. M MUST BE GREATER
-!       THAN 2.
+!       the number of unknowns in the I-direction. M must be greater
+!       than 2.
 !
 !     AM,BM,CM
-!       ONE-DIMENSIONAL ARRAYS OF LENGTH M THAT SPECIFY THE COEFFICIENTS
-!       IN THE LINEAR EQUATIONS GIVEN ABOVE.
+!       one-dimensional arrays of length M that specify the coefficients
+!       in the linear equations given above.
 !
 !     IDIMY
-!       THE ROW (OR FIRST) DIMENSION OF THE TWO-DIMENSIONAL ARRAY Y AS
-!       IT APPEARS IN THE PROGRAM CALLING BLKTRI.  THIS PARAMETER IS
-!       USED TO SPECIFY THE VARIABLE DIMENSION OF Y.  IDIMY MUST BE AT
+!       the row (or first) dimension of the two-dimensional array Y as
+!       it appears in the program calling BLKTRI.  This parameter is
+!       used to specify the variable DIMENSION of Y.  IDIMY must be at
 !       LEAST M.
 !
 !     Y
-!       A TWO-DIMENSIONAL ARRAY THAT SPECIFIES THE VALUES OF THE RIGHT
-!       SIDE OF THE LINEAR SYSTEM OF EQUATIONS GIVEN ABOVE.  Y MUST BE
-!       DIMENSIONED AT LEAST M*N.
+!       a two-dimensional array that specifies the values of the right
+!       side of the linear system of equations given above.  Y must be
+!       dimensioned at least M*N.
 !
 !     W
-!       A ONE-DIMENSIONAL ARRAY THAT MUST BE PROVIDED BY THE USER FOR
-!       WORK SPACE.
+!       a one-dimensional array that must be provided by the user for
+!       work space.
 !             IF NP=1 DEFINE K=INT(LOG2(N))+1 AND SET L=2**(K+1) THEN
-!                     W MUST HAVE DIMENSION (K-2)*L+K+4+MAX(2N,6M)
+!                     W must have dimension (K-2)*L+K+4+MAX(2N,6M)
 !
 !             IF NP=0 DEFINE K=INT(LOG2(N-1))+1 AND SET L=2**(K+1) THEN
-!                     W MUST HAVE DIMENSION (K-2)*L+K+4+2N+MAX(2N,6M)
+!                     W must have dimension (K-2)*L+K+4+2N+MAX(2N,6M)
 !
 !       **IMPORTANT** FOR PURPOSES OF CHECKING, THE REQUIRED DIMENSION
-!                     OF W IS COMPUTED BY BLKTRI AND STOR1D IN W(1)
-!                     IN FLOATING POINT FORMAT.
+!                     of W is computed by BLKTRI and STOR1D in W(1)
+!                     in floating point format.
 !
 !     * * * * * * * * * *     ON OUTPUT     * * * * * * * * * *
 !
 !     Y
-!       CONTAINS THE SOLUTION X.
+!       contains the solution X.
 !
-!     IERROR
-!       AN ERROR FLAG THAT INDICATES INVALID INPUT PARAMETERS.  EXCEPT
-!       FOR NUMBER ZERO, A SOLUTION IS NOT ATTEMPTED.
+!     Ierror
+!       an error flag that indicates invalid input parameters.  Except
+!       for number zero, a solution is not attempted.
 !
 !       = 0  NO ERROR.
 !       = 1  M IS LESS THAN 5
 !       = 2  N IS LESS THAN 3.
 !       = 3  IDIMY IS LESS THAN M.
 !       = 4  BLKTRI FAILED WHILE COMPUTING RESULTS THAT DEPEND ON THE
-!            COEFFICIENT ARRAYS AN, BN, CN.  CHECK THESE ARRAYS.
+!            coefficient arrays an, BN, CN.  Check these arrays.
 !       = 5  AN(J)*CN(J-1) IS LESS THAN 0 FOR SOME J. POSSIBLE REASONS
-!            FOR THIS CONDITION ARE
-!            1. THE ARRAYS AN AND CN ARE NOT CORRECT
-!            2. TOO LARGE A GRID SPACING WAS USED IN THE DISCRETIZATION
-!               OF THE ELLIPTIC EQUATION
-!            3. THE LINEAR EQUATIONS RESULTED FROM A PARTIAL
-!               DIFFERENTIAL EQUATION WHICH WAS NOT ELLIPTIC
+!            for this condition are
+!            1. The arrays an and CN are not correct
+!            2. Too large a grid spacing was used in the discretization
+!               of the elliptic equation
+!            3. The linear equations resulted from a partial
+!               differential equation which was not elliptic
 !
 !     W
-!       CONTAINS INTERMEDIATE VALUES THAT MUST NOT BE DESTROYED IF
+!       contains intermediate values that must not be destroyed if
 !       BLKTRI WILL BE CALLED AGAIN WITH IFLG = 1  .
 !
 !
@@ -985,7 +985,7 @@ external        prod0      ,prodp      ,cprod0     ,cprodp
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
 !
-! TEST M AND N FOR THE PROPER FORM
+! Test M and N for the proper form
 !
 nm = n
 ierror = 0
@@ -1013,7 +1013,7 @@ nl = nl-1
 iwah = (k-2)*ik+k+6
 if (npp) 110,120,110
 !
-!     DIVIDE W INTO WORKING SUB ARRAYS
+!     Divide W into working sub arrays
 !
 110 iw1 = iwah
 iwbh = iw1+nm
@@ -1024,7 +1024,7 @@ iw1 = iwbh
 w(1) = float(iw1-1+max0(2*nm,6*m))
 nm = nm-1
 !
-! SUBROUTINE COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS
+! Subroutine COMPB computes the roots of the B polynomials
 !
 130 if (ierror) 190,140,190
 140 iw2 = iw1+m
@@ -1037,7 +1037,7 @@ if (iflg) 160,150,160
 go to 190
 160 if (mp) 170,180,170
 !
-! SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
+! Subroutine BLKTR1 solves the linear system
 !
 170 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
 &w(iw3),w(iwd),w(iww),w(iwu),prod0,cprod0)
@@ -1061,7 +1061,7 @@ real :: dum
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 !
-! BLKTR1 SOLVES THE LINEAR SYSTEM
+! BLKTR1 solves the linear system
 !
 ! B  CONTAINS THE ROOTS OF ALL THE B POLYNOMIALS
 ! W1,W2,W3,WD,WW,WU  ARE ALL WORKING ARRAYS
@@ -1075,7 +1075,7 @@ real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
 !
-! BEGIN REDUCTION PHASE
+! Begin reduction phase
 !
 kdo = k-1
 do l=1,kdo
@@ -1122,7 +1122,7 @@ do l=1,kdo
 end do
 if (npp) 320,100,320
 !
-!     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
+!     The periodic case is treated using the capacitance matrix method
 !
 100 if = 2**k
 i = if/2
@@ -1245,7 +1245,7 @@ do 310 l = 1,kdo
 300 continue
 310 continue
 !
-! BEGIN BACK SUBSTITUTION PHASE
+! Begin back substitution phase
 !
 320 do ll=1,k
    l = k-ll+1
@@ -1327,7 +1327,7 @@ integer :: id, ipl, izh
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 !
-! B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
+! B(IDX) is the location of the first root of the B(I,IR) polynomial
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
@@ -1363,11 +1363,11 @@ real, intent(inout) :: y(*)
 integer :: ia, ibr, id, j, k, m1, m2, mm
 real :: den, rt
 !
-! PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
-! STORES THE RESULT IN Y.
+! PROD0 applies a sequence of matrix operations to the vector X and
+! stores the result in Y.
 !
-! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
-! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! BD,BM1,BM2 arrays containing roots of certian B polynomials.
+! ND,NM1,NM2 the lengths of the arrays BD,BM1,BM2 respectively.
 ! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
 ! NA         THE LENGTH OF THE ARRAY AA.
 ! X,Y        MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS Y.
@@ -1392,7 +1392,7 @@ ia = na
 if (nd .eq. 0) rt = -rt
 ia = ia-1
 !
-! SCALAR MULTIPLICATION
+! Scalar multiplication
 !
 do j=1,m
    y(j) = rt*w(j)
@@ -1402,7 +1402,7 @@ end do
 id = id-1
 if (id .eq. 0) ibr = 1
 !
-! BEGIN SOLUTION TO SYSTEM
+! Begin solution to system
 !
 d(m) = a(m)/(b(m)-rt)
 w(m) = y(m)/(b(m)-rt)
@@ -1455,11 +1455,11 @@ real, intent(inout) :: y(*)
 integer :: ia, ibr, id, j, k, m1, m2, mm, mm2
 real :: am, bh, den, rt, v, ym
 !
-! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! PRODP applies a sequence of matrix operations to the vector X and
 ! STORES THE RESULT IN Y.   (PERIODIC BOUNDARY CONDITIONS)
 !
-! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
-! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! BD,BM1,BM2 arrays containing roots of certian B polynomials.
+! ND,NM1,NM2 the lengths of the arrays BD,BM1,BM2 respectively.
 ! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
 ! NA         LENGTH OF THE ARRAY AA.
 ! X,Y        MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS Y.
@@ -1492,7 +1492,7 @@ end do
 id = id-1
 if (id .eq. 0) ibr = 1
 !
-! BEGIN SOLUTION TO SYSTEM
+! Begin solution to system
 !
 bh = b(m)-rt
 ym = y(m)
@@ -1561,12 +1561,12 @@ real, intent(inout) :: yy(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm
 real :: rt
 !
-! CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! CPROD0 applies a sequence of matrix operations to the vector X and
 ! STORES THE RESULT IN YY.   (COMPLEX CASE)
 !
 ! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
-! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
-! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
+! ND,NM1,NM2 the lengths of the arrays BD,BM1,BM2 respectively.
+! BD,BM1,BM2 arrays containing roots of certian B polynomials.
 ! NA         THE LENGTH OF THE ARRAY AA.
 ! X,YY       MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS YY.
 ! A,B,C      ARRAYS WHICH CONTAIN THE TRIDIAGONAL MATRIX.
@@ -1590,7 +1590,7 @@ if (id)  90, 90, 30
 30 crt = bd(id)
 id = id-1
 !
-! BEGIN SOLUTION TO SYSTEM
+! Begin solution to system
 !
 d(m) = a(m)/(b(m)-crt)
 w(m) = y(m)/(b(m)-crt)
@@ -1626,7 +1626,7 @@ m2 = m2-1
 170 y1 = (b(1)-rt)*y(1)+c(1)*y(2)
 if (mm-2) 200,180,180
 !
-! MATRIX MULTIPLICATION
+! Matrix multiplication
 !
 180 do j=2,mm
    y2 = a(j)*y(j-1)+(b(j)-rt)*y(j)+c(j)*y(j+1)
@@ -1642,7 +1642,7 @@ go to  20
 ia = ia-1
 iflg = 1
 !
-! SCALAR MULTIPLICATION
+! Scalar multiplication
 !
 do j=1,m
    y(j) = rt*y(j)
@@ -1662,12 +1662,12 @@ real, intent(inout) :: yy(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
 real :: rt
 !
-! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
-! STORES THE RESULT IN YY.  (PERIODIC BOUNDARY CONDITIONS AND
-! COMPLEX CASE)
+! PRODP applies a sequence of matrix operations to the vector X and
+! stores the result in YY.  (Periodic boundary conditions and
+! complex case)
 !
-! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
-! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! BD,BM1,BM2 arrays containing roots of certian B polynomials.
+! ND,NM1,NM2 the lengths of the arrays BD,BM1,BM2 respectively.
 ! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
 ! NA         THE LENGTH OF THE ARRAY AA.
 ! X,YY       MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS YY.
@@ -1694,7 +1694,7 @@ if (id) 110,110, 30
 id = id-1
 iflg = 1
 !
-! BEGIN SOLUTION TO SYSTEM
+! Begin solution to system
 !
 bh = b(m)-crt
 ym = y(m)
@@ -1745,7 +1745,7 @@ go to 190
 180 rt = bm2(m2)
 m2 = m2-1
 !
-! MATRIX MULTIPLICATION
+! Matrix multiplication
 !
 190 yh = y(1)
 y1 = (b(1)-rt)*y(1)+c(1)*y(2)+a(1)*y(m)
@@ -1764,7 +1764,7 @@ go to  20
 ia = ia-1
 iflg = 1
 !
-! SCALAR MULTIPLICATION
+! Scalar multiplication
 !
 do j=1,m
    y(j) = rt*y(j)
@@ -1787,10 +1787,10 @@ integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 real :: spmpar
 !
-!     COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS USING TQLRT0,
-!     WHICH IS A MODIFICATION OF THE EISPACK SUBROUTINE TQLRAT.
-!     IERROR IS SET TO 4 IF EITHER TQLRT0 FAILS OR A(J+1)*C(J) IS
-!     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
+!     COMPB computes the roots of the B polynomials using TQLRT0,
+!     which is a modification of the EISPACK subroutine TQLRAT.
+!     Ierror is set to 4 if either TQLRT0 fails or A(J+1)*C(J) is
+!     less than 0 for some J. AH and BH are temporary work arrays.
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
@@ -1872,7 +1872,7 @@ j2 = j1+nmp+nmp
 call ppadd (nm+1,ierror,an,cn,b(j1),b(j1),b(j2))
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 210 ierror = 4
 return
@@ -1895,36 +1895,36 @@ common /cblkt/  npp        ,k          ,machep     ,cnv        , &
 &nm         ,ncmplx     ,ik
 !
 !
-!     THIS SUBROUTINE IS A MODIFICATION OF THE EISPACK SUBROUTINE
-!     TQLRAT. THE SUBROUTINE FINDS THE EIGENVALUES OF A SYMMETRIC
-!     TRIDIAGONAL MATRIX BY THE RATIONAL QL METHOD.
+!     This subroutine is a modification of the EISPACK subroutine
+!     TQLRAT. The subroutine finds the eigenvalues of a symmetric
+!     tridiagonal matrix BY the rational QL method.
 !
-!     ON INPUT-
+!     On input-
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX,
+!        D contains the diagonal elements of the input matrix,
 !
 !        E2 CONTAINS THE                SUBDIAGONAL ELEMENTS OF THE
-!          INPUT MATRIX IN ITS LAST N-1 POSITIONS.  E2(1) IS ARBITRARY.
+!          input matrix in its last N-1 positions.  E2(1) is arbitrary.
 !
-!      ON OUTPUT-
+!      On output-
 !
-!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
-!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT AND
-!          ORDERED FOR INDICES 1,2,...IERR-1, BUT MAY NOT BE
-!          THE SMALLEST EIGENVALUES,
+!        D contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct and
+!          ordered for indices 1,2,...IERR-1, but may not be
+!          the smallest eigenvalues,
 !
-!        E2 HAS BEEN DESTROYED,
+!        E2 has been destroyed,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 30 ITERATIONS.
+!                     determined after 30 iterations.
 !
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!                the relative precision of floating point arithmetic.
 !
 !                **********
 !
@@ -2056,14 +2056,14 @@ real :: ppspf
 real :: bsrh
 real :: psgf
 !
-!     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
-!     WITH COEFFICIENTS AN,BN,CN
+!     PPADD computes the eigenvalues of the periodic tridiagonal matrix
+!     with coefficients an,BN,CN
 !
 ! N   IS THE ORDER OF THE BH AND BP POLYNOMIALS.
-!     ON OUTPUT BP CONTAINS THE EIGENVALUES.
-! CBP IS THE SAME AS BP EXCEPT TYPE COMPLEX.
-! BH  IS USED TO TEMPORARILY STORE THE ROOTS OF THE B HAT POLYNOMIAL
-!     WHICH ENTERS THROUGH BP.
+!     On output BP contains the eigenvalues.
+! CBP is the same as BP except type complex.
+! BH  is used to temporarily store the roots of the B hat polynomial
+!     which enters through BP.
 !
 complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3, &
 &cbp(*)
@@ -2115,7 +2115,7 @@ if = iz-2
    if (abs(psg)-eps) 180,180,160
 160 if (psg*ppsgf(xm,iz,c,a,bh)) 170,180,190
 !
-!     CASE OF A REAL ZERO
+!     Case of a real zero
 !
 170 sgn = 1.
    cbp(ig) = cmplx(bsrh(bh(ig),xm,iz,c,a,bh,psgf,sgn),0.)
@@ -2123,13 +2123,13 @@ if = iz-2
    cbp(ig+1) = cmplx(bsrh(xm,bh(ig+1),iz,c,a,bh,psgf,sgn),0.)
    go to 360
 !
-!     CASE OF A MULTIPLE ZERO
+!     Case of a multiple zero
 !
 180 cbp(ig) = cmplx(xm,0.)
    cbp(ig+1) = cmplx(xm,0.)
    go to 360
 !
-!     CASE OF A COMPLEX ZERO
+!     Case of a complex zero
 !
 190 it = 0
    icv = 0
@@ -2288,40 +2288,40 @@ integer, intent(in) :: n
 integer :: i, k, leftlo
 !-----------------------------------------------------------------------
 !
-!               UNIFORM RANDOM SELECTION OF VALUES FROM
-!                       A FINITE SET OF INTEGERS
+!               Uniform random selection of values from
+!                       a finite set of integers
 !
 !                           ----------------
 !
-!     URGET SELECTS N VALUES FROM THE SET OF INTEGERS FROM IBEG TO
+!     URGET selects N values from the set of integers from IBEG to
 !     IEND WHERE IBEG .LT. IEND. THE SELECTION IS PERFORMED SO THAT
-!     ANY INTEGER IS EQUALLY LIKELY TO OCCUR WITH PROABILITY 1/M
+!     any integer is equally likely to occur with proability 1/M
 !     WHERE M = IEND - IBEG + 1. AS N BECOMES LARGE THE MEAN AND
-!     VARIANCE OF THE VALUES WILL CLOSELY APPROXIMATE THE MEAN AND
-!     VARIANCE OF THE DISCRETE UNIFORM DISTRIBUTION WHERE
+!     variance of the values will closely approximate the mean and
+!     variance of the discrete uniform distribution where
 !
 !               MEAN = IBEG + (IEND - IBEG)/2
 !
 !               VARIANCE = (M**2 - 1)/12 .
 !
-!     INPUT...
+!     Input...
 !
 !       N     - NUMBER OF VARIATES TO BE GENERATED
-!       IBEG  - LOWER LIMIT OF GENERATION INTERVAL
-!       IEND  - UPPER LIMIT OF GENERATION INTERVAL
+!       IBEG  - lower limit of generation interval
+!       IEND  - upper limit of generation interval
 !       IX    - INTEGER SEED USED TO INITIALIZE THE
-!               SEQUENCE OF VARIATES GENERATED
+!               sequence of variates generated
 !
-!     OUTPUT...
+!     Output...
 !
 !       IX    - SEED FOR OBTAINING MORE VARIATES
 !       L     - OUTPUT ARRAY OF DIMENSION N CONTAINING
-!               THE GENERATED INTEGERS
-!       IERR  - INPUT ERROR FLAG
-!               ( 0 - NO INPUT ERRORS
+!               the generated integers
+!       IERR  - input error flag
+!               ( 0 - no input errors
 !                 1 - N .LE. 0
 !                 2 - IBEG .GE. IEND  OR  M .GE. P.
-!                 3 - SEED OUT OF RANGE )
+!                 3 - Seed out of range )
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: l(n)
@@ -2330,10 +2330,10 @@ double precision :: c, m, s, t
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     S = 1/(P-1)   (IT IS ASSUMED THAT THE ARITHMETIC BEING
-!                    USED IS ACCURATE TO AT LEAST 14 DIGITS.
-!                    S HAS BEEN SET TO A VALUE SLIGHTLY LESS
-!                    THAN 1/(P-1) TO ENSURE THAT ROUNDING
-!                    ERROR DOES NOT PRODUCE VARIATES THAT
+!                    used is accurate to at least 14 digits.
+!                    S has been set to a value slightly less
+!                    than 1/(P-1) to ensure that rounding
+!                    error does not produce variates that
 !                    EXCEED IEND.)
 !-------------------
 data a/16807/, b15/32768/, b16/65536/, p/2147483647/
@@ -2350,7 +2350,7 @@ ierr = 0
 c = m*s
 do i = 1,n
 !
-!        USE THE LINUS SCHRAGE CODE TO OBTAIN THE NEXT SEED IX.
+!        Use the linus schrage code to obtain the next seed IX.
 !
 !        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
@@ -2364,9 +2364,9 @@ do i = 1,n
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
    if (ix .lt. 0) ix = ix + p
 !
-!        MAP IX TO AN INTEGER IN THE CLOSED INTERVAL (IBEG,IEND).
+!        Map IX to an integer in the closed interval (IBEG,IEND).
 !        THIS MAPPING IS 1-1 ONLY WHEN M = P - 1, IN WHICH CASE
-!        IX IS MAPPED TO THE VALUE (IBEG - 1) + IX.
+!        IX is mapped to the value (IBEG - 1) + IX.
 !
    t = ix
    k = c*t
@@ -2374,7 +2374,7 @@ do i = 1,n
 end do
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -2392,7 +2392,7 @@ integer :: k, l, leftlo
 real :: s, t
 real, intent(inout) :: x(n)
 !-----------------------------------------------------------------------
-!         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!         Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2415,49 +2415,49 @@ if (ix .le. 0 .or. ix .ge. p) go to 110
 ierr = 0
 do l = 1,n
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
    xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
    xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
    leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
    fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
    k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
    if (ix .lt. 0) ix = ix + p
 !
-!     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
-!     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
+!     Rescale IX, to interpret it as a value between 0 and 1.
+!     The scale factor S is selected to be as near 1/P as is
 !     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR IX = 1,
-!     NAMELY S, BE ROUGHLY THE SAME DISTANCE FROM 0 AS (P-1)*S
-!     IS FROM 1. THE CURRENT VALUE FOR S ASSURES US THAT X(L)
-!     IS LESS THAN 1 FOR ANY FLOATING POINT ARITHMETIC OF 6
-!     OR MORE DIGITS.
+!     namely S, be roughly the same distance from 0 as (P-1)*S
+!     is from 1. The current value for S assures us that X(L)
+!     is less than 1 for any floating point arithmetic of 6
+!     or more digits.
 !
    t = ix
    x(l) = s*t
 end do
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -2472,7 +2472,7 @@ integer, intent(in) :: n
 integer :: k, l, leftlo
 double precision, intent(inout) :: x(n)
 !-----------------------------------------------------------------------
-!         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!         Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2496,48 +2496,48 @@ if (ix .le. 0 .or. ix .ge. p) go to 110
 ierr = 0
 do l = 1,n
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
    xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
    xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
    leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
    fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
    k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
    if (ix .lt. 0) ix = ix + p
 !
-!     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
-!     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
+!     Rescale IX, to interpret it as a value between 0 and 1.
+!     The scale factor S is selected to be as near 1/P as is
 !     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR IX = 1,
-!     NAMELY S, BE ROUGHLY THE SAME DISTANCE FROM 0 AS (P-1)*S
-!     IS FROM 1. THE CURRENT VALUE FOR S ASSURES US THAT X(L)
-!     IS LESS THAN 1 FOR ANY DOUBLE PRECISION ARITHMETIC.
+!     namely S, be roughly the same distance from 0 as (P-1)*S
+!     is from 1. The current value for S assures us that X(L)
+!     is less than 1 for any double precision arithmetic.
 !
    t = ix
    x(l) = s*t
 end do
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -2552,7 +2552,7 @@ real, intent(inout) :: u, v
 integer :: k, leftlo
 real :: t
 !-----------------------------------------------------------------------
-!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!       Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2573,36 +2573,36 @@ data a/16807/, b15/32768/, b16/65536/, p/2147483647/
 data p0/1073741823/
 !-------------------
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
 xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
 xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
 leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
 fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
 k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
 ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
 if (ix .lt. 0) ix = ix + p
 !
-!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!         Rescale IX, to interpret it as a value between 0 and 1
 !
 t = p
 if (ix .gt. p0) go to 10
@@ -2621,7 +2621,7 @@ implicit none
 integer, intent(inout) :: ix
 integer :: k, leftlo
 !-----------------------------------------------------------------------
-!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!       Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2644,36 +2644,36 @@ data a/16807/, b15/32768/, b16/65536/, p/2147483647/
 data p0/1073741823/
 !-------------------
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
 xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
 xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
 leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
 fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
 k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
 ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
 if (ix .lt. 0) ix = ix + p
 !
-!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!         Rescale IX, to interpret it as a value between 0 and 1
 !
 t = p
 if (ix .gt. p0) go to 10
@@ -2694,7 +2694,7 @@ real, intent(inout) :: d, u, v
 integer :: j, k, leftlo
 real :: t
 !-----------------------------------------------------------------------
-!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!       Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2716,36 +2716,36 @@ data a/16807/, b15/32768/, b16/65536/, p/2147483647/
 data p0/1073741823/
 !-------------------
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
 xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
 xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
 leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
 fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
 k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
 ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
 if (ix .lt. 0) ix = ix + p
 !
-!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!         Rescale IX, to interpret it as a value between 0 and 1
 !
 j = p - ix
 t = p
@@ -2767,7 +2767,7 @@ implicit none
 integer, intent(inout) :: ix
 integer :: j, k, leftlo
 !-----------------------------------------------------------------------
-!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!       Uniform random number generator using the recursion
 !
 !                       IX = IX*A MOD P
 !
@@ -2791,36 +2791,36 @@ data a/16807/, b15/32768/, b16/65536/, p/2147483647/
 data p0/1073741823/
 !-------------------
 !
-!                 GET 15 HIGH ORDER BITS OF IX
+!                 Get 15 high order bits of IX
 !
 xhi = ix/b16
 !
-!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!           Get 16 lower bits of IX and multiply with A
 !
 xalo = (ix - xhi*b16)*a
 !
-!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!             Get 15 high order bits of the product
 !
 leftlo = xalo/b16
 !
-!               FORM THE 31 HIGHEST BITS OF A*IX
+!               Form the 31 highest bits of A*IX
 !
 fhi = xhi*a + leftlo
 !
-!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!           Obtain the overflow past the 31ST bit of A*IX
 !
 k = fhi/b15
 !
-!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
-!                  THE PARENTHESES ARE ESSENTIAL
+!             Assemble all the parts and presubtract P
+!                  the parentheses are essential
 !
 ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
-!                      ADD P IF NECESSARY
+!                      Add P if necessary
 !
 if (ix .lt. 0) ix = ix + p
 !
-!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!         Rescale IX, to interpret it as a value between 0 and 1
 !
 j = p - ix
 t = p
@@ -2845,7 +2845,7 @@ integer :: k, l, leftlo
 real :: s, t
 !-----------------------------------------------------------------------
 !
-!         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
+!         Generation of uniform random points (X(I),Y(I))
 !                     FOR I = 1,...,N WHERE
 !
 !                      0 .LT. X(I) .LT. 1
@@ -2870,8 +2870,8 @@ if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
 ierr = 0
 !
-!         SEE THE COMMENTS IN THE SUBROUTINE URNG FOR THE
-!                STATEMENTS IN THE FOLLOWING LOOP
+!         See the comments in the subroutine URNG for the
+!                statements in the following loop
 !
 do l = 1,n
    xhi = ix/b16
@@ -2896,7 +2896,7 @@ do l = 1,n
 end do
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -2911,7 +2911,7 @@ integer, intent(in) :: n
 integer :: k, l, leftlo
 !-----------------------------------------------------------------------
 !
-!         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
+!         Generation of uniform random points (X(I),Y(I))
 !                     FOR I = 1,...,N WHERE
 !
 !                      0 .LT. X(I) .LT. 1
@@ -2937,8 +2937,8 @@ if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
 ierr = 0
 !
-!         SEE THE COMMENTS IN THE SUBROUTINE DURNG FOR THE
-!                 STATEMENTS IN THE FOLLOWING LOOP
+!         See the comments in the subroutine DURNG for the
+!                 statements in the following loop
 !
 do l = 1,n
    xhi = ix/b16
@@ -2963,7 +2963,7 @@ do l = 1,n
 end do
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -2977,8 +2977,8 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 !-----------------------------------------------------------------------
 !
-!          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
-!              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
+!          Generation of N uniform random points (X(I),Y(I))
+!              in the unit circle centered at the origin
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n), y(n)
@@ -2995,9 +2995,9 @@ integer :: i, i1, i2, j, k, leftlo
 real :: r, s, u, v
 !-----------------------------------------------------------------------
 !
-!      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
-!      CENTERED AT THE ORIGIN. THE ABSCISSA AND ORDINATE OF THE
-!      I-TH POINT ARE STORED IN X(I1) AND Y(I2) WHERE
+!      Generation of N uniform random points in the unit circle
+!      centered at the origin. The abscissa and ordinate of the
+!      I-TH point are stored in X(I1) and Y(I2) where
 !
 !                      I1 = 1 + KX*(I - 1)
 !                      I2 = 1 + KY*(I - 1) .
@@ -3022,7 +3022,7 @@ i1 = 1
 i2 = 1
 do i = 1,n
 !
-!        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
+!        Use the linus schrage code to obtain new seeds IX.
 !
 !        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
@@ -3045,20 +3045,20 @@ do i = 1,n
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
    if (ix .lt. 0) ix = ix + p
 !
-!        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
-!          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
+!        Subtract the midpoint P0 and rescale so that the
+!          uniform variates are in the interval (-1,1).
 !
    u = j - p0
    u = s*u
    v = ix - p0
    v = s*v
 !
-!         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
+!         Check if the point (U,V) is in the unit circle
 !
    r = (u*u + v*v) - 1.0
    if (r .ge. 0.0) go to 10
 !
-!            STORE THE POINT WHEN IT IS IN THE CIRCLE
+!            Store the point when it is in the circle
 !
    x(i1) = u
    y(i2) = v
@@ -3067,7 +3067,7 @@ do i = 1,n
 end do
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 100 ierr = 1
 return
@@ -3081,8 +3081,8 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 !-----------------------------------------------------------------------
 !
-!          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
-!              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
+!          Generation of N uniform random points (X(I),Y(I))
+!              in the unit circle centered at the origin
 !
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: x(n), y(n)
@@ -3098,9 +3098,9 @@ integer, intent(in) :: kx, ky, n
 integer :: i, i1, i2, j, k, leftlo
 !-----------------------------------------------------------------------
 !
-!      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
-!      CENTERED AT THE ORIGIN. THE ABSCISSA AND ORDINATE OF THE
-!      I-TH POINT ARE STORED IN X(I1) AND Y(I2) WHERE
+!      Generation of N uniform random points in the unit circle
+!      centered at the origin. The abscissa and ordinate of the
+!      I-TH point are stored in X(I1) and Y(I2) where
 !
 !                      I1 = 1 + KX*(I - 1)
 !                      I2 = 1 + KY*(I - 1) .
@@ -3126,7 +3126,7 @@ i1 = 1
 i2 = 1
 do i = 1,n
 !
-!        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
+!        Use the linus schrage code to obtain new seeds IX.
 !
 !        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
@@ -3149,20 +3149,20 @@ do i = 1,n
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
    if (ix .lt. 0) ix = ix + p
 !
-!        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
-!          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
+!        Subtract the midpoint P0 and rescale so that the
+!          uniform variates are in the interval (-1,1).
 !
    u = j - p0
    u = s*u
    v = ix - p0
    v = s*v
 !
-!         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
+!         Check if the point (U,V) is in the unit circle
 !
    r = (u*u + v*v) - 1.d0
    if (r .ge. 0.d0) go to 10
 !
-!            STORE THE POINT WHEN IT IS IN THE CIRCLE
+!            Store the point when it is in the circle
 !
    x(i1) = u
    y(i2) = v
@@ -3171,7 +3171,7 @@ do i = 1,n
 end do
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 100 ierr = 1
 return
@@ -3186,7 +3186,7 @@ integer, intent(in) :: n
 integer :: i, m, max
 real :: r, s, u, v
 !-----------------------------------------------------------------------
-!                 NORMAL RANDOM NUMBER GENERATOR
+!                 Normal random number generator
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(n)
 real :: t(2)
@@ -3202,7 +3202,7 @@ m = n/2
 call rcir1 (m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
 !
-!                  OBTAIN THE FIRST M VARIATES
+!                  Obtain the first M variates
 !
 do i = 1,m,2
    u = a(i)
@@ -3214,7 +3214,7 @@ do i = 1,m,2
 end do
 if (m .eq. n) return
 !
-!            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
+!            Obtain the last variate (when N is odd)
 !
 20 call rcir1 (1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
@@ -3222,7 +3222,7 @@ s = sqrt(-2.0*alog(r)/r)
 a(n) = s*t(1)
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -3236,7 +3236,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer :: i, m, max
 !-----------------------------------------------------------------------
-!                 NORMAL RANDOM NUMBER GENERATOR
+!                 Normal random number generator
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(n)
 double precision :: r, s, u, v, t(2)
@@ -3252,7 +3252,7 @@ m = n/2
 call drcir1 (m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
 !
-!                  OBTAIN THE FIRST M VARIATES
+!                  Obtain the first M variates
 !
 do i = 1,m,2
    u = a(i)
@@ -3264,7 +3264,7 @@ do i = 1,m,2
 end do
 if (m .eq. n) return
 !
-!            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
+!            Obtain the last variate (when N is odd)
 !
 20 call drcir1 (1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
@@ -3272,7 +3272,7 @@ s = dsqrt(-2.d0*dlog(r)/r)
 a(n) = s*t(1)
 return
 !
-!                         ERROR RETURN
+!                         Error return
 !
 100 ierr = 1
 return
@@ -3287,7 +3287,7 @@ integer, intent(in) :: n
 integer :: i, m
 real :: phi, pi2, r
 !-----------------------------------------------------------------------
-!                 GAUSSIAN RANDOM NUMBER GENERATOR
+!                 Gaussian random number generator
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(n)
 real :: temp(1)
@@ -3318,7 +3318,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer :: i, m
 !-----------------------------------------------------------------------
-!                 GAUSSIAN RANDOM NUMBER GENERATOR
+!                 Gaussian random number generator
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(n)
 double precision :: phi, pi2, r, temp(1)
@@ -3352,24 +3352,24 @@ integer :: i, ii, j, k, l, l0, ldim, max
 real :: sum
 !-----------------------------------------------------------------------
 !
-!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
-!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
-!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A.
+!           Generation of N random normal vectors of length M
+!           from a multivariate normal distribution with mean
+!           vector FMU and variance-covariance matrix A.
 !
 !                          ---------------
 !
-!     INPUT...
+!     Input...
 !
 !        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
-!                  BEING CALLED FOR THE FIRST TIME TO
-!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  being called for the first time to
+!                  generate normal vectors from a matrix
 !                  A. SET MO = 0 ON AN INITIAL CALL TO
 !                  THE ROUTINE, AND MO .NE. 0 ON A LATER
 !                  CALL TO GENERATE MORE VECTORS FROM
-!                  THE SAME MATRIX A.
+!                  the same matrix A.
 !
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES.
+!                  sequence of variates.
 !
 !        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
 !
@@ -3379,9 +3379,9 @@ real :: sum
 !                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
 !
 !        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
-!                  A IS A SYMMETRIC POSITIVE DEFINITE MATRIX
-!                  STORED IN PACKED FORM. THE ARRAY A MUST
-!                  BE OF LENGTH (M*(M + 1))/2 OR LARGER.
+!                  A is a symmetric positive definite matrix
+!                  stored in packed form. The array A must
+!                  be of length (M*(M + 1))/2 or larger.
 !
 !                  ON AN INITIAL CALL TO THE ROUTINE, THE
 !                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
@@ -3391,41 +3391,41 @@ real :: sum
 !                  THE ROUTINE (WHEN MO .NE. 0).
 !
 !        FMU     - MEAN VECTOR OF DIMENSION M OF THE
-!                  MULTIVARIATE NORMAL DISTRIBUTION
+!                  multivariate normal distribution
 !
 !        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
-!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  description of X below). It is assumed
 !                  THAT KX .GE. M.
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
 !
 !        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
-!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
-!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  the N generated random normal vectors. The
+!                  J-TH vector is stored in the J-TH column of
 !                  X FOR J = 1,...,N.
 !
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - M .LE. 1  OR  M .GT. KX
-!                   3 - A IS NOT POSITIVE DEFINITE
+!                   3 - A is not positive definite
 !                   4 - SEED OUT OF RANGE         )
 !
 !-----------------------------------------------------------------------
 !
 !        ***REFERENCES***
 !
-!     FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!     DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!     Fishman, george S., Concepts and methods in discrete event
+!     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     MORRISON, DONALD F., MULTIVARIATE STATISTICAL METHODS,
-!     MCGRAW-HILL, NEW YORK, 1967, PP. 80 - 81.
+!     Morrison, donald F., Multivariate statistical methods,
+!     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     SCHEUER, E. AND STOLLER, D. S., ON THE GENERATION OF
-!     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
+!     Scheuer, E. And Stoller, D. S., On the generation of
+!     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
@@ -3439,22 +3439,22 @@ if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
 if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-!           COMPUTE THE LOWER TRIANGULAR MATRIX
-!           L HAVING POSITIVE DIAGONAL ELEMENTS
+!           Compute the lower triangular matrix
+!           L having positive diagonal elements
 !           AND SATISFYING A = L*TRANSPOSE(L).
 !
 if (mo .ne. 0) go to 10
 call sppfa (a, m, ierr)
 if (ierr .ne. 0) go to 120
 !
-!           GENERATE THE N RANDOM NORMAL VECTORS
+!           Generate the N random normal vectors
 !
 10 ldim = (m*(m + 1))/2
 do j = 1,n
    call rnor (ix, x(1,j), m, ierr)
 !
-!         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
-!                    IN REVERSE ORDER
+!         Obtain the components of the J-TH vector
+!                    in reverse order
 !
    l0 = ldim
    i = m
@@ -3471,7 +3471,7 @@ do j = 1,n
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -3490,25 +3490,25 @@ integer, intent(in) :: kx, m, mo, n
 integer :: i, j, max
 !-----------------------------------------------------------------------
 !
-!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
-!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
-!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A. IT IS
-!           ASSUMED THAT A IS A DIAGONAL MATRIX.
+!           Generation of N random normal vectors of length M
+!           from a multivariate normal distribution with mean
+!           vector FMU and variance-covariance matrix A. It is
+!           assumed that A is a diagonal matrix.
 !
 !                          ---------------
 !
-!     INPUT...
+!     Input...
 !
 !        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
-!                  BEING CALLED FOR THE FIRST TIME TO
-!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  being called for the first time to
+!                  generate normal vectors from a matrix
 !                  A. SET MO = 0 ON AN INITIAL CALL TO
 !                  THE ROUTINE, AND MO .NE. 0 ON A LATER
 !                  CALL TO GENERATE MORE VECTORS FROM
-!                  THE SAME MATRIX A.
+!                  the same matrix A.
 !
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES.
+!                  sequence of variates.
 !
 !        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
 !
@@ -3518,10 +3518,10 @@ integer :: i, j, max
 !                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
 !
 !        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
-!                  A IS A DIAGONAL MATRIX WITH POSITIVE
-!                  DIAGONAL ELEMENTS. THE DIAGONAL ELEMENTS
-!                  ARE STORED IN THE ARRAY A. A IS AN ARRAY
-!                  OF LENGTH M OR LARGER.
+!                  A is a diagonal matrix with positive
+!                  diagonal elements. The diagonal elements
+!                  are stored in the array A. A is an array
+!                  of length M or larger.
 !
 !                  ON AN INITIAL CALL TO THE ROUTINE, THE
 !                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
@@ -3530,23 +3530,23 @@ integer :: i, j, max
 !                  THE ROUTINE (WHEN MO .NE. 0).
 !
 !        FMU     - MEAN VECTOR OF DIMENSION M OF THE
-!                  MULTIVARIATE NORMAL DISTRIBUTION
+!                  multivariate normal distribution
 !
 !        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
-!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  description of X below). It is assumed
 !                  THAT KX .GE. M.
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
 !
 !        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
-!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
-!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  the N generated random normal vectors. The
+!                  J-TH vector is stored in the J-TH column of
 !                  X FOR J = 1,...,N.
 !
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - M .LE. 1  OR  M .GT. KX
 !                   3 - A(I) .LE. 0 FOR SOME I
@@ -3563,7 +3563,7 @@ if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
 if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-!        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
+!        Compute the roots of the diagonal elements
 !
 if (mo .ne. 0) go to 20
 do i = 1,m
@@ -3571,7 +3571,7 @@ do i = 1,m
    a(i) = sqrt(a(i))
 end do
 !
-!           GENERATE THE N RANDOM NORMAL VECTORS
+!           Generate the N random normal vectors
 !
 20 do j = 1,n
    call rnor (ix, x(1,j), m, ierr)
@@ -3581,7 +3581,7 @@ end do
 end do
 return
 !
-!                       ERROR RETURN
+!                       Error return
 !
 100 ierr = 1
 return
@@ -3600,24 +3600,24 @@ integer, intent(in) :: kx, m, mo, n
 integer :: i, ii, j, k, l, l0, ldim, max
 !-----------------------------------------------------------------------
 !
-!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
-!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
-!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A.
+!           Generation of N random normal vectors of length M
+!           from a multivariate normal distribution with mean
+!           vector FMU and variance-covariance matrix A.
 !
 !                          ---------------
 !
-!     INPUT...
+!     Input...
 !
 !        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
-!                  BEING CALLED FOR THE FIRST TIME TO
-!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  being called for the first time to
+!                  generate normal vectors from a matrix
 !                  A. SET MO = 0 ON AN INITIAL CALL TO
 !                  THE ROUTINE, AND MO .NE. 0 ON A LATER
 !                  CALL TO GENERATE MORE VECTORS FROM
-!                  THE SAME MATRIX A.
+!                  the same matrix A.
 !
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES.
+!                  sequence of variates.
 !
 !        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
 !
@@ -3627,9 +3627,9 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
 !
 !        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
-!                  A IS A SYMMETRIC POSITIVE DEFINITE MATRIX
-!                  STORED IN PACKED FORM. THE ARRAY A MUST
-!                  BE OF LENGTH (M*(M + 1))/2 OR LARGER.
+!                  A is a symmetric positive definite matrix
+!                  stored in packed form. The array A must
+!                  be of length (M*(M + 1))/2 or larger.
 !
 !                  ON AN INITIAL CALL TO THE ROUTINE, THE
 !                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
@@ -3639,41 +3639,41 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !                  THE ROUTINE (WHEN MO .NE. 0).
 !
 !        FMU     - MEAN VECTOR OF DIMENSION M OF THE
-!                  MULTIVARIATE NORMAL DISTRIBUTION
+!                  multivariate normal distribution
 !
 !        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
-!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  description of X below). It is assumed
 !                  THAT KX .GE. M.
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
 !
 !        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
-!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
-!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  the N generated random normal vectors. The
+!                  J-TH vector is stored in the J-TH column of
 !                  X FOR J = 1,...,N.
 !
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - M .LE. 1  OR  M .GT. KX
-!                   3 - A IS NOT POSITIVE DEFINITE
+!                   3 - A is not positive definite
 !                   4 - SEED OUT OF RANGE         )
 !
 !-----------------------------------------------------------------------
 !
 !        ***REFERENCES***
 !
-!     FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!     DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!     Fishman, george S., Concepts and methods in discrete event
+!     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     MORRISON, DONALD F., MULTIVARIATE STATISTICAL METHODS,
-!     MCGRAW-HILL, NEW YORK, 1967, PP. 80 - 81.
+!     Morrison, donald F., Multivariate statistical methods,
+!     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     SCHEUER, E. AND STOLLER, D. S., ON THE GENERATION OF
-!     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
+!     Scheuer, E. And Stoller, D. S., On the generation of
+!     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
@@ -3688,22 +3688,22 @@ if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
 if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-!           COMPUTE THE LOWER TRIANGULAR MATRIX
-!           L HAVING POSITIVE DIAGONAL ELEMENTS
+!           Compute the lower triangular matrix
+!           L having positive diagonal elements
 !           AND SATISFYING A = L*TRANSPOSE(L).
 !
 if (mo .ne. 0) go to 10
 call dppfa (a, m, ierr)
 if (ierr .ne. 0) go to 120
 !
-!           GENERATE THE N RANDOM NORMAL VECTORS
+!           Generate the N random normal vectors
 !
 10 ldim = (m*(m + 1))/2
 do j = 1,n
    call drnor (ix, x(1,j), m, ierr)
 !
-!         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
-!                    IN REVERSE ORDER
+!         Obtain the components of the J-TH vector
+!                    in reverse order
 !
    l0 = ldim
    i = m
@@ -3720,7 +3720,7 @@ do j = 1,n
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -3739,25 +3739,25 @@ integer, intent(in) :: kx, m, mo, n
 integer :: i, j, max
 !-----------------------------------------------------------------------
 !
-!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
-!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
-!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A. IT IS
-!           ASSUMED THAT A IS A DIAGONAL MATRIX.
+!           Generation of N random normal vectors of length M
+!           from a multivariate normal distribution with mean
+!           vector FMU and variance-covariance matrix A. It is
+!           assumed that A is a diagonal matrix.
 !
 !                          ---------------
 !
-!     INPUT...
+!     Input...
 !
 !        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
-!                  BEING CALLED FOR THE FIRST TIME TO
-!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  being called for the first time to
+!                  generate normal vectors from a matrix
 !                  A. SET MO = 0 ON AN INITIAL CALL TO
 !                  THE ROUTINE, AND MO .NE. 0 ON A LATER
 !                  CALL TO GENERATE MORE VECTORS FROM
-!                  THE SAME MATRIX A.
+!                  the same matrix A.
 !
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES.
+!                  sequence of variates.
 !
 !        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
 !
@@ -3767,10 +3767,10 @@ integer :: i, j, max
 !                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
 !
 !        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
-!                  A IS A DIAGONAL MATRIX WITH POSITIVE
-!                  DIAGONAL ELEMENTS. THE DIAGONAL ELEMENTS
-!                  ARE STORED IN THE ARRAY A. A IS AN ARRAY
-!                  OF LENGTH M OR LARGER.
+!                  A is a diagonal matrix with positive
+!                  diagonal elements. The diagonal elements
+!                  are stored in the array A. A is an array
+!                  of length M or larger.
 !
 !                  ON AN INITIAL CALL TO THE ROUTINE, THE
 !                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
@@ -3779,23 +3779,23 @@ integer :: i, j, max
 !                  THE ROUTINE (WHEN MO .NE. 0).
 !
 !        FMU     - MEAN VECTOR OF DIMENSION M OF THE
-!                  MULTIVARIATE NORMAL DISTRIBUTION
+!                  multivariate normal distribution
 !
 !        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
-!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  description of X below). It is assumed
 !                  THAT KX .GE. M.
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
 !
 !        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
-!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
-!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  the N generated random normal vectors. The
+!                  J-TH vector is stored in the J-TH column of
 !                  X FOR J = 1,...,N.
 !
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - M .LE. 1  OR  M .GT. KX
 !                   3 - A(I) .LE. 0 FOR SOME I
@@ -3812,7 +3812,7 @@ if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
 if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-!        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
+!        Compute the roots of the diagonal elements
 !
 if (mo .ne. 0) go to 20
 do i = 1,m
@@ -3820,7 +3820,7 @@ do i = 1,m
    a(i) = dsqrt(a(i))
 end do
 !
-!           GENERATE THE N RANDOM NORMAL VECTORS
+!           Generate the N random normal vectors
 !
 20 do j = 1,n
    call drnor (ix, x(1,j), m, ierr)
@@ -3830,7 +3830,7 @@ end do
 end do
 return
 !
-!                       ERROR RETURN
+!                       Error return
 !
 100 ierr = 1
 return
@@ -3851,18 +3851,18 @@ integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
-!           RANEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
+!           RANEXP generates N exponential random variates from an
 !           EXPONENTIAL DISTRIBUTION WITH PARAMETER A (A .GT. 0).
-!           A IS THE MEAN OF THE DISTRIBUTION.  HENCE, A IS INTERPRETED
-!           AS THE AVERAGE RATE PER UNIT OF TIME OR THE AVERAGE TIME
-!           TO FAILURE (AVERAGE LIFETIME).
+!           A is the mean of the distribution.  Hence, A is interpreted
+!           as the average rate per unit of time or the average time
+!           to failure (average lifetime).
 !
-!           FORM OF THE EXPONENTIAL PROBABILITY DENSITY FUNCTION...
+!           Form of the exponential probability density function...
 !
 !                   F(X) = (1/A) * EXP(-X/A)      , X .GE. 0
 !                                                   A .GT. 0
 !
-!           MEAN AND VARIANCE OF THE EXPONENTIAL DISTRIBUTION...
+!           Mean and variance of the exponential distribution...
 !
 !                    MEAN = A
 !
@@ -3870,56 +3870,56 @@ integer :: i
 !
 !           ***PARAMETER LIST***
 !
-!           INPUT...
+!           Input...
 !
 !           N       - NUMBER OF VARIATES TO BE GENERATED
 !           A       - MEAN OF THE EXPONENTIAL DISTRIBUTION
 !           ISEED   - INTEGER SEED USED TO INITIALIZE THE
-!                     SEQUENCE OF VARIATES GENERATED
+!                     sequence of variates generated
 !
-!           OUTPUT...
+!           Output...
 !
 !           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
-!                     ROUTINE
+!                     routine
 !           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
-!                     THE GENERATED REAL VARIATES
-!           IERROR  - INPUT ERROR FLAG
-!                     ( 0 - NO INPUT ERRORS
+!                     the generated real variates
+!           ierror  - input error flag
+!                     ( 0 - no input errors
 !                       1 - N .LE. 0
 !                       2 - A .LE. 0.0
-!                       3 - SEED OUT OF RANGE )
+!                       3 - seed out of range )
 !
 !           ***REFERENCE***
 !
-!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           Fishman, george S., Concepts and methods in discrete event
+!           digital simulation, john wiley and sons, new york, 1973,
 !           P. 203.
 !
 real, intent(inout) :: x(n)
 !
-!        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
-!        ACCEPTABLE RANGE
+!        Check to ensure that the desired number of variates is within
+!        acceptable range
 !
 if (n .le. 0) go to 100
 !
-!        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
-!        PROPERLY SPECIFIED
+!        Check to ensure that the exponential parameter HAS been
+!        properly specified
 !
 if (a .le. 0.0) go to 110
 !
-!        GENERATION OF UNIFORM RANDOM VARIATES
+!        Generation of uniform random variates
 !
 call urng (iseed, x, n, ierror)
 if (ierror .ne. 0) go to 120
 !
-!        LOOP WHICH GENERATES THE N DESIRED VARIATES
+!        Loop which generates the N desired variates
 !
 do i=1,n
    x(i) = - a*alog(x(i))
 end do
 return
 !
-!              ERROR RETURN
+!              Error return
 !
 100 ierror = 1
 return
@@ -3937,18 +3937,18 @@ integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
-!           DRNEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
+!           DRNEXP generates N exponential random variates from an
 !           EXPONENTIAL DISTRIBUTION WITH PARAMETER A (A .GT. 0).
-!           A IS THE MEAN OF THE DISTRIBUTION.  HENCE, A IS INTERPRETED
-!           AS THE AVERAGE RATE PER UNIT OF TIME OR THE AVERAGE TIME
-!           TO FAILURE (AVERAGE LIFETIME).
+!           A is the mean of the distribution.  Hence, A is interpreted
+!           as the average rate per unit of time or the average time
+!           to failure (average lifetime).
 !
-!           FORM OF THE EXPONENTIAL PROBABILITY DENSITY FUNCTION...
+!           Form of the exponential probability density function...
 !
 !                   F(X) = (1/A) * EXP(-X/A)      , X .GE. 0
 !                                                   A .GT. 0
 !
-!           MEAN AND VARIANCE OF THE EXPONENTIAL DISTRIBUTION...
+!           Mean and variance of the exponential distribution...
 !
 !                    MEAN = A
 !
@@ -3956,57 +3956,57 @@ integer :: i
 !
 !           ***PARAMETER LIST***
 !
-!           INPUT...
+!           Input...
 !
 !           N       - NUMBER OF VARIATES TO BE GENERATED
 !           A       - MEAN OF THE EXPONENTIAL DISTRIBUTION
 !           ISEED   - INTEGER SEED USED TO INITIALIZE THE
-!                     SEQUENCE OF VARIATES GENERATED
+!                     sequence of variates generated
 !
-!           OUTPUT...
+!           Output...
 !
 !           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
-!                     ROUTINE
+!                     routine
 !           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
-!                     THE GENERATED REAL VARIATES
-!           IERROR  - INPUT ERROR FLAG
-!                     ( 0 - NO INPUT ERRORS
+!                     the generated real variates
+!           ierror  - input error flag
+!                     ( 0 - no input errors
 !                       1 - N .LE. 0
 !                       2 - A .LE. 0.0
-!                       3 - SEED OUT OF RANGE )
+!                       3 - seed out of range )
 !
 !           ***REFERENCE***
 !
-!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           Fishman, george S., Concepts and methods in discrete event
+!           digital simulation, john wiley and sons, new york, 1973,
 !           P. 203.
 !
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
 !
-!        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
-!        ACCEPTABLE RANGE
+!        Check to ensure that the desired number of variates is within
+!        acceptable range
 !
 if (n .le. 0) go to 100
 !
-!        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
-!        PROPERLY SPECIFIED
+!        Check to ensure that the exponential parameter HAS been
+!        properly specified
 !
 if (a .le. 0.d0) go to 110
 !
-!        GENERATION OF UNIFORM RANDOM VARIATES
+!        Generation of uniform random variates
 !
 call durng (iseed, x, n, ierror)
 if (ierror .ne. 0) go to 120
 !
-!        LOOP WHICH GENERATES THE N DESIRED VARIATES
+!        Loop which generates the N desired variates
 !
 do i=1,n
    x(i) = - a*dlog(x(i))
 end do
 return
 !
-!              ERROR RETURN
+!              Error return
 !
 100 ierror = 1
 return
@@ -4025,27 +4025,27 @@ integer :: i, ind, max
 real :: u, v, w
 !-----------------------------------------------------------------------
 !
-!               COMPUTATION OF N VARIATES X(1),...,X(N)
-!               FROM THE GAMMA DISTRIBUTION HAVING THE
-!                    PROBABILITY DENSITY FUNCTION
+!               Computation of N variates X(1),...,X(N)
+!               from the gamma distribution having the
+!                    probability density function
 !
 !                 F(T) = EXP(-T)*T**(A-1)/GAMMA(A)
 !
 !                        ------------------
 !
-!     IX IS A VARIABLE. ON INPUT IX IS A SEED FOR INITIALIZING THE
-!     SEQUENCE OF VARIATES. ON OUTPUT IX IS A NEW SEED FOR OBTAINING
+!     IX is a variable. On input IX is a seed for initializing the
+!     sequence of variates. On output IX is a new seed for obtaining
 !     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. IX .LT. 2**31 - 1.
 !
-!     IERR IS A VARIABLE WHICH REPORTS THE STATUS OF THE RESULTS.
-!     WHEN THE SUBROUTINE TERMINATES IERR HAS ONE OF THE FOLLOWING
-!     VALUES ...
+!     IERR is a variable which reports the status of the results.
+!     When the subroutine terminates IERR has one of the following
+!     values ...
 !
 !          IERR = 0   THE GAMMA VARIATES WERE OBTAINED.
 !          IERR = 1   (INPUT ERROR) N .LE. 0
 !          IERR = 2   (INPUT ERROR) A .LT. 0.1
 !          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
-!                      SEED.
+!                      seed.
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n)
@@ -4057,8 +4057,8 @@ if (a .lt. 0.1) go to 110
 if (ix .lt. 1 .or. ix .ge. max) go to 120
 ierr = 0
 !
-!             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!             The following code assumes that the uniform
+!             variates are far enough from 0 and 1 so that
 !                   THE SETTING IND = -8 IS AVOIDED
 !
 do i = 1,n
@@ -4069,7 +4069,7 @@ do i = 1,n
 end do
 return
 !
-!                            ERROR RETURN
+!                            Error return
 !
 100 ierr = 1
 return
@@ -4086,27 +4086,27 @@ integer, intent(in) :: n
 integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
-!             COMPUTATION OF N DOUBLE PRECISION VARIATES
-!             X(1),...,X(N)  FROM THE GAMMA DISTRIBUTION
-!              HAVING THE PROBABILITY DENSITY FUNCTION
+!             Computation of N double precision variates
+!             X(1),...,X(N)  from the gamma distribution
+!              having the probability density function
 !
 !                 F(T) = EXP(-T)*T**(A-1)/GAMMA(A)
 !
 !                        ------------------
 !
-!     IX IS A VARIABLE. ON INPUT IX IS A SEED FOR INITIALIZING THE
-!     SEQUENCE OF VARIATES. ON OUTPUT IX IS A NEW SEED FOR OBTAINING
+!     IX is a variable. On input IX is a seed for initializing the
+!     sequence of variates. On output IX is a new seed for obtaining
 !     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. IX .LT. 2**31 - 1.
 !
-!     IERR IS A VARIABLE WHICH REPORTS THE STATUS OF THE RESULTS.
-!     WHEN THE SUBROUTINE TERMINATES IERR HAS ONE OF THE FOLLOWING
-!     VALUES ...
+!     IERR is a variable which reports the status of the results.
+!     When the subroutine terminates IERR has one of the following
+!     values ...
 !
 !          IERR = 0   THE GAMMA VARIATES WERE OBTAINED.
 !          IERR = 1   (INPUT ERROR) N .LE. 0
 !          IERR = 2   (INPUT ERROR) A .LT. 0.1
 !          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
-!                      SEED.
+!                      seed.
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -4120,8 +4120,8 @@ if (a .lt. 0.1d0) go to 110
 if (ix .lt. 1 .or. ix .ge. max) go to 120
 ierr = 0
 !
-!             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!             The following code assumes that the uniform
+!             variates are far enough from 0 and 1 so that
 !                   THE SETTING IND = -8 IS AVOIDED
 !
 do i = 1,n
@@ -4132,7 +4132,7 @@ do i = 1,n
 end do
 return
 !
-!                            ERROR RETURN
+!                            Error return
 !
 100 ierr = 1
 return
@@ -4151,48 +4151,48 @@ integer :: i, ind, max
 real :: u, v, x1, x2
 !-----------------------------------------------------------------------
 !
-!                GENERATION OF BETA RANDOM VARIATES
+!                Generation of beta random variates
 !
 !                           ------------
 !
-!     RBETA GENERATES N VARIATES FROM THE BETA DISTRIBUTION WITH
+!     RBETA generates N variates from the beta distribution with
 !     PARAMETERS A AND B WHERE A .GE. 0.25 AND B .GE. 0.25. THE
-!     GENERATION SCHEME IS BASED ON THE FACT THAT X1 / (X1 + X2)
-!     IS A VARIATE FROM THE BETA DISTRIBUTION WHEN X1 AND X2 ARE
-!     INDEPENDENT VARIATES FROM THE STANDARD GAMMA DISTRIBUTIONS
-!     WITH PARAMETERS A AND B RESPECTIVELY.
+!     generation scheme is based on the fact that X1 / (X1 + X2)
+!     is a variate from the beta distribution when X1 and X2 are
+!     independent variates from the standard gamma distributions
+!     with parameters A and B respectively.
 !
-!     FORM OF THE BETA PROBABILITY DENSITY FUNCTION USED...
+!     Form of the beta probability density function used...
 !
 !       F(X) = X**(A - 1) * (1 - X)**(B - 1) / BETA(A,B)
 !
 !              WHERE  0 .LE. X .LE. 1  AND
-!              BETA(A,B) IS THE BETA FUNCTION.
+!              BETA(A,B) is the beta function.
 !
-!     MEAN AND VARIANCE OF THE BETA DISTRIBUTION...
+!     Mean and variance of the beta distribution...
 !
 !              MEAN = A / (A + B)
 !
 !              VARIANCE = (A * B) / ((A + B)**2 * (A + B + 1))
 !
-!     INPUT...
+!     Input...
 !
 !        N       - NUMBER OF VARIATES TO BE GENERATED
 !        A       - PARAMETER OF THE BETA DISTRIBUTION
 !        B       - PARAMETER OF THE BETA DISTRIBUTION
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !        X       - ARRAY OF DIMENSION N CONTAINING THE
-!                  BETA VARIATES
+!                  beta variates
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
-!                   2 - A OR B IS LESS THAN 0.25
+!                   2 - A or B is less than 0.25
 !                   3 - SEED OUT OF RANGE        )
 !
 !-----------------------------------------------------------------------
@@ -4207,8 +4207,8 @@ ierr = 0
 !
 do i = 1,n
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call urng0 (ix, u, v)
@@ -4219,15 +4219,15 @@ do i = 1,n
    call gaminv (b, x2, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.0
 !
-!        IT IS REQUIRED THAT A AND B NOT BE LESS
-!        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
+!        It is required that A and B not be less
+!        than 0.25 so that X1 + X2 is nonzero.
 !
    x(i) = x1/(x1 + x2)
 !
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -4244,49 +4244,49 @@ integer, intent(in) :: n
 integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
-!                         DOUBLE PRECISION
-!                GENERATION OF BETA RANDOM VARIATES
+!                         Double precision
+!                generation of beta random variates
 !
 !                           ------------
 !
-!     DRBETA GENERATES N DOUBLE PRECISION VARIATES FROM THE BETA
+!     DRBETA generates N double precision variates from the beta
 !     DISTRIBUTION WITH PARAMETERS A AND B WHERE A .GE. 0.25 AND
 !     B .GE. 0.25. THE GENERATION SCHEME IS BASED ON THE FACT
-!     THAT X1 / (X1 + X2) IS A VARIATE FROM THE BETA DISTRIBUTION
-!     WHEN X1 AND X2 ARE INDEPENDENT VARIATES FROM THE STANDARD
-!     GAMMA DISTRIBUTIONS WITH PARAMETERS A AND B RESPECTIVELY.
+!     that X1 / (X1 + X2) is a variate from the beta distribution
+!     when X1 and X2 are independent variates from the standard
+!     gamma distributions with parameters A and B respectively.
 !
-!     FORM OF THE BETA PROBABILITY DENSITY FUNCTION USED...
+!     Form of the beta probability density function used...
 !
 !       F(X) = X**(A - 1) * (1 - X)**(B - 1) / BETA(A,B)
 !
 !              WHERE  0 .LE. X .LE. 1  AND
-!              BETA(A,B) IS THE BETA FUNCTION.
+!              BETA(A,B) is the beta function.
 !
-!     MEAN AND VARIANCE OF THE BETA DISTRIBUTION...
+!     Mean and variance of the beta distribution...
 !
 !              MEAN = A / (A + B)
 !
 !              VARIANCE = (A * B) / ((A + B)**2 * (A + B + 1))
 !
-!     INPUT...
+!     Input...
 !
 !        N       - NUMBER OF VARIATES TO BE GENERATED
 !        A       - PARAMETER OF THE BETA DISTRIBUTION
 !        B       - PARAMETER OF THE BETA DISTRIBUTION
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !        X       - ARRAY OF DIMENSION N CONTAINING THE
-!                  BETA VARIATES
+!                  beta variates
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
-!                   2 - A OR B IS LESS THAN 0.25
+!                   2 - A or B is less than 0.25
 !                   3 - SEED OUT OF RANGE        )
 !
 !-----------------------------------------------------------------------
@@ -4303,8 +4303,8 @@ ierr = 0
 !
 do i = 1,n
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call durng0 (ix, u, v)
@@ -4315,15 +4315,15 @@ do i = 1,n
    call dginv (b, x2, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.d0
 !
-!        IT IS REQUIRED THAT A AND B NOT BE LESS
-!        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
+!        It is required that A and B not be less
+!        than 0.25 so that X1 + X2 is nonzero.
 !
    x(i) = x1/(x1 + x2)
 !
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -4343,39 +4343,39 @@ real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          GENERATION OF VARIATES FROM THE F-DISTRIBUTION
+!          Generation of variates from the F-distribution
 !
 !                          --------------
 !
-!     FRAN GENERATES N VARIATES FROM THE F-DISTRIBUTION WITH
-!     PARAMETERS A AND B (CALLED THE NUMERATOR AND DENOMINATOR
+!     Fran generates N variates from the F-distribution with
+!     parameters A and B (called the numerator and denominator
 !     DEGREES OF FREEDOM) WHERE A .GE. 0.5 AND B .GE. 0.5. THE
-!     GENERATION SCHEME IS BASED ON THE FACT THAT (B/A)*(X1/X2)
-!     IS A VARIATE FROM THE F-DISTRIBUTION WHEN X1 AND X2 ARE
-!     INDEPENDENT VARIATES FROM THE STANDARD GAMMA DISTRIBUTIONS
-!     WITH PARAMETERS A/2 AND B/2 RESPECTIVELY.
+!     generation scheme is based on the fact that (B/A)*(X1/X2)
+!     is a variate from the F-distribution when X1 and X2 are
+!     independent variates from the standard gamma distributions
+!     with parameters A/2 and B/2 respectively.
 !
 !
-!     INPUT...
+!     Input...
 !
 !        N       - NUMBER OF VARIATES TO BE GENERATED
 !        A       - NUMERATOR DEGREES OF FREEDOM PARAMETER
 !        B       - DENOMINATOR DEGREES OF FREEDOM PARAMETER
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !        X       - ARRAY OF DIMENSION N CONTAINING THE
-!                  F DISTRIBUTION VARIATES
+!                  F distribution variates
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
-!                   2 - A OR B IS LESS THAN 0.5
-!                   3 - B IS TOO SMALL FOR THE
-!                       FLOATING ARITHMETIC USED
+!                   2 - A or B is less than 0.5
+!                   3 - B is too small for the
+!                       floating arithmetic used
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
@@ -4385,7 +4385,7 @@ data max /2147483647/
 !--------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
-!            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
+!            largest number in the floating arithmetic used.
 !
              xmax = spmpar(3)
 !
@@ -4403,8 +4403,8 @@ bound = amax1(c, 1.0)
 !
 do i = 1,n
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call urng0 (ix, u, v)
@@ -4415,7 +4415,7 @@ do i = 1,n
    call gaminv (bhalf, x2, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
-!        PROTECT AGAINST OVERFLOW IN COMPUTING THE
+!        Protect against overflow in computing the
 !        VARIATE C*(X1/X2).
 !
    t = x1 + x2
@@ -4426,7 +4426,7 @@ do i = 1,n
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -4445,40 +4445,40 @@ integer, intent(in) :: n
 integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
-!                  DOUBLE PRECISION GENERATION OF
-!                 VARIATES FROM THE F-DISTRIBUTION
+!                  Double precision generation of
+!                 variates from the F-distribution
 !
 !                          --------------
 !
-!     DFRAN GENERATES N VARIATES FROM THE F-DISTRIBUTION WITH
-!     PARAMETERS A AND B (CALLED THE NUMERATOR AND DENOMINATOR
+!     DFRAN generates N variates from the F-distribution with
+!     parameters A and B (called the numerator and denominator
 !     DEGREES OF FREEDOM) WHERE A .GE. 0.5 AND B .GE. 0.5. THE
-!     GENERATION SCHEME IS BASED ON THE FACT THAT (B/A)*(X1/X2)
-!     IS A VARIATE FROM THE F-DISTRIBUTION WHEN X1 AND X2 ARE
-!     INDEPENDENT VARIATES FROM THE STANDARD GAMMA DISTRIBUTIONS
-!     WITH PARAMETERS A/2 AND B/2 RESPECTIVELY.
+!     generation scheme is based on the fact that (B/A)*(X1/X2)
+!     is a variate from the F-distribution when X1 and X2 are
+!     independent variates from the standard gamma distributions
+!     with parameters A/2 and B/2 respectively.
 !
 !
-!     INPUT...
+!     Input...
 !
 !        N       - NUMBER OF VARIATES TO BE GENERATED
 !        A       - NUMERATOR DEGREES OF FREEDOM PARAMETER
 !        B       - DENOMINATOR DEGREES OF FREEDOM PARAMETER
 !        IX      - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!     OUTPUT...
+!     Output...
 !
 !        IX      - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !        X       - ARRAY OF DIMENSION N CONTAINING THE
-!                  F DISTRIBUTION VARIATES
+!                  F distribution variates
 !        IERR    - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  (0 - no input errors
 !                   1 - N .LE. 0
-!                   2 - A OR B IS LESS THAN 0.5
-!                   3 - B IS TOO SMALL FOR THE
-!                       FLOATING ARITHMETIC USED
+!                   2 - A or B is less than 0.5
+!                   3 - B is too small for the
+!                       floating arithmetic used
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
@@ -4492,7 +4492,7 @@ data max /2147483647/
 !--------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
-!            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
+!            largest number in the floating arithmetic used.
 !
              xmax = dpmpar(3)
 !
@@ -4510,8 +4510,8 @@ bound = dmax1(c, 1.d0)
 !
 do i = 1,n
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call durng0 (ix, u, v)
@@ -4522,7 +4522,7 @@ do i = 1,n
    call dginv (bhalf, x2, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
-!        PROTECT AGAINST OVERFLOW IN COMPUTING THE
+!        Protect against overflow in computing the
 !        VARIATE C*(X1/X2).
 !
    t = x1 + x2
@@ -4533,7 +4533,7 @@ do i = 1,n
 end do
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -4554,37 +4554,37 @@ integer :: i, ind, max
 real :: ahalf, d, s, u, v, w, z
 !-----------------------------------------------------------------------
 !
-!          GENERATION OF VARIATES FROM THE T-DISTRIBUTION
+!          Generation of variates from the T-distribution
 !
 !                          --------------
 !
-!        TRAN GENERATES N RANDOM VARIATES FROM A T-DISTRIBUTION
-!        WITH PARAMETER A (CALLED THE DEGREES OF FREEDOM) WHERE
+!        Tran generates N random variates from A T-distribution
+!        with parameter A (called the degrees of freedom) where
 !        A .GE. 0.5. THE GENERATION SCHEME IS BASED ON THE FACT
-!        THAT X/SQRT(Y/A) IS A VARIATE FROM THE T-DISTRIBUTION
-!        WHEN X IS A STANDARD NORMAL VARIATE AND Y A CHI-SQUARE
-!        VARIATE WITH A DEGREES OF FREEDOM.
+!        that X/SQRT(Y/A) is a variate from the T-distribution
+!        when X is a standard normal variate and Y a chi-square
+!        variate with a degrees of freedom.
 !
 !
-!        INPUT...
+!        Input...
 !
 !           N    - NUMBER OF VARIATES TO BE GENERATED
 !           A    - DEGREES OF FREEDOM PARAMETER
 !           IX   - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!        OUTPUT...
+!        Output...
 !
 !           IX   - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !           X    - ARRAY OF DIMENSION N CONTAINING THE
-!                  T-DISTRIBUTION VARIATES
-!           IERR - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  T-distribution variates
+!           IERR - input error flag
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - A .LT. 0.5
-!                   3 - A IS TOO SMALL FOR THE
-!                       FLOATING ARITHMETIC USED
+!                   3 - A is too small for the
+!                       floating arithmetic used
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
@@ -4601,15 +4601,15 @@ ahalf = 0.5*a
 !
 do i = 1,n
 !
-!                    GET A NORMAL VARIATE
+!                    Get a normal variate
 !
    call urng1 (ix, u, v, d)
    call pni (u, v, d, z, ind)
 !
-!                    GET A GAMMA VARIATE
+!                    Get a gamma variate
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call urng0 (ix, u, v)
@@ -4621,7 +4621,7 @@ do i = 1,n
 end do
 return
 !
-!              ERROR RETURN
+!              Error return
 !
 100 ierr = 1
 return
@@ -4640,38 +4640,38 @@ integer, intent(in) :: n
 integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
-!                  DOUBLE PRECISION GENERATION OF
-!                 VARIATES FROM THE T-DISTRIBUTION
+!                  Double precision generation of
+!                 variates from the T-distribution
 !
 !                          --------------
 !
-!        DTRAN GENERATES N RANDOM VARIATES FROM A T-DISTRIBUTION
-!        WITH PARAMETER A (CALLED THE DEGREES OF FREEDOM) WHERE
+!        DTRAN generates N random variates from A T-distribution
+!        with parameter A (called the degrees of freedom) where
 !        A .GE. 0.5. THE GENERATION SCHEME IS BASED ON THE FACT
-!        THAT X/SQRT(Y/A) IS A VARIATE FROM THE T-DISTRIBUTION
-!        WHEN X IS A STANDARD NORMAL VARIATE AND Y A CHI-SQUARE
-!        VARIATE WITH A DEGREES OF FREEDOM.
+!        that X/SQRT(Y/A) is a variate from the T-distribution
+!        when X is a standard normal variate and Y a chi-square
+!        variate with a degrees of freedom.
 !
 !
-!        INPUT...
+!        Input...
 !
 !           N    - NUMBER OF VARIATES TO BE GENERATED
 !           A    - DEGREES OF FREEDOM PARAMETER
 !           IX   - INTEGER SEED USED TO INITIALIZE THE
-!                  SEQUENCE OF VARIATES
+!                  sequence of variates
 !
-!        OUTPUT...
+!        Output...
 !
 !           IX   - SEED TO BE USED FOR OBTAINING MORE
-!                  VARIATES
+!                  variates
 !           X    - ARRAY OF DIMENSION N CONTAINING THE
-!                  T-DISTRIBUTION VARIATES
-!           IERR - INPUT ERROR FLAG
-!                  (0 - NO INPUT ERRORS
+!                  T-distribution variates
+!           IERR - input error flag
+!                  (0 - no input errors
 !                   1 - N .LE. 0
 !                   2 - A .LT. 0.5
-!                   3 - A IS TOO SMALL FOR THE
-!                       FLOATING ARITHMETIC USED
+!                   3 - A is too small for the
+!                       floating arithmetic used
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
@@ -4690,15 +4690,15 @@ ahalf = 0.5d0*a
 !
 do i = 1,n
 !
-!                    GET A NORMAL VARIATE
+!                    Get a normal variate
 !
    call durng1 (ix, u, v, d)
    call dpni (u, v, d, z, ind)
 !
-!                    GET A GAMMA VARIATE
+!                    Get a gamma variate
 !
-!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
-!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        The following code assumes that the uniform
+!        variates are far enough from 0 and 1 so that
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
    call durng0 (ix, u, v)
@@ -4710,7 +4710,7 @@ do i = 1,n
 end do
 return
 !
-!              ERROR RETURN
+!              Error return
 !
 100 ierr = 1
 return
@@ -4732,97 +4732,97 @@ real :: c, sigi, t
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
-!           RMK1 GENERATES AN AUTOCORRELATED SEQUENCE X OF
-!           LENGTH N WHERE X IS A FIRST-ORDER MARKOV PROCESS
+!           RMK1 generates an autocorrelated sequence X of
+!           length N where X is a first-order markov process
 !           WITH PARAMETER ALPHA (ABS(ALPHA) .LT. 1). THE SEQUENCE
 !           X(J) (J = 2,...,N) IS GENERATED BY
 !
 !                  X(J) - FMU = ALPHA*(X(J-1) - FMU) + Z(J).
 !
-!           Z(J) IS THE RANDOM ERROR TERM, ASSUMED TO BE NORMALLY
-!           DISTRIBUTED WITH MEAN 0 AND STANDARD DEVIATION SIG
+!           Z(J) is the random error term, assumed to be normally
+!           distributed with mean 0 and standard deviation sig
 !           (SIG .GE. 0). THE GENERATION SCHEME ASSUMES THAT X IS
-!           A NORMAL PROCESS WITH MEAN FMU AND VARIANCE
+!           a normal process with mean FMU and variance
 !
-!                      SIG*SIG / (1 - ALPHA*ALPHA) .
+!                      Sig*sig / (1 - ALPHA*ALPHA) .
 !
 !           X IS A STATIONARY PROCESS PROVIDED THAT ABS(ALPHA) .LT.
-!           1. THE AUTOCORRELATION STRUCTURE OF THE SEQUENCE IS
-!           CHARACTERIZED BY THE FACT THAT THE CORRELATION BETWEEN
-!           TERMS BECOMES PROGRESSIVELY WEAKER WITH INCREASING LAG.
-!           WE NOTE THAT A FIRST-ORDER MARKOV PROCESS IS SYNONOMOUS
-!           WITH A FIRST-ORDER AUTOREGRESSIVE (AR) PROCESS.
+!           1. The autocorrelation structure of the sequence is
+!           characterized by the fact that the correlation between
+!           terms becomes progressively weaker with increasing lag.
+!           We note that a first-order markov process is synonomous
+!           with a first-order autoregressive (AR) process.
 !
 !           ***PARAMETER LIST***
 !
-!           INPUT...
+!           Input...
 !
 !           N       - LENGTH OF THE SEQUENCE TO BE GENERATED.
 !                     IT IS ASSUMED THAT N .GE. 2.
 !           FMU     - MEAN OF THE NORMAL PROCESS
 !           SIG     - STANDARD DEVIATION OF THE NORMALLY
-!                     DISTRIBUTED ERROR TERM
+!                     distributed error term
 !           ALPHA   - VALUE OF THE MARKOV MODEL PARAMETER
 !           ISEED   - INTEGER SEED USED TO INITIALIZE THE
-!                     SEQUENCE OF NORMAL VARIATES GENERATED
-!                     BY SUBROUTINE RNOR
+!                     sequence of normal variates generated
+!                     by subroutine RNOR
 !
-!           OUTPUT...
+!           Output...
 !
 !           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
-!                     ROUTINE
+!                     routine
 !           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
-!                     THE GENERATED FIRST-ORDER MARKOV SEQUENCE
-!           IERROR  - INPUT ERROR FLAG
-!                     ( 0 - NO INPUT ERRORS
+!                     the generated first-order markov sequence
+!           ierror  - input error flag
+!                     ( 0 - no input errors
 !                       1 - N .LE. 1
 !                       2 - SIG .LT. 0
 !                       3 - ABS(ALPHA) .GE. 1
-!                       4 - SEED OUT OF RANGE )
+!                       4 - seed out of range )
 !
 !           ***REFERENCE***
 !
-!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           Fishman, george S., Concepts and methods in discrete event
+!           digital simulation, john wiley and sons, new york, 1973,
 !           PP. 236 - 237.
 !
 real, intent(inout) :: x(n)
 !
-!        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
-!        ACCEPTABLE RANGE
+!        Check to ensure that the desired sequence length is within
+!        acceptable range
 !
 if (n .le. 1) go to 100
 !
-!        CHECK TO ENSURE THAT THE STANDARD DEVIATION OF THE ERROR TERM
-!        IS WITHIN ACCEPTABLE RANGE
+!        Check to ensure that the standard deviation of the error term
+!        is within acceptable range
 !
 if (sig .le. 0.0) go to 110
 !
-!        CHECK TO ENSURE THAT THE FIRST-ORDER MARKOV MODEL
-!        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
+!        Check to ensure that the first-order markov model
+!        parameter is within the range required to guarantee
 !        PROCESS STATIONARITY
 !
 if (abs(alpha) .ge. 1.0) go to 120
 !
-!        GENERATION OF STANDARD NORMAL RANDOM VARIATES
+!        Generation of standard normal random variates
 !
 call rnor (iseed,x,n,ierror)
 if (ierror .ne. 0) go to 130
 !
-!        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
-!        AUTOCORRELATED SEQUENCE
+!        Computes the standard deviation of the initial term of the
+!        autocorrelated sequence
 !
 c = 0.5 + (0.5 - alpha)
 t = 0.5 + (0.5 + alpha)
 sigi = sig/sqrt(c*t)
 !
-!        COMPUTES THE INITIAL TERM OF THE REQUIRED AUTOCORRELATED
-!        SEQUENCE
+!        Computes the initial term of the required autocorrelated
+!        sequence
 !
 x(1) = fmu + sigi*x(1)
 !
-!        GENERATES THE LAST N - 1 TERMS OF THE REQUIRED AUTOCORRELATED
-!        SEQUENCE
+!        Generates the last N - 1 terms of the required autocorrelated
+!        sequence
 !
 c = fmu*c
 do i=2,n
@@ -4830,7 +4830,7 @@ do i=2,n
 end do
 return
 !
-!        ERROR RETURN
+!        Error return
 !
 100 ierror = 1
 return
@@ -4850,99 +4850,99 @@ integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
-!           DRMK1 GENERATES AN AUTOCORRELATED SEQUENCE X OF
-!           LENGTH N WHERE X IS A FIRST-ORDER MARKOV PROCESS
+!           DRMK1 generates an autocorrelated sequence X of
+!           length N where X is a first-order markov process
 !           WITH PARAMETER ALPHA (ABS(ALPHA) .LT. 1). THE SEQUENCE
 !           X(J) (J = 2,...,N) IS GENERATED BY
 !
 !                  X(J) - FMU = ALPHA*(X(J-1) - FMU) + Z(J).
 !
-!           Z(J) IS THE RANDOM ERROR TERM, ASSUMED TO BE NORMALLY
-!           DISTRIBUTED WITH MEAN 0 AND STANDARD DEVIATION SIG
+!           Z(J) is the random error term, assumed to be normally
+!           distributed with mean 0 and standard deviation sig
 !           (SIG .GE. 0). THE GENERATION SCHEME ASSUMES THAT X IS
-!           A NORMAL PROCESS WITH MEAN FMU AND VARIANCE
+!           a normal process with mean FMU and variance
 !
-!                      SIG*SIG / (1 - ALPHA*ALPHA) .
+!                      Sig*sig / (1 - ALPHA*ALPHA) .
 !
 !           X IS A STATIONARY PROCESS PROVIDED THAT ABS(ALPHA) .LT.
-!           1. THE AUTOCORRELATION STRUCTURE OF THE SEQUENCE IS
-!           CHARACTERIZED BY THE FACT THAT THE CORRELATION BETWEEN
-!           TERMS BECOMES PROGRESSIVELY WEAKER WITH INCREASING LAG.
-!           WE NOTE THAT A FIRST-ORDER MARKOV PROCESS IS SYNONOMOUS
-!           WITH A FIRST-ORDER AUTOREGRESSIVE (AR) PROCESS.
+!           1. The autocorrelation structure of the sequence is
+!           characterized by the fact that the correlation between
+!           terms becomes progressively weaker with increasing lag.
+!           We note that a first-order markov process is synonomous
+!           with a first-order autoregressive (AR) process.
 !
 !           ***PARAMETER LIST***
 !
-!           INPUT...
+!           Input...
 !
 !           N       - LENGTH OF THE SEQUENCE TO BE GENERATED.
 !                     IT IS ASSUMED THAT N .GE. 2.
 !           FMU     - MEAN OF THE NORMAL PROCESS
 !           SIG     - STANDARD DEVIATION OF THE NORMALLY
-!                     DISTRIBUTED ERROR TERM
+!                     distributed error term
 !           ALPHA   - VALUE OF THE MARKOV MODEL PARAMETER
 !           ISEED   - INTEGER SEED USED TO INITIALIZE THE
-!                     SEQUENCE OF NORMAL VARIATES GENERATED
-!                     BY SUBROUTINE DRNOR
+!                     sequence of normal variates generated
+!                     by subroutine DRNOR
 !
-!           OUTPUT...
+!           Output...
 !
 !           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
-!                     ROUTINE
+!                     routine
 !           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
-!                     THE GENERATED FIRST-ORDER MARKOV SEQUENCE
-!           IERROR  - INPUT ERROR FLAG
-!                     ( 0 - NO INPUT ERRORS
+!                     the generated first-order markov sequence
+!           ierror  - input error flag
+!                     ( 0 - no input errors
 !                       1 - N .LE. 1
 !                       2 - SIG .LT. 0
 !                       3 - ABS(ALPHA) .GE. 1
-!                       4 - SEED OUT OF RANGE )
+!                       4 - seed out of range )
 !
 !           ***REFERENCE***
 !
-!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
-!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           Fishman, george S., Concepts and methods in discrete event
+!           digital simulation, john wiley and sons, new york, 1973,
 !           PP. 236 - 237.
 !
 double precision, intent(in) :: fmu, sig, alpha
 double precision, intent(inout) :: x(n)
 double precision :: c, sigi, t
 !
-!        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
-!        ACCEPTABLE RANGE
+!        Check to ensure that the desired sequence length is within
+!        acceptable range
 !
 if (n .le. 1) go to 100
 !
-!        CHECK TO ENSURE THAT THE STANDARD DEVIATION OF THE ERROR TERM
-!        IS WITHIN ACCEPTABLE RANGE
+!        Check to ensure that the standard deviation of the error term
+!        is within acceptable range
 !
 if (sig .le. 0.d0) go to 110
 !
-!        CHECK TO ENSURE THAT THE FIRST-ORDER MARKOV MODEL
-!        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
+!        Check to ensure that the first-order markov model
+!        parameter is within the range required to guarantee
 !        PROCESS STATIONARITY
 !
 if (dabs(alpha) .ge. 1.d0) go to 120
 !
-!        GENERATION OF STANDARD NORMAL RANDOM VARIATES
+!        Generation of standard normal random variates
 !
 call drnor (iseed,x,n,ierror)
 if (ierror .ne. 0) go to 130
 !
-!        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
-!        AUTOCORRELATED SEQUENCE
+!        Computes the standard deviation of the initial term of the
+!        autocorrelated sequence
 !
 c = 0.5d0 + (0.5d0 - alpha)
 t = 0.5d0 + (0.5d0 + alpha)
 sigi = sig/dsqrt(c*t)
 !
-!        COMPUTES THE INITIAL TERM OF THE REQUIRED AUTOCORRELATED
-!        SEQUENCE
+!        Computes the initial term of the required autocorrelated
+!        sequence
 !
 x(1) = fmu + sigi*x(1)
 !
-!        GENERATES THE LAST N - 1 TERMS OF THE REQUIRED AUTOCORRELATED
-!        SEQUENCE
+!        Generates the last N - 1 terms of the required autocorrelated
+!        sequence
 !
 c = fmu*c
 do i=2,n
@@ -4950,7 +4950,7 @@ do i=2,n
 end do
 return
 !
-!        ERROR RETURN
+!        Error return
 !
 100 ierror = 1
 return

@@ -5,56 +5,56 @@ implicit none
 !
 ! 1.        PURPOSE
 !              TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                             ESTIMATE
+!                             estimate
 !                         J = INTEGRAL OF DABS(F) OVER (A,B)
 !
 ! 2.        PARAMETERS
-!            ON ENTRY
+!            on entry
 !              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS
-!                       TO BE DECLARED E X T E R N A L IN THE
-!                       CALLING PROGRAM.
+!                       to be declared E X T E R N A L in the
+!                       calling program.
 !
 !              A      - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              B      - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
-!              EPMACH - DOUBLE PRECISION
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!              EPMACH - double precision
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
-!              UFLOW  - DOUBLE PRECISION
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!              UFLOW  - double precision
+!                       the smallest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE 21-POINT
-!                       KRONROD RULE (RESK) OBTAINED BY OPTIMAL
-!                       ADDITION OF ABSCISSAE TO THE 10-POINT GAUSS
+!            On return
+!              result - double precision
+!                       approximation to the integral I
+!                       result is computed by applying the 21-point
+!                       Kronrod rule (RESK) obtained by optimal
+!                       addition of abscissae to the 10-point Gauss
 !                       RULE (RESG).
 !
-!              ABSERR - DOUBLE PRECISION
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD NOT EXCEED ABS(I-RESULT)
+!              ABSERR - double precision
+!                       estimate of the modulus of the absolute error,
+!                       which should not exceed ABS(I-RESULT)
 !
-!              RESABS - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL J
+!              RESABS - double precision
+!                       approximation to the integral J
 !
-!              RESASC - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL OF ABS(F-I/(B-A))
+!              RESASC - double precision
+!                       approximation to the integral of ABS(F-I/(B-A))
 !                       OVER (A,B)
 !
 !              ISIG   - INTEGER
 !                       ISIG=0  THE INTEGRAL WAS APPROXIMATED.
 !                       ISIG=5  THE INTERVAL (A,B) IS TOO SHORT.
-!                               THE INTEGRAL CANNOT BE COMPUTED.
+!                               The integral cannot be computed.
 !
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - F (USER-PROVIDED FUNCTION)
+!                 - F (user-provided function)
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -77,15 +77,15 @@ integer :: j, jtw, jtwm1
 !
 external f
 !
-!           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
-!           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
-!           CORRESPONDING WEIGHTS ARE GIVEN.
+!           The abscissae and weights are given for the interval (-1,1).
+!           Because of symmetry only the positive abscissae and their
+!           corresponding weights are given.
 !
 !           XGK    - ABSCISSAE OF THE 21-POINT KRONROD RULE
-!                    XGK(2), XGK(4), ...  ABSCISSAE OF THE 10-POINT
-!                    GAUSS RULE
-!                    XGK(1), XGK(3), ...  ABSCISSAE WHICH ARE OPTIMALLY
-!                    ADDED TO THE 10-POINT GAUSS RULE
+!                    XGK(2), XGK(4), ...  abscissae of the 10-point
+!                    Gauss rule
+!                    XGK(1), XGK(3), ...  abscissae which are optimally
+!                    added to the 10-point Gauss rule
 !
 !           WGK    - WEIGHTS OF THE 21-POINT KRONROD RULE
 !
@@ -127,16 +127,16 @@ data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
 &0.295524224714752870173892994651d+00/
 !
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
-!           CENTR  - MID POINT OF THE INTERVAL
-!           HLGTH  - HALF-LENGTH OF THE INTERVAL
+!           CENTR  - mid point of the interval
+!           HLGTH  - half-length of the interval
 !           ABSC   - ABSCISSA
-!           FVAL*  - FUNCTION VALUE
+!           FVAL*  - function VALUE
 !           RESG   - RESULT OF THE 10-POINT GAUSS FORMULA
 !           RESK   - RESULT OF THE 21-POINT KRONROD FORMULA
-!           RESKH  - APPROXIMATION TO THE MEAN VALUE OF F OVER (A,B),
+!           RESKH  - approximation to the mean value of F over (A,B),
 !                    I.E. TO I/(B-A)
 !
 !
@@ -144,14 +144,14 @@ centr = 0.5d0*(a + b)
 hlgth = 0.5d0*(b - a)
 dhlgth = dabs(hlgth)
 !
-!             CHECK IF THE INTERVAL (A,B) IS TOO SHORT
+!             Check if the interval (A,B) is too short
 !
 isig = 5
 absc = dabs(centr) + dhlgth*0.14d0
 if (absc .eq. dabs(centr)) return
 !
-!           COMPUTE THE 21-POINT KRONROD APPROXIMATION TO
-!           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
+!           Compute the 21-point Kronrod approximation to
+!           the integral, and estimate the absolute error.
 !
 isig = 0
 resg = 0.d0
@@ -206,154 +206,154 @@ integer, intent(in) :: inf
 integer, intent(out) :: last
 !-----------------------------------------------------------------------
 !
-!         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
+!         Double precision integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
-!            BOUND  - DOUBLE PRECISION
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - double precision
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
 !                             OR EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             OR LENW .LT. 4 * LIMIT.
-!                             RESULT, ABSERR, NEVAL, LAST ARE
-!                             SET TO ZERO.
+!                             Result, ABSERR, NEVAL, last are
+!                             set to zero.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER
-!                    OF SUBINTERVALS IN THE PARTITION OF THE GIVEN
+!         Dimensioning parameters
+!            limit - integer
+!                    dimensioning parameter for IWORK
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
 !                    INTEGRATION INTERVAL (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH
 !                    IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*4.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*4.
 !                    IF LENW.LT.LIMIT*4, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF
-!                    SUBINTERVALS PRODUCED IN THE SUBDIVISION
-!                    PROCESS, WHICH DETERMINES THE NUMBER OF SIGNIFICANT
-!                    ELEMENTS ACTUALLY IN THE WORK ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of significant
+!                    elements actually in the work arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                    K ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least limit, the first
+!                    K elements of which contain pointers
+!                    to the error estimates over the subintervals,
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                    K = LIMIT+1-LAST OTHERWISE
 !
-!            WORK  - DOUBLE PRECISION
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - double precision
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END POINTS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end points,
 !                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST)
-!                     CONTAIN THE INTEGRAL APPROXIMATIONS OVER
-!                     THE SUBINTERVALS,
+!                     contain the integral approximations over
+!                     the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
+!                     contain the error estimates.
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - DQAGIE
 !              - DQK15I
 !              - DQPSRT
 !              - DQELG
-!              - F (USER PROVIDED FUNCTION)
+!              - F (user provided function)
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
@@ -372,7 +372,7 @@ dimension iwork(limit),work(lenw)
 !
 external f
 !
-!         CHECK VALIDITY OF LIMIT AND LENW.
+!         Check validity of limit and LENW.
 !
 ier = 6
 neval = 0
@@ -381,7 +381,7 @@ result = 0.d0
 abserr = 0.d0
 if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
-!         PREPARE CALL FOR DQAGIE
+!         Prepare call for DQAGIE
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -397,150 +397,150 @@ subroutine dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !-----------------------------------------------------------------------
 !
-!                   INTEGRATION OVER INFINITE INTERVALS
+!                   Integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
-!            BOUND  - DOUBLE PRECISION
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - double precision
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPER BOUND ON THE NUMBER OF
-!                     SUBINTERVALS IN THE PARTITION OF (A,B),
+!            Limit  - integer
+!                     gives an upper bound on the number of
+!                     subintervals in the partition of (A,B),
 !                     LIMIT.GE.1
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
-!                             OR EPSREL IS NEGATIVE.
-!                             RESULT, ABSERR, NEVAL, LAST, RLIST(1),
-!                             ELIST(1) AND IORD(1) ARE SET TO ZERO.
-!                             ALIST(1) AND BLIST(1) ARE SET TO 0
-!                             AND 1 RESPECTIVELY.
+!                             or EPSREL is negative.
+!                             Result, ABSERR, NEVAL, last, RLIST(1),
+!                             ELIST(1) and IORD(1) are set to zero.
+!                             ALIST(1) and BLIST(1) are set to 0
+!                             and 1 respectively.
 !
-!            ALIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT
+!            ALIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
-!            BLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT
+!            BLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
-!            RLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!            RLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
-!            ELIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT,  THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI
-!                     OF THE ABSOLUTE ERROR ESTIMATES ON THE
-!                     SUBINTERVALS
+!            ELIST  - double precision
+!                     vector of dimension at least limit,  the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
+!                     subintervals
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
+!                     vector of dimension limit, the first K
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED
-!                     IN THE SUBDIVISION PROCESS
+!                     number of subintervals actually produced
+!                     in the subdivision process
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - DQK15I
 !              - DQPSRT
 !              - DQELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
@@ -580,28 +580,28 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
-!            LIMEXP IN SUBROUTINE DQELG.
+!            The dimension of RLIST2 is determined by the value of
+!            LIMEXP in subroutine DQELG.
 !
 !
-!            LIST OF MAJOR VARIABLES
+!            List of major variables
 !            -----------------------
 !
 !           ALIST     - LIST OF LEFT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
+!                       considered up to now
 !           BLIST     - LIST OF RIGHT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
-!           RLIST(I)  - APPROXIMATION TO THE INTEGRAL OVER
+!                       considered up to now
+!           RLIST(I)  - approximation to the integral over
 !                       (ALIST(I),BLIST(I))
 !           RLIST2    - ARRAY OF DIMENSION AT LEAST (LIMEXP+2),
-!                       CONTAINING THE PART OF THE EPSILON TABLE
-!                       WICH IS STILL NEEDED FOR FURTHER COMPUTATIONS
-!           ELIST(I)  - ERROR ESTIMATE APPLYING TO RLIST(I)
+!                       containing the part of the epsilon table
+!                       wich is still needed for further computations
+!           ELIST(I)  - error estimate applying to RLIST(I)
 !           MAXERR    - POINTER TO THE INTERVAL WITH LARGEST ERROR
-!                       ESTIMATE
+!                       estimate
 !           ERRMAX    - ELIST(MAXERR)
 !           ERLAST    - ERROR ON THE INTERVAL CURRENTLY SUBDIVIDED
-!                       (BEFORE THAT SUBDIVISION HAS TAKEN PLACE)
+!                       (before that subdivision has taken place)
 !           AREA      - SUM OF THE INTEGRALS OVER THE SUBINTERVALS
 !           ERRSUM    - SUM OF THE ERRORS OVER THE SUBINTERVALS
 !           ERRBND    - REQUESTED ACCURACY MAX(EPSABS,EPSREL*
@@ -611,33 +611,33 @@ external f
 !           LAST      - INDEX FOR SUBDIVISION
 !           NRES      - NUMBER OF CALLS TO THE EXTRAPOLATION ROUTINE
 !           NUMRL2    - NUMBER OF ELEMENTS CURRENTLY IN RLIST2. IF AN
-!                       APPROPRIATE APPROXIMATION TO THE COMPOUNDED
-!                       INTEGRAL HAS BEEN OBTAINED, IT IS PUT IN
-!                       RLIST2(NUMRL2) AFTER NUMRL2 HAS BEEN INCREASED
-!                       BY ONE.
+!                       appropriate approximation to the compounded
+!                       integral has been obtained, it is put in
+!                       RLIST2(NUMRL2) after NUMRL2 has been increased
+!                       by one.
 !           SMALL     - LENGTH OF THE SMALLEST INTERVAL CONSIDERED UP
-!                       TO NOW, MULTIPLIED BY 1.5
+!                       to now, multiplied by 1.5
 !           ERLARG    - SUM OF THE ERRORS OVER THE INTERVALS LARGER
-!                       THAN THE SMALLEST INTERVAL CONSIDERED UP TO NOW
+!                       than the smallest interval considered up to now
 !           EXTRAP    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
-!                       IS ATTEMPTING TO PERFORM EXTRAPOLATION. I.E.
-!                       BEFORE SUBDIVIDING THE SMALLEST INTERVAL WE
-!                       TRY TO DECREASE THE VALUE OF ERLARG.
+!                       is attempting to perform extrapolation. I.E.
+!                       Before subdividing the smallest interval we
+!                       try to decrease the value of ERLARG.
 !           NOEXT     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
-!                       IS NO LONGER ALLOWED (TRUE-VALUE)
+!                       is no longer allowed (TRUE-VALUE)
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!           EPMACH is the largest relative spacing.
+!           UFLOW is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
 !
 epmach = dpmpar(1)
 uflow = dpmpar(2)
 oflow = dpmpar(3)
 !
-!           CHECK EPSABS AND EPSREL
+!           Check EPSABS and EPSREL
 !           -----------------------
 !
 neval = 0
@@ -654,10 +654,10 @@ if (epsabs .lt. 0.d0 .or. epsrel .lt. 0.d0) go to 999
 ier = 0
 rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
-!           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
+!           Determine the interval to be mapped onto (0,1).
 !           IF INF = 2 THE INTEGRAL IS COMPUTED AS I = I1+I2, WHERE
 !           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 !           I2 = INTEGRAL OF F OVER (0,+INFINITY).
@@ -667,7 +667,7 @@ if (inf .eq. 2) boun = 0.d0
 call dqk15i (f, boun, inf, 0.d0, 1.d0, result, abserr, &
 &defabs, resabs, epmach, uflow)
 !
-!           TEST ON ACCURACY
+!           Test on accuracy
 !
 last = 1
 rlist(1) = result
@@ -681,7 +681,7 @@ if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
 &.or. abserr .eq. 0.d0) go to 130
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -705,13 +705,13 @@ ksgn = -1
 if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
 t = 1.d0 + 100.d0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH NRMAX-TH LARGEST
-!           ERROR ESTIMATE.
+!           Bisect the subinterval with NRMAX-TH largest
+!           error estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
@@ -723,8 +723,8 @@ do 90 last = 2,limit
   call dqk15i (f, boun, inf, a2, b2, area2, error2, &
 &resabs, defab2, epmach, uflow)
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -740,25 +740,25 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
-!           SET ERROR FLAG.
+!           Test for roundoff error and eventually
+!           set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
-!           SUBINTERVALS EQUALS LIMIT.
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT SOME POINTS OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at some points of the integration range.
 !
 
   if (dmax1(dabs(a1),dabs(b2)) .le. &
 &t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -776,9 +776,9 @@ do 90 last = 2,limit
   elist(last) = error1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
-!           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
-!           BISECTED NEXT).
+!           in the list of error estimates and select the
+!           subinterval with NRMAX-TH largest error estimate (to be
+!           bisected next).
 !
 30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
   if (errsum .le. errbnd) go to 115
@@ -789,18 +789,18 @@ do 90 last = 2,limit
   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
-!           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
-!           EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (ERLARG) and perform
+!           extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -812,7 +812,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -828,7 +828,7 @@ do 90 last = 2,limit
   ertest = dmax1(epsabs,rerr*dabs(reseps))
   if (abserr .le. ertest) go to 100
 !
-!            PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!            Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -845,7 +845,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -858,7 +858,7 @@ if (area .eq. 0.d0) go to 130
 go to 110
 105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
-!           TEST ON DIVERGENCE
+!           Test on divergence
 !
 110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
 &defabs*0.1d-01) go to 130
@@ -866,7 +866,7 @@ if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
 &.or. errsum .gt. dabs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.d0
 do k = 1,last
@@ -887,22 +887,22 @@ integer :: j
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
-!              THE ORIGINAL (INFINITE) INTEGRATION RANGE IS MAPPED
-!              ONTO THE INTERVAL (0,1) AND (A,B) IS A PART OF (0,1).
-!              IT IS THE PURPOSE TO COMPUTE
+!              the original (infinite) integration range is mapped
+!              onto the interval (0,1) and (A,B) is a part of (0,1).
+!              It is the purpose to compute
 !              I = INTEGRAL OF TRANSFORMED INTEGRAND OVER (A,B),
 !              J = INTEGRAL OF ABS(TRANSFORMED INTEGRAND) OVER (A,B).
 !
 ! 2.        PARAMETERS
-!            ON ENTRY
+!            on entry
 !              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS
-!                       TO BE DECLARED E X T E R N A L IN THE
-!                       CALLING PROGRAM.
+!                       to be declared E X T E R N A L in the
+!                       calling program.
 !
 !              BOUN   - DOUBLE PRECISION
-!                       FINITE BOUND OF ORIGINAL INTEGRATION
+!                       finite bound of original integration
 !                       RANGE (SET TO ZERO IF INF = +2)
 !
 !              INF    - INTEGER
@@ -911,48 +911,48 @@ integer :: j
 !                       IF INF = +1, THE ORIGINAL INTERVAL IS
 !                                   (BOUND,+INFINITY),
 !                       IF INF = +2, THE ORIGINAL INTERVAL IS
-!                                   (-INFINITY,+INFINITY) AND
-!                       THE INTEGRAL IS COMPUTED AS THE SUM OF TWO
-!                       INTEGRALS, ONE OVER (-INFINITY,0)
-!                       AND ONE OVER (0,+INFINITY).
+!                                   (-INFINITY,+INFINITY) and
+!                       the integral is computed as the sum of two
+!                       integrals, one over (-INFINITY,0)
+!                       and one over (0,+INFINITY).
 !
 !              A      - DOUBLE PRECISION
-!                       LOWER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       lower limit for integration over subrange
+!                       of (0,1)
 !
 !              B      - DOUBLE PRECISION
-!                       UPPER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       upper limit for integration over subrange
+!                       of (0,1)
 !
-!              EPMACH - DOUBLE PRECISION
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!              EPMACH - double precision
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
-!              UFLOW  - DOUBLE PRECISION
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!              UFLOW  - double precision
+!                       the smallest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE 15-POINT
-!                       KRONROD RULE(RESK) OBTAINED BY OPTIMAL
-!                       ADDITION OF ABSCISSAE TO THE 7-POINT GAUSS
+!            On return
+!              result - double precision
+!                       approximation to the integral I
+!                       result is computed by applying the 15-point
+!                       Kronrod RULE(RESK) obtained by optimal
+!                       addition of abscissae to the 7-point Gauss
 !                       RULE(RESG).
 !
-!              ABSERR - DOUBLE PRECISION
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!              ABSERR - double precision
+!                       estimate of the modulus of the absolute error,
+!                       which should equal or exceed ABS(I-RESULT)
 !
-!              RESABS - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL J
+!              RESABS - double precision
+!                       approximation to the integral J
 !
-!              RESASC - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL OF
+!              RESASC - double precision
+!                       approximation to the integral of
 !                       ABS((TRANSFORMED INTEGRAND)-I/(B-A))
 !                       OVER (A,B)
 !
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - F (USER-PROVIDED FUNCTION)
+!                 - F (user-provided function)
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -970,21 +970,21 @@ double precision, intent(in) :: uflow
 double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 external f
 !
-!           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
-!           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
-!           THEIR CORRESPONDING WEIGHTS ARE GIVEN.
+!           The abscissae and weights are supplied for the interval
+!           (-1,1).  Because of symmetry only the positive abscissae and
+!           their corresponding weights are given.
 !
 !           XGK    - ABSCISSAE OF THE 15-POINT KRONROD RULE
-!                    XGK(2), XGK(4), ... ABSCISSAE OF THE 7-POINT
-!                    GAUSS RULE
-!                    XGK(1), XGK(3), ...  ABSCISSAE WHICH ARE OPTIMALLY
-!                    ADDED TO THE 7-POINT GAUSS RULE
+!                    XGK(2), XGK(4), ... abscissae of the 7-point
+!                    Gauss rule
+!                    XGK(1), XGK(3), ...  abscissae which are optimally
+!                    added to the 7-point Gauss rule
 !
 !           WGK    - WEIGHTS OF THE 15-POINT KRONROD RULE
 !
 !           WG     - WEIGHTS OF THE 7-POINT GAUSS RULE, CORRESPONDING
-!                    TO THE ABSCISSAE XGK(2), XGK(4), ...
-!                    WG(1), WG(3), ... ARE SET TO ZERO.
+!                    to the abscissae XGK(2), XGK(4), ...
+!                    WG(1), WG(3), ... are set to zero.
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
 &xgk(8)/ &
@@ -1015,18 +1015,18 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 &0.0d+00,    0.417959183673469387755102040816d+00/
 !
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
-!           CENTR  - MID POINT OF THE INTERVAL
-!           HLGTH  - HALF-LENGTH OF THE INTERVAL
+!           CENTR  - mid point of the interval
+!           HLGTH  - half-length of the interval
 !           ABSC*  - ABSCISSA
-!           TABSC* - TRANSFORMED ABSCISSA
-!           FVAL*  - FUNCTION VALUE
+!           TABSC* - transformed abscissa
+!           FVAL*  - function VALUE
 !           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 !           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
-!           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
-!                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
+!           RESKH  - approximation to the mean value of the transformed
+!                    integrand over (A,B), I.E. To I/(B-A)
 !
 !
 dinf = min0(1,inf)
@@ -1038,8 +1038,8 @@ fval1 = f(tabsc1)
 if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
 fc = (fval1/centr)/centr
 !
-!           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
-!           THE INTEGRAL, AND ESTIMATE THE ERROR.
+!           Compute the 15-point Kronrod approximation to
+!           the integral, and estimate the error.
 !
 resg = wg(8)*fc
 resk = wgk(8)*fc
@@ -1090,43 +1090,43 @@ implicit none
 !              DOUBLE PRECISION VERSION
 !
 ! 2.        PURPOSE
-!              THIS ROUTINE MAINTAINS THE DESCENDING ORDERING
-!              IN THE LIST OF THE LOCAL ERROR ESTIMATES RESULTING FROM
-!              THE INTERVAL SUBDIVISION PROCESS. AT EACH CALL TWO ERROR
-!              ESTIMATES ARE INSERTED USING THE SEQUENTIAL SEARCH
-!              METHOD, TOP-DOWN FOR THE LARGEST ERROR ESTIMATE
-!              AND BOTTOM-UP FOR THE SMALLEST ERROR ESTIMATE.
+!              this routine maintains the descending ordering
+!              in the list of the local error estimates resulting from
+!              the interval subdivision process. At each call two error
+!              estimates are inserted using the sequential search
+!              method, top-down for the largest error estimate
+!              and bottom-up for the smallest error estimate.
 !
 ! 3.        CALLING SEQUENCE
 !              CALL DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
 !
-!           PARAMETERS (MEANING AT OUTPUT)
-!              LIMIT  - INTEGER
-!                       MAXIMUM NUMBER OF ERROR ESTIMATES THE LIST
-!                       CAN CONTAIN
+!           Parameters (meaning at output)
+!              limit  - integer
+!                       maximum number of error estimates the list
+!                       can contain
 !
 !              LAST   - INTEGER
-!                       NUMBER OF ERROR ESTIMATES CURRENTLY
-!                       IN THE LIST
+!                       number of error estimates currently
+!                       in the list
 !
 !              MAXERR - INTEGER
-!                       MAXERR POINTS TO THE NRMAX-TH LARGEST ERROR
-!                       ESTIMATE CURRENTLY IN THE LIST
+!                       MAXERR points to the NRMAX-TH largest error
+!                       estimate currently in the list
 !
-!              ERMAX  - DOUBLE PRECISION
-!                       NRMAX-TH LARGEST ERROR ESTIMATE
+!              ERMAX  - double precision
+!                       NRMAX-TH largest error estimate
 !                       ERMAX = ELIST(MAXERR)
 !
-!              ELIST  - DOUBLE PRECISION
-!                       VECTOR OF DIMENSION LAST CONTAINING
-!                       THE ERROR ESTIMATES
+!              ELIST  - double precision
+!                       vector of dimension last containing
+!                       the error estimates
 !
 !              IORD   - INTEGER
-!                       VECTOR OF DIMENSION LAST, THE FIRST K
-!                       ELEMENTS OF WHICH CONTAIN POINTERS
-!                       TO THE ERROR ESTIMATES, SUCH THAT
+!                       vector of dimension last, the first K
+!                       elements of which contain pointers
+!                       to the error estimates, such that
 !                       ELIST(IORD(1)),... , ELIST(IORD(K))
-!                       FORM A DECREASING SEQUENCE, WITH
+!                       form a decreasing sequence, with
 !                       K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                       K = LIMIT+1-LAST OTHERWISE
 !
@@ -1147,8 +1147,8 @@ integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
 dimension elist(last),iord(last)
 !
-!           CHECK WHETHER THE LIST CONTAINS MORE THAN
-!           TWO ERROR ESTIMATES.
+!           Check whether the list contains more than
+!           two error estimates.
 !
 !***FIRST EXECUTABLE STATEMENT DQPSRT
 if(last.gt.2) go to 10
@@ -1156,11 +1156,11 @@ iord(1) = 1
 iord(2) = 2
 go to 90
 !
-!           THIS PART OF THE ROUTINE IS ONLY EXECUTED
-!           IF, DUE TO A DIFFICULT INTEGRAND, SUBDIVISION
-!           INCREASED THE ERROR ESTIMATE. IN THE NORMAL CASE
-!           THE INSERT PROCEDURE SHOULD START AFTER THE
-!           NRMAX-TH LARGEST ERROR ESTIMATE.
+!           This part of the routine is only executed
+!           if, due to a difficult integrand, subdivision
+!           increased the error estimate. In the normal case
+!           the insert procedure should start after the
+!           NRMAX-TH largest error estimate.
 !
 10 errmax = elist(maxerr)
 if(nrmax.eq.1) go to 30
@@ -1173,17 +1173,17 @@ do i = 1,ido
   nrmax = nrmax-1
    end do
 !
-!           COMPUTE THE NUMBER OF ELEMENTS IN THE LIST TO
-!           BE MAINTAINED IN DESCENDING ORDER. THIS NUMBER
-!           DEPENDS ON THE NUMBER OF SUBDIVISIONS STILL
-!           ALLOWED.
+!           Compute the number of elements in the list to
+!           be maintained in descending order. This number
+!           depends on the number of subdivisions still
+!           allowed.
 !
 30 jupbn = last
 if(last.gt.(limit/2+2)) jupbn = limit+3-last
 errmin = elist(last)
 !
-!           INSERT ERRMAX BY TRAVERSING THE LIST TOP-DOWN,
-!           STARTING COMPARISON FROM THE ELEMENT ELIST(IORD(NRMAX+1)).
+!           Insert ERRMAX by traversing the list top-down,
+!           starting comparison from the element ELIST(IORD(NRMAX+1)).
 !
 jbnd = jupbn-1
 ibeg = nrmax+1
@@ -1198,7 +1198,7 @@ end do
 iord(jupbn) = last
 go to 90
 !
-!           INSERT ERRMIN BY TRAVERSING THE LIST BOTTOM-UP.
+!           Insert ERRMIN by traversing the list bottom-up.
 !
 60 iord(i-1) = maxerr
 k = jbnd
@@ -1213,7 +1213,7 @@ iord(i) = last
 go to 90
 80 iord(k+1) = last
 !
-!           SET MAXERR AND ERMAX.
+!           Set MAXERR and ERMAX.
 !
 90 maxerr = iord(nrmax)
 ermax = elist(maxerr)
@@ -1226,47 +1226,47 @@ implicit none
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
-!              THE ROUTINE DETERMINES THE LIMIT OF A GIVEN SEQUENCE OF
-!              APPROXIMATIONS, BY MEANS OF THE EPSILON ALGORITHM
-!              OF P. WYNN.
-!              AN ESTIMATE OF THE ABSOLUTE ERROR IS ALSO GIVEN.
-!              THE CONDENSED EPSILON TABLE IS COMPUTED. ONLY THOSE
-!              ELEMENTS NEEDED FOR THE COMPUTATION OF THE NEXT DIAGONAL
-!              ARE PRESERVED.
+!              the routine determines the limit of a given sequence of
+!              approximations, by means of the epsilon algorithm
+!              of P. Wynn.
+!              An estimate of the absolute error is also given.
+!              The condensed epsilon table is computed. Only those
+!              elements needed for the computation of the next diagonal
+!              are preserved.
 !
 ! 2.        PARAMETERS
 !              N      - INTEGER
-!                       EPSTAB(N) CONTAINS THE NEW ELEMENT IN THE
-!                       FIRST COLUMN OF THE EPSILON TABLE.
+!                       EPSTAB(N) contains the new element in the
+!                       first column of the epsilon table.
 !
-!              EPSTAB - DOUBLE PRECISION
-!                       VECTOR OF DIMENSION 52 CONTAINING THE
-!                       ELEMENTS OF THE TWO LOWER DIAGONALS OF
-!                       THE TRIANGULAR EPSILON TABLE
-!                       THE ELEMENTS ARE NUMBERED STARTING AT THE
-!                       RIGHT-HAND CORNER OF THE TRIANGLE.
+!              EPSTAB - double precision
+!                       vector of dimension 52 containing the
+!                       elements of the two lower diagonals of
+!                       the triangular epsilon table
+!                       the elements are numbered starting at the
+!                       right-hand corner of the triangle.
 !
-!              RESULT - DOUBLE PRECISION
-!                       RESULTING APPROXIMATION TO THE INTEGRAL
+!              Result - double precision
+!                       resulting approximation to the integral
 !
-!              ABSERR - DOUBLE PRECISION
-!                       ESTIMATE OF THE ABSOLUTE ERROR COMPUTED FROM
-!                       RESULT AND THE 3 PREVIOUS RESULTS
+!              ABSERR - double precision
+!                       estimate of the absolute error computed from
+!                       result and the 3 previous results
 !
-!              RES3LA - DOUBLE PRECISION
-!                       VECTOR OF DIMENSION 3 CONTAINING THE LAST 3
-!                       RESULTS
+!              RES3LA - double precision
+!                       vector of dimension 3 containing the last 3
+!                       results
 !
 !              NRES   - INTEGER
-!                       NUMBER OF CALLS TO THE ROUTINE
-!                       (SHOULD BE ZERO AT FIRST CALL)
+!                       number of calls to the routine
+!                       (should be zero at first call)
 !
-!              EPMACH - DOUBLE PRECISION
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!              EPMACH - double precision
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
-!              OFLOW  - DOUBLE PRECISION
-!                       THE LARGEST POSITIVE MAGNITUDE.
+!              OFLOW  - double precision
+!                       the largest positive magnitude.
 !
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !
@@ -1289,7 +1289,7 @@ integer, intent(inout) :: nres
 integer :: num
 !---------------------
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
 !           E0     - THE 4 ELEMENTS ON WHICH THE
@@ -1298,15 +1298,15 @@ integer :: num
 !           E3                 E0
 !                        E3    E1    NEW
 !                              E2
-!           NEWELM - NUMBER OF ELEMENTS TO BE COMPUTED IN THE NEW
-!                    DIAGONAL
+!           NEWELM - number of elements to be computed in the new
+!                    diagonal
 !           ERROR  - ERROR = ABS(E1-E0) + ABS(E2-E1) + ABS(NEW-E2)
-!           RESULT - THE ELEMENT IN THE NEW DIAGONAL WITH LEAST VALUE
-!                    OF ERROR
+!           result - the element in the new diagonal with least value
+!                    of error
 !
-!           LIMEXP IS THE MAXIMUM NUMBER OF ELEMENTS THE EPSILON
-!           TABLE CAN CONTAIN. IF THIS NUMBER IS REACHED, THE UPPER
-!           DIAGONAL OF THE EPSILON TABLE IS DELETED.
+!           LIMEXP is the maximum number of elements the epsilon
+!           table can contain. If this number is reached, the upper
+!           diagonal of the epsilon table is deleted.
 !
 nres = nres + 1
 abserr = oflow
@@ -1334,8 +1334,8 @@ do 40 i = 1,newelm
   tol3 = dmax1(e1abs,dabs(e0))*epmach
   if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
-!           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
-!           ACCURACY, CONVERGENCE IS ASSUMED.
+!           If E0, E1 and E2 are equal to within machine
+!           accuracy, convergence is assumed.
 !           RESULT = E2
 !           ABSERR = ABS(E1-E0) + ABS(E2-E1)
 !
@@ -1349,15 +1349,15 @@ do 40 i = 1,newelm
   err1 = dabs(delta1)
   tol1 = dmax1(e1abs,dabs(e3))*epmach
 !
-!           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
-!           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
+!           If two elements are very close to each other, omit
+!           a part of the table by adjusting the value of N
 !
   if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
   ss = 1.d0/delta1 + 1.d0/delta2 - 1.d0/delta3
   epsinf = dabs(ss*e1)
 !
-!           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
-!           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
+!           Test to detect irregular behaviour in the table, and
+!           eventually omit a part of the table adjusting the value
 !           OF N.
 !
   if (epsinf .gt. 0.1d-03) go to 30
@@ -1365,8 +1365,8 @@ do 40 i = 1,newelm
 ! ***JUMP OUT OF DO-LOOP
   go to 50
 !
-!           COMPUTE A NEW ELEMENT AND EVENTUALLY ADJUST
-!           THE VALUE OF RESULT.
+!           Compute a new element and eventually adjust
+!           the value of result.
 !
 30 res = e1 + 1.d0/ss
   epstab(k1) = res
@@ -1377,7 +1377,7 @@ do 40 i = 1,newelm
   result = res
 40 continue
 !
-!           SHIFT THE TABLE.
+!           Shift the table.
 !
 50 if (n .eq. limexp) n = 2*(limexp/2) - 1
 ib = 1
@@ -1399,7 +1399,7 @@ res3la(nres) = result
 abserr = oflow
 go to 100
 !
-!           COMPUTE ERROR ESTIMATE
+!           Compute error estimate
 !
 90 abserr = dabs(result - res3la(3)) + dabs(result - res3la(2)) + &
 &dabs(result - res3la(1))
@@ -1414,140 +1414,140 @@ subroutine dqxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
 &limit,leniw,lenw,last,iwork,work)
 implicit none
 !
-!            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
+!            The routine calculates an approximation result to a given
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
-!            HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!            hopefully satisfying following claim for accuracy
 !            DABS(I-RESULT).LE.MAX(EPSABS,EPSREL*DABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - DOUBLE PRECISION
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - DOUBLE PRECISION
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED DABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed DABS(I-RESULT)
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
-!            ERROR MESSAGES
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF LIMIT
-!                             (AND TAKING THE ACCORDING DIMENSION
-!                             ADJUSTMENTS INTO ACCOUNT. HOWEVER, IF
-!                             THIS YIELDS NO IMPROVEMENT IT IS ADVISED
-!                             TO ANALYZE THE INTEGRAND IN ORDER TO
-!                             DETERMINE THE INTEGRATION DIFFICULTIES. IF
-!                             THE POSITION OF A LOCAL DIFFICULTY CAN BE
-!                             DETERMINED (E.G. SINGULARITY,
-!                             DISCONTINUITY WITHIN THE INTERVAL) ONE
-!                             WILL PROBABLY GAIN FROM SPLITTING UP THE
-!                             INTERVAL AT THIS POINT AND CALLING THE
-!                             INTEGRATOR ON THE SUBRANGES. IF POSSIBLE,
-!                             AN APPROPRIATE SPECIAL-PURPOSE INTEGRATOR
-!                             SHOULD BE USED, WHICH IS DESIGNED FOR
-!                             HANDLING THE TYPE OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account. However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. Singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE. IT IS PRESUMED THAT
-!                             THE REQUESTED TOLERANCE CANNOT BE
-!                             ACHIEVED, AND THAT THE RETURNED RESULT IS
-!                             THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table. It is presumed that
+!                             the requested tolerance cannot be
+!                             achieved, and that the returned result is
+!                             the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS OR
 !                             EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             LENW .LT. 46*LIMIT, OR
 !                             LENIW .LT. 3*LIMIT.
-!                             RESULT, ABSERR, LAST ARE SET TO
-!                             ZERO. EXCEPT WHEN LIMIT OR LENW OR LENIW
-!                             IS INVALID, IWORK(1), WORK(LIMIT*2+1) AND
-!                             WORK(LIMIT*3+1) ARE SET TO ZERO, WORK(1)
-!                             IS SET TO A, AND WORK(LIMIT+1) TO B.
+!                             Result, ABSERR, last are set to
+!                             zero. Except when limit or LENW or LENIW
+!                             is invalid, IWORK(1), WORK(LIMIT*2+1) and
+!                             WORK(LIMIT*3+1) are set to zero, WORK(1)
+!                             is set to A, and WORK(LIMIT+1) to B.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER OF SUBINTERVALS
-!                    IN THE PARTITION OF THE GIVEN INTEGRATION INTERVAL
+!         Dimensioning parameters
+!            limit - integer
+!                    limit determines the maximum number of subintervals
+!                    in the partition of the given integration interval
 !                    (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*46.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*46.
 !                    IF LENW.LT.LIMIT*46, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
 !            LENIW - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LENIW MUST BE AT LEAST LIMIT*3.
+!                    dimensioning parameter for IWORK
+!                    LENIW must be at least limit*3.
 !                    IF LENW.LT.LIMIT*3, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF SUBINTERVALS
-!                    PRODUCED IN THE SUBDIVISION PROCESS, WHICH DETER-
-!                    MINES THE NUMBER OF SIGNIFICANT ELEMENTS ACTUALLY
-!                    IN THE WORK ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of subintervals
+!                    produced in the subdivision process, which deter-
+!                    mines the number of significant elements actually
+!                    in the work arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST 3*LIMIT, THE FIRST K
-!                    ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least 3*limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2),
 !                    AND K = LIMIT+1-LAST OTHERWISE.
 !
-!            WORK  - DOUBLE PRECISION
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - double precision
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END-POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END-POINTS,
-!                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST) CONTAIN
-!                     THE INTEGRAL APPROXIMATIONS OVER THE SUBINTERVALS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end-points,
+!                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST) contain
+!                     the integral approximations over the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
-!                    WORK(LIMIT*4+1), ... IS THE AREA RESERVED TO STORE
-!                     FUNCTIONAL VALUES.
+!                     contain the error estimates.
+!                    WORK(LIMIT*4+1), ... is the area reserved to store
+!                     functional values.
 !
 double precision :: a
 double precision, intent(out) :: abserr
@@ -1566,7 +1566,7 @@ dimension iwork(leniw),work(lenw)
 !
 external f
 !
-!         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
+!         Check validity of limit,LENIW and LENW.
 !
 ier = 6
 last = 0
@@ -1575,7 +1575,7 @@ abserr = 0.d0
 if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
 &return
 !
-!         PREPARE CALL FOR DQXGSE.
+!         Prepare call for DQXGSE.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -1594,135 +1594,135 @@ subroutine dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
 &ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
 implicit none
 !
-!            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
+!            The routine calculates an approximation result to A
 !            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
-!            HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!            hopefully satisfying following claim for accuracy
 !            DABS(I-RESULT).LE.MAX(EPSABS,EPSREL*DABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - DOUBLE PRECISION
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - DOUBLE PRECISION
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPERBOUND ON THE NUMBER OF SUBINTERVALS
-!                     IN THE PARTITION OF (A,B)
+!            Limit  - integer
+!                     gives an upperbound on the number of subintervals
+!                     in the partition of (A,B)
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED DABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed DABS(I-RESULT)
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
-!            ERROR MESSAGES
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
 !                         = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF LIMIT
-!                             (AND TAKING THE ACCORDING DIMENSION
-!                             ADJUSTMENTS INTO ACCOUNT). HOWEVER, IF
-!                             THIS YIELDS NO IMPROVEMENT IT IS ADVISED
-!                             TO ANALYZE THE INTEGRAND IN ORDER TO
-!                             DETERMINE THE INTEGRATION DIFFICULTIES. IF
-!                             THE POSITION OF A LOCAL DIFFICULTY CAN BE
-!                             DETERMINED (E.G. SINGULARITY,
-!                             DISCONTINUITY WITHIN THE INTERVAL) ONE
-!                             WILL PROBABLY GAIN FROM SPLITTING UP THE
-!                             INTERVAL AT THIS POINT AND CALLING THE
-!                             INTEGRATOR ON THE SUBRANGES. IF POSSIBLE,
-!                             AN APPROPRIATE SPECIAL-PURPOSE INTEGRATOR
-!                             SHOULD BE USED, WHICH IS DESIGNED FOR
-!                             HANDLING THE TYPE OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account). However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. Singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS OR
-!                             EPSREL IS NEGATIVE. RESULT, ABSERR,
-!                             LAST, RLIST(1), IORD(1), AND ELIST(1)
-!                             ARE SET TO ZERO. ALIST(1) AND BLIST(1)
-!                             ARE SET TO A AND B RESPECTIVELY.
+!                             EPSREL is negative. Result, ABSERR,
+!                             last, RLIST(1), IORD(1), and ELIST(1)
+!                             are set to zero. ALIST(1) and BLIST(1)
+!                             are set to A and B respectively.
 !
-!            ALIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE
-!                     GIVEN INTEGRATION RANGE (A,B)
+!            ALIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left end points
+!                     of the subintervals in the partition of the
+!                     given integration range (A,B)
 !
-!            BLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE GIVEN
-!                     INTEGRATION RANGE (A,B)
+!            BLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right end points
+!                     of the subintervals in the partition of the given
+!                     integration range (A,B)
 !
-!            RLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!            RLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
-!            ELIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI OF THE
-!                     ABSOLUTE ERROR ESTIMATES ON THE SUBINTERVALS
+!            ELIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli of the
+!                     absolute error estimates on the subintervals
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
+!                     vector of dimension at least limit, the first K
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED IN THE
-!                     SUBDIVISION PROCESS
+!                     number of subintervals actually produced in the
+!                     subdivision process
 !
 !            VALP   - DOUBLE PRECISION
 !            VALN     ARRAYS OF DIMENSION AT LEAST (21,LIMIT) USED TO
-!                     SAVE THE FUNCTIONAL VALUES
+!                     save the functional values
 !
 !            LP     - INTEGER
 !            LN       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
-!                     STORE THE ACTUAL NUMBER OF FUNCTIONAL VALUES
-!                     SAVED IN THE CORRESPONDING COLUMN
+!                     store the actual number of functional values
+!                     saved in the corresponding column
 !                     OF VALP,VALN
 !
 !***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
@@ -1761,18 +1761,18 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!          EPMACH IS THE LARGEST RELATIVE SPACING.
-!          UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!          OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!          EPMACH is the largest relative spacing.
+!          UFLOW is the smallest positive magnitude.
+!          OFLOW is the largest positive magnitude.
 !
 epmach = dpmpar(1)
 uflow = dpmpar(2)
 oflow = dpmpar(3)
 !
-!            TEST ON VALIDITY OF PARAMETERS
+!            Test on validity of parameters
 !            ------------------------------
 last = 0
 result = 0.d0
@@ -1786,7 +1786,7 @@ if (epsabs .lt. 0.d0 .or. epsrel.lt. 0.d0) go to 999
 ier = 0
 rerr = dmax1(epsrel, 50.d0*epmach)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
 ierro = 0
@@ -1798,7 +1798,7 @@ call dqxlqm (f,a,b,result,abserr,defabs,resabs, &
 &valp(1,1),valn(1,1),lp(1),ln(1),2, &
 &epmach,uflow,oflow)
 !
-!           TEST ON ACCURACY.
+!           Test on accuracy.
 !
 dres = dabs(result)
 errbnd = dmax1(epsabs,rerr*dres)
@@ -1812,7 +1812,7 @@ if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
 &abserr .eq. 0.d0) go to 999
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -1834,13 +1834,13 @@ ksgn = -1
 if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
 t = 1.d0 + 100.d0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST ERROR
-!           ESTIMATE.
+!           Bisect the subinterval with the NRMAX-TH largest error
+!           estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
@@ -1854,8 +1854,8 @@ do 90 last = 2,limit
   call dqxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
 &2,epmach,uflow,oflow)
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -1871,23 +1871,23 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
+!           Test for roundoff error and eventually set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF SUBINTERVALS
-!           EQUALS LIMIT.
+!           Set error flag in the case that the number of subintervals
+!           equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT A POINT OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
 !
   if (dmax1(dabs(a1),dabs(b2)) .le. &
 &t*(dabs(a2) + 1.d+03*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -1922,8 +1922,8 @@ do 90 last = 2,limit
   ln(last) = ln1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE SUBINTERVAL
-!           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
+!           in the list of error estimates and select the subinterval
+!           with NRMAX-TH largest error estimate (to be bisected next).
 !
 30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
@@ -1936,22 +1936,22 @@ do 90 last = 2,limit
   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 !
-!           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
-!           MORE CAUTIOUS EXTRAPOLATION THAN IN THE ORIGINAL DQAGSE
-!           ROUTINE
+!           The bound 0.3*ERTEST has been introduced to perform A
+!           more cautious extrapolation than in the original DQAGSE
+!           routine
 !
 40 if (ierro .eq. 3 .or. erlarg .le. 0.3d0*ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS OVER THE
-!           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors over the
+!           larger intervals (ERLARG) and perform extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -1964,7 +1964,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -1981,7 +1981,7 @@ do 90 last = 2,limit
 ! ***JUMP OUT OF DO-LOOP
   if (abserr .le. ertest) go to 100
 !
-!           PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -1998,7 +1998,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -2011,7 +2011,7 @@ if (area .eq. 0.d0) go to 130
 go to 110
 105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
-!           TEST ON DIVERGENCE.
+!           Test on divergence.
 !
 110 if(ksgn.eq.(-1).and.dmax1(dabs(result),dabs(area)).le. &
 &defabs*0.1d-01) go to 130
@@ -2019,7 +2019,7 @@ if(0.1d-01.gt.(result/area).or.(result/area).gt.0.1d+03 &
 &.or.errsum.gt.dabs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.d0
 do k = 1,last
@@ -2035,7 +2035,7 @@ implicit none
 integer :: i
 !
 !  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
-!          THE DOUBLE PRECISION VECTOR A OF LENGTH L
+!          the double precision vector A of length L
 !
 integer, intent(in) :: l
 double precision, intent(inout) :: a(l)
@@ -2051,82 +2051,82 @@ subroutine dqxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
 implicit none
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
+!                           estimate
 !                       J = INTEGRAL OF DABS(F) OVER (A,B)
 !
-!           PARAMETERS
-!            ON ENTRY
+!           Parameters
+!            on entry
 !              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              A      - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              B      - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
 !              VR     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector of length LR containing the
+!                       saved  functional values of positive abscissas
 !
 !              VS     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector of length LS containing the
+!                       saved  functional values of negative abscissas
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
+!                       VR,vs respectively
 !
 !            KEY    - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     RMS FORMULAS ARE USED WITH
+!                     key for choice of local integration rule
+!                     rms formulas are used with
 !                      13 - 19               POINTS IF KEY.LT.1,
 !                      13 - 19 - (27)        POINTS IF KEY = 1,
 !                      13 - 19 - (27) - (41) POINTS IF KEY = 2,
 !                           19 -  27  - (41) POINTS IF KEY = 3,
 !                                 27  -  41  POINTS IF KEY.GT.3.
 !
-!                         (RULES) USED IF THE FUNCTION APPEARS
-!                         ENOUGH REGULAR
+!                         (Rules) used if the function APPEARS
+!                         enough regular
 !
-!              EPMACH - DOUBLE PRECISION
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!              EPMACH - double precision
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
-!              UFLOW  - DOUBLE PRECISION
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!              UFLOW  - double precision
+!                       the smallest positive magnitude.
 !
-!              OFLOW  - DOUBLE PRECISION
-!                       THE LARGEST POSITIVE MAGNITUDE.
+!              OFLOW  - double precision
+!                       the largest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
+!            On return
+!              result - double precision
+!                       approximation to the integral I
 !
-!              ABSERR - DOUBLE PRECISION
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD NOT EXCEED DABS(I-RESULT)
+!              ABSERR - double precision
+!                       estimate of the modulus of the absolute error,
+!                       which should not exceed DABS(I-RESULT)
 !
-!              RESABS - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL J
+!              RESABS - double precision
+!                       approximation to the integral J
 !
-!              RESASC - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL OF DABS(F-I/(B-A))
+!              RESASC - double precision
+!                       approximation to the integral of DABS(F-I/(B-A))
 !                       OVER (A,B)
 !
 !              VR     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector of length LR containing the
+!                       saved  functional values of positive abscissas
 !
 !              VS     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector of length LS containing the
+!                       saved  functional values of negative abscissas
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
+!                       VR,vs respectively
 !
 !***ROUTINES CALLED  DQXRUL
 !
@@ -2173,51 +2173,51 @@ implicit none
 integer :: i, is, k, ks
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
-!            AND CONDITIONALLY COMPUTE
+!                           estimate
+!            and conditionally compute
 !                       J = INTEGRAL OF DABS(F) OVER (A,B)
-!                       BY USING AN  RMS RULE
-!           PARAMETERS
-!            ON ENTRY
+!                       by using an  rms rule
+!           parameters
+!            on entry
 !              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              XL     - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              XU     - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
 !              KE     - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     AN RMS RULE IS USED WITH
+!                     key for choice of local integration rule
+!                     an rms rule is used with
 !                         13      POINTS IF KE  = 2,
 !                         19      POINTS IF KE  = 3,
 !                         27      POINTS IF KE  = 4,
 !                         42      POINTS IF KE  = 5
 !
 !              K1     INTEGER
-!                     VALUE OF KEY FOR WHICH THE ADDITIONAL ESTIMATES
-!                     YA, YM ARE TO BE COMPUTED
+!                     value of key for which the additional estimates
+!                     YA, YM are to be computed
 !
 !              FV1    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector containing L1
+!                       saved  functional values of positive abscissas
 !
 !              FV2    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector containing L2
+!                       saved  functional values of negative abscissas
 !
 !              L1     - INTEGER
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 !
-!            ON RETURN
+!            On return
 !              Y      - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE
-!                       REQUESTED RMS RULE
+!                       approximation to the integral I
+!                       result is computed by applying the
+!                       requested rms rule
 !
 !              YA     - DOUBLE PRECISION
 !                       IF KEY = K1  APPROXIMATION TO THE INTEGRAL J
@@ -2229,12 +2229,12 @@ integer :: i, is, k, ks
 !                       ELSE UNCHANGED
 !
 !              FV1    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector containing L1
+!                       saved  functional values of positive abscissas
 !
 !              FV2    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector containing L2
+!                       saved  functional values of negative abscissas
 !
 !              L1     - INTEGER
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
@@ -2277,7 +2277,7 @@ data xx(18)/.56250000000000000000d+00/
 data xx(19)/.84375000000000000000d+00/
 data xx(20)/.90625000000000000000d+00/
 data xx(21)/.99218750000000000000d+00/
-!   NUMBER OF NODES 13
+!   Number of nodes 13
 data ww(1)/1.303262173284849021810473057638590518409112513421d-1/
 data ww(2)/2.390632866847646220320329836544615917290026806242d-1/
 data ww(3)/2.630626354774670227333506083741355715758124943143d-1/
@@ -2285,7 +2285,7 @@ data ww(4)/2.186819313830574175167853094864355208948886875898d-1/
 data ww(5)/2.757897646642836865859601197607471574336674206700d-2/
 data ww(6)/1.055750100538458443365034879086669791305550493830d-1/
 data ww(7)/1.571194260595182254168429283636656908546309467968d-2/
-!   NUMBER OF NODES 19
+!   Number of nodes 19
 data ww(8)/1.298751627936015783241173611320651866834051160074d-1/
 data ww(9)/2.249996826462523640447834514709508786970828213187d-1/
 data ww(15)/5.542699233295875168406783695143646338274805359780d-2/
@@ -2296,7 +2296,7 @@ data ww(12)/1.006482260551160175038684459742336605269707889822d-1/
 data ww(13)/2.510604860724282479058338820428989444699235030871d-2/
 data ww(17)/4.507523056810492466415880450799432587809828791196d-2/
 data ww(14)/9.402964360009747110031098328922608224934320397592d-3/
-!   NUMBER OF NODES 27
+!   Number of nodes 27
 data ww(18)/6.300942249647773931746170540321811473310938661469d-2/
 data ww(28)/1.239572396231834242194189674243818619042280816640d-1/
 data ww(19)/1.261383225537664703012999637242003647020326905948d-1/
@@ -2311,7 +2311,7 @@ data ww(23)/5.026383572857942403759829860675892897279675661654d-2/
 data ww(27)/1.252575774226122633391477702593585307254527198070d-2/
 data ww(31)/2.259167374956474713302030584548274729936249753832d-2/
 data ww(24)/4.683670010609093810432609684738393586390722052124d-3/
-!   NUMBER OF NODES 41
+!   Number of nodes 41
 data ww(32)/6.362762978782724559269342300509058175967124446839d-2/
 data ww(42)/1.187141856692283347609436153545356484256869129472d-1/
 data ww(46)/1.533126874056586959338368742803997744815413565014d-2/
@@ -2376,33 +2376,33 @@ end subroutine dqxrul
 subroutine dqxrrd (f,z,lz,xl,xu,r,s,lr,ls)
 implicit none
 !
-!            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
-!            THE BISECTION OF AN INTERVAL
+!            To reorder the computed functional values before
+!            the bisection of an interval
 !
-!           PARAMETERS
-!            ON ENTRY
+!           Parameters
+!            on entry
 !              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              XL     - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTERVAL
+!                       lower limit of interval
 !
 !              XU     - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTERVAL
+!                       upper limit of interval
 !
 !              Z      - DOUBLE PRECISION
-!                       VECTOR CONTAINING LZ
-!                       SAVED  FUNCTIONAL VALUES
+!                       vector containing LZ
+!                       saved  functional values
 !
 !              LZ     - INTEGER
-!                       NUMBER OF ELEMENTS IN LZ
+!                       number of elements in LZ
 !
-!            ON RETURN
+!            On return
 !              R      - DOUBLE PRECISION
 !              S        VECTORS CONTAINING LR, LS
-!                       SAVED  FUNCTIONAL VALUES FOR THE NEW INTERVALS
+!                       saved  functional values for the new intervals
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTES IN R,S RESPECTIVELY
@@ -2481,86 +2481,86 @@ real :: one, point5, zero
 real :: rnderr
 real :: f
 !
-!       ADAPTIVE CUBATURE OVER A TRIANGLE
+!       Adaptive cubature over a triangle
 !
-!       PARAMETERS
+!       Parameters
 !          F     - USER SUPPLIED EXTERNAL FUNCTION OF THE FORM
 !                  F(X,Y,IDATA,RDATA)
-!                  WHERE X AND Y ARE THE CARTESIAN COORDINATES OF A
-!                  POINT IN THE PLANE, AND IDATA AND RDATA ARE INTEGER
-!                  AND REAL VECTORS IN WHICH DATA MAY BE PASSED.
+!                  where X and Y are the cartesian coordinates of A
+!                  point in the plane, and idata and RDATA are integer
+!                  and real vectors in which data may be passed.
 !          T     - ARRAY OF DIMENSION (2,3) WHERE T(1,J) AND T(2,J)
-!                  ARE THE X AND Y COORDINATES OF THE J-TH VERTEX OF
-!                  THE GIVEN TRIANGLE (INPUT)
+!                  are the X and Y coordinates of the J-TH vertex of
+!                  the given triangle (input)
 !          EPS   - REQUIRED TOLERANCE (INPUT).  IF THE COMPUTED
-!                  INTEGRAL IS BETWEEN-1 AND 1, AN ABSOLUTE ERROR
-!                  TEST IS USED, ELSE A RELATIVE ERROR TEST IS USED.
-!          MCALLS- MAXIMUM PERMITTED NUMBER OF CALLS TO F (INPUT)
+!                  integral is between-1 and 1, an absolute error
+!                  test is used, else a relative error test is used.
+!          MCALLS- maximum permitted number of calls to F (input)
 !          ANS   - ESTIMATE FOR THE VALUE OF THE INTEGRAL OF F OVER
-!                  THE GIVEN TRIANGLE (OUTPUT)
+!                  the given triangle (OUTPUT)
 !          ERR   - ESTIMATED ABSOLUTE ERROR IN ANS (OUTPUT)
-!          NCALLS- ACTUAL NUMBER OF CALLS TO F (OUTPUT).  THIS
-!                  PARAMETER MUST BE INITIALIZED TO 0 ON THE FIRST
+!          NCALLS- actual number of calls to F (OUTPUT).  This
+!                  parameter must be initialized to 0 on the first
 !                  CALL TO CUBTRI FOR A GIVEN INTEGRAL (INPUT)
 !          W     - WORK SPACE.  MAY NOT BE DESTROYED BETWEEN CALLS TO
-!                  CUBTRI IF RESTARTING IS INTENDED
+!                  CUBTRI if restarting is intended
 !          NW    - LENGTH OF WORK SPACE (INPUT).
 !                  IF NW .GE. 3*(19+3*MCALLS)/38, TERMINATION DUE TO
-!                  FULL WORK SPACE WILL NOT OCCUR.
+!                  full work space will not occur.
 !          IER   - TERMINATION INDICATOR (OUTPUT)
 !                  IER=0   NORMAL TERMINATION, TOLERANCE SATISFIED
 !                  IER=1   MAXIMUM NUMBER OF CALLS REACHED
 !                  IER=2   WORK SPACE FULL
 !                  IER=3   FURTHER SUBDIVISION OF TRIANGLES IMPOSSIBLE
 !                  IER=4   NO FURTHER IMPROVEMENT IN ACCURACY IS
-!                        POSSIBLE DUE TO ROUNDING ERRORS IN FUNCTION
-!                        VALUES
+!                        possible due to rounding errors in function
+!                        values
 !                  IER=5   NO FURTHER IMPROVEMENT IN ACCURACY IS
-!                        POSSIBLE BECAUSE SUBDIVISION DOES NOT
-!                        CHANGE THE ESTIMATED INTEGRAL. MACHINE
-!                        ACCURACY HAS PROBABLY BEEN REACHED BUT
-!                        THE ERROR ESTIMATE IS NOT SHARP ENOUGH.
+!                        possible because subdivision does not
+!                        change the estimated integral. Machine
+!                        accuracy has probably been reached but
+!                        the error estimate is not sharp enough.
 !
-!       CUBTRI IS DESIGNED TO BE CALLED REPEATEDLY WITHOUT WASTING
-!       EARLIER WORK.  THE PARAMETER NCALLS IS USED TO INDICATE TO
-!       CUBTRI AT WHAT POINT TO RESTART, AND MUST BE RE-INITIALIZED
-!       TO 0 WHEN A NEW INTEGRAL IS TO BE COMPUTED.  AT LEAST ONE OF
-!       THE PARAMETERS EPS, MCALLS AND NW MUST BE CHANGED BETWEEN
-!       CALLS TO CUBTRI, ACCORDING TO THE RETURNED VALUE OF IER. NONE
-!       OF THE OTHER PARAMETERS MAY BE CHANGED IF RESTARTING IS DONE.
+!       CUBTRI is designed to be called repeatedly without wasting
+!       earlier work.  The parameter NCALLS is used to indicate to
+!       CUBTRI at what point to restart, and must be RE-initialized
+!       to 0 when a new integral is to be computed.  At least one of
+!       the parameters eps, MCALLS and NW must be changed between
+!       calls to CUBTRI, according to the returned value of ier. None
+!       of the other parameters may be changed if restarting is done.
 !       IF IER=3 IS ENCOUNTERED, THERE PROBABLY IS A SINGULARITY
-!       SOMEWHERE IN THE REGION.  THE ERROR MESSAGE INDICATES THAT
-!       FURTHER SUBDIVISION IS IMPOSSIBLE BECAUSE THE VERTICES OF THE
-!       SMALLER TRIANGLES PRODUCED WILL BEGIN TO COALESCE TO THE
-!       PRECISION OF THE COMPUTER.  THIS SITUATION CAN USUALLY BE
-!       RELIEVED BY SPECIFYING THE REGION IN SUCH A WAY THAT THE
-!       SINGULARITY IS LOCATED AT THE THIRD VERTEX OF THE TRIANGLE.
+!       somewhere in the region.  The error message indicates that
+!       further subdivision is impossible because the vertices of the
+!       smaller triangles produced will begin to coalesce to the
+!       precision of the computer.  This situation can usually be
+!       relieved by specifying the region in such a way that the
+!       singularity is located at the third vertex of the triangle.
 !       IF IER=4 IS ENCOUNTERED, THE VALUE OF THE INTEGRAL CANNOT BE
-!       IMPROVED ANY FURTHER. THE ONLY EXCEPTION TO THIS OCCURS WHEN A
-!       FUNCTION WITH HIGHLY IRREGULAR BEHAVIOUR IS INTEGRATED (E.G.
-!       FUNCTIONS WITH JUMP DISCONTINUITIES OR VERY HIGHLY OSCILLATORY
-!       FUNCTIONS). IN SUCH A CASE THE USER CAN DISABLE THE ROUNDING
-!       ERROR TEST BY REMOVING THE IF STATEMENT IMMEDIATELY PRECEDING
-!       STATEMENT NUMBER 90.
+!       improved any further. The only exception to this occurs when A
+!       function with highly irregular behaviour is integrated (E.G.
+!       Functions with jump discontinuities or very highly oscillatory
+!       functions). In such a case the user can disable the rounding
+!       error test by removing the if statement immediately preceding
+!       statement number 90.
 !
 external f
 integer :: idata(*), ier, mcalls, ncalls, nw
 real :: alfa, ans, anskp, area, eps, err, errmax, h, q1, q2, r1, &
 &r2, rdata(*), d(2,4), s(4), t(2,*), vec(2,3), w(6,nw), x(2)
-!       ACTUAL DIMENSION OF W IS (6,NW/6)
+!       Actual dimension of W is (6,NW/6)
 !
 double precision :: tans, terr, dzero
 common /cubsta/ tans, terr
-!       THIS COMMON IS REQUIRED TO PRESERVE TANS AND TERR BETWEEN CALLS
-!       AND TO SAVE VARIABLES IN FUNCTION RNDERR
+!       This common is required to preserve tans and terr between calls
+!       and to save variables in function RNDERR
 data nfe /19/, s(1), s(2), s(3), s(4) /3*1e0,-1e0/, d(1,1), &
 &d(2,1) /0.0,0.0/, d(1,2), d(2,2) /0.0,1.0/, d(1,3), d(2,3) &
 &/1.0,0.0/, d(1,4), d(2,4) /1.0,1.0/
-!       NFE IS THE NUMBER OF FUNCTION EVALUATIONS PER CALL TO CUBRUL.
+!       NFE is the number of function evaluations per call to CUBRUL.
 data zero /0.e0/, one /1.e0/, dzero /0.d0/, point5 /.5e0/
 !
-!      CALCULATE DIRECTION VECTORS, AREA AND MAXIMUM NUMBER
-!      OF SUBDIVISIONS THAT MAY BE PERFORMED
+!      Calculate direction vectors, area and maximum number
+!      of subdivisions that may be performed
 do i=1,2
   vec(i,3) = t(i,3)
   do j=1,2
@@ -2576,14 +2576,14 @@ k = (ncalls/nfe+3)/4
 mw = 3*(k-1) + 1
 if (ncalls.gt.0) go to 30
 !
-!       TEST FOR TRIVIAL CASES
+!       Test for trivial cases
 tans = dzero
 terr = dzero
 if (area.eq.zero) go to 90
 if (mcalls.lt.nfe) go to 100
 if (nw.lt.6) go to 110
 !
-!       INITIALIZE DATA LIST
+!       Initialize data list
 k = 1
 mw = 1
 w(1,1) = zero
@@ -2594,13 +2594,13 @@ tans = w(5,1)
 terr = w(6,1)
 ncalls = nfe
 !
-!       TEST TERMINATION CRITERIA
+!       Test termination criteria
 30 ans = tans
 err = terr
 if (err.lt.amax1(one,abs(ans))*eps) go to 90
 if (k.eq.maxk) go to 120
 !
-!       FIND TRIANGLE WITH LARGEST ERROR
+!       Find triangle with largest error
 errmax = zero
 do 40 i = 1,mw
   if (w(6,i).le.errmax) go to 40
@@ -2608,7 +2608,7 @@ do 40 i = 1,mw
   j = i
 40 continue
 !
-!       SUBDIVIDE TRIANGLE INTO FOUR SUBTRIANGLES AND UPDATE DATA LIST
+!       Subdivide triangle into four subtriangles and update data list
 do i=1,2
   x(i) = w(i,j)
 end do
@@ -2646,14 +2646,14 @@ mw = mw + 3
 ncalls = ncalls + 4*nfe
 k = k + 1
 !
-!       IF ANSWER IS UNCHANGED, IT CANNOT BE IMPROVED
+!       If answer is unchanged, it cannot be improved
 if (anskp.eq.sngl(tans)) go to 150
 !
-!       REMOVE THIS IF STATEMENT TO DISABLE ROUNDING ERROR TEST
+!       Remove this if statement to disable rounding error test
 if (k.gt.3 .and. abs(q2-r2).gt.abs(q1-r1)) go to 140
 go to 30
 !
-!       EXITS FROM SUBROUTINE
+!       Exits from subroutine
 90 ier = 0
 go to 120
 100 ier = 1
@@ -2675,13 +2675,13 @@ implicit none
 real :: a, b, x, y
 real :: s, t
 real :: rnderr
-!       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
-!       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
-!       AS X AND B MUST BE THE SAME AS A.  THEY ARE DECLARED AS
-!       DISTINCT VARIABLES IN THIS FUNCTION, AND THE INTERMEDIATE
-!       VARIABLES S AND T ARE PUT INTO COMMON, IN ORDER TO DEFEND
-!       AGAINST THE WELL-MEANING ACTIONS OF SOME OFFICIOUS OPTIMIZING
-!       FORTRAN COMPILERS.
+!       This function computes the rounding error committed when the
+!       sum X+A is formed.  In the calling program, Y must be the same
+!       as X and B must be the same as A.  They are declared as
+!       distinct variables in this function, and the intermediate
+!       variables S and T are put into common, in order to defend
+!       against the well-meaning actions of some officious optimizing
+!       Fortran compilers.
 common /cubatb/ s, t
 s = x + a
 t = s - y
@@ -2695,33 +2695,33 @@ integer :: i, j, k, nquad
 real :: point5, x, y
 real :: f
 !
-!       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
+!       BASIC cubature rule pair over a triangle
 !
-!       PARAMETERS
-!         F  - EXTERNAL FUNCTION - SEE COMMENTS TO CUBTRI
-!         VEC- MATRIX OF BASE VECTORS AND ORIGIN (INPUT)
-!         P  - TRIANGLE DESCRIPTION VECTOR OF DIMENSION 6
-!               P(1) - TRANSFORMED X COORDINATE OF ORIGIN VERTEX(INPUT)
-!               P(2) - TRANSFORMED Y COORDINATE OF ORIGIN VERTEX(INPUT)
-!               P(3) - DISTANCE OF OTHER VERTICES IN THE DIRECTIONS
-!                     OF THE BASE VECTORS (INPUT)
-!               P(4) - LESS ACCURATE ESTIMATED INTEGRAL (OUTPUT)
-!               P(5) - MORE ACCURATE ESTIMATED INTEGRAL (OUTPUT)
+!       Parameters
+!         F  - external function - see comments to CUBTRI
+!         VEC- matrix of base vectors and origin (input)
+!         P  - triangle description vector of dimension 6
+!               P(1) - transformed X coordinate of origin VERTEX(INPUT)
+!               P(2) - transformed Y coordinate of origin VERTEX(INPUT)
+!               P(3) - distance of other vertices in the directions
+!                     of the base vectors (input)
+!               P(4) - less accurate estimated integral (OUTPUT)
+!               P(5) - more accurate estimated integral (OUTPUT)
 !               P(6) - ABS(P(5)-P(4))   (OUTPUT)
 !
-!       CUBRUL EVALUATES A LINEAR COMBINATION OF BASIC INTEGRATION
-!       RULES HAVING D3 SYMMETRY.  THE AREAL COORDINATES PERTAINING TO
+!       CUBRUL evaluates a linear combination of BASIC integration
+!       rules having D3 symmetry.  The areal coordinates pertaining to
 !       THE J-TH RULE ARE STORED IN W(I,J),I=1,2,3.  THE CORRESPONDING
-!       WEIGHTS ARE W(4,J) AND W(5,J), WITH W(5,J) BELONGING TO THE
+!       weights are W(4,J) and W(5,J), with W(5,J) belonging to the
 !       MORE ACCURATE FORMULA.  IF W(1,J).EQ.W(2,J), THE INTEGRATION
 !       POINT IS THE CENTROID, ELSE IF W(2,J).EQ.W(3,J), THE EVALUATION
-!       POINTS ARE ON THE MEDIANS.  IN BOTH CASES ADVANTAGE IS TAKEN OF
-!       SYMMETRY TO AVOID REPEATING FUNCTION EVALUATIONS.
+!       points are on the medians.  In both cases advantage is taken of
+!       symmetry to avoid repeating function evaluations.
 !
-!       THE FOLLOWING DOUBLE PRECISION VARIABLES ARE USED TO AVOID
-!       UNNECESSARY ROUNDING ERRORS IN FLOATING POINT ADDITION.
-!       THEY MAY BE DECLARED SINGLE PRECISION IF DOUBLE PRECISION IS
-!       NOT AVAILABLE AND FULL ACCURACY IS NOT NEEDED.
+!       The following double precision variables are used to avoid
+!       unnecessary rounding errors in floating point addition.
+!       They may be declared single precision if double precision is
+!       not available and full accuracy is not needed.
 !
 double precision :: a1, a2, s, sn, dzero, done, dthree, dsix
 real :: area, origin(2)
@@ -2732,11 +2732,11 @@ real :: w(5,6)
 integer :: idata(*)
 external f
 !
-!       W CONTAINS POINTS AND WEIGHTS OF THE INTEGRATION FORMULAE
-!       NQUAD - NUMBER OF BASIC RULES USED
+!       W contains points and weights of the integration formulae
+!       NQUAD - number of BASIC rules used
 !
-!       THIS PARTICULAR RULE IS THE 19 POINT EXTENSION (DEGREE 8) OF
-!       THE FAMILIAR 7 POINT RULE (DEGREE 5).
+!       This particular rule is the 19 point extension (degree 8) of
+!       the familiar 7 point rule (degree 5).
 !
 !     SIGMA=SQRT(7)
 !     PHI=SQRT(15)
@@ -2747,13 +2747,13 @@ external f
 !     W(2,2),W(3,2) = 2/7 - PHI/21
 !     W(4,2) = 31/80 - PHI/400
 !     W(5,2) = - 9301697/4695040 - 13517313*PHI/23475200
-!            + 764885*SIGMA/939008 + 198763*PHI*SIGMA/939008
+!            + 764885*sigma/939008 + 198763*phi*sigma/939008
 !     W(*,3) = W(*,2) WITH PHI REPLACED BY -PHI
 !     W(1,5) = 4/9 + PHI/9 + SIGMA/9 - SIGMA*PHI/45
 !     W(2,5),W(3,5) = 5/18 - PHI/18 - SIGMA/18 + SIGMA*PHI/90
 !     W(4,5) = 0
 !     W(5,5) = 102791225/59157504 + 23876225*PHI/59157504
-!            - 34500875*SIGMA/59157504 - 9914825*PHI*SIGMA/59157504
+!            - 34500875*sigma/59157504 - 9914825*phi*sigma/59157504
 !     W(*,4) = W(*,5) WITH PHI REPLACED BY -PHI
 !     W(1,6) = 4/9 + SIGMA/9
 !     W(2,6) = W(2,4)
@@ -2782,7 +2782,7 @@ data w(1,4), w(2,4), w(3,4) /.5357953464498992646629509e0,2* &
 data dzero /0.d0/, done /1.d0/, dthree /3.d0/, dsix /6.d0/, &
 &point5 /.5e0/
 !
-!       SCALE BASE VECTORS AND OBTAIN AREA
+!       Scale base vectors and obtain area
 !
 do i=1,2
   origin(i) = vec(i,3) + p(1)*vec(i,1) + p(2)*vec(i,2)
@@ -2794,7 +2794,7 @@ area = point5*abs(tvec(1,1)*tvec(2,2)-tvec(1,2)*tvec(2,1))
 a1 = dzero
 a2 = dzero
 !
-!       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
+!       Compute estimates for integral and error
 !
 do k=1,nquad
   x = origin(1) + w(1,k)*tvec(1,1) + w(2,k)*tvec(1,2)
@@ -2844,77 +2844,77 @@ real :: finlep, r1, r2
 real :: rhfcn
 real :: spmpar
 !
-!   THE INTEGRAL EQUATION BEING SOLVED IS
+!   The integral equation being solved is
 !
 !                     B
 !          X(S) -  INT  KERNEL(S,T)*X(T)*DT = RHFCN(S)
 !                     A
 !
-!   THE METHOD BEING USED IS BASED ON THE NYSTROM METHOD WITH
-!   GAUSSIAN QUADRATURE, WITH AN ITERATIVE TECHNIQUE OF SOLUTION
-!   FOR THE RESULTING LINEAR SYSTEM.
+!   The method being used is based on the Nystrom method with
+!   Gaussian quadrature, with an iterative technique of solution
+!   for the resulting linear system.
 !
 !   KERNEL     THESE ARE REAL FUNCTIONS OF TWO AND ONE
 !   RHFCN      VARIABLES, RESPECTIVELY. THEY MUST BE DECLARED IN AN
-!              EXTERNAL STATEMENT IN THE PROGRAM CALLING IESLV.
+!              external statement in the program calling IESLV.
 !   EP         THE DESIRED ERROR. THE VARIABLE EP IS CHANGED ON
-!              COMPLETION OF THE PROGRAM. SEE THE DISCUSSION OF IER
-!              AND IFLAG FOR MORE INFORMATION.
+!              completion of the program. See the discussion of ier
+!              and IFLAG for more information.
 !   IFLAG =0   EP IS INTERPRETED AS AN ABSOLUTE ERROR TOLERANCE.
 !         =1   EP IS INTERPRETED AS A RELATIVE ERROR TOLERANCE.
 !   T          CONTAINS THE NODE POINTS AT WHICH THE SOLUTION OF THE
-!              INTEGRAL EQUATION IS DESIRED. SEE THE VARIABLE NT FOR
-!              MORE INFORMATION.
+!              integral equation is desired. See the variable NT for
+!              more information.
 !   X          THE COMPUTED APPROXIMATE SOLUTION OF THE INTEGRAL
-!              EQUATION, EVALUATED AT THE NODE POINTS IN T, IS
-!              STORED IN X ON COMPLETION OF THE ROUTINE. THIS IS
-!              TRUE IRREGARDLESS OF WHETHER OR NOT THE DESIRED ERROR
-!              TOLERANCE WAS ATTAINED.
+!              equation, evaluated at the node points in T, is
+!              stored in X on completion of the routine. This is
+!              true irregardless of whether or not the desired error
+!              tolerance was attained.
 !   NT         IF NT=0, THEN T AND X WILL BE SET EQUAL TO THE FINAL
-!              GAUSSIAN NODES AND THE CORRESPONDING SOLUTION VALUES,
-!              AND NT WILL BE SET TO THE NUMBER OF THE SOLUTION
-!              VALUES STORED IN X AND T. THE ARRAYS T AND X SHOULD
-!              HAVE DIMENSION AT LEAST MUPPER, ASSIGNED IN THE
-!              CALLING PROGRAM.
+!              Gaussian nodes and the corresponding solution values,
+!              and NT will be set to the number of the solution
+!              values stored in X and T. The arrays T and X should
+!              have dimension at least MUPPER, assigned in the
+!              calling program.
 !              IF NT .GT. 0, THEN T CONTAINS NT USER SUPPLIED NODES
-!              AT WHICH THE SOLUTION X IS DESIRED.
+!              at which the solution X is desired.
 !   NUPPER     AN UPPER LIMIT ON THE VARIABLE N IN THIS PROGRAM.
-!              N IS THE ORDER OF A LINEAR SYSTEM WHICH IS BEING
-!              USED TO ITERATIVELY SOLVE A LARGER LINEAR SYSTEM OF
-!              ORDER M WHICH APPROXIMATES THE INTEGRAL EQUATION.
-!              (FOR FURTHER DETAILS CONCERNING THE MAXIMUM VALUE
-!              THAT N CAN TAKE, SEE THE DESCRIPTION OF NMAX BELOW.)
+!              N is the order of a linear system which is being
+!              used to iteratively solve a larger linear system of
+!              order M which approximates the integral equation.
+!              (For further details concerning the maximum value
+!              that N can take, see the description of NMAX below.)
 !   MUPPER     AN UPPER LIMIT ON THE VARIABLE M IN THE PROGRAM.
-!              N AND M ARE ALWAYS POWERS OF TWO.
+!              N and M are always powers of two.
 !   NF         SAME AS NFINAL (SEE BELOW)
 !   MF         SAME AS MFINAL (SEE BELOW)
 !   NORM       SAME AS NORMK (SEE BELOW)
 !   W          TEMPORARY WORKING STORAGE FOR THE PROGRAM. IT MUST
-!              CONTAIN AT LEAST 5*NU*NU+9*(NU+MU) POSITIONS, WITH
+!              contain at least 5*nu*nu+9*(NU+MU) positions, with
 !              NU=NUPPER, MU=MUPPER.
 !   IER =0     THIS ERROR COMPLETION CODE MEANS THE ROUTINE WAS
-!              COMPLETED SATISFACTORILY. EP CONTAINS THE PREDICTED
-!              ERROR.
+!              completed satisfactorily. EP contains the predicted
+!              error.
 !       =1     THE ERROR TEST WAS NOT SATISFIED. EP CONTAINS THE
-!              PREDICTED ERROR.
+!              predicted error.
 !       =2     THE ERROR TEST WAS NOT SATISFIED. EP HAS BEEN SET
-!              TO ZERO.
+!              to zero.
 !       =3     THE ORIGINAL VALUE OF EP WAS TOO SMALL, DUE TO
-!              POSSIBLE ILL-CONDITIONING PROBLEMS IN THE INTEGRAL
-!              EQUATION. THE VALUE OF EP WAS RESET TO A MORE
-!              REALISTIC VALUE, AND THAT TOLERANCE WAS ATTAINED.
+!              possible ill-conditioning problems in the integral
+!              equation. The value of EP was reset to a more
+!              realistic value, and that tolerance was attained.
 !       =4     THE ERROR WAS SATISFACTORY AT THE GAUSSIAN NODE
 !              POINTS (IER=0), BUT THE INTERPOLATION PROCESS(DUE TO
 !              NT .GT. 0) MAY NOT PRESERVE THIS ACCURACY. CHECK THE
-!              VALUE OF NORM(K) FOR POSSIBLE INDICATIONS THAT THE
-!              INTEGRAL EQUATION MAY BE ALMOST FIRST KIND. SUCH
-!              EQUATIONS ARE QUITE ILL-CONDITIONED. THE ERROR IN EP
-!              IS THE PREDICTED ERROR FOR THE SOLUTION AT THE
-!              GAUSSIAN NODE POINTS OF ORDER MFINAL.
+!              value of NORM(K) for possible indications that the
+!              integral equation may be almost first kind. Such
+!              equations are quite ill-conditioned. The error in EP
+!              is the predicted error for the solution at the
+!              Gaussian node points of order MFINAL.
 !       =5     THE ANALOGUE OF IER=4, BUT WITH IER=1 AT THE
-!              GAUSSIAN NODE POINTS.
+!              Gaussian node points.
 !       =6     THE ANALOGUE OF IER=4, BUT WITH IER=3 AT THE
-!              GAUSSIAN NODE POINTS.
+!              Gaussian node points.
 !
 !
 !   *** REFERENCES ***
@@ -2932,11 +2932,11 @@ external kernel,rhfcn
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !                                                                  *
 !   THE NUMBERS IN XXINFO GIVE ADDITIONAL INFORMATION ABOUT THE    *
-!   FUNCTIONING OF IESLV. R1 IS THE ITERATIVE RATE OF CONVERGENCE  *
-!   IN THE MOST RECENTLY COMPUTED LINEAR SYSTEM. R2 IS THE RATE OF *
-!   CONVERGENCE OF THE GAUSSIAN QUADRATURE VARIANT OF THE NYSTROM  *
+!   functioning of IESLV. R1 is the iterative rate of convergence  *
+!   in the most recently computed linear system. R2 is the rate of *
+!   convergence of the Gaussian quadrature variant of the Nystrom  *
 !   METHOD. FINLEP IS THE FINAL VALUE OF EP USED AS THE DESIRED    *
-!   ERROR TOLERANCE. USUALLY FINLEP WILL EQUAL THE INPUT VALUE OF  *
+!   error tolerance. Usually FINLEP will equal the input value of  *
 !   EP, UNLESS EP WAS MUCH TOO SMALL. NORMK IS AN APPROXIMATE      *
 !   VALUE FOR THE NORM OF THE INTEGRAL OPERATOR K, AND IT IS       *
 !   CALCULATED ONLY IF NT .GT. 0.                                  *
@@ -2947,8 +2947,8 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !*******************************************************************
 !                                                                  *
 !   NMAX IS THE MAXIMUM VALUE FOR N THAT IS PERMITTED BY IESLV.    *
-!   THUS MIN0(NUPPER,NMAX) IS THE MAXIMUM VALUE FOR N THAT CAN BE  *
-!   USED. THERE IS ALSO AN UPPER LIMIT OF 128 ON N IMPOSED BY THE  *
+!   thus MIN0(NUPPER,NMAX) is the maximum value for N that can be  *
+!   used. There is also an upper limit of 128 on N imposed by the  *
 !   SUBROUTINE LNSYS.                                              *
 !                                                                  *
         data nmax /64/
@@ -2967,8 +2967,8 @@ cutoff = 0.5
 rootrt = 0.1
 nup = min0(nupper,nmax)
 !
-!   SET UP THE RELATIVE BASE ADDRESSES FOR THE VARIOUS ARRAYS INTO
-!   WHICH W IS TO BE SPLIT.
+!   Set up the relative base addresses for the various arrays into
+!   which W is to be split.
 n=nup
 m=mupper
 nsq=n*n
@@ -3026,7 +3026,7 @@ real :: rnrm
 real :: conew
 real :: rmin
 !
-!   THIS ROUTINE CONTROLS THE SOLUTION OF THE INTEGRAL EQUATION.
+!   This routine controls the solution of the integral equation.
 !
 real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
 &knm(nhalf,nup), imknn(nup,nup), normk, numr1, numr2
@@ -3035,7 +3035,7 @@ common/xxlin/elinsy,relrsd,pivot
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 external kernel,rhfcn
 !
-!   INITIALIZATION
+!   Initialization
 !
 loop=1
 n=2
@@ -3048,8 +3048,8 @@ pastre=0.0
 eps=ep
 !
 !   STAGE A. DIRECT SOLUTION OF LINEAR SYSTEM (I-KN)*XN=RHS, WHILE
-!   TRYING TO FIND A GOOD APPROXIMATE INVERSE TO IMPLEMENT
-!   ITERATIVE METHOD OF SOLUTION.
+!   trying to find a good approximate inverse to implement
+!   iterative method of solution.
 !
 !   CREATE THE NODES AND WEIGHTS TN(I) AND WN(I), I=1,...,N
 call wandt(wn,tn,n,a,b)
@@ -3060,9 +3060,9 @@ do 1 i = 1,n
 xmz(j)=rhfcn(tn(j))
 2 imknn(j,j)=imknn(j,j)+1.0
 go to 6
-!   THIS IS ENTRANCE FOR AN INCREASED VALUE OF N, USING PREVIOUSLY
+!   This is entrance for an increased value of N, using previously
 !   STORED VALUES IN KMM TO DEFINE MATRIX FOR (I-KN)*XN=RHFCN WITH
-!   NEW VALUE OF N.
+!   new value of N.
 3 do 5 j = 1,n
 do 4 i = 1,n
 4 imknn(i,j)=-kmm(i,j)
@@ -3070,11 +3070,11 @@ wn(j)=wm(j)
 tn(j)=tm(j)
 xmz(j)=rhs(j)
 5 imknn(j,j)=imknn(j,j)+1.0
-!   THIS IS THE ENTRANCE WHEN ITERATION IN STAGE B FAILS AND WE NEED
-!   TO INCREASE N TO OBTAIN A BETTER ITERATIVE RATE.
+!   This is the entrance when iteration in stage B fails and we need
+!   to increase N to obtain a better iterative rate.
 6 continue
 !   SOLVE (I-KN)*XN=RHFCN AT ALL TN(I).ALSO OBTAIN THE LU
-!   DECOMPOSITION FOR LATER USE IN THE STAGE B ITERATIVE METHOD.
+!   decomposition for later use in the stage B iterative method.
 !
 !*******************************************************************
 !                                                                  *
@@ -3091,15 +3091,15 @@ cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
 relmin=rmin(n,n,cond,unitrd,averr)
 if(loop .eq. 1) go to 11
 if(loop .eq. 2) go to 9
-!   SET UP APPROXIMATE RATE OF CONVERGENCE OF SOLUTIONS XN TO TRUE
-!   SOLUTION X. ALSO SET UP DESIRED RATIO FOR ITERATIVE METHOD.
+!   Set up approximate rate of convergence of solutions XN to true
+!   solution X. Also set up desired ratio for iterative method.
 numr2=rnrm(xn,oldx,n,1)
 r2=amin1(0.5,amax1(numr2/denr2,1.0e-4))
 r1rat=amin1(rootrt,sqrt(r2))
-!   CHECK FOR ERROR IN XN USING TEST INVOLVING R2 AND OLDX,ACCORDING
-!   TO THEORY FOR ASYMPTOTIC ERROR BOUNDS. MODIFY ERROR IF IT IS
-!   OUTSIDE PRECISION RANGE OF COMPUTER, POSSIBLY DUE TO
-!   ILL-CONDITIONING.
+!   Check for error in XN using test involving R2 and OLDX,according
+!   to theory for asymptotic error bounds. Modify error if it is
+!   outside precision range of computer, possibly due to
+!   ill-conditioning.
 8 error=(r2/(1.0-r2))*numr2
 xnorm=rnrm(xn,xn,n,0)
 relerr=error/xnorm
@@ -3115,25 +3115,25 @@ go to 11
 9 numr2=rnrm(xn,oldx,n,1)
 denr2=0.0
 go to 8
-!   EXIT FOR SUCCESSFUL RETURN. ITERATION WAS NOT NECESSARY.
+!   Exit for successful return. Iteration was not necessary.
 10 call leave(0,n,n,xn,tn,wn,error, &
 &kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
 &xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !
 !   ATTEMPT TO SOLVE (I-KM)*XM=RHFCN ITERATIVELY, CHECKING TO SEE IF
-!   THE RATE OF CONVERGENCE IS SUFFICIENTLY FAST SO AS TO ENTER
+!   the rate of convergence is sufficiently fast so as to enter
 !   STAGE B.
 !
 !   CALCULATE TM(I) AND WM(I), I=1,...,M.
 11 call wandt(wm,tm,m,a,b)
 flag=0
-!   CALCULATE INITIAL GUESS XMZ FOR ITERATION METHOD.
+!   Calculate initial guess XMZ for iteration method.
 call nsterp(tm,wm,xmz,m,tn,wn,xn,n, &
 &kernel,rhfcn,rhs,kmn,nhalf,nup)
 do 12 i = 1,m
 12 oldx(i)=xmz(i)
-!   CALCULATE FIRST ITERATE.
+!   Calculate first iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
 &rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
 cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
@@ -3141,27 +3141,27 @@ denr1=rnrm(xm,xmz,m,1)
 flag=1
 do 13 i = 1,m
 13 xmz(i)=xm(i)
-!   CALCULATE SECOND ITERATE.
+!   Calculate second iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
 &rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
 cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
 numr1=rnrm(xm,xmz,m,1)
-!   CHECK ON THE SPEED OF CONVERGENCE OF ITERATIVE METHOD. IF IT IS
-!   SUFFICIENTLY RAPID, THEN FIX N AND GO TO STAGE B.
+!   Check on the speed of convergence of iterative method. If it is
+!   sufficiently rapid, then fix N and go to stage B.
 r1=amax1(numr1/denr1,.0001)
 rate=r1
 if(m .gt. nup) go to 19
 if(r1 .le. r1rat) go to 15
-!   THE ITERATION DID NOT WORK WELL ENOUGH, AND STAGE A IS TO BE
+!   The iteration did not work well enough, and stage A is to be
 !   REPEATED. RE-INITIALIZE FOR SOLVING (I-KN)*XN=RHFCN AGAIN
-!   WITH A LARGER N.
+!   with a larger N.
 14 n=m
 loop=loop+1
 m=2*n
 go to 3
-!   THE ITERATIVE RATE IS SUFFICIENTLY RAPID, AND CONTROL WILL GO TO
-!   STAGE B. SAVE INFORMATION IN CASE STAGE B ABORTS AT A LARGER
-!   VALUE OF M AND STAGE A HAS TO BE RETURNED TO.
+!   The iterative rate is sufficiently rapid, and control will go to
+!   stage B. Save information in case stage B aborts at a larger
+!   value of M and stage A has to be returned to.
 15 do 16 i = 1,m
 aside(i,1)=oldx(i)
 aside(i,2)=wm(i)
@@ -3180,7 +3180,7 @@ do 17 i = 1,m
 19 oldm=n
 aside2(2)=m
 if(r1 .le. cutoff) go to 22
-!   THE ITERATES ARE CONVERGING VERY SLOWLY OR NOT AT ALL. THUS
+!   The iterates are converging very slowly or not at all. Thus
 !   RETURN WITHOUT FURTHER ATTEMPTS TO LESSEN THE ERROR.
 if(loop .ne. 1) go to 21
 20 call leave(2,n,n,xn,tn,wn,0.0, &
@@ -3191,8 +3191,8 @@ return
 &kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
 &xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-!   TEST TO SEE IF THE CURRENT ITERATE XM IS SUFFICIENTLY ACCURATE
-!   COMPARED TO THE TRUE XM.
+!   Test to see if the current iterate XM is sufficiently accurate
+!   compared to the true XM.
 22 rate=r1*rate
 temp=rnrm(xm,oldx,m,1)
 if(loop .eq. 1) temp2=0.5
@@ -3204,8 +3204,8 @@ if(esterr .lt. relmin) esterr=relmin
 esterr=esterr*xnorm
 test=((1.0-r1)/r1)*esterr
 if(numr1 .le. test) go to 33
-!   ITERATE NOT SUFFICIENTLY ACCURATE. INITIALIZE FOR COMPUTATION
-!   OF ANOTHER ITERATE.
+!   Iterate not sufficiently accurate. Initialize for computation
+!   of another iterate.
 25 denr1=numr1
 do 26 i = 1,m
 26 xmz(i)=xm(i)
@@ -3215,9 +3215,9 @@ cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
 numr1=rnrm(xm,xmz,m,1)
 r1=amax1(numr1/denr1,.0001)
 if(r1 .le. cutoff) go to 22
-!   THIS IS ENTRANCE FOR CASE WHERE ITERATION FAILS IN STAGE B.
-!   PARAMETERS MUST BE RESET FOR A RETURN TO STAGE A OR FOR AN
-!   ABORTIVE EXIT IF N CANNOT BE INCREASED ANY FURTHER.
+!   This is entrance for case where iteration fails in stage B.
+!   Parameters must be reset for a return to stage A or for an
+!   abortive exit if N cannot be increased any further.
 27 mnew=aside2(2)
 if(mnew .gt. nup) go to 30
 n=mnew
@@ -3235,17 +3235,17 @@ r2=aside2(3)
 denr2=aside2(4)
 r1rat=aside2(5)
 go to 6
-!   ABORTIVE EXIT FROM STAGE B. N CANNOT BE INCREASED FURTHER, AND
-!   R1 IS NOT SUFFICIENTLY SMALL.
+!   Abortive exit from stage B. N cannot be increased further, and
+!   R1 is not sufficiently small.
 30 if(loop .eq. 1) go to 20
 call wandt(wm,tm,oldm,a,b)
 call leave(1,n,oldm,save,tm,wm,error, &
 &kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
 &xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-!   AN ACCURATE VALUE OF XM HAS BEEN OBTAINED. R2 IS TO BE TESTED AS
-!   TO WHETHER IT SHOULD BE RESET. THEN CHECK ERROR IN XM COMPARED
-!   WITH THE TRUE SOLUTION X.
+!   An accurate value of XM has been obtained. R2 is to be tested as
+!   to whether it should be reset. Then check error in XM compared
+!   with the true solution X.
 33 if(loop .eq. 1) go to 37
 numr2=temp
 r2=amax1(1.0e-4,rate,amin1(numr2/denr2,0.5))
@@ -3266,7 +3266,7 @@ call leave(0,n,m,xm,tm,wm,error, &
 return
 35 mnew=2*m
 if(mnew .le. mup) go to 39
-!   M CANNOT BE INCREASED ANY FURTHER.
+!   M cannot be increased any further.
 call leave(1,n,m,xm,tm,wm,error, &
 &kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
 &xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
@@ -3274,8 +3274,8 @@ return
 37 denr2=temp
 loop=2
 go to 34
-!   ERROR NOT SUFFICIENTLY SMALL. M IS INCREASED AND TWO MORE
-!   MORE ITERATES ARE COMPUTED WITH THE NEW M.
+!   Error not sufficiently small. M is increased and two more
+!   more iterates are computed with the new M.
 39 oldm=m
 m=mnew
 do 41 i = 1,oldm
@@ -3333,13 +3333,13 @@ do 1 j = 1,n
 do 2 i = 1,m
 rhs(i)=rhfcn(tm(i))
 2 xm(i)=rhs(i)
-!   CALCULATE NYSTROM INTERPOLATING FORMULA.
+!   Calculate Nystrom interpolating formula.
 do 3 i = 1,m
 do 3 j = 1,n
 3 xm(i)=xm(i)+kmn(i,j)*xn(j)
 return
 !   M .GT. NUPPER, SO SAVE JUST RHS(I) FOR LATER USE IN ITERT.
-!   CALCULATE NYSTROM INTERPOLATING FORMULA.
+!   Calculate Nystrom interpolating formula.
 4 do 5 i = 1,m
 rhs(i)=rhfcn(tm(i))
 xm(i)=rhs(i)
@@ -3356,11 +3356,11 @@ real :: float1, float2
 real :: rmin
 !
 !   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
-!   VALUE OF RELMIN USED IN IEGS. THE VARIABLE UNITRD IS DEFINED IN
-!   IEGAUS, AND THE VARIABLES COND AND AVERR ARE DEFINED IN IEGS
+!   value of RELMIN used in IEGS. The variable UNITRD is defined in
+!   IEGAUS, and the variables cond and AVERR are defined in IEGS
 !   USING CONEW.
-!   IT IS UNLIKELY THAT A SOLUTION X CAN BE FOUND FOR THE ORIGINAL
-!   INTEGRAL EQUATION WITH A SMALLER RELATIVE ERROR THAN RMIN.
+!   It is unlikely that a solution X can be found for the original
+!   integral equation with a smaller relative error than RMIN.
 !
 float1=m
 float2=float(m)/float(n)
@@ -3379,12 +3379,12 @@ integer :: i
 !   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
 !
 if(iflag .eq. 1) go to 2
-!   FIND THE NORM OF X.
+!   Find the norm of X.
 rnrm=0.0
 do 1 i = 1,n
 1 rnrm=amax1(rnrm,abs(x(i)))
 return
-!   FIND THE NORM OF X-Y.
+!   Find the norm of X-Y.
 2 rnrm=0.0
 do 3 i = 1,n
 3 rnrm=amax1(rnrm,abs(x(i)-y(i)))
@@ -3400,7 +3400,7 @@ real, intent(in) :: relrsd
 real :: c
 real :: conew
 !
-!   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
+!   This is used in updating the value of the condition number
 !   IN IEGS.
 !
 averr=sqrt(elinsy*pastre)
@@ -3422,11 +3422,11 @@ real, intent(inout) :: tv(n), wv(n)
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
 real :: al, bl, fl, floop, h, r, s, scale, t(255), w(255)
 !
-!   INTEGRATION WEIGHTS AND NODES ARE TO BE CALCULATED AND STORED IN
-!   WV AND TV, RESPECTIVELY. N IS ASSUMED TO BE A POWER OF TWO. IF
+!   Integration weights and nodes are to be calculated and stored in
+!   WV and TV, respectively. N is assumed to be a power of two. If
 !   2 .LE. N .LE. 256, THEN GAUSSIAN QUADRATURE IS USED. IF N .GT.
-!   256, THEN THE INTERVAL (A,B) IS DIVIDED N/256 TIMES AND THE 256
-!   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
+!   256, Then the interval (A,B) is divided N/256 times and the 256
+!   point formula is applied to each subinterval.
 !
 data t(1),t(2),t(3),t(4),t(5),t(6),t(7),t(8),t(9),t(10),t(11), &
 &t(12),t(13),t(14),t(15)/.577350269189626e0, &
@@ -3703,16 +3703,16 @@ real :: finlep, r1, r2
 real :: rhfcn
 real :: rnrm
 !
-!   THIS ROUTINE SETS ALL NECESSARY PARAMETERS FOR LEAVING IEGAUS.
+!   This routine sets all necessary parameters for leaving IEGAUS.
 !   IF NT .GT. 0, IT ALSO PERFORMS THE NECESSARY NYSTROM
-!   INTERPOLATION AT THE NODES GIVEN IN T.
+!   interpolation at the nodes given in T.
 !
 real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
 &imknn(nup,nup), lufact(nup,nup), normk, numr1
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 external kernel,rhfcn
 !
-!   SET ERROR PARAMETERS FOR RETURN.
+!   Set error parameters for return.
 !
 normk=0.0
 nfinal=nf
@@ -3731,15 +3731,15 @@ go to 30
 ep=eps
 if(nt .gt. 0) go to 30
 !
-!   NO NYSTROM INTERPOLATION IS DESIRED. RETURN THE VALUES AT THE
-!   GAUSSIAN NODE POINTS.
+!   No Nystrom interpolation is desired. Return the values at the
+!   Gaussian node points.
 !
 20 do 21 i = 1,mf
 x(i)=xv(i)
 21 t(i)=tv(i)
 nt=mf
 return
-!   CALCULATE NORM(K).
+!   Calculate NORM(K).
 30 savep=ep
 do 31 i = 1,nf
 31 imknn(i,i)=imknn(i,i)-1.0
@@ -3753,8 +3753,8 @@ do 34 i = 1,nf
 34 imknn(i,i)=imknn(i,i)+1.0
 if(nf .eq. mf) go to 50
 !
-!   ITERATE TO DECREASE THE NOISE LEVEL IN X. THIS SHOULD REDUCE
-!   POSSIBLE ERRORS IN NYSTROM INTERPOLATION.
+!   Iterate to decrease the noise level in X. This should reduce
+!   possible errors in Nystrom interpolation.
 !
 derror=((1.0-r1)/r1)*eps/normk
 if(iflag .eq. 1) derror=derror*xnorm
@@ -3771,21 +3771,21 @@ if((numr1 .gt. derror) .and. (itloop .lt. 5)) go to 42
 do 44 i = 1,mf
 44 xv(i)=xm(i)
 !
-!   ESTIMATE NEW ERROR BOUND FOR NYSTROM INTERPOLATES.
+!   Estimate new error bound for Nystrom interpolates.
 !
 temp=normk*(r1/(1.0-r1))*numr1
 if(iflag .eq. 1) temp=temp/xnorm
 ep=amax1(ep,temp)
 go to 60
 !
-!   NO ITERATION USED IN COMPUTING X. JUST COMPUTE ERROR ESTIMATE
-!   IN NYSTROM INTERPOLATE.
+!   No iteration used in computing X. Just compute error estimate
+!   in Nystrom interpolate.
 !
 50 temp=normk*elinsy
 if(iflag .eq. 0) temp=temp*xnorm
 if(ier .ne. 2) ep=amax1(ep,temp)
 !
-!   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
+!   Compute Nystrom interpolates at the nodes in T.
 !
 60 do 62 i = 1,nt
 sum=0.0
@@ -3813,8 +3813,8 @@ real :: xmz(m)
 integer :: i, ind, j
 real :: sum
 !
-!   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
-!   XMZ. THE ROUTINE IS DIVIDED ACCORDING TO WHETHER OR NOT
+!   This routine calculates one iterate XM given the initial guess
+!   XMZ. The routine is divided according to whether or not
 !   M .GT. NUPPER.
 !
 real :: kernel
@@ -3826,11 +3826,11 @@ real, intent(inout) :: lufact(nup,nup)
 external kernel,rhfcn
 !
 !   M .GT. NUPPER MEANS THAT THE MATRICES KMM,KMN,KNM CAN NO LONGER
-!   BE STORED DUE TO LACK OF SPACE.
+!   be stored due to lack of space.
 if (m .gt. nup) go to 13
 if(iflg .eq. 1) go to 3
 !   IF IFLG=0, THEN THE MATRICES KMM AND KNM MUST BE COMPUTED
-!   AND STORED.
+!   and stored.
 do 2 j = 1,m
 do 1 i = 1,m
 1 kmm(i,j)=wm(j)*kernel(tm(i),tm(j))
@@ -3857,7 +3857,7 @@ call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 !   SEE THE ORIGINAL REFERENCE IN IEGS.                            *
 !*******************************************************************
 !
-!   CALCULATE NEW XM.
+!   Calculate new XM.
 do 12 i = 1,m
 sum=0.0
 do 10 j = 1,m
@@ -3867,7 +3867,7 @@ do 11 j = 1,n
 12 xm(i)=sum+r(i)+xmz(i)
 return
 !   ENTRANCE WHEN M .GT. NUP.
-!   CALCULATE RESIDUALS.
+!   Calculate residuals.
 13 do 15 i = 1,m
 sum=0.0
 do 14 j = 1,m
@@ -3905,36 +3905,36 @@ real :: c, sum, t
 real :: error, relrsd
 !
 !   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
-!   ROWS IN THE DIMENSION STATEMENT FOR A IN THE CALLING PROGRAM.
+!   rows in the dimension statement for A in the calling program.
 !
 !   OPTION=1   COMPUTE AN LU DECOMPOSITION OF A AND STORE IT IN D.
 !              STORE THE PIVOT INDICES IN PIVOT AND SOLVE AX = B.
 !   OPTION=2   COMPUTE AN LU DECOMPOSITION OF A AND STORE IT IN D.
 !              STORE THE PIVOT INDICES IN PIVOT AND SOLVE AX = B.
-!              THEN COMPUTE THE RESIDUAL AND ONE CORRECTION. THE
-!              CORRECTION IS STORED IN R, THE NEW VALUE X1 IN X,
-!              THE RELATIVE ERROR
+!              Then compute the residual and one correction. The
+!              correction is stored in R, the new value X1 in X,
+!              the relative error
 !                         NORM(X0-X1)/NORM(X1)
-!              IN THE VARIABLE ERROR, AND THE RELATIVE RESIDUAL
+!              in the variable ERROR, and the relative residual
 !                         NORM(RESIDUAL)/NORM(B)
-!              IN THE VARIABLE RELRSD. THESE VALUES CAN BE OBTAINED
-!              USING THE COMMON/XXLIN/ GIVEN BELOW.
+!              in the variable RELRSD. These values can be obtained
+!              using the common/XXLIN/ given below.
 !   OPTION=3   SAME AS OPTION=1, EXCEPT THAT THE LU DECOMPOSITION
-!              HAS ALREADY BEEN STORED IN D AND THE PIVOT INDICES
-!              IN PIVOT.
+!              has already been stored in D and the pivot indices
+!              in pivot.
 !   OPTION=4   SAME AS OPTION=2, EXCEPT THAT THE LU DECOMPOSITION
-!              HAS ALREADY BEEN STORED IN D AND THE PIVOT INDICES
-!              IN PIVOT.
+!              has already been stored in D and the pivot indices
+!              in pivot.
 !
-!   THE LU DECOMPOSITION IS OBTAINED USING SCALED PARTIAL PIVOTING.
-!   FOR OPTIONS 1 AND 2, IERR IS A VARIABLE THAT REPORTS THE STATUS
+!   The LU decomposition is obtained using scaled partial pivoting.
+!   For options 1 and 2, IERR is a variable that reports the status
 !   OF THE RESULTS. IERR = 0 IF THE LU DECOMPOSITION IS OBTAINED.
 !   OTHERWISE, IERR = -K WHEN THE K-TH ROW OF A CONTAINS ONLY ZEROS
 !   OR IERR = K WHEN THE K-TH PIVOT ELEMENT IS 0.
 !
 !   IT IS ASSUMED THAT N .LE. 128. THIS ASSUMPTION MAY BE MODIFIED
-!   BY CHANGING THE DIMENSION STATEMENTS FOR THE ARRAYS PIVOT, R,
-!   AND SCALE. ALSO MODIFY THE DIMENSION STATEMENT FOR PIVOT IN THE
+!   by changing the dimension statements for the arrays pivot, R,
+!   and scale. Also modify the dimension statement for pivot in the
 !   SUBROUTINE IEGS.
 !
 real :: a(m,n), d(m,n), b(n), x(n)
@@ -3956,7 +3956,7 @@ ierr = -i
 return
 11 continue
 !
-!             OBTAIN THE LU DECOMPOSITION OF A
+!             Obtain the LU decomposition of A
 !
 ierr = 0
 do k = 1,nm1
@@ -3974,7 +3974,7 @@ if (c .ne. 0.0) go to 30
 ierr = k
 return
 !
-!     INTERCHANGE ROWS K AND L
+!     Interchange rows K and L
 !
 30 pivot(k) = l
 if (k .eq. l) go to 40
@@ -3986,7 +3986,7 @@ t = scale(k)
 scale(k) = scale(l)
 scale(l) = t
 !
-!     ELIMINATE THE K-TH UNKNOWN BELOW THE DIAGONAL
+!     Eliminate the K-TH unknown below the diagonal
 !
 40 do i = kp1,n
   d(i,k) = d(i,k)/d(k,k)
@@ -4053,7 +4053,7 @@ r(i) = (r(i) - sum)/d(i,i)
 go to (300,230,300,230),option
 230 if (iswit .eq. 1) go to 120
 !
-!             CALCULATE THE CORRECTION ERROR
+!             Calculate the correction error
 !
 normx = 0.0
 norme = 0.0
@@ -4075,133 +4075,133 @@ real, intent(inout) :: work(*), y(neqn)
 integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 &ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
 !
-!     SANDIA MATHEMATICAL PROGRAM LIBRARY
-!     APPLIED MATHEMATICS DIVISION 2642
-!     SANDIA LABORATORIES
-!     ALBUQUERQUE, NEW MEXICO  87115
-!     JANUARY 1976
+!     Sandia mathematical program library
+!     applied mathematics division 2642
+!     sandia laboratories
+!     albuquerque, new mexico  87115
+!     january 1976
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !   *                 ISSUED BY SANDIA LABORATORIES,
 !   *                   A PRIME CONTRACTOR TO THE
 !   *   UNITED STATES ENERGY RESEARCH AND DEVELOPMENT ADMINISTRATION
 !   * * * * * * * * * * * * * *  NOTICE   * * * * * * * * * * * * * * *
-!   * THIS REPORT WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY THE
-!   * UNITED STATES GOVERNMENT.  NEITHER THE UNITED STATES NOR THE
-!   * UNITED STATES ENERGY RESEARCH AND DEVELOPMENT ADMINISTRATION,
-!   * NOR ANY OF THEIR EMPLOYEES, NOR ANY OF THEIR CONTRACTORS,
-!   * SUBCONTRACTORS, OR THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS
-!   * OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY
-!   * FOR THE ACCURACY, COMPLETENESS OR USEFULNESS OF ANY INFORMATION,
-!   * APPARATUS, PRODUCT OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS
-!   * USE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.
+!   * this report was prepared as an account of work sponsored by the
+!   * united states government.  Neither the united states nor the
+!   * united states energy research and development administration,
+!   * nor any of their employees, nor any of their contractors,
+!   * subcontractors, or their employees, makes any warranty, express
+!   * or implied, or assumes any legal liability or responsibility
+!   * for the accuracy, completeness or usefulness of any information,
+!   * apparatus, product or process disclosed, or represents that its
+!   * use would not infringe privately owned rights.
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !
 !   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 !
-!   ABSTRACT
+!   Abstract
 !
-!   SUBROUTINE  ODE  INTEGRATES A SYSTEM OF  NEQN  FIRST ORDER
-!   ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!   Subroutine  ODE  integrates a system of  NEQN  first order
+!   ordinary differential equations of the form
 !             DY(I)/DT = F(T,Y(1),Y(2),...,Y(NEQN))
-!             Y(I) GIVEN AT  T .
-!   THE SUBROUTINE INTEGRATES FROM  T  TO  TOUT .  ON RETURN THE
-!   PARAMETERS IN THE CALL LIST ARE SET FOR CONTINUING THE INTEGRATION.
-!   THE USER HAS ONLY TO DEFINE A NEW VALUE  TOUT  AND CALL  ODE  AGAIN.
+!             Y(I) given at  T .
+!   The subroutine integrates from  T  to  tout .  On return the
+!   parameters in the call list are set for continuing the integration.
+!   The user has only to define a new value  tout  and call  ODE  again.
 !
-!   THE DIFFERENTIAL EQUATIONS ARE ACTUALLY SOLVED BY A SUITE OF CODES
-!   DE1,  STEP1, AND  INTRP .  ODE  ALLOCATES VIRTUAL STORAGE IN THE
-!   ARRAYS  WORK  AND  IWORK  AND CALLS  DE1.  DE1 IS A SUPERVISOR WHICH
-!   DIRECTS THE SOLUTION.  IT CALLS ON THE ROUTINES  STEP1 AND  INTRP
-!   TO ADVANCE THE INTEGRATION AND TO INTERPOLATE AT OUTPUT POINTS.
-!   STEP1 USES A MODIFIED DIVIDED DIFFERENCE FORM OF THE ADAMS PECE
-!   FORMULAS AND LOCAL EXTRAPOLATION.  IT ADJUSTS THE ORDER AND STEP
-!   SIZE TO CONTROL THE LOCAL ERROR PER UNIT STEP IN A GENERALIZED
-!   SENSE.  NORMALLY EACH CALL TO  STEP1 ADVANCES THE SOLUTION ONE STEP
-!   IN THE DIRECTION OF  TOUT .  FOR REASONS OF EFFICIENCY  DE1
-!   INTEGRATES BEYOND  TOUT  INTERNALLY, THOUGH NEVER BEYOND
-!   T+10*(TOUT-T), AND CALLS  INTRP  TO INTERPOLATE THE SOLUTION AT
-!   TOUT .  AN OPTION IS PROVIDED TO STOP THE INTEGRATION AT  TOUT  BUT
-!   IT SHOULD BE USED ONLY IF IT IS IMPOSSIBLE TO CONTINUE THE
-!   INTEGRATION BEYOND  TOUT .
+!   The differential equations are actually solved by a suite of codes
+!   DE1,  STEP1, and  INTRP .  ODE  allocates virtual storage in the
+!   arrays  work  and  IWORK  and calls  DE1.  DE1 is a supervisor which
+!   directs the solution.  It calls on the routines  STEP1 and  INTRP
+!   to advance the integration and to interpolate at output points.
+!   STEP1 uses a modified divided difference form of the Adams PECE
+!   formulas and local extrapolation.  It adjusts the order and step
+!   size to control the local error per unit step in a generalized
+!   sense.  Normally each call to  STEP1 advances the solution one step
+!   in the direction of  tout .  For reasons of efficiency  DE1
+!   integrates beyond  tout  internally, though never beyond
+!   T+10*(TOUT-T), and calls  INTRP  to interpolate the solution at
+!   tout .  An option is provided to stop the integration at  tout  but
+!   it should be used only if it is impossible to continue the
+!   integration beyond  tout .
 !
-!   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
-!   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
-!   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
 !
-!   THE PARAMETERS REPRESENT...
+!   The parameters represent...
 !      F -- SUBROUTINE F(T,Y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- SOLUTION VECTOR AT  T
-!      T -- INDEPENDENT VARIABLE
-!      TOUT -- POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE ERROR TOLERANCES FOR LOCAL
-!           ERROR TEST.  AT EACH STEP THE CODE REQUIRES
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- solution vector at  T
+!      T -- independent variable
+!      tout -- point at which solution is desired
+!      RELERR,ABSERR -- relative and absolute error tolerances for local
+!           error test.  At each step the code requires
 !             ABS(LOCAL ERROR) .LE. ABS(Y)*RELERR + ABSERR
-!           FOR EACH COMPONENT OF THE LOCAL ERROR AND SOLUTION VECTORS
-!      IFLAG -- INDICATES STATUS OF INTEGRATION
-!      WORK(*),IWORK(*) -- ARRAYS TO HOLD INFORMATION INTERNAL TO CODE
-!           WHICH IS NECESSARY FOR SUBSEQUENT CALLS
+!           for each component of the local error and solution vectors
+!      IFLAG -- indicates status of integration
+!      WORK(*),IWORK(*) -- arrays to hold information internal to code
+!           which is necessary for subsequent calls
 !
-!   FIRST CALL TO ODE --
+!   First call to ODE --
 !
-!   THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR THE ARRAYS
-!   IN THE CALL LIST,
+!   The user must provide storage in his calling program for the arrays
+!   in the call list,
 !      Y(NEQN), WORK(100+21*NEQN), IWORK(5),
-!   DECLARE  F  IN AN EXTERNAL STATEMENT, SUPPLY THE SUBROUTINE
-!   F(T,Y,YP) TO EVALUATE
+!   declare  F  in an external statement, supply the subroutine
+!   F(T,Y,YP) to evaluate
 !      DY(I)/DT = YP(I) = F(T,Y(1),Y(2),...,Y(NEQN))
-!   AND INITIALIZE THE PARAMETERS...
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- VECTOR OF INITIAL CONDITIONS
-!      T -- STARTING POINT OF INTEGRATION
-!      TOUT -- POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE LOCAL ERROR TOLERANCES
-!      IFLAG -- +1,-1.  INDICATOR TO INITIALIZE THE CODE.  NORMAL INPUT
+!   and initialize the parameters...
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- vector of initial conditions
+!      T -- starting point of integration
+!      tout -- point at which solution is desired
+!      RELERR,ABSERR -- relative and absolute local error tolerances
+!      IFLAG -- +1,-1.  Indicator to initialize the code.  Normal input
 !           IS +1.  THE USER SHOULD SET IFLAG=-1 ONLY IF IT IS
-!           IMPOSSIBLE TO CONTINUE THE INTEGRATION BEYOND  TOUT .
-!   ALL PARAMETERS EXCEPT  F ,  NEQN  AND  TOUT  MAY BE ALTERED BY THE
-!   CODE ON OUTPUT SO MUST BE VARIABLES IN THE CALLING PROGRAM.
+!           impossible to continue the integration beyond  tout .
+!   All parameters except  F ,  NEQN  and  tout  may be altered by the
+!   code on output so must be variables in the calling program.
 !
-!   OUTPUT FROM  ODE  --
+!   Output from  ODE  --
 !
 !      NEQN -- UNCHANGED
-!      Y(*) -- SOLUTION AT  T
-!      T -- LAST POINT REACHED IN INTEGRATION.  NORMAL RETURN HAS
+!      Y(*) -- solution at  T
+!      T -- last point reached in integration.  Normal return has
 !           T = TOUT .
-!      TOUT -- UNCHANGED
+!      Tout -- unchanged
 !      RELERR,ABSERR -- NORMAL RETURN HAS TOLERANCES UNCHANGED.  IFLAG=3
-!           SIGNALS TOLERANCES INCREASED
+!           signals tolerances increased
 !      IFLAG = 2 -- NORMAL RETURN.  INTEGRATION REACHED  TOUT
 !            = 3 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE ERROR
-!                   TOLERANCES TOO SMALL.  RELERR ,  ABSERR  INCREASED
-!                   APPROPRIATELY FOR CONTINUING
+!                   tolerances too small.  RELERR ,  ABSERR  increased
+!                   appropriately for continuing
 !            = 4 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE MORE THAN
-!                   MAXNUM STEPS NEEDED
+!                   MAXNUM steps needed
 !            = 5 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE EQUATIONS
-!                   APPEAR TO BE STIFF
+!                   appear to be stiff
 !            = 6 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE SOLUTION
-!                   VANISHED MAKING PURE RELATIVE ERROR IMPOSSIBLE.
-!                   MUST USE NON-ZERO  ABSERR  TO CONTINUE.
+!                   vanished making pure relative error impossible.
+!                   Must use non-zero  ABSERR  to continue.
 !            = 7 -- INVALID INPUT PARAMETERS (FATAL ERROR)
-!           THE VALUE OF  IFLAG  IS RETURNED NEGATIVE WHEN THE INPUT
-!           VALUE IS NEGATIVE AND THE INTEGRATION DOES NOT REACH  TOUT ,
+!           the value of  IFLAG  is returned negative when the input
+!           value is negative and the integration does not reach  tout ,
 !           I.E., -3, -4, -5, -6.
-!      WORK(*),IWORK(*) -- INFORMATION GENERALLY OF NO INTEREST TO THE
-!           USER BUT NECESSARY FOR SUBSEQUENT CALLS.
+!      WORK(*),IWORK(*) -- information generally of no interest to the
+!           user but necessary for subsequent calls.
 !
-!   SUBSEQUENT CALLS TO  ODE --
+!   Subsequent calls to  ODE --
 !
-!   SUBROUTINE  ODE  RETURNS WITH ALL INFORMATION NEEDED TO CONTINUE
-!   THE INTEGRATION.  IF THE INTEGRATION REACHED  TOUT , THE USER NEED
-!   ONLY DEFINE A NEW  TOUT  AND CALL AGAIN.  IF THE INTEGRATION DID NOT
-!   REACH  TOUT  AND THE USER WANTS TO CONTINUE, HE JUST CALLS AGAIN.
+!   Subroutine  ODE  returns with all information needed to continue
+!   the integration.  If the integration reached  tout , the user need
+!   only define a new  tout  and call again.  If the integration did not
+!   reach  tout  and the user wants to continue, he just calls again.
 !   IN THE CASE  IFLAG=6 , THE USER MUST ALSO ALTER THE ERROR CRITERION.
-!   THE OUTPUT VALUE OF  IFLAG  IS THE APPROPRIATE INPUT VALUE FOR
-!   SUBSEQUENT CALLS.  THE ONLY SITUATION IN WHICH IT SHOULD BE ALTERED
-!   IS TO STOP THE INTEGRATION INTERNALLY AT THE NEW  TOUT , I.E.,
+!   The output value of  IFLAG  is the appropriate input value for
+!   subsequent calls.  The only situation in which it should be altered
+!   is to stop the integration internally at the new  tout , I.E.,
 !   CHANGE OUTPUT  IFLAG=2  TO INPUT  IFLAG=-2 .  ERROR TOLERANCES MAY
-!   BE CHANGED BY THE USER BEFORE CONTINUING.  ALL OTHER PARAMETERS MUST
-!   REMAIN UNCHANGED.
+!   be changed by the user before continuing.  All other parameters must
+!   remain unchanged.
 !
 logical :: start, phase1, nornd
 external f
@@ -4250,21 +4250,21 @@ integer :: isn, kle4, l, maxnum, nostep
 real :: absdel, abseps, del, eps, fouru, releps, tend, u
 real :: spmpar
 !
-!   ODE  MERELY ALLOCATES STORAGE FOR  DE1 TO RELIEVE THE USER OF THE
-!   INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY  DE1 IS USED AS
-!   DESCRIBED IN THE COMMENTS FOR  ODE .
+!   ODE  merely allocates storage for  DE1 to relieve the user of the
+!   inconvenience of a long call list.  Consequently  DE1 is used as
+!   described in the comments for  ODE .
 !
-!   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
-!   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
-!   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
 !
 logical :: stiff, crash
 logical, intent(inout) :: start, phase1, nornd
 external f
 !
-!   THE CONSTANT  MAXNUM  IS THE MAXIMUM NUMBER OF STEPS ALLOWED IN ONE
+!   The constant  MAXNUM  is the maximum number of steps allowed in one
 !   CALL TO  DE1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
-!   FOLLOWING STATEMENT
+!   following statement
 !
 data maxnum/500/
 !
@@ -4276,7 +4276,7 @@ fouru = 4.0*u
 !
 !            ***            ***            ***
 !
-!   TEST FOR IMPROPER PARAMETERS
+!   Test for improper parameters
 !
 if(neqn .lt. 1) go to 10
 if(t .eq. tout) go to 10
@@ -4293,8 +4293,8 @@ if(iflag .eq. 6  .and.  abserr .gt. 0.0) go to 20
 10 iflag = 7
 return
 !
-!   ON EACH CALL SET INTERVAL OF INTEGRATION AND COUNTER FOR NUMBER OF
-!   STEPS.  ADJUST INPUT ERROR TOLERANCES TO DEFINE WEIGHT VECTOR FOR
+!   On each call set interval of integration and counter for number of
+!   steps.  Adjust input error tolerances to define weight vector for
 !   SUBROUTINE  STEP1
 !
 20 del = tout - t
@@ -4310,8 +4310,8 @@ if(iflag .eq. 1) go to 30
 if(isnold .lt. 0) go to 30
 if(delsgn*del .gt. 0.0) go to 50
 !
-!   ON START AND RESTART ALSO SET WORK VARIABLES X AND YY(*), STORE THE
-!   DIRECTION OF INTEGRATION AND INITIALIZE THE STEP SIZE
+!   On start and restart also set work variables X and YY(*), store the
+!   direction of integration and initialize the step size
 !
 30 start = .true.
 x = t
@@ -4320,7 +4320,7 @@ do 40 l = 1,neqn
 delsgn = sign(1.0,del)
 h = sign(amax1(fouru*abs(x),abs(tout-x)),tout-x)
 !
-!   IF ALREADY PAST OUTPUT POINT, INTERPOLATE AND RETURN
+!   If already past output point, interpolate and return
 !
 50 if(abs(x-t) .lt. absdel) go to 60
 call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
@@ -4330,8 +4330,8 @@ told = t
 isnold = isn
 return
 !
-!   IF CANNOT GO PAST OUTPUT POINT AND SUFFICIENTLY CLOSE,
-!   EXTRAPOLATE AND RETURN
+!   If cannot go past output point and sufficiently close,
+!   extrapolate and return
 !
 60 if(isn .gt. 0  .or.  abs(tout-x) .ge. fouru*abs(x)) go to 80
 h = tout - x
@@ -4344,7 +4344,7 @@ told = t
 isnold = isn
 return
 !
-!   TEST FOR TOO MANY STEPS
+!   Test for too many steps
 !
 80 if(nostep .lt. maxnum) go to 100
 iflag = isn*4
@@ -4356,7 +4356,7 @@ told = t
 isnold = 1
 return
 !
-!   LIMIT STEP SIZE, SET WEIGHT VECTOR AND TAKE A STEP
+!   Limit step size, set weight vector and take a step
 !
 100 h = sign(amin1(abs(h),abs(tend-x)),h)
 do l = 1,neqn
@@ -4367,7 +4367,7 @@ call step1(f,neqn,yy,x,h,eps,wt,start, &
 &hold,k,kold,crash,phi,p,yp,psi, &
 &alpha,beta,sig,v,w,g,phase1,ns,nornd)
 !
-!   TEST FOR TOLERANCES TOO SMALL
+!   Test for tolerances too small
 !
 if(.not.crash) go to 130
 iflag = isn*3
@@ -4380,7 +4380,7 @@ told = t
 isnold = 1
 return
 !
-!   AUGMENT COUNTER ON NUMBER OF STEPS AND TEST FOR STIFFNESS
+!   Augment counter on number of steps and test for stiffness
 !
 130 nostep = nostep + 1
 kle4 = kle4 + 1
@@ -4388,7 +4388,7 @@ if(kold .gt. 4) kle4 = 0
 if(kle4 .ge. 50) stiff = .true.
 go to 50
 !
-!   RELATIVE ERROR CRITERION INAPPROPRIATE
+!   Relative error criterion inappropriate
 !
 140 iflag = isn*6
 do 150 l = 1,neqn
@@ -4420,126 +4420,126 @@ real :: spmpar
 !
 !   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 !
-!   ABSTRACT
+!   Abstract
 !
-!   SUBROUTINE  STEP1  IS NORMALLY USED INDIRECTLY THROUGH SUBROUTINE
-!   ODE .  BECAUSE  ODE  SUFFICES FOR MOST PROBLEMS AND IS MUCH EASIER
-!   TO USE, USING IT SHOULD BE CONSIDERED BEFORE USING  STEP1  ALONE.
+!   Subroutine  STEP1  is normally used indirectly through subroutine
+!   ODE .  Because  ODE  suffices for most problems and is much easier
+!   to use, using it should be considered before using  STEP1  alone.
 !
-!   SUBROUTINE STEP1 INTEGRATES A SYSTEM OF  NEQN  FIRST ORDER ORDINARY
-!   DIFFERENTIAL EQUATIONS ONE STEP, NORMALLY FROM X TO X+H, USING A
-!   MODIFIED DIVIDED DIFFERENCE FORM OF THE ADAMS PECE FORMULAS.  LOCAL
-!   EXTRAPOLATION IS USED TO IMPROVE ABSOLUTE STABILITY AND ACCURACY.
-!   THE CODE ADJUSTS ITS ORDER AND STEP SIZE TO CONTROL THE LOCAL ERROR
-!   PER UNIT STEP IN A GENERALIZED SENSE.  SPECIAL DEVICES ARE INCLUDED
-!   TO CONTROL ROUNDOFF ERROR AND TO DETECT WHEN THE USER IS REQUESTING
-!   TOO MUCH ACCURACY.
+!   Subroutine STEP1 integrates a system of  NEQN  first order ordinary
+!   differential equations one step, normally from X to X+H, using A
+!   modified divided difference form of the Adams PECE formulas.  Local
+!   extrapolation is used to improve absolute stability and accuracy.
+!   The code adjusts its order and step size to control the local error
+!   per unit step in a generalized sense.  Special devices are included
+!   to control roundoff error and to detect when the user is requesting
+!   too much accuracy.
 !
-!   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
-!   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
-!   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
 !
 !
-!   THE PARAMETERS REPRESENT...
-!      F -- SUBROUTINE TO EVALUATE DERIVATIVES
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- SOLUTION VECTOR AT X
-!      X -- INDEPENDENT VARIABLE
-!      H -- APPROPRIATE STEP SIZE FOR NEXT STEP.  NORMALLY DETERMINED BY
-!           CODE
-!      EPS -- LOCAL ERROR TOLERANCE
-!      WT(*) -- VECTOR OF WEIGHTS FOR ERROR CRITERION
-!      START -- LOGICAL VARIABLE SET .TRUE. FOR FIRST STEP,  .FALSE.
-!           OTHERWISE
-!      HOLD -- STEP SIZE USED FOR LAST SUCCESSFUL STEP
-!      K -- APPROPRIATE ORDER FOR NEXT STEP (DETERMINED BY CODE)
-!      KOLD -- ORDER USED FOR LAST SUCCESSFUL STEP
-!      CRASH -- LOGICAL VARIABLE SET .TRUE. WHEN NO STEP CAN BE TAKEN,
-!           .FALSE. OTHERWISE.
-!      YP(*) -- DERIVATIVE OF SOLUTION VECTOR AT  X  AFTER SUCCESSFUL
-!           STEP
-!   THE ARRAYS  PHI, PSI  ARE REQUIRED FOR THE INTERPOLATION SUBROUTINE
-!   INTRP .  THE ARRAY  P  IS INTERNAL TO THE CODE.  THE REMAINING NINE
-!   VARIABLES AND ARRAYS ARE INCLUDED IN THE CALL LIST ONLY TO ELIMINATE
-!   LOCAL RETENTION OF VARIABLES BETWEEN CALLS.
+!   The parameters represent...
+!      F -- subroutine to evaluate derivatives
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- solution vector at X
+!      X -- independent variable
+!      H -- appropriate step size for next step.  Normally determined by
+!           code
+!      eps -- local error tolerance
+!      WT(*) -- vector of weights for error criterion
+!      start -- logical variable SET .True. For first step,  .False.
+!           Otherwise
+!      hold -- step size used for last successful step
+!      K -- appropriate order for next step (determined by code)
+!      KOLD -- order used for last successful step
+!      crash -- logical variable SET .True. When no step can be taken,
+!           .False. Otherwise.
+!      YP(*) -- derivative of solution vector at  X  after successful
+!           step
+!   the arrays  phi, psi  are required for the interpolation subroutine
+!   INTRP .  The array  P  is internal to the code.  The remaining nine
+!   variables and arrays are included in the call list only to eliminate
+!   local retention of variables between calls.
 !
-!   INPUT TO STEP1
+!   Input to STEP1
 !
-!      FIRST CALL --
+!      First call --
 !
-!   THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR ALL ARRAYS
-!   IN THE CALL LIST, NAMELY
+!   The user must provide storage in his calling program for all arrays
+!   in the call list, namely
 !
 !     DIMENSION Y(NEQN),WT(NEQN),PHI(NEQN,16),P(NEQN),YP(NEQN),PSI(12),
 !    1  ALPHA(12),BETA(12),SIG(13),V(12),W(12),G(13)
 !
-!   THE USER MUST ALSO DECLARE  START ,  CRASH ,  PHASE1  AND  NORND
+!   The user must also declare  start ,  crash ,  PHASE1  and  NORND
 !   LOGICAL VARIABLES AND  F  AN EXTERNAL SUBROUTINE, SUPPLY THE
 !   SUBROUTINE  F(X,Y,YP)  TO EVALUATE
 !      DY(I)/DX = YP(I) = F(X,Y(1),Y(2),...,Y(NEQN))
-!   AND INITIALIZE ONLY THE FOLLOWING PARAMETERS...
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- VECTOR OF INITIAL VALUES OF DEPENDENT VARIABLES
-!      X -- INITIAL VALUE OF THE INDEPENDENT VARIABLE
-!      H -- NOMINAL STEP SIZE INDICATING DIRECTION OF INTEGRATION
-!           AND MAXIMUM SIZE OF STEP.  MUST BE VARIABLE
-!      EPS -- LOCAL ERROR TOLERANCE PER STEP.  MUST BE VARIABLE
-!      WT(*) -- VECTOR OF NON-ZERO WEIGHTS FOR ERROR CRITERION
-!      START -- .TRUE.
+!   and initialize only the following parameters...
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- vector of initial values of dependent variables
+!      X -- initial value of the independent variable
+!      H -- nominal step size indicating direction of integration
+!           and maximum size of step.  Must be variable
+!      eps -- local error tolerance per step.  Must be variable
+!      WT(*) -- vector of non-zero weights for error criterion
+!      start -- .True.
 !
-!   STEP1  REQUIRES THAT THE L2 NORM OF THE VECTOR WITH COMPONENTS
-!   LOCAL ERROR(L)/WT(L)  BE LESS THAN  EPS  FOR A SUCCESSFUL STEP.  THE
-!   ARRAY  WT  ALLOWS THE USER TO SPECIFY AN ERROR TEST APPROPRIATE
-!   FOR HIS PROBLEM.  FOR EXAMPLE,
+!   STEP1  requires that the L2 norm of the vector with components
+!   local ERROR(L)/WT(L)  be less than  eps  for a successful step.  The
+!   array  WT  allows the user to specify an error test appropriate
+!   for his problem.  For example,
 !      WT(L) = 1.0  SPECIFIES ABSOLUTE ERROR,
 !            = ABS(Y(L))  ERROR RELATIVE TO THE MOST RECENT VALUE OF THE
-!                 L-TH COMPONENT OF THE SOLUTION,
+!                 L-TH component of the solution,
 !            = ABS(YP(L))  ERROR RELATIVE TO THE MOST RECENT VALUE OF
-!                 THE L-TH COMPONENT OF THE DERIVATIVE,
+!                 the L-TH component of the derivative,
 !            = AMAX1(WT(L),ABS(Y(L)))  ERROR RELATIVE TO THE LARGEST
-!                 MAGNITUDE OF L-TH COMPONENT OBTAINED SO FAR,
+!                 magnitude of L-TH component obtained so far,
 !            = ABS(Y(L))*RELERR/EPS + ABSERR/EPS  SPECIFIES A MIXED
-!                 RELATIVE-ABSOLUTE TEST WHERE  RELERR  IS RELATIVE
+!                 relative-absolute test where  RELERR  is relative
 !                 ERROR,  ABSERR  IS ABSOLUTE ERROR AND  EPS =
 !                 AMAX1(RELERR,ABSERR) .
 !
-!      SUBSEQUENT CALLS --
+!      Subsequent calls --
 !
-!   SUBROUTINE  STEP1  IS DESIGNED SO THAT ALL INFORMATION NEEDED TO
+!   Subroutine  STEP1  is designed so that all information needed to
 !   CONTINUE THE INTEGRATION, INCLUDING THE STEP SIZE  H  AND THE ORDER
-!   K , IS RETURNED WITH EACH STEP.  WITH THE EXCEPTION OF THE STEP
-!   SIZE, THE ERROR TOLERANCE, AND THE WEIGHTS, NONE OF THE PARAMETERS
-!   SHOULD BE ALTERED.  THE ARRAY  WT  MUST BE UPDATED AFTER EACH STEP
-!   TO MAINTAIN RELATIVE ERROR TESTS LIKE THOSE ABOVE.  NORMALLY THE
-!   INTEGRATION IS CONTINUED JUST BEYOND THE DESIRED ENDPOINT AND THE
-!   SOLUTION INTERPOLATED THERE WITH SUBROUTINE  INTRP .  IF IT IS
-!   IMPOSSIBLE TO INTEGRATE BEYOND THE ENDPOINT, THE STEP SIZE MAY BE
-!   REDUCED TO HIT THE ENDPOINT SINCE THE CODE WILL NOT TAKE A STEP
-!   LARGER THAN THE  H  INPUT.  CHANGING THE DIRECTION OF INTEGRATION,
+!   K , is returned with each step.  With the exception of the step
+!   size, the error tolerance, and the weights, none of the parameters
+!   should be altered.  The array  WT  must be updated after each step
+!   to maintain relative error tests like those above.  Normally the
+!   integration is continued just beyond the desired endpoint and the
+!   solution interpolated there with subroutine  INTRP .  If it is
+!   impossible to integrate beyond the endpoint, the step size may be
+!   reduced to hit the endpoint since the code will not take a step
+!   larger than the  H  input.  Changing the direction of integration,
 !   I.E., THE SIGN OF  H , REQUIRES THE USER SET  START = .TRUE. BEFORE
-!   CALLING  STEP1  AGAIN.  THIS IS THE ONLY SITUATION IN WHICH  START
-!   SHOULD BE ALTERED.
+!   calling  STEP1  again.  This is the only situation in which  start
+!   should be altered.
 !
-!   OUTPUT FROM STEP1
+!   Output from STEP1
 !
-!      SUCCESSFUL STEP --
+!      Successful step --
 !
-!   THE SUBROUTINE RETURNS AFTER EACH SUCCESSFUL STEP WITH  START  AND
-!   CRASH  SET .FALSE. .  X  REPRESENTS THE INDEPENDENT VARIABLE
-!   ADVANCED ONE STEP OF LENGTH  HOLD  FROM ITS VALUE ON INPUT AND  Y
-!   THE SOLUTION VECTOR AT THE NEW VALUE OF  X .  ALL OTHER PARAMETERS
-!   REPRESENT INFORMATION CORRESPONDING TO THE NEW  X  NEEDED TO
+!   The subroutine returns after each successful step with  start  and
+!   crash  set .False. .  X  represents the independent variable
+!   advanced one step of length  hold  from its value on input and  Y
+!   the solution vector at the new value of  X .  All other parameters
+!   represent information corresponding to the new  X  needed to
 !   CONTINUE THE INTEGRATION.
 !
-!      UNSUCCESSFUL STEP --
+!      Unsuccessful step --
 !
-!   WHEN THE ERROR TOLERANCE IS TOO SMALL FOR THE MACHINE PRECISION,
+!   When the error tolerance is too small for the machine precision,
 !   THE SUBROUTINE RETURNS WITHOUT TAKING A STEP AND  CRASH = .TRUE. .
-!   AN APPROPRIATE STEP SIZE AND ERROR TOLERANCE FOR CONTINUING ARE
-!   ESTIMATED AND ALL OTHER INFORMATION IS RESTORED AS UPON INPUT
-!   BEFORE RETURNING.  TO CONTINUE WITH THE LARGER TOLERANCE, THE USER
-!   JUST CALLS THE CODE AGAIN.  A RESTART IS NEITHER REQUIRED NOR
-!   DESIRABLE.
+!   An appropriate step size and error tolerance for continuing are
+!   estimated and all other information is restored as upon input
+!   before returning.  To continue with the larger tolerance, the user
+!   just calls the code again.  A restart is neither required nor
+!   desirable.
 !
 logical, intent(inout) :: start
 logical, intent(out) :: crash
@@ -4565,13 +4565,13 @@ fouru = 4.0*u
 !
 !       ***     BEGIN BLOCK 0     ***
 !
-!   CHECK IF STEP SIZE OR ERROR TOLERANCE IS TOO SMALL FOR MACHINE
-!   PRECISION.  IF FIRST STEP, INITIALIZE PHI ARRAY AND ESTIMATE A
-!   STARTING STEP SIZE.
+!   Check if step size or error tolerance is too small for machine
+!   precision.  If first step, initialize phi array and estimate A
+!   starting step size.
 !
 !                   ***
 !
-!   IF STEP SIZE IS TOO SMALL, DETERMINE AN ACCEPTABLE ONE
+!   If step size is too small, determine an acceptable one
 !
 crash = .true.
 if(abs(h) .ge. fouru*abs(x)) go to 5
@@ -4579,7 +4579,7 @@ h = sign(fouru*abs(x),h)
 return
 5 p5eps = 0.5*eps
 !
-!   IF ERROR TOLERANCE IS TOO SMALL, INCREASE IT TO AN ACCEPTABLE VALUE
+!   If error tolerance is too small, increase it to an acceptable value
 !
 round = 0.0
 do 10 l = 1,neqn
@@ -4594,7 +4594,7 @@ g(2) = 0.5
 sig(1) = 1.0
 if(.not.start) go to 99
 !
-!   INITIALIZE.  COMPUTE APPROPRIATE STEP SIZE FOR FIRST STEP
+!   Initialize.  Compute appropriate step size for first step
 !
 call f(x,y,yp)
 sum = 0.0
@@ -4622,8 +4622,8 @@ do 25 l = 1,neqn
 !
 !       ***     BEGIN BLOCK 1     ***
 !
-!   COMPUTE COEFFICIENTS OF FORMULAS FOR THIS STEP.  AVOID COMPUTING
-!   THOSE QUANTITIES NOT CHANGED WHEN STEP SIZE IS NOT CHANGED.
+!   Compute coefficients of formulas for this step.  Avoid computing
+!   those quantities not changed when step size is not changed.
 !
 !                   ***
 !
@@ -4632,7 +4632,7 @@ kp2 = k+2
 km1 = k-1
 km2 = k-2
 !
-!   NS IS THE NUMBER OF STEPS TAKEN WITH SIZE H, INCLUDING THE CURRENT
+!   NS is the number of steps taken with size H, including the current
 !   ONE.  WHEN K.LT.NS, NO COEFFICIENTS CHANGE
 !
 if(h .ne. hold) ns = 0
@@ -4640,8 +4640,8 @@ if (ns.le.kold) ns = ns+1
 nsp1 = ns+1
 if (k .lt. ns) go to 199
 !
-!   COMPUTE THOSE COMPONENTS OF ALPHA(*),BETA(*),PSI(*),SIG(*) WHICH
-!   ARE CHANGED
+!   Compute those components of ALPHA(*),BETA(*),PSI(*),SIG(*) which
+!   are changed
 !
 beta(ns) = 1.0
 realns = ns
@@ -4660,9 +4660,9 @@ do 105 i = nsp1,k
 105 sig(i+1) = reali*alpha(i)*sig(i)
 110 psi(k) = temp1
 !
-!   COMPUTE COEFFICIENTS G(*)
+!   Compute coefficients G(*)
 !
-!   INITIALIZE V(*) AND SET W(*).
+!   Initialize V(*) and set W(*).
 !
 if(ns .gt. 1) go to 120
 do 115 iq = 1,k
@@ -4671,7 +4671,7 @@ do 115 iq = 1,k
 115 w(iq) = v(iq)
 go to 140
 !
-!   IF ORDER WAS RAISED, UPDATE DIAGONAL PART OF V(*)
+!   If order was raised, update diagonal part of V(*)
 !
 120 if(k .le. kold) go to 130
 temp4 = k*kp1
@@ -4682,7 +4682,7 @@ do 125 j = 1,nsm2
   i = k-j
 125 v(i) = v(i) - alpha(j+1)*v(i+1)
 !
-!   UPDATE V(*) AND SET W(*)
+!   Update V(*) and set W(*)
 !
 130 limit1 = kp1 - ns
 temp5 = alpha(ns)
@@ -4691,7 +4691,7 @@ do 135 iq = 1,limit1
 135 w(iq) = v(iq)
 g(nsp1) = w(1)
 !
-!   COMPUTE THE G(*) IN THE WORK VECTOR W(*)
+!   Compute the G(*) in the work vector W(*)
 !
 140 nsp2 = ns + 2
 if(kp1 .lt. nsp2) go to 199
@@ -4707,13 +4707,13 @@ do 150 i = nsp2,kp1
 !
 !       ***     BEGIN BLOCK 2     ***
 !
-!   PREDICT A SOLUTION P(*), EVALUATE DERIVATIVES USING PREDICTED
-!   SOLUTION, ESTIMATE LOCAL ERROR AT ORDER K AND ERRORS AT ORDERS K,
-!   K-1, K-2 AS IF CONSTANT STEP SIZE WERE USED.
+!   Predict a solution P(*), evaluate derivatives using predicted
+!   solution, estimate local error at order K and errors at orders K,
+!   K-1, K-2 as if constant step size were used.
 !
 !                   ***
 !
-!   CHANGE PHI TO PHI STAR
+!   Change phi to phi star
 !
 if(k .lt. nsp1) go to 215
 do i = nsp1,k
@@ -4722,7 +4722,7 @@ do i = nsp1,k
 205 phi(l,i) = temp1*phi(l,i)
   end do
 !
-!   PREDICT SOLUTION AND DIFFERENCES
+!   Predict solution and differences
 !
 215 do 220 l = 1,neqn
   phi(l,kp2) = phi(l,kp1)
@@ -4749,7 +4749,7 @@ x = x + h
 absh = abs(h)
 call f(x,p,yp)
 !
-!   ESTIMATE ERRORS AT ORDERS K,K-1,K-2
+!   Estimate errors at orders K,K-1,K-2
 !
 erkm2 = 0.0
 erkm1 = 0.0
@@ -4769,14 +4769,14 @@ err = temp5*(g(k)-g(kp1))
 erk = temp5*sig(kp1)*gstr(k)
 knew = k
 !
-!   TEST IF ORDER SHOULD BE LOWERED
+!   Test if order should be lowered
 !
 if(km2)299,290,285
 285 if(amax1(erkm1,erkm2) .le. erk) knew = km1
 go to 299
 290 if(erkm1 .le. 0.5*erk) knew = km1
 !
-!   TEST IF STEP SUCCESSFUL
+!   Test if step successful
 !
 299 if(err .le. eps) go to 400
 !
@@ -4784,14 +4784,14 @@ go to 299
 !
 !       ***     BEGIN BLOCK 3     ***
 !
-!   THE STEP IS UNSUCCESSFUL.  RESTORE  X, PHI(*,*), PSI(*) .
-!   IF THIRD CONSECUTIVE FAILURE, SET ORDER TO ONE.  IF STEP FAILS MORE
-!   THAN THREE TIMES, CONSIDER AN OPTIMAL STEP SIZE.  DOUBLE ERROR
-!   TOLERANCE AND RETURN IF ESTIMATED STEP SIZE IS TOO SMALL FOR MACHINE
-!   PRECISION.
+!   The step is unsuccessful.  Restore  X, PHI(*,*), PSI(*) .
+!   If third consecutive failure, set order to one.  If step fails more
+!   than three times, consider an optimal step size.  Double error
+!   tolerance and return if estimated step size is too small for machine
+!   precision.
 !                   ***
 !
-!   RESTORE X, PHI(*,*) AND PSI(*)
+!   Restore X, PHI(*,*) and PSI(*)
 !
 phase1 = .false.
 x = xold
@@ -4805,8 +4805,8 @@ if(k .lt. 2) go to 320
 do 315 i = 2,k
 315 psi(i-1) = psi(i) - h
 !
-!   ON THIRD FAILURE, SET ORDER TO ONE.  THEREAFTER, USE OPTIMAL STEP
-!   SIZE
+!   On third failure, set order to one.  Thereafter, use optimal step
+!   size
 !
 320 ifail = ifail + 1
 temp2 = 0.5
@@ -4826,15 +4826,15 @@ return
 !
 !       ***     BEGIN BLOCK 4     ***
 !
-!   THE STEP IS SUCCESSFUL.  CORRECT THE PREDICTED SOLUTION, EVALUATE
-!   THE DERIVATIVES USING THE CORRECTED SOLUTION AND UPDATE THE
-!   DIFFERENCES.  DETERMINE BEST ORDER AND STEP SIZE FOR NEXT STEP.
+!   The step is successful.  Correct the predicted solution, evaluate
+!   the derivatives using the corrected solution and update the
+!   differences.  Determine best order and step size for next step.
 !
 !                   ***
 400 kold = k
 hold = h
 !
-!   CORRECT AND EVALUATE
+!   Correct and evaluate
 !
 temp1 = h*g(kp1)
 if(nornd) go to 410
@@ -4847,7 +4847,7 @@ go to 420
 415 y(l) = p(l) + temp1*(yp(l) - phi(l,1))
 420 call f(x,y,yp)
 !
-!   UPDATE DIFFERENCES FOR NEXT STEP
+!   Update differences for next step
 !
 do 425 l = 1,neqn
   phi(l,kp1) = yp(l) - phi(l,1)
@@ -4857,10 +4857,10 @@ do i = 1,k
 430 phi(l,i) = phi(l,i) + phi(l,kp1)
   end do
 !
-!   ESTIMATE ERROR AT ORDER K+1 UNLESS...
-!     IN FIRST PHASE WHEN ALWAYS RAISE ORDER,
-!     ALREADY DECIDED TO LOWER ORDER,
-!     STEP SIZE NOT CONSTANT SO ESTIMATE UNRELIABLE
+!   Estimate error at order K+1 unless...
+!     in first phase when always raise order,
+!     already decided to lower order,
+!     step size not constant so estimate unreliable
 !
 erkp1 = 0.0
 if(knew .eq. km1  .or.  k .eq. 12) phase1 = .false.
@@ -4871,8 +4871,8 @@ do 440 l = 1,neqn
 440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
 erkp1 = absh*gstr(kp1)*sqrt(erkp1)
 !
-!   USING ESTIMATED ERROR AT ORDER K+1, DETERMINE APPROPRIATE ORDER
-!   FOR NEXT STEP
+!   Using estimated error at order K+1, determine appropriate order
+!   for next step
 !
 if(k .gt. 1) go to 445
 if(erkp1 .ge. 0.5*erk) go to 460
@@ -4881,20 +4881,20 @@ go to 450
 if(erkp1 .ge. erk  .or.  k .eq. 12) go to 460
 !
 !   HERE ERKP1 .LT. ERK .LT. AMAX1(ERKM1,ERKM2) ELSE ORDER WOULD HAVE
-!   BEEN LOWERED IN BLOCK 2.  THUS ORDER IS TO BE RAISED
+!   been lowered in block 2.  Thus order is to be raised
 !
-!   RAISE ORDER
+!   Raise order
 !
 450 k = kp1
 erk = erkp1
 go to 460
 !
-!   LOWER ORDER
+!   Lower order
 !
 455 k = km1
 erk = erkm1
 !
-!   WITH NEW ORDER DETERMINE APPROPRIATE STEP SIZE FOR NEXT STEP
+!   With new order determine appropriate step size for next step
 !
 460 hnew = h + h
 if(phase1) go to 465
@@ -4925,33 +4925,33 @@ real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
 !
 !   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 !
-!   ABSTRACT
+!   Abstract
 !
-!   THE METHODS IN SUBROUTINE  STEP1  APPROXIMATE THE SOLUTION NEAR  X
-!   BY A POLYNOMIAL.  SUBROUTINE  INTRP  APPROXIMATES THE SOLUTION AT
-!   XOUT  BY EVALUATING THE POLYNOMIAL THERE.  INFORMATION DEFINING THIS
-!   POLYNOMIAL IS PASSED FROM  STEP1  SO  INTRP  CANNOT BE USED ALONE.
+!   The methods in subroutine  STEP1  approximate the solution near  X
+!   by a polynomial.  Subroutine  INTRP  approximates the solution at
+!   XOUT  by evaluating the polynomial there.  Information defining this
+!   polynomial is passed from  STEP1  so  INTRP  cannot be used alone.
 !
-!   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
-!   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
-!   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
 !
-!   INPUT TO INTRP --
+!   Input to INTRP --
 !
-!   THE USER PROVIDES STORAGE IN THE CALLING PROGRAM FOR THE ARRAYS IN
-!   THE CALL LIST
+!   The user provides storage in the calling program for the arrays in
+!   the call list
 !      DIMENSION Y(NEQN),YOUT(NEQN),YPOUT(NEQN),PHI(NEQN,16),PSI(12)
-!   AND DEFINES
-!      XOUT -- POINT AT WHICH SOLUTION IS DESIRED.
-!   THE REMAINING PARAMETERS ARE DEFINED IN  STEP1  AND PASSED TO  INTRP
-!   FROM THAT SUBROUTINE.
+!   and defines
+!      XOUT -- point at which solution is desired.
+!   The remaining parameters are defined in  STEP1  and passed to  INTRP
+!   from that subroutine.
 !
-!   OUTPUT FROM  INTRP --
+!   Output from  INTRP --
 !
-!      YOUT(*) -- SOLUTION AT  XOUT
-!      YPOUT(*) -- DERIVATIVE OF SOLUTION AT  XOUT
-!   THE REMAINING PARAMETERS ARE RETURNED UNALTERED FROM THEIR INPUT
-!   VALUES.  INTEGRATION WITH  STEP1  MAY BE CONTINUED.
+!      YOUT(*) -- solution at  XOUT
+!      YPOUT(*) -- derivative of solution at  XOUT
+!   the remaining parameters are returned unaltered from their input
+!   values.  Integration with  STEP1  may be continued.
 !
 data g(1)/1.0/,rho(1)/1.0/
 !
@@ -4959,14 +4959,14 @@ hi = xout - x
 ki = kold + 1
 kip1 = ki + 1
 !
-!   INITIALIZE W(*) FOR COMPUTING G(*)
+!   Initialize W(*) for computing G(*)
 !
 do 5 i = 1,ki
   temp1 = i
 5 w(i) = 1.0/temp1
 term = 0.0
 !
-!   COMPUTE G(*)
+!   Compute G(*)
 !
 do 15 j = 2,ki
   jm1 = j - 1
@@ -4980,7 +4980,7 @@ do 15 j = 2,ki
   rho(j) = gamma*rho(jm1)
 15 term = psijm1
 !
-!   INTERPOLATE
+!   Interpolate
 !
 do 20 l = 1,neqn
   ypout(l) = 0.0
@@ -5010,9 +5010,9 @@ real, intent(inout) :: work(*), y(neqn), yp(neqn)
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 &kwp, kx, ky1, ky2
 !
-!     BLOCK FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD ADVANCING
-!     A BLOCK OF TWO EQUAL STEPS.  THE FORMULA AT THE FIRST STEP IS
-!     5(4) WHILE AT THE SECOND STEP IT IS 6(4).
+!     Block Fehlberg fourth-fifth order Runge-Kutta method advancing
+!     a block of two equal steps.  The formula at the first step is
+!     5(4) while at the second step it is 6(4).
 !
 !     WRITTEN BY J.R.CASH,
 !        DEPARTMENT OF MATHEMATICS,
@@ -5031,11 +5031,11 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !    CASES A GOOD ADAMS CODE WILL OFTEN BE MORE EFFICIENT.
 !
 !***********************************************************************
-! ABSTRACT
+! Abstract
 !***********************************************************************
 !
-!    SUBROUTINE  BRKF45  INTEGRATES A SYSTEM OF NEQN FIRST ORDER
-!    ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!    Subroutine  BRKF45  integrates a system of NEQN first order
+!    ordinary differential equations of the form
 !
 !             DY(I)/DT = FCN(T,Y(1),Y(2),...,Y(NEQN))
 !
@@ -5060,167 +5060,167 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !    INITIAL VALUE PROBLEMS, ACM TRANS. MATH SOFTWARE 15 (1989),
 !    PP. 15-28.
 !
-!    THE PARAMETERS REPRESENT-
-!      FCN -- SUBROUTINE FCN(T,Y,YP) TO EVALUATE DERIVATIVES
+!    The parameters represent-
+!      FCN -- subroutine FCN(T,Y,YP) to evaluate derivatives
 !              YP(I)=DY(I)/DT
-!      NEQN -- NUMBER OF DIFFERENTIAL EQUATIONS TO BE INTEGRATED.
-!      Y(*) -- APPROXIMATION TO THE SOLUTION VECTOR AT T.
-!      T -- INDEPENDENT VARIABLE.
-!      TOUT -- THE NEXT POINT WHERE INTERMEDIATE OUTPUT IS
-!              REQUIRED.  APPROXIMATE SOLUTIONS AT THESE POINTS
-!              WILL BE OBAINED BY INTERPOLATION.
-!      TEND -- END OF THE INTEGRATION RANGE.  THIS WILL BE HIT EXACTLY.
-!      YP(*) -- APPROXIMATION TO THE DERIVATIVE VECTOR DY/DT AT T.
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE ERROR TOLERANCES FOR
+!      NEQN -- number of differential equations to be integrated.
+!      Y(*) -- approximation to the solution vector at T.
+!      T -- independent variable.
+!      Tout -- the next point where intermediate output is
+!              required.  Approximate solutions at these points
+!              will be obained by interpolation.
+!      Tend -- end of the integration range.  This will be hit exactly.
+!      YP(*) -- approximation to the derivative vector DY/DT at T.
+!      RELERR,ABSERR -- relative and absolute error tolerances for
 !            LOCAL ERROR TEST. AT THE NTH POINT OF EACH BLOCK (N=1,2)
-!            THE CODE REQUIRES THAT
+!            the code requires that
 !                 ABS(LOCAL ERROR)/N .LE. RELERR*ABS(Y) + ABSERR
-!            FOR EACH COMPONENT OF THE LOCAL ERROR AND SOLUTION VECTORS
-!      IFLAG -- INDICATOR FOR STATUS OF INTEGRATION.
-!      WORK(*) -- ARRAY TO HOLD INFORMATION INTERNAL TO BRKF45 WHICH
-!            IS NECESSARY FOR SUBSEQUENT CALLS. MUST BE DIMENSIONED
-!            AT LEAST  6+9*NEQN
-!      IWORK(*) -- INTEGER ARRAY USED TO HOLD INFORMATION INTERNAL TO
-!            BRKF45 WHICH IS NECESSARY FOR SUBSEQUENT CALLS. MUST BE
-!            DIMENSIONED AT LEAST  5
+!            for each component of the local error and solution vectors
+!      IFLAG -- indicator for status of integration.
+!      WORK(*) -- array to hold information internal to BRKF45 which
+!            is necessary for subsequent calls. Must be dimensioned
+!            at least  6+9*NEQN
+!      IWORK(*) -- integer array used to hold information internal to
+!            BRKF45 which is necessary for subsequent calls. Must be
+!            dimensioned at least  5
 !
 !***********************************************************************
-!  FIRST CALL TO BRKF45
+!  First call to BRKF45
 !***********************************************************************
 !
-!    THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR THE ARRAYS
-!    IN THE CALL LIST  -  Y(NEQN) , YP(NEQN) , WORK(6+9*NEQN)
-!    IWORK(5), DECLARE FCN IN AN EXTERNAL STATEMENT, SUPPLY SUBROUTINE
-!    FCN(T,Y,YP) AND INITIALIZE THE FOLLOWING PARAMETERS-
+!    The user must provide storage in his calling program for the arrays
+!    in the call list  -  Y(NEQN) , YP(NEQN) , WORK(6+9*NEQN)
+!    IWORK(5), declare FCN in an external statement, supply subroutine
+!    FCN(T,Y,YP) and initialize the following parameters-
 !
 !      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED.  (NEQN .GE. 1)
-!      Y(*) -- VECTOR OF INITIAL CONDITIONS.
-!      T -- STARTING POINT OF INTEGRATION , MUST BE A VARIABLE.
-!      TOUT -- OUTPUT POINT AT WHICH SOLUTION, AND POSSIBLY THE
-!              DERIVATIVE, IS DESIRED.
-!      TEND -- END OF THE RANGE OF INTEGRATION. IF THE SOLUTION IS
+!      Y(*) -- vector of initial conditions.
+!      T -- starting point of integration , must be a variable.
+!      Tout -- output point at which solution, and possibly the
+!              derivative, is desired.
+!      Tend -- end of the range of integration. If the solution is
 !              REQUIRED ONLY AT TEND THEN THE USER SHOULD SET TOUT=TEND.
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE LOCAL ERROR TOLERANCES
-!            WHICH MUST BE NON-NEGATIVE. RELERR MUST BE A VARIABLE WHILE
-!            ABSERR MAY BE A CONSTANT. THE CODE SHOULD NORMALLY NOT BE
-!            USED WITH RELATIVE ERROR CONTROL SMALLER THAN ABOUT 1.E-8,
-!            UNLESS AN APPROPRIATE NONZERO ABSOLUTE TOLERANCE IS GIVEN.
-!            TO AVOID LIMITING PRECISION DIFFICULTIES THE CODE REQUIRES
-!            RELERR TO BE LARGER THAN AN INTERNALLY COMPUTED RELATIVE
-!            ERROR PARAMETER WHICH IS MACHINE DEPENDENT. IN PARTICULAR,
-!            PURE ABSOLUTE ERROR IS NOT PERMITTED. IF A SMALLER THAN
-!            ALLOWABLE VALUE OF RELERR IS ATTEMPTED, BRKF45 INCREASES
-!            RELERR APPROPRIATELY AND RETURNS CONTROL TO THE USER BEFORE
-!            CONTINUING THE INTEGRATION.
-!      IFLAG -- +1,-1  INDICATOR TO INITIALIZE THE CODE FOR EACH NEW
+!      RELERR,ABSERR -- relative and absolute local error tolerances
+!            which must be non-negative. RELERR must be a variable while
+!            ABSERR may be a constant. The code should normally not be
+!            used with relative error control smaller than about 1.E-8,
+!            unless an appropriate nonzero absolute tolerance is given.
+!            To avoid limiting precision difficulties the code requires
+!            RELERR to be larger than an internally computed relative
+!            error parameter which is machine dependent. In particular,
+!            pure absolute error is not permitted. If a smaller than
+!            allowable value of RELERR is attempted, BRKF45 increases
+!            RELERR appropriately and returns control to the user before
+!            continuing the integration.
+!      IFLAG -- +1,-1  indicator to initialize the code for each new
 !            PROBLEM. NORMAL INPUT IS +1. THE USER SHOULD SET IFLAG=-1
-!            ONLY WHEN ONE-BLOCK INTEGRATOR CONTROL IS ESSENTIAL. IN
-!            THIS CASE, BRKF45 ATTEMPTS TO ADVANCE THE SOLUTION A
-!            SINGLE BLOCK IN THE DIRECTION OF TEND EACH TIME IT IS
-!            CALLED.  SINCE THIS MODE OF OPERATION RESULTS IN EXTRA
-!            COMPUTING OVERHEAD, IT SHOULD BE AVOIDED UNLESS NEEDED.
+!            only when one-block integrator control is essential. In
+!            this case, BRKF45 attempts to advance the solution A
+!            single block in the direction of tend each time it is
+!            called.  Since this mode of operation results in extra
+!            computing overhead, it should be avoided unless needed.
 !
 !***********************************************************************
-!  OUTPUT FROM BRKF45
+!  Output from BRKF45
 !***********************************************************************
 !
-!      Y(*) -- COMPUTED SOLUTION APPROXIMATION AT T.
-!      T -- VALUE OF THE INDEPENDENT VARIABLE WHERE THE SOLUTION IS
-!           REPORTED.
+!      Y(*) -- computed solution approximation at T.
+!      T -- value of the independent variable where the solution is
+!           reported.
 !      IFLAG = 2 -- SUCCESSFUL RETURN.  EITHER THE INTEGRATION REACHED
 !                   T=TEND OR A SUCCESSFUL INTERPOLATION HAS BEEN
 !                   PERFORMED AT T=TOUT.  IF T.EQ.TEND THEN THE
-!                   INTEGRATION IS FINISHED.  IF NOT, THE CODE SHOULD BE
+!                   integration is finished.  If not, the code should be
 !                   CALLED WITH THE NEXT VALUE OF TOUT AND WITH IFLAG=+2
 !                   FOR NORMAL INTEGRATION OR IFLAG=-2 FOR ONE-BLOCK
-!                   INTEGRATION.
+!                   integration.
 !            =-2 -- A SINGLE SUCCESSFUL BLOCK IN THE DIRECTION OF TEND
-!                   HAS BEEN TAKEN. NORMAL MODE FOR CONTINUING
-!                   INTEGRATION ONE BLOCK AT A TIME.
+!                   has been taken. Normal mode for continuing
+!                   integration one block at a time.
 !            = 3 -- INTEGRATION WAS NOT COMPLETED BECAUSE RELATIVE ERROR
-!                   TOLERANCE WAS TOO SMALL. RELERR HAS BEEN INCREASED
-!                   APPROPRIATELY FOR CONTINUING.
+!                   tolerance was too small. RELERR has been increased
+!                   appropriately for continuing.
 !            = 4 -- INTEGRATION WAS NOT COMPLETED BECAUSE MORE THAN
-!                   18000 DERIVATIVE EVALUATIONS WERE NEEDED. THIS
-!                   IS APPROXIMATELY 2000 BLOCKS.
+!                   18000 derivative evaluations were needed. This
+!                   is approximately 2000 blocks.
 !            = 5 -- INTEGRATION WAS NOT COMPLETED BECAUSE SOLUTION
-!                   VANISHED MAKING A PURE RELATIVE ERROR TEST
-!                   IMPOSSIBLE. MUST USE NON-ZERO ABSERR TO CONTINUE.
-!                   USING THE ONE-BLOCK INTEGRATION MODE FOR ONE BLOCK
-!                   IS A GOOD WAY TO PROCEED.
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero ABSERR to continue.
+!                   Using the one-block integration mode for one block
+!                   is a good way to proceed.
 !            = 6 -- INTEGRATION WAS NOT COMPLETED BECAUSE REQUESTED
-!                   ACCURACY COULD NOT BE ACHIEVED USING SMALLEST
-!                   ALLOWABLE STEPSIZE. USER MUST INCREASE THE ERROR
-!                   TOLERANCE BEFORE CONTINUED INTEGRATION CAN BE
-!                   ATTEMPTED.
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
 !            = 7 -- INVALID INPUT PARAMETERS
-!                   THIS INDICATOR OCCURS IF ANY OF THE FOLLOWING IS
+!                   this indicator occurs if any of the following is
 !                   SATISFIED -   NEQN .LE. 0
 !                                 T = TEND
 !                                 RELERR OR ABSERR .LT. 0.
 !                                 ABS(IFLAG) .LT. 1 OR .GT. 7
-!      WORK(*),IWORK(*) -- INFORMATION WHICH IS USUALLY OF NO INTEREST
-!                   TO THE USER BUT NECESSARY FOR SUBSEQUENT CALLS.
-!                   WORK(1),...,WORK(NEQN) CONTAIN THE SOLUTION VECTOR
-!                   AND WORK(NEQN+1),...,WORK(2*NEQN) CONTAIN THE
-!                   DERIVATIVE VECTOR AT THE END POINT (WHICH IS ITSELF
-!                   CONTAINED IN WORK(2*NEQN+1)) OF THE BLOCK STEP JUST
-!                   COMPUTED. WORK(2*NEQN+2) CONTAINS THE STEPSIZE H
-!                   JUST USED. (THIS IS THE STEPSIZE BEING USED BY THE
-!                   INTERPOLANT OVER THIS BLOCK.) WORK(2*NEQN+3)
-!                   CONTAINS THE STEPSIZE H TO BE ATTEMPTED ON THE NEXT
-!                   BLOCK. IWORK(1) CONTAINS THE DERIVATIVE EVALUATION
-!                   COUNTER.
+!      WORK(*),IWORK(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   WORK(1),...,WORK(NEQN) contain the solution vector
+!                   and WORK(NEQN+1),...,WORK(2*NEQN) contain the
+!                   derivative vector at the end point (which is itself
+!                   contained in WORK(2*NEQN+1)) of the block step just
+!                   computed. WORK(2*NEQN+2) contains the stepsize H
+!                   just used. (This is the stepsize being used by the
+!                   interpolant over this block.) WORK(2*NEQN+3)
+!                   contains the stepsize H to be attempted on the next
+!                   block. IWORK(1) contains the derivative evaluation
+!                   counter.
 !
 !***********************************************************************
-!  SUBSEQUENT CALLS TO BRKF45
+!  Subsequent calls to BRKF45
 !***********************************************************************
 !
-!    SUBROUTINE BRKF45 RETURNS WITH ALL INFORMATION NEEDED TO CONTINUE
-!    THE INTEGRATION. AFTER THE CODE REPORTS A SUCCESSFUL SOLUTION AT
+!    Subroutine BRKF45 returns with all information needed to continue
+!    the integration. After the code reports a successful solution at
 !    TOUT (INDICATED BY IFLAG=2), THE USER NEEDS TO DEFINE A NEW TOUT
-!    BEFORE SIMPLY CALLING BRKF45 AGAIN TO CONTINUE IN THE NORMAL MODE.
-!    (BUT THE USER MUST FIRST RESET IFLAG TO -2 TO CONTINUE IN THE
-!    ONE-BLOCK INTEGRATOR MODE.)
-!    IF THE INTEGRATION WAS NOT COMPLETED BUT THE USER STILL WANTS TO
+!    before simply calling BRKF45 again to continue in the normal mode.
+!    (But the user must first reset IFLAG to -2 to continue in the
+!    one-block integrator mode.)
+!    if the integration was not completed but the user still wants to
 !    CONTINUE (IFLAG=3,4), HE JUST CALLS BRKF45 AGAIN. IN THE CASE
 !    IFLAG=3 THE RELERR PARAMETER HAS BEEN ADJUSTED APPROPRIATELY FOR
 !    CONTINUING THE INTEGRATION. IN THE CASE OF IFLAG=4 THE FUNCTION
-!    COUNTER WILL BE RESET TO 0 AND ANOTHER 18000 FUNCTION EVALUATIONS
-!    ARE ALLOWED.
+!    counter will be reset to 0 and another 18000 function evaluations
+!    are allowed.
 !    HOWEVER,IN THE CASE IFLAG=5, THE USER MUST FIRST ALTER THE ERROR
-!    CRITERION TO USE A POSITIVE VALUE OF ABSERR BEFORE INTEGRATION CAN
-!    PROCEED. IF HE DOES NOT,EXECUTION IS TERMINATED.
+!    criterion to use a positive value of ABSERR before integration can
+!    proceed. If he does not,execution is terminated.
 !    ALSO,IN THE CASE IFLAG=6, IT IS NECESSARY FOR THE USER TO RESET
-!    IFLAG TO 2 (OR -2 WHEN THE ONE-BLOCK INTEGRATION MODE IS BEING
-!    USED) AS WELL AS INCREASING EITHER ABSERR,RELERR OR BOTH BEFORE
-!    THE INTEGRATION CAN BE CONTINUED. IF THIS IS NOT DONE, EXECUTION
+!    IFLAG to 2 (or -2 when the one-block integration mode is being
+!    used) as well as increasing either ABSERR,RELERR or both before
+!    the integration can be continued. If this is not done, execution
 !    WILL BE TERMINATED. THE OCCURRENCE OF IFLAG=6 INDICATES A TROUBLE
-!    SPOT(SOLUTION IS CHANGING RAPIDLY,SINGULARITY MAY BE PRESENT) AND
-!    IT OFTEN IS INADVISABLE TO CONTINUE.
+!    SPOT(SOLUTION IS CHANGING RAPIDLY,SINGULARITY MAY BE PRESENT) and
+!    it often is inadvisable to continue.
 !    IF IFLAG=7 IS OBTAINED, INTEGRATION CAN NOT BE CONTINUED UNLESS
-!    THE INVALID INPUT PARAMETERS ARE CORRECTED.
-!    IT SHOULD BE NOTED THAT THE ARRAYS WORK,IWORK CONTAIN INFORMATION
-!    REQUIRED FOR SUBSEQUENT INTEGRATION. ACCORDINGLY, WORK AND IWORK
-!    SHOULD NOT BE ALTERED.
+!    the invalid input parameters are corrected.
+!    It should be noted that the arrays work,IWORK contain information
+!    required for subsequent integration. Accordingly, work and IWORK
+!    should not be altered.
 !
 !***********************************************************************
-!  USER CALLS TO THE INTERPOLANT ROUTINE EXTRA
+!  User calls to the interpolant routine EXTRA
 !***********************************************************************
 !
-!    SUBROUTINE EXTRA CAN ALSO BE CALLED BY THE USER, IN CONJUNCTION
-!    WITH USAGE OF BRKF45, TO PROVIDE APPROXIMATE SOLUTIONS AT OFF-STEP
-!    POINTS BY USE OF THE INTERPOLATING POLYNOMIAL. WHILE BRKF45
-!    HANDLES THE USUAL SITUATIONS, IT CAN BE HELPFUL TO THE USER TO BE
-!    ABLE TO ACCESS THE INTERPOLANT DIRECTLY, SUCH AS WHEN DOING ROOT
-!    FINDING. ALSO, IT IS POSSIBLE THAT THE USER MAY HAVE SOME NEED FOR
-!    EXTRAPOLATING OUTSIDE OF THE BLOCK STEP ON WHICH THE UNDERLYING
-!    INTERPOLANT IS BASED. BRKF45 WILL NOT DO THIS.
-!    THE FORM OF THE USAGE CALL IS
+!    Subroutine EXTRA can also be called by the user, in conjunction
+!    with usage of BRKF45, to provide approximate solutions at off-step
+!    points by use of the interpolating polynomial. While BRKF45
+!    handles the usual situations, it can be helpful to the user to be
+!    able to access the interpolant directly, such as when doing root
+!    finding. Also, it is possible that the user may have some need for
+!    extrapolating outside of the block step on which the underlying
+!    interpolant is based. BRKF45 will not do this.
+!    The form of the usage call is
 !
 !    CALL EXTRA ( NEQN, WORK(6*NEQN+4), WORK(NEQN+1), WORK(2*NEQN+1),
 !                WORK(2*NEQN+2), WORK(2*NEQN+4), WORK(3*NEQN+4),
-!                WORK(4*NEQN+4), WORK(5*NEQN+4), TEX, YEX, YPEX )
+!                WORK(4*NEQN+4), WORK(5*NEQN+4), tex, YEX, YPEX )
 !
 !    WHERE YEX AND YPEX ARE THE SOLUTION VECTOR AND DERIVATIVE VECTOR
 !    APPROXIMATIONS DEFINED BY THE INTERPOLANT AT THE POINT TEX, AND
@@ -5228,7 +5228,7 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !    EXTRA HAS BEEN WRITTEN BY D. HIGMAN (SEE BELOW).
 !
 !***********************************************************************
-!  MORE ABOUT THE INTERPOLANT ROUTINE EXTRA
+!  More about the interpolant routine EXTRA
 !***********************************************************************
 !
 !    THE FIRST DERIVATIVE APPROXIMATIONS GIVEN BY J.R. CASH HAVE BEEN
@@ -5243,7 +5243,7 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 logical :: endpnt, blkout
 external fcn
 !
-!     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
+!     Compute indices for the splitting of the work array
 !
 kw = 1
 kwp = kw + neqn
@@ -5261,17 +5261,17 @@ ksr = kf7 + neqn
 ksa = ksr + 1
 kt = ksa + 1
 !
-!     THE WORK SPACE TOTALS  6 + 9*NEQN .
+!     The work space totals  6 + 9*NEQN .
 !
 if (iabs(iflag) .eq. 1) go to 10
    endpnt = (iwork(4) .eq. -1)
    blkout = (iwork(5) .eq. -1)
 !
 !***********************************************************************
-!     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
-!     CALLING LIST VIA THE SPLITTING APART OF TWO WORKING STORAGE
-!     ARRAYS. IF THIS IS NOT COMPATIBLE WITH THE USERS COMPILER,
-!     HE MUST USE RKFC DIRECTLY.
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use RKFC directly.
 !***********************************************************************
 !
 10 call rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
@@ -5314,9 +5314,9 @@ real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
 &remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 real :: spmpar
 !
-!     TWO STEP BLOCK RUNGE-KUTTA FEHLBERG METHOD.
-!     A STANDARD 5(4) FORMULA IS USED AT THE FIRST POINT IN THE BLOCK
-!     AND A 6(4) FORMULA IS USED AT THE SECOND POINT.
+!     Two step block Runge-Kutta Fehlberg method.
+!     A standard 5(4) formula is used at the first point in the block
+!     and A 6(4) formula is used at the second point.
 !
 logical :: hfaild
 logical, intent(inout) :: endpnt
@@ -5326,7 +5326,7 @@ external fcn
 !
 !***********************************************************************
 !
-!     COEFFICIENTS DEFINING THE METHOD ...
+!     Coefficients defining the method ...
 !
 !                C2=0.25E+0
 !                C3=3.0E+0/8.0E+0
@@ -5382,10 +5382,10 @@ data b1b /.118518518518519e+00/, b3b / .518986354775828e+00/, &
 data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
 &erc14/-.291998936735779e-01/, erc15/ .200000000000000e-01/
 !
-!     THE ABOVE DEFINE THE COEFFICIENTS FOR BRKF45 USED TO GENERATE
-!     THE SOLUTION AT THE FIRST BLOCK POINT. BELOW ARE ADDITIONAL
-!     COEFFICIENTS NEEDED TO GENERATE THE SOLUTION AT THE SECOND BLOCK
-!     POINT.
+!     The above define the coefficients for BRKF45 used to generate
+!     the solution at the first block point. Below are additional
+!     coefficients needed to generate the solution at the second block
+!     point.
 !
 !                B1=931.0E+0/6480.0E+0
 !                B3=315392.0E+0/1500525.0E+0
@@ -5428,7 +5428,7 @@ data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
 &a95 /-.627825575453278e+01/, a96 / .753363921389629e+01/, &
 &a97 /-.139246861924514e+02/, a98 / .240351257812904e+01/
 !
-!     NEXT WE DEFINE COEFFICIENTS FOR THE ERROR ESTIMATE FORMULA.
+!     Next we define coefficients for the error estimate formula.
 !
 !     B3E = 1067091077380.0E+0/1829119027671.0E+0
 !     B4E = 3284168845918.0E+0/21339721989495.0E+0
@@ -5456,31 +5456,31 @@ data erc21 /.224905375494686e-01/, erc23 /-.186601479161668e+00/, &
 !
 !***********************************************************************
 !
-!  REMIN IS A TOLERANCE THRESHOLD WHICH IS ALSO DETERMINED BY THE
-!  INTEGRATION METHOD. IN PARTICULAR, A FIFTH ORDER METHOD WILL
-!  GENERALLY NOT BE CAPABLE OF DELIVERING ACCURACIES NEAR LIMITING
-!  PRECISION ON COMPUTERS WITH LONG WORDLENGTHS. THIS DOES NOT HAVE
-!  TO BE CHANGED FOR DIFFERENT MACHINES.
+!  REMIN is a tolerance threshold which is also determined by the
+!  integration method. In particular, a fifth order method will
+!  generally not be capable of delivering accuracies near limiting
+!  precision on computers with long wordlengths. This does not have
+!  to be changed for different machines.
 !
 data remin / 1.e-12 /
 !
 !***********************************************************************
 !
-!     THE EXPENSE IS CONTROLLED BY RESTRICTING THE NUMBER
-!     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately MAXNFE.
 !
 data maxnfe / 18000 /
 !
 !***********************************************************************
 !
-!  THE COMPUTER UNIT ROUNDOFF ERROR U IS THE SMALLEST POSITIVE VALUE
+!  The computer unit roundoff error U is the smallest positive value
 !  REPRESENTABLE IN THE MACHINE SUCH THAT  1 + U .GT. 1.
 !
  u = spmpar(1)
 !
 !***********************************************************************
 !
-!     CHECK INPUT PARAMETERS
+!     Check input parameters
 !
 if (neqn .lt. 1) go to 500
 if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 500
@@ -5495,7 +5495,7 @@ if (mflag .ne. 1) go to 10
 if (tout .eq. told) go to 20
 if (sign(1.0, tend-told) .ne. sign(1.0, tout-told)) go to 500
 !
-!     CHECK CONTINUATION POSSIBILITIES
+!     Check continuation possibilities
 !
 20 if (mflag .ne. 2) go to 30
 !
@@ -5515,38 +5515,38 @@ go to 70
 if (iflag .eq. 4) go to 50
 if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 60
 !
-!     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
+!     Integration cannot be continued since user did not respond to
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=5,6 OR 7
 !
 40 stop
 !
 !***********************************************************************
 !
-!     RESET FUNCTION EVALUATION COUNTER
+!     Reset function evaluation counter
 !
 50 nfe = 0
 if (mflag .eq. 2) go to 70
 !
-!     RESET FLAG VALUE FROM PREVIOUS CALL
+!     Reset flag VALUE from previous call
 !
 60 iflag = jflag
 if (kflag .eq. 3) mflag = iabs(iflag)
 !
-!     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
-!     INPUT CHECKING
+!     Save input IFLAG and set continuation flag VALUE for subsequent
+!     input checking
 !
 70 jflag = iflag
 kflag = 0
 !
-!     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
+!     Save RELERR and ABSERR for checking input on subsequent calls
 !
 savre = relerr
 savae = abserr
 !
-!     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
-!     2U+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING FROM
-!     IMPOSSIBLE ACCURACY REQUESTS. IF TOLERANCE TOO SMALL, INCREASE
-!     AND RETURN.
+!     Restrict relative error tolerance to be at least as large as
+!     2U+REMIN to avoid limiting precision difficulties arising from
+!     impossible accuracy requests. If tolerance too small, increase
+!     and return.
 !
 rer = 2.0*u + remin
 if (relerr .lt. rer) go to 520
@@ -5556,12 +5556,12 @@ if (mflag .ne. 1) go to 100
 !
 !***********************************************************************
 !
-!     INITIALIZATION --
-!                       DEFINE INTEGRATION INDEPENDENT VARIABLE X
-!                       EVALUATE INITIAL DERIVATIVES
-!                       SET UP WORKING ARRAYS FOR INTEGRATION VARIABLES
-!                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
-!                       ESTIMATE STARTING STEPSIZE
+!     Initialization --
+!                       define integration independent variable X
+!                       evaluate initial derivatives
+!                       set up working arrays for integration variables
+!                       set counter for function evaluations,NFE
+!                       estimate starting stepsize
 !
 x = t
 endpnt = .false.
@@ -5575,7 +5575,7 @@ do n = 1, neqn
    wp(n) = yp(n)
 end do
 !
-!     COMPUTE INITIAL STEPLENGTH.
+!     Compute initial steplength.
 !
 dt = tout - t
 if (dt .eq. 0.0) dt = tend - t
@@ -5593,34 +5593,34 @@ h = amax1(h, u26*amax1(abs(t),abs(dt)))
 jflag = isign(2,iflag)
 h = sign(h,dt)
 !
-!     INITIAL STEPLENGTH NOW COMPUTED. COMPUTE FIRST SOLUTION.
+!     Initial steplength now computed. Compute first solution.
 !
 !***********************************************************************
 !
-!     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
-!     SCALE THE ERROR TOLERANCES.
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances.
 !
 100 scale = 2.0/relerr
 ae = scale*abserr
 !
-!     SET SAFETY FACTOR FOR STEPSIZE ADJUSTMENT, BASED ON TOLERANCES.
+!     Set safety factor for stepsize adjustment, based on tolerances.
 !
 toler = amax1(abserr,relerr)
 sf = 0.85
 if (toler .ge. 1.e-5) sf = 0.8
 if (toler .le. 1.e-9) sf = 0.9
 !
-!     RESTORE INTEGRATION VARIABLE TO END OF LAST BLOCK STEP TAKEN
-!     AND SET THE SIGN OF THE DIRECTION OF INTEGRATION.
+!     Restore integration variable to end of last block step taken
+!     and set the sign of the direction of integration.
 !
 t = x
 dtsign = sign(1.0, tend-t)
 !
-!     HAVE WE ALREADY INTEGRATED PAST THE PRESENT DATA OUTPUT POINT?
-!     IF SO JUMP TO 390 AND PERFORM INTERPOLATION.
-!     IF NOT, SEE IF WE HAVE REACHED THE END POINT OF INTEGRATION.
-!     IF NOT, SEE IF RESULTS AT THE END OF THE BLOCK STEP NEED TO BE
-!     REPORTED.
+!     Have we already integrated past the present data output point?
+!     If so jump to 390 and perform interpolation.
+!     If not, see if we have reached the end point of integration.
+!     If not, see if results at the end of the block step need to be
+!     reported.
 !
 if ((tout-t)*dtsign .gt. 0.0) go to 110
    if (tout .eq. t) go to 510
@@ -5632,10 +5632,10 @@ if (iflag .ne. -2  .or. .not.blkout) go to 150
 !
 !***********************************************************************
 !***********************************************************************
-!     BLOCK BY BLOCK INTEGRATION
+!     Block BY block integration
 !
-!     SEE IF WE ARE TOO CLOSE TO THE END POINT.  IF SO, DO LINEAR
-!     EXTRAPOLATION AND RETURN.
+!     See if we are too close to the end point.  If so, do linear
+!     extrapolation and return.
 !
 150 if (abs(tend-t) .gt. u26*abs(t)) go to 190
 if (dtsign*(tend-tout) .le. 0.0) go to 160
@@ -5663,8 +5663,8 @@ end do
 endpnt = .false.
 return
 !
-!     SET SMALLEST ALLOWABLE STEPSIZE AND STEP FAILURE FLAG.
-!     ADJUST STEPSIZE IF NECESSARY TO HIT THE END POINT OF INTEGRATION.
+!     Set smallest allowable stepsize and step failure flag.
+!     Adjust stepsize if necessary to hit the end point of integration.
 !
 190 hmin = u26*abs(t)
 hfaild = .false.
@@ -5674,26 +5674,26 @@ endpnt = .true.
 h = hstop
 !
 !***********************************************************************
-!     CORE INTEGRATOR FOR A SINGLE BLOCK
+!     Core integrator for a single block
 !***********************************************************************
-!     THE TOLERANCES HAVE BEEN SCALED TO AVOID PREMATURE UNDERFLOW IN
-!     COMPUTING THE ERROR TOLERANCE FUNCTION ERRTOL.
-!     TO AVOID PROBLEMS WITH ZERO CROSSINGS,RELATIVE ERROR IS MEASURED
-!     USING THE AVERAGE OF THE MAGNITUDES OF THE SOLUTION AT THE
-!     BEGINNING AND END  POINTS OF A BLOCK.
-!     TO DISTINGUISH THE VARIOUS ARGUMENTS, H IS NOT PERMITTED
-!     TO BECOME SMALLER THAN 26 UNITS OF ROUNDOFF IN T.
-!     PRACTICAL LIMITS ON THE CHANGE IN THE STEPSIZE ARE ENFORCED TO
-!     SMOOTH THE STEPSIZE SELECTION PROCESS AND TO AVOID EXCESSIVE
-!     CHATTERING ON PROBLEMS HAVING DISCONTINUITIES.
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function ERRTOL.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end  points of a block.
+!     To distinguish the various arguments, H is not permitted
+!     to become smaller than 26 units of roundoff in T.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
 !***********************************************************************
 !
-!     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
-!     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from T to T+H
 !
 200 if (nfe .gt. maxnfe) go to 530
 !
-!     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
+!     Advance an approximate solution over one step of length H
 !
 do n = 1, neqn
    y1(n) = w(n) + a21*h*wp(n)
@@ -5729,13 +5729,13 @@ do n = 1, neqn
 end do
 esttol = eeoet*scale
 !
-!     CHECK THE ERROR ESTIMATE. IF STEPLENGTH HAS FAILED FOR FIRST STEP
-!     IN THE BLOCK, GO AND COMPUTE A SMALLER STEP FOR A RE-TRY.
+!     Check the error estimate. If steplength has failed for first step
+!     in the block, go and compute a smaller step for A RE-try.
 !
 if (esttol .gt. 1.0) go to 320
 !
-!     INTEGRATION SUCCESSFUL FOR FIRST STEP.  NOW INTEGRATE OVER
-!     THE SECOND STEP IN THE BLOCK
+!     Integration successful for first step.  Now integrate over
+!     the second step in the block
 !
 call fcn (t + h, y1, f1)
 do n = 1, neqn
@@ -5761,8 +5761,8 @@ do n = 1, neqn
 end do
 esttol = eeoet*scale
 !
-!     THE FIRST OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
-!     DERIVATIVE MORE STABLE IS THE FOLLOWING DO-LOOP.
+!     The first of the three changes needed to make the interpolant
+!     derivative more stable is the following do-loop.
 !
 do n = 1, neqn
    y1(n) = b1b*wp(n)+b3b*f3(n)+b4b*f4(n)+b5b*y(n)+ &
@@ -5771,13 +5771,13 @@ do n = 1, neqn
 &b7*f1(n)+b8*f7(n)+b9*f2(n)
 end do
 !
-!     CHECK THE ERROR ESTIMATE OVER THE SECOND STEP OF THE BLOCK.
+!     Check the error estimate over the second step of the block.
 !
 if (esttol .le. 1.0) go to 330
 !
-!     UNSUCCESSFUL BLOCK
-!     REDUCE THE STEPSIZE , TRY AGAIN
-!     THE DECREASE IS LIMITED TO A FACTOR OF ABOUT 1/10
+!     Unsuccessful block
+!     reduce the stepsize , try again
+!     the decrease is limited to a factor of about 1/10
 !
 320 hfaild = .true.
 s = 0.1
@@ -5787,8 +5787,8 @@ h = s*h
 if (abs(h) .lt. hmin) go to 550
 go to 200
 !
-!     SUCCESSFUL BLOCK. CHECK FOR NEED TO INTERPOLATE.
-!     STORE SOLUTION AT T+2*H.
+!     Successful block. Check for need to interpolate.
+!     Store solution at T+2*H.
 !
 330 t = t + 2.0*h
 if (endpnt) t = tend
@@ -5815,21 +5815,21 @@ end do
 call fcn (a, w, wp)
 nfe = nfe + 1
 !
-!     CHOOSE NEXT STEPSIZE
-!     THE INCREASE IS LIMITED TO A FACTOR OF ABOUT 10
-!     IF STEP FAILURE HAS JUST OCCURED, NEXT STEP IS NOT ALLOWED
-!     TO INCREASE.
+!     Choose next stepsize
+!     the increase is limited to a factor of about 10
+!     if step failure has just occured, next step is not allowed
+!     to increase.
 !
 s = 10.0
 if (esttol .gt. 1.e-5) s = sf/esttol**0.2
 if (hfaild) s = amin1(s,1.0)
 h = sign(amax1(s*abs(h),hmin), h)
 !
-!     HAVE WE INTEGRATED PAST AN OUTPUT POINT?
+!     Have we integrated past an output point?
 !     IF SO, CALL THE INTERPOLATION ROUTINE AT T=TOUT.
-!     IF NOT, SEE IF WE ARE AT THE END POINT OF INTEGRATION.
-!     OTHERWISE, CHECK IF USER WANTS SOLUTIONS AT THE END OF THE BLOCK
-!     STEP, OR ELSE CONTINUE THE INTEGRATION.
+!     If not, see if we are at the end point of integration.
+!     Otherwise, check if user wants solutions at the end of the block
+!     step, or else continue the integration.
 !
 if (interp) go to 390
 if (endpnt) go to 510
@@ -5837,10 +5837,10 @@ if (iflag .gt. 0) go to 150
 iflag = -2
 go to 400
 !
-!     INTERPOLATE TO GET DATA AT OFF-STEP POINT AND RETURN.
+!     Interpolate to get data at off-step point and return.
 !
-!     THE SECOND OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
-!     DERIVATIVE MORE STABLE IS THE NEW STATEMENT 390 GIVEN BELOW.
+!     The second of the three changes needed to make the interpolant
+!     derivative more stable is the new statement 390 given below.
 !
 390 call extra (neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
 t = tout
@@ -5849,7 +5849,7 @@ iflag = 2
 return
 !
 !     RETURN WITH THE SOLUTION AT THE END OF THE LAST SUCCESSFUL
-!     BLOCK STEP.
+!     block step.
 !
 400 do n = 1,neqn
    y(n) = w(n)
@@ -5857,37 +5857,37 @@ return
 end do
 return
 !
-!     INVALID INPUT, RETURN
+!     Invalid input, return
 !
 500 iflag = 7
 return
 !
-!     WE HAVE REACHED THE ENDPOINT
+!     We have reached the endpoint
 !
 510 iflag = 2
 endpnt = .false.
 go to 400
 !
-!     RELATIVE ERROR TOLERANCE TOO SMALL
+!     Relative error tolerance too small
 !
 520 relerr = rer
 iflag = 3
 kflag = 3
 return
 !
-!     TOO MUCH WORK
+!     Too much work
 !
 530 iflag = 4
 kflag = 4
 go to 400
 !
-!     INAPPROPRIATE ERROR TOLERANCE
+!     Inappropriate error tolerance
 !
 540 iflag = 5
 kflag = 5
 go to 400
 !
-!     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
+!     Requested error unattainable at smallest allowable stepsize
 !
 550 iflag = 6
 kflag = 6
@@ -5909,22 +5909,22 @@ real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
 !     NEEDED TO MAKE THE INTERPOLANT DERIVATIVE MORE STABLE.
 !
-!     T IS THE INDEPENDENT VARIABLE.
-!     Y IS THE VALUE AT T-2H. THE VALUES AT T-H AND T ARE
-!     Y + H*YINC1 AND Y + H*YINC2 RESPECTIVELY.
-!     F,F1 AND F2 ARE THE DERIVATIVES AT T-2H, T-H AND T.
-!     TEX IS THE POINT WHERE THE OUTPUT IS REQUIRED.
-!     YEX WILL HOLD THE APPROXIMATE SOLUTION AT TEX AND YPEX WILL
-!     HOLD THE DERIVATIVE APPROXIMATION AT THIS POINT.
+!     T is the independent variable.
+!     Y is the value at T-2H. The values at T-H and T are
+!     Y + H*YINC1 and Y + H*YINC2 respectively.
+!     F,F1 and F2 are the derivatives at T-2H, T-H and T.
+!     Tex is the point where the output is required.
+!     YEX will hold the approximate solution at tex and YPEX will
+!     hold the derivative approximation at this point.
 !
 !
-!     PERFORM QUINTIC INTERPOLATION BASED ON THE VALUES
-!     Y(N),Y(N)+H*YINC1(N),Y(N)+H*YINC2(N),F(N),F1(N),F2(N) AT THE
-!     POINTS T-2H, T-H, T.  THIS POLYNOMIAL IS EVALUATED AT THE POINT
-!     TEX TO OBTAIN THE APPROXIMATE VALUE OF Y(TEX) AND THIS IS STORED
-!     IN THE ARRAY YEX.  THE DERIVATIVE OF THE INTERPOLATING POLYNOMIAL
-!     IS ALSO EVALUATED AT TEX TO OBTAIN AN APPROXIMATION TO DY/DT
-!     AT THIS POINT AND THIS APPROXIMATION IS STORED IN YPEX.
+!     Perform quintic interpolation based on the values
+!     Y(N),Y(N)+H*YINC1(N),Y(N)+H*YINC2(N),F(N),F1(N),F2(N) at the
+!     points T-2H, T-H, T.  This polynomial is evaluated at the point
+!     tex to obtain the approximate value of Y(TEX) and this is stored
+!     in the array YEX.  The derivative of the interpolating polynomial
+!     is also evaluated at tex to obtain an approximation to DY/DT
+!     at this point and this approximation is stored in YPEX.
 !
 sig = (tex - t)/h + 2.0
 do n = 1, neqn
@@ -5947,167 +5947,167 @@ end subroutine extra
 subroutine rkf45 (f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
 implicit none
 !
-!     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
+!     Fehlberg fourth-fifth order Runge-Kutta method
 !
 !     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
 !                   SANDIA LABORATORIES
 !                  ALBUQUERQUE,NEW MEXICO
 !
-!    RKF45 IS PRIMARILY DESIGNED TO SOLVE NON-STIFF AND MILDLY STIFF
-!    DIFFERENTIAL EQUATIONS WHEN DERIVATIVE EVALUATIONS ARE INEXPENSIVE.
-!    RKF45 SHOULD GENERALLY NOT BE USED WHEN THE USER IS DEMANDING
-!    HIGH ACCURACY.
+!    RKF45 is primarily designed to solve non-stiff and mildly stiff
+!    differential equations when derivative evaluations are inexpensive.
+!    RKF45 should generally not be used when the user is demanding
+!    high accuracy.
 !
-! ABSTRACT
+! Abstract
 !
-!    SUBROUTINE  RKF45  INTEGRATES A SYSTEM OF NEQN FIRST ORDER
-!    ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!    Subroutine  RKF45  integrates a system of NEQN first order
+!    ordinary differential equations of the form
 !             DY(I)/DT = F(T,Y(1),Y(2),...,Y(NEQN))
-!              WHERE THE Y(I) ARE GIVEN AT T .
-!    TYPICALLY THE SUBROUTINE IS USED TO INTEGRATE FROM T TO TOUT BUT IT
-!    CAN BE USED AS A ONE-STEP INTEGRATOR TO ADVANCE THE SOLUTION A
-!    SINGLE STEP IN THE DIRECTION OF TOUT.  ON RETURN THE PARAMETERS IN
-!    THE CALL LIST ARE SET FOR CONTINUING THE INTEGRATION. THE USER HAS
-!    ONLY TO CALL RKF45 AGAIN (AND PERHAPS DEFINE A NEW VALUE FOR TOUT).
-!    ACTUALLY, RKF45 IS AN INTERFACING ROUTINE WHICH CALLS SUBROUTINE
-!    RKFS FOR THE SOLUTION.  RKFS IN TURN CALLS SUBROUTINE  FEHL WHICH
-!    COMPUTES AN APPROXIMATE SOLUTION OVER ONE STEP.
+!              where the Y(I) are given at T .
+!    Typically the subroutine is used to integrate from T to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout.  On return the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call RKF45 again (and perhaps define a new value for tout).
+!    Actually, RKF45 is an interfacing routine which calls subroutine
+!    RKFS for the solution.  RKFS in turn calls subroutine  FEHL which
+!    computes an approximate solution over one step.
 !
 !    RKF45  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
 !    IN THE REFERENCE
 !    E.FEHLBERG , LOW-ORDER CLASSICAL RUNGE-KUTTA FORMULAS WITH STEPSIZE
 !                 CONTROL , NASA TR R-315
 !
-!    THE PARAMETERS REPRESENT-
+!    The parameters represent-
 !      F -- SUBROUTINE F(T,Y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- SOLUTION VECTOR AT T
-!      T -- INDEPENDENT VARIABLE
-!      TOUT -- OUTPUT POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE ERROR TOLERANCES FOR LOCAL
-!            ERROR TEST. AT EACH STEP THE CODE REQUIRES THAT
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- solution vector at T
+!      T -- independent variable
+!      tout -- output point at which solution is desired
+!      RELERR,ABSERR -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
 !                 ABS(LOCAL ERROR) .LE. RELERR*ABS(Y) + ABSERR
-!            FOR EACH COMPONENT OF THE LOCAL ERROR AND SOLUTION VECTORS
-!      IFLAG -- INDICATOR FOR STATUS OF INTEGRATION
-!      WORK(*) -- ARRAY TO HOLD INFORMATION INTERNAL TO RKF45 WHICH IS
-!            NECESSARY FOR SUBSEQUENT CALLS. MUST BE DIMENSIONED
-!            AT LEAST  3+6*NEQN
-!      IWORK(*) -- INTEGER ARRAY USED TO HOLD INFORMATION INTERNAL TO
-!            RKF45 WHICH IS NECESSARY FOR SUBSEQUENT CALLS. MUST BE
-!            DIMENSIONED AT LEAST  5
+!            for each component of the local error and solution vectors
+!      IFLAG -- indicator for status of integration
+!      WORK(*) -- array to hold information internal to RKF45 which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+6*NEQN
+!      IWORK(*) -- integer array used to hold information internal to
+!            RKF45 which is necessary for subsequent calls. Must be
+!            dimensioned at least  5
 !
-!  FIRST CALL TO RKF45
+!  First call to RKF45
 !
-!    THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR THE ARRAYS
+!    The user must provide storage in his calling program for the arrays
 !    IN THE CALL LIST  -      Y(NEQN) , WORK(3+6*NEQN) , IWORK(5)  ,
-!    DECLARE F IN AN EXTERNAL STATEMENT, SUPPLY SUBROUTINE F(T,Y,YP) AND
-!    INITIALIZE THE FOLLOWING PARAMETERS-
+!    declare F in an external statement, supply subroutine F(T,Y,YP) and
+!    initialize the following parameters-
 !
 !      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED.  (NEQN .GE. 1)
-!      Y(*) -- VECTOR OF INITIAL CONDITIONS
-!      T -- STARTING POINT OF INTEGRATION , MUST BE A VARIABLE
-!      TOUT -- OUTPUT POINT AT WHICH SOLUTION IS DESIRED.
+!      Y(*) -- vector of initial conditions
+!      T -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
 !            T=TOUT IS ALLOWED ON THE FIRST CALL ONLY, IN WHICH CASE
 !            RKF45 RETURNS WITH IFLAG=2 IF CONTINUATION IS POSSIBLE.
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE LOCAL ERROR TOLERANCES
-!            WHICH MUST BE NON-NEGATIVE. RELERR MUST BE A VARIABLE WHILE
-!            ABSERR MAY BE A CONSTANT. THE CODE SHOULD NORMALLY NOT BE
-!            USED WITH RELATIVE ERROR CONTROL SMALLER THAN ABOUT 1.E-8 .
-!            TO AVOID LIMITING PRECISION DIFFICULTIES THE CODE REQUIRES
-!            RELERR TO BE LARGER THAN AN INTERNALLY COMPUTED RELATIVE
-!            ERROR PARAMETER WHICH IS MACHINE DEPENDENT. IN PARTICULAR,
-!            PURE ABSOLUTE ERROR IS NOT PERMITTED. IF A SMALLER THAN
-!            ALLOWABLE VALUE OF RELERR IS ATTEMPTED, RKF45 INCREASES
-!            RELERR APPROPRIATELY AND RETURNS CONTROL TO THE USER BEFORE
-!            CONTINUING THE INTEGRATION.
-!      IFLAG -- +1,-1  INDICATOR TO INITIALIZE THE CODE FOR EACH NEW
+!      RELERR,ABSERR -- relative and absolute local error tolerances
+!            which must be non-negative. RELERR must be a variable while
+!            ABSERR may be a constant. The code should normally not be
+!            used with relative error control smaller than about 1.E-8 .
+!            To avoid limiting precision difficulties the code requires
+!            RELERR to be larger than an internally computed relative
+!            error parameter which is machine dependent. In particular,
+!            pure absolute error is not permitted. If a smaller than
+!            allowable value of RELERR is attempted, RKF45 increases
+!            RELERR appropriately and returns control to the user before
+!            continuing the integration.
+!      IFLAG -- +1,-1  indicator to initialize the code for each new
 !            PROBLEM. NORMAL INPUT IS +1. THE USER SHOULD SET IFLAG=-1
-!            ONLY WHEN ONE-STEP INTEGRATOR CONTROL IS ESSENTIAL. IN THIS
-!            CASE, RKF45 ATTEMPTS TO ADVANCE THE SOLUTION A SINGLE STEP
-!            IN THE DIRECTION OF TOUT EACH TIME IT IS CALLED. SINCE THIS
-!            MODE OF OPERATION RESULTS IN EXTRA COMPUTING OVERHEAD, IT
-!            SHOULD BE AVOIDED UNLESS NEEDED.
+!            only when one-step integrator control is essential. In this
+!            case, RKF45 attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
 !
-!  OUTPUT FROM RKF45
+!  Output from RKF45
 !
-!      Y(*) -- SOLUTION AT T
-!      T -- LAST POINT REACHED IN INTEGRATION.
+!      Y(*) -- solution at T
+!      T -- last point reached in integration.
 !      IFLAG = 2 -- INTEGRATION REACHED TOUT.
 !            =-2 -- A SINGLE SUCCESSFUL STEP IN THE DIRECTION OF TOUT
-!                   HAS BEEN TAKEN. NORMAL MODE FOR CONTINUING
-!                   INTEGRATION ONE STEP AT A TIME.
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
 !            = 3 -- INTEGRATION WAS NOT COMPLETED BECAUSE RELATIVE ERROR
-!                   TOLERANCE WAS TOO SMALL. RELERR HAS BEEN INCREASED
-!                   APPROPRIATELY FOR CONTINUING.
+!                   tolerance was too small. RELERR has been increased
+!                   appropriately for continuing.
 !            = 4 -- INTEGRATION WAS NOT COMPLETED BECAUSE MORE THAN
-!                   3000 DERIVATIVE EVALUATIONS WERE NEEDED. THIS
-!                   IS APPROXIMATELY 500 STEPS.
+!                   3000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
 !            = 5 -- INTEGRATION WAS NOT COMPLETED BECAUSE SOLUTION
-!                   VANISHED MAKING A PURE RELATIVE ERROR TEST
-!                   IMPOSSIBLE. MUST USE NON-ZERO ABSERR TO CONTINUE.
-!                   USING THE ONE-STEP INTEGRATION MODE FOR ONE STEP
-!                   IS A GOOD WAY TO PROCEED.
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero ABSERR to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
 !            = 6 -- INTEGRATION WAS NOT COMPLETED BECAUSE REQUESTED
-!                   ACCURACY COULD NOT BE ACHIEVED USING SMALLEST
-!                   ALLOWABLE STEPSIZE. USER MUST INCREASE THE ERROR
-!                   TOLERANCE BEFORE CONTINUED INTEGRATION CAN BE
-!                   ATTEMPTED.
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
 !            = 7 -- IT IS LIKELY THAT RKF45 IS INEFFICIENT FOR SOLVING
-!                   THIS PROBLEM. TOO MUCH OUTPUT IS RESTRICTING THE
-!                   NATURAL STEPSIZE CHOICE. USE THE ONE-STEP INTEGRATOR
-!                   MODE.
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step integrator
+!                   mode.
 !            = 8 -- INVALID INPUT PARAMETERS
-!                   THIS INDICATOR OCCURS IF ANY OF THE FOLLOWING IS
+!                   this indicator occurs if any of the following is
 !                   SATISFIED -   NEQN .LE. 0
 !                                 T=TOUT  AND  IFLAG .NE. +1 OR -1
 !                                 RELERR OR ABSERR .LT. 0.
 !                                 IFLAG .EQ. 0  OR  .LT. -2  OR  .GT. 8
-!      WORK(*),IWORK(*) -- INFORMATION WHICH IS USUALLY OF NO INTEREST
-!                   TO THE USER BUT NECESSARY FOR SUBSEQUENT CALLS.
-!                   WORK(1),...,WORK(NEQN) CONTAIN THE FIRST DERIVATIVES
-!                   OF THE SOLUTION VECTOR Y AT T. WORK(NEQN+1) CONTAINS
-!                   THE STEPSIZE H TO BE ATTEMPTED ON THE NEXT STEP.
-!                   IWORK(1) CONTAINS THE DERIVATIVE EVALUATION COUNTER.
+!      WORK(*),IWORK(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   WORK(1),...,WORK(NEQN) contain the first derivatives
+!                   of the solution vector Y at T. WORK(NEQN+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   IWORK(1) contains the derivative evaluation counter.
 !
-!  SUBSEQUENT CALLS TO RKF45
+!  Subsequent calls to RKF45
 !
-!    SUBROUTINE RKF45 RETURNS WITH ALL INFORMATION NEEDED TO CONTINUE
-!    INTEGRATION. IF THE INTEGRATION REACHED TOUT, THE USER NEED ONLY
-!    DEFINE A NEW TOUT AND CALL RKF45 AGAIN. IN THE ONE-STEP INTEGRATOR
+!    Subroutine RKF45 returns with all information needed to continue
+!    integration. If the integration reached tout, the user need only
+!    define a new tout and call RKF45 again. In the one-step integrator
 !    MODE (IFLAG=-2) THE USER MUST KEEP IN MIND THAT EACH STEP TAKEN IS
-!    IN THE DIRECTION OF THE CURRENT TOUT. UPON REACHING TOUT (INDICATED
-!    BY CHANGING IFLAG TO 2),THE USER MUST THEN DEFINE A NEW TOUT AND
-!    RESET IFLAG TO -2 TO CONTINUE IN THE ONE-STEP INTEGRATOR MODE.
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing IFLAG to 2),the user must then define a new tout and
+!    reset IFLAG to -2 to continue in the one-step integrator mode.
 !
-!    IF THE INTEGRATION WAS NOT COMPLETED BUT THE USER STILL WANTS TO
+!    If the integration was not completed but the user still wants to
 !    CONTINUE (IFLAG=3,4 CASES), HE JUST CALLS RKF45 AGAIN. WITH IFLAG=3
-!    THE RELERR PARAMETER HAS BEEN ADJUSTED APPROPRIATELY FOR CONTINUING
+!    the RELERR parameter HAS been adjusted appropriately for continuing
 !    THE INTEGRATION. IN THE CASE OF IFLAG=4 THE FUNCTION COUNTER WILL
-!    BE RESET TO 0 AND ANOTHER 3000 FUNCTION EVALUATIONS ARE ALLOWED.
+!    be reset to 0 and another 3000 function evaluations are allowed.
 !
 !    HOWEVER,IN THE CASE IFLAG=5, THE USER MUST FIRST ALTER THE ERROR
-!    CRITERION TO USE A POSITIVE VALUE OF ABSERR BEFORE INTEGRATION CAN
-!    PROCEED. IF HE DOES NOT,EXECUTION IS TERMINATED.
+!    criterion to use a positive value of ABSERR before integration can
+!    proceed. If he does not,execution is terminated.
 !
 !    ALSO,IN THE CASE IFLAG=6, IT IS NECESSARY FOR THE USER TO RESET
-!    IFLAG TO 2 (OR -2 WHEN THE ONE-STEP INTEGRATION MODE IS BEING USED)
-!    AS WELL AS INCREASING EITHER ABSERR,RELERR OR BOTH BEFORE THE
-!    INTEGRATION CAN BE CONTINUED. IF THIS IS NOT DONE, EXECUTION WILL
+!    IFLAG to 2 (or -2 when the one-step integration mode is being used)
+!    as well as increasing either ABSERR,RELERR or both before the
+!    integration can be continued. If this is not done, execution will
 !    BE TERMINATED. THE OCCURRENCE OF IFLAG=6 INDICATES A TROUBLE SPOT
-!    (SOLUTION IS CHANGING RAPIDLY,SINGULARITY MAY BE PRESENT) AND IT
-!    OFTEN IS INADVISABLE TO CONTINUE.
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
 !
 !    IF IFLAG=7 IS ENCOUNTERED, THE USER SHOULD USE THE ONE-STEP MODE
-!    OR SWITCH TO ANOTHER ROUTINE. IF THE USER INSISTS UPON CONTINUING
-!    THE INTEGRATION WITH RKF45, THEN HE MUST RESET IFLAG TO 2 OR -2
-!    BEFORE RECALLING RKF45. OTHERWISE, EXECUTION WILL BE TERMINATED.
+!    or switch to another routine. If the user insists upon continuing
+!    the integration with RKF45, then he must reset IFLAG to 2 or -2
+!    before recalling RKF45. Otherwise, execution will be terminated.
 !
 !    IF IFLAG=8 IS OBTAINED, INTEGRATION CANNOT BE CONTINUED UNLESS
-!    THE INVALID INPUT PARAMETERS ARE CORRECTED.
+!    the invalid input parameters are corrected.
 !
-!    IT SHOULD BE NOTED THAT THE ARRAYS WORK,IWORK CONTAIN INFORMATION
-!    REQUIRED FOR SUBSEQUENT INTEGRATION. ACCORDINGLY, WORK AND IWORK
-!    SHOULD NOT BE ALTERED.
+!    It should be noted that the arrays work,IWORK contain information
+!    required for subsequent integration. Accordingly, work and IWORK
+!    should not be altered.
 !
 integer, intent(in) :: neqn
 integer, intent(inout) :: iflag, iwork(5)
@@ -6121,7 +6121,7 @@ external f
 !
 integer :: k1, k2, k3, k4, k5, k6, k1m
 !
-!     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
+!     Compute indices for the splitting of the work array
 !
 k1m=neqn+1
 k1=k1m+1
@@ -6131,10 +6131,10 @@ k4=k3+neqn
 k5=k4+neqn
 k6=k5+neqn
 !
-!     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
-!     CALLING LIST VIA THE SPLITTING APART OF TWO WORKING STORAGE
-!     ARRAYS. IF THIS IS NOT COMPATIBLE WITH THE USERS COMPILER,
-!     HE MUST USE RKFS DIRECTLY.
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use RKFS directly.
 !
 call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
 &work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
@@ -6148,16 +6148,16 @@ subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
 implicit none
 !
 !
-!     RKFS INTEGRATES A SYSTEM OF FIRST ORDER ORDINARY DIFFERENTIAL
-!     EQUATIONS AS DESCRIBED IN THE COMMENTS FOR RKF45 .
-!     THE ARRAYS YP,F1,F2,F3,F4,AND F5 (OF DIMENSION AT LEAST NEQN) AND
-!     THE VARIABLES H,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,AND KFLAG ARE USED
-!     INTERNALLY BY THE CODE AND APPEAR IN THE CALL LIST TO ELIMINATE
-!     LOCAL RETENTION OF VARIABLES BETWEEN CALLS. ACCORDINGLY, THEY
-!     SHOULD NOT BE ALTERED. ITEMS OF POSSIBLE INTEREST ARE
-!         YP - DERIVATIVE OF SOLUTION VECTOR AT T
-!         H  - AN APPROPRIATE STEPSIZE TO BE USED FOR THE NEXT STEP
-!         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
+!     RKFS integrates a system of first order ordinary differential
+!     equations as described in the comments for RKF45 .
+!     The arrays YP,F1,F2,F3,F4,and F5 (of dimension at least NEQN) and
+!     the variables H,SAVRE,SAVAE,NFE,kop,init,JFLAG,and KFLAG are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         YP - derivative of solution vector at T
+!         H  - an appropriate stepsize to be used for the next step
+!         NFE- counter on the number of derivative function evaluations
 !
 logical :: hfaild, output
 !
@@ -6180,38 +6180,38 @@ real :: a, ae, dt, ee, eeoet, esttol, et, hmin, remin, rer, s, &
 !
 integer :: k, maxnfe, mflag
 !
-!     REMIN IS THE MINIMUM ACCEPTABLE VALUE OF RELERR.  ATTEMPTS
-!     TO OBTAIN HIGHER ACCURACY WITH THIS SUBROUTINE ARE USUALLY
-!     VERY EXPENSIVE AND OFTEN UNSUCCESSFUL.
+!     REMIN is the minimum acceptable value of RELERR.  Attempts
+!     to obtain higher accuracy with this subroutine are usually
+!     very expensive and often unsuccessful.
 !
 data remin/1.e-12/
 !
-!     THE EXPENSE IS CONTROLLED BY RESTRICTING THE NUMBER
-!     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
-!     AS SET, THIS CORRESPONDS TO ABOUT 500 STEPS.
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately MAXNFE.
+!     As set, this corresponds to about 500 steps.
 !
 data maxnfe/3000/
 !
-!     CHECK INPUT PARAMETERS
+!     Check input parameters
 !
 if (neqn .lt. 1) go to 10
 if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 10
 mflag = iabs(iflag)
 if (mflag .eq. 0 .or. mflag .gt. 8) go to 10
 !
-!     COMPUTE THE RELATIVE MACHINE PRECISION
+!     Compute the relative machine precision
 !
 eps = spmpar(1)
 u26 = 26.0*eps
 if (mflag .ne. 1) go to 20
 go to 50
 !
-!     INVALID INPUT
+!     Invalid input
 !
 10 iflag = 8
 return
 !
-!     CHECK CONTINUATION POSSIBILITIES
+!     Check continuation possibilities
 !
 20 if (t .eq. tout .and. kflag .ne. 3) go to 10
 if (mflag .ne. 2) go to 25
@@ -6232,40 +6232,40 @@ go to 50
 if (iflag .eq. 4) go to 40
 if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
 !
-!     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
+!     Integration cannot be continued since user did not respond to
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=5,6,7 OR 8
 !
 30 stop
 !
-!     RESET FUNCTION EVALUATION COUNTER
+!     Reset function evaluation counter
 !
 40 nfe = 0
 if (mflag .eq. 2) go to 50
 !
-!     RESET FLAG VALUE FROM PREVIOUS CALL
+!     Reset flag VALUE from previous call
 !
 45 iflag = jflag
 if (kflag .eq. 3) mflag = iabs(iflag)
 !
-!     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
-!     INPUT CHECKING
+!     Save input IFLAG and set continuation flag VALUE for subsequent
+!     input checking
 !
 50 jflag = iflag
 kflag = 0
 !
-!     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
+!     Save RELERR and ABSERR for checking input on subsequent calls
 !
 savre = relerr
 savae = abserr
 !
-!     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
-!     2*EPS+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING
-!     FROM IMPOSSIBLE ACCURACY REQUESTS
+!     Restrict relative error tolerance to be at least as large as
+!     2*eps+REMIN to avoid limiting precision difficulties arising
+!     from impossible accuracy requests
 !
 rer = 2.0*eps + remin
 if (relerr .ge. rer) go to 55
 !
-!     RELATIVE ERROR TOLERANCE TOO SMALL
+!     Relative error tolerance too small
 !
 relerr = rer
 iflag = 3
@@ -6278,12 +6278,12 @@ if (mflag .eq. 1) go to 60
 if (init .eq. 0) go to 65
 go to 80
 !
-!     INITIALIZATION --
-!                       SET INITIALIZATION COMPLETION INDICATOR,INIT
-!                       SET INDICATOR FOR TOO MANY OUTPUT POINTS,KOP
-!                       EVALUATE INITIAL DERIVATIVES
-!                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
-!                       ESTIMATE STARTING STEPSIZE
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       set counter for function evaluations,NFE
+!                       estimate starting stepsize
 !
 60 init = 0
 kop = 0
@@ -6309,24 +6309,24 @@ if (toln .le. 0.0) h=0.0
 h = amax1(h,u26*amax1(abs(t),abs(dt)))
 jflag = isign(2,iflag)
 !
-!     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
+!     Set stepsize for integration in the direction from T to tout
 !
 80 h = sign(h,dt)
 !
-!     TEST TO SEE IF RKF45 IS BEING SEVERELY IMPACTED BY TOO MANY
-!     OUTPUT POINTS
+!     Test to see if RKF45 is being severely impacted by too many
+!     output points
 !
 if (abs(h) .ge. 2.0*abs(dt)) kop = kop + 1
 if (kop .ne. 100) go to 85
 !
-!     UNNECESSARY FREQUENCY OF OUTPUT
+!     Unnecessary frequency of output
 kop = 0
 iflag = 7
 return
 !
 85 if (abs(dt) .gt. u26*abs(t)) go to 95
 !
-!     IF TOO CLOSE TO OUTPUT POINT,EXTRAPOLATE AND RETURN
+!     If too close to output point,extrapolate and return
 !
 do 90 k = 1,neqn
 90 y(k) = y(k) + dt*yp(k)
@@ -6336,34 +6336,34 @@ nfe = nfe + 1
 go to 300
 !
 !
-!     INITIALIZE OUTPUT POINT INDICATOR
+!     Initialize output point indicator
 !
 95 output = .false.
 !
-!     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
-!     SCALE THE ERROR TOLERANCES
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
 !
 scale = 2.0/relerr
 ae = scale*abserr
 !
-!     STEP BY STEP INTEGRATION
+!     Step by step integration
 !
 100 hfaild = .false.
 !
-!     SET SMALLEST ALLOWABLE STEPSIZE
+!     Set smallest allowable stepsize
 !
 hmin = u26*abs(t)
 !
-!     ADJUST STEPSIZE IF NECESSARY TO HIT THE OUTPUT POINT.
-!     LOOK AHEAD TWO STEPS TO AVOID DRASTIC CHANGES IN THE STEPSIZE AND
-!     THUS LESSEN THE IMPACT OF OUTPUT POINTS ON THE CODE.
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize and
+!     thus lessen the impact of output points on the code.
 !
 dt = tout - t
 if (abs(dt) .ge. 2.0*abs(h)) go to 200
 if (abs(dt) .gt. abs(h)) go to 150
 !
-!     THE NEXT SUCCESSFUL STEP WILL COMPLETE THE INTEGRATION TO THE
-!     OUTPUT POINT
+!     The next successful step will complete the integration to the
+!     output point
 !
 output = .true.
 h = dt
@@ -6372,55 +6372,55 @@ go to 200
 150 h=0.5*dt
 !
 !
-!     CORE INTEGRATOR FOR TAKING A SINGLE STEP
+!     Core integrator for taking a single step
 !
-!     THE TOLERANCES HAVE BEEN SCALED TO AVOID PREMATURE UNDERFLOW IN
-!     COMPUTING THE ERROR TOLERANCE FUNCTION ET.
-!     TO AVOID PROBLEMS WITH ZERO CROSSINGS,RELATIVE ERROR IS MEASURED
-!     USING THE AVERAGE OF THE MAGNITUDES OF THE SOLUTION AT THE
-!     BEGINNING AND END OF A STEP.
-!     THE ERROR ESTIMATE FORMULA HAS BEEN GROUPED TO CONTROL LOSS OF
-!     SIGNIFICANCE.
-!     TO DISTINGUISH THE VARIOUS ARGUMENTS, H IS NOT PERMITTED
-!     TO BECOME SMALLER THAN 26 UNITS OF ROUNDOFF IN T.
-!     PRACTICAL LIMITS ON THE CHANGE IN THE STEPSIZE ARE ENFORCED TO
-!     SMOOTH THE STEPSIZE SELECTION PROCESS AND TO AVOID EXCESSIVE
-!     CHATTERING ON PROBLEMS HAVING DISCONTINUITIES.
-!     TO PREVENT UNNECESSARY FAILURES, THE CODE USES 9/10 THE STEPSIZE
-!     IT ESTIMATES WILL SUCCEED.
-!     AFTER A STEP FAILURE, THE STEPSIZE IS NOT ALLOWED TO INCREASE FOR
-!     THE NEXT ATTEMPTED STEP. THIS MAKES THE CODE MORE EFFICIENT ON
-!     PROBLEMS HAVING DISCONTINUITIES AND MORE EFFECTIVE IN GENERAL
-!     SINCE LOCAL EXTRAPOLATION IS BEING USED AND EXTRA CAUTION SEEMS
-!     WARRANTED.
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function ET.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, H is not permitted
+!     to become smaller than 26 units of roundoff in T.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and extra caution seems
+!     warranted.
 !
-!     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
-!     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from T to T+H
 !
 200 if (nfe .le. maxnfe) go to 220
 !
-!     TOO MUCH WORK
+!     Too much work
 !
 iflag = 4
 kflag = 4
 return
 !
-!     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
+!     Advance an approximate solution over one step of length H
 !
 220 call fehl (f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
 nfe = nfe + 5
 !
-!     COMPUTE AND TEST ALLOWABLE TOLERANCES VERSUS LOCAL ERROR ESTIMATES
-!     AND REMOVE SCALING OF TOLERANCES. NOTE THAT RELATIVE ERROR IS
-!     MEASURED WITH RESPECT TO THE AVERAGE OF THE MAGNITUDES OF THE
-!     SOLUTION AT THE BEGINNING AND END OF THE STEP.
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
 !
 eeoet = 0.0
 do 250 k = 1,neqn
    et = abs(y(k)) + abs(f1(k)) + ae
    if (et .gt. 0.0) go to 240
 !
-!        INAPPROPRIATE ERROR TOLERANCE
+!        Inappropriate error tolerance
 !
    iflag = 5
    return
@@ -6432,9 +6432,9 @@ do 250 k = 1,neqn
 esttol = abs(h)*eeoet*scale/752400.0
 if (esttol .le. 1.0) go to 260
 !
-!     UNSUCCESSFUL STEP
-!                       REDUCE THE STEPSIZE , TRY AGAIN
-!                       THE DECREASE IS LIMITED TO A FACTOR OF 1/10
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
 !
 hfaild = .true.
 output = .false.
@@ -6443,15 +6443,15 @@ if (esttol .lt. 59049.0) s = 0.9/esttol**0.2
 h = s*h
 if (abs(h) .gt. hmin) go to 200
 !
-!     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
+!     Requested error unattainable at smallest allowable stepsize
 !
 iflag = 6
 kflag = 6
 return
 !
-!     SUCCESSFUL STEP
-!                        STORE SOLUTION AT T+H
-!                        AND EVALUATE DERIVATIVES THERE
+!     Successful step
+!                        store solution at T+H
+!                        and evaluate derivatives there
 !
 260 t = t + h
 do 270 k = 1,neqn
@@ -6460,10 +6460,10 @@ a = t
 call f(a,y,yp)
 nfe = nfe + 1
 !
-!                       CHOOSE NEXT STEPSIZE
-!                       THE INCREASE IS LIMITED TO A FACTOR OF 5
-!                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
-!                          STEPSIZE IS NOT ALLOWED TO INCREASE
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
 !
 s=5.0
 if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
@@ -6473,19 +6473,19 @@ h=sign(amax1(s*abs(h),hmin),h)
 !     END OF CORE INTEGRATOR
 !
 !
-!     SHOULD WE TAKE ANOTHER STEP
+!     Should we take another step
 !
 if (output) go to 300
 if (iflag .gt. 0) go to 100
 !
-!     INTEGRATION SUCCESSFULLY COMPLETED
+!     Integration successfully completed
 !
-!     ONE-STEP MODE
+!     One-step mode
 !
 iflag = -2
 return
 !
-!     INTERVAL MODE
+!     Interval mode
 !
 300 t = tout
 iflag = 2
@@ -6495,22 +6495,22 @@ end subroutine rkfs
 subroutine fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,s)
 implicit none
 !
-!     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
+!     Fehlberg fourth-fifth order Runge-Kutta method
 !
-!    FEHL INTEGRATES A SYSTEM OF NEQN FIRST ORDER
-!    ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!    FEHL integrates a system of NEQN first order
+!    ordinary differential equations of the form
 !             DY(I)/DT=F(T,Y(1),---,Y(NEQN))
-!    WHERE THE INITIAL VALUES Y(I) AND THE INITIAL DERIVATIVES
-!    YP(I) ARE SPECIFIED AT THE STARTING POINT T. FEHL ADVANCES
-!    THE SOLUTION OVER THE FIXED STEP H AND RETURNS
-!    THE FIFTH ORDER (SIXTH ORDER ACCURATE LOCALLY) SOLUTION
-!    APPROXIMATION AT T+H IN ARRAY S(I).
-!    F1,---,F5 ARE ARRAYS OF DIMENSION NEQN WHICH ARE NEEDED
-!    FOR INTERNAL STORAGE.
-!    THE FORMULAS HAVE BEEN GROUPED TO CONTROL LOSS OF SIGNIFICANCE.
-!    FEHL SHOULD BE CALLED WITH AN H NOT SMALLER THAN 13 UNITS OF
-!    ROUNDOFF IN T SO THAT THE VARIOUS INDEPENDENT ARGUMENTS CAN BE
-!    DISTINGUISHED.
+!    where the initial values Y(I) and the initial derivatives
+!    YP(I) are specified at the starting point T. FEHL advances
+!    the solution over the fixed step H and returns
+!    the fifth order (sixth order accurate locally) solution
+!    approximation at T+H in array S(I).
+!    F1,---,F5 are arrays of dimension NEQN which are needed
+!    for internal storage.
+!    The formulas have been grouped to control loss of significance.
+!    FEHL should be called with an H not smaller than 13 units of
+!    roundoff in T so that the various independent arguments can be
+!    distinguished.
 !
 !
 integer, intent(in) :: neqn
@@ -6552,7 +6552,7 @@ do 225 k = 1,neqn
 &5643.0*f4(k)))+(41040.0*f1(k)-28352.0*f2(k)))
 call f(t+h/2.0,f1,f5)
 !
-!     COMPUTE APPROXIMATE SOLUTION AT T+H
+!     Compute approximate solution at T+H
 !
 ch=h/7618050.0
 do 230 k = 1,neqn
@@ -6576,37 +6576,37 @@ real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !
-!     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
-!     GLOBAL ERROR ASSESSMENT
+!     Fehlberg FOURTH(FIFTH) order Runge-Kutta method with
+!     global error assessment
 !
 !     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
 !                   SANDIA LABORATORIES
 !
-!    GERK IS DESIGNED TO SOLVE SYSTEMS OF DIFFERENTIAL EQUATIONS WHEN
-!    IT IS IMPORTANT TO HAVE A READILY AVAILABLE GLOBAL ERROR ESTIMATE.
-!    PARALLEL INTEGRATION IS PERFORMED TO YIELD TWO SOLUTIONS ON
-!    DIFFERENT MESH SPACINGS AND GLOBAL EXTRAPOLATION IS APPLIED TO
-!    PROVIDE AN ESTIMATE OF THE GLOBAL ERROR IN THE MORE ACCURATE
-!    SOLUTION.
+!    GERK is designed to solve systems of differential equations when
+!    it is important to have a readily available global error estimate.
+!    Parallel integration is performed to yield two solutions on
+!    different mesh spacings and global extrapolation is applied to
+!    provide an estimate of the global error in the more accurate
+!    solution.
 !
 !***********************************************************************
-! ABSTRACT
+! Abstract
 !***********************************************************************
 !
-!    SUBROUTINE  GERK  INTEGRATES A SYSTEM OF NEQN FIRST ORDER
-!    ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!    Subroutine  GERK  integrates a system of NEQN first order
+!    ordinary differential equations of the form
 !             DY(I)/DT = F(T,Y(1),Y(2),...,Y(NEQN))
-!              WHERE THE Y(I) ARE GIVEN AT T .
-!    TYPICALLY THE SUBROUTINE IS USED TO INTEGRATE FROM T TO TOUT BUT IT
-!    CAN BE USED AS A ONE-STEP INTEGRATOR TO ADVANCE THE SOLUTION A
-!    SINGLE STEP IN THE DIRECTION OF TOUT. ON RETURN,AN ESTIMATE OF THE
-!    GLOBAL ERROR IN THE SOLUTION AT T IS PROVIDED AND THE PARAMETERS IN
-!    THE CALL LIST ARE SET FOR CONTINUING THE INTEGRATION. THE USER HAS
-!    ONLY TO CALL GERK AGAIN (AND PERHAPS DEFINE A NEW VALUE FOR TOUT).
-!    ACTUALLY, GERK  IS MERELY AN INTERFACING ROUTINE WHICH ALLOCATES
-!    VIRTUAL STORAGE IN THE ARRAYS WORK,IWORK AND CALLS SUBROUTINE GERKS
-!    FOR THE SOLUTION.  GERKS  IN TURN CALLS SUBROUTINE  FEHL  WHICH
-!    COMPUTES AN APPROXIMATE SOLUTION OVER ONE STEP.
+!              where the Y(I) are given at T .
+!    Typically the subroutine is used to integrate from T to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout. On return,an estimate of the
+!    global error in the solution at T is provided and the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call GERK again (and perhaps define a new value for tout).
+!    Actually, GERK  is merely an interfacing routine which allocates
+!    virtual storage in the arrays work,IWORK and calls subroutine GERKS
+!    for the solution.  GERKS  in turn calls subroutine  FEHL  which
+!    computes an approximate solution over one step.
 !
 !    GERK  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
 !    IN THE REFERENCE
@@ -6614,142 +6614,142 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !                 CONTROL , NASA TR R-315
 !
 !
-!    THE PARAMETERS REPRESENT-
+!    The parameters represent-
 !      F -- SUBROUTINE F(T,Y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- SOLUTION VECTOR AT T
-!      T -- INDEPENDENT VARIABLE
-!      TOUT -- OUTPUT POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE ERROR TOLERANCES FOR LOCAL
-!            ERROR TEST. AT EACH STEP THE CODE REQUIRES THAT
+!      NEQN -- number of equations to be integrated
+!      Y(*) -- solution vector at T
+!      T -- independent variable
+!      tout -- output point at which solution is desired
+!      RELERR,ABSERR -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
 !                 ABS(LOCAL ERROR) .LE. RELERR*ABS(Y) + ABSERR
-!            FOR EACH COMPONENT OF THE LOCAL ERROR AND SOLUTION VECTORS
-!      IFLAG -- INDICATOR FOR STATUS OF INTEGRATION
-!      GERROR(*) -- VECTOR WHICH ESTIMATES THE GLOBAL ERROR AT T. THAT
-!                   IS, GERROR(I) APPROXIMATES  Y(I)-TRUE SOLUTION(I).
-!      WORK(*) -- ARRAY TO HOLD INFORMATION INTERNAL TO GERK WHICH IS
-!            NECESSARY FOR SUBSEQUENT CALLS. MUST BE DIMENSIONED
-!            AT LEAST  3+8*NEQN.
-!      IWORK(*) -- INTEGER ARRAY USED TO HOLD INFORMATION INTERNAL TO
-!            GERK WHICH IS NECESSARY FOR SUBSEQUENT CALLS. MUST BE
-!            DIMENSIONED AT LEAST  5.
+!            for each component of the local error and solution vectors
+!      IFLAG -- indicator for status of integration
+!      GERROR(*) -- vector which estimates the global error at T. That
+!                   is, GERROR(I) approximates  Y(I)-true SOLUTION(I).
+!      WORK(*) -- array to hold information internal to GERK which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+8*NEQN.
+!      IWORK(*) -- integer array used to hold information internal to
+!            GERK which is necessary for subsequent calls. Must be
+!            dimensioned at least  5.
 !
 !
 !***********************************************************************
-!  FIRST CALL TO GERK
+!  First call to GERK
 !***********************************************************************
 !
-!    THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR THE ARRAYS
+!    The user must provide storage in his calling program for the arrays
 !    IN THE CALL LIST  -      Y(NEQN) , WORK(3+8*NEQN) , IWORK(5)  ,
-!    DECLARE F IN AN EXTERNAL STATEMENT, SUPPLY SUBROUTINE F(T,Y,YP) AND
-!    INITIALIZE THE FOLLOWING PARAMETERS-
+!    declare F in an external statement, supply subroutine F(T,Y,YP) and
+!    initialize the following parameters-
 !
 !      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED.  (NEQN .GE. 1)
-!      Y(*) -- VECTOR OF INITIAL CONDITIONS
-!      T -- STARTING POINT OF INTEGRATION , MUST BE A VARIABLE
-!      TOUT -- OUTPUT POINT AT WHICH SOLUTION IS DESIRED.
+!      Y(*) -- vector of initial conditions
+!      T -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
 !            T=TOUT IS ALLOWED ON THE FIRST CALL ONLY,IN WHICH CASE GERK
 !            RETURNS WITH IFLAG=2 IF CONTINUATION IS POSSIBLE.
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE LOCAL ERROR TOLERANCES
-!            WHICH MUST BE NON-NEGATIVE BUT MAY BE CONSTANTS. WE CAN
-!            USUALLY EXPECT THE GLOBAL ERRORS TO BE SOMEWHAT SMALLER
-!            THAN THE REQUESTED LOCAL ERROR TOLERANCES. TO AVOID
-!            LIMITING PRECISION DIFFICULTIES THE CODE ALWAYS USES THE
-!            LARGER OF RELERR AND AN INTERNAL RELATIVE ERROR PARAMETER
-!            WHICH IS MACHINE DEPENDENT.
-!      IFLAG -- +1,-1  INDICATOR TO INITIALIZE THE CODE FOR EACH NEW
+!      RELERR,ABSERR -- relative and absolute local error tolerances
+!            which must be non-negative but may be constants. We can
+!            usually expect the global errors to be somewhat smaller
+!            than the requested local error tolerances. To avoid
+!            limiting precision difficulties the code always uses the
+!            larger of RELERR and an internal relative error parameter
+!            which is machine dependent.
+!      IFLAG -- +1,-1  indicator to initialize the code for each new
 !            PROBLEM. NORMAL INPUT IS +1. THE USER SHOULD SET IFLAG=-1
-!            ONLY WHEN ONE-STEP INTEGRATOR CONTROL IS ESSENTIAL. IN THIS
-!            CASE, GERK ATTEMPTS TO ADVANCE THE SOLUTION A SINGLE STEP
-!            IN THE DIRECTION OF TOUT EACH TIME IT IS CALLED. SINCE THIS
-!            MODE OF OPERATION RESULTS IN EXTRA COMPUTING OVERHEAD, IT
-!            SHOULD BE AVOIDED UNLESS NEEDED.
+!            only when one-step integrator control is essential. In this
+!            case, GERK attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
 !
 !
 !***********************************************************************
-!  OUTPUT FROM GERK
+!  Output from GERK
 !***********************************************************************
 !
-!      Y(*) -- SOLUTION AT T
-!      T -- LAST POINT REACHED IN INTEGRATION.
+!      Y(*) -- solution at T
+!      T -- last point reached in integration.
 !      IFLAG = 2 -- INTEGRATION REACHED TOUT.INDICATES SUCCESSFUL RETURN
-!                   AND IS THE NORMAL MODE FOR CONTINUING INTEGRATION.
+!                   and is the normal mode for continuing integration.
 !            =-2 -- A SINGLE SUCCESSFUL STEP IN THE DIRECTION OF TOUT
-!                   HAS BEEN TAKEN. NORMAL MODE FOR CONTINUING
-!                   INTEGRATION ONE STEP AT A TIME.
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
 !            = 3 -- INTEGRATION WAS NOT COMPLETED BECAUSE MORE THAN
-!                   9000 DERIVATIVE EVALUATIONS WERE NEEDED. THIS
-!                   IS APPROXIMATELY 500 STEPS.
+!                   9000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
 !            = 4 -- INTEGRATION WAS NOT COMPLETED BECAUSE SOLUTION
-!                   VANISHED MAKING A PURE RELATIVE ERROR TEST
-!                   IMPOSSIBLE. MUST USE NON-ZERO ABSERR TO CONTINUE.
-!                   USING THE ONE-STEP INTEGRATION MODE FOR ONE STEP
-!                   IS A GOOD WAY TO PROCEED.
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero ABSERR to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
 !            = 5 -- INTEGRATION WAS NOT COMPLETED BECAUSE REQUESTED
-!                   ACCURACY COULD NOT BE ACHIEVED USING SMALLEST
-!                   ALLOWABLE STEPSIZE. USER MUST INCREASE THE ERROR
-!                   TOLERANCE BEFORE CONTINUED INTEGRATION CAN BE
-!                   ATTEMPTED.
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
 !            = 6 -- GERK IS BEING USED INEFFICIENTLY IN SOLVING
-!                   THIS PROBLEM. TOO MUCH OUTPUT IS RESTRICTING THE
-!                   NATURAL STEPSIZE CHOICE. USE THE ONE-STEP
-!                   INTEGRATOR MODE.
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step
+!                   integrator mode.
 !            = 7 -- INVALID INPUT PARAMETERS
-!                   THIS INDICATOR OCCURS IF ANY OF THE FOLLOWING IS
+!                   this indicator occurs if any of the following is
 !                   SATISFIED -   NEQN .LE. 0
 !                                 T=TOUT  AND  IFLAG .NE. +1 OR -1
 !                                 RELERR OR ABSERR .LT. 0.
 !                                 IFLAG .EQ. 0  OR  .LT. -2  OR  .GT. 7
-!      GERROR(*) -- ESTIMATE OF THE GLOBAL ERROR IN THE SOLUTION AT T
-!      WORK(*),IWORK(*) -- INFORMATION WHICH IS USUALLY OF NO INTEREST
-!                   TO THE USER BUT NECESSARY FOR SUBSEQUENT CALLS.
-!                   WORK(1),...,WORK(NEQN) CONTAIN THE FIRST DERIVATIVES
-!                   OF THE SOLUTION VECTOR Y AT T. WORK(NEQN+1) CONTAINS
-!                   THE STEPSIZE H TO BE ATTEMPTED ON THE NEXT STEP.
-!                   IWORK(1) CONTAINS THE DERIVATIVE EVALUATION COUNTER.
+!      GERROR(*) -- estimate of the global error in the solution at T
+!      WORK(*),IWORK(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   WORK(1),...,WORK(NEQN) contain the first derivatives
+!                   of the solution vector Y at T. WORK(NEQN+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   IWORK(1) contains the derivative evaluation counter.
 !
 !
 !***********************************************************************
-!  SUBSEQUENT CALLS TO GERK
+!  Subsequent calls to GERK
 !***********************************************************************
 !
-!    SUBROUTINE GERK RETURNS WITH ALL INFORMATION NEEDED TO CONTINUE THE
-!    INTEGRATION. IF THE INTEGRATION REACHED TOUT,THE USER NEED ONLY
-!    DEFINE A NEW TOUT AND CALL GERK AGAIN. IN THE ONE-STEP INTEGRATOR
+!    Subroutine GERK returns with all information needed to continue the
+!    integration. If the integration reached tout,the user need only
+!    define a new tout and call GERK again. In the one-step integrator
 !    MODE (IFLAG=-2) THE USER MUST KEEP IN MIND THAT EACH STEP TAKEN IS
-!    IN THE DIRECTION OF THE CURRENT TOUT. UPON REACHING TOUT (INDICATED
-!    BY CHANGING IFLAG TO 2),THE USER MUST THEN DEFINE A NEW TOUT AND
-!    RESET IFLAG TO -2 TO CONTINUE IN THE ONE-STEP INTEGRATOR MODE.
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing IFLAG to 2),the user must then define a new tout and
+!    reset IFLAG to -2 to continue in the one-step integrator mode.
 !
-!    IF THE INTEGRATION WAS NOT COMPLETED BUT THE USER STILL WANTS TO
+!    If the integration was not completed but the user still wants to
 !    CONTINUE (IFLAG=3 CASE), HE JUST CALLS GERK AGAIN. THE FUNCTION
-!    COUNTER IS THEN RESET TO 0 AND ANOTHER 9000 FUNCTION EVALUATIONS
-!    ARE ALLOWED.
+!    counter is then reset to 0 and another 9000 function evaluations
+!    are allowed.
 !
 !    HOWEVER,IN THE CASE IFLAG=4, THE USER MUST FIRST ALTER THE ERROR
-!    CRITERION TO USE A POSITIVE VALUE OF ABSERR BEFORE INTEGRATION CAN
-!    PROCEED. IF HE DOES NOT,EXECUTION IS TERMINATED.
+!    criterion to use a positive value of ABSERR before integration can
+!    proceed. If he does not,execution is terminated.
 !
 !    ALSO,IN THE CASE IFLAG=5, IT IS NECESSARY FOR THE USER TO RESET
-!    IFLAG TO 2 (OR -2 WHEN THE ONE-STEP INTEGRATION MODE IS BEING USED)
-!    AS WELL AS INCREASING EITHER ABSERR,RELERR OR BOTH BEFORE THE
-!    INTEGRATION CAN BE CONTINUED. IF THIS IS NOT DONE, EXECUTION WILL
+!    IFLAG to 2 (or -2 when the one-step integration mode is being used)
+!    as well as increasing either ABSERR,RELERR or both before the
+!    integration can be continued. If this is not done, execution will
 !    BE TERMINATED. THE OCCURRENCE OF IFLAG=5 INDICATES A TROUBLE SPOT
-!    (SOLUTION IS CHANGING RAPIDLY,SINGULARITY MAY BE PRESENT) AND IT
-!    OFTEN IS INADVISABLE TO CONTINUE.
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
 !
 !    IF IFLAG=6 IS ENCOUNTERED, THE USER SHOULD USE THE ONE-STEP
-!    INTEGRATION MODE WITH THE STEPSIZE DETERMINED BY THE CODE. IF THE
-!    USER INSISTS UPON CONTINUING THE INTEGRATION WITH GERK IN THE
-!    INTERVAL MODE, HE MUST RESET IFLAG TO 2 BEFORE CALLING GERK AGAIN.
-!    OTHERWISE,EXECUTION WILL BE TERMINATED.
+!    integration mode with the stepsize determined by the code. If the
+!    user insists upon continuing the integration with GERK in the
+!    interval mode, he must reset IFLAG to 2 before calling GERK again.
+!    Otherwise,execution will be terminated.
 !
 !    IF IFLAG=7 IS OBTAINED, INTEGRATION CAN NOT BE CONTINUED UNLESS
-!    THE INVALID INPUT PARAMETERS ARE CORRECTED.
+!    the invalid input parameters are corrected.
 !
-!    IT SHOULD BE NOTED THAT THE ARRAYS WORK,IWORK CONTAIN INFORMATION
-!    REQUIRED FOR SUBSEQUENT INTEGRATION. ACCORDINGLY, WORK AND IWORK
-!    SHOULD NOT BE ALTERED.
+!    It should be noted that the arrays work,IWORK contain information
+!    required for subsequent integration. Accordingly, work and IWORK
+!    should not be altered.
 !
 !***********************************************************************
 !
@@ -6757,7 +6757,7 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 external f
 !
 !
-!     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
+!     Compute indices for the splitting of the work array
 !
 k1m=neqn+1
 k1=k1m+1
@@ -6770,10 +6770,10 @@ k7=k6+neqn
 k8=k7+neqn
 !
 !***********************************************************************
-!     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
-!     CALLING LIST VIA THE SPLITTING APART OF TWO WORKING STORAGE
-!     ARRAYS. IF THIS IS NOT COMPATIBLE WITH THE USERS COMPILER,
-!     HE MUST USE GERKS DIRECTLY.
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use GERKS directly.
 !***********************************************************************
 !
 call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
@@ -6805,21 +6805,21 @@ real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
 &scale, tol, toln, ts, u, u26, ypk
 real :: spmpar
 !
-!     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
-!     GLOBAL ERROR ASSESSMENT
+!     Fehlberg FOURTH(FIFTH) order Runge-Kutta method with
+!     global error assessment
 !
 !***********************************************************************
 !
-!     GERKS INTEGRATES A SYSTEM OF FIRST ORDER ORDINARY DIFFERENTIAL
-!     EQUATIONS AS DESCRIBED IN THE COMMENTS FOR GERK.  THE ARRAYS
-!     YP,F1,F2,F3,F4,F5,YG AND YGP (OF DIMENSION AT LEAST NEQN) AND
-!     THE VARIABLES H,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,AND KFLAG ARE USED
-!     INTERNALLY BY THE CODE AND APPEAR IN THE CALL LIST TO ELIMINATE
-!     LOCAL RETENTION OF VARIABLES BETWEEN CALLS. ACCORDINGLY, THEY
-!     SHOULD NOT BE ALTERED. ITEMS OF POSSIBLE INTEREST ARE
-!         YP - DERIVATIVE OF SOLUTION VECTOR AT T
-!         H  - AN APPROPRIATE STEPSIZE TO BE USED FOR THE NEXT STEP
-!         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
+!     GERKS integrates a system of first order ordinary differential
+!     equations as described in the comments for GERK.  The arrays
+!     YP,F1,F2,F3,F4,F5,YG and YGP (of dimension at least NEQN) and
+!     the variables H,SAVRE,SAVAE,NFE,kop,init,JFLAG,and KFLAG are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         YP - derivative of solution vector at T
+!         H  - an appropriate stepsize to be used for the next step
+!         NFE- counter on the number of derivative function evaluations
 !
 !***********************************************************************
 !
@@ -6829,32 +6829,32 @@ logical :: hfaild, output
 external f
 !
 !***********************************************************************
-!  THE COMPUTER UNIT ROUNDOFF ERROR U IS THE SMALLEST POSITIVE VALUE
+!  The computer unit roundoff error U is the smallest positive value
 !  REPRESENTABLE IN THE MACHINE SUCH THAT  1.+ U .GT. 1.
 !
 u = spmpar(1)
 !
 !***********************************************************************
 !
-!  REMIN IS A TOLERANCE THRESHOLD WHICH IS ALSO DETERMINED BY THE
-!  INTEGRATION METHOD. IN PARTICULAR, A FIFTH ORDER METHOD WILL
-!  GENERALLY NOT BE CAPABLE OF DELIVERING ACCURACIES NEAR LIMITING
-!  PRECISION ON COMPUTERS WITH LONG WORDLENGTHS.
+!  REMIN is a tolerance threshold which is also determined by the
+!  integration method. In particular, a fifth order method will
+!  generally not be capable of delivering accuracies near limiting
+!  precision on computers with long wordlengths.
 !
 remin = 3.e-11
 !
 !***********************************************************************
 !
-!     THE EXPENSE IS CONTROLLED BY RESTRICTING THE NUMBER
-!     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
-!     AS SET,THIS CORRESPONDS TO ABOUT 500 STEPS.
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately MAXNFE.
+!     As set,this corresponds to about 500 steps.
 !
 maxnfe = 9000
 !
 !***********************************************************************
 !
 !
-!     CHECK INPUT PARAMETERS
+!     Check input parameters
 !
 !
 if (neqn .lt. 1) go to 10
@@ -6862,14 +6862,14 @@ if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
 mflag=iabs(iflag)
 if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
 !
-!     INVALID INPUT
+!     Invalid input
 10 iflag=7
 return
 !
-!     IS THIS THE FIRST CALL
+!     Is this the first call
 20 if (mflag .eq. 1) go to 50
 !
-!     CHECK CONTINUATION POSSIBILITIES
+!     Check continuation possibilities
 !
 if (t .eq. tout) go to 10
 if (mflag .ne. 2) go to 25
@@ -6886,31 +6886,31 @@ go to 50
 25 if (iflag .eq. 3) go to 40
 if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
 !
-!     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
+!     Integration cannot be continued since user did not respond to
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=4,5,6 OR 7
 30 stop
 !
 !***********************************************************************
 !
-!     RESET FUNCTION EVALUATION COUNTER
+!     Reset function evaluation counter
 40 nfe=0
 if (mflag .eq. 2) go to 50
 !
-!     RESET FLAG VALUE FROM PREVIOUS CALL
+!     Reset flag VALUE from previous call
 45 iflag=jflag
 !
-!     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
-!     INPUT CHECKING
+!     Save input IFLAG and set continuation flag VALUE for subsequent
+!     input checking
 50 jflag=iflag
 kflag=0
 !
-!     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
+!     Save RELERR and ABSERR for checking input on subsequent calls
 savre=relerr
 savae=abserr
 !
-!     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
-!     32U+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING FROM
-!     IMPOSSIBLE ACCURACY REQUESTS
+!     Restrict relative error tolerance to be at least as large as
+!     32U+REMIN to avoid limiting precision difficulties arising from
+!     impossible accuracy requests
 !
 rer=amax1(relerr,32.*u+remin)
 !
@@ -6925,14 +6925,14 @@ go to 80
 !
 !***********************************************************************
 !
-!     INITIALIZATION --
-!                       SET INITIALIZATION COMPLETION INDICATOR,INIT
-!                       SET INDICATOR FOR TOO MANY OUTPUT POINTS,KOP
-!                       EVALUATE INITIAL DERIVATIVES
-!                       COPY INITIAL VALUES AND DERIVATIVES FOR THE
-!                             PARALLEL SOLUTION
-!                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
-!                       ESTIMATE STARTING STEPSIZE
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       copy initial values and derivatives for the
+!                             parallel solution
+!                       set counter for function evaluations,NFE
+!                       estimate starting stepsize
 !
 60 init=0
 kop=0
@@ -6963,12 +6963,12 @@ h=amax1(h,u26*amax1(abs(t),abs(dt)))
 !
 !***********************************************************************
 !
-!     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
+!     Set stepsize for integration in the direction from T to tout
 !
 80 h=sign(h,dt)
 !
-!     TEST TO SEE IF GERK IS BEING SEVERELY IMPACTED BY TOO MANY
-!     OUTPUT POINTS
+!     Test to see if GERK is being severely impacted by too many
+!     output points
 !
 if (abs(h) .gt. 2.*abs(dt)) kop=kop+1
 if (kop .ne. 100) go to 85
@@ -6978,7 +6978,7 @@ return
 !
 85 if (abs(dt) .gt. u26*abs(t)) go to 95
 !
-!     IF TOO CLOSE TO OUTPUT POINT,EXTRAPOLATE AND RETURN
+!     If too close to output point,extrapolate and return
 !
 do 90 k = 1,neqn
   yg(k)=yg(k)+dt*ygp(k)
@@ -6989,12 +6989,12 @@ call f(a,y,yp)
 nfe=nfe+2
 go to 300
 !
-!     INITIALIZE OUTPUT POINT INDICATOR
+!     Initialize output point indicator
 !
 95 output= .false.
 !
-!     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
-!     SCALE THE ERROR TOLERANCES
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
 !
 scale=2./rer
 ae=scale*abserr
@@ -7002,24 +7002,24 @@ ae=scale*abserr
 !
 !***********************************************************************
 !***********************************************************************
-!     STEP BY STEP INTEGRATION
+!     Step by step integration
 !
 100 hfaild= .false.
 !
-!     SET SMALLEST ALLOWABLE STEPSIZE
+!     Set smallest allowable stepsize
 !
 hmin=u26*abs(t)
 !
-!     ADJUST STEPSIZE IF NECESSARY TO HIT THE OUTPUT POINT.
-!     LOOK AHEAD TWO STEPS TO AVOID DRASTIC CHANGES IN THE STEPSIZE
-!     AND THUS LESSEN THE IMPACT OF OUTPUT POINTS ON THE CODE.
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize
+!     and thus lessen the impact of output points on the code.
 !
 dt=tout-t
 if (abs(dt) .ge. 2.*abs(h)) go to 200
 if (abs(dt) .gt. abs(h)) go to 150
 !
-!     THE NEXT SUCCESSFUL STEP WILL COMPLETE THE INTEGRATION TO THE
-!     OUTPUT POINT
+!     The next successful step will complete the integration to the
+!     output point
 !
 output= .true.
 h=dt
@@ -7030,56 +7030,56 @@ go to 200
 !
 !
 !***********************************************************************
-!     CORE INTEGRATOR FOR TAKING A SINGLE STEP
+!     Core integrator for taking a single step
 !***********************************************************************
-!     THE TOLERANCES HAVE BEEN SCALED TO AVOID PREMATURE UNDERFLOW IN
-!     COMPUTING THE ERROR TOLERANCE FUNCTION ET.
-!     TO AVOID PROBLEMS WITH ZERO CROSSINGS,RELATIVE ERROR IS MEASURED
-!     USING THE AVERAGE OF THE MAGNITUDES OF THE SOLUTION AT THE
-!     BEGINNING AND END OF A STEP.
-!     THE ERROR ESTIMATE FORMULA HAS BEEN GROUPED TO CONTROL LOSS OF
-!     SIGNIFICANCE.
-!     TO DISTINGUISH THE VARIOUS ARGUMENTS, H IS NOT PERMITTED
-!     TO BECOME SMALLER THAN 26 UNITS OF ROUNDOFF IN T.
-!     PRACTICAL LIMITS ON THE CHANGE IN THE STEPSIZE ARE ENFORCED TO
-!     SMOOTH THE STEPSIZE SELECTION PROCESS AND TO AVOID EXCESSIVE
-!     CHATTERING ON PROBLEMS HAVING DISCONTINUITIES.
-!     TO PREVENT UNNECESSARY FAILURES, THE CODE USES 9/10 THE STEPSIZE
-!     IT ESTIMATES WILL SUCCEED.
-!     AFTER A STEP FAILURE, THE STEPSIZE IS NOT ALLOWED TO INCREASE FOR
-!     THE NEXT ATTEMPTED STEP. THIS MAKES THE CODE MORE EFFICIENT ON
-!     PROBLEMS HAVING DISCONTINUITIES AND MORE EFFECTIVE IN GENERAL
-!     SINCE LOCAL EXTRAPOLATION IS BEING USED AND THE ERROR ESTIMATE
-!     MAY BE UNRELIABLE OR UNACCEPTABLE WHEN A STEP FAILS.
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function ET.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, H is not permitted
+!     to become smaller than 26 units of roundoff in T.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and the error estimate
+!     may be unreliable or unacceptable when a step fails.
 !***********************************************************************
 !
 !
-!     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
-!     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from T to T+H
 !
 200 if (nfe .le. maxnfe) go to 220
 !
-!     TOO MUCH WORK
+!     Too much work
 iflag=3
 kflag=3
 return
 !
-!     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
+!     Advance an approximate solution over one step of length H
 !
 220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
 nfe=nfe+5
 !
-!     COMPUTE AND TEST ALLOWABLE TOLERANCES VERSUS LOCAL ERROR ESTIMATES
-!     AND REMOVE SCALING OF TOLERANCES. NOTE THAT RELATIVE ERROR IS
-!     MEASURED WITH RESPECT TO THE AVERAGE OF THE MAGNITUDES OF THE
-!     SOLUTION AT THE BEGINNING AND END OF THE STEP.
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
 !
 eeoet=0.
 do 250 k = 1,neqn
   et=abs(yg(k))+abs(f1(k))+ae
   if (et .gt. 0.) go to 240
 !
-!       INAPPROPRIATE ERROR TOLERANCE
+!       Inappropriate error tolerance
   iflag=4
   kflag=4
   return
@@ -7093,9 +7093,9 @@ esttol=abs(h)*eeoet*scale/752400.
 if (esttol .le. 1.) go to 260
 !
 !
-!     UNSUCCESSFUL STEP
-!                       REDUCE THE STEPSIZE , TRY AGAIN
-!                       THE DECREASE IS LIMITED TO A FACTOR OF 1/10
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
 !
 hfaild= .true.
 output= .false.
@@ -7104,15 +7104,15 @@ if (esttol .lt. 59049.) s=0.9/esttol**0.2
 h=s*h
 if (abs(h) .gt. hmin) go to 200
 !
-!     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
+!     Requested error unattainable at smallest allowable stepsize
 iflag=5
 kflag=5
 return
 !
 !
-!     SUCCESSFUL STEP
-!                        STORE ONE-STEP SOLUTION YG AT T+H
-!                        AND EVALUATE DERIVATIVES THERE
+!     Successful step
+!                        store one-step solution YG at T+H
+!                        and evaluate derivatives there
 !
 260 ts=t
 t=t+h
@@ -7122,8 +7122,8 @@ a=t
 call f(a,yg,ygp)
 nfe=nfe+1
 !
-!                        NOW ADVANCE THE Y SOLUTION OVER TWO STEPS OF
-!                        LENGTH H/2 AND EVALUATE DERIVATIVES THERE
+!                        Now advance the Y solution over two steps of
+!                        length H/2 and evaluate derivatives there
 !
 hh=0.5*h
 call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
@@ -7136,10 +7136,10 @@ call f(a,y,yp)
 nfe=nfe+12
 !
 !
-!                       CHOOSE NEXT STEPSIZE
-!                       THE INCREASE IS LIMITED TO A FACTOR OF 5
-!                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
-!                          STEPSIZE IS NOT ALLOWED TO INCREASE
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
 !
 s=5.
 if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
@@ -7152,7 +7152,7 @@ h=sign(amax1(s*abs(h),hmin),h)
 !
 !
 !
-!     SHOULD WE TAKE ANOTHER STEP
+!     Should we take another step
 !
 if (output) go to 300
 if (iflag .gt. 0) go to 100
@@ -7161,13 +7161,13 @@ if (iflag .gt. 0) go to 100
 !***********************************************************************
 !
 !
-!     INTEGRATION SUCCESSFULLY COMPLETED
+!     Integration successfully completed
 !
-!     ONE-STEP MODE
+!     One-step mode
 iflag=-2
 go to 400
 !
-!     INTERVAL MODE
+!     Interval mode
 300 t=tout
 iflag=2
 !
@@ -7249,7 +7249,7 @@ real :: pd(n,*), rpar(*)
 real, intent(out) :: t
 real :: y(n)
 !     -------------
-!     DUMMY JACOBIAN SUBROUTINE
+!     Dummy Jacobian subroutine
 !     -------------
 !     -------------
 t = 0.0
@@ -7269,16 +7269,16 @@ integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
 real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !***********************************************************************
 !***PURPOSE
-!   STFODE SOLVES INITIAL VALUE PROBLEMS IN ORDINARY DIFFERENTIAL
-!   EQUATIONS USING BACKWARD DIFFERENTIATION FORMULAS. IT IS
-!   BOTH VARIABLE ORDER (1-5) AND VARIABLE STEP.
+!   STFODE solves initial value problems in ordinary differential
+!   equations using backward differentiation formulas. It is
+!   both variable order (1-5) and variable step.
 !***DESCRIPTION
 !
-!   THIS IS A MODIFICATION BY A. H. MORRIS (NSWC) OF THE CODE
-!   DEBDF, DESIGNED BY  L. F. SHAMPINE AND H. A. WATTS (1980).
-!   DEBDF IS DOCUMENTED IN
-!        SAND79-2374 , DEPAC - DESIGN OF A USER ORIENTED PACKAGE
-!                              OF ODE SOLVERS.
+!   This is a modification by A. H. Morris (NSWC) of the code
+!   DEBDF, designed by  L. F. Shampine and H. A. Watts (1980).
+!   DEBDF is documented in
+!        SAND79-2374 , DEPAC - design of a user oriented package
+!                              of ODE solvers.
 !
 !   STFODE IS A DRIVER FOR A MODIFICATION OF THE CODE LSODE WRITTEN BY
 !             A. C. HINDMARSH
@@ -7289,76 +7289,76 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !** ABSTRACT **
 !**************
 !
-!   SUBROUTINE STFODE USES THE BACKWARD DIFFERENTIATION FORMULAS OF
-!   ORDERS ONE THROUGH FIVE TO INTEGRATE A SYSTEM OF NEQ FIRST ORDER
-!   ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
+!   Subroutine STFODE uses the backward differentiation formulas of
+!   orders one through five to integrate a system of NEQ first order
+!   ordinary differential equations of the form
 !                         DU/DX = F(X,U)
 !   WHEN THE VECTOR Y(*) OF INITIAL VALUES FOR U(*) AT X=T IS GIVEN.
-!   THE SUBROUTINE INTEGRATES FROM T TO TOUT. IT IS EASY TO CONTINUE THE
-!   INTEGRATION TO GET RESULTS AT ADDITIONAL TOUT. THIS IS THE INTERVAL
-!   MODE OF OPERATION. IT IS ALSO EASY FOR THE ROUTINE TO RETURN WITH
-!   THE SOLUTION AT EACH INTERMEDIATE STEP ON THE WAY TO TOUT. THIS IS
-!   THE INTERMEDIATE-OUTPUT MODE OF OPERATION.
+!   The subroutine integrates from T to tout. It is easy to continue the
+!   integration to get results at additional tout. This is the interval
+!   mode of operation. It is also easy for the routine to return with
+!   the solution at each intermediate step on the way to tout. This is
+!   the intermediate-output mode of operation.
 !
-!   STFODE USES SUBPROGRAMS LSOD1, INTYD, STOD, CFOD, PJAC, SLVS,VNWRMS,
-!   HSTART, VNORM, SVCO, RSCO, SPMPAR, AND THE LINPACK ROUTINES SGEFA,
-!   SGESL, SGBFA, SGBSL (WHICH ALSO USE THE BLAS ROUTINES SAXPY, SSCAL,
-!   ISAMAX AND SDOT). THE ONLY MACHINE DEPENDENT PARAMETERS USED APPEAR
+!   STFODE uses subprograms LSOD1, INTYD, STOD, CFOD, PJAC, SLVS,VNWRMS,
+!   HSTART, VNORM, SVCO, RSCO, SPMPAR, and the LINPACK routines SGEFA,
+!   SGESL, SGBFA, SGBSL (which also use the BLAS routines SAXPY, SSCAL,
+!   ISAMAX and SDOT). The only machine dependent parameters used appear
 !   IN SPMPAR.
 !
 !***********************************************************************
 !** DESCRIPTION OF THE ARGUMENTS TO STFODE (AN OVERVIEW) **
 !**********************************************************
 !
-!   THE PARAMETERS ARE
+!   The parameters are
 !
-!      F -- THIS IS THE NAME OF A SUBROUTINE WHICH YOU PROVIDE TO
-!             DEFINE THE DIFFERENTIAL EQUATIONS.
+!      F -- this is the name of a subroutine which you provide to
+!             define the differential equations.
 !
-!      NEQ -- THIS IS THE NUMBER OF (FIRST ORDER) DIFFERENTIAL
-!             EQUATIONS TO BE INTEGRATED.
+!      NEQ -- this is the number of (first order) differential
+!             equations to be integrated.
 !
-!      T -- THIS IS A VALUE OF THE INDEPENDENT VARIABLE.
+!      T -- this is a value of the independent variable.
 !
-!      Y(*) -- THIS ARRAY CONTAINS THE SOLUTION COMPONENTS AT T.
+!      Y(*) -- this array contains the solution components at T.
 !
-!      TOUT -- THIS IS A POINT AT WHICH A SOLUTION IS DESIRED.
+!      Tout -- this is a point at which a solution is desired.
 !
-!      INFO(*) -- THE BASIC TASK OF THE CODE IS TO INTEGRATE THE
-!             DIFFERENTIAL EQUATIONS FROM T TO TOUT AND RETURN AN
-!             ANSWER AT TOUT. INFO(*) IS AN INTEGER ARRAY WHICH IS USED
-!             TO COMMUNICATE EXACTLY HOW YOU WANT THIS TASK TO BE
-!             CARRIED OUT.
+!      INFO(*) -- the BASIC task of the code is to integrate the
+!             differential equations from T to tout and return an
+!             answer at tout. INFO(*) is an integer array which is used
+!             to communicate exactly how you want this task to be
+!             carried out.
 !
-!      RTOL, ATOL -- THESE QUANTITIES REPRESENT RELATIVE AND ABSOLUTE
-!             ERROR TOLERANCES WHICH YOU PROVIDE TO INDICATE HOW
-!             ACCURATELY YOU WISH THE SOLUTION TO BE COMPUTED. YOU MAY
-!             CHOOSE THEM TO BE BOTH SCALARS OR ELSE BOTH VECTORS.
+!      RTOL, ATOL -- these quantities represent relative and absolute
+!             error tolerances which you provide to indicate how
+!             accurately you wish the solution to be computed. You may
+!             choose them to be both scalars or else both vectors.
 !
-!      IDID -- THIS SCALAR QUANTITY IS AN INDICATOR REPORTING WHAT
-!             THE CODE DID. YOU MUST MONITOR THIS INTEGER VARIABLE TO
-!             DECIDE WHAT ACTION TO TAKE NEXT.
+!      IDID -- this scalar quantity is an indicator reporting what
+!             the code did. You must monitor this integer variable to
+!             decide what action to take next.
 !
-!      RWORK(*), LRW -- RWORK(*) IS A REAL WORK ARRAY OF LENGTH LRW
-!             WHICH PROVIDES THE CODE WITH NEEDED STORAGE SPACE.
+!      RWORK(*), LRW -- RWORK(*) is a real work array of length LRW
+!             which provides the code with needed storage space.
 !
-!      IWORK(*), LIW -- IWORK(*) IS AN INTEGER WORK ARRAY OF LENGTH LIW
-!             WHICH PROVIDES THE CODE WITH NEEDED STORAGE SPACE.
+!      IWORK(*), LIW -- IWORK(*) is an integer work array of length LIW
+!             which provides the code with needed storage space.
 !
-!      RPAR, IPAR -- THESE ARE REAL AND INTEGER PARAMETER ARRAYS WHICH
-!             YOU CAN USE FOR COMMUNICATION BETWEEN YOUR CALLING
-!             PROGRAM AND THE F SUBROUTINE (AND THE JAC SUBROUTINE).
+!      Rpar, IPAR -- these are real and integer parameter arrays which
+!             you can use for communication between your calling
+!             program and the F subroutine (and the JAC subroutine).
 !
-!      JAC -- THIS IS THE NAME OF A SUBROUTINE WHICH YOU MAY CHOOSE TO
-!             PROVIDE FOR DEFINING THE JACOBIAN MATRIX OF PARTIAL
+!      JAC -- this is the name of a subroutine which you may choose to
+!             provide for defining the Jacobian matrix of partial
 !             DERIVATIVES DF/DU.
 !
-!  QUANTITIES WHICH ARE USED AS INPUT ITEMS ARE
-!             NEQ, T, Y(*), TOUT, INFO(*),
+!  Quantities which are used as input items are
+!             NEQ, T, Y(*), tout, INFO(*),
 !             RTOL, ATOL, RWORK(1), LRW,
 !             IWORK(1), IWORK(2), AND LIW.
 !
-!  QUANTITIES WHICH MAY BE ALTERED BY THE CODE ARE
+!  Quantities which may be altered by the code are
 !             T, Y(*), INFO(1), RTOL, ATOL,
 !             IDID, RWORK(*) AND IWORK(*).
 !
@@ -7366,403 +7366,403 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !** INPUT -- WHAT TO DO ON THE FIRST CALL TO STFODE **
 !*****************************************************
 !
-!   THE FIRST CALL OF THE CODE IS DEFINED TO BE THE START OF EACH NEW
-!   PROBLEM. READ THROUGH THE DESCRIPTIONS OF ALL THE FOLLOWING ITEMS,
-!   PROVIDE SUFFICIENT STORAGE SPACE FOR DESIGNATED ARRAYS, SET
-!   APPROPRIATE VARIABLES FOR THE INITIALIZATION OF THE PROBLEM, AND
-!   GIVE INFORMATION ABOUT HOW YOU WANT THE PROBLEM TO BE SOLVED.
+!   The first call of the code is defined to be the start of each new
+!   problem. Read through the descriptions of all the following items,
+!   provide sufficient storage space for designated arrays, set
+!   appropriate variables for the initialization of the problem, and
+!   give information about how you want the problem to be solved.
 !
 !
-!      F -- PROVIDE A SUBROUTINE OF THE FORM
+!      F -- provide a subroutine of the form
 !                               F(X,U,UPRIME,RPAR,IPAR)
-!             TO DEFINE THE SYSTEM OF FIRST ORDER DIFFERENTIAL EQUATIONS
-!             WHICH IS TO BE SOLVED. FOR THE GIVEN VALUES OF X AND THE
+!             to define the system of first order differential equations
+!             which is to be solved. For the given values of X and the
 !             VECTOR  U(*)=(U(1),U(2),...,U(NEQ)) , THE SUBROUTINE MUST
-!             EVALUATE THE NEQ COMPONENTS OF THE SYSTEM OF DIFFERENTIAL
+!             evaluate the NEQ components of the system of differential
 !             EQUATIONS  DU/DX=F(X,U)  AND STORE THE DERIVATIVES IN THE
 !             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/DX *  FOR
 !             EQUATIONS I=1,...,NEQ.
 !
-!             SUBROUTINE F MUST NOT ALTER X OR U(*). YOU MUST DECLARE
-!             THE NAME F IN AN EXTERNAL STATEMENT IN YOUR PROGRAM THAT
-!             CALLS STFODE. YOU MUST DIMENSION U AND UPRIME IN F.
+!             Subroutine F must not alter X or U(*). You must declare
+!             the name F in an external statement in your program that
+!             calls STFODE. You must dimension U and UPRIME in F.
 !
-!             RPAR AND IPAR ARE REAL AND INTEGER PARAMETER ARRAYS WHICH
-!             YOU CAN USE FOR COMMUNICATION BETWEEN YOUR CALLING PROGRAM
-!             AND SUBROUTINE F. THEY ARE NOT USED OR ALTERED BY STFODE.
-!             IF YOU DO NOT NEED RPAR OR IPAR, IGNORE THESE PARAMETERS
-!             BY TREATING THEM AS DUMMY ARGUMENTS. IF YOU DO CHOOSE TO
-!             USE THEM, DIMENSION THEM IN YOUR CALLING PROGRAM AND IN F
-!             AS ARRAYS OF APPROPRIATE LENGTH.
+!             Rpar and IPAR are real and integer parameter arrays which
+!             you can use for communication between your calling program
+!             and subroutine F. They are not used or altered by STFODE.
+!             If you do not need rpar or IPAR, ignore these parameters
+!             by treating them as dummy arguments. If you do choose to
+!             use them, dimension them in your calling program and in F
+!             as arrays of appropriate length.
 !
-!      NEQ -- SET IT TO THE NUMBER OF DIFFERENTIAL EQUATIONS.
+!      NEQ -- set it to the number of differential equations.
 !             (NEQ .GE. 1)
 !
-!      T -- SET IT TO THE INITIAL POINT OF THE INTEGRATION.
-!             YOU MUST USE A PROGRAM VARIABLE FOR T BECAUSE THE CODE
-!             CHANGES ITS VALUE.
+!      T -- set it to the initial point of the integration.
+!             You must use a program variable for T because the code
+!             changes its value.
 !
-!      Y(*) -- SET THIS VECTOR TO THE INITIAL VALUES OF THE NEQ SOLUTION
-!             COMPONENTS AT THE INITIAL POINT. YOU MUST DIMENSION Y AT
-!             LEAST NEQ IN YOUR CALLING PROGRAM.
+!      Y(*) -- set this vector to the initial values of the NEQ solution
+!             components at the initial point. You must dimension Y at
+!             least NEQ in your calling program.
 !
-!      TOUT -- SET IT TO THE FIRST POINT AT WHICH A SOLUTION
+!      Tout -- set it to the first point at which a solution
 !             IS DESIRED. YOU CAN TAKE TOUT = T, IN WHICH CASE THE CODE
-!             WILL EVALUATE THE DERIVATIVE OF THE SOLUTION AT T AND
+!             will evaluate the derivative of the solution at T and
 !             RETURN. INTEGRATION EITHER FORWARD IN T  (TOUT .GT. T)  OR
 !             BACKWARD IN T  (TOUT .LT. T)  IS PERMITTED.
 !
-!             THE CODE ADVANCES THE SOLUTION FROM T TO TOUT USING
-!             STEP SIZES WHICH ARE AUTOMATICALLY SELECTED SO AS TO
-!             ACHIEVE THE DESIRED ACCURACY. IF YOU WISH, THE CODE WILL
+!             The code advances the solution from T to tout using
+!             step sizes which are automatically selected so as to
+!             achieve the desired accuracy. If you wish, the code will
 !             RETURN WITH THE SOLUTION AND ITS DERIVATIVE FOLLOWING
-!             EACH INTERMEDIATE STEP (INTERMEDIATE-OUTPUT MODE) SO THAT
-!             YOU CAN MONITOR THEM, BUT YOU STILL MUST PROVIDE TOUT IN
-!             ACCORD WITH THE BASIC AIM OF THE CODE.
+!             each intermediate step (intermediate-output mode) so that
+!             you can monitor them, but you still must provide tout in
+!             accord with the BASIC aim of the code.
 !
-!             THE FIRST STEP TAKEN BY THE CODE IS A CRITICAL ONE
-!             BECAUSE IT MUST REFLECT HOW FAST THE SOLUTION CHANGES NEAR
-!             THE INITIAL POINT. THE CODE AUTOMATICALLY SELECTS AN
-!             INITIAL STEP SIZE WHICH IS PRACTICALLY ALWAYS SUITABLE FOR
-!             THE PROBLEM. BY USING THE FACT THAT THE CODE WILL NOT STEP
-!             PAST TOUT IN THE FIRST STEP, YOU COULD, IF NECESSARY,
-!             RESTRICT THE LENGTH OF THE INITIAL STEP SIZE.
+!             The first step taken by the code is a critical one
+!             because it must reflect how fast the solution changes near
+!             the initial point. The code automatically selects an
+!             initial step size which is practically always suitable for
+!             the problem. By using the fact that the code will not step
+!             past tout in the first step, you could, if necessary,
+!             restrict the length of the initial step size.
 !
-!             FOR SOME PROBLEMS IT MAY NOT BE PERMISSIBLE TO INTEGRATE
-!             PAST A POINT TSTOP BECAUSE A DISCONTINUITY OCCURS THERE
-!             OR THE SOLUTION OR ITS DERIVATIVE IS NOT DEFINED BEYOND
-!             TSTOP. WHEN YOU HAVE DECLARED A TSTOP POINT (SEE INFO(4)
-!             AND RWORK(1)), YOU HAVE TOLD THE CODE NOT TO INTEGRATE
-!             PAST TSTOP. IN THIS CASE ANY TOUT BEYOND TSTOP IS INVALID
-!             INPUT.
+!             For some problems it may not be permissible to integrate
+!             past a point TSTOP because a discontinuity occurs there
+!             or the solution or its derivative is not defined beyond
+!             TSTOP. When you have declared A TSTOP point (see INFO(4)
+!             and RWORK(1)), you have told the code not to integrate
+!             past TSTOP. In this case any tout beyond TSTOP is invalid
+!             input.
 !
-!      INFO(*) -- USE THE INFO ARRAY TO GIVE THE CODE MORE DETAILS ABOUT
-!             HOW YOU WANT YOUR PROBLEM SOLVED. THIS ARRAY SHOULD BE
-!             DIMENSIONED OF LENGTH 15 TO ACCOMODATE OTHER MEMBERS OF
-!             DEPAC OR POSSIBLE FUTURE EXTENSIONS, THOUGH STFODE USES
-!             ONLY THE FIRST SIX ENTRIES. YOU MUST RESPOND TO ALL OF
-!             THE FOLLOWING ITEMS WHICH ARE ARRANGED AS QUESTIONS. THE
-!             SIMPLEST USE OF THE CODE CORRESPONDS TO ANSWERING ALL
-!             QUESTIONS AS YES ,I.E. SETTING ALL ENTRIES OF INFO TO 0.
+!      INFO(*) -- use the info array to give the code more details about
+!             how you want your problem solved. This array should be
+!             dimensioned of length 15 to accomodate other members of
+!             DEPAC or possible future extensions, though STFODE uses
+!             only the first six entries. You must respond to all of
+!             the following items which are arranged as questions. The
+!             simplest use of the code corresponds to answering all
+!             questions as yes ,I.E. Setting all entries of info to 0.
 !
-!        INFO(1) -- THIS PARAMETER ENABLES THE CODE TO INITIALIZE
-!               ITSELF. YOU MUST SET IT TO INDICATE THE START OF EVERY
-!               NEW PROBLEM.
+!        INFO(1) -- this parameter enables the code to initialize
+!               itself. You must set it to indicate the start of every
+!               new problem.
 !
 !            **** IS THIS THE FIRST CALL FOR THIS PROBLEM ...
 !                  YES -- SET INFO(1) = 0
-!                   NO -- NOT APPLICABLE HERE.
+!                   no -- not applicable here.
 !                         SEE BELOW FOR CONTINUATION CALLS.  ****
 !
-!        INFO(2) -- HOW MUCH ACCURACY YOU WANT OF YOUR SOLUTION
-!               IS SPECIFIED BY THE ERROR TOLERANCES RTOL AND ATOL.
-!               THE SIMPLEST USE IS TO TAKE THEM BOTH TO BE SCALARS.
-!               TO OBTAIN MORE FLEXIBILITY, THEY CAN BOTH BE VECTORS.
-!               THE CODE MUST BE TOLD YOUR CHOICE.
+!        INFO(2) -- how much accuracy you want of your solution
+!               is specified by the error tolerances RTOL and ATOL.
+!               The simplest use is to take them both to be scalars.
+!               To obtain more flexibility, they can both be vectors.
+!               The code must be told your choice.
 !
 !            **** ARE BOTH ERROR TOLERANCES RTOL, ATOL SCALARS ...
 !                  YES -- SET INFO(2) = 0
-!                         AND INPUT SCALARS FOR BOTH RTOL AND ATOL
+!                         and input scalars for both RTOL and ATOL
 !                   NO -- SET INFO(2) = 1
 !                         AND INPUT ARRAYS FOR BOTH RTOL AND ATOL ****
 !
-!        INFO(3) -- THE CODE INTEGRATES FROM T IN THE DIRECTION
-!               OF TOUT BY STEPS. IF YOU WISH, IT WILL RETURN THE
-!               COMPUTED SOLUTION AND DERIVATIVE AT THE NEXT
-!               INTERMEDIATE STEP (THE INTERMEDIATE-OUTPUT MODE) OR
-!               TOUT, WHICHEVER COMES FIRST. THIS IS A GOOD WAY TO
-!               PROCEED IF YOU WANT TO SEE THE BEHAVIOR OF THE SOLUTION.
-!               IF YOU MUST HAVE SOLUTIONS AT A GREAT MANY SPECIFIC
-!               TOUT POINTS, THIS CODE WILL COMPUTE THEM EFFICIENTLY.
+!        INFO(3) -- the code integrates from T in the direction
+!               of tout by steps. If you wish, it will return the
+!               computed solution and derivative at the next
+!               intermediate step (the intermediate-output mode) or
+!               tout, whichever comes first. This is a good way to
+!               proceed if you want to see the behavior of the solution.
+!               If you must have solutions at a great many specific
+!               tout points, this code will compute them efficiently.
 !
 !            **** DO YOU WANT THE SOLUTION ONLY AT
-!                 TOUT (AND NOT AT THE NEXT INTERMEDIATE STEP) ...
+!                 tout (and not at the next intermediate step) ...
 !                  YES -- SET INFO(3) = 0
 !                   NO -- SET INFO(3) = 1 ****
 !
-!        INFO(4) -- TO HANDLE SOLUTIONS AT A GREAT MANY SPECIFIC
-!               VALUES TOUT EFFICIENTLY, THIS CODE MAY INTEGRATE PAST
-!               TOUT AND INTERPOLATE TO OBTAIN THE RESULT AT TOUT.
-!               SOMETIMES IT IS NOT POSSIBLE TO INTEGRATE BEYOND SOME
-!               POINT TSTOP BECAUSE THE EQUATION CHANGES THERE OR IT IS
-!               NOT DEFINED PAST TSTOP. THEN YOU MUST TELL THE CODE
-!               NOT TO GO PAST.
+!        INFO(4) -- to handle solutions at a great many specific
+!               values tout efficiently, this code may integrate past
+!               tout and interpolate to obtain the result at tout.
+!               Sometimes it is not possible to integrate beyond some
+!               point TSTOP because the equation changes there or it is
+!               not defined past TSTOP. Then you must tell the code
+!               not to go past.
 !
 !            **** CAN THE INTEGRATION BE CARRIED OUT WITHOUT ANY
-!                 RESTRICTIONS ON THE INDEPENDENT VARIABLE T ...
+!                 restrictions on the independent variable T ...
 !                  YES -- SET INFO(4)=0
 !                   NO -- SET INFO(4)=1
-!                         AND DEFINE THE STOPPING POINT TSTOP BY
+!                         and define the stopping point TSTOP by
 !                         SETTING RWORK(1)=TSTOP ****
 !
-!        INFO(5) -- TO SOLVE STIFF PROBLEMS IT IS NECESSARY TO USE THE
-!               JACOBIAN MATRIX OF PARTIAL DERIVATIVES OF THE SYSTEM
-!               OF DIFFERENTIAL EQUATIONS. IF YOU DO NOT PROVIDE A
-!               SUBROUTINE TO EVALUATE IT ANALYTICALLY (SEE THE
-!               DESCRIPTION OF THE ITEM JAC IN THE CALL LIST), IT WILL
-!               BE APPROXIMATED BY NUMERICAL DIFFERENCING IN THIS CODE.
-!               ALTHOUGH IT IS LESS TROUBLE FOR YOU TO HAVE THE CODE
-!               COMPUTE PARTIAL DERIVATIVES BY NUMERICAL DIFFERENCING,
-!               THE SOLUTION WILL BE MORE RELIABLE IF YOU PROVIDE THE
-!               DERIVATIVES VIA JAC. SOMETIMES NUMERICAL DIFFERENCING
-!               IS CHEAPER THAN EVALUATING DERIVATIVES IN JAC AND
-!               SOMETIMES IT IS NOT - THIS DEPENDS ON YOUR PROBLEM.
+!        INFO(5) -- to solve stiff problems it is necessary to use the
+!               Jacobian matrix of partial derivatives of the system
+!               of differential equations. If you do not provide A
+!               subroutine to evaluate it analytically (see the
+!               description of the item JAC in the call list), it will
+!               be approximated by numerical differencing in this code.
+!               Although it is less trouble for you to have the code
+!               compute partial derivatives by numerical differencing,
+!               the solution will be more reliable if you provide the
+!               derivatives via JAC. Sometimes numerical differencing
+!               is cheaper than evaluating derivatives in JAC and
+!               sometimes it is not - this depends on your problem.
 !
-!               IF YOUR PROBLEM IS LINEAR, I.E. HAS THE FORM
+!               If your problem is linear, I.E. Has the form
 !               DU/DX = F(X,U) = J(X)*U + G(X)   FOR SOME MATRIX J(X)
 !               AND VECTOR G(X), THE JACOBIAN MATRIX  DF/DU = J(X).
-!               SINCE YOU MUST PROVIDE A SUBROUTINE TO EVALUATE F(X,U)
-!               ANALYTICALLY, IT IS LITTLE EXTRA TROUBLE TO PROVIDE
-!               SUBROUTINE JAC FOR EVALUATING J(X) ANALYTICALLY.
-!               FURTHERMORE, IN SUCH CASES, NUMERICAL DIFFERENCING IS
-!               MUCH MORE EXPENSIVE THAN ANALYTIC EVALUATION.
+!               Since you must provide a subroutine to evaluate F(X,U)
+!               analytically, it is little extra trouble to provide
+!               subroutine JAC for evaluating J(X) analytically.
+!               Furthermore, in such cases, numerical differencing is
+!               much more expensive than analytic evaluation.
 !
 !            **** DO YOU WANT THE CODE TO EVALUATE THE PARTIAL
-!                 DERIVATIVES AUTOMATICALLY BY NUMERICAL DIFFERENCES ...
+!                 derivatives automatically by numerical differences ...
 !                  YES -- SET INFO(5)=0
 !                   NO -- SET INFO(5)=1
-!                         AND PROVIDE SUBROUTINE JAC FOR EVALUATING THE
+!                         and provide subroutine JAC for evaluating the
 !                         JACOBIAN MATRIX ****
 !
-!        INFO(6) -- STFODE WILL PERFORM MUCH BETTER IF THE JACOBIAN
-!               MATRIX IS BANDED AND THE CODE IS TOLD THIS. IN THIS
-!               CASE, THE STORAGE NEEDED WILL BE GREATLY REDUCED,
-!               NUMERICAL DIFFERENCING WILL BE PERFORMED MORE CHEAPLY,
-!               AND A NUMBER OF IMPORTANT ALGORITHMS WILL EXECUTE MUCH
-!               FASTER. THE DIFFERENTIAL EQUATION IS SAID TO HAVE
-!               HALF-BANDWIDTHS ML (LOWER) AND MU (UPPER) IF EQUATION I
-!               INVOLVES ONLY UNKNOWNS Y(J) WITH
+!        INFO(6) -- STFODE will perform much better if the Jacobian
+!               matrix is banded and the code is told this. In this
+!               case, the storage needed will be greatly reduced,
+!               numerical differencing will be performed more cheaply,
+!               and a number of important algorithms will execute much
+!               faster. The differential equation is said to have
+!               half-bandwidths ML (lower) and mu (UPPER) if equation I
+!               involves only unknowns Y(J) with
 !                              I-ML .LE. J .LE. I+MU
 !               FOR ALL I=1,2,...,NEQ. THUS, ML AND MU ARE THE WIDTHS
-!               OF THE LOWER AND UPPER PARTS OF THE BAND, RESPECTIVELY,
-!               WITH THE MAIN DIAGONAL BEING EXCLUDED. IF YOU DO NOT
-!               INDICATE THAT THE EQUATION HAS A BANDED JACOBIAN,
+!               of the lower and upper parts of the band, respectively,
+!               with the main diagonal being excluded. If you do not
+!               indicate that the equation has a banded Jacobian,
 !               THE CODE WORKS WITH A FULL MATRIX OF NEQ**2 ELEMENTS
-!               (STORED IN THE CONVENTIONAL WAY). COMPUTATIONS WITH
-!               BANDED MATRICES COST LESS TIME AND STORAGE THAN WITH
+!               (stored in the conventional way). Computations with
+!               banded matrices cost less time and storage than with
 !               FULL MATRICES IF  2*ML+MU .LT. NEQ.  IF YOU TELL THE
-!               CODE THAT THE JACOBIAN MATRIX HAS A BANDED STRUCTURE AND
-!               YOU WANT TO PROVIDE SUBROUTINE JAC TO COMPUTE THE
-!               PARTIAL DERIVATIVES, THEN YOU MUST BE CAREFUL TO STORE
-!               THE ELEMENTS OF THE JACOBIAN MATRIX IN THE SPECIAL FORM
-!               INDICATED IN THE DESCRIPTION OF JAC.
+!               code that the Jacobian matrix HAS a banded structure and
+!               you want to provide subroutine JAC to compute the
+!               partial derivatives, then you must be careful to store
+!               the elements of the Jacobian matrix in the special form
+!               indicated in the description of JAC.
 !
 !            **** DO YOU WANT TO SOLVE THE PROBLEM USING A FULL
-!                 (DENSE) JACOBIAN MATRIX (AND NOT A SPECIAL BANDED
-!                 STRUCTURE) ...
+!                 (dense) Jacobian matrix (and not a special banded
+!                 structure) ...
 !                  YES -- SET INFO(6)=0
 !                   NO -- SET INFO(6)=1
-!                         AND PROVIDE THE LOWER (ML) AND UPPER (MU)
-!                         BANDWIDTHS BY SETTING
+!                         and provide the lower (ML) and upper (MU)
+!                         bandwidths by setting
 !                         IWORK(1)=ML
 !                         IWORK(2)=MU ****
 !
-!      RTOL, ATOL -- YOU MUST ASSIGN RELATIVE (RTOL) AND ABSOLUTE (ATOL)
-!             ERROR TOLERANCES TO TELL THE CODE HOW ACCURATELY YOU WANT
-!             THE SOLUTION TO BE COMPUTED. THEY MUST BE DEFINED AS
-!             PROGRAM VARIABLES BECAUSE THE CODE MAY CHANGE THEM. YOU
-!             HAVE TWO CHOICES --
+!      RTOL, ATOL -- you must assign relative (RTOL) and absolute (ATOL)
+!             error tolerances to tell the code how accurately you want
+!             the solution to be computed. They must be defined as
+!             program variables because the code may change them. You
+!             have two choices --
 !                  BOTH RTOL AND ATOL ARE SCALARS. (INFO(2)=0)
 !                  BOTH RTOL AND ATOL ARE VECTORS. (INFO(2)=1)
-!             IN EITHER CASE ALL COMPONENTS MUST BE NON-NEGATIVE.
+!             in either case all components must be non-negative.
 !
-!             THE TOLERANCES ARE USED BY THE CODE IN A LOCAL ERROR TEST
-!             AT EACH STEP WHICH REQUIRES ROUGHLY THAT
+!             The tolerances are used by the code in a local error test
+!             at each step which requires roughly that
 !                     ABS(LOCAL ERROR) .LE. RTOL*ABS(Y)+ATOL
-!             FOR EACH VECTOR COMPONENT.
-!             (MORE SPECIFICALLY, A ROOT-MEAN-SQUARE NORM IS USED TO
-!             MEASURE THE SIZE OF VECTORS, AND THE ERROR TEST USES THE
-!             MAGNITUDE OF THE SOLUTION AT THE BEGINNING OF THE STEP.)
+!             for each vector component.
+!             (More specifically, a root-mean-square norm is used to
+!             measure the size of vectors, and the error test uses the
+!             magnitude of the solution at the beginning of the step.)
 !
-!             THE TRUE (GLOBAL) ERROR IS THE DIFFERENCE BETWEEN THE TRUE
-!             SOLUTION OF THE INITIAL VALUE PROBLEM AND THE COMPUTED
-!             APPROXIMATION. PRACTICALLY ALL PRESENT DAY CODES,
-!             INCLUDING THIS ONE, CONTROL THE LOCAL ERROR AT EACH STEP
-!             AND DO NOT EVEN ATTEMPT TO CONTROL THE GLOBAL ERROR
-!             DIRECTLY. ROUGHLY SPEAKING, THEY PRODUCE A SOLUTION Y(T)
-!             WHICH SATISFIES THE DIFFERENTIAL EQUATIONS WITH A
+!             The true (GLOBAL) error is the difference between the true
+!             solution of the initial value problem and the computed
+!             approximation. Practically all present day codes,
+!             including this one, control the local error at each step
+!             and do not even attempt to control the global error
+!             directly. Roughly speaking, they produce a solution Y(T)
+!             which satisfies the differential equations with A
 !             RESIDUAL R(T),    DY(T)/DT = F(T,Y(T)) + R(T)   ,
-!             AND, ALMOST ALWAYS, R(T) IS BOUNDED BY THE ERROR
-!             TOLERANCES. USUALLY, BUT NOT ALWAYS, THE TRUE ACCURACY OF
-!             THE COMPUTED Y IS COMPARABLE TO THE ERROR TOLERANCES. THIS
-!             CODE WILL USUALLY, BUT NOT ALWAYS, DELIVER A MORE ACCURATE
-!             SOLUTION IF YOU REDUCE THE TOLERANCES AND INTEGRATE AGAIN.
-!             BY COMPARING TWO SUCH SOLUTIONS YOU CAN GET A FAIRLY
-!             RELIABLE IDEA OF THE TRUE ERROR IN THE SOLUTION AT THE
-!             BIGGER TOLERANCES.
+!             and, almost always, R(T) is bounded by the error
+!             tolerances. Usually, but not always, the true accuracy of
+!             the computed Y is comparable to the error tolerances. This
+!             code will usually, but not always, deliver a more accurate
+!             solution if you reduce the tolerances and integrate again.
+!             By comparing two such solutions you can get a fairly
+!             reliable idea of the true error in the solution at the
+!             bigger tolerances.
 !
 !             SETTING ATOL=0. RESULTS IN A PURE RELATIVE ERROR TEST ON
 !             THAT COMPONENT. SETTING RTOL=0. RESULTS IN A PURE ABSOLUTE
-!             ERROR TEST ON THAT COMPONENT. A MIXED TEST WITH NON-ZERO
-!             RTOL AND ATOL CORRESPONDS ROUGHLY TO A RELATIVE ERROR
-!             TEST WHEN THE SOLUTION COMPONENT IS MUCH BIGGER THAN ATOL
-!             AND TO AN ABSOLUTE ERROR TEST WHEN THE SOLUTION COMPONENT
-!             IS SMALLER THAN THE THRESHOLD ATOL.
+!             error test on that component. A mixed test with non-zero
+!             RTOL and ATOL corresponds roughly to a relative error
+!             test when the solution component is much bigger than ATOL
+!             and to an absolute error test when the solution component
+!             is smaller than the threshold ATOL.
 !
-!             PROPER SELECTION OF THE ABSOLUTE ERROR CONTROL PARAMETERS
-!             ATOL  REQUIRES YOU TO HAVE SOME IDEA OF THE SCALE OF THE
-!             SOLUTION COMPONENTS. TO ACQUIRE THIS INFORMATION MAY MEAN
-!             THAT YOU WILL HAVE TO SOLVE THE PROBLEM MORE THAN ONCE. IN
-!             THE ABSENCE OF SCALE INFORMATION, YOU SHOULD ASK FOR SOME
-!             RELATIVE ACCURACY IN ALL THE COMPONENTS (BY SETTING  RTOL
-!             VALUES NON-ZERO) AND PERHAPS IMPOSE EXTREMELY SMALL
-!             ABSOLUTE ERROR TOLERANCES TO PROTECT AGAINST THE DANGER OF
-!             A SOLUTION COMPONENT BECOMING ZERO.
+!             Proper selection of the absolute error control parameters
+!             ATOL  requires you to have some idea of the scale of the
+!             solution components. To acquire this information may mean
+!             that you will have to solve the problem more than once. In
+!             the absence of scale information, you should ask for some
+!             relative accuracy in all the components (by setting  RTOL
+!             values non-zero) and perhaps impose extremely small
+!             absolute error tolerances to protect against the danger of
+!             a solution component becoming zero.
 !
-!             THE CODE WILL NOT ATTEMPT TO COMPUTE A SOLUTION AT AN
-!             ACCURACY UNREASONABLE FOR THE MACHINE BEING USED. IT WILL
-!             ADVISE YOU IF YOU ASK FOR TOO MUCH ACCURACY AND INFORM
-!             YOU AS TO THE MAXIMUM ACCURACY IT BELIEVES POSSIBLE.
+!             The code will not attempt to compute a solution at an
+!             accuracy unreasonable for the machine being used. It will
+!             advise you if you ask for too much accuracy and inform
+!             you as to the maximum accuracy it believes possible.
 !
-!      RWORK(*) -- DIMENSION THIS REAL WORK ARRAY OF LENGTH LRW IN YOUR
-!             CALLING PROGRAM.
+!      RWORK(*) -- dimension this real work array of length LRW in your
+!             calling program.
 !
 !      RWORK(1) -- IF YOU HAVE SET INFO(4)=0, YOU CAN IGNORE THIS
-!             OPTIONAL INPUT PARAMETER. OTHERWISE YOU MUST DEFINE A
+!             optional input parameter. Otherwise you must define A
 !             STOPPING POINT TSTOP BY SETTING   RWORK(1) = TSTOP.
-!             (FOR SOME PROBLEMS IT MAY NOT BE PERMISSIBLE TO INTEGRATE
-!             PAST A POINT TSTOP BECAUSE A DISCONTINUITY OCCURS THERE
-!             OR THE SOLUTION OR ITS DERIVATIVE IS NOT DEFINED BEYOND
+!             (For some problems it may not be permissible to integrate
+!             past a point TSTOP because a discontinuity occurs there
+!             or the solution or its derivative is not defined beyond
 !             TSTOP.)
 !
-!      LRW -- SET IT TO THE DECLARED LENGTH OF THE RWORK ARRAY.
-!             YOU MUST HAVE
+!      LRW -- set it to the declared length of the RWORK array.
+!             You must have
 !                  LRW .GE. 250+10*NEQ+NEQ**2
 !             FOR THE FULL (DENSE) JACOBIAN CASE (WHEN INFO(6)=0),  OR
 !                  LRW .GE. 250+10*NEQ+(2*ML+MU+1)*NEQ
 !             FOR THE BANDED JACOBIAN CASE (WHEN INFO(6)=1).
 !
-!      IWORK(*) -- DIMENSION THIS INTEGER WORK ARRAY OF LENGTH LIW IN
-!             YOUR CALLING PROGRAM.
+!      IWORK(*) -- dimension this integer work array of length LIW in
+!             your calling program.
 !
 !      IWORK(1), IWORK(2) -- IF YOU HAVE SET INFO(6)=0, YOU CAN IGNORE
-!             THESE OPTIONAL INPUT PARAMETERS. OTHERWISE YOU MUST DEFINE
-!             THE HALF-BANDWIDTHS ML (LOWER) AND MU (UPPER) OF THE
+!             these optional input parameters. Otherwise you must define
+!             the half-bandwidths ML (lower) and mu (UPPER) of the
 !             JACOBIAN MATRIX BY SETTING    IWORK(1) = ML   AND
 !             IWORK(2) = MU.  (THE CODE WILL WORK WITH A FULL MATRIX
 !             OF NEQ**2 ELEMENTS UNLESS IT IS TOLD THAT THE PROBLEM HAS
-!             A BANDED JACOBIAN, IN WHICH CASE THE CODE WILL WORK WITH
-!             A MATRIX CONTAINING AT MOST  (2*ML+MU+1)*NEQ  ELEMENTS.)
+!             a banded Jacobian, in which case the code will work with
+!             a matrix containing at most  (2*ML+MU+1)*NEQ  elements.)
 !
-!      LIW -- SET IT TO THE DECLARED LENGTH OF THE IWORK ARRAY.
+!      LIW -- set it to the declared length of the IWORK array.
 !             YOU MUST HAVE LIW .GE. 55+NEQ.
 !
-!      RPAR, IPAR -- THESE ARE PARAMETER ARRAYS, OF REAL AND INTEGER
-!             TYPE, RESPECTIVELY. YOU CAN USE THEM FOR COMMUNICATION
-!             BETWEEN YOUR PROGRAM THAT CALLS STFODE AND THE  F
-!             SUBROUTINE (AND THE JAC SUBROUTINE). THEY ARE NOT USED OR
-!             ALTERED BY STFODE. IF YOU DO NOT NEED RPAR OR IPAR, IGNORE
-!             THESE PARAMETERS BY TREATING THEM AS DUMMY ARGUMENTS. IF
-!             YOU DO CHOOSE TO USE THEM, DIMENSION THEM IN YOUR CALLING
-!             PROGRAM AND IN F (AND IN JAC) AS ARRAYS OF APPROPRIATE
-!             LENGTH.
+!      Rpar, IPAR -- these are parameter arrays, of real and integer
+!             type, respectively. You can use them for communication
+!             between your program that calls STFODE and the  F
+!             subroutine (and the JAC subroutine). They are not used or
+!             altered by STFODE. If you do not need rpar or IPAR, ignore
+!             these parameters by treating them as dummy arguments. If
+!             you do choose to use them, dimension them in your calling
+!             program and in F (and in JAC) as arrays of appropriate
+!             length.
 !
 !      JAC -- IF YOU HAVE SET INFO(5)=0, YOU CAN IGNORE THIS PARAMETER
-!             BY TREATING IT AS A DUMMY ARGUMENT. (FOR SOME COMPILERS
-!             YOU MAY HAVE TO WRITE A DUMMY SUBROUTINE NAMED  JAC  IN
-!             ORDER TO AVOID PROBLEMS ASSOCIATED WITH MISSING EXTERNAL
-!             ROUTINE NAMES.)  OTHERWISE, YOU MUST PROVIDE A SUBROUTINE
-!             OF THE FORM
+!             by treating it as a dummy argument. (For some compilers
+!             you may have to write a dummy subroutine named  JAC  in
+!             order to avoid problems associated with missing external
+!             routine names.)  Otherwise, you must provide a subroutine
+!             of the form
 !                          JAC(X,U,PD,NROWPD,RPAR,IPAR)
-!             TO DEFINE THE JACOBIAN MATRIX OF PARTIAL DERIVATIVES DF/DU
+!             to define the Jacobian matrix of partial derivatives DF/DU
 !             OF THE SYSTEM OF DIFFERENTIAL EQUATIONS   DU/DX = F(X,U).
-!             FOR THE GIVEN VALUES OF X AND THE VECTOR
+!             For the given values of X and the vector
 !             U(*)=(U(1),U(2),...,U(NEQ)), THE SUBROUTINE MUST EVALUATE
-!             THE NON-ZERO PARTIAL DERIVATIVES  DF(I)/DU(J)  FOR EACH
+!             the non-zero partial derivatives  DF(I)/DU(J)  for each
 !             DIFFERENTIAL EQUATION I=1,...,NEQ AND EACH SOLUTION
 !             COMPONENT J=1,...,NEQ , AND STORE THESE VALUES IN THE
-!             MATRIX PD. THE ELEMENTS OF PD ARE SET TO ZERO BEFORE EACH
+!             matrix PD. The elements of PD are set to zero before each
 !             CALL TO JAC SO ONLY NON-ZERO ELEMENTS NEED TO BE DEFINED.
 !
-!             SUBROUTINE JAC MUST NOT ALTER X, U(*), OR NROWPD. YOU MUST
-!             DECLARE THE NAME JAC IN AN EXTERNAL STATEMENT IN YOUR
-!             PROGRAM THAT CALLS STFODE. NROWPD IS THE ROW DIMENSION OF
-!             THE PD MATRIX AND IS ASSIGNED BY THE CODE. THEREFORE YOU
-!             MUST DIMENSION PD IN JAC ACCORDING TO
+!             Subroutine JAC must not alter X, U(*), or NROWPD. You must
+!             declare the name JAC in an external statement in your
+!             program that calls STFODE. NROWPD is the row dimension of
+!             the PD matrix and is assigned by the code. Therefore you
+!             must dimension PD in JAC according to
 !                              DIMENSION PD(NROWPD,1)
-!             YOU MUST ALSO DIMENSION U IN JAC.
+!             you must also dimension U in JAC.
 !
-!             THE WAY YOU MUST STORE THE ELEMENTS INTO THE PD MATRIX
-!             DEPENDS ON THE STRUCTURE OF THE JACOBIAN WHICH YOU
-!             INDICATED BY INFO(6).
+!             The way you must store the elements into the PD matrix
+!             depends on the structure of the Jacobian which you
+!             indicated by INFO(6).
 !             *** INFO(6)=0 -- FULL (DENSE) JACOBIAN ***
-!                 WHEN YOU EVALUATE THE (NON-ZERO) PARTIAL DERIVATIVE
-!                 OF EQUATION I WITH RESPECT TO VARIABLE J, YOU MUST
-!                 STORE IT IN PD ACCORDING TO
+!                 when you evaluate the (NON-ZERO) partial derivative
+!                 of equation I with respect to variable J, you must
+!                 store it in PD according to
 !                                PD(I,J) = * DF(I)/DU(J) *
 !             *** INFO(6)=1 -- BANDED JACOBIAN WITH ML LOWER AND MU
-!                 UPPER DIAGONAL BANDS (REFER TO INFO(6) DESCRIPTION OF
+!                 upper diagonal bands (refer to INFO(6) description of
 !                 ML AND MU) ***
-!                 WHEN YOU EVALUATE THE (NON-ZERO) PARTIAL DERIVATIVE
-!                 OF EQUATION I WITH RESPECT TO VARIABLE J, YOU MUST
-!                 STORE IT IN PD ACCORDING TO
+!                 when you evaluate the (NON-ZERO) partial derivative
+!                 of equation I with respect to variable J, you must
+!                 store it in PD according to
 !                                IROW = I - J + ML + MU + 1
 !                                PD(IROW,J) = * DF(I)/DU(J) *
 !
-!             RPAR AND IPAR ARE REAL AND INTEGER PARAMETER ARRAYS WHICH
-!             YOU CAN USE FOR COMMUNICATION BETWEEN YOUR CALLING
-!             PROGRAM AND YOUR JACOBIAN SUBROUTINE JAC. THEY ARE NOT
-!             ALTERED BY STFODE. IF YOU DO NOT NEED RPAR OR IPAR, IGNORE
-!             THESE PARAMETERS BY TREATING THEM AS DUMMY ARGUMENTS. IF
-!             YOU DO CHOOSE TO USE THEM, DIMENSION THEM IN YOUR CALLING
-!             PROGRAM AND IN JAC AS ARRAYS OF APPROPRIATE LENGTH.
+!             Rpar and IPAR are real and integer parameter arrays which
+!             you can use for communication between your calling
+!             program and your Jacobian subroutine JAC. They are not
+!             altered by STFODE. If you do not need rpar or IPAR, ignore
+!             these parameters by treating them as dummy arguments. If
+!             you do choose to use them, dimension them in your calling
+!             program and in JAC as arrays of appropriate length.
 !
 !***********************************************************************
 !** OUTPUT -- AFTER ANY RETURN FROM STFODE **
 !********************************************
 !
-!   THE PRINCIPAL AIM OF THE CODE IS TO RETURN A COMPUTED SOLUTION AT
-!   TOUT, ALTHOUGH IT IS ALSO POSSIBLE TO OBTAIN INTERMEDIATE RESULTS
-!   ALONG THE WAY. TO FIND OUT WHETHER THE CODE ACHIEVED ITS GOAL
-!   OR IF THE INTEGRATION PROCESS WAS INTERRUPTED BEFORE THE TASK WAS
-!   COMPLETED, YOU MUST CHECK THE IDID PARAMETER.
+!   The principal aim of the code is to return a computed solution at
+!   tout, although it is also possible to obtain intermediate results
+!   along the way. To find out whether the code achieved its goal
+!   or if the integration process was interrupted before the task was
+!   completed, you must check the IDID parameter.
 !
 !
-!      T -- THE SOLUTION WAS SUCCESSFULLY ADVANCED TO THE
-!             OUTPUT VALUE OF T.
+!      T -- the solution was successfully advanced to the
+!             output value of T.
 !
-!      Y(*) -- CONTAINS THE COMPUTED SOLUTION APPROXIMATION AT T.
-!             YOU MAY ALSO BE INTERESTED IN THE APPROXIMATE DERIVATIVE
-!             OF THE SOLUTION AT T. IT IS CONTAINED IN
+!      Y(*) -- contains the computed solution approximation at T.
+!             You may also be interested in the approximate derivative
+!             of the solution at T. It is contained in
 !             RWORK(21),...,RWORK(20+NEQ).
 !
-!      IDID -- REPORTS WHAT THE CODE DID
+!      IDID -- reports what the code did
 !
 !                         *** TASK COMPLETED ***
-!                   REPORTED BY POSITIVE VALUES OF IDID
+!                   reported by positive values of IDID
 !
 !             IDID = 1 -- A STEP WAS SUCCESSFULLY TAKEN IN THE
-!                       INTERMEDIATE-OUTPUT MODE. THE CODE HAS NOT
-!                       YET REACHED TOUT.
+!                       intermediate-output mode. The code has not
+!                       yet reached tout.
 !
 !             IDID = 2 -- THE INTEGRATION TO TOUT WAS SUCCESSFULLY
 !                       COMPLETED (T=TOUT) BY STEPPING EXACTLY TO TOUT.
 !
 !             IDID = 3 -- THE INTEGRATION TO TOUT WAS SUCCESSFULLY
 !                       COMPLETED (T=TOUT) BY STEPPING PAST TOUT.
-!                       Y(*) IS OBTAINED BY INTERPOLATION.
+!                       Y(*) is obtained by interpolation.
 !
 !                         *** TASK INTERRUPTED ***
-!                   REPORTED BY NEGATIVE VALUES OF IDID
+!                   reported by negative values of IDID
 !
 !             IDID = -1 -- A LARGE AMOUNT OF WORK HAS BEEN EXPENDED.
-!                       (500 STEPS PERFORMED)
+!                       (500 Steps performed)
 !
 !             IDID = -2 -- THE ERROR TOLERANCES ARE TOO STRINGENT.
 !
 !             IDID = -3 -- THE LOCAL ERROR TEST CANNOT BE SATISFIED
-!                       SINCE THE L-TH SOLUTION COMPONENT IS 0 AND
-!                       THE CORRESPONDING ABSOLUTE ERROR TOLERANCE
+!                       since the L-TH solution component is 0 and
+!                       the corresponding absolute error tolerance
 !                       IS 0 FOR L = -INFO(1). A PURE RELATIVE ERROR
-!                       TEST CANNOT BE APPLIED TO THIS COMPONENT.
+!                       test cannot be applied to this component.
 !
 !             IDID = -4,-5  -- NOT APPLICABLE FOR THIS CODE.
 !
 !             IDID = -6 -- STFODE HAD REPEATED CONVERGENCE TEST FAILURES
-!                       ON THE LAST ATTEMPTED STEP.
+!                       on the last attempted step.
 !
 !             IDID = -7 -- STFODE HAD REPEATED ERROR TEST FAILURES ON
-!                       THE LAST ATTEMPTED STEP.
+!                       the last attempted step.
 !
 !             IDID = -8,..,-32  -- NOT APPLICABLE FOR THIS CODE.
 !
@@ -7776,21 +7776,21 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             IDID = -35  -- ATOL(K) .LT. 0 FOR SOME K
 !
 !             IDID = -36  -- THE CODE HAS BEEN CALLED WITH TOUT BUT
-!                       THE CODE HAS ALSO BEEN TOLD NOT TO INTEGRATE
-!                       PAST THE POINT TSTOP.
+!                       the code has also been told not to integrate
+!                       past the point TSTOP.
 !
 !             IDID = -37  -- THE CODE HAS BEEN CALLED WITH T = TOUT.
-!                       THIS IS NOT PERMITTED ON CONTINUATION CALLS.
+!                       This is not permitted on continuation calls.
 !
 !             IDID = -38  -- THE USER HAS MODIFIED THE VALUE OF T.
-!                       THIS IS NOT PERMITTED ON CONTINUATION CALLS.
+!                       This is not permitted on continuation calls.
 !
 !             IDID = -39  -- BY CALLING THE CODE WITH TOUT, AN
-!                       ATTEMPT IS BEING MADE TO CHANGE THE DIRECTION
-!                       OF INTEGRATION WITHOUT RESTARTING.
+!                       attempt is being made to change the direction
+!                       of integration without restarting.
 !
 !             IDID = -40  -- THE JACOBIAN MATRIX IS BANDED. HOWEVER
-!                       THE BANDWIDTHS ML AND MU DO NOT SATISFY THE
+!                       the bandwidths ML and mu do not satisfy the
 !                       CONSTRAINTS  0 .LE. ML,MU .LT. NEQ.
 !
 !             IDID = -41  -- LRW .LT. 250 + 10*NEQ + NEQ*NEQ
@@ -7801,149 +7801,149 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !             IDID = -44  -- INFO(1) IS INCORRECT.
 !
-!      RTOL, ATOL -- THESE QUANTITIES REMAIN UNCHANGED EXCEPT WHEN
+!      RTOL, ATOL -- these quantities remain unchanged except when
 !             IDID = -2. IN THIS CASE, THE ERROR TOLERANCES HAVE BEEN
-!             INCREASED BY THE CODE TO VALUES WHICH ARE ESTIMATED TO BE
-!             APPROPRIATE FOR CONTINUING THE INTEGRATION. HOWEVER, THE
-!             REPORTED SOLUTION AT T WAS OBTAINED USING THE INPUT VALUES
-!             OF RTOL AND ATOL.
+!             increased by the code to values which are estimated to be
+!             appropriate for continuing the integration. However, the
+!             reported solution at T was obtained using the input values
+!             of RTOL and ATOL.
 !
-!      RWORK, IWORK -- CONTAIN INFORMATION WHICH IS USUALLY OF NO
-!             INTEREST TO THE USER BUT NECESSARY FOR SUBSEQUENT CALLS.
-!             HOWEVER, YOU MAY FIND USE FOR
+!      RWORK, IWORK -- contain information which is usually of no
+!             interest to the user but necessary for subsequent calls.
+!             However, you may find use for
 !
-!             RWORK(11)--WHICH CONTAINS THE STEP SIZE H TO BE
-!                        ATTEMPTED ON THE NEXT STEP.
+!             RWORK(11)--which contains the step size H to be
+!                        attempted on the next step.
 !
-!             RWORK(12)--IF THE TOLERANCES HAVE BEEN INCREASED BY THE
+!             RWORK(12)--if the tolerances have been increased by the
 !                        CODE (IDID = -2) , THEY WERE MULTIPLIED BY THE
-!                        VALUE IN RWORK(12).
+!                        value in RWORK(12).
 !
-!             RWORK(13)--WHICH CONTAINS THE CURRENT VALUE OF THE
-!                        INDEPENDENT VARIABLE, I.E. THE FARTHEST POINT
-!                        INTEGRATION HAS REACHED. THIS WILL BE DIFFERENT
-!                        FROM T ONLY WHEN INTERPOLATION HAS BEEN
+!             RWORK(13)--which contains the current value of the
+!                        independent variable, I.E. The farthest point
+!                        integration has reached. This will be different
+!                        from T only when interpolation has been
 !                        PERFORMED (IDID=3).
 !
-!             RWORK(20+I)--WHICH CONTAINS THE APPROXIMATE DERIVATIVE
-!                        OF THE SOLUTION COMPONENT Y(I). IN STFODE IT IS
-!                        NEVER OBTAINED BY CALLING SUBROUTINE F TO
-!                        EVALUATE THE DIFFERENTIAL EQUATION USING T AND
-!                        Y(*), EXCEPT AT THE INITIAL POINT OF
-!                        INTEGRATION.
+!             RWORK(20+I)--which contains the approximate derivative
+!                        of the solution component Y(I). In STFODE it is
+!                        never obtained by calling subroutine F to
+!                        evaluate the differential equation using T and
+!                        Y(*), except at the initial point of
+!                        integration.
 !
 !***********************************************************************
 !** INPUT -- WHAT TO DO TO CONTINUE THE INTEGRATION **
 !**             (CALLS AFTER THE FIRST)             **
 !*****************************************************
 !
-!        THIS CODE IS ORGANIZED SO THAT SUBSEQUENT CALLS TO CONTINUE THE
-!        INTEGRATION INVOLVE LITTLE (IF ANY) ADDITIONAL EFFORT ON YOUR
-!        PART. YOU MUST MONITOR THE IDID PARAMETER IN ORDER TO DETERMINE
-!        WHAT TO DO NEXT.
+!        This code is organized so that subsequent calls to continue the
+!        integration involve little (if any) additional effort on your
+!        part. You must monitor the IDID parameter in order to determine
+!        what to do next.
 !
-!        RECALLING THAT THE PRINCIPAL TASK OF THE CODE IS TO INTEGRATE
-!        FROM T TO TOUT (THE INTERVAL MODE), USUALLY ALL YOU WILL NEED
-!        TO DO IS SPECIFY A NEW TOUT UPON REACHING THE CURRENT TOUT.
+!        Recalling that the principal task of the code is to integrate
+!        from T to tout (the interval mode), usually all you will need
+!        to do is specify a new tout upon reaching the current tout.
 !
-!        DO NOT ALTER ANY QUANTITY NOT SPECIFICALLY PERMITTED BELOW,
-!        IN PARTICULAR DO NOT ALTER NEQ, T, Y(*), RWORK(*), IWORK(*) OR
-!        THE DIFFERENTIAL EQUATION IN SUBROUTINE F. ANY SUCH ALTERATION
-!        CONSTITUTES A NEW PROBLEM AND MUST BE TREATED AS SUCH, I.E.
-!        YOU MUST START AFRESH.
+!        Do not alter any quantity not specifically permitted below,
+!        in particular do not alter NEQ, T, Y(*), RWORK(*), IWORK(*) or
+!        the differential equation in subroutine F. Any such alteration
+!        constitutes a new problem and must be treated as such, I.E.
+!        You must start afresh.
 !
-!        YOU CANNOT CHANGE FROM VECTOR TO SCALAR ERROR CONTROL OR VICE
-!        VERSA (INFO(2)) BUT YOU CAN CHANGE THE SIZE OF THE ENTRIES OF
-!        RTOL, ATOL. INCREASING A TOLERANCE MAKES THE EQUATION EASIER
-!        TO INTEGRATE. DECREASING A TOLERANCE WILL MAKE THE EQUATION
-!        HARDER TO INTEGRATE AND SHOULD GENERALLY BE AVOIDED.
+!        You cannot change from vector to scalar error control or vice
+!        versa (INFO(2)) but you can change the size of the entries of
+!        RTOL, ATOL. Increasing a tolerance makes the equation easier
+!        to integrate. Decreasing a tolerance will make the equation
+!        harder to integrate and should generally be avoided.
 !
-!        YOU CAN SWITCH FROM THE INTERMEDIATE-OUTPUT MODE TO THE
-!        INTERVAL MODE (INFO(3)) OR VICE VERSA AT ANY TIME.
+!        You can switch from the intermediate-output mode to the
+!        interval mode (INFO(3)) or vice versa at any time.
 !
-!        IF IT HAS BEEN NECESSARY TO PREVENT THE INTEGRATION FROM GOING
-!        PAST A POINT TSTOP (INFO(4), RWORK(1)), KEEP IN MIND THAT THE
-!        CODE WILL NOT INTEGRATE TO ANY TOUT BEYOND THE CURRENTLY
-!        SPECIFIED TSTOP. ONCE TSTOP HAS BEEN REACHED YOU MUST CHANGE
+!        If it has been necessary to prevent the integration from going
+!        past a point TSTOP (INFO(4), RWORK(1)), keep in mind that the
+!        code will not integrate to any tout beyond the currently
+!        specified TSTOP. Once TSTOP has been reached you must change
 !        THE VALUE OF TSTOP OR SET INFO(4)=0. YOU MAY CHANGE INFO(4)
-!        OR TSTOP AT ANY TIME BUT YOU MUST SUPPLY THE VALUE OF TSTOP IN
+!        or TSTOP at any time but you must supply the value of TSTOP in
 !        RWORK(1) WHENEVER YOU SET INFO(4)=1.
 !
-!        DO NOT CHANGE INFO(5), INFO(6), IWORK(1), OR IWORK(2)
-!        UNLESS YOU ARE GOING TO RESTART THE CODE.
+!        Do not change INFO(5), INFO(6), IWORK(1), or IWORK(2)
+!        unless you are going to restart the code.
 !
-!        THE PARAMETER INFO(1) IS USED BY THE CODE TO INDICATE THE
-!        BEGINNING OF A NEW PROBLEM AND TO INDICATE WHETHER INTEGRATION
+!        The parameter INFO(1) is used by the code to indicate the
+!        beginning of a new problem and to indicate whether integration
 !        IS TO BE CONTINUED. YOU MUST INPUT THE VALUE  INFO(1) = 0
-!        WHEN STARTING A NEW PROBLEM. YOU MUST INPUT THE VALUE
+!        when starting a new problem. You must input the value
 !        INFO(1) = 1  IF YOU WISH TO CONTINUE AFTER AN INTERRUPTED TASK
 !        FOR WHICH IDID = -3, -6, OR -7. DO NOT SET INFO(1) = 0 ON A
-!        CONTINUATION CALL UNLESS YOU WANT THE CODE TO RESTART AT THE
+!        continuation call unless you want the code to restart at the
 !        CURRENT T.
 !
 !                         *** FOLLOWING A COMPLETED TASK ***
-!         IF
+!         if
 !             IDID = 1, CALL THE CODE AGAIN TO CONTINUE THE INTEGRATION
-!                     ANOTHER STEP IN THE DIRECTION OF TOUT.
+!                     another step in the direction of tout.
 !
 !             IDID = 2 OR 3, DEFINE A NEW TOUT AND CALL THE CODE AGAIN.
-!                     TOUT MUST BE DIFFERENT FROM T. YOU CANNOT CHANGE
-!                     THE DIRECTION OF INTEGRATION WITHOUT RESTARTING.
+!                     Tout must be different from T. You cannot change
+!                     the direction of integration without restarting.
 !
 !                         *** FOLLOWING AN INTERRUPTED TASK ***
-!         IF
+!         if
 !             IDID = -1, THE CODE HAS PERFORMED 500 STEPS.
-!                     IF YOU WANT TO CONTINUE, CALL THE CODE AGAIN.
+!                     If you want to continue, call the code again.
 !
 !             IDID = -2, THE ERROR TOLERANCES RTOL AND ATOL HAVE BEEN
-!                     INCREASED TO VALUES THE CODE ESTIMATES APPROPRIATE
-!                     FOR CONTINUING. YOU MAY WANT TO CHANGE THEM
-!                     YOURSELF. IF YOU WANT TO CONTINUE, CALL THE CODE
-!                     AGAIN.
+!                     increased to values the code estimates appropriate
+!                     for continuing. You may want to change them
+!                     yourself. If you want to continue, call the code
+!                     again.
 !
 !             IDID = -3, THE L-TH SOLUTION COMPONENT IS 0 AND THE
-!                     CORRESPONDING ABSOLUTE ERROR TOLERANCE IS 0
+!                     corresponding absolute error tolerance is 0
 !                     FOR L = -INFO(1). TO CONTINUE, RESET THE
-!                     ABSOLUTE TOLERANCE TO A POSITIVE VALUE, SET
+!                     absolute tolerance to a positive value, set
 !                     INFO(1) = 1, AND CALL THE CODE AGAIN.
 !
 !             IDID = -4,-5  --- CANNOT OCCUR WITH THIS CODE.
 !
 !             IDID = -6, REPEATED CONVERGENCE TEST FAILURES OCCURRED
-!                     ON THE LAST ATTEMPTED STEP. AN INACCURATE
-!                     JACOBIAN MAY BE THE PROBLEM. IF YOU ARE ABSOLUTELY
-!                     CERTAIN YOU WANT TO CONTINUE, RESTART THE
+!                     on the last attempted step. An inaccurate
+!                     Jacobian may be the problem. If you are absolutely
+!                     certain you want to continue, restart the
 !                     INTEGRATION AT THE CURRENT T BY SETTING  INFO(1)=0
-!                     AND CALL THE CODE AGAIN.
+!                     and call the code again.
 !
 !             IDID = -7, REPEATED ERROR TEST FAILURES OCCURRED ON THE
-!                     LAST ATTEMPTED STEP. A SINGULARITY IN THE
-!                     SOLUTION MAY BE PRESENT. YOU SHOULD RE-EXAMINE THE
-!                     PROBLEM BEING SOLVED. IF YOU ARE ABSOLUTELY
-!                     CERTAIN YOU WANT TO CONTINUE, RESTART THE
+!                     last attempted step. A singularity in the
+!                     solution may be present. You should RE-examine the
+!                     problem being solved. If you are absolutely
+!                     certain you want to continue, restart the
 !                     INTEGRATION AT THE CURRENT T BY SETTING  INFO(1)=0
-!                     AND CALL THE CODE AGAIN.
+!                     and call the code again.
 !
 !             IDID = -8,..,-32  --- CANNOT OCCUR WITH THIS CODE.
 !
 !                         *** FOLLOWING A TERMINATED TASK ***
-!         IF
+!         if
 !             IDID .LE. -33, AN INPUT ERROR HAS BEEN DETECTED. AFTER THE
 !                     ERROR IS CORRECTED, RESTART BY SETTING INFO(1) = 0
-!                     AND CALL THE CODE AGAIN.
+!                     and call the code again.
 !
 !***********************************************************************
 !
 !         ***** WARNING *****
 !
-!     IF STFODE IS TO BE USED IN AN OVERLAY SITUATION, YOU MUST SAVE AND
-!     RESTORE CERTAIN ITEMS USED INTERNALLY BY STFODE  (VALUES IN THE
-!     COMMON BLOCK DEBDF1). THIS CAN BE ACCOMPLISHED AS FOLLOWS.
+!     If STFODE is to be used in an overlay situation, you must save and
+!     restore certain items used internally by STFODE  (values in the
+!     common block DEBDF1). This can be accomplished as follows.
 !
-!     TO SAVE THE NECESSARY VALUES UPON RETURN FROM STFODE, SIMPLY CALL
+!     To save the necessary values upon return from STFODE, simply call
 !        SVCO(RWORK(22+NEQ),IWORK(21+NEQ)).
 !
-!     TO RESTORE THE NECESSARY VALUES BEFORE THE NEXT CALL TO STFODE,
+!     To restore the necessary values before the next call to STFODE,
 !     SIMPLY CALL    RSCO(RWORK(22+NEQ),IWORK(21+NEQ)).
 !
 !***********************************************************************
@@ -7985,7 +7985,7 @@ if (info(6) .ne. 0) info(6) = 1
 ilrw = neq
 if (info(6) .eq. 0) go to 80
 !
-!     CHECK BANDWIDTH PARAMETERS
+!     Check bandwidth parameters
 !
 ml = iwork(1)
 mu = iwork(2)
@@ -7995,7 +7995,7 @@ if (ml .ge. 0  .and.  ml .lt. neq      .and. &
 idid = -40
 return
 !
-!     CHECK LRW AND LIW FOR SUFFICIENT STORAGE ALLOCATION
+!     Check LRW and LIW for sufficient storage allocation
 !
 80 if (lrw .ge. 250+(10+ilrw)*neq) go to 100
 !
@@ -8010,8 +8010,8 @@ return
 idid = -43
 return
 !
-!     COMPUTE THE INDICES FOR THE ARRAYS TO BE STORED IN THE WORK ARRAY
-!     AND RESTORE COMMON BLOCK DATA
+!     Compute the indices for the arrays to be stored in the work array
+!     and restore common block DATA
 !
 200 icomi = 21 + neq
 iinout = icomi + 33
@@ -8058,8 +8058,8 @@ end subroutine stfode
 subroutine rsco (rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
-! THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
-! BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
+! This routine restores from RSAV and ISAV the contents of common
+! block DEBDF1, which is used internally in the SFODE package.
 !-----------------------------------------------------------------------
 integer :: isav(*), i, ils, lenils, lenrls
 real :: rsav(*), rls
@@ -8071,14 +8071,14 @@ do 10 i = 1,lenrls
 do 20 i = 1,lenils
 20 ils(i) = isav(i)
 return
-!----------------------- END OF SUBROUTINE RSCO -----------------------
+!----------------------- End of subroutine RSCO -----------------------
 end subroutine rsco
 
 subroutine svco (rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
-! THIS ROUTINE STORES IN RSAV AND ISAV THE CONTENTS OF COMMON BLOCK
-! DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
+! This routine stores in RSAV and ISAV the contents of common block
+! DEBDF1, which is used internally in the SFODE package.
 !
 ! RSAV = REAL ARRAY OF LENGTH 218 OR MORE.
 ! ISAV = INTEGER ARRAY OF LENGTH 33 OR MORE.
@@ -8093,7 +8093,7 @@ do 10 i = 1,lenrls
 do 20 i = 1,lenils
 20 isav(i) = ils(i)
 return
-!----------------------- END OF SUBROUTINE SVCO -----------------------
+!----------------------- End of subroutine SVCO -----------------------
 end subroutine svco
 
 subroutine lsod1 (f,neq,t,y,tout,rtol,atol,idid,ypout, &
@@ -8113,9 +8113,9 @@ real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
 real :: vnwrms
 real :: spmpar
 !
-!   STFODE  MERELY ALLOCATES STORAGE FOR LSOD1 TO RELIEVE THE USER OF
-!   THE INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY LSOD1 IS USED
-!   AS DESCRIBED IN THE COMMENTS FOR  STFODE.
+!   STFODE  merely allocates storage for LSOD1 to relieve the user of
+!   the inconvenience of a long call list.  Consequently LSOD1 is used
+!   as described in the comments for  STFODE.
 !
 !***ROUTINES CALLED  STOD,INTYD,VNWRMS,HSTART,SPMPAR
 !
@@ -8133,10 +8133,10 @@ external f , jac
 !
 !.......................................................................
 !
-!  THE EXPENSE OF SOLVING THE PROBLEM IS MONITORED BY COUNTING THE
-!  NUMBER OF  STEPS ATTEMPTED. WHEN THIS EXCEEDS  MAXNUM, THE COUNTER
-!  IS RESET TO ZERO AND THE USER IS INFORMED ABOUT POSSIBLE EXCESSIVE
-!  WORK.
+!  The expense of solving the problem is monitored by counting the
+!  number of  steps attempted. When this exceeds  MAXNUM, the counter
+!  is reset to zero and the user is informed about possible excessive
+!  work.
 !
 data maxnum/500/
 !
@@ -8144,48 +8144,48 @@ data maxnum/500/
 !
 if (ibegin .ne. 0) go to 10
 !
-! ON THE FIRST CALL , PERFORM INITIALIZATION --
-!        DEFINE THE MACHINE UNIT ROUNDOFF QUANTITY  U  BY CALLING THE
-!        FUNCTION ROUTINE  SPMPAR. THE USER MUST MAKE SURE THAT THE
-!        VALUES SET IN SPMPAR ARE RELEVANT TO THE COMPUTER BEING USED.
+! On the first call , perform initialization --
+!        define the machine unit roundoff quantity  U  by calling the
+!        function routine  SPMPAR. The user must make sure that the
+!        values set in SPMPAR are relevant to the computer being used.
 !
 u=spmpar(1)
-!                       -- SET ASSOCIATED MACHINE DEPENDENT PARAMETER
+!                       -- Set associated machine dependent parameter
 wm(1)=sqrt(u)
-!                       -- SET TERMINATION FLAG
+!                       -- Set termination flag
 iquit=0
-!                       -- SET INITIALIZATION INDICATOR
+!                       -- Set initialization indicator
 init=0
-!                       -- SET COUNTER FOR ATTEMPTED STEPS
+!                       -- Set counter for attempted steps
 ksteps=0
-!                       -- SET INDICATOR FOR INTERMEDIATE-OUTPUT
+!                       -- Set indicator for intermediate-output
 intout= .false.
-!                       -- SET START INDICATOR FOR STOD CODE
+!                       -- Set start indicator for STOD code
 jstart= 0
-!                       -- SET BDF METHOD INDICATOR
+!                       -- Set BDF method indicator
 meth = 2
-!                       -- SET MAXIMUM ORDER FOR BDF METHOD
+!                       -- Set maximum order for BDF method
 maxord = 5
-!                       -- SET ITERATION MATRIX INDICATOR
+!                       -- Set iteration matrix indicator
 !
 if (ijac .eq. 0  .and.  iband .eq. 0) miter = 2
 if (ijac .eq. 1  .and.  iband .eq. 0) miter = 1
 if (ijac .eq. 0  .and.  iband .eq. 1) miter = 5
 if (ijac .eq. 1  .and.  iband .eq. 1) miter = 4
 !
-!                       -- SET OTHER NECESSARY ITEMS IN COMMON BLOCK
+!                       -- Set other necessary items in common block
 n = neq
 nst = 0
 nje = 0
 hmxi = 0.
 nq = 1
 h = 1.
-!                       -- RESET IBEGIN FOR SUBSEQUENT CALLS
+!                       -- Reset IBEGIN for subsequent calls
 ibegin = 1
 !
 !.......................................................................
 !
-!      CHECK VALIDITY OF INPUT PARAMATERS ON EACH ENTRY
+!      Check validity of input paramaters on each entry
 !
 10 if (neq .ge. 1) go to 20
 idid = -33
@@ -8209,7 +8209,7 @@ idid = -36
 go to 110
 !
 80 if (init .eq. 0) go to 150
-!                       CHECK SOME CONTINUATION POSSIBILITIES
+!                       Check some continuation possibilities
 if (t .ne. tout) go to 90
 idid = -37
 go to 110
@@ -8222,7 +8222,7 @@ go to 110
 if (delsgn*(tout-t) .ge. 0.) go to 150
 idid = -39
 !
-!                       INVALID INPUT DETECTED
+!                       Invalid input detected
 110 iquit = -33
 ibegin = -1
 return
@@ -8230,9 +8230,9 @@ return
 !.......................................................................
 !
 !     RTOL = ATOL = 0. IS ALLOWED AS VALID INPUT AND INTERPRETED AS
-!     ASKING FOR THE MOST ACCURATE SOLUTION POSSIBLE. IN THIS CASE,
-!     THE RELATIVE ERROR TOLERANCE RTOL IS RESET TO THE SMALLEST VALUE
-!     100*U WHICH IS LIKELY TO BE REASONABLE FOR THIS METHOD AND MACHINE
+!     asking for the most accurate solution possible. In this case,
+!     the relative error tolerance RTOL is reset to the smallest value
+!     100*U which is likely to be reasonable for this method and machine
 !
 150 do 170 k = 1,max
   if (rtol(k) + atol(k) .gt. 0.) go to 170
@@ -8241,9 +8241,9 @@ return
 170 continue
 if (idid .eq. -2) return
 !
-!     BRANCH ON STATUS OF INITIALIZATION INDICATOR
+!     Branch on status of initialization indicator
 !            INIT=0 MEANS INITIAL DERIVATIVES AND NOMINAL STEP SIZE
-!                   AND DIRECTION NOT YET SET
+!                   and direction not yet set
 !            INIT=1 MEANS NOMINAL STEP SIZE AND DIRECTION NOT YET SET
 !            INIT=2 MEANS NO FUTHER INITIALIZATION REQUIRED
 !
@@ -8253,8 +8253,8 @@ go to 240
 !
 !.......................................................................
 !
-!     MORE INITIALIZATION --
-!                         -- EVALUATE INITIAL DERIVATIVES
+!     More initialization --
+!                         -- evaluate initial derivatives
 !
 200 init = 1
 call f(t,y,yh(1,2),rpar,ipar)
@@ -8266,10 +8266,10 @@ do 210 l = 1,neq
 told = t
 return
 !
-!                         -- COMPUTE INITIAL STEP SIZE
-!                         -- SAVE SIGN OF INTEGRATION DIRECTION
-!                         -- SET INDEPENDENT AND DEPENDENT VARIABLES
-!                                              X AND YH(*) FOR STOD
+!                         -- Compute initial step size
+!                         -- save sign of integration direction
+!                         -- set independent and dependent variables
+!                                              X and YH(*) for STOD
 !
 220 ltol = 1
 do 225 l = 1,neq
@@ -8291,15 +8291,15 @@ init = 2
 !
 !.......................................................................
 !
-!   ON EACH CALL SET INFORMATION WHICH DETERMINES THE ALLOWED INTERVAL
-!   OF INTEGRATION BEFORE RETURNING WITH AN ANSWER AT TOUT
+!   On each call set information which determines the allowed interval
+!   of integration before returning with an answer at tout
 !
 240 del = tout - t
 absdel = abs(del)
 !
 !.......................................................................
 !
-!   IF ALREADY PAST OUTPUT POINT, INTERPOLATE AND RETURN
+!   If already past output point, interpolate and return
 !
 250 if (abs(x-t) .lt. absdel) go to 270
 call intyd(tout,0,yh,neq,y,intflg)
@@ -8312,8 +8312,8 @@ intout = .false.
 told = t
 return
 !
-!   IF CANNOT GO PAST TSTOP AND SUFFICIENTLY CLOSE,
-!   EXTRAPOLATE AND RETURN
+!   If cannot go past TSTOP and sufficiently close,
+!   extrapolate and return
 !
 270 if (itstop .ne. 1) go to 290
 if (abs(tstop-x) .ge. 100.*u*abs(x)) go to 290
@@ -8329,25 +8329,25 @@ return
 !
 290 if (iinteg .eq. 0  .or.  .not.intout) go to 300
 !
-!   INTERMEDIATE-OUTPUT MODE
+!   Intermediate-output mode
 !
 idid = 1
 go to 500
 !
 !.......................................................................
 !
-!     MONITOR NUMBER OF STEPS ATTEMPTED
+!     Monitor number of steps attempted
 !
 300 if (ksteps .le. maxnum) go to 330
 !
-!                       A SIGNIFICANT AMOUNT OF WORK HAS BEEN EXPENDED
+!                       A significant amount of work has been expended
 idid = -1
 ksteps = 0
 go to 500
 !
 !.......................................................................
 !
-!   LIMIT STEP SIZE AND SET WEIGHT VECTOR
+!   Limit step size and set weight vector
 !
 330 hmin = 100.*u*abs(x)
 ha = amax1(abs(h),hmin)
@@ -8363,7 +8363,7 @@ do l = 1,neq
 tolfac = u*vnwrms(neq,yh,ewt)
 if (tolfac .le. 1.) go to 400
 !
-!                       TOLERANCES TOO SMALL
+!                       Tolerances too small
 idid = -2
 tolfac = 2.*tolfac
 do 360 l = 1,max
@@ -8371,14 +8371,14 @@ do 360 l = 1,max
 360 atol(l) = tolfac*atol(l)
 go to 500
 !
-!                       RELATIVE ERROR CRITERION INAPPROPRIATE
+!                       Relative error criterion inappropriate
 380 idid = -3
 ibegin = -l
 go to 500
 !
 !.......................................................................
 !
-!     TAKE A STEP
+!     Take a step
 !
 400 call stod(neq,y,yh,neq,yh1,ewt,savf,acor,wm,iwm,f,jac,rpar,ipar)
 !
@@ -8390,20 +8390,20 @@ if (kflag .eq. 0) go to 250
 !
 if (kflag .eq. -1) go to 450
 !
-!                       REPEATED CORRECTOR CONVERGENCE FAILURES
+!                       Repeated corrector convergence failures
 idid = -6
 iquit = -6
 ibegin = -1
 go to 500
 !
-!                       REPEATED ERROR TEST FAILURES
+!                       Repeated error test failures
 450 idid = -7
 iquit = -7
 ibegin = -1
 !
 !.......................................................................
 !
-!                       STORE VALUES BEFORE RETURNING TO STFODE
+!                       Store values before returning to STFODE
 500 do 555 l = 1,neq
   y(l) = yh(l,1)
 555 ypout(l) = yh(l,2)/h
@@ -8433,121 +8433,121 @@ real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
 &srydpb, tolexp, tolmin, tolp, tolsum, ydpb
 real :: vnorm
 !
-!   HSTART COMPUTES A STARTING STEP SIZE TO BE USED IN SOLVING INITIAL
-!   VALUE PROBLEMS IN ORDINARY DIFFERENTIAL EQUATIONS.
+!   HSTART computes a starting step size to be used in solving initial
+!   value problems in ordinary differential equations.
 !
 !
 !***********************************************************************
-!  ABSTRACT
+!  Abstract
 !
-!     SUBROUTINE HSTART COMPUTES A STARTING STEP SIZE TO BE USED BY AN
-!     INITIAL VALUE METHOD IN SOLVING ORDINARY DIFFERENTIAL EQUATIONS.
-!     IT IS BASED ON AN ESTIMATE OF THE LOCAL LIPSCHITZ CONSTANT FOR THE
+!     Subroutine HSTART computes a starting step size to be used by an
+!     initial value method in solving ordinary differential equations.
+!     It is based on an estimate of the local Lipschitz constant for the
 !     DIFFERENTIAL EQUATION   (LOWER BOUND ON A NORM OF THE JACOBIAN) ,
-!     A BOUND ON THE DIFFERENTIAL EQUATION  (FIRST DERIVATIVE) , AND
-!     A BOUND ON THE PARTIAL DERIVATIVE OF THE EQUATION WITH RESPECT TO
-!     THE INDEPENDENT VARIABLE.
-!     (ALL APPROXIMATED NEAR THE INITIAL POINT A)
+!     a bound on the differential equation  (first derivative) , and
+!     a bound on the partial derivative of the equation with respect to
+!     the independent variable.
+!     (All approximated near the initial point A)
 !
-!     SUBROUTINE HSTART USES A FUNCTION SUBPROGRAM VNORM FOR COMPUTING
-!     A VECTOR NORM. THE MAXIMUM NORM IS PRESENTLY UTILIZED THOUGH IT
-!     CAN EASILY BE REPLACED BY ANY OTHER VECTOR NORM. IT IS PRESUMED
-!     THAT ANY REPLACEMENT NORM ROUTINE WOULD BE CAREFULLY CODED TO
-!     PREVENT UNNECESSARY UNDERFLOWS OR OVERFLOWS FROM OCCURRING, AND
-!     ALSO, WOULD NOT ALTER THE VECTOR OR NUMBER OF COMPONENTS.
+!     Subroutine HSTART uses a function subprogram VNORM for computing
+!     a vector NORM. The maximum NORM is presently utilized though it
+!     can easily be replaced by any other vector NORM. It is presumed
+!     that any replacement norm routine would be carefully coded to
+!     prevent unnecessary underflows or overflows from occurring, and
+!     also, would not alter the vector or number of components.
 !
 !***********************************************************************
-!  ON INPUT YOU MUST PROVIDE THE FOLLOWING
+!  On input you must provide the following
 !
-!      F -- THIS IS A SUBROUTINE OF THE FORM
+!      F -- this is a subroutine of the form
 !                               F(X,U,UPRIME,RPAR,IPAR)
-!             WHICH DEFINES THE SYSTEM OF FIRST ORDER DIFFERENTIAL
-!             EQUATIONS TO BE SOLVED. FOR THE GIVEN VALUES OF X AND THE
+!             which defines the system of first order differential
+!             equations to be solved. For the given values of X and the
 !             VECTOR  U(*)=(U(1),U(2),...,U(NEQ)) , THE SUBROUTINE MUST
-!             EVALUATE THE NEQ COMPONENTS OF THE SYSTEM OF DIFFERENTIAL
+!             evaluate the NEQ components of the system of differential
 !             EQUATIONS  DU/DX=F(X,U)  AND STORE THE DERIVATIVES IN THE
 !             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/DX *  FOR
 !             EQUATIONS I=1,...,NEQ.
 !
-!             SUBROUTINE F MUST NOT ALTER X OR U(*). YOU MUST DECLARE
-!             THE NAME F IN AN EXTERNAL STATEMENT IN YOUR PROGRAM THAT
-!             CALLS HSTART. YOU MUST DIMENSION U AND UPRIME IN F.
+!             Subroutine F must not alter X or U(*). You must declare
+!             the name F in an external statement in your program that
+!             calls HSTART. You must dimension U and UPRIME in F.
 !
-!             RPAR AND IPAR ARE REAL AND INTEGER PARAMETER ARRAYS WHICH
-!             YOU CAN USE FOR COMMUNICATION BETWEEN YOUR PROGRAM AND
-!             SUBROUTINE F. THEY ARE NOT USED OR ALTERED BY HSTART. IF
-!             YOU DO NOT NEED RPAR OR IPAR, IGNORE THESE PARAMETERS BY
-!             TREATING THEM AS DUMMY ARGUMENTS. IF YOU DO CHOOSE TO USE
-!             THEM, DIMENSION THEM IN YOUR PROGRAM AND IN F AS ARRAYS
-!             OF APPROPRIATE LENGTH.
+!             Rpar and IPAR are real and integer parameter arrays which
+!             you can use for communication between your program and
+!             subroutine F. They are not used or altered by HSTART. If
+!             you do not need rpar or IPAR, ignore these parameters by
+!             treating them as dummy arguments. If you do choose to use
+!             them, dimension them in your program and in F as arrays
+!             of appropriate length.
 !
-!      NEQ -- THIS IS THE NUMBER OF (FIRST ORDER) DIFFERENTIAL EQUATIONS
-!             TO BE INTEGRATED.
+!      NEQ -- this is the number of (first order) differential equations
+!             to be integrated.
 !
-!      A -- THIS IS THE INITIAL POINT OF INTEGRATION.
+!      A -- this is the initial point of integration.
 !
-!      B -- THIS IS A VALUE OF THE INDEPENDENT VARIABLE USED TO DEFINE
-!             THE DIRECTION OF INTEGRATION. A REASONABLE CHOICE IS TO
-!             SET  B  TO THE FIRST POINT AT WHICH A SOLUTION IS DESIRED.
-!             YOU CAN ALSO USE  B, IF NECESSARY, TO RESTRICT THE LENGTH
-!             OF THE FIRST INTEGRATION STEP BECAUSE THE ALGORITHM WILL
-!             NOT COMPUTE A STARTING STEP LENGTH WHICH IS BIGGER THAN
-!             ABS(B-A), UNLESS  B  HAS BEEN CHOSEN TOO CLOSE TO  A.
-!             (IT IS PRESUMED THAT HSTART HAS BEEN CALLED WITH  B
-!             DIFFERENT FROM  A  ON THE MACHINE BEING USED. ALSO SEE THE
-!             DISCUSSION ABOUT THE PARAMETER  SMALL.)
+!      B -- this is a value of the independent variable used to define
+!             the direction of integration. A reasonable choice is to
+!             set  B  to the first point at which a solution is desired.
+!             You can also use  B, if necessary, to restrict the length
+!             of the first integration step because the algorithm will
+!             not compute a starting step length which is bigger than
+!             ABS(B-A), unless  B  has been chosen too close to  A.
+!             (It is presumed that HSTART has been called with  B
+!             different from  A  on the machine being used. Also see the
+!             discussion about the parameter  SMALL.)
 !
-!      Y(*) -- THIS IS THE VECTOR OF INITIAL VALUES OF THE NEQ SOLUTION
-!             COMPONENTS AT THE INITIAL POINT  A.
+!      Y(*) -- this is the vector of initial values of the NEQ solution
+!             components at the initial point  A.
 !
-!      YPRIME(*) -- THIS IS THE VECTOR OF DERIVATIVES OF THE NEQ
-!             SOLUTION COMPONENTS AT THE INITIAL POINT  A.
-!             (DEFINED BY THE DIFFERENTIAL EQUATIONS IN SUBROUTINE F)
+!      YPRIME(*) -- this is the vector of derivatives of the NEQ
+!             solution components at the initial point  A.
+!             (Defined by the differential equations in subroutine F)
 !
-!      ETOL -- THIS IS THE VECTOR OF ERROR TOLERANCES CORRESPONDING TO
-!             THE NEQ SOLUTION COMPONENTS. IT IS ASSUMED THAT ALL
-!             ELEMENTS ARE POSITIVE. FOLLOWING THE FIRST INTEGRATION
-!             STEP, THE TOLERANCES ARE EXPECTED TO BE USED BY THE
-!             INTEGRATOR IN AN ERROR TEST WHICH ROUGHLY REQUIRES THAT
+!      ETOL -- this is the vector of error tolerances corresponding to
+!             the NEQ solution components. It is assumed that all
+!             elements are positive. Following the first integration
+!             step, the tolerances are expected to be used by the
+!             integrator in an error test which roughly requires that
 !                        ABS(LOCAL ERROR)  .LE.  ETOL
-!             FOR EACH VECTOR COMPONENT.
+!             for each vector component.
 !
-!      MORDER -- THIS IS THE ORDER OF THE FORMULA WHICH WILL BE USED BY
-!             THE INITIAL VALUE METHOD FOR TAKING THE FIRST INTEGRATION
-!             STEP.
+!      MORDER -- this is the order of the formula which will be used by
+!             the initial value method for taking the first integration
+!             step.
 !
-!      SMALL -- THIS IS A SMALL POSITIVE MACHINE DEPENDENT CONSTANT
-!             WHICH IS USED FOR PROTECTING AGAINST COMPUTATIONS WITH
-!             NUMBERS WHICH ARE TOO SMALL RELATIVE TO THE PRECISION OF
-!             FLOATING POINT ARITHMETIC.  SMALL  SHOULD BE SET TO
-!             (APPROXIMATELY) THE SMALLEST POSITIVE REAL NUMBER SUCH
+!      Small -- this is a small positive machine dependent constant
+!             which is used for protecting against computations with
+!             numbers which are too small relative to the precision of
+!             floating point arithmetic.  Small  should be set to
+!             (approximately) the smallest positive real number such
 !             THAT  (1.+SMALL) .GT. 1.  ON THE MACHINE BEING USED. THE
 !             QUANTITY  SMALL**(3/8)  IS USED IN COMPUTING INCREMENTS OF
-!             VARIABLES FOR APPROXIMATING DERIVATIVES BY DIFFERENCES.
-!             ALSO THE ALGORITHM WILL NOT COMPUTE A STARTING STEP LENGTH
-!             WHICH IS SMALLER THAN  100*SMALL*ABS(A).
+!             variables for approximating derivatives by differences.
+!             Also the algorithm will not compute a starting step length
+!             which is smaller than  100*small*ABS(A).
 !
-!      BIG -- THIS IS A LARGE POSITIVE MACHINE DEPENDENT CONSTANT WHICH
-!             IS USED FOR PREVENTING MACHINE OVERFLOWS. A REASONABLE
-!             CHOICE IS TO SET BIG TO (APPROXIMATELY) THE SQUARE ROOT OF
-!             THE LARGEST REAL NUMBER WHICH CAN BE HELD IN THE MACHINE.
+!      Big -- this is a large positive machine dependent constant which
+!             is used for preventing machine overflows. A reasonable
+!             choice is to set big to (approximately) the square root of
+!             the largest real number which can be held in the machine.
 !
-!      SPY(*),PV(*),YP(*),SF(*) -- THESE ARE REAL WORK ARRAYS OF LENGTH
-!             NEQ WHICH PROVIDE THE ROUTINE WITH NEEDED STORAGE SPACE.
+!      SPY(*),PV(*),YP(*),SF(*) -- these are real work arrays of length
+!             NEQ which provide the routine with needed storage space.
 !
-!      RPAR,IPAR -- THESE ARE PARAMETER ARRAYS, OF REAL AND INTEGER
-!             TYPE, RESPECTIVELY, WHICH CAN BE USED FOR COMMUNICATION
-!             BETWEEN YOUR PROGRAM AND THE F SUBROUTINE. THEY ARE NOT
-!             USED OR ALTERED BY HSTART.
+!      Rpar,IPAR -- these are parameter arrays, of real and integer
+!             type, respectively, which can be used for communication
+!             between your program and the F subroutine. They are not
+!             used or altered by HSTART.
 !
 !***********************************************************************
-!  ON OUTPUT  (AFTER THE RETURN FROM HSTART),
+!  On output  (after the return from HSTART),
 !
-!      H -- IS AN APPROPRIATE STARTING STEP SIZE TO BE ATTEMPTED BY THE
-!             DIFFERENTIAL EQUATION METHOD.
+!      H -- is an appropriate starting step size to be attempted by the
+!             differential equation method.
 !
-!           ALL PARAMETERS IN THE CALL LIST REMAIN UNCHANGED EXCEPT FOR
-!           THE WORKING ARRAYS SPY(*),PV(*),YP(*), AND SF(*).
+!           All parameters in the call list remain unchanged except for
+!           the working arrays SPY(*),PV(*),YP(*), and SF(*).
 !
 !***********************************************************************
 !
@@ -8563,10 +8563,10 @@ relper=small**0.375
 !
 !.......................................................................
 !
-!     COMPUTE AN APPROXIMATE BOUND (DFDXB) ON THE PARTIAL
-!     DERIVATIVE OF THE EQUATION WITH RESPECT TO THE
-!     INDEPENDENT VARIABLE. PROTECT AGAINST AN OVERFLOW.
-!     ALSO COMPUTE A BOUND (FBND) ON THE FIRST DERIVATIVE LOCALLY.
+!     Compute an approximate bound (DFDXB) on the partial
+!     derivative of the equation with respect to the
+!     independent variable. Protect against an overflow.
+!     Also compute a bound (FBND) on the first derivative locally.
 !
 da=sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
 if (da .eq. 0.) da=relper*dx
@@ -8580,37 +8580,37 @@ fbnd=vnorm(sf,neq)
 !
 !.......................................................................
 !
-!     COMPUTE AN ESTIMATE (DFDUB) OF THE LOCAL LIPSCHITZ CONSTANT FOR
-!     THE SYSTEM OF DIFFERENTIAL EQUATIONS. THIS ALSO REPRESENTS AN
-!     ESTIMATE OF THE NORM OF THE JACOBIAN LOCALLY.
+!     Compute an estimate (DFDUB) of the local Lipschitz constant for
+!     the system of differential equations. This also represents an
+!     estimate of the norm of the Jacobian locally.
 !     THREE ITERATIONS (TWO WHEN NEQ=1) ARE USED TO ESTIMATE THE
-!     LIPSCHITZ CONSTANT BY NUMERICAL DIFFERENCES. THE FIRST
-!     PERTURBATION VECTOR IS BASED ON THE INITIAL DERIVATIVES AND
-!     DIRECTION OF INTEGRATION. THE SECOND PERTURBATION VECTOR IS
-!     FORMED USING ANOTHER EVALUATION OF THE DIFFERENTIAL EQUATION.
-!     THE THIRD PERTURBATION VECTOR IS FORMED USING PERTURBATIONS BASED
-!     ONLY ON THE INITIAL VALUES. COMPONENTS THAT ARE ZERO ARE ALWAYS
-!     CHANGED TO NON-ZERO VALUES (EXCEPT ON THE FIRST ITERATION). WHEN
-!     INFORMATION IS AVAILABLE, CARE IS TAKEN TO ENSURE THAT COMPONENTS
-!     OF THE PERTURBATION VECTOR HAVE SIGNS WHICH ARE CONSISTENT WITH
-!     THE SLOPES OF LOCAL SOLUTION CURVES.
-!     ALSO CHOOSE THE LARGEST BOUND (FBND) FOR THE FIRST DERIVATIVE.
+!     Lipschitz constant by numerical differences. The first
+!     perturbation vector is based on the initial derivatives and
+!     direction of integration. The second perturbation vector is
+!     formed using another evaluation of the differential equation.
+!     The third perturbation vector is formed using perturbations based
+!     only on the initial values. Components that are zero are always
+!     changed to non-zero values (except on the first iteration). When
+!     information is available, care is taken to ensure that components
+!     of the perturbation vector have signs which are consistent with
+!     the slopes of local solution curves.
+!     Also choose the largest bound (FBND) for the first derivative.
 !
-!                       PERTURBATION VECTOR SIZE IS HELD CONSTANT FOR
-!                       ALL ITERATIONS. COMPUTE THIS CHANGE FROM THE
-!                               SIZE OF THE VECTOR OF INITIAL VALUES.
+!                       Perturbation vector SIZE is held constant for
+!                       all iterations. Compute this change from the
+!                               size of the vector of initial values.
 dely=relper*vnorm(y,neq)
 if (dely .eq. 0.) dely=relper
 dely=sign(dely,dx)
 delf=vnorm(yprime,neq)
 fbnd=amax1(fbnd,delf)
 if (delf .eq. 0.) go to 30
-!                       USE INITIAL DERIVATIVES FOR FIRST PERTURBATION
+!                       Use initial derivatives for first perturbation
 do 20 j = 1,neq
   spy(j)=yprime(j)
 20 yp(j)=yprime(j)
 go to 50
-!                       CANNOT HAVE A NULL PERTURBATION VECTOR
+!                       Cannot have a null perturbation vector
 30 do 40 j = 1,neq
   spy(j)=0.
 40 yp(j)=1.
@@ -8619,29 +8619,29 @@ delf=vnorm(yp,neq)
 50 dfdub=0.
 lk=min0(neq+1,3)
 do 140 k = 1,lk
-!                       DEFINE PERTURBED VECTOR OF INITIAL VALUES
+!                       Define perturbed vector of initial values
   do 60 j = 1,neq
 60 pv(j)=y(j)+dely*(yp(j)/delf)
   if (k .eq. 2) go to 80
-!                       EVALUATE DERIVATIVES ASSOCIATED WITH PERTURBED
-!                       VECTOR  AND  COMPUTE CORRESPONDING DIFFERENCES
+!                       Evaluate derivatives associated with perturbed
+!                       vector  and  compute corresponding differences
   call f(a,pv,yp,rpar,ipar)
   do 70 j = 1,neq
 70 pv(j)=yp(j)-yprime(j)
   go to 100
-!                       USE A SHIFTED VALUE OF THE INDEPENDENT VARIABLE
-!                                             IN COMPUTING ONE ESTIMATE
+!                       Use a shifted value of the independent variable
+!                                             in computing one estimate
 80 call f(a+da,pv,yp,rpar,ipar)
   do 90 j = 1,neq
 90 pv(j)=yp(j)-sf(j)
-!                       CHOOSE LARGEST BOUNDS ON THE FIRST DERIVATIVE
-!                                      AND A LOCAL LIPSCHITZ CONSTANT
+!                       Choose largest bounds on the first derivative
+!                                      and a local Lipschitz constant
 100 fbnd=amax1(fbnd,vnorm(yp,neq))
   delf=vnorm(pv,neq)
   if (delf .ge. big*abs(dely)) go to 150
   dfdub=amax1(dfdub,delf/abs(dely))
   if (k .eq. lk) go to 160
-!                       CHOOSE NEXT PERTURBATION VECTOR
+!                       Choose next perturbation vector
   if (delf .eq. 0.) delf=1.
   do 130 j = 1,neq
     if (k .eq. 2) go to 110
@@ -8655,20 +8655,20 @@ do 140 k = 1,lk
 130 yp(j)=dy
 140 delf=vnorm(yp,neq)
 !
-!                       PROTECT AGAINST AN OVERFLOW
+!                       Protect against an overflow
 150 dfdub=big
 !
 !.......................................................................
 !
-!     COMPUTE A BOUND (YDPB) ON THE NORM OF THE SECOND DERIVATIVE
+!     Compute a bound (YDPB) on the norm of the second derivative
 !
 160 ydpb=dfdxb+dfdub*fbnd
 !
 !.......................................................................
 !
-!     DEFINE THE TOLERANCE PARAMETER UPON WHICH THE STARTING STEP SIZE
-!     IS TO BE BASED.  A VALUE IN THE MIDDLE OF THE ERROR TOLERANCE
-!     RANGE IS SELECTED.
+!     Define the tolerance parameter upon which the starting step size
+!     is to be based.  A value in the middle of the error tolerance
+!     range is selected.
 !
 tolmin=big
 tolsum=0.
@@ -8680,43 +8680,43 @@ tolp=10.**(0.5*(tolsum/float(neq)+tolmin)/float(morder+1))
 !
 !.......................................................................
 !
-!     COMPUTE A STARTING STEP SIZE BASED ON THE ABOVE FIRST AND SECOND
-!     DERIVATIVE INFORMATION
+!     Compute a starting step size based on the above first and second
+!     derivative information
 !
-!                       RESTRICT THE STEP LENGTH TO BE NOT BIGGER THAN
+!                       Restrict the step length to be not bigger than
 !                       ABS(B-A).   (UNLESS  B  IS TOO CLOSE TO  A)
 h=absdx
 !
 if (ydpb .ne. 0.  .or.  fbnd .ne. 0.) go to 180
 !
-!                       BOTH FIRST DERIVATIVE TERM (FBND) AND SECOND
-!                                    DERIVATIVE TERM (YDPB) ARE ZERO
+!                       Both first derivative term (FBND) and second
+!                                    derivative term (YDPB) are zero
 if (tolp .lt. 1.) h=absdx*tolp
 go to 200
 !
 180 if (ydpb .ne. 0.) go to 190
 !
-!                       ONLY SECOND DERIVATIVE TERM (YDPB) IS ZERO
+!                       Only second derivative term (YDPB) is zero
 if (tolp .lt. fbnd*absdx) h=tolp/fbnd
 go to 200
 !
-!                       SECOND DERIVATIVE TERM (YDPB) IS NON-ZERO
+!                       Second derivative term (YDPB) is non-zero
 190 srydpb=sqrt(0.5*ydpb)
 if (tolp .lt. srydpb*absdx) h=tolp/srydpb
 !
-!                       FURTHER RESTRICT THE STEP LENGTH TO BE NOT
-!                                                 BIGGER THAN  1/DFDUB
+!                       Further restrict the step length to be not
+!                                                 bigger than  1/DFDUB
 200 if (h*dfdub .gt. 1.) h=1./dfdub
 !
-!                       FINALLY, RESTRICT THE STEP LENGTH TO BE NOT
-!                       SMALLER THAN  100*SMALL*ABS(A).  HOWEVER, IF
+!                       Finally, restrict the step length to be not
+!                       smaller than  100*small*ABS(A).  However, if
 !                       A=0. AND THE COMPUTED H UNDERFLOWED TO ZERO,
-!                       THE ALGORITHM RETURNS  SMALL*ABS(B)  FOR THE
-!                                                       STEP LENGTH.
+!                       the algorithm returns  small*ABS(B)  for the
+!                                                       step length.
 h=amax1(h,100.*small*abs(a))
 if (h .eq. 0.) h=small*abs(b)
 !
-!                       NOW SET DIRECTION OF INTEGRATION
+!                       Now set direction of integration
 h=sign(h,dx)
 !
 return
@@ -8725,15 +8725,15 @@ end subroutine hstart
 subroutine intyd (t, k, yh, nyh, dky, iflag)
 implicit none
 !
-!   INTYD APPROXIMATES THE SOLUTION AND DERIVATIVES AT T BY POLYNOMIAL
-!   INTERPOLATION. MUST BE USED IN CONJUNCTION WITH THE INTEGRATOR
+!   INTYD approximates the solution and derivatives at T by polynomial
+!   interpolation. Must be used in conjunction with the integrator
 !   PACKAGE SFODE.
 !-----------------------------------------------------------------------
-! INTYD COMPUTES INTERPOLATED VALUES OF THE K-TH DERIVATIVE OF THE
-! DEPENDENT VARIABLE VECTOR Y, AND STORES IT IN DKY.
+! INTYD computes interpolated values of the K-TH derivative of the
+! dependent variable vector Y, and stores it in DKY.
 ! THIS ROUTINE IS CALLED BY STFODE WITH K = 0,1 AND T = TOUT, BUT MAY
-! ALSO BE CALLED BY THE USER FOR ANY K UP TO THE CURRENT ORDER.
-! (SEE DETAILED INSTRUCTIONS IN LSODE USAGE DOCUMENTATION.)
+! also be called by the user for any K up to the current order.
+! (See detailed instructions in lsode usage documentation.)
 !-----------------------------------------------------------------------
 ! THE COMPUTED VALUES IN DKY ARE GOTTEN BY INTERPOLATION USING THE
 ! NORDSIECK HISTORY ARRAY YH.  THIS ARRAY CORRESPONDS UNIQUELY TO A
@@ -8796,7 +8796,7 @@ return
 return
 90 iflag = -2
 return
-!----------------------- END OF SUBROUTINE INTYD -----------------------
+!----------------------- End of subroutine INTYD -----------------------
 end subroutine intyd
 
 subroutine stod  (neq, y, yh, nyh, yh1, ewt, savf, acor, &
@@ -8807,64 +8807,64 @@ real :: rpar(*)
 integer :: ipnyh
 integer :: iod, ksteps
 !-----------------------------------------------------------------------
-! STOD  PERFORMS ONE STEP OF THE INTEGRATION OF AN INITIAL VALUE
-! PROBLEM FOR A SYSTEM OF ORDINARY DIFFERENTIAL EQUATIONS.
-! NOTE.. STOD  IS INDEPENDENT OF THE VALUE OF THE ITERATION METHOD
+! STOD  performs one step of the integration of an initial value
+! problem for a system of ordinary differential equations.
+! Note.. STOD  is independent of the value of the iteration method
 ! INDICATOR MITER, WHEN THIS IS .NE. 0, AND HENCE IS INDEPENDENT
-! OF THE TYPE OF CHORD METHOD USED, OR THE JACOBIAN STRUCTURE.
-! COMMUNICATION WITH STOD  IS DONE WITH THE FOLLOWING VARIABLES..
+! of the type of chord method used, or the Jacobian structure.
+! Communication with STOD  is done with the following variables..
 !
 ! Y      = AN ARRAY OF LENGTH .GE. N USED AS THE Y ARGUMENT IN
-!          ALL CALLS TO F AND JAC.
+!          all calls to F and JAC.
 ! NEQ    = INTEGER ARRAY CONTAINING PROBLEM SIZE IN NEQ(1), AND
-!          PASSED AS THE NEQ ARGUMENT IN ALL CALLS TO F AND JAC.
+!          passed as the NEQ argument in all calls to F and JAC.
 ! YH     = AN NYH BY LMAX ARRAY CONTAINING THE DEPENDENT VARIABLES
-!          AND THEIR APPROXIMATE SCALED DERIVATIVES, WHERE
+!          and their approximate scaled derivatives, where
 !          LMAX = MAXORD + 1.  YH(I,J+1) CONTAINS THE APPROXIMATE
 !          J-TH DERIVATIVE OF Y(I), SCALED BY H**J/FACTORIAL(J)
 !          (J = 0,1,...,NQ).  ON ENTRY FOR THE FIRST STEP, THE FIRST
-!          TWO COLUMNS OF YH MUST BE SET FROM THE INITIAL VALUES.
+!          two columns of YH must be set from the initial values.
 ! NYH    = A CONSTANT INTEGER .GE. N, THE FIRST DIMENSION OF YH.
 ! YH1    = A ONE-DIMENSIONAL ARRAY OCCUPYING THE SAME SPACE AS YH.
 ! EWT    = AN ARRAY OF N ELEMENTS WITH WHICH THE ESTIMATED LOCAL
-!          ERRORS IN YH ARE COMPARED.
+!          errors in YH are compared.
 ! SAVF   = AN ARRAY OF WORKING STORAGE, OF LENGTH N.
 ! ACOR   = A WORK ARRAY OF LENGTH N, USED FOR THE ACCUMULATED
-!          CORRECTIONS.  ON A SUCCESSFUL RETURN, ACOR(I) CONTAINS
-!          THE ESTIMATED ONE-STEP LOCAL ERROR IN Y(I).
+!          corrections.  On a successful return, ACOR(I) contains
+!          the estimated one-step local error in Y(I).
 ! WM,IWM = REAL AND INTEGER WORK ARRAYS ASSOCIATED WITH MATRIX
 !          OPERATIONS IN CHORD ITERATION (MITER .NE. 0).
 ! PJAC   = NAME OF ROUTINE TO EVALUATE AND PREPROCESS JACOBIAN MATRIX
-!          IF A CHORD METHOD IS BEING USED.
+!          if a chord method is being used.
 ! SLVS   = NAME OF ROUTINE TO SOLVE LINEAR SYSTEM IN CHORD ITERATION.
 ! H      = THE STEP SIZE TO BE ATTEMPTED ON THE NEXT STEP.
-!          H IS ALTERED BY THE ERROR CONTROL ALGORITHM DURING THE
-!          PROBLEM.  H CAN BE EITHER POSITIVE OR NEGATIVE, BUT ITS
-!          SIGN MUST REMAIN CONSTANT THROUGHOUT THE PROBLEM.
+!          H is altered by the error control algorithm during the
+!          problem.  H can be either positive or negative, but its
+!          sign must remain constant throughout the problem.
 ! HMIN   = THE MINIMUM ABSOLUTE VALUE OF THE STEP SIZE H TO BE USED.
 ! HMXI   = INVERSE OF THE MAXIMUM ABSOLUTE VALUE OF H TO BE USED.
 !          HMXI = 0.0 IS ALLOWED AND CORRESPONDS TO AN INFINITE HMAX.
-!          HMIN AND HMXI MAY BE CHANGED AT ANY TIME, BUT WILL NOT
-!          TAKE EFFECT UNTIL THE NEXT CHANGE OF H IS CONSIDERED.
+!          HMIN and HMXI may be changed at any time, but will not
+!          take effect until the next change of H is considered.
 ! TN     = THE INDEPENDENT VARIABLE. TN IS UPDATED ON EACH STEP TAKEN.
 ! JSTART = AN INTEGER USED FOR INPUT ONLY, WITH THE FOLLOWING
-!          VALUES AND MEANINGS..
-!               0  PERFORM THE FIRST STEP.
+!          values and meanings..
+!               0  Perform the first step.
 !           .GT.0  TAKE A NEW STEP CONTINUING FROM THE LAST.
-!              -1  TAKE THE NEXT STEP WITH A NEW VALUE OF H, MAXORD,
-!                    N, METH, MITER, AND/OR MATRIX PARAMETERS.
-!              -2  TAKE THE NEXT STEP WITH A NEW VALUE OF H,
-!                    BUT WITH OTHER INPUTS UNCHANGED.
-!          ON RETURN, JSTART IS SET TO 1 TO FACILITATE CONTINUATION.
+!              -1  Take the next step with a new value of H, MAXORD,
+!                    N, meth, miter, and/or matrix parameters.
+!              -2  Take the next step with a new value of H,
+!                    but with other inputs unchanged.
+!          On return, JSTART is set to 1 to facilitate continuation.
 ! KFLAG  = A COMPLETION CODE WITH THE FOLLOWING MEANINGS..
-!               0  THE STEP WAS SUCCESFUL.
-!              -1  THE REQUESTED ERROR COULD NOT BE ACHIEVED.
-!              -2  CORRECTOR CONVERGENCE COULD NOT BE ACHIEVED.
+!               0  The step was succesful.
+!              -1  The requested error could not be achieved.
+!              -2  Corrector convergence could not be achieved.
 !          A RETURN WITH KFLAG = -1 OR -2 MEANS EITHER
 !          ABS(H) = HMIN OR 10 CONSECUTIVE FAILURES OCCURRED.
-!          ON A RETURN WITH KFLAG NEGATIVE, THE VALUES OF TN AND
-!          THE YH ARRAY ARE AS OF THE BEGINNING OF THE LAST
-!          STEP, AND H IS THE LAST STEP SIZE ATTEMPTED.
+!          On a return with KFLAG negative, the values of TN and
+!          the YH array are as of the beginning of the last
+!          step, and H is the last step size attempted.
 ! MAXORD = THE MAXIMUM ORDER OF INTEGRATION METHOD TO BE ALLOWED.
 ! METH/MITER = THE METHOD FLAGS.  SEE DESCRIPTION IN DRIVER.
 ! N      = THE NUMBER OF FIRST-ORDER DIFFERENTIAL EQUATIONS.
@@ -8895,12 +8895,12 @@ if (jstart .gt. 0) go to 200
 if (jstart .eq. -1) go to 100
 if (jstart .eq. -2) go to 160
 !-----------------------------------------------------------------------
-! ON THE FIRST CALL, THE ORDER IS SET TO 1, AND OTHER VARIABLES ARE
-! INITIALIZED.  RMAX IS THE MAXIMUM RATIO BY WHICH H CAN BE INCREASED
-! IN A SINGLE STEP.  IT IS INITIALLY 1.E4 TO COMPENSATE FOR THE SMALL
-! INITIAL H, BUT THEN IS NORMALLY EQUAL TO 10.  IF A FAILURE
-! OCCURS (IN CORRECTOR CONVERGENCE OR ERROR TEST), RMAX IS SET AT 2
-! FOR THE NEXT INCREASE.
+! On the first call, the order is set to 1, and other variables are
+! initialized.  RMAX is the maximum ratio by which H can be increased
+! in a single step.  It is initially 1.E4 to compensate for the small
+! initial H, but then is normally equal to 10.  If a failure
+! occurs (in corrector convergence or error test), RMAX is set at 2
+! for the next increase.
 !-----------------------------------------------------------------------
 lmax = maxord + 1
 nq = 1
@@ -8918,16 +8918,16 @@ iret = 3
 go to 140
 !-----------------------------------------------------------------------
 ! THE FOLLOWING BLOCK HANDLES PRELIMINARIES NEEDED WHEN JSTART = -1.
-! IPUP IS SET TO MITER TO FORCE A MATRIX UPDATE.
+! IPUP is set to miter to force a matrix update.
 ! IF AN ORDER INCREASE IS ABOUT TO BE CONSIDERED (IALTH = 1),
-! IALTH IS RESET TO 2 TO POSTPONE CONSIDERATION ONE MORE STEP.
-! IF THE CALLER HAS CHANGED METH, CFOD  IS CALLED TO RESET
-! THE COEFFICIENTS OF THE METHOD.
-! IF THE CALLER HAS CHANGED MAXORD TO A VALUE LESS THAN THE CURRENT
-! ORDER NQ, NQ IS REDUCED TO MAXORD, AND A NEW H CHOSEN ACCORDINGLY.
-! IF H IS TO BE CHANGED, YH MUST BE RESCALED.
+! IALTH is reset to 2 to postpone consideration one more step.
+! If the caller has changed meth, CFOD  is called to reset
+! the coefficients of the method.
+! If the caller has changed MAXORD to a value less than the current
+! order NQ, NQ is reduced to MAXORD, and a new H chosen accordingly.
+! If H is to be changed, YH must be rescaled.
 ! IF H OR METH IS BEING CHANGED, IALTH IS RESET TO L = NQ + 1
-! TO PREVENT FURTHER CHANGES IN H FOR THAT MANY STEPS.
+! to prevent further changes in H for that many steps.
 !-----------------------------------------------------------------------
 100 ipup = miter
 lmax = maxord + 1
@@ -8958,9 +8958,9 @@ rh = amin1(rh,abs(h/hold))
 h = hold
 go to 175
 !-----------------------------------------------------------------------
-! CFOD  IS CALLED TO GET ALL THE INTEGRATION COEFFICIENTS FOR THE
-! CURRENT METH.  THEN THE EL VECTOR AND RELATED CONSTANTS ARE RESET
-! WHENEVER THE ORDER NQ IS CHANGED, OR AT THE START OF THE PROBLEM.
+! CFOD  is called to get all the integration coefficients for the
+! current meth.  Then the EL vector and related constants are reset
+! whenever the order NQ is changed, or at the start of the problem.
 !-----------------------------------------------------------------------
 140 call cfod  (meth, elco, tesco)
 150 do 155 i = 1,l
@@ -8971,10 +8971,10 @@ el0 = el(1)
 conit = 0.5e0/float(nq+2)
 go to (160, 170, 200), iret
 !-----------------------------------------------------------------------
-! IF H IS BEING CHANGED, THE H RATIO RH IS CHECKED AGAINST
-! RMAX, HMIN, AND HMXI, AND THE YH ARRAY RESCALED.  IALTH IS SET TO
+! If H is being changed, the H ratio RH is checked against
+! RMAX, HMIN, and HMXI, and the YH array rescaled.  IALTH is set to
 ! L = NQ + 1 TO PREVENT A CHANGE OF H FOR THAT MANY STEPS, UNLESS
-! FORCED BY A CONVERGENCE OR ERROR TEST FAILURE.
+! forced by a convergence or error test failure.
 !-----------------------------------------------------------------------
 160 if (h .eq. hold) go to 200
 rh = h/hold
@@ -8994,12 +8994,12 @@ rc = rc*rh
 ialth = l
 if (iredo .eq. 0) go to 680
 !-----------------------------------------------------------------------
-! THIS SECTION COMPUTES THE PREDICTED VALUES BY EFFECTIVELY
-! MULTIPLYING THE YH ARRAY BY THE PASCAL TRIANGLE MATRIX.
-! RC IS THE RATIO OF NEW TO OLD VALUES OF THE COEFFICIENT  H*EL(1).
-! WHEN RC DIFFERS FROM 1 BY MORE THAN 30 PERCENT, IPUP IS SET TO MITER
-! TO FORCE PJAC TO BE CALLED, IF A JACOBIAN IS INVOLVED.
-! IN ANY CASE, PJAC IS CALLED AT LEAST EVERY 20-TH STEP.
+! This section computes the predicted values by effectively
+! multiplying the YH array BY the Pascal triangle matrix.
+! RC is the ratio of new to old values of the coefficient  H*EL(1).
+! When RC differs from 1 by more than 30 percent, IPUP is set to miter
+! to force PJAC to be called, if a Jacobian is involved.
+! In any case, PJAC is called at least every 20-TH step.
 !-----------------------------------------------------------------------
 200 if (abs(rc-1.0e0) .gt. 0.3e0) ipup = miter
 if (nst .ge. nstepj+20) ipup = miter
@@ -9013,10 +9013,10 @@ do jb = 1,nq
   end do
 ksteps = ksteps + 1
 !-----------------------------------------------------------------------
-! UP TO 3 CORRECTOR ITERATIONS ARE TAKEN.  A CONVERGENCE TEST IS
-! MADE ON THE R.M.S. NORM OF EACH CORRECTION, WEIGHTED BY THE ERROR
-! WEIGHT VECTOR EWT.  THE SUM OF THE CORRECTIONS IS ACCUMULATED IN THE
-! VECTOR ACOR(I).  THE YH ARRAY IS NOT ALTERED IN THE CORRECTOR LOOP.
+! Up to 3 corrector iterations are taken.  A convergence test is
+! made on the R.M.S. Norm of each correction, weighted by the error
+! weight vector EWT.  The sum of the corrections is accumulated in the
+! vector ACOR(I).  The YH array is not altered in the corrector loop.
 !-----------------------------------------------------------------------
 220 m = 0
 do 230 i = 1,n
@@ -9026,8 +9026,8 @@ nfe = nfe + 1
 if (ipup .le. 0) go to 250
 !-----------------------------------------------------------------------
 ! IF INDICATED, THE MATRIX P = I - H*EL(1)*J IS REEVALUATED AND
-! PREPROCESSED BEFORE STARTING THE CORRECTOR ITERATION.  IPUP IS SET
-! TO 0 AS AN INDICATOR THAT THIS HAS BEEN DONE.
+! preprocessed before starting the corrector iteration.  IPUP is set
+! to 0 as an indicator that this has been done.
 !-----------------------------------------------------------------------
 ipup = 0
 rc = 1.0e0
@@ -9040,8 +9040,8 @@ if (ier .ne. 0) go to 430
 260 acor(i) = 0.0e0
 270 if (miter .ne. 0) go to 350
 !-----------------------------------------------------------------------
-! IN THE CASE OF FUNCTIONAL ITERATION, UPDATE Y DIRECTLY FROM
-! THE RESULT OF THE LAST FUNCTION EVALUATION.
+! In the case of functional iteration, update Y directly from
+! the result of the last function evaluation.
 !-----------------------------------------------------------------------
 do 290 i = 1,n
   savf(i) = h*savf(i) - yh(i,2)
@@ -9052,9 +9052,9 @@ do 300 i = 1,n
 300 acor(i) = savf(i)
 go to 400
 !-----------------------------------------------------------------------
-! IN THE CASE OF THE CHORD METHOD, COMPUTE THE CORRECTOR ERROR,
-! AND SOLVE THE LINEAR SYSTEM WITH THAT AS RIGHT-HAND SIDE AND
-! P AS COEFFICIENT MATRIX.
+! In the case of the chord method, compute the corrector error,
+! and solve the linear system with that as right-hand side and
+! P as coefficient matrix.
 !-----------------------------------------------------------------------
 350 do 360 i = 1,n
 360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
@@ -9066,7 +9066,7 @@ do 380 i = 1,n
 380 y(i) = yh(i,1) + el(1)*acor(i)
 !-----------------------------------------------------------------------
 ! TEST FOR CONVERGENCE.  IF M.GT.0, AN ESTIMATE OF THE CONVERGENCE
-! RATE CONSTANT IS STORED IN CRATE, AND THIS IS USED IN THE TEST.
+! rate constant is stored in crate, and this is used in the test.
 !-----------------------------------------------------------------------
 400 if (m .ne. 0) crate = amax1(0.2e0*crate,del/delp)
 dcon = del*amin1(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
@@ -9079,10 +9079,10 @@ call f (tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 go to 270
 !-----------------------------------------------------------------------
-! THE CORRECTOR ITERATION FAILED TO CONVERGE IN 3 TRIES.
+! The corrector iteration failed to converge in 3 tries.
 ! IF MITER .NE. 0 AND THE JACOBIAN IS OUT OF DATE, PJAC IS CALLED FOR
-! THE NEXT TRY.  OTHERWISE THE YH ARRAY IS RETRACTED TO ITS VALUES
-! BEFORE PREDICTION, AND H IS REDUCED, IF POSSIBLE.  IF H CANNOT BE
+! the next try.  Otherwise the YH array is retracted to its values
+! before prediction, and H is reduced, if possible.  If H cannot be
 ! REDUCED OR 10 FAILURES HAVE OCCURRED, EXIT WITH KFLAG = -2.
 !-----------------------------------------------------------------------
 410 if (ipup .eq. 0) go to 430
@@ -9106,23 +9106,23 @@ iredo = 1
 go to 170
 !-----------------------------------------------------------------------
 ! THE CORRECTOR HAS CONVERGED.  IPUP IS SET TO -1 IF MITER .NE. 0,
-! TO SIGNAL THAT THE JACOBIAN INVOLVED MAY NEED UPDATING LATER.
-! THE LOCAL ERROR TEST IS MADE AND CONTROL PASSES TO STATEMENT 500
-! IF IT FAILS.
+! to signal that the Jacobian involved may need updating later.
+! The local error test is made and control passes to statement 500
+! if it fails.
 !-----------------------------------------------------------------------
 450 if (miter .ne. 0) ipup = -1
 if (m .eq. 0) dsm = del/tesco(2,nq)
 if (m .gt. 0) dsm = vnwrms (n, acor, ewt)/tesco(2,nq)
 if (dsm .gt. 1.0e0) go to 500
 !-----------------------------------------------------------------------
-! AFTER A SUCCESSFUL STEP, UPDATE THE YH ARRAY.
+! After a successful step, update the YH array.
 ! CONSIDER CHANGING H IF IALTH = 1.  OTHERWISE DECREASE IALTH BY 1.
 ! IF IALTH IS THEN 1 AND NQ .LT. MAXORD, THEN ACOR IS SAVED FOR
-! USE IN A POSSIBLE ORDER INCREASE ON THE NEXT STEP.
-! IF A CHANGE IN H IS CONSIDERED, AN INCREASE OR DECREASE IN ORDER
-! BY ONE IS CONSIDERED ALSO.  A CHANGE IN H IS MADE ONLY IF IT IS BY A
-! FACTOR OF AT LEAST 1.1.  IF NOT, IALTH IS SET TO 3 TO PREVENT
-! TESTING FOR THAT MANY STEPS.
+! use in a possible order increase on the next step.
+! If a change in H is considered, an increase or decrease in order
+! by one is considered also.  A change in H is made only if it is by A
+! factor of at least 1.1.  If not, IALTH is set to 3 to prevent
+! testing for that many steps.
 !-----------------------------------------------------------------------
 kflag = 0
 iredo = 0
@@ -9140,11 +9140,11 @@ do 490 i = 1,n
 490 yh(i,lmax) = acor(i)
 go to 690
 !-----------------------------------------------------------------------
-! THE ERROR TEST FAILED.  KFLAG KEEPS TRACK OF MULTIPLE FAILURES.
-! RESTORE TN AND THE YH ARRAY TO THEIR PREVIOUS VALUES, AND PREPARE
-! TO TRY THE STEP AGAIN.  COMPUTE THE OPTIMUM STEP SIZE FOR THIS OR
-! ONE LOWER ORDER.  AFTER 2 OR MORE FAILURES, H IS FORCED TO DECREASE
-! BY A FACTOR OF 0.2 OR LESS.
+! The error test failed.  KFLAG keeps track of multiple failures.
+! Restore TN and the YH array to their previous values, and prepare
+! to try the step again.  Compute the optimum step size for this or
+! one lower order.  After 2 or more failures, H is forced to decrease
+! by a factor of 0.2 or less.
 !-----------------------------------------------------------------------
 500 kflag = kflag - 1
 tn = told
@@ -9162,13 +9162,13 @@ iredo = 2
 rhup = 0.0e0
 go to 540
 !-----------------------------------------------------------------------
-! REGARDLESS OF THE SUCCESS OR FAILURE OF THE STEP, FACTORS
-! RHDN, RHSM, AND RHUP ARE COMPUTED, BY WHICH H COULD BE MULTIPLIED
-! AT ORDER NQ - 1, ORDER NQ, OR ORDER NQ + 1, RESPECTIVELY.
+! Regardless of the success or failure of the step, factors
+! RHDN, RHSM, and RHUP are computed, by which H could be multiplied
+! at order NQ - 1, order NQ, or order NQ + 1, respectively.
 ! IN THE CASE OF FAILURE, RHUP = 0.0 TO AVOID AN ORDER INCREASE.
-! THE LARGEST OF THESE IS DETERMINED AND THE NEW ORDER CHOSEN
-! ACCORDINGLY.  IF THE ORDER IS TO BE INCREASED, WE COMPUTE ONE
-! ADDITIONAL SCALED DERIVATIVE.
+! The largest of these is determined and the new order chosen
+! accordingly.  If the order is to be increased, we compute one
+! additional scaled derivative.
 !-----------------------------------------------------------------------
 520 rhup = 0.0e0
 if (l .eq. lmax) go to 540
@@ -9207,9 +9207,9 @@ go to 690
 620 if ((kflag .eq. 0) .and. (rh .lt. 1.1e0)) go to 610
 if (kflag .le. -2) rh = amin1(rh,0.2e0)
 !-----------------------------------------------------------------------
-! IF THERE IS A CHANGE OF ORDER, RESET NQ, L, AND THE COEFFICIENTS.
-! IN ANY CASE H IS RESET ACCORDING TO RH AND THE YH ARRAY IS RESCALED.
-! THEN EXIT FROM 680 IF THE STEP WAS OK, OR REDO THE STEP OTHERWISE.
+! If there is a change of order, reset NQ, L, and the coefficients.
+! In any case H is reset according to RH and the YH array is rescaled.
+! Then exit from 680 if the step was OK, or redo the step otherwise.
 !-----------------------------------------------------------------------
 if (newq .eq. nq) go to 170
 630 nq = newq
@@ -9217,13 +9217,13 @@ l = nq + 1
 iret = 2
 go to 150
 !-----------------------------------------------------------------------
-! CONTROL REACHES THIS SECTION IF 3 OR MORE FAILURES HAVE OCCURED.
+! Control reaches this section if 3 or more failures have occured.
 ! IF 10 FAILURES HAVE OCCURRED, EXIT WITH KFLAG = -1.
-! IT IS ASSUMED THAT THE DERIVATIVES THAT HAVE ACCUMULATED IN THE
-! YH ARRAY HAVE ERRORS OF THE WRONG ORDER.  HENCE THE FIRST
-! DERIVATIVE IS RECOMPUTED, AND THE ORDER IS SET TO 1.  THEN
-! H IS REDUCED BY A FACTOR OF 10, AND THE STEP IS RETRIED,
-! UNTIL IT SUCCEEDS OR H REACHES HMIN.
+! It is assumed that the derivatives that have accumulated in the
+! YH array have errors of the wrong order.  Hence the first
+! derivative is recomputed, and the order is set to 1.  Then
+! H is reduced by a factor of 10, and the step is retried,
+! until it succeeds or H reaches HMIN.
 !-----------------------------------------------------------------------
 640 if (kflag .eq. -10) go to 660
 rh = 0.1e0
@@ -9243,8 +9243,8 @@ l = 2
 iret = 3
 go to 150
 !-----------------------------------------------------------------------
-! ALL RETURNS ARE MADE THROUGH THIS SECTION.  H IS SAVED IN HOLD
-! TO ALLOW THE CALLER TO CHANGE H ON THE NEXT STEP.
+! All returns are made through this section.  H is saved in hold
+! to allow the caller to change H on the next step.
 !-----------------------------------------------------------------------
 660 kflag = -1
 go to 700
@@ -9257,13 +9257,13 @@ do 695 i = 1,n
 700 hold = h
 jstart = 1
 return
-!----------------------- END OF SUBROUTINE STOD  -----------------------
+!----------------------- End of subroutine STOD  -----------------------
 end subroutine stod
 
 subroutine cfod  (meth, elco, tesco)
 implicit none
 !
-!   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
+!   CFOD defines coefficients needed in the integrator package SFODE
 !
 integer, intent(in) :: meth
 integer :: i, ib, nq, nqm1, nqp1
@@ -9271,28 +9271,28 @@ real, intent(inout) :: elco(13, *), tesco(3, *)
 real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
 &tsign, xpin
 !-----------------------------------------------------------------------
-! CFOD  IS CALLED BY THE INTEGRATOR ROUTINE TO SET COEFFICIENTS
-! NEEDED THERE.  THE COEFFICIENTS FOR THE CURRENT METHOD, AS
-! GIVEN BY THE VALUE OF METH, ARE SET FOR ALL ORDERS AND SAVED.
+! CFOD  is called by the integrator routine to set coefficients
+! needed there.  The coefficients for the current method, as
+! given by the value of meth, are set for all orders and saved.
 ! THE MAXIMUM ORDER ASSUMED HERE IS 12 IF METH = 1 AND 5 IF METH = 2.
-! (A SMALLER VALUE OF THE MAXIMUM ORDER IS ALSO ALLOWED.)
-! CFOD  IS CALLED ONCE AT THE BEGINNING OF THE PROBLEM,
-! AND IS NOT CALLED AGAIN UNLESS AND UNTIL METH IS CHANGED.
+! (A smaller value of the maximum order is also allowed.)
+! CFOD  is called once at the beginning of the problem,
+! and is not called again unless and until meth is changed.
 !
-! THE ELCO ARRAY CONTAINS THE BASIC METHOD COEFFICIENTS.
+! The ELCO array contains the BASIC method coefficients.
 ! THE COEFFICIENTS EL(I), 1 .LE. I .LE. NQ+1, FOR THE METHOD OF
-! ORDER NQ ARE STORED IN ELCO(I,NQ).  THEY ARE GIVEN BY A GENETRATING
+! order NQ are stored in ELCO(I,NQ).  They are given by a genetrating
 ! POLYNOMIAL, I.E.,
 !     L(X) = EL(1) + EL(2)*X + ... + EL(NQ+1)*X**NQ.
-! FOR THE IMPLICIT ADAMS METHODS, L(X) IS GIVEN BY
+! For the implicit Adams methods, L(X) is given by
 !     DL/DX = (X+1)*(X+2)*...*(X+NQ-1)/FACTORIAL(NQ-1),    L(-1) = 0.
-! FOR THE BDF METHODS, L(X) IS GIVEN BY
+! For the BDF methods, L(X) is given by
 !     L(X) = (X+1)*(X+2)* ... *(X+NQ)/K,
 ! WHERE         K = FACTORIAL(NQ)*(1 + 1/2 + ... + 1/NQ).
 !
-! THE TESCO ARRAY CONTAINS TEST CONSTANTS USED FOR THE
-! LOCAL ERROR TEST AND THE SELECTION OF STEP SIZE AND/OR ORDER.
-! AT ORDER NQ, TESCO(K,NQ) IS USED FOR THE SELECTION OF STEP
+! The tesco array contains test constants used for the
+! local error test and the selection of step size and/or order.
+! At order NQ, TESCO(K,NQ) is used for the selection of step
 ! SIZE AT ORDER NQ - 1 IF K = 1, AT ORDER NQ IF K = 2, AND AT ORDER
 ! NQ + 1 IF K = 3.
 !-----------------------------------------------------------------------
@@ -9309,7 +9309,7 @@ pc(1) = 1.0e0
 rqfac = 1.0e0
 do nq = 2,12
 !-----------------------------------------------------------------------
-! THE PC ARRAY WILL CONTAIN THE COEFFICIENTS OF THE POLYNOMIAL
+! The PC array will contain the coefficients of the polynomial
 !     P(X) = (X+1)*(X+2)*...*(X+NQ-1).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
@@ -9318,13 +9318,13 @@ do nq = 2,12
   nqm1 = nq - 1
   fnqm1 = float(nqm1)
   nqp1 = nq + 1
-! FORM COEFFICIENTS OF P(X)*(X+NQ-1). ----------------------------------
+! Form coefficients of P(X)*(X+NQ-1). ----------------------------------
   pc(nq) = 0.0e0
   do 110 ib = 1,nqm1
     i = nqp1 - ib
 110 pc(i) = pc(i-1) + fnqm1*pc(i)
   pc(1) = fnqm1*pc(1)
-! COMPUTE INTEGRAL, -1 TO 0, OF P(X) AND X*P(X). -----------------------
+! Compute integral, -1 to 0, of P(X) and X*P(X). -----------------------
   pint = pc(1)
   xpin = pc(1)/2.0e0
   tsign = 1.0e0
@@ -9332,7 +9332,7 @@ do nq = 2,12
     tsign = -tsign
     pint = pint + tsign*pc(i)/float(i)
 120 xpin = xpin + tsign*pc(i)/float(i+1)
-! STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
+! Store coefficients in ELCO and tesco. --------------------------------
   elco(1,nq) = pint*rq1fac
   elco(2,nq) = 1.0e0
   do 130 i = 2,nq
@@ -9349,19 +9349,19 @@ return
 rq1fac = 1.0e0
 do nq = 1,5
 !-----------------------------------------------------------------------
-! THE PC ARRAY WILL CONTAIN THE COEFFICIENTS OF THE POLYNOMIAL
+! The PC array will contain the coefficients of the polynomial
 !     P(X) = (X+1)*(X+2)*...*(X+NQ).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
   fnq = float(nq)
   nqp1 = nq + 1
-! FORM COEFFICIENTS OF P(X)*(X+NQ). ------------------------------------
+! Form coefficients of P(X)*(X+NQ). ------------------------------------
   pc(nqp1) = 0.0e0
   do 210 ib = 1,nq
     i = nq + 2 - ib
 210 pc(i) = pc(i-1) + fnq*pc(i)
   pc(1) = fnq*pc(1)
-! STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
+! Store coefficients in ELCO and tesco. --------------------------------
   do 220 i = 1,nqp1
 220 elco(i,nq) = pc(i)/pc(2)
   elco(2,nq) = 1.0e0
@@ -9371,7 +9371,7 @@ do nq = 1,5
   rq1fac = rq1fac/fnq
   end do
 return
-!----------------------- END OF SUBROUTINE CFOD  -----------------------
+!----------------------- End of subroutine CFOD  -----------------------
 end subroutine cfod
 
 subroutine pjac (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
@@ -9380,8 +9380,8 @@ implicit none
 integer :: ipar(*)
 real :: rpar(*)
 !
-!   PJAC SETS UP THE ITERATION MATRIX (INVOLVING THE JACOBIAN) FOR THE
-!   INTEGRATION PACKAGE SFODE.
+!   PJAC sets up the iteration matrix (involving the Jacobian) for the
+!   integration package SFODE.
 !
 !***ROUTINES CALLED  VNWRMS,SGEFA,SGBFA
 !
@@ -9397,36 +9397,36 @@ common /debdf1/ rownd, rowns(210), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
 &nje, nqu
 !-----------------------------------------------------------------------
-! PJAC IS CALLED BY STOD  TO COMPUTE AND PROCESS THE MATRIX
+! PJAC is called by STOD  to compute and process the matrix
 ! P = I - H*EL(1)*J , WHERE J IS AN APPROXIMATION TO THE JACOBIAN.
-! HERE J IS COMPUTED BY THE USER-SUPPLIED ROUTINE JAC IF
+! Here J is computed by the user-supplied routine JAC if
 ! MITER = 1 OR 4, OR BY FINITE DIFFERENCING IF MITER = 2, 3, OR 5.
 ! IF MITER = 3, A DIAGONAL APPROXIMATION TO J IS USED.
 ! J IS STORED IN WM AND REPLACED BY P.  IF MITER .NE. 3, P IS THEN
-! SUBJECTED TO LU DECOMPOSITION IN PREPARATION FOR LATER SOLUTION
-! OF LINEAR SYSTEMS WITH P AS COEFFICIENT MATRIX. THIS IS DONE
+! subjected to LU decomposition in preparation for later solution
+! of linear systems with P as coefficient matrix. This is done
 ! BY SGEFA IF MITER = 1 OR 2, AND BY SGBFA IF MITER = 4 OR 5.
 !
-! IN ADDITION TO VARIABLES DESCRIBED PREVIOUSLY, COMMUNICATION
-! WITH PJAC USES THE FOLLOWING..
+! In addition to variables described previously, communication
+! with PJAC uses the following..
 ! Y    = ARRAY CONTAINING PREDICTED VALUES ON ENTRY.
 ! FTEM = WORK ARRAY OF LENGTH N (ACOR IN STOD ).
 ! SAVF = ARRAY CONTAINING F EVALUATED AT PREDICTED Y.
 ! WM   = REAL WORK SPACE FOR MATRICES.  ON OUTPUT IT CONTAINS THE
 !        INVERSE DIAGONAL MATRIX IF MITER = 3 AND THE LU DECOMPOSITION
-!        OF P IF MITER IS 1, 2 , 4, OR 5.
-!        STORAGE OF MATRIX ELEMENTS STARTS AT WM(3).
-!        WM ALSO CONTAINS THE FOLLOWING MATRIX-RELATED DATA..
+!        of P if miter is 1, 2 , 4, or 5.
+!        Storage of matrix elements starts at WM(3).
+!        WM also contains the following matrix-related data..
 !        WM(1) = SQRT(UROUND), USED IN NUMERICAL JACOBIAN INCREMENTS.
 !        WM(2) = H*EL0, SAVED FOR LATER USE IF MITER = 3.
 ! IWM  = INTEGER WORK SPACE CONTAINING PIVOT INFORMATION, STARTING AT
-!        IWM(21), IF MITER IS 1, 2, 4, OR 5.  IWM ALSO CONTAINS THE
+!        IWM(21), if miter is 1, 2, 4, or 5.  IWM also contains the
 !        BAND PARAMETERS ML = IWM(1) AND MU = IWM(2) IF MITER IS 4 OR 5.
 ! EL0  = EL(1) (INPUT).
 ! IER  = OUTPUT ERROR FLAG,  = 0 IF NO TROUBLE, .NE. 0 IF
-!        P MATRIX FOUND TO BE SINGULAR.
-! THIS ROUTINE ALSO USES THE COMMON VARIABLES EL0, H, TN, UROUND,
-! MITER, N, NFE, AND NJE.
+!        P matrix FOUND to be singular.
+! This routine also uses the common variables EL0, H, TN, UROUND,
+! miter, N, NFE, and NJE.
 !-----------------------------------------------------------------------
 nje = nje + 1
 hl0 = h*el0
@@ -9458,12 +9458,12 @@ do j = 1,n
   j1 = j1 + n
   end do
 nfe = nfe + n
-! ADD IDENTITY MATRIX. -------------------------------------------------
+! Add identity matrix. -------------------------------------------------
 240 j = 3
 do 250 i = 1,n
   wm(j) = wm(j) + 1.0e0
 250 j = j + (n + 1)
-! DO LU DECOMPOSITION ON P. --------------------------------------------
+! Do LU decomposition on P. --------------------------------------------
 call sgefa (wm(3), n, n, iwm(21), ier)
 return
 ! IF MITER = 3, CONSTRUCT A DIAGONAL APPROXIMATION TO J AND P. ---------
@@ -9529,22 +9529,22 @@ do j = 1,mba
     end do
   end do
 nfe = nfe + mba
-! ADD IDENTITY MATRIX. -------------------------------------------------
+! Add identity matrix. -------------------------------------------------
 570 ii = mband + 2
 do 580 i = 1,n
   wm(ii) = wm(ii) + 1.0e0
 580 ii = ii + meband
-! DO LU DECOMPOSITION OF P. --------------------------------------------
+! Do LU decomposition of P. --------------------------------------------
 call sgbfa (wm(3), meband, n, ml, mu, iwm(21), ier)
 return
-!----------------------- END OF SUBROUTINE PJAC -----------------------
+!----------------------- End of subroutine PJAC -----------------------
 end subroutine pjac
 
 subroutine slvs (wm, iwm, x, tem)
 implicit none
 !
-!   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
-!   INTEGRATOR PACKAGE SFODE.
+!   SLVS solves the linear system in the iteration scheme for the
+!   integrator package SFODE.
 !
 !***ROUTINES CALLED  SGESL,SGBSL
 !
@@ -9605,7 +9605,7 @@ mu = iwm(2)
 meband = 2*ml + mu + 1
 call sgbsl (wm(3), meband, n, ml, mu, iwm(21), x, 0)
 return
-!----------------------- END OF SUBROUTINE SLVS -----------------------
+!----------------------- End of subroutine SLVS -----------------------
 end subroutine slvs
 
 subroutine sgbfa(abd,lda,n,ml,mu,ipvt,info)
@@ -9615,58 +9615,58 @@ integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
 !
-!     SGBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
+!     SGBFA factors a real band matrix BY elimination.
 !
-!     SGBFA IS USUALLY CALLED BY SGBCO, BUT IT CAN BE CALLED
-!     DIRECTLY WITH A SAVING IN TIME IF  RCOND  IS NOT NEEDED.
+!     SGBFA is usually called by SGBCO, but it can be called
+!     directly with a saving in time if  RCOND  is not needed.
 !
-!     ON ENTRY
+!     On entry
 !
 !        ABD     REAL(LDA, N)
-!                CONTAINS THE MATRIX IN BAND STORAGE.  THE COLUMNS
-!                OF THE MATRIX ARE STORED IN THE COLUMNS OF  ABD  AND
-!                THE DIAGONALS OF THE MATRIX ARE STORED IN ROWS
-!                ML+1 THROUGH 2*ML+MU+1 OF  ABD .
-!                SEE THE COMMENTS BELOW FOR DETAILS.
+!                contains the matrix in band storage.  The columns
+!                of the matrix are stored in the columns of  abd  and
+!                the diagonals of the matrix are stored in rows
+!                ML+1 through 2*ML+mu+1 of  abd .
+!                See the comments below for details.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  ABD .
+!                the leading dimension of the array  ABD .
 !                LDA MUST BE .GE. 2*ML + MU + 1 .
 !
 !        N       INTEGER
-!                THE ORDER OF THE ORIGINAL MATRIX.
+!                the order of the original matrix.
 !
 !        ML      INTEGER
-!                NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
+!                number of diagonals below the main diagonal.
 !                0 .LE. ML .LT. N .
 !
 !        MU      INTEGER
-!                NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
+!                number of diagonals above the main diagonal.
 !                0 .LE. MU .LT. N .
 !                MORE EFFICIENT IF  ML .LE. MU .
-!     ON RETURN
+!     On return
 !
 !        ABD     AN UPPER TRIANGULAR MATRIX IN BAND STORAGE AND
-!                THE MULTIPLIERS WHICH WERE USED TO OBTAIN IT.
+!                the multipliers which were used to obtain it.
 !                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L  IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND  U  IS UPPER TRIANGULAR.
+!                L  is a product of permutation and unit lower
+!                triangular matrices and  U  is upper triangular.
 !
 !        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
 !                = K  IF  U(K,K) .EQ. 0.0 .  THIS IS NOT AN ERROR
-!                     CONDITION FOR THIS SUBROUTINE, BUT IT DOES
-!                     INDICATE THAT SGBSL WILL DIVIDE BY ZERO IF
-!                     CALLED.  USE  RCOND  IN SGBCO FOR A RELIABLE
-!                     INDICATION OF SINGULARITY.
+!                     condition for this subroutine, but it does
+!                     indicate that SGBSL will divide by zero if
+!                     called.  Use  RCOND  in SGBCO for a reliable
+!                     indication of singularity.
 !
-!     BAND STORAGE
+!     Band storage
 !
-!           IF  A  IS A BAND MATRIX, THE FOLLOWING PROGRAM SEGMENT
-!           WILL SET UP THE INPUT.
+!           If  A  is a band matrix, the following program segment
+!           will set up the input.
 !
 !                   ML = (BAND WIDTH BELOW THE DIAGONAL)
 !                   MU = (BAND WIDTH ABOVE THE DIAGONAL)
@@ -9678,19 +9678,19 @@ real, intent(inout) :: abd(lda,*)
 !                         K = I - J + M
 !                         ABD(K,J) = A(I,J)
 !                10    CONTINUE
-!                20 CONTINUE
+!                20 continue
 !
-!           THIS USES ROWS  ML+1  THROUGH  2*ML+MU+1  OF  ABD .
-!           IN ADDITION, THE FIRST  ML  ROWS IN  ABD  ARE USED FOR
-!           ELEMENTS GENERATED DURING THE TRIANGULARIZATION.
-!           THE TOTAL NUMBER OF ROWS NEEDED IN  ABD  IS  2*ML+MU+1 .
-!           THE  ML+MU BY ML+MU  UPPER LEFT TRIANGLE AND THE
-!           ML BY ML  LOWER RIGHT TRIANGLE ARE NOT REFERENCED.
+!           This uses rows  ML+1  through  2*ML+mu+1  of  abd .
+!           In addition, the first  ML  rows in  abd  are used for
+!           elements generated during the triangularization.
+!           The total number of rows needed in  abd  is  2*ML+mu+1 .
+!           The  ML+mu by ML+mu  upper left triangle and the
+!           ML by ML  lower right triangle are not referenced.
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SSCAL,ISAMAX
 !     FORTRAN MAX0,MIN0
@@ -9702,7 +9702,7 @@ integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
 m = ml + mu + 1
 info = 0
 !
-!     ZERO INITIAL FILL-IN COLUMNS
+!     Zero initial fill-in columns
 !
 j0 = mu + 2
 j1 = min0(n,m) - 1
@@ -9717,14 +9717,14 @@ end do
 jz = j1
 ju = 0
 !
-!     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
+!     Gaussian elimination with partial pivoting
 !
 nm1 = n - 1
 if (nm1 .lt. 1) go to 130
 do k = 1, nm1
    kp1 = k + 1
 !
-!        ZERO NEXT FILL-IN COLUMN
+!        Zero next fill-in column
 !
    jz = jz + 1
    if (jz .gt. n) go to 50
@@ -9740,11 +9740,11 @@ do k = 1, nm1
    l = isamax(lm+1,abd(m,k),1) + m - 1
    ipvt(k) = l + k - m
 !
-!        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
+!        Zero pivot implies this column already triangularized
 !
    if (abd(l,k) .eq. 0.0e0) go to 100
 !
-!           INTERCHANGE IF NECESSARY
+!           Interchange if necessary
 !
       if (l .eq. m) go to 60
          t = abd(l,k)
@@ -9752,12 +9752,12 @@ do k = 1, nm1
          abd(m,k) = t
 60 continue
 !
-!           COMPUTE MULTIPLIERS
+!           Compute multipliers
 !
       t = -1.0e0/abd(m,k)
       call sscal(lm,t,abd(m+1,k),1)
 !
-!           ROW ELIMINATION WITH COLUMN INDEXING
+!           Row elimination with column indexing
 !
       ju = min0(max0(ju,mu+ipvt(k)),n)
       mm = m
@@ -9790,63 +9790,63 @@ integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
 real, intent(in) :: abd(lda,*)
 real, intent(inout) :: b(*)
 !
-!     SGBSL SOLVES THE REAL BAND SYSTEM
+!     SGBSL solves the real band system
 !     A * X = B  OR  TRANS(A) * X = B
-!     USING THE FACTORS COMPUTED BY SGBCO OR SGBFA.
+!     using the factors computed by SGBCO or SGBFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        ABD     REAL(LDA, N)
-!                THE OUTPUT FROM SGBCO OR SGBFA.
+!                the output from SGBCO or SGBFA.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  ABD .
+!                the leading dimension of the array  ABD .
 !
 !        N       INTEGER
-!                THE ORDER OF THE ORIGINAL MATRIX.
+!                the order of the original matrix.
 !
 !        ML      INTEGER
-!                NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
+!                number of diagonals below the main diagonal.
 !
 !        MU      INTEGER
-!                NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
+!                number of diagonals above the main diagonal.
 !
 !        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM SGBCO OR SGBFA.
+!                the pivot vector from SGBCO or SGBFA.
 !
 !        B       REAL(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
 !        JOB     INTEGER
 !                = 0         TO SOLVE  A*X = B ,
 !                = NONZERO   TO SOLVE  TRANS(A)*X = B , WHERE
-!                            TRANS(A)  IS THE TRANSPOSE.
+!                            TRANS(A)  is the transpose.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS A
-!        ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES SINGULARITY
-!        BUT IT IS OFTEN CAUSED BY IMPROPER ARGUMENTS OR IMPROPER
-!        SETTING OF LDA .  IT WILL NOT OCCUR IF THE SUBROUTINES ARE
+!        A division by zero will occur if the input factor contains A
+!        zero on the diagonal.  Technically this indicates singularity
+!        but it is often caused by improper arguments or improper
+!        setting of LDA .  It will not occur if the subroutines are
 !        CALLED CORRECTLY AND IF SGBCO HAS SET RCOND .GT. 0.0
 !        OR SGBFA HAS SET INFO .EQ. 0 .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL SGBCO(ABD,LDA,N,ML,MU,IPVT,RCOND,Z)
 !           IF (RCOND IS TOO SMALL) GO TO ...
 !           DO 10 J = 1, P
 !              CALL SGBSL(ABD,LDA,N,ML,MU,IPVT,C(1,J),0)
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SDOT
 !     FORTRAN MIN0
@@ -9927,7 +9927,7 @@ real :: v(ncomp)
 integer :: k
 real :: vnorm
 !
-!     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
+!     Compute the maximum norm of the vector V(*) of length NCOMP and
 !     RETURN THE RESULT AS VNORM
 !
 !
@@ -9940,9 +9940,9 @@ end function vnorm
 real function vnwrms (n, v, w)
 implicit none
 !-----------------------------------------------------------------------
-! THIS FUNCTION ROUTINE COMPUTES THE WEIGHTED ROOT-MEAN-SQUARE NORM
-! OF THE VECTOR OF LENGTH N CONTAINED IN THE ARRAY V, WITH WEIGHTS
-! CONTAINED IN THE ARRAY W OF LENGTH N..
+! This function routine computes the weighted root-mean-square norm
+! of the vector of length N contained in the array V, with weights
+! contained in the array W of length N..
 !   VNWRMS = SQRT( (1/N) * SUM( V(I)/W(I) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
@@ -9954,7 +9954,7 @@ do 10 i = 1,n
 10 sum = sum + (v(i)/w(i))**2
 vnwrms = sqrt(sum/float(n))
 return
-!----------------------- END OF FUNCTION VNWRMS ------------------------
+!----------------------- End of function VNWRMS ------------------------
 end function vnwrms
 
 subroutine rk(n,t,h,a,f)
@@ -10103,8 +10103,8 @@ real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin
 real :: g
 real :: bval
 ! ----------------------------------------------------------------------
-!     SOLUTION OF SEPARABLE ELLIPTIC PARTIAL DIFFERENTIAL EQUATIONS
-!                     ON RECTANGULAR DOMAINS
+!     Solution of separable elliptic partial differential equations
+!                     on rectangular domains
 ! ----------------------------------------------------------------------
 real, intent(inout) :: u(ku,np1), w(nw)
 real :: dum(1)
@@ -10124,8 +10124,8 @@ n = np1 - 1
 hx = (b - a)/float(m)
 hy = (d - c)/float(n)
 !
-!     DEFINE THE MAXIMUM AND MINIMUM ROW AND COLUMN
-!     THAT IS NEEDED FOR THE RIGHT-HAND SIDE MATRIX
+!     Define the maximum and minimum row and column
+!     that is needed for the right-hand side matrix
 !
 xmin = a
 ymin = c
@@ -10175,7 +10175,7 @@ xi = xmin
 yj = yj + hy
 51 jcol = jcol + mp1
 !
-!     STORE THE BOUNDARY VALUES OF U
+!     Store the boundary values of U
 !
 60 if (edge(1) .ne. 0) go to 70
 xi = a
@@ -10201,7 +10201,7 @@ do 91 j = 1,np1
    u(mp1,j) = bval(4,b,yj)
 91 yj = yj + hy
 !
-!     STORE THE MIXED BOUNDARY CONDITIONS
+!     Store the mixed boundary conditions
 !
 100 ic = mn + 1
 if (edge(1) .ne. 1) go to 120
@@ -10278,7 +10278,7 @@ ierr = -1
 w(1) = p
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 300 ierr = 1
 return
@@ -10314,7 +10314,7 @@ if (iabs(edge(3)) .gt. 1) go to 200
 if (iabs(edge(4)) .gt. 1) go to 200
 ierr = 0
 !
-!               PROCESS EDGES 1 AND 3
+!               Process edges 1 and 3
 !
 if (edge(1)) 10,20,30
 !
@@ -10329,7 +10329,7 @@ go to 100
 30 if (edge(3) .eq. -1) go to 210
 indy = 4 - edge(3)
 !
-!               PROCESS EDGES 2 AND 4
+!               Process edges 2 and 4
 !
 100 if (edge(2)) 110,120,130
 !
@@ -10345,7 +10345,7 @@ return
 indx = 4 - edge(4)
 return
 !
-!                   ERROR RETURN
+!                   Error return
 !
 200 ierr = 2
 return
@@ -10371,15 +10371,15 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !
 ! DIMENSION OF           BDA(N+1), BDB(N+1), BDC(M+1), BDD(M+1),
 ! ARGUMENTS              USOL(IDMN,N+1), GRHS(MN,N+1),
-!                        W (SEE ARGUMENT LIST)
+!                        W (see argument list)
 !
 ! LATEST REVISION        JANUARY 1978 (BY THE AUTHORS)
 !                        MODIFIED 1986 BY A.H. MORRIS (NSWC)
 !
 ! PURPOSE                SEPELL SOLVES FOR EITHER THE SECOND-ORDER
-!                        FINITE DIFFERENCE APPROXIMATION OR A
-!                        FOURTH-ORDER APPROXIMATION TO A SEPARABLE
-!                        ELLIPTIC EQUATION
+!                        finite difference approximation or A
+!                        fourth-order approximation to a separable
+!                        elliptic equation
 !
 !                                    2    2
 !                             AF(X)*D U/DX + BF(X)*DU/DX  + CF(X)*U +
@@ -10388,205 +10388,205 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !
 !                             = G(X,Y)
 !
-!                        ON A RECTANGLE (X GREATER THAN OR EQUAL TO A
-!                        AND LESS THAN OR EQUAL TO B, Y GREATER THAN
-!                        OR EQUAL TO C AND LESS THAN OR EQUAL TO D).
-!                        ANY COMBINATION OF PERIODIC OR MIXED BOUNDARY
-!                        CONDITIONS IS ALLOWED.
+!                        On a rectangle (X greater than or equal to A
+!                        and less than or equal to B, Y greater than
+!                        or equal to C and less than or equal to D).
+!                        Any combination of periodic or mixed boundary
+!                        conditions is allowed.
 !
 ! PURPOSE                THE POSSIBLE BOUNDARY CONDITIONS ARE ...
-!                        IN THE X-DIRECTION..
+!                        In the X-direction..
 !                         (0) PERIODIC, U(X+B-A,Y)=U(X,Y) FOR ALL Y,X
-!                         (1) U(A,Y), U(B,Y) ARE SPECIFIED FOR ALL Y
-!                         (2) U(A,Y), DU(B,Y)/DX+BETA*U(B,Y) ARE
-!                             SPECIFIED FOR ALL Y
+!                         (1) U(A,Y), U(B,Y) are specified for all Y
+!                         (2) U(A,Y), DU(B,Y)/DX+beta*U(B,Y) are
+!                             specified for all Y
 !                         (3) DU(A,Y)/DX+ALPHA*U(A,Y),DU(B,Y)/DX+
-!                             BETA*U(B,Y) ARE SPECIFIED FOR ALL Y
-!                         (4) DU(A,Y)/DX+ALPHA*U(A,Y),U(B,Y) ARE
-!                             SPECIFIED FOR ALL Y
+!                             beta*U(B,Y) are specified for all Y
+!                         (4) DU(A,Y)/DX+alpha*U(A,Y),U(B,Y) are
+!                             specified for all Y
 !
-!                        IN THE Y-DIRECTION..
+!                        In the Y-direction..
 !                         (0) PERIODIC, U(X,Y+D-C)=U(X,Y) FOR ALL X,Y
-!                         (1) U(X,C),U(X,D) ARE SPECIFIED FOR ALL X
-!                         (2) U(X,C),DU(X,D)/DY+XNU*U(X,D) ARE SPECIFIED
-!                             FOR ALL X
+!                         (1) U(X,C),U(X,D) are specified for all X
+!                         (2) U(X,C),DU(X,D)/DY+XNU*U(X,D) are specified
+!                             for all X
 !                         (3) DU(X,C)/DY+GAMA*U(X,C),DU(X,D)/DY+
-!                             XNU*U(X,D) ARE SPECIFIED FOR ALL X
-!                         (4) DU(X,C)/DY+GAMA*U(X,C),U(X,D) ARE
-!                             SPECIFIED FOR ALL X
+!                             XNU*U(X,D) are specified for all X
+!                         (4) DU(X,C)/DY+gama*U(X,C),U(X,D) are
+!                             specified for all X
 !
-! ARGUMENTS
+! Arguments
 !
 ! ON INPUT               INTL
 !                          = 0 ON INITIAL ENTRY TO SEPELL OR IF ANY OF
-!                              THE ARGUMENTS C, D, N, NBDCND, COFY ARE
-!                              CHANGED FROM A PREVIOUS CALL
+!                              the arguments C, D, N, NBDCND, COFY are
+!                              changed from a previous call
 !                          = 1 IF C, D, N, NBDCND, COFY ARE UNCHANGED
-!                              FROM THE PREVIOUS CALL.
+!                              from the previous call.
 !
 !                        IORDER
 !                          = 2 IF A SECOND-ORDER APPROXIMATION IS SOUGHT
 !                          = 4 IF A FOURTH-ORDER APPROXIMATION IS SOUGHT
 !
 !                        A,B
-!                          THE RANGE OF THE X-INDEPENDENT VARIABLE,
-!                          I.E., X IS GREATER THAN OR EQUAL TO A AND
-!                          LESS THAN OR EQUAL TO B. A MUST BE LESS THAN
+!                          the range of the X-independent variable,
+!                          I.E., X is greater than or equal to A and
+!                          less than or equal to B. A must be less than
 !                          B.
 !
 !                        M
-!                          THE NUMBER OF PANELS INTO WHICH THE INTERVAL
-!                          (A,B) IS SUBDIVIDED.  HENCE, THERE WILL BE
-!                          M+1 GRID POINTS IN THE X-DIRECTION GIVEN BY
+!                          the number of panels into which the interval
+!                          (A,B) is subdivided.  Hence, there will be
+!                          M+1 grid points in the X-direction given by
 !                          XI=A+(I-1)*DLX FOR I=1,2,...,M+1 WHERE
 !                          DLX=(B-A)/M IS THE PANEL WIDTH.  M MUST BE
-!                          LESS THAN IDMN AND GREATER THAN 5.
+!                          less than IDMN and greater than 5.
 !
 !                        MBDCND
-!                          INDICATES THE TYPE OF BOUNDARY CONDITION AT
+!                          indicates the type of boundary condition at
 !                          X=A AND X=B
 !                          = 0 IF THE SOLUTION IS PERIODIC IN X, I.E.,
 !                              U(X+B-A,Y)=U(X,Y) FOR ALL Y,X
 !                          = 1 IF THE SOLUTION IS SPECIFIED AT X=A AND
 !                              X=B, I.E., U(A,Y) AND U(B,Y) ARE
-!                              SPECIFIED FOR ALL Y
+!                              specified for all Y
 !                          = 2 IF THE SOLUTION IS SPECIFIED AT X=A AND
 !                              THE BOUNDARY CONDITION IS MIXED AT X=B,
-!                              I.E., U(A,Y) AND DU(B,Y)/DX+BETA*U(B,Y)
-!                              ARE SPECIFIED FOR ALL Y
+!                              I.E., U(A,Y) and DU(B,Y)/DX+beta*U(B,Y)
+!                              are specified for all Y
 !                          = 3 IF THE BOUNDARY CONDITIONS AT X=A AND X=B
-!                              ARE MIXED, I.E., DU(A,Y)/DX+ALPHA*U(A,Y)
-!                              AND DU(B,Y)/DX+BETA*U(B,Y) ARE SPECIFIED
-!                              FOR ALL Y
+!                              are mixed, I.E., DU(A,Y)/DX+alpha*U(A,Y)
+!                              and DU(B,Y)/DX+beta*U(B,Y) are specified
+!                              for all Y
 !                          = 4 IF THE BOUNDARY CONDITION AT X=A IS MIXED
 !                              AND THE SOLUTION IS SPECIFIED AT X=B,
-!                              I.E., DU(A,Y)/DX+ALPHA*U(A,Y) AND U(B,Y)
-!                              ARE SPECIFIED FOR ALL Y
+!                              I.E., DU(A,Y)/DX+alpha*U(A,Y) and U(B,Y)
+!                              are specified for all Y
 !
 !                        BDA
-!                          A ONE-DIMENSIONAL ARRAY OF LENGTH N+1 THAT
-!                          SPECIFIES THE VALUES OF DU(A,Y)/DX+
+!                          a one-dimensional array of length N+1 that
+!                          specifies the values of DU(A,Y)/DX+
 !                          ALPHA*U(A,Y) AT X=A. WHEN MBDCND=3 OR 4
 !                               BDA(J) = DU(A,YJ)/DX+ALPHA*U(A,YJ),
 !                               J=1,2,...,N+1.
-!                          WHEN MBDCND HAS ANY OTHER VALUE, BDA IS A
-!                          DUMMY PARAMETER.
+!                          When MBDCND has any other value, BDA is A
+!                          dummy parameter.
 !
 ! ON INPUT               ALPHA
-!                          THE SCALAR MULTIPLYING THE SOLUTION IN CASE
+!                          the scalar multiplying the solution in case
 !                          OF A MIXED BOUNDARY CONDITION AT X=A (SEE
 !                          ARGUMENT BDA). IF MBDCND.NE.3,4 THEN ALPHA
-!                          IS A DUMMY PARAMETER.
+!                          is a dummy parameter.
 !
 !                        BDB
-!                          A ONE-DIMENSIONAL ARRAY OF LENGTH N+1 THAT
-!                          SPECIFIES THE VALUES OF DU(B,Y)/DX+
+!                          a one-dimensional array of length N+1 that
+!                          specifies the values of DU(B,Y)/DX+
 !                          BETA*U(B,Y) AT X=B.  WHEN MBDCND=2 OR 3
 !                               BDB(J) = DU(B,YJ)/DX+BETA*U(B,YJ),
 !                               J=1,2,...,N+1.
-!                          WHEN MBDCND HAS ANY OTHER VALUE, BDB IS A
-!                          DUMMY PARAMETER.
+!                          When MBDCND has any other value, BDB is A
+!                          dummy parameter.
 !
-!                        BETA
-!                          THE SCALAR MULTIPLYING THE SOLUTION IN CASE
+!                        Beta
+!                          the scalar multiplying the solution in case
 !                          OF A MIXED BOUNDARY CONDITION AT X=B (SEE
 !                          ARGUMENT BDB). IF MBDCND.NE.2,3 THEN BETA IS
-!                          A DUMMY PARAMETER.
+!                          a dummy parameter.
 !
 !                        C,D
-!                          THE RANGE OF THE Y-INDEPENDENT VARIABLE,
-!                          I.E., Y IS GREATER THAN OR EQUAL TO C AND
-!                          LESS THAN OR EQUAL TO D.  C MUST BE LESS
+!                          the range of the Y-independent variable,
+!                          I.E., Y is greater than or equal to C and
+!                          less than or equal to D.  C must be less
 !                          THAN D.
 !
 !                        N
-!                          THE NUMBER OF PANELS INTO WHICH THE INTERVAL
-!                          (C,D) IS SUBDIVIDED.  HENCE, THERE WILL BE
-!                          N+1 GRID POINTS IN THE Y-DIRECTION GIVEN BY
+!                          the number of panels into which the interval
+!                          (C,D) is subdivided.  Hence, there will be
+!                          N+1 grid points in the Y-direction given by
 !                          YJ=C+(J-1)*DLY FOR J=1,2,...,N+1 WHERE
 !                          DLY=(D-C)/N IS THE PANEL WIDTH. IN ADDITION,
-!                          N MUST BE GREATER THAN 4.
+!                          N must be greater than 4.
 !
 !                        NBDCND
-!                          INDICATES THE TYPES OF BOUNDARY CONDITIONS
+!                          indicates the types of boundary conditions
 !                          AT Y=C AND Y=D
 !                          = 0 IF THE SOLUTION IS PERIODIC IN Y, I.E.,
 !                              U(X,Y+D-C)=U(X,Y) FOR ALL X,Y
 !                          = 1 IF THE SOLUTION IS SPECIFIED AT Y=C AND
 !                              Y = D, I.E., U(X,C) AND U(X,D) ARE
-!                              SPECIFIED FOR ALL X
+!                              specified for all X
 !                          = 2 IF THE SOLUTION IS SPECIFIED AT Y=C AND
 !                              THE BOUNDARY CONDITION IS MIXED AT Y=D,
 !                              I.E., U(X,C) AND DU(X,D)/DY+XNU*U(X,D)
-!                              ARE SPECIFIED FOR ALL X
+!                              are specified for all X
 !                          = 3 IF THE BOUNDARY CONDITIONS ARE MIXED AT
 !                              Y=C AND Y=D, I.E., DU(X,D)/DY+GAMA*U(X,C)
-!                              AND DU(X,D)/DY+XNU*U(X,D) ARE SPECIFIED
-!                              FOR ALL X
+!                              and DU(X,D)/DY+XNU*U(X,D) are specified
+!                              for all X
 !                          = 4 IF THE BOUNDARY CONDITION IS MIXED AT Y=C
 !                              AND THE SOLUTION IS SPECIFIED AT Y=D,
-!                              I.E. DU(X,C)/DY+GAMA*U(X,C) AND U(X,D)
-!                              ARE SPECIFIED FOR ALL X
+!                              I.E. DU(X,C)/DY+gama*U(X,C) and U(X,D)
+!                              are specified for all X
 !
 !                        BDC
-!                          A ONE-DIMENSIONAL ARRAY OF LENGTH M+1 THAT
-!                          SPECIFIES THE VALUE OF DU(X,C)/DY+GAMA*U(X,C)
+!                          a one-dimensional array of length M+1 that
+!                          specifies the value of DU(X,C)/DY+gama*U(X,C)
 !                          AT Y=C.  WHEN NBDCND=3 OR 4
 !                             BDC(I) = DU(XI,C)/DY + GAMA*U(XI,C),
 !                             I=1,2,...,M+1.
-!                          WHEN NBDCND HAS ANY OTHER VALUE, BDC IS A
-!                          DUMMY PARAMETER.
+!                          When NBDCND has any other value, BDC is A
+!                          dummy parameter.
 !
-!                        GAMA
-!                          THE SCALAR MULTIPLYING THE SOLUTION IN CASE
+!                        Gama
+!                          the scalar multiplying the solution in case
 !                          OF A MIXED BOUNDARY CONDITION AT Y=C (SEE
 !                          ARGUMENT BDC). IF NBDCND.NE.3,4 THEN GAMA IS
-!                          A DUMMY PARAMETER.
+!                          a dummy parameter.
 !
 !                        BDD
-!                          A ONE-DIMENSIONAL ARRAY OF LENGTH M+1 THAT
-!                          SPECIFIES THE VALUE OF DU(X,D)/DY +
+!                          a one-dimensional array of length M+1 that
+!                          specifies the value of DU(X,D)/DY +
 !                          XNU*U(X,D) AT Y=C.  WHEN NBDCND=2 OR 3
 !                            BDD(I) = DU(XI,D)/DY + XNU*U(XI,D),
 !                            I=1,2,...,M+1.
-!                          WHEN NBDCND HAS ANY OTHER VALUE, BDD IS A
-!                          DUMMY PARAMETER.
+!                          When NBDCND has any other value, BDD is A
+!                          dummy parameter.
 !
 !                        XNU
-!                          THE SCALAR MULTIPLYING THE SOLUTION IN CASE
+!                          the scalar multiplying the solution in case
 !                          OF A MIXED BOUNDARY CONDITION AT Y=D (SEE
 !                          ARGUMENT BDD). IF NBDCND.NE.2 OR 3 THEN XNU
-!                          IS A DUMMY PARAMETER.
+!                          is a dummy parameter.
 !
 !                        COFX
-!                          A USER-SUPPLIED SUBPROGRAM WITH
+!                          a user-supplied subprogram with
 !                          PARAMETERS X, AFUN, BFUN, CFUN WHICH
-!                          RETURNS THE VALUES OF THE X-DEPENDENT
-!                          COEFFICIENTS AF(X), BF(X), CF(X) IN
-!                          THE ELLIPTIC EQUATION AT X.
+!                          returns the values of the X-dependent
+!                          coefficients AF(X), BF(X), CF(X) in
+!                          the elliptic equation at X.
 !
 !                        COFY
-!                          A USER-SUPPLIED SUBPROGRAM WITH
+!                          a user-supplied subprogram with
 !                          PARAMETERS Y, DFUN, EFUN, FFUN WHICH
-!                          RETURNS THE VALUES OF THE Y-DEPENDENT
-!                          COEFFICIENTS DF(Y), EF(Y), FF(Y) IN
-!                          THE ELLIPTIC EQUATION AT Y.
+!                          returns the values of the Y-dependent
+!                          coefficients DF(Y), EF(Y), FF(Y) in
+!                          the elliptic equation at Y.
 !
-!                        NOTE.  COFX AND COFY MUST BE DECLARED EXTERNAL
-!                        IN THE CALLING ROUTINE. THE VALUES RETURNED IN
+!                        Note.  COFX and COFY must be declared external
+!                        in the calling routine. The values returned in
 !                        AFUN AND DFUN MUST SATISFY AFUN*DFUN GREATER
-!                        THAN 0 FOR A LESS THAN X LESS THAN B,
+!                        than 0 for a less than X less than B,
 !                        C LESS THAN Y LESS THAN D (SEE IERROR=10).
-!                        THE COEFFICIENTS PROVIDED MAY LEAD TO A MATRIX
-!                        EQUATION WHICH IS NOT DIAGONALLY DOMINANT IN
+!                        The coefficients provided may lead to a matrix
+!                        equation which is not diagonally dominant in
 !                        WHICH CASE SOLUTION MAY FAIL (SEE IERROR=4).
 !
 !                        GRHS
-!                          A TWO-DIMENSIONAL ARRAY THAT SPECIFIES THE
-!                          VALUES OF THE RIGHT-HAND SIDE OF THE ELLIPTIC
+!                          a two-dimensional array that specifies the
+!                          values of the right-hand side of the elliptic
 !                          EQUATION, I.E., GRHS(I,J)=G(XI,YI), FOR
 !                          I=2,...,M, J=2,...,N.  AT THE BOUNDARIES,
-!                          GRHS IS DEFINED BY
+!                          GRHS is defined by
 !
 !                          MBDCND   GRHS(1,J)   GRHS(M+1,J)
 !                          ------   ---------   -----------
@@ -10604,20 +10604,20 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                            3      G(XI,C)     G(XI,D)
 !                            4      G(XI,C)        *
 !
-!                          WHERE * MEANS THESE QUANTITES ARE NOT USED.
-!                          GRHS SHOULD BE DIMENSIONED MN BY AT LEAST
-!                          N+1 IN THE CALLING ROUTINE.
+!                          Where * means these quantites are not used.
+!                          GRHS should be dimensioned MN by at least
+!                          N+1 in the calling routine.
 !
 !                        MN
-!                          THE ROW (OR FIRST) DIMENSION OF THE ARRAY
-!                          GRHS AS IT APPEARS IN THE PROGRAM CALLING
-!                          SEPELL. MN MUST BE AT LEAST 7 AND GREATER
-!                          THAN OR EQUAL TO M+1.
+!                          the row (or first) dimension of the array
+!                          GRHS as it appears in the program calling
+!                          SEPELL. MN must be at least 7 and greater
+!                          than or equal to M+1.
 !
 !                        USOL
-!                          A TWO-DIMENSIONAL ARRAY THAT SPECIFIES THE
-!                          VALUES OF THE SOLUTION ALONG THE BOUNDARIES.
-!                          AT THE BOUNDARIES, USOL IS DEFINED BY
+!                          a two-dimensional array that specifies the
+!                          values of the solution along the boundaries.
+!                          At the boundaries, USOL is defined by
 !
 !                          MBDCND   USOL(1,J)   USOL(M+1,J)
 !                          ------   ---------   -----------
@@ -10635,44 +10635,44 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                            3         *           *
 !                            4         *        U(XI,D)
 !
-!                          WHERE * MEANS THE QUANTITES ARE NOT USED IN
-!                          THE SOLUTION.
+!                          Where * means the quantites are not used in
+!                          the solution.
 !
 !                          IF IORDER=2 AND IDMN=MN, THEN THE USER MAY
-!                          EQUIVALENCE GRHS AND USOL. NOTE THAT IN THIS
-!                          CASE THE TABLES SPECIFYING THE BOUNDARIES OF
-!                          THE GRHS AND USOL ARRAYS DETERMINE THE
-!                          BOUNDARIES UNIQUELY EXCEPT AT THE CORNERS.
-!                          IF THE TABLES CALL FOR BOTH G(X,Y) AND
-!                          U(X,Y) AT A CORNER THEN THE SOLUTION MUST BE
+!                          equivalence GRHS and USOL. Note that in this
+!                          case the tables specifying the boundaries of
+!                          the GRHS and USOL arrays determine the
+!                          boundaries uniquely except at the corners.
+!                          If the tables call for both G(X,Y) and
+!                          U(X,Y) at a corner then the solution must be
 !                          CHOSEN.  FOR EXAMPLE, IF MBDCND=2 AND
 !                          NBDCND=4, THEN U(A,C), U(A,D), U(B,D) MUST BE
-!                          CHOSEN AT THE CORNERS IN ADDITION TO G(B,C).
+!                          chosen at the corners in addition to G(B,C).
 !
 !                          IF IORDER=4, THEN THE TWO ARRAYS, USOL AND
-!                          GRHS, MUST BE DISTINCT.
+!                          GRHS, must be distinct.
 !
-!                          USOL SHOULD BE DIMENSIONED IDMN BY AT LEAST
-!                          N+1 IN THE CALLING ROUTINE.
+!                          USOL should be dimensioned IDMN by at least
+!                          N+1 in the calling routine.
 !
 !                        IDMN
-!                          THE ROW (OR FIRST) DIMENSION OF THE ARRAY
-!                          USOL AS IT APPEARS IN THE PROGRAM CALLING
-!                          SEPELL. IDMN MUST BE AT LEAST 7 AND GREATER
-!                          THAN OR EQUAL TO M+1.
+!                          the row (or first) dimension of the array
+!                          USOL as it appears in the program calling
+!                          SEPELL. IDMN must be at least 7 and greater
+!                          than or equal to M+1.
 !
 !                        W
-!                          A ONE-DIMENSIONAL ARRAY THAT MUST BE PROVIDED
-!                          BY THE USER FOR WORK SPACE.  LET
+!                          a one-dimensional array that must be provided
+!                          by the user for work space.  Let
 !                          K=INT(LOG2(N+1))+1 AND SET  L=2**(K+1).
-!                          THEN (K-2)*L+K+10*N+12*M+27 WILL SUFFICE
-!                          AS A LENGTH OF W.  THE ACTUAL LENGTH OF W IN
-!                          THE CALLING ROUTINE MUST BE SET IN W(1) (SEE
+!                          Then (K-2)*L+K+10*N+12*M+27 will suffice
+!                          as a length of W.  The actual length of W in
+!                          the calling routine must be set in W(1) (see
 !                          IERROR=11).
 !
 ! ON OUTPUT              USOL
-!                          CONTAINS THE APPROXIMATE SOLUTION TO THE
-!                          ELLIPTIC EQUATION.  USOL(I,J) IS THE
+!                          contains the approximate solution to the
+!                          elliptic equation.  USOL(I,J) is the
 !                          APPROXIMATION TO U(XI,YJ) FOR I=1,2...,M+1
 !                          AND J=1,2,...,N+1.  THE APPROXIMATION HAS
 !                          ERROR O(DLX**2+DLY**2) IF CALLED WITH
@@ -10680,64 +10680,64 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                          IORDER=4.
 !
 !                        W
-!                          CONTAINS INTERMEDIATE VALUES THAT MUST NOT BE
-!                          DESTROYED IF SEPELL IS CALLED AGAIN WITH
+!                          contains intermediate values that must not be
+!                          destroyed if SEPELL is called again with
 !                          INTL=1.  IN ADDITION W(1) CONTAINS THE EXACT
-!                          MINIMAL LENGTH (IN FLOATING POINT) REQUIRED
+!                          minimal length (in floating point) required
 !                          FOR THE WORK SPACE (SEE IERROR=11).
 !
 !                        PERTRB
-!                          IF A COMBINATION OF PERIODIC OR DERIVATIVE
+!                          if a combination of periodic or derivative
 !                          BOUNDARY CONDITIONS (I.E., ALPHA=BETA=0 IF
 !                          MBDCND=3, GAMA=XNU=0 IF NBDCND=3) IS
-!                          SPECIFIED AND IF THE COEFFICIENTS OF U(X,Y)
-!                          IN THE SEPARABLE ELLIPTIC EQUATION ARE ZERO
+!                          specified and if the coefficients of U(X,Y)
+!                          in the separable elliptic equation are zero
 !                          (I.E., CF(X)=0 FOR X GREATER THAN OR EQUAL TO
 !                          A AND LESS THAN OR EQUAL TO B, FF(Y)=0 FOR
-!                          Y GREATER THAN OR EQUAL TO C AND LESS THAN
-!                          OR EQUAL TO D) THEN A SOLUTION MAY NOT EXIST.
-!                          PERTRB IS A CONSTANT CALCULATED AND
-!                          SUBTRACTED FROM THE RIGHT-HAND SIDE OF THE
-!                          MATRIX EQUATIONS GENERATED BY SEPELL WHICH
-!                          INSURES THAT A SOLUTION EXISTS.  SEPELL THEN
-!                          COMPUTES THIS SOLUTION WHICH IS A WEIGHTED
-!                          MINIMAL LEAST SQUARES SOLUTION TO THE
-!                          ORIGINAL PROBLEM.
+!                          Y greater than or equal to C and less than
+!                          or equal to D) then a solution may not exist.
+!                          PERTRB is a constant calculated and
+!                          subtracted from the right-hand side of the
+!                          matrix equations generated by SEPELL which
+!                          insures that a solution exists.  SEPELL then
+!                          computes this solution which is a weighted
+!                          minimal least squares solution to the
+!                          original problem.
 !
-!                        IERROR
-!                          AN ERROR FLAG THAT INDICATES INVALID INPUT
-!                          PARAMETERS OR FAILURE TO FIND A SOLUTION
+!                        Ierror
+!                          an error flag that indicates invalid input
+!                          parameters or failure to find a solution
 !                          = 0 NO ERROR
 !                          = 1 IF A GREATER THAN B OR C GREATER THAN D
 !                          = 2 IF MBDCND LESS THAN 0 OR MBDCND GREATER
-!                              THAN 4
+!                              than 4
 !                          = 3 IF NBDCND LESS THAN 0 OR NBDCND GREATER
-!                              THAN 4
+!                              than 4
 !                          = 4 IF ATTEMPT TO FIND A SOLUTION FAILS.
-!                              (THE LINEAR SYSTEM GENERATED IS NOT
-!                              DIAGONALLY DOMINANT.)
+!                              (The linear system generated is not
+!                              diagonally dominant.)
 !                          = 5 IF IDMN OR MN IS TOO SMALL.
 !                          = 6 IF M IS TOO SMALL OR TOO LARGE (SEE
-!                              DISCUSSION OF M)
+!                              discussion of M)
 !                          = 7 IF N IS TOO SMALL (SEE DISCUSSION OF N)
 !                          = 8 IF IORDER IS NOT 2 OR 4
 !                          = 9 IF INTL IS NOT 0 OR 1
 !                          = 10 IF AFUN*DFUN LESS THAN OR EQUAL TO 0 FOR
-!                               SOME INTERIOR MESH POINT (XI,YJ)
+!                               some interior mesh point (XI,YJ)
 !                          = 11 IF THE WORK SPACE LENGTH INPUT IN W(1)
-!                               IS LESS THAN THE EXACT MINIMAL WORK
-!                               SPACE LENGTH REQUIRED OUTPUT IN W(1).
+!                               is less than the exact minimal work
+!                               space length required output in W(1).
 !
 !                          NOTE (CONCERNING IERROR=4).  FOR THE
-!                          COEFFICIENTS INPUT THROUGH COFX, COFY, THE
-!                          DISCRETIZATION MAY LEAD TO A BLOCK
-!                          TRIDIAGONAL LINEAR SYSTEM WHICH IS NOT
-!                          DIAGONALLY DOMINANT (FOR EXAMPLE, THIS
+!                          coefficients input through COFX, COFY, the
+!                          discretization may lead to a block
+!                          tridiagonal linear system which is not
+!                          diagonally dominant (for example, this
 !                          HAPPENS IF CFUN=0 AND BFUN/(2.*DLX) GREATER
 !                          THAN AFUN/DLX**2).  IN THIS CASE SOLUTION MAY
-!                          FAIL.  THIS CANNOT HAPPEN IN THE LIMIT AS
-!                          DLX, DLY APPROACH ZERO.  HENCE, THE CONDITION
-!                          MAY BE REMEDIED BY TAKING LARGER VALUES FOR M
+!                          fail.  This cannot happen in the limit as
+!                          DLX, DLY approach zero.  Hence, the condition
+!                          may be remedied by taking larger values for M
 !                          OR N.
 !
 ! ENTRY POINTS           SEPELL, SEPEL1, CHKPRM, CHKSNG, ORTHG, MINSOL,
@@ -10767,18 +10767,18 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                        REFERENCES AND METHOD.
 !
 ! ACCURACY AND TIMING    THE FOLLOWING COMPUTATIONAL RESULTS WERE
-!                        OBTAINED BY SOLVING THE SAMPLE PROBLEM AT THE
+!                        obtained by solving the sample problem at the
 !                        END OF THIS WRITE-UP ON THE CONTROL DATA 7600.
-!                        THE OP COUNT IS PROPORTIONAL TO M*N*LOG2(N).
-!                        IN CONTRAST TO THE OTHER ROUTINES IN THIS
-!                        CHAPTER, ACCURACY IS TESTED BY COMPUTING AND
-!                        TABULATING SECOND- AND FOURTH-ORDER
-!                        DISCRETIZATION ERRORS.  BELOW IS A TABLE
-!                        CONTAINING COMPUTATIONAL RESULTS.  THE TIMES
-!                        GIVEN DO NOT INCLUDE INITIALIZATION (I.E.,
+!                        The OP count is proportional to M*N*LOG2(N).
+!                        In contrast to the other routines in this
+!                        chapter, accuracy is tested by computing and
+!                        tabulating second- and fourth-order
+!                        discretization errors.  Below is a table
+!                        containing computational results.  The times
+!                        given do not include initialization (I.E.,
 !                        TIMES ARE FOR INTL=1).  NOTE THAT THE
-!                        FOURTH-ORDER ACCURACY IS NOT REALIZED UNTIL THE
-!                        MESH IS SUFFICIENTLY REFINED.
+!                        fourth-order accuracy is not realized until the
+!                        mesh is sufficiently refined.
 !
 !              SECOND-ORDER    FOURTH-ORDER   SECOND-ORDER  FOURTH-ORDER
 !    M    N   EXECUTION TIME  EXECUTION TIME    ERROR         ERROR
@@ -10790,16 +10790,16 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !   126  126     2,002           4,772          1.8E-3        3.5E-6
 !
 ! PORTABILITY            THE VALUE GIVEN BY SPMPAR(1) IS THE ONLY
-!                        MACHINE DEPENDENT CONSTANT THAT IS USED.
+!                        machine dependent constant that is used.
 !
 ! REFERENCES             KELLER, H.B., NUMERICAL METHODS FOR TWO-POINT
 !                          BOUNDARY-VALUE PROBLEMS, BLAISDEL (1968),
 !                          WALTHAM, MASS.
 !
-!                        SWARZTRAUBER, P., AND R. SWEET (1975),
-!                          EFFICIENT FORTRAN SUBPROGRAMS FOR THE
-!                          SOLUTION OF ELLIPTIC PARTIAL DIFFERENTIAL
-!                          EQUATIONS.  NCAR TECHNICAL NOTE
+!                        Swarztrauber, P., And R. Sweet (1975),
+!                          efficient Fortran subprograms for the
+!                          solution of elliptic partial differential
+!                          equations.  NCAR technical note
 !                          NCAR-TN/IA-109, PP. 135-137.
 !
 !
@@ -10810,13 +10810,13 @@ real, intent(inout) :: w(*)
 external cofx, cofy
 !
 !
-!     CHECK INPUT PARAMETERS
+!     Check input parameters
 !
 call chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
 &idmn,mn,ierror)
 if (ierror .ne. 0) return
 !
-!     COMPUTE MINIMUM WORK SPACE AND CHECK WORK SPACE LENGTH INPUT
+!     Compute minimum work space and check work space length input
 !
 l = n+1
 if (nbdcnd .eq. 0) l = n
@@ -10833,7 +10833,7 @@ w(1) = float(loutpt)
 if (loutpt .gt. linput) return
 ierror = 0
 !
-!     SET WORK SPACE INDICES
+!     Set work space indices
 !
 i1 = length+2
 i2 = i1+l

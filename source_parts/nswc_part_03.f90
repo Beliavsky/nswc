@@ -5,8 +5,8 @@ real :: a, c, eps, u, v
 real :: anorm
 real :: spmpar
 !-----------------------------------------------------------------------
-!        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
-!        AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
+!        Computation of the Bessel function K for real order nu
+!        and complex argument Z by the asymptotic expansion
 !-----------------------------------------------------------------------
 complex :: z
 complex, intent(inout) :: w
@@ -59,7 +59,7 @@ real :: spmpar
 real :: gam1
 !-----------------------------------------------------------------------
 !
-!        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
+!        Calculation of the modified Bessel functions
 !
 !                  W1 = K  (Z)  AND  W2 = K    (Z)
 !                        NU                NU+1
@@ -67,7 +67,7 @@ real :: gam1
 !     FOR A COMPLEX ARGUMENT Z WHERE ABS(Z) .LE. 2  AND A REAL
 !     ORDER NU WHERE ABS(NU) .LE. 0.5.  IT IS ASSUMED THAT
 !     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z. POWER
-!     SERIES EXPANSIONS ARE USED.
+!     series expansions are used.
 !
 !-----------------------------------------------------------------------
 complex, intent(in) :: z, zr
@@ -117,7 +117,7 @@ g2 = a*t
 gm2 = 0.5*(g1 + g2)
 if (abs(nu) .gt. 0.2) go to 30
 !
-!         THE FOLLOWING IS THE TAYLOR SERIES FOR
+!         The following is the Taylor series for
 !     T = (1/G2 - 1/G1)/(2*NU). NOTE THAT G1*G2 = A.
 !
    t = nu*nu
@@ -127,7 +127,7 @@ if (abs(nu) .gt. 0.2) go to 30
    go to 40
 30 gm1 = 0.5*(g1 - g2)/nu
 !
-!            INITIALIZATION OF THE SUMMATION
+!            Initialization of the summation
 !
 40 p = (0.5*g1)*c
 q = (0.5*g2)/c
@@ -147,7 +147,7 @@ c = (1.0, 0.0)
 w1 = f
 w2 = p
 !
-!                 SUMMATION OF SERIES
+!                 Summation of series
 !
 w = 0.25*(z*z)
 do k = 1, 50
@@ -176,16 +176,16 @@ real :: cos1
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!             COMPUTATION OF THE SCALED BESSEL FUNCTIONS
+!             Computation of the scaled Bessel functions
 !
 !                   K1 = (EXP(Z)*SQRT(Z)) K  (Z)
-!                                          NU
+!                                          nu
 !                   K2 = (EXP(Z)*SQRT(Z)) K    (Z)
-!                                          NU+1
+!                                          nu+1
 !
-!     FOR REAL ORDERS NU AND NU + 1 AND FOR COMPLEX ARGUMENT Z
-!     BY USE OF THE MILLER ALGORITHM. FOR THE GREATEST ACCURACY,
-!     Z SHOULD LIE IN A SECTOR SLIGHTLY LARGER THAN THE RIGHT
+!     For real orders nu and nu + 1 and for complex argument Z
+!     by use of the Miller algorithm. For the greatest accuracy,
+!     Z should lie in a sector slightly larger than the right
 !     HALF PLANE. IT IS ASSUMED THAT ABS(NU) .LT. 0.5, AND THAT
 !     R = ABS(Z/2) AND ZR = 2/Z.
 !
@@ -213,7 +213,7 @@ x = real(z)
 y = aimag(z)
 nu2 = nu*nu
 !
-!     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
+!     Calculation of M for use in Miller algorithm.
 !
 th = atan2(y,x)
 a = 3.0/(1.0 + r)
@@ -222,7 +222,7 @@ c = 4.0*cos1(nu)/(c1*eps0*(2.0*r)**(0.25))
 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
 &(2.0*cos(b*th))**2 + 1.5
 !
-!     BACKWARD RECURRENCE IN MILLER ALGORITHM.
+!     Backward recurrence in Miller algorithm.
 !
 u2 = (0.0, 0.0)
 u1 = (1.0, 0.0)
@@ -239,7 +239,7 @@ do 10 i = 2, m
    c = abs(real(u1)) + abs(aimag(u1))
    if (i .eq. m .or. c .lt. 1.e+6) go to 10
 !
-!           RESCALE TO AVOID OVERFLOW
+!           Rescale to avoid overflow
 !
       u2 = u2/c
       u1 = u1/c
@@ -247,7 +247,7 @@ do 10 i = 2, m
 !
 10 l = l - 1.0
 !
-!     LAST STEP IN THE MILLER ALGORITHM.
+!     Last step in the Miller algorithm.
 !
 if (c .lt. 2.0) go to 20
    u2 = u2/c
@@ -260,7 +260,7 @@ bl = 1.0 + z
 u1 = (bl*u2 - u3)/al
 s = s + u1
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 k1 = c1*(u1/s)
 k2 = k1*(1.0 + 0.5*(nu + 0.5 - u2/u1)*zr)
@@ -275,7 +275,7 @@ real :: c, s
 real :: sin0
 real :: cos0
 !-----------------------------------------------------------------------
-!                 COMPUTATION OF EXP(-R*(PI/2)*I)
+!                 Computation of EXP(-R*(PI/2)*I)
 !              WHERE R = N + NU FOR ABS(NU) .LE. 0.5
 !-----------------------------------------------------------------------
 real, intent(in) :: nu
@@ -309,7 +309,7 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 &rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), &
 &ts(2), zl(2), zs
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
+!     Fortran subroutine for modified Bessel function of integral order
 !     ******************************************************************
 !     MO = MODE OF OPERATION
 !     A  = ARGUMENT (COMPLEX NUMBER)
@@ -553,8 +553,8 @@ integer, intent(in) :: ind
 real :: a, b, r
 real :: cpabs
 !------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
-!     FOR COMPLEX ARGUMENT Z.
+!     Calculates the Airy function AI and its derivative AIP
+!     for complex argument Z.
 !------------------------------------------------------------
 complex, intent(in) :: z
 complex, intent(inout) :: ai
@@ -567,18 +567,18 @@ b = aimag(z)
 r = cpabs(a,b)
 if(r .gt. 1.0) go to 10
 !
-!     MACLAURIN EXPANSION
+!     Maclaurin expansion
 !
    call airm(ind,z,ai,aip,bi,bip)
    return
 10 if(r .gt. 10.0) go to 20
 !
-!     INTERMEDIATE RANGE CALCULATION
+!     Intermediate range calculation
 !
    call aii(ind,z,ai,aip,ierr)
    return
 !
-!     ASYMPTOTIC EXPANSION
+!     Asymptotic expansion
 !
 20 call aia(ind,z,ai,aip,ierr)
 return
@@ -590,9 +590,9 @@ integer, intent(in) :: ind
 integer :: i, n
 real :: c1, c2, sqt3, x, y
 !--------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTIONS AI AND BI AND THEIR
-!     DERIVATIVES AIP AND BIP BY USE OF THEIR MACLAURIN
-!     EXPANSIONS.
+!     Calculates the Airy functions AI and BI and their
+!     derivatives AIP and BIP by use of their Maclaurin
+!     expansions.
 !--------------------------------------------------------------
 complex, intent(inout) :: ai, aip, bi, bip
 complex, intent(in) :: z
@@ -625,7 +625,7 @@ data d(1) /.333333333333333e+00/, d(2) /.138888888888889e-01/, &
 z2 = z*z
 z3 = z*z2
 !
-!     SUMMATION OF F AND G
+!     Summation of F and G
 !
 f = cmplx(a(8),0.0)
 g = cmplx(b(8),0.0)
@@ -637,7 +637,7 @@ do 10 n = 1, 7
 f = 1.0 + z3*f
 g = z + z2*z2*g
 !
-!     SUMMATION OF F1 AND G1
+!     Summation of F1 and G1
 !
 f1 = cmplx(c(8),0.0)
 g1 = cmplx(d(8),0.0)
@@ -649,7 +649,7 @@ end do
 f1 = z2*(0.5 + z3*f1)
 g1 = 1.0 + z3*g1
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 ai = c1*f - c2*g
 bi = sqt3*(c1*f + c2*g)
@@ -680,7 +680,7 @@ integer, intent(in) :: ind
 real :: a, b, c1, r
 real :: cpabs
 !------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
+!     Calculates the Airy function AI and its derivative AIP
 !     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
 !     CABS(Z) .LE. 10.0.
 !------------------------------------------------------------
@@ -735,8 +735,8 @@ real :: c1, c2, eps, r, t, u, u1, v, v1, xm, xneg, xpos
 real :: exparg
 real :: spmpar
 !-----------------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP FOR
-!     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
+!     Calculates the Airy function AI and its derivative AIP for
+!     complex argument Z by means of asymptotic expansions.
 !-----------------------------------------------------------------------
 complex, intent(inout) :: ai, aip
 complex, intent(in) :: z
@@ -783,11 +783,11 @@ data c1 /.564189583547756/
 data c2 /.398942280401433/
 !------------------------
 !
-!     EPS, XPOS, AND XNEG ARE MACHINE DEPENDENT CONSTANTS. EPS IS
+!     Eps, xpos, and XNEG are machine dependent constants. Eps is
 !     THE SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0, XPOS IS THE
-!     THE LARGEST POSTIVE NUMBER FOR WHICH EXP(X) CAN BE COMPUTED,
-!     AND XNEG IS THE LARGEST NEGATIVE NUMBER FOR WHICH EXP(X) DOES
-!     NOT UNDERFLOW.
+!     the largest postive number for which EXP(X) can be computed,
+!     and XNEG is the largest negative number for which EXP(X) does
+!     not underflow.
 !
                 eps = spmpar(1)
                 xpos = exparg(0)
@@ -915,8 +915,8 @@ integer, intent(in) :: ind
 real :: a, b, r
 real :: cpabs
 !------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
-!     FOR COMPLEX ARGUMENT Z.
+!     Calculates the Airy function BI and its derivative BIP
+!     for complex argument Z.
 !------------------------------------------------------------
 complex, intent(in) :: z
 complex :: ai
@@ -929,18 +929,18 @@ b = aimag(z)
 r = cpabs(a,b)
 if(r .gt. 1.0) go to 10
 !
-!     MACLAURIN EXPANSION
+!     Maclaurin expansion
 !
    call airm(ind,z,ai,aip,bi,bip)
    return
 10 if(r .gt. 9.6) go to 20
 !
-!     INTERMEDIATE RANGE CALCULATION
+!     Intermediate range calculation
 !
    call bii(ind,z,bi,bip,ierr)
    return
 !
-!     ASYMPTOTIC EXPANSION
+!     Asymptotic expansion
 !
 20 call bia(ind,z,bi,bip,ierr)
 return
@@ -953,7 +953,7 @@ integer, intent(in) :: ind
 real :: a, c1, r, sqt3, x, y
 real :: cpabs
 !------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
+!     Calculates the Airy function BI and its derivative BIP
 !     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
 !     CABS(Z) .LE. 10.0.
 !------------------------------------------------------------
@@ -1020,8 +1020,8 @@ real :: c(30), c1, c2, c3, ce, cf, d(30), eps, r, s, sqt3, t, u, &
 real :: exparg
 real :: spmpar
 !---------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP FOR
-!     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
+!     Calculates the Airy function BI and its derivative BIP for
+!     complex argument Z by means of asymptotic expansions.
 !---------------------------------------------------------------
 complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
@@ -1079,11 +1079,11 @@ data c2/3.98942280401433e-01/
 data c3/7.07106781186548e-01/
 !--------------------------
 !
-!     EPS AND XM ARE MACHINE DEPENDENT CONSTANTS. EPS IS THE
+!     Eps and XM are machine dependent constants. Eps is the
 !     SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0, XPOS IS THE
-!     LARGEST POSITIVE NUMBER FOR WHICH EXP(XM) CAN BE COMPUTED,
-!     AND XNEG IS THE NEGATIVE NUMBER OF LARGEST MAGNITUDE FOR
-!     WHICH EXP(X) DOES NOT UNDERFLOW.
+!     largest positive number for which EXP(XM) can be computed,
+!     and XNEG is the negative number of largest magnitude for
+!     which EXP(X) does not underflow.
 !
                 eps = spmpar(1)
                 xpos = exparg(0)
@@ -1265,12 +1265,12 @@ end subroutine bia
 subroutine ia(z, i1, i2, i1m, i2m)
 implicit none
 !-------------------------------------------------------------
-!     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
-!     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
+!     Calculates the modified Bessel function of the first
+!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
 !     ARGUMENT Z, WHERE -PI .LT. ARG(Z) .LE. PI.  I1 AND I2
-!     ARE REPLACED BY THE FUNCTIONS OF ORDERS 1/3 AND 2/3,
-!     RESPECTIVELY, AND I1M AND I2M BY THE FUNCTIONS OF ORDERS
-!     -1/3 AND -2/3, RESPECTIVELY.
+!     are replaced by the functions of orders 1/3 and 2/3,
+!     respectively, and I1M and I2M by the functions of orders
+!     -1/3 and -2/3, respectively.
 !-------------------------------------------------------------
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
@@ -1292,7 +1292,7 @@ if(real(z) .ge. 0.0) go to 20
 !
    call imc(cz, i1, i2, i1m, i2m)
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
    if(aimag(z) .lt. 0.0) go to 10
       i1 = ex13*i1
@@ -1314,12 +1314,12 @@ implicit none
 integer :: i, n, n1
 real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
-!     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
-!     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
-!     ARGUMENT Z. THE MACLAURIN EXPANSION AND BACKWARD RECURRENCE
-!     ARE USED. I1 AND I2 ARE REPLACED BY THE FUNCTIONS OF ORDERS
-!     1/3 AND 2/3, RESPECTIVELY, AND I1M AND I2M BY THE FUNCTIONS
-!     OF ORDERS -1/3 AND -2/3, RESPECTIVELY.  FOR GREATEST
+!     Calculates the modified Bessel function of the first
+!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
+!     argument Z. The Maclaurin expansion and backward recurrence
+!     are used. I1 and I2 are replaced by the functions of orders
+!     1/3 and 2/3, respectively, and I1M and I2M by the functions
+!     of orders -1/3 and -2/3, respectively.  For greatest
 !     ACCURACY, Z SHOULD LIE IN THE REGION REAL(Z) .GE. 0.
 !----------------------------------------------------------------
 complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
@@ -1342,15 +1342,15 @@ an = aint(a*a + b*b)
 cn1 = c1 + an
 cn2 = c2 + an
 !
-!     CALCULATION OF INITIAL VALUES FOR BACKWARD RECURRENCE BY
-!     USE OF THE MACLAURIN EXPANSION.
+!     Calculation of initial values for backward recurrence by
+!     use of the Maclaurin expansion.
 !
 call bim(z, cn1, ia1)
 call bim(z, cn1 + 1.0, ia2)
 call bim(z, cn2, ib1)
 call bim(z, cn2 + 1.0, ib2)
 !
-!     BACKWARD RECURRENCE
+!     Backward recurrence
 !
 n = an
 m = an
@@ -1384,10 +1384,10 @@ real :: d, eps
 real :: anorm
 real :: spmpar
 !-------------------------------------------------------------
-!     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND
+!     Calculates the modified Bessel function of the first kind
 !     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
-!     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
-!     CALCULATED VALUE.
+!     of the Maclaurin expansion.  W is replaced by the
+!     calculated value.
 !-------------------------------------------------------------
 real :: m
 complex :: z
@@ -1396,7 +1396,7 @@ complex :: sz, t
 !------------------
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE SMALLEST
+!     Eps is a machine dependent constant.  Eps is the smallest
 !     NUMBER SUCH THAT 1 + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -1404,13 +1404,13 @@ eps = spmpar(1)
 !-------------------------------------------------------------
 sz = 0.25*z*z
 !
-!     INITIALIZATION OF MACLAURIN EXPANSION
+!     Initialization of Maclaurin expansion
 !
 m = 1.0
 t = sz/(cn + 1.0)
 w = t
 !
-!     SUMMATION OF MACLAURIN EXPANSION
+!     Summation of Maclaurin expansion
 !
 10 m = m + 1.0
    d = m*(cn + m)
@@ -1425,12 +1425,12 @@ end subroutine bim
 subroutine ja(z, i1, i2, i1m, i2m)
 implicit none
 !------------------------------------------------------------
-!     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND FOR
-!     ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX ARGUMENT
+!     Calculates the Bessel function of the first kind for
+!     orders 1/3, 2/3, -1/3, and -2/3 and for complex argument
 !     Z, WHERE -PI .LT. ARG(Z) .LE. PI.  I1 AND I2 ARE REPLACED
-!     BY THE FUNCTIONS OF ORDERS 1/3 AND 2/3, RESPECTIVELY, AND
-!     I1M AND I2M BY FUNCTIONS OF ORDERS -1/3 AND -2/3,
-!     RESPECTIVELY.
+!     by the functions of orders 1/3 and 2/3, respectively, and
+!     I1M and I2M by functions of orders -1/3 and -2/3,
+!     respectively.
 !--------------------------------------------------------------
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
@@ -1452,7 +1452,7 @@ if(real(z) .ge. 0.0) go to 20
 !
    call jmc(cz, i1, i2, i1m, i2m)
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
    if(aimag(z) .lt. 0.0) go to 10
       i1 = ex13*i1
@@ -1474,12 +1474,12 @@ implicit none
 integer :: i, n, n1
 real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
-!     CALCULATES THE BESSEL FUNCTION OF THE FIRST
-!     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
-!     ARGUMENT Z. THE MACLAURIN EXPANSION AND BACKWARD RECURRENCE
-!     ARE USED. I1 AND I2 ARE REPLACED BY THE FUNCTIONS OF ORDERS
-!     1/3 AND 2/3, RESPECTIVELY, AND I1M AND I2M BY THE FUNCTIONS
-!     OF ORDERS -1/3 AND -2/3, RESPECTIVELY.  FOR GREATEST
+!     Calculates the Bessel function of the first
+!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
+!     argument Z. The Maclaurin expansion and backward recurrence
+!     are used. I1 and I2 are replaced by the functions of orders
+!     1/3 and 2/3, respectively, and I1M and I2M by the functions
+!     of orders -1/3 and -2/3, respectively.  For greatest
 !     ACCURACY, Z SHOULD LIE IN THE REGION REAL(Z) .GE. 0.
 !----------------------------------------------------------------
 complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
@@ -1502,15 +1502,15 @@ an = aint(a*a + b*b)
 cn1 = c1 + an
 cn2 = c2 + an
 !
-!     CALCULATION OF INITIAL VALUES FOR BACKWARD RECURRENCE BY
-!     USE OF THE MACLAURIN EXPANSION.
+!     Calculation of initial values for backward recurrence by
+!     use of the Maclaurin expansion.
 !
 call bjm(z, cn1, ia1)
 call bjm(z, cn1 + 1.0, ia2)
 call bjm(z, cn2, ib1)
 call bjm(z, cn2 + 1.0, ib2)
 !
-!     BACKWARD RECURRENCE
+!     Backward recurrence
 !
 n = an
 n1 = n + 1
@@ -1544,10 +1544,10 @@ real :: d, eps
 real :: anorm
 real :: spmpar
 !-------------------------------------------------------------
-!     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND
+!     Calculates the Bessel function of the first kind
 !     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
-!     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
-!     CALCULATED VALUE.
+!     of the Maclaurin expansion.  W is replaced by the
+!     calculated value.
 !-------------------------------------------------------------
 real :: m
 complex :: z
@@ -1556,7 +1556,7 @@ complex :: sz, t
 !------------------
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE SMALLEST
+!     Eps is a machine dependent constant.  Eps is the smallest
 !     NUMBER SUCH THAT 1 + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -1564,13 +1564,13 @@ eps = spmpar(1)
 !-------------------------------------------------------------
 sz = -0.25*z*z
 !
-!     INITIALIZATION OF MACLAURIN EXPANSION
+!     Initialization of Maclaurin expansion
 !
 m = 1.0
 t = sz/(cn + 1.0)
 w = t
 !
-!     SUMMATION OF MACLAURIN EXPANSION
+!     Summation of Maclaurin expansion
 !
 10 m = m + 1.0
    d = m*(cn + m)
@@ -1588,10 +1588,10 @@ integer, intent(in) :: ind
 integer :: ind1
 real :: a, b, pi
 !------------------------------------------------------------
-!     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
-!     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z,
+!     Calculates the modified Bessel function of the second
+!     kind for orders 1/3 and 2/3 and for complex argument Z,
 !     WHERE -PI .LT. ARG(Z) .LE PI.  K1 IS REPLACED BY THE
-!     FUNCTION OF ORDER 1/3, AND K2 BY THE FUNCTION OF ORDER
+!     function of order 1/3, and K2 by the function of order
 !     2/3.
 !------------------------------------------------------------
 complex, intent(in) :: z
@@ -1640,11 +1640,11 @@ integer :: i, l, m
 real :: a, ai, al, b, c, c1, eps, r, th, x1, x2
 real :: spmpar
 !------------------------------------------------------------
-!     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
-!     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z
-!     BY USE OF THE MILLER ALGORITHM.  K1 IS REPLACED BY THE
-!     FUNCTION OF ORDER 1/3, AND K2 BY THE FUNCTION OF ORDER
-!     2/3.  FOR GREATEST ACCURACY, Z SHOULD LIE IN THE REGION
+!     Calculates the modified Bessel function of the second
+!     kind for orders 1/3 and 2/3 and for complex argument Z
+!     by use of the Miller algorithm.  K1 is replaced by the
+!     function of order 1/3, and K2 by the function of order
+!     2/3.  For greatest accuracy, Z should lie in the region
 !     REAL(Z) .GE. 0.
 !------------------------------------------------------------
 complex, intent(in) :: z
@@ -1658,7 +1658,7 @@ eps = spmpar(1)
 x1 = real(z)
 x2 = aimag(z)
 !
-!     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
+!     Calculation of M for use in Miller algorithm.
 !
 call capo(x1, x2, r, th)
 a = 3.0/(1.0 + r)
@@ -1667,7 +1667,7 @@ c = 2.0/(c1*eps*(2.0*r)**(0.25))
 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
 &(2.0*cos(b*th))**2 + 1.5
 !
-!     BACKWARD RECURRENCE IN MILLER ALGORITHM.
+!     Backward recurrence in Miller algorithm.
 !
 s = 0.0
 u2 = 0.0
@@ -1683,7 +1683,7 @@ do 10 i = 1, m
    s = s + u1
 10 l = l - 1
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 k1 = c1*u1/(s*csqrt(z))
 k2 = k1*(z  + 1.0/6.0 - u2/u1)/z
@@ -1706,7 +1706,7 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an2, an3, an4, an5, an6, &
 &rn3, rn4, rtx, t, w, x0
 real :: exparg
 !-----------------------------------------------------------------------
-!     EVALUATION OF THE AIRY FUNCTION AI(X)
+!     Evaluation of the Airy function AI(X)
 !-----------------------------------------------------------------------
 !     X0 = 2**(2/3)
 !     C = EXP(2/3)
@@ -1808,7 +1808,7 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an2, an3, an4, an5, an6, &
 &rn4, rtx, t, w, x0
 !-----------------------------------------------------------------------
 !
-!                   SCALED AIRY FUNCTION AI(X)
+!                   Scaled Airy function AI(X)
 !
 !
 !             AIE(X) = EXP(ZETA)*AI(X)  WHEN X .GE. 0
@@ -1917,11 +1917,11 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an10, an2, an3, an4, an5, &
 real :: exparg
 !-----------------------------------------------------------------------
 !
-!             EVALUATION OF THE AIRY FUNCTION BI(X)
+!             Evaluation of the Airy function BI(X)
 !
 !
-!     NOTE... IF X IS A POSITIVE NUMBER WHERE BI(X) IS TOO LARGE
-!     TO BE COMPUTED, THEN BI(X) IS SET TO 0.
+!     Note... if X is a positive number where BI(X) is too large
+!     to be computed, then BI(X) is set to 0.
 !
 !-----------------------------------------------------------------------
 !     X0 = 16**(2/3)
@@ -2061,7 +2061,7 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an10, an2, an3, an4, an5, &
 &sn2, sn3, sn4, sn5, sn6, sn7, sn8, sn9, t, w, x0
 !-----------------------------------------------------------------------
 !
-!                    SCALED AIRY FUNCTION BI(X)
+!                    Scaled Airy function BI(X)
 !
 !
 !             BIE(X) = EXP(-ZETA)*BI(X)  WHEN X .GE. 0
@@ -2298,7 +2298,7 @@ real :: c1, c2, eps, phi, r, t, tol, u, v, x, xx, y
 real :: spmpar
 real :: alnrel
 !     ------------------------------------------------------------------
-!     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRAL F(K)
+!     This function calculates the complete elliptic integral F(K)
 !     FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED THAT L.NE.0
 !     AND THAT K**2 + L**2 = 1.
 !     ------------------------------------------------------------------
@@ -2364,7 +2364,7 @@ data ln4 /1.3862943611199/
 data c1  /.20264236728467/, c2/.15915494309189/
 !     ---------------------------------------------------
 !
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!     Eps is a machine dependent constant.  Eps is the
 !     SMALLEST NUMBER SUCH THAT 1. + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -2398,8 +2398,8 @@ if (x .lt. u) go to 1
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 200
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 200
 !
-!     USES  LOGARITHMIC SERIES WHEN CABS(AL)
-!     IS LESS THAN OR EQUAL TO 0.55
+!     Uses  logarithmic series when CABS(AL)
+!     is less than or equal to 0.55
 !
 10 if (u .gt. 1.42 .or. abs(v) .gt. 1.42) go to 50
 11 if (cabs(al) .gt. 0.55) go to 20
@@ -2410,8 +2410,8 @@ ck = ckp
 al = ak
 go to 80
 !
-!     USES MACLAURIN EXPANSION WHEN THE ABSOLUTE VALUE OF
-!     THE MODULUS AK IS LESS THAN OR EQUAL TO 0.55
+!     Uses Maclaurin expansion when the absolute value of
+!     the modulus AK is less than or equal to 0.55
 !
 20 r = cabs(ak)
 if (r .gt. 0.55) go to 30
@@ -2424,7 +2424,7 @@ go to 80
 22 ck = ckk
 go to 70
 !
-!     NUMERICAL QUADRATURE APPROXIMATION
+!     Numerical quadrature approximation
 !
 30 if (ind .eq. 0 .and. r .gt. 1.0) go to 50
 31 al2 = al*al
@@ -2453,14 +2453,14 @@ if (branch) go to 70
 ck1 = ck
 branch = .true.
 !
-!     INTERCHANGE AK AND AL
+!     Interchange AK and AL
 !
 aktemp = ak
 ak = al
 al = aktemp
 go to 31
 !
-!     USES INVERSE MODULUS TRANSFORMATION WHEN CABS(AK) IS GREATER
+!     Uses inverse modulus transformation when CABS(AK) is greater
 !     THAN 1 AND REAL(AK**2) IS GREATER THAN 0.5.
 !
 50 if (x*x .le. y*y + 0.5) go to 60
@@ -2470,7 +2470,7 @@ ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
 !
-!     USES COMPLEMENTARY INVERSE MODULUS TRANSFORMATION WHEN CABS(AK)
+!     Uses complementary inverse modulus transformation when CABS(AK)
 !     IS GREATER THAN 1 AND REAL(AK**2) IS LESS THAN OR EQUAL TO 0.5
 !
 60 ind = 2
@@ -2483,12 +2483,12 @@ go to 11
 70 if (ind .eq. 0) return
 if (ind .eq. 1) go to 80
 !
-!     COMPLEMENTARY INVERSE MODULUS TRANSFORMATION
+!     Complementary inverse modulus transformation
 !
 ck = al*ck
 return
 !
-!     INVERSE MODULUS TRANSFORMATION
+!     Inverse modulus transformation
 !
 80 if (aimag(ak1) .ge. 0.0) go to 81
    ck = al*(ck1 - j*ck)
@@ -2496,7 +2496,7 @@ return
 81 ck = al*(ck1 + j*ck)
 return
 !
-!     CALCULATION OF F(K) FOR LARGE K AND L
+!     Calculation of F(K) for large K and L
 !
 90 if (x .le. abs(y)) go to 100
 if (abs(abs(v/x) - 1.0) .gt. tol) go to 200
@@ -2515,7 +2515,7 @@ z = cmplx((ln4 + 0.5*alnrel(t*t)) + alog(u), atan2(v,u))
 ck = (z/cmplx(1.0,t))/u
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 200 ck = (0.0, 0.0)
 return
@@ -2524,7 +2524,7 @@ end function ck
 complex function cflect(z)
 implicit none
 !---------------------------------------------------------
-!     REFLECTS Z WITH RESPECT TO THE ORIGIN IF REAL(Z)
+!     Reflects Z with respect to the origin if REAL(Z)
 !     .LT. 0.0 OR IF Z IS ON THE NEGATIVE IMAGINARY AXIS.
 !---------------------------------------------------------
 complex, intent(in) :: z
@@ -2545,7 +2545,7 @@ real :: c, eps, hpi, ri, tol
 real :: spmpar
 complex, intent(in) :: k2
 !---------------------------------------------------------------------
-!     KM COMPUTES THE COMPLETE ELLIPTIC INTEGRAL F(K) FOR A GIVEN
+!     KM computes the complete elliptic integral F(K) for a given
 !     VALUE OF K2 = K**2 BY USE OF THE MACLAURIN EXPANSION.
 !---------------------------------------------------------------------
 complex :: an, s1
@@ -2583,10 +2583,10 @@ real :: alnrel
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl
 ! ----------------------------------------------------------------------
-!     KL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND F(L) FOR
+!     KL computes the complete elliptic integrals F(K) and F(L) for
 !     A GIVEN VALUE OF L, WHERE CABS(L) .LT. 1 AND K**2 + L**2 = 1.
 !     IT IS ASSUMED THAT -PI .LE. ARG(L**2) .LT. PI FOR THE RESULTING
-!     VALUE FOR F(K) TO BE MEANINGFUL.
+!     value for F(K) to be meaningful.
 ! ----------------------------------------------------------------------
 complex :: an, l2, s1, s2, w
 real :: ln4
@@ -2602,8 +2602,8 @@ data ln4 /1.3862943611199/
 !
 ! ---------------
 !
-!            THE LOGARITHMIC EXPANSION IS USED FOR F(K)
-!              AND THE MACLAURIN EXPANSION FOR F(L)
+!            The logarithmic expansion is used for F(K)
+!              and the Maclaurin expansion for F(L)
 !
 tol = amax1(eps,1.e-14)
 l2 = l*l
@@ -2640,7 +2640,7 @@ if (x .ne. 0.0) go to 30
    go to 50
 41 w = cmplx(u, -atan2(y,x))
 !
-!                        FINAL ASSEMBLY
+!                        Final assembly
 !
 50 fk = w*s1 - s2
 fl = hpi*s1
@@ -2655,8 +2655,8 @@ real :: c, c1, c2, eps, phi, r, t, tol, u, v, x, xx, y
 real :: alnrel
 real :: spmpar
 !     ------------------------------------------------------------------
-!     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRALS F(K)
-!     AND E(K) FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED
+!     This function calculates the complete elliptic integrals F(K)
+!     and E(K) for complex values of the modulus K. It is assumed
 !     THAT L.NE.0 AND THAT K**2 + L**2 = 1.
 !     ------------------------------------------------------------------
 complex, intent(in) :: k, l
@@ -2722,7 +2722,7 @@ data ln4 /1.3862943611199/
 data c1  /.20264236728467/, c2/.15915494309189/
 !     ---------------------------------------------------
 !
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!     Eps is a machine dependent constant.  Eps is the
 !     SMALLEST NUMBER SUCH THAT 1. + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -2757,8 +2757,8 @@ if (x .lt. u) go to 1
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 210
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 210
 !
-!     USES  LOGARITHMIC SERIES WHEN CABS(AL)
-!     IS LESS THAN OR EQUAL TO 0.55
+!     Uses  logarithmic series when CABS(AL)
+!     is less than or equal to 0.55
 !
 10 if (u .gt. 1.42 .or. abs(v) .gt. 1.42) go to 50
 11 if (cabs(al) .gt. 0.55) go to 20
@@ -2775,8 +2775,8 @@ al = ak
 al2 = al*al
 go to 81
 !
-!     USES MACLAURIN EXPANSION WHEN THE ABSOLUTE VALUE OF
-!     THE MODULUS AK IS LESS THAN OR EQUAL TO 0.55
+!     Uses Maclaurin expansion when the absolute value of
+!     the modulus AK is less than or equal to 0.55
 !
 20 r = cabs(ak)
 if (r .gt. 0.55) go to 30
@@ -2794,7 +2794,7 @@ go to 81
 ce = cee
 go to 70
 !
-!     NUMERICAL QUADRATURE APPROXIMATION
+!     Numerical quadrature approximation
 !
 30 if (ind .eq. 0 .and. r .gt. 1.0) go to 50
 31 al2 = al*al
@@ -2838,14 +2838,14 @@ ck1 = ck
 ce1 = ce
 branch = .true.
 !
-!     INTERCHANGE AK AND AL
+!     Interchange AK and AL
 !
 aktemp = ak
 ak = al
 al = aktemp
 go to 31
 !
-!     USES INVERSE MODULUS TRANSFORMATION WHEN CABS(AK) IS GREATER
+!     Uses inverse modulus transformation when CABS(AK) is greater
 !     THAN 1 AND REAL(AK**2) IS GREATER THAN 0.5.
 !
 50 if (x*x .le. y*y + 0.5) go to 60
@@ -2855,7 +2855,7 @@ ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
 !
-!     USES COMPLEMENTARY INVERSE MODULUS TRANSFORMATION WHEN CABS(AK)
+!     Uses complementary inverse modulus transformation when CABS(AK)
 !     IS GREATER THAN 1 AND REAL(AK**2) IS LESS THAN OR EQUAL TO 0.5
 !
 60 ind = 2
@@ -2868,13 +2868,13 @@ go to 11
 70 if (ind .eq. 0) return
 if (ind .eq. 1) go to 80
 !
-!     COMPLEMENTARY INVERSE MODULUS TRANSFORMATION
+!     Complementary inverse modulus transformation
 !
 ck = al*ck
 ce = ce/al
 return
 !
-!     INVERSE MODULUS TRANSFORMATION
+!     Inverse modulus transformation
 !
 80 g = ce - al2*ck
 g1 = ce1 - ak2*ck1
@@ -2886,7 +2886,7 @@ g1 = ce1 - ak2*ck1
 ck = al*(ck1 + j*ck)
 return
 !
-!     CALCULATION OF F(K) AND E(K) FOR LARGE K AND L
+!     Calculation of F(K) and E(K) for large K and L
 !
 90 if (x .le. abs(y)) go to 100
 if (abs(abs(v/x) - 1.0) .gt. tol) go to 210
@@ -2915,7 +2915,7 @@ ck = (cmplx(r, phi)/l1)/u
 ce = al + (cmplx(0.5*r - 0.25, 0.5*phi)/l1)/u
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 200 ierr = 1
 return
@@ -2929,7 +2929,7 @@ real :: atn1, atn2, d, da, db, t, x, y
 real :: alnrel
 !---------------------------------------------------
 !     CALCULATES COMPLEX FUNCTION ATN(Z) = Z*ATAN(Z)
-!     USING DOUBLE PRECISION.
+!     using double precision.
 !---------------------------------------------------
 complex, intent(in) :: z
 double precision :: dx, dy
@@ -2955,7 +2955,7 @@ real :: spmpar
 complex, intent(in) :: k2
 complex, intent(inout) :: fk, ek
 ! ----------------------------------------------------------------------
-!     EKM COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND E(K) FOR
+!     EKM computes the complete elliptic integrals F(K) and E(K) for
 !     A GIVEN VALUE OF K2 = K**2 BY USE OF THE MACLAURIN EXPANSIONS.
 ! ----------------------------------------------------------------------
 complex :: an, cn, s1, s2
@@ -2998,12 +2998,12 @@ complex, intent(in) :: l
 complex :: l2
 complex, intent(inout) :: fk, fl, ek, el, gk, gl
 ! ----------------------------------------------------------------------
-!     EKL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K), F(L), E(K),
+!     EKL computes the complete elliptic integrals F(K), F(L), E(K),
 !     E(L) FOR A GIVEN VALUE OF L2, WHERE L2 = L**2 AND K**2 + L**2 = 1.
 !     IT IS ASSUMED THAT -PI .LT. ARG(L2) .LE. PI FOR THE RESULTING
-!     VALUE FOR F(K) TO BE MEANINGFUL.  THE COMBINATIONS OF FUNCTIONS
+!     value for F(K) to be meaningful.  The combinations of functions
 !     G(K) = E(K) - L**2*F(K) AND G(L) = E(L) - K**2*F(L) ARE ALSO
-!     CALCULATED.
+!     calculated.
 ! ----------------------------------------------------------------------
 complex :: an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
 real :: ln4
@@ -3019,8 +3019,8 @@ data ln4 /1.3862943611199/
 !
 ! ---------------
 !
-!            THE LOGARITHMIC EXPANSIONS ARE USED FOR F(K) AND E(K)
-!            AND THE MACLAURIN EXPANSIONS FOR F(L) AND E(L)
+!            The logarithmic expansions are used for F(K) and E(K)
+!            and the Maclaurin expansions for F(L) and E(L)
 !
 tol = amax1(eps,1.e-14)
 l2 = l*l
@@ -3075,7 +3075,7 @@ if (x .ne. 0.0) go to 30
    go to 50
 41 w = cmplx(u, -atan2(y,x))
 !
-!              FINAL ASSEMBLY
+!              Final assembly
 !
 50 fk = w*s1 - s2
 fl = hpi*s1
@@ -3099,7 +3099,7 @@ real :: alnrel
 real :: cpabs
 !-----------------------------------------------------------------------
 !
-!          REAL ELLIPTIC INTEGRALS OF THE FIRST AND SECOND KINDS
+!          Real elliptic integrals of the first and second kinds
 !
 !                        -----------------
 !
@@ -3221,7 +3221,7 @@ f = t1 + s3
 e = t2 + s4
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -3236,8 +3236,8 @@ implicit none
 integer, intent(inout) :: ierr
 !-----------------------------------------------------------------------
 !
-!                  DOUBLE PRECISION COMPUTATION OF THE
-!          REAL ELLIPTIC INTEGRALS OF THE FIRST AND SECOND KINDS
+!                  Double precision computation of the
+!          real elliptic integrals of the first and second kinds
 !
 !                        -----------------
 !
@@ -3363,7 +3363,7 @@ f = t1 + s3
 e = t2 + s4
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -3377,7 +3377,7 @@ subroutine epi (phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
 !-----------------------------------------------------------------------
-!             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
+!             Real elliptic integral of the third kind
 !-----------------------------------------------------------------------
 real, intent(in) :: phi, cphi, k2, l2, n, m
 real, intent(inout) :: p
@@ -3424,7 +3424,7 @@ call rfval (a, b, 1.0, rf, ierr)
 p = p + s * rf
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -3440,8 +3440,8 @@ subroutine depi (phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
 !-----------------------------------------------------------------------
-!               DOUBLE PRECISION COMPUTATION OF THE
-!             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
+!               Double precision computation of the
+!             real elliptic integral of the third kind
 !-----------------------------------------------------------------------
 double precision, intent(in) :: phi, cphi, k2, l2, n, m
 double precision, intent(inout) :: p
@@ -3488,7 +3488,7 @@ call drfval (a, b, 1.d0, rf, ierr)
 p = p + s * rf
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -3504,8 +3504,8 @@ subroutine rfval (x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE FIRST KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the first kind
 !
 !          RF(X,Y,Z) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -3536,15 +3536,15 @@ real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, AND Z ARE THE VARIABLES IN THE INTEGRAL RF(X,Y,Z).
+!          X, Y, and Z are the variables in the integral RF(X,Y,Z).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RF IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RF is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, OR Z IS NEGATIVE.
 !               IERR = 2  X+Y, X+Z, OR Y+Z IS TOO SMALL.
@@ -3552,24 +3552,24 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE MACHINE MINIMUM MULTIPLIED BY 5.
-!          UPLIM IS NOT GREATER THAN THE MACHINE MAXIMUM DIVIDED BY 5.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the machine minimum multiplied by 5.
+!          UPLIM is not greater than the machine maximum divided by 5.
 !
                 lolim = 5.0 * spmpar(2)
                 uplim = 0.2 * spmpar(3)
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          ERRTOL ** 6 / (4 * (1 - ERRTOL)).
 !
          errtol = (3.6 * spmpar(1))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z) .lt. 0.0) go to 100
@@ -3605,7 +3605,7 @@ s = 1.0 + (c1 * e2 - 0.1 - c2 * e3) * e2 + c3 * e3
 rf = s / sqrt(mu)
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 rf = 0.0
 ierr = 1
@@ -3622,8 +3622,8 @@ subroutine drfval (x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE FIRST KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the first kind
 !
 !          RF(X,Y,Z) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -3654,15 +3654,15 @@ double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, AND Z ARE THE VARIABLES IN THE INTEGRAL RF(X,Y,Z).
+!          X, Y, and Z are the variables in the integral RF(X,Y,Z).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RF IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RF is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, OR Z IS NEGATIVE.
 !               IERR = 2  X+Y, X+Z, OR Y+Z IS TOO SMALL.
@@ -3670,24 +3670,24 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE MACHINE MINIMUM MULTIPLIED BY 5.
-!          UPLIM IS NOT GREATER THAN THE MACHINE MAXIMUM DIVIDED BY 5.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the machine minimum multiplied by 5.
+!          UPLIM is not greater than the machine maximum divided by 5.
 !
                 lolim = 5.0d0 * dpmpar(2)
                 uplim = 0.2d0 * dpmpar(3)
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          ERRTOL ** 6 / (4 * (1 - ERRTOL)).
 !
        errtol = (3.6 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z) .lt. 0.d0) go to 100
@@ -3723,7 +3723,7 @@ s = 1.d0 + (c1 * e2 - 0.1d0 - c2 * e3) * e2 + c3 * e3
 rf = s / dsqrt(mu)
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 rf = 0.d0
 ierr = 1
@@ -3740,8 +3740,8 @@ subroutine rdval (x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE SECOND KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the second kind
 !
 !          RD(X,Y,Z) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -3773,15 +3773,15 @@ real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, AND Z ARE THE VARIABLES IN THE INTEGRAL RD(X,Y,Z).
+!          X, Y, and Z are the variables in the integral RD(X,Y,Z).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RD IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RD is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, OR Z IS NEGATIVE.
 !               IERR = 2  X+Y OR Z IS TOO SMALL.
@@ -3789,17 +3789,17 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
 !
         errtol = (.28 * spmpar(1)) ** (1.0/6.0)
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
+!          LOLIM and UPLIM determine the range of valid arguments.
 !          LOLIM IS NOT LESS THAN 2 / (MACHINE MAXIMUM) ** (2/3).
-!          UPLIM IS NOT GREATER THAN (0.1 * ERRTOL / MACHINE
+!          UPLIM is not greater than (0.1 * ERRTOL / machine
 !          MINIMUM) ** (2/3).
 !
         mu = -2.0/3.0
@@ -3807,8 +3807,8 @@ real :: spmpar
         uplim = (10.0 * spmpar(2) / errtol) ** mu
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z) .lt. 0.0) go to 100
@@ -3853,7 +3853,7 @@ s2 = zndev * (c2 * ef + zndev * (- c3 * ec + zndev * c4 * ea))
 rd = 3.0 * sigma + power4 * (1.0 + s1 + s2) / (mu * sqrt(mu))
 return
 !
-!                        ERROR RETURN
+!                        Error return
 !
 100 rd = 0.0
 ierr = 1
@@ -3870,8 +3870,8 @@ subroutine drdval (x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE SECOND KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the second kind
 !
 !          RD(X,Y,Z) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -3904,15 +3904,15 @@ double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, AND Z ARE THE VARIABLES IN THE INTEGRAL RD(X,Y,Z).
+!          X, Y, and Z are the variables in the integral RD(X,Y,Z).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RD IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RD is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, OR Z IS NEGATIVE.
 !               IERR = 2  X+Y OR Z IS TOO SMALL.
@@ -3920,17 +3920,17 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
 !
         errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
+!          LOLIM and UPLIM determine the range of valid arguments.
 !          LOLIM IS NOT LESS THAN 2 / (MACHINE MAXIMUM) ** (2/3).
-!          UPLIM IS NOT GREATER THAN (0.1 * ERRTOL / MACHINE
+!          UPLIM is not greater than (0.1 * ERRTOL / machine
 !          MINIMUM) ** (2/3).
 !
         mu = -2.d0/3.d0
@@ -3938,8 +3938,8 @@ double precision :: dpmpar
         uplim = (10.d0 * dpmpar(2) / errtol) ** mu
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z) .lt. 0.d0) go to 100
@@ -3984,7 +3984,7 @@ s2 = zndev * (c2 * ef + zndev * (- c3 * ec + zndev * c4 * ea))
 rd = 3.d0 * sigma + power4 * (1.d0 + s1 + s2) / (mu * dsqrt(mu))
 return
 !
-!                        ERROR RETURN
+!                        Error return
 !
 100 rd = 0.d0
 ierr = 1
@@ -4001,8 +4001,8 @@ subroutine rjval (x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE THIRD KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the third kind
 !
 !          RJ(X,Y,Z,P) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -4038,15 +4038,15 @@ real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, Z, AND P ARE THE VARIABLES IN THE INTEGRAL RJ(X,Y,Z,P).
+!          X, Y, Z, and P are the variables in the integral RJ(X,Y,Z,P).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RJ IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RJ is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, Z, OR P IS NEGATIVE.
 !               IERR = 2  X+Y, X+Z, Y+Z, OR P IS TOO SMALL.
@@ -4054,30 +4054,30 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          RC IS A FUNCTION COMPUTED BY THE SUBROUTINE RCVAL1.
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE CUBE ROOT OF THE VALUE
-!          OF LOLIM USED IN THE CODE FOR RC, AND
-!          UPLIM IS NOT GREATER THAN 0.3 TIMES THE CUBE ROOT OF
-!          THE VALUE OF UPLIM USED IN THE CODE FOR RC.
+!          RC is a function computed by the subroutine RCVAL1.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the cube root of the value
+!          of LOLIM used in the code for RC, and
+!          UPLIM is not greater than 0.3 times the cube root of
+!          the value of UPLIM used in the code for RC.
 !
          mu = 1.0/3.0
          lolim = 1.0001 * (5.0 * spmpar(2))**mu
          uplim = .29999 * (0.2 * spmpar(3))**mu
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE. THE
-!          RELATIVE ERROR DUE TO TRUNCATION OF THE SERIES FOR RJ
+!          ERRTOL is set to the desired error tolerance. The
+!          relative error due to truncation of the series for RJ
 !          IS LESS THAN 3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
-!          AN ERROR TOLERANCE (ETOLRC) WILL BE PASSED TO THE CODE FOR
-!          RC TO MAKE THE TRUNCATION ERROR FOR RC LESS THAN FOR RJ.
+!          An error tolerance (ETOLRC) will be passed to the code for
+!          RC to make the truncation error for RC less than for RJ.
 !
          errtol = (.28 * spmpar(1))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z,p) .lt. 0.0) go to 100
@@ -4132,7 +4132,7 @@ s3 = pndev * ea * (c2 - pndev * c3) - c2 * pndev * ec
 rj = 3.0 * sigma + power4 * (s1 + s2 + s3) / (mu * sqrt(mu))
 return
 !
-!                        ERROR RETURN
+!                        Error return
 !
 100 rj = 0.0
 ierr = 1
@@ -4149,8 +4149,8 @@ subroutine drjval (x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
-!          OF THE THIRD KIND
+!          This subroutine computes the incomplete elliptic integral
+!          of the third kind
 !
 !          RJ(X,Y,Z,P) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -4187,15 +4187,15 @@ double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!          INPUT ...
+!          Input ...
 !
-!          X, Y, Z, AND P ARE THE VARIABLES IN THE INTEGRAL RJ(X,Y,Z,P).
+!          X, Y, Z, and P are the variables in the integral RJ(X,Y,Z,P).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RJ IS THE VALUE OF THE INCOMPLETE ELLIPTIC INTEGRAL.
+!          RJ is the value of the incomplete elliptic integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X, Y, Z, OR P IS NEGATIVE.
 !               IERR = 2  X+Y, X+Z, Y+Z, OR P IS TOO SMALL.
@@ -4203,30 +4203,30 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !
-!          MACHINE DEPENDENT PARAMETERS ...
+!          Machine dependent parameters ...
 !
-!          RC IS A FUNCTION COMPUTED BY THE SUBROUTINE DRCVL1.
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE CUBE ROOT OF THE VALUE
-!          OF LOLIM USED IN THE CODE FOR RC, AND
-!          UPLIM IS NOT GREATER THAN 0.3 TIMES THE CUBE ROOT OF
-!          THE VALUE OF UPLIM USED IN THE CODE FOR RC.
+!          RC is a function computed by the subroutine DRCVL1.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the cube root of the value
+!          of LOLIM used in the code for RC, and
+!          UPLIM is not greater than 0.3 times the cube root of
+!          the value of UPLIM used in the code for RC.
 !
          mu = 1.d0/3.d0
          lolim = 1.00000000001d0 * (5.0d0 * dpmpar(2))**mu
          uplim = .299999999999d0 * (0.2d0 * dpmpar(3))**mu
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION OF THE SERIES FOR RJ
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation of the series for RJ
 !          IS LESS THAN 3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
-!          AN ERROR TOLERANCE (ETOLRC) WILL BE PASSED TO THE CODE FOR
-!          RC TO MAKE THE TRUNCATION ERROR FOR RC LESS THAN FOR RJ.
+!          An error tolerance (ETOLRC) will be passed to the code for
+!          RC to make the truncation error for RC less than for RJ.
 !
        errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z,p) .lt. 0.d0) go to 100
@@ -4281,7 +4281,7 @@ s3 = pndev * ea * (c2 - pndev * c3) - c2 * pndev * ec
 rj = 3.d0 * sigma + power4 * (s1 + s2 + s3) / (mu * dsqrt(mu))
 return
 !
-!                        ERROR RETURN
+!                        Error return
 !
 100 rj = 0.d0
 ierr = 1
@@ -4298,7 +4298,7 @@ subroutine rcval1 (x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INTEGRAL
+!          This subroutine computes the integral
 !
 !          RC(X,Y) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -4330,42 +4330,42 @@ real :: yn
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE MACHINE MINIMUM MULTIPLIED BY 5.
-!          UPLIM IS NOT GREATER THAN THE MACHINE MAXIMUM DIVIDED BY 5.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the machine minimum multiplied by 5.
+!          UPLIM is not greater than the machine maximum divided by 5.
 !
                 lolim = 5.0 * spmpar(2)
                 uplim = 0.2 * spmpar(3)
 !
-!          INPUT ...
+!          Input ...
 !
-!          X AND Y ARE THE VARIABLES IN THE INTEGRAL RC(X,Y).
+!          X and Y are the variables in the integral RC(X,Y).
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          16 * ERRTOL ** 6 / (1 - 2 * ERRTOL).
 !
 !          SAMPLE CHOICES   ERRTOL   RELATIVE TRUNCATION
-!                                    ERROR LESS THAN
+!                                    error less than
 !                           1.E-3    2.E-17
 !                           3.E-3    2.E-14
 !                           1.E-2    2.E-11
 !                           3.E-2    2.E-8
 !                           1.E-1    2.E-5
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RC IS THE VALUE OF THE INTEGRAL.
+!          RC is the value of the integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X OR Y IS NEGATIVE, OR Y = 0.
 !               IERR = 2  X+Y IS TOO SMALL.
 !               IERR = 3  X OR Y IS TOO LARGE.
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (x .lt. 0.0 .or. y .le. 0.0) go to 100
@@ -4390,7 +4390,7 @@ s = sn * sn * (0.3 + sn * (c1 + sn * (0.375 + sn * c2)))
 rc = (1.0 + s) / sqrt(mu)
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 rc = 0.0
 ierr = 1
@@ -4407,7 +4407,7 @@ subroutine drcvl1 (x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!          THIS SUBROUTINE COMPUTES THE INTEGRAL
+!          This subroutine computes the integral
 !
 !          RC(X,Y) = INTEGRAL FROM ZERO TO INFINITY OF
 !
@@ -4439,34 +4439,34 @@ double precision :: yn
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!          LOLIM AND UPLIM DETERMINE THE RANGE OF VALID ARGUMENTS.
-!          LOLIM IS NOT LESS THAN THE MACHINE MINIMUM MULTIPLIED BY 5.
-!          UPLIM IS NOT GREATER THAN THE MACHINE MAXIMUM DIVIDED BY 5.
+!          LOLIM and UPLIM determine the range of valid arguments.
+!          LOLIM is not less than the machine minimum multiplied by 5.
+!          UPLIM is not greater than the machine maximum divided by 5.
 !
                 lolim = 5.0d0 * dpmpar(2)
                 uplim = 0.2d0 * dpmpar(3)
 !
-!          INPUT ...
+!          Input ...
 !
-!          X AND Y ARE THE VARIABLES IN THE INTEGRAL RC(X,Y).
+!          X and Y are the variables in the integral RC(X,Y).
 !
-!          ERRTOL IS SET TO THE DESIRED ERROR TOLERANCE.
-!          RELATIVE ERROR DUE TO TRUNCATION IS LESS THAN
+!          ERRTOL is set to the desired error tolerance.
+!          Relative error due to truncation is less than
 !          16 * ERRTOL ** 6 / (1 - 2 * ERRTOL).
 !
-!          OUTPUT ...
+!          Output ...
 !
-!          RC IS THE VALUE OF THE INTEGRAL.
+!          RC is the value of the integral.
 !
-!          IERR IS THE RETURN ERROR CODE.
+!          IERR is the return error code.
 !               IERR = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
 !               IERR = 1  X OR Y IS NEGATIVE, OR Y = 0.
 !               IERR = 2  X+Y IS TOO SMALL.
 !               IERR = 3  X OR Y IS TOO LARGE.
 !
 !-----------------------------------------------------------------------
-!          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
-!          EXPENSE OF ROBUSTNESS.
+!          Warning. Changes in the program may improve speed at the
+!          expense of robustness.
 !-----------------------------------------------------------------------
 !
 if (x .lt. 0.d0  .or.  y .le. 0.d0) go to 100
@@ -4491,7 +4491,7 @@ s = sn * sn * (0.3d0 + sn * (c1 + sn * (0.375d0 + sn * c2)))
 rc = (1.d0 + s) / dsqrt(mu)
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 rc = 0.d0
 ierr = 1
@@ -4514,16 +4514,16 @@ real :: e, eps, f, f2, pihalf, r, sg, tol, u1, u2, z
 integer :: ipmpar
 real :: spmpar
 !     -------------------------------------------------------------
-!     ELLPF CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K), AND
-!     DN(U,K) FOR REAL U AND REAL MODULUS K.  IT IS ASSUMED THAT
+!     ELLPF calculates the elliptic functions SN(U,K), CN(U,K), and
+!     DN(U,K) for real U and real modulus K.  It is assumed that
 !     ABS(K) .LE. 1. AND K**2 + L**2 = 1.
 !     -------------------------------------------------------------
 real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     ----------------
 !     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
-!            MAX IS THE LARGEST POSITIVE INTEGER THAT MAY
-!            BE USED, AND EPS IS THE SMALLEST REAL NUMBER
+!            Max is the largest positive integer that may
+!            be used, and eps is the smallest real number
 !            FOR WHICH 1 + EPS .GT. 1.
 !
               max = ipmpar(3)
@@ -4550,7 +4550,7 @@ f = pihalf
 if (k .ne. 0.0) call ellpi(pihalf,0.0,k,l,f,e,ierr)
 f2 = 2.0*f
 !
-!                   ARGUMENT REDUCTION
+!                   Argument reduction
 !
 u1 = abs(u)
 r = u1/f2
@@ -4573,14 +4573,14 @@ call scd (u2,abs(k),abs(l),f,s,c,d)
 ierr = 0
 if (u1 .lt. 0.0) s = -s
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 s = sg*s
 c = sg*c
 if (u .lt. 0.0) s = -s
 return
 !
-!             U IS AN INTEGER MULTIPLE OF F2
+!             U is an integer multiple of F2
 !
 30 s = 0.0
 c = sg
@@ -4588,7 +4588,7 @@ d = 1.0
 ierr = 0
 return
 !
-!                      ERROR RETURN
+!                      Error return
 !
 100 ierr = 1
 return
@@ -4605,8 +4605,8 @@ real, intent(in) :: u
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
 !     --------------------------------------------------------
-!     SCD COMPUTES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
-!     AND DN(U,K) FOR REAL U AND REAL MODULUS K SUCH THAT
+!     SCD computes the elliptic functions SN(U,K), CN(U,K),
+!     and DN(U,K) for real U and real modulus K such that
 !     0.0 .LE. U .LE. F AND 0.0 .LE. K .LT. 1.0, WHERE
 !     F = F(K) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
 !     FIRST KIND, AND F1 = F(L) IS THE COMPLEMENTARY INTEGRAL.
@@ -4638,7 +4638,7 @@ if (k .gt. l) go to 30
 call scdf (u,k,l,f,f1,s,c,d)
 return
 !
-!     USES IMAGINARY TRANSFORMATION OF JACOBI AND FOURIER
+!     Uses imaginary transformation of Jacobi and Fourier
 !     EXPANSION WHEN K .GT. L
 !
 30 call scdj (u,k,l,f,f1,s,c,d)
@@ -4658,9 +4658,9 @@ real, intent(out) :: c, d, s
 real, intent(in) :: u
 real :: c1, c2, c3, c4, u2
 !     -------------------------------------------------
-!     CALCULATES SN(U,K), CN(U,K), AND DN(U,K) FOR
+!     Calculates SN(U,K), CN(U,K), and DN(U,K) for
 !     0.0 .LE. U .LE. 0.01 AND FOR 0.0 .LE. K .LE. 1.0
-!     BY USE OF THE MACLAURIN EXPANSION FOR SN(U,K)
+!     by use of the Maclaurin expansion for SN(U,K)
 !     -------------------------------------------------
 real, intent(in) :: k
 real :: k2
@@ -4688,8 +4688,8 @@ real :: a, ai, coef, eps, pihalf, q1, q2, qd, qh, qn, sum, temp, &
 &tol, v, w, x
 real :: spmpar
 !     -------------------------------------------------------------
-!     SCDF COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
-!     K BY USE OF THE FOURIER EXPANSION FOR SN(U,K).  IT IS
+!     SCDF computes SN(U,K), CN(U,K), and DN(U,K) for real U and
+!     K by use of the Fourier expansion for SN(U,K).  It is
 !     ASSUMED THAT 0.0 .LE. K .LT. 1.0 AND 0.0 .LE. U .LE. F,
 !     WHERE F = F(K) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
 !     FIRST KIND AND F1 = F(L) IS THE COMPLEMENTARY INTEGRAL, WITH
@@ -4699,7 +4699,7 @@ real :: i
 real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     -------------------------------------------------
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!     Eps is a machine dependent constant.  Eps is the
 !     SMALLEST NUMBER SUCH THAT 1. + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -4755,8 +4755,8 @@ real :: a, ch, coef, e1, e1n, e2, e2n, eps, pi, pihalf, q1, q1n, &
 &q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn
 real :: spmpar
 !     ----------------------------------------------------------------
-!     SCDJ COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
-!     K USING THE IMAGINARY TRANSFORMATION OF JACOBI AND A
+!     SCDJ computes SN(U,K), CN(U,K), and DN(U,K) for real U and
+!     K using the imaginary transformation of Jacobi and A
 !     FOURIER EXPANSION.  IT IS ASSUMED THAT 0.0 .LE. K .LT. 1.0
 !     AND 0.0 .LE. U .LE. F, WHERE F = F(K) IS THE COMPLETE ELLIPTIC
 !     INTEGRAL OF THE FIRST KIND AND F1 = F(L) IS THE COMPLEMENTARY
@@ -4767,7 +4767,7 @@ real :: n
 data pihalf /1.5707963267949/
 data pi /3.1415926535898/
 !     ------------------------------------------------
-!     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!     Eps is a machine dependent constant.  Eps is the
 !     SMALLEST NUMBER SUCH THAT 1. + EPS .GT. 1.
 !
 eps = spmpar(1)
@@ -4835,8 +4835,8 @@ integer, intent(inout) :: ierr
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
 &t, t1, t2, td1, td2, u1, u2
 !     -------------------------------------------------------------
-!     ELPFC1 CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
-!     DN(U,K) FOR COMPLEX U AND REAL MODULUS K.  IT IS ASSUMED THAT
+!     ELPFC1 calculates the elliptic functions SN(U,K), CN(U,K),
+!     DN(U,K) for complex U and real modulus K.  It is assumed that
 !     ABS(K) .LE. 1. AND K**2 + L**2 = 1.
 !     -------------------------------------------------------------
 complex, intent(in) :: u
@@ -4906,14 +4906,14 @@ c2 = -dk*sl*dl*t*r/td1
 d1 = dk*dl*r/t1
 d2 = -k2*ck*sl*t*r/td1
 !
-!     FINAL ASSEMBLY
+!     Final assembly
 !
 40 s = cmplx (s1, s2)
 c = cmplx (c1, c2)
 d = cmplx (d1, d2)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 50 ierr = 3
 return
@@ -4922,8 +4922,8 @@ end subroutine elpfc1
 subroutine peq(z, w, ierr)
 implicit none
 !
-!     WEIERSTRASS P-FUNCTION IN THE EQUIANHARMONIC CASE
-!     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
+!     Weierstrass P-function in the equianharmonic case
+!     for complex argument with unit period parallelogram
 !
 complex, intent(in) :: z
 complex :: z1, z4, z6
@@ -4932,7 +4932,7 @@ real :: zr, zi
 integer, intent(inout) :: ierr
 integer :: m, n
 !
-!     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
+!     Reduction to fundamental parallelogram
 !
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
 m = int(zi)
@@ -4943,7 +4943,7 @@ if (zr.lt.0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
 !
 !     IF Z1=0 THEN Z COINCIDES WITH A LATTICE POINT.
-!     THE LATTICE POINTS ARE POLES FOR P.
+!     The lattice points are poles for P.
 !
 w = z1*z1
 zr = abs(real(w)) + abs(aimag(w))
@@ -4951,7 +4951,7 @@ if (zr.ne.0e0) go to 10
 ierr = 1
 return
 !
-!     EVALUATION OF P(Z1)
+!     Evaluation of P(Z1)
 !
 10 ierr = 0
 z4 = w*w
@@ -4968,9 +4968,9 @@ end subroutine peq
 subroutine peq1(z, w, ierr)
 implicit none
 !
-!     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
-!     EQUIANHARMONIC CASE FOR COMPLEX ARGUMENT
-!     WITH UNIT PERIOD PARALLELOGRAM
+!     First derivative of Weierstrass P-function in the
+!     equianharmonic case for complex argument
+!     with unit period parallelogram
 !
 complex, intent(in) :: z
 complex :: z1, z3, z6
@@ -4979,7 +4979,7 @@ real :: zr, zi
 integer, intent(inout) :: ierr
 integer :: m, n
 !
-!     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
+!     Reduction to fundamental parallelogram
 !
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
 m = int(zi)
@@ -4990,7 +4990,7 @@ if (zr.lt.0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
 !
 !     IF Z1=0 THEN Z COINCIDES WITH A LATTICE POINT.
-!     THE LATTICE POINTS ARE POLES FOR DP.
+!     The lattice points are poles for DP.
 !
 z3 = z1*z1*z1
 z6 = z3*z3
@@ -5000,7 +5000,7 @@ if (zr.ne.0e0) go to 10
 ierr = 1
 return
 !
-!     EVALUATION OF DP(Z1)
+!     Evaluation of DP(Z1)
 !
 10 ierr = 0
 w = (((14e0*z6+294e0)*z6+126e0)*z6-2e0)/w + &
@@ -5016,8 +5016,8 @@ end subroutine peq1
 subroutine plem(z, w, ierr)
 implicit none
 !
-!     WEIERSTRASS P-FUNCTION IN THE LEMNISCATIC CASE
-!     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
+!     Weierstrass P-function in the lemniscatic case
+!     for complex argument with unit period parallelogram
 !
 complex, intent(in) :: z
 complex :: z1, z4, z6
@@ -5026,7 +5026,7 @@ real :: zr, zi
 integer, intent(inout) :: ierr
 integer :: m, n
 !
-!     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
+!     Reduction to fundamental parallelogram
 !
 zr = real(z) + 0.5e0
 zi = aimag(z) + 0.5e0
@@ -5037,7 +5037,7 @@ if (zi.lt.0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
 !
 !     IF Z1=0 THEN Z COINCIDES WITH A LATTICE POINT.
-!     THE LATTICE POINTS ARE POLES FOR P.
+!     The lattice points are poles for P.
 !
 w = z1*z1
 zr = abs(real(w)) + abs(aimag(w))
@@ -5045,7 +5045,7 @@ if (zr.ne.0e0) go to 10
 ierr = 1
 return
 !
-!     EVALUATION OF P(Z1)
+!     Evaluation of P(Z1)
 !
 10 ierr = 0
 z4 = w*w
@@ -5063,9 +5063,9 @@ end subroutine plem
 subroutine plem1(z, w, ierr)
 implicit none
 !
-!     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
-!     LEMNISCATIC CASE FOR COMPLEX ARGUMENT
-!     WITH UNIT PERIOD PARALLELOGRAM
+!     First derivative of Weierstrass P-function in the
+!     lemniscatic case for complex argument
+!     with unit period parallelogram
 !
 complex, intent(in) :: z
 complex :: z1, z3, z4
@@ -5074,7 +5074,7 @@ real :: zr, zi
 integer, intent(inout) :: ierr
 integer :: m, n
 !
-!     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
+!     Reduction to fundamental parallelogram
 !
 zr = real(z) + 0.5e0
 zi = aimag(z) + 0.5e0
@@ -5085,7 +5085,7 @@ if (zi.lt.0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
 !
 !     IF Z1=0 THEN Z COINCIDES WITH A LATTICE POINT.
-!     THE LATTICE POINTS ARE POLES FOR DP.
+!     The lattice points are poles for DP.
 !
 z3 = z1*z1*z1
 z4 = z3*z1
@@ -5095,7 +5095,7 @@ if (zr.ne.0e0) go to 10
 ierr = 1
 return
 !
-!     EVALUATION OF DP(Z1)
+!     Evaluation of DP(Z1)
 !
 10 ierr = 0
 w = (((1e1*z4+9e1)*z4+3e1)*z4-2e0)/w + &
@@ -5157,8 +5157,8 @@ data rsq(1)/6.0516/, rsq(2)/12.60605/, rsq(3)/19.201924/
 data a3d8(1)/0.28125e-4/, a3d8(2)/0.285e-7/, a3d8(3)/0.32625e-10/
 data cst(1)/.5625e-4/, cst(2)/.57e-7/, cst(3)/.6512e-10/
 !     -------------------
-!     TAU IS A MACHINE DEPENDENT TOLERANCE. IT IS ASSUMED THAT A
-!     7 OR MORE DIGIT FLOATING POINT ARITHMETIC IS BEING USED.
+!     Tau is a machine dependent tolerance. It is assumed that A
+!     7 or more digit floating point arithmetic is being used.
 !     -------------------
 tau=2.0*spmpar(1)
 if (tau.lt.3.e-11) tau=amax1(5.0*tau,1.e-14)
@@ -5222,7 +5222,7 @@ if (k.eq.n-1) return
 bgd1=sqrt(d1sq+d1sq)
 bgd2=sqrt(d2sq+d2sq)
 !
-!             PROCESSING VERTEX (XK,YK)
+!             Processing vertex (XK,YK)
 !
 50 psi1=v*w-u*z
 cee=u*w+v*z
@@ -5256,7 +5256,7 @@ c=rtpi*(h(2)-h(1))-(g(2)*h(2)-g(1)*h(1))
 p1=(aj0-c)/twopi
 go to 3621
 !
-!                 COMPUTATION OF L
+!                 Computation of L
 !
 90 if (g(1).lt.0.0) go to 100
 if (g(2).ge.0.0) go to 130
@@ -5298,7 +5298,7 @@ aj0=aj0+pi
 go to 130
 121 aj0=aj0-pi
 !
-!                 SERIES EVALUATION
+!                 Series evaluation
 !
 130 if (b.ge.rsq(iop)) go to 171
 cape=aj0
@@ -5352,7 +5352,7 @@ go to 161
 go to 3621
 171 p1=l
 !
-!               STANDARD TERMINATION
+!               Standard termination
 !
 3621 if (k.ne.n) go to 3651
 if (n.ne.1) go to 3631
@@ -5369,7 +5369,7 @@ go to 3645
 3645 p=p+float(ko)
 return
 !
-!              SET UP THE NEXT VERTEX
+!              Set up the next vertex
 !
 3651 w=u
 z=v
@@ -5387,7 +5387,7 @@ p=p-p1
 a=a+xk*(y(k+1)-ykm1)
 go to 50
 !
-!                  ERROR RETURN
+!                  Error return
 !
 4011 ind=1
 p=5.0
@@ -5414,15 +5414,15 @@ real :: rexp
 real :: spmpar
 !-----------------------------------------------------------------------
 !       IF J .NE. 0, OUTPUT IS P = CIRCULAR COVERAGE FUNCTION. P GIVES
-!       THE PROBABILITY OF A SHOT FALLING, UNDER A NORMAL DISTRIBUTION
-!       WITH MEAN (0,0) AND EQUAL STANDARD DEVIATIONS, S, IN A CIRCLE
-!       OF RADIUS R0, OFFSET A DISTANCE D0 FROM (0,0).
+!       the probability of a shot falling, under a normal distribution
+!       with mean (0,0) and equal standard deviations, S, in a circle
+!       of radius R0, offset a distance D0 from (0,0).
 !       INPUT IS R = R0/S, D = D0/S.
 !
 !       IF J = 0, OUTPUT IS P = GENERALIZED CIRCULAR ERROR FUNCTION.
-!       P GIVES THE PROBABILITY OF A SHOT FALLING ,UNDER A NORMAL
-!       BIVARIATE DISTRIBUTION WITH MEAN (0,0) AND STANDARD DEVIATIONS
-!       SMIN AND S, IN A CIRCLE OF RADIUS R0 CENTERED AT (0,0).
+!       P gives the probability of a shot falling ,under a normal
+!       bivariate distribution with mean (0,0) and standard deviations
+!       SMIN and S, in a circle of radius R0 centered at (0,0).
 !       INPUT FOR J = 0, R = R0/S, D = SMIN/S .LE. 1.
 !       IF SMIN = 0, S .NE. 0, P = ERF(R/(SQR(2)).
 !
@@ -5435,7 +5435,7 @@ real :: spmpar
 !       NWL REPORT N0.1768, JAN. 1962. NSWC REPORT N0.83-13, NOV. 1982.
 !       IEEE TRANS. INFO. TH. APRIL 1965, P. 312.
 !-----------------------------------------------------------------------
-!       NEGATIVE R AND D ARE NOT PERMITTED.
+!       Negative R and D are not permitted.
 !--------------------------------------------
 real :: m, m0
 !-----------------------
@@ -5533,7 +5533,7 @@ data c3 /6.28318530717959/
      p = (erf(c1*r) - d2/(1.0 + delta))/delta
      sum = 0.0
 !
-!          COMPUTE THE ASYMPTOTIC EXPANSION
+!          Compute the asymptotic expansion
 !
 30 an = an + 2.0
      anm1 = an - 1.0
@@ -5573,7 +5573,7 @@ data c3 /6.28318530717959/
   tr = 0.5*(r*r)
   td = 0.5*(d*d)
 !
-!       FIND THE NUMBER N OF TERMS TO BE USED IN THE SERIES
+!       Find the number N of terms to be used in the series
 !
   z = 0.5*t
   n = z*e + 1.0
@@ -5583,7 +5583,7 @@ data c3 /6.28318530717959/
       tn = tn*(w*w)
       if (tn .gt. eps) go to 65
 !
-!       COMPUTE THE SERIES
+!       Compute the series
 !
   m = n
   call gratio (m + 1.0, tr, s, w, 0)
@@ -5638,7 +5638,7 @@ data c3 /6.28318530717959/
   p = 0.5*w*abs(s1 - s2)
   if (a1 .gt. 0.0) p = abs(1.0 - 0.5*w*(s1 + s2))
 !
-!       TERMINATION
+!       Termination
 !
 110 if (p .gt. 1.0) p = 1.0
   return
@@ -5658,14 +5658,14 @@ real, intent(in) :: x
 real, intent(inout) :: y
 real :: ax, bot, c, eps, t, top
 !-----------------------------------------------------------------------
-!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!         Evaluation of the complementary error function
 !
 !               Y = ERFC(X)            IF IND = 0
 !               Y = EXP(X*X)*ERFC(X)   OTHERWISE
 !
 !     E IS AN INPUT/OUTPUT VARIABLE. IF E .GE. 0 THEN IT IS ASSUMED
 !     THAT E = EXP(-X*X). IN THIS CASE E IS NOT MODIFIED. IF E IS
-!     NEGATIVE THEN E IS SET TO EXP(-X*X) WHEN THIS VALUE IS NEEDED.
+!     negative then E is set to EXP(-X*X) when this value is needed.
 !
 !-----------------------------------------------------------------------
 real :: a(4), b(4), p(8), q(8), r(5), s(5)
@@ -5739,7 +5739,7 @@ bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + s(5)
 y = (c - t*top/bot) / ax
 go to 20
 !
-!             LIMIT VALUE FOR LARGE NEGATIVE X
+!             Limit value for large negative X
 !
 40 y = 2.0
 if (ind .eq. 0) return
@@ -5747,7 +5747,7 @@ if (e .lt. 0.0) e = exp(-x*x)
 y = 2.0/e
 return
 !
-!             LIMIT VALUE FOR LARGE POSITIVE X
+!             Limit value for large positive X
 !                       WHEN IND = 0
 !
 50 y = 0.0
@@ -5792,11 +5792,11 @@ real :: epsln
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!           COMPUTATION OF THE ELLIPTICAL COVERAGE FUNCTION
+!           Computation of the elliptical coverage function
 !
 !                         ---------------
 !
-!     THE RESULT P IS ACCURATE TO AT LEAST 6 SIGNIFICANT DIGITS IF
+!     The result P is accurate to at least 6 significant digits if
 !     P .GE. 1.E-20 AND MAX(H/S,K/S,SX/S,SY/S) .LE. 10/SQRT(SPMPAR(1))
 !     FOR S = MIN(SX,SY).
 !
@@ -5804,7 +5804,7 @@ real :: spmpar
 real, intent(in) :: k
 real :: k8, v(16), w(16)
 !-----------------------------------------------------------------------
-!   V(*), W(*)-- GAUSSIAN ABSCISSAS AND WEIGHTS OF ORDER 32, ON (-1,1).
+!   V(*), W(*)-- Gaussian abscissas and weights of order 32, on (-1,1).
 !-----------------------------------------------------------------------
 data v(1)  /.4830766568773832e-01/, v(2)  /.1444719615827965e+00/, &
 &v(3)  /.2392873622521371e+00/, v(4)  /.3318686022821276e+00/, &
@@ -5841,7 +5841,7 @@ eps = spmpar(1)
 sqeps = sqrt(eps)
 a = 6.5
 !----------------------------------------
-!     TEST NO.1 (REPORT 83-13).
+!     Test no.1 (REPORT 83-13).
 !----------------------------------------
 z3 = amin1(sqrt(sqrt(spmpar(2))),1.e-30)*sx*sy
 if (r0*r0 .le. z3) return
@@ -5851,12 +5851,12 @@ h8 = abs(h)
 k8 = abs(k)
 dm = amax1(sx,sy)
 !-----------------------------------------
-!     TEST NO.2 (REPORT 83-13).
+!     Test no.2 (REPORT 83-13).
 !-----------------------------------------
 if ((r0 - h8 + a3*sx) .le. 0.0) return
 if ((r0 - k8 + a3*sy) .le. 0.0) return
 !-----------------------------------------
-!     TEST NO.3 (REPORT 83-13).
+!     Test no.3 (REPORT 83-13).
 !-----------------------------------------
 c8 = - epsln(0)
 !-----------EXP(-10.3026) = 3.35E(-5)---------
@@ -5876,7 +5876,7 @@ t = h5 - 2.0*r0*s0 + s0*s0 - h*h
 20 p = 1.0
 return
 !-----------------------------------------
-!     TEST NO.4 (REPORT 83-13).
+!     Test no.4 (REPORT 83-13).
 !-----------------------------------------
 25 s0 = sqrt(h2)
 g2 = 0.0
@@ -5896,7 +5896,7 @@ g2 = (k*k - h3)/((r0 + h8)*dm)
 if (abs(h3) .le. abs(h5)) go to 33
 g2 = (h*h - h5)/((r0 + h8)*dm)
 !--------------------------
-!     SMALL R
+!     Small R
 !--------------------------
 33 t1 = r0/sx
 t2 = r0/sy
@@ -5983,7 +5983,7 @@ if (k8 - r .gt. -13.0*s2) u = 0.25*aerf(k8/s2,r/s2)
 p = u*z8
 return
 !----------------------------
-!     FIND THE VALUE OF A
+!     Find the value of A
 !----------------------------
 85 s0 = s1*s1
 s9 = s2*s2
@@ -6043,7 +6043,7 @@ a = a + 2.
 t9 = r8*u*exp(-h2*h2)
 if (t9 .lt. 5.e-2 * z) a = a + 0.5
 !---------------------------------------
-!     START INTEGRATION PROCEDURE
+!     Start integration procedure
 !---------------------------------------
 107 s0 = s1
 s9 = s2
@@ -6053,7 +6053,7 @@ g3 = h8
 z9 = s1
 j8 = 0
 !-------------------------------------------------
-!     DETERMINE INTERVAL OF INTEGRATION, (A,RT2).
+!     Determine interval of integration, (A,RT2).
 !           E3 = (RT2-A)/2, D1 = (RT2+A)/2.
 !-------------------------------------------------
 110 z = g2 + a*z8
@@ -6130,7 +6130,7 @@ g3 = k8
 z9 = s2
 go to 110
 !-----------------------------------------------------------------------
-!     DETERMINE IN WHICH ORDER THE X AMD Y INTEGRATIONS ARE CARRIED OUT.
+!     Determine in which order the X amd Y integrations are carried out.
 !-----------------------------------------------------------------------
 170 if (s2 .gt. 2.e-2 .and. h8 + k8 .lt. 2.e2) go to 172
 if (abs(e3 - f) .gt. 0.4*f) go to 172
@@ -6229,7 +6229,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
-!     COPYING REAL POLYNOMIALS
+!     Copying real polynomials
 !     ------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
@@ -6257,7 +6257,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
-!     COPYING DOUBLE PRECISION POLYNOMIALS
+!     Copying double precision polynomials
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
@@ -6285,7 +6285,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
-!     ADDITION OF REAL POLYNOMIALS
+!     Addition of real polynomials
 !     ------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
@@ -6309,7 +6309,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
-!     ADDITION OF DOUBLE PRECISION POLYNOMIALS
+!     Addition of double precision polynomials
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
@@ -6333,7 +6333,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
-!     SUBTRACTION OF REAL POLYNOMIALS
+!     Subtraction of real polynomials
 !     ------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
@@ -6357,7 +6357,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
-!     SUBTRACTION OF DOUBLE PRECISION POLYNOMIALS
+!     Subtraction of double precision polynomials
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
@@ -6381,7 +6381,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
 !     ------------------------------------------------------------------
-!     MULTIPLICATION OF REAL POLYNOMIALS
+!     Multiplication of real polynomials
 !     ------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
@@ -6422,7 +6422,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
 !     ------------------------------------------------------------------
-!     MULTIPLICATION OF DOUBLE PRECISION POLYNOMIALS
+!     Multiplication of double precision polynomials
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
@@ -6465,7 +6465,7 @@ integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, ib, ic, imax, j, la, lc
 real :: b0
 !     ------------------------------------------------------------------
-!     DIVISION OF REAL POLYNOMIALS
+!     Division of real polynomials
 !     ------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
@@ -6511,7 +6511,7 @@ do j = 2,n
 end do
 return
 !
-!                ERROR RETURN
+!                Error return
 !
 100 ierr = 1
 return
@@ -6523,7 +6523,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, ib, ic, imax, j, la, lc
 !     ------------------------------------------------------------------
-!     DIVISION OF DOUBLE PRECISION POLYNOMIALS
+!     Division of double precision polynomials
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
@@ -6569,7 +6569,7 @@ do j = 2,n
 end do
 return
 !
-!                ERROR RETURN
+!                Error return
 !
 100 ierr = 1
 return
@@ -6606,7 +6606,7 @@ do j = 2,n
 end do
 return
 !
-!                  GENERAL CASE
+!                  General case
 !
 20 rp1 = dble(r) + 1.d0
 lb = 1
@@ -6628,7 +6628,7 @@ do j = 2,n
 end do
 return
 !
-!                ERROR RETURN
+!                Error return
 !
 100 ierr = 1
 return
@@ -6663,7 +6663,7 @@ do j = 2,n
 end do
 return
 !
-!                  GENERAL CASE
+!                  General case
 !
 20 rp1 = r + 1.d0
 lb = 1
@@ -6685,7 +6685,7 @@ do j = 2,n
 end do
 return
 !
-!                ERROR RETURN
+!                Error return
 !
 100 ierr = 1
 return
@@ -6697,7 +6697,7 @@ integer, intent(in) :: n
 integer :: i, j, jj, k, l, l0, ll, m
 real :: s, sum, t, u
 !-----------------------------------------------------------------------
-!          COMPUTATION OF THE INVERSE OF THE POWER SERIES
+!          Computation of the inverse of the power series
 !                  SUM (A(I)*X**I, I = 1,2,...)
 !-----------------------------------------------------------------------
 real, intent(in) :: a(n)
@@ -6707,7 +6707,7 @@ real, intent(inout) :: d(n), q(*)
 !     REAL Q(NUM)
 !----------------------------
 !
-!                 COMPUTE THE COEFFICIENT MATRIX Q
+!                 Compute the coefficient matrix Q
 !
 q(1) = 1.0
 k = 2
@@ -6734,7 +6734,7 @@ do j = 2,n
    end do
 end do
 !
-!              COMPUTE THE COEFFICIENTS OF THE INVERSE
+!              Compute the coefficients of the inverse
 !
 k = 1
 do j = 1,n
@@ -6757,7 +6757,7 @@ implicit none
 integer, intent(in) :: n
 integer :: i, j, jj, k, l, l0, ll, m
 !-----------------------------------------------------------------------
-!          COMPUTATION OF THE INVERSE OF THE POWER SERIES
+!          Computation of the inverse of the power series
 !                  SUM (A(I)*X**I, I = 1,2,...)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(n)
@@ -6768,7 +6768,7 @@ double precision :: s, sum, t, u
 !     REAL Q(NUM)
 !----------------------------
 !
-!                 COMPUTE THE COEFFICIENT MATRIX Q
+!                 Compute the coefficient matrix Q
 !
 q(1) = 1.d0
 k = 2
@@ -6795,7 +6795,7 @@ do j = 2,n
    end do
 end do
 !
-!              COMPUTE THE COEFFICIENTS OF THE INVERSE
+!              Compute the coefficients of the inverse
 !
 k = 1
 do j = 1,n
@@ -6822,7 +6822,7 @@ real, intent(out) :: fv
 integer :: k, l
 real :: ql
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR MULTIPLEX POLYNOMIAL EVALUATION
+!     Fortran subroutine for multiplex polynomial evaluation
 !     ******************************************************************
 !     MO = MODE OF OPERATION
 !     AU = ARGUMENT U
@@ -6879,8 +6879,8 @@ real, intent(in) :: x
 integer :: i, k
 real :: s0, s1, s2, x2
 !-----------------------------------------------------------------------
-!          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
-!          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
+!          Evaluate the N term Chebyshev series A at X.
+!          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
 real, intent(in) :: a(n)
 !
@@ -6906,8 +6906,8 @@ implicit none
 integer, intent(in) :: n
 integer :: i, k
 !-----------------------------------------------------------------------
-!          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
-!          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
+!          Evaluate the N term Chebyshev series A at X.
+!          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(n), x
 double precision :: x2, s0, s1, s2
@@ -6937,7 +6937,7 @@ real :: au(*)
 integer :: k, m
 real :: dm, tm
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR LAGRANGIAN NORMALIZATION FACTORS
+!     Fortran subroutine for Lagrangian normalization factors
 !     ******************************************************************
 !     AU = COORDINATE ARGUMENTS  (N-ARRAY)
 !     NA = NUMBER OF ARGUMENTS   (N)
@@ -6965,7 +6965,7 @@ real, intent(inout) :: sf(*)
 integer :: k, l
 real :: dm, rm, sm, tm
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR LAGRANGIAN FUNCTION EVALUATION
+!     Fortran subroutine for Lagrangian function evaluation
 !     ******************************************************************
 !     MO = MODE OF OPERATION
 !     NA = NUMBER OF STATIONS
@@ -7077,7 +7077,7 @@ real :: au(*)
 integer :: i, j, k, l
 real :: sm, td, tm
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR LAGRANGIAN POLYNOMIAL EXPANSION
+!     Fortran subroutine for Lagrangian polynomial expansion
 !     ******************************************************************
 !     AU = COORDINATE ARGUMENTS    (N-ARRAY)
 !     NA = NUMBER OF ARGUMENTS     (N)
@@ -7130,7 +7130,7 @@ real :: au(*)
 integer :: i, j, k, l, m
 real :: rm, rn, sm, sn
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL SYNTHESIS
+!     Fortran subroutine for orthonormal polynomial synthesis
 !     ******************************************************************
 !     AU = COORDINATE ARGUMENTS    (N ARRAY)
 !     MA = NUMBER OF COLUMNS       (M)
@@ -7214,7 +7214,7 @@ real, intent(inout) :: df(*), ff(*), sf(*)
 integer :: k, l
 real :: rn, sn
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EVALUATION
+!     Fortran subroutine for orthonormal polynomial evaluation
 !     ******************************************************************
 !     MO = MODE OF OPERATION
 !     NA = NUMBER OF COORDINATES
@@ -7271,7 +7271,7 @@ real :: ar(*)
 integer :: j, k, l, m, n
 real :: rn, sn, tm
 !     ******************************************************************
-!     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EXPANSION
+!     Fortran subroutine for orthonormal polynomial expansion
 !     ******************************************************************
 !     NA = NUMBER OF ARGUMENTS     (N)
 !     AR = RECURRENCE COEFFICIENTS (2*M-2 ARRAY)
@@ -7311,23 +7311,23 @@ real function zeroin (f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
+!         Finding a zero of the function F(X) in the interval (AX,BX)
 !
 !                       ------------------------
 !
-!  INPUT...
+!  Input...
 !
 !  F      FUNCTION SUBPROGRAM WHICH EVALUATES F(X) FOR ANY X IN THE
-!         CLOSED INTERVAL (AX,BX). IT IS ASSUMED THAT F IS CONTINUOUS,
-!         AND THAT F(AX) AND F(BX) HAVE DIFFERENT SIGNS.
+!         closed interval (AX,BX). It is assumed that F is continuous,
+!         and that F(AX) and F(BX) have different signs.
 !  AX     LEFT ENDPOINT OF THE INTERVAL
 !  BX     RIGHT ENDPOINT OF THE INTERVAL
 !  AERR   THE ABSOLUTE ERROR TOLERANCE TO BE SATISFIED
 !  RERR   THE RELATIVE ERROR TOLERANCE TO BE SATISFIED
 !
-!  OUTPUT...
+!  Output...
 !
-!         ABCISSA APPROXIMATING A ZERO OF F IN THE INTERVAL (AX,BX)
+!         Abcissa approximating a zero of F in the interval (AX,BX)
 !
 !-----------------------------------------------------------------------
 !  ZEROIN IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
@@ -7341,11 +7341,11 @@ real :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, r, s, atol, &
 &rtol
 real :: spmpar
 !
-!  COMPUTE EPS, THE RELATIVE MACHINE PRECISION
+!  Compute eps, the relative machine precision
 !
 eps = spmpar(1)
 !
-! INITIALIZATION
+! Initialization
 !
 a = ax
 b = bx
@@ -7354,7 +7354,7 @@ fb = f(b)
 atol = 0.5*aerr
 rtol = amax1(0.5*rerr,2.0*eps)
 !
-! BEGIN STEP
+! Begin step
 !
 10 c = a
 fc = fa
@@ -7368,30 +7368,30 @@ fa = fb
 fb = fc
 fc = fa
 !
-! CONVERGENCE TEST
+! Convergence test
 !
 40 tol = rtol*amax1(abs(b),abs(c)) + atol
 xm = 0.5*(c - b)
 if (abs(xm) .le. tol) go to 90
 if (fb .eq. 0.0) go to 90
 !
-! IS BISECTION NECESSARY
+! Is bisection necessary
 !
 if (abs(e) .lt. tol) go to 70
 if (abs(fa) .le. abs(fb)) go to 70
 !
-! IS QUADRATIC INTERPOLATION POSSIBLE
+! Is quadratic interpolation possible
 !
 if (a .ne. c) go to 50
 !
-! LINEAR INTERPOLATION
+! Linear interpolation
 !
 s = fb/fc
 p = (c - b)*s
 q = 1.0 - s
 go to 60
 !
-! INVERSE QUADRATIC INTERPOLATION
+! Inverse quadratic interpolation
 !
 50 q = fa/fc
 r = fb/fc
@@ -7399,12 +7399,12 @@ s = fb/fa
 p = s*((c - b)*q*(q - r) - (b - a)*(r - 1.0))
 q = (q - 1.0)*(r - 1.0)*(s - 1.0)
 !
-! ADJUST SIGNS
+! Adjust signs
 !
 60 if (p .gt. 0.0) q = -q
 p = abs(p)
 !
-! IS INTERPOLATION ACCEPTABLE
+! Is interpolation acceptable
 !
 if (2.0*p .ge. (3.0*xm*q - abs(tol*q))) go to 70
 if (p .ge. abs(0.5*e*q)) go to 70
@@ -7412,12 +7412,12 @@ e = d
 d = p/q
 go to 80
 !
-! BISECTION
+! Bisection
 !
 70 d = xm
 e = d
 !
-! COMPLETE STEP
+! Complete step
 !
 80 a = b
 fa = fb
@@ -7427,7 +7427,7 @@ fb = f(b)
 if ((fb*(fc/abs(fc))) .gt. 0.0) go to 10
 go to 20
 !
-! DONE
+! Done
 !
 90 zeroin = b
 return
@@ -7437,23 +7437,23 @@ double precision function dzero (f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !
-!         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
+!         Finding a zero of the function F(X) in the interval (AX,BX)
 !
 !                       ------------------------
 !
-!  INPUT...
+!  Input...
 !
 !  F      FUNCTION SUBPROGRAM WHICH EVALUATES F(X) FOR ANY X IN THE
-!         CLOSED INTERVAL (AX,BX). IT IS ASSUMED THAT F IS CONTINUOUS,
-!         AND THAT F(AX) AND F(BX) HAVE DIFFERENT SIGNS.
+!         closed interval (AX,BX). It is assumed that F is continuous,
+!         and that F(AX) and F(BX) have different signs.
 !  AX     LEFT ENDPOINT OF THE INTERVAL
 !  BX     RIGHT ENDPOINT OF THE INTERVAL
 !  AERR   THE ABSOLUTE ERROR TOLERANCE TO BE SATISFIED
 !  RERR   THE RELATIVE ERROR TOLERANCE TO BE SATISFIED
 !
-!  OUTPUT...
+!  Output...
 !
-!         ABCISSA APPROXIMATING A ZERO OF F IN THE INTERVAL (AX,BX)
+!         Abcissa approximating a zero of F in the interval (AX,BX)
 !
 !-----------------------------------------------------------------------
 !  DZERO IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
@@ -7467,11 +7467,11 @@ double precision :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, &
 &r, s, atol, rtol
 double precision :: dpmpar
 !
-!  COMPUTE EPS, THE RELATIVE MACHINE PRECISION
+!  Compute eps, the relative machine precision
 !
 eps = dpmpar(1)
 !
-! INITIALIZATION
+! Initialization
 !
 a = ax
 b = bx
@@ -7480,7 +7480,7 @@ fb = f(b)
 atol = 0.5d0*aerr
 rtol = dmax1(0.5d0*rerr,2.d0*eps)
 !
-! BEGIN STEP
+! Begin step
 !
 10 c = a
 fc = fa
@@ -7494,30 +7494,30 @@ fa = fb
 fb = fc
 fc = fa
 !
-! CONVERGENCE TEST
+! Convergence test
 !
 40 tol = rtol*dmax1(dabs(b),dabs(c)) + atol
 xm = 0.5d0*(c - b)
 if (dabs(xm) .le. tol) go to 90
 if (fb .eq. 0.d0) go to 90
 !
-! IS BISECTION NECESSARY
+! Is bisection necessary
 !
 if (dabs(e) .lt. tol) go to 70
 if (dabs(fa) .le. dabs(fb)) go to 70
 !
-! IS QUADRATIC INTERPOLATION POSSIBLE
+! Is quadratic interpolation possible
 !
 if (a .ne. c) go to 50
 !
-! LINEAR INTERPOLATION
+! Linear interpolation
 !
 s = fb/fc
 p = (c - b)*s
 q = 1.d0 - s
 go to 60
 !
-! INVERSE QUADRATIC INTERPOLATION
+! Inverse quadratic interpolation
 !
 50 q = fa/fc
 r = fb/fc
@@ -7525,12 +7525,12 @@ s = fb/fa
 p = s*((c - b)*q*(q - r) - (b - a)*(r - 1.d0))
 q = (q - 1.d0)*(r - 1.d0)*(s - 1.d0)
 !
-! ADJUST SIGNS
+! Adjust signs
 !
 60 if (p .gt. 0.d0) q = -q
 p = dabs(p)
 !
-! IS INTERPOLATION ACCEPTABLE
+! Is interpolation acceptable
 !
 if (2.d0*p .ge. (3.d0*xm*q - dabs(tol*q))) go to 70
 if (p .ge. dabs(0.5d0*e*q)) go to 70
@@ -7538,12 +7538,12 @@ e = d
 d = p/q
 go to 80
 !
-! BISECTION
+! Bisection
 !
 70 d = xm
 e = d
 !
-! COMPLETE STEP
+! Complete step
 !
 80 a = b
 fa = fb
@@ -7553,7 +7553,7 @@ fb = f(b)
 if ((fb*(fc/dabs(fc))) .gt. 0.d0) go to 10
 go to 20
 !
-! DONE
+! Done
 !
 90 dzero = b
 return
@@ -7571,89 +7571,89 @@ external fcn
 !
 !     SUBROUTINE HBRD
 !
-!       THE PURPOSE OF HBRD IS TO FIND A ZERO OF A SYSTEM OF
-!     N NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION
-!     OF THE POWELL HYBRID METHOD. THIS IS DONE BY USING THE
-!     MORE GENERAL NONLINEAR EQUATION SOLVER HYBRD. THE USER
-!     MUST PROVIDE A SUBROUTINE WHICH CALCULATES THE FUNCTIONS.
-!     THE JACOBIAN IS THEN CALCULATED BY A FORWARD-DIFFERENCE
-!     APPROXIMATION.
+!       The purpose of HBRD is to find a zero of a system of
+!     N nonlinear functions in N variables by a modification
+!     of the Powell hybrid method. This is done by using the
+!     more general nonlinear equation solver HYBRD. The user
+!     must provide a subroutine which calculates the functions.
+!     The Jacobian is then calculated by a forward-difference
+!     approximation.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(N,X,FVEC,IFLAG)
 !         INTEGER N,IFLAG
 !         REAL X(N),FVEC(N)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ---------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE THE EXECUTION OF HBRD.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate the execution of HBRD.
+!         In this case set IFLAG to a negative integer.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS AND VARIABLES.
+!       N is a positive integer input variable SET to the number
+!         of functions and variables.
 !
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
+!       X is an array of length N. On input X must contain
+!         an initial estimate of the solution vector. On output X
+!         contains the final estimate of the solution vector.
 !
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
+!       FVEC is an output array of length N which contains
+!         the functions evaluated at the output X.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
-!       TOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION OCCURS
-!         WHEN THE ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!         BETWEEN X AND THE SOLUTION IS AT MOST TOL.
+!       TOL is a nonnegative input variable. Termination occurs
+!         when the algorithm estimates that the relative error
+!         between X and the solution is at most TOL.
 !
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
+!       Info is an integer output variable. If the user has
+!         terminated execution, info is set to the (negative)
+!         value of IFLAG. See description of FCN. Otherwise,
+!         info is set as follows.
 !
 !         INFO = 0   IMPROPER INPUT PARAMETERS.
 !
 !         INFO = 1   ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!                    BETWEEN X AND THE SOLUTION IS AT MOST TOL.
+!                    between X and the solution is at most TOL.
 !
 !         INFO = 2   NUMBER OF CALLS TO FCN HAS REACHED OR EXCEEDED
 !                    200*(N+1).
 !
 !         INFO = 3   TOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                    THE APPROXIMATE SOLUTION X IS POSSIBLE.
+!                    the approximate solution X is possible.
 !
 !         INFO = 4   ITERATION IS NOT MAKING GOOD PROGRESS.
 !
-!       WA IS A WORK ARRAY OF LENGTH LWA.
+!       WA is a work array of length LWA.
 !
-!       LWA IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
+!       LWA is a positive integer input variable NOT less than
 !         (N*(3*N+13))/2.
 !
 !     SUBPROGRAMS CALLED
 !
-!       USER-SUPPLIED ...... FCN
+!       User-supplied ...... FCN
 !
-!       MINPACK-SUPPLIED ... HYBRD
+!       MINPACK-supplied ... HYBRD
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -7664,7 +7664,7 @@ real :: factor, one, xtol, zero
 data factor,one,zero /1.0e2,1.0e0,0.0e0/
 info = 0
 !
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
+!     Check the input parameters for errors.
 !
 if (n .le. 0 .or. epsfcn .lt. zero .or. tol .lt. zero .or. &
 &lwa .lt. (n*(3*n + 13))/2) go to 20
@@ -7689,7 +7689,7 @@ if (info .eq. 5) info = 4
 20 continue
 return
 !
-!     LAST CARD OF SUBROUTINE HBRD.
+!     Last card of subroutine HBRD.
 !
 end subroutine hbrd
 
@@ -7710,153 +7710,153 @@ external fcn
 !
 !     SUBROUTINE HYBRD
 !
-!     THE PURPOSE OF HYBRD IS TO FIND A ZERO OF A SYSTEM OF
-!     N NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION
-!     OF THE POWELL HYBRID METHOD. THE USER MUST PROVIDE A
-!     SUBROUTINE WHICH CALCULATES THE FUNCTIONS. THE JACOBIAN IS
-!     THEN CALCULATED BY A FORWARD-DIFFERENCE APPROXIMATION.
+!     The purpose of HYBRD is to find a zero of a system of
+!     N nonlinear functions in N variables by a modification
+!     of the Powell hybrid method. The user must provide A
+!     subroutine which calculates the functions. The Jacobian is
+!     then calculated by a forward-difference approximation.
 !
-!     THE SUBROUTINE STATEMENT IS
+!     The subroutine statement is
 !
 !       SUBROUTINE HYBRD(FCN,N,X,FVEC,XTOL,MAXFEV,ML,MU,EPSFCN,
-!                        DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,
+!                        diag,mode,factor,NPRINT,info,NFEV,FJAC,
 !                        LDFJAC,R,LR,QTF,WA1,WA2,WA3,WA4)
 !
-!     WHERE
+!     Where
 !
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
+!       FCN is the name of the user-supplied subroutine which
+!         calculates the functions. FCN must be declared
+!         in an external statement in the user calling
+!         program, and should be written as follows.
 !
 !         SUBROUTINE FCN(N,X,FVEC,IFLAG)
 !         INTEGER N,IFLAG
 !         REAL X(N),FVEC(N)
 !         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
+!         Calculate the functions at X and
 !         RETURN THIS VECTOR IN FVEC.
 !         ---------
 !         RETURN
 !         END
 !
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF HYBRD.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
+!         The value of IFLAG should not be changed by FCN unless
+!         the user wants to terminate execution of HYBRD.
+!         In this case set IFLAG to a negative integer.
 !
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS AND VARIABLES.
+!       N is a positive integer input variable SET to the number
+!         of functions and variables.
 !
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
+!       X is an array of length N. On input X must contain
+!         an initial estimate of the solution vector. On output X
+!         contains the final estimate of the solution vector.
 !
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
+!       FVEC is an output array of length N which contains
+!         the functions evaluated at the output X.
 !
-!       XTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE RELATIVE ERROR BETWEEN TWO CONSECUTIVE
-!         ITERATES IS AT MOST XTOL.
+!       XTOL is a nonnegative input variable. Termination
+!         occurs when the relative error between two consecutive
+!         iterates is at most XTOL.
 !
-!       MAXFEV IS A POSITIVE INTEGER INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE NUMBER OF CALLS TO FCN IS AT LEAST MAXFEV
-!         BY THE END OF AN ITERATION.
+!       MAXFEV is a positive integer input variable. Termination
+!         occurs when the number of calls to FCN is at least MAXFEV
+!         by the end of an iteration.
 !
-!       ML IS A NONNEGATIVE INTEGER INPUT VARIABLE WHICH SPECIFIES
-!         THE NUMBER OF SUBDIAGONALS WITHIN THE BAND OF THE
-!         JACOBIAN MATRIX. IF THE JACOBIAN IS NOT BANDED, SET
-!         ML TO AT LEAST N - 1.
+!       ML is a nonnegative integer input variable which specifies
+!         the number of subdiagonals within the band of the
+!         Jacobian matrix. If the Jacobian is not banded, set
+!         ML to at least N - 1.
 !
-!       MU IS A NONNEGATIVE INTEGER INPUT VARIABLE WHICH SPECIFIES
-!         THE NUMBER OF SUPERDIAGONALS WITHIN THE BAND OF THE
-!         JACOBIAN MATRIX. IF THE JACOBIAN IS NOT BANDED, SET
-!         MU TO AT LEAST N - 1.
+!       Mu is a nonnegative integer input variable which specifies
+!         the number of superdiagonals within the band of the
+!         Jacobian matrix. If the Jacobian is not banded, set
+!         mu to at least N - 1.
 !
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
+!       EPSFCN is an input variable used in determining a suitable
+!         step length for the forward-difference approximation. This
+!         approximation assumes that the relative errors in the
+!         functions are of the order of EPSFCN. If EPSFCN is less
+!         than the machine precision, it is assumed that the relative
+!         errors in the functions are of the order of the machine
+!         precision.
 !
 !       DIAG IS AN ARRAY OF LENGTH N. IF MODE = 1 (SEE
 !         BELOW), DIAG IS INTERNALLY SET. IF MODE = 2, DIAG
-!         MUST CONTAIN POSITIVE ENTRIES THAT SERVE AS
-!         MULTIPLICATIVE SCALE FACTORS FOR THE VARIABLES.
+!         must contain positive entries that serve as
+!         multiplicative scale factors for the variables.
 !
 !       MODE IS AN INTEGER INPUT VARIABLE. IF MODE = 1, THE
 !         VARIABLES WILL BE SCALED INTERNALLY. IF MODE = 2,
-!         THE SCALING IS SPECIFIED BY THE INPUT DIAG. OTHER
+!         the scaling is specified by the input diag. Other
 !         VALUES OF MODE ARE EQUIVALENT TO MODE = 1.
 !
-!       FACTOR IS A POSITIVE INPUT VARIABLE USED IN DETERMINING THE
-!         INITIAL STEP BOUND. THIS BOUND IS SET TO THE PRODUCT OF
-!         FACTOR AND THE EUCLIDEAN NORM OF DIAG*X IF NONZERO, OR ELSE
-!         TO FACTOR ITSELF. IN MOST CASES FACTOR SHOULD LIE IN THE
-!         INTERVAL (.1,100.). 100. IS A GENERALLY RECOMMENDED VALUE.
+!       Factor is a positive input variable used in determining the
+!         initial step bound. This bound is set to the product of
+!         factor and the Euclidean norm of diag*X if nonzero, or else
+!         to factor itself. In most cases factor should lie in the
+!         interval (.1,100.). 100. Is a generally recommended value.
 !
-!       NPRINT IS AN INTEGER INPUT VARIABLE THAT ENABLES CONTROLLED
-!         PRINTING OF ITERATES IF IT IS POSITIVE. IN THIS CASE,
+!       NPRINT is an integer input variable that enables controlled
+!         printing of iterates if it is positive. In this case,
 !         FCN IS CALLED WITH IFLAG = 0 AT THE BEGINNING OF THE FIRST
-!         ITERATION AND EVERY NPRINT ITERATIONS THEREAFTER AND
-!         IMMEDIATELY PRIOR TO RETURN, WITH X AND FVEC AVAILABLE
-!         FOR PRINTING. IF NPRINT IS NOT POSITIVE, NO SPECIAL CALLS
+!         iteration and every NPRINT iterations thereafter and
+!         immediately prior to return, with X and FVEC available
+!         for printing. If NPRINT is not positive, no special calls
 !         OF FCN WITH IFLAG = 0 ARE MADE.
 !
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
+!       Info is an integer output variable. If the user has
+!         terminated execution, info is set to the (negative)
+!         value of IFLAG. See description of FCN. Otherwise,
+!         info is set as follows.
 !
 !         INFO = 0   IMPROPER INPUT PARAMETERS.
 !
 !         INFO = 1   RELATIVE ERROR BETWEEN TWO CONSECUTIVE ITERATES
-!                    IS AT MOST XTOL.
+!                    is at most XTOL.
 !
 !         INFO = 2   NUMBER OF CALLS TO FCN HAS REACHED OR EXCEEDED
 !                    MAXFEV.
 !
 !         INFO = 3   XTOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                    THE APPROXIMATE SOLUTION X IS POSSIBLE.
+!                    the approximate solution X is possible.
 !
 !         INFO = 4   ITERATION IS NOT MAKING GOOD PROGRESS, AS
-!                    MEASURED BY THE IMPROVEMENT FROM THE LAST
-!                    FIVE JACOBIAN EVALUATIONS.
+!                    measured by the improvement from the last
+!                    five Jacobian evaluations.
 !
 !         INFO = 5   ITERATION IS NOT MAKING GOOD PROGRESS, AS
-!                    MEASURED BY THE IMPROVEMENT FROM THE LAST
-!                    TEN ITERATIONS.
+!                    measured by the improvement from the last
+!                    ten iterations.
 !
-!       NFEV IS AN INTEGER OUTPUT VARIABLE SET TO THE NUMBER OF
-!         CALLS TO FCN.
+!       NFEV is an integer output variable SET to the number of
+!         calls to FCN.
 !
-!       FJAC IS AN OUTPUT N BY N ARRAY WHICH CONTAINS THE
-!         ORTHOGONAL MATRIX Q PRODUCED BY THE QR FACTORIZATION
-!         OF THE FINAL APPROXIMATE JACOBIAN.
+!       FJAC is an output N by N array which contains the
+!         orthogonal matrix Q produced by the QR factorization
+!         of the final approximate Jacobian.
 !
-!       LDFJAC IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN N
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY FJAC.
+!       LDFJAC is a positive integer input variable NOT less than N
+!         which specifies the leading dimension of the array FJAC.
 !
-!       R IS AN OUTPUT ARRAY OF LENGTH LR WHICH CONTAINS THE
-!         UPPER TRIANGULAR MATRIX PRODUCED BY THE QR FACTORIZATION
-!         OF THE FINAL APPROXIMATE JACOBIAN, STORED ROWWISE.
+!       R is an output array of length LR which contains the
+!         upper triangular matrix produced by the QR factorization
+!         of the final approximate Jacobian, stored rowwise.
 !
-!       LR IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
+!       LR is a positive integer input variable NOT less than
 !         (N*(N+1))/2.
 !
-!       QTF IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS
-!         THE VECTOR (Q TRANSPOSE)*FVEC.
+!       QTF is an output array of length N which contains
+!         the vector (Q transpose)*FVEC.
 !
-!       WA1, WA2, WA3, AND WA4 ARE WORK ARRAYS OF LENGTH N.
+!       WA1, WA2, WA3, and WA4 are work arrays of length N.
 !
 !     SUBPROGRAMS CALLED
 !
-!       USER-SUPPLIED ...... FCN
+!       User-supplied ...... FCN
 !
-!       MINPACK-SUPPLIED ... DOGLEG,SPMPAR,ENORM,FDJAC1,
+!       MINPACK-supplied ... dogleg,SPMPAR,ENORM,FDJAC1,
 !                            QFORM,QRFAC,R1MPYQ,R1UPDT
 !
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,AMIN1,MIN0,MOD
+!       Fortran-supplied ... abs,AMAX1,AMIN1,MIN0,mod
 !
 !     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 !     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
@@ -7872,7 +7872,7 @@ real :: spmpar, enorm
 data one,p1,p5,p001,p0001,zero &
 &/1.0e0,1.0e-1,5.0e-1,1.0e-3,1.0e-4,0.0e0/
 !
-!     EPSMCH IS THE MACHINE PRECISION.
+!     EPSMCH is the machine precision.
 !
 epsmch = spmpar(1)
 !
@@ -7880,7 +7880,7 @@ info = 0
 iflag = 0
 nfev = 0
 !
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
+!     Check the input parameters for errors.
 !
 if (n .le. 0 .or. xtol .lt. zero .or. maxfev .le. 0 &
 &.or. ml .lt. 0 .or. mu .lt. 0 .or. factor .le. zero &
@@ -7891,8 +7891,8 @@ do 10 j = 1, n
 10 continue
 20 continue
 !
-!     EVALUATE THE FUNCTION AT THE STARTING POINT
-!     AND CALCULATE ITS NORM.
+!     Evaluate the function at the starting point
+!     and calculate its norm.
 !
 iflag = 1
 call fcn(n,x,fvec,iflag)
@@ -7900,12 +7900,12 @@ nfev = 1
 if (iflag .lt. 0) go to 300
 fnorm = enorm(n,fvec)
 !
-!     DETERMINE THE NUMBER OF CALLS TO FCN NEEDED TO COMPUTE
-!     THE JACOBIAN MATRIX.
+!     Determine the number of calls to FCN needed to compute
+!     the Jacobian matrix.
 !
 msum = min0(ml+mu+1,n)
 !
-!     INITIALIZE ITERATION COUNTER AND MONITORS.
+!     Initialize iteration counter and monitors.
 !
 iter = 1
 ncsuc = 0
@@ -7913,12 +7913,12 @@ ncfail = 0
 nslow1 = 0
 nslow2 = 0
 !
-!     BEGINNING OF THE OUTER LOOP.
+!     Beginning of the outer loop.
 !
 30 continue
    jeval = .true.
 !
-!        CALCULATE THE JACOBIAN MATRIX.
+!        Calculate the Jacobian matrix.
 !
    iflag = 2
    call fdjac1(fcn,n,x,fvec,fjac,ldfjac,iflag,ml,mu,epsfcn,wa1, &
@@ -7926,12 +7926,12 @@ nslow2 = 0
    nfev = nfev + msum
    if (iflag .lt. 0) go to 300
 !
-!        COMPUTE THE QR FACTORIZATION OF THE JACOBIAN.
+!        Compute the QR factorization of the Jacobian.
 !
    call qrfac(n,n,fjac,ldfjac,.false.,iwa,1,wa1,wa2,wa3)
 !
-!        ON THE FIRST ITERATION AND IF MODE IS 1, SCALE ACCORDING
-!        TO THE NORMS OF THE COLUMNS OF THE INITIAL JACOBIAN.
+!        On the first iteration and if mode is 1, scale according
+!        to the norms of the columns of the initial Jacobian.
 !
    if (iter .ne. 1) go to 70
    if (mode .eq. 2) go to 50
@@ -7941,8 +7941,8 @@ nslow2 = 0
       end do
 50 continue
 !
-!        ON THE FIRST ITERATION, CALCULATE THE NORM OF THE SCALED X
-!        AND INITIALIZE THE STEP BOUND DELTA.
+!        On the first iteration, calculate the norm of the scaled X
+!        and initialize the step bound delta.
 !
    do j = 1, n
       wa3(j) = diag(j)*x(j)
@@ -7952,7 +7952,7 @@ nslow2 = 0
    if (delta .eq. zero) delta = factor
 70 continue
 !
-!        FORM (Q TRANSPOSE)*FVEC AND STORE IN QTF.
+!        Form (Q transpose)*FVEC and store in QTF.
 !
    do i = 1, n
       qtf(i) = fvec(i)
@@ -7970,7 +7970,7 @@ nslow2 = 0
 110 continue
       end do
 !
-!        COPY THE TRIANGULAR FACTOR OF THE QR FACTORIZATION INTO R.
+!        Copy the triangular factor of the QR factorization into R.
 !
    sing = .false.
    do j = 1, n
@@ -7986,11 +7986,11 @@ nslow2 = 0
       if (wa1(j) .eq. zero) sing = .true.
       end do
 !
-!        ACCUMULATE THE ORTHOGONAL FACTOR IN FJAC.
+!        Accumulate the orthogonal factor in FJAC.
 !
    call qform(n,n,fjac,ldfjac,wa1)
 !
-!        RESCALE IF NECESSARY.
+!        Rescale if necessary.
 !
    if (mode .eq. 2) go to 170
    do j = 1, n
@@ -7998,11 +7998,11 @@ nslow2 = 0
       end do
 170 continue
 !
-!        BEGINNING OF THE INNER LOOP.
+!        Beginning of the inner loop.
 !
 180 continue
 !
-!           IF REQUESTED, CALL FCN TO ENABLE PRINTING OF ITERATES.
+!           If requested, call FCN to enable printing of iterates.
 !
       if (nprint .le. 0) go to 190
       iflag = 0
@@ -8010,11 +8010,11 @@ nslow2 = 0
       if (iflag .lt. 0) go to 300
 190 continue
 !
-!           DETERMINE THE DIRECTION P.
+!           Determine the direction P.
 !
       call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
 !
-!           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
+!           Store the direction P and X + P. Calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -8023,11 +8023,11 @@ nslow2 = 0
          end do
       pnorm = enorm(n,wa3)
 !
-!           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
+!           On the first iteration, adjust the initial step bound.
 !
       if (iter .eq. 1) delta = amin1(delta,pnorm)
 !
-!           EVALUATE THE FUNCTION AT X + P AND CALCULATE ITS NORM.
+!           Evaluate the function at X + P and calculate its norm.
 !
       iflag = 1
       call fcn(n,wa2,wa4,iflag)
@@ -8035,12 +8035,12 @@ nslow2 = 0
       if (iflag .lt. 0) go to 300
       fnorm1 = enorm(n,wa4)
 !
-!           COMPUTE THE SCALED ACTUAL REDUCTION.
+!           Compute the scaled actual reduction.
 !
       actred = -one
       if (fnorm1 .lt. fnorm) actred = one - (fnorm1/fnorm)**2
 !
-!           COMPUTE THE SCALED PREDICTED REDUCTION.
+!           Compute the scaled predicted reduction.
 !
       l = 1
       do i = 1, n
@@ -8055,13 +8055,13 @@ nslow2 = 0
       prered = zero
       if (temp .lt. fnorm) prered = one - (temp/fnorm)**2
 !
-!           COMPUTE THE RATIO OF THE ACTUAL TO THE PREDICTED
-!           REDUCTION.
+!           Compute the ratio of the actual to the predicted
+!           reduction.
 !
       ratio = zero
       if (prered .gt. zero) ratio = actred/prered
 !
-!           UPDATE THE STEP BOUND.
+!           Update the step bound.
 !
       if (ratio .ge. p1) go to 230
          ncsuc = 0
@@ -8076,11 +8076,11 @@ nslow2 = 0
          if (abs(ratio-one) .le. p1) delta = pnorm/p5
 240 continue
 !
-!           TEST FOR SUCCESSFUL ITERATION.
+!           Test for successful iteration.
 !
       if (ratio .lt. p0001) go to 260
 !
-!           SUCCESSFUL ITERATION. UPDATE X, FVEC, AND THEIR NORMS.
+!           Successful iteration. Update X, FVEC, and their norms.
 !
       do j = 1, n
          x(j) = wa2(j)
@@ -8092,19 +8092,19 @@ nslow2 = 0
       iter = iter + 1
 260 continue
 !
-!           DETERMINE THE PROGRESS OF THE ITERATION.
+!           Determine the progress of the iteration.
 !
       nslow1 = nslow1 + 1
       if (actred .ge. p001) nslow1 = 0
       if (jeval) nslow2 = nslow2 + 1
       if (actred .ge. p1) nslow2 = 0
 !
-!           TEST FOR CONVERGENCE.
+!           Test for convergence.
 !
       if (delta .le. xtol*xnorm .or. fnorm .eq. zero) info = 1
       if (info .ne. 0) go to 300
 !
-!           TESTS FOR TERMINATION AND STRINGENT TOLERANCES.
+!           Tests for termination and stringent tolerances.
 !
       if (nfev .ge. maxfev) info = 2
       if (p1*amax1(p1*delta,pnorm) .le. epsmch*xnorm) info = 3
@@ -8112,13 +8112,13 @@ nslow2 = 0
       if (nslow1 .eq. 10) info = 5
       if (info .ne. 0) go to 300
 !
-!           CRITERION FOR RECALCULATING JACOBIAN APPROXIMATION
-!           BY FORWARD DIFFERENCES.
+!           Criterion for recalculating Jacobian approximation
+!           by forward differences.
 !
       if (ncfail .eq. 2) go to 290
 !
-!           CALCULATE THE RANK ONE MODIFICATION TO THE JACOBIAN
-!           AND UPDATE QTF IF NECESSARY.
+!           Calculate the rank one modification to the Jacobian
+!           and update QTF if necessary.
 !
       do j = 1, n
          sum = zero
@@ -8130,7 +8130,7 @@ nslow2 = 0
          if (ratio .ge. p0001) qtf(j) = sum
          end do
 !
-!           COMPUTE THE QR FACTORIZATION OF THE UPDATED JACOBIAN.
+!           Compute the QR factorization of the updated Jacobian.
 !
       call r1updt(n,n,r,lr,wa1,wa2,wa3,sing)
       call r1mpyq(n,n,fjac,ldfjac,wa2,wa3)
@@ -8147,14 +8147,14 @@ nslow2 = 0
    go to 30
 300 continue
 !
-!     TERMINATION, EITHER NORMAL OR USER IMPOSED.
+!     Termination, either normal or user imposed.
 !
 if (iflag .lt. 0) info = iflag
 iflag = 0
 if (nprint .gt. 0) call fcn(n,x,fvec,iflag)
 return
 !
-!     LAST CARD OF SUBROUTINE HYBRD.
+!     Last card of subroutine HYBRD.
 !
 end subroutine hybrd
 
@@ -8164,10 +8164,10 @@ real :: d, eps, r, w, x, y
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!        QDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!        QDCRT computes the roots of the real polynomial
 !              A(1) + A(2)*Z + A(3)*Z**2
-!     AND STORES THE RESULTS IN Z. IT IS ASSUMED THAT A(3)
-!     IS NONZERO.
+!     and stores the results in Z. It is assumed that A(3)
+!     is nonzero.
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: a(3)
@@ -8186,7 +8186,7 @@ if (abs(d) .le. 2.0*eps*a(2)*a(2)) go to 20
 r = sqrt(abs(d))
 if (d .lt. 0.0) go to 30
 !
-!                 DISTINCT REAL ROOTS
+!                 Distinct real roots
 !
 if (a(2) .ne. 0.0) go to 10
    x = abs(0.5*r/a(3))
@@ -8198,7 +8198,7 @@ z(1) = cmplx(2.0*a(1)/w, 0.0)
 z(2) = cmplx(0.5*w/a(3), 0.0)
 return
 !
-!                  EQUAL REAL ROOTS
+!                  Equal real roots
 !
 20 z(1) = cmplx(-0.5*a(2)/a(3), 0.0)
 z(2) = z(1)
@@ -8223,10 +8223,10 @@ subroutine dqdcrt (a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
-!        DQDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!        DQDCRT computes the roots of the real polynomial
 !                A(1) + A(2)*Z + A(3)*Z**2
-!     AND STORES THE RESULTS IN ZR AND ZI. IT IS ASSUMED THAT
-!     A(3) IS NONZERO.
+!     and stores the results in ZR and ZI. It is assumed that
+!     A(3) is nonzero.
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(3)
@@ -8247,7 +8247,7 @@ if (dabs(d) .le. 2.d0*eps*a(2)*a(2)) go to 20
 r = dsqrt(dabs(d))
 if (d .lt. 0.d0) go to 30
 !
-!                 DISTINCT REAL ROOTS
+!                 Distinct real roots
 !
 zi(1) = 0.d0
 zi(2) = 0.d0
@@ -8260,7 +8260,7 @@ zr(1) = 2.d0*a(1)/w
 zr(2) = 0.5d0*w/a(3)
 return
 !
-!                  EQUAL REAL ROOTS
+!                  Equal real roots
 !
 20 zr(1) = -0.5d0*a(2)/a(3)
 zr(2) = zr(1)
@@ -8294,10 +8294,10 @@ real :: cbrt
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!        CBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!        CBCRT computes the roots of the real polynomial
 !              A(1) + A(2)*Z + A(3)*Z**2 + A(4)*Z**3
-!     AND STORES THE RESULTS IN Z. IT IS ASSUMED THAT A(4)
-!     IS NONZERO.
+!     and stores the results in Z. It is assumed that A(4)
+!     is nonzero.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
@@ -8357,7 +8357,7 @@ if (w1 .lt. 0.0) go to 10
 rq = abs(s/a(4))*sqrt(abs(sq))
 if (sq .ge. 0.0) go to 40
 !
-!                   ALL ROOTS ARE REAL
+!                   All roots are real
 !
 arg = atan2(rq, -0.5*d)
 cf = cos(arg/3.0)
@@ -8391,7 +8391,7 @@ z(2) = cmplx(x2, 0.0)
 z(3) = cmplx(x3, 0.0)
 return
 !
-!                  REAL AND COMPLEX ROOTS
+!                  Real and complex roots
 !
 40 ra = cbrt(-0.5*d - sign(rq,d))
 rb = -c/(3.0*ra)
@@ -8421,7 +8421,7 @@ z(2) = cmplx(x, y)
 z(3) = cmplx(x,-y)
 return
 !
-!               AT LEAST TWO ROOTS ARE EQUAL
+!               At least two roots are equal
 !
 60 if (abs(x) .lt. abs(w)) go to 61
    if (abs(w) .lt. 0.1*abs(x)) w = - (r/x)/x
@@ -8435,11 +8435,11 @@ z(2) = z(1)
 z(3) = cmplx(w, 0.0)
 return
 !
-!     HERE W IS MUCH LARGER IN MAGNITUDE THAN THE OTHER ROOTS.
-!     AS A RESULT, THE OTHER ROOTS MAY BE EXCEEDINGLY INACCURATE
-!     BECAUSE OF ROUNDOFF ERROR. TO DEAL WITH THIS, A QUADRATIC
-!     IS FORMED WHOSE ROOTS ARE THE SAME AS THE SMALLER ROOTS OF
-!     THE CUBIC. THIS QUADRATIC IS THEN SOLVED.
+!     Here W is much larger in magnitude than the other roots.
+!     As a result, the other roots may be exceedingly inaccurate
+!     because of roundoff error. To deal with this, a quadratic
+!     is formed whose roots are the same as the smaller roots of
+!     the cubic. This quadratic is then solved.
 !
 !     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
 !
@@ -8491,10 +8491,10 @@ subroutine dcbcrt (a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
-!        DCBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!        DCBCRT computes the roots of the real polynomial
 !              A(1) + A(2)*Z + A(3)*Z**2 + A(4)*Z**3
-!     AND STORES THE RESULTS IN ZR AND ZI. IT IS ASSUMED THAT
-!     A(4) IS NONZERO.
+!     and stores the results in ZR and ZI. It is assumed that
+!     A(4) is nonzero.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
@@ -8557,7 +8557,7 @@ if (w1 .lt. 0.d0) go to 10
 rq = dabs(s/a(4))*dsqrt(dabs(sq))
 if (sq .ge. 0.d0) go to 40
 !
-!                   ALL ROOTS ARE REAL
+!                   All roots are real
 !
 arg = datan2(rq, -0.5d0*d)
 cf = dcos(arg/3.d0)
@@ -8594,7 +8594,7 @@ zi(2) = 0.d0
 zi(3) = 0.d0
 return
 !
-!                  REAL AND COMPLEX ROOTS
+!                  Real and complex roots
 !
 40 ra = dcbrt(-0.5d0*d - dsign(rq,d))
 rb = -c/(3.d0*ra)
@@ -8627,7 +8627,7 @@ zi(2) = y
 zi(3) = -y
 return
 !
-!               AT LEAST TWO ROOTS ARE EQUAL
+!               At least two roots are equal
 !
 60 zi(1) = 0.d0
 zi(2) = 0.d0
@@ -8644,11 +8644,11 @@ zr(2) = x
 zr(3) = w
 return
 !
-!     HERE W IS MUCH LARGER IN MAGNITUDE THAN THE OTHER ROOTS.
-!     AS A RESULT, THE OTHER ROOTS MAY BE EXCEEDINGLY INACCURATE
-!     BECAUSE OF ROUNDOFF ERROR. TO DEAL WITH THIS, A QUADRATIC
-!     IS FORMED WHOSE ROOTS ARE THE SAME AS THE SMALLER ROOTS OF
-!     THE CUBIC. THIS QUADRATIC IS THEN SOLVED.
+!     Here W is much larger in magnitude than the other roots.
+!     As a result, the other roots may be exceedingly inaccurate
+!     because of roundoff error. To deal with this, a quadratic
+!     is formed whose roots are the same as the smaller roots of
+!     the cubic. This quadratic is then solved.
 !
 !     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
 !
@@ -8714,10 +8714,10 @@ real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
 &x3, y
 !-----------------------------------------------------------------------
 !
-!         QTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!         QTCRT computes the roots of the real polynomial
 !               A(1) + A(2)*Z + ... + A(5)*Z**4
-!         AND STORES THE RESULTS IN Z. IT IS ASSUMED THAT A(5)
-!         IS NONZERO.
+!         and stores the results in Z. It is assumed that A(5)
+!         is nonzero.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
@@ -8740,14 +8740,14 @@ p = 0.5*(c - 6.0*b2)
 q = d - 2.0*b*(c - 4.0*b2)
 r = b2*(c - 3.0*b2) - b*d + e
 !
-!          SOLVE THE RESOLVENT CUBIC EQUATION. THE CUBIC HAS
-!          AT LEAST ONE NONNEGATIVE REAL ROOT. IF W1, W2, W3
-!          ARE THE ROOTS OF THE CUBIC THEN THE ROOTS OF THE
-!          ORIGINIAL EQUATION ARE
+!          Solve the resolvent cubic equation. The cubic has
+!          at least one nonnegative real root. If W1, W2, W3
+!          are the roots of the cubic then the roots of the
+!          originial equation are
 !
 !             Z = -B + CSQRT(W1) + CSQRT(W2) + CSQRT(W3)
 !
-!          WHERE THE SIGNS OF THE SQUARE ROOTS ARE CHOSEN SO
+!          Where the signs of the square roots are chosen so
 !          THAT CSQRT(W1) * CSQRT(W2) * CSQRT(W3) = -Q/8.
 !
 temp(1) = -q*q/64.0
@@ -8757,8 +8757,8 @@ temp(4) = 1.0
 call cbcrt(temp,z)
 if (aimag(z(2)) .ne. 0.0) go to 60
 !
-!               THE RESOLVENT CUBIC HAS ONLY REAL ROOTS
-!                REORDER THE ROOTS IN INCREASING ORDER
+!               The resolvent cubic has only real roots
+!                reorder the roots in increasing order
 !
 x1 = real(z(1))
 x2 = real(z(2))
@@ -8817,7 +8817,7 @@ z(3) = cmplx(x, y)
 z(4) = cmplx(x,-y)
 return
 !
-!                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
+!                The resolvent cubic has complex roots
 !
 60 t = real(z(1))
 x = 0.0
@@ -8865,10 +8865,10 @@ subroutine dqtcrt (a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
-!         DQTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
+!         DQTCRT computes the roots of the real polynomial
 !               A(1) + A(2)*Z + ... + A(5)*Z**4
-!         AND STORES THE RESULTS IN ZR AND ZI. IT IS ASSUMED
-!         THAT A(5) IS NONZERO.
+!         and stores the results in ZR and ZI. It is assumed
+!         that A(5) is nonzero.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
@@ -8891,14 +8891,14 @@ p = 0.5d0*(c - 6.d0*b2)
 q = d - 2.d0*b*(c - 4.d0*b2)
 r = b2*(c - 3.d0*b2) - b*d + e
 !
-!          SOLVE THE RESOLVENT CUBIC EQUATION. THE CUBIC HAS
-!          AT LEAST ONE NONNEGATIVE REAL ROOT. IF W1, W2, W3
-!          ARE THE ROOTS OF THE CUBIC THEN THE ROOTS OF THE
-!          ORIGINIAL EQUATION ARE
+!          Solve the resolvent cubic equation. The cubic has
+!          at least one nonnegative real root. If W1, W2, W3
+!          are the roots of the cubic then the roots of the
+!          originial equation are
 !
 !             Z = -B + CSQRT(W1) + CSQRT(W2) + CSQRT(W3)
 !
-!          WHERE THE SIGNS OF THE SQUARE ROOTS ARE CHOSEN SO
+!          Where the signs of the square roots are chosen so
 !          THAT CSQRT(W1) * CSQRT(W2) * CSQRT(W3) = -Q/8.
 !
 temp(1) = -q*q/64.d0
@@ -8908,8 +8908,8 @@ temp(4) = 1.d0
 call dcbcrt (temp, zr, zi)
 if (zi(2) .ne. 0.d0) go to 60
 !
-!               THE RESOLVENT CUBIC HAS ONLY REAL ROOTS
-!                REORDER THE ROOTS IN INCREASING ORDER
+!               The resolvent cubic has only real roots
+!                reorder the roots in increasing order
 !
 x1 = zr(1)
 x2 = zr(2)
@@ -8968,7 +8968,7 @@ zr(4) =  zr(3)
 zi(4) = -zi(3)
 return
 !
-!                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
+!                The resolvent cubic has complex roots
 !
 60 t = zr(1)
 x = 0.d0
@@ -9027,35 +9027,35 @@ subroutine drpoly (op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
 integer :: idp1
 !
-!     THIS SUBROUTINE FINDS THE ZEROS OF A REAL POLYNOMIAL.
+!     This subroutine finds the zeros of a real polynomial.
 !
 !     OP          - DOUBLE PRECISION ARRAY OF LENGTH IDEG + 1.
-!                   ON INPUT THIS ARRAY CONTAINS THE COEFFICIENTS
-!                   IN ORDER OF DECREASING POWERS.
+!                   On input this array contains the coefficients
+!                   in order of decreasing powers.
 !
 !     IDEG        - INTEGER DEGREE OF THE POLYNOMIAL.
 !
-!     ZEROR,ZEROI - DOUBLE PRECISION ARRAYS IF LENGTH IDEG.
-!                   ON OUTPUT THESE ARRAYS CONTAIN THE REAL AND
-!                   IMAGINARY PARTS OF THE ZEROS.
+!     ZEROR,ZEROI - double precision arrays if length IDEG.
+!                   On output these arrays contain the real and
+!                   imaginary parts of the zeros.
 !
 !     NUM         - VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
 !                   IF NUM = -1 THEN THE LEADING COEFFICIENT OF THE
 !                   POLYNOMIAL IS 0 OR IDEG .LT. 1. OTHERWISE, NUM
-!                   IS THE NUMBER OF ZEROS THAT WERE OBTAINED. IF
+!                   is the number of zeros that were obtained. If
 !                   NUM .GE. 1 THEN THE REAL AND IMAGINARY PARTS OF
-!                   THE ZEROS ARE STORED IN ZEROR(J) AND ZEROI(J)
+!                   the zeros are stored in ZEROR(J) and ZEROI(J)
 !                   FOR J = 1,...,NUM.
 !
 !     WK          - REAL ARRAY OF LENGTH IDEG + 1. THE ARRAY IS
-!                   A WORK SPACE FOR THE ROUTINE.
+!                   a work space for the routine.
 !
 !     DWK         - DOUBLE PRECISION ARRAY OF LENGTH 6*(IDEG + 1).
-!                   THE ARRAY IS A WORK SPACE FOR THE ROUTINE.
+!                   The array is a work space for the routine.
 !
-!     THE SUBROUTINE USES SINGLE PRECISION CALCULATIONS FOR SCALING,
-!     BOUNDS, AND ERROR CALCULATIONS. ALL OTHER CALCULATIONS ARE DONE
-!     IN DOUBLE PRECISION.
+!     The subroutine uses single precision calculations for scaling,
+!     bounds, and error calculations. All other calculations are done
+!     in double precision.
 !
 integer :: ideg
 integer, intent(inout) :: num
@@ -9068,7 +9068,7 @@ integer :: p, qp, k, qk, svk, tmp
 !
 if (ideg .lt. 1) go to 10
 !
-!     PARTITION THE WORKSPACE DWK AND OBTAIN THE ZEROS
+!     Partition the workspace DWK and obtain the zeros
 !
 idp1 = ideg + 1
 !
@@ -9083,7 +9083,7 @@ call drply1 (op,ideg,idp1,zeror,zeroi,dwk(p),dwk(qp),dwk(k), &
 &dwk(qk),dwk(svk),dwk(tmp),wk,num)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 10 num = -1
 return
@@ -9115,18 +9115,18 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !-------------------------
-!     THE FOLLOWING STATEMENTS SET THE MACHINE CONSTANTS USED
-!     IN THE CODE. THE MEANING OF THE CONSTANTS ARE ...
+!     The following statements set the machine constants used
+!     in the code. The meaning of the constants are ...
 !
 !     ETA     THE SMALLEST POSITIVE NUMBER SUCH THAT
-!             1.D0 + ETA IS GREATER THAN 1.D0
-!     SMALNO  THE SMALLEST POSITIVE FLOATING POINT NUMBER.
-!             IF THE EXPONENT RANGE DIFFERS IN SINGLE AND
-!             DOUBLE PRECISION THEN SMALNO AND INFIN
-!             SHOULD INDICATE THE SMALLER RANGE.
+!             1.D0 + eta is greater than 1.D0
+!     SMALNO  the smallest positive floating point number.
+!             If the exponent range differs in single and
+!             double precision then SMALNO and infin
+!             should indicate the smaller range.
 !     INFIN   THE LARGEST POSITIVE FLOATING POINT NUMBER.
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETICS
-!             BEING USED.
+!             being used.
 !
                  eta = dpmpar(1)
                  smalno = spmpar(2)
@@ -9134,14 +9134,14 @@ common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
                  base = ipmpar(4)
 !-------------------------
 !
-!     ARE AND MRE REFER TO THE UNIT ERROR IN + AND *
-!     RESPECTIVELY. THEY ARE ASSUMED TO BE THE SAME AS ETA.
+!     Are and MRE refer to the unit error in + and *
+!     respectively. They are assumed to be the same as eta.
 !
 are = eta
 mre = eta
 lo = smalno/eta
 !
-!     INITIALIZATION OF CONSTANTS FOR SHIFT ROTATION
+!     Initialization of constants for shift rotation
 !
 xx = .70710678
 yy = -xx
@@ -9151,13 +9151,13 @@ n = ideg
 nn = idp1
 num = 0
 !
-!     ALGORITHM FAILS IF THE LEADING COEFFICIENT IS ZERO.
+!     Algorithm fails if the leading coefficient is zero.
 !
 if (op(1) .ne. 0.d0) go to 10
    num = -1
    return
 !
-!     REMOVE THE ZEROS AT THE ORIGIN IF ANY
+!     Remove the zeros at the origin if any
 !
 10 if (op(nn) .ne. 0.0d0) go to 20
    num = num + 1
@@ -9167,18 +9167,18 @@ if (op(1) .ne. 0.d0) go to 10
    n = n - 1
    go to 10
 !
-!     MAKE A COPY OF THE COEFFICIENTS
+!     Make a copy of the coefficients
 !
 20 do i = 1,nn
    p(i) = op(i)
 end do
 !
-!     START THE ALGORITHM FOR OBTAINING A ZERO
+!     Start the algorithm for obtaining a zero
 !
 40 if (n .gt. 2) go to 60
 if (n .lt. 1) return
 !
-!     CALCULATE THE FINAL ZERO OR PAIR OF ZEROS
+!     Calculate the final zero or pair of zeros
 !
 num = ideg
 if (n .eq. 2) go to 50
@@ -9189,7 +9189,7 @@ if (n .eq. 2) go to 50
 &zeror(ideg), zeroi(ideg))
 return
 !
-!     FIND LARGEST AND SMALLEST MODULI OF COEFFICIENTS.
+!     Find largest and smallest moduli of coefficients.
 !
 60 max = 0.0
 min = infin
@@ -9199,12 +9199,12 @@ do i = 1,nn
    if (x .ne. 0.0 .and. x .lt. min) min = x
 end do
 !
-!     SCALE IF THERE ARE LARGE OR VERY SMALL COEFFICIENTS.
-!     COMPUTES A SCALE FACTOR TO MULTIPLY THE
-!     COEFFICIENTS OF THE POLYNOMIAL. THE SCALING IS DONE
-!     TO AVOID OVERFLOW AND TO AVOID UNDETECTED UNDERFLOW
-!     INTERFERING WITH THE CONVERGENCE CRITERION.
-!     THE FACTOR IS A POWER OF THE BASE.
+!     Scale if there are large or very small coefficients.
+!     Computes a scale factor to multiply the
+!     coefficients of the polynomial. The scaling is done
+!     to avoid overflow and to avoid undetected underflow
+!     interfering with the convergence criterion.
+!     The factor is a power of the base.
 !
 sc = lo/min
 if (sc .gt. 1.0) go to 80
@@ -9219,19 +9219,19 @@ do i = 1,nn
    p(i) = factor*p(i)
 end do
 !
-!     COMPUTE LOWER BOUND ON MODULI OF ZEROS.
+!     Compute lower bound on moduli of zeros.
 !
 110 do i=1,nn
    pt(i) = abs(sngl(p(i)))
 end do
 pt(nn) = -pt(nn)
 !
-!     COMPUTE UPPER ESTIMATE OF BOUND
+!     Compute upper estimate of bound
 !
 x = exp((alog(-pt(nn)) - alog(pt(1)))/float(n))
 if (pt(n) .eq. 0.0) go to 130
 !
-!     IF THE NEWTON STEP AT THE ORIGIN IS BETTER THEN USE IT.
+!     If the Newton step at the origin is better then use it.
 !
 xm = -pt(nn)/pt(n)
 if (xm .lt. x) x = xm
@@ -9248,7 +9248,7 @@ x = xm
 go to 130
 150 dx = x
 !
-!     DO NEWTON ITERATION UNTIL X CONVERGES TO TWO DECIMAL PLACES.
+!     Do Newton iteration until X converges to two decimal places.
 !
 160 if (abs(dx/x) .le. 0.005) go to 180
 ff = pt(1)
@@ -9263,8 +9263,8 @@ x = x - dx
 go to 160
 180 bnd = x
 !
-!     COMPUTE THE DERIVATIVE AS THE INTIAL K POLYNOMIAL
-!     AND DO 5 STEPS WITH NO SHIFT.
+!     Compute the derivative as the intial K polynomial
+!     and do 5 steps with no shift.
 !
 nm1 = n - 1
 do i = 2,n
@@ -9278,7 +9278,7 @@ do 230 jj = 1,5
    cc = k(n)
    if (zerok) go to 210
 !
-!     USE SCALED FORM OF RECURRENCE IF VALUE OF K AT 0 IS NONZERO.
+!     Use scaled form of recurrence if value of K at 0 is nonzero.
 !
    t = -aa/cc
    do i = 1,nm1
@@ -9289,7 +9289,7 @@ do 230 jj = 1,5
    zerok = dabs(k(n)) .le. dabs(bb)*eta*10.
    go to 230
 !
-!     USE UNSCALED FORM OF RECURRENCE
+!     Use unscaled form of recurrence
 !
 210 do i = 1,nm1
       j = nn - i
@@ -9299,21 +9299,21 @@ do 230 jj = 1,5
    zerok = k(n).eq.0.d0
 230 continue
 !
-!     SAVE K FOR RESTARTS WITH NEW SHIFTS
+!     Save K for restarts with new shifts
 !
 do i = 1,n
    temp(i) = k(i)
 end do
 !
-!     LOOP TO SELECT THE QUADRATIC  CORRESPONDING TO EACH
-!     NEW SHIFT
+!     Loop to select the quadratic  corresponding to each
+!     new shift
 !
 do cnt = 1,20
 !
-!     QUADRATIC CORRESPONDS TO A DOUBLE SHIFT TO A
-!     NON-REAL POINT AND ITS COMPLEX CONJUGATE. THE POINT
-!     HAS MODULUS BND AND AMPLITUDE ROTATED BY 94 DEGREES
-!     FROM THE PREVIOUS SHIFT.
+!     Quadratic corresponds to a double shift to A
+!     non-real point and its complex conjugate. The point
+!     has modulus BND and amplitude rotated by 94 degrees
+!     from the previous shift.
 !
    xxx = cosr*xx - sinr*yy
    yy = sinr*xx + cosr*yy
@@ -9323,25 +9323,25 @@ do cnt = 1,20
    u = -2.0d0*sr
    v = bnd
 !
-!     SECOND STAGE CALCULATION, FIXED QUADRATIC. THE SECOND STAGE
-!     JUMPS DIRECTLY TO ONE OF THE THIRD STAGE ITERATIONS.
+!     Second stage calculation, fixed quadratic. The second stage
+!     jumps directly to one of the third stage iterations.
 !
    call fxshfr(20*cnt, nz, nn, p, qp, k, qk, svk)
    if (nz .ne. 0) go to 300
 !
-!     IF THE ITERATION IS UNSUCCESSFUL ANOTHER QUADRATIC
-!     IS CHOSEN AFTER RESTORING K.
+!     If the iteration is unsuccessful another quadratic
+!     is chosen after restoring K.
 !
    do i = 1,n
       k(i) = temp(i)
    end do
 end do
 !
-!     CONVERGENCE WAS NOT ACHIEVED AFTER 20 SHIFTS.
+!     Convergence was not achieved after 20 shifts.
 !
 return
 !
-!     STORE THE ZEROS OBTAINED AND DEFLATE THE POLYNOMIAL.
+!     Store the zeros obtained and deflate the polynomial.
 !
 300 num = num + 1
 zeror(num) = szr
@@ -9363,14 +9363,14 @@ implicit none
 integer :: nn
 integer :: n
 !
-!     COMPUTES UP TO  L2  FIXED SHIFT K-POLYNOMIALS,
-!     TESTING FOR CONVERGENCE IN THE LINEAR OR QUADRATIC
-!     CASE. INITIATES ONE OF THE VARIABLE SHIFT
-!     ITERATIONS AND RETURNS WITH THE NUMBER OF ZEROS
-!     FOUND.
+!     Computes up to  L2  fixed shift K-polynomials,
+!     testing for convergence in the linear or quadratic
+!     case. Initiates one of the variable SHIFT
+!     iterations and returns with the number of zeros
+!     found.
 !
-!     L2 - LIMIT OF FIXED SHIFT STEPS
-!     NZ - NUMBER OF ZEROS FOUND
+!     L2 - limit of fixed shift steps
+!     NZ - number of zeros found
 !
 double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
 double precision :: svu, svv, ui, vi, s
@@ -9391,20 +9391,20 @@ betas = .25
 oss = sr
 ovv = v
 !
-!     EVALUATE POLYNOMIAL BY SYNTHETIC DIVISION
+!     Evaluate polynomial by synthetic division
 !
 call quadsd(nn, u, v, p, qp, a, b)
 call calcsc(type, n, k, qk)
 do j = 1,l2
 !
-!     CALCULATE NEXT K POLYNOMIAL AND ESTIMATE V
+!     Calculate next K polynomial and estimate V
 !
    call nextk(type, n, qp, k, qk)
    call calcsc(type, n, k, qk)
    call newest(type, ui, vi, nn, p, k)
    vv = vi
 !
-!     ESTIMATE S
+!     Estimate S
 !
    ss = 0.0
    if (k(n) .ne. 0.d0) ss = -p(nn)/k(n)
@@ -9412,28 +9412,28 @@ do j = 1,l2
    ts = 1.0
    if (j .eq. 1 .or. type .eq. 3) go to 70
 !
-!     COMPUTE RELATIVE MEASURES OF CONVERGENCE OF S AND V
-!     SEQUENCES
+!     Compute relative measures of convergence of S and V
+!     sequences
 !
    if (vv .ne. 0.0) tv = abs((vv - ovv)/vv)
    if (ss .ne. 0.0) ts = abs((ss - oss)/ss)
 !
-!     IF DECREASING, MULTIPLY TWO MOST RECENT
-!     CONVERGENCE MEASURES
+!     If decreasing, multiply two most recent
+!     convergence measures
 !
    tvv = 1.0
    if (tv .lt. otv) tvv = tv*otv
    tss = 1.0
    if (ts .lt. ots) tss = ts*ots
 !
-!     COMPARE WITH CONVERGENCE CRITERIA
+!     Compare with convergence criteria
 !
    vpass = tvv.lt.betav
    spass = tss.lt.betas
    if (.not.(spass .or. vpass)) go to 70
 !
-!     AT LEAST ONE SEQUENCE HAS PASSED THE CONVERGENCE
-!     TEST. STORE VARIABLES BEFORE ITERATING
+!     At least one sequence has passed the convergence
+!     test. Store variables before iterating
 !
    svu = u
    svv = v
@@ -9442,8 +9442,8 @@ do j = 1,l2
    end do
    s = ss
 !
-!     CHOOSE ITERATION ACCORDING TO THE FASTEST
-!     CONVERGING SEQUENCE
+!     Choose iteration according to the fastest
+!     converging sequence
 !
    vtry = .false.
    stry = .false.
@@ -9452,14 +9452,14 @@ do j = 1,l2
 20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
    if (nz .gt. 0) return
 !
-!     QUADRATIC ITERATION HAS FAILED. FLAG THAT IT HAS
-!     BEEN TRIED AND DECREASE THE CONVERGENCE CRITERION.
+!     Quadratic iteration has failed. Flag that it has
+!     been tried and decrease the convergence criterion.
 !
    vtry = .true.
    betav = betav*0.25
 !
-!     TRY LINEAR ITERATION IF IT HAS NOT BEEN TRIED AND
-!     THE S SEQUENCE IS CONVERGING
+!     Try linear iteration if it has not been tried and
+!     the S sequence is converging
 !
    if (stry .or. (.not.spass)) go to 50
    do i = 1,n
@@ -9468,21 +9468,21 @@ do j = 1,l2
 40 call realit(s, nz, iflag, nn, p, qp, k, qk)
    if (nz .gt. 0) return
 !
-!     LINEAR ITERATION HAS FAILED. FLAG THAT IT HAS BEEN
-!     TRIED AND DECREASE THE CONVERGENCE CRITERION
+!     Linear iteration has failed. Flag that it has been
+!     tried and decrease the convergence criterion
 !
    stry = .true.
    betas = betas*0.25
    if (iflag .eq. 0) go to 50
 !
-!     IF LINEAR ITERATION SIGNALS AN ALMOST DOUBLE REAL
-!     ZERO ATTEMPT QUADRATIC INTERATION
+!     If linear iteration signals an almost double real
+!     zero attempt quadratic interation
 !
    ui = -(s + s)
    vi = s*s
    go to 20
 !
-!     RESTORE VARIABLES
+!     Restore variables
 !
 50 u = svu
    v = svv
@@ -9490,13 +9490,13 @@ do j = 1,l2
       k(i) = svk(i)
    end do
 !
-!     TRY QUADRATIC ITERATION IF IT HAS NOT BEEN TRIED
-!     AND THE V SEQUENCE IS CONVERGING
+!     Try quadratic iteration if it has not been tried
+!     and the V sequence is converging
 !
    if (vpass .and. (.not.vtry)) go to 20
 !
-!     RECOMPUTE QP AND SCALAR VALUES TO CONTINUE THE
-!     SECOND STAGE
+!     Recompute QP and scalar values to continue the
+!     second stage
 !
    call quadsd(nn, u, v, p, qp, a, b)
    call calcsc(type, n, k, qk)
@@ -9513,12 +9513,12 @@ implicit none
 integer :: nn
 integer :: n
 !
-!     VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A
-!     QUADRATIC FACTOR CONVERGES ONLY IF THE ZEROS ARE
-!     EQUIMODULAR OR NEARLY SO.
+!     Variable-shift K-polynomial iteration for A
+!     quadratic factor converges only if the zeros are
+!     equimodular or nearly so.
 !
-!     UU,VV - COEFFICIENTS OF STARTING QUADRATIC
-!     NZ - NUMBER OF ZERO FOUND
+!     UU,VV - coefficients of starting quadratic
+!     NZ - number of zero found
 !
 double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
 double precision :: ui, vi
@@ -9538,21 +9538,21 @@ tried = .false.
 u = uu
 v = vv
 j = 0
-! MAIN LOOP
+! Main loop
 10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
 !
 !     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
-!     TO MULTIPLE OR NEARLY EQUAL AND OF OPPOSITE SIGN
+!     to multiple or nearly equal and of opposite sign
 !
 if (dabs(dabs(szr) - dabs(lzr)) .gt. 1.d-2*dabs(lzr)) &
 &return
 !
-!     EVALUATE POLYNOMIAL BY QUADRATIC SYNTHETIC DIVISION
+!     Evaluate polynomial by quadratic synthetic division
 !
 call quadsd(nn, u, v, p, qp, a, b)
 mp = dabs(a - szr*b) + dabs(szi*b)
 !
-!     COMPUTE A RIGOROUS BOUND ON THE ROUNDING ERROR IN
+!     Compute a rigorous bound on the rounding error in
 !     EVALUTING P
 !
 zm = sqrt(abs(sngl(v)))
@@ -9566,8 +9566,8 @@ ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
 &(abs(sngl(a) + t) + abs(sngl(b))*zm) + &
 &2.0*are*abs(t)
 !
-!     ITERATION HAS CONVERGED SUFFICIENTLY IF THE
-!     POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
 !
 if (mp .gt. 20.0*ee) go to 30
 nz = 2
@@ -9580,9 +9580,9 @@ if (j .gt. 20) return
 if (j .lt. 2) go to 50
 if (relstp .gt. 0.01 .or. mp .lt. omp .or. tried) go to 50
 !
-!     A CLUSTER APPEARS TO BE STALLING THE CONVERGENCE.
-!     FIVE FIXED SHIFT STEPS ARE TAKEN WITH A U,V CLOSE
-!     TO THE CLUSTER
+!     A cluster appears to be stalling the convergence.
+!     Five fixed shift steps are taken with A U,V close
+!     to the cluster
 !
 if (relstp .lt. eta) relstp = eta
 relstp = sqrt(relstp)
@@ -9597,14 +9597,14 @@ tried = .true.
 j = 0
 50 omp = mp
 !
-!     CALCULATE NEXT K POLYNOMIAL AND NEW U AND V
+!     Calculate next K polynomial and new U and V
 !
 call calcsc(type, n, k, qk)
 call nextk(type, n, qp, k, qk)
 call calcsc(type, n, k, qk)
 call newest(type, ui, vi, nn, p, k)
 !
-!     IF VI IS ZERO THE ITERATION IS NOT CONVERGING
+!     If VI is zero the iteration is not converging
 !
 if (vi .eq. 0.d0) return
 relstp = dabs((vi - v)/vi)
@@ -9618,12 +9618,12 @@ implicit none
 integer :: iflag, nn, nz
 integer :: i, j, n
 !
-!     VARIABLE-SHIFT H POLYNOMIAL ITERATION FOR A REAL ZERO.
+!     Variable-shift H polynomial iteration for a real zero.
 !
 !     SSS   - STARTING ITERATE
 !     NZ    - NUMBER OF ZERO FOUND
-!     IFLAG - FLAG TO INDICATE A PAIR OF ZEROS NEAR THE REAL
-!             AXIS.
+!     IFLAG - flag to indicate a pair of zeros near the real
+!             axis.
 !
 double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
 double precision :: pv, kv, t, s
@@ -9641,7 +9641,7 @@ s = sss
 iflag = 0
 j = 0
 !
-!     EVALUATE P AT S
+!     Evaluate P at S
 !
 10 pv = p(1)
 qp(1) = pv
@@ -9651,7 +9651,7 @@ do 20 i = 2,nn
 20 continue
 mp = dabs(pv)
 !
-!     COMPUTE A RIGOROUS BOUND ON THE ERROR IN EVALUATING P
+!     Compute a rigorous bound on the error in evaluating P
 !
 ms = dabs(s)
 ee = (mre/(are+mre))*abs(sngl(qp(1)))
@@ -9659,8 +9659,8 @@ do i = 2,nn
    ee = ee*ms + abs(sngl(qp(i)))
 end do
 !
-!     ITERATION HAS CONVERGED SUFFICIENTLY IF THE
-!     POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
 !
 if (mp .gt. 20.0*((are + mre)*ee - mre*mp)) go to 40
 nz = 1
@@ -9676,20 +9676,20 @@ if (j .lt. 2) go to 50
 if (dabs(t) .gt. 1.d-3*dabs(s-t) .or. mp .le. omp) &
 &go to 50
 !
-!     A CLUSTER OF ZEROS NEAR THE REAL AXIS HAS BEEN
-!     ENCOUNTERED RETURN WITH IFLAG SET TO INITIATE A
-!     QUADRATIC ITERATION
+!     A cluster of zeros near the real axis has been
+!     encountered return with IFLAG set to initiate A
+!     quadratic iteration
 !
 iflag = 1
 sss = s
 return
 !
 !     RETURN IF THE POLYNOMIAL VALUE HAS INCREASED
-!     SIGNIFICANTLY
+!     significantly
 !
 50 omp = mp
 !
-!     COMPUTE T, THE NEXT POLYNOMIAL, AND THE NEW ITERATE
+!     Compute T, the next polynomial, and the new iterate
 !
 kv = k(1)
 qk(1) = kv
@@ -9699,8 +9699,8 @@ do i = 2,n
 end do
 if (dabs(kv) .le. dabs(k(n))*10.*eta) go to 80
 !
-!     USE THE SCALED FORM OF THE RECURRENCE IF THE VALUE
-!     OF K AT S IS NONZERO
+!     Use the scaled form of the recurrence if the value
+!     of K at S is nonzero
 !
 t = -pv/kv
 k(1) = qp(1)
@@ -9709,7 +9709,7 @@ do i = 2,n
 end do
 go to 100
 !
-!     USE UNSCALED FORM
+!     Use unscaled form
 !
 80 k(1) = 0.0d0
 do i = 2,n
@@ -9729,12 +9729,12 @@ subroutine calcsc(type, n, k, qk)
 implicit none
 integer :: n
 !
-!     THIS ROUTINE CALCULATES SCALAR QUANTITIES USED TO
-!     COMPUTE THE NEXT K POLYNOMIAL AND NEW ESTIMATES OF
-!     THE QUADRATIC COEFFICIENTS.
+!     This routine calculates scalar quantities used to
+!     compute the next K polynomial and new estimates of
+!     the quadratic coefficients.
 !
-!     TYPE - INTEGER VARIABLE SET HERE INDICATING HOW THE
-!            CALCULATIONS ARE NORMALIZED TO AVOID OVERFLOW
+!     Type - integer variable SET here indicating how the
+!            calculations are normalized to avoid overflow
 !
 integer :: type
 double precision :: k(n), qk(n)
@@ -9746,7 +9746,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
-!     SYNTHETIC DIVISION OF K BY THE QUADRATIC 1,U,V
+!     Synthetic division of K by the quadratic 1,U,V
 !
 call quadsd(n, u, v, k, qk, c, d)
 tol = 100.0*eta
@@ -9789,8 +9789,8 @@ implicit none
 integer :: n
 integer :: i
 !
-!     COMPUTES THE NEXT K POLYNOMIALS USING THE SCALARS
-!     COMPUTED IN CALCSC.
+!     Computes the next K polynomials using the scalars
+!     computed in CALCSC.
 !
 integer :: type
 double precision :: qp(n), k(n), qk(n)
@@ -9806,8 +9806,8 @@ temp = a
 if (type .eq. 1) temp = b
 if (dabs(a1) .gt. dabs(temp)*eta*10.) go to 20
 !
-!     IF A1 IS NEARLY ZERO THEN USE A SPECIAL FORM OF THE
-!     RECURRENCE
+!     If A1 is nearly zero then use a special form of the
+!     recurrence
 !
 k(1) = 0.d0
 k(2) = -a7*qp(1)
@@ -9816,7 +9816,7 @@ do 10 i = 3,n
 10 continue
 return
 !
-!     USE SCALED FORM OF THE RECURRENCE
+!     Use scaled form of the recurrence
 !
 20 a7 = a7/a1
 a3 = a3/a1
@@ -9827,7 +9827,7 @@ do i = 3,n
 end do
 return
 !
-!     USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3
+!     Use unscaled form of the recurrence if type is 3
 !
 40 k(1) = 0.d0
 k(2) = 0.d0
@@ -9842,8 +9842,8 @@ implicit none
 integer :: nn
 integer :: n
 !
-!     COMPUTE NEW ESTIMATES OF THE QUADRATIC COEFFICIENTS
-!     USING THE SCALARS COMPUTED IN CALCSC.
+!     Compute new estimates of the quadratic coefficients
+!     using the scalars computed in CALCSC.
 !
 integer :: type
 double precision :: uu, vv, p(nn), k(nn)
@@ -9855,7 +9855,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
-!     USE FORMULAS APPROPRIATE TO SETTING OF TYPE.
+!     Use formulas appropriate to setting of type.
 !
 n = nn - 1
 if (type .eq. 3) go to 30
@@ -9866,7 +9866,7 @@ if (type .eq. 2) go to 10
 10 a4 = (a + g)*f + h
 a5 = (f + u)*c + v*d
 !
-!     EVALUATE NEW QUADRATIC COEFFICIENTS.
+!     Evaluate new quadratic coefficients.
 !
 20 b1 = -k(n)/p(nn)
 b2 = -(k(n - 1) + b1*p(n))/p(nn)
@@ -9892,8 +9892,8 @@ implicit none
 integer, intent(in) :: nn
 integer :: i
 !
-!     DIVIDES P BY THE QUADRATIC  1,U,V  PLACING THE
-!     QUOTIENT IN Q AND THE REMAINDER IN A,B.
+!     Divides P by the quadratic  1,U,V  placing the
+!     quotient in Q and the remainder in A,B.
 !
 double precision, intent(in) :: p(nn)
 double precision, intent(inout) :: q(nn)
@@ -9918,11 +9918,11 @@ subroutine quadpl(a, b1, c, sr, si, lr, li)
 implicit none
 !
 !     CALCULATE THE ZEROS OF THE QUADRATIC A*Z**2+B1*Z+C.
-!     THE QUADRATIC FORMULA, MODIFIED TO AVOID OVERFLOW,
-!     IS USED TO FIND THE LARGER ZERO IF THE ZEROS ARE
-!     REAL, AND BOTH ZEROS IF THE ZEROS ARE COMPLEX.
-!     THE SMALLER REAL ZERO IS FOUND DIRECTLY FROM THE
-!     PRODUCT OF THE ZEROS C/A.
+!     The quadratic formula, modified to avoid overflow,
+!     is used to find the larger zero if the zeros are
+!     real, and both zeros if the zeros are complex.
+!     The smaller real zero is found directly from the
+!     product of the zeros C/A.
 !
 double precision, intent(in) :: a, b1, c
 double precision, intent(inout) :: sr, si, lr, li
@@ -9941,7 +9941,7 @@ if (a .ne. 0.d0) go to 20
    lr = -b1/a
    go to 10
 !
-!     COMPUTE DISCRIMINANT AVOIDING OVERFLOW
+!     Compute discriminant avoiding overflow
 !
 30 b = b1/2.d0
 if (dabs(b) .lt. dabs(c)) go to 40
@@ -9962,7 +9962,7 @@ sr = 0.d0
 if (lr .ne. 0.d0) sr = (c/lr)/a
 go to 10
 !
-!     COMPLEX CONJUGATE ZEROS
+!     Complex conjugate zeros
 !
 60 sr = -b/a
 lr = sr
@@ -9976,34 +9976,34 @@ implicit none
 integer, intent(inout) :: num
 integer :: idp1
 !
-!     THIS SUBROUTINE FINDS THE ZEROS OF A COMPLEX POLYNOMIAL.
+!     This subroutine finds the zeros of a complex polynomial.
 !
 !     OPR,OPI     - DOUBLE PRECISION ARRAYS OF LENGTH IDEG + 1.
-!                   ON INPUT THESE ARRAYS CONTAIN THE REAL AND IMAGINARY
-!                   PARTS OF THE COEFFICIENTS IN ORDER OF DECREASING
-!                   POWERS.
+!                   On input these arrays contain the real and imaginary
+!                   parts of the coefficients in order of decreasing
+!                   powers.
 !
 !     IDEG        - INTEGER DEGREE OF THE POLYNOMIAL.
 !
-!     ZEROR,ZEROI - DOUBLE PRECISION ARRAYS OF LENGTH IDEG.
-!                   ON OUTPUT THESE ARRAYS CONTAIN THE REAL AND
-!                   IMAGINARY PARTS OF THE ZEROS.
+!     ZEROR,ZEROI - double precision arrays of length IDEG.
+!                   On output these arrays contain the real and
+!                   imaginary parts of the zeros.
 !
 !     NUM         - VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
 !                   IF NUM = -1 THEN THE LEADING COEFFICIENT OF THE
 !                   POLYNOMIAL IS 0 OR IDEG .LT. 1. OTHERWISE, NUM
-!                   IS THE NUMBER OF ZEROS THAT WERE OBTAINED. IF
+!                   is the number of zeros that were obtained. If
 !                   NUM .GE. 1 THEN THE REAL AND IMAGINARY PARTS OF
-!                   THE ZEROS ARE STORED IN ZEROR(J) AND ZEROI(J)
+!                   the zeros are stored in ZEROR(J) and ZEROI(J)
 !                   FOR J = 1,...,NUM.
 !
 !     WK          - DOUBLE PRECISION ARRAY OF LENGTH 10*(IDEG + 1).
-!                   THE ARRAY IS A WORK SPACE FOR THE ROUTINE.
+!                   The array is a work space for the routine.
 !
-!     THE CODE HAS BEEN WRITTEN TO REDUCE THE CHANCE OF OVERFLOW
-!     OCCURRING. IF IT DOES OCCUR, THERE IS STILL A POSSIBILITY THAT
-!     THE ZEROFINDER WILL WORK PROVIDED THE OVERFLOWED QUANTITY IS
-!     REPLACED BY A LARGE NUMBER.
+!     The code has been written to reduce the chance of overflow
+!     occurring. If it does occur, there is still a possibility that
+!     the zerofinder will work provided the overflowed quantity is
+!     replaced by a large number.
 !
 integer :: ideg
 double precision, intent(in) :: opr(*), opi(*)
@@ -10013,7 +10013,7 @@ integer :: pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !
 if (ideg .lt. 1) go to 10
 !
-!     PARTITION THE WORKSPACE AND OBTAIN THE ZEROS
+!     Partition the workspace and obtain the zeros
 !
 idp1 = ideg + 1
 !
@@ -10033,7 +10033,7 @@ call dcply1 (opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
 &wk(shr),wk(shi),num)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 10 num = -1
 return
@@ -10058,15 +10058,15 @@ double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, &
 logical :: conv
 integer :: cnt1, cnt2
 !-------------------------
-!     THE FOLLOWING STATEMENTS SET THE MACHINE CONSTANTS USED
-!     IN THE CODE. THE MEANING OF THE CONSTANTS ARE ...
+!     The following statements set the machine constants used
+!     in the code. The meaning of the constants are ...
 !
 !     ETA     THE SMALLEST POSITIVE NUMBER SUCH THAT
-!             1.D0 + ETA IS GREATER THAN 1.D0
-!     SMALNO  THE SMALLEST POSITIVE FLOATING POINT NUMBER.
+!             1.D0 + eta is greater than 1.D0
+!     SMALNO  the smallest positive floating point number.
 !     INFIN   THE LARGEST POSITIVE FLOATING POINT NUMBER.
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETIC
-!             BEING USED.
+!             being used.
 !
                  eta = dpmpar(1)
                  smalno = dpmpar(2)
@@ -10074,7 +10074,7 @@ integer :: cnt1, cnt2
                  base = ipmpar(4)
 !-------------------------
 !
-!     INITIALIZATION
+!     Initialization
 !
    are = eta
    mre = 2.d0*dsqrt(2.d0)*eta
@@ -10085,13 +10085,13 @@ integer :: cnt1, cnt2
    num = 0
    nn = idp1
 !
-!     THE ALGORITHM FAILS IF THE LEADING COEFFICIENT IS ZERO
+!     The algorithm fails if the leading coefficient is zero
 !
    if (opr(1) .ne. 0.d0 .or. opi(1) .ne. 0.d0) go to 10
       num = -1
       return
 !
-!     REMOVE THE ZEROS AT THE ORIGIN IF ANY.
+!     Remove the zeros at the origin if any.
 !
 10 if (opr(nn) .ne. 0.d0 .or. opi(nn) .ne. 0.d0) go to 20
       num = num + 1
@@ -10100,7 +10100,7 @@ integer :: cnt1, cnt2
       nn = nn - 1
       go to 10
 !
-!     MAKE A COPY OF THE COEFFICIENTS.
+!     Make a copy of the coefficients.
 !
 20 if (nn .lt. 2) return
    do i = 1,nn
@@ -10109,7 +10109,7 @@ integer :: cnt1, cnt2
       shr(i) = dcpabs(pr(i),pi(i))
    end do
 !
-!     SCALE THE POLYNOMIAL.
+!     Scale the polynomial.
 !
    bnd = scalcp (nn,shr,eta,infin,smalno,base)
    if (bnd .eq. 1.d0) go to 40
@@ -10118,7 +10118,7 @@ integer :: cnt1, cnt2
       pi(i) = bnd*pi(i)
    end do
 !
-!     START THE ALGORITHM FOR OBTAINING A ZERO.
+!     Start the algorithm for obtaining a zero.
 !
 40 if (nn .gt. 2) go to 50
 !
@@ -10127,28 +10127,28 @@ integer :: cnt1, cnt2
 &zeroi(ideg))
       return
 !
-!     CALCULATE BND, A LOWER BOUND ON THE MODULUS OF THE ZEROS.
+!     Calculate BND, a lower bound on the modulus of the zeros.
 !
 50 do i = 1,nn
       shr(i) = dcpabs(pr(i),pi(i))
    end do
    call cauchy(nn,bnd,shr,shi)
 !
-!     OUTER LOOP TO CONTROL TWO MAJOR PASSES WITH DIFFERENT
-!     SEQUENCES OF SHIFTS.
+!     Outer loop to control two major passes with different
+!     sequences of shifts.
 !
    do cnt1 = 1,2
 !
-!     FIRST STAGE CALCULATION. NO SHIFT.
+!     First stage calculation. No shift.
 !
       call noshft(5,nn,tr,ti,eta,pr,pi,hr,hi)
 !
-!     INNER LOOP TO SELECT A SHIFT.
+!     Inner loop to select a shift.
 !
       do cnt2 = 1,9
 !
-!     THE SHIFT IS CHOSEN WITH MODULUS BND AND AMPLITUDE ROTATED
-!     BY 94 DEGREES FROM THE PREVIOUS SHIFT.
+!     The shift is chosen with modulus BND and amplitude rotated
+!     by 94 degrees from the previous shift.
 !
          xxx = cosr*xx - sinr*yy
          yy = sinr*xx + cosr*yy
@@ -10156,26 +10156,26 @@ integer :: cnt1, cnt2
          sr = bnd*xx
          si = bnd*yy
 !
-!     SECOND STAGE CALCULATION, FIXED SHIFT. THE SECOND STAGE JUMPS
-!     DIRECTLY TO THE THIRD STAGE ITERATION.
+!     Second stage calculation, fixed shift. The second stage jumps
+!     directly to the third stage iteration.
 !
          call fxshft(10*cnt2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
 &qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
 &are,mre,eta,infin)
          if (conv) go to 100
 !
-!     IF THE ITERATION IS UNSUCCESSFUL ANOTHER SHIFT IS CHOSEN.
+!     If the iteration is unsuccessful another shift is chosen.
 !
       end do
 !
-!     IF 9 SHIFTS FAIL, THE OUTER LOOP IS REPEATED WITH ANOTHER
-!     SEQUENCE OF SHIFTS.
+!     If 9 shifts fail, the outer loop is repeated with another
+!     sequence of shifts.
 !
    end do
    return
 !
-!     A ZERO HAS BEEN OBTAINED. STORE THE ZERO AND DEFLATE
-!     THE POLYNOMIAL.
+!     A zero has been obtained. Store the zero and deflate
+!     the polynomial.
 !
 100 num = num + 1
    zeror(num) = zr
@@ -10193,19 +10193,19 @@ implicit none
 integer, intent(in) :: nn
 integer :: i, l
 !
-!     RETURNS A SCALE FACTOR TO MULTIPLY THE COEFFICIENTS OF THE
-!     POLYNOMIAL. THE SCALING IS DONE TO AVOID OVERFLOW AND TO AVOID
-!     UNDETECTED UNDERFLOW INTERFERING WITH THE CONVERGENCE CRITERION.
-!     THE FACTOR IS A POWER OF THE BASE.
+!     Returns a scale factor to multiply the coefficients of the
+!     polynomial. The scaling is done to avoid overflow and to avoid
+!     undetected underflow interfering with the convergence criterion.
+!     The factor is a power of the base.
 !
-!     PT - MODULUS OF THE COEFFICIENTS OF P
-!     ETA,INFIN,SMALNO,BASE - CONSTANTS DESCRIBING THE
-!            FLOATING POINT ARITHMETIC.
+!     PT - modulus of the coefficients of P
+!     eta,infin,SMALNO,base - constants describing the
+!            floating point arithmetic.
 !
 double precision, intent(in) :: pt(nn), eta, infin, smalno, base
 double precision :: hi, lo, max, min, x, sc
 !
-!     FIND THE LARGEST AND SMALLEST MODULI OF COEFFICIENTS.
+!     Find the largest and smallest moduli of coefficients.
 !
 hi = dsqrt(infin)
 lo = smalno/eta
@@ -10217,7 +10217,7 @@ do i = 1,nn
    if (x .ne. 0.d0 .and. x .lt. min) min = x
 end do
 !
-!     SCALE ONLY IF THERE ARE VERY LARGE OR VERY SMALL COEFFICIENTS.
+!     Scale only if there are very large or very small coefficients.
 !
 scalcp = 1.d0
 sc = lo/min
@@ -10236,8 +10236,8 @@ implicit none
 integer, intent(in) :: nn
 integer :: i, n
 !
-!     CAUCHY COMPUTES A LOWER BOUND BND ON THE MODULI OF THE ZEROS
-!     OF A POLYNOMIAL. PT IS THE MODULUS OF THE COEFFICIENTS.
+!     Cauchy computes a lower bound BND on the moduli of the zeros
+!     of a polynomial. PT is the modulus of the coefficients.
 !
 double precision, intent(inout) :: q(nn), pt(nn)
 double precision :: x, xm, f, dx, df
@@ -10245,13 +10245,13 @@ double precision, intent(inout) :: bnd
 !
 pt(nn) = -pt(nn)
 !
-!     COMPUTE UPPER ESTIMATE OF BOUND.
+!     Compute upper estimate of bound.
 !
 n = nn - 1
 x = dexp((dlog(-pt(nn)) - dlog(pt(1)))/dble(float(n)))
 if (pt(n) .eq. 0.d0) go to 20
 !
-!     IF THE NEWTON STEP AT THE ORIGIN IS BETTER THEN USE IT.
+!     If the Newton step at the origin is better then use it.
 !
    xm = -pt(nn)/pt(n)
    if (xm .lt. x) x = xm
@@ -10268,7 +10268,7 @@ if (f .le. 0.d0) go to 40
    go to 20
 40 dx = x
 !
-!     DO NEWTON ITERATION UNTIL X CONVERGES TO TWO DECIMAL PLACES.
+!     Do Newton iteration until X converges to two decimal places.
 !
 50 if (dabs(dx/x) .le. 0.005d0) go to 70
    q(1) = pt(1)
@@ -10293,8 +10293,8 @@ implicit none
 integer, intent(in) :: l1, nn
 integer :: i, j, jj, n, nm1
 !
-!     COMPUTES THE DERIVATIVE POLYNOMIAL AS THE INITIAL H
-!     POLYNOMIAL AND COMPUTES L1 NO-SHIFT H POLYNOMIALS.
+!     Computes the derivative polynomial as the initial H
+!     polynomial and computes L1 no-shift H polynomials.
 !
 double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: eta, pr(nn), pi(nn)
@@ -10325,7 +10325,7 @@ do 50 jj = 1,l1
    hi(1) = pi(1)
    go to 50
 !
-!     IF THE CONSTANT TERM IS ESSENTIALLY ZERO, SHIFT H COEFFICIENTS.
+!     If the constant term is essentially zero, shift H coefficients.
 !
 30 do i = 1,nm1
       j = nn - i
@@ -10345,14 +10345,14 @@ implicit none
 integer, intent(in) :: l2, nn
 integer :: i, j, n
 !
-!     COMPUTES L2 FIXED-SHIFT H POLYNOMIALS AND TESTS FOR CONVERGENCE.
-!     INITIATES A VARIABLE-SHIFT ITERATION AND RETURNS WITH THE
-!     APPROXIMATE ZERO IF SUCCESSFUL.
+!     Computes L2 fixed-shift H polynomials and tests for convergence.
+!     Initiates a variable-shift iteration and returns with the
+!     approximate zero if successful.
 !
-!     L2 - LIMIT OF FIXED-SHIFT STEPS
-!     ZR,ZI - APPROXIMATE ZERO IF CONV IS .TRUE.
-!     CONV - LOGICAL VARIABLE INDICATING CONVERGENCE OF STAGE 3
-!            ITERATION
+!     L2 - limit of fixed-shift steps
+!     ZR,ZI - approximate zero if CONV is .True.
+!     CONV - logical variable indicating convergence of stage 3
+!            iteration
 !
 double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
 double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
@@ -10366,7 +10366,7 @@ logical :: test, pasd, bool
 !
    n = nn - 1
 !
-!     EVALUATE P AT S
+!     Evaluate P at S
 !
    call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
    test = .true.
@@ -10376,30 +10376,30 @@ logical :: test, pasd, bool
 !
    call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 !
-!     MAIN LOOP FOR ONE SECOND STAGE STEP.
+!     Main loop for one second stage step.
 !
    do 50 j = 1,l2
       otr = tr
       oti = ti
 !
-!     COMPUTE NEXT H POLYNOMIAL AND NEW T.
+!     Compute next H polynomial and new T.
 !
       call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
       call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
       zr = sr + tr
       zi = si + ti
 !
-!     TEST FOR CONVERGENCE UNLESS STAGE 3 HAS FAILED ONCE OR THIS
-!     IS THE LAST H POLYNOMIAL.
+!     Test for convergence unless stage 3 has failed once or this
+!     is the last H polynomial.
 !
       if (bool .or. (.not. test) .or. j .eq. l2) go to 50
       if (dcpabs(tr - otr,ti - oti) .ge. 0.5d0*dcpabs(zr,zi)) &
 &go to 40
       if (.not. pasd) go to 30
 !
-!     THE WEAK CONVERGENCE TEST HAS BEEN PASSED TWICE. START THE
-!     THIRD SHIFT ITERATION AFTER SAVING THE CURRENT H POLYNOMIAL
-!     AND SHIFT.
+!     The weak convergence test has been passed twice. Start the
+!     third shift iteration after saving the current H polynomial
+!     and shift.
 !
          do 10 i = 1,n
             shr(i) = hr(i)
@@ -10411,7 +10411,7 @@ logical :: test, pasd, bool
 &qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
          if (conv) return
 !
-!     THE ITERATION FAILED TO CONVERGE. TURN OFF TESTING AND RESTORE
+!     The iteration failed to converge. Turn off testing and restore
 !     H,S,PV AND T.
 !
          test = .false.
@@ -10431,7 +10431,7 @@ logical :: test, pasd, bool
 40 pasd = .false.
 50 continue
 !
-!     ATTEMPT AN ITERATION WITH FINAL H POLYNOMIAL FROM SECOND STAGE.
+!     Attempt an iteration with final H polynomial from second stage.
 !
 call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
 &sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
@@ -10444,13 +10444,13 @@ implicit none
 integer, intent(in) :: l3, nn
 integer :: i, j, n
 !
-!     CARRIES OUT THE THIRD STAGE ITERATION.
+!     Carries out the third stage iteration.
 !
-!     L3 - LIMIT OF STEPS IN STAGE 3.
-!     ZR,ZI - ON ENTRY CONTAIN THE INITIAL ITERATE. IF THE
-!             ITERATION CONVERGES ZR,ZI CONTAIN THE FINAL
-!             ITERATE ON EXIT.
-!     CONV  - THE VALUE IS .TRUE. IF THE ITERATION CONVERGES.
+!     L3 - limit of steps in stage 3.
+!     ZR,ZI - on entry contain the initial iterate. If the
+!             iteration converges ZR,ZI contain the final
+!             iterate on exit.
+!     CONV  - the value is .True. If the iteration converges.
 !
 double precision, intent(out) :: sr, si
 double precision, intent(inout) :: tr, ti, pvr, pvi
@@ -10469,11 +10469,11 @@ sr = zr
 si = zi
 n = nn - 1
 !
-!     MAIN LOOP FOR STAGE 3.
+!     Main loop for stage 3.
 !
 do 60 i = 1,l3
 !
-!     EVALUATE P AT S AND TEST FOR CONVERGENCE.
+!     Evaluate P at S and test for convergence.
 !
    call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
    mp = dcpabs(pvr,pvi)
@@ -10481,8 +10481,8 @@ do 60 i = 1,l3
    if (mp .gt. 20.d0*errev(nn,qpr,qpi,ms,mp,are,mre)) &
 &go to 10
 !
-!     POLYNOMIAL VALUE IS SMALLER THAN A BOUND ON THE ERROR
-!     IN EVALUATING P. TERMINATE THE ITERATION.
+!     Polynomial value is smaller than a bound on the error
+!     in evaluating P. Terminate the iteration.
 !
       conv = .true.
       zr = sr
@@ -10493,8 +10493,8 @@ do 60 i = 1,l3
    if (b .or. mp .lt. omp .or. relstp .ge. 0.05d0) &
 &go to 30
 !
-!     ITERATION HAS STALLED. PROBABLY A CLUSTER OF ZEROS. DO 5 FIXED
-!     SHIFT STEPS INTO THE CLUSTER TO FORCE ONE ZERO TO DOMINATE.
+!     Iteration has stalled. Probably a cluster of zeros. Do 5 fixed
+!     shift steps into the cluster to force one zero to dominate.
 !
    tp = relstp
    b = .true.
@@ -10511,11 +10511,11 @@ do 60 i = 1,l3
    omp = infin
    go to 50
 !
-!     EXIT IF THE POLYNOMIAL VALUE INCREASES SIGNIFICANTLY.
+!     Exit if the polynomial value increases significantly.
 !
 30 if (0.1d0*mp .gt. omp) return
 !
-!     CALCULATE THE NEXT ITERATE.
+!     Calculate the next iterate.
 !
 40 omp = mp
 !

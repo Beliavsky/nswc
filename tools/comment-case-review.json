@@ -1,0 +1,3091 @@
+{
+  "input_sha256": "7b246665fd069c890b72aafe7d6a6dab58e1d3900c96ab4935d1873ac08e22cc",
+  "output_sha256": "b80dd57c25cfd6372f1af9c485916ecad93635223d65102d86aafe09784978af",
+  "rules_sha256": "914b6a64ca9c704745b04bdb529f6efcc2e9895488f36591e7b68e8565d44e1b",
+  "vocabulary_sha256": "e13c433e8d8472ee7b186ca09901f0f4d964404eff21040392bcd0b3b3d4a0f0",
+  "changed_lines": 18328,
+  "changed_paragraphs": 9143,
+  "retained_lines": {
+    "formula or status expression": 5780,
+    "reference/author/history paragraph": 1403,
+    "code example": 739,
+    "uncertain prose": 718,
+    "table or aligned fields": 1982
+  },
+  "unrecognized_prose_words": {
+    "VE": {
+      "count": 1,
+      "first_line": 173
+    },
+    "LOGGAMMA": {
+      "count": 2,
+      "first_line": 10994
+    },
+    "YAIRY": {
+      "count": 2,
+      "first_line": 18558
+    },
+    "BESY": {
+      "count": 2,
+      "first_line": 18565
+    },
+    "ASJK": {
+      "count": 1,
+      "first_line": 18587
+    },
+    "JBESS": {
+      "count": 2,
+      "first_line": 19004
+    },
+    "BESK": {
+      "count": 1,
+      "first_line": 20517
+    },
+    "SMIN": {
+      "count": 1,
+      "first_line": 26742
+    },
+    "OK": {
+      "count": 3,
+      "first_line": 32834
+    },
+    "SSISL": {
+      "count": 1,
+      "first_line": 40034
+    },
+    "DSISL": {
+      "count": 1,
+      "first_line": 41059
+    },
+    "SPPCO": {
+      "count": 5,
+      "first_line": 41517
+    },
+    "DPPCO": {
+      "count": 5,
+      "first_line": 41837
+    },
+    "NXP": {
+      "count": 3,
+      "first_line": 43416
+    },
+    "AB": {
+      "count": 3,
+      "first_line": 43451
+    },
+    "NXN": {
+      "count": 6,
+      "first_line": 44897
+    },
+    "QZHES": {
+      "count": 1,
+      "first_line": 47304
+    },
+    "QZIT": {
+      "count": 1,
+      "first_line": 47523
+    },
+    "UY": {
+      "count": 3,
+      "first_line": 47791
+    },
+    "VYL": {
+      "count": 3,
+      "first_line": 47791
+    },
+    "MXN": {
+      "count": 1,
+      "first_line": 55676
+    },
+    "ELMTRANS": {
+      "count": 2,
+      "first_line": 60384
+    },
+    "ORTRANS": {
+      "count": 4,
+      "first_line": 60546
+    },
+    "CBALANCE": {
+      "count": 2,
+      "first_line": 64399
+    },
+    "COMLR": {
+      "count": 2,
+      "first_line": 64687
+    },
+    "NOTROW": {
+      "count": 1,
+      "first_line": 66618
+    },
+    "ARL": {
+      "count": 8,
+      "first_line": 67089
+    },
+    "TRI": {
+      "count": 9,
+      "first_line": 71854
+    },
+    "ABAR": {
+      "count": 15,
+      "first_line": 74510
+    },
+    "RBAR": {
+      "count": 9,
+      "first_line": 74594
+    },
+    "FVAL": {
+      "count": 6,
+      "first_line": 75966
+    },
+    "GV": {
+      "count": 1,
+      "first_line": 79006
+    },
+    "GW": {
+      "count": 1,
+      "first_line": 79006
+    },
+    "MXM": {
+      "count": 2,
+      "first_line": 79306
+    },
+    "TABSC": {
+      "count": 3,
+      "first_line": 84227
+    },
+    "FDERV": {
+      "count": 2,
+      "first_line": 87175
+    },
+    "XKNOT": {
+      "count": 1,
+      "first_line": 88059
+    },
+    "XXYY": {
+      "count": 1,
+      "first_line": 96132
+    },
+    "SEG": {
+      "count": 1,
+      "first_line": 99660
+    },
+    "DWKLEN": {
+      "count": 2,
+      "first_line": 100204
+    },
+    "JPP": {
+      "count": 2,
+      "first_line": 100880
+    },
+    "SSRES": {
+      "count": 2,
+      "first_line": 100997
+    },
+    "IEGAUS": {
+      "count": 2,
+      "first_line": 109719
+    },
+    "PECE": {
+      "count": 2,
+      "first_line": 110475
+    },
+    "DEBDF": {
+      "count": 2,
+      "first_line": 113637
+    },
+    "DEPAC": {
+      "count": 2,
+      "first_line": 113639
+    },
+    "UPRIME": {
+      "count": 2,
+      "first_line": 113747
+    },
+    "NROWPD": {
+      "count": 2,
+      "first_line": 114036
+    },
+    "SGBCO": {
+      "count": 5,
+      "first_line": 115979
+    },
+    "NINT": {
+      "count": 1,
+      "first_line": 117304
+    }
+  },
+  "uncertain_prose": [
+    {
+      "line": 324,
+      "text": "     MACFORTRAN II."
+    },
+    {
+      "line": 3236,
+      "text": "         ( SC  SS )"
+    },
+    {
+      "line": 3238,
+      "text": "         (-SS  SC )"
+    },
+    {
+      "line": 3310,
+      "text": "         ( DC  DS )"
+    },
+    {
+      "line": 3312,
+      "text": "         (-DS  DC )"
+    },
+    {
+      "line": 3923,
+      "text": " SINHM APPROXIMATION"
+    },
+    {
+      "line": 3933,
+      "text": " COSHM APPROXIMATION"
+    },
+    {
+      "line": 3942,
+      "text": " COSHMM APPROXIMATION"
+    },
+    {
+      "line": 5681,
+      "text": " ARC  (I,J) ."
+    },
+    {
+      "line": 13861,
+      "text": "                      P(A,X) AND Q(A,X)"
+    },
+    {
+      "line": 13910,
+      "text": "                          FOR C0,...,C8"
+    },
+    {
+      "line": 14688,
+      "text": "                      P(A,X) AND Q(A,X)"
+    },
+    {
+      "line": 15262,
+      "text": "                        FOR C0,...,C10"
+    },
+    {
+      "line": 15921,
+      "text": "                                X"
+    },
+    {
+      "line": 16537,
+      "text": "                      P(A,X) AND Q(A,X)"
+    },
+    {
+      "line": 17125,
+      "text": "                                                    CNU"
+    },
+    {
+      "line": 17439,
+      "text": "                         CNU"
+    },
+    {
+      "line": 18576,
+      "text": "              ABS(LN((1 + WK(2))/(X/FNU)) - WK(2))"
+    },
+    {
+      "line": 19019,
+      "text": "                                D. E. AMOS"
+    },
+    {
+      "line": 19020,
+      "text": "                               S. L. DANIEL"
+    },
+    {
+      "line": 19021,
+      "text": "                               M. K. WESTON"
+    },
+    {
+      "line": 28889,
+      "text": "     SUBROUTINE HBRD"
+    },
+    {
+      "line": 28957,
+      "text": "                    200*(N+1)."
+    },
+    {
+      "line": 28967,
+      "text": "         (N*(3*N+13))/2."
+    },
+    {
+      "line": 29028,
+      "text": "     SUBROUTINE HYBRD"
+    },
+    {
+      "line": 29040,
+      "text": "                        LDFJAC,R,LR,QTF,WA1,WA2,WA3,WA4)"
+    },
+    {
+      "line": 29134,
+      "text": "                    MAXFEV."
+    },
+    {
+      "line": 29162,
+      "text": "         (N*(N+1))/2."
+    },
+    {
+      "line": 29174,
+      "text": "                            QFORM,QRFAC,R1MPYQ,R1UPDT"
+    },
+    {
+      "line": 30873,
+      "text": "     EVALUTING P"
+    },
+    {
+      "line": 31732,
+      "text": "     H,S,PV AND T."
+    },
+    {
+      "line": 37063,
+      "text": "     LINPACK SGEFA"
+    },
+    {
+      "line": 37064,
+      "text": "     BLAS SAXPY,SDOT,SSCAL,SASUM"
+    },
+    {
+      "line": 37246,
+      "text": "     BLAS SAXPY,SSCAL,ISAMAX"
+    },
+    {
+      "line": 37363,
+      "text": "     BLAS SAXPY,SDOT"
+    },
+    {
+      "line": 37480,
+      "text": "     BLAS SAXPY,SSCAL,SSWAP"
+    },
+    {
+      "line": 37704,
+      "text": "     LINPACK DGEFA"
+    },
+    {
+      "line": 37705,
+      "text": "     BLAS DAXPY,DDOT,DSCAL,DASUM"
+    },
+    {
+      "line": 37887,
+      "text": "     BLAS DAXPY,DSCAL,IDAMAX"
+    },
+    {
+      "line": 38004,
+      "text": "     BLAS DAXPY,DDOT"
+    },
+    {
+      "line": 38121,
+      "text": "     BLAS DAXPY,DSCAL,DSWAP"
+    },
+    {
+      "line": 38230,
+      "text": "               MTRSTR - INTEGER(3,NMBLKS)"
+    },
+    {
+      "line": 38251,
+      "text": "               NMBLKS - INTEGER"
+    },
+    {
+      "line": 38257,
+      "text": "                    B - REAL(N)"
+    },
+    {
+      "line": 38260,
+      "text": "                    X - REAL(N)"
+    },
+    {
+      "line": 38274,
+      "text": "                    X - REAL(N)"
+    },
+    {
+      "line": 38277,
+      "text": "                IFLAG - INTEGER"
+    },
+    {
+      "line": 38325,
+      "text": "  TO  A R C E C O ."
+    },
+    {
+      "line": 38348,
+      "text": "  M T R S T R ."
+    },
+    {
+      "line": 38370,
+      "text": "               MTRSTR - INTEGER(3,NMBLKS)"
+    },
+    {
+      "line": 38391,
+      "text": "               NMBLKS - INTEGER"
+    },
+    {
+      "line": 38408,
+      "text": "                IFLAG - INTEGER"
+    },
+    {
+      "line": 38420,
+      "text": "       ARCEPC(TOPBLK,NRWTOP,NOVRLP,BOTBLK,NRWBOT,NCLPIV,"
+    },
+    {
+      "line": 38421,
+      "text": "            PIVOT,PIVMAX,IFLAG)"
+    },
+    {
+      "line": 38474,
+      "text": "       C"
+    },
+    {
+      "line": 38476,
+      "text": "       C"
+    },
+    {
+      "line": 38479,
+      "text": "       C"
+    },
+    {
+      "line": 38482,
+      "text": "       C"
+    },
+    {
+      "line": 38485,
+      "text": "       C"
+    },
+    {
+      "line": 38487,
+      "text": "       C"
+    },
+    {
+      "line": 38489,
+      "text": "       C"
+    },
+    {
+      "line": 38491,
+      "text": "       C"
+    },
+    {
+      "line": 38493,
+      "text": "       C"
+    },
+    {
+      "line": 38496,
+      "text": "       C"
+    },
+    {
+      "line": 38498,
+      "text": "       C"
+    },
+    {
+      "line": 38501,
+      "text": "       C"
+    },
+    {
+      "line": 38514,
+      "text": "       C"
+    },
+    {
+      "line": 38517,
+      "text": "       C"
+    },
+    {
+      "line": 38524,
+      "text": "       C"
+    },
+    {
+      "line": 38526,
+      "text": "       C"
+    },
+    {
+      "line": 38532,
+      "text": "       C"
+    },
+    {
+      "line": 38535,
+      "text": "       C"
+    },
+    {
+      "line": 38546,
+      "text": "          C"
+    },
+    {
+      "line": 38548,
+      "text": "          C"
+    },
+    {
+      "line": 38556,
+      "text": "             C"
+    },
+    {
+      "line": 38558,
+      "text": "             C"
+    },
+    {
+      "line": 38571,
+      "text": "          C"
+    },
+    {
+      "line": 38573,
+      "text": "          C"
+    },
+    {
+      "line": 38580,
+      "text": "             C"
+    },
+    {
+      "line": 38582,
+      "text": "             C"
+    },
+    {
+      "line": 38612,
+      "text": "       C"
+    },
+    {
+      "line": 38614,
+      "text": "       C"
+    },
+    {
+      "line": 38621,
+      "text": "          C"
+    },
+    {
+      "line": 38623,
+      "text": "          C"
+    },
+    {
+      "line": 38639,
+      "text": "          C"
+    },
+    {
+      "line": 38641,
+      "text": "          C"
+    },
+    {
+      "line": 38644,
+      "text": "          C"
+    },
+    {
+      "line": 38651,
+      "text": "          C"
+    },
+    {
+      "line": 38653,
+      "text": "          C"
+    },
+    {
+      "line": 38667,
+      "text": "          C"
+    },
+    {
+      "line": 38669,
+      "text": "          C"
+    },
+    {
+      "line": 38678,
+      "text": "          C"
+    },
+    {
+      "line": 38680,
+      "text": "          C"
+    },
+    {
+      "line": 38693,
+      "text": "       C"
+    },
+    {
+      "line": 38696,
+      "text": "       C"
+    },
+    {
+      "line": 38725,
+      "text": "       C"
+    },
+    {
+      "line": 38727,
+      "text": "       C"
+    },
+    {
+      "line": 38734,
+      "text": "          C"
+    },
+    {
+      "line": 38736,
+      "text": "          C"
+    },
+    {
+      "line": 38753,
+      "text": "          C"
+    },
+    {
+      "line": 38755,
+      "text": "          C"
+    },
+    {
+      "line": 38758,
+      "text": "          C"
+    },
+    {
+      "line": 38765,
+      "text": "          C"
+    },
+    {
+      "line": 38767,
+      "text": "          C"
+    },
+    {
+      "line": 38786,
+      "text": "          C"
+    },
+    {
+      "line": 38789,
+      "text": "          C"
+    },
+    {
+      "line": 38810,
+      "text": "       C"
+    },
+    {
+      "line": 38813,
+      "text": "       C"
+    },
+    {
+      "line": 38850,
+      "text": "               MTRSTR - INTEGER(3,NMBLKS)"
+    },
+    {
+      "line": 38863,
+      "text": "               NMBLKS - INTEGER"
+    },
+    {
+      "line": 38869,
+      "text": "                    B - REAL(N)"
+    },
+    {
+      "line": 38872,
+      "text": "                    X - REAL(N)"
+    },
+    {
+      "line": 38878,
+      "text": "                    X - REAL(N)"
+    },
+    {
+      "line": 38906,
+      "text": "       C"
+    },
+    {
+      "line": 38908,
+      "text": "       C"
+    },
+    {
+      "line": 38910,
+      "text": "       C"
+    },
+    {
+      "line": 38912,
+      "text": "       C"
+    },
+    {
+      "line": 38915,
+      "text": "       C"
+    },
+    {
+      "line": 38925,
+      "text": "       C"
+    },
+    {
+      "line": 38927,
+      "text": "       C"
+    },
+    {
+      "line": 38934,
+      "text": "       C"
+    },
+    {
+      "line": 38936,
+      "text": "       C"
+    },
+    {
+      "line": 38945,
+      "text": "          C"
+    },
+    {
+      "line": 38947,
+      "text": "          C"
+    },
+    {
+      "line": 38956,
+      "text": "          C"
+    },
+    {
+      "line": 38958,
+      "text": "          C"
+    },
+    {
+      "line": 38970,
+      "text": "          C"
+    },
+    {
+      "line": 38972,
+      "text": "          C"
+    },
+    {
+      "line": 38981,
+      "text": "       C"
+    },
+    {
+      "line": 38983,
+      "text": "       C"
+    },
+    {
+      "line": 38990,
+      "text": "          C"
+    },
+    {
+      "line": 38992,
+      "text": "          C"
+    },
+    {
+      "line": 39000,
+      "text": "          C"
+    },
+    {
+      "line": 39002,
+      "text": "          C"
+    },
+    {
+      "line": 39015,
+      "text": "          C"
+    },
+    {
+      "line": 39017,
+      "text": "          C"
+    },
+    {
+      "line": 39030,
+      "text": "       C"
+    },
+    {
+      "line": 39033,
+      "text": "       C"
+    },
+    {
+      "line": 39548,
+      "text": "     LINPACK SSPFA"
+    },
+    {
+      "line": 39549,
+      "text": "     BLAS SAXPY,SDOT,SSCAL,SASUM"
+    },
+    {
+      "line": 39823,
+      "text": "     BLAS SAXPY,SSWAP,ISAMAX"
+    },
+    {
+      "line": 40074,
+      "text": "     BLAS SAXPY,SDOT"
+    },
+    {
+      "line": 40075,
+      "text": "     FORTRAN IABS"
+    },
+    {
+      "line": 40277,
+      "text": "     BLAS SAXPY,SCOPY,SDOT,SSWAP"
+    },
+    {
+      "line": 40315,
+      "text": "                      (S  C)"
+    },
+    {
+      "line": 40573,
+      "text": "     LINPACK DSPFA"
+    },
+    {
+      "line": 40574,
+      "text": "     BLAS DAXPY,DDOT,DSCAL,DASUM"
+    },
+    {
+      "line": 40848,
+      "text": "     BLAS DAXPY,DSWAP,IDAMAX"
+    },
+    {
+      "line": 41099,
+      "text": "     BLAS DAXPY,DDOT"
+    },
+    {
+      "line": 41100,
+      "text": "     FORTRAN IABS"
+    },
+    {
+      "line": 41340,
+      "text": "                      (S  C)"
+    },
+    {
+      "line": 41561,
+      "text": "     BLAS SDOT"
+    },
+    {
+      "line": 41646,
+      "text": "     BLAS SAXPY,SDOT"
+    },
+    {
+      "line": 41715,
+      "text": "     BLAS SAXPY,SSCAL"
+    },
+    {
+      "line": 41881,
+      "text": "     BLAS DDOT"
+    },
+    {
+      "line": 41882,
+      "text": "     FORTRAN DSQRT"
+    },
+    {
+      "line": 41966,
+      "text": "     BLAS DAXPY,DDOT"
+    },
+    {
+      "line": 42035,
+      "text": "     BLAS DAXPY,DSCAL"
+    },
+    {
+      "line": 42574,
+      "text": "     LINPACK CGEFA"
+    },
+    {
+      "line": 42575,
+      "text": "     BLAS CAXPY,CDOTC,CSSCAL,SCASUM"
+    },
+    {
+      "line": 42761,
+      "text": "     BLAS CAXPY,CSCAL,ICAMAX"
+    },
+    {
+      "line": 42882,
+      "text": "     BLAS CAXPY,CDOTC"
+    },
+    {
+      "line": 42883,
+      "text": "     FORTRAN CONJG"
+    },
+    {
+      "line": 43000,
+      "text": "     BLAS CAXPY,CSCAL,CSWAP"
+    },
+    {
+      "line": 43457,
+      "text": "                                  IN U."
+    },
+    {
+      "line": 43463,
+      "text": "                                  IN V."
+    },
+    {
+      "line": 43508,
+      "text": "     BLAS SAXPY,SDOT,SSCAL,SSWAP,SNRM2,SROTG"
+    },
+    {
+      "line": 43941,
+      "text": "                                  IN U."
+    },
+    {
+      "line": 43947,
+      "text": "                                  IN V."
+    },
+    {
+      "line": 43992,
+      "text": "     BLAS DAXPY,DDOT,DSCAL,DSWAP,DNRM2,DROTG"
+    },
+    {
+      "line": 44425,
+      "text": "                                  IN U."
+    },
+    {
+      "line": 44431,
+      "text": "                                  IN V."
+    },
+    {
+      "line": 44476,
+      "text": "     BLAS CAXPY,CDOTC,CSCAL,CSWAP,SCNRM2,SROTG"
+    },
+    {
+      "line": 45123,
+      "text": "        A(NA,M)"
+    },
+    {
+      "line": 45127,
+      "text": "        B(NB,N)"
+    },
+    {
+      "line": 45131,
+      "text": "        C(NC,N)"
+    },
+    {
+      "line": 45135,
+      "text": "        WK(---)"
+    },
+    {
+      "line": 45728,
+      "text": "        A(NA,M)"
+    },
+    {
+      "line": 45732,
+      "text": "        B(NB,N)"
+    },
+    {
+      "line": 45736,
+      "text": "        C(NC,N)"
+    },
+    {
+      "line": 45740,
+      "text": "        WK(---)"
+    },
+    {
+      "line": 46331,
+      "text": "        A(NA,N)"
+    },
+    {
+      "line": 46335,
+      "text": "        C(NC,N)"
+    },
+    {
+      "line": 46339,
+      "text": "        WK(---)"
+    },
+    {
+      "line": 46644,
+      "text": "        A(NA,N)"
+    },
+    {
+      "line": 46648,
+      "text": "        C(NC,N)"
+    },
+    {
+      "line": 46652,
+      "text": "        WK(---)"
+    },
+    {
+      "line": 47010,
+      "text": "                     CQZIT."
+    },
+    {
+      "line": 47013,
+      "text": "                     CQZIT."
+    },
+    {
+      "line": 47525,
+      "text": "     MATRIX F."
+    },
+    {
+      "line": 52459,
+      "text": "        MIN0,ISAMAX,SAXPY,SSCAL,SSWAP"
+    },
+    {
+      "line": 52590,
+      "text": "      SAXPY,SDOT"
+    },
+    {
+      "line": 52592,
+      "text": "     FORTRAN  MIN0"
+    },
+    {
+      "line": 52936,
+      "text": "        MIN0,IDAMAX,DAXPY,DSCAL,DSWAP"
+    },
+    {
+      "line": 53067,
+      "text": "      DAXPY,DDOT"
+    },
+    {
+      "line": 53069,
+      "text": "     FORTRAN  MIN0"
+    },
+    {
+      "line": 53560,
+      "text": "        MIN0,ICAMAX,CAXPY,CSCAL,CSWAP"
+    },
+    {
+      "line": 53691,
+      "text": "      CAXPY,CDOTU"
+    },
+    {
+      "line": 53693,
+      "text": "     FORTRAN  MIN0"
+    },
+    {
+      "line": 66550,
+      "text": "             A B"
+    },
+    {
+      "line": 66552,
+      "text": "             E F"
+    },
+    {
+      "line": 67275,
+      "text": "             BY ORSOL."
+    },
+    {
+      "line": 68226,
+      "text": "     RANK LT N"
+    },
+    {
+      "line": 69327,
+      "text": "     RANK LT N"
+    },
+    {
+      "line": 71038,
+      "text": "     WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)"
+    },
+    {
+      "line": 71085,
+      "text": "     W(MDW,N+1),PRGOPT(*),X(N),WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)"
+    },
+    {
+      "line": 71104,
+      "text": "                                  (E  F)"
+    },
+    {
+      "line": 71105,
+      "text": "                                  (A  B)"
+    },
+    {
+      "line": 71106,
+      "text": "                                  (G  H)"
+    },
+    {
+      "line": 71186,
+      "text": "                  (E)"
+    },
+    {
+      "line": 71187,
+      "text": "                  (A)"
+    },
+    {
+      "line": 71188,
+      "text": "                  (G)"
+    },
+    {
+      "line": 71197,
+      "text": "                  (E)"
+    },
+    {
+      "line": 71198,
+      "text": "                  (A)"
+    },
+    {
+      "line": 71199,
+      "text": "                  (G)"
+    },
+    {
+      "line": 71250,
+      "text": "                    TO PRGOPT(9)-PRGOPT(N+8))"
+    },
+    {
+      "line": 71259,
+      "text": "                  SUBPROGRAM WNNLS( )."
+    },
+    {
+      "line": 71310,
+      "text": "                              AS KRANKE."
+    },
+    {
+      "line": 71642,
+      "text": "                       (G H)"
+    },
+    {
+      "line": 71644,
+      "text": "     MDW,MA,MG,N"
+    },
+    {
+      "line": 71648,
+      "text": "     PRGOPT(*),"
+    },
+    {
+      "line": 71653,
+      "text": "      X(*),RNORM"
+    },
+    {
+      "line": 71661,
+      "text": "      WS(*),"
+    },
+    {
+      "line": 71664,
+      "text": "      IP(MG+2*N+1)"
+    },
+    {
+      "line": 71823,
+      "text": "     FROM HFTI( )."
+    },
+    {
+      "line": 72010,
+      "text": "                (G H Y)"
+    },
+    {
+      "line": 72015,
+      "text": "                  (Z)"
+    },
+    {
+      "line": 72208,
+      "text": "                       (E  F)"
+    },
+    {
+      "line": 72209,
+      "text": "                       (A  B)"
+    },
+    {
+      "line": 72276,
+      "text": "                  (E)"
+    },
+    {
+      "line": 72277,
+      "text": "                  (A)"
+    },
+    {
+      "line": 72285,
+      "text": "                  (E)"
+    },
+    {
+      "line": 72286,
+      "text": "                  (A)"
+    },
+    {
+      "line": 72328,
+      "text": "                  INTO PRGOPT(3)-PRGOPT(N+2))"
+    },
+    {
+      "line": 72367,
+      "text": "                  M + 5*N."
+    },
+    {
+      "line": 72370,
+      "text": "                  M+N."
+    },
+    {
+      "line": 72459,
+      "text": "         IPIVOT(*)"
+    },
+    {
+      "line": 72463,
+      "text": "         ITYPE(*)"
+    },
+    {
+      "line": 72470,
+      "text": "         WD(*)"
+    },
+    {
+      "line": 72474,
+      "text": "         H(*)"
+    },
+    {
+      "line": 72485,
+      "text": "         Z(*),TEMP(*)"
+    },
+    {
+      "line": 72488,
+      "text": "         D(*)"
+    },
+    {
+      "line": 72491,
+      "text": "                                       (A)"
+    },
+    {
+      "line": 73422,
+      "text": "             (A2)  M-NIV COMPONENTS"
+    },
+    {
+      "line": 73578,
+      "text": " SUBROUTINE DECOM2"
+    },
+    {
+      "line": 73581,
+      "text": " SUBROUTINE SOLVE2"
+    },
+    {
+      "line": 73584,
+      "text": " SUBROUTINE SOLVE3"
+    },
+    {
+      "line": 73586,
+      "text": " SUBROUTINE COVAR"
+    },
+    {
+      "line": 74327,
+      "text": "     C(1,1)"
+    },
+    {
+      "line": 74328,
+      "text": "     C(2,1) C(2,2)"
+    },
+    {
+      "line": 74330,
+      "text": "     C(N,1) C(N,2) ... C(N,N)"
+    },
+    {
+      "line": 74522,
+      "text": "                        1000  TO  1/RELPR."
+    },
+    {
+      "line": 74530,
+      "text": "             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY."
+    },
+    {
+      "line": 74579,
+      "text": "                        A SOLUTION."
+    },
+    {
+      "line": 74604,
+      "text": "                NORMLZ,MVPRD1,MTPRD1"
+    },
+    {
+      "line": 74864,
+      "text": "     TA,ITA,JTA."
+    },
+    {
+      "line": 74966,
+      "text": "                        1000  TO  1/RELPR."
+    },
+    {
+      "line": 74974,
+      "text": "             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY."
+    },
+    {
+      "line": 75023,
+      "text": "                        A SOLUTION."
+    },
+    {
+      "line": 75048,
+      "text": "                NORMLZ,MVPRD1,MTPRD1"
+    },
+    {
+      "line": 75390,
+      "text": "                        1000  TO  1/RELPR."
+    },
+    {
+      "line": 75398,
+      "text": "             RELPR, RELPR, AND  1/RELPR  RESPECTIVELY."
+    },
+    {
+      "line": 75447,
+      "text": "                        A SOLUTION."
+    },
+    {
+      "line": 75472,
+      "text": "                NORMLZ,BVPRD1,BTPRD1"
+    },
+    {
+      "line": 75885,
+      "text": "       WRK(N,N+8)"
+    },
+    {
+      "line": 75922,
+      "text": "     OPTIMIZE FCN"
+    },
+    {
+      "line": 76905,
+      "text": "             R + U(V+)  TO  (R*) + (U(1)*E1)(V+)"
+    },
+    {
+      "line": 77009,
+      "text": "     SUBROUTINE LMDIFF"
+    },
+    {
+      "line": 77068,
+      "text": "         MOST TOL."
+    },
+    {
+      "line": 77089,
+      "text": "                   EXCEEDED 200*(N+1)."
+    },
+    {
+      "line": 77102,
+      "text": "         M*N+5*N+M."
+    },
+    {
+      "line": 77156,
+      "text": "     SUBROUTINE LMDIF"
+    },
+    {
+      "line": 77168,
+      "text": "                        LDFJAC,IPVT,QTF,WA1,WA2,WA3,WA4)"
+    },
+    {
+      "line": 77278,
+      "text": "                   EXCEEDED MAXFEV."
+    },
+    {
+      "line": 77421,
+      "text": "        QTF."
+    },
+    {
+      "line": 77603,
+      "text": "     FUNCTION ENORM"
+    },
+    {
+      "line": 77741,
+      "text": "         (N*(N+1))/2."
+    },
+    {
+      "line": 77896,
+      "text": "     SUBROUTINE FDJAC1"
+    },
+    {
+      "line": 77907,
+      "text": "                         WA1,WA2)"
+    },
+    {
+      "line": 78053,
+      "text": "     SUBROUTINE FDJAC2"
+    },
+    {
+      "line": 78167,
+      "text": "     SUBROUTINE LMPAR"
+    },
+    {
+      "line": 78208,
+      "text": "                        WA1,WA2)"
+    },
+    {
+      "line": 78429,
+      "text": "     SUBROUTINE QFORM"
+    },
+    {
+      "line": 78528,
+      "text": "     SUBROUTINE QRFAC"
+    },
+    {
+      "line": 78538,
+      "text": "                           T"
+    },
+    {
+      "line": 78539,
+      "text": "           I - (1/U(K))*U*U"
+    },
+    {
+      "line": 78586,
+      "text": "         WITH RDIAG."
+    },
+    {
+      "line": 78695,
+      "text": "     SUBROUTINE QRSOLV"
+    },
+    {
+      "line": 78890,
+      "text": "     SUBROUTINE R1MPYQ"
+    },
+    {
+      "line": 78895,
+      "text": "           GV(N-1)*...*GV(1)*GW(1)*...*GW(N-1)"
+    },
+    {
+      "line": 78900,
+      "text": "     GV, GW ROTATIONS IS SUPPLIED."
+    },
+    {
+      "line": 78987,
+      "text": "     SUBROUTINE R1UPDT"
+    },
+    {
+      "line": 78993,
+      "text": "                   T"
+    },
+    {
+      "line": 78994,
+      "text": "           (S + U*V )*Q"
+    },
+    {
+      "line": 79001,
+      "text": "           GV(N-1)*...*GV(1)*GW(1)*...*GW(N-1)"
+    },
+    {
+      "line": 79025,
+      "text": "         (N*(2*M-N+1))/2."
+    },
+    {
+      "line": 79028,
+      "text": "         VECTOR U."
+    },
+    {
+      "line": 79283,
+      "text": "         AX(LE,EQ,GE)B0"
+    },
+    {
+      "line": 80133,
+      "text": "         AX(LE,EQ,GE)B0"
+    },
+    {
+      "line": 81430,
+      "text": "                   ... + P(N)*(X(1,N) + ... + X(M,N))"
+    },
+    {
+      "line": 81645,
+      "text": "           KNAPSACK  I ."
+    },
+    {
+      "line": 82430,
+      "text": "                   ACOND AND XCOND."
+    },
+    {
+      "line": 82585,
+      "text": "     (-1.0E4, 1.OE4)."
+    },
+    {
+      "line": 82625,
+      "text": "                   ACOND AND XCOND."
+    },
+    {
+      "line": 82974,
+      "text": "                 A - REAL"
+    },
+    {
+      "line": 82977,
+      "text": "                 B - REAL"
+    },
+    {
+      "line": 82980,
+      "text": "                 C - REAL"
+    },
+    {
+      "line": 82983,
+      "text": "                 D - REAL"
+    },
+    {
+      "line": 82997,
+      "text": "        EPSRE  - REAL"
+    },
+    {
+      "line": 83002,
+      "text": "        EPSAB  - REAL"
+    },
+    {
+      "line": 83011,
+      "text": "        ESTERR - REAL"
+    },
+    {
+      "line": 83187,
+      "text": "              EPSTAB - COMPLEX"
+    },
+    {
+      "line": 83197,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 83202,
+      "text": "              RES3LA - COMPLEX"
+    },
+    {
+      "line": 83211,
+      "text": "                     - SPMPAR, CDIVID"
+    },
+    {
+      "line": 83238,
+      "text": "                              E2"
+    },
+    {
+      "line": 83328,
+      "text": "           OF N."
+    },
+    {
+      "line": 83446,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 83449,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 83456,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 83460,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 83522,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 83535,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 83559,
+      "text": "              - QAGIE1"
+    },
+    {
+      "line": 83560,
+      "text": "              - QK15I1"
+    },
+    {
+      "line": 83561,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 83562,
+      "text": "              - QELG"
+    },
+    {
+      "line": 83565,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 83664,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 83667,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 83679,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 83683,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 83737,
+      "text": "            ALIST  - REAL"
+    },
+    {
+      "line": 83743,
+      "text": "            BLIST  - REAL"
+    },
+    {
+      "line": 83749,
+      "text": "            RLIST  - REAL"
+    },
+    {
+      "line": 83754,
+      "text": "            ELIST  - REAL"
+    },
+    {
+      "line": 83774,
+      "text": "              - QK15I1"
+    },
+    {
+      "line": 83775,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 83776,
+      "text": "              - QELG"
+    },
+    {
+      "line": 83779,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 83800,
+      "text": "                       (ALIST(I),BLIST(I))"
+    },
+    {
+      "line": 84148,
+      "text": "              EPMACH - REAL"
+    },
+    {
+      "line": 84152,
+      "text": "              UFLOW  - REAL"
+    },
+    {
+      "line": 84161,
+      "text": "                       RULE(RESG)."
+    },
+    {
+      "line": 84163,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 84167,
+      "text": "              RESABS - REAL"
+    },
+    {
+      "line": 84170,
+      "text": "              RESASC - REAL"
+    },
+    {
+      "line": 84173,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 84226,
+      "text": "           ABSC*  - ABSCISSA"
+    },
+    {
+      "line": 84295,
+      "text": "     SUBROUTINE FFT1."
+    },
+    {
+      "line": 85040,
+      "text": "     BY 4*N."
+    },
+    {
+      "line": 85072,
+      "text": "                  OF COSQF."
+    },
+    {
+      "line": 85136,
+      "text": "     BY 4*N."
+    },
+    {
+      "line": 85168,
+      "text": "                  OF COSQB."
+    },
+    {
+      "line": 85236,
+      "text": "     BY 4*N."
+    },
+    {
+      "line": 85270,
+      "text": "                  OF SINQF."
+    },
+    {
+      "line": 85309,
+      "text": "     BY 4*N."
+    },
+    {
+      "line": 85341,
+      "text": "                  OF SINQB."
+    },
+    {
+      "line": 87651,
+      "text": "                    .861136311594052575223946488893D0"
+    },
+    {
+      "line": 87652,
+      "text": "                    .339981043584856264802665759103D0"
+    },
+    {
+      "line": 87653,
+      "text": "                    .347854845137453857373063949222D0"
+    },
+    {
+      "line": 87654,
+      "text": "                    .652145154862546142626936050778D0"
+    },
+    {
+      "line": 87824,
+      "text": "                            XINTRP ARRAY"
+    },
+    {
+      "line": 87834,
+      "text": "             RRRRII"
+    },
+    {
+      "line": 87836,
+      "text": "             RRII"
+    },
+    {
+      "line": 87839,
+      "text": "             I"
+    },
+    {
+      "line": 88034,
+      "text": "             (NSTACK+KNOTS+2)((B-A)/(XRIGHT-A))"
+    },
+    {
+      "line": 88185,
+      "text": "                      +D(NL+NR+3)*(X-XINTRP(1))(X-XINTRP(2)) + ---))"
+    },
+    {
+      "line": 88544,
+      "text": "                    RS1 AND RS2."
+    },
+    {
+      "line": 91712,
+      "text": "   LATING CURVE."
+    },
+    {
+      "line": 92359,
+      "text": " KURVP2."
+    },
+    {
+      "line": 92682,
+      "text": "              NOT SLPNX, SLPNY, SLPNZ,"
+    },
+    {
+      "line": 92684,
+      "text": "              NOT SLP1X, SLP1Y, SLP1Z,"
+    },
+    {
+      "line": 92719,
+      "text": "   N, X, Y, Z, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY, SLPNZ,"
+    },
+    {
+      "line": 93216,
+      "text": "                 (X - T(.))*A(.) + (T(.+M-1) - X)*A(.-1)"
+    },
+    {
+      "line": 93417,
+      "text": "     SUBROUTINE BVAL."
+    },
+    {
+      "line": 93509,
+      "text": "             SEQUENCE T(K),...,T(N+1)."
+    },
+    {
+      "line": 93998,
+      "text": "        OF  Q ."
+    },
+    {
+      "line": 94342,
+      "text": "                                                         T"
+    },
+    {
+      "line": 94443,
+      "text": "                                       T"
+    },
+    {
+      "line": 94518,
+      "text": "      NDATA,XDATA(*),"
+    },
+    {
+      "line": 94525,
+      "text": "      NCONST,XCONST(*),"
+    },
+    {
+      "line": 94526,
+      "text": "      YCONST(*),NDERIV(*)"
+    },
+    {
+      "line": 94612,
+      "text": "                                   + (NINCON + L) + (NINCON+2)*(L+6)"
+    },
+    {
+      "line": 94632,
+      "text": "                              (BKPT(NORD), BKPT(N+1))."
+    },
+    {
+      "line": 94653,
+      "text": "      COEFF(*)"
+    },
+    {
+      "line": 95115,
+      "text": "     G(MDG,NB+1)"
+    },
+    {
+      "line": 95335,
+      "text": "     G(MDG,NB+1)"
+    },
+    {
+      "line": 95341,
+      "text": "     G(MDG,NB+1), X(N)"
+    },
+    {
+      "line": 95468,
+      "text": "                       M"
+    },
+    {
+      "line": 95474,
+      "text": "                        N"
+    },
+    {
+      "line": 95541,
+      "text": "                                  J"
+    },
+    {
+      "line": 95772,
+      "text": "           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND"
+    },
+    {
+      "line": 95954,
+      "text": "           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND"
+    },
+    {
+      "line": 96088,
+      "text": " FUNCTION SURF2."
+    },
+    {
+      "line": 96495,
+      "text": "   SURF1."
+    },
+    {
+      "line": 96659,
+      "text": "   SURF1."
+    },
+    {
+      "line": 96951,
+      "text": "                 L"
+    },
+    {
+      "line": 97060,
+      "text": "           I"
+    },
+    {
+      "line": 97069,
+      "text": "            BCHFAC."
+    },
+    {
+      "line": 97081,
+      "text": "                                       T"
+    },
+    {
+      "line": 97240,
+      "text": "                            IEND(K) - IEND(K-1) NEIGHBORS"
+    },
+    {
+      "line": 97260,
+      "text": "                                INTADD, BDYADD, SWPTST,"
+    },
+    {
+      "line": 97261,
+      "text": "                                SWAPD, TINDX"
+    },
+    {
+      "line": 97364,
+      "text": "   IN IEND."
+    },
+    {
+      "line": 97471,
+      "text": "                           1,..,KK-1."
+    },
+    {
+      "line": 97493,
+      "text": "                                SHIFTD, TINDX, SWPTST,"
+    },
+    {
+      "line": 97494,
+      "text": "                                SWAPD"
+    },
+    {
+      "line": 97624,
+      "text": " TRFIND."
+    },
+    {
+      "line": 97684,
+      "text": "   MIN(NRIGHT,NLEFT)"
+    },
+    {
+      "line": 97702,
+      "text": "   AND NLEFT"
+    },
+    {
+      "line": 97759,
+      "text": " BY TRFIND."
+    },
+    {
+      "line": 97791,
+      "text": "                 (N1,N2,KK)"
+    },
+    {
+      "line": 98046,
+      "text": "               AND IO"
+    },
+    {
+      "line": 98217,
+      "text": "                              IN2, IO1, OR IO2."
+    },
+    {
+      "line": 98248,
+      "text": "               SIN(T1+T2)"
+    },
+    {
+      "line": 98363,
+      "text": "                             NST TO P."
+    },
+    {
+      "line": 98483,
+      "text": "   OF N0."
+    },
+    {
+      "line": 98487,
+      "text": "   NL."
+    },
+    {
+      "line": 98539,
+      "text": "   SEGMENT N0-P"
+    },
+    {
+      "line": 98743,
+      "text": "                           TIONS EMPLOYED."
+    },
+    {
+      "line": 98777,
+      "text": "                 OF K"
+    },
+    {
+      "line": 98993,
+      "text": "                                       AMIN1, ABS"
+    },
+    {
+      "line": 99010,
+      "text": "               LMX."
+    },
+    {
+      "line": 99030,
+      "text": "               MENT OF NPTS"
+    },
+    {
+      "line": 99098,
+      "text": "   ...,NPTS(LNP-1)."
+    },
+    {
+      "line": 99243,
+      "text": "                               BY Q."
+    },
+    {
+      "line": 99351,
+      "text": "                          L-1 LOCATIONS."
+    },
+    {
+      "line": 99580,
+      "text": "                                      GRADL1)."
+    },
+    {
+      "line": 99624,
+      "text": "                                SROTG, SROT"
+    },
+    {
+      "line": 99638,
+      "text": "                             AND TVAL"
+    },
+    {
+      "line": 99643,
+      "text": "                             OF N2"
+    },
+    {
+      "line": 99655,
+      "text": "                             N2-N1"
+    },
+    {
+      "line": 99661,
+      "text": "                             MENT N2-N1 CONTAINING Q"
+    },
+    {
+      "line": 99664,
+      "text": "                             AT Q"
+    },
+    {
+      "line": 99788,
+      "text": "   AT Q"
+    },
+    {
+      "line": 99925,
+      "text": "                     Z(K)"
+    },
+    {
+      "line": 100224,
+      "text": "     AND SCALDN."
+    },
+    {
+      "line": 100314,
+      "text": "          NPTS"
+    },
+    {
+      "line": 100320,
+      "text": "      NPTS  --- (PASSED)"
+    },
+    {
+      "line": 100323,
+      "text": "      DIMEN  -- (PASSED)"
+    },
+    {
+      "line": 100325,
+      "text": "      IWORK  -- (RETURNED)"
+    },
+    {
+      "line": 100329,
+      "text": "                  +( DIMEN )*( DEGREE )"
+    },
+    {
+      "line": 100331,
+      "text": "               4*BINOMIAL( DIMEN +D,D)+( DIMEN )*D"
+    },
+    {
+      "line": 100335,
+      "text": "      IWKLEN  - (PASSED)"
+    },
+    {
+      "line": 100337,
+      "text": "      IREQD  -- (RETURNED)"
+    },
+    {
+      "line": 100340,
+      "text": "      DREQD  -- (RETURNED)"
+    },
+    {
+      "line": 100377,
+      "text": "          IWORK(1) ,..., IWORK(NEWSTT-1)"
+    },
+    {
+      "line": 100379,
+      "text": "          IWORK(NEWSTT ,..., IWORK(NEWSTT+DIMEN*DEGREE)"
+    },
+    {
+      "line": 100418,
+      "text": "                    -  NEWKJ( 1 , DEGREE(NPOLYS)-1 )  + 1"
+    },
+    {
+      "line": 100440,
+      "text": "     KMXBAS  IS K"
+    },
+    {
+      "line": 100441,
+      "text": "                 NPOLYS"
+    },
+    {
+      "line": 100457,
+      "text": "                      NPOLYS"
+    },
+    {
+      "line": 100640,
+      "text": "       COMB(DIMEN+CURDEG-2,CURDEG-1)"
+    },
+    {
+      "line": 100642,
+      "text": "            (DIMEN+CURDEG-2)*COMB(DIMEN+CURDEG-3,CURDEG-2)"
+    },
+    {
+      "line": 100644,
+      "text": "                              (CURDEG-1)"
+    },
+    {
+      "line": 100648,
+      "text": "       COMB(DIMEN+CURDEG-KJ-1,CURDEG-1)"
+    },
+    {
+      "line": 100650,
+      "text": "            (DIMEN-KJ+1)*COMB(DIMEN+CURDEG-KJ,CURDEG-1)"
+    },
+    {
+      "line": 100652,
+      "text": "                         (DIMEN+CURDEG-KJ)"
+    },
+    {
+      "line": 100700,
+      "text": "     CALCULATE  INDEXS (3, J ),  INDEXS (4, J )"
+    },
+    {
+      "line": 100843,
+      "text": "      GNRTP ."
+    },
+    {
+      "line": 100911,
+      "text": "                              J"
+    },
+    {
+      "line": 100929,
+      "text": "      NEWKJ ( KJ , CURDEG  - 1)  AND"
+    },
+    {
+      "line": 100930,
+      "text": "      JP  - 1."
+    },
+    {
+      "line": 100948,
+      "text": "                           J"
+    },
+    {
+      "line": 100964,
+      "text": "                          J-1"
+    },
+    {
+      "line": 101072,
+      "text": "     SCALPM ."
+    },
+    {
+      "line": 101180,
+      "text": "          MFIT ."
+    },
+    {
+      "line": 101458,
+      "text": "     AND DSCALD."
+    },
+    {
+      "line": 101633,
+      "text": "      DGNRTP ."
+    },
+    {
+      "line": 101701,
+      "text": "                              J"
+    },
+    {
+      "line": 101719,
+      "text": "      NEWKJ ( KJ , CURDEG  - 1)  AND"
+    },
+    {
+      "line": 101720,
+      "text": "      JP  - 1."
+    },
+    {
+      "line": 101738,
+      "text": "                           J"
+    },
+    {
+      "line": 101754,
+      "text": "                          J-1"
+    },
+    {
+      "line": 101862,
+      "text": "     DSCALP ."
+    },
+    {
+      "line": 101971,
+      "text": "          DMFIT ."
+    },
+    {
+      "line": 102161,
+      "text": "             QSUBA TERMINATES."
+    },
+    {
+      "line": 102288,
+      "text": " EXCEEDING *EPSIL*."
+    },
+    {
+      "line": 102654,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 102657,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 102664,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 102668,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 102729,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 102743,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 102767,
+      "text": "              - QAGSE"
+    },
+    {
+      "line": 102768,
+      "text": "              - QK21F"
+    },
+    {
+      "line": 102769,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 102770,
+      "text": "              - QELG"
+    },
+    {
+      "line": 102772,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 102827,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 102830,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 102841,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 102845,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 102898,
+      "text": "            ALIST  - REAL"
+    },
+    {
+      "line": 102904,
+      "text": "            BLIST  - REAL"
+    },
+    {
+      "line": 102910,
+      "text": "            RLIST  - REAL"
+    },
+    {
+      "line": 102915,
+      "text": "            ELIST  - REAL"
+    },
+    {
+      "line": 102919,
+      "text": "                     SUBINERVALS"
+    },
+    {
+      "line": 102925,
+      "text": "                     THAT ELIST(IORD(1)), ..., ELIST(IORD(K))"
+    },
+    {
+      "line": 102935,
+      "text": "              - QK21F"
+    },
+    {
+      "line": 102936,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 102937,
+      "text": "              - QELG"
+    },
+    {
+      "line": 102939,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 102988,
+      "text": "                       (ALIST(I),BLIST(I))"
+    },
+    {
+      "line": 103305,
+      "text": "              EPMACH - REAL"
+    },
+    {
+      "line": 103309,
+      "text": "              UFLOW  - REAL"
+    },
+    {
+      "line": 103318,
+      "text": "                       RULE (RESG)."
+    },
+    {
+      "line": 103320,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 103324,
+      "text": "              RESABS - REAL"
+    },
+    {
+      "line": 103327,
+      "text": "              RESASC - REAL"
+    },
+    {
+      "line": 103329,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 103391,
+      "text": "                    I.E. TO I/(B-A)"
+    },
+    {
+      "line": 103497,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 103500,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 103507,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 103511,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 103573,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 103586,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 103610,
+      "text": "              - QAGIE"
+    },
+    {
+      "line": 103611,
+      "text": "              - QK15I"
+    },
+    {
+      "line": 103612,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 103613,
+      "text": "              - QELG"
+    },
+    {
+      "line": 103615,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 103677,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 103680,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 103692,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 103696,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 103750,
+      "text": "            ALIST  - REAL"
+    },
+    {
+      "line": 103756,
+      "text": "            BLIST  - REAL"
+    },
+    {
+      "line": 103762,
+      "text": "            RLIST  - REAL"
+    },
+    {
+      "line": 103767,
+      "text": "            ELIST  - REAL"
+    },
+    {
+      "line": 103787,
+      "text": "              - QK15I"
+    },
+    {
+      "line": 103788,
+      "text": "              - QPSRT"
+    },
+    {
+      "line": 103789,
+      "text": "              - QELG"
+    },
+    {
+      "line": 103791,
+      "text": "              - SPMPAR"
+    },
+    {
+      "line": 103841,
+      "text": "                       (ALIST(I),BLIST(I))"
+    },
+    {
+      "line": 104181,
+      "text": "              EPMACH - REAL"
+    },
+    {
+      "line": 104185,
+      "text": "              UFLOW  - REAL"
+    },
+    {
+      "line": 104194,
+      "text": "                       RULE(RESG)."
+    },
+    {
+      "line": 104196,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 104200,
+      "text": "              RESABS - REAL"
+    },
+    {
+      "line": 104203,
+      "text": "              RESASC - REAL"
+    },
+    {
+      "line": 104206,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 104257,
+      "text": "           ABSC*  - ABSCISSA"
+    },
+    {
+      "line": 104346,
+      "text": "              MAXERR - INTEGER"
+    },
+    {
+      "line": 104350,
+      "text": "              ERMAX  - REAL"
+    },
+    {
+      "line": 104354,
+      "text": "              ELIST  - REAL"
+    },
+    {
+      "line": 104362,
+      "text": "                       ELIST(IORD(1)),... , ELIST(IORD(K))"
+    },
+    {
+      "line": 104367,
+      "text": "              NRMAX  - INTEGER"
+    },
+    {
+      "line": 104483,
+      "text": "              EPSTAB - REAL"
+    },
+    {
+      "line": 104493,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 104497,
+      "text": "              RES3LA - REAL"
+    },
+    {
+      "line": 104505,
+      "text": "              EPMACH - REAL"
+    },
+    {
+      "line": 104509,
+      "text": "              OFLOW  - REAL"
+    },
+    {
+      "line": 104526,
+      "text": "                              E2"
+    },
+    {
+      "line": 104587,
+      "text": "           OF N."
+    },
+    {
+      "line": 104661,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 104664,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 104671,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 104735,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 104741,
+      "text": "            LENIW - INTEGER"
+    },
+    {
+      "line": 104754,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 104841,
+      "text": "            EPSABS - REAL"
+    },
+    {
+      "line": 104844,
+      "text": "            EPSREL - REAL"
+    },
+    {
+      "line": 104855,
+      "text": "            ABSERR - REAL"
+    },
+    {
+      "line": 104909,
+      "text": "            ALIST  - REAL"
+    },
+    {
+      "line": 104915,
+      "text": "            BLIST  - REAL"
+    },
+    {
+      "line": 104921,
+      "text": "            RLIST  - REAL"
+    },
+    {
+      "line": 104926,
+      "text": "            ELIST  - REAL"
+    },
+    {
+      "line": 104952,
+      "text": "                     OF VALP,VALN"
+    },
+    {
+      "line": 105320,
+      "text": "              EPMACH - REAL"
+    },
+    {
+      "line": 105324,
+      "text": "              UFLOW  - REAL"
+    },
+    {
+      "line": 105327,
+      "text": "              OFLOW  - REAL"
+    },
+    {
+      "line": 105334,
+      "text": "              ABSERR - REAL"
+    },
+    {
+      "line": 105338,
+      "text": "              RESABS - REAL"
+    },
+    {
+      "line": 105341,
+      "text": "              RESASC - REAL"
+    },
+    {
+      "line": 105343,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 105745,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 105806,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 105820,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 105844,
+      "text": "              - DQAGSE"
+    },
+    {
+      "line": 105845,
+      "text": "              - DQK21"
+    },
+    {
+      "line": 105846,
+      "text": "              - DQPSRT"
+    },
+    {
+      "line": 105847,
+      "text": "              - DQELG"
+    },
+    {
+      "line": 105849,
+      "text": "              - DPMPAR"
+    },
+    {
+      "line": 105933,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 106007,
+      "text": "                     SUBINERVALS"
+    },
+    {
+      "line": 106013,
+      "text": "                     THAT ELIST(IORD(1)), ..., ELIST(IORD(K))"
+    },
+    {
+      "line": 106023,
+      "text": "              - DQK21"
+    },
+    {
+      "line": 106024,
+      "text": "              - DQPSRT"
+    },
+    {
+      "line": 106025,
+      "text": "              - DQELG"
+    },
+    {
+      "line": 106027,
+      "text": "              - DPMPAR"
+    },
+    {
+      "line": 106077,
+      "text": "                       (ALIST(I),BLIST(I))"
+    },
+    {
+      "line": 106397,
+      "text": "                       RULE (RESG)."
+    },
+    {
+      "line": 106408,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 106499,
+      "text": "                    I.E. TO I/(B-A)"
+    },
+    {
+      "line": 106612,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 106674,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 106687,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 106711,
+      "text": "              - DQAGIE"
+    },
+    {
+      "line": 106712,
+      "text": "              - DQK15I"
+    },
+    {
+      "line": 106713,
+      "text": "              - DQPSRT"
+    },
+    {
+      "line": 106714,
+      "text": "              - DQELG"
+    },
+    {
+      "line": 106716,
+      "text": "              - DPMPAR"
+    },
+    {
+      "line": 106808,
+      "text": "            NEVAL  - INTEGER"
+    },
+    {
+      "line": 106899,
+      "text": "              - DQK15I"
+    },
+    {
+      "line": 106900,
+      "text": "              - DQPSRT"
+    },
+    {
+      "line": 106901,
+      "text": "              - DQELG"
+    },
+    {
+      "line": 106903,
+      "text": "              - DPMPAR"
+    },
+    {
+      "line": 106954,
+      "text": "                       (ALIST(I),BLIST(I))"
+    },
+    {
+      "line": 107299,
+      "text": "                       RULE(RESG)."
+    },
+    {
+      "line": 107311,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 107382,
+      "text": "           ABSC*  - ABSCISSA"
+    },
+    {
+      "line": 107471,
+      "text": "              MAXERR - INTEGER"
+    },
+    {
+      "line": 107487,
+      "text": "                       ELIST(IORD(1)),... , ELIST(IORD(K))"
+    },
+    {
+      "line": 107492,
+      "text": "              NRMAX  - INTEGER"
+    },
+    {
+      "line": 107659,
+      "text": "                              E2"
+    },
+    {
+      "line": 107720,
+      "text": "           OF N."
+    },
+    {
+      "line": 107868,
+      "text": "            LENW  - INTEGER"
+    },
+    {
+      "line": 107874,
+      "text": "            LENIW - INTEGER"
+    },
+    {
+      "line": 107887,
+      "text": "            IWORK - INTEGER"
+    },
+    {
+      "line": 108085,
+      "text": "                     OF VALP,VALN"
+    },
+    {
+      "line": 108476,
+      "text": "                       OVER (A,B)"
+    },
+    {
+      "line": 108847,
+      "text": "                  F(X,Y,IDATA,RDATA)"
+    },
+    {
+      "line": 109208,
+      "text": "                     B"
+    },
+    {
+      "line": 109210,
+      "text": "                     A"
+    },
+    {
+      "line": 109485,
+      "text": "   STAGE B."
+    },
+    {
+      "line": 109720,
+      "text": "   USING CONEW."
+    },
+    {
+      "line": 109763,
+      "text": "   IN IEGS."
+    },
+    {
+      "line": 110248,
+      "text": "   CALCULATE XM."
+    },
+    {
+      "line": 110297,
+      "text": "   SUBROUTINE IEGS."
+    },
+    {
+      "line": 110508,
+      "text": "      Y(NEQN), WORK(100+21*NEQN), IWORK(5),"
+    },
+    {
+      "line": 110526,
+      "text": "      NEQN -- UNCHANGED"
+    },
+    {
+      "line": 110547,
+      "text": "           I.E., -3, -4, -5, -6."
+    },
+    {
+      "line": 110657,
+      "text": "   SUBROUTINE  STEP1"
+    },
+    {
+      "line": 110863,
+      "text": "                 AMAX1(RELERR,ABSERR) ."
+    },
+    {
+      "line": 113666,
+      "text": "   IN SPMPAR."
+    },
+    {
+      "line": 113713,
+      "text": "             DERIVATIVES DF/DU."
+    },
+    {
+      "line": 113717,
+      "text": "             RTOL, ATOL, RWORK(1), LRW,"
+    },
+    {
+      "line": 113718,
+      "text": "             IWORK(1), IWORK(2), AND LIW."
+    },
+    {
+      "line": 113721,
+      "text": "             T, Y(*), INFO(1), RTOL, ATOL,"
+    },
+    {
+      "line": 113722,
+      "text": "             IDID, RWORK(*) AND IWORK(*)."
+    },
+    {
+      "line": 113736,
+      "text": "                               F(X,U,UPRIME,RPAR,IPAR)"
+    },
+    {
+      "line": 113985,
+      "text": "             TSTOP.)"
+    },
+    {
+      "line": 114025,
+      "text": "                          JAC(X,U,PD,NROWPD,RPAR,IPAR)"
+    },
+    {
+      "line": 114086,
+      "text": "             RWORK(21),...,RWORK(20+NEQ)."
+    },
+    {
+      "line": 114241,
+      "text": "        CURRENT T."
+    },
+    {
+      "line": 114303,
+      "text": "        SVCO(RWORK(22+NEQ),IWORK(21+NEQ))."
+    },
+    {
+      "line": 114822,
+      "text": "                               F(X,U,UPRIME,RPAR,IPAR)"
+    },
+    {
+      "line": 115089,
+      "text": "   PACKAGE SFODE."
+    },
+    {
+      "line": 115644,
+      "text": " POLYNOMIAL, I.E.,"
+    },
+    {
+      "line": 116054,
+      "text": "     BLAS SAXPY,SSCAL,ISAMAX"
+    },
+    {
+      "line": 116055,
+      "text": "     FORTRAN MAX0,MIN0"
+    },
+    {
+      "line": 116210,
+      "text": "     BLAS SAXPY,SDOT"
+    },
+    {
+      "line": 116211,
+      "text": "     FORTRAN MIN0"
+    },
+    {
+      "line": 116744,
+      "text": "                             AF(X)*D U/DX + BF(X)*DU/DX  + CF(X)*U +"
+    },
+    {
+      "line": 116746,
+      "text": "                             DF(Y)*D U/DY  + EF(Y)*DU/DY + FF(Y)*U"
+    },
+    {
+      "line": 116762,
+      "text": "                         (3) DU(A,Y)/DX+ALPHA*U(A,Y),DU(B,Y)/DX+"
+    },
+    {
+      "line": 116772,
+      "text": "                         (3) DU(X,C)/DY+GAMA*U(X,C),DU(X,D)/DY+"
+    },
+    {
+      "line": 116786,
+      "text": "                        IORDER"
+    },
+    {
+      "line": 116790,
+      "text": "                        A,B"
+    },
+    {
+      "line": 116794,
+      "text": "                          B."
+    },
+    {
+      "line": 116796,
+      "text": "                        M"
+    },
+    {
+      "line": 116804,
+      "text": "                        MBDCND"
+    },
+    {
+      "line": 116825,
+      "text": "                        BDA"
+    },
+    {
+      "line": 116840,
+      "text": "                        BDB"
+    },
+    {
+      "line": 116855,
+      "text": "                        C,D"
+    },
+    {
+      "line": 116859,
+      "text": "                          THAN D."
+    },
+    {
+      "line": 116861,
+      "text": "                        N"
+    },
+    {
+      "line": 116869,
+      "text": "                        NBDCND"
+    },
+    {
+      "line": 116879,
+      "text": "                              I.E., U(X,C) AND DU(X,D)/DY+XNU*U(X,D)"
+    },
+    {
+      "line": 116890,
+      "text": "                        BDC"
+    },
+    {
+      "line": 116905,
+      "text": "                        BDD"
+    },
+    {
+      "line": 116914,
+      "text": "                        XNU"
+    },
+    {
+      "line": 116920,
+      "text": "                        COFX"
+    },
+    {
+      "line": 116922,
+      "text": "                          PARAMETERS X, AFUN, BFUN, CFUN WHICH"
+    },
+    {
+      "line": 116927,
+      "text": "                        COFY"
+    },
+    {
+      "line": 116929,
+      "text": "                          PARAMETERS Y, DFUN, EFUN, FFUN WHICH"
+    },
+    {
+      "line": 116936,
+      "text": "                        AFUN AND DFUN MUST SATISFY AFUN*DFUN GREATER"
+    },
+    {
+      "line": 116943,
+      "text": "                        GRHS"
+    },
+    {
+      "line": 116970,
+      "text": "                        MN"
+    },
+    {
+      "line": 116976,
+      "text": "                        USOL"
+    },
+    {
+      "line": 117017,
+      "text": "                        IDMN"
+    },
+    {
+      "line": 117023,
+      "text": "                        W"
+    },
+    {
+      "line": 117041,
+      "text": "                        W"
+    },
+    {
+      "line": 117048,
+      "text": "                        PERTRB"
+    },
+    {
+      "line": 117100,
+      "text": "                          OR N."
+    },
+    {
+      "line": 117103,
+      "text": "                        TRISP, DEFER, DXFN, DYFN, BLKTRI, BLKTR1,INDXB,"
+    },
+    {
+      "line": 117104,
+      "text": "                        INDXA, INDXC, PROD0, PRODP, CPROD0, CPRODP,"
+    },
+    {
+      "line": 117105,
+      "text": "                        PPADD, PSGF, BSRH, PPSGF, PPSPF, COMPB,"
+    },
+    {
+      "line": 117106,
+      "text": "                        TQLRT0, SPMPAR"
+    },
+    {
+      "line": 117162,
+      "text": "                          NCAR-TN/IA-109, PP. 135-137."
+    },
+    {
+      "line": 118108,
+      "text": "     IFLG"
+    },
+    {
+      "line": 118120,
+      "text": "     NP"
+    },
+    {
+      "line": 118125,
+      "text": "     N"
+    },
+    {
+      "line": 118130,
+      "text": "     AN,BN,CN"
+    },
+    {
+      "line": 118139,
+      "text": "     M"
+    },
+    {
+      "line": 118143,
+      "text": "     AM,BM,CM"
+    },
+    {
+      "line": 118147,
+      "text": "     IDIMY"
+    },
+    {
+      "line": 118151,
+      "text": "       LEAST M."
+    },
+    {
+      "line": 118153,
+      "text": "     Y"
+    },
+    {
+      "line": 118158,
+      "text": "     W"
+    },
+    {
+      "line": 118173,
+      "text": "     Y"
+    },
+    {
+      "line": 118194,
+      "text": "     W"
+    },
+    {
+      "line": 119553,
+      "text": "                    EXCEED IEND.)"
+    },
+    {
+      "line": 120638,
+      "text": "     PP. 215 - 217."
+    },
+    {
+      "line": 120645,
+      "text": "     PP. 278 - 281."
+    },
+    {
+      "line": 120886,
+      "text": "     PP. 215 - 217."
+    },
+    {
+      "line": 120893,
+      "text": "     PP. 278 - 281."
+    },
+    {
+      "line": 121112,
+      "text": "           P. 203."
+    },
+    {
+      "line": 121198,
+      "text": "           P. 203."
+    },
+    {
+      "line": 121635,
+      "text": "        VARIATE C*(X1/X2)."
+    },
+    {
+      "line": 121742,
+      "text": "        VARIATE C*(X1/X2)."
+    },
+    {
+      "line": 122003,
+      "text": "           PP. 236 - 237."
+    },
+    {
+      "line": 122019,
+      "text": "        PROCESS STATIONARITY"
+    },
+    {
+      "line": 122121,
+      "text": "           PP. 236 - 237."
+    },
+    {
+      "line": 122139,
+      "text": "        PROCESS STATIONARITY"
+    }
+  ]
+}

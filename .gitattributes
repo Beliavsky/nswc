@@ -2,6 +2,8 @@
 *.f text eol=lf
 *.f90 text eol=lf
 *.py text eol=lf
+tools/comment-case-*.json text eol=lf
+tools/comment-case-words.txt text eol=lf
 
 # Preserve original whitespace and procedure separators at partition boundaries.
 nswc_orig.f whitespace=-blank-at-eol

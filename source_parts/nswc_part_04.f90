@@ -4,8 +4,8 @@ integer, intent(in) :: n
 !
 !     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
 !
-!     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
-!            ESSENTIALLY ZERO.
+!     Bool - logical variable, which is set to .True. If H(S) is
+!            essentially zero.
 !
 logical, intent(inout) :: bool
 double precision, intent(in) :: sr, si
@@ -14,7 +14,7 @@ double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
 double precision, intent(inout) :: qhr(n), qhi(n)
 double precision :: hvr, hvi, dcpabs
 !
-!     EVALUATE H(S)
+!     Evaluate H(S)
 !
 call polyev (n,sr,si,hr,hi,qhr,qhi,hvr,hvi)
 bool = dcpabs(hvr,hvi) .le. 10.d0*are*dcpabs(hr(n),hi(n))
@@ -31,9 +31,9 @@ implicit none
 integer, intent(in) :: n
 integer :: j
 !
-!     CALCULATES THE NEXT SHIFTED H POLYNOMIAL.
+!     Calculates the next shifted H polynomial.
 !
-!     BOOL - LOGICAL VARIABLE. IF .TRUE. H(S) IS ESSENTIALLY ZERO.
+!     Bool - logical variable. If .True. H(S) is essentially zero.
 !
 logical, intent(in) :: bool
 double precision, intent(in) :: tr, ti
@@ -52,7 +52,7 @@ if (bool) go to 20
    hi(1) = qpi(1)
    return
 !
-!     IF H(S) IS ZERO THEN REPLACE H WITH QH.
+!     If H(S) is zero then replace H with QH.
 !
 20 do j = 2,n
    hr(j) = qhr(j - 1)
@@ -68,8 +68,8 @@ implicit none
 integer, intent(in) :: n
 integer :: i
 !
-!     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
-!     PLACING THE PARTIAL SUMS IN Q AND THE COMPUTED VALUE IN PV.
+!     Evaluates a polynomial P at S by the Horner recurrence algo.,
+!     placing the partial sums in Q and the computed value in PV.
 !
 double precision, intent(in) :: pr(n), pi(n)
 double precision, intent(inout) :: qr(n), qi(n)
@@ -96,13 +96,13 @@ implicit none
 integer, intent(in) :: nn
 integer :: i
 !
-!     BOUNDS THE ERROR IN EVALUATING THE POLYNOMIAL BY THE HORNER
-!     RECURRENCE ALGORITHM.
+!     Bounds the error in evaluating the polynomial by the Horner
+!     recurrence algorithm.
 !
 !     QR,QI   - THE PARTIAL SUMS
 !     MS      - MODULUS OF THE POINT
 !     MP      - MODULUS OF THE POLYNOMIAL VALUE
-!     ARE,MRE - ERROR BOUNDS ON COMPLEX ADDITION AND MULTIPLICATION
+!     are,MRE - error bounds on complex addition and multiplication
 !
 double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
 double precision :: e, dcpabs
@@ -125,48 +125,48 @@ real :: spmpar
 real :: cpabs
 !-----------------------------------------------------------------------
 !
-!     ABSTRACT
+!     Abstract
 !
-!         THIS ROUTINE COMPUTES ERROR BOUNDS AND CLUSTER COUNTS
-!         FOR APPROXIMATE ZEROS OF A POLYNOMIAL WITH REAL COEFFICIENTS.
-!         THE ZEROS MAY HAVE BEEN COMPUTED BY ANY APPROPRIATE ROUTINE.
-!         THE METHOD USED IS BASED ON THE FACT THAT THE VALUE OF A
-!         POLYNOMIAL AT ANY POINT IS EQUAL TO THE LEADING COEFFICIENT
-!         TIMES THE PRODUCT OF THE DISTANCES FROM THAT POINT TO EACH
-!         OF THE ZEROS.  GIVEN THE VALUE OF THE POLYNOMIAL AT AN
-!         APPROXIMATE ZERO, RBND COMPUTES FOR EACH APPROXIMATE ZERO
-!         THE RADIUS OF A CIRCLE ABOUT THAT APPROXIMATE ZERO WHICH
-!         CONTAINS A TRUE ZERO OF THE POLYNOMIAL.  USING THE KNOWN
-!         DISTRIBUTION OF APPROXIMATE ZEROS, AN ITERATIVE PROCEDURE
-!         IS USED TO SHRINK THE RADII OF THE CIRCLES.
+!         This routine computes error bounds and cluster counts
+!         for approximate zeros of a polynomial with real coefficients.
+!         The zeros may have been computed by any appropriate routine.
+!         The method used is based on the fact that the value of A
+!         polynomial at any point is equal to the leading coefficient
+!         times the product of the distances from that point to each
+!         of the zeros.  Given the value of the polynomial at an
+!         approximate zero, RBND computes for each approximate zero
+!         the radius of a circle about that approximate zero which
+!         contains a true zero of the polynomial.  Using the known
+!         distribution of approximate zeros, an iterative procedure
+!         is used to shrink the radii of the circles.
 !
-!     DESCRIPTION OF ARGUMENTS
+!     Description of arguments
 !
-!         INPUT---
+!         Input---
 !
 !         N      - DEGREE OF THE POLYNOMIAL (NUMBER OF ZEROS).
 !         C      - REAL ARRAY OF N+1 COEFFICIENTS OF THE POLYNOMIAL
 !                  C(1) + C(2)*Z + ... + C(N+1)*Z**N
 !         W      - COMPLEX ARRAY OF N APPROXIMATE ZEROS.
 !
-!         OUTPUT--
+!         Output--
 !
-!         ABSERR - REAL ARRAY OF N ABSOLUTE ERROR BOUNDS.  ABSERR(I) IS
-!                  THE ABSOLUTE ERROR BOUND IN THE ZERO (WR(I),WI(I)).
-!         RELERR - REAL ARRAY OF N RELATIVE ERROR BOUNDS.  RELERR(I) IS
-!                  THE RELATIVE ERROR BOUND IN THE ZERO (WR(I),WI(I)).
-!         KLUST  - INTEGER ARRAY OF CLUSTER COUNTS FOR ZEROS.  THE TRUE
-!                  ZERO CORRESPONDING TO I-TH APPROXIMATE ZERO LIES IN
-!                  A CIRCLE OF RADIUS ABSERR(I). KLUST(I) IS THE NUMBER
-!                  OF CIRCLES INCLUDING THE I-TH CIRCLE WHICH OVERLAP
-!                  THE I-TH CIRCLE.  THE CLUSTER COUNT OFTEN INDICATES
-!                  THE MULTIPLICITY OF A ZERO.
+!         ABSERR - real array of N absolute error bounds.  ABSERR(I) is
+!                  the absolute error bound in the zero (WR(I),WI(I)).
+!         RELERR - real array of N relative error bounds.  RELERR(I) is
+!                  the relative error bound in the zero (WR(I),WI(I)).
+!         KLUST  - integer array of cluster counts for zeros.  The true
+!                  zero corresponding to I-TH approximate zero lies in
+!                  a circle of radius ABSERR(I). KLUST(I) is the number
+!                  of circles including the I-TH circle which overlap
+!                  the I-TH circle.  The cluster count often indicates
+!                  the multiplicity of a zero.
 !         KER    - AN ERROR FLAG
-!                --NORMAL CODE
-!                  0  MEANS THE BOUNDS AND COUNTS WERE COMPUTED.
-!                --ABNORMAL CODES
+!                --normal code
+!                  0  means the bounds and counts were computed.
+!                --Abnormal codes
 !                  1  N (DEGREE) MUST BE .GE. 1
-!                  2  LEADING COEFFICIENT IS ZERO
+!                  2  leading coefficient is zero
 !
 !-------------------
 !     WRITTEN BY CARL B. BAILEY AND MODIFIED BY WILLIAM R. GAVIN
@@ -210,7 +210,7 @@ do l = 1,n
    end do
    b = amax1(rat,cpabs(sngl(vr),sngl(vi))/p)
 !
-!        SAVE PRODUCT OF DISTANCES TEMPORARILY
+!        Save product of distances temporarily
 !
    relerr(l) = b
    abserr(l) = b ** power
@@ -264,7 +264,7 @@ end do
 ker = 0
 return
 !
-!             ERROR RETURN
+!             Error return
 !
 200 ker = 1
 return
@@ -282,48 +282,48 @@ real :: spmpar
 real :: cpabs
 !-----------------------------------------------------------------------
 !
-!     ABSTRACT
+!     Abstract
 !
-!         THIS ROUTINE COMPUTES ERROR BOUNDS AND CLUSTER COUNTS FOR
-!         APPROXIMATE ZEROS OF A POLYNOMIAL WITH COMPLEX COEFFICIENTS.
-!         THE ZEROS MAY HAVE BEEN COMPUTED BY ANY APPROPRIATE ROUTINE.
-!         THE METHOD USED IS BASED ON THE FACT THAT THE VALUE OF A
-!         POLYNOMIAL AT ANY POINT IS EQUAL TO THE LEADING COEFFICIENT
-!         TIMES THE PRODUCT OF THE DISTANCES FROM THAT POINT TO EACH
-!         OF THE ZEROS.  GIVEN THE VALUE OF THE POLYNOMIAL AT AN
-!         APPROXIMATE ZERO, CBND COMPUTES FOR EACH APPROXIMATE ZERO
-!         THE RADIUS OF A CIRCLE ABOUT THAT APPROXIMATE ZERO WHICH
-!         CONTAINS A TRUE ZERO OF THE POLYNOMIAL.  USING THE KNOWN
-!         DISTRIBUTION OF APPROXIMATE ZEROS, AN ITERATIVE PROCEDURE
-!         IS USED TO SHRINK THE RADII OF THE CIRCLES.
+!         This routine computes error bounds and cluster counts for
+!         approximate zeros of a polynomial with complex coefficients.
+!         The zeros may have been computed by any appropriate routine.
+!         The method used is based on the fact that the value of A
+!         polynomial at any point is equal to the leading coefficient
+!         times the product of the distances from that point to each
+!         of the zeros.  Given the value of the polynomial at an
+!         approximate zero, CBND computes for each approximate zero
+!         the radius of a circle about that approximate zero which
+!         contains a true zero of the polynomial.  Using the known
+!         distribution of approximate zeros, an iterative procedure
+!         is used to shrink the radii of the circles.
 !
-!     DESCRIPTION OF ARGUMENTS
+!     Description of arguments
 !
-!         INPUT---
+!         Input---
 !
 !         N      - DEGREE OF THE POLYNOMIAL (NUMBER OF ZEROS).
 !         C      - COMPLEX ARRAY OF N+1 COEFFICIENTS OF THE POLYNOMIAL
 !                  C(1) + C(2)*Z + ... + C(N+1)*Z**N
 !         W      - COMPLEX ARRAY OF N APPROXIMATE ZEROS.
 !
-!         OUTPUT--
+!         Output--
 !
-!         ABSERR - REAL ARRAY OF ABSOLUTE ERROR BOUNDS.  ABSERR(I) IS
-!                  THE ABSOLUTE ERROR BOUND IN THE ZERO (WR(I),WI(I)).
-!         RELERR - REAL ARRAY OF RELATIVE ERROR BOUNDS.  RELERR(I) IS
-!                  THE RELATIVE ERROR BOUND IN THE ZERO (WR(I),WI(I)).
-!         KLUST  - INTEGER ARRAY OF CLUSTER COUNTS FOR ZEROS.  THE TRUE
-!                  ZERO CORRESPONDING TO I-TH APPROXIMATE ZERO LIES IN
-!                  A CIRCLE OF RADIUS ABSERR(I).  KLUST(I) IS THE NUMBER
-!                  OF CIRCLES INCLUDING THE I-TH CIRCLE WHICH OVERLAP
-!                  THE I-TH CIRCLE.  THE CLUSTER COUNT OFTEN INDICATES
-!                  THE MULTIPLICITY OF A ZERO.
+!         ABSERR - real array of absolute error bounds.  ABSERR(I) is
+!                  the absolute error bound in the zero (WR(I),WI(I)).
+!         RELERR - real array of relative error bounds.  RELERR(I) is
+!                  the relative error bound in the zero (WR(I),WI(I)).
+!         KLUST  - integer array of cluster counts for zeros.  The true
+!                  zero corresponding to I-TH approximate zero lies in
+!                  a circle of radius ABSERR(I).  KLUST(I) is the number
+!                  of circles including the I-TH circle which overlap
+!                  the I-TH circle.  The cluster count often indicates
+!                  the multiplicity of a zero.
 !         KER    - AN ERROR CODE
-!                --NORMAL CODES
-!                  0  MEANS THE BOUNDS AND COUNTS WERE COMPUTED.
-!                --ABNORMAL CODES
+!                --normal codes
+!                  0  means the bounds and counts were computed.
+!                --Abnormal codes
 !                  1  N (DEGREE) MUST BE .GE. 1
-!                  2  LEADING COEFFICIENT IS ZERO
+!                  2  leading coefficient is zero
 !
 !-------------------
 !     WRITTEN BY CARL B. BAILEY AND MODIFIED BY WILLIAM R. GAVIN
@@ -366,7 +366,7 @@ do l = 1,n
    end do
    b = amax1(rat,cpabs(sngl(vr),sngl(vi))/p)
 !
-!        SAVE PRODUCT OF DISTANCES TEMPORARILY
+!        Save product of distances temporarily
 !
    relerr(l) = b
    abserr(l) = b ** power
@@ -420,7 +420,7 @@ end do
 ker = 0
 return
 !
-!             ERROR RETURN
+!             Error return
 !
 200 ker = 1
 return
@@ -431,9 +431,9 @@ end subroutine cbnd
 subroutine  scopy(n,sx,incx,sy,incy)
 implicit none
 !
-!     COPIES A VECTOR, X, TO A VECTOR, Y.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Copies a vector, X, to a vector, Y.
+!     Uses unrolled loops for increments equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
@@ -445,8 +445,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -459,10 +459,10 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,7)
 if( m .eq. 0 ) go to 40
@@ -486,9 +486,9 @@ end subroutine scopy
 subroutine  dcopy(n,dx,incx,dy,incy)
 implicit none
 !
-!     COPIES A VECTOR, X, TO A VECTOR, Y.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Copies a vector, X, to a vector, Y.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
@@ -500,8 +500,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -514,10 +514,10 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,7)
 if( m .eq. 0 ) go to 40
@@ -541,8 +541,8 @@ end subroutine dcopy
 subroutine  ccopy(n,cx,incx,cy,incy)
 implicit none
 !
-!     COPIES A VECTOR, X, TO A VECTOR, Y.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Copies a vector, X, to a vector, Y.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
@@ -554,8 +554,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -568,7 +568,7 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 20 do i = 1,n
   cy(i) = cx(i)
@@ -581,25 +581,25 @@ implicit none
 integer, intent(in) :: incx, incy, n
 integer :: i, iix, iiy, m, mp1, ns
 !
-!                EXTENDED B L A S  SUBPROGRAM
+!                Extended B L A S  subprogram
 !
-!    DESCRIPTION OF PARAMETERS
+!    Description of parameters
 !
-!     --INPUT--
-!        N  NUMBER OF ELEMENTS IN INPUT VECTOR(S)
-!       IX  INTEGER VECTOR WITH N ELEMENTS
-!     INCX  STORAGE SPACING BETWEEN ELEMENTS OF IX
-!       IY  INTEGER VECTOR WITH N ELEMENTS
-!     INCY  STORAGE SPACING BETWEEN ELEMENTS OF IY
+!     --Input--
+!        N  number of elements in input VECTOR(S)
+!       IX  integer vector with N elements
+!     INCX  storage spacing between elements of IX
+!       IY  integer vector with N elements
+!     incy  storage spacing between elements of IY
 !
-!     --OUTPUT--
+!     --Output--
 !       IX  INPUT VECTOR IY (UNCHANGED IF N .LE. 0)
 !       IY  INPUT VECTOR IX (UNCHANGED IF N .LE. 0)
 !
-!     INTERCHANGE INTEGER IX AND INTEGER IY.
+!     Interchange integer IX and integer IY.
 !     FOR I = 0 TO N-1, INTERCHANGE  IX(LX+I*INCX) AND IY(LY+I*INCY),
 !     WHERE LX = 1 IF INCX .GE. 0, ELSE LX = (-INCX)*N, AND LY IS
-!     DEFINED IN A SIMILAR WAY USING INCY.
+!     defined in a similar way using incy.
 !
 !***AUTHOR  VANDEVENDER, W. (SNLA), 1985
 !
@@ -611,7 +611,7 @@ if (incx .ne. incy) go to 5
 if (incx-1) 5,20,60
 5 continue
 !
-!       CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS.
+!       Code for unequal or nonpositive increments.
 !
 iix = 1
 iiy = 1
@@ -626,10 +626,10 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 !
-!       CLEAN-UP LOOP SO REMAINING VECTOR LENGTH IS A MULTIPLE OF 3.
+!       Clean-up loop so remaining vector LENGTH is a multiple of 3.
 !
 20 m = mod(n,3)
 if (m .eq. 0) go to 40
@@ -654,7 +654,7 @@ do i = mp1,n,3
 end do
 return
 !
-!     CODE FOR EQUAL, POSITIVE, NONUNIT INCREMENTS.
+!     Code for equal, positive, nonunit increments.
 !
 60 ns = n*incx
 do i = 1,ns,incx
@@ -668,9 +668,9 @@ end subroutine iswap
 subroutine  sswap (n,sx,incx,sy,incy)
 implicit none
 !
-!     INTERCHANGES TWO VECTORS.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Interchanges two vectors.
+!     Uses unrolled loops for increments equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(inout) :: sx(*), sy(*)
 real :: stemp
@@ -682,8 +682,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -698,10 +698,10 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 !
-!       CLEAN-UP LOOP
+!       Clean-up loop
 !
 20 m = mod(n,3)
 if( m .eq. 0 ) go to 40
@@ -729,9 +729,9 @@ end subroutine sswap
 subroutine  dswap (n,dx,incx,dy,incy)
 implicit none
 !
-!     INTERCHANGES TWO VECTORS.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Interchanges two vectors.
+!     Uses unrolled loops for increments equal one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(inout) :: dx(*), dy(*)
 double precision :: dtemp
@@ -743,8 +743,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -759,10 +759,10 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 !
-!       CLEAN-UP LOOP
+!       Clean-up loop
 !
 20 m = mod(n,3)
 if( m .eq. 0 ) go to 40
@@ -790,8 +790,8 @@ end subroutine dswap
 subroutine  cswap (n,cx,incx,cy,incy)
 implicit none
 !
-!     INTERCHANGES TWO VECTORS.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Interchanges two vectors.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(inout) :: cx(*), cy(*)
 complex :: ctemp
@@ -803,8 +803,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -819,7 +819,7 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 20 do i = 1,n
   ctemp = cx(i)
   cx(i) = cy(i)
@@ -831,8 +831,8 @@ end subroutine cswap
 subroutine  srot (n,sx,incx,sy,incy,c,s)
 implicit none
 !
-!     APPLIES A PLANE ROTATION.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Applies a plane rotation.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(inout) :: sx(*), sy(*)
 real :: stemp
@@ -845,8 +845,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -861,7 +861,7 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 20 do i = 1,n
   stemp = c*sx(i) + s*sy(i)
@@ -874,8 +874,8 @@ end subroutine srot
 subroutine  drot (n,dx,incx,dy,incy,c,s)
 implicit none
 !
-!     APPLIES A PLANE ROTATION.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Applies a plane rotation.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(inout) :: dx(*), dy(*)
 double precision :: dtemp
@@ -888,8 +888,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -904,7 +904,7 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 20 do i = 1,n
   dtemp = c*dx(i) + s*dy(i)
@@ -917,9 +917,9 @@ end subroutine drot
 subroutine  csrot (n,cx,incx,cy,incy,c,s)
 implicit none
 !
-!     APPLIES A PLANE ROTATION, WHERE THE COS AND SIN (C AND S) ARE REAL
-!     AND THE VECTORS CX AND CY ARE COMPLEX.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Applies a plane rotation, where the cos and sin (C and S) are real
+!     and the vectors CX and CY are complex.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(inout) :: cx(*), cy(*)
 complex :: ctemp
@@ -932,8 +932,8 @@ integer, intent(in) :: n
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
-!         TO 1
+!       Code for unequal increments or equal increments not equal
+!         to 1
 !
 ix = 1
 iy = 1
@@ -948,7 +948,7 @@ do i = 1,n
 end do
 return
 !
-!       CODE FOR BOTH INCREMENTS EQUAL TO 1
+!       Code for both increments equal to 1
 !
 20 do i = 1,n
   ctemp = c*cx(i) + s*cy(i)
@@ -965,8 +965,8 @@ real, intent(in) :: sy1
 real :: gam, gamsq, one, rgamsq, sflag, sh11, sh12, sh21, sh22, &
 &sp1, sp2, sq1, sq2, stemp, su, two, zero
 !
-!     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-!     THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*
+!     Construct the modified Givens transformation matrix H which zeros
+!     the second component of the 2-vector  (SQRT(SD1)*SX1,SQRT(SD2)*
 !     SY1)**T.
 !     WITH SPARAM(1)=SFLAG, H HAS ONE OF THE FOLLOWING FORMS..
 !
@@ -976,14 +976,14 @@ real :: gam, gamsq, one, rgamsq, sflag, sh11, sh12, sh21, sh22, &
 !     H=(          )    (          )    (          )    (          )
 !       (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
 !
-!     LOCATIONS 2-4 OF SPARAM CONTAIN SH11,SH21,SH12, AND SH22
-!     RESPECTIVELY. (VALUES OF 1.E0, -1.E0, OR 0.E0 IMPLIED BY THE
-!     VALUE OF SPARAM(1) ARE NOT STORED IN SPARAM.)
+!     Locations 2-4 of SPARAM contain SH11,SH21,SH12, and SH22
+!     respectively. (Values of 1.E0, -1.E0, or 0.E0 implied by the
+!     value of SPARAM(1) are not stored in SPARAM.)
 !
 !     IT IS ASSUMED THAT GAMSQ = GAM*GAM AND RGAMSQ = ONE/(GAM*GAM).
-!     THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
-!     INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
-!     OF SD1 AND SD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
+!     The values of GAMSQ and RGAMSQ set in the data statement may be
+!     inexact.  This is OK as they are only used for testing the size
+!     of SD1 and SD2.  All actual scaling of data is done using gam.
 !
 !
 data zero,one,two /0.e0,1.e0,2.e0/
@@ -995,7 +995,7 @@ if (sp2 .ne. zero) go to 20
     sflag = -two
     go to 260
 !
-!     REGULAR-CASE..
+!     Regular-case..
 !
 20 sp1 = sd1*sx1
 sq1 = sp1*sx1
@@ -1014,7 +1014,7 @@ if (abs(sq1) .le. abs(sq2)) go to 40
          sd1 = sd1/su
          sd2 = sd2/su
          sx1 = sx1*su
-!         GO SCALE-CHECK..
+!         Go scale-check..
          go to 100
 !
 40 continue
@@ -1030,10 +1030,10 @@ if (abs(sq1) .le. abs(sq2)) go to 40
          sd2 = sd1/su
          sd1 = stemp
          sx1 = sy1*su
-!         GO SCALE-CHECK
+!         Go scale-check
          go to 100
 !
-!     PROCEDURE..ZERO-H-D-AND-SX1..
+!     Procedure..zero-H-D-and-SX1..
 !
 60 continue
     sflag = -one
@@ -1047,7 +1047,7 @@ if (abs(sq1) .le. abs(sq2)) go to 40
     sx1 = zero
     go to 250
 !
-!     PROCEDURE..SCALE-CHECK
+!     Procedure..scale-check
 !
 100 continue
 110 continue
@@ -1117,7 +1117,7 @@ real, intent(inout) :: sx(*), sy(*)
 integer :: i, kx, ky, nsteps
 real :: sflag, sh11, sh12, sh21, sh22, two, w, z, zero
 !
-!     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
+!     Apply the modified Givens transformation, H, to the 2 by N matrix
 !
 !     (SX**T), WHERE **T INDICATES TRANSPOSE. THE ELEMENTS OF SX ARE IN
 !     (SY**T)
@@ -1225,8 +1225,8 @@ if(n .le. 0 .or.(sflag+two.eq.zero)) go to 140
 subroutine drotmg (dd1,dd2,dx1,dy1,dparam)
 implicit none
 !
-!     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-!     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
+!     Construct the modified Givens transformation matrix H which zeros
+!     the second component of the 2-vector  (DSQRT(DD1)*DX1,DSQRT(DD2)*
 !     DY1)**T.
 !     WITH DPARAM(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
 !
@@ -1236,14 +1236,14 @@ implicit none
 !     H=(          )    (          )    (          )    (          )
 !       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
 !
-!     LOCATIONS 2-4 OF DPARAM CONTAIN DH11,DH21,DH12, AND DH22
-!     RESPECTIVELY. (VALUES OF 1.D0, -1.D0, OR 0.D0 IMPLIED BY THE
-!     VALUE OF DPARAM(1) ARE NOT STORED IN DPARAM.)
+!     Locations 2-4 of DPARAM contain DH11,DH21,DH12, and DH22
+!     respectively. (Values of 1.D0, -1.D0, or 0.D0 implied by the
+!     value of DPARAM(1) are not stored in DPARAM.)
 !
 !     IT IS ASSUMED THAT GAMSQ = GAM*GAM AND RGAMSQ = ONE/(GAM*GAM).
-!     THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
-!     INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
-!     OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
+!     The values of GAMSQ and RGAMSQ set in the data statement may be
+!     inexact.  This is OK as they are only used for testing the size
+!     of DD1 and DD2.  All actual scaling of data is done using gam.
 !
 double precision :: gam, one, rgamsq
 double precision, intent(inout) :: dd2
@@ -1266,7 +1266,7 @@ if (dp2 .ne. zero) go to 20
     dflag = -two
     go to 260
 !
-!     REGULAR-CASE..
+!     Regular-case..
 !
 20 dp1 = dd1*dx1
 dq1 = dp1*dx1
@@ -1285,7 +1285,7 @@ if (dabs(dq1) .le. dabs(dq2)) go to 40
          dd1 = dd1/du
          dd2 = dd2/du
          dx1 = dx1*du
-!         GO SCALE-CHECK..
+!         Go scale-check..
          go to 100
 !
 40 continue
@@ -1301,10 +1301,10 @@ if (dabs(dq1) .le. dabs(dq2)) go to 40
          dd2 = dd1/du
          dd1 = dtemp
          dx1 = dy1*du
-!         GO SCALE-CHECK
+!         Go scale-check
          go to 100
 !
-!     PROCEDURE..ZERO-H-D-AND-DX1..
+!     Procedure..zero-H-D-and-DX1..
 !
 60 continue
     dflag = -one
@@ -1318,7 +1318,7 @@ if (dabs(dq1) .le. dabs(dq2)) go to 40
     dx1 = zero
     go to 250
 !
-!     PROCEDURE..SCALE-CHECK
+!     Procedure..scale-check
 !
 100 continue
 110 continue
@@ -1385,7 +1385,7 @@ implicit none
 integer, intent(in) :: incx, incy, n
 integer :: i, kx, ky, nsteps
 !
-!     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
+!     Apply the modified Givens transformation, H, to the 2 by N matrix
 !
 !     (DX**T), WHERE **T INDICATES TRANSPOSE. THE ELEMENTS OF DX ARE IN
 !     (DY**T)
@@ -1498,9 +1498,9 @@ if(n .le. 0 .or.(dflag+two.eq.zero)) go to 140
 real function sdot(n,sx,incx,sy,incy)
 implicit none
 !
-!     FORMS THE DOT PRODUCT OF TWO VECTORS.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Forms the dot product of two vectors.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*), sy(*)
 real :: stemp
@@ -1514,8 +1514,8 @@ sdot = 0.0e0
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1529,10 +1529,10 @@ end do
 sdot = stemp
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,5)
 if( m .eq. 0 ) go to 40
@@ -1552,9 +1552,9 @@ end function sdot
 double precision function ddot(n,dx,incx,dy,incy)
 implicit none
 !
-!     FORMS THE DOT PRODUCT OF TWO VECTORS.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Forms the dot product of two vectors.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*), dy(*)
 double precision :: dtemp
@@ -1568,8 +1568,8 @@ dtemp = 0.0d0
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1583,10 +1583,10 @@ end do
 ddot = dtemp
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,5)
 if( m .eq. 0 ) go to 40
@@ -1606,9 +1606,9 @@ end function ddot
 complex function cdotc(n,cx,incx,cy,incy)
 implicit none
 !
-!     FORMS THE DOT PRODUCT OF TWO VECTORS, CONJUGATING THE FIRST
-!     VECTOR.
-!     JACK DONGARRA, LINPACK,  3/11/78.
+!     Forms the dot product of two vectors, conjugating the first
+!     vector.
+!     Jack dongarra, LINPACK,  3/11/78.
 !
 complex, intent(in) :: cx(*), cy(*)
 complex :: ctemp
@@ -1622,8 +1622,8 @@ cdotc = (0.0,0.0)
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1637,7 +1637,7 @@ end do
 cdotc = ctemp
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 20 do i = 1,n
   ctemp = ctemp + conjg(cx(i))*cy(i)
@@ -1649,8 +1649,8 @@ end function cdotc
 complex function cdotu(n,cx,incx,cy,incy)
 implicit none
 !
-!     FORMS THE DOT PRODUCT OF TWO VECTORS.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Forms the dot product of two vectors.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*), cy(*)
 complex :: ctemp
@@ -1664,8 +1664,8 @@ cdotu = (0.0,0.0)
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1679,7 +1679,7 @@ end do
 cdotu = ctemp
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 20 do i = 1,n
   ctemp = ctemp + cx(i)*cy(i)
@@ -1691,9 +1691,9 @@ end function cdotu
 subroutine  sscal(n,sa,sx,incx)
 implicit none
 !
-!     SCALES A VECTOR BY A CONSTANT.
-!     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO 1.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Scales a vector BY a constant.
+!     Uses unrolled loops for increment equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sa
 real, intent(inout) :: sx(*)
@@ -1706,7 +1706,7 @@ integer :: nincx
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -1714,10 +1714,10 @@ do i = 1,nincx,incx
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,5)
 if( m .eq. 0 ) go to 40
@@ -1739,9 +1739,9 @@ end subroutine sscal
 subroutine  dscal(n,da,dx,incx)
 implicit none
 !
-!     SCALES A VECTOR BY A CONSTANT.
-!     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Scales a vector BY a constant.
+!     Uses unrolled loops for increment equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: da
 double precision, intent(inout) :: dx(*)
@@ -1754,7 +1754,7 @@ integer :: nincx
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -1762,10 +1762,10 @@ do i = 1,nincx,incx
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,5)
 if( m .eq. 0 ) go to 40
@@ -1787,8 +1787,8 @@ end subroutine dscal
 subroutine  cscal(n,ca,cx,incx)
 implicit none
 !
-!     SCALES A VECTOR BY A CONSTANT.
-!     JACK DONGARRA, LINPACK,  3/11/78.
+!     Scales a vector BY a constant.
+!     Jack dongarra, LINPACK,  3/11/78.
 !
 complex, intent(in) :: ca
 complex, intent(inout) :: cx(*)
@@ -1799,7 +1799,7 @@ integer :: nincx
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -1807,7 +1807,7 @@ do i = 1,nincx,incx
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 do i = 1,n
   cx(i) = ca*cx(i)
@@ -1818,8 +1818,8 @@ end subroutine cscal
 subroutine  csscal(n,sa,cx,incx)
 implicit none
 !
-!     SCALES A COMPLEX VECTOR BY A REAL CONSTANT.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Scales a complex vector BY a real constant.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(inout) :: cx(*)
 real, intent(in) :: sa
@@ -1830,7 +1830,7 @@ integer :: nincx
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -1838,7 +1838,7 @@ do i = 1,nincx,incx
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 do i = 1,n
   cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
@@ -1849,9 +1849,9 @@ end subroutine csscal
 subroutine saxpy(n,sa,sx,incx,sy,incy)
 implicit none
 !
-!     CONSTANT TIMES A VECTOR PLUS A VECTOR.
-!     USES UNROLLED LOOP FOR INCREMENTS EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Constant times a vector plus a vector.
+!     Uses unrolled loop for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
@@ -1865,8 +1865,8 @@ if(n.le.0)return
 if (sa .eq. 0.0) return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1879,10 +1879,10 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,4)
 if( m .eq. 0 ) go to 40
@@ -1903,9 +1903,9 @@ end subroutine saxpy
 subroutine daxpy(n,da,dx,incx,dy,incy)
 implicit none
 !
-!     CONSTANT TIMES A VECTOR PLUS A VECTOR.
-!     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Constant times a vector plus a vector.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
@@ -1919,8 +1919,8 @@ if(n.le.0)return
 if (da .eq. 0.0d0) return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1933,10 +1933,10 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,4)
 if( m .eq. 0 ) go to 40
@@ -1957,8 +1957,8 @@ end subroutine daxpy
 subroutine caxpy(n,ca,cx,incx,cy,incy)
 implicit none
 !
-!     CONSTANT TIMES A VECTOR PLUS A VECTOR.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Constant times a vector plus a vector.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
@@ -1972,8 +1972,8 @@ if(n.le.0)return
 if (abs(real(ca)) + abs(aimag(ca)) .eq. 0.0 ) return
 if(incx.eq.1.and.incy.eq.1)go to 20
 !
-!        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
-!          NOT EQUAL TO 1
+!        Code for unequal increments or equal increments
+!          not equal to 1
 !
 ix = 1
 iy = 1
@@ -1986,7 +1986,7 @@ do i = 1,n
 end do
 return
 !
-!        CODE FOR BOTH INCREMENTS EQUAL TO 1
+!        Code for both increments equal to 1
 !
 20 do i = 1,n
   cy(i) = cy(i) + ca*cx(i)
@@ -1997,9 +1997,9 @@ end subroutine caxpy
 real function sasum(n,sx,incx)
 implicit none
 !
-!     TAKES THE SUM OF THE ABSOLUTE VALUES.
-!     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Takes the sum of the absolute values.
+!     Uses unrolled loops for increment equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
 real :: stemp
@@ -2014,7 +2014,7 @@ stemp = 0.0e0
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -2023,10 +2023,10 @@ end do
 sasum = stemp
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,6)
 if( m .eq. 0 ) go to 40
@@ -2046,8 +2046,8 @@ end function sasum
 double precision function dasum(n,dx,incx)
 implicit none
 !
-!     TAKES THE SUM OF THE ABSOLUTE VALUES.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Takes the sum of the absolute values.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
 double precision :: dtemp
@@ -2062,7 +2062,7 @@ dtemp = 0.0d0
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -2071,10 +2071,10 @@ end do
 dasum = dtemp
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 !
-!        CLEAN-UP LOOP
+!        Clean-up loop
 !
 20 m = mod(n,6)
 if( m .eq. 0 ) go to 40
@@ -2094,9 +2094,9 @@ end function dasum
 real function scasum(n,cx,incx)
 implicit none
 !
-!     TAKES THE SUM OF THE ABSOLUTE VALUES OF A COMPLEX VECTOR AND
-!     RETURNS A SINGLE PRECISION RESULT.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Takes the sum of the absolute values of a complex vector and
+!     returns a single precision result.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*)
 real :: stemp
@@ -2109,7 +2109,7 @@ stemp = 0.0e0
 if(n.le.0)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 nincx = n*incx
 do i = 1,nincx,incx
@@ -2118,7 +2118,7 @@ end do
 scasum = stemp
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 do i = 1,n
   stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
@@ -2136,23 +2136,23 @@ real, intent(in) :: sx(*)
 real :: cutlo, cuthi, hitest, sum, xmax, zero, one
 data   zero, one /0.0e0, 1.0e0/
 !
-!     EUCLIDEAN NORM OF THE N-VECTOR STORED IN SX() WITH STORAGE
-!     INCREMENT INCX .
+!     Euclidean norm of the N-vector stored in SX() with storage
+!     increment INCX .
 !     IF    N .LE. 0 RETURN WITH RESULT = 0.
 !     IF N .GE. 1 THEN INCX MUST BE .GE. 1
 !
-!           C.L.LAWSON, 1978 JAN 08
+!           C.L.Lawson, 1978 jan 08
 !
 !     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
-!     HOPEFULLY APPLICABLE TO ALL MACHINES.
+!     hopefully applicable to all machines.
 !         CUTLO = MAXIMUM OF  SQRT(U/EPS)  OVER ALL KNOWN MACHINES.
 !         CUTHI = MINIMUM OF  SQRT(V)      OVER ALL KNOWN MACHINES.
-!     WHERE
+!     Where
 !         EPS = SMALLEST NO. SUCH THAT EPS + 1. .GT. 1.
 !         U   = SMALLEST POSITIVE NO.   (UNDERFLOW LIMIT)
 !         V   = LARGEST  NO.            (OVERFLOW  LIMIT)
 !
-!     BRIEF OUTLINE OF ALGORITHM..
+!     Brief outline of algorithm..
 !
 !     PHASE 1    SCANS ZERO COMPONENTS.
 !     MOVE TO PHASE 2 WHEN A COMPONENT IS NONZERO AND .LE. CUTLO
@@ -2160,9 +2160,9 @@ data   zero, one /0.0e0, 1.0e0/
 !     MOVE TO PHASE 4 WHEN A COMPONENT IS .GE. CUTHI/M
 !     WHERE M = N FOR X() REAL AND M = 2*N FOR COMPLEX.
 !
-!     VALUES FOR CUTLO AND CUTHI..
-!     FROM THE ENVIRONMENTAL PARAMETERS LISTED IN THE IMSL CONVERTER
-!     DOCUMENT THE LIMITING VALUES ARE AS FOLLOWS..
+!     Values for CUTLO and CUTHI..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
 !     CUTLO, S.P.   U/EPS = 2**(-102) FOR  HONEYWELL.  CLOSE SECONDS ARE
 !                   UNIVAC AND DEC AT 2**(-103)
 !                   THUS CUTLO = 2**(-51) = 4.44089E-16
@@ -2182,23 +2182,23 @@ if(n .gt. 0) go to 10
 10 assign 30 to next
 sum = zero
 nn = n * incx
-!                                                 BEGIN MAIN LOOP
+!                                                 Begin main loop
 i = 1
 20 go to next,(30, 50, 70, 110)
 30 if( abs(sx(i)) .gt. cutlo) go to 85
 assign 50 to next
 xmax = zero
 !
-!                        PHASE 1.  SUM IS ZERO
+!                        Phase 1.  Sum is zero
 !
 50 if( sx(i) .eq. zero) go to 200
 if( abs(sx(i)) .gt. cutlo) go to 85
 !
-!                                PREPARE FOR PHASE 2.
+!                                Prepare for phase 2.
 assign 70 to next
 go to 105
 !
-!                                PREPARE FOR PHASE 4.
+!                                Prepare for phase 4.
 !
 100 i = j
 assign 110 to next
@@ -2206,13 +2206,13 @@ sum = (sum / sx(i)) / sx(i)
 105 xmax = abs(sx(i))
 go to 115
 !
-!                   PHASE 2.  SUM IS SMALL.
-!                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
 !
 70 if( abs(sx(i)) .gt. cutlo ) go to 75
 !
-!                     COMMON CODE FOR PHASES 2 AND 4.
-!                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
 !
 110 if( abs(sx(i)) .le. xmax ) go to 115
    sum = one + sum * (xmax / sx(i))**2
@@ -2223,7 +2223,7 @@ go to 115
 go to 200
 !
 !
-!                  PREPARE FOR PHASE 3.
+!                  Prepare for phase 3.
 !
 75 sum = (sum * xmax) * xmax
 !
@@ -2233,7 +2233,7 @@ go to 200
 !
 85 hitest = cuthi/float( n )
 !
-!                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
+!                   Phase 3.  Sum is mid-range.  No scaling.
 !
 do 95 j = i,nn,incx
 if(abs(sx(j)) .ge. hitest) go to 100
@@ -2247,7 +2247,7 @@ if ( i .le. nn ) go to 20
 !
 !              END OF MAIN LOOP.
 !
-!              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
+!              Compute square root and adjust for scaling.
 !
 snrm2 = xmax * sqrt(sum)
 300 continue
@@ -2263,23 +2263,23 @@ double precision, intent(in) :: dx(*)
 double precision :: cutlo, cuthi, hitest, sum, xmax, zero, one
 data   zero, one /0.0d0, 1.0d0/
 !
-!     EUCLIDEAN NORM OF THE N-VECTOR STORED IN DX() WITH STORAGE
-!     INCREMENT INCX .
+!     Euclidean norm of the N-vector stored in DX() with storage
+!     increment INCX .
 !     IF    N .LE. 0 RETURN WITH RESULT = 0.
 !     IF N .GE. 1 THEN INCX MUST BE .GE. 1
 !
-!           C.L.LAWSON, 1978 JAN 08
+!           C.L.Lawson, 1978 jan 08
 !
 !     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
-!     HOPEFULLY APPLICABLE TO ALL MACHINES.
+!     hopefully applicable to all machines.
 !         CUTLO = MAXIMUM OF  DSQRT(U/EPS)  OVER ALL KNOWN MACHINES.
 !         CUTHI = MINIMUM OF  DSQRT(V)      OVER ALL KNOWN MACHINES.
-!     WHERE
+!     Where
 !         EPS = SMALLEST NO. SUCH THAT EPS + 1. .GT. 1.
 !         U   = SMALLEST POSITIVE NO.   (UNDERFLOW LIMIT)
 !         V   = LARGEST  NO.            (OVERFLOW  LIMIT)
 !
-!     BRIEF OUTLINE OF ALGORITHM..
+!     Brief outline of algorithm..
 !
 !     PHASE 1    SCANS ZERO COMPONENTS.
 !     MOVE TO PHASE 2 WHEN A COMPONENT IS NONZERO AND .LE. CUTLO
@@ -2287,9 +2287,9 @@ data   zero, one /0.0d0, 1.0d0/
 !     MOVE TO PHASE 4 WHEN A COMPONENT IS .GE. CUTHI/M
 !     WHERE M = N FOR X() REAL AND M = 2*N FOR COMPLEX.
 !
-!     VALUES FOR CUTLO AND CUTHI..
-!     FROM THE ENVIRONMENTAL PARAMETERS LISTED IN THE IMSL CONVERTER
-!     DOCUMENT THE LIMITING VALUES ARE AS FOLLOWS..
+!     Values for CUTLO and CUTHI..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
 !     CUTLO, S.P.   U/EPS = 2**(-102) FOR  HONEYWELL.  CLOSE SECONDS ARE
 !                   UNIVAC AND DEC AT 2**(-103)
 !                   THUS CUTLO = 2**(-51) = 4.44089E-16
@@ -2309,23 +2309,23 @@ if(n .gt. 0) go to 10
 10 assign 30 to next
 sum = zero
 nn = n * incx
-!                                                 BEGIN MAIN LOOP
+!                                                 Begin main loop
 i = 1
 20 go to next,(30, 50, 70, 110)
 30 if( dabs(dx(i)) .gt. cutlo) go to 85
 assign 50 to next
 xmax = zero
 !
-!                        PHASE 1.  SUM IS ZERO
+!                        Phase 1.  Sum is zero
 !
 50 if( dx(i) .eq. zero) go to 200
 if( dabs(dx(i)) .gt. cutlo) go to 85
 !
-!                                PREPARE FOR PHASE 2.
+!                                Prepare for phase 2.
 assign 70 to next
 go to 105
 !
-!                                PREPARE FOR PHASE 4.
+!                                Prepare for phase 4.
 !
 100 i = j
 assign 110 to next
@@ -2333,13 +2333,13 @@ sum = (sum / dx(i)) / dx(i)
 105 xmax = dabs(dx(i))
 go to 115
 !
-!                   PHASE 2.  SUM IS SMALL.
-!                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
 !
 70 if( dabs(dx(i)) .gt. cutlo ) go to 75
 !
-!                     COMMON CODE FOR PHASES 2 AND 4.
-!                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
 !
 110 if( dabs(dx(i)) .le. xmax ) go to 115
    sum = one + sum * (xmax / dx(i))**2
@@ -2350,7 +2350,7 @@ go to 115
 go to 200
 !
 !
-!                  PREPARE FOR PHASE 3.
+!                  Prepare for phase 3.
 !
 75 sum = (sum * xmax) * xmax
 !
@@ -2360,7 +2360,7 @@ go to 200
 !
 85 hitest = cuthi/float( n )
 !
-!                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
+!                   Phase 3.  Sum is mid-range.  No scaling.
 !
 do 95 j = i,nn,incx
 if(dabs(dx(j)) .ge. hitest) go to 100
@@ -2374,7 +2374,7 @@ if ( i .le. nn ) go to 20
 !
 !              END OF MAIN LOOP.
 !
-!              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
+!              Compute square root and adjust for scaling.
 !
 dnrm2 = xmax * dsqrt(sum)
 300 continue
@@ -2391,23 +2391,23 @@ real :: cutlo, cuthi, hitest, sum, xmax, absx, zero, one
 complex, intent(in) :: cx(*)
 data         zero, one /0.0e0, 1.0e0/
 !
-!     UNITARY NORM OF THE COMPLEX N-VECTOR STORED IN CX() WITH STORAGE
-!     INCREMENT INCX .
+!     Unitary norm of the complex N-vector stored in CX() with storage
+!     increment INCX .
 !     IF    N .LE. 0 RETURN WITH RESULT = 0.
 !     IF N .GE. 1 THEN INCX MUST BE .GE. 1
 !
-!           C.L.LAWSON , 1978 JAN 08
+!           C.L.Lawson , 1978 jan 08
 !
 !     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
-!     HOPEFULLY APPLICABLE TO ALL MACHINES.
+!     hopefully applicable to all machines.
 !         CUTLO = MAXIMUM OF  SQRT(U/EPS)  OVER ALL KNOWN MACHINES.
 !         CUTHI = MINIMUM OF  SQRT(V)      OVER ALL KNOWN MACHINES.
-!     WHERE
+!     Where
 !         EPS = SMALLEST NO. SUCH THAT EPS + 1. .GT. 1.
 !         U   = SMALLEST POSITIVE NO.   (UNDERFLOW LIMIT)
 !         V   = LARGEST  NO.            (OVERFLOW  LIMIT)
 !
-!     BRIEF OUTLINE OF ALGORITHM..
+!     Brief outline of algorithm..
 !
 !     PHASE 1    SCANS ZERO COMPONENTS.
 !     MOVE TO PHASE 2 WHEN A COMPONENT IS NONZERO AND .LE. CUTLO
@@ -2415,9 +2415,9 @@ data         zero, one /0.0e0, 1.0e0/
 !     MOVE TO PHASE 4 WHEN A COMPONENT IS .GE. CUTHI/M
 !     WHERE M = N FOR X() REAL AND M = 2*N FOR COMPLEX.
 !
-!     VALUES FOR CUTLO AND CUTHI..
-!     FROM THE ENVIRONMENTAL PARAMETERS LISTED IN THE IMSL CONVERTER
-!     DOCUMENT THE LIMITING VALUES ARE AS FOLLOWS..
+!     Values for CUTLO and CUTHI..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
 !     CUTLO, S.P.   U/EPS = 2**(-102) FOR  HONEYWELL.  CLOSE SECONDS ARE
 !                   UNIVAC AND DEC AT 2**(-103)
 !                   THUS CUTLO = 2**(-51) = 4.44089E-16
@@ -2437,7 +2437,7 @@ if(n .gt. 0) go to 10
 10 assign 30 to next
 sum = zero
 nn = n * incx
-!                                                 BEGIN MAIN LOOP
+!                                                 Begin main loop
 do 210 i = 1,nn,incx
    absx = abs(real(cx(i)))
    imag = .false.
@@ -2446,16 +2446,16 @@ do 210 i = 1,nn,incx
 assign 50 to next
 scale = .false.
 !
-!                        PHASE 1.  SUM IS ZERO
+!                        Phase 1.  Sum is zero
 !
 50 if( absx .eq. zero) go to 200
 if( absx .gt. cutlo) go to 85
 !
-!                                PREPARE FOR PHASE 2.
+!                                Prepare for phase 2.
 assign 70 to next
 go to 105
 !
-!                                PREPARE FOR PHASE 4.
+!                                Prepare for phase 4.
 !
 100 assign 110 to next
 sum = (sum / absx) / absx
@@ -2463,13 +2463,13 @@ sum = (sum / absx) / absx
 xmax = absx
 go to 115
 !
-!                   PHASE 2.  SUM IS SMALL.
-!                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
 !
 70 if( absx .gt. cutlo ) go to 75
 !
-!                     COMMON CODE FOR PHASES 2 AND 4.
-!                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
 !
 110 if( absx .le. xmax ) go to 115
    sum = one + sum * (xmax / absx)**2
@@ -2480,7 +2480,7 @@ go to 115
 go to 200
 !
 !
-!                  PREPARE FOR PHASE 3.
+!                  Prepare for phase 3.
 !
 75 sum = (sum * xmax) * xmax
 !
@@ -2493,12 +2493,12 @@ scale = .false.
 hitest = cuthi/float( n )
 hitest = hitest * 0.5
 !
-!                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
+!                   Phase 3.  Sum is mid-range.  No scaling.
 !
 90 if(absx .ge. hitest) go to 100
    sum = sum + absx**2
 200 continue
-!                  CONTROL SELECTION OF REAL AND IMAGINARY PARTS.
+!                  Control selection of real and imaginary parts.
 !
 if(imag) go to 210
    absx = abs(aimag(cx(i)))
@@ -2508,7 +2508,7 @@ go to next,(  50, 70, 90, 110 )
 210 continue
 !
 !              END OF MAIN LOOP.
-!              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
+!              Compute square root and adjust for scaling.
 !
 scnrm2 = sqrt(sum)
 if(scale) scnrm2 = scnrm2 * xmax
@@ -2519,8 +2519,8 @@ end function scnrm2
 integer function isamax(n,sx,incx)
 implicit none
 !
-!     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
 real :: smax
@@ -2535,7 +2535,7 @@ isamax = 1
 if(n.eq.1)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 ix = 1
 smax = abs(sx(1))
@@ -2548,7 +2548,7 @@ do i = 2,n
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 smax = abs(sx(1))
 do 30 i = 2,n
@@ -2562,8 +2562,8 @@ end function isamax
 integer function idamax(n,dx,incx)
 implicit none
 !
-!     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
 double precision :: dmax
@@ -2578,7 +2578,7 @@ idamax = 1
 if(n.eq.1)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 ix = 1
 dmax = dabs(dx(1))
@@ -2591,7 +2591,7 @@ do i = 2,n
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 dmax = dabs(dx(1))
 do 30 i = 2,n
@@ -2605,8 +2605,8 @@ end function idamax
 integer function icamax(n,cx,incx)
 implicit none
 !
-!     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
-!     JACK DONGARRA, LINPACK, 3/11/78.
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
 !
 complex :: cx(*)
 real :: smax
@@ -2624,7 +2624,7 @@ icamax = 1
 if(n.eq.1)return
 if(incx.eq.1)go to 20
 !
-!        CODE FOR INCREMENT NOT EQUAL TO 1
+!        Code for increment not equal to 1
 !
 ix = 1
 smax = cabs1(cx(1))
@@ -2637,7 +2637,7 @@ do i = 2,n
 end do
 return
 !
-!        CODE FOR INCREMENT EQUAL TO 1
+!        Code for increment equal to 1
 !
 20 smax = cabs1(cx(1))
 do 30 i = 2,n
@@ -2926,12 +2926,12 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
 ! ----------------------------------------------------------
-! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
-! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
-! TRANSPOSITION OF THE N1 BY N2 MATRIX A AMOUNTS TO
-! REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
-! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
-! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
+! Transposition of a rectangular matrix in situ.
+! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
+! Transposition of the N1 by N2 matrix A amounts to
+! replacing the element at vector position I (0-ORIGIN)
+! with the element at position N1*I (mod N1*N2-1).
+! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
 real, intent(inout) :: a(*)
 real :: atemp, btemp
@@ -2942,7 +2942,7 @@ n12 = n1*n2
 n = n1
 m = n12 - 1
 if (n1.ne.n2) go to 30
-! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
+! Square matrices are done separately for speed
 i1min = 2
 do i1max=n,m,n
   i2 = i1min + n - 1
@@ -2955,20 +2955,20 @@ do i1max=n,m,n
   i1min = i1min + n + 1
 end do
 return
-! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
+! Modulus M is factored into prime powers.  Eight factors
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 ndim = 0
 call infctr(m, ifact, ipower, nexp, npower)
 do ip=1,npower
   iexp(ip) = 0
 end do
-! GENERATE EVERY DIVISOR OF M LESS THAN M/2
+! Generate every divisor of M less than M/2
 idiv = 1
 mhalf = m/2
 50 if (idiv.ge.mhalf) return
-! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
-! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
-! FUNCTION, PHI(M/IDIV).
+! The number of elements whose index is divisible by IDIV
+! and by no other divisor of M is the Euler totient
+! function, PHI(M/IDIV).
 ncount = m/idiv
 do 60 ip = 1,npower
   if (iexp(ip).eq.nexp(ip)) go to 60
@@ -2979,8 +2979,8 @@ do i=1,nwork
   moved(i) = 0
 end do
 75 istart = idiv
-! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
-! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
+! The starting point of a subcycle is divisible only by IDIV
+! and must not appear in any other subcycle.
 80 mmist = m - istart
 if (istart.eq.idiv) go to 120
 ndim = max0(ndim,istart)
@@ -3005,8 +3005,8 @@ mmia2 = m - ia2
 if (ia1.le.nwork) moved(ia1) = 1
 if (mmia1.le.nwork) moved(mmia1) = 1
 ncount = ncount - 2
-! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
-! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
+! Move two elements, the second from the negative
+! subcycle.  Check first for subcycle closure.
 if (ia2.eq.istart) go to 140
 if (mmia2.eq.istart) go to 150
 a(ia1+1) = a(ia2+1)
@@ -3042,12 +3042,12 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
 ! ----------------------------------------------------------
-! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
-! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
-! TRANSPOSITION OF THE N1 BY N2 MATRIX A AMOUNTS TO
-! REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
-! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
-! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
+! Transposition of a rectangular matrix in situ.
+! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
+! Transposition of the N1 by N2 matrix A amounts to
+! replacing the element at vector position I (0-ORIGIN)
+! with the element at position N1*I (mod N1*N2-1).
+! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
 double precision, intent(inout) :: a(*)
 double precision :: atemp, btemp
@@ -3058,7 +3058,7 @@ n12 = n1*n2
 n = n1
 m = n12 - 1
 if (n1.ne.n2) go to 30
-! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
+! Square matrices are done separately for speed
 i1min = 2
 do i1max=n,m,n
   i2 = i1min + n - 1
@@ -3071,20 +3071,20 @@ do i1max=n,m,n
   i1min = i1min + n + 1
 end do
 return
-! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
+! Modulus M is factored into prime powers.  Eight factors
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 ndim = 0
 call infctr(m, ifact, ipower, nexp, npower)
 do ip=1,npower
   iexp(ip) = 0
 end do
-! GENERATE EVERY DIVISOR OF M LESS THAN M/2
+! Generate every divisor of M less than M/2
 idiv = 1
 mhalf = m/2
 50 if (idiv.ge.mhalf) return
-! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
-! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
-! FUNCTION, PHI(M/IDIV).
+! The number of elements whose index is divisible by IDIV
+! and by no other divisor of M is the Euler totient
+! function, PHI(M/IDIV).
 ncount = m/idiv
 do 60 ip = 1,npower
   if (iexp(ip).eq.nexp(ip)) go to 60
@@ -3095,8 +3095,8 @@ do i=1,nwork
   moved(i) = 0
 end do
 75 istart = idiv
-! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
-! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
+! The starting point of a subcycle is divisible only by IDIV
+! and must not appear in any other subcycle.
 80 mmist = m - istart
 if (istart.eq.idiv) go to 120
 ndim = max0(ndim,istart)
@@ -3121,8 +3121,8 @@ mmia2 = m - ia2
 if (ia1.le.nwork) moved(ia1) = 1
 if (mmia1.le.nwork) moved(mmia1) = 1
 ncount = ncount - 2
-! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
-! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
+! Move two elements, the second from the negative
+! subcycle.  Check first for subcycle closure.
 if (ia2.eq.istart) go to 140
 if (mmia2.eq.istart) go to 150
 a(ia1+1) = a(ia2+1)
@@ -3158,12 +3158,12 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
 ! ----------------------------------------------------------
-! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
-! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
-! TRANSPOSITION OF THE N1 BY N2 MATRIX A AMOUNTS TO
-! REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
-! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
-! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
+! Transposition of a rectangular matrix in situ.
+! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
+! Transposition of the N1 by N2 matrix A amounts to
+! replacing the element at vector position I (0-ORIGIN)
+! with the element at position N1*I (mod N1*N2-1).
+! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
 complex, intent(inout) :: a(*)
 complex :: atemp, btemp
@@ -3174,7 +3174,7 @@ n12 = n1*n2
 n = n1
 m = n12 - 1
 if (n1.ne.n2) go to 30
-! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
+! Square matrices are done separately for speed
 i1min = 2
 do i1max=n,m,n
   i2 = i1min + n - 1
@@ -3187,20 +3187,20 @@ do i1max=n,m,n
   i1min = i1min + n + 1
 end do
 return
-! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
+! Modulus M is factored into prime powers.  Eight factors
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 ndim = 0
 call infctr(m, ifact, ipower, nexp, npower)
 do ip=1,npower
   iexp(ip) = 0
 end do
-! GENERATE EVERY DIVISOR OF M LESS THAN M/2
+! Generate every divisor of M less than M/2
 idiv = 1
 mhalf = m/2
 50 if (idiv.ge.mhalf) return
-! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
-! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
-! FUNCTION, PHI(M/IDIV).
+! The number of elements whose index is divisible by IDIV
+! and by no other divisor of M is the Euler totient
+! function, PHI(M/IDIV).
 ncount = m/idiv
 do 60 ip = 1,npower
   if (iexp(ip).eq.nexp(ip)) go to 60
@@ -3211,8 +3211,8 @@ do i=1,nwork
   moved(i) = 0
 end do
 75 istart = idiv
-! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
-! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
+! The starting point of a subcycle is divisible only by IDIV
+! and must not appear in any other subcycle.
 80 mmist = m - istart
 if (istart.eq.idiv) go to 120
 ndim = max0(ndim,istart)
@@ -3237,8 +3237,8 @@ mmia2 = m - ia2
 if (ia1.le.nwork) moved(ia1) = 1
 if (mmia1.le.nwork) moved(mmia1) = 1
 ncount = ncount - 2
-! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
-! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
+! Move two elements, the second from the negative
+! subcycle.  Check first for subcycle closure.
 if (ia2.eq.istart) go to 140
 if (mmia2.eq.istart) go to 150
 a(ia1+1) = a(ia2+1)
@@ -3271,7 +3271,7 @@ integer, intent(inout) :: ifact(*), ipower(*)
 integer, intent(in) :: n
 integer, intent(inout) :: nexp(*), npower
 integer :: idiv, ifcur, ip, iquot, npart
-! FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
+! Factor N into its prime powers, NPOWER in number.
 ! E.G., FOR N=1960=2**3 *5 *7**2, NPOWER=3, IFACT=2,5,7,
 ! IPOWER=8,5,49, AND NEXP=3,1,2.
 ip = 0
@@ -3328,22 +3328,22 @@ subroutine ctrans (nm, n, a)
 implicit none
 !
 !
-!     SUBROUTINE CTRANS FINDS THE COMPLEX CONJUGATE OF AN INPUT
-!     MATRIX.
+!     Subroutine CTRANS finds the complex conjugate of an input
+!     matrix.
 !
 !
-!     ON ENTRY,
+!     On entry,
 !
-!     NM IS THE LEADING DIMENSION OF MATRIX A IN THE MAIN PROGRAM.
+!     NM is the leading dimension of matrix A in the main program.
 !
-!     N  IS THE ORDER OF MATRIX A.
+!     N  is the order of matrix A.
 !
-!     A  IS THE INPUT MATRIX.
+!     A  is the input matrix.
 !
 !
-!     ON RETURN,
+!     On return,
 !
-!     A  CONTAINS ITS CONJUGATE TRANSPOSE.
+!     A  contains its conjugate transpose.
 !
 !
 integer :: i, j
@@ -3366,7 +3366,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!                      ADDITION OF REAL MATRICES
+!                      Addition of real matrices
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n), b(kb,n)
 real, intent(inout) :: c(kc,n)
@@ -3384,7 +3384,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!                ADDITION OF DOUBLE PRECISION MATRICES
+!                Addition of double precision matrices
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n), b(kb,n)
 double precision, intent(inout) :: c(kc,n)
@@ -3402,7 +3402,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!                   ADDITION OF COMPLEX MATRICES
+!                   Addition of complex matrices
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n), b(kb,n)
 complex, intent(inout) :: c(kc,n)
@@ -3432,7 +3432,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!                     SUBTRACTION OF REAL MATRICES
+!                     Subtraction of real matrices
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n), b(kb,n)
 real, intent(inout) :: c(kc,n)
@@ -3450,7 +3450,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!              SUBTRACTION OF DOUBLE PRECISION MATRICES
+!              Subtraction of double precision matrices
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n), b(kb,n)
 double precision, intent(inout) :: c(kc,n)
@@ -3468,7 +3468,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 integer :: i, j
 !-----------------------------------------------------------------------
-!                  SUBTRACTION OF COMPLEX MATRICES
+!                  Subtraction of complex matrices
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n), b(kb,n)
 complex, intent(inout) :: c(kc,n)
@@ -3498,7 +3498,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 !-----------------------------------------------------------------------
-!                     PRODUCT OF REAL MATRICES
+!                     Product of real matrices
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,l)
@@ -3521,7 +3521,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 !-----------------------------------------------------------------------
-!                PRODUCT OF DOUBLE PRECISION MATRICES
+!                Product of double precision matrices
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n), b(kb,l)
 double precision, intent(inout) :: c(kc,l)
@@ -3544,7 +3544,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 !-----------------------------------------------------------------------
-!                   PRODUCT OF COMPLEX MATRICES
+!                   Product of complex matrices
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n), b(kb,l)
 complex, intent(inout) :: c(kc,l)
@@ -3568,7 +3568,7 @@ integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 real :: save
 !-----------------------------------------------------------------------
-!                     PRODUCT OF REAL MATRICES
+!                     Product of real matrices
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 double precision :: w
@@ -3588,7 +3588,7 @@ do j = 1,l
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
+!     Here C begins in the same location as A. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 a(1,1) = save
@@ -3603,7 +3603,7 @@ do i = 1,m
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
+!     Here C begins in the same location as B. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 b(1,1) = save
@@ -3623,14 +3623,14 @@ logical function rloc (x, y)
 implicit none
 real :: xold, yold
 !-----------------------------------------------------------------------
-!     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
+!     X and Y are arrays. It is assumed that X(1) and Y(1) contain data.
 !
 !     RLOC(X,Y) = .TRUE.   IF X AND Y BEGIN IN THE SAME LOCATION
 !     RLOC(X,Y) = .FALSE.  IF X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-!     IT IS RECOMMENDED THAT THIS CODING NOT BE OPTIMIZED BY ELIMINATING
-!     THE SUBROUTINE YCHG. IF IT IS OPTIMIZED THEN RLOC MAY NOT COMPILE
-!     PROPERLY.
+!     It is recommended that this coding not be optimized by eliminating
+!     the subroutine YCHG. If it is optimized then RLOC may not compile
+!     properly.
 !-----------------------------------------------------------------------
 real, intent(in) :: x(*)
 real, intent(inout) :: y(*)
@@ -3640,13 +3640,13 @@ yold = y(1)
 call ychg(x,y,yold)
 if (x(1) .eq. xold) go to 10
 !
-!     X AND Y BEGIN IN THE SAME LOCATION
+!     X and Y begin in the same location
 !
 y(1) = yold
 rloc = .true.
 return
 !
-!     X AND Y BEGIN IN DIFFERENT LOCATIONS
+!     X and Y begin in different locations
 !
 10 y(1) = yold
 rloc = .false.
@@ -3669,7 +3669,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 !-----------------------------------------------------------------------
-!                PRODUCT OF DOUBLE PRECISION MATRICES
+!                Product of double precision matrices
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
 &row(*)
@@ -3690,7 +3690,7 @@ do j = 1,l
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
+!     Here C begins in the same location as A. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 a(1,1) = w
@@ -3705,7 +3705,7 @@ do i = 1,m
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
+!     Here C begins in the same location as B. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 b(1,1) = w
@@ -3724,14 +3724,14 @@ end subroutine dmprod
 logical function dloc (x, y)
 implicit none
 !-----------------------------------------------------------------------
-!     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
+!     X and Y are arrays. It is assumed that X(1) and Y(1) contain data.
 !
 !     DLOC(X,Y) = .TRUE.   IF X AND Y BEGIN IN THE SAME LOCATION
 !     DLOC(X,Y) = .FALSE.  IF X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-!     IT IS RECOMMENDED THAT THIS CODING NOT BE OPTIMIZED BY ELIMINATING
-!     THE SUBROUTINE DYCHG. IF IT IS OPTIMIZED THEN DLOC MAY NOT COMPILE
-!     PROPERLY.
+!     It is recommended that this coding not be optimized by eliminating
+!     the subroutine DYCHG. If it is optimized then DLOC may not compile
+!     properly.
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x(*)
 double precision, intent(inout) :: y(*)
@@ -3742,13 +3742,13 @@ yold = y(1)
 call dychg(x,y,yold)
 if (x(1) .eq. xold) go to 10
 !
-!     X AND Y BEGIN IN THE SAME LOCATION
+!     X and Y begin in the same location
 !
 y(1) = yold
 dloc = .true.
 return
 !
-!     X AND Y BEGIN IN DIFFERENT LOCATIONS
+!     X and Y begin in different locations
 !
 10 y(1) = yold
 dloc = .false.
@@ -3771,7 +3771,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 integer :: i, j, k
 !-----------------------------------------------------------------------
-!                   PRODUCT OF COMPLEX MATRICES
+!                   Product of complex matrices
 !-----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 complex :: w
@@ -3791,7 +3791,7 @@ do j = 1,l
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
+!     Here C begins in the same location as A. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 a(1,1) = w
@@ -3806,7 +3806,7 @@ do i = 1,m
 end do
 return
 !
-!     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
+!     Here C begins in the same location as B. The dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 b(1,1) = w
@@ -3825,14 +3825,14 @@ end subroutine cmprod
 logical function cloc (x, y)
 implicit none
 !-----------------------------------------------------------------------
-!     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
+!     X and Y are arrays. It is assumed that X(1) and Y(1) contain data.
 !
 !     CLOC(X,Y) = .TRUE.   IF X AND Y BEGIN IN THE SAME LOCATION
 !     CLOC(X,Y) = .FALSE.  IF X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-!     IT IS RECOMMENDED THAT THIS CODING NOT BE OPTIMIZED BY ELIMINATING
-!     THE SUBROUTINE CYCHG. IF IT IS OPTIMIZED THEN CLOC MAY NOT COMPILE
-!     PROPERLY.
+!     It is recommended that this coding not be optimized by eliminating
+!     the subroutine CYCHG. If it is optimized then CLOC may not compile
+!     properly.
 !-----------------------------------------------------------------------
 complex, intent(in) :: x(*)
 complex, intent(inout) :: y(*)
@@ -3843,13 +3843,13 @@ yold = y(1)
 call cychg(x,y,yold)
 if (x(1) .eq. xold) go to 10
 !
-!     X AND Y BEGIN IN THE SAME LOCATION
+!     X and Y begin in the same location
 !
 y(1) = yold
 cloc = .true.
 return
 !
-!     X AND Y BEGIN IN DIFFERENT LOCATIONS
+!     X and Y begin in different locations
 !
 10 y(1) = yold
 cloc = .false.
@@ -3962,7 +3962,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 integer :: i, ii, j, jj
 !     ******************************************************************
-!     KRONECKER PRODUCT OF REAL MATRICES A AND B
+!     Kronecker product of real matrices A and B
 !     ******************************************************************
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,*)
@@ -3973,7 +3973,7 @@ do s = 1,n
    do jj = 1,l
    j = j + 1
 !
-!        COMPUTE THE J-TH COLUMN OF C
+!        Compute the J-TH column of C
 !
       i = 0
       do r = 1,m
@@ -3992,7 +3992,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 integer :: i, ii, j, jj
 !     ******************************************************************
-!     KRONECKER PRODUCT OF DOUBLE PRECISION MATRICES A AND B
+!     Kronecker product of double precision matrices A and B
 !     ******************************************************************
 double precision, intent(in) :: a(ka,n), b(kb,l)
 double precision, intent(inout) :: c(kc,*)
@@ -4003,7 +4003,7 @@ do s = 1,n
    do jj = 1,l
    j = j + 1
 !
-!        COMPUTE THE J-TH COLUMN OF C
+!        Compute the J-TH column of C
 !
       i = 0
       do r = 1,m
@@ -4022,7 +4022,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 integer :: i, ii, j, jj
 !     ******************************************************************
-!     KRONECKER PRODUCT OF COMPLEX MATRICES A AND B
+!     Kronecker product of complex matrices A and B
 !     ******************************************************************
 complex, intent(in) :: a(ka,n), b(kb,l)
 complex, intent(inout) :: c(kc,*)
@@ -4033,7 +4033,7 @@ do s = 1,n
    do jj = 1,l
    j = j + 1
 !
-!        COMPUTE THE J-TH COLUMN OF C
+!        Compute the J-TH column of C
 !
       i = 0
       do r = 1,m
@@ -4057,7 +4057,7 @@ real :: eps, rerr
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!          UPPER AND LOWER BOUNDS OF THE RANK OF A REAL MATRIX
+!          Upper and lower bounds of the rank of a real matrix
 !
 !-----------------------------------------------------------------------
 !     REAL WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
@@ -4068,7 +4068,7 @@ integer, intent(inout) :: iwork(*)
 !
 m0 = min0(m,n)
 !
-!     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
+!     Define the relative and absolute tolerance lists
 !
 m1 = 1
 m2 = m1 + m0
@@ -4088,7 +4088,7 @@ do i = m5,imax
    work(i) = ae
 end do
 !
-!     FACTOR THE MATRIX A
+!     Factor the matrix A
 !
 if (m .lt. n) go to 40
 !
@@ -4108,7 +4108,7 @@ integer, intent(in) :: m, mda, n
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 !-----------------------------------------------------------------------
 !
-!              UPPER AND LOWER BOUNDS OF THE RANK OF A
+!              Upper and lower bounds of the rank of A
 !                      DOUBLE PRECISION MATRIX
 !
 !-----------------------------------------------------------------------
@@ -4124,7 +4124,7 @@ double precision :: dpmpar
 !
 m0 = min0(m,n)
 !
-!     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
+!     Define the relative and absolute tolerance lists
 !
 m1 = 1
 m2 = m1 + m0
@@ -4144,7 +4144,7 @@ do i = m5,imax
    work(i) = ae
 end do
 !
-!     FACTOR THE MATRIX A
+!     Factor the matrix A
 !
 if (m .lt. n) go to 40
 !
@@ -4166,13 +4166,13 @@ integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
 &nmj, nmk
 real :: p, t
 !-----------------------------------------------------------------------
-!     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
+!     CROUT procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
-!     A IS A MATRIX OF ORDER N WHERE N IS GREATER THAN OR EQUAL TO 1.
+!     A is a matrix of order N where N is greater than or equal to 1.
 !     IF MO=0 THEN THE INVERSE OF A IS COMPUTED AND STORED IN A. IF MO
-!     IS NOT 0 THEN THE INVERSE IS NOT COMPUTED.
+!     is not 0 then the inverse is not computed.
 !
-!     IF M IS GREATER THAN 0 THEN B IS A MATRIX HAVING N ROWS AND M
+!     If M is greater than 0 then B is a matrix having N rows and M
 !     COLUMNS. IN THIS CASE AX=B IS SOLVED AND THE SOLUTION X IS STORED
 !     IN B. IF M=0 THEN THERE ARE NO EQUATIONS TO BE SOLVED.
 !
@@ -4180,14 +4180,14 @@ real :: p, t
 !     KB = THE LENGTH OF THE COLUMNS OF THE ARRAY B (IF M.GT.0)
 !
 !     THE DETERMINANT D OF A IS ALWAYS COMPUTED. IF D=0 THEN THE
-!     ROUTINE IMMEDIATELY TERMINATES.
+!     routine immediately terminates.
 !
-!     INDEX IS AN ARRAY OF DIMENSION N-1 OR LARGER THAT IS USED BY THE
-!     ROUTINE FOR KEEPING TRACK OF THE ROW INTERCHANGES THAT ARE MADE.
-!     IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
+!     Index is an array of dimension N-1 or larger that is used by the
+!     routine for keeping track of the row interchanges that are made.
+!     If MO is not 0 then this array is not needed.
 !
-!     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
-!     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
+!     Temp is an array of dimension N or larger that is used when A
+!     is inverted. If MO is not 0 then this array is not needed.
 !-----------------------------------------------------------------------
 integer :: onej
 double precision :: dsum
@@ -4198,7 +4198,7 @@ nm1 = n - 1
 do k = 1,nm1
    kp1 = k + 1
 !
-!               SEARCH FOR THE K-TH PIVOT ELEMENT
+!               Search for the K-TH pivot element
 !
    p = abs(a(k,k))
    l = k
@@ -4216,7 +4216,7 @@ do k = 1,nm1
    if (k .eq. l) go to 40
    d = -d
 !
-!                  INTERCHANGING ROWS K AND L
+!                  Interchanging rows K and L
 !
    do 20 j = 1,n
       t = a(k,j)
@@ -4233,7 +4233,7 @@ do k = 1,nm1
       kj = kj + kb
 30 lj = lj + kb
 !
-!                  COMPUTE THE K-TH ROW OF U
+!                  Compute the K-TH row of U
 !
 40 if (k .gt. 1) go to 50
       do 41 j = kp1,n
@@ -4247,7 +4247,7 @@ do k = 1,nm1
       a(k,j) = sngl(dsum)/p
    end do
 !
-!               COMPUTE THE (K+1)-ST COLUMN OF L
+!               Compute the (K+1)-ST column of L
 !
 60 do i = kp1,n
       dsum = a(i,kp1)
@@ -4259,7 +4259,7 @@ do k = 1,nm1
    km1 = k
 end do
 !
-!                 CHECK THE N-TH PIVOT ELEMENT
+!                 Check the N-TH pivot element
 !
 d = a(n,n)*d
 if (d .eq. 0.0) return
@@ -4299,7 +4299,7 @@ do nj = n,maxb,kb
    end do
 end do
 !
-!               REPLACE L WITH THE INVERSE OF L
+!               Replace L with the inverse of L
 !
 120 if (mo .ne. 0) return
 do j = 1,nm1
@@ -4331,7 +4331,7 @@ do nmk = 1,nm1
    end do
 end do
 !
-!                    COLUMN INTERCHANGES
+!                    Column interchanges
 !
 do 161 nmj = 1,nm1
    j = n - nmj
@@ -4366,31 +4366,31 @@ integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
 &nmj, nmk
 real :: d, p, t
 !-----------------------------------------------------------------------
-!     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
+!     CROUT procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
-!     A IS A MATRIX OF ORDER N WHERE N IS GREATER THAN OR EQUAL TO 1.
+!     A is a matrix of order N where N is greater than or equal to 1.
 !     IF MO=0 THEN THE INVERSE OF A IS COMPUTED AND STORED IN A. IF MO
-!     IS NOT 0 THEN THE INVERSE IS NOT COMPUTED.
+!     is not 0 then the inverse is not computed.
 !
-!     IF M IS GREATER THAN 0 THEN B IS A MATRIX HAVING N ROWS AND M
+!     If M is greater than 0 then B is a matrix having N rows and M
 !     COLUMNS. IN THIS CASE AX=B IS SOLVED AND THE SOLUTION X IS STORED
 !     IN B. IF M=0 THEN THERE ARE NO EQUATIONS TO BE SOLVED.
 !
 !     KA = THE LENGTH OF THE COLUMNS OF THE ARRAY A
 !     KB = THE LENGTH OF THE COLUMNS OF THE ARRAY B (IF M.GT.0)
 !
-!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS. WHEN
-!     THE ROUTINE TERMINATES IERR HAS ONE OF THE FOLLOWING VALUES ...
+!     IERR is a variable that reports the status of the results. When
+!     the routine terminates IERR has one of the following values ...
 !        IERR =  0   THE REQUESTED TASK WAS PERFORMED.
 !        IERR = -1   EITHER N, KA, OR KB IS INCORRECT.
 !        IERR =  K   THE K-TH PIVOT ELEMENT IS 0.
 !
-!     INDEX IS AN ARRAY OF DIMENSION N-1 OR LARGER THAT IS USED BY THE
-!     ROUTINE FOR KEEPING TRACK OF THE ROW INTERCHANGES THAT ARE MADE.
-!     IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
+!     Index is an array of dimension N-1 or larger that is used by the
+!     routine for keeping track of the row interchanges that are made.
+!     If MO is not 0 then this array is not needed.
 !
-!     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
-!     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
+!     Temp is an array of dimension N or larger that is used when A
+!     is inverted. If MO is not 0 then this array is not needed.
 !-----------------------------------------------------------------------
 integer :: onej
 double precision :: dsum
@@ -4405,7 +4405,7 @@ nm1 = n - 1
 do k = 1,nm1
    kp1 = k + 1
 !
-!               SEARCH FOR THE K-TH PIVOT ELEMENT
+!               Search for the K-TH pivot element
 !
    p = abs(a(k,k))
    l = k
@@ -4421,7 +4421,7 @@ do k = 1,nm1
    if (mo .eq. 0) index(k) = l
    if (k .eq. l) go to 40
 !
-!                  INTERCHANGING ROWS K AND L
+!                  Interchanging rows K and L
 !
    do 20 j = 1,n
       t = a(k,j)
@@ -4438,7 +4438,7 @@ do k = 1,nm1
       kj = kj + kb
 30 lj = lj + kb
 !
-!                  COMPUTE THE K-TH ROW OF U
+!                  Compute the K-TH row of U
 !
 40 if (k .gt. 1) go to 50
       do 41 j = kp1,n
@@ -4452,7 +4452,7 @@ do k = 1,nm1
       a(k,j) = sngl(dsum)/p
    end do
 !
-!               COMPUTE THE (K+1)-ST COLUMN OF L
+!               Compute the (K+1)-ST column of L
 !
 60 do i = kp1,n
       dsum = a(i,kp1)
@@ -4464,7 +4464,7 @@ do k = 1,nm1
    km1 = k
 end do
 !
-!                 CHECK THE N-TH PIVOT ELEMENT
+!                 Check the N-TH pivot element
 !
 if (a(n,n) .eq. 0.0) go to 310
 !
@@ -4503,7 +4503,7 @@ do nj = n,maxb,kb
    end do
 end do
 !
-!               REPLACE L WITH THE INVERSE OF L
+!               Replace L with the inverse of L
 !
 120 if (mo .ne. 0) return
 do j = 1,nm1
@@ -4535,7 +4535,7 @@ do nmk = 1,nm1
    end do
 end do
 !
-!                    COLUMN INTERCHANGES
+!                    Column interchanges
 !
 do 161 nmj = 1,nm1
    j = n - nmj
@@ -4560,14 +4560,14 @@ do 210 kj = 1,maxb,kb
 210 b(kj) = b(kj)/d
 return
 !
-!                  K-TH PIVOT ELEMENT IS 0
+!                  K-TH pivot element is 0
 !
 300 ierr = k
 return
 310 ierr = n
 return
 !
-!                        INPUT ERROR
+!                        Input error
 !
 320 ierr = -1
 return
@@ -4576,22 +4576,22 @@ end subroutine krout
 subroutine dec (n, ndim, a, ip, ier)
 implicit none
 !-----------------------------------------------------------------------
-! MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
-! INPUT..
+! Matrix triangularization by Gaussian elimination.
+! Input..
 !    N = ORDER OF MATRIX.
 !    NDIM = DECLARED DIMENSION OF ARRAY  A .
 !    A = MATRIX TO BE TRIANGULARIZED.
-! OUTPUT..
+! Output..
 !    A(I,J), I.LE.J = UPPER TRIANGULAR FACTOR, U .
 !    A(I,J), I.GT.J = MULTIPLIERS = LOWER TRIANGULAR FACTOR, I - L.
 !    IP(K), K.LT.N = INDEX OF K-TH PIVOT ROW.
 !    IP(N) = (-1)**(NUMBER OF INTERCHANGES) OR O .
 !    IER = 0 IF A NONSINGULAR, OR K IF A FOUND TO BE
-!          SINGULAR AT STAGE K.
-! USE  SOL  TO OBTAIN SOLUTION OF LINEAR SYSTEM.
+!          singular at stage K.
+! Use  sol  to obtain solution of linear system.
 ! DETERM(A) = IP(N)*A(1,1)*A(2,2)*...*A(N,N).
 ! IF IP(N)=0, A IS SINGULAR, SOL WILL DIVIDE BY ZERO.
-! INTERCHANGES FINISHED IN U , ONLY PARTLY IN L .
+! Interchanges finished in U , only partly in L .
 !
 ! REFERENCE..
 ! C. B. MOLER, ALGORITHM 423, LINEAR EQUATION SOLVER,
@@ -4611,12 +4611,12 @@ if (n .eq. 1) go to 70
 nm1 = n - 1
 do k = 1,nm1
   kp1 = k + 1
-!  FIND THE PIVOT IN COLUMN K.  SEARCH ROWS K TO N. --------------------
+!  Find the pivot in column K.  Search rows K to N. --------------------
   m = k
   do 10 i = kp1,n
 10 if (abs(a(i,k)) .gt. abs(a(m,k))) m = i
   ip(k) = m
-!  INTERCHANGE ELEMENTS IN ROWS K AND M. -------------------------------
+!  Interchange elements in rows K and M. -------------------------------
   t = a(m,k)
   if (m .eq. k) go to 20
   ip(n) = -ip(n)
@@ -4627,7 +4627,7 @@ do k = 1,nm1
   t = 1.0/t
   do 30 i = kp1,n
 30 a(i,k) = -a(i,k)*t
-!  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
+!  Apply multipliers to other columns of A. ----------------------------
   do 50 j = kp1,n
     t = a(m,j)
     a(m,j) = a(k,j)
@@ -4649,14 +4649,14 @@ subroutine sol (n, ndim, a, b, ip)
 implicit none
 !-----------------------------------------------------------------------
 ! SOLUTION OF LINEAR SYSTEM, A*X = B .
-! INPUT..
+! Input..
 !   N = ORDER OF MATRIX.
 !   NDIM = DECLARED DIMENSION OF ARRAY  A .
 !   A = TRIANGULARIZED MATRIX OBTAINED FROM DEC.
 !   B = RIGHT HAND SIDE VECTOR.
 !   IP = PIVOT VECTOR OBTAINED FROM DEC.
 ! DO NOT USE IF DEC HAS SET IER .NE. 0.
-! OUTPUT..
+! Output..
 !   B = SOLUTION VECTOR, X .
 !-----------------------------------------------------------------------
 integer :: ip
@@ -4669,7 +4669,7 @@ dimension ip(n)
 !
 if (n .eq. 1) go to 50
 nm1 = n - 1
-!  APPLY ROW PERMUTATIONS AND MULTIPLIERS TO B. ------------------------
+!  Apply row permutations and multipliers to B. ------------------------
 do k = 1,nm1
   kp1 = k + 1
   m = ip(k)
@@ -4679,7 +4679,7 @@ do k = 1,nm1
   do 10 i = kp1,n
 10 b(i) = b(i) + a(i,k)*t
   end do
-!  BACK SOLVE. ---------------------------------------------------------
+!  Back solve. ---------------------------------------------------------
 do kb = 1,nm1
   km1 = n - kb
   k = km1 + 1
@@ -4708,7 +4708,7 @@ ierr = 0
 maxb = kb*m
 do k = 1,n
 !
-!     EXAMINE THE PIVOT ELEMENT
+!     Examine the pivot element
 !
 pivot = a(k,k)
 d = d*pivot
@@ -4716,7 +4716,7 @@ if (pivot .ne. 0.0) go to 10
    ierr = 1
    return
 !
-!     DIVIDE THE PIVOT ROW BY THE PIVOT ELEMENT
+!     Divide the pivot row by the pivot element
 !
 10 a(k,k) = 1.0
 do l = 1,n
@@ -4728,7 +4728,7 @@ do kl = k,maxb,kb
    b(kl) = b(kl)/pivot
 end do
 !
-!     REDUCE THE NON-PIVOT ROWS
+!     Reduce the non-pivot rows
 !
 40 do 70 j = 1,n
    if (j .eq. k) go to 70
@@ -4759,10 +4759,10 @@ real :: p, sum, t
 real, intent(inout) :: a(ka,n), b(kb,m)
 !     ------------------------------------------------------------------
 !     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
-!     ORDER N AND B IS A MATRIX HAVING N ROWS AND M COLUMNS.
-!     THE SOLUTION MATRIX X IS STORED IN B.
+!     order N and B is a matrix having N rows and M columns.
+!     The solution matrix X is stored in B.
 !
-!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!     IERR is a variable that reports the status of the results.
 !        IERR = 0   THE EQUATIONS HAVE BEEN SOLVED.
 !        IERR = J   THE J-TH PIVOT ELEMENT WAS FOUND TO BE 0.
 !     ------------------------------------------------------------------
@@ -4771,7 +4771,7 @@ nm1 = n - 1
 if (nm1 .eq. 0) go to 140
 do j = 1,nm1
 !
-!     SEARCH FOR THE J-TH PIVOT ELEMENT
+!     Search for the J-TH pivot element
 !
    p = 0.0
    do 10 i = j,n
@@ -4783,7 +4783,7 @@ do j = 1,nm1
    if (p .eq. 0.0) go to 210
    if (j .eq. l) go to 40
 !
-!     INTERCHANGE ROWS J AND L
+!     Interchange rows J and L
 !
    do k = j,n
       t = a(j,k)
@@ -4810,7 +4810,7 @@ do j = 1,nm1
 end do
 if (a(n,n) .eq. 0.0) go to 220
 !
-!     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
+!     Backsolve the triangular set of equations
 !
 do 100 j = 1,m
 100 b(n,j) = b(n,j)/a(n,n)
@@ -4833,7 +4833,7 @@ do 150 j = 1,m
 150 b(1,j) = b(1,j)/a(1,1)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 200 ierr = 1
 return
@@ -4852,10 +4852,10 @@ double precision, intent(inout) :: a(ka,n), b(kb,m)
 double precision :: p, t
 !     ------------------------------------------------------------------
 !     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
-!     ORDER N AND B IS A MATRIX HAVING N ROWS AND M COLUMNS.
-!     THE SOLUTION MATRIX X IS STORED IN B.
+!     order N and B is a matrix having N rows and M columns.
+!     The solution matrix X is stored in B.
 !
-!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!     IERR is a variable that reports the status of the results.
 !        IERR = 0   THE EQUATIONS HAVE BEEN SOLVED.
 !        IERR = J   THE J-TH PIVOT ELEMENT WAS FOUND TO BE 0.
 !     ------------------------------------------------------------------
@@ -4864,7 +4864,7 @@ nm1 = n - 1
 if (nm1 .eq. 0) go to 140
 do k = 1,nm1
 !
-!     SEARCH FOR THE K-TH PIVOT ELEMENT
+!     Search for the K-TH pivot element
 !
    p = 0.d0
    do 10 i = k,n
@@ -4876,7 +4876,7 @@ do k = 1,nm1
    if (p .eq. 0.d0) go to 210
    if (k .eq. l) go to 40
 !
-!     INTERCHANGE ROWS K AND L
+!     Interchange rows K and L
 !
    do j = k,n
       t = a(k,j)
@@ -4903,7 +4903,7 @@ do k = 1,nm1
 end do
 if (a(n,n) .eq. 0.d0) go to 220
 !
-!     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
+!     Backsolve the triangular set of equations
 !
 do 120 j = 1,m
 k = n
@@ -4925,7 +4925,7 @@ do 150 j = 1,m
 150 b(1,j) = b(1,j)/a(1,1)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 200 ierr = 1
 return
@@ -4941,8 +4941,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 integer :: j, job
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
-!     AND SOLVING REAL EQUATIONS
+!     Partial pivot Gauss procedure for inverting real matrices
+!     and solving real equations
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n), b(*)
 real, intent(inout) :: det(2), rcond
@@ -4951,7 +4951,7 @@ real, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
 integer :: onej
 !
-!          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
+!          Matrix factorization and computation of RCOND
 !
 ierr = 0
 call sgeco (a, ka, n, ipvt, rcond, wk)
@@ -4967,14 +4967,14 @@ do 10 j = 1,m
    onej = onej + kb
 10 continue
 !
-!             CALCULATION OF DET AND THE INVERSE OF A
+!             Calculation of DET and the inverse of A
 !
 20 job = 10
 if (mo .eq. 0) job = 11
 call sgedi (a, ka, n, ipvt, det, wk, job)
 return
 !
-!                  THE PROBLEM CANNOT BE SOLVED
+!                  The problem cannot be solved
 !
 30 ierr = 1
 return
@@ -4986,8 +4986,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 integer :: j
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
-!     AND SOLVING REAL EQUATIONS
+!     Partial pivot Gauss procedure for inverting real matrices
+!     and solving real equations
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
@@ -4998,7 +4998,7 @@ if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10
 if (kb .lt. n) go to 40
 !
-!                      MATRIX FACTORIZATION
+!                      Matrix factorization
 !
 10 call sgefa (a, ka, n, ipvt, ierr)
 if (ierr .ne. 0) return
@@ -5012,12 +5012,12 @@ do j = 1,m
    onej = onej + kb
 end do
 !
-!                 CALCULATION OF THE INVERSE OF A
+!                 Calculation of the inverse of A
 !
 30 if (mo .eq. 0) call sgedi (a, ka, n, ipvt, det, wk, 1)
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 40 ierr = -1
 return
@@ -5031,7 +5031,7 @@ real :: a(ka,n), b(n)
 real, intent(inout) :: wk(*), x(n)
 integer :: i, ir
 !     ******************************************************************
-!     SOLUTION OF REAL LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
+!     Solution of real linear equations with iterative improvement
 !     ******************************************************************
 dimension iwk(n)
 !     -------------------
@@ -5039,7 +5039,7 @@ dimension iwk(n)
 !     -------------------
 if (mo .ne. 0) go to 10
 !
-!             COMPUTE THE LU DECOMPOSITION OF A
+!             Compute the LU decomposition of A
 !
 call mcopy(n, n, a, ka, wk, n)
 call sgefa(wk, n, n, iwk, ierr)
@@ -5069,42 +5069,42 @@ integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
 real :: spmpar
 ! ----------------------------------------------------------------------
-!     PURPOSE
+!     Purpose
 !       GIVEN AN APPROXIMATE SOLUTION X OF A LINEAR SYSTEM AX = B
-!       OBTAINED USING SGECO OR SGEFA. LUIMP ATTEMPTS TO COMPUTE
-!       AN IMPROVED SOLUTION CORRECT TO MACHINE PRECISION.
+!       obtained using SGECO or SGEFA. LUIMP attempts to compute
+!       an improved solution correct to machine precision.
 !
-!     PARAMETERS
+!     Parameters
 !
 !       A    AN ARRAY OF DIMENSION (KA,N) CONTAINING THE MATRIX
-!            A OF ORDER N.
+!            A of order N.
 !       Q    AN ARRAY OF DIMENSION (KQ,N) CONTAINING THE LU
-!            DECOMPOSITION OF A PRODUCED BY SGECO OR SGEFA.
-!       IPVT AN ARRAY OF DIMENSION N CONTAINING THE PERMUTATION
-!            INFORMATION GIVEN BY SGECO OR SGEFA.
+!            decomposition of a produced by SGECO or SGEFA.
+!       IPVT an array of dimension N containing the permutation
+!            information given by SGECO or SGEFA.
 !       B    THE RIGHT HAND SIDE OF THE EQUATION AX = B.
 !       X    ON INPUT X IS THE APPROXIMATE SOLUTION OF AX = B TO
-!            BE IMPROVED. ON OUTPUT X IS THE SOLUTION OBTAINED.
+!            be improved. On output X is the solution obtained.
 !       R    AN ARRAY FOR INTERNAL USE BY THE ROUTINE.
-!       IND  VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!       Ind  variable that reports the status of the results.
 !            IND = 0 IF IMPROVEMENT OF X IS SUCCESSFUL WITH A
-!            GAIN IN ACCURACY OF AT LEAST 50 PER CENT EACH
+!            gain in accuracy of at least 50 per cent each
 !            ITERATION. OTHERWISE IND = 1.
 !
-!     METHOD
-!       LUIMP EXECUTES THE ITERATION CYCLE
+!     Method
+!       LUIMP executes the iteration cycle
 !            (1)  AR = B - AX
 !            (2)  X = X + R
-!       WITH AN INITIAL GIVEN X. THE RESIDUAL VECTOR B - AX IS
-!       COMPUTED TO HIGH ACCURACY USING DOUBLE PRECISION. SGESL
-!       IS THEN USED TO SOLVE (1).
+!       with an initial given X. The residual vector B - AX is
+!       computed to high accuracy using double precision. SGESL
+!       is then used to solve (1).
 !
 ! ----------------------------------------------------------------------
 dimension ipvt(n)
 double precision :: dsum
 !
 !     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
-!                THE VALUE U WHERE U IS THE SMALLEST FLOATING POINT
+!                the value U where U is the smallest floating point
 !                NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
 eps = spmpar(1)
@@ -5117,7 +5117,7 @@ if (xnrm .eq. 0.0) return
 eps2 = eps*eps
 ratio = 1.0
 !
-!                  COMPUTE THE RESIDUAL VECTOR
+!                  Compute the residual vector
 !
 20 do 22 i = 1,n
 dsum = b(i)
@@ -5125,7 +5125,7 @@ dsum = b(i)
 21 dsum = dsum - dble(a(i,j))*dble(x(j))
 22 r(i) = dsum
 !
-!                  FIND THE CORRECTION VECTOR
+!                  Find the correction vector
 !
 call sgesl(q, kq, n, ipvt, r, 0)
 rnrm = 0.0
@@ -5133,7 +5133,7 @@ do 30 i = 1,n
 30 rnrm = rnrm + r(i)*r(i)
 if (rnrm .le. eps2*xnrm) return
 !
-!                FORM A NEW APPROXIMATE SOLUTION
+!                Form a new approximate solution
 !
 do 40 i = 1,n
 40 x(i) = x(i) + r(i)
@@ -5157,88 +5157,88 @@ integer, intent(inout) :: ipvt(*)
 real, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
 !
-!     SGECO FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION
-!     AND ESTIMATES THE CONDITION OF THE MATRIX.
+!     SGECO factors a real matrix BY Gaussian elimination
+!     and estimates the condition of the matrix.
 !
-!     IF  RCOND  IS NOT NEEDED, SGEFA IS SLIGHTLY FASTER.
+!     If  RCOND  is not needed, SGEFA is slightly faster.
 !     TO SOLVE  A*X = B , FOLLOW SGECO BY SGESL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW SGECO BY SGESL.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW SGECO BY SGEDI.
-!     TO COMPUTE  INVERSE(A) , FOLLOW SGECO BY SGEDI.
+!     To compute  INVERSE(A)*C , follow SGECO by SGESL.
+!     To compute  DETERMINANT(A) , follow SGECO by SGEDI.
+!     To compute  INVERSE(A) , follow SGECO by SGEDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       REAL(LDA, N)
-!                THE MATRIX TO BE FACTORED.
+!                the matrix to be factored.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        A       AN UPPER TRIANGULAR MATRIX AND THE MULTIPLIERS
-!                WHICH WERE USED TO OBTAIN IT.
+!                which were used to obtain it.
 !                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L  IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND  U  IS UPPER TRIANGULAR.
+!                L  is a product of permutation and unit lower
+!                triangular matrices and  U  is upper triangular.
 !
 !        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        RCOND   REAL
-!                AN ESTIMATE OF THE RECIPROCAL CONDITION OF  A .
+!                an estimate of the reciprocal condition of  A .
 !                FOR THE SYSTEM  A*X = B , RELATIVE PERTURBATIONS
-!                IN  A  AND  B  OF SIZE  EPSILON  MAY CAUSE
-!                RELATIVE PERTURBATIONS IN  X  OF SIZE  EPSILON/RCOND .
-!                IF  RCOND  IS SO SMALL THAT THE LOGICAL EXPRESSION
+!                in  A  and  B  of size  epsilon  may cause
+!                relative perturbations in  X  of size  epsilon/RCOND .
+!                If  RCOND  is so small that the logical expression
 !                           1.0 + RCOND .EQ. 1.0
-!                IS TRUE, THEN  A  MAY BE SINGULAR TO WORKING
-!                PRECISION.  IN PARTICULAR,  RCOND  IS ZERO  IF
-!                EXACT SINGULARITY IS DETECTED OR THE ESTIMATE
-!                UNDERFLOWS.
+!                is true, then  A  may be singular to working
+!                precision.  In particular,  RCOND  is zero  if
+!                exact singularity is detected or the estimate
+!                underflows.
 !
 !        Z       REAL(N)
-!                A WORK VECTOR WHOSE CONTENTS ARE USUALLY UNIMPORTANT.
-!                IF  A  IS CLOSE TO A SINGULAR MATRIX, THEN  Z  IS
-!                AN APPROXIMATE NULL VECTOR IN THE SENSE THAT
+!                a work vector whose contents are usually unimportant.
+!                If  A  is close to a singular matrix, then  Z  is
+!                an approximate null vector in the sense that
 !                NORM(A*Z) = RCOND*NORM(A)*NORM(Z) .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     LINPACK SGEFA
 !     BLAS SAXPY,SDOT,SSCAL,SASUM
-!     FORTRAN ABS,AMAX1,SIGN
+!     Fortran abs,AMAX1,sign
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: sdot, ek, t, wk, wkm
 real :: anorm, s, sasum, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 !
 !
-!     COMPUTE 1-NORM OF A
+!     Compute 1-norm of A
 !
 anorm = 0.0e0
 do j = 1, n
    anorm = amax1(anorm,sasum(n,a(1,j),1))
 end do
 !
-!     FACTOR
+!     Factor
 !
 call sgefa(a,lda,n,ipvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  TRANS(A)*Y = E .
-!     TRANS(A)  IS THE TRANSPOSE OF A .  THE COMPONENTS OF  E  ARE
-!     CHOSEN TO CAUSE MAXIMUM LOCAL GROWTH IN THE ELEMENTS OF W  WHERE
+!     TRANS(A)  is the transpose of A .  The components of  E  are
+!     chosen to cause maximum local growth in the elements of W  where
 !     TRANS(U)*W = E .  THE VECTORS ARE FREQUENTLY RESCALED TO AVOID
-!     OVERFLOW.
+!     overflow.
 !
 !     SOLVE TRANS(U)*W = E
 !
@@ -5353,56 +5353,56 @@ integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
 !
-!     SGEFA FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION.
+!     SGEFA factors a real matrix BY Gaussian elimination.
 !
-!     SGEFA IS USUALLY CALLED BY SGECO, BUT IT CAN BE CALLED
-!     DIRECTLY WITH A SAVING IN TIME IF  RCOND  IS NOT NEEDED.
+!     SGEFA is usually called by SGECO, but it can be called
+!     directly with a saving in time if  RCOND  is not needed.
 !     (TIME FOR SGECO) = (1 + 9/N)*(TIME FOR SGEFA) .
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       REAL(LDA, N)
-!                THE MATRIX TO BE FACTORED.
+!                the matrix to be factored.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        A       AN UPPER TRIANGULAR MATRIX AND THE MULTIPLIERS
-!                WHICH WERE USED TO OBTAIN IT.
+!                which were used to obtain it.
 !                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L  IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND  U  IS UPPER TRIANGULAR.
+!                L  is a product of permutation and unit lower
+!                triangular matrices and  U  is upper triangular.
 !
 !        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
 !                = K  IF  U(K,K) .EQ. 0.0 .  THIS IS NOT AN ERROR
-!                     CONDITION FOR THIS SUBROUTINE, BUT IT DOES
-!                     INDICATE THAT SGESL OR SGEDI WILL DIVIDE BY ZERO
-!                     IF CALLED.  USE  RCOND  IN SGECO FOR A RELIABLE
-!                     INDICATION OF SINGULARITY.
+!                     condition for this subroutine, but it does
+!                     indicate that SGESL or SGEDI will divide by zero
+!                     if called.  Use  RCOND  in SGECO for a reliable
+!                     indication of singularity.
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SSCAL,ISAMAX
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: t
 integer :: isamax, j, k, kp1, l, nm1
 !
 !
-!     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
+!     Gaussian elimination with partial pivoting
 !
 info = 0
 nm1 = n - 1
@@ -5415,11 +5415,11 @@ do k = 1, nm1
    l = isamax(n-k+1,a(k,k),1) + k - 1
    ipvt(k) = l
 !
-!        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
+!        Zero pivot implies this column already triangularized
 !
    if (a(l,k) .eq. 0.0e0) go to 40
 !
-!           INTERCHANGE IF NECESSARY
+!           Interchange if necessary
 !
       if (l .eq. k) go to 10
          t = a(l,k)
@@ -5427,12 +5427,12 @@ do k = 1, nm1
          a(k,k) = t
 10 continue
 !
-!           COMPUTE MULTIPLIERS
+!           Compute multipliers
 !
       t = -1.0e0/a(k,k)
       call sscal(n-k,t,a(k+1,k),1)
 !
-!           ROW ELIMINATION WITH COLUMN INDEXING
+!           Row elimination with column indexing
 !
       do j = kp1, n
          t = a(l,j)
@@ -5459,61 +5459,61 @@ integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(*)
 !
-!     SGESL SOLVES THE REAL SYSTEM
+!     SGESL solves the real system
 !     A * X = B  OR  TRANS(A) * X = B
-!     USING THE FACTORS COMPUTED BY SGECO OR SGEFA.
+!     using the factors computed by SGECO or SGEFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       REAL(LDA, N)
-!                THE OUTPUT FROM SGECO OR SGEFA.
+!                the output from SGECO or SGEFA.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM SGECO OR SGEFA.
+!                the pivot vector from SGECO or SGEFA.
 !
 !        B       REAL(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
 !        JOB     INTEGER
 !                = 0         TO SOLVE  A*X = B ,
 !                = NONZERO   TO SOLVE  TRANS(A)*X = B  WHERE
-!                            TRANS(A)  IS THE TRANSPOSE.
+!                            TRANS(A)  is the transpose.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS A
-!        ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES SINGULARITY
-!        BUT IT IS OFTEN CAUSED BY IMPROPER ARGUMENTS OR IMPROPER
-!        SETTING OF LDA .  IT WILL NOT OCCUR IF THE SUBROUTINES ARE
+!        A division by zero will occur if the input factor contains A
+!        zero on the diagonal.  Technically this indicates singularity
+!        but it is often caused by improper arguments or improper
+!        setting of LDA .  It will not occur if the subroutines are
 !        CALLED CORRECTLY AND IF SGECO HAS SET RCOND .GT. 0.0
 !        OR SGEFA HAS SET INFO .EQ. 0 .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL SGECO(A,LDA,N,IPVT,RCOND,Z)
 !           IF (RCOND IS TOO SMALL) GO TO ...
 !           DO 10 J = 1, P
 !              CALL SGESL(A,LDA,N,IPVT,C(1,J),0)
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SDOT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: sdot, t
 integer :: k, kb, l, nm1
@@ -5578,67 +5578,67 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(inout) :: a(lda,*), det(2), work(*)
 !
-!     SGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
-!     USING THE FACTORS COMPUTED BY SGECO OR SGEFA.
+!     SGEDI computes the determinant and inverse of a matrix
+!     using the factors computed by SGECO or SGEFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       REAL(LDA, N)
-!                THE OUTPUT FROM SGECO OR SGEFA.
+!                the output from SGECO or SGEFA.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM SGECO OR SGEFA.
+!                the pivot vector from SGECO or SGEFA.
 !
 !        WORK    REAL(N)
-!                WORK VECTOR.  CONTENTS DESTROYED.
+!                work vector.  Contents destroyed.
 !
 !        JOB     INTEGER
 !                = 11   BOTH DETERMINANT AND INVERSE.
 !                = 01   INVERSE ONLY.
 !                = 10   DETERMINANT ONLY.
 !
-!     ON RETURN
+!     On return
 !
 !        A       INVERSE OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE UNCHANGED.
+!                Otherwise unchanged.
 !
 !        DET     REAL(2)
-!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE NOT REFERENCED.
+!                determinant of original matrix IF requested.
+!                Otherwise not referenced.
 !                DETERMINANT = DET(1) * 10.0**DET(2)
 !                WITH  1.0 .LE. ABS(DET(1)) .LT. 10.0
 !                OR  DET(1) .EQ. 0.0 .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
-!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal and the inverse is requested.
+!        It will not occur if the subroutines are called correctly
 !        AND IF SGECO HAS SET RCOND .GT. 0.0 OR SGEFA HAS SET
 !        INFO .EQ. 0 .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SSCAL,SSWAP
-!     FORTRAN ABS,MOD
+!     Fortran abs,mod
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: t
 real :: ten
 integer :: i, j, k, kb, kp1, l, nm1
 !
 !
-!     COMPUTE DETERMINANT
+!     Compute determinant
 !
 if (job/10 .eq. 0) go to 70
    det(1) = 1.0e0
@@ -5647,7 +5647,7 @@ if (job/10 .eq. 0) go to 70
    do 50 i = 1, n
       if (ipvt(i) .ne. i) det(1) = -det(1)
       det(1) = a(i,i)*det(1)
-!        ...EXIT
+!        ...Exit
       if (det(1) .eq. 0.0e0) go to 60
 10 if (abs(det(1)) .ge. 1.0e0) go to 20
          det(1) = ten*det(1)
@@ -5663,7 +5663,7 @@ if (job/10 .eq. 0) go to 70
 60 continue
 70 continue
 !
-!     COMPUTE INVERSE(U)
+!     Compute INVERSE(U)
 !
 if (mod(job,10) .eq. 0) go to 150
    do k = 1, n
@@ -5680,7 +5680,7 @@ if (mod(job,10) .eq. 0) go to 150
 90 continue
    end do
 !
-!        FORM INVERSE(U)*INVERSE(L)
+!        Form INVERSE(U)*INVERSE(L)
 !
    nm1 = n - 1
    if (nm1 .lt. 1) go to 140
@@ -5709,8 +5709,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 integer :: j, job
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
-!     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
+!     Partial pivot Gauss procedure for inverting double precision
+!     real matrices and solving double precision real equations
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,n), b(*)
 double precision, intent(inout) :: det(2), rcond
@@ -5719,7 +5719,7 @@ double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
 integer :: onej
 !
-!          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
+!          Matrix factorization and computation of RCOND
 !
 ierr = 0
 call dgeco (a, ka, n, ipvt, rcond, wk)
@@ -5735,14 +5735,14 @@ do 10 j = 1,m
    onej = onej + kb
 10 continue
 !
-!             CALCULATION OF DET AND THE INVERSE OF A
+!             Calculation of DET and the inverse of A
 !
 20 job = 10
 if (mo .eq. 0) job = 11
 call dgedi (a, ka, n, ipvt, det, wk, job)
 return
 !
-!                  THE PROBLEM CANNOT BE SOLVED
+!                  The problem cannot be solved
 !
 30 ierr = 1
 return
@@ -5754,8 +5754,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 integer :: j
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
-!     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
+!     Partial pivot Gauss procedure for inverting double precision
+!     real matrices and solving double precision real equations
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
@@ -5766,7 +5766,7 @@ if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10
 if (kb .lt. n) go to 40
 !
-!                      MATRIX FACTORIZATION
+!                      Matrix factorization
 !
 10 call dgefa (a, ka, n, ipvt, ierr)
 if (ierr .ne. 0) return
@@ -5780,12 +5780,12 @@ do j = 1,m
    onej = onej + kb
 end do
 !
-!                 CALCULATION OF THE INVERSE OF A
+!                 Calculation of the inverse of A
 !
 30 if (mo .eq. 0) call dgedi (a, ka, n, ipvt, det, wk, 1)
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 40 ierr = -1
 return
@@ -5798,88 +5798,88 @@ integer, intent(inout) :: ipvt(*)
 double precision, intent(inout) :: a(lda,*), z(*)
 double precision, intent(inout) :: rcond
 !
-!     DGECO FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION
-!     AND ESTIMATES THE CONDITION OF THE MATRIX.
+!     DGECO factors a double precision matrix BY Gaussian elimination
+!     and estimates the condition of the matrix.
 !
-!     IF  RCOND  IS NOT NEEDED, DGEFA IS SLIGHTLY FASTER.
+!     If  RCOND  is not needed, DGEFA is slightly faster.
 !     TO SOLVE  A*X = B , FOLLOW DGECO BY DGESL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW DGECO BY DGESL.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW DGECO BY DGEDI.
-!     TO COMPUTE  INVERSE(A) , FOLLOW DGECO BY DGEDI.
+!     To compute  INVERSE(A)*C , follow DGECO by DGESL.
+!     To compute  DETERMINANT(A) , follow DGECO by DGEDI.
+!     To compute  INVERSE(A) , follow DGECO by DGEDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       DOUBLE PRECISION(LDA, N)
-!                THE MATRIX TO BE FACTORED.
+!                the matrix to be factored.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        A       AN UPPER TRIANGULAR MATRIX AND THE MULTIPLIERS
-!                WHICH WERE USED TO OBTAIN IT.
+!                which were used to obtain it.
 !                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L  IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND  U  IS UPPER TRIANGULAR.
+!                L  is a product of permutation and unit lower
+!                triangular matrices and  U  is upper triangular.
 !
 !        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        RCOND   DOUBLE PRECISION
-!                AN ESTIMATE OF THE RECIPROCAL CONDITION OF  A .
+!                an estimate of the reciprocal condition of  A .
 !                FOR THE SYSTEM  A*X = B , RELATIVE PERTURBATIONS
-!                IN  A  AND  B  OF SIZE  EPSILON  MAY CAUSE
-!                RELATIVE PERTURBATIONS IN  X  OF SIZE  EPSILON/RCOND .
-!                IF  RCOND  IS SO SMALL THAT THE LOGICAL EXPRESSION
+!                in  A  and  B  of size  epsilon  may cause
+!                relative perturbations in  X  of size  epsilon/RCOND .
+!                If  RCOND  is so small that the logical expression
 !                           1.0 + RCOND .EQ. 1.0
-!                IS TRUE, THEN  A  MAY BE SINGULAR TO WORKING
-!                PRECISION.  IN PARTICULAR,  RCOND  IS ZERO  IF
-!                EXACT SINGULARITY IS DETECTED OR THE ESTIMATE
-!                UNDERFLOWS.
+!                is true, then  A  may be singular to working
+!                precision.  In particular,  RCOND  is zero  if
+!                exact singularity is detected or the estimate
+!                underflows.
 !
 !        Z       DOUBLE PRECISION(N)
-!                A WORK VECTOR WHOSE CONTENTS ARE USUALLY UNIMPORTANT.
-!                IF  A  IS CLOSE TO A SINGULAR MATRIX, THEN  Z  IS
-!                AN APPROXIMATE NULL VECTOR IN THE SENSE THAT
+!                a work vector whose contents are usually unimportant.
+!                If  A  is close to a singular matrix, then  Z  is
+!                an approximate null vector in the sense that
 !                NORM(A*Z) = RCOND*NORM(A)*NORM(Z) .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     LINPACK DGEFA
 !     BLAS DAXPY,DDOT,DSCAL,DASUM
-!     FORTRAN DABS,DMAX1,DSIGN
+!     Fortran dabs,DMAX1,DSIGN
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ddot, ek, t, wk, wkm
 double precision :: anorm, s, dasum, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 !
 !
-!     COMPUTE 1-NORM OF A
+!     Compute 1-norm of A
 !
 anorm = 0.0d0
 do j = 1, n
    anorm = dmax1(anorm,dasum(n,a(1,j),1))
 end do
 !
-!     FACTOR
+!     Factor
 !
 call dgefa(a,lda,n,ipvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  TRANS(A)*Y = E .
-!     TRANS(A)  IS THE TRANSPOSE OF A .  THE COMPONENTS OF  E  ARE
-!     CHOSEN TO CAUSE MAXIMUM LOCAL GROWTH IN THE ELEMENTS OF W  WHERE
+!     TRANS(A)  is the transpose of A .  The components of  E  are
+!     chosen to cause maximum local growth in the elements of W  where
 !     TRANS(U)*W = E .  THE VECTORS ARE FREQUENTLY RESCALED TO AVOID
-!     OVERFLOW.
+!     overflow.
 !
 !     SOLVE TRANS(U)*W = E
 !
@@ -5994,56 +5994,56 @@ integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
 !
-!     DGEFA FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION.
+!     DGEFA factors a double precision matrix BY Gaussian elimination.
 !
-!     DGEFA IS USUALLY CALLED BY DGECO, BUT IT CAN BE CALLED
-!     DIRECTLY WITH A SAVING IN TIME IF  RCOND  IS NOT NEEDED.
+!     DGEFA is usually called by DGECO, but it can be called
+!     directly with a saving in time if  RCOND  is not needed.
 !     (TIME FOR DGECO) = (1 + 9/N)*(TIME FOR DGEFA) .
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       DOUBLE PRECISION(LDA, N)
-!                THE MATRIX TO BE FACTORED.
+!                the matrix to be factored.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        A       AN UPPER TRIANGULAR MATRIX AND THE MULTIPLIERS
-!                WHICH WERE USED TO OBTAIN IT.
+!                which were used to obtain it.
 !                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L  IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND  U  IS UPPER TRIANGULAR.
+!                L  is a product of permutation and unit lower
+!                triangular matrices and  U  is upper triangular.
 !
 !        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
 !                = K  IF  U(K,K) .EQ. 0.0 .  THIS IS NOT AN ERROR
-!                     CONDITION FOR THIS SUBROUTINE, BUT IT DOES
-!                     INDICATE THAT DGESL OR DGEDI WILL DIVIDE BY ZERO
-!                     IF CALLED.  USE  RCOND  IN DGECO FOR A RELIABLE
-!                     INDICATION OF SINGULARITY.
+!                     condition for this subroutine, but it does
+!                     indicate that DGESL or DGEDI will divide by zero
+!                     if called.  Use  RCOND  in DGECO for a reliable
+!                     indication of singularity.
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DSCAL,IDAMAX
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: t
 integer :: idamax, j, k, kp1, l, nm1
 !
 !
-!     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
+!     Gaussian elimination with partial pivoting
 !
 info = 0
 nm1 = n - 1
@@ -6056,11 +6056,11 @@ do k = 1, nm1
    l = idamax(n-k+1,a(k,k),1) + k - 1
    ipvt(k) = l
 !
-!        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
+!        Zero pivot implies this column already triangularized
 !
    if (a(l,k) .eq. 0.0d0) go to 40
 !
-!           INTERCHANGE IF NECESSARY
+!           Interchange if necessary
 !
       if (l .eq. k) go to 10
          t = a(l,k)
@@ -6068,12 +6068,12 @@ do k = 1, nm1
          a(k,k) = t
 10 continue
 !
-!           COMPUTE MULTIPLIERS
+!           Compute multipliers
 !
       t = -1.0d0/a(k,k)
       call dscal(n-k,t,a(k+1,k),1)
 !
-!           ROW ELIMINATION WITH COLUMN INDEXING
+!           Row elimination with column indexing
 !
       do j = kp1, n
          t = a(l,j)
@@ -6100,61 +6100,61 @@ integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(*)
 !
-!     DGESL SOLVES THE DOUBLE PRECISION SYSTEM
+!     DGESL solves the double precision system
 !     A * X = B  OR  TRANS(A) * X = B
-!     USING THE FACTORS COMPUTED BY DGECO OR DGEFA.
+!     using the factors computed by DGECO or DGEFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       DOUBLE PRECISION(LDA, N)
-!                THE OUTPUT FROM DGECO OR DGEFA.
+!                the output from DGECO or DGEFA.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM DGECO OR DGEFA.
+!                the pivot vector from DGECO or DGEFA.
 !
 !        B       DOUBLE PRECISION(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
 !        JOB     INTEGER
 !                = 0         TO SOLVE  A*X = B ,
 !                = NONZERO   TO SOLVE  TRANS(A)*X = B  WHERE
-!                            TRANS(A)  IS THE TRANSPOSE.
+!                            TRANS(A)  is the transpose.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS A
-!        ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES SINGULARITY
-!        BUT IT IS OFTEN CAUSED BY IMPROPER ARGUMENTS OR IMPROPER
-!        SETTING OF LDA .  IT WILL NOT OCCUR IF THE SUBROUTINES ARE
+!        A division by zero will occur if the input factor contains A
+!        zero on the diagonal.  Technically this indicates singularity
+!        but it is often caused by improper arguments or improper
+!        setting of LDA .  It will not occur if the subroutines are
 !        CALLED CORRECTLY AND IF DGECO HAS SET RCOND .GT. 0.0
 !        OR DGEFA HAS SET INFO .EQ. 0 .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL DGECO(A,LDA,N,IPVT,RCOND,Z)
 !           IF (RCOND IS TOO SMALL) GO TO ...
 !           DO 10 J = 1, P
 !              CALL DGESL(A,LDA,N,IPVT,C(1,J),0)
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DDOT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ddot, t
 integer :: k, kb, l, nm1
@@ -6219,67 +6219,67 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(inout) :: a(lda,*), det(2), work(*)
 !
-!     DGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
-!     USING THE FACTORS COMPUTED BY DGECO OR DGEFA.
+!     DGEDI computes the determinant and inverse of a matrix
+!     using the factors computed by DGECO or DGEFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        A       DOUBLE PRECISION(LDA, N)
-!                THE OUTPUT FROM DGECO OR DGEFA.
+!                the output from DGECO or DGEFA.
 !
 !        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
+!                the leading dimension of the array  A .
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM DGECO OR DGEFA.
+!                the pivot vector from DGECO or DGEFA.
 !
 !        WORK    DOUBLE PRECISION(N)
-!                WORK VECTOR.  CONTENTS DESTROYED.
+!                work vector.  Contents destroyed.
 !
 !        JOB     INTEGER
 !                = 11   BOTH DETERMINANT AND INVERSE.
 !                = 01   INVERSE ONLY.
 !                = 10   DETERMINANT ONLY.
 !
-!     ON RETURN
+!     On return
 !
 !        A       INVERSE OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE UNCHANGED.
+!                Otherwise unchanged.
 !
 !        DET     DOUBLE PRECISION(2)
-!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE NOT REFERENCED.
+!                determinant of original matrix IF requested.
+!                Otherwise not referenced.
 !                DETERMINANT = DET(1) * 10.0**DET(2)
 !                WITH  1.0 .LE. DABS(DET(1)) .LT. 10.0
 !                OR  DET(1) .EQ. 0.0 .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
-!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal and the inverse is requested.
+!        It will not occur if the subroutines are called correctly
 !        AND IF DGECO HAS SET RCOND .GT. 0.0 OR DGEFA HAS SET
 !        INFO .EQ. 0 .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DSCAL,DSWAP
-!     FORTRAN DABS,MOD
+!     Fortran dabs,mod
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: t
 double precision :: ten
 integer :: i, j, k, kb, kp1, l, nm1
 !
 !
-!     COMPUTE DETERMINANT
+!     Compute determinant
 !
 if (job/10 .eq. 0) go to 70
    det(1) = 1.0d0
@@ -6288,7 +6288,7 @@ if (job/10 .eq. 0) go to 70
    do 50 i = 1, n
       if (ipvt(i) .ne. i) det(1) = -det(1)
       det(1) = a(i,i)*det(1)
-!        ...EXIT
+!        ...Exit
       if (det(1) .eq. 0.0d0) go to 60
 10 if (dabs(det(1)) .ge. 1.0d0) go to 20
          det(1) = ten*det(1)
@@ -6304,7 +6304,7 @@ if (job/10 .eq. 0) go to 70
 60 continue
 70 continue
 !
-!     COMPUTE INVERSE(U)
+!     Compute INVERSE(U)
 !
 if (mod(job,10) .eq. 0) go to 150
    do k = 1, n
@@ -6321,7 +6321,7 @@ if (mod(job,10) .eq. 0) go to 150
 90 continue
    end do
 !
-!        FORM INVERSE(U)*INVERSE(L)
+!        Form INVERSE(U)*INVERSE(L)
 !
    nm1 = n - 1
    if (nm1 .lt. 1) go to 140
@@ -6352,10 +6352,10 @@ integer, intent(in) :: n, nmblks
 !***************************************************************
 !
 !  THIS PROGRAM SOLVES THE LINEAR SYSTEM  A*X = B  WHERE  A IS
-!  AN ALMOST BLOCK DIAGONAL MATRIX.  THE METHOD IMPLEMENTED IS
-!  BASED ON GAUSS ELIMINATION WITH ALTERNATE ROW AND COLUMN
-!  ELIMINATION WITH PARTIAL PIVOTING, WHICH PRODUCES A STABLE
-!  DECOMPOSITION OF THE MATRIX  A  WITHOUT INTRODUCING FILL-IN.
+!  an almost block diagonal matrix.  The method implemented is
+!  based on Gauss elimination with alternate row and column
+!  elimination with partial pivoting, which produces a stable
+!  decomposition of the matrix  A  without introducing fill-in.
 !
 !***************************************************************
 !
@@ -6364,63 +6364,63 @@ integer, intent(in) :: n, nmblks
 !       *** ON ENTRY ...
 !
 !                N     - INTEGER
-!                         THE ORDER OF THE LINEAR SYSTEM, WHERE
+!                         the order of the linear system, where
 !                           N = SUM(MTRSTR(1,K),K=1,NMBLKS)
 !
-!                ARRAY - REAL(NUMELS)
-!                         WHERE
+!                Array - REAL(NUMELS)
+!                         where
 !                          NUMELS = SUM(MTRSTR(1,K)*MTRSTR(2,K),
 !                               K=1,NMBLKS).
-!                         CONTAINS THE ENTRIES OF THE ALMOST
-!                         BLOCK DIAGONAL MATRIX  A  WHOSE BLOCK
-!                         STRUCTURE IS GIVEN BY THE INTEGER ARRAY
-!                         MTRSTR. THE ELEMENTS OF A ARE STORED BY
-!                         COLUMNS, IN BLOCKS CORRESPONDING TO THE
-!                         GIVEN STRUCTURE.
+!                         Contains the entries of the almost
+!                         block diagonal matrix  A  whose block
+!                         structure is given by the integer array
+!                         MTRSTR. The elements of A are stored by
+!                         columns, in blocks corresponding to the
+!                         given structure.
 !
 !               MTRSTR - INTEGER(3,NMBLKS)
-!                         DESCRIBES THE BLOCK STRUCTURE OF  A ...
+!                         describes the block structure of  A ...
 !                           MTRSTR(1,K)  = NUMBER OF ROWS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(2,K)  = NUMBER OF COLUMNS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(3,K)  = NUMBER OF COLUMNS
-!                                          OVERLAPPED BY BLOCK K
-!                                          AND BLOCK (K+1).
-!                        MTRSTR MUST SATISFY SOME RESTRICTIONS.
-!                         IN ORDER THAT A BE SQUARE, WE NEED
+!                                          overlapped by block K
+!                                          and block (K+1).
+!                        MTRSTR must satisfy some restrictions.
+!                         In order that A be square, we need
 !                         SUM(MTRSTR(1,K),K=1,NMBLKS) = N =
 !                         SUM((MTRSTR(2,K)-MTRSTR(3,K)),K=1,NMBLKS).
-!                        IN ADDITION, TO ENSURE THAT THREE SUCCESS-
-!                         IVE BLOCKS DO NOT HAVE COLUMNS IN COMMON,
-!                         MTRSTR MUST SATISFY
+!                        In addition, to ensure that three success-
+!                         ive blocks do not have columns in common,
+!                         MTRSTR must satisfy
 !                         MTRSTR(3,K-1)+MTRSTR(3,K).LE.MTRSTR(2,K),
 !                         FOR K = 2,NMBLKS.
-!                        FINALLY,  A R C E C O,  SETS
+!                        Finally,  A R C E C O,  sets
 !                         MTRSTR(3,NMBLKS) = 0, IN ARCECD.
 !
 !               NMBLKS - INTEGER
-!                         TOTAL NUMBER OF BLOCKS IN  A
+!                         total number of blocks in  A
 !
-!                PIVOT - INTEGER(N)
-!                         WORK SPACE
+!                Pivot - INTEGER(N)
+!                         work space
 !
 !                    B - REAL(N)
-!                         THE RIGHT HAND SIDE VECTOR
+!                         the right hand side vector
 !
 !                    X - REAL(N)
-!                         WORK SPACE
+!                         work space
 !
 !       *** ON RETURN  ...
 !
-!                ARRAY - REAL(NUMELS)
-!                         CONTAINS THE MODIFIED ALTERNATE ROW
-!                         AND COLUMN DECOMPOSITION OF  A (IF
+!                Array - REAL(NUMELS)
+!                         contains the modified alternate row
+!                         and column decomposition of  A (if
 !                         IFLAG = 0)
 !
-!                PIVOT - INTEGER(N)
-!                         RECORDS THE PIVOTING INDICES DETER-
-!                         MINED IN THE DECOMPOSITION
+!                Pivot - INTEGER(N)
+!                         records the pivoting indices deter-
+!                         mined in the decomposition
 !
 !                    X - REAL(N)
 !                         THE SOLUTION VECTOR (IF IFLAG = 0)
@@ -6435,44 +6435,44 @@ integer, intent(in) :: n, nmblks
 !               *****  AUXILIARY PROGRAMS  *****
 !
 !            ARCEDC(ARRAY,MTRSTR,NMBLKS,PIVOT,IFLAG)
-!               - DECOMPOSES THE MATRIX  A  USING MODIFIED
-!                 ALTERNATE ROW AND COLUMN ELIMINATION
-!                 WITH PARTIAL PIVOTING, AND IS USED FOR
-!                 THIS PURPOSE IN  A R C E C O.
-!                 THE ARGUMENTS ARE ALL AS IN A R C E C O.
+!               - decomposes the matrix  A  using modified
+!                 alternate row and column elimination
+!                 with partial pivoting, and is used for
+!                 this purpose in  A R C E C O.
+!                 The arguments are all as in A R C E C O.
 !
 !            ARCESL(ARRAY,MTRSTR,NMBLKS,PIVOT,B,X)
 !               - SOLVES THE SYSTEM  A*X = B  ONCE  A  IS
-!                 DECOMPOSED.
-!                 THE ARGUMENTS ARE ALL AS IN A R C E C O .
+!                 decomposed.
+!                 The arguments are all as in A R C E C O .
 !
 !***************************************************************
 !
 !               *****  BLOCK STRUCTURE OF  A  *****
 !
-!  THE NMBLKS BLOCKS OF A ARE STORED CONSECUTIVELY IN THE ONE
-!  DIMENSIONAL MATRIX  ARRAY, THE ENTRIES OF  A  BEING STORED
-!  AS FOLLOWS ...
+!  The NMBLKS blocks of A are stored consecutively in the one
+!  dimensional matrix  ARRAY, the entries of  A  being stored
+!  as follows ...
 !
 !       IN ARRAY(1)     THE (1,1) ENTRY OF THE TOP BLOCK,
 !
-!       IN ARRAY(INDEX) THE (1,1) ENTRY OF THE ITH BLOCK WHERE
+!       In ARRAY(INDEX) the (1,1) entry of the ith block where
 !                       INDEX = 1 + SUM(MTRSTR(1,J)*MTRSTR(2,J),
 !                               J=1,I-1), I=2,NMBLKS.
 !
 !***************************************************************
 !
-!       THE SUBROUTINE  A R C E C O  AUTOMATICALLY SOLVES THE
+!       The subroutine  A R C E C O  automatically solves the
 !  INPUT SYSTEM WHEN IFLAG=0.  A R C E C O  IS CALLED ONLY ONCE
-!  FOR A GIVEN SYSTEM. THE SOLUTION FOR A SEQUENCE OF P RIGHT
-!  HAND SIDES CAN BE OBTAINED BY ONE CALL TO  A R C E C O  AND
-!  P-1 CALLS TO ARCESL ONLY. SINCE THE ARRAYS ARRAY AND
-!  PIVOT CONTAIN, RESPECTIVELY, THE DECOMPOSITION OF THE GIVEN
-!  COEFFICIENT MATRIX AND PIVOTING INFORMATION ON RETURN FROM
-!  A R C E C O , THEY MUST NOT BE ALTERED BETWEEN SUCCESSIVE
-!  CALLS TO ARCESL WITH THE SAME RIGHT HAND SIDES. FOR THE
-!  SAME REASON, IF THE USER WISHES TO SAVE THE COEFFICIENT
-!  MATRIX, THE ARRAY ARRAY MUST BE COPIED BEFORE A CALL
+!  for a given system. The solution for a sequence of P right
+!  hand sides can be obtained by one call to  A R C E C O  and
+!  P-1 calls to ARCESL only. Since the arrays array and
+!  pivot contain, respectively, the decomposition of the given
+!  coefficient matrix and pivoting information on return from
+!  A R C E C O , they must not be altered between successive
+!  calls to ARCESL with the same right hand sides. For the
+!  same reason, if the user wishes to save the coefficient
+!  matrix, the ARRAY ARRAY must be copied before a call
 !  TO  A R C E C O .
 !
 !**********************************************************************
@@ -6493,8 +6493,8 @@ integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
 !
 !***************************************************************
 !
-!  A R C E D C SUPERVISES THE MODIFIED ALTERNATE ROW AND COLUMN
-!  DECOMPOSITION WITH PARTIAL PIVOTING OF THE ALMOST BLOCK
+!  A R C E D C supervises the modified alternate row and column
+!  decomposition with partial pivoting of the almost block
 !  DIAGONAL MATRIX  A   STORED IN THE ARRAYS A R R A Y  AND
 !  M T R S T R .
 !
@@ -6505,56 +6505,56 @@ integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
 !       *** ON ENTRY ...
 !
 !                N     - INTEGER
-!                         THE ORDER OF THE LINEAR SYSTEM, WHERE
+!                         the order of the linear system, where
 !                           N = SUM(MTRSTR(1,K),K=1,NMBLKS)
 !
-!                ARRAY - REAL(NUMELS)
-!                         WHERE
+!                Array - REAL(NUMELS)
+!                         where
 !                          NUMELS = SUM(MTRSTR(1,K)*MTRSTR(2,K),
 !                               K=1,NMBLKS).
-!                         CONTAINS THE ENTRIES OF THE ALMOST
-!                         BLOCK DIAGONAL MATRIX  A  WHOSE BLOCK
-!                         STRUCTURE IS GIVEN BY THE INTEGER ARRAY
-!                         MTRSTR. THE ELEMENTS OF A ARE STORED BY
-!                         COLUMNS, IN BLOCKS CORRESPONDING TO THE
-!                         GIVEN STRUCTURE.
+!                         Contains the entries of the almost
+!                         block diagonal matrix  A  whose block
+!                         structure is given by the integer array
+!                         MTRSTR. The elements of A are stored by
+!                         columns, in blocks corresponding to the
+!                         given structure.
 !               MTRSTR - INTEGER(3,NMBLKS)
-!                         DESCRIBES THE BLOCK STRUCTURE OF  A ...
+!                         describes the block structure of  A ...
 !                           MTRSTR(1,K)  = NUMBER OF ROWS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(2,K)  = NUMBER OF COLUMNS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(3,K)  = NUMBER OF COLUMNS
-!                                          OVERLAPPED BY BLOCK K
-!                                          AND BLOCK (K+1).
-!                        MTRSTR MUST SATISFY SOME RESTRICTIONS.
-!                         IN ORDER THAT A BE SQUARE, WE NEED
+!                                          overlapped by block K
+!                                          and block (K+1).
+!                        MTRSTR must satisfy some restrictions.
+!                         In order that A be square, we need
 !                         SUM(MTRSTR(1,K),K=1,NMBLKS) = N =
 !                         SUM((MTRSTR(2,K)-MTRSTR(3,K)),K=1,NMBLKS).
-!                        IN ADDITION, TO ENSURE THAT THREE SUCCESS-
-!                         IVE BLOCKS DO NOT HAVE COLUMNS IN COMMON,
-!                         MTRSTR MUST SATISFY
+!                        In addition, to ensure that three success-
+!                         ive blocks do not have columns in common,
+!                         MTRSTR must satisfy
 !                         MTRSTR(3,K-1)+MTRSTR(3,K).LE.MTRSTR(2,K),
 !                         FOR K = 2,NMBLKS.
-!                        FINALLY,  A R C E C O,  SETS
+!                        Finally,  A R C E C O,  sets
 !                         MTRSTR(3,NMBLKS) = 0, IN ARCECD.
 !
 !               NMBLKS - INTEGER
-!                         TOTAL NUMBER OF BLOCKS
+!                         total number of blocks
 !
-!                PIVOT - INTEGER(N)
-!                         WORK SPACE
+!                Pivot - INTEGER(N)
+!                         work space
 !
 !       *** ON RETURN  ...
 !
-!                ARRAY - REAL(NUMELS)
-!                         CONTAINS THE MODIFIED ALTERNATE ROW
-!                         AND COLUMN DECOMPOSITION OF  A (IF
+!                Array - REAL(NUMELS)
+!                         contains the modified alternate row
+!                         and column decomposition of  A (if
 !                         IFLAG = 0)
 !
-!                PIVOT - INTEGER(N)
-!                         RECORDS THE PIVOTING INDICES DETER-
-!                         MINED IN THE DECOMPOSITION
+!                Pivot - INTEGER(N)
+!                         records the pivoting indices deter-
+!                         mined in the decomposition
 !
 !                IFLAG - INTEGER
 !                         =  1, IF INPUT PARAMETERS ARE INVALID
@@ -6566,11 +6566,11 @@ integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
 !               *****  AUXILIARY PROGRAMS  *****
 !
 !       ARCEPR(BLOCK,NRWBLK,NCLBLK,NRWPIV,PIVOT,PIVMAX,IFLAG)
-!        CARRIES OUT THE ROW ELIMINATIONS
+!        carries out the row eliminations
 !
 !       ARCEPC(TOPBLK,NRWTOP,NOVRLP,BOTBLK,NRWBOT,NCLPIV,
 !            PIVOT,PIVMAX,IFLAG)
-!        CARRIES OUT THE COLUMN ELIMINATIONS
+!        carries out the column eliminations
 !
 !***************************************************************
 !
@@ -6583,7 +6583,7 @@ data zero /0.0/
 !
 !       ****  CHECK VALIDITY OF THE INPUT PARAMETERS....
 !
-!            IF PARAMETERS ARE INVALID THEN TERMINATE AT 7,
+!            If parameters are invalid then terminate at 7,
 !                                      ELSE CONTINUE AT 8.
 !
 !***************************************************************
@@ -6602,28 +6602,28 @@ end do
 if (isum1.ne.isum2) go to 30
 if (isum1.ne.n) go to 30
 !
-!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!Ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
-!          PARAMETERS ARE ACCEPTABLE - CONTINUE AT 8
+!          Parameters are acceptable - continue at 8
 !
-!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!Ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 go to 40
 30 continue
 !
-!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!Cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 !        PARAMETERS ARE INVALID.  SET IFLAG = 1, AND TERMINATE
 !
-!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!Cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 iflag = 1
 return
 40 continue
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
-!       C  INTERNAL PARAMETERS ...
+!       C  internal parameters ...
 !       C
 !       C       INDEX1  POINTER TO THE ELEMENT IN THE COLUMN
 !       C               WHERE ROW PIVOTING STARTS.
@@ -6650,7 +6650,7 @@ return
 !       C       NOVRLP  NUMBER OF COLUMNS OVERLAPPED BY THE
 !       C               CURRENT BLOCK AND THE NEXT BLOCK.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 pivmax = zero
 iflag = 0
@@ -6661,30 +6661,30 @@ nclblk = mtrstr(2,1)
 novrlp = mtrstr(3,1)
 nrwpiv = nclblk - novrlp
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       CALL ARCEPR TO PERFORM NRWPIV ROW ELIMINATIONS
 !       C               ON TOP BLOCK.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 if (nrwpiv.gt.0) call arcepr(array(index1), nrwblk, nclblk, &
 &nrwpiv, pivot(indpiv), pivmax, iflag)
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       IF MATRIX SINGULAR RETURN.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 if (iflag.lt.0) return
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       NOW DO DECOMPOSITION PROCEEDING ONE BLOCK AT A
 !       C               TIME.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 do k=2,nmblks
   indpiv = indpiv + nrwpiv
@@ -6693,21 +6693,21 @@ do k=2,nmblks
   nclpiv = nrwblk - nrwpiv
   nrwbk2 = mtrstr(1,k)
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
-!          C  CALL ARCEPC TO PERFORM NCLPIV COLUMN ELIMINATIONS.
+!          C  call ARCEPC to perform NCLPIV column eliminations.
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nclpiv.eq.0) go to 50
   call arcepc(array(index2), nrwblk, novrlp, array(index3), &
 &nrwbk2, nclpiv, pivot(indpiv), pivmax, iflag)
 !
-!             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!             Cccccccccccccccccccccccccccccccccccccccccccccccccc
 !             C
 !             C    IF MATRIX IS SINGULAR RETURN.
 !             C
-!             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!             cccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (iflag.lt.0) return
 50 continue
@@ -6718,20 +6718,20 @@ do k=2,nmblks
   nrwpiv = nclblk - novrlp
   indpiv = indpiv + nclpiv
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEPR TO PERFORM NRWPIV ROW ELIMINATIONS.
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nrwpiv.eq.0) go to 60
   call arcepr(array(index1), nrwblk, nclblk, nrwpiv, &
 &pivot(indpiv), pivmax, iflag)
-!             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!             Cccccccccccccccccccccccccccccccccccccccccccccccccc
 !             C
 !             C    IF MATRIX IS SINGULAR RETURN.
 !             C
-!             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!             cccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (iflag.lt.0) return
 60 continue
@@ -6748,8 +6748,8 @@ integer :: i1, j, j1, jplus1, l1, max
 !
 !***************************************************************
 !
-!  A R C E P R  PERFORMS  NRWPIV  ROW ELIMINATIONS ON THE MATRIX
-!               BLOCK
+!  A R C E P R  performs  NRWPIV  row eliminations on the matrix
+!               block
 !
 !***************************************************************
 !
@@ -6759,20 +6759,20 @@ real :: rowmax
 real, intent(inout) :: pivmax
 real :: tempiv, rowpiv, swap
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C        PERFORM NRWPIV ROW ELIMINATIONS...
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 do j=1,nrwpiv
   jplus1 = j + 1
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    DETERMINE ROW PIVOT AND PIVOT INDEX
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   max = j
   rowmax = abs(block(j,j))
@@ -6786,23 +6786,23 @@ do j=1,nrwpiv
   end do
 30 continue
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    TEST FOR SINGULARITY ...
 !          C
 !          C             IF SINGULAR THEN TERMINATE AT 90,
 !          C                         ELSE CONTINUE.
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (pivmax+rowmax.eq.pivmax) go to 100
   pivmax = amax1(pivmax,rowmax)
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    IF NECESSARY INTERCHANGE ROWS
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   pivot(j) = max
   if (j.eq.max) go to 50
@@ -6814,22 +6814,22 @@ do j=1,nrwpiv
 50 continue
   if (j.eq.nrwblk) return
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    COMPUTE THE MULTIPLIERS
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   rowpiv = block(j,j)
   do i1=jplus1,nrwblk
     block(i1,j) = block(i1,j)/rowpiv
   end do
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    PERFORM ROW ELIMINATIONS WITH COLUMN INDEXING
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   do j1=jplus1,nclblk
     do l1=jplus1,nrwblk
@@ -6840,12 +6840,12 @@ end do
 return
 100 continue
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       MATRIX IS SINGULAR - SET IFLAG = -1.
 !       C                            TERMINATE AT 90.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 iflag = -1
 return
@@ -6860,8 +6860,8 @@ integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
 !
 !***************************************************************
 !
-!     A R C E P C PERFORMS NCLPIV COLUMN ELIMINATIONS ON THE
-!                 MATRICES TOPBLK AND BOTBLK
+!     A R C E P C performs NCLPIV column eliminations on the
+!                 matrices TOPBLK and BOTBLK
 !***************************************************************
 !
 real, intent(inout) :: topblk(nrwtop,novrlp), &
@@ -6872,20 +6872,20 @@ real :: colmlt
 real :: tempiv, swap
 integer, intent(inout) :: pivot(nrwtop)
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       PERFORM THE COLUMN ELIMINATIONS ON A LOOP.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 do j=1,nclpiv
   i = nrwtop - nclpiv + j
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    DETERMINE COLUMN PIVOT AND PIVOT INDEX
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   max = j
   colmax = abs(topblk(i,j))
@@ -6900,23 +6900,23 @@ do j=1,nclpiv
   end do
 30 continue
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    TEST FOR SINGULARITY ...
 !          C
 !          C             IF SINGULAR THEN TERMINATE AT 110,
 !          C                         ELSE CONTINUE.
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (pivmax+colmax.eq.pivmax) go to 120
   pivmax = amax1(pivmax,colmax)
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    IF NECESSARY INTERCHANGE COLUMNS
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   pivot(j) = max
   if (j.eq.max) go to 60
@@ -6933,12 +6933,12 @@ do j=1,nclpiv
 60 continue
   if (j.eq.novrlp) return
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    COMPUTE MULTIPLIERS AND PERFORM COLUMN
 !          C            ELIMINATION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   do j1=jplus1,novrlp
     colmlt = topblk(i,j1)/topblk(i,j)
@@ -6957,12 +6957,12 @@ end do
 return
 120 continue
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       MATRIX IS SINGULAR - SET IFLAG = -1.
 !       C                            TERMINATE AT 110.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 iflag = -1
 return
@@ -6977,14 +6977,14 @@ integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 !
 !***************************************************************
 !
-!  A R C E S L  SUPERVISES THE SOLUTION OF THE LINEAR SYSTEM
+!  A R C E S L  supervises the solution of the linear system
 !                          A*X = B
-!  USING THE DECOMPOSITION OF THE MATRIX  A  ALREADY GENERATED
-!  IN  A R C E D C.  IT INVOLVES TWO LOOPS, THE FORWARD LOOP,
-!  CONSISTING OF FORWARD SOLUTION, FORWARD MODIFICATION, AND
-!  FORWARD ELIMINATION, AND THE BACKWARD LOOP, CONSISTING OF
-!  BACKWARD SOLUTION, BACKWARD MODIFICATION, AND BACKWARD
-!  ELIMINATION.
+!  using the decomposition of the matrix  A  already generated
+!  in  A R C E D C.  It involves two loops, the forward loop,
+!  consisting of forward solution, forward modification, and
+!  forward elimination, and the backward loop, consisting of
+!  backward solution, backward modification, and backward
+!  elimination.
 !
 !***************************************************************
 !
@@ -6992,59 +6992,59 @@ integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 !
 !       *** ON ENTRY ...
 !
-!                ARRAY - REAL(NUMELS)
-!                         WHERE
+!                Array - REAL(NUMELS)
+!                         where
 !                          NUMELS = SUM(MTRSTR(1,K)*MTRSTR(2,K),
 !                               K=1,NMBLKS).
-!                         OUTPUT FROM A R C E D C
+!                         Output from A R C E D C
 !
 !               MTRSTR - INTEGER(3,NMBLKS)
-!                         DESCRIBES THE BLOCK STRUCTURE OF  A ...
+!                         describes the block structure of  A ...
 !                           MTRSTR(1,K)  = NUMBER OF ROWS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(2,K)  = NUMBER OF COLUMNS IN
-!                                            BLOCK K.
+!                                            block K.
 !                           MTRSTR(3,K)  = NUMBER OF COLUMNS
-!                                          OVERLAPPED BY BLOCK K
-!                                          AND BLOCK (K+1).
+!                                          overlapped by block K
+!                                          and block (K+1).
 !
-!                        THE LINEAR SYSTEM IS OF ORDER
+!                        The linear system is of order
 !                           N  = SUM(MTRSTR(1,K),K=1,NMBLKS)
 !
 !               NMBLKS - INTEGER
-!                         TOTAL NUMBER OF BLOCKS IN  A
+!                         total number of blocks in  A
 !
-!                PIVOT - INTEGER(N)
-!                         OUTPUT FROM A R C E D C
+!                Pivot - INTEGER(N)
+!                         output from A R C E D C
 !
 !                    B - REAL(N)
-!                         THE RIGHT HAND SIDE VECTOR
+!                         the right hand side vector
 !
 !                    X - REAL(N)
-!                         WORK SPACE
+!                         work space
 !
 !       *** ON RETURN  ...
 !
 !
 !                    X - REAL(N)
-!                         THE SOLUTION VECTOR
+!                         the solution vector
 !
 !***************************************************************
 !
 !               *****  AUXILIARY PROGRAMS  *****
 !
 !
-!       ARCEFS - PERFORMS FORWARD SOLUTION STEP
+!       ARCEFS - performs forward solution step
 !
-!       ARCEFM - PERFORMS FORWARD MODIFICATION STEP
+!       ARCEFM - performs forward modification step
 !
-!       ARCEFE - PERFORMS FORWARD ELIMINATION STEP
+!       ARCEFE - performs forward elimination step
 !
-!       ARCEBS - PERFORMS BACKWARD SOLUTION STEP
+!       ARCEBS - performs backward solution step
 !
-!       ARCEBM - PERFORMS BACKWARD MODIFICATION STEP
+!       ARCEBM - performs backward modification step
 !
-!       ARCEBE - PERFORMS BACKWARD ELIMINATION STEP
+!       ARCEBE - performs backward elimination step
 !
 !***************************************************************
 !
@@ -7053,9 +7053,9 @@ real, intent(inout) :: b(*), x(*)
 integer, intent(in) :: pivot(*)
 indpiv = 1
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
-!       C  INTERNAL PARAMETERS ...
+!       C  internal parameters ...
 !       C
 !       C       INDEXA  POINTER TO 1ST ELEMENT OF BLOCK OF A.
 !       C
@@ -7064,7 +7064,7 @@ indpiv = 1
 !       C       INDPIV,NRWBLK,NRWPIV,NCLBLK,NCLPIV,NOVRLP
 !       C       ARE AS IN ARCEDC.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 indexa = 1
 nrwblk = mtrstr(1,1)
@@ -7072,42 +7072,42 @@ nclblk = mtrstr(2,1)
 novrlp = mtrstr(3,1)
 nrwpiv = nclblk - novrlp
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       CALL ARCEFE TO PERFORM FORWARD ELIMINATION.
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 if (nrwpiv.gt.0) call arcefe(array(indexa), nrwblk, nrwpiv, &
 &pivot(indpiv), b(indpiv))
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       FORWARD LOOP
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 do k=2,nmblks
   indexa = indexa + nrwblk*nrwpiv
   nclpiv = nrwblk - nrwpiv
   indpiv = indpiv + nrwpiv
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEFS TO PERFORM FORWARD SOLUTION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nclpiv.gt.0) call arcefs(array(indexa), nrwblk, nclpiv, &
 &novrlp, b(indpiv), x(indpiv))
   indexa = indexa + novrlp*nrwblk
   nrwblk = mtrstr(1,k)
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEFM TO PERFORM FORWARD MODIFICATION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nclpiv.gt.0) call arcefm(array(indexa), nrwblk, nclpiv, &
 &b(indpiv), x(indpiv))
@@ -7117,41 +7117,41 @@ do k=2,nmblks
   nrwpiv = nclblk - novrlp
   indpiv = indpiv + nclpiv
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEFE TO PERFORM FORWARD ELIMINATION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nrwpiv.gt.0) call arcefe(array(indexa), nrwblk, nrwpiv, &
 &pivot(indpiv), b(indpiv))
 end do
 !     INDEXB = INDPIV + NRWPIV - 1
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       BACKWARD LOOP
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 do ll=2,nmblks
   k = nmblks - ll + 1
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEBM TO PERFORM BACKWARD MODIFICATION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nrwpiv.eq.0) go to 20
   if (nrwpiv.ne.nclblk) call arcebm(array(indexa), nrwblk, &
 &nclblk, nrwpiv, b(indpiv), x(indpiv))
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEBS TO PERFORM BACKWARD SOLUTION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   call arcebs(array(indexa), nrwblk, nclblk, nrwpiv, b(indpiv), &
 &x(indpiv))
@@ -7162,11 +7162,11 @@ do ll=2,nmblks
   indexa = indexa - nrwblk*novrlp
   indpiv = indpiv - nclpiv
 !
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          Ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !          C
 !          C    CALL ARCEBE TO PERFORM BACKWARD ELIMINATION
 !          C
-!          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!          ccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
   if (nclpiv.gt.0) call arcebe(array(indexa), nrwblk, nclpiv, &
 &novrlp, pivot(indpiv), x(indpiv))
@@ -7177,12 +7177,12 @@ do ll=2,nmblks
   nclpiv = mtrstr(2,k) - nclblk
 end do
 !
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
 !       C       IF ROW ELIMINATIONS WERE DONE IN TOPBLOCK, CALL
 !       C       ARCEBS TO PERFORM BACKWARD SOLUTION
 !       C
-!       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 if (nrwpiv.eq.0) return
 if (nrwpiv.ne.nclblk) call arcebm(array(indexa), nrwblk, nclblk, &
@@ -7199,8 +7199,8 @@ integer :: i, iplusl, j, jplusl, l, long
 !
 !***************************************************************
 !
-!  A R C E F S PERFORMS THE FORWARD SOLUTION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E F S performs the forward solution step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7229,8 +7229,8 @@ integer :: j, l, nclpvl
 !
 !***************************************************************
 !
-!  A R C E F M  PERFORMS THE FORWARD MODIFICATION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E F M  performs the forward modification step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7254,8 +7254,8 @@ integer :: i, iplus1, l
 !
 !***************************************************************
 !
-!  A R C E F E  PERFORMS THE FORWARD ELIMINATION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E F E  performs the forward elimination step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7288,8 +7288,8 @@ integer :: j, jmin1, l, nj
 !
 !***************************************************************
 !
-!  A R C E B S PERFORMS THE BACKWARD SOLUTION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E B S performs the backward solution step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7316,8 +7316,8 @@ integer :: j, l, nrwpv1
 !
 !***************************************************************
 !
-!  A R C E B M  PERFORMS THE BACKWARD MODIFICATION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E B M  performs the backward modification step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7341,8 +7341,8 @@ integer :: i, j, j1, jplus1, nj
 !
 !***************************************************************
 !
-!  A R C E B E PERFORMS THE BACKWARD ELIMINATION STEP IN THE
-!  SOLUTION PHASE OF  A R C E C O.
+!  A R C E B E performs the backward elimination step in the
+!  solution phase of  A R C E C O.
 !
 !***************************************************************
 !
@@ -7380,13 +7380,13 @@ integer :: n
 integer, intent(inout) :: ip(m,n)
 real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n), x(*)
 !
-!     DECOMPOSE THE COEFFICIENT MATRIX
+!     Decompose the coefficient matrix
 !
 if (mo .ne. 0) go to 10
 call decbt(m, n, a, b, c, ip, ierr)
 if (ierr .ne. 0) return
 !
-!     SOLVE THE SYSTEM OF EQUATIONS
+!     Solve the system of equations
 !
 10 call solbt(m, n, a, b, c, x, ip)
 return
@@ -7443,7 +7443,7 @@ real :: dp
 if (m .lt. 1 .or. n .lt. 4) go to 210
 nm1 = n - 1
 nm2 = n - 2
-! PROCESS THE FIRST BLOCK-ROW. -----------------------------------------
+! Process the first block-row. -----------------------------------------
 call dec (m, m, a, ip, ier)
 k = 1
 if (ier .ne. 0) go to 200
@@ -7451,7 +7451,7 @@ do j = 1,m
   call sol (m, m, a, b(1,j,1), ip)
   call sol (m, m, a, c(1,j,1), ip)
   end do
-! ADJUST B(*,*,2). -----------------------------------------------------
+! Adjust B(*,*,2). -----------------------------------------------------
 do j = 1,m
   do i = 1,m
     dp = 0.
@@ -7460,7 +7460,7 @@ do j = 1,m
     b(i,j,2) = b(i,j,2) - dp
     end do
   end do
-! MAIN LOOP.  PROCESS BLOCK-ROWS 2 TO N-1. -----------------------------
+! Main loop.  Process block-rows 2 to N-1. -----------------------------
 do k = 2,nm1
   km1 = k - 1
   do j = 1,m
@@ -7476,7 +7476,7 @@ do k = 2,nm1
   do 80 j = 1,m
 80 call sol (m, m, a(1,1,k), b(1,j,k), ip(1,k))
   end do
-! PROCESS LAST BLOCK-ROW AND RETURN. -----------------------------------
+! Process last block-row and return. -----------------------------------
 do j = 1,m
   do i = 1,m
     dp = 0.
@@ -7497,12 +7497,12 @@ call dec (m, m, a(1,1,n), ip(1,n), ier)
 k = n
 if (ier .ne. 0) go to 200
 return
-! ERROR RETURNS. -------------------------------------------------------
+! Error returns. -------------------------------------------------------
 200 ier = k
 return
 210 ier = -1
 return
-!-----------------------  END OF SUBROUTINE DECBT  ---------------------
+!-----------------------  End of subroutine DECBT  ---------------------
 end subroutine decbt
 
 subroutine solbt (m, n, a, b, c, y, ip)
@@ -7536,7 +7536,7 @@ real :: dp
 !
 nm1 = n - 1
 nm2 = n - 2
-! FORWARD SOLUTION SWEEP. ----------------------------------------------
+! Forward solution sweep. ----------------------------------------------
 call sol (m, m, a, y, ip)
 do k = 2,nm1
   km1 = k - 1
@@ -7555,7 +7555,7 @@ do i = 1,m
   y(i,n) = y(i,n) - dp
   end do
 call sol (m, m, a(1,1,n), y(1,n), ip(1,n))
-! BACKWARD SOLUTION SWEEP. ---------------------------------------------
+! Backward solution sweep. ---------------------------------------------
 do kb = 1,nm1
   k = n - kb
   kp1 = k + 1
@@ -7573,7 +7573,7 @@ do i = 1,m
   y(i,1) = y(i,1) - dp
   end do
 return
-!-----------------------  END OF SUBROUTINE SOLBT  ---------------------
+!-----------------------  End of subroutine SOLBT  ---------------------
 end subroutine solbt
 
 subroutine smslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
@@ -7590,7 +7590,7 @@ integer, intent(inout) :: inert(3), ipvt(n)
 integer :: onej
 !     ------------------
 !
-!          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
+!          Matrix factorization and computation of RCOND
 !
 ierr = 0
 call sspco(a,n,ipvt,rcond,wk)
@@ -7605,14 +7605,14 @@ do 10 j = 1,m
 call sspsl(a,n,ipvt,b(onej))
 10 onej = onej + kb
 !
-!             CALCULATION OF DET AND THE INVERSE OF A
+!             Calculation of DET and the inverse of A
 !
 20 job = 110
 if (mo .eq. 0) job = 111
 call sspdi(a,n,ipvt,det,inert,wk,job)
 return
 !
-!                  THE PROBLEM CANNOT BE SOLVED
+!                  The problem cannot be solved
 !
 30 ierr = 1
 return
@@ -7625,63 +7625,63 @@ integer, intent(inout) :: kpvt(*)
 real, intent(inout) :: ap(*), z(*)
 real, intent(inout) :: rcond
 !
-!     SSPCO FACTORS A REAL SYMMETRIC MATRIX STORED IN PACKED
-!     FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
-!     THE CONDITION OF THE MATRIX.
+!     SSPCO factors a real symmetric matrix stored in packed
+!     form by elimination with symmetric pivoting and estimates
+!     the condition of the matrix.
 !
-!     IF  RCOND  IS NOT NEEDED, SSPFA IS SLIGHTLY FASTER.
+!     If  RCOND  is not needed, SSPFA is slightly faster.
 !     TO SOLVE  A*X = B , FOLLOW SSPCO BY SSPSL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW SSPCO BY SSPSL.
-!     TO COMPUTE  INVERSE(A) , FOLLOW SSPCO BY SSPDI.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW SSPCO BY SSPDI.
-!     TO COMPUTE  INERTIA(A), FOLLOW SSPCO BY SSPDI.
+!     To compute  INVERSE(A)*C , follow SSPCO by SSPSL.
+!     To compute  INVERSE(A) , follow SSPCO by SSPDI.
+!     To compute  DETERMINANT(A) , follow SSPCO by SSPDI.
+!     To compute  INERTIA(A), follow SSPCO by SSPDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     OUTPUT
+!     Output
 !
 !        AP      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                WERE USED TO OBTAIN IT STORED IN PACKED FORM.
+!                were used to obtain it stored in packed form.
 !                THE FACTORIZATION CAN BE WRITTEN  A = U*D*TRANS(U)
-!                WHERE  U  IS A PRODUCT OF PERMUTATION AND UNIT
-!                UPPER TRIANGULAR MATRICES , TRANS(U) IS THE
-!                TRANSPOSE OF  U , AND  D  IS BLOCK DIAGONAL
-!                WITH 1 BY 1 AND 2 BY 2 BLOCKS.
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , TRANS(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
 !
 !        KPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        RCOND   REAL
-!                AN ESTIMATE OF THE RECIPROCAL CONDITION OF  A .
+!                an estimate of the reciprocal condition of  A .
 !                FOR THE SYSTEM  A*X = B , RELATIVE PERTURBATIONS
-!                IN  A  AND  B  OF SIZE  EPSILON  MAY CAUSE
-!                RELATIVE PERTURBATIONS IN  X  OF SIZE  EPSILON/RCOND .
-!                IF  RCOND  IS SO SMALL THAT THE LOGICAL EXPRESSION
+!                in  A  and  B  of size  epsilon  may cause
+!                relative perturbations in  X  of size  epsilon/RCOND .
+!                If  RCOND  is so small that the logical expression
 !                           1.0 + RCOND .EQ. 1.0
-!                IS TRUE, THEN  A  MAY BE SINGULAR TO WORKING
-!                PRECISION.  IN PARTICULAR,  RCOND  IS ZERO  IF
-!                EXACT SINGULARITY IS DETECTED OR THE ESTIMATE
-!                UNDERFLOWS.
+!                is true, then  A  may be singular to working
+!                precision.  In particular,  RCOND  is zero  if
+!                exact singularity is detected or the estimate
+!                underflows.
 !
 !        Z       REAL(N)
-!                A WORK VECTOR WHOSE CONTENTS ARE USUALLY UNIMPORTANT.
-!                IF  A  IS CLOSE TO A SINGULAR MATRIX, THEN  Z  IS
-!                AN APPROXIMATE NULL VECTOR IN THE SENSE THAT
+!                a work vector whose contents are usually unimportant.
+!                If  A  is close to a singular matrix, then  Z  is
+!                an approximate null vector in the sense that
 !                NORM(A*Z) = RCOND*NORM(A)*NORM(Z) .
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -7689,18 +7689,18 @@ real, intent(inout) :: rcond
 !                      K = K + 1
 !                      AP(K) = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     LINPACK SSPFA
 !     BLAS SAXPY,SDOT,SSCAL,SASUM
-!     FORTRAN ABS,AMAX1,IABS,SIGN
+!     Fortran abs,AMAX1,IABS,sign
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: ak, akm1, bk, bkm1, sdot, denom, ek, t
 real :: anorm, s, sasum, ynorm
@@ -7708,7 +7708,7 @@ integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
 integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
-!     FIND NORM OF A USING ONLY UPPER HALF
+!     Find norm of a using only upper half
 !
 j1 = 1
 do j = 1, n
@@ -7728,15 +7728,15 @@ do j = 1, n
    anorm = amax1(anorm,z(j))
 end do
 !
-!     FACTOR
+!     Factor
 !
 call sspfa(ap,n,kpvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  A*Y = E .
-!     THE COMPONENTS OF  E  ARE CHOSEN TO CAUSE MAXIMUM LOCAL
+!     The components of  E  are chosen to cause maximum local
 !     GROWTH IN THE ELEMENTS OF W  WHERE  U*D*W = E .
-!     THE VECTORS ARE FREQUENTLY RESCALED TO AVOID OVERFLOW.
+!     The vectors are frequently rescaled to avoid overflow.
 !
 !     SOLVE U*D*W = E
 !
@@ -7913,50 +7913,50 @@ integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: ap(*)
 !
-!     SSPFA FACTORS A REAL SYMMETRIC MATRIX STORED IN
-!     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
+!     SSPFA factors a real symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting.
 !
 !     TO SOLVE  A*X = B , FOLLOW SSPFA BY SSPSL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW SSPFA BY SSPSL.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW SSPFA BY SSPDI.
-!     TO COMPUTE  INERTIA(A) , FOLLOW SSPFA BY SSPDI.
-!     TO COMPUTE  INVERSE(A) , FOLLOW SSPFA BY SSPDI.
+!     To compute  INVERSE(A)*C , follow SSPFA by SSPSL.
+!     To compute  DETERMINANT(A) , follow SSPFA by SSPDI.
+!     To compute  INERTIA(A) , follow SSPFA by SSPDI.
+!     To compute  INVERSE(A) , follow SSPFA by SSPDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     OUTPUT
+!     Output
 !
 !        AP      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                WERE USED TO OBTAIN IT STORED IN PACKED FORM.
+!                were used to obtain it stored in packed form.
 !                THE FACTORIZATION CAN BE WRITTEN  A = U*D*TRANS(U)
-!                WHERE  U  IS A PRODUCT OF PERMUTATION AND UNIT
-!                UPPER TRIANGULAR MATRICES , TRANS(U) IS THE
-!                TRANSPOSE OF  U , AND  D  IS BLOCK DIAGONAL
-!                WITH 1 BY 1 AND 2 BY 2 BLOCKS.
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , TRANS(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
 !
 !        KPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
 !                = K  IF THE K-TH PIVOT BLOCK IS SINGULAR. THIS IS
-!                     NOT AN ERROR CONDITION FOR THIS SUBROUTINE,
-!                     BUT IT DOES INDICATE THAT SSPSL OR SSPDI MAY
-!                     DIVIDE BY ZERO IF CALLED.
+!                     not an error condition for this subroutine,
+!                     but it does indicate that SSPSL or SSPDI may
+!                     divide by zero if called.
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -7964,17 +7964,17 @@ real, intent(inout) :: ap(*)
 !                      K = K + 1
 !                      AP(K)  = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SSWAP,ISAMAX
-!     FORTRAN ABS,AMAX1,SQRT
+!     Fortran abs,AMAX1,sqrt
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
 real :: absakk, alpha, colmax, rowmax
@@ -7985,14 +7985,14 @@ integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
 logical :: swap
 !
 !
-!     INITIALIZE
+!     Initialize
 !
-!     ALPHA IS USED IN CHOOSING PIVOT BLOCK SIZE.
+!     Alpha is used in choosing pivot block SIZE.
 alpha = (1.0e0 + sqrt(17.0e0))/8.0e0
 !
 info = 0
 !
-!     MAIN LOOP ON K, WHICH GOES FROM N TO 1.
+!     Main loop on K, which goes from N to 1.
 !
 k = n
 ik = (n*(n - 1))/2
@@ -8000,27 +8000,27 @@ ik = (n*(n - 1))/2
 !
 !        LEAVE THE LOOP IF K=0 OR K=1.
 !
-!     ...EXIT
+!     ...Exit
    if (k .eq. 0) go to 200
    if (k .gt. 1) go to 20
       kpvt(1) = 1
       if (ap(1) .eq. 0.0e0) info = 1
-!     ......EXIT
+!     ......Exit
       go to 200
 20 continue
 !
-!        THIS SECTION OF CODE DETERMINES THE KIND OF
-!        ELIMINATION TO BE PERFORMED.  WHEN IT IS COMPLETED,
-!        KSTEP WILL BE SET TO THE SIZE OF THE PIVOT BLOCK, AND
-!        SWAP WILL BE SET TO .TRUE. IF AN INTERCHANGE IS
-!        REQUIRED.
+!        This section of code determines the kind of
+!        elimination to be performed.  When it is completed,
+!        KSTEP will be set to the size of the pivot block, and
+!        swap will be set to .True. If an interchange is
+!        required.
 !
    km1 = k - 1
    kk = ik + k
    absakk = abs(ap(kk))
 !
-!        DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
-!        COLUMN K.
+!        Determine the largest off-diagonal element in
+!        column K.
 !
    imax = isamax(k-1,ap(ik+1),1)
    imk = ik + imax
@@ -8031,8 +8031,8 @@ ik = (n*(n - 1))/2
    go to 90
 30 continue
 !
-!           DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
-!           ROW IMAX.
+!           Determine the largest off-diagonal element in
+!           row imax.
 !
       rowmax = 0.0e0
       imaxp1 = imax + 1
@@ -8064,7 +8064,7 @@ ik = (n*(n - 1))/2
 90 continue
    if (amax1(absakk,colmax) .ne. 0.0e0) go to 100
 !
-!           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
+!           Column K is zero.  Set info and iterate the loop.
 !
       kpvt(k) = k
       info = k
@@ -8072,11 +8072,11 @@ ik = (n*(n - 1))/2
 100 continue
    if (kstep .eq. 2) go to 140
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (.not.swap) go to 120
 !
-!              PERFORM AN INTERCHANGE.
+!              Perform an interchange.
 !
          call sswap(imax,ap(im+1),1,ap(ik+1),1)
          imj = ik + imax
@@ -8090,7 +8090,7 @@ ik = (n*(n - 1))/2
          end do
 120 continue
 !
-!           PERFORM THE ELIMINATION.
+!           Perform the elimination.
 !
       ij = ik - (k - 1)
       do jj = 1, km1
@@ -8104,20 +8104,20 @@ ik = (n*(n - 1))/2
          ij = ij - (j - 1)
       end do
 !
-!           SET THE PIVOT ARRAY.
+!           Set the pivot array.
 !
       kpvt(k) = k
       if (swap) kpvt(k) = imax
    go to 190
 140 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       km1k = ik + k - 1
       ikm1 = ik - (k - 1)
       if (.not.swap) go to 160
 !
-!              PERFORM AN INTERCHANGE.
+!              Perform an interchange.
 !
          call sswap(imax,ap(im+1),1,ap(ikm1+1),1)
          imj = ikm1 + imax
@@ -8134,7 +8134,7 @@ ik = (n*(n - 1))/2
          ap(imk) = t
 160 continue
 !
-!           PERFORM THE ELIMINATION.
+!           Perform the elimination.
 !
       km2 = k - 2
       if (km2 .eq. 0) go to 180
@@ -8162,7 +8162,7 @@ ik = (n*(n - 1))/2
          end do
 180 continue
 !
-!           SET THE PIVOT ARRAY.
+!           Set the pivot array.
 !
       kpvt(k) = 1 - k
       if (swap) kpvt(k) = -imax
@@ -8182,56 +8182,56 @@ integer, intent(in) :: n, kpvt(*)
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
 !
-!     SSISL SOLVES THE REAL SYMMETRIC SYSTEM
+!     SSISL solves the real symmetric system
 !     A * X = B
-!     USING THE FACTORS COMPUTED BY SSPFA.
+!     using the factors computed by SSPFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL(N*(N+1)/2)
-!                THE OUTPUT FROM SSPFA.
+!                the output from SSPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        KPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM SSPFA.
+!                the pivot vector from SSPFA.
 !
 !        B       REAL(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
 !        A DIVISION BY ZERO MAY OCCUR IF  SSPCO  HAS SET RCOND .EQ. 0.0
 !        OR  SSPFA  HAS SET INFO .NE. 0  .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL SSPFA(AP,N,KPVT,INFO)
 !           IF (INFO .NE. 0) GO TO ...
 !           DO 10 J = 1, P
 !              CALL SSPSL(AP,N,KPVT,C(1,J))
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SDOT
 !     FORTRAN IABS
 !
-!     INTERNAL VARIABLES.
+!     Internal variables.
 !
 real :: ak, akm1, bk, bkm1, sdot, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
-!     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
-!     D INVERSE TO B.
+!     Loop backward applying the transformations and
+!     D inverse to B.
 !
 k = n
 ik = (n*(n - 1))/2
@@ -8239,25 +8239,25 @@ ik = (n*(n - 1))/2
    kk = ik + k
    if (kpvt(k) .lt. 0) go to 40
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (k .eq. 1) go to 30
          kp = kpvt(k)
          if (kp .eq. k) go to 20
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
             b(kp) = temp
 20 continue
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          call saxpy(k-1,b(k),ap(ik+1),1,b(1),1)
 30 continue
 !
-!           APPLY D INVERSE.
+!           Apply D inverse.
 !
       b(k) = b(k)/ap(kk)
       k = k - 1
@@ -8265,27 +8265,27 @@ ik = (n*(n - 1))/2
    go to 70
 40 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       ikm1 = ik - (k - 1)
       if (k .eq. 2) go to 60
          kp = iabs(kpvt(k))
          if (kp .eq. k - 1) go to 50
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k-1)
             b(k-1) = b(kp)
             b(kp) = temp
 50 continue
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          call saxpy(k-2,b(k),ap(ik+1),1,b(1),1)
          call saxpy(k-2,b(k-1),ap(ikm1+1),1,b(1),1)
 60 continue
 !
-!           APPLY D INVERSE.
+!           Apply D inverse.
 !
       km1k = ik + k - 1
       kk = ik + k
@@ -8303,24 +8303,24 @@ ik = (n*(n - 1))/2
 go to 10
 80 continue
 !
-!     LOOP FORWARD APPLYING THE TRANSFORMATIONS.
+!     Loop forward applying the transformations.
 !
 k = 1
 ik = 0
 90 if (k .gt. n) go to 160
    if (kpvt(k) .lt. 0) go to 120
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (k .eq. 1) go to 110
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          b(k) = b(k) + sdot(k-1,ap(ik+1),1,b(1),1)
          kp = kpvt(k)
          if (kp .eq. k) go to 100
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
@@ -8332,11 +8332,11 @@ ik = 0
    go to 150
 120 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       if (k .eq. 1) go to 140
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          b(k) = b(k) + sdot(k-1,ap(ik+1),1,b(1),1)
          ikp1 = ik + k
@@ -8344,7 +8344,7 @@ ik = 0
          kp = iabs(kpvt(k))
          if (kp .eq. k) go to 130
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
@@ -8367,68 +8367,68 @@ real, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
 !
-!     SSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
-!     OF A REAL SYMMETRIC MATRIX USING THE FACTORS FROM SSPFA,
-!     WHERE THE MATRIX IS STORED IN PACKED FORM.
+!     SSPDI computes the determinant, inertia and inverse
+!     of a real symmetric matrix using the factors from SSPFA,
+!     where the matrix is stored in packed form.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE OUTPUT FROM SSPFA.
+!                the output from SSPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX A.
+!                the order of the matrix A.
 !
 !        KPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM SSPFA.
+!                the pivot vector from SSPFA.
 !
 !        WORK    REAL(N)
-!                WORK VECTOR.  CONTENTS IGNORED.
+!                work vector.  Contents ignored.
 !
 !        JOB     INTEGER
-!                JOB HAS THE DECIMAL EXPANSION  ABC  WHERE
+!                job has the decimal expansion  abc  where
 !                   IF  C .NE. 0, THE INVERSE IS COMPUTED,
 !                   IF  B .NE. 0, THE DETERMINANT IS COMPUTED,
 !                   IF  A .NE. 0, THE INERTIA IS COMPUTED.
 !
 !                FOR EXAMPLE, JOB = 111  GIVES ALL THREE.
 !
-!     ON RETURN
+!     On return
 !
-!        VARIABLES NOT REQUESTED BY JOB ARE NOT USED.
+!        Variables not requested by job are not used.
 !
 !        AP     CONTAINS THE UPPER TRIANGLE OF THE INVERSE OF
-!               THE ORIGINAL MATRIX, STORED IN PACKED FORM.
-!               THE COLUMNS OF THE UPPER TRIANGLE ARE STORED
-!               SEQUENTIALLY IN A ONE-DIMENSIONAL ARRAY.
+!               the original matrix, stored in packed form.
+!               The columns of the upper triangle are stored
+!               sequentially in a one-dimensional array.
 !
 !        DET    REAL(2)
-!               DETERMINANT OF ORIGINAL MATRIX.
+!               determinant of original matrix.
 !               DETERMINANT = DET(1) * 10.0**DET(2)
 !               WITH 1.0 .LE. ABS(DET(1)) .LT. 10.0
 !               OR DET(1) = 0.0.
 !
-!        INERT  INTEGER(3)
-!               THE INERTIA OF THE ORIGINAL MATRIX.
+!        Inert  INTEGER(3)
+!               the inertia of the original matrix.
 !               INERT(1)  =  NUMBER OF POSITIVE EIGENVALUES.
 !               INERT(2)  =  NUMBER OF NEGATIVE EIGENVALUES.
 !               INERT(3)  =  NUMBER OF ZERO EIGENVALUES.
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INVERSE IS REQUESTED
+!        A division by zero will occur if the inverse is requested
 !        AND  SSPCO  HAS SET RCOND .EQ. 0.0
 !        OR  SSPFA  HAS SET  INFO .NE. 0 .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SCOPY,SDOT,SSWAP
-!     FORTRAN ABS,IABS,MOD
+!     Fortran abs,IABS,mod
 !
-!     INTERNAL VARIABLES.
+!     Internal variables.
 !
 real :: akkp1, sdot, temp
 real :: ten, d, t, ak, akp1
@@ -8457,15 +8457,15 @@ if (nodet .and. noert) go to 140
       kk = ik + k
       d = ap(kk)
 !
-!           CHECK IF 1 BY 1
+!           Check if 1 by 1
 !
       if (kpvt(k) .gt. 0) go to 50
 !
-!              2 BY 2 BLOCK
+!              2 By 2 block
 !              USE DET (D  S)  =  (D/T * C - T) * T  ,  T = ABS(S)
 !                      (S  C)
-!              TO AVOID UNDERFLOW/OVERFLOW TROUBLES.
-!              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
+!              to avoid underflow/overflow troubles.
+!              Take two passes through scaling.  Use  T  for flag.
 !
          if (t .ne. 0.0e0) go to 30
             ikp1 = ik + k
@@ -8504,7 +8504,7 @@ if (nodet .and. noert) go to 140
 130 continue
 140 continue
 !
-!     COMPUTE INVERSE(A)
+!     Compute INVERSE(A)
 !
 if (noinv) go to 270
    k = 1
@@ -8516,7 +8516,7 @@ if (noinv) go to 270
       kkp1 = ikp1 + k
       if (kpvt(k) .lt. 0) go to 180
 !
-!              1 BY 1
+!              1 By 1
 !
          ap(kk) = 1.0e0/ap(kk)
          if (km1 .lt. 1) go to 170
@@ -8534,7 +8534,7 @@ if (noinv) go to 270
       go to 220
 180 continue
 !
-!              2 BY 2
+!              2 By 2
 !
          t = abs(ap(kkp1))
          ak = ap(kk)/t
@@ -8570,7 +8570,7 @@ if (noinv) go to 270
          kstep = 2
 220 continue
 !
-!           SWAP
+!           Swap
 !
       ks = iabs(kpvt(k))
       if (ks .eq. k) go to 250
@@ -8615,7 +8615,7 @@ integer, intent(inout) :: inert(3), ipvt(n)
 integer :: onej
 !     ------------------
 !
-!          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
+!          Matrix factorization and computation of RCOND
 !
 ierr = 0
 call dspco(a,n,ipvt,rcond,wk)
@@ -8630,14 +8630,14 @@ do 10 j = 1,m
 call dspsl(a,n,ipvt,b(onej))
 10 onej = onej + kb
 !
-!             CALCULATION OF DET AND THE INVERSE OF A
+!             Calculation of DET and the inverse of A
 !
 20 job = 110
 if (mo .eq. 0) job = 111
 call dspdi(a,n,ipvt,det,inert,wk,job)
 return
 !
-!                  THE PROBLEM CANNOT BE SOLVED
+!                  The problem cannot be solved
 !
 30 ierr = 1
 return
@@ -8650,63 +8650,63 @@ integer, intent(inout) :: kpvt(*)
 double precision, intent(inout) :: ap(*), z(*)
 double precision, intent(inout) :: rcond
 !
-!     DSPCO FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
-!     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
-!     THE CONDITION OF THE MATRIX.
+!     DSPCO factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting and estimates
+!     the condition of the matrix.
 !
-!     IF  RCOND  IS NOT NEEDED, DSPFA IS SLIGHTLY FASTER.
+!     If  RCOND  is not needed, DSPFA is slightly faster.
 !     TO SOLVE  A*X = B , FOLLOW DSPCO BY DSPSL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW DSPCO BY DSPSL.
-!     TO COMPUTE  INVERSE(A) , FOLLOW DSPCO BY DSPDI.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW DSPCO BY DSPDI.
-!     TO COMPUTE  INERTIA(A), FOLLOW DSPCO BY DSPDI.
+!     To compute  INVERSE(A)*C , follow DSPCO by DSPSL.
+!     To compute  INVERSE(A) , follow DSPCO by DSPDI.
+!     To compute  DETERMINANT(A) , follow DSPCO by DSPDI.
+!     To compute  INERTIA(A), follow DSPCO by DSPDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     OUTPUT
+!     Output
 !
 !        AP      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                WERE USED TO OBTAIN IT STORED IN PACKED FORM.
+!                were used to obtain it stored in packed form.
 !                THE FACTORIZATION CAN BE WRITTEN  A = U*D*TRANS(U)
-!                WHERE  U  IS A PRODUCT OF PERMUTATION AND UNIT
-!                UPPER TRIANGULAR MATRICES , TRANS(U) IS THE
-!                TRANSPOSE OF  U , AND  D  IS BLOCK DIAGONAL
-!                WITH 1 BY 1 AND 2 BY 2 BLOCKS.
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , TRANS(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
 !
 !        KPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        RCOND   DOUBLE PRECISION
-!                AN ESTIMATE OF THE RECIPROCAL CONDITION OF  A .
+!                an estimate of the reciprocal condition of  A .
 !                FOR THE SYSTEM  A*X = B , RELATIVE PERTURBATIONS
-!                IN  A  AND  B  OF SIZE  EPSILON  MAY CAUSE
-!                RELATIVE PERTURBATIONS IN  X  OF SIZE  EPSILON/RCOND .
-!                IF  RCOND  IS SO SMALL THAT THE LOGICAL EXPRESSION
+!                in  A  and  B  of size  epsilon  may cause
+!                relative perturbations in  X  of size  epsilon/RCOND .
+!                If  RCOND  is so small that the logical expression
 !                           1.0 + RCOND .EQ. 1.0
-!                IS TRUE, THEN  A  MAY BE SINGULAR TO WORKING
-!                PRECISION.  IN PARTICULAR,  RCOND  IS ZERO  IF
-!                EXACT SINGULARITY IS DETECTED OR THE ESTIMATE
-!                UNDERFLOWS.
+!                is true, then  A  may be singular to working
+!                precision.  In particular,  RCOND  is zero  if
+!                exact singularity is detected or the estimate
+!                underflows.
 !
 !        Z       DOUBLE PRECISION(N)
-!                A WORK VECTOR WHOSE CONTENTS ARE USUALLY UNIMPORTANT.
-!                IF  A  IS CLOSE TO A SINGULAR MATRIX, THEN  Z  IS
-!                AN APPROXIMATE NULL VECTOR IN THE SENSE THAT
+!                a work vector whose contents are usually unimportant.
+!                If  A  is close to a singular matrix, then  Z  is
+!                an approximate null vector in the sense that
 !                NORM(A*Z) = RCOND*NORM(A)*NORM(Z) .
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -8714,18 +8714,18 @@ double precision, intent(inout) :: rcond
 !                      K = K + 1
 !                      AP(K) = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     LINPACK DSPFA
 !     BLAS DAXPY,DDOT,DSCAL,DASUM
-!     FORTRAN DABS,DMAX1,IABS,DSIGN
+!     Fortran dabs,DMAX1,IABS,DSIGN
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ak, akm1, bk, bkm1, ddot, denom, ek, t
 double precision :: anorm, s, dasum, ynorm
@@ -8733,7 +8733,7 @@ integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
 integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
-!     FIND NORM OF A USING ONLY UPPER HALF
+!     Find norm of a using only upper half
 !
 j1 = 1
 do j = 1, n
@@ -8753,15 +8753,15 @@ do j = 1, n
    anorm = dmax1(anorm,z(j))
 end do
 !
-!     FACTOR
+!     Factor
 !
 call dspfa(ap,n,kpvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  A*Y = E .
-!     THE COMPONENTS OF  E  ARE CHOSEN TO CAUSE MAXIMUM LOCAL
+!     The components of  E  are chosen to cause maximum local
 !     GROWTH IN THE ELEMENTS OF W  WHERE  U*D*W = E .
-!     THE VECTORS ARE FREQUENTLY RESCALED TO AVOID OVERFLOW.
+!     The vectors are frequently rescaled to avoid overflow.
 !
 !     SOLVE U*D*W = E
 !
@@ -8938,50 +8938,50 @@ integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: ap(*)
 !
-!     DSPFA FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
-!     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
+!     DSPFA factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting.
 !
 !     TO SOLVE  A*X = B , FOLLOW DSPFA BY DSPSL.
-!     TO COMPUTE  INVERSE(A)*C , FOLLOW DSPFA BY DSPSL.
-!     TO COMPUTE  DETERMINANT(A) , FOLLOW DSPFA BY DSPDI.
-!     TO COMPUTE  INERTIA(A) , FOLLOW DSPFA BY DSPDI.
-!     TO COMPUTE  INVERSE(A) , FOLLOW DSPFA BY DSPDI.
+!     To compute  INVERSE(A)*C , follow DSPFA by DSPSL.
+!     To compute  DETERMINANT(A) , follow DSPFA by DSPDI.
+!     To compute  INERTIA(A) , follow DSPFA by DSPDI.
+!     To compute  INVERSE(A) , follow DSPFA by DSPDI.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     OUTPUT
+!     Output
 !
 !        AP      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                WERE USED TO OBTAIN IT STORED IN PACKED FORM.
+!                were used to obtain it stored in packed form.
 !                THE FACTORIZATION CAN BE WRITTEN  A = U*D*TRANS(U)
-!                WHERE  U  IS A PRODUCT OF PERMUTATION AND UNIT
-!                UPPER TRIANGULAR MATRICES , TRANS(U) IS THE
-!                TRANSPOSE OF  U , AND  D  IS BLOCK DIAGONAL
-!                WITH 1 BY 1 AND 2 BY 2 BLOCKS.
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , TRANS(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
 !
 !        KPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
+!                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
 !                = K  IF THE K-TH PIVOT BLOCK IS SINGULAR. THIS IS
-!                     NOT AN ERROR CONDITION FOR THIS SUBROUTINE,
-!                     BUT IT DOES INDICATE THAT DSPSL OR DSPDI MAY
-!                     DIVIDE BY ZERO IF CALLED.
+!                     not an error condition for this subroutine,
+!                     but it does indicate that DSPSL or DSPDI may
+!                     divide by zero if called.
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -8989,17 +8989,17 @@ double precision, intent(inout) :: ap(*)
 !                      K = K + 1
 !                      AP(K)  = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DSWAP,IDAMAX
-!     FORTRAN DABS,DMAX1,DSQRT
+!     Fortran dabs,DMAX1,DSQRT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
 double precision :: absakk, alpha, colmax, rowmax
@@ -9010,14 +9010,14 @@ integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
 logical :: swap
 !
 !
-!     INITIALIZE
+!     Initialize
 !
-!     ALPHA IS USED IN CHOOSING PIVOT BLOCK SIZE.
+!     Alpha is used in choosing pivot block SIZE.
 alpha = (1.0d0 + dsqrt(17.0d0))/8.0d0
 !
 info = 0
 !
-!     MAIN LOOP ON K, WHICH GOES FROM N TO 1.
+!     Main loop on K, which goes from N to 1.
 !
 k = n
 ik = (n*(n - 1))/2
@@ -9025,27 +9025,27 @@ ik = (n*(n - 1))/2
 !
 !        LEAVE THE LOOP IF K=0 OR K=1.
 !
-!     ...EXIT
+!     ...Exit
    if (k .eq. 0) go to 200
    if (k .gt. 1) go to 20
       kpvt(1) = 1
       if (ap(1) .eq. 0.0d0) info = 1
-!     ......EXIT
+!     ......Exit
       go to 200
 20 continue
 !
-!        THIS SECTION OF CODE DETERMINES THE KIND OF
-!        ELIMINATION TO BE PERFORMED.  WHEN IT IS COMPLETED,
-!        KSTEP WILL BE SET TO THE SIZE OF THE PIVOT BLOCK, AND
-!        SWAP WILL BE SET TO .TRUE. IF AN INTERCHANGE IS
-!        REQUIRED.
+!        This section of code determines the kind of
+!        elimination to be performed.  When it is completed,
+!        KSTEP will be set to the size of the pivot block, and
+!        swap will be set to .True. If an interchange is
+!        required.
 !
    km1 = k - 1
    kk = ik + k
    absakk = dabs(ap(kk))
 !
-!        DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
-!        COLUMN K.
+!        Determine the largest off-diagonal element in
+!        column K.
 !
    imax = idamax(k-1,ap(ik+1),1)
    imk = ik + imax
@@ -9056,8 +9056,8 @@ ik = (n*(n - 1))/2
    go to 90
 30 continue
 !
-!           DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
-!           ROW IMAX.
+!           Determine the largest off-diagonal element in
+!           row imax.
 !
       rowmax = 0.0d0
       imaxp1 = imax + 1
@@ -9089,7 +9089,7 @@ ik = (n*(n - 1))/2
 90 continue
    if (dmax1(absakk,colmax) .ne. 0.0d0) go to 100
 !
-!           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
+!           Column K is zero.  Set info and iterate the loop.
 !
       kpvt(k) = k
       info = k
@@ -9097,11 +9097,11 @@ ik = (n*(n - 1))/2
 100 continue
    if (kstep .eq. 2) go to 140
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (.not.swap) go to 120
 !
-!              PERFORM AN INTERCHANGE.
+!              Perform an interchange.
 !
          call dswap(imax,ap(im+1),1,ap(ik+1),1)
          imj = ik + imax
@@ -9115,7 +9115,7 @@ ik = (n*(n - 1))/2
          end do
 120 continue
 !
-!           PERFORM THE ELIMINATION.
+!           Perform the elimination.
 !
       ij = ik - (k - 1)
       do jj = 1, km1
@@ -9129,20 +9129,20 @@ ik = (n*(n - 1))/2
          ij = ij - (j - 1)
       end do
 !
-!           SET THE PIVOT ARRAY.
+!           Set the pivot array.
 !
       kpvt(k) = k
       if (swap) kpvt(k) = imax
    go to 190
 140 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       km1k = ik + k - 1
       ikm1 = ik - (k - 1)
       if (.not.swap) go to 160
 !
-!              PERFORM AN INTERCHANGE.
+!              Perform an interchange.
 !
          call dswap(imax,ap(im+1),1,ap(ikm1+1),1)
          imj = ikm1 + imax
@@ -9159,7 +9159,7 @@ ik = (n*(n - 1))/2
          ap(imk) = t
 160 continue
 !
-!           PERFORM THE ELIMINATION.
+!           Perform the elimination.
 !
       km2 = k - 2
       if (km2 .eq. 0) go to 180
@@ -9187,7 +9187,7 @@ ik = (n*(n - 1))/2
          end do
 180 continue
 !
-!           SET THE PIVOT ARRAY.
+!           Set the pivot array.
 !
       kpvt(k) = 1 - k
       if (swap) kpvt(k) = -imax
@@ -9207,56 +9207,56 @@ integer, intent(in) :: n, kpvt(*)
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
 !
-!     DSISL SOLVES THE DOUBLE PRECISION SYMMETRIC SYSTEM
+!     DSISL solves the double precision symmetric system
 !     A * X = B
-!     USING THE FACTORS COMPUTED BY DSPFA.
+!     using the factors computed by DSPFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION(N*(N+1)/2)
-!                THE OUTPUT FROM DSPFA.
+!                the output from DSPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        KPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM DSPFA.
+!                the pivot vector from DSPFA.
 !
 !        B       DOUBLE PRECISION(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
 !        A DIVISION BY ZERO MAY OCCUR IF  DSPCO  HAS SET RCOND .EQ. 0.0
 !        OR  DSPFA  HAS SET INFO .NE. 0  .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL DSPFA(AP,N,KPVT,INFO)
 !           IF (INFO .NE. 0) GO TO ...
 !           DO 10 J = 1, P
 !              CALL DSPSL(AP,N,KPVT,C(1,J))
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DDOT
 !     FORTRAN IABS
 !
-!     INTERNAL VARIABLES.
+!     Internal variables.
 !
 double precision :: ak, akm1, bk, bkm1, ddot, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
-!     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
-!     D INVERSE TO B.
+!     Loop backward applying the transformations and
+!     D inverse to B.
 !
 k = n
 ik = (n*(n - 1))/2
@@ -9264,25 +9264,25 @@ ik = (n*(n - 1))/2
    kk = ik + k
    if (kpvt(k) .lt. 0) go to 40
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (k .eq. 1) go to 30
          kp = kpvt(k)
          if (kp .eq. k) go to 20
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
             b(kp) = temp
 20 continue
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          call daxpy(k-1,b(k),ap(ik+1),1,b(1),1)
 30 continue
 !
-!           APPLY D INVERSE.
+!           Apply D inverse.
 !
       b(k) = b(k)/ap(kk)
       k = k - 1
@@ -9290,27 +9290,27 @@ ik = (n*(n - 1))/2
    go to 70
 40 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       ikm1 = ik - (k - 1)
       if (k .eq. 2) go to 60
          kp = iabs(kpvt(k))
          if (kp .eq. k - 1) go to 50
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k-1)
             b(k-1) = b(kp)
             b(kp) = temp
 50 continue
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          call daxpy(k-2,b(k),ap(ik+1),1,b(1),1)
          call daxpy(k-2,b(k-1),ap(ikm1+1),1,b(1),1)
 60 continue
 !
-!           APPLY D INVERSE.
+!           Apply D inverse.
 !
       km1k = ik + k - 1
       kk = ik + k
@@ -9328,24 +9328,24 @@ ik = (n*(n - 1))/2
 go to 10
 80 continue
 !
-!     LOOP FORWARD APPLYING THE TRANSFORMATIONS.
+!     Loop forward applying the transformations.
 !
 k = 1
 ik = 0
 90 if (k .gt. n) go to 160
    if (kpvt(k) .lt. 0) go to 120
 !
-!           1 X 1 PIVOT BLOCK.
+!           1 X 1 pivot block.
 !
       if (k .eq. 1) go to 110
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          b(k) = b(k) + ddot(k-1,ap(ik+1),1,b(1),1)
          kp = kpvt(k)
          if (kp .eq. k) go to 100
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
@@ -9357,11 +9357,11 @@ ik = 0
    go to 150
 120 continue
 !
-!           2 X 2 PIVOT BLOCK.
+!           2 X 2 pivot block.
 !
       if (k .eq. 1) go to 140
 !
-!              APPLY THE TRANSFORMATION.
+!              Apply the transformation.
 !
          b(k) = b(k) + ddot(k-1,ap(ik+1),1,b(1),1)
          ikp1 = ik + k
@@ -9369,7 +9369,7 @@ ik = 0
          kp = iabs(kpvt(k))
          if (kp .eq. k) go to 130
 !
-!                 INTERCHANGE.
+!                 Interchange.
 !
             temp = b(k)
             b(k) = b(kp)
@@ -9392,68 +9392,68 @@ double precision, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
 !
-!     DSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
-!     OF A DOUBLE PRECISION SYMMETRIC MATRIX USING THE FACTORS FROM
-!     DSPFA, WHERE THE MATRIX IS STORED IN PACKED FORM.
+!     DSPDI computes the determinant, inertia and inverse
+!     of a double precision symmetric matrix using the factors from
+!     DSPFA, where the matrix is stored in packed form.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE OUTPUT FROM DSPFA.
+!                the output from DSPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX A.
+!                the order of the matrix A.
 !
 !        KPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM DSPFA.
+!                the pivot vector from DSPFA.
 !
 !        WORK    DOUBLE PRECISION(N)
-!                WORK VECTOR.  CONTENTS IGNORED.
+!                work vector.  Contents ignored.
 !
 !        JOB     INTEGER
-!                JOB HAS THE DECIMAL EXPANSION  ABC  WHERE
+!                job has the decimal expansion  abc  where
 !                   IF  C .NE. 0, THE INVERSE IS COMPUTED,
 !                   IF  B .NE. 0, THE DETERMINANT IS COMPUTED,
 !                   IF  A .NE. 0, THE INERTIA IS COMPUTED.
 !
 !                FOR EXAMPLE, JOB = 111  GIVES ALL THREE.
 !
-!     ON RETURN
+!     On return
 !
-!        VARIABLES NOT REQUESTED BY JOB ARE NOT USED.
+!        Variables not requested by job are not used.
 !
 !        AP     CONTAINS THE UPPER TRIANGLE OF THE INVERSE OF
-!               THE ORIGINAL MATRIX, STORED IN PACKED FORM.
-!               THE COLUMNS OF THE UPPER TRIANGLE ARE STORED
-!               SEQUENTIALLY IN A ONE-DIMENSIONAL ARRAY.
+!               the original matrix, stored in packed form.
+!               The columns of the upper triangle are stored
+!               sequentially in a one-dimensional array.
 !
 !        DET    DOUBLE PRECISION(2)
-!               DETERMINANT OF ORIGINAL MATRIX.
+!               determinant of original matrix.
 !               DETERMINANT = DET(1) * 10.0**DET(2)
 !               WITH 1.0 .LE. DABS(DET(1)) .LT. 10.0
 !               OR DET(1) = 0.0.
 !
-!        INERT  INTEGER(3)
-!               THE INERTIA OF THE ORIGINAL MATRIX.
+!        Inert  INTEGER(3)
+!               the inertia of the original matrix.
 !               INERT(1)  =  NUMBER OF POSITIVE EIGENVALUES.
 !               INERT(2)  =  NUMBER OF NEGATIVE EIGENVALUES.
 !               INERT(3)  =  NUMBER OF ZERO EIGENVALUES.
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INVERSE IS REQUESTED
+!        A division by zero will occur if the inverse is requested
 !        AND  DSPCO  HAS SET RCOND .EQ. 0.0
 !        OR  DSPFA  HAS SET  INFO .NE. 0 .
 !
 !     LINPACK. THIS VERSION DATED 08/14/78 .
 !     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
-!     BLAS DAXPY,DCOPY,DDOT,DSWAP
-!     FORTRAN DABS,IABS,MOD
+!     BLAS DAXPY,dcopy,DDOT,DSWAP
+!     Fortran dabs,IABS,mod
 !
-!     INTERNAL VARIABLES.
+!     Internal variables.
 !
 double precision :: akkp1, ddot, temp
 double precision :: ten, d, t, ak, akp1
@@ -9482,15 +9482,15 @@ if (nodet .and. noert) go to 140
       kk = ik + k
       d = ap(kk)
 !
-!           CHECK IF 1 BY 1
+!           Check if 1 by 1
 !
       if (kpvt(k) .gt. 0) go to 50
 !
-!              2 BY 2 BLOCK
+!              2 By 2 block
 !              USE DET (D  S)  =  (D/T * C - T) * T  ,  T = DABS(S)
 !                      (S  C)
-!              TO AVOID UNDERFLOW/OVERFLOW TROUBLES.
-!              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
+!              to avoid underflow/overflow troubles.
+!              Take two passes through scaling.  Use  T  for flag.
 !
          if (t .ne. 0.0d0) go to 30
             ikp1 = ik + k
@@ -9529,7 +9529,7 @@ if (nodet .and. noert) go to 140
 130 continue
 140 continue
 !
-!     COMPUTE INVERSE(A)
+!     Compute INVERSE(A)
 !
 if (noinv) go to 270
    k = 1
@@ -9541,7 +9541,7 @@ if (noinv) go to 270
       kkp1 = ikp1 + k
       if (kpvt(k) .lt. 0) go to 180
 !
-!              1 BY 1
+!              1 By 1
 !
          ap(kk) = 1.0d0/ap(kk)
          if (km1 .lt. 1) go to 170
@@ -9559,7 +9559,7 @@ if (noinv) go to 270
       go to 220
 180 continue
 !
-!              2 BY 2
+!              2 By 2
 !
          t = dabs(ap(kkp1))
          ak = ap(kk)/t
@@ -9595,7 +9595,7 @@ if (noinv) go to 270
          kstep = 2
 220 continue
 !
-!           SWAP
+!           Swap
 !
       ks = iabs(kpvt(k))
       if (ks .eq. k) go to 250
@@ -9637,7 +9637,7 @@ real :: d(2)
 integer :: onej
 !     -----------------
 !
-!              MATRIX FACTORIZATION
+!              Matrix factorization
 !
 call sppfa (a,n,ierr)
 if (ierr .ne. 0) return
@@ -9650,7 +9650,7 @@ do 10 j = 1,m
    call sppsl (a,n,b(onej))
 10 onej = onej + kb
 !
-!         COMPUTATION OF THE INVERSE OF A
+!         Computation of the inverse of A
 !
 20 if (mo .eq. 0) call sppdi (a,n,d,1)
 return
@@ -9662,25 +9662,25 @@ integer, intent(in) :: n
 integer, intent(inout) :: info
 real, intent(inout) :: ap(*)
 !
-!     SPPFA FACTORS A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
-!     STORED IN PACKED FORM.
+!     SPPFA factors a real symmetric positive definite matrix
+!     stored in packed form.
 !
-!     SPPFA IS USUALLY CALLED BY SPPCO, BUT IT CAN BE CALLED
-!     DIRECTLY WITH A SAVING IN TIME IF  RCOND  IS NOT NEEDED.
+!     SPPFA is usually called by SPPCO, but it can be called
+!     directly with a saving in time if  RCOND  is not needed.
 !     (TIME FOR SPPCO) = (1 + 18/N)*(TIME FOR SPPFA) .
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        AP      AN UPPER TRIANGULAR MATRIX  R , STORED IN PACKED
 !                FORM, SO THAT  A = TRANS(R)*R .
@@ -9688,13 +9688,13 @@ real, intent(inout) :: ap(*)
 !        INFO    INTEGER
 !                = 0  FOR NORMAL RETURN.
 !                = K  IF THE LEADING MINOR OF ORDER  K  IS NOT
-!                     POSITIVE DEFINITE.
+!                     positive definite.
 !
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -9702,22 +9702,22 @@ real, intent(inout) :: ap(*)
 !                      K = K + 1
 !                      AP(K) = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SDOT
-!     FORTRAN SQRT
+!     Fortran sqrt
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: sdot, t
 real :: s
 integer :: j, jj, jm1, k, kj, kk
-!     BEGIN BLOCK WITH ...EXITS TO 40
+!     Begin block with ...exits to 40
 !
 !
    jj = 0
@@ -9739,7 +9739,7 @@ integer :: j, jj, jm1, k, kj, kk
 20 continue
       jj = jj + j
       s = ap(jj) - s
-!     ......EXIT
+!     ......Exit
       if (s .le. 0.0e0) go to 40
       ap(jj) = sqrt(s)
    end do
@@ -9754,49 +9754,49 @@ integer, intent(in) :: n
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
 !
-!     SPPSL SOLVES THE REAL SYMMETRIC POSITIVE DEFINITE SYSTEM
+!     SPPSL solves the real symmetric positive definite system
 !     A * X = B
-!     USING THE FACTORS COMPUTED BY SPPCO OR SPPFA.
+!     using the factors computed by SPPCO or SPPFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE OUTPUT FROM SPPCO OR SPPFA.
+!                the output from SPPCO or SPPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        B       REAL(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES
-!        SINGULARITY BUT IT IS USUALLY CAUSED BY IMPROPER SUBROUTINE
-!        ARGUMENTS.  IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal.  Technically this indicates
+!        singularity but it is usually caused by improper subroutine
+!        arguments.  It will not occur if the subroutines are called
 !        CORRECTLY AND  INFO .EQ. 0 .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL SPPCO(AP,N,RCOND,Z,INFO)
 !           IF (RCOND IS TOO SMALL .OR. INFO .NE. 0) GO TO ...
 !           DO 10 J = 1, P
 !              CALL SPPSL(AP,N,C(1,J))
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SDOT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: sdot, t
 integer :: k, kb, kk
@@ -9823,56 +9823,56 @@ integer, intent(in) :: n, job
 real, intent(inout) :: ap(*)
 real, intent(inout) :: det(2)
 !
-!     SPPDI COMPUTES THE DETERMINANT AND INVERSE
-!     OF A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
-!     USING THE FACTORS COMPUTED BY SPPCO OR SPPFA .
+!     SPPDI computes the determinant and inverse
+!     of a real symmetric positive definite matrix
+!     using the factors computed by SPPCO or SPPFA .
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      REAL (N*(N+1)/2)
-!                THE OUTPUT FROM SPPCO OR SPPFA.
+!                the output from SPPCO or SPPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        JOB     INTEGER
 !                = 11   BOTH DETERMINANT AND INVERSE.
 !                = 01   INVERSE ONLY.
 !                = 10   DETERMINANT ONLY.
 !
-!     ON RETURN
+!     On return
 !
 !        AP      THE UPPER TRIANGULAR HALF OF THE INVERSE .
 !
 !        DET     REAL(2)
-!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE NOT REFERENCED.
+!                determinant of original matrix IF requested.
+!                Otherwise not referenced.
 !                DETERMINANT = DET(1) * 10.0**DET(2)
 !                WITH  1.0 .LE. DET(1) .LT. 10.0
 !                OR  DET(1) .EQ. 0.0 .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
-!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal and the inverse is requested.
+!        It will not occur if the subroutines are called correctly
 !        AND IF SPOCO OR SPOFA HAS SET INFO .EQ. 0 .
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS SAXPY,SSCAL
-!     FORTRAN MOD
+!     Fortran mod
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 real :: t
 real :: s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
-!     COMPUTE DETERMINANT
+!     Compute determinant
 !
 if (job/10 .eq. 0) go to 70
    det(1) = 1.0e0
@@ -9882,7 +9882,7 @@ if (job/10 .eq. 0) go to 70
    do 50 i = 1, n
       ii = ii + i
       det(1) = ap(ii)**2*det(1)
-!        ...EXIT
+!        ...Exit
       if (det(1) .eq. 0.0e0) go to 60
 10 if (det(1) .ge. 1.0e0) go to 20
          det(1) = s*det(1)
@@ -9898,7 +9898,7 @@ if (job/10 .eq. 0) go to 70
 60 continue
 70 continue
 !
-!     COMPUTE INVERSE(R)
+!     Compute INVERSE(R)
 !
 if (mod(job,10) .eq. 0) go to 140
    kk = 0
@@ -9922,7 +9922,7 @@ if (mod(job,10) .eq. 0) go to 140
 90 continue
    end do
 !
-!        FORM  INVERSE(R) * TRANS(INVERSE(R))
+!        Form  INVERSE(R) * TRANS(INVERSE(R))
 !
    jj = 0
    do j = 1, n
@@ -9957,7 +9957,7 @@ double precision :: d(2)
 integer :: onej
 !     -----------------
 !
-!              MATRIX FACTORIZATION
+!              Matrix factorization
 !
 call dppfa (a,n,ierr)
 if (ierr .ne. 0) return
@@ -9970,7 +9970,7 @@ do 10 j = 1,m
    call dppsl (a,n,b(onej))
 10 onej = onej + kb
 !
-!         COMPUTATION OF THE INVERSE OF A
+!         Computation of the inverse of A
 !
 20 if (mo .eq. 0) call dppdi (a,n,d,1)
 return
@@ -9982,25 +9982,25 @@ integer, intent(in) :: n
 integer, intent(inout) :: info
 double precision, intent(inout) :: ap(*)
 !
-!     DPPFA FACTORS A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
-!     MATRIX STORED IN PACKED FORM.
+!     DPPFA factors a double precision symmetric positive definite
+!     matrix stored in packed form.
 !
-!     DPPFA IS USUALLY CALLED BY DPPCO, BUT IT CAN BE CALLED
-!     DIRECTLY WITH A SAVING IN TIME IF  RCOND  IS NOT NEEDED.
+!     DPPFA is usually called by DPPCO, but it can be called
+!     directly with a saving in time if  RCOND  is not needed.
 !     (TIME FOR DPPCO) = (1 + 18/N)*(TIME FOR DPPFA) .
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE PACKED FORM OF A SYMMETRIC MATRIX  A .  THE
-!                COLUMNS OF THE UPPER TRIANGLE ARE STORED SEQUENTIALLY
-!                IN A ONE-DIMENSIONAL ARRAY OF LENGTH  N*(N+1)/2 .
-!                SEE COMMENTS BELOW FOR DETAILS.
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  N*(N+1)/2 .
+!                See comments below for details.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
-!     ON RETURN
+!     On return
 !
 !        AP      AN UPPER TRIANGULAR MATRIX  R , STORED IN PACKED
 !                FORM, SO THAT  A = TRANS(R)*R .
@@ -10008,13 +10008,13 @@ double precision, intent(inout) :: ap(*)
 !        INFO    INTEGER
 !                = 0  FOR NORMAL RETURN.
 !                = K  IF THE LEADING MINOR OF ORDER  K  IS NOT
-!                     POSITIVE DEFINITE.
+!                     positive definite.
 !
 !
-!     PACKED STORAGE
+!     Packed storage
 !
-!          THE FOLLOWING PROGRAM SEGMENT WILL PACK THE UPPER
-!          TRIANGLE OF A SYMMETRIC MATRIX.
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
 !
 !                K = 0
 !                DO 20 J = 1, N
@@ -10022,22 +10022,22 @@ double precision, intent(inout) :: ap(*)
 !                      K = K + 1
 !                      AP(K) = A(I,J)
 !             10    CONTINUE
-!             20 CONTINUE
+!             20 continue
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DDOT
 !     FORTRAN DSQRT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ddot, t
 double precision :: s
 integer :: j, jj, jm1, k, kj, kk
-!     BEGIN BLOCK WITH ...EXITS TO 40
+!     Begin block with ...exits to 40
 !
 !
    jj = 0
@@ -10059,7 +10059,7 @@ integer :: j, jj, jm1, k, kj, kk
 20 continue
       jj = jj + j
       s = ap(jj) - s
-!     ......EXIT
+!     ......Exit
       if (s .le. 0.0d0) go to 40
       ap(jj) = dsqrt(s)
    end do
@@ -10074,49 +10074,49 @@ integer, intent(in) :: n
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
 !
-!     DPPSL SOLVES THE DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
+!     DPPSL solves the double precision symmetric positive definite
 !     SYSTEM A * X = B
-!     USING THE FACTORS COMPUTED BY DPPCO OR DPPFA.
+!     using the factors computed by DPPCO or DPPFA.
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE OUTPUT FROM DPPCO OR DPPFA.
+!                the output from DPPCO or DPPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        B       DOUBLE PRECISION(N)
-!                THE RIGHT HAND SIDE VECTOR.
+!                the right hand side vector.
 !
-!     ON RETURN
+!     On return
 !
 !        B       THE SOLUTION VECTOR  X .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES
-!        SINGULARITY BUT IT IS USUALLY CAUSED BY IMPROPER SUBROUTINE
-!        ARGUMENTS.  IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal.  Technically this indicates
+!        singularity but it is usually caused by improper subroutine
+!        arguments.  It will not occur if the subroutines are called
 !        CORRECTLY AND  INFO .EQ. 0 .
 !
-!     TO COMPUTE  INVERSE(A) * C  WHERE  C  IS A MATRIX
-!     WITH  P  COLUMNS
+!     To compute  INVERSE(A) * C  where  C  is a matrix
+!     with  P  columns
 !           CALL DPPCO(AP,N,RCOND,Z,INFO)
 !           IF (RCOND IS TOO SMALL .OR. INFO .NE. 0) GO TO ...
 !           DO 10 J = 1, P
 !              CALL DPPSL(AP,N,C(1,J))
-!        10 CONTINUE
+!        10 continue
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DDOT
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: ddot, t
 integer :: k, kb, kk
@@ -10143,56 +10143,56 @@ integer, intent(in) :: n, job
 double precision, intent(inout) :: ap(*)
 double precision, intent(inout) :: det(2)
 !
-!     DPPDI COMPUTES THE DETERMINANT AND INVERSE
-!     OF A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE MATRIX
-!     USING THE FACTORS COMPUTED BY DPPCO OR DPPFA .
+!     DPPDI computes the determinant and inverse
+!     of a double precision symmetric positive definite matrix
+!     using the factors computed by DPPCO or DPPFA .
 !
-!     ON ENTRY
+!     On entry
 !
 !        AP      DOUBLE PRECISION (N*(N+1)/2)
-!                THE OUTPUT FROM DPPCO OR DPPFA.
+!                the output from DPPCO or DPPFA.
 !
 !        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
+!                the order of the matrix  A .
 !
 !        JOB     INTEGER
 !                = 11   BOTH DETERMINANT AND INVERSE.
 !                = 01   INVERSE ONLY.
 !                = 10   DETERMINANT ONLY.
 !
-!     ON RETURN
+!     On return
 !
 !        AP      THE UPPER TRIANGULAR HALF OF THE INVERSE .
 !
 !        DET     DOUBLE PRECISION(2)
-!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE NOT REFERENCED.
+!                determinant of original matrix IF requested.
+!                Otherwise not referenced.
 !                DETERMINANT = DET(1) * 10.0**DET(2)
 !                WITH  1.0 .LE. DET(1) .LT. 10.0
 !                OR  DET(1) .EQ. 0.0 .
 !
-!     ERROR CONDITION
+!     Error condition
 !
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
-!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
+!        A division by zero will occur if the input factor contains
+!        a zero on the diagonal and the inverse is requested.
+!        It will not occur if the subroutines are called correctly
 !        AND IF DPOCO OR DPOFA HAS SET INFO .EQ. 0 .
 !
 !     LINPACK.  THIS VERSION DATED 08/14/78 .
 !     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
 !
-!     SUBROUTINES AND FUNCTIONS
+!     Subroutines and functions
 !
 !     BLAS DAXPY,DSCAL
-!     FORTRAN MOD
+!     Fortran mod
 !
-!     INTERNAL VARIABLES
+!     Internal variables
 !
 double precision :: t
 double precision :: s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
-!     COMPUTE DETERMINANT
+!     Compute determinant
 !
 if (job/10 .eq. 0) go to 70
    det(1) = 1.0d0
@@ -10202,7 +10202,7 @@ if (job/10 .eq. 0) go to 70
    do 50 i = 1, n
       ii = ii + i
       det(1) = ap(ii)**2*det(1)
-!        ...EXIT
+!        ...Exit
       if (det(1) .eq. 0.0d0) go to 60
 10 if (det(1) .ge. 1.0d0) go to 20
          det(1) = s*det(1)
@@ -10218,7 +10218,7 @@ if (job/10 .eq. 0) go to 70
 60 continue
 70 continue
 !
-!     COMPUTE INVERSE(R)
+!     Compute INVERSE(R)
 !
 if (mod(job,10) .eq. 0) go to 140
    kk = 0
@@ -10242,7 +10242,7 @@ if (mod(job,10) .eq. 0) go to 140
 90 continue
    end do
 !
-!        FORM  INVERSE(R) * TRANS(INVERSE(R))
+!        Form  INVERSE(R) * TRANS(INVERSE(R))
 !
    jj = 0
    do j = 1, n
@@ -10273,7 +10273,7 @@ integer, intent(in) :: n
 integer :: j, k, l, m, max, mp1, nml, npl
 real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
-!            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
+!            Solution of the Toeplitz system of equations
 !
 !               SUM(J = 1,...,N) A(N+I-J)*X(J) = B(I)
 !
@@ -10292,7 +10292,7 @@ g(1) = a(n - 1)/a(n)
 h(1) = a(n + 1)/a(n)
 mp1 = 1
 !
-!     COMPUTE NUMERATOR AND DENOMINATOR OF X(M+1)
+!     Compute numerator and denominator of X(M+1)
 !
 10 m = mp1
 mp1 = m + 1
@@ -10306,7 +10306,7 @@ do 20 j = 1,m
 if (xd .eq. 0.0) go to 100
 x(mp1) = xn/xd
 !
-!        COMPUTE X
+!        Compute X
 !
 c = x(mp1)
 do 30 j = 1,m
@@ -10314,7 +10314,7 @@ do 30 j = 1,m
 30 x(j) = x(j) - c*g(l)
 if (mp1 .eq. n) return
 !
-!     COMPUTE NUMERATOR AND DENOMINATOR OF G(M+1) AND H(M+1)
+!     Compute numerator and denominator of G(M+1) and H(M+1)
 !
 l = n - mp1
 gn = -a(l)
@@ -10332,7 +10332,7 @@ if (gd .eq. 0.0) go to 100
 g(mp1) = gn/gd
 h(mp1) = hn/xd
 !
-!     COMPUTE G AND H
+!     Compute G and H
 !
 c1 = g(mp1)
 c2 = h(mp1)
@@ -10350,7 +10350,7 @@ do 50 j = 1,max
 50 k = k - 1
 go to 10
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -10362,13 +10362,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 integer :: j, k, l, m, max, mp1, nml, npl
 !-----------------------------------------------------------------------
-!            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
+!            Solution of the Toeplitz system of equations
 !
 !               SUM(J = 1,...,N) A(N+I-J)*X(J) = B(I)
 !
 !     FOR I = 1,...,N.
 !-----------------------------------------------------------------------
-!     DOUBLE PRECISION A(2*N - 1)
+!     Double precision A(2*N - 1)
 !----------------------
 double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), g(n), h(n)
@@ -10382,7 +10382,7 @@ g(1) = a(n - 1)/a(n)
 h(1) = a(n + 1)/a(n)
 mp1 = 1
 !
-!     COMPUTE NUMERATOR AND DENOMINATOR OF X(M+1)
+!     Compute numerator and denominator of X(M+1)
 !
 10 m = mp1
 mp1 = m + 1
@@ -10396,7 +10396,7 @@ do 20 j = 1,m
 if (xd .eq. 0.d0) go to 100
 x(mp1) = xn/xd
 !
-!        COMPUTE X
+!        Compute X
 !
 c = x(mp1)
 do 30 j = 1,m
@@ -10404,7 +10404,7 @@ do 30 j = 1,m
 30 x(j) = x(j) - c*g(l)
 if (mp1 .eq. n) return
 !
-!     COMPUTE NUMERATOR AND DENOMINATOR OF G(M+1) AND H(M+1)
+!     Compute numerator and denominator of G(M+1) and H(M+1)
 !
 l = n - mp1
 gn = -a(l)
@@ -10422,7 +10422,7 @@ if (gd .eq. 0.d0) go to 100
 g(mp1) = gn/gd
 h(mp1) = hn/xd
 !
-!     COMPUTE G AND H
+!     Compute G and H
 !
 c1 = g(mp1)
 c2 = h(mp1)
@@ -10440,7 +10440,7 @@ do 50 j = 1,max
 50 k = k - 1
 go to 10
 !
-!     ERROR RETURN
+!     Error return
 !
 100 ierr = 1
 return
@@ -10453,8 +10453,8 @@ integer, intent(in) :: ka, kb, m, mo
 integer :: n
 integer :: j, job
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
-!     AND SOLVING COMPLEX EQUATIONS
+!     Partial pivot Gauss procedure for inverting complex matrices
+!     and solving complex equations
 !-----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
 real, intent(inout) :: rcond
@@ -10462,7 +10462,7 @@ real :: t
 integer, intent(inout) :: ipvt(n)
 integer :: onej
 !
-!          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
+!          Matrix factorization and computation of RCOND
 !
 ierr = 0
 call cgeco (a, ka, n, ipvt, rcond, wk)
@@ -10478,14 +10478,14 @@ do 10 j = 1,m
    onej = onej + kb
 10 continue
 !
-!             CALCULATION OF DET AND THE INVERSE OF A
+!             Calculation of DET and the inverse of A
 !
 20 job = 10
 if (mo .eq. 0) job = 11
 call cgedi (a, ka, n, ipvt, det, wk, job)
 return
 !
-!                  THE PROBLEM CANNOT BE SOLVED
+!                  The problem cannot be solved
 !
 30 ierr = 1
 return
@@ -10498,8 +10498,8 @@ integer, intent(in) :: ka, kb, m, mo
 integer :: n
 integer :: j
 !-----------------------------------------------------------------------
-!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
-!     AND SOLVING COMPLEX EQUATIONS
+!     Partial pivot Gauss procedure for inverting complex matrices
+!     and solving complex equations
 !-----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
@@ -10510,7 +10510,7 @@ if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10
 if (kb .lt. n) go to 40
 !
-!                      MATRIX FACTORIZATION
+!                      Matrix factorization
 !
 10 call cgefa (a, ka, n, ipvt, ierr)
 if (ierr .ne. 0) return
@@ -10524,12 +10524,12 @@ do j = 1,m
    onej = onej + kb
 end do
 !
-!                 CALCULATION OF THE INVERSE OF A
+!                 Calculation of the inverse of A
 !
 30 if (mo .eq. 0) call cgedi (a, ka, n, ipvt, d, wk, 1)
 return
 !
-!                          ERROR RETURN
+!                          Error return
 !
 40 ierr = -1
 return

@@ -127,12 +127,34 @@ long FORMAT statements without splitting their Hollerith text.
 
 Generation also applies `tools/lowercase_fortran.py` to make free-form code
 lowercase while preserving quoted strings, comments, spacing, and line numbers.
-Comment capitalization can be reviewed separately in the maintained `nswc.f`.
 For another free-form file, use
 `python tools/lowercase_fortran.py input.f90 --output lowercase.f90`.
 The output must be a new file. The filter rejects preprocessor directives and
 unquoted Hollerith constants, which require separate review. Existing quoted
 FORMAT strings in the maintained library are preserved exactly.
+
+The generator then applies `tools/sentence_case_comments.py` to selected
+uppercase explanatory comments. Sentences continue across physical line breaks.
+The prose vocabulary and proper-name rules are maintained in
+`tools/comment-case-words.txt` and `tools/comment-case-rules.json`.
+Only letter case changes; spelling, spacing, and line numbers are preserved.
+Existing misspellings are retained. Code, quoted executable strings, inline
+comments, directives, formulas, tables, examples, and reference/author paragraphs
+are preserved. Ambiguous passages retain their original case.
+
+The generated [comment review report](tools/comment-case-review.json) records
+changed-line counts, protected categories, unfamiliar words, and uncertain
+passages with source line numbers. Those line numbers apply to `nswc.f90`.
+The first pass changes more than 18,000 comment lines. Some comments deliberately
+remain uppercase for further review. To preview another file without replacing it:
+
+```sh
+python tools/sentence_case_comments.py input.f90 --output reviewed.f90 --report review.json
+```
+
+Output and report paths must be distinct new files. The sentence-case step is
+applied to generated free-form sources; historical comments in the fixed-form
+sources remain available for comparison.
 
 `tools/name_procedure_ends.py` created the readable fixed-form source from
 `nswc_orig.f`. It supports a preview, a separate output, and an in-place update

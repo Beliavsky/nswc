@@ -5,8 +5,8 @@ integer, intent(in) :: ka
 integer :: n
 integer :: l
 !-----------------------------------------------------------------------
-!                DOUBLE PRECISION COMPUTATION OF THE
-!               EIGENVALUES OF SYMMETRIC REAL MATRICES
+!                Double precision computation of the
+!               eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(*), w(n), t(*)
 !
@@ -26,9 +26,9 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 !-----------------------------------------------------------------------
-!                 DOUBLE PRECISION COMPUTATION OF
-!                 EIGENVALUES AND EIGENVECTORS OF
-!                     SYMMETRIC REAL MATRICES
+!                 Double precision computation of
+!                 eigenvalues and eigenvectors of
+!                     symmetric real matrices
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: w(n), z(ka,n), t(n)
@@ -48,41 +48,41 @@ integer, intent(in) :: nm
 integer :: jp1
 double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
 double precision :: f, g, h, scale
-!     DOUBLE PRECISION DSQRT,DABS
+!     Double precision DSQRT,dabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TRED1,
-!     NUM. MATH. 11, 181-195(1968) BY MARTIN, REINSCH, AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 212-226(1971).
+!     This subroutine is a translation of the Algol procedure TRED1,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
 !
-!     THIS SUBROUTINE REDUCES A REAL SYMMETRIC MATRIX
-!     TO A SYMMETRIC TRIDIAGONAL MATRIX USING
-!     ORTHOGONAL SIMILARITY TRANSFORMATIONS.
+!     This subroutine reduces a real symmetric matrix
+!     to a symmetric tridiagonal matrix using
+!     orthogonal similarity transformations.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        A CONTAINS THE REAL SYMMETRIC INPUT MATRIX.  ONLY THE
-!          LOWER TRIANGLE OF THE MATRIX NEED BE SUPPLIED.
+!        A contains the real symmetric input matrix.  Only the
+!          lower triangle of the matrix need be supplied.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        A CONTAINS INFORMATION ABOUT THE ORTHOGONAL TRANS-
-!          FORMATIONS USED IN THE REDUCTION IN ITS STRICT LOWER
-!          TRIANGLE.  THE FULL UPPER TRIANGLE OF A IS UNALTERED,
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction in its strict lower
+!          triangle.  The full upper triangle of A is unaltered,
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE TRIDIAGONAL MATRIX,
+!        D contains the diagonal elements of the tridiagonal matrix,
 !
-!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE TRIDIAGONAL
-!          MATRIX IN ITS LAST N-1 POSITIONS.  E(1) IS SET TO ZERO,
+!        E contains the subdiagonal elements of the tridiagonal
+!          matrix in its last N-1 positions.  E(1) is set to zero,
 !
-!        E2 CONTAINS THE SQUARES OF THE CORRESPONDING ELEMENTS OF E.
-!          E2 MAY COINCIDE WITH E IF THE SQUARES ARE NOT NEEDED.
+!        E2 contains the squares of the corresponding elements of E.
+!          E2 may coincide with E if the squares are not needed.
 !
 !-----------------------------------------------------------------------
 !
@@ -167,40 +167,40 @@ integer :: ii, iz, jk
 integer, intent(in) :: nv
 double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
 double precision :: f, g, h, hh, scale
-!     DOUBLE PRECISION DSQRT,DABS
+!     Double precision DSQRT,dabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TRED3,
-!     NUM. MATH. 11, 181-195(1968) BY MARTIN, REINSCH, AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 212-226(1971).
+!     This subroutine is a translation of the Algol procedure TRED3,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
 !
-!     THIS SUBROUTINE REDUCES A REAL SYMMETRIC MATRIX, STORED AS
-!     A ONE-DIMENSIONAL ARRAY, TO A SYMMETRIC TRIDIAGONAL MATRIX
-!     USING ORTHOGONAL SIMILARITY TRANSFORMATIONS.
+!     This subroutine reduces a real symmetric matrix, stored as
+!     a one-dimensional array, to a symmetric tridiagonal matrix
+!     using orthogonal similarity transformations.
 !
-!     ON INPUT-
+!     On input-
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        NV MUST BE SET TO THE DIMENSION OF THE ARRAY PARAMETER A
-!          AS DECLARED IN THE CALLING PROGRAM DIMENSION STATEMENT,
+!        NV must be set to the dimension of the array parameter A
+!          as declared in the calling program dimension statement,
 !
-!        A CONTAINS THE LOWER TRIANGLE OF THE REAL SYMMETRIC
-!          INPUT MATRIX, STORED ROW-WISE AS A ONE-DIMENSIONAL
-!          ARRAY, IN ITS FIRST N*(N+1)/2 POSITIONS.
+!        A contains the lower triangle of the real symmetric
+!          input matrix, stored row-wise as a one-dimensional
+!          array, in its first N*(N+1)/2 positions.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        A CONTAINS INFORMATION ABOUT THE ORTHOGONAL
-!          TRANSFORMATIONS USED IN THE REDUCTION,
+!        A contains information about the orthogonal
+!          transformations used in the reduction,
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE TRIDIAGONAL MATRIX,
+!        D contains the diagonal elements of the tridiagonal matrix,
 !
-!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE TRIDIAGONAL
-!          MATRIX IN ITS LAST N-1 POSITIONS.  E(1) IS SET TO ZERO,
+!        E contains the subdiagonal elements of the tridiagonal
+!          matrix in its last N-1 positions.  E(1) is set to zero,
 !
-!        E2 CONTAINS THE SQUARES OF THE CORRESPONDING ELEMENTS OF E.
-!          E2 MAY COINCIDE WITH E IF THE SQUARES ARE NOT NEEDED.
+!        E2 contains the squares of the corresponding elements of E.
+!          E2 may coincide with E if the squares are not needed.
 !
 !-----------------------------------------------------------------------
 !
@@ -287,39 +287,39 @@ double precision :: b, c, f, g, h, p, r, s, machep
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TQLRAT,
-!     ALGORITHM 464, COMM. ACM 16, 689(1973) BY REINSCH.
+!     This subroutine is a translation of the Algol procedure TQLRAT,
+!     algorithm 464, comm. ACM 16, 689(1973) by Reinsch.
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES OF A SYMMETRIC
-!     TRIDIAGONAL MATRIX BY THE RATIONAL QL METHOD.
+!     This subroutine finds the eigenvalues of a symmetric
+!     tridiagonal matrix BY the rational QL method.
 !
-!     ON INPUT-
+!     On input-
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX,
+!        D contains the diagonal elements of the input matrix,
 !
-!        E2 CONTAINS THE SQUARES OF THE SUBDIAGONAL ELEMENTS OF THE
-!          INPUT MATRIX IN ITS LAST N-1 POSITIONS.  E2(1) IS ARBITRARY.
+!        E2 contains the squares of the subdiagonal elements of the
+!          input matrix in its last N-1 positions.  E2(1) is arbitrary.
 !
-!      ON OUTPUT-
+!      On output-
 !
-!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
-!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT AND
-!          ORDERED FOR INDICES 1,2,...IERR-1, BUT MAY NOT BE
-!          THE SMALLEST EIGENVALUES,
+!        D contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct and
+!          ordered for indices 1,2,...IERR-1, but may not be
+!          the smallest eigenvalues,
 !
-!        E2 HAS BEEN DESTROYED,
+!        E2 has been destroyed,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
+!                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP THE VALUE U WHERE U IS THE SMALLEST POSITIVE
+!                MACHEP the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = dpmpar(1)
@@ -425,39 +425,39 @@ integer :: jp1
 double precision, intent(in) :: a(nm,n)
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
 double precision :: f, g, h, hh, scale
-!     DOUBLE PRECISION DSQRT,DABS
+!     Double precision DSQRT,dabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TRED2,
-!     NUM. MATH. 11, 181-195(1968) BY MARTIN, REINSCH, AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 212-226(1971).
+!     This subroutine is a translation of the Algol procedure TRED2,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
 !
-!     THIS SUBROUTINE REDUCES A REAL SYMMETRIC MATRIX TO A
-!     SYMMETRIC TRIDIAGONAL MATRIX USING AND ACCUMULATING
-!     ORTHOGONAL SIMILARITY TRANSFORMATIONS.
+!     This subroutine reduces a real symmetric matrix to A
+!     symmetric tridiagonal matrix using and accumulating
+!     orthogonal similarity transformations.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        A CONTAINS THE REAL SYMMETRIC INPUT MATRIX.  ONLY THE
-!          LOWER TRIANGLE OF THE MATRIX NEED BE SUPPLIED.
+!        A contains the real symmetric input matrix.  Only the
+!          lower triangle of the matrix need be supplied.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE TRIDIAGONAL MATRIX,
+!        D contains the diagonal elements of the tridiagonal matrix,
 !
-!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE TRIDIAGONAL
-!          MATRIX IN ITS LAST N-1 POSITIONS.  E(1) IS SET TO ZERO,
+!        E contains the subdiagonal elements of the tridiagonal
+!          matrix in its last N-1 positions.  E(1) is set to zero,
 !
-!        Z CONTAINS THE ORTHOGONAL TRANSFORMATION MATRIX
-!          PRODUCED IN THE REDUCTION,
+!        Z contains the orthogonal transformation matrix
+!          produced in the reduction,
 !
-!        A AND Z MAY COINCIDE.  IF DISTINCT, A IS UNALTERED.
+!        A and Z may coincide.  If distinct, A is unaltered.
 !
 !-----------------------------------------------------------------------
 !
@@ -573,57 +573,57 @@ double precision :: b, c, f, g, h, p, r, s, machep
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TQL2,
-!     NUM. MATH. 11, 293-306(1968) BY BOWDLER, MARTIN, REINSCH, AND
-!     WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 227-240(1971).
+!     This subroutine is a translation of the Algol procedure TQL2,
+!     NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
+!     Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 227-240(1971).
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
-!     OF A SYMMETRIC TRIDIAGONAL MATRIX BY THE QL METHOD.
-!     THE EIGENVECTORS OF A FULL SYMMETRIC MATRIX CAN ALSO
-!     BE FOUND IF  TRED2  HAS BEEN USED TO REDUCE THIS
-!     FULL MATRIX TO TRIDIAGONAL FORM.
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a symmetric tridiagonal matrix BY the QL method.
+!     The eigenvectors of a full symmetric matrix can also
+!     be found if  TRED2  has been used to reduce this
+!     full matrix to tridiagonal form.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX,
+!        D contains the diagonal elements of the input matrix,
 !
-!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE INPUT MATRIX
-!          IN ITS LAST N-1 POSITIONS.  E(1) IS ARBITRARY,
+!        E contains the subdiagonal elements of the input matrix
+!          in its last N-1 positions.  E(1) is arbitrary,
 !
-!        Z CONTAINS THE TRANSFORMATION MATRIX PRODUCED IN THE
-!          REDUCTION BY  TRED2, IF PERFORMED.  IF THE EIGENVECTORS
-!          OF THE TRIDIAGONAL MATRIX ARE DESIRED, Z MUST CONTAIN
-!          THE IDENTITY MATRIX.
+!        Z contains the transformation matrix produced in the
+!          reduction by  TRED2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, Z must contain
+!          the identity matrix.
 !
-!      ON OUTPUT-
+!      On output-
 !
-!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
-!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT BUT
-!          UNORDERED FOR INDICES 1,2,...,IERR-1,
+!        D contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct but
+!          unordered for indices 1,2,...,IERR-1,
 !
-!        E HAS BEEN DESTROYED,
+!        E has been destroyed,
 !
-!        Z CONTAINS ORTHONORMAL EIGENVECTORS OF THE SYMMETRIC
-!          TRIDIAGONAL (OR FULL) MATRIX.  IF AN ERROR EXIT IS MADE,
-!          Z CONTAINS THE EIGENVECTORS ASSOCIATED WITH THE STORED
-!          EIGENVALUES,
+!        Z contains orthonormal eigenvectors of the symmetric
+!          tridiagonal (or full) matrix.  If an error exit is made,
+!          Z contains the eigenvectors associated with the stored
+!          eigenvalues,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
+!                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP THE VALUE U WHERE U IS THE SMALLEST POSITIVE
+!                MACHEP the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = dpmpar(1)
@@ -744,7 +744,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 integer :: igh, low
 !-----------------------------------------------------------------------
-!                EIGENVALUES OF COMPLEX MATRICES
+!                Eigenvalues of complex matrices
 !-----------------------------------------------------------------------
 real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
 !
@@ -763,12 +763,12 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
-!          EIGENVALUES AND EIGENVECTORS OF COMPLEX MATRICES
+!          Eigenvalues and eigenvectors of complex matrices
 !-----------------------------------------------------------------------
 real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
 &zi(ka,n), temp(*)
 !----------------------
-!     TEMP IS A TEMPORARY STORAGE AREA
+!     Temp is a temporary storage area
 !        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
 !        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
 !----------------------
@@ -806,53 +806,53 @@ logical :: noconv
 !     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
 !     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
 !
-!     THIS SUBROUTINE BALANCES A COMPLEX MATRIX AND ISOLATES
-!     EIGENVALUES WHENEVER POSSIBLE.
+!     This subroutine balances a complex matrix and isolates
+!     eigenvalues whenever possible.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX MATRIX TO BE BALANCED.
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the complex matrix to be balanced.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE BALANCED MATRIX,
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the balanced matrix,
 !
-!        LOW AND IGH ARE TWO INTEGERS SUCH THAT AR(I,J) AND AI(I,J)
-!          ARE EQUAL TO ZERO IF
-!           (1) I IS GREATER THAN J AND
+!        Low and IGH are two integers such that AR(I,J) and AI(I,J)
+!          are equal to zero if
+!           (1) I is greater than J and
 !           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
 !
-!        SCALE CONTAINS INFORMATION DETERMINING THE
-!           PERMUTATIONS AND SCALING FACTORS USED.
+!        Scale contains information determining the
+!           permutations and scaling factors used.
 !
-!     SUPPOSE THAT THE PRINCIPAL SUBMATRIX IN ROWS LOW THROUGH IGH
-!     HAS BEEN BALANCED, THAT P(J) DENOTES THE INDEX INTERCHANGED
-!     WITH J DURING THE PERMUTATION STEP, AND THAT THE ELEMENTS
-!     OF THE DIAGONAL MATRIX USED ARE DENOTED BY D(I,J).  THEN
+!     Suppose that the principal submatrix in rows low through IGH
+!     has been balanced, that P(J) denotes the index interchanged
+!     with J during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(I,J).  Then
 !        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
 !                 = D(J,J)       J = LOW,...,IGH
 !                 = P(J)         J = IGH+1,...,N.
-!     THE ORDER IN WHICH THE INTERCHANGES ARE MADE IS N TO IGH+1,
-!     THEN 1 TO LOW-1.
+!     The order in which the interchanges are made is N to IGH+1,
+!     then 1 to low-1.
 !
-!     NOTE THAT 1 IS RETURNED FOR IGH IF IGH IS ZERO FORMALLY.
+!     Note that 1 is returned for IGH if IGH is zero formally.
 !
-!     THE ALGOL PROCEDURE EXC CONTAINED IN CBALANCE APPEARS IN
-!     CBAL  IN LINE.  (NOTE THAT THE ALGOL ROLES OF IDENTIFIERS
-!     K,L HAVE BEEN REVERSED.)
+!     The Algol procedure exc contained in CBALANCE appears in
+!     CBAL  in line.  (Note that the Algol roles of identifiers
+!     K,L have been reversed.)
 !
 !-----------------------------------------------------------------------
 !
 !     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
+!                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
 !
@@ -990,41 +990,41 @@ real :: f, g, h, fi, fr, scale
 !     COMPLEX CMPLX
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
-!     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)
-!     BY MARTIN AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 339-358(1971).
+!     This subroutine is a translation of a complex analogue of
+!     the Algol procedure ORTHES, NUM. Math. 12, 349-368(1968)
+!     by Martin and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
 !
-!     GIVEN A COMPLEX GENERAL MATRIX, THIS SUBROUTINE
-!     REDUCES A SUBMATRIX SITUATED IN ROWS AND COLUMNS
-!     LOW THROUGH IGH TO UPPER HESSENBERG FORM BY
-!     UNITARY SIMILARITY TRANSFORMATIONS.
+!     Given a complex general matrix, this subroutine
+!     reduces a submatrix situated in rows and columns
+!     low through IGH to upper Hessenberg form by
+!     unitary similarity transformations.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE  CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine  CBAL.  If  CBAL  has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX INPUT MATRIX.
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the complex input matrix.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE HESSENBERG MATRIX.  INFORMATION
-!          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION
-!          IS STORED IN THE REMAINING TRIANGLES UNDER THE
-!          HESSENBERG MATRIX,
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the Hessenberg matrix.  Information
+!          about the unitary transformations used in the reduction
+!          is stored in the remaining triangles under the
+!          Hessenberg matrix,
 !
-!        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE
-!          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
+!        ORTR and ORTI contain further information about the
+!          transformations.  Only elements low through IGH are used.
 !
 !-----------------------------------------------------------------------
 la = igh - 1
@@ -1132,59 +1132,59 @@ real :: spmpar
 !     COMPLEX CSQRT,CMPLX
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR, NUM. MATH. 12, 369-376(1968) BY MARTIN
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 396-403(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES OF A COMPLEX
-!     UPPER HESSENBERG MATRIX BY THE QR METHOD.
+!     This subroutine finds the eigenvalues of a complex
+!     upper Hessenberg matrix BY the QR method.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE  CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine  CBAL.  If  CBAL  has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN
-!          INFORMATION ABOUT THE UNITARY TRANSFORMATIONS USED IN
-!          THE REDUCTION BY  CORTH, IF PERFORMED.
+!        HR and HI contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain
+!          information about the unitary transformations used in
+!          the reduction by  CORTH, if performed.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        THE UPPER HESSENBERG PORTIONS OF HR AND HI HAVE BEEN
-!          DESTROYED.  THEREFORE, THEY MUST BE SAVED BEFORE
-!          CALLING  COMQR  IF SUBSEQUENT CALCULATION OF
-!          EIGENVECTORS IS TO BE PERFORMED,
+!        The upper Hessenberg portions of HR and HI have been
+!          destroyed.  Therefore, they must be saved before
+!          calling  COMQR  if subsequent calculation of
+!          eigenvectors is to be performed,
 !
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
+!        WR and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices IERR+1,...,N,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 30 ITERATIONS.
+!                     determined after 30 iterations.
 !
-!     ARITHMETIC IS REAL EXCEPT FOR THE REPLACEMENT OF THE ALGOL
-!     PROCEDURE CDIV BY COMPLEX DIVISION AND USE OF THE SUBROUTINES
-!     CSQRT AND CMPLX IN COMPUTING COMPLEX SQUARE ROOTS.
+!     Arithmetic is real except for the replacement of the Algol
+!     procedure CDIV by complex division and use of the subroutines
+!     CSQRT and cmplx in computing complex square roots.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!                the relative precision of floating point arithmetic.
 !
            machep = spmpar(1)
 !
@@ -1368,34 +1368,34 @@ real :: s
 !     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
 !     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
 !
-!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A COMPLEX GENERAL
-!     MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
-!     BALANCED MATRIX DETERMINED BY  CBAL.
+!     This subroutine forms the eigenvectors of a complex general
+!     matrix BY back transforming those of the corresponding
+!     balanced matrix determined by  CBAL.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY  CBAL,
+!        Low and IGH are integers determined by  CBAL,
 !
-!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
-!          AND SCALING FACTORS USED BY  CBAL,
+!        Scale contains information determining the permutations
+!          and scaling factors used by  CBAL,
 !
-!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
+!        M is the number of eigenvectors to be back transformed,
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
-!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors to be
+!          back transformed in their first M columns.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
-!          IN THEIR FIRST M COLUMNS.
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the transformed eigenvectors
+!          in their first M columns.
 !
 !-----------------------------------------------------------------------
 if (m .eq. 0) go to 200
@@ -1404,7 +1404,7 @@ if (igh .eq. low) go to 120
 do i = low, igh
    s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
-!                IF THE FOREGOING STATEMENT IS REPLACED BY
+!                if the foregoing statement is replaced by
 !                S=1.0/SCALE(I). **********
    do j = 1, m
       zr(i,j) = zr(i,j) * s
@@ -1459,73 +1459,73 @@ real :: spmpar
 !     COMPLEX CSQRT,CMPLX
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
-!     OF A COMPLEX UPPER HESSENBERG MATRIX BY THE QR
-!     METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
-!     CAN ALSO BE FOUND IF  CORTH  HAS BEEN USED TO REDUCE
-!     THIS GENERAL MATRIX TO HESSENBERG FORM.
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a complex upper Hessenberg matrix BY the QR
+!     method.  The eigenvectors of a complex general matrix
+!     can also be found if  CORTH  has been used to reduce
+!     this general matrix to Hessenberg form.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE  CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine  CBAL.  If  CBAL  has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
-!          FORMATIONS USED IN THE REDUCTION BY  CORTH, IF PERFORMED.
-!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
-!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
-!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
+!        ORTR and ORTI contain information about the unitary trans-
+!          formations used in the reduction by  CORTH, if performed.
+!          Only elements low through IGH are used.  If the eigenvectors
+!          of the Hessenberg matrix are desired, set ORTR(J) and
+!          ORTI(J) to 0.0 for these elements,
 !
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
-!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
-!          REDUCTION BY  CORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
-!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
-!          ARBITRARY.
+!        HR and HI contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain further
+!          information about the transformations which were used in the
+!          reduction by  CORTH, if performed.  If the eigenvectors of
+!          the Hessenberg matrix are desired, these elements may be
+!          arbitrary.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
-!          HAVE BEEN DESTROYED,
+!        ORTR, ORTI, and the upper Hessenberg portions of HR and HI
+!          have been destroyed,
 !
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
+!        WR and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices IERR+1,...,N,
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
-!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
-!          THE EIGENVECTORS HAS BEEN FOUND,
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors.  The eigenvectors
+!          are unnormalized.  If an error exit is made, none of
+!          the eigenvectors has been found,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 30 ITERATIONS.
+!                     determined after 30 iterations.
 !
-!     ARITHMETIC IS REAL EXCEPT FOR THE REPLACEMENT OF THE ALGOL
-!     PROCEDURE CDIV BY COMPLEX DIVISION AND USE OF THE SUBROUTINES
-!     CSQRT AND CMPLX IN COMPUTING COMPLEX SQUARE ROOTS.
+!     Arithmetic is real except for the replacement of the Algol
+!     procedure CDIV by complex division and use of the subroutines
+!     CSQRT and cmplx in computing complex square roots.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!                the relative precision of floating point arithmetic.
 !
            machep = spmpar(1)
 !
@@ -1818,7 +1818,7 @@ do 840 i = 1, enm1
 !
 840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
-!                VECTORS OF ORIGINAL FULL MATRIX.
+!                vectors of original full matrix.
 !                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
 do 880 jj = low, enm1
    j = n + low - jj
@@ -1852,7 +1852,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 integer :: igh, low
 !-----------------------------------------------------------------------
-!            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
+!            Eigenvalues of double precision complex matrices
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
 &wi(n)
@@ -1872,13 +1872,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
-!                     EIGENVALUES AND EIGENVECTORS
-!                 OF DOUBLE PRECISION COMPLEX MATRICES
+!                     Eigenvalues and eigenvectors
+!                 of double precision complex matrices
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
 &wi(n), zr(ka,n), zi(ka,n), temp(*)
 !----------------------
-!     TEMP IS A TEMPORARY STORAGE AREA
+!     Temp is a temporary storage area
 !        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
 !        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
 !----------------------
@@ -1916,53 +1916,53 @@ logical :: noconv
 !     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
 !     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
 !
-!     DCBAL BALANCES A DOUBLE PRECISION COMPLEX MATRIX AND
-!     ISOLATES EIGENVALUES WHENEVER POSSIBLE.
+!     DCBAL balances a double precision complex matrix and
+!     isolates eigenvalues whenever possible.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX MATRIX TO BE BALANCED.
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the complex matrix to be balanced.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE BALANCED MATRIX,
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the balanced matrix,
 !
-!        LOW AND IGH ARE TWO INTEGERS SUCH THAT AR(I,J) AND AI(I,J)
-!          ARE EQUAL TO ZERO IF
-!           (1) I IS GREATER THAN J AND
+!        Low and IGH are two integers such that AR(I,J) and AI(I,J)
+!          are equal to zero if
+!           (1) I is greater than J and
 !           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
 !
-!        SCALE CONTAINS INFORMATION DETERMINING THE
-!           PERMUTATIONS AND SCALING FACTORS USED.
+!        Scale contains information determining the
+!           permutations and scaling factors used.
 !
-!     SUPPOSE THAT THE PRINCIPAL SUBMATRIX IN ROWS LOW THROUGH IGH
-!     HAS BEEN BALANCED, THAT P(J) DENOTES THE INDEX INTERCHANGED
-!     WITH J DURING THE PERMUTATION STEP, AND THAT THE ELEMENTS
-!     OF THE DIAGONAL MATRIX USED ARE DENOTED BY D(I,J).  THEN
+!     Suppose that the principal submatrix in rows low through IGH
+!     has been balanced, that P(J) denotes the index interchanged
+!     with J during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(I,J).  Then
 !        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
 !                 = D(J,J)       J = LOW,...,IGH
 !                 = P(J)         J = IGH+1,...,N.
-!     THE ORDER IN WHICH THE INTERCHANGES ARE MADE IS N TO IGH+1,
-!     THEN 1 TO LOW-1.
+!     The order in which the interchanges are made is N to IGH+1,
+!     then 1 to low-1.
 !
-!     NOTE THAT 1 IS RETURNED FOR IGH IF IGH IS ZERO FORMALLY.
+!     Note that 1 is returned for IGH if IGH is zero formally.
 !
-!     THE ALGOL PROCEDURE EXC CONTAINED IN CBALANCE APPEARS IN
-!     DCBAL IN LINE.  (NOTE THAT THE ALGOL ROLES OF IDENTIFIERS
-!     K,L HAVE BEEN REVERSED.)
+!     The Algol procedure exc contained in CBALANCE appears in
+!     DCBAL in line.  (Note that the Algol roles of identifiers
+!     K,L have been reversed.)
 !
 !-----------------------------------------------------------------------
 !
 !     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
+!                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
 !
@@ -2100,41 +2100,41 @@ double precision :: f, g, h, fi, fr, scale
 double precision :: dcpabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
-!     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)
-!     BY MARTIN AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 339-358(1971).
+!     This subroutine is a translation of a complex analogue of
+!     the Algol procedure ORTHES, NUM. Math. 12, 349-368(1968)
+!     by Martin and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
 !
-!     GIVEN A DOUBLE PRECISION COMPLEX MATRIX, DCORTH
-!     REDUCES A SUBMATRIX SITUATED IN ROWS AND COLUMNS
-!     LOW THROUGH IGH TO UPPER HESSENBERG FORM BY
-!     UNITARY SIMILARITY TRANSFORMATIONS.
+!     Given a double precision complex matrix, DCORTH
+!     reduces a submatrix situated in rows and columns
+!     low through IGH to upper Hessenberg form by
+!     unitary similarity transformations.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine DCBAL.  If DCBAL has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX INPUT MATRIX.
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the complex input matrix.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE HESSENBERG MATRIX.  INFORMATION
-!          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION
-!          IS STORED IN THE REMAINING TRIANGLES UNDER THE
-!          HESSENBERG MATRIX,
+!        AR and AI contain the real and imaginary parts,
+!          respectively, of the Hessenberg matrix.  Information
+!          about the unitary transformations used in the reduction
+!          is stored in the remaining triangles under the
+!          Hessenberg matrix,
 !
-!        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE
-!          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
+!        ORTR and ORTI contain further information about the
+!          transformations.  Only elements low through IGH are used.
 !
 !-----------------------------------------------------------------------
 la = igh - 1
@@ -2241,55 +2241,55 @@ double precision :: r2, w(2), z(2)
 double precision :: dpmpar, dcpabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR, NUM. MATH. 12, 369-376(1968) BY MARTIN
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 396-403(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES OF A DOUBLE PRECISION
-!     COMPLEX UPPER HESSENBERG MATRIX BY THE QR METHOD.
+!     This subroutine finds the eigenvalues of a double precision
+!     complex upper Hessenberg matrix BY the QR method.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine DCBAL.  If DCBAL has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN
-!          INFORMATION ABOUT THE UNITARY TRANSFORMATIONS USED IN
-!          THE REDUCTION BY DCORTH, IF PERFORMED.
+!        HR and HI contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain
+!          information about the unitary transformations used in
+!          the reduction by DCORTH, if performed.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        THE UPPER HESSENBERG PORTIONS OF HR AND HI HAVE BEEN
-!          DESTROYED.  THEREFORE, THEY MUST BE SAVED BEFORE
-!          CALLING DCOMQR IF SUBSEQUENT CALCULATION OF
-!          EIGENVECTORS IS TO BE PERFORMED,
+!        The upper Hessenberg portions of HR and HI have been
+!          destroyed.  Therefore, they must be saved before
+!          calling DCOMQR if subsequent calculation of
+!          eigenvectors is to be performed,
 !
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
+!        WR and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices IERR+1,...,N,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
+!                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!                the relative precision of floating point arithmetic.
 !
            machep = dpmpar(1)
 !
@@ -2476,34 +2476,34 @@ double precision :: s
 !     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
 !     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
 !
-!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A DOUBLE PRECISION
-!     COMPLEX MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
-!     BALANCED MATRIX DETERMINED BY DCBAL.
+!     This subroutine forms the eigenvectors of a double precision
+!     complex matrix BY back transforming those of the corresponding
+!     balanced matrix determined by DCBAL.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY DCBAL,
+!        Low and IGH are integers determined by DCBAL,
 !
-!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
-!          AND SCALING FACTORS USED BY DCBAL,
+!        Scale contains information determining the permutations
+!          and scaling factors used by DCBAL,
 !
-!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
+!        M is the number of eigenvectors to be back transformed,
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
-!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors to be
+!          back transformed in their first M columns.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
-!          IN THEIR FIRST M COLUMNS.
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the transformed eigenvectors
+!          in their first M columns.
 !
 !-----------------------------------------------------------------------
 if (m .eq. 0) go to 200
@@ -2512,7 +2512,7 @@ if (igh .eq. low) go to 120
 do i = low, igh
    s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
-!                IF THE FOREGOING STATEMENT IS REPLACED BY
+!                if the foregoing statement is replaced by
 !                S=1.0/SCALE(I). **********
    do j = 1, m
       zr(i,j) = zr(i,j) * s
@@ -2566,69 +2566,69 @@ double precision :: r2, w(2), z(2)
 double precision :: dpmpar, dcpabs
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
 !
-!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS OF
-!     A DOUBLE PRECISION COMPLEX UPPER HESSENBERG MATRIX BY THE
-!     QR METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
-!     CAN ALSO BE FOUND IF DCORTH HAS BEEN USED TO REDUCE
-!     THIS GENERAL MATRIX TO HESSENBERG FORM.
+!     This subroutine finds the eigenvalues and eigenvectors of
+!     a double precision complex upper Hessenberg matrix BY the
+!     QR method.  The eigenvectors of a complex general matrix
+!     can also be found if DCORTH has been used to reduce
+!     this general matrix to Hessenberg form.
 !
-!     ON INPUT-
+!     On input-
 !
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!        NM must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
 !          DIMENSION STATEMENT,
 !
-!        N IS THE ORDER OF THE MATRIX,
+!        N is the order of the matrix,
 !
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!        Low and IGH are integers determined by the balancing
+!          subroutine DCBAL.  If DCBAL has not been used,
 !          SET LOW=1, IGH=N,
 !
-!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
-!          FORMATIONS USED IN THE REDUCTION BY DCORTH, IF PERFORMED.
-!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
-!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
-!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
+!        ORTR and ORTI contain information about the unitary trans-
+!          formations used in the reduction by DCORTH, if performed.
+!          Only elements low through IGH are used.  If the eigenvectors
+!          of the Hessenberg matrix are desired, set ORTR(J) and
+!          ORTI(J) to 0.0 for these elements,
 !
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
-!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
-!          REDUCTION BY DCORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
-!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
-!          ARBITRARY.
+!        HR and HI contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain further
+!          information about the transformations which were used in the
+!          reduction by DCORTH, if performed.  If the eigenvectors of
+!          the Hessenberg matrix are desired, these elements may be
+!          arbitrary.
 !
-!     ON OUTPUT-
+!     On output-
 !
-!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
-!          HAVE BEEN DESTROYED,
+!        ORTR, ORTI, and the upper Hessenberg portions of HR and HI
+!          have been destroyed,
 !
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
+!        WR and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices IERR+1,...,N,
 !
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
-!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
-!          THE EIGENVECTORS HAS BEEN FOUND,
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors.  The eigenvectors
+!          are unnormalized.  If an error exit is made, none of
+!          the eigenvectors has been found,
 !
-!        IERR IS SET TO
+!        IERR is set to
 !          ZERO       FOR NORMAL RETURN,
 !          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
+!                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!                the relative precision of floating point arithmetic.
 !
            machep = dpmpar(1)
 !
@@ -2925,7 +2925,7 @@ do 840 i = 1, enm1
 !
 840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
-!                VECTORS OF ORIGINAL FULL MATRIX.
+!                vectors of original full matrix.
 !                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
 do 880 jj = low, enm1
    j = n + low - jj
@@ -2974,112 +2974,112 @@ subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
 &q, kode, toler, iter, x, res, error, cu, iu, s)
 implicit none
 !
-! THIS SUBROUTINE USES A MODIFICATION OF THE SIMPLEX
-! METHOD OF LINEAR PROGRAMMING TO CALCULATE AN L1 SOLUTION
-! TO A K BY N SYSTEM OF LINEAR EQUATIONS
+! This subroutine uses a modification of the simplex
+! method of linear programming to calculate an L1 solution
+! to A K by N system of linear equations
 !             AX=B
-! SUBJECT TO L LINEAR EQUALITY CONSTRAINTS
+! subject to L linear equality constraints
 !             CX=D
-! AND M LINEAR INEQUALITY CONSTRAINTS
+! and M linear inequality constraints
 !             EX.LE.F.
-! DESCRIPTION OF PARAMETERS
+! Description of parameters
 ! K      NUMBER OF ROWS OF THE MATRIX A (K.GE.1).
 ! L      NUMBER OF ROWS OF THE MATRIX C (L.GE.0).
 ! M      NUMBER OF ROWS OF THE MATRIX E (M.GE.0).
 ! N      NUMBER OF COLUMNS OF THE MATRICES A,C,E (N.GE.1).
 ! KLMD   SET TO AT LEAST K+L+M FOR ADJUSTABLE DIMENSIONS.
-! KLM2D  SET TO AT LEAST K+L+M+2 FOR ADJUSTABLE DIMENSIONS.
-! NKLMD  SET TO AT LEAST N+K+L+M FOR ADJUSTABLE DIMENSIONS.
+! KLM2D  set to at least K+L+M+2 for adjustable dimensions.
+! NKLMD  set to at least N+K+L+M for adjustable dimensions.
 ! N2D    SET TO AT LEAST N+2 FOR ADJUSTABLE DIMENSIONS
 ! Q      TWO DIMENSIONAL REAL ARRAY WITH KLM2D ROWS AND
-!        AT LEAST N2D COLUMNS.
-!        ON ENTRY THE MATRICES A,C AND E, AND THE VECTORS
-!        B,D AND F MUST BE STORED IN THE FIRST K+L+M ROWS
-!        AND N+1 COLUMNS OF Q AS FOLLOWS
+!        at least N2D columns.
+!        On entry the matrices A,C and E, and the vectors
+!        B,D and F must be stored in the first K+L+M rows
+!        and N+1 columns of Q as follows
 !             A B
 !         Q = C D
 !             E F
-!        THESE VALUES ARE DESTROYED BY THE SUBROUTINE.
+!        these values are destroyed by the subroutine.
 ! KODE   A CODE USED ON ENTRY TO, AND EXIT
-!        FROM, THE SUBROUTINE.
-!        ON ENTRY, THIS SHOULD NORMALLY BE SET TO 0.
-!        HOWEVER, IF CERTAIN NONNEGATIVITY CONSTRAINTS
-!        ARE TO BE INCLUDED IMPLICITLY, RATHER THAN
+!        from, the subroutine.
+!        On entry, this should normally be set to 0.
+!        However, if certain nonnegativity constraints
+!        are to be included implicitly, rather than
 !        EXPLICITLY IN THE CONSTRAINTS EX.LE.F, THEN KODE
-!        SHOULD BE SET TO 1, AND THE NONNEGATIVITY
-!        CONSTRAINTS INCLUDED IN THE ARRAYS X AND
-!        RES (SEE BELOW).
-!        ON EXIT, KODE HAS ONE OF THE
-!        FOLLOWING VALUES
-!             0- OPTIMAL SOLUTION FOUND,
-!             1- NO FEASIBLE SOLUTION TO THE
-!                CONSTRAINTS,
-!             2- CALCULATIONS TERMINATED
-!                PREMATURELY DUE TO ROUNDING ERRORS,
-!             3- MAXIMUM NUMBER OF ITERATIONS REACHED.
-! TOLER  A SMALL POSITIVE TOLERANCE. EMPIRICAL
+!        should be set to 1, and the nonnegativity
+!        constraints included in the arrays X and
+!        res (see below).
+!        On exit, KODE has one of the
+!        following values
+!             0- optimal solution found,
+!             1- no feasible solution to the
+!                constraints,
+!             2- calculations terminated
+!                prematurely due to rounding errors,
+!             3- maximum number of iterations reached.
+! TOLER  a small positive tolerance. Empirical
 !        EVIDENCE SUGGESTS TOLER = 10**(-D*2/3),
-!        WHERE D REPRESENTS THE NUMBER OF DECIMAL
-!        DIGITS OF ACCURACY AVAILABLE. ESSENTIALLY,
-!        THE SUBROUTINE CANNOT DISTINGUISH BETWEEN ZERO
-!        AND ANY QUANTITY WHOSE MAGNITUDE DOES NOT EXCEED
-!        TOLER. IN PARTICULAR, IT WILL NOT PIVOT ON ANY
-!        NUMBER WHOSE MAGNITUDE DOES NOT EXCEED TOLER.
+!        where D represents the number of decimal
+!        digits of accuracy available. Essentially,
+!        the subroutine CANNOT distinguish between zero
+!        and any quantity whose magnitude does not exceed
+!        TOLER. In particular, it will not pivot on any
+!        number whose magnitude does not exceed TOLER.
 ! ITER   ON ENTRY ITER MUST CONTAIN AN UPPER BOUND ON
-!        THE MAXIMUM NUMBER OF ITERATIONS ALLOWED.
-!        A SUGGESTED VALUE IS 10*(K+L+M). ON EXIT ITER
-!        GIVES THE NUMBER OF SIMPLEX ITERATIONS.
+!        the maximum number of iterations allowed.
+!        A suggested value is 10*(K+L+M). On exit iter
+!        gives the number of simplex iterations.
 ! X      ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST N2D.
-!        ON EXIT THIS ARRAY CONTAINS A
+!        On exit this array contains A
 !        SOLUTION TO THE L1 PROBLEM. IF KODE=1
-!        ON ENTRY, THIS ARRAY IS ALSO USED TO INCLUDE
-!        SIMPLE NONNEGATIVITY CONSTRAINTS ON THE
-!        VARIABLES. THE VALUES -1, 0, OR 1
-!        FOR X(J) INDICATE THAT THE J-TH VARIABLE
+!        on entry, this array is also used to include
+!        simple nonnegativity constraints on the
+!        variables. The values -1, 0, or 1
+!        for X(J) indicate that the J-TH variable
 !        IS RESTRICTED TO BE .LE.0, UNRESTRICTED,
 !        OR .GE.0 RESPECTIVELY.
 ! RES    ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST KLMD.
-!        ON EXIT THIS CONTAINS THE RESIDUALS B-AX
-!        IN THE FIRST K COMPONENTS, D-CX IN THE
+!        On exit this contains the residuals B-AX
+!        in the first K components, D-CX in the
 !        NEXT L COMPONENTS (THESE WILL BE =0),AND
 !        F-EX IN THE NEXT M COMPONENTS. IF KODE=1 ON
-!        ENTRY, THIS ARRAY IS ALSO USED TO INCLUDE SIMPLE
-!        NONNEGATIVITY CONSTRAINTS ON THE RESIDUALS
-!        B-AX. THE VALUES -1, 0, OR 1 FOR RES(I)
+!        entry, this array is also used to include simple
+!        nonnegativity constraints on the residuals
+!        B-AX. The values -1, 0, or 1 for RES(I)
 !        INDICATE THAT THE I-TH RESIDUAL (1.LE.I.LE.K) IS
 !        RESTRICTED TO BE .LE.0, UNRESTRICTED, OR .GE.0
-!        RESPECTIVELY.
-! ERROR  ON EXIT, THIS GIVES THE MINIMUM SUM OF
-!        ABSOLUTE VALUES OF THE RESIDUALS.
+!        respectively.
+! Error  on exit, this gives the minimum sum of
+!        absolute values of the residuals.
 ! CU     A TWO DIMENSIONAL REAL ARRAY WITH TWO ROWS AND
-!        AT LEAST NKLMD COLUMNS USED FOR WORKSPACE.
+!        at least NKLMD columns used for workspace.
 ! IU     A TWO DIMENSIONAL INTEGER ARRAY WITH TWO ROWS AND
-!        AT LEAST NKLMD COLUMNS USED FOR WORKSPACE.
+!        at least NKLMD columns used for workspace.
 ! S      INTEGER ARRAY OF SIZE AT LEAST KLMD, USED FOR
-!        WORKSPACE.
-! IF YOUR FORTRAN COMPILER PERMITS A SINGLE COLUMN OF A TWO
-! DIMENSIONAL ARRAY TO BE PASSED TO A ONE DIMENSIONAL ARRAY
-! THROUGH A SUBROUTINE CALL, CONSIDERABLE SAVINGS IN
-! EXECUTION TIME MAY BE ACHIEVED THROUGH THE USE OF THE
-! FOLLOWING SUBROUTINE, WHICH OPERATES ON COLUMN VECTORS.
+!        workspace.
+! If your Fortran compiler permits a single column of a two
+! dimensional array to be passed to a one dimensional array
+! through a subroutine CALL, considerable savings in
+! execution time may be achieved through the use of the
+! following subroutine, which operates on column vectors.
 !     SUBROUTINE COL(V1, V2, XMLT, NOTROW, K)
-! THIS SUBROUTINE ADDS TO THE VECTOR V1 A MULTIPLE OF THE
-! VECTOR V2 (ELEMENTS 1 THROUGH K EXCLUDING NOTROW).
+! this subroutine adds to the vector V1 a multiple of the
+! vector V2 (elements 1 through K excluding NOTROW).
 !     DIMENSION V1(K), V2(K)
 !     KEND = NOTROW - 1
 !     KSTART = NOTROW + 1
 !     IF (KEND .LT. 1) GO TO 20
 !     DO 10 I=1,KEND
 !        V1(I) = V1(I) + XMLT*V2(I)
-!  10 CONTINUE
+!  10 continue
 !     IF(KSTART .GT. K) GO TO 40
 !  20 DO 30 I=KSTART,K
 !       V1(I) = V1(I) + XMLT*V2(I)
-!  30 CONTINUE
-!  40 RETURN
+!  30 continue
+!  40 return
 !     END
-! SEE COMMENTS FOLLOWING STATEMENT LABELLED 440 FOR
-! INSTRUCTIONS ON THE IMPLEMENTATION OF THIS MODIFICATION.
+! see comments following statement labelled 440 for
+! instructions on the implementation of this modification.
 !
 double precision :: sum
 real, intent(inout) :: q, x
@@ -3112,7 +3112,7 @@ integer :: iphase, kforce, iineg
 dimension q(klm2d,n2d), x(n2d), res(klmd), &
 &cu(2,nklmd), iu(2,nklmd), s(klmd)
 !
-! INITIALIZATION.
+! Initialization.
 !
 maxit = iter
 n1 = n + 1
@@ -3129,7 +3129,7 @@ kforce = 1
 iter = 0
 js = 1
 ia = 0
-! SET UP LABELS IN Q.
+! Set up labels in Q.
 do j=1,n
    q(klm2,j) = j
 end do
@@ -3140,7 +3140,7 @@ do 30 i = 1,klm
       q(i,j) = -q(i,j)
    end do
 30 continue
-! SET UP PHASE 1 COSTS.
+! Set up phase 1 costs.
 iphase = 2
 do j=1,nklm
    cu(1,j) = 0.
@@ -3184,7 +3184,7 @@ do 140 j = 1,k
    if (q(j,n2).lt.0.0) iphase = 1
 140 continue
 150 if (iphase.eq.2) go to 500
-! COMPUTE THE MARGINAL COSTS.
+! Compute the marginal costs.
 160 do j=js,n1
    sum = 0.d0
    do i=1,klm
@@ -3207,7 +3207,7 @@ do j=js,n
    z = cu(2,iineg)
 220 q(klm1,j) = q(klm1,j) - z
 end do
-! DETERMINE THE VECTOR TO ENTER THE BASIS.
+! Determine the vector to enter the basis.
 240 xmax = 0.
 if (js.gt.n) go to 490
 do 280 j = js,n
@@ -3235,7 +3235,7 @@ do i=1,klm2
    q(i,in) = -q(i,in)
 end do
 q(klm1,in) = xmax
-! DETERMINE THE VECTOR TO LEAVE THE BASIS.
+! Determine the vector to leave the basis.
 300 if (iphase.eq.1 .or. ia.eq.0) go to 330
 xmax = 0.
 do 310 i = 1,ia
@@ -3289,7 +3289,7 @@ if (iu(1,iineg).eq.1) go to 420
 400 ii = iabs(ii)
 cuv = cu(1,ii) + cu(2,ii)
 if (q(klm1,in)-pivot*cuv.le.toler) go to 420
-! BYPASS INTERMEDIATE VERTICES.
+! Bypass intermediate vertices.
 do j=js,n1
    z = q(iout,j)
    q(klm1,j) = q(klm1,j) - z*cuv
@@ -3297,7 +3297,7 @@ do j=js,n1
 end do
 q(iout,n2) = -q(iout,n2)
 go to 350
-! GAUSS-JORDAN ELIMINATION.
+! Gauss-Jordan elimination.
 420 if (iter.lt.maxit) go to 430
 kode = 3
 go to 590
@@ -3305,14 +3305,14 @@ go to 590
 do j=js,n1
    if (j.ne.in) q(iout,j) = q(iout,j)/pivot
 end do
-! IF PERMITTED, USE SUBROUTINE COL OF THE DESCRIPTION
-! SECTION AND REPLACE THE FOLLOWING SEVEN STATEMENTS DOWN
-! TO AND INCLUDING STATEMENT NUMBER 460 BY..
+! If permitted, use subroutine col of the description
+! section and replace the following seven statements down
+! to and including statement number 460 by..
 !     DO 460 J=JS,N1
 !        IF(J .EQ. IN) GO TO 460
 !        Z = -Q(IOUT,J)
 !        CALL COL(Q(1,J), Q(1,IN), Z, IOUT, KLM1)
-! 460 CONTINUE
+! 460 continue
 do 460 j = js,n1
    if (j.eq.in) go to 460
    z = -q(iout,j)
@@ -3337,12 +3337,12 @@ do i=1,klm2
 end do
 js = js + 1
 go to 240
-! TEST FOR OPTIMALITY.
+! Test for optimality.
 490 if (kforce.eq.0) go to 580
 if (iphase.eq.1 .and. q(klm1,n1).le.toler) go to 500
 kforce = 0
 go to 240
-! SET UP PHASE 2 COSTS.
+! Set up phase 2 costs.
 500 iphase = 2
 do j=1,nklm
    cu(1,j) = 0.
@@ -3373,7 +3373,7 @@ go to 160
 kode = 1
 go to 590
 580 if (iphase.eq.1) go to 570
-! PREPARE OUTPUT.
+! Prepare output.
 kode = 0
 590 sum = 0.d0
 do j=1,n
@@ -3490,19 +3490,19 @@ real, intent(inout) :: qr(ms,n), s(n)
 integer :: i, j, jp, k, kj, nn
 real :: ajj, sav, ss, y
 !***********************************************************************
-!      IDENTIFICATION
-!        ORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
-!                MATRIX A TO UPPER TRIANGULAR FORM
-!        FORTRAN SUBROUTINE SUBPROGRAM
-!        AEROSPACE RESEARCH LABORATORIES
-!        WRIGHT-PATTERSON AFB, OHIO  45433
-!      PURPOSE
-!        ORTHO COMPUTES AN IMPLICIT ORTHOGONAL MATRIX Q AND AN EXPLICIT
-!        UPPER TRIANGULAR MATRIX R AND A PERMUTATION MATRIX P SATISFYING
+!      Identification
+!        ortho - orthogonal transformation of a given general M by N
+!                matrix A to upper triangular form
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        ortho computes an implicit orthogonal matrix Q and an explicit
+!        upper triangular matrix R and a permutation matrix P satisfying
 !        QR = PA GIVEN AN M BY N REAL MATRIX A.  ORTHO IS INTENDED FOR
-!        USE WITH THE SUBROUTINE ORSOL TO PRODUCE THE LEAST SQUARES
+!        use with the subroutine ORSOL to produce the least squares
 !        SOLUTION OF THE EQUATION AX = B.
-!      CONTROL
+!      Control
 !
 !        DIMENSION QR(MS,N), S(N), IP(N)
 !        LOGICAL EXIT
@@ -3534,9 +3534,9 @@ real :: ajj, sav, ss, y
 !        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
 !            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
 !            269-276.
-!        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
-!            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
-!            TECHNICAL REPORT ARL TR 74-0124(1974).
+!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
 !***********************************************************************
 dimension ip(n)
 logical, intent(out) :: exit
@@ -3548,8 +3548,8 @@ do 80 j = 1, nn
   ip(j) = j
   jp = j + 1
   kj = j
-!                                       SEARCH FOR PIVOT IN THE J-TH
-!                                       COLUMN AND INTERCHANGE ROWS.
+!                                       Search for pivot in the J-TH
+!                                       column and interchange rows.
   do k = jp, m
      if (abs(qr(k,j)) .gt. abs(qr(kj,j))) kj = k
   end do
@@ -3560,8 +3560,8 @@ do 80 j = 1, nn
      sav = qr(j,i)
      qr(j,i) = qr(kj,i)
 20 qr(kj,i) = sav
-!                                       NORMALIZE THE PIVOTING COLUMN
-!                                       AND FIND ITS NORM.
+!                                       Normalize the pivoting column
+!                                       and find its norm.
 30 ajj = qr(j,j)
   do 31 i = jp, m
 31 qr(i,j) = qr(i,j)/ajj
@@ -3571,8 +3571,8 @@ do 80 j = 1, nn
   s(j) = -sqrt(sav)
   qr(j,j) = s(j)*ajj
   if (jp .gt. n) go to 80
-!                                       PREMULTIPLY QR WITH THE J-TH
-!                                       ORTHOGONAL MATRIX.
+!                                       Premultiply QR with the J-TH
+!                                       orthogonal matrix.
   y = 1.0 - s(j)
   do k = jp, n
      sav = qr(j,k)
@@ -3600,17 +3600,17 @@ real, intent(inout) :: x(m)
 integer :: i, ij, j, jp, k, ni, nm, nn
 real :: sav, ss, y
 !***********************************************************************
-!      IDENTIFICATION
-!        ORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
-!                ORTHOGONAL-TRIANGULAR FACTORIZATION OF THE COEFFICIENT
-!                MATRIX PRODUCED BY SUBROUTINE ORTHO
-!        FORTRAN SUBROUTINE SUBPROGRAM
-!        AEROSPACE RESEARCH LABORATORIES
-!        WRIGHT-PATTERSON AFB, OHIO  45433
-!      PURPOSE
-!        ORSOL COMPUTES THE LEAST SQUARES SOLUTION OF THE LINEAR SYSTEM
+!      Identification
+!        ORSOL - least squares solution of a linear system given an
+!                orthogonal-triangular factorization of the coefficient
+!                matrix produced by subroutine ORTHO
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        ORSOL computes the least squares solution of the linear system
 !        QRX = PAX = B WHERE Q, R, AND P ARE DETERMINED FROM A BY ORTHO.
-!      CONTROL
+!      Control
 !
 !        DIMENSION QR(MS,N), S(N), IP(N), X(M)
 !        .
@@ -3643,9 +3643,9 @@ real :: sav, ss, y
 !        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
 !            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
 !            269-276.
-!        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
-!            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
-!            TECHNICAL REPORT ARL TR 74-0124(1974).
+!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
 !***********************************************************************
 dimension ip(n)
 !
@@ -3658,8 +3658,8 @@ do j = 1, nn
   sav = x(j)
   x(j) = x(ij)
   x(ij) = sav
-!                                       PREMULTIPLY X WITH THE J-TH
-!                                       ORTHOGONAL MATRIX.
+!                                       Premultiply X with the J-TH
+!                                       orthogonal matrix.
   sav = x(j)
   do 10 k = jp, m
 10 sav = sav + qr(k,j)*x(k)
@@ -3669,8 +3669,8 @@ do j = 1, nn
   do 20 k = jp, m
 20 x(k) = x(k) - qr(k,j)*ss
 end do
-!                                       BACK SUBSTITUTE TO FIND THE
-!                                       LEAST SQUARES SOLUTION.
+!                                       Back substitute to find the
+!                                       least squares solution.
 x(n) = x(n)/qr(n,n)
 nm = n - 1
 do i = 1, nm
@@ -3697,12 +3697,12 @@ real :: eps, eps2, four, fourth, one, rat, ratio, rnrm2, xnrm2, &
 &zero
 real :: spmpar
 ! ----------------------------------------------------------------------
-!      PURPOSE
-!        GIVEN AN APPROXIMATE LEAST SQUARES SOLUTION X OF A LINEAR
+!      Purpose
+!        given an approximate least squares solution X of a linear
 !        SYSTEM AX = B OBTAINED USING ORSOL. ORIMP ATTEMPTS TO COMPUTE
-!        AN IMPROVED SOLUTION CORRECT TO MACHINE PRECISION.
+!        an improved solution correct to machine precision.
 !
-!      CONTROL
+!      Control
 !
 !        DIMENSION A(KA,N), QR(MS,N), B(M), X(M), R(M), S(N), IP(N)
 !        LOGICAL EXIT
@@ -3711,39 +3711,39 @@ real :: spmpar
 !        .
 !        CALL ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
 !
-!        WHERE
+!        Where
 !        M    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
 !        N    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
 !             (1 .LT. N .LE. M).
 !        A    IS A REAL INPUT ARRAY, THE GIVEN M BY N MATRIX.
 !        QR   IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR
-!             FACTORS OF A PRODUCED BY ORTHO.
+!             factors of a produced by ortho.
 !        B    IS A REAL INPUT ARRAY, THE RIGHT HAND SIDE OF AX = B.
 !        X    AS A REAL INPUT ARRAY IS THE APPROXIMATE LEAST SQUARES
-!             SOLUTION TOGETHER WITH THE RESIDUAL INFORMATION PRODUCED
+!             solution together with the residual information produced
 !             BY ORSOL.
 !        X    AS A REAL OUTPUT ARRAY IS THE IMPROVED LEAST SQUARES
-!             SOLUTION WITH A RESIDUAL OF MINIMUM LENGTH.
+!             solution with a residual of minimum length.
 !        R    IS A REAL OUTPUT ARRAY, THE CORRECTION VECTOR ADDED TO X.
 !        KA   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             OF A IN THE CALLING PROGRAM.
+!             of A in the calling program.
 !        MS   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             OF QR IN THE CALLING PROGRAM.
+!             of QR in the calling program.
 !        S    IS A REAL INPUT ARRAY, A RELEVANT PART OF Q PRODUCED BY
-!             ORTHO.
+!             ortho.
 !        IP   IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
-!             PRODUCED BY ORTHO.
-!        EXIT IS SET TO THE VALUE .TRUE. IF IMPROVEMENT OF X IS SUCCESS-
-!             FUL WITH A GAIN IN ACCURACY OF AT LEAST 50 PER CENT EACH
-!             ITERATION AND .FALSE. OTHERWISE.
+!             produced by ortho.
+!        Exit is set to the value .True. If improvement of X is success-
+!             ful with a gain in accuracy of at least 50 per cent each
+!             iteration and .False. Otherwise.
 !
-!      METHOD
-!        ORIMP EXECUTES THE ITERATION CYCLE
+!      Method
+!        ORIMP executes the iteration cycle
 !              (1)  AR = B - AX
 !              (2)  X = X + R
-!        WITH A GIVEN INITIAL X.  THE RESIDUAL VECTOR B - AX IS COMPUTED
-!        TO HIGH ACCURACY BY DOUBLE PRECISION.  ORSOL IS THEN USED TO
-!        SOLVE (1).
+!        with a given initial X.  The residual vector B - AX is computed
+!        to high accuracy by double precision.  ORSOL is then used to
+!        solve (1).
 !
 ! ----------------------------------------------------------------------
 !
@@ -3753,7 +3753,7 @@ double precision :: dsum
 data zero/0.0/, one/1.0/, four/4.0/, fourth/0.25/
 !
 !     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
-!                THE VALUE U WHERE U IS THE SMALLEST POSITIVE FLOATING
+!                the value U where U is the smallest positive floating
 !                POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
 eps = spmpar(1)
@@ -3768,7 +3768,7 @@ do 10 i = 1,n
 if (xnrm2 .eq. zero) return
 ratio = one
 !
-!                                       FIND THE RESIDUAL VECTOR.
+!                                       Find the residual vector.
 !
 20 do 22 k = 1,m
 dsum = b(k)
@@ -3776,7 +3776,7 @@ do 21 j = 1,n
 21 dsum = dsum - dble(a(k,j))*dble(x(j))
 22 r(k) = dsum
 !
-!                                       FIND THE CORRECTION VECTOR.
+!                                       Find the correction vector.
 !
 call orsol(m, n, qr, ms, s, ip, r)
 rnrm2 = zero
@@ -3784,7 +3784,7 @@ do 30 k = 1,n
 30 rnrm2 = rnrm2 + r(k)*r(k)
 if (rnrm2 .le. eps2*xnrm2) return
 !
-!                                       FORM NEW APPROXIMATE SOLUTION.
+!                                       Form new approximate solution.
 !
 do 40 k = 1,n
 40 x(k) = x(k) + r(k)
@@ -3842,19 +3842,19 @@ implicit none
 integer, intent(in) :: m, ms, n
 integer :: i, j, jp, k, kj, nn
 !***********************************************************************
-!      IDENTIFICATION
-!        DORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
-!                MATRIX A TO UPPER TRIANGULAR FORM
-!        FORTRAN SUBROUTINE SUBPROGRAM
-!        AEROSPACE RESEARCH LABORATORIES
-!        WRIGHT-PATTERSON AFB, OHIO  45433
-!      PURPOSE
-!        DORTHO COMPUTES AN IMPLICIT ORTHOGONAL MATRIX Q AND AN EXPLICIT
-!        UPPER TRIANGULAR MATRIX R AND A PERMUTATION MATRIX P SATISFYING
+!      Identification
+!        DORTHO - orthogonal transformation of a given general M by N
+!                matrix A to upper triangular form
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        DORTHO computes an implicit orthogonal matrix Q and an explicit
+!        upper triangular matrix R and a permutation matrix P satisfying
 !        QR = PA GIVEN AN M BY N REAL MATRIX A.  DORTHO IS INTENDED FOR
-!        USE WITH THE SUBROUTINE DORSOL TO PRODUCE THE LEAST SQUARES
+!        use with the subroutine DORSOL to produce the least squares
 !        SOLUTION OF THE EQUATION AX = B.
-!      CONTROL
+!      Control
 !
 !        DIMENSION QR(MS,N), S(N), IP(N)
 !        LOGICAL EXIT
@@ -3886,9 +3886,9 @@ integer :: i, j, jp, k, kj, nn
 !        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
 !            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
 !            269-276.
-!        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
-!            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
-!            TECHNICAL REPORT ARL TR 74-0124(1974).
+!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
 !***********************************************************************
 double precision, intent(inout) :: qr(ms,n), s(n)
 integer, intent(inout) :: ip(n)
@@ -3902,8 +3902,8 @@ do 80 j = 1, nn
   ip(j) = j
   jp = j + 1
   kj = j
-!                                       SEARCH FOR PIVOT IN THE J-TH
-!                                       COLUMN AND INTERCHANGE ROWS.
+!                                       Search for pivot in the J-TH
+!                                       column and interchange rows.
   do k = jp, m
      if (dabs(qr(k,j)) .gt. dabs(qr(kj,j))) kj = k
   end do
@@ -3914,8 +3914,8 @@ do 80 j = 1, nn
      sav = qr(j,i)
      qr(j,i) = qr(kj,i)
 20 qr(kj,i) = sav
-!                                       NORMALIZE THE PIVOTING COLUMN
-!                                       AND FIND ITS NORM.
+!                                       Normalize the pivoting column
+!                                       and find its norm.
 30 ajj = qr(j,j)
   do 31 i = jp, m
 31 qr(i,j) = qr(i,j)/ajj
@@ -3925,8 +3925,8 @@ do 80 j = 1, nn
   s(j) = -dsqrt(sav)
   qr(j,j) = s(j)*ajj
   if (jp .gt. n) go to 80
-!                                       PREMULTIPLY QR WITH THE J-TH
-!                                       ORTHOGONAL MATRIX.
+!                                       Premultiply QR with the J-TH
+!                                       orthogonal matrix.
   y = 1.d0 - s(j)
   do k = jp, n
      sav = qr(j,k)
@@ -3950,17 +3950,17 @@ implicit none
 integer, intent(in) :: m, ms, n
 integer :: i, ij, j, jp, k, ni, nm, nn
 !***********************************************************************
-!      IDENTIFICATION
-!        DORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
-!                ORTHOGONAL-TRIANGULAR FACTORIZATION OF THE COEFFICIENT
-!                MATRIX PRODUCED BY SUBROUTINE DORTHO
-!        FORTRAN SUBROUTINE SUBPROGRAM
-!        AEROSPACE RESEARCH LABORATORIES
-!        WRIGHT-PATTERSON AFB, OHIO  45433
-!      PURPOSE
-!        DORSOL COMPUTES THE LEAST SQUARES SOLUTION OF THE LINEAR SYSTEM
+!      Identification
+!        DORSOL - least squares solution of a linear system given an
+!                orthogonal-triangular factorization of the coefficient
+!                matrix produced by subroutine DORTHO
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        DORSOL computes the least squares solution of the linear system
 !        QRX = PAX = B WHERE Q, R, AND P ARE DETERMINED FROM A BY DORTHO
-!      CONTROL
+!      control
 !
 !        DIMENSION QR(MS,N), S(N), IP(N), X(M)
 !        .
@@ -3993,9 +3993,9 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
 !            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
 !            269-276.
-!        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
-!            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
-!            TECHNICAL REPORT ARL TR 74-0124(1974).
+!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
 !***********************************************************************
 double precision, intent(in) :: qr(ms,n), s(n)
 double precision, intent(inout) :: x(m)
@@ -4011,8 +4011,8 @@ do j = 1, nn
   sav = x(j)
   x(j) = x(ij)
   x(ij) = sav
-!                                       PREMULTIPLY X WITH THE J-TH
-!                                       ORTHOGONAL MATRIX.
+!                                       Premultiply X with the J-TH
+!                                       orthogonal matrix.
   sav = x(j)
   do 10 k = jp, m
 10 sav = sav + qr(k,j)*x(k)
@@ -4022,8 +4022,8 @@ do j = 1, nn
   do 20 k = jp, m
 20 x(k) = x(k) - qr(k,j)*ss
 end do
-!                                       BACK SUBSTITUTE TO FIND THE
-!                                       LEAST SQUARES SOLUTION.
+!                                       Back substitute to find the
+!                                       least squares solution.
 x(n) = x(n)/qr(n,n)
 nm = n - 1
 do i = 1, nm
@@ -4050,25 +4050,25 @@ real :: eps, rerr
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
+!              Least squares solution of linear equations
 !
 !                            --------------
 !
-!     LSQR SOLVES BOTH UNDERDETERMINED AND OVERDETERMINED LINEAR
+!     LSQR solves both underdetermined and overdetermined linear
 !     SYSTEMS AX = B, WHERE A IS AN M BY N MATRIX AND B IS AN M BY
 !     NB MATRIX OF RIGHT HAND SIDES. IF M .GE. N, THE LEAST SQUARES
-!     SOLUTION IS COMPUTED BY DECOMPOSING THE MATRIX A INTO THE
-!     PRODUCT OF AN ORTHOGONAL MATRIX Q AND UPPER TRIANGULAR MATRIX
+!     solution is computed by decomposing the matrix A into the
+!     product of an orthogonal matrix Q and upper triangular matrix
 !     R (QR FACTORIZATION). IF M .LT. N, THE MINIMAL LENGTH SOLUTION
-!     IS COMPUTED BY FACTORING THE MATRIX A INTO THE PRODUCT OF A
-!     LOWER TRIANGULAR MATRIX L AND ORTHOGONAL MATRIX Q (LQ FACTOR-
-!     IZATION). IF THE MATRIX A IS DETERMINED TO BE RANK DEFICIENT,
-!     THEN THE MINIMAL LENGTH LEAST SQUARES SOLUTION IS COMPUTED.
+!     is computed by factoring the matrix A into the product of A
+!     lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!     ization). If the matrix A is determined to be rank deficient,
+!     then the minimal length least squares solution is computed.
 !
-!     USER INPUT BOUNDS ON THE UNCERTAINTY OF THE ELEMENTS OF A ARE
-!     USED TO DETECT NUMERICAL RANK DEFICIENCY. THE ALGORITHM USES
-!     A ROW AND COLUMN PIVOT STRATEGY TO MINIMIZE THE GROWTH OF
-!     UNCERTAINTY AND ROUND-OFF ERRORS.
+!     User input bounds on the uncertainty of the elements of A are
+!     used to detect numerical rank deficiency. The algorithm uses
+!     a row and column pivot strategy to minimize the growth of
+!     uncertainty and round-off errors.
 !
 !   ******************************************************************
 !   *                                                                *
@@ -4076,7 +4076,7 @@ real :: spmpar
 !   *                                                                *
 !   ******************************************************************
 !
-!     INPUT..
+!     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
 !                   CALLED FOR THE FIRST TIME.
@@ -4091,15 +4091,15 @@ real :: spmpar
 !
 !     A(,)          LINEAR COEFFICIENT MATRIX OF AX=B, WITH MDA THE
 !      MDA,M,N      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
-!                   M IS THE ROW DIMENSION (NO. OF EQUATIONS OF THE
-!                   PROBLEM) AND N THE COL DIMENSION (NO. OF UNKNOWNS).
+!                   M is the row dimension (no. of equations of the
+!                   problem) and N the col dimension (no. of unknowns).
 !                   MUST HAVE MDA .GE. M.
 !
 !     B(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
 !      MDB,NB       DIMENSION OF B IN THE CALLING PROGRAM. NB IS THE
-!                   NUMBER OF M BY 1 RIGHT HAND SIDES. MUST HAVE
+!                   number of M by 1 right hand sides. Must have
 !                   MDB .GE. MAX(M,N). IF NB .LE. 0 THEN B AND MDB
-!                   ARE IGNORED.
+!                   are ignored.
 !
 !     RE            RE IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
 !                   ELEMENTS OF THE MATRIX A (0 .LE. RE .LT. 1).
@@ -4115,34 +4115,34 @@ real :: spmpar
 !
 !     LIW           ACTUAL DIMENSION OF IWORK.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
-!                   AND THE TRANSFORMATION INFORMATION. A AND THE FIRST
-!                   2*MIN(M,N) ELEMENTS OF WORK (SEE BELOW) COMPLETELY
-!                   SPECIFY THE FACTORIZATION OF THE MATRIX A.
+!                   and the transformation information. A and the first
+!                   2*MIN(M,N) elements of work (see below) completely
+!                   specify the factorization of the matrix A.
 !
 !     B(,)          CONTAINS THE N BY NB SOLUTION MATRIX FOR X.
 !
 !     KRANK,KSURE   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
-!                   AND ABSOLUTE BOUNDS ON UNCERTAINTY, IS BOUNDED
-!                   ABOVE BY KRANK AND BELOW BY KSURE. THE ALGORITHM
-!                   RETURNS A SOLUTION BASED ON KRANK. KSURE PROVIDES
-!                   AN INDICATION OF THE PRECISION OF THE RANK.
+!                   and absolute bounds on uncertainty, is bounded
+!                   above by KRANK and below by KSURE. The algorithm
+!                   returns a solution based on KRANK. KSURE provides
+!                   an indication of the precision of the rank.
 !
 !     RNORM()       CONTAINS THE EUCLIDEAN LENGTH OF THE NB RESIDUAL
 !                   VECTORS  B(I) - AX(I), I=1,...,NB.
 !
 !     WORK()        THE FIRST 2*MIN(M,N) LOCATIONS OF WORK CONTAIN
-!                   THE VALUES NECESSARY TO REPRODUCE THE HOUSEHOLDER
-!                   FACTORIZATION OF A.
+!                   the values necessary to reproduce the Householder
+!                   factorization of A.
 !
 !     IWORK()       AN ARRAY OF LENGTH M + N CONTAINING THE ORDERS IN
 !                   WHICH THE ROWS AND COLUMNS WERE USED. IF M .GE. N
-!                   THEN THE FIRST N LOCATIONS CONTAIN THE ORDER OF
-!                   THE COLUMNS AND THE NEXT M LOCATIONS THE ORDER OF
+!                   then the first N locations contain the order of
+!                   the columns and the next M locations the order of
 !                   THE ROWS. IF M .LT. N THEN THE ORDER OF THE ROWS
-!                   PRECEDES THE ORDER OF THE COLUMNS.
+!                   precedes the order of the columns.
 !
 !     IERR          FLAG TO INDICATE THE STATUS OF THE RESULTS
 !                     0     - SATISFACTORY COMPLETION
@@ -4161,24 +4161,24 @@ real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
 !----------------
 !     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
-!                   ARE NEVER INTERCHANGED.
+!                   are never interchanged.
 !                   IF M .LT. N THEN THE FIRST NP ROWS OF A ARE
-!                   NEVER INTERCHANGED. NP IS NOT REFERENCED ON
-!                   A CONTINUATION CALL TO THE ROUTINE.
+!                   never interchanged. NP is not referenced on
+!                   a continuation call to the routine.
 !
 !     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
-!                   IS TO REACT IF RANK DEFICIENCY IS DETECTED.
+!                   is to react if rank deficiency is detected.
 !                   IF MODE = 0 RETURN IMMEDIATELY, NO SOLUTION
-!                             1 COMPUTE TRUNCATED SOLUTION
-!                             2 COMPUTE MINIMAL LENGTH SOLUTION
-!                   MODE MUST NOT BE MODIFIED ON A CONTINUATION
+!                             1 compute truncated solution
+!                             2 compute minimal length solution
+!                   mode must not be modified on a continuation
 !                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
-!                   FIRST N LOCATIONS OF WORK ARE USED.
+!                   first N locations of work are used.
 !----------------
 np = 0
 mode = 2
 !
-!     CHECK THE INPUT
+!     Check the input
 !
 if (nb .le. 0 .and. ind .ne. 0) go to 200
 if (m .lt. 1 .or. n .lt. 1) go to 210
@@ -4196,7 +4196,7 @@ if (ind .ne. 0) go to 100
 10 if (lw .lt. 5*m0) go to 250
 if (re .lt. 0.0 .or. ae .lt. 0.0) go to 260
 !
-!     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
+!     Define the relative and absolute tolerance lists
 !
 m1 = 1
 m2 = m1 + m0
@@ -4216,7 +4216,7 @@ do i = m5,imax
    work(i) = ae
 end do
 !
-!     FACTOR THE MATRIX A
+!     Factor the matrix A
 !
 !     NUM = NP
 if (m .lt. n) go to 40
@@ -4228,7 +4228,7 @@ if (m .lt. n) go to 40
 40 call u11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
 &work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
-!     SOLUTION PHASE
+!     Solution phase
 !
 100 ierr = 0
 info = 0
@@ -4244,7 +4244,7 @@ m1 = 1
 m2 = 1 + m0
 if (info .eq. 2) go to 130
 !
-!     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
+!     Only MIN(M,N) elements of work are needed
 !
 if (lw .lt. m0) go to 250
 if (m .lt. n) go to 120
@@ -4257,7 +4257,7 @@ if (m .lt. n) go to 120
 &work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
-!     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
+!     Here 2*MIN(M,N) elements of work are needed
 !
 130 if (lw .lt. 2*m0) go to 250
 if (m .lt. n) go to 140
@@ -4270,7 +4270,7 @@ if (m .lt. n) go to 140
 &work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 !                             NB .LE. 0  ON A CONTINUATION CALL
 200 ierr = 7
@@ -4287,10 +4287,10 @@ return
 !                             LIW .LT. M + N
 240 ierr = 4
 return
-!                             LW TOO SMALL
+!                             LW too small
 250 ierr = 5
 return
-!                             RE OR AE IS NEGATIVE
+!                             RE or AE is negative
 260 ierr = 6
 return
 !                             0 .LT. KRANK .LT. NP
@@ -4312,15 +4312,15 @@ real :: snrm2
 real :: sdot
 integer :: isamax
 !
-!       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
-!       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
-!       COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
-!       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
-!       DEFICIENCY.
+!       This routine performs A QR factorization of A
+!       using Householder transformations. Row and
+!       column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
 !
 integer, intent(inout) :: ic(n), ir(m)
 !
-!        INITIALIZATION
+!        Initialization
 !
 j = 0
 krank = n
@@ -4331,17 +4331,17 @@ do i = 1,m
    ir(i) = i
 end do
 !
-!        DETERMINE REL AND ABS ERROR VECTORS
+!        Determine rel and abs error vectors
 !
 !
-!        CALCULATE COL LENGTH
+!        Calculate col length
 !
 do i = 1,n
    h(i) = snrm2(m,a(1,i),1)
    w(i) = h(i)
 end do
 !
-!         INITIALIZE ERROR BOUNDS
+!         Initialize error bounds
 !
 do i = 1,n
    eb(i) = amax1(db(i),ub(i)*h(i))
@@ -4349,7 +4349,7 @@ do i = 1,n
    db(i) = 0.0
 end do
 !
-!          DISCARD SELF DEPENDENT COLUMNS
+!          Discard self dependent columns
 !
 i = 1
 50 if (eb(i) .ge. h(i)) go to 60
@@ -4357,7 +4357,7 @@ if (i .eq. krank) go to 70
 i = i + 1
 go to 50
 !
-!          MATRIX REDUCTION
+!          Matrix reduction
 !
 60 kk = krank
 krank = krank - 1
@@ -4372,7 +4372,7 @@ call iswap (1,ic(i),1,ic(kk),1)
 call sswap (m,a(1,i),1,a(1,kk),1)
 go to 50
 !
-!           TEST FOR ZERO RANK
+!           Test for zero rank
 !
 70 if (krank .gt. 0) go to 100
 krank = 0
@@ -4391,7 +4391,7 @@ if (j .le. np) kz = j
 !
 mm = m - j + 1
 !
-!         UB DETERMINES COLUMN PIVOT
+!         UB determines column pivot
 !
 110 imin = j
 if (h(j) .eq. 0.0) go to 170
@@ -4402,13 +4402,13 @@ do 120 i = j,kz
    imin = i
 120 continue
 !
-!     TEST FOR RANK DEFICIENCY
+!     Test for rank deficiency
 !
 if (rmin .lt. 1.0) go to 200
 tt = (eb(imin) + abs(db(imin)))/h(imin)
 if (tt .ge. 1.0) go to 170
 !
-!     COMPUTE EXACT UB
+!     Compute exact UB
 !
 do i = 1,jm1
    w(i) = a(i,imin)
@@ -4432,7 +4432,7 @@ ub(imin) = tt
 if (ub(imin)/h(imin) .ge. 1.0) go to 170
 go to 200
 !
-!        MATRIX REDUCTION
+!        Matrix reduction
 !
 170 kk = krank
 krank = krank - 1
@@ -4450,7 +4450,7 @@ if (imin .gt. krank) go to 180
 180 if (j .gt. krank) go to 300
 go to 110
 !
-!        COLUMN PIVOT
+!        Column pivot
 !
 200 if (imin .eq. j) go to 210
 call sswap (1,h(j),1,h(imin),1)
@@ -4461,7 +4461,7 @@ call sswap (1,db(j),1,db(imin),1)
 call sswap (1,w(j),1,w(imin),1)
 call iswap (1,ic(j),1,ic(imin),1)
 !
-!        ROW PIVOT
+!        Row pivot
 !
 210 jmax = isamax(mm,a(j,j),1)
 jmax = jmax + j - 1
@@ -4469,7 +4469,7 @@ if (jmax .eq. j) go to 220
 call sswap (n,a(j,1),mda,a(jmax,1),mda)
 call iswap (1,ir(j),1,ir(jmax),1)
 !
-!     APPLY HOUSEHOLDER TRANSFORMATION
+!     Apply Householder transformation
 !
 220 tn = snrm2(mm,a(j,j),1)
 if (tn .eq. 0.0) go to 170
@@ -4496,7 +4496,7 @@ do 240 i = jp1,n
 250 h(j) = a(j,j)
 a(j,j) = -tn
 !
-!          UPDATE UB, DB
+!          Update UB, DB
 !
 ub(j) = ub(j)/abs(a(j,j))
 db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
@@ -4511,7 +4511,7 @@ go to 100
 !
 300 continue
 !
-!        COMPUTE KSURE
+!        Compute KSURE
 !
 km1 = krank - 1
 do i = 1,km1
@@ -4537,7 +4537,7 @@ do i = 1,krank
 end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
-!     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
+!     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. n .or. mode .lt. 2) return
 nmk = n - krank
@@ -4562,7 +4562,7 @@ i = krank
 350 continue
 return
 !
-!     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
+!     First NP columns are linearly dependent
 !
 400 krank = i - 1
 return
@@ -4582,10 +4582,10 @@ real :: bb, tt
 real :: snrm2
 real :: sdot
 !
-!        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
+!        Given the Householder QR factorization of A, this
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
-!        IS OF REDUCED RANK, THIS ROUTINE RETURNS A SOLUTION
-!        ACCORDING TO THE SELECTED MODE.
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
@@ -4609,7 +4609,7 @@ return
 !
 30 i = 0
 !
-!     REORDER B TO REFLECT ROW INTERCHANGES
+!     Reorder B to reflect row interchanges
 !
 40 i = i + 1
    if (i .eq. m) go to 100
@@ -4640,7 +4640,7 @@ return
    ir(i) = iabs(ir(i))
 end do
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     Apply Householder transformations to B
 !
 do j = 1,k
    tt = a(j,j)
@@ -4652,13 +4652,13 @@ do j = 1,k
    a(j,j) = tt
 end do
 !
-!        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
+!        Find norms of residual VECTOR(S)..(before overwrite B)
 !
 do jb = 1,nb
    rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
 end do
 !
-!     BACK SOLVE UPPER TRIANGULAR R
+!     Back solve upper triangular R
 !
 i = k
 150 do jb = 1,nb
@@ -4674,7 +4674,7 @@ go to 150
 !
 !     RANK LT N
 !
-!      TRUNCATED SOLUTION
+!      Truncated solution
 !
 200 if (k .eq. n) go to 230
 do jb = 1,nb
@@ -4684,7 +4684,7 @@ do jb = 1,nb
 end do
 if (mode .eq. 1) go to 230
 !
-!      MINIMAL LENGTH SOLUTION
+!      Minimal length solution
 !
 nmk = n - k
 do jb = 1,nb
@@ -4696,7 +4696,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     REORDER B TO REFLECT COLUMN INTERCHANGES
+!     Reorder B to reflect column interchanges
 !
 230 i = 0
 !
@@ -4734,15 +4734,15 @@ real :: snrm2
 real :: sdot
 integer :: isamax
 !
-!       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
-!       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
-!       AND COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
-!       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
-!       DEFICIENCY.
+!       This routine performs an LQ factorization of the
+!       matrix A using Householder transformations. Row
+!       and column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
 !
 integer, intent(inout) :: ic(n), ir(m)
 !
-!        INITIALIZATION
+!        Initialization
 !
 j = 0
 krank = m
@@ -4753,17 +4753,17 @@ do i = 1,m
    ir(i) = i
 end do
 !
-!        DETERMINE REL AND ABS ERROR VECTORS
+!        Determine rel and abs error vectors
 !
 !
-!        CALCULATE ROW LENGTH
+!        Calculate row length
 !
 do i = 1,m
    h(i) = snrm2(n,a(i,1),mda)
    w(i) = h(i)
 end do
 !
-!         INITIALIZE ERROR BOUNDS
+!         Initialize error bounds
 !
 do i = 1,m
    eb(i) = amax1(db(i),ub(i)*h(i))
@@ -4771,7 +4771,7 @@ do i = 1,m
    db(i) = 0.0
 end do
 !
-!          DISCARD SELF DEPENDENT ROWS
+!          Discard self dependent rows
 !
 i = 1
 50 if (eb(i) .ge. h(i)) go to 60
@@ -4779,7 +4779,7 @@ if (i .eq. krank) go to 70
 i = i + 1
 go to 50
 !
-!          MATRIX REDUCTION
+!          Matrix reduction
 !
 60 kk = krank
 krank = krank - 1
@@ -4794,7 +4794,7 @@ call iswap (1,ir(i),1,ir(kk),1)
 call sswap (n,a(i,1),mda,a(kk,1),mda)
 go to 50
 !
-!           TEST FOR ZERO RANK
+!           Test for zero rank
 !
 70 if (krank .gt. 0) go to 100
 krank = 0
@@ -4813,7 +4813,7 @@ if (j .le. np) kz = j
 !
 nn = n - j + 1
 !
-!         UB DETERMINES ROW PIVOT
+!         UB determines row pivot
 !
 110 imin = j
 if (h(j) .eq. 0.0) go to 170
@@ -4824,13 +4824,13 @@ do 120 i = j,kz
    imin = i
 120 continue
 !
-!     TEST FOR RANK DEFICIENCY
+!     Test for rank deficiency
 !
 if (rmin .lt. 1.0) go to 200
 tt = (eb(imin) + abs(db(imin)))/h(imin)
 if (tt .ge. 1.0) go to 170
 !
-!     COMPUTE EXACT UB
+!     Compute exact UB
 !
 do i = 1,jm1
    w(i) = a(imin,i)
@@ -4854,7 +4854,7 @@ ub(imin) = tt
 if (ub(imin)/h(imin) .ge. 1.0) go to 170
 go to 200
 !
-!        MATRIX REDUCTION
+!        Matrix reduction
 !
 170 kk = krank
 krank = krank - 1
@@ -4872,7 +4872,7 @@ if (imin .gt. krank) go to 180
 180 if (j .gt. krank) go to 300
 go to 110
 !
-!        ROW PIVOT
+!        Row pivot
 !
 200 if (imin .eq. j) go to 210
 call sswap (1,h(j),1,h(imin),1)
@@ -4883,7 +4883,7 @@ call sswap (1,db(j),1,db(imin),1)
 call sswap (1,w(j),1,w(imin),1)
 call iswap (1,ir(j),1,ir(imin),1)
 !
-!        COLUMN PIVOT
+!        Column pivot
 !
 210 jmax = isamax(nn,a(j,j),mda)
 jmax = jmax + j - 1
@@ -4891,7 +4891,7 @@ if (jmax .eq. j) go to 220
 call sswap (m,a(1,j),1,a(1,jmax),1)
 call iswap (1,ic(j),1,ic(jmax),1)
 !
-!     APPLY HOUSEHOLDER TRANSFORMATION
+!     Apply Householder transformation
 !
 220 tn = snrm2(nn,a(j,j),mda)
 if (tn .eq. 0.0) go to 170
@@ -4918,7 +4918,7 @@ do 240 i = jp1,m
 250 h(j) = a(j,j)
 a(j,j) = -tn
 !
-!          UPDATE UB, DB
+!          Update UB, DB
 !
 ub(j) = ub(j)/abs(a(j,j))
 db(j) = (sign(eb(j),db(j))+db(j))/a(j,j)
@@ -4933,7 +4933,7 @@ go to 100
 !
 300 continue
 !
-!        COMPUTE KSURE
+!        Compute KSURE
 !
 km1 = krank - 1
 do i = 1,km1
@@ -4959,7 +4959,7 @@ do i = 1,krank
 end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
-!     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
+!     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. m .or. mode .lt. 2) return
 mmk = m - krank
@@ -4984,7 +4984,7 @@ i = krank
 350 continue
 return
 !
-!     FIRST NP ROWS ARE LINEARLY DEPENDENT
+!     First NP rows are linearly dependent
 !
 400 krank = i - 1
 return
@@ -5004,10 +5004,10 @@ real :: bb, tt
 real :: snrm2
 real :: sdot
 !
-!        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
+!        Given the Householder LQ factorization of A, this
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
-!        IS OF REDUCED RANK, THIS ROUTINE RETURNS A SOLUTION
-!        ACCORDING TO THE SELECTED MODE.
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
@@ -5031,7 +5031,7 @@ return
 !
 30 i = 0
 !
-!     REORDER B TO REFLECT ROW INTERCHANGES
+!     Reorder B to reflect row interchanges
 !
 40 i = i + 1
    if (i .eq. m) go to 100
@@ -5063,7 +5063,7 @@ return
 end do
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     apply Householder transformations to B
 !
 if (mode .lt. 2 .or. k .eq. m) go to 140
 mmk = m - k
@@ -5077,13 +5077,13 @@ do jb = 1,nb
    end do
 end do
 !
-!     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
+!     Find norms of residual VECTOR(S)..(before overwrite B)
 !
 140 do jb = 1,nb
    rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
 end do
 !
-!     BACK SOLVE LOWER TRIANGULAR L
+!     Back solve lower triangular L
 !
 do 170 jb = 1,nb
    do i = 1,k
@@ -5094,7 +5094,7 @@ do 170 jb = 1,nb
    end do
 170 continue
 !
-!      TRUNCATED SOLUTION
+!      Truncated solution
 !
 if (k .eq. n) go to 210
 do jb = 1,nb
@@ -5103,7 +5103,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     Apply Householder transformations to B
 !
 210 do i = 1,k
    j = kp1 - i
@@ -5116,7 +5116,7 @@ end do
    a(j,j) = tt
 end do
 !
-!     REORDER B TO REFLECT COLUMN INTERCHANGES
+!     Reorder B to reflect column interchanges
 !
 i = 0
 !
@@ -5150,25 +5150,25 @@ integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !-----------------------------------------------------------------------
 !
-!              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
+!              Least squares solution of linear equations
 !
 !                            --------------
 !
-!     DLSQR SOLVES BOTH UNDERDETERMINED AND OVERDETERMINED LINEAR
+!     DLSQR solves both underdetermined and overdetermined linear
 !     SYSTEMS AX = B, WHERE A IS AN M BY N MATRIX AND B IS AN M BY
 !     NB MATRIX OF RIGHT HAND SIDES. IF M .GE. N, THE LEAST SQUARES
-!     SOLUTION IS COMPUTED BY DECOMPOSING THE MATRIX A INTO THE
-!     PRODUCT OF AN ORTHOGONAL MATRIX Q AND UPPER TRIANGULAR MATRIX
+!     solution is computed by decomposing the matrix A into the
+!     product of an orthogonal matrix Q and upper triangular matrix
 !     R (QR FACTORIZATION). IF M .LT. N, THE MINIMAL LENGTH SOLUTION
-!     IS COMPUTED BY FACTORING THE MATRIX A INTO THE PRODUCT OF A
-!     LOWER TRIANGULAR MATRIX L AND ORTHOGONAL MATRIX Q (LQ FACTOR-
-!     IZATION). IF THE MATRIX A IS DETERMINED TO BE RANK DEFICIENT,
-!     THEN THE MINIMAL LENGTH LEAST SQUARES SOLUTION IS COMPUTED.
+!     is computed by factoring the matrix A into the product of A
+!     lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!     ization). If the matrix A is determined to be rank deficient,
+!     then the minimal length least squares solution is computed.
 !
-!     USER INPUT BOUNDS ON THE UNCERTAINTY OF THE ELEMENTS OF A ARE
-!     USED TO DETECT NUMERICAL RANK DEFICIENCY. THE ALGORITHM USES
-!     A ROW AND COLUMN PIVOT STRATEGY TO MINIMIZE THE GROWTH OF
-!     UNCERTAINTY AND ROUND-OFF ERRORS.
+!     User input bounds on the uncertainty of the elements of A are
+!     used to detect numerical rank deficiency. The algorithm uses
+!     a row and column pivot strategy to minimize the growth of
+!     uncertainty and round-off errors.
 !
 !   ******************************************************************
 !   *                                                                *
@@ -5176,7 +5176,7 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !   *                                                                *
 !   ******************************************************************
 !
-!     INPUT..
+!     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
 !                   CALLED FOR THE FIRST TIME.
@@ -5191,15 +5191,15 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !
 !     A(,)          LINEAR COEFFICIENT MATRIX OF AX=B, WITH MDA THE
 !      MDA,M,N      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
-!                   M IS THE ROW DIMENSION (NO. OF EQUATIONS OF THE
-!                   PROBLEM) AND N THE COL DIMENSION (NO. OF UNKNOWNS).
+!                   M is the row dimension (no. of equations of the
+!                   problem) and N the col dimension (no. of unknowns).
 !                   MUST HAVE MDA .GE. M.
 !
 !     B(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
 !      MDB,NB       DIMENSION OF B IN THE CALLING PROGRAM. NB IS THE
-!                   NUMBER OF M BY 1 RIGHT HAND SIDES. MUST HAVE
+!                   number of M by 1 right hand sides. Must have
 !                   MDB .GE. MAX(M,N). IF NB .LE. 0 THEN B AND MDB
-!                   ARE IGNORED.
+!                   are ignored.
 !
 !     RE            RE IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
 !                   ELEMENTS OF THE MATRIX A (0 .LE. RE .LT. 1).
@@ -5215,34 +5215,34 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !
 !     LIW           ACTUAL DIMENSION OF IWORK.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
-!                   AND THE TRANSFORMATION INFORMATION.IND TOGETHER WITH
-!                   THE FIRST 2*MIN(M,N) ELEMENTS OF WORK (SEE BELOW)
-!                   COMPLETELY SPECIFY THE FACTORIZATION OF A.
+!                   and the transformation information.Ind together with
+!                   the first 2*MIN(M,N) elements of work (see below)
+!                   completely specify the factorization of A.
 !
 !     B(,)          CONTAINS THE N BY NB SOLUTION MATRIX FOR X.
 !
 !     KRANK,KSURE   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
-!                   AND ABSOLUTE BOUNDS ON UNCERTAINTY, IS BOUNDED
-!                   ABOVE BY KRANK AND BELOW BY KSURE. THE ALGORITHM
-!                   RETURNS A SOLUTION BASED ON KRANK. KSURE PROVIDES
-!                   AN INDICATION OF THE PRECISION OF THE RANK.
+!                   and absolute bounds on uncertainty, is bounded
+!                   above by KRANK and below by KSURE. The algorithm
+!                   returns a solution based on KRANK. KSURE provides
+!                   an indication of the precision of the rank.
 !
 !     RNORM()       CONTAINS THE EUCLIDEAN LENGTH OF THE NB RESIDUAL
 !                   VECTORS  B(I) - AX(I), I=1,...,NB.
 !
 !     WORK()        THE FIRST 2*MIN(M,N) LOCATIONS OF WORK CONTAIN
-!                   THE VALUES NECESSARY TO REPRODUCE THE HOUSEHOLDER
-!                   FACTORIZATION OF A.
+!                   the values necessary to reproduce the Householder
+!                   factorization of A.
 !
 !     IWORK()       AN ARRAY OF LENGTH M + N CONTAINING THE ORDERS IN
 !                   WHICH THE ROWS AND COLUMNS WERE USED. IF M .GE. N
-!                   THEN THE FIRST N LOCATIONS CONTAIN THE ORDER OF
-!                   THE COLUMNS AND THE NEXT M LOCATIONS THE ORDER OF
+!                   then the first N locations contain the order of
+!                   the columns and the next M locations the order of
 !                   THE ROWS. IF M .LT. N THEN THE ORDER OF THE ROWS
-!                   PRECEDES THE ORDER OF THE COLUMNS.
+!                   precedes the order of the columns.
 !
 !     IERR          FLAG TO INDICATE THE STATUS OF THE RESULTS
 !                     0     - SATISFACTORY COMPLETION
@@ -5265,24 +5265,24 @@ double precision :: eps, rerr
 double precision :: dpmpar
 !----------------
 !     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
-!                   ARE NEVER INTERCHANGED.
+!                   are never interchanged.
 !                   IF M .LT. N THEN THE FIRST NP ROWS OF A ARE
-!                   NEVER INTERCHANGED. NP IS NOT REFERENCED ON
-!                   A CONTINUATION CALL TO THE ROUTINE.
+!                   never interchanged. NP is not referenced on
+!                   a continuation call to the routine.
 !
 !     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
-!                   IS TO REACT IF RANK DEFICIENCY IS DETECTED.
+!                   is to react if rank deficiency is detected.
 !                   IF MODE = 0 RETURN IMMEDIATELY, NO SOLUTION
-!                             1 COMPUTE TRUNCATED SOLUTION
-!                             2 COMPUTE MINIMAL LENGTH SOLUTION
-!                   MODE MUST NOT BE MODIFIED ON A CONTINUATION
+!                             1 compute truncated solution
+!                             2 compute minimal length solution
+!                   mode must not be modified on a continuation
 !                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
-!                   FIRST N LOCATIONS OF WORK ARE USED.
+!                   first N locations of work are used.
 !----------------
 np = 0
 mode = 2
 !
-!     CHECK THE INPUT
+!     Check the input
 !
 if (nb .le. 0 .and. ind .ne. 0) go to 200
 if (m .lt. 1 .or. n .lt. 1) go to 210
@@ -5300,7 +5300,7 @@ if (ind .ne. 0) go to 100
 10 if (lw .lt. 5*m0) go to 250
 if (re .lt. 0.d0 .or. ae .lt. 0.d0) go to 260
 !
-!     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
+!     Define the relative and absolute tolerance lists
 !
 m1 = 1
 m2 = m1 + m0
@@ -5320,7 +5320,7 @@ do i = m5,imax
    work(i) = ae
 end do
 !
-!     FACTOR THE MATRIX A
+!     Factor the matrix A
 !
 !     NUM = NP
 if (m .lt. n) go to 40
@@ -5332,7 +5332,7 @@ if (m .lt. n) go to 40
 40 call du11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
 &work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
-!     SOLUTION PHASE
+!     Solution phase
 !
 100 ierr = 0
 info = 0
@@ -5348,7 +5348,7 @@ m1 = 1
 m2 = 1 + m0
 if (info .eq. 2) go to 130
 !
-!     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
+!     Only MIN(M,N) elements of work are needed
 !
 if (lw .lt. m0) go to 250
 if (m .lt. n) go to 120
@@ -5361,7 +5361,7 @@ if (m .lt. n) go to 120
 &work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
-!     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
+!     Here 2*MIN(M,N) elements of work are needed
 !
 130 if (lw .lt. 2*m0) go to 250
 if (m .lt. n) go to 140
@@ -5374,7 +5374,7 @@ if (m .lt. n) go to 140
 &work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 !                             NB .LE. 0  ON A CONTINUATION CALL
 200 ierr = 7
@@ -5391,10 +5391,10 @@ return
 !                             LIW .LT. M + N
 240 ierr = 4
 return
-!                             LW TOO SMALL
+!                             LW too small
 250 ierr = 5
 return
-!                             RE OR AE IS NEGATIVE
+!                             RE or AE is negative
 260 ierr = 6
 return
 !                             0 .LT. KRANK .LT. NP
@@ -5412,11 +5412,11 @@ integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mm, nmk
 integer :: idamax
 !
-!       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
-!       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
-!       COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
-!       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
-!       DEFICIENCY.
+!       This routine performs A QR factorization of A
+!       using Householder transformations. Row and
+!       column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
 !
 double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
 &w(n), eb(n)
@@ -5424,7 +5424,7 @@ integer, intent(inout) :: ic(n), ir(m)
 double precision :: bb, rmin, r2, sum, t, temp, tn, tt
 double precision :: ddot, dnrm2
 !
-!        INITIALIZATION
+!        Initialization
 !
 j = 0
 krank = n
@@ -5435,17 +5435,17 @@ do i = 1,m
    ir(i) = i
 end do
 !
-!        DETERMINE REL AND ABS ERROR VECTORS
+!        Determine rel and abs error vectors
 !
 !
-!        CALCULATE COL LENGTH
+!        Calculate col length
 !
 do i = 1,n
    h(i) = dnrm2(m,a(1,i),1)
    w(i) = h(i)
 end do
 !
-!         INITIALIZE ERROR BOUNDS
+!         Initialize error bounds
 !
 do i = 1,n
    eb(i) = dmax1(db(i),ub(i)*h(i))
@@ -5453,7 +5453,7 @@ do i = 1,n
    db(i) = 0.d0
 end do
 !
-!          DISCARD SELF DEPENDENT COLUMNS
+!          Discard self dependent columns
 !
 i = 1
 50 if (eb(i) .ge. h(i)) go to 60
@@ -5461,7 +5461,7 @@ if (i .eq. krank) go to 70
 i = i + 1
 go to 50
 !
-!          MATRIX REDUCTION
+!          Matrix reduction
 !
 60 kk = krank
 krank = krank - 1
@@ -5476,7 +5476,7 @@ call iswap (1,ic(i),1,ic(kk),1)
 call dswap (m,a(1,i),1,a(1,kk),1)
 go to 50
 !
-!           TEST FOR ZERO RANK
+!           Test for zero rank
 !
 70 if (krank .gt. 0) go to 100
 krank = 0
@@ -5495,7 +5495,7 @@ if (j .le. np) kz = j
 !
 mm = m - j + 1
 !
-!         UB DETERMINES COLUMN PIVOT
+!         UB determines column pivot
 !
 110 imin = j
 if (h(j) .eq. 0.d0) go to 170
@@ -5506,13 +5506,13 @@ do 120 i = j,kz
    imin = i
 120 continue
 !
-!     TEST FOR RANK DEFICIENCY
+!     Test for rank deficiency
 !
 if (rmin .lt. 1.d0) go to 200
 tt = (eb(imin) + dabs(db(imin)))/h(imin)
 if (tt .ge. 1.d0) go to 170
 !
-!     COMPUTE EXACT UB
+!     Compute exact UB
 !
 do i = 1,jm1
    w(i) = a(i,imin)
@@ -5536,7 +5536,7 @@ ub(imin) = tt
 if (ub(imin)/h(imin) .ge. 1.d0) go to 170
 go to 200
 !
-!        MATRIX REDUCTION
+!        Matrix reduction
 !
 170 kk = krank
 krank = krank - 1
@@ -5554,7 +5554,7 @@ if (imin .gt. krank) go to 180
 180 if (j .gt. krank) go to 300
 go to 110
 !
-!        COLUMN PIVOT
+!        Column pivot
 !
 200 if (imin .eq. j) go to 210
 call dswap (1,h(j),1,h(imin),1)
@@ -5565,7 +5565,7 @@ call dswap (1,db(j),1,db(imin),1)
 call dswap (1,w(j),1,w(imin),1)
 call iswap (1,ic(j),1,ic(imin),1)
 !
-!        ROW PIVOT
+!        Row pivot
 !
 210 jmax = idamax(mm,a(j,j),1)
 jmax = jmax + j - 1
@@ -5573,7 +5573,7 @@ if (jmax .eq. j) go to 220
 call dswap (n,a(j,1),mda,a(jmax,1),mda)
 call iswap (1,ir(j),1,ir(jmax),1)
 !
-!     APPLY HOUSEHOLDER TRANSFORMATION
+!     Apply Householder transformation
 !
 220 tn = dnrm2(mm,a(j,j),1)
 if (tn .eq. 0.d0) go to 170
@@ -5600,7 +5600,7 @@ do 240 i = jp1,n
 250 h(j) = a(j,j)
 a(j,j) = -tn
 !
-!          UPDATE UB, DB
+!          Update UB, DB
 !
 ub(j) = ub(j)/dabs(a(j,j))
 db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
@@ -5615,7 +5615,7 @@ go to 100
 !
 300 continue
 !
-!        COMPUTE KSURE
+!        Compute KSURE
 !
 km1 = krank - 1
 do i = 1,km1
@@ -5641,7 +5641,7 @@ do i = 1,krank
 end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
-!     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
+!     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. n .or. mode .lt. 2) return
 nmk = n - krank
@@ -5666,7 +5666,7 @@ i = krank
 350 continue
 return
 !
-!     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
+!     First NP columns are linearly dependent
 !
 400 krank = i - 1
 return
@@ -5679,10 +5679,10 @@ implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 integer :: i, ij, im1, j, jb, k, kp1, nmk
 !
-!        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
+!        Given the Householder QR factorization of A, this
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
-!        IS OF REDUCED RANK, THIS ROUTINE RETURNS A SOLUTION
-!        ACCORDING TO THE SELECTED MODE.
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
@@ -5710,7 +5710,7 @@ return
 !
 30 i = 0
 !
-!     REORDER B TO REFLECT ROW INTERCHANGES
+!     Reorder B to reflect row interchanges
 !
 40 i = i + 1
    if (i .eq. m) go to 100
@@ -5741,7 +5741,7 @@ return
    ir(i) = iabs(ir(i))
 end do
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     Apply Householder transformations to B
 !
 do j = 1,k
    tt = a(j,j)
@@ -5753,13 +5753,13 @@ do j = 1,k
    a(j,j) = tt
 end do
 !
-!        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
+!        Find norms of residual VECTOR(S)..(before overwrite B)
 !
 do jb = 1,nb
    rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
 end do
 !
-!     BACK SOLVE UPPER TRIANGULAR R
+!     Back solve upper triangular R
 !
 i = k
 150 do jb = 1,nb
@@ -5775,7 +5775,7 @@ go to 150
 !
 !     RANK LT N
 !
-!      TRUNCATED SOLUTION
+!      Truncated solution
 !
 200 if (k .eq. n) go to 230
 do jb = 1,nb
@@ -5785,7 +5785,7 @@ do jb = 1,nb
 end do
 if (mode .eq. 1) go to 230
 !
-!      MINIMAL LENGTH SOLUTION
+!      Minimal length solution
 !
 nmk = n - k
 do jb = 1,nb
@@ -5797,7 +5797,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     REORDER B TO REFLECT COLUMN INTERCHANGES
+!     Reorder B to reflect column interchanges
 !
 230 i = 0
 !
@@ -5831,11 +5831,11 @@ integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mmk, nn
 integer :: idamax
 !
-!       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
-!       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
-!       AND COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
-!       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
-!       DEFICIENCY.
+!       This routine performs an LQ factorization of the
+!       matrix A using Householder transformations. Row
+!       and column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
 !
 double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
 &w(m), eb(m)
@@ -5843,7 +5843,7 @@ integer, intent(inout) :: ic(n), ir(m)
 double precision :: bb, rmin, r2, sum, t, temp, tn, tt
 double precision :: ddot, dnrm2
 !
-!        INITIALIZATION
+!        Initialization
 !
 j = 0
 krank = m
@@ -5854,17 +5854,17 @@ do i = 1,m
    ir(i) = i
 end do
 !
-!        DETERMINE REL AND ABS ERROR VECTORS
+!        Determine rel and abs error vectors
 !
 !
-!        CALCULATE ROW LENGTH
+!        Calculate row length
 !
 do i = 1,m
    h(i) = dnrm2(n,a(i,1),mda)
    w(i) = h(i)
 end do
 !
-!         INITIALIZE ERROR BOUNDS
+!         Initialize error bounds
 !
 do i = 1,m
    eb(i) = dmax1(db(i),ub(i)*h(i))
@@ -5872,7 +5872,7 @@ do i = 1,m
    db(i) = 0.d0
 end do
 !
-!          DISCARD SELF DEPENDENT ROWS
+!          Discard self dependent rows
 !
 i = 1
 50 if (eb(i) .ge. h(i)) go to 60
@@ -5880,7 +5880,7 @@ if (i .eq. krank) go to 70
 i = i + 1
 go to 50
 !
-!          MATRIX REDUCTION
+!          Matrix reduction
 !
 60 kk = krank
 krank = krank - 1
@@ -5895,7 +5895,7 @@ call iswap (1,ir(i),1,ir(kk),1)
 call dswap (n,a(i,1),mda,a(kk,1),mda)
 go to 50
 !
-!           TEST FOR ZERO RANK
+!           Test for zero rank
 !
 70 if (krank .gt. 0) go to 100
 krank = 0
@@ -5914,7 +5914,7 @@ if (j .le. np) kz = j
 !
 nn = n - j + 1
 !
-!         UB DETERMINES ROW PIVOT
+!         UB determines row pivot
 !
 110 imin = j
 if (h(j) .eq. 0.d0) go to 170
@@ -5925,13 +5925,13 @@ do 120 i = j,kz
    imin = i
 120 continue
 !
-!     TEST FOR RANK DEFICIENCY
+!     Test for rank deficiency
 !
 if (rmin .lt. 1.d0) go to 200
 tt = (eb(imin) + dabs(db(imin)))/h(imin)
 if (tt .ge. 1.d0) go to 170
 !
-!     COMPUTE EXACT UB
+!     Compute exact UB
 !
 do i = 1,jm1
    w(i) = a(imin,i)
@@ -5955,7 +5955,7 @@ ub(imin) = tt
 if (ub(imin)/h(imin) .ge. 1.d0) go to 170
 go to 200
 !
-!        MATRIX REDUCTION
+!        Matrix reduction
 !
 170 kk = krank
 krank = krank - 1
@@ -5973,7 +5973,7 @@ if (imin .gt. krank) go to 180
 180 if (j .gt. krank) go to 300
 go to 110
 !
-!        ROW PIVOT
+!        Row pivot
 !
 200 if (imin .eq. j) go to 210
 call dswap (1,h(j),1,h(imin),1)
@@ -5984,7 +5984,7 @@ call dswap (1,db(j),1,db(imin),1)
 call dswap (1,w(j),1,w(imin),1)
 call iswap (1,ir(j),1,ir(imin),1)
 !
-!        COLUMN PIVOT
+!        Column pivot
 !
 210 jmax = idamax(nn,a(j,j),mda)
 jmax = jmax + j - 1
@@ -5992,7 +5992,7 @@ if (jmax .eq. j) go to 220
 call dswap (m,a(1,j),1,a(1,jmax),1)
 call iswap (1,ic(j),1,ic(jmax),1)
 !
-!     APPLY HOUSEHOLDER TRANSFORMATION
+!     Apply Householder transformation
 !
 220 tn = dnrm2(nn,a(j,j),mda)
 if (tn .eq. 0.d0) go to 170
@@ -6019,7 +6019,7 @@ do 240 i = jp1,m
 250 h(j) = a(j,j)
 a(j,j) = -tn
 !
-!          UPDATE UB, DB
+!          Update UB, DB
 !
 ub(j) = ub(j)/dabs(a(j,j))
 db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
@@ -6034,7 +6034,7 @@ go to 100
 !
 300 continue
 !
-!        COMPUTE KSURE
+!        Compute KSURE
 !
 km1 = krank - 1
 do i = 1,km1
@@ -6060,7 +6060,7 @@ do i = 1,krank
 end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
-!     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
+!     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. m .or. mode .lt. 2) return
 mmk = m - krank
@@ -6085,7 +6085,7 @@ i = krank
 350 continue
 return
 !
-!     FIRST NP ROWS ARE LINEARLY DEPENDENT
+!     First NP rows are linearly dependent
 !
 400 krank = i - 1
 return
@@ -6098,10 +6098,10 @@ implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
 !
-!        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
+!        Given the Householder LQ factorization of A, this
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
-!        IS OF REDUCED RANK, THIS ROUTINE RETURNS A SOLUTION
-!        ACCORDING TO THE SELECTED MODE.
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
@@ -6129,7 +6129,7 @@ return
 !
 30 i = 0
 !
-!     REORDER B TO REFLECT ROW INTERCHANGES
+!     Reorder B to reflect row interchanges
 !
 40 i = i + 1
    if (i .eq. m) go to 100
@@ -6161,7 +6161,7 @@ return
 end do
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     apply Householder transformations to B
 !
 if (mode .lt. 2 .or. k .eq. m) go to 140
 mmk = m - k
@@ -6175,13 +6175,13 @@ do jb = 1,nb
    end do
 end do
 !
-!     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
+!     Find norms of residual VECTOR(S)..(before overwrite B)
 !
 140 do jb = 1,nb
    rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
 end do
 !
-!     BACK SOLVE LOWER TRIANGULAR L
+!     Back solve lower triangular L
 !
 do 170 jb = 1,nb
    do i = 1,k
@@ -6192,7 +6192,7 @@ do 170 jb = 1,nb
    end do
 170 continue
 !
-!      TRUNCATED SOLUTION
+!      Truncated solution
 !
 if (k .eq. n) go to 210
 do jb = 1,nb
@@ -6201,7 +6201,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
+!     Apply Householder transformations to B
 !
 210 do i = 1,k
    j = kp1 - i
@@ -6214,7 +6214,7 @@ end do
    a(j,j) = tt
 end do
 !
-!     REORDER B TO REFLECT COLUMN INTERCHANGES
+!     Reorder B to reflect column interchanges
 !
 i = 0
 !
@@ -6253,30 +6253,30 @@ real :: factor, hmax, sm1, tmp, z
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !     FOR ALGORITHMIC DETAILS SEE ALGORITHM HFTI IN CHAPTER 14.
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBROUTINE SOLVES A LINEAR LEAST SQUARES PROBLEM OR A SET OF
-!     LINEAR LEAST SQUARES PROBLEMS HAVING THE SAME MATRIX BUT DIFFERENT
-!     RIGHT-SIDE VECTORS.  THE PROBLEM DATA CONSISTS OF AN M BY N MATRIX
-!     A, AN M BY NB MATRIX B, AND AN ABSOLUTE TOLERANCE PARAMETER TAU
-!     WHOSE USAGE IS DESCRIBED BELOW.  THE NB COLUMN VECTORS OF B
-!     REPRESENT RIGHT-SIDE VECTORS FOR NB DISTINCT LINEAR LEAST SQUARES
-!     PROBLEMS.
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an M by N matrix
+!     A, an M by NB matrix B, and an absolute tolerance parameter TAU
+!     whose usage is described below.  The NB column vectors of B
+!     represent right-side vectors for NB distinct linear least squares
+!     problems.
 !
-!     THIS SET OF PROBLEMS CAN ALSO BE WRITTEN AS THE MATRIX LEAST
-!     SQUARES PROBLEM
+!     This set of problems can also be written as the matrix least
+!     squares problem
 !
 !                       AX = B,
 !
-!     WHERE X IS THE N BY NB SOLUTION MATRIX.
+!     Where X is the N by NB solution matrix.
 !
-!     NOTE THAT IF B IS THE M BY M IDENTITY MATRIX, THEN X WILL BE THE
-!     PSEUDO-INVERSE OF A.
+!     Note that if B is the M by M identity matrix, then X will be the
+!     pseudo-inverse of A.
 !
-!     THIS SUBROUTINE FIRST TRANSFORMS THE AUGMENTED MATRIX (A B) TO A
-!     MATRIX (R C) USING PREMULTIPLYING HOUSEHOLDER TRANSFORMATIONS WITH
-!     COLUMN INTERCHANGES.  ALL SUBDIAGONAL ELEMENTS IN THE MATRIX R ARE
-!     ZERO AND ITS DIAGONAL ELEMENTS SATISFY
+!     This subroutine first transforms the augmented matrix (A B) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
 !
 !                       ABS(R(I,I)).GE.ABS(R(I+1,I+1)),
 !
@@ -6284,28 +6284,28 @@ real :: factor, hmax, sm1, tmp, z
 !
 !                       L = MIN(M,N).
 !
-!     THE SUBROUTINE SETS K TO BE THE NUMBER OF DIAGONAL ELEMENTS
-!     OF R THAT EXCEED TAU IN MAGNITUDE. THEN THE SOLUTION OF MINIMUM
-!     EUCLIDEAN LENGTH IS COMPUTED USING THE FIRST K ROWS OF (R C).
+!     The subroutine sets K to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first K rows of (R C).
 !
-!     TO BE SPECIFIC WE SUGGEST THAT THE USER CONSIDER AN EASILY
-!     COMPUTABLE MATRIX NORM, SUCH AS, THE MAXIMUM OF ALL COLUMN SUMS OF
-!     MAGNITUDES.
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
 !
-!     NOW IF THE RELATIVE UNCERTAINTY OF B IS EPS, (NORM OF UNCERTAINTY/
-!     NORM OF B), IT IS SUGGESTED THAT TAU BE SET APPROXIMATELY EQUAL TO
-!     EPS*(NORM OF A).
+!     Now if the relative uncertainty of B is eps, (norm of uncertainty/
+!     norm of B), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
 !
-!     THE ENTIRE SET OF PARAMETERS FOR HFTI ARE
+!     The entire set of parameters for HFTI are
 !
-!     INPUT..
+!     Input..
 !
 !     A(*,*),MDA,M,N    THE ARRAY A(*,*) INITIALLY CONTAINS THE M BY N
 !                       MATRIX A OF THE LEAST SQUARES PROBLEM AX = B.
-!                       THE FIRST DIMENSIONING PARAMETER OF THE ARRAY
+!                       The first dimensioning parameter of the array
 !                       A(*,*) IS MDA, WHICH MUST SATISFY MDA.GE.M
 !                       EITHER M.GE.N OR M.LT.N IS PERMITTED.  THERE
-!                       IS NO RESTRICTION ON THE RANK OF A.  THE
+!                       is no restriction on the rank of A.  The
 !                       CONDITION MDA.LT.M IS CONSIDERED AN ERROR.
 !
 !     B(*),MDB,NB       IF NB = 0 THE SUBROUTINE WILL PERFORM THE
@@ -6322,39 +6322,39 @@ real :: factor, hmax, sm1, tmp, z
 !                       VALUE SUCH AS MDB = M.
 !
 !                       THE CONDITION OF NB.GT.1.AND.MDB.LT. MAX(M,N)
-!                       IS CONSIDERED AN ERROR.
+!                       is considered an error.
 !
 !     TAU               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       FOR PSEUDORANK DETERMINATION.
+!                       for pseudorank determination.
 !
 !     H(*),G(*),IP(*)   ARRAYS OF WORKING SPACE USED BY HFTI.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(*,*)            THE CONTENTS OF THE ARRAY A(*,*) WILL BE
 !                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !
 !     B(*)              ON RETURN THE ARRAY B(*) WILL CONTAIN THE N BY
-!                       NB SOLUTION MATRIX X.
+!                       NB solution matrix X.
 !
 !     K                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       PSEUDORANK OF A.
+!                       pseudorank of A.
 !
 !     RNORM(*)          ON RETURN, RNORM(J) WILL CONTAIN THE EUCLIDEAN
-!                       NORM OF THE RESIDUAL VECTOR FOR THE PROBLEM
-!                       DEFINED BY THE J-TH COLUMN VECTOR OF THE ARRAY
+!                       norm of the residual vector for the problem
+!                       defined by the J-TH column vector of the array
 !                       B(*,*) FOR J = 1,...,NB.
 !
 !     H(*),G(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       ELEMENTS OF THE PRE- AND POST-MULTIPLYING
-!                       HOUSEHOLDER TRANSFORMATIONS USED TO COMPUTE
-!                       THE MINIMUM EUCLIDEAN LENGTH SOLUTION.
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
 !
 !     IP(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
-!                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       describing the permutation of column vectors.
+!                       The contents of arrays H(*),G(*) and IP(*)
+!                       are not generally required by the user.
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ip(n)
 double precision :: sm
@@ -6367,7 +6367,7 @@ if (ldiag .le. 0) go to 270
     do 80 j = 1,ldiag
     if (j .eq. 1) go to 20
 !
-!     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Update squared column lengths and find LMAX
 !    ..
     lmax = j
         do l = j,n
@@ -6377,7 +6377,7 @@ if (ldiag .le. 0) go to 270
     z = hmax + factor*h(lmax)
     if (z .gt. hmax) go to 50
 !
-!     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Compute squared column lengths and find LMAX
 !    ..
 20 lmax=j
         do l = j,n
@@ -6388,9 +6388,9 @@ if (ldiag .le. 0) go to 270
         end do
     hmax = h(lmax)
 !    ..
-!     LMAX HAS BEEN DETERMINED
+!     LMAX has been determined
 !
-!     DO COLUMN INTERCHANGES IF NEEDED.
+!     Do column interchanges if needed.
 !    ..
 50 ip(j) = lmax
     if (ip(j) .eq. j) go to 70
@@ -6400,12 +6400,12 @@ if (ldiag .le. 0) go to 270
 60 a(i,lmax) = tmp
     h(lmax) = h(j)
 !
-!     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
+!     Compute the J-TH transformation and apply it to A and B.
 !    ..
 70 call h12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
 80 call h12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
-!     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
+!     Determine the pseudorank, K, using the tolerance, tau.
 !    ..
     do j = 1,ldiag
     if (abs(a(j,j)) .le. tau) go to 100
@@ -6415,7 +6415,7 @@ go to 110
 100 k = j - 1
 110 kp1 = k + 1
 !
-!     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
+!     Compute the norms of the residual vectors.
 !
 if (nb .le. 0) go to 140
     do 130 jb = 1,nb
@@ -6434,8 +6434,8 @@ if (nb .le. 0) go to 270
     end do
 go to 270
 !
-!     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
-!     DECOMPOSITION OF FIRST K ROWS.
+!     If the pseudorank is less than N compute Householder
+!     decomposition of first K rows.
 !    ..
 160 if (k .eq. n) go to 180
     do 170 ii = 1,k
@@ -6447,7 +6447,7 @@ go to 270
 if (nb .le. 0) go to 270
     do jb = 1,nb
 !
-!     SOLVE THE K BY K TRIANGULAR SYSTEM.
+!     Solve the K by K triangular system.
 !    ..
         do 210 l = 1,k
         sm = 0.d0
@@ -6459,7 +6459,7 @@ if (nb .le. 0) go to 270
 200 sm1 = dble(b(i,jb)) - sm
 210 b(i,jb) = sm1/a(i,i)
 !
-!     COMPLETE COMPUTATION OF SOLUTION VECTOR.
+!     Complete computation of solution vector.
 !    ..
     if (k .eq. n) go to 240
         do 220 j = kp1,n
@@ -6467,8 +6467,8 @@ if (nb .le. 0) go to 270
         do 230 i = 1,k
 230 call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
-!      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
-!      COLUMN INTERCHANGES.
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
 !    ..
 240 do 250 jj = 1,ldiag
         j = ldiag + 1 - jj
@@ -6480,8 +6480,8 @@ if (nb .le. 0) go to 270
 250 continue
     end do
 !    ..
-!     THE SOLUTION VECTORS, X, ARE NOW
-!     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
+!     The solution vectors, X, are now
+!     in the first  N  rows of the array B(,).
 !
 270 return
 end subroutine hfti
@@ -6505,30 +6505,30 @@ real :: factor, hmax, sm1, tmp, z
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !     FOR ALGORITHMIC DETAILS SEE ALGORITHM HFTI IN CHAPTER 14.
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBROUTINE SOLVES A LINEAR LEAST SQUARES PROBLEM OR A SET OF
-!     LINEAR LEAST SQUARES PROBLEMS HAVING THE SAME MATRIX BUT DIFFERENT
-!     RIGHT-SIDE VECTORS.  THE PROBLEM DATA CONSISTS OF AN M BY N MATRIX
-!     A, AN M BY NB MATRIX B, AND AN ABSOLUTE TOLERANCE PARAMETER TAU
-!     WHOSE USAGE IS DESCRIBED BELOW.  THE NB COLUMN VECTORS OF B
-!     REPRESENT RIGHT-SIDE VECTORS FOR NB DISTINCT LINEAR LEAST SQUARES
-!     PROBLEMS.
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an M by N matrix
+!     A, an M by NB matrix B, and an absolute tolerance parameter TAU
+!     whose usage is described below.  The NB column vectors of B
+!     represent right-side vectors for NB distinct linear least squares
+!     problems.
 !
-!     THIS SET OF PROBLEMS CAN ALSO BE WRITTEN AS THE MATRIX LEAST
-!     SQUARES PROBLEM
+!     This set of problems can also be written as the matrix least
+!     squares problem
 !
 !                       AX = B,
 !
-!     WHERE X IS THE N BY NB SOLUTION MATRIX.
+!     Where X is the N by NB solution matrix.
 !
-!     NOTE THAT IF B IS THE M BY M IDENTITY MATRIX, THEN X WILL BE THE
-!     PSEUDO-INVERSE OF A.
+!     Note that if B is the M by M identity matrix, then X will be the
+!     pseudo-inverse of A.
 !
-!     THIS SUBROUTINE FIRST TRANSFORMS THE AUGMENTED MATRIX (A B) TO A
-!     MATRIX (R C) USING PREMULTIPLYING HOUSEHOLDER TRANSFORMATIONS WITH
-!     COLUMN INTERCHANGES.  ALL SUBDIAGONAL ELEMENTS IN THE MATRIX R ARE
-!     ZERO AND ITS DIAGONAL ELEMENTS SATISFY
+!     This subroutine first transforms the augmented matrix (A B) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
 !
 !                       ABS(R(I,I)).GE.ABS(R(I+1,I+1)),
 !
@@ -6536,29 +6536,29 @@ real :: factor, hmax, sm1, tmp, z
 !
 !                       L = MIN(M,N).
 !
-!     THE ARRAY D WILL CONTAIN THE DIAGONAL ELEMENTS R(1,1),...,R(L,L).
-!     THE SUBROUTINE SETS K TO BE THE NUMBER OF DIAGONAL ELEMENTS THAT
-!     EXCEED TAU IN MAGNITUDE.  THEN THE SOLUTION OF MINIMUM EUCLIDEAN
-!     LENGTH IS COMPUTED USING THE FIRST K ROWS OF (R C).
+!     The array D will contain the diagonal elements R(1,1),...,R(L,L).
+!     The subroutine sets K to be the number of diagonal elements that
+!     exceed tau in magnitude.  Then the solution of minimum Euclidean
+!     length is computed using the first K rows of (R C).
 !
-!     TO BE SPECIFIC WE SUGGEST THAT THE USER CONSIDER AN EASILY
-!     COMPUTABLE MATRIX NORM, SUCH AS, THE MAXIMUM OF ALL COLUMN SUMS OF
-!     MAGNITUDES.
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
 !
-!     NOW IF THE RELATIVE UNCERTAINTY OF B IS EPS, (NORM OF UNCERTAINTY/
-!     NORM OF B), IT IS SUGGESTED THAT TAU BE SET APPROXIMATELY EQUAL TO
-!     EPS*(NORM OF A).
+!     Now if the relative uncertainty of B is eps, (norm of uncertainty/
+!     norm of B), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
 !
-!     THE ENTIRE SET OF PARAMETERS FOR HFTI2 ARE
+!     The entire set of parameters for HFTI2 are
 !
-!     INPUT..
+!     Input..
 !
 !     A(*,*),MDA,M,N    THE ARRAY A(*,*) INITIALLY CONTAINS THE M BY N
 !                       MATRIX A OF THE LEAST SQUARES PROBLEM AX = B.
-!                       THE FIRST DIMENSIONING PARAMETER OF THE ARRAY
+!                       The first dimensioning parameter of the array
 !                       A(*,*) IS MDA, WHICH MUST SATISFY MDA.GE.M
 !                       EITHER M.GE.N OR M.LT.N IS PERMITTED.  THERE
-!                       IS NO RESTRICTION ON THE RANK OF A.  THE
+!                       is no restriction on the rank of A.  The
 !                       CONDITION MDA.LT.M IS CONSIDERED AN ERROR.
 !
 !     B(*),MDB,NB       IF NB = 0 THE SUBROUTINE WILL PERFORM THE
@@ -6575,48 +6575,48 @@ real :: factor, hmax, sm1, tmp, z
 !                       VALUE SUCH AS MDB = M.
 !
 !                       THE CONDITION OF NB.GT.1.AND.MDB.LT. MAX(M,N)
-!                       IS CONSIDERED AN ERROR.
+!                       is considered an error.
 !
 !     TAU               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       FOR PSEUDORANK DETERMINATION.
+!                       for pseudorank determination.
 !
 !     H(*),G(*),IP(*)   ARRAYS OF WORKING SPACE USED BY HFTI2.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(*,*)            THE CONTENTS OF THE ARRAY A(*,*) WILL BE
 !                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !
 !     B(*)              ON RETURN THE ARRAY B(*) WILL CONTAIN THE N BY
-!                       NB SOLUTION MATRIX X.
+!                       NB solution matrix X.
 !
 !     D(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
-!                       TRIANGULAR MATRIX R
+!                       triangular matrix R
 !
 !     K                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       PSEUDORANK OF A.
+!                       pseudorank of A.
 !
 !     RNORM(*)          ON RETURN, RNORM(J) WILL CONTAIN THE EUCLIDEAN
-!                       NORM OF THE RESIDUAL VECTOR FOR THE PROBLEM
-!                       DEFINED BY THE J-TH COLUMN VECTOR OF THE ARRAY
+!                       norm of the residual vector for the problem
+!                       defined by the J-TH column vector of the array
 !                       B(*,*) FOR J = 1,...,NB.
 !
 !     H(*),G(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       ELEMENTS OF THE PRE- AND POST-MULTIPLYING
-!                       HOUSEHOLDER TRANSFORMATIONS USED TO COMPUTE
-!                       THE MINIMUM EUCLIDEAN LENGTH SOLUTION.
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
 !
 !     IP(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
-!                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       describing the permutation of column vectors.
+!                       The contents of arrays H(*),G(*) and IP(*)
+!                       are not generally required by the user.
 !
 !     IERR              ERROR INDICATOR. IF NO INPUT ERRORS ARE
-!                       DETECTED THEN IERR IS SET TO 0. OTHERWISE
+!                       detected then IERR is set to 0. Otherwise
 !                          IERR = 1  IF MDA.LT.M
 !                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
-!                       THESE ERRORS ARE FATAL.
+!                       these errors are fatal.
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ip(n)
 double precision :: sm
@@ -6632,7 +6632,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     do 80 j = 1,ldiag
     if (j .eq. 1) go to 20
 !
-!     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Update squared column lengths and find LMAX
 !    ..
     lmax = j
         do l = j,n
@@ -6642,7 +6642,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     z = hmax + factor*h(lmax)
     if (z .gt. hmax) go to 50
 !
-!     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Compute squared column lengths and find LMAX
 !    ..
 20 lmax = j
         do l = j,n
@@ -6653,9 +6653,9 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
         end do
     hmax = h(lmax)
 !    ..
-!     LMAX HAS BEEN DETERMINED
+!     LMAX has been determined
 !
-!     DO COLUMN INTERCHANGES IF NEEDED.
+!     Do column interchanges if needed.
 !    ..
 50 ip(j) = lmax
     if (ip(j) .eq. j) go to 70
@@ -6665,13 +6665,13 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 60 a(i,lmax) = tmp
     h(lmax) = h(j)
 !
-!     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
+!     Compute the J-TH transformation and apply it to A and B.
 !    ..
 70 call h12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
 80 call h12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
-!     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
-!     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
+!     Determine the pseudorank, K, using the tolerance, tau.
+!     Also store the diagonal elements in the array D.
 !    ..
     do 90 j = 1,ldiag
     if (abs(a(j,j)) .le. tau) go to 100
@@ -6685,7 +6685,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     do 105 j = kp1,ldiag
 105 d(j) = a(j,j)
 !
-!     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
+!     Compute the norms of the residual vectors.
 !
 110 if (nb .le. 0) go to 140
     do 130 jb = 1,nb
@@ -6704,8 +6704,8 @@ if (nb .le. 0) go to 270
     end do
 go to 270
 !
-!     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
-!     DECOMPOSITION OF FIRST K ROWS.
+!     If the pseudorank is less than N compute Householder
+!     decomposition of first K rows.
 !    ..
 160 if (k .eq. n) go to 180
     do 170 ii = 1,k
@@ -6717,7 +6717,7 @@ go to 270
 if (nb .le. 0) go to 270
     do jb = 1,nb
 !
-!     SOLVE THE K BY K TRIANGULAR SYSTEM.
+!     Solve the K by K triangular system.
 !    ..
         do 210 l = 1,k
         sm = 0.d0
@@ -6729,7 +6729,7 @@ if (nb .le. 0) go to 270
 200 sm1 = dble(b(i,jb)) - sm
 210 b(i,jb)=sm1/a(i,i)
 !
-!     COMPLETE COMPUTATION OF SOLUTION VECTOR.
+!     Complete computation of solution vector.
 !    ..
     if (k .eq. n) go to 240
         do 220 j = kp1,n
@@ -6737,8 +6737,8 @@ if (nb .le. 0) go to 270
         do 230 i = 1,k
 230 call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
-!      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
-!      COLUMN INTERCHANGES.
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
 !    ..
 240 do 250 jj = 1,ldiag
         j = ldiag + 1 - jj
@@ -6750,13 +6750,13 @@ if (nb .le. 0) go to 270
 250 continue
     end do
 !    ..
-!     THE SOLUTION VECTORS, X, ARE NOW
-!     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
+!     The solution vectors, X, are now
+!     in the first  N  rows of the array B(,).
 !
 270 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 300 ierr = 1
 return
@@ -6774,7 +6774,7 @@ real :: cl, d, sm1
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !
-!     CONSTRUCTION AND/OR APPLICATION OF A SINGLE
+!     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = I + U*(U**T)/B
 !
 !     MODE    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
@@ -6858,38 +6858,38 @@ integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !-----------------------------------------------------------------------
-!     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
-!     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
+!     Double precision A(MDA,N),(B(MDB,NB) or B(M))
+!     double precision tau,RNORM(NB),H(N),G(N)
 !     INTEGER IP(N)
 !
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !     FOR ALGORITHMIC DETAILS SEE ALGORITHM HFTI IN CHAPTER 14.
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBROUTINE SOLVES A LINEAR LEAST SQUARES PROBLEM OR A SET OF
-!     LINEAR LEAST SQUARES PROBLEMS HAVING THE SAME MATRIX BUT DIFFERENT
-!     RIGHT-SIDE VECTORS.  THE PROBLEM DATA CONSISTS OF AN M BY N MATRIX
-!     A, AN M BY NB MATRIX B, AND AN ABSOLUTE TOLERANCE PARAMETER TAU
-!     WHOSE USAGE IS DESCRIBED BELOW.  THE NB COLUMN VECTORS OF B
-!     REPRESENT RIGHT-SIDE VECTORS FOR NB DISTINCT LINEAR LEAST SQUARES
-!     PROBLEMS.
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an M by N matrix
+!     A, an M by NB matrix B, and an absolute tolerance parameter TAU
+!     whose usage is described below.  The NB column vectors of B
+!     represent right-side vectors for NB distinct linear least squares
+!     problems.
 !
-!     THIS SET OF PROBLEMS CAN ALSO BE WRITTEN AS THE MATRIX LEAST
-!     SQUARES PROBLEM
+!     This set of problems can also be written as the matrix least
+!     squares problem
 !
 !                       AX = B,
 !
-!     WHERE X IS THE N BY NB SOLUTION MATRIX.
+!     Where X is the N by NB solution matrix.
 !
-!     NOTE THAT IF B IS THE M BY M IDENTITY MATRIX, THEN X WILL BE THE
-!     PSEUDO-INVERSE OF A.
+!     Note that if B is the M by M identity matrix, then X will be the
+!     pseudo-inverse of A.
 !
-!     THIS SUBROUTINE FIRST TRANSFORMS THE AUGMENTED MATRIX (A B) TO A
-!     MATRIX (R C) USING PREMULTIPLYING HOUSEHOLDER TRANSFORMATIONS WITH
-!     COLUMN INTERCHANGES.  ALL SUBDIAGONAL ELEMENTS IN THE MATRIX R ARE
-!     ZERO AND ITS DIAGONAL ELEMENTS SATISFY
+!     This subroutine first transforms the augmented matrix (A B) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
 !
 !                       DABS(R(I,I)).GE.DABS(R(I+1,I+1)),
 !
@@ -6897,28 +6897,28 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !
 !                       L = MIN(M,N).
 !
-!     THE SUBROUTINE SETS K TO BE THE NUMBER OF DIAGONAL ELEMENTS
-!     OF R THAT EXCEED TAU IN MAGNITUDE. THEN THE SOLUTION OF MINIMUM
-!     EUCLIDEAN LENGTH IS COMPUTED USING THE FIRST K ROWS OF (R C).
+!     The subroutine sets K to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first K rows of (R C).
 !
-!     TO BE SPECIFIC WE SUGGEST THAT THE USER CONSIDER AN EASILY
-!     COMPUTABLE MATRIX NORM, SUCH AS, THE MAXIMUM OF ALL COLUMN SUMS OF
-!     MAGNITUDES.
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
 !
-!     NOW IF THE RELATIVE UNCERTAINTY OF B IS EPS, (NORM OF UNCERTAINTY/
-!     NORM OF B), IT IS SUGGESTED THAT TAU BE SET APPROXIMATELY EQUAL TO
-!     EPS*(NORM OF A).
+!     Now if the relative uncertainty of B is eps, (norm of uncertainty/
+!     norm of B), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
 !
-!     THE ENTIRE SET OF PARAMETERS FOR DHFTI ARE
+!     The entire set of parameters for DHFTI are
 !
-!     INPUT..
+!     Input..
 !
 !     A(*,*),MDA,M,N    THE ARRAY A(*,*) INITIALLY CONTAINS THE M BY N
 !                       MATRIX A OF THE LEAST SQUARES PROBLEM AX = B.
-!                       THE FIRST DIMENSIONING PARAMETER OF THE ARRAY
+!                       The first dimensioning parameter of the array
 !                       A(*,*) IS MDA, WHICH MUST SATISFY MDA.GE.M
 !                       EITHER M.GE.N OR M.LT.N IS PERMITTED.  THERE
-!                       IS NO RESTRICTION ON THE RANK OF A.  THE
+!                       is no restriction on the rank of A.  The
 !                       CONDITION MDA.LT.M IS CONSIDERED AN ERROR.
 !
 !     B(*),MDB,NB       IF NB = 0 THE SUBROUTINE WILL PERFORM THE
@@ -6935,39 +6935,39 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       VALUE SUCH AS MDB = M.
 !
 !                       THE CONDITION OF NB.GT.1.AND.MDB.LT. MAX(M,N)
-!                       IS CONSIDERED AN ERROR.
+!                       is considered an error.
 !
 !     TAU               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       FOR PSEUDORANK DETERMINATION.
+!                       for pseudorank determination.
 !
 !     H(*),G(*),IP(*)   ARRAYS OF WORKING SPACE USED BY DHFTI.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(*,*)            THE CONTENTS OF THE ARRAY A(*,*) WILL BE
 !                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !
 !     B(*)              ON RETURN THE ARRAY B(*) WILL CONTAIN THE N BY
-!                       NB SOLUTION MATRIX X.
+!                       NB solution matrix X.
 !
 !     K                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       PSEUDORANK OF A.
+!                       pseudorank of A.
 !
 !     RNORM(*)          ON RETURN, RNORM(J) WILL CONTAIN THE EUCLIDEAN
-!                       NORM OF THE RESIDUAL VECTOR FOR THE PROBLEM
-!                       DEFINED BY THE J-TH COLUMN VECTOR OF THE ARRAY
+!                       norm of the residual vector for the problem
+!                       defined by the J-TH column vector of the array
 !                       B(*,*) FOR J = 1,...,NB.
 !
 !     H(*),G(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       ELEMENTS OF THE PRE- AND POST-MULTIPLYING
-!                       HOUSEHOLDER TRANSFORMATIONS USED TO COMPUTE
-!                       THE MINIMUM EUCLIDEAN LENGTH SOLUTION.
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
 !
 !     IP(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
-!                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       describing the permutation of column vectors.
+!                       The contents of arrays H(*),G(*) and IP(*)
+!                       are not generally required by the user.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(mda,n), b(mdb,*)
 double precision, intent(in) :: tau
@@ -6983,7 +6983,7 @@ if (ldiag .le. 0) go to 270
     do 80 j = 1,ldiag
     if (j .eq. 1) go to 20
 !
-!     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Update squared column lengths and find LMAX
 !    ..
     lmax = j
         do l = j,n
@@ -6993,7 +6993,7 @@ if (ldiag .le. 0) go to 270
     z = hmax + factor*h(lmax)
     if (z .gt. hmax) go to 50
 !
-!     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Compute squared column lengths and find LMAX
 !    ..
 20 lmax=j
         do l = j,n
@@ -7004,9 +7004,9 @@ if (ldiag .le. 0) go to 270
         end do
     hmax = h(lmax)
 !    ..
-!     LMAX HAS BEEN DETERMINED
+!     LMAX has been determined
 !
-!     DO COLUMN INTERCHANGES IF NEEDED.
+!     Do column interchanges if needed.
 !    ..
 50 ip(j) = lmax
     if (ip(j) .eq. j) go to 70
@@ -7016,12 +7016,12 @@ if (ldiag .le. 0) go to 270
 60 a(i,lmax) = tmp
     h(lmax) = h(j)
 !
-!     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
+!     Compute the J-TH transformation and apply it to A and B.
 !    ..
 70 call dh12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
 80 call dh12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
-!     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
+!     Determine the pseudorank, K, using the tolerance, tau.
 !    ..
     do j = 1,ldiag
     if (dabs(a(j,j)) .le. tau) go to 100
@@ -7031,7 +7031,7 @@ go to 110
 100 k = j - 1
 110 kp1 = k + 1
 !
-!     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
+!     Compute the norms of the residual vectors.
 !
 if (nb .le. 0) go to 140
     do 130 jb = 1,nb
@@ -7050,8 +7050,8 @@ if (nb .le. 0) go to 270
     end do
 go to 270
 !
-!     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
-!     DECOMPOSITION OF FIRST K ROWS.
+!     If the pseudorank is less than N compute Householder
+!     decomposition of first K rows.
 !    ..
 160 if (k .eq. n) go to 180
     do 170 ii = 1,k
@@ -7063,7 +7063,7 @@ go to 270
 if (nb .le. 0) go to 270
     do jb = 1,nb
 !
-!     SOLVE THE K BY K TRIANGULAR SYSTEM.
+!     Solve the K by K triangular system.
 !    ..
         do 210 l = 1,k
         sm = 0.d0
@@ -7075,7 +7075,7 @@ if (nb .le. 0) go to 270
 200 sm1 = b(i,jb) - sm
 210 b(i,jb) = sm1/a(i,i)
 !
-!     COMPLETE COMPUTATION OF SOLUTION VECTOR.
+!     Complete computation of solution vector.
 !    ..
     if (k .eq. n) go to 240
         do 220 j = kp1,n
@@ -7083,8 +7083,8 @@ if (nb .le. 0) go to 270
         do 230 i = 1,k
 230 call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
-!      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
-!      COLUMN INTERCHANGES.
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
 !    ..
 240 do 250 jj = 1,ldiag
         j = ldiag + 1 - jj
@@ -7096,8 +7096,8 @@ if (nb .le. 0) go to 270
 250 continue
     end do
 !    ..
-!     THE SOLUTION VECTORS, X, ARE NOW
-!     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
+!     The solution vectors, X, are now
+!     in the first  N  rows of the array B(,).
 !
 270 return
 end subroutine dhfti
@@ -7109,39 +7109,39 @@ integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !-----------------------------------------------------------------------
-!     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
+!     Double precision A(MDA,N),(B(MDB,NB) or B(M))
 !     DOUBLE PRECISION D(L) WHERE L = MIN(M,N)
-!     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
+!     double precision tau,RNORM(NB),H(N),G(N)
 !     INTEGER IP(N)
 !
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON. MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !     FOR ALGORITHMIC DETAILS SEE ALGORITHM HFTI IN CHAPTER 14.
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBROUTINE SOLVES A LINEAR LEAST SQUARES PROBLEM OR A SET OF
-!     LINEAR LEAST SQUARES PROBLEMS HAVING THE SAME MATRIX BUT DIFFERENT
-!     RIGHT-SIDE VECTORS.  THE PROBLEM DATA CONSISTS OF AN M BY N MATRIX
-!     A, AN M BY NB MATRIX B, AND AN ABSOLUTE TOLERANCE PARAMETER TAU
-!     WHOSE USAGE IS DESCRIBED BELOW.  THE NB COLUMN VECTORS OF B
-!     REPRESENT RIGHT-SIDE VECTORS FOR NB DISTINCT LINEAR LEAST SQUARES
-!     PROBLEMS.
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an M by N matrix
+!     A, an M by NB matrix B, and an absolute tolerance parameter TAU
+!     whose usage is described below.  The NB column vectors of B
+!     represent right-side vectors for NB distinct linear least squares
+!     problems.
 !
-!     THIS SET OF PROBLEMS CAN ALSO BE WRITTEN AS THE MATRIX LEAST
-!     SQUARES PROBLEM
+!     This set of problems can also be written as the matrix least
+!     squares problem
 !
 !                       AX = B,
 !
-!     WHERE X IS THE N BY NB SOLUTION MATRIX.
+!     Where X is the N by NB solution matrix.
 !
-!     NOTE THAT IF B IS THE M BY M IDENTITY MATRIX, THEN X WILL BE THE
-!     PSEUDO-INVERSE OF A.
+!     Note that if B is the M by M identity matrix, then X will be the
+!     pseudo-inverse of A.
 !
-!     THIS SUBROUTINE FIRST TRANSFORMS THE AUGMENTED MATRIX (A B) TO A
-!     MATRIX (R C) USING PREMULTIPLYING HOUSEHOLDER TRANSFORMATIONS WITH
-!     COLUMN INTERCHANGES.  ALL SUBDIAGONAL ELEMENTS IN THE MATRIX R ARE
-!     ZERO AND ITS DIAGONAL ELEMENTS SATISFY
+!     This subroutine first transforms the augmented matrix (A B) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
 !
 !                       DABS(R(I,I)).GE.DABS(R(I+1,I+1)),
 !
@@ -7149,29 +7149,29 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !
 !                       L = MIN(M,N).
 !
-!     THE ARRAY D WILL CONTAIN THE DIAGONAL ELEMENTS R(1,1),...,R(L,L).
-!     THE SUBROUTINE SETS K TO BE THE NUMBER OF DIAGONAL ELEMENTS THAT
-!     EXCEED TAU IN MAGNITUDE.  THEN THE SOLUTION OF MINIMUM EUCLIDEAN
-!     LENGTH IS COMPUTED USING THE FIRST K ROWS OF (R C).
+!     The array D will contain the diagonal elements R(1,1),...,R(L,L).
+!     The subroutine sets K to be the number of diagonal elements that
+!     exceed tau in magnitude.  Then the solution of minimum Euclidean
+!     length is computed using the first K rows of (R C).
 !
-!     TO BE SPECIFIC WE SUGGEST THAT THE USER CONSIDER AN EASILY
-!     COMPUTABLE MATRIX NORM, SUCH AS, THE MAXIMUM OF ALL COLUMN SUMS OF
-!     MAGNITUDES.
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
 !
-!     NOW IF THE RELATIVE UNCERTAINTY OF B IS EPS, (NORM OF UNCERTAINTY/
-!     NORM OF B), IT IS SUGGESTED THAT TAU BE SET APPROXIMATELY EQUAL TO
-!     EPS*(NORM OF A).
+!     Now if the relative uncertainty of B is eps, (norm of uncertainty/
+!     norm of B), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
 !
-!     THE ENTIRE SET OF PARAMETERS FOR DHFTI2 ARE
+!     The entire set of parameters for DHFTI2 are
 !
-!     INPUT..
+!     Input..
 !
 !     A(*,*),MDA,M,N    THE ARRAY A(*,*) INITIALLY CONTAINS THE M BY N
 !                       MATRIX A OF THE LEAST SQUARES PROBLEM AX = B.
-!                       THE FIRST DIMENSIONING PARAMETER OF THE ARRAY
+!                       The first dimensioning parameter of the array
 !                       A(*,*) IS MDA, WHICH MUST SATISFY MDA.GE.M
 !                       EITHER M.GE.N OR M.LT.N IS PERMITTED.  THERE
-!                       IS NO RESTRICTION ON THE RANK OF A.  THE
+!                       is no restriction on the rank of A.  The
 !                       CONDITION MDA.LT.M IS CONSIDERED AN ERROR.
 !
 !     B(*),MDB,NB       IF NB = 0 THE SUBROUTINE WILL PERFORM THE
@@ -7188,48 +7188,48 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       VALUE SUCH AS MDB = M.
 !
 !                       THE CONDITION OF NB.GT.1.AND.MDB.LT. MAX(M,N)
-!                       IS CONSIDERED AN ERROR.
+!                       is considered an error.
 !
 !     TAU               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       FOR PSEUDORANK DETERMINATION.
+!                       for pseudorank determination.
 !
 !     H(*),G(*),IP(*)   ARRAYS OF WORKING SPACE USED BY DHFTI2.
 !
-!     OUTPUT..
+!     Output..
 !
 !     A(*,*)            THE CONTENTS OF THE ARRAY A(*,*) WILL BE
 !                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !
 !     B(*)              ON RETURN THE ARRAY B(*) WILL CONTAIN THE N BY
-!                       NB SOLUTION MATRIX X.
+!                       NB solution matrix X.
 !
 !     D(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
-!                       TRIANGULAR MATRIX R
+!                       triangular matrix R
 !
 !     K                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       PSEUDORANK OF A.
+!                       pseudorank of A.
 !
 !     RNORM(*)          ON RETURN, RNORM(J) WILL CONTAIN THE EUCLIDEAN
-!                       NORM OF THE RESIDUAL VECTOR FOR THE PROBLEM
-!                       DEFINED BY THE J-TH COLUMN VECTOR OF THE ARRAY
+!                       norm of the residual vector for the problem
+!                       defined by the J-TH column vector of the array
 !                       B(*,*) FOR J = 1,...,NB.
 !
 !     H(*),G(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       ELEMENTS OF THE PRE- AND POST-MULTIPLYING
-!                       HOUSEHOLDER TRANSFORMATIONS USED TO COMPUTE
-!                       THE MINIMUM EUCLIDEAN LENGTH SOLUTION.
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
 !
 !     IP(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
-!                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       describing the permutation of column vectors.
+!                       The contents of arrays H(*),G(*) and IP(*)
+!                       are not generally required by the user.
 !
 !     IERR              ERROR INDICATOR. IF NO INPUT ERRORS ARE
-!                       DETECTED THEN IERR IS SET TO 0. OTHERWISE
+!                       detected then IERR is set to 0. Otherwise
 !                          IERR = 1  IF MDA.LT.M
 !                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
-!                       THESE ERRORS ARE FATAL.
+!                       these errors are fatal.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
 double precision, intent(in) :: tau
@@ -7248,7 +7248,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     do 80 j = 1,ldiag
     if (j .eq. 1) go to 20
 !
-!     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Update squared column lengths and find LMAX
 !    ..
     lmax = j
         do l = j,n
@@ -7258,7 +7258,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     z = hmax + factor*h(lmax)
     if (z .gt. hmax) go to 50
 !
-!     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
+!     Compute squared column lengths and find LMAX
 !    ..
 20 lmax = j
         do l = j,n
@@ -7269,9 +7269,9 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
         end do
     hmax = h(lmax)
 !    ..
-!     LMAX HAS BEEN DETERMINED
+!     LMAX has been determined
 !
-!     DO COLUMN INTERCHANGES IF NEEDED.
+!     Do column interchanges if needed.
 !    ..
 50 ip(j) = lmax
     if (ip(j) .eq. j) go to 70
@@ -7281,13 +7281,13 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 60 a(i,lmax) = tmp
     h(lmax) = h(j)
 !
-!     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
+!     Compute the J-TH transformation and apply it to A and B.
 !    ..
 70 call dh12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
 80 call dh12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
-!     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
-!     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
+!     Determine the pseudorank, K, using the tolerance, tau.
+!     Also store the diagonal elements in the array D.
 !    ..
     do 90 j = 1,ldiag
     if (dabs(a(j,j)) .le. tau) go to 100
@@ -7301,7 +7301,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
     do 105 j = kp1,ldiag
 105 d(j) = a(j,j)
 !
-!     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
+!     Compute the norms of the residual vectors.
 !
 110 if (nb .le. 0) go to 140
     do 130 jb = 1,nb
@@ -7320,8 +7320,8 @@ if (nb .le. 0) go to 270
     end do
 go to 270
 !
-!     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
-!     DECOMPOSITION OF FIRST K ROWS.
+!     If the pseudorank is less than N compute Householder
+!     decomposition of first K rows.
 !    ..
 160 if (k .eq. n) go to 180
     do 170 ii = 1,k
@@ -7333,7 +7333,7 @@ go to 270
 if (nb .le. 0) go to 270
     do jb = 1,nb
 !
-!     SOLVE THE K BY K TRIANGULAR SYSTEM.
+!     Solve the K by K triangular system.
 !    ..
         do 210 l = 1,k
         sm = 0.d0
@@ -7345,7 +7345,7 @@ if (nb .le. 0) go to 270
 200 sm1 = b(i,jb) - sm
 210 b(i,jb)=sm1/a(i,i)
 !
-!     COMPLETE COMPUTATION OF SOLUTION VECTOR.
+!     Complete computation of solution vector.
 !    ..
     if (k .eq. n) go to 240
         do 220 j = kp1,n
@@ -7353,8 +7353,8 @@ if (nb .le. 0) go to 270
         do 230 i = 1,k
 230 call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
-!      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
-!      COLUMN INTERCHANGES.
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
 !    ..
 240 do 250 jj = 1,ldiag
         j = ldiag + 1 - jj
@@ -7366,13 +7366,13 @@ if (nb .le. 0) go to 270
 250 continue
     end do
 !    ..
-!     THE SOLUTION VECTORS, X, ARE NOW
-!     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
+!     The solution vectors, X, are now
+!     in the first  N  rows of the array B(,).
 !
 270 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 300 ierr = 1
 return
@@ -7388,7 +7388,7 @@ integer :: i, i2, i3, i4, incr, j
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
 !
-!     CONSTRUCTION AND/OR APPLICATION OF A SINGLE
+!     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = I + U*(U**T)/B
 !
 !     MODE    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
@@ -7492,31 +7492,31 @@ real :: spmpar
 !     SAND77-0552, (1978), AND SAND78-1290, (1979), AND MATH.
 !     PROGRAMMING (21), 1981, PP. 98-118. MODIFIED BY A.H. MORRIS.
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBPROGRAM SOLVES A LINEARLY CONSTRAINED LEAST SQUARES
-!     PROBLEM WITH BOTH EQUALITY AND INEQUALITY CONSTRAINTS, AND, IF THE
-!     USER REQUESTS, OBTAINS A COVARIANCE MATRIX OF THE SOLUTION
-!     PARAMETERS.
+!     This subprogram solves a linearly constrained least squares
+!     problem with both equality and inequality constraints, and, if the
+!     user requests, obtains a covariance matrix of the solution
+!     parameters.
 !
-!     SUPPOSE THERE ARE GIVEN MATRICES E, A AND G OF RESPECTIVE
-!     DIMENSIONS ME BY N, MA BY N AND MG BY N, AND VECTORS F, B AND H OF
-!     RESPECTIVE LENGTHS ME, MA AND MG.  THIS SUBROUTINE SOLVES THE
-!     LINEARLY CONSTRAINED LEAST SQUARES PROBLEM
+!     Suppose there are given matrices E, A and G of respective
+!     dimensions me by N, MA by N and MG by N, and vectors F, B and H of
+!     respective lengths me, MA and MG.  This subroutine solves the
+!     linearly constrained least squares problem
 !
 !                   EX = F, (E ME BY N) (EQUATIONS TO BE EXACTLY
-!                                       SATISFIED)
+!                                       satisfied)
 !                   AX = B, (A MA BY N) (EQUATIONS TO BE
-!                                       APPROXIMATELY SATISFIED,
-!                                       LEAST SQUARES SENSE)
+!                                       approximately satisfied,
+!                                       least squares sense)
 !                   GX.GE.H,(G MG BY N) (INEQUALITY CONSTRAINTS)
 !
 !     THE INEQUALITIES GX.GE.H MEAN THAT EVERY COMPONENT OF THE PRODUCT
 !     GX MUST BE .GE. THE CORRESPONDING COMPONENT OF H.
 !
-!     IN CASE THE EQUALITY CONSTRAINTS CANNOT BE SATISFIED, A
-!     GENERALIZED INVERSE SOLUTION RESIDUAL VECTOR LENGTH IS OBTAINED
-!     FOR F-EX. THIS IS THE MINIMAL LENGTH POSSIBLE FOR F-EX.
+!     In case the equality constraints cannot be satisfied, A
+!     generalized inverse solution residual vector LENGTH is obtained
+!     for F-EX. This is the minimal length possible for F-EX.
 !
 !
 !     ANY VALUES ME.GE.0, MA.GE.0, OR MG.GE.0 ARE PERMITTED.  THE
@@ -7530,17 +7530,17 @@ real :: spmpar
 !     MODIFIED BY THE USER IF NEW VALUES ARE PROVIDED IN
 !     THE OPTION LIST OF THE ARRAY PRGOPT(*).
 !
-!     THE USER MUST DIMENSION ALL ARRAYS APPEARING IN THE CALL LIST..
+!     The user must dimension all arrays appearing in the call list..
 !     W(MDW,N+1),PRGOPT(*),X(N),WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)
 !     WHERE K=MAX(MA+MG,N).  THIS ALLOWS FOR A SOLUTION OF A RANGE OF
-!     PROBLEMS IN THE GIVEN WORKING SPACE.  THE DIMENSION OF WS(*)
-!     GIVEN IS A NECESSARY OVERESTIMATE.  ONCE A PARTICULAR PROBLEM
-!     HAS BEEN RUN, THE OUTPUT PARAMETER IP(3) GIVES THE ACTUAL
-!     DIMENSION REQUIRED FOR THAT PROBLEM.
+!     problems in the given working space.  The dimension of WS(*)
+!     given is a necessary overestimate.  Once a particular problem
+!     has been run, the output parameter IP(3) gives the actual
+!     dimension required for that problem.
 !
-!     THE PARAMETERS FOR LSEI( ) ARE
+!     The parameters for LSEI( ) are
 !
-!     INPUT..
+!     Input..
 !
 !     W(*,*),MDW,   THE ARRAY W(*,*) IS DOUBLY SUBSCRIPTED WITH
 !     ME,MA,MG,N    FIRST DIMENSIONING PARAMETER EQUAL TO MDW.
@@ -7548,42 +7548,42 @@ real :: spmpar
 !                   MDW MUST SATISFY MDW.GE.M.  THE CONDITION
 !                   MDW.LT.M IS AN ERROR.
 !
-!                   THE ARRAY W(*,*) CONTAINS THE MATRICES AND VECTORS
+!                   The array W(*,*) contains the matrices and vectors
 !
 !                                  (E  F)
 !                                  (A  B)
 !                                  (G  H)
 !
-!                   IN ROWS AND COLUMNS 1,...,M AND 1,...,N+1
-!                   RESPECTIVELY.
+!                   In rows and columns 1,...,M and 1,...,N+1
+!                   respectively.
 !
-!                   THE INTEGERS ME, MA, AND MG ARE THE
-!                   RESPECTIVE MATRIX ROW DIMENSIONS
-!                   OF E, A AND G. EACH MATRIX HAS N COLUMNS.
+!                   The integers me, MA, and MG are the
+!                   respective matrix ROW dimensions
+!                   of E, A and G. Each matrix HAS N columns.
 !
 !     PRGOPT(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
-!                  IF THE USER IS SATISFIED WITH THE NOMINAL
-!                  SUBPROGRAM FEATURES SET
+!                  If the user is satisfied with the nominal
+!                  subprogram features set
 !
 !                  PRGOPT(1)=1 (OR PRGOPT(1)=1.0)
 !
-!                  OTHERWISE PRGOPT(*) IS A LINKED LIST CONSISTING OF
-!                  GROUPS OF DATA OF THE FOLLOWING FORM
+!                  Otherwise PRGOPT(*) is a linked list consisting of
+!                  groups of data of the following form
 !
-!                  LINK
-!                  KEY
-!                  DATA SET
+!                  Link
+!                  key
+!                  data set
 !
-!                  THE PARAMETERS LINK AND KEY ARE EACH ONE WORD.
-!                  THE DATA SET CAN BE COMPRISED OF SEVERAL WORDS.
-!                  THE NUMBER OF ITEMS DEPENDS ON THE VALUE OF KEY.
-!                  THE VALUE OF LINK POINTS TO THE FIRST
-!                  ENTRY OF THE NEXT GROUP OF DATA WITHIN
-!                  PRGOPT(*).  THE EXCEPTION IS WHEN THERE ARE
-!                  NO MORE OPTIONS TO CHANGE.  IN THAT
+!                  The parameters link and key are each one word.
+!                  The data set can be comprised of several words.
+!                  The number of items depends on the value of key.
+!                  The value of link points to the first
+!                  entry of the next group of data within
+!                  PRGOPT(*).  The exception is when there are
+!                  no more options to change.  In that
 !                  CASE LINK=1 AND THE VALUES KEY AND DATA SET
-!                  ARE NOT REFERENCED. THE GENERAL LAYOUT OF
-!                  PRGOPT(*) IS AS FOLLOWS.
+!                  are not referenced. The general layout of
+!                  PRGOPT(*) is as follows.
 !
 !               ...PRGOPT(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
 !               .  PRGOPT(2)=KEY1 (KEY TO THE OPTION CHANGE)
@@ -7600,88 +7600,88 @@ real :: spmpar
 !               .       .
 !               ...PRGOPT(LINK)=1 (NO MORE OPTIONS TO CHANGE)
 !
-!                  VALUES OF LINK THAT ARE NONPOSITIVE ARE ERRORS.
+!                  Values of link that are nonpositive are errors.
 !                  A VALUE OF LINK.GT.NLINK=100000 IS ALSO AN ERROR.
-!                  THIS HELPS PREVENT USING INVALID BUT POSITIVE
-!                  VALUES OF LINK THAT WILL PROBABLY EXTEND
-!                  BEYOND THE PROGRAM LIMITS OF PRGOPT(*).
-!                  UNRECOGNIZED VALUES OF KEY ARE IGNORED.  THE
-!                  ORDER OF THE OPTIONS IS ARBITRARY AND ANY NUMBER
-!                  OF OPTIONS CAN BE CHANGED WITH THE FOLLOWING
-!                  RESTRICTION.  TO PREVENT CYCLING IN THE
-!                  PROCESSING OF THE OPTION ARRAY A COUNT OF THE
-!                  NUMBER OF OPTIONS CHANGED IS MAINTAINED.
+!                  This helps prevent using invalid but positive
+!                  values of link that will probably extend
+!                  beyond the program limits of PRGOPT(*).
+!                  Unrecognized values of key are ignored.  The
+!                  order of the options is arbitrary and any number
+!                  of options can be changed with the following
+!                  restriction.  To prevent cycling in the
+!                  processing of the option array A count of the
+!                  number of options changed is maintained.
 !                  WHENEVER THIS COUNT EXCEEDS NOPT=1000 THE
-!                  ROUTINE TERMINATES.
+!                  routine terminates.
 !
-!                  OPTIONS..
+!                  Options..
 !
 !                  KEY=1
-!                         COMPUTE IN W(*,*) THE N BY N
-!                  COVARIANCE MATRIX OF THE SOLUTION VARIABLES
-!                  AS AN OUTPUT PARAMTER.  NOMINALLY THE
-!                  COVARIANCE MATRIX WILL NOT BE COMPUTED.
-!                  (THIS REQUIRES NO USER INPUT.)
-!                  THE DATA SET FOR THIS OPTION IS A SINGLE VALUE.
-!                  IT MUST BE NONZERO WHEN THE COVARIANCE MATRIX
-!                  IS DESIRED.  IF IT IS ZERO, THE COVARIANCE
-!                  MATRIX IS NOT COMPUTED.  WHEN THE COVARIANCE MATRIX
-!                  IS COMPUTED, THE FIRST DIMENSIONING PARAMETER
+!                         compute in W(*,*) the N by N
+!                  covariance matrix of the solution variables
+!                  as an output paramter.  Nominally the
+!                  covariance matrix will not be computed.
+!                  (This requires no user input.)
+!                  the data set for this option is a single value.
+!                  It must be nonzero when the covariance matrix
+!                  is desired.  If it is zero, the covariance
+!                  matrix is not computed.  When the covariance matrix
+!                  is computed, the first dimensioning parameter
 !                  OF THE ARRAY W(*,*) MUST SATISFY MDW.GE.MAX0(M,N).
 !
 !                  KEY=2
-!                         SCALE THE NONZERO COLUMNS OF THE
-!                         ENTIRE DATA MATRIX.
+!                         scale the nonzero columns of the
+!                         entire data matrix.
 !                  (E)
 !                  (A)
 !                  (G)
 !
-!                  TO HAVE LENGTH ONE.  THE DATA SET FOR THIS
-!                  OPTION IS A SINGLE VALUE.  IT MUST BE
-!                  NONZERO IF UNIT LENGTH COLUMN SCALING
-!                  IS DESIRED.
+!                  To have length one.  The data set for this
+!                  option is a single value.  It must be
+!                  nonzero if unit length column scaling
+!                  is desired.
 !
 !                  KEY=3
-!                         SCALE COLUMNS OF THE ENTIRE DATA MATRIX
+!                         scale columns of the entire data matrix
 !                  (E)
 !                  (A)
 !                  (G)
 !
-!                  WITH A USER-PROVIDED DIAGONAL MATRIX.
-!                  THE DATA SET FOR THIS OPTION CONSISTS
-!                  OF THE N DIAGONAL SCALING FACTORS, ONE FOR
-!                  EACH MATRIX COLUMN.
+!                  With a user-provided diagonal matrix.
+!                  The data set for this option consists
+!                  of the N diagonal scaling factors, one for
+!                  each matrix column.
 !
 !                  KEY=4
-!                         CHANGE THE RANK DETERMINATION TOLERANCE FOR
-!                  THE EQUALITY CONSTRAINT EQUATIONS FROM
-!                  THE NOMINAL VALUE OF SQRT(SRELPR).  THIS QUANTITY
-!                  CAN BE NO SMALLER THAN SRELPR, THE ARITHMETIC-
-!                  STORAGE PRECISION.  THE QUANTITY SRELPR IS THE
+!                         change the rank determination tolerance for
+!                  the equality constraint equations from
+!                  the nominal value of SQRT(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity SRELPR is the
 !                  LARGEST POSITIVE NUMBER SUCH THAT T=1.+SRELPR
 !                  SATISFIES T.EQ.1.  THE QUANTITY USED
-!                  HERE IS INTERNALLY RESTRICTED TO BE AT
-!                  LEAST SRELPR.  THE DATA SET FOR THIS OPTION
-!                  IS THE NEW TOLERANCE.
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
 !
 !                  KEY=5
-!                         CHANGE THE RANK DETERMINATION TOLERANCE FOR
-!                  THE REDUCED LEAST SQUARES EQUATIONS FROM
-!                  THE NOMINAL VALUE OF SQRT(SRELPR).  THIS QUANTITY
-!                  CAN BE NO SMALLER THAN SRELPR, THE ARITHMETIC-
-!                  STORAGE PRECISION.  THE QUANTITY USED
-!                  HERE IS INTERNALLY RESTRICTED TO BE AT
-!                  LEAST SRELPR.  THE DATA SET FOR THIS OPTION
-!                  IS THE NEW TOLERANCE.
+!                         change the rank determination tolerance for
+!                  the reduced least squares equations from
+!                  the nominal value of SQRT(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity used
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
 !
-!                  FOR EXAMPLE, SUPPOSE WE WANT TO CHANGE
-!                  THE TOLERANCE FOR THE REDUCED LEAST SQUARES
-!                  PROBLEM, COMPUTE THE COVARIANCE MATRIX OF
-!                  THE SOLUTION PARAMETERS, AND PROVIDE
-!                  COLUMN SCALING FOR THE DATA MATRIX.  FOR
-!                  THESE OPTIONS THE DIMENSION OF PRGOPT(*)
-!                  MUST BE AT LEAST N+9.  THE FORTRAN STATEMENTS
-!                  DEFINING THESE OPTIONS WOULD BE AS FOLLOWS.
+!                  For example, suppose we want to change
+!                  the tolerance for the reduced least squares
+!                  problem, compute the covariance matrix of
+!                  the solution parameters, and provide
+!                  column scaling for the data matrix.  For
+!                  these options the dimension of PRGOPT(*)
+!                  must be at least N+9.  The Fortran statements
+!                  defining these options would be as follows.
 !
 !                  PRGOPT(1)=4 (LINK TO ENTRY 4 IN PRGOPT(*))
 !                  PRGOPT(2)=1 (COVARIANCE MATRIX KEY)
@@ -7695,91 +7695,91 @@ real :: spmpar
 !                  PRGOPT(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
 !
 !                  CALL SCOPY(N,D,1,PRGOPT(9),1)  (COPY THE N
-!                    SCALING FACTORS FROM THE USER ARRAY D(*)
+!                    scaling factors from the user array D(*)
 !                    TO PRGOPT(9)-PRGOPT(N+8))
 !
 !                  PRGOPT(N+9)=1 (NO MORE OPTIONS TO CHANGE)
 !
-!                  THE CONTENTS OF PRGOPT(*) ARE NOT MODIFIED
-!                  BY THE SUBPROGRAM.
-!                  THE KEY 8 AND 9 OPTIONS FOR WNNLS( ) CAN ALSO
-!                  BE INCLUDED IN THIS ARRAY.  THEIR FUNCTIONS
-!                  ARE DOCUMENTED IN THE USAGE INSTRUCTIONS FOR
+!                  The contents of PRGOPT(*) are not modified
+!                  by the subprogram.
+!                  The key 8 and 9 options for WNNLS( ) can also
+!                  be included in this array.  Their functions
+!                  are documented in the usage instructions for
 !                  SUBPROGRAM WNNLS( ).
 !
-!     OUTPUT..
+!     Output..
 !
-!     X(*),RNORME,  THE ARRAY X(*) CONTAINS THE SOLUTION PARAMETERS
+!     X(*),RNORME,  the array X(*) contains the solution parameters
 !     RNORML        IF THE INTEGER OUTPUT FLAG MODE = 0 OR 1.
-!                   THE DEFINITION OF MODE IS GIVEN DIRECTLY BELOW.
+!                   The definition of mode is given directly below.
 !                   WHEN MODE = 0 OR 1, RNORME AND RNORML
-!                   RESPECTIVELY CONTAIN THE RESIDUAL VECTOR
-!                   EUCLIDEAN LENGTHS OF F - EX AND B - AX.  WHEN
+!                   respectively contain the residual vector
+!                   Euclidean lengths of F - EX and B - AX.  When
 !                   MODE=1 THE EQUALITY CONSTRAINT EQUATIONS EX=F
 !                   ARE CONTRADICTORY, SO RNORME.NE.0. THE RESIDUAL
-!                   VECTOR F-EX HAS MINIMAL EUCLIDEAN LENGTH. FOR
+!                   vector F-EX has minimal Euclidean length. For
 !                   MODE.GE.2, NONE OF THESE PARAMETERS ARE
-!                   DEFINED.
+!                   defined.
 !
 !     MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
 !                   STATUS AFTER COMPLETION.  IF MODE.GE.2, NO
-!                   SOLUTION HAS BEEN COMPUTED.
+!                   solution has been computed.
 !
 !                   MODE =
 !
-!                   0  BOTH EQUALITY AND INEQUALITY CONSTRAINTS
-!                      ARE COMPATIBLE AND HAVE BEEN SATISFIED.
+!                   0  Both equality and inequality constraints
+!                      are compatible and have been satisfied.
 !
-!                   1  EQUALITY CONSTRAINTS ARE CONTRADICTORY.
+!                   1  Equality constraints are contradictory.
 !                      A GENERALIZED INVERSE SOLUTION OF EX=F WAS USED
-!                      TO MINIMIZE THE RESIDUAL VECTOR LENGTH F-EX.
-!                      IN THIS SENSE, THE SOLUTION IS STILL MEANINGFUL.
+!                      to minimize the residual vector LENGTH F-EX.
+!                      In this sense, the solution is still meaningful.
 !
-!                   2  NO SOLUTION COULD BE OBTAINED. THE CONSTRAINTS
-!                      ARE CONTRADICTORY.
+!                   2  No solution could be obtained. The constraints
+!                      are contradictory.
 !
-!                   4  USAGE ERROR OCCURRED.  THE VALUE
+!                   4  Usage error occurred.  The value
 !                      OF MDW IS .LT. ME+MA+MG, MDW IS
 !                      .LT. N AND A COVARIANCE MATRIX IS
-!                      REQUESTED, OR THE OPTION VECTOR
-!                      PRGOPT(*) IS NOT PROPERLY DEFINED.
+!                      requested, or the option vector
+!                      PRGOPT(*) is not properly defined.
 !
 !     W(*,*)        THE ARRAY W(*,*) CONTAINS THE N BY N SYMMETRIC
-!                   COVARIANCE MATRIX OF THE SOLUTION PARAMETERS,
-!                   PROVIDED THIS WAS REQUESTED ON INPUT WITH
-!                   THE OPTION VECTOR PRGOPT(*) AND THE OUTPUT
+!                   covariance matrix of the solution parameters,
+!                   provided this was requested on input with
+!                   the option vector PRGOPT(*) and the output
 !                   FLAG IS RETURNED WITH MODE = 0 OR 1.
 !
 !     IP(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
-!                   THAT PROVIDE RANK AND WORKING ARRAY LENGTH
-!                   INFORMATION AFTER COMPLETION.
+!                   that provide rank and working array LENGTH
+!                   information after completion.
 !
 !                      IP(1) = RANK OF EQUALITY CONSTRAINT
-!                              MATRIX.  DEFINE THIS QUANTITY
+!                              matrix.  Define this quantity
 !                              AS KRANKE.
 !
 !                      IP(2) = RANK OF REDUCED LEAST SQUARES
-!                              PROBLEM.
+!                              problem.
 !
 !                      IP(3) = THE AMOUNT OF STORAGE IN THE
-!                              WORKING ARRAY WS(*) THAT WAS
-!                              ACTUALLY USED BY THE SUBPROGRAM.
-!                              THE FORMULA GIVEN ABOVE FOR THE LENGTH
-!                              OF WS(*) IS A NECESSARY OVERESTIMATE.
-!     USER DESIGNATED
-!     WORKING ARRAYS..
+!                              working array WS(*) that was
+!                              actually used by the subprogram.
+!                              The formula given above for the length
+!                              of WS(*) is a necessary overestimate.
+!     User designated
+!     working arrays..
 !
 !     WS(*),IP(*)              THESE ARE RESPECTIVELY TYPE REAL
-!                              AND TYPE INTEGER WORKING ARRAYS.
-!                              THEIR REQUIRED MINIMAL LENGTHS ARE
-!                              GIVEN ABOVE.
+!                              and type integer working arrays.
+!                              Their required minimal lengths are
+!                              given above.
 !
 !
 !     SUBROUTINES CALLED
 !
 !     LSI           PART OF THIS PACKAGE.  SOLVES A
-!                   CONSTRAINED LEAST SQUARES PROBLEM WITH
-!                   INEQUALITY CONSTRAINTS.
+!                   constrained least squares problem with
+!                   inequality constraints.
 !
 !     SDOT,SSCAL,   SUBROUTINES FROM THE BLAS PACKAGE.
 !     SAXPY,SASUM,  SEE TRANS. MATH SOFTWARE (5), P. 308.
@@ -7787,12 +7787,12 @@ real :: spmpar
 !     SSWAP,ISAMAX
 !
 !     H12           SUBROUTINE TO CONSTRUCT AND APPLY A
-!                   HOUSEHOLDER TRANSFORMATION.
+!                   Householder transformation.
 !
 !     SPMPAR        FUNCTION TO COMPUTE THE RELATIVE MACHINE
-!                   PRECISION.
+!                   precision.
 !
-!     REVISED OCT. 1, 1989.
+!     Revised oct. 1, 1989.
 !
 real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
@@ -7801,12 +7801,12 @@ integer, intent(inout) :: ip(*)
 logical :: cov
 data zero /0.e0/, one /1.e0/, half /0.5e0/
 !
-!     COMPUTE MACHINE PRECISION
+!     Compute machine precision
 !
 srelpr = spmpar(1)
 !
-!     COMPUTE NUMBER OF POSSIBLE RIGHT MULTIPLYING HOUSEHOLDER
-!     TRANSFORMATIONS.
+!     Compute number of possible right multiplying Householder
+!     transformations.
 !
 m = me + ma + mg
 mode = 0
@@ -7819,7 +7819,7 @@ kranke = min0(me,n)
 n1 = 2*kranke + 1
 n2 = n1 + n
 !
-!     PROCESS-OPTION-VECTOR
+!     Process-option-vector
 !
 go to 480
 90 if (.not.(cov .and. mdw.lt.n)) go to 100
@@ -7827,7 +7827,7 @@ mode = 4
 return
 100 l = kranke
 !
-!     COMPUTE NORM OF EQUALITY CONSTRAINT MATRIX AND RT SIDE.
+!     Compute norm of equality constraint matrix and RT side.
 !
 enorm = zero
 do j = 1,n
@@ -7839,8 +7839,8 @@ snmax = zero
 rnmax = zero
 do 180 i = 1,l
 !
-!     COMPUTE MAXIMUM RATIO OF VECTOR LENGTHS. PARTITION
-!     IS AT COL. I.
+!     Compute maximum ratio of vector lengths. Partition
+!     is at col. I.
   do 150 k = i,me
      sn = sdot(n-i+1,w(k,i),mdw,w(k,i),mdw)
      rn = sdot(i-1,w(k,1),mdw,w(k,1),mdw)
@@ -7854,11 +7854,11 @@ do 180 i = 1,l
      imax = k
 150 continue
 !
-!     INTERCHANGE ROWS IF NECESSARY.
+!     Interchange rows if necessary.
   if (i.ne.imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
   if (.not.(snmax.gt.tau**2*rnmax)) go to 160
 !
-!     ELIMINATE ELEMS I+1,...,N IN ROW I.
+!     Eliminate elems I+1,...,N in row I.
   call h12(1, i, i+1, n, w(i,1), mdw, ws(i), w(i+1,1), mdw, 1, &
 &m-i)
   go to 180
@@ -7866,32 +7866,32 @@ do 180 i = 1,l
   go to 200
 180 continue
 !
-!     SAVE DIAG. TERMS OF LOWER TRAP. MATRIX.
+!     Save diag. Terms of lower trap. Matrix.
 !
 200 call scopy(kranke, w, mdw+1, ws(kranke+1), 1)
 !
-!     USE HOUSEHOLDER TRANS FROM LEFT TO ACHIEVE KRANKE BY KRANKE UPPER
-!     TRIANGULAR FORM.
+!     Use Householder trans from left to achieve KRANKE by KRANKE upper
+!     triangular form.
 !
 if (.not.(kranke.gt.0 .and. kranke.lt.me)) go to 220
 do kk = 1,kranke
   k = kranke + 1 - kk
 !
-!     APPLY TRANFORMATION TO MATRIX COLS. 1,...,K-1.
+!     Apply tranformation to matrix cols. 1,...,K-1.
   call h12(1, k, kranke+1, me, w(1,k), 1, up, w, 1, mdw, k-1)
 !
-!     APPLY TO RT SIDE VECTOR.
+!     Apply to RT side vector.
   call h12(2, k, kranke+1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
 end do
 220 if (.not.(kranke.gt.0)) go to 240
 !
-!     SOLVE FOR VARIABLES 1,...,KRANKE IN NEW COORDINATES.
+!     Solve for variables 1,...,KRANKE in new coordinates.
 call scopy(kranke, w(1,np1), 1, x, 1)
 do i=1,kranke
   x(i) = (x(i)-sdot(i-1,w(i,1),mdw,x,1))/w(i,i)
 end do
 !
-!     COMPUTE RESIDUALS FOR REDUCED PROBLEM.
+!     Compute residuals for reduced problem.
 !
 240 mep1 = me + 1
 rnorml = zero
@@ -7905,7 +7905,7 @@ do 260 i = mep1,m
   call scopy(n-kranke, w(i,kranke+1), 0, w(i,kranke+1), mdw)
 260 continue
 !
-!     COMPUTE EQUAL. CONSTRAINT EQUAS. RESIDUAL LENGTH.
+!     Compute equal. Constraint equas. Residual length.
 270 rnorme = snrm2(me-kranke,w(kranke+1,np1),1)
 !
 !     MOVE REDUCED PROBLEM DATA UPWARD IF KRANKE.LT.ME.
@@ -7915,22 +7915,22 @@ do j=1,np1
   call scopy(m-me, w(me+1,j), 1, w(kranke+1,j), 1)
 end do
 !
-!     COMPUTE SOLN OF REDUCED PROBLEM.
+!     Compute soln of reduced problem.
 !
 290 call lsi(w(kranke+1,kranke+1), mdw, ma, mg, n-kranke, prgopt, &
 &x(kranke+1), rnorml, mode, ws(n2), ip(2))
 if (mode .gt. 1) go to 470
 if (.not.(me.gt.0)) go to 330
 !
-!     TEST FOR CONSISTENCY OF EQUALITY CONSTRAINTS.
+!     Test for consistency of equality constraints.
 !
 mdeqc = 0
 xnrme = sasum(kranke,w(1,np1),1)
 if (rnorme.gt.tau*(enorm*xnrme+fnorm)) mdeqc = 1
 mode = mode + mdeqc
 !
-!     CHECK IF SOLN TO EQUAL. CONSTRAINTS SATISFIES INEQUAL.
-!     CONSTRAINTS WHEN THERE ARE NO DEGREES OF FREEDOM LEFT.
+!     Check if soln to equal. Constraints satisfies inequal.
+!     Constraints when there are no degrees of freedom left.
 !
 if (.not.(kranke.eq.n .and. mg.gt.0)) go to 330
 xnorm = sasum(n,x,1)
@@ -7944,17 +7944,17 @@ do 310 i = mapke1,mend
 310 continue
 330 if (.not.(kranke.gt.0)) go to 420
 !
-!     REPLACE DIAG. TERMS OF LOWER TRAP. MATRIX.
+!     Replace diag. Terms of lower trap. Matrix.
 call scopy(kranke, ws(kranke+1), 1, w, mdw+1)
 !
-!     REAPPLY TRANS TO PUT SOLN IN ORIGINAL COORDINATES.
+!     Reapply trans to put soln in original coordinates.
 !
 do ii = 1,kranke
   i = kranke + 1 - ii
   call h12(2, i, i+1, n, w(i,1), mdw, ws(i), x, 1, 1, 1)
 end do
 !
-!     COMPUTE COV MATRIX OF EQUAL. CONSTRAINED PROBLEM.
+!     Compute COV matrix of equal. Constrained problem.
 !
 if (.not.(cov)) go to 450
 do 400 jj = 1,kranke
@@ -7984,7 +7984,7 @@ do 400 jj = 1,kranke
   call scopy(n-j, w(j,jp1), mdw, w(jp1,j), 1)
 400 continue
 !
-!     APPLY THE SCALING TO THE COVARIANCE MATRIX.
+!     Apply the scaling to the covariance matrix.
 !
 420 if (.not.(cov)) go to 450
 do i = 1,n
@@ -7993,7 +7993,7 @@ do i = 1,n
   call sscal(n, ws(l-1), w(1,i), 1)
 end do
 !
-!     RESCALE SOLN. VECTOR.
+!     Rescale soln. Vector.
 !
 450 if (mode .gt. 1) go to 470
 do j = 1,n
@@ -8004,25 +8004,25 @@ end do
 ip(3) = ip(3) + 2*kranke + n
 return
 480 continue
-!     TO PROCESS-OPTION-VECTOR
+!     To process-option-vector
 !
-!     THE NOMINAL TOLERANCE USED IN THE CODE
-!     FOR THE EQUALITY CONSTRAINT EQUATIONS.
+!     The nominal tolerance used in the code
+!     for the equality constraint equations.
 tau = sqrt(srelpr)
 !
-!     THE NOMINAL COLUMN SCALING USED IN THE CODE IS
-!     THE IDENTITY SCALING.
+!     The nominal column scaling used in the code is
+!     the identity scaling.
 ws(n1) = one
 call scopy(n, ws(n1), 0, ws(n1), 1)
 !
-!     NO COVARIANCE MATRIX IS NOMINALLY COMPUTED.
+!     No covariance matrix is nominally computed.
 cov = .false.
 !
-!     DEFINE BOUND FOR NUMBER OF OPTIONS TO CHANGE.
+!     Define bound for number of options to change.
 nopt = 1000
 ntimes = 0
 !
-!     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
+!     Define bound for positive values of link.
 nlink = 100000
 last = 1
 link = prgopt(1)
@@ -8079,58 +8079,58 @@ real :: spmpar
 !     USAGE INSTRUCTIONS.
 !     WRITTEN BY R. J. HANSON, SLA.
 !
-!     SOLVE..
+!     Solve..
 !              AX = B,  A  MA BY N  (LEAST SQUARES EQUATIONS)
-!     SUBJECT TO..
+!     subject to..
 !
 !              GX.GE.H, G  MG BY N  (INEQUALITY CONSTRAINTS)
 !
-!     INPUT..
+!     Input..
 !
-!      W(*,*) CONTAINS  (A B) IN ROWS 1,...,MA+MG, COLS 1,...,N+1.
+!      W(*,*) contains  (A B) in rows 1,...,MA+MG, cols 1,...,N+1.
 !                       (G H)
 !
 !     MDW,MA,MG,N
-!              CONTAIN (RESP) VAR. DIMENSION OF W(*,*),
-!              AND MATRIX DIMENSIONS.
+!              contain (resp) var. Dimension of W(*,*),
+!              and matrix dimensions.
 !
 !     PRGOPT(*),
-!              PROGRAM OPTION VECTOR.
+!              program option vector.
 !
-!     OUTPUT..
+!     Output..
 !
 !      X(*),RNORM
 !
 !              SOLUTION VECTOR(UNLESS MODE=2), LENGTH OF AX-B.
 !
-!      MODE
+!      Mode
 !              =0   INEQUALITY CONSTRAINTS ARE COMPATIBLE.
 !              =2   INEQUALITY CONSTRAINTS CONTRADICTORY.
 !
 !      WS(*),
-!              WORKING STORAGE OF DIMENSION K+N+(MG+2)*(N+7),
+!              working storage of dimension K+N+(MG+2)*(N+7),
 !              WHERE K=MAX(MA+MG,N).
 !      IP(MG+2*N+1)
-!              INTEGER WORKING STORAGE
+!              integer working storage
 !
 !     SUBROUTINES CALLED
 !
 !     LPDP          THIS SUBPROGRAM MINIMIZES A SUM OF SQUARES
-!                   OF UNKNOWNS SUBJECT TO LINEAR INEQUALITY
-!                   CONSTRAINTS.  PART OF THIS PACKAGE.
+!                   of unknowns subject to linear inequality
+!                   constraints.  Part of this package.
 !
 !     SDOT,SSCAL    SUBROUTINES FROM THE BLAS PACKAGE.
 !     SAXPY,SASUM,  SEE TRANS. MATH SOFTWARE (5), P. 308.
 !     SCOPY,SSWAP
 !
 !     HFTI          SOLVES AN UNCONSTRAINED LINEAR LEAST SQUARES
-!                   PROBLEM.
+!                   problem.
 !
 !     H12           SUBROUTINE TO CONSTRUCT AND APPLY A HOUSEHOLDER
-!                   TRANSFORMATION.
+!                   transformation.
 !
 !     SPMPAR        FUNCTION TO COMPUTE THE RELATIVE MACHINE
-!                   PRECISION.
+!                   precision.
 !
 real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
@@ -8149,21 +8149,21 @@ np1 = n + 1
 krank = 0
 if (n.le.0 .or. m.le.0) go to 70
 !
-!     PROCESS-OPTION-VECTOR
+!     Process-option-vector
 !
 go to 500
 !
-!     COMPUTE MATRIX NORM OF LEAST SQUARES EQUAS.
+!     Compute matrix NORM of least squares equas.
 !
 40 anorm = zero
 do j = 1,n
   anorm = amax1(anorm,sasum(ma,w(1,j),1))
 end do
 !
-!     SET TOL FOR HFTI( ) RANK TEST.
+!     Set TOL for HFTI( ) rank test.
 tau = tol*anorm
 !
-!     COMPUTE HOUSEHOLDER ORTHOGONAL DECOMP OF MATRIX.
+!     Compute Householder orthogonal decomp of matrix.
 !
 if (n.gt.0) ws(1) = zero
 call scopy(n, ws, 0, ws, 1)
@@ -8180,17 +8180,17 @@ gam = ma - krank
 if (krank .lt. ma) fac = rnorm**2/gam
 go to 80
 !
-!     REDUCE-TO-LPDP-AND-SOLVE
+!     Reduce-to-LPDP-and-solve
 !
 70 ip(1) = krank
 ip(2) = n + max0(m,n) + (mg+2)*(n+7)
 return
 !
-!     TO REDUCE-TO-LPDP-AND-SOLVE
+!     To reduce-to-LPDP-and-solve
 !
 80 map1 = ma + 1
 !
-!     COMPUTE INEQ. RT-HAND SIDE FOR LPDP.
+!     Compute ineq. RT-hand side for LPDP.
 !
 if (.not.(ma.lt.m)) go to 260
 if (.not.(minman.gt.0)) go to 160
@@ -8200,11 +8200,11 @@ end do
 do i = 1,minman
   j = ip(i)
 !
-!     APPLY PERMUTATIONS TO COLS OF INEQ. CONSTRAINT MATRIX.
+!     Apply permutations to cols of ineq. Constraint matrix.
   call sswap(mg, w(map1,i), 1, w(map1,j), 1)
 end do
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO CONSTRAINT MATRIX.
+!     Apply Householder transformations to constraint matrix.
 !
 if (.not.(0.lt.krank .and. krank.lt.n)) go to 120
 do ii = 1,krank
@@ -8214,7 +8214,7 @@ do ii = 1,krank
 &mdw, 1, mg)
 end do
 !
-!     COMPUTE PERMUTED INEQ. CONSTR. MATRIX TIMES R-INVERSE.
+!     Compute permuted ineq. Constr. Matrix times R-inverse.
 !
 120 do 150 i = map1,m
   if (.not.(0.lt.krank)) go to 150
@@ -8223,22 +8223,22 @@ end do
   end do
 150 continue
 !
-!     SOLVE THE REDUCED PROBLEM WITH LPDP ALGORITHM,
-!     THE LEAST PROJECTED DISTANCE PROBLEM.
+!     Solve the reduced problem with LPDP algorithm,
+!     the least projected distance problem.
 !
 160 call lpdp(w(map1,1), mdw, mg, krank, n-krank, opt, x, xnorm, &
 &mdlpdp, ws(n2), ip(n+1))
 if (mdlpdp .ne. 1) go to 240
 if (.not.(krank.gt.0)) go to 180
 !
-!     COMPUTE SOLN IN ORIGINAL COORDINATES.
+!     Compute soln in original coordinates.
 !
 do ii = 1,krank
   i = krank + 1 - ii
   x(i) = (x(i)-sdot(ii-1,w(i,i+1),mdw,x(i+1),1))/w(i,i)
 end do
 !
-!     APPLY HOUSEHOLDER TRANS. TO SOLN VECTOR.
+!     Apply Householder trans. To soln vector.
 !
 180 if (.not.(0.lt.krank .and. krank.lt.n)) go to 200
 do i = 1,krank
@@ -8247,20 +8247,20 @@ do i = 1,krank
 end do
 200 if (.not.(minman.gt.0)) go to 270
 !
-!     REPERMUTE VARIABLES TO THEIR INPUT ORDER.
+!     Repermute variables to their input order.
 do ii=1,minman
   i = minman + 1 - ii
   j = ip(i)
   call sswap(1, x(i), 1, x(j), 1)
 end do
 !
-!     VARIABLES ARE NOW IN ORIG. COORDINATES.
-!     ADD SOLN OF UNSCONSTRAINED PROB.
+!     Variables are now in orig. Coordinates.
+!     Add soln of unsconstrained prob.
 do i = 1,n
   x(i) = x(i) + ws(i)
 end do
 !
-!     COMPUTE THE RESIDUAL VECTOR NORM.
+!     Compute the residual vector NORM.
 rnorm = sqrt(rnorm**2+xnorm**2)
 go to 270
 240 mode = 2
@@ -8268,22 +8268,22 @@ go to 270
 260 call scopy(n, ws, 1, x, 1)
 270 if (.not.(cov .and. krank.gt.0)) go to 70
 !
-!     COMPUTE COVARIANCE MATRIX BASED ON THE ORTHOGONAL DECOMP.
+!     Compute covariance matrix based on the orthogonal decomp.
 !     FROM HFTI( ).
 !
 krm1 = krank - 1
 krp1 = krank + 1
 !
-!     COPY DIAG. TERMS TO WORKING ARRAY.
+!     Copy diag. Terms to working array.
 call scopy(krank, w, mdw+1, ws(n2), 1)
 !
-!     RECIPROCATE DIAG. TERMS.
+!     Reciprocate diag. Terms.
 do j = 1,krank
   w(j,j) = one/w(j,j)
 end do
 if (.not.(krank.gt.1)) go to 310
 !
-!     INVERT THE UPPER TRIANGULAR QR FACTOR ON ITSELF.
+!     Invert the upper triangular QR factor on itself.
 do i=1,krm1
   ip1 = i + 1
   do j=ip1,krank
@@ -8291,7 +8291,7 @@ do i=1,krm1
   end do
 end do
 !
-!     COMPUTE THE INVERTED FACTOR TIMES ITS TRANSPOSE.
+!     Compute the inverted factor times its transpose.
 310 do i=1,krank
   do j=i,krank
     w(i,j) = sdot(krank+1-j,w(i,j),mdw,w(j,j),mdw)
@@ -8299,8 +8299,8 @@ end do
 end do
 if (.not.(krank.lt.n)) go to 450
 !
-!     ZERO OUT LOWER TRAPEZOIDAL PART.
-!     COPY UPPER TRI. TO LOWER TRI. PART.
+!     Zero out lower trapezoidal part.
+!     Copy upper TRI. To lower TRI. Part.
 do j=1,krank
   call scopy(j, w(1,j), 1, w(j,1), mdw)
 end do
@@ -8309,7 +8309,7 @@ do i=krp1,n
   call scopy(i, w(i,1), 0, w(i,1), mdw)
 end do
 !
-!     APPLY RIGHT SIDE TRANSFORMATIONS TO LOWER TRI.
+!     Apply right side transformations to lower TRI.
 n3 = n2 + krp1
 do i=1,krank
   l = n1 + i
@@ -8320,7 +8320,7 @@ do i=1,krank
 !     IF RB.GE.ZERO, TRANSFORMATION CAN BE REGARDED AS ZERO.
   rb = one/rb
 !
-!     STORE UNSCALED RANK-ONE HOUSEHOLDER UPDATE IN WORK ARRAY.
+!     Store unscaled rank-one Householder update in work array.
   ws(n3) = zero
   call scopy(n, ws(n3), 0, ws(n3), 1)
   l = n1 + i
@@ -8357,13 +8357,13 @@ do i=1,krank
 420 continue
 end do
 !
-!     COPY LOWER TRI. TO UPPER TRI. TO SYMMETRIZE THE COVARIANCE MATRIX.
+!     Copy lower TRI. To upper TRI. To symmetrize the covariance matrix.
 !
 do i = 1,n
   call scopy(i, w(i,1), mdw, w(1,i), 1)
 end do
 !
-!     REPERMUTE ROWS AND COLS.
+!     Repermute rows and cols.
 !
 450 do 470 ii = 1,minman
   i = minman + 1 - ii
@@ -8375,8 +8375,8 @@ end do
   call sswap(n-k, w(i,k+1), mdw, w(k,k+1), mdw)
 470 continue
 !
-!     PUT IN NORMALIZED RESIDUAL SUM OF SQUARES SCALE FACTOR
-!     AND SYMMETRIZE THE RESULTING COVARIANCE MARIX.
+!     Put in normalized residual sum of squares scale factor
+!     and symmetrize the resulting covariance marix.
 !
 do j = 1,n
   call sscal(j, fac, w(1,j), 1)
@@ -8384,9 +8384,9 @@ do j = 1,n
 end do
 go to 70
 !
-!     TO PROCESS-OPTION-VECTOR
+!     To process-option-vector
 !
-!     THE NOMINAL TOLERANCE USED IN THE CODE,
+!     The nominal tolerance used in the code,
 500 tol = sqrt(srelpr)
 cov = .false.
 last = 1
@@ -8409,7 +8409,7 @@ key9 = 0
    link = next
    go to 510
 !
-!     PREPARE THE OPTION VECTOR FOR WNNLS
+!     Prepare the option vector for WNNLS
 !
 540 j = 1
 if (key8 .eq. 0) go to 550
@@ -8445,26 +8445,26 @@ real :: sdot
 !
 !     WRITTEN BY R. J. HANSON AND K. H. HASKELL, SANDIA LABS
 !
-!     DETERMINE AN N1-VECTOR W, AND
-!               AN N2-VECTOR Z
-!     WHICH MINIMIZES THE EUCLIDEAN LENGTH OF W
+!     Determine an N1-vector W, and
+!               an N2-vector Z
+!     which minimizes the Euclidean length of W
 !     SUBJECT TO G*W+H*Z .GE. Y.
-!     THIS IS THE LEAST PROJECTED DISTANCE PROBLEM, LPDP.
-!     THE MATRICES G AND H ARE OF RESPECTIVE
-!     DIMENSIONS M BY N1 AND M BY N2.
+!     This is the least projected distance problem, LPDP.
+!     The matrices G and H are of respective
+!     dimensions M by N1 and M by N2.
 !
-!     CALLED BY SUBPROGRAM LSI( ).
+!     Called by subprogram LSI( ).
 !
-!     THE MATRIX
+!     The matrix
 !                (G H Y)
 !
-!     OCCUPIES ROWS 1,...,M AND COLS 1,...,N1+N2+1 OF A(*,*).
+!     Occupies rows 1,...,M and cols 1,...,N1+N2+1 of A(*,*).
 !
-!     THE SOLUTION (W) IS RETURNED IN X(*).
+!     The solution (W) is returned in X(*).
 !                  (Z)
 !
-!     THE VALUE OF MODE INDICATES THE STATUS OF
-!     THE COMPUTATION AFTER RETURNING TO THE USER.
+!     The value of mode indicates the status of
+!     the computation after returning to the user.
 !
 !          MODE=1  THE SOLUTION WAS SUCCESSFULLY OBTAINED.
 !
@@ -8473,8 +8473,8 @@ real :: sdot
 !     SUBROUTINES CALLED
 !
 !     WNNLS         SOLVES A NONNEGATIVELY CONSTRAINED LINEAR LEAST
-!                   SQUARES PROBLEM WITH LINEAR EQUALITY CONSTRAINTS.
-!                   PART OF THIS PACKAGE.
+!                   squares problem with linear equality constraints.
+!                   Part of this package.
 !
 !     SDOT,SCOPY    SUBROUTINES FROM THE BLAS PACKAGE.
 !     SSCAL,SNRM2   SEE TRANS. MATH SOFTWARE (5), P. 308.
@@ -8491,7 +8491,7 @@ call scopy(n, x, 0, x, 1)
 return
 20 np1 = n + 1
 !
-!     SCALE NONZERO ROWS OF INEQUALITY MATRIX TO HAVE LENGTH ONE.
+!     Scale nonzero rows of inequality matrix to have length one.
 !
 do 40 i = 1,m
    sc = snrm2(n,a(i,1),mda)
@@ -8500,13 +8500,13 @@ do 40 i = 1,m
    call sscal(np1, sc, a(i,1), mda)
 40 continue
 !
-!     SCALE RT.-SIDE VECTOR TO HAVE LENGTH ONE (OR ZERO).
+!     Scale RT.-Side vector to have length one (or zero).
 ynorm = snrm2(m,a(1,np1),1)
 if (ynorm .eq. zero) go to 50
 sc = one/ynorm
 call sscal(m, sc, a(1,np1), 1)
 !
-!     SCALE COLS OF MATRIX H.
+!     Scale cols of matrix H.
 50 j = n1 + 1
 60 if (j .gt. n) go to 70
 sc = snrm2(m,a(1,j),1)
@@ -8517,19 +8517,19 @@ j = j + 1
 go to 60
 70 if (.not.(n1.gt.0)) go to 130
 !
-!     COPY TRANSPOSE OF (H G Y) TO WORK ARRAY WS(*).
+!     Copy transpose of (H G Y) to work array WS(*).
 iw = 0
 do i=1,m
 !
-!     MOVE COL OF TRANSPOSE OF H INTO WORK ARRAY.
+!     Move col of transpose of H into work array.
    call scopy(n2, a(i,n1+1), mda, ws(iw+1), 1)
    iw = iw + n2
 !
-!     MOVE COL OF TRANSPOSE OF G INTO WORK ARRAY.
+!     Move col of transpose of G into work array.
    call scopy(n1, a(i,1), mda, ws(iw+1), 1)
    iw = iw + n1
 !
-!     MOVE COMPONENT OF VECTOR Y INTO WORK ARRAY.
+!     Move component of vector Y into work array.
    ws(iw+1) = a(i,np1)
    iw = iw + 1
 end do
@@ -8547,7 +8547,7 @@ iw = iw + m
 call wnnls(ws, np1, n2, np1-n2, m, 0, prgopt, ws(ix), rnorm, &
 &modew, is, ws(iw+1))
 !
-!     COMPUTE THE COMPONENTS OF THE SOLN DENOTED ABOVE BY W.
+!     Compute the components of the soln denoted above by W.
 sc = one - sdot(m,a(1,np1),1,ws(ix),1)
 if (.not.(one+fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 110
 sc = one/sc
@@ -8564,7 +8564,7 @@ go to 130
 return
 130 if (.not.(n2.gt.0)) go to 180
 !
-!     COPY TRANSPOSE OF (H Q) TO WORK ARRAY WS(*).
+!     Copy transpose of (H Q) to work array WS(*).
 iw = 0
 do i=1,m
    call scopy(n2, a(i,n1+1), mda, ws(iw+1), 1)
@@ -8582,12 +8582,12 @@ iw = iw + m
 !
 !     SOLVE RV=S SUBJECT TO V.GE.0.  THE MATRIX R =(TRANSPOSE
 !     OF (H Q)), WHERE Q=Y-GW.  THE (N2+1)-VECTOR S =(TRANSPOSE
-!     OF (0,...,0,1)).
+!     of (0,...,0,1)).
 !
 call wnnls(ws, n2+1, 0, n2+1, m, 0, prgopt, ws(ix), rnorm, modew, &
 &is, ws(iw+1))
 !
-!     COMPUTE THE COMPONENTS OF THE SOLN DENOTED ABOVE BY Z.
+!     Compute the components of the soln denoted above by Z.
 !
 sc = one - sdot(m,a(1,np1),1,ws(ix),1)
 if (.not.(one+fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 160
@@ -8600,7 +8600,7 @@ go to 180
 160 mode = 2
 return
 !
-!     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
+!     Account for scaling of RT.-Side vector in solution.
 180 call sscal(n, ynorm, x, 1)
 wnorm = snrm2(n1,x,1)
 return
@@ -8617,76 +8617,76 @@ integer :: l1, l2, l3, l4, l5
 !
 !     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
 !
-!     ABSTRACT
+!     Abstract
 !
-!     THIS SUBPROGRAM SOLVES A LINEARLY CONSTRAINED LEAST SQUARES
-!     PROBLEM.  SUPPOSE THERE ARE GIVEN MATRICES E AND A OF
-!     RESPECTIVE DIMENSIONS ME BY N AND MA BY N, AND VECTORS F
-!     AND B OF RESPECTIVE LENGTHS ME AND MA.  THIS SUBROUTINE
-!     SOLVES THE PROBLEM
+!     This subprogram solves a linearly constrained least squares
+!     problem.  Suppose there are given matrices E and A of
+!     respective dimensions me by N and MA by N, and vectors F
+!     and B of respective lengths me and MA.  This subroutine
+!     solves the problem
 !
 !               EX = F, (EQUATIONS TO BE EXACTLY SATISFIED)
 !
 !               AX = B, (EQUATIONS TO BE APPROXIMATELY SATISFIED,
-!                        IN THE LEAST SQUARES SENSE)
+!                        in the least squares sense)
 !
-!               SUBJECT TO COMPONENTS L+1,...,N NONNEGATIVE
+!               Subject to components L+1,...,N nonnegative
 !
 !     ANY VALUES ME.GE.0, MA.GE.0 AND 0.LE. L .LE.N ARE PERMITTED.
 !
-!     THE PROBLEM IS REPOSED AS PROBLEM WNNLS
+!     The problem is reposed as problem WNNLS
 !
 !               (WT*E)X = (WT*F)
 !               (   A)    (   B), (LEAST SQUARES)
-!               SUBJECT TO COMPONENTS L+1,...,N NONNEGATIVE.
+!               subject to components L+1,...,N nonnegative.
 !
-!     THE SUBPROGRAM CHOOSES THE HEAVY WEIGHT (OR PENALTY PARAMETER) WT.
+!     The subprogram chooses the heavy weight (or penalty parameter) WT.
 !
-!     THE PARAMETERS FOR WNNLS ARE
+!     The parameters for WNNLS are
 !
-!     INPUT..
+!     Input..
 !
-!     W(*,*),MDW,  THE ARRAY W(*,*) IS DOUBLE SUBSCRIPTED WITH FIRST
+!     W(*,*),MDW,  the array W(*,*) is double subscripted with first
 !     ME,MA,N,L    DIMENSIONING PARAMETER EQUAL TO MDW.  FOR THIS
 !                  DISCUSSION LET US CALL M = ME + MA.  THEN MDW
 !                  MUST SATISFY MDW.GE.M.  THE CONDITION MDW.LT.M
-!                  IS AN ERROR.
+!                  is an error.
 !
-!                  THE ARRAY W(*,*) CONTAINS THE MATRICES AND VECTORS
+!                  The array W(*,*) contains the matrices and vectors
 !
 !                       (E  F)
 !                       (A  B)
 !
-!                  IN ROWS AND COLUMNS 1,...,M AND 1,...,N+1
-!                  RESPECTIVELY.  COLUMNS 1,...,L CORRESPOND TO
-!                  UNCONSTRAINED VARIABLES X(1),...,X(L).  THE
-!                  REMAINING VARIABLES ARE CONSTRAINED TO BE
+!                  In rows and columns 1,...,M and 1,...,N+1
+!                  respectively.  Columns 1,...,L correspond to
+!                  unconstrained variables X(1),...,X(L).  The
+!                  remaining variables are constrained to be
 !                  NONNEGATIVE.  THE CONDITION L.LT.0 .OR. L.GT.N IS
-!                  AN ERROR.
+!                  an error.
 !
 !     PRGOPT(*)    THIS ARRAY IS THE OPTION VECTOR.
-!                  IF THE USER IS SATISFIED WITH THE NOMINAL
-!                  SUBPROGRAM FEATURES SET
+!                  If the user is satisfied with the nominal
+!                  subprogram features set
 !
 !                  PRGOPT(1)=1 (OR PRGOPT(1)=1.0)
 !
-!                  OTHERWISE PRGOPT(*) IS A LINKED LIST CONSISTING OF
-!                  GROUPS OF DATA OF THE FOLLOWING FORM
+!                  Otherwise PRGOPT(*) is a linked list consisting of
+!                  groups of data of the following form
 !
-!                  LINK
-!                  KEY
-!                  DATA SET
+!                  Link
+!                  key
+!                  data set
 !
-!                  THE PARAMETERS LINK AND KEY ARE EACH ONE WORD.
-!                  THE DATA SET CAN BE COMPRISED OF SEVERAL WORDS.
-!                  THE NUMBER OF ITEMS DEPENDS ON THE VALUE OF KEY.
-!                  THE VALUE OF LINK POINTS TO THE FIRST
-!                  ENTRY OF THE NEXT GROUP OF DATA WITHIN
-!                  PRGOPT(*).  THE EXCEPTION IS WHEN THERE ARE
-!                  NO MORE OPTIONS TO CHANGE.  IN THAT
+!                  The parameters link and key are each one word.
+!                  The data set can be comprised of several words.
+!                  The number of items depends on the value of key.
+!                  The value of link points to the first
+!                  entry of the next group of data within
+!                  PRGOPT(*).  The exception is when there are
+!                  no more options to change.  In that
 !                  CASE LINK=1 AND THE VALUES KEY AND DATA SET
-!                  ARE NOT REFERENCED. THE GENERAL LAYOUT OF
-!                  PRGOPT(*) IS AS FOLLOWS.
+!                  are not referenced. The general layout of
+!                  PRGOPT(*) is as follows.
 !
 !               ...PRGOPT(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
 !               .  PRGOPT(2)=KEY1 (KEY TO THE OPTION CHANGE)
@@ -8703,77 +8703,77 @@ integer :: l1, l2, l3, l4, l5
 !               .       .
 !               ...PRGOPT(LINK)=1 (NO MORE OPTIONS TO CHANGE)
 !
-!                  VALUES OF LINK THAT ARE NONPOSITIVE ARE ERRORS.
+!                  Values of link that are nonpositive are errors.
 !                  A VALUE OF LINK.GT.NLINK=100000 IS ALSO AN ERROR.
-!                  THIS HELPS PREVENT USING INVALID BUT POSITIVE
-!                  VALUES OF LINK THAT WILL PROBABLY EXTEND
-!                  BEYOND THE PROGRAM LIMITS OF PRGOPT(*).
-!                  UNRECOGNIZED VALUES OF KEY ARE IGNORED.  THE
-!                  ORDER OF THE OPTIONS IS ARBITRARY AND ANY NUMBER
-!                  OF OPTIONS CAN BE CHANGED WITH THE FOLLOWING
-!                  RESTRICTION.  TO PREVENT CYCLING IN THE
-!                  PROCESSING OF THE OPTION ARRAY A COUNT OF THE
-!                  NUMBER OF OPTIONS CHANGED IS MAINTAINED.
+!                  This helps prevent using invalid but positive
+!                  values of link that will probably extend
+!                  beyond the program limits of PRGOPT(*).
+!                  Unrecognized values of key are ignored.  The
+!                  order of the options is arbitrary and any number
+!                  of options can be changed with the following
+!                  restriction.  To prevent cycling in the
+!                  processing of the option array A count of the
+!                  number of options changed is maintained.
 !                  WHENEVER THIS COUNT EXCEEDS NOPT=1000 THE
-!                  ROUTINE TERMINATES.
+!                  routine terminates.
 !
-!                  OPTIONS..
+!                  Options..
 !
 !                  KEY=6
-!                         SCALE THE NONZERO COLUMNS OF THE
-!                  ENTIRE DATA MATRIX
+!                         scale the nonzero columns of the
+!                  entire data matrix
 !                  (E)
 !                  (A)
-!                  TO HAVE LENGTH ONE.  THE DATA SET FOR
-!                  THIS OPTION IS A SINGLE VALUE.  IT MUST
-!                  BE NONZERO IF UNIT LENGTH COLUMN SCALING IS
-!                  DESIRED.
+!                  to have length one.  The data set for
+!                  this option is a single value.  It must
+!                  be nonzero if unit length column scaling is
+!                  desired.
 !
 !                  KEY=7
-!                         SCALE COLUMNS OF THE ENTIRE DATA MATRIX
+!                         scale columns of the entire data matrix
 !                  (E)
 !                  (A)
-!                  WITH A USER-PROVIDED DIAGONAL MATRIX.
-!                  THE DATA SET FOR THIS OPTION CONSISTS
-!                  OF THE N DIAGONAL SCALING FACTORS, ONE FOR
-!                  EACH MATRIX COLUMN.
+!                  with a user-provided diagonal matrix.
+!                  The data set for this option consists
+!                  of the N diagonal scaling factors, one for
+!                  each matrix column.
 !
 !                  KEY=8
-!                         CHANGE THE RANK DETERMINATION TOLERANCE FROM
-!                  THE NOMINAL VALUE OF SQRT(EPS).  THIS QUANTITY CAN
-!                  BE NO SMALLER THAN EPS, THE ARITHMETIC-
-!                  STORAGE PRECISION.  THE QUANTITY USED
-!                  HERE IS INTERNALLY RESTRICTED TO BE AT
-!                  LEAST EPS.  THE DATA SET FOR THIS OPTION
-!                  IS THE NEW TOLERANCE.
+!                         change the rank determination tolerance from
+!                  the nominal value of SQRT(EPS).  This quantity can
+!                  be no smaller than eps, the arithmetic-
+!                  storage precision.  The quantity used
+!                  here is internally restricted to be at
+!                  least eps.  The data set for this option
+!                  is the new tolerance.
 !
 !                  KEY=9
-!                         CHANGE THE BLOW-UP PARAMETER FROM THE
-!                  NOMINAL VALUE OF SQRT(EPS).  THE RECIPROCAL OF
-!                  THIS PARAMETER IS USED IN REJECTING SOLUTION
-!                  COMPONENTS AS TOO LARGE WHEN A VARIABLE IS
-!                  FIRST BROUGHT INTO THE ACTIVE SET.  TOO LARGE
-!                  MEANS THAT THE PROPOSED COMPONENT TIMES THE
-!                  RECIPROCAL OF THE PARAMETERIS NOT LESS THAN
-!                  THE RATIO OF THE NORMS OF THE RIGHT-SIDE
-!                  VECTOR AND THE DATA MATRIX.
-!                  THIS PARAMETER CAN BE NO SMALLER THAN EPS,
-!                  THE ARITHMETIC-STORAGE PRECISION.
+!                         change the blow-up parameter from the
+!                  nominal value of SQRT(EPS).  The reciprocal of
+!                  this parameter is used in rejecting solution
+!                  components as too large when a variable is
+!                  first brought into the active set.  Too large
+!                  means that the proposed component times the
+!                  reciprocal of the parameteris not less than
+!                  the ratio of the norms of the right-side
+!                  vector and the data matrix.
+!                  This parameter can be no smaller than eps,
+!                  the arithmetic-storage precision.
 !
-!                  FOR EXAMPLE, SUPPOSE WE WANT TO PROVIDE
-!                  A DIAGONAL MATRIX TO SCALE THE PROBLEM
-!                  MATRIX AND CHANGE THE TOLERANCE USED FOR
-!                  DETERMINING LINEAR DEPENDENCE OF DROPPED COL
-!                  VECTORS.  FOR THESE OPTIONS THE DIMENSIONS OF
-!                  PRGOPT(*) MUST BE AT LEAST N+6.  THE FORTRAN
-!                  STATEMENTS DEFINING THESE OPTIONS WOULD
-!                  BE AS FOLLOWS.
+!                  For example, suppose we want to provide
+!                  a diagonal matrix to scale the problem
+!                  matrix and change the tolerance used for
+!                  determining linear dependence of dropped col
+!                  vectors.  For these options the dimensions of
+!                  PRGOPT(*) must be at least N+6.  The Fortran
+!                  statements defining these options would
+!                  be as follows.
 !
 !                  PRGOPT(1)=N+3 (LINK TO ENTRY N+3 IN PRGOPT(*))
 !                  PRGOPT(2)=7 (USER-PROVIDED SCALING KEY)
 !
 !                  CALL SCOPY(N,D,1,PRGOPT(3),1) (COPY THE N
-!                  SCALING FACTORS FROM A USER ARRAY CALLED D(*)
+!                  scaling factors from a user array called D(*)
 !                  INTO PRGOPT(3)-PRGOPT(N+2))
 !
 !                  PRGOPT(N+3)=N+6 (LINK TO ENTRY N+6 OF PRGOPT(*))
@@ -8782,35 +8782,35 @@ integer :: l1, l2, l3, l4, l5
 !
 !                  PRGOPT(N+6)=1 (NO MORE OPTIONS TO CHANGE)
 !
-!     OUTPUT..
+!     Output..
 !
 !     X(*)         AN ARRAY DIMENSIONED AT LEAST N, WHICH WILL
-!                  CONTAIN THE N COMPONENTS OF THE SOLUTION VECTOR
-!                  ON OUTPUT.
+!                  contain the N components of the solution vector
+!                  on output.
 !
 !     RNORM        THE RESIDUAL NORM OF THE SOLUTION.  THE VALUE OF
-!                  RNORM CONTAINS THE RESIDUAL VECTOR LENGTH OF THE
-!                  EQUALITY CONSTRAINTS AND LEAST SQUARES EQUATIONS.
+!                  RNORM contains the residual vector LENGTH of the
+!                  equality constraints and least squares equations.
 !
 !     MODE         THE VALUE OF MODE INDICATES THE SUCCESS OR FAILURE
-!                  OF THE SUBPROGRAM.
+!                  of the subprogram.
 !
 !                  MODE = 0  SUBPROGRAM COMPLETED SUCCESSFULLY.
 !
 !                       = 1  MAX. NUMBER OF ITERATIONS (EQUAL TO
-!                            3*(N-L)) EXCEEDED. NEARLY ALL PROBLEMS
-!                            SHOULD COMPLETE IN FEWER THAN THIS
-!                            NUMBER OF ITERATIONS. AN APPROXIMATE
-!                            SOLUTION AND ITS CORRESPONDING RESIDUAL
-!                            VECTOR LENGTH ARE IN X(*) AND RNORM.
+!                            3*(N-L)) exceeded. Nearly all problems
+!                            should complete in fewer than this
+!                            number of iterations. An approximate
+!                            solution and its corresponding residual
+!                            vector LENGTH are in X(*) and RNORM.
 !
 !                       = 2  USAGE ERROR OCCURRED.  EITHER
 !                            MDW .LT. ME + MA, L .LT. 0, L .GT. N,
-!                            OR THE OPTION VECTOR PRGOPT(*) IS
-!                            NOT PROPERLY DEFINED.
+!                            or the option vector PRGOPT(*) is
+!                            not properly defined.
 !
-!     USER-DESIGNATED
-!     WORKING ARRAYS..
+!     User-designated
+!     working arrays..
 !
 !     WORK(*)      A WORKING ARRAY OF LENGTH AT LEAST
 !                  M + 5*N.
@@ -8826,7 +8826,7 @@ integer :: l1, l2, l3, l4, l5
 !     SUBROUTINES CALLED BY WNNLS( )
 !
 !     WNLSM         COMPANION SUBROUTINE TO WNNLS( ), WHERE
-!                   MOST OF THE COMPUTATION TAKES PLACE.
+!                   most of the computation takes place.
 !
 !
 !     REFERENCES
@@ -8834,15 +8834,15 @@ integer :: l1, l2, l3, l4, l5
 !     1. SOLVING LEAST SQUARES PROBLEMS, BY C.L. LAWSON
 !        AND R.J. HANSON.  PRENTICE-HALL, INC. (1974).
 !
-!     2. BASIC LINEAR ALGEBRA SUBPROGRAMS FOR FORTRAN USAGE, BY
-!        C.L. LAWSON, R.J. HANSON, D.R. KINCAID, AND F.T. KROGH.
-!        TOMS, V. 5, NO. 3, P. 308.  ALSO AVAILABLE AS
-!        SANDIA TECHNICAL REPORT NO. SAND77-0898.
+!     2. BASIC linear algebra subprograms for Fortran usage, by
+!        C.L. Lawson, R.J. Hanson, D.R. Kincaid, and F.T. Krogh.
+!        Toms, V. 5, No. 3, P. 308.  Also available as
+!        sandia technical report no. SAND77-0898.
 !
-!     3. AN ALGORITHM FOR LINEAR LEAST SQUARES WITH EQUALITY
-!        AND NONNEGATIVITY CONSTRAINTS, BY K.H. HASKELL AND
-!        R.J. HANSON.  AVAILABLE AS SANDIA TECHNICAL REPORT NO.
-!        SAND77-0552, AND MATH. PROGRAMMING, VOL. 21, (1981), P. 98-118.
+!     3. An algorithm for linear least squares with equality
+!        and nonnegativity constraints, by K.H. Haskell and
+!        R.J. Hanson.  Available as sandia technical report no.
+!        SAND77-0552, and math. Programming, vol. 21, (1981), P. 98-118.
 !
 real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
@@ -8858,9 +8858,9 @@ return
 mode = 2
 return
 !
-!     THE PURPOSE OF THIS SUBROUTINE IS TO BREAK UP THE ARRAYS
-!     WORK(*) AND IWORK(*) INTO SEPARATE WORK ARRAYS
-!     REQUIRED BY THE MAIN SUBROUTINE WNLSM( ).
+!     The purpose of this subroutine is to break up the arrays
+!     WORK(*) and IWORK(*) into separate work arrays
+!     required by the main subroutine WNLSM( ).
 !
 20 l1 = n + 1
 l2 = l1 + n
@@ -8892,51 +8892,51 @@ real :: sasum
 real :: spmpar
 integer :: isamax
 !
-!     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
-!     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
-!     USAGE INSTRUCTIONS.
+!     This is a companion subprogram to WNNLS( ).
+!     The documentation for WNNLS( ) has more complete
+!     usage instructions.
 !
 !     WRITTEN BY KAREN H. HASKELL, SANDIA LABORATORIES,
 !     WITH THE HELP OF R.J. HANSON, SANDIA LABORATORIES.
 !
-!     IN ADDITION TO THE PARAMETERS DISCUSSED IN THE PROLOGUE TO
-!     SUBROUTINE WNNLS, THE FOLLOWING WORK ARRAYS ARE USED IN
+!     In addition to the parameters discussed in the prologue to
+!     subroutine WNNLS, the following work arrays are used in
 !     SUBROUTINE WNLSM  (THEY ARE PASSED THROUGH THE CALLING
-!     SEQUENCE FROM WNNLS FOR PURPOSES OF VARIABLE DIMENSIONING).
-!     THEIR CONTENTS WILL IN GENERAL BE OF NO INTEREST TO THE USER.
+!     sequence from WNNLS for purposes of variable dimensioning).
+!     Their contents will in general be of no interest to the user.
 !
 !         IPIVOT(*)
-!            AN ARRAY OF LENGTH N.  UPON COMPLETION IT CONTAINS THE
-!         PIVOTING INFORMATION FOR THE COLS OF W(*,*).
+!            an array of length N.  Upon completion it contains the
+!         pivoting information for the cols of W(*,*).
 !
 !         ITYPE(*)
-!            AN ARRAY OF LENGTH M WHICH IS USED TO KEEP TRACK
+!            an array of length M which is used to keep track
 !         OF THE CLASSIFICATION OF THE EQUATIONS.  ITYPE(I)=0
-!         DENOTES EQUATION I AS AN EQUALITY CONSTRAINT.
+!         denotes equation I as an equality constraint.
 !         ITYPE(I)=1 DENOTES EQUATION I AS A LEAST SQUARES
-!         EQUATION.
+!         equation.
 !
 !         WD(*)
-!            AN ARRAY OF LENGTH N.  UPON COMPLETION IT CONTAINS THE
-!         DUAL SOLUTION VECTOR.
+!            an array of length N.  Upon completion it contains the
+!         dual solution vector.
 !
 !         H(*)
-!            AN ARRAY OF LENGTH N.  UPON COMPLETION IT CONTAINS THE
-!         PIVOT SCALARS OF THE HOUSEHOLDER TRANSFORMATIONS PERFORMED
+!            an array of length N.  Upon completion it contains the
+!         pivot scalars of the Householder transformations performed
 !         IN THE CASE KRANK.LT.L.
 !
 !         SCALE(*)
-!            AN ARRAY OF LENGTH M WHICH IS USED BY THE SUBROUTINE
-!         TO STORE THE DIAGONAL MATRIX OF WEIGHTS.
-!         THESE ARE USED TO APPLY THE MODIFIED GIVENS
-!         TRANSFORMATIONS.
+!            an array of length M which is used by the subroutine
+!         to store the diagonal matrix of weights.
+!         These are used to apply the modified Givens
+!         transformations.
 !
 !         Z(*),TEMP(*)
-!            WORKING ARRAYS OF LENGTH N.
+!            working arrays of length N.
 !
 !         D(*)
-!            AN ARRAY OF LENGTH N THAT CONTAINS THE
-!         COLUMN SCALING FOR THE MATRIX (E).
+!            an array of length N that contains the
+!         column scaling for the matrix (E).
 !                                       (A)
 !
 !
@@ -8951,39 +8951,39 @@ integer :: idope(8)
 logical :: hitcon, feasbl, done, pos
 data zero /0.e0/, one /1.e0/, two /2.e0/
 !
-!     INITIALIZE-VARIABLES
+!     Initialize-variables
 !
 go to 180
 !
-!     PERFORM INITIAL TRIANGULARIZATION IN THE SUBMATRIX
-!     CORRESPONDING TO THE UNCONSTRAINED VARIABLES USING
-!     THE PROCEDURE INITIALLY-TRIANGULARIZE.
+!     Perform initial triangularization in the submatrix
+!     corresponding to the unconstrained variables using
+!     the procedure initially-triangularize.
 !
 10 go to 280
 !
-!     PERFORM WNNLS ALGORITHM USING THE FOLLOWING STEPS.
+!     Perform WNNLS algorithm using the following steps.
 !
 !     UNTIL(DONE)
 !
-!        COMPUTE-SEARCH-DIRECTION-AND-FEASIBLE-POINT
+!        Compute-search-direction-and-feasible-point
 !
-!        WHEN (HITCON) ADD-CONSTRAINTS
+!        When (HITCON) add-constraints
 !
 !        ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
 !
-!        FIN
+!        Fin
 !
-!     COMPUTE-FINAL-SOLUTION
+!     Compute-final-solution
 !
 20 if (done) go to 80
 go to 300
 !
-!     COMPUTE-SEARCH-DIRECTION-AND-FEASIBLE-POINT
+!     Compute-search-direction-and-feasible-point
 !
 30 if (.not.(hitcon)) go to 50
 go to 370
 !
-!     WHEN (HITCON) ADD-CONSTRAINTS
+!     When (HITCON) add-constraints
 !
 50 go to 640
 !
@@ -8991,28 +8991,28 @@ go to 370
 !
 80 go to 1000
 !
-!     COMPUTE-FINAL-SOLUTION
+!     Compute-final-solution
 !
 100 continue
 !
-!     TO PROCESS-OPTION-VECTOR
+!     To process-option-vector
 fac = 1.e-4
 !
-!     THE NOMINAL TOLERANCE USED IN THE CODE,
+!     The nominal tolerance used in the code,
 tau = sqrt(srelpr)
 !
-!     THE NOMINAL BLOW-UP FACTOR USED IN THE CODE.
+!     The nominal blow-up factor used in the code.
 blowup = tau
 !
-!     THE NOMINAL COLUMN SCALING USED IN THE CODE IS
-!     THE IDENTITY SCALING.
+!     The nominal column scaling used in the code is
+!     the identity scaling.
 d(1) = one
 call scopy(n, d, 0, d, 1)
 !
-!     DEFINE BOUND FOR NUMBER OF OPTIONS TO CHANGE.
+!     Define bound for number of options to change.
 nopt = 1000
 !
-!     DEFINE BOUND FOR POSITIVE VALUE OF LINK.
+!     Define bound for positive value of link.
 nlink = 100000
 ntimes = 0
 last = 1
@@ -9047,9 +9047,9 @@ go to 110
 170 continue
 go to 220
 !
-!     TO INITIALIZE-VARIABLES
+!     To initialize-variables
 !
-!     SRELPR IS THE PRECISION FOR THE MACHINE BEING USED.
+!     SRELPR is the precision for the machine being used.
 !
 180 srelpr = spmpar(1)
 !
@@ -9058,7 +9058,7 @@ me = mme
 mep1 = me + 1
 go to 100
 !
-!     PROCESS-OPTION-VECTOR
+!     Process-option-vector
 220 done = .false.
 iter = 0
 itmax = 3*(n-l)
@@ -9070,7 +9070,7 @@ np1 = n + 1
 nm1 = n - 1
 l1 = min0(m,l)
 !
-!     COMPUTE SCALE FACTOR TO APPLY TO EQUAL. CONSTRAINT EQUAS.
+!     Compute scale factor to apply to equal. Constraint equas.
 do 230 j = 1,n
   wd(j) = sasum(m,w(1,j),1)
 230 continue
@@ -9079,8 +9079,8 @@ eanorm = wd(imax)
 bnorm = sasum(m,w(1,np1),1)
 alamda = eanorm/(srelpr*fac)
 !
-!     DEFINE SCALING DIAG MATRIX FOR MOD GIVENS USAGE AND
-!     CLASSIFY EQUATION TYPES.
+!     Define scaling diag matrix for mod Givens usage and
+!     classify equation types.
 alsq = alamda**2
 do 260 i = 1,m
 !
@@ -9095,8 +9095,8 @@ do 260 i = 1,m
   itype(i) = itemp
 260 continue
 !
-!     SET THE SOLN VECTOR X(*) TO ZERO AND THE COL INTERCHANGE
-!     MATRIX TO THE IDENTITY.
+!     Set the soln vector X(*) to zero and the col interchange
+!     matrix to the identity.
 x(1) = zero
 call scopy(n, x, 0, x, 1)
 do 270 i = 1,n
@@ -9105,17 +9105,17 @@ do 270 i = 1,n
 go to 10
 280 continue
 !
-!     TO INITIALLY-TRIANGULARIZE
+!     To initially-triangularize
 !
-!     SET FIRST L COMPS. OF DUAL VECTOR TO ZERO BECAUSE
-!     THESE CORRESPOND TO THE UNCONSTRAINED VARIABLES.
+!     Set first L comps. Of dual vector to zero because
+!     these correspond to the unconstrained variables.
 if (.not.(l.gt.0)) go to 290
 wd(1) = zero
 call scopy(l, wd, 0, wd, 1)
 !
-!     THE ARRAYS IDOPE(*) AND DOPE(*) ARE USED TO PASS
-!     INFORMATION TO WNLIT().  THIS WAS DONE TO AVOID
-!     A LONG CALLING SEQUENCE OR THE USE OF COMMON.
+!     The arrays IDOPE(*) and DOPE(*) are used to pass
+!     information to WNLIT().  This was done to avoid
+!     a long calling sequence or the use of common.
 290 idope(1) = me
 idope(2) = mep1
 idope(3) = 0
@@ -9142,25 +9142,25 @@ l1 = idope(8)
 go to 20
 300 continue
 !
-!     TO COMPUTE-SEARCH-DIRECTION-AND-FEASIBLE-POINT
+!     To compute-search-direction-and-feasible-point
 !
-!     SOLVE THE TRIANGULAR SYSTEM OF CURRENTLY NON-ACTIVE
-!     VARIABLES AND STORE THE SOLUTION IN Z(*).
+!     Solve the triangular system of currently non-active
+!     variables and store the solution in Z(*).
 !
-!     SOLVE-SYSTEM
+!     Solve-system
 assign 310 to igo958
 go to 1110
 !
-!     INCREMENT ITERATION COUNTER AND CHECK AGAINST MAX. NUMBER
-!     OF ITERATIONS.
+!     Increment iteration counter and check against max. Number
+!     of iterations.
 310 iter = iter + 1
 if (.not.(iter.gt.itmax)) go to 320
 mode = 1
 done = .true.
 !
-!     CHECK TO SEE IF ANY CONSTRAINTS HAVE BECOME ACTIVE.
-!     IF SO, CALCULATE AN INTERPOLATION FACTOR SO THAT ALL
-!     ACTIVE CONSTRAINTS ARE REMOVED FROM THE BASIS.
+!     Check to see if any constraints have become active.
+!     If so, calculate an interpolation factor so that all
+!     active constraints are removed from the basis.
 320 alpha = two
 hitcon = .false.
 if (.not.(l.lt.nsoln)) go to 360
@@ -9176,11 +9176,11 @@ do 350 j = lp1,nsoln
 360 go to 30
 370 continue
 !
-!     TO ADD-CONSTRAINTS
+!     To add-constraints
 !
-!     USE COMPUTED ALPHA TO INTERPOLATE BETWEEN LAST
-!     FEASIBLE SOLUTION X(*) AND CURRENT UNCONSTRAINED
-!     (AND INFEASIBLE) SOLUTION Z(*).
+!     Use computed alpha to interpolate between last
+!     feasible solution X(*) and current unconstrained
+!     (and infeasible) solution Z(*).
 if (.not.(lp1.le.nsoln)) go to 390
 do 380 j = lp1,nsoln
   x(j) = x(j) + alpha*(z(j)-x(j))
@@ -9189,17 +9189,17 @@ do 380 j = lp1,nsoln
 go to 410
 400 if (feasbl) go to 20
 !
-!     REMOVE COL JCON AND SHIFT COLS JCON+1 THROUGH N TO THE
-!     LEFT. SWAP COL JCON INTO THE N-TH POSITION.  THIS ACHIEVES
-!     UPPER HESSENBERG FORM FOR THE NONACTIVE CONSTRAINTS AND
-!     LEAVES AN UPPER HESSENBERG MATRIX TO RETRIANGULARIZE.
+!     Remove col JCON and shift cols JCON+1 through N to the
+!     left. Swap col JCON into the N-TH position.  This achieves
+!     upper Hessenberg form for the nonactive constraints and
+!     leaves an upper Hessenberg matrix to retriangularize.
 410 do 420 i = 1,m
   t = w(i,jcon)
   call scopy(n-jcon, w(i,jcon+1), mdw, w(i,jcon), mdw)
   w(i,n) = t
 420 continue
 !
-!     UPDATE PERMUTED INDEX VECTOR TO REFLECT THIS SHIFT AND SWAP.
+!     Update permuted index vector to reflect this shift and swap.
 itemp = ipivot(jcon)
 if (.not.(jcon.lt.n)) go to 440
 do 430 i = jcon,nm1
@@ -9207,7 +9207,7 @@ do 430 i = jcon,nm1
 430 continue
 440 ipivot(n) = itemp
 !
-!     SIMILARLY REPERMUTE X(*) VECTOR.
+!     Similarly repermute X(*) vector.
 call scopy(n-jcon, x(jcon+1), 1, x(jcon), 1)
 x(n) = zero
 nsp1 = nsoln
@@ -9215,7 +9215,7 @@ nsoln = nsoln - 1
 niv1 = niv
 niv = niv - 1
 !
-!     RETRIANGULARIZE UPPER HESSENBERG MATRIX AFTER ADDING CONSTRAINTS.
+!     Retriangularize upper Hessenberg matrix after adding constraints.
 j = jcon
 i = krank + jcon - l
 450 if (.not.(j.le.nsoln)) go to 570
@@ -9238,12 +9238,12 @@ itemp = itype(i+1)
 itype(i+1) = itype(i)
 itype(i) = itemp
 !
-!     SWAPPED ROW WAS FORMERLY A PIVOT ELT., SO IT WILL
-!     BE LARGE ENOUGH TO PERFORM ELIM.
+!     Swapped row was formerly a pivot elt., So it will
+!     be large enough to perform ELIM.
 assign 500 to igo938
 go to 620
 !
-!     ZERO-IP1-TO-I-IN-COL-J
+!     Zero-IP1-to-I-in-col-J
 500 go to 560
 510 if (.not.(itype(i).eq.0 .and. itype(i+1).eq.1)) go to 550
 t = scale(i)*w(i,j)**2/alsq
@@ -9263,10 +9263,10 @@ w(i+1,j) = zero
 j = j + 1
 go to 450
 !
-!     SEE IF THE REMAINING COEFFS IN THE SOLN SET ARE FEASIBLE.  THEY
-!     SHOULD BE BECAUSE OF THE WAY ALPHA WAS DETERMINED.  IF ANY ARE
-!     INFEASIBLE IT IS DUE TO ROUNDOFF ERROR.  ANY THAT ARE NON-
-!     POSITIVE WILL BE SET TO ZERO AND REMOVED FROM THE SOLN SET.
+!     See if the remaining coeffs in the soln set are feasible.  They
+!     should be because of the way alpha was determined.  If any are
+!     infeasible it is due to roundoff error.  Any that are non-
+!     positive will be set to zero and removed from the soln set.
 570 if (.not.(lp1.le.nsoln)) go to 590
 do 580 jcon = lp1,nsoln
   if (x(jcon).le.zero) go to 600
@@ -9276,14 +9276,14 @@ do 580 jcon = lp1,nsoln
 go to 400
 620 continue
 !
-!     TO ZERO-IP1-TO-I-IN-COL-J
+!     To zero-IP1-to-I-in-col-J
 if (.not.(w(i+1,j).ne.zero)) go to 630
 call srotmg(scale(i), scale(i+1), w(i,j), w(i+1,j), sparam)
 w(i+1,j) = zero
 call srotm(np1-j, w(i,j+1), mdw, w(i+1,j+1), mdw, sparam)
 630 go to 1290
 !
-!     TO PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
+!     To perform-multiplier-test-and-drop-A-constraint
 !
 640 call scopy(nsoln, z, 1, x, 1)
 if (.not.(nsoln.lt.n)) go to 650
@@ -9292,8 +9292,8 @@ call scopy(n-nsoln, x(nsp1), 0, x(nsp1), 1)
 650 i = niv1
 660 if (.not.(i.le.me)) go to 690
 !
-!     RECLASSIFY LEAST SQUARES EQATIONS AS EQUALITIES AS
-!     NECESSARY.
+!     Reclassify least squares eqations as equalities as
+!     necessary.
 if (.not.(itype(i).eq.0)) go to 670
 i = i + 1
 go to 680
@@ -9306,7 +9306,7 @@ mep1 = me
 me = me - 1
 680 go to 660
 !
-!     FORM INNER PRODUCT VECTOR WD(*) OF DUAL COEFFS.
+!     Form inner product vector WD(*) of dual coeffs.
 690 if (.not.(nsp1.le.n)) go to 730
 do 720 j = nsp1,n
   sm = zero
@@ -9320,8 +9320,8 @@ do 720 j = nsp1,n
 740 if (pos .or. done) go to 970
 !
 !     FIND J SUCH THAT WD(J)=WMAX IS MAXIMUM.  THIS DETERMINES
-!     THAT THE INCOMING COL J WILL REDUCE THE RESIDUAL VECTOR
-!     AND BE POSITIVE.
+!     that the incoming col J will reduce the residual vector
+!     and be positive.
 750 wmax = zero
 iwmax = nsp1
 if (.not.(nsp1.le.n)) go to 780
@@ -9335,15 +9335,15 @@ do 770 j = nsp1,n
 done = .true.
 go to 960
 !
-!     SET DUAL COEFF TO ZERO FOR INCOMING COL.
+!     Set dual COEFF to zero for incoming col.
 790 wd(iwmax) = zero
 !
 !     WMAX .GT. ZERO, SO OKAY TO MOVE COL IWMAX TO SOLN SET.
-!     PERFORM TRANSFORMATION TO RETRIANGULARIZE, AND TEST
-!     FOR NEAR LINEAR DEPENDENCE.
-!     SWAP COL IWMAX INTO NSOLN-TH POSITION TO MAINTAIN UPPER
-!     HESSENBERG FORM OF ADJACENT COLS, AND ADD NEW COL TO
-!     TRIANGULAR DECOMPOSITION.
+!     Perform transformation to retriangularize, and test
+!     for near linear dependence.
+!     Swap col IWMAX into NSOLN-TH position to maintain upper
+!     Hessenberg form of adjacent cols, and add new col to
+!     triangular decomposition.
 nsoln = nsp1
 nsp1 = nsoln + 1
 niv = niv1
@@ -9356,17 +9356,17 @@ itemp = ipivot(nsoln)
 ipivot(nsoln) = ipivot(iwmax)
 ipivot(iwmax) = itemp
 !
-!     REDUCE COL NSOLN SO THAT THE MATRIX OF NONACTIVE
-!     CONSTRAINTS VARIABLES IS TRIANGULAR.
+!     Reduce col NSOLN so that the matrix of nonactive
+!     constraints variables is triangular.
 800 j = m
 810 if (.not.(j.gt.niv)) go to 870
 jm1 = j - 1
 jp = jm1
 !
-!     WHEN OPERATING NEAR THE ME LINE, TEST TO SEE IF THE PIVOT ELT.
-!     IS NEAR ZERO.  IF SO, USE THE LARGEST ELT. ABOVE IT AS THE PIVOT.
-!     THIS IS TO MAINTAIN THE SHARP INTERFACE BETWEEN WEIGHTED AND
-!     NON-WEIGHTED ROWS IN ALL CASES.
+!     When operating near the me line, test to see if the pivot elt.
+!     Is near zero.  If so, use the largest elt. Above it as the pivot.
+!     This is to maintain the sharp interface between weighted and
+!     non-weighted rows in all cases.
 if (.not.(j.eq.mep1)) go to 850
 imax = me
 amax = scale(me)*w(me,nsoln)**2
@@ -9386,29 +9386,29 @@ call srotm(np1-nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
 go to 810
 !
 !     SOLVE FOR Z(NSOLN)=PROPOSED NEW VALUE FOR X(NSOLN).
-!     TEST IF THIS IS NONPOSITIVE OR TOO LARGE.
-!     IF THIS WAS TRUE OR IF THE PIVOT TERM WAS ZERO REJECT
-!     THE COL AS DEPENDENT.
+!     Test if this is nonpositive or too large.
+!     If this was true or if the pivot term was zero reject
+!     the col as dependent.
 870 if (.not.(w(niv,nsoln).ne.zero)) go to 890
 isol = niv
 assign 880 to igo897
 go to 980
 !
-!     TEST-PROPOSED-NEW-COMPONENT
+!     Test-proposed-new-component
 880 go to 940
 890 if (.not.(niv.le.me .and. w(mep1,nsoln).ne.zero)) go to 920
 !
-!     TRY TO ADD ROW MEP1 AS AN ADDITIONAL EQUALITY CONSTRAINT.
-!     CHECK SIZE OF PROPOSED NEW SOLN COMPONENT.
-!     REJECT IT IF IT IS TOO LARGE.
+!     Try to add row MEP1 as an additional equality constraint.
+!     Check size of proposed new soln component.
+!     Reject it if it is too large.
 isol = mep1
 assign 900 to igo897
 go to 980
 !
-!     TEST-PROPOSED-NEW-COMPONENT
+!     Test-proposed-new-component
 900 if (.not.(pos)) go to 910
 !
-!     SWAP ROWS MEP1 AND NIV, AND SCALE FACTORS FOR THESE ROWS.
+!     Swap rows MEP1 and NIV, and scale factors for these rows.
 call sswap(np1, w(mep1,1), mdw, w(niv,1), mdw)
 call sswap(1, scale(mep1), 1, scale(niv), 1)
 itemp = itype(mep1)
@@ -9429,7 +9429,7 @@ niv = niv - 1
 970 go to 20
 980 continue
 !
-!     TO TEST-PROPOSED-NEW-COMPONENT
+!     To test-proposed-new-component
 z2 = w(isol,np1)/w(isol,nsoln)
 z(nsoln) = z2
 pos = z2.gt.zero
@@ -9437,13 +9437,13 @@ if (.not.(z2*eanorm.ge.bnorm .and. pos)) go to 990
 pos = .not.(blowup*z2*eanorm.ge.bnorm)
 990 go to 1280
 1000 continue
-!     TO COMPUTE-FINAL-SOLUTION
+!     To compute-final-solution
 !
-!     SOLVE SYSTEM, STORE RESULTS IN X(*).
+!     Solve system, store results in X(*).
 !
 assign 1010 to igo958
 go to 1110
-!     SOLVE-SYSTEM
+!     Solve-system
 1010 call scopy(nsoln, z, 1, x, 1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO X(*) IF KRANK.LT.L
@@ -9452,12 +9452,12 @@ do 1020 i = 1,krank
   call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
 1020 continue
 !
-!     FILL IN TRAILING ZEROES FOR CONSTRAINED VARIABLES NOT IN SOLN.
+!     Fill in trailing zeroes for constrained variables not in soln.
 1030 if (.not.(nsoln.lt.n)) go to 1040
 x(nsp1) = zero
 call scopy(n-nsoln, x(nsp1), 0, x(nsp1), 1)
 !
-!     REPERMUTE SOLN VECTOR TO NATURAL ORDER.
+!     Repermute soln vector to natural order.
 1040 do 1070 i = 1,n
   j = i
 1050 if (ipivot(j).eq.i) go to 1060
@@ -9468,7 +9468,7 @@ call scopy(n-nsoln, x(nsp1), 0, x(nsp1), 1)
   call sswap(1, x(j), 1, x(i), 1)
 1070 continue
 !
-!     RESCALE THE SOLN USING THE COL SCALING.
+!     Rescale the soln using the col scaling.
 do 1080 j = 1,n
   x(j) = x(j)*d(j)
 1080 continue
@@ -9482,7 +9482,7 @@ do 1090 i = niv1,m
 1100 rnorm = sqrt(rnorm)
 return
 !
-!     TO SOLVE-SYSTEM
+!     To solve-system
 !
 1110 continue
 if (.not.(done)) go to 1120
@@ -9491,7 +9491,7 @@ go to 1130
 1120 isol = lp1
 1130 if (.not.(nsoln.ge.isol)) go to 1270
 !
-!     COPY RT. HAND SIDE INTO TEMP VECTOR TO USE OVERWRITING METHOD.
+!     Copy RT. Hand side into temp vector to use overwriting method.
 call scopy(niv, w(1,np1), 1, temp, 1)
 do 1180 jj = isol,nsoln
   j = nsoln - jj + isol
@@ -9523,17 +9523,17 @@ integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
 real :: alsq, eanorm, fac, factor, hbar, one, rn, sn, t, tau, &
 &tenm3, zero
 !
-!     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
-!     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
-!     USAGE INSTRUCTIONS.
+!     This is a companion subprogram to WNNLS( ).
+!     The documentation for WNNLS( ) has more complete
+!     usage instructions.
 !
-!     NOTE  THE M BY (N+1) MATRIX W( , ) CONTAINS THE RT. HAND SIDE
-!           B AS THE (N+1)ST COL.
+!     Note  the M by (N+1) matrix W( , ) contains the RT. Hand side
+!           B as the (N+1)ST col.
 !
 !
 !     TRIANGULARIZE L1 BY L1 SUBSYSTEM, WHERE L1=MIN(M,L), WITH
-!     COL INTERCHANGES.
-!     REVISED OCT. 1, 1989
+!     col interchanges.
+!     Revised oct. 1, 1989
 !
 real, intent(inout) :: w(mdw,*), h(*), scale(*)
 real, intent(in) :: dope(*)
@@ -9564,7 +9564,7 @@ recalc = .true.
 rnorm = zero
 krank = 0
 !     WE SET FACTOR=1.E0 SO THAT THE HEAVY WEIGHT ALAMDA WILL BE
-!     INCLUDED IN THE TEST FOR COL INDEPENDENCE.
+!     included in the test for col independence.
 factor = 1.e0
 i = 1
 ip1 = 2
@@ -9572,28 +9572,28 @@ lend = l
 10 if (.not.(i.le.lb)) go to 150
 if (.not.(i.le.me)) go to 130
 !
-!     SET IR TO POINT TO THE I-TH ROW.
+!     Set IR to point to the I-TH row.
 ir = i
 mend = m
 assign 20 to igo996
 go to 460
 !
-!     UPDATE-COL-SS-AND-FIND-PIVOT-COL
+!     Update-col-SS-and-find-pivot-col
 20 assign 30 to igo993
 go to 560
 !
-!     PERFORM-COL-INTERCHANGE
+!     Perform-col-interchange
 !
-!     SET IC TO POINT TO I-TH COL.
+!     Set IC to point to I-TH col.
 30 ic = i
 assign 40 to igo990
 go to 520
 !
-!     TEST-INDEP-OF-INCOMING-COL
+!     Test-INDEP-of-incoming-col
 40 if (.not.(indep)) go to 110
 !
-!     ELIMINATE I-TH COL BELOW DIAG. USING MOD. GIVENS TRANSFORMATIONS
-!     APPLIED TO (A B).
+!     Eliminate I-TH col below diag. Using mod. Givens transformations
+!     applied to (A B).
 j = m
 do 100 jj = ip1,m
   jm1 = j - 1
@@ -9619,16 +9619,16 @@ go to 140
 110 continue
 if (.not.(lend.gt.i)) go to 130
 !
-!     COL I IS DEPENDENT. SWAP WITH COL LEND.
+!     Col I is dependent. Swap with col lend.
 max = lend
 !
-!     PERFORM-COL-INTERCHANGE
+!     Perform-col-interchange
 assign 120 to igo993
 go to 560
 120 continue
 lend = lend - 1
 !
-!     FIND COL IN REMAINING SET WITH LARGEST SS.
+!     Find col in remaining set with largest SS.
 max = isamax(lend-i+1,h(i),1) + i - 1
 hbar = h(max)
 go to 30
@@ -9648,9 +9648,9 @@ do 170 i = krp1,me
   call scopy(l, w(i,1), 0, w(i,1), mdw)
 170 continue
 !
-!     DETERMINE THE RANK OF THE REMAINING EQUALITY CONSTRAINT
-!     EQUATIONS BY ELIMINATING WITHIN THE BLOCK OF CONSTRAINED
-!     VARIABLES.  REMOVE ANY REDUNDANT CONSTRAINTS.
+!     Determine the rank of the remaining equality constraint
+!     equations by eliminating within the block of constrained
+!     variables.  Remove any redundant constraints.
 !
 ir = krp1
 if (.not.(l.lt.n)) go to 245
@@ -9666,13 +9666,13 @@ mend = me
 assign 190 to igo996
 go to 460
 !
-!     UPDATE-COL-SS-AND-FIND-PIVOT-COL
+!     Update-col-SS-and-find-pivot-col
 190 assign 200 to igo993
 go to 560
 !
-!     PERFORM-COL-INTERCHANGE
+!     Perform-col-interchange
 !
-!     ELIMINATE ELEMENTS IN THE I-TH COL.
+!     Eliminate elements in the I-TH col.
 200 j = me
 210 if (.not.(j.gt.ir)) go to 230
 jm1 = j - 1
@@ -9688,10 +9688,10 @@ go to 210
 assign 240 to igo990
 go to 520
 !
-!     TEST-INDEP-OF-INCOMING-COL
+!     Test-INDEP-of-incoming-col
 240 if (indep) go to 270
 !
-!     REMOVE ANY REDUNDANT OR DEPENDENT EQUALITY CONSTRAINTS.
+!     Remove any redundant or dependent equality constraints.
 245 continue
 jj = ir
 250 if (.not.(ir.le.me)) go to 260
@@ -9700,13 +9700,13 @@ call scopy(n, w(ir,1), 0, w(ir,1), mdw)
 rnorm = rnorm + (scale(ir)*w(ir,np1)/alsq)*w(ir,np1)
 w(ir,np1) = zero
 scale(ir) = one
-!     RECLASSIFY THE ZEROED ROW AS A LEAST SQUARES EQUATION.
+!     Reclassify the zeroed row as a least squares equation.
 itype(ir) = 1
 ir = ir + 1
 go to 250
 !
-!     REDUCE ME TO REFLECT ANY DISCOVERED DEPENDENT EQUALITY
-!     CONSTRAINTS.
+!     Reduce me to reflect any discovered dependent equality
+!     constraints.
 260 continue
 me = jj - 1
 mep1 = me + 1
@@ -9719,34 +9719,34 @@ go to 180
 300 continue
 if (.not.(krank.lt.l1)) go to 420
 !
-!     TRY TO DETERMINE THE VARIABLES KRANK+1 THROUGH L1 FROM THE
-!     LEAST SQUARES EQUATIONS.  CONTINUE THE TRIANGULARIZATION WITH
-!     PIVOT ELEMENT W(MEP1,I).
+!     Try to determine the variables KRANK+1 through L1 from the
+!     least squares equations.  Continue the triangularization with
+!     pivot element W(MEP1,I).
 !
 recalc = .true.
 !
 !     SET FACTOR=ALSQ TO REMOVE EFFECT OF HEAVY WEIGHT FROM
-!     TEST FOR COL INDEPENDENCE.
+!     test for col independence.
 factor = alsq
 kk = krp1
 i = kk
 ip1 = i + 1
 310 if (.not.(i.le.l1)) go to 410
 !
-!     SET IR TO POINT TO THE MEP1-ST ROW.
+!     Set IR to point to the MEP1-ST row.
 ir = mep1
 lend = l
 mend = m
 assign 320 to igo996
 go to 460
 !
-!     UPDATE-COL-SS-AND-FIND-PIVOT-COL
+!     Update-col-SS-and-find-pivot-col
 320 assign 330 to igo993
 go to 560
 !
-!     PERFORM-COL-INTERCHANGE
+!     Perform-col-interchange
 !
-!     ELIMINATE I-TH COL BELOW THE IR-TH ELEMENT.
+!     Eliminate I-TH col below the IR-TH element.
 330 irp1 = ir + 1
 if (.not.(irp1.le.m)) go to 355
 j = m
@@ -9760,14 +9760,14 @@ do 350 jj = irp1,m
 350 continue
 355 continue
 !
-!     TEST IF NEW PIVOT ELEMENT IS NEAR ZERO. IF SO, THE COL IS
-!     DEPENDENT.
+!     Test if new pivot element is near zero. If so, the col is
+!     dependent.
 t = scale(ir)*w(ir,i)**2
 indep = t.gt.tau**2*eanorm**2
 if (.not.indep) go to 380
 !
-!     COL TEST PASSED. NOW MUST PASS ROW NORM TEST TO BE CLASSIFIED
-!     AS INDEPENDENT.
+!     Col test passed. Now must pass row norm test to be classified
+!     as independent.
 rn = zero
 do 370 i1 = ir,m
   do 360 j1 = ip1,n
@@ -9776,14 +9776,14 @@ do 370 i1 = ir,m
 370 continue
 indep = t.gt.tau**2*rn
 !
-!     IF INDEPENDENT, SWAP THE IR-TH AND KRP1-ST ROWS TO MAINTAIN THE
-!     TRIANGULAR FORM.  UPDATE THE RANK INDICATOR KRANK AND THE
-!     EQUALITY CONSTRAINT POINTER ME.
+!     If independent, swap the IR-TH and KRP1-ST rows to maintain the
+!     triangular form.  Update the rank indicator KRANK and the
+!     equality constraint pointer me.
 380 if (.not.(indep)) go to 390
 call sswap(np1, w(krp1,1), mdw, w(ir,1), mdw)
 call sswap(1, scale(krp1), 1, scale(ir), 1)
-!     RECLASSIFY THE LEAST SQ. EQUATION AS AN EQUALITY CONSTRAINT AND
-!     RESCALE IT.
+!     Reclassify the least SQ. Equation as an equality constraint and
+!     rescale it.
 itype(ir) = 0
 t = sqrt(scale(krp1))
 call sscal(np1, t, w(krp1,1), mdw)
@@ -9801,8 +9801,8 @@ go to 310
 420 continue
 430 continue
 !
-!     IF PSEUDORANK IS LESS THAN L, APPLY HOUSEHOLDER TRANS.
-!     FROM RIGHT.
+!     If pseudorank is less than L, apply Householder trans.
+!     From right.
 if (.not.(krank.lt.l)) go to 450
 do 440 i = 1,krank
   j = krp1 - i
@@ -9824,10 +9824,10 @@ idope(8) = l1
 return
 460 continue
 !
-!     TO UPDATE-COL-SS-AND-FIND-PIVOT-COL
+!     To update-col-SS-and-find-pivot-col
 !
-!     THE COL SS VECTOR WILL BE UPDATED AT EACH STEP. WHEN
-!     NUMERICALLY NECESSARY, THESE VALUES WILL BE RECOMPUTED.
+!     The col SS vector will be updated at each step. When
+!     numerically necessary, these values will be recomputed.
 !
 if (.not.(ir.ne.1 .and. (.not.recalc))) go to 480
 !     UPDATE COL SS =SUM OF SQUARES.
@@ -9835,11 +9835,11 @@ do 470 j = i,lend
   h(j) = h(j) - scale(ir-1)*w(ir-1,j)**2
 470 continue
 !
-!     TEST FOR NUMERICAL ACCURACY.
+!     Test for numerical accuracy.
 max = isamax(lend-i+1,h(i),1) + i - 1
 recalc = hbar + tenm3*h(max).eq.hbar
 !
-!     IF REQUIRED, RECALCULATE COL SS, USING ROWS IR THROUGH MEND.
+!     If required, recalculate col SS, using rows IR through mend.
 480 if (.not.(recalc)) go to 510
 do 500 j = i,lend
   h(j) = zero
@@ -9848,25 +9848,25 @@ do 500 j = i,lend
 490 continue
 500 continue
 !
-!     FIND COL WITH LARGEST SS.
+!     Find col with largest SS.
 max = isamax(lend-i+1,h(i),1) + i - 1
 hbar = h(max)
 510 go to 600
 520 continue
 !
-!     TO TEST-INDEP-OF-INCOMING-COL
+!     To test-INDEP-of-incoming-col
 !
-!     TEST THE COL IC TO DETERMINE IF IT IS LINEARLY INDEPENDENT
-!     OF THE COLS ALREADY IN THE BASIS.  IN THE INIT TRI
-!     STEP, WE USUALLY WANT THE HEAVY WEIGHT ALAMDA TO
-!     BE INCLUDED IN THE TEST FOR INDEPENDENCE.  IN THIS CASE THE
-!     VALUE OF FACTOR WILL HAVE BEEN SET TO 1.E0 BEFORE THIS
-!     PROCEDURE IS INVOKED.  IN THE POTENTIALLY RANK DEFICIENT
-!     PROBLEM, THE VALUE OF FACTOR WILL HAVE BEEN
+!     Test the col IC to determine if it is linearly independent
+!     of the cols already in the basis.  In the init TRI
+!     step, we usually want the heavy weight ALAMDA to
+!     be included in the test for independence.  In this case the
+!     value of factor will have been set to 1.E0 before this
+!     procedure is invoked.  In the potentially rank deficient
+!     problem, the value of factor will have been
 !     SET TO ALSQ=ALAMDA**2 TO REMOVE THE EFFECT OF THE HEAVY WEIGHT
-!     FROM THE TEST FOR INDEPENDENCE.
+!     from the test for independence.
 !
-!     WRITE NEW COL AS PARTITIONED VECTOR
+!     Write new col as partitioned vector
 !             (A1)  NUMBER OF COMPONENTS IN SOLN SO FAR = NIV
 !             (A2)  M-NIV COMPONENTS
 !     AND COMPUTE  SN = INVERSE WEIGHTED LENGTH OF A1
@@ -9888,11 +9888,11 @@ indep = rn.gt.tau**2*sn
 go to 590
 560 continue
 !
-!     TO PERFORM-COL-INTERCHANGE
+!     To perform-col-interchange
 !
 if (.not.(max.ne.i)) go to 570
-!     EXCHANGE ELEMENTS OF PERMUTED INDEX VECTOR AND PERFORM COL
-!     INTERCHANGES.
+!     Exchange elements of permuted index vector and perform col
+!     interchanges.
 itemp = ipivot(i)
 ipivot(i) = ipivot(max)
 ipivot(max) = itemp
@@ -9916,21 +9916,21 @@ integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
 &k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
 real :: spmpar
 ! ** PURPOSE **
-! SUBROUTINE L2SLV COMPUTES LEAST SQUARES SOLUTIONS TO OVERDETERMINED
-! AND UNDERDETERMINED SYSTEMS OF LINEAR EQUATIONS.  THE METHOD USED IS
-! A MODIFIED GRAM-SCHMIDT ORTHOGONAL DECOMPOSITION WITH ITERATIVE
-! REFINEMENT OF THE SOLUTION.  THE SOLUTION MAY BE SUBJECT TO LINEAR
-! EQUALITY CONSTRAINTS.  OUTPUT INCLUDES THE LEAST SQUARES
-! COEFFICIENTS, RESIDUALS, UNSCALED COVARIANCE MATRIX, AND INFORMATION
-! ON THE BEHAVIOR OF THE ITERATIVE REFINEMENT PROCEDURE.
-! MATRIX A IS THE GIVEN MATRIX OF A SYSTEM OF M LINEAR EQUATIONS IN N
-! UNKNOWNS, AND MATRIX W IS A GIVEN DIAGONAL MATRIX OF WEIGHTS WITH ALL
+! subroutine L2SLV computes least squares solutions to overdetermined
+! and underdetermined systems of linear equations.  The method used is
+! a modified Gram-Schmidt orthogonal decomposition with iterative
+! refinement of the solution.  The solution may be subject to linear
+! equality constraints.  Output includes the least squares
+! coefficients, residuals, unscaled covariance matrix, and information
+! on the behavior of the iterative refinement procedure.
+! Matrix A is the given matrix of A system of M linear equations in N
+! unknowns, and matrix W is a given diagonal matrix of weights with all
 ! DIAGONAL ELEMENTS NONNEGATIVE.  LET H = W*A.
-! IN THE EVENT THAT N1 (THE COMPUTED RANK OF MATRIX H) IS LESS THAN N
-! (THE NUMBER OF UNKNOWN COEFFICIENTS), A UNIQUE SOLUTION VECTOR HAVING
-! N ELEMENTS CAN BE OBTAINED BY IMPOSING THE CONDITION THAT THE
-! SOLUTION BE OF MINIMAL EUCLIDEAN NORM.  SUCH A SOLUTION IS SOUGHT IN
-! THE CASE OF UNDERDETERMINED OR RANK-DEFICIENT PROBLEMS.
+! In the event that N1 (the computed rank of matrix H) is less than N
+! (the number of unknown coefficients), a unique solution vector having
+! N elements can be obtained by imposing the condition that the
+! solution be of minimal Euclidean norm.  Such a solution is sought in
+! the case of underdetermined or rank-deficient problems.
 !
 ! ** INPUT VARIABLES **
 ! M      TOTAL NUMBER OF EQUATIONS.
@@ -9938,25 +9938,25 @@ real :: spmpar
 ! M1     NUMBER OF LINEAR CONSTRAINTS (0.LE.M1.LE.M AND M1.LE.N).
 ! L      NUMBER OF RIGHT-HAND SIDES (VECTORS OF OBSERVATIONS).
 ! A      TWO-DIMENSIONAL ARRAY OF SIZE (MM,N).  ON ENTRY, THE ARRAY A
-!        CONTAINS THE GIVEN MATRIX OF A SYSTEM OF M LINEAR EQUATIONS
-!        IN N UNKNOWNS, WHERE THE FIRST M1 EQUATIONS ARE TO BE
-!        SATISFIED EXACTLY.  A IS LEFT INTACT ON EXIT.
+!        contains the given matrix of a system of M linear equations
+!        in N unknowns, where the first M1 equations are to be
+!        satisfied exactly.  A is left intact on exit.
 ! B      TWO-DIMENSIONAL ARRAY OF SIZE (MB,L).  ON ENTRY, B CONTAINS
-!        THE L GIVEN RIGHT-HAND SIDES (VECTORS OF OBSERVATIONS).  B IS
-!        LEFT INTACT ON EXIT.
+!        the L given right-hand sides (vectors of observations).  B is
+!        left intact on exit.
 ! W      VECTOR OF SIZE M.  ON ENTRY, W CONTAINS THE DIAGONAL ELEMENTS
-!        OF A GIVEN DIAGONAL MATRIX OF WEIGHTS, ALL NONNEGATIVE.
-!        (THE FIRST M1 ELEMENTS OF W ARE SET EQUAL TO 1.0 BY THE
-!        PROGRAM WHEN M1 IS GREATER THAN ZERO.)
+!        of a given diagonal matrix of weights, all nonnegative.
+!        (The first M1 elements of W are set equal to 1.0 by the
+!        program when M1 is greater than zero.)
 ! TOL    PARAMETER USED IN DETERMINING THE RANK OF MATRIX H.
-!        NOTE --
-!        (1) IF TOL EQUALS ZERO, THE TOLERANCE USED IN SUBROUTINE
-!            DECOM2 WILL BE BASED ON MACHINE PRECISION.
-!        (2) IF TOL IS GREATER THAN ZERO, THIS VALUE OF TOL WILL BE
-!            USED IN SETTING AN ABSOLUTE TOLERANCE FOR COMPARISON WITH
-!            DIAGONAL ELEMENTS OF THE TRIANGULAR MATRIX OBTAINED IN
-!            SUBROUTINE DECOM2.  THE VALUE OF TOL CAN BE BASED ON
-!            KNOWLEDGE CONCERNING THE ACCURACY OF THE DATA.
+!        Note --
+!        (1) if TOL equals zero, the tolerance used in subroutine
+!            DECOM2 will be based on machine precision.
+!        (2) If TOL is greater than zero, this value of TOL will be
+!            used in setting an absolute tolerance for comparison with
+!            diagonal elements of the triangular matrix obtained in
+!            subroutine DECOM2.  The value of TOL can be based on
+!            knowledge concerning the accuracy of the data.
 ! MM     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
 !        THE ARRAY A.  MM MUST SATISFY MM.GE.M.
 ! MB     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
@@ -9965,43 +9965,43 @@ real :: spmpar
 !        THE ARRAY RES.  MR MUST SATISFY MR.GE.M.
 ! NN     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
 !        THE ARRAY X.  NN MUST SATISFY NN.GE.N.
-! MMPNN  DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
+! MMPNN  dimensioning parameter specifying maximum number of rows in
 !        THE ARRAY QR.  MMPNN MUST SATISFY MMPNN.GE.M+N.
 !
 ! ** OUTPUT VARIABLES AND INTERNAL VARIABLES **
 ! N1     COMPUTED RANK OF MATRIX H, WHERE H = W*A.
-! IPIVOT VECTOR OF SIZE N.  ON EXIT, THIS ARRAY RECORDS THE ORDER
-!        IN WHICH THE COLUMNS OF H WERE SELECTED BY THE PIVOTING
-!        SCHEME IN THE COURSE OF THE ORTHOGONAL DECOMPOSITION.
+! IPIVOT vector of size N.  On exit, this array records the order
+!        in which the columns of H were selected by the pivoting
+!        scheme in the course of the orthogonal decomposition.
 !        WHENEVER N1.LT.N, THE FIRST N1 ELEMENTS OF IPIVOT INDICATE
-!        WHICH COLUMNS OF H WERE FOUND TO BE LINEARLY INDEPENDENT.
+!        which columns of H were found to be linearly independent.
 ! X      TWO-DIMENSIONAL ARRAY OF SIZE (NN,L).  ON EXIT, X CONTAINS
-!        THE SOLUTION VECTORS.
+!        the solution vectors.
 ! RES    TWO-DIMENSIONAL ARRAY OF SIZE (MR,L).  ON EXIT, RES CONTAINS
-!        THE RESIDUAL VECTORS.
+!        the residual vectors.
 ! QR     TWO-DIMENSIONAL ARRAY OF SIZE (MMPNN,N).  ON EXIT, IF N1 = N
-!        THEN QR CONTAINS THE UNSCALED COVARIANCE MATRIX. (QR IS USED
-!        INTERNALLY TO STORE THE RESULTS FROM THE SUBROUTINE DECOM2.
-!        THE RESULTS FROM DECOM2 ARE DESTROYED WHEN THE COVARIANCE
-!        MATRIX IS COMPUTED.)
+!        then QR contains the unscaled covariance matrix. (QR is used
+!        internally to store the results from the subroutine DECOM2.
+!        The results from DECOM2 are destroyed when the covariance
+!        matrix is computed.)
 ! C      VECTOR HAVING AT LEAST 6*(M+N)+2*L ELEMENTS USED (1) FOR
-!        INTERNAL WORK SPACE AND (2) FOR RETURNING INFORMATION ON THE
-!        BEHAVIOR OF THE ITERATIVE REFINEMENT PROCEDURE.
-!        (A) NUMIT IS THE NUMBER OF ITERATIONS CARRIED OUT DURING THE
-!            ITERATIVE REFINEMENT IN ATTEMPTING TO OBTAIN A SOLUTION
-!            FOR THE K-TH RIGHT-HAND SIDE.
+!        internal work space and (2) for returning information on the
+!        behavior of the iterative refinement procedure.
+!        (A) NUMIT is the number of iterations carried out during the
+!            iterative refinement in attempting to obtain a solution
+!            for the K-TH right-hand side.
 !            ON EXIT, C(K) = +NUMIT IF THE SOLUTION CONVERGED, AND
 !                     C(K) = -NUMIT IF THE SOLUTION FAILED TO CONVERGE.
-!        (B) DIGITX GIVES AN ESTIMATE OF THE NUMBER OF CORRECT DIGITS
-!            IN THE INITIAL SOLUTION OF THE COEFFICIENTS FOR THE K-TH
+!        (B) DIGITX gives an estimate of the number of correct digits
+!            in the initial solution of the coefficients for the K-TH
 !            RIGHT-HAND SIDE.  ON EXIT, C(K+L) = DIGITX.
-! IFAULT FAULT INDICATOR WHICH IS ZERO IF NO ERRORS WERE ENCOUNTERED
-!        AND POSITIVE IF ERRORS WERE DETECTED OR IF EVIDENCE OF SEVERE
-!        ILL-CONDITIONING WAS FOUND.  IF IFAULT IS SET TO 1, 2, 3, 4,
-!        5, 6 OR 7, EXECUTION IS TERMINATED.  EXECUTION CONTINUES WHEN
-!        IFAULT IS SET EQUAL TO 8, 9 OR 10 PROVIDED THAT A SOLUTION
-!        WAS OBTAINED FOR AT LEAST ONE RIGHT-HAND SIDE.  THE VALUE OF
-!        IFAULT IS USED TO INDICATE THE FOLLOWING --
+! IFAULT fault indicator which is zero if no errors were encountered
+!        and positive if errors were detected or if evidence of severe
+!        ill-conditioning was found.  If IFAULT is set to 1, 2, 3, 4,
+!        5, 6 or 7, execution is terminated.  Execution continues when
+!        IFAULT is set equal to 8, 9 or 10 provided that a solution
+!        was obtained for at least one right-hand side.  The value of
+!        IFAULT is used to indicate the following --
 !        0 = NO ERRORS ENCOUNTERED.
 !        1 = BAD INPUT PARAMETER (M, N OR L).
 !        2 = BAD INPUT PARAMETER (M1).
@@ -10012,28 +10012,28 @@ real :: spmpar
 !        6 = CONSTRAINTS ARE LINEARLY DEPENDENT.
 !        7 = ALL SOLUTIONS FAILED TO CONVERGE.
 !        8 = SOLUTION FAILED TO CONVERGE FOR AT LEAST ONE RIGHT-HAND
-!            SIDE.
+!            side.
 !        9 = LARGE NUMBER OF ITERATIONS REQUIRED FOR CONVERGENCE.
 !       10 = ESTIMATED NUMBER OF DIGITS IN INITIAL SOLUTION OF
-!            COEFFICIENTS IS SMALL.
+!            coefficients is small.
 !       11 = DIAGONAL ELEMENT OF COVARIANCE MATRIX WAS COMPUTED TO BE
-!            NEGATIVE OWING TO ROUNDING ERROR. NO SEVERE CONDITIONING
-!            PROBLEMS WERE DETECTED.
+!            negative owing to rounding error. No severe conditioning
+!            problems were detected.
 !       12 = DIAGONAL ELEMENT OF COVARIANCE MATRIX WAS COMPUTED TO BE
-!            NEGATIVE OWING TO ROUNDING ERROR. THE PROBLEM APPEARS TO
-!            BE EXTREMELY ILL-CONDITIONED.
+!            negative owing to rounding error. The problem appears to
+!            be extremely ill-conditioned.
 !
 ! ** SUBROUTINES REQUIRED **
 ! SUBROUTINE DECOM2
-!        USES MODIFIED GRAM-SCHMIDT ALGORITHM WITH PIVOTING TO
-!        OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE INPUT MATRIX.
+!        uses modified Gram-Schmidt algorithm with pivoting to
+!        obtain an orthogonal decomposition of the input matrix.
 ! SUBROUTINE SOLVE2
-!        COMPUTES COEFFICIENTS AND RESIDUALS.  ITERATIVE REFINEMENT IS
-!        USED TO IMPROVE THE ACCURACY OF THE INITIAL SOLUTION.
+!        computes coefficients and residuals.  Iterative refinement is
+!        used to improve the accuracy of the initial solution.
 ! SUBROUTINE SOLVE3
-!        CALLED ONLY BY SUBROUTINE SOLVE2.
+!        called only by subroutine SOLVE2.
 ! SUBROUTINE COVAR
-!        COMPUTES UNSCALED COVARIANCE MATRIX OF THE COEFFICIENTS.
+!        computes unscaled covariance matrix of the coefficients.
 !
 ! ** STORAGE REQUIREMENTS **
 ! THE STORAGE REQUIRED FOR THE DIMENSIONED ARRAYS IN L2SLV IS
@@ -10043,18 +10043,18 @@ real :: spmpar
 ! CALL-SEQUENCES.
 !
 ! ** PRECISION OF ARITHMETIC CALCULATIONS **
-! SINGLE PRECISION ARITHMETIC IS USED FOR ALL CALCULATIONS EXCEPT THE
-! DOUBLE PRECISION ACCUMULATION OF INNER PRODUCTS.  (THE VARIABLE SUM
-! IS DECLARED TO BE DOUBLE PRECISION IN SUBROUTINES DECOM2, SOLVE2,
-! SOLVE3 AND COVAR.)  IT IS ESSENTIAL FOR THE SUCCESS OF THE ITERATIVE
-! REFINEMENT PROCEDURE THAT INNER PRODUCTS BE ACCUMULATED IN DOUBLE
-! PRECISION.
+! single precision arithmetic is used for all calculations except the
+! double precision accumulation of inner products.  (The variable SUM
+! is declared to be double precision in subroutines DECOM2, SOLVE2,
+! SOLVE3 and COVAR.)  It is essential for the success of the iterative
+! refinement procedure that inner products be accumulated in double
+! precision.
 !
 ! ** CONVERSION OF THE PROGRAM TO DOUBLE PRECISION **
 ! *********************************************************************
-! * ON COMPUTERS HAVING SHORT WORD LENGTH (AS THE IBM 360/370) IT MAY *
-! * BE DESIRABLE TO PERFORM ALL CALCULATIONS IN DOUBLE PRECISION.  IN *
-! * THIS CASE, THE ITERATIVE REFINEMENT PRESENTLY INCLUDED IN SOLVE2  *
+! * On computers having short word length (as the IBM 360/370) it may *
+! * be desirable to perform all calculations in double precision.  In *
+! * this case, the iterative refinement presently included in SOLVE2  *
 ! * SHOULD BE OMITTED.                                                *
 ! * TO CONVERT THE PROGRAM TO DOUBLE PRECISION, THE FOLLOWING         *
 ! * APPROACH IS SUGGESTED.                                            *
@@ -10102,21 +10102,21 @@ real :: digitx
 logical :: fail
 logical :: sing
 !
-! SET VALUE OF ETA, A MACHINE-DEPENDENT PARAMETER.
-! ETA, THE RELATIVE MACHINE PRECISION, IS THE SMALLEST POSITIVE REAL
-! NUMBER SUCH THAT 1.0 + ETA IS GREATER THAN 1.0 IN FLOATING-POINT
-! ARITHMETIC.
+! Set value of eta, a machine-dependent parameter.
+! Eta, the relative machine precision, is the smallest positive real
+! number such that 1.0 + eta is greater than 1.0 in floating-point
+! arithmetic.
 !
 eta = spmpar(1)
 !
-! DEFAULT VALUE FOR TOL IS ZERO.
+! Default value for TOL is zero.
 !
 if (tol.lt.0.0) tol = 0.0
 ifault = 0
 ksum = 0
 !
-! PERFORM INITIAL CHECKING OF INPUT PARAMETERS, DIMENSIONS AND
-! WEIGHTS FOR POSSIBLE ERRORS.
+! Perform initial checking of input parameters, dimensions and
+! weights for possible errors.
 !
 if (m.gt.0 .and. n.gt.0 .and. l.gt.0) go to 10
 ifault = 1
@@ -10135,21 +10135,21 @@ return
   return
 40 continue
 !
-! SET PARAMETERS WHICH ALLOCATE VECTOR C TO CONTAIN CERTAIN FINAL
-! RESULTS AND ALSO TO BE USED AS WORK SPACE.
+! Set parameters which allocate vector C to contain certain final
+! results and also to be used as work space.
 !
-! K1 IS STARTING POINT FOR NUMIT AND FAIL, OF LENGTH L.
-! K2 IS STARTING POINT FOR DIGITX, OF LENGTH L.
-! K3 IS STARTING POINT FOR D, OF LENGTH N.
-! K4 IS STARTING POINT FOR K-TH COLUMN OF B, OF LENGTH M.
-! K5 IS STARTING POINT FOR K-TH COLUMN OF X, OF LENGTH N.
-! K6 IS STARTING POINT FOR K-TH COLUMN OF RES, OF LENGTH M.
-! K7 IS STARTING POINT FOR WORK SPACE OF LENGTH M.
-! K8 IS STARTING POINT FOR WORK SPACE OF LENGTH M.
-! K9 IS STARTING POINT FOR WORK SPACE OF LENGTH N.
-! K10 IS STARTING POINT FOR WORK SPACE OF LENGTH N.
-! K11 IS STARTING POINT FOR WORK SPACE OF LENGTH M + N.
-! K12 IS STARTING POINT FOR WORK SPACE OF LENGTH M + N.
+! K1 is starting point for NUMIT and fail, of length L.
+! K2 is starting point for DIGITX, of length L.
+! K3 is starting point for D, of length N.
+! K4 is starting point for K-TH column of B, of length M.
+! K5 is starting point for K-TH column of X, of length N.
+! K6 is starting point for K-TH column of res, of length M.
+! K7 is starting point for work space of length M.
+! K8 is starting point for work space of length M.
+! K9 is starting point for work space of length N.
+! K10 is starting point for work space of length N.
+! K11 is starting point for work space of length M + N.
+! K12 is starting point for work space of length M + N.
 !
 k1 = 1
 k2 = k1 + l
@@ -10165,9 +10165,9 @@ k11 = k10 + n
 k12 = k11 + m + n
 k = k12 + m + n - 1
 !
-! MULTIPLY EACH ROW OF MATRIX A (M BY N) BY ITS APPROPRIATE WEIGHT AND
-! STORE THE RESULT IN THE FIRST M ROWS OF ARRAY QR.  SET ARRAY C AND
-! THE LAST N ROWS OF ARRAY QR EQUAL TO ZERO.
+! Multiply each row of matrix A (M by N) by its appropriate weight and
+! store the result in the first M rows of array QR.  Set array C and
+! the last N rows of array QR equal to zero.
 !
 do i=1,k
   c(i) = 0.0
@@ -10183,8 +10183,8 @@ do j=1,n
   end do
 end do
 !
-! OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE MATRIX STORED IN THE FIRST
-! M ROWS OF ARRAY QR AND COMPUTE ITS RANK.
+! Obtain an orthogonal decomposition of the matrix stored in the first
+! M rows of array QR and compute its rank.
 !
 call decom2(m, n, m1, eta, tol, qr, c(k3), n1, ipivot, sing, &
 &mmpnn)
@@ -10196,12 +10196,12 @@ return
 100 ifault = 6
 return
 !
-! SEEK A SOLUTION (COEFFICIENTS AND RESIDUALS) FOR EACH OF THE L LEAST
-! SQUARES PROBLEMS WHOSE RIGHT-HAND SIDES ARE GIVEN IN THE ARRAY B.
+! Seek a solution (coefficients and residuals) for each of the L least
+! squares problems whose right-hand sides are given in the array B.
 !
 110 iter = -alog10(eta)
 do 200 k = 1,l
-! K-TH RIGHT-HAND SIDE.
+! K-TH right-hand side.
   k0 = k4 - 1
   do i=1,m
     k0 = k0 + 1
@@ -10231,21 +10231,21 @@ do 200 k = 1,l
   end do
 170 continue
 !
-! FOR RIGHT-HAND SIDES WHERE CONVERGENCE OF A SOLUTION IS REPORTED,
-! A CHECK IS MADE FOR EVIDENCE OF SEVERE ILL-CONDITIONING.  SUCH
-! EVIDENCE IS FURNISHED BY LARGE VALUES OF NUMIT (NUMBER OF ITERATIONS
-! BEFORE CONVERGENCE WAS OBTAINED) AND SMALL VALUES OF DIGITX
-! (ESTIMATE OF THE NUMBER OF CORRECT DIGITS IN THE INITIAL SOLUTION
-! OF THE COEFFICIENTS).  IF NUMIT EXCEEDS -ALOG10(ETA) THEN IFAULT
-! IS SET TO 9.  IF DIGITX IS LESS THAN 0.5 (HALF A DECIMAL DIGIT)
-! THEN IFAULT IS SET TO 10.
+! For right-hand sides where convergence of a solution is reported,
+! a check is made for evidence of severe ill-conditioning.  Such
+! evidence is furnished by large values of NUMIT (number of iterations
+! before convergence was obtained) and small values of DIGITX
+! (estimate of the number of correct digits in the initial solution
+! of the coefficients).  If NUMIT exceeds -ALOG10(ETA) then IFAULT
+! is set to 9.  If DIGITX is less than 0.5 (half a decimal digit)
+! then IFAULT is set to 10.
 !
   c(k) = float(numit)
   if (fail) c(k) = -c(k)
   k0 = k2 + k - 1
   c(k0) = digitx
   if (.not.fail) go to 180
-! KSUM IS A TALLY OF SOLUTIONS WHICH FAILED TO CONVERGE.
+! KSUM is a tally of solutions which failed to converge.
   ksum = ksum + 1
   ifault = 8
   go to 200
@@ -10266,7 +10266,7 @@ do i=1,n
   qr(i,i) = 0.0
 end do
 !
-! COMPUTE THE UNSCALED COVARIANCE MATRIX OF THE COEFFICIENTS.
+! Compute the unscaled covariance matrix of the coefficients.
 !
 call covar(n, m1, n1, ipivot, qr, c(k3), c(k9), mmpnn)
 if (n.eq.1) go to 260
@@ -10276,10 +10276,10 @@ jm1 = j - 1
 240 qr(i,j) = qr(j,i)
 end do
 !
-! IN CERTAIN PROBLEMS, SOME DIAGONAL TERMS OF THE UNSCALED COVARIANCE
-! MATRIX ARE EQUAL TO ZERO OR TO SMALL POSITIVE NUMBERS.  BECAUSE OF
-! ROUNDING ERRORS, COMPUTED VALUES FOR THESE TERMS MAY BE SMALL
-! NEGATIVE NUMBERS.  IFAULT IS SET TO 11 IF THIS OCCURS.
+! In certain problems, some diagonal terms of the unscaled covariance
+! matrix are equal to zero or to small positive numbers.  Because of
+! rounding errors, computed values for these terms may be small
+! negative numbers.  IFAULT is set to 11 if this occurs.
 !
 260 do j=1,n
   if (qr(j,j).lt.0.0) go to 280
@@ -10293,38 +10293,38 @@ return
 end subroutine l2slv
 
 !     SUBROUTINE DECOM2(...)
-! SUBROUTINE DECOM2 USES A MODIFIED GRAM-SCHMIDT ALGORITHM WITH
-! PIVOTING TO OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE INPUT MATRIX
-! GIVEN IN QR.
-! THE INPUT PARAMETER TOL (EQUAL EITHER TO ZERO OR TO A POSITIVE
-! NUMBER) IS USED IN DETERMINING THE RANK OF MATRIX QR.
-! NOTE --
-!     (1) IF TOL EQUALS ZERO, THE TOLERANCE USED AT STATEMENT DC2 1180
-!         WILL BE BASED ON MACHINE PRECISION.
-!         UNDER THIS APPROACH, THE TOLERANCE (TOL2) IS SET EQUAL TO
+! subroutine DECOM2 uses a modified Gram-Schmidt algorithm with
+! pivoting to obtain an orthogonal decomposition of the input matrix
+! given in QR.
+! The input parameter TOL (equal either to zero or to a positive
+! number) is used in determining the rank of matrix QR.
+! Note --
+!     (1) if TOL equals zero, the tolerance used at statement DC2 1180
+!         will be based on machine precision.
+!         Under this approach, the tolerance (TOL2) is set equal to
 !         (FLOAT(N)*ETA)**2*D(M1+1) AT STATEMENT DC2 1170.
-!         IF DESIRED, THE USER CAN OBTAIN A MORE CONSERVATIVE
-!         TOLERANCE BY REPLACING N IN THIS STATEMENT BY A LARGER
-!         QUANTITY.
-!     (2) IF TOL IS GREATER THAN ZERO, TOL2 (WHICH IS SET EQUAL TO
-!         TOL) WILL BE USED AT STATEMENT DC2 1180 AS AN ABSOLUTE
-!         TOLERANCE FOR COMPARISON WITH DIAGONAL ELEMENTS OF THE
-!         TRIANGULAR MATRIX OBTAINED IN THE DECOMPOSITION.  UNDER THIS
-!         APPROACH, THE VALUE OF TOL CAN BE BASED ON KNOWLEDGE
-!         CONCERNING THE ACCURACY OF THE DATA.
-! ON EXIT, THE ARRAYS QR, D AND IPIVOT CONTAIN THE RESULTS OF THE
-! DECOMPOSITION WHICH ARE NEEDED FOR OBTAINING AN INITIAL SOLUTION
-! AND FOR ITERATIVE REFINEMENT.
-! ON EXIT, N1 IS THE COMPUTED RANK OF THE INPUT MATRIX QR.
-! ON EXIT, SING IS SET EQUAL TO .TRUE. WHENEVER
+!         If desired, the user can obtain a more conservative
+!         tolerance by replacing N in this statement by a larger
+!         quantity.
+!     (2) If TOL is greater than zero, TOL2 (which is set equal to
+!         TOL) will be used at statement DC2 1180 as an absolute
+!         tolerance for comparison with diagonal elements of the
+!         triangular matrix obtained in the decomposition.  Under this
+!         approach, the value of TOL can be based on knowledge
+!         concerning the accuracy of the data.
+! On exit, the arrays QR, D and IPIVOT contain the results of the
+! decomposition which are needed for obtaining an initial solution
+! and for iterative refinement.
+! On exit, N1 is the computed rank of the input matrix QR.
+! On exit, sing is set equal to .True. Whenever
 !     (1) N1 = 0 (I.E., INPUT MATRIX QR EQUALS ZERO OR MATRIX OF
-!         CONSTRAINTS EQUALS ZERO), OR
-!     (2) N1 IS LESS THAN M1 (I.E., THE M1 BY N MATRIX OF LINEAR
-!         CONSTRAINTS IS SINGULAR).
+!         constraints equals zero), or
+!     (2) N1 is less than M1 (I.E., The M1 by N matrix of linear
+!         constraints is singular).
 ! OTHERWISE, ON EXIT FROM DECOM2, SING = .FALSE.
-! ON EXIT, THE VECTOR IPIVOT RECORDS THE ORDER IN WHICH THE COLUMNS
-! OF QR WERE SELECTED BY THE PIVOTING SCHEME IN THE COURSE OF THE
-! ORTHOGONAL DECOMPOSITION.
+! On exit, the vector IPIVOT records the order in which the columns
+! of QR were selected by the pivoting scheme in the course of the
+! orthogonal decomposition.
 subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
 &mmpnn)
 implicit none
@@ -10357,7 +10357,7 @@ do j=1,n
   d(j) = 0.0
   ipivot(j) = j
 end do
-! STEP NUMBER NS OF THE DECOMPOSITION.
+! Step number NS of the decomposition.
 do ns=1,n
   k = m + ns
   if (ns.eq.m1+1) go to 20
@@ -10368,7 +10368,7 @@ do ns=1,n
   fsum = .true.
 30 if (.not.finis) go to 40
   go to 150
-! PIVOT SEARCH.
+! Pivot search.
 40 ds = 0.0
   np = ns
   do 90 j = ns,n
@@ -10392,7 +10392,7 @@ do ns=1,n
 110 if (fsum) go to 40
   if (np.ne.ns) go to 120
   go to 140
-! COLUMN INTERCHANGE.
+! Column interchange.
 120 ik = ipivot(np)
   ipivot(np) = ipivot(ns)
   ipivot(ns) = ik
@@ -10406,7 +10406,7 @@ do ns=1,n
 ! END COLUMN INTERCHANGE.
 ! END PIVOT SEARCH.
 ! RETURN HERE IF N1 = 0.  EITHER INPUT MATRIX QR EQUALS ZERO OR
-! MATRIX OF CONSTRAINTS EQUALS ZERO.
+! matrix of constraints equals zero.
 140 if (ns.eq.1 .and. ds.eq.0.0) return
   go to 160
 150 ms = k - 1
@@ -10459,7 +10459,7 @@ do ns=1,n
   qr(k,ns) = -1.0
   nsp1 = ns + 1
   if (nsp1.gt.n) go to 340
-! BEGIN ORTHOGONALIZATION.
+! Begin orthogonalization.
   do 330 j = nsp1,n
     sum = 0.0
     do l=mv,mh
@@ -10480,30 +10480,30 @@ do ns=1,n
 end do
 ! END STEP NUMBER NS.
 sing = .false.
-! NORMAL RETURN.
+! Normal return.
 return
 end subroutine decom2
 
 !     SUBROUTINE SOLVE2(...)
-! SUBROUTINE SOLVE2 USES THE ORTHOGONAL DECOMPOSITION STORED IN QR, D
-! AND IPIVOT TO COMPUTE THE SOLUTION (COEFFICIENTS AND RESIDUALS)
-! TO THE LEAST SQUARES PROBLEM WHOSE RIGHT-HAND SIDE IS GIVEN IN B.
-! IN THE EVENT THAT N1 (THE COMPUTED RANK OF MATRIX H) IS LESS THAN N
-! (THE NUMBER OF UNKNOWN COEFFICIENTS), A UNIQUE SOLUTION VECTOR HAVING
-! N ELEMENTS CAN BE OBTAINED BY IMPOSING THE CONDITION THAT THE
-! SOLUTION BE OF MINIMAL EUCLIDEAN NORM.  SUCH A SOLUTION IS SOUGHT IN
-! THE CASE OF UNDERDETERMINED OR RANK-DEFICIENT PROBLEMS.
-! IN NORMAL EXITS, THE SOLUTION IS CONTAINED IN THE VECTOR X
-! (COEFFICIENTS) AND THE VECTOR RES (RESIDUALS).
-! ITERATIVE REFINEMENT IS USED TO IMPROVE THE ACCURACY OF THE INITIAL
-! SOLUTION.
-! ON EXIT, FAIL IS SET EQUAL TO .TRUE. IF THE SOLUTION FAILS TO
+! subroutine SOLVE2 uses the orthogonal decomposition stored in QR, D
+! and IPIVOT to compute the solution (coefficients and residuals)
+! to the least squares problem whose right-hand side is given in B.
+! In the event that N1 (the computed rank of matrix H) is less than N
+! (the number of unknown coefficients), a unique solution vector having
+! N elements can be obtained by imposing the condition that the
+! solution be of minimal Euclidean norm.  Such a solution is sought in
+! the case of underdetermined or rank-deficient problems.
+! In normal exits, the solution is contained in the vector X
+! (coefficients) and the vector RES (residuals).
+! Iterative refinement is used to improve the accuracy of the initial
+! solution.
+! On exit, fail is set equal to .True. If the solution fails to
 ! IMPROVE SUFFICIENTLY.  OTHERWISE, FAIL = .FALSE.  INFORMATION ON THE
-! BEHAVIOR OF THE ITERATIVE REFINEMENT PROCEDURE IS GIVEN BY NUMIT AND
-! DIGITX.  NUMIT IS THE NUMBER OF ITERATIONS CARRIED OUT IN ATTEMPTING
-! TO OBTAIN A SOLUTION.  DIGITX IS AN ESTIMATE OF THE NUMBER OF
-! CORRECT DIGITS IN THE INITIAL SOLUTION OF THE COEFFICIENTS.
-! THIS SUBROUTINE CALLS SUBROUTINE SOLVE3.
+! behavior of the iterative refinement procedure is given by NUMIT and
+! DIGITX.  NUMIT is the number of iterations carried out in attempting
+! to obtain a solution.  DIGITX is an estimate of the number of
+! correct digits in the initial solution of the coefficients.
+! This subroutine calls subroutine SOLVE3.
 !
 ! ********* CONVERSION OF THIS SUBROUTINE TO DOUBLE PRECISION *********
 ! * IF THE PROGRAM IS CONVERTED SO THAT ALL CALCULATIONS ARE DONE IN  *

@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 from fixed_to_free import convert_text
 from regenerate_sources import generate, HEADER, LINK
 from lowercase_fortran import lowercase
+from sentence_case_comments import sentence_case
 
 
 def canonical(statement):
@@ -106,7 +107,13 @@ class FreeFormTests(unittest.TestCase):
             for old, new in zip(before, after):
                 self.assertTrue(old == new or ('A' <= old <= 'Z' and new == old.lower()))
         self.assertEqual(statements(source, True), statements(converted, False))
-        self.assertEqual(converted, (ROOT / "nswc.f90").read_text())
+        comments = sentence_case(converted)
+        self.assertEqual(len(converted), len(comments.text))
+        self.assertEqual([s for s in converted.splitlines(True) if not s.lstrip().startswith('!')],
+                         [s for s in comments.text.splitlines(True) if not s.lstrip().startswith('!')])
+        self.assertEqual(statements(converted, False), statements(comments.text, False))
+        self.assertEqual(sentence_case(comments.text).text, comments.text)
+        self.assertEqual(comments.text, (ROOT / "nswc.f90").read_text())
 
     def test_generated_partitions_and_links(self):
         outputs, count = generate()

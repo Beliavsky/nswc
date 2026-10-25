@@ -5,11 +5,13 @@ Existing source links are resolved by procedure name before partitions are repla
 """
 
 import argparse
+import json
 from pathlib import Path
 import re
 
 from fixed_to_free import convert_text
 from lowercase_fortran import lowercase
+from sentence_case_comments import sentence_case
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +23,9 @@ LINK = re.compile(
 
 
 def generate(root=ROOT):
-    free = lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii")))
+    original_free = lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii")))
+    comments = sentence_case(original_free)
+    free = comments.text
     lines = free.splitlines(keepends=True)
     declarations = {}
     for number, line in enumerate(lines, 1):
@@ -40,7 +44,8 @@ def generate(root=ROOT):
         if number - starts[-1] >= 10500:
             starts.append(number)
     bounds = starts + [len(lines) + 1]
-    outputs = {root / "nswc.f90": free}
+    outputs = {root / "nswc.f90": free,
+               root / 'tools/comment-case-review.json': json.dumps(comments.report(original_free), indent=2) + '\n'}
     locations = {}
     for index, start in enumerate(starts):
         end = bounds[index + 1]

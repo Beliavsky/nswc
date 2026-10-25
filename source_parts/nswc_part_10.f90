@@ -5,17 +5,17 @@ integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
 real :: del, diff, r, s, term, x
 !-----------------------------------------------------------------------
 !
-!            COMPUTATION OF N CUBIC SPLINES AND THEIR FIRST
-!            DERIVATIVES AT THE KNOTS T(4),...,T(M+1). THE
-!            CUBIC SPLINES ARE REPRESENTED IN B-SPLINE FORM.
+!            Computation of N cubic splines and their first
+!            derivatives at the knots T(4),...,T(M+1). The
+!            cubic splines are represented in B-spline form.
 !
 !                          ---------------
 !
-!     INPUT ...
+!     Input ...
 !
 !       T     KNOT SEQUENCE OF LENGTH M+4.
 !       A     M X N MATRIX. EACH COLUMN OF A IS A SEQUENCE
-!             OF M B-SPLINE COEFFICIENTS FOR A CUBIC SPLINE.
+!             of M B-spline coefficients for a cubic spline.
 !       KA    THE NUMBER OF ROWS SPECIFIED IN THE CALLING
 !             PROGRAM FOR A. IT IS ASSUMED THAT KA .GE. M.
 !       M     DIMENSION OF THE B-SPLINE SPACE.
@@ -25,13 +25,13 @@ real :: del, diff, r, s, term, x
 !       KDZ   THE NUMBER OF ROWS SPECIFIED IN THE CALLING
 !             PROGRAM FOR DZ. IT IS ASSUMED THAT KZ .GE. N.
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       Z     N X (M-2) MATRIX WHERE Z(J,I) = VALUE OF J-TH CUBIC
 !             SPLINE AT THE POINT T(I+3) FOR I = 1,...,M-2.
 !
 !       DZ    N X (M-2) MATRIX WHERE DZ(J,I) = FIRST DERIVATIVE OF
-!             THE J-TH CUBIC SPLINE EVALUATED AT THE POINT T(I+3).
+!             the J-TH cubic spline evaluated at the point T(I+3).
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*), a(ka,n)
@@ -42,16 +42,16 @@ k = 4
 mp1 = m + 1
 do mu = 1,n
 !
-!        OBTAING THE VALUES FOR THE MU-TH CUBIC SPLINE
+!        Obtaing the values for the mu-TH cubic spline
 !
    l = 0
    do left = k,m
       l = l + 1
 !
-!           COMPUTE THE COEFFICIENTS FOR THE L-TH
-!           POLYNOMIAL FORMING THE CUBIC SPLINE. THE
-!           COEFFICIENTS ARE STORED IN C. THIS CODE
-!           IS FROM THE SUBROUTINE BSPP.
+!           Compute the coefficients for the L-TH
+!           polynomial forming the cubic spline. The
+!           coefficients are stored in C. This code
+!           is from the subroutine BSPP.
 !
       do j = 1,k
          jj = left - k + j
@@ -94,15 +94,15 @@ do mu = 1,n
          c(kmj) = r*s
       end do
 !
-!           STORE THE VALUE OF THE SPLINE AND ITS
-!           FIRST DERIVATIVE AT THE KNOT T(LEFT)
+!           Store the value of the spline and its
+!           first derivative at the knot T(LEFT)
 !
       z(mu,l) = c(1)
       dz(mu,l) = c(2)
    end do
 !
-!        COMPUTE THE SPLINE AND ITS FIRST DERIVATIVE
-!                    AT THE KNOT T(M+1)
+!        Compute the spline and its first derivative
+!                    at the knot T(M+1)
 !
    l = l + 1
    del = t(mp1) - t(m)
@@ -123,8 +123,8 @@ real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
 integer :: intrvl
 !-----------------------------------------------------------------------
 !
-!             EVALUATION OR DIFFERENTIATION OF A BICUBIC
-!                        SPLINE OVER A GRID
+!             Evaluation or differentiation of a bicubic
+!                        spline over a grid
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), y(my)
@@ -152,7 +152,7 @@ do l = 1,my
 30 j = intrvl (yy, t, n)
    go to 50
 !
-!        LINEAR FORWARD SEARCH
+!        Linear forward search
 !
 40 if (yy .lt. t(j + 1)) go to 50
    j = j + 1
@@ -180,15 +180,15 @@ do l = 1,my
 130 z(k,l) = z(k-1,l)
       go to 350
 !
-!           LINEAR FORWARD SEARCH
+!           Linear forward search
 !
 140 if (xx .lt. s(i + 1)) go to 210
 150 i = i + 1
          if (xx .ge. s(i + 1)) go to 150
 !
-!           COMPUTATION OF THE JDER-TH DERIVATIVE OF
+!           Computation of the JDER-TH derivative of
 !           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND
-!           D1F(S(I+1),Y) AT THE POINT YY.
+!           D1F(S(I+1),Y) at the point YY.
 !
 200 iold = i
          ip1 = i + 1
@@ -241,8 +241,8 @@ do l = 1,my
       dfi = 6.0*c2
       dfip1 = 6.0*c3
 !
-!           COMPUTATION OF THE IDER-TH DERIVATIVE
-!           AT THE POINT XX.
+!           Computation of the IDER-TH derivative
+!           at the point XX.
 !
 300 d = (fip1 - fi)/ds
       a = dfi + dfip1
@@ -266,7 +266,7 @@ do l = 1,my
 end do
 return
 !
-!     CASE WHEN THE RESULTS ARE ZERO.
+!     Case when the results are zero.
 !
 400 do l = 1,my
    do k = 1,mx
@@ -281,8 +281,8 @@ implicit none
 integer, intent(in) :: ider, jder, kz, m, mx, my, n
 !-----------------------------------------------------------------------
 !
-!             EVALUATION OR DIFFERENTIATION OF A BICUBIC
-!                        SPLINE OVER A GRID
+!             Evaluation or differentiation of a bicubic
+!                        spline over a grid
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), y(my)
@@ -305,8 +305,8 @@ real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
 integer :: intrvl
 !-----------------------------------------------------------------------
 !
-!             EVALUATION OR DIFFERENTIATION OF A BICUBIC
-!                        SPLINE OVER A GRID
+!             Evaluation or differentiation of a bicubic
+!                        spline over a grid
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), y(my)
@@ -334,7 +334,7 @@ do l = 1,my
 30 j = intrvl (yy, t, n)
    go to 50
 !
-!        LINEAR FORWARD SEARCH
+!        Linear forward search
 !
 40 if (yy .lt. t(j + 1)) go to 50
    j = j + 1
@@ -362,15 +362,15 @@ do l = 1,my
 130 z(k,l) = z(k-1,l)
       go to 350
 !
-!           LINEAR FORWARD SEARCH
+!           Linear forward search
 !
 140 if (xx .lt. s(i + 1)) go to 210
 150 i = i + 1
          if (xx .ge. s(i + 1)) go to 150
 !
-!           COMPUTATION OF THE JDER-TH DERIVATIVE OF
+!           Computation of the JDER-TH derivative of
 !           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND
-!           D1F(S(I+1),Y) AT THE POINT YY.
+!           D1F(S(I+1),Y) at the point YY.
 !
 200 iold = i
          ip1 = i + 1
@@ -419,8 +419,8 @@ do l = 1,my
       dfi = 6.0*c2
       dfip1 = 6.0*c3
 !
-!           COMPUTATION OF THE IDER-TH DERIVATIVE
-!           AT THE POINT XX.
+!           Computation of the IDER-TH derivative
+!           at the point XX.
 !
 300 d = (fip1 - fi)/ds
       ax = d - ds*(2.0*dfi + dfip1)/6.0
@@ -443,7 +443,7 @@ do l = 1,my
 end do
 return
 !
-!     CASE WHEN THE RESULTS ARE ZERO.
+!     Case when the results are zero.
 !
 400 do l = 1,my
    do k = 1,mx
@@ -459,8 +459,8 @@ implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
 !-----------------------------------------------------------------------
 !
-!             EVALUATION OR DIFFERENTIATION OF A BICUBIC
-!                        SPLINE OVER A GRID
+!             Evaluation or differentiation of a bicubic
+!                        spline over a grid
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), y(my)
@@ -495,66 +495,66 @@ real, intent(in) :: sigma
 !                               NAVAL SURFACE WEAPONS CENTER
 !                                          DAHLGREN VIRGINIA
 !
-! THIS SUBROUTINE DETERMINES THE PARAMETERS NECESSARY TO
-! COMPUTE AN INTERPOLATORY SURFACE PASSING THROUGH A RECT-
-! ANGULAR GRID OF FUNCTIONAL VALUES. THE SURFACE DETERMINED
-! CAN BE REPRESENTED AS THE TENSOR PRODUCT OF SPLINES UNDER
-! TENSION. THE X- AND Y-PARTIAL DERIVATIVES AROUND THE
-! BOUNDARY AND THE X-Y-PARTIAL DERIVATIVES AT THE FOUR
-! CORNERS MAY BE SPECIFIED OR OMITTED. FOR ACTUAL MAPPING
-! OF POINTS ONTO THE SURFACE IT IS NECESSARY TO CALL THE
+! This subroutine determines the parameters necessary to
+! compute an interpolatory surface passing through a rect-
+! angular grid of functional values. The surface determined
+! can be represented as the tensor product of splines under
+! tension. The X- and Y-partial derivatives around the
+! boundary and the X-Y-partial derivatives at the four
+! corners may be specified or omitted. For actual mapping
+! of points onto the surface it is necessary to call the
 ! FUNCTION SURF2.
 !
-! ON INPUT--
+! On input--
 !
-!   M IS THE NUMBER OF GRID LINES IN THE X-DIRECTION, I. E.
+!   M is the number of grid lines in the X-direction, I. E.
 !   LINES PARALLEL TO THE Y-AXIS (M .GE. 2).
 !
-!   N IS THE NUMBER OF GRID LINES IN THE Y-DIRECTION, I. E.
+!   N is the number of grid lines in the Y-direction, I. E.
 !   LINES PARALLEL TO THE X-AXIS (N .GE. 2).
 !
-!   X IS AN ARRAY OF THE M X-COORDINATES OF THE GRID LINES
-!   IN THE X-DIRECTION. THESE SHOULD BE STRICTLY INCREASING.
+!   X is an array of the M X-coordinates of the grid lines
+!   in the X-direction. These should be strictly increasing.
 !
-!   Y IS AN ARRAY OF THE N Y-COORDINATES OF THE GRID LINES
-!   IN THE Y-DIRECTION. THESE SHOULD BE STRICTLY INCREASING.
+!   Y is an array of the N Y-coordinates of the grid lines
+!   in the Y-direction. These should be strictly increasing.
 !
-!   Z IS AN ARRAY OF THE M * N FUNCTIONAL VALUES AT THE GRID
-!   POINTS, I. E. Z(I,J) CONTAINS THE FUNCTIONAL VALUE AT
+!   Z is an array of the M * N functional values at the grid
+!   points, I. E. Z(I,J) contains the functional value at
 !   (X(I),Y(J)) FOR I = 1,...,M AND J = 1,...,N.
 !
-!   IZ IS THE ROW DIMENSION OF THE MATRIX Z USED IN THE
+!   IZ is the row dimension of the matrix Z used in the
 !   CALLING PROGRAM (IZ .GE. M).
 !
-!   OPT IS AN OPTION VECTOR. IF NO BOUNDARY CONDITIONS ARE
-!   TO BE IMPOSED ON THE SURFACE THEN LET OPT BE OF LENGTH 1
+!   Opt is an option vector. If no boundary conditions are
+!   to be imposed on the surface then let opt be of length 1
 !   AND SET OPT(1)=0. OTHERWISE, SEE THE DESCRIPTION OF SURF
-!   IN THE NSWC LIBRARY MANUAL.
+!   in the NSWC library manual.
 !
-!   ZP IS AN ARRAY OF AT LEAST 3*M*N LOCATIONS.
+!   ZP is an array of at least 3*M*N locations.
 !
-!   TEMP IS AN ARRAY OF AT LEAST N+N+M LOCATIONS WHICH IS
-!   USED FOR SCRATCH STORAGE.
+!   Temp is an array of at least N+N+M locations which is
+!   used for scratch storage.
 !
-!   SIGMA CONTAINS THE TENSION FACTOR. THIS VALUE INDICATES
-!   THE CURVINESS DESIRED. IF ABS(SIGMA) IS NEARLY ZERO
-!   (E. G. .001) THE RESULTING SURFACE IS APPROXIMATELY THE
-!   TENSOR PRODUCT OF CUBIC SPLINES. IF ABS(SIGMA) IS LARGE
-!   (E. G. 50.) THE RESULTING SURFACE IS APPROXIMATELY
-!   BI-LINEAR. IF SIGMA EQUALS ZERO TENSOR PRODUCTS OF
-!   CUBIC SPLINES RESULT. A STANDARD VALUE FOR SIGMA IS
-!   APPROXIMATELY 1. IN ABSOLUTE VALUE.
+!   Sigma contains the tension factor. This value indicates
+!   the curviness desired. If ABS(SIGMA) is nearly zero
+!   (E. G. .001) The resulting surface is approximately the
+!   tensor product of cubic splines. If ABS(SIGMA) is large
+!   (E. G. 50.) The resulting surface is approximately
+!   BI-linear. If sigma equals zero tensor products of
+!   cubic splines result. A standard value for sigma is
+!   approximately 1. In absolute value.
 !
-! ON OUTPUT--
+! On output--
 !
-!   ZP CONTAINS THE VALUES OF THE XX-, YY-, AND XXYY-PARTIAL
-!   DERIVATIVES OF THE SURFACE AT THE GIVEN NODES.
+!   ZP contains the values of the XX-, YY-, and XXYY-partial
+!   derivatives of the surface at the given nodes.
 !
-!   IERR CONTAINS AN ERROR FLAG,
+!   IERR contains an error flag,
 !        = 0 FOR NORMAL RETURN,
 !        = 1 IF N IS LESS THAN 2 OR M IS LESS THAN 2,
 !        = 2 IF THE X-VALUES OR Y-VALUES ARE NOT STRICTLY
-!            INCREASING,
+!            increasing,
 !        = 3 THE OPTION VECTOR HAS AN ERROR.
 !
 ! THIS SUBROUTINE REFERENCES PACKAGE MODULES CEEZ, TERMS,
@@ -574,7 +574,7 @@ ierr = 0
 if (n .le. 1 .or. m .le. 1) go to 46
 if (y(n) .le. y(1)) go to 47
 !
-! PROCESS THE OPTION VECTOR
+! Process the option vector
 !
 num(1) = n
 num(2) = n
@@ -599,7 +599,7 @@ loc(key) = l
 l = l + num(key)
 go to 100
 !
-! DENORMALIZE TENSION FACTOR IN Y-DIRECTION
+! Denormalize tension factor in Y-direction
 !
 110 sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
@@ -645,7 +645,7 @@ do 9 i = 1,m
 9 temp(npi) = temp(npi)+c3*z(i,n-2)
 10 if (x(m) .le. x(1)) go to 47
 !
-! DENORMALIZE TENSION FACTOR IN X-DIRECTION
+! Denormalize tension factor in X-direction
 !
 sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
 !
@@ -669,7 +669,7 @@ if (m .eq. 2) go to 15
 do 14 j = 1,n
 14 zp(1,j,2) = zp(1,j,2)+c3*z(3,j)
 !
-! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(1),Y(1))
+! Obtain X-Y-partial derivative at (X(1),Y(1))
 !
 15 if (ind(5) .eq. 0) go to 16
 l = loc(5)
@@ -678,7 +678,7 @@ go to 17
 16 zp(1,1,3) = c1*zp(1,1,1)+c2*zp(2,1,1)
 if (m .gt. 2) zp(1,1,3) = zp(1,1,3)+c3*zp(3,1,1)
 !
-! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(1),Y(N))
+! Obtain X-Y-partial derivative at (X(1),Y(N))
 !
 17 if (ind(7) .eq. 0) go to 18
 l = loc(7)
@@ -710,7 +710,7 @@ do 23 j = 1,n
   npmpj = npm+j
 23 temp(npmpj) = temp(npmpj)+c3*z(m-2,j)
 !
-! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(M),Y(1))
+! Obtain X-Y-partial derivative at (X(M),Y(1))
 !
 24 if (ind(6) .eq. 0) go to 25
 l = loc(6)
@@ -719,7 +719,7 @@ go to 26
 25 zp(m,1,3) = c1*zp(m,1,1)+c2*zp(mm1,1,1)
 if (m .gt. 2) zp(m,1,3) = zp(m,1,3)+c3*zp(m-2,1,1)
 !
-! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(M),Y(N))
+! Obtain X-Y-partial derivative at (X(M),Y(N))
 !
 26 if (ind(8) .eq. 0) go to 27
 l = loc(8)
@@ -728,8 +728,8 @@ go to 28
 27 zxymns = c1*temp(npm)+c2*temp(npm-1)
 if (m .gt. 2) zxymns = zxymns+c3*temp(npm-2)
 !
-! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR Y-GRID
-! PERFORM FORWARD ELIMINATION
+! Set up right hand sides and tridiagonal system for Y-grid
+! perform forward elimination
 !
 28 del1 = y(2)-y(1)
 if (del1 .le. 0.) go to 47
@@ -779,7 +779,7 @@ zp(1,n,3) = diagin*(zxy1ns-zp(1,n,3)- &
 temp(n) = diagin*(zxymns-zp(m,n,3)- &
 &sdiag1*zp(m,nm1,3))
 !
-! PERFORM BACK SUBSTITUTION
+! Perform back substitution
 !
 do 37 j = 2,n
   jbak = np1-j
@@ -790,8 +790,8 @@ do 37 j = 2,n
   zp(1,jbak,3) = zp(1,jbak,3)-t*zp(1,jbakp1,3)
 37 temp(jbak) = zp(m,jbak,3)-t*temp(jbakp1)
 !
-! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR X-GRID
-! PERFORM FORWARD ELIMINATION
+! Set up right hand sides and tridiagonal system for X-grid
+! perform forward elimination
 !
 del1 = x(2)-x(1)
 if (del1 .le. 0.) go to 47
@@ -834,7 +834,7 @@ do 44 j = 1,n
 44 zp(m,j,3) = diagin*(temp(j)-zp(m,j,3)- &
 &sdiag1*zp(mm1,j,3))
 !
-! PERFORM BACK SUBSTITUTION
+! Perform back substitution
 !
 do 45 i = 2,m
   ibak = mp1-i
@@ -846,17 +846,17 @@ do 45 i = 2,m
 45 zp(ibak,j,3) = zp(ibak,j,3)-t*zp(ibakp1,j,3)
 return
 !
-! TOO FEW POINTS
+! Too few points
 !
 46 ierr = 1
 return
 !
-! POINTS NOT STRICTLY INCREASING
+! Points not strictly increasing
 !
 47 ierr = 2
 return
 !
-! THE OPTION VECTOR HAS AN ERROR
+! The option vector HAS an error
 !
 48 ierr = 3
 return
@@ -883,61 +883,61 @@ real, intent(in) :: sigma
 !                            DEPARTMENT OF COMPUTER SCIENCES
 !                              UNIVERSITY OF TEXAS AT AUSTIN
 !
-! THIS FUNCTION INTERPOLATES A SURFACE AT A GIVEN COORDINATE
-! PAIR USING A BI-SPLINE UNDER TENSION. THE SUBROUTINE SURF1
-! SHOULD BE CALLED EARLIER TO DETERMINE CERTAIN NECESSARY
-! PARAMETERS.
+! This function interpolates a surface at a given coordinate
+! pair using A BI-spline under tension. The subroutine SURF1
+! should be called earlier to determine certain necessary
+! parameters.
 !
-! ON INPUT--
+! On input--
 !
-!   XX AND YY CONTAIN THE X- AND Y-COORDINATES OF THE POINT
-!   TO BE MAPPED ONTO THE INTERPOLATING SURFACE.
+!   XX and YY contain the X- and Y-coordinates of the point
+!   to be mapped onto the interpolating surface.
 !
-!   M AND N CONTAIN THE NUMBER OF GRID LINES IN THE X- AND
-!   Y-DIRECTIONS, RESPECTIVELY, OF THE RECTANGULAR GRID
-!   WHICH SPECIFIED THE SURFACE.
+!   M and N contain the number of grid lines in the X- and
+!   Y-directions, respectively, of the rectangular grid
+!   which specified the surface.
 !
-!   X AND Y ARE ARRAYS CONTAINING THE X- AND Y-GRID VALUES,
-!   RESPECTIVELY, EACH IN INCREASING ORDER.
+!   X and Y are arrays containing the X- and Y-grid values,
+!   respectively, each in increasing order.
 !
-!   Z IS A MATRIX CONTAINING THE M * N FUNCTIONAL VALUES
-!   CORRESPONDING TO THE GRID VALUES (I. E. Z(I,J) IS THE
+!   Z is a matrix containing the M * N functional values
+!   corresponding to the grid values (I. E. Z(I,J) is the
 !   SURFACE VALUE AT THE POINT (X(I),Y(J)) FOR I = 1,...,M
 !   AND J = 1,...,N).
 !
-!   IZ CONTAINS THE ROW DIMENSION OF THE ARRAY Z AS DECLARED
-!   IN THE CALLING PROGRAM.
+!   IZ contains the row dimension of the array Z as declared
+!   in the calling program.
 !
-!   ZP IS AN ARRAY OF 3*M*N LOCATIONS STORED WITH THE
-!   VARIOUS SURFACE DERIVATIVE INFORMATION DETERMINED BY
+!   ZP is an array of 3*M*N locations stored with the
+!   various surface derivative information determined by
 !   SURF1.
 !
-! AND
+! And
 !
-!   SIGMA CONTAINS THE TENSION FACTOR (ITS SIGN IS IGNORED).
+!   Sigma contains the tension factor (its sign is ignored).
 !
-! THE PARAMETERS M, N, X, Y, Z, IZ, ZP, AND SIGMA SHOULD BE
-! INPUT UNALTERED FROM THE OUTPUT OF SURF1.
+! The parameters M, N, X, Y, Z, IZ, ZP, and sigma should be
+! input unaltered from the output of SURF1.
 !
-! ON OUTPUT--
+! On output--
 !
-!   SURF2 CONTAINS THE INTERPOLATED SURFACE VALUE.
+!   SURF2 contains the interpolated surface value.
 !
-! NONE OF THE INPUT PARAMETERS ARE ALTERED.
+! None of the input parameters are altered.
 !
 ! THIS FUNCTION REFERENCES PACKAGE MODULES INTRVL AND
 ! SNHCSH.
 !
 !-----------------------------------------------------------
 !
-! INLINE ONE DIMENSIONAL CUBIC SPLINE INTERPOLATION
+! Inline one dimensional cubic spline interpolation
 !
 hermz (f1,f2,fp1,fp2) = (f2*del1+f1*del2)/dels-del1* &
 &del2*(fp2*(del1+dels)+ &
 &fp1*(del2+dels))/ &
 &(6.*dels)
 !
-! INLINE ONE DIMENSIONAL SPLINE UNDER TENSION INTERPOLATION
+! Inline one dimensional spline under tension interpolation
 !
 hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1+f1*del2)/dels &
 &+(fp2*(sinhm1*del2-del1*(2.*(coshp1+1.)* &
@@ -946,17 +946,17 @@ hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1+f1*del2)/dels &
 &sinhp1+sigmap*coshp2*del1)) &
 &)/(sigmap*sigmap*dels*(sinhms+sigmap*dels))
 !
-! DENORMALIZE TENSION FACTOR IN X AND Y DIRECTION
+! Denormalize tension factor in X and Y direction
 !
 sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
 sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
-! DETERMINE Y INTERVAL
+! Determine Y interval
 !
 jm1 = intrvl (yy,y,n)
 j = jm1+1
 !
-! DETERMINE X INTERVAL
+! Determine X interval
 !
 im1 = intrvl (xx,x,m)
 i = im1+1
@@ -965,7 +965,7 @@ del2 = y(j)-yy
 dels = y(j)-y(jm1)
 if (sigmay .ne. 0.) go to 1
 !
-! PERFORM FOUR INTERPOLATIONS IN Y-DIRECTION
+! Perform four interpolations in Y-direction
 !
 zim1 = hermz(z(i-1,j-1),z(i-1,j),zp(i-1,j-1,1), &
 &zp(i-1,j,1))
@@ -993,7 +993,7 @@ zxxim1 = hermnz(zp(i-1,j-1,2),zp(i-1,j,2), &
 zxxi = hermnz(zp(i,j-1,2),zp(i,j,2), &
 &zp(i,j-1,3),zp(i,j,3),sigmay)
 !
-! PERFORM FINAL INTERPOLATION IN X-DIRECTION
+! Perform final interpolation in X-direction
 !
 2 del1 = xx-x(im1)
 del2 = x(i)-xx
@@ -1034,76 +1034,76 @@ real, intent(in) :: sigma
 !                            DEPARTMENT OF COMPUTER SCIENCES
 !                              UNIVERSITY OF TEXAS AT AUSTIN
 !
-! THIS SUBROUTINE MAPS VALUES ONTO A SURFACE AT EVERY POINT
-! OF A GRID EQUALLY SPACED IN BOTH X AND Y COORDINATES. THE
-! SURFACE INTERPOLATION IS PERFORMED USING A BI-SPLINE
-! UNDER TENSION. THE SUBROUTINE SURF1 OR NSURF1 SHOULD BE
-! CALLED EARLIER TO DETERMINE CERTAIN NECESSARY PARAMETERS.
+! This subroutine maps values onto a surface at every point
+! of a grid equally spaced in both X and Y coordinates. The
+! surface interpolation is performed using A BI-spline
+! under tension. The subroutine SURF1 or NSURF1 should be
+! called earlier to determine certain necessary parameters.
 !
-! ON INPUT--
+! On input--
 !
-!   DXMIN AND DXMAX CONTAIN THE LOWER AND UPPER LIMITS,
-!   RESPECTIVELY, OF THE X-COORDINATES OF THE SECOND GRID.
+!   DXMIN and DXMAX contain the lower and upper limits,
+!   respectively, of the X-coordinates of the second grid.
 !
-!   MD CONTAINS THE NUMBER OF GRID LINES IN THE X DIRECTION
+!   MD contains the number of grid lines in the X direction
 !   OF THE SECOND GRID (MD .GE. 1).
 !
-!   DYMIN AND DYMAX CONTAIN THE LOWER AND UPPER LIMITS,
-!   RESPECTIVELY, OF THE Y-COORDINATES OF THE SECOND GRID.
+!   DYMIN and DYMAX contain the lower and upper limits,
+!   respectively, of the Y-coordinates of the second grid.
 !
-!   ND CONTAINS THE NUMBER OF GRID LINES IN THE Y DIRECTION
+!   ND contains the number of grid lines in the Y direction
 !   OF THE SECOND GRID (ND .GE. 1).
 !
-!   IDZ CONTAINS THE ROW DIMENSION OF THE ARRAY DZ AS
-!   DECLARED IN THE CALLING PROGRAM.
+!   IDZ contains the row dimension of the array DZ as
+!   declared in the calling program.
 !
-!   M AND N CONTAIN THE NUMBER OF GRID LINES IN THE X- AND
-!   Y-DIRECTIONS, RESPECTIVELY, OF THE RECTANGULAR GRID
-!   WHICH SPECIFIED THE SURFACE.
+!   M and N contain the number of grid lines in the X- and
+!   Y-directions, respectively, of the rectangular grid
+!   which specified the surface.
 !
-!   X AND Y ARE ARRAYS CONTAINING THE X- AND Y-GRID VALUES,
-!   RESPECTIVELY, EACH IN INCREASING ORDER.
+!   X and Y are arrays containing the X- and Y-grid values,
+!   respectively, each in increasing order.
 !
-!   Z IS A MATRIX CONTAINING THE M * N FUNCTIONAL VALUES
-!   CORRESPONDING TO THE GRID VALUES (I. E. Z(I,J) IS THE
+!   Z is a matrix containing the M * N functional values
+!   corresponding to the grid values (I. E. Z(I,J) is the
 !   SURFACE VALUE AT THE POINT (X(I),Y(J)) FOR I = 1,...,M
 !   AND J = 1,...,N).
 !
-!   IZ CONTAINS THE ROW DIMENSION OF THE ARRAY Z AS DECLARED
-!   IN THE CALLING PROGRAM.
+!   IZ contains the row dimension of the array Z as declared
+!   in the calling program.
 !
-!   ZP IS AN ARRAY OF 3*M*N LOCATIONS STORED WITH THE
-!   VARIOUS SURFACE DERIVATIVE INFORMATION DETERMINED BY
+!   ZP is an array of 3*M*N locations stored with the
+!   various surface derivative information determined by
 !   SURF1.
 !
-!   WORK IS AN ARRAY OF 4*MD LOCATIONS TO BE USED INTERNALLY
-!   FOR WORKSPACE.
+!   Work is an array of 4*MD locations to be used internally
+!   for workspace.
 !
-! AND
+! And
 !
-!   SIGMA CONTAINS THE TENSION FACTOR (ITS SIGN IS IGNORED).
+!   Sigma contains the tension factor (its sign is ignored).
 !
-! THE PARAMETERS M, N, X, Y, Z, IZ, ZP, AND SIGMA SHOULD BE
-! INPUT UNALTERED FROM THE OUTPUT OF SURF1 OR NSURF1.
+! The parameters M, N, X, Y, Z, IZ, ZP, and sigma should be
+! input unaltered from the output of SURF1 or NSURF1.
 !
-! ON OUTPUT--
+! On output--
 !
-!   DZ CONTAINS THE MD BY ND ARRAY OF SURFACE VALUES
-!   INTERPOLATED AT THE POINTS OF THE SECOND GRID.
+!   DZ contains the MD by ND array of surface values
+!   interpolated at the points of the second grid.
 !
-! NONE OF THE INPUT PARAMETERS ARE ALTERED.
+! None of the input parameters are altered.
 !
 ! THIS FUNCTION REFERENCES PACKAGE MODULE SNHCSH.
 !
 !-----------------------------------------------------------
 !
-! DENORMALIZE TENSION FACTOR IN X AND Y DIRECTION
+! Denormalize tension factor in X and Y direction
 !
 sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
 sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
-! FIND INTERVALS OF SECOND X GRID WITH RESPECT TO ORIGINAL X
-! GRID
+! Find intervals of second X grid with respect to original X
+! grid
 !
 deltdx = 0.
 if (md .ge. 2) deltdx = (dxmax-dxmin)/float(md-1)
@@ -1141,8 +1141,8 @@ do 3 ii = 1,md
 &sinhp2+sigmax*coshp1*del2))/temp
 3 continue
 !
-! FIND INTERVALS OF SECOND Y GRID WITH RESPECT TO ORIGINAL Y
-! GRID AND PERFORM INTRPOLATION
+! Find intervals of second Y grid with respect to original Y
+! grid and perform intrpolation
 !
 deltdy = 0.
 if (nd .ge. 2) deltdy = (dymax-dymin)/float(nd-1)
@@ -1208,18 +1208,18 @@ integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
 integer :: iw, m
 !-----------------------------------------------------------------------
 !
-!         PIECEWISE POLYNOMIAL INTERPOLATION IN TWO VARIABLES
+!         Piecewise polynomial interpolation in two variables
 !
 !                          -----------------
 !
-!     THE PIECEWISE POLYNOMIALS CONSIDERED ARE TENSOR PRODUCTS OF
-!     B-SPLINES, HAVING THE FORM
+!     The piecewise polynomials considered are tensor products of
+!     B-splines, having the form
 !
 !                          NX   NY
 !              F(X,Y)  =  SUM  SUM  A   U (X) V (Y)
 !                         I=1  J=1   IJ  I     J
 !
-!     WHERE U  AND V  ARE ONE-DIMENSIONAL B-SPLINE BASIS FUNCTIONS.
+!     Where U  and V  are one-dimensional B-spline basis functions.
 !            I      J
 !
 !-----------------------------------------------------------------------
@@ -1233,7 +1233,7 @@ real, intent(inout) :: a(ka,ny), wk(l)
 m = nx*ny + 2*max0(kx*nx, ky*ny)
 if (l .lt. m) go to 120
 !
-!     COMPUTE THE COEFFICIENTS
+!     Compute the coefficients
 !
 iw = nx*ny + 1
 call bstrp1 (x, z, kz, nx, ny, tx, kx, wk, ny, wk(iw), iflag)
@@ -1242,7 +1242,7 @@ call bstrp1 (y, wk, ny, ny, nx, ty, ky, a, ka, wk(iw), iflag)
 if (iflag .ne. 0) go to 110
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 iflag = 1
 return
@@ -1258,9 +1258,9 @@ integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
 integer :: i, j, mp1
 !-------------------------------------------------------------------
-!     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
-!     N SETS OF DATA STORED IN THE COLUMNS OF THE ARRAY Z. THE
-!     COEFFICIENTS ARE STORED IN THE ROWS OF A.
+!     BSTRP1 computes B-spline interpolation coefficients for
+!     N sets of data stored in the columns of the array Z. The
+!     coefficients are stored in the rows of A.
 !
 !     IT IS ASSUMED THAT KZ .GE. M AND KA .GE. N.
 !-------------------------------------------------------------------
@@ -1269,7 +1269,7 @@ integer :: i, j, mp1
 real, intent(in) :: x(m), z(kz,n), t(*)
 real, intent(inout) :: a(ka,m), work(*)
 !
-!     FIRST DATA SET
+!     First data set
 !
 iflag = 1
 mp1 = m + 1
@@ -1281,7 +1281,7 @@ do i = 1,m
 end do
 if (n .eq. 1) return
 !
-!     REMAINING DATA SETS
+!     Remaining data sets
 !
 do j = 2,n
    call bstrp (x, z(1,j), t, m, k, work(1), work(mp1), iflag)
@@ -1300,19 +1300,19 @@ integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
 integer :: ierr, iq, iw, m
 !-----------------------------------------------------------------------
 !
-!             WEIGHTED LEAST SQUARES FITTING OF PIECEWISE
-!                    POLYNOMIALS IN TWO VARIABLES
+!             Weighted least squares fitting of piecewise
+!                    polynomials in two variables
 !
 !                          ----------------
 !
-!     THE PIECEWISE POLYNOMIALS CONSIDERED ARE TENSOR PRODUCTS OF
-!     B-SPLINES, HAVING THE FORM
+!     The piecewise polynomials considered are tensor products of
+!     B-splines, having the form
 !
 !                          NX   NY
 !              F(X,Y)  =  SUM  SUM  A   U (X) V (Y)
 !                         I=1  J=1   IJ  I     J
 !
-!     WHERE U  AND V  ARE ONE-DIMENSIONAL B-SPLINE BASIS FUNCTIONS.
+!     Where U  and V  are one-dimensional B-spline basis functions.
 !            I      J
 !
 !-----------------------------------------------------------------------
@@ -1326,7 +1326,7 @@ real, intent(inout) :: a(ka,ny), wk(l)
 m = nx*my + max0((kx + 1)*nx,(ky + 1)*ny)
 if (l .lt. m) go to 120
 !
-!     COMPUTE THE COEFFICIENTS
+!     Compute the coefficients
 !
 iw = nx*my + 1
 iq = iw + nx
@@ -1341,7 +1341,7 @@ if (iflag .lt. 0) go to 110
 iflag = max0(ierr,iflag)
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 100 iflag = -1
 return
@@ -1361,8 +1361,8 @@ integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 !-----------------------------------------------------------------------
 !
-!     BSLSQ1 PRODUCES THE B-SPLINE COEFFICIENTS A(J,1),...,A(J,N)
-!     OF THE PIECEWISE POLYNOMIAL P(X) OF ORDER K WITH KNOTS T(I)
+!     BSLSQ1 produces the B-spline coefficients A(J,1),...,A(J,N)
+!     of the piecewise polynomial P(X) of order K with knots T(I)
 !     (I = 1,...,N+K) WHICH MINIMIZES
 !
 !              SUM (WGT(L)*(P(TAU(L)) - Z(L,J))**2)
@@ -1370,13 +1370,13 @@ real :: dw
 !
 !     FOR J = 1,...,M.
 !
-!     INPUT ...
+!     Input ...
 !
 !       TAU   ARRAY OF LENGTH NTAU CONTAINING DATA POINT ABSCISSAE.
 !       WGT   ARRAY OF LENGTH NTAU CONTAINING THE WEIGHTS.
 !       NTAU  NUMBER OF DATA POINTS TO BE FITTED (NTAU .GE. N).
 !       Z     MATRIX CONTAINING M SETS OF ORDINATES TO BE FITTED.
-!             EACH SET OF NTAU ORDINATES IS A COLUMN OF Z.
+!             Each set of NTAU ordinates is a column of Z.
 !       KZ    NUMBER OF ROWS OF Z IN THE CALLING PROGRAM.
 !             IT IS ASSUMED THAT KZ .GE. NTAU.
 !       M     NUMBER OF SETS OF ORDINATES TO BE FITTED.
@@ -1386,19 +1386,19 @@ real :: dw
 !       KA    NUMBER OF ROWS OF A IN THE CALLING PROGRAM.
 !             IT IS ASSUMED THAT KA .GE. M.
 !
-!     OUTPUT ...
+!     Output ...
 !
 !       A     MATRIX CONTAINING THE M SETS OF B-SPLINE COEFFICIENTS
-!             OF THE L2 APPROXIMATIONS. EACH SET OF N COEFFICIENTS
-!             IS A ROW OF A.
+!             of the L2 approximations. Each set of N coefficients
+!             is a row of A.
 !
-!       IERR  INTEGER REPORTING THE STATUS OF THE RESULTS ...
+!       IERR  integer reporting the status of the results ...
 !
-!             0  THE COEFFICIENT MATRIX IS NONSIGULAR. THE
-!                UNIQUE LEAST SQUARES SOLUTION WAS OBTAINED.
-!             1  THE COEFFICIENT MATRIX IS SINGULAR. A
-!                LEAST SQUARES SOLUTION WAS OBTAINED.
-!            -1  INPUT ERRORS WERE DETECTED.
+!             0  The coefficient matrix is nonsigular. The
+!                unique least squares solution was obtained.
+!             1  The coefficient matrix is singular. A
+!                least squares solution was obtained.
+!            -1  Input errors were detected.
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
@@ -1453,13 +1453,13 @@ do l = 1,ntau
    end do
 end do
 !
-!        SOLVE THE NORMAL EQUATIONS
+!        Solve the normal equations
 !
 call bchfac (q, k, n, wk, ierr)
 call bchsv1 (q, k, n, a, ka, m)
 return
 !
-!             ERROR RETURN
+!             Error return
 !
 100 ierr = -1
 return
@@ -1474,31 +1474,31 @@ real :: t
 !
 !     BCHSV1 SOLVES M LINEAR SYSTEMS C*X = B  (I = 1,...,M), WHERE
 !                                       I   I
-!     EACH B  IS A VECTOR STORED IN THE I-TH ROW OF A MATRIX B.
+!     each B  is a vector stored in the I-TH row of a matrix B.
 !           I
 !                       ------------------
 !
-!     INPUT ...
+!     Input ...
 !
 !        N   THE ORDER OF THE MATRIX C
-!        NB  THE BANDWIDTH OF C
+!        NB  the bandwidth of C
 !        W   THE CHOLESKY FACTORIZATION OF THE BANDED SYMMETRIC
-!            POSITIVE DEFINITE MATRIX C OBTAINED BY THE ROUTINE
+!            positive definite matrix C obtained by the routine
 !            BCHFAC.
 !        B   MATRIX WHOSE ROWS ARE THE VECTORS TO BE SOLVED FOR
-!            IN THE M LINEAR SYSTEMS OF EQUATIONS.
-!        KB  THE NUMBER OF ROWS OF B SPECIFIED IN THE CALLING
+!            in the M linear systems of equations.
+!        KB  the number of rows of B specified in the calling
 !            PROGRAM. IT IS ASSUMED THAT KB .GE. M.
 !        M   NUMBER OF LINEAR SYSTEMS TO BE SOLVED.
 !
-!     OUTPUT ...
+!     Output ...
 !
 !        B   MATRIX WHOSE ROWS ARE THE SOLUTIONS X  OF THE M
 !            LINEAR SYSTEMS OF EQUATIONS.         I
 !
 !                                       T
 !     NOTE.  THE FACTORIZATION C = L*D*L  IS USED, WHERE L IS A
-!     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
+!     unit lower triangular matrix and D a diagonal matrix.
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: w(nb,n)
@@ -1556,14 +1556,14 @@ integer :: i, iw, j, l, m
 integer :: intrvl
 !-----------------------------------------------------------------------
 !
-!                EVALUATION AND PARTIAL DIFFERENTIATION
-!                      OF A PIECEWISE POLYNOMIAL
+!                Evaluation and partial differentiation
+!                      of a piecewise polynomial
 !
 !                            NX   NY
 !                F(X,Y)  =  SUM  SUM  A   U (X) V (Y)
 !                           I=1  J=1   IJ  I     J
 !
-!     WHERE U  AND V  ARE ONE-DIMENSIONAL B-SPLINE BASIS FUNCTIONS.
+!     Where U  and V  are one-dimensional B-spline basis functions.
 !            I      J
 !-----------------------------------------------------------------------
 !     REAL TX(NX + KX), TY(NY + KY), WK(KY + 3*MAX(KX,KY))
@@ -1610,71 +1610,71 @@ real :: x(n), y(n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE CREATES A THIESSEN TRIANGULATION OF N
-! ARBITRARILY SPACED POINTS IN THE PLANE REFERRED TO AS
-! NODES.  THE TRIANGULATION IS OPTIMAL IN THE SENSE THAT IT
-! IS AS NEARLY EQUIANGULAR AS POSSIBLE.  TRMESH IS PART OF
-! AN INTERPOLATION PACKAGE WHICH ALSO PROVIDES SUBROUTINES
-! TO REORDER THE NODES, ADD A NEW NODE, DELETE AN ARC, PLOT
-! THE MESH, AND PRINT THE DATA STRUCTURE.
-!   UNLESS THE NODES ARE ALREADY ORDERED IN SOME REASONABLE
-! FASHION, THEY SHOULD BE REORDERED BY SUBROUTINE REORDR FOR
-! INCREASED EFFICIENCY BEFORE CALLING TRMESH.
+!   This routine creates a thiessen triangulation of N
+! arbitrarily spaced points in the plane referred to as
+! nodes.  The triangulation is optimal in the sense that it
+! is as nearly equiangular as possible.  TRMESH is part of
+! an interpolation package which also provides subroutines
+! to reorder the nodes, add a new node, delete an arc, plot
+! the mesh, and print the data structure.
+!   Unless the nodes are already ordered in some reasonable
+! fashion, they should be reordered by subroutine reordr for
+! increased efficiency before calling TRMESH.
 !
 ! INPUT PARAMETERS -     N - NUMBER OF NODES IN THE MESH.
 !                            N .GE. 3.
 !
-!                      X,Y - N-VECTORS OF COORDINATES.
-!                            (X(I),Y(I)) DEFINES NODE I.
+!                      X,Y - N-vectors of coordinates.
+!                            (X(I),Y(I)) defines node I.
 !
 !                     IADJ - VECTOR OF LENGTH .GE. 6*N-9.
 !
 !                     IEND - VECTOR OF LENGTH .GE. N.
 !
-! N, X, AND Y ARE NOT ALTERED BY THIS ROUTINE.
+! N, X, and Y are not altered by this routine.
 !
-! OUTPUT PARAMETERS - IADJ - ADJACENCY LISTS OF NEIGHBORS IN
-!                            COUNTERCLOCKWISE ORDER.  THE
-!                            LIST FOR NODE I+1 FOLLOWS THAT
-!                            FOR NODE I WHERE X AND Y DEFINE
-!                            THE ORDER.  THE VALUE 0 DENOTES
-!                            THE BOUNDARY (OR A PSEUDO-NODE
-!                            AT INFINITY) AND IS ALWAYS THE
-!                            LAST NEIGHBOR OF A BOUNDARY
-!                            NODE.  IADJ IS UNCHANGED IF IER
+! Output parameters - IADJ - adjacency lists of neighbors in
+!                            counterclockwise order.  The
+!                            list for node I+1 follows that
+!                            for node I where X and Y define
+!                            the order.  The value 0 denotes
+!                            the boundary (or a pseudo-node
+!                            at infinity) and is always the
+!                            last neighbor of a boundary
+!                            node.  IADJ is unchanged if ier
 !                            .NE. 0.
 !
-!                     IEND - POINTERS TO THE ENDS OF
-!                            ADJACENCY LISTS (SETS OF
-!                            NEIGHBORS) IN IADJ.  THE
-!                            NEIGHBORS OF NODE 1 BEGIN IN
+!                     IEND - pointers to the ends of
+!                            adjacency lists (sets of
+!                            neighbors) in IADJ.  The
+!                            neighbors of node 1 begin in
 !                            IADJ(1).  FOR K .GT. 1, THE
-!                            NEIGHBORS OF NODE K BEGIN IN
-!                            IADJ(IEND(K-1)+1) AND K HAS
+!                            neighbors of node K begin in
+!                            IADJ(IEND(K-1)+1) and K has
 !                            IEND(K) - IEND(K-1) NEIGHBORS
-!                            INCLUDING (POSSIBLY) THE
+!                            including (possibly) the
 !                            BOUNDARY.  IADJ(IEND(K)) .EQ. 0
-!                            IFF NODE K IS ON THE BOUNDARY.
+!                            IFF node K is on the boundary.
 !                            IEND IS UNCHANGED IF IER = 1.
 !                            IF IER = 2 IEND CONTAINS THE
-!                            INDICES OF A SEQUENCE OF N
-!                            NODES ORDERED FROM LEFT TO
-!                            RIGHT WHERE LEFT AND RIGHT ARE
-!                            DEFINED BY ASSUMING NODE 1 IS
-!                            TO THE LEFT OF NODE 2.
+!                            indices of a sequence of N
+!                            nodes ordered from left to
+!                            right where left and right are
+!                            defined by assuming node 1 is
+!                            to the left of node 2.
 !
-!                      IER - ERROR INDICATOR
+!                      Ier - error indicator
 !                            IER = 0 IF NO ERRORS WERE
-!                                    ENCOUNTERED.
+!                                    encountered.
 !                            IER = 1 IF N .LT. 3.
 !                            IER = 2 IF N .GE. 3 AND ALL
-!                                    NODES ARE COLLINEAR.
+!                                    nodes are collinear.
 !
-! MODULES REFERENCED BY TRMESH - SHIFTD, ADNODE, TRFIND,
+! Modules referenced by TRMESH - SHIFTD, ADNODE, TRFIND,
 !                                INTADD, BDYADD, SWPTST,
 !                                SWAPD, TINDX
 !
@@ -1684,31 +1684,31 @@ integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
 &kmi, i, kmin
 real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =          LOCAL COPY OF N
 ! K =           NODE (INDEX) TO BE INSERTED INTO IEND
 ! KM1 =         K-1 - (VARIABLE) LENGTH OF IEND
 ! NL,NR =       IEND(1), IEND(KM1) -- LEFTMOST AND RIGHTMOST
-!                 NODES IN IEND AS VIEWED FROM THE RIGHT OF
-!                 1-2 WHEN IEND CONTAINS THE INITIAL ORDERED
-!                 SET OF NODAL INDICES
+!                 nodes in IEND as viewed from the right of
+!                 1-2 when IEND contains the initial ordered
+!                 set of nodal indices
 ! XL,YL,XR,YR = X AND Y COORDINATES OF NL AND NR
 ! DXR,DYR =     XR-XL, YR-YL
 ! XK,YK =       X AND Y COORDINATES OF NODE K
 ! DXK,DYK =     XK-XL, YK-YL
 ! CPROD =       VECTOR CROSS PRODUCT OF NL-NR AND NL-K --
-!                 USED TO DETERMINE THE POSITION OF NODE K
-!                 WITH RESPECT TO THE LINE DEFINED BY THE
-!                 NODES IN IEND
+!                 used to determine the position of node K
+!                 with respect to the line defined by the
+!                 nodes in IEND
 ! SPROD =       SCALAR PRODUCT USED TO DETERMINE THE
-!                 INTERVAL CONTAINING NODE K WHEN K IS ON
-!                 THE LINE DEFINED BY THE NODES IN IEND
+!                 interval containing node K when K is on
+!                 the line defined by the nodes in IEND
 ! IND,INDX =    INDICES FOR IEND AND IADJ, RESPECTIVELY
 ! N0,ITEMP =    TEMPORARY NODES (INDICES)
 ! IERR =        DUMMY PARAMETER FOR CALL TO ADNODE
 ! KM1D2,KMI,I = KM1/2, K-I, DO-LOOP INDEX -- USED IN IEND
-!                 REORDERING LOOP
+!                 reordering loop
 ! KMIN =        FIRST NODE INDEX SENT TO ADNODE
 !
 nn = n
@@ -1716,7 +1716,7 @@ ier = 1
 if (nn .lt. 3) return
 ier = 0
 !
-! INITIALIZE IEND, NL, NR, AND K
+! Initialize IEND, NL, NR, and K
 !
 iend(1) = 1
 iend(2) = 2
@@ -1726,12 +1726,12 @@ xr = x(2)
 yr = y(2)
 k = 2
 !
-! BEGIN LOOP ON NODES 3,4,...
+! Begin loop on nodes 3,4,...
 !
 1 dxr = xr-xl
 dyr = yr-yl
 !
-! NEXT LOOP BEGINS HERE IF NL AND NR ARE UNCHANGED
+! Next loop begins here if NL and NR are unchanged
 !
 2 if (k .eq. nn) go to 13
 km1 = k
@@ -1744,14 +1744,14 @@ cprod = dxr*dyk - dxk*dyr
 if (cprod .gt. 0.) go to 6
 if (cprod .lt. 0.) go to 8
 !
-! NODE K LIES ON THE LINE CONTAINING NODES 1,2,...,K-1.
-!   SET SPROD TO (NL-NR,NL-K).
+! Node K lies on the line containing nodes 1,2,...,K-1.
+!   Set SPROD to (NL-NR,NL-K).
 !
 sprod = dxr*dxk + dyr*dyk
 if (sprod .gt. 0.) go to 3
 !
-! NODE K IS TO THE LEFT OF NL.  INSERT K AS THE FIRST
-!   (LEFTMOST) NODE IN IEND AND SET NL TO K.
+! Node K is to the left of NL.  Insert K as the first
+!   (leftmost) node in IEND and set NL to K.
 !
 call shiftd(1,km1,1, iend )
 iend(1) = k
@@ -1759,9 +1759,9 @@ xl = xk
 yl = yk
 go to 1
 !
-! NODE K IS TO THE RIGHT OF NL.  FIND THE LEFTMOST NODE
-!   N0 WHICH LIES TO THE RIGHT OF K.
-!   SET SPROD TO (N0-NL,N0-K).
+! Node K is to the right of NL.  Find the leftmost node
+!   N0 which lies to the right of K.
+!   Set SPROD to (N0-NL,N0-K).
 !
 3 do 4 ind = 2,km1
   n0 = iend(ind)
@@ -1770,23 +1770,23 @@ go to 1
   if (sprod .ge. 0.) go to 5
 4 continue
 !
-! NODE K IS TO THE RIGHT OF NR.  INSERT K AS THE LAST
-!   (RIGHTMOST) NODE IN IEND AND SET NR TO K.
+! Node K is to the right of NR.  Insert K as the last
+!   (rightmost) node in IEND and set NR to K.
 !
 iend(k) = k
 xr = xk
 yr = yk
 go to 1
 !
-! NODE K LIES BETWEEN IEND(IND-1) AND IEND(IND).  INSERT K
+! Node K lies between IEND(IND-1) and IEND(IND).  Insert K
 !   IN IEND.
 !
 5 call shiftd(ind,km1,1, iend )
 iend(ind) = k
 go to 2
 !
-! NODE K IS TO THE LEFT OF NL-NR.  REORDER IEND SO THAT NL
-!   IS THE LEFTMOST NODE AS VIEWED FROM K.
+! Node K is to the left of NL-NR.  Reorder IEND so that NL
+!   is the leftmost node as viewed from K.
 !
 6 km1d2 = km1/2
 do i = 1,km1d2
@@ -1796,15 +1796,15 @@ do i = 1,km1d2
   iend(kmi) = itemp
   end do
 !
-! NODE K IS TO THE RIGHT OF NL-NR.  CREATE A TRIANGULATION
-!   CONSISTING OF NODES 1,2,...,K.
+! Node K is to the right of NL-NR.  Create a triangulation
+!   consisting of nodes 1,2,...,K.
 !
 8 nl = iend(1)
 nr = iend(km1)
 !
-! CREATE THE ADJACENCY LISTS FOR THE FIRST K-1 NODES.
-!   INSERT NEIGHBORS IN REVERSE ORDER.  EACH NODE HAS FOUR
-!   NEIGHBORS EXCEPT NL AND NR WHICH HAVE THREE.
+! Create the adjacency lists for the first K-1 nodes.
+!   Insert neighbors in reverse order.  Each node has four
+!   neighbors except NL and NR which have three.
 !
 do 9 ind = 1,km1
   n0 = iend(ind)
@@ -1820,7 +1820,7 @@ do 9 ind = 1,km1
   iadj(indx-1) = iend(ind-1)
 9 continue
 !
-! CREATE THE ADJACENCY LIST FOR NODE K
+! Create the adjacency list for node K
 !
 indx = 5*km1 - 1
 iadj(indx) = 0
@@ -1829,7 +1829,7 @@ do ind = 1,km1
   iadj(indx) = iend(ind)
   end do
 !
-! REPLACE IEND ELEMENTS WITH POINTERS TO IADJ
+! Replace IEND elements with pointers to IADJ
 !
 indx = 0
 do ind = 1,km1
@@ -1840,7 +1840,7 @@ do ind = 1,km1
 indx = indx + k
 iend(k) = indx
 !
-! ADD THE REMAINING NODES TO THE TRIANGULATION
+! Add the remaining nodes to the triangulation
 !
 if (k .eq. nn) return
 kmin = k+1
@@ -1849,7 +1849,7 @@ do k = kmin,nn
   end do
 return
 !
-! ALL NODES ARE COLLINEAR
+! All nodes are collinear
 !
 13 ier = 2
 return
@@ -1866,48 +1866,48 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE ADDS NODE KK TO A TRIANGULATION OF A SET
-! OF POINTS IN THE PLANE PRODUCING A NEW TRIANGULATION.  A
-! SEQUENCE OF EDGE SWAPS IS THEN APPLIED TO THE MESH,
-! RESULTING IN AN OPTIMAL TRIANGULATION.  ADNODE IS PART
-! OF AN INTERPOLATION PACKAGE WHICH ALSO PROVIDES ROUTINES
-! TO INITIALIZE THE DATA STRUCTURE, PLOT THE MESH, AND
-! DELETE ARCS.
+!   This routine adds node KK to a triangulation of a set
+! of points in the plane producing a new triangulation.  A
+! sequence of edge swaps is then applied to the mesh,
+! resulting in an optimal triangulation.  ADNODE is part
+! of an interpolation package which also provides routines
+! to initialize the data structure, plot the mesh, and
+! delete arcs.
 !
 ! INPUT PARAMETERS -   KK - INDEX OF THE NODE TO BE ADDED
 !                           TO THE MESH.  KK .GE. 4.
 !
-!                     X,Y - VECTORS OF COORDINATES OF THE
-!                           NODES IN THE MESH.  (X(I),Y(I))
+!                     X,Y - vectors of coordinates of the
+!                           nodes in the mesh.  (X(I),Y(I))
 !                           DEFINES NODE I FOR I = 1,..,KK.
 !
-!                    IADJ - SET OF ADJACENCY LISTS OF NODES
+!                    IADJ - set of adjacency lists of nodes
 !                           1,..,KK-1.
 !
-!                    IEND - POINTERS TO THE ENDS OF
-!                           ADJACENCY LISTS IN IADJ FOR
-!                           EACH NODE IN THE MESH.
+!                    IEND - pointers to the ends of
+!                           adjacency lists in IADJ for
+!                           each node in the mesh.
 !
-! IADJ AND IEND MAY BE CREATED BY TRMESH.
+! IADJ and IEND may be created by TRMESH.
 !
-! KK, X, AND Y ARE NOT ALTERED BY THIS ROUTINE.
+! KK, X, and Y are not altered by this routine.
 !
-! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
-!                                 OF NODE KK AS THE LAST
-!                                 ENTRY.
+! Output parameters - IADJ,IEND - updated with the addition
+!                                 of node KK as the last
+!                                 entry.
 !
-!                           IER - ERROR INDICATOR
+!                           Ier - error indicator
 !                                 IER = 0 IF NO ERRORS
-!                                         WERE ENCOUNTERED.
+!                                         were encountered.
 !                                 IER = 1 IF ALL NODES
-!                                         (INCLUDING KK) ARE
-!                                         COLLINEAR.
+!                                         (including KK) are
+!                                         collinear.
 !
-! MODULES REFERENCED BY ADNODE - TRFIND, INTADD, BDYADD,
+! Modules referenced by ADNODE - TRFIND, INTADD, BDYADD,
 !                                SHIFTD, TINDX, SWPTST,
 !                                SWAPD
 !
@@ -1917,7 +1917,7 @@ integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
 &in1, indk1, ind2f, ind21
 real :: xk, yk
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! K =        LOCAL COPY OF KK
 ! KM1 =      K - 1
@@ -1926,10 +1926,10 @@ real :: xk, yk
 ! INDKL =    IADJ INDEX OF THE LAST NEIGHBOR OF K
 ! NABOR1 =   FIRST NEIGHBOR OF K BEFORE ANY SWAPS OCCUR
 ! IO1,IO2 =  ADJACENT NEIGHBORS OF K DEFINING AN ARC TO
-!              BE TESTED FOR A SWAP
+!              be tested for a swap
 ! IN1 =      VERTEX OPPOSITE K -- FIRST NEIGHBOR OF IO2
-!              WHICH PRECEDES IO1.  IN1,IO1,IO2 ARE IN
-!              COUNTERCLOCKWISE ORDER.
+!              which precedes IO1.  IN1,IO1,IO2 are in
+!              counterclockwise order.
 ! INDK1 =    INDEX OF IO1 IN THE ADJACENCY LIST FOR K
 ! IND2F =    INDEX OF THE FIRST NEIGHBOR OF IO2
 ! IND21 =    INDEX OF IO1 IN THE ADJACENCY LIST FOR IO2
@@ -1938,20 +1938,20 @@ real :: xk, yk
 ier = 0
 k = kk
 !
-! INITIALIZATION
+! Initialization
 !
 km1 = k - 1
 xk = x(k)
 yk = y(k)
 !
-! ADD NODE K TO THE MESH
+! Add node K to the mesh
 !
 call trfind(km1,xk,yk,x,y,iadj,iend, i1,i2,i3)
 if (i1 .eq. 0) go to 5
 if (i3 .eq. 0) call bdyadd(k,i1,i2, iadj,iend )
 if (i3 .ne. 0) call intadd(k,i1,i2,i3, iadj,iend )
 !
-! INITIALIZE VARIABLES FOR OPTIMIZATION OF THE MESH
+! Initialize variables for optimization of the mesh
 !
 indkf = iend(km1) + 1
 indkl = iend(k)
@@ -1960,7 +1960,7 @@ io2 = nabor1
 indk1 = indkf + 1
 io1 = iadj(indk1)
 !
-! BEGIN LOOP -- FIND THE VERTEX OPPOSITE K
+! Begin loop -- find the vertex opposite K
 !
 1 ind2f = 1
 if (io2 .ne. 1) ind2f = iend(io2-1) + 1
@@ -1969,15 +1969,15 @@ if (ind2f .eq. ind21) go to 2
 in1 = iadj(ind21-1)
 go to 3
 !
-! IN1 IS THE LAST NEIGHBOR OF IO2
+! IN1 is the last neighbor of IO2
 !
 2 ind21 = iend(io2)
 in1 = iadj(ind21)
 if (in1 .eq. 0) go to 4
 !
-! SWAP TEST -- IF A SWAP OCCURS, TWO NEW ARCS ARE OPPOSITE K
-!              AND MUST BE TESTED.  INDK1 AND INDKF MUST BE
-!              DECREMENTED.
+! Swap test -- if a swap occurs, two new arcs are opposite K
+!              and must be tested.  INDK1 and INDKF must be
+!              decremented.
 !
 3 if ( .not. swptst(in1,k,io1,io2,x,y) ) go to 4
 call swapd (in1,k,io1,io2, iadj,iend)
@@ -1986,8 +1986,8 @@ indk1 = indk1 - 1
 indkf = indkf - 1
 go to 1
 !
-! NO SWAP OCCURRED.  RESET IO2 AND IO1, AND TEST FOR
-!   TERMINATION.
+! No swap occurred.  Reset IO2 and IO1, and test for
+!   termination.
 !
 4 if (io1 .eq. nabor1) return
 io2 = io1
@@ -1997,7 +1997,7 @@ io1 = iadj(indk1)
 if (io1 .ne. 0) go to 1
 return
 !
-! ALL NODES ARE COLLINEAR
+! All nodes are collinear
 !
 5 ier = 1
 return
@@ -2010,68 +2010,68 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE ADDS A BOUNDARY NODE TO A TRIANGULATION
-! OF A SET OF KK-1 POINTS IN THE PLANE.  IADJ AND IEND ARE
-! UPDATED WITH THE INSERTION OF NODE KK.
+!   This routine adds a boundary node to a triangulation
+! of a set of KK-1 points in the plane.  IADJ and IEND are
+! updated with the insertion of node KK.
 !
 ! INPUT PARAMETERS -   KK - INDEX OF AN EXTERIOR NODE TO BE
 !                           ADDED.  KK .GE. 4.
 !
-!                      I1 - FIRST (RIGHTMOST AS VIEWED FROM
-!                           KK) BOUNDARY NODE IN THE MESH
-!                           WHICH IS VISIBLE FROM KK - THE
-!                           LINE SEGMENT KK-I1 INTERSECTS
-!                           NO ARCS.
+!                      I1 - first (rightmost as viewed from
+!                           KK) boundary node in the mesh
+!                           which is visible from KK - the
+!                           line segment KK-I1 intersects
+!                           no arcs.
 !
-!                      I2 - LAST (LEFTMOST) BOUNDARY NODE
-!                           WHICH IS VISIBLE FROM KK.
+!                      I2 - last (leftmost) boundary node
+!                           which is visible from KK.
 !
-!                    IADJ - SET OF ADJACENCY LISTS OF NODES
-!                           IN THE MESH.
+!                    IADJ - set of adjacency lists of nodes
+!                           in the mesh.
 !
-!                    IEND - POINTERS TO THE ENDS OF
-!                           ADJACENCY LISTS IN IADJ FOR
-!                           EACH NODE IN THE MESH.
+!                    IEND - pointers to the ends of
+!                           adjacency lists in IADJ for
+!                           each node in the mesh.
 !
-!   IADJ AND IEND MAY BE CREATED BY TRMESH AND MUST CONTAIN
-! THE VERTICES I1 AND I2.  I1 AND I2 MAY BE DETERMINED BY
+!   IADJ and IEND may be created by TRMESH and must contain
+! the vertices I1 and I2.  I1 and I2 may be determined by
 ! TRFIND.
 !
-! KK, I1, AND I2 ARE NOT ALTERED BY THIS ROUTINE.
+! KK, I1, and I2 are not altered by this routine.
 !
-! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
-!                                 OF NODE KK AS THE LAST
-!                                 ENTRY.  NODE KK WILL BE
-!                                 CONNECTED TO I1, I2, AND
-!                                 ALL BOUNDARY NODES BETWEEN
-!                                 THEM.  NO OPTIMIZATION OF
-!                                 THE MESH IS PERFORMED.
+! Output parameters - IADJ,IEND - updated with the addition
+!                                 of node KK as the last
+!                                 entry.  Node KK will be
+!                                 connected to I1, I2, and
+!                                 all boundary nodes between
+!                                 them.  No optimization of
+!                                 the mesh is performed.
 !
-! MODULE REFERENCED BY BDYADD - SHIFTD
+! Module referenced by BDYADD - SHIFTD
 !
-! INTRINSIC FUNCTIONS CALLED BY BDYADD - MIN0, MAX0
+! Intrinsic functions called by BDYADD - MIN0, MAX0
 !
 !***********************************************************
 !
 integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
 &kend, next, indx
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! K =            LOCAL COPY OF KK
 ! KM1 =          K - 1
 ! NRIGHT,NLEFT = LOCAL COPIES OF I1, I2
 ! NF,NL =        INDICES OF IADJ BOUNDING THE PORTION OF THE
-!                  ARRAY TO BE SHIFTED
+!                  array to be shifted
 ! N1 =           IADJ INDEX OF THE FIRST NEIGHBOR OF NLEFT
 ! N2 =           IADJ INDEX OF THE LAST NEIGHBOR OF NRIGHT
 ! I =            DO-LOOP INDEX
 ! IMIN,IMAX =    BOUNDS ON DO-LOOP INDEX -- FIRST AND LAST
-!                  ELEMENTS OF IEND TO BE INCREMENTED
+!                  elements of IEND to be incremented
 ! KEND =         POINTER TO THE LAST NEIGHBOR OF K IN IADJ
 ! NEXT =         NEXT BOUNDARY NODE TO BE CONNECTED TO KK
 ! INDX =         INDEX FOR IADJ
@@ -2081,7 +2081,7 @@ km1 = k - 1
 nright = i1
 nleft = i2
 !
-! INITIALIZE VARIABLES
+! Initialize variables
 !
 nl = iend(km1)
 n1 = 1
@@ -2089,7 +2089,7 @@ if (nleft .ne. 1) n1 = iend(nleft-1) + 1
 n2 = iend(nright)
 nf = max0(n1,n2)
 !
-! INSERT K AS A NEIGHBOR OF MAX(NRIGHT,NLEFT)
+! Insert K as a neighbor of MAX(NRIGHT,NLEFT)
 !
 call shiftd(nf,nl,2, iadj )
 iadj(nf+1) = k
@@ -2098,7 +2098,7 @@ do 1 i = imin,km1
   iend(i) = iend(i) + 2
 1 continue
 !
-! INITIALIZE KEND AND INSERT K AS A NEIGHBOR OF
+! Initialize KEND and insert K as a neighbor of
 !   MIN(NRIGHT,NLEFT)
 !
 kend = nl + 3
@@ -2112,18 +2112,18 @@ do 2 i = imin,imax
   iend(i) = iend(i) + 1
 2 continue
 !
-! INSERT NRIGHT AS THE FIRST NEIGHBOR OF K
+! Insert NRIGHT as the first neighbor of K
 !
 iadj(kend) = nright
 !
-! INITIALIZE INDX FOR LOOP ON BOUNDARY NODES BETWEEN NRIGHT
+! Initialize INDX for loop on boundary nodes between NRIGHT
 !   AND NLEFT
 !
 indx = iend(nright) - 2
 3 next = iadj(indx)
 if (next .eq. nleft) go to 4
 !
-! CONNECT NEXT AND K
+! Connect next and K
 !
 kend = kend + 1
 iadj(kend) = next
@@ -2132,7 +2132,7 @@ iadj(indx) = k
 indx = indx - 1
 go to 3
 !
-! INSERT NLEFT AND 0 AS THE LAST NEIGHBORS OF K
+! Insert NLEFT and 0 as the last neighbors of K
 !
 4 iadj(kend+1) = nleft
 kend = kend + 2
@@ -2148,79 +2148,79 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE ADDS AN INTERIOR NODE TO A TRIANGULATION
-! OF A SET OF KK-1 POINTS IN THE PLANE.  IADJ AND IEND ARE
-! UPDATED WITH THE INSERTION OF NODE KK IN THE TRIANGLE
-! WHOSE VERTICES ARE I1, I2, AND I3.
+!   This routine adds an interior node to a triangulation
+! of a set of KK-1 points in the plane.  IADJ and IEND are
+! updated with the insertion of node KK in the triangle
+! whose vertices are I1, I2, and I3.
 !
 ! INPUT PARAMETERS -        KK - INDEX OF NODE TO BE
 !                                INSERTED.  KK .GE. 4.
 !
-!                     I1,I2,I3 - INDICES OF THE VERTICES OF
-!                                A TRIANGLE CONTAINING NODE
-!                                KK -- IN COUNTERCLOCKWISE
-!                                ORDER.
+!                     I1,I2,I3 - indices of the vertices of
+!                                a triangle containing node
+!                                KK -- in counterclockwise
+!                                order.
 !
-!                         IADJ - SET OF ADJACENCY LISTS
-!                                OF NODES IN THE MESH.
+!                         IADJ - set of adjacency lists
+!                                of nodes in the mesh.
 !
-!                         IEND - POINTERS TO THE ENDS OF
-!                                ADJACENCY LISTS IN IADJ FOR
-!                                EACH NODE IN THE MESH.
+!                         IEND - pointers to the ends of
+!                                adjacency lists in IADJ for
+!                                each node in the mesh.
 !
-!   IADJ AND IEND MAY BE CREATED BY TRMESH AND MUST CONTAIN
-! THE VERTICES I1, I2, AND I3.  I1,I2,I3 MAY BE DETERMINED
+!   IADJ and IEND may be created by TRMESH and must contain
+! the vertices I1, I2, and I3.  I1,I2,I3 may be determined
 ! BY TRFIND.
 !
-! KK, I1, I2, AND I3 ARE NOT ALTERED BY THIS ROUTINE.
+! KK, I1, I2, and I3 are not altered by this routine.
 !
-! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
-!                                 OF NODE KK AS THE LAST
-!                                 ENTRY.  NODE KK WILL BE
-!                                 CONNECTED TO NODES I1, I2,
-!                                 AND I3.  NO OPTIMIZATION
-!                                 OF THE MESH IS PERFORMED.
+! Output parameters - IADJ,IEND - updated with the addition
+!                                 of node KK as the last
+!                                 entry.  Node KK will be
+!                                 connected to nodes I1, I2,
+!                                 and I3.  No optimization
+!                                 of the mesh is performed.
 !
-! MODULE REFERENCED BY INTADD - SHIFTD
+! Module referenced by INTADD - SHIFTD
 !
-! INTRINSIC FUNCTION CALLED BY INTADD - MOD
+! Intrinsic function called by INTADD - mod
 !
 !***********************************************************
 !
 integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
 &n2, imin, imax, i, itemp
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! K =           LOCAL COPY OF KK
 ! KM1 =         K - 1
 ! N =           VECTOR CONTAINING I1, I2, I3
 ! NFT =         POINTERS TO THE TOPS OF THE 3 SETS OF IADJ
-!                 ELEMENTS TO BE SHIFTED DOWNWARD
+!                 elements to be shifted downward
 ! IP1,IP2,IP3 = PERMUTATION INDICES FOR N AND NFT
 ! INDX =        INDEX FOR IADJ AND N
 ! NF,NL =       INDICES OF FIRST AND LAST ENTRIES IN IADJ
-!                 TO BE SHIFTED DOWN
+!                 to be shifted down
 ! N1,N2 =       FIRST 2 VERTICES OF A NEW TRIANGLE --
 !                 (N1,N2,KK)
 ! IMIN,IMAX =   BOUNDS ON DO-LOOP INDEX -- FIRST AND LAST
-!                 ELEMENTS OF IEND TO BE INCREMENTED
+!                 elements of IEND to be incremented
 ! I =           DO-LOOP INDEX
 ! ITEMP =       TEMPORARY STORAGE LOCATION
 !
 k = kk
 !
-! INITIALIZATION
+! Initialization
 !
 n(1) = i1
 n(2) = i2
 n(3) = i3
 !
-! SET UP NFT
+! Set up nft
 !
 do 2 i = 1,3
   n1 = n(i)
@@ -2228,15 +2228,15 @@ do 2 i = 1,3
   n2 = n(indx)
   indx = iend(n1) + 1
 !
-! FIND THE INDEX OF N2 AS A NEIGHBOR OF N1
+! Find the index of N2 as a neighbor of N1
 !
 1 indx = indx - 1
   if (iadj(indx) .ne. n2) go to 1
   nft(i) = indx + 1
 2 continue
 !
-! ORDER THE VERTICES BY DECREASING MAGNITUDE.
-!   N(IP(I+1)) PRECEDES N(IP(I)) IN IEND FOR
+! Order the vertices by decreasing magnitude.
+!   N(IP(I+1)) precedes N(IP(I)) in IEND for
 !   I = 1,2.
 !
 ip1 = 1
@@ -2253,10 +2253,10 @@ itemp = ip2
 ip2 = ip3
 ip3 = itemp
 !
-! ADD NODE K TO THE ADJACENCY LISTS OF EACH VERTEX AND
-!   UPDATE IEND.  FOR EACH VERTEX, A SET OF IADJ ELEMENTS
-!   IS SHIFTED DOWNWARD AND K IS INSERTED.  SHIFTING STARTS
-!   AT THE END OF THE ARRAY.
+! Add node K to the adjacency lists of each vertex and
+!   update IEND.  For each vertex, a set of IADJ elements
+!   is shifted downward and K is inserted.  Shifting starts
+!   at the end of the array.
 !
 5 km1 = k - 1
 nl = iend(km1)
@@ -2289,7 +2289,7 @@ do i = imin,imax
   iend(i) = iend(i) + 1
   end do
 !
-! ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
+! Add node K to IEND and its neighbors to IADJ
 !
 indx = iend(km1)
 iend(k) = indx + 3
@@ -2307,53 +2307,53 @@ integer, intent(inout) :: iarr(*)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE SHIFTS A SET OF CONTIGUOUS ELEMENTS OF AN
+!   This routine shifts a set of contiguous elements of an
 ! INTEGER ARRAY KK POSITIONS DOWNWARD (UPWARD IF KK .LT. 0).
-! THE LOOPS ARE UNROLLED IN ORDER TO INCREASE EFFICIENCY.
+! The loops are unrolled in order to increase efficiency.
 !
-! INPUT PARAMETERS - NFRST,NLAST - BOUNDS ON THE PORTION OF
-!                                  IARR TO BE SHIFTED.  ALL
-!                                  ELEMENTS BETWEEN AND
-!                                  INCLUDING THE BOUNDS ARE
+! Input parameters - NFRST,NLAST - bounds on the portion of
+!                                  IARR to be shifted.  All
+!                                  elements between and
+!                                  including the bounds are
 !                                  SHIFTED UNLESS NFRST .GT.
-!                                  NLAST, IN WHICH CASE NO
-!                                  SHIFT OCCURS.
+!                                  NLAST, in which case no
+!                                  shift occurs.
 !
-!                             KK - NUMBER OF POSITIONS EACH
-!                                  ELEMENT IS TO BE SHIFTED.
+!                             KK - number of positions each
+!                                  element is to be shifted.
 !                                  IF KK .LT. 0 SHIFT UP.
 !                                  IF KK .GT. 0 SHIFT DOWN.
 !
-!                           IARR - INTEGER ARRAY OF LENGTH
+!                           IARR - integer array of length
 !                                  .GE. NLAST + MAX(KK,0).
 !
-! NFRST, NLAST, AND KK ARE NOT ALTERED BY THIS ROUTINE.
+! NFRST, NLAST, and KK are not altered by this routine.
 !
 ! OUTPUT PARAMETER -        IARR - SHIFTED ARRAY.
 !
-! MODULES REFERENCED BY SHIFTD - NONE
+! Modules referenced by SHIFTD - none
 !
 !***********************************************************
 !
 integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 data    inc/5/
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! INC =  DO-LOOP INCREMENT (UNROLLING FACTOR) -- IF INC IS
-!          CHANGED, STATEMENTS MUST BE ADDED TO OR DELETED
-!          FROM THE DO-LOOPS
+!          changed, statements must be added to or deleted
+!          from the do-loops
 ! K =    LOCAL COPY OF KK
 ! NF =   LOCAL COPY OF NFRST
 ! NL =   LOCAL COPY OF NLAST
 ! NLP1 = NL + 1
 ! NS =   NUMBER OF SHIFTS
 ! NSL =  NUMBER OF SHIFTS DONE IN UNROLLED DO-LOOP (MULTIPLE
-!          OF INC)
+!          of inc)
 ! I =    DO-LOOP INDEX AND INDEX FOR IARR
 ! IBAK = INDEX FOR DOWNWARD SHIFT OF IARR
 ! INDX = INDEX FOR IARR
@@ -2368,7 +2368,7 @@ ns = nlp1 - nf
 nsl = inc*(ns/inc)
 if ( k .lt. 0) go to 4
 !
-! SHIFT DOWNWARD STARTING FROM THE BOTTOM
+! Shift downward starting from the bottom
 !
 if (nsl .le. 0) go to 2
 do 1 i = 1,nsl,inc
@@ -2381,7 +2381,7 @@ do 1 i = 1,nsl,inc
   iarr(indx-4) = iarr(ibak-4)
 1 continue
 !
-! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
+! Perform the remaining NS-NSL shifts one at a time
 !
 2 ibak = nlp1 - nsl
 3 if (ibak .le. nf) return
@@ -2390,7 +2390,7 @@ indx = ibak + k
 iarr(indx) = iarr(ibak)
 go to 3
 !
-! SHIFT UPWARD STARTING FROM THE TOP
+! Shift upward starting from the top
 !
 4 if (nsl .le. 0) go to 6
 imax = nlp1 - inc
@@ -2403,7 +2403,7 @@ do 5 i = nf,imax,inc
   iarr(indx+4) = iarr(i+4)
 5 continue
 !
-! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
+! Perform the remaining NS-NSL shifts one at a time
 !
 6 i = nsl + nf
 7 if (i .gt. nl) return
@@ -2421,52 +2421,52 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS SUBROUTINE SWAPS THE DIAGONALS IN A CONVEX QUADRI-
-! LATERAL.
+!   This subroutine swaps the diagonals in a convex quadri-
+! lateral.
 !
-! INPUT PARAMETERS -  NIN1,NIN2,NOUT1,NOUT2 - NODAL INDICES
-!                            OF A PAIR OF ADJACENT TRIANGLES
-!                            WHICH FORM A CONVEX QUADRILAT-
-!                            ERAL.  NOUT1 AND NOUT2 ARE CON-
-!                            NECTED BY AN ARC WHICH IS TO BE
-!                            REPLACED BY THE ARC NIN1-NIN2.
-!                            (NIN1,NOUT1,NOUT2) MUST BE TRI-
-!                            ANGLE VERTICES IN COUNTERCLOCK-
-!                            WISE ORDER.
+! Input parameters -  NIN1,NIN2,NOUT1,NOUT2 - nodal indices
+!                            of a pair of adjacent triangles
+!                            which form a convex quadrilat-
+!                            eral.  NOUT1 and NOUT2 are con-
+!                            nected by an arc which is to be
+!                            replaced by the arc NIN1-NIN2.
+!                            (NIN1,NOUT1,NOUT2) must be TRI-
+!                            angle vertices in counterclock-
+!                            wise order.
 !
-! THE ABOVE PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! The above parameters are not altered by this routine.
 !
-!                IADJ,IEND - TRIANGULATION DATA STRUCTURE
-!                            (SEE SUBROUTINE TRMESH).
+!                IADJ,IEND - triangulation data structure
+!                            (see subroutine TRMESH).
 !
-! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ARC
-!                                 REPLACEMENT.
+! Output parameters - IADJ,IEND - updated with the arc
+!                                 replacement.
 !
-! MODULES REFERENCED BY SWAPD - TINDX, SHIFTD
+! Modules referenced by SWAPD - TINDX, SHIFTD
 !
 !***********************************************************
 !
 integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! IN =        NIN1 AND NIN2 ORDERED BY INCREASING MAGNITUDE
-!               (THE NEIGHBORS OF IN(1) PRECEDE THOSE OF
-!               IN(2) IN IADJ)
+!               (the neighbors of IN(1) precede those of
+!               IN(2) in IADJ)
 ! IO =        NOUT1 AND NOUT2 IN INCREASING ORDER
 ! IP1,IP2 =   PERMUTATION OF (1,2) SUCH THAT IO(IP1)
-!               PRECEDES IO(IP2) AS A NEIGHBOR OF IN(1)
+!               precedes IO(IP2) as a neighbor of IN(1)
 ! J,K =       PERMUTATION OF (1,2) USED AS INDICES OF IN
 !               AND IO
 ! NF,NL =     IADJ INDICES BOUNDARY A PORTION OF THE ARRAY
-!               TO BE SHIFTED
+!               to be shifted
 ! I =         IEND INDEX
 ! IMIN,IMAX = BOUNDS ON THE PORTION OF IEND TO BE INCRE-
-!               MENTED OR DECREMENTED
+!               mented or decremented
 !
 in(1) = nin1
 in(2) = nin2
@@ -2475,8 +2475,8 @@ io(2) = nout2
 ip1 = 1
 !
 ! ORDER THE INDICES SO THAT IN(1) .LT. IN(2) AND IO(1) .LT.
-!   IO(2), AND CHOOSE IP1 AND IP2 SUCH THAT (IN(1),IO(IP1),
-!   IO(IP2)) FORMS A TRIANGLE.
+!   IO(2), and choose IP1 and IP2 such that (IN(1),IO(IP1),
+!   IO(IP2)) forms a triangle.
 !
 if (in(1) .lt. in(2)) go to 1
 in(1) = in(2)
@@ -2491,16 +2491,16 @@ if (io(2) .lt. in(1)) go to 8
 if (in(2) .lt. io(1)) go to 12
 !
 ! IN(1) AND IO(1) PRECEDE IN(2) AND IO(2).  FOR (J,K) =
-!   (1,2) AND (2,1), DELETE IO(K) AS A NEIGHBOR OF IO(J)
-!   BY SHIFTING A PORTION OF IADJ EITHER UP OR DOWN AND
-!   AND INSERT IN(K) AS A NEIGHBOR OF IN(J).
+!   (1,2) and (2,1), delete IO(K) as a neighbor of IO(J)
+!   by shifting a portion of IADJ either up or down and
+!   and insert IN(K) as a neighbor of IN(J).
 !
 do 7 j = 1,2
   k = 3 - j
   if (in(j) .gt. io(j)) go to 4
 !
-!   THE NEIGHBORS OF IN(J) PRECEDE THOSE OF IO(J) -- SHIFT
-!     DOWN BY 1
+!   The neighbors of IN(J) precede those of IO(J) -- shift
+!     down by 1
 !
   nf = 1 + tindx(in(j),io(ip1),iadj,iend)
   nl = -1 + tindx(io(j),io(k),iadj,iend)
@@ -2512,8 +2512,8 @@ do 7 j = 1,2
 3 iend(i) = iend(i) + 1
   go to 6
 !
-!   THE NEIGHBORS OF IO(J) PRECEDE THOSE OF IN(J) -- SHIFT
-!     UP BY 1
+!   The neighbors of IO(J) precede those of IN(J) -- shift
+!     up by 1
 !
 4 nf = 1 + tindx(io(j),io(k),iadj,iend)
   nl = -1 + tindx(in(j),io(ip2),iadj,iend)
@@ -2531,8 +2531,8 @@ do 7 j = 1,2
 7 continue
 return
 !
-! THE VERTICES ARE ORDERED (IO(1),IO(2),IN(1),IN(2)).
-!   DELETE IO(2) BY SHIFTING UP BY 1
+! The vertices are ordered (IO(1),IO(2),IN(1),IN(2)).
+!   Delete IO(2) by shifting up by 1
 !
 8 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
@@ -2542,7 +2542,7 @@ imax = io(2)-1
 do 9 i = imin,imax
 9 iend(i) = iend(i) - 1
 !
-!   DELETE IO(1) BY SHIFTING UP BY 2 AND INSERT IN(2)
+!   Delete IO(1) by shifting up by 2 and insert IN(2)
 !
 nf = nl + 2
 nl = -1 + tindx(in(1),io(ip2),iadj,iend)
@@ -2553,7 +2553,7 @@ imax = in(1)-1
 do 10 i = imin,imax
 10 iend(i) = iend(i) - 2
 !
-!   SHIFT UP BY 1 AND INSERT IN(1)
+!   Shift up by 1 and insert IN(1)
 !
 nf = nl + 1
 nl = -1 + tindx(in(2),io(ip1),iadj,iend)
@@ -2565,8 +2565,8 @@ do 11 i = imin,imax
 11 iend(i) = iend(i) - 1
 return
 !
-! THE VERTICES ARE ORDERED (IN(1),IN(2),IO(1),IO(2)).
-!   DELETE IO(1) BY SHIFTING DOWN BY 1
+! The vertices are ordered (IN(1),IN(2),IO(1),IO(2)).
+!   Delete IO(1) by shifting down by 1
 !
 12 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
@@ -2576,7 +2576,7 @@ imax = io(2) - 1
 do 13 i = imin,imax
 13 iend(i) = iend(i) + 1
 !
-!   DELETE IO(2) BY SHIFTING DOWN BY 2 AND INSERT IN(1)
+!   Delete IO(2) by shifting down by 2 and insert IN(1)
 !
 nl = nf - 2
 nf = 1 + tindx(in(2),io(ip2),iadj,iend)
@@ -2587,7 +2587,7 @@ imax = io(1) - 1
 do 14 i = imin,imax
 14 iend(i) = iend(i) + 2
 !
-!   SHIFT DOWN BY 1 AND INSERT IN(2)
+!   Shift down by 1 and insert IN(2)
 !
 nl = nf - 1
 nf = 1 + tindx(in(1),io(ip1),iadj,iend)
@@ -2607,67 +2607,67 @@ real, intent(in) :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS FUNCTION DECIDES WHETHER OR NOT TO REPLACE A
-! DIAGONAL ARC IN A QUADRILATERAL WITH THE OTHER DIAGONAL.
-! THE DETERMINATION IS BASED ON THE SIZES OF THE ANGLES
-! CONTAINED IN THE 2 TRIANGLES DEFINED BY THE DIAGONAL.
-! THE DIAGONAL IS CHOSEN TO MAXIMIZE THE SMALLEST OF THE
-! SIX ANGLES OVER THE TWO PAIRS OF TRIANGLES.
+!   This function decides whether or not to replace A
+! diagonal arc in a quadrilateral with the other diagonal.
+! The determination is based on the sizes of the angles
+! contained in the 2 triangles defined by the diagonal.
+! The diagonal is chosen to maximize the smallest of the
+! six angles over the two pairs of triangles.
 !
-! INPUT PARAMETERS -  IN1,IN2,IO1,IO2 - NODE INDICES OF THE
-!                              FOUR POINTS DEFINING THE
-!                              QUADRILATERAL.  IO1 AND IO2
-!                              ARE CURRENTLY CONNECTED BY A
-!                              DIAGONAL ARC.  THIS ARC
-!                              SHOULD BE REPLACED BY AN ARC
-!                              CONNECTING IN1, IN2 IF THE
-!                              DECISION IS MADE TO SWAP.
-!                              IN1,IO1,IO2 MUST BE IN
-!                              COUNTERCLOCKWISE ORDER.
+! Input parameters -  IN1,IN2,IO1,IO2 - node indices of the
+!                              four points defining the
+!                              quadrilateral.  IO1 and IO2
+!                              are currently connected by A
+!                              diagonal arc.  This arc
+!                              should be replaced by an arc
+!                              connecting IN1, IN2 if the
+!                              decision is made to swap.
+!                              IN1,IO1,IO2 must be in
+!                              counterclockwise order.
 !
-!                        X,Y - VECTORS OF NODAL COORDINATES.
-!                              (X(I),Y(I)) ARE THE COORD-
+!                        X,Y - vectors of nodal coordinates.
+!                              (X(I),Y(I)) are the coord-
 !                              INATES OF NODE I FOR I = IN1,
 !                              IN2, IO1, OR IO2.
 !
-! NONE OF THE INPUT PARAMETERS ARE ALTERED BY THIS ROUTINE.
+! None of the input parameters are altered by this routine.
 !
-! OUTPUT PARAMETER -  SWPTST - .TRUE. IFF THE ARC CONNECTING
-!                              IO1 AND IO2 IS TO BE REPLACED
+! Output parameter -  SWPTST - .True. IFF the arc connecting
+!                              IO1 and IO2 is to be replaced
 !
-! MODULES REFERENCED BY SWPTST - NONE
+! Modules referenced by SWPTST - none
 !
 !***********************************************************
 !
 real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
 &sin2, cos1, cos2, sin12
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! DX11,DY11 = X,Y COORDINATES OF THE VECTOR IN1-IO1
 ! DX12,DY12 = X,Y COORDINATES OF THE VECTOR IN1-IO2
 ! DX22,DY22 = X,Y COORDINATES OF THE VECTOR IN2-IO2
 ! DX21,DY21 = X,Y COORDINATES OF THE VECTOR IN2-IO1
 ! SIN1 =      CROSS PRODUCT OF THE VECTORS IN1-IO1 AND
-!               IN1-IO2 -- PROPORTIONAL TO SIN(T1) WHERE T1
-!               IS THE ANGLE AT IN1 FORMED BY THE VECTORS
+!               IN1-IO2 -- proportional to SIN(T1) where T1
+!               is the angle at IN1 formed by the vectors
 ! COS1 =      INNER PRODUCT OF THE VECTORS IN1-IO1 AND
-!               IN1-IO2 -- PROPORTIONAL TO COS(T1)
+!               IN1-IO2 -- proportional to COS(T1)
 ! SIN2 =      CROSS PRODUCT OF THE VECTORS IN2-IO2 AND
-!               IN2-IO1 -- PROPORTIONAL TO SIN(T2) WHERE T2
-!               IS THE ANGLE AT IN2 FORMED BY THE VECTORS
+!               IN2-IO1 -- proportional to SIN(T2) where T2
+!               is the angle at IN2 formed by the vectors
 ! COS2 =      INNER PRODUCT OF THE VECTORS IN2-IO2 AND
-!               IN2-IO1 -- PROPORTIONAL TO COS(T2)
+!               IN2-IO1 -- proportional to COS(T2)
 ! SIN12 =     SIN1*COS2 + COS1*SIN2 -- PROPORTIONAL TO
 !               SIN(T1+T2)
 !
 swptst = .false.
 !
-! COMPUTE THE VECTORS CONTAINING THE ANGLES T1, T2
+! Compute the vectors containing the angles T1, T2
 !
 dx11 = x(io1) - x(in1)
 dx12 = x(io2) - x(in1)
@@ -2679,19 +2679,19 @@ dy12 = y(io2) - y(in1)
 dy22 = y(io2) - y(in2)
 dy21 = y(io1) - y(in2)
 !
-! COMPUTE INNER PRODUCTS
+! Compute inner products
 !
 cos1 = dx11*dx12 + dy11*dy12
 cos2 = dx22*dx21 + dy22*dy21
 !
 ! THE DIAGONALS SHOULD BE SWAPPED IFF (T1+T2) .GT. 180
-!   DEGREES.  THE FOLLOWING TWO TESTS INSURE NUMERICAL
-!   STABILITY.
+!   degrees.  The following two tests insure numerical
+!   stability.
 !
 if (cos1 .ge. 0.  .and.  cos2 .ge. 0.) return
 if (cos1 .lt. 0.  .and.  cos2 .lt. 0.) go to 1
 !
-! COMPUTE VECTOR CROSS PRODUCTS
+! Compute vector cross products
 !
 sin1 = dx11*dy12 - dx12*dy11
 sin2 = dx22*dy21 - dx21*dy22
@@ -2707,47 +2707,47 @@ integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS FUNCTION RETURNS THE INDEX OF NABOR IN THE
-! ADJACENCY LIST FOR NVERTX.
+!   This function returns the index of NABOR in the
+! adjacency list for NVERTX.
 !
-! INPUT PARAMETERS - NVERTX - NODE WHOSE ADJACENCY LIST IS
-!                             TO BE SEARCHED.
+! Input parameters - NVERTX - node whose adjacency list is
+!                             to be searched.
 !
-!                     NABOR - NODE WHOSE INDEX IS TO BE
-!                             RETURNED.  NABOR MUST BE
-!                             CONNECTED TO NVERTX.
+!                     NABOR - node whose index is to be
+!                             returned.  NABOR must be
+!                             connected to NVERTX.
 !
-!                      IADJ - SET OF ADJACENCY LISTS.
+!                      IADJ - set of adjacency lists.
 !
-!                      IEND - POINTERS TO THE ENDS OF
-!                             ADJACENCY LISTS IN IADJ.
+!                      IEND - pointers to the ends of
+!                             adjacency lists in IADJ.
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS FUNCTION.
+! Input parameters are not altered by this function.
 !
 ! OUTPUT PARAMETER -  TINDX - IADJ(TINDX) = NABOR.
 !
-! MODULES REFERENCED BY TINDX - NONE
+! Modules referenced by TINDX - none
 !
 !***********************************************************
 !
 integer :: nb, indx
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NB =   LOCAL COPY OF NABOR
 ! INDX = INDEX FOR IADJ
 !
 nb = nabor
 !
-! INITIALIZATION
+! Initialization
 !
 indx = iend(nvertx) + 1
 !
-! SEARCH THE LIST OF NVERTX NEIGHBORS FOR NB
+! Search the list of NVERTX neighbors for NB
 !
 1 indx = indx - 1
 if (iadj(indx) .ne. nb) go to 1
@@ -2766,56 +2766,56 @@ real :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE LOCATES A POINT P IN A THIESSEN TRIANGU-
-! LATION, RETURNING THE VERTEX INDICES OF A TRIANGLE WHICH
-! CONTAINS P.  TRFIND IS PART OF AN INTERPOLATION PACKAGE
-! WHICH PROVIDES SUBROUTINES FOR CREATING THE MESH.
+!   This routine locates a point P in a thiessen triangu-
+! lation, returning the vertex indices of a triangle which
+! contains P.  TRFIND is part of an interpolation package
+! which provides subroutines for creating the mesh.
 !
 ! INPUT PARAMETERS -    NST - INDEX OF NODE AT WHICH TRFIND
-!                             BEGINS SEARCH.  SEARCH TIME
-!                             DEPENDS ON THE PROXIMITY OF
+!                             begins search.  Search time
+!                             depends on the proximity of
 !                             NST TO P.
 !
-!                     PX,PY - X AND Y-COORDINATES OF THE
-!                             POINT TO BE LOCATED.
+!                     PX,PY - X and Y-coordinates of the
+!                             point to be located.
 !
-!                       X,Y - VECTORS OF COORDINATES OF
-!                             NODES IN THE MESH.  (X(I),Y(I))
+!                       X,Y - vectors of coordinates of
+!                             nodes in the mesh.  (X(I),Y(I))
 !                             DEFINES NODE I FOR I = 1,...,N
 !                             WHERE N .GE. 3.
 !
-!                      IADJ - SET OF ADJACENCY LISTS OF
-!                             NODES IN THE MESH.
+!                      IADJ - set of adjacency lists of
+!                             nodes in the mesh.
 !
-!                      IEND - POINTERS TO THE ENDS OF
-!                             ADJACENCY LISTS IN IADJ FOR
-!                             EACH NODE IN THE MESH.
+!                      IEND - pointers to the ends of
+!                             adjacency lists in IADJ for
+!                             each node in the mesh.
 !
-! IADJ AND IEND MAY BE CREATED BY TRMESH.
+! IADJ and IEND may be created by TRMESH.
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! Input parameters are not altered by this routine.
 !
-! OUTPUT PARAMETERS - I1,I2,I3 - VERTEX INDICES IN COUNTER-
-!                                CLOCKWISE ORDER - VERTICES
-!                                OF A TRIANGLE CONTAINING P
-!                                IF P IS AN INTERIOR NODE.
-!                                IF P IS OUTSIDE OF THE
-!                                BOUNDARY OF THE MESH, I1
-!                                AND I2 ARE THE FIRST (RIGHT
-!                                -MOST) AND LAST (LEFTMOST)
-!                                NODES WHICH ARE VISIBLE
+! Output parameters - I1,I2,I3 - vertex indices in counter-
+!                                clockwise order - vertices
+!                                of a triangle containing P
+!                                if P is an interior node.
+!                                If P is outside of the
+!                                boundary of the mesh, I1
+!                                and I2 are the first (right
+!                                -most) and last (leftmost)
+!                                nodes which are visible
 !                                FROM P, AND I3 = 0.  IF P
-!                                AND ALL OF THE NODES LIE ON
+!                                and all of the nodes lie on
 !                                A SINGLE LINE THEN I1 = I2
 !                                = I3 = 0.
 !
-! MODULES REFERENCED BY TRFIND - NONE
+! Modules referenced by TRFIND - none
 !
-! INTRINSIC FUNCTION CALLED BY TRFIND - MAX0
+! Intrinsic function called by TRFIND - MAX0
 !
 !***********************************************************
 !
@@ -2823,30 +2823,30 @@ integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
 real :: xp, yp
 logical :: left
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! XP,YP =     LOCAL VARIABLES CONTAINING PX AND PY
 ! N0,N1,N2 =  NODES IN COUNTERCLOCKWISE ORDER DEFINING A
-!               CONE (WITH VERTEX N0) CONTAINING P
+!               cone (with vertex N0) containing P
 ! N3,N4 =     NODES OPPOSITE N1-N2 AND N2-N1, RESPECTIVELY
 ! INDX,IND =  INDICES FOR IADJ
 ! NF,NL =     FIRST AND LAST NEIGHBORS OF N0 IN IADJ, OR
-!               FIRST (RIGHTMOST) AND LAST (LEFTMOST) NODES
-!               VISIBLE FROM P WHEN P IS OUTSIDE THE
-!               BOUNDARY
+!               first (rightmost) and last (leftmost) nodes
+!               visible from P when P is outside the
+!               boundary
 ! NEXT =      CANDIDATE FOR I1 OR I2 WHEN P IS OUTSIDE OF
-!               THE BOUNDARY
+!               the boundary
 ! LEFT =      STATEMENT FUNCTION WHICH COMPUTES THE SIGN OF
-!               A CROSS PRODUCT (Z-COMPONENT).  LEFT(X1,...,
+!               a cross product (Z-COMPONENT).  Left(X1,...,
 !               Y0) = .TRUE. IFF (X0,Y0) IS ON OR TO THE
-!               LEFT OF THE VECTOR FROM (X1,Y1) TO (X2,Y2).
+!               left of the vector from (X1,Y1) to (X2,Y2).
 !
 left(x1,y1,x2,y2,x0,y0) = (x2-x1)*(y0-y1) .ge. &
 &(x0-x1)*(y2-y1)
 xp = px
 yp = py
 !
-! INITIALIZE VARIABLES AND FIND A CONE CONTAINING P
+! Initialize variables and find a cone containing P
 !
 n0 = max0(nst,1)
 1 indx = iend(n0)
@@ -2857,26 +2857,26 @@ nf = iadj(indx)
 n1 = nf
 if (nl .ne. 0) go to 3
 !
-! N0 IS A BOUNDARY NODE.  SET NL TO THE LAST NONZERO
-!   NEIGHBOR OF N0.
+! N0 is a boundary node.  Set NL to the last nonzero
+!   neighbor of N0.
 !
 ind = iend(n0) - 1
 nl = iadj(ind)
 if ( left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) go to 2
 !
-! P IS OUTSIDE THE BOUNDARY
+! P is outside the boundary
 !
 nl = n0
 go to 16
 2 if ( left(x(nl),y(nl),x(n0),y(n0),xp,yp) ) go to 4
 !
-! P IS OUTSIDE THE BOUNDARY AND N0 IS THE RIGHTMOST
-!   VISIBLE BOUNDARY NODE
+! P is outside the boundary and N0 is the rightmost
+!   visible boundary node
 !
 i1 = n0
 go to 18
 !
-! N0 IS AN INTERIOR NODE.  FIND N1.
+! N0 is an interior node.  Find N1.
 !
 3 if ( left(x(n0),y(n0),x(n1),y(n1),xp,yp) ) go to 4
 indx = indx + 1
@@ -2884,8 +2884,8 @@ n1 = iadj(indx)
 if (n1 .eq. nl) go to 7
 go to 3
 !
-! P IS TO THE LEFT OF ARC N0-N1.  INITIALIZE N2 TO THE NEXT
-!   NEIGHBOR OF N0.
+! P is to the left of arc N0-N1.  Initialize N2 to the next
+!   neighbor of N0.
 !
 4 indx = indx + 1
 n2 = iadj(indx)
@@ -2897,10 +2897,10 @@ if ( .not. left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) &
 &go to 7
 if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
 !
-! P IS LEFT OF OR ON ARCS N0-NB FOR ALL NEIGHBORS NB
+! P is left of or on arcs N0-NB for all neighbors NB
 !   OF N0.
-! ALL POINTS ARE COLLINEAR IFF P IS LEFT OF NB-N0 FOR
-!   ALL NEIGHBORS NB OF N0.  SEARCH THE NEIGHBORS OF N0
+! All points are collinear IFF P is left of NB-N0 for
+!   all neighbors NB of N0.  Search the neighbors of N0
 !   IN REVERSE ORDER.  NOTE -- N1 = NL AND INDX POINTS TO
 !   NL.
 !
@@ -2912,48 +2912,48 @@ n1 = iadj(indx)
 go to 5
 !
 ! P IS TO THE RIGHT OF N1-N0, OR P=N0.  SET N0 TO N1 AND
-!   START OVER.
+!   start over.
 !
 6 n0 = n1
 go to 1
 !
-! P IS BETWEEN ARCS N0-N1 AND N0-NF
+! P is between arcs N0-N1 and N0-NF
 !
 7 n2 = nf
 !
-! P IS CONTAINED IN A CONE DEFINED BY LINE SEGMENTS N0-N1
-!   AND N0-N2 WHERE N1 IS ADJACENT TO N2
+! P is contained in a cone defined by line segments N0-N1
+!   and N0-N2 where N1 is adjacent to N2
 !
 8 n3 = n0
 9 if ( left(x(n1),y(n1),x(n2),y(n2),xp,yp) ) go to 13
 !
-! SET N4 TO THE FIRST NEIGHBOR OF N2 FOLLOWING N1
+! Set N4 to the first neighbor of N2 following N1
 !
 indx = iend(n2)
 if (iadj(indx) .ne. n1) go to 10
 !
-! N1 IS THE LAST NEIGHBOR OF N2.
-! SET N4 TO THE FIRST NEIGHBOR.
+! N1 is the last neighbor of N2.
+! Set N4 to the first neighbor.
 !
 indx = 1
 if (n2 .ne. 1) indx = iend(n2-1) + 1
 n4 = iadj(indx)
 go to 11
 !
-! N1 IS NOT THE LAST NEIGHBOR OF N2
+! N1 is not the last neighbor of N2
 !
 10 indx = indx-1
 if (iadj(indx) .ne. n1) go to 10
 n4 = iadj(indx+1)
 if (n4 .ne. 0) go to 11
 !
-! P IS OUTSIDE THE BOUNDARY
+! P is outside the boundary
 !
 nf = n2
 nl = n1
 go to 16
 !
-! DEFINE A NEW ARC N1-N2 WHICH INTERSECTS THE LINE
+! Define a new arc N1-N2 which intersects the line
 !   SEGMENT N0-P
 !
 11 if ( left(x(n0),y(n0),x(n4),y(n4),xp,yp) ) go to 12
@@ -2964,59 +2964,59 @@ go to 9
 n1 = n4
 go to 9
 !
-! P IS IN THE TRIANGLE (N1,N2,N3) AND NOT ON N2-N3.  IF
-!   N3-N1 OR N1-N2 IS A BOUNDARY ARC CONTAINING P, TREAT P
-!   AS EXTERIOR.
+! P is in the triangle (N1,N2,N3) and not on N2-N3.  If
+!   N3-N1 or N1-N2 is a boundary arc containing P, treat P
+!   as exterior.
 !
 13 indx = iend(n1)
 if (iadj(indx) .ne. 0) go to 15
 !
-! N1 IS A BOUNDARY NODE.  N3-N1 IS A BOUNDARY ARC IFF N3
-!   IS THE LAST NONZERO NEIGHBOR OF N1.
+! N1 is a boundary node.  N3-N1 is a boundary arc IFF N3
+!   is the last nonzero neighbor of N1.
 !
 if (n3 .ne. iadj(indx-1)) go to 14
 !
-! N3-N1 IS A BOUNDARY ARC
+! N3-N1 is a boundary arc
 !
 if ( .not. left(x(n1),y(n1),x(n3),y(n3),xp,yp) ) &
 &go to 14
 !
-! P LIES ON N1-N3
+! P lies on N1-N3
 !
 i1 = n1
 i2 = n3
 i3 = 0
 return
 !
-! N3-N1 IS NOT A BOUNDARY ARC CONTAINING P.  N1-N2 IS A
-!   BOUNDARY ARC IFF N2 IS THE FIRST NEIGHBOR OF N1.
+! N3-N1 is not a boundary arc containing P.  N1-N2 is A
+!   boundary arc IFF N2 is the first neighbor of N1.
 !
 14 indx = 1
 if (n1 .ne. 1) indx = iend(n1-1) + 1
 if (n2 .ne. iadj(indx)) go to 15
 !
-! N1-N2 IS A BOUNDARY ARC
+! N1-N2 is a boundary arc
 !
 if ( .not. left(x(n2),y(n2),x(n1),y(n1),xp,yp) ) &
 &go to 15
 !
-! P LIES ON N1-N2
+! P lies on N1-N2
 !
 i1 = n2
 i2 = n1
 i3 = 0
 return
 !
-! P DOES NOT LIE ON A BOUNDARY ARC.
+! P does not lie on a boundary arc.
 !
 15 i1 = n1
 i2 = n2
 i3 = n3
 return
 !
-! NF AND NL ARE ADJACENT BOUNDARY NODES WHICH ARE VISIBLE
-!   FROM P.  FIND THE FIRST VISIBLE BOUNDARY NODE.
-! SET NEXT TO THE FIRST NEIGHBOR OF NF.
+! NF and NL are adjacent boundary nodes which are visible
+!   from P.  Find the first visible boundary node.
+! Set next to the first neighbor of NF.
 !
 16 indx = 1
 if (nf .ne. 1) indx = iend(nf-1) + 1
@@ -3026,13 +3026,13 @@ if ( left(x(nf),y(nf),x(next),y(next),xp,yp) ) &
 nf = next
 go to 16
 !
-! NF IS THE FIRST (RIGHTMOST) VISIBLE BOUNDARY NODE
+! NF is the first (rightmost) visible boundary node
 !
 17 i1 = nf
 !
-! FIND THE LAST VISIBLE BOUNDARY NODE.  NL IS THE FIRST
-!   CANDIDATE FOR I2.
-! SET NEXT TO THE LAST NEIGHBOR OF NL.
+! Find the last visible boundary node.  NL is the first
+!   candidate for I2.
+! Set next to the last neighbor of NL.
 !
 18 indx = iend(nl) - 1
 next = iadj(indx)
@@ -3041,13 +3041,13 @@ if ( left(x(next),y(next),x(nl),y(nl),xp,yp) ) &
 nl = next
 go to 18
 !
-! NL IS THE LAST (LEFTMOST) VISIBLE BOUNDARY NODE
+! NL is the last (leftmost) visible boundary node
 !
 19 i2 = nl
 i3 = 0
 return
 !
-! ALL POINTS ARE COLLINEAR
+! All points are collinear
 !
 20 i1 = 0
 i2 = 0
@@ -3062,7 +3062,7 @@ integer, intent(in) :: n
 integer :: j, miter
 real :: eps
 !-----------------------------------------------------------------------
-!                      DERIVATIVE ESTIMATION
+!                      Derivative estimation
 !-----------------------------------------------------------------------
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
@@ -3080,7 +3080,7 @@ call gradg1 (n, x, y, z, iadj, iend, eps, miter, zxzy, ierr)
 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 20 ierr = 1
 return
@@ -3096,88 +3096,88 @@ real, intent(inout) :: zxzy(2,n)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   GIVEN A TRIANGULATION OF N NODES IN THE PLANE WITH
-! ASSOCIATED DATA VALUES, THIS ROUTINE USES A GLOBAL METHOD
-! TO COMPUTE ESTIMATED GRADIENTS AT THE NODES.  THE METHOD
-! CONSISTS OF MINIMIZING A QUADRATIC FUNCTIONAL Q(G) OVER
-! THE N-VECTOR G OF GRADIENTS WHERE Q APPROXIMATES THE LIN-
-! EARIZED CURVATURE OF AN INTERPOLANT F OVER THE TRIANGULA-
-! TION.  THE RESTRICTION OF F TO AN ARC OF THE TRIANGULATION
-! IS TAKEN TO BE THE HERMITE CUBIC INTERPOLANT OF THE DATA
-! VALUES AND TANGENTIAL GRADIENT COMPONENTS AT THE END-
-! POINTS OF THE ARC, AND Q IS THE SUM OF THE LINEARIZED
-! CURVATURES OF F ALONG THE ARCS -- THE INTEGRALS OVER THE
+!   Given a triangulation of N nodes in the plane with
+! associated data values, this routine uses a global method
+! to compute estimated gradients at the nodes.  The method
+! consists of minimizing a quadratic functional Q(G) over
+! the N-vector G of gradients where Q approximates the lin-
+! earized curvature of an interpolant F over the triangula-
+! tion.  The restriction of F to an arc of the triangulation
+! is taken to be the Hermite cubic interpolant of the data
+! values and tangential gradient components at the end-
+! points of the arc, and Q is the sum of the linearized
+! curvatures of F along the arcs -- the integrals over the
 ! ARCS OF D2F(T)**2 WHERE D2F(T) IS THE SECOND DERIVATIVE
-! OF F WITH RESPECT TO DISTANCE T ALONG THE ARC.  THIS MIN-
-! IMIZATION PROBLEM CORRESPONDS TO AN ORDER 2N SYMMETRIC
-! POSITIVE-DEFINITE SPARSE LINEAR SYSTEM WHICH IS SOLVED FOR
-! THE X AND Y PARTIAL DERIVATIVES BY THE BLOCK GAUSS-SEIDEL
-! METHOD WITH 2 BY 2 BLOCKS.
-!   AN ALTERNATIVE METHOD, SUBROUTINE GRADL, COMPUTES A
-! LOCAL APPROXIMATION TO THE PARTIALS AT A SINGLE NODE AND
-! MAY BE MORE ACCURATE, DEPENDING ON THE DATA VALUES AND
-! DISTRIBUTION OF NODES (NEITHER METHOD EMERGED AS SUPERIOR
-! IN TESTS FOR ACCURACY).  HOWEVER, IN TESTS RUN ON AN IBM
-! 370, GRADG1 WAS FOUND TO BE ABOUT 3.6 TIMES AS FAST FOR
+! of F with respect to distance T along the arc.  This min-
+! imization problem corresponds to an order 2N symmetric
+! positive-definite sparse linear system which is solved for
+! the X and Y partial derivatives by the block Gauss-Seidel
+! method with 2 by 2 blocks.
+!   An alternative method, subroutine GRADL, computes A
+! local approximation to the partials at a single node and
+! may be more accurate, depending on the data values and
+! distribution of nodes (neither method emerged as superior
+! in tests for accuracy).  However, in tests run on an IBM
+! 370, GRADG1 was found to be about 3.6 times as fast for
 ! NIT = 4.
 !
 ! INPUT PARAMETERS - N - NUMBER OF NODES.  N .GE. 3.
 !
-!                  X,Y - CARTESIAN COORDINATES OF THE NODES.
+!                  X,Y - cartesian coordinates of the nodes.
 !
-!                    Z - DATA VALUES AT THE NODES.  Z(I) IS
-!                        ASSOCIATED WITH (X(I),Y(I)).
+!                    Z - data values at the nodes.  Z(I) is
+!                        associated with (X(I),Y(I)).
 !
-!            IADJ,IEND - DATA STRUCTURE DEFINING THE TRIAN-
-!                        GULATION.  SEE SUBROUTINE TRMESH.
+!            IADJ,IEND - data structure defining the trian-
+!                        gulation.  See subroutine TRMESH.
 !
-!                  EPS - NONNEGATIVE CONVERGENCE CRITERION.
-!                        THE METHOD IS TERMINATED WHEN THE
-!                        MAXIMUM CHANGE IN A GRADIENT COMPO-
-!                        NENT BETWEEN ITERATIONS IS AT MOST
+!                  Eps - nonnegative convergence criterion.
+!                        The method is terminated when the
+!                        maximum change in a gradient compo-
+!                        nent between iterations is at most
 !                        EPS.  EPS = 1.E-2 IS SUFFICIENT FOR
-!                        EFFECTIVE CONVERGENCE.
+!                        effective convergence.
 !
-! THE ABOVE PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! The above parameters are not altered by this routine.
 !
-!                  NIT - MAXIMUM NUMBER OF GAUSS-SEIDEL
-!                        ITERATIONS TO BE APPLIED.  THIS
-!                        MAXIMUM WILL LIKELY BE ACHIEVED IF
-!                        EPS IS SMALLER THAN THE MACHINE
-!                        PRECISION.  OPTIMAL EFFICIENCY WAS
+!                  Nit - maximum number of Gauss-Seidel
+!                        iterations to be applied.  This
+!                        maximum will likely be achieved if
+!                        eps is smaller than the machine
+!                        precision.  Optimal efficiency was
 !                        ACHIEVED IN TESTING WITH EPS = 0
 !                        AND NIT = 3 OR 4.
 !
-!                 ZXZY - 2 BY N ARRAY WHOSE COLUMNS CONTAIN
-!                        INITIAL ESTIMATES OF THE PARTIAL
-!                        DERIVATIVES (ZERO VECTORS ARE
-!                        SUFFICIENT).
+!                 ZXZY - 2 by N array whose columns contain
+!                        initial estimates of the partial
+!                        derivatives (zero vectors are
+!                        sufficient).
 !
-! OUTPUT PARAMETERS - NIT - NUMBER OF GAUSS-SEIDEL ITERA-
+! Output parameters - nit - number of Gauss-Seidel itera-
 !                           TIONS EMPLOYED.
 !
-!                    ZXZY - ESTIMATED X AND Y PARTIAL DERIV-
-!                           ATIVES AT THE NODES WITH X PAR-
-!                           TIALS IN THE FIRST ROW.  ZXZY IS
+!                    ZXZY - estimated X and Y partial deriv-
+!                           atives at the nodes with X par-
+!                           tials in the first row.  ZXZY is
 !                           NOT CHANGED IF IER = 2.
 !
-!                     IER - ERROR INDICATOR
+!                     Ier - error indicator
 !                           IER = 0 IF THE CONVERGENCE CRI-
-!                                   TERION WAS ACHIEVED.
+!                                   terion was achieved.
 !                           IER = 1 IF CONVERGENCE WAS NOT
-!                                   ACHIEVED WITHIN NIT
-!                                   ITERATIONS.
+!                                   achieved within nit
+!                                   iterations.
 !                           IER = 2 IF N OR EPS IS OUT OF
 !                                   RANGE OR NIT .LT. 0 ON
-!                                   INPUT.
+!                                   input.
 !
-! MODULES REFERENCED BY GRADG1 - NONE
+! Modules referenced by GRADG1 - none
 !
-! INTRINSIC FUNCTIONS CALLED BY GRADG1 - SQRT, AMAX1, ABS
+! Intrinsic functions called by GRADG1 - sqrt, AMAX1, abs
 !
 !***********************************************************
 !
@@ -3185,7 +3185,7 @@ integer :: nn, maxit, iter, k, indf, indl, indx, nb
 real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
 &delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =          LOCAL COPY OF N
 ! MAXIT =       INPUT VALUE OF NIT
@@ -3197,35 +3197,35 @@ real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
 ! NB =          NEIGHBOR OF K
 ! TOL =         LOCAL COPY OF EPS
 ! DGMAX =       MAXIMUM CHANGE IN A GRADIENT COMPONENT BE-
-!                 TWEEN ITERATIONS
+!                 tween iterations
 ! XK,YK,ZK =    X(K), Y(K), Z(K)
 ! ZXK,ZYK =     INITIAL VALUES OF ZXZY(1,K) AND ZXZY(2,K)
 ! A11,A12,A22 = MATRIX COMPONENTS OF THE 2 BY 2 BLOCK A*DG
 !                 = R WHERE A IS SYMMETRIC, DG = (DZX,DZY)
-!                 IS THE CHANGE IN THE GRADIENT AT K, AND R
-!                 IS THE RESIDUAL
+!                 is the change in the gradient at K, and R
+!                 is the residual
 ! R1,R2 =       COMPONENTS OF THE RESIDUAL -- DERIVATIVES OF
-!                 Q WITH RESPECT TO THE COMPONENTS OF THE
-!                 GRADIENT AT NODE K
+!                 Q with respect to the components of the
+!                 gradient at node K
 ! DELX,DELY =   COMPONENTS OF THE ARC NB-K
 ! DELXS,DELYS = DELX**2, DELY**2
 ! DSQ =         SQUARE OF THE DISTANCE D BETWEEN K AND NB
 ! DCUB =        D**3
 ! T =           FACTOR OF R1 AND R2
 ! DZX,DZY =     SOLUTION OF THE 2 BY 2 SYSTEM -- CHANGE IN
-!                 DERIVATIVES AT K FROM THE PREVIOUS ITERATE
+!                 derivatives at K from the previous iterate
 !
 nn = n
 tol = eps
 maxit = nit
 !
-! ERROR CHECKS AND INITIALIZATION
+! Error checks and initialization
 !
 if (nn .lt. 3  .or.  tol .lt. 0.  .or.  maxit .lt. 0) &
 &go to 5
 iter = 0
 !
-! TOP OF ITERATION LOOP
+! Top of iteration loop
 !
 1 if (iter .eq. maxit) go to 4
 dgmax = 0.
@@ -3237,7 +3237,7 @@ do 3 k = 1,nn
   zxk = zxzy(1,k)
   zyk = zxzy(2,k)
 !
-!   INITIALIZE COMPONENTS OF THE 2 BY 2 SYSTEM
+!   Initialize components of the 2 by 2 system
 !
   a11 = 0.
   a12 = 0.
@@ -3245,7 +3245,7 @@ do 3 k = 1,nn
   r1 = 0.
   r2 = 0.
 !
-!   LOOP ON NEIGHBORS NB OF K
+!   Loop on neighbors NB of K
 !
   indf = indl + 1
   indl = iend(k)
@@ -3253,7 +3253,7 @@ do 3 k = 1,nn
     nb = iadj(indx)
     if (nb .eq. 0) go to 2
 !
-!   COMPUTE THE COMPONENTS OF ARC NB-K
+!   Compute the components of arc NB-K
 !
     delx = x(nb) - xk
     dely = y(nb) - yk
@@ -3262,7 +3262,7 @@ do 3 k = 1,nn
     dsq = delxs + delys
     dcub = dsq*sqrt(dsq)
 !
-!   UPDATE THE SYSTEM COMPONENTS FOR NODE NB
+!   Update the system components for node NB
 !
     a11 = a11 + delxs/dcub
     a12 = a12 + delx*dely/dcub
@@ -3273,34 +3273,34 @@ do 3 k = 1,nn
     r2 = r2 + t*dely
 2 continue
 !
-!   SOLVE THE 2 BY 2 SYSTEM AND UPDATE DGMAX
+!   Solve the 2 by 2 system and update DGMAX
 !
   dzy = (a11*r2 - a12*r1)/(a11*a22 - a12*a12)
   dzx = (r1 - a12*dzy)/a11
   dgmax = amax1(dgmax,abs(dzx),abs(dzy))
 !
-!   UPDATE THE PARTIALS AT NODE K
+!   Update the partials at node K
 !
   zxzy(1,k) = zxk + dzx
 3 zxzy(2,k) = zyk + dzy
 !
-!   INCREMENT ITER AND TEST FOR CONVERGENCE
+!   Increment iter and test for convergence
 !
 iter = iter + 1
 if (dgmax .gt. tol) go to 1
 !
-! METHOD CONVERGED
+! Method converged
 !
 nit = iter
 ier = 0
 return
 !
-! METHOD FAILED TO CONVERGE WITHIN NIT ITERATIONS
+! Method failed to converge within nit iterations
 !
 4 ier = 1
 return
 !
-! PARAMETER OUT OF RANGE
+! Parameter OUT of range
 !
 5 nit = 0
 ier = 2
@@ -3313,7 +3313,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 integer :: j
 !-----------------------------------------------------------------------
-!                      DERIVATIVE ESTIMATION
+!                      Derivative estimation
 !-----------------------------------------------------------------------
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
@@ -3330,7 +3330,7 @@ end do
 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 20 ierr = 1
 return
@@ -3348,66 +3348,66 @@ real, intent(inout) :: dx, dy
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   GIVEN A THIESSEN TRIANGULATION OF N POINTS IN THE PLANE
-! WITH ASSOCIATED DATA VALUES Z, THIS SUBROUTINE ESTIMATES
-! X AND Y PARTIAL DERIVATIVES AT NODE K.  THE DERIVATIVES
-! ARE TAKEN TO BE THE PARTIALS AT K OF A QUADRATIC FUNCTION
-! WHICH INTERPOLATES Z(K) AND FITS THE DATA VALUES AT A SET
-! OF NEARBY NODES IN A WEIGHTED LEAST SQUARES SENSE. A MAR-
-! QUARDT STABILIZATION FACTOR IS USED IF NECESSARY TO ENSURE
-! A WELL-CONDITIONED SYSTEM AND A LINEAR FITTING FUNCTION IS
+!   Given a thiessen triangulation of N points in the plane
+! with associated data values Z, this subroutine estimates
+! X and Y partial derivatives at node K.  The derivatives
+! are taken to be the partials at K of a quadratic function
+! which interpolates Z(K) and fits the data values at a set
+! of nearby nodes in a weighted least squares sense. A mar-
+! quardt stabilization factor is used if necessary to ensure
+! a well-conditioned system and a linear fitting function is
 ! USED IF N .LT. 6.  THUS, A UNIQUE SOLUTION EXISTS UNLESS
-! THE NODES ARE COLLINEAR.
-!   AN ALTERNATIVE ROUTINE, GRADG, EMPLOYS A GLOBAL METHOD
-! TO COMPUTE THE PARTIAL DERIVATIVES AT ALL OF THE NODES AT
-! ONCE.  THAT METHOD IS MORE EFFICIENT (WHEN ALL PARTIALS
-! ARE NEEDED) AND MAY BE MORE ACCURATE, DEPENDING ON THE
-! DATA.
+! the nodes are collinear.
+!   An alternative routine, GRADG, employs a global method
+! to compute the partial derivatives at all of the nodes at
+! once.  That method is more efficient (when all partials
+! are needed) and may be more accurate, depending on the
+! data.
 !
-! INPUT PARAMETERS - N - NUMBER OF NODES IN THE TRIANGULA-
+! Input parameters - N - number of nodes in the triangula-
 !                        TION.  N .GE. 3.
 !
-!                    K - NODE AT WHICH DERIVATIVES ARE
+!                    K - node at which derivatives are
 !                        SOUGHT.  1 .LE. K .LE. N.
 !
-!                  X,Y - N-VECTORS CONTAINING THE CARTESIAN
-!                        COORDINATES OF THE NODES.
+!                  X,Y - N-vectors containing the cartesian
+!                        coordinates of the nodes.
 !
-!                    Z - N-VECTOR CONTAINING THE DATA VALUES
-!                        ASSOCIATED WITH THE NODES.
+!                    Z - N-vector containing the data values
+!                        associated with the nodes.
 !
-!                 IADJ - SET OF ADJACENCY LISTS.
+!                 IADJ - set of adjacency lists.
 !
-!                 IEND - POINTERS TO THE ENDS OF ADJACENCY
-!                        LISTS FOR EACH NODE.
+!                 IEND - pointers to the ends of adjacency
+!                        lists for each node.
 !
-! IADJ AND IEND MAY BE CREATED BY SUBROUTINE TRMESH.
+! IADJ and IEND may be created by subroutine TRMESH.
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! Input parameters are not altered by this routine.
 !
-! OUTPUT PARAMETERS - DX,DY - ESTIMATED PARTIAL DERIVATIVES
+! Output parameters - DX,DY - estimated partial derivatives
 !                             AT NODE K UNLESS IER .LT. 0.
 !
-!                       IER - ERROR INDICATOR
+!                       Ier - error indicator
 !                             IER .GT. 0 IF NO ERRORS WERE
-!                                      ENCOUNTERED.  IER
-!                                      CONTAINS THE NUMBER
-!                                      OF NODES (INCLUDING
-!                                      K) USED IN THE FIT.
+!                                      encountered.  Ier
+!                                      contains the number
+!                                      of nodes (including
+!                                      K) used in the fit.
 !                                      IER = 3, 4, OR 5 IM-
-!                                      PLIES A LINEAR FIT.
+!                                      plies a linear fit.
 !                             IER = -1 IF N OR K IS OUT OF
-!                                      RANGE.
+!                                      range.
 !                             IER = -2 IF ALL NODES ARE
-!                                      COLLINEAR.
+!                                      collinear.
 !
-! MODULES REFERENCED BY GRADL1 - GETNP, SETRM, SROTG, SROT
+! Modules referenced by GRADL1 - GETNP, SETRM, SROTG, SROT
 !
-! INTRINSIC FUNCTIONS CALLED BY GRADL1 - MIN0, FLOAT, SQRT,
+! Intrinsic functions called by GRADL1 - MIN0, float, sqrt,
 !                                       AMIN1, ABS
 !
 !***********************************************************
@@ -3419,11 +3419,11 @@ real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
 data    lmn/10/
 data    lmx/30/, rtol/1.e-5/, dtol/.01/, sf/1./
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN,KK =     LOCAL COPIES OF N AND K
 ! LMN,LMX =   MINIMUM AND MAXIMUM VALUES OF LNP FOR N
-!               SUFFICIENTLY LARGE.  IN MOST CASES LMN-1
+!               sufficiently large.  In most cases LMN-1
 !               NODES ARE USED IN THE FIT.  4 .LE. LMN .LE.
 !               LMX.
 ! LMIN,LMAX = MIN(LMN,N), MIN(LMX,N)
@@ -3431,64 +3431,64 @@ data    lmx/30/, rtol/1.e-5/, dtol/.01/, sf/1./
 ! LNP =       LENGTH OF NPTS
 ! NPTS =      ARRAY CONTAINING THE INDICES OF A SEQUENCE OF
 !               NODES ORDERED BY DISTANCE FROM K.  NPTS(1)=K
-!               AND THE FIRST LNP-1 ELEMENTS OF NPTS ARE
-!               USED IN THE LEAST SQUARES FIT.  UNLESS LNP
-!               EXCEEDS LMAX, NPTS(LNP) DETERMINES R.
+!               and the first LNP-1 elements of NPTS are
+!               used in the least squares fit.  Unless LNP
+!               exceeds LMAX, NPTS(LNP) determines R.
 ! IERR =      ERROR FLAG FOR CALLS TO GETNP (NOT CHECKED)
 ! NP =        ELEMENT OF NPTS TO BE ADDED TO THE SYSTEM
 ! I,J =       DO-LOOP INDICES
 ! IM1,JP1 =   I-1, J+1
 ! IP1 =       I+1
 ! L =         NUMBER OF COLUMNS OF A**T TO WHICH A ROTATION
-!               IS APPLIED
+!               is applied
 ! SUM =       SUM OF SQUARED EUCLIDEAN DISTANCES BETWEEN
-!               NODE K AND THE NODES USED IN THE LEAST
-!               SQUARES FIT
+!               node K and the nodes used in the least
+!               squares fit
 ! DS =        SQUARED DISTANCE BETWEEN NODE K AND AN ELE-
 !               MENT OF NPTS
 ! R =         DISTANCE BETWEEN NODE K AND NPTS(LNP) OR SOME
-!               POINT FURTHER FROM K THAN NPTS(LMAX) IF
-!               NPTS(LMAX) IS USED IN THE FIT.  R IS A
-!               RADIUS OF INFLUENCE WHICH ENTERS INTO THE
-!               WEIGHTS (SEE SUBROUTINE SETRM).
+!               point further from K than NPTS(LMAX) if
+!               NPTS(LMAX) is used in the fit.  R is A
+!               radius of influence which enters into the
+!               weights (see subroutine SETRM).
 ! RS =        R*R
 ! RTOL =      TOLERANCE FOR DETERMINING R.  IF THE RELATIVE
-!               CHANGE IN DS BETWEEN TWO ELEMENTS OF NPTS IS
-!               NOT GREATER THAN RTOL THEY ARE TREATED AS
-!               BEING THE SAME DISTANCE FROM NODE K
+!               change in DS between two elements of NPTS is
+!               not greater than RTOL they are treated as
+!               being the same distance from node K
 ! AVSQ =      AV*AV
 ! AV =        ROOT-MEAN-SQUARE DISTANCE BETWEEN K AND THE
-!               NODES (OTHER THAN K) IN THE LEAST SQUARES
-!               FIT.  THE FIRST 3 COLUMNS OF THE SYSTEM ARE
-!               SCALED BY 1/AVSQ, THE NEXT 2 BY 1/AV.
+!               nodes (other than K) in the least squares
+!               fit.  The first 3 columns of the system are
+!               scaled by 1/AVSQ, the next 2 by 1/AV.
 ! XK,YK,ZK =  COORDINATES AND DATA VALUE ASSOCIATED WITH K
 ! A =         TRANSPOSE OF THE AUGMENTED REGRESSION MATRIX
 ! C,S =       COMPONENTS OF THE PLANE ROTATION DETERMINED
-!               BY SUBROUTINE SROTG
+!               by subroutine SROTG
 ! DMIN =      MINIMUM OF THE MAGNITUDES OF THE DIAGONAL
-!               ELEMENTS OF THE REGRESSION MATRIX AFTER
-!               ZEROS ARE INTRODUCED BELOW THE DIAGONAL
+!               elements of the regression matrix after
+!               zeros are introduced below the diagonal
 ! DTOL =      TOLERANCE FOR DETECTING AN ILL-CONDITIONED
-!               SYSTEM.  THE SYSTEM IS ACCEPTED WHEN DMIN
+!               system.  The system is accepted when DMIN
 !               .GE. DTOL
 ! SF =        MARQUARDT STABILIZATION FACTOR USED TO DAMP
-!               OUT THE FIRST 3 SOLUTION COMPONENTS (SECOND
-!               PARTIALS OF THE QUADRATIC) WHEN THE SYSTEM
-!               IS ILL-CONDITIONED.  AS SF INCREASES, THE
-!               FITTING FUNCTION APPROACHES A LINEAR
+!               out the first 3 solution components (second
+!               partials of the quadratic) when the system
+!               is ill-conditioned.  As SF increases, the
+!               fitting function approaches a linear
 !
 nn = n
 kk = k
 !
-! CHECK FOR ERRORS AND INITIALIZE LMIN, LMAX
+! Check for errors and initialize LMIN, LMAX
 !
 if (nn .lt. 3  .or.  kk .lt. 1  .or.  kk .gt. nn) &
 &go to 16
 lmin = min0(lmn,nn)
 lmax = min0(lmx,nn)
 !
-! COMPUTE NPTS, LNP, AVSQ, AV, AND R.
-!   SET NPTS TO THE CLOSEST LMIN-1 NODES TO K.
+! Compute NPTS, LNP, AVSQ, AV, and R.
+!   Set NPTS to the closest LMIN-1 nodes to K.
 !
 sum = 0.
 npts(1) = kk
@@ -3497,8 +3497,8 @@ do 1 lnp = 2,lm1
   call getnp (x,y,iadj,iend,lnp, npts, ds,ierr)
 1 sum = sum + ds
 !
-! ADD ADDITIONAL NODES TO NPTS UNTIL THE RELATIVE INCREASE
-!   IN DS IS AT LEAST RTOL.
+! Add additional nodes to NPTS until the relative increase
+!   in DS is at least RTOL.
 !
 do 2 lnp = lmin,lmax
   call getnp (x,y,iadj,iend,lnp, npts, rs,ierr)
@@ -3506,13 +3506,13 @@ do 2 lnp = lmin,lmax
   if (lnp .gt. 6) go to 3
 2 sum = sum + rs
 !
-! USE ALL LMAX NODES IN THE LEAST SQUARES FIT.  RS IS
-!   ARBITRARILY INCREASED BY 10 PER CENT.
+! Use all LMAX nodes in the least squares fit.  RS is
+!   arbitrarily increased by 10 per cent.
 !
 rs = 1.1*rs
 lnp = lmax + 1
 !
-! THERE ARE LNP-2 EQUATIONS CORRESPONDING TO NODES NPTS(2),
+! There are LNP-2 equations corresponding to nodes NPTS(2),
 !   ...,NPTS(LNP-1).
 !
 3 avsq = sum/float(lnp-2)
@@ -3523,10 +3523,10 @@ yk = y(kk)
 zk = z(kk)
 if (lnp .lt. 7) go to 12
 !
-! SET UP THE FIRST 5 EQUATIONS OF THE AUGMENTED REGRESSION
-!   MATRIX (TRANSPOSED) AS THE COLUMNS OF A, AND ZERO OUT
-!   THE LOWER TRIANGLE (UPPER TRIANGLE OF A) WITH GIVENS
-!   ROTATIONS
+! Set up the first 5 equations of the augmented regression
+!   matrix (transposed) as the columns of A, and zero out
+!   the lower triangle (upper triangle of A) with Givens
+!   rotations
 !
 do 5 i = 1,5
   np = npts(i+1)
@@ -3541,7 +3541,7 @@ do 5 i = 1,5
 4 call srot (l,a(jp1,j),1,a(jp1,i),1,c,s)
 5 continue
 !
-! ADD THE ADDITIONAL EQUATIONS TO THE SYSTEM USING
+! Add the additional equations to the system using
 !   THE LAST COLUMN OF A -- I .LE. LNP.
 !
 i = 7
@@ -3557,14 +3557,14 @@ i = 7
   i = i + 1
   go to 6
 !
-! TEST THE SYSTEM FOR ILL-CONDITIONING
+! Test the system for ill-conditioning
 !
 8 dmin = amin1( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
 &abs(a(4,4)),abs(a(5,5)) )
 if (dmin .ge. dtol) go to 15
 if (lnp .gt. lmax) go to 9
 !
-! ADD ANOTHER NODE TO THE SYSTEM AND INCREASE R --
+! Add another node to the system and increase R --
 !   I .EQ. LNP
 !
 lnp = lnp + 1
@@ -3573,9 +3573,9 @@ if (lnp .le. lmax) call getnp (x,y,iadj,iend,lnp, &
 r = sqrt(1.1*rs)
 go to 6
 !
-! STABILIZE THE SYSTEM BY DAMPING SECOND PARTIALS --ADD
-!   MULTIPLES OF THE FIRST THREE UNIT VECTORS TO THE FIRST
-!   THREE EQUATIONS.
+! Stabilize the system by damping second partials --add
+!   multiples of the first three unit vectors to the first
+!   three equations.
 !
 9 do 11 i = 1,3
   a(i,6) = sf
@@ -3590,7 +3590,7 @@ go to 6
 go to 14
 !
 ! 4 .LE. LNP .LE. 6 (2, 3, OR 4 EQUATIONS) -- FIT A PLANE TO
-!   THE DATA USING THE LAST 3 COLUMNS OF A.
+!   the data using the last 3 columns of A.
 !
 12 np = npts(2)
 call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
@@ -3612,12 +3612,12 @@ do 13 i = 4,lm1
   call srotg (a(5,5),a(5,6),c,s)
 13 call srot (1,a(6,5),1,a(6,6),1,c,s)
 !
-! TEST THE LINEAR FIT FOR ILL-CONDITIONING
+! Test the linear fit for ill-conditioning
 !
 14 dmin = amin1( abs(a(4,4)),abs(a(5,5)) )
 if (dmin .lt. dtol) go to 17
 !
-! SOLVE THE 2 BY 2 TRIANGULAR SYSTEM FOR THE DERIVATIVES
+! Solve the 2 by 2 triangular system for the derivatives
 !
 15 dy = a(6,5)/a(5,5)
 dx = (a(6,4) - a(5,4)*dy)/a(4,4)/av
@@ -3625,12 +3625,12 @@ dy = dy/av
 ier = lnp - 1
 return
 !
-! N OR K IS OUT OF RANGE
+! N or K is out of range
 !
 16 ier = -1
 return
 !
-! NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
+! No unique solution due to collinear nodes
 !
 17 ier = -2
 return
@@ -3643,48 +3643,48 @@ real, intent(inout) :: row(6)
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   THIS ROUTINE SETS UP THE I-TH ROW OF AN AUGMENTED RE-
-! GRESSION MATRIX FOR A WEIGHTED LEAST-SQUARES FIT OF A
-! QUADRATIC FUNCTION Q(X,Y) TO A SET OF DATA VALUES Z WHERE
+!   This routine sets up the I-TH row of an augmented RE-
+! gression matrix for a weighted least-squares fit of A
+! quadratic function Q(X,Y) to a set of data values Z where
 ! Q(XK,YK) = ZK.  THE FIRST 3 COLUMNS (QUADRATIC TERMS) ARE
-! SCALED BY 1/S2 AND THE FOURTH AND FIFTH COLUMNS (LINEAR
-! TERMS) ARE SCALED BY 1/S1.  THE WEIGHT IS (R-D)/(R*D) IF
+! scaled by 1/S2 and the fourth and fifth columns (linear
+! terms) are scaled by 1/S1.  The weight is (R-D)/(R*D) if
 ! R .GT. D AND 0 IF R .LE. D, WHERE D IS THE DISTANCE
-! BETWEEN NODES I AND K.
+! between nodes I and K.
 !
-! INPUT PARAMETERS - XK,YK,ZK - COORDINATES AND DATA VALUE
-!                               AT NODE K -- INTERPOLATED
+! Input parameters - XK,YK,ZK - coordinates and data value
+!                               at node K -- interpolated
 !                               BY Q.
 !
-!                    XI,YI,ZI - COORDINATES AND DATA VALUE
-!                               AT NODE I.
+!                    Xi,YI,ZI - coordinates and data value
+!                               at node I.
 !
-!                       S1,S2 - INVERSE SCALE FACTORS.
+!                       S1,S2 - inverse scale factors.
 !
-!                           R - RADIUS OF INFLUENCE ABOUT
-!                               NODE K DEFINING THE WEIGHT.
+!                           R - radius of influence about
+!                               node K defining the weight.
 !
-!                         ROW - VECTOR OF LENGTH 6.
+!                         Row - vector of length 6.
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! Input parameters are not altered by this routine.
 !
-! OUTPUT PARAMETER - ROW - VECTOR CONTAINING A ROW OF THE
-!                          AUGMENTED REGRESSION MATRIX.
+! Output parameter - row - vector containing a row of the
+!                          augmented regression matrix.
 !
-! MODULES REFERENCED BY SETRM - NONE
+! Modules referenced by SETRM - none
 !
-! INTRINSIC FUNCTION CALLED BY SETRM - SQRT
+! Intrinsic function called by SETRM - sqrt
 !
 !***********************************************************
 !
 integer :: i
 real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! I =    DO-LOOP INDEX
 ! DX =   XI - XK
@@ -3713,8 +3713,8 @@ row(5) = dy*w1
 row(6) = (zi - zk)*w
 return
 !
-! NODES K AND I COINCIDE OR NODE I IS OUTSIDE OF THE RADIUS
-!   OF INFLUENCE.  SET ROW TO THE ZERO VECTOR.
+! Nodes K and I coincide or node I is outside of the radius
+!   of influence.  Set row to the zero vector.
 !
 1 do 2 i = 1,6
 2 row(i) = 0.
@@ -3732,70 +3732,70 @@ real, intent(inout) :: ds
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   GIVEN A THIESSEN TRIANGULATION OF N NODES AND AN ARRAY
-! NPTS CONTAINING THE INDICES OF L-1 NODES ORDERED BY
-! EUCLIDEAN DISTANCE FROM NPTS(1), THIS SUBROUTINE SETS
-! NPTS(L) TO THE INDEX OF THE NEXT NODE IN THE SEQUENCE --
-! THE NODE, OTHER THAN NPTS(1),...,NPTS(L-1), WHICH IS
-! CLOSEST TO NPTS(1).  THUS, THE ORDERED SEQUENCE OF K
-! CLOSEST NODES TO N1 (INCLUDING N1) MAY BE DETERMINED BY
+!   Given a thiessen triangulation of N nodes and an array
+! NPTS containing the indices of L-1 nodes ordered by
+! Euclidean distance from NPTS(1), this subroutine sets
+! NPTS(L) to the index of the next node in the sequence --
+! the node, other than NPTS(1),...,NPTS(L-1), which is
+! closest to NPTS(1).  Thus, the ordered sequence of K
+! closest nodes to N1 (including N1) may be determined by
 ! K-1 CALLS TO GETNP WITH NPTS(1) = N1 AND L = 2,3,...,K
 ! FOR K .GE. 2.
-!   THE ALGORITHM USES THE FACT THAT, IN A THIESSEN TRIAN-
-! GULATION, THE K-TH CLOSEST NODE TO A GIVEN NODE N1 IS A
-! NEIGHBOR OF ONE OF THE K-1 CLOSEST NODES TO N1.
+!   The algorithm uses the fact that, in a thiessen trian-
+! gulation, the K-TH closest node to a given node N1 is A
+! neighbor of one of the K-1 closest nodes to N1.
 !
-! INPUT PARAMETERS - X,Y - VECTORS OF LENGTH N CONTAINING
-!                          THE CARTESIAN COORDINATES OF THE
-!                          NODES.
+! Input parameters - X,Y - vectors of length N containing
+!                          the cartesian coordinates of the
+!                          nodes.
 !
-!                   IADJ - SET OF ADJACENCY LISTS OF NODES
-!                          IN THE TRIANGULATION.
+!                   IADJ - set of adjacency lists of nodes
+!                          in the triangulation.
 !
-!                   IEND - POINTERS TO THE ENDS OF ADJACENCY
-!                          LISTS FOR EACH NODE IN THE TRI-
-!                          ANGULATION.
+!                   IEND - pointers to the ends of adjacency
+!                          lists for each node in the TRI-
+!                          angulation.
 !
-!                      L - NUMBER OF NODES IN THE SEQUENCE
+!                      L - number of nodes in the sequence
 !                          ON OUTPUT.  2 .LE. L .LE. N.
 !
 !                   NPTS - ARRAY OF LENGTH .GE. L CONTAIN-
-!                          ING THE INDICES OF THE L-1 CLOS-
-!                          EST NODES TO NPTS(1) IN THE FIRST
+!                          ing the indices of the L-1 clos-
+!                          est nodes to NPTS(1) in the first
 !                          L-1 LOCATIONS.
 !
-! IADJ AND IEND MAY BE CREATED BY SUBROUTINE TRMESH.
+! IADJ and IEND may be created by subroutine TRMESH.
 !
-! INPUT PARAMETERS OTHER THAN NPTS ARE NOT ALTERED BY THIS
-!   ROUTINE.
+! Input parameters other than NPTS are not altered by this
+!   routine.
 !
-! OUTPUT PARAMETERS - NPTS - UPDATED WITH THE INDEX OF THE
-!                            L-TH CLOSEST NODE TO NPTS(1) IN
+! Output parameters - NPTS - updated with the index of the
+!                            L-TH closest node to NPTS(1) in
 !                            POSITION L UNLESS IER = 1.
 !
-!                       DS - SQUARED EUCLIDEAN DISTANCE BE-
-!                            TWEEN NPTS(1) AND NPTS(L)
+!                       DS - squared Euclidean distance be-
+!                            tween NPTS(1) and NPTS(L)
 !                            UNLESS IER = 1.
 !
-!                      IER - ERROR INDICATOR
+!                      Ier - error indicator
 !                            IER = 0 IF NO ERRORS WERE EN-
-!                                    COUNTERED.
+!                                    countered.
 !                            IER = 1 IF L IS OUT OF RANGE.
 !
-! MODULES REFERENCED BY GETNP - NONE
+! Modules referenced by GETNP - none
 !
-! INTRINSIC FUNCTION CALLED BY GETNP - IABS
+! Intrinsic function called by GETNP - IABS
 !
 !***********************************************************
 !
 integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
 real :: x1, y1, dnp, dnb
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! LM1 =     L - 1
 ! N1 =      NPTS(1)
@@ -3808,7 +3808,7 @@ real :: x1, y1, dnp, dnb
 ! NB =      NEIGHBOR OF NI AND CANDIDATE FOR NP
 ! X1,Y1 =   COORDINATES OF N1
 ! DNP,DNB = SQUARED DISTANCES FROM N1 TO NP AND NB,
-!             RESPECTIVELY
+!             respectively
 !
 lm1 = l - 1
 if (lm1 .lt. 1) go to 4
@@ -3817,7 +3817,7 @@ n1 = npts(1)
 x1 = x(n1)
 y1 = y(n1)
 !
-! MARK THE ELEMENTS OF NPTS
+! Mark the elements of NPTS
 !
 do 1 i = 1,lm1
   ni = npts(i)
@@ -3826,12 +3826,12 @@ do 1 i = 1,lm1
 !
 ! CANDIDATES FOR NP = NPTS(L) ARE THE UNMARKED NEIGHBORS
 !   OF NODES IN NPTS.  NP=0 IS A FLAG TO SET NP TO THE
-!   FIRST CANDIDATE ENCOUNTERED.
+!   first candidate encountered.
 !
 np = 0
 dnp = 0.
 !
-! LOOP ON NODES NI IN NPTS
+! Loop on nodes NI in NPTS
 !
 do 2 i = 1,lm1
   ni = npts(i)
@@ -3839,14 +3839,14 @@ do 2 i = 1,lm1
   if (ni .gt. 1) indf = iabs(iend(ni-1)) + 1
   indl = -iend(ni)
 !
-! LOOP ON NEIGHBORS NB OF NI
+! Loop on neighbors NB of NI
 !
   do 2 indx = indf,indl
     nb = iadj(indx)
     if (nb .eq. 0  .or.  iend(nb) .lt. 0) go to 2
 !
-! NB IS AN UNMARKED NEIGHBOR OF NI.  REPLACE NP IF NB IS
-!   CLOSER TO N1 OR IS THE FIRST CANDIDATE ENCOUNTERED.
+! NB is an unmarked neighbor of NI.  Replace NP if NB is
+!   closer to N1 or is the first candidate encountered.
 !
     dnb = (x(nb)-x1)**2 + (y(nb)-y1)**2
     if (np .ne. 0  .and.  dnb .ge. dnp) go to 2
@@ -3856,7 +3856,7 @@ do 2 i = 1,lm1
 npts(l) = np
 ds = dnp
 !
-! UNMARK THE ELEMENTS OF NPTS
+! Unmark the elements of NPTS
 !
 do i = 1,lm1
   ni = npts(i)
@@ -3864,7 +3864,7 @@ do i = 1,lm1
   end do
 return
 !
-! L IS OUT OF RANGE
+! L is out of range
 !
 4 ier = 1
 return
@@ -3877,7 +3877,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 integer :: ist, j
 !-----------------------------------------------------------------------
-!                    EVALUATION OF THE SURFACE
+!                    Evaluation of the surface
 !-----------------------------------------------------------------------
 real :: x(n), y(n)
 real, intent(in) :: z(n), xi(m), yi(m)
@@ -3897,7 +3897,7 @@ end do
 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 20 ierr = 1
 return
@@ -3912,7 +3912,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, nrows
 integer :: i, ist, j
 !-----------------------------------------------------------------------
-!                EVALUATION OF THE SURFACE OVER A GRID
+!                Evaluation of the surface over a grid
 !-----------------------------------------------------------------------
 real :: x(n), y(n)
 real, intent(in) :: z(n), zxzy(2,n)
@@ -3935,7 +3935,7 @@ end do
 ierr = 0
 return
 !
-!     ERROR RETURN
+!     Error return
 !
 30 ierr = 1
 return
@@ -3957,87 +3957,87 @@ real, intent(out) :: pz
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   GIVEN A TRIANGULATION OF A SET OF POINTS IN THE PLANE,
-! THIS ROUTINE DETERMINES A PIECEWISE CUBIC FUNCTION F(X,Y)
-! WHICH INTERPOLATES A SET OF DATA VALUES AND PARTIAL
-! DERIVATIVES AT THE VERTICES.  F HAS CONTINUOUS FIRST
-! DERIVATIVES OVER THE MESH AND EXTENDS BEYOND THE MESH
-! BOUNDARY ALLOWING EXTRAPOLATION.  INTERPOLATION IS EXACT
-! FOR QUADRATIC DATA.  THE VALUE OF F AT (PX,PY) IS
-! RETURNED.  INTRC1 IS PART OF AN INTERPOLATION PACKAGE
-! WHICH PROVIDES ROUTINES TO GENERATE, UPDATE AND PLOT THE
-! MESH.
+!   Given a triangulation of a set of points in the plane,
+! this routine determines a piecewise cubic function F(X,Y)
+! which interpolates a set of data values and partial
+! derivatives at the vertices.  F has continuous first
+! derivatives over the mesh and extends beyond the mesh
+! boundary allowing extrapolation.  Interpolation is exact
+! for quadratic data.  The value of F at (PX,PY) is
+! returned.  INTRC1 is part of an interpolation package
+! which provides routines to generate, update and plot the
+! mesh.
 !
 ! INPUT PARAMETERS -     N - NUMBER OF NODES IN THE MESH.
 !                            N .GE. 3.
 !
-!                    PX,PY - COORDINATES OF A POINT AT WHICH
-!                            F IS TO BE EVALUATED.
+!                    PX,PY - coordinates of a point at which
+!                            F is to be evaluated.
 !
-!                      X,Y - VECTORS OF COORDINATES OF THE
-!                            NODES IN THE MESH.
+!                      X,Y - vectors of coordinates of the
+!                            nodes in the mesh.
 !
-!                        Z - VECTOR OF DATA VALUES AT THE
-!                            NODES.
+!                        Z - vector of data values at the
+!                            nodes.
 !
-!                     IADJ - SET OF ADJACENCY LISTS OF NODES
-!                            IN THE MESH.
+!                     IADJ - set of adjacency lists of nodes
+!                            in the mesh.
 !
-!                     IEND - POINTERS TO THE ENDS OF
-!                            ADJACENCY LISTS IN IADJ FOR
-!                            EACH NODE IN THE MESH.
+!                     IEND - pointers to the ends of
+!                            adjacency lists in IADJ for
+!                            each node in the mesh.
 !
-!                    IFLAG - OPTION INDICATOR
+!                    IFLAG - option indicator
 !                            IFLAG = 0 IF INTRC1 IS TO
-!                                      PROVIDE DERIVATIVE
-!                                      ESTIMATES (FROM
+!                                      provide derivative
+!                                      estimates (from
 !                                      GRADL1).
 !                            IFLAG = 1 IF DERIVATIVES ARE
-!                                      USER PROVIDED.
+!                                      user provided.
 !
-!                     ZXZY - 2 BY N ARRAY WHOSE COLUMNS
-!                            CONTAIN ESTIMATED PARTIAL DER-
-!                            IVATIVES AT THE NODES (X PAR-
-!                            TIALS IN THE FIRST ROW) IF
+!                     ZXZY - 2 by N array whose columns
+!                            contain estimated partial der-
+!                            ivatives at the nodes (X par-
+!                            tials in the first row) if
 !                            IFLAG = 1, NOT USED IF IFLAG
 !                            = 0.
 !
-!                      IST - INDEX OF THE STARTING NODE IN
-!                            THE SEARCH FOR A TRIANGLE CON-
+!                      IST - index of the starting node in
+!                            the search for a triangle con-
 !                            TAINING (PX,PY).  1 .LE. IST
 !                            .LE. N.  THE OUTPUT VALUE OF
-!                            IST FROM A PREVIOUS CALL MAY
-!                            BE A GOOD CHOICE.
+!                            IST from a previous call may
+!                            be a good choice.
 !
-! IADJ AND IEND MAY BE CREATED BY TRMESH AND DERIVATIVE
-!   ESTIMATES MAY BE COMPUTED BY GRADL1 OR GRADG.
+! IADJ and IEND may be created by TRMESH and derivative
+!   estimates may be computed by GRADL1 or GRADG.
 !
-! INPUT PARAMETERS OTHER THAN IST ARE NOT ALTERED BY THIS
-!   ROUTINE.
+! Input parameters other than IST are not altered by this
+!   routine.
 !
-! OUTPUT PARAMETERS - IST - INDEX OF ONE OF THE VERTICES OF
-!                           THE TRIANGLE CONTAINING (PX,PY)
+! Output parameters - IST - index of one of the vertices of
+!                           the triangle containing (PX,PY)
 !                           UNLESS IER .LT. 0.
 !
-!                      PZ - VALUE OF F AT (PX,PY), OR 0 IF
+!                      PZ - value of F at (PX,PY), or 0 if
 !                           IER .LT. 0.
 !
-!                     IER - ERROR INDICATOR
+!                     Ier - error indicator
 !                           IER = 0 IF NO ERRORS WERE
-!                                   ENCOUNTERED.
+!                                   encountered.
 !                           IER = 1 IF NO ERRORS WERE EN-
-!                                   COUNTERED AND EXTRAPOLA-
-!                                   TION WAS PERFORMED.
+!                                   countered and extrapola-
+!                                   tion was performed.
 !                           IER = -1 IF N, IFLAG, OR IST IS
-!                                    OUT OF RANGE.
+!                                    out of range.
 !                           IER = -2 IF THE NODES ARE COL-
-!                                    LINEAR.
+!                                    linear.
 !
-! MODULES REFERENCED BY INTRC1 - TRFIND, TVAL,
+! Modules referenced by INTRC1 - TRFIND, TVAL,
 !             (AND OPTIONALLY)   GRADL1, GETNP, SETRM,
 !                                SROTG, SROT
 !
@@ -4048,40 +4048,40 @@ real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
 &y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
 &c2, f1, f2
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! NN =                      LOCAL COPY OF N
 ! I1,I2,I3 =                VERTICES DETERMINED BY TRFIND
 ! IERR =                    ERROR FLAG FOR CALLS TO GRADL1
 !                             AND TVAL
 ! N1,N2 =                   ENDPOINTS OF THE CLOSEST BOUND-
-!                             ARY EDGE TO P WHEN P IS OUT-
-!                             SIDE OF THE MESH BOUNDARY
+!                             ary edge to P when P is out-
+!                             side of the mesh boundary
 ! INDX =                    IADJ INDEX OF N1 AS A NEIGHBOR
 !                             OF N2
 ! XP,YP =                   LOCAL COPIES OF THE COORDINATES
 !                             OF P=(PX,PY)
 ! ZX1,ZY1,ZX2,ZY2,ZX3,ZY3 = X AND Y DERIVATIVES AT THE
-!                             VERTICES OF A TRIANGLE T WHICH
-!                             CONTAINS P OR AT N1 AND N2
+!                             vertices of a triangle T which
+!                             contains P or at N1 and N2
 ! X1,Y1,X2,Y2,X3,Y3 =       X,Y COORDINATES OF THE VERTICES
-!                             OF T OR OF N1 AND N2
+!                             of T or of N1 and N2
 ! Z1,Z2,Z3 =                DATA VALUES AT THE VERTICES OF T
 ! DUM =                     DUMMY VARIABLE FOR CALL TO TVAL
 ! DP =                      INNER PRODUCT OF N1-N2 AND P-N2
 ! U,V =                     X,Y COORDINATES OF THE VECTOR
 !                             N2-N1
 ! XQ,YQ =                   X,Y COORDINATES OF THE CLOSEST
-!                             BOUNDARY POINT TO P WHEN P IS
-!                             OUTSIDE OF THE MESH BOUNDARY
+!                             boundary point to P when P is
+!                             outside of the mesh boundary
 ! R1,R2 =                   BARYCENTRIC COORDINATES OF Q
-!                             WITH RESPECT TO THE LINE SEG-
+!                             with respect to the line SEG-
 !                             MENT N2-N1 CONTAINING Q
 ! A1,A2,B1,B2,C1,C2 =       CARDINAL FUNCTIONS FOR EVALUAT-
-!                             ING THE INTERPOLATORY SURFACE
+!                             ing the interpolatory surface
 !                             AT Q
 ! F1,F2 =                   CUBIC FACTORS USED TO COMPUTE
-!                             THE CARDINAL FUNCTIONS
+!                             the cardinal functions
 !
 nn = n
 pz = 0.
@@ -4090,8 +4090,8 @@ if (nn .lt. 3  .or.  iflag .lt. 0  .or.  iflag .gt. 1 &
 xp = px
 yp = py
 !
-! FIND A TRIANGLE CONTAINING P IF P IS WITHIN THE MESH
-!   BOUNDARY
+! Find a triangle containing P if P is within the mesh
+!   boundary
 !
 call trfind(ist,xp,yp,x,y,iadj,iend, i1,i2,i3)
 if (i1 .eq. 0) go to 12
@@ -4099,7 +4099,7 @@ ist = i1
 if (i3 .eq. 0) go to 3
 if (iflag .ne. 1) go to 1
 !
-! DERIVATIVES ARE USER PROVIDED
+! Derivatives are user provided
 !
 zx1 = zxzy(1,i1)
 zx2 = zxzy(1,i2)
@@ -4109,13 +4109,13 @@ zy2 = zxzy(2,i2)
 zy3 = zxzy(2,i3)
 go to 2
 !
-! COMPUTE DERIVATIVE ESTIMATES AT THE VERTICES
+! Compute derivative estimates at the vertices
 !
 1 call gradl1(nn,i1,x,y,z,iadj,iend, zx1,zy1,ierr)
 call gradl1(nn,i2,x,y,z,iadj,iend, zx2,zy2,ierr)
 call gradl1(nn,i3,x,y,z,iadj,iend, zx3,zy3,ierr)
 !
-! SET LOCAL PARAMETERS FOR CALL TO TVAL
+! Set local parameters for call to TVAL
 !
 2 x1 = x(i1)
 y1 = y(i1)
@@ -4132,18 +4132,18 @@ if (ierr .ne. 0) go to 12
 ier = 0
 return
 !
-! P IS OUTSIDE OF THE MESH BOUNDARY.  EXTRAPOLATE TO P BY
-!   PASSING A LINEAR FUNCTION OF ONE VARIABLE THROUGH THE
-!   VALUE AND DIRECTIONAL DERIVATIVE (IN THE DIRECTION
-!   P-Q) OF THE INTERPOLATORY SURFACE (TVAL) AT Q WHERE
-!   Q IS THE CLOSEST BOUNDARY POINT TO P.
+! P is outside of the mesh boundary.  Extrapolate to P by
+!   passing a linear function of one variable THROUGH the
+!   value and directional derivative (in the direction
+!   P-Q) of the interpolatory surface (TVAL) at Q where
+!   Q is the closest boundary point to P.
 !
-! DETERMINE Q BY TRAVERSING THE BOUNDARY STARTING FROM
-!   THE RIGHTMOST VISIBLE NODE I1.
+! Determine Q by traversing the boundary starting from
+!   the rightmost visible node I1.
 !
 3 n2 = i1
 !
-! SET N1 TO THE LAST NONZERO NEIGHBOR OF N2 AND COMPUTE DP
+! Set N1 to the last nonzero neighbor of N2 and compute DP
 !
 4 indx = iend(n2) - 1
 n1 = iadj(indx)
@@ -4157,8 +4157,8 @@ if ((xp-x1)*(x2-x1) + (yp-y1)*(y2-y1) .gt. 0.) go to 8
 n2 = n1
 go to 4
 !
-! N2 IS THE CLOSEST BOUNDARY POINT TO P.  COMPUTE PARTIAL
-!   DERIVATIVES AT N2.
+! N2 is the closest boundary point to P.  Compute partial
+!   derivatives at N2.
 !
 5 if (iflag .ne. 1) go to 6
 zx2 = zxzy(1,n2)
@@ -4166,14 +4166,14 @@ zy2 = zxzy(2,n2)
 go to 7
 6 call gradl1(nn,n2,x,y,z,iadj,iend, zx2,zy2,ierr)
 !
-! COMPUTE EXTRAPOLATED VALUE AT P
+! Compute extrapolated value at P
 !
 7 pz = z(n2) + zx2*(xp-x2) + zy2*(yp-y2)
 ier = 1
 return
 !
-! THE CLOSEST BOUNDARY POINT Q LIES ON N2-N1.  COMPUTE
-!   PARTIALS AT N1 AND N2.
+! The closest boundary point Q lies on N2-N1.  Compute
+!   partials at N1 and N2.
 !
 8 if (iflag .ne. 1) go to 9
 zx1 = zxzy(1,n1)
@@ -4184,8 +4184,8 @@ go to 10
 9 call gradl1(nn,n1,x,y,z,iadj,iend, zx1,zy1,ierr)
 call gradl1(nn,n2,x,y,z,iadj,iend, zx2,zy2,ierr)
 !
-! COMPUTE Q, ITS BARYCENTRIC COORDINATES, AND THE CARDINAL
-!   FUNCTIONS FOR EXTRAPOLATION
+! Compute Q, its barycentric coordinates, and the cardinal
+!   functions for extrapolation
 !
 10 u = x2-x1
 v = y2-y1
@@ -4202,25 +4202,25 @@ b2 = -u*f2
 c1 = v*f1
 c2 = -v*f2
 !
-! COMPUTE THE VALUE OF THE INTERPOLATORY SURFACE (TVAL)
+! Compute the value of the interpolatory surface (TVAL)
 !   AT Q
 !
 pz = a1*z(n1) + a2*z(n2) + b1*zx1 + b2*zx2 + &
 &c1*zy1 + c2*zy2
 !
-! COMPUTE THE EXTRAPOLATED VALUE AT P
+! Compute the extrapolated value at P
 !
 pz = pz + (r1*zx1 + r2*zx2)*(xp-xq) + &
 &(r1*zy1 + r2*zy2)*(yp-yq)
 ier = 1
 return
 !
-! N, IFLAG, OR IST OUT OF RANGE
+! N, IFLAG, or IST out of range
 !
 11 ier = -1
 return
 !
-! NODES ARE COLLINEAR
+! Nodes are collinear
 !
 12 ier = -2
 return
@@ -4238,67 +4238,67 @@ real, intent(inout) :: w, wx, wy
 !
 !***********************************************************
 !
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
+!                                               Robert renka
+!                                       oak ridge natl. Lab.
 !                                             (615) 576-5139
 !
-!   GIVEN FUNCTION VALUES AND FIRST PARTIAL DERIVATIVES AT
-! THE THREE VERTICES OF A TRIANGLE, THIS ROUTINE DETERMINES
-! A FUNCTION W WHICH AGREES WITH THE GIVEN DATA, RETURNING
-! THE VALUE AND (OPTIONALLY) FIRST PARTIAL DERIVATIVES OF W
-! AT A POINT (X,Y) IN THE TRIANGLE.  THE INTERPOLATION
-! METHOD IS EXACT FOR QUADRATIC POLYNOMIAL DATA.  THE
-! TRIANGLE IS PARTITIONED INTO THREE SUBTRIANGLES WITH
-! EQUAL AREAS.  W IS CUBIC IN EACH SUBTRIANGLE AND ALONG
-! THE EDGES, BUT HAS ONLY ONE CONTINUOUS DERIVATIVE ACROSS
-! EDGES.  THE NORMAL DERIVATIVE OF W VARIES LINEARLY ALONG
-! EACH OUTER EDGE.  THE VALUES AND PARTIAL DERIVATIVES OF W
-! ALONG A TRIANGLE EDGE DEPEND ONLY ON THE DATA VALUES AT
-! THE ENDPOINTS OF THE EDGE.  THUS THE METHOD YIELDS C-1
-! CONTINUITY WHEN USED TO INTERPOLATE OVER A TRIANGULAR
-! GRID.  THIS ALGORITHM IS DUE TO C. L. LAWSON.
+!   Given function values and first partial derivatives at
+! the three vertices of a triangle, this routine determines
+! a function W which agrees with the given data, returning
+! the value and (optionally) first partial derivatives of W
+! at a point (X,Y) in the triangle.  The interpolation
+! method is exact for quadratic polynomial data.  The
+! triangle is partitioned into three subtriangles with
+! equal areas.  W is cubic in each subtriangle and along
+! the edges, but has only one continuous derivative across
+! edges.  The normal derivative of W varies linearly along
+! each outer edge.  The values and partial derivatives of W
+! along a triangle edge depend only on the data values at
+! the endpoints of the edge.  Thus the method yields C-1
+! continuity when used to interpolate over a triangular
+! grid.  This algorithm is due to C. L. Lawson.
 !
 ! INPUT PARAMETERS -   X,Y - COORDINATES OF A POINT AT WHICH
-!                            W IS TO BE EVALUATED.
+!                            W is to be evaluated.
 !
-!        X1,X2,X3,Y1,Y2,Y3 - COORDINATES OF THE VERTICES OF
-!                            A TRIANGLE CONTAINING (X,Y).
+!        X1,X2,X3,Y1,Y2,Y3 - coordinates of the vertices of
+!                            a triangle containing (X,Y).
 !
-!                 Z1,Z2,Z3 - FUNCTION VALUES AT THE VERTICES
-!                            TO BE INTERPOLATED.
+!                 Z1,Z2,Z3 - function values at the vertices
+!                            to be interpolated.
 !
-!              ZX1,ZX2,ZX3 - X-DERIVATIVE VALUES AT THE
-!                            VERTICES.
+!              ZX1,ZX2,ZX3 - X-derivative values at the
+!                            vertices.
 !
-!              ZY1,ZY2,ZY3 - Y-DERIVATIVE VALUES AT THE
-!                            VERTICES.
+!              ZY1,ZY2,ZY3 - Y-derivative values at the
+!                            vertices.
 !
-!                    IFLAG - OPTION INDICATOR
+!                    IFLAG - option indicator
 !                            IFLAG = 0 IF ONLY W IS TO BE
-!                                      COMPUTED.
+!                                      computed.
 !                            IFLAG = 1 IF W, WX, AND WY ARE
-!                                      TO BE RETURNED.
+!                                      to be returned.
 !
-! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+! Input parameters are not altered by this routine.
 !
 ! OUTPUT PARAMETERS -   W - ESTIMATED VALUE OF THE INTERP-
-!                           OLATORY FUNCTION AT (X,Y) IF
+!                           olatory function at (X,Y) if
 !                           IER = 0.  OTHERWISE W = 0.
 !
-!                   WX,WY - PARTIAL DERIVATIVES OF W AT
+!                   WX,WY - partial derivatives of W at
 !                           (X,Y) IF IER = 0 AND IFLAG = 1,
 !                           UNCHANGED IF IFLAG .NE. 1, ZERO
 !                           IF IER .NE. 0 AND IFLAG = 1.
 !
-!                     IER - ERROR INDICATOR
+!                     Ier - error indicator
 !                           IER = 0 IF NO ERRORS WERE
-!                                   ENCOUNTERED.
+!                                   encountered.
 !                           IER = 1 IF THE VERTICES OF THE
-!                                   TRIANGLE ARE COLLINEAR.
+!                                   triangle are collinear.
 !
-! MODULES REFERENCED BY TVAL - NONE
+! Modules referenced by TVAL - none
 !
-! INTRINSIC FUNCTION CALLED BY TVAL - AMIN1
+! Intrinsic function called by TVAL - AMIN1
 !
 !***********************************************************
 !
@@ -4308,17 +4308,17 @@ real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
 &f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
 &a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
 !
-! LOCAL PARAMETERS -
+! Local parameters -
 !
 ! I =               DO-LOOP INDEX
 ! IP1,IP2,IP3 =     PERMUTED INDICES FOR COMPUTING RO, ROX,
-!                     AND ROY
+!                     and roy
 ! U(K) =            X-COMPONENT OF THE VECTOR REPRESENTING
-!                     THE SIDE OPPOSITE VERTEX K
+!                     the side opposite vertex K
 ! V(K) =            Y-COMPONENT OF THE VECTOR REPRESENTING
-!                     THE SIDE OPPOSITE VERTEX K
+!                     the side opposite vertex K
 ! SL(K) =           SQUARE OF THE LENGTH OF THE SIDE
-!                     OPPOSITE VERTEX K
+!                     opposite vertex K
 ! AREA =            TWICE THE AREA OF THE TRIANGLE
 ! XP,YP =           X-X1, Y-Y1
 ! R(K) =            K-TH BARYCENTRIC COORDINATE
@@ -4328,12 +4328,12 @@ real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
 ! RMIN =            MIN(R1,R2,R3)
 ! C1,C2 =           FACTORS FOR COMPUTING RO
 ! RO(K) =           FACTORS FOR COMPUTING G -- CUBIC
-!                     CORRECTION TERMS
+!                     correction terms
 ! ROX(K),ROY(K) =   X,Y PARTIALS OF RO(K)
 ! F(K) =            FACTORS FOR COMPUTING G, GX, AND GY --
-!                     CONSTANT
+!                     constant
 ! G(K) =            FACTORS FOR COMPUTING THE CARDINAL
-!                     FUNCTIONS -- CUBIC
+!                     functions -- cubic
 ! GX(K),GY(K) =     X,Y PARTIALS OF G(K)
 ! P(K) =            G(K) + PHI(K)
 ! PX(K),PY(K) =     X,Y PARTIALS OF P(K)
@@ -4342,12 +4342,12 @@ real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
 ! A(K) =            CARDINAL FUNCTION WHOSE COEFFICIENT IS
 !                     Z(K)
 ! AX(K),AY(K) =     X,Y PARTIALS OF A(K) -- CARDINAL
-!                     FUNCTIONS FOR WX AND WY
+!                     functions for WX and WY
 ! B(K) =            TWICE THE CARDINAL FUNCTION WHOSE
-!                     COEFFICIENT IS ZX(K)
+!                     coefficient is ZX(K)
 ! BX(K),BY(K) =     X,Y PARTIALS OF B(K)
 ! C(K) =            TWICE THE CARDINAL FUNCTION WHOSE
-!                     COEFFICIENT IS ZY(K)
+!                     coefficient is ZY(K)
 ! CX(K),CY(K) =     X,Y PARTIALS OF C(K)
 !
 u(1) = x3 - x2
@@ -4427,13 +4427,13 @@ c(1) = v(3)*p(3) + v(2)*q(2)
 c(2) = v(1)*p(1) + v(3)*q(3)
 c(3) = v(2)*p(2) + v(1)*q(1)
 !
-! W IS A LINEAR COMBINATION OF THE CARDINAL FUNCTIONS
+! W is a linear combination of the cardinal functions
 !
 w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
 &+ b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
 if (iflag .ne. 1) return
 !
-! COMPUTE WX AND WY
+! Compute WX and WY
 !
 do i = 1,3
   rx(i) = -v(i)/area
@@ -4496,8 +4496,8 @@ cy(2) = v(1)*py(1) + v(3)*qy(3)
 cx(3) = v(2)*px(2) + v(1)*qx(1)
 cy(3) = v(2)*py(2) + v(1)*qy(1)
 !
-! WX AND WY ARE LINEAR COMBINATIONS OF THE CARDINAL
-!   FUNCTIONS
+! WX and WY are linear combinations of the cardinal
+!   functions
 !
 wx = ax(1)*z1 + ax(2)*z2 + ax(3)*z3 + (bx(1)*zx1 + &
 &bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
@@ -4507,7 +4507,7 @@ wy = ay(1)*z1 + ay(2)*z2 + ay(3)*z3 + (by(1)*zx1 + &
 &cy(3)*zy3)/2.
 return
 !
-! VERTICES ARE COLLINEAR
+! Vertices are collinear
 !
 9 ier = 1
 w = 0.
@@ -4537,111 +4537,111 @@ real, intent(in) :: wts(nfpts)
 real :: scale
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE CONSTRUCTS A LEAST-SQUARES  MULTINOMIAL  FIT  TO
-!     GIVEN DATA USING A BASIS OF ORTHOGONAL MULTINOMIALS.
+!     This subroutine constructs a least-squares  multinomial  fit  to
+!     given data using a basis of orthogonal multinomials.
 !
-!     THE DATA FOR THE FIT IS GIVEN IN THE ARRAYS FITCDS, FITVLS, AND
-!     WTS. FITCDS IS A MATRIX, EACH ROW OF WHICH CONTAINS AN OBSERVA-
-!     TION POINT. FITVLS IS A SINGLY-INDEXED ARRAY, EACH ELEMENT OF
-!     WHICH CONTAINS A FUNCTION VALUE CORRESPONDING TO AN OBSERVATION
-!     POINT. WTS IS A SINGLY-INDEXED ARRAY, EACH ELEMENT OF WHICH IS
-!     A NONNEGATIVE WEIGHT FOR THE CORRESPONDING OBSERVATION.
+!     The data for the fit is given in the arrays FITCDS, FITVLS, and
+!     WTS. FITCDS is a matrix, each row of which contains an observa-
+!     tion point. FITVLS is a singly-indexed array, each element of
+!     which contains a function VALUE corresponding to an observation
+!     point. WTS is a singly-indexed array, each element of which is
+!     a nonnegative weight for the corresponding observation.
 !
-!     THE FIT WHICH IS PRODUCED IS A MULTINOMIAL EXPRESSED IN THE FORM
+!     The fit which is produced is a multinomial expressed in the form
 !
 !      C  PSI  (X ,...,X     ) +...+ C       PSI       (X ,...,X     )
 !       1    1   1      DIMEN         NFPOLS    NFPOLS   1      DIMEN
 !
 !     WHERE THE VALUE OF  NFPOLS  WILL BE AS GIVEN (IF  FITDEG .LT. 0)
-!     OR  AS  COMPUTED  BY  MFIT  TO GIVE A FULL-DEGREE FIT (IN CASE
+!     or  as  computed  by  MFIT  to give a full-degree fit (in case
 !     FITDEG  IS SPECIFIED .GE. 0).  THE ELEMENTS
 !
 !         PSI  (X ,...,X     )
 !            K   1      DIMEN
 !
-!     FORM A BASIS FOR THE MULTINOMIALS WHICH IS ORTHOGONAL WITH
-!     RESPECT TO THE WEIGHTS AND OBSERVATION POINTS.
+!     Form a basis for the multinomials which is orthogonal with
+!     respect to the weights and observation points.
 !
-!     THE EXTENT OF THE FIT CAN BE SPECIFIED IN ONE OF TWO WAYS.
+!     The extent of the fit can be specified in one of two ways.
 !         IF THE PARAMETER FITDEG IS SET .GE. 0, THEN A COMPLETE BASIS
 !         FOR THE MULTINOMIALS OF DEGREE =  FITDEG  WILL BE USED.  (AN
-!         ERROR WILL BE  FLAGGED  IF  THIS  WILL  REQUIRE  MORE  BASIS
-!         MULTINOMIALS  THAN  THE  NUMBER  OF  DATA  POINTS WHICH WERE
-!         GIVEN.)
+!         error will be  flagged  if  this  will  require  more  basis
+!         multinomials  than  the  number  of  data  points which were
+!         given.)
 !         IF THE PARAMETER  FITDEG  IS .LT.  0, THEN  NFPOLS  WILL  BE
-!         TAKEN AS THE COUNT OF THE NUMBER OF BASIS MULTINOMIALS TO BE
-!         USED FOR A PARTIAL-DEGREE FIT.  (AN ERROR WILL BE FLAGGED IF
+!         taken as the count of the number of basis multinomials to be
+!         used for a partial-degree fit.  (An error will be flagged if
 !         NFPOLS  .LT. 0.)
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      DIMEN  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF VARIABLES.
+!      DIMEN  -- (INTEGER) -- (passed)
+!         the number of variables.
 !      FITDEG  - (INTEGER) -- (PASSED/RETURNED)
 !         IGNORED IF .LT. 0.
 !         IF FITDEG .GE. 0 THEN  FITDEG  IS  CHECKED  AGAINST  NFPTS .
-!         THE VALUE OF  FITDEG  WILL BE REDUCED IF THERE IS A BASIS OF
+!         The value of  FITDEG  will be reduced if there is a basis of
 !         MULTINOMIALS, ALL OF  DEGREE  .LE. FITDEG ,  OF  CARDINALITY
-!         NFPTS .  SEE  ERROR  BELOW.
+!         NFPTS .  See  error  below.
 !      NFPOLS  - (INTEGER) -- (PASSED/RETURNED)
 !         IGNORED IF  FITDEG  .GE. 0.
 !         IF  FITDEG .LT. 0 THEN THE VALUE OF NFPOLS WILL BE TAKEN  AS
-!         THE SIZE OF THE BASIS OF MULTINOMIALS TO BE USED IN THE FIT.
+!         the size of the basis of multinomials to be used in the fit.
 !         NFPOLS  MUST SATISFY  NFPOLS  .LT. NFPTS  AND NFPOLS .GE. 1
-!         SEE  ERROR  BELOW.
-!      NFPTS  --- (INTEGER) -- (PASSED)
-!         THE NUMBER OF DATA POINTS TO BE USED IN THE FIT.
+!         see  error  below.
+!      NFPTS  --- (INTEGER) -- (passed)
+!         the number of data points to be used in the fit.
 !         NFPTS  MUST BE .GE. 1.  SEE  ERROR  BELOW.
-!      FITCDS  -- (REAL 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         FITCDS (P,K) IS THE VALUE OF THE K-TH VARIABLE AT THE  P-TH
-!         DATA POINT.
-!      NCROWS  -- (INTEGER) -- (PASSED)
+!      FITCDS  -- (real 2-subscript array) -- (passed)
+!         FITCDS (P,K) is the value of the K-TH variable at the  P-TH
+!         data point.
+!      NCROWS  -- (INTEGER) -- (passed)
 !         THE ROW DIMENSION  DECLARED  FOR   FITCDS   IN  THE  CALLING
-!         PROGRAM.
-!      FITVLS  -- (REAL 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         FITVLS (P) IS THE OBSERVED FUNCTION VALUE OF THE P-TH  DATA
-!         POINT.
-!      WTS  ----- (REAL 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         WTS (P) IS THE WEIGHT ATTACHED TO THE P-TH DATA POINT.
-!      RESIDS  -- (REAL 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         RESIDS (P) IS THE DIFFERENCE BETWEEN THE FITTED FUNCTION AT
-!         POINT P AND  FITVLS (P).
-!      ERROR  -- (INTEGER) -- (RETURNED)
-!       0 THE DESIRED LEAST SQUARE MULTINOMIAL FIT WAS OBTAINED.
-!      -1 ONLY THE FIRST NFPOLS BASIS POLYNOMIALS WERE OBTAINED.
-!         FITDEG IS THE DEGREE OF THE FIT.
+!         program.
+!      FITVLS  -- (real 1-subscript array) -- (passed)
+!         FITVLS (P) is the observed function VALUE of the P-TH  data
+!         point.
+!      WTS  ----- (real 1-subscript array) -- (passed)
+!         WTS (P) is the weight attached to the P-TH data point.
+!      RESIDS  -- (real 1-subscript array) -- (returned)
+!         RESIDS (P) is the difference between the fitted function at
+!         point P and  FITVLS (P).
+!      Error  -- (INTEGER) -- (returned)
+!       0 the desired least square multinomial fit was obtained.
+!      -1 Only the first NFPOLS basis polynomials were obtained.
+!         FITDEG is the degree of the fit.
 !       1 IF  FITDEG  .GE. 0 BUT THERE IS AN INTERPOLATING MULTINOMIAL
 !         OF SMALLER DEGREE OR IF FITDEG .LT. 0 AND NFPOLS .GT. NFPTS.
 !       2 IF  FITDEG  .LT. 0 AND  NFPOLS  .LE. 0.
 !       3 IF  NFPTS  .LT. 1 AND/OR  DIMEN  .LT. 1.
 !       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
-!         THE VALUE RETURNED IN  IREQD , AND SET  DWKLEN  TO THE VALUE
-!         RETURNED IN  DREQD  TO RESOLVE THIS PROBLEM.)
-!      FITIWK  -- (INTEGER, 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         AN INTEGER WORK ARRAY OF LENGTH  FIWKLN .  UPON RETURN  FROM
-!         MFIT, FITIWK CONTAINS DIMENSION AND ARRAY LENGTH INFORMATION.
-!      FITDWK  -- (REAL 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         A REAL ARRAY OF LENGTH  FDWKLN  CONTAINING THE COEFFICIENTS
-!         NEEDED FOR COMPUTING THE MULTINOMIAL FIT AT A POINT.
-!      FIWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF THE ARRAY  FITIWK .
-!      FDWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF THE ARRAY  FITDWK .
-!      IREQD  -- (INTEGER) -- (RETURNED)
-!         THE LENGTH WHICH THE ARRAY  FITIWK  REALLY NEEDS TO BE.
-!      DREQD  -- (INTEGER) -- (RETURNED)
-!         THE LENGTH WHICH THE ARRAY  FITDWK  REALLY NEEDS TO BE.
+!         the value returned in  IREQD , and set  DWKLEN  to the value
+!         returned in  DREQD  to resolve this problem.)
+!      FITIWK  -- (integer, 1-subscript array) -- (returned)
+!         an integer work array of length  FIWKLN .  Upon return  from
+!         MFIT, FITIWK contains dimension and array LENGTH information.
+!      FITDWK  -- (real 1-subscript array) -- (returned)
+!         a real array of length  FDWKLN  containing the coefficients
+!         needed for computing the multinomial fit at a point.
+!      FIWKLN  -- (INTEGER) -- (passed)
+!         the length of the array  FITIWK .
+!      FDWKLN  -- (INTEGER) -- (passed)
+!         the length of the array  FITDWK .
+!      IREQD  -- (INTEGER) -- (returned)
+!         the length which the array  FITIWK  really needs to be.
+!      DREQD  -- (INTEGER) -- (returned)
+!         the length which the array  FITDWK  really needs to be.
 !
 !
-!     NOTE. THE 20 LOOP DEPENDS ON THE SCALING SCHEME BEING USED. THE
-!     RESIDUAL SCALING MUST BE CONSISTENT WITH THAT DEFINED BY SCALPM
+!     Note. The 20 loop depends on the scaling scheme being used. The
+!     residual scaling must be consistent with that defined by SCALPM
 !     AND SCALDN.
 !
-!     MFIT  CALLS  ALLOT  AND  GNRTP.
+!     MFIT  calls  allot  and  GNRTP.
 !     ****************
 !
 dimp1 = dimen + 1
@@ -4677,14 +4677,14 @@ psistt = ssqstt + nfpols
 &fitdwk(maxstt),error)
 !
 !     ***************
-!     STORE THE NUMBER OF BASIS POLYNOMIALS ACTUALLY COMPUTED
-!     BY THE MODIFIED ROUTINE INCDG CALLED BY GNRTP.
+!     Store the number of basis polynomials actually computed
+!     by the modified routine INCDG called by GNRTP.
 !     ***************
 !
 fitiwk(1) = nfpols
 !
 !     ***************
-!     UNSCALE THE RESIDUALS FOR THE BENEFIT OF THE USER.
+!     Unscale the residuals for the benefit of the user.
 !     ***************
 !
 scale = fitdwk(dimen + 1)
@@ -4708,78 +4708,78 @@ integer :: nplyt4
 integer, intent(inout) :: iwork(iwklen)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!      ALLOT  CHECKS FOR SUFFICIENCY THE DECLARED  DIMENSIONS  OF  THE
-!     WORK  ARRAYS  USED BY THE SUBROUTINE  MFIT .  VARIOUS SIZES OF
-!     SUB-ARRAYS ARE COMPUTED AND REPORTED.
+!      Allot  checks for sufficiency the declared  dimensions  of  the
+!     work  arrays  used by the subroutine  MFIT .  Various sizes of
+!     sub-arrays are computed and reported.
 !
-!     THIS ROUTINE IS CALLED BY  MFIT .  IT IS NOT  CALLED  DIRECTLY
-!     BY THE USER.
+!     This routine is called by  MFIT .  It is not  called  directly
+!     by the user.
 !
 !     THIS ROUTINE CALLS   BASIZ   AND   MTABLE   FOR  THE  SUBSTANTIVE
-!     COMPUTATIONS.
+!     computations.
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      DEGREE  - (PASSED/RETURNED)
+!      Degree  - (PASSED/RETURNED)
 !         IGNORED IF .LT. 0.
 !         IF  DEGREE  .GE. 0 THEN  DEGREE IS CHECKED  AGAINST   NPTS .
-!         THE VALUE OF  DEGREE  WILL BE REDUCED IF THERE IS A BASIS OF
+!         The value of  degree  will be reduced if there is a basis of
 !         MULTINOMIALS, ALL OF  DEGREE .LE.  DEGREE ,  OF  CARDINALITY
 !          NPTS
 !      NPOLYS  - (PASSED/RETURNED)
 !         IGNORED IF  DEGREE  .GE. 0.
 !         IF DEGREE .LT. 0 THEN THE VALUE OF NPOLYS WILL BE TAKEN  AS
-!         THE SIZE OF THE BASIS OF MULTINOMIALS TO BE USED IN THE FIT.
+!         the size of the basis of multinomials to be used in the fit.
 !         NPOLYS  MUST SATISFY NPOLYS .LT.  NPTS  AND  NPOLYS  .GE. 1
 !      NPTS  --- (PASSED)
-!         THE NUMBER OF DATA POINTS TO BE USED IN THE FIT.
+!         the number of data points to be used in the fit.
 !          NPTS  MUST BE .GE. 1.
 !      DIMEN  -- (PASSED)
-!         THE NUMBER OF VARIABLES.
+!         the number of variables.
 !      IWORK  -- (RETURNED)
-!         AN INTEGER WORK ARRAY OF LENGTH AT LEAST
+!         an integer work array of length at least
 !            IF  DEGREE  .GE. 0 THEN
 !               4*BINOMIAL( DIMEN + DEGREE , DIMEN )
 !                  +( DIMEN )*( DEGREE )
 !            ELSE
 !               4*BINOMIAL( DIMEN +D,D)+( DIMEN )*D
-!         WHERE D IS THE MINIMUM CARDINALITY  OF  A  BASIS  OF  DEGREE
-!          DEGREE  SUCH THAT
+!         where D is the minimum cardinality  of  a  basis  of  degree
+!          degree  such that
 !            BINOMIAL( DIMEN +ABS( DEGREE ), DIMEN ) .GE.  NPOLYS
 !      IWKLEN  - (PASSED)
-!         THE LENGTH OF  IWORK
+!         the length of  IWORK
 !      IREQD  -- (RETURNED)
 !         THE SIZE OF THE INTEGER WORK ARRAY REQUIRED BY  MFIT   FOR
-!         THE FIT SPECIFIED BY THE 4 INPUT PARAMETERS.
+!         the fit specified by the 4 input parameters.
 !      DREQD  -- (RETURNED)
-!         THE SIZE OF THE DOUBLE  PRECISION  WORK  ARRAY  REQUIRED  BY
-!          MFIT  FOR THE FIT SPECIFIED BY THE 4 INPUT PARAMETERS.
-!      ERROR  -- (RETURNED)
+!         the size of the double  precision  work  array  required  by
+!          MFIT  for the fit specified by the 4 input parameters.
+!      Error  -- (returned)
 !       0 IF  NPOLYS ,  DIMEN ,   DEGREE ,   NPTS   AND   IWKLEN   ARE
-!         VALID AND CONSISTENT WITH EACH OTHER.
+!         valid and consistent with each other.
 !       1 IF  DEGREE  .GE. 0 BUT THERE IS AN INTERPOLATING MULTINOMIAL
 !         OF SMALLER DEGREE OR IF  DEGREE .LT. 0 AND  NPOLYS .GT. NPTS
 !       2 IF  DEGREE  .LT. 0 AND  NPOLYS  .LE. 0
 !       3 IF  NPTS  .LT. 1 AND/OR  DIMEN  .LT. 1
-!       4 IF  IWKLEN  IS TOO SMALL (SET  IWKLEN  TO THE VALUE RETURNED
-!         IN  IREQD  TO RESOLVE THIS PROBLEM)
+!       4 if  IWKLEN  is too small (set  IWKLEN  to the value returned
+!         in  IREQD  to resolve this problem)
 !
 !     NOTE THAT  DEGREE ,  NPOLYS ,  PSIWID  AND  ALFL   ARE  RETURNED
-!     IN  IWORK (1-4), RESPECTIVELY.
+!     in  IWORK (1-4), respectively.
 !
 !     DATE LAST MODIFIED
 !     ---- ---- --------
-!     DECEMBER 10, 1984
+!     December 10, 1984
 !     ****************
 !
 !     ***************
-!     BASIZ  COMPUTES THE SIZE OF THE BASIS (AND AUXILIARY SIZES)
-!     BASED PRIMARILY UPON THE DEGREE, NUMBER OF  FITTING POINTS,
-!     AND THE DIMENSION.
+!     BASIZ  computes the size of the basis (and auxiliary sizes)
+!     based primarily upon the degree, number of  fitting points,
+!     and the dimension.
 !     ***************
 !
 call basiz(degree,npts,dimen,npolys,error)
@@ -4791,9 +4791,9 @@ if ( iwklen .ge. ireqd ) go to 5
 5 newstt = 4 * npolys + 1
 !
 !     ***************
-!     SET UP USEFUL INDEXING ARRAYS
+!     Set up useful indexing arrays
 !          IWORK(1) ,..., IWORK(NEWSTT-1)
-!     AND
+!     and
 !          IWORK(NEWSTT ,..., IWORK(NEWSTT+DIMEN*DEGREE)
 !     ***************
 !
@@ -4802,18 +4802,18 @@ iwork(1) = degree
 iwork(2) = npolys
 !
 !     ***************
-!     FORCE  ALFL  TO BE AT LEAST 1 SO THAT DIMENSION STATEMENTS
-!     USING  ALFL  DO NOT BOMB.
+!     Force  ALFL  to be at least 1 so that dimension statements
+!     using  ALFL  do not bomb.
 !     ***************
 !
 if ( alfl .gt. 1 ) alfl = alfl - 1
 iwork(4) = alfl
 !
 !     ***************
-!     THE FOLLOWING IS A SECTION OF CODE FOR SETTING UP THE
-!     STORAGE  MANAGEMENT OF THE  PSI  ARRAY.  THERE  IS  A
-!     COMPLICATED DOVETAILING FORMULA USED TO PACK INFORMATION
-!     INTO  PSI  WITHOUT LEAVING GAPS.
+!     The following is a section of code for setting up the
+!     storage  management of the  psi  array.  There  is  A
+!     complicated dovetailing formula used to pack information
+!     into  psi  without leaving gaps.
 !
 !     ARRAY          LENGTH
 !     -----          ------
@@ -4822,11 +4822,11 @@ iwork(4) = alfl
 !      C              NPOLYS
 !      SUMSQS         NPOLYS
 !
-!     THE NUMBER OF COLUMNS IN  PSI ,  PSIWID , IS DETERMINED BY
+!     The number of columns in  psi ,  PSIWID , is determined by
 !     PSIWID  =  NPOLYS  + 1 - (THE SMALLEST M SUCH THAT ALPHA(J,M)
 !                                   IS NONZERO AND J .GE. NPOLYS)
-!     THIS INSURES THAT IF THE USER EXTENDS THE BASIS, ALL THE  PSI
-!     REQUIRED WILL CERTAINLY BE STORED
+!     this insures that if the user extends the basis, all the  psi
+!     required will certainly be stored
 !
 !     IF DEGREE( NPOLYS ) .LE. 2 THEN                      (CASE 1)
 !       PSIWID  =  NPOLYS
@@ -4838,16 +4838,16 @@ iwork(4) = alfl
 !            PSIWID  =  NPOLYS
 !                      + 1
 !                      - (
-!                         THE SMALLER OF
+!                         The smaller of
 !                           NEWKJ(K+1,DEGREE(NPOLYS)-2)    (CASE 3)
-!                         AND
+!                         and
 !                           INDEXS(3,NPOLYS)               (CASE 4)
 !                        )
 !
 if ( degree .gt. 2 ) go to 10
 !
 !     ***************
-!     CASE 1
+!     Case 1
 !     ***************
 !
    psiwid = npolys
@@ -4864,7 +4864,7 @@ go to 40
    if ( kmxbas .ne. dimen ) go to 20
 !
 !     ***************
-!     CASE 2
+!     Case 2
 !     ***************
 !
       psiwid = npolys - iwork(4 * npolys - 1)
@@ -4886,14 +4886,14 @@ go to 40
       if ( startj .gt. kjp1d2 ) go to 30
 !
 !     ***************
-!     CASE 4
+!     Case 4
 !     ***************
 !
          psiwid = npolys - startj + 1
       go to 40
 !
 !     ***************
-!     CASE 3
+!     Case 3
 !     ***************
 !
 30 psiwid = npolys - kjp1d2 + 1
@@ -4913,38 +4913,38 @@ integer, intent(out) :: error
 integer :: i, rowlen
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
 !     IF  DEGREE  .GE. 0 THEN
-!       FIND THE SIZE OF A BASIS REQUIRED EITHER TO
-!       1) APPROXIMATE THE DATA WITH A POLYNOMIAL OF DEGREE
-!          GIVEN BY THE PARAMETER  DEGREE
-!       OR TO
+!       find the size of a basis required either to
+!       1) approximate the data with a polynomial of degree
+!          given by the parameter  DEGREE
+!       or to
 !       2) SPAN THE SPACE OF POLYNOMIALS OF DEGREE .LE. THE
-!          SMALLEST DEGREE OF POLYNOMIAL WHICH INTERPOLATES THE
-!          DATA.
+!          smallest degree of polynomial which interpolates the
+!          data.
 !       IN CASE 1  ERROR  = 0.
 !       IN CASE 2  ERROR  = 1.
 !     ELSE
 !       IF  NPOLYS  .GE. 1 THEN
 !          IF NPOLYS .GT. NPTS THEN
 !             SET  NPOLYS  =  NPTS , FIND THE SMALLEST DEGREE OF A
-!             POLYNOMIAL  WHICH  INTERPOLATES  THE  DATA,  AND SET
+!             polynomial  which  interpolates  the  data,  and set
 !              ERROR  = 1.
 !          ELSE
-!             FIND THE LARGEST DEGREE  DEGREE  OF A POLYNOMIAL  IN
-!             A  BASIS OF  NPOLYS  POLYNOMIALS GENERATED ACCORDING
+!             find the largest degree  degree  of a polynomial  in
+!             a  basis of  NPOLYS  polynomials generated according
 !             TO OUR ORDERING AND SET  ERROR  = 0.
 !       ELSE
 !           ERROR  = 2
 !
-!     THIS SUBROUTINE IS CALLED BY  ALLOT .  IT IS NOT  CALLED  BY
-!     THE USER DIRECTLY.
+!     This subroutine is called by  allot .  It is not  called  by
+!     the user directly.
 !
 !     DATE LAST MODIFIED
 !     ---- ---- --------
-!     OCTOBER 16, 1984
+!     October 16, 1984
 !     ****************
 !
 error = 0
@@ -5004,34 +5004,34 @@ integer :: dimp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     TABULATE  JP  AND  KJ  FOR EACH  J
+!     Tabulate  JP  and  KJ  for each  J
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      ALFLP1  -- (INTEGER) -- (PASSED)
-!         THE LENGTH REQUIRED FOR ARRAY  ALPHA , PLUS ONE
-!      DEGREE  -- (INTEGER) -- (PASSED)
-!         THE DEGREE OF THE POLYNOMIAL TO BE FITTED
-!      DIMEN  -- (INTEGER) -- (PASSED)
-!         NUMBER OF INDEPENDENT VARIABLES
-!      INDEXS  -- (INTEGER, 2-SUBSCRIPT ARRAY) -- (RETURNED)
+!      ALFLP1  -- (INTEGER) -- (passed)
+!         the length required for array  ALPHA , plus one
+!      degree  -- (INTEGER) -- (passed)
+!         the degree of the polynomial to be fitted
+!      DIMEN  -- (INTEGER) -- (passed)
+!         number of independent variables
+!      INDEXS  -- (integer, 2-subscript array) -- (returned)
 !          INDEXS (1, J )   IS    JP ,    INDEXS (2, J )   IS     KJ ,
-!          INDEXS (3, J )  IS THE FIRST NONZERO RECURRENCE COEFFICIENT
-!         IN  ALPHA  AND  INDEXS (4, J ) IS ITS LOCATION IN  ALPHA .
-!      NEWKJ  -- (INTEGER, 2-SUBSCRIPT ARRAY) -- (RETURNED)
+!          INDEXS (3, J )  is the first nonzero recurrence coefficient
+!         in  alpha  and  INDEXS (4, J ) is its location in  alpha .
+!      NEWKJ  -- (integer, 2-subscript array) -- (returned)
 !          NEWKJ ( K , D ) IS THE FIRST MONOMIAL OF DEGREE  D   HAVING
 !          KJ = K .
-!      NPOLYS  -- (INTEGER) -- (PASSED)
+!      NPOLYS  -- (INTEGER) -- (passed)
 !         NUMBER  OF  MONOMIALS  OF  DEGREE  .LE.  ORDER  IN   DIMEN
-!         INDEPENDENT VARIABLES.
+!         independent variables.
 !
-!     THIS SUBPROGRAM CAN BE CODED (EXCLUDING THE PART FOR CALCULATING
+!     This subprogram can be coded (excluding the part for calculating
 !      INDEXS (3, J )  AND   INDEXS (4, J )) MENTALLY MORE EFFICIENTLY
-!     BUT COMPUTATIONALLY LESS EFFICIENTLY AS
+!     but computationally less efficiently as
 !
 !         J = 2
 !         DO 5 KJ = 1,DIMEN
@@ -5039,7 +5039,7 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !           INDEXS(1,J) = 1
 !           INDEXS(2,J) = KJ
 !           J = J + 1
-!      5  CONTINUE
+!      5  continue
 !         DO 10 CURDEG = 2,DEGREE
 !           DO 10 KJ = 1,DIMEN
 !             JPRIME = NEWKJ(KJ,CURDEG - 1)
@@ -5050,10 +5050,10 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !               INDEXS(2,J) = KJ
 !               JPRIME = JPRIME + 1
 !               J = J + 1
-!     10  CONTINUE
+!     10  continue
 !
-!     WHERE COMB(N,KJ) IS N-FACTORIAL / ((N-KJ)-FACTORIAL * KJ-FACTORIAL
-!     HERE WE MAKE USE OF THE RECURRENCE RELATIONS
+!     Where COMB(N,KJ) is N-factorial / ((N-KJ)-factorial * KJ-factorial
+!     here we make use of the recurrence relations
 !
 !       COMB(DIMEN+CURDEG-2,CURDEG-1)
 !
@@ -5061,7 +5061,7 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !          = ----------------------------------------------
 !                              (CURDEG-1)
 !
-!     AND
+!     And
 !
 !       COMB(DIMEN+CURDEG-KJ-1,CURDEG-1)
 !
@@ -5072,16 +5072,16 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !
 !     DATE LAST MODIFIED
 !     ---- ---- --------
-!     OCTOBER 16, 1984
+!     October 16, 1984
 !     ****************
 !
 alflp1 = 1
 !
 !     ***************
-!     SET  INDEXS (4,1) TO 1 SO THAT  ALFL - INDEXS (4,1)+1 IS THE
+!     Set  INDEXS (4,1) to 1 so that  ALFL - INDEXS (4,1)+1 is the
 !     NUMBER OF COLUMNS REQUIRED FOR  PSI  FOR  NPOLYS =1  ( ALFL
 !     IS DEFINED IN THE MAINLINE TO BE  ALFLP1 -1 IF ALFLP1 .GT. 1
-!     AND  ALFLP1  OTHERWISE.
+!     and  ALFLP1  otherwise.
 !     ***************
 !
 indexs(4,1) = 1
@@ -5165,26 +5165,26 @@ real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
 real :: runtot, rntot1
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THE MULTINOMIAL FIT IS GENERATED INCREMENTALLY, A BASIS  ELEMENT
-!     AT A TIME.  THIS SUBROUTINE STARTS THE PROCESS OFF BY SETTING UP
-!     THE FIRST BASIS ELEMENT, SCALING THE  DATA,  FINDING  THE  FIRST
-!     COEFFICIENT,  AND  INITIALIZING  THE  WORK ARRAY Z.  GNRTP  THEN
-!     CALLS  INCDG  IF MORE THAN ONE BASIS ELEMENT IS REQUIRED.
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine starts the process off by setting up
+!     the first basis element, scaling the  data,  finding  the  first
+!     coefficient,  and  initializing  the  work array Z.  GNRTP  then
+!     calls  INCDG  if more than one basis element is required.
 !
-!     THIS SUBROUTINE IS CALLED BY  MFIT .  IT IS NOT CALLED BY  THE
-!     USER.
+!     This subroutine is called by  MFIT .  It is not called by  the
+!     user.
 !
-!     THIS SUBROUTINE CALLS  SCALPM ,  SCALDN , AND  INCDG .
+!     This subroutine calls  SCALPM ,  SCALDN , and  INCDG .
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !     ****************
 !
 !     ***************
-!     SET UP THE SCALING.
+!     Set up the scaling.
 !     ***************
 !
 do 10 k = 1,dimen
@@ -5253,14 +5253,14 @@ real, intent(inout) :: z(npts)
 real :: arc, runtot, rntot1, rntot2
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THE MULTINOMIAL FIT IS GENERATED INCREMENTALLY, A BASIS  ELEMENT
-!     AT A TIME.  THIS SUBROUTINE CONTINUES THE PROCESS STARTED OFF BY
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine continues the process started off by
 !      GNRTP .
 !
-!     THIS SUBROUTINE IS CALLED BY  GNRTP  AND NOT BY THE USER.
+!     This subroutine is called by  GNRTP  and not by the user.
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
@@ -5288,15 +5288,15 @@ do 170 j = onpp1,npolys
    j1 = newkj(kj,curdeg - 1)
 !
 !     ***************
-!     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
-!     PREVIOUSLY CALCULATED ALPHAS.
+!     Calculate those  alpha ( J , M ) that can be calculated from
+!     previously calculated alphas.
 !     ***************
 !
    if ( kj .lt. kjp ) go to 50
 !
 !     ***************
-!     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
-!     CALCULATE  ALPHA ( J , JPP )
+!     First calculate those between  JPP  and the end of 2 rows back.
+!     Calculate  alpha ( J , JPP )
 !     ***************
 !
    index1 = indexs(4,j)
@@ -5308,7 +5308,7 @@ do 170 j = onpp1,npolys
 !
 !     ***************
 !     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
-!     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
+!     previous and 8-TH previous statements.
 !     ***************
 !
       j1mj2 = j1 - newkj(kj,curdeg - 2)
@@ -5321,8 +5321,8 @@ do 170 j = onpp1,npolys
 &sumsqs(l)
 !
 !     ***************
-!     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN THE 2
-!     RANGES CALCULATED BEFORE USING
+!     Calculate  alpha ( J , M ) for  M  between the 2
+!     ranges calculated before using
 !
 !        ALPHA ( J , L ) = (X  *  PSI  ,PSI )  / (PSI ,PSI )
 !                             K      JP    L         L    L
@@ -5343,7 +5343,7 @@ do 170 j = onpp1,npolys
 70 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
-!     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN
+!     Calculate  alpha ( J , M ) for  M  between
 !      NEWKJ ( KJ , CURDEG  - 1)  AND
 !      JP  - 1.
 !     ***************
@@ -5359,7 +5359,7 @@ do 170 j = onpp1,npolys
       m = jprime
 !
 !     ***************
-!     CALCULATE THE REMAINING  ALPHA ( J , M ) FROM
+!     Calculate the remaining  alpha ( J , M ) from
 !
 !      ALPHA ( J , L ) = (X   * PSI  ,PSI ) / (PSI ,PSI )
 !                          K       JP    L        L    L
@@ -5377,7 +5377,7 @@ do 170 j = onpp1,npolys
 120 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
-!     NOW CALCULATE THE  PSI (P,J),  SUMSQS (J) AND  C (J) USING
+!     Now calculate the  psi (P,J),  SUMSQS (J) and  C (J) using
 !
 !                          J-1
 !     PSI  = X  * PSI   -  SUM   ALPHA(J,L) * PSI
@@ -5412,7 +5412,7 @@ do 170 j = onpp1,npolys
     c(j) = rntot2 / rntot1
 !
 !     ***************
-!     CALCULATE THE NEW  Z ( P ) AND THE NEW  SSRES  USING
+!     Calculate the new  Z ( P ) and the new  SSRES  using
 !
 !     Z = Z - C  * PSI
 !              J      J
@@ -5425,8 +5425,8 @@ do 170 j = onpp1,npolys
 return
 !
 !     ***************
-!     THE J-TH BASIS MULTINOMIAL CANNOT BE COMPUTED ACCURATELY.
-!     ONLY J - 1 BASIS MULTINOMIALS ARE GENERATED.
+!     The J-TH basis multinomial cannot be computed accurately.
+!     Only J - 1 basis multinomials are generated.
 !     ***************
 !
 200 error = -1
@@ -5445,25 +5445,25 @@ real :: a
 real, intent(in) :: coord(npts)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     FIND SCALING PARAMETER(S) FOR THE PROBLEM. IF THE SCALING SCHEME
-!     IS CHANGED, ALL FOUR OF THE FOLLOWING WOULD HAVE TO BE CHANGED
+!     Find scaling PARAMETER(S) for the problem. If the scaling scheme
+!     is changed, all four of the following would have to be changed
 !
-!     1)  SCALPM  - FIND THE SCALING PARAMETERS
-!     2)  SCALDN  - SCALE THE PROBLEM DATA
-!     3)  THE SCALING OF THE RESIDUALS IN  MFIT
-!     4)  THE SCALING PERFORMED IN  MEVAL1
+!     1)  SCALPM  - find the scaling parameters
+!     2)  SCALDN  - scale the problem data
+!     3)  the scaling of the residuals in  MFIT
+!     4)  the scaling performed in  MEVAL1
 !
-!     THIS SUBROUTINE IS CALLED BY  GNRTP .  IT IS NOT CALLED  BY  THE
-!     USER.
+!     This subroutine is called by  GNRTP .  It is not called  by  the
+!     user.
 !
-!     THE SCALING WHICH  IT  DEFINES  MUST  BE  COORDINATED  WITH  THE
-!     SCALING  OF RESIDUALS WHICH IS CARRIED OUT TOWARD THE END OF THE
-!     SUBROUTINE  MFIT.  THE SCALING MUST ALSO BE COORDINATED WITH THE
-!     SCALING PERFORMED IN THE 10 LOOP  AND  AT STATEMENTS 40 AND 50
-!     (WITH THE SCALE FACTOR MAXABS(DIMP1)) IN  MEVAL1.
+!     The scaling which  it  defines  must  be  coordinated  with  the
+!     scaling  of residuals which is carried out toward the end of the
+!     subroutine  MFIT.  The scaling must also be coordinated with the
+!     scaling performed in the 10 loop  and  at statements 40 and 50
+!     (with the scale factor MAXABS(DIMP1)) in  MEVAL1.
 !
 !     ****************
 !
@@ -5483,17 +5483,17 @@ real, intent(in) :: maxabs
 real, intent(inout) :: coord(npts)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     CARRY OUT THE DATA-SCALING WHICH IS DEFINED  BY  THE  SUBROUTINE
+!     Carry out the data-scaling which is defined  by  the  subroutine
 !     SCALPM .
 !
-!     THIS SUBROUTINE IS CALLED BY  GNRTP .  IT IS NOT CALLED  BY  THE
-!     USER.
+!     This subroutine is called by  GNRTP .  It is not called  by  the
+!     user.
 !
-!     THE SCALING WHICH THIS ROUTINE CARRIES OUT  MUST  BE  CONSISTENT
-!     WITH THE SCALING IN THE SUBROUTINES MFIT AND MEVAL1.
+!     The scaling which this routine carries out  must  be  consistent
+!     with the scaling in the subroutines MFIT and MEVAL1.
 !
 !     ****************
 !
@@ -5522,91 +5522,91 @@ real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE  EVALUATES  THE  LEAST-SQUARES  MULTINOMIAL  FIT
-!     WHICH HAS BEEN PREVIOUSLY PRODUCED BY  MFIT .  EITHER THE FULL
-!     MULTINOMIAL AS PRODUCED MAY BE EVALUATED,  OR  ONLY  AN  INITIAL
-!     SEGMENT THEREOF.  AS IN THE CASE WITH  MFIT , IT IS POSSIBLE
-!     (1) TO SPECIFY MULTINOMIALS OF A FULL GIVEN DEGREE, OR
-!     (2) TO SPECIFY  THE  NUMBER  OF  ORTHOGONAL  BASIS  ELEMENTS  TO
-!         ACHIEVE A PARTIAL-DEGREE FIT.
+!     This subroutine  evaluates  the  least-squares  multinomial  fit
+!     which has been previously produced by  MFIT .  Either the full
+!     multinomial as produced may be evaluated,  or  only  an  initial
+!     segment thereof.  As in the case with  MFIT , it is possible
+!     (1) to specify multinomials of a full given degree, or
+!     (2) to specify  the  number  of  orthogonal  basis  elements  to
+!         achieve a partial-degree fit.
 !
-!     IN CASE (1), THE  DESIRED  DEGREE  IS  GIVEN  AS  THE  VALUE  OF
+!     In case (1), the  desired  degree  is  given  as  the  value  of
 !     EVLDEG   (WHICH  MUST  BE  NONNEGATIVE AND NOT GREATER THAN THE
-!     VALUE USED FOR  FITDEG  IN  MFIT ), AND THE PARAMETER  NEPOLS
-!     WILL  BE  SET  BY  MEVAL  TO SPECIFY THE NUMBER OF BASIS ELEMENTS
+!     value used for  FITDEG  in  MFIT ), and the parameter  NEPOLS
+!     will  be  set  by  MEVAL  to specify the number of basis elements
 !     REQUIRED. IF  EVLDEG  .LT.  FITDEG   IS  GIVEN,  THEN  ONLY  THE
-!     INITIAL  PORTION OF THE FITTING MULTINOMIAL (OF DEGREE  EVLDEG )
-!     WILL BE EVALUATED.
+!     initial  portion of the fitting multinomial (of degree  EVLDEG )
+!     will be evaluated.
 !
-!     IN CASE (2),  EVLDEG  IS TO BE SET NEGATIVE, IN WHICH  CASE  THE
+!     In case (2),  EVLDEG  is to be set negative, in which  case  the
 !     VALUE  OF   NEPOLS  (WHICH MUST BE POSITIVE AND NOT GREATER THAN
 !     THE VALUE USED FOR   NFPOLS   IN   MFIT )  WILL  BE  TAKEN  AS
-!     DEFINING  THE  INITIAL  PORTION OF THE FITTING MULTINOMIAL TO BE
-!     EVALUATED.
+!     defining  the  initial  portion of the fitting multinomial to be
+!     evaluated.
 !
 !     IF  NEPOLS  =  NFPOLS  (WITH  EVLDEG  .LT.  0),  OR   EVLDEG   =
 !     FITDEG  (WITH   EVLDEG   .GT.  0),  THEN  THE  FULL  MULTINOMIAL
-!     GENERATED BY  MFIT  WILL BE EVALUATED.
+!     generated by  MFIT  will be evaluated.
 !
 !     THE  EVALUATION  WILL  TAKE  PLACE  FOR  EACH  OF   THE   POINTS
-!     (COLLECTION  OF  VARIABLE  VALUES)  GIVEN AS A ROW OF THE MATRIX
-!      EVLCDS .  THE  VALUES  PRODUCED  FROM  THE  FULL,  OR  PARTIAL,
-!     MULTINOMIAL WILL BE PLACED IN THE ARRAY  EVLVLS .
+!     (collection  of  variable  values)  given as a row of the matrix
+!      EVLCDS .  The  values  produced  from  the  full,  or  partial,
+!     multinomial will be placed in the array  EVLVLS .
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      DIMEN  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF VARIABLES.
-!      EVLDEG  -- (INTEGER) -- (PASSED)
+!      DIMEN  -- (INTEGER) -- (passed)
+!         the number of variables.
+!      EVLDEG  -- (INTEGER) -- (passed)
 !         IF  EVLDEG  .LT. 0, THEN THIS PARAMETER WILL BE IGNORED.
 !         IF  EVLDEG  .GE. 0, THEN THE VALUE OF  EVLDEG  MUST  SATISFY
 !         EVLDEG  .LE. (THE  DEGREE  OF THE APPROXIMATING MULTINOMIAL
-!         GENERATED IN  MFIT ).  IN THIS CASE  EVLDEG  WILL  SPECIFY
-!         THE DEGREE OF THE INITIAL PORTION OF THE FITTING MULTINOMIAL
-!         TO BE EVALUATED.
+!         generated in  MFIT ).  In this case  EVLDEG  will  specify
+!         the degree of the initial portion of the fitting multinomial
+!         to be evaluated.
 !      NEPOLS  -- (INTEGER) -- (PASSED/RETURNED)
 !         IF  EVLDEG  .GE. 0, THEN THIS PARAMETER WILL BE IGNORED.
 !         IF EVLDEG .LT. 0, THEN THE PARTIAL MULTINOMIAL INVOLVING THE
 !         FIRST   NEPOLS  ORTHOGONAL BASIS FUNCTIONS WILL BE EVALUATED
-!         AT THE POINTS GIVEN BY  EVLCDS .  THE RESULTING VALUES  WILL
-!         BE STORED IN  EVLVLS .
+!         at the points given by  EVLCDS .  The resulting values  will
+!         be stored in  EVLVLS .
 !         THE VALUE OF NEPOLS MUST BE .GE. 1 AND .LE. (THE SIZE OF THE
 !         BASIS  GENERATED  IN   MFIT ),  WHICH  WAS RETURNED AS THE
-!         VALUE OF  NFPOLS .
+!         value of  NFPOLS .
 !         NEPOLS  WILL BE CHANGED IF EVLDEG .GT. 0 TO GIVE THE SIZE OF
-!         BASIS REQUIRED FOR THE MULTINOMIAL OF DEGREE  EVLDEG .
-!      NEPTS  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF EVALUATION POINTS.
-!      EVLCDS  -- (REAL 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         EVLCDS (P,K) IS THE VALUE OF THE K-TH VARIABLE AT THE  P-TH
-!         EVALUATION POINT.
-!      NEROWS  -- (INTEGER) -- (PASSED)
-!         THE ROW DIMENSION DECLARED FOR EVLCDS IN THE CALLING PROGRAM.
-!      EVLVLS  -- (INTEGER) -- (RETURNED)
-!         EVLVLS (P) IS THE VALUE OF THE EVALUATED MULTINOMIAL AT THE
-!         P-TH EVALUATION POINT.
-!      ERROR  -- (INTEGER) -- (RETURNED)
-!          0 .........  IF NO ERRORS
+!         basis required for the multinomial of degree  EVLDEG .
+!      NEPTS  -- (INTEGER) -- (passed)
+!         the number of evaluation points.
+!      EVLCDS  -- (real 2-subscript array) -- (passed)
+!         EVLCDS (P,K) is the value of the K-TH variable at the  P-TH
+!         evaluation point.
+!      NEROWS  -- (INTEGER) -- (passed)
+!         the row dimension declared for EVLCDS in the calling program.
+!      EVLVLS  -- (INTEGER) -- (returned)
+!         EVLVLS (P) is the value of the evaluated multinomial at the
+!         P-TH evaluation point.
+!      Error  -- (INTEGER) -- (returned)
+!          0 .........  if no errors
 !         -1 .........  IF  NEPOLS  .GT.  NFPOLS  OR  NEPOLS  .LT. 1
 !         -2 .........  IF  NEPTS  .LT. 1 OR  DIMEN  .LT. 1
-!      FITIWK  -- (INTEGER, 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         THE INTEGER WORK ARRAY OF LENGTH  FIWKLN  THAT WAS  USED  IN
+!      FITIWK  -- (integer, 1-subscript array) -- (passed)
+!         the integer work array of length  FIWKLN  that was  used  in
 !          MFIT .
-!      FITDWK  -- (REAL 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         THE REAL WORK ARRAY OF LENGTH  FDWKLN  THAT WAS
-!         USED IN  MFIT .
-!      FIWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF  FITIWK .
-!      FDWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF  FITDWK .
+!      FITDWK  -- (real 2-subscript array) -- (passed)
+!         the real work array of length  FDWKLN  that was
+!         used in  MFIT .
+!      FIWKLN  -- (INTEGER) -- (passed)
+!         the length of  FITIWK .
+!      FDWKLN  -- (INTEGER) -- (passed)
+!         the length of  FITDWK .
 !      TEMP    -- (REAL 1-SUBSCRIPT ARRAY)
-!         A WORK ARRAY OF LENGTH  DIMEN  (OR LONGER).
+!         a work array of length  DIMEN  (or longer).
 !
-!     THE SUBROUTINE  MEVAL1  IS CALLED TO DO THE ACTUAL EVALUATION.
+!     The subroutine  MEVAL1  is called to do the actual evaluation.
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !
@@ -5614,9 +5614,9 @@ real, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !
 !     ***************
-!     SET UP INDEX POINTERS TO THE BEGINNING OF EACH ROW OF
-!     THE MTABLE -- THIS SETS THE BEGINNING POINT FOR EACH
-!     FULL MULTINOMIAL DEGREE.
+!     Set up index pointers to the beginning of each row of
+!     the MTABLE -- this sets the beginning point for each
+!     full multinomial degree.
 !     ***************
 !
 if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
@@ -5644,7 +5644,7 @@ cstt = alfstt + alfl
 psistt = cstt + fitiwk(2)
 !
 !     ***************
-!     THE ACTUAL EVALUATION IS DONE INSIDE  MEVAL1.
+!     The actual evaluation is done inside  MEVAL1.
 !     ***************
 !
 call meval1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
@@ -5653,7 +5653,7 @@ call meval1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
 return
 !
 !     ***************
-!     ERROR RETURN
+!     Error return
 !     ***************
 !
 100 error = -1
@@ -5679,25 +5679,25 @@ real, intent(inout) :: x(dimen)
 real :: runtot, rntot1
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE PERFORMS THE MAIN WORK OF EVALUATING THE
-!     FITTING MULTINOMIAL (OR THE INITIAL PORTION OF IT  WHICH
-!     IS REQUESTED BY THE SETTING OF  NEPOLS ,  EVLDEG  IN THE
+!     This subroutine performs the main work of evaluating the
+!     fitting multinomial (or the initial portion of it  which
+!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
 !     CALL TO SUBROUTINE  MEVAL .
 !
-!     THIS SUBROUTINE IS CALLED BY  MEVAL .  IT IS  NOT  CALLED
-!     DIRECTLY BY THE USER.
+!     This subroutine is called by  MEVAL .  It is  not  called
+!     directly by the user.
 !
-!     THE BODY OF THIS SUBROUTINE FOLLOWS THE EXPLANATION
-!     GIVEN IN
-!          LEAST SQUARES FITTING USING
-!          ORTHOGONAL MULTINOMIALS
-!     BY
-!          BARTELS AND JEZIORANSKI
-!     IN
-!          ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE
+!     The body of this subroutine FOLLOWS the explanation
+!     given in
+!          least squares fitting using
+!          orthogonal multinomials
+!     by
+!          Bartels and Jezioranski
+!     in
+!          ACM transactions on mathematical software
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
@@ -5710,7 +5710,7 @@ psi(1) = 1.0
 do 40 p = 1,nepts
 !
 !     ***************
-!     SCALE THE COORDINATES OF THE P-TH POINT
+!     Scale the coordinates of the P-TH point
 !     ***************
 !
    do k = 1,dimen
@@ -5719,9 +5719,9 @@ do 40 p = 1,nepts
    end do
 !
 !     ***************
-!     USE THE  BASIS FUNCTION COEFFICIENTS  C  AND RECURRENCE
-!     COEFFICIENTS  ALPHA  TO EVALUATE THE FITTED MULTINOMIAL
-!     AT THE P-TH POINT.
+!     Use the  basis function coefficients  C  and recurrence
+!     coefficients  alpha  to evaluate the fitted multinomial
+!     at the P-TH point.
 !     ***************
 !
    rntot1 = c(1)
@@ -5740,7 +5740,7 @@ do 40 p = 1,nepts
 return
 !
 !     ***************
-!     COMPUTE THE DEGREE 0 POLYNOMIAL
+!     Compute the degree 0 polynomial
 !     ***************
 !
 50 runtot = c(1) * maxabs(dimp1)
@@ -5770,112 +5770,112 @@ double precision, intent(in) :: wts(nfpts)
 double precision :: scale
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE CONSTRUCTS A LEAST-SQUARES  MULTINOMIAL  FIT  TO
-!     GIVEN DATA USING A BASIS OF ORTHOGONAL MULTINOMIALS. THE COMPUTA-
-!     TION IS PERFORMED IN DOUBLE PRECISION.
+!     This subroutine constructs a least-squares  multinomial  fit  to
+!     given data using a basis of orthogonal multinomials. The computa-
+!     tion is performed in double precision.
 !
-!     THE DATA FOR THE FIT IS GIVEN IN THE ARRAYS FITCDS, FITVLS, AND
-!     WTS. FITCDS IS A MATRIX, EACH ROW OF WHICH CONTAINS AN OBSERVA-
-!     TION POINT. FITVLS IS A SINGLY-INDEXED ARRAY, EACH ELEMENT OF
-!     WHICH CONTAINS A FUNCTION VALUE CORRESPONDING TO AN OBSERVATION
-!     POINT. WTS IS A SINGLY-INDEXED ARRAY, EACH ELEMENT OF WHICH IS
-!     A NONNEGATIVE WEIGHT FOR THE CORRESPONDING OBSERVATION.
+!     The data for the fit is given in the arrays FITCDS, FITVLS, and
+!     WTS. FITCDS is a matrix, each row of which contains an observa-
+!     tion point. FITVLS is a singly-indexed array, each element of
+!     which contains a function VALUE corresponding to an observation
+!     point. WTS is a singly-indexed array, each element of which is
+!     a nonnegative weight for the corresponding observation.
 !
-!     THE FIT WHICH IS PRODUCED IS A MULTINOMIAL EXPRESSED IN THE FORM
+!     The fit which is produced is a multinomial expressed in the form
 !
 !      C  PSI  (X ,...,X     ) +...+ C       PSI       (X ,...,X     )
 !       1    1   1      DIMEN         NFPOLS    NFPOLS   1      DIMEN
 !
 !     WHERE THE VALUE OF  NFPOLS  WILL BE AS GIVEN (IF  FITDEG .LT. 0)
-!     OR  AS  COMPUTED  BY  DMFIT  TO GIVE A FULL-DEGREE FIT (IN CASE
+!     or  as  computed  by  DMFIT  to give a full-degree fit (in case
 !     FITDEG  IS SPECIFIED .GE. 0).  THE ELEMENTS
 !
 !         PSI  (X ,...,X     )
 !            K   1      DIMEN
 !
-!     FORM A BASIS FOR THE MULTINOMIALS WHICH IS ORTHOGONAL WITH
-!     RESPECT TO THE WEIGHTS AND OBSERVATION POINTS.
+!     Form a basis for the multinomials which is orthogonal with
+!     respect to the weights and observation points.
 !
-!     THE EXTENT OF THE FIT CAN BE SPECIFIED IN ONE OF TWO WAYS.
+!     The extent of the fit can be specified in one of two ways.
 !         IF THE PARAMETER FITDEG IS SET .GE. 0, THEN A COMPLETE BASIS
 !         FOR THE MULTINOMIALS OF DEGREE =  FITDEG  WILL BE USED.  (AN
-!         ERROR WILL BE  FLAGGED  IF  THIS  WILL  REQUIRE  MORE  BASIS
-!         MULTINOMIALS  THAN  THE  NUMBER  OF  DATA  POINTS WHICH WERE
-!         GIVEN.)
+!         error will be  flagged  if  this  will  require  more  basis
+!         multinomials  than  the  number  of  data  points which were
+!         given.)
 !         IF THE PARAMETER  FITDEG  IS .LT.  0, THEN  NFPOLS  WILL  BE
-!         TAKEN AS THE COUNT OF THE NUMBER OF BASIS MULTINOMIALS TO BE
-!         USED FOR A PARTIAL-DEGREE FIT.  (AN ERROR WILL BE FLAGGED IF
+!         taken as the count of the number of basis multinomials to be
+!         used for a partial-degree fit.  (An error will be flagged if
 !         NFPOLS  .LT. 0.)
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      DIMEN  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF VARIABLES.
+!      DIMEN  -- (INTEGER) -- (passed)
+!         the number of variables.
 !      FITDEG  - (INTEGER) -- (PASSED/RETURNED)
 !         IGNORED IF .LT. 0.
 !         IF FITDEG .GE. 0 THEN  FITDEG  IS  CHECKED  AGAINST  NFPTS .
-!         THE VALUE OF  FITDEG  WILL BE REDUCED IF THERE IS A BASIS OF
+!         The value of  FITDEG  will be reduced if there is a basis of
 !         MULTINOMIALS, ALL OF  DEGREE  .LE. FITDEG ,  OF  CARDINALITY
-!         NFPTS .  SEE  ERROR  BELOW.
+!         NFPTS .  See  error  below.
 !      NFPOLS  - (INTEGER) -- (PASSED/RETURNED)
 !         IGNORED IF  FITDEG  .GE. 0.
 !         IF  FITDEG .LT. 0 THEN THE VALUE OF NFPOLS WILL BE TAKEN  AS
-!         THE SIZE OF THE BASIS OF MULTINOMIALS TO BE USED IN THE FIT.
+!         the size of the basis of multinomials to be used in the fit.
 !         NFPOLS  MUST SATISFY  NFPOLS  .LT. NFPTS  AND NFPOLS .GE. 1
-!         SEE  ERROR  BELOW.
-!      NFPTS  --- (INTEGER) -- (PASSED)
-!         THE NUMBER OF DATA POINTS TO BE USED IN THE FIT.
+!         see  error  below.
+!      NFPTS  --- (INTEGER) -- (passed)
+!         the number of data points to be used in the fit.
 !         NFPTS  MUST BE .GE. 1.  SEE  ERROR  BELOW.
-!      FITCDS  -- (DOUBLE PRECISION 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         FITCDS (P,K) IS THE VALUE OF THE K-TH VARIABLE AT THE  P-TH
-!         DATA POINT.
-!      NCROWS  -- (INTEGER) -- (PASSED)
+!      FITCDS  -- (double precision 2-subscript array) -- (passed)
+!         FITCDS (P,K) is the value of the K-TH variable at the  P-TH
+!         data point.
+!      NCROWS  -- (INTEGER) -- (passed)
 !         THE ROW DIMENSION  DECLARED  FOR   FITCDS   IN  THE  CALLING
-!         PROGRAM.
-!      FITVLS  -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         FITVLS (P) IS THE OBSERVED FUNCTION VALUE OF THE P-TH  DATA
-!         POINT.
-!      WTS  ----- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         WTS (P) IS THE WEIGHT ATTACHED TO THE P-TH DATA POINT.
-!      RESIDS  -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         RESIDS (P) IS THE DIFFERENCE BETWEEN THE FITTED FUNCTION AT
-!         POINT P AND  FITVLS (P).
-!      ERROR  -- (INTEGER) -- (RETURNED)
-!       0 THE DESIRED LEAST SQUARE MULTINOMIAL FIT WAS OBTAINED.
-!      -1 ONLY THE FIRST NFPOLS BASIS POLYNOMIALS WERE OBTAINED.
-!         FITDEG IS THE DEGREE OF THE FIT.
+!         program.
+!      FITVLS  -- (double precision 1-subscript array) -- (passed)
+!         FITVLS (P) is the observed function VALUE of the P-TH  data
+!         point.
+!      WTS  ----- (double precision 1-subscript array) -- (passed)
+!         WTS (P) is the weight attached to the P-TH data point.
+!      RESIDS  -- (double precision 1-subscript array) -- (returned)
+!         RESIDS (P) is the difference between the fitted function at
+!         point P and  FITVLS (P).
+!      Error  -- (INTEGER) -- (returned)
+!       0 the desired least square multinomial fit was obtained.
+!      -1 Only the first NFPOLS basis polynomials were obtained.
+!         FITDEG is the degree of the fit.
 !       1 IF  FITDEG  .GE. 0 BUT THERE IS AN INTERPOLATING MULTINOMIAL
 !         OF SMALLER DEGREE OR IF FITDEG .LT. 0 AND NFPOLS .GT. NFPTS.
 !       2 IF  FITDEG  .LT. 0 AND  NFPOLS  .LE. 0.
 !       3 IF  NFPTS  .LT. 1 AND/OR  DIMEN  .LT. 1.
 !       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
-!         THE VALUE RETURNED IN  IREQD , AND SET  DWKLEN  TO THE VALUE
-!         RETURNED IN  DREQD  TO RESOLVE THIS PROBLEM.)
-!      FITIWK  -- (INTEGER, 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         AN INTEGER WORK ARRAY OF LENGTH  FIWKLN .  UPON RETURN  FROM
-!         DMFIT, FITIWK CONTAINS DIMENSION AND ARRAY LENGTH INFORMATION.
-!      FITDWK  -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY) -- (RETURNED)
-!         AN ARRAY OF LENGTH  FDWKLN  CONTAINING THE COEFFICIENTS
-!         NEEDED FOR COMPUTING THE MULTINOMIAL FIT AT A POINT.
-!      FIWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF THE ARRAY  FITIWK .
-!      FDWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF THE ARRAY  FITDWK .
-!      IREQD  -- (INTEGER) -- (RETURNED)
-!         THE LENGTH WHICH THE ARRAY  FITIWK  REALLY NEEDS TO BE.
-!      DREQD  -- (INTEGER) -- (RETURNED)
-!         THE LENGTH WHICH THE ARRAY  FITDWK  REALLY NEEDS TO BE.
+!         the value returned in  IREQD , and set  DWKLEN  to the value
+!         returned in  DREQD  to resolve this problem.)
+!      FITIWK  -- (integer, 1-subscript array) -- (returned)
+!         an integer work array of length  FIWKLN .  Upon return  from
+!         DMFIT, FITIWK contains dimension and array LENGTH information.
+!      FITDWK  -- (double precision 1-subscript array) -- (returned)
+!         an array of length  FDWKLN  containing the coefficients
+!         needed for computing the multinomial fit at a point.
+!      FIWKLN  -- (INTEGER) -- (passed)
+!         the length of the array  FITIWK .
+!      FDWKLN  -- (INTEGER) -- (passed)
+!         the length of the array  FITDWK .
+!      IREQD  -- (INTEGER) -- (returned)
+!         the length which the array  FITIWK  really needs to be.
+!      DREQD  -- (INTEGER) -- (returned)
+!         the length which the array  FITDWK  really needs to be.
 !
 !
-!     NOTE. THE 20 LOOP DEPENDS ON THE SCALING SCHEME BEING USED. THE
-!     RESIDUAL SCALING MUST BE CONSISTENT WITH THAT DEFINED BY DSCALP
+!     Note. The 20 loop depends on the scaling scheme being used. The
+!     residual scaling must be consistent with that defined by DSCALP
 !     AND DSCALD.
 !
-!     DMFIT  CALLS  ALLOT  AND  DGNRTP.
+!     DMFIT  calls  allot  and  DGNRTP.
 !     ****************
 !
 dimp1 = dimen + 1
@@ -5911,14 +5911,14 @@ psistt = ssqstt + nfpols
 &fitdwk(maxstt),error)
 !
 !     ***************
-!     STORE THE NUMBER OF BASIS POLYNOMIALS ACTUALLY COMPUTED
-!     BY THE MODIFIED ROUTINE DINCDG CALLED BY DGNRTP.
+!     Store the number of basis polynomials actually computed
+!     by the modified routine DINCDG called by DGNRTP.
 !     ***************
 !
 fitiwk(1) = nfpols
 !
 !     ***************
-!     UNSCALE THE RESIDUALS FOR THE BENEFIT OF THE USER.
+!     Unscale the residuals for the benefit of the user.
 !     ***************
 !
 scale = fitdwk(dimen + 1)
@@ -5955,26 +5955,26 @@ double precision, intent(inout) :: z(npts), sumsqs(npolys), &
 double precision :: runtot, rntot1
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THE MULTINOMIAL FIT IS GENERATED INCREMENTALLY, A BASIS  ELEMENT
-!     AT A TIME.  THIS SUBROUTINE STARTS THE PROCESS OFF BY SETTING UP
-!     THE FIRST BASIS ELEMENT, SCALING THE  DATA,  FINDING  THE  FIRST
-!     COEFFICIENT,  AND  INITIALIZING  THE  WORK ARRAY Z.  DGNRTP THEN
-!     CALLS  DINCDG  IF MORE THAN ONE BASIS ELEMENT IS REQUIRED.
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine starts the process off by setting up
+!     the first basis element, scaling the  data,  finding  the  first
+!     coefficient,  and  initializing  the  work array Z.  DGNRTP then
+!     calls  DINCDG  if more than one basis element is required.
 !
-!     THIS SUBROUTINE IS CALLED BY  DMFIT .  IT IS NOT CALLED BY  THE
-!     USER.
+!     This subroutine is called by  DMFIT .  It is not called by  the
+!     user.
 !
-!     THIS SUBROUTINE CALLS  DSCALP ,  DSCALD , AND  DINCDG .
+!     This subroutine calls  DSCALP ,  DSCALD , and  DINCDG .
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !     ****************
 !
 !     ***************
-!     SET UP THE SCALING.
+!     Set up the scaling.
 !     ***************
 !
 do 10 k = 1,dimen
@@ -6043,14 +6043,14 @@ double precision, intent(inout) :: z(npts)
 double precision :: arc, runtot, rntot1, rntot2
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THE MULTINOMIAL FIT IS GENERATED INCREMENTALLY, A BASIS  ELEMENT
-!     AT A TIME.  THIS SUBROUTINE CONTINUES THE PROCESS STARTED OFF BY
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine continues the process started off by
 !      DGNRTP .
 !
-!     THIS SUBROUTINE IS CALLED BY  DGNRTP  AND NOT BY THE USER.
+!     This subroutine is called by  DGNRTP  and not by the user.
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
@@ -6078,15 +6078,15 @@ do 170 j = onpp1,npolys
    j1 = newkj(kj,curdeg - 1)
 !
 !     ***************
-!     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
-!     PREVIOUSLY CALCULATED ALPHAS.
+!     Calculate those  alpha ( J , M ) that can be calculated from
+!     previously calculated alphas.
 !     ***************
 !
    if ( kj .lt. kjp ) go to 50
 !
 !     ***************
-!     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
-!     CALCULATE  ALPHA ( J , JPP )
+!     First calculate those between  JPP  and the end of 2 rows back.
+!     Calculate  alpha ( J , JPP )
 !     ***************
 !
    index1 = indexs(4,j)
@@ -6098,7 +6098,7 @@ do 170 j = onpp1,npolys
 !
 !     ***************
 !     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
-!     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
+!     previous and 8-TH previous statements.
 !     ***************
 !
       j1mj2 = j1 - newkj(kj,curdeg - 2)
@@ -6111,8 +6111,8 @@ do 170 j = onpp1,npolys
 &sumsqs(l)
 !
 !     ***************
-!     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN THE 2
-!     RANGES CALCULATED BEFORE USING
+!     Calculate  alpha ( J , M ) for  M  between the 2
+!     ranges calculated before using
 !
 !        ALPHA ( J , L ) = (X  *  PSI  ,PSI )  / (PSI ,PSI )
 !                             K      JP    L         L    L
@@ -6133,7 +6133,7 @@ do 170 j = onpp1,npolys
 70 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
-!     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN
+!     Calculate  alpha ( J , M ) for  M  between
 !      NEWKJ ( KJ , CURDEG  - 1)  AND
 !      JP  - 1.
 !     ***************
@@ -6149,7 +6149,7 @@ do 170 j = onpp1,npolys
       m = jprime
 !
 !     ***************
-!     CALCULATE THE REMAINING  ALPHA ( J , M ) FROM
+!     Calculate the remaining  alpha ( J , M ) from
 !
 !      ALPHA ( J , L ) = (X   * PSI  ,PSI ) / (PSI ,PSI )
 !                          K       JP    L        L    L
@@ -6167,7 +6167,7 @@ do 170 j = onpp1,npolys
 120 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
-!     NOW CALCULATE THE  PSI (P,J),  SUMSQS (J) AND  C (J) USING
+!     Now calculate the  psi (P,J),  SUMSQS (J) and  C (J) using
 !
 !                          J-1
 !     PSI  = X  * PSI   -  SUM   ALPHA(J,L) * PSI
@@ -6202,7 +6202,7 @@ do 170 j = onpp1,npolys
     c(j) = rntot2 / rntot1
 !
 !     ***************
-!     CALCULATE THE NEW  Z ( P ) AND THE NEW  SSRES  USING
+!     Calculate the new  Z ( P ) and the new  SSRES  using
 !
 !     Z = Z - C  * PSI
 !              J      J
@@ -6215,8 +6215,8 @@ do 170 j = onpp1,npolys
 return
 !
 !     ***************
-!     THE J-TH BASIS MULTINOMIAL CANNOT BE COMPUTED ACCURATELY.
-!     ONLY J - 1 BASIS MULTINOMIALS ARE GENERATED.
+!     The J-TH basis multinomial cannot be computed accurately.
+!     Only J - 1 basis multinomials are generated.
 !     ***************
 !
 200 error = -1
@@ -6235,25 +6235,25 @@ double precision :: a
 double precision, intent(in) :: coord(npts)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     FIND SCALING PARAMETER(S) FOR THE PROBLEM. IF THE SCALING SCHEME
-!     IS CHANGED, ALL FOUR OF THE FOLLOWING WOULD HAVE TO BE CHANGED
+!     Find scaling PARAMETER(S) for the problem. If the scaling scheme
+!     is changed, all four of the following would have to be changed
 !
-!     1)  DSCALP  - FIND THE SCALING PARAMETERS
-!     2)  DSCALD  - SCALE THE PROBLEM DATA
-!     3)  THE SCALING OF THE RESIDUALS IN  DMFIT
-!     4)  THE SCALING PERFORMED IN  DMEVL1
+!     1)  DSCALP  - find the scaling parameters
+!     2)  DSCALD  - scale the problem data
+!     3)  the scaling of the residuals in  DMFIT
+!     4)  the scaling performed in  DMEVL1
 !
-!     THIS SUBROUTINE IS CALLED BY  DGNRTP .  IT IS NOT CALLED  BY  THE
-!     USER.
+!     This subroutine is called by  DGNRTP .  It is not called  by  the
+!     user.
 !
-!     THE SCALING WHICH  IT  DEFINES  MUST  BE  COORDINATED  WITH  THE
-!     SCALING  OF RESIDUALS WHICH IS CARRIED OUT TOWARD THE END OF THE
-!     SUBROUTINE  DMFIT.  THE SCALING MUST ALSO BE COORDINATED WITH THE
-!     SCALING PERFORMED IN THE 10 LOOP  AND  AT STATEMENTS 40 AND 50
-!     (WITH THE SCALE FACTOR MAXABS(DIMP1)) IN  DMEVL1.
+!     The scaling which  it  defines  must  be  coordinated  with  the
+!     scaling  of residuals which is carried out toward the end of the
+!     subroutine  DMFIT.  The scaling must also be coordinated with the
+!     scaling performed in the 10 loop  and  at statements 40 and 50
+!     (with the scale factor MAXABS(DIMP1)) in  DMEVL1.
 !
 !     ****************
 !
@@ -6273,17 +6273,17 @@ double precision, intent(in) :: maxabs
 double precision, intent(inout) :: coord(npts)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     CARRY OUT THE DATA-SCALING WHICH IS DEFINED  BY  THE SUBROUTINE
+!     Carry out the data-scaling which is defined  by  the subroutine
 !     DSCALP .
 !
-!     THIS SUBROUTINE IS CALLED BY  DGNRTP .  IT IS NOT CALLED BY THE
-!     USER.
+!     This subroutine is called by  DGNRTP .  It is not called by the
+!     user.
 !
-!     THE SCALING WHICH THIS ROUTINE CARRIES OUT MUST  BE  CONSISTENT
-!     WITH THE SCALING IN THE SUBROUTINES DMFIT AND DMEVL1.
+!     The scaling which this routine carries out must  be  consistent
+!     with the scaling in the subroutines DMFIT and DMEVL1.
 !
 !     ****************
 !
@@ -6312,92 +6312,92 @@ double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE  EVALUATES  THE  LEAST-SQUARES  MULTINOMIAL  FIT
-!     WHICH HAS BEEN PREVIOUSLY PRODUCED BY  DMFIT .  THE COMPUTATION
-!     IS PERFORMED IN DOUBLE PRECISION. EITHER THE FULL
-!     MULTINOMIAL AS PRODUCED MAY BE EVALUATED,  OR  ONLY  AN  INITIAL
-!     SEGMENT THEREOF.  AS IN THE CASE WITH  DMFIT , IT IS POSSIBLE
-!     (1) TO SPECIFY MULTINOMIALS OF A FULL GIVEN DEGREE, OR
-!     (2) TO SPECIFY  THE  NUMBER  OF  ORTHOGONAL  BASIS  ELEMENTS  TO
-!         ACHIEVE A PARTIAL-DEGREE FIT.
+!     This subroutine  evaluates  the  least-squares  multinomial  fit
+!     which has been previously produced by  DMFIT .  The computation
+!     is performed in double precision. Either the full
+!     multinomial as produced may be evaluated,  or  only  an  initial
+!     segment thereof.  As in the case with  DMFIT , it is possible
+!     (1) to specify multinomials of a full given degree, or
+!     (2) to specify  the  number  of  orthogonal  basis  elements  to
+!         achieve a partial-degree fit.
 !
-!     IN CASE (1), THE  DESIRED  DEGREE  IS  GIVEN  AS  THE  VALUE  OF
+!     In case (1), the  desired  degree  is  given  as  the  value  of
 !     EVLDEG   (WHICH  MUST  BE  NONNEGATIVE AND NOT GREATER THAN THE
-!     VALUE USED FOR  FITDEG  IN  DMFIT ), AND THE PARAMETER  NEPOLS
-!     WILL BE SET  BY  DMEVAL  TO SPECIFY THE NUMBER OF BASIS ELEMENTS
+!     value used for  FITDEG  in  DMFIT ), and the parameter  NEPOLS
+!     will be set  by  DMEVAL  to specify the number of basis elements
 !     REQUIRED. IF  EVLDEG  .LT.  FITDEG   IS  GIVEN,  THEN  ONLY  THE
-!     INITIAL  PORTION OF THE FITTING MULTINOMIAL (OF DEGREE  EVLDEG )
-!     WILL BE EVALUATED.
+!     initial  portion of the fitting multinomial (of degree  EVLDEG )
+!     will be evaluated.
 !
-!     IN CASE (2),  EVLDEG  IS TO BE SET NEGATIVE, IN WHICH  CASE  THE
+!     In case (2),  EVLDEG  is to be set negative, in which  case  the
 !     VALUE  OF   NEPOLS  (WHICH MUST BE POSITIVE AND NOT GREATER THAN
 !     THE VALUE USED FOR   NFPOLS   IN   DMFIT )  WILL  BE  TAKEN  AS
-!     DEFINING  THE  INITIAL  PORTION OF THE FITTING MULTINOMIAL TO BE
-!     EVALUATED.
+!     defining  the  initial  portion of the fitting multinomial to be
+!     evaluated.
 !
 !     IF  NEPOLS  =  NFPOLS  (WITH  EVLDEG  .LT.  0),  OR   EVLDEG   =
 !     FITDEG  (WITH   EVLDEG   .GT.  0),  THEN  THE  FULL  MULTINOMIAL
-!     GENERATED BY  DMFIT  WILL BE EVALUATED.
+!     generated by  DMFIT  will be evaluated.
 !
 !     THE  EVALUATION  WILL  TAKE  PLACE  FOR  EACH  OF   THE   POINTS
-!     (COLLECTION  OF  VARIABLE  VALUES)  GIVEN AS A ROW OF THE MATRIX
-!      EVLCDS .  THE  VALUES  PRODUCED  FROM  THE  FULL,  OR  PARTIAL,
-!     MULTINOMIAL WILL BE PLACED IN THE ARRAY  EVLVLS .
+!     (collection  of  variable  values)  given as a row of the matrix
+!      EVLCDS .  The  values  produced  from  the  full,  or  partial,
+!     multinomial will be placed in the array  EVLVLS .
 !
-!     VARIABLES
+!     Variables
 !     ---------
 !
-!      DIMEN  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF VARIABLES.
-!      EVLDEG  -- (INTEGER) -- (PASSED)
+!      DIMEN  -- (INTEGER) -- (passed)
+!         the number of variables.
+!      EVLDEG  -- (INTEGER) -- (passed)
 !         IF  EVLDEG  .LT. 0, THEN THIS PARAMETER WILL BE IGNORED.
 !         IF  EVLDEG  .GE. 0, THEN THE VALUE OF  EVLDEG  MUST  SATISFY
 !         EVLDEG  .LE. (THE  DEGREE  OF THE APPROXIMATING MULTINOMIAL
-!         GENERATED IN  DMFIT ).  IN THIS CASE  EVLDEG  WILL  SPECIFY
-!         THE DEGREE OF THE INITIAL PORTION OF THE FITTING MULTINOMIAL
-!         TO BE EVALUATED.
+!         generated in  DMFIT ).  In this case  EVLDEG  will  specify
+!         the degree of the initial portion of the fitting multinomial
+!         to be evaluated.
 !      NEPOLS  -- (INTEGER) -- (PASSED/RETURNED)
 !         IF  EVLDEG  .GE. 0, THEN THIS PARAMETER WILL BE IGNORED.
 !         IF EVLDEG .LT. 0, THEN THE PARTIAL MULTINOMIAL INVOLVING THE
 !         FIRST   NEPOLS  ORTHOGONAL BASIS FUNCTIONS WILL BE EVALUATED
-!         AT THE POINTS GIVEN BY  EVLCDS .  THE RESULTING VALUES  WILL
-!         BE STORED IN  EVLVLS .
+!         at the points given by  EVLCDS .  The resulting values  will
+!         be stored in  EVLVLS .
 !         THE VALUE OF NEPOLS MUST BE .GE. 1 AND .LE. (THE SIZE OF THE
 !         BASIS  GENERATED  IN   DMFIT ),  WHICH  WAS RETURNED AS THE
-!         VALUE OF  NFPOLS .
+!         value of  NFPOLS .
 !         NEPOLS  WILL BE CHANGED IF EVLDEG .GT. 0 TO GIVE THE SIZE OF
-!         BASIS REQUIRED FOR THE MULTINOMIAL OF DEGREE  EVLDEG .
-!      NEPTS  -- (INTEGER) -- (PASSED)
-!         THE NUMBER OF EVALUATION POINTS.
-!      EVLCDS  -- (DOUBLE PRECISION 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         EVLCDS (P,K) IS THE VALUE OF THE K-TH VARIABLE AT THE  P-TH
-!         EVALUATION POINT.
-!      NEROWS  -- (INTEGER) -- (PASSED)
-!         THE ROW DIMENSION DECLARED FOR EVLCDS IN THE CALLING PROGRAM.
-!      EVLVLS  -- (INTEGER) -- (RETURNED)
-!         EVLVLS (P) IS THE VALUE OF THE EVALUATED MULTINOMIAL AT THE
-!         P-TH EVALUATION POINT.
-!      ERROR  -- (INTEGER) -- (RETURNED)
-!          0 .........  IF NO ERRORS
+!         basis required for the multinomial of degree  EVLDEG .
+!      NEPTS  -- (INTEGER) -- (passed)
+!         the number of evaluation points.
+!      EVLCDS  -- (double precision 2-subscript array) -- (passed)
+!         EVLCDS (P,K) is the value of the K-TH variable at the  P-TH
+!         evaluation point.
+!      NEROWS  -- (INTEGER) -- (passed)
+!         the row dimension declared for EVLCDS in the calling program.
+!      EVLVLS  -- (INTEGER) -- (returned)
+!         EVLVLS (P) is the value of the evaluated multinomial at the
+!         P-TH evaluation point.
+!      Error  -- (INTEGER) -- (returned)
+!          0 .........  if no errors
 !         -1 .........  IF  NEPOLS  .GT.  NFPOLS  OR  NEPOLS  .LT. 1
 !         -2 .........  IF  NEPTS  .LT. 1 OR  DIMEN  .LT. 1
-!      FITIWK  -- (INTEGER, 1-SUBSCRIPT ARRAY) -- (PASSED)
-!         THE INTEGER WORK ARRAY OF LENGTH  FIWKLN  THAT WAS  USED  IN
+!      FITIWK  -- (integer, 1-subscript array) -- (passed)
+!         the integer work array of length  FIWKLN  that was  used  in
 !          DMFIT .
-!      FITDWK  -- (DOUBLE PRECISION 2-SUBSCRIPT ARRAY) -- (PASSED)
-!         THE REAL WORK ARRAY OF LENGTH  FDWKLN  THAT WAS
-!         USED IN  DMFIT .
-!      FIWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF  FITIWK .
-!      FDWKLN  -- (INTEGER) -- (PASSED)
-!         THE LENGTH OF  FITDWK .
+!      FITDWK  -- (double precision 2-subscript array) -- (passed)
+!         the real work array of length  FDWKLN  that was
+!         used in  DMFIT .
+!      FIWKLN  -- (INTEGER) -- (passed)
+!         the length of  FITIWK .
+!      FDWKLN  -- (INTEGER) -- (passed)
+!         the length of  FITDWK .
 !      TEMP    -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY)
-!         A WORK ARRAY OF LENGTH  DIMEN  (OR LONGER).
+!         a work array of length  DIMEN  (or longer).
 !
-!     THE SUBROUTINE  DMEVL1  IS CALLED TO DO THE ACTUAL EVALUATION.
+!     The subroutine  DMEVL1  is called to do the actual evaluation.
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !
@@ -6405,9 +6405,9 @@ double precision, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !
 !     ***************
-!     SET UP INDEX POINTERS TO THE BEGINNING OF EACH ROW OF
-!     THE MTABLE -- THIS SETS THE BEGINNING POINT FOR EACH
-!     FULL MULTINOMIAL DEGREE.
+!     Set up index pointers to the beginning of each row of
+!     the MTABLE -- this sets the beginning point for each
+!     full multinomial degree.
 !     ***************
 !
 if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
@@ -6435,7 +6435,7 @@ cstt = alfstt + alfl
 psistt = cstt + fitiwk(2)
 !
 !     ***************
-!     THE ACTUAL EVALUATION IS DONE INSIDE  DMEVL1.
+!     The actual evaluation is done inside  DMEVL1.
 !     ***************
 !
 call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
@@ -6444,7 +6444,7 @@ call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
 return
 !
 !     ***************
-!     ERROR RETURN
+!     Error return
 !     ***************
 !
 100 error = -1
@@ -6470,25 +6470,25 @@ double precision, intent(inout) :: x(dimen)
 double precision :: runtot, rntot1
 !
 !     ***************
-!     PURPOSE
+!     Purpose
 !     -------
 !
-!     THIS SUBROUTINE PERFORMS THE MAIN WORK OF EVALUATING THE
-!     FITTING MULTINOMIAL (OR THE INITIAL PORTION OF IT  WHICH
-!     IS REQUESTED BY THE SETTING OF  NEPOLS ,  EVLDEG  IN THE
+!     This subroutine performs the main work of evaluating the
+!     fitting multinomial (or the initial portion of it  which
+!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
 !     CALL TO SUBROUTINE  DMEVAL .
 !
-!     THIS SUBROUTINE IS CALLED BY  DMEVAL .  IT IS  NOT  CALLED
-!     DIRECTLY BY THE USER.
+!     This subroutine is called by  DMEVAL .  It is  not  called
+!     directly by the user.
 !
-!     THE BODY OF THIS SUBROUTINE FOLLOWS THE EXPLANATION
-!     GIVEN IN
-!          LEAST SQUARES FITTING USING
-!          ORTHOGONAL MULTINOMIALS
-!     BY
-!          BARTELS AND JEZIORANSKI
-!     IN
-!          ACM TRANSACTIONS ON MATHEMATICAL SOFTWARE
+!     The body of this subroutine FOLLOWS the explanation
+!     given in
+!          least squares fitting using
+!          orthogonal multinomials
+!     by
+!          Bartels and Jezioranski
+!     in
+!          ACM transactions on mathematical software
 !
 !
 !     MODIFIED BY A.H. MORRIS (NSWC)
@@ -6501,7 +6501,7 @@ psi(1) = 1.d0
 do 40 p = 1,nepts
 !
 !     ***************
-!     SCALE THE COORDINATES OF THE P-TH POINT
+!     Scale the coordinates of the P-TH point
 !     ***************
 !
    do k = 1,dimen
@@ -6510,9 +6510,9 @@ do 40 p = 1,nepts
    end do
 !
 !     ***************
-!     USE THE  BASIS FUNCTION COEFFICIENTS  C  AND RECURRENCE
-!     COEFFICIENTS  ALPHA  TO EVALUATE THE FITTED MULTINOMIAL
-!     AT THE P-TH POINT.
+!     Use the  basis function coefficients  C  and recurrence
+!     coefficients  alpha  to evaluate the fitted multinomial
+!     at the P-TH point.
 !     ***************
 !
    rntot1 = c(1)
@@ -6531,7 +6531,7 @@ do 40 p = 1,nepts
 return
 !
 !     ***************
-!     COMPUTE THE DEGREE 0 POLYNOMIAL
+!     Compute the degree 0 polynomial
 !     ***************
 !
 50 runtot = c(1) * maxabs(dimp1)
@@ -6552,40 +6552,40 @@ real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
 real :: f, spmpar
 !-----------------------------------------------------------------------
 !
-!                INTEGRATION OVER A FINITE INTERVAL
+!                Integration over a finite interval
 !
 !                          ----------
 !
-!     QSUBA COMPUTES THE INTEGRAL OF F(X) FROM A TO B WHERE THE
-!     RELATIVE ERROR DOES NOT EXCEED EPSIL.
+!     QSUBA computes the integral of F(X) from A to B where the
+!     relative error does not exceed EPSIL.
 !
-!     MCOUNT IS THE MAXIMUM NUMBER OF POINTS AT WHICH F(X) MAY BE
-!     EVALUATED.
+!     MCOUNT is the maximum number of points at which F(X) may be
+!     evaluated.
 !
-!     RELERR IS A VARIABLE. WHEN QSUBA TERMINATES, IF THE VALUE
-!     OF THE INTEGRAL IS NONZERO THEN RELERR IS A CRUDE ESTIMATE
+!     RELERR is a variable. When QSUBA terminates, if the value
+!     of the integral is nonzero then RELERR is a crude estimate
 !     OF THE RELATIVE ERROR OF THE VALUE. OTHERWISE, IF QSUBA = 0
-!     THEN RELERR IS AN ESTIMATE OF THE ABSOLUTE ERROR.
+!     then RELERR is an estimate of the absolute error.
 !
-!     IND IS A VARIABLE. WHEN QSUBA TERMINATES, IND HAS ONE OF THE
-!     FOLLOWING VALUES ...
+!     Ind is a variable. When QSUBA terminates, ind has one of the
+!     following values ...
 !
 !     IND=0   QSUBA IS SATISFIED THAT THE INTEGRAL HAS BEEN
-!             COMPUTED TO THE DESIRED ACCURACY.
+!             computed to the desired accuracy.
 !     IND=1   THE INTEGRAL HAS BEEN COMPUTED, BUT QSUBA IS
-!             NOT CERTAIN OF THE ACCURACY OF THE RESULT.
+!             not certain of the accuracy of the result.
 !     IND=2   THE INTEGRAND HAS BEEN EVALUATED AT MCOUNT
-!             POINTS. IF MORE EVALUATIONS ARE NEEDED THEN
+!             points. If more evaluations are needed then
 !             QSUBA TERMINATES.
 !     IND=3   QSUBA CANNOT COMPUTE THE INTEGRAL TO THE DESIRED
-!             ACCURACY. IND IS SET TO 3 WHENEVER THE STACK OF
-!             INTERVALS BECOMES FULL (IT CURRENTLY CAN HOLD 50
-!             INTERVALS). A RESULT IS OBTAINED BY CONTINUING
-!             THE INTEGRATION IGNORING CONVERGENCE FAILURES
-!             WHICH CANNOT BE ACCOMMODATED ON THE STACK.
+!             accuracy. Ind is set to 3 whenever the stack of
+!             intervals becomes full (it currently can hold 50
+!             intervals). A result is obtained by continuing
+!             the integration ignoring convergence failures
+!             which cannot be accommodated on the stack.
 !
-!     THE RELIABILITY OF THE ALGORITHM DECREASES FOR LARGE VALUES
-!     OF EPSIL. IT IS RECOMMENDED THAT EPSIL BE LESS THAN 0.001.
+!     The reliability of the algorithm decreases for large values
+!     of EPSIL. It is recommended that EPSIL be less than 0.001.
 !
 !-----------------------------------------------------------------------
 external f
@@ -6603,7 +6603,7 @@ relerr = 0.0
 ind = 0
 if (a .eq. b) return
 !
-!     APPLY QUAD TO THE ENTIRE INTERVAL
+!     Apply quad to the entire interval
 !
 sub1 = amin1(a,b)
 sub3 = amax1(a,b)
@@ -6612,8 +6612,8 @@ call quad (sub1, sub3, result, k, tol, npts, icheck, f)
 if (icheck .eq. 0) go to 100
 is = 1
 !
-!     SUBDIVIDE THE INTERVAL (SUB1,SUB3) INTO THE SUBINTERVALS
-!     (SUB1,SUB2) AND (SUB2,SUB3). CALL QUAD FOR (SUB1,SUB2).
+!     Subdivide the interval (SUB1,SUB3) into the subintervals
+!     (SUB1,SUB2) and (SUB2,SUB3). Call quad for (SUB1,SUB2).
 !
 10 if (npts .ge. mcount) go to 110
 sub2 = 0.5*(sub1 + sub3)
@@ -6623,8 +6623,8 @@ err = abs(result(k) - result(k-1))
 sum = qsuba + result(k)
 if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
 !
-!        STACK THE SUBINTERVAL (SUB1,SUB2) FOR FURTHER
-!        EXAMINATION IF THERE IS SUFFICIENT STORAGE.
+!        Stack the subinterval (SUB1,SUB2) for further
+!        examination if there is sufficient storage.
 !
    if (is .ge. ismax) go to 20
       stack(is) = sub1
@@ -6634,7 +6634,7 @@ if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
       go to 40
 20 ind = 3
 !
-!     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
+!     Update QSUBA and check if any significant digits are lost
 !
 30 x = qsuba
 qsuba = sum
@@ -6652,12 +6652,12 @@ err = abs(result(k) - result(k-1))
 sum = qsuba + result(k)
 if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 50
 !
-!        SUBDIVIDE THE INTERVAL (SUB2,SUB3)
+!        Subdivide the interval (SUB2,SUB3)
 !
    sub1 = sub2
    go to 10
 !
-!     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
+!     Update QSUBA and check if any significant digits are lost
 !
 50 x = qsuba
 qsuba = sum
@@ -6666,7 +6666,7 @@ if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 60
 x = 0.1*amin1(abs(x),abs(result(k)))
 if (abs(qsuba) .le. x) ind = 1
 !
-!     SUBDIVIDE THE INTERVAL LAST STACKED
+!     Subdivide the interval last stacked
 !
 60 if (is .eq. 1) go to 120
 is = is - 1
@@ -6675,7 +6675,7 @@ is = is - 1
 sub1 = stack(is)
 go to 10
 !
-!     TERMINATION WHEN SUBDIVISION IS NOT NEEDED
+!     Termination when subdivision is not needed
 !
 100 qsuba = result(k)
 if (a .gt. b) qsuba = -qsuba
@@ -6683,7 +6683,7 @@ relerr = abs(result(k) - result(k-1))
 if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
 return
 !
-!     SUBDIVISION RESULT
+!     Subdivision result
 !
 110 ind = 2
 120 if (a .gt. b) qsuba = -qsuba
@@ -6701,38 +6701,38 @@ integer :: i, inew, iold, j
 real :: acum, diff, funct(127), fzero, p(381), sum, x
 real :: f
 !     --------------------
-! THIS SUBROUTINE ATTEMPTS TO CALCULATE THE INTEGRAL OF F(X)
-! OVER THE INTERVAL *A* TO *B* WITH RELATIVE ERROR NOT
+! This subroutine attempts to calculate the integral of F(X)
+! over the interval *A* to *B* with relative error not
 ! EXCEEDING *EPSIL*.
-! THE RESULT IS OBTAINED USING A SEQUENCE OF 1,3,7,15,31,63,
-! 127, AND 255 POINT INTERLACING FORMULAE(NO INTEGRAND
-! EVALUATIONS ARE WASTED) OF RESPECTIVE DEGREE 1,5,11,23,
-! 47,95,191 AND 383. THE FORMULAE ARE BASED ON THE OPTIMAL
-! EXTENSION OF THE 3-POINT GAUSS FORMULA.  DETAILS OF
-! THE FORMULAE ARE GIVEN IN *THE OPTIMUM ADDITION OF POINTS
-! TO QUADRATURE FORMULAE* BY T.N.L. PATTERSON,MATHS.COMP.
-! VOL 22,847-856,1968.
+! The result is obtained using a sequence of 1,3,7,15,31,63,
+! 127, and 255 point interlacing formulae(no integrand
+! evaluations are wasted) of respective degree 1,5,11,23,
+! 47,95,191 and 383. The formulae are based on the optimal
+! extension of the 3-point Gauss formula.  Details of
+! the formulae are given in *the optimum addition of points
+! to quadrature formulae* by T.N.L. Patterson,maths.Comp.
+! Vol 22,847-856,1968.
 !                     *** INPUT ***
 ! A       LOWER LIMIT OF INTEGRATION.
 ! B       UPPER LIMIT OF INTEGRATION.
 ! EPSIL   RELATIVE ACCURACY REQUIRED. WHEN THE RELATIVE
-!         DIFFERENCE OF TWO SUCCESSIVE FORMULAE DOES NOT
-!         EXCEED *EPSIL* THE LAST FORMULA COMPUTED IS TAKEN
-!         AS THE RESULT.
+!         difference of two successive formulae does not
+!         exceed *EPSIL* the last formula computed is taken
+!         as the result.
 ! F       F(X) IS THE INTEGRAND.
 !                     *** OUTPUT ***
-! RESULT  THIS ARRAY,WHICH SHOULD BE DECLARED TO HAVE AT
-!         LEAST 8 ELEMENTS, HOLDS THE RESULTS OBTAINED BY
-!         THE 1,3,7, ETC., POINT FORMULAE. THE NUMBER OF
-!         FORMULAE COMPUTED DEPENTS ON *EPSIL*.
+! result  this array,which should be declared to have at
+!         least 8 elements, holds the results obtained by
+!         the 1,3,7, etc., point formulae. The number of
+!         formulae computed depents on *EPSIL*.
 ! K       RESULT(K) HOLDS THE VALUE OF THE INTEGRAL TO THE
-!         SPECIFIED RELATIVE ACCURACY.
+!         specified relative accuracy.
 ! NPTS    NUMBER INTEGRAND EVALUATIONS.
 ! ICHECK  ON EXIT NORMALLY ICHECK=0. HOWEVER IF CONVERGENCE
 !         TO THE ACCURACY REQUESTED IS NOT ACHIEVED ICHECK=1
-!         ON EXIT.
-! ABSCISSAE AND WEIGHTS OF QUADRATURE RULES ARE STACKED IN
-! ARRAY *P* IN THE ORDER IN WHICH THEY ARE NEEDED.
+!         on exit.
+! Abscissae and weights of quadrature rules are stacked in
+! array *P* in the order in which they are needed.
 !     --------------------
 external f
 data p( 1),p( 2),p( 3),p( 4),p( 5),p( 6),p( 7), &
@@ -6982,12 +6982,12 @@ data p(365),p(366),p(367),p(368),p(369),p(370),p(371), &
 &0.14093886410782462614e-01,0.14092845069160408355e-01, &
 &0.14094407090096179347e-01/
 icheck = 0
-! CHECK FOR TRIVIAL CASE.
+! Check for trivial case.
 if (a.eq.b) go to 70
-! SCALE FACTORS.
+! Scale factors.
 sum = (b+a)/2.0
 diff = (b-a)/2.0
-! 1-POINT GAUSS
+! 1-Point Gauss
 fzero = f(sum)
 result(1) = 2.0*fzero*diff
 i = 0
@@ -6999,12 +6999,12 @@ go to 30
 10 if (k.eq.8) go to 50
 k = k + 1
 acum = 0.0
-! CONTRIBUTION FROM FUNCTION VALUES ALREADY COMPUTED.
+! Contribution from function values already computed.
 do 20 j = 1,iold
   i = i + 1
   acum = acum + p(i)*funct(j)
 20 continue
-! CONTRIBUTION FROM NEW FUNCTION VALUES.
+! Contribution from new function values.
 30 iold = iold + inew
 do 40 j = inew,iold
   i = i + 1
@@ -7016,15 +7016,15 @@ do 40 j = inew,iold
 inew = iold + 1
 i = i + 1
 result(k) = (acum+p(i)*fzero)*diff
-! CHECK FOR CONVERGENCE.
+! Check for convergence.
 if (abs(result(k)-result(k-1))-epsil*abs(result(k))) 60, &
 &60, 10
-! CONVERGENCE NOT ACHIEVED.
+! Convergence not achieved.
 50 icheck = 1
-! NORMAL TERMINATION.
+! Normal termination.
 60 npts = inew + iold
 return
-! TRIVIAL CASE
+! Trivial case
 70 k = 2
 result(1) = 0.0
 result(2) = 0.0
@@ -7046,147 +7046,147 @@ real, intent(out) :: result
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
-!                 COMPUTATION OF A DEFINITE INTEGRAL
+!                 Computation of a definite integral
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           DEFINITE INTEGRAL   I = INTEGRAL OF  F  OVER (A,B),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - REAL
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - REAL
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF
-!                             LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A
-!                             LOCAL DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE SUB-
-!                             RANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME  POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some  points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED
-!                             THAT DIVERGENCE CAN OCCUR WITH ANY OTHER
-!                             VALUE OF IER.
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
 !                             OR EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             OR LENW .LT. 4 * LIMIT.
-!                             RESULT, ABSERR, NEVAL, LAST ARE
-!                             SET TO ZERO.
+!                             Result, ABSERR, NEVAL, last are
+!                             set to zero.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER
-!                    OF SUBINTERVALS IN THE PARTITION OF THE GIVEN
+!         Dimensioning parameters
+!            limit - integer
+!                    dimensioning parameter for IWORK
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
 !                    INTEGRATION INTERVAL (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH
 !                    IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*4.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*4.
 !                    IF LENW.LT.LIMIT*4, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF
-!                    SUBINTERVALS PRODUCED IN THE SUBDIVISION
-!                    PROCESS, WHICH DETERMINES THE NUMBER OF
-!                    SIGNIFICANT ELEMENTS ACTUALLY IN THE WORK
-!                    ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of
+!                    significant elements actually in the work
+!                    arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                    ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                    K = LIMIT+1-LAST OTHERWISE
 !
-!            WORK  - REAL
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - real
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END POINTS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end points,
 !                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST)
-!                     CONTAIN THE INTEGRAL APPROXIMATIONS OVER
-!                     THE SUBINTERVALS,
+!                     contain the integral approximations over
+!                     the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
+!                     contain the error estimates.
 !
-!         SUBROUTINES OR FUNCTIONS NEEDED
+!         Subroutines or functions needed
 !              - QAGSE
 !              - QK21F
 !              - QPSRT
 !              - QELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -7194,7 +7194,7 @@ real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
 !
-!         CHECK VALIDITY OF LIMIT AND LENW.
+!         Check validity of limit and LENW.
 !
 ier = 6
 neval = 0
@@ -7203,7 +7203,7 @@ result = 0.0
 abserr = 0.0
 if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
-!         PREPARE CALL FOR QAGSE.
+!         Prepare call for QAGSE.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -7219,141 +7219,141 @@ subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !-----------------------------------------------------------------------
 !
-!                 COMPUTATION OF A DEFINITE INTEGRAL
+!                 Computation of a definite integral
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           DEFINITE INTEGRAL   I = INTEGRAL OF  F  OVER (A,B),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - REAL
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - REAL
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPERBOUND ON THE NUMBER OF
-!                     SUBINTERVALS IN THE PARTITION OF (A,B)
+!            Limit  - integer
+!                     gives an upperbound on the number of
+!                     subintervals in the partition of (A,B)
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
 !
 !                         = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF
-!                             LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A
-!                             LOCAL DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE SUB-
-!                             RANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME  POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some  points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED
-!                             THAT DIVERGENCE CAN OCCUR WITH ANY OTHER
-!                             VALUE OF IER.
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
-!                             OR EPSREL IS NEGATIVE.
-!                             RESULT, ABSERR, NEVAL, LAST, RLIST(1),
-!                             IORD(1) AND ELIST(1) ARE SET TO ZERO.
-!                             ALIST(1) AND BLIST(1) ARE SET TO A AND B
-!                             RESPECTIVELY.
+!                             or EPSREL is negative.
+!                             Result, ABSERR, NEVAL, last, RLIST(1),
+!                             IORD(1) and ELIST(1) are set to zero.
+!                             ALIST(1) and BLIST(1) are set to A and B
+!                             respectively.
 !
 !            ALIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE GIVEN INTEGRATION RANGE (A,B)
+!                     of the given integration range (A,B)
 !
 !            BLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE GIVEN INTEGRATION RANGE (A,B)
+!                     of the given integration range (A,B)
 !
 !            RLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
 !            ELIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI
-!                     OF THE ABSOLUTE ERROR ESTIMATES ON THE
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
 !                     SUBINERVALS
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE ERROR
-!                     ESTIMATES OVER THE SUBINTERVALS, SUCH
+!                     vector of dimension at least limit, the first K
+!                     elements of which are pointers to the error
+!                     estimates over the subintervals, such
 !                     THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED IN THE
-!                     SUBDIVISION PROCESS
+!                     number of subintervals actually produced in the
+!                     subdivision process
 !
-!         SUBROUTINES OR FUNCTIONS NEEDED
+!         Subroutines or functions needed
 !              - QK21F
 !              - QPSRT
 !              - QELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -7391,28 +7391,28 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
-!            LIMEXP IN SUBROUTINE QELG (RLIST2 SHOULD BE OF DIMENSION
-!            (LIMEXP+2) AT LEAST).
+!            The dimension of RLIST2 is determined by the value of
+!            LIMEXP in subroutine QELG (RLIST2 should be of dimension
+!            (LIMEXP+2) at least).
 !
-!            LIST OF MAJOR VARIABLES
+!            List of major variables
 !            -----------------------
 !
 !           ALIST     - LIST OF LEFT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
+!                       considered up to now
 !           BLIST     - LIST OF RIGHT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
-!           RLIST(I)  - APPROXIMATION TO THE INTEGRAL OVER
+!                       considered up to now
+!           RLIST(I)  - approximation to the integral over
 !                       (ALIST(I),BLIST(I))
 !           RLIST2    - ARRAY OF DIMENSION AT LEAST LIMEXP+2
-!                       CONTAINING THE PART OF THE EPSILON TABLE
-!                       WHICH IS STILL NEEDED FOR FURTHER COMPUTATIONS
-!           ELIST(I)  - ERROR ESTIMATE APPLYING TO RLIST(I)
+!                       containing the part of the epsilon table
+!                       which is still needed for further computations
+!           ELIST(I)  - error estimate applying to RLIST(I)
 !           MAXERR    - POINTER TO THE INTERVAL WITH LARGEST ERROR
-!                       ESTIMATE
+!                       estimate
 !           ERRMAX    - ELIST(MAXERR)
 !           ERLAST    - ERROR ON THE INTERVAL CURRENTLY SUBDIVIDED
-!                       (BEFORE THAT SUBDIVISION HAS TAKEN PLACE)
+!                       (before that subdivision has taken place)
 !           AREA      - SUM OF THE INTEGRALS OVER THE SUBINTERVALS
 !           ERRSUM    - SUM OF THE ERRORS OVER THE SUBINTERVALS
 !           ERRBND    - REQUESTED ACCURACY MAX(EPSABS,EPSREL*
@@ -7422,33 +7422,33 @@ external f
 !           LAST      - INDEX FOR SUBDIVISION
 !           NRES      - NUMBER OF CALLS TO THE EXTRAPOLATION ROUTINE
 !           NUMRL2    - NUMBER OF ELEMENTS CURRENTLY IN RLIST2. IF AN
-!                       APPROPRIATE APPROXIMATION TO THE COMPOUNDED
-!                       INTEGRAL HAS BEEN OBTAINED IT IS PUT IN
-!                       RLIST2(NUMRL2) AFTER NUMRL2 HAS BEEN INCREASED
-!                       BY ONE.
+!                       appropriate approximation to the compounded
+!                       integral has been obtained it is put in
+!                       RLIST2(NUMRL2) after NUMRL2 has been increased
+!                       by one.
 !           SMALL     - LENGTH OF THE SMALLEST INTERVAL CONSIDERED
-!                       UP TO NOW, MULTIPLIED BY 1.5
+!                       up to now, multiplied by 1.5
 !           ERLARG    - SUM OF THE ERRORS OVER THE INTERVALS LARGER
-!                       THAN THE SMALLEST INTERVAL CONSIDERED UP TO NOW
+!                       than the smallest interval considered up to now
 !           EXTRAP    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
-!                       IS ATTEMPTING TO PERFORM EXTRAPOLATION
-!                       I.E. BEFORE SUBDIVIDING THE SMALLEST INTERVAL
-!                       WE TRY TO DECREASE THE VALUE OF ERLARG.
+!                       is attempting to perform extrapolation
+!                       I.E. Before subdividing the smallest interval
+!                       we try to decrease the value of ERLARG.
 !           NOEXT     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
-!                       IS NO LONGER ALLOWED (TRUE VALUE)
+!                       is no longer allowed (true value)
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!           EPMACH is the largest relative spacing.
+!           UFLOW is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
 !
 epmach = spmpar(1)
 uflow = spmpar(2)
 oflow = spmpar(3)
 !
-!            CHECK EPSABS AND EPSREL
+!            Check EPSABS and EPSREL
 !            -----------------------
 !
 neval = 0
@@ -7464,7 +7464,7 @@ if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
 ier = 0
 rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
 ierro = 0
@@ -7473,7 +7473,7 @@ call qk21f (f, a, b, result, abserr, defabs, resabs, &
 if (id .ne. 0) go to 999
 neval = 21
 !
-!           TEST ON ACCURACY.
+!           Test on accuracy.
 !
 dres = abs(result)
 errbnd = amax1(epsabs,rerr*dres)
@@ -7486,7 +7486,7 @@ if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0) go to 999
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -7509,13 +7509,13 @@ ksgn = -1
 if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
 t = 1.0 + 100.0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST
-!           ERROR ESTIMATE.
+!           Bisect the subinterval with the NRMAX-TH largest
+!           error estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5*(alist(maxerr) + blist(maxerr))
@@ -7529,8 +7529,8 @@ do 90 last = 2,limit
 &epmach, uflow, ier)
   neval = neval + 42
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -7546,24 +7546,24 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = amax1(epsabs,rerr*abs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
-!           SET ERROR FLAG.
+!           Test for roundoff error and eventually
+!           set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
-!           SUBINTERVALS EQUALS LIMIT.
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT A POINT OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
 !
   if (amax1(abs(a1),abs(b2)) .le. &
 &t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -7581,9 +7581,9 @@ do 90 last = 2,limit
   elist(last) = error1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
-!           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
-!           BISECTED NEXT).
+!           in the list of error estimates and select the
+!           subinterval with NRMAX-TH largest error estimate (to be
+!           bisected next).
 !
 30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
@@ -7596,18 +7596,18 @@ do 90 last = 2,limit
   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
-!           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
-!           EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (ERLARG) and perform
+!           extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -7620,7 +7620,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -7637,7 +7637,7 @@ do 90 last = 2,limit
 ! ***JUMP OUT OF DO-LOOP
   if (abserr .le. ertest) go to 100
 !
-!           PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -7654,7 +7654,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -7667,7 +7667,7 @@ if (area .eq. 0.0) go to 130
 go to 110
 105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
-!           TEST ON DIVERGENCE.
+!           Test on divergence.
 !
 110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
 &defabs*0.1e-01) go to 130
@@ -7675,7 +7675,7 @@ if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
 &.or. errsum .gt. abs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
@@ -7703,70 +7703,70 @@ real :: f
 !
 ! 1.        PURPOSE
 !              TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                             ESTIMATE
+!                             estimate
 !                         J = INTEGRAL OF ABS(F) OVER (A,B)
 !
 ! 2.        PARAMETERS
-!            ON ENTRY
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS
-!                       TO BE DECLARED E X T E R N A L IN THE
-!                       CALLING PROGRAM.
+!                       to be declared E X T E R N A L in the
+!                       calling program.
 !
 !              A      - REAL
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              B      - REAL
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
 !              EPMACH - REAL
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
 !              UFLOW  - REAL
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!                       the smallest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - REAL
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE 21-POINT
-!                       KRONROD RULE (RESK) OBTAINED BY OPTIMAL
-!                       ADDITION OF ABSCISSAE TO THE 10-POINT GAUSS
+!            On return
+!              result - real
+!                       approximation to the integral I
+!                       result is computed by applying the 21-point
+!                       Kronrod rule (RESK) obtained by optimal
+!                       addition of abscissae to the 10-point Gauss
 !                       RULE (RESG).
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD NOT EXCEED ABS(I-RESULT)
+!                       estimate of the modulus of the absolute error,
+!                       which should not exceed ABS(I-RESULT)
 !
 !              RESABS - REAL
-!                       APPROXIMATION TO THE INTEGRAL J
+!                       approximation to the integral J
 !
 !              RESASC - REAL
-!                       APPROXIMATION TO THE INTEGRAL OF ABS(F-I/(B-A))
+!                       approximation to the integral of ABS(F-I/(B-A))
 !                       OVER (A,B)
 !
 !              ISIG   - INTEGER
 !                       ISIG=0  THE INTEGRAL WAS APPROXIMATED.
 !                       ISIG=5  THE INTERVAL (A,B) IS TOO SHORT.
-!                               THE INTEGRAL CANNOT BE COMPUTED.
+!                               The integral cannot be computed.
 !
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - F (USER-PROVIDED FUNCTION)
+!                 - F (user-provided function)
 !
 !-----------------------------------------------------------------------
 real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
 external f
 !
-!           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
-!           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
-!           CORRESPONDING WEIGHTS ARE GIVEN.
+!           The abscissae and weights are given for the interval (-1,1).
+!           Because of symmetry only the positive abscissae and their
+!           corresponding weights are given.
 !
 !           XGK    - ABSCISSAE OF THE 21-POINT KRONROD RULE
-!                    XGK(2), XGK(4), ...  ABSCISSAE OF THE 10-POINT
-!                    GAUSS RULE
-!                    XGK(1), XGK(3), ...  ABSCISSAE WHICH ARE OPTIMALLY
-!                    ADDED TO THE 10-POINT GAUSS RULE
+!                    XGK(2), XGK(4), ...  abscissae of the 10-point
+!                    Gauss rule
+!                    XGK(1), XGK(3), ...  abscissae which are optimally
+!                    added to the 10-point Gauss rule
 !
 !           WGK    - WEIGHTS OF THE 21-POINT KRONROD RULE
 !
@@ -7796,16 +7796,16 @@ data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
 &0.2955242247147529e+00/
 !
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
-!           CENTR  - MID POINT OF THE INTERVAL
-!           HLGTH  - HALF-LENGTH OF THE INTERVAL
+!           CENTR  - mid point of the interval
+!           HLGTH  - half-length of the interval
 !           ABSC   - ABSCISSA
-!           FVAL*  - FUNCTION VALUE
+!           FVAL*  - function VALUE
 !           RESG   - RESULT OF THE 10-POINT GAUSS FORMULA
 !           RESK   - RESULT OF THE 21-POINT KRONROD FORMULA
-!           RESKH  - APPROXIMATION TO THE MEAN VALUE OF F OVER (A,B),
+!           RESKH  - approximation to the mean value of F over (A,B),
 !                    I.E. TO I/(B-A)
 !
 !
@@ -7813,14 +7813,14 @@ centr = 0.5*(a + b)
 hlgth = 0.5*(b - a)
 dhlgth = abs(hlgth)
 !
-!             CHECK IF THE INTERVAL (A,B) IS TOO SHORT
+!             Check if the interval (A,B) is too short
 !
 isig = 5
 absc = abs(centr) + dhlgth*0.14
 if (absc .eq. abs(centr)) return
 !
-!           COMPUTE THE 21-POINT KRONROD APPROXIMATION TO
-!           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
+!           Compute the 21-point Kronrod approximation to
+!           the integral, and estimate the absolute error.
 !
 isig = 0
 resg = 0.0
@@ -7882,154 +7882,154 @@ integer :: l1, l2, l3
 real :: f
 !-----------------------------------------------------------------------
 !
-!                   INTEGRATION OVER INFINITE INTERVALS
+!                   Integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
-!            BOUND  - REAL
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - real
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
 !                             OR EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             OR LENW .LT. 4 * LIMIT.
-!                             RESULT, ABSERR, NEVAL, LAST ARE
-!                             SET TO ZERO.
+!                             Result, ABSERR, NEVAL, last are
+!                             set to zero.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER
-!                    OF SUBINTERVALS IN THE PARTITION OF THE GIVEN
+!         Dimensioning parameters
+!            limit - integer
+!                    dimensioning parameter for IWORK
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
 !                    INTEGRATION INTERVAL (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH
 !                    IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*4.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*4.
 !                    IF LENW.LT.LIMIT*4, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF
-!                    SUBINTERVALS PRODUCED IN THE SUBDIVISION
-!                    PROCESS, WHICH DETERMINES THE NUMBER OF SIGNIFICANT
-!                    ELEMENTS ACTUALLY IN THE WORK ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of significant
+!                    elements actually in the work arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                    K ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least limit, the first
+!                    K elements of which contain pointers
+!                    to the error estimates over the subintervals,
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                    K = LIMIT+1-LAST OTHERWISE
 !
-!            WORK  - REAL
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - real
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END POINTS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end points,
 !                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST)
-!                     CONTAIN THE INTEGRAL APPROXIMATIONS OVER
-!                     THE SUBINTERVALS,
+!                     contain the integral approximations over
+!                     the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
+!                     contain the error estimates.
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - QAGIE
 !              - QK15I
 !              - QPSRT
 !              - QELG
-!              - F (USER PROVIDED FUNCTION)
+!              - F (user provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -8037,7 +8037,7 @@ real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
 !
-!         CHECK VALIDITY OF LIMIT AND LENW.
+!         Check validity of limit and LENW.
 !
 ier = 6
 neval = 0
@@ -8046,7 +8046,7 @@ result = 0.0
 abserr = 0.0
 if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
-!         PREPARE CALL FOR QAGIE.
+!         Prepare call for QAGIE.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -8062,150 +8062,150 @@ subroutine qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !-----------------------------------------------------------------------
 !
-!                   INTEGRATION OVER INFINITE INTERVALS
+!                   Integration over infinite intervals
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           INTEGRAL    I = INTEGRAL OF  F  OVER (BOUND,+INFINITY)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,BOUND)
 !                    OR I = INTEGRAL OF  F  OVER (-INFINITY,+INFINITY),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
-!            BOUND  - REAL
-!                     FINITE BOUND OF INTEGRATION RANGE
-!                     (HAS NO MEANING IF INTERVAL IS DOUBLY-INFINITE)
+!            Bound  - real
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
 !
 !            INF    - INTEGER
-!                     INDICATING THE KIND OF INTEGRATION RANGE
-!                     INVOLVED
+!                     indicating the kind of integration range
+!                     involved
 !                     INF = 1 CORRESPONDS TO  (BOUND,+INFINITY),
 !                     INF = -1            TO  (-INFINITY,BOUND),
 !                     INF = 2             TO (-INFINITY,+INFINITY).
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPER BOUND ON THE NUMBER OF
-!                     SUBINTERVALS IN THE PARTITION OF (A,B),
+!            Limit  - integer
+!                     gives an upper bound on the number of
+!                     subintervals in the partition of (A,B),
 !                     LIMIT.GE.1
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                   - IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE. THE
-!                             ESTIMATES FOR RESULT AND ERROR ARE LESS
-!                             RELIABLE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS NOT BEEN ACHIEVED.
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE
-!                             SUBDIVISIONS BY INCREASING THE VALUE
-!                             OF LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A LOCAL
-!                             DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE
-!                             SUBRANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS
-!                             DETECTED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR OCCURS
-!                             AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS ASSUMED THAT THE REQUESTED TOLERANCE
-!                             CANNOT BE ACHIEVED, AND THAT THE RETURNED
-!                             RESULT IS THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
-!                             OR EPSREL IS NEGATIVE.
-!                             RESULT, ABSERR, NEVAL, LAST, RLIST(1),
-!                             ELIST(1) AND IORD(1) ARE SET TO ZERO.
-!                             ALIST(1) AND BLIST(1) ARE SET TO 0
-!                             AND 1 RESPECTIVELY.
+!                             or EPSREL is negative.
+!                             Result, ABSERR, NEVAL, last, RLIST(1),
+!                             ELIST(1) and IORD(1) are set to zero.
+!                             ALIST(1) and BLIST(1) are set to 0
+!                             and 1 respectively.
 !
 !            ALIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
 !            BLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE TRANSFORMED INTEGRATION RANGE (0,1).
+!                     of the transformed integration range (0,1).
 !
 !            RLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
 !            ELIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT,  THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI
-!                     OF THE ABSOLUTE ERROR ESTIMATES ON THE
-!                     SUBINTERVALS
+!                     vector of dimension at least limit,  the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
+!                     subintervals
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
+!                     vector of dimension limit, the first K
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED
-!                     IN THE SUBDIVISION PROCESS
+!                     number of subintervals actually produced
+!                     in the subdivision process
 !
-!        SUBROUTINES OR FUNCTIONS NEEDED
+!        Subroutines or functions needed
 !              - QK15I
 !              - QPSRT
 !              - QELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
@@ -8244,28 +8244,28 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
-!            LIMEXP IN SUBROUTINE QELG.
+!            The dimension of RLIST2 is determined by the value of
+!            LIMEXP in subroutine QELG.
 !
 !
-!            LIST OF MAJOR VARIABLES
+!            List of major variables
 !            -----------------------
 !
 !           ALIST     - LIST OF LEFT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
+!                       considered up to now
 !           BLIST     - LIST OF RIGHT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
-!           RLIST(I)  - APPROXIMATION TO THE INTEGRAL OVER
+!                       considered up to now
+!           RLIST(I)  - approximation to the integral over
 !                       (ALIST(I),BLIST(I))
 !           RLIST2    - ARRAY OF DIMENSION AT LEAST (LIMEXP+2),
-!                       CONTAINING THE PART OF THE EPSILON TABLE
-!                       WICH IS STILL NEEDED FOR FURTHER COMPUTATIONS
-!           ELIST(I)  - ERROR ESTIMATE APPLYING TO RLIST(I)
+!                       containing the part of the epsilon table
+!                       wich is still needed for further computations
+!           ELIST(I)  - error estimate applying to RLIST(I)
 !           MAXERR    - POINTER TO THE INTERVAL WITH LARGEST ERROR
-!                       ESTIMATE
+!                       estimate
 !           ERRMAX    - ELIST(MAXERR)
 !           ERLAST    - ERROR ON THE INTERVAL CURRENTLY SUBDIVIDED
-!                       (BEFORE THAT SUBDIVISION HAS TAKEN PLACE)
+!                       (before that subdivision has taken place)
 !           AREA      - SUM OF THE INTEGRALS OVER THE SUBINTERVALS
 !           ERRSUM    - SUM OF THE ERRORS OVER THE SUBINTERVALS
 !           ERRBND    - REQUESTED ACCURACY MAX(EPSABS,EPSREL*
@@ -8275,33 +8275,33 @@ external f
 !           LAST      - INDEX FOR SUBDIVISION
 !           NRES      - NUMBER OF CALLS TO THE EXTRAPOLATION ROUTINE
 !           NUMRL2    - NUMBER OF ELEMENTS CURRENTLY IN RLIST2. IF AN
-!                       APPROPRIATE APPROXIMATION TO THE COMPOUNDED
-!                       INTEGRAL HAS BEEN OBTAINED, IT IS PUT IN
-!                       RLIST2(NUMRL2) AFTER NUMRL2 HAS BEEN INCREASED
-!                       BY ONE.
+!                       appropriate approximation to the compounded
+!                       integral has been obtained, it is put in
+!                       RLIST2(NUMRL2) after NUMRL2 has been increased
+!                       by one.
 !           SMALL     - LENGTH OF THE SMALLEST INTERVAL CONSIDERED UP
-!                       TO NOW, MULTIPLIED BY 1.5
+!                       to now, multiplied by 1.5
 !           ERLARG    - SUM OF THE ERRORS OVER THE INTERVALS LARGER
-!                       THAN THE SMALLEST INTERVAL CONSIDERED UP TO NOW
+!                       than the smallest interval considered up to now
 !           EXTRAP    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
-!                       IS ATTEMPTING TO PERFORM EXTRAPOLATION. I.E.
-!                       BEFORE SUBDIVIDING THE SMALLEST INTERVAL WE
-!                       TRY TO DECREASE THE VALUE OF ERLARG.
+!                       is attempting to perform extrapolation. I.E.
+!                       Before subdividing the smallest interval we
+!                       try to decrease the value of ERLARG.
 !           NOEXT     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
-!                       IS NO LONGER ALLOWED (TRUE-VALUE)
+!                       is no longer allowed (TRUE-VALUE)
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!           EPMACH is the largest relative spacing.
+!           UFLOW is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
 !
 epmach = spmpar(1)
 uflow = spmpar(2)
 oflow = spmpar(3)
 !
-!           CHECK EPSABS AND EPSREL
+!           Check EPSABS and EPSREL
 !           -----------------------
 !
 neval = 0
@@ -8318,10 +8318,10 @@ if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
 ier = 0
 rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
-!           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
+!           Determine the interval to be mapped onto (0,1).
 !           IF INF = 2 THE INTEGRAL IS COMPUTED AS I = I1+I2, WHERE
 !           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 !           I2 = INTEGRAL OF F OVER (0,+INFINITY).
@@ -8331,7 +8331,7 @@ if (inf .eq. 2) boun = 0.0
 call qk15i (f, boun, inf, 0.0, 1.0, result, abserr, &
 &defabs, resabs, epmach, uflow)
 !
-!           TEST ON ACCURACY
+!           Test on accuracy
 !
 last = 1
 rlist(1) = result
@@ -8345,7 +8345,7 @@ if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
 &.or. abserr .eq. 0.0) go to 130
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -8369,13 +8369,13 @@ ksgn = -1
 if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
 t = 1.0 + 100.0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH NRMAX-TH LARGEST
-!           ERROR ESTIMATE.
+!           Bisect the subinterval with NRMAX-TH largest
+!           error estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5*(alist(maxerr) + blist(maxerr))
@@ -8387,8 +8387,8 @@ do 90 last = 2,limit
   call qk15i (f, boun, inf, a2, b2, area2, error2, &
 &resabs, defab2, epmach, uflow)
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -8404,25 +8404,25 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = amax1(epsabs,rerr*abs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
-!           SET ERROR FLAG.
+!           Test for roundoff error and eventually
+!           set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
-!           SUBINTERVALS EQUALS LIMIT.
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT SOME POINTS OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at some points of the integration range.
 !
 
   if (amax1(abs(a1),abs(b2)) .le. &
 &t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -8440,9 +8440,9 @@ do 90 last = 2,limit
   elist(last) = error1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
-!           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
-!           BISECTED NEXT).
+!           in the list of error estimates and select the
+!           subinterval with NRMAX-TH largest error estimate (to be
+!           bisected next).
 !
 30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
   if (errsum .le. errbnd) go to 115
@@ -8453,18 +8453,18 @@ do 90 last = 2,limit
   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
-!           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
-!           EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (ERLARG) and perform
+!           extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -8476,7 +8476,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -8492,7 +8492,7 @@ do 90 last = 2,limit
   ertest = amax1(epsabs,rerr*abs(reseps))
   if (abserr .le. ertest) go to 100
 !
-!            PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!            Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -8509,7 +8509,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -8522,7 +8522,7 @@ if (area .eq. 0.0) go to 130
 go to 110
 105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
-!           TEST ON DIVERGENCE
+!           Test on divergence
 !
 110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
 &defabs*0.1e-01) go to 130
@@ -8530,7 +8530,7 @@ if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
 &.or. errsum .gt. abs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
@@ -8559,22 +8559,22 @@ real :: f
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
-!              THE ORIGINAL (INFINITE) INTEGRATION RANGE IS MAPPED
-!              ONTO THE INTERVAL (0,1) AND (A,B) IS A PART OF (0,1).
-!              IT IS THE PURPOSE TO COMPUTE
+!              the original (infinite) integration range is mapped
+!              onto the interval (0,1) and (A,B) is a part of (0,1).
+!              It is the purpose to compute
 !              I = INTEGRAL OF TRANSFORMED INTEGRAND OVER (A,B),
 !              J = INTEGRAL OF ABS(TRANSFORMED INTEGRAND) OVER (A,B).
 !
 ! 2.        PARAMETERS
-!            ON ENTRY
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS
-!                       TO BE DECLARED E X T E R N A L IN THE
-!                       CALLING PROGRAM.
+!                       to be declared E X T E R N A L in the
+!                       calling program.
 !
 !              BOUN   - REAL
-!                       FINITE BOUND OF ORIGINAL INTEGRATION
+!                       finite bound of original integration
 !                       RANGE (SET TO ZERO IF INF = +2)
 !
 !              INF    - INTEGER
@@ -8583,68 +8583,68 @@ real :: f
 !                       IF INF = +1, THE ORIGINAL INTERVAL IS
 !                                   (BOUND,+INFINITY),
 !                       IF INF = +2, THE ORIGINAL INTERVAL IS
-!                                   (-INFINITY,+INFINITY) AND
-!                       THE INTEGRAL IS COMPUTED AS THE SUM OF TWO
-!                       INTEGRALS, ONE OVER (-INFINITY,0)
-!                       AND ONE OVER (0,+INFINITY).
+!                                   (-INFINITY,+INFINITY) and
+!                       the integral is computed as the sum of two
+!                       integrals, one over (-INFINITY,0)
+!                       and one over (0,+INFINITY).
 !
 !              A      - REAL
-!                       LOWER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       lower limit for integration over subrange
+!                       of (0,1)
 !
 !              B      - REAL
-!                       UPPER LIMIT FOR INTEGRATION OVER SUBRANGE
-!                       OF (0,1)
+!                       upper limit for integration over subrange
+!                       of (0,1)
 !
 !              EPMACH - REAL
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
 !              UFLOW  - REAL
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!                       the smallest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - REAL
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE 15-POINT
-!                       KRONROD RULE(RESK) OBTAINED BY OPTIMAL
-!                       ADDITION OF ABSCISSAE TO THE 7-POINT GAUSS
+!            On return
+!              result - real
+!                       approximation to the integral I
+!                       result is computed by applying the 15-point
+!                       Kronrod RULE(RESK) obtained by optimal
+!                       addition of abscissae to the 7-point Gauss
 !                       RULE(RESG).
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                       estimate of the modulus of the absolute error,
+!                       which should equal or exceed ABS(I-RESULT)
 !
 !              RESABS - REAL
-!                       APPROXIMATION TO THE INTEGRAL J
+!                       approximation to the integral J
 !
 !              RESASC - REAL
-!                       APPROXIMATION TO THE INTEGRAL OF
+!                       approximation to the integral of
 !                       ABS((TRANSFORMED INTEGRAND)-I/(B-A))
 !                       OVER (A,B)
 !
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - F (USER-PROVIDED FUNCTION)
+!                 - F (user-provided function)
 !
 !-----------------------------------------------------------------------
 real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 external f
 !
-!           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
-!           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
-!           THEIR CORRESPONDING WEIGHTS ARE GIVEN.
+!           The abscissae and weights are supplied for the interval
+!           (-1,1).  Because of symmetry only the positive abscissae and
+!           their corresponding weights are given.
 !
 !           XGK    - ABSCISSAE OF THE 15-POINT KRONROD RULE
-!                    XGK(2), XGK(4), ... ABSCISSAE OF THE 7-POINT
-!                    GAUSS RULE
-!                    XGK(1), XGK(3), ...  ABSCISSAE WHICH ARE OPTIMALLY
-!                    ADDED TO THE 7-POINT GAUSS RULE
+!                    XGK(2), XGK(4), ... abscissae of the 7-point
+!                    Gauss rule
+!                    XGK(1), XGK(3), ...  abscissae which are optimally
+!                    added to the 7-point Gauss rule
 !
 !           WGK    - WEIGHTS OF THE 15-POINT KRONROD RULE
 !
 !           WG     - WEIGHTS OF THE 7-POINT GAUSS RULE, CORRESPONDING
-!                    TO THE ABSCISSAE XGK(2), XGK(4), ...
-!                    WG(1), WG(3), ... ARE SET TO ZERO.
+!                    to the abscissae XGK(2), XGK(4), ...
+!                    WG(1), WG(3), ... are set to zero.
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
 &xgk(8)/ &
@@ -8667,18 +8667,18 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 &0.0000000000000000e+00,     0.4179591836734694e+00/
 !
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
-!           CENTR  - MID POINT OF THE INTERVAL
-!           HLGTH  - HALF-LENGTH OF THE INTERVAL
+!           CENTR  - mid point of the interval
+!           HLGTH  - half-length of the interval
 !           ABSC*  - ABSCISSA
-!           TABSC* - TRANSFORMED ABSCISSA
-!           FVAL*  - FUNCTION VALUE
+!           TABSC* - transformed abscissa
+!           FVAL*  - function VALUE
 !           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 !           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
-!           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
-!                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
+!           RESKH  - approximation to the mean value of the transformed
+!                    integrand over (A,B), I.E. To I/(B-A)
 !
 !
 dinf = min0(1,inf)
@@ -8690,8 +8690,8 @@ fval1 = f(tabsc1)
 if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
 fc = (fval1/centr)/centr
 !
-!           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
-!           THE INTEGRAL, AND ESTIMATE THE ERROR.
+!           Compute the 15-point Kronrod approximation to
+!           the integral, and estimate the error.
 !
 resg = wg(8)*fc
 resk = wgk(8)*fc
@@ -8742,43 +8742,43 @@ implicit none
 !              REAL VERSION
 !
 ! 2.        PURPOSE
-!              THIS ROUTINE MAINTAINS THE DESCENDING ORDERING
-!              IN THE LIST OF THE LOCAL ERROR ESTIMATES RESULTING FROM
-!              THE INTERVAL SUBDIVISION PROCESS. AT EACH CALL TWO ERROR
-!              ESTIMATES ARE INSERTED USING THE SEQUENTIAL SEARCH
-!              METHOD, TOP-DOWN FOR THE LARGEST ERROR ESTIMATE
-!              AND BOTTOM-UP FOR THE SMALLEST ERROR ESTIMATE.
+!              this routine maintains the descending ordering
+!              in the list of the local error estimates resulting from
+!              the interval subdivision process. At each call two error
+!              estimates are inserted using the sequential search
+!              method, top-down for the largest error estimate
+!              and bottom-up for the smallest error estimate.
 !
 ! 3.        CALLING SEQUENCE
 !              CALL QPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
 !
-!           PARAMETERS (MEANING AT OUTPUT)
-!              LIMIT  - INTEGER
-!                       MAXIMUM NUMBER OF ERROR ESTIMATES THE LIST
-!                       CAN CONTAIN
+!           Parameters (meaning at output)
+!              limit  - integer
+!                       maximum number of error estimates the list
+!                       can contain
 !
 !              LAST   - INTEGER
-!                       NUMBER OF ERROR ESTIMATES CURRENTLY
-!                       IN THE LIST
+!                       number of error estimates currently
+!                       in the list
 !
 !              MAXERR - INTEGER
-!                       MAXERR POINTS TO THE NRMAX-TH LARGEST ERROR
-!                       ESTIMATE CURRENTLY IN THE LIST
+!                       MAXERR points to the NRMAX-TH largest error
+!                       estimate currently in the list
 !
 !              ERMAX  - REAL
-!                       NRMAX-TH LARGEST ERROR ESTIMATE
+!                       NRMAX-TH largest error estimate
 !                       ERMAX = ELIST(MAXERR)
 !
 !              ELIST  - REAL
-!                       VECTOR OF DIMENSION LAST CONTAINING
-!                       THE ERROR ESTIMATES
+!                       vector of dimension last containing
+!                       the error estimates
 !
 !              IORD   - INTEGER
-!                       VECTOR OF DIMENSION LAST, THE FIRST K
-!                       ELEMENTS OF WHICH CONTAIN POINTERS
-!                       TO THE ERROR ESTIMATES, SUCH THAT
+!                       vector of dimension last, the first K
+!                       elements of which contain pointers
+!                       to the error estimates, such that
 !                       ELIST(IORD(1)),... , ELIST(IORD(K))
-!                       FORM A DECREASING SEQUENCE, WITH
+!                       form a decreasing sequence, with
 !                       K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                       K = LIMIT+1-LAST OTHERWISE
 !
@@ -8799,8 +8799,8 @@ integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
 dimension elist(last),iord(last)
 !
-!           CHECK WHETHER THE LIST CONTAINS MORE THAN
-!           TWO ERROR ESTIMATES.
+!           Check whether the list contains more than
+!           two error estimates.
 !
 !***FIRST EXECUTABLE STATEMENT  QPSRT
 if(last.gt.2) go to 10
@@ -8808,11 +8808,11 @@ iord(1) = 1
 iord(2) = 2
 go to 90
 !
-!           THIS PART OF THE ROUTINE IS ONLY EXECUTED
-!           IF, DUE TO A DIFFICULT INTEGRAND, SUBDIVISION
-!           INCREASED THE ERROR ESTIMATE. IN THE NORMAL CASE
-!           THE INSERT PROCEDURE SHOULD START AFTER THE
-!           NRMAX-TH LARGEST ERROR ESTIMATE.
+!           This part of the routine is only executed
+!           if, due to a difficult integrand, subdivision
+!           increased the error estimate. In the normal case
+!           the insert procedure should start after the
+!           NRMAX-TH largest error estimate.
 !
 10 errmax = elist(maxerr)
 if(nrmax.eq.1) go to 30
@@ -8825,17 +8825,17 @@ do i = 1,ido
   nrmax = nrmax-1
    end do
 !
-!           COMPUTE THE NUMBER OF ELEMENTS IN THE LIST TO
-!           BE MAINTAINED IN DESCENDING ORDER. THIS NUMBER
-!           DEPENDS ON THE NUMBER OF SUBDIVISIONS STILL
-!           ALLOWED.
+!           Compute the number of elements in the list to
+!           be maintained in descending order. This number
+!           depends on the number of subdivisions still
+!           allowed.
 !
 30 jupbn = last
 if(last.gt.(limit/2+2)) jupbn = limit+3-last
 errmin = elist(last)
 !
-!           INSERT ERRMAX BY TRAVERSING THE LIST TOP-DOWN,
-!           STARTING COMPARISON FROM THE ELEMENT ELIST(IORD(NRMAX+1)).
+!           Insert ERRMAX by traversing the list top-down,
+!           starting comparison from the element ELIST(IORD(NRMAX+1)).
 !
 jbnd = jupbn-1
 ibeg = nrmax+1
@@ -8850,7 +8850,7 @@ end do
 iord(jupbn) = last
 go to 90
 !
-!           INSERT ERRMIN BY TRAVERSING THE LIST BOTTOM-UP.
+!           Insert ERRMIN by traversing the list bottom-up.
 !
 60 iord(i-1) = maxerr
 k = jbnd
@@ -8865,7 +8865,7 @@ iord(i) = last
 go to 90
 80 iord(k+1) = last
 !
-!           SET MAXERR AND ERMAX.
+!           Set MAXERR and ERMAX.
 !
 90 maxerr = iord(nrmax)
 ermax = elist(maxerr)
@@ -8885,47 +8885,47 @@ real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
-!              THE ROUTINE DETERMINES THE LIMIT OF A GIVEN SEQUENCE OF
-!              APPROXIMATIONS, BY MEANS OF THE EPSILON ALGORITHM
-!              OF P. WYNN.
-!              AN ESTIMATE OF THE ABSOLUTE ERROR IS ALSO GIVEN.
-!              THE CONDENSED EPSILON TABLE IS COMPUTED. ONLY THOSE
-!              ELEMENTS NEEDED FOR THE COMPUTATION OF THE NEXT DIAGONAL
-!              ARE PRESERVED.
+!              the routine determines the limit of a given sequence of
+!              approximations, by means of the epsilon algorithm
+!              of P. Wynn.
+!              An estimate of the absolute error is also given.
+!              The condensed epsilon table is computed. Only those
+!              elements needed for the computation of the next diagonal
+!              are preserved.
 !
 ! 2.        PARAMETERS
 !              N      - INTEGER
-!                       EPSTAB(N) CONTAINS THE NEW ELEMENT IN THE
-!                       FIRST COLUMN OF THE EPSILON TABLE.
+!                       EPSTAB(N) contains the new element in the
+!                       first column of the epsilon table.
 !
 !              EPSTAB - REAL
-!                       VECTOR OF DIMENSION 52 CONTAINING THE
-!                       ELEMENTS OF THE TWO LOWER DIAGONALS OF
-!                       THE TRIANGULAR EPSILON TABLE
-!                       THE ELEMENTS ARE NUMBERED STARTING AT THE
-!                       RIGHT-HAND CORNER OF THE TRIANGLE.
+!                       vector of dimension 52 containing the
+!                       elements of the two lower diagonals of
+!                       the triangular epsilon table
+!                       the elements are numbered starting at the
+!                       right-hand corner of the triangle.
 !
-!              RESULT - REAL
-!                       RESULTING APPROXIMATION TO THE INTEGRAL
+!              Result - real
+!                       resulting approximation to the integral
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE ABSOLUTE ERROR COMPUTED FROM
-!                       RESULT AND THE 3 PREVIOUS RESULTS
+!                       estimate of the absolute error computed from
+!                       result and the 3 previous results
 !
 !              RES3LA - REAL
-!                       VECTOR OF DIMENSION 3 CONTAINING THE LAST 3
-!                       RESULTS
+!                       vector of dimension 3 containing the last 3
+!                       results
 !
 !              NRES   - INTEGER
-!                       NUMBER OF CALLS TO THE ROUTINE
-!                       (SHOULD BE ZERO AT FIRST CALL)
+!                       number of calls to the routine
+!                       (should be zero at first call)
 !
 !              EPMACH - REAL
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
 !              OFLOW  - REAL
-!                       THE LARGEST POSITIVE MAGNITUDE.
+!                       the largest positive magnitude.
 !
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !
@@ -8933,7 +8933,7 @@ real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 real, intent(inout) :: epstab(52), res3la(3)
 !---------------------
 !
-!           LIST OF MAJOR VARIABLES
+!           List of major variables
 !           -----------------------
 !
 !           E0     - THE 4 ELEMENTS ON WHICH THE
@@ -8942,15 +8942,15 @@ real, intent(inout) :: epstab(52), res3la(3)
 !           E3                 E0
 !                        E3    E1    NEW
 !                              E2
-!           NEWELM - NUMBER OF ELEMENTS TO BE COMPUTED IN THE NEW
-!                    DIAGONAL
+!           NEWELM - number of elements to be computed in the new
+!                    diagonal
 !           ERROR  - ERROR = ABS(E1-E0)+ABS(E2-E1)+ABS(NEW-E2)
-!           RESULT - THE ELEMENT IN THE NEW DIAGONAL WITH LEAST VALUE
-!                    OF ERROR
+!           result - the element in the new diagonal with least value
+!                    of error
 !
-!           LIMEXP IS THE MAXIMUM NUMBER OF ELEMENTS THE EPSILON
-!           TABLE CAN CONTAIN. IF THIS NUMBER IS REACHED, THE UPPER
-!           DIAGONAL OF THE EPSILON TABLE IS DELETED.
+!           LIMEXP is the maximum number of elements the epsilon
+!           table can contain. If this number is reached, the upper
+!           diagonal of the epsilon table is deleted.
 !
 nres = nres + 1
 abserr = oflow
@@ -8978,8 +8978,8 @@ do 40 i = 1,newelm
   tol3 = amax1(e1abs,abs(e0))*epmach
   if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
-!           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
-!           ACCURACY, CONVERGENCE IS ASSUMED.
+!           If E0, E1 and E2 are equal to within machine
+!           accuracy, convergence is assumed.
 !           RESULT = E2
 !           ABSERR = ABS(E1-E0) + ABS(E2-E1)
 !
@@ -8993,15 +8993,15 @@ do 40 i = 1,newelm
   err1 = abs(delta1)
   tol1 = amax1(e1abs,abs(e3))*epmach
 !
-!           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
-!           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
+!           If two elements are very close to each other, omit
+!           a part of the table by adjusting the value of N
 !
   if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
   ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
   epsinf = abs(ss*e1)
 !
-!           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
-!           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
+!           Test to detect irregular behaviour in the table, and
+!           eventually omit a part of the table adjusting the value
 !           OF N.
 !
   if (epsinf .gt. 0.1e-03) go to 30
@@ -9009,8 +9009,8 @@ do 40 i = 1,newelm
 ! ***JUMP OUT OF DO-LOOP
   go to 50
 !
-!           COMPUTE A NEW ELEMENT AND EVENTUALLY ADJUST
-!           THE VALUE OF RESULT.
+!           Compute a new element and eventually adjust
+!           the value of result.
 !
 30 res = e1 + 1.0/ss
   epstab(k1) = res
@@ -9021,7 +9021,7 @@ do 40 i = 1,newelm
   result = res
 40 continue
 !
-!           SHIFT THE TABLE.
+!           Shift the table.
 !
 50 if (n .eq. limexp) n = 2*(limexp/2) - 1
 ib = 1
@@ -9043,7 +9043,7 @@ res3la(nres) = result
 abserr = oflow
 go to 100
 !
-!           COMPUTE ERROR ESTIMATE
+!           Compute error estimate
 !
 90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
 &abs(result - res3la(1))
@@ -9058,140 +9058,140 @@ subroutine qxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
 &limit,leniw,lenw,last,iwork,work)
 implicit none
 !
-!            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
+!            The routine calculates an approximation result to a given
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
-!            HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!            hopefully satisfying following claim for accuracy
 !            ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - REAL
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - REAL
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
-!            ERROR MESSAGES
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF LIMIT
-!                             (AND TAKING THE ACCORDING DIMENSION
-!                             ADJUSTMENTS INTO ACCOUNT. HOWEVER, IF
-!                             THIS YIELDS NO IMPROVEMENT IT IS ADVISED
-!                             TO ANALYZE THE INTEGRAND IN ORDER TO
-!                             DETERMINE THE INTEGRATION DIFFICULTIES. IF
-!                             THE POSITION OF A LOCAL DIFFICULTY CAN BE
-!                             DETERMINED (E.G. SINGULARITY,
-!                             DISCONTINUITY WITHIN THE INTERVAL) ONE
-!                             WILL PROBABLY GAIN FROM SPLITTING UP THE
-!                             INTERVAL AT THIS POINT AND CALLING THE
-!                             INTEGRATOR ON THE SUBRANGES. IF POSSIBLE,
-!                             AN APPROPRIATE SPECIAL-PURPOSE INTEGRATOR
-!                             SHOULD BE USED, WHICH IS DESIGNED FOR
-!                             HANDLING THE TYPE OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account. However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. Singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE. IT IS PRESUMED THAT
-!                             THE REQUESTED TOLERANCE CANNOT BE
-!                             ACHIEVED, AND THAT THE RETURNED RESULT IS
-!                             THE BEST WHICH CAN BE OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table. It is presumed that
+!                             the requested tolerance cannot be
+!                             achieved, and that the returned result is
+!                             the best which can be obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS OR
 !                             EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             LENW .LT. 46*LIMIT, OR
 !                             LENIW .LT. 3*LIMIT.
-!                             RESULT, ABSERR, LAST ARE SET TO
-!                             ZERO. EXCEPT WHEN LIMIT OR LENW OR LENIW
-!                             IS INVALID, IWORK(1), WORK(LIMIT*2+1) AND
-!                             WORK(LIMIT*3+1) ARE SET TO ZERO, WORK(1)
-!                             IS SET TO A, AND WORK(LIMIT+1) TO B.
+!                             Result, ABSERR, last are set to
+!                             zero. Except when limit or LENW or LENIW
+!                             is invalid, IWORK(1), WORK(LIMIT*2+1) and
+!                             WORK(LIMIT*3+1) are set to zero, WORK(1)
+!                             is set to A, and WORK(LIMIT+1) to B.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER OF SUBINTERVALS
-!                    IN THE PARTITION OF THE GIVEN INTEGRATION INTERVAL
+!         Dimensioning parameters
+!            limit - integer
+!                    limit determines the maximum number of subintervals
+!                    in the partition of the given integration interval
 !                    (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*46.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*46.
 !                    IF LENW.LT.LIMIT*46, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
 !            LENIW - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LENIW MUST BE AT LEAST LIMIT*3.
+!                    dimensioning parameter for IWORK
+!                    LENIW must be at least limit*3.
 !                    IF LENW.LT.LIMIT*3, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF SUBINTERVALS
-!                    PRODUCED IN THE SUBDIVISION PROCESS, WHICH DETER-
-!                    MINES THE NUMBER OF SIGNIFICANT ELEMENTS ACTUALLY
-!                    IN THE WORK ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of subintervals
+!                    produced in the subdivision process, which deter-
+!                    mines the number of significant elements actually
+!                    in the work arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST 3*LIMIT, THE FIRST K
-!                    ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least 3*limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2),
 !                    AND K = LIMIT+1-LAST OTHERWISE.
 !
-!            WORK  - REAL
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - real
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END-POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END-POINTS,
-!                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST) CONTAIN
-!                     THE INTEGRAL APPROXIMATIONS OVER THE SUBINTERVALS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end-points,
+!                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST) contain
+!                     the integral approximations over the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
-!                    WORK(LIMIT*4+1), ... IS THE AREA RESERVED TO STORE
-!                     FUNCTIONAL VALUES.
+!                     contain the error estimates.
+!                    WORK(LIMIT*4+1), ... is the area reserved to store
+!                     functional values.
 !
 real :: a
 real, intent(out) :: abserr
@@ -9210,7 +9210,7 @@ dimension iwork(leniw),work(lenw)
 !
 external f
 !
-!         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
+!         Check validity of limit,LENIW and LENW.
 !
 ier = 6
 last = 0
@@ -9219,7 +9219,7 @@ abserr = 0.0
 if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
 &return
 !
-!         PREPARE CALL FOR QXGSE.
+!         Prepare call for QXGSE.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -9238,135 +9238,135 @@ subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
 &ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
 implicit none
 !
-!            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
+!            The routine calculates an approximation result to A
 !            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
-!            HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!            hopefully satisfying following claim for accuracy
 !            ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - REAL
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - REAL
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - REAL
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
 !            EPSABS - REAL
-!                     ABSOLUTE ACCURACY REQUESTED
+!                     absolute accuracy requested
 !
 !            EPSREL - REAL
-!                     RELATIVE ACCURACY REQUESTED
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPERBOUND ON THE NUMBER OF SUBINTERVALS
-!                     IN THE PARTITION OF (A,B)
+!            Limit  - integer
+!                     gives an upperbound on the number of subintervals
+!                     in the partition of (A,B)
 !
-!         ON RETURN
-!            RESULT - REAL
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - real
+!                     approximation to the integral
 !
 !            ABSERR - REAL
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
-!            ERROR MESSAGES
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
 !                         = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF LIMIT
-!                             (AND TAKING THE ACCORDING DIMENSION
-!                             ADJUSTMENTS INTO ACCOUNT). HOWEVER, IF
-!                             THIS YIELDS NO IMPROVEMENT IT IS ADVISED
-!                             TO ANALYZE THE INTEGRAND IN ORDER TO
-!                             DETERMINE THE INTEGRATION DIFFICULTIES. IF
-!                             THE POSITION OF A LOCAL DIFFICULTY CAN BE
-!                             DETERMINED (E.G. SINGULARITY,
-!                             DISCONTINUITY WITHIN THE INTERVAL) ONE
-!                             WILL PROBABLY GAIN FROM SPLITTING UP THE
-!                             INTERVAL AT THIS POINT AND CALLING THE
-!                             INTEGRATOR ON THE SUBRANGES. IF POSSIBLE,
-!                             AN APPROPRIATE SPECIAL-PURPOSE INTEGRATOR
-!                             SHOULD BE USED, WHICH IS DESIGNED FOR
-!                             HANDLING THE TYPE OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account). However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. Singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS OR
-!                             EPSREL IS NEGATIVE. RESULT, ABSERR,
-!                             LAST, RLIST(1), IORD(1), AND ELIST(1)
-!                             ARE SET TO ZERO. ALIST(1) AND BLIST(1)
-!                             ARE SET TO A AND B RESPECTIVELY.
+!                             EPSREL is negative. Result, ABSERR,
+!                             last, RLIST(1), IORD(1), and ELIST(1)
+!                             are set to zero. ALIST(1) and BLIST(1)
+!                             are set to A and B respectively.
 !
 !            ALIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE
-!                     GIVEN INTEGRATION RANGE (A,B)
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left end points
+!                     of the subintervals in the partition of the
+!                     given integration range (A,B)
 !
 !            BLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE GIVEN
-!                     INTEGRATION RANGE (A,B)
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right end points
+!                     of the subintervals in the partition of the given
+!                     integration range (A,B)
 !
 !            RLIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
 !            ELIST  - REAL
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI OF THE
-!                     ABSOLUTE ERROR ESTIMATES ON THE SUBINTERVALS
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli of the
+!                     absolute error estimates on the subintervals
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
+!                     vector of dimension at least limit, the first K
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED IN THE
-!                     SUBDIVISION PROCESS
+!                     number of subintervals actually produced in the
+!                     subdivision process
 !
 !            VALP   - REAL
 !            VALN     ARRAYS OF DIMENSION AT LEAST (21,LIMIT) USED TO
-!                     SAVE THE FUNCTIONAL VALUES
+!                     save the functional values
 !
 !            LP     - INTEGER
 !            LN       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
-!                     STORE THE ACTUAL NUMBER OF FUNCTIONAL VALUES
-!                     SAVED IN THE CORRESPONDING COLUMN
+!                     store the actual number of functional values
+!                     saved in the corresponding column
 !                     OF VALP,VALN
 !
 !***ROUTINES CALLED  F,SPMPAR,QELG,QXLQM,QPSRT,QXRRD,QXCPY
@@ -9405,18 +9405,18 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!          EPMACH IS THE LARGEST RELATIVE SPACING.
-!          UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!          OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!          EPMACH is the largest relative spacing.
+!          UFLOW is the smallest positive magnitude.
+!          OFLOW is the largest positive magnitude.
 !
 epmach = spmpar(1)
 uflow = spmpar(2)
 oflow = spmpar(3)
 !
-!            TEST ON VALIDITY OF PARAMETERS
+!            Test on validity of parameters
 !            ------------------------------
 last = 0
 result = 0.0
@@ -9430,7 +9430,7 @@ if (epsabs .lt. 0.0 .or. epsrel.lt. 0.0) go to 999
 ier = 0
 rerr = amax1(epsrel, 50.0*epmach)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
 ierro = 0
@@ -9442,7 +9442,7 @@ call qxlqm (f,a,b,result,abserr,defabs,resabs, &
 &valp(1,1),valn(1,1),lp(1),ln(1),2, &
 &epmach,uflow,oflow)
 !
-!           TEST ON ACCURACY.
+!           Test on accuracy.
 !
 dres = abs(result)
 errbnd = amax1(epsabs,rerr*dres)
@@ -9456,7 +9456,7 @@ if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
 &abserr .eq. 0.0) go to 999
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -9478,13 +9478,13 @@ ksgn = -1
 if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
 t = 1.0 + 100.0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST ERROR
-!           ESTIMATE.
+!           Bisect the subinterval with the NRMAX-TH largest error
+!           estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5*(alist(maxerr) + blist(maxerr))
@@ -9498,8 +9498,8 @@ do 90 last = 2,limit
   call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
 &2,epmach,uflow,oflow)
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -9515,23 +9515,23 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = amax1(epsabs,rerr*abs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
+!           Test for roundoff error and eventually set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF SUBINTERVALS
-!           EQUALS LIMIT.
+!           Set error flag in the case that the number of subintervals
+!           equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT A POINT OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
 !
   if (amax1(abs(a1),abs(b2)) .le. &
 &t*(abs(a2) + 1.e+03*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -9566,8 +9566,8 @@ do 90 last = 2,limit
   ln(last) = ln1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE SUBINTERVAL
-!           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
+!           in the list of error estimates and select the subinterval
+!           with NRMAX-TH largest error estimate (to be bisected next).
 !
 30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
@@ -9580,22 +9580,22 @@ do 90 last = 2,limit
   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 !
-!           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
-!           MORE CAUTIOUS EXTRAPOLATION THAN IN THE ORIGINAL DQAGSE
-!           ROUTINE
+!           The bound 0.3*ERTEST has been introduced to perform A
+!           more cautious extrapolation than in the original DQAGSE
+!           routine
 !
 40 if (ierro .eq. 3 .or. erlarg .le. 0.3*ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS OVER THE
-!           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors over the
+!           larger intervals (ERLARG) and perform extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -9608,7 +9608,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -9625,7 +9625,7 @@ do 90 last = 2,limit
 ! ***JUMP OUT OF DO-LOOP
   if (abserr .le. ertest) go to 100
 !
-!           PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -9642,7 +9642,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -9655,7 +9655,7 @@ if (area .eq. 0.0) go to 130
 go to 110
 105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
-!           TEST ON DIVERGENCE.
+!           Test on divergence.
 !
 110 if(ksgn.eq.(-1).and.amax1(abs(result),abs(area)).le. &
 &defabs*0.1e-01) go to 130
@@ -9663,7 +9663,7 @@ if(0.1e-01.gt.(result/area).or.(result/area).gt.0.1e+03 &
 &.or.errsum.gt.abs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
@@ -9679,7 +9679,7 @@ implicit none
 integer :: i
 !
 !  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
-!          THE REAL VECTOR A OF LENGTH L
+!          the real vector A of length L
 !
 integer, intent(in) :: l
 real, intent(inout) :: a(l)
@@ -9695,82 +9695,82 @@ subroutine qxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
 implicit none
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
+!                           estimate
 !                       J = INTEGRAL OF ABS(F) OVER (A,B)
 !
-!           PARAMETERS
-!            ON ENTRY
+!           Parameters
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              A      - REAL
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              B      - REAL
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
 !              VR     - REAL
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector of length LR containing the
+!                       saved  functional values of positive abscissas
 !
 !              VS     - REAL
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector of length LS containing the
+!                       saved  functional values of negative abscissas
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
+!                       VR,vs respectively
 !
 !            KEY    - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     RMS FORMULAS ARE USED WITH
+!                     key for choice of local integration rule
+!                     rms formulas are used with
 !                      13 - 19               POINTS IF KEY.LT.1,
 !                      13 - 19 - (27)        POINTS IF KEY = 1,
 !                      13 - 19 - (27) - (41) POINTS IF KEY = 2,
 !                           19 -  27  - (41) POINTS IF KEY = 3,
 !                                 27  -  41  POINTS IF KEY.GT.3.
 !
-!                         (RULES) USED IF THE FUNCTION APPEARS
-!                         ENOUGH REGULAR
+!                         (Rules) used if the function APPEARS
+!                         enough regular
 !
 !              EPMACH - REAL
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
+!                       the relative precision of the floating
+!                       arithmetic being used.
 !
 !              UFLOW  - REAL
-!                       THE SMALLEST POSITIVE MAGNITUDE.
+!                       the smallest positive magnitude.
 !
 !              OFLOW  - REAL
-!                       THE LARGEST POSITIVE MAGNITUDE.
+!                       the largest positive magnitude.
 !
-!            ON RETURN
-!              RESULT - REAL
-!                       APPROXIMATION TO THE INTEGRAL I
+!            On return
+!              result - real
+!                       approximation to the integral I
 !
 !              ABSERR - REAL
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD NOT EXCEED ABS(I-RESULT)
+!                       estimate of the modulus of the absolute error,
+!                       which should not exceed ABS(I-RESULT)
 !
 !              RESABS - REAL
-!                       APPROXIMATION TO THE INTEGRAL J
+!                       approximation to the integral J
 !
 !              RESASC - REAL
-!                       APPROXIMATION TO THE INTEGRAL OF ABS(F-I/(B-A))
+!                       approximation to the integral of ABS(F-I/(B-A))
 !                       OVER (A,B)
 !
 !              VR     - REAL
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector of length LR containing the
+!                       saved  functional values of positive abscissas
 !
 !              VS     - REAL
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector of length LS containing the
+!                       saved  functional values of negative abscissas
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
+!                       VR,vs respectively
 !
 !***ROUTINES CALLED  QXRUL
 !
@@ -9817,51 +9817,51 @@ implicit none
 integer :: i, is, k, ks
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
-!            AND CONDITIONALLY COMPUTE
+!                           estimate
+!            and conditionally compute
 !                       J = INTEGRAL OF ABS(F) OVER (A,B)
-!                       BY USING AN  RMS RULE
-!           PARAMETERS
-!            ON ENTRY
+!                       by using an  rms rule
+!           parameters
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              XL     - REAL
-!                       LOWER LIMIT OF INTEGRATION
+!                       lower limit of integration
 !
 !              XU     - REAL
-!                       UPPER LIMIT OF INTEGRATION
+!                       upper limit of integration
 !
 !              KE     - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     AN RMS RULE IS USED WITH
+!                     key for choice of local integration rule
+!                     an rms rule is used with
 !                         13      POINTS IF KE  = 2,
 !                         19      POINTS IF KE  = 3,
 !                         27      POINTS IF KE  = 4,
 !                         42      POINTS IF KE  = 5
 !
 !              K1     INTEGER
-!                     VALUE OF KEY FOR WHICH THE ADDITIONAL ESTIMATES
-!                     YA, YM ARE TO BE COMPUTED
+!                     value of key for which the additional estimates
+!                     YA, YM are to be computed
 !
 !              FV1    - REAL
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector containing L1
+!                       saved  functional values of positive abscissas
 !
 !              FV2    - REAL
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector containing L2
+!                       saved  functional values of negative abscissas
 !
 !              L1     - INTEGER
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 !
-!            ON RETURN
+!            On return
 !              Y      - REAL
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE
-!                       REQUESTED RMS RULE
+!                       approximation to the integral I
+!                       result is computed by applying the
+!                       requested rms rule
 !
 !              YA     - REAL
 !                       IF KEY = K1  APPROXIMATION TO THE INTEGRAL J
@@ -9873,12 +9873,12 @@ integer :: i, is, k, ks
 !                       ELSE UNCHANGED
 !
 !              FV1    - REAL
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
+!                       vector containing L1
+!                       saved  functional values of positive abscissas
 !
 !              FV2    - REAL
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
+!                       vector containing L2
+!                       saved  functional values of negative abscissas
 !
 !              L1     - INTEGER
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
@@ -9921,7 +9921,7 @@ data xx(18)/.56250000000000000000e+00/
 data xx(19)/.84375000000000000000e+00/
 data xx(20)/.90625000000000000000e+00/
 data xx(21)/.99218750000000000000e+00/
-!   NUMBER OF NODES 13
+!   Number of nodes 13
 data ww(1)/1.303262173284849021810473057638590518409112513421e-1/
 data ww(2)/2.390632866847646220320329836544615917290026806242e-1/
 data ww(3)/2.630626354774670227333506083741355715758124943143e-1/
@@ -9929,7 +9929,7 @@ data ww(4)/2.186819313830574175167853094864355208948886875898e-1/
 data ww(5)/2.757897646642836865859601197607471574336674206700e-2/
 data ww(6)/1.055750100538458443365034879086669791305550493830e-1/
 data ww(7)/1.571194260595182254168429283636656908546309467968e-2/
-!   NUMBER OF NODES 19
+!   Number of nodes 19
 data ww(8)/1.298751627936015783241173611320651866834051160074e-1/
 data ww(9)/2.249996826462523640447834514709508786970828213187e-1/
 data ww(15)/5.542699233295875168406783695143646338274805359780e-2/
@@ -9940,7 +9940,7 @@ data ww(12)/1.006482260551160175038684459742336605269707889822e-1/
 data ww(13)/2.510604860724282479058338820428989444699235030871e-2/
 data ww(17)/4.507523056810492466415880450799432587809828791196e-2/
 data ww(14)/9.402964360009747110031098328922608224934320397592e-3/
-!   NUMBER OF NODES 27
+!   Number of nodes 27
 data ww(18)/6.300942249647773931746170540321811473310938661469e-2/
 data ww(28)/1.239572396231834242194189674243818619042280816640e-1/
 data ww(19)/1.261383225537664703012999637242003647020326905948e-1/
@@ -9955,7 +9955,7 @@ data ww(23)/5.026383572857942403759829860675892897279675661654e-2/
 data ww(27)/1.252575774226122633391477702593585307254527198070e-2/
 data ww(31)/2.259167374956474713302030584548274729936249753832e-2/
 data ww(24)/4.683670010609093810432609684738393586390722052124e-3/
-!   NUMBER OF NODES 41
+!   Number of nodes 41
 data ww(32)/6.362762978782724559269342300509058175967124446839e-2/
 data ww(42)/1.187141856692283347609436153545356484256869129472e-1/
 data ww(46)/1.533126874056586959338368742803997744815413565014e-2/
@@ -10020,33 +10020,33 @@ end subroutine qxrul
 subroutine qxrrd (f,z,lz,xl,xu,r,s,lr,ls)
 implicit none
 !
-!            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
-!            THE BISECTION OF AN INTERVAL
+!            To reorder the computed functional values before
+!            the bisection of an interval
 !
-!           PARAMETERS
-!            ON ENTRY
+!           Parameters
+!            on entry
 !              F      - REAL
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                       function subprogram defining the integrand
 !                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                       declared E X T E R N A L in the driver program.
 !
 !              XL     - REAL
-!                       LOWER LIMIT OF INTERVAL
+!                       lower limit of interval
 !
 !              XU     - REAL
-!                       UPPER LIMIT OF INTERVAL
+!                       upper limit of interval
 !
 !              Z      - REAL
-!                       VECTOR CONTAINING LZ
-!                       SAVED  FUNCTIONAL VALUES
+!                       vector containing LZ
+!                       saved  functional values
 !
 !              LZ     - INTEGER
-!                       NUMBER OF ELEMENTS IN LZ
+!                       number of elements in LZ
 !
-!            ON RETURN
+!            On return
 !              R      - REAL
 !              S        VECTORS CONTAINING LR, LS
-!                       SAVED  FUNCTIONAL VALUES FOR THE NEW INTERVALS
+!                       saved  functional values for the new intervals
 !
 !              LR     - INTEGER
 !              LS       NUMBER OF ELEMENTES IN R,S RESPECTIVELY
@@ -10123,147 +10123,147 @@ implicit none
 integer, intent(out) :: last
 !-----------------------------------------------------------------------
 !
-!           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
+!           Double precision computation of a definite integral
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           DEFINITE INTEGRAL   I = INTEGRAL OF  F  OVER (A,B),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - DOUBLE PRECISION
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - DOUBLE PRECISION
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
 !
 !                     IER = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF
-!                             LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A
-!                             LOCAL DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE SUB-
-!                             RANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME  POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some  points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED
-!                             THAT DIVERGENCE CAN OCCUR WITH ANY OTHER
-!                             VALUE OF IER.
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
 !                             OR EPSREL IS NEGATIVE, LIMIT .LT. 1,
 !                             OR LENW .LT. 4 * LIMIT.
-!                             RESULT, ABSERR, NEVAL, LAST ARE
-!                             SET TO ZERO.
+!                             Result, ABSERR, NEVAL, last are
+!                             set to zero.
 !
-!         DIMENSIONING PARAMETERS
-!            LIMIT - INTEGER
-!                    DIMENSIONING PARAMETER FOR IWORK
-!                    LIMIT DETERMINES THE MAXIMUM NUMBER
-!                    OF SUBINTERVALS IN THE PARTITION OF THE GIVEN
+!         Dimensioning parameters
+!            limit - integer
+!                    dimensioning parameter for IWORK
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
 !                    INTEGRATION INTERVAL (A,B), LIMIT.GE.1.
 !                    IF LIMIT.LT.1, THE ROUTINE WILL END WITH
 !                    IER = 6.
 !
 !            LENW  - INTEGER
-!                    DIMENSIONING PARAMETER FOR WORK
-!                    LENW MUST BE AT LEAST LIMIT*4.
+!                    dimensioning parameter for work
+!                    LENW must be at least limit*4.
 !                    IF LENW.LT.LIMIT*4, THE ROUTINE WILL END
 !                    WITH IER = 6.
 !
-!            LAST  - INTEGER
-!                    ON RETURN, LAST EQUALS THE NUMBER OF
-!                    SUBINTERVALS PRODUCED IN THE SUBDIVISION
-!                    PROCESS, WHICH DETERMINES THE NUMBER OF
-!                    SIGNIFICANT ELEMENTS ACTUALLY IN THE WORK
-!                    ARRAYS.
+!            Last  - integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of
+!                    significant elements actually in the work
+!                    arrays.
 !
-!         WORK ARRAYS
+!         Work arrays
 !            IWORK - INTEGER
-!                    VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                    ELEMENTS OF WHICH CONTAIN POINTERS
-!                    TO THE ERROR ESTIMATES OVER THE SUBINTERVALS
-!                    SUCH THAT WORK(LIMIT*3+IWORK(1)),... ,
-!                    WORK(LIMIT*3+IWORK(K)) FORM A DECREASING
+!                    vector of dimension at least limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that WORK(LIMIT*3+IWORK(1)),... ,
+!                    WORK(LIMIT*3+IWORK(K)) form a decreasing
 !                    SEQUENCE, WITH K = LAST IF LAST.LE.(LIMIT/2+2), AND
 !                    K = LIMIT+1-LAST OTHERWISE
 !
-!            WORK  - DOUBLE PRECISION
-!                    VECTOR OF DIMENSION AT LEAST LENW
-!                    ON RETURN
-!                    WORK(1), ..., WORK(LAST) CONTAIN THE LEFT
+!            Work  - double precision
+!                    vector of dimension at least LENW
+!                    on return
+!                    WORK(1), ..., WORK(LAST) contain the left
 !                     END POINTS OF THE SUBINTERVALS IN THE
-!                     PARTITION OF (A,B),
-!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) CONTAIN
-!                     THE RIGHT END POINTS,
+!                     partition of (A,B),
+!                    WORK(LIMIT+1), ..., WORK(LIMIT+LAST) contain
+!                     the right end points,
 !                    WORK(LIMIT*2+1), ..., WORK(LIMIT*2+LAST)
-!                     CONTAIN THE INTEGRAL APPROXIMATIONS OVER
-!                     THE SUBINTERVALS,
+!                     contain the integral approximations over
+!                     the subintervals,
 !                    WORK(LIMIT*3+1), ..., WORK(LIMIT*3+LAST)
-!                     CONTAIN THE ERROR ESTIMATES.
+!                     contain the error estimates.
 !
-!         SUBROUTINES OR FUNCTIONS NEEDED
+!         Subroutines or functions needed
 !              - DQAGSE
 !              - DQK21
 !              - DQPSRT
 !              - DQELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
@@ -10282,7 +10282,7 @@ integer, intent(out) :: neval
 dimension iwork(limit), work(lenw)
 external f
 !
-!         CHECK VALIDITY OF LIMIT AND LENW.
+!         Check validity of limit and LENW.
 !
 ier = 6
 neval = 0
@@ -10291,7 +10291,7 @@ result = 0.d0
 abserr = 0.d0
 if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
-!         PREPARE CALL FOR DQAGSE.
+!         Prepare call for DQAGSE.
 !
 l1 = limit + 1
 l2 = limit + l1
@@ -10307,141 +10307,141 @@ subroutine dqagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !-----------------------------------------------------------------------
 !
-!           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
+!           Double precision computation of a definite integral
 !
 !-----------------------------------------------------------------------
 !
-!        PURPOSE
-!           THE ROUTINE CALCULATES AN APPROXIMATION  RESULT  TO A GIVEN
+!        Purpose
+!           the routine calculates an approximation  result  to a given
 !           DEFINITE INTEGRAL   I = INTEGRAL OF  F  OVER (A,B),
-!           HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
+!           hopefully satisfying following claim for accuracy
 !           ABS(I-RESULT).LE.MAX(EPSABS,EPSREL*ABS(I)).
 !
-!        PARAMETERS
-!         ON ENTRY
+!        Parameters
+!         on entry
 !            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
+!                     function subprogram defining the integrand
 !                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
+!                     declared E X T E R N A L in the driver program.
 !
 !            A      - DOUBLE PRECISION
-!                     LOWER LIMIT OF INTEGRATION
+!                     lower limit of integration
 !
 !            B      - DOUBLE PRECISION
-!                     UPPER LIMIT OF INTEGRATION
+!                     upper limit of integration
 !
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
+!            EPSABS - double precision
+!                     absolute accuracy requested
 !
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
+!            EPSREL - double precision
+!                     relative accuracy requested
 !
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPERBOUND ON THE NUMBER OF
-!                     SUBINTERVALS IN THE PARTITION OF (A,B)
+!            Limit  - integer
+!                     gives an upperbound on the number of
+!                     subintervals in the partition of (A,B)
 !
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
+!         On return
+!            result - double precision
+!                     approximation to the integral
 !
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED ABS(I-RESULT)
+!            ABSERR - double precision
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed ABS(I-RESULT)
 !
 !            NEVAL  - INTEGER
-!                     NUMBER OF INTEGRAND EVALUATIONS
+!                     number of integrand evaluations
 !
 !            IER    - INTEGER
 !                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
 !                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
 !
 !                         = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF
-!                             LIMIT (AND TAKING THE ACCORDING
-!                             DIMENSION ADJUSTMENTS INTO ACCOUNT).
-!                             HOWEVER, IF THIS YIELDS NO IMPROVEMENT
-!                             IT IS ADVISED TO ANALYZE THE INTEGRAND
-!                             IN ORDER TO DETERMINE THE INTEGRATION
-!                             DIFFICULTIES. IF THE POSITION OF A
-!                             LOCAL DIFFICULTY CAN BE DETERMINED (E.G.
-!                             SINGULARITY, DISCONTINUITY WITHIN THE
-!                             INTERVAL) ONE WILL PROBABLY GAIN FROM
-!                             SPLITTING UP THE INTERVAL AT THIS POINT
-!                             AND CALLING THE INTEGRATOR ON THE SUB-
-!                             RANGES. IF POSSIBLE, AN APPROPRIATE
-!                             SPECIAL-PURPOSE INTEGRATOR SHOULD BE USED,
-!                             WHICH IS DESIGNED FOR HANDLING THE TYPE
-!                             OF DIFFICULTY INVOLVED.
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
 !                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
 !                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME  POINTS OF THE INTEGRATION
-!                             INTERVAL.
+!                             occurs at some  points of the integration
+!                             interval.
 !                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
 !                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED
-!                             THAT DIVERGENCE CAN OCCUR WITH ANY OTHER
-!                             VALUE OF IER.
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
 !                         = 6 THE INPUT IS INVALID BECAUSE EPSABS
-!                             OR EPSREL IS NEGATIVE.
-!                             RESULT, ABSERR, NEVAL, LAST, RLIST(1),
-!                             IORD(1) AND ELIST(1) ARE SET TO ZERO.
-!                             ALIST(1) AND BLIST(1) ARE SET TO A AND B
-!                             RESPECTIVELY.
+!                             or EPSREL is negative.
+!                             Result, ABSERR, NEVAL, last, RLIST(1),
+!                             IORD(1) and ELIST(1) are set to zero.
+!                             ALIST(1) and BLIST(1) are set to A and B
+!                             respectively.
 !
-!            ALIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT
+!            ALIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE GIVEN INTEGRATION RANGE (A,B)
+!                     of the given integration range (A,B)
 !
-!            BLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT
+!            BLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
 !                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     OF THE GIVEN INTEGRATION RANGE (A,B)
+!                     of the given integration range (A,B)
 !
-!            RLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
+!            RLIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
 !
-!            ELIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI
-!                     OF THE ABSOLUTE ERROR ESTIMATES ON THE
+!            ELIST  - double precision
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
 !                     SUBINERVALS
 !
 !            IORD   - INTEGER
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE ERROR
-!                     ESTIMATES OVER THE SUBINTERVALS, SUCH
+!                     vector of dimension at least limit, the first K
+!                     elements of which are pointers to the error
+!                     estimates over the subintervals, such
 !                     THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
 !                     FORM A DECREASING SEQUENCE, WITH K = LAST
 !                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
+!                     otherwise
 !
 !            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED IN THE
-!                     SUBDIVISION PROCESS
+!                     number of subintervals actually produced in the
+!                     subdivision process
 !
-!         SUBROUTINES OR FUNCTIONS NEEDED
+!         Subroutines or functions needed
 !              - DQK21
 !              - DQPSRT
 !              - DQELG
-!              - F (USER-PROVIDED FUNCTION)
+!              - F (user-provided function)
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
@@ -10480,28 +10480,28 @@ dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 !
 external f
 !
-!            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
-!            LIMEXP IN SUBROUTINE DQELG (RLIST2 SHOULD BE OF DIMENSION
-!            (LIMEXP+2) AT LEAST).
+!            The dimension of RLIST2 is determined by the value of
+!            LIMEXP in subroutine DQELG (RLIST2 should be of dimension
+!            (LIMEXP+2) at least).
 !
-!            LIST OF MAJOR VARIABLES
+!            List of major variables
 !            -----------------------
 !
 !           ALIST     - LIST OF LEFT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
+!                       considered up to now
 !           BLIST     - LIST OF RIGHT END POINTS OF ALL SUBINTERVALS
-!                       CONSIDERED UP TO NOW
-!           RLIST(I)  - APPROXIMATION TO THE INTEGRAL OVER
+!                       considered up to now
+!           RLIST(I)  - approximation to the integral over
 !                       (ALIST(I),BLIST(I))
 !           RLIST2    - ARRAY OF DIMENSION AT LEAST LIMEXP+2
-!                       CONTAINING THE PART OF THE EPSILON TABLE
-!                       WHICH IS STILL NEEDED FOR FURTHER COMPUTATIONS
-!           ELIST(I)  - ERROR ESTIMATE APPLYING TO RLIST(I)
+!                       containing the part of the epsilon table
+!                       which is still needed for further computations
+!           ELIST(I)  - error estimate applying to RLIST(I)
 !           MAXERR    - POINTER TO THE INTERVAL WITH LARGEST ERROR
-!                       ESTIMATE
+!                       estimate
 !           ERRMAX    - ELIST(MAXERR)
 !           ERLAST    - ERROR ON THE INTERVAL CURRENTLY SUBDIVIDED
-!                       (BEFORE THAT SUBDIVISION HAS TAKEN PLACE)
+!                       (before that subdivision has taken place)
 !           AREA      - SUM OF THE INTEGRALS OVER THE SUBINTERVALS
 !           ERRSUM    - SUM OF THE ERRORS OVER THE SUBINTERVALS
 !           ERRBND    - REQUESTED ACCURACY MAX(EPSABS,EPSREL*
@@ -10511,33 +10511,33 @@ external f
 !           LAST      - INDEX FOR SUBDIVISION
 !           NRES      - NUMBER OF CALLS TO THE EXTRAPOLATION ROUTINE
 !           NUMRL2    - NUMBER OF ELEMENTS CURRENTLY IN RLIST2. IF AN
-!                       APPROPRIATE APPROXIMATION TO THE COMPOUNDED
-!                       INTEGRAL HAS BEEN OBTAINED IT IS PUT IN
-!                       RLIST2(NUMRL2) AFTER NUMRL2 HAS BEEN INCREASED
-!                       BY ONE.
+!                       appropriate approximation to the compounded
+!                       integral has been obtained it is put in
+!                       RLIST2(NUMRL2) after NUMRL2 has been increased
+!                       by one.
 !           SMALL     - LENGTH OF THE SMALLEST INTERVAL CONSIDERED
-!                       UP TO NOW, MULTIPLIED BY 1.5
+!                       up to now, multiplied by 1.5
 !           ERLARG    - SUM OF THE ERRORS OVER THE INTERVALS LARGER
-!                       THAN THE SMALLEST INTERVAL CONSIDERED UP TO NOW
+!                       than the smallest interval considered up to now
 !           EXTRAP    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
-!                       IS ATTEMPTING TO PERFORM EXTRAPOLATION
-!                       I.E. BEFORE SUBDIVIDING THE SMALLEST INTERVAL
-!                       WE TRY TO DECREASE THE VALUE OF ERLARG.
+!                       is attempting to perform extrapolation
+!                       I.E. Before subdividing the smallest interval
+!                       we try to decrease the value of ERLARG.
 !           NOEXT     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
-!                       IS NO LONGER ALLOWED (TRUE VALUE)
+!                       is no longer allowed (true value)
 !
-!            MACHINE DEPENDENT CONSTANTS
+!            Machine dependent constants
 !            ---------------------------
 !
-!           EPMACH IS THE LARGEST RELATIVE SPACING.
-!           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
+!           EPMACH is the largest relative spacing.
+!           UFLOW is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
 !
 epmach = dpmpar(1)
 uflow = dpmpar(2)
 oflow = dpmpar(3)
 !
-!            CHECK EPSABS AND EPSREL
+!            Check EPSABS and EPSREL
 !            -----------------------
 !
 neval = 0
@@ -10553,7 +10553,7 @@ if (epsabs .lt. 0.d0 .or. epsrel .lt. 0.d0) go to 999
 ier = 0
 rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
-!           FIRST APPROXIMATION TO THE INTEGRAL
+!           First approximation to the integral
 !           -----------------------------------
 !
 ierro = 0
@@ -10562,7 +10562,7 @@ call dqk21 (f, a, b, result, abserr, defabs, resabs, &
 if (id .ne. 0) go to 999
 neval = 21
 !
-!           TEST ON ACCURACY.
+!           Test on accuracy.
 !
 dres = dabs(result)
 errbnd = dmax1(epsabs,rerr*dres)
@@ -10575,7 +10575,7 @@ if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. &
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0) go to 999
 !
-!           INITIALIZATION
+!           Initialization
 !           --------------
 !
 rlist2(1) = result
@@ -10598,13 +10598,13 @@ ksgn = -1
 if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
 t = 1.d0 + 100.d0*epmach
 !
-!           MAIN DO-LOOP
+!           Main do-loop
 !           ------------
 !
 do 90 last = 2,limit
 !
-!           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST
-!           ERROR ESTIMATE.
+!           Bisect the subinterval with the NRMAX-TH largest
+!           error estimate.
 !
   a1 = alist(maxerr)
   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
@@ -10618,8 +10618,8 @@ do 90 last = 2,limit
 &epmach, uflow, ier)
   neval = neval + 42
 !
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
 !
   area12 = area1 + area2
   erro12 = error1 + error2
@@ -10635,24 +10635,24 @@ do 90 last = 2,limit
   rlist(last) = area2
   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
-!           SET ERROR FLAG.
+!           Test for roundoff error and eventually
+!           set error flag.
 !
   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
   if (iroff2 .ge. 5) ierro = 3
 !
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
-!           SUBINTERVALS EQUALS LIMIT.
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
 !
   if (last .eq. limit) ier = 1
 !
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT A POINT OF THE INTEGRATION RANGE.
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
 !
   if (dmax1(dabs(a1),dabs(b2)) .le. &
 &t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
+!           Append the newly-created intervals to the list.
 !
   if (error2 .gt. error1) go to 20
   alist(last) = a2
@@ -10670,9 +10670,9 @@ do 90 last = 2,limit
   elist(last) = error1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
-!           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
-!           BISECTED NEXT).
+!           in the list of error estimates and select the
+!           subinterval with NRMAX-TH largest error estimate (to be
+!           bisected next).
 !
 30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
@@ -10685,18 +10685,18 @@ do 90 last = 2,limit
   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
   if (extrap) go to 40
 !
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
 !
   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
   extrap = .true.
   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
-!           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
-!           EXTRAPOLATION.
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (ERLARG) and perform
+!           extrapolation.
 !
   id = nrmax
   jupbnd = last
@@ -10709,7 +10709,7 @@ do 90 last = 2,limit
     nrmax = nrmax + 1
 50 continue
 !
-!           PERFORM EXTRAPOLATION.
+!           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
   rlist2(numrl2) = area
@@ -10726,7 +10726,7 @@ do 90 last = 2,limit
 ! ***JUMP OUT OF DO-LOOP
   if (abserr .le. ertest) go to 100
 !
-!           PREPARE BISECTION OF THE SMALLEST INTERVAL.
+!           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
   if (ier .eq. 5) go to 100
@@ -10743,7 +10743,7 @@ do 90 last = 2,limit
   rlist2(2) = area
 90 continue
 !
-!           SET FINAL RESULT AND ERROR ESTIMATE.
+!           Set final result and error estimate.
 !           ------------------------------------
 !
 100 if (abserr .eq. oflow) go to 115
@@ -10756,7 +10756,7 @@ if (area .eq. 0.d0) go to 130
 go to 110
 105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
-!           TEST ON DIVERGENCE.
+!           Test on divergence.
 !
 110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
 &defabs*0.1d-01) go to 130
@@ -10764,7 +10764,7 @@ if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
 &.or. errsum .gt. dabs(area)) ier = 6
 go to 130
 !
-!           COMPUTE GLOBAL INTEGRAL SUM.
+!           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
