@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 215 of the library's 1,062 procedures in seven
-batches of 17, 40, 29, 34, 32, 32, and 31. The remaining 847 procedures
+The reviewed conversions cover 237 of the library's 1,062 procedures in eight
+batches of 17, 40, 29, 34, 32, 32, 31, and 22. The remaining 825 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -164,6 +164,28 @@ The suite now runs 17 programs against each of the three versions, for 51 runs.
 No argument intents, precision choices, dimensions, storage statements, or
 executable library code were changed.
 
+## Batch 8: basic matrix arithmetic and conversions
+
+The eighth batch adds 22 procedures:
+
+- Packed symmetric conversions: `MCVFS`, `DMCVFS`, `MCVSF`, and `DMCVSF`.
+- Copies and conjugation: `MCOPY`, `SMCOPY`, `DMCOPY`, `CMCOPY`, and `CMCONJ`.
+- Addition and subtraction: `DMADD`, `CMADD`, `SMADD`, `MSUBT`, `DMSUBT`,
+  `CMSUBT`, and `SMSUBT`.
+- Matrix products: `MTMS`, `DMTMS`, `CMTMS`, `KPROD`, `DKPROD`, and `CKPROD`.
+
+No supplemental return types were needed. The compiler comparison preserved
+all 242 non-intrinsic symbol records in this batch. No argument intents,
+precision choices, dimensions, storage statements, or executable library code
+were changed.
+
+The new `test_matrix_arithmetic` driver extends the Miller packed symmetric
+utility test to cover all 22 procedures. Its references use array arithmetic,
+`MATMUL`, explicit packed data, and blocks of scaled matrices for Kronecker
+products. Real, double precision, and complex results are checked with suitable
+tolerances. The suite now runs 18 programs against each library version, for
+54 numerical runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -231,13 +253,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-4,286 variable and external procedure records across the 215 procedures, including
+4,528 variable and external procedure records across the 237 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 17 numerical test programs must still pass against each source version,
+All 18 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.

@@ -33118,6 +33118,9 @@ C
       END FUNCTION ICAMAX
 
       SUBROUTINE MCVFS(A,KA,N,B)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, J, L
       REAL A(KA,N),B(*)
 C
       L = 0
@@ -33130,6 +33133,9 @@ C
       END SUBROUTINE MCVFS
 
       SUBROUTINE DMCVFS(A,KA,N,B)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, J, L
       DOUBLE PRECISION A(KA,N),B(*)
 C
       L = 0
@@ -33142,6 +33148,9 @@ C
       END SUBROUTINE DMCVFS
 
       SUBROUTINE MCVSF(A,KA,N,B)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, II, IM1, J, JJ, L
       REAL A(KA,N),B(*)
 C
       A(1,1) = B(1)
@@ -33166,6 +33175,9 @@ C
       END SUBROUTINE MCVSF
 
       SUBROUTINE DMCVSF(A,KA,N,B)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, II, IM1, J, JJ, L
       DOUBLE PRECISION A(KA,N),B(*)
 C
       A(1,1) = B(1)
@@ -33260,6 +33272,9 @@ C
       END SUBROUTINE CMIMAG
 
       SUBROUTINE MCOPY(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       REAL A(KA,N),B(KB,N)
 C
       DO J = 1,N
@@ -33270,6 +33285,9 @@ C
       END SUBROUTINE MCOPY
 
       SUBROUTINE SMCOPY(N,A,B)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER K, L
       REAL A(*),B(*)
 C
       L = (N*(N + 1))/2
@@ -33279,6 +33297,9 @@ C
       END SUBROUTINE SMCOPY
 
       SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       DOUBLE PRECISION A(KA,N),B(KB,N)
 C
       DO J = 1,N
@@ -33289,6 +33310,9 @@ C
       END SUBROUTINE DMCOPY
 
       SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N),B(KB,N)
 C
       DO J = 1,N
@@ -33299,6 +33323,9 @@ C
       END SUBROUTINE CMCOPY
 
       SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N),B(KB,N)
 C
       DO J = 1,N
@@ -33796,6 +33823,9 @@ C
       END SUBROUTINE MADD
 
       SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C                ADDITION OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -33810,6 +33840,9 @@ C
       END SUBROUTINE DMADD
 
       SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C                   ADDITION OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
@@ -33824,6 +33857,9 @@ C
       END SUBROUTINE CMADD
 
       SUBROUTINE SMADD(N,A,B,C)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER K, M
       REAL A(*),B(*),C(*)
       M=(N*(N+1))/2
       DO 10 K=1,M
@@ -33832,6 +33868,9 @@ C
       END SUBROUTINE SMADD
 
       SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C                     SUBTRACTION OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -33846,6 +33885,9 @@ C
       END SUBROUTINE MSUBT
 
       SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C              SUBTRACTION OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -33860,6 +33902,9 @@ C
       END SUBROUTINE DMSUBT
 
       SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C                  SUBTRACTION OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
@@ -33874,6 +33919,9 @@ C
       END SUBROUTINE CMSUBT
 
       SUBROUTINE SMSUBT(N,A,B,C)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER K, M
       REAL A(*),B(*),C(*)
       M=(N*(N+1))/2
       DO 10 K=1,M
@@ -33882,6 +33930,9 @@ C
       END SUBROUTINE SMSUBT
 
       SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -33901,6 +33952,9 @@ C
       END SUBROUTINE MTMS
 
       SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -33919,6 +33973,9 @@ C
       END SUBROUTINE DMTMS
 
       SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
@@ -34315,6 +34372,9 @@ C
       END SUBROUTINE SMPROD
 
       SUBROUTINE KPROD(A,KA,M,N,B,KB,K,L,C,KC)
+      IMPLICIT NONE
+      INTEGER K, KA, KB, KC, L, M, N
+      INTEGER I, II, J, JJ
 C     ******************************************************************
 C     KRONECKER PRODUCT OF REAL MATRICES A AND B
 C     ******************************************************************
@@ -34341,6 +34401,9 @@ C
       END SUBROUTINE KPROD
 
       SUBROUTINE DKPROD(A,KA,M,N,B,KB,K,L,C,KC)
+      IMPLICIT NONE
+      INTEGER K, KA, KB, KC, L, M, N
+      INTEGER I, II, J, JJ
 C     ******************************************************************
 C     KRONECKER PRODUCT OF DOUBLE PRECISION MATRICES A AND B
 C     ******************************************************************
@@ -34367,6 +34430,9 @@ C
       END SUBROUTINE DKPROD
 
       SUBROUTINE CKPROD(A,KA,M,N,B,KB,K,L,C,KC)
+      IMPLICIT NONE
+      INTEGER K, KA, KB, KC, L, M, N
+      INTEGER I, II, J, JJ
 C     ******************************************************************
 C     KRONECKER PRODUCT OF COMPLEX MATRICES A AND B
 C     ******************************************************************
