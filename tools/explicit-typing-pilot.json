@@ -2600,6 +2600,104 @@
         "      INTEGER IERR, MAX, N",
         "      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL"
       ]
+    },
+    "EIG": {
+      "sha256": "2930456362dad79a4d883ab721b5d215d6ad16f6c434ce4903751e247c535ad6",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, LOW"
+      ]
+    },
+    "EIG1": {
+      "sha256": "5a045cce6edbc828ac5badc1aca39ca62589478c640f8144522d056c24352760",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, LOW"
+      ]
+    },
+    "EIGV": {
+      "sha256": "0a9e6ff3cd4bbf1aa5c6f541ab40bae7102e146bd0344622c743035c4a29aac9",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, J, K, KP1, LOW"
+      ]
+    },
+    "EIGV1": {
+      "sha256": "928a62fd6ffb3527d0d066c20568644de8d3badb97d8535bd7109ef2892d6fb7",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, J, K, KP1, LOW"
+      ]
+    },
+    "BALANC": {
+      "sha256": "13ba9f6a5d2ae1cbca511ac97ea6a984ed8421a5401e9c355aec58a760290968",
+      "declarations": []
+    },
+    "ELMHES": {
+      "sha256": "fc407bef05256380718e21d44a09b8f0e5956e0bf4b1a64ce1d3d7ec00910a6d",
+      "declarations": []
+    },
+    "ELMHS0": {
+      "sha256": "8f834cd456ac7f42a9209ab0d70155418a80466640bfb55631f5c008248e547f",
+      "declarations": []
+    },
+    "ORTHES": {
+      "sha256": "06665be613e14a59baa57c72f4a085612123696f4a2aa6a37fff2c0e9c070cdc",
+      "declarations": []
+    },
+    "HQR": {
+      "sha256": "b29a5f9ae3bd4eafd04d212c88811a3e0481a41a3ddfeec4372e5ca6eb5e8d2b",
+      "declarations": []
+    },
+    "BALBAK": {
+      "sha256": "1ee43fc334237418e842dee75b5c072c7c003678fa733985f1cddb54346c2969",
+      "declarations": []
+    },
+    "ELTRAN": {
+      "sha256": "2f67368479636aefba47c294a24f9c2c5d31430309553da70194fd772a53ccb0",
+      "declarations": []
+    },
+    "ELTRN0": {
+      "sha256": "d2cd7c3003f110f45cc08747a00ba1965c98927c73c070f352652092eca9579e",
+      "declarations": []
+    },
+    "ORTRAN": {
+      "sha256": "203c6f92a5894bb93555225c1fc7aa3c2f3b1bd37fd7e1316a99cfd73d49aa8d",
+      "declarations": []
+    },
+    "HQR2": {
+      "sha256": "5f0da91e47429cf8fb7367403ce7af518b3a50ca1059fd3051283b6e0392ce1c",
+      "declarations": []
+    },
+    "DEIG": {
+      "sha256": "1ffe95a46d937270bd01f63acba5dec18f0bf789f8acc0968f7f678b804f00cc",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, LOW"
+      ]
+    },
+    "DEIGV": {
+      "sha256": "93be8c9d89c586ce0e41e4cb0e50b51ac7f04dc546e1a058c1c5cf927bbaa8fd",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, J, K, KP1, LOW"
+      ]
+    },
+    "DORTH": {
+      "sha256": "95cb4be4efad54419bba344198c13c76b98c0b9d7a774f40d80ede48e1bf2af0",
+      "declarations": []
+    },
+    "DHQR": {
+      "sha256": "f8829cb2ac82b650c6523f204f2850deeacbcffc75fcfc300fba4641c11fcad1",
+      "declarations": []
+    },
+    "DORTRN": {
+      "sha256": "0cb581517120d03aaf7f56d46a1dec79ff769d0854f447a0ff47ea777a8b0058",
+      "declarations": []
+    },
+    "DHQR2": {
+      "sha256": "aa9a6064afe1648eb70f5d77ee324b347b06b955fa6fec812ae446c23d336c89",
+      "declarations": []
     }
   },
   "batches": [
@@ -3062,6 +3160,33 @@
         "CTSLV",
         "CTSLV1",
         "CSPLU"
+      ]
+    },
+    {
+      "id": "batch-14",
+      "source_commit": "188a715",
+      "input_sha256": "765fb1b8ea1854a84a04fb9850f58078fefc2b14b1cf4d722d1fb7c12f3d5910",
+      "procedures": [
+        "EIG",
+        "EIG1",
+        "EIGV",
+        "EIGV1",
+        "BALANC",
+        "ELMHES",
+        "ELMHS0",
+        "ORTHES",
+        "HQR",
+        "BALBAK",
+        "ELTRAN",
+        "ELTRN0",
+        "ORTRAN",
+        "HQR2",
+        "DEIG",
+        "DEIGV",
+        "DORTH",
+        "DHQR",
+        "DORTRN",
+        "DHQR2"
       ]
     }
   ]

@@ -57142,6 +57142,9 @@ C
       END SUBROUTINE CSPLU
 
       SUBROUTINE EIG (IBAL,A,KA,N,WR,WI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -57156,6 +57159,9 @@ C
       END SUBROUTINE EIG
 
       SUBROUTINE EIG1 (IBAL,A,KA,N,WR,WI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -57170,6 +57176,9 @@ C
       END SUBROUTINE EIG1
 
       SUBROUTINE EIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -57199,6 +57208,9 @@ C
       END SUBROUTINE EIGV
 
       SUBROUTINE EIGV1 (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -57228,6 +57240,7 @@ C
       END SUBROUTINE EIGV1
 
       SUBROUTINE BALANC(NM,N,A,LOW,IGH,SCALE)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
       REAL A(NM,N),SCALE(N)
@@ -57470,6 +57483,7 @@ C
       END SUBROUTINE BALINV
 
       SUBROUTINE ELMHES(NM,N,LOW,IGH,A,INT)
+      IMPLICIT NONE
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
       REAL A(NM,N)
@@ -57566,6 +57580,7 @@ C
       END SUBROUTINE ELMHES
 
       SUBROUTINE ELMHS0(NM,N,LOW,IGH,A,INT)
+      IMPLICIT NONE
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
       REAL A(NM,N)
@@ -57662,6 +57677,7 @@ C
       END SUBROUTINE ELMHS0
 
       SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
+      IMPLICIT NONE
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       REAL A(NM,N),ORT(IGH)
@@ -57768,6 +57784,7 @@ C
       END SUBROUTINE ORTHES
 
       SUBROUTINE HQR(NM,N,LOW,IGH,H,WR,WI,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
       REAL H(NM,N),WR(N),WI(N)
@@ -57992,6 +58009,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       END SUBROUTINE HQR
 
       SUBROUTINE BALBAK(NM,N,LOW,IGH,SCALE,M,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
       REAL SCALE(N),Z(NM,M)
@@ -58064,6 +58082,7 @@ C
       END SUBROUTINE BALBAK
 
       SUBROUTINE ELTRAN(NM,N,LOW,IGH,A,INT,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),Z(NM,N)
@@ -58139,6 +58158,7 @@ C
       END SUBROUTINE ELTRAN
 
       SUBROUTINE ELTRN0(NM,N,LOW,IGH,A,INT,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),Z(NM,N)
@@ -58214,6 +58234,7 @@ C
       END SUBROUTINE ELTRN0
 
       SUBROUTINE ORTRAN(NM,N,LOW,IGH,A,ORT,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),ORT(IGH),Z(NM,N)
@@ -58384,6 +58405,7 @@ C
       END SUBROUTINE ORTRN1
 
       SUBROUTINE HQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
      X        IGH,ITS,LOW,MP2,ENM2,IERR
@@ -58797,6 +58819,9 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       END SUBROUTINE HQR2
 
       SUBROUTINE DEIG (IBAL,A,KA,N,WR,WI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, LOW
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -58811,6 +58836,9 @@ C
       END SUBROUTINE DEIG
 
       SUBROUTINE DEIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      IMPLICIT NONE
+      INTEGER IBAL, IERR, KA, N
+      INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -59082,6 +59110,7 @@ C
       END SUBROUTINE DBALNV
 
       SUBROUTINE DORTH(NM,N,LOW,IGH,A,ORT)
+      IMPLICIT NONE
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       DOUBLE PRECISION A(NM,N),ORT(IGH)
@@ -59188,6 +59217,7 @@ C
       END SUBROUTINE DORTH
 
       SUBROUTINE DHQR(NM,N,LOW,IGH,H,WR,WI,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
       DOUBLE PRECISION H(NM,N),WR(N),WI(N)
@@ -59485,6 +59515,7 @@ C
       END SUBROUTINE DBABK
 
       SUBROUTINE DORTRN(NM,N,LOW,IGH,A,ORT,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       DOUBLE PRECISION A(NM,IGH),ORT(IGH),Z(NM,N)
@@ -59655,6 +59686,7 @@ C
       END SUBROUTINE DRTRN1
 
       SUBROUTINE DHQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
      X        IGH,ITS,LOW,MP2,ENM2,IERR

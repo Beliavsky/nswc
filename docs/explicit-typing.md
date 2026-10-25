@@ -1,7 +1,8 @@
 # Explicit typing
 
-The reviewed conversions cover 370 of the library's 1,062 procedures in thirteen
-batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, and 21. The remaining 692 procedures
+The reviewed conversions cover 390 of the library's 1,062 procedures in fourteen
+batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, 21, and 20.
+The remaining 672 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -309,6 +310,31 @@ and transpose systems. The reusable-factorization tests also solve a second
 right-hand side with `M0=1`; the direct solver test now includes `DSPSLV`.
 The suite runs 30 programs against each library version, for 90 numerical runs.
 
+## Batch 14: real eigenvalue and Hessenberg routines
+
+The fourteenth batch adds 20 procedures:
+
+- Public drivers: `EIG`, `EIG1`, `EIGV`, `EIGV1`, `DEIG`, and `DEIGV`.
+- Balancing and back transformation: `BALANC` and `BALBAK`.
+- Elementary Hessenberg routines: `ELMHES`, `ELMHS0`, `ELTRAN`, and `ELTRN0`.
+- Orthogonal Hessenberg routines: `ORTHES`, `ORTRAN`, `DORTH`, and `DORTRN`.
+- QR iteration: `HQR`, `HQR2`, `DHQR`, and `DHQR2`.
+
+No supplemental function types were needed. Compiler comparisons preserved all
+420 non-intrinsic symbol records in this batch. Most workers already had full
+type declarations; they only needed `IMPLICIT NONE`. No argument intents,
+precision choices, dimensions, storage statements, or executable library code
+were changed.
+
+Four more Miller drivers were adapted: `test_real_eigensystem`,
+`test_real_eigensystem_compat`, `test_real_hessenberg_qr`, and
+`test_elementary_hessenberg`. The main eigenvalue test now includes double
+precision and checks balanced and unbalanced eigenvector calls. QR workers are
+checked against known spectra and nonzero eigenvectors with small residuals,
+in addition to status checks. Hessenberg transformations are checked by matrix
+reconstruction. The suite runs 34 programs against each library version, for
+102 numerical runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -376,13 +402,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-7,240 variable and external procedure records across the 370 procedures, including
+7,660 variable and external procedure records across the 390 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 30 numerical test programs must still pass against each source version,
+All 34 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.
