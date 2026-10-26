@@ -72,6 +72,10 @@ class FreeFormattingTests(unittest.TestCase):
     def test_dot_operator_after_integer_and_real_exponents(self):
         self.check('if(1.eq.n)x=1.e+12-1.e-12\n', 'if (1.eq.n) x = 1.e+12 - 1.e-12\n')
 
+    def test_nested_pure_interface_layout(self):
+        self.check('pure real function f(x)\nreal,intent(in)::x\ninterface\npure elemental real function g(x)\nreal,intent(in)::x\nend function g\nend interface\nf=g(x)\nend function f\n',
+                   'pure real function f(x)\nreal,intent(in)::x\ninterface\n   pure elemental real function g(x)\n      real,intent(in)::x\n   end function g\nend interface\nf = g(x)\nend function f\n')
+
 
 if __name__ == '__main__':
     unittest.main()

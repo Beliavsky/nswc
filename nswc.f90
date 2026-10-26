@@ -2080,7 +2080,7 @@ do 40 ii = 1,imax
 return
 end subroutine daord
 
-subroutine qsorti (x, ind, n)
+pure subroutine qsorti (x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
@@ -2281,7 +2281,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsorti
 
-subroutine qsortr (x, ind, n)
+pure subroutine qsortr (x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2483,7 +2483,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortr
 
-subroutine qsortd (x, ind, n)
+pure subroutine qsortd (x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2686,7 +2686,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortd
 
-subroutine iorder (a, ip, n)
+pure subroutine iorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n), ip(n)
@@ -2759,7 +2759,7 @@ go to 4
 return
 end subroutine iorder
 
-subroutine rorder (a, ip, n)
+pure subroutine rorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2834,7 +2834,7 @@ go to 4
 return
 end subroutine rorder
 
-subroutine dorder (a, ip, n)
+pure subroutine dorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2909,7 +2909,7 @@ go to 4
 return
 end subroutine dorder
 
-real function cbrt (x)
+pure elemental real function cbrt (x)
 implicit none
 real, intent(in) :: x
 real :: r
@@ -2927,7 +2927,7 @@ cbrt = -exp(r)
 return
 end function cbrt
 
-double precision function dcbrt (x)
+pure elemental double precision function dcbrt (x)
 implicit none
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
@@ -2946,7 +2946,7 @@ dcbrt = -dexp(r)
 return
 end function dcbrt
 
-function artnq(y,x)
+pure elemental function artnq(y,x)
 implicit none
 real, intent(in) :: x, y
 real :: artnq
@@ -2967,7 +2967,7 @@ return
 return
 end function artnq
 
-double precision function dartnq(y,x)
+pure elemental double precision function dartnq(y,x)
 implicit none
 double precision, intent(in) :: x, y
 if (x) 1,2,5
@@ -2987,7 +2987,7 @@ return
 return
 end function dartnq
 
-real function cpabs(x, y)
+pure elemental real function cpabs(x, y)
 implicit none
 real, intent(in) :: x, y
 real :: a
@@ -3006,7 +3006,7 @@ return
 return
 end function cpabs
 
-double precision function dcpabs(x, y)
+pure elemental double precision function dcpabs(x, y)
 implicit none
 double precision, intent(in) :: x, y
 double precision :: a
@@ -3026,7 +3026,7 @@ return
 return
 end function dcpabs
 
-subroutine crec (x, y, u, v)
+pure elemental subroutine crec (x, y, u, v)
 implicit none
 real, intent(inout) :: u, v
 real, intent(in) :: x, y
@@ -3047,7 +3047,7 @@ v = -t/d
 return
 end subroutine crec
 
-subroutine dcrec (x, y, u, v)
+pure elemental subroutine dcrec (x, y, u, v)
 implicit none
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
@@ -3069,7 +3069,7 @@ v = -t/d
 return
 end subroutine dcrec
 
-complex function cdiv (a, b)
+pure elemental complex function cdiv (a, b)
 implicit none
 complex, intent(in) :: a, b
 real :: ai, ar, bi, br, d, t, u, v
@@ -3132,12 +3132,19 @@ ci = cr
 return
 end subroutine cdivid
 
-subroutine dcsqrt (z, w)
+pure subroutine dcsqrt (z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: x, y, r
-double precision :: dcpabs
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 ! ----------------------------------------------------------------------
 !        w = sqrt(z) for the double precision complex number z
 !
@@ -3181,7 +3188,7 @@ w(1) = 0.5d0*y/w(2)
 return
 end subroutine dcsqrt
 
-subroutine poca(r,a,x,y)
+pure elemental subroutine poca(r,a,x,y)
 implicit none
 real, intent(in) :: a, r
 real, intent(out) :: x, y
@@ -3190,7 +3197,7 @@ y = r*sin(a)
 return
 end subroutine poca
 
-subroutine capo(x,y,r,theta)
+pure elemental subroutine capo(x,y,r,theta)
 implicit none
 real, intent(inout) :: r, theta
 real, intent(in) :: x, y
@@ -3210,7 +3217,7 @@ theta = 0.0
 return
 end subroutine capo
 
-subroutine rota(x1,y1,a,x2,y2)
+pure elemental subroutine rota(x1,y1,a,x2,y2)
 implicit none
 real, intent(in) :: a, x1
 real, intent(out) :: x2
@@ -3224,7 +3231,7 @@ y2 = -x1*sina + y1*cosa
 return
 end subroutine rota
 
-subroutine srotg(sa,sb,sc,ss)
+pure elemental subroutine srotg(sa,sb,sc,ss)
 implicit none
 real, intent(inout) :: sa, sb, sc, ss
 real :: r, u, v
@@ -3300,7 +3307,7 @@ return
 !
 end subroutine srotg
 
-subroutine drotg(da,db,dc,ds)
+pure elemental subroutine drotg(da,db,dc,ds)
 implicit none
 !
 !     Designed by C.L.Lawson, JPL, 1977 sept 08
@@ -3419,7 +3426,7 @@ v = -v/sin(theta(2))
 return
 end subroutine rot3
 
-subroutine constr (xk,yk,zk, cx,sx,cy,sy)
+pure elemental subroutine constr (xk,yk,zk, cx,sx,cy,sy)
 implicit none
 real, intent(in) :: xk, yk, zk
 real, intent(inout) :: cx, sx
@@ -3951,7 +3958,7 @@ return
 return
 end subroutine snhcsh
 
-real function esum (mu, x)
+pure elemental real function esum (mu, x)
 implicit none
 integer, intent(in) :: mu
 real, intent(in) :: x
@@ -3978,7 +3985,7 @@ esum = exp(w)*exp(x)
 return
 end function esum
 
-double precision function desum (mu, x)
+pure elemental double precision function desum (mu, x)
 implicit none
 integer, intent(in) :: mu
 double precision, intent(in) :: x
@@ -5180,7 +5187,7 @@ vy(3) = y(1)
 return
 end subroutine hull
 
-real function parea(x, y, nb)
+pure real function parea(x, y, nb)
 implicit none
 integer, intent(in) :: nb
 real, intent(in) :: x(nb), y(nb)
@@ -5217,7 +5224,7 @@ parea = 0.5*a
 return
 end function parea
 
-subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
+pure subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
 implicit none
 integer, intent(inout) :: ind
 integer, intent(in) :: m, n
@@ -5227,6 +5234,31 @@ integer, intent(in) :: pr(*)
 integer, intent(inout) :: ar(m), s(n), iwk(num)
 integer :: i, ii, np1
 integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
+interface
+   pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p,subr, &
+      & rbus,tor,jr,k,ind0)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(inout) :: ind
+      integer, intent(in) :: pr(np1)
+      integer, intent(inout) :: ar(m)
+      integer, intent(inout) :: nb
+      integer, intent(inout) :: s(n)
+      integer, intent(inout) :: pc(np1)
+      integer, intent(inout) :: ac(m)
+      integer, intent(inout) :: vr(n)
+      integer, intent(inout) :: vc(n)
+      integer, intent(inout) :: p(n)
+      integer, intent(inout) :: subr(n)
+      integer, intent(inout) :: rbus(n)
+      integer, intent(inout) :: tor(n)
+      integer, intent(inout) :: jr
+      integer, intent(inout) :: k
+      integer, intent(inout) :: ind0
+   end subroutine hc1
+end interface
 !
 ! Subroutine to find one or more hamiltonian circuits in A
 ! directed graph of  n  vertices ( n .GT. 1 ) represented
@@ -5327,7 +5359,7 @@ return
 return
 end subroutine hc
 
-subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
+pure subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
    & vc, p, subr, rbus, tor, jr, k, ind0)
 implicit none
 integer, intent(inout) :: ind, ind0, jr, k
@@ -5340,6 +5372,89 @@ integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
 integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
    & jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
 real :: dens, score
+interface
+   pure subroutine bupd(a1,a2,p1,p2,v1,v2,ii,k1,k2,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: ii
+      integer, intent(in) :: k1
+      integer, intent(in) :: k2
+   end subroutine bupd
+   pure subroutine fupd(a1,a2,p1,p2,v1,v2,i1,k1,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: i1
+      integer, intent(in) :: k1
+   end subroutine fupd
+   pure subroutine ipath(i,j,subr,rbus,ar,pr,s,n,np,i1,i2,k,jr,m,np1 &
+      & )
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: i
+      integer, intent(in) :: j
+      integer, intent(in) :: subr(n)
+      integer, intent(inout) :: rbus(n)
+      integer, intent(in) :: ar(m)
+      integer, intent(in) :: pr(np1)
+      integer, intent(inout) :: s(n)
+      integer, intent(out) :: np
+      integer, intent(out) :: i1
+      integer, intent(inout) :: i2
+      integer, intent(in) :: k
+      integer, intent(in) :: jr
+   end subroutine ipath
+   pure subroutine iupd(ia,ib,l,a1,a2,p1,p2,v1,v2,k1,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: ia
+      integer, intent(in) :: ib
+      integer, intent(in) :: l
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: k1
+   end subroutine iupd
+   pure subroutine rarc(ia,ib,ar,ac,pr,pc,vr,vc,k1,jj,ll,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: ia
+      integer, intent(in) :: ib
+      integer, intent(inout) :: ar(m)
+      integer, intent(inout) :: ac(m)
+      integer, intent(in) :: pr(np1)
+      integer, intent(in) :: pc(np1)
+      integer, intent(inout) :: vr(n)
+      integer, intent(inout) :: vc(n)
+      integer, intent(in) :: k1
+      integer, intent(inout) :: jj
+      integer, intent(inout) :: ll
+   end subroutine rarc
+end interface
 !
 ! Meaning of the work arrays ...
 !
@@ -5666,7 +5781,7 @@ return
 return
 end subroutine hc1
 
-subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
+pure subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
    & jr, m, np1)
 implicit none
 integer, intent(in) :: i
@@ -5738,7 +5853,7 @@ rbus(j) = 0
 return
 end subroutine ipath
 
-subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
+pure subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
 implicit none
 integer, intent(in) :: i1, k1, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -5767,7 +5882,7 @@ v1(i1) = 0
 return
 end subroutine fupd
 
-subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
+pure subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
 implicit none
 integer, intent(in) :: ii, k1, k2, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -5797,7 +5912,7 @@ do 30 l = l1,l2
 return
 end subroutine bupd
 
-subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
+pure subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
 implicit none
 integer, intent(inout) :: ia
 integer, intent(in) :: ib, k1, l, m, n, np1
@@ -5833,7 +5948,7 @@ return
 return
 end subroutine iupd
 
-subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
+pure subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
    & np1)
 implicit none
 integer, intent(in) :: ia, ib
@@ -6051,6 +6166,15 @@ integer :: i
 real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 real :: exparg
 real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -6481,6 +6605,15 @@ double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
 double precision :: anorm, dpmpar
+interface
+   pure elemental subroutine dcrec(x,y,u,v)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine dcrec
+end interface
 !-----------------------------------------------------------------------
 !
 !               Computation of the complex error function
@@ -6763,6 +6896,15 @@ double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
 double precision :: anorm, dpmpar, dxparg
+interface
+   pure elemental subroutine dcrec(x,y,u,v)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine dcrec
+end interface
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -8701,8 +8843,15 @@ complex, intent(inout) :: w
 integer :: i
 real :: c, c0, dm, pm, qm, r, ss, x, y
 real :: exparg
-real :: cpabs
 real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !            Computation of the complex fresnel integral E(z)
@@ -9104,12 +9253,19 @@ integer :: i
 real :: c, cy, d, e, eps, euler, pi, qm, r, ss, sy, tol, u, x, y
 real :: anorm
 real :: spmpar
-real :: cpabs
 real :: n, np1
 real :: cd(18), ce(18)
 real :: qf(2), sm(2), tm(2), ts(2)
 real :: g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !           Evaluation of the complex exponential integral
 !-----------------------------------------------------------------------
@@ -10707,9 +10863,16 @@ complex function cli(z)
 implicit none
 complex, intent(in) :: z
 integer :: n
-real :: cpabs
 real :: qb(25), qf(2), dl(2), ds, zd(2), zl(2)
 real :: az(2), c, pm, r, sm(2), tm(2), ts(2), sr(2)
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !     ******************************************************************
 !     Computation of the complex logarithmic integral
 !     ******************************************************************
@@ -16335,8 +16498,16 @@ integer, intent(in) :: mu
 real, intent(in) :: a, b, x, y
 integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
-real :: algdiv, alnrel, bcorr, betaln, esum, gam1, gamln1, rlog1
+real :: algdiv, alnrel, bcorr, betaln, gam1, gamln1, rlog1
 real :: lambda, lnx, lny
+interface
+   pure elemental function esum(mu,x)
+      implicit none
+      integer, intent(in) :: mu
+      real, intent(in) :: x
+      real :: esum
+   end function esum
+end interface
 !-----------------------------------------------------------------------
 !          Evaluation of  exp(mu) * (x**a*y**b/beta(a,b))
 !-----------------------------------------------------------------------
@@ -17122,9 +17293,22 @@ complex, intent(inout) :: w
 integer :: i, k, m, n
 real :: a, cn1, cn2, e, fn, pi, pn, qm, qn, qnp1, r, r2, rn2, sn, &
    & t1, t2, u, v, x, y
-real :: cpabs
 complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
-complex :: cdiv, cgam0
+complex :: cgam0
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
@@ -17331,7 +17515,14 @@ real :: anorm
 real :: spmpar
 complex :: nu, nup1, p, s, sn, t, ti
 real :: inu, m
-complex :: cdiv
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
 !-----------------------------------------------------------------------
 !
 !       COMPUTATION OF  (z/2)**(-cnu) * gamma(cnu + 1) * J(cnu,z)
@@ -17439,6 +17630,15 @@ real :: alpha, am, aq, ar, bnd, c, phi, pi, pi2, sgn, theta, u, v, &
 real :: a(136), is, inu, izn
 complex :: c1, c2, eta, j, nu, p, p1, q, r, s, s1, s2, sm, t, z, &
    & zn
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !
 !         CALCULATION OF j   (cz) BY THE DEBYE APPROXIMATION
@@ -17676,6 +17876,15 @@ real :: anorm
 real :: spmpar
 real :: inu, m
 complex :: a, a1, arg, e, eta, j, nu, p, q, t, z, zr, zz
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
@@ -20641,8 +20850,15 @@ complex :: z
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
 real :: a, b, c, e, rn, rz, s, tau, x, y
-real :: cpabs
 complex :: nu
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel function of the
@@ -20761,7 +20977,14 @@ real :: a, b, pi, pihalf, u1, u2
 real :: sin1
 real :: cos1
 complex :: w1, w2
-complex :: cdiv
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     second kind with complex order and argument in terms
@@ -20792,6 +21015,15 @@ real :: anorm
 real :: spmpar
 real :: m
 complex :: a, p, t, zr
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for complex order
 !        cnu and complex argument z by the asymptotic expansion
@@ -20842,6 +21074,15 @@ real :: a, ai, b, c, cpi, pi, t, x, y, znorm, zr1, zr2
 real :: nu
 complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
 complex :: cxp
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-------------------------------------------------------------------
 !     Calculation of the modified Bessel function of the second
 !     kind with complex order and argument BY means of Maclaurin
@@ -20963,7 +21204,15 @@ real :: spmpar
 real :: d(7)
 complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
-complex :: cdiv, cgam0
+complex :: cgam0
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel functions
@@ -21200,10 +21449,24 @@ complex :: z
 complex, intent(inout) :: w
 integer :: i, ind, m, n, n1
 real :: a, ai, cpi, pi, rz, t, x, y, znorm, zr1, zr2
-real :: cpabs
 complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
 real :: nu, nu1
 complex :: cxp
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !
 !         Calculation of the modified Bessel function of the
@@ -21329,6 +21592,15 @@ real :: anorm
 real :: spmpar
 real :: m
 complex :: p, t, zr
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for real order nu
 !        and complex argument z by the asymptotic expansion
@@ -21874,9 +22146,16 @@ complex, intent(in) :: z
 complex, intent(inout) :: ai
 complex, intent(inout) :: aip
 real :: a, b, r
-real :: cpabs
 complex :: bi
 complex :: bip
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z.
@@ -22000,8 +22279,15 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: ai, aip
 real :: a, b, c1, r
-real :: cpabs
 complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -22059,6 +22345,15 @@ real :: spmpar
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
 complex :: alpha, beta, j
 real :: c(30), d(30)
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip for
 !     complex argument z by means of asymptotic expansions.
@@ -22236,9 +22531,16 @@ complex, intent(in) :: z
 complex, intent(inout) :: bi
 complex, intent(inout) :: bip
 real :: a, b, r
-real :: cpabs
 complex :: ai
 complex :: aip
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z.
@@ -22273,8 +22575,15 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
 real :: a, c1, r, sqt3, x, y
-real :: cpabs
 complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -22343,6 +22652,15 @@ real :: exparg
 real :: spmpar
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, &
    & cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !---------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip for
 !     complex argument z by means of asymptotic expansions.
@@ -22964,6 +23282,15 @@ integer :: i, l, m
 real :: a, ai, al, b, c, c1, eps, r, th, x1, x2
 real :: spmpar
 complex :: bi, u1, u2, u3, s, e
+interface
+   pure elemental subroutine capo(x,y,r,theta)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: r
+      real, intent(inout) :: theta
+   end subroutine capo
+end interface
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z
@@ -23622,10 +23949,17 @@ real :: spmpar
 real :: alnrel
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, &
    & aktemp, ck1, j
-complex :: cflect, km, z
+complex :: km, z
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
    & fb(12)
 logical :: branch
+interface
+   pure elemental function cflect(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cflect
+   end function cflect
+end interface
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integral F(k)
 !     for complex values of the modulus k. it is assumed that l.NE.0
@@ -23843,7 +24177,7 @@ return
 return
 end function ck
 
-complex function cflect(z)
+pure elemental complex function cflect(z)
 implicit none
 !---------------------------------------------------------
 !     Reflects z with respect to the origin if real(z)
@@ -23980,10 +24314,17 @@ real :: alnrel
 real :: spmpar
 complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, j
 complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk, atn
-complex :: cflect, k1, l1, ak2, al2, z, g, g1, gg, gp
+complex :: k1, l1, ak2, al2, z, g, g1, gg, gp
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
    & fb(12)
 logical :: branch
+interface
+   pure elemental function cflect(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cflect
+   end function cflect
+end interface
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
 !     and E(k) for complex values of the modulus k. it is assumed
@@ -24419,8 +24760,15 @@ real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, &
    & r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
    & t1, t2, td, th1, tr, ts, w
 real :: alnrel
-real :: cpabs
 real :: k2, l2, ln4
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !          Real elliptic integrals of the first and second kinds
@@ -24561,7 +24909,15 @@ double precision, intent(inout) :: f, e
 double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, ln4, &
    & p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
    & ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
-double precision :: dlnrel, dcpabs
+double precision :: dlnrel
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !                  Double precision computation of the
@@ -25927,6 +26283,16 @@ real, intent(in) :: u
 real, intent(in) :: k, l
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
+interface
+   pure elemental subroutine scdm(u,k,s,c,d)
+      implicit none
+      real, intent(in) :: u
+      real, intent(in) :: k
+      real, intent(out) :: s
+      real, intent(out) :: c
+      real, intent(out) :: d
+   end subroutine scdm
+end interface
 !     --------------------------------------------------------
 !     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
@@ -25974,7 +26340,7 @@ d = 1.0
 return
 end subroutine scd
 
-subroutine scdm(u,k,s,c,d)
+pure elemental subroutine scdm(u,k,s,c,d)
 implicit none
 real, intent(out) :: c, d, s
 real, intent(in) :: u
@@ -26241,7 +26607,7 @@ return
 return
 end subroutine elpfc1
 
-subroutine peq(z, w, ierr)
+pure elemental subroutine peq(z, w, ierr)
 implicit none
 !
 !     Weierstrass P-function in the equianharmonic case
@@ -26287,7 +26653,7 @@ w = 1e0/w + 6e0*z4*(5e0 + z6)/(1e0 - z6)**2 + z4* &
 return
 end subroutine peq
 
-subroutine peq1(z, w, ierr)
+pure elemental subroutine peq1(z, w, ierr)
 implicit none
 !
 !     First derivative of Weierstrass P-function in the
@@ -26335,7 +26701,7 @@ w = (((14e0*z6 + 294e0)*z6 + 126e0)*z6 - 2e0)/w + &
 return
 end subroutine peq1
 
-subroutine plem(z, w, ierr)
+pure elemental subroutine plem(z, w, ierr)
 implicit none
 !
 !     Weierstrass P-function in the lemniscatic case
@@ -26383,7 +26749,7 @@ w = 1e0/w + 4e0*w*(3e0 + z4)/(1e0 - z4)**2 + &
 return
 end subroutine plem
 
-subroutine plem1(z, w, ierr)
+pure elemental subroutine plem1(z, w, ierr)
 implicit none
 !
 !     First derivative of Weierstrass P-function in the
@@ -27547,7 +27913,7 @@ if (p .lt. 0.0) p = 0.0
 return
 end subroutine pkill
 
-subroutine plcopy (a,ka,m,b,kb,n)
+pure subroutine plcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(*)
@@ -27575,7 +27941,7 @@ end do
 return
 end subroutine plcopy
 
-subroutine dpcopy (a,ka,m,b,kb,n)
+pure subroutine dpcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(*)
@@ -27603,7 +27969,7 @@ end do
 return
 end subroutine dpcopy
 
-subroutine padd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine padd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -27627,7 +27993,7 @@ end do
 return
 end subroutine padd
 
-subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -27651,7 +28017,7 @@ end do
 return
 end subroutine dpadd
 
-subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -27675,7 +28041,7 @@ end do
 return
 end subroutine psubt
 
-subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -27699,7 +28065,7 @@ end do
 return
 end subroutine dpsubt
 
-subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -27740,7 +28106,7 @@ do 60 j = jmin,n
 return
 end subroutine pmult
 
-subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -27781,7 +28147,7 @@ do 60 j = jmin,n
 return
 end subroutine dpmult
 
-subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -27840,7 +28206,7 @@ return
 return
 end subroutine pdiv
 
-subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -27898,7 +28264,7 @@ return
 return
 end subroutine dpdiv
 
-subroutine plpwr(r,a,ka,m,b,kb,n,ierr)
+pure subroutine plpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -27957,7 +28323,7 @@ return
 return
 end subroutine plpwr
 
-subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
+pure subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -28014,7 +28380,7 @@ return
 return
 end subroutine dplpwr
 
-subroutine pinv (a, d, n, q)
+pure subroutine pinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(n)
@@ -28075,7 +28441,7 @@ end do
 return
 end subroutine pinv
 
-subroutine dpinv (a, d, n, q)
+pure subroutine dpinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n)
@@ -28195,7 +28561,7 @@ end do
 return
 end subroutine mplnmv
 
-real function csevl (x, a, n)
+pure real function csevl (x, a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x
@@ -28224,7 +28590,7 @@ csevl = 0.5 * (s0 - s2)
 return
 end function csevl
 
-double precision function dcsevl (x, a, n)
+pure double precision function dcsevl (x, a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n), x
@@ -29615,9 +29981,15 @@ complex, intent(inout) :: z(3)
 real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, &
    & rt3, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, &
    & y2, y3
-real :: cbrt
 real :: spmpar
 real :: aq(3)
+interface
+   pure elemental function cbrt(x)
+      implicit none
+      real, intent(in) :: x
+      real :: cbrt
+   end function cbrt
+end interface
 !-----------------------------------------------------------------------
 !
 !        cbcrt computes the roots of the real polynomial
@@ -29829,7 +30201,14 @@ double precision, intent(inout) :: zr(3), zi(3)
 double precision :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, &
    & ra, rb, rq, rt, rt3, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, &
    & x1, x2, x3, y, y1, y2, y3
-double precision :: dpmpar, dcbrt
+double precision :: dpmpar
+interface
+   pure elemental function dcbrt(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: dcbrt
+   end function dcbrt
+end interface
 !-------------------
 data rt3 /1.732050807568877293527446341505872366943d0/
 !-----------------------------------------------------------------------
@@ -30431,6 +30810,18 @@ double precision :: dpmpar
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
 !-------------------------
 !
 !
@@ -30845,6 +31236,18 @@ logical :: tried
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
 !
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -31212,7 +31615,7 @@ vv = 0.d0
 return
 end subroutine newest
 
-subroutine quadsd (nn, u, v, p, q, a, b)
+pure subroutine quadsd (nn, u, v, p, q, a, b)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: p(nn)
@@ -31239,7 +31642,7 @@ end do
 return
 end subroutine quadsd
 
-subroutine quadpl(a, b1, c, sr, si, lr, li)
+pure elemental subroutine quadpl(a, b1, c, sr, si, lr, li)
 implicit none
 !
 !     Calculate the zeros of the quadratic a*Z**2+b1*Z+c.
@@ -31377,10 +31780,17 @@ double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
 integer :: i, nn
 integer :: ipmpar
 double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
-double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, &
-   & bnd, dcpabs, dpmpar, scalcp
+double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd, dpmpar, scalcp
 logical :: conv
 integer :: cnt1, cnt2
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-------------------------
 !-------------------------
 !     The following statements set the machine constants used
@@ -31513,7 +31923,7 @@ end do
 go to 40
 end subroutine dcply1
 
-double precision function scalcp(nn,pt,eta,infin,smalno,base)
+pure double precision function scalcp(nn,pt,eta,infin,smalno,base)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: pt(nn), eta, infin, smalno, base
@@ -31556,7 +31966,7 @@ scalcp = base**l
 return
 end function scalcp
 
-subroutine cauchy(nn,bnd,pt,q)
+pure subroutine cauchy(nn,bnd,pt,q)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(inout) :: q(nn), pt(nn)
@@ -31620,7 +32030,15 @@ double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: eta, pr(nn), pi(nn)
 double precision, intent(inout) :: hr(nn), hi(nn)
 integer :: i, j, jj, n, nm1
-double precision :: dn, t1, t2, xni, dcpabs
+double precision :: dn, t1, t2, xni
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !     Computes the derivative polynomial as the initial H
 !     polynomial and computes l1 no-shift H polynomials.
@@ -31676,8 +32094,16 @@ double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
 double precision, intent(inout) :: zr, zi
 logical, intent(inout) :: conv
 integer :: i, j, n
-double precision :: otr, oti, svsr, svsi, dcpabs
+double precision :: otr, oti, svsr, svsi
 logical :: test, pasd, bool
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !     Computes l2 fixed-shift H polynomials and tests for convergence.
 !     Initiates a variable-shift iteration and returns with the
@@ -31776,8 +32202,16 @@ double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
 double precision, intent(inout) :: zr, zi
 logical, intent(out) :: conv
 integer :: i, j, n
-double precision :: mp, ms, omp, relstp, r1, r2, tp, errev, dcpabs
+double precision :: mp, ms, omp, relstp, r1, r2, tp, errev
 logical :: b, bool
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !     Carries out the third stage iteration.
 !
@@ -31863,7 +32297,15 @@ double precision, intent(in) :: sr, si
 double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
 double precision, intent(inout) :: qhr(n), qhi(n)
-double precision :: hvr, hvi, dcpabs
+double precision :: hvr, hvi
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !     This subroutine computes T = -P(S)/H(S)
 !
@@ -31883,7 +32325,7 @@ ti = 0.d0
 return
 end subroutine calct
 
-subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
 logical, intent(in) :: bool
@@ -31920,7 +32362,7 @@ hi(1) = 0.d0
 return
 end subroutine nexth
 
-subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: pr(n), pi(n)
@@ -31948,12 +32390,20 @@ end do
 return
 end subroutine polyev
 
-double precision function errev(nn,qr,qi,ms,mp,are,mre)
+pure double precision function errev(nn,qr,qi,ms,mp,are,mre)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
 integer :: i
-double precision :: e, dcpabs
+double precision :: e
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !     Bounds the error in evaluating the polynomial by the Horner
 !     recurrence algorithm.
@@ -31983,10 +32433,17 @@ real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 real :: spmpar
-real :: cpabs
 complex :: z
 double precision :: xr, xi, vr, vi, vt
 logical :: shrunk
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     Abstract
@@ -32139,10 +32596,17 @@ real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 real :: spmpar
-real :: cpabs
 complex :: z
 double precision :: xr, xi, vr, vi, vt
 logical :: shrunk
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     Abstract
@@ -32285,7 +32749,7 @@ return
 return
 end subroutine cbnd
 
-subroutine  scopy(n,sx,incx,sy,incy)
+pure subroutine  scopy(n,sx,incx,sy,incy)
 implicit none
 !
 !     Copies a vector, X, to a vector, Y.
@@ -32340,7 +32804,7 @@ end do
 return
 end subroutine scopy
 
-subroutine  dcopy(n,dx,incx,dy,incy)
+pure subroutine  dcopy(n,dx,incx,dy,incy)
 implicit none
 !
 !     Copies a vector, X, to a vector, Y.
@@ -32395,7 +32859,7 @@ end do
 return
 end subroutine dcopy
 
-subroutine  ccopy(n,cx,incx,cy,incy)
+pure subroutine  ccopy(n,cx,incx,cy,incy)
 implicit none
 !
 !     Copies a vector, X, to a vector, Y.
@@ -32433,7 +32897,7 @@ end do
 return
 end subroutine ccopy
 
-subroutine iswap (n,ix,incx,iy,incy)
+pure subroutine iswap (n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
 integer, intent(inout) :: ix(*), iy(*)
@@ -32522,7 +32986,7 @@ end do
 return
 end subroutine iswap
 
-subroutine  sswap (n,sx,incx,sy,incy)
+pure subroutine  sswap (n,sx,incx,sy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -32583,7 +33047,7 @@ end do
 return
 end subroutine sswap
 
-subroutine  dswap (n,dx,incx,dy,incy)
+pure subroutine  dswap (n,dx,incx,dy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -32644,7 +33108,7 @@ end do
 return
 end subroutine dswap
 
-subroutine  cswap (n,cx,incx,cy,incy)
+pure subroutine  cswap (n,cx,incx,cy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -32685,7 +33149,7 @@ end do
 return
 end subroutine cswap
 
-subroutine  srot (n,sx,incx,sy,incy,c,s)
+pure subroutine  srot (n,sx,incx,sy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation.
@@ -32728,7 +33192,7 @@ end do
 return
 end subroutine srot
 
-subroutine  drot (n,dx,incx,dy,incy,c,s)
+pure subroutine  drot (n,dx,incx,dy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation.
@@ -32771,7 +33235,7 @@ end do
 return
 end subroutine drot
 
-subroutine  csrot (n,cx,incx,cy,incy,c,s)
+pure subroutine  csrot (n,cx,incx,cy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation, where the cos and sin (c and s) are real
@@ -33353,7 +33817,7 @@ end do
 return
 end subroutine drotm
 
-real function sdot(n,sx,incx,sy,incy)
+pure real function sdot(n,sx,incx,sy,incy)
 implicit none
 !
 !     Forms the dot product of two vectors.
@@ -33407,7 +33871,7 @@ end do
 return
 end function sdot
 
-double precision function ddot(n,dx,incx,dy,incy)
+pure double precision function ddot(n,dx,incx,dy,incy)
 implicit none
 !
 !     Forms the dot product of two vectors.
@@ -33461,7 +33925,7 @@ end do
 return
 end function ddot
 
-complex function cdotc(n,cx,incx,cy,incy)
+pure complex function cdotc(n,cx,incx,cy,incy)
 implicit none
 !
 !     Forms the dot product of two vectors, conjugating the first
@@ -33504,7 +33968,7 @@ cdotc = ctemp
 return
 end function cdotc
 
-complex function cdotu(n,cx,incx,cy,incy)
+pure complex function cdotu(n,cx,incx,cy,incy)
 implicit none
 !
 !     Forms the dot product of two vectors.
@@ -33546,7 +34010,7 @@ cdotu = ctemp
 return
 end function cdotu
 
-subroutine  sscal(n,sa,sx,incx)
+pure subroutine  sscal(n,sa,sx,incx)
 implicit none
 !
 !     Scales a vector BY a constant.
@@ -33594,7 +34058,7 @@ end do
 return
 end subroutine sscal
 
-subroutine  dscal(n,da,dx,incx)
+pure subroutine  dscal(n,da,dx,incx)
 implicit none
 !
 !     Scales a vector BY a constant.
@@ -33642,7 +34106,7 @@ end do
 return
 end subroutine dscal
 
-subroutine  cscal(n,ca,cx,incx)
+pure subroutine  cscal(n,ca,cx,incx)
 implicit none
 !
 !     Scales a vector BY a constant.
@@ -33673,7 +34137,7 @@ end do
 return
 end subroutine cscal
 
-subroutine  csscal(n,sa,cx,incx)
+pure subroutine  csscal(n,sa,cx,incx)
 implicit none
 !
 !     Scales a complex vector BY a real constant.
@@ -33704,7 +34168,7 @@ end do
 return
 end subroutine csscal
 
-subroutine saxpy(n,sa,sx,incx,sy,incy)
+pure subroutine saxpy(n,sa,sx,incx,sy,incy)
 implicit none
 !
 !     Constant times a vector plus a vector.
@@ -33758,7 +34222,7 @@ end do
 return
 end subroutine saxpy
 
-subroutine daxpy(n,da,dx,incx,dy,incy)
+pure subroutine daxpy(n,da,dx,incx,dy,incy)
 implicit none
 !
 !     Constant times a vector plus a vector.
@@ -33812,7 +34276,7 @@ end do
 return
 end subroutine daxpy
 
-subroutine caxpy(n,ca,cx,incx,cy,incy)
+pure subroutine caxpy(n,ca,cx,incx,cy,incy)
 implicit none
 !
 !     Constant times a vector plus a vector.
@@ -33852,7 +34316,7 @@ end do
 return
 end subroutine caxpy
 
-real function sasum(n,sx,incx)
+pure real function sasum(n,sx,incx)
 implicit none
 !
 !     Takes the sum of the absolute values.
@@ -33901,7 +34365,7 @@ end do
 return
 end function sasum
 
-double precision function dasum(n,dx,incx)
+pure double precision function dasum(n,dx,incx)
 implicit none
 !
 !     Takes the sum of the absolute values.
@@ -33949,7 +34413,7 @@ end do
 return
 end function dasum
 
-real function scasum(n,cx,incx)
+pure real function scasum(n,cx,incx)
 implicit none
 !
 !     Takes the sum of the absolute values of a complex vector and
@@ -34374,7 +34838,7 @@ if (scale) scnrm2 = scnrm2 * xmax
 return
 end function scnrm2
 
-integer function isamax(n,sx,incx)
+pure integer function isamax(n,sx,incx)
 implicit none
 !
 !     Finds the index of element having max. Absolute value.
@@ -34417,7 +34881,7 @@ do 30 i = 2,n
 return
 end function isamax
 
-integer function idamax(n,dx,incx)
+pure integer function idamax(n,dx,incx)
 implicit none
 !
 !     Finds the index of element having max. Absolute value.
@@ -34506,7 +34970,7 @@ do 30 i = 2,n
 return
 end function icamax
 
-subroutine mcvfs(a,ka,n,b)
+pure subroutine mcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
 real, intent(in) :: a(ka,n)
@@ -34522,7 +34986,7 @@ end do
 return
 end subroutine mcvfs
 
-subroutine dmcvfs(a,ka,n,b)
+pure subroutine dmcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
 double precision, intent(in) :: a(ka,n)
@@ -34538,7 +35002,7 @@ end do
 return
 end subroutine dmcvfs
 
-subroutine mcvsf(a,ka,n,b)
+pure subroutine mcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n)
@@ -34566,7 +35030,7 @@ end do
 return
 end subroutine mcvsf
 
-subroutine dmcvsf(a,ka,n,b)
+pure subroutine dmcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n)
@@ -34594,7 +35058,7 @@ end do
 return
 end subroutine dmcvsf
 
-subroutine mcvrd(m,n,a,ka,b,kb)
+pure subroutine mcvrd(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
@@ -34608,7 +35072,7 @@ end do
 return
 end subroutine mcvrd
 
-subroutine mcvdr(m,n,a,ka,b,kb)
+pure subroutine mcvdr(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
@@ -34622,7 +35086,7 @@ end do
 return
 end subroutine mcvdr
 
-subroutine mcvrc(m,n,a,ka,b,kb)
+pure subroutine mcvrc(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
@@ -34636,7 +35100,7 @@ end do
 return
 end subroutine mcvrc
 
-subroutine cmreal(m,n,a,ka,b,kb)
+pure subroutine cmreal(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -34650,7 +35114,7 @@ end do
 return
 end subroutine cmreal
 
-subroutine cmimag(m,n,a,ka,b,kb)
+pure subroutine cmimag(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -34664,7 +35128,7 @@ end do
 return
 end subroutine cmimag
 
-subroutine mcopy(m,n,a,ka,b,kb)
+pure subroutine mcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
@@ -34678,7 +35142,7 @@ end do
 return
 end subroutine mcopy
 
-subroutine smcopy(n,a,b)
+pure subroutine smcopy(n,a,b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*)
@@ -34691,7 +35155,7 @@ do 10 k = 1,l
 return
 end subroutine smcopy
 
-subroutine dmcopy(m,n,a,ka,b,kb)
+pure subroutine dmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
@@ -34705,7 +35169,7 @@ end do
 return
 end subroutine dmcopy
 
-subroutine cmcopy(m,n,a,ka,b,kb)
+pure subroutine cmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -34719,7 +35183,7 @@ end do
 return
 end subroutine cmcopy
 
-subroutine cmconj(m,n,a,ka,b,kb)
+pure subroutine cmconj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -34733,7 +35197,7 @@ end do
 return
 end subroutine cmconj
 
-subroutine tpose(m,n,a,ka,b,kb)
+pure subroutine tpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
@@ -34747,7 +35211,7 @@ end do
 return
 end subroutine tpose
 
-subroutine dtpose(m,n,a,ka,b,kb)
+pure subroutine dtpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
@@ -34761,7 +35225,7 @@ end do
 return
 end subroutine dtpose
 
-subroutine ctpose(m,n,a,ka,b,kb)
+pure subroutine ctpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -34775,7 +35239,7 @@ end do
 return
 end subroutine ctpose
 
-subroutine tip (a, n1, n2, moved, nwork, ndim)
+pure subroutine tip (a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -34787,6 +35251,16 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
    & npower
 real :: atemp, btemp
 integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+interface
+   pure subroutine infctr(n,ifact,ipower,nexp,npower)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ifact(*)
+      integer, intent(inout) :: ipower(*)
+      integer, intent(inout) :: nexp(*)
+      integer, intent(inout) :: npower
+   end subroutine infctr
+end interface
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -34891,7 +35365,7 @@ return
 return
 end subroutine tip
 
-subroutine dtip (a, n1, n2, moved, nwork, ndim)
+pure subroutine dtip (a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -34903,6 +35377,16 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
    & npower
 double precision :: atemp, btemp
 integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+interface
+   pure subroutine infctr(n,ifact,ipower,nexp,npower)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ifact(*)
+      integer, intent(inout) :: ipower(*)
+      integer, intent(inout) :: nexp(*)
+      integer, intent(inout) :: npower
+   end subroutine infctr
+end interface
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -35007,7 +35491,7 @@ return
 return
 end subroutine dtip
 
-subroutine ctip (a, n1, n2, moved, nwork, ndim)
+pure subroutine ctip (a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -35019,6 +35503,16 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
    & npower
 complex :: atemp, btemp
 integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+interface
+   pure subroutine infctr(n,ifact,ipower,nexp,npower)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ifact(*)
+      integer, intent(inout) :: ipower(*)
+      integer, intent(inout) :: nexp(*)
+      integer, intent(inout) :: npower
+   end subroutine infctr
+end interface
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -35123,7 +35617,7 @@ return
 return
 end subroutine ctip
 
-subroutine infctr(n, ifact, ipower, nexp, npower)
+pure subroutine infctr(n, ifact, ipower, nexp, npower)
 implicit none
 integer, intent(inout) :: ifact(*), ipower(*)
 integer, intent(in) :: n
@@ -35168,7 +35662,7 @@ nexp(ip) = nexp(ip) + 1
 return
 end subroutine infctr
 
-subroutine cmadj(m,n,a,ka,b,kb)
+pure subroutine cmadj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
@@ -35182,7 +35676,7 @@ end do
 return
 end subroutine cmadj
 
-subroutine ctrans (nm, n, a)
+pure subroutine ctrans (nm, n, a)
 implicit none
 !
 !
@@ -35219,7 +35713,7 @@ end do
 return
 end subroutine ctrans
 
-subroutine madd (m, n, a, ka, b, kb, c, kc)
+pure subroutine madd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
@@ -35237,7 +35731,7 @@ end do
 return
 end subroutine madd
 
-subroutine dmadd (m, n, a, ka, b, kb, c, kc)
+pure subroutine dmadd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
@@ -35255,7 +35749,7 @@ end do
 return
 end subroutine dmadd
 
-subroutine cmadd (m, n, a, ka, b, kb, c, kc)
+pure subroutine cmadd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
@@ -35273,7 +35767,7 @@ end do
 return
 end subroutine cmadd
 
-subroutine smadd(n,a,b,c)
+pure subroutine smadd(n,a,b,c)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), b(*)
@@ -35285,7 +35779,7 @@ do 10 k = 1,m
 return
 end subroutine smadd
 
-subroutine msubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine msubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
@@ -35303,7 +35797,7 @@ end do
 return
 end subroutine msubt
 
-subroutine dmsubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine dmsubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
@@ -35321,7 +35815,7 @@ end do
 return
 end subroutine dmsubt
 
-subroutine cmsubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine cmsubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
@@ -35339,7 +35833,7 @@ end do
 return
 end subroutine cmsubt
 
-subroutine smsubt(n,a,b,c)
+pure subroutine smsubt(n,a,b,c)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), b(*)
@@ -35351,7 +35845,7 @@ do 10 k = 1,m
 return
 end subroutine smsubt
 
-subroutine mtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine mtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
@@ -35374,7 +35868,7 @@ end do
 return
 end subroutine mtms
 
-subroutine dmtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine dmtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
@@ -35397,7 +35891,7 @@ end do
 return
 end subroutine dmtms
 
-subroutine cmtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine cmtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
@@ -35511,7 +36005,7 @@ rloc = .false.
 return
 end function rloc
 
-subroutine ychg (x, y, yold)
+pure subroutine ychg (x, y, yold)
 implicit none
 real, intent(in) :: yold
 real, intent(in) :: x(*)
@@ -35613,7 +36107,7 @@ dloc = .false.
 return
 end function dloc
 
-subroutine dychg (x, y, yold)
+pure subroutine dychg (x, y, yold)
 implicit none
 double precision, intent(in) :: x(*)
 double precision, intent(inout) :: y(*)
@@ -35727,7 +36221,7 @@ if (yold .eq. zero) y(1) = one
 return
 end subroutine cychg
 
-subroutine svprd(a,n,x,y)
+pure subroutine svprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), x(n)
@@ -35753,7 +36247,7 @@ do 20 k = 2,n
 return
 end subroutine svprd
 
-subroutine dsvprd(a,n,x,y)
+pure subroutine dsvprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(*), x(n)
@@ -35779,7 +36273,7 @@ do 20 k = 2,n
 return
 end subroutine dsvprd
 
-subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
+pure subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
@@ -35796,7 +36290,7 @@ end do
 return
 end subroutine tmprod
 
-subroutine smprod(m,n,a,ka,b)
+pure subroutine smprod(m,n,a,ka,b)
 implicit none
 integer, intent(in) :: ka, m, n
 real, intent(in) :: a(ka,n)
@@ -35815,7 +36309,7 @@ end do
 return
 end subroutine smprod
 
-subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
+pure subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
@@ -35845,7 +36339,7 @@ end do
 return
 end subroutine kprod
 
-subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
+pure subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
@@ -35875,7 +36369,7 @@ end do
 return
 end subroutine dkprod
 
-subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
+pure subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
@@ -36015,7 +36509,7 @@ return
 return
 end subroutine drnk
 
-subroutine crout(mo,n,m,a,ka,b,kb,d,index,temp)
+pure subroutine crout(mo,n,m,a,ka,b,kb,d,index,temp)
 implicit none
 integer, intent(inout) :: index(*)
 integer, intent(in) :: ka, kb, m, mo, n
@@ -36215,7 +36709,7 @@ do 210 kj = 1,maxb,kb
 return
 end subroutine crout
 
-subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
+pure subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
 implicit none
 integer, intent(inout) :: ierr, index(*)
 integer, intent(in) :: ka, kb, m, mo, n
@@ -36431,7 +36925,7 @@ return
 return
 end subroutine krout
 
-subroutine dec (n, ndim, a, ip, ier)
+pure subroutine dec (n, ndim, a, ip, ier)
 implicit none
 !-----------------------------------------------------------------------
 ! Matrix triangularization by Gaussian elimination.
@@ -36550,7 +37044,7 @@ end do
 return
 end subroutine sol
 
-subroutine npivot (n, m, a, ka, b, kb, d, ierr)
+pure subroutine npivot (n, m, a, ka, b, kb, d, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -36608,7 +37102,7 @@ end do
 return
 end subroutine npivot
 
-subroutine slv (n, m, a, ka, b, kb, ierr)
+pure subroutine slv (n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -36701,7 +37195,7 @@ return
 return
 end subroutine slv
 
-subroutine dpslv (n, m, a, ka, b, kb, ierr)
+pure subroutine dpslv (n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -37008,15 +37502,57 @@ if (ratio .gt. amin1(rat,4.0*eps2)) ind = 1
 return
 end subroutine luimp
 
-subroutine sgeco(a,lda,n,ipvt,rcond,z)
+pure subroutine sgeco(a,lda,n,ipvt,rcond,z)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 real, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
-real :: sdot, ek, t, wk, wkm
-real :: anorm, s, sasum, sm, ynorm
+real :: ek, t, wk, wkm
+real :: anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
+interface
+   pure function sasum(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: sasum
+   end function sasum
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+   pure subroutine sgefa(a,lda,n,ipvt,info)
+      implicit none
+      integer, intent(in) :: lda
+      real, intent(inout) :: a(lda,*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: ipvt(*)
+      integer, intent(out) :: info
+   end subroutine sgefa
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+end interface
 !
 !     sgeco factors a real matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -37204,14 +37740,39 @@ if (anorm .eq. 0.0e0) rcond = 0.0e0
 return
 end subroutine sgeco
 
-subroutine sgefa(a,lda,n,ipvt,info)
+pure subroutine sgefa(a,lda,n,ipvt,info)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
 real :: t
-integer :: isamax, j, k, kp1, l, nm1
+integer :: j, k, kp1, l, nm1
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+end interface
 !
 !     sgefa factors a real matrix BY Gaussian elimination.
 !
@@ -37311,13 +37872,33 @@ if (a(n,n) .eq. 0.0e0) info = n
 return
 end subroutine sgefa
 
-subroutine sgesl(a,lda,n,ipvt,b,job)
+pure subroutine sgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(*)
-real :: sdot, t
+real :: t
 integer :: k, kb, l, nm1
+interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 !
 !     sgesl solves the real system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -37649,15 +38230,57 @@ return
 return
 end subroutine dmslv1
 
-subroutine dgeco(a,lda,n,ipvt,rcond,z)
+pure subroutine dgeco(a,lda,n,ipvt,rcond,z)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 double precision, intent(inout) :: a(lda,*), z(*)
 double precision, intent(inout) :: rcond
-double precision :: ddot, ek, t, wk, wkm
-double precision :: anorm, s, dasum, sm, ynorm
+double precision :: ek, t, wk, wkm
+double precision :: anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
+interface
+   pure function dasum(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dasum
+   end function dasum
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure subroutine dgefa(a,lda,n,ipvt,info)
+      implicit none
+      integer, intent(in) :: lda
+      double precision, intent(inout) :: a(lda,*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: ipvt(*)
+      integer, intent(out) :: info
+   end subroutine dgefa
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+end interface
 !
 !     dgeco factors a double precision matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -37845,14 +38468,39 @@ if (anorm .eq. 0.0d0) rcond = 0.0d0
 return
 end subroutine dgeco
 
-subroutine dgefa(a,lda,n,ipvt,info)
+pure subroutine dgefa(a,lda,n,ipvt,info)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
 double precision :: t
-integer :: idamax, j, k, kp1, l, nm1
+integer :: j, k, kp1, l, nm1
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
 !
 !     dgefa factors a double precision matrix BY Gaussian elimination.
 !
@@ -37952,13 +38600,33 @@ if (a(n,n) .eq. 0.0d0) info = n
 return
 end subroutine dgefa
 
-subroutine dgesl(a,lda,n,ipvt,b,job)
+pure subroutine dgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(*)
-double precision :: ddot, t
+double precision :: t
 integer :: k, kb, l, nm1
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
 !
 !     dgesl solves the double precision system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -38597,7 +39265,7 @@ end do
 return
 end subroutine arcedc
 
-subroutine arcepr(block, nrwblk, nclblk, nrwpiv, pivot, pivmax, &
+pure subroutine arcepr(block, nrwblk, nclblk, nrwpiv, pivot, pivmax, &
    & iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -38709,7 +39377,7 @@ iflag = -1
 return
 end subroutine arcepr
 
-subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
+pure subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
    & pivot, pivmax, iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -39478,16 +40146,57 @@ return
 return
 end subroutine smslv
 
-subroutine sspco(ap,n,kpvt,rcond,z)
+pure subroutine sspco(ap,n,kpvt,rcond,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 real, intent(inout) :: ap(*), z(*)
 real, intent(inout) :: rcond
-real :: ak, akm1, bk, bkm1, sdot, denom, ek, t
-real :: anorm, s, sasum, ynorm
+real :: ak, akm1, bk, bkm1, denom, ek, t
+real :: anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
 integer :: k, kk, km1k, km1km1, kp, kps, ks
+interface
+   pure function sasum(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: sasum
+   end function sasum
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+   pure subroutine sspfa(ap,n,kpvt,info)
+      implicit none
+      real, intent(inout) :: ap(*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: kpvt(*)
+      integer, intent(out) :: info
+   end subroutine sspfa
+end interface
 !
 !     sspco factors a real symmetric matrix stored in packed
 !     form by elimination with symmetric pivoting and estimates
@@ -39766,7 +40475,7 @@ if (anorm .eq. 0.0e0) rcond = 0.0e0
 return
 end subroutine sspco
 
-subroutine sspfa(ap,n,kpvt,info)
+pure subroutine sspfa(ap,n,kpvt,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
@@ -39774,11 +40483,36 @@ integer, intent(out) :: info
 real, intent(inout) :: ap(*)
 real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
 real :: absakk, alpha, colmax, rowmax
-integer :: isamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
-   & imk
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
 integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
    & km2, kstep
 logical :: swap
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure subroutine sswap(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine sswap
+end interface
 !
 !     sspfa factors a real symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting.
@@ -40036,13 +40770,33 @@ go to 10
 return
 end subroutine sspfa
 
-subroutine sspsl(ap,n,kpvt,b)
+pure subroutine sspsl(ap,n,kpvt,b)
 implicit none
 integer, intent(in) :: n, kpvt(*)
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
-real :: ak, akm1, bk, bkm1, sdot, denom, temp
+real :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
+interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 !
 !     SSISL solves the real symmetric system
 !     A * X = b
@@ -40503,16 +41257,57 @@ return
 return
 end subroutine dsmslv
 
-subroutine dspco(ap,n,kpvt,rcond,z)
+pure subroutine dspco(ap,n,kpvt,rcond,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 double precision, intent(inout) :: ap(*), z(*)
 double precision, intent(inout) :: rcond
-double precision :: ak, akm1, bk, bkm1, ddot, denom, ek, t
-double precision :: anorm, s, dasum, ynorm
+double precision :: ak, akm1, bk, bkm1, denom, ek, t
+double precision :: anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
 integer :: k, kk, km1k, km1km1, kp, kps, ks
+interface
+   pure function dasum(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dasum
+   end function dasum
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dspfa(ap,n,kpvt,info)
+      implicit none
+      double precision, intent(inout) :: ap(*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: kpvt(*)
+      integer, intent(out) :: info
+   end subroutine dspfa
+end interface
 !
 !     dspco factors a double precision symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting and estimates
@@ -40791,7 +41586,7 @@ if (anorm .eq. 0.0d0) rcond = 0.0d0
 return
 end subroutine dspco
 
-subroutine dspfa(ap,n,kpvt,info)
+pure subroutine dspfa(ap,n,kpvt,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
@@ -40799,11 +41594,36 @@ integer, intent(out) :: info
 double precision, intent(inout) :: ap(*)
 double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
 double precision :: absakk, alpha, colmax, rowmax
-integer :: idamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
-   & imk
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
 integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
    & km2, kstep
 logical :: swap
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
 !
 !     dspfa factors a double precision symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting.
@@ -41061,13 +41881,33 @@ go to 10
 return
 end subroutine dspfa
 
-subroutine dspsl(ap,n,kpvt,b)
+pure subroutine dspsl(ap,n,kpvt,b)
 implicit none
 integer, intent(in) :: n, kpvt(*)
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
-double precision :: ak, akm1, bk, bkm1, ddot, denom, temp
+double precision :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
 !
 !     DSISL solves the double precision symmetric system
 !     A * X = b
@@ -41516,14 +42356,25 @@ do 10 j = 1,m
 return
 end subroutine pchol
 
-subroutine sppfa(ap,n,info)
+pure subroutine sppfa(ap,n,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 real, intent(inout) :: ap(*)
-real :: sdot, t
+real :: t
 real :: s
 integer :: j, jj, jm1, k, kj, kk
+interface
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 !
 !     sppfa factors a real symmetric positive definite matrix
 !     stored in packed form.
@@ -41608,13 +42459,33 @@ info = 0
 return
 end subroutine sppfa
 
-subroutine sppsl(ap,n,b)
+pure subroutine sppsl(ap,n,b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
-real :: sdot, t
+real :: t
 integer :: k, kb, kk
+interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 !
 !     sppsl solves the real symmetric positive definite system
 !     A * X = b
@@ -41836,14 +42707,25 @@ do 10 j = 1,m
 return
 end subroutine dpchol
 
-subroutine dppfa(ap,n,info)
+pure subroutine dppfa(ap,n,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 double precision, intent(inout) :: ap(*)
-double precision :: ddot, t
+double precision :: t
 double precision :: s
 integer :: j, jj, jm1, k, kj, kk
+interface
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
 !
 !     dppfa factors a double precision symmetric positive definite
 !     matrix stored in packed form.
@@ -41928,13 +42810,33 @@ info = 0
 return
 end subroutine dppfa
 
-subroutine dppsl(ap,n,b)
+pure subroutine dppsl(ap,n,b)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
-double precision :: ddot, t
+double precision :: t
 integer :: k, kb, kk
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
 !
 !     dppsl solves the double precision symmetric positive definite
 !     SYSTEM A * X = b
@@ -42126,7 +43028,7 @@ end do
 return
 end subroutine dppdi
 
-subroutine toplx (a, b, x, n, g, h, ierr)
+pure subroutine toplx (a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -42216,7 +43118,7 @@ go to 10
 return
 end subroutine toplx
 
-subroutine dtoplx (a, b, x, n, g, h, ierr)
+pure subroutine dtoplx (a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -42832,13 +43734,33 @@ if (cabs1(a(n,n)) .eq. 0.0e0) info = n
 return
 end subroutine cgefa
 
-subroutine cgesl(a,lda,n,ipvt,b,job)
+pure subroutine cgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(*)
-complex :: cdotc, t
+complex :: t
 integer :: k, kb, l, nm1
+interface
+   pure subroutine caxpy(n,ca,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: ca
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(inout) :: cy(*)
+      integer, intent(in) :: incy
+   end subroutine caxpy
+   pure function cdotc(n,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(in) :: cy(*)
+      integer, intent(in) :: incy
+      complex :: cdotc
+   end function cdotc
+end interface
 !
 !     cgesl solves the complex system
 !     a * X = b  OR  ctrans(a) * X = b
@@ -43428,6 +44350,15 @@ real :: sdot, t
 real :: b, c, cs, el, emm1, f, g, snrm2, scale, shift, sl, sm, sn, &
    & smm1, t1, test, ztest
 logical :: wantu, wantv
+interface
+   pure elemental subroutine srotg(sa,sb,sc,ss)
+      implicit none
+      real, intent(inout) :: sa
+      real, intent(inout) :: sb
+      real, intent(inout) :: sc
+      real, intent(inout) :: ss
+   end subroutine srotg
+end interface
 !
 !
 !     ssvdc is a subroutine to reduce a real NXP matrix x by
@@ -43912,6 +44843,15 @@ double precision :: ddot, t
 double precision :: b, c, cs, el, emm1, f, g, dnrm2, scale, shift, &
    & sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
+interface
+   pure elemental subroutine drotg(da,db,dc,ds)
+      implicit none
+      double precision, intent(inout) :: da
+      double precision, intent(inout) :: db
+      double precision, intent(inout) :: dc
+      double precision, intent(inout) :: ds
+   end subroutine drotg
+end interface
 !
 !
 !     dsvdc is a subroutine to reduce a double precision NXP matrix x
@@ -44398,6 +45338,15 @@ real :: b, c, cs, el, emm1, f, g, scnrm2, scale, shift, sl, sm, &
 logical :: wantu, wantv
 complex :: csign, zdum, zdum1, zdum2
 real :: cabs1
+interface
+   pure elemental subroutine srotg(sa,sb,sc,ss)
+      implicit none
+      real, intent(inout) :: sa
+      real, intent(inout) :: sb
+      real, intent(inout) :: sc
+      real, intent(inout) :: ss
+   end subroutine srotg
+end interface
 !
 !
 !     csvdc is a subroutine to reduce a complex NXP matrix x by
@@ -45319,7 +46268,7 @@ return
 return
 end subroutine abslv1
 
-subroutine schur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
+pure subroutine schur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nh, nz, igh
@@ -45600,7 +46549,7 @@ return
 return
 end subroutine schur
 
-subroutine shrslv (a,b,c,m,n,na,nb,nc,ierr)
+pure subroutine shrslv (a,b,c,m,n,na,nb,nc,ierr)
 implicit none
 !     ------------------------------------------------------------------
 !     shrslv solves the matrix equation AX + XB = c where
@@ -45612,6 +46561,18 @@ real, intent(in) :: a(na,m), b(nb,n)
 real, intent(inout) :: c(nc,n)
 real :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
+interface
+   pure subroutine slv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: a(ka,n)
+      real, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine slv
+end interface
 !
 l = 1
 10 lm1 = l - 1
@@ -45924,7 +46885,7 @@ return
 return
 end subroutine dabsv1
 
-subroutine dschur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
+pure subroutine dschur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nh, nz, igh
@@ -46205,7 +47166,7 @@ return
 return
 end subroutine dschur
 
-subroutine dshslv (a,b,c,m,n,na,nb,nc,ierr)
+pure subroutine dshslv (a,b,c,m,n,na,nb,nc,ierr)
 implicit none
 !     ------------------------------------------------------------------
 !     dshslv solves the matrix equation AX + XB = c where
@@ -46217,6 +47178,18 @@ double precision, intent(in) :: a(na,m), b(nb,n)
 double precision, intent(inout) :: c(nc,n)
 double precision :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
+interface
+   pure subroutine dpslv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      double precision, intent(inout) :: a(ka,n)
+      double precision, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine dpslv
+end interface
 !
 l = 1
 10 lm1 = l - 1
@@ -46496,7 +47469,7 @@ return
 return
 end subroutine taslv1
 
-subroutine symslv (a,c,n,na,nc,ierr)
+pure subroutine symslv (a,c,n,na,nc,ierr)
 implicit none
 ! ----------------------------------------------------------------------
 !     symslv solves the matrix equation transpose(a)*X + X*a = c
@@ -46508,6 +47481,18 @@ real, intent(in) :: a(na,n)
 real, intent(inout) :: c(nc,n)
 real :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
+interface
+   pure subroutine slv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: a(ka,n)
+      real, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine slv
+end interface
 !
 l = 1
 10 dl = 1
@@ -46810,7 +47795,7 @@ return
 return
 end subroutine dtasv1
 
-subroutine dsymsv (a,c,n,na,nc,ierr)
+pure subroutine dsymsv (a,c,n,na,nc,ierr)
 implicit none
 ! ----------------------------------------------------------------------
 !     dsymsv solves the matrix equation transpose(a)*X + X*a = c
@@ -46822,6 +47807,18 @@ double precision, intent(in) :: a(na,n)
 double precision, intent(inout) :: c(nc,n)
 double precision :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
+interface
+   pure subroutine dpslv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      double precision, intent(inout) :: a(ka,n)
+      double precision, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine dpslv
+end interface
 !
 l = 1
 10 dl = 1
@@ -47307,7 +48304,7 @@ return
 return
 end subroutine squin2
 
-subroutine cqzhes(nm, n, a, b, mats, z, f, g, h)
+pure subroutine cqzhes(nm, n, a, b, mats, z, f, g, h)
 implicit none
 !
 !
@@ -47782,7 +48779,7 @@ go to 60
 return
 end subroutine cqzit
 
-subroutine trislv(nm, n, u, v, l, f, temp, ierr)
+pure subroutine trislv(nm, n, u, v, l, f, temp, ierr)
 implicit none
 !
 !
@@ -48723,7 +49720,7 @@ return
 return
 end subroutine cle
 
-subroutine cvbr (b,kb,m,n,ml,mu,a,ka)
+pure subroutine cvbr (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(inout) :: a(ka,n)
@@ -48793,7 +49790,7 @@ end do
 return
 end subroutine cvbr
 
-subroutine cvrb (a,ka,m,n,ml,mu,b,kb)
+pure subroutine cvrb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,n)
@@ -48863,7 +49860,7 @@ end do
 return
 end subroutine cvrb
 
-subroutine cvrb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
+pure subroutine cvrb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
@@ -48872,6 +49869,19 @@ integer, intent(in) :: n, nb
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
+interface
+   pure subroutine cvrb(a,ka,m,n,ml,mu,b,kb)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      real, intent(in) :: a(ka,n)
+      integer, intent(in) :: m
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      real, intent(inout) :: b(kb,*)
+   end subroutine cvrb
+end interface
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from standard
 !                        to banded form
@@ -48920,7 +49930,7 @@ return
 return
 end subroutine cvrb1
 
-subroutine cvbd (b,kb,m,n,ml,mu,a,ka)
+pure subroutine cvbd (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(inout) :: a(ka,n)
@@ -48990,7 +50000,7 @@ end do
 return
 end subroutine cvbd
 
-subroutine cvdb (a,ka,m,n,ml,mu,b,kb)
+pure subroutine cvdb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,n)
@@ -49060,7 +50070,7 @@ end do
 return
 end subroutine cvdb
 
-subroutine cvdb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
+pure subroutine cvdb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
@@ -49069,6 +50079,19 @@ integer, intent(in) :: n, nb
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
+interface
+   pure subroutine cvdb(a,ka,m,n,ml,mu,b,kb)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      double precision, intent(in) :: a(ka,n)
+      integer, intent(in) :: m
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      double precision, intent(inout) :: b(kb,*)
+   end subroutine cvdb
+end interface
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
 !                         to banded form
@@ -49117,7 +50140,7 @@ return
 return
 end subroutine cvdb1
 
-subroutine cvbc (b,kb,m,n,ml,mu,a,ka)
+pure subroutine cvbc (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(inout) :: a(ka,n)
@@ -49187,7 +50210,7 @@ end do
 return
 end subroutine cvbc
 
-subroutine cvcb (a,ka,m,n,ml,mu,b,kb)
+pure subroutine cvcb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,n)
@@ -49257,7 +50280,7 @@ end do
 return
 end subroutine cvcb
 
-subroutine cvcb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
+pure subroutine cvcb1 (a,ka,m,n,ml,mu,b,kb,nb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
@@ -49266,6 +50289,19 @@ integer, intent(in) :: n, nb
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
+interface
+   pure subroutine cvcb(a,ka,m,n,ml,mu,b,kb)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      complex, intent(in) :: a(ka,n)
+      integer, intent(in) :: m
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      complex, intent(inout) :: b(kb,*)
+   end subroutine cvcb
+end interface
 !-----------------------------------------------------------------------
 !           Conversion of complex matrices from standard
 !                          to banded form
@@ -49314,7 +50350,7 @@ return
 return
 end subroutine cvcb1
 
-subroutine mcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
+pure subroutine mcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
@@ -49379,7 +50415,7 @@ return
 return
 end subroutine mcvbs
 
-subroutine dmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
+pure subroutine dmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
@@ -49444,7 +50480,7 @@ return
 return
 end subroutine dmcvbs
 
-subroutine cmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
+pure subroutine cmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
@@ -49701,7 +50737,7 @@ return
 return
 end subroutine cmcvsb
 
-subroutine bcvrd (a, ka, m, n, ml, mu, b, kb)
+pure subroutine bcvrd (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
@@ -49721,7 +50757,7 @@ end do
 return
 end subroutine bcvrd
 
-subroutine bcvdr (a, ka, m, n, ml, mu, b, kb)
+pure subroutine bcvdr (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
@@ -49741,7 +50777,7 @@ end do
 return
 end subroutine bcvdr
 
-subroutine breal (a, ka, m, n, ml, mu, b, kb, l, nl, nu, ierr)
+pure subroutine breal (a, ka, m, n, ml, mu, b, kb, l, nl, nu, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
@@ -49798,7 +50834,7 @@ return
 return
 end subroutine breal
 
-subroutine bimag (a, ka, m, n, ml, mu, b, kb, l, nl, nu, ierr)
+pure subroutine bimag (a, ka, m, n, ml, mu, b, kb, l, nl, nu, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
@@ -49855,7 +50891,7 @@ return
 return
 end subroutine bimag
 
-subroutine bcvrc (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine bcvrc (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -49942,7 +50978,7 @@ return
 return
 end subroutine bcvrc
 
-subroutine bpose (a, ka, m, n, ml, mu, b, kb)
+pure subroutine bpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
@@ -49999,7 +51035,7 @@ do 61 j = jmin,l
 return
 end subroutine bpose
 
-subroutine dbpose (a, ka, m, n, ml, mu, b, kb)
+pure subroutine dbpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
@@ -50056,7 +51092,7 @@ do 61 j = jmin,l
 return
 end subroutine dbpose
 
-subroutine cbpose (a, ka, m, n, ml, mu, b, kb)
+pure subroutine cbpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,*)
@@ -50113,7 +51149,7 @@ do 61 j = jmin,l
 return
 end subroutine cbpose
 
-subroutine badd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine badd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50260,7 +51296,7 @@ return
 return
 end subroutine badd
 
-subroutine dbadd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine dbadd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50407,7 +51443,7 @@ return
 return
 end subroutine dbadd
 
-subroutine cbadd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine cbadd (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50554,7 +51590,7 @@ return
 return
 end subroutine cbadd
 
-subroutine bsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine bsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50701,7 +51737,7 @@ return
 return
 end subroutine bsubt
 
-subroutine dbsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine dbsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50848,7 +51884,7 @@ return
 return
 end subroutine dbsubt
 
-subroutine cbsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+pure subroutine cbsubt (m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
@@ -50995,7 +52031,7 @@ return
 return
 end subroutine cbsubt
 
-subroutine bprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine bprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -51150,7 +52186,7 @@ return
 return
 end subroutine bprod
 
-subroutine dbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine dbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -51305,7 +52341,7 @@ return
 return
 end subroutine dbprod
 
-subroutine cbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine cbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -51460,7 +52496,7 @@ return
 return
 end subroutine cbprod
 
-subroutine bvprd (m,n,a,ka,ml,mu,x,y)
+pure subroutine bvprd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
@@ -51513,7 +52549,7 @@ end do
 return
 end subroutine bvprd
 
-subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
@@ -51559,7 +52595,7 @@ end do
 return
 end subroutine bvprd1
 
-subroutine dbvpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbvpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
@@ -51613,7 +52649,7 @@ end do
 return
 end subroutine dbvpd
 
-subroutine dbvpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbvpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
@@ -51659,7 +52695,7 @@ end do
 return
 end subroutine dbvpd1
 
-subroutine cbvpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbvpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
@@ -51712,7 +52748,7 @@ end do
 return
 end subroutine cbvpd
 
-subroutine cbvpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbvpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
@@ -51758,7 +52794,7 @@ end do
 return
 end subroutine cbvpd1
 
-subroutine btprd (m,n,a,ka,ml,mu,x,y)
+pure subroutine btprd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
@@ -51810,7 +52846,7 @@ end do
 return
 end subroutine btprd
 
-subroutine btprd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine btprd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
@@ -51855,7 +52891,7 @@ end do
 return
 end subroutine btprd1
 
-subroutine dbtpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbtpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
@@ -51908,7 +52944,7 @@ end do
 return
 end subroutine dbtpd
 
-subroutine dbtpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbtpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
@@ -51953,7 +52989,7 @@ end do
 return
 end subroutine dbtpd1
 
-subroutine cbtpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbtpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
@@ -52005,7 +53041,7 @@ end do
 return
 end subroutine cbtpd
 
-subroutine cbtpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbtpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
@@ -52050,7 +53086,7 @@ end do
 return
 end subroutine cbtpd1
 
-real function bnrm (a, ka, m, n, ml, mu)
+pure real function bnrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*)
@@ -52073,12 +53109,20 @@ end do
 return
 end function bnrm
 
-real function b1nrm (a, ka, m, n, ml, mu)
+pure real function b1nrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
-real :: sasum
+interface
+   pure function sasum(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: sasum
+   end function sasum
+end interface
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a banded matrix a
 !-----------------------------------------------------------------------
@@ -52127,7 +53171,7 @@ b1nrm = amax1(b1nrm, sasum(num,a(i),incr))
 go to 50
 end function b1nrm
 
-double precision function dbnrm (a, ka, m, n, ml, mu)
+pure double precision function dbnrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
@@ -52150,12 +53194,20 @@ end do
 return
 end function dbnrm
 
-double precision function db1nrm (a, ka, m, n, ml, mu)
+pure double precision function db1nrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
-double precision :: dasum
+interface
+   pure function dasum(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dasum
+   end function dasum
+end interface
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a double precision
 !                            banded matrix a
@@ -52205,12 +53257,35 @@ db1nrm = dmax1(db1nrm, dasum(num,a(i),incr))
 go to 50
 end function db1nrm
 
-subroutine bslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine bslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 real, intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
+interface
+   pure subroutine snbfa(a,lda,n,ml,mu,ipvt,info)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      real, intent(inout) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(inout) :: ipvt(n)
+      integer, intent(out) :: info
+   end subroutine snbfa
+   pure subroutine snbsl(a,lda,n,ml,mu,ipvt,b,job)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      real, intent(in) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(in) :: ipvt(n)
+      real, intent(inout) :: b(n)
+      integer, intent(in) :: job
+   end subroutine snbsl
+end interface
 ! ----------------------------------------------------------------------
 !     bslv employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system AX = b. the argument m0 specifies
@@ -52287,12 +53362,35 @@ return
 return
 end subroutine bslv
 
-subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 real, intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
+interface
+   pure subroutine snbfa(a,lda,n,ml,mu,ipvt,info)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      real, intent(inout) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(inout) :: ipvt(n)
+      integer, intent(out) :: info
+   end subroutine snbfa
+   pure subroutine snbsl(a,lda,n,ml,mu,ipvt,b,job)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      real, intent(in) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(in) :: ipvt(n)
+      real, intent(inout) :: b(n)
+      integer, intent(in) :: job
+   end subroutine snbsl
+end interface
 ! ----------------------------------------------------------------------
 !     bslv1 employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system XA = b. the argument m0 specifies
@@ -52369,7 +53467,7 @@ return
 return
 end subroutine bslv1
 
-subroutine snbfa (a, lda, n, ml, mu, ipvt, info)
+pure subroutine snbfa (a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -52377,8 +53475,40 @@ real, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
-integer :: isamax
 real :: t
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+   pure subroutine sswap(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine sswap
+end interface
 ! ----------------------------------------------------------------------
 !
 !               snbfa factors a real band matrix BY elimination.
@@ -52544,15 +53674,35 @@ end do
 return
 end subroutine snbfa
 
-subroutine snbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine snbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
-real :: sdot, t
+real :: t
 integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
+interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 ! ----------------------------------------------------------------------
 !
 !     snbsl solves the real band system a*X = b or trans(a)*X = b
@@ -52682,12 +53832,35 @@ return
 return
 end subroutine snbsl
 
-subroutine dbslv (m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine dbslv (m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 double precision, intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
+interface
+   pure subroutine dbfa(a,lda,n,ml,mu,ipvt,info)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      double precision, intent(inout) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(inout) :: ipvt(n)
+      integer, intent(out) :: info
+   end subroutine dbfa
+   pure subroutine dbsl(a,lda,n,ml,mu,ipvt,b,job)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      double precision, intent(in) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(in) :: ipvt(n)
+      double precision, intent(inout) :: b(n)
+      integer, intent(in) :: job
+   end subroutine dbsl
+end interface
 ! ----------------------------------------------------------------------
 !     dbslv employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system AX = b. the argument m0 specifies
@@ -52764,12 +53937,35 @@ return
 return
 end subroutine dbslv
 
-subroutine dbslv1 (m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine dbslv1 (m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 double precision, intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
+interface
+   pure subroutine dbfa(a,lda,n,ml,mu,ipvt,info)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      double precision, intent(inout) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(inout) :: ipvt(n)
+      integer, intent(out) :: info
+   end subroutine dbfa
+   pure subroutine dbsl(a,lda,n,ml,mu,ipvt,b,job)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: lda
+      double precision, intent(in) :: a(lda,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      integer, intent(in) :: ipvt(n)
+      double precision, intent(inout) :: b(n)
+      integer, intent(in) :: job
+   end subroutine dbsl
+end interface
 ! ----------------------------------------------------------------------
 !     dbslv1 employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system XA = b. the argument m0 specifies
@@ -52846,7 +54042,7 @@ return
 return
 end subroutine dbslv1
 
-subroutine dbfa (a, lda, n, ml, mu, ipvt, info)
+pure subroutine dbfa (a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -52854,8 +54050,40 @@ double precision, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
-integer :: idamax
 double precision :: t
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
 ! ----------------------------------------------------------------------
 !
 !               dbfa factors a real band matrix BY elimination.
@@ -53021,15 +54249,35 @@ end do
 return
 end subroutine dbfa
 
-subroutine dbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine dbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
-double precision :: ddot, t
+double precision :: t
 integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
 ! ----------------------------------------------------------------------
 !
 !     dbsl solves the real band system a*X = b or trans(a)*X = b
@@ -53645,15 +54893,35 @@ end do
 return
 end subroutine cbfa
 
-subroutine cbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine cbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
-complex :: cdotu, t
+complex :: t
 integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
+interface
+   pure subroutine caxpy(n,ca,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: ca
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(inout) :: cy(*)
+      integer, intent(in) :: incy
+   end subroutine caxpy
+   pure function cdotu(n,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(in) :: cy(*)
+      integer, intent(in) :: incy
+      complex :: cdotu
+   end function cdotu
+end interface
 ! ----------------------------------------------------------------------
 !
 !     cbsl solves the complex band system a*X = b or trans(a)*X = b
@@ -53783,7 +55051,7 @@ return
 return
 end subroutine cbsl
 
-subroutine cvrs (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvrs (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -53818,7 +55086,7 @@ return
 return
 end subroutine cvrs
 
-subroutine cvds (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvds (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -55761,13 +57029,30 @@ end do
 return
 end subroutine blkord
 
-subroutine mc21a (n,icn,licn,ip,lenr,iperm,numnz,iw)
+pure subroutine mc21a (n,icn,licn,ip,lenr,iperm,numnz,iw)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: iperm(n), iw(n,4)
+interface
+   pure subroutine mc21b(n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv, &
+      & out)
+      implicit none
+      integer, intent(in) :: licn
+      integer, intent(in) :: n
+      integer, intent(in) :: icn(licn)
+      integer, intent(in) :: ip(n)
+      integer, intent(in) :: lenr(n)
+      integer, intent(inout) :: iperm(n)
+      integer, intent(inout) :: numnz
+      integer, intent(inout) :: pr(n)
+      integer, intent(inout) :: arp(n)
+      integer, intent(inout) :: cv(n)
+      integer, intent(inout) :: out(n)
+   end subroutine mc21b
+end interface
 !-----------------------------------------------------------------------
 ! Description of parameters.
 ! INPUT VARIABLES   n,icn,licn,ip,lenr
@@ -55796,7 +57081,7 @@ call mc21b (n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
 return
 end subroutine mc21a
 
-subroutine mc21b (n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
+pure subroutine mc21b (n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
@@ -55926,13 +57211,30 @@ do 170 i = 1,n
 500 return
 end subroutine mc21b
 
-subroutine mc13d(n, icn, licn, ip, lenr, ior, ib, num, iw)
+pure subroutine mc13d(n, icn, licn, ip, lenr, ior, ib, num, iw)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: num
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: ior(n), ib(n), iw(n,3)
+interface
+   pure subroutine mc13e(n,icn,licn,ip,lenr,arp,ib,num,lowl,numb, &
+      & prev)
+      implicit none
+      integer, intent(in) :: licn
+      integer, intent(in) :: n
+      integer, intent(in) :: icn(licn)
+      integer, intent(in) :: ip(n)
+      integer, intent(in) :: lenr(n)
+      integer, intent(inout) :: arp(n)
+      integer, intent(inout) :: ib(n)
+      integer, intent(out) :: num
+      integer, intent(inout) :: lowl(n)
+      integer, intent(inout) :: numb(n)
+      integer, intent(inout) :: prev(n)
+   end subroutine mc13e
+end interface
 !
 ! Description of parameters.
 ! Input variables  .... n,icn,licn,ip,lenr.
@@ -55960,7 +57262,7 @@ call mc13e(n, icn, licn, ip, lenr, ior, ib, num, iw(1,1), &
 return
 end subroutine mc13d
 
-subroutine mc13e(n, icn, licn, ip, lenr, arp, ib, num, lowl, &
+pure subroutine mc13e(n, icn, licn, ip, lenr, arp, ib, num, lowl, &
    & numb, prev)
 implicit none
 integer, intent(in) :: licn, n
@@ -56604,7 +57906,7 @@ ierr = max0(1,ierr)
 return
 end subroutine rslv
 
-subroutine rslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine rslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -56757,7 +58059,7 @@ ierr = max0(1,ierr)
 return
 end subroutine tslv
 
-subroutine tslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine tslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -57545,7 +58847,7 @@ ierr = max0(1,ierr)
 return
 end subroutine dslv
 
-subroutine dslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine dslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -57699,7 +59001,7 @@ ierr = max0(1,ierr)
 return
 end subroutine dtslv
 
-subroutine dtslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine dtslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -58959,7 +60261,7 @@ ierr = max0(1,ierr)
 return
 end subroutine cslv
 
-subroutine cslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine cslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -59113,7 +60415,7 @@ ierr = max0(1,ierr)
 return
 end subroutine ctslv
 
-subroutine ctslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine ctslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -59675,7 +60977,7 @@ igh = l
 return
 end subroutine balanc
 
-subroutine balinv (nz,n,z,low,igh,scale)
+pure subroutine balinv (nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
@@ -59752,7 +61054,7 @@ end do
 return
 end subroutine balinv
 
-subroutine elmhes(nm,n,low,igh,a,int)
+pure subroutine elmhes(nm,n,low,igh,a,int)
 implicit none
 !
 integer, intent(in) :: n
@@ -59855,7 +61157,7 @@ do 180 m = kp1, la
 200 return
 end subroutine elmhes
 
-subroutine elmhs0(nm,n,low,igh,a,int)
+pure subroutine elmhs0(nm,n,low,igh,a,int)
 implicit none
 !
 integer, intent(in) :: n
@@ -59958,7 +61260,7 @@ do 180 m = kp1, la
 200 return
 end subroutine elmhs0
 
-subroutine orthes(nm,n,low,igh,a,ort)
+pure subroutine orthes(nm,n,low,igh,a,ort)
 implicit none
 !
 integer, intent(in) :: n
@@ -60302,7 +61604,7 @@ go to 60
 1001 return
 end subroutine hqr
 
-subroutine balbak(nm,n,low,igh,scale,m,z)
+pure subroutine balbak(nm,n,low,igh,scale,m,z)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -60379,7 +61681,7 @@ end do
 200 return
 end subroutine balbak
 
-subroutine eltran(nm,n,low,igh,a,int,z)
+pure subroutine eltran(nm,n,low,igh,a,int,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -60460,7 +61762,7 @@ do 140 mm = 1, kl
 200 return
 end subroutine eltran
 
-subroutine eltrn0(nm,n,low,igh,a,int,z)
+pure subroutine eltrn0(nm,n,low,igh,a,int,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -60541,7 +61843,7 @@ do 140 mm = 1, kl
 200 return
 end subroutine eltrn0
 
-subroutine ortran(nm,n,low,igh,a,ort,z)
+pure subroutine ortran(nm,n,low,igh,a,ort,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -60630,7 +61932,7 @@ do 140 mm = 1, kl
 200 return
 end subroutine ortran
 
-subroutine ortrn1(n,low,igh,a,na,z,nz,ort)
+pure subroutine ortrn1(n,low,igh,a,na,z,nz,ort)
 implicit none
 !
 integer, intent(in) :: n
@@ -61377,7 +62679,7 @@ igh = l
 return
 end subroutine dbal
 
-subroutine dbalnv (nz,n,z,low,igh,scale)
+pure subroutine dbalnv (nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
@@ -61454,7 +62756,7 @@ end do
 return
 end subroutine dbalnv
 
-subroutine dorth(nm,n,low,igh,a,ort)
+pure subroutine dorth(nm,n,low,igh,a,ort)
 implicit none
 !
 integer, intent(in) :: n
@@ -61800,7 +63102,7 @@ go to 60
 1001 return
 end subroutine dhqr
 
-subroutine dbabk(nm,n,low,igh,scale,m,z)
+pure subroutine dbabk(nm,n,low,igh,scale,m,z)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -61877,7 +63179,7 @@ end do
 200 return
 end subroutine dbabk
 
-subroutine dortrn(nm,n,low,igh,a,ort,z)
+pure subroutine dortrn(nm,n,low,igh,a,ort,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -61966,7 +63268,7 @@ do 140 mm = 1, kl
 200 return
 end subroutine dortrn
 
-subroutine drtrn1(n,low,igh,a,na,z,nz,ort)
+pure subroutine drtrn1(n,low,igh,a,na,z,nz,ort)
 implicit none
 !
 integer, intent(in) :: n
@@ -62556,7 +63858,7 @@ call imtql2 (ka, n, w, t, z, ierr)
 return
 end subroutine seigv1
 
-subroutine tred1(nm,n,a,d,e,e2)
+pure subroutine tred1(nm,n,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -62676,7 +63978,7 @@ return
 !     ********** Last card of tred1 **********
 end subroutine tred1
 
-subroutine tred3(n,nv,a,d,e,e2)
+pure subroutine tred3(n,nv,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -63066,7 +64368,7 @@ go to 1001
 !     ********** Last card of imtql1 **********
 end subroutine imtql1
 
-subroutine tred2(nm,n,a,d,e,z)
+pure subroutine tred2(nm,n,a,d,e,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -63600,7 +64902,7 @@ call dtql2 (ka, n, w, t, z, ierr)
 return
 end subroutine dseigv
 
-subroutine dtred1 (nm,n,a,d,e,e2)
+pure subroutine dtred1 (nm,n,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -63720,7 +65022,7 @@ return
 !     ********** Last card of dtred1 **********
 end subroutine dtred1
 
-subroutine dtred3 (n,nv,a,d,e,e2)
+pure subroutine dtred3 (n,nv,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -63976,7 +65278,7 @@ go to 1001
 !     ********** Last card of dtql **********
 end subroutine dtql
 
-subroutine dtred2 (nm,n,a,d,e,z)
+pure subroutine dtred2 (nm,n,a,d,e,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -64913,7 +66215,7 @@ go to 220
 !     ********** Last card of comqr **********
 end subroutine comqr
 
-subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
+pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -65659,7 +66961,14 @@ integer :: i, j, m
 integer :: ii, jj, la, mp
 integer :: kp1
 double precision :: f, g, h, fi, fr, scale
-double precision :: dcpabs
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a complex analogue of
@@ -65800,7 +67109,15 @@ integer :: lp1, enm1
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
    & norm, machep
 double precision :: r2, w(2), z(2)
-double precision :: dpmpar, dcpabs
+double precision :: dpmpar
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a unitary analogue of the
@@ -66021,7 +67338,7 @@ go to 220
 1001 return
 end subroutine dcomqr
 
-subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
+pure subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -66125,7 +67442,15 @@ integer :: lp1, enm1, iend
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
    & norm, machep
 double precision :: r2, w(2), z(2)
-double precision :: dpmpar, dcpabs
+double precision :: dpmpar
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a unitary analogue of the
@@ -66514,7 +67839,7 @@ go to 1001
 !     ********** Last card of dcmqr2 **********
 end subroutine dcmqr2
 
-subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
+pure subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
    & error, wk, iwk)
 implicit none
 integer, intent(inout) :: iter, iwk(*)
@@ -66525,6 +67850,30 @@ real, intent(inout) :: error, q(kq,*), res(*)
 real, intent(in) :: toler
 real, intent(inout) :: wk(*), x(*)
 integer :: klm
+interface
+   pure subroutine xl1(k,l,m,n,klmd,klm2d,nklmd,n2d,q,kode,toler, &
+      & iter,x,res,error,cu,iu,s)
+      implicit none
+      integer, intent(in) :: n2d
+      integer, intent(in) :: nklmd
+      integer, intent(in) :: klm2d
+      integer, intent(in) :: klmd
+      integer, intent(in) :: k
+      integer, intent(in) :: l
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: q(klm2d,n2d)
+      integer, intent(inout) :: kode
+      real, intent(in) :: toler
+      integer, intent(inout) :: iter
+      real, intent(inout) :: x(n2d)
+      real, intent(inout) :: res(klmd)
+      real, intent(inout) :: error
+      real, intent(inout) :: cu(2,nklmd)
+      integer, intent(inout) :: iu(2,nklmd)
+      integer, intent(inout) :: s(klmd)
+   end subroutine xl1
+end interface
 !     -------------------
 klm = k + l + m
 call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
@@ -66532,7 +67881,7 @@ call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
 return
 end subroutine cl1
 
-subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
+pure subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
    & q, kode, toler, iter, x, res, error, cu, iu, s)
 implicit none
 !
@@ -67044,7 +68393,7 @@ return
 return
 end subroutine llsqmp
 
-subroutine ortho(m, n, qr, ms, s, ip, exit)
+pure subroutine ortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(inout) :: ip
 integer, intent(in) :: m, ms, n
@@ -67367,7 +68716,7 @@ exit = .false.
 return
 end subroutine orimp
 
-subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+pure subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n, nb
@@ -67376,6 +68725,28 @@ integer, intent(inout) :: iwk(n)
 integer :: i, j, np1
 double precision :: rnorm
 logical :: exit
+interface
+   pure subroutine dorsol(m,n,qr,ms,s,ip,x)
+      implicit none
+      integer, intent(in) :: ms
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      double precision, intent(in) :: qr(ms,n)
+      double precision, intent(in) :: s(n)
+      integer, intent(in) :: ip(n)
+      double precision, intent(inout) :: x(m)
+   end subroutine dorsol
+   pure subroutine dortho(m,n,qr,ms,s,ip,exit)
+      implicit none
+      integer, intent(in) :: ms
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      double precision, intent(inout) :: qr(ms,n)
+      double precision, intent(inout) :: s(n)
+      integer, intent(inout) :: ip(n)
+      logical, intent(out) :: exit
+   end subroutine dortho
+end interface
 !     --------------
 ierr = 0
 if (1 .lt. n .and. n .le. m) go to 10
@@ -67399,7 +68770,7 @@ return
 return
 end subroutine dllsq
 
-subroutine dortho(m, n, qr, ms, s, ip, exit)
+pure subroutine dortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(in) :: m, ms, n
 double precision, intent(inout) :: qr(ms,n), s(n)
@@ -67507,7 +68878,7 @@ return
 return
 end subroutine dortho
 
-subroutine dorsol(m, n, qr, ms, s, ip, x)
+pure subroutine dorsol(m, n, qr, ms, s, ip, x)
 implicit none
 integer, intent(in) :: m, ms, n
 double precision, intent(in) :: qr(ms,n), s(n)
@@ -70326,7 +71697,7 @@ return
 return
 end subroutine hfti2
 
-subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 real, intent(inout) :: c(*), u(iue,m), up
@@ -70942,7 +72313,7 @@ return
 return
 end subroutine dhfti2
 
-subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 double precision, intent(inout) :: u(iue,m), up, c(*)
@@ -73887,7 +75258,7 @@ end subroutine l2slv
 ! On exit, the vector ipivot records the order in which the columns
 ! of QR were selected by the pivoting scheme in the course of the
 ! orthogonal decomposition.
-subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
+pure subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
    & mmpnn)
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n
@@ -74088,7 +75459,7 @@ end subroutine decom2
 ! *                                                                   *
 ! *********************************************************************
 !
-subroutine solve2(m, n, m1, a, b, w, n1, ipivot, qr, d, &
+pure subroutine solve2(m, n, m1, a, b, w, n1, ipivot, qr, d, &
    & eta, fail, numit, digitx, &
    & x, res, wres, y1, y2, y, f, g, mm, mmpnn)
 implicit none
@@ -74110,6 +75481,19 @@ real :: c
 real :: dxnorm
 real :: eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
 double precision :: sum
+interface
+   pure subroutine solve3(f,m1,m,n1,qr,d,y,mmpnn)
+      implicit none
+      integer, intent(in) :: mmpnn
+      integer, intent(in) :: n1
+      real, intent(inout) :: f(*)
+      integer, intent(in) :: m1
+      integer, intent(in) :: m
+      real, intent(in) :: qr(mmpnn,n1)
+      real, intent(in) :: d(*)
+      real, intent(inout) :: y(*)
+   end subroutine solve3
+end interface
 numit = 0
 kz = 0
 eta2 = eta*eta
@@ -74251,7 +75635,7 @@ return
 return
 end subroutine solve2
 
-subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
+pure subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n1
 real, intent(in) :: d(*)
@@ -74323,7 +75707,7 @@ end do
 return
 end subroutine solve3
 
-subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
+pure subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
 implicit none
 integer, intent(in) :: m1, n, n1, nn
 integer, intent(in) :: ipivot(n)
@@ -76158,7 +77542,7 @@ end do
 return
 end subroutine optdrv
 
-subroutine opchk1 (n,x,typsiz,fscale,gradtl,itnlim,rerr, &
+pure subroutine opchk1 (n,x,typsiz,fscale,gradtl,itnlim,rerr, &
    & stepmx,ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -76255,7 +77639,7 @@ go to 895
 895 return
 end subroutine opchk1
 
-subroutine opstp(n,xpls,fpls,gpls,x,itncnt,icscmx,ierr, &
+pure subroutine opstp(n,xpls,fpls,gpls,x,itncnt,icscmx,ierr, &
    & gradtl,steptl,typsiz,fscale,itnlim,iretcd,mxtake, &
    & fstack,ns,sptr)
 implicit none
@@ -76447,7 +77831,7 @@ ierr = -10
 return
 end subroutine scalex
 
-subroutine lltslv (nr,n,a,x,b)
+pure subroutine lltslv (nr,n,a,x,b)
 implicit none
 integer, intent(in) :: n, nr
 real, intent(in) :: a(nr,n)
@@ -76882,13 +78266,25 @@ end do
 return
 end subroutine secfac
 
-subroutine qrupdt (nr,n,a,u,v)
+pure subroutine qrupdt (nr,n,a,u,v)
 implicit none
 integer, intent(in) :: n, nr
 real, intent(inout) :: a(nr,n), u(n)
 real, intent(in) :: v(n)
 integer :: i, ii, j, k, km1
 real :: r
+interface
+   pure subroutine jrot(nr,n,h,i,a,b,r)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nr
+      real, intent(inout) :: h(nr,n)
+      integer, intent(in) :: i
+      real, intent(in) :: a
+      real, intent(in) :: b
+      real, intent(inout) :: r
+   end subroutine jrot
+end interface
 !-----------------------------------------------------------------------
 !     Find an orthogonal matrix (Q*) and an upper triangular
 !          MATRIX (r*) SUCH THAT (Q*)(r*) = r + u(v+)
@@ -76940,7 +78336,7 @@ end do
 return
 end subroutine qrupdt
 
-subroutine jrot (nr,n,h,i,a,b,r)
+pure subroutine jrot (nr,n,h,i,a,b,r)
 implicit none
 integer, intent(in) :: i, n, nr
 real, intent(in) :: a, b
@@ -80919,7 +82315,7 @@ z = dsum
 go to 220
 end subroutine ssplx1
 
-subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
+pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
 implicit none
 integer, intent(in) :: iend
 integer, intent(inout) :: ierr, index(*), jp
@@ -81627,7 +83023,7 @@ return
 return
 end subroutine mkp
 
-subroutine mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+pure subroutine mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
    & bb, bl, x, xl, b, ubb, lx, lxi, &
    & f, pbl, q, v, bs, ps, ws, xs, iwk)
 implicit none
@@ -81641,6 +83037,93 @@ integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
 integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, &
    & kub, lb, li, lj, lr, lri, lub, lubi, m1, n1
 integer :: s, u, ub, vb
+interface
+   pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+      & lx,lxi,lr,lri,lubi)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: i
+      integer, intent(in) :: ii
+      integer, intent(inout) :: ub
+      integer, intent(out) :: iflag
+      integer, intent(in) :: vb
+      integer, intent(in) :: lub
+      integer, intent(in) :: lj
+      integer, intent(in) :: li
+      integer, intent(in) :: f(m)
+      integer, intent(in) :: bb(m,n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: lx(n)
+      integer, intent(in) :: lxi(n)
+      integer, intent(in) :: lr
+      integer, intent(in) :: lri
+      integer, intent(in) :: lubi
+   end subroutine parc
+   pure subroutine pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl,np1,n5,bs &
+      & ,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: i
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: bb(m,n)
+      integer, intent(inout) :: kub
+      integer, intent(inout) :: bl(m,np1)
+      integer, intent(inout) :: lb
+      integer, intent(inout) :: pbl(m)
+      integer, intent(inout) :: v(m)
+      integer, intent(inout) :: xl(m,n)
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine pi1
+   pure subroutine sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr,bs,ps,ws &
+      & ,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: i
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: kub
+      integer, intent(inout) :: ub
+      integer, intent(inout) :: lx(n)
+      integer, intent(inout) :: lr
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sigma1
+   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: ns
+      integer, intent(inout) :: qs
+      integer, intent(in) :: kub
+      integer, intent(inout) :: vs
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sknp
+end interface
 !
 ! Meaning of the main internal variables and arrays ...
 !
@@ -81822,7 +83305,7 @@ bck = 0
 return
 end subroutine mkp1
 
-subroutine sigma1 (n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
+pure subroutine sigma1 (n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: i, kub
@@ -81833,6 +83316,22 @@ integer, intent(inout) :: ub, iwk(n5)
 integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
 integer :: j, jj, ns
 integer :: qs, sb
+interface
+   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: ns
+      integer, intent(inout) :: qs
+      integer, intent(in) :: kub
+      integer, intent(inout) :: vs
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sknp
+end interface
 !
 ! Subroutine to compute an upper bound  ub  on the best
 ! final solution which can be obtained from the current
@@ -81872,7 +83371,7 @@ end do
 return
 end subroutine sigma1
 
-subroutine pi1 (n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
+pure subroutine pi1 (n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
    & np1,n5,bs,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: i
@@ -81885,6 +83384,22 @@ integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
 integer :: ii, ikub, j, jb, jbs, jj, ns
 integer :: pb, qs, sb, u
+interface
+   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: ns
+      integer, intent(inout) :: qs
+      integer, intent(in) :: kub
+      integer, intent(inout) :: vs
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sknp
+end interface
 !
 ! Subroutine to compute a feasible solution to the current
 ! problem. The solution is stored in array  xl , the
@@ -81972,7 +83487,7 @@ do 110 j = 1,u
 go to 40
 end subroutine pi1
 
-subroutine parc (i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+pure subroutine parc (i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
    & lx,lxi,lr,lri,lubi)
 implicit none
 integer, intent(in) :: i
@@ -82026,12 +83541,32 @@ iflag = 1
 return
 end subroutine parc
 
-subroutine sknp (ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+pure subroutine sknp (ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
 integer, intent(inout) :: qs, vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
 integer :: i1, i2, i3, i4, i5
+interface
+   pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min,pbar,wbar &
+      & ,zbar)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: ns
+      integer, intent(inout) :: qs
+      integer, intent(in) :: kub
+      integer, intent(out) :: vs
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: d(n)
+      integer, intent(inout) :: min(n)
+      integer, intent(inout) :: pbar(n)
+      integer, intent(inout) :: wbar(n)
+      integer, intent(inout) :: zbar(n)
+   end subroutine sknp1
+end interface
 !
 ! Subroutine to solve the 0-1 single knapsack problem
 !
@@ -82054,7 +83589,7 @@ call sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,iwk(i1),iwk(i2), &
 return
 end subroutine sknp
 
-subroutine sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
+pure subroutine sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
    & pbar,wbar,zbar)
 implicit none
 integer, intent(in) :: kub, n, np1, ns
@@ -82830,6 +84365,15 @@ real, intent(in) :: y
 external fun
 real :: a, b, s, t, u, v
 real :: acondg
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        acondg is the function integrated along the line x = c
 !        in acond. y is a dummy variable.
@@ -82923,6 +84467,15 @@ real :: x, y
 external fun
 real :: a, b, s, t, u, v
 real :: xcondx
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !
 !     Real part of the integrand in xcond
 !
@@ -82942,6 +84495,15 @@ real :: x, y
 external fun
 real :: a, b, s, t, u, v
 real :: xcondy
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !
 !     Imaginary part of integrand in xcond
 !
@@ -88548,7 +90110,15 @@ double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
 double precision :: c(4), fc(3), sc(4)
 double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), &
    & rt2(51,3), rv1(3), rv2(3)
-double precision :: dcpabs, dpmpar
+double precision :: dpmpar
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !
 !  Evaluation of complex power series coefficients or derivatives.
 !
@@ -89062,7 +90632,7 @@ t(2) = k
 return
 end subroutine htrp
 
-subroutine pcoeff(alpha,n,x,a,c,t)
+pure subroutine pcoeff(alpha,n,x,a,c,t)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha
@@ -89092,7 +90662,7 @@ do 30 i = 1,n
 return
 end subroutine pcoeff
 
-subroutine pfit(nd,np,x,y,a,rnorm,phi,phix,ierr)
+pure subroutine pfit(nd,np,x,y,a,rnorm,phi,phix,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: nd, np
@@ -89236,7 +90806,7 @@ do 102 m = 2,nd
 return
 end subroutine pfit
 
-subroutine wpfit(nd,np,x,y,w,a,rnorm,phi,phix,ierr)
+pure subroutine wpfit(nd,np,x,y,w,a,rnorm,phi,phix,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: nd, np
@@ -89396,7 +90966,7 @@ return
 return
 end subroutine wpfit
 
-subroutine cbspl (x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
+pure subroutine cbspl (x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
 implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr
@@ -89531,7 +91101,7 @@ return
 return
 end subroutine cbspl
 
-subroutine splift (x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
+pure subroutine splift (x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isx, n
@@ -89694,7 +91264,7 @@ return
 return
 end subroutine splift
 
-subroutine spfit (x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
+pure subroutine spfit (x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
@@ -89703,6 +91273,33 @@ real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer :: j, k, la, lm1, lq, lw, n
 real :: temp(20)
+interface
+   pure subroutine bslsq(tau,gtau,wgt,ntau,t,n,k,a,wk,q,ierr)
+      implicit none
+      integer, intent(in) :: k
+      integer, intent(in) :: n
+      integer, intent(in) :: ntau
+      real, intent(in) :: tau(ntau)
+      real, intent(in) :: gtau(ntau)
+      real, intent(in) :: wgt(ntau)
+      real, intent(in) :: t(*)
+      real, intent(inout) :: a(n)
+      real, intent(inout) :: wk(n)
+      real, intent(inout) :: q(k,n)
+      integer, intent(inout) :: ierr
+   end subroutine bslsq
+   pure subroutine bspp(t,a,n,k,break,c,l,wk)
+      implicit none
+      integer, intent(in) :: k
+      integer, intent(in) :: n
+      real, intent(in) :: t(*)
+      real, intent(in) :: a(n)
+      real, intent(inout) :: break(*)
+      real, intent(inout) :: c(k,*)
+      integer, intent(out) :: l
+      real, intent(inout) :: wk(k,*)
+   end subroutine bspp
+end interface
 !-----------------------------------------------------------------------
 !            Weighted least squares cubic spline fitting
 !-----------------------------------------------------------------------
@@ -89846,7 +91443,7 @@ iwk(1) = k
 return
 end subroutine cspfit
 
-subroutine scomp (x,y,a,b,c,n,xi,yi,ni,ierr)
+pure subroutine scomp (x,y,a,b,c,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -89948,7 +91545,7 @@ ir = min0(i + 1,n)
 go to 10
 end subroutine scomp
 
-subroutine scomp1 (x,y,yp,n,xi,yi,ni,ierr)
+pure subroutine scomp1 (x,y,yp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -90052,7 +91649,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine scomp1
 
-subroutine scomp2 (x,y,ypp,n,xi,yi,ni,ierr)
+pure subroutine scomp2 (x,y,ypp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -90159,7 +91756,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine scomp2
 
-subroutine seval (x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval (x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -90268,7 +91865,7 @@ ir = min0(i + 1,n)
 go to 10
 end subroutine seval
 
-subroutine seval1 (x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval1 (x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -90378,7 +91975,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine seval1
 
-subroutine seval2 (x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval2 (x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -90490,14 +92087,22 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine seval2
 
-real function csint (x, y, a, b, c, n, alpha, beta)
+pure real function csint (x, y, a, b, c, n, alpha, beta)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
 integer :: i, k, kp1, l, lm1
 real :: a0, b0, d, d2, h, h2, r, s, sum
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !                    Integrating a cubic spline
@@ -90591,14 +92196,22 @@ csint = (beta - alpha)*sum
 return
 end function csint
 
-real function csint1 (x, y, yp, n, a, b)
+pure real function csint1 (x, y, yp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), yp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !                    Integrating a cubic spline
@@ -90706,14 +92319,22 @@ csint1 = (b - a)*sum
 return
 end function csint1
 
-real function csint2 (x, y, ypp, n, a, b)
+pure real function csint2 (x, y, ypp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), ypp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !                    Integrating a cubic spline
@@ -90801,7 +92422,7 @@ csint2 = (b - a)*(0.5*r - h*h*s/24.0)
 return
 end function csint2
 
-subroutine pdspl (x, y, a, b, c, n, t, ierr)
+pure subroutine pdspl (x, y, a, b, c, n, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -91028,7 +92649,7 @@ return
 return
 end subroutine pdfit
 
-subroutine pscmp (x, y, a, b, c, n, xi, yi, m, ierr)
+pure subroutine pscmp (x, y, a, b, c, n, xi, yi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -91108,7 +92729,7 @@ yi(k) = y(1)
 go to 100
 end subroutine pscmp
 
-subroutine psevl (x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
+pure subroutine psevl (x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -91397,7 +93018,7 @@ return
 return
 end subroutine cslop1
 
-subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
+pure subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
 implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
@@ -91479,7 +93100,7 @@ ir = min0(i + 1,m)
 go to 10
 end subroutine lopcmp
 
-subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
+pure subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
 implicit none
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: ti
@@ -93110,7 +94731,7 @@ sdiag = denom*sinhm
 return
 end subroutine terms
 
-integer function intrvl (x, t, m)
+pure integer function intrvl (x, t, m)
 implicit none
 integer, intent(in) :: m
 real, intent(in) :: x, t(m)
@@ -93178,7 +94799,7 @@ return
 return
 end function intrvl
 
-subroutine bval (t, bcoef, n, k, x, jderiv, w, wk)
+pure subroutine bval (t, bcoef, n, k, x, jderiv, w, wk)
 implicit none
 integer, intent(in) :: jderiv, k, n
 real, intent(inout) :: w
@@ -93188,7 +94809,15 @@ real, intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
    & l, nmi, npk
 real :: dl, dr, fkmj
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !     bval calculates the value at x of the jderiv-TH derivative
@@ -93354,7 +94983,7 @@ end do
 return
 end subroutine bval
 
-subroutine bvali (t, bcoeff, n, k, x, w, wk)
+pure subroutine bvali (t, bcoeff, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
 real, intent(out) :: w
@@ -93363,6 +94992,19 @@ real, intent(in) :: t(*), bcoeff(n)
 real, intent(inout) :: wk(*)
 integer :: i, ipk, kp1, np1, npk
 real :: sum, tlast, tnew, xval
+interface
+   pure subroutine bvali0(t,tnew,bcoef,n,k,x,w,wk)
+      implicit none
+      integer, intent(in) :: k
+      integer, intent(in) :: n
+      real, intent(in) :: t(*)
+      real, intent(in) :: tnew
+      real, intent(in) :: bcoef(n)
+      real, intent(in) :: x
+      real, intent(out) :: w
+      real, intent(inout) :: wk(k,3)
+   end subroutine bvali0
+end interface
 !-----------------------------------------------------------------------
 !           Integral of a piecewise polynomial from t(1) to x
 !                   using its B-spline representation
@@ -93400,7 +95042,7 @@ call bvali0 (t, tnew, wk(1), n, kp1, xval, w, wk(np1))
 return
 end subroutine bvali
 
-subroutine bvali0 (t, tnew, bcoef, n, k, x, w, wk)
+pure subroutine bvali0 (t, tnew, bcoef, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
 real, intent(in) :: tnew
@@ -93410,7 +95052,15 @@ real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
 real :: dl, dr, tipj
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !     bvali0 calculates the value at x of an antiderivative
@@ -93503,7 +95153,7 @@ w = wk(1,1)
 return
 end subroutine bvali0
 
-subroutine bspp (t, a, n, k, break, c, l, wk)
+pure subroutine bspp (t, a, n, k, break, c, l, wk)
 implicit none
 integer, intent(in) :: k
 integer, intent(out) :: l
@@ -93699,7 +95349,7 @@ ir = min0(i + 1, n)
 go to 10
 end subroutine ppval
 
-subroutine bspvb (t, k, jhigh, j, x, left, blist)
+pure subroutine bspvb (t, k, jhigh, j, x, left, blist)
 implicit none
 integer, intent(inout) :: j
 integer, intent(in) :: jhigh, k, left
@@ -93763,7 +95413,7 @@ if (j .lt. jhigh) go to 10
 return
 end subroutine bspvb
 
-subroutine bspvd (t, k, x, left, dbiatx, idim, nderiv, a)
+pure subroutine bspvd (t, k, x, left, dbiatx, idim, nderiv, a)
 implicit none
 integer, intent(in) :: idim, k, left, nderiv
 real, intent(in) :: x
@@ -93772,6 +95422,18 @@ real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
 integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
    & ldummy, m, mhigh
 real :: factor, fkp1mm, sum
+interface
+   pure subroutine bspvb(t,k,jhigh,j,x,left,blist)
+      implicit none
+      integer, intent(in) :: k
+      real, intent(in) :: t(*)
+      integer, intent(in) :: jhigh
+      integer, intent(inout) :: j
+      real, intent(in) :: x
+      integer, intent(in) :: left
+      real, intent(inout) :: blist(k)
+   end subroutine bspvb
+end interface
 !-----------------------------------------------------------------------
 !
 ! Calculates value and deriv.S of all B-splines which do not vanish at x
@@ -93903,7 +95565,7 @@ end do
 return
 end subroutine bspvd
 
-subroutine bstrp (tau, gtau, t, n, k, bcoef, q, iflag)
+pure subroutine bstrp (tau, gtau, t, n, k, bcoef, q, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: k, n
@@ -93913,6 +95575,36 @@ real, intent(inout) :: q(*)
 real, intent(in) :: t(*), tau(n)
 integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
 real :: taui
+interface
+   pure subroutine banfac(w,nroww,nrow,nbandl,nbandu,iflag)
+      implicit none
+      integer, intent(in) :: nrow
+      integer, intent(in) :: nroww
+      real, intent(inout) :: w(nroww,nrow)
+      integer, intent(in) :: nbandl
+      integer, intent(in) :: nbandu
+      integer, intent(out) :: iflag
+   end subroutine banfac
+   pure subroutine banslv(w,nroww,nrow,nbandl,nbandu,b)
+      implicit none
+      integer, intent(in) :: nrow
+      integer, intent(in) :: nroww
+      real, intent(in) :: w(nroww,nrow)
+      integer, intent(in) :: nbandl
+      integer, intent(in) :: nbandu
+      real, intent(inout) :: b(nrow)
+   end subroutine banslv
+   pure subroutine bspvb(t,k,jhigh,j,x,left,blist)
+      implicit none
+      integer, intent(in) :: k
+      real, intent(in) :: t(*)
+      integer, intent(in) :: jhigh
+      integer, intent(inout) :: j
+      real, intent(in) :: x
+      integer, intent(in) :: left
+      real, intent(inout) :: blist(k)
+   end subroutine bspvb
+end interface
 !-----------------------------------------------------------------------
 !   This routine produces the B-spline COEFF.S bcoef of the piecewise
 !   polynomial of order k with knots t(i) (i=1,...,n+k) which has the
@@ -94045,7 +95737,7 @@ return
 return
 end subroutine bstrp
 
-subroutine banfac ( w, nroww, nrow, nbandl, nbandu, iflag )
+pure subroutine banfac ( w, nroww, nrow, nbandl, nbandu, iflag )
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
@@ -94166,7 +95858,7 @@ end do
 return
 end subroutine banfac
 
-subroutine banslv ( w, nroww, nrow, nbandl, nbandu, b )
+pure subroutine banslv ( w, nroww, nrow, nbandl, nbandu, b )
 implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(in) :: w(nroww,nrow)
@@ -94227,7 +95919,7 @@ if (i .gt. 1) go to 41
 return
 end subroutine banslv
 
-subroutine bslsq (tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
+pure subroutine bslsq (tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, n, ntau
@@ -94236,6 +95928,33 @@ real, intent(in) :: t(*)
 real, intent(inout) :: a(n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
+interface
+   pure subroutine bchfac(w,nb,n,diag,iflag)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nb
+      real, intent(inout) :: w(nb,n)
+      real, intent(inout) :: diag(n)
+      integer, intent(inout) :: iflag
+   end subroutine bchfac
+   pure subroutine bchslv(w,nb,n,b)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nb
+      real, intent(in) :: w(nb,n)
+      real, intent(inout) :: b(n)
+   end subroutine bchslv
+   pure subroutine bspvb(t,k,jhigh,j,x,left,blist)
+      implicit none
+      integer, intent(in) :: k
+      real, intent(in) :: t(*)
+      integer, intent(in) :: jhigh
+      integer, intent(inout) :: j
+      real, intent(in) :: x
+      integer, intent(in) :: left
+      real, intent(inout) :: blist(k)
+   end subroutine bspvb
+end interface
 !-----------------------------------------------------------------------
 !
 !        bslsq produces the B-spline coefficients of a piecewise
@@ -94322,7 +96041,7 @@ return
 return
 end subroutine bslsq
 
-subroutine bchfac (w, nb, n, diag, iflag)
+pure subroutine bchfac (w, nb, n, diag, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
@@ -94440,7 +96159,7 @@ do 60 k = 1,n
 return
 end subroutine bchfac
 
-subroutine bchslv (w, nb, n, b)
+pure subroutine bchslv (w, nb, n, b)
 implicit none
 integer, intent(in) :: n, nb
 real, intent(in) :: w(nb,n)
@@ -95056,13 +96775,29 @@ mode = -7
 return
 end subroutine bfit0
 
-subroutine bndacc (g,mdg,nb,ip,ir,mt,jt)
+pure subroutine bndacc (g,mdg,nb,ip,ir,mt,jt)
 implicit none
 integer, intent(inout) :: ip, ir
 integer, intent(in) :: jt, mdg, mt, nb
 real, intent(inout) :: g(mdg,*)
 integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
+interface
+   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      real, intent(inout) :: u(iue,m)
+      real, intent(inout) :: up
+      real, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine h12
+end interface
 !
 !***Author  Lawson, C. L., (JPL)
 !           Hanson, R. J., (SNLA)
@@ -95464,7 +97199,7 @@ return
 return
 end subroutine bndsl
 
-subroutine spfit2 (x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
+pure subroutine spfit2 (x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
    & ybreak, ny, f, s, t, wk, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -95474,6 +97209,43 @@ real, intent(in) :: xbreak(nx), ybreak(ny)
 real, intent(inout) :: f(*)
 real, intent(inout) :: s(*), t(*), wk(num)
 integer :: i, imax, j, l, ld, m, n, nu
+interface
+   pure subroutine bslsq2(x,wx,mx,y,wy,my,z,kz,tx,nx,kx,ty,ny,ky,a, &
+      & ka,wk,l,iflag)
+      implicit none
+      integer, intent(in) :: l
+      integer, intent(in) :: ka
+      integer, intent(in) :: ny
+      integer, intent(in) :: kz
+      integer, intent(in) :: my
+      integer, intent(in) :: mx
+      real, intent(in) :: x(mx)
+      real, intent(in) :: wx(mx)
+      real, intent(in) :: y(my)
+      real, intent(in) :: wy(my)
+      real, intent(in) :: z(kz,my)
+      real, intent(in) :: tx(*)
+      integer, intent(in) :: nx
+      integer, intent(in) :: kx
+      real, intent(in) :: ty(*)
+      integer, intent(in) :: ky
+      real, intent(inout) :: a(ka,ny)
+      real, intent(inout) :: wk(l)
+      integer, intent(inout) :: iflag
+   end subroutine bslsq2
+   pure subroutine cspp(t,a,ka,m,n,z,kz,dz,kdz)
+      implicit none
+      integer, intent(in) :: kdz
+      integer, intent(in) :: kz
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      real, intent(in) :: t(*)
+      real, intent(in) :: a(ka,n)
+      integer, intent(in) :: m
+      real, intent(inout) :: z(kz,*)
+      real, intent(inout) :: dz(kdz,*)
+   end subroutine cspp
+end interface
 !-----------------------------------------------------------------------
 !
 !            Weighted least squares bicubic spline fitting
@@ -95601,7 +97373,7 @@ wk(1) = l
 return
 end subroutine spfit2
 
-subroutine cspp (t, a, ka, m, n, z, kz, dz, kdz)
+pure subroutine cspp (t, a, ka, m, n, z, kz, dz, kdz)
 implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
 real, intent(in) :: t(*), a(ka,n)
@@ -95715,7 +97487,7 @@ end do
 return
 end subroutine cspp
 
-subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
@@ -95727,7 +97499,15 @@ real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
    & ds, dt, dx, dy, fi, fip1, xx, yy
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
@@ -95879,12 +97659,38 @@ end do
 return
 end subroutine csurf
 
-subroutine csurf1 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
+pure subroutine csurf1 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
 implicit none
 integer, intent(in) :: ider, jder, kz, m, mx, my, n
 real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(m,n,4)
+interface
+   pure subroutine csurf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf,f1, &
+      & kf1,f2,kf2,f12,kf12)
+      implicit none
+      integer, intent(in) :: kf12
+      integer, intent(in) :: kf2
+      integer, intent(in) :: kf1
+      integer, intent(in) :: kf
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: kz
+      integer, intent(in) :: my
+      integer, intent(in) :: mx
+      integer, intent(in) :: ider
+      integer, intent(in) :: jder
+      real, intent(in) :: x(mx)
+      real, intent(in) :: y(my)
+      real, intent(inout) :: z(kz,my)
+      real, intent(in) :: s(m)
+      real, intent(in) :: t(n)
+      real, intent(in) :: f(kf,n)
+      real, intent(in) :: f1(kf1,n)
+      real, intent(in) :: f2(kf2,n)
+      real, intent(in) :: f12(kf12,n)
+   end subroutine csurf
+end interface
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
@@ -95897,7 +97703,7 @@ call csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
 return
 end subroutine csurf1
 
-subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
@@ -95909,7 +97715,15 @@ real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
    & dt, dx, dy, fi, fip1, xx, yy
-integer :: intrvl
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
@@ -96056,13 +97870,39 @@ end do
 return
 end subroutine csrf
 
-subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, ddf)
 implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
 real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
+interface
+   pure subroutine csrf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf,f1,kf1 &
+      & ,f2,kf2,f12,kf12)
+      implicit none
+      integer, intent(in) :: kf12
+      integer, intent(in) :: kf2
+      integer, intent(in) :: kf1
+      integer, intent(in) :: kf
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: kz
+      integer, intent(in) :: my
+      integer, intent(in) :: mx
+      integer, intent(in) :: ider
+      integer, intent(in) :: jder
+      real, intent(in) :: x(mx)
+      real, intent(in) :: y(my)
+      real, intent(inout) :: z(kz,my)
+      real, intent(in) :: s(m)
+      real, intent(in) :: t(n)
+      real, intent(in) :: f(kf,n)
+      real, intent(in) :: f1(kf1,n)
+      real, intent(in) :: f2(kf2,n)
+      real, intent(in) :: f12(kf12,n)
+   end subroutine csrf
+end interface
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
@@ -96803,7 +98643,7 @@ do 8 jj = 1,nd
 return
 end subroutine nsurf2
 
-subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
+pure subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
    & a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -96812,6 +98652,22 @@ real, intent(in) :: x(nx), y(ny), z(kz,ny)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
 integer :: iw, m
+interface
+   pure subroutine bstrp1(x,z,kz,m,n,t,k,a,ka,work,iflag)
+      implicit none
+      integer, intent(in) :: ka
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: kz
+      real, intent(in) :: x(m)
+      real, intent(in) :: z(kz,n)
+      real, intent(in) :: t(*)
+      integer, intent(in) :: k
+      real, intent(inout) :: a(ka,m)
+      real, intent(inout) :: work(*)
+      integer, intent(out) :: iflag
+   end subroutine bstrp1
+end interface
 !-----------------------------------------------------------------------
 !
 !         Piecewise polynomial interpolation in two variables
@@ -96855,13 +98711,26 @@ return
 return
 end subroutine bstrp2
 
-subroutine bstrp1 (x, z, kz, m, n, t, k, a, ka, work, iflag)
+pure subroutine bstrp1 (x, z, kz, m, n, t, k, a, ka, work, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
 real, intent(in) :: x(m), z(kz,n), t(*)
 real, intent(inout) :: a(ka,m), work(*)
 integer :: i, j, mp1
+interface
+   pure subroutine bstrp(tau,gtau,t,n,k,bcoef,q,iflag)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: tau(n)
+      real, intent(in) :: gtau(n)
+      real, intent(in) :: t(*)
+      integer, intent(in) :: k
+      real, intent(inout) :: bcoef(n)
+      real, intent(inout) :: q(*)
+      integer, intent(inout) :: iflag
+   end subroutine bstrp
+end interface
 !-------------------------------------------------------------------
 !     bstrp1 computes B-spline interpolation coefficients for
 !     n sets of data stored in the columns of the array z. the
@@ -96895,7 +98764,7 @@ end do
 return
 end subroutine bstrp1
 
-subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
+pure subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
    & ty, ny, ky, a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -96904,6 +98773,25 @@ real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
 integer :: ierr, iq, iw, m
+interface
+   pure subroutine bslsq1(tau,wgt,ntau,z,kz,m,t,n,k,a,ka,wk,q,ierr)
+      implicit none
+      integer, intent(in) :: ka
+      integer, intent(in) :: k
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: kz
+      integer, intent(in) :: ntau
+      real, intent(in) :: tau(ntau)
+      real, intent(in) :: wgt(ntau)
+      real, intent(in) :: z(kz,m)
+      real, intent(in) :: t(*)
+      real, intent(inout) :: a(ka,n)
+      real, intent(inout) :: wk(n)
+      real, intent(inout) :: q(k,n)
+      integer, intent(inout) :: ierr
+   end subroutine bslsq1
+end interface
 !-----------------------------------------------------------------------
 !
 !             Weighted least squares fitting of piecewise
@@ -96955,7 +98843,7 @@ wk(1) = m
 return
 end subroutine bslsq2
 
-subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
+pure subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
    & a, ka, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -96965,6 +98853,35 @@ real, intent(in) :: t(*)
 real, intent(inout) :: a(ka,n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
+interface
+   pure subroutine bchfac(w,nb,n,diag,iflag)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nb
+      real, intent(inout) :: w(nb,n)
+      real, intent(inout) :: diag(n)
+      integer, intent(inout) :: iflag
+   end subroutine bchfac
+   pure subroutine bchsv1(w,nb,n,b,kb,m)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: n
+      integer, intent(in) :: nb
+      real, intent(in) :: w(nb,n)
+      real, intent(inout) :: b(kb,n)
+      integer, intent(in) :: m
+   end subroutine bchsv1
+   pure subroutine bspvb(t,k,jhigh,j,x,left,blist)
+      implicit none
+      integer, intent(in) :: k
+      real, intent(in) :: t(*)
+      integer, intent(in) :: jhigh
+      integer, intent(inout) :: j
+      real, intent(in) :: x
+      integer, intent(in) :: left
+      real, intent(inout) :: blist(k)
+   end subroutine bspvb
+end interface
 !-----------------------------------------------------------------------
 !
 !     bslsq1 produces the B-spline coefficients a(j,1),...,a(j,n)
@@ -97068,7 +98985,7 @@ return
 return
 end subroutine bslsq1
 
-subroutine bchsv1 (w, nb, n, b, kb, m)
+pure subroutine bchsv1 (w, nb, n, b, kb, m)
 implicit none
 integer, intent(in) :: kb, m, n, nb
 real, intent(in) :: w(nb,n)
@@ -97149,7 +99066,7 @@ if (k .gt. 0) go to 50
 return
 end subroutine bchsv1
 
-subroutine bval2 (a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
+pure subroutine bval2 (a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
    & idx, idy, f, wk)
 implicit none
 integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
@@ -97158,7 +99075,26 @@ real, intent(in) :: x0, y0
 real, intent(in) :: a(ka,ny), tx(*), ty(*)
 real, intent(inout) :: wk(*)
 integer :: i, iw, j, l, m
-integer :: intrvl
+interface
+   pure subroutine bval(t,bcoef,n,k,x,jderiv,w,wk)
+      implicit none
+      integer, intent(in) :: k
+      integer, intent(in) :: n
+      real, intent(in) :: t(*)
+      real, intent(in) :: bcoef(n)
+      real, intent(in) :: x
+      integer, intent(in) :: jderiv
+      real, intent(inout) :: w
+      real, intent(inout) :: wk(k,3)
+   end subroutine bval
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
 !-----------------------------------------------------------------------
 !
 !                Evaluation and partial differentiation
@@ -98203,7 +100139,7 @@ do 15 i = imin,imax
 return
 end subroutine swapd
 
-logical function swptst (in1,in2,io1,io2,x,y)
+pure logical function swptst (in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
@@ -98304,7 +100240,7 @@ if (sin12 .ge. 0.) return
 return
 end function swptst
 
-integer function tindx (nvertx,nabor,iadj,iend)
+pure integer function tindx (nvertx,nabor,iadj,iend)
 implicit none
 integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 integer :: nb, indx
@@ -98658,7 +100594,7 @@ i3 = 0
 return
 end subroutine trfind
 
-subroutine gradg (n, x, y, z, iadj, iend, zxzy, ierr)
+pure subroutine gradg (n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -98667,6 +100603,21 @@ real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*), iend(n)
 integer :: j, miter
 real :: eps
+interface
+   pure subroutine gradg1(n,x,y,z,iadj,iend,eps,nit,zxzy,ier)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: x(n)
+      real, intent(in) :: y(n)
+      real, intent(in) :: z(n)
+      integer, intent(in) :: iadj(*)
+      integer, intent(in) :: iend(n)
+      real, intent(in) :: eps
+      integer, intent(inout) :: nit
+      real, intent(inout) :: zxzy(2,n)
+      integer, intent(inout) :: ier
+   end subroutine gradg1
+end interface
 !-----------------------------------------------------------------------
 !                      Derivative estimation
 !-----------------------------------------------------------------------
@@ -98689,7 +100640,7 @@ return
 return
 end subroutine gradg
 
-subroutine gradg1 (n,x,y,z,iadj,iend,eps, nit, &
+pure subroutine gradg1 (n,x,y,z,iadj,iend,eps, nit, &
    & zxzy, ier)
 implicit none
 integer, intent(in) :: n, iadj(*), iend(n)
@@ -98952,6 +100903,15 @@ integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
    & np, i, j, im1, jp1, ip1, l
 real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
    & dmin, dtol, sf
+interface
+   pure elemental subroutine srotg(sa,sb,sc,ss)
+      implicit none
+      real, intent(inout) :: sa
+      real, intent(inout) :: sb
+      real, intent(inout) :: sc
+      real, intent(inout) :: ss
+   end subroutine srotg
+end interface
 !
 !***********************************************************
 !
@@ -99239,7 +101199,7 @@ return
 return
 end subroutine gradl1
 
-subroutine setrm (xk,yk,zk,xi,yi,zi,s1,s2,r, row)
+pure subroutine setrm (xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
 real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
 real, intent(inout) :: row(6)
@@ -99324,7 +101284,7 @@ return
 return
 end subroutine setrm
 
-subroutine getnp (x,y,iadj,iend,l, npts, ds,ier)
+pure subroutine getnp (x,y,iadj,iend,l, npts, ds,ier)
 implicit none
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(*)
@@ -99561,6 +101521,34 @@ integer :: nn, i1, i2, i3, ierr, n1, n2, indx
 real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
    & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
    & c2, f1, f2
+interface
+   pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1,zx2,zx3, &
+      & zy1,zy2,zy3,iflag,w,wx,wy,ier)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(in) :: x1
+      real, intent(in) :: x2
+      real, intent(in) :: x3
+      real, intent(in) :: y1
+      real, intent(in) :: y2
+      real, intent(in) :: y3
+      real, intent(in) :: z1
+      real, intent(in) :: z2
+      real, intent(in) :: z3
+      real, intent(in) :: zx1
+      real, intent(in) :: zx2
+      real, intent(in) :: zx3
+      real, intent(in) :: zy1
+      real, intent(in) :: zy2
+      real, intent(in) :: zy3
+      integer, intent(in) :: iflag
+      real, intent(inout) :: w
+      real, intent(inout) :: wx
+      real, intent(inout) :: wy
+      integer, intent(inout) :: ier
+   end subroutine tval
+end interface
 !
 !***********************************************************
 !
@@ -99829,7 +101817,7 @@ return
 return
 end subroutine intrc1
 
-subroutine tval (x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
+pure elemental subroutine tval (x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
    & zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
    & ier)
 implicit none
@@ -100297,7 +102285,7 @@ end do
 return
 end subroutine mfit
 
-subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
+pure subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
    & ireqd,dreqd,error)
 implicit none
 !
@@ -100309,6 +102297,25 @@ integer, intent(inout) :: iwork(iwklen)
 integer :: alfl
 integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
 integer :: nplyt4
+interface
+   pure elemental subroutine basiz(degree,npts,dimen,npolys,error)
+      implicit none
+      integer, intent(inout) :: degree
+      integer, intent(in) :: npts
+      integer, intent(in) :: dimen
+      integer, intent(inout) :: npolys
+      integer, intent(out) :: error
+   end subroutine basiz
+   pure subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
+      implicit none
+      integer, intent(in) :: npolys
+      integer, intent(in) :: dimen
+      integer, intent(in) :: degree
+      integer, intent(inout) :: indexs(4,npolys)
+      integer, intent(inout) :: newkj(dimen,degree)
+      integer, intent(out) :: alflp1
+   end subroutine mtable
+end interface
 !
 !     ***************
 !     Purpose
@@ -100505,7 +102512,7 @@ dreqd = 2 * npolys + dimen + 1 + npts * psiwid + alfl
 return
 end subroutine allot
 
-subroutine basiz(degree,npts,dimen,npolys,error)
+pure elemental subroutine basiz(degree,npts,dimen,npolys,error)
 implicit none
 !
 integer, intent(inout) :: degree
@@ -100596,7 +102603,7 @@ if ( i .lt. npolys ) go to 60
 return
 end subroutine basiz
 
-subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
+pure subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
 implicit none
 !
 integer, intent(in) :: npolys, dimen, degree
@@ -101038,7 +103045,7 @@ npolys = jm1
 return
 end subroutine incdg
 
-subroutine scalpm(coord,npts,maxabs)
+pure subroutine scalpm(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
@@ -101077,7 +103084,7 @@ do 10 p = 1,npts
 return
 end subroutine scalpm
 
-subroutine scaldn(coord,npts,maxabs)
+pure subroutine scaldn(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
@@ -101828,7 +103835,7 @@ npolys = jm1
 return
 end subroutine dincdg
 
-subroutine dscalp(coord,npts,maxabs)
+pure subroutine dscalp(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
@@ -101867,7 +103874,7 @@ do 10 p = 1,npts
 return
 end subroutine dscalp
 
-subroutine dscald(coord,npts,maxabs)
+pure subroutine dscald(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
@@ -104478,7 +106485,7 @@ ermax = elist(maxerr)
 return
 end subroutine qpsrt
 
-subroutine qelg (n, epstab, result, abserr, res3la, nres, &
+pure subroutine qelg (n, epstab, result, abserr, res3la, nres, &
    & epmach, oflow)
 implicit none
 integer, intent(inout) :: n, nres
@@ -105283,7 +107290,7 @@ abserr = errsum
 999 return
 end subroutine qxgse
 
-subroutine qxcpy (a, b, l)
+pure subroutine qxcpy (a, b, l)
 implicit none
 integer, intent(in) :: l
 real, intent(inout) :: a(l)
@@ -107610,7 +109617,7 @@ ermax = elist(maxerr)
 return
 end subroutine dqpsrt
 
-subroutine dqelg (n, epstab, result, abserr, res3la, nres, &
+pure subroutine dqelg (n, epstab, result, abserr, res3la, nres, &
    & epmach, oflow)
 implicit none
 !-----------------------------------------------------------------------
@@ -108423,7 +110430,7 @@ abserr = errsum
 999 return
 end subroutine dqxgse
 
-subroutine dqxcpy (a, b, l)
+pure subroutine dqxcpy (a, b, l)
 implicit none
 integer, intent(in) :: l
 double precision, intent(inout) :: a(l)
@@ -109423,9 +111430,19 @@ real :: finlep, r1, r2
 real :: elinsy, relrsd
 real :: rnrm
 real :: conew
-real :: rmin
 real :: normk, numr1, numr2
 integer :: flag, oldm, pivot(128)
+interface
+   pure elemental function rmin(n,m,cond,unitrd,averr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      real, intent(in) :: cond
+      real, intent(in) :: unitrd
+      real, intent(in) :: averr
+      real :: rmin
+   end function rmin
+end interface
 !
 !   This routine controls the solution of the integral equation.
 !
@@ -109745,7 +111762,7 @@ return
 return
 end subroutine nsterp
 
-function rmin(n,m,cond,unitrd,averr)
+pure elemental function rmin(n,m,cond,unitrd,averr)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: averr, cond, unitrd
@@ -115667,7 +117684,7 @@ return
 !----------------------- End of subroutine stod  -----------------------
 end subroutine stod
 
-subroutine cfod  (meth, elco, tesco)
+pure subroutine cfod  (meth, elco, tesco)
 implicit none
 !
 !   cfod defines coefficients needed in the integrator package sfode
@@ -116018,15 +118035,39 @@ return
 !----------------------- End of subroutine slvs -----------------------
 end subroutine slvs
 
-subroutine sgbfa(abd,lda,n,ml,mu,ipvt,info)
+pure subroutine sgbfa(abd,lda,n,ml,mu,ipvt,info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
 real :: t
-integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
-   & nm1
+integer :: i, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, nm1
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+end interface
 !
 !     sgbfa factors a real band matrix BY elimination.
 !
@@ -116194,13 +118235,33 @@ if (abd(m,n) .eq. 0.0e0) info = n
 return
 end subroutine sgbfa
 
-subroutine sgbsl(abd,lda,n,ml,mu,ipvt,b,job)
+pure subroutine sgbsl(abd,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
 real, intent(in) :: abd(lda,*)
 real, intent(inout) :: b(*)
-real :: sdot, t
+real :: t
 integer :: k, kb, l, la, lb, lm, m, nm1
+interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+end interface
 !
 !     sgbsl solves the real band system
 !     A * X = b  OR  TRANS(A) * X = b
@@ -116714,7 +118775,7 @@ nw = dum(1) + mn
 return
 end subroutine sepde
 
-subroutine pdedge (edge, indx, indy, ierr)
+pure subroutine pdedge (edge, indx, indy, ierr)
 implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)

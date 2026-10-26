@@ -1,10 +1,373 @@
+function cin(x)
+implicit none
+real, intent(in) :: x
+integer :: i, j, m1, m2, n1, n2
+real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), econ, rc, temp, &
+   & tx
+real :: cin
+real :: spmpar
+!
+!     Written by D.E. Amos and S.L. Daniel, November, 1975.
+!     Modified by A.H. Morris
+!
+!     References
+!         SAND76-0062
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
+!
+!     Abstract
+!         cin computes the integral of (1-cos(T))/T on (0,x) by means
+!         of Chebyshev expansions on (0,5) and (5,INFINITY).
+!
+!     Description of arguments
+!
+!         Input
+!           x      - Limit of integration, unrestricted
+!
+!         Output
+!           cin    - Value of the integral
+!
+!
+!     -------------------
+data n1,n2,m1,m2     / 16, 46, 14, 21 /
+data econ            / 5.77215664901533e-01/
+!     -------------------
+data bb(1) / 1.82820351064538e-01/, bb(2) /-8.23768704567135e-02/, &
+   & bb(3) /-1.03468764544958e-02/, bb(4) / 5.05085201960312e-03/, &
+   & bb(5) / 5.73772812356328e-05/, bb(6) /-1.42717916181096e-04/, &
+   & bb(7) / 2.89263664732599e-06/, bb(8) / 2.43068098304909e-06/, &
+   & bb(9) /-7.90337487433443e-08/, bb(10)/-2.80205535437371e-08/, &
+   & bb(11)/ 1.05488738052065e-09/, bb(12)/ 2.34186901801115e-10/, &
+   & bb(13)/-9.27762554764014e-12/, bb(14)/-1.48682586858284e-12/, &
+   & bb(15)/ 5.95210263082868e-14/, bb(16)/ 7.42057835287916e-15/
+!     -------------------
+data cc(1) / 9.76155271128712e-01/, cc(2) / 8.96845854916423e-02/, &
+   & cc(3) /-3.04656658030696e-02/, cc(4) / 8.50892472922945e-02/, &
+   & cc(5) /-5.78073683148386e-03/, cc(6) /-5.07182677775691e-03/, &
+   & cc(7) / 8.38643256650893e-04/, cc(8) /-3.34223415981738e-04/, &
+   & cc(9) /-2.15746207281216e-05/, cc(10)/ 1.28560650086065e-04/, &
+   & cc(11)/-1.56456413510232e-05/, cc(12)/-1.52025513597262e-05/, &
+   & cc(13)/ 4.04001013843204e-06/, cc(14)/-5.95896122752160e-07/, &
+   & cc(15)/-4.34985305974340e-07/, cc(16)/ 7.13472533530840e-07/, &
+   & cc(17)/-5.34302186061100e-08/, cc(18)/-1.76003581156610e-07/, &
+   & cc(19)/ 3.85028855125900e-08/, cc(20)/ 1.92576544441700e-08/, &
+   & cc(21)/-1.00735358217200e-08/, cc(22)/ 3.36359194377000e-09/, &
+   & cc(23)/ 1.28049619406000e-09/, cc(24)/-2.42546870827000e-09/, &
+   & cc(25)/ 1.86917288950000e-10/, cc(26)/ 7.13431298340000e-10/, &
+   & cc(27)/-1.70673483710000e-10/, cc(28)/-1.14604070350000e-10/, &
+   & cc(29)/ 5.88004411500000e-11/, cc(30)/-6.78417843000000e-12/, &
+   & cc(31)/-1.21572380900000e-11/, cc(32)/ 1.26561248700000e-11/, &
+   & cc(33)/ 4.74814180000000e-13/, cc(34)/-5.32309477000000e-12/, &
+   & cc(35)/ 9.05903810000000e-13/, cc(36)/ 1.40046450000000e-12/, &
+   & cc(37)/-5.00968320000000e-13/, cc(38)/-1.80458040000000e-13/
+data cc(39)/ 1.66162910000000e-13/, cc(40)/-5.02616400000000e-14/, &
+   & cc(41)/-3.48453600000000e-14/, cc(42)/ 4.60056600000000e-14/, &
+   & cc(43)/ 5.74000000000000e-16/, cc(44)/-1.95310700000000e-14/, &
+   & cc(45)/ 3.68837000000000e-15/, cc(46)/ 5.62862000000000e-15/
+!     -------------------
+!     ****** amax is a machine dependent constant. It is assumed that
+!            sin(x) and cos(x) are defined for  abs(x) .LE. amax, and
+!            that econ + LN(x) - (1 + 1/x)/x = econ + LN(x)
+!            FOR x .GT. amax.
+!
+amax = 0.1/spmpar(1)
+!
+!
+ax = abs(x)
+if (ax.gt.5.0) go to 20
+j = n1
+bx = 0.40*ax - 1.0
+tx = bx + bx
+b1 = bb(j)
+b2 = 0.
+do 10 i = 1,m1
+   j = j - 1
+   temp = b1
+   b1 = tx*b1 - b2 + bb(j)
+10 b2 = temp
+cin = x*x*(bx*b1 - b2 + bb(1))
+return
+!
+20 if (ax.gt.amax) go to 50
+bx = 10./ax - 1.0
+tx = bx + bx
+j = n2
+b1 = cc(j)
+b2 = 0.0
+do 30 i = 1,m2
+   j = j - 2
+   temp = b1
+   b1 = tx*b1 - b2 + cc(j)
+30 b2 = temp
+aic = bx*b1 - b2 + cc(2)
+!
+j = n2 - 1
+b1 = cc(j)
+b2 = 0.0
+do 40 i = 1,m2
+   j = j - 2
+   temp = b1
+   b1 = tx*b1 - b2 + cc(j)
+40 b2 = temp
+rc = bx*b1 - b2 + cc(1)
+!
+cin = (rc*sin(ax) - aic*cos(ax))/ax
+cin = (econ - cin) + alog(ax)
+return
+!
+50 cin = econ + alog(ax)
+return
+end function cin
+
+subroutine cexexi (z, w)
+implicit none
+complex, intent(in) :: z
+complex, intent(inout) :: w
+integer :: i
+real :: const, euler, pm, qm, r, ss, x, y, zeta2
+real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real :: ed(18), ee(18), dd(19), de(19), cd(18), ce(18)
+!-----------------------------------------------------------------------
+!        Computation of the exponential exponential integral
+!-----------------------------------------------------------------------
+!-------------------------
+!     euler = euler constant
+!     const = (pi*pi)/4
+!     zeta2 = The Riemann zeta function evaluated at 2
+!-------------------------
+data const /2.46740110027234/
+data euler /.577215664901533/
+data zeta2 /1.64493406684823/
+!-------------------------
+data ed(1)  /0.00000000000000e+00/, ed(2)  /.311105957086528e-01/, &
+   & ed(3)  /.103661260539112e+00/, ed(4)  /.216532335244554e+00/, &
+   & ed(5)  /.369931427960192e+00/, ed(6)  /.566766259990589e+00/, &
+   & ed(7)  /.814042066324748e+00/, ed(8)  /.112384247540813e+01/, &
+   & ed(9)  /.151400478148512e+01/, ed(10) /.200886795032284e+01/, &
+   & ed(11) /.264052411823592e+01/, ed(12) /.345098449933392e+01/, &
+   & ed(13) /.449583360763202e+01/, ed(14) /.585058263409822e+01/, &
+   & ed(15) /.762273501463380e+01/, ed(16) /.997814501584578e+01/, &
+   & ed(17) /.132122064896408e+02/, ed(18) /.180322948376021e+02/
+data ee(1)  /.850156516121093e-02/, ee(2)  /.505037465849058e-01/, &
+   & ee(3)  /.836817368956407e-01/, ee(4)  /.107047582417607e+00/, &
+   & ee(5)  /.120424719029462e+00/, ee(6)  /.125096631582229e+00/, &
+   & ee(7)  /.122314435224685e+00/, ee(8)  /.112621417553907e+00/, &
+   & ee(9)  /.963419407392582e-01/, ee(10) /.747398422757511e-01/, &
+   & ee(11) /.508596135953441e-01/, ee(12) /.290822706773628e-01/, &
+   & ee(13) /.132201640530101e-01/, ee(14) /.443802939829067e-02/, &
+   & ee(15) /.992612478987576e-03/, ee(16) /.126579795112011e-03/, &
+   & ee(17) /.702150908253350e-05/, ee(18) /.910281532564632e-07/
+!-------------------------
+data dd(1)  /0.00000000000000e+00/, dd(2)  /.419556678374293e-01/, &
+   & dd(3)  /.117533661648665e+00/, dd(4)  /.228560237455987e+00/, &
+   & dd(5)  /.375667350161240e+00/, dd(6)  /.791594846276672e+00/, &
+   & dd(7)  /.107546889623058e+01/, dd(8)  /.142659208030841e+01/, &
+   & dd(9)  /.186290554952377e+01/, dd(10) /.240730009509856e+01/, &
+   & dd(11) /.308854035607524e+01/, dd(12) /.394277605155259e+01/, &
+   & dd(13) /.501593196543981e+01/, dd(14) /.636759180748651e+01/, &
+   & dd(15) /.807776193096055e+01/, dd(16) /.102598961138887e+02/, &
+   & dd(17) /.130896768422610e+02/, dd(18) /.168832169085916e+02/, &
+   & dd(19) /.224083240941713e+02/
+data de(1) /-.346911733535892e-03/, de(2) /-.603787732461745e-02/, &
+   & de(3) /-.152461305949249e-01/, de(4) /-.210582169827291e-01/, &
+   & de(5) /-.171894208720754e-01/, de(6)  /.314323467033032e-01/, &
+   & de(7)  /.750898531566972e-01/, de(8)  /.124689787807260e+00/, &
+   & de(9)  /.168579075090035e+00/, de(10) /.191715080699511e+00/, &
+   & de(11) /.182600794550836e+00/, de(12) /.142345674307147e+00/, &
+   & de(13) /.874862222419327e-01/, de(14) /.402175083288425e-01/, &
+   & de(15) /.128575005680180e-01/, de(16) /.257673782598441e-02/, &
+   & de(17) /.275955003784349e-03/, de(18) /.119139315517122e-04/, &
+   & de(19) /.107292980199386e-06/
+!-------------------------
+data cd(1)  /0.00000000000000e+00/, cd(2)  /.237286128313683e-01/, &
+   & cd(3)  /.854113210668760e-01/, cd(4)  /.185276627282059e+00/, &
+   & cd(5)  /.323741526616688e+00/, cd(6)  /.503045460381267e+00/, &
+   & cd(7)  /.728806607587188e+00/, cd(8)  /.101122770102872e+01/, &
+   & cd(9)  /.136598448171249e+01/, cd(10) /.181510139038929e+01/, &
+   & cd(11) /.238824701955419e+01/, cd(12) /.312490532008812e+01/, &
+   & cd(13) /.407802489894445e+01/, cd(14) /.532033545554865e+01/, &
+   & cd(15) /.695624307290579e+01/, cd(16) /.914759902547031e+01/, &
+   & cd(17) /.121829074388544e+02/, cd(18) /.167511311969873e+02/
+data ce(1)  /.349517258926827e-01/, ce(2)  /.135849105925897e+00/, &
+   & ce(3)  /.158850581552296e+00/, ce(4)  /.153001434535435e+00/, &
+   & ce(5)  /.134520752856461e+00/, ce(6)  /.111913051619671e+00/, &
+   & ce(7)  /.892008386656190e-01/, ce(8)  /.679227205472067e-01/, &
+   & ce(9)  /.486723197887211e-01/, ce(10) /.320170976532266e-01/, &
+   & ce(11) /.187008965021111e-01/, ce(12) /.929708414427865e-02/, &
+   & ce(13) /.372604763161087e-02/, ce(14) /.111989537559823e-02/, &
+   & ce(15) /.228057496872353e-03/, ce(16) /.269596227781453e-04/, &
+   & ce(17) /.141255430224301e-05/, ce(18) /.176352326808806e-07/
+!-------------------------
+x = real(z)
+y = aimag(z)
+r = x*x + y*y
+!
+if (r .le. 1.0) go to 100
+if (r .ge. 1296.0) go to 10
+if (x .lt. 0.07*y*y) go to 30
+go to 40
+!-----------------------------------------------------------------------
+!                     Asymptotic expansion
+!-----------------------------------------------------------------------
+10 qf(1) = x/r
+qf(2) = -y/r
+sm(1) = -qf(1)
+sm(2) = -qf(2)
+tm(1) = sm(1)
+tm(2) = sm(2)
+pm = 1.0
+20 ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+tm(1) = pm*ts(1)
+tm(2) = pm*ts(2)
+pm = pm + 1.0
+ts(1) = tm(1)/pm
+ts(2) = tm(2)/pm
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 21
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 130
+21 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+if (pm .lt. 36.0) go to 20
+go to 130
+!-----------------------------------------------------------------------
+!                      Rational expansion
+!-----------------------------------------------------------------------
+30 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = x - cd(i)
+   ts(2) = y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = -ce(i)*ts(1)/ss
+   tm(2) = ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+go to 130
+!-----------------------------------------------------------------------
+!                 Expansion involving EI and DI
+!-----------------------------------------------------------------------
+40 zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
+!
+!                    SET sm = exp(z)*EI(-z)
+!
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = -x - ed(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = ee(i)*ts(1)/ss
+   tm(2) = -ee(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+sr(1) = zl(1)*sm(1) - zl(2)*sm(2)
+sr(2) = zl(1)*sm(2) + zl(2)*sm(1)
+!
+!                    SET sm = exp(z)*DI(-z)
+!
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,19
+   ts(1) = -x - dd(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = de(i)*ts(1)/ss
+   tm(2) = -de(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ts(1) = -(x*sm(1) + y*sm(2))/r
+ts(2) = -(x*sm(2) - y*sm(1))/r
+!
+!                    Compute the expansion
+!
+sr(1) = sr(1) - ts(1) - zeta2
+sr(2) = sr(2) - ts(2)
+sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = zeta2
+70 pm = pm + 1.0
+qm = qm - 1.0/(pm*pm)
+ts(1) = tm(1)*x - tm(2)*y
+ts(2) = tm(1)*y + tm(2)*x
+tm(1) = ts(1)/pm
+tm(2) = ts(2)/pm
+ts(1) = qm*tm(1)
+ts(2) = qm*tm(2)
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) - ts(1)
+sm(2) = sm(2) - ts(2)
+go to 70
+80 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
+!
+!                      Compute exp(-z)*sm
+!
+qm = exp(-x)
+qf(1) = qm*cos(-y)
+qf(2) = qm*sin(-y)
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
+go to 130
+!-----------------------------------------------------------------------
+!                  Series for x*x + y*y .LE. 1
+!-----------------------------------------------------------------------
+100 sm(1) = 0.0
+sm(2) = 0.0
+zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
+sr(1) = const + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
+sr(2) = zl(1)*zl(2)
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = 0.0
+110 pm = pm + 1.0
+qm = qm + 1.0/pm
+ts(1) = -tm(1)*x + tm(2)*y
+ts(2) = -tm(1)*y - tm(2)*x
+tm(1) = ts(1)/pm
+tm(2) = ts(2)/pm
+r = (zl(1) - 1.0/pm) - qm
+ts(1) = (r*tm(1) - zl(2)*tm(2))/pm
+ts(2) = (r*tm(2) + zl(2)*tm(1))/pm
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 111
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 120
+111 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+go to 110
+120 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
+!-----------------------------------------------------------------------
+!                         Termination
+!-----------------------------------------------------------------------
+130 w = cmplx(sm(1), sm(2))
+return
+end subroutine cexexi
+
 complex function cli(z)
 implicit none
 complex, intent(in) :: z
 integer :: n
-real :: cpabs
 real :: qb(25), qf(2), dl(2), ds, zd(2), zl(2)
 real :: az(2), c, pm, r, sm(2), tm(2), ts(2), sr(2)
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !     ******************************************************************
 !     Computation of the complex logarithmic integral
 !     ******************************************************************
@@ -5630,8 +5993,16 @@ integer, intent(in) :: mu
 real, intent(in) :: a, b, x, y
 integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
-real :: algdiv, alnrel, bcorr, betaln, esum, gam1, gamln1, rlog1
+real :: algdiv, alnrel, bcorr, betaln, gam1, gamln1, rlog1
 real :: lambda, lnx, lny
+interface
+   pure elemental function esum(mu,x)
+      implicit none
+      integer, intent(in) :: mu
+      real, intent(in) :: x
+      real :: esum
+   end function esum
+end interface
 !-----------------------------------------------------------------------
 !          Evaluation of  exp(mu) * (x**a*y**b/beta(a,b))
 !-----------------------------------------------------------------------
@@ -6417,9 +6788,22 @@ complex, intent(inout) :: w
 integer :: i, k, m, n
 real :: a, cn1, cn2, e, fn, pi, pn, qm, qn, qnp1, r, r2, rn2, sn, &
    & t1, t2, u, v, x, y
-real :: cpabs
 complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
-complex :: cdiv, cgam0
+complex :: cgam0
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
@@ -6626,7 +7010,14 @@ real :: anorm
 real :: spmpar
 complex :: nu, nup1, p, s, sn, t, ti
 real :: inu, m
-complex :: cdiv
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
 !-----------------------------------------------------------------------
 !
 !       COMPUTATION OF  (z/2)**(-cnu) * gamma(cnu + 1) * J(cnu,z)
@@ -6734,6 +7125,15 @@ real :: alpha, am, aq, ar, bnd, c, phi, pi, pi2, sgn, theta, u, v, &
 real :: a(136), is, inu, izn
 complex :: c1, c2, eta, j, nu, p, p1, q, r, s, s1, s2, sm, t, z, &
    & zn
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !
 !         CALCULATION OF j   (cz) BY THE DEBYE APPROXIMATION
@@ -6971,6 +7371,15 @@ real :: anorm
 real :: spmpar
 real :: inu, m
 complex :: a, a1, arg, e, eta, j, nu, p, q, t, z, zr, zz
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
@@ -9936,8 +10345,15 @@ complex :: z
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
 real :: a, b, c, e, rn, rz, s, tau, x, y
-real :: cpabs
 complex :: nu
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel function of the
@@ -10056,7 +10472,14 @@ real :: a, b, pi, pihalf, u1, u2
 real :: sin1
 real :: cos1
 complex :: w1, w2
-complex :: cdiv
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     second kind with complex order and argument in terms
@@ -10075,541 +10498,4 @@ u2 = cos1(a)*sinh(b)
 w = pihalf*cdiv(w1 - w2, cmplx(u1,u2))
 return
 end subroutine cbki
-
-subroutine cbka (z, cnu, w)
-implicit none
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-integer :: i
-real :: c, eps, u, v
-real :: anorm
-real :: spmpar
-real :: m
-complex :: a, p, t, zr
-!-----------------------------------------------------------------------
-!        Computation of the Bessel function K for complex order
-!        cnu and complex argument z by the asymptotic expansion
-!-----------------------------------------------------------------------
-!--------------------------
-anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
-!--------------------------
-!     c = pi**(1/2)
-!--------------------------
-data c /1.77245385090552e+00/
-!--------------------------
-!
-!     ****** eps is a machine dependent constant. Eps is the
-!            smallest number such that 1.0 + eps .GT. 1.0 .
-!
-eps = spmpar(1)
-!
-!--------------------------
-call crec (real(z), aimag(z), u, v)
-zr = cmplx(0.5*u, 0.5*v)
-a = cnu*cnu - 0.25
-m = 1.0
-t = a*zr
-p = t
-!
-do i = 1, 16
-   a = a - 2.0*m
-   m = m + 1.0
-   t = t*a*zr/m
-   p = p + t
-   if (anorm(t) .le. eps*anorm(p)) go to 20
-end do
-!
-20 p = p + 1.0
-t = csqrt(zr)
-if (aimag(z) .eq. 0.0) t = conjg(t)
-w = c*t*p*cexp(-z)
-return
-end subroutine cbka
-
-subroutine cbkm (z, rz, cnu, w)
-implicit none
-real, intent(in) :: rz
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-integer :: i, ind, m, n, n1
-real :: a, ai, b, c, cpi, pi, t, x, y, znorm, zr1, zr2
-real :: nu
-complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
-complex :: cxp
-!-------------------------------------------------------------------
-!     Calculation of the modified Bessel function of the second
-!     kind with complex order and argument BY means of Maclaurin
-!     expansions and the Miller algorithm. It is assumed that
-!     rz = abs(z).
-!-------------------------------------------------------------------
-!---------------------------
-!     cpi = sqrt(pi/2)
-!---------------------------
-data pi  /3.14159265358979/
-data cpi /1.25331413731550/
-!
-!        Reduction of cnu to r = nu + b*i where
-!                -0.5 .LT. nu .LE. 0.5
-!
-r = cnu
-if (real(r) .lt. 0.0) r = - r
-!
-a = real(r)
-b = aimag(r)
-n = a
-nu = a - float(n)
-t = nu - 0.5
-if (t .le. 0.0) go to 10
-nu = t - 0.5
-n = n + 1
-10 m = n
-r1 = cmplx(nu, b)
-!
-ind = 1
-cz = z
-x = 0.5*real(z)
-y = 0.5*aimag(z)
-call crec (x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
-if (t .ne. 0.0) go to 20
-if (b .ne. 0.0) go to 20
-!
-!               Calculation for nu = 0.5
-!
-w = cmplx(cpi, 0.0)
-w1 = (1.0, 0.0)
-if (n .eq. 0) go to 90
-if (x .ge. 0.0) go to 15
-ind = -1
-cz = - z
-zr = - zr
-15 u1 = w
-u2 = w
-n = n + 1
-r1 = (-0.5, 0.0)
-go to 70
-!
-!           Calculation for abs(nu) .LT. 0.5
-!
-20 znorm = 0.5*rz
-if (znorm .gt. 1.0) go to 30
-ind = 0
-call ckps (z, znorm, zr, r1, u1, u2)
-go to 50
-30 u1 = (1.0, 0.0)
-if (x .lt. 0.0) go to 40
-call cbkml (z, znorm, zr, r1, n, w1, u2)
-go to 50
-40 ind = -1
-cz = - z
-zr = - zr
-call cbkml (cz, znorm, zr, r1, n, w1, u2)
-!
-50 if (n .gt. 1) go to 70
-w = u1
-if (n .ne. 0) w = u2
-go to 90
-!
-!                 Recursion
-!
-70 n1 = n - 1
-do i = 1, n1
-   ai = i
-   u3 = (r1 + ai)*zr*u2 + u1
-   u1 = u2
-   u2 = u3
-end do
-w = u3
-!
-90 if (ind .eq. 0) return
-w = w*w1*cexp(-cz)/csqrt(cz)
-if (ind .gt. 0) return
-!
-!            Analytic continuation
-!
-c = exp(0.5*b*pi)
-ex = cxp(m, nu)
-if (y .lt. 0.0) go to 100
-ex = c*ex
-w1 = cmplx (aimag(z), -real(z))
-call cbsslj (w1, r, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
-w = ex*(ex*w + w2)
-return
-100 ex = conjg(ex)/c
-w1 = cmplx (-aimag(z), real(z))
-call cbsslj (w1, r, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
-w = ex*(ex*w + w2)
-return
-end subroutine cbkm
-
-subroutine ckps (z, r, zr, nu, w1, w2)
-implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex :: nu
-complex, intent(inout) :: w1, w2
-integer :: k
-real :: ak, eps, eps0, phi, pi, s, tol, u, x, y
-real :: anorm
-real :: spmpar
-real :: d(7)
-complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
-   & t2
-complex :: cdiv, cgam0
-!-----------------------------------------------------------------------
-!
-!        Calculation of the modified Bessel functions
-!
-!                  w1 = k  (z)  AND  w2 = k    (z)
-!                        nu                nu+1
-!
-!     For a complex argument z where abs(z) .LE. 2 and a complex
-!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
-!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
-!     series expansions are used.
-!
-!-----------------------------------------------------------------------
-!-----------------------
-data tol /1.e-10/
-data pi /3.14159265358979/
-!-----------------------
-data d(1) / .577215664901533e+00/,  d(2) /-.420026350340952e-01/, &
-   & d(3) /-.421977345555443e-01/,  d(4) / .721894324666310e-02/, &
-   & d(5) /-.215241674114951e-03/,  d(6) /-.201348547807882e-04/, &
-   & d(7) / .113302723198170e-05/
-!-----------------------
-anorm(t) = amax1(abs(real(t)), abs(aimag(t)))
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = amax1(eps, 5.e-15)
-!
-!                     cl = - ln(z/2)
-!
-phi = atan2(aimag(z),real(z))
-cl = cmplx(-alog(r), -phi)
-mu = nu*cl
-c = cexp(mu)
-!
-!                   g1 = gamma(1 + nu)
-!                   g2 = gamma(1 - nu)
-!
-t = pi*nu
-if (anorm(nu) .gt. tol) go to 10
-a = 1.0 + (t*t)/6.0
-go to 20
-10 a = t/csin(t)
-!
-20 s = real(nu)**2 + aimag(nu)**2
-if (s .ge. 1.0) go to 21
-t = cgam0(nu)
-g1 = 1.0/t
-g2 = a*t
-go to 30
-21 t = 0.5 + (0.5 + nu)
-call cgamma (0, t, g1)
-g2 = cdiv(a,g1)
-!
-30 gm2 = 0.5*(g1 + g2)
-if (s .gt. 0.04) go to 31
-!
-!         The following is the Taylor series for
-!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
-!
-t = nu*nu
-w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
-   & d(3))*t + d(2))*t + d(1))
-gm1 = a*w1
-go to 40
-31 gm1 = 0.5*(g1 - g2)/nu
-!
-!            Initialization of the summation
-!
-40 p = 0.5*c*g1
-q = 0.5*cdiv(g2,c)
-x = real(mu)
-y = aimag(mu)
-if (anorm(mu) .gt. tol) go to 50
-u = x*y
-sh = cmplx(1.0, u/3.0)
-ch = cmplx(1.0, u)
-go to 60
-50 t = cmplx (-y, x)
-sh = csin(t)/t
-ch = ccos(t)
-!
-60 f = gm1*ch + gm2*cl*sh
-c = (1.0, 0.0)
-w1 = f
-w2 = p
-!
-!                 Summation of series
-!
-t = 0.25*(z*z)
-do k = 1, 50
-   ak = k
-   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
-   p = p/(ak - nu)
-   q = q/(ak + nu)
-   c = c*t/ak
-   t1 = c*f
-   w1 = w1 + t1
-   t2 = c*(p - ak*f)
-   w2 = w2 + t2
-   if (anorm(t1) .le. eps0*anorm(w1)) go to 80
-end do
-!
-80 w2 = w2 * zr
-return
-end subroutine ckps
-
-subroutine cbkml (z, r, zr, nu, n, w, w0)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: r
-complex, intent(in) :: z, zr, nu
-complex, intent(inout) :: w, w0
-integer :: i, m, num
-real :: a, b, c, c1, c2, e, eps, eps0, f, rnu, t, th, x, y
-real :: cos1
-real :: spmpar
-complex :: al, bl, s, u1, u2, u3
-real :: inu, l
-!-----------------------------------------------------------------------
-!
-!             Computation of the scaled Bessel function
-!
-!                   w = (exp(z)*sqrt(z)) k  (z)
-!                                         nu
-!     and the value
-!
-!                   w0 = k    (z) /k  (z)
-!                         nu+1      nu
-!
-!     For complex orders nu and nu + 1 and for complex argument z
-!     by use of the Miller algorithm. For the greatest accuracy,
-!     z should lie in a sector slightly larger than the right half
-!     plane. It is assumed that abs(real(nu)) .LT. 0.5, and that
-!     r = abs(z/2) AND zr = 2/z.
-!
-!-----------------------------------------------------------------------
-!---------------------
-!     c1 = sqrt(pi/2)
-!     c2 = sqrt(pi)
-!---------------------
-data c1 /1.25331413731559e+00/
-data c2 /1.77245385090552e+00/
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = amax1(eps, 5.e-15)
-!
-x = real(z)
-y = aimag(z)
-rnu = real(nu)
-inu = aimag(nu)
-!
-!     Calculation of m for use in Miller algorithm.
-!
-th = atan2(y,x)
-a = 3.0/(1.0 + r)
-b = 14.7/(28.0 + r)
-f = (2.0*r)**(0.25)
-if (rnu .eq. 0.5 .and. inu .ne. 0.0) go to 10
-c = 4.0*cos1(rnu)/(c1*eps0*f)
-go to 20
-10 c = 4.0*c2/f
-20 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-   & (2.0*cos(b*th))**2 + 1.5
-t = 0.0
-if (r .gt. 22.5) t = 0.01*(r - 22.5)**2
-num = 35.0 + 0.8*(r - 22.5) + t
-if (inu .ne. 0.0) m = m + num
-c = n
-if (c + rnu .lt. 0.327*abs(inu)) m = m + 10
-!
-!     Backward recurrence in Miller algorithm.
-!
-a = (0.5 - rnu)*(0.5 + rnu) + inu*inu
-e = 2.0*rnu*inu
-u2 = (0.0, 0.0)
-u1 = (1.0, 0.0)
-s = u1
-l = m
-do 30 i = 2, m
-   u3 = u2
-   u2 = u1
-   c = a/l + (l - 1.0)
-   al = cmplx(c, - e/l)
-   bl = 2.0*(l + z)
-   u1 = (bl*u2 - (l + 1.0)*u3)/al
-   s = s + u1
-   c = abs(real(u1)) + abs(aimag(u1))
-   if (i .eq. m .or. c .lt. 1.e+8) go to 30
-!
-!           Rescale to avoid overflow
-!
-   u2 = u2/c
-   u1 = u1/c
-   s = s/c
-!
-30 l = l - 1.0
-!
-!     Last step in the Miller algorithm.
-!
-if (c .lt. 2.0) go to 40
-u2 = u2/c
-u1 = u1/c
-s = s/c
-40 u3 = u2
-u2 = u1
-al = cmplx(0.5*a, - 0.5*e)
-bl = 1.0 + z
-u1 = (bl*u2 - u3)/al
-s = s + u1
-!
-!     Final assembly
-!
-w = c1*(u1/s)
-w0 = 1.0 + 0.5*(nu + 0.5 - u2/u1)*zr
-return
-end subroutine cbkml
-
-subroutine cbsslk (z, r, w)
-implicit none
-real, intent(in) :: r
-complex :: z
-complex, intent(inout) :: w
-integer :: i, ind, m, n, n1
-real :: a, ai, cpi, pi, rz, t, x, y, znorm, zr1, zr2
-real :: cpabs
-complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real :: nu, nu1
-complex :: cxp
-!-----------------------------------------------------------------------
-!
-!         Calculation of the modified Bessel function of the
-!         second kind for real order r and complex argument z.
-!         It is assumed that -pi .LT. arg z .LE. pi.
-!
-!-----------------------------------------------------------------------
-!     Written by
-!         Andrew H. van Tuyl
-!         Naval Surface Warfare Center
-!     modified by A.H. Morris (NSWC)
-!     revised ... oct 1992
-!---------------------------
-!---------------------------
-!     cpi = sqrt(pi/2)
-!---------------------------
-data pi  /3.14159265358979/
-data cpi /1.25331413731550/
-!
-rz = cpabs(real(z), aimag(z))
-!
-!     Asymptotic expansion
-!
-if (rz .lt. 17.5 + 0.5*r*r) go to 5
-call cka (z, r, w)
-return
-!
-!          Reduction of r to the range -0.5 .LT. nu .LE. 0.5
-!
-5 a = abs(r)
-n = a
-nu = a - float(n)
-t = nu - 0.5
-if (t .le. 0.0) go to 10
-nu = t - 0.5
-n = n + 1
-10 m = n
-nu1 = nu
-!
-ind = 1
-cz = z
-x = 0.5*real(z)
-y = 0.5*aimag(z)
-call crec (x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
-if (t .ne. 0.0) go to 20
-!
-!               Calculation for nu = 0.5
-!
-w = cmplx(cpi, 0.0)
-if (n .eq. 0) go to 90
-if (x .ge. 0.0) go to 15
-ind = -1
-cz = - z
-zr = - zr
-15 u1 = w
-u2 = w
-n = n + 1
-nu = - 0.5
-go to 70
-!
-!           Calculation for abs(nu) .LT. 0.5
-!
-20 znorm = 0.5*rz
-if (znorm .gt. 1.0) go to 30
-ind = 0
-call ckm (z, znorm, zr, nu, u1, u2)
-go to 50
-30 if (x .lt. 0.0) go to 40
-call ckml (z, znorm, zr, nu, u1, u2)
-go to 50
-40 ind = -1
-cz = - z
-zr = - zr
-call ckml (cz, znorm, zr, nu, u1, u2)
-!
-50 if (n .gt. 1) go to 70
-w = u1
-if (n .ne. 0) w = u2
-go to 90
-!
-!                 Recursion
-!
-70 n1 = n - 1
-do i = 1, n1
-   ai = i
-   u3 = (nu + ai)*zr*u2 + u1
-   u1 = u2
-   u2 = u3
-end do
-w = u3
-!
-90 if (ind .eq. 0) return
-w = w*cexp(-cz)/csqrt(cz)
-if (ind .gt. 0) return
-!
-!            Analytic continuation
-!
-ex = cxp(m, nu1)
-cn = cmplx (a, 0.0)
-if (y .lt. 0.0) go to 100
-w1 = cmplx (aimag(z), -real(z))
-call cbsslj (w1, cn, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
-w = ex*(ex*w + w2)
-return
-100 ex = conjg(ex)
-w1 = cmplx (-aimag(z), real(z))
-call cbsslj (w1, cn, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
-w = ex*(ex*w + w2)
-return
-end subroutine cbsslk
 

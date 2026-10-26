@@ -56,6 +56,11 @@ END MODULE
             with self.assertRaises(ValueError):
                 procedure_blocks(source)
 
+    def test_procedure_reader_skips_nested_interfaces_and_accepts_prefixes(self):
+        source = ('pure subroutine s(x)\ninterface\npure elemental real function f(x)\n'
+                  'real,intent(in)::x\nend function f\nend interface\nend subroutine s\n')
+        self.assertEqual(set(procedure_blocks(source)), {'S'})
+
     def test_argument_modes_types_shapes_and_order_are_checked(self):
         source = {'S': {'s': {'type spec': 'type spec : (UNKNOWN 0)',
                              'attributes': 'attributes: (PROCEDURE SUBROUTINE)', 'Formal arglist': 'n x'},

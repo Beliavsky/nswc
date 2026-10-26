@@ -6,7 +6,7 @@ Approved for public release; distribution unlimited.
 
 This is a GitHub-browseable edition of the 1993 manual, checked against the
 original fixed-form Fortran source (`nswc_orig.f`). The routine index covers **576**
-documented procedures; the source contains **1,062** declarations including
+documented procedures; the source contains **1,062** external definitions including
 implementation helpers.
 
 **Scope of verification.** Public procedure names, declared argument order,
@@ -88,9 +88,10 @@ Named procedure endings require Fortran 90 or newer, including in `nswc.f`.
 ## Optional interfaces
 
 [`nswc_interfaces.f90`](nswc_interfaces.f90) provides explicit interfaces for all
-1,062 external procedures in the maintained sources. Its interfaces were
-generated with Intel `ifx` and checked independently with GNU Fortran. Existing
-callers can continue without it. To enable argument checking, compile the module
+1,062 external procedures in `nswc.f90`. Its interfaces were
+generated with Intel `ifx` and checked independently with GNU Fortran. Elemental
+procedures require explicit interfaces, supplied by this module or equivalent
+local interface blocks. To enable argument checking, compile the module
 with the same compiler as the library, then import selected procedures:
 
 ```fortran
@@ -108,6 +109,26 @@ The module contains interfaces only; link the library object as usual. The
 [interface guide](docs/interfaces.md) describes generation, verification, Intel
 commands, and callback limitations. Run `python tools/validate_interfaces.py`
 to compare all signatures and test callers using the module.
+
+## Pure and elemental procedures
+
+The free-form version declares **27 procedures `pure elemental`** and another
+**319 `pure`**. Implementations remain external procedures. Internal calls have
+local interfaces wherever pure or elemental calls require them, so compiling
+`nswc.f90` still needs no additional source file or module dependency.
+
+Import elemental routines before calling them, including scalar calls:
+
+```fortran
+use nswc_interfaces, only: cbrt
+! cbrt([-8.0, 0.0, 27.0]) returns approximately [-2.0, 0.0, 3.0].
+```
+
+The [purity guide](docs/purity.md) describes analysis, compiler verification,
+remaining blockers, and a legacy interface view for unchanged `nswc.f`.
+The [review manifest](tools/procedure-purity.json) records each contract
+and code hash. `python tools/validate_procedure_purity.py` checks unchanged data
+and executable compiler trees, pure callers, and elemental array calls.
 
 ## Regenerating the source
 

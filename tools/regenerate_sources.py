@@ -5,6 +5,7 @@ Existing source links are resolved by procedure name before partitions are repla
 """
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -13,12 +14,11 @@ from fixed_to_free import convert_text
 from lowercase_fortran import lowercase
 from sentence_case_comments import sentence_case
 from format_free_form import format_source
+from fortran_procedures import HEADER, procedure_spans
+from procedure_purity import transform as apply_purity
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HEADER = re.compile(
-    r"^\s*(?:(?:DOUBLE\s*PRECISION|DOUBLE\s*COMPLEX|REAL|INTEGER|COMPLEX|LOGICAL|CHARACTER)"
-    r"(?:\*\d+)?\s+)?(?:SUBROUTINE|FUNCTION)\s+(\w+)", re.I)
 LINK = re.compile(
     r"\[([^\]]*)\]\(([^()]*source_parts/(nswc_part_\d+\.(?:f90|f)))#L(\d+)\)")
 
@@ -26,16 +26,11 @@ LINK = re.compile(
 def generate(root=ROOT):
     original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
-    free = comments.text
+    free = apply_purity(comments.text)
     lines = free.splitlines(keepends=True)
     declarations = {}
-    for number, line in enumerate(lines, 1):
-        match = HEADER.match(line)
-        if match and not line.lstrip().startswith("!"):
-            name = match[1].upper()
-            if name in declarations:
-                raise ValueError(f"Duplicate procedure: {name}")
-            declarations[name] = number
+    for name, start, end in procedure_spans(free):
+        declarations[name] = start + 1
     if len(declarations) != 1062:
         raise ValueError(f"Expected 1062 procedures, found {len(declarations)}")
 
@@ -45,8 +40,19 @@ def generate(root=ROOT):
         if number - starts[-1] >= 10500:
             starts.append(number)
     bounds = starts + [len(lines) + 1]
+    report = comments.report(original_free)
+    before_comments = [(i, s) for i, s in enumerate(comments.text.splitlines(True), 1) if s.lstrip().startswith('!')]
+    after_comments = [(i, s) for i, s in enumerate(free.splitlines(True), 1) if s.lstrip().startswith('!')]
+    if [s for _, s in before_comments] != [s for _, s in after_comments]:
+        raise ValueError('Purity annotation changed the comment stream')
+    comment_lines = {a[0]: b[0] for a, b in zip(before_comments, after_comments)}
+    for entry in report['unrecognized_prose_words'].values():
+        entry['first_line'] = comment_lines[entry['first_line']]
+    for entry in report['uncertain_prose']:
+        entry['line'] = comment_lines[entry['line']]
+    report['generated_source_sha256'] = hashlib.sha256(free.encode('ascii')).hexdigest()
     outputs = {root / "nswc.f90": free,
-               root / 'tools/comment-case-review.json': json.dumps(comments.report(original_free), indent=2) + '\n'}
+               root / 'tools/comment-case-review.json': json.dumps(report, indent=2) + '\n'}
     locations = {}
     for index, start in enumerate(starts):
         end = bounds[index + 1]

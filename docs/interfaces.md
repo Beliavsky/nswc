@@ -1,9 +1,10 @@
 # Optional external procedure interfaces
 
 `nswc_interfaces.f90` describes all 1,062 external procedures in the maintained
-`nswc.f90` and `nswc.f`. It contains interface blocks, without implementations.
-Existing callers can keep their historical external calls. New callers can opt
-into compiler argument checking:
+`nswc.f90`. It contains interface blocks, without implementations, including the
+reviewed PURE and ELEMENTAL attributes. Elemental calls require an explicit
+interface even with scalar arguments. Use this module or equivalent local
+interface blocks; other historical external calls can retain implicit interfaces.
 
 ```fortran
 use nswc_interfaces, only: sgefa, sgesl
@@ -14,7 +15,18 @@ avoid duplicate declarations. All library interfaces, including helpers, are
 public; importing selected names avoids conflicts with local variables or other
 libraries. The documented routines remain the preferred entry points.
 
-The module describes the maintained sources. The archived `nswc_orig.f` predates
+For the unchanged fixed-form versions, create an interface view without the new
+attributes before compiling the module:
+
+```sh
+python tools/interface_variants.py nswc_interfaces.f90 --output legacy_interfaces.f90
+gfortran -c legacy_interfaces.f90
+```
+
+The legacy view defines the same module name, `nswc_interfaces`; compile either
+the modern view or the legacy view for the selected library version. The
+interface validator selects the appropriate view when testing `nswc.f`.
+The archived `nswc_orig.f` predates
 the declaration corrections in the [warning review](compiler-warnings.md); its
 existing tests continue to use their historical declarations.
 

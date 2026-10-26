@@ -1,3 +1,580 @@
+subroutine cbka (z, cnu, w)
+implicit none
+complex :: z
+complex, intent(in) :: cnu
+complex, intent(inout) :: w
+integer :: i
+real :: c, eps, u, v
+real :: anorm
+real :: spmpar
+real :: m
+complex :: a, p, t, zr
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
+!-----------------------------------------------------------------------
+!        Computation of the Bessel function K for complex order
+!        cnu and complex argument z by the asymptotic expansion
+!-----------------------------------------------------------------------
+!--------------------------
+anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
+!--------------------------
+!     c = pi**(1/2)
+!--------------------------
+data c /1.77245385090552e+00/
+!--------------------------
+!
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1.0 + eps .GT. 1.0 .
+!
+eps = spmpar(1)
+!
+!--------------------------
+call crec (real(z), aimag(z), u, v)
+zr = cmplx(0.5*u, 0.5*v)
+a = cnu*cnu - 0.25
+m = 1.0
+t = a*zr
+p = t
+!
+do i = 1, 16
+   a = a - 2.0*m
+   m = m + 1.0
+   t = t*a*zr/m
+   p = p + t
+   if (anorm(t) .le. eps*anorm(p)) go to 20
+end do
+!
+20 p = p + 1.0
+t = csqrt(zr)
+if (aimag(z) .eq. 0.0) t = conjg(t)
+w = c*t*p*cexp(-z)
+return
+end subroutine cbka
+
+subroutine cbkm (z, rz, cnu, w)
+implicit none
+real, intent(in) :: rz
+complex, intent(in) :: z, cnu
+complex, intent(inout) :: w
+integer :: i, ind, m, n, n1
+real :: a, ai, b, c, cpi, pi, t, x, y, znorm, zr1, zr2
+real :: nu
+complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
+complex :: cxp
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
+!-------------------------------------------------------------------
+!     Calculation of the modified Bessel function of the second
+!     kind with complex order and argument BY means of Maclaurin
+!     expansions and the Miller algorithm. It is assumed that
+!     rz = abs(z).
+!-------------------------------------------------------------------
+!---------------------------
+!     cpi = sqrt(pi/2)
+!---------------------------
+data pi  /3.14159265358979/
+data cpi /1.25331413731550/
+!
+!        Reduction of cnu to r = nu + b*i where
+!                -0.5 .LT. nu .LE. 0.5
+!
+r = cnu
+if (real(r) .lt. 0.0) r = - r
+!
+a = real(r)
+b = aimag(r)
+n = a
+nu = a - float(n)
+t = nu - 0.5
+if (t .le. 0.0) go to 10
+nu = t - 0.5
+n = n + 1
+10 m = n
+r1 = cmplx(nu, b)
+!
+ind = 1
+cz = z
+x = 0.5*real(z)
+y = 0.5*aimag(z)
+call crec (x, y, zr1, zr2)
+zr = cmplx (zr1, zr2)
+if (t .ne. 0.0) go to 20
+if (b .ne. 0.0) go to 20
+!
+!               Calculation for nu = 0.5
+!
+w = cmplx(cpi, 0.0)
+w1 = (1.0, 0.0)
+if (n .eq. 0) go to 90
+if (x .ge. 0.0) go to 15
+ind = -1
+cz = - z
+zr = - zr
+15 u1 = w
+u2 = w
+n = n + 1
+r1 = (-0.5, 0.0)
+go to 70
+!
+!           Calculation for abs(nu) .LT. 0.5
+!
+20 znorm = 0.5*rz
+if (znorm .gt. 1.0) go to 30
+ind = 0
+call ckps (z, znorm, zr, r1, u1, u2)
+go to 50
+30 u1 = (1.0, 0.0)
+if (x .lt. 0.0) go to 40
+call cbkml (z, znorm, zr, r1, n, w1, u2)
+go to 50
+40 ind = -1
+cz = - z
+zr = - zr
+call cbkml (cz, znorm, zr, r1, n, w1, u2)
+!
+50 if (n .gt. 1) go to 70
+w = u1
+if (n .ne. 0) w = u2
+go to 90
+!
+!                 Recursion
+!
+70 n1 = n - 1
+do i = 1, n1
+   ai = i
+   u3 = (r1 + ai)*zr*u2 + u1
+   u1 = u2
+   u2 = u3
+end do
+w = u3
+!
+90 if (ind .eq. 0) return
+w = w*w1*cexp(-cz)/csqrt(cz)
+if (ind .gt. 0) return
+!
+!            Analytic continuation
+!
+c = exp(0.5*b*pi)
+ex = cxp(m, nu)
+if (y .lt. 0.0) go to 100
+ex = c*ex
+w1 = cmplx (aimag(z), -real(z))
+call cbsslj (w1, r, w2)
+w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w = ex*(ex*w + w2)
+return
+100 ex = conjg(ex)/c
+w1 = cmplx (-aimag(z), real(z))
+call cbsslj (w1, r, w2)
+w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w = ex*(ex*w + w2)
+return
+end subroutine cbkm
+
+subroutine ckps (z, r, zr, nu, w1, w2)
+implicit none
+real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex :: nu
+complex, intent(inout) :: w1, w2
+integer :: k
+real :: ak, eps, eps0, phi, pi, s, tol, u, x, y
+real :: anorm
+real :: spmpar
+real :: d(7)
+complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
+   & t2
+complex :: cgam0
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+end interface
+!-----------------------------------------------------------------------
+!
+!        Calculation of the modified Bessel functions
+!
+!                  w1 = k  (z)  AND  w2 = k    (z)
+!                        nu                nu+1
+!
+!     For a complex argument z where abs(z) .LE. 2 and a complex
+!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
+!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
+!     series expansions are used.
+!
+!-----------------------------------------------------------------------
+!-----------------------
+data tol /1.e-10/
+data pi /3.14159265358979/
+!-----------------------
+data d(1) / .577215664901533e+00/,  d(2) /-.420026350340952e-01/, &
+   & d(3) /-.421977345555443e-01/,  d(4) / .721894324666310e-02/, &
+   & d(5) /-.215241674114951e-03/,  d(6) /-.201348547807882e-04/, &
+   & d(7) / .113302723198170e-05/
+!-----------------------
+anorm(t) = amax1(abs(real(t)), abs(aimag(t)))
+!-----------------------------------------------------------------------
+!
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+!
+eps = spmpar(1)
+!
+!-----------------------------------------------------------------------
+eps0 = amax1(eps, 5.e-15)
+!
+!                     cl = - ln(z/2)
+!
+phi = atan2(aimag(z),real(z))
+cl = cmplx(-alog(r), -phi)
+mu = nu*cl
+c = cexp(mu)
+!
+!                   g1 = gamma(1 + nu)
+!                   g2 = gamma(1 - nu)
+!
+t = pi*nu
+if (anorm(nu) .gt. tol) go to 10
+a = 1.0 + (t*t)/6.0
+go to 20
+10 a = t/csin(t)
+!
+20 s = real(nu)**2 + aimag(nu)**2
+if (s .ge. 1.0) go to 21
+t = cgam0(nu)
+g1 = 1.0/t
+g2 = a*t
+go to 30
+21 t = 0.5 + (0.5 + nu)
+call cgamma (0, t, g1)
+g2 = cdiv(a,g1)
+!
+30 gm2 = 0.5*(g1 + g2)
+if (s .gt. 0.04) go to 31
+!
+!         The following is the Taylor series for
+!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
+!
+t = nu*nu
+w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
+   & d(3))*t + d(2))*t + d(1))
+gm1 = a*w1
+go to 40
+31 gm1 = 0.5*(g1 - g2)/nu
+!
+!            Initialization of the summation
+!
+40 p = 0.5*c*g1
+q = 0.5*cdiv(g2,c)
+x = real(mu)
+y = aimag(mu)
+if (anorm(mu) .gt. tol) go to 50
+u = x*y
+sh = cmplx(1.0, u/3.0)
+ch = cmplx(1.0, u)
+go to 60
+50 t = cmplx (-y, x)
+sh = csin(t)/t
+ch = ccos(t)
+!
+60 f = gm1*ch + gm2*cl*sh
+c = (1.0, 0.0)
+w1 = f
+w2 = p
+!
+!                 Summation of series
+!
+t = 0.25*(z*z)
+do k = 1, 50
+   ak = k
+   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
+   p = p/(ak - nu)
+   q = q/(ak + nu)
+   c = c*t/ak
+   t1 = c*f
+   w1 = w1 + t1
+   t2 = c*(p - ak*f)
+   w2 = w2 + t2
+   if (anorm(t1) .le. eps0*anorm(w1)) go to 80
+end do
+!
+80 w2 = w2 * zr
+return
+end subroutine ckps
+
+subroutine cbkml (z, r, zr, nu, n, w, w0)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: r
+complex, intent(in) :: z, zr, nu
+complex, intent(inout) :: w, w0
+integer :: i, m, num
+real :: a, b, c, c1, c2, e, eps, eps0, f, rnu, t, th, x, y
+real :: cos1
+real :: spmpar
+complex :: al, bl, s, u1, u2, u3
+real :: inu, l
+!-----------------------------------------------------------------------
+!
+!             Computation of the scaled Bessel function
+!
+!                   w = (exp(z)*sqrt(z)) k  (z)
+!                                         nu
+!     and the value
+!
+!                   w0 = k    (z) /k  (z)
+!                         nu+1      nu
+!
+!     For complex orders nu and nu + 1 and for complex argument z
+!     by use of the Miller algorithm. For the greatest accuracy,
+!     z should lie in a sector slightly larger than the right half
+!     plane. It is assumed that abs(real(nu)) .LT. 0.5, and that
+!     r = abs(z/2) AND zr = 2/z.
+!
+!-----------------------------------------------------------------------
+!---------------------
+!     c1 = sqrt(pi/2)
+!     c2 = sqrt(pi)
+!---------------------
+data c1 /1.25331413731559e+00/
+data c2 /1.77245385090552e+00/
+!-----------------------------------------------------------------------
+!
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+!
+eps = spmpar(1)
+!
+!-----------------------------------------------------------------------
+eps0 = amax1(eps, 5.e-15)
+!
+x = real(z)
+y = aimag(z)
+rnu = real(nu)
+inu = aimag(nu)
+!
+!     Calculation of m for use in Miller algorithm.
+!
+th = atan2(y,x)
+a = 3.0/(1.0 + r)
+b = 14.7/(28.0 + r)
+f = (2.0*r)**(0.25)
+if (rnu .eq. 0.5 .and. inu .ne. 0.0) go to 10
+c = 4.0*cos1(rnu)/(c1*eps0*f)
+go to 20
+10 c = 4.0*c2/f
+20 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
+   & (2.0*cos(b*th))**2 + 1.5
+t = 0.0
+if (r .gt. 22.5) t = 0.01*(r - 22.5)**2
+num = 35.0 + 0.8*(r - 22.5) + t
+if (inu .ne. 0.0) m = m + num
+c = n
+if (c + rnu .lt. 0.327*abs(inu)) m = m + 10
+!
+!     Backward recurrence in Miller algorithm.
+!
+a = (0.5 - rnu)*(0.5 + rnu) + inu*inu
+e = 2.0*rnu*inu
+u2 = (0.0, 0.0)
+u1 = (1.0, 0.0)
+s = u1
+l = m
+do 30 i = 2, m
+   u3 = u2
+   u2 = u1
+   c = a/l + (l - 1.0)
+   al = cmplx(c, - e/l)
+   bl = 2.0*(l + z)
+   u1 = (bl*u2 - (l + 1.0)*u3)/al
+   s = s + u1
+   c = abs(real(u1)) + abs(aimag(u1))
+   if (i .eq. m .or. c .lt. 1.e+8) go to 30
+!
+!           Rescale to avoid overflow
+!
+   u2 = u2/c
+   u1 = u1/c
+   s = s/c
+!
+30 l = l - 1.0
+!
+!     Last step in the Miller algorithm.
+!
+if (c .lt. 2.0) go to 40
+u2 = u2/c
+u1 = u1/c
+s = s/c
+40 u3 = u2
+u2 = u1
+al = cmplx(0.5*a, - 0.5*e)
+bl = 1.0 + z
+u1 = (bl*u2 - u3)/al
+s = s + u1
+!
+!     Final assembly
+!
+w = c1*(u1/s)
+w0 = 1.0 + 0.5*(nu + 0.5 - u2/u1)*zr
+return
+end subroutine cbkml
+
+subroutine cbsslk (z, r, w)
+implicit none
+real, intent(in) :: r
+complex :: z
+complex, intent(inout) :: w
+integer :: i, ind, m, n, n1
+real :: a, ai, cpi, pi, rz, t, x, y, znorm, zr1, zr2
+complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
+real :: nu, nu1
+complex :: cxp
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
+!-----------------------------------------------------------------------
+!
+!         Calculation of the modified Bessel function of the
+!         second kind for real order r and complex argument z.
+!         It is assumed that -pi .LT. arg z .LE. pi.
+!
+!-----------------------------------------------------------------------
+!     Written by
+!         Andrew H. van Tuyl
+!         Naval Surface Warfare Center
+!     modified by A.H. Morris (NSWC)
+!     revised ... oct 1992
+!---------------------------
+!---------------------------
+!     cpi = sqrt(pi/2)
+!---------------------------
+data pi  /3.14159265358979/
+data cpi /1.25331413731550/
+!
+rz = cpabs(real(z), aimag(z))
+!
+!     Asymptotic expansion
+!
+if (rz .lt. 17.5 + 0.5*r*r) go to 5
+call cka (z, r, w)
+return
+!
+!          Reduction of r to the range -0.5 .LT. nu .LE. 0.5
+!
+5 a = abs(r)
+n = a
+nu = a - float(n)
+t = nu - 0.5
+if (t .le. 0.0) go to 10
+nu = t - 0.5
+n = n + 1
+10 m = n
+nu1 = nu
+!
+ind = 1
+cz = z
+x = 0.5*real(z)
+y = 0.5*aimag(z)
+call crec (x, y, zr1, zr2)
+zr = cmplx (zr1, zr2)
+if (t .ne. 0.0) go to 20
+!
+!               Calculation for nu = 0.5
+!
+w = cmplx(cpi, 0.0)
+if (n .eq. 0) go to 90
+if (x .ge. 0.0) go to 15
+ind = -1
+cz = - z
+zr = - zr
+15 u1 = w
+u2 = w
+n = n + 1
+nu = - 0.5
+go to 70
+!
+!           Calculation for abs(nu) .LT. 0.5
+!
+20 znorm = 0.5*rz
+if (znorm .gt. 1.0) go to 30
+ind = 0
+call ckm (z, znorm, zr, nu, u1, u2)
+go to 50
+30 if (x .lt. 0.0) go to 40
+call ckml (z, znorm, zr, nu, u1, u2)
+go to 50
+40 ind = -1
+cz = - z
+zr = - zr
+call ckml (cz, znorm, zr, nu, u1, u2)
+!
+50 if (n .gt. 1) go to 70
+w = u1
+if (n .ne. 0) w = u2
+go to 90
+!
+!                 Recursion
+!
+70 n1 = n - 1
+do i = 1, n1
+   ai = i
+   u3 = (nu + ai)*zr*u2 + u1
+   u1 = u2
+   u2 = u3
+end do
+w = u3
+!
+90 if (ind .eq. 0) return
+w = w*cexp(-cz)/csqrt(cz)
+if (ind .gt. 0) return
+!
+!            Analytic continuation
+!
+ex = cxp(m, nu1)
+cn = cmplx (a, 0.0)
+if (y .lt. 0.0) go to 100
+w1 = cmplx (aimag(z), -real(z))
+call cbsslj (w1, cn, w2)
+w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w = ex*(ex*w + w2)
+return
+100 ex = conjg(ex)
+w1 = cmplx (-aimag(z), real(z))
+call cbsslj (w1, cn, w2)
+w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w = ex*(ex*w + w2)
+return
+end subroutine cbsslk
+
 subroutine cka (z, nu, w)
 implicit none
 complex :: z
@@ -9,6 +586,15 @@ real :: anorm
 real :: spmpar
 real :: m
 complex :: p, t, zr
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for real order nu
 !        and complex argument z by the asymptotic expansion
@@ -554,9 +1140,16 @@ complex, intent(in) :: z
 complex, intent(inout) :: ai
 complex, intent(inout) :: aip
 real :: a, b, r
-real :: cpabs
 complex :: bi
 complex :: bip
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z.
@@ -680,8 +1273,15 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: ai, aip
 real :: a, b, c1, r
-real :: cpabs
 complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -739,6 +1339,15 @@ real :: spmpar
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
 complex :: alpha, beta, j
 real :: c(30), d(30)
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip for
 !     complex argument z by means of asymptotic expansions.
@@ -916,9 +1525,16 @@ complex, intent(in) :: z
 complex, intent(inout) :: bi
 complex, intent(inout) :: bip
 real :: a, b, r
-real :: cpabs
 complex :: ai
 complex :: aip
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z.
@@ -953,8 +1569,15 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
 real :: a, c1, r, sqt3, x, y
-real :: cpabs
 complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -1023,6 +1646,15 @@ real :: exparg
 real :: spmpar
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, &
    & cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !---------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip for
 !     complex argument z by means of asymptotic expansions.
@@ -1644,6 +2276,15 @@ integer :: i, l, m
 real :: a, ai, al, b, c, c1, eps, r, th, x1, x2
 real :: spmpar
 complex :: bi, u1, u2, u3, s, e
+interface
+   pure elemental subroutine capo(x,y,r,theta)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: r
+      real, intent(inout) :: theta
+   end subroutine capo
+end interface
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z
@@ -2302,10 +2943,17 @@ real :: spmpar
 real :: alnrel
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, &
    & aktemp, ck1, j
-complex :: cflect, km, z
+complex :: km, z
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
    & fb(12)
 logical :: branch
+interface
+   pure elemental function cflect(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cflect
+   end function cflect
+end interface
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integral F(k)
 !     for complex values of the modulus k. it is assumed that l.NE.0
@@ -2523,7 +3171,7 @@ return
 return
 end function ck
 
-complex function cflect(z)
+pure elemental complex function cflect(z)
 implicit none
 !---------------------------------------------------------
 !     Reflects z with respect to the origin if real(z)
@@ -2660,10 +3308,17 @@ real :: alnrel
 real :: spmpar
 complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, j
 complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk, atn
-complex :: cflect, k1, l1, ak2, al2, z, g, g1, gg, gp
+complex :: k1, l1, ak2, al2, z, g, g1, gg, gp
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
    & fb(12)
 logical :: branch
+interface
+   pure elemental function cflect(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cflect
+   end function cflect
+end interface
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
 !     and E(k) for complex values of the modulus k. it is assumed
@@ -3099,8 +3754,15 @@ real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, &
    & r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
    & t1, t2, td, th1, tr, ts, w
 real :: alnrel
-real :: cpabs
 real :: k2, l2, ln4
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !          Real elliptic integrals of the first and second kinds
@@ -3241,7 +3903,15 @@ double precision, intent(inout) :: f, e
 double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, ln4, &
    & p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
    & ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
-double precision :: dlnrel, dcpabs
+double precision :: dlnrel
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !                  Double precision computation of the
@@ -4607,6 +5277,16 @@ real, intent(in) :: u
 real, intent(in) :: k, l
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
+interface
+   pure elemental subroutine scdm(u,k,s,c,d)
+      implicit none
+      real, intent(in) :: u
+      real, intent(in) :: k
+      real, intent(out) :: s
+      real, intent(out) :: c
+      real, intent(out) :: d
+   end subroutine scdm
+end interface
 !     --------------------------------------------------------
 !     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
@@ -4654,7 +5334,7 @@ d = 1.0
 return
 end subroutine scd
 
-subroutine scdm(u,k,s,c,d)
+pure elemental subroutine scdm(u,k,s,c,d)
 implicit none
 real, intent(out) :: c, d, s
 real, intent(in) :: u
@@ -4921,7 +5601,7 @@ return
 return
 end subroutine elpfc1
 
-subroutine peq(z, w, ierr)
+pure elemental subroutine peq(z, w, ierr)
 implicit none
 !
 !     Weierstrass P-function in the equianharmonic case
@@ -4967,7 +5647,7 @@ w = 1e0/w + 6e0*z4*(5e0 + z6)/(1e0 - z6)**2 + z4* &
 return
 end subroutine peq
 
-subroutine peq1(z, w, ierr)
+pure elemental subroutine peq1(z, w, ierr)
 implicit none
 !
 !     First derivative of Weierstrass P-function in the
@@ -5015,7 +5695,7 @@ w = (((14e0*z6 + 294e0)*z6 + 126e0)*z6 - 2e0)/w + &
 return
 end subroutine peq1
 
-subroutine plem(z, w, ierr)
+pure elemental subroutine plem(z, w, ierr)
 implicit none
 !
 !     Weierstrass P-function in the lemniscatic case
@@ -5063,7 +5743,7 @@ w = 1e0/w + 4e0*w*(3e0 + z4)/(1e0 - z4)**2 + &
 return
 end subroutine plem
 
-subroutine plem1(z, w, ierr)
+pure elemental subroutine plem1(z, w, ierr)
 implicit none
 !
 !     First derivative of Weierstrass P-function in the
@@ -6227,7 +6907,7 @@ if (p .lt. 0.0) p = 0.0
 return
 end subroutine pkill
 
-subroutine plcopy (a,ka,m,b,kb,n)
+pure subroutine plcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(*)
@@ -6255,7 +6935,7 @@ end do
 return
 end subroutine plcopy
 
-subroutine dpcopy (a,ka,m,b,kb,n)
+pure subroutine dpcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(*)
@@ -6283,7 +6963,7 @@ end do
 return
 end subroutine dpcopy
 
-subroutine padd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine padd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -6307,7 +6987,7 @@ end do
 return
 end subroutine padd
 
-subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -6331,7 +7011,7 @@ end do
 return
 end subroutine dpadd
 
-subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -6355,7 +7035,7 @@ end do
 return
 end subroutine psubt
 
-subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -6379,7 +7059,7 @@ end do
 return
 end subroutine dpsubt
 
-subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -6420,7 +7100,7 @@ do 60 j = jmin,n
 return
 end subroutine pmult
 
-subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -6461,7 +7141,7 @@ do 60 j = jmin,n
 return
 end subroutine dpmult
 
-subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -6520,7 +7200,7 @@ return
 return
 end subroutine pdiv
 
-subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -6578,7 +7258,7 @@ return
 return
 end subroutine dpdiv
 
-subroutine plpwr(r,a,ka,m,b,kb,n,ierr)
+pure subroutine plpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -6637,7 +7317,7 @@ return
 return
 end subroutine plpwr
 
-subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
+pure subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -6694,7 +7374,7 @@ return
 return
 end subroutine dplpwr
 
-subroutine pinv (a, d, n, q)
+pure subroutine pinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(n)
@@ -6755,7 +7435,7 @@ end do
 return
 end subroutine pinv
 
-subroutine dpinv (a, d, n, q)
+pure subroutine dpinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n)
@@ -6875,7 +7555,7 @@ end do
 return
 end subroutine mplnmv
 
-real function csevl (x, a, n)
+pure real function csevl (x, a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x
@@ -6904,7 +7584,7 @@ csevl = 0.5 * (s0 - s2)
 return
 end function csevl
 
-double precision function dcsevl (x, a, n)
+pure double precision function dcsevl (x, a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n), x
@@ -8295,9 +8975,15 @@ complex, intent(inout) :: z(3)
 real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, &
    & rt3, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, &
    & y2, y3
-real :: cbrt
 real :: spmpar
 real :: aq(3)
+interface
+   pure elemental function cbrt(x)
+      implicit none
+      real, intent(in) :: x
+      real :: cbrt
+   end function cbrt
+end interface
 !-----------------------------------------------------------------------
 !
 !        cbcrt computes the roots of the real polynomial
@@ -8509,7 +9195,14 @@ double precision, intent(inout) :: zr(3), zi(3)
 double precision :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, &
    & ra, rb, rq, rt, rt3, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, &
    & x1, x2, x3, y, y1, y2, y3
-double precision :: dpmpar, dcbrt
+double precision :: dpmpar
+interface
+   pure elemental function dcbrt(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: dcbrt
+   end function dcbrt
+end interface
 !-------------------
 data rt3 /1.732050807568877293527446341505872366943d0/
 !-----------------------------------------------------------------------
@@ -9111,6 +9804,18 @@ double precision :: dpmpar
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
 !-------------------------
 !
 !
@@ -9525,6 +10230,18 @@ logical :: tried
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
 !
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -9788,750 +10505,4 @@ a1 = b - a*(d/c)
 a7 = a + g*d + h*f
 return
 end subroutine calcsc
-
-subroutine nextk(type, n, qp, k, qk)
-implicit none
-integer :: n
-integer :: type
-double precision :: qp(n), k(n), qk(n)
-integer :: i
-double precision :: temp
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-!
-!     Computes the next k polynomials using the scalars
-!     computed in calcsc.
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-if (type .eq. 3) go to 40
-temp = a
-if (type .eq. 1) temp = b
-if (dabs(a1) .gt. dabs(temp)*eta*10.) go to 20
-!
-!     If a1 is nearly zero then use a special form of the
-!     recurrence
-!
-k(1) = 0.d0
-k(2) = -a7*qp(1)
-do 10 i = 3,n
-   k(i) = a3*qk(i - 2) - a7*qp(i - 1)
-10 continue
-return
-!
-!     Use scaled form of the recurrence
-!
-20 a7 = a7/a1
-a3 = a3/a1
-k(1) = qp(1)
-k(2) = qp(2) - a7*qp(1)
-do i = 3,n
-   k(i) = a3*qk(i - 2) - a7*qp(i - 1) + qp(i)
-end do
-return
-!
-!     Use unscaled form of the recurrence if type is 3
-!
-40 k(1) = 0.d0
-k(2) = 0.d0
-do i = 3,n
-   k(i) = qk(i - 2)
-end do
-return
-end subroutine nextk
-
-subroutine newest (type, uu, vv, nn, p, k)
-implicit none
-integer :: nn
-integer :: type
-double precision :: uu, vv, p(nn), k(nn)
-integer :: n
-double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-!
-!     Compute new estimates of the quadratic coefficients
-!     using the scalars computed in calcsc.
-!
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-!     Use formulas appropriate to setting of type.
-!
-n = nn - 1
-if (type .eq. 3) go to 30
-if (type .eq. 2) go to 10
-a4 = a + u*b + h*f
-a5 = c + (u + v*f)*d
-go to 20
-10 a4 = (a + g)*f + h
-a5 = (f + u)*c + v*d
-!
-!     Evaluate new quadratic coefficients.
-!
-20 b1 = -k(n)/p(nn)
-b2 = -(k(n - 1) + b1*p(n))/p(nn)
-c1 = v*b2*a1
-c2 = b1*a7
-c3 = b1*b1*a3
-c4 = c1 - c2 - c3
-temp = a5 + b1*a4 - c4
-if (temp .eq. 0.d0) go to 30
-uu = u - (u*(c3 + c2) + v*(b1*a1 + b2*a7))/temp
-vv = v*(1.d0 + c4/temp)
-return
-!
-!     If type=3 The quadratic is zeroed
-!
-30 uu = 0.d0
-vv = 0.d0
-return
-end subroutine newest
-
-subroutine quadsd (nn, u, v, p, q, a, b)
-implicit none
-integer, intent(in) :: nn
-double precision, intent(in) :: p(nn)
-double precision, intent(inout) :: q(nn)
-double precision, intent(in) :: u, v
-double precision, intent(out) :: a, b
-integer :: i
-double precision :: c
-!
-!     Divides p by the quadratic  1,u,v  placing the
-!     quotient in q and the remainder in A,b.
-!
-!
-b = p(1)
-q(1) = b
-a = p(2) - u*b
-q(2) = a
-do i = 3,nn
-   c = p(i) - u*a - v*b
-   q(i) = c
-   b = a
-   a = c
-end do
-return
-end subroutine quadsd
-
-subroutine quadpl(a, b1, c, sr, si, lr, li)
-implicit none
-!
-!     Calculate the zeros of the quadratic a*Z**2+b1*Z+c.
-!     The quadratic formula, modified to avoid overflow,
-!     is used to find the larger zero if the zeros are
-!     real, and both zeros if the zeros are complex.
-!     The smaller real zero is found directly from the
-!     product of the zeros c/a.
-!
-double precision, intent(in) :: a, b1, c
-double precision, intent(inout) :: sr, si, lr, li
-double precision :: b, d, e
-!
-if (a .ne. 0.d0) go to 20
-sr = 0.d0
-if (b1 .ne. 0.d0) sr = -c/b1
-lr = 0.d0
-10 si = 0.d0
-li = 0.d0
-return
-!
-20 if (c .ne. 0.d0) go to 30
-sr = 0.d0
-lr = -b1/a
-go to 10
-!
-!     Compute discriminant avoiding overflow
-!
-30 b = b1/2.d0
-if (dabs(b) .lt. dabs(c)) go to 40
-e = 1.d0 - (a/b)*(c/b)
-d = dsqrt(dabs(e))*dabs(b)
-go to 50
-40 e = a
-if (c .lt. 0.d0) e = -a
-e = b*(b/dabs(c)) - e
-d = dsqrt(dabs(e))*dsqrt(dabs(c))
-50 if (e .lt. 0.d0) go to 60
-!
-!     real zeros
-!
-if (b .ge. 0.d0) d = -d
-lr = (-b + d)/a
-sr = 0.d0
-if (lr .ne. 0.d0) sr = (c/lr)/a
-go to 10
-!
-!     Complex conjugate zeros
-!
-60 sr = -b/a
-lr = sr
-si = dabs(d/a)
-li = -si
-return
-end subroutine quadpl
-
-subroutine dcpoly (opr,opi,ideg,zeror,zeroi,num,wk)
-implicit none
-integer, intent(inout) :: num
-integer :: ideg
-double precision, intent(in) :: opr(*), opi(*)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
-integer :: idp1
-integer :: pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
-!
-!     This subroutine finds the zeros of a complex polynomial.
-!
-!     opr,opi     - DOUBLE PRECISION ARRAYS OF LENGTH ideg + 1.
-!                   On input these arrays contain the real and imaginary
-!                   parts of the coefficients in order of decreasing
-!                   powers.
-!
-!     ideg        - Integer degree of the polynomial.
-!
-!     zeror,zeroi - Double precision arrays of length ideg.
-!                   On output these arrays contain the real and
-!                   imaginary parts of the zeros.
-!
-!     num         - Variable that reports the status of the results.
-!                   If num = -1 Then the leading coefficient of the
-!                   polynomial is 0 or ideg .LT. 1. Otherwise, num
-!                   is the number of zeros that were obtained. If
-!                   num .GE. 1 then the real and imaginary parts of
-!                   the zeros are stored in zeror(J) and zeroi(J)
-!                   FOR J = 1,...,num.
-!
-!     wk          - Double precision array of length 10*(ideg + 1).
-!                   The array is a work space for the routine.
-!
-!     The code has been written to reduce the chance of overflow
-!     occurring. If it does occur, there is still a possibility that
-!     the zerofinder will work provided the overflowed quantity is
-!     replaced by a large number.
-!
-!
-!
-if (ideg .lt. 1) go to 10
-!
-!     Partition the workspace and obtain the zeros
-!
-idp1 = ideg + 1
-!
-pr = 1
-pi = pr + idp1
-qpr = pi + idp1
-qpi = qpr + idp1
-hr = qpi + idp1
-hi = hr + idp1
-qhr = hi + idp1
-qhi = qhr + idp1
-shr = qhi + idp1
-shi = shr + idp1
-!
-call dcply1 (opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
-   & wk(qpr),wk(qpi),wk(hr),wk(hi),wk(qhr),wk(qhi), &
-   & wk(shr),wk(shi),num)
-return
-!
-!     Error return
-!
-10 num = -1
-return
-end subroutine dcpoly
-
-subroutine dcply1 (opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
-   & hr,hi,qhr,qhi,shr,shi,num)
-implicit none
-integer :: ideg
-integer, intent(in) :: idp1
-integer, intent(out) :: num
-double precision, intent(in) :: opr(idp1), opi(idp1)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
-   & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
-   & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
-integer :: i, nn
-integer :: ipmpar
-double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
-double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, &
-   & bnd, dcpabs, dpmpar, scalcp
-logical :: conv
-integer :: cnt1, cnt2
-!-------------------------
-!-------------------------
-!     The following statements set the machine constants used
-!     in the code. The meaning of the constants are ...
-!
-!     eta     THE SMALLEST POSITIVE NUMBER SUCH THAT
-!             1.D0 + eta is greater than 1.D0
-!     smalno  the smallest positive floating point number.
-!     INFIN   THE LARGEST POSITIVE FLOATING POINT NUMBER.
-!     BASE    THE BASE OF THE FLOATING POINT ARITHMETIC
-!             being used.
-!
-eta = dpmpar(1)
-smalno = dpmpar(2)
-infin = dpmpar(3)
-base = ipmpar(4)
-!-------------------------
-!
-!     Initialization
-!
-are = eta
-mre = 2.d0*dsqrt(2.d0)*eta
-xx = .70710678
-yy = -xx
-cosr = -.069756474
-sinr = .99756405
-num = 0
-nn = idp1
-!
-!     The algorithm fails if the leading coefficient is zero
-!
-if (opr(1) .ne. 0.d0 .or. opi(1) .ne. 0.d0) go to 10
-num = -1
-return
-!
-!     Remove the zeros at the origin if any.
-!
-10 if (opr(nn) .ne. 0.d0 .or. opi(nn) .ne. 0.d0) go to 20
-num = num + 1
-zeror(num) = 0.d0
-zeroi(num) = 0.d0
-nn = nn - 1
-go to 10
-!
-!     Make a copy of the coefficients.
-!
-20 if (nn .lt. 2) return
-do i = 1,nn
-   pr(i) = opr(i)
-   pi(i) = opi(i)
-   shr(i) = dcpabs(pr(i),pi(i))
-end do
-!
-!     Scale the polynomial.
-!
-bnd = scalcp (nn,shr,eta,infin,smalno,base)
-if (bnd .eq. 1.d0) go to 40
-do i = 1,nn
-   pr(i) = bnd*pr(i)
-   pi(i) = bnd*pi(i)
-end do
-!
-!     Start the algorithm for obtaining a zero.
-!
-40 if (nn .gt. 2) go to 50
-!
-num = ideg
-call cdivid(-pr(2),-pi(2),pr(1),pi(1),zeror(ideg), &
-   & zeroi(ideg))
-return
-!
-!     Calculate BND, a lower bound on the modulus of the zeros.
-!
-50 do i = 1,nn
-   shr(i) = dcpabs(pr(i),pi(i))
-end do
-call cauchy(nn,bnd,shr,shi)
-!
-!     Outer loop to control two major passes with different
-!     sequences of shifts.
-!
-do cnt1 = 1,2
-!
-!     First stage calculation. No shift.
-!
-   call noshft(5,nn,tr,ti,eta,pr,pi,hr,hi)
-!
-!     Inner loop to select a shift.
-!
-   do cnt2 = 1,9
-!
-!     The shift is chosen with modulus BND and amplitude rotated
-!     by 94 degrees from the previous shift.
-!
-      xxx = cosr*xx - sinr*yy
-      yy = sinr*xx + cosr*yy
-      xx = xxx
-      sr = bnd*xx
-      si = bnd*yy
-!
-!     Second stage calculation, fixed shift. The second stage jumps
-!     directly to the third stage iteration.
-!
-      call fxshft(10*cnt2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
-         & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
-         & are,mre,eta,infin)
-      if (conv) go to 100
-!
-!     If the iteration is unsuccessful another shift is chosen.
-!
-   end do
-!
-!     If 9 shifts fail, the outer loop is repeated with another
-!     sequence of shifts.
-!
-end do
-return
-!
-!     A zero has been obtained. Store the zero and deflate
-!     the polynomial.
-!
-100 num = num + 1
-zeror(num) = zr
-zeroi(num) = zi
-nn = nn - 1
-do i = 1,nn
-   pr(i) = qpr(i)
-   pi(i) = qpi(i)
-end do
-go to 40
-end subroutine dcply1
-
-double precision function scalcp(nn,pt,eta,infin,smalno,base)
-implicit none
-integer, intent(in) :: nn
-double precision, intent(in) :: pt(nn), eta, infin, smalno, base
-integer :: i, l
-double precision :: hi, lo, max, min, x, sc
-!
-!     Returns a scale factor to multiply the coefficients of the
-!     polynomial. The scaling is done to avoid overflow and to avoid
-!     undetected underflow interfering with the convergence criterion.
-!     The factor is a power of the base.
-!
-!     pt - Modulus of the coefficients of P
-!     eta,infin,smalno,base - Constants describing the
-!            floating point arithmetic.
-!
-!
-!     Find the largest and smallest moduli of coefficients.
-!
-hi = dsqrt(infin)
-lo = smalno/eta
-max = 0.d0
-min = infin
-do i = 1,nn
-   x = pt(i)
-   if (x .gt. max) max = x
-   if (x .ne. 0.d0 .and. x .lt. min) min = x
-end do
-!
-!     Scale only if there are very large or very small coefficients.
-!
-scalcp = 1.d0
-sc = lo/min
-if (sc .gt. 1.d0) go to 20
-if (max .le. hi) return
-sc = 1.d0/(dsqrt(max)*dsqrt(min))
-go to 30
-20 if (infin/sc .lt. max) return
-30 l = dlog(sc)/dlog(base) + 0.5d0
-scalcp = base**l
-return
-end function scalcp
-
-subroutine cauchy(nn,bnd,pt,q)
-implicit none
-integer, intent(in) :: nn
-double precision, intent(inout) :: q(nn), pt(nn)
-double precision, intent(inout) :: bnd
-integer :: i, n
-double precision :: x, xm, f, dx, df
-!
-!     Cauchy computes a lower bound bnd on the moduli of the zeros
-!     of a polynomial. pt is the modulus of the coefficients.
-!
-!
-pt(nn) = -pt(nn)
-!
-!     Compute upper estimate of bound.
-!
-n = nn - 1
-x = dexp((dlog(-pt(nn)) - dlog(pt(1)))/dble(float(n)))
-if (pt(n) .eq. 0.d0) go to 20
-!
-!     If the Newton step at the origin is better then use it.
-!
-xm = -pt(nn)/pt(n)
-if (xm .lt. x) x = xm
-!
-!     Chop the interval (0,x) until f .LE. 0.
-!
-20 xm = 0.1d0*x
-f = pt(1)
-do i = 2,nn
-   f = f*xm + pt(i)
-end do
-if (f .le. 0.d0) go to 40
-x = xm
-go to 20
-40 dx = x
-!
-!     Do Newton iteration until x converges to two decimal places.
-!
-50 if (dabs(dx/x) .le. 0.005d0) go to 70
-q(1) = pt(1)
-do i = 2,nn
-   q(i) = q(i - 1)*x + pt(i)
-end do
-f = q(nn)
-df = q(1)
-do i = 2,n
-   df = df*x + q(i)
-end do
-dx = f/df
-x = x - dx
-go to 50
-!
-70 bnd = x
-return
-end subroutine cauchy
-
-subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
-implicit none
-integer, intent(in) :: l1, nn
-double precision, intent(inout) :: tr, ti
-double precision, intent(in) :: eta, pr(nn), pi(nn)
-double precision, intent(inout) :: hr(nn), hi(nn)
-integer :: i, j, jj, n, nm1
-double precision :: dn, t1, t2, xni, dcpabs
-!
-!     Computes the derivative polynomial as the initial H
-!     polynomial and computes l1 no-shift H polynomials.
-!
-!
-n = nn - 1
-nm1 = n - 1
-dn = n
-do 10 i = 1,n
-   xni = nn - i
-   hr(i) = xni*pr(i)/dn
-   hi(i) = xni*pi(i)/dn
-10 continue
-!
-do 50 jj = 1,l1
-   if (dcpabs(hr(n),hi(n)) .le. 10.d0*eta*dcpabs(pr(n),pi(n))) &
-      & go to 30
-   call cdivid(-pr(nn),-pi(nn),hr(n),hi(n),tr,ti)
-   do i = 1,nm1
-      j = nn - i
-      t1 = hr(j - 1)
-      t2 = hi(j - 1)
-      hr(j) = tr*t1 - ti*t2 + pr(j)
-      hi(j) = tr*t2 + ti*t1 + pi(j)
-   end do
-   hr(1) = pr(1)
-   hi(1) = pi(1)
-   go to 50
-!
-!     If the constant term is essentially zero, shift H coefficients.
-!
-30 do i = 1,nm1
-      j = nn - i
-      hr(j) = hr(j - 1)
-      hi(j) = hi(j - 1)
-   end do
-   hr(1) = 0.d0
-   hi(1) = 0.d0
-50 continue
-return
-end subroutine noshft
-
-subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
-   & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
-   & are,mre,eta,infin)
-implicit none
-integer, intent(in) :: l2, nn
-double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-   & pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-   & hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
-double precision, intent(inout) :: zr, zi
-logical, intent(inout) :: conv
-integer :: i, j, n
-double precision :: otr, oti, svsr, svsi, dcpabs
-logical :: test, pasd, bool
-!
-!     Computes l2 fixed-shift H polynomials and tests for convergence.
-!     Initiates a variable-shift iteration and returns with the
-!     approximate zero if successful.
-!
-!     l2 - Limit of fixed-shift steps
-!     zr,zi - Approximate zero if conv is .TRUE.
-!     conv - Logical variable indicating convergence of stage 3
-!            iteration
-!
-!
-n = nn - 1
-!
-!     Evaluate P at S
-!
-call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-test = .true.
-pasd = .false.
-!
-!     CALCULATE T = -P(S)/H(S)
-!
-call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-!
-!     Main loop for one second stage step.
-!
-do 50 j = 1,l2
-   otr = tr
-   oti = ti
-!
-!     Compute next H polynomial and new T.
-!
-   call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
-   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-   zr = sr + tr
-   zi = si + ti
-!
-!     Test for convergence unless stage 3 has failed once or this
-!     is the last H polynomial.
-!
-   if (bool .or. (.not. test) .or. j .eq. l2) go to 50
-   if (dcpabs(tr - otr,ti - oti) .ge. 0.5d0*dcpabs(zr,zi)) &
-      & go to 40
-   if (.not. pasd) go to 30
-!
-!     The weak convergence test has been passed twice. Start the
-!     third shift iteration after saving the current H polynomial
-!     and shift.
-!
-   do 10 i = 1,n
-      shr(i) = hr(i)
-      shi(i) = hi(i)
-10    continue
-   svsr = sr
-   svsi = si
-   call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
-      & qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
-   if (conv) return
-!
-!     The iteration failed to converge. Turn off testing and restore
-!     H,S,PV AND T.
-!
-   test = .false.
-   do i = 1,n
-      hr(i) = shr(i)
-      hi(i) = shi(i)
-   end do
-   sr = svsr
-   si = svsi
-   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-   go to 50
-!
-30 pasd = .true.
-   go to 50
-!
-40 pasd = .false.
-50 continue
-!
-!     Attempt an iteration with final H polynomial from second stage.
-!
-call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
-   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
-return
-end subroutine fxshft
-
-subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
-   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
-implicit none
-integer, intent(in) :: l3, nn
-double precision, intent(out) :: sr, si
-double precision, intent(inout) :: tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-   & pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-   & hi(nn), qhr(nn), qhi(nn)
-double precision, intent(inout) :: zr, zi
-logical, intent(out) :: conv
-integer :: i, j, n
-double precision :: mp, ms, omp, relstp, r1, r2, tp, errev, dcpabs
-logical :: b, bool
-!
-!     Carries out the third stage iteration.
-!
-!     l3 - Limit of steps in stage 3.
-!     zr,zi - On entry contain the initial iterate. If the
-!             iteration converges zr,zi contain the final
-!             iterate on exit.
-!     conv  - The value is .TRUE. if the iteration converges.
-!
-!
-conv = .false.
-b = .false.
-sr = zr
-si = zi
-n = nn - 1
-!
-!     Main loop for stage 3.
-!
-do 60 i = 1,l3
-!
-!     Evaluate P at S and test for convergence.
-!
-   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   mp = dcpabs(pvr,pvi)
-   ms = dcpabs(sr,si)
-   if (mp .gt. 20.d0*errev(nn,qpr,qpi,ms,mp,are,mre)) &
-      & go to 10
-!
-!     Polynomial value is smaller than a bound on the error
-!     in evaluating P. terminate the iteration.
-!
-   conv = .true.
-   zr = sr
-   zi = si
-   return
-!
-10 if (i .eq. 1) go to 40
-   if (b .or. mp .lt. omp .or. relstp .ge. 0.05d0) &
-      & go to 30
-!
-!     Iteration has stalled. Probably a cluster of zeros. Do 5 fixed
-!     shift steps into the cluster to force one zero to dominate.
-!
-   tp = relstp
-   b = .true.
-   if (relstp .lt. eta) tp = eta
-   r1 = dsqrt(tp)
-   r2 = sr*(1.d0 + r1) - si*r1
-   si = sr*r1 + si*(1.d0 + r1)
-   sr = r2
-   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   do 20 j = 1,5
-      call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-      call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
-20    continue
-   omp = infin
-   go to 50
-!
-!     Exit if the polynomial value increases significantly.
-!
-30 if (0.1d0*mp .gt. omp) return
-!
-!     Calculate the next iterate.
-!
-40 omp = mp
-!
-50 call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-   call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
-   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-   if (bool) go to 60
-   relstp = dcpabs(tr,ti)/dcpabs(sr,si)
-   sr = sr + tr
-   si = si + ti
-60 continue
-return
-end subroutine vrshft
 

@@ -1,3 +1,1763 @@
+pure subroutine dbabk(nm,n,low,igh,scale,m,z)
+implicit none
+!
+integer, intent(in) :: m, n
+integer, intent(in) :: nm, igh, low
+double precision, intent(in) :: scale(n)
+double precision, intent(inout) :: z(nm,m)
+integer :: i, j, k
+integer :: ii
+double precision :: s
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!
+!     This subroutine forms the eigenvectors of a real general
+!     matrix BY back transforming those of the corresponding
+!     balanced matrix determined by dbal.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by dbal,
+!
+!        Scale contains information determining the permutations
+!          and scaling factors used by dbal,
+!
+!        m is the number of columns of z to be back transformed,
+!
+!        z contains the real and imaginary parts of the eigen-
+!          vectors to be back transformed in its first m columns.
+!
+!     On output-
+!
+!        z contains the real and imaginary parts of the
+!          transformed eigenvectors in its first m columns.
+!
+!-----------------------------------------------------------------------
+!
+if (m .eq. 0) go to 200
+if (igh .eq. low) go to 120
+!
+do i = low, igh
+   s = scale(i)
+!     ********** Left hand eigenvectors are back transformed
+!                if the foregoing statement is replaced by
+!                s=1.0/scale(i). **********
+   do 100 j = 1, m
+100   z(i,j) = z(i,j) * s
+!
+end do
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
+120 do 140 ii = 1, n
+   i = ii
+   if (i .ge. low .and. i .le. igh) go to 140
+   if (i .lt. low) i = low - ii
+   k = scale(i)
+   if (k .eq. i) go to 140
+!
+   do j = 1, m
+      s = z(i,j)
+      z(i,j) = z(k,j)
+      z(k,j) = s
+   end do
+!
+140 continue
+!
+200 return
+end subroutine dbabk
+
+pure subroutine dortrn(nm,n,low,igh,a,ort,z)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh, low
+double precision, intent(in) :: a(nm,igh)
+double precision, intent(inout) :: ort(igh), z(nm,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
+double precision :: g
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ORTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the orthogonal similarity
+!     transformations used in the reduction of a real double
+!     precision matrix to upper Hessenberg form by dorth.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          set low=1, igh=n,
+!
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction by dorth
+!          in its strict lower triangle,
+!
+!        Ort contains further information about the trans-
+!          formations used in the reduction by dorth.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by dorth,
+!
+!        Ort has been altered.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do 60 j = 1, n
+60    z(i,j) = 0.d0
+!
+   z(i,i) = 1.d0
+end do
+!
+kl = igh - low - 1
+if (kl .lt. 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do 140 mm = 1, kl
+   mp = igh - mm
+   if (a(mp,mp - 1) .eq. 0.d0) go to 140
+   mp1 = mp + 1
+!
+   do 100 i = mp1, igh
+100   ort(i) = a(i,mp - 1)
+!
+   do j = mp, igh
+      g = 0.d0
+!
+      do 110 i = mp, igh
+110      g = g + ort(i) * z(i,j)
+!     ********** Divisor below is negative of H formed in orthes.
+!                Double division avoids possible underflow **********
+      g = (g / ort(mp)) / a(mp,mp - 1)
+!
+      do 120 i = mp, igh
+120      z(i,j) = z(i,j) + g * ort(i)
+!
+   end do
+!
+140 continue
+!
+200 return
+end subroutine dortrn
+
+pure subroutine drtrn1(n,low,igh,a,na,z,nz,ort)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: na, igh, low
+integer, intent(in) :: nz
+double precision, intent(in) :: a(na,igh)
+double precision, intent(inout) :: ort(igh), z(nz,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
+double precision :: g
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ORTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the orthogonal similarity
+!     transformations used in the reduction of a real double
+!     precision matrix to upper Hessenberg form by dorth.
+!
+!     On input-
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          set low=1, igh=n,
+!
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction by dorth
+!          in its strict lower triangle,
+!
+!        na must be set to the row dimension of the 2-dimensional
+!          array parameter  a  as declared in the calling program
+!          dimension statement,
+!
+!        nz must be set to the row dimension of the 2-dimensional
+!          array parameter  z  as declared in the calling program
+!          dimension statement,
+!
+!        Ort contains further information about the trans-
+!          formations used in the reduction by dorth.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by dorth,
+!
+!        Ort has been altered.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do 60 j = 1, n
+60    z(i,j) = 0.d0
+!
+   z(i,i) = 1.d0
+end do
+!
+kl = igh - low - 1
+if (kl .lt. 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do 140 mm = 1, kl
+   mp = igh - mm
+   if (a(mp,mp - 1) .eq. 0.d0) go to 140
+   mp1 = mp + 1
+!
+   do 100 i = mp1, igh
+100   ort(i) = a(i,mp - 1)
+!
+   do j = mp, igh
+      g = 0.d0
+!
+      do 110 i = mp, igh
+110      g = g + ort(i) * z(i,j)
+!     ********** Divisor below is negative of H formed in orthes.
+!                Double division avoids possible underflow **********
+      g = (g / ort(mp)) / a(mp,mp - 1)
+!
+      do 120 i = mp, igh
+120      z(i,j) = z(i,j) + g * ort(i)
+!
+   end do
+!
+140 continue
+!
+200 return
+end subroutine drtrn1
+
+subroutine dhqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(in) :: igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+integer :: i, j, k, l, m
+integer :: en, ii, jj, ll, mm, na
+integer :: nn
+integer :: its
+integer :: mp2, enm2
+double precision :: a, b, d, p, q, r, s, t, u, w, x, y
+double precision :: ra, sa, vi, vr, zz, norm, machep
+double precision :: dpmpar
+logical :: notlas
+!     integer min0
+!     double precision dsqrt,dabs
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure hqr2,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a real double precision upper Hessenberg matrix BY the
+!     QR method.  The eigenvectors of a real general matrix can
+!     also be found if dorth and dortrn have been used to reduce
+!     this general matrix to Hessenberg form and to accumulate
+!     the similarity transformations.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          set low=1, igh=n,
+!
+!        h contains the upper Hessenberg matrix,
+!
+!        z contains the transformation matrix produced by dortrn
+!          after the reduction by dorth, if performed. If the
+!          eigenvectors of the Hessenberg matrix are desired,
+!          z must contain the identity matrix.
+!
+!     On output-
+!
+!        h has been destroyed,
+!
+!        wr and wi contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  The eigenvalues
+!          are unordered except that complex conjugate pairs
+!          of values appear consecutively with the eigenvalue
+!          having the positive imaginary part first.  If an
+!          error exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!
+!        z contains the real and imaginary parts of the eigenvectors.
+!          If the i-TH eigenvalue is real, the i-TH column of z
+!          contains its eigenvector.  If the i-TH eigenvalue is complex
+!          with positive imaginary part, the i-TH and (i+1)-TH
+!          columns of z contain the real and imaginary parts of its
+!          eigenvector.  The eigenvectors are unnormalized.  If an
+!          error exit is made, none of the eigenvectors has been found,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 50 iterations.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value u where u is the smallest positive
+!                floating point number such that 1.0 + u .GT. 1.0
+!                in the double precision arithmetic being used.
+!
+machep = dpmpar(1)
+!
+!                **********
+!
+ierr = 0
+norm = 0.d0
+k = 1
+!     ********** Store roots isolated by dbal
+!                and compute matrix norm **********
+do 50 i = 1, n
+!
+   do 40 j = k, n
+40    norm = norm + dabs(h(i,j))
+!
+   k = i
+   if (i .ge. low .and. i .le. igh) go to 50
+   wr(i) = h(i,i)
+   wi(i) = 0.d0
+50 continue
+!
+en = igh
+t = 0.d0
+!     ********** Search for next eigenvalues **********
+60 if (en .lt. low) go to 340
+its = 0
+na = en - 1
+enm2 = na - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
+70 do ll = low, en
+   l = en + low - ll
+   if (l .eq. low) go to 100
+   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
+   if (s .eq. 0.d0) s = norm
+   if (dabs(h(l,l - 1)) .le. machep * s) go to 100
+end do
+!     ********** Form shift **********
+100 x = h(en,en)
+if (l .eq. en) go to 270
+y = h(na,na)
+w = h(en,na) * h(na,en)
+if (l .eq. na) go to 280
+if (its .eq. 50) go to 1000
+if (its .ne. 10 .and. its .ne. 20 .and. its .ne. 30) go to 130
+!     ********** Form exceptional shift **********
+t = t + x
+!
+do 120 i = low, en
+120 h(i,i) = h(i,i) - x
+!
+s = dabs(h(en,na)) + dabs(h(na,enm2))
+x = .75d0 * s
+y = x
+w = -.4375d0 * s * s
+130 its = its + 1
+!     ********** Look for two consecutive small
+!                sub-diagonal elements.
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
+do mm = l, enm2
+   m = enm2 + l - mm
+   zz = h(m,m)
+   r = x - zz
+   s = y - zz
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
+   s = dabs(p) + dabs(q) + dabs(r)
+   p = p / s
+   q = q / s
+   r = r / s
+   if (m .eq. l) go to 150
+   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
+      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
+end do
+!
+150 mp2 = m + 2
+!
+do 160 i = mp2, en
+   h(i,i - 2) = 0.d0
+   if (i .eq. mp2) go to 160
+   h(i,i - 3) = 0.d0
+160 continue
+!     ********** Double QR step involving rows l to en and
+!                COLUMNS m TO en **********
+do 260 k = m, na
+   notlas = k .ne. na
+   if (k .eq. m) go to 170
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
+   r = 0.d0
+   if (notlas) r = h(k + 2,k - 1)
+   x = dabs(p) + dabs(q) + dabs(r)
+   if (x .eq. 0.d0) go to 260
+   p = p / x
+   q = q / x
+   r = r / x
+170 s = dsqrt(p*p + q*q + r*r)
+   if (p .lt. 0.d0) s = -s
+   if (k .eq. m) go to 180
+   h(k,k - 1) = -s * x
+   go to 190
+180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
+190 p = p + s
+   x = p / s
+   y = q / s
+   zz = r / s
+   q = q / p
+   r = r / p
+!     ********** Row modification **********
+   do j = k, n
+      p = h(k,j) + q * h(k + 1,j)
+      if (.not. notlas) go to 200
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
+      h(k,j) = h(k,j) - p * x
+   end do
+!
+   j = min0(en,k + 3)
+!     ********** Column modification **********
+   do i = 1, j
+      p = x * h(i,k) + y * h(i,k + 1)
+      if (.not. notlas) go to 220
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
+      h(i,k) = h(i,k) - p
+   end do
+!     ********** Accumulate transformations **********
+   do i = low, igh
+      p = x * z(i,k) + y * z(i,k + 1)
+      if (.not. notlas) go to 240
+      p = p + zz * z(i,k + 2)
+      z(i,k + 2) = z(i,k + 2) - p * r
+240   z(i,k + 1) = z(i,k + 1) - p * q
+      z(i,k) = z(i,k) - p
+   end do
+!
+260 continue
+!
+go to 70
+!     ********** One root found **********
+270 h(en,en) = x + t
+wr(en) = h(en,en)
+wi(en) = 0.d0
+en = na
+go to 60
+!     ********** Two roots found **********
+280 p = (y - x) / 2.d0
+q = p * p + w
+zz = dsqrt(dabs(q))
+h(en,en) = x + t
+x = h(en,en)
+h(na,na) = y + t
+if (q .lt. 0.d0) go to 320
+!     ********** Real pair **********
+if (p .lt. 0.d0) zz = -zz
+zz = p + zz
+wr(na) = x + zz
+wr(en) = wr(na)
+if (zz .ne. 0.d0) wr(en) = x - w / zz
+wi(na) = 0.d0
+wi(en) = 0.d0
+x = h(en,na)
+s = dabs(x) + dabs(zz)
+p = x / s
+q = zz / s
+r = dsqrt(p*p + q*q)
+p = p / r
+q = q / r
+!     ********** Row modification **********
+do j = na, n
+   zz = h(na,j)
+   h(na,j) = q * zz + p * h(en,j)
+   h(en,j) = q * h(en,j) - p * zz
+end do
+!     ********** Column modification **********
+do i = 1, en
+   zz = h(i,na)
+   h(i,na) = q * zz + p * h(i,en)
+   h(i,en) = q * h(i,en) - p * zz
+end do
+!     ********** Accumulate transformations **********
+do i = low, igh
+   zz = z(i,na)
+   z(i,na) = q * zz + p * z(i,en)
+   z(i,en) = q * z(i,en) - p * zz
+end do
+!
+go to 330
+!     ********** Complex pair **********
+320 wr(na) = x + p
+wr(en) = x + p
+wi(na) = zz
+wi(en) = -zz
+330 en = enm2
+go to 60
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
+340 if (norm .eq. 0.d0) go to 1001
+!     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
+do 800 nn = 1, n
+   en = n + 1 - nn
+   p = wr(en)
+   q = wi(en)
+   na = en - 1
+   if (q) 710, 600, 800
+!     ********** Real vector **********
+600 m = en
+   h(en,en) = 1.d0
+   if (na .eq. 0) go to 800
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
+   do 700 ii = 1, na
+      i = en - ii
+      w = h(i,i) - p
+      r = h(i,en)
+      if (m .gt. na) go to 620
+!
+      do 610 j = m, na
+610      r = r + h(i,j) * h(j,en)
+!
+620   if (wi(i) .ge. 0.d0) go to 630
+      zz = w
+      s = r
+      go to 700
+630   m = i
+      if (wi(i) .ne. 0.d0) go to 640
+      t = w
+      if (w .eq. 0.d0) t = machep * norm
+      h(i,en) = -r / t
+      go to 700
+!     ********** Solve real equations **********
+640   x = h(i,i + 1)
+      y = h(i + 1,i)
+      q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
+      t = (x * s - zz * r) / q
+      h(i,en) = t
+      if (dabs(x) .le. dabs(zz)) go to 650
+      h(i + 1,en) = (-r - w * t) / x
+      go to 700
+650   h(i + 1,en) = (-s - y * t) / zz
+700   continue
+!     ********** End real vector **********
+   go to 800
+!     ********** Complex vector **********
+710 m = na
+!     ********** Last vector component chosen imaginary so that
+!                eigenvector matrix is triangular **********
+   if (dabs(h(en,na)) .le. dabs(h(na,en))) go to 720
+   h(na,na) = q / h(en,na)
+   h(na,en) = -(h(en,en) - p) / h(en,na)
+   go to 730
+720 u = h(na,na) - p
+   b = -h(na,en) / (u * u + q * q)
+   h(na,na) = b * q
+   h(na,en) = b * u
+730 h(en,na) = 0.d0
+   h(en,en) = 1.d0
+   enm2 = na - 1
+   if (enm2 .eq. 0) go to 800
+!     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
+   do 790 ii = 1, enm2
+      i = na - ii
+      w = h(i,i) - p
+      ra = 0.d0
+      sa = h(i,en)
+!
+      do j = m, na
+         ra = ra + h(i,j) * h(j,na)
+         sa = sa + h(i,j) * h(j,en)
+      end do
+!
+      if (wi(i) .ge. 0.d0) go to 770
+      zz = w
+      r = ra
+      s = sa
+      go to 790
+770   m = i
+      if (wi(i) .ne. 0.d0) go to 780
+      d = w * w + q * q
+      h(i,na) = -(ra * w + sa * q) / d
+      h(i,en) = (ra * q - sa * w) / d
+      go to 790
+!     ********** Solve complex equations **********
+780   x = h(i,i + 1)
+      y = h(i + 1,i)
+      vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
+      vi = (wr(i) - p) * 2.d0 * q
+      if (vr .eq. 0.d0 .and. vi .eq. 0.d0) vr = machep * norm &
+         & * (dabs(w) + dabs(q) + dabs(x) + dabs(y) + dabs(zz))
+      a = x * r - zz * ra + q * sa
+      b = x * s - zz * sa - q * ra
+      d = vr * vr + vi * vi
+      h(i,na) = (a * vr + b * vi) / d
+      h(i,en) = (b * vr - a * vi) / d
+      if (dabs(x) .le. dabs(zz) + dabs(q)) go to 785
+      h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
+      h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
+      go to 790
+785   a = -r - y * h(i,na)
+      b = -s - y * h(i,en)
+      d = zz * zz + q * q
+      h(i + 1,na) = (a * zz + b * q) / d
+      h(i + 1,en) = (b * zz - a * q) / d
+790   continue
+!     ********** End complex vector **********
+800 continue
+!     ********** End back substitution.
+!                Vectors of isolated roots **********
+do 840 i = 1, n
+   if (i .ge. low .and. i .le. igh) go to 840
+!
+   do 820 j = i, n
+820   z(i,j) = h(i,j)
+!
+840 continue
+!     ********** Multiply by transformation matrix to give
+!                vectors of original full matrix.
+!                For j=n step -1 Until low do -- **********
+do 880 jj = low, n
+   j = n + low - jj
+   m = min0(j,igh)
+!
+   do 880 i = low, igh
+      zz = 0.d0
+!
+      do 860 k = low, m
+860      zz = zz + z(i,k) * h(k,j)
+!
+      z(i,j) = zz
+880   continue
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
+1000 ierr = en
+1001 return
+end subroutine dhqr2
+
+subroutine seig (a, ka, n, w, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka
+integer :: n
+real, intent(inout) :: a(*), w(n), t(*)
+integer :: l
+!-----------------------------------------------------------------------
+!               Eigenvalues of symmetric real matrices
+!-----------------------------------------------------------------------
+!
+if (ka .eq. 0) go to 10
+call tred1 (ka, n, a, w, t(n + 1), t(1))
+call tqlrat (n, w, t, ierr)
+return
+10 l = n*(n + 1)
+l = l/2
+call tred3 (n, l, a, w, t(n + 1), t(1))
+call tqlrat (n, w, t, ierr)
+return
+end subroutine seig
+
+subroutine seig1 (a, ka, n, w, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+real, intent(inout) :: a(*), w(n), t(n)
+integer :: l
+!-----------------------------------------------------------------------
+!               Eigenvalues of symmetric real matrices
+!-----------------------------------------------------------------------
+!
+if (ka .eq. 0) go to 10
+call tred1 (ka, n, a, w, t, t)
+call imtql1 (n, w, t, ierr)
+return
+10 l = n*(n + 1)
+l = l/2
+call tred3 (n, l, a, w, t, t)
+call imtql1 (n, w, t, ierr)
+return
+end subroutine seig1
+
+subroutine seigv (a, ka, n, w, z, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: w(n), z(ka,n), t(n)
+!-----------------------------------------------------------------------
+!        Eigenvalues and eigenvectors of symmetric real matrices
+!-----------------------------------------------------------------------
+!
+call tred2 (ka, n, a, w, t, z)
+call tql2 (ka, n, w, t, z, ierr)
+return
+end subroutine seigv
+
+subroutine seigv1 (a, ka, n, w, z, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: w(n), z(ka,n), t(n)
+!-----------------------------------------------------------------------
+!        Eigenvalues and eigenvectors of symmetric real matrices
+!-----------------------------------------------------------------------
+!
+call tred2 (ka, n, a, w, t, z)
+call imtql2 (ka, n, w, t, z, ierr)
+return
+end subroutine seigv1
+
+pure subroutine tred1(nm,n,a,d,e,e2)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm
+real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
+real :: f, g, h, scale
+!     real sqrt,abs
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure tred1,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
+!
+!     This subroutine reduces a real symmetric matrix
+!     to a symmetric tridiagonal matrix using
+!     orthogonal similarity transformations.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        A contains the real symmetric input matrix.  Only the
+!          lower triangle of the matrix need be supplied.
+!
+!     On output-
+!
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction in its strict lower
+!          triangle.  The full upper triangle of A is unaltered,
+!
+!        d contains the diagonal elements of the tridiagonal matrix,
+!
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
+!
+!        e2 contains the squares of the corresponding elements of e.
+!          e2 may coincide with e if the squares are not needed.
+!
+!-----------------------------------------------------------------------
+!
+do 100 i = 1, n
+100 d(i) = a(i,i)
+!     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
+do ii = 1, n
+   i = n + 1 - ii
+   l = i - 1
+   h = 0.0
+   scale = 0.0
+   if (l .lt. 1) go to 130
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
+   do 120 k = 1, l
+120   scale = scale + abs(a(i,k))
+!
+   if (scale .ne. 0.0) go to 140
+130 e(i) = 0.0
+   e2(i) = 0.0
+   go to 290
+!
+140 do k = 1, l
+      a(i,k) = a(i,k) / scale
+      h = h + a(i,k) * a(i,k)
+   end do
+!
+   e2(i) = scale * scale * h
+   f = a(i,l)
+   g = sqrt(h)
+   if (f .ge. 0.0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   a(i,l) = f - g
+   if (l .eq. 1) go to 270
+   f = 0.0
+!
+   do j = 1, l
+      g = 0.0
+!     ********** Form element of a*U **********
+      do 180 k = 1, j
+180      g = g + a(j,k) * a(i,k)
+!
+      jp1 = j + 1
+      if (l .lt. jp1) go to 220
+!
+      do 200 k = jp1, l
+200      g = g + a(k,j) * a(i,k)
+!     ********** Form element of P **********
+220   e(j) = g / h
+      f = f + e(j) * a(i,j)
+   end do
+!
+   h = f / (h + h)
+!     ********** Form reduced a **********
+   do 260 j = 1, l
+      f = a(i,j)
+      g = e(j) - h * f
+      e(j) = g
+!
+      do 260 k = 1, j
+         a(j,k) = a(j,k) - f * e(k) - g * a(i,k)
+260      continue
+!
+270 do 280 k = 1, l
+280   a(i,k) = scale * a(i,k)
+!
+290 h = d(i)
+   d(i) = a(i,i)
+   a(i,i) = h
+end do
+!
+return
+!     ********** Last card of tred1 **********
+end subroutine tred1
+
+pure subroutine tred3(n,nv,a,d,e,e2)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nv
+real, intent(inout) :: a(nv), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii, iz, jk
+real :: f, g, h, hh, scale
+!     real sqrt,abs
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure tred3,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
+!
+!     This subroutine reduces a real symmetric matrix, stored as
+!     a one-dimensional array, to a symmetric tridiagonal matrix
+!     using orthogonal similarity transformations.
+!
+!     On input-
+!
+!        n is the order of the matrix,
+!
+!        nv must be set to the dimension of the array parameter A
+!          as declared in the calling program dimension statement,
+!
+!        A contains the lower triangle of the real symmetric
+!          input matrix, stored row-wise as a one-dimensional
+!          array, in its first n*(n+1)/2 positions.
+!
+!     On output-
+!
+!        A contains information about the orthogonal
+!          transformations used in the reduction,
+!
+!        d contains the diagonal elements of the tridiagonal matrix,
+!
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
+!
+!        e2 contains the squares of the corresponding elements of e.
+!          e2 may coincide with e if the squares are not needed.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
+do ii = 1, n
+   i = n + 1 - ii
+   l = i - 1
+   iz = (i * l) / 2
+   h = 0.0
+   scale = 0.0
+   if (l .lt. 1) go to 130
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
+   do k = 1, l
+      iz = iz + 1
+      d(k) = a(iz)
+      scale = scale + abs(d(k))
+   end do
+!
+   if (scale .ne. 0.0) go to 140
+130 e(i) = 0.0
+   e2(i) = 0.0
+   go to 290
+!
+140 do k = 1, l
+      d(k) = d(k) / scale
+      h = h + d(k) * d(k)
+   end do
+!
+   e2(i) = scale * scale * h
+   f = d(l)
+   g = sqrt(h)
+   if (f .ge. 0.0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   d(l) = f - g
+   a(iz) = scale * d(l)
+   if (l .eq. 1) go to 290
+   f = 0.0
+!
+   do j = 1, l
+      g = 0.0
+      jk = (j * (j - 1)) / 2
+!     ********** Form element of a*U **********
+      do k = 1, l
+         jk = jk + 1
+         if (k .gt. j) jk = jk + k - 2
+         g = g + a(jk) * d(k)
+      end do
+!     ********** Form element of P **********
+      e(j) = g / h
+      f = f + e(j) * d(j)
+   end do
+!
+   hh = f / (h + h)
+   jk = 0
+!     ********** Form reduced a **********
+   do 260 j = 1, l
+      f = d(j)
+      g = e(j) - hh * f
+      e(j) = g
+!
+      do 260 k = 1, j
+         jk = jk + 1
+         a(jk) = a(jk) - f * e(k) - g * d(k)
+260      continue
+!
+290 d(i) = a(iz + 1)
+   a(iz + 1) = scale * sqrt(h)
+end do
+!
+return
+!     ********** Last card of tred3 **********
+end subroutine tred3
+
+subroutine tqlrat(n,d,e2,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(out) :: ierr
+real, intent(inout) :: d(n), e2(n)
+real :: spmpar
+integer :: i, j, l, m
+integer :: ii, l1, mml
+real :: b, c, f, g, h, p, r, s, machep
+!
+!     real sqrt,abs,spmpar
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure tqlrat,
+!     algorithm 464, comm. ACM 16, 689(1973) by Reinsch.
+!
+!     This subroutine finds the eigenvalues of a symmetric
+!     tridiagonal matrix BY the rational QL method.
+!
+!     On input-
+!
+!        n is the order of the matrix,
+!
+!        d contains the diagonal elements of the input matrix,
+!
+!        e2 contains the squares of the subdiagonal elements of the
+!          input matrix in its last n-1 positions.  e2(1) is arbitrary.
+!
+!      On output-
+!
+!        d contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct and
+!          ordered for indices 1,2,...ierr-1, but may not be
+!          the smallest eigenvalues,
+!
+!        e2 has been destroyed,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+!
+machep = spmpar(1)
+!
+!                **********
+!
+ierr = 0
+if (n .eq. 1) go to 1001
+!
+do 100 i = 2, n
+100 e2(i - 1) = e2(i)
+!
+f = 0.0
+b = 0.0
+e2(n) = 0.0
+!
+do l = 1, n
+   j = 0
+   h = machep * (abs(d(l)) + sqrt(e2(l)))
+   if (b .gt. h) go to 105
+   b = h
+   c = b * b
+!     ********** Look for small squared sub-diagonal element **********
+105 do m = l, n
+      if (e2(m) .le. c) go to 120
+!     ********** e2(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
+   end do
+!
+120 if (m .eq. l) go to 210
+130 if (j .eq. 30) go to 1000
+   j = j + 1
+!     ********** Form shift **********
+   l1 = l + 1
+   s = sqrt(e2(l))
+   g = d(l)
+   p = (d(l1) - g) / (2.0 * s)
+   r = sqrt(p*p + 1.0)
+   if (p .lt. 0.0) r = -r
+   d(l) = s / (p + r)
+   h = g - d(l)
+!
+   do 140 i = l1, n
+140   d(i) = d(i) - h
+!
+   f = f + h
+!     ********** RATIONAL QL TRANSFORMATION **********
+   g = d(m)
+   if (g .eq. 0.0) g = b
+   h = g
+   s = 0.0
+   mml = m - l
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
+   do ii = 1, mml
+      i = m - ii
+      p = g * h
+      r = p + e2(i)
+      e2(i + 1) = s * r
+      s = e2(i) / r
+      d(i + 1) = h + s * (h + d(i))
+      g = d(i) - e2(i) / g
+      if (g .eq. 0.0) g = b
+      h = g * p / r
+   end do
+!
+   e2(l) = s * g
+   d(l) = h
+!     ********** Guard against underflow in convergence test **********
+   if (h .eq. 0.0) go to 210
+   if (abs(e2(l)) .le. abs(c/h)) go to 210
+   e2(l) = h * e2(l)
+   if (e2(l) .ne. 0.0) go to 130
+210 p = d(l) + f
+!     ********** Order eigenvalues **********
+   if (l .eq. 1) go to 250
+!     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
+   do ii = 2, l
+      i = l + 2 - ii
+      if (p .ge. d(i - 1)) go to 270
+      d(i) = d(i - 1)
+   end do
+!
+250 i = 1
+270 d(i) = p
+end do
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = l
+1001 return
+!     ********** Last card of tqlrat **********
+end subroutine tqlrat
+
+subroutine imtql1(n,d,e,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(out) :: ierr
+real, intent(inout) :: d(n), e(n)
+real :: spmpar
+integer :: i, j, l, m
+integer :: ii, mml
+real :: b, c, f, g, p, r, s, machep
+!
+!     real sqrt,abs,spmpar
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure imtql1,
+!     NUM. Math. 12, 377-383(1968) By Martin and Wilkinson,
+!     as modified in NUM. Math. 15, 450(1970) By Dubrulle.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 241-248(1971).
+!
+!     This subroutine finds the eigenvalues of a symmetric
+!     tridiagonal matrix BY the implicit QL method.
+!
+!     On input-
+!
+!        n is the order of the matrix,
+!
+!        d contains the diagonal elements of the input matrix,
+!
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary.
+!
+!      On output-
+!
+!        d contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct and
+!          ordered for indices 1,2,...ierr-1, but may not be
+!          the smallest eigenvalues,
+!
+!        e has been destroyed,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+!
+machep = spmpar(1)
+!
+!                **********
+!
+ierr = 0
+if (n .eq. 1) go to 1001
+!
+do 100 i = 2, n
+100 e(i - 1) = e(i)
+!
+e(n) = 0.0
+!
+do l = 1, n
+   j = 0
+!     ********** Look for small sub-diagonal element **********
+105 do m = l, n
+      if (m .eq. n) go to 120
+      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m + 1)))) &
+         & go to 120
+   end do
+!
+120 p = d(l)
+   if (m .eq. l) go to 215
+   if (j .eq. 30) go to 1000
+   j = j + 1
+!     ********** Form shift **********
+   g = (d(l + 1) - p) / (2.0 * e(l))
+   r = sqrt(g*g + 1.0)
+   if (g .lt. 0.0) r = -r
+   g = d(m) - p + e(l) / (g + r)
+   s = 1.0
+   c = 1.0
+   p = 0.0
+   mml = m - l
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
+   do ii = 1, mml
+      i = m - ii
+      f = s * e(i)
+      b = c * e(i)
+      if (abs(f) .lt. abs(g)) go to 150
+      c = g / f
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = f * r
+      s = 1.0 / r
+      c = c * s
+      go to 160
+150   s = f / g
+      r = sqrt(s*s + 1.0)
+      e(i + 1) = g * r
+      c = 1.0 / r
+      s = s * c
+160   g = d(i + 1) - p
+      r = (d(i) - g) * s + 2.0 * c * b
+      p = s * r
+      d(i + 1) = g + p
+      g = c * r - b
+   end do
+!
+   d(l) = d(l) - p
+   e(l) = g
+   e(m) = 0.0
+   go to 105
+!     ********** Order eigenvalues **********
+215 if (l .eq. 1) go to 250
+!     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
+   do ii = 2, l
+      i = l + 2 - ii
+      if (p .ge. d(i - 1)) go to 270
+      d(i) = d(i - 1)
+   end do
+!
+250 i = 1
+270 d(i) = p
+end do
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = l
+1001 return
+!     ********** Last card of imtql1 **********
+end subroutine imtql1
+
+pure subroutine tred2(nm,n,a,d,e,z)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm
+real, intent(in) :: a(nm,n)
+real, intent(inout) :: d(n), e(n), z(nm,n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
+real :: f, g, h, hh, scale
+!     real sqrt,abs
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure tred2,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
+!
+!     This subroutine reduces a real symmetric matrix to A
+!     symmetric tridiagonal matrix using and accumulating
+!     orthogonal similarity transformations.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        A contains the real symmetric input matrix.  Only the
+!          lower triangle of the matrix need be supplied.
+!
+!     On output-
+!
+!        d contains the diagonal elements of the tridiagonal matrix,
+!
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
+!
+!        z contains the orthogonal transformation matrix
+!          produced in the reduction,
+!
+!        A and z may coincide.  If distinct, A is unaltered.
+!
+!-----------------------------------------------------------------------
+!
+do 100 i = 1, n
+!
+   do 100 j = 1, i
+      z(i,j) = a(i,j)
+100   continue
+!
+if (n .eq. 1) go to 320
+!     ********** FOR i=n STEP -1 UNTIL 2 DO -- **********
+do ii = 2, n
+   i = n + 2 - ii
+   l = i - 1
+   h = 0.0
+   scale = 0.0
+   if (l .lt. 2) go to 130
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
+   do 120 k = 1, l
+120   scale = scale + abs(z(i,k))
+!
+   if (scale .ne. 0.0) go to 140
+130 e(i) = z(i,l)
+   go to 290
+!
+140 do k = 1, l
+      z(i,k) = z(i,k) / scale
+      h = h + z(i,k) * z(i,k)
+   end do
+!
+   f = z(i,l)
+   g = sqrt(h)
+   if (f .ge. 0.0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   z(i,l) = f - g
+   f = 0.0
+!
+   do j = 1, l
+      z(j,i) = z(i,j) / h
+      g = 0.0
+!     ********** Form element of a*U **********
+      do 180 k = 1, j
+180      g = g + z(j,k) * z(i,k)
+!
+      jp1 = j + 1
+      if (l .lt. jp1) go to 220
+!
+      do 200 k = jp1, l
+200      g = g + z(k,j) * z(i,k)
+!     ********** Form element of P **********
+220   e(j) = g / h
+      f = f + e(j) * z(i,j)
+   end do
+!
+   hh = f / (h + h)
+!     ********** Form reduced a **********
+   do 260 j = 1, l
+      f = z(i,j)
+      g = e(j) - hh * f
+      e(j) = g
+!
+      do 260 k = 1, j
+         z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
+260      continue
+!
+290 d(i) = h
+end do
+!
+320 d(1) = 0.0
+e(1) = 0.0
+!     ********** Accumulation of transformation matrices **********
+do 500 i = 1, n
+   l = i - 1
+   if (d(i) .eq. 0.0) go to 380
+!
+   do 360 j = 1, l
+      g = 0.0
+!
+      do 340 k = 1, l
+340      g = g + z(i,k) * z(k,j)
+!
+      do 360 k = 1, l
+         z(k,j) = z(k,j) - g * z(k,i)
+360      continue
+!
+380 d(i) = z(i,i)
+   z(i,i) = 1.0
+   if (l .lt. 1) go to 500
+!
+   do j = 1, l
+      z(i,j) = 0.0
+      z(j,i) = 0.0
+   end do
+!
+500 continue
+!
+return
+!     ********** Last card of tred2 **********
+end subroutine tred2
+
+subroutine tql2(nm,n,d,e,z,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(out) :: ierr
+real, intent(inout) :: d(n), e(n), z(nm,n)
+real :: spmpar
+integer :: i, j, k, l, m
+integer :: ii, l1
+integer :: mml
+real :: b, c, f, g, h, p, r, s, machep
+!
+!     real sqrt,abs,spmpar
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure tql2,
+!     NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
+!     Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 227-240(1971).
+!
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a symmetric tridiagonal matrix BY the QL method.
+!     The eigenvectors of a full symmetric matrix can also
+!     be found if  tred2  has been used to reduce this
+!     full matrix to tridiagonal form.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        d contains the diagonal elements of the input matrix,
+!
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary,
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  tred2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, z must contain
+!          the identity matrix.
+!
+!      On output-
+!
+!        d contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct but
+!          unordered for indices 1,2,...,ierr-1,
+!
+!        e has been destroyed,
+!
+!        z contains orthonormal eigenvectors of the symmetric
+!          tridiagonal (or full) matrix.  If an error exit is made,
+!          z contains the eigenvectors associated with the stored
+!          eigenvalues,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+!
+machep = spmpar(1)
+!
+!                **********
+!
+ierr = 0
+if (n .eq. 1) go to 1001
+!
+do 100 i = 2, n
+100 e(i - 1) = e(i)
+!
+f = 0.0
+b = 0.0
+e(n) = 0.0
+!
+do l = 1, n
+   j = 0
+   h = machep * (abs(d(l)) + abs(e(l)))
+   if (b .lt. h) b = h
+!     ********** Look for small sub-diagonal element **********
+   do m = l, n
+      if (abs(e(m)) .le. b) go to 120
+!     ********** e(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
+   end do
+!
+120 if (m .eq. l) go to 220
+130 if (j .eq. 30) go to 1000
+   j = j + 1
+!     ********** Form shift **********
+   l1 = l + 1
+   g = d(l)
+   p = (d(l1) - g) / (2.0 * e(l))
+   r = sqrt(p*p + 1.0)
+   if (p .lt. 0.0) r = -r
+   d(l) = e(l) / (p + r)
+   h = g - d(l)
+!
+   do 140 i = l1, n
+140   d(i) = d(i) - h
+!
+   f = f + h
+!     ********** QL TRANSFORMATION **********
+   p = d(m)
+   c = 1.0
+   s = 0.0
+   mml = m - l
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
+   do ii = 1, mml
+      i = m - ii
+      g = c * e(i)
+      h = c * p
+      if (abs(p) .lt. abs(e(i))) go to 150
+      c = e(i) / p
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = s * p * r
+      s = c / r
+      c = 1.0 / r
+      go to 160
+150   c = p / e(i)
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = s * e(i) * r
+      s = 1.0 / r
+      c = c * s
+160   p = c * d(i) - s * g
+      d(i + 1) = h + s * (c * g + s * d(i))
+!     ********** Form vector **********
+      do k = 1, n
+         h = z(k,i + 1)
+         z(k,i + 1) = s * z(k,i) + c * h
+         z(k,i) = c * z(k,i) - s * h
+      end do
+!
+   end do
+!
+   e(l) = s * p
+   d(l) = c * p
+   if (abs(e(l)) .gt. b) go to 130
+220 d(l) = d(l) + f
+end do
+!     ********** Order eigenvalues and eigenvectors **********
+do 300 ii = 2, n
+   i = ii - 1
+   k = i
+   p = d(i)
+!
+   do 260 j = ii, n
+      if (d(j) .ge. p) go to 260
+      k = j
+      p = d(j)
+260   continue
+!
+   if (k .eq. i) go to 300
+   d(k) = d(i)
+   d(i) = p
+!
+   do j = 1, n
+      p = z(j,i)
+      z(j,i) = z(j,k)
+      z(j,k) = p
+   end do
+!
+300 continue
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = l
+1001 return
+!     ********** Last card of tql2 **********
+end subroutine tql2
+
+subroutine imtql2(nm,n,d,e,z,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(out) :: ierr
+real, intent(inout) :: d(n), e(n), z(nm,n)
+real :: spmpar
+integer :: i, j, k, l, m
+integer :: ii
+integer :: mml
+real :: b, c, f, g, p, r, s, machep
+!
+!     real sqrt,abs,spmpar
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure imtql2,
+!     NUM. Math. 12, 377-383(1968) By Martin and Wilkinson,
+!     as modified in NUM. Math. 15, 450(1970) By Dubrulle.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 241-248(1971).
+!
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a symmetric tridiagonal matrix BY the implicit QL method.
+!     The eigenvectors of a full symmetric matrix can also
+!     be found if  tred2  has been used to reduce this
+!     full matrix to tridiagonal form.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        d contains the diagonal elements of the input matrix,
+!
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary,
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  tred2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, z must contain
+!          the identity matrix.
+!
+!      On output-
+!
+!        d contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct but
+!          unordered for indices 1,2,...,ierr-1,
+!
+!        e has been destroyed,
+!
+!        z contains orthonormal eigenvectors of the symmetric
+!          tridiagonal (or full) matrix.  If an error exit is made,
+!          z contains the eigenvectors associated with the stored
+!          eigenvalues,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+!
+machep = spmpar(1)
+!
+!                **********
+!
+ierr = 0
+if (n .eq. 1) go to 1001
+!
+do 100 i = 2, n
+100 e(i - 1) = e(i)
+!
+e(n) = 0.0
+!
+do 240 l = 1, n
+   j = 0
+!     ********** Look for small sub-diagonal element **********
+105 do m = l, n
+      if (m .eq. n) go to 120
+      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m + 1)))) &
+         & go to 120
+   end do
+!
+120 p = d(l)
+   if (m .eq. l) go to 240
+   if (j .eq. 30) go to 1000
+   j = j + 1
+!     ********** Form shift **********
+   g = (d(l + 1) - p) / (2.0 * e(l))
+   r = sqrt(g*g + 1.0)
+   if (g .lt. 0.0) r = -r
+   g = d(m) - p + e(l) / (g + r)
+   s = 1.0
+   c = 1.0
+   p = 0.0
+   mml = m - l
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
+   do ii = 1, mml
+      i = m - ii
+      f = s * e(i)
+      b = c * e(i)
+      if (abs(f) .lt. abs(g)) go to 150
+      c = g / f
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = f * r
+      s = 1.0 / r
+      c = c * s
+      go to 160
+150   s = f / g
+      r = sqrt(s*s + 1.0)
+      e(i + 1) = g * r
+      c = 1.0 / r
+      s = s * c
+160   g = d(i + 1) - p
+      r = (d(i) - g) * s + 2.0 * c * b
+      p = s * r
+      d(i + 1) = g + p
+      g = c * r - b
+!     ********** Form vector **********
+      do k = 1, n
+         f = z(k,i + 1)
+         z(k,i + 1) = s * z(k,i) + c * f
+         z(k,i) = c * z(k,i) - s * f
+      end do
+!
+   end do
+!
+   d(l) = d(l) - p
+   e(l) = g
+   e(m) = 0.0
+   go to 105
+240 continue
+!     ********** Order eigenvalues and eigenvectors **********
+do 300 ii = 2, n
+   i = ii - 1
+   k = i
+   p = d(i)
+!
+   do 260 j = ii, n
+      if (d(j) .ge. p) go to 260
+      k = j
+      p = d(j)
+260   continue
+!
+   if (k .eq. i) go to 300
+   d(k) = d(i)
+   d(i) = p
+!
+   do j = 1, n
+      p = z(j,i)
+      z(j,i) = z(j,k)
+      z(j,k) = p
+   end do
+!
+300 continue
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = l
+1001 return
+!     ********** Last card of imtql2 **********
+end subroutine imtql2
+
 subroutine dseig (a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -38,7 +1798,7 @@ call dtql2 (ka, n, w, t, z, ierr)
 return
 end subroutine dseigv
 
-subroutine dtred1 (nm,n,a,d,e,e2)
+pure subroutine dtred1 (nm,n,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -158,7 +1918,7 @@ return
 !     ********** Last card of dtred1 **********
 end subroutine dtred1
 
-subroutine dtred3 (n,nv,a,d,e,e2)
+pure subroutine dtred3 (n,nv,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -414,7 +2174,7 @@ go to 1001
 !     ********** Last card of dtql **********
 end subroutine dtql
 
-subroutine dtred2 (nm,n,a,d,e,z)
+pure subroutine dtred2 (nm,n,a,d,e,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -1351,7 +3111,7 @@ go to 220
 !     ********** Last card of comqr **********
 end subroutine comqr
 
-subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
+pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -2097,7 +3857,14 @@ integer :: i, j, m
 integer :: ii, jj, la, mp
 integer :: kp1
 double precision :: f, g, h, fi, fr, scale
-double precision :: dcpabs
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a complex analogue of
@@ -2238,7 +4005,15 @@ integer :: lp1, enm1
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
    & norm, machep
 double precision :: r2, w(2), z(2)
-double precision :: dpmpar, dcpabs
+double precision :: dpmpar
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a unitary analogue of the
@@ -2459,7 +4234,7 @@ go to 220
 1001 return
 end subroutine dcomqr
 
-subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
+pure subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -2563,7 +4338,15 @@ integer :: lp1, enm1, iend
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
    & norm, machep
 double precision :: r2, w(2), z(2)
-double precision :: dpmpar, dcpabs
+double precision :: dpmpar
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of a unitary analogue of the
@@ -2952,7 +4735,7 @@ go to 1001
 !     ********** Last card of dcmqr2 **********
 end subroutine dcmqr2
 
-subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
+pure subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
    & error, wk, iwk)
 implicit none
 integer, intent(inout) :: iter, iwk(*)
@@ -2963,6 +4746,30 @@ real, intent(inout) :: error, q(kq,*), res(*)
 real, intent(in) :: toler
 real, intent(inout) :: wk(*), x(*)
 integer :: klm
+interface
+   pure subroutine xl1(k,l,m,n,klmd,klm2d,nklmd,n2d,q,kode,toler, &
+      & iter,x,res,error,cu,iu,s)
+      implicit none
+      integer, intent(in) :: n2d
+      integer, intent(in) :: nklmd
+      integer, intent(in) :: klm2d
+      integer, intent(in) :: klmd
+      integer, intent(in) :: k
+      integer, intent(in) :: l
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: q(klm2d,n2d)
+      integer, intent(inout) :: kode
+      real, intent(in) :: toler
+      integer, intent(inout) :: iter
+      real, intent(inout) :: x(n2d)
+      real, intent(inout) :: res(klmd)
+      real, intent(inout) :: error
+      real, intent(inout) :: cu(2,nklmd)
+      integer, intent(inout) :: iu(2,nklmd)
+      integer, intent(inout) :: s(klmd)
+   end subroutine xl1
+end interface
 !     -------------------
 klm = k + l + m
 call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
@@ -2970,7 +4777,7 @@ call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
 return
 end subroutine cl1
 
-subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
+pure subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
    & q, kode, toler, iter, x, res, error, cu, iu, s)
 implicit none
 !
@@ -3482,7 +5289,7 @@ return
 return
 end subroutine llsqmp
 
-subroutine ortho(m, n, qr, ms, s, ip, exit)
+pure subroutine ortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(inout) :: ip
 integer, intent(in) :: m, ms, n
@@ -3805,7 +5612,7 @@ exit = .false.
 return
 end subroutine orimp
 
-subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+pure subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n, nb
@@ -3814,6 +5621,28 @@ integer, intent(inout) :: iwk(n)
 integer :: i, j, np1
 double precision :: rnorm
 logical :: exit
+interface
+   pure subroutine dorsol(m,n,qr,ms,s,ip,x)
+      implicit none
+      integer, intent(in) :: ms
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      double precision, intent(in) :: qr(ms,n)
+      double precision, intent(in) :: s(n)
+      integer, intent(in) :: ip(n)
+      double precision, intent(inout) :: x(m)
+   end subroutine dorsol
+   pure subroutine dortho(m,n,qr,ms,s,ip,exit)
+      implicit none
+      integer, intent(in) :: ms
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      double precision, intent(inout) :: qr(ms,n)
+      double precision, intent(inout) :: s(n)
+      integer, intent(inout) :: ip(n)
+      logical, intent(out) :: exit
+   end subroutine dortho
+end interface
 !     --------------
 ierr = 0
 if (1 .lt. n .and. n .le. m) go to 10
@@ -3837,7 +5666,7 @@ return
 return
 end subroutine dllsq
 
-subroutine dortho(m, n, qr, ms, s, ip, exit)
+pure subroutine dortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(in) :: m, ms, n
 double precision, intent(inout) :: qr(ms,n), s(n)
@@ -3945,7 +5774,7 @@ return
 return
 end subroutine dortho
 
-subroutine dorsol(m, n, qr, ms, s, ip, x)
+pure subroutine dorsol(m, n, qr, ms, s, ip, x)
 implicit none
 integer, intent(in) :: m, ms, n
 double precision, intent(in) :: qr(ms,n), s(n)
@@ -6764,7 +8593,7 @@ return
 return
 end subroutine hfti2
 
-subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 real, intent(inout) :: c(*), u(iue,m), up
@@ -7380,7 +9209,7 @@ return
 return
 end subroutine dhfti2
 
-subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 double precision, intent(inout) :: u(iue,m), up, c(*)
@@ -8874,1655 +10703,3 @@ call wnlsm(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, iwork, &
 return
 end subroutine wnnls
 
-subroutine wnlsm(w, mdw, mme, ma, n, l, prgopt, x, rnorm, mode, &
-   & ipivot, itype, wd, h, scale, z, temp, d)
-implicit none
-integer, intent(in) :: l, ma, mdw, mme
-integer, intent(inout) :: mode
-integer, intent(in) :: n
-real, intent(inout) :: rnorm
-real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
-real, intent(inout) :: z(*), temp(*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: d(*)
-integer, intent(inout) :: ipivot(*), itype(*)
-integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, &
-   & itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
-   & link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, &
-   & nsoln, nsp1, ntimes
-real :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, &
-   & one, sm, srelpr, t, tau, two, wmax, z2, zero, zz
-real :: snrm2
-real :: sasum
-real :: spmpar
-integer :: isamax
-real :: dope(4)
-real :: sparam(5)
-integer :: idope(8)
-logical :: hitcon, feasbl, done, pos
-!
-!     This is a companion subprogram to wnnls( ).
-!     The documentation for wnnls( ) has more complete
-!     usage instructions.
-!
-!     Written by karen h. Haskell, Sandia Laboratories,
-!     with the help of R.J. Hanson, Sandia Laboratories.
-!
-!     In addition to the parameters discussed in the prologue to
-!     subroutine wnnls, the following work arrays are used in
-!     subroutine wnlsm  (they are passed through the calling
-!     sequence from wnnls for purposes of variable dimensioning).
-!     Their contents will in general be of no interest to the user.
-!
-!         ipivot(*)
-!            an array of length n.  upon completion it contains the
-!         pivoting information for the cols of w(*,*).
-!
-!         itype(*)
-!            an array of length M which is used to keep track
-!         of the classification of the equations.  itype(i)=0
-!         denotes equation i as an equality constraint.
-!         itype(i)=1 Denotes equation i as a least squares
-!         equation.
-!
-!         wd(*)
-!            an array of length n.  upon completion it contains the
-!         dual solution vector.
-!
-!         h(*)
-!            an array of length n.  upon completion it contains the
-!         pivot scalars of the Householder transformations performed
-!         in the case KRANK.LT.L.
-!
-!         scale(*)
-!            an array of length M which is used by the subroutine
-!         to store the diagonal matrix of weights.
-!         These are used to apply the modified Givens
-!         transformations.
-!
-!         z(*),temp(*)
-!            working arrays of length n.
-!
-!         d(*)
-!            an array of length n that contains the
-!         column scaling for the matrix (E).
-!                                       (A)
-!
-!
-data zero /0.e0/, one /1.e0/, two /2.e0/
-!
-!     Initialize-variables
-!
-go to 180
-!
-!     Perform initial triangularization in the submatrix
-!     corresponding to the unconstrained variables using
-!     the procedure initially-triangularize.
-!
-10 go to 280
-!
-!     Perform wnnls algorithm using the following steps.
-!
-!     Until(done)
-!
-!        Compute-search-direction-and-feasible-point
-!
-!        When (hitcon) add-constraints
-!
-!        ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
-!
-!        Fin
-!
-!     Compute-final-solution
-!
-20 if (done) go to 80
-go to 300
-!
-!     Compute-search-direction-and-feasible-point
-!
-30 if (.not.(hitcon)) go to 50
-go to 370
-!
-!     When (hitcon) add-constraints
-!
-50 go to 640
-!
-!     ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
-!
-80 go to 1000
-!
-!     Compute-final-solution
-!
-100 continue
-!
-!     To process-option-vector
-fac = 1.e-4
-!
-!     The nominal tolerance used in the code,
-tau = sqrt(srelpr)
-!
-!     The nominal blow-up factor used in the code.
-blowup = tau
-!
-!     The nominal column scaling used in the code is
-!     the identity scaling.
-d(1) = one
-call scopy(n, d, 0, d, 1)
-!
-!     Define bound for number of options to change.
-nopt = 1000
-!
-!     Define bound for positive value of link.
-nlink = 100000
-ntimes = 0
-last = 1
-link = prgopt(1)
-if (.not.(link.le.0 .or. link.gt.nlink)) go to 110
-mode = 2
-return
-110 if (.not.(link.gt.1)) go to 160
-ntimes = ntimes + 1
-if (.not.(ntimes.gt.nopt)) go to 120
-mode = 2
-return
-120 key = prgopt(last + 1)
-if (.not.(key.eq.6 .and. prgopt(last + 2).ne.zero)) go to 140
-do 130 j = 1,n
-   t = snrm2(m,w(1,j),1)
-   if (t.ne.zero) t = one/t
-   d(j) = t
-130 continue
-140 if (key.eq.7) call scopy(n, prgopt(last + 2), 1, d, 1)
-if (key.eq.8) tau = amax1(srelpr,prgopt(last + 2))
-if (key.eq.9) blowup = amax1(srelpr,prgopt(last + 2))
-next = prgopt(link)
-if (.not.(next.le.0 .or. next.gt.nlink)) go to 150
-mode = 2
-return
-150 last = link
-link = next
-go to 110
-160 do 170 j = 1,n
-   call sscal(m, d(j), w(1,j), 1)
-170 continue
-go to 220
-!
-!     To initialize-variables
-!
-!     SRELPR is the precision for the machine being used.
-!
-180 srelpr = spmpar(1)
-!
-m = ma + mme
-me = mme
-mep1 = me + 1
-go to 100
-!
-!     Process-option-vector
-220 done = .false.
-iter = 0
-itmax = 3*(n - l)
-mode = 0
-lp1 = l + 1
-nsoln = l
-nsp1 = nsoln + 1
-np1 = n + 1
-nm1 = n - 1
-l1 = min0(m,l)
-!
-!     Compute scale factor to apply to equal. Constraint equas.
-do 230 j = 1,n
-   wd(j) = sasum(m,w(1,j),1)
-230 continue
-imax = isamax(n,wd,1)
-eanorm = wd(imax)
-bnorm = sasum(m,w(1,np1),1)
-alamda = eanorm/(srelpr*fac)
-!
-!     Define scaling diag matrix for mod Givens usage and
-!     classify equation types.
-alsq = alamda**2
-do 260 i = 1,m
-!
-!     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
-   if (.not.(i.le.me)) go to 240
-   t = alsq
-   itemp = 0
-   go to 250
-240 t = one
-   itemp = 1
-250 scale(i) = t
-   itype(i) = itemp
-260 continue
-!
-!     Set the soln vector x(*) to zero and the col interchange
-!     matrix to the identity.
-x(1) = zero
-call scopy(n, x, 0, x, 1)
-do 270 i = 1,n
-   ipivot(i) = i
-270 continue
-go to 10
-280 continue
-!
-!     To initially-triangularize
-!
-!     Set first l comps. Of dual vector to zero because
-!     these correspond to the unconstrained variables.
-if (.not.(l.gt.0)) go to 290
-wd(1) = zero
-call scopy(l, wd, 0, wd, 1)
-!
-!     The arrays idope(*) and dope(*) are used to pass
-!     information to wnlit().  This was done to avoid
-!     a long calling sequence or the use of common.
-290 idope(1) = me
-idope(2) = mep1
-idope(3) = 0
-idope(4) = 1
-idope(5) = nsoln
-idope(6) = 0
-idope(7) = 1
-idope(8) = l1
-!
-dope(1) = alsq
-dope(2) = eanorm
-dope(3) = fac
-dope(4) = tau
-call wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
-   & idope, dope, done)
-me = idope(1)
-mep1 = idope(2)
-krank = idope(3)
-krp1 = idope(4)
-nsoln = idope(5)
-niv = idope(6)
-niv1 = idope(7)
-l1 = idope(8)
-go to 20
-300 continue
-!
-!     To compute-search-direction-and-feasible-point
-!
-!     Solve the triangular system of currently non-active
-!     variables and store the solution in z(*).
-!
-!     Solve-system
-assign 310 to igo958
-go to 1110
-!
-!     Increment iteration counter and check against max. Number
-!     of iterations.
-310 iter = iter + 1
-if (.not.(iter.gt.itmax)) go to 320
-mode = 1
-done = .true.
-!
-!     Check to see if any constraints have become active.
-!     If so, calculate an interpolation factor so that all
-!     active constraints are removed from the basis.
-320 alpha = two
-hitcon = .false.
-if (.not.(l.lt.nsoln)) go to 360
-do 350 j = lp1,nsoln
-   zz = z(j)
-   if (.not.(zz.le.zero)) go to 350
-   t = x(j)/(x(j) - zz)
-   if (.not.(t.lt.alpha)) go to 330
-   alpha = t
-   jcon = j
-330 hitcon = .true.
-350 continue
-360 go to 30
-370 continue
-!
-!     To add-constraints
-!
-!     Use computed alpha to interpolate between last
-!     feasible solution x(*) and current unconstrained
-!     (and infeasible) solution z(*).
-if (.not.(lp1.le.nsoln)) go to 390
-do 380 j = lp1,nsoln
-   x(j) = x(j) + alpha*(z(j) - x(j))
-380 continue
-390 feasbl = .false.
-go to 410
-400 if (feasbl) go to 20
-!
-!     Remove col JCON and shift cols JCON+1 through n to the
-!     left. Swap col JCON into the n-TH position.  This achieves
-!     upper Hessenberg form for the nonactive constraints and
-!     leaves an upper Hessenberg matrix to retriangularize.
-410 do 420 i = 1,m
-   t = w(i,jcon)
-   call scopy(n - jcon, w(i,jcon + 1), mdw, w(i,jcon), mdw)
-   w(i,n) = t
-420 continue
-!
-!     Update permuted index vector to reflect this shift and swap.
-itemp = ipivot(jcon)
-if (.not.(jcon.lt.n)) go to 440
-do 430 i = jcon,nm1
-   ipivot(i) = ipivot(i + 1)
-430 continue
-440 ipivot(n) = itemp
-!
-!     Similarly repermute x(*) vector.
-call scopy(n - jcon, x(jcon + 1), 1, x(jcon), 1)
-x(n) = zero
-nsp1 = nsoln
-nsoln = nsoln - 1
-niv1 = niv
-niv = niv - 1
-!
-!     Retriangularize upper Hessenberg matrix after adding constraints.
-j = jcon
-i = krank + jcon - l
-450 if (.not.(j.le.nsoln)) go to 570
-if (.not.(itype(i).eq.0 .and. itype(i + 1).eq.0)) go to 470
-assign 460 to igo938
-go to 620
-!
-!     (itype(i).EQ.0 .AND. itype(i+1).EQ.0) ZERO-IP1-TO-i-IN-COL-J
-460 go to 560
-470 if (.not.(itype(i).eq.1 .and. itype(i + 1).eq.1)) go to 490
-assign 480 to igo938
-go to 620
-!
-!     (itype(i).EQ.1 .AND. itype(i+1).EQ.1) ZERO-IP1-TO-i-IN-COL-J
-480 go to 560
-490 if (.not.(itype(i).eq.1 .and. itype(i + 1).eq.0)) go to 510
-call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
-call sswap(1, scale(i), 1, scale(i + 1), 1)
-itemp = itype(i + 1)
-itype(i + 1) = itype(i)
-itype(i) = itemp
-!
-!     Swapped row was formerly a pivot elt., So it will
-!     be large enough to perform ELIM.
-assign 500 to igo938
-go to 620
-!
-!     Zero-IP1-to-i-in-col-J
-500 go to 560
-510 if (.not.(itype(i).eq.0 .and. itype(i + 1).eq.1)) go to 550
-t = scale(i)*w(i,j)**2/alsq
-if (.not.(t.gt.tau**2*eanorm**2)) go to 530
-assign 520 to igo938
-go to 620
-520 go to 540
-530 call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
-call sswap(1, scale(i), 1, scale(i + 1), 1)
-itemp = itype(i + 1)
-itype(i + 1) = itype(i)
-itype(i) = itemp
-w(i + 1,j) = zero
-540 continue
-550 continue
-560 i = i + 1
-j = j + 1
-go to 450
-!
-!     See if the remaining coeffs in the soln set are feasible.  They
-!     should be because of the way alpha was determined.  If any are
-!     infeasible it is due to roundoff error.  Any that are non-
-!     positive will be set to zero and removed from the soln set.
-570 if (.not.(lp1.le.nsoln)) go to 590
-do 580 jcon = lp1,nsoln
-   if (x(jcon).le.zero) go to 600
-580 continue
-590 feasbl = .true.
-600 continue
-go to 400
-620 continue
-!
-!     To zero-IP1-to-i-in-col-J
-if (.not.(w(i + 1,j).ne.zero)) go to 630
-call srotmg(scale(i), scale(i + 1), w(i,j), w(i + 1,j), sparam)
-w(i + 1,j) = zero
-call srotm(np1 - j, w(i,j + 1), mdw, w(i + 1,j + 1), mdw, sparam)
-630 go to 1290
-!
-!     To perform-multiplier-test-and-drop-A-constraint
-!
-640 call scopy(nsoln, z, 1, x, 1)
-if (.not.(nsoln.lt.n)) go to 650
-x(nsp1) = zero
-call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
-650 i = niv1
-660 if (.not.(i.le.me)) go to 690
-!
-!     Reclassify least squares eqations as equalities as
-!     necessary.
-if (.not.(itype(i).eq.0)) go to 670
-i = i + 1
-go to 680
-670 call sswap(np1, w(i,1), mdw, w(me,1), mdw)
-call sswap(1, scale(i), 1, scale(me), 1)
-itemp = itype(i)
-itype(i) = itype(me)
-itype(me) = itemp
-mep1 = me
-me = me - 1
-680 go to 660
-!
-!     Form inner product vector wd(*) of dual coeffs.
-690 if (.not.(nsp1.le.n)) go to 730
-do 720 j = nsp1,n
-   sm = zero
-   if (.not.(nsoln.lt.m)) go to 710
-   do 700 i = nsp1,m
-      sm = sm + scale(i)*w(i,j)*w(i,np1)
-700   continue
-710 wd(j) = sm
-720 continue
-730 go to 750
-740 if (pos .or. done) go to 970
-!
-!     Find J such that wd(J)=WMAX is maximum.  This determines
-!     that the incoming col J will reduce the residual vector
-!     and be positive.
-750 wmax = zero
-iwmax = nsp1
-if (.not.(nsp1.le.n)) go to 780
-do 770 j = nsp1,n
-   if (.not.(wd(j).gt.wmax)) go to 760
-   wmax = wd(j)
-   iwmax = j
-760 continue
-770 continue
-780 if (.not.(wmax.le.zero)) go to 790
-done = .true.
-go to 960
-!
-!     Set dual COEFF to zero for incoming col.
-790 wd(iwmax) = zero
-!
-!     WMAX .GT. zero, so okay to move col IWMAX to soln set.
-!     Perform transformation to retriangularize, and test
-!     for near linear dependence.
-!     Swap col IWMAX into NSOLN-TH position to maintain upper
-!     Hessenberg form of adjacent cols, and add new col to
-!     triangular decomposition.
-nsoln = nsp1
-nsp1 = nsoln + 1
-niv = niv1
-niv1 = niv + 1
-if (.not.(nsoln.ne.iwmax)) go to 800
-call sswap(m, w(1,nsoln), 1, w(1,iwmax), 1)
-wd(iwmax) = wd(nsoln)
-wd(nsoln) = zero
-itemp = ipivot(nsoln)
-ipivot(nsoln) = ipivot(iwmax)
-ipivot(iwmax) = itemp
-!
-!     Reduce col NSOLN so that the matrix of nonactive
-!     constraints variables is triangular.
-800 j = m
-810 if (.not.(j.gt.niv)) go to 870
-jm1 = j - 1
-jp = jm1
-!
-!     When operating near the me line, test to see if the pivot elt.
-!     Is near zero.  If so, use the largest elt. Above it as the pivot.
-!     This is to maintain the sharp interface between weighted and
-!     non-weighted rows in all cases.
-if (.not.(j.eq.mep1)) go to 850
-imax = me
-amax = scale(me)*w(me,nsoln)**2
-820 if (.not.(jp.ge.niv)) go to 840
-t = scale(jp)*w(jp,nsoln)**2
-if (.not.(t.gt.amax)) go to 830
-imax = jp
-amax = t
-830 jp = jp - 1
-go to 820
-840 jp = imax
-850 if (.not.(w(j,nsoln).ne.zero)) go to 860
-call srotmg(scale(jp), scale(j), w(jp,nsoln), w(j,nsoln), sparam)
-w(j,nsoln) = zero
-call srotm(np1 - nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
-860 j = jm1
-go to 810
-!
-!     Solve for z(NSOLN)=Proposed new value for x(NSOLN).
-!     Test if this is nonpositive or too large.
-!     If this was true or if the pivot term was zero reject
-!     the col as dependent.
-870 if (.not.(w(niv,nsoln).ne.zero)) go to 890
-isol = niv
-assign 880 to igo897
-go to 980
-!
-!     Test-proposed-new-component
-880 go to 940
-890 if (.not.(niv.le.me .and. w(mep1,nsoln).ne.zero)) go to 920
-!
-!     Try to add row MEP1 as an additional equality constraint.
-!     Check size of proposed new soln component.
-!     Reject it if it is too large.
-isol = mep1
-assign 900 to igo897
-go to 980
-!
-!     Test-proposed-new-component
-900 if (.not.(pos)) go to 910
-!
-!     Swap rows MEP1 and NIV, and scale factors for these rows.
-call sswap(np1, w(mep1,1), mdw, w(niv,1), mdw)
-call sswap(1, scale(mep1), 1, scale(niv), 1)
-itemp = itype(mep1)
-itype(mep1) = itype(niv)
-itype(niv) = itemp
-me = mep1
-mep1 = me + 1
-910 go to 930
-920 pos = .false.
-930 continue
-940 if (pos) go to 950
-nsp1 = nsoln
-nsoln = nsoln - 1
-niv1 = niv
-niv = niv - 1
-950 continue
-960 go to 740
-970 go to 20
-980 continue
-!
-!     To test-proposed-new-component
-z2 = w(isol,np1)/w(isol,nsoln)
-z(nsoln) = z2
-pos = z2.gt.zero
-if (.not.(z2*eanorm.ge.bnorm .and. pos)) go to 990
-pos = .not.(blowup*z2*eanorm.ge.bnorm)
-990 go to 1280
-1000 continue
-!     To compute-final-solution
-!
-!     Solve system, store results in x(*).
-!
-assign 1010 to igo958
-go to 1110
-!     Solve-system
-1010 call scopy(nsoln, z, 1, x, 1)
-!
-!     Apply Householder transformations to x(*) if KRANK.LT.l
-if (.not.(0.lt.krank .and. krank.lt.l)) go to 1030
-do 1020 i = 1,krank
-   call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
-1020 continue
-!
-!     Fill in trailing zeroes for constrained variables not in soln.
-1030 if (.not.(nsoln.lt.n)) go to 1040
-x(nsp1) = zero
-call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
-!
-!     Repermute soln vector to natural order.
-1040 do 1070 i = 1,n
-   j = i
-1050 if (ipivot(j).eq.i) go to 1060
-   j = j + 1
-   go to 1050
-1060 ipivot(j) = ipivot(i)
-   ipivot(i) = j
-   call sswap(1, x(j), 1, x(i), 1)
-1070 continue
-!
-!     Rescale the soln using the col scaling.
-do 1080 j = 1,n
-   x(j) = x(j)*d(j)
-1080 continue
-if (.not.(niv.lt.m)) go to 1100
-do 1090 i = niv1,m
-   t = w(i,np1)
-   if (i.le.me) t = t/alamda
-   t = (scale(i)*t)*t
-   rnorm = rnorm + t
-1090 continue
-1100 rnorm = sqrt(rnorm)
-return
-!
-!     To solve-system
-!
-1110 continue
-if (.not.(done)) go to 1120
-isol = 1
-go to 1130
-1120 isol = lp1
-1130 if (.not.(nsoln.ge.isol)) go to 1270
-!
-!     Copy RT. Hand side into temp vector to use overwriting method.
-call scopy(niv, w(1,np1), 1, temp, 1)
-do 1180 jj = isol,nsoln
-   j = nsoln - jj + isol
-   if (.not.(j.gt.krank)) go to 1140
-   i = niv - jj + isol
-   go to 1150
-1140 i = j
-1150 if (.not.(j.gt.krank .and. j.le.l)) go to 1160
-   z(j) = zero
-   go to 1170
-1160 z(j) = temp(i)/w(i,j)
-   call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
-1170 continue
-1180 continue
-!
-1270 go to igo958, (310, 1010)
-1280 go to igo897, (880, 900)
-1290 go to igo938, (460, 480, 500, 520)
-end subroutine wnlsm
-
-subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
-   & idope, dope, done)
-implicit none
-integer, intent(in) :: l, m, mdw, n
-real, intent(out) :: rnorm
-real, intent(inout) :: w(mdw,*), h(*), scale(*)
-real, intent(in) :: dope(*)
-integer, intent(inout) :: itype(*), ipivot(*), idope(*)
-logical, intent(inout) :: done
-integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
-   & itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
-   & max, me, mend, mep1, niv, niv1, np1, nsoln
-real :: alsq, eanorm, fac, factor, hbar, one, rn, sn, t, tau, &
-   & tenm3, zero
-real :: sparam(5)
-integer :: isamax
-logical :: indep
-logical :: recalc
-!
-!     This is a companion subprogram to wnnls( ).
-!     The documentation for wnnls( ) has more complete
-!     usage instructions.
-!
-!     Note  the m by (n+1) matrix w( , ) contains the RT. Hand side
-!           B as the (n+1)ST col.
-!
-!
-!     TRIANGULARIZE L1 BY L1 SUBSYSTEM, WHERE L1=min(m,l), WITH
-!     col interchanges.
-!     Revised oct. 1, 1989
-!
-data tenm3 /1.e-3/, zero /0.e0/, one /1.e0/
-!
-me = idope(1)
-mep1 = idope(2)
-krank = idope(3)
-krp1 = idope(4)
-nsoln = idope(5)
-niv = idope(6)
-niv1 = idope(7)
-l1 = idope(8)
-!
-alsq = dope(1)
-eanorm = dope(2)
-fac = dope(3)
-tau = dope(4)
-np1 = n + 1
-lb = min0(m - 1,l)
-recalc = .true.
-rnorm = zero
-krank = 0
-!     We set factor=1.E0 so that the heavy weight ALAMDA will be
-!     included in the test for col independence.
-factor = 1.e0
-i = 1
-ip1 = 2
-lend = l
-10 if (.not.(i.le.lb)) go to 150
-if (.not.(i.le.me)) go to 130
-!
-!     Set ir to point to the i-TH row.
-ir = i
-mend = m
-assign 20 to igo996
-go to 460
-!
-!     Update-col-SS-and-find-pivot-col
-20 assign 30 to igo993
-go to 560
-!
-!     Perform-col-interchange
-!
-!     Set ic to point to i-TH col.
-30 ic = i
-assign 40 to igo990
-go to 520
-!
-!     Test-indep-of-incoming-col
-40 if (.not.(indep)) go to 110
-!
-!     Eliminate i-TH col below diag. Using mod. Givens transformations
-!     applied to (A B).
-j = m
-do 100 jj = ip1,m
-   jm1 = j - 1
-   jp = jm1
-   if (.not.(jj.eq.m)) go to 70
-   if (.not.(i.lt.mep1)) go to 80
-   j = mep1
-   jp = i
-   t = scale(jp)*w(jp,i)**2*tau**2
-   if (.not.(t.gt.scale(j)*w(j,i)**2)) go to 130
-   go to 80
-70 if (.not.(j.eq.mep1)) go to 80
-   j = jm1
-   jm1 = j - 1
-   jp = jm1
-80 if (.not.(w(j,i).ne.zero)) go to 90
-   call srotmg(scale(jp), scale(j), w(jp,i), w(j,i), sparam)
-   w(j,i) = zero
-   call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
-90 j = jm1
-100 continue
-go to 140
-110 continue
-if (.not.(lend.gt.i)) go to 130
-!
-!     Col i is dependent. Swap with col lend.
-max = lend
-!
-!     Perform-col-interchange
-assign 120 to igo993
-go to 560
-120 continue
-lend = lend - 1
-!
-!     Find col in remaining set with largest SS.
-max = isamax(lend - i + 1,h(i),1) + i - 1
-hbar = h(max)
-go to 30
-130 continue
-krank = i - 1
-go to 160
-140 i = ip1
-ip1 = ip1 + 1
-go to 10
-150 krank = l1
-160 continue
-krp1 = krank + 1
-if (.not.(krank.lt.me)) go to 290
-factor = alsq
-do 170 i = krp1,me
-   if (l.gt.0) w(i,1) = zero
-   call scopy(l, w(i,1), 0, w(i,1), mdw)
-170 continue
-!
-!     Determine the rank of the remaining equality constraint
-!     equations by eliminating within the block of constrained
-!     variables.  Remove any redundant constraints.
-!
-ir = krp1
-if (.not.(l.lt.n)) go to 245
-lp1 = l + 1
-recalc = .true.
-lb = min0(l + me - krank,n)
-i = lp1
-ip1 = i + 1
-180 if (.not.(i.le.lb)) go to 280
-ir = krank + i - l
-lend = n
-mend = me
-assign 190 to igo996
-go to 460
-!
-!     Update-col-SS-and-find-pivot-col
-190 assign 200 to igo993
-go to 560
-!
-!     Perform-col-interchange
-!
-!     Eliminate elements in the i-TH col.
-200 j = me
-210 if (.not.(j.gt.ir)) go to 230
-jm1 = j - 1
-if (.not.(w(j,i).ne.zero)) go to 220
-call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
-w(j,i) = zero
-call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
-220 j = jm1
-go to 210
-!
-!     Set ic=i=Col being eliminated
-230 ic = i
-assign 240 to igo990
-go to 520
-!
-!     Test-indep-of-incoming-col
-240 if (indep) go to 270
-!
-!     Remove any redundant or dependent equality constraints.
-245 continue
-jj = ir
-250 if (.not.(ir.le.me)) go to 260
-w(ir,1) = zero
-call scopy(n, w(ir,1), 0, w(ir,1), mdw)
-rnorm = rnorm + (scale(ir)*w(ir,np1)/alsq)*w(ir,np1)
-w(ir,np1) = zero
-scale(ir) = one
-!     Reclassify the zeroed row as a least squares equation.
-itype(ir) = 1
-ir = ir + 1
-go to 250
-!
-!     Reduce me to reflect any discovered dependent equality
-!     constraints.
-260 continue
-me = jj - 1
-mep1 = me + 1
-go to 300
-270 i = ip1
-ip1 = ip1 + 1
-go to 180
-280 continue
-290 continue
-300 continue
-if (.not.(krank.lt.l1)) go to 420
-!
-!     Try to determine the variables KRANK+1 through L1 from the
-!     least squares equations.  Continue the triangularization with
-!     pivot element w(MEP1,i).
-!
-recalc = .true.
-!
-!     Set factor=alsq to remove effect of heavy weight from
-!     test for col independence.
-factor = alsq
-kk = krp1
-i = kk
-ip1 = i + 1
-310 if (.not.(i.le.l1)) go to 410
-!
-!     Set ir to point to the MEP1-ST row.
-ir = mep1
-lend = l
-mend = m
-assign 320 to igo996
-go to 460
-!
-!     Update-col-SS-and-find-pivot-col
-320 assign 330 to igo993
-go to 560
-!
-!     Perform-col-interchange
-!
-!     Eliminate i-TH col below the ir-TH element.
-330 irp1 = ir + 1
-if (.not.(irp1.le.m)) go to 355
-j = m
-do 350 jj = irp1,m
-   jm1 = j - 1
-   if (.not.(w(j,i).ne.zero)) go to 340
-   call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
-   w(j,i) = zero
-   call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
-340 j = jm1
-350 continue
-355 continue
-!
-!     Test if new pivot element is near zero. If so, the col is
-!     dependent.
-t = scale(ir)*w(ir,i)**2
-indep = t.gt.tau**2*eanorm**2
-if (.not.indep) go to 380
-!
-!     Col test passed. Now must pass row norm test to be classified
-!     as independent.
-rn = zero
-do 370 i1 = ir,m
-   do 360 j1 = ip1,n
-      rn = amax1(rn,scale(i1)*w(i1,j1)**2)
-360   continue
-370 continue
-indep = t.gt.tau**2*rn
-!
-!     If independent, swap the ir-TH and KRP1-ST rows to maintain the
-!     triangular form.  Update the rank indicator KRANK and the
-!     equality constraint pointer me.
-380 if (.not.(indep)) go to 390
-call sswap(np1, w(krp1,1), mdw, w(ir,1), mdw)
-call sswap(1, scale(krp1), 1, scale(ir), 1)
-!     Reclassify the least SQ. Equation as an equality constraint and
-!     rescale it.
-itype(ir) = 0
-t = sqrt(scale(krp1))
-call sscal(np1, t, w(krp1,1), mdw)
-scale(krp1) = alsq
-me = mep1
-mep1 = me + 1
-krank = krp1
-krp1 = krank + 1
-go to 400
-390 go to 430
-400 i = ip1
-ip1 = ip1 + 1
-go to 310
-410 continue
-420 continue
-430 continue
-!
-!     If pseudorank is less than l, apply Householder trans.
-!     From right.
-if (.not.(krank.lt.l)) go to 450
-do 440 i = 1,krank
-   j = krp1 - i
-   call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j - 1)
-440 continue
-450 niv = krank + nsoln - l
-niv1 = niv + 1
-if (l.eq.n) done = .true.
-!
-!  END OF INITIAL TRIANGULARIZATION.
-idope(1) = me
-idope(2) = mep1
-idope(3) = krank
-idope(4) = krp1
-idope(5) = nsoln
-idope(6) = niv
-idope(7) = niv1
-idope(8) = l1
-return
-460 continue
-!
-!     To update-col-SS-and-find-pivot-col
-!
-!     The col SS vector will be updated at each step. When
-!     numerically necessary, these values will be recomputed.
-!
-if (.not.(ir.ne.1 .and. (.not.recalc))) go to 480
-!     Update col SS =Sum of squares.
-do 470 j = i,lend
-   h(j) = h(j) - scale(ir - 1)*w(ir - 1,j)**2
-470 continue
-!
-!     Test for numerical accuracy.
-max = isamax(lend - i + 1,h(i),1) + i - 1
-recalc = hbar + tenm3*h(max).eq.hbar
-!
-!     If required, recalculate col SS, using rows ir through mend.
-480 if (.not.(recalc)) go to 510
-do 500 j = i,lend
-   h(j) = zero
-   do 490 k = ir,mend
-      h(j) = h(j) + scale(k)*w(k,j)**2
-490   continue
-500 continue
-!
-!     Find col with largest SS.
-max = isamax(lend - i + 1,h(i),1) + i - 1
-hbar = h(max)
-510 go to 600
-520 continue
-!
-!     To test-indep-of-incoming-col
-!
-!     Test the col ic to determine if it is linearly independent
-!     of the cols already in the basis.  In the init TRI
-!     step, we usually want the heavy weight ALAMDA to
-!     be included in the test for independence.  In this case the
-!     value of factor will have been set to 1.E0 before this
-!     procedure is invoked.  In the potentially rank deficient
-!     problem, the value of factor will have been
-!     set to alsq=ALAMDA**2 to remove the effect of the heavy weight
-!     from the test for independence.
-!
-!     Write new col as partitioned vector
-!             (A1)  number of components in soln so far = NIV
-!             (A2)  m-NIV COMPONENTS
-!     and compute  sn = Inverse weighted length of A1
-!                  rn = Inverse weighted length of A2
-!     CALL THE COL INDEPENDENT WHEN rn .GT. tau*sn
-sn = zero
-rn = zero
-do 550 j = 1,mend
-   t = scale(j)
-   if (j.le.me) t = t/factor
-   t = t*w(j,ic)**2
-   if (.not.(j.lt.ir)) go to 530
-   sn = sn + t
-   go to 540
-530 rn = rn + t
-540 continue
-550 continue
-indep = rn.gt.tau**2*sn
-go to 590
-560 continue
-!
-!     To perform-col-interchange
-!
-if (.not.(max.ne.i)) go to 570
-!     Exchange elements of permuted index vector and perform col
-!     interchanges.
-itemp = ipivot(i)
-ipivot(i) = ipivot(max)
-ipivot(max) = itemp
-call sswap(m, w(1,max), 1, w(1,i), 1)
-t = h(max)
-h(max) = h(i)
-h(i) = t
-570 go to igo993, (30, 200, 330, 120)
-590 go to igo990, (40, 240)
-600 go to igo996, (20, 190, 320)
-end subroutine wnlit
-
-subroutine l2slv(m, n, m1, l, a, mm, b, mb, w, tol, n1, ipivot, &
-   & x, nn, res, mr, qr, mmpnn, c, ifault)
-implicit none
-integer, intent(inout) :: ifault
-integer, intent(in) :: l, m, m1, mb, mm, mmpnn, mr, n
-integer, intent(inout) :: n1
-integer, intent(in) :: nn
-integer, intent(inout) :: ipivot(n)
-real, intent(in) :: a(mm,n), b(mb,l)
-real, intent(inout) :: c(*)
-real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
-integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
-   & k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
-real :: spmpar
-real :: eta
-real :: digitx
-logical :: fail
-logical :: sing
-! ** PURPOSE **
-! subroutine l2slv computes least squares solutions to overdetermined
-! and underdetermined systems of linear equations.  The method used is
-! a modified Gram-Schmidt orthogonal decomposition with iterative
-! refinement of the solution.  The solution may be subject to linear
-! equality constraints.  Output includes the least squares
-! coefficients, residuals, unscaled covariance matrix, and information
-! on the behavior of the iterative refinement procedure.
-! Matrix a is the given matrix of a system of m linear equations in n
-! unknowns, and matrix w is a given diagonal matrix of weights with all
-! diagonal elements nonnegative.  Let H = w*a.
-! In the event that n1 (the computed rank of matrix H) is less than n
-! (the number of unknown coefficients), a unique solution vector having
-! n elements can be obtained by imposing the condition that the
-! solution be of minimal Euclidean norm.  Such a solution is sought in
-! the case of underdetermined or rank-deficient problems.
-!
-! ** Input variables **
-! m      TOTAL NUMBER OF EQUATIONS.
-! n      NUMBER OF UNKNOWN COEFFICIENTS.
-! m1     number of linear constraints (0.LE.m1.LE.m and m1.LE.n).
-! l      NUMBER OF RIGHT-HAND SIDES (VECTORS OF OBSERVATIONS).
-! a      TWO-DIMENSIONAL ARRAY OF size (mm,n).  ON ENTRY, THE ARRAY a
-!        contains the given matrix of a system of m linear equations
-!        in n unknowns, where the first m1 equations are to be
-!        satisfied exactly.  A is left intact on exit.
-! b      TWO-DIMENSIONAL ARRAY OF size (mb,l).  ON ENTRY, b CONTAINS
-!        the l given right-hand sides (vectors of observations).  b is
-!        left intact on exit.
-! w      VECTOR OF SIZE m.  ON ENTRY, w CONTAINS THE DIAGONAL ELEMENTS
-!        of a given diagonal matrix of weights, all nonnegative.
-!        (The first m1 elements of w are set equal to 1.0 by the
-!        program when m1 is greater than zero.)
-! tol    PARAMETER USED IN DETERMINING THE RANK OF MATRIX H.
-!        Note --
-!        (1) if tol equals zero, the tolerance used in subroutine
-!            decom2 will be based on machine precision.
-!        (2) If tol is greater than zero, this value of tol will be
-!            used in setting an absolute tolerance for comparison with
-!            diagonal elements of the triangular matrix obtained in
-!            subroutine decom2.  The value of tol can be based on
-!            knowledge concerning the accuracy of the data.
-! mm     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        the array a.  mm must satisfy mm.GE.M.
-! mb     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        the array b.  mb must satisfy mb.GE.M.
-! mr     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        the array res.  mr must satisfy mr.GE.M.
-! nn     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        the array x.  nn must satisfy nn.GE.N.
-! mmpnn  dimensioning parameter specifying maximum number of rows in
-!        the array qr.  mmpnn must satisfy mmpnn.GE.m+n.
-!
-! ** Output variables and internal variables **
-! n1     computed rank of matrix H, where H = w*a.
-! ipivot vector of size n.  on exit, this array records the order
-!        in which the columns of H were selected by the pivoting
-!        scheme in the course of the orthogonal decomposition.
-!        Whenever n1.LT.n, the first n1 elements of ipivot indicate
-!        which columns of H were found to be linearly independent.
-! x      TWO-DIMENSIONAL ARRAY OF size (nn,l).  ON EXIT, x CONTAINS
-!        the solution vectors.
-! RES    TWO-DIMENSIONAL ARRAY OF size (mr,l).  ON EXIT, RES CONTAINS
-!        the residual vectors.
-! QR     two-dimensional array of size (mmpnn,n).  On exit, if n1 = n
-!        then QR contains the unscaled covariance matrix. (QR is used
-!        internally to store the results from the subroutine decom2.
-!        The results from decom2 are destroyed when the covariance
-!        matrix is computed.)
-! c      VECTOR HAVING AT LEAST 6*(m+n)+2*l ELEMENTS USED (1) FOR
-!        internal work space and (2) for returning information on the
-!        behavior of the iterative refinement procedure.
-!        (A) NUMIT is the number of iterations carried out during the
-!            iterative refinement in attempting to obtain a solution
-!            for the k-TH right-hand side.
-!            On exit, c(k) = +NUMIT if the solution converged, and
-!                     c(k) = -NUMIT if the solution failed to converge.
-!        (b) digitx gives an estimate of the number of correct digits
-!            in the initial solution of the coefficients for the k-TH
-!            right-hand side.  On exit, c(k+l) = digitx.
-! ifault fault indicator which is zero if no errors were encountered
-!        and positive if errors were detected or if evidence of severe
-!        ill-conditioning was found.  If ifault is set to 1, 2, 3, 4,
-!        5, 6 or 7, execution is terminated.  Execution continues when
-!        ifault is set equal to 8, 9 or 10 provided that a solution
-!        was obtained for at least one right-hand side.  The value of
-!        ifault is used to indicate the following --
-!        0 = No errors encountered.
-!        1 = Bad input parameter (m, n or l).
-!        2 = Bad input parameter (m1).
-!        3 = Bad dimension.  Either m.GT.mm, m.GT.mb, m.GT.mr,
-!            n.GT.nn, OR m+n.GT.MMPNN.
-!        4 = At least one weight is negative.
-!        5 = Either matrix H or matrix of constraints equals zero.
-!        6 = Constraints are linearly dependent.
-!        7 = All solutions failed to converge.
-!        8 = Solution failed to converge for at least one right-hand
-!            side.
-!        9 = Large number of iterations required for convergence.
-!       10 = Estimated number of digits in initial solution of
-!            coefficients is small.
-!       11 = Diagonal element of covariance matrix was computed to be
-!            negative owing to rounding error. No severe conditioning
-!            problems were detected.
-!       12 = Diagonal element of covariance matrix was computed to be
-!            negative owing to rounding error. The problem appears to
-!            be extremely ill-conditioned.
-!
-! ** Subroutines required **
-! SUBROUTINE decom2
-!        uses modified Gram-Schmidt algorithm with pivoting to
-!        obtain an orthogonal decomposition of the input matrix.
-! SUBROUTINE solve2
-!        computes coefficients and residuals.  Iterative refinement is
-!        used to improve the accuracy of the initial solution.
-! SUBROUTINE solve3
-!        called only by subroutine solve2.
-! SUBROUTINE covar
-!        computes unscaled covariance matrix of the coefficients.
-!
-! ** Storage requirements **
-! the storage required for the dimensioned arrays in l2slv is
-!   m*(2*n + 2*l + 7) + n*(n + l + 7) + 2*l
-! locations.  All arrays required in subroutines called by l2slv are
-! declared herein and are transmitted only through parameter lists of
-! CALL-SEQUENCES.
-!
-! ** Precision of arithmetic calculations **
-! single precision arithmetic is used for all calculations except the
-! double precision accumulation of inner products.  (The variable SUM
-! is declared to be double precision in subroutines decom2, solve2,
-! solve3 and covar.)  It is essential for the success of the iterative
-! refinement procedure that inner products be accumulated in double
-! precision.
-!
-! ** Conversion of the program to double precision **
-! *********************************************************************
-! * On computers having short word length (as the IBM 360/370) it may *
-! * be desirable to perform all calculations in double precision.  In *
-! * this case, the iterative refinement presently included in solve2  *
-! * SHOULD BE OMITTED.                                                *
-! * TO CONVERT THE PROGRAM TO DOUBLE PRECISION, THE FOLLOWING         *
-! * APPROACH IS SUGGESTED.                                            *
-! *                                                                   *
-! * 1. VARIABLES PRESENTLY DECLARED TO BE REAL SHOULD BE DECLARED     *
-! *    DOUBLE PRECISION.  THOSE TYPED INTEGER, DOUBLE PRECISION AND   *
-! *    LOGICAL SHOULD NOT BE CHANGED.                                 *
-! * 2. THE USE OF FAIL, NUMIT AND digitx SHOULD BE OMITTED.           *
-! * 3. DESCRIPTION OF VARIABLE c (AT L2B 690-790) SHOULD READ --      *
-! *    c  VECTOR HAVING AT LEAST 6*(m+n) ELEMENTS USED ONLY FOR       *
-! *       INTERNAL WORK SPACE.                                        *
-! * 4. The value of eta (at L2B 1960) should be set so that it is the *
-! *    SMALLEST POSITIVE DOUBLE PRECISION NUMBER SUCH THAT 1.0 + eta  *
-! *    IS GREATER THAN 1.0 IN DOUBLE PRECISION ARITHMETIC.            *
-! *    for IBM computer type, eta = 16.**(-13)                        *
-! *    for Univac computer type, eta = 2.**(-59)                      *
-! * 5. THE FOLLOWING FORTRAN FUNCTIONS SHOULD BE CHANGED --           *
-! *      SINGLE PRECISION NAME     DOUBLE PRECISION NAME              *
-! *             dble(x)                x                              *
-! *             FLOAT(n)               dble(FLOAT(n))                 *
-! *             sqrt(x)                dsqrt(x)                       *
-! *    dble(x) IS USED IN SUBROUTINES decom2, solve2, solve3 AND      *
-! *       covar.                                                      *
-! *    FLOAT(n) IS USED IN SUBROUTINE decom2.                         *
-! *    sqrt(x) IS USED IN SUBROUTINE l2slv.                           *
-! * 6. REPLACE STATEMENT L2B 2500 BY A STATEMENT READING              *
-! *          k3 = 1                                                   *
-! * 7. FURTHER DETAILS ARE GIVEN IN SUBROUTINE solve2 IN CONNECTION   *
-! *    WITH THE OMISSION OF ITERATIVE REFINEMENT.                     *
-! * 8. In subroutine l2slv, statements L2B 950-1000, 1820-1830, 2020, *
-! *    2350-2360, 2480-2490, 3070, 3280-3570 AND 3590-3620 SHOULD BE  *
-! *    OMITTED.                                                       *
-! *    STATEMENT NUMBERS GIVEN HERE REFER TO THOSE IN THE RIGHT-HAND  *
-! *    MARGIN.  CERTAIN COMMENTS IN SUBROUTINE l2slv DO NOT APPLY TO  *
-! *    THE DOUBLE PRECISION VERSION.                                  *
-! *                                                                   *
-! *********************************************************************
-!
-!
-! Set value of eta, a machine-dependent parameter.
-! eta, the relative machine precision, is the smallest positive real
-! number such that 1.0 + eta is greater than 1.0 in floating-point
-! arithmetic.
-!
-eta = spmpar(1)
-!
-! Default value for tol is zero.
-!
-if (tol.lt.0.0) tol = 0.0
-ifault = 0
-ksum = 0
-!
-! Perform initial checking of input parameters, dimensions and
-! weights for possible errors.
-!
-if (m.gt.0 .and. n.gt.0 .and. l.gt.0) go to 10
-ifault = 1
-return
-10 if (m1.le.m .and. m1.le.n .and. m1.ge.0) go to 20
-ifault = 2
-return
-20 if (m.le.mm .and. m.le.mb .and. m.le.mr .and. n.le.nn &
-   & .and. m + n.le.mmpnn) go to 30
-ifault = 3
-return
-30 do 40 i = 1,m
-   if (m1.gt.0 .and. i.le.m1) w(i) = 1.0
-   if (w(i).ge.0.0) go to 40
-   ifault = 4
-   return
-40 continue
-!
-! Set parameters which allocate vector c to contain certain final
-! results and also to be used as work space.
-!
-! k1 is starting point for NUMIT and fail, of length l.
-! k2 is starting point for digitx, of length l.
-! k3 is starting point for D, of length n.
-! k4 is starting point for k-TH column of b, of length m.
-! K5 is starting point for k-TH column of x, of length n.
-! K6 is starting point for k-TH column of res, of length m.
-! K7 is starting point for work space of length m.
-! K8 is starting point for work space of length m.
-! K9 is starting point for work space of length n.
-! k10 is starting point for work space of length n.
-! k11 is starting point for work space of length m + n.
-! k12 is starting point for work space of length m + n.
-!
-k1 = 1
-k2 = k1 + l
-k3 = k2 + l
-k4 = k3 + n
-k5 = k4 + m
-k6 = k5 + n
-k7 = k6 + m
-k8 = k7 + m
-k9 = k8 + m
-k10 = k9 + n
-k11 = k10 + n
-k12 = k11 + m + n
-k = k12 + m + n - 1
-!
-! Multiply each row of matrix a (m by n) by its appropriate weight and
-! store the result in the first m rows of array qr.  Set array c and
-! the last n rows of array qr equal to zero.
-!
-do i = 1,k
-   c(i) = 0.0
-end do
-mp1 = m + 1
-mpn = m + n
-do j = 1,n
-   do i = 1,m
-      qr(i,j) = a(i,j)*w(i)
-   end do
-   do i = mp1,mpn
-      qr(i,j) = 0.0
-   end do
-end do
-!
-! Obtain an orthogonal decomposition of the matrix stored in the first
-! m rows of array qr and compute its rank.
-!
-call decom2(m, n, m1, eta, tol, qr, c(k3), n1, ipivot, sing, &
-   & mmpnn)
-!
-if (.not.sing) go to 110
-if (n1.gt.0) go to 100
-ifault = 5
-return
-100 ifault = 6
-return
-!
-! Seek a solution (coefficients and residuals) for each of the l least
-! squares problems whose right-hand sides are given in the array b.
-!
-110 iter = -alog10(eta)
-do 200 k = 1,l
-! k-TH right-hand side.
-   k0 = k4 - 1
-   do i = 1,m
-      k0 = k0 + 1
-      c(k0) = b(i,k)
-   end do
-!
-   call solve2(m, n, m1, a, c(k4), w, n1, ipivot, qr, c(k3), &
-      & eta, fail, numit, digitx, &
-      & c(k5), c(k6), c(k7), c(k8), c(k9), c(k10), c(k11), c(k12), &
-      & mm, mmpnn)
-!
-   k0 = k5 - 1
-   do j = 1,n
-      k0 = k0 + 1
-      x(j,k) = c(k0)
-   end do
-   if (m1.eq.0) go to 150
-   do i = 1,m1
-      res(i,k) = 0.0
-   end do
-150 m1p1 = m1 + 1
-   if (m1p1.gt.m) go to 170
-   k0 = k6 + m1 - 1
-   do i = m1p1,m
-      k0 = k0 + 1
-      res(i,k) = c(k0)
-   end do
-170 continue
-!
-! For right-hand sides where convergence of a solution is reported,
-! a check is made for evidence of severe ill-conditioning.  Such
-! evidence is furnished by large values of NUMIT (number of iterations
-! before convergence was obtained) and small values of digitx
-! (estimate of the number of correct digits in the initial solution
-! of the coefficients).  If NUMIT exceeds -ALOG10(eta) then ifault
-! is set to 9.  If digitx is less than 0.5 (half a decimal digit)
-! then ifault is set to 10.
-!
-   c(k) = float(numit)
-   if (fail) c(k) = -c(k)
-   k0 = k2 + k - 1
-   c(k0) = digitx
-   if (.not.fail) go to 180
-! KSUM is a tally of solutions which failed to converge.
-   ksum = ksum + 1
-   ifault = 8
-   go to 200
-180 if (numit.le.iter) go to 190
-   ifault = 9
-190 if (digitx.ge.0.5) go to 200
-   ifault = 10
-200 continue
-if (ksum.lt.l) go to 210
-ifault = 7
-return
-210 if (n1.lt.n) return
-do i = 1,n
-   mpi = m + i
-   do j = 1,n
-      qr(i,j) = qr(mpi,j)
-   end do
-   qr(i,i) = 0.0
-end do
-!
-! Compute the unscaled covariance matrix of the coefficients.
-!
-call covar(n, m1, n1, ipivot, qr, c(k3), c(k9), mmpnn)
-if (n.eq.1) go to 260
-do j = 2,n
-   jm1 = j - 1
-   do 240 i = 1,jm1
-240   qr(i,j) = qr(j,i)
-end do
-!
-! In certain problems, some diagonal terms of the unscaled covariance
-! matrix are equal to zero or to small positive numbers.  Because of
-! rounding errors, computed values for these terms may be small
-! negative numbers.  ifault is set to 11 if this occurs.
-!
-260 do j = 1,n
-   if (qr(j,j).lt.0.0) go to 280
-end do
-return
-280 if (ifault.ne.0) go to 290
-ifault = 11
-return
-290 ifault = 12
-return
-end subroutine l2slv
-
-!     subroutine decom2(...)
-! subroutine decom2 uses a modified Gram-Schmidt algorithm with
-! pivoting to obtain an orthogonal decomposition of the input matrix
-! given in QR.
-! The input parameter tol (equal either to zero or to a positive
-! number) is used in determining the rank of matrix qr.
-! Note --
-!     (1) if tol equals zero, the tolerance used at statement DC2 1180
-!         will be based on machine precision.
-!         Under this approach, the tolerance (TOL2) is set equal to
-!         (float(n)*eta)**2*D(m1+1) at statement DC2 1170.
-!         If desired, the user can obtain a more conservative
-!         tolerance by replacing n in this statement by a larger
-!         quantity.
-!     (2) If tol is greater than zero, TOL2 (which is set equal to
-!         tol) will be used at statement DC2 1180 as an absolute
-!         tolerance for comparison with diagonal elements of the
-!         triangular matrix obtained in the decomposition.  Under this
-!         approach, the value of tol can be based on knowledge
-!         concerning the accuracy of the data.
-! On exit, the arrays QR, D and ipivot contain the results of the
-! decomposition which are needed for obtaining an initial solution
-! and for iterative refinement.
-! On exit, n1 is the computed rank of the input matrix qr.
-! On exit, sing is set equal to .TRUE. whenever
-!     (1) n1 = 0 (I.E., input matrix qr equals zero or matrix of
-!         constraints equals zero), or
-!     (2) n1 is less than m1 (I.E., the m1 by n matrix of linear
-!         constraints is singular).
-! Otherwise, on exit from decom2, sing = .FALSE.
-! On exit, the vector ipivot records the order in which the columns
-! of QR were selected by the pivoting scheme in the course of the
-! orthogonal decomposition.
-subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
-   & mmpnn)
-implicit none
-integer, intent(in) :: m, m1, mmpnn, n
-integer, intent(out) :: n1
-integer, intent(inout) :: ipivot(n)
-real, intent(inout) :: d(*)
-real, intent(in) :: eta
-real, intent(inout) :: qr(mmpnn,n)
-real, intent(in) :: tol
-logical, intent(out) :: sing
-integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
-   & ns, nsp1
-real :: c
-real :: dm, ds
-real :: rsj
-real :: tol2
-double precision :: sum
-logical :: finis, fsum
-n1 = 0
-sing = .true.
-fsum = .true.
-mv = 1
-mh = m1
-ms = m
-mp1 = m + 1
-finis = .false.
-if (tol.gt.0.0) tol2 = tol
-do j = 1,n
-   d(j) = 0.0
-   ipivot(j) = j
-end do
-! Step number NS of the decomposition.
-do ns = 1,n
-   k = m + ns
-   if (ns.eq.m1 + 1) go to 20
-   go to 30
-20 if (m1.eq.m) go to 200
-   mv = m1 + 1
-   mh = m
-   fsum = .true.
-30 if (.not.finis) go to 40
-   go to 150
-! Pivot search.
-40 ds = 0.0
-   np = ns
-   do 90 j = ns,n
-      if (fsum) go to 50
-      go to 70
-50    sum = 0.0
-      do l = mv,mh
-         sum = sum + dble(qr(l,j))*dble(qr(l,j))
-      end do
-      d(j) = sum
-70    if (ds.lt.d(j)) go to 80
-      go to 90
-80    ds = d(j)
-      np = j
-90    continue
-   if (fsum) dm = ds
-   if (ds.lt.eta*dm) go to 100
-   fsum = .false.
-   go to 110
-100 fsum = .true.
-110 if (fsum) go to 40
-   if (np.ne.ns) go to 120
-   go to 140
-! Column interchange.
-120 ik = ipivot(np)
-   ipivot(np) = ipivot(ns)
-   ipivot(ns) = ik
-   d(np) = d(ns)
-   km1 = k - 1
-   do l = 1,km1
-      c = qr(l,np)
-      qr(l,np) = qr(l,ns)
-      qr(l,ns) = c
-   end do
-! END COLUMN INTERCHANGE.
-! END PIVOT SEARCH.
-! RETURN HERE IF n1 = 0.  EITHER INPUT MATRIX qr EQUALS ZERO OR
-! matrix of constraints equals zero.
-140 if (ns.eq.1 .and. ds.eq.0.0) return
-   go to 160
-150 ms = k - 1
-   mh = k - 1
-160 if (finis) go to 170
-   c = 0.0
-   go to 180
-170 c = 1.0
-180 sum = dble(c)
-   do l = mv,mh
-      sum = sum + dble(qr(l,ns))*dble(qr(l,ns))
-   end do
-   d(ns) = sum
-   ds = d(ns)
-   if (tol.eq.0.0) tol2 = (float(n)*eta)**2*d(m1 + 1)
-   if (.not.finis .and. ns.gt.m1 .and. ds.le.tol2) go to 200
-   go to 290
-200 finis = .true.
-   mv = m + 1
-   do np = ns,n
-      if (1.gt.m1) go to 250
-      do l = 1,m1
-         qr(l,np) = 0.0
-      end do
-      do j = 1,m1
-         sum = 0.0
-         do l = 1,m
-            sum = sum + dble(qr(l,j))*dble(qr(l,np))
-         end do
-         c = sum
-         c = c/d(j)
-         do l = 1,m1
-            qr(l,np) = qr(l,np) - c*qr(l,j)
-         end do
-      end do
-250   mpn1 = m + n1
-      do jj = mp1,mpn1
-         j = (m + 1) + (m + n1) - jj
-         sum = 0.0
-         do l = j,mpn1
-            lmm = l - m
-            sum = sum + dble(qr(j,lmm))*dble(qr(l,np))
-         end do
-         qr(j,np) = -sum
-      end do
-   end do
-   go to 150
-! RETURN HERE IF MATRIX OF CONSTRAINTS IS FOUND TO BE SINGULAR.
-290 if (ds.eq.0.0) return
-   qr(k,ns) = -1.0
-   nsp1 = ns + 1
-   if (nsp1.gt.n) go to 340
-! Begin orthogonalization.
-   do 330 j = nsp1,n
-      sum = 0.0
-      do l = mv,mh
-         sum = sum + dble(qr(l,j))*dble(qr(l,ns))
-      end do
-      rsj = sum
-      rsj = rsj/ds
-      qr(k,j) = rsj
-      do l = 1,ms
-         qr(l,j) = qr(l,j) - rsj*qr(l,ns)
-      end do
-      if (.not.finis) go to 320
-      go to 330
-320   d(j) = d(j) - ds*rsj*rsj
-330   continue
-! END ORTHOGONALIZATION.
-340 if (.not.finis) n1 = n1 + 1
-end do
-! END STEP NUMBER NS.
-sing = .false.
-! Normal return.
-return
-end subroutine decom2
-
-!     subroutine solve2(...)
-! subroutine solve2 uses the orthogonal decomposition stored in QR, d
-! and ipivot to compute the solution (coefficients and residuals)
-! to the least squares problem whose right-hand side is given in B.
-! In the event that n1 (the computed rank of matrix H) is less than n
-! (the number of unknown coefficients), a unique solution vector having
-! n elements can be obtained by imposing the condition that the
-! solution be of minimal Euclidean norm.  Such a solution is sought in
-! the case of underdetermined or rank-deficient problems.
-! In normal exits, the solution is contained in the vector X
-! (coefficients) and the vector RES (residuals).
-! Iterative refinement is used to improve the accuracy of the initial
-! solution.
-! On exit, fail is set equal to .TRUE. if the solution fails to
-! improve sufficiently.  Otherwise, fail = .FALSE.  information on the
-! behavior of the iterative refinement procedure is given by NUMIT and
-! DIGITX.  NUMIT is the number of iterations carried out in attempting
-! to obtain a solution.  DIGITX is an estimate of the number of
-! correct digits in the initial solution of the coefficients.
-! This subroutine calls subroutine solve3.
-!
-! ********* Conversion of this subroutine to double precision *********
-! * if the program is converted so that all calculations are done in  *
-! * DOUBLE PRECISION ARITHMETIC, THE ITERATIVE REFINEMENT PRESENTLY   *
-! * INCLUDED IN solve2 SHOULD BE OMITTED, SINCE THE SUCCESS OF THIS   *
-! * PROCEDURE DEPENDS ON COMPUTING INNER PRODUCTS IN GREATER          *
-! * PRECISION THAN OTHER CALCULATIONS.                                *
-! * SEE COMMENTS IN SUBROUTINE l2slv REGARDING CONVERSION TO DOUBLE   *
-! * PRECISION.  IN ADDITION, THE FOLLOWING COMMENTS INDICATE HOW TO   *
-! * OMIT THE ITERATIVE REFINEMENT FROM THIS SUBROUTINE.  STATEMENT    *
-! * NUMBERS GIVEN HERE REFER TO THOSE IN THE RIGHT-HAND MARGIN.       *
-! *                                                                   *
-! * 1. IN STATEMENT SV2 470 CHANGE REAL TO DOUBLE PRECISION.          *
-! * 2. REPLACE STATEMENT SV2 880 BY A STATEMENT READING               *
-! *       30 DO 50 I=1,m                                              *
-! * 3. REPLACE STATEMENTS SV2 1310-1400 BY A STATEMENT READING        *
-! *          RETURN                                                   *
-! * 4. OMIT STATEMENTS SV2 120-190, 440, 490-500, 520-550, 650,       *
-! *    750-850, 1650-1830 AND 1850-1910.                              *
-! *                                                                   *
-! *********************************************************************
-!

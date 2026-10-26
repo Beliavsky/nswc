@@ -15,6 +15,7 @@ from generate_interfaces import ROOT, MODULE, METADATA, compiler_environment, pr
 from validate_explicit_typing import symbols
 from validate_sources import check_result, test_programs
 from callback_interfaces import abstract_interfaces, enrich, strip_contracts, BINDINGS
+from interface_variants import legacy_interfaces
 
 
 def command_run(command, folder, env=None, timeout=180, expect_success=True):
@@ -33,7 +34,7 @@ def attributes(record):
 def signature(record):
     attrs = attributes(record)
     relevant = {'VARIABLE', 'PROCEDURE', 'DIMENSION', 'OPTIONAL', 'POINTER', 'ALLOCATABLE',
-                'VALUE', 'TARGET', 'CONTIGUOUS', 'VOLATILE', 'ASYNCHRONOUS'}
+                'VALUE', 'TARGET', 'CONTIGUOUS', 'VOLATILE', 'ASYNCHRONOUS', 'PURE', 'ELEMENTAL'}
     # DUMMY-PROC and inferred call-graph attributes describe executable use.
     # A declared, untyped EXTERNAL under IMPLICIT NONE is a subroutine callback.
     category = None
@@ -234,6 +235,12 @@ def verify_calls(compiler, folder, library_names, intel=False, env=None, sources
         print(f'PASS: {"ifx" if intel else "GNU"} rejects invalid {label}.', flush=True)
     passed = 0
     for source in sources:
+        view = folder / 'selected_interfaces.f90'
+        text = MODULE.read_text()
+        view.write_text(legacy_interfaces(text) if source != 'nswc.f90' else text, newline='\n')
+        command = ([compiler, *compile_flags, '/c', str(view), obj(folder / 'interfaces.obj')] if intel
+                   else [compiler, *compile_flags, '-c', str(view), '-o', str(folder / 'interfaces.o')])
+        command_run(command, folder, env)
         library = folder / ('library.obj' if intel else 'library.o')
         if intel:
             # The documented COMPB/PPADD mismatch remains in the implementation.

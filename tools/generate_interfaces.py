@@ -13,7 +13,7 @@ import re
 import subprocess
 import tempfile
 
-from regenerate_sources import HEADER
+from fortran_procedures import HEADER, procedure_blocks
 from callback_interfaces import abstract_interfaces, enrich, BINDINGS, EXCEPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,33 +42,6 @@ def compiler_environment(setup=None):
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
-
-
-def procedure_blocks(text):
-    """Read this library's external definitions or interface bodies."""
-    result, current, lines, abstract = {}, None, [], False
-    for line in text.splitlines(keepends=True):
-        if re.match(r'^\s*abstract\s+interface\b', line, re.I):
-            abstract = True
-        if abstract:
-            if re.match(r'^\s*end\s*interface\b', line, re.I):
-                abstract = False
-            continue
-        match = HEADER.match(line)
-        if match and not line.lstrip().startswith('!'):
-            if current:
-                raise ValueError('Nested or unterminated procedure')
-            current, lines = match[1].upper(), []
-            if current in result:
-                raise ValueError(f'Duplicate procedure: {current}')
-        if current:
-            lines.append(line)
-            if re.match(r'^\s*end\s+(?:subroutine|function)\b', line, re.I):
-                result[current] = ''.join(lines)
-                current = None
-    if current:
-        raise ValueError('Unterminated procedure')
-    return result
 
 
 def normalize_body(raw):

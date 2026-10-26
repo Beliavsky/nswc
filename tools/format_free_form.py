@@ -186,10 +186,14 @@ def format_source(text):
         label_match = re.match(r'^\s*(\d+)\s+', records[0].code)
         label = label_match[1] if label_match else None
         label_key = str(int(label)) if label else None
-        if HEADER.match(logical):
-            if stack:
+        is_header = HEADER.match(re.sub(r'^(?:(?:pure|elemental|impure|recursive)\s+)+', '', logical, flags=re.I))
+        prototype = bool(is_header and stack and stack[-1][0] == 'interface')
+        if is_header:
+            if stack and not prototype:
                 raise ValueError(f'Line {records[0].index + 1}: unclosed block at procedure boundary')
-        ending = 'do' if compact == 'enddo' else 'if' if compact == 'endif' else 'select' if compact == 'endselect' else None
+        prototype_end = compact.startswith(('endfunction', 'endsubroutine')) and stack and stack[-1][0] == 'prototype'
+        ending = ('prototype' if prototype_end else 'interface' if compact == 'endinterface' else
+                  'do' if compact == 'enddo' else 'if' if compact == 'endif' else 'select' if compact == 'endselect' else None)
         if ending:
             if not stack or stack[-1][0] != ending:
                 raise ValueError(f'Line {records[0].index + 1}: unmatched END {ending}')
@@ -248,12 +252,16 @@ def format_source(text):
             stack.append(('if', None))
         elif first == 'select':
             stack.append(('select', None))
+        elif first == 'interface' or lowered[:2] == ['abstract', 'interface']:
+            stack.append(('interface', None))
+        elif prototype:
+            stack.append(('prototype', None))
         if label_key:
             while stack and stack[-1] == ('do', label_key):
                 stack.pop()
             if any(kind == 'do' and target == label_key for kind, target in stack):
                 raise ValueError(f'Line {records[0].index + 1}: crossing labelled DO range')
-        if compact.startswith(('endfunction', 'endsubroutine')) and stack:
+        if compact.startswith(('endfunction', 'endsubroutine')) and stack and not prototype_end:
             raise ValueError(f'Line {records[0].index + 1}: unclosed block at procedure end')
     if stack:
         raise ValueError('Unclosed block at end of input')

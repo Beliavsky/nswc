@@ -2080,7 +2080,7 @@ do 40 ii = 1,imax
 return
 end subroutine daord
 
-subroutine qsorti (x, ind, n)
+pure subroutine qsorti (x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
@@ -2281,7 +2281,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsorti
 
-subroutine qsortr (x, ind, n)
+pure subroutine qsortr (x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2483,7 +2483,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortr
 
-subroutine qsortd (x, ind, n)
+pure subroutine qsortd (x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2686,7 +2686,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortd
 
-subroutine iorder (a, ip, n)
+pure subroutine iorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n), ip(n)
@@ -2759,7 +2759,7 @@ go to 4
 return
 end subroutine iorder
 
-subroutine rorder (a, ip, n)
+pure subroutine rorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2834,7 +2834,7 @@ go to 4
 return
 end subroutine rorder
 
-subroutine dorder (a, ip, n)
+pure subroutine dorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2909,7 +2909,7 @@ go to 4
 return
 end subroutine dorder
 
-real function cbrt (x)
+pure elemental real function cbrt (x)
 implicit none
 real, intent(in) :: x
 real :: r
@@ -2927,7 +2927,7 @@ cbrt = -exp(r)
 return
 end function cbrt
 
-double precision function dcbrt (x)
+pure elemental double precision function dcbrt (x)
 implicit none
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
@@ -2946,7 +2946,7 @@ dcbrt = -dexp(r)
 return
 end function dcbrt
 
-function artnq(y,x)
+pure elemental function artnq(y,x)
 implicit none
 real, intent(in) :: x, y
 real :: artnq
@@ -2967,7 +2967,7 @@ return
 return
 end function artnq
 
-double precision function dartnq(y,x)
+pure elemental double precision function dartnq(y,x)
 implicit none
 double precision, intent(in) :: x, y
 if (x) 1,2,5
@@ -2987,7 +2987,7 @@ return
 return
 end function dartnq
 
-real function cpabs(x, y)
+pure elemental real function cpabs(x, y)
 implicit none
 real, intent(in) :: x, y
 real :: a
@@ -3006,7 +3006,7 @@ return
 return
 end function cpabs
 
-double precision function dcpabs(x, y)
+pure elemental double precision function dcpabs(x, y)
 implicit none
 double precision, intent(in) :: x, y
 double precision :: a
@@ -3026,7 +3026,7 @@ return
 return
 end function dcpabs
 
-subroutine crec (x, y, u, v)
+pure elemental subroutine crec (x, y, u, v)
 implicit none
 real, intent(inout) :: u, v
 real, intent(in) :: x, y
@@ -3047,7 +3047,7 @@ v = -t/d
 return
 end subroutine crec
 
-subroutine dcrec (x, y, u, v)
+pure elemental subroutine dcrec (x, y, u, v)
 implicit none
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
@@ -3069,7 +3069,7 @@ v = -t/d
 return
 end subroutine dcrec
 
-complex function cdiv (a, b)
+pure elemental complex function cdiv (a, b)
 implicit none
 complex, intent(in) :: a, b
 real :: ai, ar, bi, br, d, t, u, v
@@ -3132,12 +3132,19 @@ ci = cr
 return
 end subroutine cdivid
 
-subroutine dcsqrt (z, w)
+pure subroutine dcsqrt (z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: x, y, r
-double precision :: dcpabs
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
 ! ----------------------------------------------------------------------
 !        w = sqrt(z) for the double precision complex number z
 !
@@ -3181,7 +3188,7 @@ w(1) = 0.5d0*y/w(2)
 return
 end subroutine dcsqrt
 
-subroutine poca(r,a,x,y)
+pure elemental subroutine poca(r,a,x,y)
 implicit none
 real, intent(in) :: a, r
 real, intent(out) :: x, y
@@ -3190,7 +3197,7 @@ y = r*sin(a)
 return
 end subroutine poca
 
-subroutine capo(x,y,r,theta)
+pure elemental subroutine capo(x,y,r,theta)
 implicit none
 real, intent(inout) :: r, theta
 real, intent(in) :: x, y
@@ -3210,7 +3217,7 @@ theta = 0.0
 return
 end subroutine capo
 
-subroutine rota(x1,y1,a,x2,y2)
+pure elemental subroutine rota(x1,y1,a,x2,y2)
 implicit none
 real, intent(in) :: a, x1
 real, intent(out) :: x2
@@ -3224,7 +3231,7 @@ y2 = -x1*sina + y1*cosa
 return
 end subroutine rota
 
-subroutine srotg(sa,sb,sc,ss)
+pure elemental subroutine srotg(sa,sb,sc,ss)
 implicit none
 real, intent(inout) :: sa, sb, sc, ss
 real :: r, u, v
@@ -3300,7 +3307,7 @@ return
 !
 end subroutine srotg
 
-subroutine drotg(da,db,dc,ds)
+pure elemental subroutine drotg(da,db,dc,ds)
 implicit none
 !
 !     Designed by C.L.Lawson, JPL, 1977 sept 08
@@ -3419,7 +3426,7 @@ v = -v/sin(theta(2))
 return
 end subroutine rot3
 
-subroutine constr (xk,yk,zk, cx,sx,cy,sy)
+pure elemental subroutine constr (xk,yk,zk, cx,sx,cy,sy)
 implicit none
 real, intent(in) :: xk, yk, zk
 real, intent(inout) :: cx, sx
@@ -3951,7 +3958,7 @@ return
 return
 end subroutine snhcsh
 
-real function esum (mu, x)
+pure elemental real function esum (mu, x)
 implicit none
 integer, intent(in) :: mu
 real, intent(in) :: x
@@ -3978,7 +3985,7 @@ esum = exp(w)*exp(x)
 return
 end function esum
 
-double precision function desum (mu, x)
+pure elemental double precision function desum (mu, x)
 implicit none
 integer, intent(in) :: mu
 double precision, intent(in) :: x
@@ -5180,7 +5187,7 @@ vy(3) = y(1)
 return
 end subroutine hull
 
-real function parea(x, y, nb)
+pure real function parea(x, y, nb)
 implicit none
 integer, intent(in) :: nb
 real, intent(in) :: x(nb), y(nb)
@@ -5217,7 +5224,7 @@ parea = 0.5*a
 return
 end function parea
 
-subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
+pure subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
 implicit none
 integer, intent(inout) :: ind
 integer, intent(in) :: m, n
@@ -5227,6 +5234,31 @@ integer, intent(in) :: pr(*)
 integer, intent(inout) :: ar(m), s(n), iwk(num)
 integer :: i, ii, np1
 integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
+interface
+   pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p,subr, &
+      & rbus,tor,jr,k,ind0)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(inout) :: ind
+      integer, intent(in) :: pr(np1)
+      integer, intent(inout) :: ar(m)
+      integer, intent(inout) :: nb
+      integer, intent(inout) :: s(n)
+      integer, intent(inout) :: pc(np1)
+      integer, intent(inout) :: ac(m)
+      integer, intent(inout) :: vr(n)
+      integer, intent(inout) :: vc(n)
+      integer, intent(inout) :: p(n)
+      integer, intent(inout) :: subr(n)
+      integer, intent(inout) :: rbus(n)
+      integer, intent(inout) :: tor(n)
+      integer, intent(inout) :: jr
+      integer, intent(inout) :: k
+      integer, intent(inout) :: ind0
+   end subroutine hc1
+end interface
 !
 ! Subroutine to find one or more hamiltonian circuits in A
 ! directed graph of  n  vertices ( n .GT. 1 ) represented
@@ -5327,7 +5359,7 @@ return
 return
 end subroutine hc
 
-subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
+pure subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
    & vc, p, subr, rbus, tor, jr, k, ind0)
 implicit none
 integer, intent(inout) :: ind, ind0, jr, k
@@ -5340,6 +5372,89 @@ integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
 integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
    & jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
 real :: dens, score
+interface
+   pure subroutine bupd(a1,a2,p1,p2,v1,v2,ii,k1,k2,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: ii
+      integer, intent(in) :: k1
+      integer, intent(in) :: k2
+   end subroutine bupd
+   pure subroutine fupd(a1,a2,p1,p2,v1,v2,i1,k1,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: i1
+      integer, intent(in) :: k1
+   end subroutine fupd
+   pure subroutine ipath(i,j,subr,rbus,ar,pr,s,n,np,i1,i2,k,jr,m,np1 &
+      & )
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: i
+      integer, intent(in) :: j
+      integer, intent(in) :: subr(n)
+      integer, intent(inout) :: rbus(n)
+      integer, intent(in) :: ar(m)
+      integer, intent(in) :: pr(np1)
+      integer, intent(inout) :: s(n)
+      integer, intent(out) :: np
+      integer, intent(out) :: i1
+      integer, intent(inout) :: i2
+      integer, intent(in) :: k
+      integer, intent(in) :: jr
+   end subroutine ipath
+   pure subroutine iupd(ia,ib,l,a1,a2,p1,p2,v1,v2,k1,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(inout) :: ia
+      integer, intent(in) :: ib
+      integer, intent(in) :: l
+      integer, intent(inout) :: a1(m)
+      integer, intent(inout) :: a2(m)
+      integer, intent(in) :: p1(np1)
+      integer, intent(in) :: p2(np1)
+      integer, intent(inout) :: v1(n)
+      integer, intent(inout) :: v2(n)
+      integer, intent(in) :: k1
+   end subroutine iupd
+   pure subroutine rarc(ia,ib,ar,ac,pr,pc,vr,vc,k1,jj,ll,n,m,np1)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: ia
+      integer, intent(in) :: ib
+      integer, intent(inout) :: ar(m)
+      integer, intent(inout) :: ac(m)
+      integer, intent(in) :: pr(np1)
+      integer, intent(in) :: pc(np1)
+      integer, intent(inout) :: vr(n)
+      integer, intent(inout) :: vc(n)
+      integer, intent(in) :: k1
+      integer, intent(inout) :: jj
+      integer, intent(inout) :: ll
+   end subroutine rarc
+end interface
 !
 ! Meaning of the work arrays ...
 !
@@ -5666,7 +5781,7 @@ return
 return
 end subroutine hc1
 
-subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
+pure subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
    & jr, m, np1)
 implicit none
 integer, intent(in) :: i
@@ -5738,7 +5853,7 @@ rbus(j) = 0
 return
 end subroutine ipath
 
-subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
+pure subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
 implicit none
 integer, intent(in) :: i1, k1, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -5767,7 +5882,7 @@ v1(i1) = 0
 return
 end subroutine fupd
 
-subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
+pure subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
 implicit none
 integer, intent(in) :: ii, k1, k2, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -5797,7 +5912,7 @@ do 30 l = l1,l2
 return
 end subroutine bupd
 
-subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
+pure subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
 implicit none
 integer, intent(inout) :: ia
 integer, intent(in) :: ib, k1, l, m, n, np1
@@ -5833,7 +5948,7 @@ return
 return
 end subroutine iupd
 
-subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
+pure subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
    & np1)
 implicit none
 integer, intent(in) :: ia, ib
@@ -6051,6 +6166,15 @@ integer :: i
 real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 real :: exparg
 real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
+interface
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+end interface
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -6481,6 +6605,15 @@ double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
 double precision :: anorm, dpmpar
+interface
+   pure elemental subroutine dcrec(x,y,u,v)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine dcrec
+end interface
 !-----------------------------------------------------------------------
 !
 !               Computation of the complex error function
@@ -6763,6 +6896,15 @@ double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
 double precision :: anorm, dpmpar, dxparg
+interface
+   pure elemental subroutine dcrec(x,y,u,v)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine dcrec
+end interface
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -8701,8 +8843,15 @@ complex, intent(inout) :: w
 integer :: i
 real :: c, c0, dm, pm, qm, r, ss, x, y
 real :: exparg
-real :: cpabs
 real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !
 !            Computation of the complex fresnel integral E(z)
@@ -9104,12 +9253,19 @@ integer :: i
 real :: c, cy, d, e, eps, euler, pi, qm, r, ss, sy, tol, u, x, y
 real :: anorm
 real :: spmpar
-real :: cpabs
 real :: n, np1
 real :: cd(18), ce(18)
 real :: qf(2), sm(2), tm(2), ts(2)
 real :: g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
 !-----------------------------------------------------------------------
 !           Evaluation of the complex exponential integral
 !-----------------------------------------------------------------------
@@ -10346,360 +10502,4 @@ return
 50 si = sign(pio2,x)
 return
 end function si
-
-function cin(x)
-implicit none
-real, intent(in) :: x
-integer :: i, j, m1, m2, n1, n2
-real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), econ, rc, temp, &
-   & tx
-real :: cin
-real :: spmpar
-!
-!     Written by D.E. Amos and S.L. Daniel, November, 1975.
-!     Modified by A.H. Morris
-!
-!     References
-!         SAND76-0062
-!         the special functions and their approximations, vol. II, by
-!         Y.L. Luke. Academic press, new york, 1969.
-!
-!     Abstract
-!         cin computes the integral of (1-cos(T))/T on (0,x) by means
-!         of Chebyshev expansions on (0,5) and (5,INFINITY).
-!
-!     Description of arguments
-!
-!         Input
-!           x      - Limit of integration, unrestricted
-!
-!         Output
-!           cin    - Value of the integral
-!
-!
-!     -------------------
-data n1,n2,m1,m2     / 16, 46, 14, 21 /
-data econ            / 5.77215664901533e-01/
-!     -------------------
-data bb(1) / 1.82820351064538e-01/, bb(2) /-8.23768704567135e-02/, &
-   & bb(3) /-1.03468764544958e-02/, bb(4) / 5.05085201960312e-03/, &
-   & bb(5) / 5.73772812356328e-05/, bb(6) /-1.42717916181096e-04/, &
-   & bb(7) / 2.89263664732599e-06/, bb(8) / 2.43068098304909e-06/, &
-   & bb(9) /-7.90337487433443e-08/, bb(10)/-2.80205535437371e-08/, &
-   & bb(11)/ 1.05488738052065e-09/, bb(12)/ 2.34186901801115e-10/, &
-   & bb(13)/-9.27762554764014e-12/, bb(14)/-1.48682586858284e-12/, &
-   & bb(15)/ 5.95210263082868e-14/, bb(16)/ 7.42057835287916e-15/
-!     -------------------
-data cc(1) / 9.76155271128712e-01/, cc(2) / 8.96845854916423e-02/, &
-   & cc(3) /-3.04656658030696e-02/, cc(4) / 8.50892472922945e-02/, &
-   & cc(5) /-5.78073683148386e-03/, cc(6) /-5.07182677775691e-03/, &
-   & cc(7) / 8.38643256650893e-04/, cc(8) /-3.34223415981738e-04/, &
-   & cc(9) /-2.15746207281216e-05/, cc(10)/ 1.28560650086065e-04/, &
-   & cc(11)/-1.56456413510232e-05/, cc(12)/-1.52025513597262e-05/, &
-   & cc(13)/ 4.04001013843204e-06/, cc(14)/-5.95896122752160e-07/, &
-   & cc(15)/-4.34985305974340e-07/, cc(16)/ 7.13472533530840e-07/, &
-   & cc(17)/-5.34302186061100e-08/, cc(18)/-1.76003581156610e-07/, &
-   & cc(19)/ 3.85028855125900e-08/, cc(20)/ 1.92576544441700e-08/, &
-   & cc(21)/-1.00735358217200e-08/, cc(22)/ 3.36359194377000e-09/, &
-   & cc(23)/ 1.28049619406000e-09/, cc(24)/-2.42546870827000e-09/, &
-   & cc(25)/ 1.86917288950000e-10/, cc(26)/ 7.13431298340000e-10/, &
-   & cc(27)/-1.70673483710000e-10/, cc(28)/-1.14604070350000e-10/, &
-   & cc(29)/ 5.88004411500000e-11/, cc(30)/-6.78417843000000e-12/, &
-   & cc(31)/-1.21572380900000e-11/, cc(32)/ 1.26561248700000e-11/, &
-   & cc(33)/ 4.74814180000000e-13/, cc(34)/-5.32309477000000e-12/, &
-   & cc(35)/ 9.05903810000000e-13/, cc(36)/ 1.40046450000000e-12/, &
-   & cc(37)/-5.00968320000000e-13/, cc(38)/-1.80458040000000e-13/
-data cc(39)/ 1.66162910000000e-13/, cc(40)/-5.02616400000000e-14/, &
-   & cc(41)/-3.48453600000000e-14/, cc(42)/ 4.60056600000000e-14/, &
-   & cc(43)/ 5.74000000000000e-16/, cc(44)/-1.95310700000000e-14/, &
-   & cc(45)/ 3.68837000000000e-15/, cc(46)/ 5.62862000000000e-15/
-!     -------------------
-!     ****** amax is a machine dependent constant. It is assumed that
-!            sin(x) and cos(x) are defined for  abs(x) .LE. amax, and
-!            that econ + LN(x) - (1 + 1/x)/x = econ + LN(x)
-!            FOR x .GT. amax.
-!
-amax = 0.1/spmpar(1)
-!
-!
-ax = abs(x)
-if (ax.gt.5.0) go to 20
-j = n1
-bx = 0.40*ax - 1.0
-tx = bx + bx
-b1 = bb(j)
-b2 = 0.
-do 10 i = 1,m1
-   j = j - 1
-   temp = b1
-   b1 = tx*b1 - b2 + bb(j)
-10 b2 = temp
-cin = x*x*(bx*b1 - b2 + bb(1))
-return
-!
-20 if (ax.gt.amax) go to 50
-bx = 10./ax - 1.0
-tx = bx + bx
-j = n2
-b1 = cc(j)
-b2 = 0.0
-do 30 i = 1,m2
-   j = j - 2
-   temp = b1
-   b1 = tx*b1 - b2 + cc(j)
-30 b2 = temp
-aic = bx*b1 - b2 + cc(2)
-!
-j = n2 - 1
-b1 = cc(j)
-b2 = 0.0
-do 40 i = 1,m2
-   j = j - 2
-   temp = b1
-   b1 = tx*b1 - b2 + cc(j)
-40 b2 = temp
-rc = bx*b1 - b2 + cc(1)
-!
-cin = (rc*sin(ax) - aic*cos(ax))/ax
-cin = (econ - cin) + alog(ax)
-return
-!
-50 cin = econ + alog(ax)
-return
-end function cin
-
-subroutine cexexi (z, w)
-implicit none
-complex, intent(in) :: z
-complex, intent(inout) :: w
-integer :: i
-real :: const, euler, pm, qm, r, ss, x, y, zeta2
-real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
-real :: ed(18), ee(18), dd(19), de(19), cd(18), ce(18)
-!-----------------------------------------------------------------------
-!        Computation of the exponential exponential integral
-!-----------------------------------------------------------------------
-!-------------------------
-!     euler = euler constant
-!     const = (pi*pi)/4
-!     zeta2 = The Riemann zeta function evaluated at 2
-!-------------------------
-data const /2.46740110027234/
-data euler /.577215664901533/
-data zeta2 /1.64493406684823/
-!-------------------------
-data ed(1)  /0.00000000000000e+00/, ed(2)  /.311105957086528e-01/, &
-   & ed(3)  /.103661260539112e+00/, ed(4)  /.216532335244554e+00/, &
-   & ed(5)  /.369931427960192e+00/, ed(6)  /.566766259990589e+00/, &
-   & ed(7)  /.814042066324748e+00/, ed(8)  /.112384247540813e+01/, &
-   & ed(9)  /.151400478148512e+01/, ed(10) /.200886795032284e+01/, &
-   & ed(11) /.264052411823592e+01/, ed(12) /.345098449933392e+01/, &
-   & ed(13) /.449583360763202e+01/, ed(14) /.585058263409822e+01/, &
-   & ed(15) /.762273501463380e+01/, ed(16) /.997814501584578e+01/, &
-   & ed(17) /.132122064896408e+02/, ed(18) /.180322948376021e+02/
-data ee(1)  /.850156516121093e-02/, ee(2)  /.505037465849058e-01/, &
-   & ee(3)  /.836817368956407e-01/, ee(4)  /.107047582417607e+00/, &
-   & ee(5)  /.120424719029462e+00/, ee(6)  /.125096631582229e+00/, &
-   & ee(7)  /.122314435224685e+00/, ee(8)  /.112621417553907e+00/, &
-   & ee(9)  /.963419407392582e-01/, ee(10) /.747398422757511e-01/, &
-   & ee(11) /.508596135953441e-01/, ee(12) /.290822706773628e-01/, &
-   & ee(13) /.132201640530101e-01/, ee(14) /.443802939829067e-02/, &
-   & ee(15) /.992612478987576e-03/, ee(16) /.126579795112011e-03/, &
-   & ee(17) /.702150908253350e-05/, ee(18) /.910281532564632e-07/
-!-------------------------
-data dd(1)  /0.00000000000000e+00/, dd(2)  /.419556678374293e-01/, &
-   & dd(3)  /.117533661648665e+00/, dd(4)  /.228560237455987e+00/, &
-   & dd(5)  /.375667350161240e+00/, dd(6)  /.791594846276672e+00/, &
-   & dd(7)  /.107546889623058e+01/, dd(8)  /.142659208030841e+01/, &
-   & dd(9)  /.186290554952377e+01/, dd(10) /.240730009509856e+01/, &
-   & dd(11) /.308854035607524e+01/, dd(12) /.394277605155259e+01/, &
-   & dd(13) /.501593196543981e+01/, dd(14) /.636759180748651e+01/, &
-   & dd(15) /.807776193096055e+01/, dd(16) /.102598961138887e+02/, &
-   & dd(17) /.130896768422610e+02/, dd(18) /.168832169085916e+02/, &
-   & dd(19) /.224083240941713e+02/
-data de(1) /-.346911733535892e-03/, de(2) /-.603787732461745e-02/, &
-   & de(3) /-.152461305949249e-01/, de(4) /-.210582169827291e-01/, &
-   & de(5) /-.171894208720754e-01/, de(6)  /.314323467033032e-01/, &
-   & de(7)  /.750898531566972e-01/, de(8)  /.124689787807260e+00/, &
-   & de(9)  /.168579075090035e+00/, de(10) /.191715080699511e+00/, &
-   & de(11) /.182600794550836e+00/, de(12) /.142345674307147e+00/, &
-   & de(13) /.874862222419327e-01/, de(14) /.402175083288425e-01/, &
-   & de(15) /.128575005680180e-01/, de(16) /.257673782598441e-02/, &
-   & de(17) /.275955003784349e-03/, de(18) /.119139315517122e-04/, &
-   & de(19) /.107292980199386e-06/
-!-------------------------
-data cd(1)  /0.00000000000000e+00/, cd(2)  /.237286128313683e-01/, &
-   & cd(3)  /.854113210668760e-01/, cd(4)  /.185276627282059e+00/, &
-   & cd(5)  /.323741526616688e+00/, cd(6)  /.503045460381267e+00/, &
-   & cd(7)  /.728806607587188e+00/, cd(8)  /.101122770102872e+01/, &
-   & cd(9)  /.136598448171249e+01/, cd(10) /.181510139038929e+01/, &
-   & cd(11) /.238824701955419e+01/, cd(12) /.312490532008812e+01/, &
-   & cd(13) /.407802489894445e+01/, cd(14) /.532033545554865e+01/, &
-   & cd(15) /.695624307290579e+01/, cd(16) /.914759902547031e+01/, &
-   & cd(17) /.121829074388544e+02/, cd(18) /.167511311969873e+02/
-data ce(1)  /.349517258926827e-01/, ce(2)  /.135849105925897e+00/, &
-   & ce(3)  /.158850581552296e+00/, ce(4)  /.153001434535435e+00/, &
-   & ce(5)  /.134520752856461e+00/, ce(6)  /.111913051619671e+00/, &
-   & ce(7)  /.892008386656190e-01/, ce(8)  /.679227205472067e-01/, &
-   & ce(9)  /.486723197887211e-01/, ce(10) /.320170976532266e-01/, &
-   & ce(11) /.187008965021111e-01/, ce(12) /.929708414427865e-02/, &
-   & ce(13) /.372604763161087e-02/, ce(14) /.111989537559823e-02/, &
-   & ce(15) /.228057496872353e-03/, ce(16) /.269596227781453e-04/, &
-   & ce(17) /.141255430224301e-05/, ce(18) /.176352326808806e-07/
-!-------------------------
-x = real(z)
-y = aimag(z)
-r = x*x + y*y
-!
-if (r .le. 1.0) go to 100
-if (r .ge. 1296.0) go to 10
-if (x .lt. 0.07*y*y) go to 30
-go to 40
-!-----------------------------------------------------------------------
-!                     Asymptotic expansion
-!-----------------------------------------------------------------------
-10 qf(1) = x/r
-qf(2) = -y/r
-sm(1) = -qf(1)
-sm(2) = -qf(2)
-tm(1) = sm(1)
-tm(2) = sm(2)
-pm = 1.0
-20 ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
-ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
-tm(1) = pm*ts(1)
-tm(2) = pm*ts(2)
-pm = pm + 1.0
-ts(1) = tm(1)/pm
-ts(2) = tm(2)/pm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 21
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 130
-21 sm(1) = sm(1) + ts(1)
-sm(2) = sm(2) + ts(2)
-if (pm .lt. 36.0) go to 20
-go to 130
-!-----------------------------------------------------------------------
-!                      Rational expansion
-!-----------------------------------------------------------------------
-30 sm(1) = 0.0
-sm(2) = 0.0
-do i = 1,18
-   ts(1) = x - cd(i)
-   ts(2) = y
-   ss = ts(1)*ts(1) + ts(2)*ts(2)
-   tm(1) = -ce(i)*ts(1)/ss
-   tm(2) = ce(i)*ts(2)/ss
-   sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-go to 130
-!-----------------------------------------------------------------------
-!                 Expansion involving EI and DI
-!-----------------------------------------------------------------------
-40 zl(1) = euler + 0.5*alog(r)
-zl(2) = atan2(-y, -x)
-!
-!                    SET sm = exp(z)*EI(-z)
-!
-sm(1) = 0.0
-sm(2) = 0.0
-do i = 1,18
-   ts(1) = -x - ed(i)
-   ts(2) = -y
-   ss = ts(1)*ts(1) + ts(2)*ts(2)
-   tm(1) = ee(i)*ts(1)/ss
-   tm(2) = -ee(i)*ts(2)/ss
-   sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-sr(1) = zl(1)*sm(1) - zl(2)*sm(2)
-sr(2) = zl(1)*sm(2) + zl(2)*sm(1)
-!
-!                    SET sm = exp(z)*DI(-z)
-!
-sm(1) = 0.0
-sm(2) = 0.0
-do i = 1,19
-   ts(1) = -x - dd(i)
-   ts(2) = -y
-   ss = ts(1)*ts(1) + ts(2)*ts(2)
-   tm(1) = de(i)*ts(1)/ss
-   tm(2) = -de(i)*ts(2)/ss
-   sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-ts(1) = -(x*sm(1) + y*sm(2))/r
-ts(2) = -(x*sm(2) - y*sm(1))/r
-!
-!                    Compute the expansion
-!
-sr(1) = sr(1) - ts(1) - zeta2
-sr(2) = sr(2) - ts(2)
-sm(1) = 0.0
-sm(2) = 0.0
-tm(1) = 1.0
-tm(2) = 0.0
-pm = 0.0
-qm = zeta2
-70 pm = pm + 1.0
-qm = qm - 1.0/(pm*pm)
-ts(1) = tm(1)*x - tm(2)*y
-ts(2) = tm(1)*y + tm(2)*x
-tm(1) = ts(1)/pm
-tm(2) = ts(2)/pm
-ts(1) = qm*tm(1)
-ts(2) = qm*tm(2)
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 71
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 80
-71 sm(1) = sm(1) - ts(1)
-sm(2) = sm(2) - ts(2)
-go to 70
-80 sm(1) = sr(1) + sm(1)
-sm(2) = sr(2) + sm(2)
-!
-!                      Compute exp(-z)*sm
-!
-qm = exp(-x)
-qf(1) = qm*cos(-y)
-qf(2) = qm*sin(-y)
-ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
-ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
-sm(1) = ts(1)
-sm(2) = ts(2)
-go to 130
-!-----------------------------------------------------------------------
-!                  Series for x*x + y*y .LE. 1
-!-----------------------------------------------------------------------
-100 sm(1) = 0.0
-sm(2) = 0.0
-zl(1) = euler + 0.5*alog(r)
-zl(2) = atan2(-y, -x)
-sr(1) = const + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
-sr(2) = zl(1)*zl(2)
-tm(1) = 1.0
-tm(2) = 0.0
-pm = 0.0
-qm = 0.0
-110 pm = pm + 1.0
-qm = qm + 1.0/pm
-ts(1) = -tm(1)*x + tm(2)*y
-ts(2) = -tm(1)*y - tm(2)*x
-tm(1) = ts(1)/pm
-tm(2) = ts(2)/pm
-r = (zl(1) - 1.0/pm) - qm
-ts(1) = (r*tm(1) - zl(2)*tm(2))/pm
-ts(2) = (r*tm(2) + zl(2)*tm(1))/pm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 111
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 120
-111 sm(1) = sm(1) + ts(1)
-sm(2) = sm(2) + ts(2)
-go to 110
-120 sm(1) = sr(1) + sm(1)
-sm(2) = sr(2) + sm(2)
-!-----------------------------------------------------------------------
-!                         Termination
-!-----------------------------------------------------------------------
-130 w = cmplx(sm(1), sm(2))
-return
-end subroutine cexexi
 
