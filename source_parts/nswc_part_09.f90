@@ -1,3 +1,980 @@
+subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
+   & numle,numge,bi,wk,iwk)
+implicit none
+integer, intent(inout) :: ibasis, ind
+integer :: ita(*)
+integer, intent(inout) :: iter, iwk(*)
+integer :: jta(*), m
+integer, intent(in) :: mxiter, n0, numge, numle
+real :: b0(m)
+real, intent(inout) :: bi(m,m)
+real :: c(n0), ta(*)
+real, intent(inout) :: wk(*), x(*), z
+integer :: ip
+real :: eps0, rerr, rerrmn, rerrmx
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!     Simplex procedure for solving linear programming problems
+!-----------------------------------------------------------------------
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!------------------------
+!     Initial version  DEC  1977
+!     LAST UPDATE      OCT  1990
+!------------------------
+dimension ibasis(m)
+!------------------------
+!     dimension x(n0+numle+numge)
+!     dimension wk(2*m),iwk(2*m+n0)
+!------------------------
+!
+!     ********** eps0 is a machine dependent parameter. Assign eps0
+!                the value U where U is the smallest positive floating
+!                point number such that 1.0 + U .GT. 1.0.
+!
+eps0 = spmpar(1)
+!
+!------------------------
+rerrmn = 10.0*eps0
+rerrmx = 1.e-4
+if (eps0 < 1.e-13) rerrmx = 1.e-5
+!
+ip = m + n0 + 1
+call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
+   & eps0,rerrmn,rerrmx,rerr,numle,numge,bi, &
+   & wk(1),wk(m + 1),iwk(1),iwk(ip))
+end subroutine ssplx
+
+pure subroutine ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,r,z, &
+   & iter,mxiter,eps0,rerrmn,rerrmx,rerr,numle,numge, &
+   & bi,xb,y,basis,index)
+implicit none
+integer, intent(inout) :: ind
+integer, intent(out) :: iter
+integer, intent(in) :: m, mxiter, n0, numge, numle
+real, intent(in) :: eps0
+real, intent(inout) :: rerr
+real, intent(in) :: rerrmn, rerrmx
+real, intent(out) :: z
+real, intent(in) :: ta(*), b0(m), c(n0)
+real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
+integer, intent(in) :: ita(*), jta(*)
+integer, intent(inout) :: ibasis(m), basis(*)
+integer, intent(inout) :: index(m)
+integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
+   & mcheck, ms, n, npos, ns, nstep, num, bflag, nswc_ai_i4
+real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
+double precision :: dsum, dsump, dsumn, dt
+interface
+   pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: a(*)
+      integer, intent(in) :: ka
+      integer, intent(in) :: iend
+      integer, intent(inout) :: index(*)
+      real, intent(inout) :: temp(n)
+      integer, intent(inout) :: jp
+      integer, intent(inout) :: ierr
+   end subroutine crout1
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!----------------------
+!     NSTEP = 1   Eliminate the negative variables
+!     NSTEP = 2   Phase 1 of the simplex algorithm
+!     NSTEP = 3   Phase 2 of the simplex algorithm
+!----------------------
+!     mxiter = The maximum number of iterations permitted
+!     iter = The number of the current iteration
+!     icount = The number of iterations since the last inversion
+!----------------------
+!     numle = The number of .LE. constraints
+!     numge = The number of .GE. constraints
+!----------------------
+!     The routine assumes that the .LE. constraints precede the .GE.
+!     Constraints and that the .EQ. constraints come last. There are
+!     m constraints. X(n0+i) is the slack, surplus, or artificial
+!     variable for the i-TH constraint (i=1,...,m).
+!----------------------
+!     n0 = The number of orginal variables
+!     NS = The number of orginal and slack variables
+!     N  = The number of orginal, slack, and surplus variables
+!     NUM = The total number of variables
+!----------------------
+!     rerrmn = The smallest relative error tolerance used
+!     rerrmx = The largest relative error tolerance used
+!     rerr   = The estimated current relative error
+!----------------------
+!     Let a denote an MXN0 matrix. The transpose of A is stored in
+!     sparse form in ta,ita,jta. Assume that
+!         b0 = (b0(1),...,b0(m))
+!         c  = (c(1),...,c(n0))
+!         z  = c(1)*x(1)+...+c(n0)*x(n0)
+!     the problem is to maximize z subject to
+!         AX(le,EQ,GE)b0
+!         X.GE.0
+!----------------------
+!     On input ind can have the values
+!         ind = 0   No beginning basis is provided by the user
+!         ind = 1   The array ibasis has been set by the user
+!     on output ind is assigned one of the values
+!         ind = 0   z was successfully maximized
+!         ind = 1   The problem has no feasible solution
+!         ind = 2   mxiter iterations were performed
+!         ind = 3   Sufficient accuracy cannot be maintained
+!         ind = 4   The problem has an unbounded solution
+!         ind = 5   There is an input error
+!         ind = 6   z was possibly maximized
+!----------------------
+!     Basis is an integer array of dimension n0+m. for j.LE.N
+!         basis(j) = 1  If X(j) is a BASIC variable
+!         basis(j) = 0  If X(j) is not a BASIC variable
+!     if the BASIC variables are X(I1),...,X(IM) then
+!         ibasis = (i1,...,im)
+!     also xb(1),...,xb(m) are the corresponding values of the
+!     BASIC variables.
+!----------------------
+!     bi is an MXM array containing the inverse of the basis matrix.
+!----------------------
+!     r is an array of dimension N. on output r contains the current
+!     value of X. during computation r normally contains the reduced
+!     costs used for the selection of the variable to be made BASIC.
+!----------------------
+!----------------------
+!
+!     ****** Xmax is a machine dependent constant. Xmax is the
+!            largest positive floating point number.
+!
+xmax = spmpar(3)
+!
+!----------------------
+iter = 0
+icount = 0
+mcheck = min(5,1 + m/15)
+z = 0.0
+!
+!                Check for input errors
+!
+ms = numle + numge
+if (m < 2 .or. n0 < 2 .or. ms > m) go to 12
+do i = 1,m
+   if (b0(i) < 0.0) go to 12
+10 xb(i) = 0.0
+end do
+rtol = xmax
+do i = 1,n0
+   if (c(i) /= 0.0) rtol = min(abs(c(i)),rtol)
+end do
+rtol = rerrmx*rtol
+go to 20
+!
+12 ind = 5
+return
+!
+!     Formation of the ibasis and basis arrays. (If ind = 1
+!     then the ibasis array is defined by the user.)
+!
+20 ns = n0 + numle
+n = ns + numge
+if (ind == 0) go to 30
+num = n
+do i = 1,m
+   if (ibasis(i) > n) num = num + 1
+end do
+go to 32
+22 if (ind == 0) go to 590
+ind = 0
+!
+30 num = n0 + m
+do i = 1,m
+31 ibasis(i) = n0 + i
+end do
+32 bflag = 0
+do i = 1,n
+33 basis(i) = 0
+end do
+do i = 1,m
+   ki = ibasis(i)
+34 basis(ki) = 1
+end do
+if (ind == 1) go to 100
+!
+!          Calculation of xb and bi when ind = 0
+!
+rerr = rerrmn
+do j = 1,m
+   xb(j) = b0(j)
+   do i = 1,m
+40    bi(i,j) = 0.0
+   end do
+   bi(j,j) = 1.0
+end do
+if (numge == 0) go to 630
+jmin = numle + 1
+do j = jmin,ms
+   xb(j) = -xb(j)
+   bi(j,j) = -1.0
+end do
+go to 601
+!
+!                  Reorder the basis
+!
+100 ibeg = 1
+iend = m
+do i = 1,m
+   if (ibasis(i) <= n0) go to 101
+   index(ibeg) = ibasis(i)
+   ibeg = ibeg + 1
+   go to 102
+101 index(iend) = ibasis(i)
+   iend = iend - 1
+102 continue
+end do
+if (iend == m) go to 22
+do i = 1,m
+103 ibasis(i) = index(i)
+end do
+!
+!            REINVERSION of the basis matrix
+!
+do j = 1,m
+   kj = ibasis(j)
+   if (kj <= n0) go to 110
+   if (kj <= ns) go to 120
+   if (kj <= n) go to 130
+   go to 120
+!
+110 do i = 1,m
+111   bi(i,j) = 0.0
+   end do
+   lmin = ita(kj)
+   lmax = ita(kj + 1) - 1
+   if (lmin > lmax) go to 132
+   do ll = lmin,lmax
+      l = jta(ll)
+112   bi(l,j) = ta(ll)
+   end do
+   go to 132
+!
+120 l = kj - n0
+   do i = 1,m
+121   bi(i,j) = 0.0
+   end do
+   bi(l,j) = 1.0
+   go to 132
+!
+130 l = kj - n0
+   do i = 1,m
+131   bi(i,j) = 0.0
+   end do
+   bi(l,j) = -1.0
+132 continue
+end do
+!
+icount = 0
+call crout1(bi, m, m, iend, index, y, jcol, ierr)
+if (ierr /= 0) go to 580
+!
+!         Check the accuracy of bi and reset rerr
+!
+bnorm = 0.0
+do j = 1,m
+   kj = ibasis(j)
+   if (kj <= n0) go to 140
+   sum = 1.0
+   go to 142
+140 sum = 0.0
+   lmin = ita(kj)
+   lmax = ita(kj + 1) - 1
+   do ll = lmin,lmax
+141   sum = sum + abs(ta(ll))
+   end do
+142 bnorm = max(bnorm,sum)
+end do
+!
+binorm = 0.0
+do j = 1,m
+   sum = 0.0
+   do i = 1,m
+150   sum = sum + abs(bi(i,j))
+   end do
+   binorm = max(binorm,sum)
+end do
+rerr = max(rerrmn,eps0*bnorm*binorm)
+if (rerr > 1.e-2) go to 580
+bflag = 0
+!
+!                 Recalculation of xb
+!
+180 do i = 1,m
+   dsump = 0.d0
+   dsumn = 0.d0
+   do l = 1,m
+      dt = bi(i,l)*b0(l)
+      if (dt > 0.d0) go to 181
+      dsumn = dsumn + dt
+      go to 182
+181   dsump = dsump + dt
+182   continue
+   end do
+   xb(i) = dsump + dsumn
+   s = dsump
+   t = dsumn
+   tol = rerrmx*max(s,-t)
+   if (abs(xb(i)) < tol) xb(i) = 0.0
+end do
+go to 601
+!
+!     Find the next vector A(--,JP) to be inserted into
+!                       the basis
+!
+200 jp = 0
+rmin = 0.0
+if (nstep == 3) rmin = -rtol
+do j = 1,n0
+   if (basis(j) /= 0) go to 201
+   if (r(j) >= rmin) go to 201
+   jp = j
+   rmin = r(j)
+201 continue
+end do
+if (n0 == n) go to 203
+jmin = n0 + 1
+rmin = rmin*1.1
+do j = jmin,n
+   if (basis(j) /= 0) go to 202
+   if (r(j) >= rmin) go to 202
+   jp = j
+   rmin = r(j)
+202 continue
+end do
+203 if (jp /= 0) go to 300
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 800
+if ( nswc_ai_i4 == 0 ) go to 230
+go to 250
+!
+!     Insert the values of the orginal, slack, and surplus
+!             variables into r. then terminate.
+!
+220 do j = 1,n
+221 r(j) = 0.0
+end do
+do i = 1,m
+   ki = ibasis(i)
+   if (ki <= n) r(ki) = xb(i)
+end do
+return
+!
+!             Completion of the NSTEP = 2 Case
+!
+230 do i = 1,m
+   if (ibasis(i) <= n) go to 231
+   if (xb(i) > 0.0) go to 800
+231 continue
+end do
+go to 680
+!
+240 if (icount >= 5) go to 100
+ind = 1
+go to 220
+!
+!             Completion of the NSTEP = 3 Case
+!
+250 if (rerr > 1.e-2) go to 251
+ind = 0
+go to 800
+251 if (icount >= 5) go to 100
+ind = 6
+go to 800
+!
+!     If mxiter iterations have not been performed then
+!     begin the next iteration. Compute the JP-TH column
+!               of bi*A and store it in y.
+!
+300 if (iter < mxiter) go to 301
+ind = 2
+go to 220
+301 iter = iter + 1
+icount = icount + 1
+if (jp > ns) go to 330
+if (jp > n0) go to 320
+!
+lmin = ita(jp)
+lmax = ita(jp + 1) - 1
+if (lmin <= lmax) go to 305
+ind = 4
+go to 220
+305 amax = 0.0
+do ll = lmin,lmax
+   amax = max(abs(ta(ll)),amax)
+end do
+!
+310 rerr1 = rerrmx*amax
+do i = 1,m
+   dsum = 0.d0
+   do ll = lmin,lmax
+      l = jta(ll)
+      dsum = dsum + dble(bi(i,l)*ta(ll))
+   end do
+   y(i) = dsum
+   if (abs(y(i)) >= 5.e-3) go to 313
+   bmax = 0.0
+   do l = 1,m
+      bmax = max(abs(bi(i,l)),bmax)
+   end do
+   tol = rerr1*bmax
+   if (abs(y(i)) < tol) y(i) = 0.0
+313 continue
+end do
+go to 350
+!
+320 l = jp - n0
+do i = 1,m
+   y(i) = bi(i,l)
+end do
+go to 350
+!
+330 l = jp - n0
+do i = 1,m
+   y(i) = -bi(i,l)
+end do
+!
+350 do i = 1,m
+   if (y(i) /= 0.0) go to 360
+end do
+r(jp) = 0.0
+iter = iter - 1
+icount = icount - 1
+go to 200
+!
+360 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 400
+if ( nswc_ai_i4 == 0 ) go to 430
+go to 440
+!
+!     Finding the variable xb(ip) to be made nonbasic
+!               for the NSTEP = 1 Case
+!
+400 npos = 0
+ip = 0
+eps = 0.0
+epsi = xmax
+do i = 1,m
+   if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
+   ratio = xb(i)/y(i)
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 401
+   if ( nswc_ai_r4 == 0 ) go to 402
+   go to 403
+401 epsi = ratio
+   npos = 1
+   index(1) = i
+   go to 403
+402 npos = npos + 1
+   index(npos) = i
+403 continue
+end do
+if (npos == 0) go to 420
+if (epsi == 0.0) go to 460
+!
+do i = 1,m
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 410
+   ratio = xb(i)/y(i)
+   if (ratio > epsi) go to 410
+   if (ratio < eps) go to 410
+   eps = ratio
+   ip = i
+410 continue
+end do
+if (ip /= 0) go to 500
+go to 460
+!
+420 do i = 1,m
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 421
+   ratio = xb(i)/y(i)
+   if (ratio < eps) go to 421
+   eps = ratio
+   ip = i
+421 continue
+end do
+go to 500
+!
+!     Finding the variable xb(ip) to be made nonbasic
+!               for the NSTEP = 2 Case
+!
+430 npos = 0
+epsi = xmax
+do i = 1,m
+   if (y(i) <= 0.0) go to 433
+   ratio = xb(i)/y(i)
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 431
+   if ( nswc_ai_r4 == 0 ) go to 432
+   go to 433
+431 epsi = ratio
+   npos = 1
+   index(1) = i
+   go to 433
+432 npos = npos + 1
+   index(npos) = i
+433 continue
+end do
+go to 450
+!
+!     Finding the variable xb(ip) to be made nonbasic
+!               for the NSTEP = 3 Case
+!
+440 npos = 0
+epsi = xmax
+do i = 1,m
+   nswc_ai_r4 = y ( i )
+   if ( nswc_ai_r4 < 0 ) go to 441
+   if ( nswc_ai_r4 == 0 ) go to 445
+   go to 442
+441 if (ibasis(i) <= n) go to 445
+   ip = i
+   go to 500
+442 ratio = xb(i)/y(i)
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 443
+   if ( nswc_ai_r4 == 0 ) go to 444
+   go to 445
+443 epsi = ratio
+   npos = 1
+   index(1) = i
+   go to 445
+444 npos = npos + 1
+   index(npos) = i
+445 continue
+end do
+!
+450 if (npos /= 0) go to 460
+if (icount >= 5) go to 100
+ind = 4
+go to 220
+!
+!              Tie breaking procedure
+!
+460 ip = index(1)
+if (npos == 1) go to 500
+ip = 0
+bmin = xmax
+cmin = xmax
+do ii = 1,npos
+   i = index(ii)
+   l = ibasis(i)
+   if (l > n0) go to 461
+   if (c(l) <= 0.0) cmin = min(0.0,cmin)
+   if (c(l) > cmin) go to 464
+   imin = i
+   cmin = c(l)
+   go to 464
+461 if (l <= n) go to 462
+   ip = i
+   go to 500
+462 lrow = l - n0
+   s = b0(lrow)
+   if (lrow > numle) go to 463
+   if (s > bmin) go to 464
+   ip = i
+   bmin = s
+   go to 464
+463 s = -s
+   bmin = min(0.0,bmin)
+   if (s > bmin) go to 464
+   ip = i
+   bmin = s
+464 continue
+end do
+if (cmin <= 0.0 .or. ip == 0) ip = imin
+!
+!               Transformation of xb
+!
+500 if (xb(ip) == 0.0) go to 510
+const = xb(ip)/y(ip)
+do i = 1,m
+   s = xb(i)
+   xb(i) = xb(i) - const*y(i)
+   if (xb(i) >= 0.0) go to 501
+   if (s >= 0.0 .or. xb(i) >= rerrmx*s) xb(i) = 0.0
+501 continue
+end do
+xb(ip) = const
+!
+!               Transformation of bi
+!
+510 do j = 1,m
+   if (bi(ip,j) == 0.0) go to 512
+   const = bi(ip,j)/y(ip)
+   do i = 1,m
+511   bi(i,j) = bi(i,j) - const*y(i)
+   end do
+   bi(ip,j) = const
+512 continue
+end do
+!
+!             Updating ibasis and basis
+!
+iout = ibasis(ip)
+ibasis(ip) = jp
+basis(iout) = 0
+basis(jp) = 1
+if (iout > n) num = num - 1
+!
+!        Check the accuracy of bi and reset rerr
+!
+if (rerr > 1.e-2) go to 530
+k = 0
+do j = 1,m
+   kj = ibasis(j)
+   if (kj > n0) go to 521
+   sum = 0.0
+   lmin = ita(kj)
+   lmax = ita(kj + 1) - 1
+   do ll = lmin,lmax
+      l = jta(ll)
+      sum = sum + bi(j,l)*ta(ll)
+   end do
+   rerr = max(rerr,abs(1.0 - sum))
+   k = k + 1
+   if (k >= mcheck) go to 522
+521 continue
+end do
+522 if (rerr <= 1.e-2) go to 600
+!
+!        The accuracy criteria are not satisfied
+!
+530 if (icount < 5) go to 600
+bflag = 1
+go to 100
+!
+580 if (iter == 0) go to 12
+if (bflag == 0) go to 590
+bflag = 0
+do ip = 1,m
+   if (jp == ibasis(ip)) go to 582
+end do
+582 ibasis(ip) = iout
+basis(jp) = 0
+basis(iout) = 1
+if (iout > n) num = num + 1
+go to 100
+!
+590 ind = 3
+go to 220
+!
+!       Set up the r array for the NSTEP = 1 Case
+!
+600 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 601
+if ( nswc_ai_i4 == 0 ) go to 630
+go to 700
+601 do j = 1,m
+   if (xb(j) < 0.0) go to 610
+end do
+go to 630
+!
+610 nstep = 1
+m0 = 0
+do l = 1,m
+   if (xb(l) >= 0.0) go to 611
+   m0 = m0 + 1
+   index(m0) = l
+611 continue
+end do
+!
+do j = 1,m
+   dsump = 0.d0
+   dsumn = 0.d0
+   do ll = 1,m0
+      l = index(ll)
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 620
+      if ( nswc_ai_r4 == 0 ) go to 622
+      go to 621
+620   dsumn = dsumn + dble(bi(l,j))
+      go to 622
+621   dsump = dsump + dble(bi(l,j))
+622   continue
+   end do
+   y(j) = dsump + dsumn
+   s = dsump
+   t = dsumn
+   tol = rerrmx*max(s,-t)
+   if (abs(y(j)) < tol) y(j) = 0.0
+end do
+go to 650
+!
+!       Set up the r array for the NSTEP = 2 Case
+!
+630 if (n == num) go to 680
+nstep = 2
+m0 = 0
+do l = 1,m
+   if (ibasis(l) <= n) go to 631
+   m0 = m0 + 1
+   index(m0) = l
+631 continue
+end do
+!
+do j = 1,m
+   dsump = 0.d0
+   dsumn = 0.d0
+   do ll = 1,m0
+      l = index(ll)
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 640
+      if ( nswc_ai_r4 == 0 ) go to 642
+      go to 641
+640   dsumn = dsumn + dble(bi(l,j))
+      go to 642
+641   dsump = dsump + dble(bi(l,j))
+642   continue
+   end do
+   y(j) = -(dsump + dsumn)
+   s = dsump
+   t = dsumn
+   tol = rerrmx*max(s,-t)
+   if (abs(y(j)) < tol) y(j) = 0.0
+end do
+!
+650 do j = 1,n0
+   sum = 0.0
+   if (basis(j) /= 0) go to 652
+   lmin = ita(j)
+   lmax = ita(j + 1) - 1
+   if (lmin > lmax) go to 652
+   do ll = lmin,lmax
+      l = jta(ll)
+      sum = sum + y(l)*ta(ll)
+   end do
+652 r(j) = sum
+end do
+!
+660 if (n0 == ns) go to 670
+jmin = n0 + 1
+do j = jmin,ns
+   r(j) = 0.0
+   if (basis(j) /= 0) go to 661
+   jj = j - n0
+   r(j) = y(jj)
+661 continue
+end do
+!
+670 if (ns == n) go to 200
+jmin = ns + 1
+do j = jmin,n
+   r(j) = 0.0
+   if (basis(j) /= 0) go to 671
+   jj = j - n0
+   r(j) = -y(jj)
+671 continue
+end do
+go to 200
+!
+!      Set up a new r array for the NSTEP = 3 Case
+!
+680 nstep = 3
+do j = 1,m
+   dsum = 0.d0
+   do l = 1,m
+      il = ibasis(l)
+      if (il <= n0) dsum = dsum + dble(c(il)*bi(l,j))
+   end do
+682 y(j) = dsum
+end do
+!
+do j = 1,n0
+   r(j) = 0.0
+   if (basis(j) /= 0) go to 691
+   dsum = -c(j)
+   lmin = ita(j)
+   lmax = ita(j + 1) - 1
+   r(j) = -c(j)
+   if (lmin > lmax) go to 691
+   do ll = lmin,lmax
+      l = jta(ll)
+      dsum = dsum + dble(y(l)*ta(ll))
+   end do
+   r(j) = dsum
+   if (r(j) >= 0.0) go to 691
+   tol = rerrmx*abs(c(j))
+   if (abs(r(j)) < tol) r(j) = 0.0
+691 continue
+end do
+go to 660
+!
+!       Update the r array for the NSTEP = 3 Case
+!
+700 const = r(jp)
+do j = 1,n0
+   if (basis(j) == 0) go to 701
+   r(j) = 0.0
+   go to 703
+701 sum = 0.0
+   lmin = ita(j)
+   lmax = ita(j + 1) - 1
+   if (lmin > lmax) go to 703
+   do ll = lmin,lmax
+      l = jta(ll)
+      sum = sum + bi(ip,l)*ta(ll)
+   end do
+   r(j) = r(j) - const*sum
+   if (r(j) >= 0.0) go to 703
+   tol = rerrmx*abs(c(j))
+   if (abs(r(j)) < tol) r(j) = 0.0
+703 continue
+end do
+!
+710 if (n0 == ns) go to 720
+jmin = n0 + 1
+do j = jmin,ns
+   if (basis(j) == 0) go to 711
+   r(j) = 0.0
+   go to 712
+711 jj = j - n0
+   r(j) = r(j) - const*bi(ip,jj)
+712 continue
+end do
+!
+720 if (ns == n) go to 200
+jmin = ns + 1
+do j = jmin,n
+   if (basis(j) == 0) go to 721
+   r(j) = 0.0
+   go to 722
+721 jj = j - n0
+   r(j) = r(j) + const*bi(ip,jj)
+722 continue
+end do
+go to 200
+!-----------------------------------------------------------------------
+!               Refine xb and store the result in y
+!-----------------------------------------------------------------------
+800 do i = 1,m
+   r(i) = 0.0
+   y(i) = 0.0
+end do
+!
+do j = 1,m
+   kj = ibasis(j)
+   if (kj <= n0) go to 810
+   if (kj <= ns) go to 820
+   if (kj <= n) go to 830
+   go to 820
+!
+810 lmin = ita(kj)
+   lmax = ita(kj + 1) - 1
+   do ll = lmin,lmax
+      l = jta(ll)
+      dt = dble(r(l)) + dble(y(l))
+      dt = dt + dble(ta(ll)*xb(j))
+      r(l) = dt
+      y(l) = dt - dble(r(l))
+   end do
+   go to 831
+!
+820 l = kj - n0
+   dt = dble(r(l)) + dble(y(l))
+   dt = dt + dble(xb(j))
+   r(l) = dt
+   y(l) = dt - dble(r(l))
+   go to 831
+!
+830 l = kj - n0
+   dt = dble(r(l)) + dble(y(l))
+   dt = dt - dble(xb(j))
+   r(l) = dt
+   y(l) = dt - dble(r(l))
+831 continue
+end do
+!
+do i = 1,m
+   dt = dble(r(i)) + dble(y(i))
+   r(i) = dble(b0(i)) - dt
+end do
+!
+850 rerr1 = min(rerrmx,rerr)
+do i = 1,m
+   y(i) = 0.0
+   nswc_ai_r4 = xb ( i )
+   if ( nswc_ai_r4 < 0 ) go to 851
+   if ( nswc_ai_r4 == 0 ) go to 856
+   go to 852
+851 sgn = -1.0
+   dsump = 0.d0
+   dsumn = xb(i)
+   go to 853
+852 sgn = 1.0
+   dsump = xb(i)
+   dsumn = 0.d0
+853 do l = 1,m
+      dt = bi(i,l)*r(l)
+      if (dt > 0.d0) go to 854
+      dsumn = dsumn + dt
+      go to 855
+854   dsump = dsump + dt
+855   continue
+   end do
+   w = dsump + dsumn
+   if (w == 0.0) go to 856
+   if (sgn /= sign(1.0,w)) go to 856
+   s = dsump
+   t = dsumn
+   tol = rerr1*max(s,-t)
+   if (abs(w) > tol) y(i) = w
+856 continue
+end do
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 860
+if ( nswc_ai_i4 == 0 ) go to 870
+go to 880
+!
+!         Check the refinement (NSTEP = 1)
+!
+860 do i = 1,m
+   if (y(i) >= 0.0) go to 861
+   if (y(i) < -rerrmx) go to 240
+   y(i) = 0.0
+861 xb(i) = y(i)
+end do
+go to 630
+!
+!         Check the refinement (NSTEP = 2)
+!
+870 do i = 1,m
+   if (ibasis(i) <= n) go to 871
+   if (y(i) > rerrmx) go to 240
+   y(i) = 0.0
+871 xb(i) = y(i)
+end do
+go to 680
+!
+!              COMPUTE z  (NSTEP = 3)
+!
+880 dsum = 0.d0
+do i = 1,m
+   ki = ibasis(i)
+   if (ki > n0) go to 881
+   dsum = dsum + dble(c(ki)*y(i))
+881 xb(i) = y(i)
+end do
+z = dsum
+go to 220
+end subroutine ssplx1
+
 pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
 implicit none
 integer, intent(in) :: iend
@@ -7681,7 +8658,7 @@ integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, 
 real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
 complex :: a(64), v
-complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, mult, co
+complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, co
 integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
 integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
@@ -7733,7 +8710,6 @@ data rv(1)/(-.4,.3)/, rv(2)/(.7,.2)/, rv(3)/(.02,-.06)/
 !  Statement function for multiplication of a complex number
 !  by a real number.
 !
-mult(re,co) = cmplx(re*real(co),re*aimag(co))
 !
 !  -------------------
 !
@@ -7932,6 +8908,14 @@ return
    rs(i) = (0.,0.)
 270 err(i) = 1.e10
 end do
+contains
+   pure function mult(re, co) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: re
+      complex, intent(in) :: co
+      complex :: nswc_sf_result
+      nswc_sf_result = cmplx(re*real(co),re*aimag(co))
+   end function mult
 end subroutine cpsc
 
 subroutine dcpsc(fun, x, y, n, ic, tol, r, rs1, rs2, err)
@@ -9588,928 +10572,4 @@ go to 50
 ir = min(i + 1,nm1)
 go to 10
 end subroutine scomp1
-
-pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni)
-integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
-!
-!     Abstract
-!
-!         scomp2 evaluates a cubic spline at the abscissas in xi.
-!         It is assumed that the second derivatives at the nodes
-!         have been provided.
-!
-!     Description of arguments
-!
-!       --Input--
-!
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         ypp - Array of second derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and ypp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1 then xi and yi
-!               must be arrays of dimension ni or larger.
-!               It is assumed that ni is greater than or equal to 1.
-!
-!       --Output--
-!
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!
-!
-!     Check input
-!
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-!
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!
-!     xx is greater than x(n) or less than x(1)
-!
-80 i = nm1
-go to 100
-90 i = 1
-!
-!     Evaluation
-!
-100 h = x(i + 1) - x(i)
-h2 = h*h
-xr = (x(i + 1) - xx)/h
-xr2 = xr*xr
-xr3 = xr*xr2
-xl = (xx - x(i))/h
-xl2 = xl*xl
-xl3 = xl*xl2
-yi(k) = y(i)*xr + y(i + 1)*xl &
-   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
-!
-!     Next point
-!
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine scomp2
-
-pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-integer :: i, il, ir, k
-real :: bi, ci, dx, xx, nswc_ai_r4
-!
-!     Abstract
-!
-!         seval evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the coefficients of the polynomials which form the spline
-!         are provided.
-!
-!     Description of arguments
-!
-!       --Input--
-!
-!         x   - Array of the first n abscissas (in increasing order)
-!               that define the spline.
-!         y   - Array of the first n ordinates that define the spline.
-!         A,b,c arrays that contain the coefficients of the polynomials
-!               which form the spline. If i = 1,...,n  then the spline
-!               has the value
-!                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
-!               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
-!         n   - The number of polynomials that define the spline.
-!               The arrays x, y, A, b, c  must be dimensioned at
-!               least n.  n must be greater than or equal to 1.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!
-!       --Output--
-!
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!
-!
-!     Check input
-!
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-!
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-!
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-il = 1
-ir = n
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!
-!     xx is greater than x(n) or less than x(1)
-!
-80 i = n
-go to 100
-90 i = 1
-!
-!     Evaluation
-!
-100 dx = xx - x(i)
-yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
-bi = b(i) + b(i)
-ci = 3.0*c(i)
-ypi(k) = a(i) + dx*(bi + dx*ci)
-yppi(k) = bi + dx*(ci + ci)
-!
-!     Next point
-!
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-end subroutine seval
-
-pure subroutine seval1(x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx, nswc_ai_r4
-!
-!     Abstract
-!
-!         seval1 evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the first derivatives at the nodes have been provided.
-!
-!     Description of arguments
-!
-!       --Input--
-!
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         yp  - Array of first derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and yp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!
-!       --Output--
-!
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!
-!
-!     Check input
-!
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-!
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!
-!     xx is greater than x(n) or less than x(1)
-!
-80 i = nm1
-go to 100
-90 i = 1
-!
-!     Evaluation
-!
-100 h = x(i + 1) - x(i)
-d = (y(i + 1) - y(i))/h
-a = yp(i) + yp(i + 1)
-b = (-a - yp(i) + 3.0*d)/h
-c = (a - d - d)/(h*h)
-dx = xx - x(i)
-yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
-b = b + b
-c = 3.0*c
-ypi(k) = yp(i) + dx*(b + dx*c)
-yppi(k) = b + dx*(c + c)
-!
-!     Next point
-!
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine seval1
-
-pure subroutine seval2(x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
-!
-!     Abstract
-!
-!         seval2 evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the second derivatives at the nodes have been provided.
-!
-!     Description of arguments
-!
-!       --Input--
-!
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         ypp - Array of second derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and ypp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!
-!       --Output--
-!
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!
-!
-!     Check input
-!
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-!
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!
-!     xx is greater than x(n) or less than x(1)
-!
-80 i = nm1
-go to 100
-90 i = 1
-!
-!     Evaluation
-!
-100 h = x(i + 1) - x(i)
-h2 = h*h
-xr = (x(i + 1) - xx)/h
-xr2 = xr*xr
-xr3 = xr*xr2
-xl = (xx - x(i))/h
-xl2 = xl*xl
-xl3 = xl*xl2
-yi(k) = y(i)*xr + y(i + 1)*xl &
-   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
-ypi(k) = (y(i + 1) - y(i))/h &
-   & + h*(ypp(i)*(1.0 - 3.0*xr2) - ypp(i + 1)*(1.0 - 3.0*xl2))/6.0
-yppi(k) = ypp(i)*xr + ypp(i + 1)*xl
-!
-!     Next point
-!
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine seval2
-
-pure real function csint(x, y, a, b, c, n, alpha, beta)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: alpha, beta
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
-integer :: i, k, kp1, l, lm1
-real :: a0, b0, d, d2, h, h2, r, s, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!
-!                    Integrating a cubic spline
-!
-!                         --------------
-!
-!     x      ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!            that define the spline.
-!
-!     y      ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!
-!     A,b,c  arrays that contain the coefficients of the polynomials
-!            which form the spline. If i = 1,...,n  then the spline
-!            has the value
-!                    y(i) + a(i)*DX + b(i)*DX**2 + c(i)*DX**3
-!            FOR x(i) .LE. XX .LE. x(i+1). HERE DX = XX - x(i).
-!
-!     n      THE NUMBER OF POLYNOMIALS THAT DEFINE THE SPLINE.
-!            The arrays x, y, A, b, c  must be dimensioned at
-!            least n.  n must be greater than or equal to 1.
-!
-!     alpha  lower limit of the integral.
-!
-!     beta   UPPER LIMIT OF THE INTEGRAL. beta MAY BE LESS THAN
-!            or greater than alpha.
-!
-!-----------------------------------------------------------------------
-!
-csint = 0.0
-h = beta - alpha
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = beta
-b0 = alpha
-go to 20
-10 a0 = alpha
-b0 = beta
-!
-!     Locate the intervals containing a0 and b0
-!
-20 if (n == 1) go to 50
-if (a0 >= x(n)) go to 50
-k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (b0 >= x(n)) l = n
-if (k == l) go to 51
-!
-!     Integrate from a0 to x(k + 1)
-!
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
-   & + 0.25*c(k)*r*s
-sum = (x(kp1) - a0)*sum
-!
-!     Integrate over the interior intervals
-!
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   h = x(i + 1) - x(i)
-   s = (((0.25*c(i)*h + b(i)/3.0)*h + 0.5*a(i))*h + y(i))*h
-   sum = sum + s
-end do
-!
-!     Integrate from x(l) to b0
-!
-40 h = b0 - x(l)
-s = (((0.25*c(l)*h + b(l)/3.0)*h + 0.5*a(l))*h + y(l))*h
-csint = sum + s
-if (alpha > beta) csint = -csint
-return
-!
-!     Case when a0 and b0 are in the same interval
-!
-50 k = n
-51 h = b0 - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
-   & + 0.25*c(k)*r*s
-csint = (beta - alpha)*sum
-end function csint
-
-pure real function csint1(x, y, yp, n, a, b)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), yp(n)
-integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!
-!                    Integrating a cubic spline
-!
-!                         --------------
-!
-!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!          that define the spline.
-!
-!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!
-!     yp   ARRAY OF THE FIRST DERIVATIVES THAT DEFINE THE SPLINE.
-!
-!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          and yp must have dimension at least n where n .GE. 2.
-!
-!     A    LOWER LIMIT OF THE INTEGRAL.
-!
-!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
-!          or greater than A.
-!
-!-----------------------------------------------------------------------
-!
-csint1 = 0.0
-h = b - a
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = b
-b0 = a
-go to 20
-10 a0 = a
-b0 = b
-!
-!     Locate the intervals containing a0 and b0
-!
-20 k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (k == l) go to 50
-!
-!     Integrate from a0 to x(k + 1)
-!
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = (y(kp1) - y(k))/h
-r = yp(k) + yp(kp1)
-bi = (-r - yp(k) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-!
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
-   & + 0.25*ci*r*s
-sum = (x(kp1) - a0)*sum
-!
-!     Integrate over the interior intervals
-!
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   ip1 = i + 1
-   h = x(ip1) - x(i)
-   d = (y(ip1) - y(i))/h
-   r = yp(i) + yp(ip1)
-   bi = (-r - yp(i) + 3.0*d)/h
-   ci = (r - d - d)/(h*h)
-   s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(i))*h + y(i))*h
-   sum = sum + s
-end do
-!
-!     Integrate from x(l) to b0
-!
-40 lp1 = l + 1
-h = x(lp1) - x(l)
-d = (y(lp1) - y(l))/h
-r = yp(l) + yp(lp1)
-bi = (-r - yp(l) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-h = b0 - x(l)
-s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(l))*h + y(l))*h
-csint1 = sum + s
-if (a > b) csint1 = -csint1
-return
-!
-!     Case when a0 and b0 are in the same interval
-!
-50 kp1 = k + 1
-h = x(kp1) - x(k)
-d = (y(kp1) - y(k))/h
-r = yp(k) + yp(kp1)
-bi = (-r - yp(k) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-!
-h = b0 - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
-   & + 0.25*ci*r*s
-csint1 = (b - a)*sum
-end function csint1
-
-pure real function csint2(x, y, ypp, n, a, b)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), ypp(n)
-integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!
-!                    Integrating a cubic spline
-!
-!                         --------------
-!
-!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!          that define the spline.
-!
-!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!
-!     ypp  array of the second derivatives that define the spline.
-!
-!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          and ypp must have dimension at least n where n .GE. 2.
-!
-!     A    LOWER LIMIT OF THE INTEGRAL.
-!
-!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
-!          or greater than A.
-!
-!-----------------------------------------------------------------------
-!
-csint2 = 0.0
-h = b - a
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = b
-b0 = a
-go to 20
-10 a0 = a
-b0 = b
-!
-!     Locate the intervals containing a0 and b0
-!
-20 k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (k == l) go to 50
-!
-!     Integrate from a0 to x(k + 1)
-!
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = (x(kp1) - a0)/h
-r = y(k)*d + y(kp1)*(2.0 - d)
-s = ypp(k)*(2.0 - d*d) + ypp(kp1)*(2.0 - d)**2
-sum = h*d*(0.5*r - h*h*d*s/24.0)
-!
-!
-!     Integrate over the interior intervals
-!
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   ip1 = i + 1
-   h = x(ip1) - x(i)
-   r = y(i) + y(ip1)
-   s = ypp(i) + ypp(ip1)
-   sum = sum + h*(0.5*r - h*h*s/24.0)
-end do
-!
-!     Integrate from x(l) to b0
-!
-40 lp1 = l + 1
-h = x(lp1) - x(l)
-d = (b0 - x(l))/h
-r = y(l)*(2.0 - d) + y(lp1)*d
-s = ypp(l)*(2.0 - d)**2 + ypp(lp1)*(2.0 - d*d)
-csint2 = sum + h*d*(0.5*r - h*h*d*s/24.0)
-if (a > b) csint2 = -csint2
-return
-!
-!     Case when a0 and b0 are in the same interval
-!
-50 kp1 = k + 1
-h = x(kp1) - x(k)
-dma = (a - x(k))/h
-dmb = (b - x(k))/h
-dpa = (x(kp1) - a)/h
-dpb = (x(kp1) - b)/h
-r = (dpa + dpb)*y(k) + (dma + dmb)*y(kp1)
-s = ypp(k) * (dpa + dpb)*(dma*(2.0 - dma) + dmb*(2.0 - dmb)) + &
-   & ypp(kp1)*(dma + dmb)*(dpa*(2.0 - dpa) + dpb*(2.0 - dpb))
-csint2 = (b - a)*(0.5*r - h*h*s/24.0)
-end function csint2
-
-pure subroutine pdspl(x, y, a, b, c, n, t, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n
-real, intent(in) :: x(n), y(*)
-real, intent(inout) :: a(*), b(*), c(*), t(*)
-integer :: i, j, nm1, nm2, nm3
-real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
-!-----------------------------------------------------------------------
-!                Periodic cubic spline interpolation
-!-----------------------------------------------------------------------
-!----------------------
-!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), t(n-2)
-!----------------------
-if (n < 3) go to 100
-nm1 = n - 1
-nm2 = n - 2
-nm3 = n - 3
-!
-!     A strictly diagonally dominant set of equations for the
-!     slopes s(i) of the spline at x(i) (i = 1,...,n-1) is
-!     generated and solved by Gauss elimination. The first of
-!     these equations is obtained from the requirement that
-!     the spline be periodic. This equation has the form ...
-!
-!        a(1)*s(1) + b(1)*s(2) + c(1)*s(n-1) = t(1)
-!
-b(1) = x(n) - x(nm1)
-h = x(2) - x(1)
-if (h <= 0.0 .or. b(1) <= 0.0) go to 110
-del = (y(1) - y(nm1))/b(1)
-deli = (y(2) - y(1))/h
-!
-c(1) = h
-a(1) = 2.0*(h + b(1))
-t(1) = 3.0*(h*del + b(1)*deli)
-if (n == 3) go to 20
-!
-!     For the knots x(i) (i = 2,...n-2) generate the correspond-
-!     ing equations and carry out the pivot reduction of Gauss
-!     elimination. Then the i-TH equation has the form ...
-!
-!        a(i)*s(i) + b(i)*s(i+1) + c(i)*s(n-1) = t(i)
-!
-do i = 2,nm2
-   b(i) = h
-   h = x(i + 1) - x(i)
-   if (h <= 0.0) go to 110
-!
-   e = h/a(i - 1)
-   c(i) = - e*c(i - 1)
-   a(i) = 2.0*(b(i) + h) - e*b(i - 1)
-!
-   del0 = deli
-   deli = (y(i + 1) - y(i))/h
-   t(i) = 3.0*(h*del0 + b(i)*deli) - e*t(i - 1)
-end do
-!
-20 ierr = 0
-b(nm1) = h
-!
-!     Since it is required that the spline be periodic, the
-!     equation for the knot x(n-1) has the form ...
-!
-!        alpha*s(1) + b(1)*s(n-2) + delta*s(n-1) = r
-!
-!     Applying the pivots to this equation, one obtains after
-!     each pivot operation the modified equation ...
-!
-!        alpha*s(i+1) + b(1)*s(n-2) + delta*s(n-1) = r
-!
-!     Thus, when this pivot reduction is complete, the (n-1)-ST
-!     equation to be solved has the form ...
-!
-!        (alpha + b(1))*s(n-2) + delta*s(n-1) = r
-!
-alpha = h
-delta = 2.0*(h + b(1))
-r = 3.0*(b(1)*deli + h*del)
-if (n == 3) go to 40
-!
-do i = 1,nm3
-   e = alpha/a(i)
-   alpha = - e*b(i)
-   delta = delta - e*c(i)
-   r = r - e*t(i)
-end do
-!
-!     Solve the last two equations for s(n-1) and s(n-2), and
-!     store these slopes in A.
-!
-40 e = (alpha + b(1))/a(nm2)
-w = b(nm2) + c(nm2)
-s = (r - e*t(nm2))/(delta - e*w)
-a(nm1) = s
-a(nm2) = (t(nm2) - w*s)/a(nm2)
-if (n == 3) go to 60
-!
-!     Back substitution to obtain the remaining slopes s(i).
-!     These slopes are stored in A.
-!
-si = a(nm2)
-do j = 3,nm1
-   i = n - j
-   si = (t(i) - b(i)*si - c(i)*s)/a(i)
-   a(i) = si
-end do
-!
-!     Generate the cubic coefficients b(i) and c(i)
-!
-60 h = b(1)
-do i = 1,nm2
-   hi = b(i + 1)
-   deli = (y(i + 1) - y(i))/hi
-   w = a(i) + a(i + 1) - 2.0*deli
-   b(i) = (deli - a(i) - w)/hi
-   c(i) = (w/hi)/hi
-end do
-w = a(1) + a(nm1) - 2.0*del
-b(nm1) = (del - a(nm1) - w)/h
-c(nm1) = (w/h)/h
-return
-!
-!     Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-end subroutine pdspl
 

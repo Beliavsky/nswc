@@ -7006,7 +7006,6 @@ complex, intent(inout) :: w
 complex :: z
 integer :: i, imin, k, km1, km2
 real :: a, a0, eps, rnu
-real :: anorm
 complex :: nu, nup1, p, s, sn, t, ti
 real :: inu, m
 interface
@@ -7033,7 +7032,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !--------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -7115,6 +7113,13 @@ t = t*(s/(m*(nu + m)))
 w = w + t
 if (anorm(t) > eps*anorm(w)) go to 70
 !
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine cbjm
 
 pure elemental subroutine cbdb(cz, cnu, fn, w)
@@ -7321,7 +7326,6 @@ complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
 integer :: i, ind
 real :: eps, r, rnu, tol, u, v, x, y
-real :: anorm
 real :: inu, m
 complex :: a, a1, arg, e, eta, nu, p, q, t, z, zr, zz
 real, parameter :: pihalf = 1.5707963267949
@@ -7355,7 +7359,6 @@ end interface
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     pihalf = pi/2
 !     c = 2*pi**(-1/2)
@@ -7433,6 +7436,13 @@ v = r*sin1(rnu)
 w = w*cmplx(u,v)
 !
 60 if (ind /= 0) w = conjg(w)
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
 end subroutine cbja
 
 pure elemental subroutine bsslj(a, in, w)
@@ -7938,7 +7948,14 @@ i1 = max(i1,1)
 flgjy = 1.0e0
 call asjy(jairy,x,fn,flgjy,i1,tol,elim,temp(is),wk,iflw)
 if (iflw /= 0) go to 380
-go to (320, 450, 620), is
+select case (is)
+case (1)
+   go to 320
+case (2)
+   go to 450
+case (3)
+   go to 620
+end select
 310 temp(1) = temp(3)
 kt = 1
 320 is = 2
@@ -7973,7 +7990,14 @@ do k = 1,17
 end do
 360 continue
 temp(is) = s*earg
-go to (370, 450, 610), is
+select case (is)
+case (1)
+   go to 370
+case (2)
+   go to 450
+case (3)
+   go to 610
+end select
 370 earg = earg*fn/xo2
 fni = fni - 1.0e0
 dfn = fni + fnf
@@ -9922,7 +9946,14 @@ i1 = abs(3 - is)
 i1 = max(i1,1)
 flgik = 1.0e0
 call asik(x,fn,kode,flgik,ra,arg,i1,tol,temp(is))
-go to (180, 350, 510), is
+select case (is)
+case (1)
+   go to 180
+case (2)
+   go to 350
+case (3)
+   go to 510
+end select
 !
 !     SERIES FOR (x/2)**2.LE.NU+1
 !
@@ -9949,7 +9980,14 @@ do k = 1,17
 end do
 260 continue
 temp(is) = s*earg
-go to (270, 350, 500), is
+select case (is)
+case (1)
+   go to 270
+case (2)
+   go to 350
+case (3)
+   go to 500
+end select
 270 earg = earg*fn/xo2
 fni = fni - 1.0e0
 dfn = fni + fnf
@@ -10441,7 +10479,6 @@ complex, intent(in) :: cnu
 complex, intent(inout) :: w
 integer :: i
 real :: eps, u, v
-real :: anorm
 real :: m
 complex :: a, p, t, zr
 real, parameter :: c = 1.77245385090552e+00
@@ -10464,7 +10501,6 @@ end interface
 !        cnu and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     c = pi**(1/2)
 !--------------------------
@@ -10495,145 +10531,12 @@ end do
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
-end subroutine cbka
-
-subroutine cbkm(z, rz, cnu, w)
-implicit none
-real, intent(in) :: rz
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-integer :: i, ind, m, n, n1
-real :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
-complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
-real, parameter :: pi = 3.14159265358979
-real, parameter :: cpi = 1.25331413731550
-interface
-   pure elemental subroutine cbkml(z,r,zr,nu,n,w,w0)
+contains
+   pure function anorm(z) result(nswc_sf_result)
       implicit none
       complex, intent(in) :: z
-      real, intent(in) :: r
-      complex, intent(in) :: zr
-      complex, intent(in) :: nu
-      integer, intent(in) :: n
-      complex, intent(inout) :: w
-      complex, intent(inout) :: w0
-   end subroutine cbkml
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-   pure elemental function cxp(n,nu)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: nu
-      complex :: cxp
-   end function cxp
-end interface
-!-------------------------------------------------------------------
-!     Calculation of the modified Bessel function of the second
-!     kind with complex order and argument BY means of Maclaurin
-!     expansions and the Miller algorithm. It is assumed that
-!     rz = abs(z).
-!-------------------------------------------------------------------
-!---------------------------
-!     cpi = sqrt(pi/2)
-!---------------------------
-!
-!        Reduction of cnu to r = nu + b*i where
-!                -0.5 .LT. nu .LE. 0.5
-!
-r = cnu
-if (real(r) < 0.0) r = - r
-!
-a = real(r)
-b = aimag(r)
-n = a
-nu = a - float(n)
-t = nu - 0.5
-if (t <= 0.0) go to 10
-nu = t - 0.5
-n = n + 1
-10 m = n
-r1 = cmplx(nu, b)
-!
-ind = 1
-cz = z
-x = 0.5*real(z)
-y = 0.5*aimag(z)
-call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
-if (t /= 0.0) go to 20
-if (b /= 0.0) go to 20
-!
-!               Calculation for nu = 0.5
-!
-w = cmplx(cpi, 0.0)
-w1 = (1.0, 0.0)
-if (n == 0) go to 90
-if (x >= 0.0) go to 15
-ind = -1
-cz = - z
-zr = - zr
-15 u1 = w
-u2 = w
-n = n + 1
-r1 = (-0.5, 0.0)
-go to 70
-!
-!           Calculation for abs(nu) .LT. 0.5
-!
-20 znorm = 0.5*rz
-if (znorm > 1.0) go to 30
-ind = 0
-call ckps(z, znorm, zr, r1, u1, u2)
-go to 50
-30 u1 = (1.0, 0.0)
-if (x < 0.0) go to 40
-call cbkml(z, znorm, zr, r1, n, w1, u2)
-go to 50
-40 ind = -1
-cz = - z
-zr = - zr
-call cbkml(cz, znorm, zr, r1, n, w1, u2)
-!
-50 if (n > 1) go to 70
-w = u1
-if (n /= 0) w = u2
-go to 90
-!
-!                 Recursion
-!
-70 n1 = n - 1
-do i = 1, n1
-   ai = i
-   u3 = (r1 + ai)*zr*u2 + u1
-   u1 = u2
-   u2 = u3
-end do
-w = u3
-!
-90 if (ind == 0) return
-w = w*w1*exp(-cz)/sqrt(cz)
-if (ind > 0) return
-!
-!            Analytic continuation
-!
-c = exp(0.5*b*pi)
-ex = cxp(m, nu)
-if (y < 0.0) go to 100
-ex = c*ex
-w1 = cmplx (aimag(z), -real(z))
-call cbsslj(w1, r, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
-w = ex*(ex*w + w2)
-return
-100 ex = conjg(ex)/c
-w1 = cmplx (-aimag(z), real(z))
-call cbsslj(w1, r, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
-w = ex*(ex*w + w2)
-end subroutine cbkm
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
+end subroutine cbka
 

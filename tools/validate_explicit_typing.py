@@ -45,15 +45,24 @@ def non_declaration_content(data):
     return content, [comments[i] for i in sorted(comments)]
 
 
-def symbols(dump, include_intrinsics=False):
+def symbols(dump, include_intrinsics=False, include_internal=False):
+    """Read scoped GNU records; qualify optional internal scopes as HOST::HELPER."""
     result = {}
     scope = None
     symbol = None
+    frames = []
     for line in dump.splitlines():
-        match = re.match(r"procedure name = (\w+)", line)
+        match = re.match(r"(\s*)procedure name = (\w+)", line)
         if match:
-            scope = match[1].upper()
-            result[scope] = {}
+            indent, name = len(match[1]), match[2].upper()
+            while frames and frames[-1]['indent'] >= indent:
+                frames.pop()
+            internal = bool(frames and not frames[-1]['module'])
+            key = frames[-1]['key'] + '::' + name if internal else name
+            frames.append({'indent': indent, 'name': name, 'key': key, 'module': False})
+            scope = None if internal and not include_internal else key
+            if scope:
+                result[scope] = {}
             symbol = None
         match = re.search(r"symtree:.*?\|\| symbol: '([^']+)'", line)
         if match and scope:
@@ -64,6 +73,9 @@ def symbols(dump, include_intrinsics=False):
             value = re.sub(r"\s+", " ", line.strip().replace("IMPLICIT-TYPE", ""))
             value = value.replace(" )", ")").replace("( ", "(")
             result[scope][symbol][key] = value
+            if (key == 'attributes' and symbol.upper() == frames[-1]['name'] and
+                    'MODULE' in value.removeprefix('attributes: (').removesuffix(')').split()):
+                frames[-1]['module'] = True
     # Intrinsic symbol placeholders lose their implicit defaults under IMPLICIT
     # NONE. Intrinsic result types are resolved from the actual call arguments;
     # those placeholders are not variable or external-function declarations.

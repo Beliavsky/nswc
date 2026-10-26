@@ -1,3 +1,927 @@
+pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni)
+integer :: i, il, ir, k, nm1
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
+!
+!     Abstract
+!
+!         scomp2 evaluates a cubic spline at the abscissas in xi.
+!         It is assumed that the second derivatives at the nodes
+!         have been provided.
+!
+!     Description of arguments
+!
+!       --Input--
+!
+!         x   - Array of abscissas (in increasing order) that define the
+!               spline.
+!         y   - Array of ordinates that define the spline.
+!         ypp - Array of second derivatives that define the spline.
+!         n   - The number of data points that define the spline.
+!               The arrays x, y, and ypp must be dimensioned at least n.
+!               n must be greater than or equal to 2.
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
+!               at which the spline is to be evaluated.
+!         ni  - The number of abscissas at which the spline is to be
+!               evaluated.  If ni is greater than 1 then xi and yi
+!               must be arrays of dimension ni or larger.
+!               It is assumed that ni is greater than or equal to 1.
+!
+!       --Output--
+!
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ierr- status code
+!               0  the spline was evaluated at each abscissa in xi.
+!               1  Input error - ni is not positive.
+!
+!
+!     Check input
+!
+if (ni > 0) go to 1
+ierr = 1
+return
+1 ierr = 0
+nm1 = n - 1
+!
+!     k is index on value of xi being worked on.  xx is that value.
+!     i is current index into x array.
+!
+k = 1
+xx = xi(1)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+il = 1
+ir = nm1
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 100
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+50 if (xx < x(i + 1)) go to 100
+i = i + 1
+go to 50
+!
+!     xx is greater than x(n) or less than x(1)
+!
+80 i = nm1
+go to 100
+90 i = 1
+!
+!     Evaluation
+!
+100 h = x(i + 1) - x(i)
+h2 = h*h
+xr = (x(i + 1) - xx)/h
+xr2 = xr*xr
+xr3 = xr*xr2
+xl = (xx - x(i))/h
+xl2 = xl*xl
+xl3 = xl*xl2
+yi(k) = y(i)*xr + y(i + 1)*xl &
+   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
+!
+!     Next point
+!
+if (k >= ni) return
+k = k + 1
+xx = xi(k)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
+110 il = 1
+ir = min(i + 1,nm1)
+go to 10
+end subroutine scomp2
+
+pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+integer :: i, il, ir, k
+real :: bi, ci, dx, xx, nswc_ai_r4
+!
+!     Abstract
+!
+!         seval evaluates a cubic spline and its first and second
+!         derivatives at the abscissas in xi.  It is assumed that
+!         the coefficients of the polynomials which form the spline
+!         are provided.
+!
+!     Description of arguments
+!
+!       --Input--
+!
+!         x   - Array of the first n abscissas (in increasing order)
+!               that define the spline.
+!         y   - Array of the first n ordinates that define the spline.
+!         A,b,c arrays that contain the coefficients of the polynomials
+!               which form the spline. If i = 1,...,n  then the spline
+!               has the value
+!                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
+!               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
+!         n   - The number of polynomials that define the spline.
+!               The arrays x, y, A, b, c  must be dimensioned at
+!               least n.  n must be greater than or equal to 1.
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
+!               at which the spline is to be evaluated.
+!         ni  - The number of abscissas at which the spline is to be
+!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
+!               and yppi must be arrays dimensioned at least ni.
+!               ni must be greater than or equal to 1.
+!
+!       --Output--
+!
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
+!         yppi- array of values of second derivatives of spline at xi.
+!         ierr- status code
+!               0  the spline was evaluated at each abscissa in xi.
+!               1  Input error - ni is not positive.
+!
+!
+!     Check input
+!
+if (ni > 0) go to 1
+ierr = 1
+return
+1 ierr = 0
+!
+!     k is index on value of xi being worked on.  xx is that value.
+!     i is current index into x array.
+!
+k = 1
+xx = xi(1)
+if (xx < x(1)) go to 90
+if (xx >= x(n)) go to 80
+il = 1
+ir = n
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 100
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+50 if (xx < x(i + 1)) go to 100
+i = i + 1
+go to 50
+!
+!     xx is greater than x(n) or less than x(1)
+!
+80 i = n
+go to 100
+90 i = 1
+!
+!     Evaluation
+!
+100 dx = xx - x(i)
+yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
+bi = b(i) + b(i)
+ci = 3.0*c(i)
+ypi(k) = a(i) + dx*(bi + dx*ci)
+yppi(k) = bi + dx*(ci + ci)
+!
+!     Next point
+!
+if (k >= ni) return
+k = k + 1
+xx = xi(k)
+if (xx < x(1)) go to 90
+if (xx >= x(n)) go to 80
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
+110 il = 1
+ir = min(i + 1,n)
+go to 10
+end subroutine seval
+
+pure subroutine seval1(x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), yp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+integer :: i, il, ir, k, nm1
+real :: a, b, c, d, dx, h, xx, nswc_ai_r4
+!
+!     Abstract
+!
+!         seval1 evaluates a cubic spline and its first and second
+!         derivatives at the abscissas in xi.  It is assumed that
+!         the first derivatives at the nodes have been provided.
+!
+!     Description of arguments
+!
+!       --Input--
+!
+!         x   - Array of abscissas (in increasing order) that define the
+!               spline.
+!         y   - Array of ordinates that define the spline.
+!         yp  - Array of first derivatives that define the spline.
+!         n   - The number of data points that define the spline.
+!               The arrays x, y, and yp must be dimensioned at least n.
+!               n must be greater than or equal to 2.
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
+!               at which the spline is to be evaluated.
+!         ni  - The number of abscissas at which the spline is to be
+!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
+!               and yppi must be arrays dimensioned at least ni.
+!               ni must be greater than or equal to 1.
+!
+!       --Output--
+!
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
+!         yppi- array of values of second derivatives of spline at xi.
+!         ierr- status code
+!               0  the spline was evaluated at each abscissa in xi.
+!               1  Input error - ni is not positive.
+!
+!
+!     Check input
+!
+if (ni > 0) go to 1
+ierr = 1
+return
+1 ierr = 0
+nm1 = n - 1
+!
+!     k is index on value of xi being worked on.  xx is that value.
+!     i is current index into x array.
+!
+k = 1
+xx = xi(1)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+il = 1
+ir = nm1
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 100
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+50 if (xx < x(i + 1)) go to 100
+i = i + 1
+go to 50
+!
+!     xx is greater than x(n) or less than x(1)
+!
+80 i = nm1
+go to 100
+90 i = 1
+!
+!     Evaluation
+!
+100 h = x(i + 1) - x(i)
+d = (y(i + 1) - y(i))/h
+a = yp(i) + yp(i + 1)
+b = (-a - yp(i) + 3.0*d)/h
+c = (a - d - d)/(h*h)
+dx = xx - x(i)
+yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
+b = b + b
+c = 3.0*c
+ypi(k) = yp(i) + dx*(b + dx*c)
+yppi(k) = b + dx*(c + c)
+!
+!     Next point
+!
+if (k >= ni) return
+k = k + 1
+xx = xi(k)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
+110 il = 1
+ir = min(i + 1,nm1)
+go to 10
+end subroutine seval1
+
+pure subroutine seval2(x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+integer :: i, il, ir, k, nm1
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
+!
+!     Abstract
+!
+!         seval2 evaluates a cubic spline and its first and second
+!         derivatives at the abscissas in xi.  It is assumed that
+!         the second derivatives at the nodes have been provided.
+!
+!     Description of arguments
+!
+!       --Input--
+!
+!         x   - Array of abscissas (in increasing order) that define the
+!               spline.
+!         y   - Array of ordinates that define the spline.
+!         ypp - Array of second derivatives that define the spline.
+!         n   - The number of data points that define the spline.
+!               The arrays x, y, and ypp must be dimensioned at least n.
+!               n must be greater than or equal to 2.
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
+!               at which the spline is to be evaluated.
+!         ni  - The number of abscissas at which the spline is to be
+!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
+!               and yppi must be arrays dimensioned at least ni.
+!               ni must be greater than or equal to 1.
+!
+!       --Output--
+!
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
+!         yppi- array of values of second derivatives of spline at xi.
+!         ierr- status code
+!               0  the spline was evaluated at each abscissa in xi.
+!               1  Input error - ni is not positive.
+!
+!
+!     Check input
+!
+if (ni > 0) go to 1
+ierr = 1
+return
+1 ierr = 0
+nm1 = n - 1
+!
+!     k is index on value of xi being worked on.  xx is that value.
+!     i is current index into x array.
+!
+k = 1
+xx = xi(1)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+il = 1
+ir = nm1
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 100
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+50 if (xx < x(i + 1)) go to 100
+i = i + 1
+go to 50
+!
+!     xx is greater than x(n) or less than x(1)
+!
+80 i = nm1
+go to 100
+90 i = 1
+!
+!     Evaluation
+!
+100 h = x(i + 1) - x(i)
+h2 = h*h
+xr = (x(i + 1) - xx)/h
+xr2 = xr*xr
+xr3 = xr*xr2
+xl = (xx - x(i))/h
+xl2 = xl*xl
+xl3 = xl*xl2
+yi(k) = y(i)*xr + y(i + 1)*xl &
+   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
+ypi(k) = (y(i + 1) - y(i))/h &
+   & + h*(ypp(i)*(1.0 - 3.0*xr2) - ypp(i + 1)*(1.0 - 3.0*xl2))/6.0
+yppi(k) = ypp(i)*xr + ypp(i + 1)*xl
+!
+!     Next point
+!
+if (k >= ni) return
+k = k + 1
+xx = xi(k)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
+110 il = 1
+ir = min(i + 1,nm1)
+go to 10
+end subroutine seval2
+
+pure real function csint(x, y, a, b, c, n, alpha, beta)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: alpha, beta
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
+integer :: i, k, kp1, l, lm1
+real :: a0, b0, d, d2, h, h2, r, s, sum
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
+!-----------------------------------------------------------------------
+!
+!                    Integrating a cubic spline
+!
+!                         --------------
+!
+!     x      ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!            that define the spline.
+!
+!     y      ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
+!
+!     A,b,c  arrays that contain the coefficients of the polynomials
+!            which form the spline. If i = 1,...,n  then the spline
+!            has the value
+!                    y(i) + a(i)*DX + b(i)*DX**2 + c(i)*DX**3
+!            FOR x(i) .LE. XX .LE. x(i+1). HERE DX = XX - x(i).
+!
+!     n      THE NUMBER OF POLYNOMIALS THAT DEFINE THE SPLINE.
+!            The arrays x, y, A, b, c  must be dimensioned at
+!            least n.  n must be greater than or equal to 1.
+!
+!     alpha  lower limit of the integral.
+!
+!     beta   UPPER LIMIT OF THE INTEGRAL. beta MAY BE LESS THAN
+!            or greater than alpha.
+!
+!-----------------------------------------------------------------------
+!
+csint = 0.0
+h = beta - alpha
+if (h == 0.0) return
+if (h > 0.0) go to 10
+a0 = beta
+b0 = alpha
+go to 20
+10 a0 = alpha
+b0 = beta
+!
+!     Locate the intervals containing a0 and b0
+!
+20 if (n == 1) go to 50
+if (a0 >= x(n)) go to 50
+k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
+if (b0 >= x(n)) l = n
+if (k == l) go to 51
+!
+!     Integrate from a0 to x(k + 1)
+!
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
+   & + 0.25*c(k)*r*s
+sum = (x(kp1) - a0)*sum
+!
+!     Integrate over the interior intervals
+!
+if (kp1 == l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   h = x(i + 1) - x(i)
+   s = (((0.25*c(i)*h + b(i)/3.0)*h + 0.5*a(i))*h + y(i))*h
+   sum = sum + s
+end do
+!
+!     Integrate from x(l) to b0
+!
+40 h = b0 - x(l)
+s = (((0.25*c(l)*h + b(l)/3.0)*h + 0.5*a(l))*h + y(l))*h
+csint = sum + s
+if (alpha > beta) csint = -csint
+return
+!
+!     Case when a0 and b0 are in the same interval
+!
+50 k = n
+51 h = b0 - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
+   & + 0.25*c(k)*r*s
+csint = (beta - alpha)*sum
+end function csint
+
+pure real function csint1(x, y, yp, n, a, b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a, b
+real, intent(in) :: x(n), y(n), yp(n)
+integer :: i, ip1, k, kp1, l, lm1, lp1
+real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
+!-----------------------------------------------------------------------
+!
+!                    Integrating a cubic spline
+!
+!                         --------------
+!
+!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!          that define the spline.
+!
+!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
+!
+!     yp   ARRAY OF THE FIRST DERIVATIVES THAT DEFINE THE SPLINE.
+!
+!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
+!          and yp must have dimension at least n where n .GE. 2.
+!
+!     A    LOWER LIMIT OF THE INTEGRAL.
+!
+!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
+!          or greater than A.
+!
+!-----------------------------------------------------------------------
+!
+csint1 = 0.0
+h = b - a
+if (h == 0.0) return
+if (h > 0.0) go to 10
+a0 = b
+b0 = a
+go to 20
+10 a0 = a
+b0 = b
+!
+!     Locate the intervals containing a0 and b0
+!
+20 k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
+if (k == l) go to 50
+!
+!     Integrate from a0 to x(k + 1)
+!
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = (y(kp1) - y(k))/h
+r = yp(k) + yp(kp1)
+bi = (-r - yp(k) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
+!
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
+   & + 0.25*ci*r*s
+sum = (x(kp1) - a0)*sum
+!
+!     Integrate over the interior intervals
+!
+if (kp1 == l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   ip1 = i + 1
+   h = x(ip1) - x(i)
+   d = (y(ip1) - y(i))/h
+   r = yp(i) + yp(ip1)
+   bi = (-r - yp(i) + 3.0*d)/h
+   ci = (r - d - d)/(h*h)
+   s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(i))*h + y(i))*h
+   sum = sum + s
+end do
+!
+!     Integrate from x(l) to b0
+!
+40 lp1 = l + 1
+h = x(lp1) - x(l)
+d = (y(lp1) - y(l))/h
+r = yp(l) + yp(lp1)
+bi = (-r - yp(l) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
+h = b0 - x(l)
+s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(l))*h + y(l))*h
+csint1 = sum + s
+if (a > b) csint1 = -csint1
+return
+!
+!     Case when a0 and b0 are in the same interval
+!
+50 kp1 = k + 1
+h = x(kp1) - x(k)
+d = (y(kp1) - y(k))/h
+r = yp(k) + yp(kp1)
+bi = (-r - yp(k) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
+!
+h = b0 - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
+   & + 0.25*ci*r*s
+csint1 = (b - a)*sum
+end function csint1
+
+pure real function csint2(x, y, ypp, n, a, b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a, b
+real, intent(in) :: x(n), y(n), ypp(n)
+integer :: i, ip1, k, kp1, l, lm1, lp1
+real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
+!-----------------------------------------------------------------------
+!
+!                    Integrating a cubic spline
+!
+!                         --------------
+!
+!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!          that define the spline.
+!
+!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
+!
+!     ypp  array of the second derivatives that define the spline.
+!
+!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
+!          and ypp must have dimension at least n where n .GE. 2.
+!
+!     A    LOWER LIMIT OF THE INTEGRAL.
+!
+!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
+!          or greater than A.
+!
+!-----------------------------------------------------------------------
+!
+csint2 = 0.0
+h = b - a
+if (h == 0.0) return
+if (h > 0.0) go to 10
+a0 = b
+b0 = a
+go to 20
+10 a0 = a
+b0 = b
+!
+!     Locate the intervals containing a0 and b0
+!
+20 k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
+if (k == l) go to 50
+!
+!     Integrate from a0 to x(k + 1)
+!
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = (x(kp1) - a0)/h
+r = y(k)*d + y(kp1)*(2.0 - d)
+s = ypp(k)*(2.0 - d*d) + ypp(kp1)*(2.0 - d)**2
+sum = h*d*(0.5*r - h*h*d*s/24.0)
+!
+!
+!     Integrate over the interior intervals
+!
+if (kp1 == l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   ip1 = i + 1
+   h = x(ip1) - x(i)
+   r = y(i) + y(ip1)
+   s = ypp(i) + ypp(ip1)
+   sum = sum + h*(0.5*r - h*h*s/24.0)
+end do
+!
+!     Integrate from x(l) to b0
+!
+40 lp1 = l + 1
+h = x(lp1) - x(l)
+d = (b0 - x(l))/h
+r = y(l)*(2.0 - d) + y(lp1)*d
+s = ypp(l)*(2.0 - d)**2 + ypp(lp1)*(2.0 - d*d)
+csint2 = sum + h*d*(0.5*r - h*h*d*s/24.0)
+if (a > b) csint2 = -csint2
+return
+!
+!     Case when a0 and b0 are in the same interval
+!
+50 kp1 = k + 1
+h = x(kp1) - x(k)
+dma = (a - x(k))/h
+dmb = (b - x(k))/h
+dpa = (x(kp1) - a)/h
+dpb = (x(kp1) - b)/h
+r = (dpa + dpb)*y(k) + (dma + dmb)*y(kp1)
+s = ypp(k) * (dpa + dpb)*(dma*(2.0 - dma) + dmb*(2.0 - dmb)) + &
+   & ypp(kp1)*(dma + dmb)*(dpa*(2.0 - dpa) + dpb*(2.0 - dpb))
+csint2 = (b - a)*(0.5*r - h*h*s/24.0)
+end function csint2
+
+pure subroutine pdspl(x, y, a, b, c, n, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+real, intent(in) :: x(n), y(*)
+real, intent(inout) :: a(*), b(*), c(*), t(*)
+integer :: i, j, nm1, nm2, nm3
+real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
+!-----------------------------------------------------------------------
+!                Periodic cubic spline interpolation
+!-----------------------------------------------------------------------
+!----------------------
+!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), t(n-2)
+!----------------------
+if (n < 3) go to 100
+nm1 = n - 1
+nm2 = n - 2
+nm3 = n - 3
+!
+!     A strictly diagonally dominant set of equations for the
+!     slopes s(i) of the spline at x(i) (i = 1,...,n-1) is
+!     generated and solved by Gauss elimination. The first of
+!     these equations is obtained from the requirement that
+!     the spline be periodic. This equation has the form ...
+!
+!        a(1)*s(1) + b(1)*s(2) + c(1)*s(n-1) = t(1)
+!
+b(1) = x(n) - x(nm1)
+h = x(2) - x(1)
+if (h <= 0.0 .or. b(1) <= 0.0) go to 110
+del = (y(1) - y(nm1))/b(1)
+deli = (y(2) - y(1))/h
+!
+c(1) = h
+a(1) = 2.0*(h + b(1))
+t(1) = 3.0*(h*del + b(1)*deli)
+if (n == 3) go to 20
+!
+!     For the knots x(i) (i = 2,...n-2) generate the correspond-
+!     ing equations and carry out the pivot reduction of Gauss
+!     elimination. Then the i-TH equation has the form ...
+!
+!        a(i)*s(i) + b(i)*s(i+1) + c(i)*s(n-1) = t(i)
+!
+do i = 2,nm2
+   b(i) = h
+   h = x(i + 1) - x(i)
+   if (h <= 0.0) go to 110
+!
+   e = h/a(i - 1)
+   c(i) = - e*c(i - 1)
+   a(i) = 2.0*(b(i) + h) - e*b(i - 1)
+!
+   del0 = deli
+   deli = (y(i + 1) - y(i))/h
+   t(i) = 3.0*(h*del0 + b(i)*deli) - e*t(i - 1)
+end do
+!
+20 ierr = 0
+b(nm1) = h
+!
+!     Since it is required that the spline be periodic, the
+!     equation for the knot x(n-1) has the form ...
+!
+!        alpha*s(1) + b(1)*s(n-2) + delta*s(n-1) = r
+!
+!     Applying the pivots to this equation, one obtains after
+!     each pivot operation the modified equation ...
+!
+!        alpha*s(i+1) + b(1)*s(n-2) + delta*s(n-1) = r
+!
+!     Thus, when this pivot reduction is complete, the (n-1)-ST
+!     equation to be solved has the form ...
+!
+!        (alpha + b(1))*s(n-2) + delta*s(n-1) = r
+!
+alpha = h
+delta = 2.0*(h + b(1))
+r = 3.0*(b(1)*deli + h*del)
+if (n == 3) go to 40
+!
+do i = 1,nm3
+   e = alpha/a(i)
+   alpha = - e*b(i)
+   delta = delta - e*c(i)
+   r = r - e*t(i)
+end do
+!
+!     Solve the last two equations for s(n-1) and s(n-2), and
+!     store these slopes in A.
+!
+40 e = (alpha + b(1))/a(nm2)
+w = b(nm2) + c(nm2)
+s = (r - e*t(nm2))/(delta - e*w)
+a(nm1) = s
+a(nm2) = (t(nm2) - w*s)/a(nm2)
+if (n == 3) go to 60
+!
+!     Back substitution to obtain the remaining slopes s(i).
+!     These slopes are stored in A.
+!
+si = a(nm2)
+do j = 3,nm1
+   i = n - j
+   si = (t(i) - b(i)*si - c(i)*s)/a(i)
+   a(i) = si
+end do
+!
+!     Generate the cubic coefficients b(i) and c(i)
+!
+60 h = b(1)
+do i = 1,nm2
+   hi = b(i + 1)
+   deli = (y(i + 1) - y(i))/hi
+   w = a(i) + a(i + 1) - 2.0*deli
+   b(i) = (deli - a(i) - w)/hi
+   c(i) = (w/hi)/hi
+end do
+w = a(1) + a(nm1) - 2.0*del
+b(nm1) = (del - a(nm1) - w)/h
+c(nm1) = (w/h)/h
+return
+!
+!     Error return
+!
+100 ierr = 1
+return
+110 ierr = 2
+end subroutine pdspl
+
 subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -1040,7 +1964,6 @@ real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
    & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
    & sum, t, t1, t2, xxl, xxu
 real :: curvi
-real :: term
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -1105,8 +2028,6 @@ end interface
 ! Statement function for coefficient associated with
 ! derivative terms
 !
-term (cmm1,cmm2,t) = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap* &
-   & sigmap*sigmap*(ss + sigmap*dels))
 !
 ! Denormalize tension factor
 !
@@ -1220,6 +2141,15 @@ go to 10
 ! Correct sign and return
 !
 10 curvi = ssign*sum
+contains
+   pure function term(cmm1, cmm2, t) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: cmm1
+      real, intent(in) :: cmm2
+      real, intent(in) :: t
+      real :: nswc_sf_result
+      nswc_sf_result = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap*   sigmap*sigmap*(ss + sigmap*dels))
+   end function term
 end function curvi
 
 pure subroutine kurv1(n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
@@ -4820,7 +5750,14 @@ real :: rsq, s
 !
 ierr = 0
 rnorm = 0.0
-go to (10,90,50), mode
+select case (mode)
+case (1)
+   go to 10
+case (2)
+   go to 90
+case (3)
+   go to 50
+end select
 !                                   ********************* mode = 1
 !                                   alg. Step 26
 10 do j = 1,n
@@ -6059,9 +6996,7 @@ integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
    & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
    & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
-real :: hermnz
 real :: surf2
-real :: hermz
 integer :: intrvl
 interface
    pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -6128,19 +7063,9 @@ end interface
 !
 ! Inline one dimensional cubic spline interpolation
 !
-hermz (f1,f2,fp1,fp2) = (f2*del1 + f1*del2)/dels - del1* &
-   & del2*(fp2*(del1 + dels) + &
-   & fp1*(del2 + dels))/ &
-   & (6.*dels)
 !
 ! Inline one dimensional spline under tension interpolation
 !
-hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1 + f1*del2)/dels &
-   & + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
-   & sinhp2 + sigmap*coshp1*del2)) &
-   & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
-   & sinhp1 + sigmap*coshp2*del1)) &
-   & )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
 !
 ! Denormalize tension factor in x and y direction
 !
@@ -6207,6 +7132,27 @@ call snhcsh(sinhp2,dummy,sigmax*del2/2.,-1)
 call snhcsh(dummy,coshp1,sigmax*delp1,1)
 call snhcsh(dummy,coshp2,sigmax*delp2,1)
 surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
+contains
+   pure function hermnz(f1, f2, fp1, fp2, sigmap) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: f1
+      real, intent(in) :: f2
+      real, intent(in) :: fp1
+      real, intent(in) :: fp2
+      real, intent(in) :: sigmap
+      real :: nswc_sf_result
+      nswc_sf_result = (f2*del1 + f1*del2)/dels   + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)*   sinhp2 + sigmap*coshp1*del2)) &
+   & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)*   sinhp1 + sigmap*coshp2*del1))   )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
+   end function hermnz
+   pure function hermz(f1, f2, fp1, fp2) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: f1
+      real, intent(in) :: f2
+      real, intent(in) :: fp1
+      real, intent(in) :: fp2
+      real :: nswc_sf_result
+      nswc_sf_result = (f2*del1 + f1*del2)/dels - del1*   del2*(fp2*(del1 + dels) +   fp1*(del2 + dels))/   (6.*dels)
+   end function hermz
 end function surf2
 
 pure subroutine nsurf2(dxmin,dxmax,md,dymin,dymax,nd,dz, &
@@ -8105,7 +9051,6 @@ real, intent(in) :: px, py
 real :: x(*), y(*)
 real :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
-logical :: left
 !
 !***********************************************************
 !
@@ -8181,8 +9126,6 @@ logical :: left
 !               y0) = .TRUE. IFF (x0,y0) is on or to the
 !               left of the vector from (x1,y1) to (x2,y2).
 !
-left(x1,y1,x2,y2,x0,y0) = (x2 - x1)*(y0 - y1) >= &
-   & (x0 - x1)*(y2 - y1)
 xp = px
 yp = py
 !
@@ -8392,6 +9335,18 @@ return
 20 i1 = 0
 i2 = 0
 i3 = 0
+contains
+   pure function left(x1, y1, x2, y2, x0, y0) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: x1
+      real, intent(in) :: y1
+      real, intent(in) :: x2
+      real, intent(in) :: y2
+      real, intent(in) :: x0
+      real, intent(in) :: y0
+      logical :: nswc_sf_result
+      nswc_sf_result = (x2 - x1)*(y0 - y1) >=   (x0 - x1)*(y2 - y1)
+   end function left
 end subroutine trfind
 
 pure subroutine gradg(n, x, y, z, iadj, iend, zxzy, ierr)
@@ -9672,932 +10627,4 @@ return
 !
 12 ier = -2
 end subroutine intrc1
-
-pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
-   & zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
-   & ier)
-implicit none
-integer, intent(in) :: iflag
-integer, intent(inout) :: ier
-real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
-   & zx2, zx3, zy1, zy2, zy3
-real, intent(inout) :: w, wx, wy
-integer :: i, ip1, ip2, ip3
-real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
-   & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
-   & f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
-   & a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
-!
-!***********************************************************
-!
-!                                               Robert Renka
-!                                       Oak Ridge Natl. Lab.
-!                                             (615) 576-5139
-!
-!   Given function values and first partial derivatives at
-! the three vertices of a triangle, this routine determines
-! a function w which agrees with the given data, returning
-! the value and (optionally) first partial derivatives of w
-! at a point (x,y) in the triangle.  The interpolation
-! method is exact for quadratic polynomial data.  The
-! triangle is partitioned into three subtriangles with
-! equal areas.  w is cubic in each subtriangle and along
-! the edges, but has only one continuous derivative across
-! edges.  The normal derivative of w varies linearly along
-! each outer edge.  The values and partial derivatives of w
-! along a triangle edge depend only on the data values at
-! the endpoints of the edge.  Thus the method yields C-1
-! continuity when used to interpolate over a triangular
-! grid.  This algorithm is due to C. L. Lawson.
-!
-! INPUT PARAMETERS -   x,y - COORDINATES OF A POINT AT WHICH
-!                            w is to be evaluated.
-!
-!        x1,x2,x3,y1,y2,y3 - Coordinates of the vertices of
-!                            a triangle containing (x,y).
-!
-!                 z1,z2,z3 - Function values at the vertices
-!                            to be interpolated.
-!
-!              zx1,ZX2,ZX3 - x-derivative values at the
-!                            vertices.
-!
-!              ZY1,ZY2,ZY3 - y-derivative values at the
-!                            vertices.
-!
-!                    iflag - Option indicator
-!                            iflag = 0 If only w is to be
-!                                      computed.
-!                            iflag = 1 IF w, wx, AND wy ARE
-!                                      to be returned.
-!
-! Input parameters are not altered by this routine.
-!
-! OUTPUT PARAMETERS -   w - ESTIMATED VALUE OF THE INTERP-
-!                           olatory function at (x,y) if
-!                           ier = 0.  OTHERWISE w = 0.
-!
-!                   wx,wy - Partial derivatives of w at
-!                           (x,y) if ier = 0 And iflag = 1,
-!                           unchanged if iflag .NE. 1, zero
-!                           if ier .NE. 0 and iflag = 1.
-!
-!                     ier - Error indicator
-!                           ier = 0 If no errors were
-!                                   encountered.
-!                           ier = 1 If the vertices of the
-!                                   triangle are collinear.
-!
-! Modules referenced by tval - None
-!
-! Intrinsic function called by tval - AMIN1
-!
-!***********************************************************
-!
-!
-! Local parameters -
-!
-! i =               Do-loop index
-! ip1,ip2,ip3 =     Permuted indices for computing RO, ROX,
-!                     and roy
-! u(K) =            x-component of the vector representing
-!                     the side opposite vertex K
-! v(K) =            y-component of the vector representing
-!                     the side opposite vertex K
-! sl(K) =           Square of the length of the side
-!                     opposite vertex K
-! area =            Twice the area of the triangle
-! xp,yp =           x-x1, y-y1
-! r(K) =            K-TH BARYCENTRIC COORDINATE
-! rx(K),ry(K) =     x,y partial derivatives of r(K)
-! PHI(K)            r(K-1)*r(K+1) -- QUADRATIC
-! PHIX(K),PHIY(K) = x,y PARTIALS OF PHI(K)
-! rmin =            min(r1,r2,r3)
-! C1,C2 =           Factors for computing RO
-! RO(K) =           Factors for computing G -- cubic
-!                     correction terms
-! ROX(K),ROY(K) =   x,y PARTIALS OF RO(K)
-! F(K) =            Factors for computing G, GX, and GY --
-!                     constant
-! G(K) =            Factors for computing the cardinal
-!                     functions -- cubic
-! GX(K),GY(K) =     x,y PARTIALS OF G(K)
-! p(k) =            g(k) + phi(k)
-! PX(K),PY(K) =     x,y PARTIALS OF P(K)
-! q(k) =            g(k) - phi(k)
-! QX(K),QY(K) =     x,y PARTIALS OF Q(K)
-! A(K) =            Cardinal function whose coefficient is
-!                     Z(K)
-! AX(K),AY(K) =     x,y PARTIALS OF A(K) -- CARDINAL
-!                     functions for wx and wy
-! B(K) =            Twice the cardinal function whose
-!                     coefficient is ZX(K)
-! BX(K),BY(K) =     x,y PARTIALS OF B(K)
-! C(K) =            Twice the cardinal function whose
-!                     coefficient is ZY(K)
-! CX(K),CY(K) =     x,y PARTIALS OF C(K)
-!
-u(1) = x3 - x2
-u(2) = x1 - x3
-u(3) = x2 - x1
-!
-v(1) = y3 - y2
-v(2) = y1 - y3
-v(3) = y2 - y1
-!
-do i = 1,3
-   sl(i) = u(i)*u(i) + v(i)*v(i)
-1  continue
-end do
-!
-! area = 3-1 x 3-2
-!
-area = u(1)*v(2) - u(2)*v(1)
-if (area == 0.) go to 9
-!
-! r(1) = (2-3 x 2-(x,y))/area, r(2) = (1-(x,y) x 1-3)/area,
-!   r(3) = (1-2 x 1-(x,y))/area
-!
-r(1) = (u(1)*(y - y2) - v(1)*(x - x2))/area
-xp = x - x1
-yp = y - y1
-r(2) = (u(2)*yp - v(2)*xp)/area
-r(3) = (u(3)*yp - v(3)*xp)/area
-ier = 0
-!
-phi(1) = r(2)*r(3)
-phi(2) = r(3)*r(1)
-phi(3) = r(1)*r(2)
-!
-rmin = min(r(1),r(2),r(3))
-if (rmin /= r(1)) go to 3
-ip1 = 1
-ip2 = 2
-ip3 = 3
-go to 5
-3 if (rmin /= r(2)) go to 4
-ip1 = 2
-ip2 = 3
-ip3 = 1
-go to 5
-4 ip1 = 3
-ip2 = 1
-ip3 = 2
-!
-5 c1 = rmin*rmin/2.
-c2 = rmin/3.
-ro(ip1) = (phi(ip1) + 5.*c1/3.)*r(ip1) - c1
-ro(ip2) = c1*(r(ip3) - c2)
-ro(ip3) = c1*(r(ip2) - c2)
-!
-f(1) = 3.*(sl(2) - sl(3))/sl(1)
-f(2) = 3.*(sl(3) - sl(1))/sl(2)
-f(3) = 3.*(sl(1) - sl(2))/sl(3)
-!
-g(1) = (r(2) - r(3))*phi(1) + f(1)*ro(1) - ro(2) + ro(3)
-g(2) = (r(3) - r(1))*phi(2) + f(2)*ro(2) - ro(3) + ro(1)
-g(3) = (r(1) - r(2))*phi(3) + f(3)*ro(3) - ro(1) + ro(2)
-!
-do i = 1,3
-   p(i) = g(i) + phi(i)
-   q(i) = g(i) - phi(i)
-end do
-!
-a(1) = r(1) + g(3) - g(2)
-a(2) = r(2) + g(1) - g(3)
-a(3) = r(3) + g(2) - g(1)
-!
-b(1) = u(3)*p(3) + u(2)*q(2)
-b(2) = u(1)*p(1) + u(3)*q(3)
-b(3) = u(2)*p(2) + u(1)*q(1)
-!
-c(1) = v(3)*p(3) + v(2)*q(2)
-c(2) = v(1)*p(1) + v(3)*q(3)
-c(3) = v(2)*p(2) + v(1)*q(1)
-!
-! w is a linear combination of the cardinal functions
-!
-w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
-   & + b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
-if (iflag /= 1) return
-!
-! Compute wx and wy
-!
-do i = 1,3
-   rx(i) = -v(i)/area
-   ry(i) = u(i)/area
-end do
-phix(1) = r(2)*rx(3) + rx(2)*r(3)
-phiy(1) = r(2)*ry(3) + ry(2)*r(3)
-phix(2) = r(3)*rx(1) + rx(3)*r(1)
-phiy(2) = r(3)*ry(1) + ry(3)*r(1)
-phix(3) = r(1)*rx(2) + rx(1)*r(2)
-phiy(3) = r(1)*ry(2) + ry(1)*r(2)
-!
-rox(ip1) = rx(ip1)*(phi(ip1) + 5.*c1) + &
-   & r(ip1)*(phix(ip1) - rx(ip1))
-roy(ip1) = ry(ip1)*(phi(ip1) + 5.*c1) + &
-   & r(ip1)*(phiy(ip1) - ry(ip1))
-rox(ip2) = rx(ip1)*(phi(ip2) - c1) + c1*rx(ip3)
-roy(ip2) = ry(ip1)*(phi(ip2) - c1) + c1*ry(ip3)
-rox(ip3) = rx(ip1)*(phi(ip3) - c1) + c1*rx(ip2)
-roy(ip3) = ry(ip1)*(phi(ip3) - c1) + c1*ry(ip2)
-!
-gx(1) = (rx(2) - rx(3))*phi(1) + (r(2) - r(3))*phix(1) &
-   & + f(1)*rox(1) - rox(2) + rox(3)
-gy(1) = (ry(2) - ry(3))*phi(1) + (r(2) - r(3))*phiy(1) &
-   & + f(1)*roy(1) - roy(2) + roy(3)
-gx(2) = (rx(3) - rx(1))*phi(2) + (r(3) - r(1))*phix(2) &
-   & + f(2)*rox(2) - rox(3) + rox(1)
-gy(2) = (ry(3) - ry(1))*phi(2) + (r(3) - r(1))*phiy(2) &
-   & + f(2)*roy(2) - roy(3) + roy(1)
-gx(3) = (rx(1) - rx(2))*phi(3) + (r(1) - r(2))*phix(3) &
-   & + f(3)*rox(3) - rox(1) + rox(2)
-gy(3) = (ry(1) - ry(2))*phi(3) + (r(1) - r(2))*phiy(3) &
-   & + f(3)*roy(3) - roy(1) + roy(2)
-!
-do i = 1,3
-   px(i) = gx(i) + phix(i)
-   py(i) = gy(i) + phiy(i)
-   qx(i) = gx(i) - phix(i)
-   qy(i) = gy(i) - phiy(i)
-end do
-!
-ax(1) = rx(1) + gx(3) - gx(2)
-ay(1) = ry(1) + gy(3) - gy(2)
-ax(2) = rx(2) + gx(1) - gx(3)
-ay(2) = ry(2) + gy(1) - gy(3)
-ax(3) = rx(3) + gx(2) - gx(1)
-ay(3) = ry(3) + gy(2) - gy(1)
-!
-bx(1) = u(3)*px(3) + u(2)*qx(2)
-by(1) = u(3)*py(3) + u(2)*qy(2)
-bx(2) = u(1)*px(1) + u(3)*qx(3)
-by(2) = u(1)*py(1) + u(3)*qy(3)
-bx(3) = u(2)*px(2) + u(1)*qx(1)
-by(3) = u(2)*py(2) + u(1)*qy(1)
-!
-cx(1) = v(3)*px(3) + v(2)*qx(2)
-cy(1) = v(3)*py(3) + v(2)*qy(2)
-cx(2) = v(1)*px(1) + v(3)*qx(3)
-cy(2) = v(1)*py(1) + v(3)*qy(3)
-cx(3) = v(2)*px(2) + v(1)*qx(1)
-cy(3) = v(2)*py(2) + v(1)*qy(1)
-!
-! wx and wy are linear combinations of the cardinal
-!   functions
-!
-wx = ax(1)*z1 + ax(2)*z2 + ax(3)*z3 + (bx(1)*zx1 + &
-   & bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
-   & cx(3)*zy3)/2.
-wy = ay(1)*z1 + ay(2)*z2 + ay(3)*z3 + (by(1)*zx1 + &
-   & by(2)*zx2 + by(3)*zx3 + cy(1)*zy1 + cy(2)*zy2 + &
-   & cy(3)*zy3)/2.
-return
-!
-! Vertices are collinear
-!
-9 ier = 1
-w = 0.
-if (iflag /= 1) return
-wx = 0.
-wy = 0.
-end subroutine tval
-
-subroutine mfit(dimen,fitdeg,nfpols,nfpts, &
-   & fitcds,ncrows,fitvls,wts, &
-   & resids,error,fitiwk,fitdwk, &
-   & fiwkln,fdwkln,ireqd,dreqd)
-implicit none
-!
-integer, intent(inout) :: nfpols, fitdeg
-integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
-integer, intent(inout) :: error, ireqd, dreqd
-integer, intent(in) :: ncrows
-integer, intent(inout) :: fitiwk(fiwkln)
-real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
-real, intent(inout) :: fitvls(nfpts), resids(nfpts)
-real, intent(in) :: wts(nfpts)
-integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
-real :: scale
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     This subroutine constructs a least-squares  multinomial  fit  to
-!     given data using a basis of orthogonal multinomials.
-!
-!     The data for the fit is given in the arrays fitcds, fitvls, and
-!     wts. fitcds is a matrix, each row of which contains an observa-
-!     tion point. fitvls is a singly-indexed array, each element of
-!     which contains a function VALUE corresponding to an observation
-!     point. wts is a singly-indexed array, each element of which is
-!     a nonnegative weight for the corresponding observation.
-!
-!     The fit which is produced is a multinomial expressed in the form
-!
-!      C  psi  (X ,...,X     ) +...+ C       psi       (X ,...,X     )
-!       1    1   1      dimen         nfpols    nfpols   1      dimen
-!
-!     Where the value of  nfpols  will be as given (if  fitdeg .LT. 0)
-!     or  as  computed  by  mfit  to give a full-degree fit (in case
-!     fitdeg  is specified .GE. 0).  The elements
-!
-!         psi  (X ,...,X     )
-!            K   1      dimen
-!
-!     Form a basis for the multinomials which is orthogonal with
-!     respect to the weights and observation points.
-!
-!     The extent of the fit can be specified in one of two ways.
-!         If the parameter fitdeg is set .GE. 0, then a complete basis
-!         for the multinomials of degree =  fitdeg  will be used.  (An
-!         error will be  flagged  if  this  will  require  more  basis
-!         multinomials  than  the  number  of  data  points which were
-!         given.)
-!         if the parameter  fitdeg  is .LT.  0, then  nfpols  will  be
-!         taken as the count of the number of basis multinomials to be
-!         used for a partial-degree fit.  (An error will be flagged if
-!         nfpols  .LT. 0.)
-!
-!     Variables
-!     ---------
-!
-!      dimen  -- (INTEGER) -- (passed)
-!         the number of variables.
-!      fitdeg  - (INTEGER) -- (PASSED/RETURNED)
-!         ignored if .LT. 0.
-!         If fitdeg .GE. 0 then  fitdeg  is  checked  against  nfpts .
-!         The value of  fitdeg  will be reduced if there is a basis of
-!         multinomials, all of  degree  .LE. fitdeg ,  of  cardinality
-!         nfpts .  See  error  below.
-!      nfpols  - (INTEGER) -- (PASSED/RETURNED)
-!         ignored if  fitdeg  .GE. 0.
-!         If  fitdeg .LT. 0 then the value of nfpols will be taken  as
-!         the size of the basis of multinomials to be used in the fit.
-!         nfpols  MUST SATISFY  nfpols  .LT. nfpts  AND nfpols .GE. 1
-!         see  error  below.
-!      nfpts  --- (INTEGER) -- (passed)
-!         the number of data points to be used in the fit.
-!         nfpts  must be .GE. 1.  See  error  below.
-!      fitcds  -- (real 2-subscript array) -- (passed)
-!         fitcds (p,K) is the value of the K-TH variable at the  p-TH
-!         data point.
-!      ncrows  -- (INTEGER) -- (passed)
-!         THE ROW DIMENSION  DECLARED  FOR   fitcds   IN  THE  CALLING
-!         program.
-!      fitvls  -- (real 1-subscript array) -- (passed)
-!         fitvls (p) is the observed function VALUE of the p-TH  data
-!         point.
-!      wts  ----- (real 1-subscript array) -- (passed)
-!         wts (p) is the weight attached to the p-TH data point.
-!      resids  -- (real 1-subscript array) -- (returned)
-!         resids (p) is the difference between the fitted function at
-!         point p and  fitvls (p).
-!      error  -- (INTEGER) -- (returned)
-!       0 the desired least square multinomial fit was obtained.
-!      -1 Only the first nfpols basis polynomials were obtained.
-!         fitdeg is the degree of the fit.
-!       1 If  fitdeg  .GE. 0 but there is an interpolating multinomial
-!         of smaller degree or if fitdeg .LT. 0 and nfpols .GT. nfpts.
-!       2 IF  fitdeg  .LT. 0 AND  nfpols  .LE. 0.
-!       3 IF  nfpts  .LT. 1 AND/OR  dimen  .LT. 1.
-!       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
-!         the value returned in  ireqd , and set  DWKLEN  to the value
-!         returned in  dreqd  to resolve this problem.)
-!      fitiwk  -- (integer, 1-subscript array) -- (returned)
-!         an integer work array of length  fiwkln .  Upon return  from
-!         mfit, fitiwk contains dimension and array LENGTH information.
-!      fitdwk  -- (real 1-subscript array) -- (returned)
-!         a real array of length  fdwkln  containing the coefficients
-!         needed for computing the multinomial fit at a point.
-!      fiwkln  -- (INTEGER) -- (passed)
-!         the length of the array  fitiwk .
-!      fdwkln  -- (INTEGER) -- (passed)
-!         the length of the array  fitdwk .
-!      ireqd  -- (INTEGER) -- (returned)
-!         the length which the array  fitiwk  really needs to be.
-!      dreqd  -- (INTEGER) -- (returned)
-!         the length which the array  fitdwk  really needs to be.
-!
-!
-!     Note. The 20 loop depends on the scaling scheme being used. The
-!     residual scaling must be consistent with that defined by scalpm
-!     AND scaldn.
-!
-!     mfit  calls  allot  and  gnrtp.
-!     ****************
-!
-dimp1 = dimen + 1
-!
-!     ***************
-!
-call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
-   & error)
-if ( error >= 2 ) return
-!
-if ( fdwkln >= dreqd ) go to 10
-error = 4
-return
-10 continue
-!
-psiwid = fitiwk(3)
-alfl = fitiwk(4)
-indstt = 1
-newstt = 4 * nfpols + indstt
-maxstt = 1
-alfstt = maxstt + dimp1
-cstt = alfstt + alfl
-ssqstt = cstt + nfpols
-psistt = ssqstt + nfpols
-!
-!     ***************
-!
-call gnrtp(fitdeg,fitdwk(alfstt), &
-   & fitdwk(psistt),fitiwk(indstt), &
-   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
-   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
-   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
-   & fitdwk(maxstt),error)
-!
-!     ***************
-!     Store the number of basis polynomials actually computed
-!     by the modified routine incdg called by gnrtp.
-!     ***************
-!
-fitiwk(1) = nfpols
-!
-!     ***************
-!     Unscale the residuals for the benefit of the user.
-!     ***************
-!
-scale = fitdwk(dimen + 1)
-do p = 1,nfpts
-   resids(p) = resids(p) * scale
-end do
-end subroutine mfit
-
-pure subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
-   & ireqd,dreqd,error)
-implicit none
-!
-integer, intent(inout) :: ireqd, dreqd
-integer, intent(inout) :: error, npolys, degree
-integer, intent(in) :: dimen, npts
-integer, intent(in) :: iwklen
-integer, intent(inout) :: iwork(iwklen)
-integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
-interface
-   pure elemental subroutine basiz(degree,npts,dimen,npolys, &
-      & error)
-      implicit none
-      integer, intent(inout) :: degree
-      integer, intent(in) :: npts
-      integer, intent(in) :: dimen
-      integer, intent(inout) :: npolys
-      integer, intent(out) :: error
-   end subroutine basiz
-   pure subroutine mtable(degree,dimen,npolys,indexs,newkj, &
-      & alflp1)
-      implicit none
-      integer, intent(in) :: npolys
-      integer, intent(in) :: dimen
-      integer, intent(in) :: degree
-      integer, intent(inout) :: indexs(4,npolys)
-      integer, intent(inout) :: newkj(dimen,degree)
-      integer, intent(out) :: alflp1
-   end subroutine mtable
-end interface
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!      Allot  checks for sufficiency the declared  dimensions  of  the
-!     work  arrays  used by the subroutine  mfit .  Various sizes of
-!     sub-arrays are computed and reported.
-!
-!     This routine is called by  mfit .  It is not  called  directly
-!     by the user.
-!
-!     THIS ROUTINE CALLS   basiz   AND   mtable   FOR  THE  SUBSTANTIVE
-!     computations.
-!
-!     Variables
-!     ---------
-!
-!      degree  - (PASSED/RETURNED)
-!         ignored if .LT. 0.
-!         If  degree  .GE. 0 then  degree is checked  against   npts .
-!         The value of  degree  will be reduced if there is a basis of
-!         multinomials, all of  degree .LE.  degree ,  of  cardinality
-!          npts
-!      npolys  - (PASSED/RETURNED)
-!         ignored if  degree  .GE. 0.
-!         If degree .LT. 0 then the value of npolys will be taken  as
-!         the size of the basis of multinomials to be used in the fit.
-!         npolys  MUST SATISFY npolys .LT.  npts  AND  npolys  .GE. 1
-!      npts  --- (PASSED)
-!         the number of data points to be used in the fit.
-!          npts  MUST BE .GE. 1.
-!      dimen  -- (PASSED)
-!         the number of variables.
-!      iwork  -- (RETURNED)
-!         an integer work array of length at least
-!            if  degree  .GE. 0 then
-!               4*binomial( dimen + degree , dimen )
-!                  +( dimen )*( DEGREE )
-!            ELSE
-!               4*BINOMIAL( dimen +D,D)+( dimen )*D
-!         where D is the minimum cardinality  of  a  basis  of  degree
-!          degree  such that
-!            BINOMIAL( dimen +abs( degree ), dimen ) .GE.  npolys
-!      iwklen  - (PASSED)
-!         the length of  iwork
-!      ireqd  -- (RETURNED)
-!         THE SIZE OF THE INTEGER WORK ARRAY REQUIRED BY  mfit   FOR
-!         the fit specified by the 4 input parameters.
-!      dreqd  -- (RETURNED)
-!         the size of the double  precision  work  array  required  by
-!          mfit  for the fit specified by the 4 input parameters.
-!      error  -- (returned)
-!       0 IF  npolys ,  dimen ,   DEGREE ,   npts   AND   iwklen   ARE
-!         valid and consistent with each other.
-!       1 If  degree  .GE. 0 but there is an interpolating multinomial
-!         of smaller degree or if  degree .LT. 0 and  npolys .GT. npts
-!       2 if  degree  .LT. 0 and  npolys  .LE. 0
-!       3 IF  npts  .LT. 1 AND/OR  dimen  .LT. 1
-!       4 if  iwklen  is too small (set  iwklen  to the value returned
-!         in  ireqd  to resolve this problem)
-!
-!     NOTE THAT  DEGREE ,  npolys ,  psiwid  AND  alfl   ARE  RETURNED
-!     in  iwork (1-4), respectively.
-!
-!     Date last modified
-!     ---- ---- --------
-!     December 10, 1984
-!     ****************
-!
-!     ***************
-!     basiz  computes the size of the basis (and auxiliary sizes)
-!     based primarily upon the degree, number of  fitting points,
-!     and the dimension.
-!     ***************
-!
-call basiz(degree,npts,dimen,npolys,error)
-if ( error >= 2 ) return
-ireqd = 4 * npolys + degree * dimen
-if ( iwklen >= ireqd ) go to 5
-error = 4
-return
-5 newstt = 4 * npolys + 1
-!
-!     ***************
-!     Set up useful indexing arrays
-!          iwork(1) ,..., iwork(newstt-1)
-!     and
-!          iwork(newstt ,..., iwork(newstt+dimen*degree)
-!     ***************
-!
-call mtable(degree,dimen,npolys,iwork,iwork(newstt),alfl)
-iwork(1) = degree
-iwork(2) = npolys
-!
-!     ***************
-!     Force  alfl  to be at least 1 so that dimension statements
-!     using  alfl  do not bomb.
-!     ***************
-!
-if ( alfl > 1 ) alfl = alfl - 1
-iwork(4) = alfl
-!
-!     ***************
-!     The following is a section of code for setting up the
-!     storage  management of the  psi  array.  There  is  A
-!     complicated dovetailing formula used to pack information
-!     into  psi  without leaving gaps.
-!
-!     ARRAY          LENGTH
-!     -----          ------
-!      MAXABS         dimen  + 1
-!      ALPHA          alfl
-!      C              npolys
-!      SUMSQS         npolys
-!
-!     The number of columns in  psi ,  psiwid , is determined by
-!     psiwid  =  npolys  + 1 - (the smallest M such that alpha(J,M)
-!                                   is nonzero and J .GE. npolys)
-!     this insures that if the user extends the basis, all the  psi
-!     required will certainly be stored
-!
-!     IF degree( npolys ) .LE. 2 THEN                      (CASE 1)
-!       psiwid  =  npolys
-!     ELSE
-!       IF K =  dimen  THEN                                (CASE 2)
-!         psiwid  =  npolys
-!                    -  NEWKJ( 1 , degree(npolys)-1 )  + 1
-!       ELSE
-!            psiwid  =  npolys
-!                      + 1
-!                      - (
-!                         The smaller of
-!                           NEWKJ(K+1,degree(npolys)-2)    (CASE 3)
-!                         and
-!                           INDEXS(3,npolys)               (CASE 4)
-!                        )
-!
-if ( degree > 2 ) go to 10
-!
-!     ***************
-!     Case 1
-!     ***************
-!
-psiwid = npolys
-go to 40
-10 nplyt4 = 4 * npolys
-!
-!     ***************
-!     kmxbas  IS K
-!                 npolys
-!     ***************
-!
-kmxbas = iwork(nplyt4 - 2)
-!
-if ( kmxbas /= dimen ) go to 20
-!
-!     ***************
-!     Case 2
-!     ***************
-!
-psiwid = npolys - iwork(4 * npolys - 1)
-go to 40
-!
-!     ***************
-!     index =  newkj( k      + 1 , degree(npolys-2) )
-!                      npolys
-!     ***************
-!
-20 index = nplyt4 + (degree - 3) * dimen + kmxbas + 1
-kjp1d2 = iwork(index)
-!
-!     ***************
-!     startj  =  indexs(3,npolys)
-!     ***************
-!
-startj = iwork(nplyt4 - 1)
-if ( startj > kjp1d2 ) go to 30
-!
-!     ***************
-!     Case 4
-!     ***************
-!
-psiwid = npolys - startj + 1
-go to 40
-!
-!     ***************
-!     Case 3
-!     ***************
-!
-30 psiwid = npolys - kjp1d2 + 1
-40 iwork(3) = psiwid
-dreqd = 2 * npolys + dimen + 1 + npts * psiwid + alfl
-end subroutine allot
-
-pure elemental subroutine basiz(degree,npts,dimen,npolys,error)
-implicit none
-!
-integer, intent(inout) :: degree
-integer, intent(in) :: npts, dimen
-integer, intent(inout) :: npolys
-integer, intent(out) :: error
-integer :: top, bot, i, rowlen
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     If  degree  .GE. 0 then
-!       find the size of a basis required either to
-!       1) approximate the data with a polynomial of degree
-!          given by the parameter  degree
-!       or to
-!       2) span the space of polynomials of degree .LE. the
-!          smallest degree of polynomial which interpolates the
-!          data.
-!       In case 1  error  = 0.
-!       In case 2  error  = 1.
-!     ELSE
-!       IF  npolys  .GE. 1 THEN
-!          IF npolys .GT. npts THEN
-!             set  npolys  =  npts , find the smallest degree of A
-!             polynomial  which  interpolates  the  data,  and set
-!              error  = 1.
-!          ELSE
-!             find the largest degree  degree  of a polynomial  in
-!             a  basis of  npolys  polynomials generated according
-!             to our ordering and set  error  = 0.
-!       ELSE
-!           error  = 2
-!
-!     This subroutine is called by  allot .  It is not  called  by
-!     the user directly.
-!
-!     Date last modified
-!     ---- ---- --------
-!     October 16, 1984
-!     ****************
-!
-error = 0
-if ( npts >= 1 .and. dimen >= 1 ) go to 10
-error = 3
-return
-!
-10 continue
-if ( degree < 0 ) go to 30
-!
-rowlen = 1
-npolys = 1
-top = dimen - 1
-bot = 0
-if ( degree < 1 ) go to 30
-do i = 1,degree
-   top = top + 1
-   bot = bot + 1
-   rowlen = (rowlen*top)/bot
-   npolys = npolys + rowlen
-end do
-!
-30 continue
-if ( npolys >= 1 ) go to 40
-error = 2
-return
-40 continue
-if ( npolys < npts ) go to 50
-npolys = npts
-error = 1
-50 continue
-rowlen = 1
-i = 1
-degree = 0
-top = dimen - 1
-bot = 0
-60 continue
-if ( i >= npolys ) go to 70
-top = top + 1
-bot = bot + 1
-rowlen = (rowlen*top)/bot
-i = i + rowlen
-degree = degree + 1
-if ( i < npolys ) go to 60
-70 continue
-end subroutine basiz
-
-pure subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
-implicit none
-!
-integer, intent(in) :: npolys, dimen, degree
-integer, intent(out) :: alflp1
-integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
-integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, dimm2, dimp1
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     Tabulate  JP  and  kj  for each  j
-!
-!     Variables
-!     ---------
-!
-!      alflp1  -- (INTEGER) -- (passed)
-!         the length required for array  ALPHA , plus one
-!      degree  -- (INTEGER) -- (passed)
-!         the degree of the polynomial to be fitted
-!      dimen  -- (INTEGER) -- (passed)
-!         number of independent variables
-!      indexs  -- (integer, 2-subscript array) -- (returned)
-!          indexs (1, j )   IS    JP ,    indexs (2, j )   IS     kj ,
-!          indexs (3, j )  is the first nonzero recurrence coefficient
-!         in  alpha  and  indexs (4, j ) is its location in  alpha .
-!      newkj  -- (integer, 2-subscript array) -- (returned)
-!          newkj ( K , D ) IS THE FIRST MONOMIAL OF DEGREE  D   HAVING
-!          kj = k .
-!      npolys  -- (INTEGER) -- (passed)
-!         number  of  monomials  of  degree  .LE.  order  in   dimen
-!         independent variables.
-!
-!     This subprogram can be coded (excluding the part for calculating
-!      indexs (3, j )  AND   indexs (4, j )) MENTALLY MORE EFFICIENTLY
-!     but computationally less efficiently as
-!
-!         j = 2
-!         do 5 kj = 1,dimen
-!           newkj(kj,1) = kj + 1
-!           indexs(1,j) = 1
-!           indexs(2,j) = kj
-!           j = j + 1
-!      5  continue
-!         do 10 curdeg = 2,degree
-!           do 10 kj = 1,dimen
-!             jprime = newkj(kj,curdeg - 1)
-!             newkj(kj,curdeg) = j
-!             nwithk = comb(dimen + curdeg - kj - 1,curdeg - 1)
-!             do 10 i = 1,nwithk
-!               indexs(1,j) = jprime
-!               indexs(2,j) = kj
-!               jprime = jprime + 1
-!               j = j + 1
-!     10  continue
-!
-!     Where comb(N,kj) is N-factorial / ((N-kj)-factorial * kj-factorial
-!     here we make use of the recurrence relations
-!
-!       COMB(dimen+curdeg-2,curdeg-1)
-!
-!            (dimen+curdeg-2)*COMB(dimen+curdeg-3,curdeg-2)
-!          = ----------------------------------------------
-!                              (curdeg-1)
-!
-!     And
-!
-!       COMB(dimen+curdeg-kj-1,curdeg-1)
-!
-!            (dimen-kj+1)*COMB(dimen+curdeg-kj,curdeg-1)
-!          = -------------------------------------------
-!                         (dimen+curdeg-kj)
-!
-!
-!     Date last modified
-!     ---- ---- --------
-!     October 16, 1984
-!     ****************
-!
-alflp1 = 1
-!
-!     ***************
-!     Set  indexs (4,1) to 1 so that  ALFL - indexs (4,1)+1 is the
-!     number of columns required for  psi  for  npolys =1  ( ALFL
-!     is defined in the mainline to be  alflp1 -1 If alflp1 .GT. 1
-!     and  alflp1  otherwise.
-!     ***************
-!
-indexs(4,1) = 1
-!
-if ( npolys == 1 ) return
-j = 2
-do kj = 1,dimen
-   newkj(kj,1) = kj + 1
-   indexs(1,j) = 1
-   indexs(2,j) = kj
-   indexs(3,j) = 1
-   indexs(4,j) = alflp1
-   alflp1 = alflp1 + j - 1
-   if ( j == npolys ) return
-10 j = j + 1
-end do
-if ( degree == 1 ) return
-ralen = 1
-dimm1 = dimen - 1
-dimm2 = dimen - 2
-dimp1 = dimen + 1
-do curdeg = 2,degree
-   curm1 = curdeg - 1
-   ralen = (ralen * (dimm2 + curdeg)) / curm1
-   nwithk = ralen
-   kj = 1
-20 jprime = newkj(kj,curm1)
-   newkj(kj,curdeg) = j
-   if ( kj == dimen ) go to 60
-   do i = 1,nwithk
-      indexs(1,j) = jprime
-      indexs(2,j) = kj
-!
-!     ***************
-!     CALCULATE  indexs (3, j ),  indexs (4, j )
-!     ***************
-!
-      if ( kj < indexs(2,jprime) ) go to 30
-      indexs(3,j) = indexs(1,jprime)
-      go to 40
-30    indexs(3,j) = newkj(1,curdeg - 1)
-40    indexs(4,j) = alflp1
-      alflp1 = alflp1 + j - indexs(3,j)
-      if ( j == npolys ) return
-!
-      jprime = jprime + 1
-50    j = j + 1
-   end do
-   kj = kj + 1
-   nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
-   go to 20
-60 indexs(1,j) = jprime
-   indexs(2,j) = dimen
-   indexs(3,j) = indexs(1,jprime)
-   indexs(4,j) = alflp1
-   alflp1 = alflp1 + j - indexs(3,j)
-   if ( j == npolys ) return
-70 j = j + 1
-end do
-end subroutine mtable
 

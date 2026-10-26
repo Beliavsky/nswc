@@ -22,6 +22,7 @@ jobs:
       - run: python tools/validate_deleted_do.py
       - run: python tools/validate_arithmetic_if.py
       - run: python tools/validate_remaining_features.py
+      - run: python tools/validate_obsolescent.py
       - run: python tools/validate_free_formatting.py
       - run: python tools/validate_data_constants.py
       - run: python tools/validate_generic_intrinsics.py

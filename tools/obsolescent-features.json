@@ -1,0 +1,590 @@
+{
+  "procedures": {
+    "DCERF": {
+      "source_hash": "f0f9960c9a3266aad350c7ad2ad63a5a4df0b61b6006e726de96e4fdb4aa3110",
+      "functions": {
+        "anorm": {
+          "type": "double precision",
+          "arguments": {
+            "x": "double precision",
+            "y": "double precision"
+          },
+          "expression": "max(abs(x),abs(y))",
+          "captures": []
+        }
+      },
+      "output_hash": "4c1004ca8f083f7a377613bf9d5a068da8224d8ad40c33a07ceb0f61fb2b7abb"
+    },
+    "DCERFC": {
+      "source_hash": "85e7741bf0016aa53450a0ee8fc8cf15f5c17d0d995dcca8e720b6e4b23bb149",
+      "functions": {
+        "anorm": {
+          "type": "double precision",
+          "arguments": {
+            "x": "double precision",
+            "y": "double precision"
+          },
+          "expression": "max(abs(x),abs(y))",
+          "captures": []
+        }
+      },
+      "output_hash": "fac2aa7f1b1b6e0d0d1cb3cfac6d4dcff216abccf0fbb4eba6b2bf3cf92d9abf"
+    },
+    "ERFCM2": {
+      "source_hash": "56c5080a1e62d5c66b777eead7229ad64dcc33bda36bee6153162574e2d47b06",
+      "functions": {
+        "anorm": {
+          "type": "double precision",
+          "arguments": {
+            "x": "double precision",
+            "y": "double precision"
+          },
+          "expression": "max(abs(x),abs(y))",
+          "captures": []
+        }
+      },
+      "output_hash": "989bfd16c9214927cf6c6b26c3696f4f54cf2829e41b64ee7ac8f1799e0afb8d"
+    },
+    "CEXPLI": {
+      "source_hash": "4daa886f6b53a4bb8d4ef518848ace6068f1e8095715f93c6a7b86a11e77339b",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "x": "real",
+            "y": "real"
+          },
+          "expression": "max(abs(x),abs(y))",
+          "captures": []
+        }
+      },
+      "output_hash": "0c18c9c013587b6f24ed17f345fdf93053964749436bcf8c7bf29a28b51f75e5"
+    },
+    "CBJM": {
+      "source_hash": "d2d4b504ed3c78f55605106a0df30c2567f40a4e11b4174098c5fa317f351d17",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)),abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "3db6b2af8a2b9560b39b7a33224917910816264341444d563eaef28eac8f6053"
+    },
+    "CBJA": {
+      "source_hash": "bd9adb9d2cb7dae49667a382478460bb870afa22379a2b0ef7796953b4dbfbb9",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)), abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "264f521efa899b77d507d41ab312fb6e684c14a7d55cb5923d2262ad3c8069f1"
+    },
+    "CBKA": {
+      "source_hash": "6ea156a10032baf6cab243ae5af16ae8dcfc638228af9268e9a1f80213a8d335",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)), abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "ac0c59a156626ba3db22422eeafce8fed6642ccedb8745e3c17473f7a9a01a51"
+    },
+    "CKPS": {
+      "source_hash": "39138ed69cd1f57df7e25c9c5db94a41d2a4ae0415ee811a4674d166eb815de3",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "t": "complex"
+          },
+          "expression": "max(abs(real(t)), abs(aimag(t)))",
+          "captures": []
+        }
+      },
+      "output_hash": "f290c03e45c4d190db387e0089c9c82e671f0b4423df6e6a0ad1d5459e1718a3"
+    },
+    "CKA": {
+      "source_hash": "7bb11b6287064570411dddacb06f11cd5343a83fadbb91c844afccf7a9728772",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)), abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "1b4d00c020918aaeefdf6f049af3de280695b2fcf327dd9ffaedfc4f7ab1d5fc"
+    },
+    "CKM": {
+      "source_hash": "b66cefd40e7a31cd32c68288768becdfb54d41b4bc4ce0a027b49fa018c1b790",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "w": "complex"
+          },
+          "expression": "max(abs(real(w)), abs(aimag(w)))",
+          "captures": []
+        }
+      },
+      "output_hash": "480068e3efa0ceefa8979139660c67f2b187d4b0fe61e682dbd76c5ccfbdffaa"
+    },
+    "BIM": {
+      "source_hash": "fe4bd24b121af17e98687f743df2869cf37b370787b57d608fbce8257645dd35",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)),abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "607e0a10e38457d2e1cdfa958b13aac17d7ac8ed087cb605bc18f4c92de8509b"
+    },
+    "BJM": {
+      "source_hash": "4ddc678a58c965fde0b6ed9c0b7f6489baced58ae1482c1a5607e73570439e5a",
+      "functions": {
+        "anorm": {
+          "type": "real",
+          "arguments": {
+            "z": "complex"
+          },
+          "expression": "max(abs(real(z)),abs(aimag(z)))",
+          "captures": []
+        }
+      },
+      "output_hash": "6e767c7587e75985e05fe4f5d936a20006e94ca377fd204c74fc3148ef6c4785"
+    },
+    "ICAMAX": {
+      "source_hash": "9a8e295e3337b943a7ad83214ad4f23c4dd0ae75fef62b769402d0a3b224ba47",
+      "functions": {
+        "cabs1": {
+          "type": "real",
+          "arguments": {
+            "zdum": "complex"
+          },
+          "expression": "abs(real(zdum)) + abs(aimag(zdum))",
+          "captures": []
+        }
+      },
+      "output_hash": "62cf28794ff3cc9ef88b6e8e6bba655bb391790f6eb26ebdedaac7c38f6c392f"
+    },
+    "CGECO": {
+      "source_hash": "44f4f6930edb32f5f65b51d676155ee4b843013b21d0599ad6a363d37d5d90ee",
+      "functions": {
+        "cabs1": {
+          "type": "real",
+          "arguments": {
+            "zdum": "complex"
+          },
+          "expression": "abs(real(zdum)) + abs(aimag(zdum))",
+          "captures": []
+        },
+        "csign1": {
+          "type": "complex",
+          "arguments": {
+            "zdum1": "complex",
+            "zdum2": "complex"
+          },
+          "expression": "cabs1(zdum1)*(zdum2/cabs1(zdum2))",
+          "captures": []
+        }
+      },
+      "output_hash": "1056dab792a819a07e4f2fcc9352dbeeec507ab27c260394f4de752ecf391a85"
+    },
+    "CGEFA": {
+      "source_hash": "02fe4dc867afb3938a42317105f788e21ee07a6cf0a3f4626fd94e3af7577a08",
+      "functions": {
+        "cabs1": {
+          "type": "real",
+          "arguments": {
+            "zdum": "complex"
+          },
+          "expression": "abs(real(zdum)) + abs(aimag(zdum))",
+          "captures": []
+        }
+      },
+      "output_hash": "9aee91e16e136e70b8cc0f4860fe03547d28980adf52e7e39972c962cd3d7fed"
+    },
+    "CGEDI": {
+      "source_hash": "f1d2139f38a4e0934c1bb0ea49ae0b3cf43738b1d532b27e790c6ce0d66ea270",
+      "functions": {
+        "cabs1": {
+          "type": "real",
+          "arguments": {
+            "zdum": "complex"
+          },
+          "expression": "abs(real(zdum)) + abs(aimag(zdum))",
+          "captures": []
+        }
+      },
+      "output_hash": "2493e1bf752f3118b0db102a0ded265237ab4cb09cc6c219bd6cbd3c67d8e767"
+    },
+    "CSVDC": {
+      "source_hash": "f504677518d712956a70b66cfdbe6f6d70a60f9e02af238948700adc6b0ab736",
+      "functions": {
+        "cabs1": {
+          "type": "real",
+          "arguments": {
+            "zdum": "complex"
+          },
+          "expression": "abs(real(zdum)) + abs(aimag(zdum))",
+          "captures": []
+        },
+        "csign": {
+          "type": "complex",
+          "arguments": {
+            "zdum1": "complex",
+            "zdum2": "complex"
+          },
+          "expression": "abs(zdum1)*(zdum2/abs(zdum2))",
+          "captures": []
+        }
+      },
+      "output_hash": "8745efa51f60bf274b1dfac07adae7b8bafa012e3750077b2b4be6f682830ddf"
+    },
+    "CPSC": {
+      "source_hash": "132b4cad7a58dbf79ecd65db1923cdba21cd42e21695ed1fab9a1eede9b646e7",
+      "functions": {
+        "mult": {
+          "type": "complex",
+          "arguments": {
+            "re": "real",
+            "co": "complex"
+          },
+          "expression": "cmplx(re*real(co),re*aimag(co))",
+          "captures": []
+        }
+      },
+      "output_hash": "f7f1c6db4b8cf877c62408c1ed2a0e9f282bb4948581dff23a6557adffdb10a8"
+    },
+    "CURVI": {
+      "source_hash": "b3b65d20f42f59cbe3548650a2bd61d4a28e31e47fa2e548ced333071562177d",
+      "functions": {
+        "term": {
+          "type": "real",
+          "arguments": {
+            "cmm1": "real",
+            "cmm2": "real",
+            "t": "real"
+          },
+          "expression": "(cmm1 - cmm2 - sigmap*t*ss)/(sigmap*   sigmap*sigmap*(ss + sigmap*dels))",
+          "captures": [
+            "dels",
+            "sigmap",
+            "ss"
+          ]
+        }
+      },
+      "output_hash": "f5c2f9be985d1dec40505b386bd2f954b5d555e1171cf7a6ac8d19e5bfe826fe"
+    },
+    "SURF2": {
+      "source_hash": "5f94582e09df36ee7623169a08a3ed270cb9bf5562968b5d4c676e1ded4e2bf1",
+      "functions": {
+        "hermnz": {
+          "type": "real",
+          "arguments": {
+            "f1": "real",
+            "f2": "real",
+            "fp1": "real",
+            "fp2": "real",
+            "sigmap": "real"
+          },
+          "expression": "(f2*del1 + f1*del2)/dels   + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)*   sinhp2 + sigmap*coshp1*del2))   + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)*   sinhp1 + sigmap*coshp2*del1))   )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))",
+          "captures": [
+            "coshp1",
+            "coshp2",
+            "del1",
+            "del2",
+            "dels",
+            "sinhm1",
+            "sinhm2",
+            "sinhms",
+            "sinhp1",
+            "sinhp2"
+          ]
+        },
+        "hermz": {
+          "type": "real",
+          "arguments": {
+            "f1": "real",
+            "f2": "real",
+            "fp1": "real",
+            "fp2": "real"
+          },
+          "expression": "(f2*del1 + f1*del2)/dels - del1*   del2*(fp2*(del1 + dels) +   fp1*(del2 + dels))/   (6.*dels)",
+          "captures": [
+            "del1",
+            "del2",
+            "dels"
+          ]
+        }
+      },
+      "output_hash": "815669d047f5d3c210e9a7227b1a09da1646176d5984997d6cf585e91b8a3962"
+    },
+    "TRFIND": {
+      "source_hash": "1bf4b69b4e1073cb3e6fc8fdc0dc3ca5e5ef79dff1a3c377effe93037335df8d",
+      "functions": {
+        "left": {
+          "type": "logical",
+          "arguments": {
+            "x1": "real",
+            "y1": "real",
+            "x2": "real",
+            "y2": "real",
+            "x0": "real",
+            "y0": "real"
+          },
+          "expression": "(x2 - x1)*(y0 - y1) >=   (x0 - x1)*(y2 - y1)",
+          "captures": []
+        }
+      },
+      "output_hash": "6bd6cb2ddf9b705ec568db0d3ff293272f262ef1ddc2266ead1faff8a38743ad"
+    }
+  },
+  "computed_gotos": [
+    {
+      "procedure": "BESJ",
+      "line": 18502,
+      "selector": "is",
+      "targets": [
+        320,
+        450,
+        620
+      ]
+    },
+    {
+      "procedure": "BESJ",
+      "line": 18537,
+      "selector": "is",
+      "targets": [
+        370,
+        450,
+        610
+      ]
+    },
+    {
+      "procedure": "BESI",
+      "line": 20486,
+      "selector": "is",
+      "targets": [
+        180,
+        350,
+        510
+      ]
+    },
+    {
+      "procedure": "BESI",
+      "line": 20513,
+      "selector": "is",
+      "targets": [
+        270,
+        350,
+        500
+      ]
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 45730,
+      "selector": "kase",
+      "targets": [
+        490,
+        520,
+        540,
+        570
+      ]
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 46273,
+      "selector": "kase",
+      "targets": [
+        490,
+        520,
+        540,
+        570
+      ]
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 46845,
+      "selector": "kase",
+      "targets": [
+        530,
+        560,
+        580,
+        610
+      ]
+    },
+    {
+      "procedure": "SONEST",
+      "line": 60885,
+      "selector": "jump",
+      "targets": [
+        100,
+        200,
+        300,
+        400,
+        500
+      ]
+    },
+    {
+      "procedure": "DONEST",
+      "line": 61072,
+      "selector": "jump",
+      "targets": [
+        100,
+        200,
+        300,
+        400,
+        500
+      ]
+    },
+    {
+      "procedure": "BALANC",
+      "line": 62500,
+      "selector": "iexc",
+      "targets": [
+        80,
+        130
+      ]
+    },
+    {
+      "procedure": "DBAL",
+      "line": 64348,
+      "selector": "iexc",
+      "targets": [
+        80,
+        130
+      ]
+    },
+    {
+      "procedure": "CBAL",
+      "line": 67786,
+      "selector": "iexc",
+      "targets": [
+        80,
+        130
+      ]
+    },
+    {
+      "procedure": "DCBAL",
+      "line": 69010,
+      "selector": "iexc",
+      "targets": [
+        80,
+        130
+      ]
+    },
+    {
+      "procedure": "BNDSL",
+      "line": 100854,
+      "selector": "mode",
+      "targets": [
+        10,
+        90,
+        50
+      ]
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 116017,
+      "selector": "option",
+      "targets": [
+        300,
+        230,
+        300,
+        230
+      ]
+    },
+    {
+      "procedure": "STOD",
+      "line": 121077,
+      "selector": "iret",
+      "targets": [
+        160,
+        170,
+        200
+      ]
+    },
+    {
+      "procedure": "CFOD",
+      "line": 121423,
+      "selector": "meth",
+      "targets": [
+        100,
+        200
+      ]
+    },
+    {
+      "procedure": "PJAC",
+      "line": 121561,
+      "selector": "miter",
+      "targets": [
+        100,
+        200,
+        300,
+        400,
+        500
+      ]
+    },
+    {
+      "procedure": "SLVS",
+      "line": 121724,
+      "selector": "miter",
+      "targets": [
+        100,
+        100,
+        300,
+        400,
+        400
+      ]
+    },
+    {
+      "procedure": "SEPEL1",
+      "line": 123200,
+      "selector": "kswx",
+      "targets": [
+        170,
+        130,
+        150,
+        160,
+        140
+      ]
+    },
+    {
+      "procedure": "SEPEL1",
+      "line": 123239,
+      "selector": "kswy",
+      "targets": [
+        220,
+        180,
+        200,
+        210,
+        190
+      ]
+    }
+  ],
+  "summary": {
+    "procedures": 21,
+    "computed_gotos": 21,
+    "statement_functions": 24
+  }
+}

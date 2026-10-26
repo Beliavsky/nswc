@@ -1,6 +1,8 @@
 # Pure and elemental contracts
 
-`nswc.f90` has 505 PURE procedures and 175 PURE ELEMENTAL procedures. The fixed-form
+`nswc.f90` has 505 PURE external procedures and 175 PURE ELEMENTAL external
+procedures, plus 24 pure internal helpers from the
+[statement-function conversion](obsolescent-features.md). The fixed-form
 sources retain their existing declarations. Numerical algorithms, argument order,
 argument types, bounds, intents, and external linker names remain unchanged.
 

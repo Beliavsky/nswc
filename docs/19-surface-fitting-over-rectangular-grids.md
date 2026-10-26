@@ -58,7 +58,7 @@ Pye, Boat bak dhetiabe the partial derivatives of F
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPFIT2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR` | [`L100912`](../source_parts/nswc_part_10.f90#L4881) |
+| `SPFIT2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR` | [`L101130`](../source_parts/nswc_part_10.f90#L5818) |
 
 
 GHVER ty <osee << ty and vy < +++ < vq, where mn > 2. Let { (tr, Ye,2re) 1 = 1,...,¢;9 2 1,...,} be a set of points where p,v > 4,u, < ay << Ly < Um, and SM st Sw S U_. Also let wy,...,w, and ti,,...,W, be positive weights. Then the following subroutine is available for finding a bicubic spline f(z,y) having the knots ui0; (= 1,...,.m,7 = 1, ...,n) which minimizes » s wrt [f (Zr, Ye) — Wal’. =ITe=1
@@ -110,10 +110,10 @@ PP yf dene te the partial derivatives cf f
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSURF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L101197`](../source_parts/nswc_part_10.f90#L5166) |
-| `CSURF1` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F` | [`L101380`](../source_parts/nswc_part_10.f90#L5349) |
-| `CSRF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L101423`](../source_parts/nswc_part_10.f90#L5392) |
-| `CSRF2` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, DDF` | [`L101601`](../source_parts/nswc_part_10.f90#L5570) |
+| `CSURF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L101415`](../source_parts/nswc_part_10.f90#L6103) |
+| `CSURF1` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F` | [`L101598`](../source_parts/nswc_part_10.f90#L6286) |
+| `CSRF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L101641`](../source_parts/nswc_part_10.f90#L6329) |
+| `CSRF2` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, DDF` | [`L101819`](../source_parts/nswc_part_10.f90#L6507) |
 
 
 Given uy <++: < tm and v) <-+:+: <», where m,n > 2. Then a bicubic spline f(z,y) having the knots (u,,v,;) is uniquely defined by either of the following sets of data:! (1) the values f(us, v5) and derivatives Di f(u,,v;), Dof(us,vj), Dy Da f(us, v;) for
@@ -204,7 +204,7 @@ ott
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SURF` | `SUBROUTINE` | `M, N, X, Y, Z, IZ, OPT, ZP, TEMP, SIGMA, IERR` | [`L101645`](../source_parts/nswc_part_10.f90#L5614) |
+| `SURF` | `SUBROUTINE` | `M, N, X, Y, Z, IZ, OPT, ZP, TEMP, SIGMA, IERR` | [`L101863`](../source_parts/nswc_part_10.f90#L6551) |
 
 
 Given zy < +++ < 2m and yy < ++: < y,. Also assume that we are given the values aij (¢ = 1,...,m;7 = 1,...,n) and a tension factor o. Then the subroutine SURF is available for finding a bispline F(z,y) with tension o that satisfies F(z,,y,;) = 2;; for each 1,7. Boundary conditions can be imposed on the surface F(z, y} if desired.
@@ -276,8 +276,8 @@ ala
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SURF2` | `FUNCTION` | `XX, YY, M, N, X, Y, Z, IZ, ZP, SIGMA` | [`L102083`](../source_parts/nswc_part_10.f90#L6052) |
-| `NSURF2` | `SUBROUTINE` | `DXMIN, DXMAX, MD, DYMIN, DYMAX, ND, DZ, IDZ, M, N, X, Y, Z, IZ, ZP, WORK, SIGMA` | [`L102243`](../source_parts/nswc_part_10.f90#L6212) |
+| `SURF2` | `FUNCTION` | `XX, YY, M, N, X, Y, Z, IZ, ZP, SIGMA` | [`L102301`](../source_parts/nswc_part_10.f90#L6989) |
+| `NSURF2` | `SUBROUTINE` | `DXMIN, DXMAX, MD, DYMIN, DYMAX, ND, DZ, IDZ, M, N, X, Y, Z, IZ, ZP, WORK, SIGMA` | [`L102470`](../source_parts/nswc_part_10.f90#L7158) |
 
 
 Given 21 <+++ < dm and yy < +++ < yn, and let F/z,y) be a bispline with tension o. If the partial derivatives D? F(2,,y,;), D3 F(2,;,y,;), D? D2 F(z,;,y;) are known for? = 1,...,m and 7 := 1,...,", then the function SURF2 may be used for evaluating F(z, y) at a single point, and the subroutine NSURF2 may be used for evaluating F(z, y} on a grid of points.
@@ -338,7 +338,7 @@ S16
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSTRP2` | `SUBROUTINE` | `X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L102440`](../source_parts/nswc_part_10.f90#L6409) |
+| `BSTRP2` | `SUBROUTINE` | `X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L102667`](../source_parts/nswc_part_10.f90#L7355) |
 
 
 Form>k>landn> &> 1 let 5) < +++ < 9n4, and ty < ... < tnyy be sequences where 5; < sj44 (= 1, .,m) andt, < tye (J = 1,...,n). Let Bix, ..., Bmx be the B-splines for the knots 91 < +++ < Sm4, and By,...,Bne the B-splines for the knots ty Se) S tage. Given op < 21 < ++ < tm < Sm4i, te < yr < +++ < Yn < tny1, and the values z,; (f= 1,...,m,j7 =1,...,n). Then we wish to find a piecewise polynomial of the form
@@ -387,7 +387,7 @@ O17
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLSQ2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L102559`](../source_parts/nswc_part_10.f90#L6528) |
+| `BSLSQ2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L102786`](../source_parts/nswc_part_10.f90#L7474) |
 
 
 Form>k>tandn > €>1 let sy < +++ < smyy and ty <+-- < in+e be sequences where s; < 844% (#1 = 1,...,m) and t; < tj4¢ (7 = 1,...,n). Let Big, ..., Bmg be the B-splines for the knots 3; < +++ < 84, and Bye,...,Bye the B-splines for the knots ty S++ S tnye. Given 9, S zy S++ S oy < Smii, te S yr S++ < yy < tngi, and the values zp, (r = 1,...,4, 9 =1,...,v) where yp > max{2,k} and v > max{2,é}. Also let wi,...,W, and Wy, ...,W, be positive weights. Then the following subroutine is available for finding a piecewise polynomial of the form!
@@ -447,7 +447,7 @@ for NUM, namely rv + max{(k-+ 1)m,(@+ Ln}, has been stored in WK(i). Reset NUM >
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVAL2` | `SUBROUTINE` | `A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, IDX, IDY, F, WK` | [`L102860`](../source_parts/nswc_part_10.f90#L6829) |
+| `BVAL2` | `SUBROUTINE` | `A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, IDX, IDY, F, WK` | [`L103087`](../source_parts/nswc_part_10.f90#L7775) |
 
 
 Form>k>landn>é> 1 let 3, <--- < mye and ty < +++ < tyy, be sequences where s; < sy44 (¢ = 1,...,m) and t; < tye (7 = 1,...,n). Let Biz, ..., Bmg be the B-splines for the knots sy < +++ < smsy and By, ..., Bye the B-splines for the knots

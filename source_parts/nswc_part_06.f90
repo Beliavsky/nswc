@@ -1,3 +1,471 @@
+pure subroutine cbadd(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,l)
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
+!-----------------------------------------------------------------------
+!                Addition of complex banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
+!
+!     Insert the first abs(ml - nl) diagonals
+!
+10 mcl = ml
+if (ml >= l) go to 50
+ja = ml - nl
+jb = 0
+jc = ja
+jmax = nl + 1
+do j = 1,jc
+   do i = 1,m
+11    c(i,j) = a(i,j)
+   end do
+end do
+go to 50
+!
+20 mcl = nl
+if (nl >= l) go to 50
+ja = 0
+jb = nl - ml
+jc = jb
+jmax = ml + 1
+do j = 1,jc
+   do i = 1,m
+21    c(i,j) = b(i,j)
+   end do
+end do
+go to 50
+!
+!     COMPUTE mcl WHEN ml = nl
+!
+30 mcl = ml
+if (ml == 0) go to 40
+imin = ml + 1
+do j = 1,ml
+   do i = imin,m
+      if ((a(i,j) + b(i,j)) /= (0.0,0.0)) go to 40
+   end do
+   mcl = mcl - 1
+   imin = imin - 1
+end do
+!
+40 ja = ml - mcl
+jb = ja
+jc = 0
+jmax = mcl + 1
+!
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
+!
+!     Insertion of the remaining diagonals when mu .NE. nu
+!
+100 mcu = mu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + nu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) + b(i,jb)
+   end do
+end do
+!
+jmax = mu - nu
+do j = 1,jmax
+   ja = ja + 1
+   jc = jc + 1
+   do i = 1,m
+120   c(i,jc) = a(i,ja)
+   end do
+end do
+return
+!
+130 mcu = nu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) + b(i,jb)
+   end do
+end do
+!
+jmax = nu - mu
+do j = 1,jmax
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+150   c(i,jc) = b(i,jb)
+   end do
+end do
+return
+!
+!     Compute mcu when mu = nu
+!
+160 mcu = mu
+if (mu == 0) go to 170
+la = ml + mu + 1
+lb = nl + nu + 1
+do j = 1,mu
+   do i = 1,m
+      if ((a(i,la) + b(i,lb)) /= (0.0,0.0)) go to 170
+   end do
+   mcu = mcu - 1
+   la = la - 1
+   lb = lb - 1
+end do
+!
+!     Addition of the remaining columns when mu = nu
+!
+170 num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mcu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) + b(i,jb)
+   end do
+end do
+return
+!
+!     Error return
+!
+200 ierr = num
+end subroutine cbadd
+
+pure subroutine bsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,l)
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
+!-----------------------------------------------------------------------
+!                Subtraction of real banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
+!
+!     Insert the first abs(ml - nl) diagonals
+!
+10 mcl = ml
+if (ml >= l) go to 50
+ja = ml - nl
+jb = 0
+jc = ja
+jmax = nl + 1
+do j = 1,jc
+   do i = 1,m
+11    c(i,j) = a(i,j)
+   end do
+end do
+go to 50
+!
+20 mcl = nl
+if (nl >= l) go to 50
+ja = 0
+jb = nl - ml
+jc = jb
+jmax = ml + 1
+do j = 1,jc
+   do i = 1,m
+21    c(i,j) = -b(i,j)
+   end do
+end do
+go to 50
+!
+!     COMPUTE mcl WHEN ml = nl
+!
+30 mcl = ml
+if (ml == 0) go to 40
+imin = ml + 1
+do j = 1,ml
+   do i = imin,m
+      if ((a(i,j) - b(i,j)) /= 0.0) go to 40
+   end do
+   mcl = mcl - 1
+   imin = imin - 1
+end do
+!
+40 ja = ml - mcl
+jb = ja
+jc = 0
+jmax = mcl + 1
+!
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
+!
+!     Insertion of the remaining diagonals when mu .NE. nu
+!
+100 mcu = mu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + nu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = mu - nu
+do j = 1,jmax
+   ja = ja + 1
+   jc = jc + 1
+   do i = 1,m
+120   c(i,jc) = a(i,ja)
+   end do
+end do
+return
+!
+130 mcu = nu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = nu - mu
+do j = 1,jmax
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+150   c(i,jc) = -b(i,jb)
+   end do
+end do
+return
+!
+!     Compute mcu when mu = nu
+!
+160 mcu = mu
+if (mu == 0) go to 170
+la = ml + mu + 1
+lb = nl + nu + 1
+do j = 1,mu
+   do i = 1,m
+      if ((a(i,la) - b(i,lb)) /= 0.0) go to 170
+   end do
+   mcu = mcu - 1
+   la = la - 1
+   lb = lb - 1
+end do
+!
+!     Addition of the remaining columns when mu = nu
+!
+170 num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mcu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+return
+!
+!     Error return
+!
+200 ierr = num
+end subroutine bsubt
+
+pure subroutine dbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,l)
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
+!-----------------------------------------------------------------------
+!          Subtraction of double precision banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
+!
+!     Insert the first abs(ml - nl) diagonals
+!
+10 mcl = ml
+if (ml >= l) go to 50
+ja = ml - nl
+jb = 0
+jc = ja
+jmax = nl + 1
+do j = 1,jc
+   do i = 1,m
+11    c(i,j) = a(i,j)
+   end do
+end do
+go to 50
+!
+20 mcl = nl
+if (nl >= l) go to 50
+ja = 0
+jb = nl - ml
+jc = jb
+jmax = ml + 1
+do j = 1,jc
+   do i = 1,m
+21    c(i,j) = -b(i,j)
+   end do
+end do
+go to 50
+!
+!     COMPUTE mcl WHEN ml = nl
+!
+30 mcl = ml
+if (ml == 0) go to 40
+imin = ml + 1
+do j = 1,ml
+   do i = imin,m
+      if ((a(i,j) - b(i,j)) /= 0.d0) go to 40
+   end do
+   mcl = mcl - 1
+   imin = imin - 1
+end do
+!
+40 ja = ml - mcl
+jb = ja
+jc = 0
+jmax = mcl + 1
+!
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
+!
+!     Insertion of the remaining diagonals when mu .NE. nu
+!
+100 mcu = mu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + nu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = mu - nu
+do j = 1,jmax
+   ja = ja + 1
+   jc = jc + 1
+   do i = 1,m
+120   c(i,jc) = a(i,ja)
+   end do
+end do
+return
+!
+130 mcu = nu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = nu - mu
+do j = 1,jmax
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+150   c(i,jc) = -b(i,jb)
+   end do
+end do
+return
+!
+!     Compute mcu when mu = nu
+!
+160 mcu = mu
+if (mu == 0) go to 170
+la = ml + mu + 1
+lb = nl + nu + 1
+do j = 1,mu
+   do i = 1,m
+      if ((a(i,la) - b(i,lb)) /= 0.d0) go to 170
+   end do
+   mcu = mcu - 1
+   la = la - 1
+   lb = lb - 1
+end do
+!
+!     Addition of the remaining columns when mu = nu
+!
+170 num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mcu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+return
+!
+!     Error return
+!
+200 ierr = num
+end subroutine dbsubt
+
 pure subroutine cbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -7741,7 +8209,18 @@ iter = 0
 kase = 1
 jump = 1
 return
-20 go to (100, 200, 300, 400, 500), jump
+20 select case (jump)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 !
 !     ................ ENTRY   (jump = 1)
 !     first iteration.  x has been overwritten by A*x.
@@ -7928,7 +8407,18 @@ iter = 0
 kase = 1
 jump = 1
 return
-20 go to (100, 200, 300, 400, 500), jump
+20 select case (jump)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 !
 !     ................ ENTRY   (jump = 1)
 !     first iteration.  x has been overwritten by A*x.
@@ -9356,7 +9846,12 @@ do i = k, n
    a(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -10093,435 +10588,4 @@ go to 60
 1000 ierr = en
 1001 return
 end subroutine hqr
-
-pure subroutine balbak(nm,n,low,igh,scale,m,z)
-implicit none
-!
-integer, intent(in) :: m, n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: scale(n)
-real, intent(inout) :: z(nm,m)
-integer :: i, j, k, ii
-real :: s
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure balbak,
-!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
-!
-!     This subroutine forms the eigenvectors of a real general
-!     matrix BY back transforming those of the corresponding
-!     balanced matrix determined by  balanc.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by  balanc,
-!
-!        Scale contains information determining the permutations
-!          and scaling factors used by  balanc,
-!
-!        m is the number of columns of z to be back transformed,
-!
-!        z contains the real and imaginary parts of the eigen-
-!          vectors to be back transformed in its first m columns.
-!
-!     On output-
-!
-!        z contains the real and imaginary parts of the
-!          transformed eigenvectors in its first m columns.
-!
-!-----------------------------------------------------------------------
-!
-if (m == 0) go to 200
-if (igh == low) go to 120
-!
-do i = low, igh
-   s = scale(i)
-!     ********** Left hand eigenvectors are back transformed
-!                if the foregoing statement is replaced by
-!                s=1.0/scale(i). **********
-   do j = 1, m
-100   z(i,j) = z(i,j) * s
-   end do
-!
-end do
-!     ********- FOR i=low-1 STEP -1 UNTIL 1,
-!               igh+1 STEP 1 UNTIL n DO -- **********
-120 do ii = 1, n
-   i = ii
-   if (i >= low .and. i <= igh) go to 140
-   if (i < low) i = low - ii
-   k = scale(i)
-   if (k == i) go to 140
-!
-   do j = 1, m
-      s = z(i,j)
-      z(i,j) = z(k,j)
-      z(k,j) = s
-   end do
-!
-140 continue
-end do
-!
-200 return
-end subroutine balbak
-
-pure subroutine eltran(nm,n,low,igh,a,int,z)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
-integer, intent(in) :: int(igh)
-integer :: i, j, kl, mm, mp, mp1
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ELMTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the stabilized elementary
-!     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  elmhes.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains the multipliers which were used in the
-!          reduction by  elmhes  in its lower triangle
-!          below the subdiagonal,
-!
-!        Int contains information on the rows and columns
-!          interchanged in the reduction by  elmhes.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  elmhes.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   z(i,mp) = a(i,mp - 1)
-   end do
-!
-   i = int(mp)
-   if (i == mp) go to 140
-!
-   do j = mp, igh
-      z(mp,j) = z(i,j)
-      z(i,j) = 0.0
-   end do
-!
-   z(i,mp) = 1.0
-140 continue
-end do
-!
-200 return
-end subroutine eltran
-
-pure subroutine eltrn0(nm,n,low,igh,a,int,z)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
-real, intent(in) :: int(igh)
-integer :: i, j, kl, mm, mp, mp1
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ELMTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the stabilized elementary
-!     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  elmhs0.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains the multipliers which were used in the
-!          reduction by  elmhs0  in its lower triangle
-!          below the subdiagonal,
-!
-!        Int contains information on the rows and columns
-!          interchanged in the reduction by  elmhs0.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  elmhs0.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   z(i,mp) = a(i,mp - 1)
-   end do
-!
-   i = int(mp)
-   if (i == mp) go to 140
-!
-   do j = mp, igh
-      z(mp,j) = z(i,j)
-      z(i,j) = 0.0
-   end do
-!
-   z(i,mp) = 1.0
-140 continue
-end do
-!
-200 return
-end subroutine eltrn0
-
-pure subroutine ortran(nm,n,low,igh,a,ort,z)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: ort(igh), z(nm,n)
-integer :: i, j, kl, mm, mp, mp1
-real :: g
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ORTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the orthogonal similarity
-!     transformations used in the reduction of a real general
-!     matrix to upper Hessenberg form by  orthes.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains information about the orthogonal trans-
-!          formations used in the reduction by  orthes
-!          in its strict lower triangle,
-!
-!        Ort contains further information about the trans-
-!          formations used in the reduction by  orthes.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  orthes,
-!
-!        Ort has been altered.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   if (a(mp,mp - 1) == 0.0) go to 140
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
-   end do
-!
-   do j = mp, igh
-      g = 0.0
-!
-      do i = mp, igh
-110      g = g + ort(i) * z(i,j)
-      end do
-!     ********** Divisor below is negative of H formed in orthes.
-!                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp - 1)
-!
-      do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
-      end do
-!
-   end do
-!
-140 continue
-end do
-!
-200 return
-end subroutine ortran
-
-pure subroutine ortrn1(n,low,igh,a,na,z,nz,ort)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: na, igh, low
-integer, intent(in) :: nz
-real, intent(in) :: a(na,igh)
-real, intent(inout) :: ort(igh), z(nz,n)
-integer :: i, j, kl, mm, mp, mp1
-real :: g
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ORTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the orthogonal similarity
-!     transformations used in the reduction of a real general
-!     matrix to upper Hessenberg form by  orthes.
-!
-!     On input-
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains information about the orthogonal trans-
-!          formations used in the reduction by  orthes
-!          in its strict lower triangle,
-!
-!        na must be set to the row dimension of the 2-dimensional
-!          array parameter  a  as declared in the calling program
-!          dimension statement,
-!
-!        nz must be set to the row dimension of the 2-dimensional
-!          array parameter  z  as declared in the calling program
-!          dimension statement,
-!
-!        Ort contains further information about the trans-
-!          formations used in the reduction by  orthes.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  orthes,
-!
-!        Ort has been altered.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   if (a(mp,mp - 1) == 0.0) go to 140
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
-   end do
-!
-   do j = mp, igh
-      g = 0.0
-!
-      do i = mp, igh
-110      g = g + ort(i) * z(i,j)
-      end do
-!     ********** Divisor below is negative of H formed in orthes.
-!                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp - 1)
-!
-      do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
-      end do
-!
-   end do
-!
-140 continue
-end do
-!
-200 return
-end subroutine ortrn1
 

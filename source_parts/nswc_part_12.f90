@@ -1,3 +1,1102 @@
+subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
+   & yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
+   & start,told,delsgn,ns,nornd,k,kold,isnold)
+implicit none
+integer, intent(inout) :: iflag, isnold, k, kold
+integer, intent(in) :: neqn
+integer, intent(inout) :: ns
+real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
+   & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
+real, intent(in) :: tout
+real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
+real :: yp(neqn)
+real, intent(inout) :: ypout(neqn), yy(neqn)
+logical, intent(inout) :: start, phase1, nornd
+external f
+integer :: isn, kle4, l, nostep
+real :: absdel, abseps, del, eps, fouru, releps, tend, u
+logical :: stiff, crash
+integer, parameter :: maxnum = 500
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!   ODE  merely allocates storage for  de1 to relieve the user of the
+!   inconvenience of a long call list.  Consequently  de1 is used as
+!   described in the comments for  ODE .
+!
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
+!
+!
+!   The constant  maxnum  is the maximum number of steps allowed in one
+!   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
+!   following statement
+!
+!
+!   ****** u is a machine dependent parameter. u is the smallest
+!          positive number for which 1.0 + u .GT. 1.0.
+!
+u = spmpar(1)
+fouru = 4.0*u
+!
+!            ***            ***            ***
+!
+!   Test for improper parameters
+!
+if (neqn < 1) go to 10
+if (t == tout) go to 10
+if (relerr < 0.0  .or.  abserr < 0.0) go to 10
+eps = max(relerr,abserr)
+if (eps <= 0.0) go to 10
+if (iflag == 0) go to 10
+isn = sign(1,iflag)
+iflag = abs(iflag)
+if (iflag == 1) go to 20
+if (t /= told) go to 10
+if (iflag >= 2  .and.  iflag <= 5) go to 20
+if (iflag == 6  .and.  abserr > 0.0) go to 20
+10 iflag = 7
+return
+!
+!   On each call set interval of integration and counter for number of
+!   steps.  Adjust input error tolerances to define weight vector for
+!   SUBROUTINE  step1
+!
+20 del = tout - t
+absdel = abs(del)
+tend = t + 10.0*del
+if (isn < 0) tend = tout
+nostep = 0
+kle4 = 0
+stiff = .false.
+releps = relerr/eps
+abseps = abserr/eps
+if (iflag == 1) go to 30
+if (isnold < 0) go to 30
+if (delsgn*del > 0.0) go to 50
+!
+!   On start and restart also set work variables x and yy(*), store the
+!   direction of integration and initialize the step size
+!
+30 start = .true.
+x = t
+do l = 1,neqn
+40 yy(l) = y(l)
+end do
+delsgn = sign(1.0,del)
+h = sign(max(fouru*abs(x),abs(tout - x)),tout - x)
+!
+!   If already past output point, interpolate and return
+!
+50 if (abs(x - t) < absdel) go to 60
+call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
+!
+!   If cannot go past output point and sufficiently close,
+!   extrapolate and return
+!
+60 if (isn > 0  .or.  abs(tout - x) >= fouru*abs(x)) go to 80
+h = tout - x
+call f(x,yy,yp)
+do l = 1,neqn
+70 y(l) = yy(l) + h*yp(l)
+end do
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
+!
+!   Test for too many steps
+!
+80 if (nostep < maxnum) go to 100
+iflag = isn*4
+if (stiff) iflag = isn*5
+do l = 1,neqn
+90 y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+return
+!
+!   Limit step size, set weight vector and take a step
+!
+100 h = sign(min(abs(h),abs(tend - x)),h)
+do l = 1,neqn
+   wt(l) = releps*abs(yy(l)) + abseps
+   if (wt(l) <= 0.0) go to 140
+end do
+call step1(f,neqn,yy,x,h,eps,wt,start, &
+   & hold,k,kold,crash,phi,p,yp,psi, &
+   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
+!
+!   Test for tolerances too small
+!
+if (.not.crash) go to 130
+iflag = isn*3
+relerr = eps*releps
+abserr = eps*abseps
+do l = 1,neqn
+120 y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+return
+!
+!   Augment counter on number of steps and test for stiffness
+!
+130 nostep = nostep + 1
+kle4 = kle4 + 1
+if (kold > 4) kle4 = 0
+if (kle4 >= 50) stiff = .true.
+go to 50
+!
+!   Relative error criterion inappropriate
+!
+140 iflag = isn*6
+do l = 1,neqn
+150 y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+end subroutine de1
+
+subroutine step1(f,neqn,y,x,h,eps,wt,start, &
+   & hold,k,kold,crash,phi,p,yp,psi, &
+   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
+implicit none
+integer, intent(inout) :: k, kold
+integer, intent(in) :: neqn
+integer, intent(inout) :: ns
+real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
+   & p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
+real :: wt(neqn)
+real, intent(inout) :: x, y(neqn)
+real :: yp(neqn)
+logical, intent(inout) :: start
+logical, intent(out) :: crash
+logical, intent(inout) :: phase1, nornd
+external f
+integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
+real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
+   & temp4, temp5, temp6, twou, u, xold
+real, parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
+real, parameter :: gstr(13) = [0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
+   & 0.00524, 0.00468]
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!   Written by L. F. Shampine and M. K. Gordon
+!
+!   Abstract
+!
+!   Subroutine  step1  is normally used indirectly through subroutine
+!   ODE .  Because  ODE  suffices for most problems and is much easier
+!   to use, using it should be considered before using  step1  alone.
+!
+!   Subroutine step1 integrates a system of  neqn  first order ordinary
+!   differential equations one step, normally from x to x+h, using A
+!   modified divided difference form of the Adams PECE formulas.  Local
+!   extrapolation is used to improve absolute stability and accuracy.
+!   The code adjusts its order and step size to control the local error
+!   per unit step in a generalized sense.  Special devices are included
+!   to control roundoff error and to detect when the user is requesting
+!   too much accuracy.
+!
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
+!
+!
+!   The parameters represent...
+!      F -- subroutine to evaluate derivatives
+!      neqn -- number of equations to be integrated
+!      y(*) -- solution vector at x
+!      x -- independent variable
+!      h -- appropriate step size for next step.  Normally determined by
+!           code
+!      eps -- local error tolerance
+!      wt(*) -- vector of weights for error criterion
+!      start -- logical variable SET .TRUE. for first step,  .FALSE.
+!           Otherwise
+!      hold -- step size used for last successful step
+!      k -- appropriate order for next step (determined by code)
+!      kold -- order used for last successful step
+!      crash -- logical variable SET .TRUE. when no step can be taken,
+!           .FALSE. otherwise.
+!      yp(*) -- derivative of solution vector at  x  after successful
+!           step
+!   the arrays  phi, psi  are required for the interpolation subroutine
+!   intrp .  The array  P  is internal to the code.  The remaining nine
+!   variables and arrays are included in the call list only to eliminate
+!   local retention of variables between calls.
+!
+!   Input to step1
+!
+!      First call --
+!
+!   The user must provide storage in his calling program for all arrays
+!   in the call list, namely
+!
+!     dimension y(neqn),wt(neqn),phi(neqn,16),p(neqn),yp(neqn),psi(12),
+!    1  alpha(12),beta(12),sig(13),V(12),W(12),g(13)
+!
+!   The user must also declare  start ,  crash ,  phase1  and  nornd
+!   LOGICAL VARIABLES AND  F  AN EXTERNAL SUBROUTINE, SUPPLY THE
+!   subroutine  f(x,y,yp)  to evaluate
+!      DY(i)/DX = yp(i) = F(x,y(1),y(2),...,y(neqn))
+!   and initialize only the following parameters...
+!      neqn -- number of equations to be integrated
+!      y(*) -- vector of initial values of dependent variables
+!      x -- initial value of the independent variable
+!      h -- nominal step size indicating direction of integration
+!           and maximum size of step.  Must be variable
+!      eps -- local error tolerance per step.  Must be variable
+!      wt(*) -- vector of non-zero weights for error criterion
+!      start -- .TRUE.
+!
+!   step1  requires that the L2 norm of the vector with components
+!   local error(l)/wt(l)  be less than  eps  for a successful step.  The
+!   array  wt  allows the user to specify an error test appropriate
+!   for his problem.  For example,
+!      wt(l) = 1.0  specifies absolute error,
+!            = abs(y(l))  error relative to the most recent value of the
+!                 l-TH component of the solution,
+!            = abs(yp(l))  error relative to the most recent value of
+!                 the l-TH component of the derivative,
+!            = AMAX1(wt(l),abs(y(l)))  error relative to the largest
+!                 magnitude of l-TH component obtained so far,
+!            = abs(y(l))*RELERR/eps + ABSERR/eps  specifies a mixed
+!                 relative-absolute test where  RELERR  is relative
+!                 error,  ABSERR  is absolute error and  eps =
+!                 AMAX1(RELERR,ABSERR) .
+!
+!      Subsequent calls --
+!
+!   Subroutine  step1  is designed so that all information needed to
+!   CONTINUE THE INTEGRATION, INCLUDING THE STEP SIZE  h  AND THE ORDER
+!   k , is returned with each step.  With the exception of the step
+!   size, the error tolerance, and the weights, none of the parameters
+!   should be altered.  The array  wt  must be updated after each step
+!   to maintain relative error tests like those above.  Normally the
+!   integration is continued just beyond the desired endpoint and the
+!   solution interpolated there with subroutine  intrp .  If it is
+!   impossible to integrate beyond the endpoint, the step size may be
+!   reduced to hit the endpoint since the code will not take a step
+!   larger than the  h  input.  Changing the direction of integration,
+!   I.E., the sign of  h , requires the user set  start = .TRUE. before
+!   calling  step1  again.  This is the only situation in which  start
+!   should be altered.
+!
+!   Output from step1
+!
+!      Successful step --
+!
+!   The subroutine returns after each successful step with  start  and
+!   crash  set .FALSE. .  x  represents the independent variable
+!   advanced one step of length  hold  from its value on input and  y
+!   the solution vector at the new value of  x .  All other parameters
+!   represent information corresponding to the new  x  needed to
+!   CONTINUE THE INTEGRATION.
+!
+!      Unsuccessful step --
+!
+!   When the error tolerance is too small for the machine precision,
+!   the subroutine returns without taking a step and  crash = .TRUE. .
+!   An appropriate step size and error tolerance for continuing are
+!   estimated and all other information is restored as upon input
+!   before returning.  To continue with the larger tolerance, the user
+!   just calls the code again.  A restart is neither required nor
+!   desirable.
+!
+!
+!
+!   ****** U is a machine dependent parameter. It is the smallest
+!          positive number for which 1.0 + U .GT. 1.0.
+!
+u = spmpar(1)
+twou = 2.0*u
+fouru = 4.0*u
+!
+!       ***     Begin block 0     ***
+!
+!   Check if step size or error tolerance is too small for machine
+!   precision.  If first step, initialize phi array and estimate A
+!   starting step size.
+!
+!                   ***
+!
+!   If step size is too small, determine an acceptable one
+!
+crash = .true.
+if (abs(h) >= fouru*abs(x)) go to 5
+h = sign(fouru*abs(x),h)
+return
+5 p5eps = 0.5*eps
+!
+!   If error tolerance is too small, increase it to an acceptable value
+!
+round = 0.0
+do l = 1,neqn
+10 round = round + (y(l)/wt(l))**2
+end do
+round = twou*sqrt(round)
+if (p5eps >= round) go to 15
+eps = 2.0*round*(1.0 + fouru)
+return
+15 crash = .false.
+g(1) = 1.0
+g(2) = 0.5
+sig(1) = 1.0
+if (.not.start) go to 99
+!
+!   Initialize.  Compute appropriate step size for first step
+!
+call f(x,y,yp)
+sum = 0.0
+do l = 1,neqn
+   phi(l,1) = yp(l)
+   phi(l,2) = 0.0
+20 sum = sum + (yp(l)/wt(l))**2
+end do
+sum = sqrt(sum)
+absh = abs(h)
+if (eps < 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
+h = sign(max(absh,fouru*abs(x)),h)
+hold = 0.0
+k = 1
+kold = 0
+start = .false.
+phase1 = .true.
+nornd = .true.
+if (p5eps > 100.0*round) go to 99
+nornd = .false.
+do l = 1,neqn
+25 phi(l,15) = 0.0
+end do
+99 ifail = 0
+!
+!       ***     End block 0     ***
+!
+!       ***     Begin block 1     ***
+!
+!   Compute coefficients of formulas for this step.  Avoid computing
+!   those quantities not changed when step size is not changed.
+!
+!                   ***
+!
+100 kp1 = k + 1
+kp2 = k + 2
+km1 = k - 1
+km2 = k - 2
+!
+!   ns is the number of steps taken with size h, including the current
+!   one.  When k.LT.ns, no coefficients change
+!
+if (h /= hold) ns = 0
+if (ns <= kold) ns = ns + 1
+nsp1 = ns + 1
+if (k < ns) go to 199
+!
+!   Compute those components of alpha(*),beta(*),psi(*),sig(*) which
+!   are changed
+!
+beta(ns) = 1.0
+realns = ns
+alpha(ns) = 1.0/realns
+temp1 = h*realns
+sig(nsp1) = 1.0
+if (k < nsp1) go to 110
+do i = nsp1,k
+   im1 = i - 1
+   temp2 = psi(im1)
+   psi(im1) = temp1
+   beta(i) = beta(im1)*psi(im1)/temp2
+   temp1 = temp2 + h
+   alpha(i) = h/temp1
+   reali = i
+105 sig(i + 1) = reali*alpha(i)*sig(i)
+end do
+110 psi(k) = temp1
+!
+!   Compute coefficients g(*)
+!
+!   Initialize V(*) and set W(*).
+!
+if (ns > 1) go to 120
+do iq = 1,k
+   temp3 = iq*(iq + 1)
+   v(iq) = 1.0/temp3
+115 w(iq) = v(iq)
+end do
+go to 140
+!
+!   If order was raised, update diagonal part of V(*)
+!
+120 if (k <= kold) go to 130
+temp4 = k*kp1
+v(k) = 1.0/temp4
+nsm2 = ns - 2
+if (nsm2 < 1) go to 130
+do j = 1,nsm2
+   i = k - j
+125 v(i) = v(i) - alpha(j + 1)*v(i + 1)
+end do
+!
+!   Update V(*) and set W(*)
+!
+130 limit1 = kp1 - ns
+temp5 = alpha(ns)
+do iq = 1,limit1
+   v(iq) = v(iq) - temp5*v(iq + 1)
+135 w(iq) = v(iq)
+end do
+g(nsp1) = w(1)
+!
+!   Compute the g(*) in the work vector W(*)
+!
+140 nsp2 = ns + 2
+if (kp1 < nsp2) go to 199
+do i = nsp2,kp1
+   limit2 = kp2 - i
+   temp6 = alpha(i - 1)
+   do iq = 1,limit2
+145   w(iq) = w(iq) - temp6*w(iq + 1)
+   end do
+150 g(i) = w(1)
+end do
+199 continue
+!
+!       ***     End block 1     ***
+!
+!       ***     Begin block 2     ***
+!
+!   Predict a solution P(*), evaluate derivatives using predicted
+!   solution, estimate local error at order k and errors at orders k,
+!   k-1, k-2 as if constant step size were used.
+!
+!                   ***
+!
+!   Change phi to phi star
+!
+if (k < nsp1) go to 215
+do i = nsp1,k
+   temp1 = beta(i)
+   do l = 1,neqn
+205   phi(l,i) = temp1*phi(l,i)
+   end do
+end do
+!
+!   Predict solution and differences
+!
+215 do l = 1,neqn
+   phi(l,kp2) = phi(l,kp1)
+   phi(l,kp1) = 0.0
+220 p(l) = 0.0
+end do
+do j = 1,k
+   i = kp1 - j
+   ip1 = i + 1
+   temp2 = g(i)
+   do l = 1,neqn
+      p(l) = p(l) + temp2*phi(l,i)
+225   phi(l,i) = phi(l,i) + phi(l,ip1)
+   end do
+end do
+if (nornd) go to 240
+do l = 1,neqn
+   tau = h*p(l) - phi(l,15)
+   p(l) = y(l) + tau
+235 phi(l,16) = (p(l) - y(l)) - tau
+end do
+go to 250
+240 do l = 1,neqn
+245 p(l) = y(l) + h*p(l)
+end do
+250 xold = x
+x = x + h
+absh = abs(h)
+call f(x,p,yp)
+!
+!   Estimate errors at orders k,k-1,k-2
+!
+erkm2 = 0.0
+erkm1 = 0.0
+erk = 0.0
+do l = 1,neqn
+   temp3 = 1.0/wt(l)
+   temp4 = yp(l) - phi(l,1)
+   nswc_ai_i4 = km2
+   if ( nswc_ai_i4 < 0 ) go to 265
+   if ( nswc_ai_i4 == 0 ) go to 260
+   go to 255
+255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
+260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
+265 erk = erk + (temp4*temp3)**2
+end do
+nswc_ai_i4 = km2
+if ( nswc_ai_i4 < 0 ) go to 280
+if ( nswc_ai_i4 == 0 ) go to 275
+go to 270
+270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
+275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
+280 temp5 = absh*sqrt(erk)
+err = temp5*(g(k) - g(kp1))
+erk = temp5*sig(kp1)*gstr(k)
+knew = k
+!
+!   Test if order should be lowered
+!
+nswc_ai_i4 = km2
+if ( nswc_ai_i4 < 0 ) go to 299
+if ( nswc_ai_i4 == 0 ) go to 290
+go to 285
+285 if (max(erkm1,erkm2) <= erk) knew = km1
+go to 299
+290 if (erkm1 <= 0.5*erk) knew = km1
+!
+!   Test if step successful
+!
+299 if (err <= eps) go to 400
+!
+!       ***     End block 2     ***
+!
+!       ***     Begin block 3     ***
+!
+!   The step is unsuccessful.  Restore  x, phi(*,*), psi(*) .
+!   If third consecutive failure, set order to one.  If step fails more
+!   than three times, consider an optimal step size.  Double error
+!   tolerance and return if estimated step size is too small for machine
+!   precision.
+!                   ***
+!
+!   Restore x, phi(*,*) and psi(*)
+!
+phase1 = .false.
+x = xold
+do i = 1,k
+   temp1 = 1.0/beta(i)
+   ip1 = i + 1
+   do l = 1,neqn
+305   phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
+   end do
+end do
+if (k < 2) go to 320
+do i = 2,k
+315 psi(i - 1) = psi(i) - h
+end do
+!
+!   On third failure, set order to one.  Thereafter, use optimal step
+!   size
+!
+320 ifail = ifail + 1
+temp2 = 0.5
+nswc_ai_i4 = ifail - 3
+if ( nswc_ai_i4 < 0 ) go to 335
+if ( nswc_ai_i4 == 0 ) go to 330
+go to 325
+325 if (p5eps < 0.25*erk) temp2 = sqrt(p5eps/erk)
+330 knew = 1
+335 h = temp2*h
+k = knew
+if (abs(h) >= fouru*abs(x)) go to 340
+crash = .true.
+h = sign(fouru*abs(x),h)
+eps = eps + eps
+return
+340 go to 100
+!
+!       ***     End block 3     ***
+!
+!       ***     Begin block 4     ***
+!
+!   The step is successful.  Correct the predicted solution, evaluate
+!   the derivatives using the corrected solution and update the
+!   differences.  Determine best order and step size for next step.
+!
+!                   ***
+400 kold = k
+hold = h
+!
+!   Correct and evaluate
+!
+temp1 = h*g(kp1)
+if (nornd) go to 410
+do l = 1,neqn
+   rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
+   y(l) = p(l) + rho
+405 phi(l,15) = (y(l) - p(l)) - rho
+end do
+go to 420
+410 do l = 1,neqn
+415 y(l) = p(l) + temp1*(yp(l) - phi(l,1))
+end do
+420 call f(x,y,yp)
+!
+!   Update differences for next step
+!
+do l = 1,neqn
+   phi(l,kp1) = yp(l) - phi(l,1)
+425 phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
+end do
+do i = 1,k
+   do l = 1,neqn
+430   phi(l,i) = phi(l,i) + phi(l,kp1)
+   end do
+end do
+!
+!   Estimate error at order k+1 unless...
+!     in first phase when always raise order,
+!     already decided to lower order,
+!     step size not constant so estimate unreliable
+!
+erkp1 = 0.0
+if (knew == km1  .or.  k == 12) phase1 = .false.
+if (phase1) go to 450
+if (knew == km1) go to 455
+if (kp1 > ns) go to 460
+do l = 1,neqn
+440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
+end do
+erkp1 = absh*gstr(kp1)*sqrt(erkp1)
+!
+!   Using estimated error at order k+1, determine appropriate order
+!   for next step
+!
+if (k > 1) go to 445
+if (erkp1 >= 0.5*erk) go to 460
+go to 450
+445 if (erkm1 <= min(erk,erkp1)) go to 455
+if (erkp1 >= erk  .or.  k == 12) go to 460
+!
+!   Here erkp1 .LT. erk .LT. AMAX1(erkm1,erkm2) else order would have
+!   been lowered in block 2.  Thus order is to be raised
+!
+!   Raise order
+!
+450 k = kp1
+erk = erkp1
+go to 460
+!
+!   Lower order
+!
+455 k = km1
+erk = erkm1
+!
+!   With new order determine appropriate step size for next step
+!
+460 hnew = h + h
+if (phase1) go to 465
+if (p5eps >= erk*two(k + 1)) go to 465
+hnew = h
+if (p5eps >= erk) go to 465
+temp2 = k + 1
+r = (p5eps/erk)**(1.0/temp2)
+hnew = absh*max(0.5,min(0.9,r))
+hnew = sign(max(hnew,fouru*abs(x)),h)
+465 h = hnew
+!
+!       ***     End block 4     ***
+!
+end subroutine step1
+
+subroutine intrp(x,y,xout,yout,ypout,neqn,kold,phi,psi)
+implicit none
+integer, intent(in) :: kold, neqn
+real :: phi(neqn,16), psi(12)
+real, intent(in) :: x, xout
+real :: y(neqn)
+real, intent(inout) :: yout(neqn), ypout(neqn)
+integer :: i, j, jm1, ki, kip1, l, limit1
+real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
+   & temp3, term, w(13)
+!
+!   Written by L. F. Shampine and M. K. Gordon
+!
+!   Abstract
+!
+!   The methods in subroutine  step1  approximate the solution near  x
+!   by a polynomial.  Subroutine  intrp  approximates the solution at
+!   xout  by evaluating the polynomial there.  Information defining this
+!   polynomial is passed from  step1  so  intrp  cannot be used alone.
+!
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
+!
+!   Input to intrp --
+!
+!   The user provides storage in the calling program for the arrays in
+!   the call list
+!      dimension y(neqn),yout(neqn),ypout(neqn),phi(neqn,16),psi(12)
+!   and defines
+!      xout -- point at which solution is desired.
+!   The remaining parameters are defined in  step1  and passed to  intrp
+!   from that subroutine.
+!
+!   Output from  intrp --
+!
+!      yout(*) -- solution at  xout
+!      ypout(*) -- derivative of solution at  xout
+!   the remaining parameters are returned unaltered from their input
+!   values.  Integration with  step1  may be continued.
+!
+data g(1)/1.0/,rho(1)/1.0/
+!
+hi = xout - x
+ki = kold + 1
+kip1 = ki + 1
+!
+!   Initialize W(*) for computing g(*)
+!
+do i = 1,ki
+   temp1 = i
+5  w(i) = 1.0/temp1
+end do
+term = 0.0
+!
+!   Compute g(*)
+!
+do j = 2,ki
+   jm1 = j - 1
+   psijm1 = psi(jm1)
+   gamma = (hi + term)/psijm1
+   eta = hi/psijm1
+   limit1 = kip1 - j
+   do i = 1,limit1
+10    w(i) = gamma*w(i) - eta*w(i + 1)
+   end do
+   g(j) = w(1)
+   rho(j) = gamma*rho(jm1)
+15 term = psijm1
+end do
+!
+!   Interpolate
+!
+do l = 1,neqn
+   ypout(l) = 0.0
+20 yout(l) = 0.0
+end do
+do j = 1,ki
+   i = kip1 - j
+   temp2 = g(i)
+   temp3 = rho(i)
+   do l = 1,neqn
+      yout(l) = yout(l) + temp2*phi(l,i)
+25    ypout(l) = ypout(l) + temp3*phi(l,i)
+   end do
+end do
+do l = 1,neqn
+35 yout(l) = y(l) + hi*yout(l)
+end do
+end subroutine intrp
+
+subroutine brkf45(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+   & work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(in) :: abserr
+real, intent(inout) :: relerr, t
+real, intent(in) :: tend, tout
+real, intent(inout) :: work(*), y(neqn), yp(neqn)
+external fcn
+integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
+   & kwp, kx, ky1, ky2
+logical :: endpnt, blkout
+!
+!     Block Fehlberg fourth-fifth order Runge-Kutta method advancing
+!     a block of two equal steps.  The formula at the first step is
+!     5(4) while at the second step it is 6(4).
+!
+!     Written by J.R.Cash,
+!        department of mathematics,
+!        imperial college,
+!        south KENSINGTON, london SW7 2AZ,
+!        england.
+!     Modified by D. Higham and A.H. Morris.
+!
+!    This is a heavily revised version of rkf45 of L.F. Shampine and
+!    H.A. Watts.
+!    brkf45 is primarily designed to solve non-stiff and mildly stiff
+!    initial value ordinary differential equations when derivative
+!    evaluations are inexpensive. brkf45 uses interpolation to produce
+!    output at off-step points efficiently. brkf45 should generally
+!    not be used when the user is demanding high accuracy.  In such
+!    cases a good Adams code will often be more efficient.
+!
+!***********************************************************************
+! Abstract
+!***********************************************************************
+!
+!    Subroutine  brkf45  integrates a system of neqn first order
+!    ordinary differential equations of the form
+!
+!             DY(I)/DT = FCN(t,y(1),y(2),...,y(neqn))
+!
+!    Where the y(I) are known at time t.
+!    Typically the subroutine is used to integrate from t to tend
+!    (while returning answers at specified output points tout), but
+!    it can also be used as a one-block integrator to advance the
+!    solution a single block step in the direction of tend.  On return
+!    the parameters in the call list are set for continuing the
+!    integration. The user has only to call brkf45 again (and perhaps
+!    define a new value for tout). Actually, brkf45 is an interfacing
+!    routine which calls subroutine rkfc for the solution.  Subroutine
+!    rkfc computes an approximate solution over one block of length 2H.
+!    brkf45 is particularly useful when output is required at many
+!    off-step points since the output values can be obtained by
+!    interpolation.  This is in contrast to many other Runge-Kutta
+!    programs which choose the step sequence so as to hit all output
+!    points exactly and so become inefficient when output is required
+!    at many points within a step.
+!    brkf45 uses the (5,4), (6,4) block formula described in
+!    J.R. Cash,  a block 6(4) Runge-Kutta formula for non-stiff
+!    initial value problems, ACM Trans. Math Software 15 (1989),
+!    PP. 15-28.
+!
+!    The parameters represent-
+!      fcn -- subroutine fcn(t,y,yp) to evaluate derivatives
+!              yp(i)=dy(i)/dt
+!      neqn -- number of differential equations to be integrated.
+!      y(*) -- approximation to the solution vector at t.
+!      t -- independent variable.
+!      tout -- the next point where intermediate output is
+!              required.  Approximate solutions at these points
+!              will be obained by interpolation.
+!      tend -- end of the integration range.  This will be hit exactly.
+!      yp(*) -- approximation to the derivative vector dy/DT at t.
+!      relerr,abserr -- relative and absolute error tolerances for
+!            local error test. At the nth point of each block (N=1,2)
+!            the code requires that
+!                 abs(LOCAL ERROR)/N .LE. relerr*abs(y) + abserr
+!            for each component of the local error and solution vectors
+!      iflag -- indicator for status of integration.
+!      work(*) -- array to hold information internal to brkf45 which
+!            is necessary for subsequent calls. Must be dimensioned
+!            at least  6+9*neqn
+!      iwork(*) -- integer array used to hold information internal to
+!            brkf45 which is necessary for subsequent calls. Must be
+!            dimensioned at least  5
+!
+!***********************************************************************
+!  First call to brkf45
+!***********************************************************************
+!
+!    The user must provide storage in his calling program for the arrays
+!    in the call list  -  y(neqn) , yp(neqn) , work(6+9*neqn)
+!    iwork(5), declare FCN in an external statement, supply subroutine
+!    FCN(t,y,yp) and initialize the following parameters-
+!
+!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
+!      y(*) -- vector of initial conditions.
+!      t -- starting point of integration , must be a variable.
+!      tout -- output point at which solution, and possibly the
+!              derivative, is desired.
+!      tend -- end of the range of integration. If the solution is
+!              required only at tend then the user should set tout=tend.
+!      relerr,abserr -- relative and absolute local error tolerances
+!            which must be non-negative. relerr must be a variable while
+!            abserr may be a constant. The code should normally not be
+!            used with relative error control smaller than about 1.E-8,
+!            unless an appropriate nonzero absolute tolerance is given.
+!            To avoid limiting precision difficulties the code requires
+!            relerr to be larger than an internally computed relative
+!            error parameter which is machine dependent. In particular,
+!            pure absolute error is not permitted. If a smaller than
+!            allowable value of relerr is attempted, brkf45 increases
+!            relerr appropriately and returns control to the user before
+!            continuing the integration.
+!      iflag -- +1,-1  indicator to initialize the code for each new
+!            problem. Normal input is +1. The user should set iflag=-1
+!            only when one-block integrator control is essential. In
+!            this case, brkf45 attempts to advance the solution A
+!            single block in the direction of tend each time it is
+!            called.  Since this mode of operation results in extra
+!            computing overhead, it should be avoided unless needed.
+!
+!***********************************************************************
+!  Output from brkf45
+!***********************************************************************
+!
+!      y(*) -- computed solution approximation at t.
+!      t -- value of the independent variable where the solution is
+!           reported.
+!      iflag = 2 -- successful return.  Either the integration reached
+!                   t=tend or a successful interpolation has been
+!                   performed at t=tout.  If t.EQ.tend then the
+!                   integration is finished.  If not, the code should be
+!                   called with the next value of tout and with iflag=+2
+!                   for normal integration or iflag=-2 For one-block
+!                   integration.
+!            =-2 -- A single successful block in the direction of tend
+!                   has been taken. Normal mode for continuing
+!                   integration one block at a time.
+!            = 3 -- Integration was not completed because relative error
+!                   tolerance was too small. relerr has been increased
+!                   appropriately for continuing.
+!            = 4 -- Integration was not completed because more than
+!                   18000 derivative evaluations were needed. This
+!                   is approximately 2000 blocks.
+!            = 5 -- Integration was not completed because solution
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero abserr to continue.
+!                   Using the one-block integration mode for one block
+!                   is a good way to proceed.
+!            = 6 -- Integration was not completed because requested
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
+!            = 7 -- Invalid input parameters
+!                   this indicator occurs if any of the following is
+!                   SATISFIED -   neqn .LE. 0
+!                                 t = tend
+!                                 relerr OR abserr .LT. 0.
+!                                 abs(iflag) .LT. 1 OR .GT. 7
+!      work(*),iwork(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   work(1),...,work(neqn) contain the solution vector
+!                   and work(neqn+1),...,work(2*neqn) contain the
+!                   derivative vector at the end point (which is itself
+!                   contained in work(2*neqn+1)) of the block step just
+!                   computed. work(2*neqn+2) contains the stepsize H
+!                   just used. (This is the stepsize being used by the
+!                   interpolant over this block.) work(2*neqn+3)
+!                   contains the stepsize H to be attempted on the next
+!                   block. iwork(1) contains the derivative evaluation
+!                   counter.
+!
+!***********************************************************************
+!  Subsequent calls to brkf45
+!***********************************************************************
+!
+!    Subroutine brkf45 returns with all information needed to continue
+!    the integration. After the code reports a successful solution at
+!    tout (indicated by iflag=2), the user needs to define a new tout
+!    before simply calling brkf45 again to continue in the normal mode.
+!    (But the user must first reset iflag to -2 To continue in the
+!    one-block integrator mode.)
+!    if the integration was not completed but the user still wants to
+!    CONTINUE (iflag=3,4), HE JUST CALLS brkf45 AGAIN. IN THE CASE
+!    iflag=3 The relerr parameter HAS been adjusted appropriately for
+!    continuing the integration. In the case of iflag=4 The function
+!    counter will be reset to 0 and another 18000 function evaluations
+!    are allowed.
+!    However,in the case iflag=5, the user must first alter the error
+!    criterion to use a positive value of abserr before integration can
+!    proceed. If he does not,execution is terminated.
+!    Also,in the case iflag=6, it is necessary for the user to reset
+!    iflag to 2 (or -2 When the one-block integration mode is being
+!    used) as well as increasing either abserr,relerr or both before
+!    the integration can be continued. If this is not done, execution
+!    will be terminated. The occurrence of iflag=6 Indicates a trouble
+!    spot(solution is changing rapidly,singularity may be present) and
+!    it often is inadvisable to continue.
+!    If iflag=7 Is obtained, integration can not be continued unless
+!    the invalid input parameters are corrected.
+!    It should be noted that the arrays work,iwork contain information
+!    required for subsequent integration. Accordingly, work and iwork
+!    should not be altered.
+!
+!***********************************************************************
+!  User calls to the interpolant routine extra
+!***********************************************************************
+!
+!    Subroutine extra can also be called by the user, in conjunction
+!    with usage of brkf45, to provide approximate solutions at off-step
+!    points by use of the interpolating polynomial. While brkf45
+!    handles the usual situations, it can be helpful to the user to be
+!    able to access the interpolant directly, such as when doing root
+!    finding. Also, it is possible that the user may have some need for
+!    extrapolating outside of the block step on which the underlying
+!    interpolant is based. brkf45 will not do this.
+!    The form of the usage call is
+!
+!    call extra ( neqn, work(6*neqn+4), work(neqn+1), work(2*neqn+1),
+!                work(2*neqn+2), work(2*neqn+4), work(3*neqn+4),
+!                work(4*neqn+4), work(5*neqn+4), tex, YEX, YPEX )
+!
+!    Where YEX and YPEX are the solution vector and derivative vector
+!    approximations defined by the interpolant at the point tex, and
+!    work is the working array SET up by brkf45. This version of
+!    extra has been written by D. Higman (see below).
+!
+!***********************************************************************
+!  More about the interpolant routine extra
+!***********************************************************************
+!
+!    The first derivative approximations given by J.R. Cash have been
+!    modified by D. Higman. Three changes have been made and are
+!    clearly documented in the code. Just search for the word *changes*.
+!    For an explanation of these modifications see
+!    remark on algorithm 669, by D. Higham,
+!    ACM Trans. Math Software 17, PP. 424-426.
+!
+!***********************************************************************
+!
+!
+!     Compute indices for the splitting of the work array
+!
+kw = 1
+kwp = kw + neqn
+kx = kwp + neqn
+khi = kx + 1
+kh = khi + 1
+ky1 = kh + 1
+ky2 = ky1 + neqn
+kf1 = ky2 + neqn
+kf2 = kf1 + neqn
+kf3 = kf2 + neqn
+kf4 = kf3 + neqn
+kf7 = kf4 + neqn
+ksr = kf7 + neqn
+ksa = ksr + 1
+kt = ksa + 1
+!
+!     The work space totals  6 + 9*neqn .
+!
+if (abs(iflag) == 1) go to 10
+endpnt = (iwork(4) == -1)
+blkout = (iwork(5) == -1)
+!
+!***********************************************************************
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use rkfc directly.
+!***********************************************************************
+!
+10 call rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
+   & work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
+   & work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
+   & work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
+!
+iwork(4) = 0
+if (endpnt) iwork(4) = -1
+iwork(5) = 0
+if (blkout) iwork(5) = -1
+!
+end subroutine brkf45
+
 subroutine rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
    & w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
    & told,nfe,jflag,kflag,endpnt,blkout)
@@ -3765,7 +4864,14 @@ nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
 conit = 0.5e0/float(nq + 2)
-go to (160, 170, 200), iret
+select case (iret)
+case (1)
+   go to 160
+case (2)
+   go to 170
+case (3)
+   go to 200
+end select
 !-----------------------------------------------------------------------
 ! If H is being changed, the H ratio RH is checked against
 ! rmax, HMIN, and HMXI, and the yh array rescaled.  ialth is set to
@@ -4111,7 +5217,12 @@ real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
 ! nq + 1 IF K = 3.
 !-----------------------------------------------------------------------
 !
-go to (100, 200), meth
+select case (meth)
+case (1)
+   go to 100
+case (2)
+   go to 200
+end select
 !
 100 elco(1,1) = 1.0e0
 elco(2,1) = 1.0e0
@@ -4249,7 +5360,18 @@ common /debdf1/ rownd, rowns(210), &
 !-----------------------------------------------------------------------
 nje = nje + 1
 hl0 = h*el0
-go to (100, 200, 300, 400, 500), miter
+select case (miter)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
 100 lenp = n*n
 do i = 1,lenp
@@ -4412,7 +5534,18 @@ common /debdf1/ rownd, rowns(210), &
 ! This routine also uses the common variables el0, h, miter, and N.
 !-----------------------------------------------------------------------
 ier = 0
-go to (100, 100, 300, 400, 400), miter
+select case (miter)
+case (1)
+   go to 100
+case (2)
+   go to 100
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 400
+end select
 100 call sgesl(wm(3), n, n, iwm(21), x, 0)
 return
 !
@@ -5888,7 +7021,18 @@ end do
 !
 ax1 = am(1)
 cxm = cm(mit)
-go to (170,130,150,160,140),kswx
+select case (kswx)
+case (1)
+   go to 170
+case (2)
+   go to 130
+case (3)
+   go to 150
+case (4)
+   go to 160
+case (5)
+   go to 140
+end select
 !
 !     Dirichlet-Dirichlet in X direction
 !
@@ -5927,7 +7071,18 @@ cm(mit) = 0.0
 !
 dy1 = an(1)
 fyn = cn(nit)
-go to (220,180,200,210,190),kswy
+select case (kswy)
+case (1)
+   go to 220
+case (2)
+   go to 180
+case (3)
+   go to 200
+case (4)
+   go to 210
+case (5)
+   go to 190
+end select
 !
 !     Dirichlet-Dirichlet in Y direction
 !
@@ -9452,1088 +10607,4 @@ return
 return
 130 ierr = 4
 end subroutine nrvg
-
-pure subroutine nrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: kx, m, mo, n
-real, intent(inout) :: a(m)
-real, intent(in) :: fmu(m)
-real, intent(inout) :: x(kx,n)
-integer :: i, j
-integer, parameter :: max = 2147483647
-interface
-   pure subroutine rnor(ix,a,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      real, intent(inout) :: a(n)
-      integer, intent(inout) :: ierr
-   end subroutine rnor
-end interface
-!-----------------------------------------------------------------------
-!
-!           Generation of n random normal vectors of length m
-!           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. it is
-!           assumed that A is a diagonal matrix.
-!
-!                          ---------------
-!
-!     Input...
-!
-!        mo      - Integer specifying if the routine is
-!                  being called for the first time to
-!                  generate normal vectors from a matrix
-!                  A. set mo = 0 On an initial call to
-!                  the routine, and mo .NE. 0 on a later
-!                  CALL TO GENERATE MORE VECTORS FROM
-!                  the same matrix a.
-!
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates.
-!
-!        n       - Number of random vectors to be generated.
-!
-!        m       - Length of the desired random vectors.
-!                  It is assumed that m .GE. 2. m should
-!                  not be modified by the user on a later
-!                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
-!
-!        a       - Variance-covariance matrix of order m.
-!                  A is a diagonal matrix with positive
-!                  diagonal elements. The diagonal elements
-!                  are stored in the array a. a is an array
-!                  of length m or larger.
-!
-!                  On an initial call to the routine, the
-!                  square roots of the elements of a replace
-!                  the original data in A. A should not be
-!                  modified by the user on a later call to
-!                  THE ROUTINE (WHEN mo .NE. 0).
-!
-!        fmu     - Mean vector of dimension m of the
-!                  multivariate normal distribution
-!
-!        kx      - Row dimension of the matrix x (see the
-!                  description of x below). It is assumed
-!                  THAT kx .GE. m.
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more variates.
-!
-!        x       - Output array of dimension kx by n containing
-!                  the n generated random normal vectors. The
-!                  j-TH vector is stored in the j-TH column of
-!                  x FOR j = 1,...,n.
-!
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - m .LE. 1  OR  m .GT. kx
-!                   3 - a(i) .LE. 0 for some i
-!                   4 - Seed out of range      )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (m <= 1 .or. m > kx) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-!
-!        Compute the roots of the diagonal elements
-!
-if (mo /= 0) go to 20
-do i = 1,m
-   if (a(i) <= 0.0) go to 120
-   a(i) = sqrt(a(i))
-end do
-!
-!           Generate the n random normal vectors
-!
-20 do j = 1,n
-   call rnor(ix, x(1,j), m, ierr)
-   do i = 1,m
-      x(i,j) = a(i)*x(i,j) + fmu(i)
-   end do
-end do
-return
-!
-!                       Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine nrvg1
-
-pure subroutine dnrvg(mo, ix, n, m, a, fmu, x, kx, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: kx, m, mo, n
-double precision, intent(inout) :: a(*)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
-integer :: i, ii, j, k, l, l0, ldim
-double precision :: sum
-integer, parameter :: max = 2147483647
-interface
-   pure subroutine dppfa(ap,n,info)
-      implicit none
-      double precision, intent(inout) :: ap(*)
-      integer, intent(in) :: n
-      integer, intent(inout) :: info
-   end subroutine dppfa
-   pure subroutine drnor(ix,a,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: a(n)
-      integer, intent(inout) :: ierr
-   end subroutine drnor
-end interface
-!-----------------------------------------------------------------------
-!
-!           Generation of n random normal vectors of length m
-!           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a.
-!
-!                          ---------------
-!
-!     Input...
-!
-!        mo      - Integer specifying if the routine is
-!                  being called for the first time to
-!                  generate normal vectors from a matrix
-!                  A. set mo = 0 On an initial call to
-!                  the routine, and mo .NE. 0 on a later
-!                  CALL TO GENERATE MORE VECTORS FROM
-!                  the same matrix a.
-!
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates.
-!
-!        n       - Number of random vectors to be generated.
-!
-!        m       - Length of the desired random vectors.
-!                  It is assumed that m .GE. 2. m should
-!                  not be modified by the user on a later
-!                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
-!
-!        a       - Variance-covariance matrix of order m.
-!                  A is a symmetric positive definite matrix
-!                  stored in packed form. The array a must
-!                  be of length (m*(m + 1))/2 or larger.
-!
-!                  On an initial call to the routine, the
-!                  lower triangular matrix in the Cholesky
-!                  decomposition of a replaces the original
-!                  data in the array a. a should never be
-!                  modified by the user on a later call to
-!                  THE ROUTINE (WHEN mo .NE. 0).
-!
-!        fmu     - Mean vector of dimension m of the
-!                  multivariate normal distribution
-!
-!        kx      - Row dimension of the matrix x (see the
-!                  description of x below). It is assumed
-!                  THAT kx .GE. m.
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more variates.
-!
-!        x       - Output array of dimension kx by n containing
-!                  the n generated random normal vectors. The
-!                  j-TH vector is stored in the j-TH column of
-!                  x FOR j = 1,...,n.
-!
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - m .LE. 1  OR  m .GT. kx
-!                   3 - a is not positive definite
-!                   4 - Seed out of range         )
-!
-!-----------------------------------------------------------------------
-!
-!        ***REFERENCES***
-!
-!     Fishman, george S., Concepts and methods in discrete event
-!     digital simulation, john wiley and sons, new york, 1973,
-!     PP. 215 - 217.
-!
-!     Morrison, Donald F., Multivariate statistical methods,
-!     mcgraw-hill, new york, 1967, PP. 80 - 81.
-!
-!     Scheuer, E. and Stoller, D. S., On the generation of
-!     normal random vectors, Technometrics, volume 4, may, 1962,
-!     PP. 278 - 281.
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (m <= 1 .or. m > kx) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-!
-!           Compute the lower triangular matrix
-!           l having positive diagonal elements
-!           and satisfying a = l*transpose(l).
-!
-if (mo /= 0) go to 10
-call dppfa(a, m, ierr)
-if (ierr /= 0) go to 120
-!
-!           Generate the n random normal vectors
-!
-10 ldim = (m*(m + 1))/2
-do j = 1,n
-   call drnor(ix, x(1,j), m, ierr)
-!
-!         Obtain the components of the j-TH vector
-!                    in reverse order
-!
-   l0 = ldim
-   i = m
-   do ii = 1,m
-      l0 = l0 - i
-      l = l0
-      sum = 0.d0
-      do k = 1,i
-         l = l + 1
-20       sum = sum + a(l)*x(k,j)
-      end do
-      x(i,j) = sum + fmu(i)
-      i = i - 1
-   end do
-end do
-return
-!
-!                      Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine dnrvg
-
-pure subroutine dnrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: kx, m, mo, n
-double precision, intent(inout) :: a(m)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
-integer :: i, j
-integer, parameter :: max = 2147483647
-interface
-   pure subroutine drnor(ix,a,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: a(n)
-      integer, intent(inout) :: ierr
-   end subroutine drnor
-end interface
-!-----------------------------------------------------------------------
-!
-!           Generation of n random normal vectors of length m
-!           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. it is
-!           assumed that A is a diagonal matrix.
-!
-!                          ---------------
-!
-!     Input...
-!
-!        mo      - Integer specifying if the routine is
-!                  being called for the first time to
-!                  generate normal vectors from a matrix
-!                  A. set mo = 0 On an initial call to
-!                  the routine, and mo .NE. 0 on a later
-!                  CALL TO GENERATE MORE VECTORS FROM
-!                  the same matrix a.
-!
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates.
-!
-!        n       - Number of random vectors to be generated.
-!
-!        m       - Length of the desired random vectors.
-!                  It is assumed that m .GE. 2. m should
-!                  not be modified by the user on a later
-!                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
-!
-!        a       - Variance-covariance matrix of order m.
-!                  A is a diagonal matrix with positive
-!                  diagonal elements. The diagonal elements
-!                  are stored in the array a. a is an array
-!                  of length m or larger.
-!
-!                  On an initial call to the routine, the
-!                  square roots of the elements of a replace
-!                  the original data in A. A should not be
-!                  modified by the user on a later call to
-!                  THE ROUTINE (WHEN mo .NE. 0).
-!
-!        fmu     - Mean vector of dimension m of the
-!                  multivariate normal distribution
-!
-!        kx      - Row dimension of the matrix x (see the
-!                  description of x below). It is assumed
-!                  THAT kx .GE. m.
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more variates.
-!
-!        x       - Output array of dimension kx by n containing
-!                  the n generated random normal vectors. The
-!                  j-TH vector is stored in the j-TH column of
-!                  x FOR j = 1,...,n.
-!
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - m .LE. 1  OR  m .GT. kx
-!                   3 - a(i) .LE. 0 for some i
-!                   4 - Seed out of range      )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (m <= 1 .or. m > kx) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-!
-!        Compute the roots of the diagonal elements
-!
-if (mo /= 0) go to 20
-do i = 1,m
-   if (a(i) <= 0.d0) go to 120
-   a(i) = sqrt(a(i))
-end do
-!
-!           Generate the n random normal vectors
-!
-20 do j = 1,n
-   call drnor(ix, x(1,j), m, ierr)
-   do i = 1,m
-      x(i,j) = a(i)*x(i,j) + fmu(i)
-   end do
-end do
-return
-!
-!                       Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine dnrvg1
-
-pure subroutine ranexp(n,a,iseed,x,ierror)
-implicit none
-integer, intent(inout) :: ierror, iseed
-integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
-integer :: i
-interface
-   pure subroutine urng(ix,x,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      real, intent(inout) :: x(n)
-      integer, intent(inout) :: ierr
-   end subroutine urng
-end interface
-!
-!              ***Subroutine purpose and description***
-!
-!           ranexp generates n exponential random variates from an
-!           exponential distribution with parameter a (a .GT. 0).
-!           A is the mean of the distribution.  Hence, A is interpreted
-!           as the average rate per unit of time or the average time
-!           to failure (average lifetime).
-!
-!           Form of the exponential probability density function...
-!
-!                   f(x) = (1/a) * exp(-x/a)      , x .ge. 0
-!                                                   a .GT. 0
-!
-!           Mean and variance of the exponential distribution...
-!
-!                    mean = a
-!
-!                    variance = a**2
-!
-!           ***Parameter list***
-!
-!           Input...
-!
-!           n       - Number of variates to be generated
-!           a       - Mean of the exponential distribution
-!           iseed   - Integer seed used to initialize the
-!                     sequence of variates generated
-!
-!           Output...
-!
-!           iseed   - Seed to be used on the next call to the
-!                     routine
-!           x       - Output array of dimension n containing
-!                     the generated real variates
-!           ierror  - Input error flag
-!                     ( 0 - No input errors
-!                       1 - n .LE. 0
-!                       2 - a .LE. 0.0
-!                       3 - Seed out of range )
-!
-!           ***REFERENCE***
-!
-!           Fishman, george S., Concepts and methods in discrete event
-!           digital simulation, john wiley and sons, new york, 1973,
-!           P. 203.
-!
-!
-!        Check to ensure that the desired number of variates is within
-!        acceptable range
-!
-if (n <= 0) go to 100
-!
-!        Check to ensure that the exponential parameter HAS been
-!        properly specified
-!
-if (a <= 0.0) go to 110
-!
-!        Generation of uniform random variates
-!
-call urng(iseed, x, n, ierror)
-if (ierror /= 0) go to 120
-!
-!        Loop which generates the n desired variates
-!
-do i = 1,n
-   x(i) = - a*log(x(i))
-end do
-return
-!
-!              Error return
-!
-100 ierror = 1
-return
-110 ierror = 2
-return
-120 ierror = 3
-end subroutine ranexp
-
-pure subroutine drnexp(n,a,iseed,x,ierror)
-implicit none
-integer, intent(inout) :: ierror, iseed
-integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
-integer :: i
-interface
-   pure subroutine durng(ix,x,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: x(n)
-      integer, intent(inout) :: ierr
-   end subroutine durng
-end interface
-!
-!              ***Subroutine purpose and description***
-!
-!           drnexp generates n exponential random variates from an
-!           exponential distribution with parameter a (a .GT. 0).
-!           A is the mean of the distribution.  Hence, A is interpreted
-!           as the average rate per unit of time or the average time
-!           to failure (average lifetime).
-!
-!           Form of the exponential probability density function...
-!
-!                   f(x) = (1/a) * exp(-x/a)      , x .ge. 0
-!                                                   a .GT. 0
-!
-!           Mean and variance of the exponential distribution...
-!
-!                    mean = a
-!
-!                    variance = a**2
-!
-!           ***Parameter list***
-!
-!           Input...
-!
-!           n       - Number of variates to be generated
-!           a       - Mean of the exponential distribution
-!           iseed   - Integer seed used to initialize the
-!                     sequence of variates generated
-!
-!           Output...
-!
-!           iseed   - Seed to be used on the next call to the
-!                     routine
-!           x       - Output array of dimension n containing
-!                     the generated real variates
-!           ierror  - Input error flag
-!                     ( 0 - No input errors
-!                       1 - n .LE. 0
-!                       2 - a .LE. 0.0
-!                       3 - Seed out of range )
-!
-!           ***REFERENCE***
-!
-!           Fishman, george S., Concepts and methods in discrete event
-!           digital simulation, john wiley and sons, new york, 1973,
-!           P. 203.
-!
-!
-!        Check to ensure that the desired number of variates is within
-!        acceptable range
-!
-if (n <= 0) go to 100
-!
-!        Check to ensure that the exponential parameter HAS been
-!        properly specified
-!
-if (a <= 0.d0) go to 110
-!
-!        Generation of uniform random variates
-!
-call durng(iseed, x, n, ierror)
-if (ierror /= 0) go to 120
-!
-!        Loop which generates the n desired variates
-!
-do i = 1,n
-   x(i) = - a*log(x(i))
-end do
-return
-!
-!              Error return
-!
-100 ierror = 1
-return
-110 ierror = 2
-return
-120 ierror = 3
-end subroutine drnexp
-
-pure subroutine rgam(ix, a, n, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
-integer :: i, ind
-real :: u, v, w
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
-      implicit none
-      real, intent(in) :: a
-      real, intent(out) :: x
-      real, intent(in) :: x0
-      real, intent(in) :: p
-      real, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine gaminv
-   pure elemental subroutine urng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine urng0
-end interface
-!-----------------------------------------------------------------------
-!
-!               Computation of n variates x(1),...,x(n)
-!               from the gamma distribution having the
-!                    probability density function
-!
-!                 f(t) = exp(-t)*t**(a-1)/gamma(a)
-!
-!                        ------------------
-!
-!     ix is a variable. On input ix is a seed for initializing the
-!     sequence of variates. On output ix is a new seed for obtaining
-!     more variates. It is assumed that 1 .LE. ix .LT. 2**31 - 1.
-!
-!     ierr is a variable which reports the status of the results.
-!     When the subroutine terminates ierr has one of the following
-!     values ...
-!
-!          ierr = 0   The gamma variates were obtained.
-!          ierr = 1   (INPUT ERROR) n .LE. 0
-!          ierr = 2   (INPUT ERROR) a .LT. 0.1
-!          ierr = 3   (INPUT ERROR) ix IS NOT A PROPER
-!                      seed.
-!
-!-----------------------------------------------------------------------
-!
-!
-if (n <= 0) go to 100
-if (a < 0.1) go to 110
-if (ix < 1 .or. ix >= max) go to 120
-ierr = 0
-!
-!             The following code assumes that the uniform
-!             variates are far enough from 0 and 1 so that
-!                   the setting ind = -8 Is avoided
-!
-do i = 1,n
-   call urng0(ix, u, v)
-   call gaminv(a, w, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) w = 0.0
-   x(i) = w
-end do
-return
-!
-!                            Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-end subroutine rgam
-
-pure subroutine drgam(ix, a, n, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
-integer :: i, ind
-double precision :: u, v, w
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine dginv(a,x,p,q,ierr)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(out) :: x
-      double precision, intent(in) :: p
-      double precision, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine dginv
-   pure elemental subroutine durng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: u
-      double precision, intent(inout) :: v
-   end subroutine durng0
-end interface
-!-----------------------------------------------------------------------
-!
-!             Computation of n double precision variates
-!             x(1),...,x(n)  from the gamma distribution
-!              having the probability density function
-!
-!                 f(t) = exp(-t)*t**(a-1)/gamma(a)
-!
-!                        ------------------
-!
-!     ix is a variable. On input ix is a seed for initializing the
-!     sequence of variates. On output ix is a new seed for obtaining
-!     more variates. It is assumed that 1 .LE. ix .LT. 2**31 - 1.
-!
-!     ierr is a variable which reports the status of the results.
-!     When the subroutine terminates ierr has one of the following
-!     values ...
-!
-!          ierr = 0   The gamma variates were obtained.
-!          ierr = 1   (INPUT ERROR) n .LE. 0
-!          ierr = 2   (INPUT ERROR) a .LT. 0.1
-!          ierr = 3   (INPUT ERROR) ix IS NOT A PROPER
-!                      seed.
-!
-!-----------------------------------------------------------------------
-!
-!
-if (n <= 0) go to 100
-if (a < 0.1d0) go to 110
-if (ix < 1 .or. ix >= max) go to 120
-ierr = 0
-!
-!             The following code assumes that the uniform
-!             variates are far enough from 0 and 1 so that
-!                   the setting ind = -8 Is avoided
-!
-do i = 1,n
-   call durng0(ix, u, v)
-   call dginv(a, w, u, v, ind)
-   if (ind == -3 .or. ind == -7) w = 0.d0
-   x(i) = w
-end do
-return
-!
-!                            Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-end subroutine drgam
-
-pure subroutine rbeta(n, a, b, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(inout) :: x(n)
-integer :: i, ind
-real :: u, v, x1, x2
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
-      implicit none
-      real, intent(in) :: a
-      real, intent(out) :: x
-      real, intent(in) :: x0
-      real, intent(in) :: p
-      real, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine gaminv
-   pure elemental subroutine urng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine urng0
-end interface
-!-----------------------------------------------------------------------
-!
-!                Generation of beta random variates
-!
-!                           ------------
-!
-!     rbeta generates n variates from the beta distribution with
-!     PARAMETERS A AND b WHERE a .GE. 0.25 AND b .GE. 0.25. THE
-!     generation scheme is based on the fact that x1 / (x1 + x2)
-!     is a variate from the beta distribution when x1 and x2 are
-!     independent variates from the standard gamma distributions
-!     with parameters A and b respectively.
-!
-!     Form of the beta probability density function used...
-!
-!       f(x) = x**(a - 1) * (1 - x)**(b - 1) / beta(a,b)
-!
-!              WHERE  0 .LE. x .LE. 1  AND
-!              beta(a,b) is the beta function.
-!
-!     Mean and variance of the beta distribution...
-!
-!              mean = a / (a + b)
-!
-!              variance = (a * b) / ((a + b)**2 * (a + b + 1))
-!
-!     Input...
-!
-!        n       - Number of variates to be generated
-!        a       - Parameter of the beta distribution
-!        b       - Parameter of the beta distribution
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more
-!                  variates
-!        x       - Array of dimension n containing the
-!                  beta variates
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a or b is less than 0.25
-!                   3 - Seed out of range        )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (min(a,b) < 0.25) go to 110
-if (ix <= 0 .or. ix >= max) go to 120
-ierr = 0
-!
-do i = 1,n
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call urng0(ix, u, v)
-   call gaminv(a, x1, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) x1 = 0.0
-!
-   call urng0(ix, u, v)
-   call gaminv(b, x2, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) x2 = 0.0
-!
-!        It is required that A and b not be less
-!        than 0.25 so that x1 + x2 is nonzero.
-!
-   x(i) = x1/(x1 + x2)
-!
-end do
-return
-!
-!                      Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-end subroutine rbeta
-
-pure subroutine drbeta(n, a, b, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
-integer :: i, ind
-double precision :: u, v, x1, x2
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine dginv(a,x,p,q,ierr)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(out) :: x
-      double precision, intent(in) :: p
-      double precision, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine dginv
-   pure elemental subroutine durng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: u
-      double precision, intent(inout) :: v
-   end subroutine durng0
-end interface
-!-----------------------------------------------------------------------
-!
-!                         Double precision
-!                generation of beta random variates
-!
-!                           ------------
-!
-!     drbeta generates n double precision variates from the beta
-!     distribution with parameters A and b where a .GE. 0.25 and
-!     b .GE. 0.25. The generation scheme is based on the fact
-!     that x1 / (x1 + x2) is a variate from the beta distribution
-!     when x1 and x2 are independent variates from the standard
-!     gamma distributions with parameters A and b respectively.
-!
-!     Form of the beta probability density function used...
-!
-!       f(x) = x**(a - 1) * (1 - x)**(b - 1) / beta(a,b)
-!
-!              WHERE  0 .LE. x .LE. 1  AND
-!              beta(a,b) is the beta function.
-!
-!     Mean and variance of the beta distribution...
-!
-!              mean = a / (a + b)
-!
-!              variance = (a * b) / ((a + b)**2 * (a + b + 1))
-!
-!     Input...
-!
-!        n       - Number of variates to be generated
-!        a       - Parameter of the beta distribution
-!        b       - Parameter of the beta distribution
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more
-!                  variates
-!        x       - Array of dimension n containing the
-!                  beta variates
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a or b is less than 0.25
-!                   3 - Seed out of range        )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (min(a,b) < 0.25d0) go to 110
-if (ix <= 0 .or. ix >= max) go to 120
-ierr = 0
-!
-do i = 1,n
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call durng0(ix, u, v)
-   call dginv(a, x1, u, v, ind)
-   if (ind == -3 .or. ind == -7) x1 = 0.d0
-!
-   call durng0(ix, u, v)
-   call dginv(b, x2, u, v, ind)
-   if (ind == -3 .or. ind == -7) x2 = 0.d0
-!
-!        It is required that A and b not be less
-!        than 0.25 so that x1 + x2 is nonzero.
-!
-   x(i) = x1/(x1 + x2)
-!
-end do
-return
-!
-!                      Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-end subroutine drbeta
-
-pure subroutine fran(n, a, b, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(inout) :: x(n)
-integer :: i, ind
-real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
-      implicit none
-      real, intent(in) :: a
-      real, intent(out) :: x
-      real, intent(in) :: x0
-      real, intent(in) :: p
-      real, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine gaminv
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-   pure elemental subroutine urng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine urng0
-end interface
-!-----------------------------------------------------------------------
-!
-!          Generation of variates from the F-distribution
-!
-!                          --------------
-!
-!     Fran generates n variates from the F-distribution with
-!     parameters A and b (called the numerator and denominator
-!     degrees of freedom) where a .GE. 0.5 and b .GE. 0.5. The
-!     generation scheme is based on the fact that (b/a)*(x1/x2)
-!     is a variate from the F-distribution when x1 and x2 are
-!     independent variates from the standard gamma distributions
-!     with parameters a/2 and b/2 respectively.
-!
-!
-!     Input...
-!
-!        n       - Number of variates to be generated
-!        a       - Numerator degrees of freedom parameter
-!        b       - Denominator degrees of freedom parameter
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more
-!                  variates
-!        x       - Array of dimension n containing the
-!                  F distribution variates
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a or b is less than 0.5
-!                   3 - b is too small for the
-!                       floating arithmetic used
-!                   4 - Seed out of range       )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-!
-!     ****** xmax is a machine dependent constant. Xmax is the
-!            largest number in the floating arithmetic used.
-!
-xmax = spmpar(3)
-!
-!--------------------
-if (n <= 0) go to 100
-if (min(a,b) < 0.5) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-ierr = 0
-!
-ahalf = 0.5*a
-bhalf = 0.5*b
-c = b/a
-big = 0.5*xmax
-bound = amax1(c, 1.0)
-!
-do i = 1,n
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call urng0(ix, u, v)
-   call gaminv(ahalf, x1, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) x1 = 0.0
-!
-   call urng0(ix, u, v)
-   call gaminv(bhalf, x2, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) go to 120
-!
-!        Protect against overflow in computing the
-!        VARIATE c*(x1/x2).
-!
-   t = x1 + x2
-   x1 = x1/t
-   x2 = x2/t
-   if (x2*big <= bound) go to 120
-   x(i) = c * (x1/x2)
-end do
-return
-!
-!                      Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine fran
 

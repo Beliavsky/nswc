@@ -6632,7 +6632,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -6674,7 +6673,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -6929,6 +6927,14 @@ return
 210 if (sn < 0.0) return
 w(1) = - w(1)
 w(2) = - w(2)
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine dcerf
 
 pure subroutine dcerfc(mo, z, w)
@@ -6938,7 +6944,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -6985,7 +6990,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -7245,6 +7249,14 @@ if (sz(1) <= dxparg(1)) go to 140
 e = exp(sz(1))
 w(1) = e*cos(sz(2)) + sm(1)
 w(2) = e*sin(sz(2)) + sm(2)
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine dcerfc
 
 pure subroutine erfcm2(mo, z, w)
@@ -7254,7 +7266,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 integer :: j, n
 double precision :: eps, h(2), t(2), tol, x, y
-double precision :: anorm
 double precision, parameter :: c = .20666985354092053857068941306585476d-01
 double precision, parameter :: e = .46777349810472658379307436327470714d-02
 double precision, parameter :: a(63) = [.20000000000000000000000000000000000d+01, &
@@ -7295,7 +7306,6 @@ end interface
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
 !------------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------------
 !     c = (2/sqrt(pi))*exp(-4)
 !     e = erfc(2)
@@ -7357,6 +7367,14 @@ x = t(1)*w(1) - t(2)*w(2)
 y = t(1)*w(2) + t(2)*w(1)
 w(1) = x
 w(2) = y
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine erfcm2
 
 pure elemental double precision function derf(x)
@@ -9219,7 +9237,6 @@ complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
 real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y
-real :: anorm
 real :: n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
 real, parameter :: pi = 3.14159265358979
@@ -9249,7 +9266,6 @@ end interface
 !           Evaluation of the complex exponential integral
 !-----------------------------------------------------------------------
 !-------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !-------------------------
 !-------------------------
 !-------------------------
@@ -9397,6 +9413,14 @@ sm(2) = ts(2)
 if (.not. ind) sm(2) = sm(2) + c
 !
 130 w = cmplx(sm(1),sm(2))
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine cexpli
 
 pure elemental subroutine expli(int,arg,result,ierr)

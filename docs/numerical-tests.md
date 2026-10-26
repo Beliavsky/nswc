@@ -92,7 +92,7 @@ directly with any one of those library files.
 | `test_fftpack_workers.f90` | Direct Fourier and cosine sums and transform round trips at lengths 3, 5, 8, and 15, including public cosine-transform calls |
 | `test_inverse_laplace.f90` | Known exponential inverse transforms and convergence checks on both sides of a pole, including forwarded subroutine callbacks |
 | `test_sfode.f90` | Scalar and vector tolerances for a stiff ODE with a known cosine solution |
-| `test_surface.f90` | Bilinear surface reproduction with splines under tension, including statement functions |
+| `test_surface.f90` | Bilinear surface reproduction with splines under tension, including the original statement functions and their internal-function replacements |
 | `test_cubature.f90` | Exact triangle integrals using direct and adaptive cubature with function callbacks |
 | `test_random.f90` | Seed progression and a known normal sequence |
 

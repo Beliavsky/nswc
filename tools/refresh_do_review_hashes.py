@@ -23,6 +23,7 @@ from procedure_purity import code_hash, transform as purity
 from remove_final_returns import transform_free as returns
 from sentence_case_comments import sentence_case
 from simplify_free_style import transform as style
+from modernize_obsolescent import transform as modernize_obsolescent
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -70,6 +71,7 @@ def migrate_reviewed_pipeline(before, after, expected_free=None):
     new = returns(coalesce(generics(new, generic_new)))
     if expected_free is None:
         expected_free = (ROOT / 'nswc.f90').read_text(encoding='ascii')
+        old = modernize_obsolescent(old)
     if old != expected_free:
         raise ValueError('Old reviewed pipeline does not reproduce maintained free form')
     return {'data-constants.json': data_new, 'procedure-purity.json': pure_new,

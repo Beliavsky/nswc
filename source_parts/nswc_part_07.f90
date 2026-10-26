@@ -1,3 +1,434 @@
+pure subroutine balbak(nm,n,low,igh,scale,m,z)
+implicit none
+!
+integer, intent(in) :: m, n
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: scale(n)
+real, intent(inout) :: z(nm,m)
+integer :: i, j, k, ii
+real :: s
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!
+!     This subroutine forms the eigenvectors of a real general
+!     matrix BY back transforming those of the corresponding
+!     balanced matrix determined by  balanc.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by  balanc,
+!
+!        Scale contains information determining the permutations
+!          and scaling factors used by  balanc,
+!
+!        m is the number of columns of z to be back transformed,
+!
+!        z contains the real and imaginary parts of the eigen-
+!          vectors to be back transformed in its first m columns.
+!
+!     On output-
+!
+!        z contains the real and imaginary parts of the
+!          transformed eigenvectors in its first m columns.
+!
+!-----------------------------------------------------------------------
+!
+if (m == 0) go to 200
+if (igh == low) go to 120
+!
+do i = low, igh
+   s = scale(i)
+!     ********** Left hand eigenvectors are back transformed
+!                if the foregoing statement is replaced by
+!                s=1.0/scale(i). **********
+   do j = 1, m
+100   z(i,j) = z(i,j) * s
+   end do
+!
+end do
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
+120 do ii = 1, n
+   i = ii
+   if (i >= low .and. i <= igh) go to 140
+   if (i < low) i = low - ii
+   k = scale(i)
+   if (k == i) go to 140
+!
+   do j = 1, m
+      s = z(i,j)
+      z(i,j) = z(k,j)
+      z(k,j) = s
+   end do
+!
+140 continue
+end do
+!
+200 return
+end subroutine balbak
+
+pure subroutine eltran(nm,n,low,igh,a,int,z)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: a(nm,igh)
+real, intent(inout) :: z(nm,n)
+integer, intent(in) :: int(igh)
+integer :: i, j, kl, mm, mp, mp1
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ELMTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the stabilized elementary
+!     similarity transformations used in the reduction of A
+!     real general matrix to upper Hessenberg form by  elmhes.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          set low=1, igh=n,
+!
+!        A contains the multipliers which were used in the
+!          reduction by  elmhes  in its lower triangle
+!          below the subdiagonal,
+!
+!        Int contains information on the rows and columns
+!          interchanged in the reduction by  elmhes.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  elmhes.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do j = 1, n
+60    z(i,j) = 0.0
+   end do
+!
+   z(i,i) = 1.0
+end do
+!
+kl = igh - low - 1
+if (kl < 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do mm = 1, kl
+   mp = igh - mm
+   mp1 = mp + 1
+!
+   do i = mp1, igh
+100   z(i,mp) = a(i,mp - 1)
+   end do
+!
+   i = int(mp)
+   if (i == mp) go to 140
+!
+   do j = mp, igh
+      z(mp,j) = z(i,j)
+      z(i,j) = 0.0
+   end do
+!
+   z(i,mp) = 1.0
+140 continue
+end do
+!
+200 return
+end subroutine eltran
+
+pure subroutine eltrn0(nm,n,low,igh,a,int,z)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: a(nm,igh)
+real, intent(inout) :: z(nm,n)
+real, intent(in) :: int(igh)
+integer :: i, j, kl, mm, mp, mp1
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ELMTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the stabilized elementary
+!     similarity transformations used in the reduction of A
+!     real general matrix to upper Hessenberg form by  elmhs0.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          set low=1, igh=n,
+!
+!        A contains the multipliers which were used in the
+!          reduction by  elmhs0  in its lower triangle
+!          below the subdiagonal,
+!
+!        Int contains information on the rows and columns
+!          interchanged in the reduction by  elmhs0.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  elmhs0.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do j = 1, n
+60    z(i,j) = 0.0
+   end do
+!
+   z(i,i) = 1.0
+end do
+!
+kl = igh - low - 1
+if (kl < 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do mm = 1, kl
+   mp = igh - mm
+   mp1 = mp + 1
+!
+   do i = mp1, igh
+100   z(i,mp) = a(i,mp - 1)
+   end do
+!
+   i = int(mp)
+   if (i == mp) go to 140
+!
+   do j = mp, igh
+      z(mp,j) = z(i,j)
+      z(i,j) = 0.0
+   end do
+!
+   z(i,mp) = 1.0
+140 continue
+end do
+!
+200 return
+end subroutine eltrn0
+
+pure subroutine ortran(nm,n,low,igh,a,ort,z)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: a(nm,igh)
+real, intent(inout) :: ort(igh), z(nm,n)
+integer :: i, j, kl, mm, mp, mp1
+real :: g
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ORTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the orthogonal similarity
+!     transformations used in the reduction of a real general
+!     matrix to upper Hessenberg form by  orthes.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          set low=1, igh=n,
+!
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction by  orthes
+!          in its strict lower triangle,
+!
+!        Ort contains further information about the trans-
+!          formations used in the reduction by  orthes.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  orthes,
+!
+!        Ort has been altered.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do j = 1, n
+60    z(i,j) = 0.0
+   end do
+!
+   z(i,i) = 1.0
+end do
+!
+kl = igh - low - 1
+if (kl < 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do mm = 1, kl
+   mp = igh - mm
+   if (a(mp,mp - 1) == 0.0) go to 140
+   mp1 = mp + 1
+!
+   do i = mp1, igh
+100   ort(i) = a(i,mp - 1)
+   end do
+!
+   do j = mp, igh
+      g = 0.0
+!
+      do i = mp, igh
+110      g = g + ort(i) * z(i,j)
+      end do
+!     ********** Divisor below is negative of H formed in orthes.
+!                Double division avoids possible underflow **********
+      g = (g / ort(mp)) / a(mp,mp - 1)
+!
+      do i = mp, igh
+120      z(i,j) = z(i,j) + g * ort(i)
+      end do
+!
+   end do
+!
+140 continue
+end do
+!
+200 return
+end subroutine ortran
+
+pure subroutine ortrn1(n,low,igh,a,na,z,nz,ort)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: na, igh, low
+integer, intent(in) :: nz
+real, intent(in) :: a(na,igh)
+real, intent(inout) :: ort(igh), z(nz,n)
+integer :: i, j, kl, mm, mp, mp1
+real :: g
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure ORTRANS,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!
+!     This subroutine accumulates the orthogonal similarity
+!     transformations used in the reduction of a real general
+!     matrix to upper Hessenberg form by  orthes.
+!
+!     On input-
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          set low=1, igh=n,
+!
+!        A contains information about the orthogonal trans-
+!          formations used in the reduction by  orthes
+!          in its strict lower triangle,
+!
+!        na must be set to the row dimension of the 2-dimensional
+!          array parameter  a  as declared in the calling program
+!          dimension statement,
+!
+!        nz must be set to the row dimension of the 2-dimensional
+!          array parameter  z  as declared in the calling program
+!          dimension statement,
+!
+!        Ort contains further information about the trans-
+!          formations used in the reduction by  orthes.
+!          Only elements low through igh are used.
+!
+!     On output-
+!
+!        z contains the transformation matrix produced in the
+!          reduction by  orthes,
+!
+!        Ort has been altered.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** Initialize z to identity matrix **********
+do i = 1, n
+!
+   do j = 1, n
+60    z(i,j) = 0.0
+   end do
+!
+   z(i,i) = 1.0
+end do
+!
+kl = igh - low - 1
+if (kl < 1) go to 200
+!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
+do mm = 1, kl
+   mp = igh - mm
+   if (a(mp,mp - 1) == 0.0) go to 140
+   mp1 = mp + 1
+!
+   do i = mp1, igh
+100   ort(i) = a(i,mp - 1)
+   end do
+!
+   do j = mp, igh
+      g = 0.0
+!
+      do i = mp, igh
+110      g = g + ort(i) * z(i,j)
+      end do
+!     ********** Divisor below is negative of H formed in orthes.
+!                Double division avoids possible underflow **********
+      g = (g / ort(mp)) / a(mp,mp - 1)
+!
+      do i = mp, igh
+120      z(i,j) = z(i,j) + g * ort(i)
+      end do
+!
+   end do
+!
+140 continue
+end do
+!
+200 return
+end subroutine ortrn1
+
 pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
 implicit none
 !
@@ -677,7 +1108,12 @@ do i = k, n
    a(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -4115,7 +4551,12 @@ do i = k, n
    ai(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -5339,7 +5780,12 @@ do i = k, n
    ai(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -10091,587 +10537,4 @@ go to 240
    ic(i) = abs(ic(i))
 end do
 end subroutine du12us
-
-pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
-implicit none
-integer, intent(out) :: k
-integer, intent(in) :: m, mda, mdb, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
-real, intent(in) :: tau
-integer, intent(inout) :: ip(n)
-integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-real :: hmax, sm1, tmp, z
-double precision :: sm
-real, parameter :: factor = 1.e-3
-interface
-   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
-      implicit none
-      integer, intent(in) :: iue
-      integer, intent(in) :: m
-      integer, intent(in) :: mode
-      integer, intent(in) :: lpivot
-      integer, intent(in) :: l1
-      real, intent(inout) :: u(iue,m)
-      real, intent(inout) :: up
-      real, intent(inout) :: c(*)
-      integer, intent(in) :: ice
-      integer, intent(in) :: icv
-      integer, intent(in) :: ncv
-   end subroutine h12
-end interface
-!-----------------------------------------------------------------------
-!     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
-!
-!     Written by C.L. Lawson and R.J. Hanson.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!     For algorithmic details see algorithm hfti in chapter 14.
-!
-!     Abstract
-!
-!     This subroutine solves a linear least squares problem or a set of
-!     linear least squares problems having the same matrix but different
-!     right-side vectors.  The problem data consists of an m by n matrix
-!     A, an m by nb matrix b, and an absolute tolerance parameter tau
-!     whose usage is described below.  The nb column vectors of b
-!     represent right-side vectors for nb distinct linear least squares
-!     problems.
-!
-!     This set of problems can also be written as the matrix least
-!     squares problem
-!
-!                       ax = b,
-!
-!     Where X is the n by nb solution matrix.
-!
-!     Note that if b is the m by m identity matrix, then X will be the
-!     pseudo-inverse of A.
-!
-!     This subroutine first transforms the augmented matrix (A b) to A
-!     matrix (R C) using premultiplying Householder transformations with
-!     column interchanges.  All subdiagonal elements in the matrix R are
-!     zero and its diagonal elements satisfy
-!
-!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
-!
-!                       i = 1,...,l-1, where
-!
-!                       l = min(m,n).
-!
-!     The subroutine sets k to be the number of diagonal elements
-!     of R that exceed tau in magnitude. Then the solution of minimum
-!     Euclidean length is computed using the first k rows of (R C).
-!
-!     To be specific we suggest that the user consider an easily
-!     computable matrix NORM, such as, the maximum of all column sums of
-!     magnitudes.
-!
-!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
-!     norm of b), it is suggested that tau be set approximately equal to
-!     eps*(norm of A).
-!
-!     The entire set of parameters for hfti are
-!
-!     Input..
-!
-!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       matrix a of the least squares problem AX = b.
-!                       The first dimensioning parameter of the array
-!                       a(*,*) is mda, which must satisfy mda.GE.m
-!                       either m.GE.n or m.LT.n is permitted.  There
-!                       is no restriction on the rank of A.  the
-!                       condition mda.LT.m is considered an error.
-!
-!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
-!                       orthogonal decomposition but will make no
-!                       references to the array b(*).  If nb.GT.0
-!                       the array b(*) must initially contain the m by
-!                       nb matrix b of the least squares problem AX =
-!                       b.  if nb.GE.2 the array b(*) must be doubly
-!                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
-!                       be either doubly or singly subscripted.  In
-!                       the latter case the value of mdb is arbitrary
-!                       but it should be set to some valid integer
-!                       value such as mdb = m.
-!
-!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
-!                       is considered an error.
-!
-!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       for pseudorank determination.
-!
-!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti.
-!
-!     Output..
-!
-!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       modified by the subroutine.  These contents
-!                       are not generally required by the user.
-!
-!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
-!                       nb solution matrix X.
-!
-!     k                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       pseudorank of A.
-!
-!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
-!                       norm of the residual vector for the problem
-!                       defined by the j-TH column vector of the array
-!                       b(*,*) FOR j = 1,...,nb.
-!
-!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       elements of the pre- and post-multiplying
-!                       Householder transformations used to compute
-!                       the minimum Euclidean length solution.
-!
-!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       describing the permutation of column vectors.
-!                       The contents of arrays h(*),g(*) and ip(*)
-!                       are not generally required by the user.
-!-----------------------------------------------------------------------
-!---------------------
-!
-k = 0
-ldiag = min(m,n)
-if (ldiag <= 0) go to 270
-do j = 1,ldiag
-   if (j == 1) go to 20
-!
-!     Update squared column lengths and find lmax
-!    ..
-   lmax = j
-   do l = j,n
-      h(l) = h(l) - a(j - 1,l)**2
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   z = hmax + factor*h(lmax)
-   if (z > hmax) go to 50
-!
-!     Compute squared column lengths and find lmax
-!    ..
-20 lmax = j
-   do l = j,n
-      h(l) = 0.0
-      do i = j,m
-30       h(l) = h(l) + a(i,l)**2
-      end do
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   hmax = h(lmax)
-!    ..
-!     lmax has been determined
-!
-!     Do column interchanges if needed.
-!    ..
-50 ip(j) = lmax
-   if (ip(j) == j) go to 70
-   do i = 1,m
-      tmp = a(i,j)
-      a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
-   end do
-   h(lmax) = h(j)
-!
-!     Compute the j-TH transformation and apply it to A and b.
-!    ..
-70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
-end do
-!
-!     Determine the pseudorank, k, using the tolerance, tau.
-!    ..
-do j = 1,ldiag
-   if (abs(a(j,j)) <= tau) go to 100
-end do
-k = ldiag
-go to 110
-100 k = j - 1
-110 kp1 = k + 1
-!
-!     Compute the norms of the residual vectors.
-!
-if (nb <= 0) go to 140
-do jb = 1,nb
-   tmp = 0.0
-   if (kp1 > m) go to 130
-   do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
-   end do
-130 rnorm(jb) = sqrt(tmp)
-end do
-140 continue
-!                                           Special for pseudorank = 0
-if (k > 0) go to 160
-if (nb <= 0) go to 270
-do jb = 1,nb
-   do i = 1,n
-150   b(i,jb) = 0.0
-   end do
-end do
-go to 270
-!
-!     If the pseudorank is less than n compute Householder
-!     decomposition of first k rows.
-!    ..
-160 if (k == n) go to 180
-do ii = 1,k
-   i = kp1 - ii
-170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
-end do
-180 continue
-!
-!
-if (nb <= 0) go to 270
-do jb = 1,nb
-!
-!     Solve the k by k triangular system.
-!    ..
-   do l = 1,k
-      sm = 0.d0
-      i = kp1 - l
-      if (i == k) go to 200
-      ip1 = i + 1
-      do j = ip1,k
-190      sm = sm + dble(a(i,j))*dble(b(j,jb))
-      end do
-200   sm1 = dble(b(i,jb)) - sm
-210   b(i,jb) = sm1/a(i,i)
-   end do
-!
-!     Complete computation of solution vector.
-!    ..
-   if (k == n) go to 240
-   do j = kp1,n
-220   b(j,jb) = 0.0
-   end do
-   do i = 1,k
-230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
-   end do
-!
-!      RE-order the solution vector to compensate for the
-!      column interchanges.
-!    ..
-240 do jj = 1,ldiag
-      j = ldiag + 1 - jj
-      if (ip(j) == j) go to 250
-      l = ip(j)
-      tmp = b(l,jb)
-      b(l,jb) = b(j,jb)
-      b(j,jb) = tmp
-250   continue
-   end do
-end do
-!    ..
-!     The solution vectors, X, are now
-!     in the first  n  rows of the array b(,).
-!
-270 return
-end subroutine hfti
-
-pure subroutine hfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(out) :: k
-integer, intent(in) :: m, mda, mdb, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
-   & rnorm(*)
-real, intent(in) :: tau
-integer, intent(inout) :: ip(n)
-integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-real :: hmax, sm1, tmp, z
-double precision :: sm
-real, parameter :: factor = 1.e-3
-interface
-   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
-      implicit none
-      integer, intent(in) :: iue
-      integer, intent(in) :: m
-      integer, intent(in) :: mode
-      integer, intent(in) :: lpivot
-      integer, intent(in) :: l1
-      real, intent(inout) :: u(iue,m)
-      real, intent(inout) :: up
-      real, intent(inout) :: c(*)
-      integer, intent(in) :: ice
-      integer, intent(in) :: icv
-      integer, intent(in) :: ncv
-   end subroutine h12
-end interface
-!-----------------------------------------------------------------------
-!     dimension a(mda,n),(b(mdb,nb) or b(m))
-!     dimension d(l) where l = min(m,n)
-!     dimension rnorm(nb),h(n),g(n),ip(n)
-!
-!     Written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!     For algorithmic details see algorithm hfti in chapter 14.
-!
-!     Abstract
-!
-!     This subroutine solves a linear least squares problem or a set of
-!     linear least squares problems having the same matrix but different
-!     right-side vectors.  The problem data consists of an m by n matrix
-!     A, an m by nb matrix b, and an absolute tolerance parameter tau
-!     whose usage is described below.  The nb column vectors of b
-!     represent right-side vectors for nb distinct linear least squares
-!     problems.
-!
-!     This set of problems can also be written as the matrix least
-!     squares problem
-!
-!                       ax = b,
-!
-!     Where X is the n by nb solution matrix.
-!
-!     Note that if b is the m by m identity matrix, then X will be the
-!     pseudo-inverse of A.
-!
-!     This subroutine first transforms the augmented matrix (A b) to A
-!     matrix (R C) using premultiplying Householder transformations with
-!     column interchanges.  All subdiagonal elements in the matrix R are
-!     zero and its diagonal elements satisfy
-!
-!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
-!
-!                       i = 1,...,l-1, where
-!
-!                       l = min(m,n).
-!
-!     The array d will contain the diagonal elements R(1,1),...,R(l,l).
-!     The subroutine sets k to be the number of diagonal elements that
-!     exceed tau in magnitude.  Then the solution of minimum Euclidean
-!     length is computed using the first k rows of (R C).
-!
-!     To be specific we suggest that the user consider an easily
-!     computable matrix NORM, such as, the maximum of all column sums of
-!     magnitudes.
-!
-!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
-!     norm of b), it is suggested that tau be set approximately equal to
-!     eps*(norm of A).
-!
-!     The entire set of parameters for hfti2 are
-!
-!     Input..
-!
-!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       matrix a of the least squares problem AX = b.
-!                       The first dimensioning parameter of the array
-!                       a(*,*) is mda, which must satisfy mda.GE.m
-!                       either m.GE.n or m.LT.n is permitted.  There
-!                       is no restriction on the rank of A.  the
-!                       condition mda.LT.m is considered an error.
-!
-!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
-!                       orthogonal decomposition but will make no
-!                       references to the array b(*).  If nb.GT.0
-!                       the array b(*) must initially contain the m by
-!                       nb matrix b of the least squares problem AX =
-!                       b.  if nb.GE.2 the array b(*) must be doubly
-!                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
-!                       be either doubly or singly subscripted.  In
-!                       the latter case the value of mdb is arbitrary
-!                       but it should be set to some valid integer
-!                       value such as mdb = m.
-!
-!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
-!                       is considered an error.
-!
-!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       for pseudorank determination.
-!
-!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti2.
-!
-!     Output..
-!
-!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       modified by the subroutine.  These contents
-!                       are not generally required by the user.
-!
-!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
-!                       nb solution matrix X.
-!
-!     d(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
-!                       triangular matrix R
-!
-!     k                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       pseudorank of A.
-!
-!     RNORM(*)          ON RETURN, RNORM(j) WILL CONTAIN THE EUCLIDEAN
-!                       norm of the residual vector for the problem
-!                       defined by the j-TH column vector of the array
-!                       b(*,*) FOR j = 1,...,nb.
-!
-!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       elements of the pre- and post-multiplying
-!                       Householder transformations used to compute
-!                       the minimum Euclidean length solution.
-!
-!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       describing the permutation of column vectors.
-!                       The contents of arrays h(*),g(*) and ip(*)
-!                       are not generally required by the user.
-!
-!     ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
-!                       detected then ierr is set to 0. Otherwise
-!                          ierr = 1  IF mda.LT.m
-!                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
-!                       these errors are fatal.
-!-----------------------------------------------------------------------
-!---------------------
-!
-k = 0
-ldiag = min(m,n)
-if (ldiag <= 0) go to 270
-if (m > mda) go to 300
-if (nb > 1 .and. max(m,n) > mdb) go to 310
-!
-do j = 1,ldiag
-   if (j == 1) go to 20
-!
-!     Update squared column lengths and find lmax
-!    ..
-   lmax = j
-   do l = j,n
-      h(l) = h(l) - a(j - 1,l)**2
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   z = hmax + factor*h(lmax)
-   if (z > hmax) go to 50
-!
-!     Compute squared column lengths and find lmax
-!    ..
-20 lmax = j
-   do l = j,n
-      h(l) = 0.0
-      do i = j,m
-30       h(l) = h(l) + a(i,l)**2
-      end do
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   hmax = h(lmax)
-!    ..
-!     lmax has been determined
-!
-!     Do column interchanges if needed.
-!    ..
-50 ip(j) = lmax
-   if (ip(j) == j) go to 70
-   do i = 1,m
-      tmp = a(i,j)
-      a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
-   end do
-   h(lmax) = h(j)
-!
-!     Compute the j-TH transformation and apply it to A and b.
-!    ..
-70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
-end do
-!
-!     Determine the pseudorank, k, using the tolerance, tau.
-!     Also store the diagonal elements in the array d.
-!    ..
-do j = 1,ldiag
-   if (abs(a(j,j)) <= tau) go to 100
-90 d(j) = a(j,j)
-end do
-k = ldiag
-kp1 = k + 1
-go to 110
-!
-100 k = j - 1
-kp1 = j
-do j = kp1,ldiag
-105 d(j) = a(j,j)
-end do
-!
-!     Compute the norms of the residual vectors.
-!
-110 if (nb <= 0) go to 140
-do jb = 1,nb
-   tmp = 0.0
-   if (kp1 > m) go to 130
-   do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
-   end do
-130 rnorm(jb) = sqrt(tmp)
-end do
-140 continue
-!                                           Special for pseudorank = 0
-if (k > 0) go to 160
-if (nb <= 0) go to 270
-do jb = 1,nb
-   do i = 1,n
-150   b(i,jb) = 0.0
-   end do
-end do
-go to 270
-!
-!     If the pseudorank is less than n compute Householder
-!     decomposition of first k rows.
-!    ..
-160 if (k == n) go to 180
-do ii = 1,k
-   i = kp1 - ii
-170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
-end do
-180 continue
-!
-!
-if (nb <= 0) go to 270
-do jb = 1,nb
-!
-!     Solve the k by k triangular system.
-!    ..
-   do l = 1,k
-      sm = 0.d0
-      i = kp1 - l
-      if (i == k) go to 200
-      ip1 = i + 1
-      do j = ip1,k
-190      sm = sm + dble(a(i,j))*dble(b(j,jb))
-      end do
-200   sm1 = dble(b(i,jb)) - sm
-210   b(i,jb) = sm1/a(i,i)
-   end do
-!
-!     Complete computation of solution vector.
-!    ..
-   if (k == n) go to 240
-   do j = kp1,n
-220   b(j,jb) = 0.0
-   end do
-   do i = 1,k
-230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
-   end do
-!
-!      RE-order the solution vector to compensate for the
-!      column interchanges.
-!    ..
-240 do jj = 1,ldiag
-      j = ldiag + 1 - jj
-      if (ip(j) == j) go to 250
-      l = ip(j)
-      tmp = b(l,jb)
-      b(l,jb) = b(j,jb)
-      b(j,jb) = tmp
-250   continue
-   end do
-end do
-!    ..
-!     The solution vectors, X, are now
-!     in the first  n  rows of the array b(,).
-!
-270 ierr = 0
-return
-!
-!     Error return
-!
-300 ierr = 1
-return
-310 ierr = 2
-end subroutine hfti2
 

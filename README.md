@@ -96,8 +96,9 @@ compiler. See the [module guide](docs/module.md) for generation and verification
 For external callers, compile `nswc.f90` instead and link `nswc.o`.
 
 Use `-std=f2023` with compilers supporting that option; `-std=f2018` also accepts
-all maintained versions. COMMON, EQUIVALENCE, statement functions and computed
-GO TO still produce obsolescent-feature warnings. Only the archival `nswc_orig.f`
+all maintained versions. COMMON and EQUIVALENCE still produce obsolescent-feature
+warnings. The fixed-form reference also retains statement functions and computed
+GO TO; both are removed from the recommended free-form implementations. Only the archival `nswc_orig.f`
 requires `-std=legacy -fallow-argument-mismatch`. Both maintained source forms use
 separate real and complex root work arrays in `COMPB`, with explicit packing
 back into the solver workspace. See the [warning review](docs/compiler-warnings.md).
@@ -133,8 +134,9 @@ to compare all signatures and test callers using the module.
 
 ## Pure and elemental procedures
 
-Both free-form versions declare **175 procedures `pure elemental`** and another
-**505 `pure`**. In `nswc.f90`, implementations remain external. Internal calls have
+Both free-form versions declare **175 public procedures `pure elemental`** and another
+**505 `pure`**, plus 24 pure internal helpers. In `nswc.f90`, the original entry
+points remain external. Internal calls have
 local interfaces wherever pure or elemental calls require them, so compiling
 `nswc.f90` still needs no additional source file or module dependency.
 
@@ -219,6 +221,12 @@ specific intrinsic calls with generic names, such as `dabs` to `abs` and
 `dsqrt` to `sqrt`. Conflicting names and conversion intrinsics are retained.
 The [generic-intrinsic guide](docs/generic-intrinsics.md) describes the binding
 review and checks for identical compiled code.
+
+The final [obsolescent-feature pass](docs/obsolescent-features.md) replaces 21
+computed GO TO statements with SELECT CASE and 24 statement functions with pure
+internal functions. It preserves out-of-range fall-through, helper argument/result
+types and captured host variables. Both fixed-form implementations remain
+comparison targets; existing external interfaces remain unchanged.
 
 The final `tools/coalesce_local_declarations.py` pass combines matching local
 declarations within contiguous blocks. Argument declarations, comments,

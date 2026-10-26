@@ -1,3 +1,152 @@
+subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
+implicit none
+integer :: nn
+double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+integer :: l2, nz
+integer :: n, type, i, j, iflag
+double precision :: svu, svv, ui, vi, s
+real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+logical :: vpass, spass, vtry, stry
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     Computes up to  l2  fixed shift k-polynomials,
+!     testing for convergence in the linear or quadratic
+!     case. Initiates one of the variable SHIFT
+!     iterations and returns with the number of zeros
+!     found.
+!
+!     l2 - Limit of fixed shift steps
+!     nz - Number of zeros found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+betav = .25
+betas = .25
+oss = sr
+ovv = v
+!
+!     Evaluate polynomial by synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+call calcsc(type, n, k, qk)
+do j = 1,l2
+!
+!     Calculate next k polynomial and estimate v
+!
+   call nextk(type, n, qp, k, qk)
+   call calcsc(type, n, k, qk)
+   call newest(type, ui, vi, nn, p, k)
+   vv = vi
+!
+!     Estimate s
+!
+   ss = 0.0
+   if (k(n) /= 0.d0) ss = -p(nn)/k(n)
+   tv = 1.0
+   ts = 1.0
+   if (j == 1 .or. type == 3) go to 70
+!
+!     Compute relative measures of convergence of s and v
+!     sequences
+!
+   if (vv /= 0.0) tv = abs((vv - ovv)/vv)
+   if (ss /= 0.0) ts = abs((ss - oss)/ss)
+!
+!     If decreasing, multiply two most recent
+!     convergence measures
+!
+   tvv = 1.0
+   if (tv < otv) tvv = tv*otv
+   tss = 1.0
+   if (ts < ots) tss = ts*ots
+!
+!     Compare with convergence criteria
+!
+   vpass = tvv < betav
+   spass = tss < betas
+   if (.not.(spass .or. vpass)) go to 70
+!
+!     At least one sequence has passed the convergence
+!     test. Store variables before iterating
+!
+   svu = u
+   svv = v
+   do i = 1,n
+      svk(i) = k(i)
+   end do
+   s = ss
+!
+!     Choose iteration according to the fastest
+!     converging sequence
+!
+   vtry = .false.
+   stry = .false.
+   if (spass .and. ((.not.vpass) .or. &
+      & tss < tvv)) go to 40
+20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Quadratic iteration has failed. Flag that it has
+!     been tried and decrease the convergence criterion.
+!
+   vtry = .true.
+   betav = betav*0.25
+!
+!     Try linear iteration if it has not been tried and
+!     the s sequence is converging
+!
+   if (stry .or. (.not.spass)) go to 50
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+40 call realit(s, nz, iflag, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Linear iteration has failed. Flag that it has been
+!     tried and decrease the convergence criterion
+!
+   stry = .true.
+   betas = betas*0.25
+   if (iflag == 0) go to 50
+!
+!     If linear iteration signals an almost double real
+!     zero attempt quadratic interation
+!
+   ui = -(s + s)
+   vi = s*s
+   go to 20
+!
+!     Restore variables
+!
+50 u = svu
+   v = svv
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+!
+!     Try quadratic iteration if it has not been tried
+!     and the v sequence is converging
+!
+   if (vpass .and. (.not.vtry)) go to 20
+!
+!     Recompute qp and scalar values to continue the
+!     second stage
+!
+   call quadsd(nn, u, v, p, qp, a, b)
+   call calcsc(type, n, k, qk)
+70 ovv = vv
+   oss = ss
+   otv = tv
+   ots = ts
+end do
+end subroutine fxshfr
+
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
 integer :: nn
@@ -3893,8 +4042,6 @@ integer, intent(in) :: n
 real :: smax
 integer :: i, ix
 complex :: zdum
-real :: cabs1
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 icamax = 0
 if ( n < 1 ) return
@@ -3924,6 +4071,13 @@ do i = 2,n
    smax = cabs1(cx(i))
 30 continue
 end do
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end function icamax
 
 pure subroutine mcvfs(a,ka,n,b)
@@ -10353,330 +10507,4 @@ return
 !
 30 ierr = 1
 end subroutine dsmslv
-
-pure subroutine dspco(ap,n,kpvt,rcond,z)
-implicit none
-integer, intent(in) :: n
-integer, intent(inout) :: kpvt(*)
-double precision, intent(inout) :: ap(*), z(*)
-double precision, intent(inout) :: rcond
-double precision :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
-integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
-interface
-   pure function dasum(n,dx,incx)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision :: dasum
-   end function dasum
-   pure subroutine daxpy(n,da,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: da
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine daxpy
-   pure function ddot(n,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(in) :: dy(*)
-      integer, intent(in) :: incy
-      double precision :: ddot
-   end function ddot
-   pure subroutine dscal(n,da,dx,incx)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: da
-      double precision, intent(inout) :: dx(*)
-      integer, intent(in) :: incx
-   end subroutine dscal
-   pure subroutine dspfa(ap,n,kpvt,info)
-      implicit none
-      double precision, intent(inout) :: ap(*)
-      integer, intent(in) :: n
-      integer, intent(inout) :: kpvt(*)
-      integer, intent(out) :: info
-   end subroutine dspfa
-end interface
-!
-!     dspco factors a double precision symmetric matrix stored in
-!     packed form by elimination with symmetric pivoting and estimates
-!     the condition of the matrix.
-!
-!     If  rcond  is not needed, dspfa is slightly faster.
-!     To solve  A*X = B , follow dspco by dspsl.
-!     To compute  inverse(A)*C , follow dspco by dspsl.
-!     To compute  inverse(A) , follow dspco by dspdi.
-!     To compute  determinant(A) , follow dspco by dspdi.
-!     To compute  inertia(A), follow dspco by dspdi.
-!
-!     On entry
-!
-!        ap      DOUBLE PRECISION (n*(n+1)/2)
-!                the packed form of A symmetric matrix  A .  The
-!                columns of the upper triangle are stored sequentially
-!                in a one-dimensional array of length  n*(n+1)/2 .
-!                See comments below for details.
-!
-!        n       INTEGER
-!                the order of the matrix  A .
-!
-!     Output
-!
-!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                were used to obtain it stored in packed form.
-!                The factorization can be written  A = U*D*trans(U)
-!                where  U  is a product of permutation and unit
-!                upper triangular matrices , trans(U) is the
-!                transpose of  U , and  D  is block diagonal
-!                with 1 by 1 and 2 by 2 blocks.
-!
-!        kpvt    INTEGER(n)
-!                an integer vector of pivot indices.
-!
-!        rcond   DOUBLE PRECISION
-!                an estimate of the reciprocal condition of  A .
-!                For the system  A*X = B , relative perturbations
-!                in  A  and  B  of size  epsilon  may cause
-!                relative perturbations in  X  of size  epsilon/rcond .
-!                If  rcond  is so small that the logical expression
-!                           1.0 + rcond .EQ. 1.0
-!                is true, then  A  may be singular to working
-!                precision.  In particular,  rcond  is zero  if
-!                exact singularity is detected or the estimate
-!                underflows.
-!
-!        z       DOUBLE PRECISION(n)
-!                a work vector whose contents are usually unimportant.
-!                If  A  is close to a singular matrix, then  z  is
-!                an approximate null vector in the sense that
-!                norm(a*z) = rcond*norm(a)*norm(z) .
-!
-!     Packed storage
-!
-!          The following program segment will pack the upper
-!          triangle of a symmetric matrix.
-!
-!                k = 0
-!                do 20 j = 1, n
-!                   do 10 i = 1, j
-!                      k = k + 1
-!                      ap(k) = a(i,j)
-!             10    continue
-!             20 continue
-!
-!     LINPACK. This version dated 08/14/78 .
-!     Cleve Moler, University of New Mexico, Argonne National Lab.
-!
-!     Subroutines and functions
-!
-!     LINPACK dspfa
-!     BLAS daxpy,ddot,dscal,dasum
-!     Fortran dabs,DMAX1,IABS,DSIGN
-!
-!     Internal variables
-!
-!
-!
-!     Find norm of a using only upper half
-!
-j1 = 1
-do j = 1, n
-   z(j) = dasum(j,ap(j1),1)
-   ij = j1
-   j1 = j1 + j
-   jm1 = j - 1
-   if (jm1 < 1) go to 20
-   do i = 1, jm1
-      z(i) = z(i) + abs(ap(ij))
-      ij = ij + 1
-   end do
-20 continue
-end do
-anorm = 0.0d0
-do j = 1, n
-   anorm = max(anorm,z(j))
-end do
-!
-!     Factor
-!
-call dspfa(ap,n,kpvt,info)
-!
-!     rcond = 1/(norm(A)*(estimate of norm(inverse(A)))) .
-!     ESTIMATE = NORM(z)/NORM(Y) WHERE  A*z = Y  AND  A*Y = E .
-!     The components of  E  are chosen to cause maximum local
-!     growth in the elements of W  where  U*D*W = E .
-!     The vectors are frequently rescaled to avoid overflow.
-!
-!     SOLVE U*D*W = E
-!
-ek = 1.0d0
-do j = 1, n
-   z(j) = 0.0d0
-end do
-k = n
-ik = (n*(n - 1))/2
-60 if (k == 0) go to 120
-kk = ik + k
-ikm1 = ik - (k - 1)
-ks = 1
-if (kpvt(k) < 0) ks = 2
-kp = abs(kpvt(k))
-kps = k + 1 - ks
-if (kp == kps) go to 70
-t = z(kps)
-z(kps) = z(kp)
-z(kp) = t
-70 continue
-if (z(k) /= 0.0d0) ek = sign(ek,z(k))
-z(k) = z(k) + ek
-call daxpy(k - ks,z(k),ap(ik + 1),1,z(1),1)
-if (ks == 1) go to 80
-if (z(k - 1) /= 0.0d0) ek = sign(ek,z(k - 1))
-z(k - 1) = z(k - 1) + ek
-call daxpy(k - ks,z(k - 1),ap(ikm1 + 1),1,z(1),1)
-80 continue
-if (ks == 2) go to 100
-if (abs(z(k)) <= abs(ap(kk))) go to 90
-s = abs(ap(kk))/abs(z(k))
-call dscal(n,s,z,1)
-ek = s*ek
-90 continue
-if (ap(kk) /= 0.0d0) z(k) = z(k)/ap(kk)
-if (ap(kk) == 0.0d0) z(k) = 1.0d0
-go to 110
-100 continue
-km1k = ik + k - 1
-km1km1 = ikm1 + k - 1
-ak = ap(kk)/ap(km1k)
-akm1 = ap(km1km1)/ap(km1k)
-bk = z(k)/ap(km1k)
-bkm1 = z(k - 1)/ap(km1k)
-denom = ak*akm1 - 1.0d0
-z(k) = (akm1*bk - bkm1)/denom
-z(k - 1) = (ak*bkm1 - bk)/denom
-110 continue
-k = k - ks
-ik = ik - k
-if (ks == 2) ik = ik - (k + 1)
-go to 60
-120 continue
-s = 1.0d0/dasum(n,z,1)
-call dscal(n,s,z,1)
-!
-!     SOLVE TRANS(U)*Y = W
-!
-k = 1
-ik = 0
-130 if (k > n) go to 160
-ks = 1
-if (kpvt(k) < 0) ks = 2
-if (k == 1) go to 150
-z(k) = z(k) + ddot(k - 1,ap(ik + 1),1,z(1),1)
-ikp1 = ik + k
-if (ks == 2) &
-   & z(k + 1) = z(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,z(1),1)
-kp = abs(kpvt(k))
-if (kp == k) go to 140
-t = z(k)
-z(k) = z(kp)
-z(kp) = t
-140 continue
-150 continue
-ik = ik + k
-if (ks == 2) ik = ik + (k + 1)
-k = k + ks
-go to 130
-160 continue
-s = 1.0d0/dasum(n,z,1)
-call dscal(n,s,z,1)
-!
-ynorm = 1.0d0
-!
-!     SOLVE U*D*V = Y
-!
-k = n
-ik = n*(n - 1)/2
-170 if (k == 0) go to 230
-kk = ik + k
-ikm1 = ik - (k - 1)
-ks = 1
-if (kpvt(k) < 0) ks = 2
-if (k == ks) go to 190
-kp = abs(kpvt(k))
-kps = k + 1 - ks
-if (kp == kps) go to 180
-t = z(kps)
-z(kps) = z(kp)
-z(kp) = t
-180 continue
-call daxpy(k - ks,z(k),ap(ik + 1),1,z(1),1)
-if (ks == 2) call daxpy(k - ks,z(k - 1),ap(ikm1 + 1),1,z(1),1)
-190 continue
-if (ks == 2) go to 210
-if (abs(z(k)) <= abs(ap(kk))) go to 200
-s = abs(ap(kk))/abs(z(k))
-call dscal(n,s,z,1)
-ynorm = s*ynorm
-200 continue
-if (ap(kk) /= 0.0d0) z(k) = z(k)/ap(kk)
-if (ap(kk) == 0.0d0) z(k) = 1.0d0
-go to 220
-210 continue
-km1k = ik + k - 1
-km1km1 = ikm1 + k - 1
-ak = ap(kk)/ap(km1k)
-akm1 = ap(km1km1)/ap(km1k)
-bk = z(k)/ap(km1k)
-bkm1 = z(k - 1)/ap(km1k)
-denom = ak*akm1 - 1.0d0
-z(k) = (akm1*bk - bkm1)/denom
-z(k - 1) = (ak*bkm1 - bk)/denom
-220 continue
-k = k - ks
-ik = ik - k
-if (ks == 2) ik = ik - (k + 1)
-go to 170
-230 continue
-s = 1.0d0/dasum(n,z,1)
-call dscal(n,s,z,1)
-ynorm = s*ynorm
-!
-!     SOLVE TRANS(U)*z = V
-!
-k = 1
-ik = 0
-240 if (k > n) go to 270
-ks = 1
-if (kpvt(k) < 0) ks = 2
-if (k == 1) go to 260
-z(k) = z(k) + ddot(k - 1,ap(ik + 1),1,z(1),1)
-ikp1 = ik + k
-if (ks == 2) &
-   & z(k + 1) = z(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,z(1),1)
-kp = abs(kpvt(k))
-if (kp == k) go to 250
-t = z(k)
-z(k) = z(kp)
-z(kp) = t
-250 continue
-260 continue
-ik = ik + k
-if (ks == 2) ik = ik + (k + 1)
-k = k + ks
-go to 240
-270 continue
-!     MAKE ZNORM = 1.0
-s = 1.0d0/dasum(n,z,1)
-call dscal(n,s,z,1)
-ynorm = s*ynorm
-!
-if (anorm /= 0.0d0) rcond = ynorm/anorm
-if (anorm == 0.0d0) rcond = 0.0d0
-end subroutine dspco
 

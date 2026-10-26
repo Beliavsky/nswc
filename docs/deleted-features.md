@@ -157,6 +157,8 @@ diagnostics. It uses Fortran 2023 when supported and Fortran 2018 on older GNU
 compilers. The archive deliberately retains its original code and legacy build
 options.
 
-The remaining standards warnings concern permitted obsolescent features:
-COMMON, EQUIVALENCE, statement functions and computed GO TO. Their removal would
-be a separate modernization effort, especially for shared storage and state.
+The remaining standards warnings concern permitted obsolescent features.
+A subsequent [free-form pass](obsolescent-features.md) removes all statement
+functions and computed GO TO statements from `nswc.f90` and `nswc_mod.f90`.
+The fixed-form reference retains them. COMMON and EQUIVALENCE still require
+individual review of shared storage and state.

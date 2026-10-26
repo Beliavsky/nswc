@@ -9,7 +9,9 @@ HEADER = re.compile(r'^\s*' + PREFIX +
 
 
 def procedure_spans(text):
+    """Yield complete host procedures, keeping contained definitions in their host."""
     current, nested, abstract = None, 0, 0
+    contains, internal = False, 0
     seen = set()
     for i, line in enumerate(text.splitlines(True)):
         if line.lstrip().startswith('!'):
@@ -31,13 +33,22 @@ def procedure_spans(text):
         match = HEADER.match(line)
         if match:
             if current:
-                raise ValueError('Nested or unterminated procedure')
+                if not contains:
+                    raise ValueError('Nested or unterminated procedure')
+                internal += 1
+                continue
             name = match[1].upper()
             if name in seen:
                 raise ValueError(f'Duplicate procedure: {name}')
             seen.add(name)
             current = name, i
+            contains, internal = False, 0
+        if current and re.match(r'^\s*contains\s*$', line, re.I):
+            contains = True
         if current and re.match(r'^\s*end\s+(?:subroutine|function)\b', line, re.I):
+            if internal:
+                internal -= 1
+                continue
             yield current[0], current[1], i + 1
             current = None
     if current or nested or abstract:

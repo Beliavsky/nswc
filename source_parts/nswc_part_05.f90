@@ -1,3 +1,329 @@
+pure subroutine dspco(ap,n,kpvt,rcond,z)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+double precision, intent(inout) :: ap(*), z(*)
+double precision, intent(inout) :: rcond
+double precision :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
+interface
+   pure function dasum(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dasum
+   end function dasum
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dspfa(ap,n,kpvt,info)
+      implicit none
+      double precision, intent(inout) :: ap(*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: kpvt(*)
+      integer, intent(out) :: info
+   end subroutine dspfa
+end interface
+!
+!     dspco factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting and estimates
+!     the condition of the matrix.
+!
+!     If  rcond  is not needed, dspfa is slightly faster.
+!     To solve  A*X = B , follow dspco by dspsl.
+!     To compute  inverse(A)*C , follow dspco by dspsl.
+!     To compute  inverse(A) , follow dspco by dspdi.
+!     To compute  determinant(A) , follow dspco by dspdi.
+!     To compute  inertia(A), follow dspco by dspdi.
+!
+!     On entry
+!
+!        ap      DOUBLE PRECISION (n*(n+1)/2)
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  n*(n+1)/2 .
+!                See comments below for details.
+!
+!        n       INTEGER
+!                the order of the matrix  A .
+!
+!     Output
+!
+!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
+!                were used to obtain it stored in packed form.
+!                The factorization can be written  A = U*D*trans(U)
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , trans(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
+!
+!        kpvt    INTEGER(n)
+!                an integer vector of pivot indices.
+!
+!        rcond   DOUBLE PRECISION
+!                an estimate of the reciprocal condition of  A .
+!                For the system  A*X = B , relative perturbations
+!                in  A  and  B  of size  epsilon  may cause
+!                relative perturbations in  X  of size  epsilon/rcond .
+!                If  rcond  is so small that the logical expression
+!                           1.0 + rcond .EQ. 1.0
+!                is true, then  A  may be singular to working
+!                precision.  In particular,  rcond  is zero  if
+!                exact singularity is detected or the estimate
+!                underflows.
+!
+!        z       DOUBLE PRECISION(n)
+!                a work vector whose contents are usually unimportant.
+!                If  A  is close to a singular matrix, then  z  is
+!                an approximate null vector in the sense that
+!                norm(a*z) = rcond*norm(a)*norm(z) .
+!
+!     Packed storage
+!
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
+!
+!                k = 0
+!                do 20 j = 1, n
+!                   do 10 i = 1, j
+!                      k = k + 1
+!                      ap(k) = a(i,j)
+!             10    continue
+!             20 continue
+!
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
+!
+!     Subroutines and functions
+!
+!     LINPACK dspfa
+!     BLAS daxpy,ddot,dscal,dasum
+!     Fortran dabs,DMAX1,IABS,DSIGN
+!
+!     Internal variables
+!
+!
+!
+!     Find norm of a using only upper half
+!
+j1 = 1
+do j = 1, n
+   z(j) = dasum(j,ap(j1),1)
+   ij = j1
+   j1 = j1 + j
+   jm1 = j - 1
+   if (jm1 < 1) go to 20
+   do i = 1, jm1
+      z(i) = z(i) + abs(ap(ij))
+      ij = ij + 1
+   end do
+20 continue
+end do
+anorm = 0.0d0
+do j = 1, n
+   anorm = max(anorm,z(j))
+end do
+!
+!     Factor
+!
+call dspfa(ap,n,kpvt,info)
+!
+!     rcond = 1/(norm(A)*(estimate of norm(inverse(A)))) .
+!     ESTIMATE = NORM(z)/NORM(Y) WHERE  A*z = Y  AND  A*Y = E .
+!     The components of  E  are chosen to cause maximum local
+!     growth in the elements of W  where  U*D*W = E .
+!     The vectors are frequently rescaled to avoid overflow.
+!
+!     SOLVE U*D*W = E
+!
+ek = 1.0d0
+do j = 1, n
+   z(j) = 0.0d0
+end do
+k = n
+ik = (n*(n - 1))/2
+60 if (k == 0) go to 120
+kk = ik + k
+ikm1 = ik - (k - 1)
+ks = 1
+if (kpvt(k) < 0) ks = 2
+kp = abs(kpvt(k))
+kps = k + 1 - ks
+if (kp == kps) go to 70
+t = z(kps)
+z(kps) = z(kp)
+z(kp) = t
+70 continue
+if (z(k) /= 0.0d0) ek = sign(ek,z(k))
+z(k) = z(k) + ek
+call daxpy(k - ks,z(k),ap(ik + 1),1,z(1),1)
+if (ks == 1) go to 80
+if (z(k - 1) /= 0.0d0) ek = sign(ek,z(k - 1))
+z(k - 1) = z(k - 1) + ek
+call daxpy(k - ks,z(k - 1),ap(ikm1 + 1),1,z(1),1)
+80 continue
+if (ks == 2) go to 100
+if (abs(z(k)) <= abs(ap(kk))) go to 90
+s = abs(ap(kk))/abs(z(k))
+call dscal(n,s,z,1)
+ek = s*ek
+90 continue
+if (ap(kk) /= 0.0d0) z(k) = z(k)/ap(kk)
+if (ap(kk) == 0.0d0) z(k) = 1.0d0
+go to 110
+100 continue
+km1k = ik + k - 1
+km1km1 = ikm1 + k - 1
+ak = ap(kk)/ap(km1k)
+akm1 = ap(km1km1)/ap(km1k)
+bk = z(k)/ap(km1k)
+bkm1 = z(k - 1)/ap(km1k)
+denom = ak*akm1 - 1.0d0
+z(k) = (akm1*bk - bkm1)/denom
+z(k - 1) = (ak*bkm1 - bk)/denom
+110 continue
+k = k - ks
+ik = ik - k
+if (ks == 2) ik = ik - (k + 1)
+go to 60
+120 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+!
+!     SOLVE TRANS(U)*Y = W
+!
+k = 1
+ik = 0
+130 if (k > n) go to 160
+ks = 1
+if (kpvt(k) < 0) ks = 2
+if (k == 1) go to 150
+z(k) = z(k) + ddot(k - 1,ap(ik + 1),1,z(1),1)
+ikp1 = ik + k
+if (ks == 2) &
+   & z(k + 1) = z(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,z(1),1)
+kp = abs(kpvt(k))
+if (kp == k) go to 140
+t = z(k)
+z(k) = z(kp)
+z(kp) = t
+140 continue
+150 continue
+ik = ik + k
+if (ks == 2) ik = ik + (k + 1)
+k = k + ks
+go to 130
+160 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+!
+ynorm = 1.0d0
+!
+!     SOLVE U*D*V = Y
+!
+k = n
+ik = n*(n - 1)/2
+170 if (k == 0) go to 230
+kk = ik + k
+ikm1 = ik - (k - 1)
+ks = 1
+if (kpvt(k) < 0) ks = 2
+if (k == ks) go to 190
+kp = abs(kpvt(k))
+kps = k + 1 - ks
+if (kp == kps) go to 180
+t = z(kps)
+z(kps) = z(kp)
+z(kp) = t
+180 continue
+call daxpy(k - ks,z(k),ap(ik + 1),1,z(1),1)
+if (ks == 2) call daxpy(k - ks,z(k - 1),ap(ikm1 + 1),1,z(1),1)
+190 continue
+if (ks == 2) go to 210
+if (abs(z(k)) <= abs(ap(kk))) go to 200
+s = abs(ap(kk))/abs(z(k))
+call dscal(n,s,z,1)
+ynorm = s*ynorm
+200 continue
+if (ap(kk) /= 0.0d0) z(k) = z(k)/ap(kk)
+if (ap(kk) == 0.0d0) z(k) = 1.0d0
+go to 220
+210 continue
+km1k = ik + k - 1
+km1km1 = ikm1 + k - 1
+ak = ap(kk)/ap(km1k)
+akm1 = ap(km1km1)/ap(km1k)
+bk = z(k)/ap(km1k)
+bkm1 = z(k - 1)/ap(km1k)
+denom = ak*akm1 - 1.0d0
+z(k) = (akm1*bk - bkm1)/denom
+z(k - 1) = (ak*bkm1 - bk)/denom
+220 continue
+k = k - ks
+ik = ik - k
+if (ks == 2) ik = ik - (k + 1)
+go to 170
+230 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
+!
+!     SOLVE TRANS(U)*z = V
+!
+k = 1
+ik = 0
+240 if (k > n) go to 270
+ks = 1
+if (kpvt(k) < 0) ks = 2
+if (k == 1) go to 260
+z(k) = z(k) + ddot(k - 1,ap(ik + 1),1,z(1),1)
+ikp1 = ik + k
+if (ks == 2) &
+   & z(k + 1) = z(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,z(1),1)
+kp = abs(kpvt(k))
+if (kp == k) go to 250
+t = z(k)
+z(k) = z(kp)
+z(kp) = t
+250 continue
+260 continue
+ik = ik + k
+if (ks == 2) ik = ik + (k + 1)
+k = k + ks
+go to 240
+270 continue
+!     MAKE ZNORM = 1.0
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
+!
+if (anorm /= 0.0d0) rcond = ynorm/anorm
+if (anorm == 0.0d0) rcond = 0.0d0
+end subroutine dspco
+
 pure subroutine dspfa(ap,n,kpvt,info)
 implicit none
 integer, intent(in) :: n
@@ -1851,8 +2177,7 @@ real, intent(inout) :: rcond
 complex :: cdotc, ek, t, wk, wkm
 real :: anorm, s, scasum, sm, ynorm
 integer :: info, j, k, kb, kp1, l
-complex :: zdum, zdum1, zdum2, csign1
-real :: cabs1
+complex :: zdum, zdum1, zdum2
 !
 !     cgeco factors a complex matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -1915,8 +2240,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
-csign1(zdum1,zdum2) = cabs1(zdum1)*(zdum2/cabs1(zdum2))
 !
 !     Compute 1-norm of A
 !
@@ -2039,6 +2362,20 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0e0) rcond = ynorm/anorm
 if (anorm == 0.0e0) rcond = 0.0e0
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
+   pure function csign1(zdum1, zdum2) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum1
+      complex, intent(in) :: zdum2
+      complex :: nswc_sf_result
+      nswc_sf_result = cabs1(zdum1)*(zdum2/cabs1(zdum2))
+   end function csign1
 end subroutine cgeco
 
 subroutine cgefa(a,lda,n,ipvt,info)
@@ -2050,7 +2387,6 @@ complex, intent(inout) :: a(lda,*)
 complex :: t
 integer :: icamax, j, k, kp1, l, nm1
 complex :: zdum
-real :: cabs1
 !
 !     cgefa factors a complex matrix BY Gaussian elimination.
 !
@@ -2099,7 +2435,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Gaussian elimination with partial pivoting
 !
@@ -2149,6 +2484,13 @@ end do
 70 continue
 ipvt(n) = n
 if (cabs1(a(n,n)) == 0.0e0) info = n
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end subroutine cgefa
 
 pure subroutine cgesl(a,lda,n,ipvt,b,job)
@@ -2298,7 +2640,6 @@ complex, intent(inout) :: a(lda,*), det(2), work(*)
 complex :: t, zdum
 real :: ten
 integer :: i, j, k, kb, kp1, l, nm1
-real :: cabs1
 !
 !     cgedi computes the determinant and inverse of a matrix
 !     using the factors computed by cgeco or cgefa.
@@ -2356,7 +2697,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Compute determinant
 !
@@ -2421,6 +2761,13 @@ do kb = 1, nm1
 end do
 140 continue
 150 continue
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end subroutine cgedi
 
 subroutine dcmslv(mo,n,m,ar,ai,ka,br,bi,kb,ierr,ipvt,wk)
@@ -3213,7 +3560,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (490,520,540,570), kase
+select case (kase)
+case (1)
+   go to 490
+case (2)
+   go to 520
+case (3)
+   go to 540
+case (4)
+   go to 570
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -3756,7 +4112,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (490,520,540,570), kase
+select case (kase)
+case (1)
+   go to 490
+case (2)
+   go to 520
+case (3)
+   go to 540
+case (4)
+   go to 570
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -3884,8 +4249,7 @@ integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
 complex :: t, r
 real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
-complex :: csign, zdum, zdum1, zdum2
-real :: cabs1
+complex :: zdum, zdum1, zdum2
 interface
    pure subroutine caxpy(n,ca,cx,incx,cy,incy)
       implicit none
@@ -4046,8 +4410,6 @@ end interface
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
-csign(zdum1,zdum2) = abs(zdum1)*(zdum2/abs(zdum2))
 !
 !     Set the maximum number of iterations.
 !
@@ -4328,7 +4690,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (530, 560, 580, 610), kase
+select case (kase)
+case (1)
+   go to 530
+case (2)
+   go to 560
+case (3)
+   go to 580
+case (4)
+   go to 610
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -4443,6 +4814,20 @@ m = m - 1
 650 continue
 go to 400
 660 continue
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
+   pure function csign(zdum1, zdum2) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum1
+      complex, intent(in) :: zdum2
+      complex :: nswc_sf_result
+      nswc_sf_result = abs(zdum1)*(zdum2/abs(zdum2))
+   end function csign
 end subroutine csvdc
 
 function det(a,ka,n,x)
@@ -10156,472 +10541,4 @@ return
 !
 200 ierr = num
 end subroutine dbadd
-
-pure subroutine cbadd(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
-!-----------------------------------------------------------------------
-!                Addition of complex banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
-go to 20
-!
-!     Insert the first abs(ml - nl) diagonals
-!
-10 mcl = ml
-if (ml >= l) go to 50
-ja = ml - nl
-jb = 0
-jc = ja
-jmax = nl + 1
-do j = 1,jc
-   do i = 1,m
-11    c(i,j) = a(i,j)
-   end do
-end do
-go to 50
-!
-20 mcl = nl
-if (nl >= l) go to 50
-ja = 0
-jb = nl - ml
-jc = jb
-jmax = ml + 1
-do j = 1,jc
-   do i = 1,m
-21    c(i,j) = b(i,j)
-   end do
-end do
-go to 50
-!
-!     COMPUTE mcl WHEN ml = nl
-!
-30 mcl = ml
-if (ml == 0) go to 40
-imin = ml + 1
-do j = 1,ml
-   do i = imin,m
-      if ((a(i,j) + b(i,j)) /= (0.0,0.0)) go to 40
-   end do
-   mcl = mcl - 1
-   imin = imin - 1
-end do
-!
-40 ja = ml - mcl
-jb = ja
-jc = 0
-jmax = mcl + 1
-!
-50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
-go to 130
-!
-!     Insertion of the remaining diagonals when mu .NE. nu
-!
-100 mcu = mu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + nu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) + b(i,jb)
-   end do
-end do
-!
-jmax = mu - nu
-do j = 1,jmax
-   ja = ja + 1
-   jc = jc + 1
-   do i = 1,m
-120   c(i,jc) = a(i,ja)
-   end do
-end do
-return
-!
-130 mcu = nu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) + b(i,jb)
-   end do
-end do
-!
-jmax = nu - mu
-do j = 1,jmax
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-150   c(i,jc) = b(i,jb)
-   end do
-end do
-return
-!
-!     Compute mcu when mu = nu
-!
-160 mcu = mu
-if (mu == 0) go to 170
-la = ml + mu + 1
-lb = nl + nu + 1
-do j = 1,mu
-   do i = 1,m
-      if ((a(i,la) + b(i,lb)) /= (0.0,0.0)) go to 170
-   end do
-   mcu = mcu - 1
-   la = la - 1
-   lb = lb - 1
-end do
-!
-!     Addition of the remaining columns when mu = nu
-!
-170 num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mcu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) + b(i,jb)
-   end do
-end do
-return
-!
-!     Error return
-!
-200 ierr = num
-end subroutine cbadd
-
-pure subroutine bsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
-!-----------------------------------------------------------------------
-!                Subtraction of real banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
-go to 20
-!
-!     Insert the first abs(ml - nl) diagonals
-!
-10 mcl = ml
-if (ml >= l) go to 50
-ja = ml - nl
-jb = 0
-jc = ja
-jmax = nl + 1
-do j = 1,jc
-   do i = 1,m
-11    c(i,j) = a(i,j)
-   end do
-end do
-go to 50
-!
-20 mcl = nl
-if (nl >= l) go to 50
-ja = 0
-jb = nl - ml
-jc = jb
-jmax = ml + 1
-do j = 1,jc
-   do i = 1,m
-21    c(i,j) = -b(i,j)
-   end do
-end do
-go to 50
-!
-!     COMPUTE mcl WHEN ml = nl
-!
-30 mcl = ml
-if (ml == 0) go to 40
-imin = ml + 1
-do j = 1,ml
-   do i = imin,m
-      if ((a(i,j) - b(i,j)) /= 0.0) go to 40
-   end do
-   mcl = mcl - 1
-   imin = imin - 1
-end do
-!
-40 ja = ml - mcl
-jb = ja
-jc = 0
-jmax = mcl + 1
-!
-50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
-go to 130
-!
-!     Insertion of the remaining diagonals when mu .NE. nu
-!
-100 mcu = mu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + nu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = mu - nu
-do j = 1,jmax
-   ja = ja + 1
-   jc = jc + 1
-   do i = 1,m
-120   c(i,jc) = a(i,ja)
-   end do
-end do
-return
-!
-130 mcu = nu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = nu - mu
-do j = 1,jmax
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-150   c(i,jc) = -b(i,jb)
-   end do
-end do
-return
-!
-!     Compute mcu when mu = nu
-!
-160 mcu = mu
-if (mu == 0) go to 170
-la = ml + mu + 1
-lb = nl + nu + 1
-do j = 1,mu
-   do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= 0.0) go to 170
-   end do
-   mcu = mcu - 1
-   la = la - 1
-   lb = lb - 1
-end do
-!
-!     Addition of the remaining columns when mu = nu
-!
-170 num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mcu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-return
-!
-!     Error return
-!
-200 ierr = num
-end subroutine bsubt
-
-pure subroutine dbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
-!-----------------------------------------------------------------------
-!          Subtraction of double precision banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
-go to 20
-!
-!     Insert the first abs(ml - nl) diagonals
-!
-10 mcl = ml
-if (ml >= l) go to 50
-ja = ml - nl
-jb = 0
-jc = ja
-jmax = nl + 1
-do j = 1,jc
-   do i = 1,m
-11    c(i,j) = a(i,j)
-   end do
-end do
-go to 50
-!
-20 mcl = nl
-if (nl >= l) go to 50
-ja = 0
-jb = nl - ml
-jc = jb
-jmax = ml + 1
-do j = 1,jc
-   do i = 1,m
-21    c(i,j) = -b(i,j)
-   end do
-end do
-go to 50
-!
-!     COMPUTE mcl WHEN ml = nl
-!
-30 mcl = ml
-if (ml == 0) go to 40
-imin = ml + 1
-do j = 1,ml
-   do i = imin,m
-      if ((a(i,j) - b(i,j)) /= 0.d0) go to 40
-   end do
-   mcl = mcl - 1
-   imin = imin - 1
-end do
-!
-40 ja = ml - mcl
-jb = ja
-jc = 0
-jmax = mcl + 1
-!
-50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
-go to 130
-!
-!     Insertion of the remaining diagonals when mu .NE. nu
-!
-100 mcu = mu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + nu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = mu - nu
-do j = 1,jmax
-   ja = ja + 1
-   jc = jc + 1
-   do i = 1,m
-120   c(i,jc) = a(i,ja)
-   end do
-end do
-return
-!
-130 mcu = nu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = nu - mu
-do j = 1,jmax
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-150   c(i,jc) = -b(i,jb)
-   end do
-end do
-return
-!
-!     Compute mcu when mu = nu
-!
-160 mcu = mu
-if (mu == 0) go to 170
-la = ml + mu + 1
-lb = nl + nu + 1
-do j = 1,mu
-   do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= 0.d0) go to 170
-   end do
-   mcu = mcu - 1
-   la = la - 1
-   lb = lb - 1
-end do
-!
-!     Addition of the remaining columns when mu = nu
-!
-170 num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mcu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-return
-!
-!     Error return
-!
-200 ierr = num
-end subroutine dbsubt
 

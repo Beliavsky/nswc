@@ -1,3 +1,143 @@
+subroutine cbkm(z, rz, cnu, w)
+implicit none
+real, intent(in) :: rz
+complex, intent(in) :: z, cnu
+complex, intent(inout) :: w
+integer :: i, ind, m, n, n1
+real :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
+complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
+real, parameter :: pi = 3.14159265358979
+real, parameter :: cpi = 1.25331413731550
+interface
+   pure elemental subroutine cbkml(z,r,zr,nu,n,w,w0)
+      implicit none
+      complex, intent(in) :: z
+      real, intent(in) :: r
+      complex, intent(in) :: zr
+      complex, intent(in) :: nu
+      integer, intent(in) :: n
+      complex, intent(inout) :: w
+      complex, intent(inout) :: w0
+   end subroutine cbkml
+   pure elemental subroutine crec(x,y,u,v)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine crec
+   pure elemental function cxp(n,nu)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: nu
+      complex :: cxp
+   end function cxp
+end interface
+!-------------------------------------------------------------------
+!     Calculation of the modified Bessel function of the second
+!     kind with complex order and argument BY means of Maclaurin
+!     expansions and the Miller algorithm. It is assumed that
+!     rz = abs(z).
+!-------------------------------------------------------------------
+!---------------------------
+!     cpi = sqrt(pi/2)
+!---------------------------
+!
+!        Reduction of cnu to r = nu + b*i where
+!                -0.5 .LT. nu .LE. 0.5
+!
+r = cnu
+if (real(r) < 0.0) r = - r
+!
+a = real(r)
+b = aimag(r)
+n = a
+nu = a - float(n)
+t = nu - 0.5
+if (t <= 0.0) go to 10
+nu = t - 0.5
+n = n + 1
+10 m = n
+r1 = cmplx(nu, b)
+!
+ind = 1
+cz = z
+x = 0.5*real(z)
+y = 0.5*aimag(z)
+call crec(x, y, zr1, zr2)
+zr = cmplx (zr1, zr2)
+if (t /= 0.0) go to 20
+if (b /= 0.0) go to 20
+!
+!               Calculation for nu = 0.5
+!
+w = cmplx(cpi, 0.0)
+w1 = (1.0, 0.0)
+if (n == 0) go to 90
+if (x >= 0.0) go to 15
+ind = -1
+cz = - z
+zr = - zr
+15 u1 = w
+u2 = w
+n = n + 1
+r1 = (-0.5, 0.0)
+go to 70
+!
+!           Calculation for abs(nu) .LT. 0.5
+!
+20 znorm = 0.5*rz
+if (znorm > 1.0) go to 30
+ind = 0
+call ckps(z, znorm, zr, r1, u1, u2)
+go to 50
+30 u1 = (1.0, 0.0)
+if (x < 0.0) go to 40
+call cbkml(z, znorm, zr, r1, n, w1, u2)
+go to 50
+40 ind = -1
+cz = - z
+zr = - zr
+call cbkml(cz, znorm, zr, r1, n, w1, u2)
+!
+50 if (n > 1) go to 70
+w = u1
+if (n /= 0) w = u2
+go to 90
+!
+!                 Recursion
+!
+70 n1 = n - 1
+do i = 1, n1
+   ai = i
+   u3 = (r1 + ai)*zr*u2 + u1
+   u1 = u2
+   u2 = u3
+end do
+w = u3
+!
+90 if (ind == 0) return
+w = w*w1*exp(-cz)/sqrt(cz)
+if (ind > 0) return
+!
+!            Analytic continuation
+!
+c = exp(0.5*b*pi)
+ex = cxp(m, nu)
+if (y < 0.0) go to 100
+ex = c*ex
+w1 = cmplx (aimag(z), -real(z))
+call cbsslj(w1, r, w2)
+w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w = ex*(ex*w + w2)
+return
+100 ex = conjg(ex)/c
+w1 = cmplx (-aimag(z), real(z))
+call cbsslj(w1, r, w2)
+w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w = ex*(ex*w + w2)
+end subroutine cbkm
+
 subroutine ckps(z, r, zr, nu, w1, w2)
 implicit none
 real, intent(in) :: r
@@ -6,7 +146,6 @@ complex :: nu
 complex, intent(inout) :: w1, w2
 integer :: k
 real :: ak, eps, eps0, phi, s, u, x, y
-real :: anorm
 complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
 real, parameter :: tol = 1.e-10
@@ -53,7 +192,6 @@ end interface
 !-----------------------
 !-----------------------
 !-----------------------
-anorm(t) = max(abs(real(t)), abs(aimag(t)))
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant.  Eps is the
@@ -140,6 +278,13 @@ do k = 1, 50
 end do
 !
 80 w2 = w2 * zr
+contains
+   pure function anorm(t) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: t
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(t)), abs(aimag(t)))
+   end function anorm
 end subroutine ckps
 
 pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
@@ -435,7 +580,6 @@ complex, intent(inout) :: w
 real, intent(in) :: nu
 integer :: i
 real :: a, eps, u, v
-real :: anorm
 real :: m
 complex :: p, t, zr
 real, parameter :: c = 1.77245385090552
@@ -458,7 +602,6 @@ end interface
 !        and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     c = pi**(1/2)
 !--------------------------
@@ -489,6 +632,13 @@ end do
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
 end subroutine cka
 
 pure elemental subroutine ckm(z, r, zr, nu, w1, w2)
@@ -499,7 +649,6 @@ complex, intent(inout) :: w1, w2
 real, intent(in) :: nu
 integer :: k
 real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
-real :: anorm
 complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 real, parameter :: tol = 1.e-10
 real, parameter :: pi = 3.14159265358979
@@ -533,7 +682,6 @@ end interface
 !-----------------------
 !-----------------------
 !-----------------------
-anorm(w) = max(abs(real(w)), abs(aimag(w)))
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant.  Eps is the
@@ -613,6 +761,13 @@ do k = 1, 50
 end do
 !
 80 w2 = w2 * zr
+contains
+   pure function anorm(w) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: w
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(w)), abs(aimag(w)))
+   end function anorm
 end subroutine ckm
 
 pure elemental subroutine ckml(z, r, zr, nu, k1, k2)
@@ -1912,7 +2067,6 @@ real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
 real :: d, eps
-real :: anorm
 real :: m
 complex :: sz, t
 interface
@@ -1929,7 +2083,6 @@ end interface
 !     calculated value.
 !-------------------------------------------------------------
 !------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
 !     number such that 1 + eps .GT. 1.
@@ -1954,6 +2107,13 @@ w = w + t
 if (anorm(t) > eps*anorm(w)) go to 10
 !
 w = w + 1.0
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine bim
 
 subroutine ja(z, i1, i2, i1m, i2m)
@@ -2075,7 +2235,6 @@ real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
 real :: d, eps
-real :: anorm
 real :: m
 complex :: sz, t
 interface
@@ -2092,7 +2251,6 @@ end interface
 !     calculated value.
 !-------------------------------------------------------------
 !------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
 !     number such that 1 + eps .GT. 1.
@@ -2117,6 +2275,13 @@ w = w + t
 if (anorm(t) > eps*anorm(w)) go to 10
 !
 w = w + 1.0
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine bjm
 
 subroutine ka(ind, z, k1, k2)
@@ -10480,153 +10645,4 @@ zeror(num) = lzr
 zeroi(num) = lzi
 go to 40
 end subroutine drply1
-
-subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
-implicit none
-integer :: nn
-double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
-integer :: l2, nz
-integer :: n, type, i, j, iflag
-double precision :: svu, svv, ui, vi, s
-real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
-logical :: vpass, spass, vtry, stry
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-!
-!     Computes up to  l2  fixed shift k-polynomials,
-!     testing for convergence in the linear or quadratic
-!     case. Initiates one of the variable SHIFT
-!     iterations and returns with the number of zeros
-!     found.
-!
-!     l2 - Limit of fixed shift steps
-!     nz - Number of zeros found
-!
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-n = nn - 1
-nz = 0
-betav = .25
-betas = .25
-oss = sr
-ovv = v
-!
-!     Evaluate polynomial by synthetic division
-!
-call quadsd(nn, u, v, p, qp, a, b)
-call calcsc(type, n, k, qk)
-do j = 1,l2
-!
-!     Calculate next k polynomial and estimate v
-!
-   call nextk(type, n, qp, k, qk)
-   call calcsc(type, n, k, qk)
-   call newest(type, ui, vi, nn, p, k)
-   vv = vi
-!
-!     Estimate s
-!
-   ss = 0.0
-   if (k(n) /= 0.d0) ss = -p(nn)/k(n)
-   tv = 1.0
-   ts = 1.0
-   if (j == 1 .or. type == 3) go to 70
-!
-!     Compute relative measures of convergence of s and v
-!     sequences
-!
-   if (vv /= 0.0) tv = abs((vv - ovv)/vv)
-   if (ss /= 0.0) ts = abs((ss - oss)/ss)
-!
-!     If decreasing, multiply two most recent
-!     convergence measures
-!
-   tvv = 1.0
-   if (tv < otv) tvv = tv*otv
-   tss = 1.0
-   if (ts < ots) tss = ts*ots
-!
-!     Compare with convergence criteria
-!
-   vpass = tvv < betav
-   spass = tss < betas
-   if (.not.(spass .or. vpass)) go to 70
-!
-!     At least one sequence has passed the convergence
-!     test. Store variables before iterating
-!
-   svu = u
-   svv = v
-   do i = 1,n
-      svk(i) = k(i)
-   end do
-   s = ss
-!
-!     Choose iteration according to the fastest
-!     converging sequence
-!
-   vtry = .false.
-   stry = .false.
-   if (spass .and. ((.not.vpass) .or. &
-      & tss < tvv)) go to 40
-20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
-   if (nz > 0) return
-!
-!     Quadratic iteration has failed. Flag that it has
-!     been tried and decrease the convergence criterion.
-!
-   vtry = .true.
-   betav = betav*0.25
-!
-!     Try linear iteration if it has not been tried and
-!     the s sequence is converging
-!
-   if (stry .or. (.not.spass)) go to 50
-   do i = 1,n
-      k(i) = svk(i)
-   end do
-40 call realit(s, nz, iflag, nn, p, qp, k, qk)
-   if (nz > 0) return
-!
-!     Linear iteration has failed. Flag that it has been
-!     tried and decrease the convergence criterion
-!
-   stry = .true.
-   betas = betas*0.25
-   if (iflag == 0) go to 50
-!
-!     If linear iteration signals an almost double real
-!     zero attempt quadratic interation
-!
-   ui = -(s + s)
-   vi = s*s
-   go to 20
-!
-!     Restore variables
-!
-50 u = svu
-   v = svv
-   do i = 1,n
-      k(i) = svk(i)
-   end do
-!
-!     Try quadratic iteration if it has not been tried
-!     and the v sequence is converging
-!
-   if (vpass .and. (.not.vtry)) go to 20
-!
-!     Recompute qp and scalar values to continue the
-!     second stage
-!
-   call quadsd(nn, u, v, p, qp, a, b)
-   call calcsc(type, n, k, qk)
-70 ovv = vv
-   oss = ss
-   otv = tv
-   ots = ts
-end do
-end subroutine fxshfr
 

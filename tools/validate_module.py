@@ -36,8 +36,8 @@ def verify(compiler, folder, intel=False, env=None):
             raise RuntimeError(f'{stem}: compiler rejected library\n{result.stderr[:10000]}')
         libraries.append(obj)
         if not intel:
-            normalized = re.sub(r'(?m)^[ \t]+(procedure name =)', r'\1', result.stdout)
-            complete = symbols(normalized, include_intrinsics=True)
+            normalized = result.stdout
+            complete = symbols(normalized, include_intrinsics=True, include_internal=True)
             intrinsic_bindings.append({(scope, n) for scope, records in complete.items() if scope != 'NSWC_MOD'
                                        for n, record in records.items() if 'INTRINSIC-PROC' in record.get('attributes', '')})
             inventory = symbols(normalized)

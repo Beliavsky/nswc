@@ -1,3 +1,931 @@
+pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
+   & zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
+   & ier)
+implicit none
+integer, intent(in) :: iflag
+integer, intent(inout) :: ier
+real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
+   & zx2, zx3, zy1, zy2, zy3
+real, intent(inout) :: w, wx, wy
+integer :: i, ip1, ip2, ip3
+real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
+   & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
+   & f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
+   & a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
+!
+!***********************************************************
+!
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
+!                                             (615) 576-5139
+!
+!   Given function values and first partial derivatives at
+! the three vertices of a triangle, this routine determines
+! a function w which agrees with the given data, returning
+! the value and (optionally) first partial derivatives of w
+! at a point (x,y) in the triangle.  The interpolation
+! method is exact for quadratic polynomial data.  The
+! triangle is partitioned into three subtriangles with
+! equal areas.  w is cubic in each subtriangle and along
+! the edges, but has only one continuous derivative across
+! edges.  The normal derivative of w varies linearly along
+! each outer edge.  The values and partial derivatives of w
+! along a triangle edge depend only on the data values at
+! the endpoints of the edge.  Thus the method yields C-1
+! continuity when used to interpolate over a triangular
+! grid.  This algorithm is due to C. L. Lawson.
+!
+! INPUT PARAMETERS -   x,y - COORDINATES OF A POINT AT WHICH
+!                            w is to be evaluated.
+!
+!        x1,x2,x3,y1,y2,y3 - Coordinates of the vertices of
+!                            a triangle containing (x,y).
+!
+!                 z1,z2,z3 - Function values at the vertices
+!                            to be interpolated.
+!
+!              zx1,ZX2,ZX3 - x-derivative values at the
+!                            vertices.
+!
+!              ZY1,ZY2,ZY3 - y-derivative values at the
+!                            vertices.
+!
+!                    iflag - Option indicator
+!                            iflag = 0 If only w is to be
+!                                      computed.
+!                            iflag = 1 IF w, wx, AND wy ARE
+!                                      to be returned.
+!
+! Input parameters are not altered by this routine.
+!
+! OUTPUT PARAMETERS -   w - ESTIMATED VALUE OF THE INTERP-
+!                           olatory function at (x,y) if
+!                           ier = 0.  OTHERWISE w = 0.
+!
+!                   wx,wy - Partial derivatives of w at
+!                           (x,y) if ier = 0 And iflag = 1,
+!                           unchanged if iflag .NE. 1, zero
+!                           if ier .NE. 0 and iflag = 1.
+!
+!                     ier - Error indicator
+!                           ier = 0 If no errors were
+!                                   encountered.
+!                           ier = 1 If the vertices of the
+!                                   triangle are collinear.
+!
+! Modules referenced by tval - None
+!
+! Intrinsic function called by tval - AMIN1
+!
+!***********************************************************
+!
+!
+! Local parameters -
+!
+! i =               Do-loop index
+! ip1,ip2,ip3 =     Permuted indices for computing RO, ROX,
+!                     and roy
+! u(K) =            x-component of the vector representing
+!                     the side opposite vertex K
+! v(K) =            y-component of the vector representing
+!                     the side opposite vertex K
+! sl(K) =           Square of the length of the side
+!                     opposite vertex K
+! area =            Twice the area of the triangle
+! xp,yp =           x-x1, y-y1
+! r(K) =            K-TH BARYCENTRIC COORDINATE
+! rx(K),ry(K) =     x,y partial derivatives of r(K)
+! PHI(K)            r(K-1)*r(K+1) -- QUADRATIC
+! PHIX(K),PHIY(K) = x,y PARTIALS OF PHI(K)
+! rmin =            min(r1,r2,r3)
+! C1,C2 =           Factors for computing RO
+! RO(K) =           Factors for computing G -- cubic
+!                     correction terms
+! ROX(K),ROY(K) =   x,y PARTIALS OF RO(K)
+! F(K) =            Factors for computing G, GX, and GY --
+!                     constant
+! G(K) =            Factors for computing the cardinal
+!                     functions -- cubic
+! GX(K),GY(K) =     x,y PARTIALS OF G(K)
+! p(k) =            g(k) + phi(k)
+! PX(K),PY(K) =     x,y PARTIALS OF P(K)
+! q(k) =            g(k) - phi(k)
+! QX(K),QY(K) =     x,y PARTIALS OF Q(K)
+! A(K) =            Cardinal function whose coefficient is
+!                     Z(K)
+! AX(K),AY(K) =     x,y PARTIALS OF A(K) -- CARDINAL
+!                     functions for wx and wy
+! B(K) =            Twice the cardinal function whose
+!                     coefficient is ZX(K)
+! BX(K),BY(K) =     x,y PARTIALS OF B(K)
+! C(K) =            Twice the cardinal function whose
+!                     coefficient is ZY(K)
+! CX(K),CY(K) =     x,y PARTIALS OF C(K)
+!
+u(1) = x3 - x2
+u(2) = x1 - x3
+u(3) = x2 - x1
+!
+v(1) = y3 - y2
+v(2) = y1 - y3
+v(3) = y2 - y1
+!
+do i = 1,3
+   sl(i) = u(i)*u(i) + v(i)*v(i)
+1  continue
+end do
+!
+! area = 3-1 x 3-2
+!
+area = u(1)*v(2) - u(2)*v(1)
+if (area == 0.) go to 9
+!
+! r(1) = (2-3 x 2-(x,y))/area, r(2) = (1-(x,y) x 1-3)/area,
+!   r(3) = (1-2 x 1-(x,y))/area
+!
+r(1) = (u(1)*(y - y2) - v(1)*(x - x2))/area
+xp = x - x1
+yp = y - y1
+r(2) = (u(2)*yp - v(2)*xp)/area
+r(3) = (u(3)*yp - v(3)*xp)/area
+ier = 0
+!
+phi(1) = r(2)*r(3)
+phi(2) = r(3)*r(1)
+phi(3) = r(1)*r(2)
+!
+rmin = min(r(1),r(2),r(3))
+if (rmin /= r(1)) go to 3
+ip1 = 1
+ip2 = 2
+ip3 = 3
+go to 5
+3 if (rmin /= r(2)) go to 4
+ip1 = 2
+ip2 = 3
+ip3 = 1
+go to 5
+4 ip1 = 3
+ip2 = 1
+ip3 = 2
+!
+5 c1 = rmin*rmin/2.
+c2 = rmin/3.
+ro(ip1) = (phi(ip1) + 5.*c1/3.)*r(ip1) - c1
+ro(ip2) = c1*(r(ip3) - c2)
+ro(ip3) = c1*(r(ip2) - c2)
+!
+f(1) = 3.*(sl(2) - sl(3))/sl(1)
+f(2) = 3.*(sl(3) - sl(1))/sl(2)
+f(3) = 3.*(sl(1) - sl(2))/sl(3)
+!
+g(1) = (r(2) - r(3))*phi(1) + f(1)*ro(1) - ro(2) + ro(3)
+g(2) = (r(3) - r(1))*phi(2) + f(2)*ro(2) - ro(3) + ro(1)
+g(3) = (r(1) - r(2))*phi(3) + f(3)*ro(3) - ro(1) + ro(2)
+!
+do i = 1,3
+   p(i) = g(i) + phi(i)
+   q(i) = g(i) - phi(i)
+end do
+!
+a(1) = r(1) + g(3) - g(2)
+a(2) = r(2) + g(1) - g(3)
+a(3) = r(3) + g(2) - g(1)
+!
+b(1) = u(3)*p(3) + u(2)*q(2)
+b(2) = u(1)*p(1) + u(3)*q(3)
+b(3) = u(2)*p(2) + u(1)*q(1)
+!
+c(1) = v(3)*p(3) + v(2)*q(2)
+c(2) = v(1)*p(1) + v(3)*q(3)
+c(3) = v(2)*p(2) + v(1)*q(1)
+!
+! w is a linear combination of the cardinal functions
+!
+w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
+   & + b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
+if (iflag /= 1) return
+!
+! Compute wx and wy
+!
+do i = 1,3
+   rx(i) = -v(i)/area
+   ry(i) = u(i)/area
+end do
+phix(1) = r(2)*rx(3) + rx(2)*r(3)
+phiy(1) = r(2)*ry(3) + ry(2)*r(3)
+phix(2) = r(3)*rx(1) + rx(3)*r(1)
+phiy(2) = r(3)*ry(1) + ry(3)*r(1)
+phix(3) = r(1)*rx(2) + rx(1)*r(2)
+phiy(3) = r(1)*ry(2) + ry(1)*r(2)
+!
+rox(ip1) = rx(ip1)*(phi(ip1) + 5.*c1) + &
+   & r(ip1)*(phix(ip1) - rx(ip1))
+roy(ip1) = ry(ip1)*(phi(ip1) + 5.*c1) + &
+   & r(ip1)*(phiy(ip1) - ry(ip1))
+rox(ip2) = rx(ip1)*(phi(ip2) - c1) + c1*rx(ip3)
+roy(ip2) = ry(ip1)*(phi(ip2) - c1) + c1*ry(ip3)
+rox(ip3) = rx(ip1)*(phi(ip3) - c1) + c1*rx(ip2)
+roy(ip3) = ry(ip1)*(phi(ip3) - c1) + c1*ry(ip2)
+!
+gx(1) = (rx(2) - rx(3))*phi(1) + (r(2) - r(3))*phix(1) &
+   & + f(1)*rox(1) - rox(2) + rox(3)
+gy(1) = (ry(2) - ry(3))*phi(1) + (r(2) - r(3))*phiy(1) &
+   & + f(1)*roy(1) - roy(2) + roy(3)
+gx(2) = (rx(3) - rx(1))*phi(2) + (r(3) - r(1))*phix(2) &
+   & + f(2)*rox(2) - rox(3) + rox(1)
+gy(2) = (ry(3) - ry(1))*phi(2) + (r(3) - r(1))*phiy(2) &
+   & + f(2)*roy(2) - roy(3) + roy(1)
+gx(3) = (rx(1) - rx(2))*phi(3) + (r(1) - r(2))*phix(3) &
+   & + f(3)*rox(3) - rox(1) + rox(2)
+gy(3) = (ry(1) - ry(2))*phi(3) + (r(1) - r(2))*phiy(3) &
+   & + f(3)*roy(3) - roy(1) + roy(2)
+!
+do i = 1,3
+   px(i) = gx(i) + phix(i)
+   py(i) = gy(i) + phiy(i)
+   qx(i) = gx(i) - phix(i)
+   qy(i) = gy(i) - phiy(i)
+end do
+!
+ax(1) = rx(1) + gx(3) - gx(2)
+ay(1) = ry(1) + gy(3) - gy(2)
+ax(2) = rx(2) + gx(1) - gx(3)
+ay(2) = ry(2) + gy(1) - gy(3)
+ax(3) = rx(3) + gx(2) - gx(1)
+ay(3) = ry(3) + gy(2) - gy(1)
+!
+bx(1) = u(3)*px(3) + u(2)*qx(2)
+by(1) = u(3)*py(3) + u(2)*qy(2)
+bx(2) = u(1)*px(1) + u(3)*qx(3)
+by(2) = u(1)*py(1) + u(3)*qy(3)
+bx(3) = u(2)*px(2) + u(1)*qx(1)
+by(3) = u(2)*py(2) + u(1)*qy(1)
+!
+cx(1) = v(3)*px(3) + v(2)*qx(2)
+cy(1) = v(3)*py(3) + v(2)*qy(2)
+cx(2) = v(1)*px(1) + v(3)*qx(3)
+cy(2) = v(1)*py(1) + v(3)*qy(3)
+cx(3) = v(2)*px(2) + v(1)*qx(1)
+cy(3) = v(2)*py(2) + v(1)*qy(1)
+!
+! wx and wy are linear combinations of the cardinal
+!   functions
+!
+wx = ax(1)*z1 + ax(2)*z2 + ax(3)*z3 + (bx(1)*zx1 + &
+   & bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
+   & cx(3)*zy3)/2.
+wy = ay(1)*z1 + ay(2)*z2 + ay(3)*z3 + (by(1)*zx1 + &
+   & by(2)*zx2 + by(3)*zx3 + cy(1)*zy1 + cy(2)*zy2 + &
+   & cy(3)*zy3)/2.
+return
+!
+! Vertices are collinear
+!
+9 ier = 1
+w = 0.
+if (iflag /= 1) return
+wx = 0.
+wy = 0.
+end subroutine tval
+
+subroutine mfit(dimen,fitdeg,nfpols,nfpts, &
+   & fitcds,ncrows,fitvls,wts, &
+   & resids,error,fitiwk,fitdwk, &
+   & fiwkln,fdwkln,ireqd,dreqd)
+implicit none
+!
+integer, intent(inout) :: nfpols, fitdeg
+integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
+integer, intent(inout) :: error, ireqd, dreqd
+integer, intent(in) :: ncrows
+integer, intent(inout) :: fitiwk(fiwkln)
+real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
+real, intent(inout) :: fitvls(nfpts), resids(nfpts)
+real, intent(in) :: wts(nfpts)
+integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
+real :: scale
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     This subroutine constructs a least-squares  multinomial  fit  to
+!     given data using a basis of orthogonal multinomials.
+!
+!     The data for the fit is given in the arrays fitcds, fitvls, and
+!     wts. fitcds is a matrix, each row of which contains an observa-
+!     tion point. fitvls is a singly-indexed array, each element of
+!     which contains a function VALUE corresponding to an observation
+!     point. wts is a singly-indexed array, each element of which is
+!     a nonnegative weight for the corresponding observation.
+!
+!     The fit which is produced is a multinomial expressed in the form
+!
+!      C  psi  (X ,...,X     ) +...+ C       psi       (X ,...,X     )
+!       1    1   1      dimen         nfpols    nfpols   1      dimen
+!
+!     Where the value of  nfpols  will be as given (if  fitdeg .LT. 0)
+!     or  as  computed  by  mfit  to give a full-degree fit (in case
+!     fitdeg  is specified .GE. 0).  The elements
+!
+!         psi  (X ,...,X     )
+!            K   1      dimen
+!
+!     Form a basis for the multinomials which is orthogonal with
+!     respect to the weights and observation points.
+!
+!     The extent of the fit can be specified in one of two ways.
+!         If the parameter fitdeg is set .GE. 0, then a complete basis
+!         for the multinomials of degree =  fitdeg  will be used.  (An
+!         error will be  flagged  if  this  will  require  more  basis
+!         multinomials  than  the  number  of  data  points which were
+!         given.)
+!         if the parameter  fitdeg  is .LT.  0, then  nfpols  will  be
+!         taken as the count of the number of basis multinomials to be
+!         used for a partial-degree fit.  (An error will be flagged if
+!         nfpols  .LT. 0.)
+!
+!     Variables
+!     ---------
+!
+!      dimen  -- (INTEGER) -- (passed)
+!         the number of variables.
+!      fitdeg  - (INTEGER) -- (PASSED/RETURNED)
+!         ignored if .LT. 0.
+!         If fitdeg .GE. 0 then  fitdeg  is  checked  against  nfpts .
+!         The value of  fitdeg  will be reduced if there is a basis of
+!         multinomials, all of  degree  .LE. fitdeg ,  of  cardinality
+!         nfpts .  See  error  below.
+!      nfpols  - (INTEGER) -- (PASSED/RETURNED)
+!         ignored if  fitdeg  .GE. 0.
+!         If  fitdeg .LT. 0 then the value of nfpols will be taken  as
+!         the size of the basis of multinomials to be used in the fit.
+!         nfpols  MUST SATISFY  nfpols  .LT. nfpts  AND nfpols .GE. 1
+!         see  error  below.
+!      nfpts  --- (INTEGER) -- (passed)
+!         the number of data points to be used in the fit.
+!         nfpts  must be .GE. 1.  See  error  below.
+!      fitcds  -- (real 2-subscript array) -- (passed)
+!         fitcds (p,K) is the value of the K-TH variable at the  p-TH
+!         data point.
+!      ncrows  -- (INTEGER) -- (passed)
+!         THE ROW DIMENSION  DECLARED  FOR   fitcds   IN  THE  CALLING
+!         program.
+!      fitvls  -- (real 1-subscript array) -- (passed)
+!         fitvls (p) is the observed function VALUE of the p-TH  data
+!         point.
+!      wts  ----- (real 1-subscript array) -- (passed)
+!         wts (p) is the weight attached to the p-TH data point.
+!      resids  -- (real 1-subscript array) -- (returned)
+!         resids (p) is the difference between the fitted function at
+!         point p and  fitvls (p).
+!      error  -- (INTEGER) -- (returned)
+!       0 the desired least square multinomial fit was obtained.
+!      -1 Only the first nfpols basis polynomials were obtained.
+!         fitdeg is the degree of the fit.
+!       1 If  fitdeg  .GE. 0 but there is an interpolating multinomial
+!         of smaller degree or if fitdeg .LT. 0 and nfpols .GT. nfpts.
+!       2 IF  fitdeg  .LT. 0 AND  nfpols  .LE. 0.
+!       3 IF  nfpts  .LT. 1 AND/OR  dimen  .LT. 1.
+!       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
+!         the value returned in  ireqd , and set  DWKLEN  to the value
+!         returned in  dreqd  to resolve this problem.)
+!      fitiwk  -- (integer, 1-subscript array) -- (returned)
+!         an integer work array of length  fiwkln .  Upon return  from
+!         mfit, fitiwk contains dimension and array LENGTH information.
+!      fitdwk  -- (real 1-subscript array) -- (returned)
+!         a real array of length  fdwkln  containing the coefficients
+!         needed for computing the multinomial fit at a point.
+!      fiwkln  -- (INTEGER) -- (passed)
+!         the length of the array  fitiwk .
+!      fdwkln  -- (INTEGER) -- (passed)
+!         the length of the array  fitdwk .
+!      ireqd  -- (INTEGER) -- (returned)
+!         the length which the array  fitiwk  really needs to be.
+!      dreqd  -- (INTEGER) -- (returned)
+!         the length which the array  fitdwk  really needs to be.
+!
+!
+!     Note. The 20 loop depends on the scaling scheme being used. The
+!     residual scaling must be consistent with that defined by scalpm
+!     AND scaldn.
+!
+!     mfit  calls  allot  and  gnrtp.
+!     ****************
+!
+dimp1 = dimen + 1
+!
+!     ***************
+!
+call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
+   & error)
+if ( error >= 2 ) return
+!
+if ( fdwkln >= dreqd ) go to 10
+error = 4
+return
+10 continue
+!
+psiwid = fitiwk(3)
+alfl = fitiwk(4)
+indstt = 1
+newstt = 4 * nfpols + indstt
+maxstt = 1
+alfstt = maxstt + dimp1
+cstt = alfstt + alfl
+ssqstt = cstt + nfpols
+psistt = ssqstt + nfpols
+!
+!     ***************
+!
+call gnrtp(fitdeg,fitdwk(alfstt), &
+   & fitdwk(psistt),fitiwk(indstt), &
+   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+   & fitdwk(maxstt),error)
+!
+!     ***************
+!     Store the number of basis polynomials actually computed
+!     by the modified routine incdg called by gnrtp.
+!     ***************
+!
+fitiwk(1) = nfpols
+!
+!     ***************
+!     Unscale the residuals for the benefit of the user.
+!     ***************
+!
+scale = fitdwk(dimen + 1)
+do p = 1,nfpts
+   resids(p) = resids(p) * scale
+end do
+end subroutine mfit
+
+pure subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
+   & ireqd,dreqd,error)
+implicit none
+!
+integer, intent(inout) :: ireqd, dreqd
+integer, intent(inout) :: error, npolys, degree
+integer, intent(in) :: dimen, npts
+integer, intent(in) :: iwklen
+integer, intent(inout) :: iwork(iwklen)
+integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
+interface
+   pure elemental subroutine basiz(degree,npts,dimen,npolys, &
+      & error)
+      implicit none
+      integer, intent(inout) :: degree
+      integer, intent(in) :: npts
+      integer, intent(in) :: dimen
+      integer, intent(inout) :: npolys
+      integer, intent(out) :: error
+   end subroutine basiz
+   pure subroutine mtable(degree,dimen,npolys,indexs,newkj, &
+      & alflp1)
+      implicit none
+      integer, intent(in) :: npolys
+      integer, intent(in) :: dimen
+      integer, intent(in) :: degree
+      integer, intent(inout) :: indexs(4,npolys)
+      integer, intent(inout) :: newkj(dimen,degree)
+      integer, intent(out) :: alflp1
+   end subroutine mtable
+end interface
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!      Allot  checks for sufficiency the declared  dimensions  of  the
+!     work  arrays  used by the subroutine  mfit .  Various sizes of
+!     sub-arrays are computed and reported.
+!
+!     This routine is called by  mfit .  It is not  called  directly
+!     by the user.
+!
+!     THIS ROUTINE CALLS   basiz   AND   mtable   FOR  THE  SUBSTANTIVE
+!     computations.
+!
+!     Variables
+!     ---------
+!
+!      degree  - (PASSED/RETURNED)
+!         ignored if .LT. 0.
+!         If  degree  .GE. 0 then  degree is checked  against   npts .
+!         The value of  degree  will be reduced if there is a basis of
+!         multinomials, all of  degree .LE.  degree ,  of  cardinality
+!          npts
+!      npolys  - (PASSED/RETURNED)
+!         ignored if  degree  .GE. 0.
+!         If degree .LT. 0 then the value of npolys will be taken  as
+!         the size of the basis of multinomials to be used in the fit.
+!         npolys  MUST SATISFY npolys .LT.  npts  AND  npolys  .GE. 1
+!      npts  --- (PASSED)
+!         the number of data points to be used in the fit.
+!          npts  MUST BE .GE. 1.
+!      dimen  -- (PASSED)
+!         the number of variables.
+!      iwork  -- (RETURNED)
+!         an integer work array of length at least
+!            if  degree  .GE. 0 then
+!               4*binomial( dimen + degree , dimen )
+!                  +( dimen )*( DEGREE )
+!            ELSE
+!               4*BINOMIAL( dimen +D,D)+( dimen )*D
+!         where D is the minimum cardinality  of  a  basis  of  degree
+!          degree  such that
+!            BINOMIAL( dimen +abs( degree ), dimen ) .GE.  npolys
+!      iwklen  - (PASSED)
+!         the length of  iwork
+!      ireqd  -- (RETURNED)
+!         THE SIZE OF THE INTEGER WORK ARRAY REQUIRED BY  mfit   FOR
+!         the fit specified by the 4 input parameters.
+!      dreqd  -- (RETURNED)
+!         the size of the double  precision  work  array  required  by
+!          mfit  for the fit specified by the 4 input parameters.
+!      error  -- (returned)
+!       0 IF  npolys ,  dimen ,   DEGREE ,   npts   AND   iwklen   ARE
+!         valid and consistent with each other.
+!       1 If  degree  .GE. 0 but there is an interpolating multinomial
+!         of smaller degree or if  degree .LT. 0 and  npolys .GT. npts
+!       2 if  degree  .LT. 0 and  npolys  .LE. 0
+!       3 IF  npts  .LT. 1 AND/OR  dimen  .LT. 1
+!       4 if  iwklen  is too small (set  iwklen  to the value returned
+!         in  ireqd  to resolve this problem)
+!
+!     NOTE THAT  DEGREE ,  npolys ,  psiwid  AND  alfl   ARE  RETURNED
+!     in  iwork (1-4), respectively.
+!
+!     Date last modified
+!     ---- ---- --------
+!     December 10, 1984
+!     ****************
+!
+!     ***************
+!     basiz  computes the size of the basis (and auxiliary sizes)
+!     based primarily upon the degree, number of  fitting points,
+!     and the dimension.
+!     ***************
+!
+call basiz(degree,npts,dimen,npolys,error)
+if ( error >= 2 ) return
+ireqd = 4 * npolys + degree * dimen
+if ( iwklen >= ireqd ) go to 5
+error = 4
+return
+5 newstt = 4 * npolys + 1
+!
+!     ***************
+!     Set up useful indexing arrays
+!          iwork(1) ,..., iwork(newstt-1)
+!     and
+!          iwork(newstt ,..., iwork(newstt+dimen*degree)
+!     ***************
+!
+call mtable(degree,dimen,npolys,iwork,iwork(newstt),alfl)
+iwork(1) = degree
+iwork(2) = npolys
+!
+!     ***************
+!     Force  alfl  to be at least 1 so that dimension statements
+!     using  alfl  do not bomb.
+!     ***************
+!
+if ( alfl > 1 ) alfl = alfl - 1
+iwork(4) = alfl
+!
+!     ***************
+!     The following is a section of code for setting up the
+!     storage  management of the  psi  array.  There  is  A
+!     complicated dovetailing formula used to pack information
+!     into  psi  without leaving gaps.
+!
+!     ARRAY          LENGTH
+!     -----          ------
+!      MAXABS         dimen  + 1
+!      ALPHA          alfl
+!      C              npolys
+!      SUMSQS         npolys
+!
+!     The number of columns in  psi ,  psiwid , is determined by
+!     psiwid  =  npolys  + 1 - (the smallest M such that alpha(J,M)
+!                                   is nonzero and J .GE. npolys)
+!     this insures that if the user extends the basis, all the  psi
+!     required will certainly be stored
+!
+!     IF degree( npolys ) .LE. 2 THEN                      (CASE 1)
+!       psiwid  =  npolys
+!     ELSE
+!       IF K =  dimen  THEN                                (CASE 2)
+!         psiwid  =  npolys
+!                    -  NEWKJ( 1 , degree(npolys)-1 )  + 1
+!       ELSE
+!            psiwid  =  npolys
+!                      + 1
+!                      - (
+!                         The smaller of
+!                           NEWKJ(K+1,degree(npolys)-2)    (CASE 3)
+!                         and
+!                           INDEXS(3,npolys)               (CASE 4)
+!                        )
+!
+if ( degree > 2 ) go to 10
+!
+!     ***************
+!     Case 1
+!     ***************
+!
+psiwid = npolys
+go to 40
+10 nplyt4 = 4 * npolys
+!
+!     ***************
+!     kmxbas  IS K
+!                 npolys
+!     ***************
+!
+kmxbas = iwork(nplyt4 - 2)
+!
+if ( kmxbas /= dimen ) go to 20
+!
+!     ***************
+!     Case 2
+!     ***************
+!
+psiwid = npolys - iwork(4 * npolys - 1)
+go to 40
+!
+!     ***************
+!     index =  newkj( k      + 1 , degree(npolys-2) )
+!                      npolys
+!     ***************
+!
+20 index = nplyt4 + (degree - 3) * dimen + kmxbas + 1
+kjp1d2 = iwork(index)
+!
+!     ***************
+!     startj  =  indexs(3,npolys)
+!     ***************
+!
+startj = iwork(nplyt4 - 1)
+if ( startj > kjp1d2 ) go to 30
+!
+!     ***************
+!     Case 4
+!     ***************
+!
+psiwid = npolys - startj + 1
+go to 40
+!
+!     ***************
+!     Case 3
+!     ***************
+!
+30 psiwid = npolys - kjp1d2 + 1
+40 iwork(3) = psiwid
+dreqd = 2 * npolys + dimen + 1 + npts * psiwid + alfl
+end subroutine allot
+
+pure elemental subroutine basiz(degree,npts,dimen,npolys,error)
+implicit none
+!
+integer, intent(inout) :: degree
+integer, intent(in) :: npts, dimen
+integer, intent(inout) :: npolys
+integer, intent(out) :: error
+integer :: top, bot, i, rowlen
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     If  degree  .GE. 0 then
+!       find the size of a basis required either to
+!       1) approximate the data with a polynomial of degree
+!          given by the parameter  degree
+!       or to
+!       2) span the space of polynomials of degree .LE. the
+!          smallest degree of polynomial which interpolates the
+!          data.
+!       In case 1  error  = 0.
+!       In case 2  error  = 1.
+!     ELSE
+!       IF  npolys  .GE. 1 THEN
+!          IF npolys .GT. npts THEN
+!             set  npolys  =  npts , find the smallest degree of A
+!             polynomial  which  interpolates  the  data,  and set
+!              error  = 1.
+!          ELSE
+!             find the largest degree  degree  of a polynomial  in
+!             a  basis of  npolys  polynomials generated according
+!             to our ordering and set  error  = 0.
+!       ELSE
+!           error  = 2
+!
+!     This subroutine is called by  allot .  It is not  called  by
+!     the user directly.
+!
+!     Date last modified
+!     ---- ---- --------
+!     October 16, 1984
+!     ****************
+!
+error = 0
+if ( npts >= 1 .and. dimen >= 1 ) go to 10
+error = 3
+return
+!
+10 continue
+if ( degree < 0 ) go to 30
+!
+rowlen = 1
+npolys = 1
+top = dimen - 1
+bot = 0
+if ( degree < 1 ) go to 30
+do i = 1,degree
+   top = top + 1
+   bot = bot + 1
+   rowlen = (rowlen*top)/bot
+   npolys = npolys + rowlen
+end do
+!
+30 continue
+if ( npolys >= 1 ) go to 40
+error = 2
+return
+40 continue
+if ( npolys < npts ) go to 50
+npolys = npts
+error = 1
+50 continue
+rowlen = 1
+i = 1
+degree = 0
+top = dimen - 1
+bot = 0
+60 continue
+if ( i >= npolys ) go to 70
+top = top + 1
+bot = bot + 1
+rowlen = (rowlen*top)/bot
+i = i + rowlen
+degree = degree + 1
+if ( i < npolys ) go to 60
+70 continue
+end subroutine basiz
+
+pure subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
+implicit none
+!
+integer, intent(in) :: npolys, dimen, degree
+integer, intent(out) :: alflp1
+integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
+integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, dimm2, dimp1
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     Tabulate  JP  and  kj  for each  j
+!
+!     Variables
+!     ---------
+!
+!      alflp1  -- (INTEGER) -- (passed)
+!         the length required for array  ALPHA , plus one
+!      degree  -- (INTEGER) -- (passed)
+!         the degree of the polynomial to be fitted
+!      dimen  -- (INTEGER) -- (passed)
+!         number of independent variables
+!      indexs  -- (integer, 2-subscript array) -- (returned)
+!          indexs (1, j )   IS    JP ,    indexs (2, j )   IS     kj ,
+!          indexs (3, j )  is the first nonzero recurrence coefficient
+!         in  alpha  and  indexs (4, j ) is its location in  alpha .
+!      newkj  -- (integer, 2-subscript array) -- (returned)
+!          newkj ( K , D ) IS THE FIRST MONOMIAL OF DEGREE  D   HAVING
+!          kj = k .
+!      npolys  -- (INTEGER) -- (passed)
+!         number  of  monomials  of  degree  .LE.  order  in   dimen
+!         independent variables.
+!
+!     This subprogram can be coded (excluding the part for calculating
+!      indexs (3, j )  AND   indexs (4, j )) MENTALLY MORE EFFICIENTLY
+!     but computationally less efficiently as
+!
+!         j = 2
+!         do 5 kj = 1,dimen
+!           newkj(kj,1) = kj + 1
+!           indexs(1,j) = 1
+!           indexs(2,j) = kj
+!           j = j + 1
+!      5  continue
+!         do 10 curdeg = 2,degree
+!           do 10 kj = 1,dimen
+!             jprime = newkj(kj,curdeg - 1)
+!             newkj(kj,curdeg) = j
+!             nwithk = comb(dimen + curdeg - kj - 1,curdeg - 1)
+!             do 10 i = 1,nwithk
+!               indexs(1,j) = jprime
+!               indexs(2,j) = kj
+!               jprime = jprime + 1
+!               j = j + 1
+!     10  continue
+!
+!     Where comb(N,kj) is N-factorial / ((N-kj)-factorial * kj-factorial
+!     here we make use of the recurrence relations
+!
+!       COMB(dimen+curdeg-2,curdeg-1)
+!
+!            (dimen+curdeg-2)*COMB(dimen+curdeg-3,curdeg-2)
+!          = ----------------------------------------------
+!                              (curdeg-1)
+!
+!     And
+!
+!       COMB(dimen+curdeg-kj-1,curdeg-1)
+!
+!            (dimen-kj+1)*COMB(dimen+curdeg-kj,curdeg-1)
+!          = -------------------------------------------
+!                         (dimen+curdeg-kj)
+!
+!
+!     Date last modified
+!     ---- ---- --------
+!     October 16, 1984
+!     ****************
+!
+alflp1 = 1
+!
+!     ***************
+!     Set  indexs (4,1) to 1 so that  ALFL - indexs (4,1)+1 is the
+!     number of columns required for  psi  for  npolys =1  ( ALFL
+!     is defined in the mainline to be  alflp1 -1 If alflp1 .GT. 1
+!     and  alflp1  otherwise.
+!     ***************
+!
+indexs(4,1) = 1
+!
+if ( npolys == 1 ) return
+j = 2
+do kj = 1,dimen
+   newkj(kj,1) = kj + 1
+   indexs(1,j) = 1
+   indexs(2,j) = kj
+   indexs(3,j) = 1
+   indexs(4,j) = alflp1
+   alflp1 = alflp1 + j - 1
+   if ( j == npolys ) return
+10 j = j + 1
+end do
+if ( degree == 1 ) return
+ralen = 1
+dimm1 = dimen - 1
+dimm2 = dimen - 2
+dimp1 = dimen + 1
+do curdeg = 2,degree
+   curm1 = curdeg - 1
+   ralen = (ralen * (dimm2 + curdeg)) / curm1
+   nwithk = ralen
+   kj = 1
+20 jprime = newkj(kj,curm1)
+   newkj(kj,curdeg) = j
+   if ( kj == dimen ) go to 60
+   do i = 1,nwithk
+      indexs(1,j) = jprime
+      indexs(2,j) = kj
+!
+!     ***************
+!     CALCULATE  indexs (3, j ),  indexs (4, j )
+!     ***************
+!
+      if ( kj < indexs(2,jprime) ) go to 30
+      indexs(3,j) = indexs(1,jprime)
+      go to 40
+30    indexs(3,j) = newkj(1,curdeg - 1)
+40    indexs(4,j) = alflp1
+      alflp1 = alflp1 + j - indexs(3,j)
+      if ( j == npolys ) return
+!
+      jprime = jprime + 1
+50    j = j + 1
+   end do
+   kj = kj + 1
+   nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
+   go to 20
+60 indexs(1,j) = jprime
+   indexs(2,j) = dimen
+   indexs(3,j) = indexs(1,jprime)
+   indexs(4,j) = alflp1
+   alflp1 = alflp1 + j - indexs(3,j)
+   if ( j == npolys ) return
+70 j = j + 1
+end do
+end subroutine mtable
+
 subroutine gnrtp(degree,alpha,psi,indexs, &
    & newkj,sumsqs,coord,ncrows,npolys, &
    & dimen,npts,f,z,c,psiwid,weight, &
@@ -9380,7 +10308,16 @@ do nmi = 1,nm1
 221 x(i) = x(i) + r(i)
 end do
 !
-go to (300,230,300,230),option
+select case (option)
+case (1)
+   go to 300
+case (2)
+   go to 230
+case (3)
+   go to 300
+case (4)
+   go to 230
+end select
 230 if (iswit == 1) go to 120
 !
 !             Calculate the correction error
@@ -9573,1103 +10510,4 @@ if (phase1) work(iphase) = 1.0
 iwork(2) = -1
 if (nornd) iwork(2) = 1
 end subroutine ode
-
-subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
-   & yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
-   & start,told,delsgn,ns,nornd,k,kold,isnold)
-implicit none
-integer, intent(inout) :: iflag, isnold, k, kold
-integer, intent(in) :: neqn
-integer, intent(inout) :: ns
-real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
-   & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
-real, intent(in) :: tout
-real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
-real :: yp(neqn)
-real, intent(inout) :: ypout(neqn), yy(neqn)
-logical, intent(inout) :: start, phase1, nornd
-external f
-integer :: isn, kle4, l, nostep
-real :: absdel, abseps, del, eps, fouru, releps, tend, u
-logical :: stiff, crash
-integer, parameter :: maxnum = 500
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!
-!   ODE  merely allocates storage for  de1 to relieve the user of the
-!   inconvenience of a long call list.  Consequently  de1 is used as
-!   described in the comments for  ODE .
-!
-!   This code is completely explained and documented in the text,
-!   computer solution of ordinary differential equations,  the initial
-!   value problem  by L. F. Shampine and M. K. Gordon.
-!
-!
-!   The constant  maxnum  is the maximum number of steps allowed in one
-!   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
-!   following statement
-!
-!
-!   ****** u is a machine dependent parameter. u is the smallest
-!          positive number for which 1.0 + u .GT. 1.0.
-!
-u = spmpar(1)
-fouru = 4.0*u
-!
-!            ***            ***            ***
-!
-!   Test for improper parameters
-!
-if (neqn < 1) go to 10
-if (t == tout) go to 10
-if (relerr < 0.0  .or.  abserr < 0.0) go to 10
-eps = max(relerr,abserr)
-if (eps <= 0.0) go to 10
-if (iflag == 0) go to 10
-isn = sign(1,iflag)
-iflag = abs(iflag)
-if (iflag == 1) go to 20
-if (t /= told) go to 10
-if (iflag >= 2  .and.  iflag <= 5) go to 20
-if (iflag == 6  .and.  abserr > 0.0) go to 20
-10 iflag = 7
-return
-!
-!   On each call set interval of integration and counter for number of
-!   steps.  Adjust input error tolerances to define weight vector for
-!   SUBROUTINE  step1
-!
-20 del = tout - t
-absdel = abs(del)
-tend = t + 10.0*del
-if (isn < 0) tend = tout
-nostep = 0
-kle4 = 0
-stiff = .false.
-releps = relerr/eps
-abseps = abserr/eps
-if (iflag == 1) go to 30
-if (isnold < 0) go to 30
-if (delsgn*del > 0.0) go to 50
-!
-!   On start and restart also set work variables x and yy(*), store the
-!   direction of integration and initialize the step size
-!
-30 start = .true.
-x = t
-do l = 1,neqn
-40 yy(l) = y(l)
-end do
-delsgn = sign(1.0,del)
-h = sign(max(fouru*abs(x),abs(tout - x)),tout - x)
-!
-!   If already past output point, interpolate and return
-!
-50 if (abs(x - t) < absdel) go to 60
-call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
-iflag = 2
-t = tout
-told = t
-isnold = isn
-return
-!
-!   If cannot go past output point and sufficiently close,
-!   extrapolate and return
-!
-60 if (isn > 0  .or.  abs(tout - x) >= fouru*abs(x)) go to 80
-h = tout - x
-call f(x,yy,yp)
-do l = 1,neqn
-70 y(l) = yy(l) + h*yp(l)
-end do
-iflag = 2
-t = tout
-told = t
-isnold = isn
-return
-!
-!   Test for too many steps
-!
-80 if (nostep < maxnum) go to 100
-iflag = isn*4
-if (stiff) iflag = isn*5
-do l = 1,neqn
-90 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-return
-!
-!   Limit step size, set weight vector and take a step
-!
-100 h = sign(min(abs(h),abs(tend - x)),h)
-do l = 1,neqn
-   wt(l) = releps*abs(yy(l)) + abseps
-   if (wt(l) <= 0.0) go to 140
-end do
-call step1(f,neqn,yy,x,h,eps,wt,start, &
-   & hold,k,kold,crash,phi,p,yp,psi, &
-   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
-!
-!   Test for tolerances too small
-!
-if (.not.crash) go to 130
-iflag = isn*3
-relerr = eps*releps
-abserr = eps*abseps
-do l = 1,neqn
-120 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-return
-!
-!   Augment counter on number of steps and test for stiffness
-!
-130 nostep = nostep + 1
-kle4 = kle4 + 1
-if (kold > 4) kle4 = 0
-if (kle4 >= 50) stiff = .true.
-go to 50
-!
-!   Relative error criterion inappropriate
-!
-140 iflag = isn*6
-do l = 1,neqn
-150 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-end subroutine de1
-
-subroutine step1(f,neqn,y,x,h,eps,wt,start, &
-   & hold,k,kold,crash,phi,p,yp,psi, &
-   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
-implicit none
-integer, intent(inout) :: k, kold
-integer, intent(in) :: neqn
-integer, intent(inout) :: ns
-real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
-   & p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
-real :: wt(neqn)
-real, intent(inout) :: x, y(neqn)
-real :: yp(neqn)
-logical, intent(inout) :: start
-logical, intent(out) :: crash
-logical, intent(inout) :: phase1, nornd
-external f
-integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
-real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
-   & temp4, temp5, temp6, twou, u, xold
-real, parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
-real, parameter :: gstr(13) = [0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
-   & 0.00524, 0.00468]
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!
-!   Written by L. F. Shampine and M. K. Gordon
-!
-!   Abstract
-!
-!   Subroutine  step1  is normally used indirectly through subroutine
-!   ODE .  Because  ODE  suffices for most problems and is much easier
-!   to use, using it should be considered before using  step1  alone.
-!
-!   Subroutine step1 integrates a system of  neqn  first order ordinary
-!   differential equations one step, normally from x to x+h, using A
-!   modified divided difference form of the Adams PECE formulas.  Local
-!   extrapolation is used to improve absolute stability and accuracy.
-!   The code adjusts its order and step size to control the local error
-!   per unit step in a generalized sense.  Special devices are included
-!   to control roundoff error and to detect when the user is requesting
-!   too much accuracy.
-!
-!   This code is completely explained and documented in the text,
-!   computer solution of ordinary differential equations,  the initial
-!   value problem  by L. F. Shampine and M. K. Gordon.
-!
-!
-!   The parameters represent...
-!      F -- subroutine to evaluate derivatives
-!      neqn -- number of equations to be integrated
-!      y(*) -- solution vector at x
-!      x -- independent variable
-!      h -- appropriate step size for next step.  Normally determined by
-!           code
-!      eps -- local error tolerance
-!      wt(*) -- vector of weights for error criterion
-!      start -- logical variable SET .TRUE. for first step,  .FALSE.
-!           Otherwise
-!      hold -- step size used for last successful step
-!      k -- appropriate order for next step (determined by code)
-!      kold -- order used for last successful step
-!      crash -- logical variable SET .TRUE. when no step can be taken,
-!           .FALSE. otherwise.
-!      yp(*) -- derivative of solution vector at  x  after successful
-!           step
-!   the arrays  phi, psi  are required for the interpolation subroutine
-!   intrp .  The array  P  is internal to the code.  The remaining nine
-!   variables and arrays are included in the call list only to eliminate
-!   local retention of variables between calls.
-!
-!   Input to step1
-!
-!      First call --
-!
-!   The user must provide storage in his calling program for all arrays
-!   in the call list, namely
-!
-!     dimension y(neqn),wt(neqn),phi(neqn,16),p(neqn),yp(neqn),psi(12),
-!    1  alpha(12),beta(12),sig(13),V(12),W(12),g(13)
-!
-!   The user must also declare  start ,  crash ,  phase1  and  nornd
-!   LOGICAL VARIABLES AND  F  AN EXTERNAL SUBROUTINE, SUPPLY THE
-!   subroutine  f(x,y,yp)  to evaluate
-!      DY(i)/DX = yp(i) = F(x,y(1),y(2),...,y(neqn))
-!   and initialize only the following parameters...
-!      neqn -- number of equations to be integrated
-!      y(*) -- vector of initial values of dependent variables
-!      x -- initial value of the independent variable
-!      h -- nominal step size indicating direction of integration
-!           and maximum size of step.  Must be variable
-!      eps -- local error tolerance per step.  Must be variable
-!      wt(*) -- vector of non-zero weights for error criterion
-!      start -- .TRUE.
-!
-!   step1  requires that the L2 norm of the vector with components
-!   local error(l)/wt(l)  be less than  eps  for a successful step.  The
-!   array  wt  allows the user to specify an error test appropriate
-!   for his problem.  For example,
-!      wt(l) = 1.0  specifies absolute error,
-!            = abs(y(l))  error relative to the most recent value of the
-!                 l-TH component of the solution,
-!            = abs(yp(l))  error relative to the most recent value of
-!                 the l-TH component of the derivative,
-!            = AMAX1(wt(l),abs(y(l)))  error relative to the largest
-!                 magnitude of l-TH component obtained so far,
-!            = abs(y(l))*RELERR/eps + ABSERR/eps  specifies a mixed
-!                 relative-absolute test where  RELERR  is relative
-!                 error,  ABSERR  is absolute error and  eps =
-!                 AMAX1(RELERR,ABSERR) .
-!
-!      Subsequent calls --
-!
-!   Subroutine  step1  is designed so that all information needed to
-!   CONTINUE THE INTEGRATION, INCLUDING THE STEP SIZE  h  AND THE ORDER
-!   k , is returned with each step.  With the exception of the step
-!   size, the error tolerance, and the weights, none of the parameters
-!   should be altered.  The array  wt  must be updated after each step
-!   to maintain relative error tests like those above.  Normally the
-!   integration is continued just beyond the desired endpoint and the
-!   solution interpolated there with subroutine  intrp .  If it is
-!   impossible to integrate beyond the endpoint, the step size may be
-!   reduced to hit the endpoint since the code will not take a step
-!   larger than the  h  input.  Changing the direction of integration,
-!   I.E., the sign of  h , requires the user set  start = .TRUE. before
-!   calling  step1  again.  This is the only situation in which  start
-!   should be altered.
-!
-!   Output from step1
-!
-!      Successful step --
-!
-!   The subroutine returns after each successful step with  start  and
-!   crash  set .FALSE. .  x  represents the independent variable
-!   advanced one step of length  hold  from its value on input and  y
-!   the solution vector at the new value of  x .  All other parameters
-!   represent information corresponding to the new  x  needed to
-!   CONTINUE THE INTEGRATION.
-!
-!      Unsuccessful step --
-!
-!   When the error tolerance is too small for the machine precision,
-!   the subroutine returns without taking a step and  crash = .TRUE. .
-!   An appropriate step size and error tolerance for continuing are
-!   estimated and all other information is restored as upon input
-!   before returning.  To continue with the larger tolerance, the user
-!   just calls the code again.  A restart is neither required nor
-!   desirable.
-!
-!
-!
-!   ****** U is a machine dependent parameter. It is the smallest
-!          positive number for which 1.0 + U .GT. 1.0.
-!
-u = spmpar(1)
-twou = 2.0*u
-fouru = 4.0*u
-!
-!       ***     Begin block 0     ***
-!
-!   Check if step size or error tolerance is too small for machine
-!   precision.  If first step, initialize phi array and estimate A
-!   starting step size.
-!
-!                   ***
-!
-!   If step size is too small, determine an acceptable one
-!
-crash = .true.
-if (abs(h) >= fouru*abs(x)) go to 5
-h = sign(fouru*abs(x),h)
-return
-5 p5eps = 0.5*eps
-!
-!   If error tolerance is too small, increase it to an acceptable value
-!
-round = 0.0
-do l = 1,neqn
-10 round = round + (y(l)/wt(l))**2
-end do
-round = twou*sqrt(round)
-if (p5eps >= round) go to 15
-eps = 2.0*round*(1.0 + fouru)
-return
-15 crash = .false.
-g(1) = 1.0
-g(2) = 0.5
-sig(1) = 1.0
-if (.not.start) go to 99
-!
-!   Initialize.  Compute appropriate step size for first step
-!
-call f(x,y,yp)
-sum = 0.0
-do l = 1,neqn
-   phi(l,1) = yp(l)
-   phi(l,2) = 0.0
-20 sum = sum + (yp(l)/wt(l))**2
-end do
-sum = sqrt(sum)
-absh = abs(h)
-if (eps < 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
-h = sign(max(absh,fouru*abs(x)),h)
-hold = 0.0
-k = 1
-kold = 0
-start = .false.
-phase1 = .true.
-nornd = .true.
-if (p5eps > 100.0*round) go to 99
-nornd = .false.
-do l = 1,neqn
-25 phi(l,15) = 0.0
-end do
-99 ifail = 0
-!
-!       ***     End block 0     ***
-!
-!       ***     Begin block 1     ***
-!
-!   Compute coefficients of formulas for this step.  Avoid computing
-!   those quantities not changed when step size is not changed.
-!
-!                   ***
-!
-100 kp1 = k + 1
-kp2 = k + 2
-km1 = k - 1
-km2 = k - 2
-!
-!   ns is the number of steps taken with size h, including the current
-!   one.  When k.LT.ns, no coefficients change
-!
-if (h /= hold) ns = 0
-if (ns <= kold) ns = ns + 1
-nsp1 = ns + 1
-if (k < ns) go to 199
-!
-!   Compute those components of alpha(*),beta(*),psi(*),sig(*) which
-!   are changed
-!
-beta(ns) = 1.0
-realns = ns
-alpha(ns) = 1.0/realns
-temp1 = h*realns
-sig(nsp1) = 1.0
-if (k < nsp1) go to 110
-do i = nsp1,k
-   im1 = i - 1
-   temp2 = psi(im1)
-   psi(im1) = temp1
-   beta(i) = beta(im1)*psi(im1)/temp2
-   temp1 = temp2 + h
-   alpha(i) = h/temp1
-   reali = i
-105 sig(i + 1) = reali*alpha(i)*sig(i)
-end do
-110 psi(k) = temp1
-!
-!   Compute coefficients g(*)
-!
-!   Initialize V(*) and set W(*).
-!
-if (ns > 1) go to 120
-do iq = 1,k
-   temp3 = iq*(iq + 1)
-   v(iq) = 1.0/temp3
-115 w(iq) = v(iq)
-end do
-go to 140
-!
-!   If order was raised, update diagonal part of V(*)
-!
-120 if (k <= kold) go to 130
-temp4 = k*kp1
-v(k) = 1.0/temp4
-nsm2 = ns - 2
-if (nsm2 < 1) go to 130
-do j = 1,nsm2
-   i = k - j
-125 v(i) = v(i) - alpha(j + 1)*v(i + 1)
-end do
-!
-!   Update V(*) and set W(*)
-!
-130 limit1 = kp1 - ns
-temp5 = alpha(ns)
-do iq = 1,limit1
-   v(iq) = v(iq) - temp5*v(iq + 1)
-135 w(iq) = v(iq)
-end do
-g(nsp1) = w(1)
-!
-!   Compute the g(*) in the work vector W(*)
-!
-140 nsp2 = ns + 2
-if (kp1 < nsp2) go to 199
-do i = nsp2,kp1
-   limit2 = kp2 - i
-   temp6 = alpha(i - 1)
-   do iq = 1,limit2
-145   w(iq) = w(iq) - temp6*w(iq + 1)
-   end do
-150 g(i) = w(1)
-end do
-199 continue
-!
-!       ***     End block 1     ***
-!
-!       ***     Begin block 2     ***
-!
-!   Predict a solution P(*), evaluate derivatives using predicted
-!   solution, estimate local error at order k and errors at orders k,
-!   k-1, k-2 as if constant step size were used.
-!
-!                   ***
-!
-!   Change phi to phi star
-!
-if (k < nsp1) go to 215
-do i = nsp1,k
-   temp1 = beta(i)
-   do l = 1,neqn
-205   phi(l,i) = temp1*phi(l,i)
-   end do
-end do
-!
-!   Predict solution and differences
-!
-215 do l = 1,neqn
-   phi(l,kp2) = phi(l,kp1)
-   phi(l,kp1) = 0.0
-220 p(l) = 0.0
-end do
-do j = 1,k
-   i = kp1 - j
-   ip1 = i + 1
-   temp2 = g(i)
-   do l = 1,neqn
-      p(l) = p(l) + temp2*phi(l,i)
-225   phi(l,i) = phi(l,i) + phi(l,ip1)
-   end do
-end do
-if (nornd) go to 240
-do l = 1,neqn
-   tau = h*p(l) - phi(l,15)
-   p(l) = y(l) + tau
-235 phi(l,16) = (p(l) - y(l)) - tau
-end do
-go to 250
-240 do l = 1,neqn
-245 p(l) = y(l) + h*p(l)
-end do
-250 xold = x
-x = x + h
-absh = abs(h)
-call f(x,p,yp)
-!
-!   Estimate errors at orders k,k-1,k-2
-!
-erkm2 = 0.0
-erkm1 = 0.0
-erk = 0.0
-do l = 1,neqn
-   temp3 = 1.0/wt(l)
-   temp4 = yp(l) - phi(l,1)
-   nswc_ai_i4 = km2
-   if ( nswc_ai_i4 < 0 ) go to 265
-   if ( nswc_ai_i4 == 0 ) go to 260
-   go to 255
-255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
-260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
-265 erk = erk + (temp4*temp3)**2
-end do
-nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 280
-if ( nswc_ai_i4 == 0 ) go to 275
-go to 270
-270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
-275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
-280 temp5 = absh*sqrt(erk)
-err = temp5*(g(k) - g(kp1))
-erk = temp5*sig(kp1)*gstr(k)
-knew = k
-!
-!   Test if order should be lowered
-!
-nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 299
-if ( nswc_ai_i4 == 0 ) go to 290
-go to 285
-285 if (max(erkm1,erkm2) <= erk) knew = km1
-go to 299
-290 if (erkm1 <= 0.5*erk) knew = km1
-!
-!   Test if step successful
-!
-299 if (err <= eps) go to 400
-!
-!       ***     End block 2     ***
-!
-!       ***     Begin block 3     ***
-!
-!   The step is unsuccessful.  Restore  x, phi(*,*), psi(*) .
-!   If third consecutive failure, set order to one.  If step fails more
-!   than three times, consider an optimal step size.  Double error
-!   tolerance and return if estimated step size is too small for machine
-!   precision.
-!                   ***
-!
-!   Restore x, phi(*,*) and psi(*)
-!
-phase1 = .false.
-x = xold
-do i = 1,k
-   temp1 = 1.0/beta(i)
-   ip1 = i + 1
-   do l = 1,neqn
-305   phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
-   end do
-end do
-if (k < 2) go to 320
-do i = 2,k
-315 psi(i - 1) = psi(i) - h
-end do
-!
-!   On third failure, set order to one.  Thereafter, use optimal step
-!   size
-!
-320 ifail = ifail + 1
-temp2 = 0.5
-nswc_ai_i4 = ifail - 3
-if ( nswc_ai_i4 < 0 ) go to 335
-if ( nswc_ai_i4 == 0 ) go to 330
-go to 325
-325 if (p5eps < 0.25*erk) temp2 = sqrt(p5eps/erk)
-330 knew = 1
-335 h = temp2*h
-k = knew
-if (abs(h) >= fouru*abs(x)) go to 340
-crash = .true.
-h = sign(fouru*abs(x),h)
-eps = eps + eps
-return
-340 go to 100
-!
-!       ***     End block 3     ***
-!
-!       ***     Begin block 4     ***
-!
-!   The step is successful.  Correct the predicted solution, evaluate
-!   the derivatives using the corrected solution and update the
-!   differences.  Determine best order and step size for next step.
-!
-!                   ***
-400 kold = k
-hold = h
-!
-!   Correct and evaluate
-!
-temp1 = h*g(kp1)
-if (nornd) go to 410
-do l = 1,neqn
-   rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
-   y(l) = p(l) + rho
-405 phi(l,15) = (y(l) - p(l)) - rho
-end do
-go to 420
-410 do l = 1,neqn
-415 y(l) = p(l) + temp1*(yp(l) - phi(l,1))
-end do
-420 call f(x,y,yp)
-!
-!   Update differences for next step
-!
-do l = 1,neqn
-   phi(l,kp1) = yp(l) - phi(l,1)
-425 phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
-end do
-do i = 1,k
-   do l = 1,neqn
-430   phi(l,i) = phi(l,i) + phi(l,kp1)
-   end do
-end do
-!
-!   Estimate error at order k+1 unless...
-!     in first phase when always raise order,
-!     already decided to lower order,
-!     step size not constant so estimate unreliable
-!
-erkp1 = 0.0
-if (knew == km1  .or.  k == 12) phase1 = .false.
-if (phase1) go to 450
-if (knew == km1) go to 455
-if (kp1 > ns) go to 460
-do l = 1,neqn
-440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
-end do
-erkp1 = absh*gstr(kp1)*sqrt(erkp1)
-!
-!   Using estimated error at order k+1, determine appropriate order
-!   for next step
-!
-if (k > 1) go to 445
-if (erkp1 >= 0.5*erk) go to 460
-go to 450
-445 if (erkm1 <= min(erk,erkp1)) go to 455
-if (erkp1 >= erk  .or.  k == 12) go to 460
-!
-!   Here erkp1 .LT. erk .LT. AMAX1(erkm1,erkm2) else order would have
-!   been lowered in block 2.  Thus order is to be raised
-!
-!   Raise order
-!
-450 k = kp1
-erk = erkp1
-go to 460
-!
-!   Lower order
-!
-455 k = km1
-erk = erkm1
-!
-!   With new order determine appropriate step size for next step
-!
-460 hnew = h + h
-if (phase1) go to 465
-if (p5eps >= erk*two(k + 1)) go to 465
-hnew = h
-if (p5eps >= erk) go to 465
-temp2 = k + 1
-r = (p5eps/erk)**(1.0/temp2)
-hnew = absh*max(0.5,min(0.9,r))
-hnew = sign(max(hnew,fouru*abs(x)),h)
-465 h = hnew
-!
-!       ***     End block 4     ***
-!
-end subroutine step1
-
-subroutine intrp(x,y,xout,yout,ypout,neqn,kold,phi,psi)
-implicit none
-integer, intent(in) :: kold, neqn
-real :: phi(neqn,16), psi(12)
-real, intent(in) :: x, xout
-real :: y(neqn)
-real, intent(inout) :: yout(neqn), ypout(neqn)
-integer :: i, j, jm1, ki, kip1, l, limit1
-real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
-   & temp3, term, w(13)
-!
-!   Written by L. F. Shampine and M. K. Gordon
-!
-!   Abstract
-!
-!   The methods in subroutine  step1  approximate the solution near  x
-!   by a polynomial.  Subroutine  intrp  approximates the solution at
-!   xout  by evaluating the polynomial there.  Information defining this
-!   polynomial is passed from  step1  so  intrp  cannot be used alone.
-!
-!   This code is completely explained and documented in the text,
-!   computer solution of ordinary differential equations,  the initial
-!   value problem  by L. F. Shampine and M. K. Gordon.
-!
-!   Input to intrp --
-!
-!   The user provides storage in the calling program for the arrays in
-!   the call list
-!      dimension y(neqn),yout(neqn),ypout(neqn),phi(neqn,16),psi(12)
-!   and defines
-!      xout -- point at which solution is desired.
-!   The remaining parameters are defined in  step1  and passed to  intrp
-!   from that subroutine.
-!
-!   Output from  intrp --
-!
-!      yout(*) -- solution at  xout
-!      ypout(*) -- derivative of solution at  xout
-!   the remaining parameters are returned unaltered from their input
-!   values.  Integration with  step1  may be continued.
-!
-data g(1)/1.0/,rho(1)/1.0/
-!
-hi = xout - x
-ki = kold + 1
-kip1 = ki + 1
-!
-!   Initialize W(*) for computing g(*)
-!
-do i = 1,ki
-   temp1 = i
-5  w(i) = 1.0/temp1
-end do
-term = 0.0
-!
-!   Compute g(*)
-!
-do j = 2,ki
-   jm1 = j - 1
-   psijm1 = psi(jm1)
-   gamma = (hi + term)/psijm1
-   eta = hi/psijm1
-   limit1 = kip1 - j
-   do i = 1,limit1
-10    w(i) = gamma*w(i) - eta*w(i + 1)
-   end do
-   g(j) = w(1)
-   rho(j) = gamma*rho(jm1)
-15 term = psijm1
-end do
-!
-!   Interpolate
-!
-do l = 1,neqn
-   ypout(l) = 0.0
-20 yout(l) = 0.0
-end do
-do j = 1,ki
-   i = kip1 - j
-   temp2 = g(i)
-   temp3 = rho(i)
-   do l = 1,neqn
-      yout(l) = yout(l) + temp2*phi(l,i)
-25    ypout(l) = ypout(l) + temp3*phi(l,i)
-   end do
-end do
-do l = 1,neqn
-35 yout(l) = y(l) + hi*yout(l)
-end do
-end subroutine intrp
-
-subroutine brkf45(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
-   & work,iwork)
-implicit none
-integer, intent(inout) :: iflag, iwork(5)
-integer, intent(in) :: neqn
-real, intent(in) :: abserr
-real, intent(inout) :: relerr, t
-real, intent(in) :: tend, tout
-real, intent(inout) :: work(*), y(neqn), yp(neqn)
-external fcn
-integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
-   & kwp, kx, ky1, ky2
-logical :: endpnt, blkout
-!
-!     Block Fehlberg fourth-fifth order Runge-Kutta method advancing
-!     a block of two equal steps.  The formula at the first step is
-!     5(4) while at the second step it is 6(4).
-!
-!     Written by J.R.Cash,
-!        department of mathematics,
-!        imperial college,
-!        south KENSINGTON, london SW7 2AZ,
-!        england.
-!     Modified by D. Higham and A.H. Morris.
-!
-!    This is a heavily revised version of rkf45 of L.F. Shampine and
-!    H.A. Watts.
-!    brkf45 is primarily designed to solve non-stiff and mildly stiff
-!    initial value ordinary differential equations when derivative
-!    evaluations are inexpensive. brkf45 uses interpolation to produce
-!    output at off-step points efficiently. brkf45 should generally
-!    not be used when the user is demanding high accuracy.  In such
-!    cases a good Adams code will often be more efficient.
-!
-!***********************************************************************
-! Abstract
-!***********************************************************************
-!
-!    Subroutine  brkf45  integrates a system of neqn first order
-!    ordinary differential equations of the form
-!
-!             DY(I)/DT = FCN(t,y(1),y(2),...,y(neqn))
-!
-!    Where the y(I) are known at time t.
-!    Typically the subroutine is used to integrate from t to tend
-!    (while returning answers at specified output points tout), but
-!    it can also be used as a one-block integrator to advance the
-!    solution a single block step in the direction of tend.  On return
-!    the parameters in the call list are set for continuing the
-!    integration. The user has only to call brkf45 again (and perhaps
-!    define a new value for tout). Actually, brkf45 is an interfacing
-!    routine which calls subroutine rkfc for the solution.  Subroutine
-!    rkfc computes an approximate solution over one block of length 2H.
-!    brkf45 is particularly useful when output is required at many
-!    off-step points since the output values can be obtained by
-!    interpolation.  This is in contrast to many other Runge-Kutta
-!    programs which choose the step sequence so as to hit all output
-!    points exactly and so become inefficient when output is required
-!    at many points within a step.
-!    brkf45 uses the (5,4), (6,4) block formula described in
-!    J.R. Cash,  a block 6(4) Runge-Kutta formula for non-stiff
-!    initial value problems, ACM Trans. Math Software 15 (1989),
-!    PP. 15-28.
-!
-!    The parameters represent-
-!      fcn -- subroutine fcn(t,y,yp) to evaluate derivatives
-!              yp(i)=dy(i)/dt
-!      neqn -- number of differential equations to be integrated.
-!      y(*) -- approximation to the solution vector at t.
-!      t -- independent variable.
-!      tout -- the next point where intermediate output is
-!              required.  Approximate solutions at these points
-!              will be obained by interpolation.
-!      tend -- end of the integration range.  This will be hit exactly.
-!      yp(*) -- approximation to the derivative vector dy/DT at t.
-!      relerr,abserr -- relative and absolute error tolerances for
-!            local error test. At the nth point of each block (N=1,2)
-!            the code requires that
-!                 abs(LOCAL ERROR)/N .LE. relerr*abs(y) + abserr
-!            for each component of the local error and solution vectors
-!      iflag -- indicator for status of integration.
-!      work(*) -- array to hold information internal to brkf45 which
-!            is necessary for subsequent calls. Must be dimensioned
-!            at least  6+9*neqn
-!      iwork(*) -- integer array used to hold information internal to
-!            brkf45 which is necessary for subsequent calls. Must be
-!            dimensioned at least  5
-!
-!***********************************************************************
-!  First call to brkf45
-!***********************************************************************
-!
-!    The user must provide storage in his calling program for the arrays
-!    in the call list  -  y(neqn) , yp(neqn) , work(6+9*neqn)
-!    iwork(5), declare FCN in an external statement, supply subroutine
-!    FCN(t,y,yp) and initialize the following parameters-
-!
-!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
-!      y(*) -- vector of initial conditions.
-!      t -- starting point of integration , must be a variable.
-!      tout -- output point at which solution, and possibly the
-!              derivative, is desired.
-!      tend -- end of the range of integration. If the solution is
-!              required only at tend then the user should set tout=tend.
-!      relerr,abserr -- relative and absolute local error tolerances
-!            which must be non-negative. relerr must be a variable while
-!            abserr may be a constant. The code should normally not be
-!            used with relative error control smaller than about 1.E-8,
-!            unless an appropriate nonzero absolute tolerance is given.
-!            To avoid limiting precision difficulties the code requires
-!            relerr to be larger than an internally computed relative
-!            error parameter which is machine dependent. In particular,
-!            pure absolute error is not permitted. If a smaller than
-!            allowable value of relerr is attempted, brkf45 increases
-!            relerr appropriately and returns control to the user before
-!            continuing the integration.
-!      iflag -- +1,-1  indicator to initialize the code for each new
-!            problem. Normal input is +1. The user should set iflag=-1
-!            only when one-block integrator control is essential. In
-!            this case, brkf45 attempts to advance the solution A
-!            single block in the direction of tend each time it is
-!            called.  Since this mode of operation results in extra
-!            computing overhead, it should be avoided unless needed.
-!
-!***********************************************************************
-!  Output from brkf45
-!***********************************************************************
-!
-!      y(*) -- computed solution approximation at t.
-!      t -- value of the independent variable where the solution is
-!           reported.
-!      iflag = 2 -- successful return.  Either the integration reached
-!                   t=tend or a successful interpolation has been
-!                   performed at t=tout.  If t.EQ.tend then the
-!                   integration is finished.  If not, the code should be
-!                   called with the next value of tout and with iflag=+2
-!                   for normal integration or iflag=-2 For one-block
-!                   integration.
-!            =-2 -- A single successful block in the direction of tend
-!                   has been taken. Normal mode for continuing
-!                   integration one block at a time.
-!            = 3 -- Integration was not completed because relative error
-!                   tolerance was too small. relerr has been increased
-!                   appropriately for continuing.
-!            = 4 -- Integration was not completed because more than
-!                   18000 derivative evaluations were needed. This
-!                   is approximately 2000 blocks.
-!            = 5 -- Integration was not completed because solution
-!                   vanished making a pure relative error test
-!                   impossible. Must use non-zero abserr to continue.
-!                   Using the one-block integration mode for one block
-!                   is a good way to proceed.
-!            = 6 -- Integration was not completed because requested
-!                   accuracy could not be achieved using smallest
-!                   allowable stepsize. User must increase the error
-!                   tolerance before continued integration can be
-!                   attempted.
-!            = 7 -- Invalid input parameters
-!                   this indicator occurs if any of the following is
-!                   SATISFIED -   neqn .LE. 0
-!                                 t = tend
-!                                 relerr OR abserr .LT. 0.
-!                                 abs(iflag) .LT. 1 OR .GT. 7
-!      work(*),iwork(*) -- information which is usually of no interest
-!                   to the user but necessary for subsequent calls.
-!                   work(1),...,work(neqn) contain the solution vector
-!                   and work(neqn+1),...,work(2*neqn) contain the
-!                   derivative vector at the end point (which is itself
-!                   contained in work(2*neqn+1)) of the block step just
-!                   computed. work(2*neqn+2) contains the stepsize H
-!                   just used. (This is the stepsize being used by the
-!                   interpolant over this block.) work(2*neqn+3)
-!                   contains the stepsize H to be attempted on the next
-!                   block. iwork(1) contains the derivative evaluation
-!                   counter.
-!
-!***********************************************************************
-!  Subsequent calls to brkf45
-!***********************************************************************
-!
-!    Subroutine brkf45 returns with all information needed to continue
-!    the integration. After the code reports a successful solution at
-!    tout (indicated by iflag=2), the user needs to define a new tout
-!    before simply calling brkf45 again to continue in the normal mode.
-!    (But the user must first reset iflag to -2 To continue in the
-!    one-block integrator mode.)
-!    if the integration was not completed but the user still wants to
-!    CONTINUE (iflag=3,4), HE JUST CALLS brkf45 AGAIN. IN THE CASE
-!    iflag=3 The relerr parameter HAS been adjusted appropriately for
-!    continuing the integration. In the case of iflag=4 The function
-!    counter will be reset to 0 and another 18000 function evaluations
-!    are allowed.
-!    However,in the case iflag=5, the user must first alter the error
-!    criterion to use a positive value of abserr before integration can
-!    proceed. If he does not,execution is terminated.
-!    Also,in the case iflag=6, it is necessary for the user to reset
-!    iflag to 2 (or -2 When the one-block integration mode is being
-!    used) as well as increasing either abserr,relerr or both before
-!    the integration can be continued. If this is not done, execution
-!    will be terminated. The occurrence of iflag=6 Indicates a trouble
-!    spot(solution is changing rapidly,singularity may be present) and
-!    it often is inadvisable to continue.
-!    If iflag=7 Is obtained, integration can not be continued unless
-!    the invalid input parameters are corrected.
-!    It should be noted that the arrays work,iwork contain information
-!    required for subsequent integration. Accordingly, work and iwork
-!    should not be altered.
-!
-!***********************************************************************
-!  User calls to the interpolant routine extra
-!***********************************************************************
-!
-!    Subroutine extra can also be called by the user, in conjunction
-!    with usage of brkf45, to provide approximate solutions at off-step
-!    points by use of the interpolating polynomial. While brkf45
-!    handles the usual situations, it can be helpful to the user to be
-!    able to access the interpolant directly, such as when doing root
-!    finding. Also, it is possible that the user may have some need for
-!    extrapolating outside of the block step on which the underlying
-!    interpolant is based. brkf45 will not do this.
-!    The form of the usage call is
-!
-!    call extra ( neqn, work(6*neqn+4), work(neqn+1), work(2*neqn+1),
-!                work(2*neqn+2), work(2*neqn+4), work(3*neqn+4),
-!                work(4*neqn+4), work(5*neqn+4), tex, YEX, YPEX )
-!
-!    Where YEX and YPEX are the solution vector and derivative vector
-!    approximations defined by the interpolant at the point tex, and
-!    work is the working array SET up by brkf45. This version of
-!    extra has been written by D. Higman (see below).
-!
-!***********************************************************************
-!  More about the interpolant routine extra
-!***********************************************************************
-!
-!    The first derivative approximations given by J.R. Cash have been
-!    modified by D. Higman. Three changes have been made and are
-!    clearly documented in the code. Just search for the word *changes*.
-!    For an explanation of these modifications see
-!    remark on algorithm 669, by D. Higham,
-!    ACM Trans. Math Software 17, PP. 424-426.
-!
-!***********************************************************************
-!
-!
-!     Compute indices for the splitting of the work array
-!
-kw = 1
-kwp = kw + neqn
-kx = kwp + neqn
-khi = kx + 1
-kh = khi + 1
-ky1 = kh + 1
-ky2 = ky1 + neqn
-kf1 = ky2 + neqn
-kf2 = kf1 + neqn
-kf3 = kf2 + neqn
-kf4 = kf3 + neqn
-kf7 = kf4 + neqn
-ksr = kf7 + neqn
-ksa = ksr + 1
-kt = ksa + 1
-!
-!     The work space totals  6 + 9*neqn .
-!
-if (abs(iflag) == 1) go to 10
-endpnt = (iwork(4) == -1)
-blkout = (iwork(5) == -1)
-!
-!***********************************************************************
-!     This interfacing routine merely relieves the user of a long
-!     calling list via the splitting apart of two working storage
-!     arrays. If this is not compatible with the users compiler,
-!     he must use rkfc directly.
-!***********************************************************************
-!
-10 call rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
-   & work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
-   & work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
-   & work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
-!
-iwork(4) = 0
-if (endpnt) iwork(4) = -1
-iwork(5) = 0
-if (blkout) iwork(5) = -1
-!
-end subroutine brkf45
 

@@ -6632,7 +6632,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -6674,7 +6673,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -6929,6 +6927,14 @@ return
 210 if (sn < 0.0) return
 w(1) = - w(1)
 w(2) = - w(2)
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine dcerf
 
 pure subroutine dcerfc(mo, z, w)
@@ -6938,7 +6944,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -6985,7 +6990,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -7245,6 +7249,14 @@ if (sz(1) <= dxparg(1)) go to 140
 e = exp(sz(1))
 w(1) = e*cos(sz(2)) + sm(1)
 w(2) = e*sin(sz(2)) + sm(2)
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine dcerfc
 
 pure subroutine erfcm2(mo, z, w)
@@ -7254,7 +7266,6 @@ double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 integer :: j, n
 double precision :: eps, h(2), t(2), tol, x, y
-double precision :: anorm
 double precision, parameter :: c = .20666985354092053857068941306585476d-01
 double precision, parameter :: e = .46777349810472658379307436327470714d-02
 double precision, parameter :: a(63) = [.20000000000000000000000000000000000d+01, &
@@ -7295,7 +7306,6 @@ end interface
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
 !------------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !------------------------------
 !     c = (2/sqrt(pi))*exp(-4)
 !     e = erfc(2)
@@ -7357,6 +7367,14 @@ x = t(1)*w(1) - t(2)*w(2)
 y = t(1)*w(2) + t(2)*w(1)
 w(1) = x
 w(2) = y
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine erfcm2
 
 pure elemental double precision function derf(x)
@@ -9219,7 +9237,6 @@ complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
 real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y
-real :: anorm
 real :: n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
 real, parameter :: pi = 3.14159265358979
@@ -9249,7 +9266,6 @@ end interface
 !           Evaluation of the complex exponential integral
 !-----------------------------------------------------------------------
 !-------------------------
-anorm(x,y) = max(abs(x),abs(y))
 !-------------------------
 !-------------------------
 !-------------------------
@@ -9397,6 +9413,14 @@ sm(2) = ts(2)
 if (.not. ind) sm(2) = sm(2) + c
 !
 130 w = cmplx(sm(1),sm(2))
+contains
+   pure function anorm(x, y) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(x),abs(y))
+   end function anorm
 end subroutine cexpli
 
 pure elemental subroutine expli(int,arg,result,ierr)
@@ -17567,7 +17591,6 @@ complex, intent(inout) :: w
 complex :: z
 integer :: i, imin, k, km1, km2
 real :: a, a0, eps, rnu
-real :: anorm
 complex :: nu, nup1, p, s, sn, t, ti
 real :: inu, m
 interface
@@ -17594,7 +17617,6 @@ end interface
 !
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !--------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -17676,6 +17698,13 @@ t = t*(s/(m*(nu + m)))
 w = w + t
 if (anorm(t) > eps*anorm(w)) go to 70
 !
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine cbjm
 
 pure elemental subroutine cbdb(cz, cnu, fn, w)
@@ -17882,7 +17911,6 @@ complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
 integer :: i, ind
 real :: eps, r, rnu, tol, u, v, x, y
-real :: anorm
 real :: inu, m
 complex :: a, a1, arg, e, eta, nu, p, q, t, z, zr, zz
 real, parameter :: pihalf = 1.5707963267949
@@ -17916,7 +17944,6 @@ end interface
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     pihalf = pi/2
 !     c = 2*pi**(-1/2)
@@ -17994,6 +18021,13 @@ v = r*sin1(rnu)
 w = w*cmplx(u,v)
 !
 60 if (ind /= 0) w = conjg(w)
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
 end subroutine cbja
 
 pure elemental subroutine bsslj(a, in, w)
@@ -18499,7 +18533,14 @@ i1 = max(i1,1)
 flgjy = 1.0e0
 call asjy(jairy,x,fn,flgjy,i1,tol,elim,temp(is),wk,iflw)
 if (iflw /= 0) go to 380
-go to (320, 450, 620), is
+select case (is)
+case (1)
+   go to 320
+case (2)
+   go to 450
+case (3)
+   go to 620
+end select
 310 temp(1) = temp(3)
 kt = 1
 320 is = 2
@@ -18534,7 +18575,14 @@ do k = 1,17
 end do
 360 continue
 temp(is) = s*earg
-go to (370, 450, 610), is
+select case (is)
+case (1)
+   go to 370
+case (2)
+   go to 450
+case (3)
+   go to 610
+end select
 370 earg = earg*fn/xo2
 fni = fni - 1.0e0
 dfn = fni + fnf
@@ -20483,7 +20531,14 @@ i1 = abs(3 - is)
 i1 = max(i1,1)
 flgik = 1.0e0
 call asik(x,fn,kode,flgik,ra,arg,i1,tol,temp(is))
-go to (180, 350, 510), is
+select case (is)
+case (1)
+   go to 180
+case (2)
+   go to 350
+case (3)
+   go to 510
+end select
 !
 !     SERIES FOR (x/2)**2.LE.NU+1
 !
@@ -20510,7 +20565,14 @@ do k = 1,17
 end do
 260 continue
 temp(is) = s*earg
-go to (270, 350, 500), is
+select case (is)
+case (1)
+   go to 270
+case (2)
+   go to 350
+case (3)
+   go to 500
+end select
 270 earg = earg*fn/xo2
 fni = fni - 1.0e0
 dfn = fni + fnf
@@ -21002,7 +21064,6 @@ complex, intent(in) :: cnu
 complex, intent(inout) :: w
 integer :: i
 real :: eps, u, v
-real :: anorm
 real :: m
 complex :: a, p, t, zr
 real, parameter :: c = 1.77245385090552e+00
@@ -21025,7 +21086,6 @@ end interface
 !        cnu and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     c = pi**(1/2)
 !--------------------------
@@ -21056,6 +21116,13 @@ end do
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
 end subroutine cbka
 
 subroutine cbkm(z, rz, cnu, w)
@@ -21206,7 +21273,6 @@ complex :: nu
 complex, intent(inout) :: w1, w2
 integer :: k
 real :: ak, eps, eps0, phi, s, u, x, y
-real :: anorm
 complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
 real, parameter :: tol = 1.e-10
@@ -21253,7 +21319,6 @@ end interface
 !-----------------------
 !-----------------------
 !-----------------------
-anorm(t) = max(abs(real(t)), abs(aimag(t)))
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant.  Eps is the
@@ -21340,6 +21405,13 @@ do k = 1, 50
 end do
 !
 80 w2 = w2 * zr
+contains
+   pure function anorm(t) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: t
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(t)), abs(aimag(t)))
+   end function anorm
 end subroutine ckps
 
 pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
@@ -21635,7 +21707,6 @@ complex, intent(inout) :: w
 real, intent(in) :: nu
 integer :: i
 real :: a, eps, u, v
-real :: anorm
 real :: m
 complex :: p, t, zr
 real, parameter :: c = 1.77245385090552
@@ -21658,7 +21729,6 @@ end interface
 !        and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     c = pi**(1/2)
 !--------------------------
@@ -21689,6 +21759,13 @@ end do
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
+   end function anorm
 end subroutine cka
 
 pure elemental subroutine ckm(z, r, zr, nu, w1, w2)
@@ -21699,7 +21776,6 @@ complex, intent(inout) :: w1, w2
 real, intent(in) :: nu
 integer :: k
 real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
-real :: anorm
 complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 real, parameter :: tol = 1.e-10
 real, parameter :: pi = 3.14159265358979
@@ -21733,7 +21809,6 @@ end interface
 !-----------------------
 !-----------------------
 !-----------------------
-anorm(w) = max(abs(real(w)), abs(aimag(w)))
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant.  Eps is the
@@ -21813,6 +21888,13 @@ do k = 1, 50
 end do
 !
 80 w2 = w2 * zr
+contains
+   pure function anorm(w) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: w
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(w)), abs(aimag(w)))
+   end function anorm
 end subroutine ckm
 
 pure elemental subroutine ckml(z, r, zr, nu, k1, k2)
@@ -23112,7 +23194,6 @@ real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
 real :: d, eps
-real :: anorm
 real :: m
 complex :: sz, t
 interface
@@ -23129,7 +23210,6 @@ end interface
 !     calculated value.
 !-------------------------------------------------------------
 !------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
 !     number such that 1 + eps .GT. 1.
@@ -23154,6 +23234,13 @@ w = w + t
 if (anorm(t) > eps*anorm(w)) go to 10
 !
 w = w + 1.0
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine bim
 
 subroutine ja(z, i1, i2, i1m, i2m)
@@ -23275,7 +23362,6 @@ real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
 real :: d, eps
-real :: anorm
 real :: m
 complex :: sz, t
 interface
@@ -23292,7 +23378,6 @@ end interface
 !     calculated value.
 !-------------------------------------------------------------
 !------------------
-anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
 !     number such that 1 + eps .GT. 1.
@@ -23317,6 +23402,13 @@ w = w + t
 if (anorm(t) > eps*anorm(w)) go to 10
 !
 w = w + 1.0
+contains
+   pure function anorm(z) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: z
+      real :: nswc_sf_result
+      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
+   end function anorm
 end subroutine bjm
 
 subroutine ka(ind, z, k1, k2)
@@ -35725,8 +35817,6 @@ integer, intent(in) :: n
 real :: smax
 integer :: i, ix
 complex :: zdum
-real :: cabs1
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 icamax = 0
 if ( n < 1 ) return
@@ -35756,6 +35846,13 @@ do i = 2,n
    smax = cabs1(cx(i))
 30 continue
 end do
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end function icamax
 
 pure subroutine mcvfs(a,ka,n,b)
@@ -44365,8 +44462,7 @@ real, intent(inout) :: rcond
 complex :: cdotc, ek, t, wk, wkm
 real :: anorm, s, scasum, sm, ynorm
 integer :: info, j, k, kb, kp1, l
-complex :: zdum, zdum1, zdum2, csign1
-real :: cabs1
+complex :: zdum, zdum1, zdum2
 !
 !     cgeco factors a complex matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -44429,8 +44525,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
-csign1(zdum1,zdum2) = cabs1(zdum1)*(zdum2/cabs1(zdum2))
 !
 !     Compute 1-norm of A
 !
@@ -44553,6 +44647,20 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0e0) rcond = ynorm/anorm
 if (anorm == 0.0e0) rcond = 0.0e0
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
+   pure function csign1(zdum1, zdum2) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum1
+      complex, intent(in) :: zdum2
+      complex :: nswc_sf_result
+      nswc_sf_result = cabs1(zdum1)*(zdum2/cabs1(zdum2))
+   end function csign1
 end subroutine cgeco
 
 subroutine cgefa(a,lda,n,ipvt,info)
@@ -44564,7 +44672,6 @@ complex, intent(inout) :: a(lda,*)
 complex :: t
 integer :: icamax, j, k, kp1, l, nm1
 complex :: zdum
-real :: cabs1
 !
 !     cgefa factors a complex matrix BY Gaussian elimination.
 !
@@ -44613,7 +44720,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Gaussian elimination with partial pivoting
 !
@@ -44663,6 +44769,13 @@ end do
 70 continue
 ipvt(n) = n
 if (cabs1(a(n,n)) == 0.0e0) info = n
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end subroutine cgefa
 
 pure subroutine cgesl(a,lda,n,ipvt,b,job)
@@ -44812,7 +44925,6 @@ complex, intent(inout) :: a(lda,*), det(2), work(*)
 complex :: t, zdum
 real :: ten
 integer :: i, j, k, kb, kp1, l, nm1
-real :: cabs1
 !
 !     cgedi computes the determinant and inverse of a matrix
 !     using the factors computed by cgeco or cgefa.
@@ -44870,7 +44982,6 @@ real :: cabs1
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Compute determinant
 !
@@ -44935,6 +45046,13 @@ do kb = 1, nm1
 end do
 140 continue
 150 continue
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
 end subroutine cgedi
 
 subroutine dcmslv(mo,n,m,ar,ai,ka,br,bi,kb,ierr,ipvt,wk)
@@ -45727,7 +45845,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (490,520,540,570), kase
+select case (kase)
+case (1)
+   go to 490
+case (2)
+   go to 520
+case (3)
+   go to 540
+case (4)
+   go to 570
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -46270,7 +46397,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (490,520,540,570), kase
+select case (kase)
+case (1)
+   go to 490
+case (2)
+   go to 520
+case (3)
+   go to 540
+case (4)
+   go to 570
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -46398,8 +46534,7 @@ integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
 complex :: t, r
 real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
-complex :: csign, zdum, zdum1, zdum2
-real :: cabs1
+complex :: zdum, zdum1, zdum2
 interface
    pure subroutine caxpy(n,ca,cx,incx,cy,incy)
       implicit none
@@ -46560,8 +46695,6 @@ end interface
 !     Internal variables
 !
 !
-cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
-csign(zdum1,zdum2) = abs(zdum1)*(zdum2/abs(zdum2))
 !
 !     Set the maximum number of iterations.
 !
@@ -46842,7 +46975,16 @@ l = l + 1
 !
 !        Perform the task indicated by kase.
 !
-go to (530, 560, 580, 610), kase
+select case (kase)
+case (1)
+   go to 530
+case (2)
+   go to 560
+case (3)
+   go to 580
+case (4)
+   go to 610
+end select
 !
 !        Deflate negligible s(M).
 !
@@ -46957,6 +47099,20 @@ m = m - 1
 650 continue
 go to 400
 660 continue
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
+   pure function csign(zdum1, zdum2) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum1
+      complex, intent(in) :: zdum2
+      complex :: nswc_sf_result
+      nswc_sf_result = abs(zdum1)*(zdum2/abs(zdum2))
+   end function csign
 end subroutine csvdc
 
 function det(a,ka,n,x)
@@ -60882,7 +61038,18 @@ iter = 0
 kase = 1
 jump = 1
 return
-20 go to (100, 200, 300, 400, 500), jump
+20 select case (jump)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 !
 !     ................ ENTRY   (jump = 1)
 !     first iteration.  x has been overwritten by A*x.
@@ -61069,7 +61236,18 @@ iter = 0
 kase = 1
 jump = 1
 return
-20 go to (100, 200, 300, 400, 500), jump
+20 select case (jump)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 !
 !     ................ ENTRY   (jump = 1)
 !     first iteration.  x has been overwritten by A*x.
@@ -62497,7 +62675,12 @@ do i = k, n
    a(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -64345,7 +64528,12 @@ do i = k, n
    a(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -67783,7 +67971,12 @@ do i = k, n
    ai(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -69007,7 +69200,12 @@ do i = k, n
    ai(m,i) = f
 end do
 !
-50 go to (80,130), iexc
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
 !     ********** Search for rows isolating an eigenvalue
 !                and push them down **********
 80 if (l == 1) go to 280
@@ -93197,7 +93395,7 @@ integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, 
 real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
 complex :: a(64), v
-complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, mult, co
+complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, co
 integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
 integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
@@ -93249,7 +93447,6 @@ data rv(1)/(-.4,.3)/, rv(2)/(.7,.2)/, rv(3)/(.02,-.06)/
 !  Statement function for multiplication of a complex number
 !  by a real number.
 !
-mult(re,co) = cmplx(re*real(co),re*aimag(co))
 !
 !  -------------------
 !
@@ -93448,6 +93645,14 @@ return
    rs(i) = (0.,0.)
 270 err(i) = 1.e10
 end do
+contains
+   pure function mult(re, co) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: re
+      complex, intent(in) :: co
+      complex :: nswc_sf_result
+      nswc_sf_result = cmplx(re*real(co),re*aimag(co))
+   end function mult
 end subroutine cpsc
 
 subroutine dcpsc(fun, x, y, n, ic, tol, r, rs1, rs2, err)
@@ -97071,7 +97276,6 @@ real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
    & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
    & sum, t, t1, t2, xxl, xxu
 real :: curvi
-real :: term
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -97136,8 +97340,6 @@ end interface
 ! Statement function for coefficient associated with
 ! derivative terms
 !
-term (cmm1,cmm2,t) = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap* &
-   & sigmap*sigmap*(ss + sigmap*dels))
 !
 ! Denormalize tension factor
 !
@@ -97251,6 +97453,15 @@ go to 10
 ! Correct sign and return
 !
 10 curvi = ssign*sum
+contains
+   pure function term(cmm1, cmm2, t) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: cmm1
+      real, intent(in) :: cmm2
+      real, intent(in) :: t
+      real :: nswc_sf_result
+      nswc_sf_result = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap*   sigmap*sigmap*(ss + sigmap*dels))
+   end function term
 end function curvi
 
 pure subroutine kurv1(n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
@@ -100851,7 +101062,14 @@ real :: rsq, s
 !
 ierr = 0
 rnorm = 0.0
-go to (10,90,50), mode
+select case (mode)
+case (1)
+   go to 10
+case (2)
+   go to 90
+case (3)
+   go to 50
+end select
 !                                   ********************* mode = 1
 !                                   alg. Step 26
 10 do j = 1,n
@@ -102090,9 +102308,7 @@ integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
    & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
    & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
-real :: hermnz
 real :: surf2
-real :: hermz
 integer :: intrvl
 interface
    pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -102159,19 +102375,9 @@ end interface
 !
 ! Inline one dimensional cubic spline interpolation
 !
-hermz (f1,f2,fp1,fp2) = (f2*del1 + f1*del2)/dels - del1* &
-   & del2*(fp2*(del1 + dels) + &
-   & fp1*(del2 + dels))/ &
-   & (6.*dels)
 !
 ! Inline one dimensional spline under tension interpolation
 !
-hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1 + f1*del2)/dels &
-   & + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
-   & sinhp2 + sigmap*coshp1*del2)) &
-   & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
-   & sinhp1 + sigmap*coshp2*del1)) &
-   & )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
 !
 ! Denormalize tension factor in x and y direction
 !
@@ -102238,6 +102444,27 @@ call snhcsh(sinhp2,dummy,sigmax*del2/2.,-1)
 call snhcsh(dummy,coshp1,sigmax*delp1,1)
 call snhcsh(dummy,coshp2,sigmax*delp2,1)
 surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
+contains
+   pure function hermnz(f1, f2, fp1, fp2, sigmap) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: f1
+      real, intent(in) :: f2
+      real, intent(in) :: fp1
+      real, intent(in) :: fp2
+      real, intent(in) :: sigmap
+      real :: nswc_sf_result
+      nswc_sf_result = (f2*del1 + f1*del2)/dels   + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)*   sinhp2 + sigmap*coshp1*del2)) &
+   & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)*   sinhp1 + sigmap*coshp2*del1))   )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
+   end function hermnz
+   pure function hermz(f1, f2, fp1, fp2) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: f1
+      real, intent(in) :: f2
+      real, intent(in) :: fp1
+      real, intent(in) :: fp2
+      real :: nswc_sf_result
+      nswc_sf_result = (f2*del1 + f1*del2)/dels - del1*   del2*(fp2*(del1 + dels) +   fp1*(del2 + dels))/   (6.*dels)
+   end function hermz
 end function surf2
 
 pure subroutine nsurf2(dxmin,dxmax,md,dymin,dymax,nd,dz, &
@@ -104136,7 +104363,6 @@ real, intent(in) :: px, py
 real :: x(*), y(*)
 real :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
-logical :: left
 !
 !***********************************************************
 !
@@ -104212,8 +104438,6 @@ logical :: left
 !               y0) = .TRUE. IFF (x0,y0) is on or to the
 !               left of the vector from (x1,y1) to (x2,y2).
 !
-left(x1,y1,x2,y2,x0,y0) = (x2 - x1)*(y0 - y1) >= &
-   & (x0 - x1)*(y2 - y1)
 xp = px
 yp = py
 !
@@ -104423,6 +104647,18 @@ return
 20 i1 = 0
 i2 = 0
 i3 = 0
+contains
+   pure function left(x1, y1, x2, y2, x0, y0) result(nswc_sf_result)
+      implicit none
+      real, intent(in) :: x1
+      real, intent(in) :: y1
+      real, intent(in) :: x2
+      real, intent(in) :: y2
+      real, intent(in) :: x0
+      real, intent(in) :: y0
+      logical :: nswc_sf_result
+      nswc_sf_result = (x2 - x1)*(y0 - y1) >=   (x0 - x1)*(y2 - y1)
+   end function left
 end subroutine trfind
 
 pure subroutine gradg(n, x, y, z, iadj, iend, zxzy, ierr)
@@ -116014,7 +116250,16 @@ do nmi = 1,nm1
 221 x(i) = x(i) + r(i)
 end do
 !
-go to (300,230,300,230),option
+select case (option)
+case (1)
+   go to 300
+case (2)
+   go to 230
+case (3)
+   go to 300
+case (4)
+   go to 230
+end select
 230 if (iswit == 1) go to 120
 !
 !             Calculate the correction error
@@ -121074,7 +121319,14 @@ nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
 conit = 0.5e0/float(nq + 2)
-go to (160, 170, 200), iret
+select case (iret)
+case (1)
+   go to 160
+case (2)
+   go to 170
+case (3)
+   go to 200
+end select
 !-----------------------------------------------------------------------
 ! If H is being changed, the H ratio RH is checked against
 ! rmax, HMIN, and HMXI, and the yh array rescaled.  ialth is set to
@@ -121420,7 +121672,12 @@ real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
 ! nq + 1 IF K = 3.
 !-----------------------------------------------------------------------
 !
-go to (100, 200), meth
+select case (meth)
+case (1)
+   go to 100
+case (2)
+   go to 200
+end select
 !
 100 elco(1,1) = 1.0e0
 elco(2,1) = 1.0e0
@@ -121558,7 +121815,18 @@ common /debdf1/ rownd, rowns(210), &
 !-----------------------------------------------------------------------
 nje = nje + 1
 hl0 = h*el0
-go to (100, 200, 300, 400, 500), miter
+select case (miter)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
 100 lenp = n*n
 do i = 1,lenp
@@ -121721,7 +121989,18 @@ common /debdf1/ rownd, rowns(210), &
 ! This routine also uses the common variables el0, h, miter, and N.
 !-----------------------------------------------------------------------
 ier = 0
-go to (100, 100, 300, 400, 400), miter
+select case (miter)
+case (1)
+   go to 100
+case (2)
+   go to 100
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 400
+end select
 100 call sgesl(wm(3), n, n, iwm(21), x, 0)
 return
 !
@@ -123197,7 +123476,18 @@ end do
 !
 ax1 = am(1)
 cxm = cm(mit)
-go to (170,130,150,160,140),kswx
+select case (kswx)
+case (1)
+   go to 170
+case (2)
+   go to 130
+case (3)
+   go to 150
+case (4)
+   go to 160
+case (5)
+   go to 140
+end select
 !
 !     Dirichlet-Dirichlet in X direction
 !
@@ -123236,7 +123526,18 @@ cm(mit) = 0.0
 !
 dy1 = an(1)
 fyn = cn(nit)
-go to (220,180,200,210,190),kswy
+select case (kswy)
+case (1)
+   go to 220
+case (2)
+   go to 180
+case (3)
+   go to 200
+case (4)
+   go to 210
+case (5)
+   go to 190
+end select
 !
 !     Dirichlet-Dirichlet in Y direction
 !
