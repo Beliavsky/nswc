@@ -12,6 +12,7 @@ from blktri_empty_factors import transform_fixed as correct_empty_factors
 from remove_unused_labels import transform as clean_unused_labels
 from source_comment_fixes import transform_fixed as fix_comments
 from goto_to_exit import transform as convert_exits
+from normalize_fixed_spacing import transform as normalize_spacing
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -20,7 +21,7 @@ def main():
     before = loops(workspace(returns(fixed_stages()[3].data))).data
     manifest = json.loads(MANIFEST.read_text())
     after = transform(before, manifest)
-    if convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(after))))) != (ROOT / 'nswc.f').read_bytes():
+    if normalize_spacing(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(after)))))) != (ROOT / 'nswc.f').read_bytes():
         raise ValueError('Maintained fixed form differs from reviewed arithmetic IF conversion')
     verify(before, after, manifest)
     if candidates(after)[2] or transform(after, manifest) != after:

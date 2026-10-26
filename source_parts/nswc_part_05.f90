@@ -137,7 +137,7 @@ do i = k,kk
    end do
 end do
 45 if (dl == 2) go to 60
-if (dk == 2 ) go to 50
+if (dk == 2) go to 50
 t(1,1) = a(k,k) + a(l,l)
 if (t(1,1) == 0.0) go to 200
 c(k,l) = c(k,l)/t(1,1)
@@ -429,7 +429,7 @@ do i = k,kk
    end do
 end do
 45 if (dl == 2) go to 60
-if (dk == 2 ) go to 50
+if (dk == 2) go to 50
 t(1,1) = a(k,k) + a(l,l)
 if (t(1,1) == 0.d0) go to 200
 c(k,l) = c(k,l)/t(1,1)
@@ -734,11 +734,11 @@ end do
       if (fxni > fxnorm) fxnorm = fxni
    end do
    if (tol <= 0.0) go to 230
-   if ( fxnorm < tol ) exit
+   if (fxnorm < tol) exit
 230 tnorm = 8.0*float(n)*anorm*xnorm**2 + 5.0*float(n)*bnorm*xnorm &
       & + cnorm
    t = 1.0 + fxnorm/tnorm
-   if ( t == 1.0 ) exit
+   if (t == 1.0) exit
    if (its >= maxits) go to 400
 !        ********** Upper triangularization **********
    if (its /= 1) go to 240
@@ -1108,7 +1108,7 @@ do ll = 1,en
    lm1 = en - ll
    l = lm1 + 1
    if (l == 1) go to 90
-   if ( abs ( a ( l , lm1 ) ) <= epsa ) exit
+   if (abs(a(l , lm1)) <= epsa) exit
 end do
 80 a(l,lm1) = cmplx(0.0,0.0)
 if (l < na) go to 90
@@ -2211,7 +2211,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_1
+      if (a(i , j) /= 0.0) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -2223,7 +2223,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_2
+      if (a(i , j) /= 0.0) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -2402,7 +2402,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_1
+      if (a(i , j) /= 0.d0) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -2414,7 +2414,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_2
+      if (a(i , j) /= 0.d0) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -2593,7 +2593,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if (a(i , j) /= (0.0 , 0.0)) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -2605,7 +2605,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_2
+      if (a(i , j) /= (0.0 , 0.0)) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -3024,7 +3024,7 @@ if (ml == 0) go to 30
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if (real(a(i , j)) /= 0.0) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
@@ -3034,7 +3034,7 @@ if (mu == 0) go to 60
 j = ml + mu + 1
 nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
+      if (real(a(i , j)) /= 0.0) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
@@ -3073,7 +3073,7 @@ if (ml == 0) go to 30
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if (aimag(a(i , j)) /= 0.0) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
@@ -3083,7 +3083,7 @@ if (mu == 0) go to 60
 j = ml + mu + 1
 nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
+      if (aimag(a(i , j)) /= 0.0) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
@@ -3342,8 +3342,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -3376,7 +3376,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= 0.0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -3386,8 +3386,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -3439,7 +3439,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
+      if ((a(i , la) + b(i , lb)) /= 0.0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -3476,8 +3476,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -3510,7 +3510,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= 0.d0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -3520,8 +3520,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -3573,7 +3573,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
+      if ((a(i , la) + b(i , lb)) /= 0.d0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -3610,8 +3610,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -3644,7 +3644,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -3654,8 +3654,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -3707,7 +3707,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+      if ((a(i , la) + b(i , lb)) /= (0.0 , 0.0)) &
          & exit nswc_exit_2
    end do
    mcu = mcu - 1
@@ -3745,8 +3745,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -3779,7 +3779,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= 0.0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -3789,8 +3789,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -3842,7 +3842,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
+      if ((a(i , la) - b(i , lb)) /= 0.0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -3879,8 +3879,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -3913,7 +3913,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= 0.d0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -3923,8 +3923,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -3976,7 +3976,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
+      if ((a(i , la) - b(i , lb)) /= 0.d0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -4013,8 +4013,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -4047,7 +4047,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -4057,8 +4057,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -4110,7 +4110,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+      if ((a(i , la) - b(i , lb)) /= (0.0 , 0.0)) &
          & exit nswc_exit_2
    end do
    mcu = mcu - 1
@@ -4235,7 +4235,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= 0.0 ) exit nswc_exit_1
+      if (c(i , jc) /= 0.0) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -4373,7 +4373,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= 0.d0 ) exit nswc_exit_1
+      if (c(i , jc) /= 0.d0) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -4511,7 +4511,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if (c(i , jc) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -7043,7 +7043,7 @@ do i = 1,m
    do l = minb,maxb
       if (b(l) == 0.0) go to 31
       j = jb(l)
-      t = cmplx (wk(j), b(l))
+      t = cmplx(wk(j), b(l))
       wk(j) = 0.0
       if (ip > num) go to 50
       c(ip) = t
@@ -7056,7 +7056,7 @@ do i = 1,m
       j = ja(l)
       if (wk(j) == 0.0) go to 41
       if (ip > num) go to 50
-      c(ip) = cmplx (wk(j), 0.0)
+      c(ip) = cmplx(wk(j), 0.0)
       wk(j) = 0.0
       jc(ip) = j
       ip = ip + 1
@@ -8634,7 +8634,7 @@ do jord = 1,n
       in1 = in2 - in1
       do ii = in1,in2
          i = icn(ii)
-         if ( iperm ( i ) == 0 ) exit nswc_exit_1
+         if (iperm(i) == 0) exit nswc_exit_1
       end do
 !     No cheap assignment in row
       arp(j) = -1
@@ -8670,7 +8670,7 @@ do jord = 1,n
    numnz = numnz + 1
    do k = 1,jord
       j = pr(j)
-      if ( j == - 1 ) exit
+      if (j == - 1) exit
       ii = ip(j) + lenr(j) - out(j) - 2
       i = icn(ii)
       iperm(i) = j
@@ -8826,14 +8826,14 @@ nswc_exit_1 : do isn = 1 , n
          lowl(iw) = n + 1
          icnt = icnt + 1
          numb(iw) = icnt
-         if ( iw == iv ) exit
+         if (iw == iv) exit
       end do
       ist = n - stp
       ib(num) = lcnt
 ! Are there any nodes left on the stack.
       if (ist /= 0) go to 60
 ! Have all the nodes been ordered.
-      if ( icnt < n ) exit
+      if (icnt < n) exit
       exit nswc_exit_1
 ! Backtrack to previous node on path.
 60    iw = iv
@@ -9029,8 +9029,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -9062,15 +9062,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -9487,8 +9487,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -9516,15 +9516,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= 0.0) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm
@@ -9764,8 +9764,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -9797,15 +9797,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -10225,8 +10225,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -10254,15 +10254,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= 0.d0) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm

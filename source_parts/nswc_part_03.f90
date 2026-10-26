@@ -506,9 +506,9 @@ implicit none
 complex, intent(in) :: z
 real :: nswc_ai_r4
 !     ----------
-nswc_ai_r4 = real ( z )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 20
+nswc_ai_r4 = real(z)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 20
 go to 30
 10 cflect = -z
 return
@@ -548,7 +548,7 @@ do i = 1,50
    c = ((ri - 0.5)/ri)**2
    an = c*(an*k2)
    s1 = s1 + an
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 km = hpi*s1
 end function km
@@ -601,7 +601,7 @@ do i = 1,50
    bn = bn + 1.0/(ri*(2.0*ri - 1.0))
    s1 = s1 + an
    s2 = s2 + an*bn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 s1 = s1 + (1.0, 0.0)
 !                   SET w = 0.5*CLOG(16.0/l2)
@@ -944,7 +944,7 @@ do i = 1,50
    cn = an/(2.0*ri - 1.0)
    s1 = s1 + an
    s2 = s2 - cn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 fk = hpi*s1
 ek = hpi*s2
@@ -1015,7 +1015,7 @@ do i = 1,300
    s5 = s5 + en
    s6 = s6 + an*fn
    s7 = s7 + an*gn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 s1 = s1 + (1.0, 0.0)
 s3 = s3 + (1.0, 0.0)
@@ -2758,9 +2758,9 @@ c2 = -dk*sl*dl*t*r/td1
 d1 = dk*dl*r/t1
 d2 = -k2*ck*sl*t*r/td1
 !     Final assembly
-40 s = cmplx (s1, s2)
-c = cmplx (c1, c2)
-d = cmplx (d1, d2)
+40 s = cmplx(s1, s2)
+c = cmplx(c1, c2)
+d = cmplx(d1, d2)
 return
 !     Error return
 50 ierr = 3
@@ -3102,8 +3102,8 @@ f = 0.0
 aj1 = h(2) - h(1)
 circm = aj1
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 140
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 140
+if (nswc_ai_i4 == 0) go to 150
 go to 160
 140 sum = e(m)*aj1
 141 m = m + 1
@@ -3913,8 +3913,8 @@ go to 110
 170 if (s2 > 2.e-2 .and. h8 + k8 < 2.e2) go to 172
 if (abs(e3 - f) > 0.4*f) go to 172
 nswc_ai_r4 = d1 - t
-if ( nswc_ai_r4 < 0 ) go to 200
-if ( nswc_ai_r4 == 0 ) go to 180
+if (nswc_ai_r4 < 0) go to 200
+if (nswc_ai_r4 == 0) go to 180
 go to 195
 172 if (e3 < 2.e4*eps) go to 195
 if (f < 2.e4*eps) go to 200
@@ -3924,12 +3924,12 @@ if (s2 >= 5.e-4) go to 180
 if (s1 /= s2) go to 195
 175 if (min(e3,f) < 2.5e-2*sqeps) goto 185
 180 nswc_ai_r4 = e3 - f
-if ( nswc_ai_r4 < 0 ) go to 200
-if ( nswc_ai_r4 == 0 ) go to 190
+if (nswc_ai_r4 < 0) go to 200
+if (nswc_ai_r4 == 0) go to 190
 go to 195
 185 nswc_ai_r4 = e3 - f
-if ( nswc_ai_r4 < 0 ) go to 195
-if ( nswc_ai_r4 == 0 ) go to 190
+if (nswc_ai_r4 < 0) go to 195
+if (nswc_ai_r4 == 0) go to 190
 go to 200
 190 if (s0 >= s9) go to 200
 195 e3 = f
@@ -6255,9 +6255,9 @@ x1 = 0.0
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.0) x1 = -x1
-temp(1) = (( x1 + x2) + u) - b
+temp(1) = ((x1 + x2) + u) - b
 temp(2) = ((-x1 - x2) + u) - b
-temp(3) = (( x1 - x2) - u) - b
+temp(3) = ((x1 - x2) - u) - b
 temp(4) = ((-x1 + x2) - u) - b
 call aord(temp,4)
 if (abs(temp(1)) >= 0.1*abs(temp(4))) go to 31
@@ -6287,8 +6287,8 @@ return
 60 t = real(z(1))
 x = 0.0
 nswc_ai_r4 = t
-if ( nswc_ai_r4 < 0 ) go to 61
-if ( nswc_ai_r4 == 0 ) go to 70
+if (nswc_ai_r4 < 0) go to 61
+if (nswc_ai_r4 == 0) go to 70
 go to 62
 61 h = abs(real(z(2))) + abs(aimag(z(2)))
 if (abs(t) <= h) go to 70
@@ -6405,9 +6405,9 @@ x1 = 0.d0
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.d0) x1 = -x1
-zr(1) = (( x1 + x2) + u) - b
+zr(1) = ((x1 + x2) + u) - b
 zr(2) = ((-x1 - x2) + u) - b
-zr(3) = (( x1 - x2) - u) - b
+zr(3) = ((x1 - x2) - u) - b
 zr(4) = ((-x1 + x2) - u) - b
 call daord(zr, 4)
 if (abs(zr(1)) >= 0.1d0*abs(zr(4))) go to 31
@@ -6437,8 +6437,8 @@ return
 60 t = zr(1)
 x = 0.d0
 nswc_ai_r8 = t
-if ( nswc_ai_r8 < 0 ) go to 61
-if ( nswc_ai_r8 == 0 ) go to 70
+if (nswc_ai_r8 < 0) go to 61
+if (nswc_ai_r8 == 0) go to 70
 go to 62
 61 h = abs(zr(2)) + abs(zi(2))
 if (abs(t) <= h) go to 70
@@ -8353,11 +8353,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,7)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sy(i) = sx(i)
 end do
-if ( n < 7 ) return
+if (n < 7) return
 40 mp1 = m + 1
 do i = mp1,n,7
    sy(i) = sx(i)
@@ -8397,11 +8397,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,7)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dy(i) = dx(i)
 end do
-if ( n < 7 ) return
+if (n < 7) return
 40 mp1 = m + 1
 do i = mp1,n,7
    dy(i) = dx(i)
@@ -8467,8 +8467,8 @@ integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3, nswc_ai_i4
 if (n <= 0) return
 if (incx /= incy) go to 5
 nswc_ai_i4 = incx - 1
-if ( nswc_ai_i4 < 0 ) go to 5
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 5
+if (nswc_ai_i4 == 0) go to 20
 go to 60
 5 continue
 !       Code for unequal or nonpositive increments.
@@ -8545,13 +8545,13 @@ return
 !       Code for both increments equal to 1
 !       clean-up loop
 20 m = mod(n,3)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = sx(i)
    sx(i) = sy(i)
    sy(i) = stemp
 end do
-if ( n < 3 ) return
+if (n < 3) return
 40 mp1 = m + 1
 do i = mp1,n,3
    stemp = sx(i)
@@ -8595,13 +8595,13 @@ return
 !       Code for both increments equal to 1
 !       clean-up loop
 20 m = mod(n,3)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dx(i)
    dx(i) = dy(i)
    dy(i) = dtemp
 end do
-if ( n < 3 ) return
+if (n < 3) return
 40 mp1 = m + 1
 do i = mp1,n,3
    dtemp = dx(i)
@@ -8864,8 +8864,8 @@ sh22 = sh22*gam
 go to 200
 220 continue
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 250
-if ( nswc_ai_r4 == 0 ) go to 230
+if (nswc_ai_r4 < 0) go to 250
+if (nswc_ai_r4 == 0) go to 230
 go to 240
 230 continue
 sparam(3) = sh21
@@ -8908,8 +8908,8 @@ if (n <= 0 .or.(sflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 50
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 50
+if (nswc_ai_r4 == 0) go to 10
 go to 30
 10 continue
 sh21 = sparam(3)
@@ -8949,8 +8949,8 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 120
-if ( nswc_ai_r4 == 0 ) go to 80
+if (nswc_ai_r4 < 0) go to 120
+if (nswc_ai_r4 == 0) go to 80
 go to 100
 80 continue
 sh21 = sparam(3)
@@ -9107,8 +9107,8 @@ dh22 = dh22*gam
 go to 200
 220 continue
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 250
-if ( nswc_ai_r8 == 0 ) go to 230
+if (nswc_ai_r8 < 0) go to 250
+if (nswc_ai_r8 == 0) go to 230
 go to 240
 230 continue
 dparam(3) = dh21
@@ -9152,8 +9152,8 @@ if (n <= 0 .or.(dflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 50
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 50
+if (nswc_ai_r8 == 0) go to 10
 go to 30
 10 continue
 dh21 = dparam(3)
@@ -9193,8 +9193,8 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 120
-if ( nswc_ai_r8 == 0 ) go to 80
+if (nswc_ai_r8 < 0) go to 120
+if (nswc_ai_r8 == 0) go to 80
 go to 100
 80 continue
 dh21 = dparam(3)
@@ -9266,11 +9266,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = stemp + sx(i)*sy(i)
 end do
-if ( n < 5 ) go to 60
+if (n < 5) go to 60
 40 mp1 = m + 1
 do i = mp1,n,5
    stemp = stemp + sx(i)*sy(i) + sx(i + 1)*sy(i + 1) + &
@@ -9309,11 +9309,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dtemp + dx(i)*dy(i)
 end do
-if ( n < 5 ) go to 60
+if (n < 5) go to 60
 40 mp1 = m + 1
 do i = mp1,n,5
    dtemp = dtemp + dx(i)*dy(i) + dx(i + 1)*dy(i + 1) + &
@@ -9410,11 +9410,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sx(i) = sa*sx(i)
 end do
-if ( n < 5 ) return
+if (n < 5) return
 40 mp1 = m + 1
 do i = mp1,n,5
    sx(i) = sa*sx(i)
@@ -9446,11 +9446,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dx(i) = da*dx(i)
 end do
-if ( n < 5 ) return
+if (n < 5) return
 40 mp1 = m + 1
 do i = mp1,n,5
    dx(i) = da*dx(i)
@@ -9534,11 +9534,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,4)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sy(i) = sy(i) + sa*sx(i)
 end do
-if ( n < 4 ) return
+if (n < 4) return
 40 mp1 = m + 1
 do i = mp1,n,4
    sy(i) = sy(i) + sa*sx(i)
@@ -9577,11 +9577,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,4)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dy(i) = dy(i) + da*dx(i)
 end do
-if ( n < 4 ) return
+if (n < 4) return
 40 mp1 = m + 1
 do i = mp1,n,4
    dy(i) = dy(i) + da*dx(i)
@@ -9602,7 +9602,7 @@ integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy
 if (n <= 0) return
-if (abs(real(ca)) + abs(aimag(ca)) == 0.0 ) return
+if (abs(real(ca)) + abs(aimag(ca)) == 0.0) return
 if (incx == 1.and.incy == 1) go to 20
 !        Code for unequal increments or equal increments
 !          not equal to 1
@@ -9646,11 +9646,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,6)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = stemp + abs(sx(i))
 end do
-if ( n < 6 ) go to 60
+if (n < 6) go to 60
 40 mp1 = m + 1
 do i = mp1,n,6
    stemp = stemp + abs(sx(i)) + abs(sx(i + 1)) + abs(sx(i + 2)) &
@@ -9682,11 +9682,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,6)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dtemp + abs(dx(i))
 end do
-if ( n < 6 ) go to 60
+if (n < 6) go to 60
 40 mp1 = m + 1
 do i = mp1,n,6
    dtemp = dtemp + abs(dx(i)) + abs(dx(i + 1)) + abs(dx(i + 2)) &
@@ -9722,7 +9722,7 @@ end do
 scasum = stemp
 end function scasum
 
-pure real function snrm2( n, sx, incx)
+pure real function snrm2(n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
@@ -9772,22 +9772,22 @@ sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 select case ( next )
-case ( 30 )
+20 select case (next)
+case (30)
    go to 30
-case ( 50 )
+case (50)
    go to 50
-case ( 70 )
+case (70)
    go to 70
-case ( 110 )
+case (110)
    go to 110
 end select
-30 if ( abs(sx(i)) > cutlo) go to 85
+30 if (abs(sx(i)) > cutlo) go to 85
 next = 50
 xmax = zero
 !                        Phase 1.  Sum is zero
-50 if ( sx(i) == zero) go to 200
-if ( abs(sx(i)) > cutlo) go to 85
+50 if (sx(i) == zero) go to 200
+if (abs(sx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
 go to 105
@@ -9799,10 +9799,10 @@ sum = (sum / sx(i)) / sx(i)
 go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( abs(sx(i)) > cutlo ) go to 75
+70 if (abs(sx(i)) > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( abs(sx(i)) <= xmax ) go to 115
+110 if (abs(sx(i)) <= xmax) go to 115
 sum = one + sum * (xmax / sx(i))**2
 xmax = abs(sx(i))
 go to 200
@@ -9812,24 +9812,24 @@ go to 200
 75 sum = (sum * xmax) * xmax
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-85 hitest = cuthi/float( n )
+85 hitest = cuthi/float(n)
 !                   Phase 3.  Sum is mid-range.  No scaling.
 do j = i,nn,incx
    if (abs(sx(j)) >= hitest) go to 100
    sum = sum + sx(j)**2
 end do
-snrm2 = sqrt( sum )
+snrm2 = sqrt(sum)
 go to 300
 200 continue
 i = i + incx
-if ( i <= nn ) go to 20
+if (i <= nn) go to 20
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
 snrm2 = xmax * sqrt(sum)
 300 continue
 end function snrm2
 
-pure double precision function dnrm2( n, dx, incx)
+pure double precision function dnrm2(n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
@@ -9879,22 +9879,22 @@ sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 select case ( next )
-case ( 30 )
+20 select case (next)
+case (30)
    go to 30
-case ( 50 )
+case (50)
    go to 50
-case ( 70 )
+case (70)
    go to 70
-case ( 110 )
+case (110)
    go to 110
 end select
-30 if ( abs(dx(i)) > cutlo) go to 85
+30 if (abs(dx(i)) > cutlo) go to 85
 next = 50
 xmax = zero
 !                        Phase 1.  Sum is zero
-50 if ( dx(i) == zero) go to 200
-if ( abs(dx(i)) > cutlo) go to 85
+50 if (dx(i) == zero) go to 200
+if (abs(dx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
 go to 105
@@ -9906,10 +9906,10 @@ sum = (sum / dx(i)) / dx(i)
 go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( abs(dx(i)) > cutlo ) go to 75
+70 if (abs(dx(i)) > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( abs(dx(i)) <= xmax ) go to 115
+110 if (abs(dx(i)) <= xmax) go to 115
 sum = one + sum * (xmax / dx(i))**2
 xmax = abs(dx(i))
 go to 200
@@ -9919,24 +9919,24 @@ go to 200
 75 sum = (sum * xmax) * xmax
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-85 hitest = cuthi/float( n )
+85 hitest = cuthi/float(n)
 !                   Phase 3.  Sum is mid-range.  No scaling.
 do j = i,nn,incx
    if (abs(dx(j)) >= hitest) go to 100
    sum = sum + dx(j)**2
 end do
-dnrm2 = sqrt( sum )
+dnrm2 = sqrt(sum)
 go to 300
 200 continue
 i = i + incx
-if ( i <= nn ) go to 20
+if (i <= nn) go to 20
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
 dnrm2 = xmax * sqrt(sum)
 300 continue
 end function dnrm2
 
-pure real function scnrm2( n, cx, incx)
+pure real function scnrm2(n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
 complex, intent(in) :: cx(*)
@@ -9989,24 +9989,24 @@ nn = n * incx
 do i = 1,nn,incx
    absx = abs(real(cx(i)))
    imag = .false.
-   select case ( next )
-   case ( 30 )
+   select case (next)
+   case (30)
       go to 30
-   case ( 50 )
+   case (50)
       go to 50
-   case ( 70 )
+   case (70)
       go to 70
-   case ( 90 )
+   case (90)
       go to 90
-   case ( 110 )
+   case (110)
       go to 110
    end select
-30 if ( absx > cutlo) go to 85
+30 if (absx > cutlo) go to 85
    next = 50
    scale = .false.
 !                        Phase 1.  Sum is zero
-50 if ( absx == zero) go to 200
-   if ( absx > cutlo) go to 85
+50 if (absx == zero) go to 200
+   if (absx > cutlo) go to 85
 !                                Prepare for phase 2.
    next = 70
    go to 105
@@ -10018,10 +10018,10 @@ do i = 1,nn,incx
    go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( absx > cutlo ) go to 75
+70 if (absx > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( absx <= xmax ) go to 115
+110 if (absx <= xmax) go to 115
    sum = one + sum * (xmax / absx)**2
    xmax = absx
    go to 200
@@ -10033,7 +10033,7 @@ do i = 1,nn,incx
    scale = .false.
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-   hitest = cuthi/float( n )
+   hitest = cuthi/float(n)
    hitest = hitest * 0.5
 !                   Phase 3.  Sum is mid-range.  No scaling.
 90 if (absx >= hitest) go to 100
@@ -10043,14 +10043,14 @@ do i = 1,nn,incx
    if (imag) go to 210
    absx = abs(aimag(cx(i)))
    imag = .true.
-   select case ( next )
-   case ( 50 )
+   select case (next)
+   case (50)
       go to 50
-   case ( 70 )
+   case (70)
       go to 70
-   case ( 90 )
+   case (90)
       go to 90
-   case ( 110 )
+   case (110)
       go to 110
    end select
 210 continue
@@ -10072,7 +10072,7 @@ integer, intent(in) :: n
 real :: smax
 integer :: i, ix
 isamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 isamax = 1
 if (n == 1) return
 if (incx == 1) go to 20
@@ -10107,7 +10107,7 @@ integer, intent(in) :: n
 double precision :: dmax
 integer :: i, ix
 idamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 idamax = 1
 if (n == 1) return
 if (incx == 1) go to 20
@@ -10143,7 +10143,7 @@ real :: smax
 integer :: i, ix
 complex :: zdum
 icamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 icamax = 1
 if (n == 1) return
 if (incx == 1) go to 20

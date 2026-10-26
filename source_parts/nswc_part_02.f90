@@ -449,7 +449,7 @@ do j = 1,m
    a1 = a1 + c0(j)*v1
    a2 = a2 + c0(j)*v2
    if (a1 /= t1) go to 60
-   if ( a2 == t2 ) exit
+   if (a2 == t2) exit
 60 t1 = v1*q1 - v2*q2
    t2 = v1*q2 + v2*q1
    v1 = t1
@@ -570,8 +570,8 @@ n = x
 n = n - 1
 !     Let t be the sum of 1/(a-j) when a .GE. 2
 nswc_ai_i4 = n
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,n
    x = x - 1.d0
@@ -839,7 +839,7 @@ tk = 2.0
 do k = 4,22
    t = t*((tk + fn + 1.0)/(tk + 1.0))*((tk + fn)/(tk + 2.0))*rxsq
    trm(k) = t*b(k)
-   if ( abs ( trm ( k ) ) < tst ) exit
+   if (abs(trm(k)) < tst) exit
    s = s + trm(k)
    tk = tk + 2.0
 end do
@@ -881,7 +881,7 @@ do j = 2,m
    tk = 3.0e0 + fnp
    do k = 4,22
       trm(k) = trm(k)*fnp/tk
-      if ( abs ( trm ( k ) ) < tst ) exit
+      if (abs(trm(k)) < tst) exit
       s = s + trm(k)
       tk = tk + 2.0
    end do
@@ -938,7 +938,7 @@ do j = 2,m
       den = den + 1.0
       trm(i) = trm(i)/den
       s = s + trm(i)
-      if ( trm ( i ) < tols ) exit
+      if (trm(i) < tols) exit
    end do
    ans(j) = s
 end do
@@ -1763,8 +1763,8 @@ u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 210
-if ( nswc_ai_i4 == 0 ) go to 220
+if (nswc_ai_i4 < 0) go to 210
+if (nswc_ai_i4 == 0) go to 220
 go to 230
 210 if (abs(s) <= 1.e-3) go to 260
 !            Using the minimax approximations
@@ -1809,8 +1809,8 @@ u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 260
-if ( nswc_ai_i4 == 0 ) go to 270
+if (nswc_ai_i4 < 0) go to 260
+if (nswc_ai_i4 == 0) go to 270
 go to 280
 260 c0 = ((d0(3) * z + d0(2)) * z + d0(1)) * z + d00
 c1 = ((d1(3) * z + d1(2)) * z + d1(1)) * z + d10
@@ -3664,7 +3664,7 @@ do i = kp1,nm1
    l = i - 1
    d = ((apb + l)/(ap1 + l))*x*d
    w = w + d
-   if ( d <= eps * w ) exit
+   if (d <= eps * w) exit
 end do
 !               Terminate the procedure
 50 bup = bup*w
@@ -4103,7 +4103,7 @@ do n = 1,30
    dj = d(n)*j
    sum = sum + dj
    if (sum <= 0.0) go to 100
-   if ( abs ( dj ) <= eps * ( sum + l ) ) exit
+   if (abs(dj) <= eps * (sum + l)) exit
 end do
 !                    Add the results to w
 ierr = 0
@@ -4319,7 +4319,7 @@ do n = 2, num, 2
    w = w0*w
    t1 = d(np1)*w*j1
    sum = sum + (t0 + t1)
-   if ( ( abs ( t0 ) + abs ( t1 ) ) <= eps * sum ) exit
+   if ((abs(t0) + abs(t1)) <= eps * sum) exit
 end do
 u = exp(-bcorr(a,b))
 basym = e0*t*u*sum
@@ -5187,7 +5187,7 @@ do i = 1,16
    m = m + 1.0
    t = t*a/m
    q = q + t
-   if ( anorm ( t ) <= tol ) exit
+   if (anorm(t) <= tol) exit
 end do
 p = p + 1.0
 q = (q + a1)*zr
@@ -5255,11 +5255,11 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if ( ( in ) < 0 ) go to 002
+if ((in) < 0) go to 002
 go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if ( ( az ( 1 ) ) < 0 ) go to 004
+003 if ((az(1)) < 0) go to 004
 go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
@@ -5280,9 +5280,9 @@ go to 031
 008 if (zm <= 17.5) go to 009
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 013
-009 if ( ( zs - 1.0 ) < 0 ) go to 011
+009 if ((zs - 1.0) < 0) go to 011
 go to 010
-010 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) < 0 ) &
+010 if ((- abs(az(2)) + 0.096 * az(1) * az(1)) < 0) &
    & go to 011
 go to 012
 011 qn = aint(0.0625*zs)
@@ -5624,18 +5624,18 @@ tolln = min(tolln,34.5388e0)
 nz = 0
 kt = 1
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 720
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 720
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 kt = 2
 20 nn = n
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 730
-if ( nswc_ai_r4 == 0 ) go to 30
+if (nswc_ai_r4 < 0) go to 730
+if (nswc_ai_r4 == 0) go to 30
 go to 80
 30 nswc_ai_r4 = alpha
-if ( nswc_ai_r4 < 0 ) go to 710
-if ( nswc_ai_r4 == 0 ) go to 40
+if (nswc_ai_r4 < 0) go to 710
+if (nswc_ai_r4 == 0) go to 40
 go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
@@ -5733,7 +5733,7 @@ do k = 1,17
    s2 = t2 + s1
    t = -t*sxo2/s2
    s = s + t
-   if ( abs ( t ) < tol ) exit
+   if (abs(t) < tol) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -5761,8 +5761,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 440
-if ( nswc_ai_i4 == 0 ) go to 390
+if (nswc_ai_i4 < 0) go to 440
+if (nswc_ai_i4 == 0) go to 390
 go to 130
 390 kt = 2
 is = 2
@@ -5774,8 +5774,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 440
-if ( nswc_ai_i4 == 0 ) go to 410
+if (nswc_ai_i4 < 0) go to 440
+if (nswc_ai_i4 == 0) go to 410
 go to 420
 410 kt = 2
 is = 2
@@ -5856,7 +5856,7 @@ do k = 1,13
    ap = trx + tm
    t2 = t2*ap/t1
    s2 = s2 + t2
-   if ( abs ( t2 ) <= relb ) exit
+   if (abs(t2) <= relb) exit
    ak = ak + 8.0e0
 end do
 temp(is) = coef*(s1*sb - s2*sa)
@@ -6247,7 +6247,7 @@ do jn = 1,in
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
-      if ( abs ( ta ) <= tol .and. abs ( tb ) <= relb ) exit
+      if (abs(ta) <= tol .and. abs(tb) <= relb) exit
    end do
    bsum = bsum/(fn*wk(7))
    go to 160
@@ -6323,7 +6323,7 @@ do jn = 1,in
       if (wk(1) > 0.0e0) tb = abs(tb)
       asum = asum + suma*tb
       bsum = bsum + sumb*tb
-      if ( abs ( suma ) <= tol .and. abs ( sumb ) <= relb ) exit
+      if (abs(suma) <= tol .and. abs(sumb) <= relb) exit
    end do
    tb = wk(5)
    if (wk(1) > 0.0e0) tb = -tb
@@ -6627,22 +6627,22 @@ zl(1) = 0.5*log(zs)
 zl(2) = atan2(az(2),az(1))
 an = abs(in)
 sn = 1.0
-if ( ( in ) < 0 ) go to 002
+if ((in) < 0) go to 002
 go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if ( ( az ( 1 ) ) < 0 ) go to 004
+003 if ((az(1)) < 0) go to 004
 go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
 go to 006
 005 qz(1) = az(1)
 qz(2) = az(2)
-006 if ( ( zs - 1.0 ) <= 0 ) go to 020
+006 if ((zs - 1.0) <= 0) go to 020
 go to 007
-007 if ( ( zs - 289.0 ) < 0 ) go to 008
+007 if ((zs - 289.0) < 0) go to 008
 go to 010
-008 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) <= 0 ) &
+008 if ((- abs(az(2)) + 0.096 * az(1) * az(1)) <= 0) &
    & go to 020
 go to 015
 010 qm = sn*0.797884560802865*exp(-0.5*zl(1))
@@ -6770,9 +6770,9 @@ tm(1) = tm(1) - sm(3)*ts(1) + sm(4)*ts(2)
 tm(2) = tm(2) - sm(3)*ts(2) - sm(4)*ts(1)
 tm(3) = tm(3) + sm(1)*ts(1) - sm(2)*ts(2)
 tm(4) = tm(4) + sm(1)*ts(2) + sm(2)*ts(1)
-if ( ( az ( 1 ) ) < 0 ) go to 106
+if ((az(1)) < 0) go to 106
 go to 110
-106 if ( ( az ( 2 ) ) < 0 ) go to 107
+106 if ((az(2)) < 0) go to 107
 go to 108
 107 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
@@ -6785,12 +6785,12 @@ sm(2) = -sm(2)
 go to 111
 110 sm(1) = tm(3)
 sm(2) = tm(4)
-111 select case ( la )
-case ( 11 )
+111 select case (la)
+case (11)
    go to 11
-case ( 13 )
+case (13)
    go to 13
-case ( 14 )
+case (14)
    go to 14
 end select
 112 sm(1) = 1.0
@@ -6829,9 +6829,9 @@ tm(1) = tm(1) - ts(1)*sm(2) - ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
 tm(2) = tm(2) + ts(1)*sm(1) - ts(2)*sm(2) - ts(1)*sm(3) + ts(2)*sm(4)
 tm(3) = tm(3) + ts(1)*sm(1) - ts(2)*sm(2) + ts(1)*sm(3) - ts(2)*sm(4)
 tm(4) = tm(4) + ts(1)*sm(2) + ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
-if ( ( az ( 1 ) ) < 0 ) go to 116
+if ((az(1)) < 0) go to 116
 go to 120
-116 if ( ( az ( 2 ) ) < 0 ) go to 117
+116 if ((az(2)) < 0) go to 117
 go to 118
 117 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
@@ -6844,12 +6844,12 @@ sm(2) = -sm(2)
 go to 121
 120 sm(1) = tm(3)
 sm(2) = tm(4)
-121 select case ( lr )
-case ( 16 )
+121 select case (lr)
+case (16)
    go to 16
-case ( 18 )
+case (18)
    go to 18
-case ( 19 )
+case (19)
    go to 19
 end select
 122 aq(1) = 1.0
@@ -6906,12 +6906,12 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 127
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-select case ( ly )
-case ( 22 )
+select case (ly)
+case (22)
    go to 22
-case ( 24 )
+case (24)
    go to 24
-case ( 25 )
+case (25)
    go to 25
 end select
 end subroutine bssly
@@ -6998,7 +6998,7 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if ( ( az ( 1 ) ) < 0 ) go to 002
+if ((az(1)) < 0) go to 002
 go to 003
 002 qz(1) = -az(1)
 qz(2) = -az(2)
@@ -7019,9 +7019,9 @@ go to 039
 006 if (zm <= 17.5) go to 007
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 011
-007 if ( ( zs - 1.0 ) < 0 ) go to 009
+007 if ((zs - 1.0) < 0) go to 009
 go to 008
-008 if ( ( - abs ( az ( 1 ) ) + 0.096 * az ( 2 ) * az ( 2 ) ) < 0 ) &
+008 if ((- abs(az(1)) + 0.096 * az(2) * az(2)) < 0) &
    & go to 009
 go to 010
 009 qn = aint(0.0625*zs)
@@ -7102,7 +7102,7 @@ end do
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 023
 aq(1) = -2.0*qz(1)
-if ( ( qz ( 2 ) ) < 0 ) go to 020
+if ((qz(2)) < 0) go to 020
 go to 021
 020 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 022
@@ -7178,7 +7178,7 @@ end do
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 036
 aq(1) = -2.0*qz(1)
-if ( ( qz ( 2 ) ) < 0 ) go to 032
+if ((qz(2)) < 0) go to 032
 go to 033
 032 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 034
@@ -7405,19 +7405,19 @@ tolln = min(tolln,34.5388e0)
 nz = 0
 kt = 1
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 590
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 590
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 kt = 2
 20 nn = n
 if (kode < 1 .or. kode > 2) go to 570
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 600
-if ( nswc_ai_r4 == 0 ) go to 30
+if (nswc_ai_r4 < 0) go to 600
+if (nswc_ai_r4 == 0) go to 30
 go to 80
 30 nswc_ai_r4 = alpha
-if ( nswc_ai_r4 < 0 ) go to 580
-if ( nswc_ai_r4 == 0 ) go to 40
+if (nswc_ai_r4 < 0) go to 580
+if (nswc_ai_r4 == 0) go to 40
 go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
@@ -7544,7 +7544,7 @@ do k = 1,17
    s2 = t2 + s1
    t = t*sxo2/s2
    s = s + t
-   if ( abs ( t ) < tol ) exit
+   if (abs(t) < tol) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -7572,8 +7572,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 340
-if ( nswc_ai_i4 == 0 ) go to 290
+if (nswc_ai_i4 < 0) go to 340
+if (nswc_ai_i4 == 0) go to 290
 go to 130
 290 kt = 2
 is = 2
@@ -7585,8 +7585,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 340
-if ( nswc_ai_i4 == 0 ) go to 310
+if (nswc_ai_i4 < 0) go to 340
+if (nswc_ai_i4 == 0) go to 310
 go to 320
 310 kt = 2
 is = 2
@@ -7667,7 +7667,7 @@ do k = 1,25
    ap = dx + tm
    t = -t*ap/s1
    s = s + t
-   if ( abs ( t ) <= atol ) exit
+   if (abs(t) <= atol) exit
    ak = ak + 8.0e0
 end do
 temp(is) = s*earg
@@ -7843,7 +7843,7 @@ do jn = 1,in
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
-      if ( max ( abs ( ak ) , abs ( ap ) ) < tol ) exit
+      if (max(abs(ak) , abs(ap)) < tol) exit
    end do
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
@@ -8045,7 +8045,7 @@ do i = 1, 16
    m = m + 1.0
    t = t*a*zr/m
    p = p + t
-   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
+   if (anorm(t) <= eps * anorm(p)) exit
 end do
 p = p + 1.0
 t = sqrt(zr)
@@ -8123,7 +8123,7 @@ cz = z
 x = 0.5*real(z)
 y = 0.5*aimag(z)
 call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
+zr = cmplx(zr1, zr2)
 if (t /= 0.0) go to 20
 if (b /= 0.0) go to 20
 !               Calculation for nu = 0.5
@@ -8174,15 +8174,15 @@ c = exp(0.5*b*pi)
 ex = cxp(m, nu)
 if (y < 0.0) go to 100
 ex = c*ex
-w1 = cmplx (aimag(z), -real(z))
+w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(pi*aimag(w2), -pi*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)/c
-w1 = cmplx (-aimag(z), real(z))
+w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbkm
 
@@ -8283,7 +8283,7 @@ u = x*y
 sh = cmplx(1.0, u/3.0)
 ch = cmplx(1.0, u)
 go to 60
-50 t = cmplx (-y, x)
+50 t = cmplx(-y, x)
 sh = sin(t)/t
 ch = cos(t)
 60 f = gm1*ch + gm2*cl*sh
@@ -8302,7 +8302,7 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
+   if (anorm(t1) <= eps0 * anorm(w1)) exit
 end do
 w2 = w2 * zr
 contains
@@ -8503,7 +8503,7 @@ cz = z
 x = 0.5*real(z)
 y = 0.5*aimag(z)
 call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
+zr = cmplx(zr1, zr2)
 if (t /= 0.0) go to 20
 !               Calculation for nu = 0.5
 w = cmplx(cpi, 0.0)
@@ -8548,17 +8548,17 @@ w = w*exp(-cz)/sqrt(cz)
 if (ind > 0) return
 !            Analytic continuation
 ex = cxp(m, nu1)
-cn = cmplx (a, 0.0)
+cn = cmplx(a, 0.0)
 if (y < 0.0) go to 100
-w1 = cmplx (aimag(z), -real(z))
+w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(pi*aimag(w2), -pi*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)
-w1 = cmplx (-aimag(z), real(z))
+w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbsslk
 
@@ -8610,7 +8610,7 @@ do i = 1, 16
    m = m + 1.0
    t = (a/m)*t*zr
    p = p + t
-   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
+   if (anorm(t) <= eps * anorm(p)) exit
 end do
 p = p + 1.0
 t = sqrt(zr)
@@ -8703,7 +8703,7 @@ t = x*y
 sh = cmplx(1.0, t/3.0)
 ch = cmplx(1.0, t)
 go to 60
-50 w = cmplx (-y, x)
+50 w = cmplx(-y, x)
 sh = sin(w)/w
 ch = cos(w)
 60 f = gm1*ch + gm2*cl*sh
@@ -8722,7 +8722,7 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
+   if (anorm(t1) <= eps0 * anorm(w1)) exit
 end do
 w2 = w2 * zr
 contains
@@ -8853,13 +8853,13 @@ if (k == 0) go to 10
 if (k == 1) go to 20
 if (k == 2) go to 30
 go to 40
-10 cxp = cmplx (c, -s)
+10 cxp = cmplx(c, -s)
 return
-20 cxp = cmplx (-s, -c)
+20 cxp = cmplx(-s, -c)
 return
-30 cxp = cmplx (-c, s)
+30 cxp = cmplx(-c, s)
 return
-40 cxp = cmplx (s, c)
+40 cxp = cmplx(s, c)
 end function cxp
 
 pure elemental subroutine bsslk(mo, a, in, w)
@@ -8902,11 +8902,11 @@ tm(2) = 0.0
 if (mo /= 0) go to 002
 tm(1) = az(1)
 tm(2) = az(2)
-002 if ( ( zs - 1.0 ) <= 0 ) go to 020
+002 if ((zs - 1.0) <= 0) go to 020
 go to 003
-003 if ( ( zs - 289.0 ) < 0 ) go to 004
+003 if ((zs - 289.0) < 0) go to 004
 go to 010
-004 if ( ( az ( 1 ) + 0.096 * az ( 2 ) * az ( 2 ) ) <= 0 ) go to 020
+004 if ((az(1) + 0.096 * az(2) * az(2)) <= 0) go to 020
 go to 015
 010 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
 qf(1) = qm*cos(-0.5*zl(2) - tm(2))
@@ -9013,12 +9013,12 @@ if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 103
 102 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
 if (pm < 36.0) go to 101
-103 select case ( la )
-case ( 11 )
+103 select case (la)
+case (11)
    go to 11
-case ( 13 )
+case (13)
    go to 13
-case ( 14 )
+case (14)
    go to 14
 end select
 104 sm(1) = 1.0
@@ -9034,12 +9034,12 @@ do i = m,n
    sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
 end do
-select case ( lr )
-case ( 16 )
+select case (lr)
+case (16)
    go to 16
-case ( 18 )
+case (18)
    go to 18
-case ( 19 )
+case (19)
    go to 19
 end select
 106 aq(1) = 1.0
@@ -9100,12 +9100,12 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 111
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-select case ( lk )
-case ( 22 )
+select case (lk)
+case (22)
    go to 22
-case ( 24 )
+case (24)
    go to 24
-case ( 25 )
+case (25)
    go to 25
 end select
 end subroutine bsslk

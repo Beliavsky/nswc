@@ -100,8 +100,8 @@ do k = k1,k2
       & abserr = resasc*min(1.0,(200.0*abserr/resasc)**1.5)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if ( abserr > errold * 0.16 ) exit
-   if ( abserr < 1000.0 * epmach * resabs ) exit
+   if (abserr > errold * 0.16) exit
+   if (abserr < 1000.0 * epmach * resabs) exit
    errold = abserr
 end do
 end subroutine qxlqm
@@ -203,15 +203,15 @@ real, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e
 !------------------------
 !------------------------
 !------------------------
-data xx( 1)/.0                       /
-data xx( 2)/.25000000000000000000e+00/
-data xx( 3)/.50000000000000000000e+00/
-data xx( 4)/.75000000000000000000e+00/
-data xx( 5)/.87500000000000000000e+00/
-data xx( 6)/.93750000000000000000e+00/
-data xx( 7)/.10000000000000000000e+01/
-data xx( 8)/.37500000000000000000e+00/
-data xx( 9)/.62500000000000000000e+00/
+data xx(1)/.0                       /
+data xx(2)/.25000000000000000000e+00/
+data xx(3)/.50000000000000000000e+00/
+data xx(4)/.75000000000000000000e+00/
+data xx(5)/.87500000000000000000e+00/
+data xx(6)/.93750000000000000000e+00/
+data xx(7)/.10000000000000000000e+01/
+data xx(8)/.37500000000000000000e+00/
+data xx(9)/.62500000000000000000e+00/
 data xx(10)/.96875000000000000000e+00/
 data xx(11)/.12500000000000000000e+00/
 data xx(12)/.68750000000000000000e+00/
@@ -773,7 +773,7 @@ do last = 2,limit
    erlast = errmax
    call dqk21(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    call dqk21(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
@@ -826,7 +826,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -866,10 +866,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -1552,7 +1552,7 @@ do last = 2,limit
 !           bisected next).
 30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -1590,10 +1590,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -1860,7 +1860,7 @@ ido = nrmax - 1
 do i = 1,ido
    isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-   if ( errmax <= elist ( isucc ) ) exit
+   if (errmax <= elist(isucc)) exit
    iord(nrmax) = isucc
    nrmax = nrmax - 1
 end do
@@ -2505,7 +2505,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -2547,10 +2547,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -2693,8 +2693,8 @@ do k = k1,k2
       & abserr = resasc*min(1.d0,(200.d0*abserr/resasc)**1.5d0)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if ( abserr > errold * 0.16d0 ) exit
-   if ( abserr < 1000.d0 * epmach * resabs ) exit
+   if (abserr > errold * 0.16d0) exit
+   if (abserr < 1000.d0 * epmach * resabs) exit
    errold = abserr
 end do
 end subroutine dqxlqm
@@ -2796,15 +2796,15 @@ double precision, parameter :: ww(52) = [1.3032621732848490218104730576385905184
 !------------------------
 !------------------------
 !------------------------
-data xx( 1)/0.d0                     /
-data xx( 2)/.25000000000000000000d+00/
-data xx( 3)/.50000000000000000000d+00/
-data xx( 4)/.75000000000000000000d+00/
-data xx( 5)/.87500000000000000000d+00/
-data xx( 6)/.93750000000000000000d+00/
-data xx( 7)/.10000000000000000000d+01/
-data xx( 8)/.37500000000000000000d+00/
-data xx( 9)/.62500000000000000000d+00/
+data xx(1)/0.d0                     /
+data xx(2)/.25000000000000000000d+00/
+data xx(3)/.50000000000000000000d+00/
+data xx(4)/.75000000000000000000d+00/
+data xx(5)/.87500000000000000000d+00/
+data xx(6)/.93750000000000000000d+00/
+data xx(7)/.10000000000000000000d+01/
+data xx(8)/.37500000000000000000d+00/
+data xx(9)/.62500000000000000000d+00/
 data xx(10)/.96875000000000000000d+00/
 data xx(11)/.12500000000000000000d+00/
 data xx(12)/.68750000000000000000d+00/
@@ -4973,16 +4973,16 @@ do l = 1,neqn
    temp3 = 1.0/wt(l)
    temp4 = yp(l) - phi(l,1)
    nswc_ai_i4 = km2
-   if ( nswc_ai_i4 < 0 ) go to 265
-   if ( nswc_ai_i4 == 0 ) go to 260
+   if (nswc_ai_i4 < 0) go to 265
+   if (nswc_ai_i4 == 0) go to 260
    go to 255
 255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
 260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
 265 erk = erk + (temp4*temp3)**2
 end do
 nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 280
-if ( nswc_ai_i4 == 0 ) go to 275
+if (nswc_ai_i4 < 0) go to 280
+if (nswc_ai_i4 == 0) go to 275
 go to 270
 270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
 275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
@@ -4992,8 +4992,8 @@ erk = temp5*sig(kp1)*gstr(k)
 knew = k
 !   Test if order should be lowered
 nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 299
-if ( nswc_ai_i4 == 0 ) go to 290
+if (nswc_ai_i4 < 0) go to 299
+if (nswc_ai_i4 == 0) go to 290
 go to 285
 285 if (max(erkm1,erkm2) <= erk) knew = km1
 go to 299
@@ -5027,8 +5027,8 @@ end do
 320 ifail = ifail + 1
 temp2 = 0.5
 nswc_ai_i4 = ifail - 3
-if ( nswc_ai_i4 < 0 ) go to 335
-if ( nswc_ai_i4 == 0 ) go to 330
+if (nswc_ai_i4 < 0) go to 335
+if (nswc_ai_i4 == 0) go to 330
 go to 325
 325 if (p5eps < 0.25*erk) temp2 = sqrt(p5eps/erk)
 330 knew = 1
@@ -7064,7 +7064,7 @@ end subroutine zzzjac
 subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
-integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
+integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
@@ -8210,7 +8210,7 @@ do k = 1,lk
 !                                      and a local Lipschitz constant
 100 fbnd = max(fbnd,vnorm(yp,neq))
    delf = vnorm(pv,neq)
-   if ( delf >= big * abs ( dely ) ) exit
+   if (delf >= big * abs(dely)) exit
    dfdub = max(dfdub,delf/abs(dely))
    if (k == lk) go to 160
 !                       Choose next perturbation vector
@@ -8960,7 +8960,7 @@ subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
-integer :: neq, nyh, iwm( *)
+integer :: neq, nyh, iwm(*)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
@@ -9144,7 +9144,7 @@ implicit none
 !   slvs solves the linear system in the iteration scheme for the
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
-integer :: iwm( *)
+integer :: iwm(*)
 real :: wm(*), x(*), tem(*)
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
    & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
@@ -9865,9 +9865,9 @@ if (abs(edge(3)) > 1) go to 200
 if (abs(edge(4)) > 1) go to 200
 ierr = 0
 !               Process edges 1 and 3
-nswc_ai_i4 = edge ( 1 )
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+nswc_ai_i4 = edge(1)
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 if (edge(3) /= -1) go to 210
 indy = 0
@@ -9878,9 +9878,9 @@ go to 100
 30 if (edge(3) == -1) go to 210
 indy = 4 - edge(3)
 !               Process edges 2 and 4
-100 nswc_ai_i4 = edge ( 2 )
-if ( nswc_ai_i4 < 0 ) go to 110
-if ( nswc_ai_i4 == 0 ) go to 120
+100 nswc_ai_i4 = edge(2)
+if (nswc_ai_i4 < 0) go to 110
+if (nswc_ai_i4 == 0) go to 120
 go to 130
 110 if (edge(4) /= -1) go to 220
 indx = 0

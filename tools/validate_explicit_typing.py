@@ -22,6 +22,7 @@ from blktri_empty_factors import transform_fixed as correct_empty_factors
 from remove_unused_labels import transform as clean_unused_labels
 from source_comment_fixes import transform_fixed as fix_comments
 from goto_to_exit import transform as convert_exits
+from normalize_fixed_spacing import transform as normalize_spacing
 from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -173,7 +174,7 @@ def main():
     after = remove_final_returns(after, cleanup_report)
     if cleanup_report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise RuntimeError('Terminal RETURN cleanup report is stale')
-    if convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data)))))) != (ROOT / "nswc.f").read_bytes():
+    if normalize_spacing(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data))))))) != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
         raise RuntimeError('Declaration ordering report is stale')
@@ -202,7 +203,7 @@ def main():
                 inventory = normalize_reviewed_symbols(inventories[0], inventory)
             inventories.append(inventory)
         maintained = Path(folder) / 'maintained.f'
-        maintained.write_bytes(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data)))))))
+        maintained.write_bytes(normalize_spacing(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data))))))))
         result = subprocess.run([compiler, '-fsyntax-only', '-std=legacy',
                                  '-fno-allow-argument-mismatch', str(maintained)],
                                 cwd=folder, capture_output=True, text=True, timeout=180,

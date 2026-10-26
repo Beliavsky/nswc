@@ -60,7 +60,22 @@ optimization levels zero and two, including nested exits, empty loops, loop-inde
 values, and conditions calling a function that modifies shared state.
 
 The pass follows unused-label and empty-comment cleanup in fixed-form source
-reconstruction. `nswc.f90` and `nswc_mod.f90` are regenerated from the maintained
+reconstruction. A final parentheses-spacing pass removes unnecessary blanks
+inside parentheses and between array/function names and their arguments:
+`IF ( N .LE. K ( I ) ) EXIT` becomes `IF (N .LE. K(I)) EXIT`.
+The EXIT emitter uses this formatting too. To preview or apply it separately:
+
+```sh
+python tools/normalize_fixed_spacing.py input.f
+python tools/normalize_fixed_spacing.py input.f --output formatted.f --compiler gfortran
+```
+
+Labels, continuation columns, line counts, sequence fields, comments and quoted
+text are preserved. FORMAT, Hollerith and continued character statements are
+left unchanged. The compiler option checks tokens, symbols, warnings and assembly
+before writing. The full validator also verifies this final spacing pass.
+
+`nswc.f90` and `nswc_mod.f90` are regenerated from the maintained
 `nswc.f` through the existing reviewed modernization passes. The archived
 `nswc_orig.f` is unchanged.
 

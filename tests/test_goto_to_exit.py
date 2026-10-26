@@ -24,7 +24,7 @@ class GotoExitTests(unittest.TestCase):
 
     def test_inner_exit_and_unused_target(self):
         result = transform(self.inner)
-        self.assertIn(b'IF ( I .EQ. 2 ) EXIT', result)
+        self.assertIn(b'IF (I .EQ. 2) EXIT', result)
         self.assertNotIn(b'   20 ', result)
         self.assertNotIn(b'NSWC_EXIT', result)
         self.assertEqual(transform(result), result)

@@ -262,9 +262,9 @@ ifcur = 0
 npart = n
 idiv = 2
 10 iquot = npart/idiv
-if ( ( npart - idiv * iquot ) == 0 ) go to 20
+if ((npart - idiv * iquot) == 0) go to 20
 go to 60
-20 if ( ( idiv - ifcur ) <= 0 ) go to 40
+20 if ((idiv - ifcur) <= 0) go to 40
 go to 30
 30 ip = ip + 1
 ifact(ip) = idiv
@@ -276,17 +276,17 @@ go to 50
 nexp(ip) = nexp(ip) + 1
 50 npart = iquot
 go to 10
-60 if ( ( iquot - idiv ) <= 0 ) go to 100
+60 if ((iquot - idiv) <= 0) go to 100
 go to 70
-70 if ( ( idiv - 2 ) <= 0 ) go to 80
+70 if ((idiv - 2) <= 0) go to 80
 go to 90
 80 idiv = 3
 go to 10
 90 idiv = idiv + 2
 go to 10
-100 if ( ( npart - 1 ) <= 0 ) go to 140
+100 if ((npart - 1) <= 0) go to 140
 go to 110
-110 if ( ( npart - ifcur ) <= 0 ) go to 130
+110 if ((npart - ifcur) <= 0) go to 130
 go to 120
 120 ip = ip + 1
 ifact(ip) = npart
@@ -2496,7 +2496,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0e0 ) exit
+   if (det(1) == 0.0e0) exit
 10 if (abs(det(1)) >= 1.0e0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0e0
@@ -3084,7 +3084,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0d0 ) exit
+   if (det(1) == 0.0d0) exit
 10 if (abs(det(1)) >= 1.0d0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0d0
@@ -6269,7 +6269,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0e0 ) exit
+   if (det(1) == 0.0e0) exit
 10 if (det(1) >= 1.0e0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0e0
@@ -6551,7 +6551,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0d0 ) exit
+   if (det(1) == 0.0d0) exit
 10 if (det(1) >= 1.0d0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0d0
@@ -7395,7 +7395,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( cabs1 ( det( 1 ) ) == 0.0e0 ) exit
+   if (cabs1(det(1)) == 0.0e0) exit
 10 if (cabs1(det(1)) >= 1.0e0) go to 20
    det(1) = cmplx(ten,0.0e0)*det(1)
    det(2) = det(2) - (1.0e0,0.0e0)
@@ -8069,7 +8069,7 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
@@ -8087,7 +8087,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -8539,7 +8539,7 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
@@ -8557,7 +8557,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0d0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -8998,7 +8998,7 @@ do i = 1, m
    if (wantu) call cscal(n,r,u(1,i),1)
 360 continue
 !     ...Exit
-   if ( i == m ) exit
+   if (i == m) exit
    if (cabs1(e(i)) == 0.0e0) go to 370
    t = cmplx(abs(e(i)),0.0e0)
    r = t/e(i)
@@ -9032,7 +9032,7 @@ go to 660
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 420
@@ -9050,7 +9050,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -9636,12 +9636,12 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -9676,10 +9676,10 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if ( m == l ) exit
+   if (m == l) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 mp2 = m + 2
 do i = mp2,en
@@ -10188,12 +10188,12 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -10228,10 +10228,10 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if ( m == l ) exit
+   if (m == l) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 mp2 = m + 2
 do i = mp2,en

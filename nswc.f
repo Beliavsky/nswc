@@ -1,4 +1,4 @@
-      INTEGER FUNCTION IPMPAR (I)
+      INTEGER FUNCTION IPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
       INTEGER :: IMACH(10)
@@ -246,15 +246,15 @@ C     DATA IMACH( 8) /   14 /
 C     DATA IMACH( 9) /  -64 /
 C     DATA IMACH(10) /   63 /
 C     MACHINE CONSTANTS FOR THE IBM PC.
-      DATA IMACH( 1) /     2 /
-      DATA IMACH( 2) /    31 /
-      DATA IMACH( 3) / 2147483647 /
-      DATA IMACH( 4) /     2 /
-      DATA IMACH( 5) /    24 /
-      DATA IMACH( 6) /  -125 /
-      DATA IMACH( 7) /   128 /
-      DATA IMACH( 8) /    53 /
-      DATA IMACH( 9) / -1021 /
+      DATA IMACH(1) /     2 /
+      DATA IMACH(2) /    31 /
+      DATA IMACH(3) / 2147483647 /
+      DATA IMACH(4) /     2 /
+      DATA IMACH(5) /    24 /
+      DATA IMACH(6) /  -125 /
+      DATA IMACH(7) /   128 /
+      DATA IMACH(8) /    53 /
+      DATA IMACH(9) / -1021 /
       DATA IMACH(10) /  1024 /
 C     MACHINE CONSTANTS FOR THE MACINTOSH II - ABSOFT
 C     MACFORTRAN II.
@@ -353,7 +353,7 @@ C     DATA IMACH(10) /  1023 /
       END FUNCTION IPMPAR
 
 C-----------------------------------------------------------------------
-      SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+      SUBROUTINE MACH(MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
       IMPLICIT NONE
       INTEGER :: IBETA
       INTEGER, INTENT(IN) :: IDMAX, IMAX, MO, N
@@ -545,7 +545,7 @@ C-----------------------------------------------------------------------
 C     OBTAIN THE SINGLE PRECISION INFORMATION
 C-----------------------------------------------------------------------
       MAXEXP = IMAX
-      CALL MACH1 (N0, IBETA, M, MINEXP, MAXEXP, EPS, XINT, XMIN, XMAX)
+      CALL MACH1(N0, IBETA, M, MINEXP, MAXEXP, EPS, XINT, XMIN, XMAX)
       IF (MO .EQ. 1) STOP
       RMACH(1) = EPS
       RMACH(2) = XMIN
@@ -558,7 +558,7 @@ C-----------------------------------------------------------------------
 C     OBTAIN THE DOUBLE PRECISION INFORMATION
 C-----------------------------------------------------------------------
    10 MAXEXP = IDMAX
-      CALL MACH2 (N0, IBETA, M, MINEXP, MAXEXP, DEPS, DINT, DMIN, DMAX)
+      CALL MACH2(N0, IBETA, M, MINEXP, MAXEXP, DEPS, DINT, DMIN, DMAX)
       IF (MO .GE. 2) STOP
       DMACH(1) = DEPS
       DMACH(2) = DMIN
@@ -568,7 +568,7 @@ C-----------------------------------------------------------------------
       IMACH(10)= MAXEXP
       END SUBROUTINE MACH
 
-      SUBROUTINE RADIX (IBETA)
+      SUBROUTINE RADIX(IBETA)
       IMPLICIT NONE
       INTEGER :: IBETA
       REAL :: A, B, ONE, Y
@@ -580,17 +580,17 @@ C-----------------------------------------------------------------------
       ONE  = FLOAT(1)
       A = ONE
    10 A = A + A
-      CALL STORE2 (A + ONE, A)
+      CALL STORE2(A + ONE, A)
       Y = D1 - D2
       IF (Y .EQ. ONE) GO TO 10
       B = ONE
    20 B = B + B
-      CALL STORE2 (A + B, A)
+      CALL STORE2(A + B, A)
       IF (D1 .EQ. D2) GO TO 20
       IBETA = INT(D1 - D2)
       END SUBROUTINE RADIX
 
-      SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
+      SUBROUTINE MACH1(N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
@@ -688,7 +688,7 @@ C-----------------------------------------------------------------------
    10    M = M + 1
          Z = T
          T = B*T
-         CALL STORE2 (T + ONE, T)
+         CALL STORE2(T + ONE, T)
          X = D1*BINV - Z
          IF (X .EQ. BINV) GO TO 10
       XINT = (Z - ONE)*B + BM1
@@ -711,10 +711,10 @@ C     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
       Z = BINV
    30    X = Z
          Z = (X*X)*ONE
-         CALL STORE2 (Z*XINT, Z*T)
+         CALL STORE2(Z*XINT, Z*T)
          IF (D1 .EQ. D2) GO TO 40
          IF (Z + Z .EQ. ZERO .OR. ABS(Z) .GE. X) GO TO 40
-         CALL STORE2 (Z, P*Z)
+         CALL STORE2(Z, P*Z)
          IF (T*D2 .EQ. T*Z) GO TO 40
          K = K + K
          GO TO 30
@@ -723,22 +723,22 @@ C     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 C     LOOP TO DETERMINE MINEXP AND XMIN.
    50    XMIN = X
          X = (X*BINV)*ONE
-         CALL STORE2 (X*XINT, X*T)
+         CALL STORE2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
          IF (X + X .EQ. ZERO .OR. ABS(X) .GE. XMIN) GO TO 90
-         CALL STORE2 (X, P*X)
+         CALL STORE2(X, P*X)
          IF (T*D2 .EQ. T*X) GO TO 80
          K = K + 1
          GO TO 50
 C     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
 C     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
 C     THIS LOSS OF ACCURACY.
-   80 CALL STORE2 (X, Q*X)
+   80 CALL STORE2(X, Q*X)
       IF (T*D2 .NE. T*X) GO TO 90
    81    Z = X
          J = J + 1
          X = (X*BINV)*ONE
-         CALL STORE2 (X*XINT, X*T)
+         CALL STORE2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
          IF (X + X .NE. ZERO .AND. ABS(X) .LT. Z) GO TO 81
    90 MINEXP = 1 - K
@@ -763,7 +763,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     CHECK THE APPROXIMATION FOR MAXEXP
 C-----------------------------------------------------------------------
-  110 CALL STORE2 (T, T*P)
+  110 CALL STORE2(T, T*P)
       IF (D1 .EQ. D2) GO TO 150
       IF (N .LE. 0) RETURN
 C-----------------------------------------------------------------------
@@ -774,7 +774,7 @@ C-----------------------------------------------------------------------
          T = T*B
          XMAX = XMAX*B
          MAXEXP = MAXEXP + 1
-         CALL STORE2 (T, T*P)
+         CALL STORE2(T, T*P)
          IF (D1 .EQ. D2) GO TO 150
          WRITE (N,220) MAXEXP
       END DO
@@ -805,7 +805,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
       END SUBROUTINE MACH1
 
-      SUBROUTINE STORE2 (A, B)
+      SUBROUTINE STORE2(A, B)
       IMPLICIT NONE
       REAL :: A, B
       REAL :: D1, D2
@@ -817,7 +817,7 @@ C-----------------------------------------------------------------------
       D2 = B
       END SUBROUTINE STORE2
 
-      SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
+      SUBROUTINE MACH2(N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
@@ -916,7 +916,7 @@ C-----------------------------------------------------------------------
    10    M = M + 1
          Z = T
          T = B*T
-         CALL DSTOR2 (T + ONE, T)
+         CALL DSTOR2(T + ONE, T)
          X = D1*BINV - Z
          IF (X .EQ. BINV) GO TO 10
       XINT = (Z - ONE)*B + BM1
@@ -939,10 +939,10 @@ C     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
       Z = BINV
    30    X = Z
          Z = (X*X)*ONE
-         CALL DSTOR2 (Z*XINT, Z*T)
+         CALL DSTOR2(Z*XINT, Z*T)
          IF (D1 .EQ. D2) GO TO 40
          IF (Z + Z .EQ. ZERO .OR. DABS(Z) .GE. X) GO TO 40
-         CALL DSTOR2 (Z, P*Z)
+         CALL DSTOR2(Z, P*Z)
          IF (T*D2 .EQ. T*Z) GO TO 40
          K = K + K
          GO TO 30
@@ -951,22 +951,22 @@ C     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 C     LOOP TO DETERMINE MINEXP AND XMIN
    50    XMIN = X
          X = (X*BINV)*ONE
-         CALL DSTOR2 (X*XINT, X*T)
+         CALL DSTOR2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
          IF (X + X .EQ. ZERO .OR. DABS(X) .GE. XMIN) GO TO 90
-         CALL DSTOR2 (X, P*X)
+         CALL DSTOR2(X, P*X)
          IF (T*D2 .EQ. T*X) GO TO 80
          K = K + 1
          GO TO 50
 C     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
 C     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
 C     THIS LOSS OF ACCURACY.
-   80 CALL DSTOR2 (X, Q*X)
+   80 CALL DSTOR2(X, Q*X)
       IF (T*D2 .NE. T*X) GO TO 90
    81    Z = X
          J = J + 1
          X = (X*BINV)*ONE
-         CALL DSTOR2 (X*XINT, X*T)
+         CALL DSTOR2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
          IF (X + X .NE. ZERO .AND. DABS(X) .LT. Z) GO TO 81
    90 MINEXP = 1 - K
@@ -991,7 +991,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     CHECK THE APPROXIMATION FOR MAXEXP
 C-----------------------------------------------------------------------
-  110 CALL DSTOR2 (T, T*P)
+  110 CALL DSTOR2(T, T*P)
       IF (D1 .EQ. D2) GO TO 150
       IF (N .LE. 0) RETURN
 C-----------------------------------------------------------------------
@@ -1002,7 +1002,7 @@ C-----------------------------------------------------------------------
          T = T*B
          XMAX = XMAX*B
          MAXEXP = MAXEXP + 1
-         CALL DSTOR2 (T, T*P)
+         CALL DSTOR2(T, T*P)
          IF (D1 .EQ. D2) GO TO 150
          WRITE (N,220) MAXEXP
       END DO
@@ -1033,7 +1033,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
       END SUBROUTINE MACH2
 
-      SUBROUTINE DSTOR2 (A, B)
+      SUBROUTINE DSTOR2(A, B)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
@@ -1045,7 +1045,7 @@ C-----------------------------------------------------------------------
       D2 = B
       END SUBROUTINE DSTOR2
 
-      REAL FUNCTION SPMPAR (I)
+      REAL FUNCTION SPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
       INTEGER :: IBETA, M
@@ -1092,7 +1092,7 @@ C-----------------------------------------------------------------------
       SPMPAR = ((W * Z) * B) * B
       END FUNCTION SPMPAR
 
-      DOUBLE PRECISION FUNCTION DPMPAR (I)
+      DOUBLE PRECISION FUNCTION DPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
       INTEGER :: IBETA, M
@@ -1139,7 +1139,7 @@ C-----------------------------------------------------------------------
       DPMPAR = ((W * Z) * B) * B
       END FUNCTION DPMPAR
 
-      REAL FUNCTION EPSLN (L)
+      REAL FUNCTION EPSLN(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
@@ -1165,7 +1165,7 @@ C--------------------------------------------------------------------
       EPSLN = M * LNB
       END FUNCTION EPSLN
 
-      DOUBLE PRECISION FUNCTION DEPSLN (L)
+      DOUBLE PRECISION FUNCTION DEPSLN(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       INTEGER :: IPMPAR
@@ -1191,7 +1191,7 @@ C--------------------------------------------------------------------
       DEPSLN = M * LNB
       END FUNCTION DEPSLN
 
-      REAL FUNCTION EXPARG (L)
+      REAL FUNCTION EXPARG(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
@@ -1224,7 +1224,7 @@ C--------------------------------------------------------------------
       EXPARG = 0.99999 * (M * LNB)
       END FUNCTION EXPARG
 
-      DOUBLE PRECISION FUNCTION DXPARG (L)
+      DOUBLE PRECISION FUNCTION DXPARG(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
@@ -1258,7 +1258,7 @@ C--------------------------------------------------------------------
       DXPARG = 0.999999999999D+00 * (M * LNB)
       END FUNCTION DXPARG
 
-      SUBROUTINE ISHELL (A, N)
+      SUBROUTINE ISHELL(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N)
@@ -1276,7 +1276,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1301,7 +1301,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE ISHELL
 
-      SUBROUTINE SHELL (A, N)
+      SUBROUTINE SHELL(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
@@ -1320,7 +1320,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1345,7 +1345,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE SHELL
 
-      SUBROUTINE SHELL2 (A, B, N)
+      SUBROUTINE SHELL2(A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), B(N)
@@ -1365,7 +1365,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1393,7 +1393,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE SHELL2
 
-      SUBROUTINE RSORT (A, N)
+      SUBROUTINE RSORT(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
@@ -1412,7 +1412,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1437,7 +1437,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE RSORT
 
-      SUBROUTINE RISORT (A, M, N)
+      SUBROUTINE RISORT(A, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
@@ -1459,7 +1459,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1487,7 +1487,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE RISORT
 
-      SUBROUTINE RRSORT (A, B, N)
+      SUBROUTINE RRSORT(A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), B(N)
@@ -1507,7 +1507,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1535,7 +1535,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE RRSORT
 
-      SUBROUTINE DSORT (A, N)
+      SUBROUTINE DSORT(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
@@ -1554,7 +1554,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1579,7 +1579,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE DSORT
 
-      SUBROUTINE DISORT (A, M, N)
+      SUBROUTINE DISORT(A, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
@@ -1601,7 +1601,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1629,7 +1629,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE DISORT
 
-      SUBROUTINE DDSORT (A, B, N)
+      SUBROUTINE DDSORT(A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
@@ -1649,7 +1649,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1677,7 +1677,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       END DO
       END SUBROUTINE DDSORT
 
-      SUBROUTINE AORD (A, N)
+      SUBROUTINE AORD(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
@@ -1697,7 +1697,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1722,7 +1722,7 @@ C                 SO THAT ABS(A(J)) .LE. ABS(A(J+KI))
       END DO
       END SUBROUTINE AORD
 
-      SUBROUTINE DAORD (A, N)
+      SUBROUTINE DAORD(A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
@@ -1742,7 +1742,7 @@ C             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
       IF (N .LT. 2) RETURN
       IMAX = 1
       DO I = 3,10
-         IF ( N .LE. K ( I ) ) EXIT
+         IF (N .LE. K(I)) EXIT
          IMAX = IMAX + 1
       END DO
 C            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
@@ -1767,7 +1767,7 @@ C               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
       END DO
       END SUBROUTINE DAORD
 
-      SUBROUTINE QSORTI (X, IND, N)
+      SUBROUTINE QSORTI(X, IND, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, X(N)
       INTEGER, INTENT(INOUT) :: IND(N)
@@ -1920,7 +1920,7 @@ C   J-I .LT. 11.
       GO TO 12
       END SUBROUTINE QSORTI
 
-      SUBROUTINE QSORTR (X, IND, N)
+      SUBROUTINE QSORTR(X, IND, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
@@ -2074,7 +2074,7 @@ C   J-I .LT. 11.
       GO TO 12
       END SUBROUTINE QSORTR
 
-      SUBROUTINE QSORTD (X, IND, N)
+      SUBROUTINE QSORTD(X, IND, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
@@ -2229,7 +2229,7 @@ C   J-I .LT. 11.
       GO TO 12
       END SUBROUTINE QSORTD
 
-      SUBROUTINE IORDER (A, IP, N)
+      SUBROUTINE IORDER(A, IP, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N), IP(N)
@@ -2281,7 +2281,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       END DO
       END SUBROUTINE IORDER
 
-      SUBROUTINE RORDER (A, IP, N)
+      SUBROUTINE RORDER(A, IP, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
@@ -2335,7 +2335,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       END DO
       END SUBROUTINE RORDER
 
-      SUBROUTINE DORDER (A, IP, N)
+      SUBROUTINE DORDER(A, IP, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
@@ -2389,7 +2389,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       END DO
       END SUBROUTINE DORDER
 
-      REAL FUNCTION CBRT (X)
+      REAL FUNCTION CBRT(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: R
@@ -2398,8 +2398,8 @@ C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       NSWC_AI_R4 = X
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_R4 .LT. 0) GO TO 30
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 10
       GO TO 20
    10 CBRT = 0.0
       RETURN
@@ -2410,7 +2410,7 @@ C-----------------------------------------------------------------------
       CBRT = -EXP(R)
       END FUNCTION CBRT
 
-      DOUBLE PRECISION FUNCTION DCBRT (X)
+      DOUBLE PRECISION FUNCTION DCBRT(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
@@ -2419,8 +2419,8 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: R
       DOUBLE PRECISION :: NSWC_AI_R8
       NSWC_AI_R8 = X
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_R8 .LT. 0) GO TO 30
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 10
       GO TO 20
    10 DCBRT = 0.D0
       RETURN
@@ -2437,22 +2437,22 @@ C-----------------------------------------------------------------------
       REAL :: ARTNQ
       REAL :: NSWC_AI_R4
       NSWC_AI_R4 = X
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 1
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 2
+      IF (NSWC_AI_R4 .LT. 0) GO TO 1
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 2
       GO TO 5
     1 ARTNQ=ATAN(Y/X)+3.1415926535898
       RETURN
     2 NSWC_AI_R4 = Y
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 3
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 8
+      IF (NSWC_AI_R4 .LT. 0) GO TO 3
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 8
       GO TO 4
     3 ARTNQ=4.7123889803847
       RETURN
     4 ARTNQ=1.5707963267949
       RETURN
     5 NSWC_AI_R4 = Y
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 6
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 8
+      IF (NSWC_AI_R4 .LT. 0) GO TO 6
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 8
       GO TO 7
     6 ARTNQ=ATAN(Y/X)+6.2831853071795
       RETURN
@@ -2466,22 +2466,22 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X, Y
       DOUBLE PRECISION :: NSWC_AI_R8
       NSWC_AI_R8 = X
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 1
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 2
+      IF (NSWC_AI_R8 .LT. 0) GO TO 1
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 2
       GO TO 5
     1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
       RETURN
     2 NSWC_AI_R8 = Y
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 3
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 8
+      IF (NSWC_AI_R8 .LT. 0) GO TO 3
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 8
       GO TO 4
     3 DARTNQ=4.71238898038468985769396507492D0
       RETURN
     4 DARTNQ=1.57079632679489661923132169164D0
       RETURN
     5 NSWC_AI_R8 = Y
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 6
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 8
+      IF (NSWC_AI_R8 .LT. 0) GO TO 6
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 8
       GO TO 7
     6 DARTNQ=DATAN(Y/X)+6.28318530717958647692528676656D0
       RETURN
@@ -2526,7 +2526,7 @@ C     --------------------------------------
    20 DCPABS = 0.D0
       END FUNCTION DCPABS
 
-      SUBROUTINE CREC (X, Y, U, V)
+      SUBROUTINE CREC(X, Y, U, V)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: U, V
       REAL, INTENT(IN) :: X, Y
@@ -2546,7 +2546,7 @@ C-----------------------------------------------------------------------
       V = -T/D
       END SUBROUTINE CREC
 
-      SUBROUTINE DCREC (X, Y, U, V)
+      SUBROUTINE DCREC(X, Y, U, V)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
@@ -2566,7 +2566,7 @@ C-----------------------------------------------------------------------
       V = -T/D
       END SUBROUTINE DCREC
 
-      COMPLEX FUNCTION CDIV (A, B)
+      COMPLEX FUNCTION CDIV(A, B)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: A, B
       REAL :: AI, AR, BI, BR, D, T, U, V
@@ -2591,7 +2591,7 @@ C-----------------------------------------------------------------------
       CDIV = CMPLX(U,V)
       END FUNCTION CDIV
 
-      SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
+      SUBROUTINE CDIVID(AR,AI,BR,BI,CR,CI)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
@@ -2621,7 +2621,7 @@ C     DIVISION BY ZERO. C = INFINITY
       CI = CR
       END SUBROUTINE CDIVID
 
-      SUBROUTINE DCSQRT (Z, W)
+      SUBROUTINE DCSQRT(Z, W)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
@@ -2639,8 +2639,8 @@ C ----------------------------------------------------------------------
       X = Z(1)
       Y = Z(2)
       NSWC_AI_R8 = X
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_R8 .LT. 0) GO TO 30
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 10
       GO TO 20
    10 IF (Y .NE. 0.D0) GO TO 11
          W(1) = 0.D0
@@ -2809,7 +2809,7 @@ C *** HERE DA = DB = 0.D0 ***
       DS = 0.D0
       END SUBROUTINE DROTG
 
-      SUBROUTINE ROT3 (A, THETA)
+      SUBROUTINE ROT3(A, THETA)
       IMPLICIT NONE
       REAL :: A(3,3)
       REAL, INTENT(INOUT) :: THETA(3)
@@ -2845,7 +2845,7 @@ C     EVALUATION OF THE ANGLES
    22 THETA(1) = ATAN2(V,U)
       END SUBROUTINE ROT3
 
-      SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
+      SUBROUTINE CONSTR(XK,YK,ZK, CX,SX,CY,SY)
       IMPLICIT NONE
       REAL, INTENT(IN) :: XK, YK, ZK
       REAL, INTENT(INOUT) :: CX, SX
@@ -2880,7 +2880,7 @@ C (XK,YK,ZK) LIES ON THE X-AXIS
       SX = 0.
       END SUBROUTINE CONSTR
 
-      REAL FUNCTION ANG (N, X, Y)
+      REAL FUNCTION ANG(N, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X(N), Y(N)
@@ -2912,7 +2912,7 @@ C                           ERROR RETURN
    30 ANG = -1.0
       END FUNCTION ANG
 
-      REAL FUNCTION SIN0 (X)
+      REAL FUNCTION SIN0(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: A0, A1, A2, A3, A4, A5, A6, T
@@ -2929,7 +2929,7 @@ C------------------------
      *                  + A1)*T + A0)*X
       END FUNCTION SIN0
 
-      REAL FUNCTION COS0 (X)
+      REAL FUNCTION COS0(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: A1, A2, A3, A4, A5, A6, T
@@ -2944,7 +2944,7 @@ C------------------------
       COS0 = (((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T + A1)*T + 1.0
       END FUNCTION COS0
 
-      REAL FUNCTION SIN1 (X)
+      REAL FUNCTION SIN1(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       INTEGER :: MAX, N
@@ -2989,7 +2989,7 @@ C                        TERMINATION
       IF (MOD(N,2) .NE. 0) SIN1 = - SIN1
       END FUNCTION SIN1
 
-      REAL FUNCTION COS1 (X)
+      REAL FUNCTION COS1(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       INTEGER :: MAX, N
@@ -3034,7 +3034,7 @@ C                        TERMINATION
    30 IF (MOD(N,2) .NE. 0) COS1 = - COS1
       END FUNCTION COS1
 
-      DOUBLE PRECISION FUNCTION DSIN1 (X)
+      DOUBLE PRECISION FUNCTION DSIN1(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: MAX, N
@@ -3116,7 +3116,7 @@ C                        TERMINATION
       IF (MOD(N,2) .NE. 0) DSIN1 = - DSIN1
       END FUNCTION DSIN1
 
-      DOUBLE PRECISION FUNCTION DCOS1 (X)
+      DOUBLE PRECISION FUNCTION DCOS1(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: MAX, N
@@ -3198,7 +3198,7 @@ C                        TERMINATION
    30 IF (MOD(N,2) .NE. 0) DCOS1 = - DCOS1
       END FUNCTION DCOS1
 
-      SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
+      SUBROUTINE SNHCSH(SINHM,COSHM,X,ISW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ISW
       REAL, INTENT(INOUT) :: SINHM, COSHM
@@ -3283,7 +3283,7 @@ C COSHMM APPROXIMATION
     5 COSHM = (((1./EXPX-2.)-XS)+EXPX)/2.
       END SUBROUTINE SNHCSH
 
-      REAL FUNCTION ESUM (MU, X)
+      REAL FUNCTION ESUM(MU, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       REAL, INTENT(IN) :: X
@@ -3306,7 +3306,7 @@ C-----------------------------------------------------------------------
       ESUM = EXP(W)*EXP(X)
       END FUNCTION ESUM
 
-      DOUBLE PRECISION FUNCTION DESUM (MU, X)
+      DOUBLE PRECISION FUNCTION DESUM(MU, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       DOUBLE PRECISION, INTENT(IN) :: X
@@ -3329,7 +3329,7 @@ C-----------------------------------------------------------------------
       DESUM = DEXP(W)*DEXP(X)
       END FUNCTION DESUM
 
-      REAL FUNCTION REXP (X)
+      REAL FUNCTION REXP(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: E, P1, P2, Q1, Q2, Q3, Q4
@@ -3354,7 +3354,7 @@ C-----------------------
    30 REXP = -1.0
       END FUNCTION REXP
 
-      DOUBLE PRECISION FUNCTION DREXP (X)
+      DOUBLE PRECISION FUNCTION DREXP(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
@@ -3406,7 +3406,7 @@ C        DIGIT.
    30 DREXP = -1.D0
       END FUNCTION DREXP
 
-      SUBROUTINE REXP1 (X, E, W)
+      SUBROUTINE REXP1(X, E, W)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: E, W
       REAL, INTENT(IN) :: X
@@ -3436,7 +3436,7 @@ C-----------------------
    30 W = -1.0/X
       END SUBROUTINE REXP1
 
-      SUBROUTINE DREXP1 (X, E, W)
+      SUBROUTINE DREXP1(X, E, W)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -3519,7 +3519,7 @@ C--------------------------
       ALNREL = ALOG(X)
       END FUNCTION ALNREL
 
-      DOUBLE PRECISION FUNCTION DLNREL (A)
+      DOUBLE PRECISION FUNCTION DLNREL(A)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
@@ -3652,7 +3652,7 @@ C                  SERIES EXPANSION
       RLOG1 = X - ALOG(W)
       END FUNCTION RLOG1
 
-      DOUBLE PRECISION FUNCTION DRLOG (X)
+      DOUBLE PRECISION FUNCTION DRLOG(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
@@ -3718,7 +3718,7 @@ C        THE 21-ST SIGNIFICANT DIGIT.
       DRLOG = R - DLOG(X)
       END FUNCTION DRLOG
 
-      DOUBLE PRECISION FUNCTION DRLOG1 (X)
+      DOUBLE PRECISION FUNCTION DRLOG1(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
@@ -3784,7 +3784,7 @@ C        THE 21-ST SIGNIFICANT DIGIT.
       DRLOG1 = X - DLOG(W)
       END FUNCTION DRLOG1
 
-      SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
+      SUBROUTINE LOCPT(X0, Y0, X, Y, N, L, M)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: L, M
       INTEGER, INTENT(IN) :: N
@@ -3852,7 +3852,7 @@ C     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
    20 L = 0
       END SUBROUTINE LOCPT
 
-      SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
+      SUBROUTINE PFIND(A, B, X, Y, N, U, V, M, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
@@ -3990,7 +3990,7 @@ C                          ERROR RETURN
   220 IERR = -I
       END SUBROUTINE PFIND
 
-      SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
+      SUBROUTINE HULL(X, Y, M, BX, BY, K, VX, VY, N)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: K
       INTEGER, INTENT(IN) :: M
@@ -4014,7 +4014,7 @@ C---------------------
       MP1 = M + 1
       ONEP = 1.0 + 4.0*EPS
 C                       REORDER X AND Y
-      CALL RRSORT (Y, X, M)
+      CALL RRSORT(Y, X, M)
       YMIN = Y(1)
       YMAX = Y(M)
       IF (YMIN .EQ. YMAX) GO TO 500
@@ -4023,14 +4023,14 @@ C                       REORDER X AND Y
          IF (Y(L) .EQ. YMIN) GO TO 10
       LMIN = L
       L = L - 1
-      CALL RRSORT (X, Y, L)
+      CALL RRSORT(X, Y, L)
       X1 = X(1)
       I = M
    20    I = I - 1
          IF (Y(I) .EQ. YMAX) GO TO 20
       LMAX = I
       I = I + 1
-      CALL RRSORT (X(I), Y(I), M - LMAX)
+      CALL RRSORT(X(I), Y(I), M - LMAX)
       XM = X(M)
 C                      FIND XMIN AND XMAX
       XMIN = X1
@@ -4315,7 +4315,7 @@ C           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
   471 K = MP1
       RETURN
 C                     CASE WHEN YMIN = YMAX
-  500 CALL RRSORT (X, Y, M)
+  500 CALL RRSORT(X, Y, M)
       DO I = 1,M
          BX(I) = X(I)
          BY(I) = Y(I)
@@ -4350,8 +4350,8 @@ C*****************************************************************
       N = NB
       IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N = N - 1
       NSWC_AI_I4 = N - 3
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 20
       GO TO 30
    10 PAREA = 0.0
       RETURN
@@ -4366,7 +4366,7 @@ C*****************************************************************
       PAREA = 0.5*A
       END FUNCTION PAREA
 
-      SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
+      SUBROUTINE HC(IND, M, N, PR, AR, NB, S, IWK, NUM)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IND
       INTEGER, INTENT(IN) :: M, N
@@ -4442,7 +4442,7 @@ C     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
       SUBR = P + N
       RBUS = SUBR + N
       TOR  = RBUS + N
-      CALL HC1 (IND, M, N, PR, AR, NB, IWK(S0), NP1, IWK(PC),
+      CALL HC1(IND, M, N, PR, AR, NB, IWK(S0), NP1, IWK(PC),
      *          IWK(AC), IWK(VR), IWK(VC), IWK(P), IWK(SUBR),
      *          IWK(RBUS), IWK(TOR), IWK(1), IWK(2), IWK(3))
       IF (IND .NE. 1) RETURN
@@ -4460,7 +4460,7 @@ C                   ERROR RETURN
    40 IND = -5
       END SUBROUTINE HC
 
-      SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR,
+      SUBROUTINE HC1(IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR,
      *                VC, P, SUBR, RBUS, TOR, JR, K, IND0)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IND, IND0, JR, K
@@ -4550,9 +4550,9 @@ C (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
       MINU = VR(1)
       JR = 1
       DO I=2,N
-        NSWC_AI_I4 = VC ( I ) - MAXE
-        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 70
+        NSWC_AI_I4 = VC(I) - MAXE
+        IF (NSWC_AI_I4 .LT. 0) GO TO 100
+        IF (NSWC_AI_I4 .EQ. 0) GO TO 70
         GO TO 80
    70   IF (VR(I).GE.MINU) GO TO 100
         GO TO 90
@@ -4575,7 +4575,7 @@ C ARC  (J,JL)  IS IMPLIED BECAUSE  VR(J) = 1 .
   130 L1 = PR(J) + 1
       L2 = PR(J+1)
       DO L=L1,L2
-        IF ( AR ( L ) .GT. 0 ) EXIT
+        IF (AR(L) .GT. 0) EXIT
       END DO
       JL = AR(L)
 C FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
@@ -4597,7 +4597,7 @@ C ARC  (JL,J)  IS IMPLIED BECAUSE  VC(J) = 1 .
   170 L1 = PC(J) + 1
       L2 = PC(J+1)
       DO L=L1,L2
-        IF ( AC ( L ) .GT. 0 ) EXIT
+        IF (AC(L) .GT. 0) EXIT
       END DO
       JL = AC(L)
 C FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
@@ -4741,7 +4741,7 @@ C AT LEAST ONE ARC WAS IMPLIED AT LEVEL  K .
           LL1 = PC(JL) + 1
           LL2 = PC(JL+1)
           DO LL=LL1,LL2
-            IF ( K1 - AC ( LL ) .EQ. J ) EXIT
+            IF (K1 - AC(LL) .EQ. J) EXIT
           END DO
           AC(LL) = J
           VC(JL) = VC(JL) + 1
@@ -4779,7 +4779,7 @@ C ERROR RETURN
   620 IND = -6
       END SUBROUTINE HC1
 
-      SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K,
+      SUBROUTINE IPATH(I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K,
      * JR, M, NP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
@@ -4846,7 +4846,7 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
       RBUS(J) = 0
       END SUBROUTINE IPATH
 
-      SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
+      SUBROUTINE FUPD(A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I1, K1, M, N, NP1
       INTEGER, INTENT(INOUT) :: A1(M), A2(M)
@@ -4862,7 +4862,7 @@ C FORWARD STEP UPDATING
         L1 = P2(IA) + 1
         L2 = P2(IA+1)
         DO L=L1,L2
-          IF ( A2 ( L ) .EQ. I1 ) EXIT
+          IF (A2(L) .EQ. I1) EXIT
         END DO
         V2(IA) = V2(IA) - 1
         A2(L) = K1 - A2(L)
@@ -4872,7 +4872,7 @@ C FORWARD STEP UPDATING
       V1(I1) = 0
       END SUBROUTINE FUPD
 
-      SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
+      SUBROUTINE BUPD(A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: II, K1, K2, M, N, NP1
       INTEGER, INTENT(INOUT) :: A1(M), A2(M)
@@ -4891,7 +4891,7 @@ C BACKTRACKING STEP UPDATING
         LL1 = P2(IA) + 1
         LL2 = P2(IA+1)
         DO LL=LL1,LL2
-          IF ( K1 - A2 ( LL ) .EQ. II ) EXIT
+          IF (K1 - A2(LL) .EQ. II) EXIT
         END DO
         A2(LL) = II
         V2(IA) = V2(IA) + 1
@@ -4920,7 +4920,7 @@ C UPDATING FOR IMPLIED ARC
    10   J1 = P2(IARC) + 1
         J2 = P2(IARC+1)
         DO JJ=J1,J2
-          IF ( A2 ( JJ ) .EQ. IB ) EXIT
+          IF (A2(JJ) .EQ. IB) EXIT
         END DO
    30   A2(JJ) = K1 - A2(JJ)
         V2(IARC) = V2(IARC) - 1
@@ -4979,7 +4979,7 @@ C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
    40 JJ = -1
       END SUBROUTINE RARC
 
-      SUBROUTINE CERF (MO, Z, W)
+      SUBROUTINE CERF(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
@@ -5118,7 +5118,7 @@ C                       TERMINATION
       W = CMPLX(EF(1),EF(2))
       END SUBROUTINE CERF
 
-      SUBROUTINE CERFC (MO, Z, W)
+      SUBROUTINE CERFC(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
@@ -5224,7 +5224,7 @@ C              RATIONAL FUNCTION APPROXIMATION
       SM(2) = C*TS(2)
       GO TO 100
 C                   ASYMPTOTIC EXPANSION
-   60 CALL CREC (X, Y, TM(1), TM(2))
+   60 CALL CREC(X, Y, TM(1), TM(2))
       SM(1) = TM(1)
       SM(2) = TM(2)
       QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
@@ -5276,7 +5276,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       W = CMPLX(SM(1),SM(2))
       END SUBROUTINE CERFC
 
-      REAL FUNCTION ERF (X)
+      REAL FUNCTION ERF(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: AX, BOT, C, T, TOP, X2
@@ -5335,7 +5335,7 @@ C-------------------------
    30 ERF = SIGN(1.0,X)
       END FUNCTION ERF
 
-      REAL FUNCTION ERFC (X)
+      REAL FUNCTION ERFC(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: AX, BOT, C, E, T, TOP
@@ -5408,7 +5408,7 @@ C             LIMIT VALUE FOR LARGE POSITIVE X
    50 ERFC = 0.0
       END FUNCTION ERFC
 
-      REAL FUNCTION ERFC1 (IND, X)
+      REAL FUNCTION ERFC1(IND, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(IN) :: X
@@ -5490,7 +5490,7 @@ C                       WHEN IND = 0
    60 ERFC1 = 0.0
       END FUNCTION ERFC1
 
-      SUBROUTINE DCERF (MO, Z, W)
+      SUBROUTINE DCERF(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
@@ -5576,7 +5576,7 @@ C                          TAYLOR SERIES
 C                  TAYLOR SERIES AROUND Z0 = 2
    40 TM(1) = X
       TM(2) = Y
-      CALL ERFCM2 (0, TM, W)
+      CALL ERFCM2(0, TM, W)
       IF (MO .NE. 0) GO TO 41
          W(1) = SN*(0.5D0 + (0.5D0 - W(1)))
          W(2) = - SN*W(2)
@@ -5591,7 +5591,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       IF (R .GT. 16.D0) D = 16.D0
       IF (R .GT. 64.D0) D = 64.D0
       D2 = D*D
-      CALL DCREC (SZ(1), SZ(2), W(1), W(2))
+      CALL DCREC(SZ(1), SZ(2), W(1), W(2))
       A0(1) = 1.D0
       A0(2) = 0.D0
       AN(1) = (W(1) + 4.D0/15.D0)*D
@@ -5600,7 +5600,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       B0(2) = 0.D0
       BN(1) = (W(1) - 0.4D0)*D
       BN(2) = W(2)*D
-      CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+      CALL CDIVID(AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
       TOL = 10.D0*EPS
       N4 = 0.D0
    60    N4 = N4 + 4.D0
@@ -5622,7 +5622,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
          BN(2) = QF(2)
          W0(1) = WN(1)
          W0(2) = WN(2)
-         CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+         CALL CDIVID(AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
          IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT.
      *          TOL*ANORM(WN(1), WN(2))) GO TO 60
       C2 = C + C
@@ -5655,7 +5655,7 @@ C                    FOR  Z*EXP(Z*Z)*ERFC(Z)
       TM(1) = 3.D0 + TM(1)
       HN(1) = TM(1)/D
       HN(2) = TM(2)/D
-      CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+      CALL CDIVID(GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
       NP1 = 1.D0
       TOL = 10.D0*EPS
    90    N = NP1
@@ -5677,15 +5677,15 @@ C                    FOR  Z*EXP(Z*Z)*ERFC(Z)
          HN(2) = QF(2)
          W0(1) = WN(1)
          W0(2) = WN(2)
-         CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+         CALL CDIVID(GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
          IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT.
      *          TOL*ANORM(WN(1), WN(2))) GO TO 90
       TM(1) = X*HN(1) - Y*HN(2)
       TM(2) = X*HN(2) + Y*HN(1)
-      CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
+      CALL CDIVID(C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
       GO TO 130
 C                      ASYMPTOTIC EXPANSION
-  100 CALL DCREC (X, Y, TM(1), TM(2))
+  100 CALL DCREC(X, Y, TM(1), TM(2))
       SM(1) = TM(1)
       SM(2) = TM(2)
       QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
@@ -5737,7 +5737,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       W(2) = - W(2)
       END SUBROUTINE DCERF
 
-      SUBROUTINE DCERFC (MO, Z, W)
+      SUBROUTINE DCERFC(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
@@ -5826,11 +5826,11 @@ C                          TAYLOR SERIES
       RETURN
 C                  TAYLOR SERIES AROUND Z0 = 2
    40 IF (SN .LT. 0.D0) GO TO 41
-         CALL ERFCM2 (MO, Z, W)
+         CALL ERFCM2(MO, Z, W)
          RETURN
    41 TM(1) = X
       TM(2) = Y
-      CALL ERFCM2 (0, TM, W)
+      CALL ERFCM2(0, TM, W)
       W(1) = 2.D0 - W(1)
       W(2) = - W(2)
       RETURN
@@ -5840,7 +5840,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       IF (R .GT. 16.D0) D = 16.D0
       IF (R .GT. 64.D0) D = 64.D0
       D2 = D*D
-      CALL DCREC (SZ(1), SZ(2), W(1), W(2))
+      CALL DCREC(SZ(1), SZ(2), W(1), W(2))
       A0(1) = 1.D0
       A0(2) = 0.D0
       AN(1) = (W(1) + 4.D0/15.D0)*D
@@ -5849,7 +5849,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       B0(2) = 0.D0
       BN(1) = (W(1) - 0.4D0)*D
       BN(2) = W(2)*D
-      CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+      CALL CDIVID(AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
       TOL = 10.D0*EPS
       N4 = 0.D0
    60    N4 = N4 + 4.D0
@@ -5871,7 +5871,7 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
          BN(2) = QF(2)
          W0(1) = WN(1)
          W0(2) = WN(2)
-         CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+         CALL CDIVID(AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
          IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT.
      *          TOL*ANORM(WN(1), WN(2))) GO TO 60
       C2 = C + C
@@ -5906,7 +5906,7 @@ C                    FOR  Z*EXP(Z*Z)*ERFC(Z)
       TM(1) = 3.D0 + TM(1)
       HN(1) = TM(1)/D
       HN(2) = TM(2)/D
-      CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+      CALL CDIVID(GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
       NP1 = 1.D0
       TOL = 10.D0*EPS
    90    N = NP1
@@ -5928,15 +5928,15 @@ C                    FOR  Z*EXP(Z*Z)*ERFC(Z)
          HN(2) = QF(2)
          W0(1) = WN(1)
          W0(2) = WN(2)
-         CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+         CALL CDIVID(GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
          IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT.
      *          TOL*ANORM(WN(1), WN(2))) GO TO 90
       TM(1) = X*HN(1) - Y*HN(2)
       TM(2) = X*HN(2) + Y*HN(1)
-      CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
+      CALL CDIVID(C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
       GO TO 130
 C                      ASYMPTOTIC EXPANSION
-  100 CALL DCREC (X, Y, TM(1), TM(2))
+  100 CALL DCREC(X, Y, TM(1), TM(2))
       SM(1) = TM(1)
       SM(2) = TM(2)
       QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
@@ -5987,7 +5987,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       W(2) = E*DSIN(SZ(2)) + SM(2)
       END SUBROUTINE DCERFC
 
-      SUBROUTINE ERFCM2 (MO, Z, W)
+      SUBROUTINE ERFCM2(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
@@ -6092,8 +6092,8 @@ C------------------------------
          T(2) = A(N)*Y
          W(1) = W(1) + T(1)
          W(2) = W(2) + T(2)
-         IF ( ANORM ( T ( 1 ) , T ( 2 ) ) .LE. TOL * ANORM ( W ( 1 ) , W
-     &   ( 2 ) ) ) EXIT
+         IF (ANORM(T(1) , T(2)) .LE. TOL * ANORM(W(1) , W
+     &   (2))) EXIT
       END DO
       DO J = 1,29
          N = 30 - J
@@ -6120,7 +6120,7 @@ C                     COMPUTE EXP(Z*Z)*ERFC(Z)
       W(2) = Y
       END SUBROUTINE ERFCM2
 
-      DOUBLE PRECISION FUNCTION DERF (X)
+      DOUBLE PRECISION FUNCTION DERF(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
@@ -6174,7 +6174,7 @@ C                 LIMIT VALUE FOR LARGE X
    30 DERF = DSIGN(1.D0,X)
       END FUNCTION DERF
 
-      DOUBLE PRECISION FUNCTION DERFC (X)
+      DOUBLE PRECISION FUNCTION DERFC(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
@@ -6233,7 +6233,7 @@ C                       X .GT. 1
       DERFC = DEXP(-T) * DERFC0(X)
       END FUNCTION DERFC
 
-      DOUBLE PRECISION FUNCTION DERFC1 (IND, X)
+      DOUBLE PRECISION FUNCTION DERFC1(IND, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       DOUBLE PRECISION, INTENT(IN) :: X
@@ -6304,7 +6304,7 @@ C             LIMIT VALUE FOR LARGE NEGATIVE X
       IF (IND .NE. 0) DERFC1 = 2.D0*DEXP(X*X)
       END FUNCTION DERFC1
 
-      DOUBLE PRECISION FUNCTION DERFC0 (X)
+      DOUBLE PRECISION FUNCTION DERFC0(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -6453,7 +6453,7 @@ C                        X .GE. 50
       DERFC0 = RPINV*(Z/X)
       END FUNCTION DERFC0
 
-      REAL FUNCTION ERFI (P, Q)
+      REAL FUNCTION ERFI(P, Q)
       IMPLICIT NONE
       REAL, INTENT(IN) :: P, Q
       REAL :: C, C1, C2, EPS, S, T, V, V1
@@ -6560,7 +6560,7 @@ C                         ERROR RETURN
   110 ERFI = -2.0
       END FUNCTION ERFI
 
-      DOUBLE PRECISION FUNCTION DERFI (P, Q)
+      DOUBLE PRECISION FUNCTION DERFI(P, Q)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C                  DOUBLE PRECISION COMPUTATION OF
@@ -6703,7 +6703,7 @@ C                         ERROR RETURN
   110 DERFI = -2.D0
       END FUNCTION DERFI
 
-      REAL FUNCTION AERF (X, H)
+      REAL FUNCTION AERF(X, H)
       IMPLICIT NONE
       REAL, INTENT(IN) :: H, X
       INTEGER :: J, N, N1
@@ -6819,7 +6819,7 @@ C     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
   160 AERF = T*ERF(H)
       END FUNCTION AERF
 
-      DOUBLE PRECISION FUNCTION DAERF (X, H)
+      DOUBLE PRECISION FUNCTION DAERF(X, H)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X, H
       INTEGER :: J
@@ -6962,7 +6962,7 @@ C     ---------------
    30 PNDF = C/ERFC1(1,T)
       END FUNCTION PNDF
 
-      SUBROUTINE PNI (P, Q, D, W, IERR)
+      SUBROUTINE PNI(P, Q, D, W, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: D, P, Q
@@ -7006,7 +7006,7 @@ C                         ERROR RETURN
    20 IERR = 2
       END SUBROUTINE PNI
 
-      SUBROUTINE DPNI (P, Q, D, W, IERR)
+      SUBROUTINE DPNI(P, Q, D, W, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: P, Q, D
@@ -7166,7 +7166,7 @@ C     ---------- RETURN FOR SMALL X ----------
  1000 RETURN
       END FUNCTION DAW
 
-      DOUBLE PRECISION FUNCTION DPDAW (X)
+      DOUBLE PRECISION FUNCTION DPDAW(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
@@ -7266,7 +7266,7 @@ C                       ABS(X) .GE. 4
    30 DPDAW = DPDAW0(AX)/X
       END FUNCTION DPDAW
 
-      DOUBLE PRECISION FUNCTION DPDAW0 (X)
+      DOUBLE PRECISION FUNCTION DPDAW0(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C                EVALUATION OF X*DAW(X) FOR X .GE. 4
@@ -7450,7 +7450,7 @@ C                          X .GE. 12
       DPDAW0 = 0.5D0*W
       END FUNCTION DPDAW0
 
-      SUBROUTINE CFRNLI (MO, Z, W)
+      SUBROUTINE CFRNLI(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
@@ -7605,7 +7605,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       W = CMPLX(SM(1),SM(2))
       END SUBROUTINE CFRNLI
 
-      SUBROUTINE FRNL (T, C, S)
+      SUBROUTINE FRNL(T, C, S)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: C, S
       REAL, INTENT(IN) :: T
@@ -7817,7 +7817,7 @@ C-----------------------------------------------------------------------
       S = -0.5
       END SUBROUTINE FRNL
 
-      SUBROUTINE CEXPLI (MO, Z, W)
+      SUBROUTINE CEXPLI(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
@@ -8151,8 +8151,8 @@ C-----------------------------------------------------------------------
       IERR = 0
       IF (INT .EQ. 2) GO TO 450
       NSWC_AI_R4 = X
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 280
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 640
+      IF (NSWC_AI_R4 .LT. 0) GO TO 280
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 640
       GO TO 110
   110 IF (X .GE. 12.E0) GO TO 200
       IF (X .GT. 8.E0) GO TO 160
@@ -8188,7 +8188,7 @@ C                FOR X CLOSE TO X0 ----------
       GO TO 410
 C     ---------- 4.0 .LE. X .LE. 8.0 ----------
   150 M = 20
-      EI = (1.0 + CSEVL (3.0 - 16.0/X, R, M)) / X
+      EI = (1.0 + CSEVL(3.0 - 16.0/X, R, M)) / X
       IF (INT .EQ. 3) GO TO 410
       EI = EI * EXP(X)
       GO TO 410
@@ -8267,8 +8267,8 @@ C     ---------- 4.0 .LT. -X ----------
       RETURN
   450 Y = X
       NSWC_AI_R4 = Y
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 660
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 640
+      IF (NSWC_AI_R4 .LT. 0) GO TO 660
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 640
       GO TO 300
 C     ---------- ERROR RETURN FOR X .LT. XMIN,
 C                CAUSING UNDERFLOW ----------
@@ -8288,7 +8288,7 @@ C                ARGUMENT IN E-SUB-1 ----------
   660 IERR = 4
       END SUBROUTINE EXPLI
 
-      DOUBLE PRECISION FUNCTION DEI (X)
+      DOUBLE PRECISION FUNCTION DEI(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
@@ -8299,7 +8299,7 @@ C-----------------------------------------------------------------------
       IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
       END FUNCTION DEI
 
-      DOUBLE PRECISION FUNCTION DEI1 (X)
+      DOUBLE PRECISION FUNCTION DEI1(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
@@ -8705,22 +8705,22 @@ C                    -90 .LT. X .LT. -4
       IF (X .GT. -32.D0) GO TO 10
       M = 50
       IF (EPS .GE. 1.D-20) M = 25
-      DE1E = (1.D0 + DCSEVL (64.D0/X+1.D0, A, M))/X
+      DE1E = (1.D0 + DCSEVL(64.D0/X+1.D0, A, M))/X
       RETURN
    10 IF (X .GT. -8.D0) GO TO 20
       M = 60
       IF (EPS .GE. 1.D-20) M = 37
-      DE1E = (1.D0 + DCSEVL ((64.D0/X+5.D0)/3.D0, B, M))/X
+      DE1E = (1.D0 + DCSEVL((64.D0/X+5.D0)/3.D0, B, M))/X
       RETURN
    20 IF (X .GE. -4.D0) GO TO 30
       M = 41
       IF (EPS .GE. 1.D-20) M = 27
-      DE1E = (1.D0 + DCSEVL (16.D0/X+3.D0, D, M))/X
+      DE1E = (1.D0 + DCSEVL(16.D0/X+3.D0, D, M))/X
       RETURN
 C                     -4 .LE. X .LE. 1
    30 M = 29
       IF (EPS .GE. 1.D-20) M = 20
-      DE1E = -DLOG(-X) + DCSEVL ((2.D0*X+5.D0)/3.D0, E, M)
+      DE1E = -DLOG(-X) + DCSEVL((2.D0*X+5.D0)/3.D0, E, M)
       RETURN
    40 IF (X .GT. 1.0D0) GO TO 60
       IF (X .LT. -0.4D0 .OR. X .GT. -0.35D0) GO TO 50
@@ -8728,17 +8728,17 @@ C                     -4 .LE. X .LE. 1
          RETURN
    50 M = 25
       IF (EPS .GE. 1.D-20) M = 18
-      DE1E = (-DLOG(DABS(X)) - 0.6875D0 + X)  + DCSEVL (X, R, M)
+      DE1E = (-DLOG(DABS(X)) - 0.6875D0 + X)  + DCSEVL(X, R, M)
       RETURN
 C                     1 .LT. X .LT. 90
    60 IF (X .GT. 4.0D0) GO TO 70
       M = 50
       IF (EPS .GE. 1.D-20) M = 31
-      DE1E = (1.D0 + DCSEVL ((8.D0/X-5.D0)/3.D0, P, M))/X
+      DE1E = (1.D0 + DCSEVL((8.D0/X-5.D0)/3.D0, P, M))/X
       RETURN
    70 M = 64
       IF (EPS .GE. 1.D-20) M = 35
-      DE1E = (1.D0 + DCSEVL (8.D0/X-1.D0, Q, M))/X
+      DE1E = (1.D0 + DCSEVL(8.D0/X-1.D0, Q, M))/X
       RETURN
 C                   ASYMPTOTIC EXPANSION
    80 T = -1.D0/X
@@ -8752,7 +8752,7 @@ C                   ASYMPTOTIC EXPANSION
       DE1E = (1.D0 + W)/X
       END FUNCTION DE1E
 
-      DOUBLE PRECISION FUNCTION DEI0 (X, EPS)
+      DOUBLE PRECISION FUNCTION DEI0(X, EPS)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: EPS
       DOUBLE PRECISION, INTENT(IN) :: X
@@ -8833,7 +8833,7 @@ C-------------------------
       DO N = 2,40
          C = A(N)*T
          W = W + C
-         IF ( DABS ( C ) .LT. EPS ) EXIT
+         IF (DABS(C) .LT. EPS) EXIT
          T = H*T
       END DO
       DEI0 = H * (A(1) + W)
@@ -9055,7 +9055,7 @@ C            FOR X .GT. AMAX.
    50 CIN=ECON+ALOG(AX)
       END FUNCTION CIN
 
-      SUBROUTINE CEXEXI (Z, W)
+      SUBROUTINE CEXEXI(Z, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
@@ -9378,7 +9378,7 @@ C        EVALUATION OF THE SERIES IN  U = -LN(1 + Z)
          TM(1) = TS(1)
          TM(2) = TS(2)
          IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 60
-         IF ( ABS ( SM ( 2 ) ) + ABS ( TM ( 2 ) ) .EQ. ABS ( SM ( 2 ) )
+         IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))
      &   ) EXIT
    60    SM(1) = SM(1) + TM(1)
          SM(2) = SM(2) + TM(2)
@@ -9527,7 +9527,7 @@ C                     -26.63 .LE. X .LE. -14
      *            S(4))*T + S(3))*T + S(2))*T + S(1))
       END FUNCTION ALI
 
-      SUBROUTINE CGAMMA (MO, Z, W)
+      SUBROUTINE CGAMMA(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
@@ -9733,7 +9733,7 @@ C-----------------------------------------------------------------------
   200 W = (0.0, 0.0)
       END SUBROUTINE CGAMMA
 
-      COMPLEX FUNCTION CGAM0 (Z)
+      COMPLEX FUNCTION CGAM0(Z)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
       INTEGER :: I, K, N
@@ -9820,8 +9820,8 @@ C-----------------------------------------------------------------------
       M = INT(A) - 1
 C     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
       NSWC_AI_I4 = M
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      IF (NSWC_AI_I4 .LT. 0) GO TO 20
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 12
       GO TO 10
    10 DO J = 1,M
         X = X - 1.0
@@ -10033,8 +10033,8 @@ C------------------------
       D = A - 0.5
       IF (D .GT. 0.0) T = D - 0.5
       NSWC_AI_R4 = T
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_R4 .LT. 0) GO TO 30
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 10
       GO TO 20
    10 GAM1 = 0.0
       RETURN
@@ -10057,7 +10057,7 @@ C------------------------
    31 GAM1 = T*W/A
       END FUNCTION GAM1
 
-      REAL FUNCTION GAMLN (A)
+      REAL FUNCTION GAMLN(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
       REAL :: GAMLN1
@@ -10100,7 +10100,7 @@ C-----------------------------------------------------------------------
       GAMLN = (D + W) + (A - 0.5)*(ALOG(A) - 1.0)
       END FUNCTION GAMLN
 
-      REAL FUNCTION GAMLN1 (A)
+      REAL FUNCTION GAMLN1(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
       REAL :: P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0,
@@ -10134,7 +10134,7 @@ C----------------------
       GAMLN1 = X*W
       END FUNCTION GAMLN1
 
-      SUBROUTINE DCGAMA (MO, Z, W)
+      SUBROUTINE DCGAMA(MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
@@ -10313,7 +10313,7 @@ C     LET A1 + A2*I BE THE ASYMPTOTIC SUM
          A1 = A1 + C0(J)*U1
          A2 = A2 + C0(J)*U2
          IF (A1 .NE. T1) GO TO 90
-         IF ( A2 .EQ. T2 ) EXIT
+         IF (A2 .EQ. T2) EXIT
    90    T1 = U1*Q1 - U2*Q2
          T2 = U1*Q2 + U2*Q1
          U1 = T1
@@ -10409,8 +10409,8 @@ C-----------------------------------------------------------------------
       N = N - 1
 C     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
       NSWC_AI_I4 = N
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      IF (NSWC_AI_I4 .LT. 0) GO TO 20
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 12
       GO TO 10
    10 DO J = 1,N
          X = X - 1.D0
@@ -10501,7 +10501,7 @@ C-----------------------------------------------------------------------
       DPDEL = W/X
       END FUNCTION DPDEL
 
-      DOUBLE PRECISION FUNCTION DGAM1 (X)
+      DOUBLE PRECISION FUNCTION DGAM1(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
@@ -10620,8 +10620,8 @@ C----------------------------
       D = X - 0.5D0
       IF (D .GT. 0.D0) T = D - 0.5D0
       NSWC_AI_R8 = T
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 40
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_R8 .LT. 0) GO TO 40
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 10
       GO TO 20
    10 DGAM1 = 0.D0
       RETURN
@@ -10656,7 +10656,7 @@ C------------
    50 DGAM1 = T*Z/X
       END FUNCTION DGAM1
 
-      DOUBLE PRECISION FUNCTION DGAMLN (A)
+      DOUBLE PRECISION FUNCTION DGAMLN(A)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A
       INTEGER :: I, N
@@ -10696,7 +10696,7 @@ C--------------------------
       DGAMLN = (D + W) + (A - 0.5D0)*(DLOG(A) - 1.D0)
       END FUNCTION DGAMLN
 
-      DOUBLE PRECISION FUNCTION DGMLN1 (X)
+      DOUBLE PRECISION FUNCTION DGMLN1(X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
@@ -10709,7 +10709,7 @@ C-----------------------
       DGMLN1 = - DLNREL(W)
       END FUNCTION DGMLN1
 
-      SUBROUTINE CPSI (Z, W)
+      SUBROUTINE CPSI(Z, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
@@ -10989,7 +10989,7 @@ C---------------------------------------------------------------------
   400 PSI = 0.0E0
       END FUNCTION PSI
 
-      SUBROUTINE DCPSI (Z, W)
+      SUBROUTINE DCPSI(Z, W)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
@@ -11124,7 +11124,7 @@ C     LET A1 + A2*I BE THE ASYMPTOTIC SUM
          A1 = A1 + C0(J)*V1
          A2 = A2 + C0(J)*V2
          IF (A1 .NE. T1) GO TO 60
-         IF ( A2 .EQ. T2 ) EXIT
+         IF (A2 .EQ. T2) EXIT
    60    T1 = V1*Q1 - V2*Q2
          T2 = V1*Q2 + V2*Q1
          V1 = T1
@@ -11260,8 +11260,8 @@ C-----------------------------------------------------------------------
       N = N - 1
 C     LET T BE THE SUM OF 1/(A-J) WHEN A .GE. 2
       NSWC_AI_I4 = N
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      IF (NSWC_AI_I4 .LT. 0) GO TO 20
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 12
       GO TO 10
    10 DO J = 1,N
          X = X - 1.D0
@@ -11291,7 +11291,7 @@ C     COMPUTE  T + DPSI(1 + X)  FOR 0 .LE. X .LT. 1
          RETURN
    50 K = 42
       IF (EPS .GT. 1.D-20) K = 28
-      DPSI = T + DCSEVL (2.D0*X - 1.D0, C, K)
+      DPSI = T + DCSEVL(2.D0*X - 1.D0, C, K)
       RETURN
 C-----------------------------------------------------------------------
 C           EVALUATION OF DPSI(A) FOR DABS(A) .GE. 10
@@ -11320,7 +11320,7 @@ C     FINAL ASSEMBLY
       IF (A .LT. 0.D0) DPSI = DPSI - W
       END FUNCTION DPSI
 
-      DOUBLE PRECISION FUNCTION DPSI0 (X)
+      DOUBLE PRECISION FUNCTION DPSI0(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, L, N, NM1
@@ -11383,7 +11383,7 @@ C-------------------------
       DPSI0 = H*W
       END FUNCTION DPSI0
 
-      SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
+      SUBROUTINE PSIDF(X, N, M, ANS, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: M, N
@@ -11537,7 +11537,7 @@ C-----------------------------------------------------------------------
       DO K = 4,22
          T = T*((TK+FN + 1.0)/(TK + 1.0))*((TK+FN)/(TK + 2.0))*RXSQ
          TRM(K) = T*B(K)
-         IF ( ABS ( TRM ( K ) ) .LT. TST ) EXIT
+         IF (ABS(TRM(K)) .LT. TST) EXIT
          S = S + TRM(K)
          TK = TK + 2.0
       END DO
@@ -11579,7 +11579,7 @@ C-----------------------------------------------------------------------
          TK = 3.0E0 + FNP
          DO K = 4,22
             TRM(K) = TRM(K)*FNP/TK
-            IF ( ABS ( TRM ( K ) ) .LT. TST ) EXIT
+            IF (ABS(TRM(K)) .LT. TST) EXIT
             S = S + TRM(K)
             TK = TK + 2.0
          END DO
@@ -11636,7 +11636,7 @@ C-----------------------------------------------------------------------
             DEN = DEN + 1.0
             TRM(I) = TRM(I)/DEN
             S = S + TRM(I)
-            IF ( TRM ( I ) .LT. TOLS ) EXIT
+            IF (TRM(I) .LT. TOLS) EXIT
          END DO
          ANS(J) = S
       END DO
@@ -11666,7 +11666,7 @@ C                            INCREASE THE DIMENSION OF TRMR(NMAX)
   330 IFLAG = 4
       END SUBROUTINE PSIDF
 
-      REAL FUNCTION BETALN (A0, B0)
+      REAL FUNCTION BETALN(A0, B0)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A0, B0
       INTEGER :: I, N
@@ -11747,7 +11747,7 @@ C-----------------------------------------------------------------------
    61 BETALN = (((-0.5*ALOG(B) + E) + W) - U) - V
       END FUNCTION BETALN
 
-      REAL FUNCTION GSUMLN (A, B)
+      REAL FUNCTION GSUMLN(A, B)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B
       REAL :: X
@@ -11766,7 +11766,7 @@ C-----------------------------------------------------------------------
    20 GSUMLN = GAMLN1(X - 1.0) + ALOG(X*(1.0 + X))
       END FUNCTION GSUMLN
 
-      REAL FUNCTION BCORR (A0, B0)
+      REAL FUNCTION BCORR(A0, B0)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A0, B0
       REAL :: A, B, C, C0, C1, C2, C3, C4, C5, H, S11, S3, S5, S7, S9,
@@ -11801,7 +11801,7 @@ C                   COMPUTE  DEL(A) + W
       BCORR = (((((C5*T + C4)*T + C3)*T + C2)*T + C1)*T + C0)/A + W
       END FUNCTION BCORR
 
-      REAL FUNCTION ALGDIV (A, B)
+      REAL FUNCTION ALGDIV(A, B)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B
       REAL :: ALNREL
@@ -11847,7 +11847,7 @@ C                    COMBINE THE RESULTS
    30 ALGDIV = (W - U) - V
       END FUNCTION ALGDIV
 
-      DOUBLE PRECISION FUNCTION DBETLN (A0, B0)
+      DOUBLE PRECISION FUNCTION DBETLN(A0, B0)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A0, B0
       INTEGER :: I, N
@@ -11930,7 +11930,7 @@ C-----------------------------------------------------------------------
    61 DBETLN = (((-0.5D0*DLOG(B) + E) + W) - U) - V
       END FUNCTION DBETLN
 
-      DOUBLE PRECISION FUNCTION DGSMLN (A, B)
+      DOUBLE PRECISION FUNCTION DGSMLN(A, B)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
@@ -11949,7 +11949,7 @@ C-----------------------------------------------------------------------
    20 DGSMLN = DGMLN1(X - 1.D0) + DLOG(X*(1.D0 + X))
       END FUNCTION DGSMLN
 
-      DOUBLE PRECISION FUNCTION DBCORR (A0, B0)
+      DOUBLE PRECISION FUNCTION DBCORR(A0, B0)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A0, B0
       INTEGER :: J, K
@@ -12010,7 +12010,7 @@ C                    COMPUTE  DEL(A) + W
       DBCORR = Z/A + W
       END FUNCTION DBCORR
 
-      DOUBLE PRECISION FUNCTION DLGDIV (A, B)
+      DOUBLE PRECISION FUNCTION DLGDIV(A, B)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A, B
       INTEGER :: J, K
@@ -12076,7 +12076,7 @@ C                    COMBINE THE RESULTS
    40 DLGDIV = (W - U) - V
       END FUNCTION DLGDIV
 
-      SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
+      SUBROUTINE GRATIO(A, X, ANS, QANS, IND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(IN) :: A
@@ -12370,8 +12370,8 @@ C              CONTINUED FRACTION EXPANSION
       Z = SQRT(Z + Z)
       IF (L .LT. 1.0) Z = -Z
       NSWC_AI_I4 = IOP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 210
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 220
+      IF (NSWC_AI_I4 .LT. 0) GO TO 210
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 220
       GO TO 230
   210 IF (ABS(S) .LE. 1.E-3) GO TO 260
 C            USING THE MINIMAX APPROXIMATIONS
@@ -12416,8 +12416,8 @@ C               TEMME EXPANSION FOR L = 1
       Z = SQRT(Z + Z)
       IF (L .LT. 1.0) Z = -Z
       NSWC_AI_I4 = IOP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 260
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 270
+      IF (NSWC_AI_I4 .LT. 0) GO TO 260
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 270
       GO TO 280
   260 C0 = ((D0(3) * Z + D0(2)) * Z + D0(1)) * Z + D00
       C1 = ((D1(3) * Z + D1(2)) * Z + D1(1)) * Z + D10
@@ -12456,7 +12456,7 @@ C                     ERROR RETURN
   400 ANS = 2.0
       END SUBROUTINE GRATIO
 
-      REAL FUNCTION RCOMP (A, X)
+      REAL FUNCTION RCOMP(A, X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, X
       REAL :: RT2PIN, T, T1, U
@@ -12488,7 +12488,7 @@ C------------------------
       IF (T1 .GE. EXPARG(1)) RCOMP = RT2PIN*SQRT(A)*EXP(T1)
       END FUNCTION RCOMP
 
-      DOUBLE PRECISION FUNCTION DRCOMP (A, X)
+      DOUBLE PRECISION FUNCTION DRCOMP(A, X)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
@@ -12517,7 +12517,7 @@ C--------------------------
       IF (W .GE. DXPARG(1)) DRCOMP = C * DSQRT(A) * DEXP(W)
       END FUNCTION DRCOMP
 
-      SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
+      SUBROUTINE GAMINV(A, X, X0, P, Q, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: A, P, Q
@@ -12671,7 +12671,7 @@ C        SELECTION OF THE INITIAL APPROXIMATION XN OF X
 C                       WHEN A .GT. 1
    50 T = P - 0.5
       IF (Q .LT. 0.5) T = 0.5 - Q
-      CALL PNI (P, Q, T, S, IER)
+      CALL PNI(P, Q, T, S, IER)
       RTA = SQRT(A)
       S2 = S*S
       XN = (((12.0*S2 - 243.0)*S2 - 923.0)*S2 + 1472.0)/204120.0
@@ -12734,7 +12734,7 @@ C                 SCHRODER ITERATION USING P
       IF (ABS(D) .LE. E2) GO TO 550
   110 IF (IERR .GE. 20) GO TO 530
       IERR = IERR + 1
-      CALL GRATIO (A, XN, PN, QN, 0)
+      CALL GRATIO(A, XN, PN, QN, 0)
       IF (PN .EQ. 0.0 .OR. QN .EQ. 0.0) GO TO 550
       R = RCOMP(A,XN)
       IF (R .LT. XMIN) GO TO 550
@@ -12763,7 +12763,7 @@ C                 SCHRODER ITERATION USING Q
       IF (ABS(D) .LE. E2) GO TO 550
   210 IF (IERR .GE. 20) GO TO 530
       IERR = IERR + 1
-      CALL GRATIO (A, XN, PN, QN, 0)
+      CALL GRATIO(A, XN, PN, QN, 0)
       IF (PN .EQ. 0.0 .OR. QN .EQ. 0.0) GO TO 550
       R = RCOMP(A,XN)
       IF (R .LT. XMIN) GO TO 550
@@ -12810,7 +12810,7 @@ C                       ERROR RETURN
       IERR = -8
       END SUBROUTINE GAMINV
 
-      SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
+      SUBROUTINE DGRAT(A, X, ANS, QANS, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A, X
@@ -12998,9 +12998,9 @@ C              CONTINUED FRACTION EXPANSION
 C                 MINIMAX APPROXIMATIONS
   200 IF (DABS(S) .LE. 2.D0*E .AND. A*E*E .GT. 3.28D-3) GO TO 420
       IF (E .LT. 1.D-17) GO TO 210
-         CALL DGR17 (A, Y, L, Z, RTA, ANS, QANS)
+         CALL DGR17(A, Y, L, Z, RTA, ANS, QANS)
          RETURN
-  210 CALL DGR29 (A, Y, L, Z, RTA, ANS, QANS)
+  210 CALL DGR29(A, Y, L, Z, RTA, ANS, QANS)
       RETURN
 C                     SPECIAL CASES
   300 ANS = 0.D0
@@ -13030,7 +13030,7 @@ C                     ERROR RETURN
       ANS = 2.D0
       END SUBROUTINE DGRAT
 
-      SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
+      SUBROUTINE DGR29(A, Y, L, Z, RTA, ANS, QANS)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -13337,7 +13337,7 @@ C---------------------------
       QANS = 0.5D0 + (0.5D0 - ANS)
       END SUBROUTINE DGR29
 
-      SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
+      SUBROUTINE DGR17(A, Y, L, Z, RTA, ANS, QANS)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -13462,7 +13462,7 @@ C------------------------
       QANS = 0.5D0 + (0.5D0 - ANS)
       END SUBROUTINE DGR17
 
-      SUBROUTINE DGINV (A, X, P, Q, IERR)
+      SUBROUTINE DGINV(A, X, P, Q, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A
@@ -13549,7 +13549,7 @@ C         PRECISION ARITHMETIC (IF THIS IS POSSIBLE)
       P0 = P
       Q0 = Q
       IF (P0 .EQ. 0.0 .OR. Q0 .EQ. 0.0) GO TO 10
-      CALL GAMINV (SNGL(A), X0, 0.0, P0, Q0, IER)
+      CALL GAMINV(SNGL(A), X0, 0.0, P0, Q0, IER)
       IF (IER .LT. 0.0 .AND. IER .NE. -8) GO TO 10
       IERR = MAX0(IER,0)
       IF (X0 .GT. 1.E34) GO TO 10
@@ -13609,7 +13609,7 @@ C        SELECTION OF THE INITIAL APPROXIMATION XN OF X
 C                       WHEN A .GT. 1
    50 T = P - 0.5D0
       IF (Q .LT. 0.5D0) T = 0.5D0 - Q
-      CALL DPNI (P, Q, T, S, IER)
+      CALL DPNI(P, Q, T, S, IER)
       RTA = DSQRT(A)
       S2 = S*S
       XN = (((12.D0*S2 - 243.D0)*S2 - 923.D0)*S2 + 1472.D0)/204120.D0
@@ -13669,7 +13669,7 @@ C                 SCHRODER ITERATION USING P
       AM1 = (A - 0.5D0) - 0.5D0
   110 IF (IERR .GE. 10) GO TO 530
       IERR = IERR + 1
-      CALL DGRAT (A, XN, PN, QN, IND)
+      CALL DGRAT(A, XN, PN, QN, IND)
       IF (PN .EQ. 0.D0 .OR. QN .EQ. 0.D0) GO TO 550
       R = DRCOMP(A,XN)
       IF (R .LT. XMIN) GO TO 550
@@ -13695,7 +13695,7 @@ C                 SCHRODER ITERATION USING Q
       AM1 = (A - 0.5D0) - 0.5D0
   210 IF (IERR .GE. 10) GO TO 530
       IERR = IERR + 1
-      CALL DGRAT (A, XN, PN, QN, IND)
+      CALL DGRAT(A, XN, PN, QN, IND)
       IF (PN .EQ. 0.D0 .OR. QN .EQ. 0.D0) GO TO 550
       R = DRCOMP(A,XN)
       IF (R .LT. XMIN) GO TO 550
@@ -13742,7 +13742,7 @@ C                       ERROR RETURN
       IERR = -8
       END SUBROUTINE DGINV
 
-      SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
+      SUBROUTINE BRATIO(A, B, X, Y, W, W1, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: A, B
@@ -13921,7 +13921,7 @@ C                       ERROR RETURN
   360 IERR = 7
       END SUBROUTINE BRATIO
 
-      REAL FUNCTION FPSER (A, B, X, EPS)
+      REAL FUNCTION FPSER(A, B, X, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X
       REAL :: AN, C, S, T, TOL
@@ -13952,7 +13952,7 @@ C                NOTE THAT 1/B(A,B) = B
       FPSER = FPSER*(1.0 + A*S)
       END FUNCTION FPSER
 
-      REAL FUNCTION APSER (A, B, X, EPS)
+      REAL FUNCTION APSER(A, B, X, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X
       REAL :: AJ, BX, C, G, S, T, TOL
@@ -14112,7 +14112,7 @@ C          ADD THE REMAINING TERMS OF THE SERIES
          L = I - 1
          D = ((APB + L)/(AP1 + L))*X*D
          W = W + D
-         IF ( D .LE. EPS * W ) EXIT
+         IF (D .LE. EPS * W) EXIT
       END DO
 C               TERMINATE THE PROCEDURE
    50 BUP = BUP*W
@@ -14175,7 +14175,7 @@ C                 TERMINATION
    20 BFRAC = BFRAC*R
       END FUNCTION BFRAC
 
-      REAL FUNCTION BRCOMP (A, B, X, Y)
+      REAL FUNCTION BRCOMP(A, B, X, Y)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, X, Y
       INTEGER :: I, N
@@ -14277,7 +14277,7 @@ C-----------------------------------------------------------------------
       BRCOMP = CONST*SQRT(B*X0)*Z*EXP(-BCORR(A,B))
       END FUNCTION BRCOMP
 
-      REAL FUNCTION BRCMP1 (MU, A, B, X, Y)
+      REAL FUNCTION BRCMP1(MU, A, B, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       REAL, INTENT(IN) :: A, B, X, Y
@@ -14438,7 +14438,7 @@ C                 SET R = EXP(-Z)*Z**B/GAMMA(B)
          DJ = D(N)*J
          SUM = SUM + DJ
          IF (SUM .LE. 0.0) GO TO 100
-         IF ( ABS ( DJ ) .LE. EPS * ( SUM + L ) ) EXIT
+         IF (ABS(DJ) .LE. EPS * (SUM + L)) EXIT
       END DO
 C                    ADD THE RESULTS TO W
       IERR = 0
@@ -14448,7 +14448,7 @@ C               THE EXPANSION CANNOT BE COMPUTED
   100 IERR = 1
       END SUBROUTINE BGRAT
 
-      SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
+      SUBROUTINE GRAT1(A,X,R,P,Q,EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, EPS
       REAL, INTENT(INOUT) :: P, Q
@@ -14623,13 +14623,13 @@ C------------------------
          W = W0*W
          T1 = D(NP1)*W*J1
          SUM = SUM + (T0 + T1)
-         IF ( ( ABS ( T0 ) + ABS ( T1 ) ) .LE. EPS * SUM ) EXIT
+         IF ((ABS(T0) + ABS(T1)) .LE. EPS * SUM) EXIT
          END DO
       U = EXP(-BCORR(A,B))
       BASYM = E0*T*U*SUM
       END FUNCTION BASYM
 
-      SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
+      SUBROUTINE ISUBX(A0, B0, X0, P, IERR, EPS)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: A0, B0, EPS
@@ -14854,7 +14854,7 @@ C                           ERROR RETURN
    10 BLND = ALGDIV(B,A) + LOGAM(B + 1.0)
       END FUNCTION BLND
 
-      REAL FUNCTION LOGAM (X)
+      REAL FUNCTION LOGAM(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       INTEGER :: N
@@ -14977,7 +14977,7 @@ C     ------------------------------------------------------------------
       LOGAM = (D + Z) + (X - 0.5)*(ALOG(X) - 1.0)
       END FUNCTION LOGAM
 
-      SUBROUTINE CBSSLJ (Z, CNU, W)
+      SUBROUTINE CBSSLJ(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
@@ -15071,17 +15071,17 @@ C          ASYMPTOTIC EXPANSION
       IF (ABS(QN) .GE. ABS(PN)) GO TO 100
       IF (R .LT. 17.5 + 0.5*(QNP1*QNP1 + CN2*CN2)) GO TO 100
       NU = CMPLX(QN + FN, CN2)
-      CALL CBJA (ZZ, NU, SM1)
+      CALL CBJA(ZZ, NU, SM1)
       NU = CMPLX(QNP1 + FN, CN2)
-      CALL CBJA (ZZ, NU, SM2)
+      CALL CBJA(ZZ, NU, SM2)
       GO TO 110
 C          USE BACKWARD RECURRENCE STARTING FROM THE
 C          DEBYE APPROXIMATION
   100 NU = CMPLX(QN + FN, CN2)
-      CALL CBDB (ZZ, NU, FN, SM1)
+      CALL CBDB(ZZ, NU, FN, SM1)
       IF (QN .EQ. PN) GO TO 120
       NU = CMPLX(QNP1 + FN, CN2)
-      CALL CBDB (ZZ, NU, FN, SM2)
+      CALL CBDB(ZZ, NU, FN, SM2)
   110    NU = CMPLX(QN + FN, CN2)
          TSC = 2.0*NU*SM1/ZZ - SM2
          SM2 = SM1
@@ -15099,16 +15099,16 @@ C          USE MACLAURIN EXPANSION WITH FORWARD OR BACKWARD RECURRENCE.
   130 M = QN - PN
       IF (IABS(M) .GT. 1) GO TO 140
          NU = CMPLX(CN1, CN2)
-         CALL CBJM (Z, NU, W)
+         CALL CBJM(Z, NU, W)
          GO TO 180
   140 NU = CMPLX(QN + FN, CN2)
-      CALL CBJM (Z, NU, W1)
+      CALL CBJM(Z, NU, W1)
       W0 = 0.25*Z*Z
       IF (M .GT. 0) GO TO 160
 C          FORWARD RECURRENCE
       M = IABS(M)
       NU = NU + 1.0
-      CALL CBJM (Z, NU, W)
+      CALL CBJM(Z, NU, W)
       DO I = 2,M
          C = NU*(NU + 1.0)
          T = (C/W0)*(W - W1)
@@ -15119,7 +15119,7 @@ C          FORWARD RECURRENCE
       GO TO 180
 C          BACKWARD RECURRENCE
   160 NU = NU - 1.0
-      CALL CBJM (Z, NU, W)
+      CALL CBJM(Z, NU, W)
       DO I = 2,M
          C = NU*(NU + 1.0)
          T = (W0/C)*W1
@@ -15143,7 +15143,7 @@ C          FINAL ASSEMBLY
       W = CDIV(W, CNU*T)
       END SUBROUTINE CBSSLJ
 
-      SUBROUTINE CBJM (Z, CNU, W)
+      SUBROUTINE CBJM(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: CNU
       COMPLEX, INTENT(INOUT) :: W
@@ -15231,7 +15231,7 @@ C     ADD THE REMAINING TERMS
       IF (ANORM(T) .GT. EPS*ANORM(W)) GO TO 70
       END SUBROUTINE CBJM
 
-      SUBROUTINE CBDB (CZ, CNU, FN, W)
+      SUBROUTINE CBDB(CZ, CNU, FN, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: FN
       COMPLEX, INTENT(IN) :: CZ, CNU
@@ -15441,7 +15441,7 @@ C          FINAL ASSEMBLY
   200 IF (INU .LT. 0.0) W = CONJG(W)
       END SUBROUTINE CBDB
 
-      SUBROUTINE CBJA (CZ, CNU, W)
+      SUBROUTINE CBJA(CZ, CNU, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: CZ, CNU
       COMPLEX, INTENT(INOUT) :: W
@@ -15484,7 +15484,7 @@ C--------------------------
          Y = -Y
    10 IF (X .LT. -1.E-2*Y) Z = -Z
       ZZ = Z + Z
-      CALL CREC (REAL(ZZ), AIMAG(ZZ), U, V)
+      CALL CREC(REAL(ZZ), AIMAG(ZZ), U, V)
       ZR = CMPLX(U, V)
       ETA = -ZR*ZR
       P = (0.0,0.0)
@@ -15503,7 +15503,7 @@ C--------------------------
          M = M + 1.0
          T = T*A/M
          Q = Q + T
-         IF ( ANORM ( T ) .LE. TOL ) EXIT
+         IF (ANORM(T) .LE. TOL) EXIT
       END DO
       P = P + 1.0
       Q = (Q + A1)*ZR
@@ -15530,7 +15530,7 @@ C     COMPUTATION OF EXP(I*PI*NU)
    60 IF (IND .NE. 0) W = CONJG(W)
       END SUBROUTINE CBJA
 
-      SUBROUTINE BSSLJ (A, IN, W)
+      SUBROUTINE BSSLJ(A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN
       COMPLEX, INTENT(IN) :: A
@@ -15585,11 +15585,11 @@ C     -------------------
       ZM=SQRT(ZS)
       PN=IABS(IN)
       SN=+1.0
-      IF ( ( IN ) .LT. 0 ) GO TO 002
+      IF ((IN) .LT. 0) GO TO 002
       GO TO 003
   002 IF(IN.EQ.IN/2*2)GO TO 003
       SN=-1.0
-  003 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 004
+  003 IF ((AZ(1)) .LT. 0) GO TO 004
       GO TO 005
   004 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
@@ -15610,9 +15610,9 @@ C     -------------------
   008 IF(ZM.LE.17.5)GO TO 009
       QN=+AINT(SQRT(2.0*(ZM-17.5)))
       GO TO 013
-  009 IF ( ( ZS - 1.0 ) .LT. 0 ) GO TO 011
+  009 IF ((ZS - 1.0) .LT. 0) GO TO 011
       GO TO 010
-  010 IF ( ( - ABS ( AZ ( 2 ) ) + 0.096 * AZ ( 1 ) * AZ ( 1 ) ) .LT. 0 )
+  010 IF ((- ABS(AZ(2)) + 0.096 * AZ(1) * AZ(1)) .LT. 0)
      &GO TO 011
       GO TO 012
   011 QN=+AINT(0.0625*ZS)
@@ -15945,18 +15945,18 @@ C     TOLLN = -LN(TOL)
       NZ = 0
       KT = 1
       NSWC_AI_I4 = N - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 720
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_I4 .LT. 0) GO TO 720
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
       GO TO 20
    10 KT = 2
    20 NN = N
       NSWC_AI_R4 = X
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 730
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_R4 .LT. 0) GO TO 730
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 30
       GO TO 80
    30 NSWC_AI_R4 = ALPHA
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 710
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      IF (NSWC_AI_R4 .LT. 0) GO TO 710
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 40
       GO TO 50
    40 Y(1) = 1.0E0
       IF (N.EQ.1) RETURN
@@ -16047,7 +16047,7 @@ C     SERIES FOR (X/2)**2.LE.NU+1
         S2 = T2 + S1
         T = -T*SXO2/S2
         S = S + T
-        IF ( ABS ( T ) .LT. TOL ) EXIT
+        IF (ABS(T) .LT. TOL) EXIT
         T2 = T2 + AK
         AK = AK + 2.0E0
         S1 = S1 + FN
@@ -16068,8 +16068,8 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       DFN = FNI + FNF
       FN = DFN
       NSWC_AI_I4 = NN - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 440
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 390
+      IF (NSWC_AI_I4 .LT. 0) GO TO 440
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 390
       GO TO 130
   390 KT = 2
       IS = 2
@@ -16081,8 +16081,8 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       DFN = FNI + FNF
       FN = DFN
       NSWC_AI_I4 = NN - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 440
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 410
+      IF (NSWC_AI_I4 .LT. 0) GO TO 440
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 410
       GO TO 420
   410 KT = 2
       IS = 2
@@ -16163,7 +16163,7 @@ C     OF THE SEQUENCE IS ALSO IN THE REGION.
         AP = TRX + TM
         T2 = T2*AP/T1
         S2 = S2 + T2
-        IF ( ABS ( T2 ) .LE. RELB ) EXIT
+        IF (ABS(T2) .LE. RELB) EXIT
         AK = AK + 8.0E0
       END DO
       TEMP(IS) = COEF*(S1*SB-S2*SA)
@@ -16340,11 +16340,11 @@ C         SUPPLIED BY THE EXTERNAL FUNTION YAIRY.
      &CR(10), CRZ32, DFI, DR(10), FI, FN, FN2, GAMA(26), PHI, RCZ, RDEN,
      &RELB, RFN2, RTZ, RZDEN, SA, SB, SUMA, SUMB, S1, TA, TAU, TB, TFN,
      &TOLS, T2, UPOL(10), XX, Z, Z32
-      EQUIVALENCE (ALFA(1,1),ALFA1(1,1))
-      EQUIVALENCE (ALFA(1,3),ALFA2(1,1))
-      EQUIVALENCE (BETA(1,1),BETA1(1,1))
-      EQUIVALENCE (BETA(1,3),BETA2(1,1))
-      EQUIVALENCE (BETA(1,5),BETA3(1,1))
+      EQUIVALENCE(ALFA(1,1),ALFA1(1,1))
+      EQUIVALENCE(ALFA(1,3),ALFA2(1,1))
+      EQUIVALENCE(BETA(1,1),BETA1(1,1))
+      EQUIVALENCE(BETA(1,3),BETA2(1,1))
+      EQUIVALENCE(BETA(1,5),BETA3(1,1))
       DATA TOLS            /-6.90775527898214E+00/
       DATA CON1,CON2,CON3,CON548/
      1 6.66666666666667E-01, 3.33333333333333E-01, 1.41421356237310E+00,
@@ -16616,7 +16616,7 @@ C     A(ZETA) AND B(ZETA) FOR S=1,2,3,4
           TB = SB*RDEN
           ASUM = ASUM + TA
           BSUM = BSUM + TB
-          IF ( ABS ( TA ) .LE. TOL .AND. ABS ( TB ) .LE. RELB ) EXIT
+          IF (ABS(TA) .LE. TOL .AND. ABS(TB) .LE. RELB) EXIT
         END DO
         BSUM = BSUM/(FN*WK(7))
         GO TO 160
@@ -16692,7 +16692,7 @@ C     COMPUTE TWO U POLYNOMIALS FOR NEXT A(ZETA) AND B(ZETA)
           IF (WK(1).GT.0.0E0) TB = ABS(TB)
           ASUM = ASUM + SUMA*TB
           BSUM = BSUM + SUMB*TB
-          IF ( ABS ( SUMA ) .LE. TOL .AND. ABS ( SUMB ) .LE. RELB ) EXIT
+          IF (ABS(SUMA) .LE. TOL .AND. ABS(SUMB) .LE. RELB) EXIT
         END DO
         TB = WK(5)
         IF (WK(1).GT.0.0E0) TB = -TB
@@ -17024,7 +17024,7 @@ C     -------------------
       DAI=(TEMP1*E1-TEMP2*E2)*RTRX
       END SUBROUTINE JAIRY
 
-      SUBROUTINE BSSLY (A, IN, W)
+      SUBROUTINE BSSLY(A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN
       COMPLEX, INTENT(IN) :: A
@@ -17080,22 +17080,22 @@ C     -------------------
       ZL(2)=ATAN2(AZ(2),AZ(1))
       AN=IABS(IN)
       SN=+1.0
-      IF ( ( IN ) .LT. 0 ) GO TO 002
+      IF ((IN) .LT. 0) GO TO 002
       GO TO 003
   002 IF(IN.EQ.IN/2*2)GO TO 003
       SN=-1.0
-  003 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 004
+  003 IF ((AZ(1)) .LT. 0) GO TO 004
       GO TO 005
   004 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
       GO TO 006
   005 QZ(1)=+AZ(1)
       QZ(2)=+AZ(2)
-  006 IF ( ( ZS - 1.0 ) .LE. 0 ) GO TO 020
+  006 IF ((ZS - 1.0) .LE. 0) GO TO 020
       GO TO 007
-  007 IF ( ( ZS - 289.0 ) .LT. 0 ) GO TO 008
+  007 IF ((ZS - 289.0) .LT. 0) GO TO 008
       GO TO 010
-  008 IF ( ( - ABS ( AZ ( 2 ) ) + 0.096 * AZ ( 1 ) * AZ ( 1 ) ) .LE. 0 )
+  008 IF ((- ABS(AZ(2)) + 0.096 * AZ(1) * AZ(1)) .LE. 0)
      &GO TO 020
       GO TO 015
   010 QM=SN*0.797884560802865*EXP(-0.5*ZL(1))
@@ -17223,9 +17223,9 @@ C     -------------------
       TM(2)=TM(2)-SM(3)*TS(2)-SM(4)*TS(1)
       TM(3)=TM(3)+SM(1)*TS(1)-SM(2)*TS(2)
       TM(4)=TM(4)+SM(1)*TS(2)+SM(2)*TS(1)
-      IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 106
+      IF ((AZ(1)) .LT. 0) GO TO 106
       GO TO 110
-  106 IF ( ( AZ ( 2 ) ) .LT. 0 ) GO TO 107
+  106 IF ((AZ(2)) .LT. 0) GO TO 107
       GO TO 108
   107 SM(1)=-2.0*TM(1)+TM(4)
       SM(2)=-2.0*TM(2)-TM(3)
@@ -17238,12 +17238,12 @@ C     -------------------
       GO TO 111
   110 SM(1)=TM(3)
       SM(2)=TM(4)
-  111 SELECT CASE ( LA )
-      CASE ( 11 )
+  111 SELECT CASE (LA)
+      CASE (11)
       GO TO 11
-      CASE ( 13 )
+      CASE (13)
       GO TO 13
-      CASE ( 14 )
+      CASE (14)
       GO TO 14
       END SELECT
   112 SM(1)=1.0
@@ -17282,9 +17282,9 @@ C     -------------------
       TM(2)=TM(2)+TS(1)*SM(1)-TS(2)*SM(2)-TS(1)*SM(3)+TS(2)*SM(4)
       TM(3)=TM(3)+TS(1)*SM(1)-TS(2)*SM(2)+TS(1)*SM(3)-TS(2)*SM(4)
       TM(4)=TM(4)+TS(1)*SM(2)+TS(2)*SM(1)+TS(1)*SM(4)+TS(2)*SM(3)
-      IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 116
+      IF ((AZ(1)) .LT. 0) GO TO 116
       GO TO 120
-  116 IF ( ( AZ ( 2 ) ) .LT. 0 ) GO TO 117
+  116 IF ((AZ(2)) .LT. 0) GO TO 117
       GO TO 118
   117 SM(1)=-2.0*TM(1)+TM(4)
       SM(2)=-2.0*TM(2)-TM(3)
@@ -17297,12 +17297,12 @@ C     -------------------
       GO TO 121
   120 SM(1)=TM(3)
       SM(2)=TM(4)
-  121 SELECT CASE ( LR )
-      CASE ( 16 )
+  121 SELECT CASE (LR)
+      CASE (16)
       GO TO 16
-      CASE ( 18 )
+      CASE (18)
       GO TO 18
-      CASE ( 19 )
+      CASE (19)
       GO TO 19
       END SELECT
   122 AQ(1)=1.0
@@ -17359,17 +17359,17 @@ C     -------------------
       IF(QM+RM.GT.QM)GO TO 127
       SM(1)=SR(1)+SM(1)
       SM(2)=SR(2)+SM(2)
-      SELECT CASE ( LY )
-      CASE ( 22 )
+      SELECT CASE (LY)
+      CASE (22)
       GO TO 22
-      CASE ( 24 )
+      CASE (24)
       GO TO 24
-      CASE ( 25 )
+      CASE (25)
       GO TO 25
       END SELECT
       END SUBROUTINE BSSLY
 
-      SUBROUTINE CBSSLI (Z, CNU, W)
+      SUBROUTINE CBSSLI(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z, CNU
       COMPLEX, INTENT(INOUT) :: W
@@ -17396,13 +17396,13 @@ C------------------------------------------------------------
       IF (T .GT. EXPARG(1)) GO TO 30
          W = (0.0, 0.0)
          RETURN
-   30 CALL CBSSLJ (Z0, CNU, W)
+   30 CALL CBSSLJ(Z0, CNU, W)
       W = EXP(T)*W
       T = 0.5*REAL(NU)
       W = W*CMPLX(COS1(T),SIN1(T))
       END SUBROUTINE CBSSLI
 
-      SUBROUTINE BSSLI (MO, A, IN, W)
+      SUBROUTINE BSSLI(MO, A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN, MO
       COMPLEX, INTENT(IN) :: A
@@ -17458,7 +17458,7 @@ C     -------------------
       ZM=SQRT(ZS)
       PN=IABS(IN)
       SN=+1.0
-      IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 002
+      IF ((AZ(1)) .LT. 0) GO TO 002
       GO TO 003
   002 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
@@ -17479,9 +17479,9 @@ C     -------------------
   006 IF(ZM.LE.17.5)GO TO 007
       QN=+AINT(SQRT(2.0*(ZM-17.5)))
       GO TO 011
-  007 IF ( ( ZS - 1.0 ) .LT. 0 ) GO TO 009
+  007 IF ((ZS - 1.0) .LT. 0) GO TO 009
       GO TO 008
-  008 IF ( ( - ABS ( AZ ( 1 ) ) + 0.096 * AZ ( 2 ) * AZ ( 2 ) ) .LT. 0 )
+  008 IF ((- ABS(AZ(1)) + 0.096 * AZ(2) * AZ(2)) .LT. 0)
      &GO TO 009
       GO TO 010
   009 QN=AINT(0.0625*ZS)
@@ -17562,7 +17562,7 @@ C     -------------------
       RM(2)=SM(2)
       IF(QZ(1).GE.17.5)GO TO 023
       AQ(1)=-2.0*QZ(1)
-      IF ( ( QZ ( 2 ) ) .LT. 0 ) GO TO 020
+      IF ((QZ(2)) .LT. 0) GO TO 020
       GO TO 021
   020 AQ(2)=-2.0*QZ(2)-3.14159265358979*(QN+0.5)
       GO TO 022
@@ -17638,7 +17638,7 @@ C     -------------------
       RM(2)=SM(2)
       IF(QZ(1).GE.17.5)GO TO 036
       AQ(1)=-2.0*QZ(1)
-      IF ( ( QZ ( 2 ) ) .LT. 0 ) GO TO 032
+      IF ((QZ(2)) .LT. 0) GO TO 032
       GO TO 033
   032 AQ(2)=-2.0*QZ(2)-3.14159265358979*(QN+0.5)
       GO TO 034
@@ -17846,19 +17846,19 @@ C     TOLLN = -LN(TOL)
       NZ = 0
       KT = 1
       NSWC_AI_I4 = N - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 590
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_I4 .LT. 0) GO TO 590
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
       GO TO 20
    10 KT = 2
    20 NN = N
       IF (KODE.LT.1 .OR. KODE.GT.2) GO TO 570
       NSWC_AI_R4 = X
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 600
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_R4 .LT. 0) GO TO 600
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 30
       GO TO 80
    30 NSWC_AI_R4 = ALPHA
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 580
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      IF (NSWC_AI_R4 .LT. 0) GO TO 580
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 40
       GO TO 50
    40 Y(1) = 1.0E0
       IF (N.EQ.1) RETURN
@@ -17978,7 +17978,7 @@ C     SERIES FOR (X/2)**2.LE.NU+1
         S2 = T2 + S1
         T = T*SXO2/S2
         S = S + T
-        IF ( ABS ( T ) .LT. TOL ) EXIT
+        IF (ABS(T) .LT. TOL) EXIT
         T2 = T2 + AK
         AK = AK + 2.0E0
         S1 = S1 + FN
@@ -17999,8 +17999,8 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       DFN = FNI + FNF
       FN = DFN
       NSWC_AI_I4 = NN - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 340
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 290
+      IF (NSWC_AI_I4 .LT. 0) GO TO 340
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 290
       GO TO 130
   290 KT = 2
       IS = 2
@@ -18012,8 +18012,8 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       DFN = FNI + FNF
       FN = DFN
       NSWC_AI_I4 = NN - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 340
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 310
+      IF (NSWC_AI_I4 .LT. 0) GO TO 340
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 310
       GO TO 320
   310 KT = 2
       IS = 2
@@ -18094,7 +18094,7 @@ C     ASYMPTOTIC EXPANSION FOR X TO INFINITY
         AP = DX + TM
         T = -T*AP/S1
         S = S + T
-        IF ( ABS ( T ) .LE. ATOL ) EXIT
+        IF (ABS(T) .LE. ATOL) EXIT
         AK = AK + 8.0E0
       END DO
       TEMP(IS) = S*EARG
@@ -18306,14 +18306,14 @@ C     ---------------------
           AP = AP*T
           AK = AP*S1
           S2 = S2 + AK
-          IF ( AMAX1 ( ABS ( AK ) , ABS ( AP ) ) .LT. TOL ) EXIT
+          IF (AMAX1(ABS(AK) , ABS(AP)) .LT. TOL) EXIT
         END DO
       T = ABS(T)
       Y(JN) = S2*COEF*SQRT(T)*CON(KK)
       END DO
       END SUBROUTINE ASIK
 
-      SUBROUTINE CBESK (Z, CNU, W)
+      SUBROUTINE CBESK(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
@@ -18341,7 +18341,7 @@ C--------------------------
       RZ = CPABS(X, Y)
 C     ASYMPTOTIC EXPANSION
       IF (RZ .LT. 17.5 + 0.5*RN*RN) GO TO 10
-         CALL CBKA (Z, NU, W)
+         CALL CBKA(Z, NU, W)
          RETURN
    10 IF (B .LE. 1.5E-2*A) GO TO 200
       TAU = RN/RZ
@@ -18407,13 +18407,13 @@ C     ASYMPTOTIC EXPANSION
       IF (X .GE. C*Y) GO TO 200
 C     CALCULATION IN TERMS OF THE MODIFIED
 C     BESSEL FUNCTION I
-  100 CALL CBKI (Z, NU, W)
+  100 CALL CBKI(Z, NU, W)
       RETURN
 C     POWER SERIES AND MILLER ALGORITHM
-  200 CALL CBKM (Z, RZ, NU, W)
+  200 CALL CBKM(Z, RZ, NU, W)
       END SUBROUTINE CBESK
 
-      SUBROUTINE CBKI (Z, CNU, W)
+      SUBROUTINE CBKI(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z, CNU
       COMPLEX, INTENT(INOUT) :: W
@@ -18429,8 +18429,8 @@ C     OF THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND.
 C------------------------------------------------------------
       DATA PI/3.14159265358979E+00/
       DATA PIHALF/1.5707963267949E+00/
-      CALL CBSSLI (Z, -CNU, W1)
-      CALL CBSSLI (Z, CNU, W2)
+      CALL CBSSLI(Z, -CNU, W1)
+      CALL CBSSLI(Z, CNU, W2)
       A = REAL(CNU)
       B = PI*AIMAG(CNU)
       U1 = SIN1(A)*COSH(B)
@@ -18438,7 +18438,7 @@ C------------------------------------------------------------
       W = PIHALF*CDIV(W1 - W2, CMPLX(U1,U2))
       END SUBROUTINE CBKI
 
-      SUBROUTINE CBKA (Z, CNU, W)
+      SUBROUTINE CBKA(Z, CNU, W)
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
@@ -18464,7 +18464,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
                       EPS = SPMPAR(1)
 C--------------------------
-      CALL CREC (REAL(Z), AIMAG(Z), U, V)
+      CALL CREC(REAL(Z), AIMAG(Z), U, V)
       ZR = CMPLX(0.5*U, 0.5*V)
       A = CNU*CNU - 0.25
       M = 1.0
@@ -18475,7 +18475,7 @@ C--------------------------
          M = M + 1.0
          T = T*A*ZR/M
          P = P + T
-         IF ( ANORM ( T ) .LE. EPS * ANORM ( P ) ) EXIT
+         IF (ANORM(T) .LE. EPS * ANORM(P)) EXIT
       END DO
       P = P + 1.0
       T = CSQRT(ZR)
@@ -18483,7 +18483,7 @@ C--------------------------
       W = C*T*P*CEXP(-Z)
       END SUBROUTINE CBKA
 
-      SUBROUTINE CBKM (Z, RZ, CNU, W)
+      SUBROUTINE CBKM(Z, RZ, CNU, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: RZ
       COMPLEX, INTENT(IN) :: Z, CNU
@@ -18522,8 +18522,8 @@ C                -0.5 .LT. NU .LE. 0.5
       CZ = Z
       X = 0.5*REAL(Z)
       Y = 0.5*AIMAG(Z)
-      CALL CREC (X, Y, ZR1, ZR2)
-      ZR = CMPLX (ZR1, ZR2)
+      CALL CREC(X, Y, ZR1, ZR2)
+      ZR = CMPLX(ZR1, ZR2)
       IF (T .NE. 0.0) GO TO 20
       IF (B .NE. 0.0) GO TO 20
 C               CALCULATION FOR NU = 0.5
@@ -18543,16 +18543,16 @@ C           CALCULATION FOR ABS(NU) .LT. 0.5
    20 ZNORM = 0.5*RZ
       IF (ZNORM .GT. 1.0) GO TO 30
          IND = 0
-         CALL CKPS (Z, ZNORM, ZR, R1, U1, U2)
+         CALL CKPS(Z, ZNORM, ZR, R1, U1, U2)
          GO TO 50
    30 U1 = (1.0, 0.0)
       IF (X .LT. 0.0) GO TO 40
-         CALL CBKML (Z, ZNORM, ZR, R1, N, W1, U2)
+         CALL CBKML(Z, ZNORM, ZR, R1, N, W1, U2)
          GO TO 50
    40 IND = -1
       CZ = - Z
       ZR = - ZR
-      CALL CBKML (CZ, ZNORM, ZR, R1, N, W1, U2)
+      CALL CBKML(CZ, ZNORM, ZR, R1, N, W1, U2)
    50 IF (N .GT. 1) GO TO 70
       W = U1
       IF (N .NE. 0) W = U2
@@ -18574,19 +18574,19 @@ C            ANALYTIC CONTINUATION
       EX = CXP(M, NU)
       IF (Y .LT. 0.0) GO TO 100
          EX = C*EX
-         W1 = CMPLX (AIMAG(Z), -REAL(Z))
-         CALL CBSSLJ (W1, R, W2)
-         W2 = CMPLX (PI*AIMAG(W2), -PI*REAL(W2))
+         W1 = CMPLX(AIMAG(Z), -REAL(Z))
+         CALL CBSSLJ(W1, R, W2)
+         W2 = CMPLX(PI*AIMAG(W2), -PI*REAL(W2))
          W = EX*(EX*W + W2)
          RETURN
   100 EX = CONJG(EX)/C
-      W1 = CMPLX (-AIMAG(Z), REAL(Z))
-      CALL CBSSLJ (W1, R, W2)
-      W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
+      W1 = CMPLX(-AIMAG(Z), REAL(Z))
+      CALL CBSSLJ(W1, R, W2)
+      W2 = CMPLX(-PI*AIMAG(W2), PI*REAL(W2))
       W = EX*(EX*W + W2)
       END SUBROUTINE CBKM
 
-      SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
+      SUBROUTINE CKPS(Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
       COMPLEX, INTENT(IN) :: Z, ZR
@@ -18644,7 +18644,7 @@ C                   G2 = GAMMA(1 - NU)
          G2 = A*T
          GO TO 30
    21 T = 0.5 + (0.5 + NU)
-      CALL CGAMMA (0, T, G1)
+      CALL CGAMMA(0, T, G1)
       G2 = CDIV(A,G1)
    30 GM2 = 0.5*(G1 + G2)
       IF (S .GT. 0.04) GO TO 31
@@ -18666,7 +18666,7 @@ C            INITIALIZATION OF THE SUMMATION
          SH = CMPLX(1.0, U/3.0)
          CH = CMPLX(1.0, U)
          GO TO 60
-   50 T = CMPLX (-Y, X)
+   50 T = CMPLX(-Y, X)
       SH = CSIN(T)/T
       CH = CCOS(T)
    60 F = GM1*CH + GM2*CL*SH
@@ -18685,12 +18685,12 @@ C                 SUMMATION OF SERIES
          W1 = W1 + T1
          T2 = C*(P - AK*F)
          W2 = W2 + T2
-         IF ( ANORM ( T1 ) .LE. EPS0 * ANORM ( W1 ) ) EXIT
+         IF (ANORM(T1) .LE. EPS0 * ANORM(W1)) EXIT
       END DO
       W2 = W2 * ZR
       END SUBROUTINE CKPS
 
-      SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
+      SUBROUTINE CBKML(Z, R, ZR, NU, N, W, W0)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: R
@@ -18787,7 +18787,7 @@ C     FINAL ASSEMBLY
       W0 = 1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR
       END SUBROUTINE CBKML
 
-      SUBROUTINE CBSSLK (Z, R, W)
+      SUBROUTINE CBSSLK(Z, R, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
       COMPLEX :: Z
@@ -18817,7 +18817,7 @@ C---------------------------
       RZ = CPABS(REAL(Z), AIMAG(Z))
 C     ASYMPTOTIC EXPANSION
       IF (RZ .LT. 17.5 + 0.5*R*R) GO TO 5
-         CALL CKA (Z, R, W)
+         CALL CKA(Z, R, W)
          RETURN
 C          REDUCTION OF R TO THE RANGE -0.5 .LT. NU .LE. 0.5
     5 A = ABS(R)
@@ -18833,8 +18833,8 @@ C          REDUCTION OF R TO THE RANGE -0.5 .LT. NU .LE. 0.5
       CZ = Z
       X = 0.5*REAL(Z)
       Y = 0.5*AIMAG(Z)
-      CALL CREC (X, Y, ZR1, ZR2)
-      ZR = CMPLX (ZR1, ZR2)
+      CALL CREC(X, Y, ZR1, ZR2)
+      ZR = CMPLX(ZR1, ZR2)
       IF (T .NE. 0.0) GO TO 20
 C               CALCULATION FOR NU = 0.5
       W = CMPLX(CPI, 0.0)
@@ -18852,15 +18852,15 @@ C           CALCULATION FOR ABS(NU) .LT. 0.5
    20 ZNORM = 0.5*RZ
       IF (ZNORM .GT. 1.0) GO TO 30
          IND = 0
-         CALL CKM (Z, ZNORM, ZR, NU, U1, U2)
+         CALL CKM(Z, ZNORM, ZR, NU, U1, U2)
          GO TO 50
    30 IF (X .LT. 0.0) GO TO 40
-         CALL CKML (Z, ZNORM, ZR, NU, U1, U2)
+         CALL CKML(Z, ZNORM, ZR, NU, U1, U2)
          GO TO 50
    40 IND = -1
       CZ = - Z
       ZR = - ZR
-      CALL CKML (CZ, ZNORM, ZR, NU, U1, U2)
+      CALL CKML(CZ, ZNORM, ZR, NU, U1, U2)
    50 IF (N .GT. 1) GO TO 70
       W = U1
       IF (N .NE. 0) W = U2
@@ -18879,21 +18879,21 @@ C                 RECURSION
       IF (IND .GT. 0) RETURN
 C            ANALYTIC CONTINUATION
       EX = CXP(M, NU1)
-      CN = CMPLX (A, 0.0)
+      CN = CMPLX(A, 0.0)
       IF (Y .LT. 0.0) GO TO 100
-         W1 = CMPLX (AIMAG(Z), -REAL(Z))
-         CALL CBSSLJ (W1, CN, W2)
-         W2 = CMPLX (PI*AIMAG(W2), -PI*REAL(W2))
+         W1 = CMPLX(AIMAG(Z), -REAL(Z))
+         CALL CBSSLJ(W1, CN, W2)
+         W2 = CMPLX(PI*AIMAG(W2), -PI*REAL(W2))
          W = EX*(EX*W + W2)
          RETURN
   100 EX = CONJG(EX)
-      W1 = CMPLX (-AIMAG(Z), REAL(Z))
-      CALL CBSSLJ (W1, CN, W2)
-      W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
+      W1 = CMPLX(-AIMAG(Z), REAL(Z))
+      CALL CBSSLJ(W1, CN, W2)
+      W2 = CMPLX(-PI*AIMAG(W2), PI*REAL(W2))
       W = EX*(EX*W + W2)
       END SUBROUTINE CBSSLK
 
-      SUBROUTINE CKA (Z, NU, W)
+      SUBROUTINE CKA(Z, NU, W)
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: W
@@ -18919,7 +18919,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
                       EPS = SPMPAR(1)
 C--------------------------
-      CALL CREC (REAL(Z), AIMAG(Z), U, V)
+      CALL CREC(REAL(Z), AIMAG(Z), U, V)
       ZR = CMPLX(0.5*U, 0.5*V)
       A = NU*NU - 0.25
       M = 1.0
@@ -18930,7 +18930,7 @@ C--------------------------
          M = M + 1.0
          T = (A/M)*T*ZR
          P = P + T
-         IF ( ANORM ( T ) .LE. EPS * ANORM ( P ) ) EXIT
+         IF (ANORM(T) .LE. EPS * ANORM(P)) EXIT
       END DO
       P = P + 1.0
       T = CSQRT(ZR)
@@ -18938,7 +18938,7 @@ C--------------------------
       W = C*T*P*CEXP(-Z)
       END SUBROUTINE CKA
 
-      SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
+      SUBROUTINE CKM(Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
       COMPLEX, INTENT(IN) :: Z, ZR
@@ -19011,7 +19011,7 @@ C            INITIALIZATION OF THE SUMMATION
          SH = CMPLX(1.0, T/3.0)
          CH = CMPLX(1.0, T)
          GO TO 60
-   50 W = CMPLX (-Y, X)
+   50 W = CMPLX(-Y, X)
       SH = CSIN(W)/W
       CH = CCOS(W)
    60 F = GM1*CH + GM2*CL*SH
@@ -19030,12 +19030,12 @@ C                 SUMMATION OF SERIES
          W1 = W1 + T1
          T2 = C*(P - AK*F)
          W2 = W2 + T2
-         IF ( ANORM ( T1 ) .LE. EPS0 * ANORM ( W1 ) ) EXIT
+         IF (ANORM(T1) .LE. EPS0 * ANORM(W1)) EXIT
       END DO
       W2 = W2 * ZR
       END SUBROUTINE CKM
 
-      SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
+      SUBROUTINE CKML(Z, R, ZR, NU, K1, K2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
       COMPLEX, INTENT(IN) :: Z, ZR
@@ -19117,7 +19117,7 @@ C     FINAL ASSEMBLY
       K2 = K1*(1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR)
       END SUBROUTINE CKML
 
-      COMPLEX FUNCTION CXP (N, NU)
+      COMPLEX FUNCTION CXP(N, NU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: NU
@@ -19136,16 +19136,16 @@ C-----------------------------------------------------------------------
       IF (K .EQ. 1) GO TO 20
       IF (K .EQ. 2) GO TO 30
       GO TO 40
-   10 CXP = CMPLX (C, -S)
+   10 CXP = CMPLX(C, -S)
       RETURN
-   20 CXP = CMPLX (-S, -C)
+   20 CXP = CMPLX(-S, -C)
       RETURN
-   30 CXP = CMPLX (-C, S)
+   30 CXP = CMPLX(-C, S)
       RETURN
-   40 CXP = CMPLX (S, C)
+   40 CXP = CMPLX(S, C)
       END FUNCTION CXP
 
-      SUBROUTINE BSSLK (MO, A, IN, W)
+      SUBROUTINE BSSLK(MO, A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN, MO
       COMPLEX, INTENT(IN) :: A
@@ -19206,11 +19206,11 @@ C     -------------------
       IF(MO.NE.0)GO TO 002
       TM(1)=AZ(1)
       TM(2)=AZ(2)
-  002 IF ( ( ZS - 1.0 ) .LE. 0 ) GO TO 020
+  002 IF ((ZS - 1.0) .LE. 0) GO TO 020
       GO TO 003
-  003 IF ( ( ZS - 289.0 ) .LT. 0 ) GO TO 004
+  003 IF ((ZS - 289.0) .LT. 0) GO TO 004
       GO TO 010
-  004 IF ( ( AZ ( 1 ) + 0.096 * AZ ( 2 ) * AZ ( 2 ) ) .LE. 0 ) GO TO 020
+  004 IF ((AZ(1) + 0.096 * AZ(2) * AZ(2)) .LE. 0) GO TO 020
       GO TO 015
   010 QM=1.25331413731550*EXP(-0.5*ZL(1)-TM(1))
       QF(1)=QM*COS(-0.5*ZL(2)-TM(2))
@@ -19317,12 +19317,12 @@ C     -------------------
   102 SM(1)=SM(1)+TM(1)
       SM(2)=SM(2)+TM(2)
       IF(PM.LT.36.0)GO TO 101
-  103 SELECT CASE ( LA )
-      CASE ( 11 )
+  103 SELECT CASE (LA)
+      CASE (11)
       GO TO 11
-      CASE ( 13 )
+      CASE (13)
       GO TO 13
-      CASE ( 14 )
+      CASE (14)
       GO TO 14
       END SELECT
   104 SM(1)=1.0
@@ -19338,12 +19338,12 @@ C     -------------------
       SM(1)=SM(1)+TM(1)
       SM(2)=SM(2)+TM(2)
       END DO
-      SELECT CASE ( LR )
-      CASE ( 16 )
+      SELECT CASE (LR)
+      CASE (16)
       GO TO 16
-      CASE ( 18 )
+      CASE (18)
       GO TO 18
-      CASE ( 19 )
+      CASE (19)
       GO TO 19
       END SELECT
   106 AQ(1)=1.0
@@ -19404,12 +19404,12 @@ C     -------------------
       IF(QM+RM.GT.QM)GO TO 111
       SM(1)=SR(1)+SM(1)
       SM(2)=SR(2)+SM(2)
-      SELECT CASE ( LK )
-      CASE ( 22 )
+      SELECT CASE (LK)
+      CASE (22)
       GO TO 22
-      CASE ( 24 )
+      CASE (24)
       GO TO 24
-      CASE ( 25 )
+      CASE (25)
       GO TO 25
       END SELECT
       END SUBROUTINE BSSLK
@@ -19445,7 +19445,7 @@ C     ASYMPTOTIC EXPANSION
    20 CALL AIA(IND,Z,AI,AIP,IERR)
       END SUBROUTINE CAI
 
-      SUBROUTINE AIRM (IND,Z,AI,AIP,BI,BIP)
+      SUBROUTINE AIRM(IND,Z,AI,AIP,BI,BIP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(INOUT) :: AI, AIP, BI, BIP
@@ -19570,10 +19570,10 @@ C           ----  ABS(B) .LT. -5.0*A  ----
             AIP = AIP*E
             RETURN
    30 IF (R .LT. 7.4) GO TO 20
-   40 CALL AIA (IND,Z,AI,AIP,IERR)
+   40 CALL AIA(IND,Z,AI,AIP,IERR)
       END SUBROUTINE AII
 
-      SUBROUTINE AIA (IND, Z, AI, AIP, IERR)
+      SUBROUTINE AIA(IND, Z, AI, AIP, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
@@ -19644,7 +19644,7 @@ C             -----   REAL(Z) .GE. 0    -----
       Z1 = CSQRT(Z)
       Z2 = CSQRT(Z1)
       Z2R = 1.0/Z2
-      CALL CREC (REAL(Z), AIMAG(Z), U, V)
+      CALL CREC(REAL(Z), AIMAG(Z), U, V)
       W = -1.5*CMPLX(U,V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
@@ -19680,7 +19680,7 @@ C             -----   REAL(Z) .LT. 0    -----
       Z1 = CSQRT(ZZ)
       Z2 = CSQRT(Z1)
       Z2R = 1.0/Z2
-      CALL CREC (REAL(ZZ), AIMAG(ZZ), U, V)
+      CALL CREC(REAL(ZZ), AIMAG(ZZ), U, V)
       W = 1.5*CMPLX(U,V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
@@ -20493,7 +20493,7 @@ C-----------------------
      *     RD4/.225973894323078E-03/, RD5/.232707159780478E-06/
 C-----------------------------------------------------------------------
       IF (X .GE. -1.0) GO TO 10
-      CALL AIMP (-X, R, PHI)
+      CALL AIMP(-X, R, PHI)
       AI = R*SIN(PHI)
       RETURN
    10 IF (X .GE. 0.0) GO TO 20
@@ -20588,7 +20588,7 @@ C-----------------------
      *     RD4/.225973894323078E-03/, RD5/.232707159780478E-06/
 C-----------------------------------------------------------------------
       IF (X .GE. -1.0) GO TO 10
-      CALL AIMP (-X, R, PHI)
+      CALL AIMP(-X, R, PHI)
       AIE = R*SIN(PHI)
       RETURN
    10 IF (X .GE. 0.0) GO TO 20
@@ -20704,7 +20704,7 @@ C-----------------------
       DATA SD0 /.100000000000000E+01/, SD1 / .193077670156841E+00/
 C-----------------------------------------------------------------------
       IF (X .GE. -1.0) GO TO 10
-      CALL AIMP (-X, R, PHI)
+      CALL AIMP(-X, R, PHI)
       BI = R*COS(PHI)
       RETURN
    10 IF (X .GE. 0.0) GO TO 20
@@ -20835,7 +20835,7 @@ C-----------------------
       DATA SD0 /.100000000000000E+01/, SD1 / .193077670156841E+00/
 C-----------------------------------------------------------------------
       IF (X .GE. -1.0) GO TO 10
-      CALL AIMP (-X, R, PHI)
+      CALL AIMP(-X, R, PHI)
       BIE = R*COS(PHI)
       RETURN
    10 IF (X .GE. 0.0) GO TO 20
@@ -20887,7 +20887,7 @@ C-----------------------------------------------------------------------
    70 BIE = SN0/SQRT(RTX)
       END FUNCTION BIE
 
-      SUBROUTINE AIMP (X, R, PHI)
+      SUBROUTINE AIMP(X, R, PHI)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: PHI, R
       REAL, INTENT(IN) :: X
@@ -21190,9 +21190,9 @@ C---------------------------------------------------------
       COMPLEX, INTENT(IN) :: Z
       REAL :: NSWC_AI_R4
 C     ----------
-      NSWC_AI_R4 = REAL ( Z )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 20
+      NSWC_AI_R4 = REAL(Z)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 10
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 20
       GO TO 30
    10 CFLECT = -Z
       RETURN
@@ -21226,12 +21226,12 @@ C ---------------
          C = ((RI - 0.5)/RI)**2
          AN = C*(AN*K2)
          S1 = S1 + AN
-         IF ( ABS ( REAL ( AN ) ) + ABS ( AIMAG ( AN ) ) .LT. TOL ) EXIT
+         IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) EXIT
       END DO
       KM = HPI*S1
       END FUNCTION KM
 
-      SUBROUTINE KL (L, FK, FL)
+      SUBROUTINE KL(L, FK, FL)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: L
       COMPLEX, INTENT(INOUT) :: FK, FL
@@ -21270,7 +21270,7 @@ C              AND THE MACLAURIN EXPANSION FOR F(L)
          BN = BN + 1.0/(RI*(2.0*RI - 1.0))
          S1 = S1 + AN
          S2 = S2 + AN*BN
-         IF ( ABS ( REAL ( AN ) ) + ABS ( AIMAG ( AN ) ) .LT. TOL ) EXIT
+         IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) EXIT
       END DO
       S1 = S1 + (1.0, 0.0)
 C                   SET W = 0.5*CLOG(16.0/L2)
@@ -21559,7 +21559,7 @@ C---------------------------------------------------
       ATN = CMPLX(ATN1, ATN2)
       END FUNCTION ATN
 
-      SUBROUTINE EKM (K2, FK, EK)
+      SUBROUTINE EKM(K2, FK, EK)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: K2
       COMPLEX, INTENT(INOUT) :: FK, EK
@@ -21588,13 +21588,13 @@ C ---------------
          CN = AN/(2.0*RI - 1.0)
          S1 = S1 + AN
          S2 = S2 - CN
-         IF ( ABS ( REAL ( AN ) ) + ABS ( AIMAG ( AN ) ) .LT. TOL ) EXIT
+         IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) EXIT
       END DO
       FK = HPI*S1
       EK = HPI*S2
       END SUBROUTINE EKM
 
-      SUBROUTINE EKL (L,FK,FL,EK,EL,GK,GL)
+      SUBROUTINE EKL(L,FK,FL,EK,EL,GK,GL)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: L
       COMPLEX, INTENT(INOUT) :: FK, FL, EK, EL, GK, GL
@@ -21651,7 +21651,7 @@ C            AND THE MACLAURIN EXPANSIONS FOR F(L) AND E(L)
          S5 = S5 + EN
          S6 = S6 + AN*FN
          S7 = S7 + AN*GN
-         IF ( ABS ( REAL ( AN ) ) + ABS ( AIMAG ( AN ) ) .LT. TOL ) EXIT
+         IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) EXIT
       END DO
       S1 = S1 + (1.0, 0.0)
       S3 = S3 + (1.0, 0.0)
@@ -21680,7 +21680,7 @@ C              FINAL ASSEMBLY
       GL = HPI*S7*L2
       END SUBROUTINE EKL
 
-      SUBROUTINE ELLPI (PHI, CPHI, K, L, F, E, IERR)
+      SUBROUTINE ELLPI(PHI, CPHI, K, L, F, E, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: CPHI
@@ -21809,7 +21809,7 @@ C     ERROR RETURN
   120 IERR = 3
       END SUBROUTINE ELLPI
 
-      SUBROUTINE DELLPI (PHI, CPHI, K, L, F, E, IERR)
+      SUBROUTINE DELLPI(PHI, CPHI, K, L, F, E, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K, L
@@ -21935,7 +21935,7 @@ C     ERROR RETURN
   120 IERR = 3
       END SUBROUTINE DELLPI
 
-      SUBROUTINE EPI (PHI, CPHI, K2, L2, N, M, P, IERR)
+      SUBROUTINE EPI(PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
@@ -21973,10 +21973,10 @@ C-----------------------------------------------------------------------
    20 IF (M .LT. 0.0 .OR. M .GT. 1.0) GO TO 110
       IF (ABS((M + N) - 1.0) .GT. TOL) GO TO 110
       R = M + N*A
-   30 CALL RJVAL (A, B, 1.0, R, P, IERR)
+   30 CALL RJVAL(A, B, 1.0, R, P, IERR)
       IF (IERR .NE. 0) GO TO 130
       P = P * (S * S2) * N/3.0
-      CALL RFVAL (A, B, 1.0, RF, IERR)
+      CALL RFVAL(A, B, 1.0, RF, IERR)
       P = P + S * RF
       RETURN
 C     ERROR RETURN
@@ -21989,7 +21989,7 @@ C     ERROR RETURN
   130 IERR = 4
       END SUBROUTINE EPI
 
-      SUBROUTINE DEPI (PHI, CPHI, K2, L2, N, M, P, IERR)
+      SUBROUTINE DEPI(PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
@@ -22028,10 +22028,10 @@ C-----------------------------------------------------------------------
    20 IF (M .LT. 0.D0 .OR. M .GT. 1.D0) GO TO 110
       IF (DABS((M + N) - 1.D0) .GT. TOL) GO TO 110
       R = M + N*A
-   30 CALL DRJVAL (A, B, 1.D0, R, P, IERR)
+   30 CALL DRJVAL(A, B, 1.D0, R, P, IERR)
       IF (IERR .NE. 0) GO TO 130
       P = P * (S * S2) * N/3.D0
-      CALL DRFVAL (A, B, 1.D0, RF, IERR)
+      CALL DRFVAL(A, B, 1.D0, RF, IERR)
       P = P + S * RF
       RETURN
 C     ERROR RETURN
@@ -22044,7 +22044,7 @@ C     ERROR RETURN
   130 IERR = 4
       END SUBROUTINE DEPI
 
-      SUBROUTINE RFVAL (X, Y, Z, RF, IERR)
+      SUBROUTINE RFVAL(X, Y, Z, RF, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22138,7 +22138,7 @@ C                      ERROR RETURN
       IERR = 3
       END SUBROUTINE RFVAL
 
-      SUBROUTINE DRFVAL (X, Y, Z, RF, IERR)
+      SUBROUTINE DRFVAL(X, Y, Z, RF, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22232,7 +22232,7 @@ C                      ERROR RETURN
       IERR = 3
       END SUBROUTINE DRFVAL
 
-      SUBROUTINE RDVAL (X, Y, Z, RD, IERR)
+      SUBROUTINE RDVAL(X, Y, Z, RD, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22338,7 +22338,7 @@ C                        ERROR RETURN
       IERR = 3
       END SUBROUTINE RDVAL
 
-      SUBROUTINE DRDVAL (X, Y, Z, RD, IERR)
+      SUBROUTINE DRDVAL(X, Y, Z, RD, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22445,7 +22445,7 @@ C                        ERROR RETURN
       IERR = 3
       END SUBROUTINE DRDVAL
 
-      SUBROUTINE RJVAL (X, Y, Z, P, RJ, IERR)
+      SUBROUTINE RJVAL(X, Y, Z, P, RJ, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22535,7 +22535,7 @@ C-----------------------------------------------------------------------
       ALFA = PN * (XNROOT + YNROOT + ZNROOT) + XNROOT * YNROOT * ZNROOT
       ALFA = ALFA * ALFA
       BETA = PN * (PN + LAMDA) * (PN + LAMDA)
-      CALL RCVAL1 (ALFA, BETA, ETOLRC, RC, IERR)
+      CALL RCVAL1(ALFA, BETA, ETOLRC, RC, IERR)
       IF (IERR .NE. 0) RETURN
       SIGMA = SIGMA + POWER4 * RC
       POWER4 = POWER4 * 0.25
@@ -22569,7 +22569,7 @@ C                        ERROR RETURN
       IERR = 3
       END SUBROUTINE RJVAL
 
-      SUBROUTINE DRJVAL (X, Y, Z, P, RJ, IERR)
+      SUBROUTINE DRJVAL(X, Y, Z, P, RJ, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -22660,7 +22660,7 @@ C-----------------------------------------------------------------------
       ALFA = PN * (XNROOT + YNROOT + ZNROOT) + XNROOT * YNROOT * ZNROOT
       ALFA = ALFA * ALFA
       BETA = PN * (PN + LAMDA) * (PN + LAMDA)
-      CALL DRCVL1 (ALFA, BETA, ETOLRC, RC, IERR)
+      CALL DRCVL1(ALFA, BETA, ETOLRC, RC, IERR)
       IF (IERR .NE. 0) RETURN
       SIGMA = SIGMA + POWER4 * RC
       POWER4 = POWER4 * 0.25D0
@@ -22694,7 +22694,7 @@ C                        ERROR RETURN
       IERR = 3
       END SUBROUTINE DRJVAL
 
-      SUBROUTINE RCVAL1 (X, Y, ERRTOL, RC, IERR)
+      SUBROUTINE RCVAL1(X, Y, ERRTOL, RC, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -22781,7 +22781,7 @@ C                      ERROR RETURN
       IERR = 3
       END SUBROUTINE RCVAL1
 
-      SUBROUTINE DRCVL1 (X, Y, ERRTOL, RC, IERR)
+      SUBROUTINE DRCVL1(X, Y, ERRTOL, RC, IERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -22915,7 +22915,7 @@ C                   ARGUMENT REDUCTION
       IF (U1 .GE. 0.0) GO TO 30
 C     CALCULATION OF ELLIPTIC FUNCTIONS FOR 0.0 .LE. U2 .LE. F(K)
    20 U2 = ABS(U1)
-      CALL SCD (U2,ABS(K),ABS(L),F,S,C,D)
+      CALL SCD(U2,ABS(K),ABS(L),F,S,C,D)
       IERR = 0
       IF (U1 .LT. 0.0) S = -S
 C     FINAL ASSEMBLY
@@ -22958,10 +22958,10 @@ C     ------------------------
       V = F - U
 C     USES MACLAURIN EXPANSION WHEN U OR V .LE. 0.01
       IF (U .GT. 0.01) GO TO 10
-         CALL SCDM (U,K,S,C,D)
+         CALL SCDM(U,K,S,C,D)
          RETURN
    10 IF (V .GT. 0.01) GO TO 20
-      CALL SCDM (V,K,S1,C1,D1)
+      CALL SCDM(V,K,S1,C1,D1)
       S = C1/D1
       C = L*S1/D1
       D = L/D1
@@ -22969,11 +22969,11 @@ C     USES MACLAURIN EXPANSION WHEN U OR V .LE. 0.01
 C     USES FOURIER EXPANSION WHEN K .LE. L
    20 CALL ELLPI(PIHALF,0.0,L,K,F1,E1,IERR)
       IF (K .GT. L) GO TO 30
-      CALL SCDF (U,K,L,F,F1,S,C,D)
+      CALL SCDF(U,K,L,F,F1,S,C,D)
       RETURN
 C     USES IMAGINARY TRANSFORMATION OF JACOBI AND FOURIER
 C     EXPANSION WHEN K .GT. L
-   30 CALL SCDJ (U,K,L,F,F1,S,C,D)
+   30 CALL SCDJ(U,K,L,F,F1,S,C,D)
       RETURN
 C     COMPUTATION FOR K = 0.0
    40 S = SIN(U)
@@ -23135,7 +23135,7 @@ C     ASSEMBLY FOR U .GT. V
       D = L/D
       END SUBROUTINE SCDJ
 
-      SUBROUTINE ELPFC1 (U,K,L,S,C,D,IERR)
+      SUBROUTINE ELPFC1(U,K,L,S,C,D,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       COMPLEX, INTENT(IN) :: U
@@ -23155,14 +23155,14 @@ C     -------------------------------------------------------------
       IF (U1 .EQ. 0.0) GO TO 10
       IF (U2 .NE. 0.0) GO TO 20
 C     CALCULATION FOR U2 = 0.
-      CALL ELLPF (U1,K,L,S1,C1,D1,IERR)
+      CALL ELLPF(U1,K,L,S1,C1,D1,IERR)
       IF (IERR .NE. 0) RETURN
       S2 = 0.0
       C2 = 0.0
       D2 = 0.0
       GO TO 40
 C     CALCULATION FOR U1 = 0.
-   10 CALL ELLPF (U2,L,K,S2,C2,D2,IERR)
+   10 CALL ELLPF(U2,L,K,S2,C2,D2,IERR)
       IF  (IERR .NE. 0) RETURN
       IF (C2 .EQ. 0.0) GO TO 50
       S1 = 0.0
@@ -23173,9 +23173,9 @@ C     CALCULATION FOR U1 = 0.
       C2 = 0.0
       GO TO 40
 C     CALCULATION FOR U1 AND U2 .NE. 0.
-   20 CALL ELLPF (U1,K,L,SK,CK,DK,IERR)
+   20 CALL ELLPF(U1,K,L,SK,CK,DK,IERR)
       IF (IERR .NE. 0) RETURN
-      CALL ELLPF (U2,L,K,SL,CL,DL,IERR)
+      CALL ELLPF(U2,L,K,SL,CL,DL,IERR)
       IF (IERR .NE. 0) RETURN
       COEF = ABS(K)*SL
       T1 = CL
@@ -23205,9 +23205,9 @@ C     CALCULATION FOR U1 AND U2 .NE. 0.
       D1 = DK*DL*R/T1
       D2 = -K2*CK*SL*T*R/TD1
 C     FINAL ASSEMBLY
-   40 S = CMPLX (S1, S2)
-      C = CMPLX (C1, C2)
-      D = CMPLX (D1, D2)
+   40 S = CMPLX(S1, S2)
+      C = CMPLX(C1, C2)
+      D = CMPLX(D1, D2)
       RETURN
 C     ERROR RETURN
    50 IERR = 3
@@ -23549,8 +23549,8 @@ C                 SERIES EVALUATION
       AJ1=H(2)-H(1)
       CIRCM=AJ1
       NSWC_AI_I4 = IOP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 140
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      IF (NSWC_AI_I4 .LT. 0) GO TO 140
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 150
       GO TO 160
   140 SUM=E(M)*AJ1
   141 M=M+1
@@ -23628,7 +23628,7 @@ C                  ERROR RETURN
  4021 IND=3
       END SUBROUTINE VALR2
 
-      SUBROUTINE CIRCV (R, D, J, P, IERR)
+      SUBROUTINE CIRCV(R, D, J, P, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: J
@@ -23746,7 +23746,7 @@ C------------------------------------------------
         DELTA = SQRT(ZM)
         X = 2.0*(C1*C2)/(R*DELTA)
         EXPT = EXP(-0.5*R*R)
-        CALL ERFC0 (1, C1*R, EXPT, M)
+        CALL ERFC0(1, C1*R, EXPT, M)
         M = M/DELTA
         P = 1.0
         SUM = M
@@ -23803,7 +23803,7 @@ C       FIND THE NUMBER N OF TERMS TO BE USED IN THE SERIES
             IF (TN .GT. EPS) GO TO 65
 C       COMPUTE THE SERIES
         M = N
-        CALL GRATIO (M + 1.0, TR, S, W, 0)
+        CALL GRATIO(M + 1.0, TR, S, W, 0)
         W = RCOMP(M,TR)/M
         P = S
         DO I = 1,N
@@ -23819,7 +23819,7 @@ C      J .NE. 0,    R .GE. 1.7  AND  R*D .GT. 16
 C------------------------------------------------------------------
    75   Z = C1*ABS(A1)
         W = EXP(-A)
-        CALL ERFC0 (1, Z, W, S1)
+        CALL ERFC0(1, Z, W, S1)
         A = 0.5*Z/T
         T = 0.25/T
         M = C2 - Z*S1
@@ -23861,7 +23861,7 @@ C       TERMINATION
         P = -1.0
         END SUBROUTINE CIRCV
 
-      SUBROUTINE ERFC0 (IND, X, E, Y)
+      SUBROUTINE ERFC0(IND, X, E, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(INOUT) :: E
@@ -23949,7 +23949,7 @@ C                       WHEN IND = 0
    50 Y = 0.0
       END SUBROUTINE ERFC0
 
-      REAL FUNCTION ERFCR (X)
+      REAL FUNCTION ERFCR(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: BOT, T, TOP
@@ -23970,7 +23970,7 @@ C------------------------
       ERFCR = T*TOP/BOT
       END FUNCTION ERFCR
 
-      SUBROUTINE PKILL (R0, SX, SY, H, K, P)
+      SUBROUTINE PKILL(R0, SX, SY, H, K, P)
       IMPLICIT NONE
       REAL, INTENT(IN) :: H
       REAL, INTENT(OUT) :: P
@@ -24183,7 +24183,7 @@ C----------------------------
       T1 = 2.0*(Z + 2*H3)
       YY = R*R*(H2 + Z8)/T1
       T1 = (H2 + Z8)*(H2 + Z8)/T1
-      CALL GRATIO (T1,YY,Z,Z8,0)
+      CALL GRATIO(T1,YY,Z,Z8,0)
       Z2 = R/(RT2*S2)
       R8 = R/(RT2*S1)
       H2 = H8/(RT2*S1)
@@ -24321,8 +24321,8 @@ C-----------------------------------------------------------------------
   170 IF (S2 .GT. 2.E-2 .AND. H8 + K8 .LT. 2.E2) GO TO 172
       IF (ABS(E3 - F) .GT. 0.4*F) GO TO 172
       NSWC_AI_R4 = D1 - T
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 200
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 180
+      IF (NSWC_AI_R4 .LT. 0) GO TO 200
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 180
       GO TO 195
   172 IF (E3 .LT. 2.E4*EPS) GO TO 195
       IF (F .LT. 2.E4*EPS) GO TO 200
@@ -24332,12 +24332,12 @@ C-----------------------------------------------------------------------
       IF (S1 .NE. S2) GO TO 195
   175 IF (AMIN1(E3,F) .LT. 2.5E-2*SQEPS) GOTO 185
   180 NSWC_AI_R4 = E3 - F
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 200
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 190
+      IF (NSWC_AI_R4 .LT. 0) GO TO 200
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 190
       GO TO 195
   185 NSWC_AI_R4 = E3 - F
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 195
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 190
+      IF (NSWC_AI_R4 .LT. 0) GO TO 195
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 190
       GO TO 200
   190 IF (S0 .GE. S9) GO TO 200
   195 E3 = F
@@ -24418,7 +24418,7 @@ C-----------------------------------------------------------------------
       IF (P .LT. 0.0) P = 0.0
       END SUBROUTINE PKILL
 
-      SUBROUTINE PLCOPY (A,KA,M,B,KB,N)
+      SUBROUTINE PLCOPY(A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(*)
@@ -24443,7 +24443,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE PLCOPY
 
-      SUBROUTINE DPCOPY (A,KA,M,B,KB,N)
+      SUBROUTINE DPCOPY(A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -24468,7 +24468,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE DPCOPY
 
-      SUBROUTINE PADD (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE PADD(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
@@ -24490,7 +24490,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE PADD
 
-      SUBROUTINE DPADD (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE DPADD(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
@@ -24512,7 +24512,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE DPADD
 
-      SUBROUTINE PSUBT (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE PSUBT(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
@@ -24534,7 +24534,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE PSUBT
 
-      SUBROUTINE DPSUBT (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE DPSUBT(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
@@ -24556,7 +24556,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE DPSUBT
 
-      SUBROUTINE PMULT (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE PMULT(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
@@ -24595,7 +24595,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE PMULT
 
-      SUBROUTINE DPMULT (A,KA,L,B,KB,M,C,KC,N)
+      SUBROUTINE DPMULT(A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
@@ -24634,7 +24634,7 @@ C     ------------------------------------------------------------------
       END DO
       END SUBROUTINE DPMULT
 
-      SUBROUTINE PDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
+      SUBROUTINE PDIV(A,KA,L,B,KB,M,C,KC,N,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
@@ -24685,7 +24685,7 @@ C                ERROR RETURN
   100 IERR = 1
       END SUBROUTINE PDIV
 
-      SUBROUTINE DPDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
+      SUBROUTINE DPDIV(A,KA,L,B,KB,M,C,KC,N,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
@@ -24835,7 +24835,7 @@ C                ERROR RETURN
   100 IERR = 1
       END SUBROUTINE DPLPWR
 
-      SUBROUTINE PINV (A, D, N, Q)
+      SUBROUTINE PINV(A, D, N, Q)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(N)
@@ -24891,7 +24891,7 @@ C              COMPUTE THE COEFFICIENTS OF THE INVERSE
       END DO
       END SUBROUTINE PINV
 
-      SUBROUTINE DPINV (A, D, N, Q)
+      SUBROUTINE DPINV(A, D, N, Q)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(N)
@@ -24947,7 +24947,7 @@ C              COMPUTE THE COEFFICIENTS OF THE INVERSE
       END DO
       END SUBROUTINE DPINV
 
-      SUBROUTINE MPLNMV (MO, AU, NC, AC, FV)
+      SUBROUTINE MPLNMV(MO, AU, NC, AC, FV)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NC
       REAL :: AC(*)
@@ -25003,7 +25003,7 @@ C     MO = +2 FOR SECOND DERIVATIVE
       END DO
       END SUBROUTINE MPLNMV
 
-      REAL FUNCTION CSEVL (X, A, N)
+      REAL FUNCTION CSEVL(X, A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X
@@ -25029,7 +25029,7 @@ C-----------------------------------------------------------------------
       CSEVL = 0.5 * (S0 - S2)
       END FUNCTION CSEVL
 
-      DOUBLE PRECISION FUNCTION DCSEVL (X, A, N)
+      DOUBLE PRECISION FUNCTION DCSEVL(X, A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(N), X
@@ -25054,7 +25054,7 @@ C-----------------------------------------------------------------------
       DCSEVL = 0.5D0 * (S0 - S2)
       END FUNCTION DCSEVL
 
-      SUBROUTINE LGRNGN (AU, NA, AN)
+      SUBROUTINE LGRNGN(AU, NA, AN)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AN(*)
@@ -25079,7 +25079,7 @@ C     AN = NORMALIZATION FACTORS (N-ARRAY)
       END DO
       END SUBROUTINE LGRNGN
 
-      SUBROUTINE LGRNGV (MO, NA, QU, AU, AN, FF, DF, SF)
+      SUBROUTINE LGRNGV(MO, NA, QU, AU, AN, FF, DF, SF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NA
       REAL :: AN(*), AU(*)
@@ -25196,7 +25196,7 @@ C     CALL LGRNGV (2, NA, QU, AU, AN, FF, DF, SF) FOR SECOND DERIVATIVES
   053 RETURN
       END SUBROUTINE LGRNGV
 
-      SUBROUTINE LGRNGX (AU, NA, AC)
+      SUBROUTINE LGRNGX(AU, NA, AC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AC(*)
@@ -25248,7 +25248,7 @@ C     AC = POLYNOMIAL COEFFICIENTS (NX(N+1) ARRAY)
       END DO
       END SUBROUTINE LGRNGX
 
-      SUBROUTINE ORTHOS (AU, MA, AA, NA, AR)
+      SUBROUTINE ORTHOS(AU, MA, AA, NA, AR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MA, NA
       REAL, INTENT(INOUT) :: AA(*), AR(*)
@@ -25329,7 +25329,7 @@ C     AR = RECURRENCE COEFFICIENTS (2*M-2 ARRAY)
       END DO
       END SUBROUTINE ORTHOS
 
-      SUBROUTINE ORTHOV (MO, NA, AU, AR, NF, FF, DF, SF)
+      SUBROUTINE ORTHOV(MO, NA, AU, AR, NF, FF, DF, SF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NA, NF
       REAL :: AR(*)
@@ -25385,7 +25385,7 @@ C     CALL ORTHOV (2, NA, AU, AR, NF, FF, DF, SF) FOR SECOND DERIVATIVES
   007 RETURN
       END SUBROUTINE ORTHOV
 
-      SUBROUTINE ORTHOX (NA, AR, NC, AC)
+      SUBROUTINE ORTHOX(NA, AR, NC, AC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA, NC
       REAL, INTENT(INOUT) :: AC(*)
@@ -25427,7 +25427,7 @@ C     AC = POLYNOMIAL COEFFICIENTS (M*M ARRAY)
       END DO
       END SUBROUTINE ORTHOX
 
-      REAL FUNCTION ZEROIN (F, AX, BX, AERR, RERR)
+      REAL FUNCTION ZEROIN(F, AX, BX, AERR, RERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
@@ -25519,7 +25519,7 @@ C DONE
    90 ZEROIN = B
       END FUNCTION ZEROIN
 
-      DOUBLE PRECISION FUNCTION DZERO (F, AX, BX, AERR, RERR)
+      DOUBLE PRECISION FUNCTION DZERO(F, AX, BX, AERR, RERR)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
@@ -26063,7 +26063,7 @@ C     TERMINATION, EITHER NORMAL OR USER IMPOSED.
 C     LAST CARD OF SUBROUTINE HYBRD.
       END SUBROUTINE HYBRD
 
-      SUBROUTINE QDCRT (A, Z)
+      SUBROUTINE QDCRT(A, Z)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(3)
       COMPLEX, INTENT(INOUT) :: Z(2)
@@ -26110,7 +26110,7 @@ C                 CASE WHEN A(1) = 0
       Z(2) = CMPLX(-A(2)/A(3), 0.0)
       END SUBROUTINE QDCRT
 
-      SUBROUTINE DQDCRT (A, ZR, ZI)
+      SUBROUTINE DQDCRT(A, ZR, ZI)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C        DQDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -26162,7 +26162,7 @@ C                 CASE WHEN A(1) = 0
       ZI(2) = 0.D0
       END SUBROUTINE DQDCRT
 
-      SUBROUTINE CBCRT (A, Z)
+      SUBROUTINE CBCRT(A, Z)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(4)
       COMPLEX, INTENT(INOUT) :: Z(3)
@@ -26334,7 +26334,7 @@ C                   CASE WHEN D = 0
       Z(1) = CMPLX(T, 0.0)
       END SUBROUTINE CBCRT
 
-      SUBROUTINE DCBCRT (A, ZR, ZI)
+      SUBROUTINE DCBCRT(A, ZR, ZI)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C        DCBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -26480,7 +26480,7 @@ C     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
    70    AQ(1) = A(1)
          AQ(2) = A(2) + A(1)/W
          AQ(3) = -A(4)*W
-         CALL DQDCRT (AQ, ZR, ZI)
+         CALL DQDCRT(AQ, ZR, ZI)
          ZR(3) = W
          ZI(3) = 0.D0
       IF (ZI(1) .EQ. 0.D0) RETURN
@@ -26525,7 +26525,7 @@ C                   CASE WHEN D = 0
       ZR(1) = T
       END SUBROUTINE DCBCRT
 
-      SUBROUTINE QTCRT (A, Z)
+      SUBROUTINE QTCRT(A, Z)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(5)
       COMPLEX, INTENT(INOUT) :: Z(4)
@@ -26592,11 +26592,11 @@ C                REORDER THE ROOTS IN INCREASING ORDER
    30 X1 = SQRT(X1)
       X2 = SQRT(X2)
       IF (Q .GT. 0.0) X1 = -X1
-      TEMP(1) = (( X1 + X2) + U) - B
+      TEMP(1) = ((X1 + X2) + U) - B
       TEMP(2) = ((-X1 - X2) + U) - B
-      TEMP(3) = (( X1 - X2) - U) - B
+      TEMP(3) = ((X1 - X2) - U) - B
       TEMP(4) = ((-X1 + X2) - U) - B
-      CALL AORD (TEMP,4)
+      CALL AORD(TEMP,4)
       IF (ABS(TEMP(1)) .GE. 0.1*ABS(TEMP(4))) GO TO 31
          T = TEMP(2)*TEMP(3)*TEMP(4)
          IF (T .NE. 0.0) TEMP(1) = E/T
@@ -26624,8 +26624,8 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
    60 T = REAL(Z(1))
       X = 0.0
       NSWC_AI_R4 = T
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 61
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 70
+      IF (NSWC_AI_R4 .LT. 0) GO TO 61
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 70
       GO TO 62
    61 H = ABS(REAL(Z(2))) + ABS(AIMAG(Z(2)))
       IF (ABS(T) .LE. H) GO TO 70
@@ -26661,7 +26661,7 @@ C                         CASE WHEN A(1) = 0
       CALL CBCRT(A(2), Z(2))
       END SUBROUTINE QTCRT
 
-      SUBROUTINE DQTCRT (A, ZR, ZI)
+      SUBROUTINE DQTCRT(A, ZR, ZI)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C         DQTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -26698,7 +26698,7 @@ C          THAT CSQRT(W1) * CSQRT(W2) * CSQRT(W3) = -Q/8.
       TEMP(2) = 0.25D0*(P*P - R)
       TEMP(3) =  P
       TEMP(4) = 1.D0
-      CALL DCBCRT (TEMP, ZR, ZI)
+      CALL DCBCRT(TEMP, ZR, ZI)
       IF (ZI(2) .NE. 0.D0) GO TO 60
 C               THE RESOLVENT CUBIC HAS ONLY REAL ROOTS
 C                REORDER THE ROOTS IN INCREASING ORDER
@@ -26726,11 +26726,11 @@ C                REORDER THE ROOTS IN INCREASING ORDER
    30 X1 = DSQRT(X1)
       X2 = DSQRT(X2)
       IF (Q .GT. 0.D0) X1 = -X1
-      ZR(1) = (( X1 + X2) + U) - B
+      ZR(1) = ((X1 + X2) + U) - B
       ZR(2) = ((-X1 - X2) + U) - B
-      ZR(3) = (( X1 - X2) - U) - B
+      ZR(3) = ((X1 - X2) - U) - B
       ZR(4) = ((-X1 + X2) - U) - B
-      CALL DAORD (ZR, 4)
+      CALL DAORD(ZR, 4)
       IF (DABS(ZR(1)) .GE. 0.1D0*DABS(ZR(4))) GO TO 31
          T = ZR(2)*ZR(3)*ZR(4)
          IF (T .NE. 0.D0) ZR(1) = E/T
@@ -26758,8 +26758,8 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
    60 T = ZR(1)
       X = 0.D0
       NSWC_AI_R8 = T
-      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 61
-      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 70
+      IF (NSWC_AI_R8 .LT. 0) GO TO 61
+      IF (NSWC_AI_R8 .EQ. 0) GO TO 70
       GO TO 62
    61 H = DABS(ZR(2)) + DABS(ZI(2))
       IF (DABS(T) .LE. H) GO TO 70
@@ -26768,7 +26768,7 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
       IF (Q .GT. 0.D0) X = -X
    70 W(1) = ZR(2)
       W(2) = ZI(2)
-      CALL DCSQRT (W, W)
+      CALL DCSQRT(W, W)
       U = 2.D0*W(1)
       V = 2.D0*DABS(W(2))
       T =  X - B
@@ -26806,7 +26806,7 @@ C                         CASE WHEN A(1) = 0
       CALL DCBCRT(A(2), ZR(2), ZI(2))
       END SUBROUTINE DQTCRT
 
-      SUBROUTINE DRPOLY (OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK)
+      SUBROUTINE DRPOLY(OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK)
       IMPLICIT NONE
       INTEGER :: IDEG
       INTEGER, INTENT(INOUT) :: NUM
@@ -26847,14 +26847,14 @@ C     PARTITION THE WORKSPACE DWK AND OBTAIN THE ZEROS
       QK = K  + IDP1
       SVK = QK  + IDP1
       TMP = SVK + IDP1
-      CALL DRPLY1 (OP,IDEG,IDP1,ZEROR,ZEROI,DWK(P),DWK(QP),DWK(K),
+      CALL DRPLY1(OP,IDEG,IDP1,ZEROR,ZEROI,DWK(P),DWK(QP),DWK(K),
      *             DWK(QK),DWK(SVK),DWK(TMP),WK,NUM)
       RETURN
 C     ERROR RETURN
    10 NUM = -1
       END SUBROUTINE DRPOLY
 
-      SUBROUTINE DRPLY1 (OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,
+      SUBROUTINE DRPLY1(OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,
      *                   TEMP,PT,NUM)
       IMPLICIT NONE
       INTEGER :: IDEG, IDP1, NUM
@@ -27450,7 +27450,7 @@ C     USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3
       END DO
       END SUBROUTINE NEXTK
 
-      SUBROUTINE NEWEST (TYPE, UU, VV, NN, P, K)
+      SUBROUTINE NEWEST(TYPE, UU, VV, NN, P, K)
       IMPLICIT NONE
       INTEGER :: NN
       INTEGER :: TYPE
@@ -27490,7 +27490,7 @@ C     IF TYPE=3 THE QUADRATIC IS ZEROED
       VV = 0.D0
       END SUBROUTINE NEWEST
 
-      SUBROUTINE QUADSD (NN, U, V, P, Q, A, B)
+      SUBROUTINE QUADSD(NN, U, V, P, Q, A, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
       DOUBLE PRECISION, INTENT(IN) :: P(NN)
@@ -27559,7 +27559,7 @@ C     COMPLEX CONJUGATE ZEROS
       LI = -SI
       END SUBROUTINE QUADPL
 
-      SUBROUTINE DCPOLY (OPR,OPI,IDEG,ZEROR,ZEROI,NUM,WK)
+      SUBROUTINE DCPOLY(OPR,OPI,IDEG,ZEROR,ZEROI,NUM,WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: NUM
       INTEGER :: IDEG
@@ -27602,7 +27602,7 @@ C     PARTITION THE WORKSPACE AND OBTAIN THE ZEROS
       QHI = QHR + IDP1
       SHR = QHI + IDP1
       SHI = SHR + IDP1
-      CALL DCPLY1 (OPR,OPI,IDEG,IDP1,ZEROR,ZEROI,WK(PR),WK(PI),
+      CALL DCPLY1(OPR,OPI,IDEG,IDP1,ZEROR,ZEROI,WK(PR),WK(PI),
      *             WK(QPR),WK(QPI),WK(HR),WK(HI),WK(QHR),WK(QHI),
      *             WK(SHR),WK(SHI),NUM)
       RETURN
@@ -27610,7 +27610,7 @@ C     ERROR RETURN
    10 NUM = -1
       END SUBROUTINE DCPOLY
 
-      SUBROUTINE DCPLY1 (OPR,OPI,IDEG,IDP1,ZEROR,ZEROI,PR,PI,QPR,QPI,
+      SUBROUTINE DCPLY1(OPR,OPI,IDEG,IDP1,ZEROR,ZEROI,PR,PI,QPR,QPI,
      *                   HR,HI,QHR,QHI,SHR,SHI,NUM)
       IMPLICIT NONE
       INTEGER :: IDEG
@@ -27670,7 +27670,7 @@ C     MAKE A COPY OF THE COEFFICIENTS.
             SHR(I) = DCPABS(PR(I),PI(I))
          END DO
 C     SCALE THE POLYNOMIAL.
-         BND = SCALCP (NN,SHR,ETA,INFIN,SMALNO,BASE)
+         BND = SCALCP(NN,SHR,ETA,INFIN,SMALNO,BASE)
          IF (BND .EQ. 1.D0) GO TO 40
          DO I = 1,NN
             PR(I) = BND*PR(I)
@@ -28014,7 +28014,7 @@ C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
 C     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
 C            ESSENTIALLY ZERO.
 C     EVALUATE H(S)
-      CALL POLYEV (N,SR,SI,HR,HI,QHR,QHI,HVR,HVI)
+      CALL POLYEV(N,SR,SI,HR,HI,QHR,QHI,HVR,HVI)
       BOOL = DCPABS(HVR,HVI) .LE. 10.D0*ARE*DCPABS(HR(N),HI(N))
       IF (BOOL) GO TO 10
          CALL CDIVID(-PVR,-PVI,HVR,HVI,TR,TI)
@@ -28096,7 +28096,7 @@ C     ARE,MRE - ERROR BOUNDS ON COMPLEX ADDITION AND MULTIPLICATION
       ERREV = E*(ARE + MRE) - MP*MRE
       END FUNCTION ERREV
 
-      SUBROUTINE RBND (N, C, W, ABSERR, RELERR, KLUST, KER)
+      SUBROUTINE RBND(N, C, W, ABSERR, RELERR, KLUST, KER)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KER
       INTEGER, INTENT(IN) :: N
@@ -28237,7 +28237,7 @@ C             ERROR RETURN
   210 KER = 2
       END SUBROUTINE RBND
 
-      SUBROUTINE CBND (N, C, W, ABSERR, RELERR, KLUST, KER)
+      SUBROUTINE CBND(N, C, W, ABSERR, RELERR, KLUST, KER)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KER
       INTEGER, INTENT(IN) :: N
@@ -28405,11 +28405,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,7)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         SY(I) = SX(I)
       END DO
-      IF( N .LT. 7 ) RETURN
+      IF(N .LT. 7) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,7
         SY(I) = SX(I)
@@ -28450,11 +28450,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,7)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DY(I) = DX(I)
       END DO
-      IF( N .LT. 7 ) RETURN
+      IF(N .LT. 7) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,7
         DY(I) = DX(I)
@@ -28497,7 +28497,7 @@ C        CODE FOR BOTH INCREMENTS EQUAL TO 1
       END DO
       END SUBROUTINE CCOPY
 
-      SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
+      SUBROUTINE ISWAP(N,IX,INCX,IY,INCY)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
       INTEGER, INTENT(INOUT) :: IX(*), IY(*)
@@ -28523,8 +28523,8 @@ C***AUTHOR  VANDEVENDER, W. (SNLA), 1985
       IF (N .LE. 0) RETURN
       IF (INCX .NE. INCY) GO TO 5
       NSWC_AI_I4 = INCX - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 5
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      IF (NSWC_AI_I4 .LT. 0) GO TO 5
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 20
       GO TO 60
     5 CONTINUE
 C       CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS.
@@ -28572,7 +28572,7 @@ C     CODE FOR EQUAL, POSITIVE, NONUNIT INCREMENTS.
       END DO
       END SUBROUTINE ISWAP
 
-      SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
+      SUBROUTINE  SSWAP(N,SX,INCX,SY,INCY)
       IMPLICIT NONE
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -28602,13 +28602,13 @@ C         TO 1
 C       CODE FOR BOTH INCREMENTS EQUAL TO 1
 C       CLEAN-UP LOOP
    20 M = MOD(N,3)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         STEMP = SX(I)
         SX(I) = SY(I)
         SY(I) = STEMP
       END DO
-      IF( N .LT. 3 ) RETURN
+      IF(N .LT. 3) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,3
         STEMP = SX(I)
@@ -28623,7 +28623,7 @@ C       CLEAN-UP LOOP
       END DO
       END SUBROUTINE SSWAP
 
-      SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
+      SUBROUTINE  DSWAP(N,DX,INCX,DY,INCY)
       IMPLICIT NONE
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
@@ -28653,13 +28653,13 @@ C         TO 1
 C       CODE FOR BOTH INCREMENTS EQUAL TO 1
 C       CLEAN-UP LOOP
    20 M = MOD(N,3)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DTEMP = DX(I)
         DX(I) = DY(I)
         DY(I) = DTEMP
       END DO
-      IF( N .LT. 3 ) RETURN
+      IF(N .LT. 3) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,3
         DTEMP = DX(I)
@@ -28674,7 +28674,7 @@ C       CLEAN-UP LOOP
       END DO
       END SUBROUTINE DSWAP
 
-      SUBROUTINE  CSWAP (N,CX,INCX,CY,INCY)
+      SUBROUTINE  CSWAP(N,CX,INCX,CY,INCY)
       IMPLICIT NONE
 C     INTERCHANGES TWO VECTORS.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -28708,7 +28708,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       END DO
       END SUBROUTINE CSWAP
 
-      SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
+      SUBROUTINE  SROT(N,SX,INCX,SY,INCY,C,S)
       IMPLICIT NONE
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -28743,7 +28743,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       END DO
       END SUBROUTINE SROT
 
-      SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
+      SUBROUTINE  DROT(N,DX,INCX,DY,INCY,C,S)
       IMPLICIT NONE
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -28778,7 +28778,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       END DO
       END SUBROUTINE DROT
 
-      SUBROUTINE  CSROT (N,CX,INCX,CY,INCY,C,S)
+      SUBROUTINE  CSROT(N,CX,INCX,CY,INCY,C,S)
       IMPLICIT NONE
 C     APPLIES A PLANE ROTATION, WHERE THE COS AND SIN (C AND S) ARE REAL
 C     AND THE VECTORS CX AND CY ARE COMPLEX.
@@ -28814,7 +28814,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       END DO
       END SUBROUTINE CSROT
 
-      SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
+      SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: SD1, SD2, SPARAM(5), SX1
       REAL, INTENT(IN) :: SY1
@@ -28924,8 +28924,8 @@ C     PROCEDURE..SCALE-CHECK
           GO TO 200
   220 CONTINUE
           NSWC_AI_R4 = SFLAG
-          IF ( NSWC_AI_R4 .LT. 0 ) GO TO 250
-          IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 230
+          IF (NSWC_AI_R4 .LT. 0) GO TO 250
+          IF (NSWC_AI_R4 .EQ. 0) GO TO 230
           GO TO 240
   230     CONTINUE
                SPARAM(3)=SH21
@@ -28944,7 +28944,7 @@ C     PROCEDURE..SCALE-CHECK
           SPARAM(1)=SFLAG
       END SUBROUTINE SROTMG
 
-      SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
+      SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
       REAL :: SPARAM(5)
@@ -28968,8 +28968,8 @@ C       (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
           IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
                NSTEPS=N*INCX
                NSWC_AI_R4 = SFLAG
-               IF ( NSWC_AI_R4 .LT. 0 ) GO TO 50
-               IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+               IF (NSWC_AI_R4 .LT. 0) GO TO 50
+               IF (NSWC_AI_R4 .EQ. 0) GO TO 10
                GO TO 30
    10          CONTINUE
                SH21=SPARAM(3)
@@ -29009,8 +29009,8 @@ C       (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
           IF(INCX .LT. 0) KX=1+(1-N)*INCX
           IF(INCY .LT. 0) KY=1+(1-N)*INCY
           NSWC_AI_R4 = SFLAG
-          IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
-          IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 80
+          IF (NSWC_AI_R4 .LT. 0) GO TO 120
+          IF (NSWC_AI_R4 .EQ. 0) GO TO 80
           GO TO 100
    80     CONTINUE
           SH21=SPARAM(3)
@@ -29052,7 +29052,7 @@ C       (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
   140     CONTINUE
           END SUBROUTINE SROTM
 
-      SUBROUTINE DROTMG (DD1,DD2,DX1,DY1,DPARAM)
+      SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
       IMPLICIT NONE
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 C     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
@@ -29169,8 +29169,8 @@ C     PROCEDURE..SCALE-CHECK
           GO TO 200
   220 CONTINUE
           NSWC_AI_R8 = DFLAG
-          IF ( NSWC_AI_R8 .LT. 0 ) GO TO 250
-          IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 230
+          IF (NSWC_AI_R8 .LT. 0) GO TO 250
+          IF (NSWC_AI_R8 .EQ. 0) GO TO 230
           GO TO 240
   230     CONTINUE
                DPARAM(3)=DH21
@@ -29189,7 +29189,7 @@ C     PROCEDURE..SCALE-CHECK
           DPARAM(1)=DFLAG
       END SUBROUTINE DROTMG
 
-      SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
+      SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
@@ -29216,8 +29216,8 @@ C       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
           IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
                NSTEPS=N*INCX
                NSWC_AI_R8 = DFLAG
-               IF ( NSWC_AI_R8 .LT. 0 ) GO TO 50
-               IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+               IF (NSWC_AI_R8 .LT. 0) GO TO 50
+               IF (NSWC_AI_R8 .EQ. 0) GO TO 10
                GO TO 30
    10          CONTINUE
                DH21=DPARAM(3)
@@ -29257,8 +29257,8 @@ C       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
           IF(INCX .LT. 0) KX=1+(1-N)*INCX
           IF(INCY .LT. 0) KY=1+(1-N)*INCY
           NSWC_AI_R8 = DFLAG
-          IF ( NSWC_AI_R8 .LT. 0 ) GO TO 120
-          IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 80
+          IF (NSWC_AI_R8 .LT. 0) GO TO 120
+          IF (NSWC_AI_R8 .EQ. 0) GO TO 80
           GO TO 100
    80     CONTINUE
           DH21=DPARAM(3)
@@ -29331,11 +29331,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,5)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         STEMP = STEMP + SX(I)*SY(I)
       END DO
-      IF( N .LT. 5 ) GO TO 60
+      IF(N .LT. 5) GO TO 60
    40 MP1 = M + 1
       DO I = MP1,N,5
         STEMP = STEMP + SX(I)*SY(I) + SX(I + 1)*SY(I + 1) +
@@ -29375,11 +29375,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,5)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DTEMP = DTEMP + DX(I)*DY(I)
       END DO
-      IF( N .LT. 5 ) GO TO 60
+      IF(N .LT. 5) GO TO 60
    40 MP1 = M + 1
       DO I = MP1,N,5
         DTEMP = DTEMP + DX(I)*DY(I) + DX(I + 1)*DY(I + 1) +
@@ -29480,11 +29480,11 @@ C        CODE FOR INCREMENT NOT EQUAL TO 1
 C        CODE FOR INCREMENT EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,5)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         SX(I) = SA*SX(I)
       END DO
-      IF( N .LT. 5 ) RETURN
+      IF(N .LT. 5) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,5
         SX(I) = SA*SX(I)
@@ -29518,11 +29518,11 @@ C        CODE FOR INCREMENT NOT EQUAL TO 1
 C        CODE FOR INCREMENT EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,5)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DX(I) = DA*DX(I)
       END DO
-      IF( N .LT. 5 ) RETURN
+      IF(N .LT. 5) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,5
         DX(I) = DA*DX(I)
@@ -29609,11 +29609,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,4)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         SY(I) = SY(I) + SA*SX(I)
       END DO
-      IF( N .LT. 4 ) RETURN
+      IF(N .LT. 4) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,4
         SY(I) = SY(I) + SA*SX(I)
@@ -29653,11 +29653,11 @@ C          NOT EQUAL TO 1
 C        CODE FOR BOTH INCREMENTS EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,4)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DY(I) = DY(I) + DA*DX(I)
       END DO
-      IF( N .LT. 4 ) RETURN
+      IF(N .LT. 4) RETURN
    40 MP1 = M + 1
       DO I = MP1,N,4
         DY(I) = DY(I) + DA*DX(I)
@@ -29679,7 +29679,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       INTEGER :: I
       INTEGER :: IX, IY
       IF(N.LE.0)RETURN
-      IF (ABS(REAL(CA)) + ABS(AIMAG(CA)) .EQ. 0.0 ) RETURN
+      IF (ABS(REAL(CA)) + ABS(AIMAG(CA)) .EQ. 0.0) RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
 C        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 C          NOT EQUAL TO 1
@@ -29725,11 +29725,11 @@ C        CODE FOR INCREMENT NOT EQUAL TO 1
 C        CODE FOR INCREMENT EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,6)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         STEMP = STEMP + ABS(SX(I))
       END DO
-      IF( N .LT. 6 ) GO TO 60
+      IF(N .LT. 6) GO TO 60
    40 MP1 = M + 1
       DO I = MP1,N,6
         STEMP = STEMP + ABS(SX(I)) + ABS(SX(I + 1)) + ABS(SX(I + 2))
@@ -29763,11 +29763,11 @@ C        CODE FOR INCREMENT NOT EQUAL TO 1
 C        CODE FOR INCREMENT EQUAL TO 1
 C        CLEAN-UP LOOP
    20 M = MOD(N,6)
-      IF( M .EQ. 0 ) GO TO 40
+      IF(M .EQ. 0) GO TO 40
       DO I = 1,M
         DTEMP = DTEMP + DABS(DX(I))
       END DO
-      IF( N .LT. 6 ) GO TO 60
+      IF(N .LT. 6) GO TO 60
    40 MP1 = M + 1
       DO I = MP1,N,6
         DTEMP = DTEMP + DABS(DX(I)) + DABS(DX(I + 1)) + DABS(DX(I + 2))
@@ -29804,7 +29804,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       SCASUM = STEMP
       END FUNCTION SCASUM
 
-      REAL FUNCTION SNRM2 ( N, SX, INCX)
+      REAL FUNCTION SNRM2(N, SX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       REAL, INTENT(IN) :: SX(*)
@@ -29853,22 +29853,22 @@ C     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
       NN = N * INCX
 C                                                 BEGIN MAIN LOOP
       I = 1
-   20    SELECT CASE ( NEXT )
-         CASE ( 30 )
+   20    SELECT CASE (NEXT)
+         CASE (30)
          GO TO 30
-         CASE ( 50 )
+         CASE (50)
          GO TO 50
-         CASE ( 70 )
+         CASE (70)
          GO TO 70
-         CASE ( 110 )
+         CASE (110)
          GO TO 110
          END SELECT
-   30 IF( ABS(SX(I)) .GT. CUTLO) GO TO 85
+   30 IF(ABS(SX(I)) .GT. CUTLO) GO TO 85
       NEXT = 50
       XMAX = ZERO
 C                        PHASE 1.  SUM IS ZERO
-   50 IF( SX(I) .EQ. ZERO) GO TO 200
-      IF( ABS(SX(I)) .GT. CUTLO) GO TO 85
+   50 IF(SX(I) .EQ. ZERO) GO TO 200
+      IF(ABS(SX(I)) .GT. CUTLO) GO TO 85
 C                                PREPARE FOR PHASE 2.
       NEXT = 70
       GO TO 105
@@ -29880,10 +29880,10 @@ C                                PREPARE FOR PHASE 4.
       GO TO 115
 C                   PHASE 2.  SUM IS SMALL.
 C                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
-   70 IF( ABS(SX(I)) .GT. CUTLO ) GO TO 75
+   70 IF(ABS(SX(I)) .GT. CUTLO) GO TO 75
 C                     COMMON CODE FOR PHASES 2 AND 4.
 C                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
-  110 IF( ABS(SX(I)) .LE. XMAX ) GO TO 115
+  110 IF(ABS(SX(I)) .LE. XMAX) GO TO 115
          SUM = ONE + SUM * (XMAX / SX(I))**2
          XMAX = ABS(SX(I))
          GO TO 200
@@ -29893,24 +29893,24 @@ C                  PREPARE FOR PHASE 3.
    75 SUM = (SUM * XMAX) * XMAX
 C     FOR REAL OR D.P. SET HITEST = CUTHI/N
 C     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
-   85 HITEST = CUTHI/FLOAT( N )
+   85 HITEST = CUTHI/FLOAT(N)
 C                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
       DO J =I,NN,INCX
       IF(ABS(SX(J)) .GE. HITEST) GO TO 100
          SUM = SUM + SX(J)**2
       END DO
-      SNRM2 = SQRT( SUM )
+      SNRM2 = SQRT(SUM)
       GO TO 300
   200 CONTINUE
       I = I + INCX
-      IF ( I .LE. NN ) GO TO 20
+      IF (I .LE. NN) GO TO 20
 C              END OF MAIN LOOP.
 C              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
       SNRM2 = XMAX * SQRT(SUM)
   300 CONTINUE
       END FUNCTION SNRM2
 
-      DOUBLE PRECISION FUNCTION DNRM2 ( N, DX, INCX)
+      DOUBLE PRECISION FUNCTION DNRM2(N, DX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
@@ -29959,22 +29959,22 @@ C     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
       NN = N * INCX
 C                                                 BEGIN MAIN LOOP
       I = 1
-   20    SELECT CASE ( NEXT )
-         CASE ( 30 )
+   20    SELECT CASE (NEXT)
+         CASE (30)
          GO TO 30
-         CASE ( 50 )
+         CASE (50)
          GO TO 50
-         CASE ( 70 )
+         CASE (70)
          GO TO 70
-         CASE ( 110 )
+         CASE (110)
          GO TO 110
          END SELECT
-   30 IF( DABS(DX(I)) .GT. CUTLO) GO TO 85
+   30 IF(DABS(DX(I)) .GT. CUTLO) GO TO 85
       NEXT = 50
       XMAX = ZERO
 C                        PHASE 1.  SUM IS ZERO
-   50 IF( DX(I) .EQ. ZERO) GO TO 200
-      IF( DABS(DX(I)) .GT. CUTLO) GO TO 85
+   50 IF(DX(I) .EQ. ZERO) GO TO 200
+      IF(DABS(DX(I)) .GT. CUTLO) GO TO 85
 C                                PREPARE FOR PHASE 2.
       NEXT = 70
       GO TO 105
@@ -29986,10 +29986,10 @@ C                                PREPARE FOR PHASE 4.
       GO TO 115
 C                   PHASE 2.  SUM IS SMALL.
 C                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
-   70 IF( DABS(DX(I)) .GT. CUTLO ) GO TO 75
+   70 IF(DABS(DX(I)) .GT. CUTLO) GO TO 75
 C                     COMMON CODE FOR PHASES 2 AND 4.
 C                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
-  110 IF( DABS(DX(I)) .LE. XMAX ) GO TO 115
+  110 IF(DABS(DX(I)) .LE. XMAX) GO TO 115
          SUM = ONE + SUM * (XMAX / DX(I))**2
          XMAX = DABS(DX(I))
          GO TO 200
@@ -29999,24 +29999,24 @@ C                  PREPARE FOR PHASE 3.
    75 SUM = (SUM * XMAX) * XMAX
 C     FOR REAL OR D.P. SET HITEST = CUTHI/N
 C     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
-   85 HITEST = CUTHI/FLOAT( N )
+   85 HITEST = CUTHI/FLOAT(N)
 C                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
       DO J =I,NN,INCX
       IF(DABS(DX(J)) .GE. HITEST) GO TO 100
          SUM = SUM + DX(J)**2
       END DO
-      DNRM2 = DSQRT( SUM )
+      DNRM2 = DSQRT(SUM)
       GO TO 300
   200 CONTINUE
       I = I + INCX
-      IF ( I .LE. NN ) GO TO 20
+      IF (I .LE. NN) GO TO 20
 C              END OF MAIN LOOP.
 C              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
       DNRM2 = XMAX * DSQRT(SUM)
   300 CONTINUE
       END FUNCTION DNRM2
 
-      REAL FUNCTION SCNRM2( N, CX, INCX)
+      REAL FUNCTION SCNRM2(N, CX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       COMPLEX, INTENT(IN) :: CX(*)
@@ -30068,24 +30068,24 @@ C                                                 BEGIN MAIN LOOP
       DO I=1,NN,INCX
          ABSX = ABS(REAL(CX(I)))
          IMAG = .FALSE.
-         SELECT CASE ( NEXT )
-         CASE ( 30 )
+         SELECT CASE (NEXT)
+         CASE (30)
          GO TO 30
-         CASE ( 50 )
+         CASE (50)
          GO TO 50
-         CASE ( 70 )
+         CASE (70)
          GO TO 70
-         CASE ( 90 )
+         CASE (90)
          GO TO 90
-         CASE ( 110 )
+         CASE (110)
          GO TO 110
          END SELECT
-   30 IF( ABSX .GT. CUTLO) GO TO 85
+   30 IF(ABSX .GT. CUTLO) GO TO 85
       NEXT = 50
       SCALE = .FALSE.
 C                        PHASE 1.  SUM IS ZERO
-   50 IF( ABSX .EQ. ZERO) GO TO 200
-      IF( ABSX .GT. CUTLO) GO TO 85
+   50 IF(ABSX .EQ. ZERO) GO TO 200
+      IF(ABSX .GT. CUTLO) GO TO 85
 C                                PREPARE FOR PHASE 2.
       NEXT = 70
       GO TO 105
@@ -30097,10 +30097,10 @@ C                                PREPARE FOR PHASE 4.
       GO TO 115
 C                   PHASE 2.  SUM IS SMALL.
 C                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
-   70 IF( ABSX .GT. CUTLO ) GO TO 75
+   70 IF(ABSX .GT. CUTLO) GO TO 75
 C                     COMMON CODE FOR PHASES 2 AND 4.
 C                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
-  110 IF( ABSX .LE. XMAX ) GO TO 115
+  110 IF(ABSX .LE. XMAX) GO TO 115
          SUM = ONE + SUM * (XMAX / ABSX)**2
          XMAX = ABSX
          GO TO 200
@@ -30112,7 +30112,7 @@ C                  PREPARE FOR PHASE 3.
       SCALE = .FALSE.
 C     FOR REAL OR D.P. SET HITEST = CUTHI/N
 C     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
-      HITEST = CUTHI/FLOAT( N )
+      HITEST = CUTHI/FLOAT(N)
       HITEST = HITEST * 0.5
 C                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
    90 IF(ABSX .GE. HITEST) GO TO 100
@@ -30122,14 +30122,14 @@ C                  CONTROL SELECTION OF REAL AND IMAGINARY PARTS.
       IF(IMAG) GO TO 210
          ABSX = ABS(AIMAG(CX(I)))
          IMAG = .TRUE.
-      SELECT CASE ( NEXT )
-      CASE ( 50 )
+      SELECT CASE (NEXT)
+      CASE (50)
       GO TO 50
-      CASE ( 70 )
+      CASE (70)
       GO TO 70
-      CASE ( 90 )
+      CASE (90)
       GO TO 90
-      CASE ( 110 )
+      CASE (110)
       GO TO 110
       END SELECT
   210 CONTINUE
@@ -30152,7 +30152,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       INTEGER :: I
       INTEGER :: IX
       ISAMAX = 0
-      IF( N .LT. 1 ) RETURN
+      IF(N .LT. 1) RETURN
       ISAMAX = 1
       IF(N.EQ.1)RETURN
       IF(INCX.EQ.1)GO TO 20
@@ -30188,7 +30188,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       INTEGER :: I
       INTEGER :: IX
       IDAMAX = 0
-      IF( N .LT. 1 ) RETURN
+      IF(N .LT. 1) RETURN
       IDAMAX = 1
       IF(N.EQ.1)RETURN
       IF(INCX.EQ.1)GO TO 20
@@ -30227,7 +30227,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
       ICAMAX = 0
-      IF( N .LT. 1 ) RETURN
+      IF(N .LT. 1) RETURN
       ICAMAX = 1
       IF(N.EQ.1)RETURN
       IF(INCX.EQ.1)GO TO 20
@@ -30504,7 +30504,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       END DO
       END SUBROUTINE CTPOSE
 
-      SUBROUTINE TIP (A, N1, N2, MOVED, NWORK, NDIM)
+      SUBROUTINE TIP(A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
@@ -30621,7 +30621,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
   200 IF (N1.NE.N2) NDIM = 0
       END SUBROUTINE TIP
 
-      SUBROUTINE DTIP (A, N1, N2, MOVED, NWORK, NDIM)
+      SUBROUTINE DTIP(A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
@@ -30738,7 +30738,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
   200 IF (N1.NE.N2) NDIM = 0
       END SUBROUTINE DTIP
 
-      SUBROUTINE CTIP (A, N1, N2, MOVED, NWORK, NDIM)
+      SUBROUTINE CTIP(A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
@@ -30869,9 +30869,9 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       NPART = N
       IDIV = 2
    10 IQUOT = NPART/IDIV
-      IF ( ( NPART - IDIV * IQUOT ) .EQ. 0 ) GO TO 20
+      IF ((NPART - IDIV * IQUOT) .EQ. 0) GO TO 20
       GO TO 60
-   20 IF ( ( IDIV - IFCUR ) .LE. 0 ) GO TO 40
+   20 IF ((IDIV - IFCUR) .LE. 0) GO TO 40
       GO TO 30
    30 IP = IP + 1
       IFACT(IP) = IDIV
@@ -30883,17 +30883,17 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       NEXP(IP) = NEXP(IP) + 1
    50 NPART = IQUOT
       GO TO 10
-   60 IF ( ( IQUOT - IDIV ) .LE. 0 ) GO TO 100
+   60 IF ((IQUOT - IDIV) .LE. 0) GO TO 100
       GO TO 70
-   70 IF ( ( IDIV - 2 ) .LE. 0 ) GO TO 80
+   70 IF ((IDIV - 2) .LE. 0) GO TO 80
       GO TO 90
    80 IDIV = 3
       GO TO 10
    90 IDIV = IDIV + 2
       GO TO 10
-  100 IF ( ( NPART - 1 ) .LE. 0 ) GO TO 140
+  100 IF ((NPART - 1) .LE. 0) GO TO 140
       GO TO 110
-  110 IF ( ( NPART - IFCUR ) .LE. 0 ) GO TO 130
+  110 IF ((NPART - IFCUR) .LE. 0) GO TO 130
       GO TO 120
   120 IP = IP + 1
       IFACT(IP) = NPART
@@ -30918,7 +30918,7 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       END DO
       END SUBROUTINE CMADJ
 
-      SUBROUTINE CTRANS (NM, N, A)
+      SUBROUTINE CTRANS(NM, N, A)
       IMPLICIT NONE
 C     SUBROUTINE CTRANS FINDS THE COMPLEX CONJUGATE OF AN INPUT
 C     MATRIX.
@@ -30941,7 +30941,7 @@ C     A  CONTAINS ITS CONJUGATE TRANSPOSE.
       END DO
       END SUBROUTINE CTRANS
 
-      SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE MADD(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -30957,7 +30957,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MADD
 
-      SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE DMADD(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -30973,7 +30973,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DMADD
 
-      SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE CMADD(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -31001,7 +31001,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE SMADD
 
-      SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE MSUBT(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -31017,7 +31017,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MSUBT
 
-      SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE DMSUBT(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -31033,7 +31033,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DMSUBT
 
-      SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
+      SUBROUTINE CMSUBT(M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
@@ -31061,7 +31061,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE SMSUBT
 
-      SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
+      SUBROUTINE MTMS(M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,L)
@@ -31082,7 +31082,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MTMS
 
-      SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
+      SUBROUTINE DMTMS(M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
@@ -31103,7 +31103,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DMTMS
 
-      SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
+      SUBROUTINE CMTMS(M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
@@ -31124,7 +31124,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE CMTMS
 
-      SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      SUBROUTINE MPROD(M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
@@ -31182,7 +31182,7 @@ C     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
       END DO
       END SUBROUTINE MPROD
 
-      LOGICAL FUNCTION RLOC (X, Y)
+      LOGICAL FUNCTION RLOC(X, Y)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X(*)
       REAL, INTENT(INOUT) :: Y(*)
@@ -31208,7 +31208,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       RLOC = .FALSE.
       END FUNCTION RLOC
 
-      SUBROUTINE YCHG (X, Y, YOLD)
+      SUBROUTINE YCHG(X, Y, YOLD)
       IMPLICIT NONE
       REAL, INTENT(IN) :: YOLD
       REAL, INTENT(IN) :: X(*)
@@ -31217,7 +31217,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       IF (YOLD .EQ. 0.0) Y(1) = 1.0
       END SUBROUTINE YCHG
 
-      SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      SUBROUTINE DMPROD(M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L),
@@ -31275,7 +31275,7 @@ C     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
       END DO
       END SUBROUTINE DMPROD
 
-      LOGICAL FUNCTION DLOC (X, Y)
+      LOGICAL FUNCTION DLOC(X, Y)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -31301,7 +31301,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       DLOC = .FALSE.
       END FUNCTION DLOC
 
-      SUBROUTINE DYCHG (X, Y, YOLD)
+      SUBROUTINE DYCHG(X, Y, YOLD)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X(*)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(*)
@@ -31310,7 +31310,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       IF (YOLD .EQ. 0.D0) Y(1) = 1.D0
       END SUBROUTINE DYCHG
 
-      SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      SUBROUTINE CMPROD(M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       COMPLEX, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
@@ -31367,7 +31367,7 @@ C     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
       END DO
       END SUBROUTINE CMPROD
 
-      LOGICAL FUNCTION CLOC (X, Y)
+      LOGICAL FUNCTION CLOC(X, Y)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -31393,7 +31393,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       CLOC = .FALSE.
       END FUNCTION CLOC
 
-      SUBROUTINE CYCHG (X, Y, YOLD)
+      SUBROUTINE CYCHG(X, Y, YOLD)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: X(*)
       COMPLEX, INTENT(INOUT) :: Y(*)
@@ -31568,7 +31568,7 @@ C        COMPUTE THE J-TH COLUMN OF C
       END DO
       END SUBROUTINE CKPROD
 
-      SUBROUTINE RNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
+      SUBROUTINE RNK(A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: M, MDA, N
@@ -31603,14 +31603,14 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       END DO
 C     FACTOR THE MATRIX A
       IF (M .LT. N) GO TO 40
-         CALL U11LS (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
+         CALL U11LS(A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *               WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
          RETURN
-   40 CALL U11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
+   40 CALL U11US(A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *            WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
       END SUBROUTINE RNK
 
-      SUBROUTINE DRNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
+      SUBROUTINE DRNK(A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: M, MDA, N
@@ -31647,10 +31647,10 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       END DO
 C     FACTOR THE MATRIX A
       IF (M .LT. N) GO TO 40
-         CALL DU11LS (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
+         CALL DU11LS(A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *                WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
          RETURN
-   40 CALL DU11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
+   40 CALL DU11US(A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *             WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
       END SUBROUTINE DRNK
 
@@ -32027,7 +32027,7 @@ C                        INPUT ERROR
   320 IERR = -1
       END SUBROUTINE KROUT
 
-      SUBROUTINE DEC (N, NDIM, A, IP, IER)
+      SUBROUTINE DEC(N, NDIM, A, IP, IER)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
@@ -32100,7 +32100,7 @@ C  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
       IP(N) = 0
       END SUBROUTINE DEC
 
-      SUBROUTINE SOL (N, NDIM, A, B, IP)
+      SUBROUTINE SOL(N, NDIM, A, B, IP)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C SOLUTION OF LINEAR SYSTEM, A*X = B .
@@ -32147,7 +32147,7 @@ C  BACK SOLVE. ---------------------------------------------------------
  50   B(1) = B(1)/A(1,1)
       END SUBROUTINE SOL
 
-      SUBROUTINE NPIVOT (N, M, A, KA, B, KB, D, IERR)
+      SUBROUTINE NPIVOT(N, M, A, KA, B, KB, D, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
@@ -32195,7 +32195,7 @@ C     REDUCE THE NON-PIVOT ROWS
       END DO
       END SUBROUTINE NPIVOT
 
-      SUBROUTINE SLV (N, M, A, KA, B, KB, IERR)
+      SUBROUTINE SLV(N, M, A, KA, B, KB, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
@@ -32280,7 +32280,7 @@ C     ERROR RETURN
  220  IERR = N
       END SUBROUTINE SLV
 
-      SUBROUTINE DPSLV (N, M, A, KA, B, KB, IERR)
+      SUBROUTINE DPSLV(N, M, A, KA, B, KB, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
@@ -32365,7 +32365,7 @@ C     ERROR RETURN
  220  IERR = N
       END SUBROUTINE DPSLV
 
-      SUBROUTINE MSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
+      SUBROUTINE MSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
@@ -32382,26 +32382,26 @@ C     AND SOLVING REAL EQUATIONS
 C-----------------------------------------------------------------------
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
       IERR = 0
-      CALL SGECO (A, KA, N, IPVT, RCOND, WK)
+      CALL SGECO(A, KA, N, IPVT, RCOND, WK)
       T = 1.0 + RCOND
       IF (T .EQ. 1.0) GO TO 30
 C                  SOLUTION OF THE EQUATION AX=B
       IF (M .LT. 1) GO TO 20
       ONEJ = 1
       DO J = 1,M
-         CALL SGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL SGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C             CALCULATION OF DET AND THE INVERSE OF A
    20 JOB = 10
       IF (MO .EQ. 0) JOB = 11
-      CALL SGEDI (A, KA, N, IPVT, DET, WK, JOB)
+      CALL SGEDI(A, KA, N, IPVT, DET, WK, JOB)
       RETURN
 C                  THE PROBLEM CANNOT BE SOLVED
    30 IERR = 1
       END SUBROUTINE MSLV
 
-      SUBROUTINE MSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
+      SUBROUTINE MSLV1(MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
@@ -32418,17 +32418,17 @@ C-----------------------------------------------------------------------
       IF (M .LE. 0) GO TO 10
       IF (KB .LT. N) GO TO 40
 C                      MATRIX FACTORIZATION
-   10 CALL SGEFA (A, KA, N, IPVT, IERR)
+   10 CALL SGEFA(A, KA, N, IPVT, IERR)
       IF (IERR .NE. 0) RETURN
 C                  SOLUTION OF THE EQUATION AX=B
       IF (M .LE. 0) GO TO 30
       ONEJ = 1
       DO J = 1,M
-         CALL SGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL SGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C                 CALCULATION OF THE INVERSE OF A
-   30 IF (MO .EQ. 0) CALL SGEDI (A, KA, N, IPVT, DET, WK, 1)
+   30 IF (MO .EQ. 0) CALL SGEDI(A, KA, N, IPVT, DET, WK, 1)
       RETURN
 C                          ERROR RETURN
    40 IERR = -1
@@ -32933,7 +32933,7 @@ C     COMPUTE DETERMINANT
             IF (IPVT(I) .NE. I) DET(1) = -DET(1)
             DET(1) = A(I,I)*DET(1)
 C        ...EXIT
-            IF ( DET ( 1 ) .EQ. 0.0E0 ) EXIT
+            IF (DET(1) .EQ. 0.0E0) EXIT
    10       IF (ABS(DET(1)) .GE. 1.0E0) GO TO 20
                DET(1) = TEN*DET(1)
                DET(2) = DET(2) - 1.0E0
@@ -32982,7 +32982,7 @@ C        FORM INVERSE(U)*INVERSE(L)
   150 CONTINUE
       END SUBROUTINE SGEDI
 
-      SUBROUTINE DMSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
+      SUBROUTINE DMSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
@@ -32999,26 +32999,26 @@ C     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
 C-----------------------------------------------------------------------
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
       IERR = 0
-      CALL DGECO (A, KA, N, IPVT, RCOND, WK)
+      CALL DGECO(A, KA, N, IPVT, RCOND, WK)
       T = 1.D0 + RCOND
       IF (T .EQ. 1.D0) GO TO 30
 C                  SOLUTION OF THE EQUATION AX=B
       IF (M .LT. 1) GO TO 20
       ONEJ = 1
       DO J = 1,M
-         CALL DGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL DGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C             CALCULATION OF DET AND THE INVERSE OF A
    20 JOB = 10
       IF (MO .EQ. 0) JOB = 11
-      CALL DGEDI (A, KA, N, IPVT, DET, WK, JOB)
+      CALL DGEDI(A, KA, N, IPVT, DET, WK, JOB)
       RETURN
 C                  THE PROBLEM CANNOT BE SOLVED
    30 IERR = 1
       END SUBROUTINE DMSLV
 
-      SUBROUTINE DMSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
+      SUBROUTINE DMSLV1(MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
@@ -33035,17 +33035,17 @@ C-----------------------------------------------------------------------
       IF (M .LE. 0) GO TO 10
       IF (KB .LT. N) GO TO 40
 C                      MATRIX FACTORIZATION
-   10 CALL DGEFA (A, KA, N, IPVT, IERR)
+   10 CALL DGEFA(A, KA, N, IPVT, IERR)
       IF (IERR .NE. 0) RETURN
 C                  SOLUTION OF THE EQUATION AX=B
       IF (M .LE. 0) GO TO 30
       ONEJ = 1
       DO J = 1,M
-         CALL DGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL DGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C                 CALCULATION OF THE INVERSE OF A
-   30 IF (MO .EQ. 0) CALL DGEDI (A, KA, N, IPVT, DET, WK, 1)
+   30 IF (MO .EQ. 0) CALL DGEDI(A, KA, N, IPVT, DET, WK, 1)
       RETURN
 C                          ERROR RETURN
    40 IERR = -1
@@ -33438,7 +33438,7 @@ C     COMPUTE DETERMINANT
             IF (IPVT(I) .NE. I) DET(1) = -DET(1)
             DET(1) = A(I,I)*DET(1)
 C        ...EXIT
-            IF ( DET ( 1 ) .EQ. 0.0D0 ) EXIT
+            IF (DET(1) .EQ. 0.0D0) EXIT
    10       IF (DABS(DET(1)) .GE. 1.0D0) GO TO 20
                DET(1) = TEN*DET(1)
                DET(2) = DET(2) - 1.0D0
@@ -34339,7 +34339,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
    10 CALL SOLBT(M, N, A, B, C, X, IP)
       END SUBROUTINE BTSLV
 
-      SUBROUTINE DECBT (M, N, A, B, C, IP, IER)
+      SUBROUTINE DECBT(M, N, A, B, C, IP, IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
@@ -34390,12 +34390,12 @@ C-----------------------------------------------------------------------
       NM1 = N - 1
       NM2 = N - 2
 C PROCESS THE FIRST BLOCK-ROW. -----------------------------------------
-      CALL DEC (M, M, A, IP, IER)
+      CALL DEC(M, M, A, IP, IER)
       K = 1
       IF (IER .NE. 0) GO TO 200
       DO J = 1,M
-        CALL SOL (M, M, A, B(1,J,1), IP)
-        CALL SOL (M, M, A, C(1,J,1), IP)
+        CALL SOL(M, M, A, B(1,J,1), IP)
+        CALL SOL(M, M, A, C(1,J,1), IP)
         END DO
 C ADJUST B(*,*,2). -----------------------------------------------------
       DO J = 1,M
@@ -34419,10 +34419,10 @@ C MAIN LOOP.  PROCESS BLOCK-ROWS 2 TO N-1. -----------------------------
             A(I,J,K) = A(I,J,K) - DP
             END DO
           END DO
-        CALL DEC (M, M, A(1,1,K), IP(1,K), IER)
+        CALL DEC(M, M, A(1,1,K), IP(1,K), IER)
         IF (IER .NE. 0) GO TO 200
         DO J = 1,M
-          CALL SOL (M, M, A(1,1,K), B(1,J,K), IP(1,K))
+          CALL SOL(M, M, A(1,1,K), B(1,J,K), IP(1,K))
         END DO
         END DO
 C PROCESS LAST BLOCK-ROW AND RETURN. -----------------------------------
@@ -34444,7 +34444,7 @@ C PROCESS LAST BLOCK-ROW AND RETURN. -----------------------------------
           A(I,J,N) = A(I,J,N) - DP
           END DO
         END DO
-      CALL DEC (M, M, A(1,1,N), IP(1,N), IER)
+      CALL DEC(M, M, A(1,1,N), IP(1,N), IER)
       K = N
       IF (IER .NE. 0) GO TO 200
       RETURN
@@ -34455,7 +34455,7 @@ C ERROR RETURNS. -------------------------------------------------------
 C-----------------------  END OF SUBROUTINE DECBT  ---------------------
       END SUBROUTINE DECBT
 
-      SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
+      SUBROUTINE SOLBT(M, N, A, B, C, Y, IP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       INTEGER :: N, IP(M,N)
@@ -34486,7 +34486,7 @@ C-----------------------------------------------------------------------
       NM1 = N - 1
       NM2 = N - 2
 C FORWARD SOLUTION SWEEP. ----------------------------------------------
-      CALL SOL (M, M, A, Y, IP)
+      CALL SOL(M, M, A, Y, IP)
       DO K = 2,NM1
         KM1 = K - 1
         DO I = 1,M
@@ -34496,7 +34496,7 @@ C FORWARD SOLUTION SWEEP. ----------------------------------------------
           END DO
           Y(I,K) = Y(I,K) - DP
           END DO
-        CALL SOL (M, M, A(1,1,K), Y(1,K), IP(1,K))
+        CALL SOL(M, M, A(1,1,K), Y(1,K), IP(1,K))
         END DO
       DO I = 1,M
         DP = 0.
@@ -34505,7 +34505,7 @@ C FORWARD SOLUTION SWEEP. ----------------------------------------------
         END DO
         Y(I,N) = Y(I,N) - DP
         END DO
-      CALL SOL (M, M, A(1,1,N), Y(1,N), IP(1,N))
+      CALL SOL(M, M, A(1,1,N), Y(1,N), IP(1,N))
 C BACKWARD SOLUTION SWEEP. ---------------------------------------------
       DO KB = 1,NM1
         K = N - KB
@@ -36220,7 +36220,7 @@ C           SWAP
   270 CONTINUE
       END SUBROUTINE DSPDI
 
-      SUBROUTINE PCHOL (MO,N,M,A,B,KB,IERR)
+      SUBROUTINE PCHOL(MO,N,M,A,B,KB,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
@@ -36231,17 +36231,17 @@ C           SWAP
 C     -----------------
 C     -----------------
 C              MATRIX FACTORIZATION
-      CALL SPPFA (A,N,IERR)
+      CALL SPPFA(A,N,IERR)
       IF (IERR .NE. 0) RETURN
 C          SOLUTION OF THE EQUATION AX=B
       IF (M .LT. 1) GO TO 20
       ONEJ = 1
       DO J = 1,M
-         CALL SPPSL (A,N,B(ONEJ))
+         CALL SPPSL(A,N,B(ONEJ))
       ONEJ = ONEJ + KB
       END DO
 C         COMPUTATION OF THE INVERSE OF A
-   20 IF (MO .EQ. 0) CALL SPPDI (A,N,D,1)
+   20 IF (MO .EQ. 0) CALL SPPDI(A,N,D,1)
       END SUBROUTINE PCHOL
 
       SUBROUTINE SPPFA(AP,N,INFO)
@@ -36417,7 +36417,7 @@ C     COMPUTE DETERMINANT
             II = II + I
             DET(1) = AP(II)**2*DET(1)
 C        ...EXIT
-            IF ( DET ( 1 ) .EQ. 0.0E0 ) EXIT
+            IF (DET(1) .EQ. 0.0E0) EXIT
    10       IF (DET(1) .GE. 1.0E0) GO TO 20
                DET(1) = S*DET(1)
                DET(2) = DET(2) - 1.0E0
@@ -36474,7 +36474,7 @@ C        FORM  INVERSE(R) * TRANS(INVERSE(R))
   140 CONTINUE
       END SUBROUTINE SPPDI
 
-      SUBROUTINE DPCHOL (MO,N,M,A,B,KB,IERR)
+      SUBROUTINE DPCHOL(MO,N,M,A,B,KB,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
@@ -36485,17 +36485,17 @@ C        FORM  INVERSE(R) * TRANS(INVERSE(R))
 C     -----------------
 C     -----------------
 C              MATRIX FACTORIZATION
-      CALL DPPFA (A,N,IERR)
+      CALL DPPFA(A,N,IERR)
       IF (IERR .NE. 0) RETURN
 C          SOLUTION OF THE EQUATION AX=B
       IF (M .LT. 1) GO TO 20
       ONEJ = 1
       DO J = 1,M
-         CALL DPPSL (A,N,B(ONEJ))
+         CALL DPPSL(A,N,B(ONEJ))
       ONEJ = ONEJ + KB
       END DO
 C         COMPUTATION OF THE INVERSE OF A
-   20 IF (MO .EQ. 0) CALL DPPDI (A,N,D,1)
+   20 IF (MO .EQ. 0) CALL DPPDI(A,N,D,1)
       END SUBROUTINE DPCHOL
 
       SUBROUTINE DPPFA(AP,N,INFO)
@@ -36671,7 +36671,7 @@ C     COMPUTE DETERMINANT
             II = II + I
             DET(1) = AP(II)**2*DET(1)
 C        ...EXIT
-            IF ( DET ( 1 ) .EQ. 0.0D0 ) EXIT
+            IF (DET(1) .EQ. 0.0D0) EXIT
    10       IF (DET(1) .GE. 1.0D0) GO TO 20
                DET(1) = S*DET(1)
                DET(2) = DET(2) - 1.0D0
@@ -36728,7 +36728,7 @@ C        FORM  INVERSE(R) * TRANS(INVERSE(R))
   140 CONTINUE
       END SUBROUTINE DPPDI
 
-      SUBROUTINE TOPLX (A, B, X, N, G, H, IERR)
+      SUBROUTINE TOPLX(A, B, X, N, G, H, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -36808,7 +36808,7 @@ C     ERROR RETURN
   100 IERR = 1
       END SUBROUTINE TOPLX
 
-      SUBROUTINE DTOPLX (A, B, X, N, G, H, IERR)
+      SUBROUTINE DTOPLX(A, B, X, N, G, H, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -36905,26 +36905,26 @@ C     AND SOLVING COMPLEX EQUATIONS
 C-----------------------------------------------------------------------
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
       IERR = 0
-      CALL CGECO (A, KA, N, IPVT, RCOND, WK)
+      CALL CGECO(A, KA, N, IPVT, RCOND, WK)
       T = 1.0 + RCOND
       IF (T .EQ. 1.0) GO TO 30
 C                  SOLUTION OF THE EQUATION AX=B
       IF (M .LT. 1) GO TO 20
       ONEJ = 1
       DO J = 1,M
-         CALL CGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL CGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C             CALCULATION OF DET AND THE INVERSE OF A
    20 JOB = 10
       IF (MO .EQ. 0) JOB = 11
-      CALL CGEDI (A, KA, N, IPVT, DET, WK, JOB)
+      CALL CGEDI(A, KA, N, IPVT, DET, WK, JOB)
       RETURN
 C                  THE PROBLEM CANNOT BE SOLVED
    30 IERR = 1
       END SUBROUTINE CMSLV
 
-      SUBROUTINE CMSLV1 (MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
+      SUBROUTINE CMSLV1(MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO
@@ -36942,17 +36942,17 @@ C-----------------------------------------------------------------------
       IF (M .LE. 0) GO TO 10
       IF (KB .LT. N) GO TO 40
 C                      MATRIX FACTORIZATION
-   10 CALL CGEFA (A, KA, N, IPVT, IERR)
+   10 CALL CGEFA(A, KA, N, IPVT, IERR)
       IF (IERR .NE. 0) RETURN
 C                 SOLUTION OF THE EQUATION AX = B
       IF (M .LE. 0) GO TO 30
       ONEJ = 1
       DO J = 1,M
-         CALL CGESL (A, KA, N, IPVT, B(ONEJ), 0)
+         CALL CGESL(A, KA, N, IPVT, B(ONEJ), 0)
          ONEJ = ONEJ + KB
       END DO
 C                 CALCULATION OF THE INVERSE OF A
-   30 IF (MO .EQ. 0) CALL CGEDI (A, KA, N, IPVT, D, WK, 1)
+   30 IF (MO .EQ. 0) CALL CGEDI(A, KA, N, IPVT, D, WK, 1)
       RETURN
 C                          ERROR RETURN
    40 IERR = -1
@@ -37469,7 +37469,7 @@ C     COMPUTE DETERMINANT
             IF (IPVT(I) .NE. I) DET(1) = -DET(1)
             DET(1) = A(I,I)*DET(1)
 C        ...EXIT
-            IF ( CABS1 ( DET ( 1 ) ) .EQ. 0.0E0 ) EXIT
+            IF (CABS1(DET(1)) .EQ. 0.0E0) EXIT
    10       IF (CABS1(DET(1)) .GE. 1.0E0) GO TO 20
                DET(1) = CMPLX(TEN,0.0E0)*DET(1)
                DET(2) = DET(2) - (1.0E0,0.0E0)
@@ -37518,7 +37518,7 @@ C        FORM INVERSE(U)*INVERSE(L)
   150 CONTINUE
       END SUBROUTINE CGEDI
 
-      SUBROUTINE DCMSLV (MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
+      SUBROUTINE DCMSLV(MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO
@@ -37534,19 +37534,19 @@ C-----------------------------------------------------------------------
       IF (M .LE. 0) GO TO 10
       IF (KB .LT. N) GO TO 30
 C                      MATRIX FACTORIZATION
-   10 CALL DCFACT (AR, AI, KA, N, IPVT, IERR)
+   10 CALL DCFACT(AR, AI, KA, N, IPVT, IERR)
       IF (IERR .NE. 0) RETURN
 C                 SOLUTION OF THE EQUATION AX = B
       IF (M .LE. 0) GO TO 20
-      CALL DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
+      CALL DCSOL(N, M, AR, AI, KA, BR, BI, KB, IPVT)
 C                 CALCULATION OF THE INVERSE OF A
-   20 IF (MO .EQ. 0) CALL DCMINV (AR, AI, KA, N, IPVT, WK)
+   20 IF (MO .EQ. 0) CALL DCMINV(AR, AI, KA, N, IPVT, WK)
       RETURN
 C                          ERROR RETURN
    30 IERR = -1
       END SUBROUTINE DCMSLV
 
-      SUBROUTINE DCFACT (AR, AI, KA, N, IPVT, IERR)
+      SUBROUTINE DCFACT(AR, AI, KA, N, IPVT, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
@@ -37632,7 +37632,7 @@ C                    K-TH PIVOT ELEMENT IS 0
   100 IERR = K
       END SUBROUTINE DCFACT
 
-      SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
+      SUBROUTINE DCSOL(N, M, AR, AI, KA, BR, BI, KB, IPVT)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: AR(KA,N), AI(KA,N)
@@ -37685,7 +37685,7 @@ C               FOR THE LAST N - 1 VARIABLES
       DO L = 1,NM1
          KM1 = N - L
          K = KM1 + 1
-         CALL CDIVID (1.D0, 0.D0, AR(K,K), AI(K,K), PR, PI)
+         CALL CDIVID(1.D0, 0.D0, AR(K,K), AI(K,K), PR, PI)
          DO J = 1,M
             TR = BR(K,J)
             TI = BI(K,J)
@@ -37699,7 +37699,7 @@ C               FOR THE LAST N - 1 VARIABLES
             END DO
          END DO
       END DO
-   50 CALL CDIVID (1.D0, 0.D0, AR(1,1), AI(1,1), PR, PI)
+   50 CALL CDIVID(1.D0, 0.D0, AR(1,1), AI(1,1), PR, PI)
       DO J = 1,M
          TR = BR(1,J)
          TI = BI(1,J)
@@ -37708,7 +37708,7 @@ C               FOR THE LAST N - 1 VARIABLES
       END DO
       END SUBROUTINE DCSOL
 
-      SUBROUTINE DCMINV (AR, AI, KA, N, IPVT, TEMP)
+      SUBROUTINE DCMINV(AR, AI, KA, N, IPVT, TEMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
@@ -37731,7 +37731,7 @@ C        TEMP = TEMPORARY STORAGE AREA FOR THE SUBROUTINE
 C     OUTPUT ...
 C        AR AND AI CONTAIN THE INVERSE OF THE MATRIX.
 C-----------------------------------------------------------------------
-      CALL CDIVID (1.D0, 0.D0, AR(N,N), AI(N,N), AR(N,N), AI(N,N))
+      CALL CDIVID(1.D0, 0.D0, AR(N,N), AI(N,N), AR(N,N), AI(N,N))
       IF (N .EQ. 1) RETURN
       NP1 = N + 1
       NM1 = N - 1
@@ -37739,7 +37739,7 @@ C                REPLACE U WITH THE INVERSE OF U
       DO NMI = 1,NM1
          I = N - NMI
          IP1 = I + 1
-         CALL CDIVID (1.D0, 0.D0, AR(I,I), AI(I,I), TR, TI)
+         CALL CDIVID(1.D0, 0.D0, AR(I,I), AI(I,I), TR, TI)
          DO JB = 1,NMI
             J = NP1 - JB
             SR = 0.D0
@@ -38046,7 +38046,7 @@ C           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
          DO LL = 1, M
             L = M - LL
 C        ...EXIT
-            IF ( L .EQ. 0 ) EXIT
+            IF (L .EQ. 0) EXIT
             TEST = ABS(S(L)) + ABS(S(L+1))
             ZTEST = TEST + ABS(E(L))
             IF (ZTEST .NE. TEST) GO TO 380
@@ -38064,7 +38064,7 @@ C        ......EXIT
             DO LLS = LP1, MP1
                LS = M - LLS + LP1
 C           ...EXIT
-               IF ( LS .EQ. L ) EXIT
+               IF (LS .EQ. L) EXIT
                TEST = 0.0E0
                IF (LS .NE. M) TEST = TEST + ABS(E(LS))
                IF (LS .NE. L + 1) TEST = TEST + ABS(E(LS-1))
@@ -38450,7 +38450,7 @@ C           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
          DO LL = 1, M
             L = M - LL
 C        ...EXIT
-            IF ( L .EQ. 0 ) EXIT
+            IF (L .EQ. 0) EXIT
             TEST = DABS(S(L)) + DABS(S(L+1))
             ZTEST = TEST + DABS(E(L))
             IF (ZTEST .NE. TEST) GO TO 380
@@ -38468,7 +38468,7 @@ C        ......EXIT
             DO LLS = LP1, MP1
                LS = M - LLS + LP1
 C           ...EXIT
-               IF ( LS .EQ. L ) EXIT
+               IF (LS .EQ. L) EXIT
                TEST = 0.0D0
                IF (LS .NE. M) TEST = TEST + DABS(E(LS))
                IF (LS .NE. L + 1) TEST = TEST + DABS(E(LS-1))
@@ -38845,7 +38845,7 @@ C     TRANSFORM S AND E SO THAT THEY ARE REAL.
             IF (WANTU) CALL CSCAL(N,R,U(1,I),1)
   360    CONTINUE
 C     ...EXIT
-         IF ( I .EQ. M ) EXIT
+         IF (I .EQ. M) EXIT
          IF (CABS1(E(I)) .EQ. 0.0E0) GO TO 370
             T = CMPLX(CABS(E(I)),0.0E0)
             R = T/E(I)
@@ -38879,7 +38879,7 @@ C           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
          DO LL = 1, M
             L = M - LL
 C        ...EXIT
-            IF ( L .EQ. 0 ) EXIT
+            IF (L .EQ. 0) EXIT
             TEST = CABS(S(L)) + CABS(S(L+1))
             ZTEST = TEST + CABS(E(L))
             IF (ZTEST .NE. TEST) GO TO 420
@@ -38897,7 +38897,7 @@ C        ......EXIT
             DO LLS = LP1, MP1
                LS = M - LLS + LP1
 C           ...EXIT
-               IF ( LS .EQ. L ) EXIT
+               IF (LS .EQ. L) EXIT
                TEST = 0.0E0
                IF (LS .NE. M) TEST = TEST + CABS(E(LS))
                IF (LS .NE. L + 1) TEST = TEST + CABS(E(LS-1))
@@ -39209,7 +39209,7 @@ C         FINAL DETERMINANT CALCULATION
       CDET = CDET*A(N,N)
       END FUNCTION CDET
 
-      SUBROUTINE ABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+      SUBROUTINE ABSLV(MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: M
@@ -39277,11 +39277,11 @@ C ----------------------------------------------------------------------
       IU = 1
       IV = M*M + 1
       IW = N*N + IV
-      CALL ABSLV1 (MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
+      CALL ABSLV1(MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
      *                C,NC,WK(IW),IERR)
       END SUBROUTINE ABSLV
 
-      SUBROUTINE ABSLV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+      SUBROUTINE ABSLV1(MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: M
@@ -39307,10 +39307,10 @@ C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
             A(J,I) = TEMP
          END DO
       END DO
-      CALL ORTHES (NA,M,1,M,A,WK)
-      CALL ORTRN1 (M,1,M,A,NA,U,NU,WK)
+      CALL ORTHES(NA,M,1,M,A,WK)
+      CALL ORTRN1(M,1,M,A,NA,U,NU,WK)
       IF (M .EQ. 1) GO TO 20
-      CALL SCHUR (M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
+      CALL SCHUR(M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
       IF (IERR .NE. 0) GO TO 200
    20 DO I = 1,M
          DO J = I,M
@@ -39321,10 +39321,10 @@ C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
       END DO
 C     IF REQUIRED, REDUCE B TO UPPER REAL SCHUR FORM
    35 IF (MO .NE. 0 .AND. MO .NE. 2) GO TO 45
-      CALL ORTHES (NB,N,1,N,B,WK)
-      CALL ORTRN1 (N,1,N,B,NB,V,NV,WK)
+      CALL ORTHES(NB,N,1,N,B,WK)
+      CALL ORTRN1(N,1,N,B,NB,V,NV,WK)
       IF (N .EQ. 1) GO TO 45
-      CALL SCHUR (N,1,N,B,NB,V,NV,WK(1),WK(N+1),IERR)
+      CALL SCHUR(N,1,N,B,NB,V,NV,WK(1),WK(N+1),IERR)
       IF (IERR .NE. 0) GO TO 210
 C     TRANSFORM C
    45 DO J = 1,N
@@ -39350,7 +39350,7 @@ C     TRANSFORM C
          END DO
       END DO
 C     SOLVE THE TRANSFORMED SYSTEM
-      CALL SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      CALL SHRSLV(A,B,C,M,N,NA,NB,NC,IERR)
       IF (IERR .NE. 0) GO TO 220
 C     TRANSFORM C BACK TO THE SOLUTION
       DO J = 1,N
@@ -39384,7 +39384,7 @@ C     ERROR RETURN
   220 IERR = 1
       END SUBROUTINE ABSLV1
 
-      SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+      SUBROUTINE SCHUR(N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NH, NZ, IGH
@@ -39464,12 +39464,12 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    40 DO LL = LOW,EN
         L = EN + LOW - LL
-        IF ( L .EQ. LOW ) EXIT
+        IF (L .EQ. LOW) EXIT
         S = ABS(H(L-1,L-1)) + ABS(H(L,L))
         IF (S .EQ. 0.0) S = NORM
         S1 = S
         S2 = S1 + ABS(H(L,L-1))
-        IF ( S1 .EQ. S2 ) EXIT
+        IF (S1 .EQ. S2) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -39504,10 +39504,10 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
         P = P/S
         Q = Q/S
         R = R/S
-        IF ( M .EQ. L ) EXIT
+        IF (M .EQ. L) EXIT
         S1 = ABS(P)*(ABS(H(M-1,M-1))+ABS(ZZ)+ABS(H(M+1,M+1)))
         S2 = S1 + ABS(H(M,M-1))*(ABS(Q) + ABS(R))
-        IF ( S1 .EQ. S2 ) EXIT
+        IF (S1 .EQ. S2) EXIT
       END DO
       MP2 = M + 2
       DO I = MP2,EN
@@ -39643,7 +39643,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       END DO
       END SUBROUTINE SCHUR
 
-      SUBROUTINE SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      SUBROUTINE SHRSLV(A,B,C,M,N,NA,NB,NC,IERR)
       IMPLICIT NONE
 C     ------------------------------------------------------------------
 C     SHRSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
@@ -39700,7 +39700,7 @@ C     ------------------------------------------------------------------
             T(2,2) = A(KK,KK) + B(L,L)
             P(1) = C(K,L)
             P(2) = C(KK,L)
-            CALL SLV (2, 1, T, 4, P, 4, IERR)
+            CALL SLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -39712,7 +39712,7 @@ C     ------------------------------------------------------------------
             T(2,2) = A(K,K) + B(LL,LL)
             P(1) = C(K,L)
             P(2) = C(K,LL)
-            CALL SLV (2, 1, T, 4, P, 4, IERR)
+            CALL SLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(K,LL) = P(2)
@@ -39737,7 +39737,7 @@ C     ------------------------------------------------------------------
             P(2) = C(KK,L)
             P(3) = C(K,LL)
             P(4) = C(KK,LL)
-            CALL SLV (4, 1, T, 4, P, 4, IERR)
+            CALL SLV(4, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -39752,7 +39752,7 @@ C     ERROR RETURN
   200 IERR = 1
       END SUBROUTINE SHRSLV
 
-      SUBROUTINE DABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+      SUBROUTINE DABSLV(MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: M
@@ -39821,11 +39821,11 @@ C ----------------------------------------------------------------------
       IU = 1
       IV = M*M + 1
       IW = N*N + IV
-      CALL DABSV1 (MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
+      CALL DABSV1(MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
      *                C,NC,WK(IW),IERR)
       END SUBROUTINE DABSLV
 
-      SUBROUTINE DABSV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+      SUBROUTINE DABSV1(MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: M
@@ -39851,10 +39851,10 @@ C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
             A(J,I) = TEMP
          END DO
       END DO
-      CALL DORTH (NA,M,1,M,A,WK)
-      CALL DRTRN1 (M,1,M,A,NA,U,NU,WK)
+      CALL DORTH(NA,M,1,M,A,WK)
+      CALL DRTRN1(M,1,M,A,NA,U,NU,WK)
       IF (M .EQ. 1) GO TO 20
-      CALL DSCHUR (M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
+      CALL DSCHUR(M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
       IF (IERR .NE. 0) GO TO 200
    20 DO I = 1,M
          DO J = I,M
@@ -39865,10 +39865,10 @@ C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
       END DO
 C     IF REQUIRED, REDUCE B TO UPPER REAL SCHUR FORM
    35 IF (MO .NE. 0 .AND. MO .NE. 2) GO TO 45
-      CALL DORTH (NB,N,1,N,B,WK)
-      CALL DRTRN1 (N,1,N,B,NB,V,NV,WK)
+      CALL DORTH(NB,N,1,N,B,WK)
+      CALL DRTRN1(N,1,N,B,NB,V,NV,WK)
       IF (N .EQ. 1) GO TO 45
-      CALL DSCHUR (N,1,N,B,NB,V,NV,WK(1),WK(N+1),IERR)
+      CALL DSCHUR(N,1,N,B,NB,V,NV,WK(1),WK(N+1),IERR)
       IF (IERR .NE. 0) GO TO 210
 C     TRANSFORM C
    45 DO J = 1,N
@@ -39894,7 +39894,7 @@ C     TRANSFORM C
          END DO
       END DO
 C     SOLVE THE TRANSFORMED SYSTEM
-      CALL DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      CALL DSHSLV(A,B,C,M,N,NA,NB,NC,IERR)
       IF (IERR .NE. 0) GO TO 220
 C     TRANSFORM C BACK TO THE SOLUTION
       DO J = 1,N
@@ -39928,7 +39928,7 @@ C     ERROR RETURN
   220 IERR = 1
       END SUBROUTINE DABSV1
 
-      SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+      SUBROUTINE DSCHUR(N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NH, NZ, IGH
@@ -40008,12 +40008,12 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    40 DO LL = LOW,EN
         L = EN + LOW - LL
-        IF ( L .EQ. LOW ) EXIT
+        IF (L .EQ. LOW) EXIT
         S = DABS(H(L-1,L-1)) + DABS(H(L,L))
         IF (S .EQ. 0.D0) S = NORM
         S1 = S
         S2 = S1 + DABS(H(L,L-1))
-        IF ( S1 .EQ. S2 ) EXIT
+        IF (S1 .EQ. S2) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -40048,10 +40048,10 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
         P = P/S
         Q = Q/S
         R = R/S
-        IF ( M .EQ. L ) EXIT
+        IF (M .EQ. L) EXIT
         S1 = DABS(P)*(DABS(H(M-1,M-1))+DABS(ZZ)+DABS(H(M+1,M+1)))
         S2 = S1 + DABS(H(M,M-1))*(DABS(Q) + DABS(R))
-        IF ( S1 .EQ. S2 ) EXIT
+        IF (S1 .EQ. S2) EXIT
       END DO
       MP2 = M + 2
       DO I = MP2,EN
@@ -40187,7 +40187,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       END DO
       END SUBROUTINE DSCHUR
 
-      SUBROUTINE DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      SUBROUTINE DSHSLV(A,B,C,M,N,NA,NB,NC,IERR)
       IMPLICIT NONE
 C     ------------------------------------------------------------------
 C     DSHSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
@@ -40244,7 +40244,7 @@ C     ------------------------------------------------------------------
             T(2,2) = A(KK,KK) + B(L,L)
             P(1) = C(K,L)
             P(2) = C(KK,L)
-            CALL DPSLV (2, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -40256,7 +40256,7 @@ C     ------------------------------------------------------------------
             T(2,2) = A(K,K) + B(LL,LL)
             P(1) = C(K,L)
             P(2) = C(K,LL)
-            CALL DPSLV (2, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(K,LL) = P(2)
@@ -40281,7 +40281,7 @@ C     ------------------------------------------------------------------
             P(2) = C(KK,L)
             P(3) = C(K,LL)
             P(4) = C(KK,LL)
-            CALL DPSLV (4, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(4, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -40296,7 +40296,7 @@ C     ERROR RETURN
   200 IERR = 1
       END SUBROUTINE DSHSLV
 
-      SUBROUTINE TASLV (MO,N,A,NA,C,NC,WK,IERR)
+      SUBROUTINE TASLV(MO,N,A,NA,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO
@@ -40349,10 +40349,10 @@ C        SOLUTION OF THE MATRIX EQUATION AX + XB = C, COMM. ACM
 C        15 (1972), PP. 820-826.
 C ----------------------------------------------------------------------
       IW = N*N + 1
-      CALL TASLV1 (MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
+      CALL TASLV1(MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
       END SUBROUTINE TASLV
 
-      SUBROUTINE TASLV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+      SUBROUTINE TASLV1(MO,N,A,NA,U,NU,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO
@@ -40367,9 +40367,9 @@ C     AND THE TRANSFORMED SYSTEM IS SOLVED.
 C ----------------------------------------------------------------------
 C    IF REQUIRED, REDUCE A TO UPPER REAL SCHUR FORM
       IF (MO .NE. 0) GO TO 10
-      CALL ORTHES (NA,N,1,N,A,WK)
-      CALL ORTRN1 (N,1,N,A,NA,U,NU,WK)
-      CALL SCHUR (N,1,N,A,NA,U,NU,WK(1),WK(N+1),IERR)
+      CALL ORTHES(NA,N,1,N,A,WK)
+      CALL ORTRN1(N,1,N,A,NA,U,NU,WK)
+      CALL SCHUR(N,1,N,A,NA,U,NU,WK(1),WK(N+1),IERR)
       IF (IERR .NE. 0) GO TO 200
 C     TRANSFORM C
    10 DO I = 1,N
@@ -40404,7 +40404,7 @@ C     TRANSFORM C
          END DO
       END DO
 C     SOLVE THE TRANSFORMED SYSTEM
-      CALL SYMSLV (A,C,N,NA,NC,IERR)
+      CALL SYMSLV(A,C,N,NA,NC,IERR)
       IF (IERR .NE. 0) GO TO 210
 C     TRANSFORM C BACK TO THE SOLUTION
       DO I = 1,N
@@ -40445,7 +40445,7 @@ C     ERROR RETURN
   210 IERR = 1
       END SUBROUTINE TASLV1
 
-      SUBROUTINE SYMSLV (A,C,N,NA,NC,IERR)
+      SUBROUTINE SYMSLV(A,C,N,NA,NC,IERR)
       IMPLICIT NONE
 C ----------------------------------------------------------------------
 C     SYMSLV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40479,7 +40479,7 @@ C ----------------------------------------------------------------------
                END DO
             END DO
    45       IF (DL .EQ. 2) GO TO 60
-            IF (DK .EQ. 2 ) GO TO 50
+            IF (DK .EQ. 2) GO TO 50
             T(1,1) = A(K,K) + A(L,L)
             IF (T(1,1) .EQ. 0.0) GO TO 200
             C(K,L) = C(K,L)/T(1,1)
@@ -40491,7 +40491,7 @@ C ----------------------------------------------------------------------
             T(2,2) = A(KK,KK) + A(L,L)
             P(1) = C(K,L)
             P(2) = C(KK,L)
-            CALL SLV (2, 1, T, 4, P, 4, IERR)
+            CALL SLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -40503,7 +40503,7 @@ C ----------------------------------------------------------------------
             T(2,2) = A(K,K) + A(LL,LL)
             P(1) = C(K,L)
             P(2) = C(K,LL)
-            CALL SLV (2, 1, T, 4, P, 4, IERR)
+            CALL SLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(K,LL) = P(2)
@@ -40521,7 +40521,7 @@ C ----------------------------------------------------------------------
             P(1) = C(L,L)/2.0
             P(2) = C(LL,L)
             P(3) = C(LL,LL)/2.0
-            CALL SLV (3, 1, T, 4, P, 4, IERR)
+            CALL SLV(3, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(L,L) = P(1)
             C(LL,L) = P(2)
@@ -40548,7 +40548,7 @@ C ----------------------------------------------------------------------
             P(2) = C(KK,L)
             P(3) = C(K,LL)
             P(4) = C(KK,LL)
-            CALL SLV (4, 1, T, 4, P, 4, IERR)
+            CALL SLV(4, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -40575,7 +40575,7 @@ C     ERROR RETURN
   200 IERR = 1
       END SUBROUTINE SYMSLV
 
-      SUBROUTINE DTASLV (MO,N,A,NA,C,NC,WK,IERR)
+      SUBROUTINE DTASLV(MO,N,A,NA,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO
@@ -40628,10 +40628,10 @@ C        SOLUTION OF THE MATRIX EQUATION AX + XB = C, COMM. ACM
 C        15 (1972), PP. 820-826.
 C ----------------------------------------------------------------------
       IW = N*N + 1
-      CALL DTASV1 (MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
+      CALL DTASV1(MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
       END SUBROUTINE DTASLV
 
-      SUBROUTINE DTASV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+      SUBROUTINE DTASV1(MO,N,A,NA,U,NU,C,NC,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO
@@ -40647,9 +40647,9 @@ C     AND THE TRANSFORMED SYSTEM IS SOLVED.
 C ----------------------------------------------------------------------
 C    IF REQUIRED, REDUCE A TO UPPER REAL SCHUR FORM
       IF (MO .NE. 0) GO TO 10
-      CALL DORTH (NA,N,1,N,A,WK)
-      CALL DRTRN1 (N,1,N,A,NA,U,NU,WK)
-      CALL DSCHUR (N,1,N,A,NA,U,NU,WK(1),WK(N+1),IERR)
+      CALL DORTH(NA,N,1,N,A,WK)
+      CALL DRTRN1(N,1,N,A,NA,U,NU,WK)
+      CALL DSCHUR(N,1,N,A,NA,U,NU,WK(1),WK(N+1),IERR)
       IF (IERR .NE. 0) GO TO 200
 C     TRANSFORM C
    10 DO I = 1,N
@@ -40684,7 +40684,7 @@ C     TRANSFORM C
          END DO
       END DO
 C     SOLVE THE TRANSFORMED SYSTEM
-      CALL DSYMSV (A,C,N,NA,NC,IERR)
+      CALL DSYMSV(A,C,N,NA,NC,IERR)
       IF (IERR .NE. 0) GO TO 210
 C     TRANSFORM C BACK TO THE SOLUTION
       DO I = 1,N
@@ -40725,7 +40725,7 @@ C     ERROR RETURN
   210 IERR = 1
       END SUBROUTINE DTASV1
 
-      SUBROUTINE DSYMSV (A,C,N,NA,NC,IERR)
+      SUBROUTINE DSYMSV(A,C,N,NA,NC,IERR)
       IMPLICIT NONE
 C ----------------------------------------------------------------------
 C     DSYMSV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40759,7 +40759,7 @@ C ----------------------------------------------------------------------
                END DO
             END DO
    45       IF (DL .EQ. 2) GO TO 60
-            IF (DK .EQ. 2 ) GO TO 50
+            IF (DK .EQ. 2) GO TO 50
             T(1,1) = A(K,K) + A(L,L)
             IF (T(1,1) .EQ. 0.D0) GO TO 200
             C(K,L) = C(K,L)/T(1,1)
@@ -40771,7 +40771,7 @@ C ----------------------------------------------------------------------
             T(2,2) = A(KK,KK) + A(L,L)
             P(1) = C(K,L)
             P(2) = C(KK,L)
-            CALL DPSLV (2, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -40783,7 +40783,7 @@ C ----------------------------------------------------------------------
             T(2,2) = A(K,K) + A(LL,LL)
             P(1) = C(K,L)
             P(2) = C(K,LL)
-            CALL DPSLV (2, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(2, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(K,LL) = P(2)
@@ -40801,7 +40801,7 @@ C ----------------------------------------------------------------------
             P(1) = C(L,L)/2.D0
             P(2) = C(LL,L)
             P(3) = C(LL,LL)/2.D0
-            CALL DPSLV (3, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(3, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(L,L) = P(1)
             C(LL,L) = P(2)
@@ -40828,7 +40828,7 @@ C ----------------------------------------------------------------------
             P(2) = C(KK,L)
             P(3) = C(K,LL)
             P(4) = C(KK,LL)
-            CALL DPSLV (4, 1, T, 4, P, 4, IERR)
+            CALL DPSLV(4, 1, T, 4, P, 4, IERR)
             IF (IERR .NE. 0) GO TO 200
             C(K,L) = P(1)
             C(KK,L) = P(2)
@@ -41065,11 +41065,11 @@ C        ********** CHECK FOR CONVERGENCE **********
           IF (FXNI.GT.FXNORM) FXNORM = FXNI
         END DO
         IF (TOL.LE.0.0) GO TO 230
-        IF ( FXNORM .LT. TOL ) EXIT
+        IF (FXNORM .LT. TOL) EXIT
   230   TNORM = 8.0*FLOAT(N)*ANORM*XNORM**2 + 5.0*FLOAT(N)*BNORM*XNORM
      *   + CNORM
         T = 1.0 + FXNORM/TNORM
-        IF ( T .EQ. 1.0 ) EXIT
+        IF (T .EQ. 1.0) EXIT
         IF (ITS.GE.MAXITS) GO TO 400
 C        ********** UPPER TRIANGULARIZATION **********
         IF (ITS.NE.1) GO TO 240
@@ -41444,7 +41444,7 @@ C     ********** CHECK FOR CONVERGENCE OR REDUCIBILITY **********
         LM1 = EN - LL
         L = LM1 + 1
         IF (L.EQ.1) GO TO 90
-        IF ( CABS ( A ( L , LM1 ) ) .LE. EPSA ) EXIT
+        IF (CABS(A(L , LM1)) .LE. EPSA) EXIT
       END DO
    80 A(L,LM1) = CMPLX(0.0,0.0)
       IF (L.LT.NA) GO TO 90
@@ -41677,7 +41677,7 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
       END DO
       END SUBROUTINE TRISLV
 
-      SUBROUTINE MEXP (A, KA, N, Z, KZ, WK, IERR)
+      SUBROUTINE MEXP(A, KA, N, Z, KZ, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KZ
@@ -41713,7 +41713,7 @@ C ----------------------------------------------------------------------
          RETURN
 C       BALANCE A AND SELECT THE SMALLER OF THE 1-NORM
 C              AND INFINITY-NORM OF THE RESULT
-   10 CALL BALANC (KA,N,A,LOW,IGH,WK(1,N+8))
+   10 CALL BALANC(KA,N,A,LOW,IGH,WK(1,N+8))
       ANORM = 0.0
       ANORM1 = 0.0
       DO J = 1,N
@@ -41787,7 +41787,7 @@ C                  OF THE PADE APPROXIMATION
          END DO
       END DO
 C        CALCULATE EXP(A) BY SOLVING  WK * EXP(A) = Z
-      CALL SLV (N, N, WK, N, Z, KZ, IERR)
+      CALL SLV(N, N, WK, N, Z, KZ, IERR)
       IF (IERR .NE. 0) GO TO 210
       IF (M .EQ. 0)  GO TO 150
 C          TAKE OUT THE EFFECT OF THE NORMALIZATION
@@ -41810,7 +41810,7 @@ C                   OPERATION ON EXP(A)
       END DO
 C            TAKE OUT THE EFFECT OF THE BALANCING
 C                   OPERATION ON EXP(A)
-  150 CALL BALINV (KZ,N,Z,LOW,IGH,WK(1,N+8))
+  150 CALL BALINV(KZ,N,Z,LOW,IGH,WK(1,N+8))
       RETURN
 C                     ERROR RETURN
   200 IERR = 1
@@ -41818,7 +41818,7 @@ C                     ERROR RETURN
   210 IERR = 2
       END SUBROUTINE MEXP
 
-      SUBROUTINE DMEXP (A, KA, N, Z, KZ, WK, IERR)
+      SUBROUTINE DMEXP(A, KA, N, Z, KZ, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KZ
@@ -41861,7 +41861,7 @@ C ----------------------------------------------------------------------
          RETURN
 C       BALANCE A AND SELECT THE SMALLER OF THE 1-NORM
 C              AND INFINITY-NORM OF THE RESULT
-   10 CALL DBAL (KA,N,A,LOW,IGH,WK(1,N+12))
+   10 CALL DBAL(KA,N,A,LOW,IGH,WK(1,N+12))
       ANORM = 0.D0
       ANORM1 = 0.D0
       DO J = 1,N
@@ -41935,7 +41935,7 @@ C                  OF THE PADE APPROXIMATION
          END DO
       END DO
 C        CALCULATE EXP(A) BY SOLVING  WK * EXP(A) = Z
-      CALL DPSLV (N, N, WK, N, Z, KZ, IERR)
+      CALL DPSLV(N, N, WK, N, Z, KZ, IERR)
       IF (IERR .NE. 0) GO TO 210
       IF (M .EQ. 0)  GO TO 150
 C          TAKE OUT THE EFFECT OF THE NORMALIZATION
@@ -41958,7 +41958,7 @@ C                   OPERATION ON EXP(A)
       END DO
 C            TAKE OUT THE EFFECT OF THE BALANCING
 C                   OPERATION ON EXP(A)
-  150 CALL DBALNV (KZ,N,Z,LOW,IGH,WK(1,N+12))
+  150 CALL DBALNV(KZ,N,Z,LOW,IGH,WK(1,N+12))
       RETURN
 C                     ERROR RETURN
   200 IERR = 1
@@ -41966,7 +41966,7 @@ C                     ERROR RETURN
   210 IERR = 2
       END SUBROUTINE DMEXP
 
-      SUBROUTINE LE (ROWK,N,B,C,D,IP,IERR)
+      SUBROUTINE LE(ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
@@ -42106,7 +42106,7 @@ C     THE SYSTEM IS SINGULAR
   200 IERR = K
       END SUBROUTINE LE
 
-      SUBROUTINE DPLE (ROWK,N,B,C,D,IP,IERR)
+      SUBROUTINE DPLE(ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
@@ -42246,7 +42246,7 @@ C     THE SYSTEM IS SINGULAR
   200 IERR = K
       END SUBROUTINE DPLE
 
-      SUBROUTINE CLE (ROWK,N,B,C,D,IP,IERR)
+      SUBROUTINE CLE(ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
@@ -42397,7 +42397,7 @@ C     THE SYSTEM IS SINGULAR
   200 IERR = K
       END SUBROUTINE CLE
 
-      SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
+      SUBROUTINE CVBR(B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(INOUT) :: A(KA,N)
@@ -42461,7 +42461,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVBR
 
-      SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
+      SUBROUTINE CVRB(A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,N)
@@ -42525,7 +42525,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVRB
 
-      SUBROUTINE CVRB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      SUBROUTINE CVRB1(A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M
@@ -42546,7 +42546,7 @@ C     COMPUTATION OF ML AND MU
          J = 1
          IMAX = MIN0(M,IMIN + NM1)
          DO I = IMIN,IMAX
-            IF ( A ( I , J ) .NE. 0.0 ) EXIT NSWC_EXIT_1
+            IF (A(I , J) .NE. 0.0) EXIT NSWC_EXIT_1
             J = J + 1
          END DO
          IMIN = IMIN - 1
@@ -42558,7 +42558,7 @@ C     COMPUTATION OF ML AND MU
          I = 1
          JMAX = MIN0(N,JMIN + MM1)
          DO J = JMIN,JMAX
-            IF ( A ( I , J ) .NE. 0.0 ) EXIT NSWC_EXIT_2
+            IF (A(I , J) .NE. 0.0) EXIT NSWC_EXIT_2
             I = I + 1
          END DO
          JMIN = JMIN - 1
@@ -42569,13 +42569,13 @@ C     COMPUTATION OF ML AND MU
       IF (KMAX .GT. NB) GO TO 40
 C     STORE THE MATRIX IN B
       IERR = 0
-      CALL CVRB (A,KA,M,N,ML,MU,B,KB)
+      CALL CVRB(A,KA,M,N,ML,MU,B,KB)
       RETURN
 C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE CVRB1
 
-      SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
+      SUBROUTINE CVBD(B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
@@ -42639,7 +42639,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVBD
 
-      SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
+      SUBROUTINE CVDB(A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
@@ -42703,7 +42703,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVDB
 
-      SUBROUTINE CVDB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      SUBROUTINE CVDB1(A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M
@@ -42724,7 +42724,7 @@ C     COMPUTATION OF ML AND MU
          J = 1
          IMAX = MIN0(M,IMIN + NM1)
          DO I = IMIN,IMAX
-            IF ( A ( I , J ) .NE. 0.D0 ) EXIT NSWC_EXIT_1
+            IF (A(I , J) .NE. 0.D0) EXIT NSWC_EXIT_1
             J = J + 1
          END DO
          IMIN = IMIN - 1
@@ -42736,7 +42736,7 @@ C     COMPUTATION OF ML AND MU
          I = 1
          JMAX = MIN0(N,JMIN + MM1)
          DO J = JMIN,JMAX
-            IF ( A ( I , J ) .NE. 0.D0 ) EXIT NSWC_EXIT_2
+            IF (A(I , J) .NE. 0.D0) EXIT NSWC_EXIT_2
             I = I + 1
          END DO
          JMIN = JMIN - 1
@@ -42747,13 +42747,13 @@ C     COMPUTATION OF ML AND MU
       IF (KMAX .GT. NB) GO TO 40
 C     STORE THE MATRIX IN B
       IERR = 0
-      CALL CVDB (A,KA,M,N,ML,MU,B,KB)
+      CALL CVDB(A,KA,M,N,ML,MU,B,KB)
       RETURN
 C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE CVDB1
 
-      SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
+      SUBROUTINE CVBC(B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(INOUT) :: A(KA,N)
@@ -42817,7 +42817,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVBC
 
-      SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
+      SUBROUTINE CVCB(A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,N)
@@ -42881,7 +42881,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       END DO
       END SUBROUTINE CVCB
 
-      SUBROUTINE CVCB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      SUBROUTINE CVCB1(A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M
@@ -42902,7 +42902,7 @@ C     COMPUTATION OF ML AND MU
          J = 1
          IMAX = MIN0(M,IMIN + NM1)
          DO I = IMIN,IMAX
-            IF ( A ( I , J ) .NE. ( 0.0 , 0.0 ) ) EXIT NSWC_EXIT_1
+            IF (A(I , J) .NE. (0.0 , 0.0)) EXIT NSWC_EXIT_1
             J = J + 1
          END DO
          IMIN = IMIN - 1
@@ -42914,7 +42914,7 @@ C     COMPUTATION OF ML AND MU
          I = 1
          JMAX = MIN0(N,JMIN + MM1)
          DO J = JMIN,JMAX
-            IF ( A ( I , J ) .NE. ( 0.0 , 0.0 ) ) EXIT NSWC_EXIT_2
+            IF (A(I , J) .NE. (0.0 , 0.0)) EXIT NSWC_EXIT_2
             I = I + 1
          END DO
          JMIN = JMIN - 1
@@ -42925,13 +42925,13 @@ C     COMPUTATION OF ML AND MU
       IF (KMAX .GT. NB) GO TO 40
 C     STORE THE MATRIX IN B
       IERR = 0
-      CALL CVCB (A,KA,M,N,ML,MU,B,KB)
+      CALL CVCB(A,KA,M,N,ML,MU,B,KB)
       RETURN
 C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE CVCB1
 
-      SUBROUTINE MCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      SUBROUTINE MCVBS(A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
@@ -42988,7 +42988,7 @@ C     ERROR RETURN
    40 IERR = I
       END SUBROUTINE MCVBS
 
-      SUBROUTINE DMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      SUBROUTINE DMCVBS(A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
@@ -43045,7 +43045,7 @@ C     ERROR RETURN
    40 IERR = I
       END SUBROUTINE DMCVBS
 
-      SUBROUTINE CMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      SUBROUTINE CMCVBS(A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
@@ -43102,7 +43102,7 @@ C     ERROR RETURN
    40 IERR = I
       END SUBROUTINE CMCVBS
 
-      SUBROUTINE MCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      SUBROUTINE MCVSB(A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M
@@ -43161,7 +43161,7 @@ C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE MCVSB
 
-      SUBROUTINE DMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      SUBROUTINE DMCVSB(A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M
@@ -43220,7 +43220,7 @@ C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE DMCVSB
 
-      SUBROUTINE CMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      SUBROUTINE CMCVSB(A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M
@@ -43279,7 +43279,7 @@ C     ERROR RETURN
    40 IERR = KMAX
       END SUBROUTINE CMCVSB
 
-      SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
+      SUBROUTINE BCVRD(A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
@@ -43297,7 +43297,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE BCVRD
 
-      SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
+      SUBROUTINE BCVDR(A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
@@ -43315,7 +43315,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE BCVDR
 
-      SUBROUTINE BREAL (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+      SUBROUTINE BREAL(A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, L, M, ML, MU, N
@@ -43333,7 +43333,7 @@ C     COMPUTATION OF NL AND NU
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( REAL ( A ( I , J ) ) .NE. 0.0 ) EXIT NSWC_EXIT_1
+            IF (REAL(A(I , J)) .NE. 0.0) EXIT NSWC_EXIT_1
          END DO
          NL = NL - 1
          IMIN = IMIN - 1
@@ -43343,7 +43343,7 @@ C     COMPUTATION OF NL AND NU
       J = ML + MU + 1
       NSWC_EXIT_2 : DO K = 1 , MU
          DO I = 1,M
-            IF ( REAL ( A ( I , J ) ) .NE. 0.0 ) EXIT NSWC_EXIT_2
+            IF (REAL(A(I , J)) .NE. 0.0) EXIT NSWC_EXIT_2
          END DO
          NU = NU - 1
          J = J - 1
@@ -43364,7 +43364,7 @@ C     ERROR RETURN
   100 IERR = NUM
       END SUBROUTINE BREAL
 
-      SUBROUTINE BIMAG (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+      SUBROUTINE BIMAG(A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, L, M, ML, MU, N
@@ -43382,7 +43382,7 @@ C     COMPUTATION OF NL AND NU
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( AIMAG ( A ( I , J ) ) .NE. 0.0 ) EXIT NSWC_EXIT_1
+            IF (AIMAG(A(I , J)) .NE. 0.0) EXIT NSWC_EXIT_1
          END DO
          NL = NL - 1
          IMIN = IMIN - 1
@@ -43392,7 +43392,7 @@ C     COMPUTATION OF NL AND NU
       J = ML + MU + 1
       NSWC_EXIT_2 : DO K = 1 , MU
          DO I = 1,M
-            IF ( AIMAG ( A ( I , J ) ) .NE. 0.0 ) EXIT NSWC_EXIT_2
+            IF (AIMAG(A(I , J)) .NE. 0.0) EXIT NSWC_EXIT_2
          END DO
          NU = NU - 1
          J = J - 1
@@ -43413,7 +43413,7 @@ C     ERROR RETURN
   100 IERR = NUM
       END SUBROUTINE BIMAG
 
-      SUBROUTINE BCVRC (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE BCVRC(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -43487,7 +43487,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE BCVRC
 
-      SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
+      SUBROUTINE BPOSE(A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
@@ -43537,7 +43537,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       END DO
       END SUBROUTINE BPOSE
 
-      SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
+      SUBROUTINE DBPOSE(A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
@@ -43587,7 +43587,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       END DO
       END SUBROUTINE DBPOSE
 
-      SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
+      SUBROUTINE CBPOSE(A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*)
@@ -43637,7 +43637,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       END DO
       END SUBROUTINE CBPOSE
 
-      SUBROUTINE BADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE BADD(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -43652,8 +43652,8 @@ C                 ADDITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -43686,7 +43686,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) + B ( I , J ) ) .NE. 0.0 ) EXIT
+            IF ((A(I , J) + B(I , J)) .NE. 0.0) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -43697,8 +43697,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -43750,7 +43750,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) + B ( I , LB ) ) .NE. 0.0 ) EXIT
+            IF ((A(I , LA) + B(I , LB)) .NE. 0.0) EXIT
      &      NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -43774,7 +43774,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE BADD
 
-      SUBROUTINE DBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE DBADD(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -43789,8 +43789,8 @@ C           ADDITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -43823,7 +43823,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) + B ( I , J ) ) .NE. 0.D0 ) EXIT
+            IF ((A(I , J) + B(I , J)) .NE. 0.D0) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -43834,8 +43834,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -43887,7 +43887,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) + B ( I , LB ) ) .NE. 0.D0 ) EXIT
+            IF ((A(I , LA) + B(I , LB)) .NE. 0.D0) EXIT
      &      NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -43911,7 +43911,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE DBADD
 
-      SUBROUTINE CBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE CBADD(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -43926,8 +43926,8 @@ C                ADDITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -43960,7 +43960,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) + B ( I , J ) ) .NE. ( 0.0 , 0.0 ) ) EXIT
+            IF ((A(I , J) + B(I , J)) .NE. (0.0 , 0.0)) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -43971,8 +43971,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -44024,7 +44024,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) + B ( I , LB ) ) .NE. ( 0.0 , 0.0 ) )
+            IF ((A(I , LA) + B(I , LB)) .NE. (0.0 , 0.0))
      &      EXIT NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -44048,7 +44048,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE CBADD
 
-      SUBROUTINE BSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE BSUBT(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -44063,8 +44063,8 @@ C                SUBTRACTION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -44097,7 +44097,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) - B ( I , J ) ) .NE. 0.0 ) EXIT
+            IF ((A(I , J) - B(I , J)) .NE. 0.0) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -44108,8 +44108,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -44161,7 +44161,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) - B ( I , LB ) ) .NE. 0.0 ) EXIT
+            IF ((A(I , LA) - B(I , LB)) .NE. 0.0) EXIT
      &      NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -44185,7 +44185,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE BSUBT
 
-      SUBROUTINE DBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE DBSUBT(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -44200,8 +44200,8 @@ C          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -44234,7 +44234,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) - B ( I , J ) ) .NE. 0.D0 ) EXIT
+            IF ((A(I , J) - B(I , J)) .NE. 0.D0) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -44245,8 +44245,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -44298,7 +44298,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) - B ( I , LB ) ) .NE. 0.D0 ) EXIT
+            IF ((A(I , LA) - B(I , LB)) .NE. 0.D0) EXIT
      &      NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -44322,7 +44322,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE DBSUBT
 
-      SUBROUTINE CBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      SUBROUTINE CBSUBT(M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
@@ -44337,8 +44337,8 @@ C             SUBTRACTION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
       IERR = 0
       NSWC_AI_I4 = NL - ML
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 20
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
    10 MCL = ML
@@ -44371,7 +44371,7 @@ C     COMPUTE MCL WHEN ML = NL
       IMIN = ML + 1
       NSWC_EXIT_1 : DO J = 1 , ML
          DO I = IMIN,M
-            IF ( ( A ( I , J ) - B ( I , J ) ) .NE. ( 0.0 , 0.0 ) ) EXIT
+            IF ((A(I , J) - B(I , J)) .NE. (0.0 , 0.0)) EXIT
      &      NSWC_EXIT_1
          END DO
          MCL = MCL - 1
@@ -44382,8 +44382,8 @@ C     COMPUTE MCL WHEN ML = NL
       JC = 0
       JMAX = MCL + 1
    50 NSWC_AI_I4 = NU - MU
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      IF (NSWC_AI_I4 .LT. 0) GO TO 100
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 160
       GO TO 130
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
   100 MCU = MU
@@ -44435,7 +44435,7 @@ C     COMPUTE MCU WHEN MU = NU
       LB = NL + NU + 1
       NSWC_EXIT_2 : DO J = 1 , MU
          DO I = 1,M
-            IF ( ( A ( I , LA ) - B ( I , LB ) ) .NE. ( 0.0 , 0.0 ) )
+            IF ((A(I , LA) - B(I , LB)) .NE. (0.0 , 0.0))
      &      EXIT NSWC_EXIT_2
          END DO
          MCU = MCU - 1
@@ -44459,7 +44459,7 @@ C     ERROR RETURN
   200 IERR = NUM
       END SUBROUTINE CBSUBT
 
-      SUBROUTINE BPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
+      SUBROUTINE BPROD(M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                  C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
@@ -44560,7 +44560,7 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
             C(I,JC) = SUM
          END DO
          DO I = 1,IMAX
-            IF ( C ( I , JC ) .NE. 0.0 ) EXIT NSWC_EXIT_1
+            IF (C(I , JC) .NE. 0.0) EXIT NSWC_EXIT_1
          END DO
          MCU = MCU - 1
       END DO NSWC_EXIT_1
@@ -44597,7 +44597,7 @@ C     ERROR RETURN
   200 IERR = LAST
       END SUBROUTINE BPROD
 
-      SUBROUTINE DBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
+      SUBROUTINE DBPROD(M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
@@ -44698,7 +44698,7 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
             C(I,JC) = SUM
          END DO
          DO I = 1,IMAX
-            IF ( C ( I , JC ) .NE. 0.D0 ) EXIT NSWC_EXIT_1
+            IF (C(I , JC) .NE. 0.D0) EXIT NSWC_EXIT_1
          END DO
          MCU = MCU - 1
       END DO NSWC_EXIT_1
@@ -44735,7 +44735,7 @@ C     ERROR RETURN
   200 IERR = LAST
       END SUBROUTINE DBPROD
 
-      SUBROUTINE CBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
+      SUBROUTINE CBPROD(M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
@@ -44836,7 +44836,7 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
             C(I,JC) = SUM
          END DO
          DO I = 1,IMAX
-            IF ( C ( I , JC ) .NE. ( 0.0 , 0.0 ) ) EXIT NSWC_EXIT_1
+            IF (C(I , JC) .NE. (0.0 , 0.0)) EXIT NSWC_EXIT_1
          END DO
          MCU = MCU - 1
       END DO NSWC_EXIT_1
@@ -44873,7 +44873,7 @@ C     ERROR RETURN
   200 IERR = LAST
       END SUBROUTINE CBPROD
 
-      SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE BVPRD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(N)
@@ -44919,7 +44919,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       END DO
       END SUBROUTINE BVPRD
 
-      SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE BVPRD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(N)
@@ -44960,7 +44960,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE BVPRD1
 
-      SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE DBVPD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
@@ -45007,7 +45007,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       END DO
       END SUBROUTINE DBVPD
 
-      SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE DBVPD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
@@ -45048,7 +45048,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE DBVPD1
 
-      SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE CBVPD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(N)
@@ -45094,7 +45094,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       END DO
       END SUBROUTINE CBVPD
 
-      SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE CBVPD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(N)
@@ -45135,7 +45135,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE CBVPD1
 
-      SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE BTPRD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(M)
@@ -45180,7 +45180,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       END DO
       END SUBROUTINE BTPRD
 
-      SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE BTPRD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(M)
@@ -45220,7 +45220,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE BTPRD1
 
-      SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE DBTPD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
@@ -45266,7 +45266,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       END DO
       END SUBROUTINE DBTPD
 
-      SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE DBTPD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
@@ -45306,7 +45306,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE DBTPD1
 
-      SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE CBTPD(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(M)
@@ -45351,7 +45351,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       END DO
       END SUBROUTINE CBTPD
 
-      SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
+      SUBROUTINE CBTPD1(M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(M)
@@ -45391,7 +45391,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       END DO
       END SUBROUTINE CBTPD1
 
-      REAL FUNCTION BNRM (A, KA, M, N, ML, MU)
+      REAL FUNCTION BNRM(A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
@@ -45412,7 +45412,7 @@ C-----------------------------------------------------------------------
       END DO
       END FUNCTION BNRM
 
-      REAL FUNCTION B1NRM (A, KA, M, N, ML, MU)
+      REAL FUNCTION B1NRM(A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(*)
@@ -45459,7 +45459,7 @@ C     PROCEED ALONG THE LAST ROW OF A
          GO TO 50
       END FUNCTION B1NRM
 
-      DOUBLE PRECISION FUNCTION DBNRM (A, KA, M, N, ML, MU)
+      DOUBLE PRECISION FUNCTION DBNRM(A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
@@ -45480,7 +45480,7 @@ C-----------------------------------------------------------------------
       END DO
       END FUNCTION DBNRM
 
-      DOUBLE PRECISION FUNCTION DB1NRM (A, KA, M, N, ML, MU)
+      DOUBLE PRECISION FUNCTION DB1NRM(A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -45644,7 +45644,7 @@ C     ERROR RETURN
   120 IERR = -3
       END SUBROUTINE BSLV1
 
-      SUBROUTINE SNBFA (A, LDA, N, ML, MU, IPVT, INFO)
+      SUBROUTINE SNBFA(A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU
       INTEGER, INTENT(OUT) :: INFO
@@ -45780,7 +45780,7 @@ C     CASE WHEN ML = 0
       END DO
       END SUBROUTINE SNBFA
 
-      SUBROUTINE SNBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
+      SUBROUTINE SNBSL(A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
       REAL, INTENT(IN) :: A(LDA,*)
@@ -45891,7 +45891,7 @@ C     CASE WHEN ML = 0 AND MU = 0
       END DO
       END SUBROUTINE SNBSL
 
-      SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
+      SUBROUTINE DBSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
@@ -45949,7 +45949,7 @@ C     ERROR RETURN
   120 IERR = -3
       END SUBROUTINE DBSLV
 
-      SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
+      SUBROUTINE DBSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
@@ -46007,7 +46007,7 @@ C     ERROR RETURN
   120 IERR = -3
       END SUBROUTINE DBSLV1
 
-      SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
+      SUBROUTINE DBFA(A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU
       INTEGER, INTENT(OUT) :: INFO
@@ -46143,7 +46143,7 @@ C     CASE WHEN ML = 0
       END DO
       END SUBROUTINE DBFA
 
-      SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
+      SUBROUTINE DBSL(A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
       DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
@@ -46254,7 +46254,7 @@ C     CASE WHEN ML = 0 AND MU = 0
       END DO
       END SUBROUTINE DBSL
 
-      SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+      SUBROUTINE B1CND(A, KA, N, ML, MU, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, ML, MU, N
@@ -46283,20 +46283,20 @@ C-----------------------
       ISGN = N + 1
       KASE = 0
       AINORM = 0.0
-      CALL SONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+      CALL SONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
-      CALL BSLV (0, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+      CALL BSLV(0, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
 C     CHECK IF A IS SINGULAR
       IF (IERR .GT. 0) GO TO 40
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
-   10 CALL SONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+   10 CALL SONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
       IF (KASE .EQ. 0) GO TO 30
       IF (KASE .NE. 1) GO TO 20
-         CALL BSLV (1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+         CALL BSLV(1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
          GO TO 10
-   20 CALL BSLV1 (1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+   20 CALL BSLV1(1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
       GO TO 10
 C     COMPUTE THE VALUE OF COND
    30 COND = ANORM*AINORM
@@ -46312,7 +46312,7 @@ C     ERROR RETURN
   120 IERR = -3
       END SUBROUTINE B1CND
 
-      SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+      SUBROUTINE DB1CND(A, KA, N, ML, MU, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, ML, MU, N
@@ -46342,20 +46342,20 @@ C-----------------------
       ISGN = N + 1
       KASE = 0
       AINORM = 0.D0
-      CALL DONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+      CALL DONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
-      CALL DBSLV (0, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+      CALL DBSLV(0, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
 C     CHECK IF A IS SINGULAR
       IF (IERR .GT. 0) GO TO 40
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
-   10 CALL DONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+   10 CALL DONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
       IF (KASE .EQ. 0) GO TO 30
       IF (KASE .NE. 1) GO TO 20
-         CALL DBSLV (1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+         CALL DBSLV(1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
          GO TO 10
-   20 CALL DBSLV1 (1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
+   20 CALL DBSLV1(1, A, KA, N, ML, MU, WK(IX), IWK(1), IERR)
       GO TO 10
 C     COMPUTE THE VALUE OF COND
    30 COND = ANORM*AINORM
@@ -46489,7 +46489,7 @@ C     ERROR RETURN
   120 IERR = -3
       END SUBROUTINE CBSLV1
 
-      SUBROUTINE CBFA (A, LDA, N, ML, MU, IPVT, INFO)
+      SUBROUTINE CBFA(A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU
       INTEGER, INTENT(OUT) :: INFO
@@ -46625,7 +46625,7 @@ C     CASE WHEN ML = 0
       END DO
       END SUBROUTINE CBFA
 
-      SUBROUTINE CBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
+      SUBROUTINE CBSL(A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
       COMPLEX, INTENT(IN) :: A(LDA,*)
@@ -46736,7 +46736,7 @@ C     CASE WHEN ML = 0 AND MU = 0
       END DO
       END SUBROUTINE CBSL
 
-      SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      SUBROUTINE CVRS(A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
@@ -46765,7 +46765,7 @@ C                   ERROR RETURN
    20 IERR = I
       END SUBROUTINE CVRS
 
-      SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      SUBROUTINE CVDS(A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
@@ -46794,7 +46794,7 @@ C                   ERROR RETURN
    20 IERR = I
       END SUBROUTINE CVDS
 
-      SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      SUBROUTINE CVCS(A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
@@ -46825,7 +46825,7 @@ C                   ERROR RETURN
    20 IERR = I
       END SUBROUTINE CVCS
 
-      SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
+      SUBROUTINE CVSR(A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
       REAL, INTENT(IN) :: A(*)
@@ -46849,7 +46849,7 @@ C                 STORE THE I-TH ROW
       END DO
       END SUBROUTINE CVSR
 
-      SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
+      SUBROUTINE CVSD(A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -46873,7 +46873,7 @@ C                 STORE THE I-TH ROW
       END DO
       END SUBROUTINE CVSD
 
-      SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
+      SUBROUTINE CVSC(A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
       COMPLEX, INTENT(IN) :: A(*)
@@ -46897,7 +46897,7 @@ C                 STORE THE I-TH ROW
       END DO
       END SUBROUTINE CVSC
 
-      SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE SCVRD(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       REAL, INTENT(IN) :: A(*)
@@ -46923,7 +46923,7 @@ C                 STORE THE I-TH ROW
       IB(M + 1) = L
       END SUBROUTINE SCVRD
 
-      SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE SCVDR(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -46949,7 +46949,7 @@ C                 STORE THE I-TH ROW
       IB(M + 1) = L
       END SUBROUTINE SCVDR
 
-      SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE CSREAL(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       COMPLEX, INTENT(IN) :: A(*)
@@ -46980,7 +46980,7 @@ C-----------------------------------------------------------------------
       IB(M + 1) = L
       END SUBROUTINE CSREAL
 
-      SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE CSIMAG(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       COMPLEX, INTENT(IN) :: A(*)
@@ -47011,7 +47011,7 @@ C-----------------------------------------------------------------------
       IB(M + 1) = L
       END SUBROUTINE CSIMAG
 
-      SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE SCVRC(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47046,7 +47046,7 @@ C                  COMPUTE THE I-TH ROW OF C
          DO L = MINB,MAXB
             IF (B(L) .EQ. 0.0) GO TO 31
             J = JB(L)
-            T = CMPLX (WK(J), B(L))
+            T = CMPLX(WK(J), B(L))
             WK(J) = 0.0
             IF (IP .GT. NUM) GO TO 50
             C(IP) = T
@@ -47059,7 +47059,7 @@ C                  COMPUTE THE I-TH ROW OF C
             J = JA(L)
             IF (WK(J) .EQ. 0.0) GO TO 41
             IF (IP .GT. NUM) GO TO 50
-            C(IP) = CMPLX (WK(J), 0.0)
+            C(IP) = CMPLX(WK(J), 0.0)
             WK(J) = 0.0
             JC(IP) = J
             IP = IP + 1
@@ -47074,7 +47074,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE SCVRC
 
-      SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE RSCOPY(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       REAL, INTENT(IN) :: A(*)
@@ -47103,7 +47103,7 @@ C-----------------------------------------------------------------------
       IB(M + 1) = L
       END SUBROUTINE RSCOPY
 
-      SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE DSCOPY(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -47132,7 +47132,7 @@ C-----------------------------------------------------------------------
       IB(M + 1) = L
       END SUBROUTINE DSCOPY
 
-      SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE CSCOPY(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       COMPLEX, INTENT(IN) :: A(*)
@@ -47163,7 +47163,7 @@ C-----------------------------------------------------------------------
       IB(M + 1) = L
       END SUBROUTINE CSCOPY
 
-      SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
+      SUBROUTINE SCONJ(A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       COMPLEX, INTENT(IN) :: A(*)
@@ -47190,7 +47190,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE SCONJ
 
-      SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE RPOSE(A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*)
@@ -47246,7 +47246,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE RPOSE
 
-      SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE RPOSE1(P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: P(M)
@@ -47305,7 +47305,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE RPOSE1
 
-      SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE DPOSE(A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -47361,7 +47361,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE DPOSE
 
-      SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE DPOSE1(P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: P(M)
@@ -47420,7 +47420,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE DPOSE1
 
-      SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE CPOSE(A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       COMPLEX, INTENT(IN) :: A(*)
@@ -47476,7 +47476,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE CPOSE
 
-      SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      SUBROUTINE CPOSE1(P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: P(M)
@@ -47535,7 +47535,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       END DO
       END SUBROUTINE CPOSE1
 
-      SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE SADD(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47597,7 +47597,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE SADD
 
-      SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE DSADD(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47659,7 +47659,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE DSADD
 
-      SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE CSADD(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47721,7 +47721,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE CSADD
 
-      SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE SSUBT(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47783,7 +47783,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE SSUBT
 
-      SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE DSSUBT(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47845,7 +47845,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE DSSUBT
 
-      SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      SUBROUTINE CSSUBT(A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
@@ -47907,7 +47907,7 @@ C                        ERROR RETURN
    50 IERR = I
       END SUBROUTINE CSSUBT
 
-      SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+      SUBROUTINE SPROD(A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
@@ -47962,7 +47962,7 @@ C                           ERROR RETURN
    40 IERR = I
       END SUBROUTINE SPROD
 
-      SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+      SUBROUTINE DSPROD(A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
@@ -48017,7 +48017,7 @@ C                           ERROR RETURN
    40 IERR = I
       END SUBROUTINE DSPROD
 
-      SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+      SUBROUTINE CSPROD(A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
@@ -48072,7 +48072,7 @@ C                           ERROR RETURN
    40 IERR = I
       END SUBROUTINE CSPROD
 
-      SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE MVPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*), X(N)
@@ -48096,7 +48096,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MVPRD
 
-      SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE MVPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*), X(N)
@@ -48120,7 +48120,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MVPRD1
 
-      SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE MTPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*), X(M)
@@ -48147,7 +48147,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MTPRD
 
-      SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE MTPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*), X(M)
@@ -48171,7 +48171,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE MTPRD1
 
-      SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE DVPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
@@ -48195,7 +48195,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DVPRD
 
-      SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE DVPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
@@ -48219,7 +48219,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DVPRD1
 
-      SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE DTPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
@@ -48246,7 +48246,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DTPRD
 
-      SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE DTPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
@@ -48270,7 +48270,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE DTPRD1
 
-      SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE CVPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       COMPLEX, INTENT(IN) :: A(*), X(N)
@@ -48294,7 +48294,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE CVPRD
 
-      SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE CVPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       COMPLEX, INTENT(IN) :: A(*), X(N)
@@ -48318,7 +48318,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE CVPRD1
 
-      SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
+      SUBROUTINE CTPRD(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       COMPLEX, INTENT(IN) :: A(*), X(M)
@@ -48345,7 +48345,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE CTPRD
 
-      SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
+      SUBROUTINE CTPRD1(M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       COMPLEX, INTENT(IN) :: A(*), X(M)
@@ -48369,7 +48369,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE CTPRD1
 
-      REAL FUNCTION SNRM (A, IA, JA, M, N)
+      REAL FUNCTION SNRM(A, IA, JA, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*)
@@ -48394,7 +48394,7 @@ C-----------------------------------------------------------------------
       END DO
       END FUNCTION SNRM
 
-      SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
+      SUBROUTINE S1NRM(A, IA, JA, M, N, ANORM, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(OUT) :: ANORM
@@ -48422,7 +48422,7 @@ C     COMPUTE THE L1 NORM OF A
       END DO
       END SUBROUTINE S1NRM
 
-      DOUBLE PRECISION FUNCTION DSNRM (A, IA, JA, M, N)
+      DOUBLE PRECISION FUNCTION DSNRM(A, IA, JA, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -48447,7 +48447,7 @@ C-----------------------------------------------------------------------
       END DO
       END FUNCTION DSNRM
 
-      SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
+      SUBROUTINE DS1NRM(A, IA, JA, M, N, ANORM, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
@@ -48476,7 +48476,7 @@ C     COMPUTE THE L1 NORM OF A
       END DO
       END SUBROUTINE DS1NRM
 
-      SUBROUTINE SPORD (M, N, IA, R, IWK)
+      SUBROUTINE SPORD(M, N, IA, R, IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: IA(*)
@@ -48513,7 +48513,7 @@ C----------------------
       END DO
       END SUBROUTINE SPORD
 
-      SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
+      SUBROUTINE BLKORD(N, IA, JA, R, C, IB, NUM, IWK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: N
@@ -48550,7 +48550,7 @@ C     INTEGER IWK(5*N)
       END DO
       END SUBROUTINE BLKORD
 
-      SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
+      SUBROUTINE MC21A(N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(INOUT) :: NUMNZ
@@ -48578,11 +48578,11 @@ C     BE ZERO FOR N-NUMNZ ENTRIES.
 C NUMNZ NUMBER OF NON-ZEROS ON DIAGONAL OF PERMUTED MATRIX.
 C IW  WORK ARRAY  ..  SEE LATER COMMENTS.
 C-----------------------------------------------------------------------
-      CALL MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW(1,1),IW(1,2),
+      CALL MC21B(N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW(1,1),IW(1,2),
      *            IW(1,3),IW(1,4))
       END SUBROUTINE MC21A
 
-      SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
+      SUBROUTINE MC21B(N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(INOUT) :: NUMNZ
@@ -48621,7 +48621,7 @@ C     LOOK FOR A CHEAP ASSIGNMENT
       IN1 = IN2 - IN1
       DO II = IN1,IN2
          I = ICN(II)
-         IF ( IPERM ( I ) .EQ. 0 ) EXIT NSWC_EXIT_1
+         IF (IPERM(I) .EQ. 0) EXIT NSWC_EXIT_1
       END DO
 C     NO CHEAP ASSIGNMENT IN ROW
       ARP(J) = -1
@@ -48657,7 +48657,7 @@ C     NEW ASSIGNMENT IS MADE
       NUMNZ = NUMNZ + 1
       DO K = 1,JORD
          J = PR(J)
-         IF ( J .EQ. - 1 ) EXIT
+         IF (J .EQ. - 1) EXIT
          II = IP(J) + LENR(J) - OUT(J) - 2
          I = ICN(II)
          IPERM(I) = J
@@ -48798,14 +48798,14 @@ C     WORKING DOWN TO THE ROOT OF THE BLOCK.
             LOWL(IW) = N + 1
             ICNT = ICNT + 1
             NUMB(IW) = ICNT
-            IF ( IW .EQ. IV ) EXIT
+            IF (IW .EQ. IV) EXIT
           END DO
           IST = N - STP
           IB(NUM) = LCNT
 C ARE THERE ANY NODES LEFT ON THE STACK.
           IF (IST.NE.0) GO TO 60
 C HAVE ALL THE NODES BEEN ORDERED.
-          IF ( ICNT .LT. N ) EXIT
+          IF (ICNT .LT. N) EXIT
           EXIT NSWC_EXIT_1
 C BACKTRACK TO PREVIOUS NODE ON PATH.
    60     IW = IV
@@ -48833,7 +48833,7 @@ C PUT PERMUTATION IN THE REQUIRED FORM.
       END DO
       END SUBROUTINE MC13E
 
-      SUBROUTINE SPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      SUBROUTINE SPSLV(N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -48915,12 +48915,12 @@ C  COMPUTE THE INVERSE PERMUTATION OF C
          ITEMP(L) = K
       END DO
 C  CALL NSPIV1 TO PERFORM COMPUTATIONS
-      CALL NSPIV1 (N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
+      CALL NSPIV1(N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       END SUBROUTINE SPSLV
 
-      SUBROUTINE NSPIV1 (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      SUBROUTINE NSPIV1(N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -49005,8 +49005,8 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
  30       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          IF (NSWC_AI_I4 .LT. 0) GO TO 30
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 1003
           GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
@@ -49038,15 +49038,15 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
           NSWC_AI_I4 = VJ - PPK
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 60
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 70
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
@@ -49146,7 +49146,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
  1005 IERR = -(3*N+K)
       END SUBROUTINE NSPIV1
 
-      SUBROUTINE RSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE RSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -49215,16 +49215,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL SPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL SPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL RSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL RSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       END SUBROUTINE RSLV
 
-      SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE RSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -49267,7 +49267,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       END DO
       END SUBROUTINE RSLV1
 
-      SUBROUTINE TSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE TSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -49336,16 +49336,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL SPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL SPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL TSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL TSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       END SUBROUTINE TSLV
 
-      SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE TSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -49393,7 +49393,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       END DO
       END SUBROUTINE TSLV1
 
-      SUBROUTINE SPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      SUBROUTINE SPLU(A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -49468,8 +49468,8 @@ C     SET P TO THE REORDERED ROW OF A
    21 M = PM
       PM = P(M)
       NSWC_AI_I4 = PM - J
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      IF (NSWC_AI_I4 .LT. 0) GO TO 21
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 210
       GO TO 22
    22 P(M) = J
       P(J) = PM
@@ -49497,15 +49497,15 @@ C     PERFORM ELIMINATION USING THE I-TH ROW OF U
          J = IC(LJ)
          IF (W(J) .NE. 0.0) GO TO 43
          NSWC_AI_I4 = J - PM
-         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
-         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         IF (NSWC_AI_I4 .LT. 0) GO TO 40
+         IF (NSWC_AI_I4 .EQ. 0) GO TO 43
          GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
             NSWC_AI_I4 = PM - J
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            IF (NSWC_AI_I4 .LT. 0) GO TO 41
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 43
             GO TO 42
    42       P(M) = J
             P(J) = PM
@@ -49574,7 +49574,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
   230 IERR = -(3*N + K)
       END SUBROUTINE SPLU
 
-      SUBROUTINE DSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      SUBROUTINE DSPSLV(N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -49659,12 +49659,12 @@ C  COMPUTE THE INVERSE PERMUTATION OF C
          ITEMP(L) = K
       END DO
 C  CALL DNSPIV TO PERFORM COMPUTATIONS
-      CALL DNSPIV (N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
+      CALL DNSPIV(N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       END SUBROUTINE DSPSLV
 
-      SUBROUTINE DNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      SUBROUTINE DNSPIV(N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -49749,8 +49749,8 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
  30       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          IF (NSWC_AI_I4 .LT. 0) GO TO 30
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 1003
           GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
@@ -49782,15 +49782,15 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
           NSWC_AI_I4 = VJ - PPK
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 60
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 70
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
@@ -49890,7 +49890,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
  1005 IERR = -(3*N+K)
       END SUBROUTINE DNSPIV
 
-      SUBROUTINE DSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE DSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -49960,16 +49960,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL DSPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL DSPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL DSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL DSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       END SUBROUTINE DSLV
 
-      SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE DSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -50012,7 +50012,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       END DO
       END SUBROUTINE DSLV1
 
-      SUBROUTINE DTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE DTSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -50082,16 +50082,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL DSPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL DSPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL DTSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL DTSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       END SUBROUTINE DTSLV
 
-      SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE DTSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -50139,7 +50139,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       END DO
       END SUBROUTINE DTSLV1
 
-      SUBROUTINE DSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      SUBROUTINE DSPLU(A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -50215,8 +50215,8 @@ C     SET P TO THE REORDERED ROW OF A
    21 M = PM
       PM = P(M)
       NSWC_AI_I4 = PM - J
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      IF (NSWC_AI_I4 .LT. 0) GO TO 21
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 210
       GO TO 22
    22 P(M) = J
       P(J) = PM
@@ -50244,15 +50244,15 @@ C     PERFORM ELIMINATION USING THE I-TH ROW OF U
          J = IC(LJ)
          IF (W(J) .NE. 0.D0) GO TO 43
          NSWC_AI_I4 = J - PM
-         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
-         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         IF (NSWC_AI_I4 .LT. 0) GO TO 40
+         IF (NSWC_AI_I4 .EQ. 0) GO TO 43
          GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
             NSWC_AI_I4 = PM - J
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            IF (NSWC_AI_I4 .LT. 0) GO TO 41
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 43
             GO TO 42
    42       P(M) = J
             P(J) = PM
@@ -50321,7 +50321,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
   230 IERR = -(3*N + K)
       END SUBROUTINE DSPLU
 
-      SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+      SUBROUTINE S1CND(N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -50341,16 +50341,16 @@ C     REAL WK(4*N + MAX)
 C     INTEGER IWK(5*N + MAX + 2)
 C-----------------------
       COND = 0.0
-      CALL S1NRM (A, IA, JA, N, N, ANORM, WK)
+      CALL S1NRM(A, IA, JA, N, N, ANORM, WK)
       IF (ANORM .EQ. 0.0) GO TO 50
       IX = 2*N + MAX + 1
       IV = IX + N
       ISGN = 4*N + MAX + 3
       KASE = 0
       AINORM = 0.0
-      CALL SONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+      CALL SONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
-      CALL RSLV (0, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+      CALL RSLV(0, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *           IWK(1), WK(1), IERR)
 C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       IF (IERR .GT. 0) GO TO 20
@@ -50362,14 +50362,14 @@ C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       RETURN
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
-   20 CALL SONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+   20 CALL SONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
       IF (KASE .EQ. 0) GO TO 40
       IF (KASE .NE. 1) GO TO 30
-         CALL RSLV (1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+         CALL RSLV(1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *              IWK(1), WK(1), IERR)
          GO TO 20
-   30 CALL TSLV (1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+   30 CALL TSLV(1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *           IWK(1), WK(1), IERR)
       GO TO 20
 C     COMPUTE THE VALUE OF COND
@@ -50379,7 +50379,7 @@ C     SINGULAR CASE
    50 IERR = 0
       END SUBROUTINE S1CND
 
-      SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+      SUBROUTINE DS1CND(N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -50399,16 +50399,16 @@ C     DOUBLE PRECISION WK(4*N + MAX)
 C     INTEGER IWK(5*N + MAX + 2)
 C-----------------------
       COND = 0.D0
-      CALL DS1NRM (A, IA, JA, N, N, ANORM, WK)
+      CALL DS1NRM(A, IA, JA, N, N, ANORM, WK)
       IF (ANORM .EQ. 0.D0) GO TO 50
       IX = 2*N + MAX + 1
       IV = IX + N
       ISGN = 4*N + MAX + 3
       KASE = 0
       AINORM = 0.D0
-      CALL DONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+      CALL DONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
-      CALL DSLV (0, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+      CALL DSLV(0, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *           IWK(1), WK(1), IERR)
 C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       IF (IERR .GT. 0) GO TO 20
@@ -50420,14 +50420,14 @@ C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       RETURN
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
-   20 CALL DONEST (N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
+   20 CALL DONEST(N, WK(IV), WK(IX), IWK(ISGN), AINORM, KASE,
      *             ITER, J, JUMP)
       IF (KASE .EQ. 0) GO TO 40
       IF (KASE .NE. 1) GO TO 30
-         CALL DSLV (1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+         CALL DSLV(1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *              IWK(1), WK(1), IERR)
          GO TO 20
-   30 CALL DTSLV (1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
+   30 CALL DTSLV(1, N, A, IA, JA, WK(IX), R, C, MAX, WK(IX),
      *            IWK(1), WK(1), IERR)
       GO TO 20
 C     COMPUTE THE VALUE OF COND
@@ -50437,7 +50437,7 @@ C     SINGULAR CASE
    50 IERR = 0
       END SUBROUTINE DS1CND
 
-      SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+      SUBROUTINE SONEST(N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
       INTEGER, INTENT(IN) :: N
@@ -50518,7 +50518,7 @@ C     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
       RETURN
 C     ................ ENTRY   (JUMP = 3)
 C     X HAS BEEN OVERWRITTEN BY A*X.
-  300 CALL SCOPY (N,X,1,V,1)
+  300 CALL SCOPY(N,X,1,V,1)
       ANRM = ANORM
       ANORM = SASUM(N,V,1)
       DO I = 1,N
@@ -50559,12 +50559,12 @@ C     ................ ENTRY   (JUMP = 5)
 C     X HAS BEEN OVERWRITTEN BY A*X.
   500 ANRM = 2.0*SASUM(N,X,1)/FLOAT(3*N)
       IF (ANRM .LE. ANORM) GO TO 510
-         CALL SCOPY (N,X,1,V,1)
+         CALL SCOPY(N,X,1,V,1)
          ANORM = ANRM
   510 KASE = 0
       END SUBROUTINE SONEST
 
-      SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+      SUBROUTINE DONEST(N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
       INTEGER, INTENT(IN) :: N
@@ -50646,7 +50646,7 @@ C     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
       RETURN
 C     ................ ENTRY   (JUMP = 3)
 C     X HAS BEEN OVERWRITTEN BY A*X.
-  300 CALL DCOPY (N,X,1,V,1)
+  300 CALL DCOPY(N,X,1,V,1)
       ANRM = ANORM
       ANORM = DASUM(N,V,1)
       DO I = 1,N
@@ -50688,12 +50688,12 @@ C     ................ ENTRY   (JUMP = 5)
 C     X HAS BEEN OVERWRITTEN BY A*X.
   500 ANRM = 2.D0*DASUM(N,X,1)/(3.D0*AN)
       IF (ANRM .LE. ANORM) GO TO 510
-         CALL DCOPY (N,X,1,V,1)
+         CALL DCOPY(N,X,1,V,1)
          ANORM = ANRM
   510 KASE = 0
       END SUBROUTINE DONEST
 
-      SUBROUTINE CSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      SUBROUTINE CSPSLV(N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -50775,12 +50775,12 @@ C  COMPUTE THE INVERSE PERMUTATION OF C
          ITEMP(L) = K
       END DO
 C  CALL CNSPIV TO PERFORM COMPUTATIONS
-      CALL CNSPIV (N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
+      CALL CNSPIV(N,IA,JA,A,B,MAX,R,C,ITEMP(1),X,RTEMP(Y),ITEMP(P),
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       END SUBROUTINE CSPSLV
 
-      SUBROUTINE CNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      SUBROUTINE CNSPIV(N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -50868,8 +50868,8 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
  30       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          IF (NSWC_AI_I4 .LT. 0) GO TO 30
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 1003
           GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
@@ -50901,15 +50901,15 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
           NSWC_AI_I4 = VJ - PPK
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 60
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
           NSWC_AI_I4 = PPK - VJ
-          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
-          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          IF (NSWC_AI_I4 .LT. 0) GO TO 70
+          IF (NSWC_AI_I4 .EQ. 0) GO TO 90
           GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
@@ -51009,7 +51009,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
  1005 IERR = -(3*N+K)
       END SUBROUTINE CNSPIV
 
-      SUBROUTINE CSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE CSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -51079,16 +51079,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL CSPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL CSPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL CSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL CSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       END SUBROUTINE CSLV
 
-      SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE CSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -51131,7 +51131,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       END DO
       END SUBROUTINE CSLV1
 
-      SUBROUTINE CTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      SUBROUTINE CTSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
@@ -51201,16 +51201,16 @@ C     COMPUTE THE INVERSE PERMUTATION OF C
          IWK(L) = K
       END DO
 C     OBTAIN THE LU DECOMPOSITION OF A
-      CALL CSPLU (A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
+      CALL CSPLU(A,IA,JA,R,C,IWK(1),N,MAX,WK(1),WK(T),IWK(IT),IWK(JT),
      *             IWK(IU),WK(Y),IWK(P),IERR)
       IF (IERR .LT. 0) RETURN
       IERR = MAX0(1,IERR)
 C     SOLVE THE SYSTEM OF EQUATIONS
-   20 CALL CTSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
+   20 CALL CTSLV1(N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                 B,X,WK(Y))
       END SUBROUTINE CTSLV
 
-      SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      SUBROUTINE CTSLV1(N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
@@ -51258,7 +51258,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       END DO
       END SUBROUTINE CTSLV1
 
-      SUBROUTINE CSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      SUBROUTINE CSPLU(A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
@@ -51337,8 +51337,8 @@ C     SET P TO THE REORDERED ROW OF A
    21 M = PM
       PM = P(M)
       NSWC_AI_I4 = PM - J
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      IF (NSWC_AI_I4 .LT. 0) GO TO 21
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 210
       GO TO 22
    22 P(M) = J
       P(J) = PM
@@ -51366,15 +51366,15 @@ C     PERFORM ELIMINATION USING THE I-TH ROW OF U
          J = IC(LJ)
          IF (W(J) .NE. ZERO) GO TO 43
          NSWC_AI_I4 = J - PM
-         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
-         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         IF (NSWC_AI_I4 .LT. 0) GO TO 40
+         IF (NSWC_AI_I4 .EQ. 0) GO TO 43
          GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
             NSWC_AI_I4 = PM - J
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            IF (NSWC_AI_I4 .LT. 0) GO TO 41
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 43
             GO TO 42
    42       P(M) = J
             P(J) = PM
@@ -51443,7 +51443,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
   230 IERR = -(3*N + K)
       END SUBROUTINE CSPLU
 
-      SUBROUTINE EIG (IBAL,A,KA,N,WR,WI,IERR)
+      SUBROUTINE EIG(IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -51455,12 +51455,12 @@ C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL BALANC (KA,N,A,LOW,IGH,WR)
-      CALL ELMHS0 (KA,N,LOW,IGH,A,WR)
-      CALL HQR (KA,N,LOW,IGH,A,WR,WI,IERR)
+      IF (IBAL .NE. 0) CALL BALANC(KA,N,A,LOW,IGH,WR)
+      CALL ELMHS0(KA,N,LOW,IGH,A,WR)
+      CALL HQR(KA,N,LOW,IGH,A,WR,WI,IERR)
       END SUBROUTINE EIG
 
-      SUBROUTINE EIG1 (IBAL,A,KA,N,WR,WI,IERR)
+      SUBROUTINE EIG1(IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -51472,12 +51472,12 @@ C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL BALANC (KA,N,A,LOW,IGH,WR)
-      CALL ORTHES (KA,N,LOW,IGH,A,WR)
-      CALL HQR (KA,N,LOW,IGH,A,WR,WI,IERR)
+      IF (IBAL .NE. 0) CALL BALANC(KA,N,A,LOW,IGH,WR)
+      CALL ORTHES(KA,N,LOW,IGH,A,WR)
+      CALL HQR(KA,N,LOW,IGH,A,WR,WI,IERR)
       END SUBROUTINE EIG1
 
-      SUBROUTINE EIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      SUBROUTINE EIGV(IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -51490,16 +51490,16 @@ C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL BALANC (KA,N,A,LOW,IGH,ZI)
-      CALL ELMHS0 (KA,N,LOW,IGH,A,WR)
-      CALL ELTRN0 (KA,N,LOW,IGH,A,WR,ZR)
-      CALL HQR2 (KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
+      IF (IBAL .NE. 0) CALL BALANC(KA,N,A,LOW,IGH,ZI)
+      CALL ELMHS0(KA,N,LOW,IGH,A,WR)
+      CALL ELTRN0(KA,N,LOW,IGH,A,WR,ZR)
+      CALL HQR2(KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
       IF (IERR .NE. 0) RETURN
-      IF (IBAL .NE. 0) CALL BALBAK (KA,N,LOW,IGH,ZI,N,ZR)
+      IF (IBAL .NE. 0) CALL BALBAK(KA,N,LOW,IGH,ZI,N,ZR)
       DO K = 1,N
-         NSWC_AI_R4 = WI ( K )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+         NSWC_AI_R4 = WI(K)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 30
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 10
          GO TO 20
    10    DO J = 1,N
             ZI(J,K) = 0.0
@@ -51515,7 +51515,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE EIGV
 
-      SUBROUTINE EIGV1 (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      SUBROUTINE EIGV1(IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -51528,16 +51528,16 @@ C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL BALANC (KA,N,A,LOW,IGH,ZI)
-      CALL ORTHES (KA,N,LOW,IGH,A,WR)
-      CALL ORTRAN (KA,N,LOW,IGH,A,WR,ZR)
-      CALL HQR2 (KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
+      IF (IBAL .NE. 0) CALL BALANC(KA,N,A,LOW,IGH,ZI)
+      CALL ORTHES(KA,N,LOW,IGH,A,WR)
+      CALL ORTRAN(KA,N,LOW,IGH,A,WR,ZR)
+      CALL HQR2(KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
       IF (IERR .NE. 0) RETURN
-      IF (IBAL .NE. 0) CALL BALBAK (KA,N,LOW,IGH,ZI,N,ZR)
+      IF (IBAL .NE. 0) CALL BALBAK(KA,N,LOW,IGH,ZI,N,ZR)
       DO K = 1,N
-         NSWC_AI_R4 = WI ( K )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+         NSWC_AI_R4 = WI(K)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 30
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 10
          GO TO 20
    10    DO J = 1,N
             ZI(J,K) = 0.0
@@ -51702,7 +51702,7 @@ C     ********** NOW BALANCE **********
       IGH = L
       END SUBROUTINE BALANC
 
-      SUBROUTINE BALINV (NZ,N,Z,LOW,IGH,SCALE)
+      SUBROUTINE BALINV(NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
@@ -52109,10 +52109,10 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          S = ABS(H(L-1,L-1)) + ABS(H(L,L))
          IF (S .EQ. 0.0) S = NORM
-         IF ( ABS ( H ( L , L - 1 ) ) .LE. MACHEP * S ) EXIT
+         IF (ABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -52147,7 +52147,7 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = P / S
          Q = Q / S
          R = R / S
-         IF ( M .EQ. L ) EXIT
+         IF (M .EQ. L) EXIT
          IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P)
      X    * (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
       END DO
@@ -52669,10 +52669,10 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          S = ABS(H(L-1,L-1)) + ABS(H(L,L))
          IF (S .EQ. 0.0) S = NORM
-         IF ( ABS ( H ( L , L - 1 ) ) .LE. MACHEP * S ) EXIT
+         IF (ABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -52707,7 +52707,7 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = P / S
          Q = Q / S
          R = R / S
-         IF ( M .EQ. L ) EXIT
+         IF (M .EQ. L) EXIT
          IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P)
      X    * (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
       END DO
@@ -52840,8 +52840,8 @@ C     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
          Q = WI(EN)
          NA = EN - 1
          NSWC_AI_R4 = Q
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 710
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 600
+         IF (NSWC_AI_R4 .LT. 0) GO TO 710
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 600
          GO TO 800
 C     ********** REAL VECTOR **********
   600    M = EN
@@ -52968,7 +52968,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1001 RETURN
       END SUBROUTINE HQR2
 
-      SUBROUTINE DEIG (IBAL,A,KA,N,WR,WI,IERR)
+      SUBROUTINE DEIG(IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -52980,12 +52980,12 @@ C                EIGENVALUES OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL DBAL (KA,N,A,LOW,IGH,WR)
-      CALL DORTH (KA,N,LOW,IGH,A,WR)
-      CALL DHQR (KA,N,LOW,IGH,A,WR,WI,IERR)
+      IF (IBAL .NE. 0) CALL DBAL(KA,N,A,LOW,IGH,WR)
+      CALL DORTH(KA,N,LOW,IGH,A,WR)
+      CALL DHQR(KA,N,LOW,IGH,A,WR,WI,IERR)
       END SUBROUTINE DEIG
 
-      SUBROUTINE DEIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
+      SUBROUTINE DEIGV(IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -52999,16 +52999,16 @@ C     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
       LOW = 1
       IGH = N
-      IF (IBAL .NE. 0) CALL DBAL (KA,N,A,LOW,IGH,ZI)
-      CALL DORTH (KA,N,LOW,IGH,A,WR)
-      CALL DORTRN (KA,N,LOW,IGH,A,WR,ZR)
-      CALL DHQR2 (KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
+      IF (IBAL .NE. 0) CALL DBAL(KA,N,A,LOW,IGH,ZI)
+      CALL DORTH(KA,N,LOW,IGH,A,WR)
+      CALL DORTRN(KA,N,LOW,IGH,A,WR,ZR)
+      CALL DHQR2(KA,N,LOW,IGH,A,WR,WI,ZR,IERR)
       IF (IERR .NE. 0) RETURN
-      IF (IBAL .NE. 0) CALL DBABK (KA,N,LOW,IGH,ZI,N,ZR)
+      IF (IBAL .NE. 0) CALL DBABK(KA,N,LOW,IGH,ZI,N,ZR)
       DO K = 1,N
-         NSWC_AI_R8 = WI ( K )
-         IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
-         IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+         NSWC_AI_R8 = WI(K)
+         IF (NSWC_AI_R8 .LT. 0) GO TO 30
+         IF (NSWC_AI_R8 .EQ. 0) GO TO 10
          GO TO 20
    10    DO J = 1,N
             ZI(J,K) = 0.D0
@@ -53173,7 +53173,7 @@ C     ********** NOW BALANCE **********
       IGH = L
       END SUBROUTINE DBAL
 
-      SUBROUTINE DBALNV (NZ,N,Z,LOW,IGH,SCALE)
+      SUBROUTINE DBALNV(NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
@@ -53412,10 +53412,10 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          S = DABS(H(L-1,L-1)) + DABS(H(L,L))
          IF (S .EQ. 0.D0) S = NORM
-         IF ( DABS ( H ( L , L - 1 ) ) .LE. MACHEP * S ) EXIT
+         IF (DABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -53450,7 +53450,7 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = P / S
          Q = Q / S
          R = R / S
-         IF ( M .EQ. L ) EXIT
+         IF (M .EQ. L) EXIT
          IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P)
      X    * (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
       END DO
@@ -53842,10 +53842,10 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          S = DABS(H(L-1,L-1)) + DABS(H(L,L))
          IF (S .EQ. 0.D0) S = NORM
-         IF ( DABS ( H ( L , L - 1 ) ) .LE. MACHEP * S ) EXIT
+         IF (DABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -53880,7 +53880,7 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = P / S
          Q = Q / S
          R = R / S
-         IF ( M .EQ. L ) EXIT
+         IF (M .EQ. L) EXIT
          IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P)
      X    * (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
       END DO
@@ -54013,8 +54013,8 @@ C     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
          Q = WI(EN)
          NA = EN - 1
          NSWC_AI_R8 = Q
-         IF ( NSWC_AI_R8 .LT. 0 ) GO TO 710
-         IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 600
+         IF (NSWC_AI_R8 .LT. 0) GO TO 710
+         IF (NSWC_AI_R8 .EQ. 0) GO TO 600
          GO TO 800
 C     ********** REAL VECTOR **********
   600    M = EN
@@ -54146,7 +54146,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
  1001 RETURN
       END SUBROUTINE DHQR2
 
-      SUBROUTINE SEIG (A, KA, N, W, T, IERR)
+      SUBROUTINE SEIG(A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA
@@ -54157,16 +54157,16 @@ C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
       IF (KA .EQ. 0) GO TO 10
-         CALL TRED1 (KA, N, A, W, T(N+1), T(1))
-         CALL TQLRAT (N, W, T, IERR)
+         CALL TRED1(KA, N, A, W, T(N+1), T(1))
+         CALL TQLRAT(N, W, T, IERR)
          RETURN
 10    L = N*(N + 1)
       L = L/2
-      CALL TRED3 (N, L, A, W, T(N+1), T(1))
-      CALL TQLRAT (N, W, T, IERR)
+      CALL TRED3(N, L, A, W, T(N+1), T(1))
+      CALL TQLRAT(N, W, T, IERR)
       END SUBROUTINE SEIG
 
-      SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
+      SUBROUTINE SEIG1(A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
@@ -54176,16 +54176,16 @@ C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
       IF (KA .EQ. 0) GO TO 10
-         CALL TRED1 (KA, N, A, W, T, T)
-         CALL IMTQL1 (N, W, T, IERR)
+         CALL TRED1(KA, N, A, W, T, T)
+         CALL IMTQL1(N, W, T, IERR)
          RETURN
 10    L = N*(N + 1)
       L = L/2
-      CALL TRED3 (N, L, A, W, T, T)
-      CALL IMTQL1 (N, W, T, IERR)
+      CALL TRED3(N, L, A, W, T, T)
+      CALL IMTQL1(N, W, T, IERR)
       END SUBROUTINE SEIG1
 
-      SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
+      SUBROUTINE SEIGV(A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
@@ -54194,11 +54194,11 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      CALL TRED2 (KA, N, A, W, T, Z)
-      CALL TQL2 (KA, N, W, T, Z, IERR)
+      CALL TRED2(KA, N, A, W, T, Z)
+      CALL TQL2(KA, N, W, T, Z, IERR)
       END SUBROUTINE SEIGV
 
-      SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
+      SUBROUTINE SEIGV1(A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
@@ -54207,8 +54207,8 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      CALL TRED2 (KA, N, A, W, T, Z)
-      CALL IMTQL2 (KA, N, W, T, Z, IERR)
+      CALL TRED2(KA, N, A, W, T, Z)
+      CALL IMTQL2(KA, N, W, T, Z, IERR)
       END SUBROUTINE SEIGV1
 
       SUBROUTINE TRED1(NM,N,A,D,E,E2)
@@ -54458,7 +54458,7 @@ C                **********
          C = B * B
 C     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
   105    DO M = L, N
-            IF ( E2 ( M ) .LE. C ) EXIT
+            IF (E2(M) .LE. C) EXIT
 C     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -54571,7 +54571,7 @@ C                **********
          J = 0
 C     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
   105    DO M = L, N
-            IF ( M .EQ. N ) EXIT
+            IF (M .EQ. N) EXIT
             IF (ABS(E(M)) .LE. MACHEP * (ABS(D(M)) + ABS(D(M+1))))
      X         GO TO 120
          END DO
@@ -54820,7 +54820,7 @@ C                **********
          IF (B .LT. H) B = H
 C     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
          DO M = L, N
-            IF ( ABS ( E ( M ) ) .LE. B ) EXIT
+            IF (ABS(E(M)) .LE. B) EXIT
 C     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -54967,7 +54967,7 @@ C                **********
          J = 0
 C     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
   105    DO M = L, N
-            IF ( M .EQ. N ) EXIT
+            IF (M .EQ. N) EXIT
             IF (ABS(E(M)) .LE. MACHEP * (ABS(D(M)) + ABS(D(M+1))))
      X         GO TO 120
          END DO
@@ -55048,7 +55048,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
 C     ********** LAST CARD OF IMTQL2 **********
       END SUBROUTINE IMTQL2
 
-      SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
+      SUBROUTINE DSEIG(A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA
@@ -55060,16 +55060,16 @@ C                DOUBLE PRECISION COMPUTATION OF THE
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
       IF (KA .EQ. 0) GO TO 10
-         CALL DTRED1 (KA, N, A, W, T(N+1), T(1))
-         CALL DTQL (N, W, T, IERR)
+         CALL DTRED1(KA, N, A, W, T(N+1), T(1))
+         CALL DTQL(N, W, T, IERR)
          RETURN
 10    L = N*(N + 1)
       L = L/2
-      CALL DTRED3 (N, L, A, W, T(N+1), T(1))
-      CALL DTQL (N, W, T, IERR)
+      CALL DTRED3(N, L, A, W, T(N+1), T(1))
+      CALL DTQL(N, W, T, IERR)
       END SUBROUTINE DSEIG
 
-      SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
+      SUBROUTINE DSEIGV(A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
@@ -55080,11 +55080,11 @@ C                 DOUBLE PRECISION COMPUTATION OF
 C                 EIGENVALUES AND EIGENVECTORS OF
 C                     SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      CALL DTRED2 (KA, N, A, W, T, Z)
-      CALL DTQL2 (KA, N, W, T, Z, IERR)
+      CALL DTRED2(KA, N, A, W, T, Z)
+      CALL DTQL2(KA, N, W, T, Z, IERR)
       END SUBROUTINE DSEIGV
 
-      SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
+      SUBROUTINE DTRED1(NM,N,A,D,E,E2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
@@ -55184,7 +55184,7 @@ C     ********** FORM REDUCED A **********
 C     ********** LAST CARD OF DTRED1 **********
       END SUBROUTINE DTRED1
 
-      SUBROUTINE DTRED3 (N,NV,A,D,E,E2)
+      SUBROUTINE DTRED3(N,NV,A,D,E,E2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NV
@@ -55279,7 +55279,7 @@ C     ********** FORM REDUCED A **********
 C     ********** LAST CARD OF DTRED3 **********
       END SUBROUTINE DTRED3
 
-      SUBROUTINE DTQL (N,D,E2,IERR)
+      SUBROUTINE DTQL(N,D,E2,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
@@ -55330,7 +55330,7 @@ C                **********
          C = B * B
 C     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
   105    DO M = L, N
-            IF ( E2 ( M ) .LE. C ) EXIT
+            IF (E2(M) .LE. C) EXIT
 C     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -55395,7 +55395,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
 C     ********** LAST CARD OF DTQL **********
       END SUBROUTINE DTQL
 
-      SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
+      SUBROUTINE DTRED2(NM,N,A,D,E,Z)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
@@ -55514,7 +55514,7 @@ C     ********** ACCUMULATION OF TRANSFORMATION MATRICES **********
 C     ********** LAST CARD OF DTRED2 **********
       END SUBROUTINE DTRED2
 
-      SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
+      SUBROUTINE DTQL2(NM,N,D,E,Z,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
@@ -55580,7 +55580,7 @@ C                **********
          IF (B .LT. H) B = H
 C     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
          DO M = L, N
-            IF ( DABS ( E ( M ) ) .LE. B ) EXIT
+            IF (DABS(E(M)) .LE. B) EXIT
 C     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -56087,7 +56087,7 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW  -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          IF (ABS(HR(L,L-1)) .LE.
      X      MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1))
      X             + ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
@@ -56349,8 +56349,8 @@ C     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 C                FROM THE INFORMATION LEFT BY CORTH **********
       IEND = IGH - LOW - 1
       NSWC_AI_I4 = IEND
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 180
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      IF (NSWC_AI_I4 .LT. 0) GO TO 180
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 150
       GO TO 105
 C     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
   105 DO II = 1, IEND
@@ -56425,7 +56425,7 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          IF (ABS(HR(L,L-1)) .LE.
      X      MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1))
      X             + ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
@@ -56638,7 +56638,7 @@ C-----------------------------------------------------------------------
       CALL DCOMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
       END SUBROUTINE DCEIG
 
-      SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
+      SUBROUTINE DCEIGV(IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
@@ -57041,7 +57041,7 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW  -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          IF (DABS(HR(L,L-1)) .LE.
      X      MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1))
      X             + DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
@@ -57149,7 +57149,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
  1001 RETURN
       END SUBROUTINE DCOMQR
 
-      SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
+      SUBROUTINE DCBABK(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: NM, IGH, LOW
@@ -57217,7 +57217,7 @@ C                IGH+1 STEP 1 UNTIL N DO -- **********
 C     ********** LAST CARD OF DCBABK **********
       END SUBROUTINE DCBABK
 
-      SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
+      SUBROUTINE DCMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
@@ -57301,8 +57301,8 @@ C     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 C                FROM THE INFORMATION LEFT BY DCORTH **********
       IEND = IGH - LOW - 1
       NSWC_AI_I4 = IEND
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 180
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      IF (NSWC_AI_I4 .LT. 0) GO TO 180
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 150
       GO TO 105
 C     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
   105 DO II = 1, IEND
@@ -57377,7 +57377,7 @@ C     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
-         IF ( L .EQ. LOW ) EXIT
+         IF (L .EQ. LOW) EXIT
          IF (DABS(HR(L,L-1)) .LE.
      X      MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1))
      X             + DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
@@ -57786,9 +57786,9 @@ C SET UP PHASE 1 COSTS.
       END DO
    80 IF (KODE.EQ.0) GO TO 150
       DO J=1,N
-         NSWC_AI_R4 = X ( J )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 90
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 110
+         NSWC_AI_R4 = X(J)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 90
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 110
          GO TO 100
    90    CU(1,J) = 1.
          IU(1,J) = 1
@@ -57799,9 +57799,9 @@ C SET UP PHASE 1 COSTS.
       END DO
       DO J=1,K
          JPN = J + N
-         NSWC_AI_R4 = RES ( J )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 140
+         NSWC_AI_R4 = RES(J)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 120
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 140
          GO TO 130
   120    CU(1,JPN) = 1.
          IU(1,JPN) = 1
@@ -58657,7 +58657,7 @@ C                                       LEAST SQUARES SOLUTION.
       END DO
       END SUBROUTINE DORSOL
 
-      SUBROUTINE LSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
+      SUBROUTINE LSQR(IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                 KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -58804,10 +58804,10 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 C     FACTOR THE MATRIX A
 C     NUM = NP
       IF (M .LT. N) GO TO 40
-         CALL U11LS (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
+         CALL U11LS(A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
      *               WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
          GO TO 100
-   40 CALL U11US (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
+   40 CALL U11US(A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
      *            WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
 C     SOLUTION PHASE
   100 IERR = 0
@@ -58824,19 +58824,19 @@ C     IF (MODE .EQ. 0) RETURN
 C     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
       IF (LW .LT. M0) GO TO 250
       IF (M .LT. N) GO TO 120
-         CALL U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+         CALL U12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *               WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
          RETURN
-  120 CALL U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+  120 CALL U12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *            WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
       RETURN
 C     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
   130 IF (LW .LT. 2*M0) GO TO 250
       IF (M .LT. N) GO TO 140
-         CALL U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+         CALL U12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *               WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
          RETURN
- 140  CALL U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+ 140  CALL U12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *            WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
       RETURN
 C     ERROR RETURN
@@ -58865,7 +58865,7 @@ C 280 IERR = 8
 C     RETURN
       END SUBROUTINE LSQR
 
-      SUBROUTINE U11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
+      SUBROUTINE U11LS(A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IC,IR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: KRANK
@@ -58917,12 +58917,12 @@ C          MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (I .LE. NP) GO TO 400
       IF (I .GT. KRANK) GO TO 70
-      CALL SSWAP (1,EB(I),1,EB(KK),1)
-      CALL SSWAP (1,UB(I),1,UB(KK),1)
-      CALL SSWAP (1,W(I),1,W(KK),1)
-      CALL SSWAP (1,H(I),1,H(KK),1)
-      CALL ISWAP (1,IC(I),1,IC(KK),1)
-      CALL SSWAP (M,A(1,I),1,A(1,KK),1)
+      CALL SSWAP(1,EB(I),1,EB(KK),1)
+      CALL SSWAP(1,UB(I),1,UB(KK),1)
+      CALL SSWAP(1,W(I),1,W(KK),1)
+      CALL SSWAP(1,H(I),1,H(KK),1)
+      CALL ISWAP(1,IC(I),1,IC(KK),1)
+      CALL SSWAP(M,A(1,I),1,A(1,KK),1)
       GO TO 50
 C           TEST FOR ZERO RANK
    70 IF (KRANK .GT. 0) GO TO 100
@@ -58978,40 +58978,40 @@ C        MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (J .LE. NP) GO TO 410
       IF (IMIN .GT. KRANK) GO TO 180
-         CALL ISWAP (1,IC(IMIN),1,IC(KK),1)
-         CALL SSWAP (M,A(1,IMIN),1,A(1,KK),1)
-         CALL SSWAP (1,EB(IMIN),1,EB(KK),1)
-         CALL SSWAP (1,UB(IMIN),1,UB(KK),1)
-         CALL SSWAP (1,DB(IMIN),1,DB(KK),1)
-         CALL SSWAP (1,W(IMIN),1,W(KK),1)
-         CALL SSWAP (1,H(IMIN),1,H(KK),1)
+         CALL ISWAP(1,IC(IMIN),1,IC(KK),1)
+         CALL SSWAP(M,A(1,IMIN),1,A(1,KK),1)
+         CALL SSWAP(1,EB(IMIN),1,EB(KK),1)
+         CALL SSWAP(1,UB(IMIN),1,UB(KK),1)
+         CALL SSWAP(1,DB(IMIN),1,DB(KK),1)
+         CALL SSWAP(1,W(IMIN),1,W(KK),1)
+         CALL SSWAP(1,H(IMIN),1,H(KK),1)
   180 IF (J .GT. KRANK) GO TO 300
       GO TO 110
 C        COLUMN PIVOT
   200 IF (IMIN .EQ. J) GO TO 210
-      CALL SSWAP (1,H(J),1,H(IMIN),1)
-      CALL SSWAP (M,A(1,J),1,A(1,IMIN),1)
-      CALL SSWAP (1,EB(J),1,EB(IMIN),1)
-      CALL SSWAP (1,UB(J),1,UB(IMIN),1)
-      CALL SSWAP (1,DB(J),1,DB(IMIN),1)
-      CALL SSWAP (1,W(J),1,W(IMIN),1)
-      CALL ISWAP (1,IC(J),1,IC(IMIN),1)
+      CALL SSWAP(1,H(J),1,H(IMIN),1)
+      CALL SSWAP(M,A(1,J),1,A(1,IMIN),1)
+      CALL SSWAP(1,EB(J),1,EB(IMIN),1)
+      CALL SSWAP(1,UB(J),1,UB(IMIN),1)
+      CALL SSWAP(1,DB(J),1,DB(IMIN),1)
+      CALL SSWAP(1,W(J),1,W(IMIN),1)
+      CALL ISWAP(1,IC(J),1,IC(IMIN),1)
 C        ROW PIVOT
   210 JMAX = ISAMAX(MM,A(J,J),1)
       JMAX = JMAX + J - 1
       IF (JMAX .EQ. J) GO TO 220
-      CALL SSWAP (N,A(J,1),MDA,A(JMAX,1),MDA)
-      CALL ISWAP (1,IR(J),1,IR(JMAX),1)
+      CALL SSWAP(N,A(J,1),MDA,A(JMAX,1),MDA)
+      CALL ISWAP(1,IR(J),1,IR(JMAX),1)
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = SNRM2(MM,A(J,J),1)
       IF (TN .EQ. 0.0) GO TO 170
       IF (A(J,J) .NE. 0.0) TN = SIGN(TN,A(J,J))
-      CALL SSCAL (MM,1.0/TN,A(J,J),1)
+      CALL SSCAL(MM,1.0/TN,A(J,J),1)
       A(J,J) = A(J,J) + 1.0
       IF (J .EQ. N) GO TO 250
       DO I = JP1,N
          BB = -SDOT(MM,A(J,J),1,A(J,I),1)/A(J,J)
-         CALL SAXPY (MM,BB,A(J,J),1,A(J,I),1)
+         CALL SAXPY(MM,BB,A(J,J),1,A(J,I),1)
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.0) GO TO 240
          TT = 1.0 - (A(J,I)/H(I))**2
@@ -59051,13 +59051,13 @@ C        COMPUTE KSURE
             UB(II + 1) = TEMP
   310    CONTINUE
          END DO
-         IF ( IS .EQ. 0 ) EXIT
+         IF (IS .EQ. 0) EXIT
       END DO
       KSURE = 0
       SUM = 0.0
       DO I = 1,KRANK
          R2 = UB(I)*UB(I)
-         IF ( R2 + SUM .GE. 1.0 ) EXIT
+         IF (R2 + SUM .GE. 1.0) EXIT
          SUM = SUM + R2
          KSURE = KSURE + 1
       END DO
@@ -59069,7 +59069,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       I = KRANK
   340    TN = SNRM2(NMK,A(I,KP1),MDA)/A(I,I)
          TN = A(I,I)*SQRT(1.0 + TN*TN)
-         CALL SSCAL (NMK,1.0/TN,A(I,KP1),MDA)
+         CALL SSCAL(NMK,1.0/TN,A(I,KP1),MDA)
          W(I) = A(I,I)/TN + 1.0
          A(I,I) = -TN
          IF (I .EQ. 1) GO TO 350
@@ -59077,7 +59077,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
          DO II = 1,IM1
             TT = -SDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
             TT = TT - A(II,I)
-            CALL SAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
+            CALL SAXPY(NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
             A(II,I) = A(II,I) + TT*W(I)
          END DO
          I = I - 1
@@ -59090,7 +59090,7 @@ C     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
   410 KRANK = J - 1
       END SUBROUTINE U11LS
 
-      SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+      SUBROUTINE U12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,NB)
@@ -59151,8 +59151,8 @@ C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
          TT = A(J,J)
          A(J,J) = H(J)
          DO I = 1,NB
-            BB = -SDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
-            CALL SAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
+            BB = -SDOT(M-J+1,A(J,J),1,B(J,I),1)/H(J)
+            CALL SAXPY(M-J+1,BB,A(J,J),1,B(J,I),1)
          END DO
          A(J,J) = TT
       END DO
@@ -59168,7 +59168,7 @@ C     BACK SOLVE UPPER TRIANGULAR R
       IF (I .EQ. 1) GO TO 200
       IM1 = I - 1
       DO JB = 1,NB
-         CALL SAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
+         CALL SAXPY(IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
       END DO
       I = IM1
       GO TO 150
@@ -59187,7 +59187,7 @@ C      MINIMAL LENGTH SOLUTION
          DO I = 1,K
             TT = -SDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
             TT = TT - B(I,JB)
-            CALL SAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
+            CALL SAXPY(NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
             B(I,JB) = B(I,JB) + TT*W(I)
          END DO
       END DO
@@ -59199,7 +59199,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .EQ. I) GO TO 240
          IF (J .LT. 0) GO TO 240
          IC(I) = -IC(I)
-  250       CALL SSWAP (NB,B(J,1),MDB,B(I,1),MDB)
+  250       CALL SSWAP(NB,B(J,1),MDB,B(I,1),MDB)
             IJ = IC(J)
             IC(J) = -IC(J)
             J = IJ
@@ -59210,7 +59210,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       END DO
       END SUBROUTINE U12LS
 
-      SUBROUTINE U11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
+      SUBROUTINE U11US(A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IR,IC)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: KRANK
@@ -59262,12 +59262,12 @@ C          MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (I .LE. NP) GO TO 400
       IF (I .GT. KRANK) GO TO 70
-      CALL SSWAP (1,EB(I),1,EB(KK),1)
-      CALL SSWAP (1,UB(I),1,UB(KK),1)
-      CALL SSWAP (1,W(I),1,W(KK),1)
-      CALL SSWAP (1,H(I),1,H(KK),1)
-      CALL ISWAP (1,IR(I),1,IR(KK),1)
-      CALL SSWAP (N,A(I,1),MDA,A(KK,1),MDA)
+      CALL SSWAP(1,EB(I),1,EB(KK),1)
+      CALL SSWAP(1,UB(I),1,UB(KK),1)
+      CALL SSWAP(1,W(I),1,W(KK),1)
+      CALL SSWAP(1,H(I),1,H(KK),1)
+      CALL ISWAP(1,IR(I),1,IR(KK),1)
+      CALL SSWAP(N,A(I,1),MDA,A(KK,1),MDA)
       GO TO 50
 C           TEST FOR ZERO RANK
    70 IF (KRANK .GT. 0) GO TO 100
@@ -59323,40 +59323,40 @@ C        MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (J .LE. NP) GO TO 410
       IF (IMIN .GT. KRANK) GO TO 180
-         CALL ISWAP (1,IR(IMIN),1,IR(KK),1)
-         CALL SSWAP (N,A(IMIN,1),MDA,A(KK,1),MDA)
-         CALL SSWAP (1,EB(IMIN),1,EB(KK),1)
-         CALL SSWAP (1,UB(IMIN),1,UB(KK),1)
-         CALL SSWAP (1,DB(IMIN),1,DB(KK),1)
-         CALL SSWAP (1,W(IMIN),1,W(KK),1)
-         CALL SSWAP (1,H(IMIN),1,H(KK),1)
+         CALL ISWAP(1,IR(IMIN),1,IR(KK),1)
+         CALL SSWAP(N,A(IMIN,1),MDA,A(KK,1),MDA)
+         CALL SSWAP(1,EB(IMIN),1,EB(KK),1)
+         CALL SSWAP(1,UB(IMIN),1,UB(KK),1)
+         CALL SSWAP(1,DB(IMIN),1,DB(KK),1)
+         CALL SSWAP(1,W(IMIN),1,W(KK),1)
+         CALL SSWAP(1,H(IMIN),1,H(KK),1)
   180 IF (J .GT. KRANK) GO TO 300
       GO TO 110
 C        ROW PIVOT
   200 IF (IMIN .EQ. J) GO TO 210
-      CALL SSWAP (1,H(J),1,H(IMIN),1)
-      CALL SSWAP (N,A(J,1),MDA,A(IMIN,1),MDA)
-      CALL SSWAP (1,EB(J),1,EB(IMIN),1)
-      CALL SSWAP (1,UB(J),1,UB(IMIN),1)
-      CALL SSWAP (1,DB(J),1,DB(IMIN),1)
-      CALL SSWAP (1,W(J),1,W(IMIN),1)
-      CALL ISWAP (1,IR(J),1,IR(IMIN),1)
+      CALL SSWAP(1,H(J),1,H(IMIN),1)
+      CALL SSWAP(N,A(J,1),MDA,A(IMIN,1),MDA)
+      CALL SSWAP(1,EB(J),1,EB(IMIN),1)
+      CALL SSWAP(1,UB(J),1,UB(IMIN),1)
+      CALL SSWAP(1,DB(J),1,DB(IMIN),1)
+      CALL SSWAP(1,W(J),1,W(IMIN),1)
+      CALL ISWAP(1,IR(J),1,IR(IMIN),1)
 C        COLUMN PIVOT
   210 JMAX = ISAMAX(NN,A(J,J),MDA)
       JMAX = JMAX + J - 1
       IF (JMAX .EQ. J) GO TO 220
-      CALL SSWAP (M,A(1,J),1,A(1,JMAX),1)
-      CALL ISWAP (1,IC(J),1,IC(JMAX),1)
+      CALL SSWAP(M,A(1,J),1,A(1,JMAX),1)
+      CALL ISWAP(1,IC(J),1,IC(JMAX),1)
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = SNRM2(NN,A(J,J),MDA)
       IF (TN .EQ. 0.0) GO TO 170
       IF (A(J,J) .NE. 0.0) TN = SIGN(TN,A(J,J))
-      CALL SSCAL (NN,1.0/TN,A(J,J),MDA)
+      CALL SSCAL(NN,1.0/TN,A(J,J),MDA)
       A(J,J) = A(J,J) + 1.0
       IF (J .EQ. M) GO TO 250
       DO I = JP1,M
          BB = -SDOT(NN,A(J,J),MDA,A(I,J),MDA)/A(J,J)
-         CALL SAXPY (NN,BB,A(J,J),MDA,A(I,J),MDA)
+         CALL SAXPY(NN,BB,A(J,J),MDA,A(I,J),MDA)
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.0) GO TO 240
          TT = 1.0 - (A(I,J)/H(I))**2
@@ -59396,13 +59396,13 @@ C        COMPUTE KSURE
             UB(II + 1) = TEMP
   310    CONTINUE
          END DO
-         IF ( IS .EQ. 0 ) EXIT
+         IF (IS .EQ. 0) EXIT
       END DO
       KSURE = 0
       SUM = 0.0
       DO I = 1,KRANK
          R2 = UB(I)*UB(I)
-         IF ( R2 + SUM .GE. 1.0 ) EXIT
+         IF (R2 + SUM .GE. 1.0) EXIT
          SUM = SUM + R2
          KSURE = KSURE + 1
       END DO
@@ -59414,7 +59414,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       I = KRANK
   340    TN = SNRM2(MMK,A(KP1,I),1)/A(I,I)
          TN = A(I,I)*SQRT(1.0 + TN*TN)
-         CALL SSCAL (MMK,1.0/TN,A(KP1,I),1)
+         CALL SSCAL(MMK,1.0/TN,A(KP1,I),1)
          W(I) = A(I,I)/TN + 1.0
          A(I,I) = -TN
          IF (I .EQ. 1) GO TO 350
@@ -59422,7 +59422,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
          DO II = 1,IM1
             TT = -SDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
             TT = TT - A(I,II)
-            CALL SAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
+            CALL SAXPY(MMK,TT,A(KP1,I),1,A(KP1,II),1)
             A(I,II) = A(I,II) + TT*W(I)
          END DO
          I = I - 1
@@ -59435,7 +59435,7 @@ C     FIRST NP ROWS ARE LINEARLY DEPENDENT
   410 KRANK = J - 1
       END SUBROUTINE U11US
 
-      SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+      SUBROUTINE U12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,NB)
@@ -59500,7 +59500,7 @@ C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
             I = KP1 - J
             TT = -SDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
             TT = TT - B(I,JB)
-            CALL SAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
+            CALL SAXPY(MMK,TT,A(KP1,I),1,B(KP1,JB),1)
             B(I,JB) = B(I,JB) + TT*W(I)
          END DO
       END DO
@@ -59512,7 +59512,7 @@ C     BACK SOLVE LOWER TRIANGULAR L
       DO JB = 1,NB
          DO I = 1,K
             B(I,JB) = B(I,JB)/A(I,I)
-            IF ( I .EQ. K ) EXIT
+            IF (I .EQ. K) EXIT
             IP1 = I + 1
             CALL SAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
          END DO
@@ -59543,7 +59543,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .EQ. I) GO TO 240
          IF (J .LT. 0) GO TO 240
          IC(I) = -IC(I)
-  250       CALL SSWAP (NB,B(J,1),MDB,B(I,1),MDB)
+  250       CALL SSWAP(NB,B(J,1),MDB,B(I,1),MDB)
             IJ = IC(J)
             IC(J) = -IC(J)
             J = IJ
@@ -59554,7 +59554,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       END DO
       END SUBROUTINE U12US
 
-      SUBROUTINE DLSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
+      SUBROUTINE DLSQR(IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                  KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -59702,10 +59702,10 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 C     FACTOR THE MATRIX A
 C     NUM = NP
       IF (M .LT. N) GO TO 40
-         CALL DU11LS (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
+         CALL DU11LS(A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
      *                WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
          GO TO 100
-   40 CALL DU11US (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
+   40 CALL DU11US(A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE,
      *             WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
 C     SOLUTION PHASE
   100 IERR = 0
@@ -59722,19 +59722,19 @@ C     IF (MODE .EQ. 0) RETURN
 C     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
       IF (LW .LT. M0) GO TO 250
       IF (M .LT. N) GO TO 120
-         CALL DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+         CALL DU12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *                WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
          RETURN
-  120 CALL DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+  120 CALL DU12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *             WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
       RETURN
 C     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
   130 IF (LW .LT. 2*M0) GO TO 250
       IF (M .LT. N) GO TO 140
-         CALL DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+         CALL DU12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *                WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
          RETURN
- 140  CALL DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
+ 140  CALL DU12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,
      *             WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
       RETURN
 C     ERROR RETURN
@@ -59763,7 +59763,7 @@ C 280 IERR = 8
 C     RETURN
       END SUBROUTINE DLSQR
 
-      SUBROUTINE DU11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
+      SUBROUTINE DU11LS(A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IC,IR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: KRANK
@@ -59815,12 +59815,12 @@ C          MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (I .LE. NP) GO TO 400
       IF (I .GT. KRANK) GO TO 70
-      CALL DSWAP (1,EB(I),1,EB(KK),1)
-      CALL DSWAP (1,UB(I),1,UB(KK),1)
-      CALL DSWAP (1,W(I),1,W(KK),1)
-      CALL DSWAP (1,H(I),1,H(KK),1)
-      CALL ISWAP (1,IC(I),1,IC(KK),1)
-      CALL DSWAP (M,A(1,I),1,A(1,KK),1)
+      CALL DSWAP(1,EB(I),1,EB(KK),1)
+      CALL DSWAP(1,UB(I),1,UB(KK),1)
+      CALL DSWAP(1,W(I),1,W(KK),1)
+      CALL DSWAP(1,H(I),1,H(KK),1)
+      CALL ISWAP(1,IC(I),1,IC(KK),1)
+      CALL DSWAP(M,A(1,I),1,A(1,KK),1)
       GO TO 50
 C           TEST FOR ZERO RANK
    70 IF (KRANK .GT. 0) GO TO 100
@@ -59876,40 +59876,40 @@ C        MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (J .LE. NP) GO TO 410
       IF (IMIN .GT. KRANK) GO TO 180
-         CALL ISWAP (1,IC(IMIN),1,IC(KK),1)
-         CALL DSWAP (M,A(1,IMIN),1,A(1,KK),1)
-         CALL DSWAP (1,EB(IMIN),1,EB(KK),1)
-         CALL DSWAP (1,UB(IMIN),1,UB(KK),1)
-         CALL DSWAP (1,DB(IMIN),1,DB(KK),1)
-         CALL DSWAP (1,W(IMIN),1,W(KK),1)
-         CALL DSWAP (1,H(IMIN),1,H(KK),1)
+         CALL ISWAP(1,IC(IMIN),1,IC(KK),1)
+         CALL DSWAP(M,A(1,IMIN),1,A(1,KK),1)
+         CALL DSWAP(1,EB(IMIN),1,EB(KK),1)
+         CALL DSWAP(1,UB(IMIN),1,UB(KK),1)
+         CALL DSWAP(1,DB(IMIN),1,DB(KK),1)
+         CALL DSWAP(1,W(IMIN),1,W(KK),1)
+         CALL DSWAP(1,H(IMIN),1,H(KK),1)
   180 IF (J .GT. KRANK) GO TO 300
       GO TO 110
 C        COLUMN PIVOT
   200 IF (IMIN .EQ. J) GO TO 210
-      CALL DSWAP (1,H(J),1,H(IMIN),1)
-      CALL DSWAP (M,A(1,J),1,A(1,IMIN),1)
-      CALL DSWAP (1,EB(J),1,EB(IMIN),1)
-      CALL DSWAP (1,UB(J),1,UB(IMIN),1)
-      CALL DSWAP (1,DB(J),1,DB(IMIN),1)
-      CALL DSWAP (1,W(J),1,W(IMIN),1)
-      CALL ISWAP (1,IC(J),1,IC(IMIN),1)
+      CALL DSWAP(1,H(J),1,H(IMIN),1)
+      CALL DSWAP(M,A(1,J),1,A(1,IMIN),1)
+      CALL DSWAP(1,EB(J),1,EB(IMIN),1)
+      CALL DSWAP(1,UB(J),1,UB(IMIN),1)
+      CALL DSWAP(1,DB(J),1,DB(IMIN),1)
+      CALL DSWAP(1,W(J),1,W(IMIN),1)
+      CALL ISWAP(1,IC(J),1,IC(IMIN),1)
 C        ROW PIVOT
   210 JMAX = IDAMAX(MM,A(J,J),1)
       JMAX = JMAX + J - 1
       IF (JMAX .EQ. J) GO TO 220
-      CALL DSWAP (N,A(J,1),MDA,A(JMAX,1),MDA)
-      CALL ISWAP (1,IR(J),1,IR(JMAX),1)
+      CALL DSWAP(N,A(J,1),MDA,A(JMAX,1),MDA)
+      CALL ISWAP(1,IR(J),1,IR(JMAX),1)
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = DNRM2(MM,A(J,J),1)
       IF (TN .EQ. 0.D0) GO TO 170
       IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
-      CALL DSCAL (MM,1.D0/TN,A(J,J),1)
+      CALL DSCAL(MM,1.D0/TN,A(J,J),1)
       A(J,J) = A(J,J) + 1.D0
       IF (J .EQ. N) GO TO 250
       DO I = JP1,N
          BB = -DDOT(MM,A(J,J),1,A(J,I),1)/A(J,J)
-         CALL DAXPY (MM,BB,A(J,J),1,A(J,I),1)
+         CALL DAXPY(MM,BB,A(J,J),1,A(J,I),1)
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.D0) GO TO 240
          TT = 1.D0 - (A(J,I)/H(I))**2
@@ -59949,13 +59949,13 @@ C        COMPUTE KSURE
             UB(II + 1) = TEMP
   310    CONTINUE
          END DO
-         IF ( IS .EQ. 0 ) EXIT
+         IF (IS .EQ. 0) EXIT
       END DO
       KSURE = 0
       SUM = 0.D0
       DO I = 1,KRANK
          R2 = UB(I)*UB(I)
-         IF ( R2 + SUM .GE. 1.D0 ) EXIT
+         IF (R2 + SUM .GE. 1.D0) EXIT
          SUM = SUM + R2
          KSURE = KSURE + 1
       END DO
@@ -59967,7 +59967,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       I = KRANK
   340    TN = DNRM2(NMK,A(I,KP1),MDA)/A(I,I)
          TN = A(I,I)*DSQRT(1.D0 + TN*TN)
-         CALL DSCAL (NMK,1.D0/TN,A(I,KP1),MDA)
+         CALL DSCAL(NMK,1.D0/TN,A(I,KP1),MDA)
          W(I) = A(I,I)/TN + 1.D0
          A(I,I) = -TN
          IF (I .EQ. 1) GO TO 350
@@ -59975,7 +59975,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
          DO II = 1,IM1
             TT = -DDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
             TT = TT - A(II,I)
-            CALL DAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
+            CALL DAXPY(NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
             A(II,I) = A(II,I) + TT*W(I)
          END DO
          I = I - 1
@@ -59988,7 +59988,7 @@ C     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
   410 KRANK = J - 1
       END SUBROUTINE DU11LS
 
-      SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+      SUBROUTINE DU12LS(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
@@ -60046,8 +60046,8 @@ C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
          TT = A(J,J)
          A(J,J) = H(J)
          DO I = 1,NB
-            BB = -DDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
-            CALL DAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
+            BB = -DDOT(M-J+1,A(J,J),1,B(J,I),1)/H(J)
+            CALL DAXPY(M-J+1,BB,A(J,J),1,B(J,I),1)
          END DO
          A(J,J) = TT
       END DO
@@ -60063,7 +60063,7 @@ C     BACK SOLVE UPPER TRIANGULAR R
       IF (I .EQ. 1) GO TO 200
       IM1 = I - 1
       DO JB = 1,NB
-         CALL DAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
+         CALL DAXPY(IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
       END DO
       I = IM1
       GO TO 150
@@ -60082,7 +60082,7 @@ C      MINIMAL LENGTH SOLUTION
          DO I = 1,K
             TT = -DDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
             TT = TT - B(I,JB)
-            CALL DAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
+            CALL DAXPY(NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
             B(I,JB) = B(I,JB) + TT*W(I)
          END DO
       END DO
@@ -60094,7 +60094,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .EQ. I) GO TO 240
          IF (J .LT. 0) GO TO 240
          IC(I) = -IC(I)
-  250       CALL DSWAP (NB,B(J,1),MDB,B(I,1),MDB)
+  250       CALL DSWAP(NB,B(J,1),MDB,B(I,1),MDB)
             IJ = IC(J)
             IC(J) = -IC(J)
             J = IJ
@@ -60105,7 +60105,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       END DO
       END SUBROUTINE DU12LS
 
-      SUBROUTINE DU11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
+      SUBROUTINE DU11US(A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IR,IC)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: KRANK
@@ -60157,12 +60157,12 @@ C          MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (I .LE. NP) GO TO 400
       IF (I .GT. KRANK) GO TO 70
-      CALL DSWAP (1,EB(I),1,EB(KK),1)
-      CALL DSWAP (1,UB(I),1,UB(KK),1)
-      CALL DSWAP (1,W(I),1,W(KK),1)
-      CALL DSWAP (1,H(I),1,H(KK),1)
-      CALL ISWAP (1,IR(I),1,IR(KK),1)
-      CALL DSWAP (N,A(I,1),MDA,A(KK,1),MDA)
+      CALL DSWAP(1,EB(I),1,EB(KK),1)
+      CALL DSWAP(1,UB(I),1,UB(KK),1)
+      CALL DSWAP(1,W(I),1,W(KK),1)
+      CALL DSWAP(1,H(I),1,H(KK),1)
+      CALL ISWAP(1,IR(I),1,IR(KK),1)
+      CALL DSWAP(N,A(I,1),MDA,A(KK,1),MDA)
       GO TO 50
 C           TEST FOR ZERO RANK
    70 IF (KRANK .GT. 0) GO TO 100
@@ -60218,40 +60218,40 @@ C        MATRIX REDUCTION
       IF (MODE .EQ. 0) RETURN
       IF (J .LE. NP) GO TO 410
       IF (IMIN .GT. KRANK) GO TO 180
-         CALL ISWAP (1,IR(IMIN),1,IR(KK),1)
-         CALL DSWAP (N,A(IMIN,1),MDA,A(KK,1),MDA)
-         CALL DSWAP (1,EB(IMIN),1,EB(KK),1)
-         CALL DSWAP (1,UB(IMIN),1,UB(KK),1)
-         CALL DSWAP (1,DB(IMIN),1,DB(KK),1)
-         CALL DSWAP (1,W(IMIN),1,W(KK),1)
-         CALL DSWAP (1,H(IMIN),1,H(KK),1)
+         CALL ISWAP(1,IR(IMIN),1,IR(KK),1)
+         CALL DSWAP(N,A(IMIN,1),MDA,A(KK,1),MDA)
+         CALL DSWAP(1,EB(IMIN),1,EB(KK),1)
+         CALL DSWAP(1,UB(IMIN),1,UB(KK),1)
+         CALL DSWAP(1,DB(IMIN),1,DB(KK),1)
+         CALL DSWAP(1,W(IMIN),1,W(KK),1)
+         CALL DSWAP(1,H(IMIN),1,H(KK),1)
   180 IF (J .GT. KRANK) GO TO 300
       GO TO 110
 C        ROW PIVOT
   200 IF (IMIN .EQ. J) GO TO 210
-      CALL DSWAP (1,H(J),1,H(IMIN),1)
-      CALL DSWAP (N,A(J,1),MDA,A(IMIN,1),MDA)
-      CALL DSWAP (1,EB(J),1,EB(IMIN),1)
-      CALL DSWAP (1,UB(J),1,UB(IMIN),1)
-      CALL DSWAP (1,DB(J),1,DB(IMIN),1)
-      CALL DSWAP (1,W(J),1,W(IMIN),1)
-      CALL ISWAP (1,IR(J),1,IR(IMIN),1)
+      CALL DSWAP(1,H(J),1,H(IMIN),1)
+      CALL DSWAP(N,A(J,1),MDA,A(IMIN,1),MDA)
+      CALL DSWAP(1,EB(J),1,EB(IMIN),1)
+      CALL DSWAP(1,UB(J),1,UB(IMIN),1)
+      CALL DSWAP(1,DB(J),1,DB(IMIN),1)
+      CALL DSWAP(1,W(J),1,W(IMIN),1)
+      CALL ISWAP(1,IR(J),1,IR(IMIN),1)
 C        COLUMN PIVOT
   210 JMAX = IDAMAX(NN,A(J,J),MDA)
       JMAX = JMAX + J - 1
       IF (JMAX .EQ. J) GO TO 220
-      CALL DSWAP (M,A(1,J),1,A(1,JMAX),1)
-      CALL ISWAP (1,IC(J),1,IC(JMAX),1)
+      CALL DSWAP(M,A(1,J),1,A(1,JMAX),1)
+      CALL ISWAP(1,IC(J),1,IC(JMAX),1)
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = DNRM2(NN,A(J,J),MDA)
       IF (TN .EQ. 0.D0) GO TO 170
       IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
-      CALL DSCAL (NN,1.D0/TN,A(J,J),MDA)
+      CALL DSCAL(NN,1.D0/TN,A(J,J),MDA)
       A(J,J) = A(J,J) + 1.D0
       IF (J .EQ. M) GO TO 250
       DO I = JP1,M
          BB = -DDOT(NN,A(J,J),MDA,A(I,J),MDA)/A(J,J)
-         CALL DAXPY (NN,BB,A(J,J),MDA,A(I,J),MDA)
+         CALL DAXPY(NN,BB,A(J,J),MDA,A(I,J),MDA)
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.D0) GO TO 240
          TT = 1.0 - (A(I,J)/H(I))**2
@@ -60291,13 +60291,13 @@ C        COMPUTE KSURE
             UB(II + 1) = TEMP
   310    CONTINUE
          END DO
-         IF ( IS .EQ. 0 ) EXIT
+         IF (IS .EQ. 0) EXIT
       END DO
       KSURE = 0
       SUM = 0.D0
       DO I = 1,KRANK
          R2 = UB(I)*UB(I)
-         IF ( R2 + SUM .GE. 1.D0 ) EXIT
+         IF (R2 + SUM .GE. 1.D0) EXIT
          SUM = SUM + R2
          KSURE = KSURE + 1
       END DO
@@ -60309,7 +60309,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       I = KRANK
   340    TN = DNRM2(MMK,A(KP1,I),1)/A(I,I)
          TN = A(I,I)*DSQRT(1.D0 + TN*TN)
-         CALL DSCAL (MMK,1.D0/TN,A(KP1,I),1)
+         CALL DSCAL(MMK,1.D0/TN,A(KP1,I),1)
          W(I) = A(I,I)/TN + 1.D0
          A(I,I) = -TN
          IF (I .EQ. 1) GO TO 350
@@ -60317,7 +60317,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
          DO II = 1,IM1
             TT = -DDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
             TT = TT - A(I,II)
-            CALL DAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
+            CALL DAXPY(MMK,TT,A(KP1,I),1,A(KP1,II),1)
             A(I,II) = A(I,II) + TT*W(I)
          END DO
          I = I - 1
@@ -60330,7 +60330,7 @@ C     FIRST NP ROWS ARE LINEARLY DEPENDENT
   410 KRANK = J - 1
       END SUBROUTINE DU11US
 
-      SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+      SUBROUTINE DU12US(A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
@@ -60392,7 +60392,7 @@ C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
             I = KP1 - J
             TT = -DDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
             TT = TT - B(I,JB)
-            CALL DAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
+            CALL DAXPY(MMK,TT,A(KP1,I),1,B(KP1,JB),1)
             B(I,JB) = B(I,JB) + TT*W(I)
          END DO
       END DO
@@ -60404,7 +60404,7 @@ C     BACK SOLVE LOWER TRIANGULAR L
       DO JB = 1,NB
          DO I = 1,K
             B(I,JB) = B(I,JB)/A(I,I)
-            IF ( I .EQ. K ) EXIT
+            IF (I .EQ. K) EXIT
             IP1 = I + 1
             CALL DAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
          END DO
@@ -60435,7 +60435,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .EQ. I) GO TO 240
          IF (J .LT. 0) GO TO 240
          IC(I) = -IC(I)
-  250       CALL DSWAP (NB,B(J,1),MDB,B(I,1),MDB)
+  250       CALL DSWAP(NB,B(J,1),MDB,B(I,1),MDB)
             IJ = IC(J)
             IC(J) = -IC(J)
             J = IJ
@@ -60446,7 +60446,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       END DO
       END SUBROUTINE DU12US
 
-      SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+      SUBROUTINE HFTI(A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: K
       INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
@@ -60579,8 +60579,8 @@ C    ..
           H(LMAX) = H(J)
 C     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 C    ..
-   70     CALL H12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-          CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+   70     CALL H12(1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
+          CALL H12(2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
           END DO
 C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C    ..
@@ -60617,7 +60617,7 @@ C    ..
   160 IF (K .EQ. N) GO TO 180
           DO II = 1,K
           I = KP1 - II
-          CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
+          CALL H12(1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
           END DO
   180 CONTINUE
       IF (NB .LE. 0) GO TO 270
@@ -60642,7 +60642,7 @@ C    ..
               B(J,JB) = 0.0
               END DO
               DO I = 1,K
-              CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+              CALL H12(2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
               END DO
 C      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 C      COLUMN INTERCHANGES.
@@ -60810,8 +60810,8 @@ C    ..
           H(LMAX) = H(J)
 C     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 C    ..
-   70     CALL H12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-          CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+   70     CALL H12(1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
+          CALL H12(2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
           END DO
 C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
@@ -60854,7 +60854,7 @@ C    ..
   160 IF (K .EQ. N) GO TO 180
           DO II = 1,K
           I = KP1 - II
-          CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
+          CALL H12(1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
           END DO
   180 CONTINUE
       IF (NB .LE. 0) GO TO 270
@@ -60879,7 +60879,7 @@ C    ..
               B(J,JB) = 0.0
               END DO
               DO I = 1,K
-              CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+              CALL H12(2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
               END DO
 C      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 C      COLUMN INTERCHANGES.
@@ -60905,7 +60905,7 @@ C     ERROR RETURN
   310 IERR = 2
       END SUBROUTINE HFTI2
 
-      SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+      SUBROUTINE H12(MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       REAL, INTENT(INOUT) :: C(*), U(IUE,M), UP
@@ -60959,7 +60959,7 @@ C                            ****** CONSTRUCT THE TRANSFORMATION. ******
       U(1,LPIVOT) = CL
       GO TO 70
 C            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
-   60 IF ( ( CL ) .LE. 0 ) GO TO 130
+   60 IF ((CL) .LE. 0) GO TO 130
       GO TO 70
    70 IF (NCV .LE. 0) RETURN
       B = DBLE(UP)*DBLE(U(1,LPIVOT))
@@ -60989,7 +60989,7 @@ C                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
   130 RETURN
       END SUBROUTINE H12
 
-      SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+      SUBROUTINE DHFTI(A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: K
       INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
@@ -61124,8 +61124,8 @@ C    ..
           H(LMAX) = H(J)
 C     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 C    ..
-   70     CALL DH12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-          CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+   70     CALL DH12(1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
+          CALL DH12(2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
           END DO
 C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C    ..
@@ -61162,7 +61162,7 @@ C    ..
   160 IF (K .EQ. N) GO TO 180
           DO II = 1,K
           I = KP1 - II
-          CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
+          CALL DH12(1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
           END DO
   180 CONTINUE
       IF (NB .LE. 0) GO TO 270
@@ -61187,7 +61187,7 @@ C    ..
               B(J,JB) = 0.D0
               END DO
               DO I = 1,K
-              CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+              CALL DH12(2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
               END DO
 C      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 C      COLUMN INTERCHANGES.
@@ -61355,8 +61355,8 @@ C    ..
           H(LMAX) = H(J)
 C     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 C    ..
-   70     CALL DH12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-          CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+   70     CALL DH12(1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
+          CALL DH12(2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
           END DO
 C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
@@ -61399,7 +61399,7 @@ C    ..
   160 IF (K .EQ. N) GO TO 180
           DO II = 1,K
           I = KP1 - II
-          CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
+          CALL DH12(1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
           END DO
   180 CONTINUE
       IF (NB .LE. 0) GO TO 270
@@ -61424,7 +61424,7 @@ C    ..
               B(J,JB) = 0.D0
               END DO
               DO I = 1,K
-              CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+              CALL DH12(2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
               END DO
 C      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 C      COLUMN INTERCHANGES.
@@ -61450,7 +61450,7 @@ C     ERROR RETURN
   310 IERR = 2
       END SUBROUTINE DHFTI2
 
-      SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+      SUBROUTINE DH12(MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       DOUBLE PRECISION, INTENT(INOUT) :: U(IUE,M), UP, C(*)
@@ -61502,7 +61502,7 @@ C                            ****** CONSTRUCT THE TRANSFORMATION. ******
       U(1,LPIVOT) = CL
       GO TO 70
 C            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
-   60 IF ( ( CL ) .LE. 0 ) GO TO 130
+   60 IF ((CL) .LE. 0) GO TO 130
       GO TO 70
    70 IF (NCV .LE. 0) RETURN
       B = UP*U(1,LPIVOT)
@@ -63225,26 +63225,26 @@ C     COPY RT. HAND SIDE INTO TEMP VECTOR TO USE OVERWRITING METHOD.
         CALL SAXPY(I-1, -Z(J), W(1,J), 1, TEMP, 1)
  1170   CONTINUE
       END DO
- 1270 SELECT CASE ( IGO958 )
-      CASE ( 310 )
+ 1270 SELECT CASE (IGO958)
+      CASE (310)
       GO TO 310
-      CASE ( 1010 )
+      CASE (1010)
       GO TO 1010
       END SELECT
- 1280 SELECT CASE ( IGO897 )
-      CASE ( 880 )
+ 1280 SELECT CASE (IGO897)
+      CASE (880)
       GO TO 880
-      CASE ( 900 )
+      CASE (900)
       GO TO 900
       END SELECT
- 1290 SELECT CASE ( IGO938 )
-      CASE ( 460 )
+ 1290 SELECT CASE (IGO938)
+      CASE (460)
       GO TO 460
-      CASE ( 480 )
+      CASE (480)
       GO TO 480
-      CASE ( 500 )
+      CASE (500)
       GO TO 500
-      CASE ( 520 )
+      CASE (520)
       GO TO 520
       END SELECT
       END SUBROUTINE WNLSM
@@ -63589,28 +63589,28 @@ C     INTERCHANGES.
       T = H(MAX)
       H(MAX) = H(I)
       H(I) = T
-  570 SELECT CASE ( IGO993 )
-      CASE ( 30 )
+  570 SELECT CASE (IGO993)
+      CASE (30)
       GO TO 30
-      CASE ( 200 )
+      CASE (200)
       GO TO 200
-      CASE ( 330 )
+      CASE (330)
       GO TO 330
-      CASE ( 120 )
+      CASE (120)
       GO TO 120
       END SELECT
-  590 SELECT CASE ( IGO990 )
-      CASE ( 40 )
+  590 SELECT CASE (IGO990)
+      CASE (40)
       GO TO 40
-      CASE ( 240 )
+      CASE (240)
       GO TO 240
       END SELECT
-  600 SELECT CASE ( IGO996 )
-      CASE ( 20 )
+  600 SELECT CASE (IGO996)
+      CASE (20)
       GO TO 20
-      CASE ( 190 )
+      CASE (190)
       GO TO 190
-      CASE ( 320 )
+      CASE (320)
       GO TO 320
       END SELECT
       END SUBROUTINE WNLIT
@@ -64719,7 +64719,7 @@ C     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
       CALL NORMLZ(M,U,BETA)
       CALL MTPRD1(M,N,A,IA,JA,U,W)
       CALL NORMLZ(N,W,ALFA)
-      CALL SCOPY (N,W,1,W(N+1),1)
+      CALL SCOPY(N,W,1,W(N+1),1)
       RHOBAR = ALFA
       PHIBAR = BETA
       BNORM  = BETA
@@ -64734,11 +64734,11 @@ C     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
 C     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
 C                BETA*U  =  A*W  -  ALFA*U,
 C                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
-      CALL SSCAL (M,(-ALFA),U,1)
+      CALL SSCAL(M,(-ALFA),U,1)
       CALL MVPRD1(M,N,A,IA,JA,W,U)
       CALL NORMLZ(M,U,BETA)
       BBNORM = BBNORM + ALFA**2 + BETA**2 + DAMPSQ
-      CALL SSCAL (N,(-BETA),W,1)
+      CALL SSCAL(N,(-BETA),W,1)
       CALL MTPRD1(M,N,A,IA,JA,U,W)
       CALL NORMLZ(N,W,ALFA)
 C     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
@@ -64809,9 +64809,9 @@ C     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
       T2 = ONE + TEST2
       T1 = ONE + T1
       IF (ITN .GE. ITNLIM) ISTOP = 7
-      IF (T3  .LE. ONE   ) ISTOP = 6
-      IF (T2  .LE. ONE   ) ISTOP = 5
-      IF (T1  .LE. ONE   ) ISTOP = 4
+      IF (T3  .LE. ONE) ISTOP = 6
+      IF (T2  .LE. ONE) ISTOP = 5
+      IF (T1  .LE. ONE) ISTOP = 4
 C     ALLOW FOR TOLERANCES SET BY THE USER.
       IF (TEST3 .LE. CTOL) ISTOP = 3
       IF (TEST2 .LE. ATOL) ISTOP = 2
@@ -65056,7 +65056,7 @@ C     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
       CALL NORMLZ(M,U,BETA)
       CALL MVPRD1(N,M,TA,ITA,JTA,U,W)
       CALL NORMLZ(N,W,ALFA)
-      CALL SCOPY (N,W,1,W(N+1),1)
+      CALL SCOPY(N,W,1,W(N+1),1)
       RHOBAR = ALFA
       PHIBAR = BETA
       BNORM  = BETA
@@ -65071,11 +65071,11 @@ C     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
 C     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
 C                BETA*U  =  A*W  -  ALFA*U,
 C                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
-      CALL SSCAL (M,(-ALFA),U,1)
+      CALL SSCAL(M,(-ALFA),U,1)
       CALL MTPRD1(N,M,TA,ITA,JTA,W,U)
       CALL NORMLZ(M,U,BETA)
       BBNORM = BBNORM + ALFA**2 + BETA**2 + DAMPSQ
-      CALL SSCAL (N,(-BETA),W,1)
+      CALL SSCAL(N,(-BETA),W,1)
       CALL MVPRD1(N,M,TA,ITA,JTA,U,W)
       CALL NORMLZ(N,W,ALFA)
 C     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
@@ -65146,9 +65146,9 @@ C     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
       T2 = ONE + TEST2
       T1 = ONE + T1
       IF (ITN .GE. ITNLIM) ISTOP = 7
-      IF (T3  .LE. ONE   ) ISTOP = 6
-      IF (T2  .LE. ONE   ) ISTOP = 5
-      IF (T1  .LE. ONE   ) ISTOP = 4
+      IF (T3  .LE. ONE) ISTOP = 6
+      IF (T2  .LE. ONE) ISTOP = 5
+      IF (T1  .LE. ONE) ISTOP = 4
 C     ALLOW FOR TOLERANCES SET BY THE USER.
       IF (TEST3 .LE. CTOL) ISTOP = 3
       IF (TEST2 .LE. ATOL) ISTOP = 2
@@ -65378,7 +65378,7 @@ C     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
       CALL NORMLZ(M,U,BETA)
       CALL BTPRD1(M,N,A,KA,ML,MU,U,W)
       CALL NORMLZ(N,W,ALFA)
-      CALL SCOPY (N,W,1,W(N+1),1)
+      CALL SCOPY(N,W,1,W(N+1),1)
       RHOBAR = ALFA
       PHIBAR = BETA
       BNORM  = BETA
@@ -65393,11 +65393,11 @@ C     PERFORM THE NEXT STEP OF THE BIDIAGONALIZATION TO OBTAIN THE
 C     NEXT  BETA, U, ALFA, W.  THESE SATISFY THE RELATIONS
 C                BETA*U  =  A*W  -  ALFA*U,
 C                ALFA*W  =  A(TRANSPOSE)*U  -  BETA*W.
-      CALL SSCAL (M,(-ALFA),U,1)
+      CALL SSCAL(M,(-ALFA),U,1)
       CALL BVPRD1(M,N,A,KA,ML,MU,W,U)
       CALL NORMLZ(M,U,BETA)
       BBNORM = BBNORM + ALFA**2 + BETA**2 + DAMPSQ
-      CALL SSCAL (N,(-BETA),W,1)
+      CALL SSCAL(N,(-BETA),W,1)
       CALL BTPRD1(M,N,A,KA,ML,MU,U,W)
       CALL NORMLZ(N,W,ALFA)
 C     USE A PLANE ROTATION TO ELIMINATE THE DAMPING PARAMETER.
@@ -65468,9 +65468,9 @@ C     ATOL = RELPR,  BTOL = RELPR,  CONLIM = 1/RELPR.
       T2 = ONE + TEST2
       T1 = ONE + T1
       IF (ITN .GE. ITNLIM) ISTOP = 7
-      IF (T3  .LE. ONE   ) ISTOP = 6
-      IF (T2  .LE. ONE   ) ISTOP = 5
-      IF (T1  .LE. ONE   ) ISTOP = 4
+      IF (T3  .LE. ONE) ISTOP = 6
+      IF (T2  .LE. ONE) ISTOP = 5
+      IF (T1  .LE. ONE) ISTOP = 4
 C     ALLOW FOR TOLERANCES SET BY THE USER.
       IF (TEST3 .LE. CTOL) ISTOP = 3
       IF (TEST2 .LE. ATOL) ISTOP = 2
@@ -65533,8 +65533,8 @@ C     -------------------
 C        LOCATION OF THE REGION OF A LOCAL MINIMUM
    10 IF (E .LE. EPS0*(1.0 + ABS(A))) GO TO 40
       NSWC_AI_R4 = FU - FV
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 11
       GO TO 30
    11 IF (FU .GT. F(B)) GO TO 30
    20 B = V
@@ -65628,8 +65628,8 @@ C        CHECKING THE ACCURACY OF THE LOCAL MINIMUM
 C                    REPORT THE RESULTS
   240 IND = 0
   241 NSWC_AI_R4 = FU - FV
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 242
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 243
+      IF (NSWC_AI_R4 .LT. 0) GO TO 242
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 243
       GO TO 244
   242 X = U
       W = FU
@@ -65644,7 +65644,7 @@ C                    REPORT THE RESULTS
       ERROR = C1*E
       END SUBROUTINE FMIN
 
-      SUBROUTINE OPTF (FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
+      SUBROUTINE OPTF(FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, ITER
       INTEGER :: N
@@ -65710,7 +65710,7 @@ C     OPTIMIZE FCN
       GO TO 20
       END SUBROUTINE OPTF
 
-      SUBROUTINE OPTDRV (MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR,
+      SUBROUTINE OPTDRV(MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR,
      *        ITNLIM,ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,GPLS,
      *        IERR,A,G,P,WRK0,WRK1,WRK2)
       IMPLICIT NONE
@@ -65787,7 +65787,7 @@ C     --------------
       NS = 30
       STMX = STEPMX
       STEPMX = 0.0
-      CALL OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
+      CALL OPCHK1(N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
       IF (IERR .LT. 0) RETURN
       IF (MO .NE. 0) STEPMX = AMAX1(STMX,STEPMX)
       RNF = 2.0*AMAX1(RERR,SPMPAR(1))
@@ -65799,18 +65799,18 @@ C     --------------
 C     EVALUATE FCN(X)
       CALL FCN(N,X,F)
 C     EVALUATE FINITE DIFFERENCE GRADIENT
-      CALL FSTOFD (N, X, FCN, F, G, TYPSIZ, SQRNF)
-      CALL OPSTP (N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
+      CALL FSTOFD(N, X, FCN, F, G, TYPSIZ, SQRNF)
+      CALL OPSTP(N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
      *            TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
       IF (IERR .EQ. 0) GO TO 10
       IF (MO .NE. 0) GO TO 210
 C        APPLY THE FIXED STEP COORDINATE DESCENT PROCEDURE
 C        FOR ONE STEP AND CHECK IF THE GRADIENT IS NONZERO
-         CALL FXDEC (FCN, N, X, F, 10.0)
+         CALL FXDEC(FCN, N, X, F, 10.0)
          STEPMX = 0.0
-         CALL OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
-         CALL FSTOFD (N, X, FCN, F, G, TYPSIZ, SQRNF)
-         CALL OPSTP (N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
+         CALL OPCHK1(N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
+         CALL FSTOFD(N, X, FCN, F, G, TYPSIZ, SQRNF)
+         CALL OPSTP(N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
      *               TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
          IF (IERR .NE. 0) GO TO 210
 C     THE HESSIAN WILL BE OBTAINED BY SECANT UPDATES.
@@ -65830,7 +65830,7 @@ C     ---------
   100 IF (MO .GT. 1) GO TO 101
       IF (MOD(ITNCNT,10) .NE. 0) GO TO 101
       IF (ITNCNT + 10 .GE. ITNLIM) GO TO 101
-         CALL SCALEX (MO, X, TYPSIZ, N, IERR)
+         CALL SCALEX(MO, X, TYPSIZ, N, IERR)
          IF (IERR .EQ. 0) GO TO 101
          MO = MO + 1
          RETURN
@@ -65849,15 +65849,15 @@ C     GRADIENT WAS USED, RETRY USING A CENTRAL DIFFERENCE GRADIENT.
 C        SET IAGFLG FOR CENTRAL DIFFERENCES
          IAGFLG = -1
          CBRNF = RNF**(1.0/3.0)
-         CALL FSTOCD (N, X, FCN, TYPSIZ, CBRNF, G)
+         CALL FSTOCD(N, X, FCN, TYPSIZ, CBRNF, G)
          GO TO 105
 C     CALCULATE GRADIENT AT XPLS
   120 IF (IAGFLG .EQ. 0) GO TO 130
-         CALL FSTOCD (N, XPLS, FCN, TYPSIZ, CBRNF, GPLS)
+         CALL FSTOCD(N, XPLS, FCN, TYPSIZ, CBRNF, GPLS)
          GO TO 140
-  130 CALL FSTOFD (N, XPLS, FCN, FPLS, GPLS, TYPSIZ, SQRNF)
+  130 CALL FSTOFD(N, XPLS, FCN, FPLS, GPLS, TYPSIZ, SQRNF)
 C     CHECK WHETHER THE STOPPING CRITERIA SATISFIED
-  140 CALL OPSTP (N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
+  140 CALL OPSTP(N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL,
      *            TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
       IF (IERR .NE. 0) GO TO 200
 C     EVALUATE HESSIAN AT XPLS
@@ -65881,7 +65881,7 @@ C     RESET XPLS,FPLS,GPLS  IF PREVIOUS ITERATE SOLUTION
       END DO
       END SUBROUTINE OPTDRV
 
-      SUBROUTINE OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,
+      SUBROUTINE OPCHK1(N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,
      *                       STEPMX,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
@@ -66053,7 +66053,7 @@ C     TERMINATE
   100 IERR = JERR
       END SUBROUTINE OPSTP
 
-      SUBROUTINE FXDEC (FCN, N, X, FX, R)
+      SUBROUTINE FXDEC(FCN, N, X, FX, R)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: FX
@@ -66070,10 +66070,10 @@ C-----------------------------------------------------------------------
          XI = X(I)
          XPLUS = XI + H
          X(I) = XPLUS
-         CALL FCN (N, X, FPLUS)
+         CALL FCN(N, X, FPLUS)
          XMINUS = XI - 1.1*H
          X(I) = XMINUS
-         CALL FCN (N, X, FMINUS)
+         CALL FCN(N, X, FMINUS)
          X(I) = XI
          IF (FX .LE. FPLUS) GO TO 10
             FX = FPLUS
@@ -66085,7 +66085,7 @@ C-----------------------------------------------------------------------
       END DO
       END SUBROUTINE FXDEC
 
-      SUBROUTINE SCALEX (MO, X, TYPSIZ, N, IERR)
+      SUBROUTINE SCALEX(MO, X, TYPSIZ, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO, N
@@ -66117,7 +66117,7 @@ C-----------------------------------------------------------------------
       IERR = -10
       END SUBROUTINE SCALEX
 
-      SUBROUTINE LLTSLV (NR,N,A,X,B)
+      SUBROUTINE LLTSLV(NR,N,A,X,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NR
       REAL, INTENT(IN) :: A(NR,N)
@@ -66166,7 +66166,7 @@ C                   BACK SOLVE, RESULT IN X
       END DO
       END SUBROUTINE LLTSLV
 
-      SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
+      SUBROUTINE FSTOFD(N, X, FCN, FX, G, TYPSIZ, R)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(IN) :: FX
@@ -66195,13 +66195,13 @@ C-----------------------------------------------------------------------
         STEPSZ = R * AMAX1(ABS(X(J)),TYPSIZ(J))
         XTMPJ = X(J)
         X(J) = XTMPJ + STEPSZ
-        CALL FCN (N, X, FPLUS)
+        CALL FCN(N, X, FPLUS)
         X(J) = XTMPJ
         G(J) = (FPLUS - FX)/STEPSZ
       END DO
       END SUBROUTINE FSTOFD
 
-      SUBROUTINE FSTOCD (N, X, FCN, TYPSIZ, R, G)
+      SUBROUTINE FSTOCD(N, X, FCN, TYPSIZ, R, G)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(IN) :: R
@@ -66230,9 +66230,9 @@ C     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
          STEPI = R * AMAX1(ABS(X(I)),TYPSIZ(I))
          XTEMPI = X(I)
          X(I) = XTEMPI + STEPI
-         CALL FCN (N, X, FPLUS)
+         CALL FCN(N, X, FPLUS)
          X(I) = XTEMPI - STEPI
-         CALL FCN (N, X, FMINUS)
+         CALL FCN(N, X, FMINUS)
          X(I) = XTEMPI
          G(I) = (FPLUS - FMINUS)/(2.0*STEPI)
       END DO
@@ -66352,7 +66352,7 @@ C     NO SATISFACTORY XPLS FOUND SUFFICIENTLY DISTINCT FROM X
   210 IRETCD = 1
       END SUBROUTINE LNSRCH
 
-      SUBROUTINE SECFAC (NR,N,X,G,A,XPLS,GPLS,ITNCNT,TOL,
+      SUBROUTINE SECFAC(NR,N,X,G,A,XPLS,GPLS,ITNCNT,TOL,
      *                      NOUPDT,S,Y,W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ITNCNT, N, NR
@@ -66450,7 +66450,7 @@ C     COPY L INTO UPPER TRIANGULAR PART.  ZERO L.
          END DO
       END DO
 C     FIND Q AND R SUCH THAT  Q*R = (L+) + S*(W+)
-      CALL QRUPDT (NR, N, A, S, W)
+      CALL QRUPDT(NR, N, A, S, W)
 C     UPPER TRIANGULAR PART AND DIAGONAL OF A NOW CONTAIN UPDATED
 C     CHOLESKY DECOMPOSITION OF HESSIAN.  COPY BACK TO LOWER
 C     TRIANGULAR PART.
@@ -66462,7 +66462,7 @@ C     TRIANGULAR PART.
       END DO
       END SUBROUTINE SECFAC
 
-      SUBROUTINE QRUPDT (NR,N,A,U,V)
+      SUBROUTINE QRUPDT(NR,N,A,U,V)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NR
       REAL, INTENT(INOUT) :: A(NR,N), U(N)
@@ -66493,7 +66493,7 @@ C                 WHICH IS UPPER HESSENBERG
       IF (K .LE. 1) GO TO 40
       DO II = 1,KM1
          I = K - II
-         CALL JROT (NR,N,A,I,U(I),-U(I+1),R)
+         CALL JROT(NR,N,A,I,U(I),-U(I+1),R)
          U(I) = R
       END DO
 C SET R = R + (U(1)*E1)(V+)
@@ -66504,11 +66504,11 @@ C SET R = R + (U(1)*E1)(V+)
 C       K-1 JACOBI ROTATIONS TRANSFORM UPPER HESSENBERG R
 C                   TO UPPER TRIANGULAR R*
       DO I = 1,KM1
-         CALL JROT (NR,N,A,I,A(I,I),-A(I+1,I),R)
+         CALL JROT(NR,N,A,I,A(I,I),-A(I+1,I),R)
       END DO
       END SUBROUTINE QRUPDT
 
-      SUBROUTINE JROT (NR,N,H,I,A,B,R)
+      SUBROUTINE JROT(NR,N,H,I,A,B,R)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I, N, NR
       REAL, INTENT(IN) :: A, B
@@ -66562,7 +66562,7 @@ C                     CASE WHEN A = 0
       END DO
       END SUBROUTINE JROT
 
-      SUBROUTINE LMDIFF (FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
+      SUBROUTINE LMDIFF(FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
       IMPLICIT NONE
       INTEGER :: M, N
       INTEGER, INTENT(OUT) :: INFO
@@ -67332,7 +67332,7 @@ C        COMPUTATION OF DENSE APPROXIMATE JACOBIAN.
             IF (H .EQ. ZERO) H = EPS
             X(J) = TEMP + H
             CALL FCN(N,X,WA1,IFLAG)
-            IF ( IFLAG .LT. 0 ) EXIT
+            IF (IFLAG .LT. 0) EXIT
             X(J) = TEMP
             DO I = 1, N
                FJAC(I,J) = (WA1(I) - FVEC(I))/H
@@ -67349,7 +67349,7 @@ C        COMPUTATION OF BANDED APPROXIMATE JACOBIAN.
                X(J) = WA2(J) + H
                END DO
             CALL FCN(N,X,WA1,IFLAG)
-            IF ( IFLAG .LT. 0 ) EXIT
+            IF (IFLAG .LT. 0) EXIT
             DO J = K, N, MSUM
                X(J) = WA2(J)
                H = EPS*ABS(WA2(J))
@@ -67441,7 +67441,7 @@ C     EPSMCH IS THE MACHINE PRECISION.
          IF (H .EQ. ZERO) H = EPS
          X(J) = TEMP + H
          CALL FCN(M,N,X,WA,IFLAG)
-         IF ( IFLAG .LT. 0 ) EXIT
+         IF (IFLAG .LT. 0) EXIT
          X(J) = TEMP
          DO I = 1, M
             FJAC(I,J) = (WA(I) - FVEC(I))/H
@@ -68236,7 +68236,7 @@ C     MOVE W BACK INTO THE LAST COLUMN OF THE OUTPUT S.
 C     LAST CARD OF SUBROUTINE R1UPDT.
       END SUBROUTINE R1UPDT
 
-      SUBROUTINE SMPLX (A,B0,C,KA,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
+      SUBROUTINE SMPLX(A,B0,C,KA,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IBASIS, IND, ITER, IWK(*)
@@ -68279,7 +68279,7 @@ C------------------------
      2            WK(1),WK(M+1),IWK(1),IWK(IP))
       END SUBROUTINE SMPLX
 
-      SUBROUTINE SMPLX1 (A,B0,C,KA,M,N0,IND,IBASIS,R,Z,ITER,MXITER,
+      SUBROUTINE SMPLX1(A,B0,C,KA,M,N0,IND,IBASIS,R,Z,ITER,MXITER,
      *     EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,BI,XB,Y,BASIS,INDEX)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IND
@@ -68470,7 +68470,7 @@ C            REINVERSION OF THE BASIS MATRIX
   132 CONTINUE
       END DO
       ICOUNT = 0
-      CALL CROUT1 (BI, M, M, IEND, INDEX, Y, JCOL, IERR)
+      CALL CROUT1(BI, M, M, IEND, INDEX, Y, JCOL, IERR)
       IF (IERR .NE. 0) GO TO 580
 C         CHECK THE ACCURACY OF BI AND RESET RERR
       BNORM = 0.0
@@ -68539,8 +68539,8 @@ C                       THE BASIS
       END DO
   203 IF (JP .NE. 0) GO TO 300
       NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 800
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 230
+      IF (NSWC_AI_I4 .LT. 0) GO TO 800
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 230
       GO TO 250
 C     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
 C             VARIABLES INTO R. THEN TERMINATE.
@@ -68626,8 +68626,8 @@ C               OF BI*A AND STORE IT IN Y.
       ICOUNT = ICOUNT - 1
       GO TO 200
   360 NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 400
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 430
+      IF (NSWC_AI_I4 .LT. 0) GO TO 400
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 430
       GO TO 440
 C     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
 C               FOR THE NSTEP = 1 CASE
@@ -68639,8 +68639,8 @@ C               FOR THE NSTEP = 1 CASE
          IF (XB(I) .LT. 0.0 .OR. Y(I) .LE. 0.0) GO TO 403
          RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 401
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 402
+         IF (NSWC_AI_R4 .LT. 0) GO TO 401
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 402
          GO TO 403
   401    EPSI = RATIO
          NPOS = 1
@@ -68680,8 +68680,8 @@ C               FOR THE NSTEP = 2 CASE
          IF (Y(I) .LE. 0.0) GO TO 433
          RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 431
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 432
+         IF (NSWC_AI_R4 .LT. 0) GO TO 431
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 432
          GO TO 433
   431    EPSI = RATIO
          NPOS = 1
@@ -68697,17 +68697,17 @@ C               FOR THE NSTEP = 3 CASE
   440 NPOS = 0
       EPSI = XMAX
       DO I = 1,M
-         NSWC_AI_R4 = Y ( I )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 441
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 445
+         NSWC_AI_R4 = Y(I)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 441
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 445
          GO TO 442
   441    IF (IBASIS(I) .LE. N) GO TO 445
          IP = I
          GO TO 500
   442    RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 443
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 444
+         IF (NSWC_AI_R4 .LT. 0) GO TO 443
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 444
          GO TO 445
   443       EPSI = RATIO
             NPOS = 1
@@ -68793,7 +68793,7 @@ C        CHECK THE ACCURACY OF BI AND RESET RERR
          END DO
          RERR = AMAX1(RERR,ABS(1.0 - SUM))
          K = K + 1
-         IF ( K .GE. MCHECK ) EXIT
+         IF (K .GE. MCHECK) EXIT
   521 CONTINUE
       END DO
       IF (RERR .LE. 1.E-2) GO TO 600
@@ -68805,7 +68805,7 @@ C        THE ACCURACY CRITERIA ARE NOT SATISFIED
       IF (BFLAG .EQ. 0) GO TO 590
       BFLAG = 0
       DO IP = 1,M
-         IF ( JP .EQ. IBASIS ( IP ) ) EXIT
+         IF (JP .EQ. IBASIS(IP)) EXIT
       END DO
       IBASIS(IP) = IOUT
       BASIS(JP) = 0
@@ -68816,8 +68816,8 @@ C        THE ACCURACY CRITERIA ARE NOT SATISFIED
       GO TO 220
 C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
   600 NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 601
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 630
+      IF (NSWC_AI_I4 .LT. 0) GO TO 601
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 630
       GO TO 700
   601 DO J = 1,M
          IF (XB(J) .LT. 0.0) GO TO 610
@@ -68836,9 +68836,9 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            NSWC_AI_R4 = BI ( L , J )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 620
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 622
+            NSWC_AI_R4 = BI(L , J)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 620
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 622
             GO TO 621
   620       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 622
@@ -68867,9 +68867,9 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 2 CASE
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            NSWC_AI_R4 = BI ( L , J )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 640
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 642
+            NSWC_AI_R4 = BI(L , J)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 640
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 642
             GO TO 641
   640       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 642
@@ -69010,9 +69010,9 @@ C-----------------------------------------------------------------------
   850 RERR1 = AMIN1(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
-         NSWC_AI_R4 = XB ( I )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 851
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 856
+         NSWC_AI_R4 = XB(I)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 851
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 856
          GO TO 852
   851    SGN = -1.0
          DSUMP = 0.D0
@@ -69039,8 +69039,8 @@ C-----------------------------------------------------------------------
   856 CONTINUE
       END DO
       NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 860
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 870
+      IF (NSWC_AI_I4 .LT. 0) GO TO 860
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 870
       GO TO 880
 C         CHECK THE REFINEMENT (NSTEP = 1)
   860 DO I = 1,M
@@ -69070,7 +69070,7 @@ C              COMPUTE Z  (NSTEP = 3)
       GO TO 220
       END SUBROUTINE SMPLX1
 
-      SUBROUTINE SSPLX (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
+      SUBROUTINE SSPLX(TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IBASIS, IND
@@ -69114,7 +69114,7 @@ C------------------------
      2            WK(1),WK(M+1),IWK(1),IWK(IP))
       END SUBROUTINE SSPLX
 
-      SUBROUTINE SSPLX1 (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,R,Z,
+      SUBROUTINE SSPLX1(TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,R,Z,
      1       ITER,MXITER,EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,
      2       BI,XB,Y,BASIS,INDEX)
       IMPLICIT NONE
@@ -69314,7 +69314,7 @@ C            REINVERSION OF THE BASIS MATRIX
   132 CONTINUE
       END DO
       ICOUNT = 0
-      CALL CROUT1 (BI, M, M, IEND, INDEX, Y, JCOL, IERR)
+      CALL CROUT1(BI, M, M, IEND, INDEX, Y, JCOL, IERR)
       IF (IERR .NE. 0) GO TO 580
 C         CHECK THE ACCURACY OF BI AND RESET RERR
       BNORM = 0.0
@@ -69385,8 +69385,8 @@ C                       THE BASIS
       END DO
   203 IF (JP .NE. 0) GO TO 300
       NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 800
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 230
+      IF (NSWC_AI_I4 .LT. 0) GO TO 800
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 230
       GO TO 250
 C     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
 C             VARIABLES INTO R. THEN TERMINATE.
@@ -69469,8 +69469,8 @@ C               OF BI*A AND STORE IT IN Y.
       ICOUNT = ICOUNT - 1
       GO TO 200
   360 NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 400
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 430
+      IF (NSWC_AI_I4 .LT. 0) GO TO 400
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 430
       GO TO 440
 C     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
 C               FOR THE NSTEP = 1 CASE
@@ -69482,8 +69482,8 @@ C               FOR THE NSTEP = 1 CASE
          IF (XB(I) .LT. 0.0 .OR. Y(I) .LE. 0.0) GO TO 403
          RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 401
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 402
+         IF (NSWC_AI_R4 .LT. 0) GO TO 401
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 402
          GO TO 403
   401    EPSI = RATIO
          NPOS = 1
@@ -69523,8 +69523,8 @@ C               FOR THE NSTEP = 2 CASE
          IF (Y(I) .LE. 0.0) GO TO 433
          RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 431
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 432
+         IF (NSWC_AI_R4 .LT. 0) GO TO 431
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 432
          GO TO 433
   431    EPSI = RATIO
          NPOS = 1
@@ -69540,17 +69540,17 @@ C               FOR THE NSTEP = 3 CASE
   440 NPOS = 0
       EPSI = XMAX
       DO I = 1,M
-         NSWC_AI_R4 = Y ( I )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 441
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 445
+         NSWC_AI_R4 = Y(I)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 441
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 445
          GO TO 442
   441    IF (IBASIS(I) .LE. N) GO TO 445
          IP = I
          GO TO 500
   442    RATIO = XB(I)/Y(I)
          NSWC_AI_R4 = RATIO - EPSI
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 443
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 444
+         IF (NSWC_AI_R4 .LT. 0) GO TO 443
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 444
          GO TO 445
   443       EPSI = RATIO
             NPOS = 1
@@ -69639,7 +69639,7 @@ C        CHECK THE ACCURACY OF BI AND RESET RERR
          END DO
          RERR = AMAX1(RERR,ABS(1.0-SUM))
          K = K + 1
-         IF ( K .GE. MCHECK ) EXIT
+         IF (K .GE. MCHECK) EXIT
   521 CONTINUE
       END DO
       IF (RERR .LE. 1.E-2) GO TO 600
@@ -69651,7 +69651,7 @@ C        THE ACCURACY CRITERIA ARE NOT SATISFIED
       IF (BFLAG .EQ. 0) GO TO 590
       BFLAG = 0
       DO IP = 1,M
-         IF ( JP .EQ. IBASIS ( IP ) ) EXIT
+         IF (JP .EQ. IBASIS(IP)) EXIT
       END DO
       IBASIS(IP) = IOUT
       BASIS(JP) = 0
@@ -69662,8 +69662,8 @@ C        THE ACCURACY CRITERIA ARE NOT SATISFIED
       GO TO 220
 C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
   600 NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 601
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 630
+      IF (NSWC_AI_I4 .LT. 0) GO TO 601
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 630
       GO TO 700
   601 DO J = 1,M
          IF (XB(J) .LT. 0.0) GO TO 610
@@ -69682,9 +69682,9 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            NSWC_AI_R4 = BI ( L , J )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 620
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 622
+            NSWC_AI_R4 = BI(L , J)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 620
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 622
             GO TO 621
   620       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 622
@@ -69713,9 +69713,9 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 2 CASE
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            NSWC_AI_R4 = BI ( L , J )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 640
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 642
+            NSWC_AI_R4 = BI(L , J)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 640
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 642
             GO TO 641
   640       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 642
@@ -69872,9 +69872,9 @@ C-----------------------------------------------------------------------
       RERR1 = AMIN1(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
-         NSWC_AI_R4 = XB ( I )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 851
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 856
+         NSWC_AI_R4 = XB(I)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 851
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 856
          GO TO 852
   851    SGN = -1.0
          DSUMP = 0.D0
@@ -69901,8 +69901,8 @@ C-----------------------------------------------------------------------
   856 CONTINUE
       END DO
       NSWC_AI_I4 = NSTEP - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 860
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 870
+      IF (NSWC_AI_I4 .LT. 0) GO TO 860
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 870
       GO TO 880
 C         CHECK THE REFINEMENT (NSTEP = 1)
   860 DO I = 1,M
@@ -69970,9 +69970,9 @@ C           PROCESS THE FIRST IEND COLUMNS OF A
       KK = KCOL + K
       NK = KCOL + N
       DO LK = KK,NK
-      NSWC_AI_R4 = A ( LK )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      NSWC_AI_R4 = A(LK)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 10
       GO TO 30
    10 CONTINUE
       END DO
@@ -70151,7 +70151,7 @@ C                    ERROR RETURN
   300 IERR = 1
       END SUBROUTINE CROUT1
 
-      SUBROUTINE ASSGN (N,A,C,T,IWK,IERR)
+      SUBROUTINE ASSGN(N,A,C,T,IWK,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -70238,11 +70238,11 @@ C REDUCTION OF THE INITIAL COST MATRIX
       DO J=1,N
         S = A(1,J)
         DO L=2,N
-          IF ( A(L,J) .LT. S ) S = A(L,J)
+          IF (A(L,J) .LT. S) S = A(L,J)
         END DO
         NSWC_AI_I4 = S
-        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
-        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 40
+        IF (NSWC_AI_I4 .LT. 0) GO TO 20
+        IF (NSWC_AI_I4 .EQ. 0) GO TO 40
         GO TO 30
    20   MM = MAXNUM + S
         IF (T .LT. -MM) GO TO 400
@@ -70263,7 +70263,7 @@ C REDUCTION OF THE INITIAL COST MATRIX
       DO I=1,N
         Q = A(I,1)
         DO L=2,N
-          IF ( A(I,L) .LT. Q ) Q = A(I,L)
+          IF (A(I,L) .LT. Q) Q = A(I,L)
         END DO
         MM = MAXNUM - Q
         IF (T .GT. MM) GO TO 400
@@ -70271,7 +70271,7 @@ C REDUCTION OF THE INITIAL COST MATRIX
         L = NP1
         DO J=1,N
           A(I,J) = A(I,J)-Q
-          IF ( A(I,J) .NE. 0 ) GO TO 60
+          IF (A(I,J) .NE. 0) GO TO 60
           A(I,L) = -J
           L = J
    60   CONTINUE
@@ -70282,23 +70282,23 @@ C CHOICE OF THE INITIAL SOLUTION
       DO I=1,N
         LJ = NP1
         J = -A(I,NP1)
-   80   IF ( C(J) .EQ. 0 ) GO TO 130
+   80   IF (C(J) .EQ. 0) GO TO 130
         LJ = J
         J = -A(I,J)
-        IF ( J .NE. 0 ) GO TO 80
+        IF (J .NE. 0) GO TO 80
         LJ = NP1
         J = -A(I,NP1)
    90   R = C(J)
         LM = LZ(R)
         M = NZ(R)
-  100   IF ( M .EQ. 0 ) GO TO 110
-        IF ( C(M) .EQ. 0 ) GO TO 120
+  100   IF (M .EQ. 0) GO TO 110
+        IF (C(M) .EQ. 0) GO TO 120
         LM = M
         M = -A(R,M)
         GO TO 100
   110   LJ = J
         J = -A(I,J)
-        IF ( J .NE. 0 ) GO TO 90
+        IF (J .NE. 0) GO TO 90
         U(K) = I
         K = I
         GO TO 140
@@ -70316,7 +70316,7 @@ C CHOICE OF THE INITIAL SOLUTION
   140 CONTINUE
       END DO
 C RESEARCH OF A NEW ASSIGNMENT
-  150 IF ( U(NP1) .EQ. 0 ) RETURN
+  150 IF (U(NP1) .EQ. 0) RETURN
       DO I=1,N
         CH(I) = 0
         LC(I) = 0
@@ -70329,39 +70329,39 @@ C RESEARCH OF A NEW ASSIGNMENT
       R = U(NP1)
       LR(R) = -1
       SLR(1) = R
-      IF ( A(R,NP1) .EQ. 0 ) GO TO 220
+      IF (A(R,NP1) .EQ. 0) GO TO 220
   170 L = -A(R,NP1)
-      IF ( A(R,L) .EQ. 0 ) GO TO 180
-      IF ( RH(R) .NE. 0 ) GO TO 180
+      IF (A(R,L) .EQ. 0) GO TO 180
+      IF (RH(R) .NE. 0) GO TO 180
       RH(R) = RH(NP1)
       CH(R) = -A(R,L)
       RH(NP1) = R
-  180 IF ( LC(L) .EQ. 0 ) GO TO 200
-      IF ( RH(R) .EQ. 0 ) GO TO 210
+  180 IF (LC(L) .EQ. 0) GO TO 200
+      IF (RH(R) .EQ. 0) GO TO 210
   190 L = CH(R)
       CH(R) = -A(R,L)
-      IF ( A(R,L) .NE. 0 ) GO TO 180
+      IF (A(R,L) .NE. 0) GO TO 180
       RH(NP1) = RH(R)
       RH(R) = 0
       GO TO 180
   200 LC(L) = R
-      IF ( C(L) .EQ. 0 ) GO TO 360
+      IF (C(L) .EQ. 0) GO TO 360
       KSLC = KSLC+1
       SLC(KSLC) = L
       R = C(L)
       LR(R) = L
       KSLR = KSLR+1
       SLR(KSLR) = R
-      IF ( A(R,NP1) .NE. 0 ) GO TO 170
+      IF (A(R,NP1) .NE. 0) GO TO 170
   210 CONTINUE
-      IF ( RH(NP1) .GT. 0 ) GO TO 350
+      IF (RH(NP1) .GT. 0) GO TO 350
 C REDUCTION OF THE CURRENT COST MATRIX
   220 H = MAXNUM
       DO J=1,N
-        IF ( LC(J) .NE. 0 ) GO TO 240
+        IF (LC(J) .NE. 0) GO TO 240
         DO K=1,KSLR
           I = SLR(K)
-          IF ( A(I,J) .LT. H ) H = A(I,J)
+          IF (A(I,J) .LT. H) H = A(I,J)
         END DO
   240 CONTINUE
       END DO
@@ -70369,18 +70369,18 @@ C REDUCTION OF THE CURRENT COST MATRIX
       IF (MM .EQ. 0 .OR. T .GT. MM) GO TO 400
       T = T + H
       DO J=1,N
-        IF ( LC(J) .NE. 0 ) GO TO 290
+        IF (LC(J) .NE. 0) GO TO 290
         DO K=1,KSLR
           I = SLR(K)
           A(I,J) = A(I,J)-H
-          IF ( A(I,J) .NE. 0 ) GO TO 280
-          IF ( RH(I) .NE. 0 ) GO TO 250
+          IF (A(I,J) .NE. 0) GO TO 280
+          IF (RH(I) .NE. 0) GO TO 250
           RH(I) = RH(NP1)
           CH(I) = J
           RH(NP1) = I
   250     L = NP1
   260     NL = -A(I,L)
-          IF ( NL .EQ. 0 ) GO TO 270
+          IF (NL .EQ. 0) GO TO 270
           L = NL
           GO TO 260
   270     A(I,L) = -J
@@ -70388,15 +70388,15 @@ C REDUCTION OF THE CURRENT COST MATRIX
         END DO
   290 CONTINUE
       END DO
-      IF ( KSLC .EQ. 0 ) GO TO 350
+      IF (KSLC .EQ. 0) GO TO 350
       DO I=1,N
-        IF ( LR(I) .NE. 0 ) GO TO 340
+        IF (LR(I) .NE. 0) GO TO 340
         DO K=1,KSLC
           J = SLC(K)
-          IF ( A(I,J) .GT. 0 ) GO TO 320
+          IF (A(I,J) .GT. 0) GO TO 320
           L = NP1
   300     NL = - A(I,L)
-          IF ( NL .EQ. J ) GO TO 310
+          IF (NL .EQ. J) GO TO 310
           L = NL
           GO TO 300
   310     A(I,L) = A(I,J)
@@ -70415,12 +70415,12 @@ C ASSIGNMENT OF A NEW ROW
   360 C(L) = R
       M = NP1
   370 NM = -A(R,M)
-      IF ( NM .EQ. L ) GO TO 380
+      IF (NM .EQ. L) GO TO 380
       M = NM
       GO TO 370
   380 A(R,M) = A(R,L)
       A(R,L) = 0
-      IF ( LR(R) .LT. 0 ) GO TO 390
+      IF (LR(R) .LT. 0) GO TO 390
       L = LR(R)
       A(R,L) = A(R,NP1)
       A(R,NP1) = -L
@@ -70433,7 +70433,7 @@ C ERROR RETURN - INTEGER OVERFLOW OCCURS
   400 IERR = 1
       END SUBROUTINE ASSGN1
 
-      SUBROUTINE MKP (N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
+      SUBROUTINE MKP(N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, NUM
       INTEGER, INTENT(INOUT) :: P(N), W(N)
@@ -70530,7 +70530,7 @@ C                P(J)/W(J) .GE. P(J+1)/W(J+1)
          JJ = N5 + J
          IWK(JJ) = J
       END DO
-      CALL RISORT (WK, IWK(N5 + 1), N)
+      CALL RISORT(WK, IWK(N5 + 1), N)
       DO J = 1,N
          IWK(J) = P(J)
          JN = J + N
@@ -70562,7 +70562,7 @@ C                PARTITION THE WORK SPACE IWK
       XL = X + MN
       BL = XL + MN
 C                     SOLVE THE PROBLEM
-      CALL MKP1 (N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
+      CALL MKP1(N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
      1           IWK(BB), IWK(BL), IWK(X), IWK(XL),
      2           IWK(B), IWK(UBB), IWK(LX), IWK(LXI),
      3           IWK(F), IWK(PBL), IWK(Q), IWK(V),
@@ -70602,7 +70602,7 @@ C                        ERROR RETURN
   160 VSTAR = -8
       END SUBROUTINE MKP
 
-      SUBROUTINE MKP1 (N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
+      SUBROUTINE MKP1(N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
      1                 BB, BL, X, XL, B, UBB, LX, LXI,
      2                 F, PBL, Q, V, BS, PS, WS, XS, IWK)
       IMPLICIT NONE
@@ -70663,7 +70663,7 @@ C STEP 1 (INITIALIZATION)
       VSTAR = 0
       VB = 0
       I = 1
-      CALL SIGMA1 (N,M,P,W,K,1,B,KUB,UB,NP1,N5,LX,LR,
+      CALL SIGMA1(N,M,P,W,K,1,B,KUB,UB,NP1,N5,LX,LR,
      *             BS,PS,WS,XS,IWK)
       DO J=1,N
         LXI(J) = LX(J)
@@ -70673,43 +70673,43 @@ C STEP 1 (INITIALIZATION)
       IFLAG = 0
 C STEP 2 (HEURISTIC)
    70 KUB = VSTAR - VB
-      CALL PI1 (N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
+      CALL PI1(N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
      *          NP1,N5,BS,PS,WS,XS,IWK)
-      IF ( LB + VB .LE. VSTAR ) GO TO 140
+      IF (LB + VB .LE. VSTAR) GO TO 140
       VSTAR = LB + VB
       DO J=1,N
         XSTAR(J) = 0
         DO S=1,I
-          IF ( X(S,J) .EQ. 0 ) GO TO 80
+          IF (X(S,J) .EQ. 0) GO TO 80
           XSTAR(J) = S
           EXIT
    80   CONTINUE
         END DO
       END DO
       IP = PBL(I)
-      IF ( IP .EQ. 0 ) GO TO 110
+      IF (IP .EQ. 0) GO TO 110
       DO J=1,IP
         JJ = BL(I,J)
-        IF ( XL(I,J) .EQ. 1 ) XSTAR(JJ) = I
+        IF (XL(I,J) .EQ. 1) XSTAR(JJ) = I
       END DO
   110 I1 = I + 1
       DO II=I1,M
         IP = PBL(II)
-        IF ( IP .EQ. 0 ) GO TO 130
+        IF (IP .EQ. 0) GO TO 130
         DO J=1,IP
           JJ = BL(II,J)
-          IF ( XL(II,J) .EQ. 1 ) XSTAR(JJ) = II
+          IF (XL(II,J) .EQ. 1) XSTAR(JJ) = II
         END DO
   130 CONTINUE
       END DO
-      IF ( UB .EQ. LB ) GO TO 200
+      IF (UB .EQ. LB) GO TO 200
 C STEP 3 (UPDATING)
-  140 IF ( V(I) .EQ. 0 ) GO TO 180
+  140 IF (V(I) .EQ. 0) GO TO 180
       IUV = UB + VB
       U = PBL(I)
       IBV = 0
       DO S=1,U
-        IF ( XL(I,S) .EQ. 0 ) GO TO 170
+        IF (XL(I,S) .EQ. 0) GO TO 170
         J = BL(I,S)
         X(I,J) = 1
         Q(I) = Q(I) - W(J)
@@ -70717,43 +70717,43 @@ C STEP 3 (UPDATING)
         B(J) = 0
         BB(I,J) = F(I)
         UBB(J) = IUV
-        IF ( IFLAG .EQ. 1 ) GO TO 150
+        IF (IFLAG .EQ. 1) GO TO 150
         LUB = IUV
         LJ = J
         LI = I
   150   F(I) = J
         IBV = IBV + P(J)
-        IF ( IBV .EQ. V ( I ) ) EXIT
-        CALL PARC (I,I,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
+        IF (IBV .EQ. V(I)) EXIT
+        CALL PARC(I,I,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
      *             LX,LXI,LR,LRI,LUBI)
-        IF ( IFLAG .EQ. 1 ) GO TO 160
+        IF (IFLAG .EQ. 1) GO TO 160
         KUB = VSTAR - VB
-        CALL SIGMA1 (N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
+        CALL SIGMA1(N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
      *               BS,PS,WS,XS,IWK)
         LJ = N1
   160   IUV = UB + VB
-        IF ( IUV .LE. VSTAR ) GO TO 200
+        IF (IUV .LE. VSTAR) GO TO 200
   170 CONTINUE
       END DO
-  180 IF ( I .EQ. M - 1 ) GO TO 200
+  180 IF (I .EQ. M - 1) GO TO 200
       IP1 = I + 1
-      CALL PARC (IP1,I,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
+      CALL PARC(IP1,I,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
      *           LX,LXI,LR,LRI,LUBI)
-      IF ( IFLAG .EQ. 1 ) GO TO 190
+      IF (IFLAG .EQ. 1) GO TO 190
       KUB = VSTAR - VB
-      CALL SIGMA1 (N,M,P,W,Q,IP1,B,KUB,UB,NP1,N5,LX,LR,
+      CALL SIGMA1(N,M,P,W,Q,IP1,B,KUB,UB,NP1,N5,LX,LR,
      *             BS,PS,WS,XS,IWK)
       LJ = N1
-  190 IF ( UB + VB .LE. VSTAR ) GO TO 200
+  190 IF (UB + VB .LE. VSTAR) GO TO 200
       I = I + 1
       GO TO 140
 C STEP 4 (BACKTRACKING)
-  200 IF ( I .GT. 0 ) GO TO 210
+  200 IF (I .GT. 0) GO TO 210
       BCK = BCK - 1
       RETURN
-  210 IF ( BCK .EQ. JBCK ) RETURN
+  210 IF (BCK .EQ. JBCK) RETURN
       BCK = BCK + 1
-      IF ( F(I) .NE. (-1) ) GO TO 230
+      IF (F(I) .NE. (-1)) GO TO 230
       DO J=1,N
         BB(I,J) = 0
       END DO
@@ -70765,10 +70765,10 @@ C STEP 4 (BACKTRACKING)
       VB = VB - P(J)
       Q(I) = Q(I) + W(J)
       DO S=1,N
-        IF ( BB(I,S) .EQ. J ) BB(I,S) = 0
+        IF (BB(I,S) .EQ. J) BB(I,S) = 0
       END DO
       F(I) = BB(I,J)
-      IF ( UBB(J) .LE. VSTAR ) GO TO 200
+      IF (UBB(J) .LE. VSTAR) GO TO 200
       UB = UBB(J) - VB
       IFLAG = 1
       GO TO 70
@@ -70778,14 +70778,14 @@ C PARTICULAR CASE (0-1 SINGLE KNAPSACK PROBLEM)
         PS(J) = P(J)
         WS(J) = W(J)
       END DO
-      CALL SKNP (N,K1,0,VSTAR,N,NP1,N5,PS,WS,XS,IWK)
+      CALL SKNP(N,K1,0,VSTAR,N,NP1,N5,PS,WS,XS,IWK)
       DO J=1,N
         XSTAR(J) = XS(J)
       END DO
       BCK = 0
       END SUBROUTINE MKP1
 
-      SUBROUTINE SIGMA1 (N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
+      SUBROUTINE SIGMA1(N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
      *                   BS,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I, KUB
@@ -70807,7 +70807,7 @@ C SOLUTION.
       SB = 0
       DO J=1,N
         LX(J) = 0
-        IF ( B(J) .EQ. 0 ) GO TO 20
+        IF (B(J) .EQ. 0) GO TO 20
         NS = NS + 1
         BS(NS) = J
         PS(NS) = P(J)
@@ -70815,16 +70815,16 @@ C SOLUTION.
         SB = SB + W(J)
    20 CONTINUE
       END DO
-      IF ( SB .GT. QS ) GO TO 40
+      IF (SB .GT. QS) GO TO 40
       LR = QS - SB
       UB = 0
-      IF ( NS .EQ. 0 ) RETURN
+      IF (NS .EQ. 0) RETURN
       DO J=1,NS
         UB = UB + PS(J)
         XS(J) = 1
       END DO
       GO TO 50
-   40 CALL SKNP (NS,QS,KUB,UB,N,NP1,N5,PS,WS,XS,IWK)
+   40 CALL SKNP(NS,QS,KUB,UB,N,NP1,N5,PS,WS,XS,IWK)
       LR = QS
    50 DO J=1,NS
         JJ = BS(J)
@@ -70832,7 +70832,7 @@ C SOLUTION.
       END DO
       END SUBROUTINE SIGMA1
 
-      SUBROUTINE PI1 (N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
+      SUBROUTINE PI1(N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
      *                NP1,N5,BS,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
@@ -70851,7 +70851,7 @@ C CORRESPONDING VALUE IN  LB .
 C STEP 1
       U = 0
       DO J=1,N
-        IF ( B(J) .EQ. 0 ) GO TO 10
+        IF (B(J) .EQ. 0) GO TO 10
         U = U + 1
         BS(U) = J
    10 CONTINUE
@@ -70862,13 +70862,13 @@ C STEP 1
       END DO
       LB = 0
       IKUB = KUB
-      IF ( U .EQ. 0 ) RETURN
+      IF (U .EQ. 0) RETURN
       NS = 0
       SB = 0
       DO J=1,U
         JJ = BS(J)
-        IF ( BB(I,JJ) .NE. 0 ) GO TO 30
-        IF ( W(JJ) .GT. Q(I) ) GO TO 30
+        IF (BB(I,JJ) .NE. 0) GO TO 30
+        IF (W(JJ) .GT. Q(I)) GO TO 30
         NS = NS + 1
         SB = SB + W(JJ)
         BL(I,NS) = JJ
@@ -70879,9 +70879,9 @@ C STEP 1
       II = I
 C STEP 2
    40 PBL(II) = NS
-      IF ( SB .GT. Q(II) ) GO TO 60
+      IF (SB .GT. Q(II)) GO TO 60
       PB = 0
-      IF ( NS .EQ. 0 ) GO TO 80
+      IF (NS .EQ. 0) GO TO 80
       DO J=1,NS
         PB = PB + PS(J)
         XL(II,J) = 1
@@ -70889,8 +70889,8 @@ C STEP 2
       GO TO 80
    60 QS = Q(II)
       KUB = 0
-      IF ( II .EQ. M ) KUB = IKUB
-      CALL SKNP (NS,QS,KUB,PB,N,NP1,N5,PS,WS,XS,IWK)
+      IF (II .EQ. M) KUB = IKUB
+      CALL SKNP(NS,QS,KUB,PB,N,NP1,N5,PS,WS,XS,IWK)
       DO J=1,NS
         XL(II,J) = XS(J)
       END DO
@@ -70899,25 +70899,25 @@ C STEP 2
       V(II) = PB
       BL(II,NS+1) = N + 1
 C STEP 3
-      IF ( II .EQ. M ) RETURN
+      IF (II .EQ. M) RETURN
       JB = 1
       JBS = 0
       DO J=1,U
-        IF ( BS(J) .LT. BL(II,JB) ) GO TO 90
+        IF (BS(J) .LT. BL(II,JB)) GO TO 90
         JB = JB + 1
-        IF ( XL(II,JB-1) .EQ. 1 ) GO TO 100
+        IF (XL(II,JB-1) .EQ. 1) GO TO 100
    90   JBS = JBS + 1
         BS(JBS) = BS(J)
   100 CONTINUE
       END DO
       U = JBS
-      IF ( U .EQ. 0 ) RETURN
+      IF (U .EQ. 0) RETURN
       NS = 0
       SB = 0
       II = II + 1
       DO J=1,U
         JJ = BS(J)
-        IF( W(JJ) .GT. Q(II) ) GO TO 110
+        IF(W(JJ) .GT. Q(II)) GO TO 110
         NS = NS + 1
         SB = SB + W(JJ)
         BL(II,NS) = JJ
@@ -70928,7 +70928,7 @@ C STEP 3
       GO TO 40
       END SUBROUTINE PI1
 
-      SUBROUTINE PARC (I,II,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
+      SUBROUTINE PARC(I,II,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
      *                 LX,LXI,LR,LRI,LUBI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
@@ -70942,44 +70942,44 @@ C STEP 3
       INTEGER :: R, S
 C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
       IFLAG = 0
-      IF ( B(LJ) .NE. 0 ) GO TO 60
+      IF (B(LJ) .NE. 0) GO TO 60
       I1 = I - 1
-      IF ( I1 .LT. LI ) GO TO 20
+      IF (I1 .LT. LI) GO TO 20
       IQ = 0
       DO R=LI,I1
         IQ = IQ + Q(R)
       END DO
-      IF ( IQ .GT. LR ) RETURN
+      IF (IQ .GT. LR) RETURN
    20 R = II
       S = F(R)
-   30 IF ( S .NE. (-1) ) GO TO 40
+   30 IF (S .NE. (-1)) GO TO 40
       R = R - 1
       S = F(R)
       GO TO 30
-   40 IF ( LX(S) .EQ. 0 ) RETURN
-      IF ( S .EQ. LJ ) GO TO 50
+   40 IF (LX(S) .EQ. 0) RETURN
+      IF (S .EQ. LJ) GO TO 50
       S = BB(R,S)
       GO TO 30
    50 UB = LUB - VB
       IFLAG = 1
       RETURN
    60 I1 = I - 1
-      IF ( I1 .LT. 1 ) GO TO 80
+      IF (I1 .LT. 1) GO TO 80
       IQ = 0
       DO R=1,I1
         IQ = IQ + Q(R)
       END DO
-      IF ( IQ .GT. LRI ) RETURN
+      IF (IQ .GT. LRI) RETURN
    80 DO J=1,N
-        IF ( B(J) .EQ. 1 ) GO TO 90
-        IF ( LXI(J) .EQ. 0 ) RETURN
+        IF (B(J) .EQ. 1) GO TO 90
+        IF (LXI(J) .EQ. 0) RETURN
    90 CONTINUE
       END DO
       UB = LUBI - VB
       IFLAG = 1
       END SUBROUTINE PARC
 
-      SUBROUTINE SKNP (NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
+      SUBROUTINE SKNP(NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KUB, N, N5, NP1, NS
       INTEGER, INTENT(INOUT) :: QS, VS
@@ -70997,11 +70997,11 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       I3 = I2 + N
       I4 = I3 + N
       I5 = I4 + N
-      CALL SKNP1 (NS,QS,KUB,VS,N,NP1,PS,WS,XS,IWK(I1),IWK(I2),
+      CALL SKNP1(NS,QS,KUB,VS,N,NP1,PS,WS,XS,IWK(I1),IWK(I2),
      *            IWK(I3),IWK(I4),IWK(I5))
       END SUBROUTINE SKNP
 
-      SUBROUTINE SKNP1 (NS,QS,KUB,VS,N,NP1,PS,WS,XS,D,MIN,
+      SUBROUTINE SKNP1(NS,QS,KUB,VS,N,NP1,PS,WS,XS,D,MIN,
      *                  PBAR,WBAR,ZBAR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KUB, N, NP1, NS
@@ -71026,12 +71026,12 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       MS = QS
       DO L=1,NS
         LL = L
-        IF ( WS ( L ) .GT. MS ) EXIT
+        IF (WS(L) .GT. MS) EXIT
         IP = IP + PS(L)
         MS = MS - WS(L)
       END DO
       LL = LL - 1
-      IF ( MS .EQ. 0 ) GO TO 50
+      IF (MS .EQ. 0) GO TO 50
       PS(NS+1) = 0
       WS(NS+1) = QS + 1
       LIM = IP + (MS*PS(LL+2))/WS(LL+2)
@@ -71039,13 +71039,13 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       B = (WS(LL+1) - MS)*PS(LL)
       C = WS(LL)
       LIM1 = A - B/C
-      IF ( LIM1 .GT. LIM ) LIM = LIM1
-      IF ( LIM .LE. VS ) RETURN
+      IF (LIM1 .GT. LIM) LIM = LIM1
+      IF (LIM .LE. VS) RETURN
       MINK = QS + 1
       MIN(NS) = MINK
       DO J=2,NS
         KK = NS + 2 - J
-        IF ( WS(KK) .LT. MINK ) MINK = WS(KK)
+        IF (WS(KK) .LT. MINK) MINK = WS(KK)
         MIN(KK-1) = MINK
       END DO
       DO J=1,NS
@@ -71055,7 +71055,7 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       LOLD = NS
       II = 1
       GO TO 170
-   50 IF ( VS .GE. IP ) RETURN
+   50 IF (VS .GE. IP) RETURN
       VS = IP
       DO J=1,LL
         XS(J) = 1
@@ -71066,23 +71066,23 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       END DO
       QS = 0
       RETURN
-   80 IF ( WS(II) .LE. QS ) GO TO 90
+   80 IF (WS(II) .LE. QS) GO TO 90
       II1 = II + 1
-      IF ( VS .GE. (QS*PS(II1))/WS(II1) + PR ) GO TO 280
+      IF (VS .GE. (QS*PS(II1))/WS(II1) + PR) GO TO 280
       II = II1
       GO TO 80
    90 IP = PBAR(II)
       MS = QS - WBAR(II)
       IN = ZBAR(II)
       LL = NS
-      IF ( IN .GT. NS) GO TO 110
+      IF (IN .GT. NS) GO TO 110
       DO L=IN,NS
         LL = L
-        IF ( WS(L) .GT. MS ) GO TO 160
+        IF (WS(L) .GT. MS) GO TO 160
         IP = IP + PS(L)
         MS = MS - WS(L)
       END DO
-  110 IF ( VS .GE. IP + PR ) GO TO 280
+  110 IF (VS .GE. IP + PR) GO TO 280
       VS = IP + PR
       MFIRST = MS
       NN = II - 1
@@ -71092,24 +71092,24 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       DO J=II,LL
         XS(J) = 1
       END DO
-      IF ( LL .EQ. NS ) GO TO 150
+      IF (LL .EQ. NS) GO TO 150
       NN = LL + 1
       DO J=NN,NS
         XS(J) = 0
       END DO
-  150 IF ( VS .NE. LIM ) GO TO 280
+  150 IF (VS .NE. LIM) GO TO 280
       QS = MFIRST
       RETURN
   160 L = LL
       LL = LL - 1
-      IF ( MS .EQ. 0 ) GO TO 110
-      IF ( VS .GE. PR + IP + (MS*PS(L))/WS(L) ) GO TO 280
+      IF (MS .EQ. 0) GO TO 110
+      IF (VS .GE. PR + IP + (MS*PS(L))/WS(L)) GO TO 280
   170 WBAR(II) = QS - MS
       PBAR(II) = IP
       ZBAR(II) = LL + 1
       D(II) = 1
       NN = LL - 1
-      IF ( NN .LT. II ) GO TO 190
+      IF (NN .LT. II) GO TO 190
       DO J=II,NN
         WBAR(J+1) = WBAR(J) - WS(J)
         PBAR(J+1) = PBAR(J) - PS(J)
@@ -71125,36 +71125,36 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       LOLD = LL
       QS = MS
       PR = PR + IP
-      NSWC_AI_I4 = LL - ( NS - 2 )
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 240
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 220
+      NSWC_AI_I4 = LL - (NS - 2)
+      IF (NSWC_AI_I4 .LT. 0) GO TO 240
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 220
       GO TO 210
   210 II = NS
       GO TO 250
-  220 IF ( QS .LT. WS(NS) ) GO TO 230
+  220 IF (QS .LT. WS(NS)) GO TO 230
       QS = QS - WS(NS)
       PR = PR + PS(NS)
       D(NS) = 1
   230 II = NS - 1
       GO TO 250
   240 II = LL + 2
-      IF ( QS .GE. MIN(II-1) ) GO TO 80
-  250 IF ( VS .GE. PR ) GO TO 270
+      IF (QS .GE. MIN(II-1)) GO TO 80
+  250 IF (VS .GE. PR) GO TO 270
       VS = PR
       DO J=1,NS
         XS(J) = D(J)
       END DO
       MFIRST = QS
-      IF ( VS .EQ. LIM ) RETURN
-  270 IF ( D(NS) .EQ. 0 ) GO TO 280
+      IF (VS .EQ. LIM) RETURN
+  270 IF (D(NS) .EQ. 0) GO TO 280
       D(NS) = 0
       QS = QS + WS(NS)
       PR = PR - PS(NS)
   280 NN = II - 1
-      IF ( NN .EQ. 0 ) GO TO 300
+      IF (NN .EQ. 0) GO TO 300
       DO J=1,NN
         KK = II - J
-        IF ( D(KK) .EQ. 1 ) GO TO 310
+        IF (D(KK) .EQ. 1) GO TO 310
       END DO
   300 QS = MFIRST
       RETURN
@@ -71162,21 +71162,21 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       QS = QS + WS(KK)
       PR = PR - PS(KK)
       D(KK) = 0
-      IF ( R .LT. MIN(KK) ) GO TO 320
+      IF (R .LT. MIN(KK)) GO TO 320
       II = KK + 1
       GO TO 80
   320 NN = KK + 1
       II = KK
-  330 IF ( VS .GE. PR + (QS*PS(NN))/WS(NN) ) GO TO 280
+  330 IF (VS .GE. PR + (QS*PS(NN))/WS(NN)) GO TO 280
       DIFF = WS(NN) - WS(KK)
       NSWC_AI_I4 = DIFF
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 390
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 340
+      IF (NSWC_AI_I4 .LT. 0) GO TO 390
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 340
       GO TO 350
   340 NN = NN + 1
       GO TO 330
-  350 IF ( DIFF .GT. R ) GO TO 340
-      IF ( VS .GE. PR + PS(NN) ) GO TO 340
+  350 IF (DIFF .GT. R) GO TO 340
+      IF (VS .GE. PR + PS(NN)) GO TO 340
       VS = PR + PS(NN)
       DO J=1,KK
         XS(J) = D(J)
@@ -71187,7 +71187,7 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       END DO
       XS(NN) = 1
       MFIRST = QS - WS(NN)
-      IF ( VS .NE. LIM ) GO TO 380
+      IF (VS .NE. LIM) GO TO 380
       QS = MFIRST
       RETURN
   380 R = R - DIFF
@@ -71195,9 +71195,9 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       NN = NN + 1
       GO TO 330
   390 T = R - DIFF
-      IF ( T .LT. MIN(NN) ) GO TO 340
+      IF (T .LT. MIN(NN)) GO TO 340
       N1 = NN + 1
-      IF ( VS .GE. PR + PS(NN) + (T*PS(N1))/WS(N1) ) GO TO 280
+      IF (VS .GE. PR + PS(NN) + (T*PS(N1))/WS(N1)) GO TO 280
       QS = QS - WS(NN)
       PR = PR + PS(NN)
       D(NN) = 1
@@ -71214,7 +71214,7 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       GO TO 80
       END SUBROUTINE SKNP1
 
-      SUBROUTINE LAINV (MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
+      SUBROUTINE LAINV(MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO
@@ -71287,15 +71287,15 @@ C-----------------------------------------------------------------------
       IF (IERR .GE. 0) GO TO 10
 C     CALCULATION OF THE ABSCISSA OF CONVERGENCE.
       IF (MO .EQ. 0) GO TO 5
-         CALL ABCON1 (FUN,C,NUM,IERC)
+         CALL ABCON1(FUN,C,NUM,IERC)
          GO TO 10
-    5 CALL ABCON (FUN,C,NUM,IERC)
+    5 CALL ABCON(FUN,C,NUM,IERC)
    10 IF (IERC .EQ. 2) GO TO 100
 C     CHECK IF T IS TOO LARGE
       A = C + 2.0/T
       IF (A*T .GT. EXPARG(0)) GO TO 110
 C     CALCULATION OF THE INVERSE LAPLACE TRANSFORM.
-      CALL LAINV1 (FUN,T,C,RERR,AERR,Y,ERROR,NUM1,IER)
+      CALL LAINV1(FUN,T,C,RERR,AERR,Y,ERROR,NUM1,IER)
       NUM = NUM + NUM1
 C     REPORT THE STATUS OF THE RESULTS.
       IF (IERC .GE. 0) GO TO 20
@@ -71326,7 +71326,7 @@ C     REPORT THE STATUS OF THE RESULTS.
       IERR = 6
       END SUBROUTINE LAINV
 
-      SUBROUTINE ABCON (FUN, C, NUM, IERR)
+      SUBROUTINE ABCON(FUN, C, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
@@ -71379,7 +71379,7 @@ C     TERMINATION
    20 IERR = MIN0(IERR,2)
       END SUBROUTINE ABCON
 
-      SUBROUTINE SRCH (FUN,COND,XL,ETA,X,NUM,IERR)
+      SUBROUTINE SRCH(FUN,COND,XL,ETA,X,NUM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(INOUT) :: NUM
@@ -71446,7 +71446,7 @@ C     X2 .LE. 0.01269
             X1 = AMAX1(X1, XL)
             CALL COND(FUN,X1,CND,NUM1,IER)
             NUM = NUM + NUM1
-            IF ( .NOT. CND ) EXIT
+            IF (.NOT. CND) EXIT
             X2 = X1
             IF (X1 .EQ. XL) GO TO 400
          X1 = 10.0*X1
@@ -71480,7 +71480,7 @@ C     (-1.0E4, 1.OE4).
       IERR = 3
       END SUBROUTINE SRCH
 
-      SUBROUTINE ABCON1 (FUN, C, NUM, IERR)
+      SUBROUTINE ABCON1(FUN, C, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
@@ -71514,9 +71514,9 @@ C-----------------------------------------------------------------------
       ETA = 0.01
       CMPLEX = .FALSE.
       X1 = .01269
-      CALL XCOND (FUN,X1,RIGHT,NUM,IERR)
+      CALL XCOND(FUN,X1,RIGHT,NUM,IERR)
       IF (.NOT. RIGHT) GO TO 10
-      CALL ACOND (FUN,X1,RIGHT,NUM1,IERR)
+      CALL ACOND(FUN,X1,RIGHT,NUM1,IERR)
       NUM = NUM + NUM1
       IF (RIGHT) GO TO 30
       CMPLEX = .TRUE.
@@ -71525,10 +71525,10 @@ C     X1 .GE. 0.01269
    10    X2 = 10.1269
          DO I = 1,4
             IF (CMPLEX) GO TO 20
-               CALL XCOND (FUN,X2,RIGHT,NUM1,IERR)
+               CALL XCOND(FUN,X2,RIGHT,NUM1,IERR)
                NUM = NUM + NUM1
                IF (.NOT. RIGHT) GO TO 21
-   20       CALL ACOND (FUN,X2,RIGHT,NUM1,IERR)
+   20       CALL ACOND(FUN,X2,RIGHT,NUM1,IERR)
             NUM = NUM + NUM1
             IF (RIGHT) GO TO 50
             CMPLEX = .TRUE.
@@ -71541,10 +71541,10 @@ C     X2 .LE. 0.01269
    30    X2 = X1
          X1 = -.100358
          DO I = 1,6
-            CALL XCOND (FUN,X1,RIGHT,NUM1,IERR)
+            CALL XCOND(FUN,X1,RIGHT,NUM1,IERR)
             NUM = NUM + NUM1
             IF (.NOT. RIGHT) GO TO 50
-            CALL ACOND (FUN,X1,RIGHT,NUM1,IERR)
+            CALL ACOND(FUN,X1,RIGHT,NUM1,IERR)
             NUM = NUM + NUM1
             IF (.NOT. RIGHT) GO TO 45
             X2 = X1
@@ -71560,13 +71560,13 @@ C     SEARCH FOR X IN THE INTERVAL (X1, X2) BY BISECTION
             IF (XM .GT. 1.0) TOL = ETA*XM
             IEND =  DX .LE. TOL
             IF (CMPLEX) GO TO 60
-            CALL XCOND (FUN,XBAR,RIGHT,NUM1,IERR)
+            CALL XCOND(FUN,XBAR,RIGHT,NUM1,IERR)
             NUM = NUM + NUM1
             IF (RIGHT) GO TO 60
                IF (IEND) GO TO 80
                X1 = XBAR
                GO TO 50
-   60       CALL ACOND (FUN,XBAR,RIGHT,NUM1,IERR)
+   60       CALL ACOND(FUN,XBAR,RIGHT,NUM1,IERR)
             NUM = NUM + NUM1
             IF (RIGHT) GO TO 70
                IF (IEND) GO TO 80
@@ -71583,7 +71583,7 @@ C     ERROR RETURN WHEN X CANNOT BE FOUND IN (-1.E4, 1.E4)
       IERR = 2
       END SUBROUTINE ABCON1
 
-      SUBROUTINE ACOND (FUN, X, COND, NUM, IERR)
+      SUBROUTINE ACOND(FUN, X, COND, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(IN) :: X
@@ -71620,11 +71620,11 @@ C--------------------------
 C--------------------------
       C = X
 C     CALCULATION OF THE INTEGRAL OF ACONDF FROM X TO INFINITY.
-      CALL QAGI1 (ACONDF,FUN,Y,C,X,1,AERR,RERR,Z1,ERROR1,NUM1,IER1,
+      CALL QAGI1(ACONDF,FUN,Y,C,X,1,AERR,RERR,Z1,ERROR1,NUM1,IER1,
      *            L,M,N,IWK,WK)
 C     CALCULATION OF THE INTEGRAL OF ACONDG FROM 0 TO INFINITY.
       A = 0.0
-      CALL QAGI1 (ACONDG,FUN,Y,C,A,1,AERR,RERR,Z2,ERROR2,NUM2,IER2,
+      CALL QAGI1(ACONDG,FUN,Y,C,A,1,AERR,RERR,Z2,ERROR2,NUM2,IER2,
      *            L,M,N,IWK,WK)
       NUM = NUM1 + NUM2
       IER = MAX0(IER1, IER2)
@@ -71636,7 +71636,7 @@ C     SET IERR AND RETURN
       IF (IER .GT. 4) IERR = 1
       END SUBROUTINE ACOND
 
-      FUNCTION ACONDF (X, Y, C, FUN)
+      FUNCTION ACONDF(X, Y, C, FUN)
       IMPLICIT NONE
       REAL, INTENT(IN) :: C
       REAL :: X
@@ -71648,12 +71648,12 @@ C-----------------------------------------------------------------------
 C        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
 C        ACOND. Y IS A DUMMY VARIABLE.
 C-----------------------------------------------------------------------
-      CALL FUN (X, 0.0, A, B)
+      CALL FUN(X, 0.0, A, B)
       T = 1.0/((X - C) + 1.0)
       ACONDF = A*T*T
       END FUNCTION ACONDF
 
-      FUNCTION ACONDG (X, Y, C, FUN)
+      FUNCTION ACONDG(X, Y, C, FUN)
       IMPLICIT NONE
       REAL :: C, X
       REAL, INTENT(IN) :: Y
@@ -71664,14 +71664,14 @@ C-----------------------------------------------------------------------
 C        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
 C        IN ACOND. Y IS A DUMMY VARIABLE.
 C-----------------------------------------------------------------------
-      CALL FUN (C, X, A, B)
-      CALL CREC (1.0, X, S, T)
+      CALL FUN(C, X, A, B)
+      CALL CREC(1.0, X, S, T)
       U = S*S - T*T
       V = 2.0*S*T
       ACONDG = -(A*V + B*U)
       END FUNCTION ACONDG
 
-      SUBROUTINE XCOND (FUN, X, COND, NUM, IERR)
+      SUBROUTINE XCOND(FUN, X, COND, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL :: X
@@ -71712,7 +71712,7 @@ C--------------------------
       COND = .FALSE.
 C     NUMERICAL INTEGRATION OF THE IMAGINARY PART OF THE INTEGRAND
 C     ALONG THE LINE Y = EPSR.
-      CALL QAGI1 (XCONDY,FUN,Y,C,X,1,AERR,RERR,Z,ERROR,NUM,IERR,
+      CALL QAGI1(XCONDY,FUN,Y,C,X,1,AERR,RERR,Z,ERROR,NUM,IERR,
      *            L,M,N,IWK,WK)
       IF (IERR .NE. 0) GO TO 100
 C     DETERMINATION OF COND.
@@ -71728,7 +71728,7 @@ C     ERROR RETURN
   100 IERR = 1
       END SUBROUTINE XCOND
 
-      FUNCTION XCONDX (X,Y,C,FUN)
+      FUNCTION XCONDX(X,Y,C,FUN)
       IMPLICIT NONE
       REAL, INTENT(IN) :: C
       REAL :: X, Y
@@ -71736,14 +71736,14 @@ C     ERROR RETURN
       REAL :: A, B, S, T, U, V
       REAL :: XCONDX
 C     REAL PART OF THE INTEGRAND IN XCOND
-      CALL FUN (X, Y, A, B)
-      CALL CREC (X + C, Y, S, T)
+      CALL FUN(X, Y, A, B)
+      CALL CREC(X + C, Y, S, T)
       U = S*S - T*T
       V = 2.0*S*T
       XCONDX = A*U - B*V
       END FUNCTION XCONDX
 
-      FUNCTION XCONDY (X,Y,C,FUN)
+      FUNCTION XCONDY(X,Y,C,FUN)
       IMPLICIT NONE
       REAL, INTENT(IN) :: C
       REAL :: X, Y
@@ -71751,8 +71751,8 @@ C     REAL PART OF THE INTEGRAND IN XCOND
       REAL :: A, B, S, T, U, V
       REAL :: XCONDY
 C     IMAGINARY PART OF INTEGRAND IN XCOND
-      CALL FUN (X, Y, A, B)
-      CALL CREC (X + C, Y, S, T)
+      CALL FUN(X, Y, A, B)
+      CALL CREC(X + C, Y, S, T)
       U = S*S - T*T
       V = 2.0*S*T
       XCONDY = A*V + B*U
@@ -71889,7 +71889,7 @@ C   INITIALIZATION OF THE SUMMATION OF THE DURBIN FORMULA.
       ARE = C+2.0E+00/T
       AIM = 0.0E+00
       BB = EXP(ARE*T)/(1.6E+01*T)
-      CALL FUN (ARE,AIM,FRE,FIM)
+      CALL FUN(ARE,AIM,FRE,FIM)
       NUM = 5
       R = 5.0E-01*FRE
       S = 0.0
@@ -72552,7 +72552,7 @@ C           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 C           I2 = INTEGRAL OF F OVER (0,+INFINITY).
       BOUN = BOUND
       IF (INF .EQ. 2) BOUN = 0.0
-      CALL QK15I1 (F, PHI, Y, C, BOUN, INF, 0.0, 1.0, RESULT, ABSERR,
+      CALL QK15I1(F, PHI, Y, C, BOUN, INF, 0.0, 1.0, RESULT, ABSERR,
      *             DEFABS, RESABS, EPMACH, UFLOW)
 C           TEST ON ACCURACY
       LAST = 1
@@ -72598,9 +72598,9 @@ C           ERROR ESTIMATE.
         A2 = B1
         B2 = BLIST(MAXERR)
         ERLAST = ERRMAX
-        CALL QK15I1 (F, PHI, Y, C, BOUN, INF, A1, B1, AREA1, ERROR1,
+        CALL QK15I1(F, PHI, Y, C, BOUN, INF, A1, B1, AREA1, ERROR1,
      *               RESABS, DEFAB1, EPMACH, UFLOW)
-        CALL QK15I1 (F, PHI, Y, C, BOUN, INF, A2, B2, AREA2, ERROR2,
+        CALL QK15I1(F, PHI, Y, C, BOUN, INF, A2, B2, AREA2, ERROR2,
      *               RESABS, DEFAB2, EPMACH, UFLOW)
 C           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 C           AND ERROR AND TEST FOR ACCURACY.
@@ -72647,9 +72647,9 @@ C           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 C           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 C           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 C           BISECTED NEXT).
-   30   CALL QPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+   30   CALL QPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
         IF(ERRSUM.LE.ERRBND) GO TO 115
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF(LAST.EQ.2) GO TO 80
         IF(NOEXT) GO TO 90
         ERLARG = ERLARG-ERLAST
@@ -72677,7 +72677,7 @@ C           EXTRAPOLATION.
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2+1
         RLIST2(NUMRL2) = AREA
-        CALL QELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
+        CALL QELG(NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
      *             EPMACH, OFLOW)
         KTMIN = KTMIN+1
         IF(KTMIN.GT.5.AND.ABSERR.LT.0.1E-02*ERRSUM) IER = 5
@@ -72687,10 +72687,10 @@ C           PERFORM EXTRAPOLATION.
         RESULT = RESEPS
         CORREC = ERLARG
         ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF(NUMRL2.EQ.1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -72733,7 +72733,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE QAGIE1
 
-      SUBROUTINE QK15I1 (F, PHI, Y, C, BOUN, INF, A, B, RESULT, ABSERR,
+      SUBROUTINE QK15I1(F, PHI, Y, C, BOUN, INF, A, B, RESULT, ABSERR,
      *                   RESABS, RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
@@ -72901,7 +72901,7 @@ C           THE INTEGRAL, AND ESTIMATE THE ERROR.
       IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
       END SUBROUTINE QK15I1
 
-      SUBROUTINE FFT (C,N,ISN,IERR)
+      SUBROUTINE FFT(C,N,ISN,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: ISN, N
@@ -72913,24 +72913,24 @@ C     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE THE
 C     SUBROUTINE FFT1.
 C-----------------------------------------------------------------------
       IF (IABS(ISN) .NE. 1) GO TO 10
-      CALL SFFT (C(1),C(2),N,N,N,ISN+ISN,IERR)
+      CALL SFFT(C(1),C(2),N,N,N,ISN+ISN,IERR)
       RETURN
    10 IERR = 4
       END SUBROUTINE FFT
 
-      SUBROUTINE FFT1 (A,B,N,ISN,IERR)
+      SUBROUTINE FFT1(A,B,N,ISN,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: ISN, N
       REAL, INTENT(INOUT) :: A(N), B(N)
 C     ------------
       IF (IABS(ISN) .NE. 1) GO TO 10
-      CALL SFFT (A,B,N,N,N,ISN,IERR)
+      CALL SFFT(A,B,N,N,N,ISN,IERR)
       RETURN
    10 IERR = 4
       END SUBROUTINE FFT1
 
-      SUBROUTINE MFFT (C,N,NDIM,ISN,IERR)
+      SUBROUTINE MFFT(C,N,NDIM,ISN,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: ISN, NDIM
@@ -72955,7 +72955,7 @@ C-----------------------------------------------------------------------
       NSPAN = 1
       DO I = 1,NDIM
          NSPAN = N(I)*NSPAN
-         CALL SFFT (C(1),C(2),NTOT,N(I),NSPAN,ISIGN,IERR)
+         CALL SFFT(C(1),C(2),NTOT,N(I),NSPAN,ISIGN,IERR)
          IF (IERR .NE. 0) RETURN
       END DO
       RETURN
@@ -72966,7 +72966,7 @@ C-----------------------------------------------------------------------
    50 IERR = 5
       END SUBROUTINE MFFT
 
-      SUBROUTINE MFFT1 (A,B,N,NDIM,ISN,IERR)
+      SUBROUTINE MFFT1(A,B,N,NDIM,ISN,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: ISN
@@ -72985,7 +72985,7 @@ C     ------------
       NSPAN = 1
       DO I = 1,NDIM
          NSPAN = N(I)*NSPAN
-         CALL SFFT (A,B,NTOT,N(I),NSPAN,ISN,IERR)
+         CALL SFFT(A,B,NTOT,N(I),NSPAN,ISN,IERR)
          IF (IERR .NE. 0) RETURN
       END DO
       RETURN
@@ -73058,7 +73058,7 @@ C  ARRAY STORAGE IN NFAC FOR A MAXIMUM OF 15 FACTORS OF N.
 C  IF N HAS MORE THAN ONE SQUARE-FREE FACTOR, THE PRODUCT OF THE
 C    SQUARE-FREE FACTORS MUST BE .LE. 210
 C  ARRAY STORAGE FOR MAXIMUM PRIME FACTOR OF 23
-      EQUIVALENCE (I,II)
+      EQUIVALENCE(I,II)
 C  THE FOLLOWING CONSTANTS SHOULD AGREE WITH THE ARRAY DIMENSIONS.
       MAXN=15
       MAXF=23
@@ -73074,8 +73074,8 @@ C     S120=SQRT(0.75)
       S120=.86602540378444
       IERR=0
       NSWC_AI_I4 = N - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 1000
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 960
+      IF (NSWC_AI_I4 .LT. 0) GO TO 1000
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 960
       GO TO 5
     5 INC=ISN
       IF(ISN .GE. 0) GO TO 10
@@ -73611,7 +73611,7 @@ C             THE SAME WORK ARRAY CAN BE USED FOR BOTH COSQF AND COSQB
 C             AS LONG AS N REMAINS UNCHANGED. DIFFERENT WSAVE ARRAYS
 C             ARE REQUIRED FOR DIFFERENT VALUES OF N. THE CONTENTS OF
 C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
-      SUBROUTINE COSQI (N,WSAVE)
+      SUBROUTINE COSQI(N,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*)
@@ -73624,7 +73624,7 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
          FK = FK+1.
          WSAVE(K) = COS(FK*DT)
       END DO
-      CALL RFFTI (N,WSAVE(N+1))
+      CALL RFFTI(N,WSAVE(N+1))
       END SUBROUTINE COSQI
 
 C     ******************************************************************
@@ -73660,7 +73660,7 @@ C                  THEREFORE COSQB IS THE UNNORMALIZED INVERSE
 C                  OF COSQF.
 C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
-      SUBROUTINE COSQF (N,X,WSAVE)
+      SUBROUTINE COSQF(N,X,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
@@ -73668,17 +73668,17 @@ C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
       INTEGER :: NSWC_AI_I4
       DATA SQRT2 /1.4142135623731/
       NSWC_AI_I4 = N - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 102
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 101
+      IF (NSWC_AI_I4 .LT. 0) GO TO 102
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 101
       GO TO 103
   101 TSQX = SQRT2*X(2)
       X(2) = X(1)-TSQX
       X(1) = X(1)+TSQX
   102 RETURN
-  103 CALL COSQF1 (N,X,WSAVE,WSAVE(N+1))
+  103 CALL COSQF1(N,X,WSAVE,WSAVE(N+1))
       END SUBROUTINE COSQF
 
-      SUBROUTINE COSQF1 (N,X,W,XH)
+      SUBROUTINE COSQF1(N,X,W,XH)
       IMPLICIT NONE
       INTEGER :: N
       REAL :: W(*)
@@ -73700,7 +73700,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
          X(KC) = W(K-1)*XH(K)-W(KC-1)*XH(KC)
       END DO
       IF (MODN .EQ. 0) X(NS2+1) = W(NS2)*XH(NS2+1)
-      CALL RFFTF (N,X,XH)
+      CALL RFFTF(N,X,XH)
       DO I=3,N,2
          XIM1 = X(I-1)-X(I)
          X(I) = X(I-1)+X(I)
@@ -73741,7 +73741,7 @@ C                  THEREFORE COSQF IS THE UNNORMALIZED INVERSE
 C                  OF COSQB.
 C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
-      SUBROUTINE COSQB (N,X,WSAVE)
+      SUBROUTINE COSQB(N,X,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
@@ -73749,8 +73749,8 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
       INTEGER :: NSWC_AI_I4
       DATA TSQRT2 /2.82842712474619/
       NSWC_AI_I4 = N - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 101
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 102
+      IF (NSWC_AI_I4 .LT. 0) GO TO 101
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 102
       GO TO 103
   101 X(1) = 4.*X(1)
       RETURN
@@ -73758,10 +73758,10 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
       X(2) = TSQRT2*(X(1)-X(2))
       X(1) = X1
       RETURN
-  103 CALL COSQB1 (N,X,WSAVE,WSAVE(N+1))
+  103 CALL COSQB1(N,X,WSAVE,WSAVE(N+1))
       END SUBROUTINE COSQB
 
-      SUBROUTINE COSQB1 (N,X,W,XH)
+      SUBROUTINE COSQB1(N,X,W,XH)
       IMPLICIT NONE
       INTEGER :: N
       REAL :: W(*)
@@ -73778,7 +73778,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
       X(1) = X(1)+X(1)
       MODN = MOD(N,2)
       IF (MODN .EQ. 0) X(N) = X(N)+X(N)
-      CALL RFFTB (N,X,XH)
+      CALL RFFTB(N,X,XH)
       DO K=2,NS2
          KC = NP2-K
          XH(K) = W(K-1)*X(KC)+W(KC-1)*X(K)
@@ -73827,7 +73827,7 @@ C                  THEREFORE SINQB IS THE UNNORMALIZED INVERSE
 C                  OF SINQF.
 C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
-      SUBROUTINE SINQF (N,X,WSAVE)
+      SUBROUTINE SINQF(N,X,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
@@ -73841,7 +73841,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
          X(K) = X(KC+1)
          X(KC+1) = XHOLD
       END DO
-      CALL COSQF (N,X,WSAVE)
+      CALL COSQF(N,X,WSAVE)
       DO K=2,N,2
          X(K) = -X(K)
       END DO
@@ -73880,7 +73880,7 @@ C                  THEREFORE SINQF IS THE UNNORMALIZED INVERSE
 C                  OF SINQB.
 C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
-      SUBROUTINE SINQB (N,X,WSAVE)
+      SUBROUTINE SINQB(N,X,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
@@ -73893,7 +73893,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
       DO K=2,N,2
          X(K) = -X(K)
       END DO
-      CALL COSQB (N,X,WSAVE)
+      CALL COSQB(N,X,WSAVE)
       DO K=1,NS2
          KC = N-K
          XHOLD = X(K)
@@ -73917,15 +73917,15 @@ C             THE SAME WORK ARRAY CAN BE USED FOR BOTH RFFTF AND RFFTB
 C             AS LONG AS N REMAINS UNCHANGED. DIFFERENT WSAVE ARRAYS
 C             ARE REQUIRED FOR DIFFERENT VALUES OF N. THE CONTENTS OF
 C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF RFFTF OR RFFTB.
-      SUBROUTINE RFFTI (N,WSAVE)
+      SUBROUTINE RFFTI(N,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*)
       IF (N .EQ. 1) RETURN
-      CALL RFFTI1 (N,WSAVE(N+1),WSAVE(2*N+1))
+      CALL RFFTI1(N,WSAVE(N+1),WSAVE(2*N+1))
       END SUBROUTINE RFFTI
 
-      SUBROUTINE RFFTI1 (N,WA,IFAC)
+      SUBROUTINE RFFTI1(N,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: WA(*), IFAC(*)
@@ -73938,14 +73938,14 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF RFFTF OR RFFTB.
       NF = 0
       J = 0
   101 J = J+1
-      IF ( ( J - 4 ) .LE. 0 ) GO TO 102
+      IF ((J - 4) .LE. 0) GO TO 102
       GO TO 103
   102 NTRY = NTRYH(J)
       GO TO 104
   103 NTRY = NTRY+2
   104 NQ = NL/NTRY
       NR = NL-NTRY*NQ
-      IF ( ( NR ) .EQ. 0 ) GO TO 105
+      IF ((NR) .EQ. 0) GO TO 105
       GO TO 101
   105 NF = NF+1
       IFAC(NF+2) = NTRY
@@ -74026,15 +74026,15 @@ C                  FOLLOWED BY A CALL OF RFFTB WILL MULTIPLY THE INPUT
 C                  SEQUENCE BY N.
 C     WSAVE   CONTAINS RESULTS WHICH MUST NOT BE DESTROYED BETWEEN
 C             CALLS OF RFFTB OR RFFTF.
-      SUBROUTINE RFFTB (N,R,WSAVE)
+      SUBROUTINE RFFTB(N,R,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: R(*), WSAVE(*)
       IF (N .EQ. 1) RETURN
-      CALL RFFTB1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
+      CALL RFFTB1(N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
       END SUBROUTINE RFFTB
 
-      SUBROUTINE RFFTB1 (N,C,CH,WA,IFAC)
+      SUBROUTINE RFFTB1(N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: C(*), CH(*)
@@ -74054,24 +74054,24 @@ C             CALLS OF RFFTB OR RFFTF.
          IX2 = IW+IDO
          IX3 = IX2+IDO
          IF (NA .NE. 0) GO TO 101
-         CALL RADB4 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
+         CALL RADB4(IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
          GO TO 102
-  101    CALL RADB4 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
+  101    CALL RADB4(IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
   102    NA = 1-NA
          GO TO 115
   103    IF (IP .NE. 2) GO TO 106
          IF (NA .NE. 0) GO TO 104
-         CALL RADB2 (IDO,L1,C,CH,WA(IW))
+         CALL RADB2(IDO,L1,C,CH,WA(IW))
          GO TO 105
-  104    CALL RADB2 (IDO,L1,CH,C,WA(IW))
+  104    CALL RADB2(IDO,L1,CH,C,WA(IW))
   105    NA = 1-NA
          GO TO 115
   106    IF (IP .NE. 3) GO TO 109
          IX2 = IW+IDO
          IF (NA .NE. 0) GO TO 107
-         CALL RADB3 (IDO,L1,C,CH,WA(IW),WA(IX2))
+         CALL RADB3(IDO,L1,C,CH,WA(IW),WA(IX2))
          GO TO 108
-  107    CALL RADB3 (IDO,L1,CH,C,WA(IW),WA(IX2))
+  107    CALL RADB3(IDO,L1,CH,C,WA(IW),WA(IX2))
   108    NA = 1-NA
          GO TO 115
   109    IF (IP .NE. 5) GO TO 112
@@ -74079,15 +74079,15 @@ C             CALLS OF RFFTB OR RFFTF.
          IX3 = IX2+IDO
          IX4 = IX3+IDO
          IF (NA .NE. 0) GO TO 110
-         CALL RADB5 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
+         CALL RADB5(IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
          GO TO 111
-  110    CALL RADB5 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
+  110    CALL RADB5(IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
   111    NA = 1-NA
          GO TO 115
   112    IF (NA .NE. 0) GO TO 113
-         CALL RADBG (IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
+         CALL RADBG(IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
          GO TO 114
-  113    CALL RADBG (IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
+  113    CALL RADBG(IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
   114    IF (IDO .EQ. 1) NA = 1-NA
   115    L1 = L2
          IW = IW+(IP-1)*IDO
@@ -74098,7 +74098,7 @@ C             CALLS OF RFFTB OR RFFTF.
       END DO
       END SUBROUTINE RFFTB1
 
-      SUBROUTINE RADB2 (IDO,L1,CC,CH,WA1)
+      SUBROUTINE RADB2(IDO,L1,CC,CH,WA1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,2,L1)
@@ -74112,8 +74112,8 @@ C             CALLS OF RFFTB OR RFFTF.
          CH(1,K,2) = CC(1,1,K)-CC(IDO,2,K)
       END DO
       NSWC_AI_I4 = IDO - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      IF (NSWC_AI_I4 .LT. 0) GO TO 107
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 105
       GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
@@ -74148,7 +74148,7 @@ C             CALLS OF RFFTB OR RFFTF.
   107 RETURN
       END SUBROUTINE RADB2
 
-      SUBROUTINE RADB3 (IDO,L1,CC,CH,WA1,WA2)
+      SUBROUTINE RADB3(IDO,L1,CC,CH,WA1,WA2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,3,L1)
@@ -74214,7 +74214,7 @@ C             CALLS OF RFFTB OR RFFTF.
       END DO
       END SUBROUTINE RADB3
 
-      SUBROUTINE RADB4 (IDO,L1,CC,CH,WA1,WA2,WA3)
+      SUBROUTINE RADB4(IDO,L1,CC,CH,WA1,WA2,WA3)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,4,L1)
@@ -74236,8 +74236,8 @@ C             CALLS OF RFFTB OR RFFTF.
          CH(1,K,4) = TR1+TR4
       END DO
       NSWC_AI_I4 = IDO - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      IF (NSWC_AI_I4 .LT. 0) GO TO 107
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 105
       GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
@@ -74310,7 +74310,7 @@ C             CALLS OF RFFTB OR RFFTF.
   107 RETURN
       END SUBROUTINE RADB4
 
-      SUBROUTINE RADB5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
+      SUBROUTINE RADB5(IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,5,L1)
@@ -74421,7 +74421,7 @@ C             CALLS OF RFFTB OR RFFTF.
       END DO
       END SUBROUTINE RADB5
 
-      SUBROUTINE RADBG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
+      SUBROUTINE RADBG(IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDL1, IDO, IP, L1
       REAL, INTENT(INOUT) :: C1(IDO,L1,IP), C2(IDL1,IP)
@@ -74626,15 +74626,15 @@ C                  FOLLOWED BY A CALL OF RFFTB WILL MULTIPLY THE INPUT
 C                  SEQUENCE BY N.
 C     WSAVE   CONTAINS RESULTS WHICH MUST NOT BE DESTROYED BETWEEN
 C             CALLS OF RFFTF OR RFFTB.
-      SUBROUTINE RFFTF (N,R,WSAVE)
+      SUBROUTINE RFFTF(N,R,WSAVE)
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: R(*), WSAVE(*)
       IF (N .EQ. 1) RETURN
-      CALL RFFTF1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
+      CALL RFFTF1(N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
       END SUBROUTINE RFFTF
 
-      SUBROUTINE RFFTF1 (N,C,CH,WA,IFAC)
+      SUBROUTINE RFFTF1(N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: C(*), CH(*)
@@ -74658,38 +74658,38 @@ C             CALLS OF RFFTF OR RFFTB.
          IX2 = IW+IDO
          IX3 = IX2+IDO
          IF (NA .NE. 0) GO TO 101
-         CALL RADF4 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
+         CALL RADF4(IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
          GO TO 110
-  101    CALL RADF4 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
+  101    CALL RADF4(IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
          GO TO 110
   102    IF (IP .NE. 2) GO TO 104
          IF (NA .NE. 0) GO TO 103
-         CALL RADF2 (IDO,L1,C,CH,WA(IW))
+         CALL RADF2(IDO,L1,C,CH,WA(IW))
          GO TO 110
-  103    CALL RADF2 (IDO,L1,CH,C,WA(IW))
+  103    CALL RADF2(IDO,L1,CH,C,WA(IW))
          GO TO 110
   104    IF (IP .NE. 3) GO TO 106
          IX2 = IW+IDO
          IF (NA .NE. 0) GO TO 105
-         CALL RADF3 (IDO,L1,C,CH,WA(IW),WA(IX2))
+         CALL RADF3(IDO,L1,C,CH,WA(IW),WA(IX2))
          GO TO 110
-  105    CALL RADF3 (IDO,L1,CH,C,WA(IW),WA(IX2))
+  105    CALL RADF3(IDO,L1,CH,C,WA(IW),WA(IX2))
          GO TO 110
   106    IF (IP .NE. 5) GO TO 108
          IX2 = IW+IDO
          IX3 = IX2+IDO
          IX4 = IX3+IDO
          IF (NA .NE. 0) GO TO 107
-         CALL RADF5 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
+         CALL RADF5(IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
          GO TO 110
-  107    CALL RADF5 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
+  107    CALL RADF5(IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
          GO TO 110
   108    IF (IDO .EQ. 1) NA = 1-NA
          IF (NA .NE. 0) GO TO 109
-         CALL RADFG (IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
+         CALL RADFG(IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
          NA = 1
          GO TO 110
-  109    CALL RADFG (IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
+  109    CALL RADFG(IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
          NA = 0
   110    L2 = L1
       END DO
@@ -74699,7 +74699,7 @@ C             CALLS OF RFFTF OR RFFTB.
       END DO
       END SUBROUTINE RFFTF1
 
-      SUBROUTINE RADF2 (IDO,L1,CC,CH,WA1)
+      SUBROUTINE RADF2(IDO,L1,CC,CH,WA1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,L1,*)
@@ -74713,8 +74713,8 @@ C             CALLS OF RFFTF OR RFFTB.
          CH(IDO,2,K) = CC(1,K,1)-CC(1,K,2)
       END DO
       NSWC_AI_I4 = IDO - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      IF (NSWC_AI_I4 .LT. 0) GO TO 107
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 105
       GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
@@ -74749,7 +74749,7 @@ C             CALLS OF RFFTF OR RFFTB.
   107 RETURN
       END SUBROUTINE RADF2
 
-      SUBROUTINE RADF3 (IDO,L1,CC,CH,WA1,WA2)
+      SUBROUTINE RADF3(IDO,L1,CC,CH,WA1,WA2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,L1,*)
@@ -74813,7 +74813,7 @@ C             CALLS OF RFFTF OR RFFTB.
       END DO
       END SUBROUTINE RADF3
 
-      SUBROUTINE RADF4 (IDO,L1,CC,CH,WA1,WA2,WA3)
+      SUBROUTINE RADF4(IDO,L1,CC,CH,WA1,WA2,WA3)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,L1,*)
@@ -74833,8 +74833,8 @@ C             CALLS OF RFFTF OR RFFTB.
          CH(1,3,K) = CC(1,K,4)-CC(1,K,2)
       END DO
       NSWC_AI_I4 = IDO - 2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      IF (NSWC_AI_I4 .LT. 0) GO TO 107
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 105
       GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 111
@@ -74905,7 +74905,7 @@ C             CALLS OF RFFTF OR RFFTB.
   107 RETURN
       END SUBROUTINE RADF4
 
-      SUBROUTINE RADF5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
+      SUBROUTINE RADF5(IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDO, L1
       REAL :: CC(IDO,L1,*)
@@ -75012,7 +75012,7 @@ C             CALLS OF RFFTF OR RFFTB.
       END DO
       END SUBROUTINE RADF5
 
-      SUBROUTINE RADFG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
+      SUBROUTINE RADFG(IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDL1, IDO, IP, L1
       REAL, INTENT(INOUT) :: C1(IDO,L1,IP), C2(IDL1,IP), CC(IDO,IP,L1),
@@ -75182,7 +75182,7 @@ C             CALLS OF RFFTF OR RFFTB.
       END DO
       END SUBROUTINE RADFG
 
-      SUBROUTINE CHEBY (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
+      SUBROUTINE CHEBY(A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      X                    P, Q, ERROR, IERR, W)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, ITNO
@@ -75210,7 +75210,7 @@ C     -------------------
       I3 = I2 + NP1*NP1
       I4 = I3 + NP1
       I5 = I4 + NP1
-      CALL CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q,
+      CALL CHEBY1(A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q,
      1              ERROR, IERR, LP1, MP1, LPM, N, NP1, W(1),
      2              W(I1), W(I2), W(I3), W(I4), W(I5))
       RETURN
@@ -75220,7 +75220,7 @@ C     ------------------------------------------------------------------
    10 IERR = 1
       END SUBROUTINE CHEBY
 
-      SUBROUTINE CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
+      SUBROUTINE CHEBY1(A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      1                   P, Q, ERROR, IERR, LP1, MP1, LPM, N, NP1,
      2                   X, XVAL, C, D, ERR, H)
       IMPLICIT NONE
@@ -75297,7 +75297,7 @@ C     SET UP THE LINEAR EQUATIONS
    44 C(I,NP1) = SIGN*G(X(I))
       END DO
 C     SOLVE THE EQUATIONS CX = D AND STORE THE RESULTS IN D
-      CALL DPSLV (NP1, 1, C, NP1, D, NP1, IERR)
+      CALL DPSLV(NP1, 1, C, NP1, D, NP1, IERR)
       IF (IERR .NE. 0) GO TO 220
       IF (KOUNT .GT. 1) GO TO 50
 C     REDEFINE THE EQUATIONS AND SOLVE
@@ -75482,7 +75482,7 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
   250 IERR = 6
       END SUBROUTINE CHEBY1
 
-      SUBROUTINE CERR (T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
+      SUBROUTINE CERR(T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, LP1, M, NP1
@@ -75524,7 +75524,7 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
   110 IERR = 6
       END SUBROUTINE CERR
 
-      SUBROUTINE ADAPT (F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS,
+      SUBROUTINE ADAPT(F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS,
      * COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT,
      * KDIFF, VALLFT, VALRGT)
       IMPLICIT NONE
@@ -76013,7 +76013,7 @@ C     THE CURRENT INTERVAL. IT ALSO ESTIMATES THE ERROR
      * NPAR, NSTACK, RIGHT, DISCRD, BUFFER
       COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP,
      * LEFTX, NINTRP, RIGHTX
-      EQUIVALENCE (FLEFT(2),FDERVL(1)), (FRIGHT(2),FDERVR(1))
+      EQUIVALENCE(FLEFT(2),FDERVL(1)), (FRIGHT(2),FDERVR(1))
       DATA R/1.5D0/
 C     THIRTY DIGIT VALUES FOR THE GAUSS INTEGRATION CONSTANTS
 C                    .861136311594052575223946488893D0
@@ -76347,8 +76347,8 @@ C     TESTS ABOUT DISCARDING INVOLVING EDIST AND CHARF.
 C         COMPUTE DTEST FOR THE LOCAL ERROR CRITERION
       IF (NORM.EQ.THREE) GO TO 30
       NSWC_AI_I4 = EDIST - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 20
       GO TO 30
    10 DTEST = DX*DSCTOL
       GO TO 40
@@ -76554,7 +76554,7 @@ C                   SYNTHETIC DIVISION LOOP
 C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       END SUBROUTINE ADTRAN
 
-      SUBROUTINE CPSC (F, Z, N, IC, TOL, R, RS, ERR)
+      SUBROUTINE CPSC(F, Z, N, IC, TOL, R, RS, ERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IC, N
       REAL, INTENT(INOUT) :: ERR(N), R
@@ -76599,8 +76599,8 @@ C   IW   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
 C   IP   PERMUTATION CONSTANTS FOR THE FFT.
 C   RV   CONSTANTS FOR THE LAURENT SERIES TEST.
       DATA IW(1),IW(2),IW(3),IW(4),IW(5),IW(6),IW(7)/1,2,4,8,16,32,64/
-      DATA IP( 1),IP( 2),IP( 3),IP( 4),IP( 5),IP( 6),IP( 7),IP( 8),
-     *     IP( 9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16),
+      DATA IP(1),IP(2),IP(3),IP(4),IP(5),IP(6),IP(7),IP(8),
+     *     IP(9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16),
      *     IP(17),IP(18),IP(19),IP(20),IP(21),IP(22),IP(23),IP(24),
      *     IP(25),IP(26),IP(27),IP(28),IP(29),IP(30),IP(31),IP(32)/
      *     64,32,48,16,56,24,40,8,60,28,44,12,52,20,36,4,62,30,46,14,
@@ -76725,7 +76725,7 @@ C  DETERMINATION OF THE NEXT RADIUS TO BE USED.
   160 IF (L1 .NE. L2) GO TO 180
         IF (NR .GT. 0) GO TO 170
           NP = NP + 1
-          IF ( ( NP - 15 ) .LE. 0 ) GO TO 190
+          IF ((NP - 15) .LE. 0) GO TO 190
           GO TO 260
   170   FACT = 1.0/FACT
   180 FACT = 1.0/SQRT(FACT)
@@ -76775,7 +76775,7 @@ C  ERROR RETURN.
       END DO
       END SUBROUTINE CPSC
 
-      SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
+      SUBROUTINE DCPSC(FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IC, N
       DOUBLE PRECISION :: X, Y
@@ -76832,8 +76832,8 @@ C   IP   PERMUTATION CONSTANTS FOR THE FFT.
 C   RV1  REAL PARTS OF THE CONSTANTS FOR THE LAURENT SERIES TEST.
 C   RV2  IMAGINARY PARTS OF THE CONSTANTS FOR THE LAURENT SERIES TEST.
       DATA IW(1),IW(2),IW(3),IW(4),IW(5),IW(6),IW(7)/1,2,4,8,16,32,64/
-      DATA IP( 1),IP( 2),IP( 3),IP( 4),IP( 5),IP( 6),IP( 7),IP( 8),
-     *     IP( 9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16),
+      DATA IP(1),IP(2),IP(3),IP(4),IP(5),IP(6),IP(7),IP(8),
+     *     IP(9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16),
      *     IP(17),IP(18),IP(19),IP(20),IP(21),IP(22),IP(23),IP(24),
      *     IP(25),IP(26),IP(27),IP(28),IP(29),IP(30),IP(31),IP(32)/
      *     64,32,48,16,56,24,40,8,60,28,44,12,52,20,36,4,62,30,46,14,
@@ -76975,7 +76975,7 @@ C  DETERMINATION OF THE NEXT RADIUS TO BE USED.
   160 IF (L1 .NE. L2) GO TO 180
          IF (NR .GT. 0) GO TO 170
             NP = NP + 1
-            IF ( ( NP - 15 ) .LE. 0 ) GO TO 190
+            IF ((NP - 15) .LE. 0) GO TO 190
             GO TO 260
   170    FACT = 1.D0/FACT
   180 FACT = 1.D0/DSQRT(FACT)
@@ -77050,9 +77050,9 @@ C  ERROR RETURN.
 C     BISECTION SEARCH
    10 I = (IL+IR)/2
       IF (I.EQ.IL) GO TO 60
-      NSWC_AI_R4 = A - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 60
+      NSWC_AI_R4 = A - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 60
       GO TO 30
    20 IR = I
       GO TO 10
@@ -77067,7 +77067,7 @@ C     EVALUATION
       TRP = Y(I)+R*(Y(I+1)-Y(I))
       END FUNCTION TRP
 
-      SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
+      SUBROUTINE LTRP(M,X,Y,N,XI,YI,NI,T,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NI
@@ -77093,9 +77093,9 @@ C     INITIALIZATION
       ILOLD = 0
 C     FIND THE SUBINTERVAL WHICH CONTAINS XX. I = 1 IF XX.LT.X(2)
 C     AND I = N IF XX.GE.X(N). OTHERWISE X(I).LE.XX.LT.X(I+1).
-      NSWC_AI_R4 = XX - X ( 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      NSWC_AI_R4 = XX - X(1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 10
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 11
       GO TO 20
    10 I = 1
       IL = 1
@@ -77104,9 +77104,9 @@ C     AND I = N IF XX.GE.X(N). OTHERWISE X(I).LE.XX.LT.X(I+1).
    11 I = 1
       YI(K) = Y(1)
       GO TO 110
-   20 NSWC_AI_R4 = X ( N ) - XX
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 21
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 22
+   20 NSWC_AI_R4 = X(N) - XX
+      IF (NSWC_AI_R4 .LT. 0) GO TO 21
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 22
       GO TO 23
    21 I = N
       IL = N-M+1
@@ -77120,9 +77120,9 @@ C     AND I = N IF XX.GE.X(N). OTHERWISE X(I).LE.XX.LT.X(I+1).
 C     BISECTION SEARCH
    30 I = (IL+IR)/2
       IF (I.EQ.IL) GO TO 50
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 31
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 32
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 31
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 32
       GO TO 33
    31 IR = I
       GO TO 30
@@ -77131,9 +77131,9 @@ C     BISECTION SEARCH
    33 IL = I
       GO TO 30
 C     LINEAR FORWARD SEARCH
-   40 NSWC_AI_R4 = XX - X ( I + 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 50
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 41
+   40 NSWC_AI_R4 = XX - X(I + 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 50
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 41
       GO TO 42
    41 I = I+1
       YI(K) = Y(I)
@@ -77195,17 +77195,17 @@ C     NEXT POINT
   110 IF (K.GE.NI) RETURN
       K = K+1
       XX = XI(K)
-      NSWC_AI_R4 = XX - X ( 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      NSWC_AI_R4 = XX - X(1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 10
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 11
       GO TO 111
-  111 NSWC_AI_R4 = X ( N ) - XX
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 21
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 22
+  111 NSWC_AI_R4 = X(N) - XX
+      IF (NSWC_AI_R4 .LT. 0) GO TO 21
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 22
       GO TO 120
-  120 NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 121
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 122
+  120 NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 121
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 122
       GO TO 40
   121 IL = 1
       IR = MIN0(I+1,N)
@@ -77220,7 +77220,7 @@ C     ERROR RETURN
   132 IERR = 3
       END SUBROUTINE LTRP
 
-      SUBROUTINE HTRP (N,X,Y,A,T,IERR)
+      SUBROUTINE HTRP(N,X,Y,A,T,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -77240,7 +77240,7 @@ C     ******************************************************************
       IEND = 0
       IBEG = 1
       DO K=2,N
-      IF ( ( X ( K ) - X ( K - 1 ) ) .EQ. 0 ) GO TO 20
+      IF ((X(K) - X(K - 1)) .EQ. 0) GO TO 20
       GO TO 10
    10 F = 1.0
       R = 0.0
@@ -77249,7 +77249,7 @@ C     ******************************************************************
       T(1) = Y(K)
       DO I=1,IEND
       DIFF = X(I)-X(K)
-      IF ( ( DIFF ) .EQ. 0 ) GO TO 31
+      IF ((DIFF) .EQ. 0) GO TO 31
       GO TO 11
    11 T(I+1) = (A(I)-T(I))/DIFF
       END DO
@@ -77462,9 +77462,9 @@ C                      ERROR CHECKING
       NW=0
       DSUM=0.D0
       DO K=1,NP
-      NSWC_AI_R4 = W ( K )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 202
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 13
+      NSWC_AI_R4 = W(K)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 202
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 13
       GO TO 10
    10 NW=NW+1
       DSUM=DSUM+DBLE(W(K))
@@ -77598,7 +77598,7 @@ C                        ERROR RETURN
   202 IERR=3
       END SUBROUTINE WPFIT
 
-      SUBROUTINE CBSPL (X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR)
+      SUBROUTINE CBSPL(X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBEG, IEND
       INTEGER, INTENT(INOUT) :: IERR
@@ -77628,8 +77628,8 @@ C     CONSTRUCT THE FIRST EQUATION FROM THE BOUNDARY CONDITION, OF
 C     THE FORM
 C             C(1)*S(1) + B(1)*S(2) = A(1)
       NSWC_AI_I4 = IBEG - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      IF (NSWC_AI_I4 .LT. 0) GO TO 20
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 30
       GO TO 40
 C     NO CONDITION AT LEFT END.
    20 C(1) = B(3)
@@ -77659,8 +77659,8 @@ C     SLOPE AND GO TO BACK SUBSTITUTION. OTHERWISE, CONSTRUCT THE
 C     LAST EQUATION FROM THE SECOND BOUNDARY CONDITION, OF THE FORM
 C                R*S(N-1) + C(N)*S(N) = A(N)
       NSWC_AI_I4 = IEND - 1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 80
+      IF (NSWC_AI_I4 .LT. 0) GO TO 60
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 80
       GO TO 90
    60 IF (N .EQ. 3 .AND. IBEG .EQ. 0) GO TO 70
 C     NO CONDITION AT THE RIGHT END. EITHER  N .GE. 4  OR
@@ -77707,7 +77707,7 @@ C     ERROR RETURN
   210 IERR = 2
       END SUBROUTINE CBSPL
 
-      SUBROUTINE SPLIFT (X,Y,YP,YPP,N,W,IERR,ISX,A1,B1,AN,BN)
+      SUBROUTINE SPLIFT(X,Y,YP,YPP,N,W,IERR,ISX,A1,B1,AN,BN)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: ISX, N
@@ -77839,7 +77839,7 @@ C     COMPUTE FIRST DERIVATIVES
   300 IERR = 3
       END SUBROUTINE SPLIFT
 
-      SUBROUTINE SPFIT (X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
+      SUBROUTINE SPFIT(X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M
@@ -77872,12 +77872,12 @@ C     OBTAIN THE B-SPLINE COEFFICIENTS OF THE LEAST SQUARES FIT
       LA = N + 5
       LW = LA + N
       LQ = LW + N
-      CALL BSLSQ (X, Y, WGT, M, WK(1), N, 4, WK(LA),
+      CALL BSLSQ(X, Y, WGT, M, WK(1), N, 4, WK(LA),
      *            WK(LW), WK(LQ), IERR)
       IF (IERR .LT. 0) GO TO 120
       IERR = 0
 C     OBTAIN THE COEFFICIENTS OF THE FIT IN TAYLOR SERIES FORM
-      CALL BSPP (WK(1), WK(LA), N, 4, BREAK,
+      CALL BSPP(WK(1), WK(LA), N, 4, BREAK,
      *             WK(LQ), LM1, TEMP)
       K = LQ
       DO J = 1,LM1
@@ -77896,7 +77896,7 @@ C                       ERROR RETURN
   120 IERR = 3
       END SUBROUTINE SPFIT
 
-      SUBROUTINE CSPFIT (X, Y, M, BREAK, L, XCON, CON, NDER, NC,
+      SUBROUTINE CSPFIT(X, Y, M, BREAK, L, XCON, CON, NDER, NC,
      *                   Z, A, B, C, WK, IWK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -77944,12 +77944,12 @@ C     OBTAIN THE B-SPLINE COEFFICIENTS OF THE LEAST SQUARES FIT
       IERR = 0
       K = LW - 1
       IWK(1) = IWK(1) - K
-      CALL BFIT (WK(1), N, 4, X, Y, M, XCON, CON, NDER, NC, IERR,
+      CALL BFIT(WK(1), N, 4, X, Y, M, XCON, CON, NDER, NC, IERR,
      *           WK(LA), R, WK(LW), IWK)
       IWK(1) = IWK(1) + K
       IF (IERR .LT. 0 .OR. IERR .EQ. 2) RETURN
 C     OBTAIN THE COEFFICIENTS OF THE FIT IN TAYLOR SERIES FORM
-      CALL BSPP (WK(1), WK(LA), N, 4, BREAK,
+      CALL BSPP(WK(1), WK(LA), N, 4, BREAK,
      *             WK(LW), LM1, TEMP)
       K = LW
       DO J = 1,LM1
@@ -77969,7 +77969,7 @@ C                       ERROR RETURN
       IWK(1) = K
       END SUBROUTINE CSPFIT
 
-      SUBROUTINE SCOMP (X,Y,A,B,C,N,XI,YI,NI,IERR)
+      SUBROUTINE SCOMP(X,Y,A,B,C,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78022,9 +78022,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78047,16 +78047,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
       END SUBROUTINE SCOMP
 
-      SUBROUTINE SCOMP1 (X,Y,YP,N,XI,YI,NI,IERR)
+      SUBROUTINE SCOMP1(X,Y,YP,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78106,9 +78106,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78136,16 +78136,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
       END SUBROUTINE SCOMP1
 
-      SUBROUTINE SCOMP2 (X,Y,YPP,N,XI,YI,NI,IERR)
+      SUBROUTINE SCOMP2(X,Y,YPP,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78195,9 +78195,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78228,16 +78228,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
       END SUBROUTINE SCOMP2
 
-      SUBROUTINE SEVAL (X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
+      SUBROUTINE SEVAL(X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78293,9 +78293,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78322,16 +78322,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
       END SUBROUTINE SEVAL
 
-      SUBROUTINE SEVAL1 (X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
+      SUBROUTINE SEVAL1(X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78383,9 +78383,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78417,16 +78417,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
       END SUBROUTINE SEVAL1
 
-      SUBROUTINE SEVAL2 (X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
+      SUBROUTINE SEVAL2(X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
@@ -78478,9 +78478,9 @@ C     I IS CURRENT INDEX INTO X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -78514,16 +78514,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
       END SUBROUTINE SEVAL2
 
-      REAL FUNCTION CSINT (X, Y, A, B, C, N, ALPHA, BETA)
+      REAL FUNCTION CSINT(X, Y, A, B, C, N, ALPHA, BETA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, BETA
@@ -78561,8 +78561,8 @@ C-----------------------------------------------------------------------
 C     LOCATE THE INTERVALS CONTAINING A0 AND B0
    20 IF (N .EQ. 1) GO TO 50
       IF (A0 .GE. X(N)) GO TO 50
-      K = INTRVL (A0, X, N)
-      L = INTRVL (B0, X, N)
+      K = INTRVL(A0, X, N)
+      L = INTRVL(B0, X, N)
       IF (B0 .GE. X(N)) L = N
       IF (K .EQ. L) GO TO 51
 C     INTEGRATE FROM A0 TO X(K + 1)
@@ -78603,7 +78603,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       CSINT = (BETA - ALPHA)*SUM
       END FUNCTION CSINT
 
-      REAL FUNCTION CSINT1 (X, Y, YP, N, A, B)
+      REAL FUNCTION CSINT1(X, Y, YP, N, A, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
@@ -78634,8 +78634,8 @@ C-----------------------------------------------------------------------
    10 A0 = A
       B0 = B
 C     LOCATE THE INTERVALS CONTAINING A0 AND B0
-   20 K = INTRVL (A0, X, N)
-      L = INTRVL (B0, X, N)
+   20 K = INTRVL(A0, X, N)
+      L = INTRVL(B0, X, N)
       IF (K .EQ. L) GO TO 50
 C     INTEGRATE FROM A0 TO X(K + 1)
       KP1 = K + 1
@@ -78695,7 +78695,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       CSINT1 = (B - A)*SUM
       END FUNCTION CSINT1
 
-      REAL FUNCTION CSINT2 (X, Y, YPP, N, A, B)
+      REAL FUNCTION CSINT2(X, Y, YPP, N, A, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
@@ -78726,8 +78726,8 @@ C-----------------------------------------------------------------------
    10 A0 = A
       B0 = B
 C     LOCATE THE INTERVALS CONTAINING A0 AND B0
-   20 K = INTRVL (A0, X, N)
-      L = INTRVL (B0, X, N)
+   20 K = INTRVL(A0, X, N)
+      L = INTRVL(B0, X, N)
       IF (K .EQ. L) GO TO 50
 C     INTEGRATE FROM A0 TO X(K + 1)
       KP1 = K + 1
@@ -78768,7 +78768,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       CSINT2 = (B - A)*(0.5*R - H*H*S/24.0)
       END FUNCTION CSINT2
 
-      SUBROUTINE PDSPL (X, Y, A, B, C, N, T, IERR)
+      SUBROUTINE PDSPL(X, Y, A, B, C, N, T, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -78872,7 +78872,7 @@ C     ERROR RETURN
   110 IERR = 2
       END SUBROUTINE PDSPL
 
-      SUBROUTINE PDFIT (X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
+      SUBROUTINE PDFIT(X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M
@@ -78922,12 +78922,12 @@ C     OBTAIN THE B-SPLINE COEFFICIENTS OF THE PERIODIC SPLINE
       LA = N + 5
       LW = LA + N
       IWK(1) = IWK(1) - (L + L + 8)
-      CALL BFIT (WK(1), N, 4, X, Y, M, XCON, CON, NDER, 3, IERR,
+      CALL BFIT(WK(1), N, 4, X, Y, M, XCON, CON, NDER, 3, IERR,
      *           WK(LA), R, WK(LW), IWK)
       IWK(1) = IWK(1) + (L + L + 8)
       IF (IERR .NE. 0) GO TO 30
 C     OBTAIN THE COEFFICIENTS OF THE SPLINE IN TAYLOR SERIES FORM
-      CALL BSPP (WK(1), WK(LA), N, 4, BREAK, WK(LW), LM1, TEMP)
+      CALL BSPP(WK(1), WK(LA), N, 4, BREAK, WK(LW), LM1, TEMP)
       K = LW
       DO J = 1,LM1
          Z(J) = WK(K)
@@ -78955,7 +78955,7 @@ C                           ERROR RETURN
   140 IERR = 6
       END SUBROUTINE PDFIT
 
-      SUBROUTINE PSCMP (X, Y, A, B, C, N, XI, YI, M, IERR)
+      SUBROUTINE PSCMP(X, Y, A, B, C, N, XI, YI, M, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
@@ -78989,9 +78989,9 @@ C     REDUCTION OF XI(K) TO XX WHERE X(1) .LE. XX .LT. X(N)
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 90
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 30
    20 IR = I
       GO TO 10
@@ -79015,8 +79015,8 @@ C     NEXT POINT
       XX = X1 + T0*H
       IF (XX .GE. X(N)) GO TO 120
       NSWC_AI_R4 = XX - XOLD
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 40
   110 IL = 1
       IR = MIN0(I+1,N)
@@ -79029,7 +79029,7 @@ C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
       GO TO 100
       END SUBROUTINE PSCMP
 
-      SUBROUTINE PSEVL (X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
+      SUBROUTINE PSEVL(X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
@@ -79064,9 +79064,9 @@ C     REDUCTION OF XI(K) TO XX WHERE X(1) .LE. XX .LT. X(N)
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 90
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 30
    20 IR = I
       GO TO 10
@@ -79094,8 +79094,8 @@ C     NEXT POINT
       XX = X1 + T0*H
       IF (XX .GE. X(N)) GO TO 120
       NSWC_AI_R4 = XX - XOLD
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 40
   110 IL = 1
       IR = MIN0(I+1,N)
@@ -79110,7 +79110,7 @@ C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
       GO TO 100
       END SUBROUTINE PSEVL
 
-      SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
+      SUBROUTINE CSLOOP(M, N, X, KX, T, DX, KDX, WK, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KDX, KX, M, N
@@ -79136,14 +79136,14 @@ C----------------------
       IA = MM1
       IB = IA + MM1
       IC = IB + M
-      CALL CSLOP1 (M, N, X, KX, T, DX, KDX, WK(IA), WK(IB),
+      CALL CSLOP1(M, N, X, KX, T, DX, KDX, WK(IA), WK(IB),
      *                    WK(IC), WK(IE), IERR)
       RETURN
 C     ERROR RETURN
    10 IERR = 1
       END SUBROUTINE CSLOOP
 
-      SUBROUTINE CSLOP1 (M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
+      SUBROUTINE CSLOP1(M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KDX, KX, M, N
@@ -79281,7 +79281,7 @@ C     ERROR RETURN
   210 IERR = 3
       END SUBROUTINE CSLOP1
 
-      SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
+      SUBROUTINE LOPCMP(M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KDX, KX, KZ, L, M, N
       REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N), TI(L)
@@ -79304,9 +79304,9 @@ C     REDUCTION OF TI(K) TO T0 WHERE 0 .LE. T0 .LT. 1
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 50
-      NSWC_AI_R4 = T0 - T ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      NSWC_AI_R4 = T0 - T(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 50
       GO TO 30
    20 IR = I
       GO TO 10
@@ -79349,15 +79349,15 @@ C     NEXT POINT
       IF (T0 .LT. 0.0) T0 = 1.0 + T0
       IF (T0 .GE. T(M)) GO TO 60
       NSWC_AI_R4 = T0 - TOLD
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      IF (NSWC_AI_R4 .LT. 0) GO TO 110
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 50
       GO TO 40
   110 IL = 1
       IR = MIN0(I+1,M)
       GO TO 10
       END SUBROUTINE LOPCMP
 
-      SUBROUTINE LOPDF (M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
+      SUBROUTINE LOPDF(M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KDX, KX, M, N
       REAL, INTENT(IN) :: TI
@@ -79380,9 +79380,9 @@ C     REDUCTION OF TI TO T0 WHERE 0 .LE. T0 .LT. 1
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 40
-      NSWC_AI_R4 = T0 - T ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      NSWC_AI_R4 = T0 - T(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 40
       GO TO 30
    20 IR = I
       GO TO 10
@@ -79421,7 +79421,7 @@ C     COMPUTATION WHEN T0 .GE. T(M)
       END DO
       END SUBROUTINE LOPDF
 
-      SUBROUTINE CURV1 (N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP,
+      SUBROUTINE CURV1(N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP,
      *                  SIGMA,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, ISLPSW
@@ -79498,7 +79498,7 @@ C APPROXIMATE END SLOPES
       DELX2 = DELX1+DELX1
       IF (N .GT. 2) DELX2 = X(3)-X(1)
       IF (DELX1 .LE. 0. .OR. DELX2 .LE. DELX1) GO TO 9
-      CALL CEEZ (DELX1,DELX2,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(DELX1,DELX2,SIGMAP,C1,C2,C3,N)
       SLPP1 = C1*Y(1)+C2*Y(2)
       IF (N .GT. 2) SLPP1 = SLPP1+C3*Y(3)
     2 IF (ISLPSW .EQ. 1 .OR. ISLPSW .EQ. 3) GO TO 3
@@ -79508,7 +79508,7 @@ C APPROXIMATE END SLOPES
       DELXNM = DELXN+DELXN
       IF (N .GT. 2) DELXNM = X(N)-X(N-2)
       IF (DELXN .LE. 0. .OR. DELXNM .LE. DELXN) GO TO 9
-      CALL CEEZ (-DELXN,-DELXNM,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(-DELXN,-DELXNM,SIGMAP,C1,C2,C3,N)
       SLPPN = C1*Y(N)+C2*Y(NM1)
       IF (N .GT. 2) SLPPN = SLPPN+C3*Y(N-2)
 C SET UP RIGHT HAND SIDE AND TRIDIAGONAL SYSTEM FOR YP AND
@@ -79516,7 +79516,7 @@ C PERFORM FORWARD ELIMINATION
     4 DELX1 = X(2)-X(1)
       IF (DELX1 .LE. 0.) GO TO 9
       DX1 = (Y(2)-Y(1))/DELX1
-      CALL TERMS (DIAG1,SDIAG1,SIGMAP,DELX1)
+      CALL TERMS(DIAG1,SDIAG1,SIGMAP,DELX1)
       YP(1) = (DX1-SLPP1)/DIAG1
       TEMP(1) = SDIAG1/DIAG1
       IF (N .EQ. 2) GO TO 6
@@ -79524,7 +79524,7 @@ C PERFORM FORWARD ELIMINATION
         DELX2 = X(I+1)-X(I)
         IF (DELX2 .LE. 0.) GO TO 9
         DX2 = (Y(I+1)-Y(I))/DELX2
-        CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELX2)
+        CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELX2)
         DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
         YP(I) = (DX2-DX1-SDIAG1*YP(I-1))/DIAG
         TEMP(I) = SDIAG2/DIAG
@@ -79547,7 +79547,7 @@ C X-VALUES NOT STRICTLY INCREASING
     9 IERR = 2
       END SUBROUTINE CURV1
 
-      FUNCTION CURV2 (T,N,X,Y,YP,SIGMA)
+      FUNCTION CURV2(T,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
@@ -79599,13 +79599,13 @@ C SET UP AND PERFORM INTERPOLATION
       RETURN
     1 DELP1 = SIGMAP*(DEL1+DELS)/2.
       DELP2 = SIGMAP*(DEL2+DELS)/2.
-      CALL SNHCSH (SINHM1,DUMMY,SIGMAP*DEL1,-1)
-      CALL SNHCSH (SINHM2,DUMMY,SIGMAP*DEL2,-1)
-      CALL SNHCSH (SINHMS,DUMMY,SIGMAP*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
+      CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
+      CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
+      CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,DELP2,1)
       CURV2 = SUM+(YP(I)*(SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*
      *        SINHP2+SIGMAP*COSHP1*DEL2))+YP(IM1)*(SINHM2*
      *        DEL1-DEL2*(2.*(COSHP2+1.)*SINHP1+SIGMAP*
@@ -79613,7 +79613,7 @@ C SET UP AND PERFORM INTERPOLATION
      *        SIGMAP*DELS))
       END FUNCTION CURV2
 
-      FUNCTION CURVD (T,N,X,Y,YP,SIGMA)
+      FUNCTION CURVD(T,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
@@ -79664,15 +79664,15 @@ C SET UP AND PERFORM DIFFERENTIATION
      *             YP(IM1)*(2.*DEL2*DEL2-DEL1*(DEL2+DELS)))
      *             /(6.*DELS)
       RETURN
-    1 CALL SNHCSH (DUMMY,COSHM1,SIGMAP*DEL1,1)
-      CALL SNHCSH (DUMMY,COSHM2,SIGMAP*DEL2,1)
-      CALL SNHCSH (SINHMS,DUMMY,SIGMAP*DELS,-1)
+    1 CALL SNHCSH(DUMMY,COSHM1,SIGMAP*DEL1,1)
+      CALL SNHCSH(DUMMY,COSHM2,SIGMAP*DEL2,1)
+      CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
       CURVD = SUM+(YP(I)*(DELS*SIGMAP*COSHM1-SINHMS)-
      *        YP(IM1)*(DELS*SIGMAP*COSHM2-SINHMS))/
      *        (SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS))
       END FUNCTION CURVD
 
-      FUNCTION CURVI (XL,XU,N,X,Y,YP,SIGMA)
+      FUNCTION CURVI(XL,XU,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
@@ -79713,7 +79713,7 @@ C SNHCSH.
 C-----------------------------------------------------------
 C STATEMENT FUNCTION FOR COEFFICIENT ASSOCIATED WITH
 C DERIVATIVE TERMS
-      TERM (CMM1,CMM2,T) = (CMM1-CMM2-SIGMAP*T*SS)/(SIGMAP*
+      TERM(CMM1,CMM2,T) = (CMM1-CMM2-SIGMAP*T*SS)/(SIGMAP*
      *                     SIGMAP*SIGMAP*(SS+SIGMAP*DELS))
 C DENORMALIZE TENSION FACTOR
       SIGMAP = ABS(SIGMA)*FLOAT(N-1)/(X(N)-X(1))
@@ -79730,9 +79730,9 @@ C RETURN ZERO IF XL .EQ. XU
       CURVI = 0.
       RETURN
 C SEARCH FOR PROPER INTERVALS
-    1 ILM1 = INTRVL (XXL,X,N)
+    1 ILM1 = INTRVL(XXL,X,N)
       IL = ILM1+1
-      IUM1 = INTRVL (XXU,X,N)
+      IUM1 = INTRVL(XXU,X,N)
       IU = IUM1+1
       IF (IL .EQ. IU) GO TO 8
 C INTEGRATE FROM XXL TO X(IL)
@@ -79745,9 +79745,9 @@ C INTEGRATE FROM XXL TO X(IL)
       T2 = DEL2*DEL2/(2.*DELS)
       SUM = T1*Y(IL)+T2*Y(ILM1)
       IF (SIGMA .EQ. 0.) GO TO 2
-      CALL SNHCSH (DUMMY,C1,SIGMAP*DEL1,2)
-      CALL SNHCSH (DUMMY,C2,SIGMAP*DEL2,2)
-      CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
+      CALL SNHCSH(DUMMY,C1,SIGMAP*DEL1,2)
+      CALL SNHCSH(DUMMY,C2,SIGMAP*DEL2,2)
+      CALL SNHCSH(SS,CS,SIGMAP*DELS,3)
       SUM = SUM+TERM(CS,C1,T1)*YP(IL)
      *         +TERM(C2,0.,T2)*YP(ILM1)
       GO TO 3
@@ -79760,7 +79760,7 @@ C INTEGRATE OVER INTERIOR INTERVALS
         DELS = X(I)-X(I-1)
         SUM = SUM+(Y(I)+Y(I-1))*DELS/2.
         IF (SIGMA .EQ. 0.) GO TO 4
-        CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
+        CALL SNHCSH(SS,CS,SIGMAP*DELS,3)
         SUM = SUM+(YP(I)+YP(I-1))*(CS-SS*SIGMAP*DELS/2.)/
      *            (SIGMAP*SIGMAP*SIGMAP*(SS+SIGMAP*DELS))
         GO TO 5
@@ -79776,9 +79776,9 @@ C INTEGRATE FROM X(IU-1) TO XXU
       T2 = (DEL2+DELS)*DEL1/(2.*DELS)
       SUM = SUM+T1*Y(IU)+T2*Y(IUM1)
       IF (SIGMA .EQ. 0.) GO TO 7
-      CALL SNHCSH (DUMMY,C1,SIGMAP*DEL1,2)
-      CALL SNHCSH (DUMMY,C2,SIGMAP*DEL2,2)
-      CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
+      CALL SNHCSH(DUMMY,C1,SIGMAP*DEL1,2)
+      CALL SNHCSH(DUMMY,C2,SIGMAP*DEL2,2)
+      CALL SNHCSH(SS,CS,SIGMAP*DELS,3)
       SUM = SUM+TERM(C1,0.,T1)*YP(IU)
      *         +TERM(CS,C2,T2)*YP(IUM1)
       GO TO 10
@@ -79796,11 +79796,11 @@ C INTEGRATE FROM XXL TO XXU
       T2 = (DELU2+DELL2)*DELI/(2.*DELS)
       SUM = T1*Y(IU)+T2*Y(IUM1)
       IF (SIGMA .EQ. 0.) GO TO 9
-      CALL SNHCSH (DUMMY,CU1,SIGMAP*DELU1,2)
-      CALL SNHCSH (DUMMY,CU2,SIGMAP*DELU2,2)
-      CALL SNHCSH (DUMMY,CL1,SIGMAP*DELL1,2)
-      CALL SNHCSH (DUMMY,CL2,SIGMAP*DELL2,2)
-      CALL SNHCSH (SS,DUMMY,SIGMAP*DELS,-1)
+      CALL SNHCSH(DUMMY,CU1,SIGMAP*DELU1,2)
+      CALL SNHCSH(DUMMY,CU2,SIGMAP*DELU2,2)
+      CALL SNHCSH(DUMMY,CL1,SIGMAP*DELL1,2)
+      CALL SNHCSH(DUMMY,CL2,SIGMAP*DELL2,2)
+      CALL SNHCSH(SS,DUMMY,SIGMAP*DELS,-1)
       SUM = SUM+TERM(CU1,CL1,T1)*YP(IU)
      *         +TERM(CL2,CU2,T2)*YP(IUM1)
       GO TO 10
@@ -79812,7 +79812,7 @@ C CORRECT SIGN AND RETURN
    10 CURVI = SSIGN*SUM
       END FUNCTION CURVI
 
-      SUBROUTINE KURV1 (N,X,Y,SLP1,SLPN,ISLPSW,XP,YP,TEMP,S,
+      SUBROUTINE KURV1(N,X,Y,SLP1,SLPN,ISLPSW,XP,YP,TEMP,S,
      *                  SIGMA,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, ISLPSW
@@ -79903,7 +79903,7 @@ C APPROXIMATE END SLOPES
       DELS2 = DELS1+DELS1
       IF (N .GT. 2) DELS2 = S(3)-S(1)
       IF (DELS1 .EQ. 0. .OR. DELS2 .EQ. 0.) GO TO 12
-      CALL CEEZ (DELS1,DELS2,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(DELS1,DELS2,SIGMAP,C1,C2,C3,N)
       SX = C1*X(1)+C2*X(2)
       SY = C1*Y(1)+C2*Y(2)
       IF (N .EQ. 2) GO TO 3
@@ -79920,7 +79920,7 @@ C APPROXIMATE END SLOPES
       DELSNM = DELSN+DELSN
       IF (N .GT. 2) DELSNM = S(N)-S(N-2)
       IF (DELSN .EQ. 0. .OR. DELSNM .EQ. 0.) GO TO 12
-      CALL CEEZ (-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
       SX = C1*X(N)+C2*X(NM1)
       SY = C1*Y(N)+C2*Y(NM1)
       IF (N .EQ. 2) GO TO 6
@@ -79933,7 +79933,7 @@ C SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR XP AND
 C YP AND PERFORM FORWARD ELIMINATION
     7 DX1 = (X(2)-X(1))/S(2)
       DY1 = (Y(2)-Y(1))/S(2)
-      CALL TERMS (DIAG1,SDIAG1,SIGMAP,S(2))
+      CALL TERMS(DIAG1,SDIAG1,SIGMAP,S(2))
       XP(1) = (DX1-SLPP1X)/DIAG1
       YP(1) = (DY1-SLPP1Y)/DIAG1
       TEMP(1) = SDIAG1/DIAG1
@@ -79943,7 +79943,7 @@ C YP AND PERFORM FORWARD ELIMINATION
         IF (DELS2 .EQ. 0.) GO TO 12
         DX2 = (X(I+1)-X(I))/DELS2
         DY2 = (Y(I+1)-Y(I))/DELS2
-        CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELS2)
+        CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELS2)
         DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
         DIAGIN = 1./DIAG
         XP(I) = (DX2-DX1-SDIAG1*XP(I-1))*DIAGIN
@@ -79971,7 +79971,7 @@ C COINCIDENT ADJACENT POINTS
    12 IERR = 2
       END SUBROUTINE KURV1
 
-      SUBROUTINE KURV2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
+      SUBROUTINE KURV2(T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T
@@ -80042,10 +80042,10 @@ C SET UP AND PERFORM INTERPOLATION
       CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
       CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
       CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,DELP2,1)
       D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
       C1 = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP*
      *     COSHP1*DEL2))/D
@@ -80055,7 +80055,7 @@ C SET UP AND PERFORM INTERPOLATION
       YS = SUMY+YP(I)*C1+YP(IM1)*C2
       END SUBROUTINE KURV2
 
-      SUBROUTINE KURVP1 (N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
+      SUBROUTINE KURVP1(N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
@@ -80197,7 +80197,7 @@ C COINCIDENT ADJACENT POINTS
     8 IERR = 2
       END SUBROUTINE KURVP1
 
-      SUBROUTINE KURVP2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
+      SUBROUTINE KURVP2(T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T
@@ -80274,10 +80274,10 @@ C SET UP AND PERFORM INTERPOLATION
       CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
       CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
       CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,DELP2,1)
       D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
       CI = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP*
      *     COSHP1*DEL2))/D
@@ -80287,7 +80287,7 @@ C SET UP AND PERFORM INTERPOLATION
       YS = SUMY+CI*YP(I)+CIM1*YP(IM1)
       END SUBROUTINE KURVP2
 
-      SUBROUTINE QURV1 (N,X,Y,Z,SLP1X,SLP1Y,SLP1Z,SLPNX,
+      SUBROUTINE QURV1(N,X,Y,Z,SLP1X,SLP1Y,SLP1Z,SLPNX,
      *                  SLPNY,SLPNZ,ISLPSW,XP,YP,ZP,TEMP,
      *                  S,SIGMA,IERR)
       IMPLICIT NONE
@@ -80388,7 +80388,7 @@ C APPROXIMATE END SLOPES
       DELS2 = DELS1+DELS1
       IF (N .GT. 2) DELS2 = S(3)-S(1)
       IF (DELS1 .EQ. 0. .OR. DELS2 .EQ. 0.) GO TO 9
-      CALL CEEZ (DELS1,DELS2,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(DELS1,DELS2,SIGMAP,C1,C2,C3,N)
       SLPP1X = C1*X(1)+C2*X(2)
       SLPP1Y = C1*Y(1)+C2*Y(2)
       SLPP1Z = C1*Z(1)+C2*Z(2)
@@ -80409,7 +80409,7 @@ C APPROXIMATE END SLOPES
       DELSNM = DELSN+DELSN
       IF (N .GT. 2) DELSNM = S(N)-S(N-2)
       IF (DELSN .EQ. 0. .OR. DELSNM .EQ. 0.) GO TO 10
-      CALL CEEZ (-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
+      CALL CEEZ(-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
       SLPPNX = C1*X(N)+C2*X(NM1)
       SLPPNY = C1*Y(N)+C2*Y(NM1)
       SLPPNZ = C1*Z(N)+C2*Z(NM1)
@@ -80426,7 +80426,7 @@ C AND ZP AND PERFORM FORWARD ELIMINATION
       DX1 = (X(2)-X(1))/S(2)
       DY1 = (Y(2)-Y(1))/S(2)
       DZ1 = (Z(2)-Z(1))/S(2)
-      CALL TERMS (DIAG1,SDIAG1,SIGMAP,S(2))
+      CALL TERMS(DIAG1,SDIAG1,SIGMAP,S(2))
       XP(1) = (DX1-SLPP1X)/DIAG1
       YP(1) = (DY1-SLPP1Y)/DIAG1
       ZP(1) = (DZ1-SLPP1Z)/DIAG1
@@ -80438,7 +80438,7 @@ C AND ZP AND PERFORM FORWARD ELIMINATION
         DX2 = (X(I+1)-X(I))/DELS2
         DY2 = (Y(I+1)-Y(I))/DELS2
         DZ2 = (Z(I+1)-Z(I))/DELS2
-        CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELS2)
+        CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELS2)
         DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
         DIAGIN = 1./DIAG
         XP(I) = (DX2-DX1-SDIAG1*XP(I-1))*DIAGIN
@@ -80471,7 +80471,7 @@ C COINCIDENT ADJACENT POINTS
    10 IERR = 2
       END SUBROUTINE QURV1
 
-      SUBROUTINE QURV2 (T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
+      SUBROUTINE QURV2(T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T
@@ -80545,10 +80545,10 @@ C SET UP AND PERFORM INTERPOLATION
       CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
       CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
       CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,DELP2,1)
       D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
       C1 = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP*
      *     COSHP1*DEL2))/D
@@ -80559,7 +80559,7 @@ C SET UP AND PERFORM INTERPOLATION
       ZS = SUMZ+ZP(I)*C1+ZP(IM1)*C2
       END SUBROUTINE QURV2
 
-      SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
+      SUBROUTINE CEEZ(DEL1,DEL2,SIGMA,C1,C2,C3,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: DEL1, DEL2, SIGMA
@@ -80601,12 +80601,12 @@ C TENSION .EQ. 0.
       C3 = -DEL1/(DEL2*DEL)
       RETURN
 C TENSION .NE. 0.
-    1 CALL SNHCSH (DUMMY,COSHM1,SIGMA*DEL1,1)
-      CALL SNHCSH (DUMMY,COSHM2,SIGMA*DEL2,1)
+    1 CALL SNHCSH(DUMMY,COSHM1,SIGMA*DEL1,1)
+      CALL SNHCSH(DUMMY,COSHM2,SIGMA*DEL2,1)
       DELP = SIGMA*(DEL2+DEL1)/2.
       DELM = SIGMA*(DEL2-DEL1)/2.
-      CALL SNHCSH (SINHMP,DUMMY,DELP,-1)
-      CALL SNHCSH (SINHMM,DUMMY,DELM,-1)
+      CALL SNHCSH(SINHMP,DUMMY,DELP,-1)
+      CALL SNHCSH(SINHMM,DUMMY,DELM,-1)
       DENOM = COSHM1*(DEL2-DEL1)-2.*DEL1*(SINHMP+DELP)*
      *        (SINHMM+DELM)
       C1 = 2.*(SINHMP+DELP)*(SINHMM+DELM)/DENOM
@@ -80618,7 +80618,7 @@ C TWO COEFFICIENTS
       C2 = -C1
       END SUBROUTINE CEEZ
 
-      SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
+      SUBROUTINE TERMS(DIAG,SDIAG,SIGMA,DEL)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: DIAG, SDIAG
       REAL, INTENT(IN) :: SIGMA, DEL
@@ -80650,13 +80650,13 @@ C-----------------------------------------------------------
       SDIAG = DEL/6.
       RETURN
     1 SIGDEL = SIGMA*DEL
-      CALL SNHCSH (SINHM,COSHM,SIGDEL,0)
+      CALL SNHCSH(SINHM,COSHM,SIGDEL,0)
       DENOM = DEL/((SINHM+SIGDEL)*SIGDEL*SIGDEL)
       DIAG = DENOM*(SIGDEL*COSHM-SINHM)
       SDIAG = DENOM*SINHM
       END SUBROUTINE TERMS
 
-      INTEGER FUNCTION INTRVL (X, T, M)
+      INTEGER FUNCTION INTRVL(X, T, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       REAL, INTENT(IN) :: X, T(M)
@@ -80691,9 +80691,9 @@ C-----------------------------------------------------------------------
 C     BISECTION SEARCH
    30 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 110
-      NSWC_AI_R4 = X - T ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 40
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 60
+      NSWC_AI_R4 = X - T(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 40
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 60
       GO TO 50
    40 IR = I
       GO TO 30
@@ -80710,7 +80710,7 @@ C     NORMAL EXIT
   110 INTRVL = I
       END FUNCTION INTRVL
 
-      SUBROUTINE BVAL (T, BCOEF, N, K, X, JDERIV, W, WK)
+      SUBROUTINE BVAL(T, BCOEF, N, K, X, JDERIV, W, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: JDERIV, K, N
       REAL, INTENT(INOUT) :: W
@@ -80854,7 +80854,7 @@ C     GIVEN ITS RELEVANT B-SPLINE COEFFS IN WK(1,1),...,WK(K-JDERIV,1).
   200 W = WK(1,1)
       END SUBROUTINE BVAL
 
-      SUBROUTINE BVALI (T, BCOEFF, N, K, X, W, WK)
+      SUBROUTINE BVALI(T, BCOEFF, N, K, X, W, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K, N
       REAL, INTENT(OUT) :: W
@@ -80889,10 +80889,10 @@ C     COMPUTE THE FIRST N COEFFICIENTS OF THE ANTIDERIVATIVE
 C     COMPUTE THE ANTIDERIVATIVE
       KP1 = K + 1
       NP1 = N + 1
-      CALL BVALI0 (T, TNEW, WK(1), N, KP1, XVAL, W, WK(NP1))
+      CALL BVALI0(T, TNEW, WK(1), N, KP1, XVAL, W, WK(NP1))
       END SUBROUTINE BVALI
 
-      SUBROUTINE BVALI0 (T, TNEW, BCOEF, N, K, X, W, WK)
+      SUBROUTINE BVALI0(T, TNEW, BCOEF, N, K, X, W, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K, N
       REAL, INTENT(IN) :: TNEW
@@ -80977,7 +80977,7 @@ C     B-SPLINE COEFFS IN WK(1,1),...,WK(K,1).
       W = WK(1,1)
       END SUBROUTINE BVALI0
 
-      SUBROUTINE BSPP (T, A, N, K, BREAK, C, L, WK)
+      SUBROUTINE BSPP(T, A, N, K, BREAK, C, L, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K
       INTEGER, INTENT(OUT) :: L
@@ -81064,7 +81064,7 @@ C          PIECEWISE CONSTANT CASE
       END DO
       END SUBROUTINE BSPP
 
-      SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
+      SUBROUTINE PPVAL(X, A, L, N, XI, YI, NI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L, N, NI
       REAL :: A(L,N), X(N), XI(NI)
@@ -81106,9 +81106,9 @@ C     I IS THE CURRENT INDEX IN THE X ARRAY.
 C     BISECTION SEARCH
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      NSWC_AI_R4 = XX - X ( I )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      NSWC_AI_R4 = XX - X(I)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 20
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 30
    20 IR = I
       GO TO 10
@@ -81137,16 +81137,16 @@ C     NEXT POINT
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      NSWC_AI_R4 = XX - XI ( K - 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 130
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 120
+      NSWC_AI_R4 = XX - XI(K - 1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 130
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 120
       GO TO 40
   130 IL = 1
       IR = MIN0(I + 1, N)
       GO TO 10
       END SUBROUTINE PPVAL
 
-      SUBROUTINE BSPVB (T, K, JHIGH, J, X, LEFT, BLIST)
+      SUBROUTINE BSPVB(T, K, JHIGH, J, X, LEFT, BLIST)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: J
       INTEGER, INTENT(IN) :: JHIGH, K, LEFT
@@ -81199,7 +81199,7 @@ C-----------------------------------------------------------------------
       IF (J .LT. JHIGH) GO TO 10
       END SUBROUTINE BSPVB
 
-      SUBROUTINE BSPVD (T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
+      SUBROUTINE BSPVD(T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDIM, K, LEFT, NDERIV
       REAL, INTENT(IN) :: X
@@ -81251,7 +81251,7 @@ C-----------------------------------------------------------------------
 C     MHIGH IS USUALLY EQUAL TO NDERIV.
       KP1 = K + 1
       JJ = 0
-      CALL BSPVB (T, K, KP1 - MHIGH, JJ, X, LEFT, DBIATX)
+      CALL BSPVB(T, K, KP1 - MHIGH, JJ, X, LEFT, DBIATX)
       IF (MHIGH .EQ. 1) RETURN
 C     THE FIRST COLUMN OF DBIATX ALWAYS CONTAINS THE B-SPLINE VALUES
 C     FOR THE CURRENT ORDER. THESE ARE STORED IN COLUMN K+1-CURRENT
@@ -81265,7 +81265,7 @@ C     HIGHER ORDER ON TOP OF IT.
             JP1MID = JP1MID + 1
          END DO
          IDERIV = IDERIV - 1
-         CALL BSPVB (T, K, KP1 - IDERIV, JJ, X, LEFT, DBIATX)
+         CALL BSPVB(T, K, KP1 - IDERIV, JJ, X, LEFT, DBIATX)
       END DO
 C     AT THIS POINT, B(LEFT-K+I, K+1-J)(X) IS IN DBIATX(I,J) FOR
 C     I = J,...,K AND J = 1,...,MHIGH. IN PARTICULAR, THE FIRST
@@ -81320,7 +81320,7 @@ C        THAT  A(J,I) = 0  FOR J .LT. I .
       END DO
       END SUBROUTINE BSPVD
 
-      SUBROUTINE BSTRP (TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
+      SUBROUTINE BSTRP(TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: K, N
@@ -81406,7 +81406,7 @@ C        LEFT-K+1,...,LEFT ACTUALLY MIGHT BE NONZERO. THESE  K  NUMBERS
 C        ARE RETURNED, IN  BCOEF (USED FOR TEMP.STORAGE HERE), BY THE
 C        FOLLOWING
    40    JJ = 0
-         CALL BSPVB (T, K, K, JJ, TAUI, LEFT, BCOEF)
+         CALL BSPVB(T, K, K, JJ, TAUI, LEFT, BCOEF)
 C        LET Q DENOTE A TWO-DIMENSIONAL ARRAY OF DIMENSION (2*K-1,N).
 C        WE THEREFORE WANT  BCOEF(J) = B(LEFT-K+J)(TAUI) TO GO INTO
 C        A(I,LEFT-K+J), I.E., INTO  Q(I-(LEFT+J)+2*K,(LEFT+J)-K) SINCE
@@ -81423,20 +81423,20 @@ C        OF  Q .
          END DO
       END DO
 C     ***OBTAIN FACTORIZATION OF  A  , STORED AGAIN IN  Q.
-      CALL BANFAC (Q, K + KM1, N, KM1, KM1, IFLAG)
+      CALL BANFAC(Q, K + KM1, N, KM1, KM1, IFLAG)
       IFLAG = IFLAG - 1
       IF (IFLAG .NE. 0) RETURN
 C     *** SOLVE  A*BCOEF = GTAU  BY BACKSUBSTITUTION
    60 DO I = 1,N
          BCOEF(I) = GTAU(I)
       END DO
-      CALL BANSLV (Q, K + KM1, N, KM1, KM1, BCOEF)
+      CALL BANSLV(Q, K + KM1, N, KM1, KM1, BCOEF)
       RETURN
 C     *** ERROR RETURN
   100 IFLAG = 1
       END SUBROUTINE BSTRP
 
-      SUBROUTINE BANFAC ( W, NROWW, NROW, NBANDL, NBANDU, IFLAG )
+      SUBROUTINE BANFAC(W, NROWW, NROW, NBANDL, NBANDU, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
@@ -81500,8 +81500,8 @@ C     THE ROUTINE SHOULD NOT BE USED FOR AN ARBITRARY BANDED MATRIX.
 C                         W(MIDDLE,.) CONTAINS THE MAIN DIAGONAL OF  A .
       NROWM1 = NROW - 1
       NSWC_AI_I4 = NROWM1
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 999
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 900
+      IF (NSWC_AI_I4 .LT. 0) GO TO 999
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 900
       GO TO 1
     1 IF (NBANDL .GT. 0)                GO TO 10
 C                A IS UPPER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO .
@@ -81558,7 +81558,7 @@ C                                       CHECK THE LAST DIAGONAL ENTRY .
   999 IFLAG = 2
       END SUBROUTINE BANFAC
 
-      SUBROUTINE BANSLV ( W, NROWW, NROW, NBANDL, NBANDU, B )
+      SUBROUTINE BANSLV(W, NROWW, NROW, NBANDL, NBANDU, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
       REAL, INTENT(IN) :: W(NROWW,NROW)
@@ -81618,7 +81618,7 @@ C                                A  IS LOWER TRIANGULAR .
    49 B(1) = B(1)/W(MIDDLE,1)
       END SUBROUTINE BANSLV
 
-      SUBROUTINE BSLSQ (TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
+      SUBROUTINE BSLSQ(TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: K, N, NTAU
@@ -81669,7 +81669,7 @@ C            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
             LEFT = LEFT + 1
             GO TO 30
    40    JJ = 0
-         CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
+         CALL BSPVB(T, K, K, JJ, TAU(L), LEFT, WK)
          LEFTMK = LEFT - K
          DO MM = 1,K
             DW = WK(MM)*WGT(L)
@@ -81683,14 +81683,14 @@ C            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
          END DO
       END DO
 C        SOLVE THE NORMAL EQUATIONS
-      CALL BCHFAC (Q, K, N, WK, IERR)
-      CALL BCHSLV (Q, K, N, A)
+      CALL BCHFAC(Q, K, N, WK, IERR)
+      CALL BCHSLV(Q, K, N, A)
       RETURN
 C             ERROR RETURN
   100 IERR = -1
       END SUBROUTINE BSLSQ
 
-      SUBROUTINE BCHFAC (W, NB, N, DIAG, IFLAG)
+      SUBROUTINE BCHFAC(W, NB, N, DIAG, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: N, NB
@@ -81791,7 +81791,7 @@ C     FACTORIZATION
       END DO
       END SUBROUTINE BCHFAC
 
-      SUBROUTINE BCHSLV (W, NB, N, B)
+      SUBROUTINE BCHSLV(W, NB, N, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NB
       REAL, INTENT(IN) :: W(NB,N)
@@ -81840,7 +81840,7 @@ C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
          IF (K .GT. 0) GO TO 40
       END SUBROUTINE BCHSLV
 
-      SUBROUTINE BFIT (BKPT, N, NORD, XDATA, YDATA, NDATA,
+      SUBROUTINE BFIT(BKPT, N, NORD, XDATA, YDATA, NDATA,
      *                 XCONST, YCONST, NDERIV, NCONST,
      *                 MODE, COEFF, RNORM, W, IW)
       IMPLICIT NONE
@@ -82026,12 +82026,12 @@ C      I7,...           WORK(*) FOR BSPVD( ) AND LSEI( )
       I2 = I1 + MDG*(NORD + 1)
       I3 = I2 + NORD*NORD
       I7 = I3 + MDW*(N + 1)
-      CALL BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT, NCONST,
+      CALL BFIT0(NDATA, XDATA, YDATA, NORD, NBKPT, BKPT, NCONST,
      1         XCONST, YCONST, NDERIV, MODE, COEFF, RNORM, W(I2),
      2         W(I1), MDG, W(I3), MDW, W(I7), IW)
       END SUBROUTINE BFIT
 
-      SUBROUTINE BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT,
+      SUBROUTINE BFIT0(NDATA, XDATA, YDATA, NORD, NBKPT, BKPT,
      1        NCONST, XCONST, YCONST, NDERIV, MODE, COEFF, RNORM,
      2        BF, G, MDG, W, MDW, WORK, IWORK)
       IMPLICIT NONE
@@ -82054,7 +82054,7 @@ C      I7,...           WORK(*) FOR BSPVD( ) AND LSEI( )
 C---------------------
       GO TO 100
    10 IF (.NOT. BAND) GO TO 20
-      CALL BNDSL (1, G, MDG, NORD, IP, IR, COEFF, N, RNORM, IERR)
+      CALL BNDSL(1, G, MDG, NORD, IP, IR, COEFF, N, RNORM, IERR)
       IF (IERR .EQ. 0) RETURN
 C     CHECK FURTHER FOR SUFFICIENT STORAGE IN WORKING ARRAYS.
    20 IF (IW1 .LT. LW) GO TO 850
@@ -82150,35 +82150,35 @@ C     WHEN INTERVAL CHANGES, PROCESS EQUATIONS IN THE LAST BLOCK.
       IP1 = ILEFT + 1
       IF (XVAL .LT. BKPT(IP1)) GO TO 230
       INTRVL = ILEFT - NORDM1
-      CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
+      CALL BNDACC(G, MDG, NORD, IP, IR, MT, INTRVL)
       MT = 0
 C     MOVE POINTER UP SO THAT XVAL .GE. BKPT(ILEFT).
       DO I = IP1,N
-         IF ( XVAL .LT. BKPT ( I ) ) EXIT
+         IF (XVAL .LT. BKPT(I)) EXIT
          ILEFT = I
       END DO
 C     OBTAIN B-SPLINE FUNCTION VALUE
   230 J = 0
-      CALL BSPVB (BKPT, NORD, NORD, J, XVAL, ILEFT, BF)
+      CALL BSPVB(BKPT, NORD, NORD, J, XVAL, ILEFT, BF)
 C     MOVE ROW INTO PLACE
       IROW = IR + MT
       MT = MT + 1
-      CALL SCOPY (NORD, BF, 1, G(IROW,1), MDG)
+      CALL SCOPY(NORD, BF, 1, G(IROW,1), MDG)
       G(IROW,NORDP1) = YDATA(IDATA)
 C     WHEN STAGING WORK AREA IS EXHAUSTED, PROCESS ROWS
       IF (IROW .NE. MDG - 1) GO TO 240
          INTRVL = ILEFT - NORDM1
-         CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
+         CALL BNDACC(G, MDG, NORD, IP, IR, MT, INTRVL)
          MT = 0
   240 IDATA = IDATA + 1
       GO TO 210
 C     PROCESS  BLOCK OF EQUATIONS
   250 INTRVL = ILEFT - NORDM1
-      CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
+      CALL BNDACC(G, MDG, NORD, IP, IR, MT, INTRVL)
 C     LAST CALL TO ADJUST BLOCK POSITIONING
       G(IR,1) = 0.0
-      CALL SCOPY (NORDP1, G(IR,1), 0, G(IR,1), MDG)
-      CALL BNDACC (G, MDG, NORD, IP, IR, 1, NP1)
+      CALL SCOPY(NORDP1, G(IR,1), 0, G(IR,1), MDG)
+      CALL BNDACC(G, MDG, NORD, IP, IR, 1, NP1)
   260 DO I = 1,N
         BAND = BAND .AND. G(I,1) .NE. 0.0
       END DO
@@ -82200,14 +82200,14 @@ C-----------------------------------------------------------------------
       ILEFT = NORD
       IF (NORD .EQ. N) GO TO 330
       DO I = NORDP1,N
-         IF ( XVAL .LT. BKPT ( I ) ) EXIT
+         IF (XVAL .LT. BKPT(I)) EXIT
          ILEFT = I
       END DO
-  330 CALL BSPVD (BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
+  330 CALL BSPVD(BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
       W(NEQCON,1) = 0.0
-      CALL SCOPY (N, W(NEQCON,1), 0, W(NEQCON,1), MDW)
+      CALL SCOPY(N, W(NEQCON,1), 0, W(NEQCON,1), MDW)
       INTRVL = ILEFT - NORDM1
-      CALL SCOPY (NORD, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
+      CALL SCOPY(NORD, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
       IF (ITYPE .NE. 2) GO TO 340
       W(NEQCON,NP1) = YCONST(IDATA)
       GO TO 310
@@ -82218,12 +82218,12 @@ C-----------------------------------------------------------------------
       ILEFT = NORD
       IF (NORD .EQ. N) GO TO 360
       DO I = NORDP1,N
-         IF ( YVAL .LT. BKPT ( I ) ) EXIT
+         IF (YVAL .LT. BKPT(I)) EXIT
          ILEFT = I
       END DO
-  360 CALL BSPVD (BKPT, NORD, YVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
+  360 CALL BSPVD(BKPT, NORD, YVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
       INTRVL = ILEFT - NORDM1
-      CALL SAXPY (NORD, -1.0, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
+      CALL SAXPY(NORD, -1.0, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
       GO TO 310
 C-----------------------------------------------------------------------
 C                    TRANSFER-LEAST-SQUARES DATA
@@ -82231,8 +82231,8 @@ C-----------------------------------------------------------------------
   400 DO I = 1,NP1
         IROW = I + NEQCON
         W(IROW,1) = 0.0
-        CALL SCOPY (N, W(IROW,1), 0, W(IROW,1), MDW)
-        CALL SCOPY (MIN0(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
+        CALL SCOPY(N, W(IROW,1), 0, W(IROW,1), MDW)
+        CALL SCOPY(MIN0(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
         W(IROW,NP1) = G(I,NORDP1)
       END DO
 C-----------------------------------------------------------------------
@@ -82252,15 +82252,15 @@ C-----------------------------------------------------------------------
       ILEFT = NORD
       IF (NORD .EQ. N) GO TO 520
       DO I = NORDP1,N
-         IF ( XVAL .LT. BKPT ( I ) ) EXIT
+         IF (XVAL .LT. BKPT(I)) EXIT
          ILEFT = I
       END DO
-  520 CALL BSPVD (BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
+  520 CALL BSPVD(BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
       IROW = NEQCON + NP1 + NINCON
       W(IROW,1) = 0.0
-      CALL SCOPY (N, W(IROW,1), 0, W(IROW,1), MDW)
+      CALL SCOPY(N, W(IROW,1), 0, W(IROW,1), MDW)
       INTRVL = ILEFT - NORDM1
-      CALL SCOPY (NORD, BF(1,IDERIV+1), 1, W(IROW,INTRVL), MDW)
+      CALL SCOPY(NORD, BF(1,IDERIV+1), 1, W(IROW,INTRVL), MDW)
       W(IROW,NP1) = YCONST(IDATA)
       IF (ITYPE .NE. 0) GO TO 500
       W(IROW,NP1) = -W(IROW,NP1)
@@ -82298,7 +82298,7 @@ C                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
       MODE = -7
       END SUBROUTINE BFIT0
 
-      SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)
+      SUBROUTINE BNDACC(G,MDG,NB,IP,IR,MT,JT)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IP, IR
       INTEGER, INTENT(IN) :: JT, MDG, MT, NB
@@ -82456,7 +82456,7 @@ C                                             ALG. STEPS 18-19
       KH = MIN0(NBP1, MH)
 C                                             ALG. STEP 20
       DO I = 1,KH
-         CALL H12 (1,I,MAX0(I+1,IR-IP+1),MH,G(IP,I),1,RHO,
+         CALL H12(1,I,MAX0(I+1,IR-IP+1),MH,G(IP,I),1,RHO,
      1             G(IP,I+1),1,MDG,NBP1-I)
       END DO
 C                                             ALG. STEP 21
@@ -82472,7 +82472,7 @@ C                                             ALG. STEP 24
 C                                             ALG. STEP 25
       END SUBROUTINE BNDACC
 
-      SUBROUTINE BNDSL (MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
+      SUBROUTINE BNDSL(MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IP, IR, MDG, MODE, N, NB
@@ -82623,7 +82623,7 @@ C            A ZERO DIAGONAL TERM OCCURS
   130 IERR = 1
       END SUBROUTINE BNDSL
 
-      SUBROUTINE SPFIT2 (X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX,
+      SUBROUTINE SPFIT2(X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX,
      *                   YBREAK, NY, F, S, T, WK, NUM, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -82694,7 +82694,7 @@ C     DEFINE THE KNOT SQUENCES
       T(NY + 6) = YBREAK(NY)
 C     OBTAIN THE B-SPLINE COEFFICIENTS OF THE BIVARIATE
 C     LEAST SQUARES FIT AND STORE THEM IN WK.
-      CALL BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, S, M, 4,
+      CALL BSLSQ2(X, WX, MX, Y, WY, MY, Z, KZ, S, M, 4,
      *             T, N, 4, F, M, WK, NUM, IERR)
       IF (IERR .LT. 0) GO TO 110
       IERR = 0
@@ -82709,7 +82709,7 @@ C     DERIVATIVES IN WK. (THE VALUES OF THE SPLINES WILL
 C     BE IN THE LATTER HALF OF F.)
       NU = NX*NY
       L = 2*NU + 1
-      CALL CSPP (S, WK, M, M, N, F(L), N, F(1), N)
+      CALL CSPP(S, WK, M, M, N, F(L), N, F(1), N)
       IMAX = N*NX
       DO I = 1,IMAX
          WK(I) = F(I)
@@ -82718,11 +82718,11 @@ C     COMPUTE THE VALUES OF THE BISPLINE AND THEIR PARTIAL
 C     DERIVATIVES WITH RESPECT TO Y. THE RESULTS ARE STORED
 C     IN THE FIRST HALF OF F.
       LD = NU + 1
-      CALL CSPP (T, F(L), N, N, NX, F(1), NX, F(LD), NX)
+      CALL CSPP(T, F(L), N, N, NX, F(1), NX, F(LD), NX)
 C     COMPUTE THE REMAINING PARTIAL DERIVATIVES AND STORE
 C     THE RESULTS IN THE LATTER HALF OF F.
       LD = L + NU
-      CALL CSPP (T, WK, N, N, NX, F(L), NX, F(LD), NX)
+      CALL CSPP(T, WK, N, N, NX, F(L), NX, F(LD), NX)
       RETURN
 C     ERROR RETURN
   100 IERR = 1
@@ -82736,7 +82736,7 @@ C     ERROR RETURN
       WK(1) = L
       END SUBROUTINE SPFIT2
 
-      SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
+      SUBROUTINE CSPP(T, A, KA, M, N, Z, KZ, DZ, KDZ)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KDZ, KZ, M, N
       REAL, INTENT(IN) :: T(*), A(KA,N)
@@ -82829,7 +82829,7 @@ C                    AT THE KNOT T(M+1)
       END DO
       END SUBROUTINE CSPP
 
-      SUBROUTINE CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
+      SUBROUTINE CSURF(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, F1, KF1, F2, KF2, F12, KF12)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX,
@@ -82858,15 +82858,15 @@ C-----------------------------------------------------------------------
          IF (YY .LT. T(2)) GO TO 10
          IF (YY .GE. T(NM1)) GO TO 20
          IF (L .EQ. 1) GO TO 30
-         NSWC_AI_R4 = YY - Y ( L - 1 )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+         NSWC_AI_R4 = YY - Y(L - 1)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 30
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 50
          GO TO 40
    10    J = 1
          GO TO 50
    20    J = NM1
          GO TO 50
-   30    J = INTRVL (YY, T, N)
+   30    J = INTRVL(YY, T, N)
          GO TO 50
 C        LINEAR FORWARD SEARCH
    40    IF (YY .LT. T(J + 1)) GO TO 50
@@ -82879,9 +82879,9 @@ C        LINEAR FORWARD SEARCH
             IF (XX .LT. S(2)) GO TO 100
             IF (XX .GE. S(MM1)) GO TO 110
             IF (K .EQ. 1) GO TO 120
-            NSWC_AI_R4 = XX - X ( K - 1 )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 130
+            NSWC_AI_R4 = XX - X(K - 1)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 120
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 130
             GO TO 140
   100       I = 1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
@@ -82889,7 +82889,7 @@ C        LINEAR FORWARD SEARCH
   110       I = MM1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
             GO TO 200
-  120       I = INTRVL (XX, S, M)
+  120       I = INTRVL(XX, S, M)
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
             GO TO 200
   130       Z(K,L) = Z(K-1,L)
@@ -82923,8 +82923,8 @@ C           D1F(S(I+1),Y) AT THE POINT YY.
   210       DY = YY - T(J)
             IF (JDER .EQ. 0) GO TO 220
             NSWC_AI_I4 = JDER - 2
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 230
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 240
+            IF (NSWC_AI_I4 .LT. 0) GO TO 230
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 240
             GO TO 250
   220       FI = ((C*DY + B)*DY + F2(I,J))*DY + F(I,J)
             FIP1 = ((C1*DY + B1)*DY + F2(IP1,J))*DY + F(IP1,J)
@@ -82954,8 +82954,8 @@ C           AT THE POINT XX.
             DX = XX - S(I)
             IF (IDER .EQ. 0) GO TO 310
             NSWC_AI_I4 = IDER - 2
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 320
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+            IF (NSWC_AI_I4 .LT. 0) GO TO 320
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 330
             GO TO 340
   310       Z(K,L) = ((CX*DX + BX)*DX + DFI)*DX + FI
             GO TO 350
@@ -82977,7 +82977,7 @@ C     CASE WHEN THE RESULTS ARE ZERO.
       END DO
       END SUBROUTINE CSURF
 
-      SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
+      SUBROUTINE CSURF1(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KZ, M, MX, MY, N
       REAL, INTENT(IN) :: X(MX), Y(MY)
@@ -82987,11 +82987,11 @@ C-----------------------------------------------------------------------
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C-----------------------------------------------------------------------
-      CALL CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, M,
+      CALL CSURF(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, M,
      *            F(1,1,3), M, F(1,1,2), M, F(1,1,4), M)
       END SUBROUTINE CSURF1
 
-      SUBROUTINE CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
+      SUBROUTINE CSRF(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                 F, KF, F1, KF1, F2, KF2, F12, KF12)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX,
@@ -83020,15 +83020,15 @@ C-----------------------------------------------------------------------
          IF (YY .LT. T(2)) GO TO 10
          IF (YY .GE. T(NM1)) GO TO 20
          IF (L .EQ. 1) GO TO 30
-         NSWC_AI_R4 = YY - Y ( L - 1 )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+         NSWC_AI_R4 = YY - Y(L - 1)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 30
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 50
          GO TO 40
    10    J = 1
          GO TO 50
    20    J = NM1
          GO TO 50
-   30    J = INTRVL (YY, T, N)
+   30    J = INTRVL(YY, T, N)
          GO TO 50
 C        LINEAR FORWARD SEARCH
    40    IF (YY .LT. T(J + 1)) GO TO 50
@@ -83041,9 +83041,9 @@ C        LINEAR FORWARD SEARCH
             IF (XX .LT. S(2)) GO TO 100
             IF (XX .GE. S(MM1)) GO TO 110
             IF (K .EQ. 1) GO TO 120
-            NSWC_AI_R4 = XX - X ( K - 1 )
-            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
-            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 130
+            NSWC_AI_R4 = XX - X(K - 1)
+            IF (NSWC_AI_R4 .LT. 0) GO TO 120
+            IF (NSWC_AI_R4 .EQ. 0) GO TO 130
             GO TO 140
   100       I = 1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
@@ -83051,7 +83051,7 @@ C        LINEAR FORWARD SEARCH
   110       I = MM1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
             GO TO 200
-  120       I = INTRVL (XX, S, M)
+  120       I = INTRVL(XX, S, M)
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
             GO TO 200
   130       Z(K,L) = Z(K-1,L)
@@ -83081,8 +83081,8 @@ C           D1F(S(I+1),Y) AT THE POINT YY.
   210       DY = YY - T(J)
             IF (JDER .EQ. 0) GO TO 220
             NSWC_AI_I4 = JDER - 2
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 230
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 240
+            IF (NSWC_AI_I4 .LT. 0) GO TO 230
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 240
             GO TO 250
   220       FI = ((C*DY + 0.5*F2(I,J))*DY + A)*DY + F(I,J)
             FIP1 = ((C1*DY + 0.5*F2(IP1,J))*DY + A1)*DY + F(IP1,J)
@@ -83111,8 +83111,8 @@ C           AT THE POINT XX.
             DX = XX - S(I)
             IF (IDER .EQ. 0) GO TO 310
             NSWC_AI_I4 = IDER - 2
-            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 320
-            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+            IF (NSWC_AI_I4 .LT. 0) GO TO 320
+            IF (NSWC_AI_I4 .EQ. 0) GO TO 330
             GO TO 340
   310       Z(K,L) = ((CX*DX + 0.5*DFI)*DX + AX)*DX + FI
             GO TO 350
@@ -83134,7 +83134,7 @@ C     CASE WHEN THE RESULTS ARE ZERO.
       END DO
       END SUBROUTINE CSRF
 
-      SUBROUTINE CSRF2 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
+      SUBROUTINE CSRF2(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, DDF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KZ, M, MX, MY, N
@@ -83145,11 +83145,11 @@ C-----------------------------------------------------------------------
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C-----------------------------------------------------------------------
-      CALL CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF,
+      CALL CSRF(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF,
      *           DDF(1,1,2), M, DDF, M, DDF(1,1,3), M)
       END SUBROUTINE CSRF2
 
-      SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
+      SUBROUTINE SURF(M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, IZ
       INTEGER, INTENT(OUT) :: IERR
@@ -83245,8 +83245,8 @@ C PROCESS THE OPTION VECTOR
       L = 1
   100 KEY = OPT(L)
       NSWC_AI_I4 = KEY
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 48
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 110
+      IF (NSWC_AI_I4 .LT. 0) GO TO 48
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 110
       GO TO 101
   101 IF (KEY .GT. 8) GO TO 48
       IND(KEY) = 1
@@ -83268,7 +83268,7 @@ C OBTAIN Y-PARTIAL DERIVATIVES ALONG Y = Y(1)
       DELY2 = DELY1+DELY1
       IF (N .GT. 2) DELY2 = Y(3)-Y(1)
       IF (DELY1 .LE. 0. .OR. DELY2 .LE. DELY1) GO TO 47
-      CALL CEEZ (DELY1,DELY2,SIGMAY,C1,C2,C3,N)
+      CALL CEEZ(DELY1,DELY2,SIGMAY,C1,C2,C3,N)
       DO I = 1,M
         ZP(I,1,1) = C1*Z(I,1)+C2*Z(I,2)
       END DO
@@ -83289,7 +83289,7 @@ C OBTAIN Y-PARTIAL DERIVATIVES ALONG Y = Y(N)
       DELYNM = DELYN+DELYN
       IF (N .GT. 2) DELYNM = Y(N)-Y(N-2)
       IF (DELYN .LE. 0. .OR. DELYNM .LE. DELYN) GO TO 47
-      CALL CEEZ (-DELYN,-DELYNM,SIGMAY,C1,C2,C3,N)
+      CALL CEEZ(-DELYN,-DELYNM,SIGMAY,C1,C2,C3,N)
       DO I = 1,M
         NPI = N+I
         TEMP(NPI) = C1*Z(I,N)+C2*Z(I,NM1)
@@ -83314,7 +83314,7 @@ C OBTAIN X-PARTIAL DERIVATIVES ALONG X = X(1)
       DELX2 = DELX1+DELX1
       IF (M .GT. 2) DELX2 = X(3)-X(1)
       IF (DELX1 .LE. 0. .OR. DELX2 .LE. DELX1) GO TO 47
-      CALL CEEZ (DELX1,DELX2,SIGMAX,C1,C2,C3,M)
+      CALL CEEZ(DELX1,DELX2,SIGMAX,C1,C2,C3,M)
       IF (IND(1) .EQ. 1) GO TO 15
       DO J = 1,N
         ZP(1,J,2) = C1*Z(1,J)+C2*Z(2,J)
@@ -83350,7 +83350,7 @@ C OBTAIN X-PARTIAL DERIVATIVE ALONG X = X(M)
       DELXMM = DELXM+DELXM
       IF (M .GT. 2) DELXMM = X(M)-X(M-2)
       IF (DELXM .LE. 0. .OR. DELXMM .LE. DELXM) GO TO 47
-      CALL CEEZ (-DELXM,-DELXMM,SIGMAX,C1,C2,C3,M)
+      CALL CEEZ(-DELXM,-DELXMM,SIGMAX,C1,C2,C3,M)
       IF (IND(2) .EQ. 1) GO TO 24
       DO J = 1,N
         NPMPJ = NPM+J
@@ -83385,7 +83385,7 @@ C PERFORM FORWARD ELIMINATION
       END DO
       ZP(1,2,3) = DELI*(ZP(1,2,2)-ZP(1,1,2))
       ZP(M,2,3) = DELI*(TEMP(NPM+2)-TEMP(NPM+1))
-      CALL TERMS (DIAG1,SDIAG1,SIGMAY,DEL1)
+      CALL TERMS(DIAG1,SDIAG1,SIGMAY,DEL1)
       DIAGI = 1./DIAG1
       DO I = 1,M
         ZP(I,1,1) = DIAGI*(ZP(I,2,1)-ZP(I,1,1))
@@ -83406,7 +83406,7 @@ C PERFORM FORWARD ELIMINATION
         END DO
         ZP(1,JP1,3) = DELI*(ZP(1,JP1,2)-ZP(1,J,2))
         ZP(M,JP1,3) = DELI*(TEMP(NPMPJ+1)-TEMP(NPMPJ))
-        CALL TERMS (DIAG2,SDIAG2,SIGMAY,DEL2)
+        CALL TERMS(DIAG2,SDIAG2,SIGMAY,DEL2)
         DIAGIN = 1./(DIAG1+DIAG2-SDIAG1*TEMP(JM1))
         DO I = 1,M
           ZP(I,J,1) = DIAGIN*(ZP(I,JP1,1)-ZP(I,J,1)-
@@ -83450,7 +83450,7 @@ C PERFORM FORWARD ELIMINATION
         ZP(2,J,2) = DELI*(Z(2,J)-Z(1,J))
         ZP(2,J,3) = DELI*(ZP(2,J,1)-ZP(1,J,1))
       END DO
-      CALL TERMS (DIAG1,SDIAG1,SIGMAX,DEL1)
+      CALL TERMS(DIAG1,SDIAG1,SIGMAX,DEL1)
       DIAGI = 1./DIAG1
       DO J = 1,N
         ZP(1,J,2) = DIAGI*(ZP(2,J,2)-ZP(1,J,2))
@@ -83469,7 +83469,7 @@ C PERFORM FORWARD ELIMINATION
           ZP(IP1,J,2) = DELI*(Z(IP1,J)-Z(I,J))
           ZP(IP1,J,3) = DELI*(ZP(IP1,J,1)-ZP(I,J,1))
         END DO
-        CALL TERMS (DIAG2,SDIAG2,SIGMAX,DEL2)
+        CALL TERMS(DIAG2,SDIAG2,SIGMAX,DEL2)
         DIAGIN = 1./(DIAG1+DIAG2-SDIAG1*TEMP(NPI-1))
         DO J = 1,N
           ZP(I,J,2) = DIAGIN*(ZP(IP1,J,2)-ZP(I,J,2)-
@@ -83511,7 +83511,7 @@ C THE OPTION VECTOR HAS AN ERROR
    48 IERR = 3
       END SUBROUTINE SURF
 
-      FUNCTION SURF2 (XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
+      FUNCTION SURF2(XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, IZ
       REAL, INTENT(IN) :: XX, YY, X(M), Y(N)
@@ -83561,12 +83561,12 @@ C THIS FUNCTION REFERENCES PACKAGE MODULES INTRVL AND
 C SNHCSH.
 C-----------------------------------------------------------
 C INLINE ONE DIMENSIONAL CUBIC SPLINE INTERPOLATION
-      HERMZ (F1,F2,FP1,FP2) = (F2*DEL1+F1*DEL2)/DELS-DEL1*
+      HERMZ(F1,F2,FP1,FP2) = (F2*DEL1+F1*DEL2)/DELS-DEL1*
      *                        DEL2*(FP2*(DEL1+DELS)+
      *                              FP1*(DEL2+DELS))/
      *                        (6.*DELS)
 C INLINE ONE DIMENSIONAL SPLINE UNDER TENSION INTERPOLATION
-      HERMNZ (F1,F2,FP1,FP2,SIGMAP) = (F2*DEL1+F1*DEL2)/DELS
+      HERMNZ(F1,F2,FP1,FP2,SIGMAP) = (F2*DEL1+F1*DEL2)/DELS
      *          +(FP2*(SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*
      *                           SINHP2+SIGMAP*COSHP1*DEL2))
      *           +FP1*(SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*
@@ -83576,10 +83576,10 @@ C DENORMALIZE TENSION FACTOR IN X AND Y DIRECTION
       SIGMAX = ABS(SIGMA)*FLOAT(M-1)/(X(M)-X(1))
       SIGMAY = ABS(SIGMA)*FLOAT(N-1)/(Y(N)-Y(1))
 C DETERMINE Y INTERVAL
-      JM1 = INTRVL (YY,Y,N)
+      JM1 = INTRVL(YY,Y,N)
       J = JM1+1
 C DETERMINE X INTERVAL
-      IM1 = INTRVL (XX,X,M)
+      IM1 = INTRVL(XX,X,M)
       I = IM1+1
       DEL1 = YY-Y(JM1)
       DEL2 = Y(J)-YY
@@ -83596,13 +83596,13 @@ C PERFORM FOUR INTERPOLATIONS IN Y-DIRECTION
       GO TO 2
     1 DELP1 = (DEL1+DELS)/2.
       DELP2 = (DEL2+DELS)/2.
-      CALL SNHCSH (SINHM1,DUMMY,SIGMAY*DEL1,-1)
-      CALL SNHCSH (SINHM2,DUMMY,SIGMAY*DEL2,-1)
-      CALL SNHCSH (SINHMS,DUMMY,SIGMAY*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,SIGMAY*DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,SIGMAY*DELP2,1)
+      CALL SNHCSH(SINHM1,DUMMY,SIGMAY*DEL1,-1)
+      CALL SNHCSH(SINHM2,DUMMY,SIGMAY*DEL2,-1)
+      CALL SNHCSH(SINHMS,DUMMY,SIGMAY*DELS,-1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,SIGMAY*DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,SIGMAY*DELP2,1)
       ZIM1 = HERMNZ(Z(I-1,J-1),Z(I-1,J),ZP(I-1,J-1,1),
      *               ZP(I-1,J,1),SIGMAY)
       ZI = HERMNZ(Z(I,J-1),Z(I,J),ZP(I,J-1,1),ZP(I,J,1),
@@ -83620,17 +83620,17 @@ C PERFORM FINAL INTERPOLATION IN X-DIRECTION
       RETURN
     3 DELP1 = (DEL1+DELS)/2.
       DELP2 = (DEL2+DELS)/2.
-      CALL SNHCSH (SINHM1,DUMMY,SIGMAX*DEL1,-1)
-      CALL SNHCSH (SINHM2,DUMMY,SIGMAX*DEL2,-1)
-      CALL SNHCSH (SINHMS,DUMMY,SIGMAX*DELS,-1)
-      CALL SNHCSH (SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
-      CALL SNHCSH (SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
-      CALL SNHCSH (DUMMY,COSHP1,SIGMAX*DELP1,1)
-      CALL SNHCSH (DUMMY,COSHP2,SIGMAX*DELP2,1)
+      CALL SNHCSH(SINHM1,DUMMY,SIGMAX*DEL1,-1)
+      CALL SNHCSH(SINHM2,DUMMY,SIGMAX*DEL2,-1)
+      CALL SNHCSH(SINHMS,DUMMY,SIGMAX*DELS,-1)
+      CALL SNHCSH(SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
+      CALL SNHCSH(SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
+      CALL SNHCSH(DUMMY,COSHP1,SIGMAX*DELP1,1)
+      CALL SNHCSH(DUMMY,COSHP2,SIGMAX*DELP2,1)
       SURF2 = HERMNZ(ZIM1,ZI,ZXXIM1,ZXXI,SIGMAX)
       END FUNCTION SURF2
 
-      SUBROUTINE NSURF2 (DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ,
+      SUBROUTINE NSURF2(DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ,
      *                   IDZ,M,N,X,Y,Z,IZ,ZP,WORK,SIGMA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MD, ND, IDZ, M, N, IZ
@@ -83716,13 +83716,13 @@ C GRID
         GO TO 3
     2   DELP1 = (DEL1+DELS)/2.
         DELP2 = (DEL2+DELS)/2.
-        CALL SNHCSH (SINHM1,DUMMY,SIGMAX*DEL1,-1)
-        CALL SNHCSH (SINHM2,DUMMY,SIGMAX*DEL2,-1)
-        CALL SNHCSH (SINHMS,DUMMY,SIGMAX*DELS,-1)
-        CALL SNHCSH (SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
-        CALL SNHCSH (SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
-        CALL SNHCSH (DUMMY,COSHP1,SIGMAX*DELP1,1)
-        CALL SNHCSH (DUMMY,COSHP2,SIGMAX*DELP2,1)
+        CALL SNHCSH(SINHM1,DUMMY,SIGMAX*DEL1,-1)
+        CALL SNHCSH(SINHM2,DUMMY,SIGMAX*DEL2,-1)
+        CALL SNHCSH(SINHMS,DUMMY,SIGMAX*DELS,-1)
+        CALL SNHCSH(SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
+        CALL SNHCSH(SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
+        CALL SNHCSH(DUMMY,COSHP1,SIGMAX*DELP1,1)
+        CALL SNHCSH(DUMMY,COSHP2,SIGMAX*DELP2,1)
         TEMP = SIGMAX*SIGMAX*DELS*(SINHMS+SIGMAX*DELS)
         WORK(3,II) = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*
      *                SINHP1+SIGMAX*COSHP2*DEL1))/TEMP
@@ -83754,13 +83754,13 @@ C GRID AND PERFORM INTRPOLATION
         GO TO 6
     5   DELP1 = (DEL1+DELS)/2.
         DELP2 = (DEL2+DELS)/2.
-        CALL SNHCSH (SINHM1,DUMMY,SIGMAY*DEL1,-1)
-        CALL SNHCSH (SINHM2,DUMMY,SIGMAY*DEL2,-1)
-        CALL SNHCSH (SINHMS,DUMMY,SIGMAY*DELS,-1)
-        CALL SNHCSH (SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
-        CALL SNHCSH (SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
-        CALL SNHCSH (DUMMY,COSHP1,SIGMAY*DELP1,1)
-        CALL SNHCSH (DUMMY,COSHP2,SIGMAY*DELP2,1)
+        CALL SNHCSH(SINHM1,DUMMY,SIGMAY*DEL1,-1)
+        CALL SNHCSH(SINHM2,DUMMY,SIGMAY*DEL2,-1)
+        CALL SNHCSH(SINHMS,DUMMY,SIGMAY*DELS,-1)
+        CALL SNHCSH(SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
+        CALL SNHCSH(SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
+        CALL SNHCSH(DUMMY,COSHP1,SIGMAY*DELP1,1)
+        CALL SNHCSH(DUMMY,COSHP2,SIGMAY*DELP2,1)
         TEMP = SIGMAY*SIGMAY*DELS*(SINHMS+SIGMAY*DELS)
         C3 = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*
      *        SINHP1+SIGMAY*COSHP2*DEL1))/TEMP
@@ -83769,7 +83769,7 @@ C GRID AND PERFORM INTRPOLATION
     6   LASTI = 0
         DO II=1,MD
           XII = DXMIN+FLOAT(II-1)*DELTDX
-          I = MAX0 (1, LASTI)
+          I = MAX0(1, LASTI)
     7     I = I+1
           IF (XII .GT. X(I) .AND. I .LT. M) GO TO 7
           IM1 = I-1
@@ -83789,7 +83789,7 @@ C GRID AND PERFORM INTRPOLATION
       END DO
       END SUBROUTINE NSURF2
 
-      SUBROUTINE BSTRP2 (X, Y, Z, KZ, TX, NX, KX, TY, NY, KY,
+      SUBROUTINE BSTRP2(X, Y, Z, KZ, TX, NX, KX, TY, NY, KY,
      *                   A, KA, WK, L, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
@@ -83816,9 +83816,9 @@ C-------------------------
       IF (L .LT. M) GO TO 120
 C     COMPUTE THE COEFFICIENTS
       IW = NX*NY + 1
-      CALL BSTRP1 (X, Z, KZ, NX, NY, TX, KX, WK, NY, WK(IW), IFLAG)
+      CALL BSTRP1(X, Z, KZ, NX, NY, TX, KX, WK, NY, WK(IW), IFLAG)
       IF (IFLAG .NE. 0) GO TO 100
-      CALL BSTRP1 (Y, WK, NY, NY, NX, TY, KY, A, KA, WK(IW), IFLAG)
+      CALL BSTRP1(Y, WK, NY, NY, NX, TY, KY, A, KA, WK(IW), IFLAG)
       IF (IFLAG .NE. 0) GO TO 110
       RETURN
 C     ERROR RETURN
@@ -83829,7 +83829,7 @@ C     ERROR RETURN
   120 IFLAG = 3
       END SUBROUTINE BSTRP2
 
-      SUBROUTINE BSTRP1 (X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
+      SUBROUTINE BSTRP1(X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: K, KA, KZ, M, N
@@ -83847,7 +83847,7 @@ C-----------------------
 C     FIRST DATA SET
       IFLAG = 1
       MP1 = M + 1
-      CALL BSTRP (X, Z, T, M, K, WORK(1), WORK(MP1), IFLAG)
+      CALL BSTRP(X, Z, T, M, K, WORK(1), WORK(MP1), IFLAG)
       IF (IFLAG .NE. 0) RETURN
       DO I = 1,M
          A(1,I) = WORK(I)
@@ -83855,14 +83855,14 @@ C     FIRST DATA SET
       IF (N .EQ. 1) RETURN
 C     REMAINING DATA SETS
       DO J = 2,N
-         CALL BSTRP (X, Z(1,J), T, M, K, WORK(1), WORK(MP1), IFLAG)
+         CALL BSTRP(X, Z(1,J), T, M, K, WORK(1), WORK(MP1), IFLAG)
          DO I = 1,M
             A(J,I) = WORK(I)
          END DO
       END DO
       END SUBROUTINE BSTRP1
 
-      SUBROUTINE BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX,
+      SUBROUTINE BSLSQ2(X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX,
      *                   TY, NY, KY, A, KA, WK, L, IFLAG)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
@@ -83891,11 +83891,11 @@ C-------------------------
 C     COMPUTE THE COEFFICIENTS
       IW = NX*MY + 1
       IQ = IW + NX
-      CALL BSLSQ1 (X, WX, MX, Z, KZ, MY, TX, NX, KX,
+      CALL BSLSQ1(X, WX, MX, Z, KZ, MY, TX, NX, KX,
      *             WK, MY, WK(IW), WK(IQ), IERR)
       IF (IERR .LT. 0) GO TO 100
       IQ = IW + NY
-      CALL BSLSQ1 (Y, WY, MY, WK, MY, NX, TY, NY, KY,
+      CALL BSLSQ1(Y, WY, MY, WK, MY, NX, TY, NY, KY,
      *             A, KA, WK(IW), WK(IQ), IFLAG)
       IF (IFLAG .LT. 0) GO TO 110
       IFLAG = MAX0(IERR,IFLAG)
@@ -83909,7 +83909,7 @@ C     ERROR RETURN
       WK(1) = M
       END SUBROUTINE BSLSQ2
 
-      SUBROUTINE BSLSQ1 (TAU, WGT, NTAU, Z, KZ, M, T, N, K,
+      SUBROUTINE BSLSQ1(TAU, WGT, NTAU, Z, KZ, M, T, N, K,
      *                   A, KA, WK, Q, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -83975,7 +83975,7 @@ C            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
             LEFT = LEFT + 1
             GO TO 40
    50    JJ = 0
-         CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
+         CALL BSPVB(T, K, K, JJ, TAU(L), LEFT, WK)
          LEFTMK = LEFT - K
          DO MM = 1,K
             DW = WK(MM)*WGT(L)
@@ -83991,14 +83991,14 @@ C            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
          END DO
       END DO
 C        SOLVE THE NORMAL EQUATIONS
-      CALL BCHFAC (Q, K, N, WK, IERR)
-      CALL BCHSV1 (Q, K, N, A, KA, M)
+      CALL BCHFAC(Q, K, N, WK, IERR)
+      CALL BCHSV1(Q, K, N, A, KA, M)
       RETURN
 C             ERROR RETURN
   100 IERR = -1
       END SUBROUTINE BSLSQ1
 
-      SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
+      SUBROUTINE BCHSV1(W, NB, N, B, KB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N, NB
       REAL, INTENT(IN) :: W(NB,N)
@@ -84068,7 +84068,7 @@ C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
          IF (K .GT. 0) GO TO 50
       END SUBROUTINE BCHSV1
 
-      SUBROUTINE BVAL2 (A, KA, TX, NX, KX, TY, NY, KY, X0, Y0,
+      SUBROUTINE BVAL2(A, KA, TX, NX, KX, TY, NY, KY, X0, Y0,
      *                  IDX, IDY, F, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDX, IDY, KA, KX, KY, NX, NY
@@ -84099,21 +84099,21 @@ C-----------------------------
       IF (J .GT. KY) GO TO 20
 C     CASE WHEN  J .LE. KY
       DO L = 1,J
-         CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(L), WK(IW))
+         CALL BVAL(TX, A(1,L), NX, KX, X0, IDX, WK(L), WK(IW))
       END DO
-      CALL BVAL (TY, WK(1), J, KY, Y0, IDY, F, WK(IW))
+      CALL BVAL(TY, WK(1), J, KY, Y0, IDY, F, WK(IW))
       RETURN
 C     CASE WHEN  J .GT. KY
    20 L = J - KY
       DO I = 1,KY
          L = L + 1
-         CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(I), WK(IW))
+         CALL BVAL(TX, A(1,L), NX, KX, X0, IDX, WK(I), WK(IW))
       END DO
       L = J - KY + 1
-      CALL BVAL (TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
+      CALL BVAL(TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
       END SUBROUTINE BVAL2
 
-      SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
+      SUBROUTINE TRMESH(N,X,Y, IADJ,IEND,IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(N)
@@ -84238,7 +84238,7 @@ C   SET SPROD TO (NL-NR,NL-K).
       IF (SPROD .GT. 0.) GO TO 3
 C NODE K IS TO THE LEFT OF NL.  INSERT K AS THE FIRST
 C   (LEFTMOST) NODE IN IEND AND SET NL TO K.
-      CALL SHIFTD(1,KM1,1, IEND )
+      CALL SHIFTD(1,KM1,1, IEND)
       IEND(1) = K
       XL = XK
       YL = YK
@@ -84260,7 +84260,7 @@ C   (RIGHTMOST) NODE IN IEND AND SET NR TO K.
       GO TO 1
 C NODE K LIES BETWEEN IEND(IND-1) AND IEND(IND).  INSERT K
 C   IN IEND.
-    5 CALL SHIFTD(IND,KM1,1, IEND )
+    5 CALL SHIFTD(IND,KM1,1, IEND)
       IEND(IND) = K
       GO TO 2
 C NODE K IS TO THE LEFT OF NL-NR.  REORDER IEND SO THAT NL
@@ -84320,7 +84320,7 @@ C ALL NODES ARE COLLINEAR
    13 IER = 2
       END SUBROUTINE TRMESH
 
-      SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
+      SUBROUTINE ADNODE(KK,X,Y, IADJ,IEND, IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
@@ -84392,8 +84392,8 @@ C INITIALIZATION
 C ADD NODE K TO THE MESH
       CALL TRFIND(KM1,XK,YK,X,Y,IADJ,IEND, I1,I2,I3)
       IF (I1 .EQ. 0) GO TO 5
-      IF (I3 .EQ. 0) CALL BDYADD(K,I1,I2, IADJ,IEND )
-      IF (I3 .NE. 0) CALL INTADD(K,I1,I2,I3, IADJ,IEND )
+      IF (I3 .EQ. 0) CALL BDYADD(K,I1,I2, IADJ,IEND)
+      IF (I3 .NE. 0) CALL INTADD(K,I1,I2,I3, IADJ,IEND)
 C INITIALIZE VARIABLES FOR OPTIMIZATION OF THE MESH
       INDKF = IEND(KM1) + 1
       INDKL = IEND(K)
@@ -84415,8 +84415,8 @@ C IN1 IS THE LAST NEIGHBOR OF IO2
 C SWAP TEST -- IF A SWAP OCCURS, TWO NEW ARCS ARE OPPOSITE K
 C              AND MUST BE TESTED.  INDK1 AND INDKF MUST BE
 C              DECREMENTED.
-    3 IF ( .NOT. SWPTST(IN1,K,IO1,IO2,X,Y) ) GO TO 4
-      CALL SWAPD (IN1,K,IO1,IO2, IADJ,IEND)
+    3 IF (.NOT. SWPTST(IN1,K,IO1,IO2,X,Y)) GO TO 4
+      CALL SWAPD(IN1,K,IO1,IO2, IADJ,IEND)
       IO1 = IN1
       INDK1 = INDK1 - 1
       INDKF = INDKF - 1
@@ -84434,7 +84434,7 @@ C ALL NODES ARE COLLINEAR
     5 IER = 1
       END SUBROUTINE ADNODE
 
-      SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
+      SUBROUTINE BDYADD(KK,I1,I2, IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
@@ -84500,7 +84500,7 @@ C INITIALIZE VARIABLES
       N2 = IEND(NRIGHT)
       NF = MAX0(N1,N2)
 C INSERT K AS A NEIGHBOR OF MAX(NRIGHT,NLEFT)
-      CALL SHIFTD(NF,NL,2, IADJ )
+      CALL SHIFTD(NF,NL,2, IADJ)
       IADJ(NF+1) = K
       IMIN = MAX0(NRIGHT,NLEFT)
       DO I = IMIN,KM1
@@ -84511,7 +84511,7 @@ C   MIN(NRIGHT,NLEFT)
       KEND = NL + 3
       NL = NF - 1
       NF = MIN0(N1,N2)
-      CALL SHIFTD(NF,NL,1, IADJ )
+      CALL SHIFTD(NF,NL,1, IADJ)
       IADJ(NF) = K
       IMAX = IMIN - 1
       IMIN = MIN0(NRIGHT,NLEFT)
@@ -84539,7 +84539,7 @@ C INSERT NLEFT AND 0 AS THE LAST NEIGHBORS OF K
       IEND(K) = KEND
       END SUBROUTINE BDYADD
 
-      SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
+      SUBROUTINE INTADD(KK,I1,I2,I3, IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2, I3
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
@@ -84615,13 +84615,13 @@ C   I = 1,2.
       IP1 = 1
       IP2 = 2
       IP3 = 3
-      IF ( N(2) .LE. N(1) ) GO TO 3
+      IF (N(2) .LE. N(1)) GO TO 3
       IP1 = 2
       IP2 = 1
-    3 IF ( N(3) .LE. N(IP1) ) GO TO 4
+    3 IF (N(3) .LE. N(IP1)) GO TO 4
       IP3 = IP1
       IP1 = 3
-    4 IF ( N(IP3) .LE. N(IP2) )  GO TO 5
+    4 IF (N(IP3) .LE. N(IP2))  GO TO 5
       ITEMP = IP2
       IP2 = IP3
       IP3 = ITEMP
@@ -84632,7 +84632,7 @@ C   AT THE END OF THE ARRAY.
     5 KM1 = K - 1
       NL = IEND(KM1)
       NF = NFT(IP1)
-      IF (NF .LE. NL) CALL SHIFTD(NF,NL,3, IADJ )
+      IF (NF .LE. NL) CALL SHIFTD(NF,NL,3, IADJ)
       IADJ(NF+2) = K
       IMIN = N(IP1)
       IMAX = KM1
@@ -84641,7 +84641,7 @@ C   AT THE END OF THE ARRAY.
         END DO
       NL = NF - 1
       NF = NFT(IP2)
-      CALL SHIFTD(NF,NL,2, IADJ )
+      CALL SHIFTD(NF,NL,2, IADJ)
       IADJ(NF+1) = K
       IMAX = IMIN - 1
       IMIN = N(IP2)
@@ -84650,7 +84650,7 @@ C   AT THE END OF THE ARRAY.
         END DO
       NL = NF - 1
       NF = NFT(IP3)
-      CALL SHIFTD(NF,NL,1, IADJ )
+      CALL SHIFTD(NF,NL,1, IADJ)
       IADJ(NF) = K
       IMAX = IMIN - 1
       IMIN = N(IP3)
@@ -84666,7 +84666,7 @@ C ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
         END DO
       END SUBROUTINE INTADD
 
-      SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
+      SUBROUTINE SHIFTD(NFRST,NLAST,KK, IARR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NFRST, NLAST, KK
       INTEGER, INTENT(INOUT) :: IARR(*)
@@ -84718,7 +84718,7 @@ C IMAX = BOUND ON DO-LOOP INDEX
       NLP1 = NL + 1
       NS = NLP1 - NF
       NSL = INC*(NS/INC)
-      IF ( K .LT. 0) GO TO 4
+      IF (K .LT. 0) GO TO 4
 C SHIFT DOWNWARD STARTING FROM THE BOTTOM
       IF (NSL .LE. 0) GO TO 2
       DO I = 1,NSL,INC
@@ -84757,7 +84757,7 @@ C PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
       GO TO 7
       END SUBROUTINE SHIFTD
 
-      SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
+      SUBROUTINE SWAPD(NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NIN1, NIN2, NOUT1, NOUT2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(*)
@@ -84829,7 +84829,7 @@ C   THE NEIGHBORS OF IN(J) PRECEDE THOSE OF IO(J) -- SHIFT
 C     DOWN BY 1
         NF = 1 + TINDX(IN(J),IO(IP1),IADJ,IEND)
         NL = -1 + TINDX(IO(J),IO(K),IADJ,IEND)
-        IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
+        IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ)
         IADJ(NF) = IN(K)
         IMIN = IN(J)
         IMAX = IO(J)-1
@@ -84841,7 +84841,7 @@ C   THE NEIGHBORS OF IO(J) PRECEDE THOSE OF IN(J) -- SHIFT
 C     UP BY 1
     4   NF = 1 + TINDX(IO(J),IO(K),IADJ,IEND)
         NL = -1 + TINDX(IN(J),IO(IP2),IADJ,IEND)
-        IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
+        IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ)
         IADJ(NL) = IN(K)
         IMIN = IO(J)
         IMAX = IN(J) - 1
@@ -84857,7 +84857,7 @@ C THE VERTICES ARE ORDERED (IO(1),IO(2),IN(1),IN(2)).
 C   DELETE IO(2) BY SHIFTING UP BY 1
     8 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
       NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
-      IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
+      IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ)
       IMIN = IO(1)
       IMAX = IO(2)-1
       DO I = IMIN,IMAX
@@ -84866,7 +84866,7 @@ C   DELETE IO(2) BY SHIFTING UP BY 1
 C   DELETE IO(1) BY SHIFTING UP BY 2 AND INSERT IN(2)
       NF = NL + 2
       NL = -1 + TINDX(IN(1),IO(IP2),IADJ,IEND)
-      IF (NF .LE. NL) CALL SHIFTD(NF,NL,-2, IADJ )
+      IF (NF .LE. NL) CALL SHIFTD(NF,NL,-2, IADJ)
       IADJ(NL-1) = IN(2)
       IMIN = IO(2)
       IMAX = IN(1)-1
@@ -84876,7 +84876,7 @@ C   DELETE IO(1) BY SHIFTING UP BY 2 AND INSERT IN(2)
 C   SHIFT UP BY 1 AND INSERT IN(1)
       NF = NL + 1
       NL = -1 + TINDX(IN(2),IO(IP1),IADJ,IEND)
-      CALL SHIFTD(NF,NL,-1, IADJ )
+      CALL SHIFTD(NF,NL,-1, IADJ)
       IADJ(NL) = IN(1)
       IMIN = IN(1)
       IMAX = IN(2)-1
@@ -84888,7 +84888,7 @@ C THE VERTICES ARE ORDERED (IN(1),IN(2),IO(1),IO(2)).
 C   DELETE IO(1) BY SHIFTING DOWN BY 1
    12 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
       NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
-      IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
+      IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ)
       IMIN = IO(1)
       IMAX = IO(2) - 1
       DO I = IMIN,IMAX
@@ -84897,7 +84897,7 @@ C   DELETE IO(1) BY SHIFTING DOWN BY 1
 C   DELETE IO(2) BY SHIFTING DOWN BY 2 AND INSERT IN(1)
       NL = NF - 2
       NF = 1 + TINDX(IN(2),IO(IP2),IADJ,IEND)
-      IF (NF .LE. NL) CALL SHIFTD(NF,NL,2, IADJ )
+      IF (NF .LE. NL) CALL SHIFTD(NF,NL,2, IADJ)
       IADJ(NF+1) = IN(1)
       IMIN = IN(2)
       IMAX = IO(1) - 1
@@ -84907,7 +84907,7 @@ C   DELETE IO(2) BY SHIFTING DOWN BY 2 AND INSERT IN(1)
 C   SHIFT DOWN BY 1 AND INSERT IN(2)
       NL = NF - 1
       NF = 1 + TINDX(IN(1),IO(IP1),IADJ,IEND)
-      CALL SHIFTD(NF,NL,1, IADJ )
+      CALL SHIFTD(NF,NL,1, IADJ)
       IADJ(NF) = IN(2)
       IMIN = IN(1)
       IMAX = IN(2) - 1
@@ -84916,7 +84916,7 @@ C   SHIFT DOWN BY 1 AND INSERT IN(2)
       END DO
       END SUBROUTINE SWAPD
 
-      LOGICAL FUNCTION SWPTST (IN1,IN2,IO1,IO2,X,Y)
+      LOGICAL FUNCTION SWPTST(IN1,IN2,IO1,IO2,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN1, IN2, IO1, IO2
       REAL, INTENT(IN) :: X(*), Y(*)
@@ -84994,7 +84994,7 @@ C COMPUTE VECTOR CROSS PRODUCTS
     1 SWPTST = .TRUE.
       END FUNCTION SWPTST
 
-      INTEGER FUNCTION TINDX (NVERTX,NABOR,IADJ,IEND)
+      INTEGER FUNCTION TINDX(NVERTX,NABOR,IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NVERTX, NABOR, IADJ(*), IEND(*)
       INTEGER :: NB, INDX
@@ -85028,7 +85028,7 @@ C SEARCH THE LIST OF NVERTX NEIGHBORS FOR NB
       TINDX = INDX
       END FUNCTION TINDX
 
-      SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
+      SUBROUTINE TRFIND(NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NST, IADJ(*), IEND(*)
       INTEGER, INTENT(INOUT) :: I1, I2, I3
@@ -85112,17 +85112,17 @@ C N0 IS A BOUNDARY NODE.  SET NL TO THE LAST NONZERO
 C   NEIGHBOR OF N0.
       IND = IEND(N0) - 1
       NL = IADJ(IND)
-      IF ( LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) ) GO TO 2
+      IF (LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP)) GO TO 2
 C P IS OUTSIDE THE BOUNDARY
       NL = N0
       GO TO 16
-    2 IF ( LEFT(X(NL),Y(NL),X(N0),Y(N0),XP,YP) ) GO TO 4
+    2 IF (LEFT(X(NL),Y(NL),X(N0),Y(N0),XP,YP)) GO TO 4
 C P IS OUTSIDE THE BOUNDARY AND N0 IS THE RIGHTMOST
 C   VISIBLE BOUNDARY NODE
       I1 = N0
       GO TO 18
 C N0 IS AN INTERIOR NODE.  FIND N1.
-    3 IF ( LEFT(X(N0),Y(N0),X(N1),Y(N1),XP,YP) ) GO TO 4
+    3 IF (LEFT(X(N0),Y(N0),X(N1),Y(N1),XP,YP)) GO TO 4
       INDX = INDX + 1
       N1 = IADJ(INDX)
       IF (N1 .EQ. NL) GO TO 7
@@ -85131,11 +85131,11 @@ C P IS TO THE LEFT OF ARC N0-N1.  INITIALIZE N2 TO THE NEXT
 C   NEIGHBOR OF N0.
     4 INDX = INDX + 1
       N2 = IADJ(INDX)
-      IF ( .NOT. LEFT(X(N0),Y(N0),X(N2),Y(N2),XP,YP) )
+      IF (.NOT. LEFT(X(N0),Y(N0),X(N2),Y(N2),XP,YP))
      .   GO TO 8
       N1 = N2
       IF (N1 .NE. NL) GO TO 4
-      IF ( .NOT. LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) )
+      IF (.NOT. LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP))
      .   GO TO 7
       IF (XP .EQ. X(N0) .AND. YP .EQ. Y(N0)) GO TO 6
 C P IS LEFT OF OR ON ARCS N0-NB FOR ALL NEIGHBORS NB
@@ -85144,7 +85144,7 @@ C ALL POINTS ARE COLLINEAR IFF P IS LEFT OF NB-N0 FOR
 C   ALL NEIGHBORS NB OF N0.  SEARCH THE NEIGHBORS OF N0
 C   IN REVERSE ORDER.  NOTE -- N1 = NL AND INDX POINTS TO
 C   NL.
-    5 IF ( .NOT. LEFT(X(N1),Y(N1),X(N0),Y(N0),XP,YP) )
+    5 IF (.NOT. LEFT(X(N1),Y(N1),X(N0),Y(N0),XP,YP))
      .   GO TO 6
       IF (N1 .EQ. NF) GO TO 20
       INDX = INDX - 1
@@ -85159,7 +85159,7 @@ C P IS BETWEEN ARCS N0-N1 AND N0-NF
 C P IS CONTAINED IN A CONE DEFINED BY LINE SEGMENTS N0-N1
 C   AND N0-N2 WHERE N1 IS ADJACENT TO N2
     8 N3 = N0
-    9 IF ( LEFT(X(N1),Y(N1),X(N2),Y(N2),XP,YP) ) GO TO 13
+    9 IF (LEFT(X(N1),Y(N1),X(N2),Y(N2),XP,YP)) GO TO 13
 C SET N4 TO THE FIRST NEIGHBOR OF N2 FOLLOWING N1
       INDX = IEND(N2)
       IF (IADJ(INDX) .NE. N1) GO TO 10
@@ -85180,7 +85180,7 @@ C P IS OUTSIDE THE BOUNDARY
       GO TO 16
 C DEFINE A NEW ARC N1-N2 WHICH INTERSECTS THE LINE
 C   SEGMENT N0-P
-   11 IF ( LEFT(X(N0),Y(N0),X(N4),Y(N4),XP,YP) ) GO TO 12
+   11 IF (LEFT(X(N0),Y(N0),X(N4),Y(N4),XP,YP)) GO TO 12
       N3 = N2
       N2 = N4
       GO TO 9
@@ -85196,7 +85196,7 @@ C N1 IS A BOUNDARY NODE.  N3-N1 IS A BOUNDARY ARC IFF N3
 C   IS THE LAST NONZERO NEIGHBOR OF N1.
       IF (N3 .NE. IADJ(INDX-1)) GO TO 14
 C N3-N1 IS A BOUNDARY ARC
-      IF ( .NOT. LEFT(X(N1),Y(N1),X(N3),Y(N3),XP,YP) )
+      IF (.NOT. LEFT(X(N1),Y(N1),X(N3),Y(N3),XP,YP))
      .   GO TO 14
 C P LIES ON N1-N3
       I1 = N1
@@ -85209,7 +85209,7 @@ C   BOUNDARY ARC IFF N2 IS THE FIRST NEIGHBOR OF N1.
       IF (N1 .NE. 1) INDX = IEND(N1-1) + 1
       IF (N2 .NE. IADJ(INDX)) GO TO 15
 C N1-N2 IS A BOUNDARY ARC
-      IF ( .NOT. LEFT(X(N2),Y(N2),X(N1),Y(N1),XP,YP) )
+      IF (.NOT. LEFT(X(N2),Y(N2),X(N1),Y(N1),XP,YP))
      .   GO TO 15
 C P LIES ON N1-N2
       I1 = N2
@@ -85227,7 +85227,7 @@ C SET NEXT TO THE FIRST NEIGHBOR OF NF.
    16 INDX = 1
       IF (NF .NE. 1) INDX = IEND(NF-1) + 1
       NEXT = IADJ(INDX)
-      IF ( LEFT(X(NF),Y(NF),X(NEXT),Y(NEXT),XP,YP) )
+      IF (LEFT(X(NF),Y(NF),X(NEXT),Y(NEXT),XP,YP))
      .   GO TO 17
       NF = NEXT
       GO TO 16
@@ -85238,7 +85238,7 @@ C   CANDIDATE FOR I2.
 C SET NEXT TO THE LAST NEIGHBOR OF NL.
    18 INDX = IEND(NL) - 1
       NEXT = IADJ(INDX)
-      IF ( LEFT(X(NEXT),Y(NEXT),X(NL),Y(NL),XP,YP) )
+      IF (LEFT(X(NEXT),Y(NEXT),X(NL),Y(NL),XP,YP))
      .   GO TO 19
       NL = NEXT
       GO TO 18
@@ -85252,7 +85252,7 @@ C ALL POINTS ARE COLLINEAR
       I3 = 0
       END SUBROUTINE TRFIND
 
-      SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+      SUBROUTINE GRADG(N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -85271,14 +85271,14 @@ C-----------------------------------------------------------------------
          ZXZY(1,J) = 0.0
          ZXZY(2,J) = 0.0
       END DO
-      CALL GRADG1 (N, X, Y, Z, IADJ, IEND, EPS, MITER, ZXZY, IERR)
+      CALL GRADG1(N, X, Y, Z, IADJ, IEND, EPS, MITER, ZXZY, IERR)
       IERR = 0
       RETURN
 C     ERROR RETURN
    20 IERR = 1
       END SUBROUTINE GRADG
 
-      SUBROUTINE GRADG1 (N,X,Y,Z,IADJ,IEND,EPS, NIT,
+      SUBROUTINE GRADG1(N,X,Y,Z,IADJ,IEND,EPS, NIT,
      .                   ZXZY, IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, IADJ(*), IEND(N)
@@ -85426,8 +85426,8 @@ C   UPDATE THE SYSTEM COMPONENTS FOR NODE NB
           A11 = A11 + DELXS/DCUB
           A12 = A12 + DELX*DELY/DCUB
           A22 = A22 + DELYS/DCUB
-          T = ( 1.5*(Z(NB)-ZK) - ((ZXZY(1,NB)/2.+ZXK)*DELX +
-     .          (ZXZY(2,NB)/2.+ZYK)*DELY) )/DCUB
+          T = (1.5*(Z(NB)-ZK) - ((ZXZY(1,NB)/2.+ZXK)*DELX +
+     .          (ZXZY(2,NB)/2.+ZYK)*DELY))/DCUB
           R1 = R1 + T*DELX
           R2 = R2 + T*DELY
     2     CONTINUE
@@ -85455,7 +85455,7 @@ C PARAMETER OUT OF RANGE
       IER = 2
       END SUBROUTINE GRADG1
 
-      SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+      SUBROUTINE GRADL(N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
@@ -85469,7 +85469,7 @@ C                      DERIVATIVE ESTIMATION
 C-----------------------------------------------------------------------
       IF (N .LT. 3) GO TO 20
       DO J = 1,N
-         CALL GRADL1 (N, J, X, Y, Z, IADJ, IEND, ZXZY(1,J),
+         CALL GRADL1(N, J, X, Y, Z, IADJ, IEND, ZXZY(1,J),
      *               ZXZY(2,J), IERR)
          IF (IERR .LT. 0) GO TO 30
       END DO
@@ -85481,7 +85481,7 @@ C     ERROR RETURN
    30 IERR = 2
       END SUBROUTINE GRADL
 
-      SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
+      SUBROUTINE GRADL1(N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, K, IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N), IER
@@ -85612,13 +85612,13 @@ C   SET NPTS TO THE CLOSEST LMIN-1 NODES TO K.
       NPTS(1) = KK
       LM1 = LMIN - 1
       DO LNP = 2,LM1
-        CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, DS,IERR)
+        CALL GETNP(X,Y,IADJ,IEND,LNP, NPTS, DS,IERR)
         SUM = SUM + DS
       END DO
 C ADD ADDITIONAL NODES TO NPTS UNTIL THE RELATIVE INCREASE
 C   IN DS IS AT LEAST RTOL.
       DO LNP = LMIN,LMAX
-        CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, RS,IERR)
+        CALL GETNP(X,Y,IADJ,IEND,LNP, NPTS, RS,IERR)
         IF ((RS-DS)/DS .LE. RTOL) GO TO 2
         IF (LNP .GT. 6) GO TO 3
     2   SUM = SUM + RS
@@ -85642,15 +85642,15 @@ C   THE LOWER TRIANGLE (UPPER TRIANGLE OF A) WITH GIVENS
 C   ROTATIONS
       DO I = 1,5
         NP = NPTS(I+1)
-        CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
+        CALL SETRM(XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
      .              R, A(1,I))
         IF (I .EQ. 1) GO TO 5
         IM1 = I - 1
         DO J = 1,IM1
           JP1 = J + 1
           L = 6 - J
-          CALL SROTG (A(J,J),A(J,I),C,S)
-          CALL SROT (L,A(JP1,J),1,A(JP1,I),1,C,S)
+          CALL SROTG(A(J,J),A(J,I),C,S)
+          CALL SROT(L,A(JP1,J),1,A(JP1,I),1,C,S)
         END DO
     5   CONTINUE
       END DO
@@ -85659,25 +85659,25 @@ C   THE LAST COLUMN OF A -- I .LE. LNP.
       I = 7
     6   IF (I .EQ. LNP) GO TO 8
         NP = NPTS(I)
-        CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
+        CALL SETRM(XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
      .              R, A(1,6))
         DO J = 1,5
           JP1 = J + 1
           L = 6 - J
-          CALL SROTG (A(J,J),A(J,6),C,S)
-          CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
+          CALL SROTG(A(J,J),A(J,6),C,S)
+          CALL SROT(L,A(JP1,J),1,A(JP1,6),1,C,S)
         END DO
         I = I + 1
         GO TO 6
 C TEST THE SYSTEM FOR ILL-CONDITIONING
-    8 DMIN = AMIN1( ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)),
-     .              ABS(A(4,4)),ABS(A(5,5)) )
+    8 DMIN = AMIN1(ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)),
+     .              ABS(A(4,4)),ABS(A(5,5)))
       IF (DMIN .GE. DTOL) GO TO 15
       IF (LNP .GT. LMAX) GO TO 9
 C ADD ANOTHER NODE TO THE SYSTEM AND INCREASE R --
 C   I .EQ. LNP
       LNP = LNP + 1
-      IF (LNP .LE. LMAX) CALL GETNP (X,Y,IADJ,IEND,LNP,
+      IF (LNP .LE. LMAX) CALL GETNP(X,Y,IADJ,IEND,LNP,
      .                               NPTS, RS,IERR)
       R = SQRT(1.1*RS)
       GO TO 6
@@ -85693,34 +85693,34 @@ C   THREE EQUATIONS.
         DO J = I,5
           JP1 = J + 1
           L = 6 - J
-          CALL SROTG (A(J,J),A(J,6),C,S)
-          CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
+          CALL SROTG(A(J,J),A(J,6),C,S)
+          CALL SROT(L,A(JP1,J),1,A(JP1,6),1,C,S)
         END DO
       END DO
       GO TO 14
 C 4 .LE. LNP .LE. 6 (2, 3, OR 4 EQUATIONS) -- FIT A PLANE TO
 C   THE DATA USING THE LAST 3 COLUMNS OF A.
    12 NP = NPTS(2)
-      CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
+      CALL SETRM(XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
      .            R, A(1,4))
       NP = NPTS(3)
-      CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
+      CALL SETRM(XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
      .            R, A(1,5))
-      CALL SROTG (A(4,4),A(4,5),C,S)
-      CALL SROT (2,A(5,4),1,A(5,5),1,C,S)
+      CALL SROTG(A(4,4),A(4,5),C,S)
+      CALL SROT(2,A(5,4),1,A(5,5),1,C,S)
       IF (LNP .EQ. 4) GO TO 14
       LM1 = LNP - 1
       DO I = 4,LM1
         NP = NPTS(I)
-        CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
+        CALL SETRM(XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ,
      .              R, A(1,6))
-        CALL SROTG (A(4,4),A(4,6),C,S)
-        CALL SROT (2,A(5,4),1,A(5,6),1,C,S)
-        CALL SROTG (A(5,5),A(5,6),C,S)
-        CALL SROT (1,A(6,5),1,A(6,6),1,C,S)
+        CALL SROTG(A(4,4),A(4,6),C,S)
+        CALL SROT(2,A(5,4),1,A(5,6),1,C,S)
+        CALL SROTG(A(5,5),A(5,6),C,S)
+        CALL SROT(1,A(6,5),1,A(6,6),1,C,S)
       END DO
 C TEST THE LINEAR FIT FOR ILL-CONDITIONING
-   14 DMIN = AMIN1( ABS(A(4,4)),ABS(A(5,5)) )
+   14 DMIN = AMIN1(ABS(A(4,4)),ABS(A(5,5)))
       IF (DMIN .LT. DTOL) GO TO 17
 C SOLVE THE 2 BY 2 TRIANGULAR SYSTEM FOR THE DERIVATIVES
    15 DY = A(6,5)/A(5,5)
@@ -85735,7 +85735,7 @@ C NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
    17 IER = -2
       END SUBROUTINE GRADL1
 
-      SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
+      SUBROUTINE SETRM(XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
       IMPLICIT NONE
       REAL, INTENT(IN) :: XK, YK, ZK, XI, YI, ZI, S1, S2, R
       REAL, INTENT(INOUT) :: ROW(6)
@@ -85801,7 +85801,7 @@ C   OF INFLUENCE.  SET ROW TO THE ZERO VECTOR.
       END DO
       END SUBROUTINE SETRM
 
-      SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
+      SUBROUTINE GETNP(X,Y,IADJ,IEND,L, NPTS, DS,IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(*)
@@ -85917,7 +85917,7 @@ C L IS OUT OF RANGE
     4 IER = 1
       END SUBROUTINE GETNP
 
-      SUBROUTINE SFVAL (N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND,
+      SUBROUTINE SFVAL(N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND,
      *                  ZXZY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -85935,7 +85935,7 @@ C-----------------------------------------------------------------------
       IF (N .LT. 3 .OR. M .LT. 1) GO TO 20
       IST = 1
       DO J = 1,M
-         CALL INTRC1 (N, XI(J), YI(J), X, Y, Z, IADJ, IEND,
+         CALL INTRC1(N, XI(J), YI(J), X, Y, Z, IADJ, IEND,
      *                1, ZXZY, IST, ZI(J), IERR)
          IF (IERR .LT. 0) GO TO 30
       END DO
@@ -85947,7 +85947,7 @@ C     ERROR RETURN
    30 IERR = 2
       END SUBROUTINE SFVAL
 
-      SUBROUTINE SFVAL2 (N, X, Y, Z, L, M, NROWS, XI, YI, ZI,
+      SUBROUTINE SFVAL2(N, X, Y, Z, L, M, NROWS, XI, YI, ZI,
      *                   IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -85967,7 +85967,7 @@ C-----------------------------------------------------------------------
       IST = 1
       DO J = 1,M
          DO I = 1,L
-            CALL INTRC1 (N, XI(I), YI(J), X, Y, Z, IADJ, IEND,
+            CALL INTRC1(N, XI(I), YI(J), X, Y, Z, IADJ, IEND,
      *                   1, ZXZY, IST, ZI(I,J), IERR)
             IF (IERR .LT. 0) GO TO 40
          END DO
@@ -85980,7 +85980,7 @@ C     ERROR RETURN
    40 IERR = 2
       END SUBROUTINE SFVAL2
 
-      SUBROUTINE INTRC1 (N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG,
+      SUBROUTINE INTRC1(N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG,
      .                   ZXZY, IST, PZ,IER)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, IADJ(*)
@@ -86210,7 +86210,7 @@ C NODES ARE COLLINEAR
    12 IER = -2
       END SUBROUTINE INTRC1
 
-      SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1,
+      SUBROUTINE TVAL(X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1,
      .                 ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY,
      .                 IER)
       IMPLICIT NONE
@@ -86566,8 +86566,8 @@ C     ****************
 C     ***************
       CALL ALLOT(FITDEG,NFPOLS,NFPTS,DIMEN,FITIWK,FIWKLN,IREQD,DREQD,
      +           ERROR)
-      IF ( ERROR .GE. 2 ) RETURN
-      IF ( FDWKLN .GE. DREQD ) GO TO 10
+      IF (ERROR .GE. 2) RETURN
+      IF (FDWKLN .GE. DREQD) GO TO 10
          ERROR = 4
          RETURN
    10 CONTINUE
@@ -86679,9 +86679,9 @@ C     BASED PRIMARILY UPON THE DEGREE, NUMBER OF  FITTING POINTS,
 C     AND THE DIMENSION.
 C     ***************
       CALL BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
-      IF ( ERROR .GE. 2 ) RETURN
+      IF (ERROR .GE. 2) RETURN
       IREQD = 4 * NPOLYS + DEGREE * DIMEN
-      IF ( IWKLEN .GE. IREQD ) GO TO 5
+      IF (IWKLEN .GE. IREQD) GO TO 5
          ERROR = 4
          RETURN
  5    NEWSTT = 4 * NPOLYS + 1
@@ -86698,7 +86698,7 @@ C     ***************
 C     FORCE  ALFL  TO BE AT LEAST 1 SO THAT DIMENSION STATEMENTS
 C     USING  ALFL  DO NOT BOMB.
 C     ***************
-      IF ( ALFL .GT. 1 ) ALFL = ALFL - 1
+      IF (ALFL .GT. 1) ALFL = ALFL - 1
       IWORK(4) = ALFL
 C     ***************
 C     THE FOLLOWING IS A SECTION OF CODE FOR SETTING UP THE
@@ -86731,7 +86731,7 @@ C                           NEWKJ(K+1,DEGREE(NPOLYS)-2)    (CASE 3)
 C                         AND
 C                           INDEXS(3,NPOLYS)               (CASE 4)
 C                        )
-      IF ( DEGREE .GT. 2 ) GO TO 10
+      IF (DEGREE .GT. 2) GO TO 10
 C     ***************
 C     CASE 1
 C     ***************
@@ -86743,7 +86743,7 @@ C     KMXBAS  IS K
 C                 NPOLYS
 C     ***************
          KMXBAS = IWORK(NPLYT4 - 2)
-         IF ( KMXBAS .NE. DIMEN ) GO TO 20
+         IF (KMXBAS .NE. DIMEN) GO TO 20
 C     ***************
 C     CASE 2
 C     ***************
@@ -86759,7 +86759,7 @@ C     ***************
 C     STARTJ  =  INDEXS(3,NPOLYS)
 C     ***************
             STARTJ = IWORK(NPLYT4 - 1)
-            IF ( STARTJ .GT. KJP1D2 ) GO TO 30
+            IF (STARTJ .GT. KJP1D2) GO TO 30
 C     ***************
 C     CASE 4
 C     ***************
@@ -86813,16 +86813,16 @@ C     ---- ---- --------
 C     OCTOBER 16, 1984
 C     ****************
       ERROR = 0
-      IF ( NPTS .GE. 1 .AND. DIMEN .GE. 1 ) GO TO 10
+      IF (NPTS .GE. 1 .AND. DIMEN .GE. 1) GO TO 10
          ERROR = 3
          RETURN
  10   CONTINUE
-      IF ( DEGREE .LT. 0 ) GO TO 30
+      IF (DEGREE .LT. 0) GO TO 30
         ROWLEN = 1
         NPOLYS = 1
         TOP = DIMEN - 1
         BOT = 0
-        IF ( DEGREE .LT. 1 )  GO TO 30
+        IF (DEGREE .LT. 1)  GO TO 30
           DO I=1,DEGREE
             TOP = TOP + 1
             BOT = BOT + 1
@@ -86830,11 +86830,11 @@ C     ****************
             NPOLYS = NPOLYS + ROWLEN
           END DO
    30 CONTINUE
-      IF ( NPOLYS .GE. 1 ) GO TO 40
+      IF (NPOLYS .GE. 1) GO TO 40
             ERROR = 2
             RETURN
    40 CONTINUE
-      IF ( NPOLYS .LT. NPTS ) GO TO 50
+      IF (NPOLYS .LT. NPTS) GO TO 50
             NPOLYS = NPTS
             ERROR = 1
    50 CONTINUE
@@ -86844,13 +86844,13 @@ C     ****************
       TOP = DIMEN - 1
       BOT = 0
    60 CONTINUE
-      IF ( I .GE. NPOLYS )  GO TO 70
+      IF (I .GE. NPOLYS)  GO TO 70
           TOP = TOP + 1
           BOT = BOT + 1
           ROWLEN = (ROWLEN*TOP)/BOT
           I = I + ROWLEN
           DEGREE = DEGREE + 1
-          IF ( I .LT. NPOLYS )  GO TO 60
+          IF (I .LT. NPOLYS)  GO TO 60
    70 CONTINUE
       END SUBROUTINE BASIZ
 
@@ -86928,7 +86928,7 @@ C     IS DEFINED IN THE MAINLINE TO BE  ALFLP1 -1 IF ALFLP1 .GT. 1
 C     AND  ALFLP1  OTHERWISE.
 C     ***************
       INDEXS(4,1) = 1
-      IF ( NPOLYS .EQ. 1 ) RETURN
+      IF (NPOLYS .EQ. 1) RETURN
       J = 2
       DO KJ = 1,DIMEN
          NEWKJ(KJ,1) = KJ + 1
@@ -86937,10 +86937,10 @@ C     ***************
          INDEXS(3,J) = 1
          INDEXS(4,J) = ALFLP1
          ALFLP1 = ALFLP1 + J - 1
-         IF ( J .EQ. NPOLYS ) RETURN
+         IF (J .EQ. NPOLYS) RETURN
          J = J + 1
       END DO
-      IF ( DEGREE .EQ. 1 ) RETURN
+      IF (DEGREE .EQ. 1) RETURN
       RALEN = 1
       DIMM1 = DIMEN - 1
       DIMM2 = DIMEN - 2
@@ -86952,20 +86952,20 @@ C     ***************
          KJ = 1
 20       JPRIME = NEWKJ(KJ,CURM1)
          NEWKJ(KJ,CURDEG) = J
-         IF ( KJ .EQ. DIMEN ) GO TO 60
+         IF (KJ .EQ. DIMEN) GO TO 60
             DO I = 1,NWITHK
                INDEXS(1,J) = JPRIME
                INDEXS(2,J) = KJ
 C     ***************
 C     CALCULATE  INDEXS (3, J ),  INDEXS (4, J )
 C     ***************
-               IF ( KJ .LT. INDEXS(2,JPRIME) ) GO TO 30
+               IF (KJ .LT. INDEXS(2,JPRIME)) GO TO 30
                   INDEXS(3,J) = INDEXS(1,JPRIME)
                   GO TO 40
  30            INDEXS(3,J) = NEWKJ(1,CURDEG - 1)
  40            INDEXS(4,J) = ALFLP1
                ALFLP1 = ALFLP1 + J - INDEXS(3,J)
-               IF ( J .EQ. NPOLYS ) RETURN
+               IF (J .EQ. NPOLYS) RETURN
                JPRIME = JPRIME + 1
                J = J + 1
             END DO
@@ -86977,7 +86977,7 @@ C     ***************
          INDEXS(3,J) = INDEXS(1,JPRIME)
          INDEXS(4,J) = ALFLP1
          ALFLP1 = ALFLP1 + J - INDEXS(3,J)
-         IF ( J .EQ. NPOLYS ) RETURN
+         IF (J .EQ. NPOLYS) RETURN
          J = J + 1
       END DO
       END SUBROUTINE MTABLE
@@ -87046,7 +87046,7 @@ C     ***************
       DO P = 1,NPTS
          Z(P) = F(P) - C(1)
       END DO
-      IF ( NPOLYS .EQ. 1 ) RETURN
+      IF (NPOLYS .EQ. 1) RETURN
       STTDEG = 1
       ONPLYS = 1
       CALL INCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,SUMSQS,
@@ -87087,10 +87087,10 @@ C      GNRTP .
 C     THIS SUBROUTINE IS CALLED BY  GNRTP  AND NOT BY THE USER.
 C     MODIFIED BY A.H. MORRIS (NSWC)
 C     ****************
-      IF ( ONPLYS .GE. 1 .AND. STTDEG .GE. 1 ) GO TO 10
+      IF (ONPLYS .GE. 1 .AND. STTDEG .GE. 1) GO TO 10
          ERROR = 6
       RETURN
- 10      IF ( INDEXS(2,ONPLYS) .EQ. DIMEN ) GO TO 20
+ 10      IF (INDEXS(2,ONPLYS) .EQ. DIMEN) GO TO 20
             CURDEG = STTDEG
          GO TO 30
  20         CURDEG = STTDEG + 1
@@ -87103,14 +87103,14 @@ C     ****************
          START = INDEXS(3,J)
          M = START
          STARTA = INDEXS(4,J) - START
-         IF ( CURDEG .EQ. 1 ) GO TO 100
+         IF (CURDEG .EQ. 1) GO TO 100
          KJP = INDEXS(2,JPRIME)
          J1 = NEWKJ(KJ,CURDEG - 1)
 C     ***************
 C     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
 C     PREVIOUSLY CALCULATED ALPHAS.
 C     ***************
-         IF ( KJ .LT. KJP ) GO TO 50
+         IF (KJ .LT. KJP) GO TO 50
 C     ***************
 C     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
 C     CALCULATE  ALPHA ( J , JPP )
@@ -87119,7 +87119,7 @@ C     ***************
          ALPHA(INDEX1) = SUMSQS(JPRIME) / SUMSQS(START)
          M = START + 1
          J3 = NEWKJ(1,CURDEG - 1) - 1
-         IF ( M .GT. J3 ) GO TO 50
+         IF (M .GT. J3) GO TO 50
 C     ***************
 C     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
 C     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
@@ -87140,8 +87140,8 @@ C                             K      JP    L         L    L
 C                              J
 C     ***************
          M = J3 + 1
- 50      IF ( JPRIME .EQ. J1 ) GO TO 100
-            IF ( KJ .EQ. 1 ) GO TO 80
+ 50      IF (JPRIME .EQ. J1) GO TO 100
+            IF (KJ .EQ. 1) GO TO 80
             J1M1 = J1 - 1
             DO L = M,J1M1
                RUNTOT = 0.0
@@ -87226,7 +87226,7 @@ C     ***************
               Z(P) = Z(P) - C(J) * PSI(P,JINDEX)
           END DO
           STTDEG = CURDEG
-          IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1
+          IF (KJ .EQ. DIMEN) CURDEG = CURDEG + 1
       END DO
       RETURN
 C     ***************
@@ -87265,7 +87265,7 @@ C     ****************
       MAXABS = 0.0
       DO P = 1,NPTS
          A = ABS(COORD(P))
-         IF ( A .GT. MAXABS ) MAXABS = A
+         IF (A .GT. MAXABS) MAXABS = A
       END DO
       END SUBROUTINE SCALPM
 
@@ -87285,7 +87285,7 @@ C     USER.
 C     THE SCALING WHICH THIS ROUTINE CARRIES OUT  MUST  BE  CONSISTENT
 C     WITH THE SCALING IN THE SUBROUTINES MFIT AND MEVAL1.
 C     ****************
-      IF ( MAXABS .EQ. 0.0E+00 ) RETURN
+      IF (MAXABS .EQ. 0.0E+00) RETURN
          DO P = 1,NPTS
             COORD(P) = COORD(P) / MAXABS
          END DO
@@ -87395,8 +87395,8 @@ C     FULL MULTINOMIAL DEGREE.
 C     ***************
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
       NSWC_AI_I4 = EVLDEG
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_I4 .LT. 0) GO TO 40
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
       GO TO 20
    10 NEPOLS = 1
       GO TO 50
@@ -87419,7 +87419,7 @@ C     ***************
 C     ***************
 C     THE ACTUAL EVALUATION IS DONE INSIDE  MEVAL1.
 C     ***************
-      CALL MEVAL1 (EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS,
+      CALL MEVAL1(EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS,
      +             FITDWK(ALFSTT),FITIWK,FITDWK(PSISTT),
      +             EVLVLS,ALFL,FITDWK(MAXSTT),TEMP,DIMP1)
       RETURN
@@ -87431,7 +87431,7 @@ C     ***************
   110 ERROR = -2
       END SUBROUTINE MEVAL
 
-      SUBROUTINE MEVAL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
+      SUBROUTINE MEVAL1(COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
@@ -87622,8 +87622,8 @@ C     ****************
 C     ***************
       CALL ALLOT(FITDEG,NFPOLS,NFPTS,DIMEN,FITIWK,FIWKLN,IREQD,DREQD,
      +           ERROR)
-      IF ( ERROR .GE. 2 ) RETURN
-      IF ( FDWKLN .GE. DREQD ) GO TO 10
+      IF (ERROR .GE. 2) RETURN
+      IF (FDWKLN .GE. DREQD) GO TO 10
          ERROR = 4
          RETURN
    10 CONTINUE
@@ -87724,7 +87724,7 @@ C     ***************
       DO P = 1,NPTS
          Z(P) = F(P) - C(1)
       END DO
-      IF ( NPOLYS .EQ. 1 ) RETURN
+      IF (NPOLYS .EQ. 1) RETURN
       STTDEG = 1
       ONPLYS = 1
       CALL DINCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,SUMSQS,
@@ -87765,10 +87765,10 @@ C      DGNRTP .
 C     THIS SUBROUTINE IS CALLED BY  DGNRTP  AND NOT BY THE USER.
 C     MODIFIED BY A.H. MORRIS (NSWC)
 C     ****************
-      IF ( ONPLYS .GE. 1 .AND. STTDEG .GE. 1 ) GO TO 10
+      IF (ONPLYS .GE. 1 .AND. STTDEG .GE. 1) GO TO 10
          ERROR = 6
       RETURN
- 10      IF ( INDEXS(2,ONPLYS) .EQ. DIMEN ) GO TO 20
+ 10      IF (INDEXS(2,ONPLYS) .EQ. DIMEN) GO TO 20
             CURDEG = STTDEG
          GO TO 30
  20         CURDEG = STTDEG + 1
@@ -87781,14 +87781,14 @@ C     ****************
          START = INDEXS(3,J)
          M = START
          STARTA = INDEXS(4,J) - START
-         IF ( CURDEG .EQ. 1 ) GO TO 100
+         IF (CURDEG .EQ. 1) GO TO 100
          KJP = INDEXS(2,JPRIME)
          J1 = NEWKJ(KJ,CURDEG - 1)
 C     ***************
 C     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
 C     PREVIOUSLY CALCULATED ALPHAS.
 C     ***************
-         IF ( KJ .LT. KJP ) GO TO 50
+         IF (KJ .LT. KJP) GO TO 50
 C     ***************
 C     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
 C     CALCULATE  ALPHA ( J , JPP )
@@ -87797,7 +87797,7 @@ C     ***************
          ALPHA(INDEX1) = SUMSQS(JPRIME) / SUMSQS(START)
          M = START + 1
          J3 = NEWKJ(1,CURDEG - 1) - 1
-         IF ( M .GT. J3 ) GO TO 50
+         IF (M .GT. J3) GO TO 50
 C     ***************
 C     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
 C     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
@@ -87818,8 +87818,8 @@ C                             K      JP    L         L    L
 C                              J
 C     ***************
          M = J3 + 1
- 50      IF ( JPRIME .EQ. J1 ) GO TO 100
-            IF ( KJ .EQ. 1 ) GO TO 80
+ 50      IF (JPRIME .EQ. J1) GO TO 100
+            IF (KJ .EQ. 1) GO TO 80
             J1M1 = J1 - 1
             DO L = M,J1M1
                RUNTOT = 0.D0
@@ -87904,7 +87904,7 @@ C     ***************
               Z(P) = Z(P) - C(J) * PSI(P,JINDEX)
           END DO
           STTDEG = CURDEG
-          IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1
+          IF (KJ .EQ. DIMEN) CURDEG = CURDEG + 1
       END DO
       RETURN
 C     ***************
@@ -87943,7 +87943,7 @@ C     ****************
       MAXABS = 0.D0
       DO P = 1,NPTS
          A = DABS(COORD(P))
-         IF ( A .GT. MAXABS ) MAXABS = A
+         IF (A .GT. MAXABS) MAXABS = A
       END DO
       END SUBROUTINE DSCALP
 
@@ -87963,7 +87963,7 @@ C     USER.
 C     THE SCALING WHICH THIS ROUTINE CARRIES OUT MUST  BE  CONSISTENT
 C     WITH THE SCALING IN THE SUBROUTINES DMFIT AND DMEVL1.
 C     ****************
-      IF ( MAXABS .EQ. 0.0D+00 ) RETURN
+      IF (MAXABS .EQ. 0.0D+00) RETURN
          DO P = 1,NPTS
             COORD(P) = COORD(P) / MAXABS
          END DO
@@ -88074,8 +88074,8 @@ C     FULL MULTINOMIAL DEGREE.
 C     ***************
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
       NSWC_AI_I4 = EVLDEG
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_I4 .LT. 0) GO TO 40
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
       GO TO 20
    10 NEPOLS = 1
       GO TO 50
@@ -88098,7 +88098,7 @@ C     ***************
 C     ***************
 C     THE ACTUAL EVALUATION IS DONE INSIDE  DMEVL1.
 C     ***************
-      CALL DMEVL1 (EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS,
+      CALL DMEVL1(EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS,
      +             FITDWK(ALFSTT),FITIWK,FITDWK(PSISTT),
      +             EVLVLS,ALFL,FITDWK(MAXSTT),TEMP,DIMP1)
       RETURN
@@ -88110,7 +88110,7 @@ C     ***************
   110 ERROR = -2
       END SUBROUTINE DMEVAL
 
-      SUBROUTINE DMEVL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
+      SUBROUTINE DMEVL1(COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
@@ -88184,7 +88184,7 @@ C     ***************
       END DO
       END SUBROUTINE DMEVL1
 
-      REAL FUNCTION QSUBA (F, A, B, EPSIL, MCOUNT, RELERR, IND)
+      REAL FUNCTION QSUBA(F, A, B, EPSIL, MCOUNT, RELERR, IND)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IND
       INTEGER, INTENT(IN) :: MCOUNT
@@ -88239,14 +88239,14 @@ C     APPLY QUAD TO THE ENTIRE INTERVAL
       SUB1 = AMIN1(A,B)
       SUB3 = AMAX1(A,B)
       TOL = AMAX1(EPSIL, 10.0*EPS)
-      CALL QUAD (SUB1, SUB3, RESULT, K, TOL, NPTS, ICHECK, F)
+      CALL QUAD(SUB1, SUB3, RESULT, K, TOL, NPTS, ICHECK, F)
       IF (ICHECK .EQ. 0) GO TO 100
       IS = 1
 C     SUBDIVIDE THE INTERVAL (SUB1,SUB3) INTO THE SUBINTERVALS
 C     (SUB1,SUB2) AND (SUB2,SUB3). CALL QUAD FOR (SUB1,SUB2).
    10 IF (NPTS .GE. MCOUNT) GO TO 110
       SUB2 = 0.5*(SUB1 + SUB3)
-      CALL QUAD (SUB1, SUB2, RESULT, K, TOL, NF, ICHECK, F)
+      CALL QUAD(SUB1, SUB2, RESULT, K, TOL, NF, ICHECK, F)
       NPTS = NPTS + NF
       ERR = ABS(RESULT(K) - RESULT(K-1))
       SUM = QSUBA + RESULT(K)
@@ -88269,7 +88269,7 @@ C     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
       IF (ABS(QSUBA) .LE. X) IND = 1
 C     CALL QUAD FOR THE INTERVAL (SUB2,SUB3)
    40 IF (NPTS .GE. MCOUNT) GO TO 110
-      CALL QUAD (SUB2, SUB3, RESULT, K, TOL, NF, ICHECK, F)
+      CALL QUAD(SUB2, SUB3, RESULT, K, TOL, NF, ICHECK, F)
       NPTS = NPTS + NF
       ERR = ABS(RESULT(K) - RESULT(K-1))
       SUM = QSUBA + RESULT(K)
@@ -88348,8 +88348,8 @@ C ABSCISSAE AND WEIGHTS OF QUADRATURE RULES ARE STACKED IN
 C ARRAY *P* IN THE ORDER IN WHICH THEY ARE NEEDED.
 C     --------------------
       DATA
-     * P( 1),P( 2),P( 3),P( 4),P( 5),P( 6),P( 7),
-     * P( 8),P( 9),P(10),P(11),P(12),P(13),P(14),
+     * P(1),P(2),P(3),P(4),P(5),P(6),P(7),
+     * P(8),P(9),P(10),P(11),P(12),P(13),P(14),
      * P(15),P(16),P(17),P(18),P(19),P(20),P(21),
      * P(22),P(23),P(24),P(25),P(26),P(27),P(28)/
      *  0.77459666924148337704E 00,0.55555555555555555556E 00,
@@ -88405,9 +88405,9 @@ C     --------------------
      *  0.57719571005204581484E 00,0.44914531653632197414E-01,
      *  0.48361802694584102756E 00,0.48564330406673198716E-01/
       DATA
-     * P( 85),P( 86),P( 87),P( 88),P( 89),P( 90),P( 91),
-     * P( 92),P( 93),P( 94),P( 95),P( 96),P( 97),P( 98),
-     * P( 99),P(100),P(101),P(102),P(103),P(104),P(105),
+     * P(85),P(86),P(87),P(88),P(89),P(90),P(91),
+     * P(92),P(93),P(94),P(95),P(96),P(97),P(98),
+     * P(99),P(100),P(101),P(102),P(103),P(104),P(105),
      * P(106),P(107),P(108),P(109),P(110),P(111),P(112)/
      *  0.38335932419873034692E 00,0.51583253952048458777E-01,
      *  0.27774982202182431507E 00,0.53905499335266063927E-01,
@@ -88643,8 +88643,8 @@ C CONTRIBUTION FROM NEW FUNCTION VALUES.
       I = I + 1
       RESULT(K) = (ACUM+P(I)*FZERO)*DIFF
 C CHECK FOR CONVERGENCE.
-      IF ( ( ABS ( RESULT ( K ) - RESULT ( K - 1 ) ) - EPSIL * ABS (
-     &RESULT ( K ) ) ) .LE. 0 ) GO TO 60
+      IF ((ABS(RESULT(K) - RESULT(K - 1)) - EPSIL * ABS(
+     &RESULT(K))) .LE. 0) GO TO 60
       GO TO 10
 C CONVERGENCE NOT ACHIEVED.
    50 ICHECK = 1
@@ -88658,7 +88658,7 @@ C TRIVIAL CASE
       NPTS = 0
       END SUBROUTINE QUAD
 
-      SUBROUTINE QAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
+      SUBROUTINE QAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       REAL :: F
@@ -88810,11 +88810,11 @@ C         PREPARE CALL FOR QAGSE.
       L1 = LIMIT + 1
       L2 = LIMIT + L1
       L3 = LIMIT + L2
-      CALL QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
+      CALL QAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
      *        IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       END SUBROUTINE QAGS
 
-      SUBROUTINE QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      SUBROUTINE QAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *              NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -89035,7 +89035,7 @@ C            -----------------------
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
-      CALL QK21F (F, A, B, RESULT, ABSERR, DEFABS, RESABS,
+      CALL QK21F(F, A, B, RESULT, ABSERR, DEFABS, RESABS,
      *            EPMACH, UFLOW, ID)
       IF (ID .NE. 0) GO TO 999
       NEVAL = 21
@@ -89081,10 +89081,10 @@ C           ERROR ESTIMATE.
         A2 = B1
         B2 = BLIST(MAXERR)
         ERLAST = ERRMAX
-        CALL QK21F (F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1,
+        CALL QK21F(F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1,
      *              EPMACH, UFLOW, IER)
-        IF ( IER .NE. 0 ) EXIT
-        CALL QK21F (F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2,
+        IF (IER .NE. 0) EXIT
+        CALL QK21F(F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2,
      *              EPMACH, UFLOW, IER)
         NEVAL = NEVAL + 42
 C           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
@@ -89132,11 +89132,11 @@ C           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 C           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 C           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 C           BISECTED NEXT).
-   30   CALL QPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+   30   CALL QPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
 C ***JUMP OUT OF DO-LOOP
         IF (ERRSUM .LE. ERRBND) GO TO 115
 C ***JUMP OUT OF DO-LOOP
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -89165,7 +89165,7 @@ C ***JUMP OUT OF DO-LOOP
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL QELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
+        CALL QELG(NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
      *             EPMACH, OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
@@ -89176,10 +89176,10 @@ C           PERFORM EXTRAPOLATION.
         CORREC = ERLARG
         ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -89220,7 +89220,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE QAGSE
 
-      SUBROUTINE QK21F (F, A, B, RESULT, ABSERR, RESABS, RESASC,
+      SUBROUTINE QK21F(F, A, B, RESULT, ABSERR, RESABS, RESASC,
      *                  EPMACH, UFLOW, ISIG)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: ISIG
@@ -89371,7 +89371,7 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR,TOL*RESABS)
       END SUBROUTINE QK21F
 
-      SUBROUTINE QAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
+      SUBROUTINE QAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IER
@@ -89531,11 +89531,11 @@ C         PREPARE CALL FOR QAGIE.
       L1 = LIMIT + 1
       L2 = LIMIT + L1
       L3 = LIMIT + L2
-      CALL QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      CALL QAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *  NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       END SUBROUTINE QAGI
 
-      SUBROUTINE QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      SUBROUTINE QAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                  NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -89771,7 +89771,7 @@ C           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 C           I2 = INTEGRAL OF F OVER (0,+INFINITY).
       BOUN = BOUND
       IF (INF .EQ. 2) BOUN = 0.0
-      CALL QK15I (F, BOUN, INF, 0.0, 1.0, RESULT, ABSERR,
+      CALL QK15I(F, BOUN, INF, 0.0, 1.0, RESULT, ABSERR,
      *            DEFABS, RESABS, EPMACH, UFLOW)
 C           TEST ON ACCURACY
       LAST = 1
@@ -89817,9 +89817,9 @@ C           ERROR ESTIMATE.
         A2 = B1
         B2 = BLIST(MAXERR)
         ERLAST = ERRMAX
-        CALL QK15I (F, BOUN, INF, A1, B1, AREA1, ERROR1,
+        CALL QK15I(F, BOUN, INF, A1, B1, AREA1, ERROR1,
      *              RESABS, DEFAB1, EPMACH, UFLOW)
-        CALL QK15I (F, BOUN, INF, A2, B2, AREA2, ERROR2,
+        CALL QK15I(F, BOUN, INF, A2, B2, AREA2, ERROR2,
      *              RESABS, DEFAB2, EPMACH, UFLOW)
 C           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 C           AND ERROR AND TEST FOR ACCURACY.
@@ -89867,9 +89867,9 @@ C           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 C           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 C           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 C           BISECTED NEXT).
-   30   CALL QPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+   30   CALL QPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
         IF (ERRSUM .LE. ERRBND) GO TO 115
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -89897,7 +89897,7 @@ C           EXTRAPOLATION.
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL QELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
+        CALL QELG(NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
      *             EPMACH, OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
@@ -89907,10 +89907,10 @@ C           PERFORM EXTRAPOLATION.
         RESULT = RESEPS
         CORREC = ERLARG
         ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -89953,7 +89953,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE QAGIE
 
-      SUBROUTINE QK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
+      SUBROUTINE QK15I(F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                  RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
@@ -90183,7 +90183,7 @@ C           NRMAX-TH LARGEST ERROR ESTIMATE.
       DO I = 1,IDO
         ISUCC = IORD(NRMAX-1)
 C ***JUMP OUT OF DO-LOOP
-        IF ( ERRMAX .LE. ELIST ( ISUCC ) ) EXIT
+        IF (ERRMAX .LE. ELIST(ISUCC)) EXIT
         IORD(NRMAX) = ISUCC
         NRMAX = NRMAX-1
          END DO
@@ -90226,7 +90226,7 @@ C           SET MAXERR AND ERMAX.
       ERMAX = ELIST(MAXERR)
       END SUBROUTINE QPSRT
 
-      SUBROUTINE QELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
+      SUBROUTINE QELG(N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
      *                 EPMACH, OFLOW)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: N, NRES
@@ -90381,7 +90381,7 @@ C           COMPUTE ERROR ESTIMATE
   100 ABSERR = AMAX1(ABSERR,5.0*EPMACH*ABS(RESULT))
       END SUBROUTINE QELG
 
-      SUBROUTINE QXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
+      SUBROUTINE QXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                 LIMIT,LENIW,LENW,LAST,IWORK,WORK)
       IMPLICIT NONE
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
@@ -90715,7 +90715,7 @@ C           -----------------------------------
       LN(1) = 1
       VALP(1,1) = F((A + B)*0.5)
       VALN(1,1) = VALP(1,1)
-      CALL QXLQM (F,A,B,RESULT,ABSERR,DEFABS,RESABS,
+      CALL QXLQM(F,A,B,RESULT,ABSERR,DEFABS,RESABS,
      *            VALP(1,1),VALN(1,1),LP(1),LN(1),2,
      *            EPMACH,UFLOW,OFLOW)
 C           TEST ON ACCURACY.
@@ -90829,7 +90829,7 @@ C           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
 C ***JUMP OUT OF DO-LOOP
         IF(ERRSUM .LE. ERRBND) GO TO 115
 C ***JUMP OUT OF DO-LOOP
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -90860,7 +90860,7 @@ C ***JUMP OUT OF DO-LOOP
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL QELG (NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES,
+        CALL QELG(NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES,
      *             EPMACH,OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
@@ -90871,10 +90871,10 @@ C           PERFORM EXTRAPOLATION.
         CORREC = ERLARG
         ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -90915,7 +90915,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE QXGSE
 
-      SUBROUTINE QXCPY (A, B, L)
+      SUBROUTINE QXCPY(A, B, L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       REAL, INTENT(INOUT) :: A(L)
@@ -90928,7 +90928,7 @@ C          THE REAL VECTOR A OF LENGTH L
       END DO
       END SUBROUTINE QXCPY
 
-      SUBROUTINE QXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
+      SUBROUTINE QXLQM(F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                  KEY,EPMACH,UFLOW,OFLOW)
       IMPLICIT NONE
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -91008,24 +91008,24 @@ C***ROUTINES CALLED  QXRUL
       K0   = MAX0(KEY1-2,0)
       K1   = K0 + 1
       K2   = MIN0(KEY1+1,3)
-      CALL QXRUL (F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
+      CALL QXRUL(F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
       ERROLD = OFLOW
       T = 10.0*EPMACH
       DO K = K1,K2
-        CALL QXRUL (F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
+        CALL QXRUL(F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
         RESULT = RESK
         ABSERR = ABS(RESK - RESG)
         IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0)
      *      ABSERR = RESASC*AMIN1(1.0,(200.0*ABSERR/RESASC)**1.5)
         IF (RESABS .GT. UFLOW/T) ABSERR = AMAX1(T*RESABS,ABSERR)
         RESG = RESK
-        IF ( ABSERR .GT. ERROLD * 0.16 ) EXIT
-        IF ( ABSERR .LT. 1000.0 * EPMACH * RESABS ) EXIT
+        IF (ABSERR .GT. ERROLD * 0.16) EXIT
+        IF (ABSERR .LT. 1000.0 * EPMACH * RESABS) EXIT
         ERROLD = ABSERR
       END DO
       END SUBROUTINE QXLQM
 
-      SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      SUBROUTINE QXRUL(F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
       REAL :: F
       REAL, INTENT(IN) :: XL, XU
@@ -91098,15 +91098,15 @@ C------------------------
       DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
       DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
 C------------------------
-      DATA XX( 1)/.0                       /
-      DATA XX( 2)/.25000000000000000000E+00/
-      DATA XX( 3)/.50000000000000000000E+00/
-      DATA XX( 4)/.75000000000000000000E+00/
-      DATA XX( 5)/.87500000000000000000E+00/
-      DATA XX( 6)/.93750000000000000000E+00/
-      DATA XX( 7)/.10000000000000000000E+01/
-      DATA XX( 8)/.37500000000000000000E+00/
-      DATA XX( 9)/.62500000000000000000E+00/
+      DATA XX(1)/.0                       /
+      DATA XX(2)/.25000000000000000000E+00/
+      DATA XX(3)/.50000000000000000000E+00/
+      DATA XX(4)/.75000000000000000000E+00/
+      DATA XX(5)/.87500000000000000000E+00/
+      DATA XX(6)/.93750000000000000000E+00/
+      DATA XX(7)/.10000000000000000000E+01/
+      DATA XX(8)/.37500000000000000000E+00/
+      DATA XX(9)/.62500000000000000000E+00/
       DATA XX(10)/.96875000000000000000E+00/
       DATA XX(11)/.12500000000000000000E+00/
       DATA XX(12)/.68750000000000000000E+00/
@@ -91210,7 +91210,7 @@ C------------------------
       YM = YM*ABS(BB)
       END SUBROUTINE QXRUL
 
-      SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
+      SUBROUTINE QXRRD(F,Z,LZ,XL,XU,R,S,LR,LS)
       IMPLICIT NONE
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -91295,7 +91295,7 @@ C***ROUTINES CALLED  F
       LS = 11
       END SUBROUTINE QXRRD
 
-      SUBROUTINE DQAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
+      SUBROUTINE DQAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: LAST
@@ -91449,11 +91449,11 @@ C         PREPARE CALL FOR DQAGSE.
       L1 = LIMIT + 1
       L2 = LIMIT + L1
       L3 = LIMIT + L2
-      CALL DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
+      CALL DQAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
      *         IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       END SUBROUTINE DQAGS
 
-      SUBROUTINE DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      SUBROUTINE DQAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *               NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -91675,7 +91675,7 @@ C            -----------------------
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
-      CALL DQK21 (F, A, B, RESULT, ABSERR, DEFABS, RESABS,
+      CALL DQK21(F, A, B, RESULT, ABSERR, DEFABS, RESABS,
      *            EPMACH, UFLOW, ID)
       IF (ID .NE. 0) GO TO 999
       NEVAL = 21
@@ -91721,10 +91721,10 @@ C           ERROR ESTIMATE.
         A2 = B1
         B2 = BLIST(MAXERR)
         ERLAST = ERRMAX
-        CALL DQK21 (F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1,
+        CALL DQK21(F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1,
      *              EPMACH, UFLOW, IER)
-        IF ( IER .NE. 0 ) EXIT
-        CALL DQK21 (F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2,
+        IF (IER .NE. 0) EXIT
+        CALL DQK21(F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2,
      *              EPMACH, UFLOW, IER)
         NEVAL = NEVAL + 42
 C           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
@@ -91772,11 +91772,11 @@ C           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
 C           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 C           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 C           BISECTED NEXT).
-   30   CALL DQPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+   30   CALL DQPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
 C ***JUMP OUT OF DO-LOOP
         IF (ERRSUM .LE. ERRBND) GO TO 115
 C ***JUMP OUT OF DO-LOOP
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -91805,7 +91805,7 @@ C ***JUMP OUT OF DO-LOOP
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL DQELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
+        CALL DQELG(NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
      *              EPMACH, OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
@@ -91816,10 +91816,10 @@ C           PERFORM EXTRAPOLATION.
         CORREC = ERLARG
         ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -91860,7 +91860,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE DQAGSE
 
-      SUBROUTINE DQK21 (F, A, B, RESULT, ABSERR, RESABS, RESASC,
+      SUBROUTINE DQK21(F, A, B, RESULT, ABSERR, RESABS, RESASC,
      *                  EPMACH, UFLOW, ISIG)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -92031,7 +92031,7 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR,TOL*RESABS)
       END SUBROUTINE DQK21
 
-      SUBROUTINE DQAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
+      SUBROUTINE DQAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
@@ -92192,11 +92192,11 @@ C         PREPARE CALL FOR DQAGIE
       L1 = LIMIT + 1
       L2 = LIMIT + L1
       L3 = LIMIT + L2
-      CALL DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      CALL DQAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       END SUBROUTINE DQAGI
 
-      SUBROUTINE DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
+      SUBROUTINE DQAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                   NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -92433,7 +92433,7 @@ C           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 C           I2 = INTEGRAL OF F OVER (0,+INFINITY).
       BOUN = BOUND
       IF (INF .EQ. 2) BOUN = 0.D0
-      CALL DQK15I (F, BOUN, INF, 0.D0, 1.D0, RESULT, ABSERR,
+      CALL DQK15I(F, BOUN, INF, 0.D0, 1.D0, RESULT, ABSERR,
      *             DEFABS, RESABS, EPMACH, UFLOW)
 C           TEST ON ACCURACY
       LAST = 1
@@ -92479,9 +92479,9 @@ C           ERROR ESTIMATE.
         A2 = B1
         B2 = BLIST(MAXERR)
         ERLAST = ERRMAX
-        CALL DQK15I (F, BOUN, INF, A1, B1, AREA1, ERROR1,
+        CALL DQK15I(F, BOUN, INF, A1, B1, AREA1, ERROR1,
      *               RESABS, DEFAB1, EPMACH, UFLOW)
-        CALL DQK15I (F, BOUN, INF, A2, B2, AREA2, ERROR2,
+        CALL DQK15I(F, BOUN, INF, A2, B2, AREA2, ERROR2,
      *               RESABS, DEFAB2, EPMACH, UFLOW)
 C           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 C           AND ERROR AND TEST FOR ACCURACY.
@@ -92529,9 +92529,9 @@ C           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
 C           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 C           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 C           BISECTED NEXT).
-   30   CALL DQPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+   30   CALL DQPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
         IF (ERRSUM .LE. ERRBND) GO TO 115
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -92559,7 +92559,7 @@ C           EXTRAPOLATION.
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL DQELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
+        CALL DQELG(NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES,
      *              EPMACH, OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
@@ -92569,10 +92569,10 @@ C           PERFORM EXTRAPOLATION.
         RESULT = RESEPS
         CORREC = ERLARG
         ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -92615,7 +92615,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE DQAGIE
 
-      SUBROUTINE DQK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
+      SUBROUTINE DQK15I(F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                   RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
@@ -92858,7 +92858,7 @@ C           NRMAX-TH LARGEST ERROR ESTIMATE.
       DO I = 1,IDO
         ISUCC = IORD(NRMAX-1)
 C ***JUMP OUT OF DO-LOOP
-        IF ( ERRMAX .LE. ELIST ( ISUCC ) ) EXIT
+        IF (ERRMAX .LE. ELIST(ISUCC)) EXIT
         IORD(NRMAX) = ISUCC
         NRMAX = NRMAX-1
          END DO
@@ -92901,7 +92901,7 @@ C           SET MAXERR AND ERMAX.
       ERMAX = ELIST(MAXERR)
       END SUBROUTINE DQPSRT
 
-      SUBROUTINE DQELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
+      SUBROUTINE DQELG(N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
      *                  EPMACH, OFLOW)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
@@ -93064,7 +93064,7 @@ C           COMPUTE ERROR ESTIMATE
   100 ABSERR = DMAX1(ABSERR,5.D0*EPMACH*DABS(RESULT))
       END SUBROUTINE DQELG
 
-      SUBROUTINE DQXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
+      SUBROUTINE DQXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                  LIMIT,LENIW,LENW,LAST,IWORK,WORK)
       IMPLICIT NONE
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
@@ -93398,7 +93398,7 @@ C           -----------------------------------
       LN(1) = 1
       VALP(1,1) = F((A + B)*0.5D0)
       VALN(1,1) = VALP(1,1)
-      CALL DQXLQM (F,A,B,RESULT,ABSERR,DEFABS,RESABS,
+      CALL DQXLQM(F,A,B,RESULT,ABSERR,DEFABS,RESABS,
      *             VALP(1,1),VALN(1,1),LP(1),LN(1),2,
      *             EPMACH,UFLOW,OFLOW)
 C           TEST ON ACCURACY.
@@ -93512,7 +93512,7 @@ C           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
 C ***JUMP OUT OF DO-LOOP
         IF(ERRSUM .LE. ERRBND) GO TO 115
 C ***JUMP OUT OF DO-LOOP
-        IF ( IER .NE. 0 ) EXIT
+        IF (IER .NE. 0) EXIT
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
@@ -93543,7 +93543,7 @@ C ***JUMP OUT OF DO-LOOP
 C           PERFORM EXTRAPOLATION.
    60   NUMRL2 = NUMRL2 + 1
         RLIST2(NUMRL2) = AREA
-        CALL DQELG (NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES,
+        CALL DQELG(NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES,
      *              EPMACH,OFLOW)
         KTMIN = KTMIN + 1
         IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
@@ -93554,10 +93554,10 @@ C           PERFORM EXTRAPOLATION.
         CORREC = ERLARG
         ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
-        IF ( ABSERR .LE. ERTEST ) EXIT
+        IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-        IF ( IER .EQ. 5 ) EXIT
+        IF (IER .EQ. 5) EXIT
         MAXERR = IORD(1)
         ERRMAX = ELIST(MAXERR)
         NRMAX = 1
@@ -93598,7 +93598,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
   999 RETURN
       END SUBROUTINE DQXGSE
 
-      SUBROUTINE DQXCPY (A, B, L)
+      SUBROUTINE DQXCPY(A, B, L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       DOUBLE PRECISION, INTENT(INOUT) :: A(L)
@@ -93611,7 +93611,7 @@ C          THE DOUBLE PRECISION VECTOR A OF LENGTH L
       END DO
       END SUBROUTINE DQXCPY
 
-      SUBROUTINE DQXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
+      SUBROUTINE DQXLQM(F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                   KEY,EPMACH,UFLOW,OFLOW)
       IMPLICIT NONE
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -93691,24 +93691,24 @@ C***ROUTINES CALLED  DQXRUL
       K0   = MAX0(KEY1-2,0)
       K1   = K0 + 1
       K2   = MIN0(KEY1+1,3)
-      CALL DQXRUL (F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
+      CALL DQXRUL(F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
       ERROLD = OFLOW
       T = 10.D0*EPMACH
       DO K = K1,K2
-        CALL DQXRUL (F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
+        CALL DQXRUL(F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
         RESULT = RESK
         ABSERR = DABS(RESK - RESG)
         IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0)
      *      ABSERR = RESASC*DMIN1(1.D0,(200.D0*ABSERR/RESASC)**1.5D0)
         IF (RESABS .GT. UFLOW/T) ABSERR = DMAX1(T*RESABS,ABSERR)
         RESG = RESK
-        IF ( ABSERR .GT. ERROLD * 0.16D0 ) EXIT
-        IF ( ABSERR .LT. 1000.D0 * EPMACH * RESABS ) EXIT
+        IF (ABSERR .GT. ERROLD * 0.16D0) EXIT
+        IF (ABSERR .LT. 1000.D0 * EPMACH * RESABS) EXIT
         ERROLD = ABSERR
       END DO
       END SUBROUTINE DQXLQM
 
-      SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      SUBROUTINE DQXRUL(F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
       DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(IN) :: XL, XU
@@ -93781,15 +93781,15 @@ C------------------------
       DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
       DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
 C------------------------
-      DATA XX( 1)/0.D0                     /
-      DATA XX( 2)/.25000000000000000000D+00/
-      DATA XX( 3)/.50000000000000000000D+00/
-      DATA XX( 4)/.75000000000000000000D+00/
-      DATA XX( 5)/.87500000000000000000D+00/
-      DATA XX( 6)/.93750000000000000000D+00/
-      DATA XX( 7)/.10000000000000000000D+01/
-      DATA XX( 8)/.37500000000000000000D+00/
-      DATA XX( 9)/.62500000000000000000D+00/
+      DATA XX(1)/0.D0                     /
+      DATA XX(2)/.25000000000000000000D+00/
+      DATA XX(3)/.50000000000000000000D+00/
+      DATA XX(4)/.75000000000000000000D+00/
+      DATA XX(5)/.87500000000000000000D+00/
+      DATA XX(6)/.93750000000000000000D+00/
+      DATA XX(7)/.10000000000000000000D+01/
+      DATA XX(8)/.37500000000000000000D+00/
+      DATA XX(9)/.62500000000000000000D+00/
       DATA XX(10)/.96875000000000000000D+00/
       DATA XX(11)/.12500000000000000000D+00/
       DATA XX(12)/.68750000000000000000D+00/
@@ -93893,7 +93893,7 @@ C------------------------
       YM = YM*DABS(BB)
       END SUBROUTINE DQXRUL
 
-      SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
+      SUBROUTINE DQXRRD(F,Z,LZ,XL,XU,R,S,LR,LS)
       IMPLICIT NONE
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -94308,7 +94308,7 @@ C       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
       P(6) = ABS(P(5)-P(4))
       END SUBROUTINE CUBRUL
 
-      SUBROUTINE IESLV (KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,
+      SUBROUTINE IESLV(KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,
      *                     MUPPER,NF,MF,NORM,W,IER)
       IMPLICIT NONE
       INTEGER :: IER, IFLAG, MF, MUPPER, NF, NT, NUPPER
@@ -96129,16 +96129,16 @@ C   ESTIMATE ERRORS AT ORDERS K,K-1,K-2
         TEMP3 = 1.0/WT(L)
         TEMP4 = YP(L) - PHI(L,1)
         NSWC_AI_I4 = KM2
-        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 265
-        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 260
+        IF (NSWC_AI_I4 .LT. 0) GO TO 265
+        IF (NSWC_AI_I4 .EQ. 0) GO TO 260
         GO TO 255
  255    ERKM2 = ERKM2 + ((PHI(L,KM1)+TEMP4)*TEMP3)**2
  260    ERKM1 = ERKM1 + ((PHI(L,K)+TEMP4)*TEMP3)**2
  265    ERK = ERK + (TEMP4*TEMP3)**2
       END DO
       NSWC_AI_I4 = KM2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 280
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 275
+      IF (NSWC_AI_I4 .LT. 0) GO TO 280
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 275
       GO TO 270
  270  ERKM2 = ABSH*SIG(KM1)*GSTR(KM2)*SQRT(ERKM2)
  275  ERKM1 = ABSH*SIG(K)*GSTR(KM1)*SQRT(ERKM1)
@@ -96148,8 +96148,8 @@ C   ESTIMATE ERRORS AT ORDERS K,K-1,K-2
       KNEW = K
 C   TEST IF ORDER SHOULD BE LOWERED
       NSWC_AI_I4 = KM2
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 299
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 290
+      IF (NSWC_AI_I4 .LT. 0) GO TO 299
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 290
       GO TO 285
  285  IF(AMAX1(ERKM1,ERKM2) .LE. ERK) KNEW = KM1
       GO TO 299
@@ -96183,8 +96183,8 @@ C   SIZE
  320  IFAIL = IFAIL + 1
       TEMP2 = 0.5
       NSWC_AI_I4 = IFAIL - 3
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 335
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+      IF (NSWC_AI_I4 .LT. 0) GO TO 335
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 330
       GO TO 325
  325  IF(P5EPS .LT. 0.25*ERK) TEMP2 = SQRT(P5EPS/ERK)
  330  KNEW = 1
@@ -96345,7 +96345,7 @@ C   INTERPOLATE
       END DO
       END SUBROUTINE INTRP
 
-      SUBROUTINE BRKF45 (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
+      SUBROUTINE BRKF45(FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                   WORK,IWORK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG, IWORK(5)
@@ -96592,7 +96592,7 @@ C     CALLING LIST VIA THE SPLITTING APART OF TWO WORKING STORAGE
 C     ARRAYS. IF THIS IS NOT COMPATIBLE WITH THE USERS COMPILER,
 C     HE MUST USE RKFC DIRECTLY.
 C***********************************************************************
-   10 CALL RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,WORK(KW),
+   10 CALL RKFC(FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,WORK(KW),
      *      WORK(KWP),WORK(KX),WORK(KHI),WORK(KH),WORK(KY1),WORK(KY2),
      *      WORK(KF1),WORK(KF2),WORK(KF3),WORK(KF4),WORK(KF7),WORK(KSR),
      *      WORK(KSA),WORK(KT),IWORK(1),IWORK(2),IWORK(3),ENDPNT,BLKOUT)
@@ -96602,7 +96602,7 @@ C***********************************************************************
       IF (BLKOUT) IWORK(5) = -1
       END SUBROUTINE BRKF45
 
-      SUBROUTINE RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
+      SUBROUTINE RKFC(FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                 W,WP,X,HINT,H,Y1,Y2,F1,F2,F3,F4,F7,SAVRE,SAVAE,
      *                 TOLD,NFE,JFLAG,KFLAG,ENDPNT,BLKOUT)
       IMPLICIT NONE
@@ -96824,7 +96824,7 @@ C                       ESTIMATE STARTING STEPSIZE
       ENDPNT = .FALSE.
       BLKOUT = .FALSE.
       A = T
-      CALL FCN (A, Y, YP)
+      CALL FCN(A, Y, YP)
       NFE = 1
       DO N = 1, NEQN
          W(N) = Y(N)
@@ -96892,7 +96892,7 @@ C     EXTRAPOLATION AND RETURN.
   170 DO K = 1, NEQN
          Y(K) = W(K) + DT*WP(K)
       END DO
-      CALL FCN (T, Y, YP)
+      CALL FCN(T, Y, YP)
       NFE = NFE + 1
       IFLAG = 2
       IF (.NOT.ENDPNT) RETURN
@@ -96931,24 +96931,24 @@ C     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
       DO N = 1, NEQN
          Y1(N) = W(N) + A21*H*WP(N)
       END DO
-      CALL FCN (T + C2*H, Y1, F2)
+      CALL FCN(T + C2*H, Y1, F2)
       DO N = 1, NEQN
          Y1(N) = W(N) + H*(A31*WP(N) + A32*F2(N))
       END DO
-      CALL FCN (T + C3*H, Y1, F3)
+      CALL FCN(T + C3*H, Y1, F3)
       DO N = 1, NEQN
          Y1(N) = W(N) + H*(A41*WP(N) + A42*F2(N) + A43*F3(N))
       END DO
-      CALL FCN (T + C4*H, Y1, F4)
+      CALL FCN(T + C4*H, Y1, F4)
       DO N = 1, NEQN
          Y1(N) = W(N) + H*(A51*WP(N)+A52*F2(N)+A53*F3(N)+A54*F4(N))
       END DO
-      CALL FCN (T + H, Y1, Y)
+      CALL FCN(T + H, Y1, Y)
       DO N = 1, NEQN
          Y1(N) = W(N) + H*(A61*WP(N)+A62*F2(N)+A63*F3(N)+A64*F4(N)+
      *                     A65*Y(N))
       END DO
-      CALL FCN (T + C6*H, Y1, YP)
+      CALL FCN(T + C6*H, Y1, YP)
       NFE = NFE + 5
       EEOET = 0.0
       DO N = 1, NEQN
@@ -96966,17 +96966,17 @@ C     IN THE BLOCK, GO AND COMPUTE A SMALLER STEP FOR A RE-TRY.
       IF (ESTTOL .GT. 1.0) GO TO 320
 C     INTEGRATION SUCCESSFUL FOR FIRST STEP.  NOW INTEGRATE OVER
 C     THE SECOND STEP IN THE BLOCK
-      CALL FCN (T + H, Y1, F1)
+      CALL FCN(T + H, Y1, F1)
       DO N = 1, NEQN
          Y2(N) = W(N) + H*(A81*WP(N)+A82*F2(N)+A83*F3(N)+A84*F4(N)+
      *                     A85*Y(N)+A86*YP(N)+A87*F1(N))
       END DO
-      CALL FCN (T + C8*H, Y2, F7)
+      CALL FCN(T + C8*H, Y2, F7)
       DO N = 1, NEQN
          Y2(N) = W(N) + H*(A91*WP(N)+A92*F2(N)+A93*F3(N)+A94*F4(N)+
      *                     A95*Y(N)+A96*YP(N)+A97*F1(N)+A98*F7(N))
       END DO
-      CALL FCN (T + C9*H, Y2, F2)
+      CALL FCN(T + C9*H, Y2, F2)
       NFE = NFE + 3
       EEOET = 0.0
       DO N = 1, NEQN
@@ -97030,7 +97030,7 @@ C     STORE SOLUTION AT T+2*H.
          F2(N) = WP(N)
       END DO
   360 A = T
-      CALL FCN (A, W, WP)
+      CALL FCN(A, W, WP)
       NFE = NFE + 1
 C     CHOOSE NEXT STEPSIZE
 C     THE INCREASE IS LIMITED TO A FACTOR OF ABOUT 10
@@ -97053,7 +97053,7 @@ C     STEP, OR ELSE CONTINUE THE INTEGRATION.
 C     INTERPOLATE TO GET DATA AT OFF-STEP POINT AND RETURN.
 C     THE SECOND OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
 C     DERIVATIVE MORE STABLE IS THE NEW STATEMENT 390 GIVEN BELOW.
-  390 CALL EXTRA (NEQN,F3,WP,X,HINT,Y1,Y2,F1,F2,TOUT,Y,YP)
+  390 CALL EXTRA(NEQN,F3,WP,X,HINT,Y1,Y2,F1,F2,TOUT,Y,YP)
       T = TOUT
       IF (IFLAG .LT. 0 .AND. TOUT .NE. X) BLKOUT = .TRUE.
       IFLAG = 2
@@ -97091,7 +97091,7 @@ C     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
       GO TO 400
       END SUBROUTINE RKFC
 
-      SUBROUTINE EXTRA (NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
+      SUBROUTINE EXTRA(NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
       REAL :: F(NEQN), F1(NEQN), F2(NEQN)
@@ -97135,7 +97135,7 @@ C     AT THIS POINT AND THIS APPROXIMATION IS STORED IN YPEX.
       END DO
       END SUBROUTINE EXTRA
 
-      SUBROUTINE RKF45 (F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
+      SUBROUTINE RKF45(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
       IMPLICIT NONE
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 C     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
@@ -97497,7 +97497,7 @@ C     TOO MUCH WORK
       KFLAG = 4
       RETURN
 C     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
-  220 CALL FEHL (F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,F1)
+  220 CALL FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,F1)
       NFE = NFE + 5
 C     COMPUTE AND TEST ALLOWABLE TOLERANCES VERSUS LOCAL ERROR ESTIMATES
 C     AND REMOVE SCALING OF TOLERANCES. NOTE THAT RELATIVE ERROR IS
@@ -98101,7 +98101,7 @@ C     INTERVAL MODE
       END DO
       END SUBROUTINE GERKS
 
-      SUBROUTINE SFODE (F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,
+      SUBROUTINE SFODE(F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,
      *                  RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
@@ -98128,14 +98128,14 @@ C     --------------
       INFO1(6) = INFO(4)
       RTOL(1) = RERR
       ATOL(1) = AERR
-      CALL STFODE (F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID,
+      CALL STFODE(F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID,
      *             RWORK,LRW,IWORK,LIW,RPAR,IPAR,ZZZJAC)
       INFO(1) = INFO1(1)
       RERR = RTOL(1)
       AERR = ATOL(1)
       END SUBROUTINE SFODE
 
-      SUBROUTINE SFODE1 (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
+      SUBROUTINE SFODE1(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      *                   RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
@@ -98158,7 +98158,7 @@ C     --------------
       INFO1(4) = INFO(3)
       INFO1(5) = 0
       INFO1(6) = INFO(4)
-      CALL STFODE (F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID,
+      CALL STFODE(F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID,
      *             RWORK,LRW,IWORK,LIW,RPAR,IPAR,ZZZJAC)
       INFO(1) = INFO1(1)
       END SUBROUTINE SFODE1
@@ -98177,10 +98177,10 @@ C     -------------
       T = 0.0
       END SUBROUTINE ZZZJAC
 
-      SUBROUTINE STFODE (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
+      SUBROUTINE STFODE(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      1                   RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
       IMPLICIT NONE
-      INTEGER :: IDID, INFO( *), IPAR(*), IWORK, LIW, LRW, NEQ
+      INTEGER :: IDID, INFO(*), IPAR(*), IWORK, LIW, LRW, NEQ
       REAL :: ATOL(*), RPAR(*), RTOL(*), RWORK(LRW), T, TOUT, Y(NEQ)
       EXTERNAL F, JAC
       INTEGER :: ICOMI, ICOMR, IDELSN, IINOUT, ILRW, ITSTAR, IYPOUT, ML,
@@ -98820,7 +98820,7 @@ C     CALL SVCO(RWORK(ICOMR),IWORK(ICOMI))
       INFO(1) = IBEGIN
       END SUBROUTINE STFODE
 
-      SUBROUTINE RSCO (RSAV, ISAV)
+      SUBROUTINE RSCO(RSAV, ISAV)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
@@ -98841,7 +98841,7 @@ C-----------------------------------------------------------------------
 C----------------------- END OF SUBROUTINE RSCO -----------------------
       END SUBROUTINE RSCO
 
-      SUBROUTINE SVCO (RSAV, ISAV)
+      SUBROUTINE SVCO(RSAV, ISAV)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS ROUTINE STORES IN RSAV AND ISAV THE CONTENTS OF COMMON BLOCK
@@ -98864,7 +98864,7 @@ C-----------------------------------------------------------------------
 C----------------------- END OF SUBROUTINE SVCO -----------------------
       END SUBROUTINE SVCO
 
-      SUBROUTINE LSOD1 (F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT,
+      SUBROUTINE LSOD1(F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT,
      1                YH,YH1,EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,
      2                TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
       IMPLICIT NONE
@@ -99016,7 +99016,7 @@ C                                              X AND YH(*) FOR STOD
         EWT(L) = TOL
       END DO
       BIG = SQRT(SPMPAR(3))
-      CALL HSTART (F,NEQ,T,TOUT,Y,YH(1,2),EWT,1,U,BIG,
+      CALL HSTART(F,NEQ,T,TOUT,Y,YH(1,2),EWT,1,U,BIG,
      1             YH(1,3),YH(1,4),YH(1,5),YH(1,6),RPAR,IPAR,H)
       DELSGN = SIGN(1.0,TOUT-T)
       X = T
@@ -99318,7 +99318,7 @@ C                       CHOOSE LARGEST BOUNDS ON THE FIRST DERIVATIVE
 C                                      AND A LOCAL LIPSCHITZ CONSTANT
   100   FBND=AMAX1(FBND,VNORM(YP,NEQ))
         DELF=VNORM(PV,NEQ)
-        IF ( DELF .GE. BIG * ABS ( DELY ) ) EXIT
+        IF (DELF .GE. BIG * ABS(DELY)) EXIT
         DFDUB=AMAX1(DFDUB,DELF/ABS(DELY))
         IF (K .EQ. LK) GO TO 160
 C                       CHOOSE NEXT PERTURBATION VECTOR
@@ -99385,7 +99385,7 @@ C                       NOW SET DIRECTION OF INTEGRATION
       H=SIGN(H,DX)
       END SUBROUTINE HSTART
 
-      SUBROUTINE INTYD (T, K, YH, NYH, DKY, IFLAG)
+      SUBROUTINE INTYD(T, K, YH, NYH, DKY, IFLAG)
       IMPLICIT NONE
 C   INTYD APPROXIMATES THE SOLUTION AND DERIVATIVES AT T BY POLYNOMIAL
 C   INTERPOLATION. MUST BE USED IN CONJUNCTION WITH THE INTEGRATOR
@@ -99463,7 +99463,7 @@ C-----------------------------------------------------------------------
 C----------------------- END OF SUBROUTINE INTYD -----------------------
       END SUBROUTINE INTYD
 
-      SUBROUTINE STOD  (NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR,
+      SUBROUTINE STOD(NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR,
      1   WM, IWM, F, JAC, RPAR, IPAR)
       IMPLICIT NONE
       INTEGER :: IPAR(*)
@@ -99593,7 +99593,7 @@ C-----------------------------------------------------------------------
       LMAX = MAXORD + 1
       IF (IALTH .EQ. 1) IALTH = 2
       IF (METH .EQ. MEO) GO TO 110
-      CALL CFOD  (METH, ELCO, TESCO)
+      CALL CFOD(METH, ELCO, TESCO)
       MEO = METH
       IF (NQ .GT. MAXORD) GO TO 120
       IALTH = L
@@ -99609,7 +99609,7 @@ C-----------------------------------------------------------------------
       RC = RC*EL(1)/EL0
       EL0 = EL(1)
       CONIT = 0.5E0/FLOAT(NQ+2)
-      DDN = VNWRMS (N, SAVF, EWT)/TESCO(1,L)
+      DDN = VNWRMS(N, SAVF, EWT)/TESCO(1,L)
       EXDN = 1.0E0/FLOAT(L)
       RHDN = 1.0E0/(1.3E0*DDN**EXDN + 0.0000013E0)
       RH = AMIN1(RHDN,1.0E0)
@@ -99623,7 +99623,7 @@ C CFOD  IS CALLED TO GET ALL THE INTEGRATION COEFFICIENTS FOR THE
 C CURRENT METH.  THEN THE EL VECTOR AND RELATED CONSTANTS ARE RESET
 C WHENEVER THE ORDER NQ IS CHANGED, OR AT THE START OF THE PROBLEM.
 C-----------------------------------------------------------------------
- 140  CALL CFOD  (METH, ELCO, TESCO)
+ 140  CALL CFOD(METH, ELCO, TESCO)
  150  DO I = 1,L
         EL(I) = ELCO(I,NQ)
       END DO
@@ -99687,7 +99687,7 @@ C-----------------------------------------------------------------------
       DO I = 1,N
         Y(I) = YH(I,1)
       END DO
-      CALL F (TN, Y, SAVF, RPAR, IPAR)
+      CALL F(TN, Y, SAVF, RPAR, IPAR)
       NFE = NFE + 1
       IF (IPUP .LE. 0) GO TO 250
 C-----------------------------------------------------------------------
@@ -99699,7 +99699,7 @@ C-----------------------------------------------------------------------
       RC = 1.0E0
       NSTEPJ = NST
       CRATE = 0.7E0
-      CALL PJAC (NEQ, Y, YH, NYH, EWT, ACOR, SAVF, WM, IWM, F, JAC,
+      CALL PJAC(NEQ, Y, YH, NYH, EWT, ACOR, SAVF, WM, IWM, F, JAC,
      1          RPAR, IPAR)
       IF (IER .NE. 0) GO TO 430
  250  DO I = 1,N
@@ -99714,7 +99714,7 @@ C-----------------------------------------------------------------------
         SAVF(I) = H*SAVF(I) - YH(I,2)
         Y(I) = SAVF(I) - ACOR(I)
       END DO
-      DEL = VNWRMS (N, Y, EWT)
+      DEL = VNWRMS(N, Y, EWT)
       DO I = 1,N
         Y(I) = YH(I,1) + EL(1)*SAVF(I)
         ACOR(I) = SAVF(I)
@@ -99728,9 +99728,9 @@ C-----------------------------------------------------------------------
  350  DO I = 1,N
         Y(I) = H*SAVF(I) - (YH(I,2) + ACOR(I))
       END DO
-      CALL SLVS (WM, IWM, Y, SAVF)
+      CALL SLVS(WM, IWM, Y, SAVF)
       IF (IER .NE. 0) GO TO 410
-      DEL = VNWRMS (N, Y, EWT)
+      DEL = VNWRMS(N, Y, EWT)
       DO I = 1,N
         ACOR(I) = ACOR(I) + Y(I)
         Y(I) = YH(I,1) + EL(1)*ACOR(I)
@@ -99746,7 +99746,7 @@ C-----------------------------------------------------------------------
       IF (M .EQ. 3) GO TO 410
       IF (M .GE. 2 .AND. DEL .GT. 2.0E0*DELP) GO TO 410
       DELP = DEL
-      CALL F (TN, Y, SAVF, RPAR, IPAR)
+      CALL F(TN, Y, SAVF, RPAR, IPAR)
       NFE = NFE + 1
       GO TO 270
 C-----------------------------------------------------------------------
@@ -99784,7 +99784,7 @@ C IF IT FAILS.
 C-----------------------------------------------------------------------
  450  IF (MITER .NE. 0) IPUP = -1
       IF (M .EQ. 0) DSM = DEL/TESCO(2,NQ)
-      IF (M .GT. 0) DSM = VNWRMS (N, ACOR, EWT)/TESCO(2,NQ)
+      IF (M .GT. 0) DSM = VNWRMS(N, ACOR, EWT)/TESCO(2,NQ)
       IF (DSM .GT. 1.0E0) GO TO 500
 C-----------------------------------------------------------------------
 C AFTER A SUCCESSFUL STEP, UPDATE THE YH ARRAY.
@@ -99851,14 +99851,14 @@ C-----------------------------------------------------------------------
       DO I = 1,N
         SAVF(I) = ACOR(I) - YH(I,LMAX)
       END DO
-      DUP = VNWRMS (N, SAVF, EWT)/TESCO(3,NQ)
+      DUP = VNWRMS(N, SAVF, EWT)/TESCO(3,NQ)
       EXUP = 1.0E0/FLOAT(L+1)
       RHUP = 1.0E0/(1.4E0*DUP**EXUP + 0.0000014E0)
  540  EXSM = 1.0E0/FLOAT(L)
       RHSM = 1.0E0/(1.2E0*DSM**EXSM + 0.0000012E0)
       RHDN = 0.0E0
       IF (NQ .EQ. 1) GO TO 560
-      DDN = VNWRMS (N, YH(1,L), EWT)/TESCO(1,NQ)
+      DDN = VNWRMS(N, YH(1,L), EWT)/TESCO(1,NQ)
       EXDN = 1.0E0/FLOAT(NQ)
       RHDN = 1.0E0/(1.3E0*DDN**EXDN + 0.0000013E0)
  560  IF (RHSM .GE. RHUP) GO TO 570
@@ -99910,7 +99910,7 @@ C-----------------------------------------------------------------------
       DO I = 1,N
         Y(I) = YH(I,1)
       END DO
-      CALL F (TN, Y, SAVF, RPAR, IPAR)
+      CALL F(TN, Y, SAVF, RPAR, IPAR)
       NFE = NFE + 1
       DO I = 1,N
         YH(I,2) = H*SAVF(I)
@@ -99940,7 +99940,7 @@ C-----------------------------------------------------------------------
 C----------------------- END OF SUBROUTINE STOD  -----------------------
       END SUBROUTINE STOD
 
-      SUBROUTINE CFOD  (METH, ELCO, TESCO)
+      SUBROUTINE CFOD(METH, ELCO, TESCO)
       IMPLICIT NONE
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
       INTEGER, INTENT(IN) :: METH
@@ -100051,12 +100051,12 @@ C STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
 C----------------------- END OF SUBROUTINE CFOD  -----------------------
       END SUBROUTINE CFOD
 
-      SUBROUTINE PJAC (NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM,
+      SUBROUTINE PJAC(NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM,
      1   F, JAC, RPAR, IPAR)
       IMPLICIT NONE
       INTEGER :: IPAR(*)
       REAL :: RPAR(*)
-      INTEGER :: NEQ, NYH, IWM( *)
+      INTEGER :: NEQ, NYH, IWM(*)
       EXTERNAL F, JAC
       REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
       INTEGER :: I, I1, I2, IER, II, IOWND, IOWNS, J, J1, JJ, JSTART,
@@ -100110,14 +100110,14 @@ C IF MITER = 1, CALL JAC AND MULTIPLY BY SCALAR. -----------------------
       DO I = 1,LENP
         WM(I+2) = 0.0E0
       END DO
-      CALL JAC (TN, Y, WM(3), N, RPAR, IPAR)
+      CALL JAC(TN, Y, WM(3), N, RPAR, IPAR)
       CON = -HL0
       DO I = 1,LENP
         WM(I+2) = WM(I+2)*CON
       END DO
       GO TO 240
 C IF MITER = 2, MAKE N CALLS TO F TO APPROXIMATE J. --------------------
- 200  FAC = VNWRMS (N, SAVF, EWT)
+ 200  FAC = VNWRMS(N, SAVF, EWT)
       R0 = 1000.0E0*ABS(H)*UROUND*FLOAT(N)*FAC
       IF (R0 .EQ. 0.0E0) R0 = 1.0E0
       SRUR = WM(1)
@@ -100127,7 +100127,7 @@ C IF MITER = 2, MAKE N CALLS TO F TO APPROXIMATE J. --------------------
         R = AMAX1(SRUR*ABS(YJ),R0*EWT(J))
         Y(J) = Y(J) + R
         FAC = -HL0/R
-        CALL F (TN, Y, FTEM, RPAR, IPAR)
+        CALL F(TN, Y, FTEM, RPAR, IPAR)
         DO I = 1,N
           WM(I+J1) = (FTEM(I) - SAVF(I))*FAC
         END DO
@@ -100142,7 +100142,7 @@ C ADD IDENTITY MATRIX. -------------------------------------------------
         J = J + (N + 1)
       END DO
 C DO LU DECOMPOSITION ON P. --------------------------------------------
-      CALL SGEFA (WM(3), N, N, IWM(21), IER)
+      CALL SGEFA(WM(3), N, N, IWM(21), IER)
       RETURN
 C IF MITER = 3, CONSTRUCT A DIAGONAL APPROXIMATION TO J AND P. ---------
  300  WM(2) = HL0
@@ -100151,7 +100151,7 @@ C IF MITER = 3, CONSTRUCT A DIAGONAL APPROXIMATION TO J AND P. ---------
       DO I = 1,N
         Y(I) = Y(I) + R*(H*SAVF(I) - YH(I,2))
       END DO
-      CALL F (TN, Y, WM(3), RPAR, IPAR)
+      CALL F(TN, Y, WM(3), RPAR, IPAR)
       NFE = NFE + 1
       DO I = 1,N
         R0 = H*SAVF(I) - YH(I,2)
@@ -100175,7 +100175,7 @@ C IF MITER = 4, CALL JAC AND MULTIPLY BY SCALAR. -----------------------
       DO I = 1,LENP
         WM(I+2) = 0.0E0
       END DO
-      CALL JAC (TN, Y, WM(ML3), MEBAND, RPAR, IPAR)
+      CALL JAC(TN, Y, WM(ML3), MEBAND, RPAR, IPAR)
       CON = -HL0
       DO I = 1,LENP
         WM(I+2) = WM(I+2)*CON
@@ -100189,7 +100189,7 @@ C IF MITER = 5, MAKE MBAND CALLS TO F TO APPROXIMATE J. ----------------
       MEBAND = MBAND + ML
       MEB1 = MEBAND - 1
       SRUR = WM(1)
-      FAC = VNWRMS (N, SAVF, EWT)
+      FAC = VNWRMS(N, SAVF, EWT)
       R0 = 1000.0E0*ABS(H)*UROUND*FLOAT(N)*FAC
       IF (R0 .EQ. 0.0E0) R0 = 1.0E0
       DO J = 1,MBA
@@ -100198,7 +100198,7 @@ C IF MITER = 5, MAKE MBAND CALLS TO F TO APPROXIMATE J. ----------------
           R = AMAX1(SRUR*ABS(YI),R0*EWT(I))
           Y(I) = Y(I) + R
         END DO
-        CALL F (TN, Y, FTEM, RPAR, IPAR)
+        CALL F(TN, Y, FTEM, RPAR, IPAR)
         DO JJ = J,N,MBAND
           Y(JJ) = YH(JJ,1)
           YJJ = Y(JJ)
@@ -100220,16 +100220,16 @@ C ADD IDENTITY MATRIX. -------------------------------------------------
         II = II + MEBAND
       END DO
 C DO LU DECOMPOSITION OF P. --------------------------------------------
-      CALL SGBFA (WM(3), MEBAND, N, ML, MU, IWM(21), IER)
+      CALL SGBFA(WM(3), MEBAND, N, ML, MU, IWM(21), IER)
 C----------------------- END OF SUBROUTINE PJAC -----------------------
       END SUBROUTINE PJAC
 
-      SUBROUTINE SLVS (WM, IWM, X, TEM)
+      SUBROUTINE SLVS(WM, IWM, X, TEM)
       IMPLICIT NONE
 C   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
 C   INTEGRATOR PACKAGE SFODE.
 C***ROUTINES CALLED  SGESL,SGBSL
-      INTEGER :: IWM( *)
+      INTEGER :: IWM(*)
       REAL :: WM(*), X(*), TEM(*)
       INTEGER :: I, IER, IOWND, IOWNS, JSTART, KFLAG, L, MAXORD, MEBAND,
      &METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
@@ -100265,7 +100265,7 @@ C THIS ROUTINE ALSO USES THE COMMON VARIABLES EL0, H, MITER, AND N.
 C-----------------------------------------------------------------------
       IER = 0
       GO TO (100, 100, 300, 400, 400), MITER
- 100  CALL SGESL (WM(3), N, N, IWM(21), X, 0)
+ 100  CALL SGESL(WM(3), N, N, IWM(21), X, 0)
       RETURN
  300  PHL0 = WM(2)
       HL0 = H*EL0
@@ -100286,7 +100286,7 @@ C-----------------------------------------------------------------------
  400  ML = IWM(1)
       MU = IWM(2)
       MEBAND = 2*ML + MU + 1
-      CALL SGBSL (WM(3), MEBAND, N, ML, MU, IWM(21), X, 0)
+      CALL SGBSL(WM(3), MEBAND, N, ML, MU, IWM(21), X, 0)
 C----------------------- END OF SUBROUTINE SLVS -----------------------
       END SUBROUTINE SLVS
 
@@ -100550,7 +100550,7 @@ C     RETURN THE RESULT AS VNORM
       END DO
       END FUNCTION VNORM
 
-      REAL FUNCTION VNWRMS (N, V, W)
+      REAL FUNCTION VNWRMS(N, V, W)
       IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS FUNCTION ROUTINE COMPUTES THE WEIGHTED ROOT-MEAN-SQUARE NORM
@@ -100704,7 +100704,7 @@ C     -------------------
       CALL F(T,DY)
       END SUBROUTINE RK8
 
-      SUBROUTINE SEPDE (COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1,
+      SUBROUTINE SEPDE(COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1,
      *                         C, D, NP1, U, KU, W, NW, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
@@ -100728,7 +100728,7 @@ C ----------------------------------------------------------------------
 C     --------------
       DATA ALPHA/0.0/, BETA/0.0/, GAM/0.0/, DEL/0.0/
 C     --------------
-      CALL PDEDGE (EDGE, INDX, INDY, IERR)
+      CALL PDEDGE(EDGE, INDX, INDY, IERR)
       IF (IERR .NE. 0) RETURN
       IF (A .GE. B .OR. C .GE. D) GO TO 300
       IF (MP1 .LT. 7) GO TO 320
@@ -100859,11 +100859,11 @@ C     CALL THE DIFFERENTIAL EQUATION SOLVER
       IW = MN + 1
       W(IW) = NW - MN
       IF (IORD .EQ. 4) GO TO 210
-      CALL SEPELL (0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA,
+      CALL SEPELL(0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA,
      *             C, D, N, INDY, W(IC), GAM, W(ID), DEL, COFX, COFY,
      *             U, KU, U, KU, W(IW), P, IERR)
       GO TO 220
-  210 CALL SEPELL (0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA,
+  210 CALL SEPELL(0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA,
      *             C, D, N, INDY, W(IC), GAM, W(ID), DEL, COFX, COFY,
      *             W(1),MP1, U, KU, W(IW), P, IERR)
   220 NW = W(IW) + MN
@@ -100884,13 +100884,13 @@ C     ERROR RETURN
   340 IERR = 8
       RETURN
   350 DUM(1) = 1.0
-      CALL SEPELL (0, IORD, A, B, M, INDX, DUM, ALPHA, DUM, BETA,
+      CALL SEPELL(0, IORD, A, B, M, INDX, DUM, ALPHA, DUM, BETA,
      *             C, D, N, INDY, DUM, GAM, DUM, DEL, COFX, COFY,
      *             U, KU, U, KU, DUM, P, IERR)
       NW = DUM(1) + MN
       END SUBROUTINE SEPDE
 
-      SUBROUTINE PDEDGE (EDGE, INDX, INDY, IERR)
+      SUBROUTINE PDEDGE(EDGE, INDX, INDY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, INDX, INDY
       INTEGER, INTENT(IN) :: EDGE(4)
@@ -100901,9 +100901,9 @@ C     ERROR RETURN
       IF (IABS(EDGE(4)) .GT. 1) GO TO 200
       IERR = 0
 C               PROCESS EDGES 1 AND 3
-      NSWC_AI_I4 = EDGE ( 1 )
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      NSWC_AI_I4 = EDGE(1)
+      IF (NSWC_AI_I4 .LT. 0) GO TO 10
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 20
       GO TO 30
    10 IF (EDGE(3) .NE. -1) GO TO 210
       INDY = 0
@@ -100914,9 +100914,9 @@ C               PROCESS EDGES 1 AND 3
    30 IF (EDGE(3) .EQ. -1) GO TO 210
       INDY = 4 - EDGE(3)
 C               PROCESS EDGES 2 AND 4
-  100 NSWC_AI_I4 = EDGE ( 2 )
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 110
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 120
+  100 NSWC_AI_I4 = EDGE(2)
+      IF (NSWC_AI_I4 .LT. 0) GO TO 110
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 120
       GO TO 130
   110 IF (EDGE(4) .NE. -1) GO TO 220
       INDX = 0
@@ -100935,7 +100935,7 @@ C                   ERROR RETURN
   220 IERR = 13
       END SUBROUTINE PDEDGE
 
-      SUBROUTINE SEPELL (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
+      SUBROUTINE SEPELL(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,
      2                   USOL,IDMN,W,PERTRB,IERROR)
       IMPLICIT NONE
@@ -101325,7 +101325,7 @@ C                          SOLUTION OF ELLIPTIC PARTIAL DIFFERENTIAL
 C                          EQUATIONS.  NCAR TECHNICAL NOTE
 C                          NCAR-TN/IA-109, PP. 135-137.
 C     CHECK INPUT PARAMETERS
-      CALL CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,COFY,
+      CALL CHKPRM(INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,COFY,
      1             IDMN,MN,IERROR)
       IF (IERROR .NE. 0) RETURN
 C     COMPUTE MINIMUM WORK SPACE AND CHECK WORK SPACE LENGTH INPUT
@@ -101357,13 +101357,13 @@ C     SET WORK SPACE INDICES
       I11 = I10+K
       I12 = I11+K
       I13 = 2
-      CALL SEPEL1 (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,D,N,
+      CALL SEPEL1(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,D,N,
      1             NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,W(I1),W(I2),W(I3),
      2             W(I4),W(I5),W(I6),W(I7),W(I8),W(I9),W(I10),W(I11),
      3             W(I12),GRHS,MN,USOL,IDMN,W(I13),PERTRB,IERROR)
       END SUBROUTINE SEPELL
 
-      SUBROUTINE SEPEL1 (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
+      SUBROUTINE SEPEL1(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,AN,BN,
      2                   CN,DN,UN,ZN,AM,BM,CM,DM,UM,ZM,GRHS,MN,USOL,
      3                   IDMN,W,PERTRB,IERROR)
@@ -101463,7 +101463,7 @@ C     SET SUBSCRIPT LIMITS FOR PORTION OF ARRAY TO INPUT TO BLKTRI
 C     SET X - DIRECTION
       DO I=1,MIT
          XI = AIT+FLOAT(IS+I-2)*DLX
-         CALL COFX (XI,AI,BI,CI)
+         CALL COFX(XI,AI,BI,CI)
          AXI = (AI/DLX-0.5*BI)/DLX
          BXI = -2.*AI/DLX**2+CI
          CXI = (AI/DLX+0.5*BI)/DLX
@@ -101474,7 +101474,7 @@ C     SET X - DIRECTION
 C     SET Y DIRECTION
       DO J=1,NIT
          YJ = CIT+FLOAT(JS+J-2)*DLY
-         CALL COFY (YJ,DJ,EJ,FJ)
+         CALL COFY(YJ,DJ,EJ,FJ)
          DYJ = (DJ/DLY-0.5*EJ)/DLY
          EYJ = (-2.*DJ/DLY**2+FJ)
          FYJ = (DJ/DLY+0.5*EJ)/DLY
@@ -101582,21 +101582,21 @@ C     SAVE ADJUSTED EDGES IN GRHS IF IORDER=4
       IORD = IORDER
       PERTRB = 0.0
 C     CHECK IF OPERATOR IS SINGULAR
-      CALL CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,SINGLR)
+      CALL CHKSNG(MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,SINGLR)
 C     COMPUTE NON-ZERO EIGENVECTOR IN NULL SPACE OF TRANSPOSE
 C     IF SINGULAR
-      IF (SINGLR) CALL TRISP (MIT,AM,BM,CM,DM,UM,ZM)
-      IF (SINGLR) CALL TRISP (NIT,AN,BN,CN,DN,UN,ZN)
+      IF (SINGLR) CALL TRISP(MIT,AM,BM,CM,DM,UM,ZM)
+      IF (SINGLR) CALL TRISP(NIT,AN,BN,CN,DN,UN,ZN)
 C     MAKE INITIALIZATION CALL TO BLKTRI
       IF (INTL .EQ. 0)
-     1    CALL BLKTRI (INTL,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN,
+     1    CALL BLKTRI(INTL,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN,
      2                 USOL(IS,JS),IERROR,W)
       IF (IERROR .NE. 0) RETURN
 C     ADJUST RIGHT HAND SIDE IF NECESSARY
   360 CONTINUE
-      IF (SINGLR) CALL ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
+      IF (SINGLR) CALL ORTHG(USOL,IDMN,ZN,ZM,PERTRB)
 C     COMPUTE SOLUTION
-      CALL BLKTRI (I1,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN,USOL(IS,JS),
+      CALL BLKTRI(I1,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN,USOL(IS,JS),
      1             IERROR,W)
       IF (IERROR .NE. 0) RETURN
 C     SET PERIODIC BOUNDARIES IF NECESSARY
@@ -101611,17 +101611,17 @@ C     SET PERIODIC BOUNDARIES IF NECESSARY
   400 CONTINUE
 C     MINIMIZE SOLUTION WITH RESPECT TO WEIGHTED LEAST SQUARES
 C     NORM IF OPERATOR IS SINGULAR
-      IF (SINGLR) CALL MINSOL (USOL,IDMN,ZN,ZM,PRTRB)
+      IF (SINGLR) CALL MINSOL(USOL,IDMN,ZN,ZM,PRTRB)
 C     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
 C     NOT FLAGGED
       IF (IORD .EQ. 2) RETURN
       IORD = 2
 C     COMPUTE NEW RIGHT HAND SIDE FOR FOURTH ORDER SOLUTION
-      CALL DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
+      CALL DEFER(COFX,COFY,USOL,IDMN,GRHS,MN)
       GO TO 360
       END SUBROUTINE SEPEL1
 
-      SUBROUTINE CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,
+      SUBROUTINE CHKPRM(INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,
      1                   COFY,IDMN,MN,IERROR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDMN
@@ -101660,10 +101660,10 @@ C     CHECK THAT EQUATION IS ELLIPTIC
       DLY = (D-C)/FLOAT(N)
       DO I=2,M
          XI = A+FLOAT(I-1)*DLX
-         CALL COFX (XI,AI,BI,CI)
+         CALL COFX(XI,AI,BI,CI)
          DO J=2,N
             YJ = C+FLOAT(J-1)*DLY
-            CALL COFY (YJ,DJ,EJ,FJ)
+            CALL COFY(YJ,DJ,EJ,FJ)
             IF (AI*DJ .GT. 0.0) GO TO  10
             IERROR = 10
             RETURN
@@ -101674,7 +101674,7 @@ C     NO ERROR FOUND
       IERROR = 0
       END SUBROUTINE CHKPRM
 
-      SUBROUTINE CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,
+      SUBROUTINE CHKSNG(MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,
      1                   SINGLR)
       IMPLICIT NONE
       INTEGER :: MBDCND, NBDCND
@@ -101706,19 +101706,19 @@ C     CHECK THAT NON-DERIVATIVE COEFFICIENT FUNCTIONS
 C     ARE ZERO
       DO I=IS,MS
          XI = AIT+FLOAT(I-1)*DLX
-         CALL COFX (XI,AI,BI,CI)
+         CALL COFX(XI,AI,BI,CI)
          IF (CI .NE. 0.0) RETURN
       END DO
       DO J=JS,NS
          YJ = CIT+FLOAT(J-1)*DLY
-         CALL COFY (YJ,DJ,EJ,FJ)
+         CALL COFY(YJ,DJ,EJ,FJ)
          IF (FJ .NE. 0.0) RETURN
       END DO
 C     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
       SINGLR = .TRUE.
       END SUBROUTINE CHKSNG
 
-      SUBROUTINE ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
+      SUBROUTINE ORTHG(USOL,IDMN,ZN,ZM,PERTRB)
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: PERTRB, USOL(IDMN,*), ZM(*), ZN(*)
@@ -101758,7 +101758,7 @@ C     SUBTRACT OFF CONSTANT PERTRB
       END DO
       END SUBROUTINE ORTHG
 
-      SUBROUTINE MINSOL (USOL,IDMN,ZN,ZM,PERTB)
+      SUBROUTINE MINSOL(USOL,IDMN,ZN,ZM,PERTB)
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: PERTB, USOL(IDMN,*), ZM(*), ZN(*)
@@ -101801,7 +101801,7 @@ C     SUBTRACT OFF CONSTANT PERTRB
       END DO
       END SUBROUTINE MINSOL
 
-      SUBROUTINE TRISP (N,A,B,C,D,U,Z)
+      SUBROUTINE TRISP(N,A,B,C,D,U,Z)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL :: A(N), B(N), C(N)
@@ -101840,7 +101840,7 @@ C     SET LAST COMPONENT EQUAL TO ONE
       END DO
       END SUBROUTINE TRISP
 
-      SUBROUTINE DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
+      SUBROUTINE DEFER(COFX,COFY,USOL,IDMN,GRHS,MN)
       IMPLICIT NONE
       INTEGER :: IDMN, MN
       REAL :: GRHS(MN,*), USOL(IDMN,*)
@@ -101871,13 +101871,13 @@ C     HAND SIDE WHEN CALLING BLKTRI FOR A FOURTH ORDER SOLUTION.
 C     COMPUTE TRUNCATION ERROR APPROXIMATION OVER THE ENTIRE MESH
       DO J=JS,NS
          YJ = CIT+FLOAT(J-1)*DLY
-         CALL COFY (YJ,DJ,EJ,FJ)
+         CALL COFY(YJ,DJ,EJ,FJ)
          DO I=IS,MS
             XI = AIT+FLOAT(I-1)*DLX
-            CALL COFX (XI,AI,BI,CI)
+            CALL COFX(XI,AI,BI,CI)
 C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT (XI,YJ)
-            CALL DXFN (USOL,IDMN,I,J,UXXX,UXXXX)
-            CALL DYFN (USOL,IDMN,I,J,UYYY,UYYYY)
+            CALL DXFN(USOL,IDMN,I,J,UXXX,UXXXX)
+            CALL DYFN(USOL,IDMN,I,J,UYYY,UYYYY)
             TX = AI*UXXXX/12.0+BI*UXXX/6.0
             TY = DJ*UYYYY/12.0+EJ*UYYY/6.0
 C     RESET FORM OF TRUNCATION IF AT BOUNDARY WHICH IS NON-PERIODIC
@@ -101896,7 +101896,7 @@ C     RESET THE RIGHT HAND SIDE IN USOL
       END DO
       END SUBROUTINE DEFER
 
-      SUBROUTINE DXFN (U,IDMN,I,J,UXXX,UXXXX)
+      SUBROUTINE DXFN(U,IDMN,I,J,UXXX,UXXXX)
       IMPLICIT NONE
       INTEGER :: I, IDMN, J
       REAL :: U(IDMN,*), UXXX, UXXXX
@@ -101962,7 +101962,7 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B
      1                                    14.0*U(K-1,J)+3.0*U(K,J))/DLX4
       END SUBROUTINE DXFN
 
-      SUBROUTINE DYFN (U,IDMN,I,J,UYYY,UYYYY)
+      SUBROUTINE DYFN(U,IDMN,I,J,UYYY,UYYYY)
       IMPLICIT NONE
       INTEGER :: I, IDMN, J
       REAL :: U(IDMN,*), UYYY, UYYYY
@@ -102029,7 +102029,7 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D
      1                                    14.0*U(I,L-1)+3.0*U(I,L))/DLY4
       END SUBROUTINE DYFN
 
-      SUBROUTINE BLKTRI (IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y,
+      SUBROUTINE BLKTRI(IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y,
      1                   IERROR,W)
       IMPLICIT NONE
       INTEGER :: IDIMY, IERROR, IFLG, M, MP, N, NP
@@ -102137,34 +102137,34 @@ C       BLKTRI WILL BE CALLED AGAIN WITH IFLG = 1  .
 C TEST M AND N FOR THE PROPER FORM
       NM = N
       IERROR = 0
-      IF ( ( M - 5 ) .LT. 0 ) GO TO 10
+      IF ((M - 5) .LT. 0) GO TO 10
       GO TO 20
    10 IERROR = 1
       GO TO 190
-   20 IF ( ( NM - 3 ) .LT. 0 ) GO TO 30
+   20 IF ((NM - 3) .LT. 0) GO TO 30
       GO TO 40
    30 IERROR = 2
       GO TO 190
-   40 IF ( ( IDIMY - M ) .LT. 0 ) GO TO 50
+   40 IF ((IDIMY - M) .LT. 0) GO TO 50
       GO TO 60
    50 IERROR = 3
       GO TO 190
    60 NH = N
       NPP = NP
-      IF ( ( NPP ) .EQ. 0 ) GO TO 80
+      IF ((NPP) .EQ. 0) GO TO 80
       GO TO 70
    70 NH = NH+1
    80 IK = 2
       K = 1
    90 IK = IK+IK
       K = K+1
-      IF ( ( NH - IK ) .LE. 0 ) GO TO 100
+      IF ((NH - IK) .LE. 0) GO TO 100
       GO TO 90
   100 NL = IK
       IK = IK+IK
       NL = NL-1
       IWAH = (K-2)*IK+K+6
-      IF ( ( NPP ) .EQ. 0 ) GO TO 120
+      IF ((NPP) .EQ. 0) GO TO 120
       GO TO 110
 C     DIVIDE W INTO WORKING SUB ARRAYS
   110 IW1 = IWAH
@@ -102176,29 +102176,29 @@ C     DIVIDE W INTO WORKING SUB ARRAYS
       W(1) = FLOAT(IW1-1+MAX0(2*NM,6*M))
       NM = NM-1
 C SUBROUTINE COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS
-  130 IF ( ( IERROR ) .EQ. 0 ) GO TO 140
+  130 IF ((IERROR) .EQ. 0) GO TO 140
       GO TO 190
   140 IW2 = IW1+M
       IW3 = IW2+M
       IWD = IW3+M
       IWW = IWD+M
       IWU = IWW+M
-      IF ( ( IFLG ) .EQ. 0 ) GO TO 150
+      IF ((IFLG) .EQ. 0) GO TO 150
       GO TO 160
-  150 CALL COMPB (NL,IERROR,AN,BN,CN,W(2),W(IWAH),W(IWBH))
+  150 CALL COMPB(NL,IERROR,AN,BN,CN,W(2),W(IWAH),W(IWBH))
       GO TO 190
-  160 IF ( ( MP ) .EQ. 0 ) GO TO 180
+  160 IF ((MP) .EQ. 0) GO TO 180
       GO TO 170
 C SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
-  170 CALL BLKTR1 (NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2),
+  170 CALL BLKTR1(NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2),
      1             W(IW3),W(IWD),W(IWW),W(IWU),PROD0,CPROD0)
       GO TO 190
-  180 CALL BLKTR1 (NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2),
+  180 CALL BLKTR1(NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2),
      1             W(IW3),W(IWD),W(IWW),W(IWU),PRODP,CPRODP)
   190 CONTINUE
       END SUBROUTINE BLKTRI
 
-      SUBROUTINE BLKTR1 (N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD,
+      SUBROUTINE BLKTR1(N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD,
      1                   WW,WU,PRDCT,CPRDCT)
       IMPLICIT NONE
       INTEGER :: IDIMY, M, N
@@ -102229,45 +102229,45 @@ C BEGIN REDUCTION PHASE
          I3 = I2+I1
          I4 = I2+I2
          IRM1 = IR-1
-         CALL INDXB (I2,IR,IM2,NM2)
+         CALL INDXB(I2,IR,IM2,NM2)
          IF (NM2 .EQ. 0) IM2 = 1
-         CALL INDXB (I1,IRM1,IM3,NM3)
+         CALL INDXB(I1,IRM1,IM3,NM3)
          IF (NM3 .EQ. 0) IM3 = 1
-         CALL INDXB (I3,IRM1,IM1,NM1)
+         CALL INDXB(I3,IRM1,IM1,NM1)
          IF (NM1 .EQ. 0) IM1 = 1
-         CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,Y(1,I2),W3,
+         CALL PRDCT(NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,Y(1,I2),W3,
      1               M,AM,BM,CM,WD,WW,WU)
          IF = 2**K
          DO I=I4,IF,I4
-            IF ( ( I - NM ) .LE. 0 ) GO TO 10
+            IF ((I - NM) .LE. 0) GO TO 10
             GO TO 80
    10       IPI1 = I+I1
             IPI2 = I+I2
             IPI3 = I+I3
-            CALL INDXC (I,IR,IDXC,NC)
-            IF ( ( I - IF ) .LT. 0 ) GO TO 20
+            CALL INDXC(I,IR,IDXC,NC)
+            IF ((I - IF) .LT. 0) GO TO 20
             GO TO 80
-   20       CALL INDXA (I,IR,IDXA,NA)
-            CALL INDXB (I-I1,IRM1,IM1,NM1)
+   20       CALL INDXA(I,IR,IDXA,NA)
+            CALL INDXB(I-I1,IRM1,IM1,NM1)
             IF (NM1 .EQ. 0) IM1 = 1
-            CALL INDXB (IPI2,IR,IP2,NP2)
+            CALL INDXB(IPI2,IR,IP2,NP2)
             IF (NP2 .EQ. 0) IP2 = 1
-            CALL INDXB (IPI1,IRM1,IP1,NP1)
+            CALL INDXB(IPI1,IRM1,IP1,NP1)
             IF (NP1 .EQ. 0) IP1 = 1
-            CALL INDXB (IPI3,IRM1,IP3,NP3)
+            CALL INDXB(IPI3,IRM1,IP3,NP3)
             IF (NP3 .EQ. 0) IP3 = 1
-            CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W3,W1,M,AM,
+            CALL PRDCT(NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W3,W1,M,AM,
      1                  BM,CM,WD,WW,WU)
-            IF ( ( IPI2 - NM ) .LE. 0 ) GO TO 50
+            IF ((IPI2 - NM) .LE. 0) GO TO 50
             GO TO 30
    30       DO J=1,M
                W3(J) = 0.
                W2(J) = 0.
             END DO
             GO TO  60
-   50       CALL PRDCT (NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,
+   50       CALL PRDCT(NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,
      1                  Y(1,IPI2),W3,M,AM,BM,CM,WD,WW,WU)
-            CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W3,W2,M,AM,
+            CALL PRDCT(NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W3,W2,M,AM,
      1                  BM,CM,WD,WW,WU)
    60       DO J=1,M
                Y(J,I) = W1(J)+W2(J)+Y(J,I)
@@ -102275,19 +102275,19 @@ C BEGIN REDUCTION PHASE
    80    CONTINUE
          END DO
       END DO
-      IF ( ( NPP ) .EQ. 0 ) GO TO 100
+      IF ((NPP) .EQ. 0) GO TO 100
       GO TO 320
 C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
   100 IF = 2**K
       I = IF/2
       I1 = I/2
-      CALL INDXB (I-I1,K-2,IM1,NM1)
+      CALL INDXB(I-I1,K-2,IM1,NM1)
       IF (NM1 .EQ. 0) IM1 = 1
-      CALL INDXB (I+I1,K-2,IP1,NP1)
+      CALL INDXB(I+I1,K-2,IP1,NP1)
       IF (NP1 .EQ. 0) IP1 = 1
-      CALL INDXB (I,K-1,IZ,NZ)
+      CALL INDXB(I,K-1,IZ,NZ)
       IF (NZ .EQ. 0) IZ = 1
-      CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,Y(1,I),W1,M,AM,
+      CALL PRDCT(NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,Y(1,I),W1,M,AM,
      1            BM,CM,WD,WW,WU)
       IZR = I
       DO J=1,M
@@ -102299,19 +102299,19 @@ C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
          I2 = 2**IR
          I1 = I2/2
          I = I2
-         CALL INDXC (I,IR,IDXC,NC)
-         CALL INDXB (I,IR,IZ,NZ)
+         CALL INDXC(I,IR,IDXC,NC)
+         CALL INDXB(I,IR,IZ,NZ)
          IF (NZ .EQ. 0) IZ = 1
-         CALL INDXB (I-I1,IR-1,IM1,NM1)
+         CALL INDXB(I-I1,IR-1,IM1,NM1)
          IF (NM1 .EQ. 0) IM1 = 1
-         CALL INDXB (I+I1,IR-1,IP1,NP1)
+         CALL INDXB(I+I1,IR-1,IP1,NP1)
          IF (NP1 .EQ. 0) IP1 = 1
-         CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W1,W1,M,AM,BM,
+         CALL PRDCT(NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W1,W1,M,AM,BM,
      1               CM,WD,WW,WU)
          DO J=1,M
             W1(J) = Y(J,I)+W1(J)
          END DO
-         CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,W1,M,AM,
+         CALL PRDCT(NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,W1,M,AM,
      1               BM,CM,WD,WW,WU)
       END DO
       NSWC_EXIT_1 : DO LL = 2 , K
@@ -102322,26 +102322,26 @@ C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
          I4 = I2+I2
          IFD = IF-I2
          DO I=I2,IFD,I4
-            IF ( ( I - I2 - IZR ) .EQ. 0 ) GO TO 140
+            IF ((I - I2 - IZR) .EQ. 0) GO TO 140
             GO TO 170
-  140       IF ( ( I - NM ) .LE. 0 ) GO TO 150
+  140       IF ((I - NM) .LE. 0) GO TO 150
             EXIT
-  150       CALL INDXA (I,IR,IDXA,NA)
-            CALL INDXB (I,IR,IZ,NZ)
+  150       CALL INDXA(I,IR,IDXA,NA)
+            CALL INDXB(I,IR,IZ,NZ)
             IF (NZ .EQ. 0) IZ = 1
-            CALL INDXB (I-I1,IR-1,IM1,NM1)
+            CALL INDXB(I-I1,IR-1,IM1,NM1)
             IF (NM1 .EQ. 0) IM1 = 1
-            CALL INDXB (I+I1,IR-1,IP1,NP1)
+            CALL INDXB(I+I1,IR-1,IP1,NP1)
             IF (NP1 .EQ. 0) IP1 = 1
-            CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W2,W2,M,AM,
+            CALL PRDCT(NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W2,W2,M,AM,
      1                  BM,CM,WD,WW,WU)
             DO J=1,M
                W2(J) = Y(J,I)+W2(J)
             END DO
-            CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W2,W2,M,
+            CALL PRDCT(NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W2,W2,M,
      1                  AM,BM,CM,WD,WW,WU)
             IZR = I
-            IF ( ( I - NM ) .EQ. 0 ) EXIT NSWC_EXIT_1
+            IF ((I - NM) .EQ. 0) EXIT NSWC_EXIT_1
             GO TO 170
   170    CONTINUE
          END DO
@@ -102349,15 +102349,15 @@ C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
       DO J=1,M
          Y(J,NM+1) = Y(J,NM+1)-CN(NM+1)*W1(J)-AN(NM+1)*W2(J)
       END DO
-      CALL INDXB (IF/2,K-1,IM1,NM1)
+      CALL INDXB(IF/2,K-1,IM1,NM1)
       IF (NM1 .EQ. 0) IM1 = 1
-      CALL INDXB (IF,K-1,IP,NP)
-      IF ( ( NCMPLX ) .EQ. 0 ) GO TO 220
+      CALL INDXB(IF,K-1,IP,NP)
+      IF ((NCMPLX) .EQ. 0) GO TO 220
       GO TO 210
-  210 CALL CPRDCT (NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1),
+  210 CALL CPRDCT(NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1),
      1             Y(1,NM+1),M,AM,BM,CM,W1,W3,WW)
       GO TO 230
-  220 CALL PRDCT (NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1),
+  220 CALL PRDCT(NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1),
      1            Y(1,NM+1),M,AM,BM,CM,WD,WW,WU)
   230 DO J=1,M
          W1(J) = AN(1)*Y(J,NM+1)
@@ -102371,16 +102371,16 @@ C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
          I4 = I2+I2
          I1 = I2/2
          I = I4
-         CALL INDXA (I,IR,IDXA,NA)
-         CALL INDXB (I-I2,IR,IM2,NM2)
+         CALL INDXA(I,IR,IDXA,NA)
+         CALL INDXB(I-I2,IR,IM2,NM2)
          IF (NM2 .EQ. 0) IM2 = 1
-         CALL INDXB (I-I2-I1,IR-1,IM3,NM3)
+         CALL INDXB(I-I2-I1,IR-1,IM3,NM3)
          IF (NM3 .EQ. 0) IM3 = 1
-         CALL INDXB (I-I1,IR-1,IM1,NM1)
+         CALL INDXB(I-I1,IR-1,IM1,NM1)
          IF (NM1 .EQ. 0) IM1 = 1
-         CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,W1,W1,M,AM,
+         CALL PRDCT(NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,W1,W1,M,AM,
      1               BM,CM,WD,WW,WU)
-         CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W1,W1,M,AM,BM,
+         CALL PRDCT(NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W1,W1,M,AM,BM,
      1               CM,WD,WW,WU)
          DO J=1,M
             Y(J,I) = Y(J,I)-W1(J)
@@ -102398,20 +102398,20 @@ C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
             IPI1 = I+I1
             IPI2 = I+I2
             IPI3 = I+I3
-            IF ( ( IPI2 - IZR ) .EQ. 0 ) GO TO 280
+            IF ((IPI2 - IZR) .EQ. 0) GO TO 280
             GO TO 270
-  270       IF ( ( I - IZR ) .EQ. 0 ) EXIT
+  270       IF ((I - IZR) .EQ. 0) EXIT
             GO TO 300
-  280       CALL INDXC (I,IR,IDXC,NC)
-            CALL INDXB (IPI2,IR,IP2,NP2)
+  280       CALL INDXC(I,IR,IDXC,NC)
+            CALL INDXB(IPI2,IR,IP2,NP2)
             IF (NP2 .EQ. 0) IP2 = 1
-            CALL INDXB (IPI1,IRM1,IP1,NP1)
+            CALL INDXB(IPI1,IRM1,IP1,NP1)
             IF (NP1 .EQ. 0) IP1 = 1
-            CALL INDXB (IPI3,IRM1,IP3,NP3)
+            CALL INDXB(IPI3,IRM1,IP3,NP3)
             IF (NP3 .EQ. 0) IP3 = 1
-            CALL PRDCT (NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,W2,W2,M,
+            CALL PRDCT(NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,W2,W2,M,
      1                  AM,BM,CM,WD,WW,WU)
-            CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W2,W2,M,AM,
+            CALL PRDCT(NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W2,W2,M,AM,
      1                  BM,CM,WD,WW,WU)
             DO J=1,M
                Y(J,I) = Y(J,I)-W2(J)
@@ -102431,47 +102431,47 @@ C BEGIN BACK SUBSTITUTION PHASE
          I4 = I2+I2
          IFD = IF-I2
          DO I=I2,IFD,I4
-            IF ( ( I - NM ) .LE. 0 ) GO TO 330
+            IF ((I - NM) .LE. 0) GO TO 330
             GO TO 430
   330       IMI1 = I-I1
             IMI2 = I-I2
             IPI1 = I+I1
             IPI2 = I+I2
-            CALL INDXA (I,IR,IDXA,NA)
-            CALL INDXC (I,IR,IDXC,NC)
-            CALL INDXB (I,IR,IZ,NZ)
+            CALL INDXA(I,IR,IDXA,NA)
+            CALL INDXC(I,IR,IDXC,NC)
+            CALL INDXB(I,IR,IZ,NZ)
             IF (NZ .EQ. 0) IZ = 1
-            CALL INDXB (IMI1,IRM1,IM1,NM1)
+            CALL INDXB(IMI1,IRM1,IM1,NM1)
             IF (NM1 .EQ. 0) IM1 = 1
-            CALL INDXB (IPI1,IRM1,IP1,NP1)
+            CALL INDXB(IPI1,IRM1,IP1,NP1)
             IF (NP1 .EQ. 0) IP1 = 1
-            IF ( ( I - I2 ) .LE. 0 ) GO TO 340
+            IF ((I - I2) .LE. 0) GO TO 340
             GO TO 360
   340       DO J=1,M
                W1(J) = 0.
             END DO
             GO TO 370
-  360       CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),Y(1,IMI2),
+  360       CALL PRDCT(NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),Y(1,IMI2),
      1                  W1,M,AM,BM,CM,WD,WW,WU)
-  370       IF ( ( IPI2 - NM ) .LE. 0 ) GO TO 400
+  370       IF ((IPI2 - NM) .LE. 0) GO TO 400
             GO TO 380
   380       DO J=1,M
                W2(J) = 0.
             END DO
             GO TO 410
-  400       CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),Y(1,IPI2),
+  400       CALL PRDCT(NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),Y(1,IPI2),
      1                  W2,M,AM,BM,CM,WD,WW,WU)
   410       DO J=1,M
                W1(J) = Y(J,I)+W1(J)+W2(J)
             END DO
-            CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,Y(1,I),
+            CALL PRDCT(NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,Y(1,I),
      1                  M,AM,BM,CM,WD,WW,WU)
   430    CONTINUE
          END DO
       END DO
       END SUBROUTINE BLKTR1
 
-      SUBROUTINE INDXA (I,IR,IDXA,NA)
+      SUBROUTINE INDXA(I,IR,IDXA,NA)
       IMPLICIT NONE
       INTEGER :: I, IDXA, IR, NA
       INTEGER :: IK, K, NCMPLX, NM, NPP
@@ -102480,13 +102480,13 @@ C BEGIN BACK SUBSTITUTION PHASE
      1                NM         ,NCMPLX     ,IK
       NA = 2**IR
       IDXA = I-NA+1
-      IF ( ( I - NM ) .LE. 0 ) GO TO 20
+      IF ((I - NM) .LE. 0) GO TO 20
       GO TO 10
    10 NA = 0
    20 RETURN
       END SUBROUTINE INDXA
 
-      SUBROUTINE INDXC (I,IR,IDXC,NC)
+      SUBROUTINE INDXC(I,IR,IDXC,NC)
       IMPLICIT NONE
       INTEGER :: I, IDXC, IR, NC
       INTEGER :: IK, K, NCMPLX, NM, NPP
@@ -102495,13 +102495,13 @@ C BEGIN BACK SUBSTITUTION PHASE
      1                NM         ,NCMPLX     ,IK
       NC = 2**IR
       IDXC = I
-      IF ( ( IDXC + NC - 1 - NM ) .LE. 0 ) GO TO 20
+      IF ((IDXC + NC - 1 - NM) .LE. 0) GO TO 20
       GO TO 10
    10 NC = 0
    20 RETURN
       END SUBROUTINE INDXC
 
-      SUBROUTINE INDXB (I,IR,IDX,IDP)
+      SUBROUTINE INDXB(I,IR,IDX,IDP)
       IMPLICIT NONE
       INTEGER :: I, IDP, IDX, IR
       INTEGER :: ID, IPL, IZH
@@ -102513,10 +102513,10 @@ C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
      1                NM         ,NCMPLX     ,IK
       IDP = 0
       NSWC_AI_I4 = IR
-      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
-      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      IF (NSWC_AI_I4 .LT. 0) GO TO 70
+      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
       GO TO 30
-   10 IF ( ( I - NM ) .LE. 0 ) GO TO 20
+   10 IF ((I - NM) .LE. 0) GO TO 20
       GO TO 70
    20 IDX = I
       IDP = 1
@@ -102526,17 +102526,17 @@ C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
       IDX = ID+ID+(IR-1)*IK+IR+(IK-I)/IZH+4
       IPL = IZH-1
       IDP = IZH+IZH-1
-      IF ( ( I - IPL - NM ) .LE. 0 ) GO TO 50
+      IF ((I - IPL - NM) .LE. 0) GO TO 50
       GO TO 40
    40 IDP = 0
       RETURN
-   50 IF ( ( I + IPL - NM ) .LE. 0 ) GO TO 70
+   50 IF ((I + IPL - NM) .LE. 0) GO TO 70
       GO TO 60
    60 IDP = NM+IPL-I+1
    70 RETURN
       END SUBROUTINE INDXB
 
-      SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
+      SUBROUTINE PROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
       REAL :: A(*), AA(*), B(*), BD(*), BM1(*), BM2(*), C(*)
@@ -102568,7 +102568,7 @@ C IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
       M1 = NM1
       M2 = NM2
       IA = NA
-   20 IF ( ( IA ) .LE. 0 ) GO TO 50
+   20 IF ((IA) .LE. 0) GO TO 50
       GO TO 30
    30 RT = AA(IA)
       IF (ND .EQ. 0) RT = -RT
@@ -102577,7 +102577,7 @@ C SCALAR MULTIPLICATION
       DO J=1,M
          Y(J) = RT*W(J)
       END DO
-   50 IF ( ( ID ) .LE. 0 ) GO TO 250
+   50 IF ((ID) .LE. 0) GO TO 250
       GO TO 60
    60 RT = BD(ID)
       ID = ID-1
@@ -102593,40 +102593,40 @@ C BEGIN SOLUTION TO SYSTEM
       END DO
       DEN = B(1)-RT-C(1)*D(2)
       W(1) = 1.
-      IF ( ( DEN ) .EQ. 0 ) GO TO 90
+      IF ((DEN) .EQ. 0) GO TO 90
       GO TO 80
    80 W(1) = (Y(1)-C(1)*W(2))/DEN
    90 DO J=2,M
          W(J) = W(J)-D(J)*W(J-1)
       END DO
-      IF ( ( NA ) .LE. 0 ) GO TO 130
+      IF ((NA) .LE. 0) GO TO 130
       GO TO 20
   110 DO J=1,M
          Y(J) = W(J)
       END DO
       IBR = 1
       GO TO  20
-  130 IF ( ( M1 ) .LE. 0 ) GO TO 140
+  130 IF ((M1) .LE. 0) GO TO 140
       GO TO 150
-  140 IF ( ( M2 ) .LE. 0 ) GO TO 110
+  140 IF ((M2) .LE. 0) GO TO 110
       GO TO 200
-  150 IF ( ( M2 ) .LE. 0 ) GO TO 170
+  150 IF ((M2) .LE. 0) GO TO 170
       GO TO 160
-  160 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+  160 IF ((ABS(BM1(M1)) - ABS(BM2(M2))) .LE. 0)
      &GO TO 200
       GO TO 170
-  170 IF ( ( IBR ) .LE. 0 ) GO TO 180
+  170 IF ((IBR) .LE. 0) GO TO 180
       GO TO 190
-  180 IF ( ( ABS ( BM1 ( M1 ) - BD ( ID ) ) - ABS ( BM1 ( M1 ) - RT ) )
-     &.LT. 0 ) GO TO 110
+  180 IF ((ABS(BM1(M1) - BD(ID)) - ABS(BM1(M1) - RT))
+     &.LT. 0) GO TO 110
       GO TO 190
   190 RT = RT-BM1(M1)
       M1 = M1-1
       GO TO 230
-  200 IF ( ( IBR ) .LE. 0 ) GO TO 210
+  200 IF ((IBR) .LE. 0) GO TO 210
       GO TO 220
-  210 IF ( ( ABS ( BM2 ( M2 ) - BD ( ID ) ) - ABS ( BM2 ( M2 ) - RT ) )
-     &.LT. 0 ) GO TO 110
+  210 IF ((ABS(BM2(M2) - BD(ID)) - ABS(BM2(M2) - RT))
+     &.LT. 0) GO TO 110
       GO TO 220
   220 RT = RT-BM2(M2)
       M2 = M2-1
@@ -102637,7 +102637,7 @@ C BEGIN SOLUTION TO SYSTEM
   250 RETURN
       END SUBROUTINE PROD0
 
-      SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
+      SUBROUTINE PRODP(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
       REAL :: A(*), AA(*), B(*), BD(*), BM1(*), BM2(*), C(*)
@@ -102668,7 +102668,7 @@ C IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
       M1 = NM1
       M2 = NM2
       IA = NA
-   20 IF ( ( IA ) .LE. 0 ) GO TO 50
+   20 IF ((IA) .LE. 0) GO TO 50
       GO TO 30
    30 RT = AA(IA)
       IF (ND .EQ. 0) RT = -RT
@@ -102676,7 +102676,7 @@ C IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
       DO J=1,M
          Y(J) = RT*W(J)
       END DO
-   50 IF ( ( ID ) .LE. 0 ) GO TO 280
+   50 IF ((ID) .LE. 0) GO TO 280
       GO TO 60
    60 RT = BD(ID)
       ID = ID-1
@@ -102689,7 +102689,7 @@ C BEGIN SOLUTION TO SYSTEM
       U(1) = A(1)/DEN
       W(1) = Y(1)/DEN
       V = C(M)
-      IF ( ( MM2 - 2 ) .LT. 0 ) GO TO 90
+      IF ((MM2 - 2) .LT. 0) GO TO 90
       GO TO 70
    70 DO J=2,MM2
          DEN = B(J)-RT-A(J)*D(J-1)
@@ -102707,7 +102707,7 @@ C BEGIN SOLUTION TO SYSTEM
       BH = BH-V*U(M-2)
       YM = YM-V*W(M-2)
       DEN = BH-AM*D(M-1)
-      IF ( ( DEN ) .EQ. 0 ) GO TO 110
+      IF ((DEN) .EQ. 0) GO TO 110
       GO TO 100
   100 W(M) = (YM-AM*W(M-1))/DEN
       GO TO 120
@@ -102717,34 +102717,34 @@ C BEGIN SOLUTION TO SYSTEM
          K = M-J
          W(K) = W(K)-D(K)*W(K+1)-U(K)*W(M)
       END DO
-      IF ( ( NA ) .LE. 0 ) GO TO 160
+      IF ((NA) .LE. 0) GO TO 160
       GO TO 20
   140 DO J=1,M
          Y(J) = W(J)
       END DO
       IBR = 1
       GO TO  20
-  160 IF ( ( M1 ) .LE. 0 ) GO TO 170
+  160 IF ((M1) .LE. 0) GO TO 170
       GO TO 180
-  170 IF ( ( M2 ) .LE. 0 ) GO TO 140
+  170 IF ((M2) .LE. 0) GO TO 140
       GO TO 230
-  180 IF ( ( M2 ) .LE. 0 ) GO TO 200
+  180 IF ((M2) .LE. 0) GO TO 200
       GO TO 190
-  190 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+  190 IF ((ABS(BM1(M1)) - ABS(BM2(M2))) .LE. 0)
      &GO TO 230
       GO TO 200
-  200 IF ( ( IBR ) .LE. 0 ) GO TO 210
+  200 IF ((IBR) .LE. 0) GO TO 210
       GO TO 220
-  210 IF ( ( ABS ( BM1 ( M1 ) - BD ( ID ) ) - ABS ( BM1 ( M1 ) - RT ) )
-     &.LT. 0 ) GO TO 140
+  210 IF ((ABS(BM1(M1) - BD(ID)) - ABS(BM1(M1) - RT))
+     &.LT. 0) GO TO 140
       GO TO 220
   220 RT = RT-BM1(M1)
       M1 = M1-1
       GO TO 260
-  230 IF ( ( IBR ) .LE. 0 ) GO TO 240
+  230 IF ((IBR) .LE. 0) GO TO 240
       GO TO 250
-  240 IF ( ( ABS ( BM2 ( M2 ) - BD ( ID ) ) - ABS ( BM2 ( M2 ) - RT ) )
-     &.LT. 0 ) GO TO 140
+  240 IF ((ABS(BM2(M2) - BD(ID)) - ABS(BM2(M2) - RT))
+     &.LT. 0) GO TO 140
       GO TO 250
   250 RT = RT-BM2(M2)
       M2 = M2-1
@@ -102785,7 +102785,7 @@ C ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
       M2 = NM2
       IA = NA
    20 IFLG = 0
-      IF ( ( ID ) .LE. 0 ) GO TO 90
+      IF ((ID) .LE. 0) GO TO 90
       GO TO 30
    30 CRT = BD(ID)
       ID = ID-1
@@ -102799,7 +102799,7 @@ C BEGIN SOLUTION TO SYSTEM
          W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
       END DO
       DEN = B(1)-CRT-C(1)*D(2)
-      IF ( ( CABS ( DEN ) ) .EQ. 0 ) GO TO 60
+      IF ((CABS(DEN)) .EQ. 0) GO TO 60
       GO TO 50
    50 Y(1) = (Y(1)-C(1)*W(2))/DEN
       GO TO  70
@@ -102807,19 +102807,19 @@ C BEGIN SOLUTION TO SYSTEM
    70 DO J=2,M
          Y(J) = W(J)-D(J)*Y(J-1)
       END DO
-   90 IF ( ( M1 ) .LE. 0 ) GO TO 100
+   90 IF ((M1) .LE. 0) GO TO 100
       GO TO 120
-  100 IF ( ( M2 ) .LE. 0 ) GO TO 210
+  100 IF ((M2) .LE. 0) GO TO 210
       GO TO 110
   110 RT = BM2(M2)
       M2 = M2-1
       GO TO 170
-  120 IF ( ( M2 ) .LE. 0 ) GO TO 130
+  120 IF ((M2) .LE. 0) GO TO 130
       GO TO 140
   130 RT = BM1(M1)
       M1 = M1-1
       GO TO 170
-  140 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+  140 IF ((ABS(BM1(M1)) - ABS(BM2(M2))) .LE. 0)
      &GO TO 160
       GO TO 150
   150 RT = BM1(M1)
@@ -102828,7 +102828,7 @@ C BEGIN SOLUTION TO SYSTEM
   160 RT = BM2(M2)
       M2 = M2-1
   170 Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)
-      IF ( ( MM - 2 ) .LT. 0 ) GO TO 200
+      IF ((MM - 2) .LT. 0) GO TO 200
       GO TO 180
 C MATRIX MULTIPLICATION
   180 DO J=2,MM
@@ -102840,7 +102840,7 @@ C MATRIX MULTIPLICATION
       Y(M-1) = Y1
       IFLG = 1
       GO TO  20
-  210 IF ( ( IA ) .LE. 0 ) GO TO 240
+  210 IF ((IA) .LE. 0) GO TO 240
       GO TO 220
   220 RT = AA(IA)
       IA = IA-1
@@ -102849,14 +102849,14 @@ C SCALAR MULTIPLICATION
       DO J=1,M
          Y(J) = RT*Y(J)
       END DO
-  240 IF ( ( IFLG ) .LE. 0 ) GO TO 250
+  240 IF ((IFLG) .LE. 0) GO TO 250
       GO TO 20
   250 DO J=1,M
          YY(J) = REAL(Y(J))
       END DO
       END SUBROUTINE CPROD0
 
-      SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
+      SUBROUTINE CPRODP(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
       REAL :: A(*), AA(*), B(*), BM1(*), BM2(*), C(*), X(*)
@@ -102888,7 +102888,7 @@ C ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
       M2 = NM2
       IA = NA
    20 IFLG = 0
-      IF ( ( ID ) .LE. 0 ) GO TO 110
+      IF ((ID) .LE. 0) GO TO 110
       GO TO 30
    30 CRT = BD(ID)
       ID = ID-1
@@ -102901,7 +102901,7 @@ C BEGIN SOLUTION TO SYSTEM
       U(1) = A(1)/DEN
       Y(1) = Y(1)/DEN
       V = CMPLX(C(M),0.)
-      IF ( ( MM2 - 2 ) .LT. 0 ) GO TO 60
+      IF ((MM2 - 2) .LT. 0) GO TO 60
       GO TO 40
    40 DO J=2,MM2
          DEN = B(J)-CRT-A(J)*D(J-1)
@@ -102919,7 +102919,7 @@ C BEGIN SOLUTION TO SYSTEM
       BH = BH-V*U(M-2)
       YM = YM-V*Y(M-2)
       DEN = BH-AM*D(M-1)
-      IF ( ( CABS ( DEN ) ) .EQ. 0 ) GO TO 80
+      IF ((CABS(DEN)) .EQ. 0) GO TO 80
       GO TO 70
    70 Y(M) = (YM-AM*Y(M-1))/DEN
       GO TO  90
@@ -102929,19 +102929,19 @@ C BEGIN SOLUTION TO SYSTEM
          K = M-J
          Y(K) = Y(K)-D(K)*Y(K+1)-U(K)*Y(M)
       END DO
-  110 IF ( ( M1 ) .LE. 0 ) GO TO 120
+  110 IF ((M1) .LE. 0) GO TO 120
       GO TO 140
-  120 IF ( ( M2 ) .LE. 0 ) GO TO 230
+  120 IF ((M2) .LE. 0) GO TO 230
       GO TO 130
   130 RT = BM2(M2)
       M2 = M2-1
       GO TO 190
-  140 IF ( ( M2 ) .LE. 0 ) GO TO 150
+  140 IF ((M2) .LE. 0) GO TO 150
       GO TO 160
   150 RT = BM1(M1)
       M1 = M1-1
       GO TO 190
-  160 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+  160 IF ((ABS(BM1(M1)) - ABS(BM2(M2))) .LE. 0)
      &GO TO 180
       GO TO 170
   170 RT = BM1(M1)
@@ -102952,7 +102952,7 @@ C BEGIN SOLUTION TO SYSTEM
 C MATRIX MULTIPLICATION
   190 YH = Y(1)
       Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)+A(1)*Y(M)
-      IF ( ( MM - 2 ) .LT. 0 ) GO TO 220
+      IF ((MM - 2) .LT. 0) GO TO 220
       GO TO 200
   200 DO J=2,MM
          Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
@@ -102963,7 +102963,7 @@ C MATRIX MULTIPLICATION
       Y(M-1) = Y1
       IFLG = 1
       GO TO  20
-  230 IF ( ( IA ) .LE. 0 ) GO TO 260
+  230 IF ((IA) .LE. 0) GO TO 260
       GO TO 240
   240 RT = AA(IA)
       IA = IA-1
@@ -102972,14 +102972,14 @@ C SCALAR MULTIPLICATION
       DO J=1,M
          Y(J) = RT*Y(J)
       END DO
-  260 IF ( ( IFLG ) .LE. 0 ) GO TO 270
+  260 IF ((IFLG) .LE. 0) GO TO 270
       GO TO 20
   270 DO J=1,M
          YY(J) = REAL(Y(J))
       END DO
       END SUBROUTINE CPRODP
 
-      SUBROUTINE COMPB (N,IERROR,AN,BN,CN,B,AH,BH)
+      SUBROUTINE COMPB(N,IERROR,AN,BN,CN,B,AH,BH)
       IMPLICIT NONE
       INTEGER :: IERROR, N
       REAL :: AH(*), AN(*), B(*), BH(*), BN(*), CN(*)
@@ -103002,7 +103002,7 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
       DO J=2,NM
          BNORM = AMAX1(BNORM,ABS(BN(J)))
          ARG = AN(J)*CN(J-1)
-         IF ( ( ARG ) .LT. 0 ) GO TO 220
+         IF ((ARG) .LT. 0) GO TO 220
          GO TO 30
    30    B(J) = SIGN(SQRT(ARG),AN(J))
       END DO
@@ -103016,8 +103016,8 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
          IPL = I4-1
          IFD = IF-I4
          DO I=I4,IFD,I4
-            CALL INDXB (I,L,IB,NB)
-            IF ( ( NB ) .LE. 0 ) EXIT
+            CALL INDXB(I,L,IB,NB)
+            IF ((NB) .LE. 0) EXIT
             GO TO 50
    50       JS = I-IPL
             JF = JS+NB-1
@@ -103027,8 +103027,8 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
                BH(LS) = BN(J)
                AH(LS) = B(J)
             END DO
-            CALL TQLRT0 (NB,BH,AH,IERROR)
-            IF ( ( IERROR ) .EQ. 0 ) GO TO 70
+            CALL TQLRT0(NB,BH,AH,IERROR)
+            IF ((IERROR) .EQ. 0) GO TO 70
             GO TO 210
    70       LH = IB-1
             DO J=1,NB
@@ -103051,10 +103051,10 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
          BH(J) = SIGN(SQRT(ARG),-AN(L1))
          AH(J) = -BN(L1)
       END DO
-      CALL TQLRT0 (NB,AH,BH,IERROR)
+      CALL TQLRT0(NB,AH,BH,IERROR)
       IF (IERROR .NE. 0) GO TO 210
-      CALL INDXB (IF,K-1,J2,LH)
-      CALL INDXB (IF/2,K-1,J1,LH)
+      CALL INDXB(IF,K-1,J2,LH)
+      CALL INDXB(IF/2,K-1,J1,LH)
       J2 = J2+1
       LH = J2
       N2M2 = J2+NM+NM-2
@@ -103065,18 +103065,18 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
       B(LH) = B(J2)
       J2 = J2+1
       LH = LH+1
-      IF ( ( J2 - N2M2 ) .LE. 0 ) GO TO 170
+      IF ((J2 - N2M2) .LE. 0) GO TO 170
       GO TO 190
   180 J2 = J2+1
       J1 = J1+1
-      IF ( ( J2 - N2M2 ) .LE. 0 ) GO TO 170
+      IF ((J2 - N2M2) .LE. 0) GO TO 170
       GO TO 190
   190 B(LH) = B(N2M2+1)
-      CALL INDXB (IF,K-1,J1,J2)
+      CALL INDXB(IF,K-1,J1,J2)
       J2 = J1+NMP+NMP
       ALLOCATE(ROOT_COMPLEX(NMP),ROOT_REAL(NMP))
       ROOT_REAL = B(J1:J1+NM)
-      CALL PPADD (NMP,IERROR,AN,CN,ROOT_COMPLEX,ROOT_REAL,B(J2))
+      CALL PPADD(NMP,IERROR,AN,CN,ROOT_COMPLEX,ROOT_REAL,B(J2))
       IF (IERROR .NE. 0) RETURN
       B(J1:J1+2*NMP-1) = TRANSFER(ROOT_COMPLEX,B(J1),2*NMP)
       IF (NCMPLX .EQ. 0) THEN
@@ -103090,7 +103090,7 @@ C     ERROR RETURN
   220 IERROR = 5
       END SUBROUTINE COMPB
 
-      SUBROUTINE TQLRT0 (N,D,E2,IERR)
+      SUBROUTINE TQLRT0(N,D,E2,IERR)
       IMPLICIT NONE
       INTEGER :: N, IERR
       REAL :: D(N), E2(N)
@@ -103139,7 +103139,7 @@ C                **********
          C = B*B
 C     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
    20    DO M=L,N
-            IF ( E2 ( M ) .LE. C ) EXIT
+            IF (E2(M) .LE. C) EXIT
 C     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -103210,7 +103210,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
   150 RETURN
       END SUBROUTINE TQLRT0
 
-      SUBROUTINE PPADD (N,IERROR,A,C,CBP,BP,BH)
+      SUBROUTINE PPADD(N,IERROR,A,C,CBP,BP,BH)
       IMPLICIT NONE
       INTEGER :: IERROR, N
       REAL :: A(*), BH(*), BP(*), C(*)
@@ -103240,9 +103240,9 @@ C     WHICH ENTERS THROUGH BP.
       IZ = N
       IZM = IZ-1
       IZM2 = IZ-2
-      NSWC_AI_R4 = BP ( N ) - BP ( 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      NSWC_AI_R4 = BP(N) - BP(1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 10
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 420
       GO TO 30
    10 DO J=1,N
          NT = N-J
@@ -103255,31 +103255,31 @@ C     WHICH ENTERS THROUGH BP.
    50 NCMPLX = 0
       MODIZ = MOD(IZ,2)
       IS = 1
-      IF ( ( MODIZ ) .EQ. 0 ) GO TO 70
+      IF ((MODIZ) .EQ. 0) GO TO 70
       GO TO 60
-   60 NSWC_AI_R4 = A ( 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 100
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+   60 NSWC_AI_R4 = A(1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 100
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 420
       GO TO 70
    70 XL = BH(1)
       DB = BH(3)-BH(1)
    80 XL = XL-DB
-      IF ( ( PSGF ( XL , IZ , C , A , BH ) ) .LE. 0 ) GO TO 80
+      IF ((PSGF(XL , IZ , C , A , BH)) .LE. 0) GO TO 80
       GO TO 90
    90 SGN = -1.
       CBP(1) = CMPLX(BSRH(XL,BH(1),IZ,C,A,BH,PSGF,SGN),0.)
       IS = 2
   100 IF = IZ-1
-      IF ( ( MODIZ ) .EQ. 0 ) GO TO 120
+      IF ((MODIZ) .EQ. 0) GO TO 120
       GO TO 110
-  110 NSWC_AI_R4 = A ( 1 )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+  110 NSWC_AI_R4 = A(1)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 120
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 420
       GO TO 150
   120 XR = BH(IZ)
       DB = BH(IZ)-BH(IZ-2)
   130 XR = XR+DB
-      IF ( ( PSGF ( XR , IZ , C , A , BH ) ) .LT. 0 ) GO TO 130
+      IF ((PSGF(XR , IZ , C , A , BH)) .LT. 0) GO TO 130
       GO TO 140
   140 SGN = 1.
       CBP(IZ) = CMPLX(BSRH(BH(IZ),XR,IZ,C,A,BH,PSGF,SGN),0.)
@@ -103290,11 +103290,11 @@ C     WHICH ENTERS THROUGH BP.
          SGN = -1.
          XM = BSRH(XL,XR,IZ,C,A,BH,PPSPF,SGN)
          PSG = PSGF(XM,IZ,C,A,BH)
-         IF ( ( ABS ( PSG ) - EPS ) .LE. 0 ) GO TO 180
+         IF ((ABS(PSG) - EPS) .LE. 0) GO TO 180
          GO TO 160
-  160    NSWC_AI_R4 = PSG * PPSGF ( XM , IZ , C , A , BH )
-         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 170
-         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 180
+  160    NSWC_AI_R4 = PSG * PPSGF(XM , IZ , C , A , BH)
+         IF (NSWC_AI_R4 .LT. 0) GO TO 170
+         IF (NSWC_AI_R4 .EQ. 0) GO TO 180
          GO TO 190
 C     CASE OF A REAL ZERO
   170    SGN = 1.
@@ -103321,31 +103321,31 @@ C     CASE OF A COMPLEX ZERO
             FP = FP+DD
             FPP = FPP-DD*DD
          END DO
-         IF ( ( MODIZ ) .EQ. 0 ) GO TO 220
+         IF ((MODIZ) .EQ. 0) GO TO 220
          GO TO 230
   220    F = (1.,0.)-FSG-HSG
          GO TO 240
   230    F = (1.,0.)+FSG+HSG
   240    I3 = 0
-         IF ( ( CABS ( FP ) ) .LE. 0 ) GO TO 260
+         IF ((CABS(FP)) .LE. 0) GO TO 260
          GO TO 250
   250    I3 = 1
          R3 = -F/FP
   260    I2 = 0
-         IF ( ( CABS ( FPP ) ) .LE. 0 ) GO TO 320
+         IF ((CABS(FPP)) .LE. 0) GO TO 320
          GO TO 270
   270    I2 = 1
          CDIS = CSQRT(FP**2-2.*F*FPP)
          R1 = CDIS-FP
          R2 = -FP-CDIS
-         IF ( ( CABS ( R1 ) - CABS ( R2 ) ) .LE. 0 ) GO TO 290
+         IF ((CABS(R1) - CABS(R2)) .LE. 0) GO TO 290
          GO TO 280
   280    R1 = R1/FPP
          GO TO 300
   290    R1 = R2/FPP
   300    R2 = 2.*F/FPP/R1
          IF (CABS(R2) .LT. CABS(R1)) R1 = R2
-         IF ( ( I3 ) .LE. 0 ) GO TO 330
+         IF ((I3) .LE. 0) GO TO 330
          GO TO 310
   310    IF (CABS(R3) .LT. CABS(R1)) R1 = R3
          GO TO 330
@@ -103354,7 +103354,7 @@ C     CASE OF A COMPLEX ZERO
          IT = IT+1
          IF (IT .GT. 50) GO TO 420
          IF (CABS(R1) .GT. SCNV) GO TO 200
-         IF ( ( ICV ) .LE. 0 ) GO TO 340
+         IF ((ICV) .LE. 0) GO TO 340
          GO TO 350
   340    ICV = 1
          GO TO 200
@@ -103362,9 +103362,9 @@ C     CASE OF A COMPLEX ZERO
          CBP(IG+1) = CONJG(CX)
   360 CONTINUE
       END DO
-      NSWC_AI_R4 = CABS ( CBP ( N ) ) - CABS ( CBP ( 1 ) )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 370
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      NSWC_AI_R4 = CABS(CBP(N)) - CABS(CBP(1))
+      IF (NSWC_AI_R4 .LT. 0) GO TO 370
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 420
       GO TO 390
   370 NHALF = N/2
       DO J=1,NHALF
@@ -103375,7 +103375,7 @@ C     CASE OF A COMPLEX ZERO
       END DO
   390 NCMPLX = 1
       DO J=2,IZ
-         IF ( ( AIMAG ( CBP ( J ) ) ) .EQ. 0 ) GO TO 400
+         IF ((AIMAG(CBP(J))) .EQ. 0) GO TO 400
          GO TO 430
   400 CONTINUE
       END DO
@@ -103388,7 +103388,7 @@ C     CASE OF A COMPLEX ZERO
   430 CONTINUE
       END SUBROUTINE PPADD
 
-      FUNCTION PSGF (X,IZ,C,A,BH)
+      FUNCTION PSGF(X,IZ,C,A,BH)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
@@ -103403,14 +103403,14 @@ C     CASE OF A COMPLEX ZERO
          FSG = FSG*A(J)*DD
          HSG = HSG*C(J)*DD
       END DO
-      IF ( ( MOD ( IZ , 2 ) ) .EQ. 0 ) GO TO 20
+      IF ((MOD(IZ , 2)) .EQ. 0) GO TO 20
       GO TO 30
    20 PSGF = 1.-FSG-HSG
       RETURN
    30 PSGF = 1.+FSG+HSG
       END FUNCTION PSGF
 
-      FUNCTION BSRH (XLL,XRR,IZ,C,A,BH,F,SGN)
+      FUNCTION BSRH(XLL,XRR,IZ,C,A,BH,F,SGN)
       IMPLICIT NONE
       INTEGER :: IZ
       REAL :: A(*), BH(*), C(*), SGN, XLL, XRR
@@ -103426,20 +103426,20 @@ C     CASE OF A COMPLEX ZERO
       XR = XRR
       DX = .5*ABS(XR-XL)
    10 X = .5*(XL+XR)
-      NSWC_AI_R4 = SGN * F ( X , IZ , C , A , BH )
-      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
-      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      NSWC_AI_R4 = SGN * F(X , IZ , C , A , BH)
+      IF (NSWC_AI_R4 .LT. 0) GO TO 30
+      IF (NSWC_AI_R4 .EQ. 0) GO TO 50
       GO TO 20
    20 XR = X
       GO TO  40
    30 XL = X
    40 DX = .5*DX
-      IF ( ( DX - CNV ) .LE. 0 ) GO TO 50
+      IF ((DX - CNV) .LE. 0) GO TO 50
       GO TO 10
    50 BSRH = .5*(XL+XR)
       END FUNCTION BSRH
 
-      FUNCTION PPSGF (X,IZ,C,A,BH)
+      FUNCTION PPSGF(X,IZ,C,A,BH)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
@@ -103454,7 +103454,7 @@ C     CASE OF A COMPLEX ZERO
       PPSGF = SUM
       END FUNCTION PPSGF
 
-      FUNCTION PPSPF (X,IZ,C,A,BH)
+      FUNCTION PPSPF(X,IZ,C,A,BH)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
@@ -103469,7 +103469,7 @@ C     CASE OF A COMPLEX ZERO
       PPSPF = SUM
       END FUNCTION PPSPF
 
-      SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
+      SUBROUTINE URGET(N, IBEG, IEND, IX, L, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IBEG, IEND
       INTEGER, INTENT(INOUT) :: IERR, IX
@@ -103554,7 +103554,7 @@ C                         ERROR RETURN
   120 IERR = 3
       END SUBROUTINE URGET
 
-      SUBROUTINE URNG (IX, X, N, IERR)
+      SUBROUTINE URNG(IX, X, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -103614,7 +103614,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE URNG
 
-      SUBROUTINE DURNG (IX, X, N, IERR)
+      SUBROUTINE DURNG(IX, X, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -103673,7 +103673,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE DURNG
 
-      SUBROUTINE URNG0 (IX, U, V)
+      SUBROUTINE URNG0(IX, U, V)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       REAL, INTENT(INOUT) :: U, V
@@ -103725,7 +103725,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       U = 0.5 + (0.5 - V)
       END SUBROUTINE URNG0
 
-      SUBROUTINE DURNG0 (IX, U, V)
+      SUBROUTINE DURNG0(IX, U, V)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       DOUBLE PRECISION, INTENT(INOUT) :: U, V
@@ -103777,7 +103777,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       U = 0.5D0 + (0.5D0 - V)
       END SUBROUTINE DURNG0
 
-      SUBROUTINE URNG1 (IX, U, V, D)
+      SUBROUTINE URNG1(IX, U, V, D)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       REAL, INTENT(INOUT) :: D, U, V
@@ -103833,7 +103833,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       U = 0.5 + (0.5 - V)
       END SUBROUTINE URNG1
 
-      SUBROUTINE DURNG1 (IX, U, V, D)
+      SUBROUTINE DURNG1(IX, U, V, D)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       DOUBLE PRECISION, INTENT(INOUT) :: U, V, D
@@ -103889,7 +103889,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       U = 0.5D0 + (0.5D0 - V)
       END SUBROUTINE DURNG1
 
-      SUBROUTINE URNG2 (IX, X, Y, N, IERR)
+      SUBROUTINE URNG2(IX, X, Y, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -103947,7 +103947,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE URNG2
 
-      SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
+      SUBROUTINE DURNG2(IX, X, Y, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104005,7 +104005,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE DURNG2
 
-      SUBROUTINE RCIR (N, IX, X, Y, IERR)
+      SUBROUTINE RCIR(N, IX, X, Y, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104015,10 +104015,10 @@ C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 C              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 C-----------------------------------------------------------------------
 C------------------
-      CALL RCIR1 (N, IX, X, 1, Y, 1, IERR)
+      CALL RCIR1(N, IX, X, 1, Y, 1, IERR)
       END SUBROUTINE RCIR
 
-      SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
+      SUBROUTINE RCIR1(N, IX, X, KX, Y, KY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
@@ -104089,7 +104089,7 @@ C                          ERROR RETURN
   110 IERR = 2
       END SUBROUTINE RCIR1
 
-      SUBROUTINE DRCIR (N, IX, X, Y, IERR)
+      SUBROUTINE DRCIR(N, IX, X, Y, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104099,10 +104099,10 @@ C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 C              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 C-----------------------------------------------------------------------
 C------------------
-      CALL DRCIR1 (N, IX, X, 1, Y, 1, IERR)
+      CALL DRCIR1(N, IX, X, 1, Y, 1, IERR)
       END SUBROUTINE DRCIR
 
-      SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
+      SUBROUTINE DRCIR1(N, IX, X, KX, Y, KY, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
@@ -104173,7 +104173,7 @@ C                          ERROR RETURN
   110 IERR = 2
       END SUBROUTINE DRCIR1
 
-      SUBROUTINE RNOR (IX, A, N, IERR)
+      SUBROUTINE RNOR(IX, A, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104192,7 +104192,7 @@ C---------------------
       IERR = 0
       IF (N .EQ. 1) GO TO 20
       M = N/2
-      CALL RCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
+      CALL RCIR1(M, IX, A(1), 2, A(2), 2, IERR)
       M = M + M
 C                  OBTAIN THE FIRST M VARIATES
       DO I = 1,M,2
@@ -104205,7 +104205,7 @@ C                  OBTAIN THE FIRST M VARIATES
       END DO
       IF (M .EQ. N) RETURN
 C            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
-   20 CALL RCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
+   20 CALL RCIR1(1, IX, T(1), 1, T(2), 1, IERR)
       R = T(1)*T(1) + T(2)*T(2)
       S = SQRT(-2.0*ALOG(R)/R)
       A(N) = S*T(1)
@@ -104216,7 +104216,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE RNOR
 
-      SUBROUTINE DRNOR (IX, A, N, IERR)
+      SUBROUTINE DRNOR(IX, A, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104234,7 +104234,7 @@ C---------------------
       IERR = 0
       IF (N .EQ. 1) GO TO 20
       M = N/2
-      CALL DRCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
+      CALL DRCIR1(M, IX, A(1), 2, A(2), 2, IERR)
       M = M + M
 C                  OBTAIN THE FIRST M VARIATES
       DO I = 1,M,2
@@ -104247,7 +104247,7 @@ C                  OBTAIN THE FIRST M VARIATES
       END DO
       IF (M .EQ. N) RETURN
 C            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
-   20 CALL DRCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
+   20 CALL DRCIR1(1, IX, T(1), 1, T(2), 1, IERR)
       R = T(1)*T(1) + T(2)*T(2)
       S = DSQRT(-2.D0*DLOG(R)/R)
       A(N) = S*T(1)
@@ -104258,7 +104258,7 @@ C                         ERROR RETURN
   110 IERR = 2
       END SUBROUTINE DRNOR
 
-      SUBROUTINE NRNG (IX, A, N, IERR)
+      SUBROUTINE NRNG(IX, A, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104270,7 +104270,7 @@ C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
       DATA PI2 /6.2831853071796/
-      CALL URNG (IX,A,N,IERR)
+      CALL URNG(IX,A,N,IERR)
       IF (IERR .NE. 0) RETURN
       IF (N .EQ. 1) GO TO 20
       M = N/2
@@ -104282,12 +104282,12 @@ C-----------------------------------------------------------------------
          A(I+1) = R*SIN(PHI)
       END DO
       IF (M .EQ. N) RETURN
-   20 CALL URNG (IX,TEMP,1,IERR)
+   20 CALL URNG(IX,TEMP,1,IERR)
       R = SQRT(-2.0*ALOG(A(N)))
       A(N) = R*COS(PI2*TEMP(1))
       END SUBROUTINE NRNG
 
-      SUBROUTINE DNRNG (IX, A, N, IERR)
+      SUBROUTINE DNRNG(IX, A, N, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104298,7 +104298,7 @@ C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
       DATA PI2 /6.28318530717958647692528676656D0/
-      CALL DURNG (IX, A, N, IERR)
+      CALL DURNG(IX, A, N, IERR)
       IF (IERR .NE. 0) RETURN
       IF (N .EQ. 1) GO TO 20
       M = N/2
@@ -104310,12 +104310,12 @@ C-----------------------------------------------------------------------
          A(I+1) = R*DSIN(PHI)
       END DO
       IF (M .EQ. N) RETURN
-   20 CALL DURNG (IX, TEMP, 1, IERR)
+   20 CALL DURNG(IX, TEMP, 1, IERR)
       R = DSQRT(-2.D0*DLOG(A(N)))
       A(N) = R*DCOS(PI2*TEMP(1))
       END SUBROUTINE DNRNG
 
-      SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+      SUBROUTINE NRVG(MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
@@ -104392,12 +104392,12 @@ C           COMPUTE THE LOWER TRIANGULAR MATRIX
 C           L HAVING POSITIVE DIAGONAL ELEMENTS
 C           AND SATISFYING A = L*TRANSPOSE(L).
       IF (MO .NE. 0) GO TO 10
-      CALL SPPFA (A, M, IERR)
+      CALL SPPFA(A, M, IERR)
       IF (IERR .NE. 0) GO TO 120
 C           GENERATE THE N RANDOM NORMAL VECTORS
    10 LDIM = (M*(M + 1))/2
       DO J = 1,N
-         CALL RNOR (IX, X(1,J), M, IERR)
+         CALL RNOR(IX, X(1,J), M, IERR)
 C         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
 C                    IN REVERSE ORDER
          L0 = LDIM
@@ -104425,7 +104425,7 @@ C                      ERROR RETURN
   130 IERR = 4
       END SUBROUTINE NRVG
 
-      SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+      SUBROUTINE NRVG1(MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
@@ -104496,7 +104496,7 @@ C        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
       END DO
 C           GENERATE THE N RANDOM NORMAL VECTORS
    20 DO J = 1,N
-         CALL RNOR (IX, X(1,J), M, IERR)
+         CALL RNOR(IX, X(1,J), M, IERR)
          DO I = 1,M
             X(I,J) = A(I)*X(I,J) + FMU(I)
          END DO
@@ -104512,7 +104512,7 @@ C                       ERROR RETURN
   130 IERR = 4
       END SUBROUTINE NRVG1
 
-      SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+      SUBROUTINE DNRVG(MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
@@ -104589,12 +104589,12 @@ C           COMPUTE THE LOWER TRIANGULAR MATRIX
 C           L HAVING POSITIVE DIAGONAL ELEMENTS
 C           AND SATISFYING A = L*TRANSPOSE(L).
       IF (MO .NE. 0) GO TO 10
-      CALL DPPFA (A, M, IERR)
+      CALL DPPFA(A, M, IERR)
       IF (IERR .NE. 0) GO TO 120
 C           GENERATE THE N RANDOM NORMAL VECTORS
    10 LDIM = (M*(M + 1))/2
       DO J = 1,N
-         CALL DRNOR (IX, X(1,J), M, IERR)
+         CALL DRNOR(IX, X(1,J), M, IERR)
 C         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
 C                    IN REVERSE ORDER
          L0 = LDIM
@@ -104622,7 +104622,7 @@ C                      ERROR RETURN
   130 IERR = 4
       END SUBROUTINE DNRVG
 
-      SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+      SUBROUTINE DNRVG1(MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
@@ -104693,7 +104693,7 @@ C        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
       END DO
 C           GENERATE THE N RANDOM NORMAL VECTORS
    20 DO J = 1,N
-         CALL DRNOR (IX, X(1,J), M, IERR)
+         CALL DRNOR(IX, X(1,J), M, IERR)
          DO I = 1,M
             X(I,J) = A(I)*X(I,J) + FMU(I)
          END DO
@@ -104709,7 +104709,7 @@ C                       ERROR RETURN
   130 IERR = 4
       END SUBROUTINE DNRVG1
 
-      SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
+      SUBROUTINE RANEXP(N,A,ISEED,X,IERROR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
@@ -104755,7 +104755,7 @@ C        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
 C        PROPERLY SPECIFIED
       IF (A .LE. 0.0) GO TO 110
 C        GENERATION OF UNIFORM RANDOM VARIATES
-      CALL URNG (ISEED, X, N, IERROR)
+      CALL URNG(ISEED, X, N, IERROR)
       IF (IERROR .NE. 0) GO TO 120
 C        LOOP WHICH GENERATES THE N DESIRED VARIATES
       DO I=1,N
@@ -104770,7 +104770,7 @@ C              ERROR RETURN
   120 IERROR = 3
       END SUBROUTINE RANEXP
 
-      SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
+      SUBROUTINE DRNEXP(N,A,ISEED,X,IERROR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
@@ -104816,7 +104816,7 @@ C        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
 C        PROPERLY SPECIFIED
       IF (A .LE. 0.D0) GO TO 110
 C        GENERATION OF UNIFORM RANDOM VARIATES
-      CALL DURNG (ISEED, X, N, IERROR)
+      CALL DURNG(ISEED, X, N, IERROR)
       IF (IERROR .NE. 0) GO TO 120
 C        LOOP WHICH GENERATES THE N DESIRED VARIATES
       DO I=1,N
@@ -104831,7 +104831,7 @@ C              ERROR RETURN
   120 IERROR = 3
       END SUBROUTINE DRNEXP
 
-      SUBROUTINE RGAM (IX, A, N, X, IERR)
+      SUBROUTINE RGAM(IX, A, N, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104866,8 +104866,8 @@ C             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C                   THE SETTING IND = -8 IS AVOIDED
       DO I = 1,N
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (A, W, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(A, W, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.0
          X(I) = W
       END DO
@@ -104880,7 +104880,7 @@ C                            ERROR RETURN
   120 IERR = 3
       END SUBROUTINE RGAM
 
-      SUBROUTINE DRGAM (IX, A, N, X, IERR)
+      SUBROUTINE DRGAM(IX, A, N, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104915,8 +104915,8 @@ C             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C                   THE SETTING IND = -8 IS AVOIDED
       DO I = 1,N
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (A, W, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(A, W, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.D0
          X(I) = W
       END DO
@@ -104929,7 +104929,7 @@ C                            ERROR RETURN
   120 IERR = 3
       END SUBROUTINE DRGAM
 
-      SUBROUTINE RBETA (N, A, B, IX, X, IERR)
+      SUBROUTINE RBETA(N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -104981,11 +104981,11 @@ C--------------------
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (A, X1, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(A, X1, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.0
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (B, X2, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(B, X2, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.0
 C        IT IS REQUIRED THAT A AND B NOT BE LESS
 C        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
@@ -105000,7 +105000,7 @@ C                      ERROR RETURN
   120 IERR = 3
       END SUBROUTINE RBETA
 
-      SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
+      SUBROUTINE DRBETA(N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -105053,11 +105053,11 @@ C--------------------
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (A, X1, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(A, X1, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.D0
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (B, X2, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(B, X2, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.D0
 C        IT IS REQUIRED THAT A AND B NOT BE LESS
 C        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
@@ -105072,7 +105072,7 @@ C                      ERROR RETURN
   120 IERR = 3
       END SUBROUTINE DRBETA
 
-      SUBROUTINE FRAN (N, A, B, IX, X, IERR)
+      SUBROUTINE FRAN(N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -105130,11 +105130,11 @@ C--------------------
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (AHALF, X1, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(AHALF, X1, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.0
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (BHALF, X2, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(BHALF, X2, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
 C        PROTECT AGAINST OVERFLOW IN COMPUTING THE
 C        VARIATE C*(X1/X2).
@@ -105155,7 +105155,7 @@ C                      ERROR RETURN
   130 IERR = 4
       END SUBROUTINE FRAN
 
-      SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
+      SUBROUTINE DFRAN(N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -105215,11 +105215,11 @@ C--------------------
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (AHALF, X1, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(AHALF, X1, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.D0
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (BHALF, X2, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(BHALF, X2, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
 C        PROTECT AGAINST OVERFLOW IN COMPUTING THE
 C        VARIATE C*(X1/X2).
@@ -105240,7 +105240,7 @@ C                      ERROR RETURN
   130 IERR = 4
       END SUBROUTINE DFRAN
 
-      SUBROUTINE TRAN (N, A, IX, X, IERR)
+      SUBROUTINE TRAN(N, A, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -105285,14 +105285,14 @@ C--------------------
       AHALF = 0.5*A
       DO I = 1,N
 C                    GET A NORMAL VARIATE
-         CALL URNG1 (IX, U, V, D)
-         CALL PNI (U, V, D, Z, IND)
+         CALL URNG1(IX, U, V, D)
+         CALL PNI(U, V, D, Z, IND)
 C                    GET A GAMMA VARIATE
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL URNG0 (IX, U, V)
-         CALL GAMINV (AHALF, W, 0.0, U, V, IND)
+         CALL URNG0(IX, U, V)
+         CALL GAMINV(AHALF, W, 0.0, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
          S = SQRT(W/AHALF)
          X(I) = Z/S
@@ -105308,7 +105308,7 @@ C              ERROR RETURN
   130 IERR = 4
       END SUBROUTINE TRAN
 
-      SUBROUTINE DTRAN (N, A, IX, X, IERR)
+      SUBROUTINE DTRAN(N, A, IX, X, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
@@ -105354,14 +105354,14 @@ C--------------------
       AHALF = 0.5D0*A
       DO I = 1,N
 C                    GET A NORMAL VARIATE
-         CALL DURNG1 (IX, U, V, D)
-         CALL DPNI (U, V, D, Z, IND)
+         CALL DURNG1(IX, U, V, D)
+         CALL DPNI(U, V, D, Z, IND)
 C                    GET A GAMMA VARIATE
 C        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 C        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
-         CALL DURNG0 (IX, U, V)
-         CALL DGINV (AHALF, W, U, V, IND)
+         CALL DURNG0(IX, U, V)
+         CALL DGINV(AHALF, W, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
          S = DSQRT(W/AHALF)
          X(I) = Z/S
@@ -105377,7 +105377,7 @@ C              ERROR RETURN
   130 IERR = 4
       END SUBROUTINE DTRAN
 
-      SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+      SUBROUTINE RMK1(N, FMU, SIG, ALPHA, ISEED, X, IERROR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
@@ -105439,7 +105439,7 @@ C        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
 C        PROCESS STATIONARITY
       IF (ABS(ALPHA) .GE. 1.0) GO TO 120
 C        GENERATION OF STANDARD NORMAL RANDOM VARIATES
-      CALL RNOR (ISEED,X,N,IERROR)
+      CALL RNOR(ISEED,X,N,IERROR)
       IF (IERROR .NE. 0) GO TO 130
 C        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
 C        AUTOCORRELATED SEQUENCE
@@ -105466,7 +105466,7 @@ C        ERROR RETURN
   130 IERROR = 4
       END SUBROUTINE RMK1
 
-      SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+      SUBROUTINE DRMK1(N, FMU, SIG, ALPHA, ISEED, X, IERROR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
@@ -105528,7 +105528,7 @@ C        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
 C        PROCESS STATIONARITY
       IF (DABS(ALPHA) .GE. 1.D0) GO TO 120
 C        GENERATION OF STANDARD NORMAL RANDOM VARIATES
-      CALL DRNOR (ISEED,X,N,IERROR)
+      CALL DRNOR(ISEED,X,N,IERROR)
       IF (IERROR .NE. 0) GO TO 130
 C        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
 C        AUTOCORRELATED SEQUENCE

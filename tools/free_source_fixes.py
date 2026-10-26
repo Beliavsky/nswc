@@ -19,17 +19,21 @@ def correct_root_workspace(text):
     declaration = 'real :: cnv, eps\n'
     call = 'call ppadd (nm + 1,ierror,an,cn,b(j1),b(j1),b(j2))\n'
     # Maintained fixed form now includes the same correction. Accept only the
-    # exact reviewed block and normalize its comparisons to the historical
-    # free-form spelling, keeping generated sources byte-for-byte unchanged.
+    # reviewed block (with original or normalized parentheses spacing), and
+    # normalize its comparisons to the historical free-form spelling.
     from periodic_root_workspace import NEW_CALL
     from fixed_to_free import convert_text
     from lowercase_fortran import lowercase
     from format_free_form import format_source
-    block = format_source(lowercase(convert_text(NEW_CALL)))
+    from normalize_fixed_spacing import transform as normalize_spacing
+    blocks = {format_source(lowercase(convert_text(source))) for source in
+              (NEW_CALL, normalize_spacing(NEW_CALL.encode('ascii')).decode('ascii'))}
     if body.count('complex, allocatable :: root_complex(:)\n') == 1:
+        present = [block for block in blocks if body.count(block) == 1]
         if (body.count('real, allocatable :: root_real(:)\n') != 1
-                or body.count(block) != 1 or call in body):
+                or len(present) != 1 or call in body):
             raise ValueError('COMPB corrected workspace block needs review')
+        block = present[0]
         body = body.replace(block, block.replace('.ne.', '/=').replace('.eq.', '=='))
         return ''.join(lines[:start]) + body + ''.join(lines[end:])
     if body.count(declaration) != 1 or body.count(call) != 1:

@@ -2474,7 +2474,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2516,7 +2516,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2559,7 +2559,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2604,7 +2604,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2648,7 +2648,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2694,7 +2694,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2739,7 +2739,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2783,7 +2783,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2829,7 +2829,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2875,7 +2875,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2918,7 +2918,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -3570,8 +3570,8 @@ real :: r, nswc_ai_r4
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 10
 go to 20
 10 cbrt = 0.0
 return
@@ -3590,8 +3590,8 @@ implicit none
 double precision, intent(in) :: x
 double precision :: r, nswc_ai_r8
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 30
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 30
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 dcbrt = 0.d0
 return
@@ -3608,22 +3608,22 @@ real, intent(in) :: x, y
 real :: artnq
 real :: nswc_ai_r4
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 1
-if ( nswc_ai_r4 == 0 ) go to 2
+if (nswc_ai_r4 < 0) go to 1
+if (nswc_ai_r4 == 0) go to 2
 go to 5
 1 artnq = atan(y/x) + 3.1415926535898
 return
 2 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 3
-if ( nswc_ai_r4 == 0 ) go to 8
+if (nswc_ai_r4 < 0) go to 3
+if (nswc_ai_r4 == 0) go to 8
 go to 4
 3 artnq = 4.7123889803847
 return
 4 artnq = 1.5707963267949
 return
 5 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 6
-if ( nswc_ai_r4 == 0 ) go to 8
+if (nswc_ai_r4 < 0) go to 6
+if (nswc_ai_r4 == 0) go to 8
 go to 7
 6 artnq = atan(y/x) + 6.2831853071795
 return
@@ -3637,22 +3637,22 @@ implicit none
 double precision, intent(in) :: x, y
 double precision :: nswc_ai_r8
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 1
-if ( nswc_ai_r8 == 0 ) go to 2
+if (nswc_ai_r8 < 0) go to 1
+if (nswc_ai_r8 == 0) go to 2
 go to 5
 1 dartnq = atan(y/x) + 3.14159265358979323846264338328d0
 return
 2 nswc_ai_r8 = y
-if ( nswc_ai_r8 < 0 ) go to 3
-if ( nswc_ai_r8 == 0 ) go to 8
+if (nswc_ai_r8 < 0) go to 3
+if (nswc_ai_r8 == 0) go to 8
 go to 4
 3 dartnq = 4.71238898038468985769396507492d0
 return
 4 dartnq = 1.57079632679489661923132169164d0
 return
 5 nswc_ai_r8 = y
-if ( nswc_ai_r8 < 0 ) go to 6
-if ( nswc_ai_r8 == 0 ) go to 8
+if (nswc_ai_r8 < 0) go to 6
+if (nswc_ai_r8 == 0) go to 8
 go to 7
 6 dartnq = atan(y/x) + 6.28318530717958647692528676656d0
 return
@@ -3807,8 +3807,8 @@ double precision :: x, y, r, nswc_ai_r8
 x = z(1)
 y = z(2)
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 30
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 30
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 if (y /= 0.d0) go to 11
 w(1) = 0.d0
@@ -5515,8 +5515,8 @@ real :: a
 n = nb
 if (x(1) == x(n) .and. y(1) == y(n)) n = n - 1
 nswc_ai_i4 = n - 3
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 parea = 0.0
 return
@@ -5713,9 +5713,9 @@ maxe = vc(1)
 minu = vr(1)
 jr = 1
 do i = 2,n
-   nswc_ai_i4 = vc ( i ) - maxe
-   if ( nswc_ai_i4 < 0 ) go to 100
-   if ( nswc_ai_i4 == 0 ) go to 70
+   nswc_ai_i4 = vc(i) - maxe
+   if (nswc_ai_i4 < 0) go to 100
+   if (nswc_ai_i4 == 0) go to 70
    go to 80
 70 if (vr(i) >= minu) go to 100
    go to 90
@@ -5738,7 +5738,7 @@ go to 220
 130 l1 = pr(j) + 1
 l2 = pr(j + 1)
 do l = l1,l2
-   if ( ar ( l ) > 0 ) exit
+   if (ar(l) > 0) exit
 end do
 jl = ar(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
@@ -5760,7 +5760,7 @@ go to 210
 170 l1 = pc(j) + 1
 l2 = pc(j + 1)
 do l = l1,l2
-   if ( ac ( l ) > 0 ) exit
+   if (ac(l) > 0) exit
 end do
 jl = ac(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
@@ -5904,7 +5904,7 @@ go to 420
       ll1 = pc(jl) + 1
       ll2 = pc(jl + 1)
       do ll = ll1,ll2
-         if ( k1 - ac ( ll ) == j ) exit
+         if (k1 - ac(ll) == j) exit
       end do
       ac(ll) = j
       vc(jl) = vc(jl) + 1
@@ -6025,7 +6025,7 @@ do j = j1,j2
    l1 = p2(ia) + 1
    l2 = p2(ia + 1)
    do l = l1,l2
-      if ( a2 ( l ) == i1 ) exit
+      if (a2(l) == i1) exit
    end do
    v2(ia) = v2(ia) - 1
    a2(l) = k1 - a2(l)
@@ -6054,7 +6054,7 @@ do l = l1,l2
    ll1 = p2(ia) + 1
    ll2 = p2(ia + 1)
    do ll = ll1,ll2
-      if ( k1 - a2 ( ll ) == ii ) exit
+      if (k1 - a2(ll) == ii) exit
    end do
    a2(ll) = ii
    v2(ia) = v2(ia) + 1
@@ -6083,7 +6083,7 @@ do mm = m1,m2
 10 j1 = p2(iarc) + 1
    j2 = p2(iarc + 1)
    do jj = j1,j2
-      if ( a2 ( jj ) == ib ) exit
+      if (a2(jj) == ib) exit
    end do
 30 a2(jj) = k1 - a2(jj)
    v2(iarc) = v2(iarc) - 1
@@ -7168,8 +7168,8 @@ do n = 31,63
    t(2) = a(n)*y
    w(1) = w(1) + t(1)
    w(2) = w(2) + t(2)
-   if ( anorm ( t ( 1 ) , t ( 2 ) ) <= tol * anorm ( w ( 1 ) , w &
-      & ( 2 ) ) ) exit
+   if (anorm(t(1) , t(2)) <= tol * anorm(w(1) , w &
+      & (2))) exit
 end do
 do j = 1,29
    n = 30 - j
@@ -8969,8 +8969,8 @@ x = arg
 ierr = 0
 if (int == 2) go to 450
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 280
-if ( nswc_ai_r4 == 0 ) go to 640
+if (nswc_ai_r4 < 0) go to 280
+if (nswc_ai_r4 == 0) go to 640
 go to 110
 110 if (x >= 12.e0) go to 200
 if (x > 8.e0) go to 160
@@ -9085,8 +9085,8 @@ if (t == 0.0e0) go to 600
 return
 450 y = x
 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 660
-if ( nswc_ai_r4 == 0 ) go to 640
+if (nswc_ai_r4 < 0) go to 660
+if (nswc_ai_r4 == 0) go to 640
 go to 300
 !     ---------- Error return for X .LT. xmin,
 !                causing underflow ----------
@@ -9421,7 +9421,7 @@ w = 0.d0
 do n = 2,40
    c = a(n)*t
    w = w + c
-   if ( abs ( c ) < eps ) exit
+   if (abs(c) < eps) exit
    t = h*t
 end do
 dei0 = h * (a(1) + w)
@@ -9891,7 +9891,7 @@ do n = 1,25
    tm(1) = ts(1)
    tm(2) = ts(2)
    if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
-   if ( abs ( sm ( 2 ) ) + abs ( tm ( 2 ) ) == abs ( sm ( 2 ) ) &
+   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2)) &
       & ) exit
 60 sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
@@ -10293,8 +10293,8 @@ t = 1.0
 m = int(a) - 1
 !     Let t be the product of a-j when a .GE. 2
 nswc_ai_i4 = m
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,m
    x = x - 1.0
@@ -10447,8 +10447,8 @@ t = a
 d = a - 0.5
 if (d > 0.0) t = d - 0.5
 nswc_ai_r4 = t
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 10
 go to 20
 10 gam1 = 0.0
 return
@@ -10722,7 +10722,7 @@ do j = 1,30
    a1 = a1 + c0(j)*u1
    a2 = a2 + c0(j)*u2
    if (a1 /= t1) go to 90
-   if ( a2 == t2 ) exit
+   if (a2 == t2) exit
 90 t1 = u1*q1 - u2*q2
    t2 = u1*q2 + u2*q1
    u1 = t1
@@ -10816,8 +10816,8 @@ n = x
 n = n - 1
 !     Let t be the product of a-j when a .GE. 2
 nswc_ai_i4 = n
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,n
    x = x - 1.d0
@@ -11013,8 +11013,8 @@ t = x
 d = x - 0.5d0
 if (d > 0.d0) t = d - 0.5d0
 nswc_ai_r8 = t
-if ( nswc_ai_r8 < 0 ) go to 40
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 40
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 dgam1 = 0.d0
 return
@@ -11481,7 +11481,7 @@ do j = 1,m
    a1 = a1 + c0(j)*v1
    a2 = a2 + c0(j)*v2
    if (a1 /= t1) go to 60
-   if ( a2 == t2 ) exit
+   if (a2 == t2) exit
 60 t1 = v1*q1 - v2*q2
    t2 = v1*q2 + v2*q1
    v1 = t1
@@ -11578,8 +11578,8 @@ n = x
 n = n - 1
 !     Let t be the sum of 1/(a-j) when a .GE. 2
 nswc_ai_i4 = n
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,n
    x = x - 1.d0
@@ -11830,7 +11830,7 @@ tk = 2.0
 do k = 4,22
    t = t*((tk + fn + 1.0)/(tk + 1.0))*((tk + fn)/(tk + 2.0))*rxsq
    trm(k) = t*b(k)
-   if ( abs ( trm ( k ) ) < tst ) exit
+   if (abs(trm(k)) < tst) exit
    s = s + trm(k)
    tk = tk + 2.0
 end do
@@ -11872,7 +11872,7 @@ do j = 2,m
    tk = 3.0e0 + fnp
    do k = 4,22
       trm(k) = trm(k)*fnp/tk
-      if ( abs ( trm ( k ) ) < tst ) exit
+      if (abs(trm(k)) < tst) exit
       s = s + trm(k)
       tk = tk + 2.0
    end do
@@ -11929,7 +11929,7 @@ do j = 2,m
       den = den + 1.0
       trm(i) = trm(i)/den
       s = s + trm(i)
-      if ( trm ( i ) < tols ) exit
+      if (trm(i) < tols) exit
    end do
    ans(j) = s
 end do
@@ -12623,8 +12623,8 @@ u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 210
-if ( nswc_ai_i4 == 0 ) go to 220
+if (nswc_ai_i4 < 0) go to 210
+if (nswc_ai_i4 == 0) go to 220
 go to 230
 210 if (abs(s) <= 1.e-3) go to 260
 !            Using the minimax approximations
@@ -12669,8 +12669,8 @@ u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 260
-if ( nswc_ai_i4 == 0 ) go to 270
+if (nswc_ai_i4 < 0) go to 260
+if (nswc_ai_i4 == 0) go to 270
 go to 280
 260 c0 = ((d0(3) * z + d0(2)) * z + d0(1)) * z + d00
 c1 = ((d1(3) * z + d1(2)) * z + d1(1)) * z + d10
@@ -14197,7 +14197,7 @@ do i = kp1,nm1
    l = i - 1
    d = ((apb + l)/(ap1 + l))*x*d
    w = w + d
-   if ( d <= eps * w ) exit
+   if (d <= eps * w) exit
 end do
 !               Terminate the procedure
 50 bup = bup*w
@@ -14513,7 +14513,7 @@ do n = 1,30
    dj = d(n)*j
    sum = sum + dj
    if (sum <= 0.0) go to 100
-   if ( abs ( dj ) <= eps * ( sum + l ) ) exit
+   if (abs(dj) <= eps * (sum + l)) exit
 end do
 !                    Add the results to w
 ierr = 0
@@ -14693,7 +14693,7 @@ do n = 2, num, 2
    w = w0*w
    t1 = d(np1)*w*j1
    sum = sum + (t0 + t1)
-   if ( ( abs ( t0 ) + abs ( t1 ) ) <= eps * sum ) exit
+   if ((abs(t0) + abs(t1)) <= eps * sum) exit
 end do
 u = exp(-bcorr(a,b))
 basym = e0*t*u*sum
@@ -15439,7 +15439,7 @@ do i = 1,16
    m = m + 1.0
    t = t*a/m
    q = q + t
-   if ( anorm ( t ) <= tol ) exit
+   if (anorm(t) <= tol) exit
 end do
 p = p + 1.0
 q = (q + a1)*zr
@@ -15507,11 +15507,11 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if ( ( in ) < 0 ) go to 002
+if ((in) < 0) go to 002
 go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if ( ( az ( 1 ) ) < 0 ) go to 004
+003 if ((az(1)) < 0) go to 004
 go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
@@ -15532,9 +15532,9 @@ go to 031
 008 if (zm <= 17.5) go to 009
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 013
-009 if ( ( zs - 1.0 ) < 0 ) go to 011
+009 if ((zs - 1.0) < 0) go to 011
 go to 010
-010 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) < 0 ) &
+010 if ((- abs(az(2)) + 0.096 * az(1) * az(1)) < 0) &
    & go to 011
 go to 012
 011 qn = aint(0.0625*zs)
@@ -15858,18 +15858,18 @@ tolln = min(tolln,34.5388e0)
 nz = 0
 kt = 1
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 720
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 720
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 kt = 2
 20 nn = n
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 730
-if ( nswc_ai_r4 == 0 ) go to 30
+if (nswc_ai_r4 < 0) go to 730
+if (nswc_ai_r4 == 0) go to 30
 go to 80
 30 nswc_ai_r4 = alpha
-if ( nswc_ai_r4 < 0 ) go to 710
-if ( nswc_ai_r4 == 0 ) go to 40
+if (nswc_ai_r4 < 0) go to 710
+if (nswc_ai_r4 == 0) go to 40
 go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
@@ -15967,7 +15967,7 @@ do k = 1,17
    s2 = t2 + s1
    t = -t*sxo2/s2
    s = s + t
-   if ( abs ( t ) < tol ) exit
+   if (abs(t) < tol) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -15995,8 +15995,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 440
-if ( nswc_ai_i4 == 0 ) go to 390
+if (nswc_ai_i4 < 0) go to 440
+if (nswc_ai_i4 == 0) go to 390
 go to 130
 390 kt = 2
 is = 2
@@ -16008,8 +16008,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 440
-if ( nswc_ai_i4 == 0 ) go to 410
+if (nswc_ai_i4 < 0) go to 440
+if (nswc_ai_i4 == 0) go to 410
 go to 420
 410 kt = 2
 is = 2
@@ -16090,7 +16090,7 @@ do k = 1,13
    ap = trx + tm
    t2 = t2*ap/t1
    s2 = s2 + t2
-   if ( abs ( t2 ) <= relb ) exit
+   if (abs(t2) <= relb) exit
    ak = ak + 8.0e0
 end do
 temp(is) = coef*(s1*sb - s2*sa)
@@ -16481,7 +16481,7 @@ do jn = 1,in
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
-      if ( abs ( ta ) <= tol .and. abs ( tb ) <= relb ) exit
+      if (abs(ta) <= tol .and. abs(tb) <= relb) exit
    end do
    bsum = bsum/(fn*wk(7))
    go to 160
@@ -16557,7 +16557,7 @@ do jn = 1,in
       if (wk(1) > 0.0e0) tb = abs(tb)
       asum = asum + suma*tb
       bsum = bsum + sumb*tb
-      if ( abs ( suma ) <= tol .and. abs ( sumb ) <= relb ) exit
+      if (abs(suma) <= tol .and. abs(sumb) <= relb) exit
    end do
    tb = wk(5)
    if (wk(1) > 0.0e0) tb = -tb
@@ -16861,22 +16861,22 @@ zl(1) = 0.5*log(zs)
 zl(2) = atan2(az(2),az(1))
 an = abs(in)
 sn = 1.0
-if ( ( in ) < 0 ) go to 002
+if ((in) < 0) go to 002
 go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if ( ( az ( 1 ) ) < 0 ) go to 004
+003 if ((az(1)) < 0) go to 004
 go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
 go to 006
 005 qz(1) = az(1)
 qz(2) = az(2)
-006 if ( ( zs - 1.0 ) <= 0 ) go to 020
+006 if ((zs - 1.0) <= 0) go to 020
 go to 007
-007 if ( ( zs - 289.0 ) < 0 ) go to 008
+007 if ((zs - 289.0) < 0) go to 008
 go to 010
-008 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) <= 0 ) &
+008 if ((- abs(az(2)) + 0.096 * az(1) * az(1)) <= 0) &
    & go to 020
 go to 015
 010 qm = sn*0.797884560802865*exp(-0.5*zl(1))
@@ -17004,9 +17004,9 @@ tm(1) = tm(1) - sm(3)*ts(1) + sm(4)*ts(2)
 tm(2) = tm(2) - sm(3)*ts(2) - sm(4)*ts(1)
 tm(3) = tm(3) + sm(1)*ts(1) - sm(2)*ts(2)
 tm(4) = tm(4) + sm(1)*ts(2) + sm(2)*ts(1)
-if ( ( az ( 1 ) ) < 0 ) go to 106
+if ((az(1)) < 0) go to 106
 go to 110
-106 if ( ( az ( 2 ) ) < 0 ) go to 107
+106 if ((az(2)) < 0) go to 107
 go to 108
 107 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
@@ -17019,12 +17019,12 @@ sm(2) = -sm(2)
 go to 111
 110 sm(1) = tm(3)
 sm(2) = tm(4)
-111 select case ( la )
-case ( 11 )
+111 select case (la)
+case (11)
    go to 11
-case ( 13 )
+case (13)
    go to 13
-case ( 14 )
+case (14)
    go to 14
 end select
 112 sm(1) = 1.0
@@ -17063,9 +17063,9 @@ tm(1) = tm(1) - ts(1)*sm(2) - ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
 tm(2) = tm(2) + ts(1)*sm(1) - ts(2)*sm(2) - ts(1)*sm(3) + ts(2)*sm(4)
 tm(3) = tm(3) + ts(1)*sm(1) - ts(2)*sm(2) + ts(1)*sm(3) - ts(2)*sm(4)
 tm(4) = tm(4) + ts(1)*sm(2) + ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
-if ( ( az ( 1 ) ) < 0 ) go to 116
+if ((az(1)) < 0) go to 116
 go to 120
-116 if ( ( az ( 2 ) ) < 0 ) go to 117
+116 if ((az(2)) < 0) go to 117
 go to 118
 117 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
@@ -17078,12 +17078,12 @@ sm(2) = -sm(2)
 go to 121
 120 sm(1) = tm(3)
 sm(2) = tm(4)
-121 select case ( lr )
-case ( 16 )
+121 select case (lr)
+case (16)
    go to 16
-case ( 18 )
+case (18)
    go to 18
-case ( 19 )
+case (19)
    go to 19
 end select
 122 aq(1) = 1.0
@@ -17140,12 +17140,12 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 127
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-select case ( ly )
-case ( 22 )
+select case (ly)
+case (22)
    go to 22
-case ( 24 )
+case (24)
    go to 24
-case ( 25 )
+case (25)
    go to 25
 end select
 end subroutine bssly
@@ -17215,7 +17215,7 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if ( ( az ( 1 ) ) < 0 ) go to 002
+if ((az(1)) < 0) go to 002
 go to 003
 002 qz(1) = -az(1)
 qz(2) = -az(2)
@@ -17236,9 +17236,9 @@ go to 039
 006 if (zm <= 17.5) go to 007
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 011
-007 if ( ( zs - 1.0 ) < 0 ) go to 009
+007 if ((zs - 1.0) < 0) go to 009
 go to 008
-008 if ( ( - abs ( az ( 1 ) ) + 0.096 * az ( 2 ) * az ( 2 ) ) < 0 ) &
+008 if ((- abs(az(1)) + 0.096 * az(2) * az(2)) < 0) &
    & go to 009
 go to 010
 009 qn = aint(0.0625*zs)
@@ -17319,7 +17319,7 @@ end do
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 023
 aq(1) = -2.0*qz(1)
-if ( ( qz ( 2 ) ) < 0 ) go to 020
+if ((qz(2)) < 0) go to 020
 go to 021
 020 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 022
@@ -17395,7 +17395,7 @@ end do
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 036
 aq(1) = -2.0*qz(1)
-if ( ( qz ( 2 ) ) < 0 ) go to 032
+if ((qz(2)) < 0) go to 032
 go to 033
 032 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 034
@@ -17593,19 +17593,19 @@ tolln = min(tolln,34.5388e0)
 nz = 0
 kt = 1
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 590
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 590
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 kt = 2
 20 nn = n
 if (kode < 1 .or. kode > 2) go to 570
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 600
-if ( nswc_ai_r4 == 0 ) go to 30
+if (nswc_ai_r4 < 0) go to 600
+if (nswc_ai_r4 == 0) go to 30
 go to 80
 30 nswc_ai_r4 = alpha
-if ( nswc_ai_r4 < 0 ) go to 580
-if ( nswc_ai_r4 == 0 ) go to 40
+if (nswc_ai_r4 < 0) go to 580
+if (nswc_ai_r4 == 0) go to 40
 go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
@@ -17732,7 +17732,7 @@ do k = 1,17
    s2 = t2 + s1
    t = t*sxo2/s2
    s = s + t
-   if ( abs ( t ) < tol ) exit
+   if (abs(t) < tol) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -17760,8 +17760,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 340
-if ( nswc_ai_i4 == 0 ) go to 290
+if (nswc_ai_i4 < 0) go to 340
+if (nswc_ai_i4 == 0) go to 290
 go to 130
 290 kt = 2
 is = 2
@@ -17773,8 +17773,8 @@ fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
 nswc_ai_i4 = nn - 1
-if ( nswc_ai_i4 < 0 ) go to 340
-if ( nswc_ai_i4 == 0 ) go to 310
+if (nswc_ai_i4 < 0) go to 340
+if (nswc_ai_i4 == 0) go to 310
 go to 320
 310 kt = 2
 is = 2
@@ -17855,7 +17855,7 @@ do k = 1,25
    ap = dx + tm
    t = -t*ap/s1
    s = s + t
-   if ( abs ( t ) <= atol ) exit
+   if (abs(t) <= atol) exit
    ak = ak + 8.0e0
 end do
 temp(is) = s*earg
@@ -18031,7 +18031,7 @@ do jn = 1,in
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
-      if ( max ( abs ( ak ) , abs ( ap ) ) < tol ) exit
+      if (max(abs(ak) , abs(ap)) < tol) exit
    end do
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
@@ -18192,7 +18192,7 @@ do i = 1, 16
    m = m + 1.0
    t = t*a*zr/m
    p = p + t
-   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
+   if (anorm(t) <= eps * anorm(p)) exit
 end do
 p = p + 1.0
 t = sqrt(zr)
@@ -18245,7 +18245,7 @@ cz = z
 x = 0.5*real(z)
 y = 0.5*aimag(z)
 call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
+zr = cmplx(zr1, zr2)
 if (t /= 0.0) go to 20
 if (b /= 0.0) go to 20
 !               Calculation for nu = 0.5
@@ -18296,15 +18296,15 @@ c = exp(0.5*b*pi)
 ex = cxp(m, nu)
 if (y < 0.0) go to 100
 ex = c*ex
-w1 = cmplx (aimag(z), -real(z))
+w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(pi*aimag(w2), -pi*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)/c
-w1 = cmplx (-aimag(z), real(z))
+w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbkm
 
@@ -18381,7 +18381,7 @@ u = x*y
 sh = cmplx(1.0, u/3.0)
 ch = cmplx(1.0, u)
 go to 60
-50 t = cmplx (-y, x)
+50 t = cmplx(-y, x)
 sh = sin(t)/t
 ch = cos(t)
 60 f = gm1*ch + gm2*cl*sh
@@ -18400,7 +18400,7 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
+   if (anorm(t1) <= eps0 * anorm(w1)) exit
 end do
 w2 = w2 * zr
 contains
@@ -18550,7 +18550,7 @@ cz = z
 x = 0.5*real(z)
 y = 0.5*aimag(z)
 call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
+zr = cmplx(zr1, zr2)
 if (t /= 0.0) go to 20
 !               Calculation for nu = 0.5
 w = cmplx(cpi, 0.0)
@@ -18595,17 +18595,17 @@ w = w*exp(-cz)/sqrt(cz)
 if (ind > 0) return
 !            Analytic continuation
 ex = cxp(m, nu1)
-cn = cmplx (a, 0.0)
+cn = cmplx(a, 0.0)
 if (y < 0.0) go to 100
-w1 = cmplx (aimag(z), -real(z))
+w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(pi*aimag(w2), -pi*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)
-w1 = cmplx (-aimag(z), real(z))
+w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbsslk
 
@@ -18642,7 +18642,7 @@ do i = 1, 16
    m = m + 1.0
    t = (a/m)*t*zr
    p = p + t
-   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
+   if (anorm(t) <= eps * anorm(p)) exit
 end do
 p = p + 1.0
 t = sqrt(zr)
@@ -18723,7 +18723,7 @@ t = x*y
 sh = cmplx(1.0, t/3.0)
 ch = cmplx(1.0, t)
 go to 60
-50 w = cmplx (-y, x)
+50 w = cmplx(-y, x)
 sh = sin(w)/w
 ch = cos(w)
 60 f = gm1*ch + gm2*cl*sh
@@ -18742,7 +18742,7 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
+   if (anorm(t1) <= eps0 * anorm(w1)) exit
 end do
 w2 = w2 * zr
 contains
@@ -18849,13 +18849,13 @@ if (k == 0) go to 10
 if (k == 1) go to 20
 if (k == 2) go to 30
 go to 40
-10 cxp = cmplx (c, -s)
+10 cxp = cmplx(c, -s)
 return
-20 cxp = cmplx (-s, -c)
+20 cxp = cmplx(-s, -c)
 return
-30 cxp = cmplx (-c, s)
+30 cxp = cmplx(-c, s)
 return
-40 cxp = cmplx (s, c)
+40 cxp = cmplx(s, c)
 end function cxp
 
 pure elemental subroutine bsslk(mo, a, in, w)
@@ -18898,11 +18898,11 @@ tm(2) = 0.0
 if (mo /= 0) go to 002
 tm(1) = az(1)
 tm(2) = az(2)
-002 if ( ( zs - 1.0 ) <= 0 ) go to 020
+002 if ((zs - 1.0) <= 0) go to 020
 go to 003
-003 if ( ( zs - 289.0 ) < 0 ) go to 004
+003 if ((zs - 289.0) < 0) go to 004
 go to 010
-004 if ( ( az ( 1 ) + 0.096 * az ( 2 ) * az ( 2 ) ) <= 0 ) go to 020
+004 if ((az(1) + 0.096 * az(2) * az(2)) <= 0) go to 020
 go to 015
 010 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
 qf(1) = qm*cos(-0.5*zl(2) - tm(2))
@@ -19009,12 +19009,12 @@ if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 103
 102 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
 if (pm < 36.0) go to 101
-103 select case ( la )
-case ( 11 )
+103 select case (la)
+case (11)
    go to 11
-case ( 13 )
+case (13)
    go to 13
-case ( 14 )
+case (14)
    go to 14
 end select
 104 sm(1) = 1.0
@@ -19030,12 +19030,12 @@ do i = m,n
    sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
 end do
-select case ( lr )
-case ( 16 )
+select case (lr)
+case (16)
    go to 16
-case ( 18 )
+case (18)
    go to 18
-case ( 19 )
+case (19)
    go to 19
 end select
 106 aq(1) = 1.0
@@ -19096,12 +19096,12 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 111
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-select case ( lk )
-case ( 22 )
+select case (lk)
+case (22)
    go to 22
-case ( 24 )
+case (24)
    go to 24
-case ( 25 )
+case (25)
    go to 25
 end select
 end subroutine bsslk
@@ -20954,9 +20954,9 @@ implicit none
 complex, intent(in) :: z
 real :: nswc_ai_r4
 !     ----------
-nswc_ai_r4 = real ( z )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 20
+nswc_ai_r4 = real(z)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 20
 go to 30
 10 cflect = -z
 return
@@ -20989,7 +20989,7 @@ do i = 1,50
    c = ((ri - 0.5)/ri)**2
    an = c*(an*k2)
    s1 = s1 + an
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 km = hpi*s1
 end function km
@@ -21030,7 +21030,7 @@ do i = 1,50
    bn = bn + 1.0/(ri*(2.0*ri - 1.0))
    s1 = s1 + an
    s2 = s2 + an*bn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 s1 = s1 + (1.0, 0.0)
 !                   SET w = 0.5*CLOG(16.0/l2)
@@ -21321,7 +21321,7 @@ do i = 1,50
    cn = an/(2.0*ri - 1.0)
    s1 = s1 + an
    s2 = s2 - cn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 fk = hpi*s1
 ek = hpi*s2
@@ -21380,7 +21380,7 @@ do i = 1,300
    s5 = s5 + en
    s6 = s6 + an*fn
    s7 = s7 + an*gn
-   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
+   if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
 s1 = s1 + (1.0, 0.0)
 s3 = s3 + (1.0, 0.0)
@@ -22870,9 +22870,9 @@ c2 = -dk*sl*dl*t*r/td1
 d1 = dk*dl*r/t1
 d2 = -k2*ck*sl*t*r/td1
 !     Final assembly
-40 s = cmplx (s1, s2)
-c = cmplx (c1, c2)
-d = cmplx (d1, d2)
+40 s = cmplx(s1, s2)
+c = cmplx(c1, c2)
+d = cmplx(d1, d2)
 return
 !     Error return
 50 ierr = 3
@@ -23202,8 +23202,8 @@ f = 0.0
 aj1 = h(2) - h(1)
 circm = aj1
 nswc_ai_i4 = iop - 2
-if ( nswc_ai_i4 < 0 ) go to 140
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 140
+if (nswc_ai_i4 == 0) go to 150
 go to 160
 140 sum = e(m)*aj1
 141 m = m + 1
@@ -23941,8 +23941,8 @@ go to 110
 170 if (s2 > 2.e-2 .and. h8 + k8 < 2.e2) go to 172
 if (abs(e3 - f) > 0.4*f) go to 172
 nswc_ai_r4 = d1 - t
-if ( nswc_ai_r4 < 0 ) go to 200
-if ( nswc_ai_r4 == 0 ) go to 180
+if (nswc_ai_r4 < 0) go to 200
+if (nswc_ai_r4 == 0) go to 180
 go to 195
 172 if (e3 < 2.e4*eps) go to 195
 if (f < 2.e4*eps) go to 200
@@ -23952,12 +23952,12 @@ if (s2 >= 5.e-4) go to 180
 if (s1 /= s2) go to 195
 175 if (min(e3,f) < 2.5e-2*sqeps) goto 185
 180 nswc_ai_r4 = e3 - f
-if ( nswc_ai_r4 < 0 ) go to 200
-if ( nswc_ai_r4 == 0 ) go to 190
+if (nswc_ai_r4 < 0) go to 200
+if (nswc_ai_r4 == 0) go to 190
 go to 195
 185 nswc_ai_r4 = e3 - f
-if ( nswc_ai_r4 < 0 ) go to 195
-if ( nswc_ai_r4 == 0 ) go to 190
+if (nswc_ai_r4 < 0) go to 195
+if (nswc_ai_r4 == 0) go to 190
 go to 200
 190 if (s0 >= s9) go to 200
 195 e3 = f
@@ -26200,9 +26200,9 @@ x1 = 0.0
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.0) x1 = -x1
-temp(1) = (( x1 + x2) + u) - b
+temp(1) = ((x1 + x2) + u) - b
 temp(2) = ((-x1 - x2) + u) - b
-temp(3) = (( x1 - x2) - u) - b
+temp(3) = ((x1 - x2) - u) - b
 temp(4) = ((-x1 + x2) - u) - b
 call aord(temp,4)
 if (abs(temp(1)) >= 0.1*abs(temp(4))) go to 31
@@ -26232,8 +26232,8 @@ return
 60 t = real(z(1))
 x = 0.0
 nswc_ai_r4 = t
-if ( nswc_ai_r4 < 0 ) go to 61
-if ( nswc_ai_r4 == 0 ) go to 70
+if (nswc_ai_r4 < 0) go to 61
+if (nswc_ai_r4 == 0) go to 70
 go to 62
 61 h = abs(real(z(2))) + abs(aimag(z(2)))
 if (abs(t) <= h) go to 70
@@ -26332,9 +26332,9 @@ x1 = 0.d0
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.d0) x1 = -x1
-zr(1) = (( x1 + x2) + u) - b
+zr(1) = ((x1 + x2) + u) - b
 zr(2) = ((-x1 - x2) + u) - b
-zr(3) = (( x1 - x2) - u) - b
+zr(3) = ((x1 - x2) - u) - b
 zr(4) = ((-x1 + x2) - u) - b
 call daord(zr, 4)
 if (abs(zr(1)) >= 0.1d0*abs(zr(4))) go to 31
@@ -26364,8 +26364,8 @@ return
 60 t = zr(1)
 x = 0.d0
 nswc_ai_r8 = t
-if ( nswc_ai_r8 < 0 ) go to 61
-if ( nswc_ai_r8 == 0 ) go to 70
+if (nswc_ai_r8 < 0) go to 61
+if (nswc_ai_r8 == 0) go to 70
 go to 62
 61 h = abs(zr(2)) + abs(zi(2))
 if (abs(t) <= h) go to 70
@@ -27961,11 +27961,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,7)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sy(i) = sx(i)
 end do
-if ( n < 7 ) return
+if (n < 7) return
 40 mp1 = m + 1
 do i = mp1,n,7
    sy(i) = sx(i)
@@ -28005,11 +28005,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,7)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dy(i) = dx(i)
 end do
-if ( n < 7 ) return
+if (n < 7) return
 40 mp1 = m + 1
 do i = mp1,n,7
    dy(i) = dx(i)
@@ -28075,8 +28075,8 @@ integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3, nswc_ai_i4
 if (n <= 0) return
 if (incx /= incy) go to 5
 nswc_ai_i4 = incx - 1
-if ( nswc_ai_i4 < 0 ) go to 5
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 5
+if (nswc_ai_i4 == 0) go to 20
 go to 60
 5 continue
 !       Code for unequal or nonpositive increments.
@@ -28153,13 +28153,13 @@ return
 !       Code for both increments equal to 1
 !       clean-up loop
 20 m = mod(n,3)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = sx(i)
    sx(i) = sy(i)
    sy(i) = stemp
 end do
-if ( n < 3 ) return
+if (n < 3) return
 40 mp1 = m + 1
 do i = mp1,n,3
    stemp = sx(i)
@@ -28203,13 +28203,13 @@ return
 !       Code for both increments equal to 1
 !       clean-up loop
 20 m = mod(n,3)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dx(i)
    dx(i) = dy(i)
    dy(i) = dtemp
 end do
-if ( n < 3 ) return
+if (n < 3) return
 40 mp1 = m + 1
 do i = mp1,n,3
    dtemp = dx(i)
@@ -28472,8 +28472,8 @@ sh22 = sh22*gam
 go to 200
 220 continue
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 250
-if ( nswc_ai_r4 == 0 ) go to 230
+if (nswc_ai_r4 < 0) go to 250
+if (nswc_ai_r4 == 0) go to 230
 go to 240
 230 continue
 sparam(3) = sh21
@@ -28516,8 +28516,8 @@ if (n <= 0 .or.(sflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 50
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 50
+if (nswc_ai_r4 == 0) go to 10
 go to 30
 10 continue
 sh21 = sparam(3)
@@ -28557,8 +28557,8 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 nswc_ai_r4 = sflag
-if ( nswc_ai_r4 < 0 ) go to 120
-if ( nswc_ai_r4 == 0 ) go to 80
+if (nswc_ai_r4 < 0) go to 120
+if (nswc_ai_r4 == 0) go to 80
 go to 100
 80 continue
 sh21 = sparam(3)
@@ -28715,8 +28715,8 @@ dh22 = dh22*gam
 go to 200
 220 continue
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 250
-if ( nswc_ai_r8 == 0 ) go to 230
+if (nswc_ai_r8 < 0) go to 250
+if (nswc_ai_r8 == 0) go to 230
 go to 240
 230 continue
 dparam(3) = dh21
@@ -28760,8 +28760,8 @@ if (n <= 0 .or.(dflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 50
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 50
+if (nswc_ai_r8 == 0) go to 10
 go to 30
 10 continue
 dh21 = dparam(3)
@@ -28801,8 +28801,8 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 nswc_ai_r8 = dflag
-if ( nswc_ai_r8 < 0 ) go to 120
-if ( nswc_ai_r8 == 0 ) go to 80
+if (nswc_ai_r8 < 0) go to 120
+if (nswc_ai_r8 == 0) go to 80
 go to 100
 80 continue
 dh21 = dparam(3)
@@ -28874,11 +28874,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = stemp + sx(i)*sy(i)
 end do
-if ( n < 5 ) go to 60
+if (n < 5) go to 60
 40 mp1 = m + 1
 do i = mp1,n,5
    stemp = stemp + sx(i)*sy(i) + sx(i + 1)*sy(i + 1) + &
@@ -28917,11 +28917,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dtemp + dx(i)*dy(i)
 end do
-if ( n < 5 ) go to 60
+if (n < 5) go to 60
 40 mp1 = m + 1
 do i = mp1,n,5
    dtemp = dtemp + dx(i)*dy(i) + dx(i + 1)*dy(i + 1) + &
@@ -29018,11 +29018,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sx(i) = sa*sx(i)
 end do
-if ( n < 5 ) return
+if (n < 5) return
 40 mp1 = m + 1
 do i = mp1,n,5
    sx(i) = sa*sx(i)
@@ -29054,11 +29054,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,5)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dx(i) = da*dx(i)
 end do
-if ( n < 5 ) return
+if (n < 5) return
 40 mp1 = m + 1
 do i = mp1,n,5
    dx(i) = da*dx(i)
@@ -29142,11 +29142,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,4)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    sy(i) = sy(i) + sa*sx(i)
 end do
-if ( n < 4 ) return
+if (n < 4) return
 40 mp1 = m + 1
 do i = mp1,n,4
    sy(i) = sy(i) + sa*sx(i)
@@ -29185,11 +29185,11 @@ return
 !        Code for both increments equal to 1
 !        clean-up loop
 20 m = mod(n,4)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dy(i) = dy(i) + da*dx(i)
 end do
-if ( n < 4 ) return
+if (n < 4) return
 40 mp1 = m + 1
 do i = mp1,n,4
    dy(i) = dy(i) + da*dx(i)
@@ -29210,7 +29210,7 @@ integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy
 if (n <= 0) return
-if (abs(real(ca)) + abs(aimag(ca)) == 0.0 ) return
+if (abs(real(ca)) + abs(aimag(ca)) == 0.0) return
 if (incx == 1.and.incy == 1) go to 20
 !        Code for unequal increments or equal increments
 !          not equal to 1
@@ -29254,11 +29254,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,6)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    stemp = stemp + abs(sx(i))
 end do
-if ( n < 6 ) go to 60
+if (n < 6) go to 60
 40 mp1 = m + 1
 do i = mp1,n,6
    stemp = stemp + abs(sx(i)) + abs(sx(i + 1)) + abs(sx(i + 2)) &
@@ -29290,11 +29290,11 @@ return
 !        Code for increment equal to 1
 !        clean-up loop
 20 m = mod(n,6)
-if ( m == 0 ) go to 40
+if (m == 0) go to 40
 do i = 1,m
    dtemp = dtemp + abs(dx(i))
 end do
-if ( n < 6 ) go to 60
+if (n < 6) go to 60
 40 mp1 = m + 1
 do i = mp1,n,6
    dtemp = dtemp + abs(dx(i)) + abs(dx(i + 1)) + abs(dx(i + 2)) &
@@ -29330,7 +29330,7 @@ end do
 scasum = stemp
 end function scasum
 
-pure real function snrm2( n, sx, incx)
+pure real function snrm2(n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
@@ -29380,22 +29380,22 @@ sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 select case ( next )
-case ( 30 )
+20 select case (next)
+case (30)
    go to 30
-case ( 50 )
+case (50)
    go to 50
-case ( 70 )
+case (70)
    go to 70
-case ( 110 )
+case (110)
    go to 110
 end select
-30 if ( abs(sx(i)) > cutlo) go to 85
+30 if (abs(sx(i)) > cutlo) go to 85
 next = 50
 xmax = zero
 !                        Phase 1.  Sum is zero
-50 if ( sx(i) == zero) go to 200
-if ( abs(sx(i)) > cutlo) go to 85
+50 if (sx(i) == zero) go to 200
+if (abs(sx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
 go to 105
@@ -29407,10 +29407,10 @@ sum = (sum / sx(i)) / sx(i)
 go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( abs(sx(i)) > cutlo ) go to 75
+70 if (abs(sx(i)) > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( abs(sx(i)) <= xmax ) go to 115
+110 if (abs(sx(i)) <= xmax) go to 115
 sum = one + sum * (xmax / sx(i))**2
 xmax = abs(sx(i))
 go to 200
@@ -29420,24 +29420,24 @@ go to 200
 75 sum = (sum * xmax) * xmax
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-85 hitest = cuthi/float( n )
+85 hitest = cuthi/float(n)
 !                   Phase 3.  Sum is mid-range.  No scaling.
 do j = i,nn,incx
    if (abs(sx(j)) >= hitest) go to 100
    sum = sum + sx(j)**2
 end do
-snrm2 = sqrt( sum )
+snrm2 = sqrt(sum)
 go to 300
 200 continue
 i = i + incx
-if ( i <= nn ) go to 20
+if (i <= nn) go to 20
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
 snrm2 = xmax * sqrt(sum)
 300 continue
 end function snrm2
 
-pure double precision function dnrm2( n, dx, incx)
+pure double precision function dnrm2(n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
@@ -29487,22 +29487,22 @@ sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 select case ( next )
-case ( 30 )
+20 select case (next)
+case (30)
    go to 30
-case ( 50 )
+case (50)
    go to 50
-case ( 70 )
+case (70)
    go to 70
-case ( 110 )
+case (110)
    go to 110
 end select
-30 if ( abs(dx(i)) > cutlo) go to 85
+30 if (abs(dx(i)) > cutlo) go to 85
 next = 50
 xmax = zero
 !                        Phase 1.  Sum is zero
-50 if ( dx(i) == zero) go to 200
-if ( abs(dx(i)) > cutlo) go to 85
+50 if (dx(i) == zero) go to 200
+if (abs(dx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
 go to 105
@@ -29514,10 +29514,10 @@ sum = (sum / dx(i)) / dx(i)
 go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( abs(dx(i)) > cutlo ) go to 75
+70 if (abs(dx(i)) > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( abs(dx(i)) <= xmax ) go to 115
+110 if (abs(dx(i)) <= xmax) go to 115
 sum = one + sum * (xmax / dx(i))**2
 xmax = abs(dx(i))
 go to 200
@@ -29527,24 +29527,24 @@ go to 200
 75 sum = (sum * xmax) * xmax
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-85 hitest = cuthi/float( n )
+85 hitest = cuthi/float(n)
 !                   Phase 3.  Sum is mid-range.  No scaling.
 do j = i,nn,incx
    if (abs(dx(j)) >= hitest) go to 100
    sum = sum + dx(j)**2
 end do
-dnrm2 = sqrt( sum )
+dnrm2 = sqrt(sum)
 go to 300
 200 continue
 i = i + incx
-if ( i <= nn ) go to 20
+if (i <= nn) go to 20
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
 dnrm2 = xmax * sqrt(sum)
 300 continue
 end function dnrm2
 
-pure real function scnrm2( n, cx, incx)
+pure real function scnrm2(n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
 complex, intent(in) :: cx(*)
@@ -29597,24 +29597,24 @@ nn = n * incx
 do i = 1,nn,incx
    absx = abs(real(cx(i)))
    imag = .false.
-   select case ( next )
-   case ( 30 )
+   select case (next)
+   case (30)
       go to 30
-   case ( 50 )
+   case (50)
       go to 50
-   case ( 70 )
+   case (70)
       go to 70
-   case ( 90 )
+   case (90)
       go to 90
-   case ( 110 )
+   case (110)
       go to 110
    end select
-30 if ( absx > cutlo) go to 85
+30 if (absx > cutlo) go to 85
    next = 50
    scale = .false.
 !                        Phase 1.  Sum is zero
-50 if ( absx == zero) go to 200
-   if ( absx > cutlo) go to 85
+50 if (absx == zero) go to 200
+   if (absx > cutlo) go to 85
 !                                Prepare for phase 2.
    next = 70
    go to 105
@@ -29626,10 +29626,10 @@ do i = 1,nn,incx
    go to 115
 !                   Phase 2.  Sum is small.
 !                             Scale to avoid destructive underflow.
-70 if ( absx > cutlo ) go to 75
+70 if (absx > cutlo) go to 75
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if ( absx <= xmax ) go to 115
+110 if (absx <= xmax) go to 115
    sum = one + sum * (xmax / absx)**2
    xmax = absx
    go to 200
@@ -29641,7 +29641,7 @@ do i = 1,nn,incx
    scale = .false.
 !     For real or D.P. set hitest = cuthi/n
 !     for complex      set hitest = cuthi/(2*n)
-   hitest = cuthi/float( n )
+   hitest = cuthi/float(n)
    hitest = hitest * 0.5
 !                   Phase 3.  Sum is mid-range.  No scaling.
 90 if (absx >= hitest) go to 100
@@ -29651,14 +29651,14 @@ do i = 1,nn,incx
    if (imag) go to 210
    absx = abs(aimag(cx(i)))
    imag = .true.
-   select case ( next )
-   case ( 50 )
+   select case (next)
+   case (50)
       go to 50
-   case ( 70 )
+   case (70)
       go to 70
-   case ( 90 )
+   case (90)
       go to 90
-   case ( 110 )
+   case (110)
       go to 110
    end select
 210 continue
@@ -29680,7 +29680,7 @@ integer, intent(in) :: n
 real :: smax
 integer :: i, ix
 isamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 isamax = 1
 if (n == 1) return
 if (incx == 1) go to 20
@@ -29715,7 +29715,7 @@ integer, intent(in) :: n
 double precision :: dmax
 integer :: i, ix
 idamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 idamax = 1
 if (n == 1) return
 if (incx == 1) go to 20
@@ -29751,7 +29751,7 @@ real :: smax
 integer :: i, ix
 complex :: zdum
 icamax = 0
-if ( n < 1 ) return
+if (n < 1) return
 icamax = 1
 if (n == 1) return
 if (incx == 1) go to 20
@@ -30394,9 +30394,9 @@ ifcur = 0
 npart = n
 idiv = 2
 10 iquot = npart/idiv
-if ( ( npart - idiv * iquot ) == 0 ) go to 20
+if ((npart - idiv * iquot) == 0) go to 20
 go to 60
-20 if ( ( idiv - ifcur ) <= 0 ) go to 40
+20 if ((idiv - ifcur) <= 0) go to 40
 go to 30
 30 ip = ip + 1
 ifact(ip) = idiv
@@ -30408,17 +30408,17 @@ go to 50
 nexp(ip) = nexp(ip) + 1
 50 npart = iquot
 go to 10
-60 if ( ( iquot - idiv ) <= 0 ) go to 100
+60 if ((iquot - idiv) <= 0) go to 100
 go to 70
-70 if ( ( idiv - 2 ) <= 0 ) go to 80
+70 if ((idiv - 2) <= 0) go to 80
 go to 90
 80 idiv = 3
 go to 10
 90 idiv = idiv + 2
 go to 10
-100 if ( ( npart - 1 ) <= 0 ) go to 140
+100 if ((npart - 1) <= 0) go to 140
 go to 110
-110 if ( ( npart - ifcur ) <= 0 ) go to 130
+110 if ((npart - ifcur) <= 0) go to 130
 go to 120
 120 ip = ip + 1
 ifact(ip) = npart
@@ -32441,7 +32441,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0e0 ) exit
+   if (det(1) == 0.0e0) exit
 10 if (abs(det(1)) >= 1.0e0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0e0
@@ -32942,7 +32942,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0d0 ) exit
+   if (det(1) == 0.0d0) exit
 10 if (abs(det(1)) >= 1.0d0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0d0
@@ -35894,7 +35894,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0e0 ) exit
+   if (det(1) == 0.0e0) exit
 10 if (det(1) >= 1.0e0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0e0
@@ -36145,7 +36145,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if ( det( 1 ) == 0.0d0 ) exit
+   if (det(1) == 0.0d0) exit
 10 if (det(1) >= 1.0d0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0d0
@@ -36951,7 +36951,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if ( cabs1 ( det( 1 ) ) == 0.0e0 ) exit
+   if (cabs1(det(1)) == 0.0e0) exit
 10 if (cabs1(det(1)) >= 1.0e0) go to 20
    det(1) = cmplx(ten,0.0e0)*det(1)
    det(2) = det(2) - (1.0e0,0.0e0)
@@ -37533,7 +37533,7 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
@@ -37551,7 +37551,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -37944,7 +37944,7 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
@@ -37962,7 +37962,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0d0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -38343,7 +38343,7 @@ do i = 1, m
    if (wantu) call cscal(n,r,u(1,i),1)
 360 continue
 !     ...Exit
-   if ( i == m ) exit
+   if (i == m) exit
    if (cabs1(e(i)) == 0.0e0) go to 370
    t = cmplx(abs(e(i)),0.0e0)
    r = t/e(i)
@@ -38377,7 +38377,7 @@ go to 660
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if ( l == 0 ) exit
+   if (l == 0) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 420
@@ -38395,7 +38395,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if ( ls == l ) exit
+   if (ls == l) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -38981,12 +38981,12 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -39021,10 +39021,10 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if ( m == l ) exit
+   if (m == l) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 mp2 = m + 2
 do i = mp2,en
@@ -39521,12 +39521,12 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -39561,10 +39561,10 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if ( m == l ) exit
+   if (m == l) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if ( s1 == s2 ) exit
+   if (s1 == s2) exit
 end do
 mp2 = m + 2
 do i = mp2,en
@@ -39992,7 +39992,7 @@ do i = k,kk
    end do
 end do
 45 if (dl == 2) go to 60
-if (dk == 2 ) go to 50
+if (dk == 2) go to 50
 t(1,1) = a(k,k) + a(l,l)
 if (t(1,1) == 0.0) go to 200
 c(k,l) = c(k,l)/t(1,1)
@@ -40272,7 +40272,7 @@ do i = k,kk
    end do
 end do
 45 if (dl == 2) go to 60
-if (dk == 2 ) go to 50
+if (dk == 2) go to 50
 t(1,1) = a(k,k) + a(l,l)
 if (t(1,1) == 0.d0) go to 200
 c(k,l) = c(k,l)/t(1,1)
@@ -40577,11 +40577,11 @@ end do
       if (fxni > fxnorm) fxnorm = fxni
    end do
    if (tol <= 0.0) go to 230
-   if ( fxnorm < tol ) exit
+   if (fxnorm < tol) exit
 230 tnorm = 8.0*float(n)*anorm*xnorm**2 + 5.0*float(n)*bnorm*xnorm &
       & + cnorm
    t = 1.0 + fxnorm/tnorm
-   if ( t == 1.0 ) exit
+   if (t == 1.0) exit
    if (its >= maxits) go to 400
 !        ********** Upper triangularization **********
    if (its /= 1) go to 240
@@ -40944,7 +40944,7 @@ do ll = 1,en
    lm1 = en - ll
    l = lm1 + 1
    if (l == 1) go to 90
-   if ( abs ( a ( l , lm1 ) ) <= epsa ) exit
+   if (abs(a(l , lm1)) <= epsa) exit
 end do
 80 a(l,lm1) = cmplx(0.0,0.0)
 if (l < na) go to 90
@@ -42034,7 +42034,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_1
+      if (a(i , j) /= 0.0) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -42046,7 +42046,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_2
+      if (a(i , j) /= 0.0) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -42212,7 +42212,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_1
+      if (a(i , j) /= 0.d0) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -42224,7 +42224,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_2
+      if (a(i , j) /= 0.d0) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -42390,7 +42390,7 @@ nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if (a(i , j) /= (0.0 , 0.0)) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
@@ -42402,7 +42402,7 @@ nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_2
+      if (a(i , j) /= (0.0 , 0.0)) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
@@ -42821,7 +42821,7 @@ if (ml == 0) go to 30
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if (real(a(i , j)) /= 0.0) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
@@ -42831,7 +42831,7 @@ if (mu == 0) go to 60
 j = ml + mu + 1
 nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
+      if (real(a(i , j)) /= 0.0) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
@@ -42870,7 +42870,7 @@ if (ml == 0) go to 30
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if (aimag(a(i , j)) /= 0.0) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
@@ -42880,7 +42880,7 @@ if (mu == 0) go to 60
 j = ml + mu + 1
 nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
+      if (aimag(a(i , j)) /= 0.0) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
@@ -43139,8 +43139,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43173,7 +43173,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= 0.0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43183,8 +43183,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43236,7 +43236,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
+      if ((a(i , la) + b(i , lb)) /= 0.0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -43273,8 +43273,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43307,7 +43307,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= 0.d0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43317,8 +43317,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43370,7 +43370,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
+      if ((a(i , la) + b(i , lb)) /= 0.d0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -43407,8 +43407,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43441,7 +43441,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) + b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if ((a(i , j) + b(i , j)) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43451,8 +43451,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43504,7 +43504,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) + b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+      if ((a(i , la) + b(i , lb)) /= (0.0 , 0.0)) &
          & exit nswc_exit_2
    end do
    mcu = mcu - 1
@@ -43542,8 +43542,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43576,7 +43576,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= 0.0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43586,8 +43586,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43639,7 +43639,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
+      if ((a(i , la) - b(i , lb)) /= 0.0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -43676,8 +43676,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43710,7 +43710,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= 0.d0) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43720,8 +43720,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43773,7 +43773,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
+      if ((a(i , la) - b(i , lb)) /= 0.d0) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
@@ -43810,8 +43810,8 @@ integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 ierr = 0
 nswc_ai_i4 = nl - ml
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 30
 go to 20
 !     Insert the first abs(ml - nl) diagonals
 10 mcl = ml
@@ -43844,7 +43844,7 @@ if (ml == 0) go to 40
 imin = ml + 1
 nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ( ( a ( i , j ) - b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if ((a(i , j) - b(i , j)) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -43854,8 +43854,8 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 50 nswc_ai_i4 = nu - mu
-if ( nswc_ai_i4 < 0 ) go to 100
-if ( nswc_ai_i4 == 0 ) go to 160
+if (nswc_ai_i4 < 0) go to 100
+if (nswc_ai_i4 == 0) go to 160
 go to 130
 !     Insertion of the remaining diagonals when mu .NE. nu
 100 mcu = mu
@@ -43907,7 +43907,7 @@ la = ml + mu + 1
 lb = nl + nu + 1
 nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ( ( a ( i , la ) - b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+      if ((a(i , la) - b(i , lb)) /= (0.0 , 0.0)) &
          & exit nswc_exit_2
    end do
    mcu = mcu - 1
@@ -44032,7 +44032,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= 0.0 ) exit nswc_exit_1
+      if (c(i , jc) /= 0.0) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -44170,7 +44170,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= 0.d0 ) exit nswc_exit_1
+      if (c(i , jc) /= 0.d0) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -44308,7 +44308,7 @@ nswc_exit_1 : do ndiag = 1 , maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if ( c ( i , jc ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
+      if (c(i , jc) /= (0.0 , 0.0)) exit nswc_exit_1
    end do
    mcu = mcu - 1
 end do nswc_exit_1
@@ -46507,7 +46507,7 @@ do i = 1,m
    do l = minb,maxb
       if (b(l) == 0.0) go to 31
       j = jb(l)
-      t = cmplx (wk(j), b(l))
+      t = cmplx(wk(j), b(l))
       wk(j) = 0.0
       if (ip > num) go to 50
       c(ip) = t
@@ -46520,7 +46520,7 @@ do i = 1,m
       j = ja(l)
       if (wk(j) == 0.0) go to 41
       if (ip > num) go to 50
-      c(ip) = cmplx (wk(j), 0.0)
+      c(ip) = cmplx(wk(j), 0.0)
       wk(j) = 0.0
       jc(ip) = j
       ip = ip + 1
@@ -48081,7 +48081,7 @@ do jord = 1,n
       in1 = in2 - in1
       do ii = in1,in2
          i = icn(ii)
-         if ( iperm ( i ) == 0 ) exit nswc_exit_1
+         if (iperm(i) == 0) exit nswc_exit_1
       end do
 !     No cheap assignment in row
       arp(j) = -1
@@ -48117,7 +48117,7 @@ do jord = 1,n
    numnz = numnz + 1
    do k = 1,jord
       j = pr(j)
-      if ( j == - 1 ) exit
+      if (j == - 1) exit
       ii = ip(j) + lenr(j) - out(j) - 2
       i = icn(ii)
       iperm(i) = j
@@ -48256,14 +48256,14 @@ nswc_exit_1 : do isn = 1 , n
          lowl(iw) = n + 1
          icnt = icnt + 1
          numb(iw) = icnt
-         if ( iw == iv ) exit
+         if (iw == iv) exit
       end do
       ist = n - stp
       ib(num) = lcnt
 ! Are there any nodes left on the stack.
       if (ist /= 0) go to 60
 ! Have all the nodes been ordered.
-      if ( icnt < n ) exit
+      if (icnt < n) exit
       exit nswc_exit_1
 ! Backtrack to previous node on path.
 60    iw = iv
@@ -48459,8 +48459,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -48492,15 +48492,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -48917,8 +48917,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -48946,15 +48946,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= 0.0) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm
@@ -49194,8 +49194,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -49227,15 +49227,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -49655,8 +49655,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -49684,15 +49684,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= 0.d0) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm
@@ -50322,8 +50322,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -50355,15 +50355,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -50786,8 +50786,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -50815,15 +50815,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= zero) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm
@@ -50946,9 +50946,9 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r4 = wi ( k )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 10
+   nswc_ai_r4 = wi(k)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.0
@@ -50984,9 +50984,9 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r4 = wi ( k )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 10
+   nswc_ai_r4 = wi(k)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.0
@@ -51548,10 +51548,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -51586,7 +51586,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -52093,10 +52093,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -52131,7 +52131,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -52264,8 +52264,8 @@ do nn = 1, n
    q = wi(en)
    na = en - 1
    nswc_ai_r4 = q
-   if ( nswc_ai_r4 < 0 ) go to 710
-   if ( nswc_ai_r4 == 0 ) go to 600
+   if (nswc_ai_r4 < 0) go to 710
+   if (nswc_ai_r4 == 0) go to 600
    go to 800
 !     ********** Real vector **********
 600 m = en
@@ -52430,9 +52430,9 @@ call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r8 = wi ( k )
-   if ( nswc_ai_r8 < 0 ) go to 30
-   if ( nswc_ai_r8 == 0 ) go to 10
+   nswc_ai_r8 = wi(k)
+   if (nswc_ai_r8 < 0) go to 30
+   if (nswc_ai_r8 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.d0
@@ -52831,10 +52831,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -52869,7 +52869,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -53249,10 +53249,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -53287,7 +53287,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -53420,8 +53420,8 @@ do nn = 1, n
    q = wi(en)
    na = en - 1
    nswc_ai_r8 = q
-   if ( nswc_ai_r8 < 0 ) go to 710
-   if ( nswc_ai_r8 == 0 ) go to 600
+   if (nswc_ai_r8 < 0) go to 710
+   if (nswc_ai_r8 == 0) go to 600
    go to 800
 !     ********** Real vector **********
 600 m = en
@@ -53860,7 +53860,7 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -53971,7 +53971,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if ( m == n ) exit
+      if (m == n) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -54215,7 +54215,7 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if ( abs ( e ( m ) ) <= b ) exit
+      if (abs(e(m)) <= b) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -54359,7 +54359,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if ( m == n ) exit
+      if (m == n) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -54717,7 +54717,7 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -54962,7 +54962,7 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if ( abs ( e ( m ) ) <= b ) exit
+      if (abs(e(m)) <= b) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -55465,7 +55465,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -55720,8 +55720,8 @@ end do
 !                from the information left by corth **********
 iend = igh - low - 1
 nswc_ai_i4 = iend
-if ( nswc_ai_i4 < 0 ) go to 180
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
 go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
@@ -55796,7 +55796,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -56405,7 +56405,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -56656,8 +56656,8 @@ end do
 !                from the information left by dcorth **********
 iend = igh - low - 1
 nswc_ai_i4 = iend
-if ( nswc_ai_i4 < 0 ) go to 180
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
 go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
@@ -56732,7 +56732,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -57130,9 +57130,9 @@ do j = nkl1,nklm
 end do
 80 if (kode == 0) go to 150
 do j = 1,n
-   nswc_ai_r4 = x ( j )
-   if ( nswc_ai_r4 < 0 ) go to 90
-   if ( nswc_ai_r4 == 0 ) go to 110
+   nswc_ai_r4 = x(j)
+   if (nswc_ai_r4 < 0) go to 90
+   if (nswc_ai_r4 == 0) go to 110
    go to 100
 90 cu(1,j) = 1.
    iu(1,j) = 1
@@ -57143,9 +57143,9 @@ do j = 1,n
 end do
 do j = 1,k
    jpn = j + n
-   nswc_ai_r4 = res ( j )
-   if ( nswc_ai_r4 < 0 ) go to 120
-   if ( nswc_ai_r4 == 0 ) go to 140
+   nswc_ai_r4 = res(j)
+   if (nswc_ai_r4 < 0) go to 120
+   if (nswc_ai_r4 == 0) go to 140
    go to 130
 120 cu(1,jpn) = 1.
    iu(1,jpn) = 1
@@ -58392,13 +58392,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.0 ) exit
+   if (r2 + sum >= 1.0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -58732,13 +58732,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.0 ) exit
+   if (r2 + sum >= 1.0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -58846,7 +58846,7 @@ end do
 do jb = 1,nb
    do i = 1,k
       b(i,jb) = b(i,jb)/a(i,i)
-      if ( i == k ) exit
+      if (i == k) exit
       ip1 = i + 1
       call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
    end do
@@ -59280,13 +59280,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.d0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.d0 ) exit
+   if (r2 + sum >= 1.d0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -59619,13 +59619,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.d0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.d0 ) exit
+   if (r2 + sum >= 1.d0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -59731,7 +59731,7 @@ end do
 do jb = 1,nb
    do i = 1,k
       b(i,jb) = b(i,jb)/a(i,i)
-      if ( i == k ) exit
+      if (i == k) exit
       ip1 = i + 1
       call daxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
    end do
@@ -60286,7 +60286,7 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-60 if ( ( cl ) <= 0 ) go to 130
+60 if ((cl) <= 0) go to 130
 go to 70
 70 if (ncv <= 0) return
 b = dble(up)*dble(u(1,lpivot))
@@ -60829,7 +60829,7 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-60 if ( ( cl ) <= 0 ) go to 130
+60 if ((cl) <= 0) go to 130
 go to 70
 70 if (ncv <= 0) return
 b = up*u(1,lpivot)
@@ -62538,26 +62538,26 @@ do jj = isol,nsoln
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
 1170 continue
 end do
-1270 select case ( igo958 )
-case ( 310 )
+1270 select case (igo958)
+case (310)
    go to 310
-case ( 1010 )
+case (1010)
    go to 1010
 end select
-1280 select case ( igo897 )
-case ( 880 )
+1280 select case (igo897)
+case (880)
    go to 880
-case ( 900 )
+case (900)
    go to 900
 end select
-1290 select case ( igo938 )
-case ( 460 )
+1290 select case (igo938)
+case (460)
    go to 460
-case ( 480 )
+case (480)
    go to 480
-case ( 500 )
+case (500)
    go to 500
-case ( 520 )
+case (520)
    go to 520
 end select
 end subroutine wnlsm
@@ -62900,28 +62900,28 @@ call sswap(m, w(1,max), 1, w(1,i), 1)
 t = h(max)
 h(max) = h(i)
 h(i) = t
-570 select case ( igo993 )
-case ( 30 )
+570 select case (igo993)
+case (30)
    go to 30
-case ( 200 )
+case (200)
    go to 200
-case ( 330 )
+case (330)
    go to 330
-case ( 120 )
+case (120)
    go to 120
 end select
-590 select case ( igo990 )
-case ( 40 )
+590 select case (igo990)
+case (40)
    go to 40
-case ( 240 )
+case (240)
    go to 240
 end select
-600 select case ( igo996 )
-case ( 20 )
+600 select case (igo996)
+case (20)
    go to 20
-case ( 190 )
+case (190)
    go to 190
-case ( 320 )
+case (320)
    go to 320
 end select
 end subroutine wnlit
@@ -64110,9 +64110,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -64445,9 +64445,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -64765,9 +64765,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -64827,8 +64827,8 @@ fv = f(v)
 !        Location of the region of a local minimum
 10 if (e <= eps0*(1.0 + abs(a))) go to 40
 nswc_ai_r4 = fu - fv
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 11
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 11
 go to 30
 11 if (fu > f(b)) go to 30
 20 b = v
@@ -64922,8 +64922,8 @@ go to 201
 !                    Report the results
 240 ind = 0
 241 nswc_ai_r4 = fu - fv
-if ( nswc_ai_r4 < 0 ) go to 242
-if ( nswc_ai_r4 == 0 ) go to 243
+if (nswc_ai_r4 < 0) go to 242
+if (nswc_ai_r4 == 0) go to 243
 go to 244
 242 x = u
 w = fu
@@ -66615,7 +66615,7 @@ do j = 1, n
    if (h == zero) h = eps
    x(j) = temp + h
    call fcn(n,x,wa1,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    x(j) = temp
    do i = 1, n
       fjac(i,j) = (wa1(i) - fvec(i))/h
@@ -66632,7 +66632,7 @@ do k = 1, msum
       x(j) = wa2(j) + h
    end do
    call fcn(n,x,wa1,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    do j = k, n, msum
       x(j) = wa2(j)
       h = eps*abs(wa2(j))
@@ -66723,7 +66723,7 @@ do j = 1, n
    if (h == zero) h = eps
    x(j) = temp + h
    call fcn(m,n,x,wa,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    x(j) = temp
    do i = 1, m
       fjac(i,j) = (wa(i) - fvec(i))/h
@@ -67820,8 +67820,8 @@ do j = jmin,n
 end do
 203 if (jp /= 0) go to 300
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 800
-if ( nswc_ai_i4 == 0 ) go to 230
+if (nswc_ai_i4 < 0) go to 800
+if (nswc_ai_i4 == 0) go to 230
 go to 250
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -67907,8 +67907,8 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 360 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 400
-if ( nswc_ai_i4 == 0 ) go to 430
+if (nswc_ai_i4 < 0) go to 400
+if (nswc_ai_i4 == 0) go to 430
 go to 440
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -67920,8 +67920,8 @@ do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 401
-   if ( nswc_ai_r4 == 0 ) go to 402
+   if (nswc_ai_r4 < 0) go to 401
+   if (nswc_ai_r4 == 0) go to 402
    go to 403
 401 epsi = ratio
    npos = 1
@@ -67961,8 +67961,8 @@ do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 431
-   if ( nswc_ai_r4 == 0 ) go to 432
+   if (nswc_ai_r4 < 0) go to 431
+   if (nswc_ai_r4 == 0) go to 432
    go to 433
 431 epsi = ratio
    npos = 1
@@ -67978,17 +67978,17 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   nswc_ai_r4 = y ( i )
-   if ( nswc_ai_r4 < 0 ) go to 441
-   if ( nswc_ai_r4 == 0 ) go to 445
+   nswc_ai_r4 = y(i)
+   if (nswc_ai_r4 < 0) go to 441
+   if (nswc_ai_r4 == 0) go to 445
    go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 443
-   if ( nswc_ai_r4 == 0 ) go to 444
+   if (nswc_ai_r4 < 0) go to 443
+   if (nswc_ai_r4 == 0) go to 444
    go to 445
 443 epsi = ratio
    npos = 1
@@ -68074,7 +68074,7 @@ do j = 1,m
    end do
    rerr = max(rerr,abs(1.0 - sum))
    k = k + 1
-   if ( k >= mcheck ) exit
+   if (k >= mcheck) exit
 521 continue
 end do
 if (rerr <= 1.e-2) go to 600
@@ -68086,7 +68086,7 @@ go to 100
 if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if ( jp == ibasis ( ip ) ) exit
+   if (jp == ibasis(ip)) exit
 end do
 ibasis(ip) = iout
 basis(jp) = 0
@@ -68097,8 +68097,8 @@ go to 100
 go to 220
 !       Set up the r array for the NSTEP = 1 Case
 600 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 601
-if ( nswc_ai_i4 == 0 ) go to 630
+if (nswc_ai_i4 < 0) go to 601
+if (nswc_ai_i4 == 0) go to 630
 go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
@@ -68117,9 +68117,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 620
-      if ( nswc_ai_r4 == 0 ) go to 622
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 620
+      if (nswc_ai_r4 == 0) go to 622
       go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
@@ -68148,9 +68148,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 640
-      if ( nswc_ai_r4 == 0 ) go to 642
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 640
+      if (nswc_ai_r4 == 0) go to 642
       go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
@@ -68291,9 +68291,9 @@ end do
 850 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   nswc_ai_r4 = xb ( i )
-   if ( nswc_ai_r4 < 0 ) go to 851
-   if ( nswc_ai_r4 == 0 ) go to 856
+   nswc_ai_r4 = xb(i)
+   if (nswc_ai_r4 < 0) go to 851
+   if (nswc_ai_r4 == 0) go to 856
    go to 852
 851 sgn = -1.0
    dsump = 0.d0
@@ -68320,8 +68320,8 @@ do i = 1,m
 856 continue
 end do
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 860
-if ( nswc_ai_i4 == 0 ) go to 870
+if (nswc_ai_i4 < 0) go to 860
+if (nswc_ai_i4 == 0) go to 870
 go to 880
 !         Check the refinement (NSTEP = 1)
 860 do i = 1,m
@@ -68659,8 +68659,8 @@ do j = jmin,n
 end do
 203 if (jp /= 0) go to 300
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 800
-if ( nswc_ai_i4 == 0 ) go to 230
+if (nswc_ai_i4 < 0) go to 800
+if (nswc_ai_i4 == 0) go to 230
 go to 250
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -68743,8 +68743,8 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 360 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 400
-if ( nswc_ai_i4 == 0 ) go to 430
+if (nswc_ai_i4 < 0) go to 400
+if (nswc_ai_i4 == 0) go to 430
 go to 440
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -68756,8 +68756,8 @@ do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 401
-   if ( nswc_ai_r4 == 0 ) go to 402
+   if (nswc_ai_r4 < 0) go to 401
+   if (nswc_ai_r4 == 0) go to 402
    go to 403
 401 epsi = ratio
    npos = 1
@@ -68797,8 +68797,8 @@ do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 431
-   if ( nswc_ai_r4 == 0 ) go to 432
+   if (nswc_ai_r4 < 0) go to 431
+   if (nswc_ai_r4 == 0) go to 432
    go to 433
 431 epsi = ratio
    npos = 1
@@ -68814,17 +68814,17 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   nswc_ai_r4 = y ( i )
-   if ( nswc_ai_r4 < 0 ) go to 441
-   if ( nswc_ai_r4 == 0 ) go to 445
+   nswc_ai_r4 = y(i)
+   if (nswc_ai_r4 < 0) go to 441
+   if (nswc_ai_r4 == 0) go to 445
    go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 443
-   if ( nswc_ai_r4 == 0 ) go to 444
+   if (nswc_ai_r4 < 0) go to 443
+   if (nswc_ai_r4 == 0) go to 444
    go to 445
 443 epsi = ratio
    npos = 1
@@ -68913,7 +68913,7 @@ do j = 1,m
    end do
    rerr = max(rerr,abs(1.0 - sum))
    k = k + 1
-   if ( k >= mcheck ) exit
+   if (k >= mcheck) exit
 521 continue
 end do
 if (rerr <= 1.e-2) go to 600
@@ -68925,7 +68925,7 @@ go to 100
 if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if ( jp == ibasis ( ip ) ) exit
+   if (jp == ibasis(ip)) exit
 end do
 ibasis(ip) = iout
 basis(jp) = 0
@@ -68936,8 +68936,8 @@ go to 100
 go to 220
 !       Set up the r array for the NSTEP = 1 Case
 600 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 601
-if ( nswc_ai_i4 == 0 ) go to 630
+if (nswc_ai_i4 < 0) go to 601
+if (nswc_ai_i4 == 0) go to 630
 go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
@@ -68956,9 +68956,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 620
-      if ( nswc_ai_r4 == 0 ) go to 622
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 620
+      if (nswc_ai_r4 == 0) go to 622
       go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
@@ -68987,9 +68987,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 640
-      if ( nswc_ai_r4 == 0 ) go to 642
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 640
+      if (nswc_ai_r4 == 0) go to 642
       go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
@@ -69146,9 +69146,9 @@ end do
 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   nswc_ai_r4 = xb ( i )
-   if ( nswc_ai_r4 < 0 ) go to 851
-   if ( nswc_ai_r4 == 0 ) go to 856
+   nswc_ai_r4 = xb(i)
+   if (nswc_ai_r4 < 0) go to 851
+   if (nswc_ai_r4 == 0) go to 856
    go to 852
 851 sgn = -1.0
    dsump = 0.d0
@@ -69175,8 +69175,8 @@ do i = 1,m
 856 continue
 end do
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 860
-if ( nswc_ai_i4 == 0 ) go to 870
+if (nswc_ai_i4 < 0) go to 860
+if (nswc_ai_i4 == 0) go to 870
 go to 880
 !         Check the refinement (NSTEP = 1)
 860 do i = 1,m
@@ -69243,9 +69243,9 @@ do k = 1,iend
    kk = kcol + k
    nk = kcol + n
    do lk = kk,nk
-      nswc_ai_r4 = a ( lk )
-      if ( nswc_ai_r4 < 0 ) go to 20
-      if ( nswc_ai_r4 == 0 ) go to 10
+      nswc_ai_r4 = a(lk)
+      if (nswc_ai_r4 < 0) go to 20
+      if (nswc_ai_r4 == 0) go to 10
       go to 30
 10    continue
    end do
@@ -69507,11 +69507,11 @@ t = 0
 do j = 1,n
    s = a(1,j)
    do l = 2,n
-      if ( a(l,j) < s ) s = a(l,j)
+      if (a(l,j) < s) s = a(l,j)
    end do
    nswc_ai_i4 = s
-   if ( nswc_ai_i4 < 0 ) go to 20
-   if ( nswc_ai_i4 == 0 ) go to 40
+   if (nswc_ai_i4 < 0) go to 20
+   if (nswc_ai_i4 == 0) go to 40
    go to 30
 20 mm = maxnum + s
    if (t < -mm) go to 400
@@ -69532,7 +69532,7 @@ end do
 do i = 1,n
    q = a(i,1)
    do l = 2,n
-      if ( a(i,l) < q ) q = a(i,l)
+      if (a(i,l) < q) q = a(i,l)
    end do
    mm = maxnum - q
    if (t > mm) go to 400
@@ -69540,7 +69540,7 @@ do i = 1,n
    l = np1
    do j = 1,n
       a(i,j) = a(i,j) - q
-      if ( a(i,j) /= 0 ) go to 60
+      if (a(i,j) /= 0) go to 60
       a(i,l) = -j
       l = j
 60    continue
@@ -69551,23 +69551,23 @@ k = np1
 do i = 1,n
    lj = np1
    j = -a(i,np1)
-80 if ( c(j) == 0 ) go to 130
+80 if (c(j) == 0) go to 130
    lj = j
    j = -a(i,j)
-   if ( j /= 0 ) go to 80
+   if (j /= 0) go to 80
    lj = np1
    j = -a(i,np1)
 90 r = c(j)
    lm = lz(r)
    m = nz(r)
-100 if ( m == 0 ) go to 110
-   if ( c(m) == 0 ) go to 120
+100 if (m == 0) go to 110
+   if (c(m) == 0) go to 120
    lm = m
    m = -a(r,m)
    go to 100
 110 lj = j
    j = -a(i,j)
-   if ( j /= 0 ) go to 90
+   if (j /= 0) go to 90
    u(k) = i
    k = i
    go to 140
@@ -69585,7 +69585,7 @@ do i = 1,n
 140 continue
 end do
 ! Research of a new assignment
-150 if ( u(np1) == 0 ) return
+150 if (u(np1) == 0) return
 do i = 1,n
    ch(i) = 0
    lc(i) = 0
@@ -69598,39 +69598,39 @@ kslr = 1
 r = u(np1)
 lr(r) = -1
 slr(1) = r
-if ( a(r,np1) == 0 ) go to 220
+if (a(r,np1) == 0) go to 220
 170 l = -a(r,np1)
-if ( a(r,l) == 0 ) go to 180
-if ( rh(r) /= 0 ) go to 180
+if (a(r,l) == 0) go to 180
+if (rh(r) /= 0) go to 180
 rh(r) = rh(np1)
 ch(r) = -a(r,l)
 rh(np1) = r
-180 if ( lc(l) == 0 ) go to 200
-if ( rh(r) == 0 ) go to 210
+180 if (lc(l) == 0) go to 200
+if (rh(r) == 0) go to 210
 190 l = ch(r)
 ch(r) = -a(r,l)
-if ( a(r,l) /= 0 ) go to 180
+if (a(r,l) /= 0) go to 180
 rh(np1) = rh(r)
 rh(r) = 0
 go to 180
 200 lc(l) = r
-if ( c(l) == 0 ) go to 360
+if (c(l) == 0) go to 360
 kslc = kslc + 1
 slc(kslc) = l
 r = c(l)
 lr(r) = l
 kslr = kslr + 1
 slr(kslr) = r
-if ( a(r,np1) /= 0 ) go to 170
+if (a(r,np1) /= 0) go to 170
 210 continue
-if ( rh(np1) > 0 ) go to 350
+if (rh(np1) > 0) go to 350
 ! Reduction of the current cost matrix
 220 h = maxnum
 do j = 1,n
-   if ( lc(j) /= 0 ) go to 240
+   if (lc(j) /= 0) go to 240
    do k = 1,kslr
       i = slr(k)
-      if ( a(i,j) < h ) h = a(i,j)
+      if (a(i,j) < h) h = a(i,j)
    end do
 240 continue
 end do
@@ -69638,18 +69638,18 @@ mm = maxnum - h
 if (mm == 0 .or. t > mm) go to 400
 t = t + h
 do j = 1,n
-   if ( lc(j) /= 0 ) go to 290
+   if (lc(j) /= 0) go to 290
    do k = 1,kslr
       i = slr(k)
       a(i,j) = a(i,j) - h
-      if ( a(i,j) /= 0 ) go to 280
-      if ( rh(i) /= 0 ) go to 250
+      if (a(i,j) /= 0) go to 280
+      if (rh(i) /= 0) go to 250
       rh(i) = rh(np1)
       ch(i) = j
       rh(np1) = i
 250   l = np1
 260   nl = -a(i,l)
-      if ( nl == 0 ) go to 270
+      if (nl == 0) go to 270
       l = nl
       go to 260
 270   a(i,l) = -j
@@ -69657,15 +69657,15 @@ do j = 1,n
    end do
 290 continue
 end do
-if ( kslc == 0 ) go to 350
+if (kslc == 0) go to 350
 do i = 1,n
-   if ( lr(i) /= 0 ) go to 340
+   if (lr(i) /= 0) go to 340
    do k = 1,kslc
       j = slc(k)
-      if ( a(i,j) > 0 ) go to 320
+      if (a(i,j) > 0) go to 320
       l = np1
 300   nl = - a(i,l)
-      if ( nl == j ) go to 310
+      if (nl == j) go to 310
       l = nl
       go to 300
 310   a(i,l) = a(i,j)
@@ -69684,12 +69684,12 @@ go to 190
 360 c(l) = r
 m = np1
 370 nm = -a(r,m)
-if ( nm == l ) go to 380
+if (nm == l) go to 380
 m = nm
 go to 370
 380 a(r,m) = a(r,l)
 a(r,l) = 0
-if ( lr(r) < 0 ) go to 390
+if (lr(r) < 0) go to 390
 l = lr(r)
 a(r,l) = a(r,np1)
 a(r,np1) = -l
@@ -69937,41 +69937,41 @@ iflag = 0
 70 kub = vstar - vb
 call pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
    & np1,n5,bs,ps,ws,xs,iwk)
-if ( lb + vb <= vstar ) go to 140
+if (lb + vb <= vstar) go to 140
 vstar = lb + vb
 do j = 1,n
    xstar(j) = 0
    do s = 1,i
-      if ( x(s,j) == 0 ) go to 80
+      if (x(s,j) == 0) go to 80
       xstar(j) = s
       exit
 80    continue
    end do
 end do
 ip = pbl(i)
-if ( ip == 0 ) go to 110
+if (ip == 0) go to 110
 do j = 1,ip
    jj = bl(i,j)
-   if ( xl(i,j) == 1 ) xstar(jj) = i
+   if (xl(i,j) == 1) xstar(jj) = i
 end do
 110 i1 = i + 1
 do ii = i1,m
    ip = pbl(ii)
-   if ( ip == 0 ) go to 130
+   if (ip == 0) go to 130
    do j = 1,ip
       jj = bl(ii,j)
-      if ( xl(ii,j) == 1 ) xstar(jj) = ii
+      if (xl(ii,j) == 1) xstar(jj) = ii
    end do
 130 continue
 end do
-if ( ub == lb ) go to 200
+if (ub == lb) go to 200
 ! Step 3 (updating)
-140 if ( v(i) == 0 ) go to 180
+140 if (v(i) == 0) go to 180
 iuv = ub + vb
 u = pbl(i)
 ibv = 0
 do s = 1,u
-   if ( xl(i,s) == 0 ) go to 170
+   if (xl(i,s) == 0) go to 170
    j = bl(i,s)
    x(i,j) = 1
    q(i) = q(i) - w(j)
@@ -69979,43 +69979,43 @@ do s = 1,u
    b(j) = 0
    bb(i,j) = f(i)
    ubb(j) = iuv
-   if ( iflag == 1 ) go to 150
+   if (iflag == 1) go to 150
    lub = iuv
    lj = j
    li = i
 150 f(i) = j
    ibv = ibv + p(j)
-   if ( ibv == v ( i ) ) exit
+   if (ibv == v(i)) exit
    call parc(i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
       & lx,lxi,lr,lri,lubi)
-   if ( iflag == 1 ) go to 160
+   if (iflag == 1) go to 160
    kub = vstar - vb
    call sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
       & bs,ps,ws,xs,iwk)
    lj = n1
 160 iuv = ub + vb
-   if ( iuv <= vstar ) go to 200
+   if (iuv <= vstar) go to 200
 170 continue
 end do
-180 if ( i == m - 1 ) go to 200
+180 if (i == m - 1) go to 200
 ip1 = i + 1
 call parc(ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
    & lx,lxi,lr,lri,lubi)
-if ( iflag == 1 ) go to 190
+if (iflag == 1) go to 190
 kub = vstar - vb
 call sigma1(n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 lj = n1
-190 if ( ub + vb <= vstar ) go to 200
+190 if (ub + vb <= vstar) go to 200
 i = i + 1
 go to 140
 ! Step 4 (backtracking)
-200 if ( i > 0 ) go to 210
+200 if (i > 0) go to 210
 bck = bck - 1
 return
-210 if ( bck == jbck ) return
+210 if (bck == jbck) return
 bck = bck + 1
-if ( f(i) /= (-1) ) go to 230
+if (f(i) /= (-1)) go to 230
 do j = 1,n
    bb(i,j) = 0
 end do
@@ -70027,10 +70027,10 @@ b(j) = 1
 vb = vb - p(j)
 q(i) = q(i) + w(j)
 do s = 1,n
-   if ( bb(i,s) == j ) bb(i,s) = 0
+   if (bb(i,s) == j) bb(i,s) = 0
 end do
 f(i) = bb(i,j)
-if ( ubb(j) <= vstar ) go to 200
+if (ubb(j) <= vstar) go to 200
 ub = ubb(j) - vb
 iflag = 1
 go to 70
@@ -70068,7 +70068,7 @@ end do
 sb = 0
 do j = 1,n
    lx(j) = 0
-   if ( b(j) == 0 ) go to 20
+   if (b(j) == 0) go to 20
    ns = ns + 1
    bs(ns) = j
    ps(ns) = p(j)
@@ -70076,10 +70076,10 @@ do j = 1,n
    sb = sb + w(j)
 20 continue
 end do
-if ( sb > qs ) go to 40
+if (sb > qs) go to 40
 lr = qs - sb
 ub = 0
-if ( ns == 0 ) return
+if (ns == 0) return
 do j = 1,ns
    ub = ub + ps(j)
    xs(j) = 1
@@ -70111,7 +70111,7 @@ integer :: ii, ikub, j, jb, jbs, jj, ns, pb, qs, sb, u
 ! Step 1
 u = 0
 do j = 1,n
-   if ( b(j) == 0 ) go to 10
+   if (b(j) == 0) go to 10
    u = u + 1
    bs(u) = j
 10 continue
@@ -70122,13 +70122,13 @@ do j = i,m
 end do
 lb = 0
 ikub = kub
-if ( u == 0 ) return
+if (u == 0) return
 ns = 0
 sb = 0
 do j = 1,u
    jj = bs(j)
-   if ( bb(i,jj) /= 0 ) go to 30
-   if ( w(jj) > q(i) ) go to 30
+   if (bb(i,jj) /= 0) go to 30
+   if (w(jj) > q(i)) go to 30
    ns = ns + 1
    sb = sb + w(jj)
    bl(i,ns) = jj
@@ -70139,9 +70139,9 @@ end do
 ii = i
 ! Step 2
 40 pbl(ii) = ns
-if ( sb > q(ii) ) go to 60
+if (sb > q(ii)) go to 60
 pb = 0
-if ( ns == 0 ) go to 80
+if (ns == 0) go to 80
 do j = 1,ns
    pb = pb + ps(j)
    xl(ii,j) = 1
@@ -70149,7 +70149,7 @@ end do
 go to 80
 60 qs = q(ii)
 kub = 0
-if ( ii == m ) kub = ikub
+if (ii == m) kub = ikub
 call sknp(ns,qs,kub,pb,n,np1,n5,ps,ws,xs,iwk)
 do j = 1,ns
    xl(ii,j) = xs(j)
@@ -70159,25 +70159,25 @@ ikub = ikub - pb
 v(ii) = pb
 bl(ii,ns + 1) = n + 1
 ! Step 3
-if ( ii == m ) return
+if (ii == m) return
 jb = 1
 jbs = 0
 do j = 1,u
-   if ( bs(j) < bl(ii,jb) ) go to 90
+   if (bs(j) < bl(ii,jb)) go to 90
    jb = jb + 1
-   if ( xl(ii,jb - 1) == 1 ) go to 100
+   if (xl(ii,jb - 1) == 1) go to 100
 90 jbs = jbs + 1
    bs(jbs) = bs(j)
 100 continue
 end do
 u = jbs
-if ( u == 0 ) return
+if (u == 0) return
 ns = 0
 sb = 0
 ii = ii + 1
 do j = 1,u
    jj = bs(j)
-   if ( w(jj) > q(ii) ) go to 110
+   if (w(jj) > q(ii)) go to 110
    ns = ns + 1
    sb = sb + w(jj)
    bl(ii,ns) = jj
@@ -70201,37 +70201,37 @@ integer, intent(in) :: lx(n), lxi(n)
 integer :: i1, iq, j, r, s
 ! Subroutine for parametric computation of the upper bounds.
 iflag = 0
-if ( b(lj) /= 0 ) go to 60
+if (b(lj) /= 0) go to 60
 i1 = i - 1
-if ( i1 < li ) go to 20
+if (i1 < li) go to 20
 iq = 0
 do r = li,i1
    iq = iq + q(r)
 end do
-if ( iq > lr ) return
+if (iq > lr) return
 20 r = ii
 s = f(r)
-30 if ( s /= (-1) ) go to 40
+30 if (s /= (-1)) go to 40
 r = r - 1
 s = f(r)
 go to 30
-40 if ( lx(s) == 0 ) return
-if ( s == lj ) go to 50
+40 if (lx(s) == 0) return
+if (s == lj) go to 50
 s = bb(r,s)
 go to 30
 50 ub = lub - vb
 iflag = 1
 return
 60 i1 = i - 1
-if ( i1 < 1 ) go to 80
+if (i1 < 1) go to 80
 iq = 0
 do r = 1,i1
    iq = iq + q(r)
 end do
-if ( iq > lri ) return
+if (iq > lri) return
 80 do j = 1,n
-   if ( b(j) == 1 ) go to 90
-   if ( lxi(j) == 0 ) return
+   if (b(j) == 1) go to 90
+   if (lxi(j) == 0) return
 90 continue
 end do
 ub = lubi - vb
@@ -70282,12 +70282,12 @@ ip = 0
 ms = qs
 do l = 1,ns
    ll = l
-   if ( ws ( l ) > ms ) exit
+   if (ws(l) > ms) exit
    ip = ip + ps(l)
    ms = ms - ws(l)
 end do
 ll = ll - 1
-if ( ms == 0 ) go to 50
+if (ms == 0) go to 50
 ps(ns + 1) = 0
 ws(ns + 1) = qs + 1
 lim = ip + (ms*ps(ll + 2))/ws(ll + 2)
@@ -70295,13 +70295,13 @@ a = ip + ps(ll + 1)
 b = (ws(ll + 1) - ms)*ps(ll)
 c = ws(ll)
 lim1 = a - b/c
-if ( lim1 > lim ) lim = lim1
-if ( lim <= vs ) return
+if (lim1 > lim) lim = lim1
+if (lim <= vs) return
 mink = qs + 1
 min(ns) = mink
 do j = 2,ns
    kk = ns + 2 - j
-   if ( ws(kk) < mink ) mink = ws(kk)
+   if (ws(kk) < mink) mink = ws(kk)
    min(kk - 1) = mink
 end do
 do j = 1,ns
@@ -70311,7 +70311,7 @@ pr = 0
 lold = ns
 ii = 1
 go to 170
-50 if ( vs >= ip ) return
+50 if (vs >= ip) return
 vs = ip
 do j = 1,ll
    xs(j) = 1
@@ -70322,23 +70322,23 @@ do j = nn,ns
 end do
 qs = 0
 return
-80 if ( ws(ii) <= qs ) go to 90
+80 if (ws(ii) <= qs) go to 90
 ii1 = ii + 1
-if ( vs >= (qs*ps(ii1))/ws(ii1) + pr ) go to 280
+if (vs >= (qs*ps(ii1))/ws(ii1) + pr) go to 280
 ii = ii1
 go to 80
 90 ip = pbar(ii)
 ms = qs - wbar(ii)
 in = zbar(ii)
 ll = ns
-if ( in > ns) go to 110
+if (in > ns) go to 110
 do l = in,ns
    ll = l
-   if ( ws(l) > ms ) go to 160
+   if (ws(l) > ms) go to 160
    ip = ip + ps(l)
    ms = ms - ws(l)
 end do
-110 if ( vs >= ip + pr ) go to 280
+110 if (vs >= ip + pr) go to 280
 vs = ip + pr
 mfirst = ms
 nn = ii - 1
@@ -70348,24 +70348,24 @@ end do
 do j = ii,ll
    xs(j) = 1
 end do
-if ( ll == ns ) go to 150
+if (ll == ns) go to 150
 nn = ll + 1
 do j = nn,ns
    xs(j) = 0
 end do
-150 if ( vs /= lim ) go to 280
+150 if (vs /= lim) go to 280
 qs = mfirst
 return
 160 l = ll
 ll = ll - 1
-if ( ms == 0 ) go to 110
-if ( vs >= pr + ip + (ms*ps(l))/ws(l) ) go to 280
+if (ms == 0) go to 110
+if (vs >= pr + ip + (ms*ps(l))/ws(l)) go to 280
 170 wbar(ii) = qs - ms
 pbar(ii) = ip
 zbar(ii) = ll + 1
 d(ii) = 1
 nn = ll - 1
-if ( nn < ii ) go to 190
+if (nn < ii) go to 190
 do j = ii,nn
    wbar(j + 1) = wbar(j) - ws(j)
    pbar(j + 1) = pbar(j) - ps(j)
@@ -70381,36 +70381,36 @@ end do
 lold = ll
 qs = ms
 pr = pr + ip
-nswc_ai_i4 = ll - ( ns - 2 )
-if ( nswc_ai_i4 < 0 ) go to 240
-if ( nswc_ai_i4 == 0 ) go to 220
+nswc_ai_i4 = ll - (ns - 2)
+if (nswc_ai_i4 < 0) go to 240
+if (nswc_ai_i4 == 0) go to 220
 go to 210
 210 ii = ns
 go to 250
-220 if ( qs < ws(ns) ) go to 230
+220 if (qs < ws(ns)) go to 230
 qs = qs - ws(ns)
 pr = pr + ps(ns)
 d(ns) = 1
 230 ii = ns - 1
 go to 250
 240 ii = ll + 2
-if ( qs >= min(ii - 1) ) go to 80
-250 if ( vs >= pr ) go to 270
+if (qs >= min(ii - 1)) go to 80
+250 if (vs >= pr) go to 270
 vs = pr
 do j = 1,ns
    xs(j) = d(j)
 end do
 mfirst = qs
-if ( vs == lim ) return
-270 if ( d(ns) == 0 ) go to 280
+if (vs == lim) return
+270 if (d(ns) == 0) go to 280
 d(ns) = 0
 qs = qs + ws(ns)
 pr = pr - ps(ns)
 280 nn = ii - 1
-if ( nn == 0 ) go to 300
+if (nn == 0) go to 300
 do j = 1,nn
    kk = ii - j
-   if ( d(kk) == 1 ) go to 310
+   if (d(kk) == 1) go to 310
 end do
 300 qs = mfirst
 return
@@ -70418,21 +70418,21 @@ return
 qs = qs + ws(kk)
 pr = pr - ps(kk)
 d(kk) = 0
-if ( r < min(kk) ) go to 320
+if (r < min(kk)) go to 320
 ii = kk + 1
 go to 80
 320 nn = kk + 1
 ii = kk
-330 if ( vs >= pr + (qs*ps(nn))/ws(nn) ) go to 280
+330 if (vs >= pr + (qs*ps(nn))/ws(nn)) go to 280
 diff = ws(nn) - ws(kk)
 nswc_ai_i4 = diff
-if ( nswc_ai_i4 < 0 ) go to 390
-if ( nswc_ai_i4 == 0 ) go to 340
+if (nswc_ai_i4 < 0) go to 390
+if (nswc_ai_i4 == 0) go to 340
 go to 350
 340 nn = nn + 1
 go to 330
-350 if ( diff > r ) go to 340
-if ( vs >= pr + ps(nn) ) go to 340
+350 if (diff > r) go to 340
+if (vs >= pr + ps(nn)) go to 340
 vs = pr + ps(nn)
 do j = 1,kk
    xs(j) = d(j)
@@ -70443,7 +70443,7 @@ do j = jj,ns
 end do
 xs(nn) = 1
 mfirst = qs - ws(nn)
-if ( vs /= lim ) go to 380
+if (vs /= lim) go to 380
 qs = mfirst
 return
 380 r = r - diff
@@ -70451,9 +70451,9 @@ kk = nn
 nn = nn + 1
 go to 330
 390 t = r - diff
-if ( t < min(nn) ) go to 340
+if (t < min(nn)) go to 340
 n1 = nn + 1
-if ( vs >= pr + ps(nn) + (t*ps(n1))/ws(n1) ) go to 280
+if (vs >= pr + ps(nn) + (t*ps(n1))/ws(n1)) go to 280
 qs = qs - ws(nn)
 pr = pr + ps(nn)
 d(nn) = 1
@@ -70700,7 +70700,7 @@ do i = 1,6
    x1 = max(x1, xl)
    call cond(fun,x1,cnd,num1,ier)
    num = num + num1
-   if ( .not. cnd ) exit
+   if (.not. cnd) exit
    x2 = x1
    if (x1 == xl) go to 400
    x1 = 10.0*x1
@@ -71894,7 +71894,7 @@ do last = 2,limit
 !           bisected next).
 30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -71932,10 +71932,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -72303,8 +72303,8 @@ c72 = .309016994374947
 s120 = .86602540378444
 ierr = 0
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 1000
-if ( nswc_ai_i4 == 0 ) go to 960
+if (nswc_ai_i4 < 0) go to 1000
+if (nswc_ai_i4 == 0) go to 960
 go to 5
 5 inc = isn
 if (isn >= 0) go to 10
@@ -72897,8 +72897,8 @@ real :: tsqx
 integer :: nswc_ai_i4
 real, parameter :: sqrt2 = 1.4142135623731
 nswc_ai_i4 = n - 2
-if ( nswc_ai_i4 < 0 ) go to 102
-if ( nswc_ai_i4 == 0 ) go to 101
+if (nswc_ai_i4 < 0) go to 102
+if (nswc_ai_i4 == 0) go to 101
 go to 103
 101 tsqx = sqrt2*x(2)
 x(2) = x(1) - tsqx
@@ -72978,8 +72978,8 @@ real :: x1
 integer :: nswc_ai_i4
 real, parameter :: tsqrt2 = 2.82842712474619
 nswc_ai_i4 = n - 2
-if ( nswc_ai_i4 < 0 ) go to 101
-if ( nswc_ai_i4 == 0 ) go to 102
+if (nswc_ai_i4 < 0) go to 101
+if (nswc_ai_i4 == 0) go to 102
 go to 103
 101 x(1) = 4.*x(1)
 return
@@ -73166,14 +73166,14 @@ nl = n
 nf = 0
 j = 0
 101 j = j + 1
-if ( ( j - 4 ) <= 0 ) go to 102
+if ((j - 4) <= 0) go to 102
 go to 103
 102 ntry = ntryh(j)
 go to 104
 103 ntry = ntry + 2
 104 nq = nl/ntry
 nr = nl - ntry*nq
-if ( ( nr ) == 0 ) go to 105
+if ((nr) == 0) go to 105
 go to 101
 105 nf = nf + 1
 ifac(nf + 2) = ntry
@@ -73339,8 +73339,8 @@ do k = 1,l1
    ch(1,k,2) = cc(1,1,k) - cc(ido,2,k)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -73461,8 +73461,8 @@ do k = 1,l1
    ch(1,k,4) = tr1 + tr4
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -73936,8 +73936,8 @@ do k = 1,l1
    ch(ido,2,k) = cc(1,k,1) - cc(1,k,2)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -74054,8 +74054,8 @@ do k = 1,l1
    ch(1,3,k) = cc(1,k,4) - cc(1,k,2)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 111
@@ -75396,8 +75396,8 @@ if (dx > nswc_state_inputz_charf) return
 !         Compute dtest for the local error criterion
 if (nswc_state_inputz_norm == three) go to 30
 nswc_ai_i4 = nswc_state_inputz_edist - 1
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 dtest = dx*nswc_state_kontrl_dsctol
 go to 40
@@ -75730,7 +75730,7 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if ( ( np - 15 ) <= 0 ) go to 190
+if ((np - 15) <= 0) go to 190
 go to 260
 170 fact = 1.0/fact
 180 fact = 1.0/sqrt(fact)
@@ -75979,7 +75979,7 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if ( ( np - 15 ) <= 0 ) go to 190
+if ((np - 15) <= 0) go to 190
 go to 260
 170 fact = 1.d0/fact
 180 fact = 1.d0/sqrt(fact)
@@ -76054,9 +76054,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 60
-nswc_ai_r4 = a - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 60
+nswc_ai_r4 = a - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 60
 go to 30
 20 ir = i
 go to 10
@@ -76096,9 +76096,9 @@ xx = xi(1)
 ilold = 0
 !     Find the subinterval which contains xx. i = 1 If xx.LT.x(2)
 !     AND i = n IF xx.GE.x(n). OTHERWISE x(i).LE.xx.LT.x(i+1).
-nswc_ai_r4 = xx - x ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 11
+nswc_ai_r4 = xx - x(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 11
 go to 20
 10 i = 1
 il = 1
@@ -76107,9 +76107,9 @@ go to 80
 11 i = 1
 yi(k) = y(1)
 go to 110
-20 nswc_ai_r4 = x ( n ) - xx
-if ( nswc_ai_r4 < 0 ) go to 21
-if ( nswc_ai_r4 == 0 ) go to 22
+20 nswc_ai_r4 = x(n) - xx
+if (nswc_ai_r4 < 0) go to 21
+if (nswc_ai_r4 == 0) go to 22
 go to 23
 21 i = n
 il = n - m + 1
@@ -76123,9 +76123,9 @@ ir = n
 !     Bisection search
 30 i = (il + ir)/2
 if (i == il) go to 50
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 31
-if ( nswc_ai_r4 == 0 ) go to 32
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 31
+if (nswc_ai_r4 == 0) go to 32
 go to 33
 31 ir = i
 go to 30
@@ -76134,9 +76134,9 @@ go to 110
 33 il = i
 go to 30
 !     Linear forward search
-40 nswc_ai_r4 = xx - x ( i + 1 )
-if ( nswc_ai_r4 < 0 ) go to 50
-if ( nswc_ai_r4 == 0 ) go to 41
+40 nswc_ai_r4 = xx - x(i + 1)
+if (nswc_ai_r4 < 0) go to 50
+if (nswc_ai_r4 == 0) go to 41
 go to 42
 41 i = i + 1
 yi(k) = y(i)
@@ -76198,17 +76198,17 @@ end do
 110 if (k >= ni) return
 k = k + 1
 xx = xi(k)
-nswc_ai_r4 = xx - x ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 11
+nswc_ai_r4 = xx - x(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 11
 go to 111
-111 nswc_ai_r4 = x ( n ) - xx
-if ( nswc_ai_r4 < 0 ) go to 21
-if ( nswc_ai_r4 == 0 ) go to 22
+111 nswc_ai_r4 = x(n) - xx
+if (nswc_ai_r4 < 0) go to 21
+if (nswc_ai_r4 == 0) go to 22
 go to 120
-120 nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 121
-if ( nswc_ai_r4 == 0 ) go to 122
+120 nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 121
+if (nswc_ai_r4 == 0) go to 122
 go to 40
 121 il = 1
 ir = min(i + 1,n)
@@ -76243,7 +76243,7 @@ r = 0.0
 iend = 0
 ibeg = 1
 do k = 2,n
-   if ( ( x ( k ) - x ( k - 1 ) ) == 0 ) go to 20
+   if ((x(k) - x(k - 1)) == 0) go to 20
    go to 10
 10 f = 1.0
    r = 0.0
@@ -76252,7 +76252,7 @@ do k = 2,n
    t(1) = y(k)
    do i = 1,iend
       diff = x(i) - x(k)
-      if ( ( diff ) == 0 ) go to 31
+      if ((diff) == 0) go to 31
       go to 11
 11    t(i + 1) = (a(i) - t(i))/diff
    end do
@@ -76462,9 +76462,9 @@ if (nd < 1.or.np < 2) go to 200
 nw = 0
 dsum = 0.d0
 do k = 1,np
-   nswc_ai_r4 = w ( k )
-   if ( nswc_ai_r4 < 0 ) go to 202
-   if ( nswc_ai_r4 == 0 ) go to 13
+   nswc_ai_r4 = w(k)
+   if (nswc_ai_r4 < 0) go to 202
+   if (nswc_ai_r4 == 0) go to 13
    go to 10
 10 nw = nw + 1
    dsum = dsum + dble(w(k))
@@ -76627,8 +76627,8 @@ ierr = 0
 !     the form
 !             c(1)*S(1) + b(1)*S(2) = a(1)
 nswc_ai_i4 = ibeg - 1
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 30
 go to 40
 !     No condition at left end.
 20 c(1) = b(3)
@@ -76658,8 +76658,8 @@ end do
 !     last equation from the second boundary condition, of the form
 !                r*S(n-1) + c(n)*S(n) = a(n)
 nswc_ai_i4 = iend - 1
-if ( nswc_ai_i4 < 0 ) go to 60
-if ( nswc_ai_i4 == 0 ) go to 80
+if (nswc_ai_i4 < 0) go to 60
+if (nswc_ai_i4 == 0) go to 80
 go to 90
 60 if (n == 3 .and. ibeg == 0) go to 70
 !     No condition at the right end. Either  n .GE. 4  or
@@ -77019,9 +77019,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77044,9 +77044,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,n)
@@ -77102,9 +77102,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77132,9 +77132,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -77190,9 +77190,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77223,9 +77223,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -77287,9 +77287,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77316,9 +77316,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,n)
@@ -77376,9 +77376,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77410,9 +77410,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -77470,9 +77470,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -77506,9 +77506,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -77974,9 +77974,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 90
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 90
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 90
 go to 30
 20 ir = i
 go to 10
@@ -78000,8 +78000,8 @@ if (t0 < 0.0) t0 = 1.0 + t0
 xx = x1 + t0*h
 if (xx >= x(n)) go to 120
 nswc_ai_r4 = xx - xold
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 90
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 90
 go to 40
 110 il = 1
 ir = min(i + 1,n)
@@ -78048,9 +78048,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 90
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 90
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 90
 go to 30
 20 ir = i
 go to 10
@@ -78078,8 +78078,8 @@ if (t0 < 0.0) t0 = 1.0 + t0
 xx = x1 + t0*h
 if (xx >= x(n)) go to 120
 nswc_ai_r4 = xx - xold
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 90
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 90
 go to 40
 110 il = 1
 ir = min(i + 1,n)
@@ -78286,9 +78286,9 @@ ir = m
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 50
-nswc_ai_r4 = t0 - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 50
+nswc_ai_r4 = t0 - t(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 50
 go to 30
 20 ir = i
 go to 10
@@ -78331,8 +78331,8 @@ t0 = ti(k) - j
 if (t0 < 0.0) t0 = 1.0 + t0
 if (t0 >= t(m)) go to 60
 nswc_ai_r4 = t0 - told
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 50
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 50
 go to 40
 110 il = 1
 ir = min(i + 1,m)
@@ -78361,9 +78361,9 @@ ir = m
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 40
-nswc_ai_r4 = t0 - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 40
+nswc_ai_r4 = t0 - t(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 40
 go to 30
 20 ir = i
 go to 10
@@ -79671,9 +79671,9 @@ ir = i
 !     Bisection search
 30 i = (il + ir)/2
 if (i == il) go to 110
-nswc_ai_r4 = x - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 40
-if ( nswc_ai_r4 == 0 ) go to 60
+nswc_ai_r4 = x - t(i)
+if (nswc_ai_r4 < 0) go to 40
+if (nswc_ai_r4 == 0) go to 60
 go to 50
 40 ir = i
 go to 30
@@ -80083,9 +80083,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -80114,9 +80114,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 130
-if ( nswc_ai_r4 == 0 ) go to 120
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 130
+if (nswc_ai_r4 == 0) go to 120
 go to 40
 130 il = 1
 ir = min(i + 1, n)
@@ -80413,7 +80413,7 @@ return
 100 iflag = 1
 end subroutine bstrp
 
-pure subroutine banfac( w, nroww, nrow, nbandl, nbandu, iflag )
+pure subroutine banfac(w, nroww, nrow, nbandl, nbandu, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
@@ -80475,8 +80475,8 @@ middle = nbandu + 1
 !                         w(middle,.) Contains the main diagonal of  A .
 nrowm1 = nrow - 1
 nswc_ai_i4 = nrowm1
-if ( nswc_ai_i4 < 0 ) go to 999
-if ( nswc_ai_i4 == 0 ) go to 900
+if (nswc_ai_i4 < 0) go to 999
+if (nswc_ai_i4 == 0) go to 900
 go to 1
 1 if (nbandl > 0) go to 10
 !                A is upper triangular. Check that diagonal is nonzero .
@@ -80533,7 +80533,7 @@ end do
 999 iflag = 2
 end subroutine banfac
 
-pure subroutine banslv( w, nroww, nrow, nbandl, nbandu, b )
+pure subroutine banslv(w, nroww, nrow, nbandl, nbandu, b)
 implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(in) :: w(nroww,nrow)
@@ -81128,7 +81128,7 @@ call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
 !     Move pointer up so that xval .GE. bkpt(ileft).
 do i = ip1,n
-   if ( xval < bkpt ( i ) ) exit
+   if (xval < bkpt(i)) exit
    ileft = i
 end do
 !     Obtain B-spline function VALUE
@@ -81174,7 +81174,7 @@ xval = xconst(idata)
 ileft = nord
 if (nord == n) go to 330
 do i = nordp1,n
-   if ( xval < bkpt ( i ) ) exit
+   if (xval < bkpt(i)) exit
    ileft = i
 end do
 330 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
@@ -81192,7 +81192,7 @@ if (yval < xmin .or. yval > xmax) go to 840
 ileft = nord
 if (nord == n) go to 360
 do i = nordp1,n
-   if ( yval < bkpt ( i ) ) exit
+   if (yval < bkpt(i)) exit
    ileft = i
 end do
 360 call bspvd(bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
@@ -81226,7 +81226,7 @@ xval = xconst(idata)
 ileft = nord
 if (nord == n) go to 520
 do i = nordp1,n
-   if ( xval < bkpt ( i ) ) exit
+   if (xval < bkpt(i)) exit
    ileft = i
 end do
 520 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
@@ -81834,9 +81834,9 @@ do l = 1,my
    if (yy < t(2)) go to 10
    if (yy >= t(nm1)) go to 20
    if (l == 1) go to 30
-   nswc_ai_r4 = yy - y ( l - 1 )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 50
+   nswc_ai_r4 = yy - y(l - 1)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 50
    go to 40
 10 j = 1
    go to 50
@@ -81855,9 +81855,9 @@ do l = 1,my
       if (xx < s(2)) go to 100
       if (xx >= s(mm1)) go to 110
       if (k == 1) go to 120
-      nswc_ai_r4 = xx - x ( k - 1 )
-      if ( nswc_ai_r4 < 0 ) go to 120
-      if ( nswc_ai_r4 == 0 ) go to 130
+      nswc_ai_r4 = xx - x(k - 1)
+      if (nswc_ai_r4 < 0) go to 120
+      if (nswc_ai_r4 == 0) go to 130
       go to 140
 100   i = 1
       if (i == iold .and. j == jold) go to 210
@@ -81899,8 +81899,8 @@ do l = 1,my
 210   dy = yy - t(j)
       if (jder == 0) go to 220
       nswc_ai_i4 = jder - 2
-      if ( nswc_ai_i4 < 0 ) go to 230
-      if ( nswc_ai_i4 == 0 ) go to 240
+      if (nswc_ai_i4 < 0) go to 230
+      if (nswc_ai_i4 == 0) go to 240
       go to 250
 220   fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
       fip1 = ((c1*dy + b1)*dy + f2(ip1,j))*dy + f(ip1,j)
@@ -81930,8 +81930,8 @@ do l = 1,my
       dx = xx - s(i)
       if (ider == 0) go to 310
       nswc_ai_i4 = ider - 2
-      if ( nswc_ai_i4 < 0 ) go to 320
-      if ( nswc_ai_i4 == 0 ) go to 330
+      if (nswc_ai_i4 < 0) go to 320
+      if (nswc_ai_i4 == 0) go to 330
       go to 340
 310   z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
       go to 350
@@ -81992,9 +81992,9 @@ do l = 1,my
    if (yy < t(2)) go to 10
    if (yy >= t(nm1)) go to 20
    if (l == 1) go to 30
-   nswc_ai_r4 = yy - y ( l - 1 )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 50
+   nswc_ai_r4 = yy - y(l - 1)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 50
    go to 40
 10 j = 1
    go to 50
@@ -82013,9 +82013,9 @@ do l = 1,my
       if (xx < s(2)) go to 100
       if (xx >= s(mm1)) go to 110
       if (k == 1) go to 120
-      nswc_ai_r4 = xx - x ( k - 1 )
-      if ( nswc_ai_r4 < 0 ) go to 120
-      if ( nswc_ai_r4 == 0 ) go to 130
+      nswc_ai_r4 = xx - x(k - 1)
+      if (nswc_ai_r4 < 0) go to 120
+      if (nswc_ai_r4 == 0) go to 130
       go to 140
 100   i = 1
       if (i == iold .and. j == jold) go to 210
@@ -82053,8 +82053,8 @@ do l = 1,my
 210   dy = yy - t(j)
       if (jder == 0) go to 220
       nswc_ai_i4 = jder - 2
-      if ( nswc_ai_i4 < 0 ) go to 230
-      if ( nswc_ai_i4 == 0 ) go to 240
+      if (nswc_ai_i4 < 0) go to 230
+      if (nswc_ai_i4 == 0) go to 240
       go to 250
 220   fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
       fip1 = ((c1*dy + 0.5*f2(ip1,j))*dy + a1)*dy + f(ip1,j)
@@ -82083,8 +82083,8 @@ do l = 1,my
       dx = xx - s(i)
       if (ider == 0) go to 310
       nswc_ai_i4 = ider - 2
-      if ( nswc_ai_i4 < 0 ) go to 320
-      if ( nswc_ai_i4 == 0 ) go to 330
+      if (nswc_ai_i4 < 0) go to 320
+      if (nswc_ai_i4 == 0) go to 330
       go to 340
 310   z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
       go to 350
@@ -82215,8 +82215,8 @@ ind(8) = 0
 l = 1
 100 key = opt(l)
 nswc_ai_i4 = key
-if ( nswc_ai_i4 < 0 ) go to 48
-if ( nswc_ai_i4 == 0 ) go to 110
+if (nswc_ai_i4 < 0) go to 48
+if (nswc_ai_i4 == 0) go to 110
 go to 101
 101 if (key > 8) go to 48
 ind(key) = 1
@@ -82747,7 +82747,7 @@ do jj = 1,nd
 6  lasti = 0
    do ii = 1,md
       xii = dxmin + float(ii - 1)*deltdx
-      i = max (1, lasti)
+      i = max(1, lasti)
 7     i = i + 1
       if (xii > x(i) .and. i < m) go to 7
       im1 = i - 1
@@ -83215,7 +83215,7 @@ sprod = dxr*dxk + dyr*dyk
 if (sprod > 0.) go to 3
 ! Node k is to the left of nl.  Insert k as the first
 !   (leftmost) node in iend and set nl to k.
-call shiftd(1,km1,1, iend )
+call shiftd(1,km1,1, iend)
 iend(1) = k
 xl = xk
 yl = yk
@@ -83237,7 +83237,7 @@ yr = yk
 go to 1
 ! Node k lies between iend(ind-1) and iend(ind).  Insert k
 !   IN iend.
-5 call shiftd(ind,km1,1, iend )
+5 call shiftd(ind,km1,1, iend)
 iend(ind) = k
 go to 2
 ! Node k is to the left of nl-nr.  Reorder iend so that nl
@@ -83367,8 +83367,8 @@ yk = y(k)
 ! Add node k to the mesh
 call trfind(km1,xk,yk,x,y,iadj,iend, i1,i2,i3)
 if (i1 == 0) go to 5
-if (i3 == 0) call bdyadd(k,i1,i2, iadj,iend )
-if (i3 /= 0) call intadd(k,i1,i2,i3, iadj,iend )
+if (i3 == 0) call bdyadd(k,i1,i2, iadj,iend)
+if (i3 /= 0) call intadd(k,i1,i2,i3, iadj,iend)
 ! Initialize variables for optimization of the mesh
 indkf = iend(km1) + 1
 indkl = iend(k)
@@ -83390,7 +83390,7 @@ if (in1 == 0) go to 4
 ! Swap test -- if a swap occurs, two new arcs are opposite k
 !              and must be tested.  INDK1 and indkf must be
 !              decremented.
-3 if ( .not. swptst(in1,k,io1,io2,x,y) ) go to 4
+3 if (.not. swptst(in1,k,io1,io2,x,y)) go to 4
 call swapd(in1,k,io1,io2, iadj,iend)
 io1 = in1
 indk1 = indk1 - 1
@@ -83409,7 +83409,7 @@ return
 5 ier = 1
 end subroutine adnode
 
-pure subroutine bdyadd(kk,i1,i2, iadj,iend )
+pure subroutine bdyadd(kk,i1,i2, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
@@ -83475,7 +83475,7 @@ if (nleft /= 1) n1 = iend(nleft - 1) + 1
 n2 = iend(nright)
 nf = max(n1,n2)
 ! Insert k as a neighbor of max(nright,nleft)
-call shiftd(nf,nl,2, iadj )
+call shiftd(nf,nl,2, iadj)
 iadj(nf + 1) = k
 imin = max(nright,nleft)
 do i = imin,km1
@@ -83486,7 +83486,7 @@ end do
 kend = nl + 3
 nl = nf - 1
 nf = min(n1,n2)
-call shiftd(nf,nl,1, iadj )
+call shiftd(nf,nl,1, iadj)
 iadj(nf) = k
 imax = imin - 1
 imin = min(nright,nleft)
@@ -83514,7 +83514,7 @@ iadj(kend) = 0
 iend(k) = kend
 end subroutine bdyadd
 
-pure subroutine intadd(kk,i1,i2,i3, iadj,iend )
+pure subroutine intadd(kk,i1,i2,i3, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
@@ -83590,13 +83590,13 @@ end do
 ip1 = 1
 ip2 = 2
 ip3 = 3
-if ( n(2) <= n(1) ) go to 3
+if (n(2) <= n(1)) go to 3
 ip1 = 2
 ip2 = 1
-3 if ( n(3) <= n(ip1) ) go to 4
+3 if (n(3) <= n(ip1)) go to 4
 ip3 = ip1
 ip1 = 3
-4 if ( n(ip3) <= n(ip2) ) go to 5
+4 if (n(ip3) <= n(ip2)) go to 5
 itemp = ip2
 ip2 = ip3
 ip3 = itemp
@@ -83607,7 +83607,7 @@ ip3 = itemp
 5 km1 = k - 1
 nl = iend(km1)
 nf = nft(ip1)
-if (nf <= nl) call shiftd(nf,nl,3, iadj )
+if (nf <= nl) call shiftd(nf,nl,3, iadj)
 iadj(nf + 2) = k
 imin = n(ip1)
 imax = km1
@@ -83616,7 +83616,7 @@ do i = imin,imax
 end do
 nl = nf - 1
 nf = nft(ip2)
-call shiftd(nf,nl,2, iadj )
+call shiftd(nf,nl,2, iadj)
 iadj(nf + 1) = k
 imax = imin - 1
 imin = n(ip2)
@@ -83625,7 +83625,7 @@ do i = imin,imax
 end do
 nl = nf - 1
 nf = nft(ip3)
-call shiftd(nf,nl,1, iadj )
+call shiftd(nf,nl,1, iadj)
 iadj(nf) = k
 imax = imin - 1
 imin = n(ip3)
@@ -83641,7 +83641,7 @@ do i = 1,3
 end do
 end subroutine intadd
 
-pure subroutine shiftd(nfrst,nlast,kk, iarr )
+pure subroutine shiftd(nfrst,nlast,kk, iarr)
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
@@ -83693,7 +83693,7 @@ if (nf > nl  .or.  k == 0) return
 nlp1 = nl + 1
 ns = nlp1 - nf
 nsl = inc*(ns/inc)
-if ( k < 0) go to 4
+if (k < 0) go to 4
 ! Shift downward starting from the bottom
 if (nsl <= 0) go to 2
 do i = 1,nsl,inc
@@ -83803,7 +83803,7 @@ do j = 1,2
 !     down by 1
    nf = 1 + tindx(in(j),io(ip1),iadj,iend)
    nl = -1 + tindx(io(j),io(k),iadj,iend)
-   if (nf <= nl) call shiftd(nf,nl,1, iadj )
+   if (nf <= nl) call shiftd(nf,nl,1, iadj)
    iadj(nf) = in(k)
    imin = in(j)
    imax = io(j) - 1
@@ -83815,7 +83815,7 @@ do j = 1,2
 !     up by 1
 4  nf = 1 + tindx(io(j),io(k),iadj,iend)
    nl = -1 + tindx(in(j),io(ip2),iadj,iend)
-   if (nf <= nl) call shiftd(nf,nl,-1, iadj )
+   if (nf <= nl) call shiftd(nf,nl,-1, iadj)
    iadj(nl) = in(k)
    imin = io(j)
    imax = in(j) - 1
@@ -83831,7 +83831,7 @@ return
 !   Delete io(2) by shifting up by 1
 8 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
-if (nf <= nl) call shiftd(nf,nl,-1, iadj )
+if (nf <= nl) call shiftd(nf,nl,-1, iadj)
 imin = io(1)
 imax = io(2) - 1
 do i = imin,imax
@@ -83840,7 +83840,7 @@ end do
 !   Delete io(1) by shifting up by 2 and insert in(2)
 nf = nl + 2
 nl = -1 + tindx(in(1),io(ip2),iadj,iend)
-if (nf <= nl) call shiftd(nf,nl,-2, iadj )
+if (nf <= nl) call shiftd(nf,nl,-2, iadj)
 iadj(nl - 1) = in(2)
 imin = io(2)
 imax = in(1) - 1
@@ -83850,7 +83850,7 @@ end do
 !   Shift up by 1 and insert in(1)
 nf = nl + 1
 nl = -1 + tindx(in(2),io(ip1),iadj,iend)
-call shiftd(nf,nl,-1, iadj )
+call shiftd(nf,nl,-1, iadj)
 iadj(nl) = in(1)
 imin = in(1)
 imax = in(2) - 1
@@ -83862,7 +83862,7 @@ return
 !   Delete io(1) by shifting down by 1
 12 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
-if (nf <= nl) call shiftd(nf,nl,1, iadj )
+if (nf <= nl) call shiftd(nf,nl,1, iadj)
 imin = io(1)
 imax = io(2) - 1
 do i = imin,imax
@@ -83871,7 +83871,7 @@ end do
 !   Delete io(2) by shifting down by 2 and insert in(1)
 nl = nf - 2
 nf = 1 + tindx(in(2),io(ip2),iadj,iend)
-if (nf <= nl) call shiftd(nf,nl,2, iadj )
+if (nf <= nl) call shiftd(nf,nl,2, iadj)
 iadj(nf + 1) = in(1)
 imin = in(2)
 imax = io(1) - 1
@@ -83881,7 +83881,7 @@ end do
 !   Shift down by 1 and insert in(2)
 nl = nf - 1
 nf = 1 + tindx(in(1),io(ip1),iadj,iend)
-call shiftd(nf,nl,1, iadj )
+call shiftd(nf,nl,1, iadj)
 iadj(nf) = in(2)
 imin = in(1)
 imax = in(2) - 1
@@ -84082,17 +84082,17 @@ if (nl /= 0) go to 3
 !   neighbor of n0.
 ind = iend(n0) - 1
 nl = iadj(ind)
-if ( left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) go to 2
+if (left(x(n0),y(n0),x(nf),y(nf),xp,yp)) go to 2
 ! P is outside the boundary
 nl = n0
 go to 16
-2 if ( left(x(nl),y(nl),x(n0),y(n0),xp,yp) ) go to 4
+2 if (left(x(nl),y(nl),x(n0),y(n0),xp,yp)) go to 4
 ! P is outside the boundary and n0 is the rightmost
 !   visible boundary node
 i1 = n0
 go to 18
 ! n0 is an interior node.  Find n1.
-3 if ( left(x(n0),y(n0),x(n1),y(n1),xp,yp) ) go to 4
+3 if (left(x(n0),y(n0),x(n1),y(n1),xp,yp)) go to 4
 indx = indx + 1
 n1 = iadj(indx)
 if (n1 == nl) go to 7
@@ -84101,11 +84101,11 @@ go to 3
 !   neighbor of n0.
 4 indx = indx + 1
 n2 = iadj(indx)
-if ( .not. left(x(n0),y(n0),x(n2),y(n2),xp,yp) ) &
+if (.not. left(x(n0),y(n0),x(n2),y(n2),xp,yp)) &
    & go to 8
 n1 = n2
 if (n1 /= nl) go to 4
-if ( .not. left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) &
+if (.not. left(x(n0),y(n0),x(nf),y(nf),xp,yp)) &
    & go to 7
 if (xp == x(n0) .and. yp == y(n0)) go to 6
 ! P is left of or on arcs n0-NB for all neighbors NB
@@ -84114,7 +84114,7 @@ if (xp == x(n0) .and. yp == y(n0)) go to 6
 !   all neighbors NB of n0.  Search the neighbors of n0
 !   in reverse order.  Note -- n1 = nl and indx points to
 !   nl.
-5 if ( .not. left(x(n1),y(n1),x(n0),y(n0),xp,yp) ) &
+5 if (.not. left(x(n1),y(n1),x(n0),y(n0),xp,yp)) &
    & go to 6
 if (n1 == nf) go to 20
 indx = indx - 1
@@ -84129,7 +84129,7 @@ go to 1
 ! P is contained in a cone defined by line segments n0-n1
 !   and n0-n2 where n1 is adjacent to n2
 8 n3 = n0
-9 if ( left(x(n1),y(n1),x(n2),y(n2),xp,yp) ) go to 13
+9 if (left(x(n1),y(n1),x(n2),y(n2),xp,yp)) go to 13
 ! Set n4 to the first neighbor of n2 following n1
 indx = iend(n2)
 if (iadj(indx) /= n1) go to 10
@@ -84150,7 +84150,7 @@ nl = n1
 go to 16
 ! Define a new arc n1-n2 which intersects the line
 !   SEGMENT n0-P
-11 if ( left(x(n0),y(n0),x(n4),y(n4),xp,yp) ) go to 12
+11 if (left(x(n0),y(n0),x(n4),y(n4),xp,yp)) go to 12
 n3 = n2
 n2 = n4
 go to 9
@@ -84166,7 +84166,7 @@ if (iadj(indx) /= 0) go to 15
 !   is the last nonzero neighbor of n1.
 if (n3 /= iadj(indx - 1)) go to 14
 ! n3-n1 is a boundary arc
-if ( .not. left(x(n1),y(n1),x(n3),y(n3),xp,yp) ) &
+if (.not. left(x(n1),y(n1),x(n3),y(n3),xp,yp)) &
    & go to 14
 ! P lies on n1-n3
 i1 = n1
@@ -84179,7 +84179,7 @@ return
 if (n1 /= 1) indx = iend(n1 - 1) + 1
 if (n2 /= iadj(indx)) go to 15
 ! n1-n2 is a boundary arc
-if ( .not. left(x(n2),y(n2),x(n1),y(n1),xp,yp) ) &
+if (.not. left(x(n2),y(n2),x(n1),y(n1),xp,yp)) &
    & go to 15
 ! P lies on n1-n2
 i1 = n2
@@ -84197,7 +84197,7 @@ return
 16 indx = 1
 if (nf /= 1) indx = iend(nf - 1) + 1
 next = iadj(indx)
-if ( left(x(nf),y(nf),x(next),y(next),xp,yp) ) &
+if (left(x(nf),y(nf),x(next),y(next),xp,yp)) &
    & go to 17
 nf = next
 go to 16
@@ -84208,7 +84208,7 @@ go to 16
 ! Set next to the last neighbor of nl.
 18 indx = iend(nl) - 1
 next = iadj(indx)
-if ( left(x(next),y(next),x(nl),y(nl),xp,yp) ) &
+if (left(x(next),y(next),x(nl),y(nl),xp,yp)) &
    & go to 19
 nl = next
 go to 18
@@ -84408,8 +84408,8 @@ do k = 1,nn
       a11 = a11 + delxs/dcub
       a12 = a12 + delx*dely/dcub
       a22 = a22 + delys/dcub
-      t = ( 1.5*(z(nb) - zk) - ((zxzy(1,nb)/2. + zxk)*delx + &
-         & (zxzy(2,nb)/2. + zyk)*dely) )/dcub
+      t = (1.5*(z(nb) - zk) - ((zxzy(1,nb)/2. + zxk)*delx + &
+         & (zxzy(2,nb)/2. + zyk)*dely))/dcub
       r1 = r1 + t*delx
       r2 = r2 + t*dely
 2     continue
@@ -84653,8 +84653,8 @@ end do
 i = i + 1
 go to 6
 ! Test the system for ill-conditioning
-8 dmin = min( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
-   & abs(a(4,4)),abs(a(5,5)) )
+8 dmin = min(abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
+   & abs(a(4,4)),abs(a(5,5)))
 if (dmin >= dtol) go to 15
 if (lnp > lmax) go to 9
 ! Add another node to the system and increase r --
@@ -84703,7 +84703,7 @@ do i = 4,lm1
    call srot(1,a(6,5),1,a(6,6),1,c,s)
 end do
 ! Test the linear fit for ill-conditioning
-14 dmin = min( abs(a(4,4)),abs(a(5,5)) )
+14 dmin = min(abs(a(4,4)),abs(a(5,5)))
 if (dmin < dtol) go to 17
 ! Solve the 2 by 2 triangular system for the derivatives
 15 dy = a(6,5)/a(5,5)
@@ -85547,8 +85547,8 @@ dimp1 = dimen + 1
 !     ***************
 call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
    & error)
-if ( error >= 2 ) return
-if ( fdwkln >= dreqd ) go to 10
+if (error >= 2) return
+if (fdwkln >= dreqd) go to 10
 error = 4
 return
 10 continue
@@ -85658,9 +85658,9 @@ integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
 !     and the dimension.
 !     ***************
 call basiz(degree,npts,dimen,npolys,error)
-if ( error >= 2 ) return
+if (error >= 2) return
 ireqd = 4 * npolys + degree * dimen
-if ( iwklen >= ireqd ) go to 5
+if (iwklen >= ireqd) go to 5
 error = 4
 return
 5 newstt = 4 * npolys + 1
@@ -85677,7 +85677,7 @@ iwork(2) = npolys
 !     Force  alfl  to be at least 1 so that dimension statements
 !     using  alfl  do not bomb.
 !     ***************
-if ( alfl > 1 ) alfl = alfl - 1
+if (alfl > 1) alfl = alfl - 1
 iwork(4) = alfl
 !     ***************
 !     The following is a section of code for setting up the
@@ -85710,7 +85710,7 @@ iwork(4) = alfl
 !                         and
 !                           INDEXS(3,npolys)               (CASE 4)
 !                        )
-if ( degree > 2 ) go to 10
+if (degree > 2) go to 10
 !     ***************
 !     Case 1
 !     ***************
@@ -85722,7 +85722,7 @@ go to 40
 !                 npolys
 !     ***************
 kmxbas = iwork(nplyt4 - 2)
-if ( kmxbas /= dimen ) go to 20
+if (kmxbas /= dimen) go to 20
 !     ***************
 !     Case 2
 !     ***************
@@ -85738,7 +85738,7 @@ kjp1d2 = iwork(index)
 !     startj  =  indexs(3,npolys)
 !     ***************
 startj = iwork(nplyt4 - 1)
-if ( startj > kjp1d2 ) go to 30
+if (startj > kjp1d2) go to 30
 !     ***************
 !     Case 4
 !     ***************
@@ -85791,16 +85791,16 @@ integer :: top, bot, i, rowlen
 !     October 16, 1984
 !     ****************
 error = 0
-if ( npts >= 1 .and. dimen >= 1 ) go to 10
+if (npts >= 1 .and. dimen >= 1) go to 10
 error = 3
 return
 10 continue
-if ( degree < 0 ) go to 30
+if (degree < 0) go to 30
 rowlen = 1
 npolys = 1
 top = dimen - 1
 bot = 0
-if ( degree < 1 ) go to 30
+if (degree < 1) go to 30
 do i = 1,degree
    top = top + 1
    bot = bot + 1
@@ -85808,11 +85808,11 @@ do i = 1,degree
    npolys = npolys + rowlen
 end do
 30 continue
-if ( npolys >= 1 ) go to 40
+if (npolys >= 1) go to 40
 error = 2
 return
 40 continue
-if ( npolys < npts ) go to 50
+if (npolys < npts) go to 50
 npolys = npts
 error = 1
 50 continue
@@ -85822,13 +85822,13 @@ degree = 0
 top = dimen - 1
 bot = 0
 60 continue
-if ( i >= npolys ) go to 70
+if (i >= npolys) go to 70
 top = top + 1
 bot = bot + 1
 rowlen = (rowlen*top)/bot
 i = i + rowlen
 degree = degree + 1
-if ( i < npolys ) go to 60
+if (i < npolys) go to 60
 70 continue
 end subroutine basiz
 
@@ -85904,7 +85904,7 @@ alflp1 = 1
 !     and  alflp1  otherwise.
 !     ***************
 indexs(4,1) = 1
-if ( npolys == 1 ) return
+if (npolys == 1) return
 j = 2
 do kj = 1,dimen
    newkj(kj,1) = kj + 1
@@ -85913,10 +85913,10 @@ do kj = 1,dimen
    indexs(3,j) = 1
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - 1
-   if ( j == npolys ) return
+   if (j == npolys) return
    j = j + 1
 end do
-if ( degree == 1 ) return
+if (degree == 1) return
 ralen = 1
 dimm1 = dimen - 1
 dimm2 = dimen - 2
@@ -85928,20 +85928,20 @@ do curdeg = 2,degree
    kj = 1
 20 jprime = newkj(kj,curm1)
    newkj(kj,curdeg) = j
-   if ( kj == dimen ) go to 60
+   if (kj == dimen) go to 60
    do i = 1,nwithk
       indexs(1,j) = jprime
       indexs(2,j) = kj
 !     ***************
 !     CALCULATE  indexs (3, j ),  indexs (4, j )
 !     ***************
-      if ( kj < indexs(2,jprime) ) go to 30
+      if (kj < indexs(2,jprime)) go to 30
       indexs(3,j) = indexs(1,jprime)
       go to 40
 30    indexs(3,j) = newkj(1,curdeg - 1)
 40    indexs(4,j) = alflp1
       alflp1 = alflp1 + j - indexs(3,j)
-      if ( j == npolys ) return
+      if (j == npolys) return
       jprime = jprime + 1
       j = j + 1
    end do
@@ -85953,7 +85953,7 @@ do curdeg = 2,degree
    indexs(3,j) = indexs(1,jprime)
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - indexs(3,j)
-   if ( j == npolys ) return
+   if (j == npolys) return
    j = j + 1
 end do
 end subroutine mtable
@@ -86021,7 +86021,7 @@ c(1) = runtot / rntot1
 do p = 1,npts
    z(p) = f(p) - c(1)
 end do
-if ( npolys == 1 ) return
+if (npolys == 1) return
 sttdeg = 1
 onplys = 1
 call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
@@ -86059,10 +86059,10 @@ real :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  gnrtp  and not by the user.
 !     Modified by A.H. Morris (NSWC)
 !     ****************
-if ( onplys >= 1 .and. sttdeg >= 1 ) go to 10
+if (onplys >= 1 .and. sttdeg >= 1) go to 10
 error = 6
 return
-10 if ( indexs(2,onplys) == dimen ) go to 20
+10 if (indexs(2,onplys) == dimen) go to 20
 curdeg = sttdeg
 go to 30
 20 curdeg = sttdeg + 1
@@ -86075,14 +86075,14 @@ do j = onpp1,npolys
    start = indexs(3,j)
    m = start
    starta = indexs(4,j) - start
-   if ( curdeg == 1 ) go to 100
+   if (curdeg == 1) go to 100
    kjp = indexs(2,jprime)
    j1 = newkj(kj,curdeg - 1)
 !     ***************
 !     Calculate those  alpha ( j , m ) that can be calculated from
 !     previously calculated alphas.
 !     ***************
-   if ( kj < kjp ) go to 50
+   if (kj < kjp) go to 50
 !     ***************
 !     First calculate those between  JPP  and the end of 2 rows back.
 !     Calculate  alpha ( j , JPP )
@@ -86091,7 +86091,7 @@ do j = onpp1,npolys
    alpha(index1) = sumsqs(jprime) / sumsqs(start)
    m = start + 1
    j3 = newkj(1,curdeg - 1) - 1
-   if ( m > j3 ) go to 50
+   if (m > j3) go to 50
 !     ***************
 !     curdeg .GT. 2 if control has passed the branches in the 3-RD
 !     previous and 8-TH previous statements.
@@ -86112,8 +86112,8 @@ do j = onpp1,npolys
 !                              j
 !     ***************
    m = j3 + 1
-50 if ( jprime == j1 ) go to 100
-   if ( kj == 1 ) go to 80
+50 if (jprime == j1) go to 100
+   if (kj == 1) go to 80
    j1m1 = j1 - 1
    do l = m,j1m1
       runtot = 0.0
@@ -86198,7 +86198,7 @@ do j = onpp1,npolys
       z(p) = z(p) - c(j) * psi(p,jindex)
    end do
    sttdeg = curdeg
-   if ( kj == dimen ) curdeg = curdeg + 1
+   if (kj == dimen) curdeg = curdeg + 1
 end do
 return
 !     ***************
@@ -86237,7 +86237,7 @@ real :: a
 maxabs = 0.0
 do p = 1,npts
    a = abs(coord(p))
-   if ( a > maxabs ) maxabs = a
+   if (a > maxabs) maxabs = a
 end do
 end subroutine scalpm
 
@@ -86257,7 +86257,7 @@ integer :: p
 !     The scaling which this routine carries out  must  be  consistent
 !     with the scaling in the subroutines mfit and meval1.
 !     ****************
-if ( maxabs == 0.0e+00 ) return
+if (maxabs == 0.0e+00) return
 do p = 1,npts
    coord(p) = coord(p) / maxabs
 end do
@@ -86364,8 +86364,8 @@ integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, 
 !     ***************
 if (nepts < 1 .or. dimen < 1) go to 110
 nswc_ai_i4 = evldeg
-if ( nswc_ai_i4 < 0 ) go to 40
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 40
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 nepols = 1
 go to 50
@@ -86589,8 +86589,8 @@ dimp1 = dimen + 1
 !     ***************
 call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
    & error)
-if ( error >= 2 ) return
-if ( fdwkln >= dreqd ) go to 10
+if (error >= 2) return
+if (fdwkln >= dreqd) go to 10
 error = 4
 return
 10 continue
@@ -86690,7 +86690,7 @@ c(1) = runtot / rntot1
 do p = 1,npts
    z(p) = f(p) - c(1)
 end do
-if ( npolys == 1 ) return
+if (npolys == 1) return
 sttdeg = 1
 onplys = 1
 call dincdg(degree,alpha,psi,indexs,newkj,sumsqs, &
@@ -86728,10 +86728,10 @@ double precision :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  dgnrtp  and not by the user.
 !     Modified by A.H. Morris (NSWC)
 !     ****************
-if ( onplys >= 1 .and. sttdeg >= 1 ) go to 10
+if (onplys >= 1 .and. sttdeg >= 1) go to 10
 error = 6
 return
-10 if ( indexs(2,onplys) == dimen ) go to 20
+10 if (indexs(2,onplys) == dimen) go to 20
 curdeg = sttdeg
 go to 30
 20 curdeg = sttdeg + 1
@@ -86744,14 +86744,14 @@ do j = onpp1,npolys
    start = indexs(3,j)
    m = start
    starta = indexs(4,j) - start
-   if ( curdeg == 1 ) go to 100
+   if (curdeg == 1) go to 100
    kjp = indexs(2,jprime)
    j1 = newkj(kj,curdeg - 1)
 !     ***************
 !     Calculate those  alpha ( j , m ) that can be calculated from
 !     previously calculated alphas.
 !     ***************
-   if ( kj < kjp ) go to 50
+   if (kj < kjp) go to 50
 !     ***************
 !     First calculate those between  JPP  and the end of 2 rows back.
 !     Calculate  alpha ( j , JPP )
@@ -86760,7 +86760,7 @@ do j = onpp1,npolys
    alpha(index1) = sumsqs(jprime) / sumsqs(start)
    m = start + 1
    j3 = newkj(1,curdeg - 1) - 1
-   if ( m > j3 ) go to 50
+   if (m > j3) go to 50
 !     ***************
 !     curdeg .GT. 2 if control has passed the branches in the 3-RD
 !     previous and 8-TH previous statements.
@@ -86781,8 +86781,8 @@ do j = onpp1,npolys
 !                              j
 !     ***************
    m = j3 + 1
-50 if ( jprime == j1 ) go to 100
-   if ( kj == 1 ) go to 80
+50 if (jprime == j1) go to 100
+   if (kj == 1) go to 80
    j1m1 = j1 - 1
    do l = m,j1m1
       runtot = 0.d0
@@ -86867,7 +86867,7 @@ do j = onpp1,npolys
       z(p) = z(p) - c(j) * psi(p,jindex)
    end do
    sttdeg = curdeg
-   if ( kj == dimen ) curdeg = curdeg + 1
+   if (kj == dimen) curdeg = curdeg + 1
 end do
 return
 !     ***************
@@ -86906,7 +86906,7 @@ double precision :: a
 maxabs = 0.d0
 do p = 1,npts
    a = abs(coord(p))
-   if ( a > maxabs ) maxabs = a
+   if (a > maxabs) maxabs = a
 end do
 end subroutine dscalp
 
@@ -86926,7 +86926,7 @@ integer :: p
 !     The scaling which this routine carries out must  be  consistent
 !     with the scaling in the subroutines dmfit and dmevl1.
 !     ****************
-if ( maxabs == 0.0d+00 ) return
+if (maxabs == 0.0d+00) return
 do p = 1,npts
    coord(p) = coord(p) / maxabs
 end do
@@ -87034,8 +87034,8 @@ integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, 
 !     ***************
 if (nepts < 1 .or. dimen < 1) go to 110
 nswc_ai_i4 = evldeg
-if ( nswc_ai_i4 < 0 ) go to 40
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 40
+if (nswc_ai_i4 == 0) go to 10
 go to 20
 10 nepols = 1
 go to 50
@@ -87438,8 +87438,8 @@ inew = iold + 1
 i = i + 1
 result(k) = (acum + p(i)*fzero)*diff
 ! Check for convergence.
-if ( ( abs ( result ( k ) - result ( k - 1 ) ) - epsil * abs ( &
-   & result ( k ) ) ) <= 0 ) go to 60
+if ((abs(result(k) - result(k - 1)) - epsil * abs( &
+   & result(k))) <= 0) go to 60
 go to 10
 ! Convergence not achieved.
 50 icheck = 1
@@ -87868,7 +87868,7 @@ do last = 2,limit
    erlast = errmax
    call qk21f(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    call qk21f(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
@@ -87921,7 +87921,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -87961,10 +87961,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -88629,7 +88629,7 @@ do last = 2,limit
 !           bisected next).
 30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -88667,10 +88667,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -88929,7 +88929,7 @@ ido = nrmax - 1
 do i = 1,ido
    isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-   if ( errmax <= elist ( isucc ) ) exit
+   if (errmax <= elist(isucc)) exit
    iord(nrmax) = isucc
    nrmax = nrmax - 1
 end do
@@ -89565,7 +89565,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -89607,10 +89607,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -89753,8 +89753,8 @@ do k = k1,k2
       & abserr = resasc*min(1.0,(200.0*abserr/resasc)**1.5)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if ( abserr > errold * 0.16 ) exit
-   if ( abserr < 1000.0 * epmach * resabs ) exit
+   if (abserr > errold * 0.16) exit
+   if (abserr < 1000.0 * epmach * resabs) exit
    errold = abserr
 end do
 end subroutine qxlqm
@@ -89856,15 +89856,15 @@ real, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e
 !------------------------
 !------------------------
 !------------------------
-data xx( 1)/.0                       /
-data xx( 2)/.25000000000000000000e+00/
-data xx( 3)/.50000000000000000000e+00/
-data xx( 4)/.75000000000000000000e+00/
-data xx( 5)/.87500000000000000000e+00/
-data xx( 6)/.93750000000000000000e+00/
-data xx( 7)/.10000000000000000000e+01/
-data xx( 8)/.37500000000000000000e+00/
-data xx( 9)/.62500000000000000000e+00/
+data xx(1)/.0                       /
+data xx(2)/.25000000000000000000e+00/
+data xx(3)/.50000000000000000000e+00/
+data xx(4)/.75000000000000000000e+00/
+data xx(5)/.87500000000000000000e+00/
+data xx(6)/.93750000000000000000e+00/
+data xx(7)/.10000000000000000000e+01/
+data xx(8)/.37500000000000000000e+00/
+data xx(9)/.62500000000000000000e+00/
 data xx(10)/.96875000000000000000e+00/
 data xx(11)/.12500000000000000000e+00/
 data xx(12)/.68750000000000000000e+00/
@@ -90419,7 +90419,7 @@ do last = 2,limit
    erlast = errmax
    call dqk21(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    call dqk21(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
@@ -90472,7 +90472,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -90512,10 +90512,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -91191,7 +91191,7 @@ do last = 2,limit
 !           bisected next).
 30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -91229,10 +91229,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -91499,7 +91499,7 @@ ido = nrmax - 1
 do i = 1,ido
    isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-   if ( errmax <= elist ( isucc ) ) exit
+   if (errmax <= elist(isucc)) exit
    iord(nrmax) = isucc
    nrmax = nrmax - 1
 end do
@@ -92137,7 +92137,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -92179,10 +92179,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -92325,8 +92325,8 @@ do k = k1,k2
       & abserr = resasc*min(1.d0,(200.d0*abserr/resasc)**1.5d0)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if ( abserr > errold * 0.16d0 ) exit
-   if ( abserr < 1000.d0 * epmach * resabs ) exit
+   if (abserr > errold * 0.16d0) exit
+   if (abserr < 1000.d0 * epmach * resabs) exit
    errold = abserr
 end do
 end subroutine dqxlqm
@@ -92428,15 +92428,15 @@ double precision, parameter :: ww(52) = [1.3032621732848490218104730576385905184
 !------------------------
 !------------------------
 !------------------------
-data xx( 1)/0.d0                     /
-data xx( 2)/.25000000000000000000d+00/
-data xx( 3)/.50000000000000000000d+00/
-data xx( 4)/.75000000000000000000d+00/
-data xx( 5)/.87500000000000000000d+00/
-data xx( 6)/.93750000000000000000d+00/
-data xx( 7)/.10000000000000000000d+01/
-data xx( 8)/.37500000000000000000d+00/
-data xx( 9)/.62500000000000000000d+00/
+data xx(1)/0.d0                     /
+data xx(2)/.25000000000000000000d+00/
+data xx(3)/.50000000000000000000d+00/
+data xx(4)/.75000000000000000000d+00/
+data xx(5)/.87500000000000000000d+00/
+data xx(6)/.93750000000000000000d+00/
+data xx(7)/.10000000000000000000d+01/
+data xx(8)/.37500000000000000000d+00/
+data xx(9)/.62500000000000000000d+00/
 data xx(10)/.96875000000000000000d+00/
 data xx(11)/.12500000000000000000d+00/
 data xx(12)/.68750000000000000000d+00/
@@ -94544,16 +94544,16 @@ do l = 1,neqn
    temp3 = 1.0/wt(l)
    temp4 = yp(l) - phi(l,1)
    nswc_ai_i4 = km2
-   if ( nswc_ai_i4 < 0 ) go to 265
-   if ( nswc_ai_i4 == 0 ) go to 260
+   if (nswc_ai_i4 < 0) go to 265
+   if (nswc_ai_i4 == 0) go to 260
    go to 255
 255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
 260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
 265 erk = erk + (temp4*temp3)**2
 end do
 nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 280
-if ( nswc_ai_i4 == 0 ) go to 275
+if (nswc_ai_i4 < 0) go to 280
+if (nswc_ai_i4 == 0) go to 275
 go to 270
 270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
 275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
@@ -94563,8 +94563,8 @@ erk = temp5*sig(kp1)*gstr(k)
 knew = k
 !   Test if order should be lowered
 nswc_ai_i4 = km2
-if ( nswc_ai_i4 < 0 ) go to 299
-if ( nswc_ai_i4 == 0 ) go to 290
+if (nswc_ai_i4 < 0) go to 299
+if (nswc_ai_i4 == 0) go to 290
 go to 285
 285 if (max(erkm1,erkm2) <= erk) knew = km1
 go to 299
@@ -94598,8 +94598,8 @@ end do
 320 ifail = ifail + 1
 temp2 = 0.5
 nswc_ai_i4 = ifail - 3
-if ( nswc_ai_i4 < 0 ) go to 335
-if ( nswc_ai_i4 == 0 ) go to 330
+if (nswc_ai_i4 < 0) go to 335
+if (nswc_ai_i4 == 0) go to 330
 go to 325
 325 if (p5eps < 0.25*erk) temp2 = sqrt(p5eps/erk)
 330 knew = 1
@@ -96612,7 +96612,7 @@ end subroutine zzzjac
 subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
-integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
+integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
@@ -97809,7 +97809,7 @@ do k = 1,lk
 !                                      and a local Lipschitz constant
 100 fbnd = max(fbnd,vnorm(yp,neq))
    delf = vnorm(pv,neq)
-   if ( delf >= big * abs ( dely ) ) exit
+   if (delf >= big * abs(dely)) exit
    dfdub = max(dfdub,delf/abs(dely))
    if (k == lk) go to 160
 !                       Choose next perturbation vector
@@ -98542,7 +98542,7 @@ subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
-integer :: neq, nyh, iwm( *)
+integer :: neq, nyh, iwm(*)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
 integer :: i, i1, i2, ii, j, j1, jj, lenp, mba, mband, meb1, meband, ml, ml3, mu
@@ -98719,7 +98719,7 @@ implicit none
 !   slvs solves the linear system in the iteration scheme for the
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
-integer :: iwm( *)
+integer :: iwm(*)
 real :: wm(*), x(*), tem(*)
 integer :: i, meband, ml, mu
 real :: di, hl0, phl0, r
@@ -99389,9 +99389,9 @@ if (abs(edge(3)) > 1) go to 200
 if (abs(edge(4)) > 1) go to 200
 ierr = 0
 !               Process edges 1 and 3
-nswc_ai_i4 = edge ( 1 )
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+nswc_ai_i4 = edge(1)
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 if (edge(3) /= -1) go to 210
 indy = 0
@@ -99402,9 +99402,9 @@ go to 100
 30 if (edge(3) == -1) go to 210
 indy = 4 - edge(3)
 !               Process edges 2 and 4
-100 nswc_ai_i4 = edge ( 2 )
-if ( nswc_ai_i4 < 0 ) go to 110
-if ( nswc_ai_i4 == 0 ) go to 120
+100 nswc_ai_i4 = edge(2)
+if (nswc_ai_i4 < 0) go to 110
+if (nswc_ai_i4 == 0) go to 120
 go to 130
 110 if (edge(4) /= -1) go to 220
 indx = 0
@@ -100585,34 +100585,34 @@ integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
 ! Test m and n for the proper form
 nswc_state_cblkt_nm = n
 ierror = 0
-if ( ( m - 5 ) < 0 ) go to 10
+if ((m - 5) < 0) go to 10
 go to 20
 10 ierror = 1
 go to 190
-20 if ( ( nswc_state_cblkt_nm - 3 ) < 0 ) go to 30
+20 if ((nswc_state_cblkt_nm - 3) < 0) go to 30
 go to 40
 30 ierror = 2
 go to 190
-40 if ( ( idimy - m ) < 0 ) go to 50
+40 if ((idimy - m) < 0) go to 50
 go to 60
 50 ierror = 3
 go to 190
 60 nh = n
 nswc_state_cblkt_npp = np
-if ( ( nswc_state_cblkt_npp ) == 0 ) go to 80
+if ((nswc_state_cblkt_npp) == 0) go to 80
 go to 70
 70 nh = nh + 1
 80 nswc_state_cblkt_ik = 2
 nswc_state_cblkt_k = 1
 90 nswc_state_cblkt_ik = nswc_state_cblkt_ik + nswc_state_cblkt_ik
 nswc_state_cblkt_k = nswc_state_cblkt_k + 1
-if ( ( nh - nswc_state_cblkt_ik ) <= 0 ) go to 100
+if ((nh - nswc_state_cblkt_ik) <= 0) go to 100
 go to 90
 100 nl = nswc_state_cblkt_ik
 nswc_state_cblkt_ik = nswc_state_cblkt_ik + nswc_state_cblkt_ik
 nl = nl - 1
 iwah = (nswc_state_cblkt_k - 2)*nswc_state_cblkt_ik + nswc_state_cblkt_k + 6
-if ( ( nswc_state_cblkt_npp ) == 0 ) go to 120
+if ((nswc_state_cblkt_npp) == 0) go to 120
 go to 110
 !     Divide w into working sub arrays
 110 iw1 = iwah
@@ -100624,18 +100624,18 @@ iw1 = iwbh
 w(1) = float(iw1 - 1 + max(2*nswc_state_cblkt_nm,6*m))
 nswc_state_cblkt_nm = nswc_state_cblkt_nm - 1
 ! Subroutine compb computes the roots of the B polynomials
-130 if ( ( ierror ) == 0 ) go to 140
+130 if ((ierror) == 0) go to 140
 go to 190
 140 iw2 = iw1 + m
 iw3 = iw2 + m
 iwd = iw3 + m
 iww = iwd + m
 iwu = iww + m
-if ( ( iflg ) == 0 ) go to 150
+if ((iflg) == 0) go to 150
 go to 160
 150 call compb(nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
 go to 190
-160 if ( ( mp ) == 0 ) go to 180
+160 if ((mp) == 0) go to 180
 go to 170
 ! Subroutine blktr1 solves the linear system
 170 call blktr1(nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
@@ -100684,13 +100684,13 @@ do l = 1,kdo
       & m,am,bm,cm,wd,ww,wu)
    if = 2**nswc_state_cblkt_k
    do i = i4,if,i4
-      if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 10
+      if ((i - nswc_state_cblkt_nm) <= 0) go to 10
       go to 80
 10    ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
       call indxc(i,ir,idxc,nc)
-      if ( ( i - if ) < 0 ) go to 20
+      if ((i - if) < 0) go to 20
       go to 80
 20    call indxa(i,ir,idxa,na)
       call indxb(i - i1,irm1,im1,nm1)
@@ -100703,7 +100703,7 @@ do l = 1,kdo
       if (np3 == 0) ip3 = 1
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
-      if ( ( ipi2 - nswc_state_cblkt_nm ) <= 0 ) go to 50
+      if ((ipi2 - nswc_state_cblkt_nm) <= 0) go to 50
       go to 30
 30    do j = 1,m
          w3(j) = 0.
@@ -100720,7 +100720,7 @@ do l = 1,kdo
 80    continue
    end do
 end do
-if ( ( nswc_state_cblkt_npp ) == 0 ) go to 100
+if ((nswc_state_cblkt_npp) == 0) go to 100
 go to 320
 !     The periodic case is treated using the capacitance matrix method
 100 if = 2**nswc_state_cblkt_k
@@ -100767,9 +100767,9 @@ nswc_exit_1 : do ll = 2 , nswc_state_cblkt_k
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if ( ( i - i2 - izr ) == 0 ) go to 140
+      if ((i - i2 - izr) == 0) go to 140
       go to 170
-140   if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 150
+140   if ((i - nswc_state_cblkt_nm) <= 0) go to 150
       exit
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
@@ -100786,7 +100786,7 @@ nswc_exit_1 : do ll = 2 , nswc_state_cblkt_k
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
-      if ( ( i - nswc_state_cblkt_nm ) == 0 ) exit nswc_exit_1
+      if ((i - nswc_state_cblkt_nm) == 0) exit nswc_exit_1
       go to 170
 170   continue
    end do
@@ -100798,7 +100798,7 @@ end do
 call indxb(if/2,nswc_state_cblkt_k - 1,im1,nm1)
 if (nm1 == 0) im1 = 1
 call indxb(if,nswc_state_cblkt_k - 1,ip,np)
-if ( ( nswc_state_cblkt_ncmplx ) == 0 ) go to 220
+if ((nswc_state_cblkt_ncmplx) == 0) go to 220
 go to 210
 210 call cprdct(nswc_state_cblkt_nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nswc_state_cblkt_nm + 1),   y(1,nswc_state_cblkt_nm + 1), &
    & m,am,bm,cm,w1,w3,ww)
@@ -100844,9 +100844,9 @@ do l = 1,kdo
       ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
-      if ( ( ipi2 - izr ) == 0 ) go to 280
+      if ((ipi2 - izr) == 0) go to 280
       go to 270
-270   if ( ( i - izr ) == 0 ) exit
+270   if ((i - izr) == 0) exit
       go to 300
 280   call indxc(i,ir,idxc,nc)
       call indxb(ipi2,ir,ip2,np2)
@@ -100877,7 +100877,7 @@ end do
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 330
+      if ((i - nswc_state_cblkt_nm) <= 0) go to 330
       go to 430
 330   imi1 = i - i1
       imi2 = i - i2
@@ -100891,7 +100891,7 @@ end do
       if (nm1 == 0) im1 = 1
       call indxb(ipi1,irm1,ip1,np1)
       if (np1 == 0) ip1 = 1
-      if ( ( i - i2 ) <= 0 ) go to 340
+      if ((i - i2) <= 0) go to 340
       go to 360
 340   do j = 1,m
          w1(j) = 0.
@@ -100899,7 +100899,7 @@ end do
       go to 370
 360   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
          & w1,m,am,bm,cm,wd,ww,wu)
-370   if ( ( ipi2 - nswc_state_cblkt_nm ) <= 0 ) go to 400
+370   if ((ipi2 - nswc_state_cblkt_nm) <= 0) go to 400
       go to 380
 380   do j = 1,m
          w2(j) = 0.
@@ -100922,7 +100922,7 @@ implicit none
 integer :: i, idxa, ir, na
 na = 2**ir
 idxa = i - na + 1
-if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 20
+if ((i - nswc_state_cblkt_nm) <= 0) go to 20
 go to 10
 10 na = 0
 20 return
@@ -100933,7 +100933,7 @@ implicit none
 integer :: i, idxc, ir, nc
 nc = 2**ir
 idxc = i
-if ( ( idxc + nc - 1 - nswc_state_cblkt_nm ) <= 0 ) go to 20
+if ((idxc + nc - 1 - nswc_state_cblkt_nm) <= 0) go to 20
 go to 10
 10 nc = 0
 20 return
@@ -100947,10 +100947,10 @@ integer :: nswc_ai_i4
 ! B(idx) is the location of the first root of the B(i,ir) polynomial
 idp = 0
 nswc_ai_i4 = ir
-if ( nswc_ai_i4 < 0 ) go to 70
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 70
+if (nswc_ai_i4 == 0) go to 10
 go to 30
-10 if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 20
+10 if ((i - nswc_state_cblkt_nm) <= 0) go to 20
 go to 70
 20 idx = i
 idp = 1
@@ -100960,11 +100960,11 @@ id = i - izh - izh
 idx = id + id + (ir - 1)*nswc_state_cblkt_ik + ir + (nswc_state_cblkt_ik - i)/izh + 4
 ipl = izh - 1
 idp = izh + izh - 1
-if ( ( i - ipl - nswc_state_cblkt_nm ) <= 0 ) go to 50
+if ((i - ipl - nswc_state_cblkt_nm) <= 0) go to 50
 go to 40
 40 idp = 0
 return
-50 if ( ( i + ipl - nswc_state_cblkt_nm ) <= 0 ) go to 70
+50 if ((i + ipl - nswc_state_cblkt_nm) <= 0) go to 70
 go to 60
 60 idp = nswc_state_cblkt_nm + ipl - i + 1
 70 return
@@ -101002,7 +101002,7 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if ( ( ia ) <= 0 ) go to 50
+20 if ((ia) <= 0) go to 50
 go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
@@ -101011,7 +101011,7 @@ ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if ( ( id ) <= 0 ) go to 250
+50 if ((id) <= 0) go to 250
 go to 60
 60 rt = bd(id)
 id = id - 1
@@ -101027,40 +101027,40 @@ do j = 2,mm
 end do
 den = b(1) - rt - c(1)*d(2)
 w(1) = 1.
-if ( ( den ) == 0 ) go to 90
+if ((den) == 0) go to 90
 go to 80
 80 w(1) = (y(1) - c(1)*w(2))/den
 90 do j = 2,m
    w(j) = w(j) - d(j)*w(j - 1)
 end do
-if ( ( na ) <= 0 ) go to 130
+if ((na) <= 0) go to 130
 go to 20
 110 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-130 if ( ( m1 ) <= 0 ) go to 140
+130 if ((m1) <= 0) go to 140
 go to 150
-140 if ( ( m2 ) <= 0 ) go to 110
+140 if ((m2) <= 0) go to 110
 go to 200
-150 if ( ( m2 ) <= 0 ) go to 170
+150 if ((m2) <= 0) go to 170
 go to 160
-160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+160 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 200
 go to 170
-170 if ( ( ibr ) <= 0 ) go to 180
+170 if ((ibr) <= 0) go to 180
 go to 190
-180 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
-   & < 0 ) go to 110
+180 if ((abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) &
+   & < 0) go to 110
 go to 190
 190 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 230
-200 if ( ( ibr ) <= 0 ) go to 210
+200 if ((ibr) <= 0) go to 210
 go to 220
-210 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
-   & < 0 ) go to 110
+210 if ((abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) &
+   & < 0) go to 110
 go to 220
 220 rt = rt - bm2(m2)
 m2 = m2 - 1
@@ -101102,7 +101102,7 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if ( ( ia ) <= 0 ) go to 50
+20 if ((ia) <= 0) go to 50
 go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
@@ -101110,7 +101110,7 @@ ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if ( ( id ) <= 0 ) go to 280
+50 if ((id) <= 0) go to 280
 go to 60
 60 rt = bd(id)
 id = id - 1
@@ -101123,7 +101123,7 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 w(1) = y(1)/den
 v = c(m)
-if ( ( mm2 - 2 ) < 0 ) go to 90
+if ((mm2 - 2) < 0) go to 90
 go to 70
 70 do j = 2,mm2
    den = b(j) - rt - a(j)*d(j - 1)
@@ -101141,7 +101141,7 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*w(m - 2)
 den = bh - am*d(m - 1)
-if ( ( den ) == 0 ) go to 110
+if ((den) == 0) go to 110
 go to 100
 100 w(m) = (ym - am*w(m - 1))/den
 go to 120
@@ -101151,34 +101151,34 @@ do j = 2,mm
    k = m - j
    w(k) = w(k) - d(k)*w(k + 1) - u(k)*w(m)
 end do
-if ( ( na ) <= 0 ) go to 160
+if ((na) <= 0) go to 160
 go to 20
 140 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-160 if ( ( m1 ) <= 0 ) go to 170
+160 if ((m1) <= 0) go to 170
 go to 180
-170 if ( ( m2 ) <= 0 ) go to 140
+170 if ((m2) <= 0) go to 140
 go to 230
-180 if ( ( m2 ) <= 0 ) go to 200
+180 if ((m2) <= 0) go to 200
 go to 190
-190 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+190 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 230
 go to 200
-200 if ( ( ibr ) <= 0 ) go to 210
+200 if ((ibr) <= 0) go to 210
 go to 220
-210 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
-   & < 0 ) go to 140
+210 if ((abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) &
+   & < 0) go to 140
 go to 220
 220 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 260
-230 if ( ( ibr ) <= 0 ) go to 240
+230 if ((ibr) <= 0) go to 240
 go to 250
-240 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
-   & < 0 ) go to 140
+240 if ((abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) &
+   & < 0) go to 140
 go to 250
 250 rt = rt - bm2(m2)
 m2 = m2 - 1
@@ -101219,7 +101219,7 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if ( ( id ) <= 0 ) go to 90
+if ((id) <= 0) go to 90
 go to 30
 30 crt = bd(id)
 id = id - 1
@@ -101233,7 +101233,7 @@ do j = 2,mm
    w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
 den = b(1) - crt - c(1)*d(2)
-if ( ( abs ( den ) ) == 0 ) go to 60
+if ((abs(den)) == 0) go to 60
 go to 50
 50 y(1) = (y(1) - c(1)*w(2))/den
 go to  70
@@ -101241,19 +101241,19 @@ go to  70
 70 do j = 2,m
    y(j) = w(j) - d(j)*y(j - 1)
 end do
-90 if ( ( m1 ) <= 0 ) go to 100
+90 if ((m1) <= 0) go to 100
 go to 120
-100 if ( ( m2 ) <= 0 ) go to 210
+100 if ((m2) <= 0) go to 210
 go to 110
 110 rt = bm2(m2)
 m2 = m2 - 1
 go to 170
-120 if ( ( m2 ) <= 0 ) go to 130
+120 if ((m2) <= 0) go to 130
 go to 140
 130 rt = bm1(m1)
 m1 = m1 - 1
 go to 170
-140 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+140 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 160
 go to 150
 150 rt = bm1(m1)
@@ -101262,7 +101262,7 @@ go to 170
 160 rt = bm2(m2)
 m2 = m2 - 1
 170 y1 = (b(1) - rt)*y(1) + c(1)*y(2)
-if ( ( mm - 2 ) < 0 ) go to 200
+if ((mm - 2) < 0) go to 200
 go to 180
 ! Matrix multiplication
 180 do j = 2,mm
@@ -101274,7 +101274,7 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-210 if ( ( ia ) <= 0 ) go to 240
+210 if ((ia) <= 0) go to 240
 go to 220
 220 rt = aa(ia)
 ia = ia - 1
@@ -101283,7 +101283,7 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-240 if ( ( iflg ) <= 0 ) go to 250
+240 if ((iflg) <= 0) go to 250
 go to 20
 250 do j = 1,m
    yy(j) = real(y(j))
@@ -101322,7 +101322,7 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if ( ( id ) <= 0 ) go to 110
+if ((id) <= 0) go to 110
 go to 30
 30 crt = bd(id)
 id = id - 1
@@ -101335,7 +101335,7 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 y(1) = y(1)/den
 v = cmplx(c(m),0.)
-if ( ( mm2 - 2 ) < 0 ) go to 60
+if ((mm2 - 2) < 0) go to 60
 go to 40
 40 do j = 2,mm2
    den = b(j) - crt - a(j)*d(j - 1)
@@ -101353,7 +101353,7 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*y(m - 2)
 den = bh - am*d(m - 1)
-if ( ( abs ( den ) ) == 0 ) go to 80
+if ((abs(den)) == 0) go to 80
 go to 70
 70 y(m) = (ym - am*y(m - 1))/den
 go to  90
@@ -101363,19 +101363,19 @@ do j = 2,mm
    k = m - j
    y(k) = y(k) - d(k)*y(k + 1) - u(k)*y(m)
 end do
-110 if ( ( m1 ) <= 0 ) go to 120
+110 if ((m1) <= 0) go to 120
 go to 140
-120 if ( ( m2 ) <= 0 ) go to 230
+120 if ((m2) <= 0) go to 230
 go to 130
 130 rt = bm2(m2)
 m2 = m2 - 1
 go to 190
-140 if ( ( m2 ) <= 0 ) go to 150
+140 if ((m2) <= 0) go to 150
 go to 160
 150 rt = bm1(m1)
 m1 = m1 - 1
 go to 190
-160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+160 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 180
 go to 170
 170 rt = bm1(m1)
@@ -101386,7 +101386,7 @@ m2 = m2 - 1
 ! Matrix multiplication
 190 yh = y(1)
 y1 = (b(1) - rt)*y(1) + c(1)*y(2) + a(1)*y(m)
-if ( ( mm - 2 ) < 0 ) go to 220
+if ((mm - 2) < 0) go to 220
 go to 200
 200 do j = 2,mm
    y2 = a(j)*y(j - 1) + (b(j) - rt)*y(j) + c(j)*y(j + 1)
@@ -101397,7 +101397,7 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-230 if ( ( ia ) <= 0 ) go to 260
+230 if ((ia) <= 0) go to 260
 go to 240
 240 rt = aa(ia)
 ia = ia - 1
@@ -101406,7 +101406,7 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-260 if ( ( iflg ) <= 0 ) go to 270
+260 if ((iflg) <= 0) go to 270
 go to 20
 270 do j = 1,m
    yy(j) = real(y(j))
@@ -101431,7 +101431,7 @@ bnorm = abs(bn(1))
 do j = 2,nswc_state_cblkt_nm
    bnorm = max(bnorm,abs(bn(j)))
    arg = an(j)*cn(j - 1)
-   if ( ( arg ) < 0 ) go to 220
+   if ((arg) < 0) go to 220
    go to 30
 30 b(j) = sign(sqrt(arg),an(j))
 end do
@@ -101446,7 +101446,7 @@ do l = 1,kdo
    ifd = if - i4
    do i = i4,ifd,i4
       call indxb(i,l,ib,nb)
-      if ( ( nb ) <= 0 ) exit
+      if ((nb) <= 0) exit
       go to 50
 50    js = i - ipl
       jf = js + nb - 1
@@ -101457,7 +101457,7 @@ do l = 1,kdo
          ah(ls) = b(j)
       end do
       call tqlrt0(nb,bh,ah,ierror)
-      if ( ( ierror ) == 0 ) go to 70
+      if ((ierror) == 0) go to 70
       go to 210
 70    lh = ib - 1
       do j = 1,nb
@@ -101494,11 +101494,11 @@ if ((d2 < d1) .and. (d2 < d3)) go to 180
 b(lh) = b(j2)
 j2 = j2 + 1
 lh = lh + 1
-if ( ( j2 - n2m2 ) <= 0 ) go to 170
+if ((j2 - n2m2) <= 0) go to 170
 go to 190
 180 j2 = j2 + 1
 j1 = j1 + 1
-if ( ( j2 - n2m2 ) <= 0 ) go to 170
+if ((j2 - n2m2) <= 0) go to 170
 go to 190
 190 b(lh) = b(n2m2 + 1)
 call indxb(if,nswc_state_cblkt_k - 1,j1,j2)
@@ -101564,7 +101564,7 @@ do l = 1,n
    c = b*b
 !     ********** Look for small squared sub-diagonal element **********
 20 do m = l,n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -101656,9 +101656,9 @@ scnv = sqrt(nswc_state_cblkt_cnv)
 iz = n
 izm = iz - 1
 izm2 = iz - 2
-nswc_ai_r4 = bp ( n ) - bp ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 420
+nswc_ai_r4 = bp(n) - bp(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 420
 go to 30
 10 do j = 1,n
    nt = n - j
@@ -101671,31 +101671,31 @@ end do
 50 nswc_state_cblkt_ncmplx = 0
 modiz = mod(iz,2)
 is = 1
-if ( ( modiz ) == 0 ) go to 70
+if ((modiz) == 0) go to 70
 go to 60
-60 nswc_ai_r4 = a ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 100
-if ( nswc_ai_r4 == 0 ) go to 420
+60 nswc_ai_r4 = a(1)
+if (nswc_ai_r4 < 0) go to 100
+if (nswc_ai_r4 == 0) go to 420
 go to 70
 70 xl = bh(1)
 db = bh(3) - bh(1)
 80 xl = xl - db
-if ( ( psgf( xl , iz , c , a , bh ) ) <= 0 ) go to 80
+if ((psgf(xl , iz , c , a , bh)) <= 0) go to 80
 go to 90
 90 sgn = -1.
 cbp(1) = cmplx(bsrh(xl,bh(1),iz,c,a,bh,psgf,sgn),0.)
 is = 2
 100 if = iz - 1
-if ( ( modiz ) == 0 ) go to 120
+if ((modiz) == 0) go to 120
 go to 110
-110 nswc_ai_r4 = a ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 120
-if ( nswc_ai_r4 == 0 ) go to 420
+110 nswc_ai_r4 = a(1)
+if (nswc_ai_r4 < 0) go to 120
+if (nswc_ai_r4 == 0) go to 420
 go to 150
 120 xr = bh(iz)
 db = bh(iz) - bh(iz - 2)
 130 xr = xr + db
-if ( ( psgf( xr , iz , c , a , bh ) ) < 0 ) go to 130
+if ((psgf(xr , iz , c , a , bh)) < 0) go to 130
 go to 140
 140 sgn = 1.
 cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
@@ -101706,11 +101706,11 @@ if = iz - 2
    sgn = -1.
    xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
    psg = psgf(xm,iz,c,a,bh)
-   if ( ( abs ( psg ) - nswc_state_cblkt_eps ) <= 0 ) go to 180
+   if ((abs(psg) - nswc_state_cblkt_eps) <= 0) go to 180
    go to 160
-160 nswc_ai_r4 = psg * ppsgf( xm , iz , c , a , bh )
-   if ( nswc_ai_r4 < 0 ) go to 170
-   if ( nswc_ai_r4 == 0 ) go to 180
+160 nswc_ai_r4 = psg * ppsgf(xm , iz , c , a , bh)
+   if (nswc_ai_r4 < 0) go to 170
+   if (nswc_ai_r4 == 0) go to 180
    go to 190
 !     Case of a real zero
 170 sgn = 1.
@@ -101737,31 +101737,31 @@ if = iz - 2
       fp = fp + dd
       fpp = fpp - dd*dd
    end do
-   if ( ( modiz ) == 0 ) go to 220
+   if ((modiz) == 0) go to 220
    go to 230
 220 f = (1.,0.) - fsg - hsg
    go to 240
 230 f = (1.,0.) + fsg + hsg
 240 i3 = 0
-   if ( ( abs ( fp ) ) <= 0 ) go to 260
+   if ((abs(fp)) <= 0) go to 260
    go to 250
 250 i3 = 1
    r3 = -f/fp
 260 i2 = 0
-   if ( ( abs ( fpp ) ) <= 0 ) go to 320
+   if ((abs(fpp)) <= 0) go to 320
    go to 270
 270 i2 = 1
    cdis = sqrt(fp**2 - 2.*f*fpp)
    r1 = cdis - fp
    r2 = -fp - cdis
-   if ( ( abs ( r1 ) - abs ( r2 ) ) <= 0 ) go to 290
+   if ((abs(r1) - abs(r2)) <= 0) go to 290
    go to 280
 280 r1 = r1/fpp
    go to 300
 290 r1 = r2/fpp
 300 r2 = 2.*f/fpp/r1
    if (abs(r2) < abs(r1)) r1 = r2
-   if ( ( i3 ) <= 0 ) go to 330
+   if ((i3) <= 0) go to 330
    go to 310
 310 if (abs(r3) < abs(r1)) r1 = r3
    go to 330
@@ -101770,7 +101770,7 @@ if = iz - 2
    it = it + 1
    if (it > 50) go to 420
    if (abs(r1) > scnv) go to 200
-   if ( ( icv ) <= 0 ) go to 340
+   if ((icv) <= 0) go to 340
    go to 350
 340 icv = 1
    go to 200
@@ -101778,9 +101778,9 @@ if = iz - 2
    cbp(ig + 1) = conjg(cx)
 360 continue
 end do
-nswc_ai_r4 = abs ( cbp ( n ) ) - abs ( cbp ( 1 ) )
-if ( nswc_ai_r4 < 0 ) go to 370
-if ( nswc_ai_r4 == 0 ) go to 420
+nswc_ai_r4 = abs(cbp(n)) - abs(cbp(1))
+if (nswc_ai_r4 < 0) go to 370
+if (nswc_ai_r4 == 0) go to 420
 go to 390
 370 nhalf = n/2
 do j = 1,nhalf
@@ -101791,7 +101791,7 @@ do j = 1,nhalf
 end do
 390 nswc_state_cblkt_ncmplx = 1
 do j = 2,iz
-   if ( ( aimag ( cbp ( j ) ) ) == 0 ) go to 400
+   if ((aimag(cbp(j))) == 0) go to 400
    go to 430
 400 continue
 end do
@@ -101819,7 +101819,7 @@ do j = 1,iz
    fsg = fsg*a(j)*dd
    hsg = hsg*c(j)*dd
 end do
-if ( ( mod ( iz , 2 ) ) == 0 ) go to 20
+if ((mod(iz , 2)) == 0) go to 20
 go to 30
 20 psgf = 1. - fsg - hsg
 return
@@ -101838,15 +101838,15 @@ xl = xll
 xr = xrr
 dx = .5*abs(xr - xl)
 10 x = .5*(xl + xr)
-nswc_ai_r4 = sgn * f ( x , iz , c , a , bh )
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 50
+nswc_ai_r4 = sgn * f(x , iz , c , a , bh)
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 50
 go to 20
 20 xr = x
 go to  40
 30 xl = x
 40 dx = .5*dx
-if ( ( dx - nswc_state_cblkt_cnv ) <= 0 ) go to 50
+if ((dx - nswc_state_cblkt_cnv) <= 0) go to 50
 go to 10
 50 bsrh = .5*(xl + xr)
 end function bsrh

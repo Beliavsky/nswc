@@ -1295,7 +1295,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1337,7 +1337,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1380,7 +1380,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1425,7 +1425,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1469,7 +1469,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1515,7 +1515,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1560,7 +1560,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1604,7 +1604,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1650,7 +1650,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1696,7 +1696,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -1739,7 +1739,7 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if ( n <= k ( i ) ) exit
+   if (n <= k(i)) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
@@ -2391,8 +2391,8 @@ real :: r, nswc_ai_r4
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 10
 go to 20
 10 cbrt = 0.0
 return
@@ -2411,8 +2411,8 @@ implicit none
 double precision, intent(in) :: x
 double precision :: r, nswc_ai_r8
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 30
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 30
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 dcbrt = 0.d0
 return
@@ -2429,22 +2429,22 @@ real, intent(in) :: x, y
 real :: artnq
 real :: nswc_ai_r4
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 1
-if ( nswc_ai_r4 == 0 ) go to 2
+if (nswc_ai_r4 < 0) go to 1
+if (nswc_ai_r4 == 0) go to 2
 go to 5
 1 artnq = atan(y/x) + 3.1415926535898
 return
 2 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 3
-if ( nswc_ai_r4 == 0 ) go to 8
+if (nswc_ai_r4 < 0) go to 3
+if (nswc_ai_r4 == 0) go to 8
 go to 4
 3 artnq = 4.7123889803847
 return
 4 artnq = 1.5707963267949
 return
 5 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 6
-if ( nswc_ai_r4 == 0 ) go to 8
+if (nswc_ai_r4 < 0) go to 6
+if (nswc_ai_r4 == 0) go to 8
 go to 7
 6 artnq = atan(y/x) + 6.2831853071795
 return
@@ -2458,22 +2458,22 @@ implicit none
 double precision, intent(in) :: x, y
 double precision :: nswc_ai_r8
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 1
-if ( nswc_ai_r8 == 0 ) go to 2
+if (nswc_ai_r8 < 0) go to 1
+if (nswc_ai_r8 == 0) go to 2
 go to 5
 1 dartnq = atan(y/x) + 3.14159265358979323846264338328d0
 return
 2 nswc_ai_r8 = y
-if ( nswc_ai_r8 < 0 ) go to 3
-if ( nswc_ai_r8 == 0 ) go to 8
+if (nswc_ai_r8 < 0) go to 3
+if (nswc_ai_r8 == 0) go to 8
 go to 4
 3 dartnq = 4.71238898038468985769396507492d0
 return
 4 dartnq = 1.57079632679489661923132169164d0
 return
 5 nswc_ai_r8 = y
-if ( nswc_ai_r8 < 0 ) go to 6
-if ( nswc_ai_r8 == 0 ) go to 8
+if (nswc_ai_r8 < 0) go to 6
+if (nswc_ai_r8 == 0) go to 8
 go to 7
 6 dartnq = atan(y/x) + 6.28318530717958647692528676656d0
 return
@@ -2643,8 +2643,8 @@ end interface
 x = z(1)
 y = z(2)
 nswc_ai_r8 = x
-if ( nswc_ai_r8 < 0 ) go to 30
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 30
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 if (y /= 0.d0) go to 11
 w(1) = 0.d0
@@ -4415,8 +4415,8 @@ real :: a
 n = nb
 if (x(1) == x(n) .and. y(1) == y(n)) n = n - 1
 nswc_ai_i4 = n - 3
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 parea = 0.0
 return
@@ -4722,9 +4722,9 @@ maxe = vc(1)
 minu = vr(1)
 jr = 1
 do i = 2,n
-   nswc_ai_i4 = vc ( i ) - maxe
-   if ( nswc_ai_i4 < 0 ) go to 100
-   if ( nswc_ai_i4 == 0 ) go to 70
+   nswc_ai_i4 = vc(i) - maxe
+   if (nswc_ai_i4 < 0) go to 100
+   if (nswc_ai_i4 == 0) go to 70
    go to 80
 70 if (vr(i) >= minu) go to 100
    go to 90
@@ -4747,7 +4747,7 @@ go to 220
 130 l1 = pr(j) + 1
 l2 = pr(j + 1)
 do l = l1,l2
-   if ( ar ( l ) > 0 ) exit
+   if (ar(l) > 0) exit
 end do
 jl = ar(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
@@ -4769,7 +4769,7 @@ go to 210
 170 l1 = pc(j) + 1
 l2 = pc(j + 1)
 do l = l1,l2
-   if ( ac ( l ) > 0 ) exit
+   if (ac(l) > 0) exit
 end do
 jl = ac(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
@@ -4913,7 +4913,7 @@ go to 420
       ll1 = pc(jl) + 1
       ll2 = pc(jl + 1)
       do ll = ll1,ll2
-         if ( k1 - ac ( ll ) == j ) exit
+         if (k1 - ac(ll) == j) exit
       end do
       ac(ll) = j
       vc(jl) = vc(jl) + 1
@@ -5034,7 +5034,7 @@ do j = j1,j2
    l1 = p2(ia) + 1
    l2 = p2(ia + 1)
    do l = l1,l2
-      if ( a2 ( l ) == i1 ) exit
+      if (a2(l) == i1) exit
    end do
    v2(ia) = v2(ia) - 1
    a2(l) = k1 - a2(l)
@@ -5063,7 +5063,7 @@ do l = l1,l2
    ll1 = p2(ia) + 1
    ll2 = p2(ia + 1)
    do ll = ll1,ll2
-      if ( k1 - a2 ( ll ) == ii ) exit
+      if (k1 - a2(ll) == ii) exit
    end do
    a2(ll) = ii
    v2(ia) = v2(ia) + 1
@@ -5092,7 +5092,7 @@ do mm = m1,m2
 10 j1 = p2(iarc) + 1
    j2 = p2(iarc + 1)
    do jj = j1,j2
-      if ( a2 ( jj ) == ib ) exit
+      if (a2(jj) == ib) exit
    end do
 30 a2(jj) = k1 - a2(jj)
    v2(iarc) = v2(iarc) - 1
@@ -6275,8 +6275,8 @@ do n = 31,63
    t(2) = a(n)*y
    w(1) = w(1) + t(1)
    w(2) = w(2) + t(2)
-   if ( anorm ( t ( 1 ) , t ( 2 ) ) <= tol * anorm ( w ( 1 ) , w &
-      & ( 2 ) ) ) exit
+   if (anorm(t(1) , t(2)) <= tol * anorm(w(1) , w &
+      & (2))) exit
 end do
 do j = 1,29
    n = 30 - j
@@ -8271,8 +8271,8 @@ x = arg
 ierr = 0
 if (int == 2) go to 450
 nswc_ai_r4 = x
-if ( nswc_ai_r4 < 0 ) go to 280
-if ( nswc_ai_r4 == 0 ) go to 640
+if (nswc_ai_r4 < 0) go to 280
+if (nswc_ai_r4 == 0) go to 640
 go to 110
 110 if (x >= 12.e0) go to 200
 if (x > 8.e0) go to 160
@@ -8387,8 +8387,8 @@ if (t == 0.0e0) go to 600
 return
 450 y = x
 nswc_ai_r4 = y
-if ( nswc_ai_r4 < 0 ) go to 660
-if ( nswc_ai_r4 == 0 ) go to 640
+if (nswc_ai_r4 < 0) go to 660
+if (nswc_ai_r4 == 0) go to 640
 go to 300
 !     ---------- Error return for X .LT. xmin,
 !                causing underflow ----------
@@ -8757,7 +8757,7 @@ w = 0.d0
 do n = 2,40
    c = a(n)*t
    w = w + c
-   if ( abs ( c ) < eps ) exit
+   if (abs(c) < eps) exit
    t = h*t
 end do
 dei0 = h * (a(1) + w)
@@ -9249,7 +9249,7 @@ do n = 1,25
    tm(1) = ts(1)
    tm(2) = ts(2)
    if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
-   if ( abs ( sm ( 2 ) ) + abs ( tm ( 2 ) ) == abs ( sm ( 2 ) ) &
+   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2)) &
       & ) exit
 60 sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
@@ -9685,8 +9685,8 @@ t = 1.0
 m = int(a) - 1
 !     Let t be the product of a-j when a .GE. 2
 nswc_ai_i4 = m
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,m
    x = x - 1.0
@@ -9839,8 +9839,8 @@ t = a
 d = a - 0.5
 if (d > 0.0) t = d - 0.5
 nswc_ai_r4 = t
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 10
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 10
 go to 20
 10 gam1 = 0.0
 return
@@ -10138,7 +10138,7 @@ do j = 1,30
    a1 = a1 + c0(j)*u1
    a2 = a2 + c0(j)*u2
    if (a1 /= t1) go to 90
-   if ( a2 == t2 ) exit
+   if (a2 == t2) exit
 90 t1 = u1*q1 - u2*q2
    t2 = u1*q2 + u2*q1
    u1 = t1
@@ -10259,8 +10259,8 @@ n = x
 n = n - 1
 !     Let t be the product of a-j when a .GE. 2
 nswc_ai_i4 = n
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 12
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 12
 go to 10
 10 do j = 1,n
    x = x - 1.d0
@@ -10456,8 +10456,8 @@ t = x
 d = x - 0.5d0
 if (d > 0.d0) t = d - 0.5d0
 nswc_ai_r8 = t
-if ( nswc_ai_r8 < 0 ) go to 40
-if ( nswc_ai_r8 == 0 ) go to 10
+if (nswc_ai_r8 < 0) go to 40
+if (nswc_ai_r8 == 0) go to 10
 go to 20
 10 dgam1 = 0.d0
 return

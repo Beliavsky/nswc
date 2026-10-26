@@ -156,41 +156,41 @@ iflag = 0
 70 kub = vstar - vb
 call pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
    & np1,n5,bs,ps,ws,xs,iwk)
-if ( lb + vb <= vstar ) go to 140
+if (lb + vb <= vstar) go to 140
 vstar = lb + vb
 do j = 1,n
    xstar(j) = 0
    do s = 1,i
-      if ( x(s,j) == 0 ) go to 80
+      if (x(s,j) == 0) go to 80
       xstar(j) = s
       exit
 80    continue
    end do
 end do
 ip = pbl(i)
-if ( ip == 0 ) go to 110
+if (ip == 0) go to 110
 do j = 1,ip
    jj = bl(i,j)
-   if ( xl(i,j) == 1 ) xstar(jj) = i
+   if (xl(i,j) == 1) xstar(jj) = i
 end do
 110 i1 = i + 1
 do ii = i1,m
    ip = pbl(ii)
-   if ( ip == 0 ) go to 130
+   if (ip == 0) go to 130
    do j = 1,ip
       jj = bl(ii,j)
-      if ( xl(ii,j) == 1 ) xstar(jj) = ii
+      if (xl(ii,j) == 1) xstar(jj) = ii
    end do
 130 continue
 end do
-if ( ub == lb ) go to 200
+if (ub == lb) go to 200
 ! Step 3 (updating)
-140 if ( v(i) == 0 ) go to 180
+140 if (v(i) == 0) go to 180
 iuv = ub + vb
 u = pbl(i)
 ibv = 0
 do s = 1,u
-   if ( xl(i,s) == 0 ) go to 170
+   if (xl(i,s) == 0) go to 170
    j = bl(i,s)
    x(i,j) = 1
    q(i) = q(i) - w(j)
@@ -198,43 +198,43 @@ do s = 1,u
    b(j) = 0
    bb(i,j) = f(i)
    ubb(j) = iuv
-   if ( iflag == 1 ) go to 150
+   if (iflag == 1) go to 150
    lub = iuv
    lj = j
    li = i
 150 f(i) = j
    ibv = ibv + p(j)
-   if ( ibv == v ( i ) ) exit
+   if (ibv == v(i)) exit
    call parc(i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
       & lx,lxi,lr,lri,lubi)
-   if ( iflag == 1 ) go to 160
+   if (iflag == 1) go to 160
    kub = vstar - vb
    call sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
       & bs,ps,ws,xs,iwk)
    lj = n1
 160 iuv = ub + vb
-   if ( iuv <= vstar ) go to 200
+   if (iuv <= vstar) go to 200
 170 continue
 end do
-180 if ( i == m - 1 ) go to 200
+180 if (i == m - 1) go to 200
 ip1 = i + 1
 call parc(ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
    & lx,lxi,lr,lri,lubi)
-if ( iflag == 1 ) go to 190
+if (iflag == 1) go to 190
 kub = vstar - vb
 call sigma1(n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 lj = n1
-190 if ( ub + vb <= vstar ) go to 200
+190 if (ub + vb <= vstar) go to 200
 i = i + 1
 go to 140
 ! Step 4 (backtracking)
-200 if ( i > 0 ) go to 210
+200 if (i > 0) go to 210
 bck = bck - 1
 return
-210 if ( bck == jbck ) return
+210 if (bck == jbck) return
 bck = bck + 1
-if ( f(i) /= (-1) ) go to 230
+if (f(i) /= (-1)) go to 230
 do j = 1,n
    bb(i,j) = 0
 end do
@@ -246,10 +246,10 @@ b(j) = 1
 vb = vb - p(j)
 q(i) = q(i) + w(j)
 do s = 1,n
-   if ( bb(i,s) == j ) bb(i,s) = 0
+   if (bb(i,s) == j) bb(i,s) = 0
 end do
 f(i) = bb(i,j)
-if ( ubb(j) <= vstar ) go to 200
+if (ubb(j) <= vstar) go to 200
 ub = ubb(j) - vb
 iflag = 1
 go to 70
@@ -303,7 +303,7 @@ end do
 sb = 0
 do j = 1,n
    lx(j) = 0
-   if ( b(j) == 0 ) go to 20
+   if (b(j) == 0) go to 20
    ns = ns + 1
    bs(ns) = j
    ps(ns) = p(j)
@@ -311,10 +311,10 @@ do j = 1,n
    sb = sb + w(j)
 20 continue
 end do
-if ( sb > qs ) go to 40
+if (sb > qs) go to 40
 lr = qs - sb
 ub = 0
-if ( ns == 0 ) return
+if (ns == 0) return
 do j = 1,ns
    ub = ub + ps(j)
    xs(j) = 1
@@ -362,7 +362,7 @@ end interface
 ! Step 1
 u = 0
 do j = 1,n
-   if ( b(j) == 0 ) go to 10
+   if (b(j) == 0) go to 10
    u = u + 1
    bs(u) = j
 10 continue
@@ -373,13 +373,13 @@ do j = i,m
 end do
 lb = 0
 ikub = kub
-if ( u == 0 ) return
+if (u == 0) return
 ns = 0
 sb = 0
 do j = 1,u
    jj = bs(j)
-   if ( bb(i,jj) /= 0 ) go to 30
-   if ( w(jj) > q(i) ) go to 30
+   if (bb(i,jj) /= 0) go to 30
+   if (w(jj) > q(i)) go to 30
    ns = ns + 1
    sb = sb + w(jj)
    bl(i,ns) = jj
@@ -390,9 +390,9 @@ end do
 ii = i
 ! Step 2
 40 pbl(ii) = ns
-if ( sb > q(ii) ) go to 60
+if (sb > q(ii)) go to 60
 pb = 0
-if ( ns == 0 ) go to 80
+if (ns == 0) go to 80
 do j = 1,ns
    pb = pb + ps(j)
    xl(ii,j) = 1
@@ -400,7 +400,7 @@ end do
 go to 80
 60 qs = q(ii)
 kub = 0
-if ( ii == m ) kub = ikub
+if (ii == m) kub = ikub
 call sknp(ns,qs,kub,pb,n,np1,n5,ps,ws,xs,iwk)
 do j = 1,ns
    xl(ii,j) = xs(j)
@@ -410,25 +410,25 @@ ikub = ikub - pb
 v(ii) = pb
 bl(ii,ns + 1) = n + 1
 ! Step 3
-if ( ii == m ) return
+if (ii == m) return
 jb = 1
 jbs = 0
 do j = 1,u
-   if ( bs(j) < bl(ii,jb) ) go to 90
+   if (bs(j) < bl(ii,jb)) go to 90
    jb = jb + 1
-   if ( xl(ii,jb - 1) == 1 ) go to 100
+   if (xl(ii,jb - 1) == 1) go to 100
 90 jbs = jbs + 1
    bs(jbs) = bs(j)
 100 continue
 end do
 u = jbs
-if ( u == 0 ) return
+if (u == 0) return
 ns = 0
 sb = 0
 ii = ii + 1
 do j = 1,u
    jj = bs(j)
-   if ( w(jj) > q(ii) ) go to 110
+   if (w(jj) > q(ii)) go to 110
    ns = ns + 1
    sb = sb + w(jj)
    bl(ii,ns) = jj
@@ -452,37 +452,37 @@ integer, intent(in) :: lx(n), lxi(n)
 integer :: i1, iq, j, r, s
 ! Subroutine for parametric computation of the upper bounds.
 iflag = 0
-if ( b(lj) /= 0 ) go to 60
+if (b(lj) /= 0) go to 60
 i1 = i - 1
-if ( i1 < li ) go to 20
+if (i1 < li) go to 20
 iq = 0
 do r = li,i1
    iq = iq + q(r)
 end do
-if ( iq > lr ) return
+if (iq > lr) return
 20 r = ii
 s = f(r)
-30 if ( s /= (-1) ) go to 40
+30 if (s /= (-1)) go to 40
 r = r - 1
 s = f(r)
 go to 30
-40 if ( lx(s) == 0 ) return
-if ( s == lj ) go to 50
+40 if (lx(s) == 0) return
+if (s == lj) go to 50
 s = bb(r,s)
 go to 30
 50 ub = lub - vb
 iflag = 1
 return
 60 i1 = i - 1
-if ( i1 < 1 ) go to 80
+if (i1 < 1) go to 80
 iq = 0
 do r = 1,i1
    iq = iq + q(r)
 end do
-if ( iq > lri ) return
+if (iq > lri) return
 80 do j = 1,n
-   if ( b(j) == 1 ) go to 90
-   if ( lxi(j) == 0 ) return
+   if (b(j) == 1) go to 90
+   if (lxi(j) == 0) return
 90 continue
 end do
 ub = lubi - vb
@@ -553,12 +553,12 @@ ip = 0
 ms = qs
 do l = 1,ns
    ll = l
-   if ( ws ( l ) > ms ) exit
+   if (ws(l) > ms) exit
    ip = ip + ps(l)
    ms = ms - ws(l)
 end do
 ll = ll - 1
-if ( ms == 0 ) go to 50
+if (ms == 0) go to 50
 ps(ns + 1) = 0
 ws(ns + 1) = qs + 1
 lim = ip + (ms*ps(ll + 2))/ws(ll + 2)
@@ -566,13 +566,13 @@ a = ip + ps(ll + 1)
 b = (ws(ll + 1) - ms)*ps(ll)
 c = ws(ll)
 lim1 = a - b/c
-if ( lim1 > lim ) lim = lim1
-if ( lim <= vs ) return
+if (lim1 > lim) lim = lim1
+if (lim <= vs) return
 mink = qs + 1
 min(ns) = mink
 do j = 2,ns
    kk = ns + 2 - j
-   if ( ws(kk) < mink ) mink = ws(kk)
+   if (ws(kk) < mink) mink = ws(kk)
    min(kk - 1) = mink
 end do
 do j = 1,ns
@@ -582,7 +582,7 @@ pr = 0
 lold = ns
 ii = 1
 go to 170
-50 if ( vs >= ip ) return
+50 if (vs >= ip) return
 vs = ip
 do j = 1,ll
    xs(j) = 1
@@ -593,23 +593,23 @@ do j = nn,ns
 end do
 qs = 0
 return
-80 if ( ws(ii) <= qs ) go to 90
+80 if (ws(ii) <= qs) go to 90
 ii1 = ii + 1
-if ( vs >= (qs*ps(ii1))/ws(ii1) + pr ) go to 280
+if (vs >= (qs*ps(ii1))/ws(ii1) + pr) go to 280
 ii = ii1
 go to 80
 90 ip = pbar(ii)
 ms = qs - wbar(ii)
 in = zbar(ii)
 ll = ns
-if ( in > ns) go to 110
+if (in > ns) go to 110
 do l = in,ns
    ll = l
-   if ( ws(l) > ms ) go to 160
+   if (ws(l) > ms) go to 160
    ip = ip + ps(l)
    ms = ms - ws(l)
 end do
-110 if ( vs >= ip + pr ) go to 280
+110 if (vs >= ip + pr) go to 280
 vs = ip + pr
 mfirst = ms
 nn = ii - 1
@@ -619,24 +619,24 @@ end do
 do j = ii,ll
    xs(j) = 1
 end do
-if ( ll == ns ) go to 150
+if (ll == ns) go to 150
 nn = ll + 1
 do j = nn,ns
    xs(j) = 0
 end do
-150 if ( vs /= lim ) go to 280
+150 if (vs /= lim) go to 280
 qs = mfirst
 return
 160 l = ll
 ll = ll - 1
-if ( ms == 0 ) go to 110
-if ( vs >= pr + ip + (ms*ps(l))/ws(l) ) go to 280
+if (ms == 0) go to 110
+if (vs >= pr + ip + (ms*ps(l))/ws(l)) go to 280
 170 wbar(ii) = qs - ms
 pbar(ii) = ip
 zbar(ii) = ll + 1
 d(ii) = 1
 nn = ll - 1
-if ( nn < ii ) go to 190
+if (nn < ii) go to 190
 do j = ii,nn
    wbar(j + 1) = wbar(j) - ws(j)
    pbar(j + 1) = pbar(j) - ps(j)
@@ -652,36 +652,36 @@ end do
 lold = ll
 qs = ms
 pr = pr + ip
-nswc_ai_i4 = ll - ( ns - 2 )
-if ( nswc_ai_i4 < 0 ) go to 240
-if ( nswc_ai_i4 == 0 ) go to 220
+nswc_ai_i4 = ll - (ns - 2)
+if (nswc_ai_i4 < 0) go to 240
+if (nswc_ai_i4 == 0) go to 220
 go to 210
 210 ii = ns
 go to 250
-220 if ( qs < ws(ns) ) go to 230
+220 if (qs < ws(ns)) go to 230
 qs = qs - ws(ns)
 pr = pr + ps(ns)
 d(ns) = 1
 230 ii = ns - 1
 go to 250
 240 ii = ll + 2
-if ( qs >= min(ii - 1) ) go to 80
-250 if ( vs >= pr ) go to 270
+if (qs >= min(ii - 1)) go to 80
+250 if (vs >= pr) go to 270
 vs = pr
 do j = 1,ns
    xs(j) = d(j)
 end do
 mfirst = qs
-if ( vs == lim ) return
-270 if ( d(ns) == 0 ) go to 280
+if (vs == lim) return
+270 if (d(ns) == 0) go to 280
 d(ns) = 0
 qs = qs + ws(ns)
 pr = pr - ps(ns)
 280 nn = ii - 1
-if ( nn == 0 ) go to 300
+if (nn == 0) go to 300
 do j = 1,nn
    kk = ii - j
-   if ( d(kk) == 1 ) go to 310
+   if (d(kk) == 1) go to 310
 end do
 300 qs = mfirst
 return
@@ -689,21 +689,21 @@ return
 qs = qs + ws(kk)
 pr = pr - ps(kk)
 d(kk) = 0
-if ( r < min(kk) ) go to 320
+if (r < min(kk)) go to 320
 ii = kk + 1
 go to 80
 320 nn = kk + 1
 ii = kk
-330 if ( vs >= pr + (qs*ps(nn))/ws(nn) ) go to 280
+330 if (vs >= pr + (qs*ps(nn))/ws(nn)) go to 280
 diff = ws(nn) - ws(kk)
 nswc_ai_i4 = diff
-if ( nswc_ai_i4 < 0 ) go to 390
-if ( nswc_ai_i4 == 0 ) go to 340
+if (nswc_ai_i4 < 0) go to 390
+if (nswc_ai_i4 == 0) go to 340
 go to 350
 340 nn = nn + 1
 go to 330
-350 if ( diff > r ) go to 340
-if ( vs >= pr + ps(nn) ) go to 340
+350 if (diff > r) go to 340
+if (vs >= pr + ps(nn)) go to 340
 vs = pr + ps(nn)
 do j = 1,kk
    xs(j) = d(j)
@@ -714,7 +714,7 @@ do j = jj,ns
 end do
 xs(nn) = 1
 mfirst = qs - ws(nn)
-if ( vs /= lim ) go to 380
+if (vs /= lim) go to 380
 qs = mfirst
 return
 380 r = r - diff
@@ -722,9 +722,9 @@ kk = nn
 nn = nn + 1
 go to 330
 390 t = r - diff
-if ( t < min(nn) ) go to 340
+if (t < min(nn)) go to 340
 n1 = nn + 1
-if ( vs >= pr + ps(nn) + (t*ps(n1))/ws(n1) ) go to 280
+if (vs >= pr + ps(nn) + (t*ps(n1))/ws(n1)) go to 280
 qs = qs - ws(nn)
 pr = pr + ps(nn)
 d(nn) = 1
@@ -979,7 +979,7 @@ do i = 1,6
    x1 = max(x1, xl)
    call cond(fun,x1,cnd,num1,ier)
    num = num + num1
-   if ( .not. cnd ) exit
+   if (.not. cnd) exit
    x2 = x1
    if (x1 == xl) go to 400
    x1 = 10.0*x1
@@ -2236,7 +2236,7 @@ do last = 2,limit
 !           bisected next).
 30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if ( ier /= 0 ) exit
+   if (ier /= 0) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -2274,10 +2274,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if ( abserr <= ertest ) exit
+   if (abserr <= ertest) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if ( ier == 5 ) exit
+   if (ier == 5) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -2646,8 +2646,8 @@ c72 = .309016994374947
 s120 = .86602540378444
 ierr = 0
 nswc_ai_i4 = n - 1
-if ( nswc_ai_i4 < 0 ) go to 1000
-if ( nswc_ai_i4 == 0 ) go to 960
+if (nswc_ai_i4 < 0) go to 1000
+if (nswc_ai_i4 == 0) go to 960
 go to 5
 5 inc = isn
 if (isn >= 0) go to 10
@@ -3240,8 +3240,8 @@ real :: tsqx
 integer :: nswc_ai_i4
 real, parameter :: sqrt2 = 1.4142135623731
 nswc_ai_i4 = n - 2
-if ( nswc_ai_i4 < 0 ) go to 102
-if ( nswc_ai_i4 == 0 ) go to 101
+if (nswc_ai_i4 < 0) go to 102
+if (nswc_ai_i4 == 0) go to 101
 go to 103
 101 tsqx = sqrt2*x(2)
 x(2) = x(1) - tsqx
@@ -3321,8 +3321,8 @@ real :: x1
 integer :: nswc_ai_i4
 real, parameter :: tsqrt2 = 2.82842712474619
 nswc_ai_i4 = n - 2
-if ( nswc_ai_i4 < 0 ) go to 101
-if ( nswc_ai_i4 == 0 ) go to 102
+if (nswc_ai_i4 < 0) go to 101
+if (nswc_ai_i4 == 0) go to 102
 go to 103
 101 x(1) = 4.*x(1)
 return
@@ -3509,14 +3509,14 @@ nl = n
 nf = 0
 j = 0
 101 j = j + 1
-if ( ( j - 4 ) <= 0 ) go to 102
+if ((j - 4) <= 0) go to 102
 go to 103
 102 ntry = ntryh(j)
 go to 104
 103 ntry = ntry + 2
 104 nq = nl/ntry
 nr = nl - ntry*nq
-if ( ( nr ) == 0 ) go to 105
+if ((nr) == 0) go to 105
 go to 101
 105 nf = nf + 1
 ifac(nf + 2) = ntry
@@ -3682,8 +3682,8 @@ do k = 1,l1
    ch(1,k,2) = cc(1,1,k) - cc(ido,2,k)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -3804,8 +3804,8 @@ do k = 1,l1
    ch(1,k,4) = tr1 + tr4
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -4279,8 +4279,8 @@ do k = 1,l1
    ch(ido,2,k) = cc(1,k,1) - cc(1,k,2)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
@@ -4397,8 +4397,8 @@ do k = 1,l1
    ch(1,3,k) = cc(1,k,4) - cc(1,k,2)
 end do
 nswc_ai_i4 = ido - 2
-if ( nswc_ai_i4 < 0 ) go to 107
-if ( nswc_ai_i4 == 0 ) go to 105
+if (nswc_ai_i4 < 0) go to 107
+if (nswc_ai_i4 == 0) go to 105
 go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 111
@@ -5924,8 +5924,8 @@ if (dx > charf) return
 !         Compute dtest for the local error criterion
 if (norm == three) go to 30
 nswc_ai_i4 = edist - 1
-if ( nswc_ai_i4 < 0 ) go to 10
-if ( nswc_ai_i4 == 0 ) go to 20
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
 go to 30
 10 dtest = dx*dsctol
 go to 40
@@ -6304,7 +6304,7 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if ( ( np - 15 ) <= 0 ) go to 190
+if ((np - 15) <= 0) go to 190
 go to 260
 170 fact = 1.0/fact
 180 fact = 1.0/sqrt(fact)
@@ -6565,7 +6565,7 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if ( ( np - 15 ) <= 0 ) go to 190
+if ((np - 15) <= 0) go to 190
 go to 260
 170 fact = 1.d0/fact
 180 fact = 1.d0/sqrt(fact)
@@ -6640,9 +6640,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 60
-nswc_ai_r4 = a - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 60
+nswc_ai_r4 = a - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 60
 go to 30
 20 ir = i
 go to 10
@@ -6682,9 +6682,9 @@ xx = xi(1)
 ilold = 0
 !     Find the subinterval which contains xx. i = 1 If xx.LT.x(2)
 !     AND i = n IF xx.GE.x(n). OTHERWISE x(i).LE.xx.LT.x(i+1).
-nswc_ai_r4 = xx - x ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 11
+nswc_ai_r4 = xx - x(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 11
 go to 20
 10 i = 1
 il = 1
@@ -6693,9 +6693,9 @@ go to 80
 11 i = 1
 yi(k) = y(1)
 go to 110
-20 nswc_ai_r4 = x ( n ) - xx
-if ( nswc_ai_r4 < 0 ) go to 21
-if ( nswc_ai_r4 == 0 ) go to 22
+20 nswc_ai_r4 = x(n) - xx
+if (nswc_ai_r4 < 0) go to 21
+if (nswc_ai_r4 == 0) go to 22
 go to 23
 21 i = n
 il = n - m + 1
@@ -6709,9 +6709,9 @@ ir = n
 !     Bisection search
 30 i = (il + ir)/2
 if (i == il) go to 50
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 31
-if ( nswc_ai_r4 == 0 ) go to 32
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 31
+if (nswc_ai_r4 == 0) go to 32
 go to 33
 31 ir = i
 go to 30
@@ -6720,9 +6720,9 @@ go to 110
 33 il = i
 go to 30
 !     Linear forward search
-40 nswc_ai_r4 = xx - x ( i + 1 )
-if ( nswc_ai_r4 < 0 ) go to 50
-if ( nswc_ai_r4 == 0 ) go to 41
+40 nswc_ai_r4 = xx - x(i + 1)
+if (nswc_ai_r4 < 0) go to 50
+if (nswc_ai_r4 == 0) go to 41
 go to 42
 41 i = i + 1
 yi(k) = y(i)
@@ -6784,17 +6784,17 @@ end do
 110 if (k >= ni) return
 k = k + 1
 xx = xi(k)
-nswc_ai_r4 = xx - x ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 11
+nswc_ai_r4 = xx - x(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 11
 go to 111
-111 nswc_ai_r4 = x ( n ) - xx
-if ( nswc_ai_r4 < 0 ) go to 21
-if ( nswc_ai_r4 == 0 ) go to 22
+111 nswc_ai_r4 = x(n) - xx
+if (nswc_ai_r4 < 0) go to 21
+if (nswc_ai_r4 == 0) go to 22
 go to 120
-120 nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 121
-if ( nswc_ai_r4 == 0 ) go to 122
+120 nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 121
+if (nswc_ai_r4 == 0) go to 122
 go to 40
 121 il = 1
 ir = min(i + 1,n)
@@ -6829,7 +6829,7 @@ r = 0.0
 iend = 0
 ibeg = 1
 do k = 2,n
-   if ( ( x ( k ) - x ( k - 1 ) ) == 0 ) go to 20
+   if ((x(k) - x(k - 1)) == 0) go to 20
    go to 10
 10 f = 1.0
    r = 0.0
@@ -6838,7 +6838,7 @@ do k = 2,n
    t(1) = y(k)
    do i = 1,iend
       diff = x(i) - x(k)
-      if ( ( diff ) == 0 ) go to 31
+      if ((diff) == 0) go to 31
       go to 11
 11    t(i + 1) = (a(i) - t(i))/diff
    end do
@@ -7048,9 +7048,9 @@ if (nd < 1.or.np < 2) go to 200
 nw = 0
 dsum = 0.d0
 do k = 1,np
-   nswc_ai_r4 = w ( k )
-   if ( nswc_ai_r4 < 0 ) go to 202
-   if ( nswc_ai_r4 == 0 ) go to 13
+   nswc_ai_r4 = w(k)
+   if (nswc_ai_r4 < 0) go to 202
+   if (nswc_ai_r4 == 0) go to 13
    go to 10
 10 nw = nw + 1
    dsum = dsum + dble(w(k))
@@ -7213,8 +7213,8 @@ ierr = 0
 !     the form
 !             c(1)*S(1) + b(1)*S(2) = a(1)
 nswc_ai_i4 = ibeg - 1
-if ( nswc_ai_i4 < 0 ) go to 20
-if ( nswc_ai_i4 == 0 ) go to 30
+if (nswc_ai_i4 < 0) go to 20
+if (nswc_ai_i4 == 0) go to 30
 go to 40
 !     No condition at left end.
 20 c(1) = b(3)
@@ -7244,8 +7244,8 @@ end do
 !     last equation from the second boundary condition, of the form
 !                r*S(n-1) + c(n)*S(n) = a(n)
 nswc_ai_i4 = iend - 1
-if ( nswc_ai_i4 < 0 ) go to 60
-if ( nswc_ai_i4 == 0 ) go to 80
+if (nswc_ai_i4 < 0) go to 60
+if (nswc_ai_i4 == 0) go to 80
 go to 90
 60 if (n == 3 .and. ibeg == 0) go to 70
 !     No condition at the right end. Either  n .GE. 4  or
@@ -7632,9 +7632,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -7657,9 +7657,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,n)
@@ -7715,9 +7715,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -7745,9 +7745,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -7803,9 +7803,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -7836,9 +7836,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -7900,9 +7900,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -7929,9 +7929,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,n)
@@ -7989,9 +7989,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -8023,9 +8023,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -8083,9 +8083,9 @@ ir = nm1
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 100
 go to 30
 20 ir = i
 go to 10
@@ -8119,9 +8119,9 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
+nswc_ai_r4 = xx - xi(k - 1)
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 100
 go to 50
 110 il = 1
 ir = min(i + 1,nm1)
@@ -8614,9 +8614,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 90
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 90
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 90
 go to 30
 20 ir = i
 go to 10
@@ -8640,8 +8640,8 @@ if (t0 < 0.0) t0 = 1.0 + t0
 xx = x1 + t0*h
 if (xx >= x(n)) go to 120
 nswc_ai_r4 = xx - xold
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 90
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 90
 go to 40
 110 il = 1
 ir = min(i + 1,n)
@@ -8688,9 +8688,9 @@ ir = n
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 90
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 90
+nswc_ai_r4 = xx - x(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 90
 go to 30
 20 ir = i
 go to 10
@@ -8718,8 +8718,8 @@ if (t0 < 0.0) t0 = 1.0 + t0
 xx = x1 + t0*h
 if (xx >= x(n)) go to 120
 nswc_ai_r4 = xx - xold
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 90
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 90
 go to 40
 110 il = 1
 ir = min(i + 1,n)
@@ -8952,9 +8952,9 @@ ir = m
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 50
-nswc_ai_r4 = t0 - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 50
+nswc_ai_r4 = t0 - t(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 50
 go to 30
 20 ir = i
 go to 10
@@ -8997,8 +8997,8 @@ t0 = ti(k) - j
 if (t0 < 0.0) t0 = 1.0 + t0
 if (t0 >= t(m)) go to 60
 nswc_ai_r4 = t0 - told
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 50
+if (nswc_ai_r4 < 0) go to 110
+if (nswc_ai_r4 == 0) go to 50
 go to 40
 110 il = 1
 ir = min(i + 1,m)
@@ -9027,9 +9027,9 @@ ir = m
 !     Bisection search
 10 i = (il + ir)/2
 if (i == il) go to 40
-nswc_ai_r4 = t0 - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 40
+nswc_ai_r4 = t0 - t(i)
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 40
 go to 30
 20 ir = i
 go to 10
@@ -10517,9 +10517,9 @@ ir = i
 !     Bisection search
 30 i = (il + ir)/2
 if (i == il) go to 110
-nswc_ai_r4 = x - t ( i )
-if ( nswc_ai_r4 < 0 ) go to 40
-if ( nswc_ai_r4 == 0 ) go to 60
+nswc_ai_r4 = x - t(i)
+if (nswc_ai_r4 < 0) go to 40
+if (nswc_ai_r4 == 0) go to 60
 go to 50
 40 ir = i
 go to 30

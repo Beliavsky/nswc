@@ -18,6 +18,7 @@ from modernize_arithmetic_if import emit
 from modernize_do import masked, has_comma
 from name_procedure_ends import statements, split_line, code_comment
 from remove_unused_labels import action, references
+from normalize_fixed_spacing import transform as normalize_spacing
 
 MANIFEST = Path(__file__).with_name('goto-exits.json')
 
@@ -60,7 +61,7 @@ def render(lines, statement, code):
         raise ValueError('sequence field requires review')
     indent = re.match(r'\s*', raw[6:72])[0]
     _, comment, _ = code_comment(raw[6:72])
-    result = emit(code.strip(), raw[:5].strip(), indent, newline)
+    result = normalize_spacing(emit(code.strip(), raw[:5].strip(), indent, newline).encode('latin-1')).decode('latin-1')
     if comment:
         result += '      ' + comment + newline
     return result

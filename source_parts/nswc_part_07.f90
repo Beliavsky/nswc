@@ -106,7 +106,7 @@ end do
 do jb = 1,nb
    do i = 1,k
       b(i,jb) = b(i,jb)/a(i,i)
-      if ( i == k ) exit
+      if (i == k) exit
       ip1 = i + 1
       call daxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
    end do
@@ -693,7 +693,7 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-60 if ( ( cl ) <= 0 ) go to 130
+60 if ((cl) <= 0) go to 130
 go to 70
 70 if (ncv <= 0) return
 b = dble(up)*dble(u(1,lpivot))
@@ -1270,7 +1270,7 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-60 if ( ( cl ) <= 0 ) go to 130
+60 if ((cl) <= 0) go to 130
 go to 70
 70 if (ncv <= 0) return
 b = up*u(1,lpivot)
@@ -3015,26 +3015,26 @@ do jj = isol,nsoln
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
 1170 continue
 end do
-1270 select case ( igo958 )
-case ( 310 )
+1270 select case (igo958)
+case (310)
    go to 310
-case ( 1010 )
+case (1010)
    go to 1010
 end select
-1280 select case ( igo897 )
-case ( 880 )
+1280 select case (igo897)
+case (880)
    go to 880
-case ( 900 )
+case (900)
    go to 900
 end select
-1290 select case ( igo938 )
-case ( 460 )
+1290 select case (igo938)
+case (460)
    go to 460
-case ( 480 )
+case (480)
    go to 480
-case ( 500 )
+case (500)
    go to 500
-case ( 520 )
+case (520)
    go to 520
 end select
 end subroutine wnlsm
@@ -3378,28 +3378,28 @@ call sswap(m, w(1,max), 1, w(1,i), 1)
 t = h(max)
 h(max) = h(i)
 h(i) = t
-570 select case ( igo993 )
-case ( 30 )
+570 select case (igo993)
+case (30)
    go to 30
-case ( 200 )
+case (200)
    go to 200
-case ( 330 )
+case (330)
    go to 330
-case ( 120 )
+case (120)
    go to 120
 end select
-590 select case ( igo990 )
-case ( 40 )
+590 select case (igo990)
+case (40)
    go to 40
-case ( 240 )
+case (240)
    go to 240
 end select
-600 select case ( igo996 )
-case ( 20 )
+600 select case (igo996)
+case (20)
    go to 20
-case ( 190 )
+case (190)
    go to 190
-case ( 320 )
+case (320)
    go to 320
 end select
 end subroutine wnlit
@@ -4662,9 +4662,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -5013,9 +5013,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -5333,9 +5333,9 @@ t3 = one + test3
 t2 = one + test2
 t1 = one + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one   ) istop = 6
-if (t2 <= one   ) istop = 5
-if (t1 <= one   ) istop = 4
+if (t3 <= one) istop = 6
+if (t2 <= one) istop = 5
+if (t1 <= one) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -5402,8 +5402,8 @@ fv = f(v)
 !        Location of the region of a local minimum
 10 if (e <= eps0*(1.0 + abs(a))) go to 40
 nswc_ai_r4 = fu - fv
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 11
+if (nswc_ai_r4 < 0) go to 20
+if (nswc_ai_r4 == 0) go to 11
 go to 30
 11 if (fu > f(b)) go to 30
 20 b = v
@@ -5497,8 +5497,8 @@ go to 201
 !                    Report the results
 240 ind = 0
 241 nswc_ai_r4 = fu - fv
-if ( nswc_ai_r4 < 0 ) go to 242
-if ( nswc_ai_r4 == 0 ) go to 243
+if (nswc_ai_r4 < 0) go to 242
+if (nswc_ai_r4 == 0) go to 243
 go to 244
 242 x = u
 w = fu
@@ -7280,7 +7280,7 @@ do j = 1, n
    if (h == zero) h = eps
    x(j) = temp + h
    call fcn(n,x,wa1,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    x(j) = temp
    do i = 1, n
       fjac(i,j) = (wa1(i) - fvec(i))/h
@@ -7297,7 +7297,7 @@ do k = 1, msum
       x(j) = wa2(j) + h
    end do
    call fcn(n,x,wa1,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    do j = k, n, msum
       x(j) = wa2(j)
       h = eps*abs(wa2(j))
@@ -7395,7 +7395,7 @@ do j = 1, n
    if (h == zero) h = eps
    x(j) = temp + h
    call fcn(m,n,x,wa,iflag)
-   if ( iflag < 0 ) exit
+   if (iflag < 0) exit
    x(j) = temp
    do i = 1, m
       fjac(i,j) = (wa(i) - fvec(i))/h
@@ -8562,8 +8562,8 @@ do j = jmin,n
 end do
 203 if (jp /= 0) go to 300
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 800
-if ( nswc_ai_i4 == 0 ) go to 230
+if (nswc_ai_i4 < 0) go to 800
+if (nswc_ai_i4 == 0) go to 230
 go to 250
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -8649,8 +8649,8 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 360 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 400
-if ( nswc_ai_i4 == 0 ) go to 430
+if (nswc_ai_i4 < 0) go to 400
+if (nswc_ai_i4 == 0) go to 430
 go to 440
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -8662,8 +8662,8 @@ do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 401
-   if ( nswc_ai_r4 == 0 ) go to 402
+   if (nswc_ai_r4 < 0) go to 401
+   if (nswc_ai_r4 == 0) go to 402
    go to 403
 401 epsi = ratio
    npos = 1
@@ -8703,8 +8703,8 @@ do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 431
-   if ( nswc_ai_r4 == 0 ) go to 432
+   if (nswc_ai_r4 < 0) go to 431
+   if (nswc_ai_r4 == 0) go to 432
    go to 433
 431 epsi = ratio
    npos = 1
@@ -8720,17 +8720,17 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   nswc_ai_r4 = y ( i )
-   if ( nswc_ai_r4 < 0 ) go to 441
-   if ( nswc_ai_r4 == 0 ) go to 445
+   nswc_ai_r4 = y(i)
+   if (nswc_ai_r4 < 0) go to 441
+   if (nswc_ai_r4 == 0) go to 445
    go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 443
-   if ( nswc_ai_r4 == 0 ) go to 444
+   if (nswc_ai_r4 < 0) go to 443
+   if (nswc_ai_r4 == 0) go to 444
    go to 445
 443 epsi = ratio
    npos = 1
@@ -8816,7 +8816,7 @@ do j = 1,m
    end do
    rerr = max(rerr,abs(1.0 - sum))
    k = k + 1
-   if ( k >= mcheck ) exit
+   if (k >= mcheck) exit
 521 continue
 end do
 if (rerr <= 1.e-2) go to 600
@@ -8828,7 +8828,7 @@ go to 100
 if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if ( jp == ibasis ( ip ) ) exit
+   if (jp == ibasis(ip)) exit
 end do
 ibasis(ip) = iout
 basis(jp) = 0
@@ -8839,8 +8839,8 @@ go to 100
 go to 220
 !       Set up the r array for the NSTEP = 1 Case
 600 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 601
-if ( nswc_ai_i4 == 0 ) go to 630
+if (nswc_ai_i4 < 0) go to 601
+if (nswc_ai_i4 == 0) go to 630
 go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
@@ -8859,9 +8859,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 620
-      if ( nswc_ai_r4 == 0 ) go to 622
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 620
+      if (nswc_ai_r4 == 0) go to 622
       go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
@@ -8890,9 +8890,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 640
-      if ( nswc_ai_r4 == 0 ) go to 642
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 640
+      if (nswc_ai_r4 == 0) go to 642
       go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
@@ -9033,9 +9033,9 @@ end do
 850 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   nswc_ai_r4 = xb ( i )
-   if ( nswc_ai_r4 < 0 ) go to 851
-   if ( nswc_ai_r4 == 0 ) go to 856
+   nswc_ai_r4 = xb(i)
+   if (nswc_ai_r4 < 0) go to 851
+   if (nswc_ai_r4 == 0) go to 856
    go to 852
 851 sgn = -1.0
    dsump = 0.d0
@@ -9062,8 +9062,8 @@ do i = 1,m
 856 continue
 end do
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 860
-if ( nswc_ai_i4 == 0 ) go to 870
+if (nswc_ai_i4 < 0) go to 860
+if (nswc_ai_i4 == 0) go to 870
 go to 880
 !         Check the refinement (NSTEP = 1)
 860 do i = 1,m
@@ -9426,8 +9426,8 @@ do j = jmin,n
 end do
 203 if (jp /= 0) go to 300
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 800
-if ( nswc_ai_i4 == 0 ) go to 230
+if (nswc_ai_i4 < 0) go to 800
+if (nswc_ai_i4 == 0) go to 230
 go to 250
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -9510,8 +9510,8 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 360 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 400
-if ( nswc_ai_i4 == 0 ) go to 430
+if (nswc_ai_i4 < 0) go to 400
+if (nswc_ai_i4 == 0) go to 430
 go to 440
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -9523,8 +9523,8 @@ do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 401
-   if ( nswc_ai_r4 == 0 ) go to 402
+   if (nswc_ai_r4 < 0) go to 401
+   if (nswc_ai_r4 == 0) go to 402
    go to 403
 401 epsi = ratio
    npos = 1
@@ -9564,8 +9564,8 @@ do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 431
-   if ( nswc_ai_r4 == 0 ) go to 432
+   if (nswc_ai_r4 < 0) go to 431
+   if (nswc_ai_r4 == 0) go to 432
    go to 433
 431 epsi = ratio
    npos = 1
@@ -9581,17 +9581,17 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   nswc_ai_r4 = y ( i )
-   if ( nswc_ai_r4 < 0 ) go to 441
-   if ( nswc_ai_r4 == 0 ) go to 445
+   nswc_ai_r4 = y(i)
+   if (nswc_ai_r4 < 0) go to 441
+   if (nswc_ai_r4 == 0) go to 445
    go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
    nswc_ai_r4 = ratio - epsi
-   if ( nswc_ai_r4 < 0 ) go to 443
-   if ( nswc_ai_r4 == 0 ) go to 444
+   if (nswc_ai_r4 < 0) go to 443
+   if (nswc_ai_r4 == 0) go to 444
    go to 445
 443 epsi = ratio
    npos = 1
@@ -9680,7 +9680,7 @@ do j = 1,m
    end do
    rerr = max(rerr,abs(1.0 - sum))
    k = k + 1
-   if ( k >= mcheck ) exit
+   if (k >= mcheck) exit
 521 continue
 end do
 if (rerr <= 1.e-2) go to 600
@@ -9692,7 +9692,7 @@ go to 100
 if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if ( jp == ibasis ( ip ) ) exit
+   if (jp == ibasis(ip)) exit
 end do
 ibasis(ip) = iout
 basis(jp) = 0
@@ -9703,8 +9703,8 @@ go to 100
 go to 220
 !       Set up the r array for the NSTEP = 1 Case
 600 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 601
-if ( nswc_ai_i4 == 0 ) go to 630
+if (nswc_ai_i4 < 0) go to 601
+if (nswc_ai_i4 == 0) go to 630
 go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
@@ -9723,9 +9723,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 620
-      if ( nswc_ai_r4 == 0 ) go to 622
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 620
+      if (nswc_ai_r4 == 0) go to 622
       go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
@@ -9754,9 +9754,9 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      nswc_ai_r4 = bi( l , j )
-      if ( nswc_ai_r4 < 0 ) go to 640
-      if ( nswc_ai_r4 == 0 ) go to 642
+      nswc_ai_r4 = bi(l , j)
+      if (nswc_ai_r4 < 0) go to 640
+      if (nswc_ai_r4 == 0) go to 642
       go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
@@ -9913,9 +9913,9 @@ end do
 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   nswc_ai_r4 = xb ( i )
-   if ( nswc_ai_r4 < 0 ) go to 851
-   if ( nswc_ai_r4 == 0 ) go to 856
+   nswc_ai_r4 = xb(i)
+   if (nswc_ai_r4 < 0) go to 851
+   if (nswc_ai_r4 == 0) go to 856
    go to 852
 851 sgn = -1.0
    dsump = 0.d0
@@ -9942,8 +9942,8 @@ do i = 1,m
 856 continue
 end do
 nswc_ai_i4 = nstep - 2
-if ( nswc_ai_i4 < 0 ) go to 860
-if ( nswc_ai_i4 == 0 ) go to 870
+if (nswc_ai_i4 < 0) go to 860
+if (nswc_ai_i4 == 0) go to 870
 go to 880
 !         Check the refinement (NSTEP = 1)
 860 do i = 1,m
@@ -10010,9 +10010,9 @@ do k = 1,iend
    kk = kcol + k
    nk = kcol + n
    do lk = kk,nk
-      nswc_ai_r4 = a ( lk )
-      if ( nswc_ai_r4 < 0 ) go to 20
-      if ( nswc_ai_r4 == 0 ) go to 10
+      nswc_ai_r4 = a(lk)
+      if (nswc_ai_r4 < 0) go to 20
+      if (nswc_ai_r4 == 0) go to 10
       go to 30
 10    continue
    end do
@@ -10300,11 +10300,11 @@ t = 0
 do j = 1,n
    s = a(1,j)
    do l = 2,n
-      if ( a(l,j) < s ) s = a(l,j)
+      if (a(l,j) < s) s = a(l,j)
    end do
    nswc_ai_i4 = s
-   if ( nswc_ai_i4 < 0 ) go to 20
-   if ( nswc_ai_i4 == 0 ) go to 40
+   if (nswc_ai_i4 < 0) go to 20
+   if (nswc_ai_i4 == 0) go to 40
    go to 30
 20 mm = maxnum + s
    if (t < -mm) go to 400
@@ -10325,7 +10325,7 @@ end do
 do i = 1,n
    q = a(i,1)
    do l = 2,n
-      if ( a(i,l) < q ) q = a(i,l)
+      if (a(i,l) < q) q = a(i,l)
    end do
    mm = maxnum - q
    if (t > mm) go to 400
@@ -10333,7 +10333,7 @@ do i = 1,n
    l = np1
    do j = 1,n
       a(i,j) = a(i,j) - q
-      if ( a(i,j) /= 0 ) go to 60
+      if (a(i,j) /= 0) go to 60
       a(i,l) = -j
       l = j
 60    continue
@@ -10344,23 +10344,23 @@ k = np1
 do i = 1,n
    lj = np1
    j = -a(i,np1)
-80 if ( c(j) == 0 ) go to 130
+80 if (c(j) == 0) go to 130
    lj = j
    j = -a(i,j)
-   if ( j /= 0 ) go to 80
+   if (j /= 0) go to 80
    lj = np1
    j = -a(i,np1)
 90 r = c(j)
    lm = lz(r)
    m = nz(r)
-100 if ( m == 0 ) go to 110
-   if ( c(m) == 0 ) go to 120
+100 if (m == 0) go to 110
+   if (c(m) == 0) go to 120
    lm = m
    m = -a(r,m)
    go to 100
 110 lj = j
    j = -a(i,j)
-   if ( j /= 0 ) go to 90
+   if (j /= 0) go to 90
    u(k) = i
    k = i
    go to 140
@@ -10378,7 +10378,7 @@ do i = 1,n
 140 continue
 end do
 ! Research of a new assignment
-150 if ( u(np1) == 0 ) return
+150 if (u(np1) == 0) return
 do i = 1,n
    ch(i) = 0
    lc(i) = 0
@@ -10391,39 +10391,39 @@ kslr = 1
 r = u(np1)
 lr(r) = -1
 slr(1) = r
-if ( a(r,np1) == 0 ) go to 220
+if (a(r,np1) == 0) go to 220
 170 l = -a(r,np1)
-if ( a(r,l) == 0 ) go to 180
-if ( rh(r) /= 0 ) go to 180
+if (a(r,l) == 0) go to 180
+if (rh(r) /= 0) go to 180
 rh(r) = rh(np1)
 ch(r) = -a(r,l)
 rh(np1) = r
-180 if ( lc(l) == 0 ) go to 200
-if ( rh(r) == 0 ) go to 210
+180 if (lc(l) == 0) go to 200
+if (rh(r) == 0) go to 210
 190 l = ch(r)
 ch(r) = -a(r,l)
-if ( a(r,l) /= 0 ) go to 180
+if (a(r,l) /= 0) go to 180
 rh(np1) = rh(r)
 rh(r) = 0
 go to 180
 200 lc(l) = r
-if ( c(l) == 0 ) go to 360
+if (c(l) == 0) go to 360
 kslc = kslc + 1
 slc(kslc) = l
 r = c(l)
 lr(r) = l
 kslr = kslr + 1
 slr(kslr) = r
-if ( a(r,np1) /= 0 ) go to 170
+if (a(r,np1) /= 0) go to 170
 210 continue
-if ( rh(np1) > 0 ) go to 350
+if (rh(np1) > 0) go to 350
 ! Reduction of the current cost matrix
 220 h = maxnum
 do j = 1,n
-   if ( lc(j) /= 0 ) go to 240
+   if (lc(j) /= 0) go to 240
    do k = 1,kslr
       i = slr(k)
-      if ( a(i,j) < h ) h = a(i,j)
+      if (a(i,j) < h) h = a(i,j)
    end do
 240 continue
 end do
@@ -10431,18 +10431,18 @@ mm = maxnum - h
 if (mm == 0 .or. t > mm) go to 400
 t = t + h
 do j = 1,n
-   if ( lc(j) /= 0 ) go to 290
+   if (lc(j) /= 0) go to 290
    do k = 1,kslr
       i = slr(k)
       a(i,j) = a(i,j) - h
-      if ( a(i,j) /= 0 ) go to 280
-      if ( rh(i) /= 0 ) go to 250
+      if (a(i,j) /= 0) go to 280
+      if (rh(i) /= 0) go to 250
       rh(i) = rh(np1)
       ch(i) = j
       rh(np1) = i
 250   l = np1
 260   nl = -a(i,l)
-      if ( nl == 0 ) go to 270
+      if (nl == 0) go to 270
       l = nl
       go to 260
 270   a(i,l) = -j
@@ -10450,15 +10450,15 @@ do j = 1,n
    end do
 290 continue
 end do
-if ( kslc == 0 ) go to 350
+if (kslc == 0) go to 350
 do i = 1,n
-   if ( lr(i) /= 0 ) go to 340
+   if (lr(i) /= 0) go to 340
    do k = 1,kslc
       j = slc(k)
-      if ( a(i,j) > 0 ) go to 320
+      if (a(i,j) > 0) go to 320
       l = np1
 300   nl = - a(i,l)
-      if ( nl == j ) go to 310
+      if (nl == j) go to 310
       l = nl
       go to 300
 310   a(i,l) = a(i,j)
@@ -10477,12 +10477,12 @@ go to 190
 360 c(l) = r
 m = np1
 370 nm = -a(r,m)
-if ( nm == l ) go to 380
+if (nm == l) go to 380
 m = nm
 go to 370
 380 a(r,m) = a(r,l)
 a(r,l) = 0
-if ( lr(r) < 0 ) go to 390
+if (lr(r) < 0) go to 390
 l = lr(r)
 a(r,l) = a(r,np1)
 a(r,np1) = -l

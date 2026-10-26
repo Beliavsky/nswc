@@ -331,8 +331,8 @@ do k = 1,n
 30 pk = ppk
    ppk = p(pk)
    nswc_ai_i4 = ppk - vj
-   if ( nswc_ai_i4 < 0 ) go to 30
-   if ( nswc_ai_i4 == 0 ) go to 1003
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
    go to 40
 40 p(vj) = ppk
    p(pk) = vj
@@ -364,15 +364,15 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
       nswc_ai_i4 = vj - ppk
-      if ( nswc_ai_i4 < 0 ) go to 60
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
       go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
       nswc_ai_i4 = ppk - vj
-      if ( nswc_ai_i4 < 0 ) go to 70
-      if ( nswc_ai_i4 == 0 ) go to 90
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
       go to 80
 80    p(vj) = ppk
       p(pk) = vj
@@ -795,8 +795,8 @@ do k = 1,n
 21 m = pm
    pm = p(m)
    nswc_ai_i4 = pm - j
-   if ( nswc_ai_i4 < 0 ) go to 21
-   if ( nswc_ai_i4 == 0 ) go to 210
+   if (nswc_ai_i4 < 0) go to 21
+   if (nswc_ai_i4 == 0) go to 210
    go to 22
 22 p(m) = j
    p(j) = pm
@@ -824,15 +824,15 @@ do k = 1,n
       j = ic(lj)
       if (w(j) /= zero) go to 43
       nswc_ai_i4 = j - pm
-      if ( nswc_ai_i4 < 0 ) go to 40
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 40
+      if (nswc_ai_i4 == 0) go to 43
       go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
       nswc_ai_i4 = pm - j
-      if ( nswc_ai_i4 < 0 ) go to 41
-      if ( nswc_ai_i4 == 0 ) go to 43
+      if (nswc_ai_i4 < 0) go to 41
+      if (nswc_ai_i4 == 0) go to 43
       go to 42
 42    p(m) = j
       p(j) = pm
@@ -1069,9 +1069,9 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r4 = wi ( k )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 10
+   nswc_ai_r4 = wi(k)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.0
@@ -1159,9 +1159,9 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r4 = wi ( k )
-   if ( nswc_ai_r4 < 0 ) go to 30
-   if ( nswc_ai_r4 == 0 ) go to 10
+   nswc_ai_r4 = wi(k)
+   if (nswc_ai_r4 < 0) go to 30
+   if (nswc_ai_r4 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.0
@@ -1737,10 +1737,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -1775,7 +1775,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -2289,10 +2289,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -2327,7 +2327,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -2460,8 +2460,8 @@ do nn = 1, n
    q = wi(en)
    na = en - 1
    nswc_ai_r4 = q
-   if ( nswc_ai_r4 < 0 ) go to 710
-   if ( nswc_ai_r4 == 0 ) go to 600
+   if (nswc_ai_r4 < 0) go to 710
+   if (nswc_ai_r4 == 0) go to 600
    go to 800
 !     ********** Real vector **********
 600 m = en
@@ -2709,9 +2709,9 @@ call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
 do k = 1,n
-   nswc_ai_r8 = wi ( k )
-   if ( nswc_ai_r8 < 0 ) go to 30
-   if ( nswc_ai_r8 == 0 ) go to 10
+   nswc_ai_r8 = wi(k)
+   if (nswc_ai_r8 < 0) go to 30
+   if (nswc_ai_r8 == 0) go to 10
    go to 20
 10 do j = 1,n
       zi(j,k) = 0.d0
@@ -3124,10 +3124,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -3162,7 +3162,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -3549,10 +3549,10 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
+   if (abs(h(l , l - 1)) <= machep * s) exit
 end do
 !     ********** Form shift **********
 x = h(en,en)
@@ -3587,7 +3587,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if ( m == l ) exit
+   if (m == l) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -3720,8 +3720,8 @@ do nn = 1, n
    q = wi(en)
    na = en - 1
    nswc_ai_r8 = q
-   if ( nswc_ai_r8 < 0 ) go to 710
-   if ( nswc_ai_r8 == 0 ) go to 600
+   if (nswc_ai_r8 < 0) go to 710
+   if (nswc_ai_r8 == 0) go to 600
    go to 800
 !     ********** Real vector **********
 600 m = en
@@ -4234,7 +4234,7 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -4352,7 +4352,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if ( m == n ) exit
+      if (m == n) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -4603,7 +4603,7 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if ( abs ( e ( m ) ) <= b ) exit
+      if (abs(e(m)) <= b) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -4754,7 +4754,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if ( m == n ) exit
+      if (m == n) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -5139,7 +5139,7 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -5391,7 +5391,7 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if ( abs ( e ( m ) ) <= b ) exit
+      if (abs(e(m)) <= b) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -5994,7 +5994,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -6256,8 +6256,8 @@ end do
 !                from the information left by corth **********
 iend = igh - low - 1
 nswc_ai_i4 = iend
-if ( nswc_ai_i4 < 0 ) go to 180
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
 go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
@@ -6332,7 +6332,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -7060,7 +7060,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -7329,8 +7329,8 @@ end do
 !                from the information left by dcorth **********
 iend = igh - low - 1
 nswc_ai_i4 = iend
-if ( nswc_ai_i4 < 0 ) go to 180
-if ( nswc_ai_i4 == 0 ) go to 150
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
 go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
@@ -7405,7 +7405,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if ( l == low ) exit
+   if (l == low) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -7827,9 +7827,9 @@ do j = nkl1,nklm
 end do
 80 if (kode == 0) go to 150
 do j = 1,n
-   nswc_ai_r4 = x ( j )
-   if ( nswc_ai_r4 < 0 ) go to 90
-   if ( nswc_ai_r4 == 0 ) go to 110
+   nswc_ai_r4 = x(j)
+   if (nswc_ai_r4 < 0) go to 90
+   if (nswc_ai_r4 == 0) go to 110
    go to 100
 90 cu(1,j) = 1.
    iu(1,j) = 1
@@ -7840,9 +7840,9 @@ do j = 1,n
 end do
 do j = 1,k
    jpn = j + n
-   nswc_ai_r4 = res ( j )
-   if ( nswc_ai_r4 < 0 ) go to 120
-   if ( nswc_ai_r4 == 0 ) go to 140
+   nswc_ai_r4 = res(j)
+   if (nswc_ai_r4 < 0) go to 120
+   if (nswc_ai_r4 == 0) go to 140
    go to 130
 120 cu(1,jpn) = 1.
    iu(1,jpn) = 1
@@ -9182,13 +9182,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.0 ) exit
+   if (r2 + sum >= 1.0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -9581,13 +9581,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.0 ) exit
+   if (r2 + sum >= 1.0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -9697,7 +9697,7 @@ end do
 do jb = 1,nb
    do i = 1,k
       b(i,jb) = b(i,jb)/a(i,i)
-      if ( i == k ) exit
+      if (i == k) exit
       ip1 = i + 1
       call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
    end do
@@ -10269,13 +10269,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.d0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.d0 ) exit
+   if (r2 + sum >= 1.d0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
@@ -10700,13 +10700,13 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if ( is == 0 ) exit
+   if (is == 0) exit
 end do
 ksure = 0
 sum = 0.d0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if ( r2 + sum >= 1.d0 ) exit
+   if (r2 + sum >= 1.d0) exit
    sum = sum + r2
    ksure = ksure + 1
 end do

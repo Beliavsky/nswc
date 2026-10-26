@@ -77,6 +77,7 @@ end subroutine sfft
         self.assertIn('x=i', result)
         self.assertNotIn('equivalence', result)
         self.assertEqual(equivalence_free(result, review), result)
+        self.assertEqual(equivalence_free(self.alias.replace('equivalence (i,ii)', 'equivalence(i, ii)'), review), result)
         with self.assertRaisesRegex(ValueError, 'stale'):
             equivalence_free(self.alias.replace('i=7', 'i=8'), review)
         with self.assertRaisesRegex(ValueError, 'Unreviewed'):

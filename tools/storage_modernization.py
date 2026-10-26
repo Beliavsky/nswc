@@ -87,7 +87,8 @@ def equivalence_free(text, manifest=None):
         for physical, code in host_groups(body):
             updated = None
             if re.match(r'^\s*equivalence\b', code, re.I):
-                if code not in entry['statements']:
+                tokens = lambda s: tuple(m[0] for m in TOKEN.finditer(s))
+                if tokens(code) not in {tokens(s) for s in entry['statements']}:
                     raise ValueError(f'{host}: unexpected EQUIVALENCE')
                 updated = ''
                 counts['equivalences'] += 1

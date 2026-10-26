@@ -514,34 +514,34 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 ! Test m and n for the proper form
 nm = n
 ierror = 0
-if ( ( m - 5 ) < 0 ) go to 10
+if ((m - 5) < 0) go to 10
 go to 20
 10 ierror = 1
 go to 190
-20 if ( ( nm - 3 ) < 0 ) go to 30
+20 if ((nm - 3) < 0) go to 30
 go to 40
 30 ierror = 2
 go to 190
-40 if ( ( idimy - m ) < 0 ) go to 50
+40 if ((idimy - m) < 0) go to 50
 go to 60
 50 ierror = 3
 go to 190
 60 nh = n
 npp = np
-if ( ( npp ) == 0 ) go to 80
+if ((npp) == 0) go to 80
 go to 70
 70 nh = nh + 1
 80 ik = 2
 k = 1
 90 ik = ik + ik
 k = k + 1
-if ( ( nh - ik ) <= 0 ) go to 100
+if ((nh - ik) <= 0) go to 100
 go to 90
 100 nl = ik
 ik = ik + ik
 nl = nl - 1
 iwah = (k - 2)*ik + k + 6
-if ( ( npp ) == 0 ) go to 120
+if ((npp) == 0) go to 120
 go to 110
 !     Divide w into working sub arrays
 110 iw1 = iwah
@@ -553,18 +553,18 @@ iw1 = iwbh
 w(1) = float(iw1 - 1 + max(2*nm,6*m))
 nm = nm - 1
 ! Subroutine compb computes the roots of the B polynomials
-130 if ( ( ierror ) == 0 ) go to 140
+130 if ((ierror) == 0) go to 140
 go to 190
 140 iw2 = iw1 + m
 iw3 = iw2 + m
 iwd = iw3 + m
 iww = iwd + m
 iwu = iww + m
-if ( ( iflg ) == 0 ) go to 150
+if ((iflg) == 0) go to 150
 go to 160
 150 call compb(nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
 go to 190
-160 if ( ( mp ) == 0 ) go to 180
+160 if ((mp) == 0) go to 180
 go to 170
 ! Subroutine blktr1 solves the linear system
 170 call blktr1(nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
@@ -616,13 +616,13 @@ do l = 1,kdo
       & m,am,bm,cm,wd,ww,wu)
    if = 2**k
    do i = i4,if,i4
-      if ( ( i - nm ) <= 0 ) go to 10
+      if ((i - nm) <= 0) go to 10
       go to 80
 10    ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
       call indxc(i,ir,idxc,nc)
-      if ( ( i - if ) < 0 ) go to 20
+      if ((i - if) < 0) go to 20
       go to 80
 20    call indxa(i,ir,idxa,na)
       call indxb(i - i1,irm1,im1,nm1)
@@ -635,7 +635,7 @@ do l = 1,kdo
       if (np3 == 0) ip3 = 1
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
-      if ( ( ipi2 - nm ) <= 0 ) go to 50
+      if ((ipi2 - nm) <= 0) go to 50
       go to 30
 30    do j = 1,m
          w3(j) = 0.
@@ -652,7 +652,7 @@ do l = 1,kdo
 80    continue
    end do
 end do
-if ( ( npp ) == 0 ) go to 100
+if ((npp) == 0) go to 100
 go to 320
 !     The periodic case is treated using the capacitance matrix method
 100 if = 2**k
@@ -699,9 +699,9 @@ nswc_exit_1 : do ll = 2 , k
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if ( ( i - i2 - izr ) == 0 ) go to 140
+      if ((i - i2 - izr) == 0) go to 140
       go to 170
-140   if ( ( i - nm ) <= 0 ) go to 150
+140   if ((i - nm) <= 0) go to 150
       exit
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
@@ -718,7 +718,7 @@ nswc_exit_1 : do ll = 2 , k
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
-      if ( ( i - nm ) == 0 ) exit nswc_exit_1
+      if ((i - nm) == 0) exit nswc_exit_1
       go to 170
 170   continue
    end do
@@ -729,7 +729,7 @@ end do
 call indxb(if/2,k - 1,im1,nm1)
 if (nm1 == 0) im1 = 1
 call indxb(if,k - 1,ip,np)
-if ( ( ncmplx ) == 0 ) go to 220
+if ((ncmplx) == 0) go to 220
 go to 210
 210 call cprdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
    & y(1,nm + 1),m,am,bm,cm,w1,w3,ww)
@@ -775,9 +775,9 @@ do l = 1,kdo
       ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
-      if ( ( ipi2 - izr ) == 0 ) go to 280
+      if ((ipi2 - izr) == 0) go to 280
       go to 270
-270   if ( ( i - izr ) == 0 ) exit
+270   if ((i - izr) == 0) exit
       go to 300
 280   call indxc(i,ir,idxc,nc)
       call indxb(ipi2,ir,ip2,np2)
@@ -808,7 +808,7 @@ end do
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if ( ( i - nm ) <= 0 ) go to 330
+      if ((i - nm) <= 0) go to 330
       go to 430
 330   imi1 = i - i1
       imi2 = i - i2
@@ -822,7 +822,7 @@ end do
       if (nm1 == 0) im1 = 1
       call indxb(ipi1,irm1,ip1,np1)
       if (np1 == 0) ip1 = 1
-      if ( ( i - i2 ) <= 0 ) go to 340
+      if ((i - i2) <= 0) go to 340
       go to 360
 340   do j = 1,m
          w1(j) = 0.
@@ -830,7 +830,7 @@ end do
       go to 370
 360   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
          & w1,m,am,bm,cm,wd,ww,wu)
-370   if ( ( ipi2 - nm ) <= 0 ) go to 400
+370   if ((ipi2 - nm) <= 0) go to 400
       go to 380
 380   do j = 1,m
          w2(j) = 0.
@@ -857,7 +857,7 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
 na = 2**ir
 idxa = i - na + 1
-if ( ( i - nm ) <= 0 ) go to 20
+if ((i - nm) <= 0) go to 20
 go to 10
 10 na = 0
 20 return
@@ -872,7 +872,7 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
 nc = 2**ir
 idxc = i
-if ( ( idxc + nc - 1 - nm ) <= 0 ) go to 20
+if ((idxc + nc - 1 - nm) <= 0) go to 20
 go to 10
 10 nc = 0
 20 return
@@ -890,10 +890,10 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
 idp = 0
 nswc_ai_i4 = ir
-if ( nswc_ai_i4 < 0 ) go to 70
-if ( nswc_ai_i4 == 0 ) go to 10
+if (nswc_ai_i4 < 0) go to 70
+if (nswc_ai_i4 == 0) go to 10
 go to 30
-10 if ( ( i - nm ) <= 0 ) go to 20
+10 if ((i - nm) <= 0) go to 20
 go to 70
 20 idx = i
 idp = 1
@@ -903,11 +903,11 @@ id = i - izh - izh
 idx = id + id + (ir - 1)*ik + ir + (ik - i)/izh + 4
 ipl = izh - 1
 idp = izh + izh - 1
-if ( ( i - ipl - nm ) <= 0 ) go to 50
+if ((i - ipl - nm) <= 0) go to 50
 go to 40
 40 idp = 0
 return
-50 if ( ( i + ipl - nm ) <= 0 ) go to 70
+50 if ((i + ipl - nm) <= 0) go to 70
 go to 60
 60 idp = nm + ipl - i + 1
 70 return
@@ -945,7 +945,7 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if ( ( ia ) <= 0 ) go to 50
+20 if ((ia) <= 0) go to 50
 go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
@@ -954,7 +954,7 @@ ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if ( ( id ) <= 0 ) go to 250
+50 if ((id) <= 0) go to 250
 go to 60
 60 rt = bd(id)
 id = id - 1
@@ -970,40 +970,40 @@ do j = 2,mm
 end do
 den = b(1) - rt - c(1)*d(2)
 w(1) = 1.
-if ( ( den ) == 0 ) go to 90
+if ((den) == 0) go to 90
 go to 80
 80 w(1) = (y(1) - c(1)*w(2))/den
 90 do j = 2,m
    w(j) = w(j) - d(j)*w(j - 1)
 end do
-if ( ( na ) <= 0 ) go to 130
+if ((na) <= 0) go to 130
 go to 20
 110 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-130 if ( ( m1 ) <= 0 ) go to 140
+130 if ((m1) <= 0) go to 140
 go to 150
-140 if ( ( m2 ) <= 0 ) go to 110
+140 if ((m2) <= 0) go to 110
 go to 200
-150 if ( ( m2 ) <= 0 ) go to 170
+150 if ((m2) <= 0) go to 170
 go to 160
-160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+160 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 200
 go to 170
-170 if ( ( ibr ) <= 0 ) go to 180
+170 if ((ibr) <= 0) go to 180
 go to 190
-180 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
-   & < 0 ) go to 110
+180 if ((abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) &
+   & < 0) go to 110
 go to 190
 190 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 230
-200 if ( ( ibr ) <= 0 ) go to 210
+200 if ((ibr) <= 0) go to 210
 go to 220
-210 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
-   & < 0 ) go to 110
+210 if ((abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) &
+   & < 0) go to 110
 go to 220
 220 rt = rt - bm2(m2)
 m2 = m2 - 1
@@ -1045,7 +1045,7 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if ( ( ia ) <= 0 ) go to 50
+20 if ((ia) <= 0) go to 50
 go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
@@ -1053,7 +1053,7 @@ ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if ( ( id ) <= 0 ) go to 280
+50 if ((id) <= 0) go to 280
 go to 60
 60 rt = bd(id)
 id = id - 1
@@ -1066,7 +1066,7 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 w(1) = y(1)/den
 v = c(m)
-if ( ( mm2 - 2 ) < 0 ) go to 90
+if ((mm2 - 2) < 0) go to 90
 go to 70
 70 do j = 2,mm2
    den = b(j) - rt - a(j)*d(j - 1)
@@ -1084,7 +1084,7 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*w(m - 2)
 den = bh - am*d(m - 1)
-if ( ( den ) == 0 ) go to 110
+if ((den) == 0) go to 110
 go to 100
 100 w(m) = (ym - am*w(m - 1))/den
 go to 120
@@ -1094,34 +1094,34 @@ do j = 2,mm
    k = m - j
    w(k) = w(k) - d(k)*w(k + 1) - u(k)*w(m)
 end do
-if ( ( na ) <= 0 ) go to 160
+if ((na) <= 0) go to 160
 go to 20
 140 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-160 if ( ( m1 ) <= 0 ) go to 170
+160 if ((m1) <= 0) go to 170
 go to 180
-170 if ( ( m2 ) <= 0 ) go to 140
+170 if ((m2) <= 0) go to 140
 go to 230
-180 if ( ( m2 ) <= 0 ) go to 200
+180 if ((m2) <= 0) go to 200
 go to 190
-190 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+190 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 230
 go to 200
-200 if ( ( ibr ) <= 0 ) go to 210
+200 if ((ibr) <= 0) go to 210
 go to 220
-210 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
-   & < 0 ) go to 140
+210 if ((abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) &
+   & < 0) go to 140
 go to 220
 220 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 260
-230 if ( ( ibr ) <= 0 ) go to 240
+230 if ((ibr) <= 0) go to 240
 go to 250
-240 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
-   & < 0 ) go to 140
+240 if ((abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) &
+   & < 0) go to 140
 go to 250
 250 rt = rt - bm2(m2)
 m2 = m2 - 1
@@ -1162,7 +1162,7 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if ( ( id ) <= 0 ) go to 90
+if ((id) <= 0) go to 90
 go to 30
 30 crt = bd(id)
 id = id - 1
@@ -1176,7 +1176,7 @@ do j = 2,mm
    w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
 den = b(1) - crt - c(1)*d(2)
-if ( ( abs ( den ) ) == 0 ) go to 60
+if ((abs(den)) == 0) go to 60
 go to 50
 50 y(1) = (y(1) - c(1)*w(2))/den
 go to  70
@@ -1184,19 +1184,19 @@ go to  70
 70 do j = 2,m
    y(j) = w(j) - d(j)*y(j - 1)
 end do
-90 if ( ( m1 ) <= 0 ) go to 100
+90 if ((m1) <= 0) go to 100
 go to 120
-100 if ( ( m2 ) <= 0 ) go to 210
+100 if ((m2) <= 0) go to 210
 go to 110
 110 rt = bm2(m2)
 m2 = m2 - 1
 go to 170
-120 if ( ( m2 ) <= 0 ) go to 130
+120 if ((m2) <= 0) go to 130
 go to 140
 130 rt = bm1(m1)
 m1 = m1 - 1
 go to 170
-140 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+140 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 160
 go to 150
 150 rt = bm1(m1)
@@ -1205,7 +1205,7 @@ go to 170
 160 rt = bm2(m2)
 m2 = m2 - 1
 170 y1 = (b(1) - rt)*y(1) + c(1)*y(2)
-if ( ( mm - 2 ) < 0 ) go to 200
+if ((mm - 2) < 0) go to 200
 go to 180
 ! Matrix multiplication
 180 do j = 2,mm
@@ -1217,7 +1217,7 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-210 if ( ( ia ) <= 0 ) go to 240
+210 if ((ia) <= 0) go to 240
 go to 220
 220 rt = aa(ia)
 ia = ia - 1
@@ -1226,7 +1226,7 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-240 if ( ( iflg ) <= 0 ) go to 250
+240 if ((iflg) <= 0) go to 250
 go to 20
 250 do j = 1,m
    yy(j) = real(y(j))
@@ -1265,7 +1265,7 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if ( ( id ) <= 0 ) go to 110
+if ((id) <= 0) go to 110
 go to 30
 30 crt = bd(id)
 id = id - 1
@@ -1278,7 +1278,7 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 y(1) = y(1)/den
 v = cmplx(c(m),0.)
-if ( ( mm2 - 2 ) < 0 ) go to 60
+if ((mm2 - 2) < 0) go to 60
 go to 40
 40 do j = 2,mm2
    den = b(j) - crt - a(j)*d(j - 1)
@@ -1296,7 +1296,7 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*y(m - 2)
 den = bh - am*d(m - 1)
-if ( ( abs ( den ) ) == 0 ) go to 80
+if ((abs(den)) == 0) go to 80
 go to 70
 70 y(m) = (ym - am*y(m - 1))/den
 go to  90
@@ -1306,19 +1306,19 @@ do j = 2,mm
    k = m - j
    y(k) = y(k) - d(k)*y(k + 1) - u(k)*y(m)
 end do
-110 if ( ( m1 ) <= 0 ) go to 120
+110 if ((m1) <= 0) go to 120
 go to 140
-120 if ( ( m2 ) <= 0 ) go to 230
+120 if ((m2) <= 0) go to 230
 go to 130
 130 rt = bm2(m2)
 m2 = m2 - 1
 go to 190
-140 if ( ( m2 ) <= 0 ) go to 150
+140 if ((m2) <= 0) go to 150
 go to 160
 150 rt = bm1(m1)
 m1 = m1 - 1
 go to 190
-160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+160 if ((abs(bm1(m1)) - abs(bm2(m2))) <= 0) &
    & go to 180
 go to 170
 170 rt = bm1(m1)
@@ -1329,7 +1329,7 @@ m2 = m2 - 1
 ! Matrix multiplication
 190 yh = y(1)
 y1 = (b(1) - rt)*y(1) + c(1)*y(2) + a(1)*y(m)
-if ( ( mm - 2 ) < 0 ) go to 220
+if ((mm - 2) < 0) go to 220
 go to 200
 200 do j = 2,mm
    y2 = a(j)*y(j - 1) + (b(j) - rt)*y(j) + c(j)*y(j + 1)
@@ -1340,7 +1340,7 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-230 if ( ( ia ) <= 0 ) go to 260
+230 if ((ia) <= 0) go to 260
 go to 240
 240 rt = aa(ia)
 ia = ia - 1
@@ -1349,7 +1349,7 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-260 if ( ( iflg ) <= 0 ) go to 270
+260 if ((iflg) <= 0) go to 270
 go to 20
 270 do j = 1,m
    yy(j) = real(y(j))
@@ -1385,7 +1385,7 @@ bnorm = abs(bn(1))
 do j = 2,nm
    bnorm = max(bnorm,abs(bn(j)))
    arg = an(j)*cn(j - 1)
-   if ( ( arg ) < 0 ) go to 220
+   if ((arg) < 0) go to 220
    go to 30
 30 b(j) = sign(sqrt(arg),an(j))
 end do
@@ -1400,7 +1400,7 @@ do l = 1,kdo
    ifd = if - i4
    do i = i4,ifd,i4
       call indxb(i,l,ib,nb)
-      if ( ( nb ) <= 0 ) exit
+      if ((nb) <= 0) exit
       go to 50
 50    js = i - ipl
       jf = js + nb - 1
@@ -1411,7 +1411,7 @@ do l = 1,kdo
          ah(ls) = b(j)
       end do
       call tqlrt0(nb,bh,ah,ierror)
-      if ( ( ierror ) == 0 ) go to 70
+      if ((ierror) == 0) go to 70
       go to 210
 70    lh = ib - 1
       do j = 1,nb
@@ -1448,11 +1448,11 @@ if ((d2 < d1) .and. (d2 < d3)) go to 180
 b(lh) = b(j2)
 j2 = j2 + 1
 lh = lh + 1
-if ( ( j2 - n2m2 ) <= 0 ) go to 170
+if ((j2 - n2m2) <= 0) go to 170
 go to 190
 180 j2 = j2 + 1
 j1 = j1 + 1
-if ( ( j2 - n2m2 ) <= 0 ) go to 170
+if ((j2 - n2m2) <= 0) go to 170
 go to 190
 190 b(lh) = b(n2m2 + 1)
 call indxb(if,k - 1,j1,j2)
@@ -1522,7 +1522,7 @@ do l = 1,n
    c = b*b
 !     ********** Look for small squared sub-diagonal element **********
 20 do m = l,n
-      if ( e2 ( m ) <= c ) exit
+      if (e2(m) <= c) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -1623,9 +1623,9 @@ scnv = sqrt(cnv)
 iz = n
 izm = iz - 1
 izm2 = iz - 2
-nswc_ai_r4 = bp ( n ) - bp ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 10
-if ( nswc_ai_r4 == 0 ) go to 420
+nswc_ai_r4 = bp(n) - bp(1)
+if (nswc_ai_r4 < 0) go to 10
+if (nswc_ai_r4 == 0) go to 420
 go to 30
 10 do j = 1,n
    nt = n - j
@@ -1638,31 +1638,31 @@ end do
 50 ncmplx = 0
 modiz = mod(iz,2)
 is = 1
-if ( ( modiz ) == 0 ) go to 70
+if ((modiz) == 0) go to 70
 go to 60
-60 nswc_ai_r4 = a ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 100
-if ( nswc_ai_r4 == 0 ) go to 420
+60 nswc_ai_r4 = a(1)
+if (nswc_ai_r4 < 0) go to 100
+if (nswc_ai_r4 == 0) go to 420
 go to 70
 70 xl = bh(1)
 db = bh(3) - bh(1)
 80 xl = xl - db
-if ( ( psgf( xl , iz , c , a , bh ) ) <= 0 ) go to 80
+if ((psgf(xl , iz , c , a , bh)) <= 0) go to 80
 go to 90
 90 sgn = -1.
 cbp(1) = cmplx(bsrh(xl,bh(1),iz,c,a,bh,psgf,sgn),0.)
 is = 2
 100 if = iz - 1
-if ( ( modiz ) == 0 ) go to 120
+if ((modiz) == 0) go to 120
 go to 110
-110 nswc_ai_r4 = a ( 1 )
-if ( nswc_ai_r4 < 0 ) go to 120
-if ( nswc_ai_r4 == 0 ) go to 420
+110 nswc_ai_r4 = a(1)
+if (nswc_ai_r4 < 0) go to 120
+if (nswc_ai_r4 == 0) go to 420
 go to 150
 120 xr = bh(iz)
 db = bh(iz) - bh(iz - 2)
 130 xr = xr + db
-if ( ( psgf( xr , iz , c , a , bh ) ) < 0 ) go to 130
+if ((psgf(xr , iz , c , a , bh)) < 0) go to 130
 go to 140
 140 sgn = 1.
 cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
@@ -1673,11 +1673,11 @@ if = iz - 2
    sgn = -1.
    xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
    psg = psgf(xm,iz,c,a,bh)
-   if ( ( abs ( psg ) - eps ) <= 0 ) go to 180
+   if ((abs(psg) - eps) <= 0) go to 180
    go to 160
-160 nswc_ai_r4 = psg * ppsgf( xm , iz , c , a , bh )
-   if ( nswc_ai_r4 < 0 ) go to 170
-   if ( nswc_ai_r4 == 0 ) go to 180
+160 nswc_ai_r4 = psg * ppsgf(xm , iz , c , a , bh)
+   if (nswc_ai_r4 < 0) go to 170
+   if (nswc_ai_r4 == 0) go to 180
    go to 190
 !     Case of a real zero
 170 sgn = 1.
@@ -1704,31 +1704,31 @@ if = iz - 2
       fp = fp + dd
       fpp = fpp - dd*dd
    end do
-   if ( ( modiz ) == 0 ) go to 220
+   if ((modiz) == 0) go to 220
    go to 230
 220 f = (1.,0.) - fsg - hsg
    go to 240
 230 f = (1.,0.) + fsg + hsg
 240 i3 = 0
-   if ( ( abs ( fp ) ) <= 0 ) go to 260
+   if ((abs(fp)) <= 0) go to 260
    go to 250
 250 i3 = 1
    r3 = -f/fp
 260 i2 = 0
-   if ( ( abs ( fpp ) ) <= 0 ) go to 320
+   if ((abs(fpp)) <= 0) go to 320
    go to 270
 270 i2 = 1
    cdis = sqrt(fp**2 - 2.*f*fpp)
    r1 = cdis - fp
    r2 = -fp - cdis
-   if ( ( abs ( r1 ) - abs ( r2 ) ) <= 0 ) go to 290
+   if ((abs(r1) - abs(r2)) <= 0) go to 290
    go to 280
 280 r1 = r1/fpp
    go to 300
 290 r1 = r2/fpp
 300 r2 = 2.*f/fpp/r1
    if (abs(r2) < abs(r1)) r1 = r2
-   if ( ( i3 ) <= 0 ) go to 330
+   if ((i3) <= 0) go to 330
    go to 310
 310 if (abs(r3) < abs(r1)) r1 = r3
    go to 330
@@ -1737,7 +1737,7 @@ if = iz - 2
    it = it + 1
    if (it > 50) go to 420
    if (abs(r1) > scnv) go to 200
-   if ( ( icv ) <= 0 ) go to 340
+   if ((icv) <= 0) go to 340
    go to 350
 340 icv = 1
    go to 200
@@ -1745,9 +1745,9 @@ if = iz - 2
    cbp(ig + 1) = conjg(cx)
 360 continue
 end do
-nswc_ai_r4 = abs ( cbp ( n ) ) - abs ( cbp ( 1 ) )
-if ( nswc_ai_r4 < 0 ) go to 370
-if ( nswc_ai_r4 == 0 ) go to 420
+nswc_ai_r4 = abs(cbp(n)) - abs(cbp(1))
+if (nswc_ai_r4 < 0) go to 370
+if (nswc_ai_r4 == 0) go to 420
 go to 390
 370 nhalf = n/2
 do j = 1,nhalf
@@ -1758,7 +1758,7 @@ do j = 1,nhalf
 end do
 390 ncmplx = 1
 do j = 2,iz
-   if ( ( aimag ( cbp ( j ) ) ) == 0 ) go to 400
+   if ((aimag(cbp(j))) == 0) go to 400
    go to 430
 400 continue
 end do
@@ -1786,7 +1786,7 @@ do j = 1,iz
    fsg = fsg*a(j)*dd
    hsg = hsg*c(j)*dd
 end do
-if ( ( mod ( iz , 2 ) ) == 0 ) go to 20
+if ((mod(iz , 2)) == 0) go to 20
 go to 30
 20 psgf = 1. - fsg - hsg
 return
@@ -1809,15 +1809,15 @@ xl = xll
 xr = xrr
 dx = .5*abs(xr - xl)
 10 x = .5*(xl + xr)
-nswc_ai_r4 = sgn * f ( x , iz , c , a , bh )
-if ( nswc_ai_r4 < 0 ) go to 30
-if ( nswc_ai_r4 == 0 ) go to 50
+nswc_ai_r4 = sgn * f(x , iz , c , a , bh)
+if (nswc_ai_r4 < 0) go to 30
+if (nswc_ai_r4 == 0) go to 50
 go to 20
 20 xr = x
 go to  40
 30 xl = x
 40 dx = .5*dx
-if ( ( dx - cnv ) <= 0 ) go to 50
+if ((dx - cnv) <= 0) go to 50
 go to 10
 50 bsrh = .5*(xl + xr)
 end function bsrh

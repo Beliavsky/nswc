@@ -209,6 +209,12 @@ The validator compares complete GNU compiler dumps before and after formatting,
 allowing only removal of redundant unary-plus expression wrappers. Regeneration
 also checks tokens and literal values, and updates source-link line numbers.
 
+The maintained fixed-form source has a separate parentheses-spacing pass:
+`IF ( N .LE. K ( I ) ) EXIT` becomes `IF (N .LE. K(I)) EXIT`.
+`tools/normalize_fixed_spacing.py` preserves fixed-form control columns,
+comments and quoted text. The EXIT conversion uses it too; see the
+[spacing commands and checks](docs/structured-exits.md#verification-and-regeneration).
+
 The `tools/simplify_free_style.py` pass removes spaces before argument
 lists in procedure declarations and calls to known procedures. It also removes
 redundant array constructor types for matching default-kind literals, preserving
