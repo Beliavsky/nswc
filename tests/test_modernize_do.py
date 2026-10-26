@@ -137,7 +137,8 @@ class ModernizeDoTests(unittest.TestCase):
             reviewed = apply_intents(reviewed, json.loads(INTENT_MANIFEST.read_text()))
         from combine_declarations import transform as combine_declarations
         from order_declarations import transform as order_declarations
-        self.assertEqual(order_declarations(combine_declarations(reviewed).data).data,
+        from remove_final_returns import transform_fixed as remove_final_returns
+        self.assertEqual(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data),
                          (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 

@@ -118,17 +118,9 @@ def scope_preserved(before, after, reviewed_subroutines=(), reviewed_functions=N
     return before == adjusted
 
 
-def main():
-    # Import here: the intent analyzer reuses this module's dump parser.
-    from argument_intents import apply_intents, normalize_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--compiler", default="gfortran")
-    parser.add_argument("--unformatted-output", type=Path,
-                        help="Write a new copy of the verified intermediate source for historical manifest tools")
-    args = parser.parse_args()
-    if args.unformatted_output and args.unformatted_output.exists():
-        parser.error("--unformatted-output must name a new file")
-    compiler = str(Path(args.compiler).resolve()) if Path(args.compiler).is_file() else args.compiler
+def fixed_stages():
+    """Reproduce the historical fixed-form stages before terminal cleanup."""
+    from argument_intents import apply_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
     manifest = json.loads(DEFAULT_MANIFEST.read_text())
     before = modernize_loops(name_ends((ROOT / "nswc_orig.f").read_bytes()).data).data
     after = apply_manifest(apply_fixes(before), manifest)
@@ -138,9 +130,29 @@ def main():
     unformatted_source = after
     formatting = combine_declarations(unformatted_source)
     ordering = order_declarations(formatting.data)
+    return before, unformatted_source, formatting, ordering, intents, manifest
+
+
+def main():
+    # Import here: the intent analyzer reuses this module's dump parser.
+    from argument_intents import normalize_intents
+    from remove_final_returns import transform_fixed as remove_final_returns
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--compiler", default="gfortran")
+    parser.add_argument("--unformatted-output", type=Path,
+                        help="Write a new copy of the verified intermediate source for historical manifest tools")
+    args = parser.parse_args()
+    if args.unformatted_output and args.unformatted_output.exists():
+        parser.error("--unformatted-output must name a new file")
+    compiler = str(Path(args.compiler).resolve()) if Path(args.compiler).is_file() else args.compiler
+    before, unformatted_source, formatting, ordering, intents, manifest = fixed_stages()
     after = ordering.data
     if non_declaration_content(unformatted_source) != non_declaration_content(after):
         raise RuntimeError("Declaration formatting changed other statements or comments")
+    cleanup_report = {}
+    after = remove_final_returns(after, cleanup_report)
+    if cleanup_report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
+        raise RuntimeError('Terminal RETURN cleanup report is stale')
     if after != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
@@ -199,7 +211,8 @@ def main():
     print(f"Confirmed {warning_count} remaining compiler warnings against the reviewed inventory.")
     print(f"Declaration formatting preserves all {sum(map(len, reviewed_inventory.values()))} compiler records, "
           f"including intrinsics; combined {formatting.intents_combined} intents and {formatting.dimensions_combined} dimensions.")
-    print("Confirmed unchanged non-declaration statements and comment text/order.")
+    print("Declaration formatting preserves non-declaration statements and comment text/order.")
+    print(f"Removed {cleanup_report['removed']} plain terminal RETURNs in the final fixed-form cleanup.")
     print(f'Argument declarations precede local types; reordered {ordering.changed_procedures} procedures, '
           f'with {len(ordering.prerequisite_locals)} required local dependency groups.')
     if intents:

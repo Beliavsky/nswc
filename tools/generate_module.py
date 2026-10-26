@@ -16,6 +16,7 @@ from fortran_procedures import HEADER, procedure_spans
 from format_free_form import TOKEN, groups, wrap_line
 from procedure_purity import MANIFEST, code_hash
 from coalesce_local_declarations import transform as coalesce_locals
+from remove_final_returns import transform_free as remove_final_returns
 
 ROOT = Path(__file__).resolve().parents[1]
 BINDINGS = Path(__file__).with_name('module-bindings.json')
@@ -136,7 +137,7 @@ def module_source(text, calls=None, intrinsics=None, coalesce=True):
             'module nswc_mod\nimplicit none\nprivate\n' +
             ''.join('public :: ' + n.lower() + '\n' for n, _, _ in spans) +
             'contains\n' + ''.join(renamed) + 'end module nswc_mod\n')
-    return coalesce_locals(generated) if coalesce else generated
+    return remove_final_returns(coalesce_locals(generated) if coalesce else generated)
 
 
 def review_intrinsics(text, compiler):

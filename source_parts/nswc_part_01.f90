@@ -420,7 +420,6 @@ integer, parameter :: imach(10) = [2, 31, 2147483647, 2, 24, -125, 128, 53, -102
 !     data imach(10) /  1023 /
 !
 ipmpar = imach(i)
-return
 end function ipmpar
 
 !-----------------------------------------------------------------------
@@ -694,7 +693,6 @@ dmach(3) = dmax
 imach(8) = m
 imach(9) = minexp
 imach(10) = maxexp
-return
 end subroutine mach
 
 subroutine radix(ibeta)
@@ -721,7 +719,6 @@ call store2(a + b, a)
 if (d1 == d2) go to 20
 !
 ibeta = int(d1 - d2)
-return
 end subroutine radix
 
 subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
@@ -978,7 +975,6 @@ real :: d1, d2
 common /spdata/ d1, d2
 d1 = a
 d2 = b
-return
 end subroutine store2
 
 subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
@@ -1236,7 +1232,6 @@ double precision :: d1, d2
 common /dpdata/ d1, d2
 d1 = a
 d2 = b
-return
 end subroutine dstor2
 
 pure elemental real function spmpar(i)
@@ -1299,7 +1294,6 @@ w = ((z - one)*b + bm1)/(b*z)
 !
 z = b**(emax - 2)
 spmpar = ((w * z) * b) * b
-return
 end function spmpar
 
 pure elemental double precision function dpmpar(i)
@@ -1362,7 +1356,6 @@ w = ((z - one)*b + bm1)/(b*z)
 !
 z = b**(emax - 2)
 dpmpar = ((w * z) * b) * b
-return
 end function dpmpar
 
 pure real function epsln(l)
@@ -1396,7 +1389,6 @@ go to 50
 !
 50 m = 1 - ipmpar(5)
 epsln = m * lnb
-return
 end function epsln
 
 pure elemental double precision function depsln(l)
@@ -1431,7 +1423,6 @@ lnb = log(db)
 !
 50 m = 1 - ipmpar(8)
 depsln = m * lnb
-return
 end function depsln
 
 pure elemental real function exparg(l)
@@ -1474,7 +1465,6 @@ exparg = 0.99999 * (m * lnb)
 return
 60 m = ipmpar(7)
 exparg = 0.99999 * (m * lnb)
-return
 end function exparg
 
 pure elemental double precision function dxparg(l)
@@ -1518,7 +1508,6 @@ dxparg = 0.999999999999d+00 * (m * lnb)
 return
 60 m = ipmpar(10)
 dxparg = 0.999999999999d+00 * (m * lnb)
-return
 end function dxparg
 
 pure subroutine ishell(a, n)
@@ -1565,7 +1554,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine ishell
 
 pure subroutine shell(a, n)
@@ -1613,7 +1601,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine shell
 
 pure subroutine shell2(a, b, n)
@@ -1666,7 +1653,6 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
-return
 end subroutine shell2
 
 pure subroutine rsort(a, n)
@@ -1714,7 +1700,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine rsort
 
 pure subroutine risort(a, m, n)
@@ -1768,7 +1753,6 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
-return
 end subroutine risort
 
 pure subroutine rrsort(a, b, n)
@@ -1821,7 +1805,6 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
-return
 end subroutine rrsort
 
 pure subroutine dsort(a, n)
@@ -1869,7 +1852,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine dsort
 
 pure subroutine disort(a, m, n)
@@ -1923,7 +1905,6 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
-return
 end subroutine disort
 
 pure subroutine ddsort(a, b, n)
@@ -1976,7 +1957,6 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
-return
 end subroutine ddsort
 
 pure subroutine aord(a, n)
@@ -2025,7 +2005,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine aord
 
 pure subroutine daord(a, n)
@@ -2074,7 +2053,6 @@ do 40 ii = 1,imax
 31    a(ll) = s
 !
 40 i = i - 1
-return
 end subroutine daord
 
 pure subroutine qsorti(x, ind, n)
@@ -2750,7 +2728,6 @@ go to 4
 !
 5 do 6 k = 1,nn
 6  ip(k) = -ip(k)
-return
 end subroutine iorder
 
 pure subroutine rorder(a, ip, n)
@@ -2825,7 +2802,6 @@ go to 4
 !
 5 do 6 k = 1,nn
 6  ip(k) = -ip(k)
-return
 end subroutine rorder
 
 pure subroutine dorder(a, ip, n)
@@ -2900,7 +2876,6 @@ go to 4
 !
 5 do 6 k = 1,nn
 6  ip(k) = -ip(k)
-return
 end subroutine dorder
 
 pure elemental real function cbrt(x)
@@ -2918,7 +2893,6 @@ cbrt = exp(r)
 return
 30 r = log(-x)/3.0
 cbrt = -exp(r)
-return
 end function cbrt
 
 pure elemental double precision function dcbrt(x)
@@ -2937,7 +2911,6 @@ dcbrt = exp(r)
 return
 30 r = log(-x)/3.d0
 dcbrt = -exp(r)
-return
 end function dcbrt
 
 pure elemental function artnq(y,x)
@@ -2958,7 +2931,6 @@ return
 7 artnq = atan(y/x)
 return
 8 artnq = 0.
-return
 end function artnq
 
 pure elemental double precision function dartnq(y,x)
@@ -2978,7 +2950,6 @@ return
 7 dartnq = atan(y/x)
 return
 8 dartnq = 0.d0
-return
 end function dartnq
 
 pure elemental real function cpabs(x, y)
@@ -2997,7 +2968,6 @@ a = x/y
 cpabs = abs(y)*sqrt(1.0 + a*a)
 return
 20 cpabs = 0.0
-return
 end function cpabs
 
 pure elemental double precision function dcpabs(x, y)
@@ -3017,7 +2987,6 @@ a = x/y
 dcpabs = abs(y)*sqrt(1.d0 + a*a)
 return
 20 dcpabs = 0.d0
-return
 end function dcpabs
 
 pure elemental subroutine crec(x, y, u, v)
@@ -3038,7 +3007,6 @@ return
 d = x + t*y
 u = 1.0/d
 v = -t/d
-return
 end subroutine crec
 
 pure elemental subroutine dcrec(x, y, u, v)
@@ -3060,7 +3028,6 @@ return
 d = x + t*y
 u = 1.d0/d
 v = -t/d
-return
 end subroutine dcrec
 
 pure elemental complex function cdiv(a, b)
@@ -3088,7 +3055,6 @@ d = bi + t*br
 u = (ar*t + ai)/d
 v = (ai*t - ar)/d
 cdiv = cmplx(u,v)
-return
 end function cdiv
 
 pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -3129,7 +3095,6 @@ return
 !
 20 cr = dpmpar(3)
 ci = cr
-return
 end subroutine cdivid
 
 pure subroutine dcsqrt(z, w)
@@ -3185,7 +3150,6 @@ return
 w(2) = sqrt(0.5d0*(r - x))
 w(2) = sign(w(2),y)
 w(1) = 0.5d0*y/w(2)
-return
 end subroutine dcsqrt
 
 pure elemental subroutine poca(r,a,x,y)
@@ -3194,7 +3158,6 @@ real, intent(in) :: a, r
 real, intent(out) :: x, y
 x = r*cos(a)
 y = r*sin(a)
-return
 end subroutine poca
 
 pure elemental subroutine capo(x,y,r,theta)
@@ -3214,7 +3177,6 @@ theta = atan2(y,x)
 return
 20 r = 0.0
 theta = 0.0
-return
 end subroutine capo
 
 pure elemental subroutine rota(x1,y1,a,x2,y2)
@@ -3228,7 +3190,6 @@ sina = sin(a)
 cosa = cos(a)
 x2 = x1*cosa + y1*sina
 y2 = -x1*sina + y1*cosa
-return
 end subroutine rota
 
 pure elemental subroutine srotg(sa,sb,sc,ss)
@@ -3303,7 +3264,6 @@ return
 !
 20 sc = 1.
 ss = 0.
-return
 !
 end subroutine srotg
 
@@ -3379,7 +3339,6 @@ return
 !
 20 dc = 1.d0
 ds = 0.d0
-return
 !
 end subroutine drotg
 
@@ -3423,7 +3382,6 @@ go to 22
 21 v = dble(a(1,1))*dble(a(1,2)) + dble(a(2,1))*dble(a(2,2))
 v = -v/sin(theta(2))
 22 theta(1) = atan2(v,u)
-return
 end subroutine rot3
 
 pure elemental subroutine constr(xk,yk,zk, cx,sx,cy,sy)
@@ -3471,7 +3429,6 @@ return
 !
 1 cx = 1.
 sx = 0.
-return
 end subroutine constr
 
 pure real function ang(n, x, y)
@@ -3517,7 +3474,6 @@ return
 !                           Error return
 !
 30 ang = -1.0
-return
 end function ang
 
 pure elemental real function sin0(x)
@@ -3538,7 +3494,6 @@ real, parameter :: a6 = .563372101191893e-07
 t = x*x
 sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
    & + a1)*t + a0)*x
-return
 end function sin0
 
 pure elemental real function cos0(x)
@@ -3557,7 +3512,6 @@ real, parameter :: a6 = .465461768260405e-06
 !------------------------
 t = x*x
 cos0 = (((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t + a1)*t + 1.0
-return
 end function cos0
 
 pure elemental real function sin1(x)
@@ -3625,7 +3579,6 @@ sin1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 !
 30 if (x < 0.0) sin1 = - sin1
 if (mod(n,2) /= 0) sin1 = - sin1
-return
 end function sin1
 
 pure elemental real function cos1(x)
@@ -3693,7 +3646,6 @@ cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 !                        Termination
 !
 30 if (mod(n,2) /= 0) cos1 = - cos1
-return
 end function cos1
 
 pure elemental double precision function dsin1(x)
@@ -3792,7 +3744,6 @@ dsin1 = pi*a*w
 !
 30 if (x < 0.0) dsin1 = - dsin1
 if (mod(n,2) /= 0) dsin1 = - dsin1
-return
 end function dsin1
 
 pure elemental double precision function dcos1(x)
@@ -3891,7 +3842,6 @@ dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
 !                        Termination
 !
 30 if (mod(n,2) /= 0) dcos1 = - dcos1
-return
 end function dcos1
 
 pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -3994,7 +3944,6 @@ coshm = ((((zp3*xs + zp2)*xs + zp1)*xs + 1.)*xs*xs)/(((((zq4 &
    & *xs + zq3)*xs + zq2)*xs + zq1)*xs + 1.)*24.)
 return
 5 coshm = (((1./expx - 2.) - xs) + expx)/2.
-return
 end subroutine snhcsh
 
 pure elemental real function esum(mu, x)
@@ -4021,7 +3970,6 @@ return
 !
 20 w = mu
 esum = exp(w)*exp(x)
-return
 end function esum
 
 pure elemental double precision function desum(mu, x)
@@ -4049,7 +3997,6 @@ return
 !
 20 w = mu
 desum = exp(w)*exp(x)
-return
 end function desum
 
 pure elemental real function rexp(x)
@@ -4079,7 +4026,6 @@ return
 rexp = (exp(x) - 0.5) - 0.5
 return
 30 rexp = -1.0
-return
 end function rexp
 
 pure elemental double precision function drexp(x)
@@ -4135,7 +4081,6 @@ return
 drexp = (exp(x) - 0.5d0) - 0.5d0
 return
 30 drexp = -1.d0
-return
 end function drexp
 
 pure elemental subroutine rexp1(x, e, w)
@@ -4172,7 +4117,6 @@ if (e < 0.0) e = exp(x)
 w = ((e - 0.5) - 0.5)/x
 return
 30 w = -1.0/x
-return
 end subroutine rexp1
 
 pure elemental subroutine drexp1(x, e, w)
@@ -4238,7 +4182,6 @@ if (e < 0.d0) e = exp(x)
 w = ((e - 0.5d0) - 0.5d0)/x
 return
 30 w = -1.d0/x
-return
 end subroutine drexp1
 
 pure elemental real function alnrel(a)
@@ -4266,7 +4209,6 @@ return
 10 x = 1.0 + a
 if (a < 0.0) x = (a + 0.5) + 0.5
 alnrel = log(x)
-return
 end function alnrel
 
 pure elemental double precision function dlnrel(a)
@@ -4317,7 +4259,6 @@ w = (((p3*t2 + p2)*t2 + p1)*t2 + p0)/ &
 !
 z = ((((w*t2 + c5)*t2 + c4)*t2 + c3)*t2 + c2)*t2 + c1
 dlnrel = 2.d0*t*(1.d0 + t2*z)
-return
 end function dlnrel
 
 pure elemental real function rlog(x)
@@ -4371,7 +4312,6 @@ return
 !
 100 r = (x - 0.5) - 0.5
 rlog = r - log(x)
-return
 end function rlog
 
 pure elemental real function rlog1(x)
@@ -4425,7 +4365,6 @@ return
 !
 100 w = (x + 0.5) + 0.5
 rlog1 = x - log(w)
-return
 end function rlog1
 
 pure elemental double precision function drlog(x)
@@ -4503,7 +4442,6 @@ return
 !
 100 r = (x - 0.5d0) - 0.5d0
 drlog = r - log(x)
-return
 end function drlog
 
 pure elemental double precision function drlog1(x)
@@ -4581,7 +4519,6 @@ return
 !
 100 w = (x + 0.5d0) + 0.5d0
 drlog1 = x - log(w)
-return
 end function drlog1
 
 pure subroutine locpt(x0, y0, x, y, n, l, m)
@@ -4671,7 +4608,6 @@ return
 !     (x0, y0) is on the boundary of the path
 !
 20 l = 0
-return
 end subroutine locpt
 
 pure subroutine pfind(a, b, x, y, n, u, v, m, num, ierr)
@@ -4843,7 +4779,6 @@ return
 num = num - 1
 return
 220 ierr = -i
-return
 end subroutine pfind
 
 pure subroutine hull(x, y, m, bx, by, k, vx, vy, n)
@@ -5246,7 +5181,6 @@ vx(3) = x(1)
 vy(1) = y(1)
 vy(2) = y(m)
 vy(3) = y(1)
-return
 end subroutine hull
 
 pure real function parea(x, y, nb)
@@ -5283,7 +5217,6 @@ a = x(1)*(y(2) - y(n)) + x(n)*(y(1) - y(nm1))
 do 31 i = 2, nm1
 31 a = a + x(i)*(y(i + 1) - y(i - 1))
 parea = 0.5*a
-return
 end function parea
 
 pure subroutine hc(ind, m, n, pr, ar, nb, s, iwk, num)
@@ -5417,7 +5350,6 @@ return
 30 ind = -4
 return
 40 ind = -5
-return
 end subroutine hc
 
 pure subroutine hc1(ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
@@ -5840,7 +5772,6 @@ return
 610 ind = -3
 return
 620 ind = -6
-return
 end subroutine hc1
 
 pure subroutine ipath(i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
@@ -5912,7 +5843,6 @@ l = l - 1
 go to 80
 90 rbus(i1) = 0
 rbus(j) = 0
-return
 end subroutine ipath
 
 pure subroutine fupd(a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
@@ -5941,7 +5871,6 @@ do 30 j = j1,j2
    a1(j) = k1 - ia
 30 continue
 v1(i1) = 0
-return
 end subroutine fupd
 
 pure subroutine bupd(a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
@@ -5971,7 +5900,6 @@ do 30 l = l1,l2
 20 a2(ll) = ii
    v2(ia) = v2(ia) + 1
 30 continue
-return
 end subroutine bupd
 
 pure subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
@@ -6007,7 +5935,6 @@ do 40 mm = m1,m2
 40 continue
 return
 50 ia = 0
-return
 end subroutine iupd
 
 pure subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
@@ -6059,7 +5986,6 @@ vc(ib) = vc(ib) - 1
 return
 ! Arc  (ia,ib)  cannot be removed from the graph.
 40 jj = -1
-return
 end subroutine rarc
 
 pure elemental subroutine cerf(mo, z, w)
@@ -6205,7 +6131,6 @@ return
 101 ef(1) = sn*(1.0 - ef(1))
 ef(2) = -sn*ef(2)
 w = cmplx(ef(1),ef(2))
-return
 end subroutine cerf
 
 pure elemental subroutine cerfc(mo, z, w)
@@ -6387,7 +6312,6 @@ qm = exp(sz(1))
 sm(1) = qm*cos(sz(2)) + sm(1)
 sm(2) = qm*sin(sz(2)) + sm(2)
 w = cmplx(sm(1),sm(2))
-return
 end subroutine cerfc
 
 pure elemental real function erf(x)
@@ -6441,7 +6365,6 @@ if (x < 0.0) erf = -erf
 return
 !
 30 erf = sign(1.0,x)
-return
 end function erf
 
 pure elemental real function erfc(x)
@@ -6525,7 +6448,6 @@ return
 !             Limit value for large positive x
 !
 50 erfc = 0.0
-return
 end function erfc
 
 pure elemental real function erfc1(ind, x)
@@ -6619,7 +6541,6 @@ return
 !                       when ind = 0
 !
 60 erfc1 = 0.0
-return
 end function erfc1
 
 pure subroutine dcerf(mo, z, w)
@@ -6926,7 +6847,6 @@ return
 210 if (sn < 0.0) return
 w(1) = - w(1)
 w(2) = - w(2)
-return
 end subroutine dcerf
 
 pure subroutine dcerfc(mo, z, w)
@@ -7243,7 +7163,6 @@ if (sz(1) <= dxparg(1)) go to 140
 e = exp(sz(1))
 w(1) = e*cos(sz(2)) + sm(1)
 w(2) = e*sin(sz(2)) + sm(2)
-return
 end subroutine dcerfc
 
 pure subroutine erfcm2(mo, z, w)
@@ -7354,7 +7273,6 @@ x = t(1)*w(1) - t(2)*w(2)
 y = t(1)*w(2) + t(2)*w(1)
 w(1) = x
 w(2) = y
-return
 end subroutine erfcm2
 
 pure elemental double precision function derf(x)
@@ -7406,7 +7324,6 @@ return
 !                 Limit value for large x
 !
 30 derf = sign(1.d0,x)
-return
 end function derf
 
 pure elemental double precision function derfc(x)
@@ -7469,7 +7386,6 @@ if (x > 100.d0) return
 t = x*x
 if (t > -dxparg(1)) return
 derfc = exp(-t) * derfc0(x)
-return
 end function derfc
 
 pure elemental double precision function derfc1(ind, x)
@@ -7549,7 +7465,6 @@ return
 !
 80 derfc1 = 2.d0
 if (ind /= 0) derfc1 = 2.d0*exp(x*x)
-return
 end function derfc1
 
 pure elemental double precision function derfc0(x)
@@ -7703,7 +7618,6 @@ z = (((((((((((s11*t + s10)*t + s9)*t + s8)*t + s7)*t + &
    & s6)*t + s5)*t + s4)*t + s3)*t + s2)*t + s1)*t - &
    & 0.5d0)*t + 1.d0
 derfc0 = rpinv*(z/x)
-return
 end function derfc0
 
 pure elemental real function erfi(p, q)
@@ -7816,7 +7730,6 @@ return
 100 erfi = -1.0
 return
 110 erfi = -2.0
-return
 end function erfi
 
 pure elemental double precision function derfi(p, q)
@@ -7973,7 +7886,6 @@ return
 100 derfi = -1.d0
 return
 110 derfi = -2.d0
-return
 end function derfi
 
 pure elemental real function aerf(x, h)
@@ -8117,7 +8029,6 @@ if (h*h >= 3.0*eps) go to 160
 aerf = c*h*t
 return
 160 aerf = t*erf(h)
-return
 end function aerf
 
 pure elemental double precision function daerf(x, h)
@@ -8263,7 +8174,6 @@ if (h*h >= 3.d0*eps) go to 160
 daerf = c*h*t
 return
 160 daerf = t*derf(h)
-return
 end function daerf
 
 pure elemental function pndf(x,ind)
@@ -8298,7 +8208,6 @@ return
 pndf = 0.5*erfc1(0,t)
 return
 30 pndf = c/erfc1(1,t)
-return
 end function pndf
 
 pure elemental subroutine pni(p, q, d, w, ierr)
@@ -8366,7 +8275,6 @@ return
 10 ierr = 1
 return
 20 ierr = 2
-return
 end subroutine pni
 
 pure elemental subroutine dpni(p, q, d, w, ierr)
@@ -8435,7 +8343,6 @@ return
 10 ierr = 1
 return
 20 ierr = 2
-return
 end subroutine dpni
 
 pure elemental real function daw(x)
@@ -8643,7 +8550,6 @@ return
 !                       abs(x) .GE. 4
 !
 30 dpdaw = dpdaw0(ax)/x
-return
 end function dpdaw
 
 pure elemental double precision function dpdaw0(x)
@@ -8832,7 +8738,6 @@ w = (((((p5*t + p4)*t + p3)*t + p2)*t + p1)*t + p0)/ &
 w = ((((w*t + 6.5625d0)*t + 1.875d0)*t + 0.75d0)*t + &
    & 0.5d0)*t + 1.d0
 dpdaw0 = 0.5d0*w
-return
 end function dpdaw0
 
 pure elemental subroutine cfrnli(mo, z, w)
@@ -9011,7 +8916,6 @@ qm = c0*exp(-x)
 sm(1) = sm(1) + qm*sin(y)
 sm(2) = sm(2) + qm*cos(y)
 w = cmplx(sm(1),sm(2))
-return
 end subroutine cfrnli
 
 pure elemental subroutine frnl(t, c, s)
@@ -9214,7 +9118,6 @@ s = 0.5
 return
 110 c = -0.5
 s = -0.5
-return
 end subroutine frnl
 
 pure elemental subroutine cexpli(mo, z, w)
@@ -9402,7 +9305,6 @@ sm(2) = ts(2)
 if (.not. ind) sm(2) = sm(2) + c
 !
 130 w = cmplx(sm(1),sm(2))
-return
 end subroutine cexpli
 
 pure elemental subroutine expli(int,arg,result,ierr)
@@ -9725,7 +9627,6 @@ return
 !     ---------- Error return for negative
 !                argument in e-sub-1 ----------
 660 ierr = 4
-return
 end subroutine expli
 
 pure elemental double precision function dei(x)
@@ -9744,7 +9645,6 @@ end interface
 !
 dei = -de1e(-x)
 if (x > 4.d0 .or. x < -1.d0) dei = exp(x) * dei
-return
 end function dei
 
 pure elemental double precision function dei1(x)
@@ -9764,7 +9664,6 @@ end interface
 dei1 = -de1e(-x)
 if (x > 4.d0 .or. x < -1.d0) return
 dei1 = exp(-x) * dei1
-return
 end function dei1
 
 pure elemental double precision function de1e(x)
@@ -10052,7 +9951,6 @@ c = (m*t)*c
 w = c + w
 if (abs(c) > eps) go to 81
 de1e = (1.d0 + w)/x
-return
 end function de1e
 
 pure elemental double precision function dei0(x, eps)
@@ -10129,7 +10027,6 @@ do 10 n = 2,40
 10 continue
 !
 20 dei0 = h * (a(1) + w)
-return
 end function dei0
 
 pure function si(x)
@@ -10241,7 +10138,6 @@ if (x < 0.0) si = -si
 return
 !
 50 si = sign(pio2,x)
-return
 end function si
 
 pure elemental function cin(x)
@@ -10353,7 +10249,6 @@ cin = (econ - cin) + log(ax)
 return
 !
 50 cin = econ + log(ax)
-return
 end function cin
 
 pure elemental subroutine cexexi(z, w)
@@ -10554,6 +10449,121 @@ sm(2) = sr(2) + sm(2)
 !                         Termination
 !-----------------------------------------------------------------------
 130 w = cmplx(sm(1), sm(2))
-return
 end subroutine cexexi
+
+pure elemental complex function cli(z)
+implicit none
+complex, intent(in) :: z
+integer :: n
+real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
+real, parameter :: c = 1.64493406684823
+real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
+   & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
+   & 2.29178211549926e-2, -2.31276449354844e-2, -2.33038680700203e-2, -2.34539766464373e-2, -2.35833786876607e-2, - &
+   & 2.36960832049849e-2, -2.37951264448373e-2, -2.38828504258091e-2, -2.39610907251825e-2, -2.40313063764460e-2, - &
+   & 2.40946717197585e-2, -2.41521426124012e-2, -2.42045049812210e-2, -2.42524109782181e-2, -2.42964062815807e-2, - &
+   & 2.43369509729144e-2]
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
+!     ******************************************************************
+!     Computation of the complex logarithmic integral
+!     ******************************************************************
+!     ---------------------
+!     c = pi**2/6
+!     ---------------------
+!     ---------------------
+!     ---------------------
+az(1) = real(z)
+az(2) = aimag(z)
+r = cpabs(az(1),az(2))
+if (r > 0.5) go to 10
+sr(1) = 0.0
+sr(2) = 0.0
+qf(1) = -az(1)
+qf(2) = -az(2)
+tm(1) = az(1)
+tm(2) = az(2)
+go to 30
+!
+10 if (r < 3.0) go to 20
+zl(1) = log(r)
+zl(2) = atan2(az(2),az(1))
+sr(1) = c + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
+sr(2) = zl(1)*zl(2)
+qf(1) = (-az(1)/r)/r
+qf(2) = (az(2)/r)/r
+tm(1) = qf(1)
+tm(2) = qf(2)
+go to 30
+!
+20 zd(1) = 1.0 + az(1)
+zd(2) = az(2)
+ds = zd(1)*zd(1) + zd(2)*zd(2)
+if (ds == 0.0) go to 100
+dl(1) = 0.5*log(ds)
+dl(2) = atan2(zd(2),zd(1))
+if (ds > 0.25) go to 50
+zl(1) = log(r)
+zl(2) = atan2(-az(2),-az(1))
+sr(1) = -c + (dl(1)*zl(1) - dl(2)*zl(2))
+sr(2) = dl(1)*zl(2) + dl(2)*zl(1)
+qf(1) = zd(1)
+qf(2) = zd(2)
+tm(1) = qf(1)
+tm(2) = qf(2)
+!
+!             Evaluation of the Taylor series
+!
+30 sr(1) = sr(1) + tm(1)
+sr(2) = sr(2) + tm(2)
+sm(1) = 0.0
+sm(2) = 0.0
+pm = 1.0
+40 pm = pm + 1.0
+ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+tm(1) = ts(1)
+tm(2) = ts(2)
+ts(1) = tm(1)/(pm*pm)
+ts(2) = tm(2)/(pm*pm)
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 41
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 80
+41 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+go to 40
+!
+!        Evaluation of the series in  U = -LN(1 + z)
+!
+50 qf(1) = dl(1)*dl(1) - dl(2)*dl(2)
+qf(2) = 2.0*dl(1)*dl(2)
+sr(1) = dl(1) + 0.25*qf(1)
+sr(2) = dl(2) + 0.25*qf(2)
+sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = dl(1)
+tm(2) = dl(2)
+do n = 1,25
+   ts(1) = qb(n)*(tm(1)*qf(1) - tm(2)*qf(2))
+   ts(2) = qb(n)*(tm(1)*qf(2) + tm(2)*qf(1))
+   tm(1) = ts(1)
+   tm(2) = ts(2)
+   if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
+   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
+60 sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+!
+80 cli = cmplx(sr(1) + sm(1), sr(2) + sm(2))
+return
+!
+!                  Evaluation at z = -1
+!
+100 cli = cmplx(-c, 0.0)
+end function cli
 

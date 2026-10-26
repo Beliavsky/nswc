@@ -223,6 +223,12 @@ declarations within contiguous blocks. Argument declarations, comments,
 initializers, and type/bound dependencies retain their boundaries. See the
 [local-declaration guide](docs/local-declarations.md) for usage and validation.
 
+The maintained fixed-form source and both free-form versions also omit redundant
+unlabelled final `return` statements. Labelled, conditional, early, and alternate
+returns remain. The shared cleanup runs after fixed-form declaration ordering
+and at the end of free-form generation; `nswc_orig.f` remains unchanged.
+See the [final-return guide](docs/final-returns.md) for the review and checks.
+
 Comment capitalization uses `tools/sentence_case_comments.py` for selected
 uppercase explanatory comments. Sentences continue across physical line breaks.
 The prose vocabulary and proper-name rules are maintained in

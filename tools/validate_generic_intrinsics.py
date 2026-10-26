@@ -14,6 +14,7 @@ from procedure_purity import transform as apply_purity
 from sentence_case_comments import sentence_case
 from simplify_free_style import transform as simplify_style
 from coalesce_local_declarations import transform as coalesce_locals
+from remove_final_returns import transform_free as remove_final_returns
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,7 +29,7 @@ def main():
     baseline = baseline_source()
     manifest = json.loads(MANIFEST.read_text())
     converted = transform(baseline, manifest)
-    if coalesce_locals(converted) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if remove_final_returns(coalesce_locals(converted)) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Generic intrinsic regeneration differs from maintained source')
     with tempfile.TemporaryDirectory(prefix='nswc-generic-validation-') as work:
         before = compile_dump(baseline, work)

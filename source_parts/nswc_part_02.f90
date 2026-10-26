@@ -1,120 +1,3 @@
-pure elemental complex function cli(z)
-implicit none
-complex, intent(in) :: z
-integer :: n
-real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
-real, parameter :: c = 1.64493406684823
-real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
-   & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
-   & 2.29178211549926e-2, -2.31276449354844e-2, -2.33038680700203e-2, -2.34539766464373e-2, -2.35833786876607e-2, - &
-   & 2.36960832049849e-2, -2.37951264448373e-2, -2.38828504258091e-2, -2.39610907251825e-2, -2.40313063764460e-2, - &
-   & 2.40946717197585e-2, -2.41521426124012e-2, -2.42045049812210e-2, -2.42524109782181e-2, -2.42964062815807e-2, - &
-   & 2.43369509729144e-2]
-interface
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!     ******************************************************************
-!     Computation of the complex logarithmic integral
-!     ******************************************************************
-!     ---------------------
-!     c = pi**2/6
-!     ---------------------
-!     ---------------------
-!     ---------------------
-az(1) = real(z)
-az(2) = aimag(z)
-r = cpabs(az(1),az(2))
-if (r > 0.5) go to 10
-sr(1) = 0.0
-sr(2) = 0.0
-qf(1) = -az(1)
-qf(2) = -az(2)
-tm(1) = az(1)
-tm(2) = az(2)
-go to 30
-!
-10 if (r < 3.0) go to 20
-zl(1) = log(r)
-zl(2) = atan2(az(2),az(1))
-sr(1) = c + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
-sr(2) = zl(1)*zl(2)
-qf(1) = (-az(1)/r)/r
-qf(2) = (az(2)/r)/r
-tm(1) = qf(1)
-tm(2) = qf(2)
-go to 30
-!
-20 zd(1) = 1.0 + az(1)
-zd(2) = az(2)
-ds = zd(1)*zd(1) + zd(2)*zd(2)
-if (ds == 0.0) go to 100
-dl(1) = 0.5*log(ds)
-dl(2) = atan2(zd(2),zd(1))
-if (ds > 0.25) go to 50
-zl(1) = log(r)
-zl(2) = atan2(-az(2),-az(1))
-sr(1) = -c + (dl(1)*zl(1) - dl(2)*zl(2))
-sr(2) = dl(1)*zl(2) + dl(2)*zl(1)
-qf(1) = zd(1)
-qf(2) = zd(2)
-tm(1) = qf(1)
-tm(2) = qf(2)
-!
-!             Evaluation of the Taylor series
-!
-30 sr(1) = sr(1) + tm(1)
-sr(2) = sr(2) + tm(2)
-sm(1) = 0.0
-sm(2) = 0.0
-pm = 1.0
-40 pm = pm + 1.0
-ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
-ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
-tm(1) = ts(1)
-tm(2) = ts(2)
-ts(1) = tm(1)/(pm*pm)
-ts(2) = tm(2)/(pm*pm)
-if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 41
-if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 80
-41 sm(1) = sm(1) + ts(1)
-sm(2) = sm(2) + ts(2)
-go to 40
-!
-!        Evaluation of the series in  U = -LN(1 + z)
-!
-50 qf(1) = dl(1)*dl(1) - dl(2)*dl(2)
-qf(2) = 2.0*dl(1)*dl(2)
-sr(1) = dl(1) + 0.25*qf(1)
-sr(2) = dl(2) + 0.25*qf(2)
-sm(1) = 0.0
-sm(2) = 0.0
-tm(1) = dl(1)
-tm(2) = dl(2)
-do n = 1,25
-   ts(1) = qb(n)*(tm(1)*qf(1) - tm(2)*qf(2))
-   ts(2) = qb(n)*(tm(1)*qf(2) + tm(2)*qf(1))
-   tm(1) = ts(1)
-   tm(2) = ts(2)
-   if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
-   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
-60 sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-!
-80 cli = cmplx(sr(1) + sm(1), sr(2) + sm(2))
-return
-!
-!                  Evaluation at z = -1
-!
-100 cli = cmplx(-c, 0.0)
-return
-end function cli
-
 pure elemental real function ali(x)
 implicit none
 real, intent(in) :: x
@@ -254,7 +137,6 @@ return
 ali = ((((((r(7)*t + r(6))*t + r(5))*t + r(4))*t + r(3))*t + &
    & r(2))*t + r(1)) / (((((s(6)*t + s(5))*t + &
    & s(4))*t + s(3))*t + s(2))*t + s(1))
-return
 end function ali
 
 pure elemental subroutine cgamma(mo, z, w)
@@ -503,7 +385,6 @@ return
 !             The requested value cannot be computed
 !-----------------------------------------------------------------------
 200 w = (0.0, 0.0)
-return
 end subroutine cgamma
 
 pure elemental complex function cgam0(z)
@@ -535,7 +416,6 @@ do 10 i = 2,n
    w = a(k) + z*w
 10 continue
 cgam0 = 1.0 + z*w
-return
 end function cgam0
 
 pure elemental real function gamma(a)
@@ -681,7 +561,6 @@ t = g - dble(w)
 if (w > 0.99999*exparg(0)) return
 gamma = exp(w)*(1.0 + t)
 if (a < 0.0) gamma = (1.0/(gamma*s))/x
-return
 end function gamma
 
 pure elemental double precision function glog(x)
@@ -744,7 +623,6 @@ glog = w(n - 14) + z
 return
 !
 10 glog = log(x)
-return
 end function glog
 
 pure elemental real function gam1(a)
@@ -793,7 +671,6 @@ if (d > 0.0) go to 31
 gam1 = a*((w + 0.5) + 0.5)
 return
 31 gam1 = t*w/a
-return
 end function gam1
 
 pure elemental real function gamln(a)
@@ -892,7 +769,6 @@ return
 w = (((((r5*x + r4)*x + r3)*x + r2)*x + r1)*x + r0)/ &
    & (((((s5*x + s4)*x + s3)*x + s2)*x + s1)*x + 1.0)
 gamln1 = x*w
-return
 end function gamln1
 
 pure subroutine dcgama(mo, z, w)
@@ -1167,7 +1043,6 @@ return
 !-----------------------------------------------------------------------
 200 w(1) = 0.d0
 w(2) = 0.d0
-return
 end subroutine dcgama
 
 pure elemental double precision function dgamma(a)
@@ -1295,7 +1170,6 @@ w = (d + w) + (x - 0.5d0)*(log(x) - 1.d0)
 if (w > dxparg(0)) return
 dgamma = exp(w)
 if (a < 0.d0) dgamma = (1.d0/(dgamma*s))/x
-return
 end function dgamma
 
 pure elemental double precision function dpdel(x)
@@ -1330,7 +1204,6 @@ do 10 i = 1,14
    w = t*w + a(k)
 10 continue
 dpdel = w/x
-return
 end function dpdel
 
 pure elemental double precision function dgam1(x)
@@ -1494,7 +1367,6 @@ if (d > 0.d0) go to 50
 dgam1 = x*((z + 0.5d0) + 0.5d0)
 return
 50 dgam1 = t*z/x
-return
 end function dgam1
 
 pure elemental double precision function dgamln(a)
@@ -1573,7 +1445,6 @@ end interface
 !-----------------------
 w = dgam1(x)
 dgmln1 = - dlnrel(w)
-return
 end function dgmln1
 
 pure elemental subroutine cpsi(z, w)
@@ -1721,7 +1592,6 @@ return
 !             The requested value cannot be computed
 !-----------------------------------------------------------------------
 100 w = (0.0, 0.0)
-return
 end subroutine cpsi
 
 pure real function psi(xx)
@@ -1902,7 +1772,6 @@ return
 !     Error return
 !---------------------------------------------------------------------
 400 psi = 0.0e0
-return
 end function psi
 
 pure subroutine dcpsi(z, w)
@@ -2077,7 +1946,6 @@ return
 !-----------------------------------------------------------------------
 100 w(1) = 0.d0
 w(2) = 0.d0
-return
 end subroutine dcpsi
 
 pure elemental double precision function dpsi(a)
@@ -2257,7 +2125,6 @@ s = 0.5d0/x + t*s
 !
 dpsi = log(x) - s
 if (a < 0.d0) dpsi = dpsi - w
-return
 end function dpsi
 
 pure elemental double precision function dpsi0(x)
@@ -2318,7 +2185,6 @@ do 10 i = 1,nm1
    w = a(l) + h*w
 10 continue
 dpsi0 = h*w
-return
 end function dpsi0
 
 pure subroutine psidf(x, n, m, ans, iflag)
@@ -2640,7 +2506,6 @@ return
 return
 !                            Increase the dimension of trmr(nmax)
 330 iflag = 4
-return
 end subroutine psidf
 
 pure elemental real function betaln(a0, b0)
@@ -2757,7 +2622,6 @@ if (u <= v) go to 61
 betaln = (((-0.5*log(b) + e) + w) - v) - u
 return
 61 betaln = (((-0.5*log(b) + e) + w) - u) - v
-return
 end function betaln
 
 pure elemental real function gsumln(a, b)
@@ -2788,7 +2652,6 @@ return
 gsumln = gamln1(x) + alnrel(x)
 return
 20 gsumln = gamln1(x - 1.0) + log(x*(1.0 + x))
-return
 end function gsumln
 
 pure elemental real function bcorr(a0, b0)
@@ -2835,7 +2698,6 @@ w = w*(c/b)
 !
 t = (1.0/a)**2
 bcorr = (((((c5*t + c4)*t + c3)*t + c2)*t + c1)*t + c0)/a + w
-return
 end function bcorr
 
 pure elemental real function algdiv(a, b)
@@ -2900,7 +2762,6 @@ if (u <= v) go to 30
 algdiv = (w - v) - u
 return
 30 algdiv = (w - u) - v
-return
 end function algdiv
 
 pure elemental double precision function dbetln(a0, b0)
@@ -3019,7 +2880,6 @@ if (u <= v) go to 61
 dbetln = (((-0.5d0*log(b) + e) + w) - v) - u
 return
 61 dbetln = (((-0.5d0*log(b) + e) + w) - u) - v
-return
 end function dbetln
 
 pure elemental double precision function dgsmln(a, b)
@@ -3051,7 +2911,6 @@ return
 dgsmln = dgmln1(x) + dlnrel(x)
 return
 20 dgsmln = dgmln1(x - 1.d0) + log(x*(1.d0 + x))
-return
 end function dgsmln
 
 pure elemental double precision function dbcorr(a0, b0)
@@ -3115,7 +2974,6 @@ do j = 1,14
    z = t*z + e(k)
 end do
 dbcorr = z/a + w
-return
 end function dbcorr
 
 pure elemental double precision function dlgdiv(a, b)
@@ -3189,7 +3047,6 @@ if (u <= v) go to 40
 dlgdiv = (w - v) - u
 return
 40 dlgdiv = (w - u) - v
-return
 end function dlgdiv
 
 pure elemental subroutine gratio(a, x, ans, qans, ind)
@@ -3638,7 +3495,6 @@ go to 310
 !                     Error return
 !
 400 ans = 2.0
-return
 end subroutine gratio
 
 pure elemental real function rcomp(a, x)
@@ -3687,7 +3543,6 @@ t = (1.0/a)**2
 t1 = (((0.75*t - 1.0)*t + 3.5)*t - 105.0)/(a*1260.0)
 t1 = t1 - a*rlog(u)
 if (t1 >= exparg(1)) rcomp = rt2pin*sqrt(a)*exp(t1)
-return
 end function rcomp
 
 pure elemental double precision function drcomp(a, x)
@@ -3741,7 +3596,6 @@ return
 if (t == 0.d0) return
 w = -(dpdel(a) + a*drlog(t))
 if (w >= dxparg(1)) drcomp = c * sqrt(a) * exp(w)
-return
 end function drcomp
 
 pure elemental subroutine gaminv(a, x, x0, p, q, ierr)
@@ -4116,7 +3970,6 @@ return
 !
 560 x = spmpar(3)
 ierr = -8
-return
 end subroutine gaminv
 
 pure elemental subroutine dgrat(a, x, ans, qans, ierr)
@@ -4430,7 +4283,6 @@ return
 !
 420 ierr = 3
 ans = 2.d0
-return
 end subroutine dgrat
 
 pure elemental subroutine dgr29(a, y, l, z, rta, ans, qans)
@@ -4636,7 +4488,6 @@ ans = 0.5d0 + (0.5d0 - qans)
 return
 10 ans = e*(w - rt2pin*t/rta)
 qans = 0.5d0 + (0.5d0 - ans)
-return
 end subroutine dgr29
 
 pure elemental subroutine dgr17(a, y, l, z, rta, ans, qans)
@@ -4743,7 +4594,6 @@ ans = 0.5d0 + (0.5d0 - qans)
 return
 10 ans = e*(w - rt2pin*t/rta)
 qans = 0.5d0 + (0.5d0 - ans)
-return
 end subroutine dgr17
 
 pure elemental subroutine dginv(a, x, p, q, ierr)
@@ -5122,7 +4972,6 @@ return
 !
 560 x = dpmpar(3)
 ierr = -8
-return
 end subroutine dginv
 
 pure elemental subroutine bratio(a, b, x, y, w, w1, ierr)
@@ -5407,7 +5256,6 @@ return
 350 ierr = 6
 return
 360 ierr = 7
-return
 end subroutine bratio
 
 pure elemental real function fpser(a, b, x, eps)
@@ -5453,7 +5301,6 @@ s = s + c
 if (abs(c) > tol) go to 20
 !
 fpser = fpser*(1.0 + a*s)
-return
 end function fpser
 
 pure elemental real function apser(a, b, x, eps)
@@ -5492,7 +5339,6 @@ s = s + aj
 if (abs(aj) > tol) go to 30
 !
 apser = -a*(c + s)
-return
 end function apser
 
 pure elemental real function bpser(a, b, x, eps)
@@ -5600,7 +5446,6 @@ w = c/(a + n)
 sum = sum + w
 if (abs(w) > tol) go to 100
 bpser = bpser*(1.0 + a*sum)
-return
 end function bpser
 
 pure elemental real function bup(a, b, x, y, n, eps)
@@ -5685,7 +5530,6 @@ end do
 !               Terminate the procedure
 !
 50 bup = bup*w
-return
 end function bup
 
 pure elemental real function bfrac(a, b, x, y, lambda, eps)
@@ -5761,7 +5605,6 @@ go to 10
 !                 Termination
 !
 20 bfrac = bfrac*r
-return
 end function bfrac
 
 pure elemental real function brcomp(a, b, x, y)
@@ -5917,7 +5760,6 @@ go to 130
 !
 130 z = exp(-(a*u + b*v))
 brcomp = const*sqrt(b*x0)*z*exp(-bcorr(a,b))
-return
 end function brcomp
 
 pure elemental real function brcmp1(mu, a, b, x, y)
@@ -6078,7 +5920,6 @@ go to 130
 !
 130 z = esum(mu,-(a*u + b*v))
 brcmp1 = const*sqrt(b*x0)*z*exp(-bcorr(a,b))
-return
 end function brcmp1
 
 pure elemental subroutine bgrat(a, b, x, y, w, eps, ierr)
@@ -6180,7 +6021,6 @@ return
 !               The expansion cannot be computed
 !
 100 ierr = 1
-return
 end subroutine bgrat
 
 pure elemental subroutine grat1(a,x,r,p,q,eps)
@@ -6410,7 +6250,6 @@ end do
 !
 60 u = exp(-bcorr(a,b))
 basym = e0*t*u*sum
-return
 end function basym
 
 pure elemental subroutine isubx(a0, b0, x0, p, ierr, eps)
@@ -6676,7 +6515,6 @@ return
 return
 !
 420 ierr = 4
-return
 end subroutine isubx
 
 pure elemental real function blnd(a,b)
@@ -6700,7 +6538,6 @@ if (a > 20.0) go to 10
 blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
 return
 10 blnd = algdiv(b,a) + logam(b + 1.0)
-return
 end function blnd
 
 pure elemental real function logam(x)
@@ -6757,7 +6594,6 @@ return
 10 t = (1.0/x)**2
 z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
 logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
-return
 end function logam
 
 subroutine cbsslj(z, cnu, w)
@@ -6998,7 +6834,6 @@ w = w*cgam0(cnu)
 return
 200 call cgamma(0, cnu, t)
 w = cdiv(w, cnu*t)
-return
 end subroutine cbsslj
 
 subroutine cbjm(z, cnu, w)
@@ -7117,7 +6952,6 @@ t = t*(s/(m*(nu + m)))
 w = w + t
 if (anorm(t) > eps*anorm(w)) go to 70
 !
-return
 end subroutine cbjm
 
 pure elemental subroutine cbdb(cz, cnu, fn, w)
@@ -7315,7 +7149,6 @@ go to 200
 180 w = s2 - t
 !
 200 if (inu < 0.0) w = conjg(w)
-return
 end subroutine cbdb
 
 pure elemental subroutine cbja(cz, cnu, w)
@@ -7436,7 +7269,6 @@ v = r*sin1(rnu)
 w = w*cmplx(u,v)
 !
 60 if (ind /= 0) w = conjg(w)
-return
 end subroutine cbja
 
 pure elemental subroutine bsslj(a, in, w)
@@ -7723,7 +7555,6 @@ qf(2) = 0.5*tm(2)/qn
 fj(1) = qf(1)*sm(1) - qf(2)*sm(2)
 fj(2) = qf(1)*sm(2) + qf(2)*sm(1)
 w = cmplx(fj(1),fj(2))
-return
 end subroutine bsslj
 
 subroutine besj(x, alpha, n, y, nz)
@@ -8209,7 +8040,6 @@ nz = -3
 return
 730 continue
 nz = -1
-return
 end subroutine besj
 
 subroutine asjy(funjy,x,fnu,flgjy,in,tol,elim,y,wk,iflw)
@@ -8651,7 +8481,6 @@ do 170 jn = 1,in
    y(jn) = flgjy*phi*(fi*asum + dfi*bsum)/wk(7)
    fn = fn - flgjy
 170 continue
-return
 end subroutine asjy
 
 pure subroutine jairy(x,rx,c,ai,dai)
@@ -8937,7 +8766,6 @@ temp2 = t*e1 - e2 + db(1)
 e1 = ccv*con5 + .5*scv
 e2 = scv*con5 - .5*ccv
 dai = (temp1*e1 - temp2*e2)*rtrx
-return
 end subroutine jairy
 
 pure elemental subroutine bssly(a, in, w)
@@ -9283,7 +9111,6 @@ return
 w = exp(t)*w
 t = 0.5*real(nu)
 w = w*cmplx(cos1(t),sin1(t))
-return
 end subroutine cbssli
 
 pure elemental subroutine bssli(mo, a, in, w)
@@ -9590,7 +9417,6 @@ qf(2) = ts(2)
 047 fi(1) = qf(1)*sm(1) - qf(2)*sm(2)
 fi(2) = qf(1)*sm(2) + qf(2)*sm(1)
 w = cmplx(fi(1),fi(2))
-return
 end subroutine bssli
 
 pure subroutine besi(x, alpha, kode, n, y, nz)
@@ -10084,7 +9910,6 @@ nz = -1
 return
 610 continue
 nz = -5
-return
 end subroutine besi
 
 pure subroutine asik(x,fnu,kode,flgik,ra,arg,in,tol,y)
@@ -10190,7 +10015,6 @@ do 50 jn = 1,in
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
 50 continue
-return
 end subroutine asik
 
 subroutine cbesk(z, cnu, w)
@@ -10315,7 +10139,6 @@ return
 !     Power series and Miller algorithm
 !
 200 call cbkm(z, rz, nu, w)
-return
 end subroutine cbesk
 
 subroutine cbki(z, cnu, w)
@@ -10358,7 +10181,6 @@ b = pi*aimag(cnu)
 u1 = sin1(a)*cosh(b)
 u2 = cos1(a)*sinh(b)
 w = pihalf*cdiv(w1 - w2, cmplx(u1,u2))
-return
 end subroutine cbki
 
 subroutine cbka(z, cnu, w)
@@ -10422,7 +10244,6 @@ end do
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
-return
 end subroutine cbka
 
 subroutine cbkm(z, rz, cnu, w)
@@ -10563,6 +10384,149 @@ w1 = cmplx (-aimag(z), real(z))
 call cbsslj(w1, r, w2)
 w2 = cmplx (-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
-return
 end subroutine cbkm
+
+subroutine ckps(z, r, zr, nu, w1, w2)
+implicit none
+real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex :: nu
+complex, intent(inout) :: w1, w2
+integer :: k
+real :: ak, eps, eps0, phi, s, u, x, y
+real :: anorm
+complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
+   & t2
+real, parameter :: tol = 1.e-10
+real, parameter :: pi = 3.14159265358979
+real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+   & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+   pure elemental function cgam0(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cgam0
+   end function cgam0
+   pure elemental subroutine cgamma(mo,z,w)
+      implicit none
+      integer, intent(in) :: mo
+      complex, intent(in) :: z
+      complex, intent(inout) :: w
+   end subroutine cgamma
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!
+!        Calculation of the modified Bessel functions
+!
+!                  w1 = k  (z)  AND  w2 = k    (z)
+!                        nu                nu+1
+!
+!     For a complex argument z where abs(z) .LE. 2 and a complex
+!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
+!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
+!     series expansions are used.
+!
+!-----------------------------------------------------------------------
+!-----------------------
+!-----------------------
+!-----------------------
+anorm(t) = max(abs(real(t)), abs(aimag(t)))
+!-----------------------------------------------------------------------
+!
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+!
+eps = spmpar(1)
+!
+!-----------------------------------------------------------------------
+eps0 = max(eps, 5.e-15)
+!
+!                     cl = - ln(z/2)
+!
+phi = atan2(aimag(z),real(z))
+cl = cmplx(-log(r), -phi)
+mu = nu*cl
+c = exp(mu)
+!
+!                   g1 = gamma(1 + nu)
+!                   g2 = gamma(1 - nu)
+!
+t = pi*nu
+if (anorm(nu) > tol) go to 10
+a = 1.0 + (t*t)/6.0
+go to 20
+10 a = t/sin(t)
+!
+20 s = real(nu)**2 + aimag(nu)**2
+if (s >= 1.0) go to 21
+t = cgam0(nu)
+g1 = 1.0/t
+g2 = a*t
+go to 30
+21 t = 0.5 + (0.5 + nu)
+call cgamma(0, t, g1)
+g2 = cdiv(a,g1)
+!
+30 gm2 = 0.5*(g1 + g2)
+if (s > 0.04) go to 31
+!
+!         The following is the Taylor series for
+!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
+!
+t = nu*nu
+w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
+   & d(3))*t + d(2))*t + d(1))
+gm1 = a*w1
+go to 40
+31 gm1 = 0.5*(g1 - g2)/nu
+!
+!            Initialization of the summation
+!
+40 p = 0.5*c*g1
+q = 0.5*cdiv(g2,c)
+x = real(mu)
+y = aimag(mu)
+if (anorm(mu) > tol) go to 50
+u = x*y
+sh = cmplx(1.0, u/3.0)
+ch = cmplx(1.0, u)
+go to 60
+50 t = cmplx (-y, x)
+sh = sin(t)/t
+ch = cos(t)
+!
+60 f = gm1*ch + gm2*cl*sh
+c = (1.0, 0.0)
+w1 = f
+w2 = p
+!
+!                 Summation of series
+!
+t = 0.25*(z*z)
+do k = 1, 50
+   ak = k
+   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
+   p = p/(ak - nu)
+   q = q/(ak + nu)
+   c = c*t/ak
+   t1 = c*f
+   w1 = w1 + t1
+   t2 = c*(p - ak*f)
+   w2 = w2 + t2
+   if (anorm(t1) <= eps0*anorm(w1)) go to 80
+end do
+!
+80 w2 = w2 * zr
+end subroutine ckps
 

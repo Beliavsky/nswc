@@ -15,6 +15,7 @@ from portable_intrinsics import transform as portable_intrinsics
 from simplify_free_style import transform as simplify_style
 from generic_intrinsics import transform as apply_generics
 from coalesce_local_declarations import transform as coalesce_locals
+from remove_final_returns import transform_free as remove_final_returns
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -51,7 +52,7 @@ def main():
     args = parser.parse_args()
     original = lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii')))
     formatted = format_source(original)
-    if semantic_statements(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(formatted)))))))) != semantic_statements((ROOT / 'nswc.f90').read_text(encoding='ascii')):
+    if semantic_statements(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(formatted))))))))) != semantic_statements((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Maintained free-form code differs from formatted fixed-form conversion')
     dumps = []
     with tempfile.TemporaryDirectory(prefix='nswc-free-formatting-') as folder:

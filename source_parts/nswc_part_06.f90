@@ -1,313 +1,3 @@
-pure subroutine bprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-real :: sum
-!-----------------------------------------------------------------------
-!                Multiplication of real banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do 10 i = 1,m
-10    c(i,j) = 0.0
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min(m - 1,ml + nl)
-jc = 0
-if (mcl == 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) /= 0.0) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl >= nc) go to 100
-jc = 1
-if (mcl == 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min(l - 1,mu + nu)
-if (mcu == 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) /= 0.0) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last > nc) go to 200
-if (mcu == 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = 0.0
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-return
-end subroutine bprod
-
-pure subroutine dbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-double precision :: sum
-!-----------------------------------------------------------------------
-!          Multiplication of double precision banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do 10 i = 1,m
-10    c(i,j) = 0.d0
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min(m - 1,ml + nl)
-jc = 0
-if (mcl == 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.d0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) /= 0.d0) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl >= nc) go to 100
-jc = 1
-if (mcl == 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.d0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min(l - 1,mu + nu)
-if (mcu == 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.d0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) /= 0.d0) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last > nc) go to 200
-if (mcu == 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = 0.d0
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.d0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-return
-end subroutine dbprod
-
 pure subroutine cbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
@@ -460,7 +150,6 @@ return
 !     Error return
 !
 200 ierr = last
-return
 end subroutine cbprod
 
 pure subroutine bvprd(m,n,a,ka,ml,mu,x,y)
@@ -513,7 +202,6 @@ imin = imax + 1
 do i = imin,m
    y(i) = 0.0
 end do
-return
 end subroutine bvprd
 
 pure subroutine bvprd1(m,n,a,ka,ml,mu,x,y)
@@ -559,7 +247,6 @@ do i = mlp1,imax
    end do
    y(i) = sum
 end do
-return
 end subroutine bvprd1
 
 pure subroutine dbvpd(m,n,a,ka,ml,mu,x,y)
@@ -613,7 +300,6 @@ imin = imax + 1
 do i = imin,m
    y(i) = 0.d0
 end do
-return
 end subroutine dbvpd
 
 pure subroutine dbvpd1(m,n,a,ka,ml,mu,x,y)
@@ -659,7 +345,6 @@ do i = mlp1,imax
    end do
    y(i) = sum
 end do
-return
 end subroutine dbvpd1
 
 pure subroutine cbvpd(m,n,a,ka,ml,mu,x,y)
@@ -712,7 +397,6 @@ imin = imax + 1
 do i = imin,m
    y(i) = (0.0,0.0)
 end do
-return
 end subroutine cbvpd
 
 pure subroutine cbvpd1(m,n,a,ka,ml,mu,x,y)
@@ -758,7 +442,6 @@ do i = mlp1,imax
    end do
    y(i) = sum
 end do
-return
 end subroutine cbvpd1
 
 pure subroutine btprd(m,n,a,ka,ml,mu,x,y)
@@ -810,7 +493,6 @@ jmin = jmax + 1
 do j = jmin,n
    y(j) = 0.0
 end do
-return
 end subroutine btprd
 
 pure subroutine btprd1(m,n,a,ka,ml,mu,x,y)
@@ -855,7 +537,6 @@ do j = jmin,jmax
    end do
    y(j) = sum
 end do
-return
 end subroutine btprd1
 
 pure subroutine dbtpd(m,n,a,ka,ml,mu,x,y)
@@ -908,7 +589,6 @@ jmin = jmax + 1
 do j = jmin,n
    y(j) = 0.d0
 end do
-return
 end subroutine dbtpd
 
 pure subroutine dbtpd1(m,n,a,ka,ml,mu,x,y)
@@ -953,7 +633,6 @@ do j = jmin,jmax
    end do
    y(j) = sum
 end do
-return
 end subroutine dbtpd1
 
 pure subroutine cbtpd(m,n,a,ka,ml,mu,x,y)
@@ -1005,7 +684,6 @@ jmin = jmax + 1
 do j = jmin,n
    y(j) = (0.0,0.0)
 end do
-return
 end subroutine cbtpd
 
 pure subroutine cbtpd1(m,n,a,ka,ml,mu,x,y)
@@ -1050,7 +728,6 @@ do j = jmin,jmax
    end do
    y(j) = sum
 end do
-return
 end subroutine cbtpd1
 
 pure real function bnrm(a, ka, m, n, ml, mu)
@@ -1073,7 +750,6 @@ do i = 1,m
    end do
    bnrm = max(bnrm, sum)
 end do
-return
 end function bnrm
 
 pure real function b1nrm(a, ka, m, n, ml, mu)
@@ -1158,7 +834,6 @@ do i = 1,m
    end do
    dbnrm = max(dbnrm, sum)
 end do
-return
 end function dbnrm
 
 pure double precision function db1nrm(a, ka, m, n, ml, mu)
@@ -1326,7 +1001,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine bslv
 
 pure subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -1431,7 +1105,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine bslv1
 
 pure subroutine snbfa(a, lda, n, ml, mu, ipvt, info)
@@ -1638,7 +1311,6 @@ return
    ipvt(k) = k
    if (a(k,1) == 0.0) info = k
 end do
-return
 end subroutine snbfa
 
 pure subroutine snbsl(a,lda,n,ml,mu,ipvt,b,job)
@@ -1795,7 +1467,6 @@ return
 !
 100 do 110 k = 1,n
 110 b(k) = b(k)/a(k,1)
-return
 end subroutine snbsl
 
 pure subroutine dbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -1900,7 +1571,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine dbslv
 
 pure subroutine dbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -2005,7 +1675,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine dbslv1
 
 pure subroutine dbfa(a, lda, n, ml, mu, ipvt, info)
@@ -2212,7 +1881,6 @@ return
    ipvt(k) = k
    if (a(k,1) == 0.d0) info = k
 end do
-return
 end subroutine dbfa
 
 pure subroutine dbsl(a,lda,n,ml,mu,ipvt,b,job)
@@ -2369,7 +2037,6 @@ return
 !
 100 do 110 k = 1,n
 110 b(k) = b(k)/a(k,1)
-return
 end subroutine dbsl
 
 pure subroutine b1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
@@ -2488,7 +2155,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine b1cnd
 
 pure subroutine db1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
@@ -2608,7 +2274,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine db1cnd
 
 subroutine cbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -2691,7 +2356,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine cbslv
 
 subroutine cbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -2774,7 +2438,6 @@ return
 110 ierr = -2
 return
 120 ierr = -3
-return
 end subroutine cbslv1
 
 subroutine cbfa(a, lda, n, ml, mu, ipvt, info)
@@ -2949,7 +2612,6 @@ return
    ipvt(k) = k
    if (a(k,1) == (0.0,0.0)) info = k
 end do
-return
 end subroutine cbfa
 
 pure subroutine cbsl(a,lda,n,ml,mu,ipvt,b,job)
@@ -3106,7 +2768,6 @@ return
 !
 100 do 110 k = 1,n
 110 b(k) = b(k)/a(k,1)
-return
 end subroutine cbsl
 
 pure subroutine cvrs(a, ka, m, n, b, ib, jb, num, ierr)
@@ -3141,7 +2802,6 @@ return
 !                   Error return
 !
 20 ierr = i
-return
 end subroutine cvrs
 
 pure subroutine cvds(a, ka, m, n, b, ib, jb, num, ierr)
@@ -3176,7 +2836,6 @@ return
 !                   Error return
 !
 20 ierr = i
-return
 end subroutine cvds
 
 pure subroutine cvcs(a, ka, m, n, b, ib, jb, num, ierr)
@@ -3212,7 +2871,6 @@ return
 !                   Error return
 !
 20 ierr = i
-return
 end subroutine cvcs
 
 subroutine cvsr(a, ia, ja, b, kb, m, n)
@@ -3242,7 +2900,6 @@ do 30 i = 1,m
    end do
 !
 30 continue
-return
 end subroutine cvsr
 
 subroutine cvsd(a, ia, ja, b, kb, m, n)
@@ -3272,7 +2929,6 @@ do 30 i = 1,m
    end do
 !
 30 continue
-return
 end subroutine cvsd
 
 subroutine cvsc(a, ia, ja, b, kb, m, n)
@@ -3302,7 +2958,6 @@ do 30 i = 1,m
    end do
 !
 30 continue
-return
 end subroutine cvsc
 
 subroutine scvrd(a, ia, ja, b, ib, jb, m)
@@ -3328,7 +2983,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine scvrd
 
 subroutine scvdr(a, ia, ja, b, ib, jb, m)
@@ -3354,7 +3008,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine scvdr
 
 subroutine csreal(a, ia, ja, b, ib, jb, m)
@@ -3385,7 +3038,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine csreal
 
 subroutine csimag(a, ia, ja, b, ib, jb, m)
@@ -3416,7 +3068,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine csimag
 
 subroutine scvrc(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -3483,7 +3134,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine scvrc
 
 subroutine rscopy(a, ia, ja, b, ib, jb, m)
@@ -3512,7 +3162,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine rscopy
 
 subroutine dscopy(a, ia, ja, b, ib, jb, m)
@@ -3541,7 +3190,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine dscopy
 
 subroutine cscopy(a, ia, ja, b, ib, jb, m)
@@ -3571,7 +3219,6 @@ do 20 i = 1,m
 10    continue
 20 continue
 ib(m + 1) = l
-return
 end subroutine cscopy
 
 subroutine sconj(a, ia, ja, b, ib, jb, m)
@@ -3601,7 +3248,6 @@ do ip = ibeg,iend
    jb(l) = ja(ip)
    l = l + 1
 end do
-return
 end subroutine sconj
 
 subroutine rpose(a, ia, ja, b, ib, jb, m, n)
@@ -3665,7 +3311,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine rpose
 
 subroutine rpose1(p, a, ia, ja, b, ib, jb, m, n)
@@ -3732,7 +3377,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine rpose1
 
 subroutine dpose(a, ia, ja, b, ib, jb, m, n)
@@ -3796,7 +3440,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine dpose
 
 subroutine dpose1(p, a, ia, ja, b, ib, jb, m, n)
@@ -3863,7 +3506,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine dpose1
 
 subroutine cpose(a, ia, ja, b, ib, jb, m, n)
@@ -3927,7 +3569,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine cpose
 
 subroutine cpose1(p, a, ia, ja, b, ib, jb, m, n)
@@ -3994,7 +3635,6 @@ return
 do j = 1,np1
    ib(j) = 1
 end do
-return
 end subroutine cpose1
 
 subroutine sadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4060,7 +3700,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine sadd
 
 subroutine dsadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4126,7 +3765,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine dsadd
 
 subroutine csadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4192,7 +3830,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine csadd
 
 subroutine ssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4258,7 +3895,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine ssubt
 
 subroutine dssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4324,7 +3960,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine dssubt
 
 subroutine cssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
@@ -4390,7 +4025,6 @@ return
 !                        Error return
 !
 50 ierr = i
-return
 end subroutine cssubt
 
 subroutine sprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
@@ -4449,7 +4083,6 @@ return
 !                           Error return
 !
 40 ierr = i
-return
 end subroutine sprod
 
 subroutine dsprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
@@ -4508,7 +4141,6 @@ return
 !                           Error return
 !
 40 ierr = i
-return
 end subroutine dsprod
 
 subroutine csprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
@@ -4567,7 +4199,6 @@ return
 !                           Error return
 !
 40 ierr = i
-return
 end subroutine csprod
 
 subroutine mvprd(m, n, a, ia, ja, x, y)
@@ -4592,7 +4223,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine mvprd
 
 subroutine mvprd1(m, n, a, ia, ja, x, y)
@@ -4617,7 +4247,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine mvprd1
 
 subroutine mtprd(m, n, a, ia, ja, x, y)
@@ -4646,7 +4275,6 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
-return
 end subroutine mtprd
 
 subroutine mtprd1(m, n, a, ia, ja, x, y)
@@ -4671,7 +4299,6 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
-return
 end subroutine mtprd1
 
 subroutine dvprd(m, n, a, ia, ja, x, y)
@@ -4696,7 +4323,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine dvprd
 
 subroutine dvprd1(m, n, a, ia, ja, x, y)
@@ -4721,7 +4347,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine dvprd1
 
 subroutine dtprd(m, n, a, ia, ja, x, y)
@@ -4750,7 +4375,6 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
-return
 end subroutine dtprd
 
 subroutine dtprd1(m, n, a, ia, ja, x, y)
@@ -4775,7 +4399,6 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
-return
 end subroutine dtprd1
 
 subroutine cvprd(m, n, a, ia, ja, x, y)
@@ -4800,7 +4423,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine cvprd
 
 subroutine cvprd1(m, n, a, ia, ja, x, y)
@@ -4825,7 +4447,6 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
-return
 end subroutine cvprd1
 
 subroutine ctprd(m, n, a, ia, ja, x, y)
@@ -4854,7 +4475,6 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
-return
 end subroutine ctprd
 
 subroutine ctprd1(m, n, a, ia, ja, x, y)
@@ -4879,7 +4499,6 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
-return
 end subroutine ctprd1
 
 real function snrm(a, ia, ja, m, n)
@@ -4905,7 +4524,6 @@ do 20 i = 1,m
    end do
    snrm = max(snrm, sum)
 20 continue
-return
 end function snrm
 
 subroutine s1nrm(a, ia, ja, m, n, anorm, wk)
@@ -4939,7 +4557,6 @@ end do
 do j = 1,n
    anorm = max(anorm,wk(j))
 end do
-return
 end subroutine s1nrm
 
 double precision function dsnrm(a, ia, ja, m, n)
@@ -4965,7 +4582,6 @@ do 20 i = 1,m
    end do
    dsnrm = max(dsnrm, sum)
 20 continue
-return
 end function dsnrm
 
 subroutine ds1nrm(a, ia, ja, m, n, anorm, wk)
@@ -5000,7 +4616,6 @@ end do
 do j = 1,n
    anorm = max(anorm,wk(j))
 end do
-return
 end subroutine ds1nrm
 
 subroutine spord(m, n, ia, r, iwk)
@@ -5041,7 +4656,6 @@ do i = 1,m
    l = np1 + k
    k = iwk(l)
 end do
-return
 end subroutine spord
 
 subroutine blkord(n, ia, ja, r, c, ib, num, iwk, ierr)
@@ -5082,7 +4696,6 @@ end do
 do i = 1,n
    r(i) = iwk(i)
 end do
-return
 end subroutine blkord
 
 pure subroutine mc21a(n,icn,licn,ip,lenr,iperm,numnz,iw)
@@ -5134,7 +4747,6 @@ end interface
 !
 call mc21b(n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
    & iw(1,3),iw(1,4))
-return
 end subroutine mc21a
 
 pure subroutine mc21b(n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
@@ -5315,7 +4927,6 @@ end interface
 !
 call mc13e(n, icn, licn, ip, lenr, ior, ib, num, iw(1,1), &
    & iw(1,2), iw(1,3))
-return
 end subroutine mc13d
 
 pure subroutine mc13e(n, icn, licn, ip, lenr, arp, ib, num, lowl, &
@@ -5450,7 +5061,6 @@ do 90 isn = 1,n
    ii = numb(i)
    arp(ii) = i
 end do
-return
 end subroutine mc13e
 
 subroutine spslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
@@ -5570,7 +5180,6 @@ end do
 call nspiv1(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr == 0) ierr = 1
-return
 end subroutine spslv
 
 subroutine nspiv1(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
@@ -5848,7 +5457,6 @@ return
 !  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n + k)
-return
 end subroutine nspiv1
 
 subroutine rslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -5953,7 +5561,6 @@ ierr = max0(1,ierr)
 !
 20 call rslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine rslv
 
 pure subroutine rslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -6000,7 +5607,6 @@ do i = 1,n
    x(lk) = y(k)
    k = k - 1
 end do
-return
 end subroutine rslv1
 
 subroutine tslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -6105,7 +5711,6 @@ ierr = max0(1,ierr)
 !
 20 call tslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine tslv
 
 pure subroutine tslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -6160,7 +5765,6 @@ do k = 1,n
    lk = r(k)
    x(lk) = y(k)
 end do
-return
 end subroutine tslv1
 
 subroutine splu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
@@ -6380,7 +5984,6 @@ return
 !     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
-return
 end subroutine splu
 
 subroutine dspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
@@ -6503,7 +6106,6 @@ end do
 call dnspiv(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr == 0) ierr = 1
-return
 end subroutine dspslv
 
 subroutine dnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
@@ -6781,7 +6383,6 @@ return
 !  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n + k)
-return
 end subroutine dnspiv
 
 subroutine dslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -6887,7 +6488,6 @@ ierr = max0(1,ierr)
 !
 20 call dslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine dslv
 
 pure subroutine dslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -6934,7 +6534,6 @@ do i = 1,n
    x(lk) = y(k)
    k = k - 1
 end do
-return
 end subroutine dslv1
 
 subroutine dtslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -7040,7 +6639,6 @@ ierr = max0(1,ierr)
 !
 20 call dtslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine dtslv
 
 pure subroutine dtslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -7095,7 +6693,6 @@ do k = 1,n
    lk = r(k)
    x(lk) = y(k)
 end do
-return
 end subroutine dtslv1
 
 subroutine dsplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
@@ -7316,7 +6913,6 @@ return
 !     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
-return
 end subroutine dsplu
 
 subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
@@ -7385,7 +6981,6 @@ return
 !     Singular case
 !
 50 ierr = 0
-return
 end subroutine s1cnd
 
 subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
@@ -7454,7 +7049,6 @@ return
 !     Singular case
 !
 50 ierr = 0
-return
 end subroutine ds1cnd
 
 pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
@@ -7641,7 +7235,6 @@ if (anrm <= anorm) go to 510
 call scopy(n,x,1,v,1)
 anorm = anrm
 510 kase = 0
-return
 end subroutine sonest
 
 pure subroutine donest(n, v, x, isgn, anorm, kase, iter, j, jump)
@@ -7830,7 +7423,6 @@ if (anrm <= anorm) go to 510
 call dcopy(n,x,1,v,1)
 anorm = anrm
 510 kase = 0
-return
 end subroutine donest
 
 subroutine cspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
@@ -7950,7 +7542,6 @@ end do
 call cnspiv(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr == 0) ierr = 1
-return
 end subroutine cspslv
 
 subroutine cnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
@@ -8232,7 +7823,6 @@ return
 !  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n + k)
-return
 end subroutine cnspiv
 
 subroutine cslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -8338,7 +7928,6 @@ ierr = max0(1,ierr)
 !
 20 call cslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine cslv
 
 pure subroutine cslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -8385,7 +7974,6 @@ do i = 1,n
    x(lk) = y(k)
    k = k - 1
 end do
-return
 end subroutine cslv1
 
 subroutine ctslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
@@ -8491,7 +8079,6 @@ ierr = max0(1,ierr)
 !
 20 call ctslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
-return
 end subroutine ctslv
 
 pure subroutine ctslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
@@ -8546,7 +8133,6 @@ do k = 1,n
    lk = r(k)
    x(lk) = y(k)
 end do
-return
 end subroutine ctslv1
 
 subroutine csplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
@@ -8769,7 +8355,6 @@ return
 !     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
-return
 end subroutine csplu
 
 pure subroutine eig(ibal,a,ka,n,wr,wi,ierr)
@@ -8819,7 +8404,6 @@ igh = n
 if (ibal /= 0) call balanc(ka,n,a,low,igh,wr)
 call elmhs0(ka,n,low,igh,a,wr)
 call hqr(ka,n,low,igh,a,wr,wi,ierr)
-return
 end subroutine eig
 
 pure subroutine eig1(ibal,a,ka,n,wr,wi,ierr)
@@ -8869,7 +8453,6 @@ igh = n
 if (ibal /= 0) call balanc(ka,n,a,low,igh,wr)
 call orthes(ka,n,low,igh,a,wr)
 call hqr(ka,n,low,igh,a,wr,wi,ierr)
-return
 end subroutine eig1
 
 pure subroutine eigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
@@ -8955,7 +8538,6 @@ do 30 k = 1,n
       zr(j,kp1) = zr(j,k)
 21    zi(j,kp1) = -zi(j,k)
 30 continue
-return
 end subroutine eigv
 
 pure subroutine eigv1(ibal,a,ka,n,wr,wi,zr,zi,ierr)
@@ -9041,7 +8623,6 @@ do 30 k = 1,n
       zr(j,kp1) = zr(j,k)
 21    zi(j,kp1) = -zi(j,k)
 30 continue
-return
 end subroutine eigv1
 
 pure subroutine balanc(nm,n,a,low,igh,scale)
@@ -9221,7 +8802,6 @@ if (noconv) go to 190
 !
 280 low = k
 igh = l
-return
 end subroutine balanc
 
 pure subroutine balinv(nz,n,z,low,igh,scale)
@@ -9297,7 +8877,6 @@ end do
       z(j,i) = z(j,k)
 50    z(j,k) = s
 60 continue
-return
 end subroutine balinv
 
 pure subroutine elmhes(nm,n,low,igh,a,int)
@@ -10683,4 +10262,318 @@ go to 1001
 1000 ierr = en
 1001 return
 end subroutine hqr2
+
+pure subroutine deig(ibal,a,ka,n,wr,wi,ierr)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
+integer :: igh, low
+interface
+   pure subroutine dbal(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      double precision, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      double precision, intent(inout) :: scale(n)
+   end subroutine dbal
+   pure subroutine dhqr(nm,n,low,igh,h,wr,wi,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      double precision, intent(inout) :: h(nm,n)
+      double precision, intent(inout) :: wr(n)
+      double precision, intent(inout) :: wi(n)
+      integer, intent(out) :: ierr
+   end subroutine dhqr
+   pure subroutine dorth(nm,n,low,igh,a,ort)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(inout) :: a(nm,n)
+      double precision, intent(inout) :: ort(igh)
+   end subroutine dorth
+end interface
+!-----------------------------------------------------------------------
+!                Eigenvalues of double precision matrices
+!-----------------------------------------------------------------------
+!
+low = 1
+igh = n
+if (ibal /= 0) call dbal(ka,n,a,low,igh,wr)
+call dorth(ka,n,low,igh,a,wr)
+call dhqr(ka,n,low,igh,a,wr,wi,ierr)
+end subroutine deig
+
+pure subroutine deigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
+   & zr(ka,n), zi(ka,n)
+integer :: igh, j, k, kp1, low
+interface
+   pure subroutine dbabk(nm,n,low,igh,scale,m,z)
+      implicit none
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      double precision, intent(in) :: scale(n)
+      double precision, intent(inout) :: z(nm,m)
+   end subroutine dbabk
+   pure subroutine dbal(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      double precision, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      double precision, intent(inout) :: scale(n)
+   end subroutine dbal
+   pure subroutine dhqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      double precision, intent(inout) :: h(nm,n)
+      double precision, intent(inout) :: wr(n)
+      double precision, intent(inout) :: wi(n)
+      double precision, intent(inout) :: z(nm,n)
+      integer, intent(out) :: ierr
+   end subroutine dhqr2
+   pure subroutine dorth(nm,n,low,igh,a,ort)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(inout) :: a(nm,n)
+      double precision, intent(inout) :: ort(igh)
+   end subroutine dorth
+   pure subroutine dortrn(nm,n,low,igh,a,ort,z)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(in) :: a(nm,igh)
+      double precision, intent(inout) :: ort(igh)
+      double precision, intent(inout) :: z(nm,n)
+   end subroutine dortrn
+end interface
+!-----------------------------------------------------------------------
+!     Eigenvalues and eigenvectors of double precision matrices
+!-----------------------------------------------------------------------
+!
+low = 1
+igh = n
+if (ibal /= 0) call dbal(ka,n,a,low,igh,zi)
+call dorth(ka,n,low,igh,a,wr)
+call dortrn(ka,n,low,igh,a,wr,zr)
+call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
+if (ierr /= 0) return
+if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
+!
+do 30 k = 1,n
+   if (wi(k)) 30,10,20
+10 do 11 j = 1,n
+11    zi(j,k) = 0.d0
+   go to 30
+20 kp1 = k + 1
+   do 21 j = 1,n
+      zi(j,k) = zr(j,kp1)
+      zr(j,kp1) = zr(j,k)
+21    zi(j,kp1) = -zi(j,k)
+30 continue
+end subroutine deigv
+
+pure subroutine dbal(nm,n,a,low,igh,scale)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(inout) :: igh, low
+double precision, intent(inout) :: a(nm,n), scale(n)
+integer :: i, j, k, l, m, jj, iexc
+double precision :: c, f, g, r, s, b2, radix
+logical :: noconv
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
+!     double precision dabs
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!
+!     Dbal balances a double precision real matrix and isolates
+!     eigenvalues whenever possible.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        A contains the input matrix to be balanced.
+!
+!     On output-
+!
+!        A contains the balanced matrix,
+!
+!        Low and igh are two integers such that a(i,j)
+!          is equal to zero if
+!           (1) i is greater than j and
+!           (2) j=1,...,low-1 OR i=igh+1,...,n,
+!
+!        Scale contains information determining the
+!           permutations and scaling factors used.
+!
+!     Suppose that the principal submatrix in rows low through igh
+!     has been balanced, that P(j) denotes the index interchanged
+!     with j during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(i,j).  Then
+!        scale(j) = P(j),    FOR j = 1,...,low-1
+!                 = D(j,j),      j = low,...,igh
+!                 = P(j)         j = igh+1,...,n.
+!     The order in which the interchanges are made is n to igh+1,
+!     then 1 to low-1.
+!
+!     Note that 1 is returned for igh if igh is zero formally.
+!
+!     The Algol procedure exc contained in balance appears in
+!     dbal in line.  (Note that the Algol roles of identifiers
+!     k,l have been reversed.)
+!
+!-----------------------------------------------------------------------
+!
+!     ********** radix is a machine dependent parameter specifying
+!                the base of the machine floating point representation.
+!
+radix = ipmpar(4)
+!
+!                **********
+!
+b2 = radix * radix
+k = 1
+l = n
+go to 100
+!     ********** In-line procedure for row and
+!                column exchange **********
+20 scale(m) = j
+if (j == m) go to 50
+!
+do i = 1, l
+   f = a(i,j)
+   a(i,j) = a(i,m)
+   a(i,m) = f
+end do
+!
+do i = k, n
+   f = a(j,i)
+   a(j,i) = a(m,i)
+   a(m,i) = f
+end do
+!
+50 go to (80,130), iexc
+!     ********** Search for rows isolating an eigenvalue
+!                and push them down **********
+80 if (l == 1) go to 280
+l = l - 1
+!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
+100 do 120 jj = 1, l
+   j = l + 1 - jj
+!
+   do 110 i = 1, l
+      if (i == j) go to 110
+      if (a(j,i) /= 0.d0) go to 120
+110   continue
+!
+   m = l
+   iexc = 1
+   go to 20
+120 continue
+!
+go to 140
+!     ********** Search for columns isolating an eigenvalue
+!                and push them left **********
+130 k = k + 1
+!
+140 do 170 j = k, l
+!
+   do 150 i = k, l
+      if (i == j) go to 150
+      if (a(i,j) /= 0.d0) go to 170
+150   continue
+!
+   m = k
+   iexc = 2
+   go to 20
+170 continue
+!     ********** Now balance the submatrix in rows k to l **********
+do 180 i = k, l
+180 scale(i) = 1.d0
+!     ********** Iterative loop for norm reduction **********
+190 noconv = .false.
+!
+do 270 i = k, l
+   c = 0.d0
+   r = 0.d0
+!
+   do 200 j = k, l
+      if (j == i) go to 200
+      c = c + abs(a(j,i))
+      r = r + abs(a(i,j))
+200   continue
+!     ********** Guard against zero c or r due to underflow **********
+   if (c == 0.d0 .or. r == 0.d0) go to 270
+   g = r / radix
+   f = 1.d0
+   s = c + r
+210 if (c >= g) go to 220
+   f = f * radix
+   c = c * b2
+   go to 210
+220 g = r * radix
+230 if (c < g) go to 240
+   f = f / radix
+   c = c / b2
+   go to 230
+!     ********** Now balance **********
+240 if ((c + r) / f >= 0.95d0 * s) go to 270
+   g = 1.d0 / f
+   scale(i) = scale(i) * f
+   noconv = .true.
+!
+   do 250 j = k, n
+250   a(i,j) = a(i,j) * g
+!
+   do 260 j = 1, l
+260   a(j,i) = a(j,i) * f
+!
+270 continue
+!
+if (noconv) go to 190
+!
+280 low = k
+igh = l
+end subroutine dbal
 

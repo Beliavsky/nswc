@@ -23,6 +23,7 @@ from portable_intrinsics import transform as portable_intrinsics
 from simplify_free_style import transform as simplify_style
 from generic_intrinsics import transform as apply_generics
 from coalesce_local_declarations import transform as coalesce_locals
+from remove_final_returns import transform_free as remove_final_returns
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,7 +34,7 @@ LINK = re.compile(
 def generate(root=ROOT):
     original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
-    free = coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))))))
+    free = remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text))))))))
     lines = free.splitlines(keepends=True)
     declarations = {}
     for name, start, end in procedure_spans(free):

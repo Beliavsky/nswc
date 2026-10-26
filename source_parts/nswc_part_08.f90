@@ -1,689 +1,3 @@
-pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
-implicit none
-integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
-double precision, intent(inout) :: u(iue,m), up, c(*)
-integer :: i, i2, i3, i4, incr, j
-double precision :: b, cl, d, sm
-!-----------------------------------------------------------------------
-!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!
-!     Construction and/or application of a single
-!     Householder transformation..     Q = i + u*(u**T)/b
-!
-!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
-!     lpivot is the index of the pivot element.
-!     l1,m   if l1 .LE. m   the transformation will be constructed to
-!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            the subroutine does an identity transformation.
-!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue is the storage increment between elements.
-!                                       On exit from H1 u() and up
-!                   contain quantities defining the vector u of the
-!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   and up should contain quantities previously computed
-!                   by H1.  These will not be modified by H2.
-!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            regarded as a set of vectors to which the Householder
-!            transformation is to be applied.  On exit c() contains the
-!            set of transformed vectors.
-!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
-!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
-!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
-!            no operations will be done on c().
-!-----------------------------------------------------------------------
-!
-if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
-cl = abs(u(1,lpivot))
-if (mode == 2) go to 60
-!
-!                            ****** Construct the transformation. ******
-!
-do 10 j = l1,m
-10 cl = max(abs(u(1,j)),cl)
-if (cl <= 0.d0) go to 130
-d = u(1,lpivot)/cl
-sm = d*d
-do 20 j = l1,m
-   d = u(1,j)/cl
-20 sm = sm + d*d
-!
-cl = cl*sqrt(sm)
-if (u(1,lpivot) > 0.d0) cl = -cl
-up = u(1,lpivot) - cl
-u(1,lpivot) = cl
-go to 70
-!
-!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-!
-60 if (cl) 130,130,70
-70 if (ncv <= 0) return
-b = up*u(1,lpivot)
-!
-!                       b  must be nonpositive here.  If b = 0., Return.
-!
-if (b >= 0.d0) go to 130
-b = 1.d0/b
-i2 = 1 - icv + ice*(lpivot - 1)
-incr = ice*(l1 - lpivot)
-do 120 j = 1,ncv
-   i2 = i2 + icv
-   i3 = i2 + incr
-   i4 = i3
-   sm = c(i2)*up
-   do 90 i = l1,m
-      sm = sm + c(i3)*u(1,i)
-90    i3 = i3 + ice
-   if (sm == 0.d0) go to 120
-   sm = sm*b
-   c(i2) = c(i2) + sm*up
-   do 110 i = l1,m
-      c(i4) = c(i4) + sm*u(1,i)
-110   i4 = i4 + ice
-120 continue
-130 return
-end subroutine dh12
-
-subroutine lsei(w, mdw, me, ma, mg, n, prgopt, x, rnorme, rnorml, &
-   & mode, ws, ip)
-implicit none
-integer, intent(in) :: ma, mdw, me, mg
-integer, intent(out) :: mode
-integer :: n
-real, intent(inout) :: rnorme, rnorml
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(*), ws(*)
-integer, intent(inout) :: ip(*)
-integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
-   & link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
-   & np1, ntimes
-real :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
-real :: snrm2
-real :: sasum
-real :: sdot
-logical :: cov
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: half = 0.5e0
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!
-!     dimension w(mdw,n+1),prgopt(*),x(n),
-!     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
-!     ABOVE, k=max(ma+mg,n).
-!
-!     Written by R. J. Hanson and K. H. Haskell.  For further math.
-!     And algorithmic details see Sandia Laboratories tech. REPTS.
-!     SAND77-0552, (1978), and SAND78-1290, (1979), and math.
-!     Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
-!
-!     Abstract
-!
-!     This subprogram solves a linearly constrained least squares
-!     problem with both equality and inequality constraints, and, if the
-!     user requests, obtains a covariance matrix of the solution
-!     parameters.
-!
-!     Suppose there are given matrices E, A and G of respective
-!     dimensions me by n, ma by n and mg by n, and vectors F, B and H of
-!     respective lengths me, ma and mg.  This subroutine solves the
-!     linearly constrained least squares problem
-!
-!                   EX = F, (E me by n) (equations to be exactly
-!                                       satisfied)
-!                   AX = B, (A ma by n) (equations to be
-!                                       approximately satisfied,
-!                                       least squares sense)
-!                   GX.GE.H,(G mg by n) (inequality constraints)
-!
-!     The inequalities GX.GE.H mean that every component of the product
-!     GX must be .GE. the corresponding component of H.
-!
-!     In case the equality constraints cannot be satisfied, A
-!     generalized inverse solution residual vector LENGTH is obtained
-!     for F-EX. This is the minimal length possible for F-EX.
-!
-!
-!     Any values me.GE.0, ma.GE.0, or mg.GE.0 are permitted.  The
-!     rank of the matrix E is estimated during the computation. We call
-!     this value kranke. It is an output parameter in ip(1) defined
-!     below. Using a generalized inverse solution of EX=F, a reduced
-!     least squares problem with inequality constraints is obtained.
-!     The tolerances used in these tests for determining the rank
-!     of E and the rank of the reduced least squares problem are
-!     given in sandia tech. Rept. SAND78-1290. They can be
-!     modified by the user if new values are provided in
-!     the option list of the array prgopt(*).
-!
-!     The user must dimension all arrays appearing in the call list..
-!     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
-!     where k=max(ma+mg,n).  This allows for a solution of a range of
-!     problems in the given working space.  The dimension of ws(*)
-!     given is a necessary overestimate.  Once a particular problem
-!     has been run, the output parameter ip(3) gives the actual
-!     dimension required for that problem.
-!
-!     The parameters for lsei( ) are
-!
-!     Input..
-!
-!     w(*,*),mdw,   THE ARRAY w(*,*) IS DOUBLY SUBSCRIPTED WITH
-!     ME,ma,mg,n    FIRST DIMENSIONING PARAMETER EQUAL TO mdw.
-!                   For this discussion let us call M = me+ma+mg.  Then
-!                   mdw must satisfy mdw.GE.M.  the condition
-!                   mdw.LT.M is an error.
-!
-!                   The array w(*,*) contains the matrices and vectors
-!
-!                                  (E  F)
-!                                  (A  B)
-!                                  (G  H)
-!
-!                   In rows and columns 1,...,M and 1,...,n+1
-!                   respectively.
-!
-!                   The integers me, ma, and mg are the
-!                   respective matrix ROW dimensions
-!                   of E, A and G. each matrix HAS n columns.
-!
-!     prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
-!                  If the user is satisfied with the nominal
-!                  subprogram features set
-!
-!                  prgopt(1)=1 (OR prgopt(1)=1.0)
-!
-!                  Otherwise prgopt(*) is a linked list consisting of
-!                  groups of data of the following form
-!
-!                  Link
-!                  key
-!                  data set
-!
-!                  The parameters link and key are each one word.
-!                  The data set can be comprised of several words.
-!                  The number of items depends on the value of key.
-!                  The value of link points to the first
-!                  entry of the next group of data within
-!                  prgopt(*).  The exception is when there are
-!                  no more options to change.  In that
-!                  case link=1 And the values key and data set
-!                  are not referenced. The general layout of
-!                  prgopt(*) is as follows.
-!
-!               ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
-!               .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
-!               .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
-!               .       .
-!               .       .
-!               .       .
-!               ...prgopt(LINK1)=LINK2 (link to the first entry of
-!               .                       NEXT GROUP)
-!               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
-!               .  prgopt(LINK1+2)=Data value
-!               ...     .
-!               .       .
-!               .       .
-!               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
-!
-!                  Values of link that are nonpositive are errors.
-!                  A value of link.GT.NLINK=100000 Is also an error.
-!                  This helps prevent using invalid but positive
-!                  values of link that will probably extend
-!                  beyond the program limits of prgopt(*).
-!                  Unrecognized values of key are ignored.  The
-!                  order of the options is arbitrary and any number
-!                  of options can be changed with the following
-!                  restriction.  To prevent cycling in the
-!                  processing of the option array A count of the
-!                  number of options changed is maintained.
-!                  Whenever this count exceeds NOPT=1000 The
-!                  routine terminates.
-!
-!                  Options..
-!
-!                  key=1
-!                         compute in w(*,*) the n by n
-!                  covariance matrix of the solution variables
-!                  as an output paramter.  Nominally the
-!                  covariance matrix will not be computed.
-!                  (This requires no user input.)
-!                  the data set for this option is a single value.
-!                  It must be nonzero when the covariance matrix
-!                  is desired.  If it is zero, the covariance
-!                  matrix is not computed.  When the covariance matrix
-!                  is computed, the first dimensioning parameter
-!                  of the array w(*,*) must satisfy mdw.GE.MAX0(M,n).
-!
-!                  key=2
-!                         scale the nonzero columns of the
-!                         entire data matrix.
-!                  (E)
-!                  (A)
-!                  (G)
-!
-!                  To have length one.  The data set for this
-!                  option is a single value.  It must be
-!                  nonzero if unit length column scaling
-!                  is desired.
-!
-!                  key=3
-!                         scale columns of the entire data matrix
-!                  (E)
-!                  (A)
-!                  (G)
-!
-!                  With a user-provided diagonal matrix.
-!                  The data set for this option consists
-!                  of the n diagonal scaling factors, one for
-!                  each matrix column.
-!
-!                  key=4
-!                         change the rank determination tolerance for
-!                  the equality constraint equations from
-!                  the nominal value of sqrt(SRELPR).  This quantity
-!                  can be no smaller than SRELPR, the arithmetic-
-!                  storage precision.  The quantity SRELPR is the
-!                  largest positive number such that T=1.+SRELPR
-!                  satisfies T.EQ.1.  the quantity used
-!                  here is internally restricted to be at
-!                  least SRELPR.  The data set for this option
-!                  is the new tolerance.
-!
-!                  key=5
-!                         change the rank determination tolerance for
-!                  the reduced least squares equations from
-!                  the nominal value of sqrt(SRELPR).  This quantity
-!                  can be no smaller than SRELPR, the arithmetic-
-!                  storage precision.  The quantity used
-!                  here is internally restricted to be at
-!                  least SRELPR.  The data set for this option
-!                  is the new tolerance.
-!
-!                  For example, suppose we want to change
-!                  the tolerance for the reduced least squares
-!                  problem, compute the covariance matrix of
-!                  the solution parameters, and provide
-!                  column scaling for the data matrix.  For
-!                  these options the dimension of prgopt(*)
-!                  must be at least n+9.  The Fortran statements
-!                  defining these options would be as follows.
-!
-!                  prgopt(1)=4 (LINK TO ENTRY 4 IN prgopt(*))
-!                  prgopt(2)=1 (COVARIANCE MATRIX key)
-!                  prgopt(3)=1 (COVARIANCE MATRIX WANTED)
-!
-!                  prgopt(4)=7 (LINK TO ENTRY 7 IN prgopt(*))
-!                  prgopt(5)=5 (LEAST SQUARES EQUAS. TOLERANCE KEY)
-!                  prgopt(6)=... (new value of the tolerance)
-!
-!                  prgopt(7)=n+9 (LINK TO ENTRY n+9 IN prgopt(*))
-!                  prgopt(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
-!
-!                  call scopy(n,d,1,prgopt(9),1)  (copy the n
-!                    scaling factors from the user array D(*)
-!                    TO prgopt(9)-prgopt(n+8))
-!
-!                  prgopt(n+9)=1 (NO MORE OPTIONS TO CHANGE)
-!
-!                  The contents of prgopt(*) are not modified
-!                  by the subprogram.
-!                  The key 8 and 9 options for wnnls( ) can also
-!                  be included in this array.  Their functions
-!                  are documented in the usage instructions for
-!                  SUBPROGRAM wnnls( ).
-!
-!     Output..
-!
-!     x(*),rnorme,  the array x(*) contains the solution parameters
-!     rnorml        if the integer output flag mode = 0 Or 1.
-!                   The definition of mode is given directly below.
-!                   When mode = 0 Or 1, rnorme and rnorml
-!                   respectively contain the residual vector
-!                   Euclidean lengths of F - EX and B - AX.  When
-!                   mode=1 The equality constraint equations EX=F
-!                   are contradictory, so rnorme.NE.0. The residual
-!                   vector F-EX has minimal Euclidean length. For
-!                   mode.GE.2, none of these parameters are
-!                   defined.
-!
-!     MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
-!                   status after completion.  If mode.GE.2, no
-!                   solution has been computed.
-!
-!                   mode =
-!
-!                   0  Both equality and inequality constraints
-!                      are compatible and have been satisfied.
-!
-!                   1  Equality constraints are contradictory.
-!                      A generalized inverse solution of EX=F was used
-!                      to minimize the residual vector LENGTH F-EX.
-!                      In this sense, the solution is still meaningful.
-!
-!                   2  No solution could be obtained. The constraints
-!                      are contradictory.
-!
-!                   4  Usage error occurred.  The value
-!                      of mdw is .LT. me+ma+mg, mdw is
-!                      .LT. n and a covariance matrix is
-!                      requested, or the option vector
-!                      prgopt(*) is not properly defined.
-!
-!     w(*,*)        THE ARRAY w(*,*) CONTAINS THE n BY n SYMMETRIC
-!                   covariance matrix of the solution parameters,
-!                   provided this was requested on input with
-!                   the option vector prgopt(*) and the output
-!                   flag is returned with mode = 0 Or 1.
-!
-!     ip(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
-!                   that provide rank and working array LENGTH
-!                   information after completion.
-!
-!                      ip(1) = Rank of equality constraint
-!                              matrix.  Define this quantity
-!                              AS kranke.
-!
-!                      ip(2) = Rank of reduced least squares
-!                              problem.
-!
-!                      ip(3) = The amount of storage in the
-!                              working array ws(*) that was
-!                              actually used by the subprogram.
-!                              The formula given above for the length
-!                              of ws(*) is a necessary overestimate.
-!     User designated
-!     working arrays..
-!
-!     ws(*),ip(*)              THESE ARE RESPECTIVELY TYPE REAL
-!                              and type integer working arrays.
-!                              Their required minimal lengths are
-!                              given above.
-!
-!
-!     Subroutines called
-!
-!     lsi           PART OF THIS PACKAGE.  SOLVES A
-!                   constrained least squares problem with
-!                   inequality constraints.
-!
-!     sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
-!     saxpy,sasum,  see trans. Math software (5), P. 308.
-!     scopy,snrm2,
-!     sswap,isamax
-!
-!     h12           SUBROUTINE TO CONSTRUCT AND APPLY A
-!                   Householder transformation.
-!
-!     spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
-!                   precision.
-!
-!     Revised oct. 1, 1989.
-!
-!
-!     Compute machine precision
-!
-srelpr = spmpar(1)
-!
-!     Compute number of possible right multiplying Householder
-!     transformations.
-!
-m = me + ma + mg
-mode = 0
-if (n <= 0 .or. me + ma <= 0) return
-if (.not.(mdw < m)) go to 80
-mode = 4
-return
-80 np1 = n + 1
-kranke = min(me,n)
-n1 = 2*kranke + 1
-n2 = n1 + n
-!
-!     Process-option-vector
-!
-go to 480
-90 if (.not.(cov .and. mdw < n)) go to 100
-mode = 4
-return
-100 l = kranke
-!
-!     Compute norm of equality constraint matrix and RT side.
-!
-enorm = zero
-do j = 1,n
-   enorm = max(enorm,sasum(me,w(1,j),1))
-end do
-fnorm = sasum(me,w(1,np1),1)
-if (.not.(l > 0)) go to 200
-snmax = zero
-rnmax = zero
-do 180 i = 1,l
-!
-!     Compute maximum ratio of vector lengths. Partition
-!     is at col. i.
-   do 150 k = i,me
-      sn = sdot(n - i + 1,w(k,i),mdw,w(k,i),mdw)
-      rn = sdot(i - 1,w(k,1),mdw,w(k,1),mdw)
-      if (.not.(rn == zero .and. sn > snmax)) go to 120
-      snmax = sn
-      imax = k
-      go to 150
-120   if (.not.(k == i .or. (sn*rnmax > rn*snmax))) go to 150
-      snmax = sn
-      rnmax = rn
-      imax = k
-150   continue
-!
-!     Interchange rows if necessary.
-   if (i /= imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
-   if (.not.(snmax > tau**2*rnmax)) go to 160
-!
-!     Eliminate elems i+1,...,n in row i.
-   call h12(1, i, i + 1, n, w(i,1), mdw, ws(i), w(i + 1,1), mdw, 1, &
-      & m - i)
-   go to 180
-160 kranke = i - 1
-   go to 200
-180 continue
-!
-!     Save diag. Terms of lower trap. Matrix.
-!
-200 call scopy(kranke, w, mdw + 1, ws(kranke + 1), 1)
-!
-!     Use Householder trans from left to achieve kranke by kranke upper
-!     triangular form.
-!
-if (.not.(kranke > 0 .and. kranke < me)) go to 220
-do kk = 1,kranke
-   k = kranke + 1 - kk
-!
-!     Apply tranformation to matrix cols. 1,...,k-1.
-   call h12(1, k, kranke + 1, me, w(1,k), 1, up, w, 1, mdw, k - 1)
-!
-!     Apply to RT side vector.
-   call h12(2, k, kranke + 1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
-end do
-220 if (.not.(kranke > 0)) go to 240
-!
-!     Solve for variables 1,...,kranke in new coordinates.
-call scopy(kranke, w(1,np1), 1, x, 1)
-do i = 1,kranke
-   x(i) = (x(i) - sdot(i - 1,w(i,1),mdw,x,1))/w(i,i)
-end do
-!
-!     Compute residuals for reduced problem.
-!
-240 mep1 = me + 1
-rnorml = zero
-if (.not.(me < m)) go to 270
-do 260 i = mep1,m
-   w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
-   sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
-   rn = sdot(n - kranke,w(i,kranke + 1),mdw,w(i,kranke + 1),mdw)
-   if (.not.(rn <= tau**2*sn .and. kranke < n)) go to 260
-   w(i,kranke + 1) = zero
-   call scopy(n - kranke, w(i,kranke + 1), 0, w(i,kranke + 1), mdw)
-260 continue
-!
-!     Compute equal. Constraint equas. Residual length.
-270 rnorme = snrm2(me - kranke,w(kranke + 1,np1),1)
-!
-!     Move reduced problem data upward if kranke.LT.me.
-!
-if (.not.(kranke < me)) go to 290
-do j = 1,np1
-   call scopy(m - me, w(me + 1,j), 1, w(kranke + 1,j), 1)
-end do
-!
-!     Compute soln of reduced problem.
-!
-290 call lsi(w(kranke + 1,kranke + 1), mdw, ma, mg, n - kranke, prgopt, &
-   & x(kranke + 1), rnorml, mode, ws(n2), ip(2))
-if (mode > 1) go to 470
-if (.not.(me > 0)) go to 330
-!
-!     Test for consistency of equality constraints.
-!
-mdeqc = 0
-xnrme = sasum(kranke,w(1,np1),1)
-if (rnorme > tau*(enorm*xnrme + fnorm)) mdeqc = 1
-mode = mode + mdeqc
-!
-!     Check if soln to equal. Constraints satisfies inequal.
-!     Constraints when there are no degrees of freedom left.
-!
-if (.not.(kranke == n .and. mg > 0)) go to 330
-xnorm = sasum(n,x,1)
-mapke1 = ma + kranke + 1
-mend = ma + kranke + mg
-do 310 i = mapke1,mend
-   size = sasum(n,w(i,1),mdw)*xnorm + abs(w(i,np1))
-   if (.not.(w(i,np1) > tau*size)) go to 310
-   mode = 2
-   go to 470
-310 continue
-330 if (.not.(kranke > 0)) go to 420
-!
-!     Replace diag. Terms of lower trap. Matrix.
-call scopy(kranke, ws(kranke + 1), 1, w, mdw + 1)
-!
-!     Reapply trans to put soln in original coordinates.
-!
-do ii = 1,kranke
-   i = kranke + 1 - ii
-   call h12(2, i, i + 1, n, w(i,1), mdw, ws(i), x, 1, 1, 1)
-end do
-!
-!     Compute cov matrix of equal. Constrained problem.
-!
-if (.not.(cov)) go to 450
-do 400 jj = 1,kranke
-   j = kranke + 1 - jj
-   if (.not.(j < n)) go to 400
-   rb = ws(j)*w(j,j)
-   if (rb /= zero) rb = one/rb
-   jp1 = j + 1
-   do i = jp1,n
-      w(i,j) = sdot(n - j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
-   end do
-   gam = sdot(n - j,w(jp1,j),1,w(j,jp1),mdw)*rb
-   gam = half*gam
-   call saxpy(n - j, gam, w(j,jp1), mdw, w(jp1,j), 1)
-   do i = jp1,n
-      do k = i,n
-         w(i,k) = w(i,k) + w(j,i)*w(k,j) + w(i,j)*w(j,k)
-         w(k,i) = w(i,k)
-      end do
-   end do
-   uj = ws(j)
-   vj = gam*uj
-   w(j,j) = uj*vj + uj*vj
-   do i = jp1,n
-      w(j,i) = uj*w(i,j) + vj*w(j,i)
-   end do
-   call scopy(n - j, w(j,jp1), mdw, w(jp1,j), 1)
-400 continue
-!
-!     Apply the scaling to the covariance matrix.
-!
-420 if (.not.(cov)) go to 450
-do i = 1,n
-   l = n1 + i
-   call sscal(n, ws(l - 1), w(i,1), mdw)
-   call sscal(n, ws(l - 1), w(1,i), 1)
-end do
-!
-!     Rescale soln. Vector.
-!
-450 if (mode > 1) go to 470
-do j = 1,n
-   l = n1 + j
-   x(j) = x(j)*ws(l - 1)
-end do
-470 ip(1) = kranke
-ip(3) = ip(3) + 2*kranke + n
-return
-480 continue
-!     To process-option-vector
-!
-!     The nominal tolerance used in the code
-!     for the equality constraint equations.
-tau = sqrt(srelpr)
-!
-!     The nominal column scaling used in the code is
-!     the identity scaling.
-ws(n1) = one
-call scopy(n, ws(n1), 0, ws(n1), 1)
-!
-!     No covariance matrix is nominally computed.
-cov = .false.
-!
-!     Define bound for number of options to change.
-nopt = 1000
-ntimes = 0
-!
-!     Define bound for positive values of link.
-nlink = 100000
-last = 1
-link = prgopt(1)
-if (.not.(link <= 0 .or. link > nlink)) go to 490
-mode = 4
-return
-490 if (.not.(link > 1)) go to 540
-ntimes = ntimes + 1
-if (.not.(ntimes > nopt)) go to 500
-mode = 4
-return
-500 key = prgopt(last + 1)
-if (key == 1) cov = prgopt(last + 2) /= zero
-if (.not.(key == 2 .and. prgopt(last + 2) /= zero)) go to 520
-do j = 1,n
-   t = snrm2(m,w(1,j),1)
-   if (t /= zero) t = one/t
-   l = n1 + j
-   ws(l - 1) = t
-end do
-520 if (key == 3) call scopy(n, prgopt(last + 2), 1, ws(n1), 1)
-if (key == 4) tau = max(srelpr,prgopt(last + 2))
-next = prgopt(link)
-if (.not.(next <= 0 .or. next > nlink)) go to 530
-mode = 4
-return
-530 last = link
-link = next
-go to 490
-540 do j = 1,n
-   l = n1 + j
-   call sscal(m, ws(l - 1), w(1,j), 1)
-end do
-go to 90
-end subroutine lsei
-
 subroutine lsi(w, mdw, ma, mg, n, prgopt, x, rnorm, mode, ws, ip)
 implicit none
 integer, intent(in) :: ma, mdw, mg
@@ -1237,7 +551,6 @@ return
 !     Account for scaling of RT.-Side vector in solution.
 180 call sscal(n, ynorm, x, 1)
 wnorm = snrm2(n1,x,1)
-return
 end subroutine lpdp
 
 subroutine wnnls(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, &
@@ -1505,7 +818,6 @@ l5 = l4 + n
 call wnlsm(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, iwork, &
    & iwork(l1), work(1), work(l1), work(l2), work(l3), work(l4), &
    & work(l5))
-return
 end subroutine wnnls
 
 subroutine wnlsm(w, mdw, mme, ma, n, l, prgopt, x, rnorm, mode, &
@@ -2986,7 +2298,6 @@ return
 ifault = 11
 return
 290 ifault = 12
-return
 end subroutine l2slv
 
 !     subroutine decom2(...)
@@ -3175,7 +2486,6 @@ end do
 ! END STEP NUMBER NS.
 sing = .false.
 ! Normal return.
-return
 end subroutine decom2
 
 !     subroutine solve2(...)
@@ -3391,7 +2701,6 @@ if ((rdr2 > 4.*eta2*rnr) .and. &
 fail = .false.
 return
 280 fail = .true.
-return
 end subroutine solve2
 
 pure subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
@@ -3463,7 +2772,6 @@ end do
    end do
    f(j) = -sum
 end do
-return
 end subroutine solve3
 
 pure subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
@@ -3540,7 +2848,6 @@ do i = 1,n
       c(j,i) = z(j)
    end do
 end do
-return
 end subroutine covar
 
 subroutine splsq(m,n,a,ia,ja,damp,u,x,atol,btol,conlim,itnlim, &
@@ -3996,7 +3303,6 @@ end interface
 !
 beta = snrm2(n,x,1)
 if (beta > zero) call sscal(n,(one/beta),x,1)
-return
 end subroutine normlz
 
 subroutine stlsq(m,n,ta,ita,jta,damp,u,x,atol,btol,conlim, &
@@ -5014,7 +4320,6 @@ return
 244 x = v
 w = fv
 error = c1*e
-return
 end subroutine fmin
 
 subroutine optf(fcn,n,rerr,iter,xpls,fpls,ierr,wrk)
@@ -5324,7 +4629,6 @@ do i = 1,n
    xpls(i) = x(i)
    gpls(i) = g(i)
 end do
-return
 end subroutine optdrv
 
 pure subroutine opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr, &
@@ -5544,7 +4848,6 @@ return
 !     Terminate
 !
 100 ierr = jerr
-return
 end subroutine opstp
 
 subroutine fxdec(fcn, n, x, fx, r)
@@ -5578,7 +4881,6 @@ do 20 i = 1,n
    fx = fminus
    x(i) = xminus
 20 continue
-return
 end subroutine fxdec
 
 pure subroutine scalex(mo, x, typsiz, n, ierr)
@@ -5619,7 +4921,6 @@ return
    typsiz(i) = max(t, xmin)
 end do
 ierr = -10
-return
 end subroutine scalex
 
 pure subroutine lltslv(nr,n,a,x,b)
@@ -5678,7 +4979,6 @@ do ii = 2,n
    end do
    x(i) = (x(i) - sum)/a(i,i)
 end do
-return
 end subroutine lltslv
 
 subroutine fstofd(n, x, fcn, fx, g, typsiz, r)
@@ -5720,7 +5020,6 @@ do j = 1,n
    x(j) = xtmpj
    g(j) = (fplus - fx)/stepsz
 end do
-return
 end subroutine fstofd
 
 subroutine fstocd(n, x, fcn, typsiz, r, g)
@@ -5765,7 +5064,6 @@ do i = 1, n
    x(i) = xtempi
    g(i) = (fplus - fminus)/(2.0*stepi)
 end do
-return
 end subroutine fstocd
 
 subroutine lnsrch(n,x,f,g,p,xpls,fpls,fcn,mxtake,iretcd, &
@@ -5916,7 +5214,6 @@ return
 !     No satisfactory xpls found sufficiently distinct from x
 !
 210 iretcd = 1
-return
 end subroutine lnsrch
 
 pure subroutine secfac(nr,n,x,g,a,xpls,gpls,itncnt,tol, &
@@ -6078,7 +5375,6 @@ do i = 2,n
       a(i,j) = a(j,i)
    end do
 end do
-return
 end subroutine secfac
 
 pure subroutine qrupdt(nr,n,a,u,v)
@@ -6148,7 +5444,6 @@ if (k <= 1) return
 do i = 1,km1
    call jrot(nr,n,a,i,a(i,i),-a(i + 1,i),r)
 end do
-return
 end subroutine qrupdt
 
 pure subroutine jrot(nr,n,h,i,a,b,r)
@@ -6214,7 +5509,6 @@ do j = i,n
    h(i,j) = - s*h(i + 1,j)
    h(i + 1,j) = s*t
 end do
-return
 end subroutine jrot
 
 subroutine lmdiff(fcn,m,n,x,fvec,epsfcn,tol,info,iwa,wa,lwa)
@@ -6357,7 +5651,6 @@ call lmdif(fcn,m,n,x,fvec,ftol,xtol,gtol,maxfev,epsfcn,wa(1), &
    & wa(n + 1),wa(2*n + 1),wa(3*n + 1),wa(4*n + 1),wa(5*n + 1))
 if (info == 8) info = 4
 10 continue
-return
 end subroutine lmdiff
 
 subroutine lmdif(fcn,m,n,x,fvec,ftol,xtol,gtol,maxfev,epsfcn, &
@@ -6821,7 +6114,6 @@ go to 30
 if (iflag < 0) info = iflag
 iflag = 0
 if (nprint > 0) call fcn(m,n,x,fvec,iflag)
-return
 end subroutine lmdif
 
 pure real function enorm(n,x)
@@ -6929,7 +6221,6 @@ go to 120
 enorm = x3max*sqrt(s3)
 120 continue
 130 continue
-return
 end function enorm
 
 pure subroutine dogleg(n,r,lr,diag,qtb,delta,x,wa1,wa2)
@@ -7116,7 +6407,6 @@ do j = 1, n
    x(j) = temp*wa1(j) + alpha*x(j)
 end do
 140 continue
-return
 end subroutine dogleg
 
 subroutine fdjac1(fcn,n,x,fvec,fjac,ldfjac,iflag,ml,mu,epsfcn, &
@@ -7279,7 +6569,6 @@ do k = 1, msum
 end do
 100 continue
 110 continue
-return
 !
 !     Last card of subroutine fdjac1.
 !
@@ -7400,7 +6689,6 @@ do j = 1, n
    end do
 end do
 30 continue
-return
 !
 !     Last card of subroutine fdjac2.
 !
@@ -7693,7 +6981,6 @@ go to 150
 !     Termination.
 !
 if (iter == 0) par = zero
-return
 !
 !     Last card of subroutine lmpar.
 !
@@ -7791,7 +7078,6 @@ do l = 1, minmn
    end do
 110 continue
 end do
-return
 !
 !     Last card of subroutine qform.
 !
@@ -7971,7 +7257,6 @@ do j = 1, minmn
 100 continue
    rdiag(j) = -ajnorm
 end do
-return
 !
 !     Last card of subroutine qrfac.
 !
@@ -8170,7 +7455,6 @@ do j = 1, n
    l = ipvt(j)
    x(l) = wa(j)
 end do
-return
 !
 !     Last card of subroutine qrsolv.
 !
@@ -8265,7 +7549,6 @@ do j = 1, nm1
    end do
 end do
 50 continue
-return
 !
 !     Last card of subroutine r1mpyq.
 !
@@ -8484,7 +7767,6 @@ do i = n, m
    l = l + 1
 end do
 if (s(jj) == zero) sing = .true.
-return
 !
 !     Last card of subroutine r1updt.
 !
@@ -8541,7 +7823,6 @@ ip = m + n0 + 1
 call smplx1(a,b0,c,ka,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & eps0,rerrmn,rerrmx,rerr,numle,numge,bi, &
    & wk(1),wk(m + 1),iwk(1),iwk(ip))
-return
 end subroutine smplx
 
 pure subroutine smplx1(a,b0,c,ka,m,n0,ind,ibasis,r,z,iter,mxiter, &
@@ -9410,7 +8691,6 @@ ip = m + n0 + 1
 call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & eps0,rerrmn,rerrmx,rerr,numle,numge,bi, &
    & wk(1),wk(m + 1),iwk(1),iwk(ip))
-return
 end subroutine ssplx
 
 pure subroutine ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,r,z, &
@@ -10482,7 +9762,6 @@ return
 !                    Error return
 !
 300 ierr = 1
-return
 end subroutine crout1
 
 pure subroutine assgn(n,a,c,t,iwk,ierr)
@@ -10522,6 +9801,777 @@ i5 = i4 + n
 i6 = i5 + n
 call assgn1(n,a,c,t,iwk(1),iwk(i1),iwk(i2),iwk(i3),iwk(1), &
    & iwk(i3),iwk(i4),iwk(i5),iwk(i6),ierr)
-return
 end subroutine assgn
+
+pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr, &
+   & u,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
+   & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
+integer, intent(inout) :: t
+integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
+!
+! This subroutine solves the square assignment problem
+! the meaning of the input parameters is
+! n = Number of rows and columns of the cost matrix
+! a(i,j) = Element in row i and column j of the cost matrix
+! ( at the end of computation the elements of A are changed)
+! the meaning of the output parameters is
+! c(j) = Row assigned to column j (j=1,n)
+! t = Cost of the optimal assignment
+! all parameters are integer
+! the meaning of the local variables is
+! a(i,j) = Element of the cost matrix IF a(i,j) is positive,
+!          column of the unassigned zero following in row i
+!          (i=1,n) the unassigned zero of column j (j=1,n)
+!          if a(i,j) is not positive
+! a(i,n+1) = Column of the first unassigned zero of row i
+!            (i=1,n)
+! ch(i) = Column of the next unexplored and unassigned zero
+!         of row i (i=1,n)
+! lc(j) = Label of column j (j=1,n)
+! lr(i) = Label of row i (i=1,n)
+! LZ(i) = Column of the last unassigned zero of row i(i=1,n)
+! NZ(i) = Column of the next unassigned zero of row i(i=1,n)
+! RH(i) = Unexplored row following the unexplored row i
+!         (i=1,n)
+! RH(n+1) = First unexplored row
+! SLC(k) = k-TH element contained in the set of the labelled
+!          columns
+! slr(k) = k-TH element contained in the set of the labelled
+!          rows
+! U(i) = Unassigned row following the unassigned row i
+!        (i=1,n)
+! U(n+1) = First unassigned row
+! ierr = 0 If the routine terminates successfully. Otherwise
+!          ierr = 1
+!
+! The vectors c,ch,lc,lr,LZ,NZ,SLC,slr must be dimensioned
+! at least at (n), the vectors RH,U at  least at (n+1),
+! and the matrix a at least at (n,n+1). To save storage
+! LZ and RH may use the same storage area, and NZ and ch
+! may use the same storage area.
+!
+! Initialization
+maxnum = ipmpar(3)
+ierr = 0
+np1 = n + 1
+do j = 1,n
+   c(j) = 0
+   lz(j) = 0
+   nz(j) = 0
+   u(j) = 0
+end do
+u(np1) = 0
+t = 0
+! Reduction of the initial cost matrix
+do 40 j = 1,n
+   s = a(1,j)
+   do l = 2,n
+      if ( a(l,j) < s ) s = a(l,j)
+   end do
+   if (s) 20,40,30
+20 mm = maxnum + s
+   if (t < -mm) go to 400
+   t = t + s
+   do i = 1,n
+      if (a(i,j) > mm) go to 400
+      a(i,j) = a(i,j) - s
+   end do
+   go to 40
+30 mm = maxnum - s
+   if (t > mm) go to 400
+   t = t + s
+   do i = 1,n
+      a(i,j) = a(i,j) - s
+   end do
+40 continue
+do i = 1,n
+   q = a(i,1)
+   do l = 2,n
+      if ( a(i,l) < q ) q = a(i,l)
+   end do
+   mm = maxnum - q
+   if (t > mm) go to 400
+   t = t + q
+   l = np1
+   do 60 j = 1,n
+      a(i,j) = a(i,j) - q
+      if ( a(i,j) /= 0 ) go to 60
+      a(i,l) = -j
+      l = j
+60    continue
+end do
+! Choice of the initial solution
+k = np1
+do 140 i = 1,n
+   lj = np1
+   j = -a(i,np1)
+80 if ( c(j) == 0 ) go to 130
+   lj = j
+   j = -a(i,j)
+   if ( j /= 0 ) go to 80
+   lj = np1
+   j = -a(i,np1)
+90 r = c(j)
+   lm = lz(r)
+   m = nz(r)
+100 if ( m == 0 ) go to 110
+   if ( c(m) == 0 ) go to 120
+   lm = m
+   m = -a(r,m)
+   go to 100
+110 lj = j
+   j = -a(i,j)
+   if ( j /= 0 ) go to 90
+   u(k) = i
+   k = i
+   go to 140
+120 nz(r) = -a(r,m)
+   lz(r) = j
+   a(r,lm) = -j
+   a(r,j) = a(r,m)
+   a(r,m) = 0
+   c(m) = r
+130 c(j) = i
+   a(i,lj) = a(i,j)
+   nz(i) = -a(i,j)
+   lz(i) = lj
+   a(i,j) = 0
+140 continue
+! Research of a new assignment
+150 if ( u(np1) == 0 ) return
+do i = 1,n
+   ch(i) = 0
+   lc(i) = 0
+   lr(i) = 0
+   rh(i) = 0
+end do
+rh(np1) = -1
+kslc = 0
+kslr = 1
+r = u(np1)
+lr(r) = -1
+slr(1) = r
+if ( a(r,np1) == 0 ) go to 220
+170 l = -a(r,np1)
+if ( a(r,l) == 0 ) go to 180
+if ( rh(r) /= 0 ) go to 180
+rh(r) = rh(np1)
+ch(r) = -a(r,l)
+rh(np1) = r
+180 if ( lc(l) == 0 ) go to 200
+if ( rh(r) == 0 ) go to 210
+190 l = ch(r)
+ch(r) = -a(r,l)
+if ( a(r,l) /= 0 ) go to 180
+rh(np1) = rh(r)
+rh(r) = 0
+go to 180
+200 lc(l) = r
+if ( c(l) == 0 ) go to 360
+kslc = kslc + 1
+slc(kslc) = l
+r = c(l)
+lr(r) = l
+kslr = kslr + 1
+slr(kslr) = r
+if ( a(r,np1) /= 0 ) go to 170
+210 continue
+if ( rh(np1) > 0 ) go to 350
+! Reduction of the current cost matrix
+220 h = maxnum
+do 240 j = 1,n
+   if ( lc(j) /= 0 ) go to 240
+   do k = 1,kslr
+      i = slr(k)
+      if ( a(i,j) < h ) h = a(i,j)
+   end do
+240 continue
+mm = maxnum - h
+if (mm == 0 .or. t > mm) go to 400
+t = t + h
+do 290 j = 1,n
+   if ( lc(j) /= 0 ) go to 290
+   do 280 k = 1,kslr
+      i = slr(k)
+      a(i,j) = a(i,j) - h
+      if ( a(i,j) /= 0 ) go to 280
+      if ( rh(i) /= 0 ) go to 250
+      rh(i) = rh(np1)
+      ch(i) = j
+      rh(np1) = i
+250   l = np1
+260   nl = -a(i,l)
+      if ( nl == 0 ) go to 270
+      l = nl
+      go to 260
+270   a(i,l) = -j
+280   continue
+290 continue
+if ( kslc == 0 ) go to 350
+do 340 i = 1,n
+   if ( lr(i) /= 0 ) go to 340
+   do 330 k = 1,kslc
+      j = slc(k)
+      if ( a(i,j) > 0 ) go to 320
+      l = np1
+300   nl = - a(i,l)
+      if ( nl == j ) go to 310
+      l = nl
+      go to 300
+310   a(i,l) = a(i,j)
+      a(i,j) = h
+      go to 330
+320   mm = maxnum - h
+      if (a(i,j) > mm) go to 400
+      a(i,j) = a(i,j) + h
+330   continue
+340 continue
+350 r = rh(np1)
+go to 190
+! Assignment of a new row
+360 c(l) = r
+m = np1
+370 nm = -a(r,m)
+if ( nm == l ) go to 380
+m = nm
+go to 370
+380 a(r,m) = a(r,l)
+a(r,l) = 0
+if ( lr(r) < 0 ) go to 390
+l = lr(r)
+a(r,l) = a(r,np1)
+a(r,np1) = -l
+r = lc(l)
+go to 360
+390 u(np1) = u(r)
+u(r) = 0
+go to 150
+! Error return - Integer overflow occurs
+400 ierr = 1
+end subroutine assgn1
+
+pure subroutine mkp(n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
+implicit none
+integer, intent(in) :: m, n, num
+integer, intent(inout) :: p(n), w(n)
+integer, intent(in) :: k(m)
+integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
+real, intent(inout) :: wk(n)
+integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
+real :: ap, aw
+interface
+   pure subroutine mkp1(n,m,p,w,k,bck,xstar,vstar,np1,n5,bb,bl, &
+      & x,xl,b,ubb,lx,lxi,f,pbl,q,v,bs,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: k(m)
+      integer, intent(inout) :: bck
+      integer, intent(inout) :: xstar(n)
+      integer, intent(inout) :: vstar
+      integer, intent(inout) :: bb(m,n)
+      integer, intent(inout) :: bl(m,np1)
+      integer, intent(inout) :: x(m,n)
+      integer, intent(inout) :: xl(m,n)
+      integer, intent(inout) :: b(np1)
+      integer, intent(inout) :: ubb(n)
+      integer, intent(inout) :: lx(n)
+      integer, intent(inout) :: lxi(n)
+      integer, intent(inout) :: f(m)
+      integer, intent(inout) :: pbl(m)
+      integer, intent(inout) :: q(m)
+      integer, intent(inout) :: v(m)
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine mkp1
+   pure subroutine risort(a,m,n)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: m(n)
+   end subroutine risort
+end interface
+!
+! Subroutine to solve A 0-1 multiple knapsack problem of n
+! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
+! I.E. also suitable for A 0-1 single knapsack problem).
+! The problem to be solved is
+!
+! MAXIMIZE  vstar = p(1)*(x(1,1) + ... + x(m,1)) + ...
+!                   ... + p(n)*(x(1,n) + ... + x(m,n))
+! subject to
+! w(1)*x(i,1) + ... + w(n)*x(i,n) .LE. k(i)   FOR  i=1,...,m
+! x(1,j) + ... + x(m,j) .LE. 1   FOR  j=1,...,n
+! x(i,j) = 0 OR 1   FOR  i=1,...,m ,  j=1,...,n ,
+!
+! Where all p(j), w(j), and k(i) are positive integers.
+! Before mkp is called, array k must be sorted so that
+! k(1) .LE. k(2) .LE. ... .LE. k(m) .
+!
+! Meaning of the input parameters ...
+!
+! n    = Number of items.
+! m    = Number of knapsacks.
+! p(j) = Profit of item  j  (j=1,...,n) .
+! w(j) = Weight of item  j  (j=1,...,n) .
+! k(i) = Capacity of knapsack  i  (i=1,...,m) .
+! bck  = -1  If exact solution is required.
+!      = Maximum number of backtrackings to be performed, if
+!        heuristic solution is required.
+! wk   = Real work space of dimension n.
+! iwk  = Work space of dimension .GE. 5*m + 14*n + 4*m*n + 3
+! num  = Dimension of iwk
+!
+! Meaning of the output parameters ...
+!
+! xstar(j) = 0  If item  j  is not in the optimal solution
+!               (I.E. if  x(i,j) = 0  For all  i ).
+!          = Knapsack where item  j  is inserted, otherwise
+!            (I.E. IF  x(xstar(j),j) = 1 ).
+! vstar    = Value of the optimal solution if  vstar .GT. 0.
+!          = ERROR CONDITION (INFEASIBILITY OR TRIVIALITY)
+!            in the input data if  vstar .LT. 0 .
+!            = -1  IF  n .LT. 2  OR  m .LT. 1 .
+!            = -2  If some  p(j) ,  w(j)  or  k(i) are not
+!                  positive.
+!            = -3  If a knapsack cannot contain any item.
+!            = -4  If an item cannot fit into any knapsack.
+!            = -5  If knapsack  m  contains all the items.
+!            = -7  If array  k is not correctly sorted.
+!            = -8  IF num .LT. 5*m + 14*n + 4*m*n + 3.
+!
+!            (In all the above cases array  xstar is not
+!            defined).
+!
+! All the parameters except wk are of integer type. When mkp
+! terminates, all the input parameters are unchanged except
+! bck, which gives the number of backtrackings performed.
+!
+!
+!                    Check the input data
+!
+if (m < 1 .or. n < 2) go to 100
+mn = m*n
+if (num < 5*m + 14*n + 4*mn + 3) go to 160
+!
+if (p(1) <= 0 .or. w(1) <= 0) go to 110
+ap = p(1)
+aw = w(1)
+wk(1) = -ap/aw
+maxw = w(1)
+minw = w(1)
+isumw = w(1)
+do j = 2,n
+   if (p(j) <= 0 .or. w(j) <= 0) go to 110
+   ap = p(j)
+   aw = w(j)
+   wk(j) = -ap/aw
+   if (w(j) > maxw) maxw = w(j)
+   if (w(j) < minw) minw = w(j)
+   isumw = isumw + w(j)
+end do
+!
+if (k(1) <= 0) go to 110
+if (m == 1) go to 30
+do i = 2,m
+   if (k(i) <= 0) go to 110
+   if (k(i) < k(i - 1)) go to 150
+end do
+!
+30 if (minw > k(1)) go to 120
+if (maxw > k(m)) go to 130
+if (isumw <= k(m)) go to 140
+vstar = 0
+!
+!             Reorder the arrays p and w so that
+!                p(j)/w(j) .GE. p(j+1)/w(j+1)
+!
+n5 = 5*n
+do j = 1,n
+   jj = n5 + j
+   iwk(jj) = j
+end do
+call risort(wk, iwk(n5 + 1), n)
+!
+do j = 1,n
+   iwk(j) = p(j)
+   jn = j + n
+   iwk(jn) = w(j)
+end do
+!
+do j = 1,n
+   jj = n5 + j
+   l = iwk(jj)
+   p(j) = iwk(l)
+   npl = n + l
+   w(j) = iwk(npl)
+end do
+!
+!                Partition the work space iwk
+!
+lx = jj + 1
+lxi = lx + n
+bs = lxi + n
+xs = bs + n
+ubb = xs + n
+!
+np1 = n + 1
+b = ubb + n
+ps = b + np1
+ws = ps + np1
+!
+f = ws + np1
+pbl = f + m
+q = pbl + m
+v = q + m
+!
+bb = v + m
+x = bb + mn
+xl = x + mn
+!
+bl = xl + mn
+!
+!                     Solve the problem
+!
+call mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+   & iwk(bb), iwk(bl), iwk(x), iwk(xl), &
+   & iwk(b), iwk(ubb), iwk(lx), iwk(lxi), &
+   & iwk(f), iwk(pbl), iwk(q), iwk(v), &
+   & iwk(bs), iwk(ps), iwk(ws), iwk(xs), iwk(1))
+!
+!           Restore the initial ordering to p and w,
+!                and reorder xstar accordingly
+!
+do j = 1,n
+   iwk(j) = p(j)
+   jn = j + n
+   iwk(jn) = w(j)
+   jnn = jn + n
+   iwk(jnn) = xstar(j)
+end do
+!
+do j = 1,n
+   jj = n5 + j
+   l = iwk(jj)
+   p(l) = iwk(j)
+   jn = j + n
+   w(l) = iwk(jn)
+   jnn = jn + n
+   xstar(l) = iwk(jnn)
+end do
+return
+!
+!                        Error return
+!
+100 vstar = -1
+return
+110 vstar = -2
+return
+120 vstar = -3
+return
+130 vstar = -4
+return
+140 vstar = -5
+return
+150 vstar = -7
+return
+160 vstar = -8
+end subroutine mkp
+
+pure subroutine mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+   & bb, bl, x, xl, b, ubb, lx, lxi, &
+   & f, pbl, q, v, bs, ps, ws, xs, iwk)
+implicit none
+integer, intent(in) :: m, n, n5, np1
+integer, intent(in) :: p(n), w(n), k(m)
+integer, intent(inout) :: xstar(n), bck, vstar
+integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
+integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
+integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
+integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
+integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, kub, lb, li, lj, lr, lri, lub, lubi, m1, n1, s, u, ub, vb
+interface
+   pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m &
+      & ,np1,lx,lxi,lr,lri,lubi)
+      implicit none
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: i
+      integer, intent(in) :: ii
+      integer, intent(inout) :: ub
+      integer, intent(out) :: iflag
+      integer, intent(in) :: vb
+      integer, intent(in) :: lub
+      integer, intent(in) :: lj
+      integer, intent(in) :: li
+      integer, intent(in) :: f(m)
+      integer, intent(in) :: bb(m,n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: lx(n)
+      integer, intent(in) :: lxi(n)
+      integer, intent(in) :: lr
+      integer, intent(in) :: lri
+      integer, intent(in) :: lubi
+   end subroutine parc
+   pure subroutine pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl,np1, &
+      & n5,bs,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: i
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: bb(m,n)
+      integer, intent(inout) :: kub
+      integer, intent(inout) :: bl(m,np1)
+      integer, intent(inout) :: lb
+      integer, intent(inout) :: pbl(m)
+      integer, intent(inout) :: v(m)
+      integer, intent(inout) :: xl(m,n)
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine pi1
+   pure subroutine sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr,bs, &
+      & ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: q(m)
+      integer, intent(in) :: i
+      integer, intent(in) :: b(np1)
+      integer, intent(in) :: kub
+      integer, intent(inout) :: ub
+      integer, intent(inout) :: lx(n)
+      integer, intent(inout) :: lr
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sigma1
+   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: n
+      integer, intent(in) :: ns
+      integer, intent(inout) :: qs
+      integer, intent(in) :: kub
+      integer, intent(inout) :: vs
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine sknp
+end interface
+!
+! Meaning of the main internal variables and arrays ...
+!
+! i       = Knapsack currently considered.
+! LB      = Lower bound on the optimal solution.
+! ub      = Upper bound on the optimal solution.
+! vb      = Value of the current solution.
+! x(i,j)  = 1  If item  j  is inserted in knapsack  i  in
+!              the current solution.
+!         = 0  OTHERWISE.
+! f(i)    = Pointer to the last item inserted in knapsack  i
+!           ( = -1  If knapsack  i  is empty).
+! bb(i,j) = Pointer to the item inserted in knapsack  i
+!           just before item  j ( = -1  If  j  is the first
+!           item inserted in knapsack  i ).
+! q(i)    = Current available capacity of knapsack  i .
+! b(j)    = 1  If item  j  is not inserted in any knapsack.
+!         = 0  If item  j  is inserted in a knapsack.
+! pbl(i)  = Number of the items which can be inserted in
+!           KNAPSACK  i .
+! bl(i,s) = Pointer to the  s-TH  item which can be inserted
+!           in knapsack  i .
+! xl(i,j) = 1  If item  j  was inserted in knapsack  i  in
+!              the last execution of subroutine pi1.
+!         = 0  OTHERWISE.
+! iwk       WORK SPACE FOR THE SUBROUTINE sknp.
+!
+!
+if (m == 1) go to 250
+!
+! Step 1 (initialization)
+!
+jbck = bck
+bck = 0
+kub = 0
+n1 = n + 1
+b(n1) = 1
+m1 = m - 1
+do j = 1,n
+   b(j) = 1
+   do i = 1,m
+      x(i,j) = 0
+      bb(i,j) = 0
+   end do
+end do
+do i = 1,m1
+   q(i) = k(i)
+   f(i) = -1
+end do
+q(m) = k(m)
+vstar = 0
+vb = 0
+i = 1
+call sigma1(n,m,p,w,k,1,b,kub,ub,np1,n5,lx,lr, &
+   & bs,ps,ws,xs,iwk)
+do j = 1,n
+   lxi(j) = lx(j)
+end do
+lri = lr
+lubi = ub
+iflag = 0
+!
+! Step 2 (heuristic)
+!
+70 kub = vstar - vb
+call pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
+   & np1,n5,bs,ps,ws,xs,iwk)
+if ( lb + vb <= vstar ) go to 140
+vstar = lb + vb
+do 90 j = 1,n
+   xstar(j) = 0
+   do 80 s = 1,i
+      if ( x(s,j) == 0 ) go to 80
+      xstar(j) = s
+      go to 90
+80    continue
+90 continue
+ip = pbl(i)
+if ( ip == 0 ) go to 110
+do j = 1,ip
+   jj = bl(i,j)
+   if ( xl(i,j) == 1 ) xstar(jj) = i
+end do
+110 i1 = i + 1
+do 130 ii = i1,m
+   ip = pbl(ii)
+   if ( ip == 0 ) go to 130
+   do j = 1,ip
+      jj = bl(ii,j)
+      if ( xl(ii,j) == 1 ) xstar(jj) = ii
+   end do
+130 continue
+if ( ub == lb ) go to 200
+!
+! Step 3 (updating)
+!
+140 if ( v(i) == 0 ) go to 180
+iuv = ub + vb
+u = pbl(i)
+ibv = 0
+do 170 s = 1,u
+   if ( xl(i,s) == 0 ) go to 170
+   j = bl(i,s)
+   x(i,j) = 1
+   q(i) = q(i) - w(j)
+   vb = vb + p(j)
+   b(j) = 0
+   bb(i,j) = f(i)
+   ubb(j) = iuv
+   if ( iflag == 1 ) go to 150
+   lub = iuv
+   lj = j
+   li = i
+150 f(i) = j
+   ibv = ibv + p(j)
+   if ( ibv == v(i) ) go to 180
+   call parc(i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+      & lx,lxi,lr,lri,lubi)
+   if ( iflag == 1 ) go to 160
+   kub = vstar - vb
+   call sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
+      & bs,ps,ws,xs,iwk)
+   lj = n1
+160 iuv = ub + vb
+   if ( iuv <= vstar ) go to 200
+170 continue
+180 if ( i == m - 1 ) go to 200
+ip1 = i + 1
+call parc(ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+   & lx,lxi,lr,lri,lubi)
+if ( iflag == 1 ) go to 190
+kub = vstar - vb
+call sigma1(n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
+   & bs,ps,ws,xs,iwk)
+lj = n1
+190 if ( ub + vb <= vstar ) go to 200
+i = i + 1
+go to 140
+!
+! Step 4 (backtracking)
+!
+200 if ( i > 0 ) go to 210
+bck = bck - 1
+return
+210 if ( bck == jbck ) return
+bck = bck + 1
+if ( f(i) /= (-1) ) go to 230
+do j = 1,n
+   bb(i,j) = 0
+end do
+i = i - 1
+go to 200
+230 j = f(i)
+x(i,j) = 0
+b(j) = 1
+vb = vb - p(j)
+q(i) = q(i) + w(j)
+do s = 1,n
+   if ( bb(i,s) == j ) bb(i,s) = 0
+end do
+f(i) = bb(i,j)
+if ( ubb(j) <= vstar ) go to 200
+ub = ubb(j) - vb
+iflag = 1
+go to 70
+!
+! Particular case (0-1 single knapsack problem)
+!
+250 k1 = k(1)
+do j = 1,n
+   ps(j) = p(j)
+   ws(j) = w(j)
+end do
+call sknp(n,k1,0,vstar,n,np1,n5,ps,ws,xs,iwk)
+do j = 1,n
+   xstar(j) = xs(j)
+end do
+bck = 0
+end subroutine mkp1
 

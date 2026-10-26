@@ -1,320 +1,3 @@
-pure subroutine deig(ibal,a,ka,n,wr,wi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
-integer :: igh, low
-interface
-   pure subroutine dbal(nm,n,a,low,igh,scale)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      double precision, intent(inout) :: a(nm,n)
-      integer, intent(inout) :: low
-      integer, intent(inout) :: igh
-      double precision, intent(inout) :: scale(n)
-   end subroutine dbal
-   pure subroutine dhqr(nm,n,low,igh,h,wr,wi,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(inout) :: h(nm,n)
-      double precision, intent(inout) :: wr(n)
-      double precision, intent(inout) :: wi(n)
-      integer, intent(out) :: ierr
-   end subroutine dhqr
-   pure subroutine dorth(nm,n,low,igh,a,ort)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(inout) :: a(nm,n)
-      double precision, intent(inout) :: ort(igh)
-   end subroutine dorth
-end interface
-!-----------------------------------------------------------------------
-!                Eigenvalues of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal /= 0) call dbal(ka,n,a,low,igh,wr)
-call dorth(ka,n,low,igh,a,wr)
-call dhqr(ka,n,low,igh,a,wr,wi,ierr)
-return
-end subroutine deig
-
-pure subroutine deigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
-   & zr(ka,n), zi(ka,n)
-integer :: igh, j, k, kp1, low
-interface
-   pure subroutine dbabk(nm,n,low,igh,scale,m,z)
-      implicit none
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(in) :: scale(n)
-      double precision, intent(inout) :: z(nm,m)
-   end subroutine dbabk
-   pure subroutine dbal(nm,n,a,low,igh,scale)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      double precision, intent(inout) :: a(nm,n)
-      integer, intent(inout) :: low
-      integer, intent(inout) :: igh
-      double precision, intent(inout) :: scale(n)
-   end subroutine dbal
-   pure subroutine dhqr2(nm,n,low,igh,h,wr,wi,z,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(inout) :: h(nm,n)
-      double precision, intent(inout) :: wr(n)
-      double precision, intent(inout) :: wi(n)
-      double precision, intent(inout) :: z(nm,n)
-      integer, intent(out) :: ierr
-   end subroutine dhqr2
-   pure subroutine dorth(nm,n,low,igh,a,ort)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(inout) :: a(nm,n)
-      double precision, intent(inout) :: ort(igh)
-   end subroutine dorth
-   pure subroutine dortrn(nm,n,low,igh,a,ort,z)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(in) :: a(nm,igh)
-      double precision, intent(inout) :: ort(igh)
-      double precision, intent(inout) :: z(nm,n)
-   end subroutine dortrn
-end interface
-!-----------------------------------------------------------------------
-!     Eigenvalues and eigenvectors of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal /= 0) call dbal(ka,n,a,low,igh,zi)
-call dorth(ka,n,low,igh,a,wr)
-call dortrn(ka,n,low,igh,a,wr,zr)
-call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
-if (ierr /= 0) return
-if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
-!
-do 30 k = 1,n
-   if (wi(k)) 30,10,20
-10 do 11 j = 1,n
-11    zi(j,k) = 0.d0
-   go to 30
-20 kp1 = k + 1
-   do 21 j = 1,n
-      zi(j,k) = zr(j,kp1)
-      zr(j,kp1) = zr(j,k)
-21    zi(j,kp1) = -zi(j,k)
-30 continue
-return
-end subroutine deigv
-
-pure subroutine dbal(nm,n,a,low,igh,scale)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm
-integer, intent(inout) :: igh, low
-double precision, intent(inout) :: a(nm,n), scale(n)
-integer :: i, j, k, l, m, jj, iexc
-double precision :: c, f, g, r, s, b2, radix
-logical :: noconv
-interface
-   pure elemental function ipmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      integer :: ipmpar
-   end function ipmpar
-end interface
-!     double precision dabs
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure balance,
-!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
-!
-!     Dbal balances a double precision real matrix and isolates
-!     eigenvalues whenever possible.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        A contains the input matrix to be balanced.
-!
-!     On output-
-!
-!        A contains the balanced matrix,
-!
-!        Low and igh are two integers such that a(i,j)
-!          is equal to zero if
-!           (1) i is greater than j and
-!           (2) j=1,...,low-1 OR i=igh+1,...,n,
-!
-!        Scale contains information determining the
-!           permutations and scaling factors used.
-!
-!     Suppose that the principal submatrix in rows low through igh
-!     has been balanced, that P(j) denotes the index interchanged
-!     with j during the permutation step, and that the elements
-!     of the diagonal matrix used are denoted by D(i,j).  Then
-!        scale(j) = P(j),    FOR j = 1,...,low-1
-!                 = D(j,j),      j = low,...,igh
-!                 = P(j)         j = igh+1,...,n.
-!     The order in which the interchanges are made is n to igh+1,
-!     then 1 to low-1.
-!
-!     Note that 1 is returned for igh if igh is zero formally.
-!
-!     The Algol procedure exc contained in balance appears in
-!     dbal in line.  (Note that the Algol roles of identifiers
-!     k,l have been reversed.)
-!
-!-----------------------------------------------------------------------
-!
-!     ********** radix is a machine dependent parameter specifying
-!                the base of the machine floating point representation.
-!
-radix = ipmpar(4)
-!
-!                **********
-!
-b2 = radix * radix
-k = 1
-l = n
-go to 100
-!     ********** In-line procedure for row and
-!                column exchange **********
-20 scale(m) = j
-if (j == m) go to 50
-!
-do i = 1, l
-   f = a(i,j)
-   a(i,j) = a(i,m)
-   a(i,m) = f
-end do
-!
-do i = k, n
-   f = a(j,i)
-   a(j,i) = a(m,i)
-   a(m,i) = f
-end do
-!
-50 go to (80,130), iexc
-!     ********** Search for rows isolating an eigenvalue
-!                and push them down **********
-80 if (l == 1) go to 280
-l = l - 1
-!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
-100 do 120 jj = 1, l
-   j = l + 1 - jj
-!
-   do 110 i = 1, l
-      if (i == j) go to 110
-      if (a(j,i) /= 0.d0) go to 120
-110   continue
-!
-   m = l
-   iexc = 1
-   go to 20
-120 continue
-!
-go to 140
-!     ********** Search for columns isolating an eigenvalue
-!                and push them left **********
-130 k = k + 1
-!
-140 do 170 j = k, l
-!
-   do 150 i = k, l
-      if (i == j) go to 150
-      if (a(i,j) /= 0.d0) go to 170
-150   continue
-!
-   m = k
-   iexc = 2
-   go to 20
-170 continue
-!     ********** Now balance the submatrix in rows k to l **********
-do 180 i = k, l
-180 scale(i) = 1.d0
-!     ********** Iterative loop for norm reduction **********
-190 noconv = .false.
-!
-do 270 i = k, l
-   c = 0.d0
-   r = 0.d0
-!
-   do 200 j = k, l
-      if (j == i) go to 200
-      c = c + abs(a(j,i))
-      r = r + abs(a(i,j))
-200   continue
-!     ********** Guard against zero c or r due to underflow **********
-   if (c == 0.d0 .or. r == 0.d0) go to 270
-   g = r / radix
-   f = 1.d0
-   s = c + r
-210 if (c >= g) go to 220
-   f = f * radix
-   c = c * b2
-   go to 210
-220 g = r * radix
-230 if (c < g) go to 240
-   f = f / radix
-   c = c / b2
-   go to 230
-!     ********** Now balance **********
-240 if ((c + r) / f >= 0.95d0 * s) go to 270
-   g = 1.d0 / f
-   scale(i) = scale(i) * f
-   noconv = .true.
-!
-   do 250 j = k, n
-250   a(i,j) = a(i,j) * g
-!
-   do 260 j = 1, l
-260   a(j,i) = a(j,i) * f
-!
-270 continue
-!
-if (noconv) go to 190
-!
-280 low = k
-igh = l
-return
-end subroutine dbal
-
 pure subroutine dbalnv(nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
@@ -388,7 +71,6 @@ end do
       z(j,i) = z(j,k)
 50    z(j,k) = s
 60 continue
-return
 end subroutine dbalnv
 
 pure subroutine dorth(nm,n,low,igh,a,ort)
@@ -1436,7 +1118,6 @@ return
 l = l/2
 call tred3(n, l, a, w, t(n + 1), t(1))
 call tqlrat(n, w, t, ierr)
-return
 end subroutine seig
 
 pure subroutine seig1(a, ka, n, w, t, ierr)
@@ -1484,7 +1165,6 @@ return
 l = l/2
 call tred3(n, l, a, w, t, t)
 call imtql1(n, w, t, ierr)
-return
 end subroutine seig1
 
 pure subroutine seigv(a, ka, n, w, z, t, ierr)
@@ -1519,7 +1199,6 @@ end interface
 !
 call tred2(ka, n, a, w, t, z)
 call tql2(ka, n, w, t, z, ierr)
-return
 end subroutine seigv
 
 pure subroutine seigv1(a, ka, n, w, z, t, ierr)
@@ -1554,7 +1233,6 @@ end interface
 !
 call tred2(ka, n, a, w, t, z)
 call imtql2(ka, n, w, t, z, ierr)
-return
 end subroutine seigv1
 
 pure subroutine tred1(nm,n,a,d,e,e2)
@@ -1671,7 +1349,6 @@ do ii = 1, n
    a(i,i) = h
 end do
 !
-return
 !     ********** Last card of tred1 **********
 end subroutine tred1
 
@@ -1787,7 +1464,6 @@ do ii = 1, n
    a(iz + 1) = scale * sqrt(h)
 end do
 !
-return
 !     ********** Last card of tred3 **********
 end subroutine tred3
 
@@ -2213,7 +1889,6 @@ do 500 i = 1, n
 !
 500 continue
 !
-return
 !     ********** Last card of tred2 **********
 end subroutine tred2
 
@@ -2594,7 +2269,6 @@ return
 l = l/2
 call dtred3(n, l, a, w, t(n + 1), t(1))
 call dtql(n, w, t, ierr)
-return
 end subroutine dseig
 
 pure subroutine dseigv(a, ka, n, w, z, t, ierr)
@@ -2631,7 +2305,6 @@ end interface
 !
 call dtred2(ka, n, a, w, t, z)
 call dtql2(ka, n, w, t, z, ierr)
-return
 end subroutine dseigv
 
 pure subroutine dtred1(nm,n,a,d,e,e2)
@@ -2748,7 +2421,6 @@ do ii = 1, n
    a(i,i) = h
 end do
 !
-return
 !     ********** Last card of dtred1 **********
 end subroutine dtred1
 
@@ -2864,7 +2536,6 @@ do ii = 1, n
    a(iz + 1) = scale * sqrt(h)
 end do
 !
-return
 !     ********** Last card of dtred3 **********
 end subroutine dtred3
 
@@ -3151,7 +2822,6 @@ do 500 i = 1, n
 !
 500 continue
 !
-return
 !     ********** Last card of dtred2 **********
 end subroutine dtred2
 
@@ -3388,7 +3058,6 @@ igh = n
 if (ibal /= 0) call cbal(ka,n,ar,ai,low,igh,wr)
 call corth(ka,n,low,igh,ar,ai,wr,wi)
 call comqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
-return
 end subroutine ceig
 
 pure subroutine ceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
@@ -3468,7 +3137,6 @@ call corth(ka,n,low,igh,ar,ai,temp(i2),temp(i3))
 call comqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi,zr,zi,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call cbabk2(ka,n,low,igh,temp(i1),n,zr,zi)
-return
 end subroutine ceigv
 
 pure subroutine cbal(nm,n,ar,ai,low,igh,scale)
@@ -3661,7 +3329,6 @@ if (noconv) go to 190
 !
 280 low = k
 igh = l
-return
 !     ********** Last card of cbal **********
 end subroutine cbal
 
@@ -4589,7 +4256,6 @@ igh = n
 if (ibal /= 0) call dcbal(ka,n,ar,ai,low,igh,wr)
 call dcorth(ka,n,low,igh,ar,ai,wr,wi)
 call dcomqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
-return
 end subroutine dceig
 
 pure subroutine dceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
@@ -4671,7 +4337,6 @@ call dcmqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi, &
    & zr,zi,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call dcbabk(ka,n,low,igh,temp(i1),n,zr,zi)
-return
 end subroutine dceigv
 
 pure subroutine dcbal(nm,n,ar,ai,low,igh,scale)
@@ -4863,7 +4528,6 @@ if (noconv) go to 190
 !
 280 low = k
 igh = l
-return
 !     ********** Last card of dcbal **********
 end subroutine dcbal
 
@@ -5800,7 +5464,6 @@ end interface
 klm = k + l + m
 call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
    & iter, x, res, error, wk, iwk(klm + 1), iwk(1))
-return
 end subroutine cl1
 
 pure subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
@@ -6220,7 +5883,6 @@ do 640 i = 1,klm
       & dble(q(i,n1))
 640 continue
 error = sum
-return
 end subroutine xl1
 
 subroutine llsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
@@ -6253,7 +5915,6 @@ return
 21    rnorm = rnorm + b(i,j)*b(i,j)
    b(np1,j) = sqrt(rnorm)
 22 continue
-return
 end subroutine llsq
 
 subroutine llsqmp(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
@@ -6302,7 +5963,6 @@ return
 30    rnorm = rnorm + wk(i)*wk(i)
    b(np1,j) = sqrt(rnorm)
 31 continue
-return
 end subroutine llsqmp
 
 pure subroutine ortho(m, n, qr, ms, s, ip, exit)
@@ -6411,7 +6071,6 @@ do 80 j = 1, nn
 return
 !
 90 exit = .false.
-return
 end subroutine ortho
 
 subroutine orsol(m, n, qr, ms, s, ip, x)
@@ -6504,7 +6163,6 @@ do i = 1, nm
 40    nn = nn - 1
    x(ni) = x(ni)/qr(ni,ni)
 end do
-return
 end subroutine orsol
 
 subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
@@ -6633,7 +6291,6 @@ if (ratio <= fourth*rat) go to 20
 !
 if (ratio <= min(rat,four*eps2)) return
 exit = .false.
-return
 end subroutine orimp
 
 pure subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
@@ -6687,7 +6344,6 @@ return
 21    rnorm = rnorm + b(i,j)*b(i,j)
    b(np1,j) = sqrt(rnorm)
 22 continue
-return
 end subroutine dllsq
 
 pure subroutine dortho(m, n, qr, ms, s, ip, exit)
@@ -6795,7 +6451,6 @@ do 80 j = 1, nn
 return
 !
 90 exit = .false.
-return
 end subroutine dortho
 
 pure subroutine dorsol(m, n, qr, ms, s, ip, x)
@@ -6887,7 +6542,6 @@ do i = 1, nm
 40    nn = nn - 1
    x(ni) = x(ni)/qr(ni,ni)
 end do
-return
 end subroutine dorsol
 
 subroutine lsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
@@ -7151,7 +6805,6 @@ return
 return
 !                             re or ae is negative
 260 ierr = 6
-return
 !                             0 .LT. krank .LT. np
 ! 280 ierr = 8
 !     return
@@ -7480,7 +7133,6 @@ return
 400 krank = i - 1
 return
 410 krank = j - 1
-return
 end subroutine u11ls
 
 subroutine u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
@@ -7630,7 +7282,6 @@ go to 240
 260 do i = 1,n
    ic(i) = abs(ic(i))
 end do
-return
 end subroutine u12ls
 
 pure subroutine u11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
@@ -7956,7 +7607,6 @@ return
 400 krank = i - 1
 return
 410 krank = j - 1
-return
 end subroutine u11us
 
 subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
@@ -8104,7 +7754,6 @@ go to 240
 260 do i = 1,n
    ic(i) = abs(ic(i))
 end do
-return
 end subroutine u12us
 
 pure subroutine dlsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
@@ -8443,7 +8092,6 @@ return
 return
 !                             re or ae is negative
 260 ierr = 6
-return
 !                             0 .LT. krank .LT. np
 ! 280 ierr = 8
 !     return
@@ -8773,7 +8421,6 @@ return
 400 krank = i - 1
 return
 410 krank = j - 1
-return
 end subroutine du11ls
 
 pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
@@ -8954,7 +8601,6 @@ go to 240
 260 do i = 1,n
    ic(i) = abs(ic(i))
 end do
-return
 end subroutine du12ls
 
 pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
@@ -9281,7 +8927,6 @@ return
 400 krank = i - 1
 return
 410 krank = j - 1
-return
 end subroutine du11us
 
 pure subroutine du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
@@ -9460,7 +9105,6 @@ go to 240
 260 do i = 1,n
    ic(i) = abs(ic(i))
 end do
-return
 end subroutine du12us
 
 pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
@@ -10018,7 +9662,6 @@ return
 300 ierr = 1
 return
 310 ierr = 2
-return
 end subroutine hfti2
 
 pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
@@ -10668,6 +10311,691 @@ return
 300 ierr = 1
 return
 310 ierr = 2
-return
 end subroutine dhfti2
+
+pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+double precision, intent(inout) :: u(iue,m), up, c(*)
+integer :: i, i2, i3, i4, incr, j
+double precision :: b, cl, d, sm
+!-----------------------------------------------------------------------
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!
+!     Construction and/or application of a single
+!     Householder transformation..     Q = i + u*(u**T)/b
+!
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!     lpivot is the index of the pivot element.
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
+!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!            the subroutine does an identity transformation.
+!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
+!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
+!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
+!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!            no operations will be done on c().
+!-----------------------------------------------------------------------
+!
+if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
+cl = abs(u(1,lpivot))
+if (mode == 2) go to 60
+!
+!                            ****** Construct the transformation. ******
+!
+do 10 j = l1,m
+10 cl = max(abs(u(1,j)),cl)
+if (cl <= 0.d0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+do 20 j = l1,m
+   d = u(1,j)/cl
+20 sm = sm + d*d
+!
+cl = cl*sqrt(sm)
+if (u(1,lpivot) > 0.d0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
+!
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
+!
+60 if (cl) 130,130,70
+70 if (ncv <= 0) return
+b = up*u(1,lpivot)
+!
+!                       b  must be nonpositive here.  If b = 0., Return.
+!
+if (b >= 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+do 120 j = 1,ncv
+   i2 = i2 + icv
+   i3 = i2 + incr
+   i4 = i3
+   sm = c(i2)*up
+   do 90 i = l1,m
+      sm = sm + c(i3)*u(1,i)
+90    i3 = i3 + ice
+   if (sm == 0.d0) go to 120
+   sm = sm*b
+   c(i2) = c(i2) + sm*up
+   do 110 i = l1,m
+      c(i4) = c(i4) + sm*u(1,i)
+110   i4 = i4 + ice
+120 continue
+130 return
+end subroutine dh12
+
+subroutine lsei(w, mdw, me, ma, mg, n, prgopt, x, rnorme, rnorml, &
+   & mode, ws, ip)
+implicit none
+integer, intent(in) :: ma, mdw, me, mg
+integer, intent(out) :: mode
+integer :: n
+real, intent(inout) :: rnorme, rnorml
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
+integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
+   & link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
+   & np1, ntimes
+real :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
+real :: snrm2
+real :: sasum
+real :: sdot
+logical :: cov
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: half = 0.5e0
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!     dimension w(mdw,n+1),prgopt(*),x(n),
+!     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!     ABOVE, k=max(ma+mg,n).
+!
+!     Written by R. J. Hanson and K. H. Haskell.  For further math.
+!     And algorithmic details see Sandia Laboratories tech. REPTS.
+!     SAND77-0552, (1978), and SAND78-1290, (1979), and math.
+!     Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
+!
+!     Abstract
+!
+!     This subprogram solves a linearly constrained least squares
+!     problem with both equality and inequality constraints, and, if the
+!     user requests, obtains a covariance matrix of the solution
+!     parameters.
+!
+!     Suppose there are given matrices E, A and G of respective
+!     dimensions me by n, ma by n and mg by n, and vectors F, B and H of
+!     respective lengths me, ma and mg.  This subroutine solves the
+!     linearly constrained least squares problem
+!
+!                   EX = F, (E me by n) (equations to be exactly
+!                                       satisfied)
+!                   AX = B, (A ma by n) (equations to be
+!                                       approximately satisfied,
+!                                       least squares sense)
+!                   GX.GE.H,(G mg by n) (inequality constraints)
+!
+!     The inequalities GX.GE.H mean that every component of the product
+!     GX must be .GE. the corresponding component of H.
+!
+!     In case the equality constraints cannot be satisfied, A
+!     generalized inverse solution residual vector LENGTH is obtained
+!     for F-EX. This is the minimal length possible for F-EX.
+!
+!
+!     Any values me.GE.0, ma.GE.0, or mg.GE.0 are permitted.  The
+!     rank of the matrix E is estimated during the computation. We call
+!     this value kranke. It is an output parameter in ip(1) defined
+!     below. Using a generalized inverse solution of EX=F, a reduced
+!     least squares problem with inequality constraints is obtained.
+!     The tolerances used in these tests for determining the rank
+!     of E and the rank of the reduced least squares problem are
+!     given in sandia tech. Rept. SAND78-1290. They can be
+!     modified by the user if new values are provided in
+!     the option list of the array prgopt(*).
+!
+!     The user must dimension all arrays appearing in the call list..
+!     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!     where k=max(ma+mg,n).  This allows for a solution of a range of
+!     problems in the given working space.  The dimension of ws(*)
+!     given is a necessary overestimate.  Once a particular problem
+!     has been run, the output parameter ip(3) gives the actual
+!     dimension required for that problem.
+!
+!     The parameters for lsei( ) are
+!
+!     Input..
+!
+!     w(*,*),mdw,   THE ARRAY w(*,*) IS DOUBLY SUBSCRIPTED WITH
+!     ME,ma,mg,n    FIRST DIMENSIONING PARAMETER EQUAL TO mdw.
+!                   For this discussion let us call M = me+ma+mg.  Then
+!                   mdw must satisfy mdw.GE.M.  the condition
+!                   mdw.LT.M is an error.
+!
+!                   The array w(*,*) contains the matrices and vectors
+!
+!                                  (E  F)
+!                                  (A  B)
+!                                  (G  H)
+!
+!                   In rows and columns 1,...,M and 1,...,n+1
+!                   respectively.
+!
+!                   The integers me, ma, and mg are the
+!                   respective matrix ROW dimensions
+!                   of E, A and G. each matrix HAS n columns.
+!
+!     prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
+!                  If the user is satisfied with the nominal
+!                  subprogram features set
+!
+!                  prgopt(1)=1 (OR prgopt(1)=1.0)
+!
+!                  Otherwise prgopt(*) is a linked list consisting of
+!                  groups of data of the following form
+!
+!                  Link
+!                  key
+!                  data set
+!
+!                  The parameters link and key are each one word.
+!                  The data set can be comprised of several words.
+!                  The number of items depends on the value of key.
+!                  The value of link points to the first
+!                  entry of the next group of data within
+!                  prgopt(*).  The exception is when there are
+!                  no more options to change.  In that
+!                  case link=1 And the values key and data set
+!                  are not referenced. The general layout of
+!                  prgopt(*) is as follows.
+!
+!               ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
+!               .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
+!               .       .
+!               .       .
+!               .       .
+!               ...prgopt(LINK1)=LINK2 (link to the first entry of
+!               .                       NEXT GROUP)
+!               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(LINK1+2)=Data value
+!               ...     .
+!               .       .
+!               .       .
+!               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
+!
+!                  Values of link that are nonpositive are errors.
+!                  A value of link.GT.NLINK=100000 Is also an error.
+!                  This helps prevent using invalid but positive
+!                  values of link that will probably extend
+!                  beyond the program limits of prgopt(*).
+!                  Unrecognized values of key are ignored.  The
+!                  order of the options is arbitrary and any number
+!                  of options can be changed with the following
+!                  restriction.  To prevent cycling in the
+!                  processing of the option array A count of the
+!                  number of options changed is maintained.
+!                  Whenever this count exceeds NOPT=1000 The
+!                  routine terminates.
+!
+!                  Options..
+!
+!                  key=1
+!                         compute in w(*,*) the n by n
+!                  covariance matrix of the solution variables
+!                  as an output paramter.  Nominally the
+!                  covariance matrix will not be computed.
+!                  (This requires no user input.)
+!                  the data set for this option is a single value.
+!                  It must be nonzero when the covariance matrix
+!                  is desired.  If it is zero, the covariance
+!                  matrix is not computed.  When the covariance matrix
+!                  is computed, the first dimensioning parameter
+!                  of the array w(*,*) must satisfy mdw.GE.MAX0(M,n).
+!
+!                  key=2
+!                         scale the nonzero columns of the
+!                         entire data matrix.
+!                  (E)
+!                  (A)
+!                  (G)
+!
+!                  To have length one.  The data set for this
+!                  option is a single value.  It must be
+!                  nonzero if unit length column scaling
+!                  is desired.
+!
+!                  key=3
+!                         scale columns of the entire data matrix
+!                  (E)
+!                  (A)
+!                  (G)
+!
+!                  With a user-provided diagonal matrix.
+!                  The data set for this option consists
+!                  of the n diagonal scaling factors, one for
+!                  each matrix column.
+!
+!                  key=4
+!                         change the rank determination tolerance for
+!                  the equality constraint equations from
+!                  the nominal value of sqrt(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity SRELPR is the
+!                  largest positive number such that T=1.+SRELPR
+!                  satisfies T.EQ.1.  the quantity used
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
+!
+!                  key=5
+!                         change the rank determination tolerance for
+!                  the reduced least squares equations from
+!                  the nominal value of sqrt(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity used
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
+!
+!                  For example, suppose we want to change
+!                  the tolerance for the reduced least squares
+!                  problem, compute the covariance matrix of
+!                  the solution parameters, and provide
+!                  column scaling for the data matrix.  For
+!                  these options the dimension of prgopt(*)
+!                  must be at least n+9.  The Fortran statements
+!                  defining these options would be as follows.
+!
+!                  prgopt(1)=4 (LINK TO ENTRY 4 IN prgopt(*))
+!                  prgopt(2)=1 (COVARIANCE MATRIX key)
+!                  prgopt(3)=1 (COVARIANCE MATRIX WANTED)
+!
+!                  prgopt(4)=7 (LINK TO ENTRY 7 IN prgopt(*))
+!                  prgopt(5)=5 (LEAST SQUARES EQUAS. TOLERANCE KEY)
+!                  prgopt(6)=... (new value of the tolerance)
+!
+!                  prgopt(7)=n+9 (LINK TO ENTRY n+9 IN prgopt(*))
+!                  prgopt(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
+!
+!                  call scopy(n,d,1,prgopt(9),1)  (copy the n
+!                    scaling factors from the user array D(*)
+!                    TO prgopt(9)-prgopt(n+8))
+!
+!                  prgopt(n+9)=1 (NO MORE OPTIONS TO CHANGE)
+!
+!                  The contents of prgopt(*) are not modified
+!                  by the subprogram.
+!                  The key 8 and 9 options for wnnls( ) can also
+!                  be included in this array.  Their functions
+!                  are documented in the usage instructions for
+!                  SUBPROGRAM wnnls( ).
+!
+!     Output..
+!
+!     x(*),rnorme,  the array x(*) contains the solution parameters
+!     rnorml        if the integer output flag mode = 0 Or 1.
+!                   The definition of mode is given directly below.
+!                   When mode = 0 Or 1, rnorme and rnorml
+!                   respectively contain the residual vector
+!                   Euclidean lengths of F - EX and B - AX.  When
+!                   mode=1 The equality constraint equations EX=F
+!                   are contradictory, so rnorme.NE.0. The residual
+!                   vector F-EX has minimal Euclidean length. For
+!                   mode.GE.2, none of these parameters are
+!                   defined.
+!
+!     MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
+!                   status after completion.  If mode.GE.2, no
+!                   solution has been computed.
+!
+!                   mode =
+!
+!                   0  Both equality and inequality constraints
+!                      are compatible and have been satisfied.
+!
+!                   1  Equality constraints are contradictory.
+!                      A generalized inverse solution of EX=F was used
+!                      to minimize the residual vector LENGTH F-EX.
+!                      In this sense, the solution is still meaningful.
+!
+!                   2  No solution could be obtained. The constraints
+!                      are contradictory.
+!
+!                   4  Usage error occurred.  The value
+!                      of mdw is .LT. me+ma+mg, mdw is
+!                      .LT. n and a covariance matrix is
+!                      requested, or the option vector
+!                      prgopt(*) is not properly defined.
+!
+!     w(*,*)        THE ARRAY w(*,*) CONTAINS THE n BY n SYMMETRIC
+!                   covariance matrix of the solution parameters,
+!                   provided this was requested on input with
+!                   the option vector prgopt(*) and the output
+!                   flag is returned with mode = 0 Or 1.
+!
+!     ip(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
+!                   that provide rank and working array LENGTH
+!                   information after completion.
+!
+!                      ip(1) = Rank of equality constraint
+!                              matrix.  Define this quantity
+!                              AS kranke.
+!
+!                      ip(2) = Rank of reduced least squares
+!                              problem.
+!
+!                      ip(3) = The amount of storage in the
+!                              working array ws(*) that was
+!                              actually used by the subprogram.
+!                              The formula given above for the length
+!                              of ws(*) is a necessary overestimate.
+!     User designated
+!     working arrays..
+!
+!     ws(*),ip(*)              THESE ARE RESPECTIVELY TYPE REAL
+!                              and type integer working arrays.
+!                              Their required minimal lengths are
+!                              given above.
+!
+!
+!     Subroutines called
+!
+!     lsi           PART OF THIS PACKAGE.  SOLVES A
+!                   constrained least squares problem with
+!                   inequality constraints.
+!
+!     sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
+!     scopy,snrm2,
+!     sswap,isamax
+!
+!     h12           SUBROUTINE TO CONSTRUCT AND APPLY A
+!                   Householder transformation.
+!
+!     spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
+!                   precision.
+!
+!     Revised oct. 1, 1989.
+!
+!
+!     Compute machine precision
+!
+srelpr = spmpar(1)
+!
+!     Compute number of possible right multiplying Householder
+!     transformations.
+!
+m = me + ma + mg
+mode = 0
+if (n <= 0 .or. me + ma <= 0) return
+if (.not.(mdw < m)) go to 80
+mode = 4
+return
+80 np1 = n + 1
+kranke = min(me,n)
+n1 = 2*kranke + 1
+n2 = n1 + n
+!
+!     Process-option-vector
+!
+go to 480
+90 if (.not.(cov .and. mdw < n)) go to 100
+mode = 4
+return
+100 l = kranke
+!
+!     Compute norm of equality constraint matrix and RT side.
+!
+enorm = zero
+do j = 1,n
+   enorm = max(enorm,sasum(me,w(1,j),1))
+end do
+fnorm = sasum(me,w(1,np1),1)
+if (.not.(l > 0)) go to 200
+snmax = zero
+rnmax = zero
+do 180 i = 1,l
+!
+!     Compute maximum ratio of vector lengths. Partition
+!     is at col. i.
+   do 150 k = i,me
+      sn = sdot(n - i + 1,w(k,i),mdw,w(k,i),mdw)
+      rn = sdot(i - 1,w(k,1),mdw,w(k,1),mdw)
+      if (.not.(rn == zero .and. sn > snmax)) go to 120
+      snmax = sn
+      imax = k
+      go to 150
+120   if (.not.(k == i .or. (sn*rnmax > rn*snmax))) go to 150
+      snmax = sn
+      rnmax = rn
+      imax = k
+150   continue
+!
+!     Interchange rows if necessary.
+   if (i /= imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
+   if (.not.(snmax > tau**2*rnmax)) go to 160
+!
+!     Eliminate elems i+1,...,n in row i.
+   call h12(1, i, i + 1, n, w(i,1), mdw, ws(i), w(i + 1,1), mdw, 1, &
+      & m - i)
+   go to 180
+160 kranke = i - 1
+   go to 200
+180 continue
+!
+!     Save diag. Terms of lower trap. Matrix.
+!
+200 call scopy(kranke, w, mdw + 1, ws(kranke + 1), 1)
+!
+!     Use Householder trans from left to achieve kranke by kranke upper
+!     triangular form.
+!
+if (.not.(kranke > 0 .and. kranke < me)) go to 220
+do kk = 1,kranke
+   k = kranke + 1 - kk
+!
+!     Apply tranformation to matrix cols. 1,...,k-1.
+   call h12(1, k, kranke + 1, me, w(1,k), 1, up, w, 1, mdw, k - 1)
+!
+!     Apply to RT side vector.
+   call h12(2, k, kranke + 1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
+end do
+220 if (.not.(kranke > 0)) go to 240
+!
+!     Solve for variables 1,...,kranke in new coordinates.
+call scopy(kranke, w(1,np1), 1, x, 1)
+do i = 1,kranke
+   x(i) = (x(i) - sdot(i - 1,w(i,1),mdw,x,1))/w(i,i)
+end do
+!
+!     Compute residuals for reduced problem.
+!
+240 mep1 = me + 1
+rnorml = zero
+if (.not.(me < m)) go to 270
+do 260 i = mep1,m
+   w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
+   sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
+   rn = sdot(n - kranke,w(i,kranke + 1),mdw,w(i,kranke + 1),mdw)
+   if (.not.(rn <= tau**2*sn .and. kranke < n)) go to 260
+   w(i,kranke + 1) = zero
+   call scopy(n - kranke, w(i,kranke + 1), 0, w(i,kranke + 1), mdw)
+260 continue
+!
+!     Compute equal. Constraint equas. Residual length.
+270 rnorme = snrm2(me - kranke,w(kranke + 1,np1),1)
+!
+!     Move reduced problem data upward if kranke.LT.me.
+!
+if (.not.(kranke < me)) go to 290
+do j = 1,np1
+   call scopy(m - me, w(me + 1,j), 1, w(kranke + 1,j), 1)
+end do
+!
+!     Compute soln of reduced problem.
+!
+290 call lsi(w(kranke + 1,kranke + 1), mdw, ma, mg, n - kranke, prgopt, &
+   & x(kranke + 1), rnorml, mode, ws(n2), ip(2))
+if (mode > 1) go to 470
+if (.not.(me > 0)) go to 330
+!
+!     Test for consistency of equality constraints.
+!
+mdeqc = 0
+xnrme = sasum(kranke,w(1,np1),1)
+if (rnorme > tau*(enorm*xnrme + fnorm)) mdeqc = 1
+mode = mode + mdeqc
+!
+!     Check if soln to equal. Constraints satisfies inequal.
+!     Constraints when there are no degrees of freedom left.
+!
+if (.not.(kranke == n .and. mg > 0)) go to 330
+xnorm = sasum(n,x,1)
+mapke1 = ma + kranke + 1
+mend = ma + kranke + mg
+do 310 i = mapke1,mend
+   size = sasum(n,w(i,1),mdw)*xnorm + abs(w(i,np1))
+   if (.not.(w(i,np1) > tau*size)) go to 310
+   mode = 2
+   go to 470
+310 continue
+330 if (.not.(kranke > 0)) go to 420
+!
+!     Replace diag. Terms of lower trap. Matrix.
+call scopy(kranke, ws(kranke + 1), 1, w, mdw + 1)
+!
+!     Reapply trans to put soln in original coordinates.
+!
+do ii = 1,kranke
+   i = kranke + 1 - ii
+   call h12(2, i, i + 1, n, w(i,1), mdw, ws(i), x, 1, 1, 1)
+end do
+!
+!     Compute cov matrix of equal. Constrained problem.
+!
+if (.not.(cov)) go to 450
+do 400 jj = 1,kranke
+   j = kranke + 1 - jj
+   if (.not.(j < n)) go to 400
+   rb = ws(j)*w(j,j)
+   if (rb /= zero) rb = one/rb
+   jp1 = j + 1
+   do i = jp1,n
+      w(i,j) = sdot(n - j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
+   end do
+   gam = sdot(n - j,w(jp1,j),1,w(j,jp1),mdw)*rb
+   gam = half*gam
+   call saxpy(n - j, gam, w(j,jp1), mdw, w(jp1,j), 1)
+   do i = jp1,n
+      do k = i,n
+         w(i,k) = w(i,k) + w(j,i)*w(k,j) + w(i,j)*w(j,k)
+         w(k,i) = w(i,k)
+      end do
+   end do
+   uj = ws(j)
+   vj = gam*uj
+   w(j,j) = uj*vj + uj*vj
+   do i = jp1,n
+      w(j,i) = uj*w(i,j) + vj*w(j,i)
+   end do
+   call scopy(n - j, w(j,jp1), mdw, w(jp1,j), 1)
+400 continue
+!
+!     Apply the scaling to the covariance matrix.
+!
+420 if (.not.(cov)) go to 450
+do i = 1,n
+   l = n1 + i
+   call sscal(n, ws(l - 1), w(i,1), mdw)
+   call sscal(n, ws(l - 1), w(1,i), 1)
+end do
+!
+!     Rescale soln. Vector.
+!
+450 if (mode > 1) go to 470
+do j = 1,n
+   l = n1 + j
+   x(j) = x(j)*ws(l - 1)
+end do
+470 ip(1) = kranke
+ip(3) = ip(3) + 2*kranke + n
+return
+480 continue
+!     To process-option-vector
+!
+!     The nominal tolerance used in the code
+!     for the equality constraint equations.
+tau = sqrt(srelpr)
+!
+!     The nominal column scaling used in the code is
+!     the identity scaling.
+ws(n1) = one
+call scopy(n, ws(n1), 0, ws(n1), 1)
+!
+!     No covariance matrix is nominally computed.
+cov = .false.
+!
+!     Define bound for number of options to change.
+nopt = 1000
+ntimes = 0
+!
+!     Define bound for positive values of link.
+nlink = 100000
+last = 1
+link = prgopt(1)
+if (.not.(link <= 0 .or. link > nlink)) go to 490
+mode = 4
+return
+490 if (.not.(link > 1)) go to 540
+ntimes = ntimes + 1
+if (.not.(ntimes > nopt)) go to 500
+mode = 4
+return
+500 key = prgopt(last + 1)
+if (key == 1) cov = prgopt(last + 2) /= zero
+if (.not.(key == 2 .and. prgopt(last + 2) /= zero)) go to 520
+do j = 1,n
+   t = snrm2(m,w(1,j),1)
+   if (t /= zero) t = one/t
+   l = n1 + j
+   ws(l - 1) = t
+end do
+520 if (key == 3) call scopy(n, prgopt(last + 2), 1, ws(n1), 1)
+if (key == 4) tau = max(srelpr,prgopt(last + 2))
+next = prgopt(link)
+if (.not.(next <= 0 .or. next > nlink)) go to 530
+mode = 4
+return
+530 last = link
+link = next
+go to 490
+540 do j = 1,n
+   l = n1 + j
+   call sscal(m, ws(l - 1), w(1,j), 1)
+end do
+go to 90
+end subroutine lsei
 

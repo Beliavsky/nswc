@@ -1,120 +1,3 @@
-subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
-implicit none
-integer :: nn
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
-integer :: nz
-integer :: n, type, i, j
-double precision :: ui, vi
-real :: mp, omp, ee, relstp, t, zm
-logical :: tried
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-interface
-   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(in) :: b1
-      double precision, intent(in) :: c
-      double precision, intent(inout) :: sr
-      double precision, intent(inout) :: si
-      double precision, intent(inout) :: lr
-      double precision, intent(inout) :: li
-   end subroutine quadpl
-end interface
-!
-!     Variable-shift k-polynomial iteration for A
-!     quadratic factor converges only if the zeros are
-!     equimodular or nearly so.
-!
-!     uu,vv - Coefficients of starting quadratic
-!     nz - Number of zero found
-!
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-n = nn - 1
-nz = 0
-tried = .false.
-u = uu
-v = vv
-j = 0
-! Main loop
-10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
-!
-!     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
-!     to multiple or nearly equal and of opposite sign
-!
-if (abs(abs(szr) - abs(lzr)) > 1.d-2*abs(lzr)) &
-   & return
-!
-!     Evaluate polynomial by quadratic synthetic division
-!
-call quadsd(nn, u, v, p, qp, a, b)
-mp = abs(a - szr*b) + abs(szi*b)
-!
-!     Compute a rigorous bound on the rounding error in
-!     EVALUTING p
-!
-zm = sqrt(abs(sngl(v)))
-ee = 2.0*abs(sngl(qp(1)))
-t = -szr*b
-do 20 i = 2,n
-   ee = ee*zm + abs(sngl(qp(i)))
-20 continue
-ee = ee*zm + abs(sngl(a) + t)
-ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
-   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
-   & 2.0*are*abs(t)
-!
-!     Iteration has converged sufficiently if the
-!     polynomial value is less than 20 times this bound
-!
-if (mp > 20.0*ee) go to 30
-nz = 2
-return
-30 j = j + 1
-!
-!     STOP ITERATION AFTER 20 STEPS
-!
-if (j > 20) return
-if (j < 2) go to 50
-if (relstp > 0.01 .or. mp < omp .or. tried) go to 50
-!
-!     A cluster appears to be stalling the convergence.
-!     Five fixed shift steps are taken with A u,v close
-!     to the cluster
-!
-if (relstp < eta) relstp = eta
-relstp = sqrt(relstp)
-u = u - u*relstp
-v = v + v*relstp
-call quadsd(nn, u, v, p, qp, a, b)
-do i = 1,5
-   call calcsc(type, n, k, qk)
-   call nextk(type, n, qp, k, qk)
-end do
-tried = .true.
-j = 0
-50 omp = mp
-!
-!     Calculate next k polynomial and new u and v
-!
-call calcsc(type, n, k, qk)
-call nextk(type, n, qp, k, qk)
-call calcsc(type, n, k, qk)
-call newest(type, ui, vi, nn, p, k)
-!
-!     If vi is zero the iteration is not converging
-!
-if (vi == 0.d0) return
-relstp = abs((vi - v)/vi)
-u = ui
-v = vi
-go to 10
-end subroutine quadit
-
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
 integer :: iflag, nn, nz
@@ -283,7 +166,6 @@ h = v*b
 a3 = a*e + (h/c + g)*b
 a1 = b - a*(d/c)
 a7 = a + g*d + h*f
-return
 end subroutine calcsc
 
 subroutine nextk(type, n, qp, k, qk)
@@ -336,7 +218,6 @@ k(2) = 0.d0
 do i = 3,n
    k(i) = qk(i - 2)
 end do
-return
 end subroutine nextk
 
 subroutine newest(type, uu, vv, nn, p, k)
@@ -386,7 +267,6 @@ return
 !
 30 uu = 0.d0
 vv = 0.d0
-return
 end subroutine newest
 
 pure subroutine quadsd(nn, u, v, p, q, a, b)
@@ -413,7 +293,6 @@ do i = 3,nn
    b = a
    a = c
 end do
-return
 end subroutine quadsd
 
 pure elemental subroutine quadpl(a, b1, c, sr, si, lr, li)
@@ -470,7 +349,6 @@ go to 10
 lr = sr
 si = abs(d/a)
 li = -si
-return
 end subroutine quadpl
 
 subroutine dcpoly(opr,opi,ideg,zeror,zeroi,num,wk)
@@ -537,7 +415,6 @@ return
 !     Error return
 !
 10 num = -1
-return
 end subroutine dcpoly
 
 subroutine dcply1(opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
@@ -754,7 +631,6 @@ go to 30
 20 if (infin/sc < max) return
 30 l = log(sc)/log(base) + 0.5d0
 scalcp = base**l
-return
 end function scalcp
 
 pure subroutine cauchy(nn,bnd,pt,q)
@@ -811,7 +687,6 @@ x = x - dx
 go to 50
 !
 70 bnd = x
-return
 end subroutine cauchy
 
 pure subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
@@ -878,7 +753,6 @@ do 50 jj = 1,l1
    hr(1) = 0.d0
    hi(1) = 0.d0
 50 continue
-return
 end subroutine noshft
 
 pure subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
@@ -1055,7 +929,6 @@ do 50 j = 1,l2
 !
 call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
    & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
-return
 end subroutine fxshft
 
 pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
@@ -1208,7 +1081,6 @@ do 60 i = 1,l3
    sr = sr + tr
    si = si + ti
 60 continue
-return
 end subroutine vrshft
 
 pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
@@ -1265,7 +1137,6 @@ call cdivid(-pvr,-pvi,hvr,hvi,tr,ti)
 return
 10 tr = 0.d0
 ti = 0.d0
-return
 end subroutine calct
 
 pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
@@ -1302,7 +1173,6 @@ return
 end do
 hr(1) = 0.d0
 hi(1) = 0.d0
-return
 end subroutine nexth
 
 pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
@@ -1330,7 +1200,6 @@ do i = 2,n
    qr(i) = pvr
    qi(i) = pvi
 end do
-return
 end subroutine polyev
 
 pure double precision function errev(nn,qr,qi,ms,mp,are,mre)
@@ -1362,7 +1231,6 @@ do i = 1,nn
    e = e*ms + dcpabs(qr(i),qi(i))
 end do
 errev = e*(are + mre) - mp*mre
-return
 end function errev
 
 pure subroutine rbnd(n, c, w, abserr, relerr, klust, ker)
@@ -1530,7 +1398,6 @@ return
 200 ker = 1
 return
 210 ker = 2
-return
 end subroutine rbnd
 
 pure subroutine cbnd(n, c, w, abserr, relerr, klust, ker)
@@ -1697,7 +1564,6 @@ return
 200 ker = 1
 return
 210 ker = 2
-return
 end subroutine cbnd
 
 pure subroutine  scopy(n,sx,incx,sy,incy)
@@ -1751,7 +1617,6 @@ do i = mp1,n,7
    sy(i + 5) = sx(i + 5)
    sy(i + 6) = sx(i + 6)
 end do
-return
 end subroutine scopy
 
 pure subroutine  dcopy(n,dx,incx,dy,incy)
@@ -1805,7 +1670,6 @@ do i = mp1,n,7
    dy(i + 5) = dx(i + 5)
    dy(i + 6) = dx(i + 6)
 end do
-return
 end subroutine dcopy
 
 pure subroutine  ccopy(n,cx,incx,cy,incy)
@@ -1842,7 +1706,6 @@ return
 20 do i = 1,n
    cy(i) = cx(i)
 end do
-return
 end subroutine ccopy
 
 pure subroutine iswap(n,ix,incx,iy,incy)
@@ -1930,7 +1793,6 @@ do i = 1,ns,incx
    ix(i) = iy(i)
    iy(i) = itemp1
 end do
-return
 end subroutine iswap
 
 pure subroutine  sswap(n,sx,incx,sy,incy)
@@ -1990,7 +1852,6 @@ do i = mp1,n,3
    sx(i + 2) = sy(i + 2)
    sy(i + 2) = stemp
 end do
-return
 end subroutine sswap
 
 pure subroutine  dswap(n,dx,incx,dy,incy)
@@ -2050,7 +1911,6 @@ do i = mp1,n,3
    dx(i + 2) = dy(i + 2)
    dy(i + 2) = dtemp
 end do
-return
 end subroutine dswap
 
 pure subroutine  cswap(n,cx,incx,cy,incy)
@@ -2090,7 +1950,6 @@ return
    cx(i) = cy(i)
    cy(i) = ctemp
 end do
-return
 end subroutine cswap
 
 pure subroutine  srot(n,sx,incx,sy,incy,c,s)
@@ -2132,7 +1991,6 @@ return
    sy(i) = c*sy(i) - s*sx(i)
    sx(i) = stemp
 end do
-return
 end subroutine srot
 
 pure subroutine  drot(n,dx,incx,dy,incy,c,s)
@@ -2174,7 +2032,6 @@ return
    dy(i) = c*dy(i) - s*dx(i)
    dx(i) = dtemp
 end do
-return
 end subroutine drot
 
 pure subroutine  csrot(n,cx,incx,cy,incy,c,s)
@@ -2217,7 +2074,6 @@ return
    cy(i) = c*cy(i) - s*cx(i)
    cx(i) = ctemp
 end do
-return
 end subroutine csrot
 
 pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
@@ -2371,7 +2227,6 @@ sparam(4) = sh12
 sparam(5) = sh22
 260 continue
 sparam(1) = sflag
-return
 end subroutine srotmg
 
 subroutine srotm(n,sx,incx,sy,incy,sparam)
@@ -2485,7 +2340,6 @@ do i = 1,n
    ky = ky + incy
 end do
 140 continue
-return
 end subroutine srotm
 
 pure subroutine drotmg(dd1,dd2,dx1,dy1,dparam)
@@ -2642,7 +2496,6 @@ dparam(4) = dh12
 dparam(5) = dh22
 260 continue
 dparam(1) = dflag
-return
 end subroutine drotmg
 
 subroutine drotm(n,dx,incx,dy,incy,dparam)
@@ -2757,7 +2610,6 @@ do i = 1,n
    ky = ky + incy
 end do
 140 continue
-return
 end subroutine drotm
 
 pure real function sdot(n,sx,incx,sy,incy)
@@ -2810,7 +2662,6 @@ do i = mp1,n,5
       & sx(i + 2)*sy(i + 2) + sx(i + 3)*sy(i + 3) + sx(i + 4)*sy(i + 4)
 end do
 60 sdot = stemp
-return
 end function sdot
 
 pure double precision function ddot(n,dx,incx,dy,incy)
@@ -2863,7 +2714,6 @@ do i = mp1,n,5
       & dx(i + 2)*dy(i + 2) + dx(i + 3)*dy(i + 3) + dx(i + 4)*dy(i + 4)
 end do
 60 ddot = dtemp
-return
 end function ddot
 
 pure complex function cdotc(n,cx,incx,cy,incy)
@@ -2905,7 +2755,6 @@ return
    ctemp = ctemp + conjg(cx(i))*cy(i)
 end do
 cdotc = ctemp
-return
 end function cdotc
 
 pure complex function cdotu(n,cx,incx,cy,incy)
@@ -2946,7 +2795,6 @@ return
    ctemp = ctemp + cx(i)*cy(i)
 end do
 cdotu = ctemp
-return
 end function cdotu
 
 pure subroutine  sscal(n,sa,sx,incx)
@@ -2992,7 +2840,6 @@ do i = mp1,n,5
    sx(i + 3) = sa*sx(i + 3)
    sx(i + 4) = sa*sx(i + 4)
 end do
-return
 end subroutine sscal
 
 pure subroutine  dscal(n,da,dx,incx)
@@ -3038,7 +2885,6 @@ do i = mp1,n,5
    dx(i + 3) = da*dx(i + 3)
    dx(i + 4) = da*dx(i + 4)
 end do
-return
 end subroutine dscal
 
 pure subroutine  cscal(n,ca,cx,incx)
@@ -3068,7 +2914,6 @@ return
 20 do i = 1,n
    cx(i) = ca*cx(i)
 end do
-return
 end subroutine cscal
 
 pure subroutine  csscal(n,sa,cx,incx)
@@ -3098,7 +2943,6 @@ return
 20 do i = 1,n
    cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
 end do
-return
 end subroutine csscal
 
 pure subroutine saxpy(n,sa,sx,incx,sy,incy)
@@ -3151,7 +2995,6 @@ do i = mp1,n,4
    sy(i + 2) = sy(i + 2) + sa*sx(i + 2)
    sy(i + 3) = sy(i + 3) + sa*sx(i + 3)
 end do
-return
 end subroutine saxpy
 
 pure subroutine daxpy(n,da,dx,incx,dy,incy)
@@ -3204,7 +3047,6 @@ do i = mp1,n,4
    dy(i + 2) = dy(i + 2) + da*dx(i + 2)
    dy(i + 3) = dy(i + 3) + da*dx(i + 3)
 end do
-return
 end subroutine daxpy
 
 pure subroutine caxpy(n,ca,cx,incx,cy,incy)
@@ -3243,7 +3085,6 @@ return
 20 do i = 1,n
    cy(i) = cy(i) + ca*cx(i)
 end do
-return
 end subroutine caxpy
 
 pure real function sasum(n,sx,incx)
@@ -3290,7 +3131,6 @@ do i = mp1,n,6
       & + abs(sx(i + 3)) + abs(sx(i + 4)) + abs(sx(i + 5))
 end do
 60 sasum = stemp
-return
 end function sasum
 
 pure double precision function dasum(n,dx,incx)
@@ -3336,7 +3176,6 @@ do i = mp1,n,6
       & + abs(dx(i + 3)) + abs(dx(i + 4)) + abs(dx(i + 5))
 end do
 60 dasum = dtemp
-return
 end function dasum
 
 pure real function scasum(n,cx,incx)
@@ -3371,7 +3210,6 @@ return
    stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
 end do
 scasum = stemp
-return
 end function scasum
 
 pure real function snrm2( n, sx, incx)
@@ -3499,7 +3337,6 @@ if ( i <= nn ) go to 20
 !
 snrm2 = xmax * sqrt(sum)
 300 continue
-return
 end function snrm2
 
 pure double precision function dnrm2( n, dx, incx)
@@ -3627,7 +3464,6 @@ if ( i <= nn ) go to 20
 !
 dnrm2 = xmax * sqrt(sum)
 300 continue
-return
 end function dnrm2
 
 pure real function scnrm2( n, cx, incx)
@@ -3763,7 +3599,6 @@ do 210 i = 1,nn,incx
 scnrm2 = sqrt(sum)
 if (scale) scnrm2 = scnrm2 * xmax
 300 continue
-return
 end function scnrm2
 
 pure integer function isamax(n,sx,incx)
@@ -3805,7 +3640,6 @@ do 30 i = 2,n
    isamax = i
    smax = abs(sx(i))
 30 continue
-return
 end function isamax
 
 pure integer function idamax(n,dx,incx)
@@ -3847,7 +3681,6 @@ do 30 i = 2,n
    idamax = i
    dmax = abs(dx(i))
 30 continue
-return
 end function idamax
 
 integer function icamax(n,cx,incx)
@@ -3892,7 +3725,6 @@ do 30 i = 2,n
    icamax = i
    smax = cabs1(cx(i))
 30 continue
-return
 end function icamax
 
 pure subroutine mcvfs(a,ka,n,b)
@@ -3908,7 +3740,6 @@ do j = 1,n
       l = l + 1
 10    b(l) = a(i,j)
 end do
-return
 end subroutine mcvfs
 
 pure subroutine dmcvfs(a,ka,n,b)
@@ -3924,7 +3755,6 @@ do j = 1,n
       l = l + 1
 10    b(l) = a(i,j)
 end do
-return
 end subroutine dmcvfs
 
 pure subroutine mcvsf(a,ka,n,b)
@@ -3952,7 +3782,6 @@ do i = 2,n
    do 20 j = 1,im1
 20    a(i,j) = a(j,i)
 end do
-return
 end subroutine mcvsf
 
 pure subroutine dmcvsf(a,ka,n,b)
@@ -3980,7 +3809,6 @@ do i = 2,n
    do 20 j = 1,im1
 20    a(i,j) = a(j,i)
 end do
-return
 end subroutine dmcvsf
 
 pure subroutine mcvrd(m,n,a,ka,b,kb)
@@ -3994,7 +3822,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = a(i,j)
 end do
-return
 end subroutine mcvrd
 
 pure subroutine mcvdr(m,n,a,ka,b,kb)
@@ -4008,7 +3835,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = a(i,j)
 end do
-return
 end subroutine mcvdr
 
 pure subroutine mcvrc(m,n,a,ka,b,kb)
@@ -4022,7 +3848,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = cmplx(a(i,j),0.0)
 end do
-return
 end subroutine mcvrc
 
 pure subroutine cmreal(m,n,a,ka,b,kb)
@@ -4036,7 +3861,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = real(a(i,j))
 end do
-return
 end subroutine cmreal
 
 pure subroutine cmimag(m,n,a,ka,b,kb)
@@ -4050,7 +3874,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = aimag(a(i,j))
 end do
-return
 end subroutine cmimag
 
 pure subroutine mcopy(m,n,a,ka,b,kb)
@@ -4064,7 +3887,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = a(i,j)
 end do
-return
 end subroutine mcopy
 
 pure subroutine smcopy(n,a,b)
@@ -4077,7 +3899,6 @@ integer :: k, l
 l = (n*(n + 1))/2
 do 10 k = 1,l
 10 b(k) = a(k)
-return
 end subroutine smcopy
 
 pure subroutine dmcopy(m,n,a,ka,b,kb)
@@ -4091,7 +3912,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = a(i,j)
 end do
-return
 end subroutine dmcopy
 
 pure subroutine cmcopy(m,n,a,ka,b,kb)
@@ -4105,7 +3925,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = a(i,j)
 end do
-return
 end subroutine cmcopy
 
 pure subroutine cmconj(m,n,a,ka,b,kb)
@@ -4119,7 +3938,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(i,j) = conjg(a(i,j))
 end do
-return
 end subroutine cmconj
 
 pure subroutine tpose(m,n,a,ka,b,kb)
@@ -4133,7 +3951,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(j,i) = a(i,j)
 end do
-return
 end subroutine tpose
 
 pure subroutine dtpose(m,n,a,ka,b,kb)
@@ -4147,7 +3964,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(j,i) = a(i,j)
 end do
-return
 end subroutine dtpose
 
 pure subroutine ctpose(m,n,a,ka,b,kb)
@@ -4161,7 +3977,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(j,i) = a(i,j)
 end do
-return
 end subroutine ctpose
 
 pure subroutine tip(a, n1, n2, moved, nwork, ndim)
@@ -4285,7 +4100,6 @@ do ip = 1,npower
 end do
 return
 200 if (n1 /= n2) ndim = 0
-return
 end subroutine tip
 
 pure subroutine dtip(a, n1, n2, moved, nwork, ndim)
@@ -4409,7 +4223,6 @@ do ip = 1,npower
 end do
 return
 200 if (n1 /= n2) ndim = 0
-return
 end subroutine dtip
 
 pure subroutine ctip(a, n1, n2, moved, nwork, ndim)
@@ -4533,7 +4346,6 @@ do ip = 1,npower
 end do
 return
 200 if (n1 /= n2) ndim = 0
-return
 end subroutine ctip
 
 pure subroutine infctr(n, ifact, ipower, nexp, npower)
@@ -4578,7 +4390,6 @@ go to 140
 130 ipower(ip) = npart*ipower(ip)
 nexp(ip) = nexp(ip) + 1
 140 npower = ip
-return
 end subroutine infctr
 
 pure subroutine cmadj(m,n,a,ka,b,kb)
@@ -4592,7 +4403,6 @@ do j = 1,n
    do 10 i = 1,m
 10    b(j,i) = conjg(a(i,j))
 end do
-return
 end subroutine cmadj
 
 pure subroutine ctrans(nm, n, a)
@@ -4629,7 +4439,6 @@ do i = 1,n
       a(j,i) = conjg(temp)
    end do
 end do
-return
 end subroutine ctrans
 
 pure subroutine madd(m, n, a, ka, b, kb, c, kc)
@@ -4647,7 +4456,6 @@ do j = 1,n
       c(i,j) = a(i,j) + b(i,j)
    end do
 end do
-return
 end subroutine madd
 
 pure subroutine dmadd(m, n, a, ka, b, kb, c, kc)
@@ -4665,7 +4473,6 @@ do j = 1,n
       c(i,j) = a(i,j) + b(i,j)
    end do
 end do
-return
 end subroutine dmadd
 
 pure subroutine cmadd(m, n, a, ka, b, kb, c, kc)
@@ -4683,7 +4490,6 @@ do j = 1,n
       c(i,j) = a(i,j) + b(i,j)
    end do
 end do
-return
 end subroutine cmadd
 
 pure subroutine smadd(n,a,b,c)
@@ -4695,7 +4501,6 @@ integer :: k, m
 m = (n*(n + 1))/2
 do 10 k = 1,m
 10 c(k) = a(k) + b(k)
-return
 end subroutine smadd
 
 pure subroutine msubt(m, n, a, ka, b, kb, c, kc)
@@ -4713,7 +4518,6 @@ do j = 1,n
       c(i,j) = a(i,j) - b(i,j)
    end do
 end do
-return
 end subroutine msubt
 
 pure subroutine dmsubt(m, n, a, ka, b, kb, c, kc)
@@ -4731,7 +4535,6 @@ do j = 1,n
       c(i,j) = a(i,j) - b(i,j)
    end do
 end do
-return
 end subroutine dmsubt
 
 pure subroutine cmsubt(m, n, a, ka, b, kb, c, kc)
@@ -4749,7 +4552,6 @@ do j = 1,n
       c(i,j) = a(i,j) - b(i,j)
    end do
 end do
-return
 end subroutine cmsubt
 
 pure subroutine smsubt(n,a,b,c)
@@ -4761,7 +4563,6 @@ integer :: k, m
 m = (n*(n + 1))/2
 do 10 k = 1,m
 10 c(k) = a(k) - b(k)
-return
 end subroutine smsubt
 
 pure subroutine mtms(m, n, l, a, ka, b, kb, c, kc)
@@ -4784,7 +4585,6 @@ do j = 1,l
       c(i,j) = w
    end do
 end do
-return
 end subroutine mtms
 
 pure subroutine dmtms(m, n, l, a, ka, b, kb, c, kc)
@@ -4807,7 +4607,6 @@ do j = 1,l
       c(i,j) = w
    end do
 end do
-return
 end subroutine dmtms
 
 pure subroutine cmtms(m, n, l, a, ka, b, kb, c, kc)
@@ -4830,7 +4629,6 @@ do j = 1,l
       c(i,j) = w
    end do
 end do
-return
 end subroutine cmtms
 
 subroutine mprod(m, n, l, a, ka, b, kb, c, kc, row)
@@ -4887,7 +4685,6 @@ do j = 1,l
    do 33 i = 1,m
 33    b(i,j) = row(i)
 end do
-return
 end subroutine mprod
 
 logical function rloc(x, y)
@@ -4921,7 +4718,6 @@ return
 !
 10 y(1) = yold
 rloc = .false.
-return
 end function rloc
 
 pure subroutine ychg(x, y, yold)
@@ -4932,7 +4728,6 @@ real, intent(inout) :: y(*)
 !
 y(1) = 0.0
 if (yold == 0.0) y(1) = 1.0
-return
 end subroutine ychg
 
 subroutine dmprod(m, n, l, a, ka, b, kb, c, kc, row)
@@ -4989,7 +4784,6 @@ do j = 1,l
    do 33 i = 1,m
 33    b(i,j) = row(i)
 end do
-return
 end subroutine dmprod
 
 logical function dloc(x, y)
@@ -5023,7 +4817,6 @@ return
 !
 10 y(1) = yold
 dloc = .false.
-return
 end function dloc
 
 pure subroutine dychg(x, y, yold)
@@ -5034,7 +4827,6 @@ double precision, intent(in) :: yold
 !
 y(1) = 0.d0
 if (yold == 0.d0) y(1) = 1.d0
-return
 end subroutine dychg
 
 subroutine cmprod(m, n, l, a, ka, b, kb, c, kc, row)
@@ -5090,7 +4882,6 @@ do j = 1,l
    do 33 i = 1,m
 33    b(i,j) = row(i)
 end do
-return
 end subroutine cmprod
 
 logical function cloc(x, y)
@@ -5124,7 +4915,6 @@ return
 !
 10 y(1) = yold
 cloc = .false.
-return
 end function cloc
 
 pure subroutine cychg(x, y, yold)
@@ -5137,7 +4927,6 @@ complex, parameter :: one = (1.0,0.0)
 !
 y(1) = zero
 if (yold == zero) y(1) = one
-return
 end subroutine cychg
 
 pure subroutine svprd(a,n,x,y)
@@ -5163,7 +4952,6 @@ do 20 k = 2,n
 !
    l = l + 1
 20 y(k) = yk + a(l)*xk
-return
 end subroutine svprd
 
 pure subroutine dsvprd(a,n,x,y)
@@ -5189,7 +4977,6 @@ do 20 k = 2,n
 !
    l = l + 1
 20 y(k) = yk + a(l)*xk
-return
 end subroutine dsvprd
 
 pure subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
@@ -5206,7 +4993,6 @@ do j = 1,l
 10       s = s + dble(a(k,i))*dble(b(k,j))
 11    c(i,j) = s
 end do
-return
 end subroutine tmprod
 
 pure subroutine smprod(m,n,a,ka,b)
@@ -5225,7 +5011,6 @@ do i = 1,n
       b(ii) = s
 11    ii = ii + 1
 end do
-return
 end subroutine smprod
 
 pure subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
@@ -5254,7 +5039,6 @@ do s = 1,n
 !
    end do
 end do
-return
 end subroutine kprod
 
 pure subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
@@ -5283,7 +5067,6 @@ do s = 1,n
 !
    end do
 end do
-return
 end subroutine dkprod
 
 pure subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
@@ -5312,7 +5095,6 @@ do s = 1,n
 !
    end do
 end do
-return
 end subroutine ckprod
 
 pure subroutine rnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
@@ -5410,7 +5192,6 @@ return
 !
 40 call u11us(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
-return
 end subroutine rnk
 
 pure subroutine drnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
@@ -5510,7 +5291,6 @@ return
 !
 40 call du11us(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
-return
 end subroutine drnk
 
 pure subroutine crout(mo,n,m,a,ka,b,kb,d,index,temp)
@@ -5708,7 +5488,6 @@ if (m <= 0) return
 maxb = kb*m
 do 210 kj = 1,maxb,kb
 210 b(kj) = b(kj)/d
-return
 end subroutine crout
 
 pure subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
@@ -5922,7 +5701,6 @@ return
 !                        Input error
 !
 320 ierr = -1
-return
 end subroutine krout
 
 pure subroutine dec(n, ndim, a, ip, ier)
@@ -5994,7 +5772,6 @@ if (a(n,n) == 0.0) go to 80
 return
 80 ier = k
 ip(n) = 0
-return
 end subroutine dec
 
 subroutine sol(n, ndim, a, b, ip)
@@ -6041,7 +5818,6 @@ do kb = 1,nm1
 30    b(i) = b(i) + a(i,k)*t
 end do
 50 b(1) = b(1)/a(1,1)
-return
 end subroutine sol
 
 pure subroutine npivot(n, m, a, ka, b, kb, d, ierr)
@@ -6099,7 +5875,6 @@ do k = 1,n
 70    continue
 !
 end do
-return
 end subroutine npivot
 
 pure subroutine slv(n, m, a, ka, b, kb, ierr)
@@ -6192,7 +5967,6 @@ return
 210 ierr = j
 return
 220 ierr = n
-return
 end subroutine slv
 
 pure subroutine dpslv(n, m, a, ka, b, kb, ierr)
@@ -6284,7 +6058,6 @@ return
 210 ierr = k
 return
 220 ierr = n
-return
 end subroutine dpslv
 
 subroutine mslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
@@ -6328,7 +6101,6 @@ return
 !                  The problem cannot be solved
 !
 30 ierr = 1
-return
 end subroutine mslv
 
 subroutine mslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
@@ -6370,7 +6142,6 @@ return
 !                          Error return
 !
 40 ierr = -1
-return
 end subroutine mslv1
 
 subroutine slvmp(mo, n, a, ka, b, x, wk, iwk, ierr)
@@ -6405,7 +6176,6 @@ return
 ir = n*n + 1
 call sgesl(wk, n, n, iwk, x, 0)
 call luimp(a, ka, n, wk(1), n, iwk, b, x, wk(ir), ierr)
-return
 end subroutine slvmp
 
 subroutine luimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
@@ -6503,7 +6273,6 @@ ratio = rnrm/xnrm
 if (ratio <= 0.25*rat) go to 20
 !
 if (ratio > min(rat,4.0*eps2)) ind = 1
-return
 end subroutine luimp
 
 pure subroutine sgeco(a,lda,n,ipvt,rcond,z)
@@ -6740,7 +6509,6 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0e0) rcond = ynorm/anorm
 if (anorm == 0.0e0) rcond = 0.0e0
-return
 end subroutine sgeco
 
 pure subroutine sgefa(a,lda,n,ipvt,info)
@@ -6872,7 +6640,6 @@ end do
 70 continue
 ipvt(n) = n
 if (a(n,n) == 0.0e0) info = n
-return
 end subroutine sgefa
 
 pure subroutine sgesl(a,lda,n,ipvt,b,job)
@@ -7012,7 +6779,6 @@ do kb = 1, nm1
 end do
 90 continue
 100 continue
-return
 end subroutine sgesl
 
 subroutine sgedi(a,lda,n,ipvt,det,work,job)
@@ -7141,7 +6907,6 @@ do kb = 1, nm1
 end do
 140 continue
 150 continue
-return
 end subroutine sgedi
 
 subroutine dmslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
@@ -7185,7 +6950,6 @@ return
 !                  The problem cannot be solved
 !
 30 ierr = 1
-return
 end subroutine dmslv
 
 subroutine dmslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
@@ -7227,7 +6991,6 @@ return
 !                          Error return
 !
 40 ierr = -1
-return
 end subroutine dmslv1
 
 pure subroutine dgeco(a,lda,n,ipvt,rcond,z)
@@ -7464,7 +7227,6 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0d0) rcond = ynorm/anorm
 if (anorm == 0.0d0) rcond = 0.0d0
-return
 end subroutine dgeco
 
 pure subroutine dgefa(a,lda,n,ipvt,info)
@@ -7596,7 +7358,6 @@ end do
 70 continue
 ipvt(n) = n
 if (a(n,n) == 0.0d0) info = n
-return
 end subroutine dgefa
 
 pure subroutine dgesl(a,lda,n,ipvt,b,job)
@@ -7736,7 +7497,6 @@ do kb = 1, nm1
 end do
 90 continue
 100 continue
-return
 end subroutine dgesl
 
 subroutine dgedi(a,lda,n,ipvt,det,work,job)
@@ -7865,7 +7625,6 @@ do kb = 1, nm1
 end do
 140 continue
 150 continue
-return
 end subroutine dgedi
 
 subroutine arceco(n, array, mtrstr, nmblks, pivot, b, x, iflag)
@@ -8005,7 +7764,6 @@ integer, intent(inout) :: mtrstr(3,*), pivot(*)
 call arcedc(n, array, mtrstr, nmblks, pivot, iflag)
 if (iflag /= 0) return
 call arcesl(array, mtrstr, nmblks, pivot, b, x)
-return
 end subroutine arceco
 
 pure subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
@@ -8286,7 +8044,6 @@ do k = 2,nmblks
    if (iflag < 0) return
 60 continue
 end do
-return
 end subroutine arcedc
 
 pure subroutine arcepr(block, nrwblk, nclblk, nrwpiv, pivot, pivmax, &
@@ -8397,7 +8154,6 @@ return
 !       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 iflag = -1
-return
 end subroutine arcepr
 
 pure subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
@@ -8512,7 +8268,6 @@ return
 !       ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !
 iflag = -1
-return
 end subroutine arcepc
 
 subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
@@ -8736,7 +8491,6 @@ if (nrwpiv /= nclblk) call arcebm(array(indexa), nrwblk, nclblk, &
    & nrwpiv, b(indpiv), x(indpiv))
 call arcebs(array(indexa), nrwblk, nclblk, nrwpiv, b(indpiv), &
    & x(indpiv))
-return
 end subroutine arcesl
 
 subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
@@ -8766,7 +8520,6 @@ do j = 1,nclpiv
       b(jplusl) = b(jplusl) - block(iplusl,j)*xj
    end do
 end do
-return
 end subroutine arcefs
 
 subroutine arcefm(block, nrwblk, nclpiv, b, x)
@@ -8792,7 +8545,6 @@ do j = 1,nclpiv
       b(nclpvl) = b(nclpvl) - block(l,j)*xj
    end do
 end do
-return
 end subroutine arcefm
 
 subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
@@ -8825,7 +8577,6 @@ do i = 1,nrwpiv
       b(l) = b(l) - block(l,i)*bi
    end do
 end do
-return
 end subroutine arcefe
 
 subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
@@ -8853,7 +8604,6 @@ do nj = 1,nrwpiv
       b(l) = b(l) - block(l,j)*xj
    end do
 end do
-return
 end subroutine arcebs
 
 subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
@@ -8879,7 +8629,6 @@ do j = nrwpv1,nclblk
       b(l) = b(l) - block(l,j)*xj
    end do
 end do
-return
 end subroutine arcebm
 
 subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
@@ -8916,7 +8665,6 @@ do 40 nj = 1,nclpiv
    x(j) = swap
 30 continue
 40 continue
-return
 end subroutine arcebe
 
 subroutine btslv(mo, m, n, a, b, c, x, ip, ierr)
@@ -8936,7 +8684,6 @@ if (ierr /= 0) return
 !     Solve the system of equations
 !
 10 call solbt(m, n, a, b, c, x, ip)
-return
 end subroutine btslv
 
 subroutine decbt(m, n, a, b, c, ip, ier)
@@ -9048,7 +8795,6 @@ return
 200 ier = k
 return
 210 ier = -1
-return
 !-----------------------  End of subroutine decbt  ---------------------
 end subroutine decbt
 
@@ -9118,7 +8864,6 @@ do i = 1,m
 90    dp = dp + c(i,j,1)*y(j,3)
    y(i,1) = y(i,1) - dp
 end do
-return
 !-----------------------  End of subroutine solbt  ---------------------
 end subroutine solbt
 
@@ -9160,7 +8905,6 @@ return
 !                  The problem cannot be solved
 !
 30 ierr = 1
-return
 end subroutine smslv
 
 pure subroutine sspco(ap,n,kpvt,rcond,z)
@@ -9487,7 +9231,6 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0e0) rcond = ynorm/anorm
 if (anorm == 0.0e0) rcond = 0.0e0
-return
 end subroutine sspco
 
 pure subroutine sspfa(ap,n,kpvt,info)
@@ -9779,7 +9522,6 @@ if (kstep == 2) ik = ik - (k - 2)
 k = k - kstep
 go to 10
 200 continue
-return
 end subroutine sspfa
 
 pure subroutine sspsl(ap,n,kpvt,b)
@@ -9982,7 +9724,6 @@ k = k + 2
 150 continue
 go to 90
 160 continue
-return
 end subroutine sspsl
 
 subroutine sspdi(ap,n,kpvt,det,inert,work,job)
@@ -10223,7 +9964,6 @@ k = k + kstep
 go to 150
 260 continue
 270 continue
-return
 end subroutine sspdi
 
 subroutine dsmslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
@@ -10264,7 +10004,6 @@ return
 !                  The problem cannot be solved
 !
 30 ierr = 1
-return
 end subroutine dsmslv
 
 pure subroutine dspco(ap,n,kpvt,rcond,z)
@@ -10591,6 +10330,296 @@ ynorm = s*ynorm
 !
 if (anorm /= 0.0d0) rcond = ynorm/anorm
 if (anorm == 0.0d0) rcond = 0.0d0
-return
 end subroutine dspco
+
+pure subroutine dspfa(ap,n,kpvt,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+integer, intent(out) :: info
+double precision, intent(inout) :: ap(*)
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
+logical :: swap
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
+!
+!     dspfa factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting.
+!
+!     To solve  A*X = B , follow dspfa by dspsl.
+!     To compute  inverse(A)*C , follow dspfa by dspsl.
+!     To compute  determinant(A) , follow dspfa by dspdi.
+!     To compute  inertia(A) , follow dspfa by dspdi.
+!     To compute  inverse(A) , follow dspfa by dspdi.
+!
+!     On entry
+!
+!        ap      DOUBLE PRECISION (n*(n+1)/2)
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  n*(n+1)/2 .
+!                See comments below for details.
+!
+!        n       INTEGER
+!                the order of the matrix  A .
+!
+!     Output
+!
+!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
+!                were used to obtain it stored in packed form.
+!                The factorization can be written  A = U*D*trans(U)
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , trans(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
+!
+!        kpvt    INTEGER(n)
+!                an integer vector of pivot indices.
+!
+!        INFO    INTEGER
+!                = 0  Normal value.
+!                = k  if the k-TH pivot block is singular. This is
+!                     not an error condition for this subroutine,
+!                     but it does indicate that dspsl or dspdi may
+!                     divide by zero if called.
+!
+!     Packed storage
+!
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
+!
+!                k = 0
+!                do 20 j = 1, n
+!                   do 10 i = 1, j
+!                      k = k + 1
+!                      ap(k)  = a(i,j)
+!             10    continue
+!             20 continue
+!
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
+!
+!     Subroutines and functions
+!
+!     BLAS daxpy,dswap,idamax
+!     Fortran dabs,DMAX1,DSQRT
+!
+!     Internal variables
+!
+!
+!
+!     Initialize
+!
+!     alpha is used in choosing pivot block SIZE.
+alpha = (1.0d0 + sqrt(17.0d0))/8.0d0
+!
+info = 0
+!
+!     Main loop on k, which goes from n to 1.
+!
+k = n
+ik = (n*(n - 1))/2
+10 continue
+!
+!        Leave the loop if k=0 Or k=1.
+!
+!     ...Exit
+if (k == 0) go to 200
+if (k > 1) go to 20
+kpvt(1) = 1
+if (ap(1) == 0.0d0) info = 1
+!     ......Exit
+go to 200
+20 continue
+!
+!        This section of code determines the kind of
+!        elimination to be performed.  When it is completed,
+!        KSTEP will be set to the size of the pivot block, and
+!        swap will be set to .TRUE. if an interchange is
+!        required.
+!
+km1 = k - 1
+kk = ik + k
+absakk = abs(ap(kk))
+!
+!        Determine the largest off-diagonal element in
+!        column k.
+!
+imax = idamax(k - 1,ap(ik + 1),1)
+imk = ik + imax
+colmax = abs(ap(imk))
+if (absakk < alpha*colmax) go to 30
+kstep = 1
+swap = .false.
+go to 90
+30 continue
+!
+!           Determine the largest off-diagonal element in
+!           row imax.
+!
+rowmax = 0.0d0
+imaxp1 = imax + 1
+im = imax*(imax - 1)/2
+imj = im + 2*imax
+do j = imaxp1, k
+   rowmax = max(rowmax,abs(ap(imj)))
+   imj = imj + j
+end do
+if (imax == 1) go to 50
+jmax = idamax(imax - 1,ap(im + 1),1)
+jmim = jmax + im
+rowmax = max(rowmax,abs(ap(jmim)))
+50 continue
+imim = imax + im
+if (abs(ap(imim)) < alpha*rowmax) go to 60
+kstep = 1
+swap = .true.
+go to 80
+60 continue
+if (absakk < alpha*colmax*(colmax/rowmax)) go to 70
+kstep = 1
+swap = .false.
+go to 80
+70 continue
+kstep = 2
+swap = imax /= km1
+80 continue
+90 continue
+if (max(absakk,colmax) /= 0.0d0) go to 100
+!
+!           Column k is zero.  Set info and iterate the loop.
+!
+kpvt(k) = k
+info = k
+go to 190
+100 continue
+if (kstep == 2) go to 140
+!
+!           1 X 1 pivot block.
+!
+if (.not.swap) go to 120
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ik + 1),1)
+imj = ik + imax
+do jj = imax, k
+   j = k + imax - jj
+   jk = ik + j
+   t = ap(jk)
+   ap(jk) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+120 continue
+!
+!           Perform the elimination.
+!
+ij = ik - (k - 1)
+do jj = 1, km1
+   j = k - jj
+   jk = ik + j
+   mulk = -ap(jk)/ap(kk)
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   ijj = ij + j
+   ap(jk) = mulk
+   ij = ij - (j - 1)
+end do
+!
+!           Set the pivot array.
+!
+kpvt(k) = k
+if (swap) kpvt(k) = imax
+go to 190
+140 continue
+!
+!           2 X 2 pivot block.
+!
+km1k = ik + k - 1
+ikm1 = ik - (k - 1)
+if (.not.swap) go to 160
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ikm1 + 1),1)
+imj = ikm1 + imax
+do jj = imax, km1
+   j = km1 + imax - jj
+   jkm1 = ikm1 + j
+   t = ap(jkm1)
+   ap(jkm1) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+t = ap(km1k)
+ap(km1k) = ap(imk)
+ap(imk) = t
+160 continue
+!
+!           Perform the elimination.
+!
+km2 = k - 2
+if (km2 == 0) go to 180
+ak = ap(kk)/ap(km1k)
+km1km1 = ikm1 + k - 1
+akm1 = ap(km1km1)/ap(km1k)
+denom = 1.0d0 - ak*akm1
+ij = ik - (k - 1) - (k - 2)
+do jj = 1, km2
+   j = km1 - jj
+   jk = ik + j
+   bk = ap(jk)/ap(km1k)
+   jkm1 = ikm1 + j
+   bkm1 = ap(jkm1)/ap(km1k)
+   mulk = (akm1*bk - bkm1)/denom
+   mulkm1 = (ak*bkm1 - bk)/denom
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   t = mulkm1
+   call daxpy(j,t,ap(ikm1 + 1),1,ap(ij + 1),1)
+   ap(jk) = mulk
+   ap(jkm1) = mulkm1
+   ijj = ij + j
+   ij = ij - (j - 1)
+end do
+180 continue
+!
+!           Set the pivot array.
+!
+kpvt(k) = 1 - k
+if (swap) kpvt(k) = -imax
+kpvt(k - 1) = kpvt(k)
+190 continue
+ik = ik - (k - 1)
+if (kstep == 2) ik = ik - (k - 2)
+k = k - kstep
+go to 10
+200 continue
+end subroutine dspfa
 
