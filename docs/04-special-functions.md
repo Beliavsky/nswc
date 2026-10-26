@@ -2138,7 +2138,7 @@ SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFC1 was writ
 | `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L26244`](../source_parts/nswc_part_03.f90#L4924) |
 | `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L26290`](../source_parts/nswc_part_03.f90#L4970) |
 | `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L26338`](../source_parts/nswc_part_03.f90#L5018) |
-| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L26385`](../source_parts/nswc_part_03.f90#L5065) |
+| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L26386`](../source_parts/nswc_part_03.f90#L5066) |
 
 
 Lei w and w’ be complex numbers where Im(w’/w) > 0, and Wm, = 2mw + 2nw’ for all integers m,n. Then for any complex z, the Weierstrass elliptic function P(z;w,w') can be
@@ -2262,7 +2262,7 @@ niscatic Case,” Computing (Arch. Elektron. Rechnen) 18 (1977), pp. 341-349.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L26436`](../source_parts/nswc_part_03.f90#L5116) |
+| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L26437`](../source_parts/nswc_part_03.f90#L5117) |
 
 
 Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose boundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
@@ -2342,7 +2342,7 @@ Jf dds g tal p* A(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L26721`](../source_parts/nswc_part_03.f90#L5401) |
+| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L26722`](../source_parts/nswc_part_03.f90#L5402) |
 
 
 The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian distribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
@@ -2420,7 +2420,7 @@ Weapons Laboratory, Dahlgren, Virginia, 62
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L27101`](../source_parts/nswc_part_03.f90#L5781) |
+| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L27102`](../source_parts/nswc_part_03.f90#L5782) |
 
 
 The subroutine PKILL is available for evaluating the integral of an uncorrelated elliptical Gaussian distribution over the area A of a circle (x — h)* + (y—k)? = R?. The probability to be computed is given by

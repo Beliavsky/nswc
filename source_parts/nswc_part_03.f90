@@ -24,7 +24,7 @@ data c /1.77245385090552/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.0 + eps .GT. 1.0 .
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 !--------------------------
 call crec (real(z), aimag(z), u, v)
@@ -80,9 +80,9 @@ data tol /1.e-10/
 data pi /3.14159265358979/
 !-----------------------
 data d(1) / .577215664901533e+00/,  d(2) /-.420026350340952e-01/, &
-&d(3) /-.421977345555443e-01/,  d(4) / .721894324666310e-02/, &
-&d(5) /-.215241674114951e-03/,  d(6) /-.201348547807882e-04/, &
-&d(7) / .113302723198170e-05/
+   & d(3) /-.421977345555443e-01/,  d(4) / .721894324666310e-02/, &
+   & d(5) /-.215241674114951e-03/,  d(6) /-.201348547807882e-04/, &
+   & d(7) / .113302723198170e-05/
 !-----------------------
 anorm(w) = amax1(abs(real(w)), abs(aimag(w)))
 !-----------------------------------------------------------------------
@@ -90,7 +90,7 @@ anorm(w) = amax1(abs(real(w)), abs(aimag(w)))
 !     ****** eps is a machine dependent constant.  Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 eps0 = amax1(eps, 5.e-15)
@@ -107,8 +107,8 @@ c = cexp(mu)
 !
 t = pi*nu
 if (abs(nu) .gt. tol) go to 10
-   a = 1.0 + (t*t)/6.0
-   go to 20
+a = 1.0 + (t*t)/6.0
+go to 20
 10 a = t/sin(t)
 !
 20 t = 0.5 + (0.5 + gam1(nu))
@@ -120,11 +120,11 @@ if (abs(nu) .gt. 0.2) go to 30
 !         The following is the Taylor series for
 !     t = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
 !
-   t = nu*nu
-   t = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
-&d(3))*t + d(2))*t + d(1))
-   gm1 = a*t
-   go to 40
+t = nu*nu
+t = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
+   & d(3))*t + d(2))*t + d(1))
+gm1 = a*t
+go to 40
 30 gm1 = 0.5*(g1 - g2)/nu
 !
 !            Initialization of the summation
@@ -134,10 +134,10 @@ q = (0.5*g2)/c
 x = real(mu)
 y = aimag(mu)
 if (anorm(mu) .gt. tol) go to 50
-   t = x*y
-   sh = cmplx(1.0, t/3.0)
-   ch = cmplx(1.0, t)
-   go to 60
+t = x*y
+sh = cmplx(1.0, t/3.0)
+ch = cmplx(1.0, t)
+go to 60
 50 w = cmplx (-y, x)
 sh = csin(w)/w
 ch = ccos(w)
@@ -205,7 +205,7 @@ data c1/1.25331413731559/
 !     ****** eps is a machine dependent constant.  Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 eps0 = amax1(eps, 5.e-15)
@@ -220,7 +220,7 @@ a = 3.0/(1.0 + r)
 b = 14.7/(28.0 + r)
 c = 4.0*cos1(nu)/(c1*eps0*(2.0*r)**(0.25))
 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-&(2.0*cos(b*th))**2 + 1.5
+   & (2.0*cos(b*th))**2 + 1.5
 !
 !     Backward recurrence in Miller algorithm.
 !
@@ -241,18 +241,18 @@ do 10 i = 2, m
 !
 !           Rescale to avoid overflow
 !
-      u2 = u2/c
-      u1 = u1/c
-      s = s/c
+   u2 = u2/c
+   u1 = u1/c
+   s = s/c
 !
 10 l = l - 1.0
 !
 !     Last step in the Miller algorithm.
 !
 if (c .lt. 2.0) go to 20
-   u2 = u2/c
-   u1 = u1/c
-   s = s/c
+u2 = u2/c
+u1 = u1/c
+s = s/c
 20 u3 = u2
 u2 = u1
 al = 0.5*(0.5 - nu)*(0.5 + nu)
@@ -308,8 +308,8 @@ complex, intent(in) :: a
 complex, intent(inout) :: w
 integer :: i, la, lk, lr, m, n
 real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
-&rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), &
-&ts(2), zl(2), zs
+   & rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), &
+   & ts(2), zl(2), zs
 !     ******************************************************************
 !     Fortran subroutine for modified Bessel function of integral order
 !     ******************************************************************
@@ -319,230 +319,230 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 !     w  = Function of second kind (complex number)
 !     -------------------
 data cd(1) / 0.00000000000000e00/,  cd(2) /-1.64899505142212e-2/, &
-&cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
-&cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
-&cd(7) /-7.07075239357898e-1/,  cd(8) /-9.92995790539516e-1/, &
-&cd(9) /-1.35583925612592e00/,  cd(10)/-1.82105907899132e00/, &
-&cd(11)/-2.42482175310879e00/,  cd(12)/-3.21956655708750e00/, &
-&cd(13)/-4.28658077248384e00/,  cd(14)/-5.77022816798128e00/, &
-&cd(15)/-8.01371260952526e00/
+   & cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
+   & cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
+   & cd(7) /-7.07075239357898e-1/,  cd(8) /-9.92995790539516e-1/, &
+   & cd(9) /-1.35583925612592e00/,  cd(10)/-1.82105907899132e00/, &
+   & cd(11)/-2.42482175310879e00/,  cd(12)/-3.21956655708750e00/, &
+   & cd(13)/-4.28658077248384e00/,  cd(14)/-5.77022816798128e00/, &
+   & cd(15)/-8.01371260952526e00/
 data cd(16)/ 0.00000000000000e00/,  cd(17)/-5.57742429879505e-3/, &
-&cd(18)/-4.99112944172476e-2/,  cd(19)/-1.37440911652397e-1/, &
-&cd(20)/-2.67233784710566e-1/,  cd(21)/-4.40380166808682e-1/, &
-&cd(22)/-6.61813614872541e-1/,  cd(23)/-9.41861077665017e-1/, &
-&cd(24)/-1.29754130468326e00/,  cd(25)/-1.75407696719816e00/, &
-&cd(26)/-2.34755299882276e00/,  cd(27)/-3.13041332689196e00/, &
-&cd(28)/-4.18397120563729e00/,  cd(29)/-5.65251799214994e00/, &
-&cd(30)/-7.87863959810677e00/
+   & cd(18)/-4.99112944172476e-2/,  cd(19)/-1.37440911652397e-1/, &
+   & cd(20)/-2.67233784710566e-1/,  cd(21)/-4.40380166808682e-1/, &
+   & cd(22)/-6.61813614872541e-1/,  cd(23)/-9.41861077665017e-1/, &
+   & cd(24)/-1.29754130468326e00/,  cd(25)/-1.75407696719816e00/, &
+   & cd(26)/-2.34755299882276e00/,  cd(27)/-3.13041332689196e00/, &
+   & cd(28)/-4.18397120563729e00/,  cd(29)/-5.65251799214994e00/, &
+   & cd(30)/-7.87863959810677e00/
 data ce(1) / 0.00000000000000e00/,  ce(2) /-4.80942336387447e-3/, &
-&ce(3) /-1.31366200347759e-2/,  ce(4) /-1.94843834008458e-2/, &
-&ce(5) /-2.19948900032003e-2/,  ce(6) /-2.09396625676519e-2/, &
-&ce(7) /-1.74600268458650e-2/,  ce(8) /-1.27937813362085e-2/, &
-&ce(9) /-8.05234421796592e-3/,  ce(10)/-4.15817375002760e-3/, &
-&ce(11)/-1.64317738747922e-3/,  ce(12)/-4.49175585314709e-4/, &
-&ce(13)/-7.28594765574007e-5/,  ce(14)/-5.38265230658285e-6/, &
-&ce(15)/-9.93779048036289e-8/
+   & ce(3) /-1.31366200347759e-2/,  ce(4) /-1.94843834008458e-2/, &
+   & ce(5) /-2.19948900032003e-2/,  ce(6) /-2.09396625676519e-2/, &
+   & ce(7) /-1.74600268458650e-2/,  ce(8) /-1.27937813362085e-2/, &
+   & ce(9) /-8.05234421796592e-3/,  ce(10)/-4.15817375002760e-3/, &
+   & ce(11)/-1.64317738747922e-3/,  ce(12)/-4.49175585314709e-4/, &
+   & ce(13)/-7.28594765574007e-5/,  ce(14)/-5.38265230658285e-6/, &
+   & ce(15)/-9.93779048036289e-8/
 data ce(16)/ 0.00000000000000e00/,  ce(17)/ 7.53805779200591e-2/, &
-&ce(18)/ 7.12293537403464e-2/,  ce(19)/ 6.33116224228200e-2/, &
-&ce(20)/ 5.28240264523301e-2/,  ce(21)/ 4.13305359441492e-2/, &
-&ce(22)/ 3.01350573947510e-2/,  ce(23)/ 2.01043439592720e-2/, &
-&ce(24)/ 1.18552223068074e-2/,  ce(25)/ 5.86055510956010e-3/, &
-&ce(26)/ 2.25465148267325e-3/,  ce(27)/ 6.08173041536336e-4/, &
-&ce(28)/ 9.84215550625747e-5/,  ce(29)/ 7.32139093038089e-6/, &
-&ce(30)/ 1.37279667384666e-7/
+   & ce(18)/ 7.12293537403464e-2/,  ce(19)/ 6.33116224228200e-2/, &
+   & ce(20)/ 5.28240264523301e-2/,  ce(21)/ 4.13305359441492e-2/, &
+   & ce(22)/ 3.01350573947510e-2/,  ce(23)/ 2.01043439592720e-2/, &
+   & ce(24)/ 1.18552223068074e-2/,  ce(25)/ 5.86055510956010e-3/, &
+   & ce(26)/ 2.25465148267325e-3/,  ce(27)/ 6.08173041536336e-4/, &
+   & ce(28)/ 9.84215550625747e-5/,  ce(29)/ 7.32139093038089e-6/, &
+   & ce(30)/ 1.37279667384666e-7/
 !     -------------------
-az(1)=real(a)
-az(2)=aimag(a)
-zs=az(1)*az(1)+az(2)*az(2)
-zl(1)=0.5*alog(zs)
-zl(2)=atan2(az(2),az(1))
-an=iabs(in)
-tm(1)=0.0
-tm(2)=0.0
-if(mo.ne.0)go to 002
-tm(1)=az(1)
-tm(2)=az(2)
-002 if(zs-1.0)020,020,003
-003 if(zs-289.0)004,010,010
-004 if(az(1)+0.096*az(2)*az(2))020,020,015
-010 qm=1.25331413731550*exp(-0.5*zl(1)-tm(1))
-qf(1)=qm*cos(-0.5*zl(2)-tm(2))
-qf(2)=qm*sin(-0.5*zl(2)-tm(2))
-if(an.gt.1.0)go to 012
-pn=an
+az(1) = real(a)
+az(2) = aimag(a)
+zs = az(1)*az(1) + az(2)*az(2)
+zl(1) = 0.5*alog(zs)
+zl(2) = atan2(az(2),az(1))
+an = iabs(in)
+tm(1) = 0.0
+tm(2) = 0.0
+if (mo.ne.0) go to 002
+tm(1) = az(1)
+tm(2) = az(2)
+002 if (zs - 1.0) 020,020,003
+003 if (zs - 289.0) 004,010,010
+004 if (az(1) + 0.096*az(2)*az(2)) 020,020,015
+010 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
+qf(1) = qm*cos(-0.5*zl(2) - tm(2))
+qf(2) = qm*sin(-0.5*zl(2) - tm(2))
+if (an.gt.1.0) go to 012
+pn = an
 assign 011 to la
 go to 100
-011 ts(1)=qf(1)*sm(1)-qf(2)*sm(2)
-ts(2)=qf(1)*sm(2)+qf(2)*sm(1)
-sm(1)=ts(1)
-sm(2)=ts(2)
+011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 go to 029
-012 pn=1.0
+012 pn = 1.0
 assign 013 to la
 go to 100
-013 sq(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sq(2)=qf(1)*sm(2)+qf(2)*sm(1)
-pn=0.0
+013 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
+pn = 0.0
 assign 014 to la
 go to 100
-014 sr(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sr(2)=qf(1)*sm(2)+qf(2)*sm(1)
+014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
 go to 026
-015 qm=1.25331413731550*exp(-0.5*zl(1)-tm(1))
-qf(1)=qm*cos(-0.5*zl(2)-tm(2))
-qf(2)=qm*sin(-0.5*zl(2)-tm(2))
-if(an.gt.1.0)go to 017
-pn=an
+015 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
+qf(1) = qm*cos(-0.5*zl(2) - tm(2))
+qf(2) = qm*sin(-0.5*zl(2) - tm(2))
+if (an.gt.1.0) go to 017
+pn = an
 assign 016 to lr
 go to 104
-016 ts(1)=qf(1)*sm(1)-qf(2)*sm(2)
-ts(2)=qf(1)*sm(2)+qf(2)*sm(1)
-sm(1)=ts(1)
-sm(2)=ts(2)
+016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 go to 029
-017 pn=1.0
+017 pn = 1.0
 assign 018 to lr
 go to 104
-018 sq(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sq(2)=qf(1)*sm(2)+qf(2)*sm(1)
-pn=0.0
+018 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
+pn = 0.0
 assign 019 to lr
 go to 104
-019 sr(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sr(2)=qf(1)*sm(2)+qf(2)*sm(1)
+019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
 go to 026
-020 qf(1)=1.0
-qf(2)=0.0
-if(mo.eq.0)go to 021
-qm=exp(az(1))
-qf(1)=qm*cos(az(2))
-qf(2)=qm*sin(az(2))
-021 if(an.gt.1.0)go to 023
-pn=an
+020 qf(1) = 1.0
+qf(2) = 0.0
+if (mo.eq.0) go to 021
+qm = exp(az(1))
+qf(1) = qm*cos(az(2))
+qf(2) = qm*sin(az(2))
+021 if (an.gt.1.0) go to 023
+pn = an
 assign 022 to lk
 go to 106
-022 ts(1)=qf(1)*sm(1)-qf(2)*sm(2)
-ts(2)=qf(1)*sm(2)+qf(2)*sm(1)
-sm(1)=ts(1)
-sm(2)=ts(2)
+022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 go to 029
-023 pn=1.0
+023 pn = 1.0
 assign 024 to lk
 go to 106
-024 sq(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sq(2)=qf(1)*sm(2)+qf(2)*sm(1)
-pn=0.0
+024 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
+pn = 0.0
 assign 025 to lk
 go to 106
-025 sr(1)=qf(1)*sm(1)-qf(2)*sm(2)
-sr(2)=qf(1)*sm(2)+qf(2)*sm(1)
-026 rz(1)=+az(1)/zs
-rz(2)=-az(2)/zs
-pn=0.0
+025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
+sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
+026 rz(1) = az(1)/zs
+rz(2) = -az(2)/zs
+pn = 0.0
 go to 028
-027 sq(1)=sr(1)
-sq(2)=sr(2)
-sr(1)=sm(1)
-sr(2)=sm(2)
-028 sm(1)=2.0*pn*(rz(1)*sr(1)-rz(2)*sr(2))+sq(1)
-sm(2)=2.0*pn*(rz(1)*sr(2)+rz(2)*sr(1))+sq(2)
-pn=pn+1.0
-if(pn.lt.an)go to 027
-029 w=cmplx(sm(1),sm(2))
+027 sq(1) = sr(1)
+sq(2) = sr(2)
+sr(1) = sm(1)
+sr(2) = sm(2)
+028 sm(1) = 2.0*pn*(rz(1)*sr(1) - rz(2)*sr(2)) + sq(1)
+sm(2) = 2.0*pn*(rz(1)*sr(2) + rz(2)*sr(1)) + sq(2)
+pn = pn + 1.0
+if (pn.lt.an) go to 027
+029 w = cmplx(sm(1),sm(2))
 return
-100 sm(1)=0.0
-sm(2)=0.0
-rz(1)=+0.5*az(1)/zs
-rz(2)=-0.5*az(2)/zs
-qn=(pn-0.5)*(pn+0.5)
-tm(1)=1.0
-tm(2)=0.0
-pm=0.0
+100 sm(1) = 0.0
+sm(2) = 0.0
+rz(1) = 0.5*az(1)/zs
+rz(2) = -0.5*az(2)/zs
+qn = (pn - 0.5)*(pn + 0.5)
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
 go to 102
-101 qn=qn-2.0*pm
-pm=pm+1.0
-ts(1)=rz(1)*tm(1)-rz(2)*tm(2)
-ts(2)=rz(1)*tm(2)+rz(2)*tm(1)
-tm(1)=qn*ts(1)/pm
-tm(2)=qn*ts(2)/pm
-if(abs(sm(1))+abs(tm(1)).ne.abs(sm(1)))go to 102
-if(abs(sm(2))+abs(tm(2)).eq.abs(sm(2)))go to 103
-102 sm(1)=sm(1)+tm(1)
-sm(2)=sm(2)+tm(2)
-if(pm.lt.36.0)go to 101
+101 qn = qn - 2.0*pm
+pm = pm + 1.0
+ts(1) = rz(1)*tm(1) - rz(2)*tm(2)
+ts(2) = rz(1)*tm(2) + rz(2)*tm(1)
+tm(1) = qn*ts(1)/pm
+tm(2) = qn*ts(2)/pm
+if (abs(sm(1)) + abs(tm(1)).ne.abs(sm(1))) go to 102
+if (abs(sm(2)) + abs(tm(2)).eq.abs(sm(2))) go to 103
+102 sm(1) = sm(1) + tm(1)
+sm(2) = sm(2) + tm(2)
+if (pm.lt.36.0) go to 101
 103 go to la,(011,013,014)
-104 sm(1)=1.0
-sm(2)=0.0
-m=15.0*pn+2.0
-n=15.0*pn+15.0
+104 sm(1) = 1.0
+sm(2) = 0.0
+m = 15.0*pn + 2.0
+n = 15.0*pn + 15.0
 do 105 i = m,n
-ts(1)=az(1)-cd(i)
-ts(2)=az(2)
-ss=ts(1)*ts(1)+ts(2)*ts(2)
-tm(1)=+ce(i)*ts(1)/ss
-tm(2)=-ce(i)*ts(2)/ss
-sm(1)=sm(1)+tm(1)
-sm(2)=sm(2)+tm(2)
+   ts(1) = az(1) - cd(i)
+   ts(2) = az(2)
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = ce(i)*ts(1)/ss
+   tm(2) = -ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
 105 continue
 go to lr,(016,018,019)
-106 aq(1)=1.0
-aq(2)=0.0
-rn=0.0
-sn=-1.0
-pm=0.0
+106 aq(1) = 1.0
+aq(2) = 0.0
+rn = 0.0
+sn = -1.0
+pm = 0.0
 go to 108
-107 pm=pm+1.0
-rn=rn+0.5/pm
-sn=-sn
-ts(1)=0.5*(az(1)*aq(1)-az(2)*aq(2))
-ts(2)=0.5*(az(1)*aq(2)+az(2)*aq(1))
-aq(1)=ts(1)/pm
-aq(2)=ts(2)/pm
-108 if(pm.lt.pn)go to 107
-sz(1)=0.25*(az(1)-az(2))*(az(1)+az(2))
-sz(2)=0.5*az(1)*az(2)
-sr(1)=0.0
-sr(2)=0.0
-ss=aq(1)*aq(1)+aq(2)*aq(2)
-tm(1)=+aq(1)/ss
-tm(2)=-aq(2)/ss
-pm=0.0
+107 pm = pm + 1.0
+rn = rn + 0.5/pm
+sn = -sn
+ts(1) = 0.5*(az(1)*aq(1) - az(2)*aq(2))
+ts(2) = 0.5*(az(1)*aq(2) + az(2)*aq(1))
+aq(1) = ts(1)/pm
+aq(2) = ts(2)/pm
+108 if (pm.lt.pn) go to 107
+sz(1) = 0.25*(az(1) - az(2))*(az(1) + az(2))
+sz(2) = 0.5*az(1)*az(2)
+sr(1) = 0.0
+sr(2) = 0.0
+ss = aq(1)*aq(1) + aq(2)*aq(2)
+tm(1) = aq(1)/ss
+tm(2) = -aq(2)/ss
+pm = 0.0
 go to 110
-109 tm(1)=tm(1)/(pn-pm)
-tm(2)=tm(2)/(pn-pm)
-sr(1)=sr(1)+0.5*tm(1)
-sr(2)=sr(2)+0.5*tm(2)
-pm=pm+1.0
-ts(1)=sz(1)*tm(1)-sz(2)*tm(2)
-ts(2)=sz(1)*tm(2)+sz(2)*tm(1)
-tm(1)=-ts(1)/pm
-tm(2)=-ts(2)/pm
-110 if(pm.lt.pn)go to 109
-sm(1)=0.0
-sm(2)=0.0
-rm=1.0
-qm=0.0
-aq(1)=sn*aq(1)
-aq(2)=sn*aq(2)
-sl(1)=-0.115931515658412+zl(1)-rn
-sl(2)=+zl(2)
-pm=0.0
+109 tm(1) = tm(1)/(pn - pm)
+tm(2) = tm(2)/(pn - pm)
+sr(1) = sr(1) + 0.5*tm(1)
+sr(2) = sr(2) + 0.5*tm(2)
+pm = pm + 1.0
+ts(1) = sz(1)*tm(1) - sz(2)*tm(2)
+ts(2) = sz(1)*tm(2) + sz(2)*tm(1)
+tm(1) = -ts(1)/pm
+tm(2) = -ts(2)/pm
+110 if (pm.lt.pn) go to 109
+sm(1) = 0.0
+sm(2) = 0.0
+rm = 1.0
+qm = 0.0
+aq(1) = sn*aq(1)
+aq(2) = sn*aq(2)
+sl(1) = -0.115931515658412 + zl(1) - rn
+sl(2) = zl(2)
+pm = 0.0
 go to 112
-111 qm=qm+rm
-pm=pm+1.0
-rm=0.25*zs*rm/(pm*(pn+pm))
-ts(1)=sz(1)*aq(1)-sz(2)*aq(2)
-ts(2)=sz(1)*aq(2)+sz(2)*aq(1)
-aq(1)=ts(1)/(pm*(pn+pm))
-aq(2)=ts(2)/(pm*(pn+pm))
-sl(1)=sl(1)-0.5/pm-0.5/(pn+pm)
-112 tm(1)=aq(1)*sl(1)-aq(2)*sl(2)
-tm(2)=aq(1)*sl(2)+aq(2)*sl(1)
-sm(1)=sm(1)+tm(1)
-sm(2)=sm(2)+tm(2)
-if(qm+rm.gt.qm)go to 111
-sm(1)=sr(1)+sm(1)
-sm(2)=sr(2)+sm(2)
+111 qm = qm + rm
+pm = pm + 1.0
+rm = 0.25*zs*rm/(pm*(pn + pm))
+ts(1) = sz(1)*aq(1) - sz(2)*aq(2)
+ts(2) = sz(1)*aq(2) + sz(2)*aq(1)
+aq(1) = ts(1)/(pm*(pn + pm))
+aq(2) = ts(2)/(pm*(pn + pm))
+sl(1) = sl(1) - 0.5/pm - 0.5/(pn + pm)
+112 tm(1) = aq(1)*sl(1) - aq(2)*sl(2)
+tm(2) = aq(1)*sl(2) + aq(2)*sl(1)
+sm(1) = sm(1) + tm(1)
+sm(2) = sm(2) + tm(2)
+if (qm + rm.gt.qm) go to 111
+sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
 go to lk,(022,024,025)
 end subroutine bsslk
 
@@ -565,18 +565,18 @@ ierr = 0
 a = real(z)
 b = aimag(z)
 r = cpabs(a,b)
-if(r .gt. 1.0) go to 10
+if (r .gt. 1.0) go to 10
 !
 !     Maclaurin expansion
 !
-   call airm(ind,z,ai,aip,bi,bip)
-   return
-10 if(r .gt. 10.0) go to 20
+call airm(ind,z,ai,aip,bi,bip)
+return
+10 if (r .gt. 10.0) go to 20
 !
 !     Intermediate range calculation
 !
-   call aii(ind,z,ai,aip,ierr)
-   return
+call aii(ind,z,ai,aip,ierr)
+return
 !
 !     Asymptotic expansion
 !
@@ -603,24 +603,24 @@ real :: a(8), b(8), c(8), d(8)
 !     c2 = 3**(-1/3)/gamma(1/3)
 !-----------------------
 data c1/3.55028053887817e-01/, c2/2.58819403792807e-01/, &
-&sqt3/1.73205080756888e+00/
+   & sqt3/1.73205080756888e+00/
 !-----------------------
 data a(1) /.166666666666667e+00/, a(2) /.555555555555556e-02/, &
-&a(3) /.771604938271605e-04/, a(4) /.584549195660307e-06/, &
-&a(5) /.278356759838241e-08/, a(6) /.909662613850462e-11/, &
-&a(7) /.216586336631062e-13/, a(8) /.392366551867867e-16/
+   & a(3) /.771604938271605e-04/, a(4) /.584549195660307e-06/, &
+   & a(5) /.278356759838241e-08/, a(6) /.909662613850462e-11/, &
+   & a(7) /.216586336631062e-13/, a(8) /.392366551867867e-16/
 data b(1) /.833333333333333e-01/, b(2) /.198412698412698e-02/, &
-&b(3) /.220458553791887e-04/, b(4) /.141319585764030e-06/, &
-&b(5) /.588831607350126e-09/, b(6) /.172172984605300e-11/, &
-&b(7) /.372668797846970e-14/, b(8) /.621114663078283e-17/
+   & b(3) /.220458553791887e-04/, b(4) /.141319585764030e-06/, &
+   & b(5) /.588831607350126e-09/, b(6) /.172172984605300e-11/, &
+   & b(7) /.372668797846970e-14/, b(8) /.621114663078283e-17/
 data c(1) /.333333333333333e-01/, c(2) /.694444444444444e-03/, &
-&c(3) /.701459034792368e-05/, c(4) /.417535139757362e-07/, &
-&c(5) /.163739270493083e-09/, c(6) /.454831306925231e-12/, &
-&c(7) /.941679724482880e-15/, c(8) /.150910212256872e-17/
+   & c(3) /.701459034792368e-05/, c(4) /.417535139757362e-07/, &
+   & c(5) /.163739270493083e-09/, c(6) /.454831306925231e-12/, &
+   & c(7) /.941679724482880e-15/, c(8) /.150910212256872e-17/
 data d(1) /.333333333333333e+00/, d(2) /.138888888888889e-01/, &
-&d(3) /.220458553791887e-03/, d(4) /.183715461493239e-05/, &
-&d(5) /.942130571760201e-08/, d(6) /.327128670750070e-10/, &
-&d(7) /.819871355263333e-13/, d(8) /.155278665769571e-15/
+   & d(3) /.220458553791887e-03/, d(4) /.183715461493239e-05/, &
+   & d(5) /.942130571760201e-08/, d(6) /.327128670750070e-10/, &
+   & d(7) /.819871355263333e-13/, d(8) /.155278665769571e-15/
 !-----------------------
 z2 = z*z
 z3 = z*z2
@@ -656,20 +656,20 @@ bi = sqt3*(c1*f + c2*g)
 aip = c1*f1 - c2*g1
 bip = sqt3*(c1*f1 + c2*g1)
 if (ind .eq. 0) return
-   x = real(z)
-   y = aimag(z)
-   z1 = csqrt(z)
-   zz = z*z1/1.5
-   e = cexp(zz)
-   e1 = 1.0/e
-   ai = ai*e
-   aip = aip*e
-   if (abs(y) .gt. x*sqt3) go to 30
-      bi = bi*e1
-      bip = bip*e1
-      return
+x = real(z)
+y = aimag(z)
+z1 = csqrt(z)
+zz = z*z1/1.5
+e = cexp(zz)
+e1 = 1.0/e
+ai = ai*e
+aip = aip*e
+if (abs(y) .gt. x*sqt3) go to 30
+bi = bi*e1
+bip = bip*e1
+return
 30 bi = bi*e
-   bip = bip*e
+bip = bip*e
 return
 end subroutine airm
 
@@ -701,26 +701,26 @@ if (abs(b) .lt. -5.0*a) go to 10
 !
 !           ----  abs(b) .GE. -5.0*a  ----
 !
-   call ka(ind, z2, w1, w2)
-   ai = c1*z1*w1
-   aip = -c1*z*w2
-   return
+call ka(ind, z2, w1, w2)
+ai = c1*z1*w1
+aip = -c1*z*w2
+return
 !
 !           ----  abs(b) .LT. -5.0*a  ----
 !
 10 if (abs(b) .lt. -1.74*a) go to 30
-   if (r .ge. 8.2) go to 40
+if (r .ge. 8.2) go to 40
 20 zm = -z
-   z1 = csqrt(zm)
-   z3 = z1*zm/1.5
-   call ja(z3, w1, w2, w1m, w2m)
-   ai = (z1/3.0)*(w1m +w1)
-   aip = (z/3.0)*(w2m - w2)
-   if (ind .eq. 0) return
-      e = cexp(z2)
-      ai = ai*e
-      aip = aip*e
-      return
+z1 = csqrt(zm)
+z3 = z1*zm/1.5
+call ja(z3, w1, w2, w1m, w2m)
+ai = (z1/3.0)*(w1m + w1)
+aip = (z/3.0)*(w2m - w2)
+if (ind .eq. 0) return
+e = cexp(z2)
+ai = ai*e
+aip = aip*e
+return
 30 if (r .lt. 7.4) go to 20
 40 call aia (ind,z,ai,aip,ierr)
 return
@@ -745,36 +745,36 @@ real :: c(30), d(30)
 !-----------------------------------------------------------------------
 !------------------------
 data c(1)  /.100000000000000e+01/, c(2)  /.694444444444444e-01/, &
-&c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
-&c(5)  /.576491904126697e-01/, c(6)  /.116099064025515e+00/, &
-&c(7)  /.291591399230751e+00/, c(8)  /.877666969510017e+00/, &
-&c(9)  /.307945303017317e+01/, c(10) /.123415733323452e+02/, &
-&c(11) /.556227853659171e+02/, c(12) /.278465080777603e+03/, &
-&c(13) /.153316943201280e+04/, c(14) /.920720659972641e+04/, &
-&c(15) /.598925135658791e+05/, c(16) /.419524875116551e+06/, &
-&c(17) /.314825741786683e+07/, c(18) /.251989198716024e+08/, &
-&c(19) /.214288036963680e+09/, c(20) /.192937554918249e+10/
+   & c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
+   & c(5)  /.576491904126697e-01/, c(6)  /.116099064025515e+00/, &
+   & c(7)  /.291591399230751e+00/, c(8)  /.877666969510017e+00/, &
+   & c(9)  /.307945303017317e+01/, c(10) /.123415733323452e+02/, &
+   & c(11) /.556227853659171e+02/, c(12) /.278465080777603e+03/, &
+   & c(13) /.153316943201280e+04/, c(14) /.920720659972641e+04/, &
+   & c(15) /.598925135658791e+05/, c(16) /.419524875116551e+06/, &
+   & c(17) /.314825741786683e+07/, c(18) /.251989198716024e+08/, &
+   & c(19) /.214288036963680e+09/, c(20) /.192937554918249e+10/
 data c(21) /.183357669378906e+11/, c(22) /.183418303528833e+12/, &
-&c(23) /.192647115897045e+13/, c(24) /.211969993886476e+14/, &
-&c(25) /.243826826879716e+15/, c(26) /.292659921929793e+16/, &
-&c(27) /.365903070126431e+17/, c(28) /.475768102036307e+18/, &
-&c(29) /.642404935790194e+19/, c(30) /.899520742705838e+20/
+   & c(23) /.192647115897045e+13/, c(24) /.211969993886476e+14/, &
+   & c(25) /.243826826879716e+15/, c(26) /.292659921929793e+16/, &
+   & c(27) /.365903070126431e+17/, c(28) /.475768102036307e+18/, &
+   & c(29) /.642404935790194e+19/, c(30) /.899520742705838e+20/
 !------------------------
 data d(1)  / .100000000000000e+01/, d(2)  /-.972222222222222e-01/, &
-&d(3)  /-.438850308641975e-01/, d(4)  /-.424628307898948e-01/, &
-&d(5)  /-.626621634920323e-01/, d(6)  /-.124105896027275e+00/, &
-&d(7)  /-.308253764901079e+00/, d(8)  /-.920479992412945e+00/, &
-&d(9)  /-.321049358464862e+01/, d(10) /-.128072930807356e+02/, &
-&d(11) /-.575083035139143e+02/, d(12) /-.287033237109221e+03/, &
-&d(13) /-.157635730333710e+04/, d(14) /-.944635482309593e+04/, &
-&d(15) /-.613357066638521e+05/, d(16) /-.428952400400069e+06/, &
-&d(17) /-.321453652140086e+07/, d(18) /-.256979083839113e+08/, &
-&d(19) /-.218293420832160e+09/, d(20) /-.196352378899103e+10/
+   & d(3)  /-.438850308641975e-01/, d(4)  /-.424628307898948e-01/, &
+   & d(5)  /-.626621634920323e-01/, d(6)  /-.124105896027275e+00/, &
+   & d(7)  /-.308253764901079e+00/, d(8)  /-.920479992412945e+00/, &
+   & d(9)  /-.321049358464862e+01/, d(10) /-.128072930807356e+02/, &
+   & d(11) /-.575083035139143e+02/, d(12) /-.287033237109221e+03/, &
+   & d(13) /-.157635730333710e+04/, d(14) /-.944635482309593e+04/, &
+   & d(15) /-.613357066638521e+05/, d(16) /-.428952400400069e+06/, &
+   & d(17) /-.321453652140086e+07/, d(18) /-.256979083839113e+08/, &
+   & d(19) /-.218293420832160e+09/, d(20) /-.196352378899103e+10/
 data d(21) /-.186439310881072e+11/, d(22) /-.186352996385294e+12/, &
-&d(23) /-.195588293238984e+13/, d(24) /-.215064446351972e+14/, &
-&d(25) /-.247236992290621e+15/, d(26) /-.296588243029521e+16/, &
-&d(27) /-.370624400063547e+17/, d(28) /-.481678264794522e+18/, &
-&d(29) /-.650098408075106e+19/, d(30) /-.909919826436541e+20/
+   & d(23) /-.195588293238984e+13/, d(24) /-.215064446351972e+14/, &
+   & d(25) /-.247236992290621e+15/, d(26) /-.296588243029521e+16/, &
+   & d(27) /-.370624400063547e+17/, d(28) /-.481678264794522e+18/, &
+   & d(29) /-.650098408075106e+19/, d(30) /-.909919826436541e+20/
 !------------------------
 !     c1 = pi**(-1/2)
 !     c2 = (2*pi)**(-1/2)
@@ -789,9 +789,9 @@ data c2 /.398942280401433/
 !     and xneg is the largest negative number for which exp(X) does
 !     not underflow.
 !
-                eps = spmpar(1)
-                xpos = exparg(0)
-                xneg = exparg(1)
+eps = spmpar(1)
+xpos = exparg(0)
+xneg = exparg(1)
 !
 !------------------------
 ierr = 0
@@ -809,15 +809,15 @@ v = abs(aimag(w))
 t = amax1(u,v)
 if (ind .ne. 0) go to 10
 !
-   if (t .eq. 0.0) go to 90
-   u1 = u/t
-   v1 = v/t
-   r = u*u1 + v*v1
-   xm = xpos
-   if (real(w) .lt. 0.0) xm = -xneg
-   if (u1 .ge. r*xm .or. v1 .ge. 0.1*r/eps) go to 90
-   zeta = z1*z/1.5
-   e = cexp(-zeta)
+if (t .eq. 0.0) go to 90
+u1 = u/t
+v1 = v/t
+r = u*u1 + v*v1
+xm = xpos
+if (real(w) .lt. 0.0) xm = -xneg
+if (u1 .ge. r*xm .or. v1 .ge. 0.1*r/eps) go to 90
+zeta = z1*z/1.5
+e = cexp(-zeta)
 !
 10 m = 20
 if (t .gt. 30.0) m = 8
@@ -849,23 +849,23 @@ u = abs(real(w))
 v = abs(aimag(w))
 t = amax1(u,v)
 !
-   if (t .eq. 0.0) go to 90
-   u1 = u/t
-   v1 = v/t
-   r = u*u1 + v*v1
-   if (ind .ne. 0) go to 40
-      if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
-      zeta = z1*zz/1.5
-      go to 50
+if (t .eq. 0.0) go to 90
+u1 = u/t
+v1 = v/t
+r = u*u1 + v*v1
+if (ind .ne. 0) go to 40
+if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
+zeta = z1*zz/1.5
+go to 50
 40 e = (0.0, 0.0)
-   j = (0.0, -1.0)
-   if (aimag(z) .lt. 0.0) j = (0.0, 1.0)
-   if (v1 .gt. 0.5*r*abs(xneg)) go to 50
-   if (u1 .ge. 0.05*r/eps) go to 90
-   zeta = z1*zz/1.5
-   e = cexp(2.0*j*zeta)
+j = (0.0, -1.0)
+if (aimag(z) .lt. 0.0) j = (0.0, 1.0)
+if (v1 .gt. 0.5*r*abs(xneg)) go to 50
+if (u1 .ge. 0.05*r/eps) go to 90
+zeta = z1*zz/1.5
+e = cexp(2.0*j*zeta)
 !
-50 w2 =  w*w
+50 w2 = w*w
 m = 15
 if (t .gt. 30.0) m = 5
 m2 = m + m
@@ -886,17 +886,17 @@ s2 = w*s2
 s4 = w*s4
 !
 if (ind .ne. 0) go to 70
-   cn = ccos(zeta)
-   si = csin(zeta)
-   go to 80
+cn = ccos(zeta)
+si = csin(zeta)
+go to 80
 70 cn = 0.5*(1.0 + e)
 si = 0.5*(1.0 - e)*j
 !
 80 alpha = s1 - s2
-beta  = s1 + s2
+beta = s1 + s2
 ai = c2*z2r*(alpha*cn + beta*si)
 alpha = s3 - s4
-beta  = s3 + s4
+beta = s3 + s4
 aip = c2*z2*(alpha*si - beta*cn)
 return
 !
@@ -927,18 +927,18 @@ ierr = 0
 a = real(z)
 b = aimag(z)
 r = cpabs(a,b)
-if(r .gt. 1.0) go to 10
+if (r .gt. 1.0) go to 10
 !
 !     Maclaurin expansion
 !
-   call airm(ind,z,ai,aip,bi,bip)
-   return
-10 if(r .gt. 9.6) go to 20
+call airm(ind,z,ai,aip,bi,bip)
+return
+10 if (r .gt. 9.6) go to 20
 !
 !     Intermediate range calculation
 !
-   call bii(ind,z,bi,bip,ierr)
-   return
+call bii(ind,z,bi,bip,ierr)
+return
 !
 !     Asymptotic expansion
 !
@@ -975,7 +975,7 @@ z1 = csqrt(z)
 z2 = z1*z/1.5
 e = cexp(-z2)
 e1 = 1.0/e
-if(real(z) .lt. 0.0) go to 10
+if (real(z) .lt. 0.0) go to 10
 !
 !               ----  real(z) .GE. 0  ----
 !
@@ -983,29 +983,29 @@ if (r .lt. 8.9) go to 5
 a = 0.156*r - 0.913
 if (abs(y) .lt. a*x .or. abs(y) .gt. 0.58*x) go to 40
 5 call ia(z2, w1, w2, w1m, w2m)
-   bi = c1*z1*(w1 + w1m)
-   bip = c1*z*(w2 + w2m)
-   if (ind .eq. 0) return
-   go to 20
+bi = c1*z1*(w1 + w1m)
+bip = c1*z*(w2 + w2m)
+if (ind .eq. 0) return
+go to 20
 !
 !               ----  real(z) .LT. 0  ----
 !
 10 if (r .lt. 8.1) go to 15
 if (abs(y) .lt. 3.89*abs(x)) go to 40
 15 zm = -z
-   z1 = csqrt(zm)
-   z2 = z1*zm/1.5
-   call ja(z2, w1, w2, w1m, w2m)
-   bi = c1*z1*(w1m -w1)
-   bip = c1*zm*(w2m + w2)
-   if (ind .eq. 0) return
+z1 = csqrt(zm)
+z2 = z1*zm/1.5
+call ja(z2, w1, w2, w1m, w2m)
+bi = c1*z1*(w1m - w1)
+bip = c1*zm*(w2m + w2)
+if (ind .eq. 0) return
 20 if (x .ge. c1*abs(y)) go to 30
-      bi = bi*e1
-      bip = bip*e1
-      return
+bi = bi*e1
+bip = bip*e1
+return
 30 bi = bi*e
-   bip = bip*e
-   return
+bip = bip*e
+return
 40 call bia(ind, z, bi, bip, ierr)
 return
 end subroutine bii
@@ -1018,47 +1018,47 @@ complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
 integer :: i, k, m, m2
 real :: c(30), c1, c2, c3, ce, cf, d(30), eps, r, s, sqt3, t, u, &
-&u1, v, v1, x, xneg, xpos, y
+   & u1, v, v1, x, xneg, xpos, y
 real :: exparg
 real :: spmpar
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, &
-&cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
+   & cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
 !---------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip for
 !     complex argument z by means of asymptotic expansions.
 !---------------------------------------------------------------
 !------------------------
 data c(1)  /.100000000000000e+01/, c(2)  /.694444444444444e-01/, &
-&c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
-&c(5)  /.576491904126697e-01/, c(6)  /.116099064025515e+00/, &
-&c(7)  /.291591399230751e+00/, c(8)  /.877666969510017e+00/, &
-&c(9)  /.307945303017317e+01/, c(10) /.123415733323452e+02/, &
-&c(11) /.556227853659171e+02/, c(12) /.278465080777603e+03/, &
-&c(13) /.153316943201280e+04/, c(14) /.920720659972641e+04/, &
-&c(15) /.598925135658791e+05/, c(16) /.419524875116551e+06/, &
-&c(17) /.314825741786683e+07/, c(18) /.251989198716024e+08/, &
-&c(19) /.214288036963680e+09/, c(20) /.192937554918249e+10/
+   & c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
+   & c(5)  /.576491904126697e-01/, c(6)  /.116099064025515e+00/, &
+   & c(7)  /.291591399230751e+00/, c(8)  /.877666969510017e+00/, &
+   & c(9)  /.307945303017317e+01/, c(10) /.123415733323452e+02/, &
+   & c(11) /.556227853659171e+02/, c(12) /.278465080777603e+03/, &
+   & c(13) /.153316943201280e+04/, c(14) /.920720659972641e+04/, &
+   & c(15) /.598925135658791e+05/, c(16) /.419524875116551e+06/, &
+   & c(17) /.314825741786683e+07/, c(18) /.251989198716024e+08/, &
+   & c(19) /.214288036963680e+09/, c(20) /.192937554918249e+10/
 data c(21) /.183357669378906e+11/, c(22) /.183418303528833e+12/, &
-&c(23) /.192647115897045e+13/, c(24) /.211969993886476e+14/, &
-&c(25) /.243826826879716e+15/, c(26) /.292659921929793e+16/, &
-&c(27) /.365903070126431e+17/, c(28) /.475768102036307e+18/, &
-&c(29) /.642404935790194e+19/, c(30) /.899520742705838e+20/
+   & c(23) /.192647115897045e+13/, c(24) /.211969993886476e+14/, &
+   & c(25) /.243826826879716e+15/, c(26) /.292659921929793e+16/, &
+   & c(27) /.365903070126431e+17/, c(28) /.475768102036307e+18/, &
+   & c(29) /.642404935790194e+19/, c(30) /.899520742705838e+20/
 !------------------------
 data d(1)  / .100000000000000e+01/, d(2)  /-.972222222222222e-01/, &
-&d(3)  /-.438850308641975e-01/, d(4)  /-.424628307898948e-01/, &
-&d(5)  /-.626621634920323e-01/, d(6)  /-.124105896027275e+00/, &
-&d(7)  /-.308253764901079e+00/, d(8)  /-.920479992412945e+00/, &
-&d(9)  /-.321049358464862e+01/, d(10) /-.128072930807356e+02/, &
-&d(11) /-.575083035139143e+02/, d(12) /-.287033237109221e+03/, &
-&d(13) /-.157635730333710e+04/, d(14) /-.944635482309593e+04/, &
-&d(15) /-.613357066638521e+05/, d(16) /-.428952400400069e+06/, &
-&d(17) /-.321453652140086e+07/, d(18) /-.256979083839113e+08/, &
-&d(19) /-.218293420832160e+09/, d(20) /-.196352378899103e+10/
+   & d(3)  /-.438850308641975e-01/, d(4)  /-.424628307898948e-01/, &
+   & d(5)  /-.626621634920323e-01/, d(6)  /-.124105896027275e+00/, &
+   & d(7)  /-.308253764901079e+00/, d(8)  /-.920479992412945e+00/, &
+   & d(9)  /-.321049358464862e+01/, d(10) /-.128072930807356e+02/, &
+   & d(11) /-.575083035139143e+02/, d(12) /-.287033237109221e+03/, &
+   & d(13) /-.157635730333710e+04/, d(14) /-.944635482309593e+04/, &
+   & d(15) /-.613357066638521e+05/, d(16) /-.428952400400069e+06/, &
+   & d(17) /-.321453652140086e+07/, d(18) /-.256979083839113e+08/, &
+   & d(19) /-.218293420832160e+09/, d(20) /-.196352378899103e+10/
 data d(21) /-.186439310881072e+11/, d(22) /-.186352996385294e+12/, &
-&d(23) /-.195588293238984e+13/, d(24) /-.215064446351972e+14/, &
-&d(25) /-.247236992290621e+15/, d(26) /-.296588243029521e+16/, &
-&d(27) /-.370624400063547e+17/, d(28) /-.481678264794522e+18/, &
-&d(29) /-.650098408075106e+19/, d(30) /-.909919826436541e+20/
+   & d(23) /-.195588293238984e+13/, d(24) /-.215064446351972e+14/, &
+   & d(25) /-.247236992290621e+15/, d(26) /-.296588243029521e+16/, &
+   & d(27) /-.370624400063547e+17/, d(28) /-.481678264794522e+18/, &
+   & d(29) /-.650098408075106e+19/, d(30) /-.909919826436541e+20/
 !-------------------------
 !     sqt3 = sqrt(3)
 !     ex3c = exp(-i*pi/3)
@@ -1085,9 +1085,9 @@ data c3/7.07106781186548e-01/
 !     and XNEG is the negative number of largest magnitude for
 !     which exp(X) does not underflow.
 !
-                eps = spmpar(1)
-                xpos = exparg(0)
-                xneg = exparg(1)
+eps = spmpar(1)
+xpos = exparg(0)
+xneg = exparg(1)
 !
 !------------------------
 ierr = 0
@@ -1106,13 +1106,13 @@ u = abs(real(w))
 v = abs(aimag(w))
 t = amax1(u, v)
 if (ind .ne. 0) go to 10
-   if (t .eq. 0.0) go to 90
-      u1 = u/t
-      v1 = v/t
-      r = u*u1 + v*v1
-      if (u1 .ge. r*xpos .or. v1 .ge. 0.1*r/eps) go to 90
-         zeta = z1*z/1.5
-         e = cexp(zeta)
+if (t .eq. 0.0) go to 90
+u1 = u/t
+v1 = v/t
+r = u*u1 + v*v1
+if (u1 .ge. r*xpos .or. v1 .ge. 0.1*r/eps) go to 90
+zeta = z1*z/1.5
+e = cexp(zeta)
 !
 10 m = 20
 t = amax1(x, abs(y))
@@ -1129,9 +1129,9 @@ do 20 k = 2,m
 bi = c1*z2r*s1
 bip = c1*z2*s2
 if (ind .ne. 0) return
-   bi = e*bi
-   bip = e*bip
-   return
+bi = e*bi
+bip = e*bip
+return
 30 if (x .lt. 0.0) go to 50
 !
 !          ----  PI/6 .LT. abs(ARG(z)) .LE. PI/2  ----
@@ -1151,35 +1151,35 @@ v = abs(aimag(w))
 t = amax1(u, v)
 !
 if (t .eq. 0.0) go to 90
-   u1 = u/t
-   v1 = v/t
-   r = u*u1 + v*v1
-   if (ind .ne. 0) go to 40
-      if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
-         zeta = z1*zz/1.5
-         cn = ccos(zeta - cln2)
-         si = csin(zeta - cln2)
-         go to 70
+u1 = u/t
+v1 = v/t
+r = u*u1 + v*v1
+if (ind .ne. 0) go to 40
+if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
+zeta = z1*zz/1.5
+cn = ccos(zeta - cln2)
+si = csin(zeta - cln2)
+go to 70
 !
 !        e = exp(-2*i*(zeta - CLN2)) IF abs(ARG(zz)) .LE. PI/3
 !        e = exp( 2*i*(zeta - CLN2)) IF abs(ARG(zz)) .GT. PI/3
 !
 40 e = (0.0, 0.0)
-   j = (0.0, -1.0)
-   s = 1.0
-   ce = 1.0
-   cf = 0.5
-   if (aimag(zz) .le. 0.0) go to 44
-      s = -1.0
-      ce = 0.5
-      cf = 2.0
+j = (0.0, -1.0)
+s = 1.0
+ce = 1.0
+cf = 0.5
+if (aimag(zz) .le. 0.0) go to 44
+s = -1.0
+ce = 0.5
+cf = 2.0
 44 if (v1 .ge. 0.5*r*abs(xneg)) go to 45
-   if (u1 .ge. 0.05*r/eps) go to 90
-   zeta = z1*zz/1.5
-   e = cf*cexp(2.0*s*j*zeta)
+if (u1 .ge. 0.05*r/eps) go to 90
+zeta = z1*zz/1.5
+e = cf*cexp(2.0*s*j*zeta)
 45 cn = ce*c3*(1 + e)
-   si = ce*s*c3*(1 - e)*j
-   go to 70
+si = ce*s*c3*(1 - e)*j
+go to 70
 !
 !                  ----  real(z) .LT. 0  ----
 !
@@ -1197,62 +1197,62 @@ v = abs(aimag(w))
 t = amax1(u, v)
 !
 if (t .eq. 0.0) go to 90
-   u1 = u/t
-   v1 = v/t
-   r = u*u1 + v*v1
-   if (ind .ne. 0) go to 60
-      if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
-         zeta = z1*zz/1.5
-         cn = ccos(zeta)
-         si = csin(zeta)
-         go to 70
+u1 = u/t
+v1 = v/t
+r = u*u1 + v*v1
+if (ind .ne. 0) go to 60
+if (v1 .ge. r*xpos .or. u1 .ge. 0.1*r/eps) go to 90
+zeta = z1*zz/1.5
+cn = ccos(zeta)
+si = csin(zeta)
+go to 70
 60 e = (0.0, 0.0)
-   j = (0.0, -1.0)
-   if (v1 .ge. 0.5*r*abs(xneg)) go to 65
-   if (u1 .ge. 0.05*r/eps) go to 90
-   zeta = z1*zz/1.5
-   e = cexp(2.0*j*zeta)
+j = (0.0, -1.0)
+if (v1 .ge. 0.5*r*abs(xneg)) go to 65
+if (u1 .ge. 0.05*r/eps) go to 90
+zeta = z1*zz/1.5
+e = cexp(2.0*j*zeta)
 65 cn = 0.5*(1.0 + e)
-   si = 0.5*(1.0 - e)*j
+si = 0.5*(1.0 - e)*j
 !
 70 w2 = w*w
 m = 15
 t = amax1(abs(x), abs(y))
 if (t .gt. 30.0) m = 5
-   m2 = m + m
-   i = m2 - 1
-   s1 = cmplx(c(i), 0.0)
-   s2 = cmplx(c(m2), 0.0)
-   s3 = cmplx(d(i), 0.0)
-   s4 = cmplx(d(m2), 0.0)
-   do k = 2,m
-      i = i - 1
-      s2 = c(i) - s2*w2
-      s4 = d(i) - s4*w2
-      i = i - 1
-      s1 = c(i) - s1*w2
-      s3 = d(i) - s3*w2
-   end do
-   s2 = w*s2
-   s4 = w*s4
-   if (x .ge. 0.0) go to 81
-      alpha = s1 + s2
-      beta = s2 - s1
-      go to 82
+m2 = m + m
+i = m2 - 1
+s1 = cmplx(c(i), 0.0)
+s2 = cmplx(c(m2), 0.0)
+s3 = cmplx(d(i), 0.0)
+s4 = cmplx(d(m2), 0.0)
+do k = 2,m
+   i = i - 1
+   s2 = c(i) - s2*w2
+   s4 = d(i) - s4*w2
+   i = i - 1
+   s1 = c(i) - s1*w2
+   s3 = d(i) - s3*w2
+end do
+s2 = w*s2
+s4 = w*s4
+if (x .ge. 0.0) go to 81
+alpha = s1 + s2
+beta = s2 - s1
+go to 82
 81 alpha = s1 - s2
-   beta = s1 + s2
+beta = s1 + s2
 82 bi = cf1*(alpha*cn + beta*si)
-   if (x .ge. 0.0) go to 83
-      alpha = s3 - s4
-      beta = s3 + s4
-      go to 84
+if (x .ge. 0.0) go to 83
+alpha = s3 - s4
+beta = s3 + s4
+go to 84
 83 alpha = s3 + s4
-   beta = s4 - s3
+beta = s4 - s3
 84 bip = cf2*(alpha*cn + beta*si)
-   if (y .ge. 0.0) return
-   bi = conjg(bi)
-   bip = conjg(bip)
-   return
+if (y .ge. 0.0) return
+bi = conjg(bi)
+bip = conjg(bip)
+return
 !
 !            RETURN WITH ZERO VALUES IF SCALING IS NEEDED.
 !
@@ -1285,29 +1285,29 @@ data ex13/(5.0e-01, 8.66025403784439e-01)/
 data ex13c/(5.0e-01, -8.66025403784439e-01)/
 data ex23/(-5.0e-01, 8.66025403784439e-01)/
 data ex23c/(-5.0e-01, -8.66025403784439e-01)/
-if(real(z) .ge. 0.0) go to 20
-   cz = -z
+if (real(z) .ge. 0.0) go to 20
+cz = -z
 !
 !     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.
 !
-   call imc(cz, i1, i2, i1m, i2m)
+call imc(cz, i1, i2, i1m, i2m)
 !
 !     Final assembly
 !
-   if(aimag(z) .lt. 0.0) go to 10
-      i1 = ex13*i1
-      i2 = ex23*i2
-      i1m = ex13c*i1m
-      i2m = ex23c*i2m
-      return
+if (aimag(z) .lt. 0.0) go to 10
+i1 = ex13*i1
+i2 = ex23*i2
+i1m = ex13c*i1m
+i2m = ex23c*i2m
+return
 10 i1 = ex13c*i1
-   i2 = ex23c*i2
-   i1m = ex13*i1m
-   i2m = ex23*i2m
-   return
+i2 = ex23c*i2
+i1m = ex13*i1m
+i2m = ex23*i2m
+return
 20 call imc(z, i1, i2, i1m, i2m)
-   return
-   end subroutine ia
+return
+end subroutine ia
 
 subroutine imc(z, i1, i2, i1m, i2m)
 implicit none
@@ -1414,10 +1414,10 @@ w = t
 !     Summation of Maclaurin expansion
 !
 10 m = m + 1.0
-   d = m*(cn + m)
-   t = t*(sz/d)
-   w = w + t
-   if(anorm(t) .gt. eps*anorm(w)) go to 10
+d = m*(cn + m)
+t = t*(sz/d)
+w = w + t
+if (anorm(t) .gt. eps*anorm(w)) go to 10
 !
 w = w + 1.0
 return
@@ -1446,29 +1446,29 @@ data ex13/(5.0e-01, 8.66025403784439e-01)/
 data ex13c/(5.0e-01, -8.66025403784439e-01)/
 data ex23/(-5.0e-01, 8.66025403784439e-01)/
 data ex23c/(-5.0e-01, -8.66025403784439e-01)/
-if(real(z) .ge. 0.0) go to 20
-   cz = -z
+if (real(z) .ge. 0.0) go to 20
+cz = -z
 !
 !     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.0
 !
-   call jmc(cz, i1, i2, i1m, i2m)
+call jmc(cz, i1, i2, i1m, i2m)
 !
 !     Final assembly
 !
-   if(aimag(z) .lt. 0.0) go to 10
-      i1 = ex13*i1
-      i2 = ex23*i2
-      i1m = ex13c*i1m
-      i2m = ex23c*i2m
-      return
+if (aimag(z) .lt. 0.0) go to 10
+i1 = ex13*i1
+i2 = ex23*i2
+i1m = ex13c*i1m
+i2m = ex23c*i2m
+return
 10 i1 = ex13c*i1
-   i2 = ex23c*i2
-   i1m = ex13*i1m
-   i2m = ex23*i2m
-   return
+i2 = ex23c*i2
+i1m = ex13*i1m
+i2m = ex23*i2m
+return
 20 call jmc(z, i1, i2, i1m, i2m)
-   return
-   end subroutine ja
+return
+end subroutine ja
 
 subroutine jmc(z, i1, i2, i1m, i2m)
 implicit none
@@ -1575,10 +1575,10 @@ w = t
 !     Summation of Maclaurin expansion
 !
 10 m = m + 1.0
-   d = m*(cn + m)
-   t = t*(sz/d)
-   w = w + t
-   if(anorm(t) .gt. eps*anorm(w)) go to 10
+d = m*(cn + m)
+t = t*(sz/d)
+w = w + t
+if (anorm(t) .gt. eps*anorm(w)) go to 10
 !
 w = w + 1.0
 return
@@ -1613,26 +1613,26 @@ if (abs(b) .lt. -0.5*a) go to 10
 !
 !            ----  abs(b) .GE. -0.5*a  ----
 !
-   call kml(ind, z, k1, k2)
-   return
+call kml(ind, z, k1, k2)
+return
 !
 !            ----  abs(b) .LT. -0.5*a  ----
 !
 10 cz = -z
-   if(aimag(z) .lt. 0.0) cz = conjg(cz)
-   ind1 = 0
-   call kml(ind1, cz, k1, k2)
-   call imc(cz, i1, i2, i1m, i2m)
-   k1 = ex13c*k1 - j*pi*i1
-   k2 = ex23c*k2 - j*pi*i2
-   if (ind .eq. 0) go to 20
-   e = cexp(z)
-   k1 = k1*e
-   k2 = k2*e
-20 if(aimag(z) .ge. 0.0) return
-      k1 = conjg(k1)
-      k2 = conjg(k2)
-      return
+if (aimag(z) .lt. 0.0) cz = conjg(cz)
+ind1 = 0
+call kml(ind1, cz, k1, k2)
+call imc(cz, i1, i2, i1m, i2m)
+k1 = ex13c*k1 - j*pi*i1
+k2 = ex23c*k2 - j*pi*i2
+if (ind .eq. 0) go to 20
+e = cexp(z)
+k1 = k1*e
+k2 = k2*e
+20 if (aimag(z) .ge. 0.0) return
+k1 = conjg(k1)
+k2 = conjg(k2)
+return
 end subroutine ka
 
 subroutine kml(ind, z, k1, k2)
@@ -1667,7 +1667,7 @@ a = 3.0/(1.0 + r)
 b = 14.7/(28.0 + r)
 c = 2.0/(c1*eps*(2.0*r)**(0.25))
 m = (0.485/r)*(alog(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-&(2.0*cos(b*th))**2 + 1.5
+   & (2.0*cos(b*th))**2 + 1.5
 !
 !     Backward recurrence in Miller algorithm.
 !
@@ -1688,12 +1688,12 @@ do 10 i = 1, m
 !     Final assembly
 !
 k1 = c1*u1/(s*csqrt(z))
-k2 = k1*(z  + 1.0/6.0 - u2/u1)/z
+k2 = k1*(z + 1.0/6.0 - u2/u1)/z
 if (ind .ne. 0) return
-   e = cexp(-z)
-   k1 = k1*e
-   k2 = k2*e
-   return
+e = cexp(-z)
+k1 = k1*e
+k2 = k2*e
+return
 end subroutine kml
 
 real function ai(x)
@@ -1701,11 +1701,11 @@ implicit none
 real, intent(in) :: x
 integer :: n, n2
 real :: ad0, ad1, ad2, ad3, an0, an1, an2, an3, an4, an5, an6, &
-&an7, an8, an9, bd0, bd1, bd2, bd3, bd4, bd5, bn0, bn1, bn2, bn3, &
-&bn4, bn5, bn6, bn7, c, pd0, pd1, pd2, pd3, pd4, pd5, phi, pn0, &
-&pn1, pn2, pn3, pn4, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, &
-&qn3, qn4, qn5, r, rd0, rd1, rd2, rd3, rd4, rd5, rn0, rn1, rn2, &
-&rn3, rn4, rtx, t, w, x0
+   & an7, an8, an9, bd0, bd1, bd2, bd3, bd4, bd5, bn0, bn1, bn2, bn3, &
+   & bn4, bn5, bn6, bn7, c, pd0, pd1, pd2, pd3, pd4, pd5, phi, pn0, &
+   & pn1, pn2, pn3, pn4, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, &
+   & qn3, qn4, qn5, r, rd0, rd1, rd2, rd3, rd4, rd5, rn0, rn1, rn2, &
+   & rn3, rn4, rtx, t, w, x0
 real :: exparg
 !-----------------------------------------------------------------------
 !     Evaluation of the Airy function ai(x)
@@ -1717,41 +1717,41 @@ data x0/1.58740105196820/
 data c /1.94773404105468/
 !-----------------------
 data an0/ .355028053887818e+00/, an1/-.187394912983414e+00/, &
-&an2/-.383735973881972e-01/, an3/ .491952571236878e-01/, &
-&an4/-.967017625191329e-02/, an5/-.205648610308316e-02/, &
-&an6/ .114176040526844e-02/, an7/-.117114823456866e-03/, &
-&an8/-.270165470074755e-04/, an9/ .789002965889206e-05/
+   & an2/-.383735973881972e-01/, an3/ .491952571236878e-01/, &
+   & an4/-.967017625191329e-02/, an5/-.205648610308316e-02/, &
+   & an6/ .114176040526844e-02/, an7/-.117114823456866e-03/, &
+   & an8/-.270165470074755e-04/, an9/ .789002965889206e-05/
 data ad0/ .100000000000000e+01/, ad1/ .201179850513612e+00/, &
-&ad2/ .385762517106249e-01/, ad3/ .230887443780120e-04/
+   & ad2/ .385762517106249e-01/, ad3/ .230887443780120e-04/
 !-----------------------
 data bn0/ .355028053887817e+00/, bn1/-.997169317338190e-01/, &
-&bn2/-.602216060213075e-01/, bn3/ .297705337630730e-01/, &
-&bn4/-.152969932286570e-02/, bn5/-.147868368189372e-02/, &
-&bn6/ .350518617006107e-03/, bn7/-.257766924610873e-04/
+   & bn2/-.602216060213075e-01/, bn3/ .297705337630730e-01/, &
+   & bn4/-.152969932286570e-02/, bn5/-.147868368189372e-02/, &
+   & bn6/ .350518617006107e-03/, bn7/-.257766924610873e-04/
 data bd0/.100000000000000e+01/, bd1/.448140563306831e+00/, &
-&bd2/.157074537566686e+00/, bd3/.316964519364865e-01/, &
-&bd4/.485922740843953e-02/, bd5/.423326964456309e-03/
+   & bd2/.157074537566686e+00/, bd3/.316964519364865e-01/, &
+   & bd4/.485922740843953e-02/, bd5/.423326964456309e-03/
 !-----------------------
 data pn0/.282094378896566e+00/, pn1/.807868561687271e-01/, &
-&pn2/.630644564152247e-02/, pn3/.147116711467936e-03/, &
-&pn4/.750490748341483e-06/
+   & pn2/.630644564152247e-02/, pn3/.147116711467936e-03/, &
+   & pn4/.750490748341483e-06/
 data pd0/.100000000000000e+01/, pd1/.292890323271551e+00/, &
-&pd2/.239376862143358e-01/, pd3/.612353984250624e-03/, &
-&pd4/.384461189764830e-05/, pd5/.123247804102182e-08/
+   & pd2/.239376862143358e-01/, pd3/.612353984250624e-03/, &
+   & pd4/.384461189764830e-05/, pd5/.123247804102182e-08/
 !-----------------------
 data qn0/.282094791017188e+00/, qn1/.149585822742689e+00/, &
-&qn2/.241876418864958e-01/, qn3/.138190913282142e-02/, &
-&qn4/.241862862465003e-04/, qn5/.709733720554615e-07/
+   & qn2/.241876418864958e-01/, qn3/.138190913282142e-02/, &
+   & qn4/.241862862465003e-04/, qn5/.709733720554615e-07/
 data qd0/.100000000000000e+01/, qd1/.536778341756648e+00/, &
-&qd2/.889112579703465e-01/, qd3/.533368703697049e-02/, &
-&qd4/.103812739863315e-03/, qd5/.408838544650398e-06/
+   & qd2/.889112579703465e-01/, qd3/.533368703697049e-02/, &
+   & qd4/.103812739863315e-03/, qd5/.408838544650398e-06/
 !-----------------------
 data rn0/.282094791773878e+00/, rn1/.203731967781874e+00/, &
-&rn2/.436660479870037e-01/, rn3/.306595563073142e-02/, &
-&rn4/.517398800281618e-04/
+   & rn2/.436660479870037e-01/, rn3/.306595563073142e-02/, &
+   & rn4/.517398800281618e-04/
 data rd0/.100000000000000e+01/, rd1/.728721438361672e+00/, &
-&rd2/.159210021472267e+00/, rd3/.116985268534248e-01/, &
-&rd4/.225973894323078e-03/, rd5/.232707159780478e-06/
+   & rd2/.159210021472267e+00/, rd3/.116985268534248e-01/, &
+   & rd4/.225973894323078e-03/, rd5/.232707159780478e-06/
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
 call aimp (-x, r, phi)
@@ -1760,35 +1760,35 @@ return
 !
 10 if (x .ge. 0.0) go to 20
 ai = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
-&+ an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
-&(((ad3*x + ad2)*x + ad1)*x + ad0)
+   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
 !
 20 if (x .ge. 1.0) go to 30
 ai = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
-&+ bn1)*x + bn0) / &
-&(((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
+   & + bn1)*x + bn0) / &
+   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
 return
 !
 30 rtx = sqrt(x)
 if (x .gt. x0) go to 40
 t = 16.0/(x*rtx)
 w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
-&(((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
+   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
 ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
 return
 !
 40 if (x .gt. 4.0d0) go to 50
 t = 16.0/(x*rtx)
 w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
-&(((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
+   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
 ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
 return
 !
 50 if (x*rtx .gt. 1.5*exparg(0)) go to 60
 t = 16.0/(x*rtx)
 w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
-&(((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
+   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
 n = rtx
 n2 = n*n
 t = (x - n2)/(rtx + n)
@@ -1803,11 +1803,11 @@ real function aie(x)
 implicit none
 real, intent(in) :: x
 real :: ad0, ad1, ad2, ad3, an0, an1, an2, an3, an4, an5, an6, &
-&an7, an8, an9, bd0, bd1, bd2, bd3, bd4, bd5, bn0, bn1, bn2, bn3, &
-&bn4, bn5, bn6, bn7, pd0, pd1, pd2, pd3, pd4, pd5, phi, pn0, pn1, &
-&pn2, pn3, pn4, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, qn3, &
-&qn4, qn5, r, rd0, rd1, rd2, rd3, rd4, rd5, rn0, rn1, rn2, rn3, &
-&rn4, rtx, t, w, x0
+   & an7, an8, an9, bd0, bd1, bd2, bd3, bd4, bd5, bn0, bn1, bn2, bn3, &
+   & bn4, bn5, bn6, bn7, pd0, pd1, pd2, pd3, pd4, pd5, phi, pn0, pn1, &
+   & pn2, pn3, pn4, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, qn3, &
+   & qn4, qn5, r, rd0, rd1, rd2, rd3, rd4, rd5, rn0, rn1, rn2, rn3, &
+   & rn4, rtx, t, w, x0
 !-----------------------------------------------------------------------
 !
 !                   Scaled Airy function ai(x)
@@ -1824,41 +1824,41 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an2, an3, an4, an5, an6, &
 data x0/.158740105196820e+01/
 !-----------------------
 data an0/ .355028053887818e+00/, an1/-.187394912983414e+00/, &
-&an2/-.383735973881972e-01/, an3/ .491952571236878e-01/, &
-&an4/-.967017625191329e-02/, an5/-.205648610308316e-02/, &
-&an6/ .114176040526844e-02/, an7/-.117114823456866e-03/, &
-&an8/-.270165470074755e-04/, an9/ .789002965889206e-05/
+   & an2/-.383735973881972e-01/, an3/ .491952571236878e-01/, &
+   & an4/-.967017625191329e-02/, an5/-.205648610308316e-02/, &
+   & an6/ .114176040526844e-02/, an7/-.117114823456866e-03/, &
+   & an8/-.270165470074755e-04/, an9/ .789002965889206e-05/
 data ad0/ .100000000000000e+01/, ad1/ .201179850513612e+00/, &
-&ad2/ .385762517106249e-01/, ad3/ .230887443780120e-04/
+   & ad2/ .385762517106249e-01/, ad3/ .230887443780120e-04/
 !-----------------------
 data bn0/ .355028053887817e+00/, bn1/-.997169317338190e-01/, &
-&bn2/-.602216060213075e-01/, bn3/ .297705337630730e-01/, &
-&bn4/-.152969932286570e-02/, bn5/-.147868368189372e-02/, &
-&bn6/ .350518617006107e-03/, bn7/-.257766924610873e-04/
+   & bn2/-.602216060213075e-01/, bn3/ .297705337630730e-01/, &
+   & bn4/-.152969932286570e-02/, bn5/-.147868368189372e-02/, &
+   & bn6/ .350518617006107e-03/, bn7/-.257766924610873e-04/
 data bd0/.100000000000000e+01/, bd1/.448140563306831e+00/, &
-&bd2/.157074537566686e+00/, bd3/.316964519364865e-01/, &
-&bd4/.485922740843953e-02/, bd5/.423326964456309e-03/
+   & bd2/.157074537566686e+00/, bd3/.316964519364865e-01/, &
+   & bd4/.485922740843953e-02/, bd5/.423326964456309e-03/
 !-----------------------
 data pn0/.282094378896566e+00/, pn1/.807868561687271e-01/, &
-&pn2/.630644564152247e-02/, pn3/.147116711467936e-03/, &
-&pn4/.750490748341483e-06/
+   & pn2/.630644564152247e-02/, pn3/.147116711467936e-03/, &
+   & pn4/.750490748341483e-06/
 data pd0/.100000000000000e+01/, pd1/.292890323271551e+00/, &
-&pd2/.239376862143358e-01/, pd3/.612353984250624e-03/, &
-&pd4/.384461189764830e-05/, pd5/.123247804102182e-08/
+   & pd2/.239376862143358e-01/, pd3/.612353984250624e-03/, &
+   & pd4/.384461189764830e-05/, pd5/.123247804102182e-08/
 !-----------------------
 data qn0/.282094791017188e+00/, qn1/.149585822742689e+00/, &
-&qn2/.241876418864958e-01/, qn3/.138190913282142e-02/, &
-&qn4/.241862862465003e-04/, qn5/.709733720554615e-07/
+   & qn2/.241876418864958e-01/, qn3/.138190913282142e-02/, &
+   & qn4/.241862862465003e-04/, qn5/.709733720554615e-07/
 data qd0/.100000000000000e+01/, qd1/.536778341756648e+00/, &
-&qd2/.889112579703465e-01/, qd3/.533368703697049e-02/, &
-&qd4/.103812739863315e-03/, qd5/.408838544650398e-06/
+   & qd2/.889112579703465e-01/, qd3/.533368703697049e-02/, &
+   & qd4/.103812739863315e-03/, qd5/.408838544650398e-06/
 !-----------------------
 data rn0/.282094791773878e+00/, rn1/.203731967781874e+00/, &
-&rn2/.436660479870037e-01/, rn3/.306595563073142e-02/, &
-&rn4/.517398800281618e-04/
+   & rn2/.436660479870037e-01/, rn3/.306595563073142e-02/, &
+   & rn4/.517398800281618e-04/
 data rd0/.100000000000000e+01/, rd1/.728721438361672e+00/, &
-&rd2/.159210021472267e+00/, rd3/.116985268534248e-01/, &
-&rd4/.225973894323078e-03/, rd5/.232707159780478e-06/
+   & rd2/.159210021472267e+00/, rd3/.116985268534248e-01/, &
+   & rd4/.225973894323078e-03/, rd5/.232707159780478e-06/
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
 call aimp (-x, r, phi)
@@ -1867,14 +1867,14 @@ return
 !
 10 if (x .ge. 0.0) go to 20
 aie = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
-&+ an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
-&(((ad3*x + ad2)*x + ad1)*x + ad0)
+   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
 !
 20 if (x .ge. 1.0) go to 30
 aie = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
-&+ bn1)*x + bn0) / &
-&(((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
+   & + bn1)*x + bn0) / &
+   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
 if (x .gt. 1.e-20) aie = aie * exp(2.0*x*sqrt(x)/3.0)
 return
 !
@@ -1882,21 +1882,21 @@ return
 if (x .gt. x0) go to 40
 t = 16.0/(x*rtx)
 w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
-&(((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
+   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
 aie = w/sqrt(rtx)
 return
 !
 40 if (x .gt. 4.0d0) go to 50
 t = 16.0/(x*rtx)
 w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
-&(((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
+   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
 aie = w/sqrt(rtx)
 return
 !
 50 if (x .gt. 1.e20) go to 60
 t = 16.0/(x*rtx)
 w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
-&(((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
+   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
 aie = w/sqrt(rtx)
 return
 !
@@ -1909,13 +1909,13 @@ implicit none
 real, intent(in) :: x
 integer :: n, n2
 real :: ad0, ad1, ad2, ad3, an0, an1, an10, an2, an3, an4, an5, &
-&an6, an7, an8, an9, bd0, bd1, bd2, bd3, bn0, bn1, bn10, bn2, bn3, &
-&bn4, bn5, bn6, bn7, bn8, bn9, c, pd0, pd1, pd2, pd3, pd4, pd5, &
-&pd6, pd7, phi, pn0, pn1, pn2, pn3, pn4, pn5, pn6, qd0, qd1, qd2, &
-&qd3, qd4, qd5, qd6, qd7, qd8, qn0, qn1, qn2, qn3, qn4, qn5, qn6, &
-&qn7, r, rd0, rd1, rd2, rn0, rn1, rn10, rn11, rn2, rn3, rn4, rn5, &
-&rn6, rn7, rn8, rn9, rtx, sd0, sd1, sn0, sn1, sn10, sn11, sn12, &
-&sn13, sn2, sn3, sn4, sn5, sn6, sn7, sn8, sn9, t, w, x0
+   & an6, an7, an8, an9, bd0, bd1, bd2, bd3, bn0, bn1, bn10, bn2, bn3, &
+   & bn4, bn5, bn6, bn7, bn8, bn9, c, pd0, pd1, pd2, pd3, pd4, pd5, &
+   & pd6, pd7, phi, pn0, pn1, pn2, pn3, pn4, pn5, pn6, qd0, qd1, qd2, &
+   & qd3, qd4, qd5, qd6, qd7, qd8, qn0, qn1, qn2, qn3, qn4, qn5, qn6, &
+   & qn7, r, rd0, rd1, rd2, rn0, rn1, rn10, rn11, rn2, rn3, rn4, rn5, &
+   & rn6, rn7, rn8, rn9, rtx, sd0, sd1, sn0, sn1, sn10, sn11, sn12, &
+   & sn13, sn2, sn3, sn4, sn5, sn6, sn7, sn8, sn9, t, w, x0
 real :: exparg
 !-----------------------------------------------------------------------
 !
@@ -1933,58 +1933,58 @@ data x0/6.3496042078728/
 data c /1.94773404105468/
 !-----------------------
 data an0/ .614926627446001e+00/, an1/ .462726943978834e+00/, &
-&an2/ .867811386408974e-02/, an3/ .974670609357959e-01/, &
-&an4/ .370856545413908e-01/, an5/ .569193415071716e-03/, &
-&an6/ .269172131237236e-02/, an7/ .746473849872868e-03/, &
-&an8/ .105638036899269e-04/, an9/ .242726195973978e-04/, &
-&an10/.557260250681542e-05/
+   & an2/ .867811386408974e-02/, an3/ .974670609357959e-01/, &
+   & an4/ .370856545413908e-01/, an5/ .569193415071716e-03/, &
+   & an6/ .269172131237236e-02/, an7/ .746473849872868e-03/, &
+   & an8/ .105638036899269e-04/, an9/ .242726195973978e-04/, &
+   & an10/.557260250681542e-05/
 data ad0/ .100000000000000e+01/, ad1/ .234801779278695e-01/, &
-&ad2/-.300487317759152e-02/, ad3/-.597414466459612e-02/
+   & ad2/-.300487317759152e-02/, ad3/-.597414466459612e-02/
 !-----------------------
 data bn0/ .614926627446001e+00/, bn1/ .548653374523520e+00/, &
-&bn2/ .582684047163842e-01/, bn3/ .871954925712688e-01/, &
-&bn4/ .508547058449004e-01/, bn5/ .361412623711710e-02/, &
-&bn6/ .177269722794511e-02/, bn7/ .117774184027185e-02/, &
-&bn8/ .627004834186143e-04/, bn9/ .774782269814080e-06/, &
-&bn10/.118116474369315e-04/
+   & bn2/ .582684047163842e-01/, bn3/ .871954925712688e-01/, &
+   & bn4/ .508547058449004e-01/, bn5/ .361412623711710e-02/, &
+   & bn6/ .177269722794511e-02/, bn7/ .117774184027185e-02/, &
+   & bn8/ .627004834186143e-04/, bn9/ .774782269814080e-06/, &
+   & bn10/.118116474369315e-04/
 data bd0/ .100000000000000e+01/, bd1/ .163214622184402e+00/, &
-&bd2/-.242285981710408e-01/, bd3/-.720554280297616e-02/
+   & bd2/-.242285981710408e-01/, bd3/-.720554280297616e-02/
 !-----------------------
 data pn0/.619911943572678e+00/, pn1/.100411558489626e+01/, &
-&pn2/.563659963795768e+00/, pn3/.274925508033015e+00/, &
-&pn4/.115641822943246e+00/, pn5/.120048517441127e-01/, &
-&pn6/.501838091254330e-02/
+   & pn2/.563659963795768e+00/, pn3/.274925508033015e+00/, &
+   & pn4/.115641822943246e+00/, pn5/.120048517441127e-01/, &
+   & pn6/.501838091254330e-02/
 data pd0/.100000000000000e+01/, pd1/.159751878026937e+01/, &
-&pd2/.104664867034140e+01/, pd3/.512560333664022e+00/, &
-&pd4/.159144727666995e+00/, pd5/.394456748956258e-01/, &
-&pd6/.529926873250079e-02/, pd7/.288921845412576e-03/
+   & pd2/.104664867034140e+01/, pd3/.512560333664022e+00/, &
+   & pd4/.159144727666995e+00/, pd5/.394456748956258e-01/, &
+   & pd6/.529926873250079e-02/, pd7/.288921845412576e-03/
 !-----------------------
 data qn0/.595123543430856e+00/, qn1/.652692120245803e+00/, &
-&qn2/.436851872835894e+00/, qn3/.201626141057807e+00/, &
-&qn4/.649535170626944e-01/, qn5/.171798867787816e-01/, &
-&qn6/.287998748038892e-02/, qn7/.359634362348937e-03/
+   & qn2/.436851872835894e+00/, qn3/.201626141057807e+00/, &
+   & qn4/.649535170626944e-01/, qn5/.171798867787816e-01/, &
+   & qn6/.287998748038892e-02/, qn7/.359634362348937e-03/
 data qd0/.100000000000000e+01/, qd1/.114259871204893e+01/, &
-&qd2/.766390439057101e+00/, qd3/.348287281255683e+00/, &
-&qd4/.117049276946157e+00/, qd5/.294545450289541e-01/, &
-&qd6/.523951773968125e-02/, qd7/.622692248774973e-03/, &
-&qd8/.674811395957744e-06/
+   & qd2/.766390439057101e+00/, qd3/.348287281255683e+00/, &
+   & qd4/.117049276946157e+00/, qd5/.294545450289541e-01/, &
+   & qd6/.523951773968125e-02/, qd7/.622692248774973e-03/, &
+   & qd8/.674811395957744e-06/
 !-----------------------
 data rn0 / .568067636505865e+00/, rn1 / .462183136291541e-01/, &
-&rn2 / .268519638203645e+00/, rn3 / .199427104235673e-02/, &
-&rn4 / .135599161332010e-03/, rn5 / .229937707171804e-04/, &
-&rn6 / .697888081361175e-05/, rn7 / .153277172934286e-05/, &
-&rn8 /-.149322381877245e-05/, rn9 /-.113533571972859e-05/, &
-&rn10/ .740721412702102e-06/, rn11/-.120160431596119e-06/
+   & rn2 / .268519638203645e+00/, rn3 / .199427104235673e-02/, &
+   & rn4 / .135599161332010e-03/, rn5 / .229937707171804e-04/, &
+   & rn6 / .697888081361175e-05/, rn7 / .153277172934286e-05/, &
+   & rn8 /-.149322381877245e-05/, rn9 /-.113533571972859e-05/, &
+   & rn10/ .740721412702102e-06/, rn11/-.120160431596119e-06/
 data rd0 / .100000000000000e+01/, rd1 / .741293424676788e-01/, &
-&rd2 / .471695968238457e+00/
+   & rd2 / .471695968238457e+00/
 !-----------------------
 data sn0 /.564189583547757e+00/, sn1 / .112605519585866e+00/, &
-&sn2 /.893329124921909e-03/, sn3 / .532139134120350e-04/, &
-&sn4 /.592725458717738e-05/, sn5 / .921448923850546e-06/, &
-&sn6 /.404558310611815e-06/, sn7 /-.660517686759109e-06/, &
-&sn8 /.174667472383815e-05/, sn9 /-.287037710548882e-05/, &
-&sn10/.322304072982791e-05/, sn11/-.231569499551950e-05/, &
-&sn12/.963478964685941e-06/, sn13/-.173784488565533e-06/
+   & sn2 /.893329124921909e-03/, sn3 / .532139134120350e-04/, &
+   & sn4 /.592725458717738e-05/, sn5 / .921448923850546e-06/, &
+   & sn6 /.404558310611815e-06/, sn7 /-.660517686759109e-06/, &
+   & sn8 /.174667472383815e-05/, sn9 /-.287037710548882e-05/, &
+   & sn10/.322304072982791e-05/, sn11/-.231569499551950e-05/, &
+   & sn12/.963478964685941e-06/, sn13/-.173784488565533e-06/
 data sd0 /.100000000000000e+01/, sd1 / .193077670156841e+00/
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
@@ -1994,52 +1994,52 @@ return
 !
 10 if (x .ge. 0.0) go to 20
 bi = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
-&+ an6)*x + an5)*x + an4)*x + an3)*x &
-&+ an2)*x + an1)*x + an0) / &
-&(((ad3*x + ad2)*x + ad1)*x + ad0)
+   & + an6)*x + an5)*x + an4)*x + an3)*x &
+   & + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
 !
 20 if (x .gt. 1.0) go to 30
 bi = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
-&+ bn6)*x + bn5)*x + bn4)*x + bn3)*x &
-&+ bn2)*x + bn1)*x + bn0) / &
-&(((bd3*x + bd2)*x + bd1)*x + bd0)
+   & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
+   & + bn2)*x + bn1)*x + bn0) / &
+   & (((bd3*x + bd2)*x + bd1)*x + bd0)
 return
 !
 30 rtx = sqrt(x)
 if (x .gt. 2.0) go to 40
 t = x - 1.0
 w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
-&+ pn1)*t + pn0) / &
-&(((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
-&+ pd2)*t + pd1)*t + pd0)
+   & + pn1)*t + pn0) / &
+   & (((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
+   & + pd2)*t + pd1)*t + pd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
 !
 40 if (x .gt. 4.0) go to 50
 t = x - 2.0
 w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
-&+ qn2)*t + qn1)*t + qn0) / &
-&((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
-&+ qd3)*t + qd2)*t + qd1)*t + qd0)
+   & + qn2)*t + qn1)*t + qn0) / &
+   & ((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
+   & + qd3)*t + qd2)*t + qd1)*t + qd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
 !
 50 if (x .gt. x0) go to 60
 t = 16.0/(x*rtx) - 1.0
 w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
-&+ rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
-&+ rn2)*t + rn1)*t + rn0) / &
-&((rd2*t + rd1)*t + rd0)
+   & + rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
+   & + rn2)*t + rn1)*t + rn0) / &
+   & ((rd2*t + rd1)*t + rd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
 !
 60 if (x*rtx .gt. 1.5*exparg(0)) go to 70
 t = 16.0/(x*rtx)
 w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
-&+ sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
-&+ sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
-&(sd1*t + sd0)
+   & + sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
+   & + sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
+   & (sd1*t + sd0)
 n = rtx
 n2 = n*n
 t = (x - n2)/(rtx + n)
@@ -2054,13 +2054,13 @@ real function bie(x)
 implicit none
 real, intent(in) :: x
 real :: ad0, ad1, ad2, ad3, an0, an1, an10, an2, an3, an4, an5, &
-&an6, an7, an8, an9, bd0, bd1, bd2, bd3, bn0, bn1, bn10, bn2, bn3, &
-&bn4, bn5, bn6, bn7, bn8, bn9, pd0, pd1, pd2, pd3, pd4, pd5, pd6, &
-&pd7, phi, pn0, pn1, pn2, pn3, pn4, pn5, pn6, qd0, qd1, qd2, qd3, &
-&qd4, qd5, qd6, qd7, qd8, qn0, qn1, qn2, qn3, qn4, qn5, qn6, qn7, &
-&r, rd0, rd1, rd2, rn0, rn1, rn10, rn11, rn2, rn3, rn4, rn5, rn6, &
-&rn7, rn8, rn9, rtx, sd0, sd1, sn0, sn1, sn10, sn11, sn12, sn13, &
-&sn2, sn3, sn4, sn5, sn6, sn7, sn8, sn9, t, w, x0
+   & an6, an7, an8, an9, bd0, bd1, bd2, bd3, bn0, bn1, bn10, bn2, bn3, &
+   & bn4, bn5, bn6, bn7, bn8, bn9, pd0, pd1, pd2, pd3, pd4, pd5, pd6, &
+   & pd7, phi, pn0, pn1, pn2, pn3, pn4, pn5, pn6, qd0, qd1, qd2, qd3, &
+   & qd4, qd5, qd6, qd7, qd8, qn0, qn1, qn2, qn3, qn4, qn5, qn6, qn7, &
+   & r, rd0, rd1, rd2, rn0, rn1, rn10, rn11, rn2, rn3, rn4, rn5, rn6, &
+   & rn7, rn8, rn9, rtx, sd0, sd1, sn0, sn1, sn10, sn11, sn12, sn13, &
+   & sn2, sn3, sn4, sn5, sn6, sn7, sn8, sn9, t, w, x0
 !-----------------------------------------------------------------------
 !
 !                    Scaled Airy function bi(x)
@@ -2077,58 +2077,58 @@ real :: ad0, ad1, ad2, ad3, an0, an1, an10, an2, an3, an4, an5, &
 data x0/6.3496042078728/
 !-----------------------
 data an0/ .614926627446001e+00/, an1/ .462726943978834e+00/, &
-&an2/ .867811386408974e-02/, an3/ .974670609357959e-01/, &
-&an4/ .370856545413908e-01/, an5/ .569193415071716e-03/, &
-&an6/ .269172131237236e-02/, an7/ .746473849872868e-03/, &
-&an8/ .105638036899269e-04/, an9/ .242726195973978e-04/, &
-&an10/.557260250681542e-05/
+   & an2/ .867811386408974e-02/, an3/ .974670609357959e-01/, &
+   & an4/ .370856545413908e-01/, an5/ .569193415071716e-03/, &
+   & an6/ .269172131237236e-02/, an7/ .746473849872868e-03/, &
+   & an8/ .105638036899269e-04/, an9/ .242726195973978e-04/, &
+   & an10/.557260250681542e-05/
 data ad0/ .100000000000000e+01/, ad1/ .234801779278695e-01/, &
-&ad2/-.300487317759152e-02/, ad3/-.597414466459612e-02/
+   & ad2/-.300487317759152e-02/, ad3/-.597414466459612e-02/
 !-----------------------
 data bn0/ .614926627446001e+00/, bn1/ .548653374523520e+00/, &
-&bn2/ .582684047163842e-01/, bn3/ .871954925712688e-01/, &
-&bn4/ .508547058449004e-01/, bn5/ .361412623711710e-02/, &
-&bn6/ .177269722794511e-02/, bn7/ .117774184027185e-02/, &
-&bn8/ .627004834186143e-04/, bn9/ .774782269814080e-06/, &
-&bn10/.118116474369315e-04/
+   & bn2/ .582684047163842e-01/, bn3/ .871954925712688e-01/, &
+   & bn4/ .508547058449004e-01/, bn5/ .361412623711710e-02/, &
+   & bn6/ .177269722794511e-02/, bn7/ .117774184027185e-02/, &
+   & bn8/ .627004834186143e-04/, bn9/ .774782269814080e-06/, &
+   & bn10/.118116474369315e-04/
 data bd0/ .100000000000000e+01/, bd1/ .163214622184402e+00/, &
-&bd2/-.242285981710408e-01/, bd3/-.720554280297616e-02/
+   & bd2/-.242285981710408e-01/, bd3/-.720554280297616e-02/
 !-----------------------
 data pn0/.619911943572678e+00/, pn1/.100411558489626e+01/, &
-&pn2/.563659963795768e+00/, pn3/.274925508033015e+00/, &
-&pn4/.115641822943246e+00/, pn5/.120048517441127e-01/, &
-&pn6/.501838091254330e-02/
+   & pn2/.563659963795768e+00/, pn3/.274925508033015e+00/, &
+   & pn4/.115641822943246e+00/, pn5/.120048517441127e-01/, &
+   & pn6/.501838091254330e-02/
 data pd0/.100000000000000e+01/, pd1/.159751878026937e+01/, &
-&pd2/.104664867034140e+01/, pd3/.512560333664022e+00/, &
-&pd4/.159144727666995e+00/, pd5/.394456748956258e-01/, &
-&pd6/.529926873250079e-02/, pd7/.288921845412576e-03/
+   & pd2/.104664867034140e+01/, pd3/.512560333664022e+00/, &
+   & pd4/.159144727666995e+00/, pd5/.394456748956258e-01/, &
+   & pd6/.529926873250079e-02/, pd7/.288921845412576e-03/
 !-----------------------
 data qn0/.595123543430856e+00/, qn1/.652692120245803e+00/, &
-&qn2/.436851872835894e+00/, qn3/.201626141057807e+00/, &
-&qn4/.649535170626944e-01/, qn5/.171798867787816e-01/, &
-&qn6/.287998748038892e-02/, qn7/.359634362348937e-03/
+   & qn2/.436851872835894e+00/, qn3/.201626141057807e+00/, &
+   & qn4/.649535170626944e-01/, qn5/.171798867787816e-01/, &
+   & qn6/.287998748038892e-02/, qn7/.359634362348937e-03/
 data qd0/.100000000000000e+01/, qd1/.114259871204893e+01/, &
-&qd2/.766390439057101e+00/, qd3/.348287281255683e+00/, &
-&qd4/.117049276946157e+00/, qd5/.294545450289541e-01/, &
-&qd6/.523951773968125e-02/, qd7/.622692248774973e-03/, &
-&qd8/.674811395957744e-06/
+   & qd2/.766390439057101e+00/, qd3/.348287281255683e+00/, &
+   & qd4/.117049276946157e+00/, qd5/.294545450289541e-01/, &
+   & qd6/.523951773968125e-02/, qd7/.622692248774973e-03/, &
+   & qd8/.674811395957744e-06/
 !-----------------------
 data rn0 / .568067636505865e+00/, rn1 / .462183136291541e-01/, &
-&rn2 / .268519638203645e+00/, rn3 / .199427104235673e-02/, &
-&rn4 / .135599161332010e-03/, rn5 / .229937707171804e-04/, &
-&rn6 / .697888081361175e-05/, rn7 / .153277172934286e-05/, &
-&rn8 /-.149322381877245e-05/, rn9 /-.113533571972859e-05/, &
-&rn10/ .740721412702102e-06/, rn11/-.120160431596119e-06/
+   & rn2 / .268519638203645e+00/, rn3 / .199427104235673e-02/, &
+   & rn4 / .135599161332010e-03/, rn5 / .229937707171804e-04/, &
+   & rn6 / .697888081361175e-05/, rn7 / .153277172934286e-05/, &
+   & rn8 /-.149322381877245e-05/, rn9 /-.113533571972859e-05/, &
+   & rn10/ .740721412702102e-06/, rn11/-.120160431596119e-06/
 data rd0 / .100000000000000e+01/, rd1 / .741293424676788e-01/, &
-&rd2 / .471695968238457e+00/
+   & rd2 / .471695968238457e+00/
 !-----------------------
 data sn0 /.564189583547757e+00/, sn1 / .112605519585866e+00/, &
-&sn2 /.893329124921909e-03/, sn3 / .532139134120350e-04/, &
-&sn4 /.592725458717738e-05/, sn5 / .921448923850546e-06/, &
-&sn6 /.404558310611815e-06/, sn7 /-.660517686759109e-06/, &
-&sn8 /.174667472383815e-05/, sn9 /-.287037710548882e-05/, &
-&sn10/.322304072982791e-05/, sn11/-.231569499551950e-05/, &
-&sn12/.963478964685941e-06/, sn13/-.173784488565533e-06/
+   & sn2 /.893329124921909e-03/, sn3 / .532139134120350e-04/, &
+   & sn4 /.592725458717738e-05/, sn5 / .921448923850546e-06/, &
+   & sn6 /.404558310611815e-06/, sn7 /-.660517686759109e-06/, &
+   & sn8 /.174667472383815e-05/, sn9 /-.287037710548882e-05/, &
+   & sn10/.322304072982791e-05/, sn11/-.231569499551950e-05/, &
+   & sn12/.963478964685941e-06/, sn13/-.173784488565533e-06/
 data sd0 /.100000000000000e+01/, sd1 / .193077670156841e+00/
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
@@ -2138,16 +2138,16 @@ return
 !
 10 if (x .ge. 0.0) go to 20
 bie = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
-&+ an6)*x + an5)*x + an4)*x + an3)*x &
-&+ an2)*x + an1)*x + an0) / &
-&(((ad3*x + ad2)*x + ad1)*x + ad0)
+   & + an6)*x + an5)*x + an4)*x + an3)*x &
+   & + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
 !
 20 if (x .gt. 1.0) go to 30
 bie = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
-&+ bn6)*x + bn5)*x + bn4)*x + bn3)*x &
-&+ bn2)*x + bn1)*x + bn0) / &
-&(((bd3*x + bd2)*x + bd1)*x + bd0)
+   & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
+   & + bn2)*x + bn1)*x + bn0) / &
+   & (((bd3*x + bd2)*x + bd1)*x + bd0)
 if (x .gt. 1.e-20) bie = bie * exp(-2.0*x*sqrt(x)/3.0)
 return
 !
@@ -2155,36 +2155,36 @@ return
 if (x .gt. 2.0) go to 40
 t = x - 1.0
 w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
-&+ pn1)*t + pn0) / &
-&(((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
-&+ pd2)*t + pd1)*t + pd0)
+   & + pn1)*t + pn0) / &
+   & (((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
+   & + pd2)*t + pd1)*t + pd0)
 bie = w/sqrt(rtx)
 return
 !
 40 if (x .gt. 4.0) go to 50
 t = x - 2.0
 w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
-&+ qn2)*t + qn1)*t + qn0) / &
-&((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
-&+ qd3)*t + qd2)*t + qd1)*t + qd0)
+   & + qn2)*t + qn1)*t + qn0) / &
+   & ((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
+   & + qd3)*t + qd2)*t + qd1)*t + qd0)
 bie = w/sqrt(rtx)
 return
 !
 50 if (x .gt. x0) go to 60
 t = 16.0/(x*rtx) - 1.0
 w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
-&+ rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
-&+ rn2)*t + rn1)*t + rn0) / &
-&((rd2*t + rd1)*t + rd0)
+   & + rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
+   & + rn2)*t + rn1)*t + rn0) / &
+   & ((rd2*t + rd1)*t + rd0)
 bie = w/sqrt(rtx)
 return
 !
 60 if (x .gt. 1.e20) go to 70
 t = 16.0/(x*rtx)
 w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
-&+ sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
-&+ sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
-&(sd1*t + sd0)
+   & + sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
+   & + sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
+   & (sd1*t + sd0)
 bie = w/sqrt(rtx)
 return
 !
@@ -2197,91 +2197,91 @@ implicit none
 real, intent(inout) :: phi, r
 real, intent(in) :: x
 real :: ad0, ad1, ad2, ad3, ad4, ad5, an0, an1, an2, an3, an4, &
-&an5, an6, bd0, bd1, bd2, bd3, bd4, bd5, bd6, bn0, bn1, bn2, bn3, &
-&bn4, bn5, bn6, cd0, cd1, cd2, cd3, cd4, cd5, cd6, cn0, cn1, cn2, &
-&cn3, cn4, cn5, dd0, dd1, dd2, dd3, dd4, dd5, dd6, dn0, dn1, dn2, &
-&dn3, dn4, dn5, pd0, pd1, pd2, pd3, pd4, pd5, pi4, pn0, pn1, pn2, &
-&pn3, pn4, pn5, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, qn3, &
-&qn4, rtx, z
+   & an5, an6, bd0, bd1, bd2, bd3, bd4, bd5, bd6, bn0, bn1, bn2, bn3, &
+   & bn4, bn5, bn6, cd0, cd1, cd2, cd3, cd4, cd5, cd6, cn0, cn1, cn2, &
+   & cn3, cn4, cn5, dd0, dd1, dd2, dd3, dd4, dd5, dd6, dn0, dn1, dn2, &
+   & dn3, dn4, dn5, pd0, pd1, pd2, pd3, pd4, pd5, pi4, pn0, pn1, pn2, &
+   & pn3, pn4, pn5, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, qn3, &
+   & qn4, rtx, z
 !-----------------------------------------------------------------------
 !     Computation of the Airy modulus and phase for x .GE. 1
 !-----------------------------------------------------------------------
 data pi4 /.785398163397448/
 !-----------------------
 data an0/.297640916735064e+00/, an1/.772796814419809e+00/, &
-&an2/.764990563560236e+00/, an3/.375694096095838e+00/, &
-&an4/.978661044870204e-01/, an5/.110446639522696e-01/, &
-&an6/.145271249611697e-05/
+   & an2/.764990563560236e+00/, an3/.375694096095838e+00/, &
+   & an4/.978661044870204e-01/, an5/.110446639522696e-01/, &
+   & an6/.145271249611697e-05/
 data ad0/.100000000000000e+01/, ad1/.247380029946443e+01/, &
-&ad2/.240125897828762e+01/, ad3/.118267264172257e+01/, &
-&ad4/.306942883081787e+00/, ad5/.347670057203535e-01/
+   & ad2/.240125897828762e+01/, ad3/.118267264172257e+01/, &
+   & ad4/.306942883081787e+00/, ad5/.347670057203535e-01/
 !-----------------------
 data bn0/.593601051670149e+00/, bn1/.223281495955754e+01/, &
-&bn2/.317718143418600e+01/, bn3/.229890914530923e+01/, &
-&bn4/.933580623665765e+00/, bn5/.209164380960390e+00/, &
-&bn6/.207910965366403e-01/
+   & bn2/.317718143418600e+01/, bn3/.229890914530923e+01/, &
+   & bn4/.933580623665765e+00/, bn5/.209164380960390e+00/, &
+   & bn6/.207910965366403e-01/
 data bd0/.100000000000000e+01/, bd1/.345985556561483e+01/, &
-&bd2/.479629661187354e+01/, bd3/.345429311552596e+01/, &
-&bd4/.140017214942186e+01/, bd5/.313770549939860e+00/, &
-&bd6/.311852186700025e-01/
+   & bd2/.479629661187354e+01/, bd3/.345429311552596e+01/, &
+   & bd4/.140017214942186e+01/, bd5/.313770549939860e+00/, &
+   & bd6/.311852186700025e-01/
 !-----------------------
 data cn0/.313541841678871e+00/, cn1/.470104287134296e+00/, &
-&cn2/.291795874641314e+00/, cn3/.962250689852768e-01/, &
-&cn4/.171024484244850e-01/, cn5/.134933201907052e-02/
+   & cn2/.291795874641314e+00/, cn3/.962250689852768e-01/, &
+   & cn4/.171024484244850e-01/, cn5/.134933201907052e-02/
 data cd0/.100000000000000e+01/, cd1/.148070947673639e+01/, &
-&cd2/.917484386216329e+00/, cd3/.302281922152536e+00/, &
-&cd4/.537309296828367e-01/, cd5/.423890576557513e-02/, &
-&cd6/.525954318463502e-08/
+   & cd2/.917484386216329e+00/, cd3/.302281922152536e+00/, &
+   & cd4/.537309296828367e-01/, cd5/.423890576557513e-02/, &
+   & cd6/.525954318463502e-08/
 !-----------------------
 data dn0/.654836896032068e+00/, dn1/.117099614856528e+01/, &
-&dn2/.831899010444840e+00/, dn3/.301060337976575e+00/, &
-&dn4/.564712748150658e-01/, dn5/.444134415666317e-02/
+   & dn2/.831899010444840e+00/, dn3/.301060337976575e+00/, &
+   & dn4/.564712748150658e-01/, dn5/.444134415666317e-02/
 data dd0/.100000000000000e+01/, dd1/.176306543768126e+01/, &
-&dd2/.124897609613487e+01/, dd3/.451576491257036e+00/, &
-&dd4/.847085955634988e-01/, dd5/.666188176245820e-02/, &
-&dd6/.537600060708764e-08/
+   & dd2/.124897609613487e+01/, dd3/.451576491257036e+00/, &
+   & dd4/.847085955634988e-01/, dd5/.666188176245820e-02/, &
+   & dd6/.537600060708764e-08/
 !-----------------------
 data pn0/.318309886183791e+00/, pn1/.100996327221962e+01/, &
-&pn2/.902315148591491e+00/, pn3/.259820640977615e+00/, &
-&pn4/.203717769716282e-01/, pn5/.216893438784765e-03/
+   & pn2/.902315148591491e+00/, pn3/.259820640977615e+00/, &
+   & pn4/.203717769716282e-01/, pn5/.216893438784765e-03/
 data pd0/.100000000000000e+01/, pd1/.317533460265059e+01/, &
-&pd2/.284232123705698e+01/, pd3/.822777439238360e+00/, &
-&pd4/.656865942543526e-01/, pd5/.775376048996392e-03/
+   & pd2/.284232123705698e+01/, pd3/.822777439238360e+00/, &
+   & pd4/.656865942543526e-01/, pd5/.775376048996392e-03/
 !-----------------------
 data qn0/.666666666666667e+00/, qn1/.141905542385598e+01/, &
-&qn2/.772778148352443e+00/, qn3/.115170415082442e+00/, &
-&qn4/.326457319318373e-02/
+   & qn2/.772778148352443e+00/, qn3/.115170415082442e+00/, &
+   & qn4/.326457319318373e-02/
 data qd0/.100000000000000e+01/, qd1/.213102454203392e+01/, &
-&qd2/.116432601041188e+01/, qd3/.175509465791633e+00/, &
-&qd4/.528319849831061e-02/, qd5/.867802002275824e-05/
+   & qd2/.116432601041188e+01/, qd3/.175509465791633e+00/, &
+   & qd4/.528319849831061e-02/, qd5/.867802002275824e-05/
 !-----------------------------------------------------------------------
 if (x .gt. 2.0) go to 10
 z = x - 1.0
-r =   ((((((an6*z + an5)*z + an4)*z + an3)*z + an2)*z &
-&+ an1)*z + an0) / &
-&(((((ad5*z + ad4)*z + ad3)*z + ad2)*z + ad1)*z + ad0)
+r = ((((((an6*z + an5)*z + an4)*z + an3)*z + an2)*z &
+   & + an1)*z + an0) / &
+   & (((((ad5*z + ad4)*z + ad3)*z + ad2)*z + ad1)*z + ad0)
 phi = ((((((bn6*z + bn5)*z + bn4)*z + bn3)*z + bn2)*z &
-&+ bn1)*z + bn0) / &
-&((((((bd6*z + bd5)*z + bd4)*z + bd3)*z + bd2)*z &
-&+ bd1)*z + bd0)
+   & + bn1)*z + bn0) / &
+   & ((((((bd6*z + bd5)*z + bd4)*z + bd3)*z + bd2)*z &
+   & + bd1)*z + bd0)
 go to 40
 !
 10 if (x .ge. 4.0) go to 20
 z = x - 2.0
-r =   (((((cn5*z + cn4)*z + cn3)*z + cn2)*z + cn1)*z + cn0) / &
-&((((((cd6*z + cd5)*z + cd4)*z + cd3)*z + cd2)*z &
-&+ cd1)*z + cd0)
+r = (((((cn5*z + cn4)*z + cn3)*z + cn2)*z + cn1)*z + cn0) / &
+   & ((((((cd6*z + cd5)*z + cd4)*z + cd3)*z + cd2)*z &
+   & + cd1)*z + cd0)
 phi = (((((dn5*z + dn4)*z + dn3)*z + dn2)*z + dn1)*z + dn0) / &
-&((((((dd6*z + dd5)*z + dd4)*z + dd3)*z + dd2)*z &
-&+ dd1)*z + dd0)
+   & ((((((dd6*z + dd5)*z + dd4)*z + dd3)*z + dd2)*z &
+   & + dd1)*z + dd0)
 go to 40
 !
 20 if (x .gt. 1.e10) go to 30
 z = 64.0/x**3
-r =   (((((pn5*z + pn4)*z + pn3)*z + pn2)*z + pn1)*z + pn0) / &
-&(((((pd5*z + pd4)*z + pd3)*z + pd2)*z + pd1)*z + pd0)
+r = (((((pn5*z + pn4)*z + pn3)*z + pn2)*z + pn1)*z + pn0) / &
+   & (((((pd5*z + pd4)*z + pd3)*z + pd2)*z + pd1)*z + pd0)
 phi = ((((qn4*z + qn3)*z + qn2)*z + qn1)*z + qn0) / &
-&(((((qd5*z + qd4)*z + qd3)*z + qd2)*z + qd1)*z + qd0)
+   & (((((qd5*z + qd4)*z + qd3)*z + qd2)*z + qd1)*z + qd0)
 go to 40
 !
 30 r = pn0
@@ -2301,10 +2301,10 @@ real :: c1, c2, eps, phi, r, t, tol, u, v, x, xx, y
 real :: spmpar
 real :: alnrel
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, &
-&aktemp, ck1, j
+   & aktemp, ck1, j
 complex :: cflect, km, z
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
-&fb(12)
+   & fb(12)
 logical :: branch
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integral F(k)
@@ -2313,53 +2313,53 @@ logical :: branch
 !     ------------------------------------------------------------------
 !     --------------------------------------------------------------
 data x1(1)/ 6.5487222790801e-03/, x1(2)/ 3.8946809560450e-02/, &
-&x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
-&x1(5)/ 2.8322006766737e-01/, x1(6)/ 3.9843443516344e-01/, &
-&x1(7)/ 5.1995262679235e-01/, x1(8)/ 6.4051091671611e-01/, &
-&x1(9)/ 7.5286501205183e-01/, x1(10)/8.5024002416230e-01/, &
-&x1(11)/9.2674968322391e-01/, x1(12)/9.7775612969000e-01/
+   & x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
+   & x1(5)/ 2.8322006766737e-01/, x1(6)/ 3.9843443516344e-01/, &
+   & x1(7)/ 5.1995262679235e-01/, x1(8)/ 6.4051091671611e-01/, &
+   & x1(9)/ 7.5286501205183e-01/, x1(10)/8.5024002416230e-01/, &
+   & x1(11)/9.2674968322391e-01/, x1(12)/9.7775612969000e-01/
 !     --------------------------------------------------------------
 data w1(1)/ 9.3192691443932e-02/, w1(2)/ 1.4975182757632e-01/, &
-&w1(3)/ 1.6655745436459e-01/, w1(4)/ 1.5963355943699e-01/, &
-&w1(5)/ 1.3842483186484e-01/, w1(6)/ 1.1001657063572e-01/, &
-&w1(7)/ 7.9961821770829e-02/, w1(8)/ 5.2406954824642e-02/, &
-&w1(9)/ 3.0071088873761e-02/, w1(10)/1.4249245587998e-02/, &
-&w1(11)/4.8999245823217e-03/, w1(12)/8.3402903805690e-04/
+   & w1(3)/ 1.6655745436459e-01/, w1(4)/ 1.5963355943699e-01/, &
+   & w1(5)/ 1.3842483186484e-01/, w1(6)/ 1.1001657063572e-01/, &
+   & w1(7)/ 7.9961821770829e-02/, w1(8)/ 5.2406954824642e-02/, &
+   & w1(9)/ 3.0071088873761e-02/, w1(10)/1.4249245587998e-02/, &
+   & w1(11)/4.8999245823217e-03/, w1(12)/8.3402903805690e-04/
 !     --------------------------------------------------------------
 data fl(1)/ 1.5708005371203e+00/, fl(2)/ 1.5709452753591e+00/, &
-&fl(3)/ 1.5717433742881e+00/, fl(4)/ 1.5740325056162e+00/, &
-&fl(5)/ 1.5787613653341e+00/, fl(6)/ 1.5867393901613e+00/, &
-&fl(7)/ 1.5983969635617e+00/, fl(8)/ 1.6135762587884e+00/, &
-&fl(9)/ 1.6313677113831e+00/, fl(10)/1.6500349733510e+00/, &
-&fl(11)/1.6671202200919e+00/, fl(12)/1.6798403417359e+00/
+   & fl(3)/ 1.5717433742881e+00/, fl(4)/ 1.5740325056162e+00/, &
+   & fl(5)/ 1.5787613653341e+00/, fl(6)/ 1.5867393901613e+00/, &
+   & fl(7)/ 1.5983969635617e+00/, fl(8)/ 1.6135762587884e+00/, &
+   & fl(9)/ 1.6313677113831e+00/, fl(10)/1.6500349733510e+00/, &
+   & fl(11)/1.6671202200919e+00/, fl(12)/1.6798403417359e+00/
 !     --------------------------------------------------------------
 data x2(1)/-9.8156063424672e-01/, x2(2)/-9.0411725637048e-01/, &
-&x2(3)/-7.6990267419431e-01/, x2(4)/-5.8731795428662e-01/, &
-&x2(5)/-3.6783149899818e-01/, x2(6)/-1.2523340851147e-01/, &
-&x2(7)/ 1.2523340851147e-01/, x2(8)/ 3.6783149899818e-01/, &
-&x2(9)/ 5.8731795428662e-01/, x2(10)/7.6990267419431e-01/, &
-&x2(11)/9.0411725637048e-01/, x2(12)/9.8156063424672e-01/
+   & x2(3)/-7.6990267419431e-01/, x2(4)/-5.8731795428662e-01/, &
+   & x2(5)/-3.6783149899818e-01/, x2(6)/-1.2523340851147e-01/, &
+   & x2(7)/ 1.2523340851147e-01/, x2(8)/ 3.6783149899818e-01/, &
+   & x2(9)/ 5.8731795428662e-01/, x2(10)/7.6990267419431e-01/, &
+   & x2(11)/9.0411725637048e-01/, x2(12)/9.8156063424672e-01/
 !     --------------------------------------------------------------
 data w2(1)/ 4.7175336386512e-02/, w2(2)/ 1.0693932599532e-01/, &
-&w2(3)/ 1.6007832854335e-01/, w2(4)/ 2.0316742672307e-01/, &
-&w2(5)/ 2.3349253653836e-01/, w2(6)/ 2.4914704581340e-01/, &
-&w2(7)/ 2.4914704581340e-01/, w2(8)/ 2.3349253653836e-01/, &
-&w2(9)/ 2.0316742672307e-01/, w2(10)/1.6007832854335e-01/, &
-&w2(11)/1.0693932599532e-01/, w2(12)/4.7175336386512e-02/
+   & w2(3)/ 1.6007832854335e-01/, w2(4)/ 2.0316742672307e-01/, &
+   & w2(5)/ 2.3349253653836e-01/, w2(6)/ 2.4914704581340e-01/, &
+   & w2(7)/ 2.4914704581340e-01/, w2(8)/ 2.3349253653836e-01/, &
+   & w2(9)/ 2.0316742672307e-01/, w2(10)/1.6007832854335e-01/, &
+   & w2(11)/1.0693932599532e-01/, w2(12)/4.7175336386512e-02/
 !     --------------------------------------------------------------
 data fa(1)/ 2.0794472764428e+00/, fa(2)/ 2.0795966441739e+00/, &
-&fa(3)/ 2.0803359313463e+00/, fa(4)/ 2.0823286205438e+00/, &
-&fa(5)/ 2.0862633195105e+00/, fa(6)/ 2.0926508621232e+00/, &
-&fa(7)/ 2.1016440761258e+00/, fa(8)/ 2.1128974786197e+00/, &
-&fa(9)/ 2.1254857173540e+00/, fa(10)/2.1379218133017e+00/, &
-&fa(11)/2.1483404506064e+00/, fa(12)/2.1548934173960e+00/
+   & fa(3)/ 2.0803359313463e+00/, fa(4)/ 2.0823286205438e+00/, &
+   & fa(5)/ 2.0862633195105e+00/, fa(6)/ 2.0926508621232e+00/, &
+   & fa(7)/ 2.1016440761258e+00/, fa(8)/ 2.1128974786197e+00/, &
+   & fa(9)/ 2.1254857173540e+00/, fa(10)/2.1379218133017e+00/, &
+   & fa(11)/2.1483404506064e+00/, fa(12)/2.1548934173960e+00/
 !     --------------------------------------------------------------
 data fb(1)/ 1.5744273529551e+00/, fb(2)/ 1.5899097325063e+00/, &
-&fb(3)/ 1.6176685384410e+00/, fb(4)/ 1.6574605448620e+00/, &
-&fb(5)/ 1.7087245795822e+00/, fb(6)/ 1.7703459462057e+00/, &
-&fb(7)/ 1.8403280188791e+00/, fb(8)/ 1.9154060277115e+00/, &
-&fb(9)/ 1.9907093877047e+00/, fb(10)/2.0596975322636e+00/, &
-&fb(11)/2.1146977530430e+00/, fb(12)/2.1482986855683e+00/
+   & fb(3)/ 1.6176685384410e+00/, fb(4)/ 1.6574605448620e+00/, &
+   & fb(5)/ 1.7087245795822e+00/, fb(6)/ 1.7703459462057e+00/, &
+   & fb(7)/ 1.8403280188791e+00/, fb(8)/ 1.9154060277115e+00/, &
+   & fb(9)/ 1.9907093877047e+00/, fb(10)/2.0596975322636e+00/, &
+   & fb(11)/2.1146977530430e+00/, fb(12)/2.1482986855683e+00/
 !     --------------------------------------------------------------
 data j/(0.0, 1.0)/
 data ln4 /1.3862943611199/
@@ -2392,10 +2392,10 @@ if (amax1(u,abs(v)) .ge. 1.1/eps) go to 200
 !     Check that k**2 + l**2 = 1
 !
 if (x .lt. u) go to 1
-   t = u/x
-   if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 200
-   if (abs(y + t*v) .gt. tol*amax1(1.0, abs(v))) go to 200
-   go to 10
+t = u/x
+if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 200
+if (abs(y + t*v) .gt. tol*amax1(1.0, abs(v))) go to 200
+go to 10
 1 t = x/u
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 200
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 200
@@ -2438,12 +2438,12 @@ do 40 i = 1,12
 40 f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
 f2 = (0.0, 0.0)
 do 41 i = 1,12
-   xx = .25*(1.+ x2(i))
+   xx = .25*(1. + x2(i))
    fxk = ak*xx
 41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
 f3 = (0.0, 0.0)
 do 42 i = 1,12
-   xx = .25*(3.- x2(i))
+   xx = .25*(3. - x2(i))
    fxk = ak*xx
 42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
 !
@@ -2493,8 +2493,8 @@ return
 !     Inverse modulus transformation
 !
 80 if (aimag(ak1) .ge. 0.0) go to 81
-   ck = al*(ck1 - j*ck)
-   return
+ck = al*(ck1 - j*ck)
+return
 81 ck = al*(ck1 + j*ck)
 return
 !
@@ -2557,7 +2557,7 @@ data hpi /1.5707963267949/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 ! ---------------
 !
@@ -2600,7 +2600,7 @@ data ln4 /1.3862943611199/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 ! ---------------
 !
@@ -2629,17 +2629,17 @@ end do
 x = real(l)
 y = aimag(l)
 if (x .ne. 0.0) go to 30
-   w = cmplx(ln4 - alog(abs(y)), hpi)
-   go to 50
+w = cmplx(ln4 - alog(abs(y)), hpi)
+go to 50
 !
 30 if (abs(x) .gt. abs(y)) go to 31
-   u = (ln4 - 0.5*alnrel((x/y)**2)) - alog(abs(y))
-   go to 40
+u = (ln4 - 0.5*alnrel((x/y)**2)) - alog(abs(y))
+go to 40
 31 u = (ln4 - 0.5*alnrel((y/x)**2)) - alog(abs(x))
 !
 40 if (x .gt. 0.0) go to 41
-   w = cmplx(u, -atan2(-y,-x))
-   go to 50
+w = cmplx(u, -atan2(-y,-x))
+go to 50
 41 w = cmplx(u, -atan2(y,x))
 !
 !                        Final assembly
@@ -2662,7 +2662,7 @@ complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, j
 complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk, atn
 complex :: cflect, k1, l1, ak2, al2, z, g, g1, gg, gp
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
-&fb(12)
+   & fb(12)
 logical :: branch
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
@@ -2671,53 +2671,53 @@ logical :: branch
 !     ------------------------------------------------------------------
 !     --------------------------------------------------------------
 data x1(1)/ 6.5487222790801e-03/, x1(2)/ 3.8946809560450e-02/, &
-&x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
-&x1(5)/ 2.8322006766737e-01/, x1(6)/ 3.9843443516344e-01/, &
-&x1(7)/ 5.1995262679235e-01/, x1(8)/ 6.4051091671611e-01/, &
-&x1(9)/ 7.5286501205183e-01/, x1(10)/8.5024002416230e-01/, &
-&x1(11)/9.2674968322391e-01/, x1(12)/9.7775612969000e-01/
+   & x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
+   & x1(5)/ 2.8322006766737e-01/, x1(6)/ 3.9843443516344e-01/, &
+   & x1(7)/ 5.1995262679235e-01/, x1(8)/ 6.4051091671611e-01/, &
+   & x1(9)/ 7.5286501205183e-01/, x1(10)/8.5024002416230e-01/, &
+   & x1(11)/9.2674968322391e-01/, x1(12)/9.7775612969000e-01/
 !     --------------------------------------------------------------
 data w1(1)/ 9.3192691443932e-02/, w1(2)/ 1.4975182757632e-01/, &
-&w1(3)/ 1.6655745436459e-01/, w1(4)/ 1.5963355943699e-01/, &
-&w1(5)/ 1.3842483186484e-01/, w1(6)/ 1.1001657063572e-01/, &
-&w1(7)/ 7.9961821770829e-02/, w1(8)/ 5.2406954824642e-02/, &
-&w1(9)/ 3.0071088873761e-02/, w1(10)/1.4249245587998e-02/, &
-&w1(11)/4.8999245823217e-03/, w1(12)/8.3402903805690e-04/
+   & w1(3)/ 1.6655745436459e-01/, w1(4)/ 1.5963355943699e-01/, &
+   & w1(5)/ 1.3842483186484e-01/, w1(6)/ 1.1001657063572e-01/, &
+   & w1(7)/ 7.9961821770829e-02/, w1(8)/ 5.2406954824642e-02/, &
+   & w1(9)/ 3.0071088873761e-02/, w1(10)/1.4249245587998e-02/, &
+   & w1(11)/4.8999245823217e-03/, w1(12)/8.3402903805690e-04/
 !     --------------------------------------------------------------
 data fl(1)/ 1.5708005371203e+00/, fl(2)/ 1.5709452753591e+00/, &
-&fl(3)/ 1.5717433742881e+00/, fl(4)/ 1.5740325056162e+00/, &
-&fl(5)/ 1.5787613653341e+00/, fl(6)/ 1.5867393901613e+00/, &
-&fl(7)/ 1.5983969635617e+00/, fl(8)/ 1.6135762587884e+00/, &
-&fl(9)/ 1.6313677113831e+00/, fl(10)/1.6500349733510e+00/, &
-&fl(11)/1.6671202200919e+00/, fl(12)/1.6798403417359e+00/
+   & fl(3)/ 1.5717433742881e+00/, fl(4)/ 1.5740325056162e+00/, &
+   & fl(5)/ 1.5787613653341e+00/, fl(6)/ 1.5867393901613e+00/, &
+   & fl(7)/ 1.5983969635617e+00/, fl(8)/ 1.6135762587884e+00/, &
+   & fl(9)/ 1.6313677113831e+00/, fl(10)/1.6500349733510e+00/, &
+   & fl(11)/1.6671202200919e+00/, fl(12)/1.6798403417359e+00/
 !     --------------------------------------------------------------
 data x2(1)/-9.8156063424672e-01/, x2(2)/-9.0411725637048e-01/, &
-&x2(3)/-7.6990267419431e-01/, x2(4)/-5.8731795428662e-01/, &
-&x2(5)/-3.6783149899818e-01/, x2(6)/-1.2523340851147e-01/, &
-&x2(7)/ 1.2523340851147e-01/, x2(8)/ 3.6783149899818e-01/, &
-&x2(9)/ 5.8731795428662e-01/, x2(10)/7.6990267419431e-01/, &
-&x2(11)/9.0411725637048e-01/, x2(12)/9.8156063424672e-01/
+   & x2(3)/-7.6990267419431e-01/, x2(4)/-5.8731795428662e-01/, &
+   & x2(5)/-3.6783149899818e-01/, x2(6)/-1.2523340851147e-01/, &
+   & x2(7)/ 1.2523340851147e-01/, x2(8)/ 3.6783149899818e-01/, &
+   & x2(9)/ 5.8731795428662e-01/, x2(10)/7.6990267419431e-01/, &
+   & x2(11)/9.0411725637048e-01/, x2(12)/9.8156063424672e-01/
 !     --------------------------------------------------------------
 data w2(1)/ 4.7175336386512e-02/, w2(2)/ 1.0693932599532e-01/, &
-&w2(3)/ 1.6007832854335e-01/, w2(4)/ 2.0316742672307e-01/, &
-&w2(5)/ 2.3349253653836e-01/, w2(6)/ 2.4914704581340e-01/, &
-&w2(7)/ 2.4914704581340e-01/, w2(8)/ 2.3349253653836e-01/, &
-&w2(9)/ 2.0316742672307e-01/, w2(10)/1.6007832854335e-01/, &
-&w2(11)/1.0693932599532e-01/, w2(12)/4.7175336386512e-02/
+   & w2(3)/ 1.6007832854335e-01/, w2(4)/ 2.0316742672307e-01/, &
+   & w2(5)/ 2.3349253653836e-01/, w2(6)/ 2.4914704581340e-01/, &
+   & w2(7)/ 2.4914704581340e-01/, w2(8)/ 2.3349253653836e-01/, &
+   & w2(9)/ 2.0316742672307e-01/, w2(10)/1.6007832854335e-01/, &
+   & w2(11)/1.0693932599532e-01/, w2(12)/4.7175336386512e-02/
 !     --------------------------------------------------------------
 data fa(1)/ 2.0794472764428e+00/, fa(2)/ 2.0795966441739e+00/, &
-&fa(3)/ 2.0803359313463e+00/, fa(4)/ 2.0823286205438e+00/, &
-&fa(5)/ 2.0862633195105e+00/, fa(6)/ 2.0926508621232e+00/, &
-&fa(7)/ 2.1016440761258e+00/, fa(8)/ 2.1128974786197e+00/, &
-&fa(9)/ 2.1254857173540e+00/, fa(10)/2.1379218133017e+00/, &
-&fa(11)/2.1483404506064e+00/, fa(12)/2.1548934173960e+00/
+   & fa(3)/ 2.0803359313463e+00/, fa(4)/ 2.0823286205438e+00/, &
+   & fa(5)/ 2.0862633195105e+00/, fa(6)/ 2.0926508621232e+00/, &
+   & fa(7)/ 2.1016440761258e+00/, fa(8)/ 2.1128974786197e+00/, &
+   & fa(9)/ 2.1254857173540e+00/, fa(10)/2.1379218133017e+00/, &
+   & fa(11)/2.1483404506064e+00/, fa(12)/2.1548934173960e+00/
 !     --------------------------------------------------------------
 data fb(1)/ 1.5744273529551e+00/, fb(2)/ 1.5899097325063e+00/, &
-&fb(3)/ 1.6176685384410e+00/, fb(4)/ 1.6574605448620e+00/, &
-&fb(5)/ 1.7087245795822e+00/, fb(6)/ 1.7703459462057e+00/, &
-&fb(7)/ 1.8403280188791e+00/, fb(8)/ 1.9154060277115e+00/, &
-&fb(9)/ 1.9907093877047e+00/, fb(10)/2.0596975322636e+00/, &
-&fb(11)/2.1146977530430e+00/, fb(12)/2.1482986855683e+00/
+   & fb(3)/ 1.6176685384410e+00/, fb(4)/ 1.6574605448620e+00/, &
+   & fb(5)/ 1.7087245795822e+00/, fb(6)/ 1.7703459462057e+00/, &
+   & fb(7)/ 1.8403280188791e+00/, fb(8)/ 1.9154060277115e+00/, &
+   & fb(9)/ 1.9907093877047e+00/, fb(10)/2.0596975322636e+00/, &
+   & fb(11)/2.1146977530430e+00/, fb(12)/2.1482986855683e+00/
 !     --------------------------------------------------------------
 data j/(0.0, 1.0)/
 data ln4 /1.3862943611199/
@@ -2751,10 +2751,10 @@ if (amax1(u,abs(v)) .ge. 1.1/eps) go to 210
 !     Check that k**2 + l**2 = 1
 !
 if (x .lt. u) go to 1
-   t = u/x
-   if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 210
-   if (abs(y + t*v) .gt. tol*amax1(1.0, abs(v))) go to 210
-   go to 10
+t = u/x
+if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 210
+if (abs(y + t*v) .gt. tol*amax1(1.0, abs(v))) go to 210
+go to 10
 1 t = x/u
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 210
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 210
@@ -2814,7 +2814,7 @@ do 40 i = 1,12
 f2 = (0.0, 0.0)
 e2 = (0.0, 0.0)
 do 41 i = 1,12
-   xx = .25*(1.+ x2(i))
+   xx = .25*(1. + x2(i))
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
@@ -2823,7 +2823,7 @@ do 41 i = 1,12
 f3 = (0.0, 0.0)
 e3 = (0.0, 0.0)
 do 42 i = 1,12
-   xx = .25*(3.- x2(i))
+   xx = .25*(3. - x2(i))
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
@@ -2881,9 +2881,9 @@ return
 80 g = ce - al2*ck
 g1 = ce1 - ak2*ck1
 81 if (aimag(ak2) .ge. 0.0) go to 82
-   ce = (g1 + j*g)/al
-   ck = al*(ck1 - j*ck)
-   return
+ce = (g1 + j*g)/al
+ck = al*(ck1 - j*ck)
+return
 82 ce = (g1 - j*g)/al
 ck = al*(ck1 + j*ck)
 return
@@ -2900,9 +2900,9 @@ r = (ln4 + 0.5*alnrel(t*t)) + alog(x)
 c = 0.5*r + 0.25
 z = cmplx(y,-x)
 if (y .ge. 0.0) go to 91
-   r = -r
-   c = -c
-   z = -z
+r = -r
+c = -c
+z = -z
 91 ck = (cmplx(phi,r)/k1)/x
 ce = z + (cmplx(0.5*phi,c)/k1)/x
 return
@@ -2967,7 +2967,7 @@ data hpi /1.5707963267949/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 ! ---------------
 !
@@ -3017,7 +3017,7 @@ data ln4 /1.3862943611199/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 ! ---------------
 !
@@ -3064,17 +3064,17 @@ s7 = s7 + (0.5, 0.0)
 x = real(l)
 y = aimag(l)
 if (x .ne. 0.0) go to 30
-   w = cmplx(ln4 - alog(abs(y)), hpi)
-   go to 50
+w = cmplx(ln4 - alog(abs(y)), hpi)
+go to 50
 !
 30 if (abs(x) .gt. abs(y)) go to 31
-   u = (ln4 - 0.5*alnrel((x/y)**2)) - alog(abs(y))
-   go to 40
+u = (ln4 - 0.5*alnrel((x/y)**2)) - alog(abs(y))
+go to 40
 31 u = (ln4 - 0.5*alnrel((y/x)**2)) - alog(abs(x))
 !
 40 if (x .gt. 0.0) go to 41
-   w = cmplx(u, -atan2(-y,-x))
-   go to 50
+w = cmplx(u, -atan2(-y,-x))
+go to 50
 41 w = cmplx(u, -atan2(y,x))
 !
 !              Final assembly
@@ -3083,7 +3083,7 @@ if (x .ne. 0.0) go to 30
 fl = hpi*s1
 ek = w*s6 - s4 + s5
 el = hpi*s3
-gk = -w*s7*l2 -s4 + s5 + s2*l2
+gk = -w*s7*l2 - s4 + s5 + s2*l2
 gl = hpi*s7*l2
 return
 end subroutine ekl
@@ -3096,8 +3096,8 @@ real, intent(inout) :: e, f
 real, intent(in) :: phi
 real, intent(in) :: k, l
 real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, &
-&r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
-&t1, t2, td, th1, tr, ts, w
+   & r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
+   & t1, t2, td, th1, tr, ts, w
 real :: alnrel
 real :: cpabs
 real :: k2, l2, ln4
@@ -3126,14 +3126,14 @@ if (phi .lt. 0.0 .or. cphi .lt. 0.0) go to 100
 if (abs(k) .gt. 1.0 .or. abs(l) .gt. 1.0) go to 110
 ierr = 0
 if (phi .ne. 0.0) go to 10
-   f = 0.0
-   e = 0.0
-   return
+f = 0.0
+e = 0.0
+return
 !
 10 if (phi .lt. 0.79) go to 11
-   sn = cos(cphi)
-   cn = sin(cphi)
-   go to 20
+sn = cos(cphi)
+cn = sin(cphi)
+go to 20
 11 sn = sin(phi)
 cn = cos(phi)
 !
@@ -3156,7 +3156,7 @@ tr = phi*ss
 ts = sn*cn
 !
 30 an = (pn*an - ts)/qn
-r  = k2*hn/qn
+r = k2*hn/qn
 s2 = s2 + r*an
 hn = pn*r
 s0 = s1
@@ -3239,8 +3239,8 @@ integer, intent(inout) :: ierr
 double precision, intent(in) :: phi, cphi, k, l
 double precision, intent(inout) :: f, e
 double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, ln4, &
-&p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
-&ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
+   & p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
+   & ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
 double precision :: dlnrel, dcpabs
 !-----------------------------------------------------------------------
 !
@@ -3268,14 +3268,14 @@ if (phi .lt. 0.d0 .or. cphi .lt. 0.d0) go to 100
 if (dabs(k) .gt. 1.d0 .or. dabs(l) .gt. 1.d0) go to 110
 ierr = 0
 if (phi .ne. 0.d0) go to 10
-   f = 0.d0
-   e = 0.d0
-   return
+f = 0.d0
+e = 0.d0
+return
 !
 10 if (phi .lt. 0.79d0) go to 11
-   sn = dcos(cphi)
-   cn = dsin(cphi)
-   go to 20
+sn = dcos(cphi)
+cn = dsin(cphi)
+go to 20
 11 sn = dsin(phi)
 cn = dcos(phi)
 !
@@ -3298,7 +3298,7 @@ tr = phi*ss
 ts = sn*cn
 !
 30 an = (pn*an - ts)/qn
-r  = k2*hn/qn
+r = k2*hn/qn
 s2 = s2 + r*an
 hn = pn*r
 s0 = s1
@@ -3392,7 +3392,7 @@ data pihalf /1.5707963267948966192/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.0 + eps .GT. 1.0.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 tol = 4.0 * eps
@@ -3403,9 +3403,9 @@ if (k2 .lt. 0.0 .or. l2 .lt. 0.0) go to 120
 if (abs((k2 + l2) - 1.0) .gt. tol) go to 120
 !
 if (phi .lt. 0.79) go to 10
-    s = cos(cphi)
-    c = sin(cphi)
-    go to 11
+s = cos(cphi)
+c = sin(cphi)
+go to 11
 10 s = sin(phi)
 c = cos(phi)
 11 a = c*c
@@ -3413,8 +3413,8 @@ b = l2 + k2*a
 s2 = s*s
 !
 if (n .gt. 0.0) go to 20
-    r = 1.0 - n*s2
-    go to 30
+r = 1.0 - n*s2
+go to 30
 20 if (m .lt. 0.0 .or. m .gt. 1.0) go to 110
 if (abs((m + n) - 1.0) .gt. tol) go to 110
 r = m + n*a
@@ -3456,7 +3456,7 @@ data pihalf /1.570796326794896619231321691639751442099d0/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.D0 + eps .GT. 1.D0.
 !
-                eps = dpmpar(1)
+eps = dpmpar(1)
 !
 !-----------------------------------------------------------------------
 tol = 4.d0 * eps
@@ -3467,9 +3467,9 @@ if (k2 .lt. 0.d0 .or. l2 .lt. 0.d0) go to 120
 if (dabs((k2 + l2) - 1.d0) .gt. tol) go to 120
 !
 if (phi .lt. 0.79d0) go to 10
-    s = dcos(cphi)
-    c = dsin(cphi)
-    go to 11
+s = dcos(cphi)
+c = dsin(cphi)
+go to 11
 10 s = dsin(phi)
 c = dcos(phi)
 11 a = c*c
@@ -3477,8 +3477,8 @@ b = l2 + k2*a
 s2 = s*s
 !
 if (n .gt. 0.d0) go to 20
-    r = 1.d0 - n*s2
-    go to 30
+r = 1.d0 - n*s2
+go to 30
 20 if (m .lt. 0.d0 .or. m .gt. 1.d0) go to 110
 if (dabs((m + n) - 1.d0) .gt. tol) go to 110
 r = m + n*a
@@ -3560,14 +3560,14 @@ real :: spmpar
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
 !
-                lolim = 5.0 * spmpar(2)
-                uplim = 0.2 * spmpar(3)
+lolim = 5.0 * spmpar(2)
+uplim = 0.2 * spmpar(3)
 !
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          errtol ** 6 / (4 * (1 - errtol)).
 !
-         errtol = (3.6 * spmpar(1))**(1.0/6.0)
+errtol = (3.6 * spmpar(1))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -3575,7 +3575,7 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z) .lt. 0.0) go to 100
-if (amin1(x+y,x+z,y+z) .lt. lolim) go to 110
+if (amin1(x + y,x + z,y + z) .lt. lolim) go to 110
 if (amax1(x,y,z) .gt. uplim) go to 120
 !
 ierr = 0
@@ -3678,14 +3678,14 @@ double precision :: dpmpar
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
 !
-                lolim = 5.0d0 * dpmpar(2)
-                uplim = 0.2d0 * dpmpar(3)
+lolim = 5.0d0 * dpmpar(2)
+uplim = 0.2d0 * dpmpar(3)
 !
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          errtol ** 6 / (4 * (1 - errtol)).
 !
-       errtol = (3.6 * sngl(dpmpar(1)))**(1.0/6.0)
+errtol = (3.6 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -3693,7 +3693,7 @@ double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z) .lt. 0.d0) go to 100
-if (dmin1(x+y,x+z,y+z) .lt. lolim) go to 110
+if (dmin1(x + y,x + z,y + z) .lt. lolim) go to 110
 if (dmax1(x,y,z) .gt. uplim) go to 120
 !
 ierr = 0
@@ -3797,16 +3797,16 @@ real :: spmpar
 !          Relative error due to truncation is less than
 !          3 * errtol ** 6 / (1 - errtol) ** 3/2.
 !
-        errtol = (.28 * spmpar(1)) ** (1.0/6.0)
+errtol = (.28 * spmpar(1)) ** (1.0/6.0)
 !
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * errtol / machine
 !          MINIMUM) ** (2/3).
 !
-        mu = -2.0/3.0
-        lolim = 2.0001 * spmpar(3) ** mu
-        uplim = (10.0 * spmpar(2) / errtol) ** mu
+mu = -2.0/3.0
+lolim = 2.0001 * spmpar(3) ** mu
+uplim = (10.0 * spmpar(2) / errtol) ** mu
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -3814,7 +3814,7 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z) .lt. 0.0) go to 100
-if (amin1(x+y,z) .lt. lolim) go to 110
+if (amin1(x + y,z) .lt. lolim) go to 110
 if (amax1(x,y,z) .gt. uplim) go to 120
 !
 ierr = 0
@@ -3897,7 +3897,7 @@ double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
 double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, &
-&errtol, lamda
+   & errtol, lamda
 double precision :: lolim, mu, power4, sigma, s1, s2, uplim
 double precision :: xn, xndev
 double precision :: xnroot
@@ -3928,16 +3928,16 @@ double precision :: dpmpar
 !          Relative error due to truncation is less than
 !          3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
 !
-        errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
+errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * ERRTOL / machine
 !          MINIMUM) ** (2/3).
 !
-        mu = -2.d0/3.d0
-        lolim = 2.00000000001d0 * dpmpar(3) ** mu
-        uplim = (10.d0 * dpmpar(2) / errtol) ** mu
+mu = -2.d0/3.d0
+lolim = 2.00000000001d0 * dpmpar(3) ** mu
+uplim = (10.d0 * dpmpar(2) / errtol) ** mu
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -3945,7 +3945,7 @@ double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z) .lt. 0.d0) go to 100
-if (dmin1(x+y,z) .lt. lolim) go to 110
+if (dmin1(x + y,z) .lt. lolim) go to 110
 if (dmax1(x,y,z) .gt. uplim) go to 120
 !
 ierr = 0
@@ -4065,9 +4065,9 @@ real :: spmpar
 !          uplim is not greater than 0.3 times the cube root of
 !          the value of uplim used in the code for rc.
 !
-         mu = 1.0/3.0
-         lolim = 1.0001 * (5.0 * spmpar(2))**mu
-         uplim = .29999 * (0.2 * spmpar(3))**mu
+mu = 1.0/3.0
+lolim = 1.0001 * (5.0 * spmpar(2))**mu
+uplim = .29999 * (0.2 * spmpar(3))**mu
 !
 !          errtol is set to the desired error tolerance. The
 !          relative error due to truncation of the series for rj
@@ -4075,7 +4075,7 @@ real :: spmpar
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
 !
-         errtol = (.28 * spmpar(1))**(1.0/6.0)
+errtol = (.28 * spmpar(1))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -4083,7 +4083,7 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !
 if (amin1(x,y,z,p) .lt. 0.0) go to 100
-if (amin1(x+y,x+z,y+z,p) .lt. lolim) go to 110
+if (amin1(x + y,x + z,y + z,p) .lt. lolim) go to 110
 if (amax1(x,y,z,p) .gt. uplim) go to 120
 !
 ierr = 0
@@ -4178,7 +4178,7 @@ double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
 double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, &
-&e2, e3
+   & e2, e3
 double precision :: epslon, errtol, etolrc, lamda, lolim, mu
 double precision :: pn, pndev
 double precision :: power4, sigma, s1, s2, s3, uplim
@@ -4214,9 +4214,9 @@ double precision :: dpmpar
 !          uplim is not greater than 0.3 times the cube root of
 !          the value of uplim used in the code for rc.
 !
-         mu = 1.d0/3.d0
-         lolim = 1.00000000001d0 * (5.0d0 * dpmpar(2))**mu
-         uplim = .299999999999d0 * (0.2d0 * dpmpar(3))**mu
+mu = 1.d0/3.d0
+lolim = 1.00000000001d0 * (5.0d0 * dpmpar(2))**mu
+uplim = .299999999999d0 * (0.2d0 * dpmpar(3))**mu
 !
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation of the series for rj
@@ -4224,7 +4224,7 @@ double precision :: dpmpar
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
 !
-       errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
+errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -4232,7 +4232,7 @@ double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 if (dmin1(x,y,z,p) .lt. 0.d0) go to 100
-if (dmin1(x+y,x+z,y+z,p) .lt. lolim) go to 110
+if (dmin1(x + y,x + z,y + z,p) .lt. lolim) go to 110
 if (dmax1(x,y,z,p) .gt. uplim) go to 120
 !
 ierr = 0
@@ -4336,8 +4336,8 @@ real :: spmpar
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
 !
-                lolim = 5.0 * spmpar(2)
-                uplim = 0.2 * spmpar(3)
+lolim = 5.0 * spmpar(2)
+uplim = 0.2 * spmpar(3)
 !
 !          Input ...
 !
@@ -4445,8 +4445,8 @@ double precision :: dpmpar
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
 !
-                lolim = 5.0d0 * dpmpar(2)
-                uplim = 0.2d0 * dpmpar(3)
+lolim = 5.0d0 * dpmpar(2)
+uplim = 0.2d0 * dpmpar(3)
 !
 !          Input ...
 !
@@ -4528,8 +4528,8 @@ data pihalf /1.5707963267949/
 !            be used, and eps is the smallest real number
 !            for which 1 + eps .GT. 1.
 !
-              max = ipmpar(3)
-              eps = spmpar(1)
+max = ipmpar(3)
+eps = spmpar(1)
 !
 !     ----------------
 !     Calculation for l = 0.0
@@ -4623,8 +4623,8 @@ v = f - u
 !     Uses Maclaurin expansion when u or v .LE. 0.01
 !
 if (u .gt. 0.01) go to 10
-   call scdm (u,k,s,c,d)
-   return
+call scdm (u,k,s,c,d)
+return
 10 if (v .gt. 0.01) go to 20
 call scdm (v,k,s1,c1,d1)
 s = c1/d1
@@ -4673,7 +4673,7 @@ c1 = -(1.0 + k2)/6.0
 c2 = (1.0 + k2*(14.0 + k2))/120.0
 c3 = -(1.0 + k2*(135.0 + k2*(135.0 + k2)))/5040.0
 c4 = (1.0 + k2*(1228.0 + k2*(5478.0 + k2*(1228.0 + k2))))/ &
-&362880.0
+   & 362880.0
 s = u*(1.0 + u2*(c1 + u2*(c2 + u2*(c3 + c4*u2))))
 c = sqrt(1.0 - s*s)
 d = sqrt(1.0 - (k*s)**2)
@@ -4688,7 +4688,7 @@ real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
 real :: a, ai, coef, eps, pihalf, q1, q2, qd, qh, qn, sum, temp, &
-&tol, v, w, x
+   & tol, v, w, x
 real :: spmpar
 real :: i
 !     -------------------------------------------------------------
@@ -4755,7 +4755,7 @@ real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
 real :: a, ch, coef, e1, e1n, e2, e2n, eps, pi, pihalf, q1, q1n, &
-&q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn
+   & q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn
 real :: spmpar
 real :: n
 !     ----------------------------------------------------------------
@@ -4801,10 +4801,10 @@ sum = 0.0
 !
 20 xn = n*x2
 if (xn .gt. 1.0) go to 30
-   call snhcsh(sh,ch,xn,-1)
-   sh = sh + xn
-   a = 2.0*q1n*abs(q1n)*sh/(1.0 + q2n)
-   go to 40
+call snhcsh(sh,ch,xn,-1)
+sh = sh + xn
+a = 2.0*q1n*abs(q1n)*sh/(1.0 + q2n)
+go to 40
 30 a = q1n*(e1n - e2n)/(1.0 + q2n)
 40 sum = sum + a
 if (abs(a) .lt. tol*abs(sum)) go to 50
@@ -4838,7 +4838,7 @@ complex, intent(in) :: u
 complex, intent(inout) :: s, c, d
 real, intent(in) :: k, l
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
-&t, t1, t2, td1, td2, u1, u2
+   & t, t1, t2, td1, td2, u1, u2
 real :: k2
 !     -------------------------------------------------------------
 !     elpfc1 calculates the elliptic functions sn(u,k), CN(u,k),
@@ -4864,7 +4864,7 @@ go to 40
 !     Calculation for U1 = 0.
 !
 10 call ellpf (u2,l,k,s2,c2,d2,ierr)
-if  (ierr .ne. 0) return
+if (ierr .ne. 0) return
 if (c2 .eq. 0.0) go to 50
 s1 = 0.0
 s2 = s2/c2
@@ -4958,12 +4958,12 @@ return
 10 ierr = 0
 z4 = w*w
 z6 = z4*w
-w = 1e0/w + 6e0*z4*(5e0+z6)/(1e0-z6)**2 + z4* &
-&(((((-2.6427662e-10*z6+1.610954818e-8)*z6+7.38610752879e-6)* &
-&z6+4.3991444671178e-4)*z6+7.477288220490697e-2)* &
-&z6-6.8484153287299201e-1)/(((((6.2252191e-10*z6+2.553314573e-7)* &
-&z6-2.619832920421e-5)*z6-5.6444801847646e-4)* &
-&z6+4.565553484820106e-2)*z6+1e0)
+w = 1e0/w + 6e0*z4*(5e0 + z6)/(1e0 - z6)**2 + z4* &
+   & (((((-2.6427662e-10*z6 + 1.610954818e-8)*z6 + 7.38610752879e-6)* &
+   & z6 + 4.3991444671178e-4)*z6 + 7.477288220490697e-2)* &
+   & z6 - 6.8484153287299201e-1)/(((((6.2252191e-10*z6 + 2.553314573e-7)* &
+   & z6 - 2.619832920421e-5)*z6 - 5.6444801847646e-4)* &
+   & z6 + 4.565553484820106e-2)*z6 + 1e0)
 return
 end subroutine peq
 
@@ -4996,7 +4996,7 @@ z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
 !
 z3 = z1*z1*z1
 z6 = z3*z3
-w = z3*(1e0-z6)**3
+w = z3*(1e0 - z6)**3
 zr = abs(real(w)) + abs(aimag(w))
 if (zr.ne.0e0) go to 10
 ierr = 1
@@ -5005,13 +5005,13 @@ return
 !     Evaluation of DP(z1)
 !
 10 ierr = 0
-w = (((14e0*z6+294e0)*z6+126e0)*z6-2e0)/w + &
-&z3*((((((-2.95539175e-9*z6-2.6764693031e-7)*z6+2.402192743346e-5) &
-&*z6+1.9656661451391e-4)*z6+1.760135529461036e-2)* &
-&z6+8.1026243498822636e-1)*z6-2.73936613149196804e0)/ &
-&((((((4.6397763e-10*z6+5.413482233e-8)*z6-1.56293298374e-6)* &
-&z6-1.0393701076352e-4)*z6+9.5553182532237e-4)* &
-&z6+9.131106969640212e-2)*z6+1e0)
+w = (((14e0*z6 + 294e0)*z6 + 126e0)*z6 - 2e0)/w + &
+   & z3*((((((-2.95539175e-9*z6 - 2.6764693031e-7)*z6 + 2.402192743346e-5) &
+   & *z6 + 1.9656661451391e-4)*z6 + 1.760135529461036e-2)* &
+   & z6 + 8.1026243498822636e-1)*z6 - 2.73936613149196804e0)/ &
+   & ((((((4.6397763e-10*z6 + 5.413482233e-8)*z6 - 1.56293298374e-6)* &
+   & z6 - 1.0393701076352e-4)*z6 + 9.5553182532237e-4)* &
+   & z6 + 9.131106969640212e-2)*z6 + 1e0)
 return
 end subroutine peq1
 
@@ -5052,13 +5052,14 @@ return
 10 ierr = 0
 z4 = w*w
 z6 = z4*w
-w = 1e0/w + 4e0*w*(3e0+z4)/(1e0-z4)**2 + &
-&w*((((((((-7.233108e-11*z4+1.714197273e-8)*z4-2.5369036492e-7)* &
-&z4-7.98710206868e-6)*z4+6.4850606909737e-4)*z4+7.39624629362938e-3)*z4+2.012382768497244e-2)*z4+7.1177297543136598e-1)* &
-&z4-2.54636399353830738e0)/((((((((5.1161516e-10*z4+6.61289408e-9) &
-&*z4+4.4618987048e-7)*z4-8.42694918892e-6)*z4+4.42886829095e-6)* &
-&z4-4.22629935217101e-3)*z4+2.577496871700433e-2)* &
-&z4+4.2359940482277074e-1)*z4+1e0)
+w = 1e0/w + 4e0*w*(3e0 + z4)/(1e0 - z4)**2 + &
+   & w*((((((((-7.233108e-11*z4 + 1.714197273e-8)*z4 - 2.5369036492e-7)* &
+   & z4 - 7.98710206868e-6)*z4 + 6.4850606909737e-4)*z4 + 7.39624629362938e-3)*z4 + 2.012382768497244e-2)*z4 + &
+   & 7.1177297543136598e-1)* &
+   & z4 - 2.54636399353830738e0)/((((((((5.1161516e-10*z4 + 6.61289408e-9) &
+   & *z4 + 4.4618987048e-7)*z4 - 8.42694918892e-6)*z4 + 4.42886829095e-6)* &
+   & z4 - 4.22629935217101e-3)*z4 + 2.577496871700433e-2)* &
+   & z4 + 4.2359940482277074e-1)*z4 + 1e0)
 return
 end subroutine plem
 
@@ -5091,7 +5092,7 @@ z1 = z - float(m) - (0e0,1e0)*float(n)
 !
 z3 = z1*z1*z1
 z4 = z3*z1
-w = (z1*(1e0-z4))**3
+w = (z1*(1e0 - z4))**3
 zr = abs(real(w)) + abs(aimag(w))
 if (zr.ne.0e0) go to 10
 ierr = 1
@@ -5100,16 +5101,16 @@ return
 !     Evaluation of DP(z1)
 !
 10 ierr = 0
-w = (((1e1*z4+9e1)*z4+3e1)*z4-2e0)/w + &
-&z1*((((((((((-3.9046302e-9*z4-1.001487137e-8)*z4+5.9573043092e-7) &
-&*z4-2.482518130524e-5)*z4+1.4557266595395e-4)* &
-&z4+4.56633655643206e-3)*z4+6.224782572111135e-2)* &
-&z4+1.038527937794269e-2)*z4+1.19804620802637942e0)* &
-&z4+6.42791439683811718e0)*z4-5.09272798707661477e0)/ &
-&((((((((((4.726888e-11*z4-3.0667983e-9)*z4+1.0087596089e-7)* &
-&z4-8.060683451e-8)*z4+1.184299251664e-5)*z4-2.3096723361547e-4)* &
-&z4-2.90730903142055e-3)*z4+1.338392411135511e-2)* &
-&z4+2.3098639320021426e-1)*z4+8.4719880964554148e-1)*z4+1e0)
+w = (((1e1*z4 + 9e1)*z4 + 3e1)*z4 - 2e0)/w + &
+   & z1*((((((((((-3.9046302e-9*z4 - 1.001487137e-8)*z4 + 5.9573043092e-7) &
+   & *z4 - 2.482518130524e-5)*z4 + 1.4557266595395e-4)* &
+   & z4 + 4.56633655643206e-3)*z4 + 6.224782572111135e-2)* &
+   & z4 + 1.038527937794269e-2)*z4 + 1.19804620802637942e0)* &
+   & z4 + 6.42791439683811718e0)*z4 - 5.09272798707661477e0)/ &
+   & ((((((((((4.726888e-11*z4 - 3.0667983e-9)*z4 + 1.0087596089e-7)* &
+   & z4 - 8.060683451e-8)*z4 + 1.184299251664e-5)*z4 - 2.3096723361547e-4)* &
+   & z4 - 2.90730903142055e-3)*z4 + 1.338392411135511e-2)* &
+   & z4 + 2.3098639320021426e-1)*z4 + 8.4719880964554148e-1)*z4 + 1e0)
 return
 end subroutine plem1
 
@@ -5122,9 +5123,9 @@ integer, intent(in) :: n0
 real, intent(inout) :: a, p, x(*), y(*)
 integer :: k, m, n
 real :: a3d8(3), aj0, aj1, alnpi, aph1(3), aph2(3), aph4(3), b, &
-&bgd1, bgd2, c, cape, caph, capv, cee, circm, cst(3), d1sq, d2sq, &
-&e(5), e2(10), e3(15), f, g(2), h(2), p1, pi, psi1, rsq(3), rtpi, &
-&rtpii, sum, t, t1, tau, tausq, twopi, u, v, w, xk, yk, ykm1, z
+   & bgd1, bgd2, c, cape, caph, capv, cee, circm, cst(3), d1sq, d2sq, &
+   & e(5), e2(10), e3(15), f, g(2), h(2), p1, pi, psi1, rsq(3), rtpi, &
+   & rtpii, sum, t, t1, tau, tausq, twopi, u, v, w, xk, yk, ykm1, z
 real :: erfc1
 real :: spmpar
 real :: kom, l
@@ -5137,21 +5138,21 @@ data rtpi/1.77245385090552/
 data rtpii/.56418958354776/
 !     -------------------
 data e(1)/.885777518572895e+00/,  e(2)/-.981151952778050e+00/, &
-&e(3)/.759305502082485e+00/,  e(4)/-.353644980686977e+00/, &
-&e(5)/.695232092435207e-01/
+   & e(3)/.759305502082485e+00/,  e(4)/-.353644980686977e+00/, &
+   & e(5)/.695232092435207e-01/
 data e2(1) /.886226470016632e+00/,  e2(2) /-.999950714561036e+00/, &
-&e2(3) /.885348820003892e+00/,  e2(4) /-.660611239043357e+00/, &
-&e2(5) /.421821197160099e+00/,  e2(6) /-.222898055667208e+00/, &
-&e2(7) /.905057384150449e-01/,  e2(8) /-.254906111884287e-01/, &
-&e2(9) /.430895168984138e-02/,  e2(10)/-.323377239693247e-03/
+   & e2(3) /.885348820003892e+00/,  e2(4) /-.660611239043357e+00/, &
+   & e2(5) /.421821197160099e+00/,  e2(6) /-.222898055667208e+00/, &
+   & e2(7) /.905057384150449e-01/,  e2(8) /-.254906111884287e-01/, &
+   & e2(9) /.430895168984138e-02/,  e2(10)/-.323377239693247e-03/
 data e3(1) /.886226924931465e+00/,  e3(2) /-.999999899776252e+00/, &
-&e3(3) /.886223733186722e+00/,  e3(4) /-.666626670510907e+00/, &
-&e3(5) /.442851899328569e+00/,  e3(6) /-.265638206366025e+00/, &
-&e3(7) /.145060043403014e+00/,  e3(8) /-.714909837799889e-01/, &
-&e3(9) /.309199295521210e-01/,  e3(10)/-.112323532148441e-01/, &
-&e3(11)/.324944543171185e-02/,  e3(12)/-.704260243309096e-03/, &
-&e3(13)/.105787574480633e-03/,  e3(14)/-.971864864160461e-05/, &
-&e3(15)/.408335517232165e-06/
+   & e3(3) /.886223733186722e+00/,  e3(4) /-.666626670510907e+00/, &
+   & e3(5) /.442851899328569e+00/,  e3(6) /-.265638206366025e+00/, &
+   & e3(7) /.145060043403014e+00/,  e3(8) /-.714909837799889e-01/, &
+   & e3(9) /.309199295521210e-01/,  e3(10)/-.112323532148441e-01/, &
+   & e3(11)/.324944543171185e-02/,  e3(12)/-.704260243309096e-03/, &
+   & e3(13)/.105787574480633e-03/,  e3(14)/-.971864864160461e-05/, &
+   & e3(15)/.408335517232165e-06/
 data aph1(1)/2.02e-7/, aph1(2)/2.08e-13/, aph1(3)/2.71e-19/
 data aph2(1)/1.22e-2/, aph2(2)/1.23e-4/, aph2(3)/1.34e-6/
 data aph4(1)/.6962e-1/, aph4(2)/.6990e-2/, aph4(3)/.7311e-3/
@@ -5162,239 +5163,239 @@ data cst(1)/.5625e-4/, cst(2)/.57e-7/, cst(3)/.6512e-10/
 !     Tau is a machine dependent tolerance. It is assumed that A
 !     7 or more digit floating point arithmetic is being used.
 !     -------------------
-tau=2.0*spmpar(1)
-if (tau.lt.3.e-11) tau=amax1(5.0*tau,1.e-14)
+tau = 2.0*spmpar(1)
+if (tau.lt.3.e-11) tau = amax1(5.0*tau,1.e-14)
 !     -------------------
-n=n0
+n = n0
 if (n.eq.2.or.n.lt.1) go to 4021
-tausq=tau*tau
+tausq = tau*tau
 !
-p=0.0
-ind=0
-a=0.0
-kom=0.0
-k=1
+p = 0.0
+ind = 0
+a = 0.0
+kom = 0.0
+k = 1
 if (n.ne.1) go to 10
 !
-w=x(2)-x(1)
-z=y(2)-y(1)
-u=x(3)-x(1)
-v=y(3)-y(1)
-xk=0.0
-psi1=v*w-u*z
+w = x(2) - x(1)
+z = y(2) - y(1)
+u = x(3) - x(1)
+v = y(3) - y(1)
+xk = 0.0
+psi1 = v*w - u*z
 if (psi1.ge.0.0) go to 21
 !
-p=-1.0
-t1=w
-w=u
-u=t1
-t1=v
-v=z
-z=t1
+p = -1.0
+t1 = w
+w = u
+u = t1
+t1 = v
+v = z
+z = t1
 go to 21
 !
-10 ko=0
-x(n+1)=x(1)
-y(n+1)=y(1)
-u=x(2)-x(1)
-v=y(2)-y(1)
-xk=x(1)
-yk=y(1)
+10 ko = 0
+x(n + 1) = x(1)
+y(n + 1) = y(1)
+u = x(2) - x(1)
+v = y(2) - y(1)
+xk = x(1)
+yk = y(1)
 !
-20 w=x(1)-x(n)
-z=y(1)-y(n)
-21 d1sq=w*w+z*z
+20 w = x(1) - x(n)
+z = y(1) - y(n)
+21 d1sq = w*w + z*z
 if (d1sq.gt.tausq) go to 30
 if (n.eq.1) go to 4011
-n=n-1
+n = n - 1
 if (n.eq.2) return
 go to 20
 !
-30 d2sq=u*u+v*v
+30 d2sq = u*u + v*v
 if (d2sq.gt.tausq) go to 40
 if (n.eq.1) go to 4011
-31 k=k+1
-u=x(k+1)-xk
-v=y(k+1)-yk
-d2sq=u*u+v*v
+31 k = k + 1
+u = x(k + 1) - xk
+v = y(k + 1) - yk
+d2sq = u*u + v*v
 if (d2sq.le.tausq) go to 31
-if (k.eq.n-1) return
+if (k.eq.n - 1) return
 !
-40 a=xk*(y(k+1)-y(n))
-bgd1=sqrt(d1sq+d1sq)
-bgd2=sqrt(d2sq+d2sq)
+40 a = xk*(y(k + 1) - y(n))
+bgd1 = sqrt(d1sq + d1sq)
+bgd2 = sqrt(d2sq + d2sq)
 !
 !             Processing vertex (XK,YK)
 !
-50 psi1=v*w-u*z
-cee=u*w+v*z
-aj0=atan2(psi1,cee)
-kom=kom+aj0
-l=0.0
-b=.5*(x(k)*x(k)+y(k)*y(k))
+50 psi1 = v*w - u*z
+cee = u*w + v*z
+aj0 = atan2(psi1,cee)
+kom = kom + aj0
+l = 0.0
+b = .5*(x(k)*x(k) + y(k)*y(k))
 if (b.gt.aph1(iop)) go to 60
-p1=aj0/twopi
+p1 = aj0/twopi
 go to 3621
 !
-60 g(1)=(w*x(k)+z*y(k))/bgd1
-g(2)=(u*x(k)+v*y(k))/bgd2
-h(1)=(-y(k)*w+x(k)*z)/bgd1
-h(2)=(-y(k)*u+x(k)*v)/bgd2
+60 g(1) = (w*x(k) + z*y(k))/bgd1
+g(2) = (u*x(k) + v*y(k))/bgd2
+h(1) = (-y(k)*w + x(k)*z)/bgd1
+h(2) = (-y(k)*u + x(k)*v)/bgd2
 if (abs(psi1).gt.bgd1*bgd2*a3d8(iop)) go to 80
 if (cee.lt.0.0) go to 70
 if (abs(aj0).gt.tau.and.g(1).lt.0.0) go to 80
-p1=0.0
+p1 = 0.0
 go to 3621
 !
-70 if (abs(psi1).le.(.5*tau*bgd1*bgd2)) ind=2
+70 if (abs(psi1).le.(.5*tau*bgd1*bgd2)) ind = 2
 if (psi1.lt.0.0) go to 71
-p1=.5*erfc1(0,h(2))
+p1 = .5*erfc1(0,h(2))
 go to 3621
-71 p1=-.5*erfc1(0,h(1))
+71 p1 = -.5*erfc1(0,h(1))
 go to 3621
 !
 80 if (b.gt.aph2(iop)) go to 90
-c=rtpi*(h(2)-h(1))-(g(2)*h(2)-g(1)*h(1))
-p1=(aj0-c)/twopi
+c = rtpi*(h(2) - h(1)) - (g(2)*h(2) - g(1)*h(1))
+p1 = (aj0 - c)/twopi
 go to 3621
 !
 !                 Computation of l
 !
 90 if (g(1).lt.0.0) go to 100
 if (g(2).ge.0.0) go to 130
-g(2)=-g(2)
-h(2)=-h(2)
+g(2) = -g(2)
+h(2) = -h(2)
 if (abs(h(2)).le.aph4(iop)) go to 91
-l=.5*erfc1(0,-h(2))
+l = .5*erfc1(0,-h(2))
 go to 120
-91 l=.5+rtpii*h(2)
+91 l = .5 + rtpii*h(2)
 go to 120
 !
-100 g(1)=-g(1)
-h(1)=-h(1)
+100 g(1) = -g(1)
+h(1) = -h(1)
 if (g(2).lt.0.0) go to 110
 if (abs(h(1)).le.aph4(iop)) go to 101
-l=.5*erfc1(0,h(1))
+l = .5*erfc1(0,h(1))
 go to 120
-101 l=.5-rtpii*h(1)
+101 l = .5 - rtpii*h(1)
 go to 120
 !
-110 g(2)=-g(2)
-h(2)=-h(2)
+110 g(2) = -g(2)
+h(2) = -h(2)
 if (abs(h(1)).le.aph4(iop)) go to 112
 if (abs(h(2)).le.aph4(iop)) go to 111
-l=.5*(erfc1(0,h(1))-erfc1(0,h(2)))
+l = .5*(erfc1(0,h(1)) - erfc1(0,h(2)))
 go to 130
-111 l=rtpii*h(2)-.5*erf(h(1))
+111 l = rtpii*h(2) - .5*erf(h(1))
 go to 130
 112 if (abs(h(2)).le.aph4(iop)) go to 113
-l=.5*erf(h(2))-rtpii*h(1)
+l = .5*erf(h(2)) - rtpii*h(1)
 go to 130
-113 l=rtpii*(h(2)-h(1))
+113 l = rtpii*(h(2) - h(1))
 go to 130
 !
-120 psi1=-psi1
+120 psi1 = -psi1
 if (psi1.le.0.0) go to 121
-l=l-1.0
-aj0=aj0+pi
+l = l - 1.0
+aj0 = aj0 + pi
 go to 130
-121 aj0=aj0-pi
+121 aj0 = aj0 - pi
 !
 !                 Series evaluation
 !
 130 if (b.ge.rsq(iop)) go to 171
-cape=aj0
-caph=.5*aj0
-m=1
-f=0.0
-aj1=h(2)-h(1)
-circm=aj1
-if (iop-2) 140,150,160
+cape = aj0
+caph = .5*aj0
+m = 1
+f = 0.0
+aj1 = h(2) - h(1)
+circm = aj1
+if (iop - 2) 140,150,160
 !
-140 sum=e(m)*aj1
-141 m=m+1
-h(1)=h(1)*g(1)
-h(2)=h(2)*g(2)
-t=h(2)-h(1)
-f=f+b
-capv=(f*cape+t)/m
-sum=sum+e(m)*capv
+140 sum = e(m)*aj1
+141 m = m + 1
+h(1) = h(1)*g(1)
+h(2) = h(2)*g(2)
+t = h(2) - h(1)
+f = f + b
+capv = (f*cape + t)/m
+sum = sum + e(m)*capv
 if (m.ge.5) go to 170
-cape=circm
-circm=capv
+cape = circm
+circm = capv
 go to 141
 !
-150 sum=e2(m)*aj1
-151 m=m+1
-h(1)=h(1)*g(1)
-h(2)=h(2)*g(2)
-t=h(2)-h(1)
-f=f+b
-capv=(f*cape+t)/m
-sum=sum+e2(m)*capv
+150 sum = e2(m)*aj1
+151 m = m + 1
+h(1) = h(1)*g(1)
+h(2) = h(2)*g(2)
+t = h(2) - h(1)
+f = f + b
+capv = (f*cape + t)/m
+sum = sum + e2(m)*capv
 if (m.ge.10) go to 170
-cape=circm
-circm=capv
+cape = circm
+circm = capv
 go to 151
 !
-160 sum=e3(m)*aj1
-161 m=m+1
-h(1)=h(1)*g(1)
-h(2)=h(2)*g(2)
-t=h(2)-h(1)
-f=f+b
-capv=(f*cape+t)/m
-sum=sum+e3(m)*capv
+160 sum = e3(m)*aj1
+161 m = m + 1
+h(1) = h(1)*g(1)
+h(2) = h(2)*g(2)
+t = h(2) - h(1)
+f = f + b
+capv = (f*cape + t)/m
+sum = sum + e3(m)*capv
 if (m.ge.15) go to 170
-cape=circm
-circm=capv
+cape = circm
+circm = capv
 go to 161
 !
-170 p1=l+exp(-(b+alnpi))*(caph-sum)
+170 p1 = l + exp(-(b + alnpi))*(caph - sum)
 go to 3621
-171 p1=l
+171 p1 = l
 !
 !               Standard termination
 !
 3621 if (k.ne.n) go to 3651
 if (n.ne.1) go to 3631
-p=abs(p+abs(p1))
+p = abs(p + abs(p1))
 return
 !
-3631 p=p-p1
-kom=kom/twopi
-a=.5*a
+3631 p = p - p1
+kom = kom/twopi
+a = .5*a
 if (kom.lt.0.0) go to 3641
-ko=int(kom+.125)
+ko = int(kom + .125)
 go to 3645
-3641 ko=int(kom-.125)
-3645 p=p+float(ko)
+3641 ko = int(kom - .125)
+3645 p = p + float(ko)
 return
 !
 !              Set up the next vertex
 !
-3651 w=u
-z=v
-bgd1=bgd2
-xk=x(k+1)
-yk=y(k+1)
-ykm1=y(k)
-3661 k=k+1
-u=x(k+1)-xk
-v=y(k+1)-yk
-d2sq=u*u+v*v
+3651 w = u
+z = v
+bgd1 = bgd2
+xk = x(k + 1)
+yk = y(k + 1)
+ykm1 = y(k)
+3661 k = k + 1
+u = x(k + 1) - xk
+v = y(k + 1) - yk
+d2sq = u*u + v*v
 if (d2sq.le.tausq) go to 3661
-bgd2=sqrt(d2sq+d2sq)
-p=p-p1
-a=a+xk*(y(k+1)-ykm1)
+bgd2 = sqrt(d2sq + d2sq)
+p = p - p1
+a = a + xk*(y(k + 1) - ykm1)
 go to 50
 !
 !                  Error return
 !
-4011 ind=1
-p=5.0
+4011 ind = 1
+p = 5.0
 return
-4021 ind=3
+4021 ind = 3
 return
 end subroutine valr2
 
@@ -5407,8 +5408,8 @@ real, intent(out) :: p
 real, intent(in) :: r
 integer :: i, n
 real :: a, a1, an, anm1, bk2, c0, c1, c2, c3, const, d2, delta, e, &
-&eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, &
-&x, x0, y1, z, zm, zp, zr, zrs
+   & eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, &
+   & x, x0, y1, z, zm, zp, zr, zrs
 real :: exparg
 real :: erfcr
 real :: rcomp
@@ -5450,207 +5451,207 @@ data c1 /.707106781186548/
 data c2 /.564189583547756/
 data c3 /6.28318530717959/
 !-----------------------
-  p = 0.0
-  if (r .lt. 0.0) goto 115
-  if (d .lt. 0.0) goto 120
-  ierr = 0
-  if (r .eq. 0.0) return
+p = 0.0
+if (r .lt. 0.0) goto 115
+if (d .lt. 0.0) goto 120
+ierr = 0
+if (r .eq. 0.0) return
 !
-  eps0 = spmpar(1)
-  z = - alog(eps0)
-  if (j .ne. 0) goto 40
+eps0 = spmpar(1)
+z = - alog(eps0)
+if (j .ne. 0) goto 40
 !------------------------------------------------------------------
 !   For j = 0, error in d if d .LT. 0 or d .GT. 1
 !------------------------------------------------------------------
 !                j = 0
 !--------------------------------------------------
-  if (d .gt. 1.0) goto 120
-  if (d .eq. 1.0) goto 45
-  if (d .ne. 0.0) goto 5
+if (d .gt. 1.0) goto 120
+if (d .eq. 1.0) goto 45
+if (d .ne. 0.0) goto 5
 !---------------------------------------
 !          j = 0,     d = 0
 !---------------------------------------
-  p = erf(r*c1)
-  return
+p = erf(r*c1)
+return
 !-------------------------------------------------
 !   j = 0,  (r*r .gt. -2*log(eps0))  p = 1
 !-------------------------------------------------
 5 if (r*r .lt. 2.0*z) goto 10
-  p = 1.0
-  return
+p = 1.0
+return
 !---------------------------------------------
 10 x = r
-  d2 = d*d
-  y1 = r/d
-  t = 0.5*y1
-  zm = (0.5 - d2) + 0.5
-  t2 = t*t
-  t = t2*zm
+d2 = d*d
+y1 = r/d
+t = 0.5*y1
+zm = (0.5 - d2) + 0.5
+t2 = t*t
+t = t2*zm
 !
-  eps = 10.0*eps0
-  if (t .gt. 14.0) go to 25
+eps = 10.0*eps0
+if (t .gt. 14.0) go to 25
 !-------------------------------------------------
 !    j = 0,   t .le. 14
 !-------------------------------------------------
-  zp = 1.0 + d2
-  zr = zm/zp
-  zrs = zr*zr
-  bk2 = t2*zp
-  c0 = 2.0*d/zp
-  s0 = exp(-bk2)
-  t0 = 0.5 + (0.5 - s0)
-  if (bk2 .le. 0.15) t0 = -rexp(-bk2)
-  t0 = c0*t0
-  s0 = c0*s0
+zp = 1.0 + d2
+zr = zm/zp
+zrs = zr*zr
+bk2 = t2*zp
+c0 = 2.0*d/zp
+s0 = exp(-bk2)
+t0 = 0.5 + (0.5 - s0)
+if (bk2 .le. 0.15) t0 = -rexp(-bk2)
+t0 = c0*t0
+s0 = c0*s0
 !
-  p = t0
-  an = 0.0
+p = t0
+an = 0.0
 20 an = an + 2.0
-     f = (an - 1.0)/an
-     w = t/an
-     x = s0*w
-     t0 = f*zrs*t0 - (w + zr)*x
-     s0 = w*x
-     p = p + t0
-     if (t0 .gt. eps*p) go to 20
-  return
+f = (an - 1.0)/an
+w = t/an
+x = s0*w
+t0 = f*zrs*t0 - (w + zr)*x
+s0 = w*x
+p = p + t0
+if (t0 .gt. eps*p) go to 20
+return
 !------------------------------------------------
 !   j = 0,    t .gt. 14
 !------------------------------------------------
 25 t = 0.25/t
-  const = d2/zm
-  delta = sqrt(zm)
-  x = 2.0*(c1*c2)/(r*delta)
-  expt = exp(-0.5*r*r)
-  call erfc0 (1, c1*r, expt, m)
-  m = m/delta
+const = d2/zm
+delta = sqrt(zm)
+x = 2.0*(c1*c2)/(r*delta)
+expt = exp(-0.5*r*r)
+call erfc0 (1, c1*r, expt, m)
+m = m/delta
 !
-  p = 1.0
-  sum = m
-  an = 0.0
-  if (expt*m .lt. 5.e-3) go to 30
+p = 1.0
+sum = m
+an = 0.0
+if (expt*m .lt. 5.e-3) go to 30
 !
 !          SET  p = 1 - exp(-r*r/2)*m
 !
-     p = (erf(c1*r) - d2/(1.0 + delta))/delta
-     sum = 0.0
+p = (erf(c1*r) - d2/(1.0 + delta))/delta
+sum = 0.0
 !
 !          Compute the asymptotic expansion
 !
 30 an = an + 2.0
-     anm1 = an - 1.0
-     f = anm1/an
-     m0 = m
-     m = const*f*(x - m)
-     if (m .ge. m0 .or. m .lt. 0.0) go to 35
-     x = anm1*f*t*x
-     sum = sum + m
-     if (m .gt. eps*sum) go to 30
+anm1 = an - 1.0
+f = anm1/an
+m0 = m
+m = const*f*(x - m)
+if (m .ge. m0 .or. m .lt. 0.0) go to 35
+x = anm1*f*t*x
+sum = sum + m
+if (m .gt. eps*sum) go to 30
 35 p = p - expt*sum
-  go to 110
+go to 110
 !------------------------------------
 !              j .NE. 0
 !------------------------------------
 40 a1 = r - d
-  t = r*d
-  if (d .ne. 0.0) go to 50
+t = r*d
+if (d .ne. 0.0) go to 50
 !----------------------------------------------
 !     j = 0 AND d = 1, OR j .NE. 0 AND d = 0
 !----------------------------------------------
 45 p = -rexp(-0.5*r*r)
-  return
+return
 !----------------------------------------
 50 a = 0.5*(a1*a1)
-  if (a1 .le. 5.0) go to 55
-  if (a .le. z) go to 60
-      p = 1.0
-      return
+if (a1 .le. 5.0) go to 55
+if (a .le. z) go to 60
+p = 1.0
+return
 55 if (a1 .lt. -5.0 .and. a .gt. -exparg(1)) return
 !----------------------------------------
 60 eps = 1.5e2*eps0
-  if (r .ge. 1.7 .and. t .gt. 16.0) go to 75
+if (r .ge. 1.7 .and. t .gt. 16.0) go to 75
 !------------------------------------------------------------------
 !      j .NE. 0,    r .LT. 1.7  OR  r*d .LE. 16
 !------------------------------------------------------------------
-  tr = 0.5*(r*r)
-  td = 0.5*(d*d)
+tr = 0.5*(r*r)
+td = 0.5*(d*d)
 !
 !       Find the number n of terms to be used in the series
 !
-  z = 0.5*t
-  n = z*e + 1.0
-  tn = ((e*z/n)**(n + n))/(c3*n)
+z = 0.5*t
+n = z*e + 1.0
+tn = ((e*z/n)**(n + n))/(c3*n)
 65 n = n + 1
-      w = z/n
-      tn = tn*(w*w)
-      if (tn .gt. eps) go to 65
+w = z/n
+tn = tn*(w*w)
+if (tn .gt. eps) go to 65
 !
 !       Compute the series
 !
-  m = n
-  call gratio (m + 1.0, tr, s, w, 0)
-  w = rcomp(m,tr)/m
-  p = s
-  do 70 i = 1,n
-      s = s + w
-      w = (m/tr)*w
-      p = s + (td/m)*p
+m = n
+call gratio (m + 1.0, tr, s, w, 0)
+w = rcomp(m,tr)/m
+p = s
+do 70 i = 1,n
+   s = s + w
+   w = (m/tr)*w
+   p = s + (td/m)*p
 70 m = m - 1.0
-  p = exp(-td)*p
-  go to 110
+p = exp(-td)*p
+go to 110
 !------------------------------------------------------------------
 !      j .NE. 0,    r .GE. 1.7  AND  r*d .GT. 16
 !------------------------------------------------------------------
 75 z = c1*abs(a1)
-  w = exp(-a)
-  call erfc0 (1, z, w, s1)
+w = exp(-a)
+call erfc0 (1, z, w, s1)
 !
-  a = 0.5*z/t
-  t = 0.25/t
-  m = c2 - z*s1
-  if (z .ge. 4.0) m = erfcr(z)
-  m = 0.5*a*m
-  x = 0.5*c2*t
-  s1 = s1 + m
-  s2 = c2 + x
+a = 0.5*z/t
+t = 0.25/t
+m = c2 - z*s1
+if (z .ge. 4.0) m = erfcr(z)
+m = 0.5*a*m
+x = 0.5*c2*t
+s1 = s1 + m
+s2 = c2 + x
 !
-  an = 2.0
+an = 2.0
 80 an = an + 2.0
-      anm1 = an - 1.0
-      f = anm1/an
-      m0 = m
-      m = f*a*(x - z*m)
-      x = f*(anm1*t)*x
-      s2 = s2 + x
-      if (m .le. 0.0 .or. m .ge. m0) go to 90
-      s1 = s1 + m
-      if (m .gt. eps*s1) go to 80
+anm1 = an - 1.0
+f = anm1/an
+m0 = m
+m = f*a*(x - z*m)
+x = f*(anm1*t)*x
+s2 = s2 + x
+if (m .le. 0.0 .or. m .ge. m0) go to 90
+s1 = s1 + m
+if (m .gt. eps*s1) go to 80
 !
 90 an = an + 2.0
-      anm1 = an - 1.0
-      x0 = x
-      x = (anm1/an)*(anm1*t)*x
-      if (x .ge. x0) go to 100
-      s2 = s2 + x
-      if (x .gt. eps*s2) go to 90
+anm1 = an - 1.0
+x0 = x
+x = (anm1/an)*(anm1*t)*x
+if (x .ge. x0) go to 100
+s2 = s2 + x
+if (x .gt. eps*s2) go to 90
 !
 100 s1 = 0.5*(r + d)*s1
-  s2 = c1*s2
-  w = w/sqrt(r*d)
-  p = 0.5*w*abs(s1 - s2)
-  if (a1 .gt. 0.0) p = abs(1.0 - 0.5*w*(s1 + s2))
+s2 = c1*s2
+w = w/sqrt(r*d)
+p = 0.5*w*abs(s1 - s2)
+if (a1 .gt. 0.0) p = abs(1.0 - 0.5*w*(s1 + s2))
 !
 !       Termination
 !
 110 if (p .gt. 1.0) p = 1.0
-  return
+return
 115 ierr = 1
-  p = -1.0
-  return
+p = -1.0
+return
 120 ierr = 2
-  p = -1.0
-  return
-  end subroutine circv
+p = -1.0
+return
+end subroutine circv
 
 subroutine erfc0 (ind, x, e, y)
 implicit none
@@ -5676,23 +5677,23 @@ double precision :: w
 data c/.564189583547756/
 !-------------------------
 data a(1)/-1.65581836870402e-4/, a(2)/3.25324098357738e-2/, &
-&a(3)/1.02201136918406e-1/,  a(4)/1.12837916709552e00/
+   & a(3)/1.02201136918406e-1/,  a(4)/1.12837916709552e00/
 data b(1)/4.64988945913179e-3/,  b(2)/7.01333417158511e-2/, &
-&b(3)/4.23906732683201e-1/,  b(4)/1.00000000000000e00/
+   & b(3)/4.23906732683201e-1/,  b(4)/1.00000000000000e00/
 data p(1)/-1.36864857382717e-7/, p(2)/5.64195517478974e-1/, &
-&p(3)/7.21175825088309e00/,  p(4)/4.31622272220567e01/, &
-&p(5)/1.52989285046940e02/,  p(6)/3.39320816734344e02/, &
-&p(7)/4.51918953711873e02/,  p(8)/3.00459261020162e02/
+   & p(3)/7.21175825088309e00/,  p(4)/4.31622272220567e01/, &
+   & p(5)/1.52989285046940e02/,  p(6)/3.39320816734344e02/, &
+   & p(7)/4.51918953711873e02/,  p(8)/3.00459261020162e02/
 data q(1)/1.00000000000000e00/,  q(2)/1.27827273196294e01/, &
-&q(3)/7.70001529352295e01/,  q(4)/2.77585444743988e02/, &
-&q(5)/6.38980264465631e02/,  q(6)/9.31354094850610e02/, &
-&q(7)/7.90950925327898e02/,  q(8)/3.00459260956983e02/
+   & q(3)/7.70001529352295e01/,  q(4)/2.77585444743988e02/, &
+   & q(5)/6.38980264465631e02/,  q(6)/9.31354094850610e02/, &
+   & q(7)/7.90950925327898e02/,  q(8)/3.00459260956983e02/
 data r(1)/2.10144126479064e00/,  r(2)/2.62370141675169e01/, &
-&r(3)/2.13688200555087e01/,  r(4)/4.65807828718470e00/, &
-&r(5)/2.82094791773523e-1/
+   & r(3)/2.13688200555087e01/,  r(4)/4.65807828718470e00/, &
+   & r(5)/2.82094791773523e-1/
 data s(1)/9.41537750555460e01/,  s(2)/1.87114811799590e02/, &
-&s(3)/9.90191814623914e01/,  s(4)/1.80124575948747e01/, &
-&s(5)/1.00000000000000e00/
+   & s(3)/9.90191814623914e01/,  s(4)/1.80124575948747e01/, &
+   & s(5)/1.00000000000000e00/
 !-------------------------
 !
 !                     abs(x) .LT. 0.47
@@ -5713,16 +5714,16 @@ return
 !
 10 if (ax .gt. 4.0) go to 30
 top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
-&+ p(6))*ax + p(7))*ax + p(8)
+   & + p(6))*ax + p(7))*ax + p(8)
 bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
-&+ q(6))*ax + q(7))*ax + q(8)
+   & + q(6))*ax + q(7))*ax + q(8)
 y = top/bot
 !
 20 if (ind .eq. 0) go to 21
-   if (x .ge. 0.0) return
-   if (e .lt. 0.0) e = exp(-x*x)
-   y = 2.0/e - y
-   return
+if (x .ge. 0.0) return
+if (e .lt. 0.0) e = exp(-x*x)
+y = 2.0/e - y
+return
 21 w = dble(x)*dble(x)
 t = w
 eps = w - dble(t)
@@ -5766,10 +5767,10 @@ real :: r(5), s(4)
 !-----------------------------------------------------------------------
 !------------------------
 data r(1)/2.10144126479064e+00/,  r(2)/2.62370141675169e+01/, &
-&r(3)/2.13688200555087e+01/,  r(4)/4.65807828718470e+00/, &
-&r(5)/2.82094791773523e-01/
+   & r(3)/2.13688200555087e+01/,  r(4)/4.65807828718470e+00/, &
+   & r(5)/2.82094791773523e-01/
 data s(1)/9.41537750555460e+01/,  s(2)/1.87114811799590e+02/, &
-&s(3)/9.90191814623914e+01/,  s(4)/1.80124575948747e+01/
+   & s(3)/9.90191814623914e+01/,  s(4)/1.80124575948747e+01/
 !------------------------
 t = (1.0/x)**2
 top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
@@ -5786,9 +5787,9 @@ real, intent(in) :: r0, sx, sy
 real, intent(in) :: k
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a3, a4, c, c8, d, d1, d2, dm, e3, e4, eps, f, &
-&g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, rpi, rt2, s0, s1, &
-&s2, s9, sa, seps1, sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, &
-&yy, z, z1, z2, z3, z8, z9
+   & g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, rpi, rt2, s0, s1, &
+   & s2, s9, sa, seps1, sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, &
+   & yy, z, z1, z2, z3, z8, z9
 real :: exparg
 real :: aerf
 real :: epsln
@@ -5809,21 +5810,21 @@ real :: k8, v(16), w(16)
 !   v(*), w(*)-- Gaussian abscissas and weights of order 32, on (-1,1).
 !-----------------------------------------------------------------------
 data v(1)  /.4830766568773832e-01/, v(2)  /.1444719615827965e+00/, &
-&v(3)  /.2392873622521371e+00/, v(4)  /.3318686022821276e+00/, &
-&v(5)  /.4213512761306353e+00/, v(6)  /.5068999089322294e+00/, &
-&v(7)  /.5877157572407623e+00/, v(8)  /.6630442669302152e+00/, &
-&v(9)  /.7321821187402897e+00/, v(10) /.7944837959679424e+00/, &
-&v(11) /.8493676137325700e+00/, v(12) /.8963211557660521e+00/, &
-&v(13) /.9349060759377397e+00/, v(14) /.9647622555875064e+00/, &
-&v(15) /.9856115115452683e+00/, v(16) /.9972638618494816e+00/
+   & v(3)  /.2392873622521371e+00/, v(4)  /.3318686022821276e+00/, &
+   & v(5)  /.4213512761306353e+00/, v(6)  /.5068999089322294e+00/, &
+   & v(7)  /.5877157572407623e+00/, v(8)  /.6630442669302152e+00/, &
+   & v(9)  /.7321821187402897e+00/, v(10) /.7944837959679424e+00/, &
+   & v(11) /.8493676137325700e+00/, v(12) /.8963211557660521e+00/, &
+   & v(13) /.9349060759377397e+00/, v(14) /.9647622555875064e+00/, &
+   & v(15) /.9856115115452683e+00/, v(16) /.9972638618494816e+00/
 data w(1)  /.9654008851472780e-01/, w(2)  /.9563872007927486e-01/, &
-&w(3)  /.9384439908080457e-01/, w(4)  /.9117387869576388e-01/, &
-&w(5)  /.8765209300440381e-01/, w(6)  /.8331192422694676e-01/, &
-&w(7)  /.7819389578707031e-01/, w(8)  /.7234579410884851e-01/, &
-&w(9)  /.6582222277636185e-01/, w(10) /.5868409347853555e-01/, &
-&w(11) /.5099805926237618e-01/, w(12) /.4283589802222668e-01/, &
-&w(13) /.3427386291302143e-01/, w(14) /.2539206530926206e-01/, &
-&w(15) /.1627439473090567e-01/, w(16) /.7018610009470097e-02/
+   & w(3)  /.9384439908080457e-01/, w(4)  /.9117387869576388e-01/, &
+   & w(5)  /.8765209300440381e-01/, w(6)  /.8331192422694676e-01/, &
+   & w(7)  /.7819389578707031e-01/, w(8)  /.7234579410884851e-01/, &
+   & w(9)  /.6582222277636185e-01/, w(10) /.5868409347853555e-01/, &
+   & w(11) /.5099805926237618e-01/, w(12) /.4283589802222668e-01/, &
+   & w(13) /.3427386291302143e-01/, w(14) /.2539206530926206e-01/, &
+   & w(15) /.1627439473090567e-01/, w(16) /.7018610009470097e-02/
 !----------------------------------------
 !     c = (2**.25)*gamma(3/4)/pi
 !     rpi = 1/sqrt(pi)
@@ -5836,8 +5837,8 @@ data rt2 /1.414213562373095/
 !
 p = 0.0
 if (sx .gt. 0.0 .and. sy .gt. 0.0) go to 5
-   p = -1.e10
-   return
+p = -1.e10
+return
 5 j = 0
 eps = spmpar(1)
 sqeps = sqrt(eps)
@@ -5871,7 +5872,7 @@ t = r0 - s0
 if (t .lt. 0.0) go to 25
 if (t*t .lt. h2) go to 25
 if (r0 .lt. 1/sqeps) go to 20
-t = h3 -2.0*r0*s0 + s0*s0 - k*k
+t = h3 - 2.0*r0*s0 + s0*s0 - k*k
 if (abs(h3) .le. abs(h5)) go to 10
 t = h5 - 2.0*r0*s0 + s0*s0 - h*h
 10 if (t .lt. 0.0) go to 25
@@ -5954,15 +5955,15 @@ h1 = s2*s2/(4.0*rt2*r)
 g2 = g2/rt2
 if (j .eq. 0) g2 = abs(h8 - r)/rt2
 if (abs(g2) .lt. 4.0) go to 55
-   if (h1*abs(g2) .gt. seps1) go to 85
-   p = 0.5*aerf(h8/rt2,r/rt2)
-   return
+if (h1*abs(g2) .gt. seps1) go to 85
+p = 0.5*aerf(h8/rt2,r/rt2)
+return
 55 if (j .ne. 0) go to 60
-   p = 0.5*aerf(h8/rt2,r/rt2)
-   go to 70
+p = 0.5*aerf(h8/rt2,r/rt2)
+go to 70
 60 if (h8 + r .lt. rt2) go to 65
-   p = 0.5*(erfc(g2) - erfc((h8 + r)/rt2))
-   go to 70
+p = 0.5*(erfc(g2) - erfc((h8 + r)/rt2))
+go to 70
 65 p = 0.5*(erf((h8 + r)/rt2) - erf(g2))
 70 if (h1*exp(-g2*g2) .gt. p*seps1) go to 85
 return
@@ -5972,10 +5973,10 @@ g2 = sqrt(z)
 h1 = abs(h8 - g2)
 j = 0
 if (h1 .gt. 5.0) go to 80
-   j = 1
-   z8 = aerf(h8/rt2,g2/rt2)
-   if (z8 .eq. 0.0) go to 85
-   h1 = exp(-0.5*(h8 - g2)**2)/z8
+j = 1
+z8 = aerf(h8/rt2,g2/rt2)
+if (z8 .eq. 0.0) go to 85
+h1 = exp(-0.5*(h8 - g2)**2)/z8
 80 h1 = 1.0/(8.0*rt2*z)*(k8*k8*abs(h8 - g2) + r*r/g2)*s2*s2*h1
 if (abs(h1) .gt. seps1) go to 85
 u = 0.5
@@ -6010,8 +6011,8 @@ if (h2 .gt. 50.0 .or. h3 .gt. 50.0) s0 = 1.5
 yy = 0.25*u*aerf(h2,r8)
 if (yy .gt. 0.1) s9 = 0.5
 if (yy .ge. 5.e-15) go to 95
-   z = yy
-   go to 100
+z = yy
+go to 100
 95 z = amin1(yy,z)
 !
 100 if (z .ge. 0.5) go to 105
@@ -6076,18 +6077,18 @@ t3 = a1/sqrt(1.0 + sa)
 !            H3 .LE. 0.0
 !----------------------------------------
 if (t3 .lt. 0.0) go to 120
-   d2 = 0.5*(1.0 + t3)
-   e4 = 0.25*sa/d2
-   t5 = e4
+d2 = 0.5*(1.0 + t3)
+e4 = 0.25*sa/d2
+t5 = e4
 120 if (z .lt. r) go to 125
-   e3 = 0.5
-   d1 = e3
-   t9 = d1
-   go to 130
+e3 = 0.5
+d1 = e3
+t9 = d1
+go to 130
 125 d1 = 0.5*(1.0 + sqrt(1.0 - z/r))
 e3 = 0.25*z/(r*d1)
 t9 = e3
-130 if (t3 .le.d1 - e3)  go to 165
+130 if (t3 .le.d1 - e3) go to 165
 go to 160
 !----------------------------------------
 !            H3 .GT. 0.0
@@ -6095,22 +6096,22 @@ go to 160
 135 h5 = 1.0
 q = h3/r
 if (q .le. 1.0) go to 140
-   e3 = 0.5
-   d1 = e3
-   t9 = d1
-   go to 165
+e3 = 0.5
+d1 = e3
+t9 = d1
+go to 165
 140 if (t3 .lt. 0.0) go to 145
-   e4 = amax1((1.0 - g2/r) + a*z8/r, 0.0)
-   e4 = sqrt(e4)
-   d2 = 0.5*(e4 + t3)
-   t5 = 0.5*(q/(1.0 + e4) + sa/(1.0 + t3))
-   e4 = 0.25*(sa - q)/d2
+e4 = amax1((1.0 - g2/r) + a*z8/r, 0.0)
+e4 = sqrt(e4)
+d2 = 0.5*(e4 + t3)
+t5 = 0.5*(q/(1.0 + e4) + sa/(1.0 + t3))
+e4 = 0.25*(sa - q)/d2
 145 e3 = amax1((1.0 - g2/r) + a*z8/r, 0.0)
 if (z .lt. r) go to 150
-   e3 = 0.5*sqrt(e3)
-   d1 = e3
-   t9 = 0.25*(3.0 + h3/r)/(1.0 + e3)
-   go to 155
+e3 = 0.5*sqrt(e3)
+d1 = e3
+t9 = 0.25*(3.0 + h3/r)/(1.0 + e3)
+go to 155
 150 t9 = sqrt(e3)
 t2 = sqrt(1.0 - z/r)
 d1 = 0.5*(t9 + t2)
@@ -6171,7 +6172,7 @@ if (t .gt. 0.0 .and. t*t .gt. -exparg(1)) return
 q1 = rpi*e3*r8
 g3 = 0.0
 nt = 2*n1 + 1
-z = (.5 + d1) +.5
+z = (.5 + d1) + .5
 do 260 ii = 1, nt
    i = ii - (n1 + 1)
    if (i .eq. 0) go to 260
@@ -6184,33 +6185,33 @@ do 260 ii = 1, nt
    t1 = r8*f
    t2 = (h2 - t1)*(h2 - t1)
    if (h2 - r8 .ge. 0. .or. t .lt. eps) t2 = &
-&((h2 - r8) + r8*t*t)**2
+      & ((h2 - r8) + r8*t*t)**2
    t4 = exp(-t2)
    if (h2 .ne. 0.0) go to 210
-      t4 = t4 + t4
-      go to 215
+   t4 = t4 + t4
+   go to 215
 210 if (h5 .ne. 0.0) go to 215
-      t2 = 4.0*h2*t1
-      if (t2 .gt. c8) go to 215
-      t4 = t4*(1.0 + exp(-t2))
+   t2 = 4.0*h2*t1
+   if (t2 .gt. c8) go to 215
+   t4 = t4*(1.0 + exp(-t2))
 215 if (iz .ne. 0) go to 255
    g2 = sqrt(1.0 + f)
    z1 = z2*t*g2
    x1 = h3 - z1
    if (x1 .gt. -a) go to 225
-      iz = 1
-      x5 = 2.0
-      go to 255
+   iz = 1
+   x5 = 2.0
+   go to 255
 225 if (abs(x1) .gt. 1.e-2*z1) go to 230
-      iy = 1
-      x1 = ((k8 - r) + r*f*f/(1.0 + t*g2))/(rt2*s9)
+   iy = 1
+   x1 = ((k8 - r) + r*f*f/(1.0 + t*g2))/(rt2*s9)
 230 if (iz3 .ne. 0) go to 250
    sa = h3 + z1
    if (sa .gt. a3) go to 245
    if (iy .eq. 0) go to 240
    if (x1 .gt. rt2) go to 235
-      x5 = erf(sa) - erf(x1)
-      go to 255
+   x5 = erf(sa) - erf(x1)
+   go to 255
 235 x5 = erfc(x1) - erfc(sa)
    go to 255
 240 x5 = aerf(h3,z1)
@@ -6393,10 +6394,10 @@ lc = 1
 jmax = min0(l + m - 1, n)
 do 40 j = 1,jmax
    if (j .le. l) go to 10
-      imin = 1 + (j - l)
-      la = 1 + (l - 1)*ka
-      lb = 1 + (imin - 1)*kb
-      go to 20
+   imin = 1 + (j - l)
+   la = 1 + (l - 1)*ka
+   lb = 1 + (imin - 1)*kb
+   go to 20
 10 imin = 1
    la = 1 + (j - 1)*ka
    lb = 1
@@ -6434,10 +6435,10 @@ lc = 1
 jmax = min0(l + m - 1, n)
 do 40 j = 1,jmax
    if (j .le. l) go to 10
-      imin = 1 + (j - l)
-      la = 1 + (l - 1)*ka
-      lb = 1 + (imin - 1)*kb
-      go to 20
+   imin = 1 + (j - l)
+   la = 1 + (l - 1)*ka
+   lb = 1 + (imin - 1)*kb
+   go to 20
 10 imin = 1
    la = 1 + (j - 1)*ka
    lb = 1
@@ -6837,39 +6838,39 @@ real :: ql
 !     mo = +1 For first derivative
 !     mo = +2 For second derivative
 !
-001 fv=0.0
-l=nc
-if(mo.lt.0)go to 002
-if(mo.eq.0)go to 004
-if(mo.eq.1)go to 006
-if(mo.ge.2)go to 008
-002 ql=nc
+001 fv = 0.0
+l = nc
+if (mo.lt.0) go to 002
+if (mo.eq.0) go to 004
+if (mo.eq.1) go to 006
+if (mo.ge.2) go to 008
+002 ql = nc
 do 003 k = 1,nc
-fv=ac(l)/ql+au*fv
-l=l-1
-ql=ql-1.0
+   fv = ac(l)/ql + au*fv
+   l = l - 1
+   ql = ql - 1.0
 003 continue
-fv=au*fv
+fv = au*fv
 return
-004 do k=1,nc
-fv=ac(l)+au*fv
-l=l-1
+004 do k = 1,nc
+   fv = ac(l) + au*fv
+   l = l - 1
 end do
 return
-006 if(nc.le.1)return
-ql=nc
-do k=2,nc
-ql=ql-1.0
-fv=ql*ac(l)+au*fv
-l=l-1
+006 if (nc.le.1) return
+ql = nc
+do k = 2,nc
+   ql = ql - 1.0
+   fv = ql*ac(l) + au*fv
+   l = l - 1
 end do
 return
-008 if(nc.le.2)return
-ql=nc
-do k=3,nc
-ql=ql-1.0
-fv=ql*(ql-1.0)*ac(l)+au*fv
-l=l-1
+008 if (nc.le.2) return
+ql = nc
+do k = 3,nc
+   ql = ql - 1.0
+   fv = ql*(ql - 1.0)*ac(l) + au*fv
+   l = l - 1
 end do
 return
 end subroutine mplnmv
@@ -6887,8 +6888,8 @@ real :: s0, s1, s2, x2
 !-----------------------------------------------------------------------
 !
 if (n .gt. 1) go to 10
-   csevl = 0.5 * a(1)
-   return
+csevl = 0.5 * a(1)
+return
 !
 10 x2 = x + x
 s0 = a(n)
@@ -6915,8 +6916,8 @@ double precision :: x2, s0, s1, s2
 !-----------------------------------------------------------------------
 !
 if (n .gt. 1) go to 10
-   dcsevl = 0.5d0 * a(1)
-   return
+dcsevl = 0.5d0 * a(1)
+return
 !
 10 x2 = x + x
 s0 = a(n)
@@ -6945,14 +6946,14 @@ real :: dm, tm
 !     na = Number of arguments   (N)
 !     an = NORMALIZATION FACTORS (N-ARRAY)
 !
-001 do k=1,na
-tm=1.0
-do 002 m = 1,na
-if(m.eq.k)go to 002
-dm=au(k)-au(m)
-tm=dm*tm
-002 continue
-an(k)=tm
+001 do k = 1,na
+   tm = 1.0
+   do 002 m = 1,na
+      if (m.eq.k) go to 002
+      dm = au(k) - au(m)
+      tm = dm*tm
+002   continue
+   an(k) = tm
 end do
 return
 end subroutine lgrngn
@@ -6983,90 +6984,90 @@ logical :: ln
 !     call lgrngv (1, na, qu, au, an, ff, df)     for first derivatives
 !     call lgrngv (2, na, qu, au, an, ff, df, sf) for second derivatives
 !
-001 ln=.true.
-tm=1.0
+001 ln = .true.
+tm = 1.0
 do 003 k = 1,na
-if(qu.ne.au(k))go to 002
-ln=.false.
-go to 003
-002 dm=qu-au(k)
-tm=dm*tm
+   if (qu.ne.au(k)) go to 002
+   ln = .false.
+   go to 003
+002 dm = qu - au(k)
+   tm = dm*tm
 003 continue
-do k=1,na
-if(ln)go to 005
-if(qu.ne.au(k))go to 005
-ff(k)=tm
-go to 006
-005 dm=qu-au(k)
-ff(k)=tm/dm
-006 ff(k)=ff(k)/an(k)
+do k = 1,na
+   if (ln) go to 005
+   if (qu.ne.au(k)) go to 005
+   ff(k) = tm
+   go to 006
+005 dm = qu - au(k)
+   ff(k) = tm/dm
+006 ff(k) = ff(k)/an(k)
 end do
-if(mo.le.0)go to 050
-sm=0.0
+if (mo.le.0) go to 050
+sm = 0.0
 do 013 k = 1,na
-df(k)=sm
-if(ln)go to 012
-if(qu.eq.au(k))go to 013
-012 dm=qu-au(k)
-sm=sm+1.0/dm
+   df(k) = sm
+   if (ln) go to 012
+   if (qu.eq.au(k)) go to 013
+012 dm = qu - au(k)
+   sm = sm + 1.0/dm
 013 continue
-rm=sm
-if(mo.eq.1)go to 040
-sm=0.0
+rm = sm
+if (mo.eq.1) go to 040
+sm = 0.0
 do 023 k = 1,na
-sf(k)=sm
-if(ln)go to 022
-if(qu.eq.au(k))go to 023
-022 dm=qu-au(k)
-sm=sm+2.0*df(k)/dm
+   sf(k) = sm
+   if (ln) go to 022
+   if (qu.eq.au(k)) go to 023
+022 dm = qu - au(k)
+   sm = sm + 2.0*df(k)/dm
 023 continue
-sm=0.0
-tm=0.0
-l=na
-if(ln)go to 034
-do k=1,na
-sf(l)=tm+sf(l)+2.0*sm*df(l)
-if(qu.eq.au(l))go to 032
-sf(l)=2.0*(sm+df(l))
-dm=qu-au(l)
-tm=tm+2.0*sm/dm
-sm=sm+1.0/dm
-032 l=l-1
+sm = 0.0
+tm = 0.0
+l = na
+if (ln) go to 034
+do k = 1,na
+   sf(l) = tm + sf(l) + 2.0*sm*df(l)
+   if (qu.eq.au(l)) go to 032
+   sf(l) = 2.0*(sm + df(l))
+   dm = qu - au(l)
+   tm = tm + 2.0*sm/dm
+   sm = sm + 1.0/dm
+032 l = l - 1
 end do
 go to 036
-034 do k=1,na
-sf(l)=tm+sf(l)+2.0*sm*df(l)
-dm=qu-au(l)
-tm=tm+2.0*sm/dm
-sm=sm+1.0/dm
-l=l-1
+034 do k = 1,na
+   sf(l) = tm + sf(l) + 2.0*sm*df(l)
+   dm = qu - au(l)
+   tm = tm + 2.0*sm/dm
+   sm = sm + 1.0/dm
+   l = l - 1
 end do
-036 do k=1,na
-sf(k)=ff(k)*sf(k)
+036 do k = 1,na
+   sf(k) = ff(k)*sf(k)
 end do
 040 if (ln) go to 043
 do 042 k = 1,na
-if (qu.ne.au(k)) go to 041
-df(k)=rm
-ff(k)=1.0
-go to 042
-041 df(k)=ff(k)
-ff(k)=0.0
+   if (qu.ne.au(k)) go to 041
+   df(k) = rm
+   ff(k) = 1.0
+   go to 042
+041 df(k) = ff(k)
+   ff(k) = 0.0
 042 continue
 return
-043 sm=0.0
-l=na
-do k=1,na
-df(l)=ff(l)*(sm+df(l))
-sm=sm+1.0/(qu-au(l))
-l=l-1
+043 sm = 0.0
+l = na
+do k = 1,na
+   df(l) = ff(l)*(sm + df(l))
+   sm = sm + 1.0/(qu - au(l))
+   l = l - 1
 end do
 return
-050 if(ln)go to 053
+050 if (ln) go to 053
 do 052 k = 1,na
-ff(k)=0.0
-if(qu.ne.au(k))go to 052
-ff(k)=1.0
+   ff(k) = 0.0
+   if (qu.ne.au(k)) go to 052
+   ff(k) = 1.0
 052 continue
 053 return
 end subroutine lgrngv
@@ -7086,40 +7087,40 @@ real :: sm, td, tm
 !     ac = Polynomial coefficients (NX(N+1) array)
 !
 001 do 003 i = 1,na
-k=(i-1)*na
-l=k+i
-ac(l)=1.0
-sm=0.0
-do 002 j = 1,i
-k=k+1
-l=k+na
-ac(l)=sm-au(i)*ac(k)
-sm=ac(k)
-002 continue
+   k = (i - 1)*na
+   l = k + i
+   ac(l) = 1.0
+   sm = 0.0
+   do 002 j = 1,i
+      k = k + 1
+      l = k + na
+      ac(l) = sm - au(i)*ac(k)
+      sm = ac(k)
+002   continue
 003 continue
-do i=1,na
-k=na+na*na
-l=i*na
-ac(l)=1.0
-do j=2,na
-sm=au(i)*ac(l)
-l=l-1
-ac(l)=sm+ac(k)
-k=k-1
+do i = 1,na
+   k = na + na*na
+   l = i*na
+   ac(l) = 1.0
+   do j = 2,na
+      sm = au(i)*ac(l)
+      l = l - 1
+      ac(l) = sm + ac(k)
+      k = k - 1
+   end do
 end do
-end do
-do i=1,na
-tm=1.0
-do 006 j = 1,na
-if(j.eq.i)go to 006
-td=au(i)-au(j)
-tm=tm*td
-006 continue
-k=(i-1)*na
-do j=1,na
-k=k+1
-ac(k)=ac(k)/tm
-end do
+do i = 1,na
+   tm = 1.0
+   do 006 j = 1,na
+      if (j.eq.i) go to 006
+      td = au(i) - au(j)
+      tm = tm*td
+006   continue
+   k = (i - 1)*na
+   do j = 1,na
+      k = k + 1
+      ac(k) = ac(k)/tm
+   end do
 end do
 return
 end subroutine lgrngx
@@ -7140,69 +7141,69 @@ real :: rm, rn, sm, sn
 !     na = Number of rows          (N)
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
 !
-001 sn=na
-rn=sqrt(sn)
+001 sn = na
+rn = sqrt(sn)
 do 002 i = 1,na
-aa(i)=1.0/rn
+   aa(i) = 1.0/rn
 002 continue
-if(ma.eq.1)return
-003 sm=0.0
-do i=1,na
-sm=sm+au(i)
+if (ma.eq.1) return
+003 sm = 0.0
+do i = 1,na
+   sm = sm + au(i)
 end do
-ar(2)=sm/sn
-sm=0.0
-l=na
+ar(2) = sm/sn
+sm = 0.0
+l = na
 do 005 i = 1,na
-l=l+1
-aa(l)=au(i)-ar(2)
-sm=sm+aa(l)*aa(l)
+   l = l + 1
+   aa(l) = au(i) - ar(2)
+   sm = sm + aa(l)*aa(l)
 005 continue
-rm=sqrt(sm)
-l=na
-do i=1,na
-l=l+1
-aa(l)=aa(l)/rm
+rm = sqrt(sm)
+l = na
+do i = 1,na
+   l = l + 1
+   aa(l) = aa(l)/rm
 end do
-sm=0.0
-l=na
-do i=1,na
-l=l+1
-sm=sm+au(i)*aa(l)
+sm = 0.0
+l = na
+do i = 1,na
+   l = l + 1
+   sm = sm + au(i)*aa(l)
 end do
-ar(1)=sm/rn
-if(ma.eq.2)return
-008 do m=3,ma
-sm=0.0
-k=(m-2)*na
-do i=1,na
-k=k+1
-sm=sm+au(i)*aa(k)*aa(k)
-end do
-ar(2*m-2)=sm
-sm=0.0
-j=(m-3)*na
-do i=1,na
-j=j+1
-k=j+na
-l=k+na
-aa(l)=au(i)*aa(k)-ar(2*m-2)*aa(k)-ar(2*m-5)*aa(j)
-sm=sm+aa(l)*aa(l)
-end do
-rm=sqrt(sm)
-l=(m-1)*na
-do i=1,na
-l=l+1
-aa(l)=aa(l)/rm
-end do
-sm=0.0
-k=(m-2)*na
-do i=1,na
-k=k+1
-l=k+na
-sm=sm+au(i)*aa(k)*aa(l)
-end do
-ar(2*m-3)=sm
+ar(1) = sm/rn
+if (ma.eq.2) return
+008 do m = 3,ma
+   sm = 0.0
+   k = (m - 2)*na
+   do i = 1,na
+      k = k + 1
+      sm = sm + au(i)*aa(k)*aa(k)
+   end do
+   ar(2*m - 2) = sm
+   sm = 0.0
+   j = (m - 3)*na
+   do i = 1,na
+      j = j + 1
+      k = j + na
+      l = k + na
+      aa(l) = au(i)*aa(k) - ar(2*m - 2)*aa(k) - ar(2*m - 5)*aa(j)
+      sm = sm + aa(l)*aa(l)
+   end do
+   rm = sqrt(sm)
+   l = (m - 1)*na
+   do i = 1,na
+      l = l + 1
+      aa(l) = aa(l)/rm
+   end do
+   sm = 0.0
+   k = (m - 2)*na
+   do i = 1,na
+      k = k + 1
+      l = k + na
+      sm = sm + au(i)*aa(k)*aa(l)
+   end do
+   ar(2*m - 3) = sm
 end do
 return
 end subroutine orthos
@@ -7231,36 +7232,36 @@ real :: rn, sn
 !     call orthov (1, na, au, ar, nf, ff, df)     for first derivatives
 !     call orthov (2, na, au, ar, nf, ff, df, sf) for second derivatives
 !
-001 sn=na
-rn=sqrt(sn)
-ff(1)=1.0/rn
-if(nf.le.1)go to 003
-ff(2)=(au-ar(2))*ff(1)/ar(1)
-if(nf.eq.2)go to 003
-l=2
+001 sn = na
+rn = sqrt(sn)
+ff(1) = 1.0/rn
+if (nf.le.1) go to 003
+ff(2) = (au - ar(2))*ff(1)/ar(1)
+if (nf.eq.2) go to 003
+l = 2
 do 002 k = 3,nf
-l=l+2
-ff(k)=((au-ar(l))*ff(k-1)-ar(l-3)*ff(k-2))/ar(l-1)
+   l = l + 2
+   ff(k) = ((au - ar(l))*ff(k - 1) - ar(l - 3)*ff(k - 2))/ar(l - 1)
 002 continue
-003 if(mo.le.0)return
-df(1)=0.0
-if(nf.le.1)go to 005
-df(2)=ff(1)/ar(1)
-if(nf.eq.2)go to 005
-l=2
-do k=3,nf
-l=l+2
-df(k)=(ff(k-1)+(au-ar(l))*df(k-1)-ar(l-3)*df(k-2))/ar(l-1)
+003 if (mo.le.0) return
+df(1) = 0.0
+if (nf.le.1) go to 005
+df(2) = ff(1)/ar(1)
+if (nf.eq.2) go to 005
+l = 2
+do k = 3,nf
+   l = l + 2
+   df(k) = (ff(k - 1) + (au - ar(l))*df(k - 1) - ar(l - 3)*df(k - 2))/ar(l - 1)
 end do
-005 if(mo.eq.1)return
-sf(1)=0.0
-if(nf.le.1)go to 007
-sf(2)=0.0
-if(nf.eq.2)go to 007
-l=2
-do k=3,nf
-l=l+2
-sf(k)=(2.0*df(k-1)+(au-ar(l))*sf(k-1)-ar(l-3)*sf(k-2))/ar(l-1)
+005 if (mo.eq.1) return
+sf(1) = 0.0
+if (nf.le.1) go to 007
+sf(2) = 0.0
+if (nf.eq.2) go to 007
+l = 2
+do k = 3,nf
+   l = l + 2
+   sf(k) = (2.0*df(k - 1) + (au - ar(l))*sf(k - 1) - ar(l - 3)*sf(k - 2))/ar(l - 1)
 end do
 007 return
 end subroutine orthov
@@ -7281,30 +7282,30 @@ real :: rn, sn, tm
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
 !
 001 do 002 n = 1,nc
-ac(n)=0.0
+   ac(n) = 0.0
 002 continue
-sn=na
-rn=sqrt(sn)
-ac(1)=1.0/rn
-if(nc.eq.1)return
-003 tm=0.0
-l=nc
-do n=1,nc
-l=l+1
-ac(l)=(tm-ar(2)*ac(n))/ar(1)
-tm=ac(n)
+sn = na
+rn = sqrt(sn)
+ac(1) = 1.0/rn
+if (nc.eq.1) return
+003 tm = 0.0
+l = nc
+do n = 1,nc
+   l = l + 1
+   ac(l) = (tm - ar(2)*ac(n))/ar(1)
+   tm = ac(n)
 end do
-if(nc.eq.2)return
-005 do m=3,nc
-tm=0.0
-j=(m-3)*nc
-do n=1,nc
-j=j+1
-k=j+nc
-l=k+nc
-ac(l)=(tm-ar(2*m-2)*ac(k)-ar(2*m-5)*ac(j))/ar(2*m-3)
-tm=ac(k)
-end do
+if (nc.eq.2) return
+005 do m = 3,nc
+   tm = 0.0
+   j = (m - 3)*nc
+   do n = 1,nc
+      j = j + 1
+      k = j + nc
+      l = k + nc
+      ac(l) = (tm - ar(2*m - 2)*ac(k) - ar(2*m - 5)*ac(j))/ar(2*m - 3)
+      tm = ac(k)
+   end do
 end do
 return
 end subroutine orthox
@@ -7340,7 +7341,7 @@ real :: f
 real, intent(in) :: ax, bx, aerr, rerr
 external f
 real :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, r, s, atol, &
-&rtol
+   & rtol
 real :: spmpar
 !
 !  Compute eps, the relative machine precision
@@ -7466,7 +7467,7 @@ double precision :: f
 double precision, intent(in) :: ax, bx, aerr, rerr
 external f
 double precision :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, &
-&r, s, atol, rtol
+   & r, s, atol, rtol
 double precision :: dpmpar
 !
 !  Compute eps, the relative machine precision
@@ -7669,7 +7670,7 @@ info = 0
 !     Check the input parameters for errors.
 !
 if (n .le. 0 .or. epsfcn .lt. zero .or. tol .lt. zero .or. &
-&lwa .lt. (n*(3*n + 13))/2) go to 20
+   & lwa .lt. (n*(3*n + 13))/2) go to 20
 !
 !     CALL hybrd.
 !
@@ -7680,13 +7681,13 @@ mu = n - 1
 mode = 2
 do j = 1, n
    wa(j) = one
-   end do
+end do
 nprint = 0
 lr = (n*(n + 1))/2
 index = 6*n + lr
 call hybrd(fcn,n,x,fvec,xtol,maxfev,ml,mu,epsfcn,wa(1),mode, &
-&factor,nprint,info,nfev,wa(index+1),n,wa(6*n+1),lr, &
-&wa(n+1),wa(2*n+1),wa(3*n+1),wa(4*n+1),wa(5*n+1))
+   & factor,nprint,info,nfev,wa(index + 1),n,wa(6*n + 1),lr, &
+   & wa(n + 1),wa(2*n + 1),wa(3*n + 1),wa(4*n + 1),wa(5*n + 1))
 if (info .eq. 5) info = 4
 20 continue
 return
@@ -7696,8 +7697,8 @@ return
 end subroutine hbrd
 
 subroutine hybrd(fcn,n,x,fvec,xtol,maxfev,ml,mu,epsfcn,diag, &
-&mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr, &
-&qtf,wa1,wa2,wa3,wa4)
+   & mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr, &
+   & qtf,wa1,wa2,wa3,wa4)
 implicit none
 integer :: n
 integer, intent(in) :: maxfev, ml, mu, mode, nprint
@@ -7705,15 +7706,15 @@ integer, intent(out) :: info, nfev
 integer, intent(in) :: ldfjac, lr
 real, intent(in) :: xtol, epsfcn, factor
 real, intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
-&r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
+   & r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
 real :: wa4(n)
 external fcn
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
-&nslow2
+   & nslow2
 integer :: iwa(1)
 logical :: jeval, sing
 real :: actred, delta, epsmch, fnorm, fnorm1, one, pnorm, prered, &
-&p1, p5, p001, p0001, ratio, sum, temp, xnorm, zero
+   & p1, p5, p001, p0001, ratio, sum, temp, xnorm, zero
 real :: spmpar, enorm
 !     **********
 !
@@ -7872,7 +7873,7 @@ real :: spmpar, enorm
 !
 !     **********
 data one,p1,p5,p001,p0001,zero &
-&/1.0e0,1.0e-1,5.0e-1,1.0e-3,1.0e-4,0.0e0/
+   & /1.0e0,1.0e-1,5.0e-1,1.0e-3,1.0e-4,0.0e0/
 !
 !     epsmch is the machine precision.
 !
@@ -7885,8 +7886,8 @@ nfev = 0
 !     Check the input parameters for errors.
 !
 if (n .le. 0 .or. xtol .lt. zero .or. maxfev .le. 0 &
-&.or. ml .lt. 0 .or. mu .lt. 0 .or. factor .le. zero &
-&.or. ldfjac .lt. n .or. lr .lt. (n*(n + 1))/2) go to 300
+   & .or. ml .lt. 0 .or. mu .lt. 0 .or. factor .le. zero &
+   & .or. ldfjac .lt. n .or. lr .lt. (n*(n + 1))/2) go to 300
 if (mode .ne. 2) go to 20
 do 10 j = 1, n
    if (diag(j) .le. zero) go to 300
@@ -7905,7 +7906,7 @@ fnorm = enorm(n,fvec)
 !     Determine the number of calls to FCN needed to compute
 !     the Jacobian matrix.
 !
-msum = min0(ml+mu+1,n)
+msum = min0(ml + mu + 1,n)
 !
 !     Initialize iteration counter and monitors.
 !
@@ -7918,86 +7919,86 @@ nslow2 = 0
 !     Beginning of the outer loop.
 !
 30 continue
-   jeval = .true.
+jeval = .true.
 !
 !        Calculate the Jacobian matrix.
 !
-   iflag = 2
-   call fdjac1(fcn,n,x,fvec,fjac,ldfjac,iflag,ml,mu,epsfcn,wa1, &
-&wa2)
-   nfev = nfev + msum
-   if (iflag .lt. 0) go to 300
+iflag = 2
+call fdjac1(fcn,n,x,fvec,fjac,ldfjac,iflag,ml,mu,epsfcn,wa1, &
+   & wa2)
+nfev = nfev + msum
+if (iflag .lt. 0) go to 300
 !
 !        Compute the QR factorization of the Jacobian.
 !
-   call qrfac(n,n,fjac,ldfjac,.false.,iwa,1,wa1,wa2,wa3)
+call qrfac(n,n,fjac,ldfjac,.false.,iwa,1,wa1,wa2,wa3)
 !
 !        On the first iteration and if mode is 1, scale according
 !        to the norms of the columns of the initial Jacobian.
 !
-   if (iter .ne. 1) go to 70
-   if (mode .eq. 2) go to 50
-   do j = 1, n
-      diag(j) = wa2(j)
-      if (wa2(j) .eq. zero) diag(j) = one
-      end do
+if (iter .ne. 1) go to 70
+if (mode .eq. 2) go to 50
+do j = 1, n
+   diag(j) = wa2(j)
+   if (wa2(j) .eq. zero) diag(j) = one
+end do
 50 continue
 !
 !        On the first iteration, calculate the norm of the scaled x
 !        and initialize the step bound delta.
 !
-   do j = 1, n
-      wa3(j) = diag(j)*x(j)
-      end do
-   xnorm = enorm(n,wa3)
-   delta = factor*xnorm
-   if (delta .eq. zero) delta = factor
+do j = 1, n
+   wa3(j) = diag(j)*x(j)
+end do
+xnorm = enorm(n,wa3)
+delta = factor*xnorm
+if (delta .eq. zero) delta = factor
 70 continue
 !
 !        Form (Q transpose)*fvec and store in QTF.
 !
-   do i = 1, n
-      qtf(i) = fvec(i)
-      end do
-   do j = 1, n
-      if (fjac(j,j) .eq. zero) go to 110
-      sum = zero
-      do i = j, n
-         sum = sum + fjac(i,j)*qtf(i)
-         end do
-      temp = -sum/fjac(j,j)
-      do i = j, n
-         qtf(i) = qtf(i) + fjac(i,j)*temp
-         end do
+do i = 1, n
+   qtf(i) = fvec(i)
+end do
+do j = 1, n
+   if (fjac(j,j) .eq. zero) go to 110
+   sum = zero
+   do i = j, n
+      sum = sum + fjac(i,j)*qtf(i)
+   end do
+   temp = -sum/fjac(j,j)
+   do i = j, n
+      qtf(i) = qtf(i) + fjac(i,j)*temp
+   end do
 110 continue
-      end do
+end do
 !
 !        Copy the triangular factor of the QR factorization into R.
 !
-   sing = .false.
-   do j = 1, n
-      l = j
-      jm1 = j - 1
-      if (jm1 .lt. 1) go to 140
-      do i = 1, jm1
-         r(l) = fjac(i,j)
-         l = l + n - i
-         end do
+sing = .false.
+do j = 1, n
+   l = j
+   jm1 = j - 1
+   if (jm1 .lt. 1) go to 140
+   do i = 1, jm1
+      r(l) = fjac(i,j)
+      l = l + n - i
+   end do
 140 continue
-      r(l) = wa1(j)
-      if (wa1(j) .eq. zero) sing = .true.
-      end do
+   r(l) = wa1(j)
+   if (wa1(j) .eq. zero) sing = .true.
+end do
 !
 !        Accumulate the orthogonal factor in fjac.
 !
-   call qform(n,n,fjac,ldfjac,wa1)
+call qform(n,n,fjac,ldfjac,wa1)
 !
 !        Rescale if necessary.
 !
-   if (mode .eq. 2) go to 170
-   do j = 1, n
-      diag(j) = amax1(diag(j),wa2(j))
-      end do
+if (mode .eq. 2) go to 170
+do j = 1, n
+   diag(j) = amax1(diag(j),wa2(j))
+end do
 170 continue
 !
 !        Beginning of the inner loop.
@@ -8006,147 +8007,147 @@ nslow2 = 0
 !
 !           If requested, call FCN to enable printing of iterates.
 !
-      if (nprint .le. 0) go to 190
-      iflag = 0
-      if (mod(iter-1,nprint) .eq. 0) call fcn(n,x,fvec,iflag)
-      if (iflag .lt. 0) go to 300
+if (nprint .le. 0) go to 190
+iflag = 0
+if (mod(iter - 1,nprint) .eq. 0) call fcn(n,x,fvec,iflag)
+if (iflag .lt. 0) go to 300
 190 continue
 !
 !           Determine the direction P.
 !
-      call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
+call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
 !
 !           Store the direction P and x + P. calculate the norm of P.
 !
-      do j = 1, n
-         wa1(j) = -wa1(j)
-         wa2(j) = x(j) + wa1(j)
-         wa3(j) = diag(j)*wa1(j)
-         end do
-      pnorm = enorm(n,wa3)
+do j = 1, n
+   wa1(j) = -wa1(j)
+   wa2(j) = x(j) + wa1(j)
+   wa3(j) = diag(j)*wa1(j)
+end do
+pnorm = enorm(n,wa3)
 !
 !           On the first iteration, adjust the initial step bound.
 !
-      if (iter .eq. 1) delta = amin1(delta,pnorm)
+if (iter .eq. 1) delta = amin1(delta,pnorm)
 !
 !           Evaluate the function at x + P and calculate its norm.
 !
-      iflag = 1
-      call fcn(n,wa2,wa4,iflag)
-      nfev = nfev + 1
-      if (iflag .lt. 0) go to 300
-      fnorm1 = enorm(n,wa4)
+iflag = 1
+call fcn(n,wa2,wa4,iflag)
+nfev = nfev + 1
+if (iflag .lt. 0) go to 300
+fnorm1 = enorm(n,wa4)
 !
 !           Compute the scaled actual reduction.
 !
-      actred = -one
-      if (fnorm1 .lt. fnorm) actred = one - (fnorm1/fnorm)**2
+actred = -one
+if (fnorm1 .lt. fnorm) actred = one - (fnorm1/fnorm)**2
 !
 !           Compute the scaled predicted reduction.
 !
-      l = 1
-      do i = 1, n
-         sum = zero
-         do j = i, n
-            sum = sum + r(l)*wa1(j)
-            l = l + 1
-            end do
-         wa3(i) = qtf(i) + sum
-         end do
-      temp = enorm(n,wa3)
-      prered = zero
-      if (temp .lt. fnorm) prered = one - (temp/fnorm)**2
+l = 1
+do i = 1, n
+   sum = zero
+   do j = i, n
+      sum = sum + r(l)*wa1(j)
+      l = l + 1
+   end do
+   wa3(i) = qtf(i) + sum
+end do
+temp = enorm(n,wa3)
+prered = zero
+if (temp .lt. fnorm) prered = one - (temp/fnorm)**2
 !
 !           Compute the ratio of the actual to the predicted
 !           reduction.
 !
-      ratio = zero
-      if (prered .gt. zero) ratio = actred/prered
+ratio = zero
+if (prered .gt. zero) ratio = actred/prered
 !
 !           Update the step bound.
 !
-      if (ratio .ge. p1) go to 230
-         ncsuc = 0
-         ncfail = ncfail + 1
-         delta = p5*delta
-         go to 240
+if (ratio .ge. p1) go to 230
+ncsuc = 0
+ncfail = ncfail + 1
+delta = p5*delta
+go to 240
 230 continue
-         ncfail = 0
-         ncsuc = ncsuc + 1
-         if (ratio .ge. p5 .or. ncsuc .gt. 1) &
-&delta = amax1(delta,pnorm/p5)
-         if (abs(ratio-one) .le. p1) delta = pnorm/p5
+ncfail = 0
+ncsuc = ncsuc + 1
+if (ratio .ge. p5 .or. ncsuc .gt. 1) &
+   & delta = amax1(delta,pnorm/p5)
+if (abs(ratio - one) .le. p1) delta = pnorm/p5
 240 continue
 !
 !           Test for successful iteration.
 !
-      if (ratio .lt. p0001) go to 260
+if (ratio .lt. p0001) go to 260
 !
 !           Successful iteration. Update x, fvec, and their norms.
 !
-      do j = 1, n
-         x(j) = wa2(j)
-         wa2(j) = diag(j)*x(j)
-         fvec(j) = wa4(j)
-         end do
-      xnorm = enorm(n,wa2)
-      fnorm = fnorm1
-      iter = iter + 1
+do j = 1, n
+   x(j) = wa2(j)
+   wa2(j) = diag(j)*x(j)
+   fvec(j) = wa4(j)
+end do
+xnorm = enorm(n,wa2)
+fnorm = fnorm1
+iter = iter + 1
 260 continue
 !
 !           Determine the progress of the iteration.
 !
-      nslow1 = nslow1 + 1
-      if (actred .ge. p001) nslow1 = 0
-      if (jeval) nslow2 = nslow2 + 1
-      if (actred .ge. p1) nslow2 = 0
+nslow1 = nslow1 + 1
+if (actred .ge. p001) nslow1 = 0
+if (jeval) nslow2 = nslow2 + 1
+if (actred .ge. p1) nslow2 = 0
 !
 !           Test for convergence.
 !
-      if (delta .le. xtol*xnorm .or. fnorm .eq. zero) info = 1
-      if (info .ne. 0) go to 300
+if (delta .le. xtol*xnorm .or. fnorm .eq. zero) info = 1
+if (info .ne. 0) go to 300
 !
 !           Tests for termination and stringent tolerances.
 !
-      if (nfev .ge. maxfev) info = 2
-      if (p1*amax1(p1*delta,pnorm) .le. epsmch*xnorm) info = 3
-      if (nslow2 .eq. 5) info = 4
-      if (nslow1 .eq. 10) info = 5
-      if (info .ne. 0) go to 300
+if (nfev .ge. maxfev) info = 2
+if (p1*amax1(p1*delta,pnorm) .le. epsmch*xnorm) info = 3
+if (nslow2 .eq. 5) info = 4
+if (nslow1 .eq. 10) info = 5
+if (info .ne. 0) go to 300
 !
 !           Criterion for recalculating Jacobian approximation
 !           by forward differences.
 !
-      if (ncfail .eq. 2) go to 290
+if (ncfail .eq. 2) go to 290
 !
 !           Calculate the rank one modification to the Jacobian
 !           and update QTF if necessary.
 !
-      do j = 1, n
-         sum = zero
-         do i = 1, n
-            sum = sum + fjac(i,j)*wa4(i)
-            end do
-         wa2(j) = (sum - wa3(j))/pnorm
-         wa1(j) = diag(j)*((diag(j)*wa1(j))/pnorm)
-         if (ratio .ge. p0001) qtf(j) = sum
-         end do
+do j = 1, n
+   sum = zero
+   do i = 1, n
+      sum = sum + fjac(i,j)*wa4(i)
+   end do
+   wa2(j) = (sum - wa3(j))/pnorm
+   wa1(j) = diag(j)*((diag(j)*wa1(j))/pnorm)
+   if (ratio .ge. p0001) qtf(j) = sum
+end do
 !
 !           Compute the QR factorization of the updated Jacobian.
 !
-      call r1updt(n,n,r,lr,wa1,wa2,wa3,sing)
-      call r1mpyq(n,n,fjac,ldfjac,wa2,wa3)
-      call r1mpyq(1,n,qtf,1,wa2,wa3)
+call r1updt(n,n,r,lr,wa1,wa2,wa3,sing)
+call r1mpyq(n,n,fjac,ldfjac,wa2,wa3)
+call r1mpyq(1,n,qtf,1,wa2,wa3)
 !
 !           END OF THE INNER LOOP.
 !
-      jeval = .false.
-      go to 180
+jeval = .false.
+go to 180
 290 continue
 !
 !        END OF THE OUTER LOOP.
 !
-   go to 30
+go to 30
 300 continue
 !
 !     Termination, either normal or user imposed.
@@ -8179,7 +8180,7 @@ real :: spmpar
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.0 + eps .GT. 1.0.
 !
-         eps = spmpar(1)
+eps = spmpar(1)
 !
 !-------------------
 if (a(1) .eq. 0.0) go to 40
@@ -8191,10 +8192,10 @@ if (d .lt. 0.0) go to 30
 !                 Distinct real roots
 !
 if (a(2) .ne. 0.0) go to 10
-   x = abs(0.5*r/a(3))
-   z(1) = cmplx(x, 0.0)
-   z(2) = cmplx(-x, 0.0)
-   return
+x = abs(0.5*r/a(3))
+z(1) = cmplx(x, 0.0)
+z(2) = cmplx(-x, 0.0)
+return
 10 w = -(a(2) + sign(r,a(2)))
 z(1) = cmplx(2.0*a(1)/w, 0.0)
 z(2) = cmplx(0.5*w/a(3), 0.0)
@@ -8240,7 +8241,7 @@ double precision :: dpmpar
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.D0 + eps .GT. 1.D0.
 !
-         eps = dpmpar(1)
+eps = dpmpar(1)
 !
 !-------------------
 if (a(1) .eq. 0.d0) go to 40
@@ -8254,9 +8255,9 @@ if (d .lt. 0.d0) go to 30
 zi(1) = 0.d0
 zi(2) = 0.d0
 if (a(2) .ne. 0.d0) go to 10
-   zr(1) = dabs(0.5d0*r/a(3))
-   zr(2) = -zr(1)
-   return
+zr(1) = dabs(0.5d0*r/a(3))
+zr(2) = -zr(1)
+return
 10 w = -(a(2) + dsign(r,a(2)))
 zr(1) = 2.d0*a(1)/w
 zr(2) = 0.5d0*w/a(3)
@@ -8292,8 +8293,8 @@ implicit none
 real, intent(in) :: a(4)
 complex, intent(inout) :: z(3)
 real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, &
-&rt3, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, &
-&y2, y3
+   & rt3, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, &
+   & y2, y3
 real :: cbrt
 real :: spmpar
 real :: aq(3)
@@ -8316,7 +8317,7 @@ data rt3/1.7320508075689/
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.0 + eps .GT. 1.0.
 !
-         eps = spmpar(1)
+eps = spmpar(1)
 !
 !-------------------
 if (a(1) .eq. 0.0) go to 100
@@ -8347,13 +8348,13 @@ w = 0.25*r1*r1
 w1 = 0.5*p1*r1*t
 w2 = q1*q1*t1/27.0
 if (w1 .lt. 0.0) go to 10
-   w = w + w1
-   sq = w + w2
-   go to 12
+w = w + w1
+sq = w + w2
+go to 12
 10 if (w2 .lt. 0.0) go to 11
-   w = w + w2
-   sq = w + w1
-   go to 12
+w = w + w2
+sq = w + w1
+go to 12
 11 sq = w + (w1 + w2)
 12 if (abs(sq) .le. tol*w) sq = 0.0
 rq = abs(s/a(4))*sqrt(abs(sq))
@@ -8373,17 +8374,17 @@ x1 = y1 - p
 x2 = y2 - p
 x3 = y3 - p
 if (abs(x1) .le. abs(x2)) go to 20
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 20 if (abs(x2) .le. abs(x3)) go to 30
-   t = x2
-   x2 = x3
-   x3 = t
+t = x2
+x2 = x3
+x3 = t
 if (abs(x1) .le. abs(x2)) go to 30
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 !
 30 w = x3
 if (abs(x2) .lt. 0.1*abs(x3)) go to 70
@@ -8401,17 +8402,17 @@ t = ra + rb
 w = -p
 x = -p
 if (abs(t) .le. tol*abs(ra)) go to 41
-   w = t - p
-   x = -0.5*t - p
-   if (abs(x) .le. tol*abs(p)) x = 0.0
+w = t - p
+x = -0.5*t - p
+if (abs(x) .le. tol*abs(p)) x = 0.0
 41 t = abs(ra - rb)
 y = 0.5*rt3*t
 !
 if (t .le. tol*abs(ra)) go to 60
 if (abs(x) .lt. abs(y)) go to 50
-   s = abs(x)
-   t = y/x
-   go to 51
+s = abs(x)
+t = y/x
+go to 51
 50 s = abs(y)
 t = x/y
 51 if (s .lt. 0.1*abs(w)) go to 70
@@ -8426,11 +8427,11 @@ return
 !               At least two roots are equal
 !
 60 if (abs(x) .lt. abs(w)) go to 61
-   if (abs(w) .lt. 0.1*abs(x)) w = - (r/x)/x
-   z(1) = cmplx(w, 0.0)
-   z(2) = cmplx(x, 0.0)
-   z(3) = z(2)
-   return
+if (abs(w) .lt. 0.1*abs(x)) w = - (r/x)/x
+z(1) = cmplx(w, 0.0)
+z(2) = cmplx(x, 0.0)
+z(3) = z(2)
+return
 61 if (abs(x) .lt. 0.1*abs(w)) go to 70
 z(1) = cmplx(x, 0.0)
 z(2) = z(1)
@@ -8446,10 +8447,10 @@ return
 !     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
-   aq(2) = a(2) + a(1)/w
-   aq(3) = -a(4)*w
-   call qdcrt(aq, z)
-   z(3) = cmplx(w, 0.0)
+aq(2) = a(2) + a(1)/w
+aq(3) = -a(4)*w
+call qdcrt(aq, z)
+z(3) = cmplx(w, 0.0)
 !
 if (aimag(z(1)) .eq. 0.0) return
 z(3) = z(2)
@@ -8469,21 +8470,21 @@ return
 110 z(1) = cmplx(-p, 0.0)
 w = sqrt(abs(c))
 if (c .lt. 0.0) go to 120
-   z(2) = cmplx(-p, w)
-   z(3) = cmplx(-p,-w)
-   return
+z(2) = cmplx(-p, w)
+z(3) = cmplx(-p,-w)
+return
 !
 120 if (p .ne. 0.0) go to 130
-   z(2) = cmplx(w, 0.0)
-   z(3) = cmplx(-w, 0.0)
-   return
+z(2) = cmplx(w, 0.0)
+z(3) = cmplx(-w, 0.0)
+return
 !
 130 x = -(p + sign(w,p))
 z(3) = cmplx(x, 0.0)
 t = 3.0*a(1)/(a(3)*x)
 if (abs(p) .gt. abs(t)) go to 131
-   z(2) = cmplx(t, 0.0)
-   return
+z(2) = cmplx(t, 0.0)
+return
 131 z(2) = z(1)
 z(1) = cmplx(t, 0.0)
 return
@@ -8506,8 +8507,8 @@ implicit none
 double precision, intent(in) :: a(4)
 double precision, intent(inout) :: zr(3), zi(3)
 double precision :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, &
-&ra, rb, rq, rt, rt3, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, &
-&x1, x2, x3, y, y1, y2, y3
+   & ra, rb, rq, rt, rt3, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, &
+   & x1, x2, x3, y, y1, y2, y3
 double precision :: dpmpar, dcbrt
 !-------------------
 data rt3 /1.732050807568877293527446341505872366943d0/
@@ -8516,7 +8517,7 @@ data rt3 /1.732050807568877293527446341505872366943d0/
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.D0 + eps .GT. 1.D0.
 !
-         eps = dpmpar(1)
+eps = dpmpar(1)
 !
 !-------------------
 if (a(1) .eq. 0.d0) go to 100
@@ -8547,13 +8548,13 @@ w = 0.25d0*r1*r1
 w1 = 0.5d0*p1*r1*t
 w2 = q1*q1*t1/27.d0
 if (w1 .lt. 0.d0) go to 10
-   w = w + w1
-   sq = w + w2
-   go to 12
+w = w + w1
+sq = w + w2
+go to 12
 10 if (w2 .lt. 0.d0) go to 11
-   w = w + w2
-   sq = w + w1
-   go to 12
+w = w + w2
+sq = w + w1
+go to 12
 11 sq = w + (w1 + w2)
 12 if (dabs(sq) .le. tol*w) sq = 0.d0
 rq = dabs(s/a(4))*dsqrt(dabs(sq))
@@ -8573,17 +8574,17 @@ x1 = y1 - p
 x2 = y2 - p
 x3 = y3 - p
 if (dabs(x1) .le. dabs(x2)) go to 20
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 20 if (dabs(x2) .le. dabs(x3)) go to 30
-   t = x2
-   x2 = x3
-   x3 = t
+t = x2
+x2 = x3
+x3 = t
 if (dabs(x1) .le. dabs(x2)) go to 30
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 !
 30 w = x3
 if (dabs(x2) .lt. 0.1d0*dabs(x3)) go to 70
@@ -8604,17 +8605,17 @@ t = ra + rb
 w = -p
 x = -p
 if (dabs(t) .le. tol*dabs(ra)) go to 41
-   w = t - p
-   x = -0.5d0*t - p
-   if (dabs(x) .le. tol*dabs(p)) x = 0.d0
+w = t - p
+x = -0.5d0*t - p
+if (dabs(x) .le. tol*dabs(p)) x = 0.d0
 41 t = dabs(ra - rb)
 y = 0.5d0*rt3*t
 !
 if (t .le. tol*dabs(ra)) go to 60
 if (dabs(x) .lt. dabs(y)) go to 50
-   s = dabs(x)
-   t = y/x
-   go to 51
+s = dabs(x)
+t = y/x
+go to 51
 50 s = dabs(y)
 t = x/y
 51 if (s .lt. 0.1d0*dabs(w)) go to 70
@@ -8635,11 +8636,11 @@ return
 zi(2) = 0.d0
 zi(3) = 0.d0
 if (dabs(x) .lt. dabs(w)) go to 61
-   if (dabs(w) .lt. 0.1d0*dabs(x)) w = - (r/x)/x
-   zr(1) = w
-   zr(2) = x
-   zr(3) = x
-   return
+if (dabs(w) .lt. 0.1d0*dabs(x)) w = - (r/x)/x
+zr(1) = w
+zr(2) = x
+zr(3) = x
+return
 61 if (dabs(x) .lt. 0.1d0*dabs(w)) go to 70
 zr(1) = x
 zr(2) = x
@@ -8655,11 +8656,11 @@ return
 !     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
-   aq(2) = a(2) + a(1)/w
-   aq(3) = -a(4)*w
-   call dqdcrt (aq, zr, zi)
-   zr(3) = w
-   zi(3) = 0.d0
+aq(2) = a(2) + a(1)/w
+aq(3) = -a(4)*w
+call dqdcrt (aq, zr, zi)
+zr(3) = w
+zi(3) = 0.d0
 !
 if (zi(1) .eq. 0.d0) return
 zr(3) = zr(2)
@@ -8684,27 +8685,27 @@ return
 zi(1) = 0.d0
 w = dsqrt(dabs(c))
 if (c .lt. 0.d0) go to 120
-   zr(2) = -p
-   zr(3) = zr(2)
-   zi(2) =  w
-   zi(3) = -w
-   return
+zr(2) = -p
+zr(3) = zr(2)
+zi(2) = w
+zi(3) = -w
+return
 !
 120 if (p .ne. 0.d0) go to 130
-   zr(2) =  w
-   zr(3) = -w
-   zi(2) = 0.d0
-   zi(3) = 0.d0
-   return
+zr(2) = w
+zr(3) = -w
+zi(2) = 0.d0
+zi(3) = 0.d0
+return
 !
 130 x = -(p + dsign(w,p))
-zr(3) =  x
+zr(3) = x
 zi(2) = 0.d0
 zi(3) = 0.d0
 t = 3.d0*a(1)/(a(3)*x)
 if (dabs(p) .gt. dabs(t)) go to 131
-   zr(2) = t
-   return
+zr(2) = t
+return
 131 zr(2) = zr(1)
 zr(1) = t
 return
@@ -8715,7 +8716,7 @@ implicit none
 real, intent(in) :: a(5)
 complex, intent(inout) :: z(4)
 real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
-&x3, y
+   & x3, y
 real :: temp(4)
 complex :: w
 !-----------------------------------------------------------------------
@@ -8754,7 +8755,7 @@ r = b2*(c - 3.0*b2) - b*d + e
 !
 temp(1) = -q*q/64.0
 temp(2) = 0.25*(p*p - r)
-temp(3) =  p
+temp(3) = p
 temp(4) = 1.0
 call cbcrt(temp,z)
 if (aimag(z(2)) .ne. 0.0) go to 60
@@ -8766,17 +8767,17 @@ x1 = real(z(1))
 x2 = real(z(2))
 x3 = real(z(3))
 if (x1 .le. x2) go to 10
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 10 if (x2 .le. x3) go to 20
-   t = x2
-   x2 = x3
-   x3 = t
+t = x2
+x2 = x3
+x3 = t
 if (x1 .le. x2) go to 20
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 !
 20 u = 0.0
 if (x3 .gt. 0.0) u = sqrt(x3)
@@ -8794,8 +8795,8 @@ temp(3) = (( x1 - x2) - u) - b
 temp(4) = ((-x1 + x2) - u) - b
 call aord (temp,4)
 if (abs(temp(1)) .ge. 0.1*abs(temp(4))) go to 31
-   t = temp(2)*temp(3)*temp(4)
-   if (t .ne. 0.0) temp(1) = e/t
+t = temp(2)*temp(3)*temp(4)
+if (t .ne. 0.0) temp(1) = e/t
 31 z(1) = cmplx(temp(1), 0.0)
 z(2) = cmplx(temp(2), 0.0)
 z(3) = cmplx(temp(3), 0.0)
@@ -8813,7 +8814,7 @@ if (q .lt. 0.0) u = -u
 y = v1 - v2
 z(1) = cmplx(x, y)
 z(2) = cmplx(x,-y)
-x =  u - b
+x = u - b
 y = v1 + v2
 z(3) = cmplx(x, y)
 z(4) = cmplx(x,-y)
@@ -8833,13 +8834,13 @@ if (q .gt. 0.0) x = -x
 70 w = csqrt(z(2))
 u = 2.0*real(w)
 v = 2.0*abs(aimag(w))
-t =  x - b
+t = x - b
 x1 = t + u
 x2 = t - u
 if (abs(x1) .le. abs(x2)) go to 71
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 71 u = -x - b
 h = u*u + v*v
 if (x1*x1 .lt. 0.01*amin1(x2*x2,h)) x1 = e/(x2*h)
@@ -8880,7 +8881,7 @@ implicit none
 double precision, intent(in) :: a(5)
 double precision, intent(inout) :: zr(4), zi(4)
 double precision :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, &
-&v1, v2, w(2), x, x1, x2, x3
+   & v1, v2, w(2), x, x1, x2, x3
 !
 if (a(1) .eq. 0.d0) go to 100
 b = a(4)/(4.d0*a(5))
@@ -8905,7 +8906,7 @@ r = b2*(c - 3.d0*b2) - b*d + e
 !
 temp(1) = -q*q/64.d0
 temp(2) = 0.25d0*(p*p - r)
-temp(3) =  p
+temp(3) = p
 temp(4) = 1.d0
 call dcbcrt (temp, zr, zi)
 if (zi(2) .ne. 0.d0) go to 60
@@ -8917,17 +8918,17 @@ x1 = zr(1)
 x2 = zr(2)
 x3 = zr(3)
 if (x1 .le. x2) go to 10
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 10 if (x2 .le. x3) go to 20
-   t = x2
-   x2 = x3
-   x3 = t
+t = x2
+x2 = x3
+x3 = t
 if (x1 .le. x2) go to 20
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 !
 20 u = 0.d0
 if (x3 .gt. 0.d0) u = dsqrt(x3)
@@ -8945,8 +8946,8 @@ zr(3) = (( x1 - x2) - u) - b
 zr(4) = ((-x1 + x2) - u) - b
 call daord (zr, 4)
 if (dabs(zr(1)) .ge. 0.1d0*dabs(zr(4))) go to 31
-   t = zr(2)*zr(3)*zr(4)
-   if (t .ne. 0.d0) zr(1) = e/t
+t = zr(2)*zr(3)*zr(4)
+if (t .ne. 0.d0) zr(1) = e/t
 31 zi(1) = 0.d0
 zi(2) = 0.d0
 zi(3) = 0.d0
@@ -8962,11 +8963,11 @@ if (q .lt. 0.d0) u = -u
 !
 50 zr(1) = -u - b
 zi(1) = v1 - v2
-zr(2) =  zr(1)
+zr(2) = zr(1)
 zi(2) = -zi(1)
-zr(3) =  u - b
+zr(3) = u - b
 zi(3) = v1 + v2
-zr(4) =  zr(3)
+zr(4) = zr(3)
 zi(4) = -zi(3)
 return
 !
@@ -8986,13 +8987,13 @@ w(2) = zi(2)
 call dcsqrt (w, w)
 u = 2.d0*w(1)
 v = 2.d0*dabs(w(2))
-t =  x - b
+t = x - b
 x1 = t + u
 x2 = t - u
 if (dabs(x1) .le. dabs(x2)) go to 71
-   t = x1
-   x1 = x2
-   x2 = t
+t = x1
+x1 = x2
+x2 = t
 71 u = -x - b
 h = u*u + v*v
 if (x1*x1 .lt. 1.d-2*dmin1(x2*x2,h)) x1 = e/(x2*h)
@@ -9000,9 +9001,9 @@ zr(1) = x1
 zr(2) = x2
 zi(1) = 0.d0
 zi(2) = 0.d0
-zr(3) =  u
-zr(4) =  u
-zi(3) =  v
+zr(3) = u
+zr(4) = u
+zi(3) = v
 zi(4) = -v
 return
 !
@@ -9011,9 +9012,9 @@ zr(1) = -b
 zr(2) = -b
 zr(3) = -b
 zr(4) = -b
-zi(1) =  v
+zi(1) = v
 zi(2) = -v
-zi(3) =  v
+zi(3) = v
 zi(4) = -v
 return
 !
@@ -9031,7 +9032,7 @@ integer :: ideg
 integer, intent(inout) :: num
 double precision :: op(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
-&dwk(*)
+   & dwk(*)
 real, intent(inout) :: wk(*)
 integer :: idp1
 integer :: p, qp, k, qk, svk, tmp
@@ -9074,15 +9075,15 @@ if (ideg .lt. 1) go to 10
 !
 idp1 = ideg + 1
 !
-p  = 1
-qp = p  + idp1
-k  = qp + idp1
-qk = k  + idp1
-svk = qk  + idp1
+p = 1
+qp = p + idp1
+k = qp + idp1
+qk = k + idp1
+svk = qk + idp1
 tmp = svk + idp1
 !
 call drply1 (op,ideg,idp1,zeror,zeroi,dwk(p),dwk(qp),dwk(k), &
-&dwk(qk),dwk(svk),dwk(tmp),wk,num)
+   & dwk(qk),dwk(svk),dwk(tmp),wk,num)
 return
 !
 !     Error return
@@ -9092,16 +9093,16 @@ return
 end subroutine drpoly
 
 subroutine drply1 (op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
-&temp,pt,num)
+   & temp,pt,num)
 implicit none
 integer :: ideg, idp1, num
 double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
-&qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
+   & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
 real :: pt(idp1)
 integer :: i, j, jj, l, n, nm1, nn, nz
 double precision :: aa, bb, cc, factor, t
 real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
-&df, dx, base, smalno, infin
+   & df, dx, base, smalno, infin
 integer :: cnt
 logical :: zerok
 real :: spmpar
@@ -9109,13 +9110,13 @@ integer :: ipmpar
 double precision :: dpmpar
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !-------------------------
 !
 !
 !-------------------------
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !-------------------------
 !     The following statements set the machine constants used
 !     in the code. The meaning of the constants are ...
@@ -9130,10 +9131,10 @@ common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETICS
 !             being used.
 !
-                 eta = dpmpar(1)
-                 smalno = spmpar(2)
-                 infin = spmpar(3)
-                 base = ipmpar(4)
+eta = dpmpar(1)
+smalno = spmpar(2)
+infin = spmpar(3)
+base = ipmpar(4)
 !-------------------------
 !
 !     Are and mre refer to the unit error in + and *
@@ -9156,18 +9157,18 @@ num = 0
 !     Algorithm fails if the leading coefficient is zero.
 !
 if (op(1) .ne. 0.d0) go to 10
-   num = -1
-   return
+num = -1
+return
 !
 !     Remove the zeros at the origin if any
 !
 10 if (op(nn) .ne. 0.0d0) go to 20
-   num = num + 1
-   zeror(num) = 0.d0
-   zeroi(num) = 0.d0
-   nn = nn - 1
-   n = n - 1
-   go to 10
+num = num + 1
+zeror(num) = 0.d0
+zeroi(num) = 0.d0
+nn = nn - 1
+n = n - 1
+go to 10
 !
 !     Make a copy of the coefficients
 !
@@ -9184,11 +9185,11 @@ if (n .lt. 1) return
 !
 num = ideg
 if (n .eq. 2) go to 50
-   zeror(ideg) = -p(2)/p(1)
-   zeroi(ideg) = 0.0d0
-   return
+zeror(ideg) = -p(2)/p(1)
+zeroi(ideg) = 0.0d0
+return
 50 call quadpl(p(1), p(2), p(3), zeror(ideg - 1), zeroi(ideg - 1), &
-&zeror(ideg), zeroi(ideg))
+   & zeror(ideg), zeroi(ideg))
 return
 !
 !     Find largest and smallest moduli of coefficients.
@@ -9223,7 +9224,7 @@ end do
 !
 !     Compute lower bound on moduli of zeros.
 !
-110 do i=1,nn
+110 do i = 1,nn
    pt(i) = abs(sngl(p(i)))
 end do
 pt(nn) = -pt(nn)
@@ -9372,7 +9373,7 @@ integer :: type, i, j, iflag
 logical :: vpass, spass, vtry, stry
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Computes up to  l2  fixed shift k-polynomials,
 !     testing for convergence in the linear or quadratic
@@ -9385,7 +9386,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
@@ -9451,7 +9452,7 @@ do j = 1,l2
    vtry = .false.
    stry = .false.
    if (spass .and. ((.not.vpass) .or. &
-&tss .lt. tvv)) go to 40
+      & tss .lt. tvv)) go to 40
 20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
    if (nz .gt. 0) return
 !
@@ -9489,7 +9490,7 @@ do j = 1,l2
 !
 50 u = svu
    v = svv
-   do i=1,n
+   do i = 1,n
       k(i) = svk(i)
    end do
 !
@@ -9523,7 +9524,7 @@ integer :: type, i, j
 logical :: tried
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -9534,7 +9535,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
@@ -9549,7 +9550,7 @@ j = 0
 !     to multiple or nearly equal and of opposite sign
 !
 if (dabs(dabs(szr) - dabs(lzr)) .gt. 1.d-2*dabs(lzr)) &
-&return
+   & return
 !
 !     Evaluate polynomial by quadratic synthetic division
 !
@@ -9567,8 +9568,8 @@ do 20 i = 2,n
 20 continue
 ee = ee*zm + abs(sngl(a) + t)
 ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
-&(abs(sngl(a) + t) + abs(sngl(b))*zm) + &
-&2.0*are*abs(t)
+   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
+   & 2.0*are*abs(t)
 !
 !     Iteration has converged sufficiently if the
 !     polynomial value is less than 20 times this bound
@@ -9626,7 +9627,7 @@ double precision :: pv, kv, t, s
 real :: ms, mp, omp, ee
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift H polynomial iteration for a real zero.
 !
@@ -9637,7 +9638,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
@@ -9658,7 +9659,7 @@ mp = dabs(pv)
 !     Compute a rigorous bound on the error in evaluating p
 !
 ms = dabs(s)
-ee = (mre/(are+mre))*abs(sngl(qp(1)))
+ee = (mre/(are + mre))*abs(sngl(qp(1)))
 do i = 2,nn
    ee = ee*ms + abs(sngl(qp(i)))
 end do
@@ -9677,8 +9678,8 @@ return
 !
 if (j .gt. 10) return
 if (j .lt. 2) go to 50
-if (dabs(t) .gt. 1.d-3*dabs(s-t) .or. mp .le. omp) &
-&go to 50
+if (dabs(t) .gt. 1.d-3*dabs(s - t) .or. mp .le. omp) &
+   & go to 50
 !
 !     A cluster of zeros near the real axis has been
 !     encountered return with iflag set to initiate A
@@ -9709,7 +9710,7 @@ if (dabs(kv) .le. dabs(k(n))*10.*eta) go to 80
 t = -pv/kv
 k(1) = qp(1)
 do i = 2,n
-   k(i) = t*qk(i-1) + qp(i)
+   k(i) = t*qk(i - 1) + qp(i)
 end do
 go to 100
 !
@@ -9717,7 +9718,7 @@ go to 100
 !
 80 k(1) = 0.0d0
 do i = 2,n
-   k(i) = qk(i-1)
+   k(i) = qk(i - 1)
 end do
 100 kv = k(1)
 do i = 2,n
@@ -9737,7 +9738,7 @@ double precision :: k(n), qk(n)
 double precision :: tol
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     This routine calculates scalar quantities used to
 !     compute the next k polynomial and new estimates of
@@ -9748,7 +9749,7 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 !     Synthetic division of k by the quadratic 1,u,v
 !
@@ -9797,13 +9798,13 @@ integer :: i
 double precision :: temp
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Computes the next k polynomials using the scalars
 !     computed in calcsc.
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 if (type .eq. 3) go to 40
 temp = a
@@ -9816,7 +9817,7 @@ if (dabs(a1) .gt. dabs(temp)*eta*10.) go to 20
 k(1) = 0.d0
 k(2) = -a7*qp(1)
 do 10 i = 3,n
-   k(i) = a3*qk(i-2) - a7*qp(i-1)
+   k(i) = a3*qk(i - 2) - a7*qp(i - 1)
 10 continue
 return
 !
@@ -9827,7 +9828,7 @@ a3 = a3/a1
 k(1) = qp(1)
 k(2) = qp(2) - a7*qp(1)
 do i = 3,n
-   k(i) = a3*qk(i-2) - a7*qp(i-1) + qp(i)
+   k(i) = a3*qk(i - 2) - a7*qp(i - 1) + qp(i)
 end do
 return
 !
@@ -9850,23 +9851,23 @@ integer :: n
 double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
+   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Compute new estimates of the quadratic coefficients
 !     using the scalars computed in calcsc.
 !
 !
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 !     Use formulas appropriate to setting of type.
 !
 n = nn - 1
 if (type .eq. 3) go to 30
 if (type .eq. 2) go to 10
-   a4 = a + u*b + h*f
-   a5 = c + (u + v*f)*d
-   go to 20
+a4 = a + u*b + h*f
+a5 = c + (u + v*f)*d
+go to 20
 10 a4 = (a + g)*f + h
 a5 = (f + u)*c + v*d
 !
@@ -9933,25 +9934,25 @@ double precision, intent(inout) :: sr, si, lr, li
 double precision :: b, d, e
 !
 if (a .ne. 0.d0) go to 20
-   sr = 0.d0
-   if (b1 .ne. 0.d0) sr = -c/b1
-   lr = 0.d0
+sr = 0.d0
+if (b1 .ne. 0.d0) sr = -c/b1
+lr = 0.d0
 10 si = 0.d0
-   li = 0.d0
-   return
+li = 0.d0
+return
 !
 20 if (c .ne. 0.d0) go to 30
-   sr = 0.d0
-   lr = -b1/a
-   go to 10
+sr = 0.d0
+lr = -b1/a
+go to 10
 !
 !     Compute discriminant avoiding overflow
 !
 30 b = b1/2.d0
 if (dabs(b) .lt. dabs(c)) go to 40
-   e = 1.d0 - (a/b)*(c/b)
-   d = dsqrt(dabs(e))*dabs(b)
-   go to 50
+e = 1.d0 - (a/b)*(c/b)
+d = dsqrt(dabs(e))*dabs(b)
+go to 50
 40 e = a
 if (c .lt. 0.d0) e = -a
 e = b*(b/dabs(c)) - e
@@ -10021,20 +10022,20 @@ if (ideg .lt. 1) go to 10
 !
 idp1 = ideg + 1
 !
-pr  = 1
-pi  = pr +  idp1
-qpr = pi +  idp1
+pr = 1
+pi = pr + idp1
+qpr = pi + idp1
 qpi = qpr + idp1
-hr  = qpi + idp1
-hi  = hr  + idp1
-qhr = hi  + idp1
+hr = qpi + idp1
+hi = hr + idp1
+qhr = hi + idp1
 qhi = qhr + idp1
 shr = qhi + idp1
 shi = shr + idp1
 !
 call dcply1 (opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
-&wk(qpr),wk(qpi),wk(hr),wk(hi),wk(qhr),wk(qhi), &
-&wk(shr),wk(shi),num)
+   & wk(qpr),wk(qpi),wk(hr),wk(hi),wk(qhr),wk(qhi), &
+   & wk(shr),wk(shi),num)
 return
 !
 !     Error return
@@ -10044,20 +10045,20 @@ return
 end subroutine dcpoly
 
 subroutine dcply1 (opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
-&hr,hi,qhr,qhi,shr,shi,num)
+   & hr,hi,qhr,qhi,shr,shi,num)
 implicit none
 integer :: ideg
 integer, intent(in) :: idp1
 integer, intent(out) :: num
 double precision, intent(in) :: opr(idp1), opi(idp1)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
-&pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
-&qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
+   & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
+   & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
 integer :: i, nn
 integer :: ipmpar
 double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
 double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, &
-&bnd, dcpabs, dpmpar, scalcp
+   & bnd, dcpabs, dpmpar, scalcp
 logical :: conv
 integer :: cnt1, cnt2
 !-------------------------
@@ -10072,125 +10073,125 @@ integer :: cnt1, cnt2
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETIC
 !             being used.
 !
-                 eta = dpmpar(1)
-                 smalno = dpmpar(2)
-                 infin = dpmpar(3)
-                 base = ipmpar(4)
+eta = dpmpar(1)
+smalno = dpmpar(2)
+infin = dpmpar(3)
+base = ipmpar(4)
 !-------------------------
 !
 !     Initialization
 !
-   are = eta
-   mre = 2.d0*dsqrt(2.d0)*eta
-   xx = .70710678
-   yy = -xx
-   cosr = -.069756474
-   sinr = .99756405
-   num = 0
-   nn = idp1
+are = eta
+mre = 2.d0*dsqrt(2.d0)*eta
+xx = .70710678
+yy = -xx
+cosr = -.069756474
+sinr = .99756405
+num = 0
+nn = idp1
 !
 !     The algorithm fails if the leading coefficient is zero
 !
-   if (opr(1) .ne. 0.d0 .or. opi(1) .ne. 0.d0) go to 10
-      num = -1
-      return
+if (opr(1) .ne. 0.d0 .or. opi(1) .ne. 0.d0) go to 10
+num = -1
+return
 !
 !     Remove the zeros at the origin if any.
 !
 10 if (opr(nn) .ne. 0.d0 .or. opi(nn) .ne. 0.d0) go to 20
-      num = num + 1
-      zeror(num) = 0.d0
-      zeroi(num) = 0.d0
-      nn = nn - 1
-      go to 10
+num = num + 1
+zeror(num) = 0.d0
+zeroi(num) = 0.d0
+nn = nn - 1
+go to 10
 !
 !     Make a copy of the coefficients.
 !
 20 if (nn .lt. 2) return
-   do i = 1,nn
-      pr(i) = opr(i)
-      pi(i) = opi(i)
-      shr(i) = dcpabs(pr(i),pi(i))
-   end do
+do i = 1,nn
+   pr(i) = opr(i)
+   pi(i) = opi(i)
+   shr(i) = dcpabs(pr(i),pi(i))
+end do
 !
 !     Scale the polynomial.
 !
-   bnd = scalcp (nn,shr,eta,infin,smalno,base)
-   if (bnd .eq. 1.d0) go to 40
-   do i = 1,nn
-      pr(i) = bnd*pr(i)
-      pi(i) = bnd*pi(i)
-   end do
+bnd = scalcp (nn,shr,eta,infin,smalno,base)
+if (bnd .eq. 1.d0) go to 40
+do i = 1,nn
+   pr(i) = bnd*pr(i)
+   pi(i) = bnd*pi(i)
+end do
 !
 !     Start the algorithm for obtaining a zero.
 !
 40 if (nn .gt. 2) go to 50
 !
-      num = ideg
-      call cdivid(-pr(2),-pi(2),pr(1),pi(1),zeror(ideg), &
-&zeroi(ideg))
-      return
+num = ideg
+call cdivid(-pr(2),-pi(2),pr(1),pi(1),zeror(ideg), &
+   & zeroi(ideg))
+return
 !
 !     Calculate BND, a lower bound on the modulus of the zeros.
 !
 50 do i = 1,nn
-      shr(i) = dcpabs(pr(i),pi(i))
-   end do
-   call cauchy(nn,bnd,shr,shi)
+   shr(i) = dcpabs(pr(i),pi(i))
+end do
+call cauchy(nn,bnd,shr,shi)
 !
 !     Outer loop to control two major passes with different
 !     sequences of shifts.
 !
-   do cnt1 = 1,2
+do cnt1 = 1,2
 !
 !     First stage calculation. No shift.
 !
-      call noshft(5,nn,tr,ti,eta,pr,pi,hr,hi)
+   call noshft(5,nn,tr,ti,eta,pr,pi,hr,hi)
 !
 !     Inner loop to select a shift.
 !
-      do cnt2 = 1,9
+   do cnt2 = 1,9
 !
 !     The shift is chosen with modulus BND and amplitude rotated
 !     by 94 degrees from the previous shift.
 !
-         xxx = cosr*xx - sinr*yy
-         yy = sinr*xx + cosr*yy
-         xx = xxx
-         sr = bnd*xx
-         si = bnd*yy
+      xxx = cosr*xx - sinr*yy
+      yy = sinr*xx + cosr*yy
+      xx = xxx
+      sr = bnd*xx
+      si = bnd*yy
 !
 !     Second stage calculation, fixed shift. The second stage jumps
 !     directly to the third stage iteration.
 !
-         call fxshft(10*cnt2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
-&qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
-&are,mre,eta,infin)
-         if (conv) go to 100
+      call fxshft(10*cnt2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
+         & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
+         & are,mre,eta,infin)
+      if (conv) go to 100
 !
 !     If the iteration is unsuccessful another shift is chosen.
 !
-      end do
+   end do
 !
 !     If 9 shifts fail, the outer loop is repeated with another
 !     sequence of shifts.
 !
-   end do
-   return
+end do
+return
 !
 !     A zero has been obtained. Store the zero and deflate
 !     the polynomial.
 !
 100 num = num + 1
-   zeror(num) = zr
-   zeroi(num) = zi
-   nn = nn - 1
-   do i = 1,nn
-      pr(i) = qpr(i)
-      pi(i) = qpi(i)
-   end do
-   go to 40
-   end subroutine dcply1
+zeror(num) = zr
+zeroi(num) = zi
+nn = nn - 1
+do i = 1,nn
+   pr(i) = qpr(i)
+   pi(i) = qpi(i)
+end do
+go to 40
+end subroutine dcply1
 
 double precision function scalcp(nn,pt,eta,infin,smalno,base)
 implicit none
@@ -10257,8 +10258,8 @@ if (pt(n) .eq. 0.d0) go to 20
 !
 !     If the Newton step at the origin is better then use it.
 !
-   xm = -pt(nn)/pt(n)
-   if (xm .lt. x) x = xm
+xm = -pt(nn)/pt(n)
+if (xm .lt. x) x = xm
 !
 !     Chop the interval (0,x) until f .LE. 0.
 !
@@ -10268,25 +10269,25 @@ do i = 2,nn
    f = f*xm + pt(i)
 end do
 if (f .le. 0.d0) go to 40
-   x = xm
-   go to 20
+x = xm
+go to 20
 40 dx = x
 !
 !     Do Newton iteration until x converges to two decimal places.
 !
 50 if (dabs(dx/x) .le. 0.005d0) go to 70
-   q(1) = pt(1)
-   do i = 2,nn
-      q(i) = q(i - 1)*x + pt(i)
-   end do
-   f = q(nn)
-   df = q(1)
-   do i = 2,n
-      df = df*x + q(i)
-   end do
-   dx = f/df
-   x = x - dx
-   go to 50
+q(1) = pt(1)
+do i = 2,nn
+   q(i) = q(i - 1)*x + pt(i)
+end do
+f = q(nn)
+df = q(1)
+do i = 2,n
+   df = df*x + q(i)
+end do
+dx = f/df
+x = x - dx
+go to 50
 !
 70 bnd = x
 return
@@ -10316,7 +10317,7 @@ do 10 i = 1,n
 !
 do 50 jj = 1,l1
    if (dcpabs(hr(n),hi(n)) .le. 10.d0*eta*dcpabs(pr(n),pi(n))) &
-&go to 30
+      & go to 30
    call cdivid(-pr(nn),-pi(nn),hr(n),hi(n),tr,ti)
    do i = 1,nm1
       j = nn - i
@@ -10343,15 +10344,15 @@ return
 end subroutine noshft
 
 subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
-&qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
-&are,mre,eta,infin)
+   & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
+   & are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l2, nn
 double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
 double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-&pi(nn)
+   & pi(nn)
 double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-&hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
+   & hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
 double precision, intent(inout) :: zr, zi
 logical, intent(inout) :: conv
 integer :: i, j, n
@@ -10368,69 +10369,69 @@ logical :: test, pasd, bool
 !            iteration
 !
 !
-   n = nn - 1
+n = nn - 1
 !
 !     Evaluate P at S
 !
-   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   test = .true.
-   pasd = .false.
+call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+test = .true.
+pasd = .false.
 !
 !     CALCULATE T = -P(S)/H(S)
 !
-   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 !
 !     Main loop for one second stage step.
 !
-   do 50 j = 1,l2
-      otr = tr
-      oti = ti
+do 50 j = 1,l2
+   otr = tr
+   oti = ti
 !
 !     Compute next H polynomial and new T.
 !
-      call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
-      call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-      zr = sr + tr
-      zi = si + ti
+   call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   zr = sr + tr
+   zi = si + ti
 !
 !     Test for convergence unless stage 3 has failed once or this
 !     is the last H polynomial.
 !
-      if (bool .or. (.not. test) .or. j .eq. l2) go to 50
-      if (dcpabs(tr - otr,ti - oti) .ge. 0.5d0*dcpabs(zr,zi)) &
-&go to 40
-      if (.not. pasd) go to 30
+   if (bool .or. (.not. test) .or. j .eq. l2) go to 50
+   if (dcpabs(tr - otr,ti - oti) .ge. 0.5d0*dcpabs(zr,zi)) &
+      & go to 40
+   if (.not. pasd) go to 30
 !
 !     The weak convergence test has been passed twice. Start the
 !     third shift iteration after saving the current H polynomial
 !     and shift.
 !
-         do 10 i = 1,n
-            shr(i) = hr(i)
-            shi(i) = hi(i)
-10 continue
-         svsr = sr
-         svsi = si
-         call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
-&qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
-         if (conv) return
+   do 10 i = 1,n
+      shr(i) = hr(i)
+      shi(i) = hi(i)
+10    continue
+   svsr = sr
+   svsi = si
+   call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
+      & qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+   if (conv) return
 !
 !     The iteration failed to converge. Turn off testing and restore
 !     H,S,PV AND T.
 !
-         test = .false.
-         do i = 1,n
-            hr(i) = shr(i)
-            hi(i) = shi(i)
-         end do
-         sr = svsr
-         si = svsi
-         call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-         call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
-         go to 50
+   test = .false.
+   do i = 1,n
+      hr(i) = shr(i)
+      hi(i) = shi(i)
+   end do
+   sr = svsr
+   si = svsi
+   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   go to 50
 !
 30 pasd = .true.
-      go to 50
+   go to 50
 !
 40 pasd = .false.
 50 continue
@@ -10438,20 +10439,20 @@ logical :: test, pasd, bool
 !     Attempt an iteration with final H polynomial from second stage.
 !
 call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
-&sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
 return
 end subroutine fxshft
 
 subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
-&sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l3, nn
 double precision, intent(out) :: sr, si
 double precision, intent(inout) :: tr, ti, pvr, pvi
 double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-&pi(nn)
+   & pi(nn)
 double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-&hi(nn), qhr(nn), qhi(nn)
+   & hi(nn), qhr(nn), qhi(nn)
 double precision, intent(inout) :: zr, zi
 logical, intent(out) :: conv
 integer :: i, j, n
@@ -10483,19 +10484,19 @@ do 60 i = 1,l3
    mp = dcpabs(pvr,pvi)
    ms = dcpabs(sr,si)
    if (mp .gt. 20.d0*errev(nn,qpr,qpi,ms,mp,are,mre)) &
-&go to 10
+      & go to 10
 !
 !     Polynomial value is smaller than a bound on the error
 !     in evaluating P. terminate the iteration.
 !
-      conv = .true.
-      zr = sr
-      zi = si
-      return
+   conv = .true.
+   zr = sr
+   zi = si
+   return
 !
 10 if (i .eq. 1) go to 40
    if (b .or. mp .lt. omp .or. relstp .ge. 0.05d0) &
-&go to 30
+      & go to 30
 !
 !     Iteration has stalled. Probably a cluster of zeros. Do 5 fixed
 !     shift steps into the cluster to force one zero to dominate.
@@ -10511,7 +10512,7 @@ do 60 i = 1,l3
    do 20 j = 1,5
       call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
       call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
-20 continue
+20    continue
    omp = infin
    go to 50
 !

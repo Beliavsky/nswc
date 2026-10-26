@@ -76,15 +76,15 @@ if (job .ne. 0) go to 50
 !
 if (ml .eq. 0) go to 30
 do k = 1,nm1
-   lm = min0(ml,n-k)
+   lm = min0(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l .eq. k) go to 10
-      b(l) = b(k)
-      b(k) = t
+   b(l) = b(k)
+   b(k) = t
 10 klm = k + lm
    mlm = ml1 - lm
-   call daxpy(lm, t, a(klm,mlm), ldb, b(k+1), 1)
+   call daxpy(lm, t, a(klm,mlm), ldb, b(k + 1), 1)
 end do
 !
 !       Now solve  U*X = Y
@@ -95,7 +95,7 @@ do kb = 2,n
    lm = min0(k,m) - 1
    lb = k - lm
    t = -b(k)
-   call daxpy(lm, t, a(k-1,ml2), ldb, b(lb), 1)
+   call daxpy(lm, t, a(k - 1,ml2), ldb, b(lb), 1)
    k = k - 1
 end do
 b(1) = b(1)/a(1,ml1)
@@ -108,7 +108,7 @@ return
 do k = 2,n
    lm = min0(k,m) - 1
    lb = k - lm
-   t = ddot(lm, a(k-1,ml2), ldb, b(lb), 1)
+   t = ddot(lm, a(k - 1,ml2), ldb, b(lb), 1)
    b(k) = (b(k) - t)/a(k,ml1)
 end do
 if (ml .eq. 0) return
@@ -117,15 +117,15 @@ if (ml .eq. 0) return
 !
 do 70 kb = 1,nm1
    k = n - kb
-   lm = min0(ml,n-k)
+   lm = min0(ml,n - k)
    klm = k + lm
    mlm = ml1 - lm
-   b(k) = b(k) + ddot(lm, a(klm,mlm), ldb, b(k+1), 1)
+   b(k) = b(k) + ddot(lm, a(klm,mlm), ldb, b(k + 1), 1)
    l = ipvt(k)
    if (l .eq. k) go to 70
-      t = b(l)
-      b(l) = b(k)
-      b(k) = t
+   t = b(l)
+   b(l) = b(k)
+   b(k) = t
 70 continue
 return
 !
@@ -169,7 +169,7 @@ isgn = n + 1
 kase = 0
 ainorm = 0.0
 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 call bslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 !     Check if A is singular
@@ -180,11 +180,11 @@ if (ierr .gt. 0) go to 40
 !     of the inverse of A
 !
 10 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 if (kase .eq. 0) go to 30
 if (kase .ne. 1) go to 20
-   call bslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
-   go to 10
+call bslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+go to 10
 20 call bslv1 (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
 !
@@ -242,7 +242,7 @@ isgn = n + 1
 kase = 0
 ainorm = 0.d0
 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 call dbslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 !     Check if A is singular
@@ -253,11 +253,11 @@ if (ierr .gt. 0) go to 40
 !     of the inverse of A
 !
 10 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 if (kase .eq. 0) go to 30
 if (kase .ne. 1) go to 20
-   call dbslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
-   go to 10
+call dbslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+go to 10
 20 call dbslv1 (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
 !
@@ -454,7 +454,7 @@ integer, intent(out) :: info
 complex, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
-&ml1, mp, n1
+   & ml1, mp, n1
 integer :: icamax
 complex :: t
 ! ----------------------------------------------------------------------
@@ -573,40 +573,40 @@ mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
 do 40 k = 1,n1
-  lm = min0(n-k,ml)
-  lmk = lm + k
-  lm1 = lm + 1
-  lm2 = ml1 - lm
+   lm = min0(n - k,ml)
+   lmk = lm + k
+   lm1 = lm + 1
+   lm2 = ml1 - lm
 !
 !     Search for pivot index
 !
-  l = -icamax(lm1, a(lmk,lm2), ldb) + lm1 + k
-  ipvt(k) = l
-  mp = min0(mb,n-k)
+   l = -icamax(lm1, a(lmk,lm2), ldb) + lm1 + k
+   ipvt(k) = l
+   mp = min0(mb,n - k)
 !
 !     Swap rows if necessary
 !
-  ll = ml1 + k - l
-  if (l .ne. k) call cswap(mp + 1, a(k,ml1), lda, a(l,ll), lda)
+   ll = ml1 + k - l
+   if (l .ne. k) call cswap(mp + 1, a(k,ml1), lda, a(l,ll), lda)
 !
 !     Skip column reduction if pivot is zero
 !
-  if (a(k,ml1) .ne. (0.0,0.0)) go to 20
-     info = k
-     go to 40
+   if (a(k,ml1) .ne. (0.0,0.0)) go to 20
+   info = k
+   go to 40
 !
 !     Compute multipliers
 !
 20 t = (-1.0,0.0)/a(k,ml1)
-  call cscal(lm, t, a(lmk,lm2), ldb)
+   call cscal(lm, t, a(lmk,lm2), ldb)
 !
 !     Row elimination with column indexing
 !
-  do j = 1,mp
-     jj = ml1 + j
-     j1 = lm2 + j
-     call caxpy(lm, a(k,jj), a(lmk,lm2), ldb, a(lmk,j1), ldb)
-  end do
+   do j = 1,mp
+      jj = ml1 + j
+      j1 = lm2 + j
+      call caxpy(lm, a(k,jj), a(lmk,lm2), ldb, a(lmk,j1), ldb)
+   end do
 40 continue
 !
 ipvt(n) = n
@@ -616,8 +616,8 @@ return
 !     Case when ml = 0
 !
 100 do k = 1,n
-  ipvt(k) = k
-  if (a(k,1) .eq. (0.0,0.0)) info = k
+   ipvt(k) = k
+   if (a(k,1) .eq. (0.0,0.0)) info = k
 end do
 return
 end subroutine cbfa
@@ -700,15 +700,15 @@ if (job .ne. 0) go to 50
 !
 if (ml .eq. 0) go to 30
 do k = 1,nm1
-   lm = min0(ml,n-k)
+   lm = min0(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l .eq. k) go to 10
-      b(l) = b(k)
-      b(k) = t
+   b(l) = b(k)
+   b(k) = t
 10 klm = k + lm
    mlm = ml1 - lm
-   call caxpy(lm, t, a(klm,mlm), ldb, b(k+1), 1)
+   call caxpy(lm, t, a(klm,mlm), ldb, b(k + 1), 1)
 end do
 !
 !       Now solve  U*X = Y
@@ -719,7 +719,7 @@ do kb = 2,n
    lm = min0(k,m) - 1
    lb = k - lm
    t = -b(k)
-   call caxpy(lm, t, a(k-1,ml2), ldb, b(lb), 1)
+   call caxpy(lm, t, a(k - 1,ml2), ldb, b(lb), 1)
    k = k - 1
 end do
 b(1) = b(1)/a(1,ml1)
@@ -732,7 +732,7 @@ return
 do k = 2,n
    lm = min0(k,m) - 1
    lb = k - lm
-   t = cdotu(lm, a(k-1,ml2), ldb, b(lb), 1)
+   t = cdotu(lm, a(k - 1,ml2), ldb, b(lb), 1)
    b(k) = (b(k) - t)/a(k,ml1)
 end do
 if (ml .eq. 0) return
@@ -741,15 +741,15 @@ if (ml .eq. 0) return
 !
 do 70 kb = 1, nm1
    k = n - kb
-   lm = min0(ml,n-k)
+   lm = min0(ml,n - k)
    klm = k + lm
    mlm = ml1 - lm
-   b(k) = b(k) + cdotu(lm, a(klm,mlm), ldb, b(k+1), 1)
+   b(k) = b(k) + cdotu(lm, a(klm,mlm), ldb, b(k + 1), 1)
    l = ipvt(k)
    if (l .eq. k) go to 70
-      t = b(l)
-      b(l) = b(k)
-      b(k) = t
+   t = b(l)
+   b(l) = b(k)
+   b(k) = t
 70 continue
 return
 !
@@ -780,7 +780,7 @@ do i = 1,m
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
-10 continue
+10    continue
 end do
 !
 !                 Complete the setup
@@ -815,7 +815,7 @@ do i = 1,m
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
-10 continue
+10    continue
 end do
 !
 !                 Complete the setup
@@ -852,7 +852,7 @@ do i = 1,m
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
-10 continue
+10    continue
 end do
 !
 !                 Complete the setup
@@ -886,7 +886,7 @@ do 30 i = 1,m
 !                 Store the i-TH row
 !
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 30
    do ip = ipmin,ipmax
       j = ja(ip)
@@ -916,7 +916,7 @@ do 30 i = 1,m
 !                 Store the i-TH row
 !
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 30
    do ip = ipmin,ipmax
       j = ja(ip)
@@ -946,7 +946,7 @@ do 30 i = 1,m
 !                 Store the i-TH row
 !
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 30
    do ip = ipmin,ipmax
       j = ja(ip)
@@ -970,14 +970,14 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       if (a(ip) .eq. 0.0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -996,14 +996,14 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       if (a(ip) .eq. 0.d0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1026,7 +1026,7 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       t = real(a(ip))
@@ -1034,7 +1034,7 @@ do 20 i = 1,m
       b(l) = t
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1057,7 +1057,7 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       t = aimag(a(ip))
@@ -1065,7 +1065,7 @@ do 20 i = 1,m
       b(l) = t
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1096,7 +1096,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1104,7 +1104,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       if (b(l) .eq. 0.0) go to 31
@@ -1115,7 +1115,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1126,7 +1126,7 @@ do 42 i = 1,m
       wk(j) = 0.0
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -1154,14 +1154,14 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       if (a(ip) .eq. 0.0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1183,14 +1183,14 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       if (a(ip) .eq. 0.d0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1214,14 +1214,14 @@ l = 1
 do 20 i = 1,m
    ib(i) = l
    ibeg = ia(i)
-   iend = ia(i+1) - 1
+   iend = ia(i + 1) - 1
    if (ibeg .gt. iend) go to 20
    do 10 ip = ibeg,iend
       if (a(ip) .eq. zero) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
-10 continue
+10    continue
 20 continue
 ib(m + 1) = l
 return
@@ -1273,7 +1273,7 @@ integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1286,11 +1286,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1299,14 +1299,14 @@ end do
 !
 do 31 i = 1,m
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1339,7 +1339,7 @@ integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1352,11 +1352,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1366,14 +1366,14 @@ end do
 do 31 i = 1,m
    ii = p(i)
    ipmin = ia(ii)
-   ipmax = ia(ii+1) - 1
+   ipmax = ia(ii + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1404,7 +1404,7 @@ integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1417,11 +1417,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1430,14 +1430,14 @@ end do
 !
 do 31 i = 1,m
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1470,7 +1470,7 @@ integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1483,11 +1483,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1497,14 +1497,14 @@ end do
 do 31 i = 1,m
    ii = p(i)
    ipmin = ia(ii)
-   ipmax = ia(ii+1) - 1
+   ipmax = ia(ii + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1535,7 +1535,7 @@ integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1548,11 +1548,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1561,14 +1561,14 @@ end do
 !
 do 31 i = 1,m
    ipmin = ia(i)
-   ipmax = ia(i+1) - 1
+   ipmax = ia(i + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1601,7 +1601,7 @@ integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !                 of A and store the results in ib
 !
 ipmin = ia(1)
-ipmax = ia(m+1) - 1
+ipmax = ia(m + 1) - 1
 if (ipmin .gt. ipmax) go to 40
 do j = 1,n
    ib(j) = 0
@@ -1614,11 +1614,11 @@ end do
 !          Compute the row pointers of the transpose matrix
 !                and store them in ib(2),...,ib(n+1)
 !
-num = ia(m+1) - ia(1) + 1
+num = ia(m + 1) - ia(1) + 1
 j = n
 do jj = 1,n
    num = num - ib(j)
-   ib(j+1) = num
+   ib(j + 1) = num
    j = j - 1
 end do
 !
@@ -1628,14 +1628,14 @@ end do
 do 31 i = 1,m
    ii = p(i)
    ipmin = ia(ii)
-   ipmax = ia(ii+1) - 1
+   ipmax = ia(ii + 1) - 1
    if (ipmin .gt. ipmax) go to 31
    do ip = ipmin,ipmax
       j = ja(ip)
-      jp = ib(j+1)
+      jp = ib(j + 1)
       jb(jp) = i
       b(jp) = a(ip)
-      ib(j+1) = jp + 1
+      ib(j + 1) = jp + 1
    end do
 31 continue
 ib(1) = 1
@@ -1674,7 +1674,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1682,7 +1682,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -1693,7 +1693,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1704,7 +1704,7 @@ do 42 i = 1,m
       wk(j) = 0.0
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -1740,7 +1740,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1748,7 +1748,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -1759,7 +1759,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1770,7 +1770,7 @@ do 42 i = 1,m
       wk(j) = 0.d0
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -1806,7 +1806,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1814,7 +1814,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -1825,7 +1825,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1836,7 +1836,7 @@ do 42 i = 1,m
       wk(j) = (0.0, 0.0)
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -1872,7 +1872,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1880,7 +1880,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -1891,7 +1891,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1902,7 +1902,7 @@ do 42 i = 1,m
       wk(j) = 0.0
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -1938,7 +1938,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -1946,7 +1946,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -1957,7 +1957,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -1968,7 +1968,7 @@ do 42 i = 1,m
       wk(j) = 0.d0
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -2004,7 +2004,7 @@ ip = 1
 do 42 i = 1,m
    ic(i) = ip
    mina = ia(i)
-   maxa = ia(i+1) - 1
+   maxa = ia(i + 1) - 1
    if (mina .gt. maxa) go to 30
    do l = mina,maxa
       j = ja(l)
@@ -2012,7 +2012,7 @@ do 42 i = 1,m
    end do
 !
 30 minb = ib(i)
-   maxb = ib(i+1) - 1
+   maxb = ib(i + 1) - 1
    if (minb .gt. maxb) go to 40
    do 31 l = minb,maxb
       j = jb(l)
@@ -2023,7 +2023,7 @@ do 42 i = 1,m
       c(ip) = t
       jc(ip) = j
       ip = ip + 1
-31 continue
+31    continue
 !
 40 if (mina .gt. maxa) go to 42
    do 41 l = mina,maxa
@@ -2034,7 +2034,7 @@ do 42 i = 1,m
       wk(j) = (0.0, 0.0)
       jc(ip) = j
       ip = ip + 1
-41 continue
+41    continue
 42 continue
 ic(m + 1) = ip
 ierr = 0
@@ -2070,7 +2070,7 @@ ip = 1
 do 31 i = 1,l
    ic(i) = ip
    jpmin = ia(i)
-   jpmax = ia(i+1) - 1
+   jpmax = ia(i + 1) - 1
    if (jpmin .gt. jpmax) go to 31
 !
    do 21 jp = jpmin,jpmax
@@ -2078,13 +2078,13 @@ do 31 i = 1,l
       if (t .eq. 0.0) go to 21
       j = ja(jp)
       kpmin = ib(j)
-      kpmax = ib(j+1) - 1
+      kpmax = ib(j + 1) - 1
       if (kpmin .gt. kpmax) go to 21
       do kp = kpmin,kpmax
          k = jb(kp)
          wk(k) = wk(k) + t*b(kp)
       end do
-21 continue
+21    continue
 !
    do 30 k = 1,n
       if (wk(k) .eq. 0.0) go to 30
@@ -2093,7 +2093,7 @@ do 31 i = 1,l
       wk(k) = 0.0
       jc(ip) = k
       ip = ip + 1
-30 continue
+30    continue
 31 continue
 ic(l + 1) = ip
 ierr = 0
@@ -2129,7 +2129,7 @@ ip = 1
 do 31 i = 1,l
    ic(i) = ip
    jpmin = ia(i)
-   jpmax = ia(i+1) - 1
+   jpmax = ia(i + 1) - 1
    if (jpmin .gt. jpmax) go to 31
 !
    do 21 jp = jpmin,jpmax
@@ -2137,13 +2137,13 @@ do 31 i = 1,l
       if (t .eq. 0.d0) go to 21
       j = ja(jp)
       kpmin = ib(j)
-      kpmax = ib(j+1) - 1
+      kpmax = ib(j + 1) - 1
       if (kpmin .gt. kpmax) go to 21
       do kp = kpmin,kpmax
          k = jb(kp)
          wk(k) = wk(k) + t*b(kp)
       end do
-21 continue
+21    continue
 !
    do 30 k = 1,n
       if (wk(k) .eq. 0.d0) go to 30
@@ -2152,7 +2152,7 @@ do 31 i = 1,l
       wk(k) = 0.d0
       jc(ip) = k
       ip = ip + 1
-30 continue
+30    continue
 31 continue
 ic(l + 1) = ip
 ierr = 0
@@ -2188,7 +2188,7 @@ ip = 1
 do 31 i = 1,l
    ic(i) = ip
    jpmin = ia(i)
-   jpmax = ia(i+1) - 1
+   jpmax = ia(i + 1) - 1
    if (jpmin .gt. jpmax) go to 31
 !
    do 21 jp = jpmin,jpmax
@@ -2196,13 +2196,13 @@ do 31 i = 1,l
       if (t .eq. (0.0, 0.0)) go to 21
       j = ja(jp)
       kpmin = ib(j)
-      kpmax = ib(j+1) - 1
+      kpmax = ib(j + 1) - 1
       if (kpmin .gt. kpmax) go to 21
       do kp = kpmin,kpmax
          k = jb(kp)
          wk(k) = wk(k) + t*b(kp)
       end do
-21 continue
+21    continue
 !
    do 30 k = 1,n
       if (wk(k) .eq. (0.0, 0.0)) go to 30
@@ -2211,7 +2211,7 @@ do 31 i = 1,l
       wk(k) = (0.0, 0.0)
       jc(ip) = k
       ip = ip + 1
-30 continue
+30    continue
 31 continue
 ic(l + 1) = ip
 ierr = 0
@@ -2238,7 +2238,7 @@ real :: sum
 do 11 i = 1,m
    sum = 0.0
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2263,7 +2263,7 @@ real :: sum
 do 11 i = 1,m
    sum = y(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2292,7 +2292,7 @@ end do
 do 21 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 21
    do l = lmin,lmax
       j = ja(l)
@@ -2317,7 +2317,7 @@ real :: t
 do 11 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2342,7 +2342,7 @@ double precision :: sum
 do 11 i = 1,m
    sum = 0.d0
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2367,7 +2367,7 @@ double precision :: sum
 do 11 i = 1,m
    sum = y(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2396,7 +2396,7 @@ end do
 do 21 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 21
    do l = lmin,lmax
       j = ja(l)
@@ -2421,7 +2421,7 @@ double precision :: t
 do 11 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2446,7 +2446,7 @@ complex :: sum
 do 11 i = 1,m
    sum = (0.0, 0.0)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2471,7 +2471,7 @@ complex :: sum
 do 11 i = 1,m
    sum = y(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2500,7 +2500,7 @@ end do
 do 21 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 21
    do l = lmin,lmax
       j = ja(l)
@@ -2525,7 +2525,7 @@ complex :: t
 do 11 i = 1,m
    t = x(i)
    lmin = ia(i)
-   lmax = ia(i+1) - 1
+   lmax = ia(i + 1) - 1
    if (lmin .gt. lmax) go to 11
    do l = lmin,lmax
       j = ja(l)
@@ -2676,7 +2676,7 @@ end do
 !
 i = m
 do ii = 1,m
-   num = ia(i+1) - ia(i) + 1
+   num = ia(i + 1) - ia(i) + 1
    l = np1 + i
    iwk(l) = iwk(num)
    iwk(num) = i
@@ -2687,9 +2687,9 @@ num = 1
 k = iwk(num)
 do i = 1,m
 30 if (k .ne. 0) go to 31
-      num = num + 1
-      k = iwk(num)
-      go to 30
+   num = num + 1
+   k = iwk(num)
+   go to 30
 31 r(i) = k
    l = np1 + k
    k = iwk(l)
@@ -2714,7 +2714,7 @@ integer :: i, length, li, np1, npi
 np1 = n + 1
 length = ia(np1) - ia(1)
 do i = 1,n
-   iwk(i) = ia(i+1) - ia(i)
+   iwk(i) = ia(i + 1) - ia(i)
 end do
 call mc21a(n,ja,length,ia,iwk(1),r,num,iwk(np1))
 ierr = n - num
@@ -2724,9 +2724,9 @@ do i = 1,n
    li = r(i)
    iwk(i) = ia(li)
    npi = n + i
-   iwk(npi) = ia(li+1) - ia(li)
+   iwk(npi) = ia(li + 1) - ia(li)
 end do
-call mc13d(n,ja,length,iwk(1),iwk(np1),c,ib,num,iwk(2*n+1))
+call mc13d(n,ja,length,iwk(1),iwk(np1),c,ib,num,iwk(2*n + 1))
 !
 do i = 1,n
    li = c(i)
@@ -2769,7 +2769,7 @@ integer, intent(inout) :: iperm(n), iw(n,4)
 !-----------------------------------------------------------------------
 !
 call mc21b (n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
-&iw(1,3),iw(1,4))
+   & iw(1,3),iw(1,4))
 return
 end subroutine mc21a
 
@@ -2807,73 +2807,73 @@ numnz = 0
 !     or gives a row with no assignment.
 !
 do 130 jord = 1,n
-j = jord
-pr(j) = -1
-do 100 k = 1,jord
+   j = jord
+   pr(j) = -1
+   do 100 k = 1,jord
 !
 !     Look for a cheap assignment
 !
-in1 = arp(j)
-if (in1 .lt. 0) go to 60
-in2 = ip(j) + lenr(j) - 1
-in1 = in2 - in1
-do ii = in1,in2
-   i = icn(ii)
-   if (iperm(i) .eq. 0) go to 110
-end do
+      in1 = arp(j)
+      if (in1 .lt. 0) go to 60
+      in2 = ip(j) + lenr(j) - 1
+      in1 = in2 - in1
+      do ii = in1,in2
+         i = icn(ii)
+         if (iperm(i) .eq. 0) go to 110
+      end do
 !
 !     No cheap assignment in row
 !
-arp(j) = -1
+      arp(j) = -1
 !
 !     Begin looking for assignment chain starting with row j
 !
-60 out(j) = lenr(j) - 1
+60    out(j) = lenr(j) - 1
 !
 !     Inner loop.  Extends chain by one or backtracks.
 !
-do kk = 1,jord
-   in1 = out(j)
-   if (in1 .lt. 0) go to 80
-   in2 = ip(j) + lenr(j) - 1
-   in1 = in2 - in1
+      do kk = 1,jord
+         in1 = out(j)
+         if (in1 .lt. 0) go to 80
+         in2 = ip(j) + lenr(j) - 1
+         in1 = in2 - in1
 !
 !        Forward scan
 !
-   do 70 ii = in1,in2
-      i = icn(ii)
-      if (cv(i) .eq. jord) go to 70
+         do 70 ii = in1,in2
+            i = icn(ii)
+            if (cv(i) .eq. jord) go to 70
 !
 !           Column i has not yet been accessed during this pass
 !
-      j1 = j
-      j = iperm(i)
-      cv(i) = jord
-      pr(j) = j1
-      out(j1) = in2 - ii - 1
-      go to 100
-70 continue
+            j1 = j
+            j = iperm(i)
+            cv(i) = jord
+            pr(j) = j1
+            out(j1) = in2 - ii - 1
+            go to 100
+70          continue
 !
 !        Backtracking step
 !
-80 j = pr(j)
-   if (j .eq. -1) go to 130
-end do
+80       j = pr(j)
+         if (j .eq. -1) go to 130
+      end do
 !
-100 continue
+100   continue
 !
 !     New assignment is made
 !
 110 iperm(i) = j
-arp(j) = in2 - ii - 1
-numnz = numnz + 1
-do k = 1,jord
-   j = pr(j)
-   if (j .eq. -1) go to 130
-   ii = ip(j) + lenr(j) - out(j) - 2
-   i = icn(ii)
-   iperm(i) = j
-end do
+   arp(j) = in2 - ii - 1
+   numnz = numnz + 1
+   do k = 1,jord
+      j = pr(j)
+      if (j .eq. -1) go to 130
+      ii = ip(j) + lenr(j) - out(j) - 2
+      i = icn(ii)
+      iperm(i) = j
+   end do
 !
 130 continue
 !
@@ -2887,9 +2887,9 @@ end do
 k = 0
 do 160 i = 1,n
    if (iperm(i) .ne. 0) go to 150
-      k = k + 1
-      out(k) = i
-      go to 160
+   k = k + 1
+   out(k) = i
+   go to 160
 150 j = iperm(i)
    arp(j) = i
 160 continue
@@ -2933,12 +2933,12 @@ integer, intent(inout) :: ior(n), ib(n), iw(n,3)
 !
 !
 call mc13e(n, icn, licn, ip, lenr, ior, ib, num, iw(1,1), &
-&iw(1,2), iw(1,3))
+   & iw(1,2), iw(1,3))
 return
 end subroutine mc13d
 
 subroutine mc13e(n, icn, licn, ip, lenr, arp, ib, num, lowl, &
-&numb, prev)
+   & numb, prev)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(out) :: num
@@ -2946,7 +2946,7 @@ integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
 integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, &
-&lcnt, nnm1
+   & lcnt, nnm1
 integer :: stp, dummy
 !
 ! arp(i) is one less than the number of unsearched edges leaving
@@ -2976,100 +2976,100 @@ nnm1 = n + n - 1
 !
 ! Initialization of arrays.
 !
-do j=1,n
-  numb(j) = 0
-  arp(j) = lenr(j) - 1
+do j = 1,n
+   numb(j) = 0
+   arp(j) = lenr(j) - 1
 end do
 !
 !
 do 90 isn = 1,n
 ! Look for a starting node
-  if (numb(isn).ne.0) go to 90
-  iv = isn
+   if (numb(isn).ne.0) go to 90
+   iv = isn
 ! ist is the number of nodes on the stack ... it is the stack pointer.
-  ist = 1
+   ist = 1
 ! Put node iv at beginning of stack.
-  lowl(iv) = 1
-  numb(iv) = 1
-  ib(n) = iv
+   lowl(iv) = 1
+   numb(iv) = 1
+   ib(n) = iv
 !
 ! The body of this loop puts a new node on the stack or backtracks.
 !
-  do 80 dummy = 1,nnm1
-    i1 = arp(iv)
+   do 80 dummy = 1,nnm1
+      i1 = arp(iv)
 ! Have all edges leaving node iv been searched.
-    if (i1.lt.0) go to 30
-    i2 = ip(iv) + lenr(iv) - 1
-    i1 = i2 - i1
+      if (i1.lt.0) go to 30
+      i2 = ip(iv) + lenr(iv) - 1
+      i1 = i2 - i1
 !
 ! Look at edges leaving node iv until one enters a new node or
 !     all edges are exhausted.
 !
-    do ii=i1,i2
-      iw = icn(ii)
+      do ii = i1,i2
+         iw = icn(ii)
 ! Has node iw been on stack already.
-      if (numb(iw).eq.0) go to 70
+         if (numb(iw).eq.0) go to 70
 ! Update value of lowl(iv) if necessary.
-      if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
-    end do
+         if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
+      end do
 !
 ! There are no more edges leaving node iv.
 !
-    arp(iv) = -1
+      arp(iv) = -1
 ! Is node iv the root of a block.
-30 if (lowl(iv).lt.numb(iv)) go to 60
+30    if (lowl(iv).lt.numb(iv)) go to 60
 !
 ! Order nodes in a block.
 !
-    num = num + 1
-    ist1 = n + 1 - ist
-    lcnt = icnt + 1
+      num = num + 1
+      ist1 = n + 1 - ist
+      lcnt = icnt + 1
 !
 ! Peel block off the top of the stack starting at the top and
 !     working down to the root of the block.
 !
-    do stp=ist1,n
-      iw = ib(stp)
-      lowl(iw) = n + 1
-      icnt = icnt + 1
-      numb(iw) = icnt
-      if (iw.eq.iv) go to 50
-    end do
-50 ist = n - stp
-    ib(num) = lcnt
+      do stp = ist1,n
+         iw = ib(stp)
+         lowl(iw) = n + 1
+         icnt = icnt + 1
+         numb(iw) = icnt
+         if (iw.eq.iv) go to 50
+      end do
+50    ist = n - stp
+      ib(num) = lcnt
 ! Are there any nodes left on the stack.
-    if (ist.ne.0) go to 60
+      if (ist.ne.0) go to 60
 ! Have all the nodes been ordered.
-    if (icnt.lt.n) go to 90
-    go to 100
+      if (icnt.lt.n) go to 90
+      go to 100
 !
 ! Backtrack to previous node on path.
 !
-60 iw = iv
-    iv = prev(iv)
+60    iw = iv
+      iv = prev(iv)
 ! Update value of lowl(iv) if necessary.
-    if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
-    go to 80
+      if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
+      go to 80
 !
 ! Put new node on the stack.
 !
-70 arp(iv) = i2 - ii - 1
-    prev(iw) = iv
-    iv = iw
-    ist = ist + 1
-    lowl(iv) = ist
-    numb(iv) = ist
-    k = n + 1 - ist
-    ib(k) = iv
-80 continue
+70    arp(iv) = i2 - ii - 1
+      prev(iw) = iv
+      iv = iw
+      ist = ist + 1
+      lowl(iv) = ist
+      numb(iv) = ist
+      k = n + 1 - ist
+      ib(k) = iv
+80    continue
 !
 90 continue
 !
 ! Put permutation in the required form.
 !
-100 do i=1,n
-  ii = numb(i)
-  arp(ii) = i
+100 do i = 1,n
+   ii = numb(i)
+   arp(ii) = i
 end do
 return
 end subroutine mc13e
@@ -3190,7 +3190,7 @@ end do
 !  CALL nspiv1 TO PERFORM COMPUTATIONS
 !
 call nspiv1 (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
-&itemp(iu),itemp(ju),rtemp(u),ierr)
+   & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine spslv
@@ -3208,7 +3208,7 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-&nzcnt
+   & nzcnt
 real :: dk, lki, xpv, xpvmax, yk
 integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
@@ -3269,7 +3269,7 @@ integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !  Initialize work storage and pointers to ju
 !
 do j = 1,n
-  x(j) = 0.0
+   x(j) = 0.0
 end do
 iu(1) = 1
 juptr = 0
@@ -3282,84 +3282,84 @@ do 170 k = 1,n
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
 !
-  p(n+1) = n+1
-  vk = r(k)
+   p(n + 1) = n + 1
+   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
 !  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
-  jmin = ia(vk)
-  jmax = ia(vk+1) - 1
-  if (jmin .gt. jmax)  go to 1002
-  j = jmax
+   jmin = ia(vk)
+   jmax = ia(vk + 1) - 1
+   if (jmin .gt. jmax) go to 1002
+   j = jmax
 20 jaj = ja(j)
-    vj = ic(jaj)
+   vj = ic(jaj)
 !
 !  Store a(k,j) in work vector
 !
-    x(vj) = a(j)
+   x(vj) = a(j)
 !  This code inserts vj into adjacency list of vk
-    ppk = n+1
+   ppk = n + 1
 30 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  30,1003,40
+   ppk = p(pk)
+   if (ppk - vj) 30,1003,40
 40 p(vj) = ppk
-    p(pk) = vj
-    j = j - 1
-    if (j .ge. jmin) go to 20
+   p(pk) = vj
+   j = j - 1
+   if (j .ge. jmin) go to 20
 !
 !  The following code computes the k-TH row of u
 !
-  vi = n+1
-  yk = b(vk)
+   vi = n + 1
+   yk = b(vk)
 50 vi = p(vi)
-  if (vi .ge. k) go to 110
+   if (vi .ge. k) go to 110
 !
 !  vi LT vk -- process the L(k,i) element and merge the
 !  adjacency of vi with the ordered adjacency of vk
 !
-  lki = - x(vi)
-  x(vi) = 0.0
+   lki = - x(vi)
+   x(vi) = 0.0
 !
 !  Adjust right hand side to reflect elimination
 !
-  yk = yk + lki * y(vi)
-  ppk = vi
-  jmin = iu(vi)
-  jmax = iu(vi+1) - 1
-  if (jmin .gt. jmax)  go to 50
-  do j = jmin,jmax
-    juj = ju(j)
-    vj = ic(juj)
+   yk = yk + lki * y(vi)
+   ppk = vi
+   jmin = iu(vi)
+   jmax = iu(vi + 1) - 1
+   if (jmin .gt. jmax) go to 50
+   do j = jmin,jmax
+      juj = ju(j)
+      vj = ic(juj)
 !
 !  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
-    if (x(vj) .ne. 0.0)  go to 90
+      if (x(vj) .ne. 0.0) go to 90
 !
 !  Insert vj in adjacency list of vk.
 !  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-    if (vj - ppk) 60,90,70
-60 ppk = vi
-70 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  70,90,80
-80 p(vj) = ppk
-    p(pk) = vj
-    ppk = vj
+      if (vj - ppk) 60,90,70
+60    ppk = vi
+70    pk = ppk
+      ppk = p(pk)
+      if (ppk - vj) 70,90,80
+80    p(vj) = ppk
+      p(pk) = vj
+      ppk = vj
 !
 !  Compute L(k,j) = L(k,j) - L(k,i)*u(i,j) for L(k,i) nonzero
 !  compute u*(k,j) = u*(k,j) - L(k,i)*u(i,j) for u(k,j) nonzero
 !  (u*(k,j) = u(k,j)*D(k,k))
 !
-90 x(vj) = x(vj) + lki * u(j)
-  end do
-  go to 50
+90    x(vj) = x(vj) + lki * u(j)
+   end do
+   go to 50
 !
 !  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
@@ -3367,89 +3367,89 @@ do 170 k = 1,n
 !  Find largest entry, counting off-diagonal nonzeros
 !
 110 if (vi .gt. n) go to 1004
-  xpvmax = abs(x(vi))
-  maxc = vi
-  nzcnt = 0
-  pv = vi
+   xpvmax = abs(x(vi))
+   maxc = vi
+   nzcnt = 0
+   pv = vi
 120 v = pv
-    pv = p(pv)
-    if (pv .gt. n) go to 130
-    nzcnt = nzcnt + 1
-    xpv = abs(x(pv))
-    if (xpv .le. xpvmax) go to 120
-    xpvmax = xpv
-    maxc = pv
-    maxcl = v
-    go to 120
+   pv = p(pv)
+   if (pv .gt. n) go to 130
+   nzcnt = nzcnt + 1
+   xpv = abs(x(pv))
+   if (xpv .le. xpvmax) go to 120
+   xpvmax = xpv
+   maxc = pv
+   maxcl = v
+   go to 120
 130 if (xpvmax .eq. 0.0) go to 1004
 !
 !  If vi = k, then there is an entry for diagonal
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
-  if (vi .eq. k) go to 140
-  if (vi .eq. maxc) go to 140
-  p(maxcl) = p(maxc)
-  go to 150
+   if (vi .eq. k) go to 140
+   if (vi .eq. maxc) go to 140
+   p(maxcl) = p(maxc)
+   go to 150
 140 vi = p(vi)
 !
 !  Compute D(k) = 1/L(k,k) and perform interchange.
 !
 150 dk = 1.0 / x(maxc)
-  x(maxc) = x(k)
-  i = c(k)
-  c(k) = c(maxc)
-  c(maxc) = i
-  ck = c(k)
-  ic(ck) = k
-  ic(i) = maxc
-  x(k) = 0.0
+   x(maxc) = x(k)
+   i = c(k)
+   c(k) = c(maxc)
+   c(maxc) = i
+   ck = c(k)
+   ic(ck) = k
+   ic(i) = maxc
+   x(k) = 0.0
 !
 !  Update right hand side.
 !
-  y(k) = yk * dk
+   y(k) = yk * dk
 !
 !  Compute value for iu(k+1) and check for storage overflow
 !
-  iu(k+1) = iu(k) + nzcnt
-  if (iu(k+1) .gt. max+1) go to 1005
+   iu(k + 1) = iu(k) + nzcnt
+   if (iu(k + 1) .gt. max + 1) go to 1005
 !
 !  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
 !  column number (c(j)) stored for current column j
 !
-  if (vi .gt. n)  go to 170
-  j = vi
+   if (vi .gt. n) go to 170
+   j = vi
 160 juptr = juptr + 1
-    ju(juptr) = c(j)
-    u(juptr) = x(j) * dk
-    x(j) = 0.0
-    j = p(j)
-    if (j .le. n) go to 160
+   ju(juptr) = c(j)
+   u(juptr) = x(j) * dk
+   x(j) = 0.0
+   j = p(j)
+   if (j .le. n) go to 160
 170 continue
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
 k = n
 do i = 1,n
-  yk = y(k)
-  jmin = iu(k)
-  jmax = iu(k+1) - 1
-  if (jmin .gt. jmax)  go to 190
-  do j = jmin,jmax
-    juj = ju(j)
-    juj = ic(juj)
-    yk = yk - u(j) * y(juj)
-  end do
+   yk = y(k)
+   jmin = iu(k)
+   jmax = iu(k + 1) - 1
+   if (jmin .gt. jmax) go to 190
+   do j = jmin,jmax
+      juj = ju(j)
+      juj = ic(juj)
+      yk = yk - u(j) * y(juj)
+   end do
 190 y(k) = yk
-  ck = c(k)
-  x(ck) = yk
-  k = k - 1
+   ck = c(k)
+   x(ck) = yk
+   k = k - 1
 end do
 !
 !  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
-ierr = iu(n+1) - iu(1)
+ierr = iu(n + 1) - iu(1)
 return
 !
 !  Error returns
@@ -3461,17 +3461,17 @@ return
 !
 !  Row k of A has a duplicate entry
 !
-1003 ierr = -(n+k)
+1003 ierr = -(n + k)
 return
 !
 !  Zero pivot in row k
 !
-1004 ierr = -(2*n+k)
+1004 ierr = -(2*n + k)
 return
 !
 !  Storage for u exceeded on row k
 !
-1005 ierr = -(3*n+k)
+1005 ierr = -(3*n + k)
 return
 end subroutine nspiv1
 
@@ -3570,14 +3570,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call splu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call rslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine rslv
 
@@ -3613,7 +3613,7 @@ k = n
 do i = 1,n
    sum = y(k)
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -3723,14 +3723,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call splu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call tslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine tslv
 
@@ -3753,7 +3753,7 @@ end do
 do 21 k = 1,n
    if (y(k) .eq. 0.0) go to 21
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -3801,7 +3801,7 @@ integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-&maxil
+   & maxil
 integer :: pm
 real :: const, wi, wmax
 !-----------------------------------------------------------------------
@@ -3872,75 +3872,75 @@ end do
 !     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
-lk = r(k)
-jmin = ia(lk)
-jmax = ia(lk+1) - 1
-if (jmin .gt. jmax) go to 200
+   lk = r(k)
+   jmin = ia(lk)
+   jmax = ia(lk + 1) - 1
+   if (jmin .gt. jmax) go to 200
 !
 !     Set p to the reordered row of A
 !
-p(n+1) = n + 1
-jj = jmax
+   p(n + 1) = n + 1
+   jj = jmax
 20 lj = ja(jj)
-j = ic(lj)
-w(j) = a(jj)
-pm = n + 1
+   j = ic(lj)
+   w(j) = a(jj)
+   pm = n + 1
 21 m = pm
-pm = p(m)
-if (pm - j) 21,210,22
+   pm = p(m)
+   if (pm - j) 21,210,22
 22 p(m) = j
-p(j) = pm
-jj = jj - 1
-if (jj .ge. jmin) go to 20
+   p(j) = pm
+   jj = jj - 1
+   if (jj .ge. jmin) go to 20
 !
 !     Process the entries in the lower triangle of A
 !
-i = n + 1
+   i = n + 1
 30 i = p(i)
-if (i .ge. k) go to 50
-if (w(i) .eq. 0.0) go to 30
+   if (i .ge. k) go to 50
+   if (w(i) .eq. 0.0) go to 30
 !
 !     L(k,i) is nonzero. Therefore store it in L.
 !
-jptr = jptr + 1
-if (jptr .gt. max) go to 230
-const = w(i)
-t(jptr) = const
-jt(jptr) = c(i)
-w(i) = 0.0
+   jptr = jptr + 1
+   if (jptr .gt. max) go to 230
+   const = w(i)
+   t(jptr) = const
+   jt(jptr) = c(i)
+   w(i) = 0.0
 !
 !     Perform elimination using the i-TH row of U
 !
-jmin = iu(i)
-jmax = it(i+1) - 1
-if (jmin .gt. jmax) go to 30
-pm = i
-do 43 jj = jmin,jmax
-   lj = jt(jj)
-   j = ic(lj)
-   if (w(j) .ne. 0.0) go to 43
-   if (j - pm) 40,43,41
-40 pm = i
-41 m = pm
+   jmin = iu(i)
+   jmax = it(i + 1) - 1
+   if (jmin .gt. jmax) go to 30
+   pm = i
+   do 43 jj = jmin,jmax
+      lj = jt(jj)
+      j = ic(lj)
+      if (w(j) .ne. 0.0) go to 43
+      if (j - pm) 40,43,41
+40    pm = i
+41    m = pm
       pm = p(m)
       if (pm - j) 41,43,42
-42 p(m) = j
+42    p(m) = j
       p(j) = pm
       pm = j
-43 w(j) = w(j) - const*t(jj)
-go to 30
+43    w(j) = w(j) - const*t(jj)
+   go to 30
 !
 !     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
-wmax = abs(w(i))
-maxi = i
-pm = i
+   wmax = abs(w(i))
+   maxi = i
+   pm = i
 51 m = pm
-pm = p(m)
-if (pm .gt. n) go to 60
-wi = abs(w(pm))
-if (wi .le. wmax) go to 51
+   pm = p(m)
+   if (pm .gt. n) go to 60
+   wi = abs(w(pm))
+   if (wi .le. wmax) go to 51
    wmax = wi
    maxi = pm
    maxil = m
@@ -3949,41 +3949,41 @@ if (wi .le. wmax) go to 51
 !     Store the pivot in d
 !
 60 if (wmax .eq. 0.0) go to 220
-d(k) = w(maxi)
+   d(k) = w(maxi)
 !
 !     Perform the column interchange
 !
-if (i .eq. k) go to 70
-if (i .eq. maxi) go to 70
+   if (i .eq. k) go to 70
+   if (i .eq. maxi) go to 70
    p(maxil) = p(maxi)
    go to 80
 70 i = p(i)
 !
 80 w(maxi) = w(k)
-w(k) = 0.0
-lk = c(k)
-ll = c(maxi)
-c(k) = ll
-c(maxi) = lk
-ic(lk) = maxi
-ic(ll) = k
+   w(k) = 0.0
+   lk = c(k)
+   ll = c(maxi)
+   c(k) = ll
+   c(maxi) = lk
+   ic(lk) = maxi
+   ic(ll) = k
 !
 !     The remaining elements of p form the k-TH row of U
 !
-iu(k) = jptr + 1
+   iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
-if (w(i) .eq. 0.0) go to 91
+   if (w(i) .eq. 0.0) go to 91
    jptr = jptr + 1
    if (jptr .gt. max) go to 230
    t(jptr) = w(i)/d(k)
    jt(jptr) = c(i)
    w(i) = 0.0
 91 i = p(i)
-go to 90
+   go to 90
 !
 !     Prepare for the next row
 !
-100 it(k+1) = jptr + 1
+100 it(k + 1) = jptr + 1
 !
 ierr = jptr
 return
@@ -4130,7 +4130,7 @@ end do
 !  CALL dnspiv TO PERFORM COMPUTATIONS
 !
 call dnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
-&itemp(iu),itemp(ju),rtemp(u),ierr)
+   & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine dspslv
@@ -4148,7 +4148,7 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-&nzcnt
+   & nzcnt
 double precision :: dk, lki, xpv, xpvmax, yk
 integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
@@ -4209,7 +4209,7 @@ integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !  Initialize work storage and pointers to ju
 !
 do j = 1,n
-  x(j) = 0.d0
+   x(j) = 0.d0
 end do
 iu(1) = 1
 juptr = 0
@@ -4222,84 +4222,84 @@ do 170 k = 1,n
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
 !
-  p(n+1) = n+1
-  vk = r(k)
+   p(n + 1) = n + 1
+   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
 !  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
-  jmin = ia(vk)
-  jmax = ia(vk+1) - 1
-  if (jmin .gt. jmax)  go to 1002
-  j = jmax
+   jmin = ia(vk)
+   jmax = ia(vk + 1) - 1
+   if (jmin .gt. jmax) go to 1002
+   j = jmax
 20 jaj = ja(j)
-    vj = ic(jaj)
+   vj = ic(jaj)
 !
 !  Store a(k,j) in work vector
 !
-    x(vj) = a(j)
+   x(vj) = a(j)
 !  This code inserts vj into adjacency list of vk
-    ppk = n+1
+   ppk = n + 1
 30 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  30,1003,40
+   ppk = p(pk)
+   if (ppk - vj) 30,1003,40
 40 p(vj) = ppk
-    p(pk) = vj
-    j = j - 1
-    if (j .ge. jmin) go to 20
+   p(pk) = vj
+   j = j - 1
+   if (j .ge. jmin) go to 20
 !
 !  The following code computes the k-TH row of u
 !
-  vi = n+1
-  yk = b(vk)
+   vi = n + 1
+   yk = b(vk)
 50 vi = p(vi)
-  if (vi .ge. k) go to 110
+   if (vi .ge. k) go to 110
 !
 !  vi LT vk -- process the L(k,i) element and merge the
 !  adjacency of vi with the ordered adjacency of vk
 !
-  lki = - x(vi)
-  x(vi) = 0.d0
+   lki = - x(vi)
+   x(vi) = 0.d0
 !
 !  Adjust right hand side to reflect elimination
 !
-  yk = yk + lki * y(vi)
-  ppk = vi
-  jmin = iu(vi)
-  jmax = iu(vi+1) - 1
-  if (jmin .gt. jmax)  go to 50
-  do j = jmin,jmax
-    juj = ju(j)
-    vj = ic(juj)
+   yk = yk + lki * y(vi)
+   ppk = vi
+   jmin = iu(vi)
+   jmax = iu(vi + 1) - 1
+   if (jmin .gt. jmax) go to 50
+   do j = jmin,jmax
+      juj = ju(j)
+      vj = ic(juj)
 !
 !  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
-    if (x(vj) .ne. 0.d0)  go to 90
+      if (x(vj) .ne. 0.d0) go to 90
 !
 !  Insert vj in adjacency list of vk.
 !  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-    if (vj - ppk) 60,90,70
-60 ppk = vi
-70 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  70,90,80
-80 p(vj) = ppk
-    p(pk) = vj
-    ppk = vj
+      if (vj - ppk) 60,90,70
+60    ppk = vi
+70    pk = ppk
+      ppk = p(pk)
+      if (ppk - vj) 70,90,80
+80    p(vj) = ppk
+      p(pk) = vj
+      ppk = vj
 !
 !  Compute L(k,j) = L(k,j) - L(k,i)*u(i,j) for L(k,i) nonzero
 !  compute u*(k,j) = u*(k,j) - L(k,i)*u(i,j) for u(k,j) nonzero
 !  (u*(k,j) = u(k,j)*D(k,k))
 !
-90 x(vj) = x(vj) + lki * u(j)
-  end do
-  go to 50
+90    x(vj) = x(vj) + lki * u(j)
+   end do
+   go to 50
 !
 !  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
@@ -4307,89 +4307,89 @@ do 170 k = 1,n
 !  Find largest entry, counting off-diagonal nonzeros
 !
 110 if (vi .gt. n) go to 1004
-  xpvmax = dabs(x(vi))
-  maxc = vi
-  nzcnt = 0
-  pv = vi
+   xpvmax = dabs(x(vi))
+   maxc = vi
+   nzcnt = 0
+   pv = vi
 120 v = pv
-    pv = p(pv)
-    if (pv .gt. n) go to 130
-    nzcnt = nzcnt + 1
-    xpv = dabs(x(pv))
-    if (xpv .le. xpvmax) go to 120
-    xpvmax = xpv
-    maxc = pv
-    maxcl = v
-    go to 120
+   pv = p(pv)
+   if (pv .gt. n) go to 130
+   nzcnt = nzcnt + 1
+   xpv = dabs(x(pv))
+   if (xpv .le. xpvmax) go to 120
+   xpvmax = xpv
+   maxc = pv
+   maxcl = v
+   go to 120
 130 if (xpvmax .eq. 0.d0) go to 1004
 !
 !  If vi = k, then there is an entry for diagonal
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
-  if (vi .eq. k) go to 140
-  if (vi .eq. maxc) go to 140
-  p(maxcl) = p(maxc)
-  go to 150
+   if (vi .eq. k) go to 140
+   if (vi .eq. maxc) go to 140
+   p(maxcl) = p(maxc)
+   go to 150
 140 vi = p(vi)
 !
 !  Compute D(k) = 1/L(k,k) and perform interchange.
 !
 150 dk = 1.d0 / x(maxc)
-  x(maxc) = x(k)
-  i = c(k)
-  c(k) = c(maxc)
-  c(maxc) = i
-  ck = c(k)
-  ic(ck) = k
-  ic(i) = maxc
-  x(k) = 0.d0
+   x(maxc) = x(k)
+   i = c(k)
+   c(k) = c(maxc)
+   c(maxc) = i
+   ck = c(k)
+   ic(ck) = k
+   ic(i) = maxc
+   x(k) = 0.d0
 !
 !  Update right hand side.
 !
-  y(k) = yk * dk
+   y(k) = yk * dk
 !
 !  Compute value for iu(k+1) and check for storage overflow
 !
-  iu(k+1) = iu(k) + nzcnt
-  if (iu(k+1) .gt. max+1) go to 1005
+   iu(k + 1) = iu(k) + nzcnt
+   if (iu(k + 1) .gt. max + 1) go to 1005
 !
 !  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
 !  column number (c(j)) stored for current column j
 !
-  if (vi .gt. n)  go to 170
-  j = vi
+   if (vi .gt. n) go to 170
+   j = vi
 160 juptr = juptr + 1
-    ju(juptr) = c(j)
-    u(juptr) = x(j) * dk
-    x(j) = 0.d0
-    j = p(j)
-    if (j .le. n) go to 160
+   ju(juptr) = c(j)
+   u(juptr) = x(j) * dk
+   x(j) = 0.d0
+   j = p(j)
+   if (j .le. n) go to 160
 170 continue
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
 k = n
 do i = 1,n
-  yk = y(k)
-  jmin = iu(k)
-  jmax = iu(k+1) - 1
-  if (jmin .gt. jmax)  go to 190
-  do j = jmin,jmax
-    juj = ju(j)
-    juj = ic(juj)
-    yk = yk - u(j) * y(juj)
-  end do
+   yk = y(k)
+   jmin = iu(k)
+   jmax = iu(k + 1) - 1
+   if (jmin .gt. jmax) go to 190
+   do j = jmin,jmax
+      juj = ju(j)
+      juj = ic(juj)
+      yk = yk - u(j) * y(juj)
+   end do
 190 y(k) = yk
-  ck = c(k)
-  x(ck) = yk
-  k = k - 1
+   ck = c(k)
+   x(ck) = yk
+   k = k - 1
 end do
 !
 !  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
-ierr = iu(n+1) - iu(1)
+ierr = iu(n + 1) - iu(1)
 return
 !
 !  Error returns
@@ -4401,17 +4401,17 @@ return
 !
 !  Row k of A has a duplicate entry
 !
-1003 ierr = -(n+k)
+1003 ierr = -(n + k)
 return
 !
 !  Zero pivot in row k
 !
-1004 ierr = -(2*n+k)
+1004 ierr = -(2*n + k)
 return
 !
 !  Storage for u exceeded on row k
 !
-1005 ierr = -(3*n+k)
+1005 ierr = -(3*n + k)
 return
 end subroutine dnspiv
 
@@ -4511,14 +4511,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call dsplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call dslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine dslv
 
@@ -4554,7 +4554,7 @@ k = n
 do i = 1,n
    sum = y(k)
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -4665,14 +4665,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call dsplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call dtslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine dtslv
 
@@ -4695,7 +4695,7 @@ end do
 do 21 k = 1,n
    if (y(k) .eq. 0.d0) go to 21
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -4743,7 +4743,7 @@ integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-&maxil
+   & maxil
 integer :: pm
 double precision :: const, wi, wmax
 !-----------------------------------------------------------------------
@@ -4815,75 +4815,75 @@ end do
 !     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
-lk = r(k)
-jmin = ia(lk)
-jmax = ia(lk+1) - 1
-if (jmin .gt. jmax) go to 200
+   lk = r(k)
+   jmin = ia(lk)
+   jmax = ia(lk + 1) - 1
+   if (jmin .gt. jmax) go to 200
 !
 !     Set p to the reordered row of A
 !
-p(n+1) = n + 1
-jj = jmax
+   p(n + 1) = n + 1
+   jj = jmax
 20 lj = ja(jj)
-j = ic(lj)
-w(j) = a(jj)
-pm = n + 1
+   j = ic(lj)
+   w(j) = a(jj)
+   pm = n + 1
 21 m = pm
-pm = p(m)
-if (pm - j) 21,210,22
+   pm = p(m)
+   if (pm - j) 21,210,22
 22 p(m) = j
-p(j) = pm
-jj = jj - 1
-if (jj .ge. jmin) go to 20
+   p(j) = pm
+   jj = jj - 1
+   if (jj .ge. jmin) go to 20
 !
 !     Process the entries in the lower triangle of A
 !
-i = n + 1
+   i = n + 1
 30 i = p(i)
-if (i .ge. k) go to 50
-if (w(i) .eq. 0.d0) go to 30
+   if (i .ge. k) go to 50
+   if (w(i) .eq. 0.d0) go to 30
 !
 !     L(k,i) is nonzero. Therefore store it in L.
 !
-jptr = jptr + 1
-if (jptr .gt. max) go to 230
-const = w(i)
-t(jptr) = const
-jt(jptr) = c(i)
-w(i) = 0.d0
+   jptr = jptr + 1
+   if (jptr .gt. max) go to 230
+   const = w(i)
+   t(jptr) = const
+   jt(jptr) = c(i)
+   w(i) = 0.d0
 !
 !     Perform elimination using the i-TH row of U
 !
-jmin = iu(i)
-jmax = it(i+1) - 1
-if (jmin .gt. jmax) go to 30
-pm = i
-do 43 jj = jmin,jmax
-   lj = jt(jj)
-   j = ic(lj)
-   if (w(j) .ne. 0.d0) go to 43
-   if (j - pm) 40,43,41
-40 pm = i
-41 m = pm
+   jmin = iu(i)
+   jmax = it(i + 1) - 1
+   if (jmin .gt. jmax) go to 30
+   pm = i
+   do 43 jj = jmin,jmax
+      lj = jt(jj)
+      j = ic(lj)
+      if (w(j) .ne. 0.d0) go to 43
+      if (j - pm) 40,43,41
+40    pm = i
+41    m = pm
       pm = p(m)
       if (pm - j) 41,43,42
-42 p(m) = j
+42    p(m) = j
       p(j) = pm
       pm = j
-43 w(j) = w(j) - const*t(jj)
-go to 30
+43    w(j) = w(j) - const*t(jj)
+   go to 30
 !
 !     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
-wmax = dabs(w(i))
-maxi = i
-pm = i
+   wmax = dabs(w(i))
+   maxi = i
+   pm = i
 51 m = pm
-pm = p(m)
-if (pm .gt. n) go to 60
-wi = dabs(w(pm))
-if (wi .le. wmax) go to 51
+   pm = p(m)
+   if (pm .gt. n) go to 60
+   wi = dabs(w(pm))
+   if (wi .le. wmax) go to 51
    wmax = wi
    maxi = pm
    maxil = m
@@ -4892,41 +4892,41 @@ if (wi .le. wmax) go to 51
 !     Store the pivot in d
 !
 60 if (wmax .eq. 0.d0) go to 220
-d(k) = w(maxi)
+   d(k) = w(maxi)
 !
 !     Perform the column interchange
 !
-if (i .eq. k) go to 70
-if (i .eq. maxi) go to 70
+   if (i .eq. k) go to 70
+   if (i .eq. maxi) go to 70
    p(maxil) = p(maxi)
    go to 80
 70 i = p(i)
 !
 80 w(maxi) = w(k)
-w(k) = 0.d0
-lk = c(k)
-ll = c(maxi)
-c(k) = ll
-c(maxi) = lk
-ic(lk) = maxi
-ic(ll) = k
+   w(k) = 0.d0
+   lk = c(k)
+   ll = c(maxi)
+   c(k) = ll
+   c(maxi) = lk
+   ic(lk) = maxi
+   ic(ll) = k
 !
 !     The remaining elements of p form the k-TH row of U
 !
-iu(k) = jptr + 1
+   iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
-if (w(i) .eq. 0.d0) go to 91
+   if (w(i) .eq. 0.d0) go to 91
    jptr = jptr + 1
    if (jptr .gt. max) go to 230
    t(jptr) = w(i)/d(k)
    jt(jptr) = c(i)
    w(i) = 0.d0
 91 i = p(i)
-go to 90
+   go to 90
 !
 !     Prepare for the next row
 !
-100 it(k+1) = jptr + 1
+100 it(k + 1) = jptr + 1
 !
 ierr = jptr
 return
@@ -4984,9 +4984,9 @@ isgn = 4*n + max + 3
 kase = 0
 ainorm = 0.0
 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 call rslv (0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
+   & iwk(1), wk(1), ierr)
 !
 !     Check if A is singular or if there are errors
 !
@@ -5002,14 +5002,14 @@ return
 !     of the inverse of A
 !
 20 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 if (kase .eq. 0) go to 40
 if (kase .ne. 1) go to 30
-   call rslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
-   go to 20
+call rslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
 30 call tslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
+   & iwk(1), wk(1), ierr)
 go to 20
 !
 !     Compute the value of cond
@@ -5053,9 +5053,9 @@ isgn = 4*n + max + 3
 kase = 0
 ainorm = 0.d0
 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 call dslv (0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
+   & iwk(1), wk(1), ierr)
 !
 !     Check if A is singular or if there are errors
 !
@@ -5071,14 +5071,14 @@ return
 !     of the inverse of A
 !
 20 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-&iter, j, jump)
+   & iter, j, jump)
 if (kase .eq. 0) go to 40
 if (kase .ne. 1) go to 30
-   call dslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
-   go to 20
+call dslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
 30 call dtslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-&iwk(1), wk(1), ierr)
+   & iwk(1), wk(1), ierr)
 go to 20
 !
 !     Compute the value of cond
@@ -5153,14 +5153,14 @@ real :: sasum
 data itmax /5/
 !
 if (kase .ne. 0) go to 20
-   t = 1.0/float(n)
-   do i = 1,n
-      x(i) = t
-   end do
-   iter = 0
-   kase = 1
-   jump = 1
-   return
+t = 1.0/float(n)
+do i = 1,n
+   x(i) = t
+end do
+iter = 0
+kase = 1
+jump = 1
+return
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
@@ -5168,9 +5168,9 @@ if (kase .ne. 0) go to 20
 !
 100 iter = 1
 if (n .gt. 1) go to 110
-   v(1) = x(1)
-   anorm = abs(v(1))
-   go to 510
+v(1) = x(1)
+anorm = abs(v(1))
+go to 510
 !
 110 anorm = sasum(n,x,1)
 do i = 1,n
@@ -5231,7 +5231,7 @@ return
 400 jlast = j
 j = isamax(n,x,1)
 if (x(jlast) .eq. abs(x(j)) .or. &
-&iter .ge. itmax) go to 410
+   & iter .ge. itmax) go to 410
 iter = iter + 1
 go to 210
 !
@@ -5239,7 +5239,7 @@ go to 210
 !
 410 altsgn = 1.0
 do i = 1,n
-   x(i) = altsgn * (1.0 + float(i-1)/float(n-1))
+   x(i) = altsgn * (1.0 + float(i - 1)/float(n - 1))
    altsgn = -altsgn
 end do
 kase = 1
@@ -5251,8 +5251,8 @@ return
 !
 500 anrm = 2.0*sasum(n,x,1)/float(3*n)
 if (anrm .le. anorm) go to 510
-   call scopy (n,x,1,v,1)
-   anorm = anrm
+call scopy (n,x,1,v,1)
+anorm = anrm
 510 kase = 0
 return
 end subroutine sonest
@@ -5319,14 +5319,14 @@ data itmax /5/
 an = n
 anm1 = n - 1
 if (kase .ne. 0) go to 20
-   t = 1.d0/an
-   do i = 1,n
-      x(i) = t
-   end do
-   iter = 0
-   kase = 1
-   jump = 1
-   return
+t = 1.d0/an
+do i = 1,n
+   x(i) = t
+end do
+iter = 0
+kase = 1
+jump = 1
+return
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
@@ -5334,9 +5334,9 @@ if (kase .ne. 0) go to 20
 !
 100 iter = 1
 if (n .gt. 1) go to 110
-   v(1) = x(1)
-   anorm = dabs(v(1))
-   go to 510
+v(1) = x(1)
+anorm = dabs(v(1))
+go to 510
 !
 110 anorm = dasum(n,x,1)
 do i = 1,n
@@ -5397,7 +5397,7 @@ return
 400 jlast = j
 j = idamax(n,x,1)
 if (x(jlast) .eq. dabs(x(j)) .or. &
-&iter .ge. itmax) go to 410
+   & iter .ge. itmax) go to 410
 iter = iter + 1
 go to 210
 !
@@ -5418,8 +5418,8 @@ return
 !
 500 anrm = 2.d0*dasum(n,x,1)/(3.d0*an)
 if (anrm .le. anorm) go to 510
-   call dcopy (n,x,1,v,1)
-   anorm = anrm
+call dcopy (n,x,1,v,1)
+anorm = anrm
 510 kase = 0
 return
 end subroutine donest
@@ -5540,7 +5540,7 @@ end do
 !  CALL cnspiv TO PERFORM COMPUTATIONS
 !
 call cnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
-&itemp(iu),itemp(ju),rtemp(u),ierr)
+   & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine cspslv
@@ -5558,7 +5558,7 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-&nzcnt
+   & nzcnt
 complex :: dk, lki, one, yk, zero
 real :: xpv, xpvmax
 integer :: ck, pk, ppk, pv, v, vi, vj, vk
@@ -5623,7 +5623,7 @@ zero = (0.0,0.0)
 !  Initialize work storage and pointers to ju
 !
 do j = 1,n
-  x(j) = zero
+   x(j) = zero
 end do
 iu(1) = 1
 juptr = 0
@@ -5636,84 +5636,84 @@ do 170 k = 1,n
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
 !
-  p(n+1) = n+1
-  vk = r(k)
+   p(n + 1) = n + 1
+   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
 !  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
-  jmin = ia(vk)
-  jmax = ia(vk+1) - 1
-  if (jmin .gt. jmax)  go to 1002
-  j = jmax
+   jmin = ia(vk)
+   jmax = ia(vk + 1) - 1
+   if (jmin .gt. jmax) go to 1002
+   j = jmax
 20 jaj = ja(j)
-    vj = ic(jaj)
+   vj = ic(jaj)
 !
 !  Store a(k,j) in work vector
 !
-    x(vj) = a(j)
+   x(vj) = a(j)
 !  This code inserts vj into adjacency list of vk
-    ppk = n+1
+   ppk = n + 1
 30 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  30,1003,40
+   ppk = p(pk)
+   if (ppk - vj) 30,1003,40
 40 p(vj) = ppk
-    p(pk) = vj
-    j = j - 1
-    if (j .ge. jmin) go to 20
+   p(pk) = vj
+   j = j - 1
+   if (j .ge. jmin) go to 20
 !
 !  The following code computes the k-TH row of u
 !
-  vi = n+1
-  yk = b(vk)
+   vi = n + 1
+   yk = b(vk)
 50 vi = p(vi)
-  if (vi .ge. k) go to 110
+   if (vi .ge. k) go to 110
 !
 !  vi LT vk -- process the L(k,i) element and merge the
 !  adjacency of vi with the ordered adjacency of vk
 !
-  lki = - x(vi)
-  x(vi) = zero
+   lki = - x(vi)
+   x(vi) = zero
 !
 !  Adjust right hand side to reflect elimination
 !
-  yk = yk + lki * y(vi)
-  ppk = vi
-  jmin = iu(vi)
-  jmax = iu(vi+1) - 1
-  if (jmin .gt. jmax)  go to 50
-  do j = jmin,jmax
-    juj = ju(j)
-    vj = ic(juj)
+   yk = yk + lki * y(vi)
+   ppk = vi
+   jmin = iu(vi)
+   jmax = iu(vi + 1) - 1
+   if (jmin .gt. jmax) go to 50
+   do j = jmin,jmax
+      juj = ju(j)
+      vj = ic(juj)
 !
 !  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
-    if (x(vj) .ne. zero)  go to 90
+      if (x(vj) .ne. zero) go to 90
 !
 !  Insert vj in adjacency list of vk.
 !  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-    if (vj - ppk) 60,90,70
-60 ppk = vi
-70 pk = ppk
-    ppk = p(pk)
-    if (ppk - vj)  70,90,80
-80 p(vj) = ppk
-    p(pk) = vj
-    ppk = vj
+      if (vj - ppk) 60,90,70
+60    ppk = vi
+70    pk = ppk
+      ppk = p(pk)
+      if (ppk - vj) 70,90,80
+80    p(vj) = ppk
+      p(pk) = vj
+      ppk = vj
 !
 !  Compute L(k,j) = L(k,j) - L(k,i)*u(i,j) for L(k,i) nonzero
 !  compute u*(k,j) = u*(k,j) - L(k,i)*u(i,j) for u(k,j) nonzero
 !  (u*(k,j) = u(k,j)*D(k,k))
 !
-90 x(vj) = x(vj) + lki * u(j)
-  end do
-  go to 50
+90    x(vj) = x(vj) + lki * u(j)
+   end do
+   go to 50
 !
 !  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
@@ -5721,89 +5721,89 @@ do 170 k = 1,n
 !  Find largest entry, counting off-diagonal nonzeros
 !
 110 if (vi .gt. n) go to 1004
-  xpvmax = abs(real(x(vi))) + abs(aimag(x(vi)))
-  maxc = vi
-  nzcnt = 0
-  pv = vi
+   xpvmax = abs(real(x(vi))) + abs(aimag(x(vi)))
+   maxc = vi
+   nzcnt = 0
+   pv = vi
 120 v = pv
-    pv = p(pv)
-    if (pv .gt. n) go to 130
-    nzcnt = nzcnt + 1
-    xpv = abs(real(x(pv))) + abs(aimag(x(pv)))
-    if (xpv .le. xpvmax) go to 120
-    xpvmax = xpv
-    maxc = pv
-    maxcl = v
-    go to 120
+   pv = p(pv)
+   if (pv .gt. n) go to 130
+   nzcnt = nzcnt + 1
+   xpv = abs(real(x(pv))) + abs(aimag(x(pv)))
+   if (xpv .le. xpvmax) go to 120
+   xpvmax = xpv
+   maxc = pv
+   maxcl = v
+   go to 120
 130 if (xpvmax .eq. 0.0) go to 1004
 !
 !  If vi = k, then there is an entry for diagonal
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
-  if (vi .eq. k) go to 140
-  if (vi .eq. maxc) go to 140
-  p(maxcl) = p(maxc)
-  go to 150
+   if (vi .eq. k) go to 140
+   if (vi .eq. maxc) go to 140
+   p(maxcl) = p(maxc)
+   go to 150
 140 vi = p(vi)
 !
 !  Compute D(k) = 1/L(k,k) and perform interchange.
 !
 150 dk = one / x(maxc)
-  x(maxc) = x(k)
-  i = c(k)
-  c(k) = c(maxc)
-  c(maxc) = i
-  ck = c(k)
-  ic(ck) = k
-  ic(i) = maxc
-  x(k) = zero
+   x(maxc) = x(k)
+   i = c(k)
+   c(k) = c(maxc)
+   c(maxc) = i
+   ck = c(k)
+   ic(ck) = k
+   ic(i) = maxc
+   x(k) = zero
 !
 !  Update right hand side.
 !
-  y(k) = yk * dk
+   y(k) = yk * dk
 !
 !  Compute value for iu(k+1) and check for storage overflow
 !
-  iu(k+1) = iu(k) + nzcnt
-  if (iu(k+1) .gt. max+1) go to 1005
+   iu(k + 1) = iu(k) + nzcnt
+   if (iu(k + 1) .gt. max + 1) go to 1005
 !
 !  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
 !  column number (c(j)) stored for current column j
 !
-  if (vi .gt. n)  go to 170
-  j = vi
+   if (vi .gt. n) go to 170
+   j = vi
 160 juptr = juptr + 1
-    ju(juptr) = c(j)
-    u(juptr) = x(j) * dk
-    x(j) = zero
-    j = p(j)
-    if (j .le. n) go to 160
+   ju(juptr) = c(j)
+   u(juptr) = x(j) * dk
+   x(j) = zero
+   j = p(j)
+   if (j .le. n) go to 160
 170 continue
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
 k = n
 do i = 1,n
-  yk = y(k)
-  jmin = iu(k)
-  jmax = iu(k+1) - 1
-  if (jmin .gt. jmax)  go to 190
-  do j = jmin,jmax
-    juj = ju(j)
-    juj = ic(juj)
-    yk = yk - u(j) * y(juj)
-  end do
+   yk = y(k)
+   jmin = iu(k)
+   jmax = iu(k + 1) - 1
+   if (jmin .gt. jmax) go to 190
+   do j = jmin,jmax
+      juj = ju(j)
+      juj = ic(juj)
+      yk = yk - u(j) * y(juj)
+   end do
 190 y(k) = yk
-  ck = c(k)
-  x(ck) = yk
-  k = k - 1
+   ck = c(k)
+   x(ck) = yk
+   k = k - 1
 end do
 !
 !  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
-ierr = iu(n+1) - iu(1)
+ierr = iu(n + 1) - iu(1)
 return
 !
 !  Error returns
@@ -5815,17 +5815,17 @@ return
 !
 !  Row k of A has a duplicate entry
 !
-1003 ierr = -(n+k)
+1003 ierr = -(n + k)
 return
 !
 !  Zero pivot in row k
 !
-1004 ierr = -(2*n+k)
+1004 ierr = -(2*n + k)
 return
 !
 !  Storage for u exceeded on row k
 !
-1005 ierr = -(3*n+k)
+1005 ierr = -(3*n + k)
 return
 end subroutine cnspiv
 
@@ -5925,14 +5925,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call csplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call cslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine cslv
 
@@ -5968,7 +5968,7 @@ k = n
 do i = 1,n
    sum = y(k)
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -6079,14 +6079,14 @@ end do
 !     Obtain the LU decomposition of A
 !
 call csplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-&iwk(iu),wk(y),iwk(p),ierr)
+   & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
 20 call ctslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-&b,x,wk(y))
+   & b,x,wk(y))
 return
 end subroutine ctslv
 
@@ -6109,7 +6109,7 @@ end do
 do 21 k = 1,n
    if (y(k) .eq. (0.0, 0.0)) go to 21
    jmin = iu(k)
-   jmax = it(k+1) - 1
+   jmax = it(k + 1) - 1
    if (jmin .gt. jmax) go to 21
    do jj = jmin,jmax
       lj = jt(jj)
@@ -6157,7 +6157,7 @@ integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-&maxil
+   & maxil
 integer :: pm
 complex :: const, zero
 real :: wi, wmax
@@ -6231,75 +6231,75 @@ end do
 !     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
-lk = r(k)
-jmin = ia(lk)
-jmax = ia(lk+1) - 1
-if (jmin .gt. jmax) go to 200
+   lk = r(k)
+   jmin = ia(lk)
+   jmax = ia(lk + 1) - 1
+   if (jmin .gt. jmax) go to 200
 !
 !     Set p to the reordered row of A
 !
-p(n+1) = n + 1
-jj = jmax
+   p(n + 1) = n + 1
+   jj = jmax
 20 lj = ja(jj)
-j = ic(lj)
-w(j) = a(jj)
-pm = n + 1
+   j = ic(lj)
+   w(j) = a(jj)
+   pm = n + 1
 21 m = pm
-pm = p(m)
-if (pm - j) 21,210,22
+   pm = p(m)
+   if (pm - j) 21,210,22
 22 p(m) = j
-p(j) = pm
-jj = jj - 1
-if (jj .ge. jmin) go to 20
+   p(j) = pm
+   jj = jj - 1
+   if (jj .ge. jmin) go to 20
 !
 !     Process the entries in the lower triangle of A
 !
-i = n + 1
+   i = n + 1
 30 i = p(i)
-if (i .ge. k) go to 50
-if (w(i) .eq. zero) go to 30
+   if (i .ge. k) go to 50
+   if (w(i) .eq. zero) go to 30
 !
 !     L(k,i) is nonzero. Therefore store it in L.
 !
-jptr = jptr + 1
-if (jptr .gt. max) go to 230
-const = w(i)
-t(jptr) = const
-jt(jptr) = c(i)
-w(i) = zero
+   jptr = jptr + 1
+   if (jptr .gt. max) go to 230
+   const = w(i)
+   t(jptr) = const
+   jt(jptr) = c(i)
+   w(i) = zero
 !
 !     Perform elimination using the i-TH row of U
 !
-jmin = iu(i)
-jmax = it(i+1) - 1
-if (jmin .gt. jmax) go to 30
-pm = i
-do 43 jj = jmin,jmax
-   lj = jt(jj)
-   j = ic(lj)
-   if (w(j) .ne. zero) go to 43
-   if (j - pm) 40,43,41
-40 pm = i
-41 m = pm
+   jmin = iu(i)
+   jmax = it(i + 1) - 1
+   if (jmin .gt. jmax) go to 30
+   pm = i
+   do 43 jj = jmin,jmax
+      lj = jt(jj)
+      j = ic(lj)
+      if (w(j) .ne. zero) go to 43
+      if (j - pm) 40,43,41
+40    pm = i
+41    m = pm
       pm = p(m)
       if (pm - j) 41,43,42
-42 p(m) = j
+42    p(m) = j
       p(j) = pm
       pm = j
-43 w(j) = w(j) - const*t(jj)
-go to 30
+43    w(j) = w(j) - const*t(jj)
+   go to 30
 !
 !     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
-wmax = abs(real(w(i))) + abs(aimag(w(i)))
-maxi = i
-pm = i
+   wmax = abs(real(w(i))) + abs(aimag(w(i)))
+   maxi = i
+   pm = i
 51 m = pm
-pm = p(m)
-if (pm .gt. n) go to 60
-wi = abs(real(w(pm))) + abs(aimag(w(pm)))
-if (wi .le. wmax) go to 51
+   pm = p(m)
+   if (pm .gt. n) go to 60
+   wi = abs(real(w(pm))) + abs(aimag(w(pm)))
+   if (wi .le. wmax) go to 51
    wmax = wi
    maxi = pm
    maxil = m
@@ -6308,41 +6308,41 @@ if (wi .le. wmax) go to 51
 !     Store the pivot in d
 !
 60 if (wmax .eq. 0.0) go to 220
-d(k) = w(maxi)
+   d(k) = w(maxi)
 !
 !     Perform the column interchange
 !
-if (i .eq. k) go to 70
-if (i .eq. maxi) go to 70
+   if (i .eq. k) go to 70
+   if (i .eq. maxi) go to 70
    p(maxil) = p(maxi)
    go to 80
 70 i = p(i)
 !
 80 w(maxi) = w(k)
-w(k) = zero
-lk = c(k)
-ll = c(maxi)
-c(k) = ll
-c(maxi) = lk
-ic(lk) = maxi
-ic(ll) = k
+   w(k) = zero
+   lk = c(k)
+   ll = c(maxi)
+   c(k) = ll
+   c(maxi) = lk
+   ic(lk) = maxi
+   ic(ll) = k
 !
 !     The remaining elements of p form the k-TH row of U
 !
-iu(k) = jptr + 1
+   iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
-if (w(i) .eq. zero) go to 91
+   if (w(i) .eq. zero) go to 91
    jptr = jptr + 1
    if (jptr .gt. max) go to 230
    t(jptr) = w(i)/d(k)
    jt(jptr) = c(i)
    w(i) = zero
 91 i = p(i)
-go to 90
+   go to 90
 !
 !     Prepare for the next row
 !
-100 it(k+1) = jptr + 1
+100 it(k + 1) = jptr + 1
 !
 ierr = jptr
 return
@@ -6431,13 +6431,13 @@ if (ibal .ne. 0) call balbak (ka,n,low,igh,zi,n,zr)
 do 30 k = 1,n
    if (wi(k)) 30,10,20
 10 do 11 j = 1,n
-11 zi(j,k) = 0.0
+11    zi(j,k) = 0.0
    go to 30
 20 kp1 = k + 1
    do 21 j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
-21 zi(j,kp1) = -zi(j,k)
+21    zi(j,kp1) = -zi(j,k)
 30 continue
 return
 end subroutine eigv
@@ -6465,13 +6465,13 @@ if (ibal .ne. 0) call balbak (ka,n,low,igh,zi,n,zr)
 do 30 k = 1,n
    if (wi(k)) 30,10,20
 10 do 11 j = 1,n
-11 zi(j,k) = 0.0
+11    zi(j,k) = 0.0
    go to 30
 20 kp1 = k + 1
    do 21 j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
-21 zi(j,kp1) = -zi(j,k)
+21    zi(j,kp1) = -zi(j,k)
 30 continue
 return
 end subroutine eigv1
@@ -6542,7 +6542,7 @@ logical :: noconv
 !     ********** radix is a machine dependent parameter specifying
 !                the base of the machine floating point representation.
 !
-           radix = ipmpar(4)
+radix = ipmpar(4)
 !
 !                **********
 !
@@ -6579,7 +6579,7 @@ l = l - 1
    do 110 i = 1, l
       if (i .eq. j) go to 110
       if (a(j,i) .ne. 0.0) go to 120
-110 continue
+110   continue
 !
    m = l
    iexc = 1
@@ -6596,7 +6596,7 @@ go to 140
    do 150 i = k, l
       if (i .eq. j) go to 150
       if (a(i,j) .ne. 0.0) go to 170
-150 continue
+150   continue
 !
    m = k
    iexc = 2
@@ -6616,7 +6616,7 @@ do 270 i = k, l
       if (j .eq. i) go to 200
       c = c + abs(a(j,i))
       r = r + abs(a(i,j))
-200 continue
+200   continue
 !     ********** Guard against zero c or r due to underflow **********
    if (c .eq. 0.0 .or. r .eq. 0.0) go to 270
    g = r / radix
@@ -6638,10 +6638,10 @@ do 270 i = k, l
    noconv = .true.
 !
    do 250 j = k, n
-250 a(i,j) = a(i,j) * g
+250   a(i,j) = a(i,j) * g
 !
    do 260 j = 1, l
-260 a(j,i) = a(j,i) * f
+260   a(j,i) = a(j,i) * f
 !
 270 continue
 !
@@ -6695,15 +6695,15 @@ real :: s
 if (igh .eq. low) go to 30
 !
 do i = low, igh
-s = scale(i)
+   s = scale(i)
    do 10 j = 1, n
-10 z(i,j) = z(i,j) * s
+10    z(i,j) = z(i,j) * s
 end do
 !
 do j = low, igh
-s = 1.0/scale(j)
+   s = 1.0/scale(j)
    do 20 i = 1, n
-20 z(i,j) = z(i,j) * s
+20    z(i,j) = z(i,j) * s
 end do
 !
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
@@ -6719,12 +6719,12 @@ end do
    do 40 j = 1, n
       s = z(i,j)
       z(i,j) = z(k,j)
-40 z(k,j) = s
+40    z(k,j) = s
 !
    do 50 j = 1, n
       s = z(j,i)
       z(j,i) = z(j,k)
-50 z(j,k) = s
+50    z(j,k) = s
 60 continue
 return
 end subroutine balinv
@@ -6793,7 +6793,7 @@ do 180 m = kp1, la
       if (abs(a(j,mm1)) .le. abs(x)) go to 100
       x = a(j,mm1)
       i = j
-100 continue
+100   continue
 !
    int(m) = i
    if (i .eq. m) go to 130
@@ -6820,12 +6820,12 @@ do 180 m = kp1, la
       a(i,mm1) = y
 !
       do 140 j = m, n
-140 a(i,j) = a(i,j) - y * a(m,j)
+140      a(i,j) = a(i,j) - y * a(m,j)
 !
       do 150 j = 1, igh
-150 a(j,m) = a(j,m) + y * a(j,i)
+150      a(j,m) = a(j,m) + y * a(j,i)
 !
-160 continue
+160   continue
 !
 180 continue
 !
@@ -6896,7 +6896,7 @@ do 180 m = kp1, la
       if (abs(a(j,mm1)) .le. abs(x)) go to 100
       x = a(j,mm1)
       i = j
-100 continue
+100   continue
 !
    int(m) = i
    if (i .eq. m) go to 130
@@ -6923,12 +6923,12 @@ do 180 m = kp1, la
       a(i,mm1) = y
 !
       do 140 j = m, n
-140 a(i,j) = a(i,j) - y * a(m,j)
+140      a(i,j) = a(i,j) - y * a(m,j)
 !
       do 150 j = 1, igh
-150 a(j,m) = a(j,m) + y * a(j,i)
+150      a(j,m) = a(j,m) + y * a(j,i)
 !
-160 continue
+160   continue
 !
 180 continue
 !
@@ -6994,14 +6994,14 @@ do 180 m = kp1, la
    scale = 0.0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
-90 scale = scale + abs(a(i,m-1))
+90    scale = scale + abs(a(i,m - 1))
 !
    if (scale .eq. 0.0) go to 180
    mp = m + igh
 !     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
    do ii = m, igh
       i = mp - ii
-      ort(i) = a(i,m-1) / scale
+      ort(i) = a(i,m - 1) / scale
       h = h + ort(i) * ort(i)
    end do
 !
@@ -7021,7 +7021,7 @@ do 180 m = kp1, la
       f = f / h
 !
       do 120 i = m, igh
-120 a(i,j) = a(i,j) - f * ort(i)
+120      a(i,j) = a(i,j) - f * ort(i)
 !
    end do
 !     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
@@ -7036,12 +7036,12 @@ do 180 m = kp1, la
       f = f / h
 !
       do 150 j = m, igh
-150 a(i,j) = a(i,j) - f * ort(j)
+150      a(i,j) = a(i,j) - f * ort(j)
 !
    end do
 !
    ort(m) = scale * ort(m)
-   a(m,m-1) = scale * g
+   a(m,m - 1) = scale * g
 180 continue
 !
 200 return
@@ -7114,7 +7114,7 @@ logical :: notlas
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -7126,7 +7126,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40 norm = norm + abs(h(i,j))
+40    norm = norm + abs(h(i,j))
 !
    k = i
    if (i .ge. low .and. i .le. igh) go to 50
@@ -7146,9 +7146,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
-   s = abs(h(l-1,l-1)) + abs(h(l,l))
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s .eq. 0.0) s = norm
-   if (abs(h(l,l-1)) .le. machep * s) go to 100
+   if (abs(h(l,l - 1)) .le. machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -7177,34 +7177,34 @@ do mm = l, enm2
    zz = h(m,m)
    r = x - zz
    s = y - zz
-   p = (r * s - w) / h(m+1,m) + h(m,m+1)
-   q = h(m+1,m+1) - zz - r - s
-   r = h(m+2,m+1)
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
    s = abs(p) + abs(q) + abs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m .eq. l) go to 150
-   if (abs(h(m,m-1)) * (abs(q) + abs(r)) .le. machep * abs(p) &
-&* (abs(h(m-1,m-1)) + abs(zz) + abs(h(m+1,m+1)))) go to 150
+   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) .le. machep * abs(p) &
+      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
 !
 do 160 i = mp2, en
-   h(i,i-2) = 0.0
+   h(i,i - 2) = 0.0
    if (i .eq. mp2) go to 160
-   h(i,i-3) = 0.0
+   h(i,i - 3) = 0.0
 160 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
-   p = h(k,k-1)
-   q = h(k+1,k-1)
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
    r = 0.0
-   if (notlas) r = h(k+2,k-1)
+   if (notlas) r = h(k + 2,k - 1)
    x = abs(p) + abs(q) + abs(r)
    if (x .eq. 0.0) go to 260
    p = p / x
@@ -7213,9 +7213,9 @@ do 260 k = m, na
 170 s = sqrt(p*p + q*q + r*r)
    if (p .lt. 0.0) s = -s
    if (k .eq. m) go to 180
-   h(k,k-1) = -s * x
+   h(k,k - 1) = -s * x
    go to 190
-180 if (l .ne. m) h(k,k-1) = -h(k,k-1)
+180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
 190 p = p + s
    x = p / s
    y = q / s
@@ -7224,22 +7224,22 @@ do 260 k = m, na
    r = r / p
 !     ********** Row modification **********
    do j = k, en
-      p = h(k,j) + q * h(k+1,j)
+      p = h(k,j) + q * h(k + 1,j)
       if (.not. notlas) go to 200
-      p = p + r * h(k+2,j)
-      h(k+2,j) = h(k+2,j) - p * zz
-200 h(k+1,j) = h(k+1,j) - p * y
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k+3)
+   j = min0(en,k + 3)
 !     ********** Column modification **********
    do i = l, j
-      p = x * h(i,k) + y * h(i,k+1)
+      p = x * h(i,k) + y * h(i,k + 1)
       if (.not. notlas) go to 220
-      p = p + zz * h(i,k+2)
-      h(i,k+2) = h(i,k+2) - p * r
-220 h(i,k+1) = h(i,k+1) - p * q
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
       h(i,k) = h(i,k) - p
    end do
 !
@@ -7333,7 +7333,7 @@ do i = low, igh
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
    do 100 j = 1, m
-100 z(i,j) = z(i,j) * s
+100   z(i,j) = z(i,j) * s
 !
 end do
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
@@ -7408,7 +7408,7 @@ integer :: mp1
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.0
+60    z(i,j) = 0.0
 !
    z(i,i) = 1.0
 end do
@@ -7421,7 +7421,7 @@ do 140 mm = 1, kl
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 z(i,mp) = a(i,mp-1)
+100   z(i,mp) = a(i,mp - 1)
 !
    i = int(mp)
    if (i .eq. mp) go to 140
@@ -7489,7 +7489,7 @@ integer :: mp1
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.0
+60    z(i,j) = 0.0
 !
    z(i,i) = 1.0
 end do
@@ -7502,7 +7502,7 @@ do 140 mm = 1, kl
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 z(i,mp) = a(i,mp-1)
+100   z(i,mp) = a(i,mp - 1)
 !
    i = int(mp)
    if (i .eq. mp) go to 140
@@ -7572,7 +7572,7 @@ real :: g
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.0
+60    z(i,j) = 0.0
 !
    z(i,i) = 1.0
 end do
@@ -7582,23 +7582,23 @@ if (kl .lt. 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
 do 140 mm = 1, kl
    mp = igh - mm
-   if (a(mp,mp-1) .eq. 0.0) go to 140
+   if (a(mp,mp - 1) .eq. 0.0) go to 140
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 ort(i) = a(i,mp-1)
+100   ort(i) = a(i,mp - 1)
 !
    do j = mp, igh
       g = 0.0
 !
       do 110 i = mp, igh
-110 g = g + ort(i) * z(i,j)
+110      g = g + ort(i) * z(i,j)
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp-1)
+      g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do 120 i = mp, igh
-120 z(i,j) = z(i,j) + g * ort(i)
+120      z(i,j) = z(i,j) + g * ort(i)
 !
    end do
 !
@@ -7666,7 +7666,7 @@ real :: g
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.0
+60    z(i,j) = 0.0
 !
    z(i,i) = 1.0
 end do
@@ -7676,23 +7676,23 @@ if (kl .lt. 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
 do 140 mm = 1, kl
    mp = igh - mm
-   if (a(mp,mp-1) .eq. 0.0) go to 140
+   if (a(mp,mp - 1) .eq. 0.0) go to 140
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 ort(i) = a(i,mp-1)
+100   ort(i) = a(i,mp - 1)
 !
    do j = mp, igh
       g = 0.0
 !
       do 110 i = mp, igh
-110 g = g + ort(i) * z(i,j)
+110      g = g + ort(i) * z(i,j)
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp-1)
+      g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do 120 i = mp, igh
-120 z(i,j) = z(i,j) + g * ort(i)
+120      z(i,j) = z(i,j) + g * ort(i)
 !
    end do
 !
@@ -7716,7 +7716,7 @@ integer :: nn
 integer :: its
 integer :: mp2, enm2
 real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, &
-&spmpar
+   & spmpar
 logical :: notlas
 complex :: z3
 !     real sqrt,abs
@@ -7790,7 +7790,7 @@ complex :: z3
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -7802,7 +7802,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40 norm = norm + abs(h(i,j))
+40    norm = norm + abs(h(i,j))
 !
    k = i
    if (i .ge. low .and. i .le. igh) go to 50
@@ -7822,9 +7822,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
-   s = abs(h(l-1,l-1)) + abs(h(l,l))
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s .eq. 0.0) s = norm
-   if (abs(h(l,l-1)) .le. machep * s) go to 100
+   if (abs(h(l,l - 1)) .le. machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -7853,34 +7853,34 @@ do mm = l, enm2
    zz = h(m,m)
    r = x - zz
    s = y - zz
-   p = (r * s - w) / h(m+1,m) + h(m,m+1)
-   q = h(m+1,m+1) - zz - r - s
-   r = h(m+2,m+1)
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
    s = abs(p) + abs(q) + abs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m .eq. l) go to 150
-   if (abs(h(m,m-1)) * (abs(q) + abs(r)) .le. machep * abs(p) &
-&* (abs(h(m-1,m-1)) + abs(zz) + abs(h(m+1,m+1)))) go to 150
+   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) .le. machep * abs(p) &
+      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
 !
 do 160 i = mp2, en
-   h(i,i-2) = 0.0
+   h(i,i - 2) = 0.0
    if (i .eq. mp2) go to 160
-   h(i,i-3) = 0.0
+   h(i,i - 3) = 0.0
 160 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
-   p = h(k,k-1)
-   q = h(k+1,k-1)
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
    r = 0.0
-   if (notlas) r = h(k+2,k-1)
+   if (notlas) r = h(k + 2,k - 1)
    x = abs(p) + abs(q) + abs(r)
    if (x .eq. 0.0) go to 260
    p = p / x
@@ -7889,9 +7889,9 @@ do 260 k = m, na
 170 s = sqrt(p*p + q*q + r*r)
    if (p .lt. 0.0) s = -s
    if (k .eq. m) go to 180
-   h(k,k-1) = -s * x
+   h(k,k - 1) = -s * x
    go to 190
-180 if (l .ne. m) h(k,k-1) = -h(k,k-1)
+180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
 190 p = p + s
    x = p / s
    y = q / s
@@ -7900,31 +7900,31 @@ do 260 k = m, na
    r = r / p
 !     ********** Row modification **********
    do j = k, n
-      p = h(k,j) + q * h(k+1,j)
+      p = h(k,j) + q * h(k + 1,j)
       if (.not. notlas) go to 200
-      p = p + r * h(k+2,j)
-      h(k+2,j) = h(k+2,j) - p * zz
-200 h(k+1,j) = h(k+1,j) - p * y
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k+3)
+   j = min0(en,k + 3)
 !     ********** Column modification **********
    do i = 1, j
-      p = x * h(i,k) + y * h(i,k+1)
+      p = x * h(i,k) + y * h(i,k + 1)
       if (.not. notlas) go to 220
-      p = p + zz * h(i,k+2)
-      h(i,k+2) = h(i,k+2) - p * r
-220 h(i,k+1) = h(i,k+1) - p * q
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
       h(i,k) = h(i,k) - p
    end do
 !     ********** Accumulate transformations **********
    do i = low, igh
-      p = x * z(i,k) + y * z(i,k+1)
+      p = x * z(i,k) + y * z(i,k + 1)
       if (.not. notlas) go to 240
-      p = p + zz * z(i,k+2)
-      z(i,k+2) = z(i,k+2) - p * r
-240 z(i,k+1) = z(i,k+1) - p * q
+      p = p + zz * z(i,k + 2)
+      z(i,k + 2) = z(i,k + 2) - p * r
+240   z(i,k + 1) = z(i,k + 1) - p * q
       z(i,k) = z(i,k) - p
    end do
 !
@@ -7957,7 +7957,7 @@ x = h(en,na)
 s = abs(x) + abs(zz)
 p = x / s
 q = zz / s
-r = sqrt(p*p+q*q)
+r = sqrt(p*p + q*q)
 p = p / r
 q = q / r
 !     ********** Row modification **********
@@ -8009,29 +8009,29 @@ do 800 nn = 1, n
       if (m .gt. na) go to 620
 !
       do 610 j = m, na
-610 r = r + h(i,j) * h(j,en)
+610      r = r + h(i,j) * h(j,en)
 !
-620 if (wi(i) .ge. 0.0) go to 630
+620   if (wi(i) .ge. 0.0) go to 630
       zz = w
       s = r
       go to 700
-630 m = i
+630   m = i
       if (wi(i) .ne. 0.0) go to 640
       t = w
       if (w .eq. 0.0) t = machep * norm
       h(i,en) = -r / t
       go to 700
 !     ********** Solve real equations **********
-640 x = h(i,i+1)
-      y = h(i+1,i)
+640   x = h(i,i + 1)
+      y = h(i + 1,i)
       q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
       t = (x * s - zz * r) / q
       h(i,en) = t
       if (abs(x) .le. abs(zz)) go to 650
-      h(i+1,en) = (-r - w * t) / x
+      h(i + 1,en) = (-r - w * t) / x
       go to 700
-650 h(i+1,en) = (-s - y * t) / zz
-700 continue
+650   h(i + 1,en) = (-s - y * t) / zz
+700   continue
 !     ********** End real vector **********
    go to 800
 !     ********** Complex vector **********
@@ -8042,7 +8042,7 @@ do 800 nn = 1, n
    h(na,na) = q / h(en,na)
    h(na,en) = -(h(en,en) - p) / h(en,na)
    go to 730
-720 z3 = cmplx(0.0,-h(na,en)) / cmplx(h(na,na)-p,q)
+720 z3 = cmplx(0.0,-h(na,en)) / cmplx(h(na,na) - p,q)
    h(na,na) = real(z3)
    h(na,en) = aimag(z3)
 730 h(en,na) = 0.0
@@ -8066,30 +8066,30 @@ do 800 nn = 1, n
       r = ra
       s = sa
       go to 790
-770 m = i
+770   m = i
       if (wi(i) .ne. 0.0) go to 780
       z3 = cmplx(-ra,-sa) / cmplx(w,q)
       h(i,na) = real(z3)
       h(i,en) = aimag(z3)
       go to 790
 !     ********** Solve complex equations **********
-780 x = h(i,i+1)
-      y = h(i+1,i)
+780   x = h(i,i + 1)
+      y = h(i + 1,i)
       vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
       vi = (wr(i) - p) * 2.0 * q
       if (vr .eq. 0.0 .and. vi .eq. 0.0) vr = machep * norm &
-&* (abs(w) + abs(q) + abs(x) + abs(y) + abs(zz))
-      z3 = cmplx(x*r-zz*ra+q*sa,x*s-zz*sa-q*ra) / cmplx(vr,vi)
+         & * (abs(w) + abs(q) + abs(x) + abs(y) + abs(zz))
+      z3 = cmplx(x*r - zz*ra + q*sa,x*s - zz*sa - q*ra) / cmplx(vr,vi)
       h(i,na) = real(z3)
       h(i,en) = aimag(z3)
       if (abs(x) .le. abs(zz) + abs(q)) go to 785
-      h(i+1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
-      h(i+1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
+      h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
+      h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
       go to 790
-785 z3 = cmplx(-r-y*h(i,na),-s-y*h(i,en)) / cmplx(zz,q)
-      h(i+1,na) = real(z3)
-      h(i+1,en) = aimag(z3)
-790 continue
+785   z3 = cmplx(-r - y*h(i,na),-s - y*h(i,en)) / cmplx(zz,q)
+      h(i + 1,na) = real(z3)
+      h(i + 1,en) = aimag(z3)
+790   continue
 !     ********** End complex vector **********
 800 continue
 !     ********** End back substitution.
@@ -8098,7 +8098,7 @@ do 840 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 840
 !
    do 820 j = i, n
-820 z(i,j) = h(i,j)
+820   z(i,j) = h(i,j)
 !
 840 continue
 !     ********** Multiply by transformation matrix to give
@@ -8112,10 +8112,10 @@ do 880 jj = low, n
       zz = 0.0
 !
       do 860 k = low, m
-860 zz = zz + z(i,k) * h(k,j)
+860      zz = zz + z(i,k) * h(k,j)
 !
       z(i,j) = zz
-880 continue
+880   continue
 !
 go to 1001
 !     ********** Set error -- no convergence to an
@@ -8149,7 +8149,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
-&zr(ka,n), zi(ka,n)
+   & zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
 !-----------------------------------------------------------------------
 !     Eigenvalues and eigenvectors of double precision matrices
@@ -8167,13 +8167,13 @@ if (ibal .ne. 0) call dbabk (ka,n,low,igh,zi,n,zr)
 do 30 k = 1,n
    if (wi(k)) 30,10,20
 10 do 11 j = 1,n
-11 zi(j,k) = 0.d0
+11    zi(j,k) = 0.d0
    go to 30
 20 kp1 = k + 1
    do 21 j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
-21 zi(j,kp1) = -zi(j,k)
+21    zi(j,kp1) = -zi(j,k)
 30 continue
 return
 end subroutine deigv
@@ -8244,7 +8244,7 @@ logical :: noconv
 !     ********** radix is a machine dependent parameter specifying
 !                the base of the machine floating point representation.
 !
-           radix = ipmpar(4)
+radix = ipmpar(4)
 !
 !                **********
 !
@@ -8281,7 +8281,7 @@ l = l - 1
    do 110 i = 1, l
       if (i .eq. j) go to 110
       if (a(j,i) .ne. 0.d0) go to 120
-110 continue
+110   continue
 !
    m = l
    iexc = 1
@@ -8298,7 +8298,7 @@ go to 140
    do 150 i = k, l
       if (i .eq. j) go to 150
       if (a(i,j) .ne. 0.d0) go to 170
-150 continue
+150   continue
 !
    m = k
    iexc = 2
@@ -8318,7 +8318,7 @@ do 270 i = k, l
       if (j .eq. i) go to 200
       c = c + dabs(a(j,i))
       r = r + dabs(a(i,j))
-200 continue
+200   continue
 !     ********** Guard against zero c or r due to underflow **********
    if (c .eq. 0.d0 .or. r .eq. 0.d0) go to 270
    g = r / radix
@@ -8340,10 +8340,10 @@ do 270 i = k, l
    noconv = .true.
 !
    do 250 j = k, n
-250 a(i,j) = a(i,j) * g
+250   a(i,j) = a(i,j) * g
 !
    do 260 j = 1, l
-260 a(j,i) = a(j,i) * f
+260   a(j,i) = a(j,i) * f
 !
 270 continue
 !
@@ -8397,15 +8397,15 @@ double precision :: s
 if (igh .eq. low) go to 30
 !
 do i = low, igh
-s = scale(i)
+   s = scale(i)
    do 10 j = 1, n
-10 z(i,j) = z(i,j) * s
+10    z(i,j) = z(i,j) * s
 end do
 !
 do j = low, igh
-s = 1.d0/scale(j)
+   s = 1.d0/scale(j)
    do 20 i = 1, n
-20 z(i,j) = z(i,j) * s
+20    z(i,j) = z(i,j) * s
 end do
 !
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
@@ -8421,12 +8421,12 @@ end do
    do 40 j = 1, n
       s = z(i,j)
       z(i,j) = z(k,j)
-40 z(k,j) = s
+40    z(k,j) = s
 !
    do 50 j = 1, n
       s = z(j,i)
       z(j,i) = z(j,k)
-50 z(j,k) = s
+50    z(j,k) = s
 60 continue
 return
 end subroutine dbalnv
@@ -8490,14 +8490,14 @@ do 180 m = kp1, la
    scale = 0.d0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
-90 scale = scale + dabs(a(i,m-1))
+90    scale = scale + dabs(a(i,m - 1))
 !
    if (scale .eq. 0.d0) go to 180
    mp = m + igh
 !     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
    do ii = m, igh
       i = mp - ii
-      ort(i) = a(i,m-1) / scale
+      ort(i) = a(i,m - 1) / scale
       h = h + ort(i) * ort(i)
    end do
 !
@@ -8517,7 +8517,7 @@ do 180 m = kp1, la
       f = f / h
 !
       do 120 i = m, igh
-120 a(i,j) = a(i,j) - f * ort(i)
+120      a(i,j) = a(i,j) - f * ort(i)
 !
    end do
 !     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
@@ -8532,12 +8532,12 @@ do 180 m = kp1, la
       f = f / h
 !
       do 150 j = m, igh
-150 a(i,j) = a(i,j) - f * ort(j)
+150      a(i,j) = a(i,j) - f * ort(j)
 !
    end do
 !
    ort(m) = scale * ort(m)
-   a(m,m-1) = scale * g
+   a(m,m - 1) = scale * g
 180 continue
 !
 200 return
@@ -8556,7 +8556,7 @@ integer :: en, ll, mm, na
 integer :: its
 integer :: mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, machep, &
-&dpmpar
+   & dpmpar
 logical :: notlas
 !     double precision dsqrt,dabs
 !     integer min0
@@ -8612,7 +8612,7 @@ logical :: notlas
 !                floating point number such that 1.0 + U .GT. 1.0
 !                in the double precision arithmetic being used.
 !
-           machep = dpmpar(1)
+machep = dpmpar(1)
 !
 !                **********
 !
@@ -8624,7 +8624,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40 norm = norm + dabs(h(i,j))
+40    norm = norm + dabs(h(i,j))
 !
    k = i
    if (i .ge. low .and. i .le. igh) go to 50
@@ -8644,9 +8644,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
-   s = dabs(h(l-1,l-1)) + dabs(h(l,l))
+   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
    if (s .eq. 0.d0) s = norm
-   if (dabs(h(l,l-1)) .le. machep * s) go to 100
+   if (dabs(h(l,l - 1)) .le. machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -8675,34 +8675,34 @@ do mm = l, enm2
    zz = h(m,m)
    r = x - zz
    s = y - zz
-   p = (r * s - w) / h(m+1,m) + h(m,m+1)
-   q = h(m+1,m+1) - zz - r - s
-   r = h(m+2,m+1)
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
    s = dabs(p) + dabs(q) + dabs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m .eq. l) go to 150
-   if (dabs(h(m,m-1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
-&* (dabs(h(m-1,m-1)) + dabs(zz) + dabs(h(m+1,m+1)))) go to 150
+   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
+      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
 !
 do 160 i = mp2, en
-   h(i,i-2) = 0.d0
+   h(i,i - 2) = 0.d0
    if (i .eq. mp2) go to 160
-   h(i,i-3) = 0.d0
+   h(i,i - 3) = 0.d0
 160 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
-   p = h(k,k-1)
-   q = h(k+1,k-1)
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
    r = 0.d0
-   if (notlas) r = h(k+2,k-1)
+   if (notlas) r = h(k + 2,k - 1)
    x = dabs(p) + dabs(q) + dabs(r)
    if (x .eq. 0.d0) go to 260
    p = p / x
@@ -8711,9 +8711,9 @@ do 260 k = m, na
 170 s = dsqrt(p*p + q*q + r*r)
    if (p .lt. 0.d0) s = -s
    if (k .eq. m) go to 180
-   h(k,k-1) = -s * x
+   h(k,k - 1) = -s * x
    go to 190
-180 if (l .ne. m) h(k,k-1) = -h(k,k-1)
+180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
 190 p = p + s
    x = p / s
    y = q / s
@@ -8722,22 +8722,22 @@ do 260 k = m, na
    r = r / p
 !     ********** Row modification **********
    do j = k, en
-      p = h(k,j) + q * h(k+1,j)
+      p = h(k,j) + q * h(k + 1,j)
       if (.not. notlas) go to 200
-      p = p + r * h(k+2,j)
-      h(k+2,j) = h(k+2,j) - p * zz
-200 h(k+1,j) = h(k+1,j) - p * y
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k+3)
+   j = min0(en,k + 3)
 !     ********** Column modification **********
    do i = l, j
-      p = x * h(i,k) + y * h(i,k+1)
+      p = x * h(i,k) + y * h(i,k + 1)
       if (.not. notlas) go to 220
-      p = p + zz * h(i,k+2)
-      h(i,k+2) = h(i,k+2) - p * r
-220 h(i,k+1) = h(i,k+1) - p * q
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
       h(i,k) = h(i,k) - p
    end do
 !
@@ -8831,7 +8831,7 @@ do i = low, igh
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
    do 100 j = 1, m
-100 z(i,j) = z(i,j) * s
+100   z(i,j) = z(i,j) * s
 !
 end do
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
@@ -8908,7 +8908,7 @@ double precision :: g
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.d0
+60    z(i,j) = 0.d0
 !
    z(i,i) = 1.d0
 end do
@@ -8918,23 +8918,23 @@ if (kl .lt. 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
 do 140 mm = 1, kl
    mp = igh - mm
-   if (a(mp,mp-1) .eq. 0.d0) go to 140
+   if (a(mp,mp - 1) .eq. 0.d0) go to 140
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 ort(i) = a(i,mp-1)
+100   ort(i) = a(i,mp - 1)
 !
    do j = mp, igh
       g = 0.d0
 !
       do 110 i = mp, igh
-110 g = g + ort(i) * z(i,j)
+110      g = g + ort(i) * z(i,j)
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp-1)
+      g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do 120 i = mp, igh
-120 z(i,j) = z(i,j) + g * ort(i)
+120      z(i,j) = z(i,j) + g * ort(i)
 !
    end do
 !
@@ -9002,7 +9002,7 @@ double precision :: g
 do i = 1, n
 !
    do 60 j = 1, n
-60 z(i,j) = 0.d0
+60    z(i,j) = 0.d0
 !
    z(i,i) = 1.d0
 end do
@@ -9012,23 +9012,23 @@ if (kl .lt. 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
 do 140 mm = 1, kl
    mp = igh - mm
-   if (a(mp,mp-1) .eq. 0.d0) go to 140
+   if (a(mp,mp - 1) .eq. 0.d0) go to 140
    mp1 = mp + 1
 !
    do 100 i = mp1, igh
-100 ort(i) = a(i,mp-1)
+100   ort(i) = a(i,mp - 1)
 !
    do j = mp, igh
       g = 0.d0
 !
       do 110 i = mp, igh
-110 g = g + ort(i) * z(i,j)
+110      g = g + ort(i) * z(i,j)
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
-      g = (g / ort(mp)) / a(mp,mp-1)
+      g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do 120 i = mp, igh
-120 z(i,j) = z(i,j) + g * ort(i)
+120      z(i,j) = z(i,j) + g * ort(i)
 !
    end do
 !
@@ -9121,7 +9121,7 @@ logical :: notlas
 !                floating point number such that 1.0 + u .GT. 1.0
 !                in the double precision arithmetic being used.
 !
-           machep = dpmpar(1)
+machep = dpmpar(1)
 !
 !                **********
 !
@@ -9133,7 +9133,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40 norm = norm + dabs(h(i,j))
+40    norm = norm + dabs(h(i,j))
 !
    k = i
    if (i .ge. low .and. i .le. igh) go to 50
@@ -9153,9 +9153,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
-   s = dabs(h(l-1,l-1)) + dabs(h(l,l))
+   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
    if (s .eq. 0.d0) s = norm
-   if (dabs(h(l,l-1)) .le. machep * s) go to 100
+   if (dabs(h(l,l - 1)) .le. machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -9184,34 +9184,34 @@ do mm = l, enm2
    zz = h(m,m)
    r = x - zz
    s = y - zz
-   p = (r * s - w) / h(m+1,m) + h(m,m+1)
-   q = h(m+1,m+1) - zz - r - s
-   r = h(m+2,m+1)
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
    s = dabs(p) + dabs(q) + dabs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m .eq. l) go to 150
-   if (dabs(h(m,m-1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
-&* (dabs(h(m-1,m-1)) + dabs(zz) + dabs(h(m+1,m+1)))) go to 150
+   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
+      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
 !
 do 160 i = mp2, en
-   h(i,i-2) = 0.d0
+   h(i,i - 2) = 0.d0
    if (i .eq. mp2) go to 160
-   h(i,i-3) = 0.d0
+   h(i,i - 3) = 0.d0
 160 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
-   p = h(k,k-1)
-   q = h(k+1,k-1)
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
    r = 0.d0
-   if (notlas) r = h(k+2,k-1)
+   if (notlas) r = h(k + 2,k - 1)
    x = dabs(p) + dabs(q) + dabs(r)
    if (x .eq. 0.d0) go to 260
    p = p / x
@@ -9220,9 +9220,9 @@ do 260 k = m, na
 170 s = dsqrt(p*p + q*q + r*r)
    if (p .lt. 0.d0) s = -s
    if (k .eq. m) go to 180
-   h(k,k-1) = -s * x
+   h(k,k - 1) = -s * x
    go to 190
-180 if (l .ne. m) h(k,k-1) = -h(k,k-1)
+180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
 190 p = p + s
    x = p / s
    y = q / s
@@ -9231,31 +9231,31 @@ do 260 k = m, na
    r = r / p
 !     ********** Row modification **********
    do j = k, n
-      p = h(k,j) + q * h(k+1,j)
+      p = h(k,j) + q * h(k + 1,j)
       if (.not. notlas) go to 200
-      p = p + r * h(k+2,j)
-      h(k+2,j) = h(k+2,j) - p * zz
-200 h(k+1,j) = h(k+1,j) - p * y
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k+3)
+   j = min0(en,k + 3)
 !     ********** Column modification **********
    do i = 1, j
-      p = x * h(i,k) + y * h(i,k+1)
+      p = x * h(i,k) + y * h(i,k + 1)
       if (.not. notlas) go to 220
-      p = p + zz * h(i,k+2)
-      h(i,k+2) = h(i,k+2) - p * r
-220 h(i,k+1) = h(i,k+1) - p * q
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
       h(i,k) = h(i,k) - p
    end do
 !     ********** Accumulate transformations **********
    do i = low, igh
-      p = x * z(i,k) + y * z(i,k+1)
+      p = x * z(i,k) + y * z(i,k + 1)
       if (.not. notlas) go to 240
-      p = p + zz * z(i,k+2)
-      z(i,k+2) = z(i,k+2) - p * r
-240 z(i,k+1) = z(i,k+1) - p * q
+      p = p + zz * z(i,k + 2)
+      z(i,k + 2) = z(i,k + 2) - p * r
+240   z(i,k + 1) = z(i,k + 1) - p * q
       z(i,k) = z(i,k) - p
    end do
 !
@@ -9288,7 +9288,7 @@ x = h(en,na)
 s = dabs(x) + dabs(zz)
 p = x / s
 q = zz / s
-r = dsqrt(p*p+q*q)
+r = dsqrt(p*p + q*q)
 p = p / r
 q = q / r
 !     ********** Row modification **********
@@ -9340,29 +9340,29 @@ do 800 nn = 1, n
       if (m .gt. na) go to 620
 !
       do 610 j = m, na
-610 r = r + h(i,j) * h(j,en)
+610      r = r + h(i,j) * h(j,en)
 !
-620 if (wi(i) .ge. 0.d0) go to 630
+620   if (wi(i) .ge. 0.d0) go to 630
       zz = w
       s = r
       go to 700
-630 m = i
+630   m = i
       if (wi(i) .ne. 0.d0) go to 640
       t = w
       if (w .eq. 0.d0) t = machep * norm
       h(i,en) = -r / t
       go to 700
 !     ********** Solve real equations **********
-640 x = h(i,i+1)
-      y = h(i+1,i)
+640   x = h(i,i + 1)
+      y = h(i + 1,i)
       q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
       t = (x * s - zz * r) / q
       h(i,en) = t
       if (dabs(x) .le. dabs(zz)) go to 650
-      h(i+1,en) = (-r - w * t) / x
+      h(i + 1,en) = (-r - w * t) / x
       go to 700
-650 h(i+1,en) = (-s - y * t) / zz
-700 continue
+650   h(i + 1,en) = (-s - y * t) / zz
+700   continue
 !     ********** End real vector **********
    go to 800
 !     ********** Complex vector **********
@@ -9398,34 +9398,34 @@ do 800 nn = 1, n
       r = ra
       s = sa
       go to 790
-770 m = i
+770   m = i
       if (wi(i) .ne. 0.d0) go to 780
       d = w * w + q * q
       h(i,na) = -(ra * w + sa * q) / d
       h(i,en) = (ra * q - sa * w) / d
       go to 790
 !     ********** Solve complex equations **********
-780 x = h(i,i+1)
-      y = h(i+1,i)
+780   x = h(i,i + 1)
+      y = h(i + 1,i)
       vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
       vi = (wr(i) - p) * 2.d0 * q
       if (vr .eq. 0.d0 .and. vi .eq. 0.d0) vr = machep * norm &
-&* (dabs(w) + dabs(q) + dabs(x) + dabs(y) + dabs(zz))
+         & * (dabs(w) + dabs(q) + dabs(x) + dabs(y) + dabs(zz))
       a = x * r - zz * ra + q * sa
       b = x * s - zz * sa - q * ra
       d = vr * vr + vi * vi
       h(i,na) = (a * vr + b * vi) / d
       h(i,en) = (b * vr - a * vi) / d
       if (dabs(x) .le. dabs(zz) + dabs(q)) go to 785
-      h(i+1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
-      h(i+1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
+      h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
+      h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
       go to 790
-785 a = -r - y * h(i,na)
+785   a = -r - y * h(i,na)
       b = -s - y * h(i,en)
       d = zz * zz + q * q
-      h(i+1,na) = (a * zz + b * q) / d
-      h(i+1,en) = (b * zz - a * q) / d
-790 continue
+      h(i + 1,na) = (a * zz + b * q) / d
+      h(i + 1,en) = (b * zz - a * q) / d
+790   continue
 !     ********** End complex vector **********
 800 continue
 !     ********** End back substitution.
@@ -9434,7 +9434,7 @@ do 840 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 840
 !
    do 820 j = i, n
-820 z(i,j) = h(i,j)
+820   z(i,j) = h(i,j)
 !
 840 continue
 !     ********** Multiply by transformation matrix to give
@@ -9448,10 +9448,10 @@ do 880 jj = low, n
       zz = 0.d0
 !
       do 860 k = low, m
-860 zz = zz + z(i,k) * h(k,j)
+860      zz = zz + z(i,k) * h(k,j)
 !
       z(i,j) = zz
-880 continue
+880   continue
 !
 go to 1001
 !     ********** Set error -- no convergence to an
@@ -9472,12 +9472,12 @@ integer :: l
 !-----------------------------------------------------------------------
 !
 if (ka .eq. 0) go to 10
-   call tred1 (ka, n, a, w, t(n+1), t(1))
-   call tqlrat (n, w, t, ierr)
-   return
+call tred1 (ka, n, a, w, t(n + 1), t(1))
+call tqlrat (n, w, t, ierr)
+return
 10 l = n*(n + 1)
 l = l/2
-call tred3 (n, l, a, w, t(n+1), t(1))
+call tred3 (n, l, a, w, t(n + 1), t(1))
 call tqlrat (n, w, t, ierr)
 return
 end subroutine seig
@@ -9493,9 +9493,9 @@ integer :: l
 !-----------------------------------------------------------------------
 !
 if (ka .eq. 0) go to 10
-   call tred1 (ka, n, a, w, t, t)
-   call imtql1 (n, w, t, ierr)
-   return
+call tred1 (ka, n, a, w, t, t)
+call imtql1 (n, w, t, ierr)
+return
 10 l = n*(n + 1)
 l = l/2
 call tred3 (n, l, a, w, t, t)
@@ -9592,7 +9592,7 @@ do ii = 1, n
    if (l .lt. 1) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
-120 scale = scale + abs(a(i,k))
+120   scale = scale + abs(a(i,k))
 !
    if (scale .ne. 0.0) go to 140
 130 e(i) = 0.0
@@ -9618,15 +9618,15 @@ do ii = 1, n
       g = 0.0
 !     ********** Form element of a*U **********
       do 180 k = 1, j
-180 g = g + a(j,k) * a(i,k)
+180      g = g + a(j,k) * a(i,k)
 !
       jp1 = j + 1
       if (l .lt. jp1) go to 220
 !
       do 200 k = jp1, l
-200 g = g + a(k,j) * a(i,k)
+200      g = g + a(k,j) * a(i,k)
 !     ********** Form element of P **********
-220 e(j) = g / h
+220   e(j) = g / h
       f = f + e(j) * a(i,j)
    end do
 !
@@ -9639,10 +9639,10 @@ do ii = 1, n
 !
       do 260 k = 1, j
          a(j,k) = a(j,k) - f * e(k) - g * a(i,k)
-260 continue
+260      continue
 !
 270 do 280 k = 1, l
-280 a(i,k) = scale * a(i,k)
+280   a(i,k) = scale * a(i,k)
 !
 290 h = d(i)
    d(i) = a(i,i)
@@ -9737,7 +9737,7 @@ do ii = 1, n
 !
    do j = 1, l
       g = 0.0
-      jk = (j * (j-1)) / 2
+      jk = (j * (j - 1)) / 2
 !     ********** Form element of a*U **********
       do k = 1, l
          jk = jk + 1
@@ -9760,10 +9760,10 @@ do ii = 1, n
       do 260 k = 1, j
          jk = jk + 1
          a(jk) = a(jk) - f * e(k) - g * d(k)
-260 continue
+260      continue
 !
-290 d(i) = a(iz+1)
-   a(iz+1) = scale * sqrt(h)
+290 d(i) = a(iz + 1)
+   a(iz + 1) = scale * sqrt(h)
 end do
 !
 return
@@ -9818,7 +9818,7 @@ real :: b, c, f, g, h, p, r, s, machep
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -9826,7 +9826,7 @@ ierr = 0
 if (n .eq. 1) go to 1001
 !
 do 100 i = 2, n
-100 e2(i-1) = e2(i)
+100 e2(i - 1) = e2(i)
 !
 f = 0.0
 b = 0.0
@@ -9853,13 +9853,13 @@ do l = 1, n
    s = sqrt(e2(l))
    g = d(l)
    p = (d(l1) - g) / (2.0 * s)
-   r = sqrt(p*p+1.0)
+   r = sqrt(p*p + 1.0)
    if (p .lt. 0.0) r = -r
    d(l) = s / (p + r)
    h = g - d(l)
 !
    do 140 i = l1, n
-140 d(i) = d(i) - h
+140   d(i) = d(i) - h
 !
    f = f + h
 !     ********** RATIONAL QL TRANSFORMATION **********
@@ -9873,9 +9873,9 @@ do l = 1, n
       i = m - ii
       p = g * h
       r = p + e2(i)
-      e2(i+1) = s * r
+      e2(i + 1) = s * r
       s = e2(i) / r
-      d(i+1) = h + s * (h + d(i))
+      d(i + 1) = h + s * (h + d(i))
       g = d(i) - e2(i) / g
       if (g .eq. 0.0) g = b
       h = g * p / r
@@ -9894,8 +9894,8 @@ do l = 1, n
 !     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
    do ii = 2, l
       i = l + 2 - ii
-      if (p .ge. d(i-1)) go to 270
-      d(i) = d(i-1)
+      if (p .ge. d(i - 1)) go to 270
+      d(i) = d(i - 1)
    end do
 !
 250 i = 1
@@ -9960,7 +9960,7 @@ real :: b, c, f, g, p, r, s, machep
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -9968,7 +9968,7 @@ ierr = 0
 if (n .eq. 1) go to 1001
 !
 do 100 i = 2, n
-100 e(i-1) = e(i)
+100 e(i - 1) = e(i)
 !
 e(n) = 0.0
 !
@@ -9977,8 +9977,8 @@ do l = 1, n
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
       if (m .eq. n) go to 120
-      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m+1)))) &
-&go to 120
+      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m + 1)))) &
+         & go to 120
    end do
 !
 120 p = d(l)
@@ -9986,8 +9986,8 @@ do l = 1, n
    if (j .eq. 30) go to 1000
    j = j + 1
 !     ********** Form shift **********
-   g = (d(l+1) - p) / (2.0 * e(l))
-   r = sqrt(g*g+1.0)
+   g = (d(l + 1) - p) / (2.0 * e(l))
+   r = sqrt(g*g + 1.0)
    if (g .lt. 0.0) r = -r
    g = d(m) - p + e(l) / (g + r)
    s = 1.0
@@ -10001,20 +10001,20 @@ do l = 1, n
       b = c * e(i)
       if (abs(f) .lt. abs(g)) go to 150
       c = g / f
-      r = sqrt(c*c+1.0)
-      e(i+1) = f * r
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = f * r
       s = 1.0 / r
       c = c * s
       go to 160
-150 s = f / g
-      r = sqrt(s*s+1.0)
-      e(i+1) = g * r
+150   s = f / g
+      r = sqrt(s*s + 1.0)
+      e(i + 1) = g * r
       c = 1.0 / r
       s = s * c
-160 g = d(i+1) - p
+160   g = d(i + 1) - p
       r = (d(i) - g) * s + 2.0 * c * b
       p = s * r
-      d(i+1) = g + p
+      d(i + 1) = g + p
       g = c * r - b
    end do
 !
@@ -10027,8 +10027,8 @@ do l = 1, n
 !     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
    do ii = 2, l
       i = l + 2 - ii
-      if (p .ge. d(i-1)) go to 270
-      d(i) = d(i-1)
+      if (p .ge. d(i - 1)) go to 270
+      d(i) = d(i - 1)
    end do
 !
 250 i = 1
@@ -10094,7 +10094,7 @@ do 100 i = 1, n
 !
    do 100 j = 1, i
       z(i,j) = a(i,j)
-100 continue
+100   continue
 !
 if (n .eq. 1) go to 320
 !     ********** FOR i=n STEP -1 UNTIL 2 DO -- **********
@@ -10106,7 +10106,7 @@ do ii = 2, n
    if (l .lt. 2) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
-120 scale = scale + abs(z(i,k))
+120   scale = scale + abs(z(i,k))
 !
    if (scale .ne. 0.0) go to 140
 130 e(i) = z(i,l)
@@ -10130,15 +10130,15 @@ do ii = 2, n
       g = 0.0
 !     ********** Form element of a*U **********
       do 180 k = 1, j
-180 g = g + z(j,k) * z(i,k)
+180      g = g + z(j,k) * z(i,k)
 !
       jp1 = j + 1
       if (l .lt. jp1) go to 220
 !
       do 200 k = jp1, l
-200 g = g + z(k,j) * z(i,k)
+200      g = g + z(k,j) * z(i,k)
 !     ********** Form element of P **********
-220 e(j) = g / h
+220   e(j) = g / h
       f = f + e(j) * z(i,j)
    end do
 !
@@ -10151,7 +10151,7 @@ do ii = 2, n
 !
       do 260 k = 1, j
          z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
-260 continue
+260      continue
 !
 290 d(i) = h
 end do
@@ -10167,11 +10167,11 @@ do 500 i = 1, n
       g = 0.0
 !
       do 340 k = 1, l
-340 g = g + z(i,k) * z(k,j)
+340      g = g + z(i,k) * z(k,j)
 !
       do 360 k = 1, l
          z(k,j) = z(k,j) - g * z(k,i)
-360 continue
+360      continue
 !
 380 d(i) = z(i,i)
    z(i,i) = 1.0
@@ -10256,7 +10256,7 @@ real :: b, c, f, g, h, p, r, s, machep
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -10264,7 +10264,7 @@ ierr = 0
 if (n .eq. 1) go to 1001
 !
 do 100 i = 2, n
-100 e(i-1) = e(i)
+100 e(i - 1) = e(i)
 !
 f = 0.0
 b = 0.0
@@ -10288,13 +10288,13 @@ do l = 1, n
    l1 = l + 1
    g = d(l)
    p = (d(l1) - g) / (2.0 * e(l))
-   r = sqrt(p*p+1.0)
+   r = sqrt(p*p + 1.0)
    if (p .lt. 0.0) r = -r
    d(l) = e(l) / (p + r)
    h = g - d(l)
 !
    do 140 i = l1, n
-140 d(i) = d(i) - h
+140   d(i) = d(i) - h
 !
    f = f + h
 !     ********** QL TRANSFORMATION **********
@@ -10309,22 +10309,22 @@ do l = 1, n
       h = c * p
       if (abs(p) .lt. abs(e(i))) go to 150
       c = e(i) / p
-      r = sqrt(c*c+1.0)
-      e(i+1) = s * p * r
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = s * p * r
       s = c / r
       c = 1.0 / r
       go to 160
-150 c = p / e(i)
-      r = sqrt(c*c+1.0)
-      e(i+1) = s * e(i) * r
+150   c = p / e(i)
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = s * e(i) * r
       s = 1.0 / r
       c = c * s
-160 p = c * d(i) - s * g
-      d(i+1) = h + s * (c * g + s * d(i))
+160   p = c * d(i) - s * g
+      d(i + 1) = h + s * (c * g + s * d(i))
 !     ********** Form vector **********
       do k = 1, n
-         h = z(k,i+1)
-         z(k,i+1) = s * z(k,i) + c * h
+         h = z(k,i + 1)
+         z(k,i + 1) = s * z(k,i) + c * h
          z(k,i) = c * z(k,i) - s * h
       end do
 !
@@ -10345,7 +10345,7 @@ do 300 ii = 2, n
       if (d(j) .ge. p) go to 260
       k = j
       p = d(j)
-260 continue
+260   continue
 !
    if (k .eq. i) go to 300
    d(k) = d(i)
@@ -10435,7 +10435,7 @@ real :: b, c, f, g, p, r, s, machep
 !                machep the value U where U is the smallest positive
 !                floating point number such that 1.0 + U .GT. 1.0 .
 !
-           machep = spmpar(1)
+machep = spmpar(1)
 !
 !                **********
 !
@@ -10443,7 +10443,7 @@ ierr = 0
 if (n .eq. 1) go to 1001
 !
 do 100 i = 2, n
-100 e(i-1) = e(i)
+100 e(i - 1) = e(i)
 !
 e(n) = 0.0
 !
@@ -10452,8 +10452,8 @@ do 240 l = 1, n
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
       if (m .eq. n) go to 120
-      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m+1)))) &
-&go to 120
+      if (abs(e(m)) .le. machep * (abs(d(m)) + abs(d(m + 1)))) &
+         & go to 120
    end do
 !
 120 p = d(l)
@@ -10461,8 +10461,8 @@ do 240 l = 1, n
    if (j .eq. 30) go to 1000
    j = j + 1
 !     ********** Form shift **********
-   g = (d(l+1) - p) / (2.0 * e(l))
-   r = sqrt(g*g+1.0)
+   g = (d(l + 1) - p) / (2.0 * e(l))
+   r = sqrt(g*g + 1.0)
    if (g .lt. 0.0) r = -r
    g = d(m) - p + e(l) / (g + r)
    s = 1.0
@@ -10476,25 +10476,25 @@ do 240 l = 1, n
       b = c * e(i)
       if (abs(f) .lt. abs(g)) go to 150
       c = g / f
-      r = sqrt(c*c+1.0)
-      e(i+1) = f * r
+      r = sqrt(c*c + 1.0)
+      e(i + 1) = f * r
       s = 1.0 / r
       c = c * s
       go to 160
-150 s = f / g
-      r = sqrt(s*s+1.0)
-      e(i+1) = g * r
+150   s = f / g
+      r = sqrt(s*s + 1.0)
+      e(i + 1) = g * r
       c = 1.0 / r
       s = s * c
-160 g = d(i+1) - p
+160   g = d(i + 1) - p
       r = (d(i) - g) * s + 2.0 * c * b
       p = s * r
-      d(i+1) = g + p
+      d(i + 1) = g + p
       g = c * r - b
 !     ********** Form vector **********
       do k = 1, n
-         f = z(k,i+1)
-         z(k,i+1) = s * z(k,i) + c * f
+         f = z(k,i + 1)
+         z(k,i + 1) = s * z(k,i) + c * f
          z(k,i) = c * z(k,i) - s * f
       end do
 !
@@ -10515,7 +10515,7 @@ do 300 ii = 2, n
       if (d(j) .ge. p) go to 260
       k = j
       p = d(j)
-260 continue
+260   continue
 !
    if (k .eq. i) go to 300
    d(k) = d(i)

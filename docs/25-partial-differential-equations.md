@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEPDE` | `SUBROUTINE` | `COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1, C, D, NP1, U, KU, W, NW, IERR` | [`L116502`](../source_parts/nswc_part_11.f90#L10116) |
+| `SEPDE` | `SUBROUTINE` | `COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1, C, D, NP1, U, KU, W, NW, IERR` | [`L116503`](../source_parts/nswc_part_11.f90#L10116) |
 
 
 Given a separable elliptic equation

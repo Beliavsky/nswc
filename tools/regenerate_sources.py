@@ -12,6 +12,7 @@ import re
 from fixed_to_free import convert_text
 from lowercase_fortran import lowercase
 from sentence_case_comments import sentence_case
+from format_free_form import format_source
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,7 +24,7 @@ LINK = re.compile(
 
 
 def generate(root=ROOT):
-    original_free = lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii")))
+    original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
     free = comments.text
     lines = free.splitlines(keepends=True)

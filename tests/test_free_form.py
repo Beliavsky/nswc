@@ -11,6 +11,7 @@ from fixed_to_free import convert_text
 from regenerate_sources import generate, HEADER, LINK
 from lowercase_fortran import lowercase
 from sentence_case_comments import sentence_case
+from format_free_form import format_source, semantic_statements
 
 
 def canonical(statement):
@@ -107,11 +108,16 @@ class FreeFormTests(unittest.TestCase):
             for old, new in zip(before, after):
                 self.assertTrue(old == new or ('A' <= old <= 'Z' and new == old.lower()))
         self.assertEqual(statements(source, True), statements(converted, False))
-        comments = sentence_case(converted)
-        self.assertEqual(len(converted), len(comments.text))
-        self.assertEqual([s for s in converted.splitlines(True) if not s.lstrip().startswith('!')],
+        formatted = format_source(converted)
+        self.assertEqual(semantic_statements(converted), semantic_statements(formatted))
+        self.assertEqual(format_source(formatted), formatted)
+        self.assertEqual([s for s in converted.splitlines(True) if s.lstrip().startswith('!')],
+                         [s for s in formatted.splitlines(True) if s.lstrip().startswith('!')])
+        comments = sentence_case(formatted)
+        self.assertEqual(len(formatted), len(comments.text))
+        self.assertEqual([s for s in formatted.splitlines(True) if not s.lstrip().startswith('!')],
                          [s for s in comments.text.splitlines(True) if not s.lstrip().startswith('!')])
-        self.assertEqual(statements(converted, False), statements(comments.text, False))
+        self.assertEqual(statements(formatted, False), statements(comments.text, False))
         self.assertEqual(sentence_case(comments.text).text, comments.text)
         self.assertEqual(comments.text, (ROOT / "nswc.f90").read_text())
 

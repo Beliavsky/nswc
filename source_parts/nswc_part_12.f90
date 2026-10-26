@@ -1,17 +1,17 @@
 subroutine sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
-&d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
-&cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
-&idmn,w,pertrb,ierror)
+   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
+   & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
+   & idmn,w,pertrb,ierror)
 implicit none
 integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
 real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
-&beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
-&grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
-&zn(*)
+   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
+   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
+   & zn(*)
 external cofx, cofy
 integer :: i, i1, iord, j, mp, np
 real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
-&eyj, fj, fyj, fyn, prtrb, xi, yj
+   & eyj, fj, fyj, fyn, prtrb, xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 logical :: singlr
@@ -22,18 +22,18 @@ logical :: singlr
 !     solution is generated in USOL.
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     Set parameters internally
 !
-kswx = mbdcnd+1
-kswy = nbdcnd+1
-k = m+1
-l = n+1
+kswx = mbdcnd + 1
+kswy = nbdcnd + 1
+k = m + 1
+l = n + 1
 ait = a
 bit = b
 cit = c
@@ -42,39 +42,39 @@ dit = d
 !     Set right hand side values from GRHS in USOL on the interior
 !     and non-specified boundaries.
 !
-do i=2,m
-   do j=2,n
+do i = 2,m
+   do j = 2,n
       usol(i,j) = grhs(i,j)
    end do
 end do
 if (kswx.eq.2 .or. kswx.eq.3) go to  40
-do j=2,n
+do j = 2,n
    usol(1,j) = grhs(1,j)
 end do
 40 continue
 if (kswx.eq.2 .or. kswx.eq.5) go to  60
-do j=2,n
+do j = 2,n
    usol(k,j) = grhs(k,j)
 end do
 60 continue
 if (kswy.eq.2 .or. kswy.eq.3) go to  80
-do i=2,m
+do i = 2,m
    usol(i,1) = grhs(i,1)
 end do
 80 continue
 if (kswy.eq.2 .or. kswy.eq.5) go to 100
-do i=2,m
+do i = 2,m
    usol(i,l) = grhs(i,l)
 end do
 100 continue
 if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.3) &
-&usol(1,1) = grhs(1,1)
+   & usol(1,1) = grhs(1,1)
 if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.3) &
-&usol(k,1) = grhs(k,1)
+   & usol(k,1) = grhs(k,1)
 if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.5) &
-&usol(1,l) = grhs(1,l)
+   & usol(1,l) = grhs(1,l)
 if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.5) &
-&usol(k,l) = grhs(k,l)
+   & usol(k,l) = grhs(k,l)
 i1 = 1
 !
 !     Set switches for periodic or non-periodic boundaries
@@ -87,13 +87,13 @@ if (kswy .eq. 1) np = 0
 !     Set dlx,dly and size of block tri-diagonal system generated
 !     in NINT,mint
 !
-dlx = (bit-ait)/float(m)
-mit = k-1
-if (kswx .eq. 2) mit = k-2
+dlx = (bit - ait)/float(m)
+mit = k - 1
+if (kswx .eq. 2) mit = k - 2
 if (kswx .eq. 4) mit = k
-dly = (dit-cit)/float(n)
-nit = l-1
-if (kswy .eq. 2) nit = l-2
+dly = (dit - cit)/float(n)
+nit = l - 1
+if (kswy .eq. 2) nit = l - 2
 if (kswy .eq. 4) nit = l
 tdlx3 = 2.0*dlx**3
 dlx4 = dlx**4
@@ -106,17 +106,17 @@ is = 1
 js = 1
 if (kswx.eq.2 .or. kswx.eq.3) is = 2
 if (kswy.eq.2 .or. kswy.eq.3) js = 2
-ns = nit+js-1
-ms = mit+is-1
+ns = nit + js - 1
+ms = mit + is - 1
 !
 !     Set X - Direction
 !
-do i=1,mit
-   xi = ait+float(is+i-2)*dlx
+do i = 1,mit
+   xi = ait + float(is + i - 2)*dlx
    call cofx (xi,ai,bi,ci)
-   axi = (ai/dlx-0.5*bi)/dlx
-   bxi = -2.*ai/dlx**2+ci
-   cxi = (ai/dlx+0.5*bi)/dlx
+   axi = (ai/dlx - 0.5*bi)/dlx
+   bxi = -2.*ai/dlx**2 + ci
+   cxi = (ai/dlx + 0.5*bi)/dlx
    am(i) = axi
    bm(i) = bxi
    cm(i) = cxi
@@ -124,12 +124,12 @@ end do
 !
 !     Set Y direction
 !
-do j=1,nit
-   yj = cit+float(js+j-2)*dly
+do j = 1,nit
+   yj = cit + float(js + j - 2)*dly
    call cofy (yj,dj,ej,fj)
-   dyj = (dj/dly-0.5*ej)/dly
-   eyj = (-2.*dj/dly**2+fj)
-   fyj = (dj/dly+0.5*ej)/dly
+   dyj = (dj/dly - 0.5*ej)/dly
+   eyj = (-2.*dj/dly**2 + fj)
+   fyj = (dj/dly + 0.5*ej)/dly
    an(j) = dyj
    bn(j) = eyj
    cn(j) = fyj
@@ -150,16 +150,16 @@ go to 170
 !     Mixed-Dirichlet in X direction
 !
 140 am(1) = 0.0
-bm(1) = bm(1)+2.*alpha*dlx*ax1
-cm(1) = cm(1)+ax1
+bm(1) = bm(1) + 2.*alpha*dlx*ax1
+cm(1) = cm(1) + ax1
 cm(mit) = 0.0
 go to 170
 !
 !     Dirichlet-mixed in X direction
 !
 150 am(1) = 0.0
-am(mit) = am(mit)+cxm
-bm(mit) = bm(mit)-2.*beta*dlx*cxm
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*beta*dlx*cxm
 cm(mit) = 0.0
 go to 170
 !
@@ -167,10 +167,10 @@ go to 170
 !
 160 continue
 am(1) = 0.0
-bm(1) = bm(1)+2.*dlx*alpha*ax1
-cm(1) = cm(1)+ax1
-am(mit) = am(mit)+cxm
-bm(mit) = bm(mit)-2.*dlx*beta*cxm
+bm(1) = bm(1) + 2.*dlx*alpha*ax1
+cm(1) = cm(1) + ax1
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*dlx*beta*cxm
 cm(mit) = 0.0
 170 continue
 !
@@ -191,16 +191,16 @@ go to 220
 !
 190 continue
 an(1) = 0.0
-bn(1) = bn(1)+2.*dly*gama*dy1
-cn(1) = cn(1)+dy1
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
 cn(nit) = 0.0
 go to 220
 !
 !     Dirichlet-mixed in Y direction
 !
 200 an(1) = 0.0
-an(nit) = an(nit)+fyn
-bn(nit) = bn(nit)-2.*dly*xnu*fyn
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.*dly*xnu*fyn
 cn(nit) = 0.0
 go to 220
 !
@@ -208,10 +208,10 @@ go to 220
 !
 210 continue
 an(1) = 0.0
-bn(1) = bn(1)+2.*dly*gama*dy1
-cn(1) = cn(1)+dy1
-an(nit) = an(nit)+fyn
-bn(nit) = bn(nit)-2.0*dly*xnu*fyn
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
 cn(nit) = 0.0
 220 if (kswx .eq. 1) go to 270
 !
@@ -219,13 +219,13 @@ cn(nit) = 0.0
 !
 do 260 j = js,ns
    if (kswx.ne.2 .and. kswx.ne.3) go to 230
-   usol(is,j) = usol(is,j)-ax1*usol(1,j)
+   usol(is,j) = usol(is,j) - ax1*usol(1,j)
    go to 240
-230 usol(is,j) = usol(is,j)+2.0*dlx*ax1*bda(j)
+230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
 240 if (kswx.ne.2 .and. kswx.ne.5) go to 250
-   usol(ms,j) = usol(ms,j)-cxm*usol(k,j)
+   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
    go to 260
-250 usol(ms,j) = usol(ms,j)-2.0*dlx*cxm*bdb(j)
+250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
 260 continue
 270 if (kswy .eq. 1) go to 320
 !
@@ -233,24 +233,24 @@ do 260 j = js,ns
 !
 do 310 i = is,ms
    if (kswy.ne.2 .and. kswy.ne.3) go to 280
-   usol(i,js) = usol(i,js)-dy1*usol(i,1)
+   usol(i,js) = usol(i,js) - dy1*usol(i,1)
    go to 290
-280 usol(i,js) = usol(i,js)+2.0*dly*dy1*bdc(i)
+280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
 290 if (kswy.ne.2 .and. kswy.ne.5) go to 300
-   usol(i,ns) = usol(i,ns)-fyn*usol(i,l)
+   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
    go to 310
-300 usol(i,ns) = usol(i,ns)-2.0*dly*fyn*bdd(i)
+300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
 310 continue
 320 continue
 !
 !     Save adjusted edges in GRHS if iorder=4
 !
 if (iorder .ne. 4) go to 350
-do j=js,ns
+do j = js,ns
    grhs(is,j) = usol(is,j)
    grhs(ms,j) = usol(ms,j)
 end do
-do i=is,ms
+do i = is,ms
    grhs(i,js) = usol(i,js)
    grhs(i,ns) = usol(i,ns)
 end do
@@ -271,8 +271,8 @@ if (singlr) call trisp (nit,an,bn,cn,dn,un,zn)
 !     Make initialization call to blktri
 !
 if (intl .eq. 0) &
-&call blktri (intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
-&usol(is,js),ierror,w)
+   & call blktri (intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
+   & usol(is,js),ierror,w)
 if (ierror .ne. 0) return
 !
 !     Adjust right hand side if necessary
@@ -283,17 +283,17 @@ if (singlr) call orthg (usol,idmn,zn,zm,pertrb)
 !     Compute solution
 !
 call blktri (i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
-&ierror,w)
+   & ierror,w)
 if (ierror .ne. 0) return
 !
 !     Set periodic boundaries if necessary
 !
 if (kswx .ne. 1) go to 380
-do j=1,l
+do j = 1,l
    usol(k,j) = usol(1,j)
 end do
 380 if (kswy .ne. 1) go to 400
-do i=1,k
+do i = 1,k
    usol(i,l) = usol(i,1)
 end do
 400 continue
@@ -316,7 +316,7 @@ go to 360
 end subroutine sepel1
 
 subroutine chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
-&cofy,idmn,mn,ierror)
+   & cofy,idmn,mn,ierror)
 implicit none
 integer, intent(in) :: idmn
 integer, intent(out) :: ierror
@@ -348,7 +348,7 @@ if (mn .lt. 7 .or. idmn .lt. 7) return
 !     Check m
 !
 ierror = 6
-if (m .gt. (idmn-1) .or. m.lt.6) return
+if (m .gt. (idmn - 1) .or. m.lt.6) return
 if (m .gt. mn - 1) return
 !
 !     Check n
@@ -368,18 +368,18 @@ if (intl.ne.0 .and. intl.ne.1) return
 !
 !     Check that equation is elliptic
 !
-dlx = (b-a)/float(m)
-dly = (d-c)/float(n)
-do i=2,m
-   xi = a+float(i-1)*dlx
+dlx = (b - a)/float(m)
+dly = (d - c)/float(n)
+do i = 2,m
+   xi = a + float(i - 1)*dlx
    call cofx (xi,ai,bi,ci)
-   do j=2,n
-      yj = c+float(j-1)*dly
+   do j = 2,n
+      yj = c + float(j - 1)*dly
       call cofy (yj,dj,ej,fj)
       if (ai*dj .gt. 0.0) go to  10
       ierror = 10
       return
-10 continue
+10    continue
    end do
 end do
 !
@@ -390,7 +390,7 @@ return
 end subroutine chkprm
 
 subroutine chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
-&singlr)
+   & singlr)
 implicit none
 integer :: mbdcnd, nbdcnd
 real :: alpha, beta, gama, xnu
@@ -404,10 +404,10 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     must solve is a singular operator
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 singlr = .false.
@@ -416,7 +416,7 @@ singlr = .false.
 !     entirely periodic and/or mixed
 !
 if ((mbdcnd.ne.0 .and. mbdcnd.ne.3) .or. &
-&(nbdcnd.ne.0 .and. nbdcnd.ne.3)) return
+   & (nbdcnd.ne.0 .and. nbdcnd.ne.3)) return
 !
 !     Check that mixed conditions are pure neuman
 !
@@ -429,13 +429,13 @@ if (gama.ne.0.0 .or. xnu.ne.0.0) return
 !     Check that non-derivative coefficient functions
 !     are zero
 !
-do i=is,ms
-   xi = ait+float(i-1)*dlx
+do i = is,ms
+   xi = ait + float(i - 1)*dlx
    call cofx (xi,ai,bi,ci)
    if (ci .ne. 0.0) return
 end do
-do j=js,ns
-   yj = cit+float(j-1)*dly
+do j = js,ns
+   yj = cit + float(j - 1)*dly
    call cofy (yj,dj,ej,fj)
    if (fj .ne. 0.0) return
 end do
@@ -459,10 +459,10 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     the constant array in a weighted least squares norm
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 istr = is
 ifnl = ms
@@ -473,12 +473,12 @@ jfnl = ns
 !
 ute = 0.0
 ete = 0.0
-do i=is,ms
-   ii = i-is+1
-   do j=js,ns
-      jj = j-js+1
-      ete = ete+zm(ii)*zn(jj)
-      ute = ute+usol(i,j)*zm(ii)*zn(jj)
+do i = is,ms
+   ii = i - is + 1
+   do j = js,ns
+      jj = j - js + 1
+      ete = ete + zm(ii)*zn(jj)
+      ute = ute + usol(i,j)*zm(ii)*zn(jj)
    end do
 end do
 !
@@ -488,9 +488,9 @@ pertrb = ute/ete
 !
 !     Subtract off constant pertrb
 !
-do i=istr,ifnl
-   do j=jstr,jfnl
-      usol(i,j) = usol(i,j)-pertrb
+do i = istr,ifnl
+   do j = jstr,jfnl
+      usol(i,j) = usol(i,j) - pertrb
    end do
 end do
 return
@@ -509,10 +509,10 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     the constant array in a weighted least squares norm
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !     Entry at minsol occurrs when the final solution is
 !     to be minimized with respect to the weighted
@@ -527,12 +527,12 @@ jfnl = l
 !
 ute = 0.0
 ete = 0.0
-do i=is,ms
-   ii = i-is+1
-   do j=js,ns
-      jj = j-js+1
-      ete = ete+zm(ii)*zn(jj)
-      ute = ute+usol(i,j)*zm(ii)*zn(jj)
+do i = is,ms
+   ii = i - is + 1
+   do j = js,ns
+      jj = j - js + 1
+      ete = ete + zm(ii)*zn(jj)
+      ute = ute + usol(i,j)*zm(ii)*zn(jj)
    end do
 end do
 !
@@ -542,9 +542,9 @@ pertrb = ute/ete
 !
 !     Subtract off constant pertrb
 !
-do i=istr,ifnl
-   do j=jstr,jfnl
-      usol(i,j) = usol(i,j)-pertrb
+do i = istr,ifnl
+   do j = jstr,jfnl
+      usol(i,j) = usol(i,j) - pertrb
    end do
 end do
 return
@@ -569,28 +569,28 @@ bn = b(n)
 d(1) = a(2)/b(1)
 v = a(1)
 u(1) = c(n)/b(1)
-nm2 = n-2
-do j=2,nm2
-   den = b(j)-c(j-1)*d(j-1)
-   d(j) = a(j+1)/den
-   u(j) = -c(j-1)*u(j-1)/den
-   bn = bn-v*u(j-1)
-   v = -v*d(j-1)
+nm2 = n - 2
+do j = 2,nm2
+   den = b(j) - c(j - 1)*d(j - 1)
+   d(j) = a(j + 1)/den
+   u(j) = -c(j - 1)*u(j - 1)/den
+   bn = bn - v*u(j - 1)
+   v = -v*d(j - 1)
 end do
-den = b(n-1)-c(n-2)*d(n-2)
-d(n-1) = (a(n)-c(n-2)*u(n-2))/den
-an = c(n-1)-v*d(n-2)
-bn = bn-v*u(n-2)
-den = bn-an*d(n-1)
+den = b(n - 1) - c(n - 2)*d(n - 2)
+d(n - 1) = (a(n) - c(n - 2)*u(n - 2))/den
+an = c(n - 1) - v*d(n - 2)
+bn = bn - v*u(n - 2)
+den = bn - an*d(n - 1)
 !
 !     Set last component equal to one
 !
 z(n) = 1.0
-z(n-1) = -d(n-1)
-nm1 = n-1
-do j=2,nm1
-   k = n-j
-   z(k) = -d(k)*z(k+1)-u(k)*z(n)
+z(n - 1) = -d(n - 1)
+nm1 = n - 1
+do j = 2,nm1
+   k = n - j
+   z(k) = -d(k)*z(k + 1) - u(k)*z(n)
 end do
 return
 end subroutine trisp
@@ -601,7 +601,7 @@ integer :: idmn, mn
 real :: grhs(mn,*), usol(idmn,*)
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
-&xi, yj
+   & xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
@@ -621,42 +621,42 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     hand side when calling blktri for a fourth order solution.
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     Compute truncation error approximation over the entire mesh
 !
-do j=js,ns
-   yj = cit+float(j-1)*dly
+do j = js,ns
+   yj = cit + float(j - 1)*dly
    call cofy (yj,dj,ej,fj)
-   do i=is,ms
-      xi = ait+float(i-1)*dlx
+   do i = is,ms
+      xi = ait + float(i - 1)*dlx
       call cofx (xi,ai,bi,ci)
 !
 !     Compute partial derivative approximations at (XI,YJ)
 !
       call dxfn (usol,idmn,i,j,uxxx,uxxxx)
       call dyfn (usol,idmn,i,j,uyyy,uyyyy)
-      tx = ai*uxxxx/12.0+bi*uxxx/6.0
-      ty = dj*uyyyy/12.0+ej*uyyy/6.0
+      tx = ai*uxxxx/12.0 + bi*uxxx/6.0
+      ty = dj*uyyyy/12.0 + ej*uyyy/6.0
 !
 !     Reset form of truncation if at boundary which is non-periodic
 !
       if (kswx.eq.1 .or. (i.gt.1 .and. i.lt.k)) go to  10
-      tx = ai/3.0*(uxxxx/4.0+uxxx/dlx)
-10 if (kswy.eq.1 .or. (j.gt.1 .and. j.lt.l)) go to  20
-      ty = dj/3.0*(uyyyy/4.0+uyyy/dly)
-20 grhs(i,j) = grhs(i,j)+dlx**2*tx+dly**2*ty
+      tx = ai/3.0*(uxxxx/4.0 + uxxx/dlx)
+10    if (kswy.eq.1 .or. (j.gt.1 .and. j.lt.l)) go to  20
+      ty = dj/3.0*(uyyyy/4.0 + uyyy/dly)
+20    grhs(i,j) = grhs(i,j) + dlx**2*tx + dly**2*ty
    end do
 end do
 !
 !     Reset the right hand side in usol
 !
-do i=is,ms
-   do j=js,ns
+do i = is,ms
+   do j = js,ns
       usol(i,j) = grhs(i,j)
    end do
 end do
@@ -675,77 +675,77 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     partial derivatives of u at the (i,j) mesh point
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (i.gt.2 .and. i.lt.(k-1)) go to  50
+if (i.gt.2 .and. i.lt.(k - 1)) go to  50
 if (i .eq. 1) go to  10
 if (i .eq. 2) go to  30
-if (i .eq. k-1) go to  60
+if (i .eq. k - 1) go to  60
 if (i .eq. k) go to  80
 !
 !     Compute partial derivative approximations at X=A
 !
 10 if (kswx .eq. 1) go to  20
-uxxx = (-5.0*u(1,j)+18.0*u(2,j)-24.0*u(3,j)+14.0*u(4,j)- &
-&3.0*u(5,j))/(tdlx3)
-uxxxx = (3.0*u(1,j)-14.0*u(2,j)+26.0*u(3,j)-24.0*u(4,j)+ &
-&11.0*u(5,j)-2.0*u(6,j))/dlx4
+uxxx = (-5.0*u(1,j) + 18.0*u(2,j) - 24.0*u(3,j) + 14.0*u(4,j) - &
+   & 3.0*u(5,j))/(tdlx3)
+uxxxx = (3.0*u(1,j) - 14.0*u(2,j) + 26.0*u(3,j) - 24.0*u(4,j) + &
+   & 11.0*u(5,j) - 2.0*u(6,j))/dlx4
 return
 !
 !     Periodic at X=A
 !
-20 uxxx = (-u(k-2,j)+2.0*u(k-1,j)-2.0*u(2,j)+u(3,j))/(tdlx3)
-uxxxx = (u(k-2,j)-4.0*u(k-1,j)+6.0*u(1,j)-4.0*u(2,j)+u(3,j))/dlx4
+20 uxxx = (-u(k - 2,j) + 2.0*u(k - 1,j) - 2.0*u(2,j) + u(3,j))/(tdlx3)
+uxxxx = (u(k - 2,j) - 4.0*u(k - 1,j) + 6.0*u(1,j) - 4.0*u(2,j) + u(3,j))/dlx4
 return
 !
 !     Compute partial derivative approximations at X=A+dlx
 !
 30 if (kswx .eq. 1) go to  40
-uxxx = (-3.0*u(1,j)+10.0*u(2,j)-12.0*u(3,j)+6.0*u(4,j)-u(5,j))/ &
-&tdlx3
-uxxxx = (2.0*u(1,j)-9.0*u(2,j)+16.0*u(3,j)-14.0*u(4,j)+6.0*u(5,j)- &
-&u(6,j))/dlx4
+uxxx = (-3.0*u(1,j) + 10.0*u(2,j) - 12.0*u(3,j) + 6.0*u(4,j) - u(5,j))/ &
+   & tdlx3
+uxxxx = (2.0*u(1,j) - 9.0*u(2,j) + 16.0*u(3,j) - 14.0*u(4,j) + 6.0*u(5,j) - &
+   & u(6,j))/dlx4
 return
 !
 !     Periodic at X=A+dlx
 !
-40 uxxx = (-u(k-1,j)+2.0*u(1,j)-2.0*u(3,j)+u(4,j))/(tdlx3)
-uxxxx = (u(k-1,j)-4.0*u(1,j)+6.0*u(2,j)-4.0*u(3,j)+u(4,j))/dlx4
+40 uxxx = (-u(k - 1,j) + 2.0*u(1,j) - 2.0*u(3,j) + u(4,j))/(tdlx3)
+uxxxx = (u(k - 1,j) - 4.0*u(1,j) + 6.0*u(2,j) - 4.0*u(3,j) + u(4,j))/dlx4
 return
 !
 !     Compute partial derivative approximations on the interior
 !
 50 continue
-uxxx = (-u(i-2,j)+2.0*u(i-1,j)-2.0*u(i+1,j)+u(i+2,j))/tdlx3
-uxxxx = (u(i-2,j)-4.0*u(i-1,j)+6.0*u(i,j)-4.0*u(i+1,j)+u(i+2,j))/ &
-&dlx4
+uxxx = (-u(i - 2,j) + 2.0*u(i - 1,j) - 2.0*u(i + 1,j) + u(i + 2,j))/tdlx3
+uxxxx = (u(i - 2,j) - 4.0*u(i - 1,j) + 6.0*u(i,j) - 4.0*u(i + 1,j) + u(i + 2,j))/ &
+   & dlx4
 return
 !
 !     Compute partial derivative approximations at X=B-dlx
 !
 60 if (kswx .eq. 1) go to  70
-uxxx = (u(k-4,j)-6.0*u(k-3,j)+12.0*u(k-2,j)-10.0*u(k-1,j)+ &
-&3.0*u(k,j))/tdlx3
-uxxxx = (-u(k-5,j)+6.0*u(k-4,j)-14.0*u(k-3,j)+16.0*u(k-2,j)- &
-&9.0*u(k-1,j)+2.0*u(k,j))/dlx4
+uxxx = (u(k - 4,j) - 6.0*u(k - 3,j) + 12.0*u(k - 2,j) - 10.0*u(k - 1,j) + &
+   & 3.0*u(k,j))/tdlx3
+uxxxx = (-u(k - 5,j) + 6.0*u(k - 4,j) - 14.0*u(k - 3,j) + 16.0*u(k - 2,j) - &
+   & 9.0*u(k - 1,j) + 2.0*u(k,j))/dlx4
 return
 !
 !     Periodic at X=B-dlx
 !
-70 uxxx = (-u(k-3,j)+2.0*u(k-2,j)-2.0*u(1,j)+u(2,j))/tdlx3
-uxxxx = (u(k-3,j)-4.0*u(k-2,j)+6.0*u(k-1,j)-4.0*u(1,j)+u(2,j))/ &
-&dlx4
+70 uxxx = (-u(k - 3,j) + 2.0*u(k - 2,j) - 2.0*u(1,j) + u(2,j))/tdlx3
+uxxxx = (u(k - 3,j) - 4.0*u(k - 2,j) + 6.0*u(k - 1,j) - 4.0*u(1,j) + u(2,j))/ &
+   & dlx4
 return
 !
 !     Compute partial derivative approximations at X=B
 !
-80 uxxx = -(3.0*u(k-4,j)-14.0*u(k-3,j)+24.0*u(k-2,j)-18.0*u(k-1,j)+ &
-&5.0*u(k,j))/tdlx3
-uxxxx = (-2.0*u(k-5,j)+11.0*u(k-4,j)-24.0*u(k-3,j)+26.0*u(k-2,j)- &
-&14.0*u(k-1,j)+3.0*u(k,j))/dlx4
+80 uxxx = -(3.0*u(k - 4,j) - 14.0*u(k - 3,j) + 24.0*u(k - 2,j) - 18.0*u(k - 1,j) + &
+   & 5.0*u(k,j))/tdlx3
+uxxxx = (-2.0*u(k - 5,j) + 11.0*u(k - 4,j) - 24.0*u(k - 3,j) + 26.0*u(k - 2,j) - &
+   & 14.0*u(k - 1,j) + 3.0*u(k,j))/dlx4
 return
 end subroutine dxfn
 
@@ -761,83 +761,83 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     partial derivatives of u at the (i,j) mesh point
 !
 common /splp/   kswx       ,kswy       ,k          ,l          , &
-&ait        ,bit        ,cit        ,dit        , &
-&mit        ,nit        ,is         ,ms         , &
-&js         ,ns         ,dlx        ,dly        , &
-&tdlx3      ,tdly3      ,dlx4       ,dly4
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (j.gt.2 .and. j.lt.(l-1)) go to  50
+if (j.gt.2 .and. j.lt.(l - 1)) go to  50
 if (j .eq. 1) go to  10
 if (j .eq. 2) go to  30
-if (j .eq. l-1) go to  60
+if (j .eq. l - 1) go to  60
 if (j .eq. l) go to  80
 !
 !     Compute partial derivative approximations at Y=C
 !
 10 if (kswy .eq. 1) go to  20
-uyyy = (-5.0*u(i,1)+18.0*u(i,2)-24.0*u(i,3)+14.0*u(i,4)- &
-&3.0*u(i,5))/tdly3
-uyyyy = (3.0*u(i,1)-14.0*u(i,2)+26.0*u(i,3)-24.0*u(i,4)+ &
-&11.0*u(i,5)-2.0*u(i,6))/dly4
+uyyy = (-5.0*u(i,1) + 18.0*u(i,2) - 24.0*u(i,3) + 14.0*u(i,4) - &
+   & 3.0*u(i,5))/tdly3
+uyyyy = (3.0*u(i,1) - 14.0*u(i,2) + 26.0*u(i,3) - 24.0*u(i,4) + &
+   & 11.0*u(i,5) - 2.0*u(i,6))/dly4
 return
 !
 !     Periodic at X=A
 !
-20 uyyy = (-u(i,l-2)+2.0*u(i,l-1)-2.0*u(i,2)+u(i,3))/tdly3
-uyyyy = (u(i,l-2)-4.0*u(i,l-1)+6.0*u(i,1)-4.0*u(i,2)+u(i,3))/dly4
+20 uyyy = (-u(i,l - 2) + 2.0*u(i,l - 1) - 2.0*u(i,2) + u(i,3))/tdly3
+uyyyy = (u(i,l - 2) - 4.0*u(i,l - 1) + 6.0*u(i,1) - 4.0*u(i,2) + u(i,3))/dly4
 return
 !
 !     Compute partial derivative approximations at Y=C+dly
 !
 30 if (kswy .eq. 1) go to  40
-uyyy = (-3.0*u(i,1)+10.0*u(i,2)-12.0*u(i,3)+6.0*u(i,4)-u(i,5))/ &
-&tdly3
-uyyyy = (2.0*u(i,1)-9.0*u(i,2)+16.0*u(i,3)-14.0*u(i,4)+6.0*u(i,5)- &
-&u(i,6))/dly4
+uyyy = (-3.0*u(i,1) + 10.0*u(i,2) - 12.0*u(i,3) + 6.0*u(i,4) - u(i,5))/ &
+   & tdly3
+uyyyy = (2.0*u(i,1) - 9.0*u(i,2) + 16.0*u(i,3) - 14.0*u(i,4) + 6.0*u(i,5) - &
+   & u(i,6))/dly4
 return
 !
 !     Periodic at Y=C+dly
 !
-40 uyyy = (-u(i,l-1)+2.0*u(i,1)-2.0*u(i,3)+u(i,4))/tdly3
-uyyyy = (u(i,l-1)-4.0*u(i,1)+6.0*u(i,2)-4.0*u(i,3)+u(i,4))/dly4
+40 uyyy = (-u(i,l - 1) + 2.0*u(i,1) - 2.0*u(i,3) + u(i,4))/tdly3
+uyyyy = (u(i,l - 1) - 4.0*u(i,1) + 6.0*u(i,2) - 4.0*u(i,3) + u(i,4))/dly4
 return
 !
 !     Compute partial derivative approximations on the interior
 !
 50 continue
-uyyy = (-u(i,j-2)+2.0*u(i,j-1)-2.0*u(i,j+1)+u(i,j+2))/tdly3
-uyyyy = (u(i,j-2)-4.0*u(i,j-1)+6.0*u(i,j)-4.0*u(i,j+1)+u(i,j+2))/ &
-&dly4
+uyyy = (-u(i,j - 2) + 2.0*u(i,j - 1) - 2.0*u(i,j + 1) + u(i,j + 2))/tdly3
+uyyyy = (u(i,j - 2) - 4.0*u(i,j - 1) + 6.0*u(i,j) - 4.0*u(i,j + 1) + u(i,j + 2))/ &
+   & dly4
 return
 !
 !     Compute partial derivative approximations at Y=D-dly
 !
 60 if (kswy .eq. 1) go to  70
-uyyy = (u(i,l-4)-6.0*u(i,l-3)+12.0*u(i,l-2)-10.0*u(i,l-1)+ &
-&3.0*u(i,l))/tdly3
-uyyyy = (-u(i,l-5)+6.0*u(i,l-4)-14.0*u(i,l-3)+16.0*u(i,l-2)- &
-&9.0*u(i,l-1)+2.0*u(i,l))/dly4
+uyyy = (u(i,l - 4) - 6.0*u(i,l - 3) + 12.0*u(i,l - 2) - 10.0*u(i,l - 1) + &
+   & 3.0*u(i,l))/tdly3
+uyyyy = (-u(i,l - 5) + 6.0*u(i,l - 4) - 14.0*u(i,l - 3) + 16.0*u(i,l - 2) - &
+   & 9.0*u(i,l - 1) + 2.0*u(i,l))/dly4
 return
 !
 !     Periodic at Y=D-dly
 !
 70 continue
-uyyy = (-u(i,l-3)+2.0*u(i,l-2)-2.0*u(i,1)+u(i,2))/tdly3
-uyyyy = (u(i,l-3)-4.0*u(i,l-2)+6.0*u(i,l-1)-4.0*u(i,1)+u(i,2))/ &
-&dly4
+uyyy = (-u(i,l - 3) + 2.0*u(i,l - 2) - 2.0*u(i,1) + u(i,2))/tdly3
+uyyyy = (u(i,l - 3) - 4.0*u(i,l - 2) + 6.0*u(i,l - 1) - 4.0*u(i,1) + u(i,2))/ &
+   & dly4
 return
 !
 !     Compute partial derivative approximations at Y=D
 !
-80 uyyy = -(3.0*u(i,l-4)-14.0*u(i,l-3)+24.0*u(i,l-2)-18.0*u(i,l-1)+ &
-&5.0*u(i,l))/tdly3
-uyyyy = (-2.0*u(i,l-5)+11.0*u(i,l-4)-24.0*u(i,l-3)+26.0*u(i,l-2)- &
-&14.0*u(i,l-1)+3.0*u(i,l))/dly4
+80 uyyy = -(3.0*u(i,l - 4) - 14.0*u(i,l - 3) + 24.0*u(i,l - 2) - 18.0*u(i,l - 1) + &
+   & 5.0*u(i,l))/tdly3
+uyyyy = (-2.0*u(i,l - 5) + 11.0*u(i,l - 4) - 24.0*u(i,l - 3) + 26.0*u(i,l - 2) - &
+   & 14.0*u(i,l - 1) + 3.0*u(i,l))/dly4
 return
 end subroutine dyfn
 
 subroutine blktri (iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
-&ierror,w)
+   & ierror,w)
 implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
@@ -983,55 +983,55 @@ external prod0, prodp, cprod0, cprodp
 !
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 ! Test m and n for the proper form
 !
 nm = n
 ierror = 0
-if (m-5)  10, 20, 20
+if (m - 5) 10, 20, 20
 10 ierror = 1
 go to 190
-20 if (nm-3)  30, 40, 40
+20 if (nm - 3) 30, 40, 40
 30 ierror = 2
 go to 190
-40 if (idimy-m)  50, 60, 60
+40 if (idimy - m) 50, 60, 60
 50 ierror = 3
 go to 190
 60 nh = n
 npp = np
-if (npp)  70, 80, 70
-70 nh = nh+1
+if (npp) 70, 80, 70
+70 nh = nh + 1
 80 ik = 2
 k = 1
-90 ik = ik+ik
-k = k+1
-if (nh-ik) 100,100, 90
+90 ik = ik + ik
+k = k + 1
+if (nh - ik) 100,100, 90
 100 nl = ik
-ik = ik+ik
-nl = nl-1
-iwah = (k-2)*ik+k+6
+ik = ik + ik
+nl = nl - 1
+iwah = (k - 2)*ik + k + 6
 if (npp) 110,120,110
 !
 !     Divide w into working sub arrays
 !
 110 iw1 = iwah
-iwbh = iw1+nm
-w(1) = float(iw1-1+max0(2*nm,6*m))
+iwbh = iw1 + nm
+w(1) = float(iw1 - 1 + max0(2*nm,6*m))
 go to 130
-120 iwbh = iwah+nm+nm
+120 iwbh = iwah + nm + nm
 iw1 = iwbh
-w(1) = float(iw1-1+max0(2*nm,6*m))
-nm = nm-1
+w(1) = float(iw1 - 1 + max0(2*nm,6*m))
+nm = nm - 1
 !
 ! Subroutine compb computes the roots of the B polynomials
 !
 130 if (ierror) 190,140,190
-140 iw2 = iw1+m
-iw3 = iw2+m
-iwd = iw3+m
-iww = iwd+m
-iwu = iww+m
+140 iw2 = iw1 + m
+iw3 = iw2 + m
+iwd = iw3 + m
+iww = iwd + m
+iwu = iww + m
 if (iflg) 160,150,160
 150 call compb (nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
 go to 190
@@ -1040,23 +1040,23 @@ go to 190
 ! Subroutine blktr1 solves the linear system
 !
 170 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
-&w(iw3),w(iwd),w(iww),w(iwu),prod0,cprod0)
+   & w(iw3),w(iwd),w(iww),w(iwu),prod0,cprod0)
 go to 190
 180 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
-&w(iw3),w(iwd),w(iww),w(iwu),prodp,cprodp)
+   & w(iw3),w(iwd),w(iww),w(iwu),prodp,cprodp)
 190 continue
 return
 end subroutine blktri
 
 subroutine blktr1 (n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
-&ww,wu,prdct,cprdct)
+   & ww,wu,prdct,cprdct)
 implicit none
 integer :: idimy, m, n
 real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
-&w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
+   & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
 integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
-&imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
-&izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
+   & imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
+   & izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
 real :: dum
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -1073,52 +1073,52 @@ real :: cnv, eps
 !
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 ! Begin reduction phase
 !
-kdo = k-1
-do l=1,kdo
-   ir = l-1
+kdo = k - 1
+do l = 1,kdo
+   ir = l - 1
    i2 = 2**ir
    i1 = i2/2
-   i3 = i2+i1
-   i4 = i2+i2
-   irm1 = ir-1
+   i3 = i2 + i1
+   i4 = i2 + i2
+   irm1 = ir - 1
    call indxb (i2,ir,im2,nm2)
    call indxb (i1,irm1,im3,nm3)
    call indxb (i3,irm1,im1,nm1)
    call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
-&m,am,bm,cm,wd,ww,wu)
+      & m,am,bm,cm,wd,ww,wu)
    if = 2**k
    do 80 i = i4,if,i4
-      if (i-nm)  10, 10, 80
-10 ipi1 = i+i1
-      ipi2 = i+i2
-      ipi3 = i+i3
+      if (i - nm) 10, 10, 80
+10    ipi1 = i + i1
+      ipi2 = i + i2
+      ipi3 = i + i3
       call indxc (i,ir,idxc,nc)
-      if (i-if)  20, 80, 80
-20 call indxa (i,ir,idxa,na)
-      call indxb (i-i1,irm1,im1,nm1)
+      if (i - if) 20, 80, 80
+20    call indxa (i,ir,idxa,na)
+      call indxb (i - i1,irm1,im1,nm1)
       call indxb (ipi2,ir,ip2,np2)
       call indxb (ipi1,irm1,ip1,np1)
       call indxb (ipi3,irm1,ip3,np3)
       call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
-&bm,cm,wd,ww,wu)
-      if (ipi2-nm)  50, 50, 30
-30 do j=1,m
+         & bm,cm,wd,ww,wu)
+      if (ipi2 - nm) 50, 50, 30
+30    do j = 1,m
          w3(j) = 0.
          w2(j) = 0.
       end do
       go to  60
-50 call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum, &
-&y(1,ipi2),w3,m,am,bm,cm,wd,ww,wu)
+50    call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum, &
+         & y(1,ipi2),w3,m,am,bm,cm,wd,ww,wu)
       call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w3,w2,m,am, &
-&bm,cm,wd,ww,wu)
-60 do j=1,m
-         y(j,i) = w1(j)+w2(j)+y(j,i)
+         & bm,cm,wd,ww,wu)
+60    do j = 1,m
+         y(j,i) = w1(j) + w2(j) + y(j,i)
       end do
-80 continue
+80    continue
 end do
 if (npp) 320,100,320
 !
@@ -1127,165 +1127,165 @@ if (npp) 320,100,320
 100 if = 2**k
 i = if/2
 i1 = i/2
-call indxb (i-i1,k-2,im1,nm1)
-call indxb (i+i1,k-2,ip1,np1)
-call indxb (i,k-1,iz,nz)
+call indxb (i - i1,k - 2,im1,nm1)
+call indxb (i + i1,k - 2,ip1,np1)
+call indxb (i,k - 1,iz,nz)
 call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
-&bm,cm,wd,ww,wu)
+   & bm,cm,wd,ww,wu)
 izr = i
-do j=1,m
+do j = 1,m
    w2(j) = w1(j)
 end do
-do ll=2,k
-   l = k-ll+1
-   ir = l-1
+do ll = 2,k
+   l = k - ll + 1
+   ir = l - 1
    i2 = 2**ir
    i1 = i2/2
    i = i2
    call indxc (i,ir,idxc,nc)
    call indxb (i,ir,iz,nz)
-   call indxb (i-i1,ir-1,im1,nm1)
-   call indxb (i+i1,ir-1,ip1,np1)
+   call indxb (i - i1,ir - 1,im1,nm1)
+   call indxb (i + i1,ir - 1,ip1,np1)
    call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w1,w1,m,am,bm, &
-&cm,wd,ww,wu)
-   do j=1,m
-      w1(j) = y(j,i)+w1(j)
+      & cm,wd,ww,wu)
+   do j = 1,m
+      w1(j) = y(j,i) + w1(j)
    end do
    call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
-&bm,cm,wd,ww,wu)
+      & bm,cm,wd,ww,wu)
 end do
 do 180 ll = 2,k
-   l = k-ll+1
-   ir = l-1
+   l = k - ll + 1
+   ir = l - 1
    i2 = 2**ir
    i1 = i2/2
-   i4 = i2+i2
-   ifd = if-i2
+   i4 = i2 + i2
+   ifd = if - i2
    do 170 i = i2,ifd,i4
-      if (i-i2-izr) 170,140,170
-140 if (i-nm) 150,150,180
-150 call indxa (i,ir,idxa,na)
+      if (i - i2 - izr) 170,140,170
+140   if (i - nm) 150,150,180
+150   call indxa (i,ir,idxa,na)
       call indxb (i,ir,iz,nz)
-      call indxb (i-i1,ir-1,im1,nm1)
-      call indxb (i+i1,ir-1,ip1,np1)
+      call indxb (i - i1,ir - 1,im1,nm1)
+      call indxb (i + i1,ir - 1,ip1,np1)
       call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w2,w2,m,am, &
-&bm,cm,wd,ww,wu)
-      do j=1,m
-         w2(j) = y(j,i)+w2(j)
+         & bm,cm,wd,ww,wu)
+      do j = 1,m
+         w2(j) = y(j,i) + w2(j)
       end do
       call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
-&am,bm,cm,wd,ww,wu)
+         & am,bm,cm,wd,ww,wu)
       izr = i
-      if (i-nm) 170,190,170
-170 continue
+      if (i - nm) 170,190,170
+170   continue
 180 continue
-190 do j=1,m
-   y(j,nm+1) = y(j,nm+1)-cn(nm+1)*w1(j)-an(nm+1)*w2(j)
+190 do j = 1,m
+   y(j,nm + 1) = y(j,nm + 1) - cn(nm + 1)*w1(j) - an(nm + 1)*w2(j)
 end do
-call indxb (if/2,k-1,im1,nm1)
-call indxb (if,k-1,ip,np)
+call indxb (if/2,k - 1,im1,nm1)
+call indxb (if,k - 1,ip,np)
 if (ncmplx) 210,220,210
-210 call cprdct (nm+1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm+1), &
-&y(1,nm+1),m,am,bm,cm,w1,w3,ww)
+210 call cprdct (nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
+   & y(1,nm + 1),m,am,bm,cm,w1,w3,ww)
 go to 230
-220 call prdct (nm+1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm+1), &
-&y(1,nm+1),m,am,bm,cm,wd,ww,wu)
-230 do j=1,m
-   w1(j) = an(1)*y(j,nm+1)
-   w2(j) = cn(nm)*y(j,nm+1)
-   y(j,1) = y(j,1)-w1(j)
-   y(j,nm) = y(j,nm)-w2(j)
+220 call prdct (nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
+   & y(1,nm + 1),m,am,bm,cm,wd,ww,wu)
+230 do j = 1,m
+   w1(j) = an(1)*y(j,nm + 1)
+   w2(j) = cn(nm)*y(j,nm + 1)
+   y(j,1) = y(j,1) - w1(j)
+   y(j,nm) = y(j,nm) - w2(j)
 end do
-do l=1,kdo
-   ir = l-1
+do l = 1,kdo
+   ir = l - 1
    i2 = 2**ir
-   i4 = i2+i2
+   i4 = i2 + i2
    i1 = i2/2
    i = i4
    call indxa (i,ir,idxa,na)
-   call indxb (i-i2,ir,im2,nm2)
-   call indxb (i-i2-i1,ir-1,im3,nm3)
-   call indxb (i-i1,ir-1,im1,nm1)
+   call indxb (i - i2,ir,im2,nm2)
+   call indxb (i - i2 - i1,ir - 1,im3,nm3)
+   call indxb (i - i1,ir - 1,im1,nm1)
    call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,w1,w1,m,am, &
-&bm,cm,wd,ww,wu)
+      & bm,cm,wd,ww,wu)
    call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w1,w1,m,am,bm, &
-&cm,wd,ww,wu)
-   do j=1,m
-      y(j,i) = y(j,i)-w1(j)
+      & cm,wd,ww,wu)
+   do j = 1,m
+      y(j,i) = y(j,i) - w1(j)
    end do
 end do
 !
 izr = nm
 do 310 l = 1,kdo
-   ir = l-1
+   ir = l - 1
    i2 = 2**ir
    i1 = i2/2
-   i3 = i2+i1
-   i4 = i2+i2
-   irm1 = ir-1
+   i3 = i2 + i1
+   i4 = i2 + i2
+   irm1 = ir - 1
    do 300 i = i4,if,i4
-      ipi1 = i+i1
-      ipi2 = i+i2
-      ipi3 = i+i3
-      if (ipi2-izr) 270,280,270
-270 if (i-izr) 300,310,300
-280 call indxc (i,ir,idxc,nc)
+      ipi1 = i + i1
+      ipi2 = i + i2
+      ipi3 = i + i3
+      if (ipi2 - izr) 270,280,270
+270   if (i - izr) 300,310,300
+280   call indxc (i,ir,idxc,nc)
       call indxb (ipi2,ir,ip2,np2)
       call indxb (ipi1,irm1,ip1,np1)
       call indxb (ipi3,irm1,ip3,np3)
       call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum,w2,w2,m, &
-&am,bm,cm,wd,ww,wu)
+         & am,bm,cm,wd,ww,wu)
       call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w2,w2,m,am, &
-&bm,cm,wd,ww,wu)
-      do j=1,m
-         y(j,i) = y(j,i)-w2(j)
+         & bm,cm,wd,ww,wu)
+      do j = 1,m
+         y(j,i) = y(j,i) - w2(j)
       end do
       izr = i
       go to 310
-300 continue
+300   continue
 310 continue
 !
 ! Begin back substitution phase
 !
-320 do ll=1,k
-   l = k-ll+1
-   ir = l-1
-   irm1 = ir-1
+320 do ll = 1,k
+   l = k - ll + 1
+   ir = l - 1
+   irm1 = ir - 1
    i2 = 2**ir
    i1 = i2/2
-   i4 = i2+i2
-   ifd = if-i2
+   i4 = i2 + i2
+   ifd = if - i2
    do 430 i = i2,ifd,i4
-      if (i-nm) 330,330,430
-330 imi1 = i-i1
-      imi2 = i-i2
-      ipi1 = i+i1
-      ipi2 = i+i2
+      if (i - nm) 330,330,430
+330   imi1 = i - i1
+      imi2 = i - i2
+      ipi1 = i + i1
+      ipi2 = i + i2
       call indxa (i,ir,idxa,na)
       call indxc (i,ir,idxc,nc)
       call indxb (i,ir,iz,nz)
       call indxb (imi1,irm1,im1,nm1)
       call indxb (ipi1,irm1,ip1,np1)
-      if (i-i2) 340,340,360
-340 do j=1,m
+      if (i - i2) 340,340,360
+340   do j = 1,m
          w1(j) = 0.
       end do
       go to 370
-360 call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
-&w1,m,am,bm,cm,wd,ww,wu)
-370 if (ipi2-nm) 400,400,380
-380 do j=1,m
+360   call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
+         & w1,m,am,bm,cm,wd,ww,wu)
+370   if (ipi2 - nm) 400,400,380
+380   do j = 1,m
          w2(j) = 0.
       end do
       go to 410
-400 call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),y(1,ipi2), &
-&w2,m,am,bm,cm,wd,ww,wu)
-410 do j=1,m
-         w1(j) = y(j,i)+w1(j)+w2(j)
+400   call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),y(1,ipi2), &
+         & w2,m,am,bm,cm,wd,ww,wu)
+410   do j = 1,m
+         w1(j) = y(j,i) + w1(j) + w2(j)
       end do
       call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,y(1,i), &
-&m,am,bm,cm,wd,ww,wu)
-430 continue
+         & m,am,bm,cm,wd,ww,wu)
+430   continue
 end do
 return
 end subroutine blktr1
@@ -1296,11 +1296,11 @@ integer :: i, idxa, ir, na
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 na = 2**ir
-idxa = i-na+1
-if (i-nm)  20, 20, 10
+idxa = i - na + 1
+if (i - nm) 20, 20, 10
 10 na = 0
 20 return
 end subroutine indxa
@@ -1311,11 +1311,11 @@ integer :: i, idxc, ir, nc
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 nc = 2**ir
 idxc = i
-if (idxc+nc-1-nm)  20, 20, 10
+if (idxc + nc - 1 - nm) 20, 20, 10
 10 nc = 0
 20 return
 end subroutine indxc
@@ -1330,24 +1330,24 @@ real :: cnv, eps
 ! B(idx) is the location of the first root of the B(i,ir) polynomial
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 idp = 0
-if (ir)  70, 10, 30
-10 if (i-nm)  20, 20, 70
+if (ir) 70, 10, 30
+10 if (i - nm) 20, 20, 70
 20 idx = i
 idp = 1
 return
 30 izh = 2**ir
-id = i-izh-izh
-idx = id+id+(ir-1)*ik+ir+(ik-i)/izh+4
-ipl = izh-1
-idp = izh+izh-1
-if (i-ipl-nm)  50, 50, 40
+id = i - izh - izh
+idx = id + id + (ir - 1)*ik + ir + (ik - i)/izh + 4
+ipl = izh - 1
+idp = izh + izh - 1
+if (i - ipl - nm) 50, 50, 40
 40 idp = 0
 return
-50 if (i+ipl-nm)  70, 70, 60
-60 idp = nm+ipl-i+1
+50 if (i + ipl - nm) 70, 70, 60
+60 idp = nm + ipl - i + 1
 70 return
 end subroutine indxb
 
@@ -1377,50 +1377,50 @@ real :: den, rt
 ! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-do j=1,m
+do j = 1,m
    w(j) = x(j)
    y(j) = w(j)
 end do
-mm = m-1
+mm = m - 1
 id = nd
 ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if (ia)  50, 50, 30
+20 if (ia) 50, 50, 30
 30 rt = aa(ia)
 if (nd .eq. 0) rt = -rt
-ia = ia-1
+ia = ia - 1
 !
 ! Scalar multiplication
 !
-do j=1,m
+do j = 1,m
    y(j) = rt*w(j)
 end do
 50 if (id) 250,250, 60
 60 rt = bd(id)
-id = id-1
+id = id - 1
 if (id .eq. 0) ibr = 1
 !
 ! Begin solution to system
 !
-d(m) = a(m)/(b(m)-rt)
-w(m) = y(m)/(b(m)-rt)
-do j=2,mm
-   k = m-j
-   den = b(k+1)-rt-c(k+1)*d(k+2)
-   d(k+1) = a(k+1)/den
-   w(k+1) = (y(k+1)-c(k+1)*w(k+2))/den
+d(m) = a(m)/(b(m) - rt)
+w(m) = y(m)/(b(m) - rt)
+do j = 2,mm
+   k = m - j
+   den = b(k + 1) - rt - c(k + 1)*d(k + 2)
+   d(k + 1) = a(k + 1)/den
+   w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
-den = b(1)-rt-c(1)*d(2)
+den = b(1) - rt - c(1)*d(2)
 w(1) = 1.
-if (den)  80, 90, 80
-80 w(1) = (y(1)-c(1)*w(2))/den
-90 do j=2,m
-   w(j) = w(j)-d(j)*w(j-1)
+if (den) 80, 90, 80
+80 w(1) = (y(1) - c(1)*w(2))/den
+90 do j = 2,m
+   w(j) = w(j) - d(j)*w(j - 1)
 end do
 if (na) 130,130, 20
-110 do j=1,m
+110 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
@@ -1428,18 +1428,18 @@ go to  20
 130 if (m1) 140,140,150
 140 if (m2) 110,110,200
 150 if (m2) 170,170,160
-160 if (abs(bm1(m1))-abs(bm2(m2))) 200,200,170
+160 if (abs(bm1(m1)) - abs(bm2(m2))) 200,200,170
 170 if (ibr) 180,180,190
-180 if (abs(bm1(m1)-bd(id))-abs(bm1(m1)-rt)) 110,190,190
-190 rt = rt-bm1(m1)
-m1 = m1-1
+180 if (abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) 110,190,190
+190 rt = rt - bm1(m1)
+m1 = m1 - 1
 go to 230
 200 if (ibr) 210,210,220
-210 if (abs(bm2(m2)-bd(id))-abs(bm2(m2)-rt)) 110,220,220
-220 rt = rt-bm2(m2)
-m2 = m2-1
-230 do j=1,m
-   y(j) = y(j)+rt*w(j)
+210 if (abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) 110,220,220
+220 rt = rt - bm2(m2)
+m2 = m2 - 1
+230 do j = 1,m
+   y(j) = y(j) + rt*w(j)
 end do
 go to  20
 250 return
@@ -1469,66 +1469,66 @@ real :: am, bh, den, rt, v, ym
 ! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-do j=1,m
+do j = 1,m
    y(j) = x(j)
    w(j) = y(j)
 end do
-mm = m-1
-mm2 = m-2
+mm = m - 1
+mm2 = m - 2
 id = nd
 ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if (ia)  50, 50, 30
+20 if (ia) 50, 50, 30
 30 rt = aa(ia)
 if (nd .eq. 0) rt = -rt
-ia = ia-1
-do j=1,m
+ia = ia - 1
+do j = 1,m
    y(j) = rt*w(j)
 end do
 50 if (id) 280,280, 60
 60 rt = bd(id)
-id = id-1
+id = id - 1
 if (id .eq. 0) ibr = 1
 !
 ! Begin solution to system
 !
-bh = b(m)-rt
+bh = b(m) - rt
 ym = y(m)
-den = b(1)-rt
+den = b(1) - rt
 d(1) = c(1)/den
 u(1) = a(1)/den
 w(1) = y(1)/den
 v = c(m)
-if (mm2-2)  90, 70, 70
-70 do j=2,mm2
-   den = b(j)-rt-a(j)*d(j-1)
+if (mm2 - 2) 90, 70, 70
+70 do j = 2,mm2
+   den = b(j) - rt - a(j)*d(j - 1)
    d(j) = c(j)/den
-   u(j) = -a(j)*u(j-1)/den
-   w(j) = (y(j)-a(j)*w(j-1))/den
-   bh = bh-v*u(j-1)
-   ym = ym-v*w(j-1)
-   v = -v*d(j-1)
+   u(j) = -a(j)*u(j - 1)/den
+   w(j) = (y(j) - a(j)*w(j - 1))/den
+   bh = bh - v*u(j - 1)
+   ym = ym - v*w(j - 1)
+   v = -v*d(j - 1)
 end do
-90 den = b(m-1)-rt-a(m-1)*d(m-2)
-d(m-1) = (c(m-1)-a(m-1)*u(m-2))/den
-w(m-1) = (y(m-1)-a(m-1)*w(m-2))/den
-am = a(m)-v*d(m-2)
-bh = bh-v*u(m-2)
-ym = ym-v*w(m-2)
-den = bh-am*d(m-1)
+90 den = b(m - 1) - rt - a(m - 1)*d(m - 2)
+d(m - 1) = (c(m - 1) - a(m - 1)*u(m - 2))/den
+w(m - 1) = (y(m - 1) - a(m - 1)*w(m - 2))/den
+am = a(m) - v*d(m - 2)
+bh = bh - v*u(m - 2)
+ym = ym - v*w(m - 2)
+den = bh - am*d(m - 1)
 if (den) 100,110,100
-100 w(m) = (ym-am*w(m-1))/den
+100 w(m) = (ym - am*w(m - 1))/den
 go to 120
 110 w(m) = 1.
-120 w(m-1) = w(m-1)-d(m-1)*w(m)
-do j=2,mm
-   k = m-j
-   w(k) = w(k)-d(k)*w(k+1)-u(k)*w(m)
+120 w(m - 1) = w(m - 1) - d(m - 1)*w(m)
+do j = 2,mm
+   k = m - j
+   w(k) = w(k) - d(k)*w(k + 1) - u(k)*w(m)
 end do
 if (na) 160,160, 20
-140 do j=1,m
+140 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
@@ -1536,18 +1536,18 @@ go to  20
 160 if (m1) 170,170,180
 170 if (m2) 140,140,230
 180 if (m2) 200,200,190
-190 if (abs(bm1(m1))-abs(bm2(m2))) 230,230,200
+190 if (abs(bm1(m1)) - abs(bm2(m2))) 230,230,200
 200 if (ibr) 210,210,220
-210 if (abs(bm1(m1)-bd(id))-abs(bm1(m1)-rt)) 140,220,220
-220 rt = rt-bm1(m1)
-m1 = m1-1
+210 if (abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) 140,220,220
+220 rt = rt - bm1(m1)
+m1 = m1 - 1
 go to 260
 230 if (ibr) 240,240,250
-240 if (abs(bm2(m2)-bd(id))-abs(bm2(m2)-rt)) 140,250,250
-250 rt = rt-bm2(m2)
-m2 = m2-1
-260 do j=1,m
-   y(j) = y(j)+rt*w(j)
+240 if (abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) 140,250,250
+250 rt = rt - bm2(m2)
+m2 = m2 - 1
+260 do j = 1,m
+   y(j) = y(j) + rt*w(j)
 end do
 go to  20
 280 return
@@ -1578,78 +1578,78 @@ complex :: crt, den, y1, y2
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-do j=1,m
+do j = 1,m
    y(j) = cmplx(x(j),0.)
 end do
-mm = m-1
+mm = m - 1
 id = nd
 m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if (id)  90, 90, 30
+if (id) 90, 90, 30
 30 crt = bd(id)
-id = id-1
+id = id - 1
 !
 ! Begin solution to system
 !
-d(m) = a(m)/(b(m)-crt)
-w(m) = y(m)/(b(m)-crt)
-do j=2,mm
-   k = m-j
-   den = b(k+1)-crt-c(k+1)*d(k+2)
-   d(k+1) = a(k+1)/den
-   w(k+1) = (y(k+1)-c(k+1)*w(k+2))/den
+d(m) = a(m)/(b(m) - crt)
+w(m) = y(m)/(b(m) - crt)
+do j = 2,mm
+   k = m - j
+   den = b(k + 1) - crt - c(k + 1)*d(k + 2)
+   d(k + 1) = a(k + 1)/den
+   w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
-den = b(1)-crt-c(1)*d(2)
-if (cabs(den))  50, 60, 50
-50 y(1) = (y(1)-c(1)*w(2))/den
+den = b(1) - crt - c(1)*d(2)
+if (cabs(den)) 50, 60, 50
+50 y(1) = (y(1) - c(1)*w(2))/den
 go to  70
 60 y(1) = (1.,0.)
-70 do j=2,m
-   y(j) = w(j)-d(j)*y(j-1)
+70 do j = 2,m
+   y(j) = w(j) - d(j)*y(j - 1)
 end do
 90 if (m1) 100,100,120
 100 if (m2) 210,210,110
 110 rt = bm2(m2)
-m2 = m2-1
+m2 = m2 - 1
 go to 170
 120 if (m2) 130,130,140
 130 rt = bm1(m1)
-m1 = m1-1
+m1 = m1 - 1
 go to 170
-140 if (abs(bm1(m1))-abs(bm2(m2))) 160,160,150
+140 if (abs(bm1(m1)) - abs(bm2(m2))) 160,160,150
 150 rt = bm1(m1)
-m1 = m1-1
+m1 = m1 - 1
 go to 170
 160 rt = bm2(m2)
-m2 = m2-1
-170 y1 = (b(1)-rt)*y(1)+c(1)*y(2)
-if (mm-2) 200,180,180
+m2 = m2 - 1
+170 y1 = (b(1) - rt)*y(1) + c(1)*y(2)
+if (mm - 2) 200,180,180
 !
 ! Matrix multiplication
 !
-180 do j=2,mm
-   y2 = a(j)*y(j-1)+(b(j)-rt)*y(j)+c(j)*y(j+1)
-   y(j-1) = y1
+180 do j = 2,mm
+   y2 = a(j)*y(j - 1) + (b(j) - rt)*y(j) + c(j)*y(j + 1)
+   y(j - 1) = y1
    y1 = y2
 end do
-200 y(m) = a(m)*y(m-1)+(b(m)-rt)*y(m)
-y(m-1) = y1
+200 y(m) = a(m)*y(m - 1) + (b(m) - rt)*y(m)
+y(m - 1) = y1
 iflg = 1
 go to  20
 210 if (ia) 240,240,220
 220 rt = aa(ia)
-ia = ia-1
+ia = ia - 1
 iflg = 1
 !
 ! Scalar multiplication
 !
-do j=1,m
+do j = 1,m
    y(j) = rt*y(j)
 end do
 240 if (iflg) 250,250, 20
-250 do j=1,m
+250 do j = 1,m
    yy(j) = real(y(j))
 end do
 return
@@ -1681,11 +1681,11 @@ complex :: v, den, bh, ym, am, y1, y2, yh, crt
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-do j=1,m
+do j = 1,m
    y(j) = cmplx(x(j),0.)
 end do
-mm = m-1
-mm2 = m-2
+mm = m - 1
+mm2 = m - 2
 id = nd
 m1 = nm1
 m2 = nm2
@@ -1693,86 +1693,86 @@ ia = na
 20 iflg = 0
 if (id) 110,110, 30
 30 crt = bd(id)
-id = id-1
+id = id - 1
 iflg = 1
 !
 ! Begin solution to system
 !
-bh = b(m)-crt
+bh = b(m) - crt
 ym = y(m)
-den = b(1)-crt
+den = b(1) - crt
 d(1) = c(1)/den
 u(1) = a(1)/den
 y(1) = y(1)/den
 v = cmplx(c(m),0.)
-if (mm2-2)  60, 40, 40
-40 do j=2,mm2
-   den = b(j)-crt-a(j)*d(j-1)
+if (mm2 - 2) 60, 40, 40
+40 do j = 2,mm2
+   den = b(j) - crt - a(j)*d(j - 1)
    d(j) = c(j)/den
-   u(j) = -a(j)*u(j-1)/den
-   y(j) = (y(j)-a(j)*y(j-1))/den
-   bh = bh-v*u(j-1)
-   ym = ym-v*y(j-1)
-   v = -v*d(j-1)
+   u(j) = -a(j)*u(j - 1)/den
+   y(j) = (y(j) - a(j)*y(j - 1))/den
+   bh = bh - v*u(j - 1)
+   ym = ym - v*y(j - 1)
+   v = -v*d(j - 1)
 end do
-60 den = b(m-1)-crt-a(m-1)*d(m-2)
-d(m-1) = (c(m-1)-a(m-1)*u(m-2))/den
-y(m-1) = (y(m-1)-a(m-1)*y(m-2))/den
-am = a(m)-v*d(m-2)
-bh = bh-v*u(m-2)
-ym = ym-v*y(m-2)
-den = bh-am*d(m-1)
-if (cabs(den))  70, 80, 70
-70 y(m) = (ym-am*y(m-1))/den
+60 den = b(m - 1) - crt - a(m - 1)*d(m - 2)
+d(m - 1) = (c(m - 1) - a(m - 1)*u(m - 2))/den
+y(m - 1) = (y(m - 1) - a(m - 1)*y(m - 2))/den
+am = a(m) - v*d(m - 2)
+bh = bh - v*u(m - 2)
+ym = ym - v*y(m - 2)
+den = bh - am*d(m - 1)
+if (cabs(den)) 70, 80, 70
+70 y(m) = (ym - am*y(m - 1))/den
 go to  90
 80 y(m) = (1.,0.)
-90 y(m-1) = y(m-1)-d(m-1)*y(m)
-do j=2,mm
-   k = m-j
-   y(k) = y(k)-d(k)*y(k+1)-u(k)*y(m)
+90 y(m - 1) = y(m - 1) - d(m - 1)*y(m)
+do j = 2,mm
+   k = m - j
+   y(k) = y(k) - d(k)*y(k + 1) - u(k)*y(m)
 end do
 110 if (m1) 120,120,140
 120 if (m2) 230,230,130
 130 rt = bm2(m2)
-m2 = m2-1
+m2 = m2 - 1
 go to 190
 140 if (m2) 150,150,160
 150 rt = bm1(m1)
-m1 = m1-1
+m1 = m1 - 1
 go to 190
-160 if (abs(bm1(m1))-abs(bm2(m2))) 180,180,170
+160 if (abs(bm1(m1)) - abs(bm2(m2))) 180,180,170
 170 rt = bm1(m1)
-m1 = m1-1
+m1 = m1 - 1
 go to 190
 180 rt = bm2(m2)
-m2 = m2-1
+m2 = m2 - 1
 !
 ! Matrix multiplication
 !
 190 yh = y(1)
-y1 = (b(1)-rt)*y(1)+c(1)*y(2)+a(1)*y(m)
-if (mm-2) 220,200,200
-200 do j=2,mm
-   y2 = a(j)*y(j-1)+(b(j)-rt)*y(j)+c(j)*y(j+1)
-   y(j-1) = y1
+y1 = (b(1) - rt)*y(1) + c(1)*y(2) + a(1)*y(m)
+if (mm - 2) 220,200,200
+200 do j = 2,mm
+   y2 = a(j)*y(j - 1) + (b(j) - rt)*y(j) + c(j)*y(j + 1)
+   y(j - 1) = y1
    y1 = y2
 end do
-220 y(m) = a(m)*y(m-1)+(b(m)-rt)*y(m)+c(m)*yh
-y(m-1) = y1
+220 y(m) = a(m)*y(m - 1) + (b(m) - rt)*y(m) + c(m)*yh
+y(m - 1) = y1
 iflg = 1
 go to  20
 230 if (ia) 260,260,240
 240 rt = aa(ia)
-ia = ia-1
+ia = ia - 1
 iflg = 1
 !
 ! Scalar multiplication
 !
-do j=1,m
+do j = 1,m
    y(j) = rt*y(j)
 end do
 260 if (iflg) 270,270, 20
-270 do j=1,m
+270 do j = 1,m
    yy(j) = real(y(j))
 end do
 return
@@ -1783,7 +1783,7 @@ implicit none
 integer :: ierror, n
 real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
 integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
-&kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
+   & kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
 real :: arg, bnorm, d1, d2, d3
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -1795,55 +1795,55 @@ real :: spmpar
 !     less than 0 for some j. ah and bh are temporary work arrays.
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 eps = spmpar(1)
 bnorm = abs(bn(1))
-do j=2,nm
+do j = 2,nm
    bnorm = amax1(bnorm,abs(bn(j)))
-   arg = an(j)*cn(j-1)
+   arg = an(j)*cn(j - 1)
    if (arg) 220, 30, 30
 30 b(j) = sign(sqrt(arg),an(j))
 end do
 cnv = eps*bnorm
 if = 2**k
-kdo = k-1
+kdo = k - 1
 do 100 l = 1,kdo
-   ir = l-1
+   ir = l - 1
    i2 = 2**ir
-   i4 = i2+i2
-   ipl = i4-1
-   ifd = if-i4
-   do i=i4,ifd,i4
+   i4 = i2 + i2
+   ipl = i4 - 1
+   ifd = if - i4
+   do i = i4,ifd,i4
       call indxb (i,l,ib,nb)
       if (nb) 100,100, 50
-50 js = i-ipl
-      jf = js+nb-1
+50    js = i - ipl
+      jf = js + nb - 1
       ls = 0
-      do j=js,jf
-         ls = ls+1
+      do j = js,jf
+         ls = ls + 1
          bh(ls) = bn(j)
          ah(ls) = b(j)
       end do
       call tqlrt0 (nb,bh,ah,ierror)
       if (ierror) 210, 70,210
-70 lh = ib-1
-      do j=1,nb
-         lh = lh+1
+70    lh = ib - 1
+      do j = 1,nb
+         lh = lh + 1
          b(lh) = -bh(j)
       end do
    end do
 100 continue
-do j=1,nm
+do j = 1,nm
    b(j) = -bn(j)
 end do
 if (npp .ne. 0) return
 !
-nmp = nm+1
-nb = nm+nmp
-do j=1,nb
-   l1 = mod(j-1,nmp)+1
-   l2 = mod(j+nm-1,nmp)+1
+nmp = nm + 1
+nb = nm + nmp
+do j = 1,nb
+   l1 = mod(j - 1,nmp) + 1
+   l2 = mod(j + nm - 1,nmp) + 1
    arg = an(l1)*cn(l2)
    if (arg .lt. 0.0) go to 220
    bh(j) = sign(sqrt(arg),-an(l1))
@@ -1852,26 +1852,26 @@ end do
 call tqlrt0 (nb,ah,bh,ierror)
 if (ierror .ne. 0) go to 210
 !
-call indxb (if,k-1,j2,lh)
-call indxb (if/2,k-1,j1,lh)
-j2 = j2+1
+call indxb (if,k - 1,j2,lh)
+call indxb (if/2,k - 1,j1,lh)
+j2 = j2 + 1
 lh = j2
-n2m2 = j2+nm+nm-2
-170 d1 = abs(b(j1)-b(j2-1))
-d2 = abs(b(j1)-b(j2))
-d3 = abs(b(j1)-b(j2+1))
+n2m2 = j2 + nm + nm - 2
+170 d1 = abs(b(j1) - b(j2 - 1))
+d2 = abs(b(j1) - b(j2))
+d3 = abs(b(j1) - b(j2 + 1))
 if ((d2 .lt.d1) .and. (d2 .lt.d3)) go to 180
 b(lh) = b(j2)
-j2 = j2+1
-lh = lh+1
-if (j2-n2m2) 170,170,190
-180 j2 = j2+1
-j1 = j1+1
-if (j2-n2m2) 170,170,190
-190 b(lh) = b(n2m2+1)
-call indxb (if,k-1,j1,j2)
-j2 = j1+nmp+nmp
-call ppadd (nm+1,ierror,an,cn,b(j1),b(j1),b(j2))
+j2 = j2 + 1
+lh = lh + 1
+if (j2 - n2m2) 170,170,190
+180 j2 = j2 + 1
+j1 = j1 + 1
+if (j2 - n2m2) 170,170,190
+190 b(lh) = b(n2m2 + 1)
+call indxb (if,k - 1,j1,j2)
+j2 = j1 + nmp + nmp
+call ppadd (nm + 1,ierror,an,cn,b(j1),b(j1),b(j2))
 return
 !
 !     Error return
@@ -1895,7 +1895,7 @@ real :: b, c, f, g, h, p, r, s, machep
 !
 !
 common /cblkt/  npp        ,k          ,machep     ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 !
 !     This subroutine is a modification of the EISPACK subroutine
@@ -1934,17 +1934,17 @@ common /cblkt/  npp        ,k          ,machep     ,cnv        , &
 ierr = 0
 if (n .eq. 1) go to 150
 !
-do i=2,n
-   e2(i-1) = e2(i)*e2(i)
+do i = 2,n
+   e2(i - 1) = e2(i)*e2(i)
 end do
 !
 f = 0.0
 b = 0.0
 e2(n) = 0.0
 !
-do l=1,n
+do l = 1,n
    j = 0
-   h = machep*(abs(d(l))+sqrt(e2(l)))
+   h = machep*(abs(d(l)) + sqrt(e2(l)))
    if (b .gt. h) go to  20
    b = h
    c = b*b
@@ -1957,27 +1957,27 @@ do l=1,n
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
 !
-30 continue
+30    continue
 !
 40 if (m .eq. l) go to  80
 50 if (j .eq. 30) go to 140
-   j = j+1
+   j = j + 1
 !
 !     ********** Form shift **********
 !
-   l1 = l+1
+   l1 = l + 1
    s = sqrt(e2(l))
    g = d(l)
-   p = (d(l1)-g)/(2.0*s)
-   r = sqrt(p*p+1.0)
-   d(l) = s/(p+sign(r,p))
-   h = g-d(l)
+   p = (d(l1) - g)/(2.0*s)
+   r = sqrt(p*p + 1.0)
+   d(l) = s/(p + sign(r,p))
+   h = g - d(l)
 !
-   do i=l1,n
-      d(i) = d(i)-h
+   do i = l1,n
+      d(i) = d(i) - h
    end do
 !
-   f = f+h
+   f = f + h
 !
 !     ********** RATIONAL QL TRANSFORMATION **********
 !
@@ -1985,18 +1985,18 @@ do l=1,n
    if (g .eq. 0.0) g = b
    h = g
    s = 0.0
-   mml = m-l
+   mml = m - l
 !
 !     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
 !
-   do ii=1,mml
-      i = m-ii
+   do ii = 1,mml
+      i = m - ii
       p = g*h
-      r = p+e2(i)
-      e2(i+1) = s*r
+      r = p + e2(i)
+      e2(i + 1) = s*r
       s = e2(i)/r
-      d(i+1) = h+s*(h+d(i))
-      g = d(i)-e2(i)/g
+      d(i + 1) = h + s*(h + d(i))
+      g = d(i) - e2(i)/g
       if (g .eq. 0.0) g = b
       h = g*p/r
    end do
@@ -2010,7 +2010,7 @@ do l=1,n
    if (abs(e2(l)) .le. abs(c/h)) go to  80
    e2(l) = h*e2(l)
    if (e2(l) .ne. 0.0) go to  50
-80 p = d(l)+f
+80 p = d(l) + f
 !
 !     ********** Order eigenvalues **********
 !
@@ -2018,10 +2018,10 @@ do l=1,n
 !
 !     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
 !
-   do ii=2,l
-      i = l+2-ii
-      if (p .ge. d(i-1)) go to 110
-      d(i) = d(i-1)
+   do ii = 2,l
+      i = l + 2 - ii
+      if (p .ge. d(i - 1)) go to 110
+      d(i) = d(i - 1)
    end do
 !
 100 i = 1
@@ -2030,11 +2030,11 @@ end do
 !
 if (abs(d(n)) .ge. abs(d(1))) go to 150
 nhalf = n/2
-do i=1,nhalf
-   ntop = n-i
+do i = 1,nhalf
+   ntop = n - i
    dhold = d(i)
-   d(i) = d(ntop+1)
-   d(ntop+1) = dhold
+   d(i) = d(ntop + 1)
+   d(ntop + 1) = dhold
 end do
 go to 150
 !
@@ -2051,7 +2051,7 @@ integer :: ierror, n
 real :: a(*), bh(*), bp(*), c(*)
 complex :: cbp(*)
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
-&nhalf, nt
+   & nhalf, nt
 real :: db, psg, scnv, sgn, xl, xm, xr
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -2072,50 +2072,50 @@ external psgf, ppspf, ppsgf
 !     which enters through bp.
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 !
 scnv = sqrt(cnv)
 iz = n
-izm = iz-1
-izm2 = iz-2
-if (bp(n)-bp(1))  10,420, 30
-10 do j=1,n
-   nt = n-j
-   bh(j) = bp(nt+1)
+izm = iz - 1
+izm2 = iz - 2
+if (bp(n) - bp(1)) 10,420, 30
+10 do j = 1,n
+   nt = n - j
+   bh(j) = bp(nt + 1)
 end do
 go to  50
-30 do j=1,n
+30 do j = 1,n
    bh(j) = bp(j)
 end do
 50 ncmplx = 0
 modiz = mod(iz,2)
 is = 1
-if (modiz)  60, 70, 60
+if (modiz) 60, 70, 60
 60 if (a(1)) 100,420, 70
 70 xl = bh(1)
-db = bh(3)-bh(1)
-80 xl = xl-db
-if (psgf(xl,iz,c,a,bh))  80, 80, 90
+db = bh(3) - bh(1)
+80 xl = xl - db
+if (psgf(xl,iz,c,a,bh)) 80, 80, 90
 90 sgn = -1.
 cbp(1) = cmplx(bsrh(xl,bh(1),iz,c,a,bh,psgf,sgn),0.)
 is = 2
-100 if = iz-1
+100 if = iz - 1
 if (modiz) 110,120,110
 110 if (a(1)) 120,420,150
 120 xr = bh(iz)
-db = bh(iz)-bh(iz-2)
-130 xr = xr+db
+db = bh(iz) - bh(iz - 2)
+130 xr = xr + db
 if (psgf(xr,iz,c,a,bh)) 130,140,140
 140 sgn = 1.
 cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
-if = iz-2
+if = iz - 2
 150 do 360 ig = is,if,2
    xl = bh(ig)
-   xr = bh(ig+1)
+   xr = bh(ig + 1)
    sgn = -1.
    xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
    psg = psgf(xm,iz,c,a,bh)
-   if (abs(psg)-eps) 180,180,160
+   if (abs(psg) - eps) 180,180,160
 160 if (psg*ppsgf(xm,iz,c,a,bh)) 170,180,190
 !
 !     Case of a real zero
@@ -2123,13 +2123,13 @@ if = iz-2
 170 sgn = 1.
    cbp(ig) = cmplx(bsrh(bh(ig),xm,iz,c,a,bh,psgf,sgn),0.)
    sgn = -1.
-   cbp(ig+1) = cmplx(bsrh(xm,bh(ig+1),iz,c,a,bh,psgf,sgn),0.)
+   cbp(ig + 1) = cmplx(bsrh(xm,bh(ig + 1),iz,c,a,bh,psgf,sgn),0.)
    go to 360
 !
 !     Case of a multiple zero
 !
 180 cbp(ig) = cmplx(xm,0.)
-   cbp(ig+1) = cmplx(xm,0.)
+   cbp(ig + 1) = cmplx(xm,0.)
    go to 360
 !
 !     Case of a complex zero
@@ -2141,17 +2141,17 @@ if = iz-2
    hsg = (1.,0.)
    fp = (0.,0.)
    fpp = (0.,0.)
-   do j=1,iz
-      dd = 1./(cx-bh(j))
+   do j = 1,iz
+      dd = 1./(cx - bh(j))
       fsg = fsg*a(j)*dd
       hsg = hsg*c(j)*dd
-      fp = fp+dd
-      fpp = fpp-dd*dd
+      fp = fp + dd
+      fpp = fpp - dd*dd
    end do
    if (modiz) 230,220,230
-220 f = (1.,0.)-fsg-hsg
+220 f = (1.,0.) - fsg - hsg
    go to 240
-230 f = (1.,0.)+fsg+hsg
+230 f = (1.,0.) + fsg + hsg
 240 i3 = 0
    if (cabs(fp)) 260,260,250
 250 i3 = 1
@@ -2159,10 +2159,10 @@ if = iz-2
 260 i2 = 0
    if (cabs(fpp)) 320,320,270
 270 i2 = 1
-   cdis = csqrt(fp**2-2.*f*fpp)
-   r1 = cdis-fp
-   r2 = -fp-cdis
-   if (cabs(r1)-cabs(r2)) 290,290,280
+   cdis = csqrt(fp**2 - 2.*f*fpp)
+   r1 = cdis - fp
+   r2 = -fp - cdis
+   if (cabs(r1) - cabs(r2)) 290,290,280
 280 r1 = r1/fpp
    go to 300
 290 r1 = r2/fpp
@@ -2172,30 +2172,30 @@ if = iz-2
 310 if (cabs(r3) .lt. cabs(r1)) r1 = r3
    go to 330
 320 r1 = r3
-330 cx = cx+r1
-   it = it+1
+330 cx = cx + r1
+   it = it + 1
    if (it .gt. 50) go to 420
    if (cabs(r1) .gt. scnv) go to 200
    if (icv) 340,340,350
 340 icv = 1
    go to 200
 350 cbp(ig) = cx
-   cbp(ig+1) = conjg(cx)
+   cbp(ig + 1) = conjg(cx)
 360 continue
-if (cabs(cbp(n))-cabs(cbp(1))) 370,420,390
+if (cabs(cbp(n)) - cabs(cbp(1))) 370,420,390
 370 nhalf = n/2
-do j=1,nhalf
-   nt = n-j
+do j = 1,nhalf
+   nt = n - j
    cx = cbp(j)
-   cbp(j) = cbp(nt+1)
-   cbp(nt+1) = cx
+   cbp(j) = cbp(nt + 1)
+   cbp(nt + 1) = cx
 end do
 390 ncmplx = 1
 do 400 j = 2,iz
    if (aimag(cbp(j))) 430,400,430
 400 continue
 ncmplx = 0
-do j=2,iz
+do j = 2,iz
    bp(j) = real(cbp(j))
 end do
 go to 430
@@ -2214,15 +2214,15 @@ real :: dd, fsg, hsg
 real :: psgf
 fsg = 1.
 hsg = 1.
-do j=1,iz
-   dd = 1./(x-bh(j))
+do j = 1,iz
+   dd = 1./(x - bh(j))
    fsg = fsg*a(j)*dd
    hsg = hsg*c(j)*dd
 end do
-if (mod(iz,2))  30, 20, 30
-20 psgf = 1.-fsg-hsg
+if (mod(iz,2)) 30, 20, 30
+20 psgf = 1. - fsg - hsg
 return
-30 psgf = 1.+fsg+hsg
+30 psgf = 1. + fsg + hsg
 return
 end function psgf
 
@@ -2236,18 +2236,18 @@ integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 real :: bsrh
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-&nm         ,ncmplx     ,ik
+   & nm         ,ncmplx     ,ik
 xl = xll
 xr = xrr
-dx = .5*abs(xr-xl)
-10 x = .5*(xl+xr)
-if (sgn*f(x,iz,c,a,bh))  30, 50, 20
+dx = .5*abs(xr - xl)
+10 x = .5*(xl + xr)
+if (sgn*f(x,iz,c,a,bh)) 30, 50, 20
 20 xr = x
 go to  40
 30 xl = x
 40 dx = .5*dx
-if (dx-cnv)  50, 50, 10
-50 bsrh = .5*(xl+xr)
+if (dx - cnv) 50, 50, 10
+50 bsrh = .5*(xl + xr)
 return
 end function bsrh
 
@@ -2260,8 +2260,8 @@ integer :: j
 real :: sum
 real :: ppsgf
 sum = 0.
-do j=1,iz
-   sum = sum-1./(x-bh(j))**2
+do j = 1,iz
+   sum = sum - 1./(x - bh(j))**2
 end do
 ppsgf = sum
 return
@@ -2276,8 +2276,8 @@ integer :: j
 real :: sum
 real :: ppspf
 sum = 0.
-do j=1,iz
-   sum = sum+1./(x-bh(j))
+do j = 1,iz
+   sum = sum + 1./(x - bh(j))
 end do
 ppspf = sum
 return
@@ -2609,10 +2609,10 @@ if (ix .lt. 0) ix = ix + p
 !
 t = p
 if (ix .gt. p0) go to 10
-   u = ix
-   u = u/t
-   v = 0.5 + (0.5 - u)
-   return
+u = ix
+u = u/t
+v = 0.5 + (0.5 - u)
+return
 10 v = p - ix
 v = v/t
 u = 0.5 + (0.5 - v)
@@ -2680,10 +2680,10 @@ if (ix .lt. 0) ix = ix + p
 !
 t = p
 if (ix .gt. p0) go to 10
-   u = ix
-   u = u/t
-   v = 0.5d0 + (0.5d0 - u)
-   return
+u = ix
+u = u/t
+v = 0.5d0 + (0.5d0 - u)
+return
 10 v = p - ix
 v = v/t
 u = 0.5d0 + (0.5d0 - v)
@@ -2755,10 +2755,10 @@ t = p
 d = ix - j
 d = 0.5*(d/t)
 if (ix .gt. p0) go to 10
-   u = ix
-   u = u/t
-   v = 0.5 + (0.5 - u)
-   return
+u = ix
+u = u/t
+v = 0.5 + (0.5 - u)
+return
 10 v = j
 v = v/t
 u = 0.5 + (0.5 - v)
@@ -2830,10 +2830,10 @@ t = p
 d = ix - j
 d = 0.5d0*(d/t)
 if (ix .gt. p0) go to 10
-   u = ix
-   u = u/t
-   v = 0.5d0 + (0.5d0 - u)
-   return
+u = ix
+u = u/t
+v = 0.5d0 + (0.5d0 - u)
+return
 10 v = j
 v = v/t
 u = 0.5d0 + (0.5d0 - v)
@@ -3304,9 +3304,9 @@ m = n/2
 m = m + m
 do 10 i = 1,m,2
    r = sqrt(-2.0*alog(a(i)))
-   phi = pi2*a(i+1)
+   phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
-10 a(i+1) = r*sin(phi)
+10 a(i + 1) = r*sin(phi)
 if (m .eq. n) return
 !
 20 call urng (ix,temp,1,ierr)
@@ -3336,9 +3336,9 @@ m = n/2
 m = m + m
 do 10 i = 1,m,2
    r = dsqrt(-2.d0*dlog(a(i)))
-   phi = pi2*a(i+1)
+   phi = pi2*a(i + 1)
    a(i) = r*dcos(phi)
-10 a(i+1) = r*dsin(phi)
+10 a(i + 1) = r*dsin(phi)
 if (m .eq. n) return
 !
 20 call durng (ix, temp, 1, ierr)
@@ -3467,7 +3467,7 @@ do j = 1,n
       sum = 0.0
       do 20 k = 1,i
          l = l + 1
-20 sum = sum + a(l)*x(k,j)
+20       sum = sum + a(l)*x(k,j)
       x(i,j) = sum + fmu(i)
       i = i - 1
    end do
@@ -3716,7 +3716,7 @@ do j = 1,n
       sum = 0.d0
       do 20 k = 1,i
          l = l + 1
-20 sum = sum + a(l)*x(k,j)
+20       sum = sum + a(l)*x(k,j)
       x(i,j) = sum + fmu(i)
       i = i - 1
    end do
@@ -3917,7 +3917,7 @@ if (ierror .ne. 0) go to 120
 !
 !        Loop which generates the n desired variates
 !
-do i=1,n
+do i = 1,n
    x(i) = - a*alog(x(i))
 end do
 return
@@ -4004,7 +4004,7 @@ if (ierror .ne. 0) go to 120
 !
 !        Loop which generates the n desired variates
 !
-do i=1,n
+do i = 1,n
    x(i) = - a*dlog(x(i))
 end do
 return
@@ -4390,7 +4390,7 @@ data max /2147483647/
 !     ****** xmax is a machine dependent constant. Xmax is the
 !            largest number in the floating arithmetic used.
 !
-             xmax = spmpar(3)
+xmax = spmpar(3)
 !
 !--------------------
 if (n .le. 0) go to 100
@@ -4449,7 +4449,7 @@ double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
 integer :: i, ind, max
 double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
-&x1, x2
+   & x1, x2
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
@@ -4497,7 +4497,7 @@ data max /2147483647/
 !     ****** xmax is a machine dependent constant. Xmax is the
 !            largest number in the floating arithmetic used.
 !
-             xmax = dpmpar(3)
+xmax = dpmpar(3)
 !
 !--------------------
 if (n .le. 0) go to 100
@@ -4828,8 +4828,8 @@ x(1) = fmu + sigi*x(1)
 !        sequence
 !
 c = fmu*c
-do i=2,n
-   x(i) = alpha*x(i-1) + c + sig*x(i)
+do i = 2,n
+   x(i) = alpha*x(i - 1) + c + sig*x(i)
 end do
 return
 !
@@ -4948,8 +4948,8 @@ x(1) = fmu + sigi*x(1)
 !        sequence
 !
 c = fmu*c
-do i=2,n
-   x(i) = alpha*x(i-1) + c + sig*x(i)
+do i = 2,n
+   x(i) = alpha*x(i - 1) + c + sig*x(i)
 end do
 return
 !

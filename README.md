@@ -133,6 +133,23 @@ The output must be a new file. The filter rejects preprocessor directives and
 unquoted Hollerith constants, which require separate review. Existing quoted
 FORMAT strings in the maintained library are preserved exactly.
 
+`tools/format_free_form.py` then applies three-space block indentation, IF
+condition spacing, spaces around assignment `=` and binary `+`/`-`, and removal
+of redundant leading unary `+` in assignment expressions. It handles labelled
+DO loops, including shared terminal labels, and wraps code at token boundaries
+when needed to stay within 132 columns. Quoted text, comments, and FORMAT records
+are preserved. This step applies only to the generated free-form sources;
+`nswc.f` is unchanged. To format another file, write a new output file:
+
+```sh
+python tools/format_free_form.py input.f90 --output formatted.f90
+python tools/validate_free_formatting.py
+```
+
+The validator compares complete GNU compiler dumps before and after formatting,
+allowing only removal of redundant unary-plus expression wrappers. Regeneration
+also checks tokens and literal values, and updates source-link line numbers.
+
 The generator then applies `tools/sentence_case_comments.py` to selected
 uppercase explanatory comments. Sentences continue across physical line breaks.
 The prose vocabulary and proper-name rules are maintained in

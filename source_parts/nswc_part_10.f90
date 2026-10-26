@@ -65,7 +65,7 @@ do mu = 1,n
             il = i + left
             ilkj = il - kmj
             diff = t(il) - t(ilkj)
-            wk(i,jp1) = (wk(i+1,j) - wk(i,j))/diff
+            wk(i,jp1) = (wk(i + 1,j) - wk(i,j))/diff
          end do
       end do
 !
@@ -113,17 +113,17 @@ return
 end subroutine cspp
 
 subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
-&f, kf, f1, kf1, f2, kf2, f12, kf12)
+   & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
-&my, n
+   & my, n
 real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
-&f12(kf12,n)
+   & f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
-&ds, dt, dx, dy, fi, fip1, xx, yy
+   & ds, dt, dx, dy, fi, fip1, xx, yy
 integer :: intrvl
 !-----------------------------------------------------------------------
 !
@@ -143,7 +143,7 @@ do l = 1,my
    if (yy .lt. t(2)) go to 10
    if (yy .ge. t(nm1)) go to 20
    if (l .eq. 1) go to 30
-   if (yy - y(l-1)) 30,50,40
+   if (yy - y(l - 1)) 30,50,40
 !
 10 j = 1
    go to 50
@@ -166,77 +166,77 @@ do l = 1,my
       if (xx .lt. s(2)) go to 100
       if (xx .ge. s(mm1)) go to 110
       if (k .eq. 1) go to 120
-      if (xx - x(k-1)) 120,130,140
+      if (xx - x(k - 1)) 120,130,140
 !
-100 i = 1
+100   i = 1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-110 i = mm1
+110   i = mm1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-120 i = intrvl (xx, s, m)
+120   i = intrvl (xx, s, m)
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-130 z(k,l) = z(k-1,l)
+130   z(k,l) = z(k - 1,l)
       go to 350
 !
 !           Linear forward search
 !
-140 if (xx .lt. s(i + 1)) go to 210
-150 i = i + 1
-         if (xx .ge. s(i + 1)) go to 150
+140   if (xx .lt. s(i + 1)) go to 210
+150   i = i + 1
+      if (xx .ge. s(i + 1)) go to 150
 !
 !           Computation of the jder-TH derivative of
 !           f(s(i),y), D1F(s(i),y), f(s(i+1),y), AND
 !           D1F(s(i+1),y) at the point YY.
 !
-200 iold = i
-         ip1 = i + 1
-         ds = s(ip1) - s(i)
+200   iold = i
+      ip1 = i + 1
+      ds = s(ip1) - s(i)
 !
-         d = (f(i,jp1) - f(i,j))/dt
-         a = f2(i,j) + f2(i,jp1)
-         b = (-a - f2(i,j) + 3.0*d)/dt
-         c = (a - d - d)/(dt*dt)
+      d = (f(i,jp1) - f(i,j))/dt
+      a = f2(i,j) + f2(i,jp1)
+      b = (-a - f2(i,j) + 3.0*d)/dt
+      c = (a - d - d)/(dt*dt)
 !
-         d = (f(ip1,jp1) - f(ip1,j))/dt
-         a = f2(ip1,j) + f2(ip1,jp1)
-         b1 = (-a - f2(ip1,j) + 3.0*d)/dt
-         c1 = (a - d - d)/(dt*dt)
+      d = (f(ip1,jp1) - f(ip1,j))/dt
+      a = f2(ip1,j) + f2(ip1,jp1)
+      b1 = (-a - f2(ip1,j) + 3.0*d)/dt
+      c1 = (a - d - d)/(dt*dt)
 !
-         d = (f1(i,jp1) - f1(i,j))/dt
-         a = f12(i,j) + f12(i,jp1)
-         b2 = (-a - f12(i,j) + 3.0*d)/dt
-         c2 = (a - d - d)/(dt*dt)
+      d = (f1(i,jp1) - f1(i,j))/dt
+      a = f12(i,j) + f12(i,jp1)
+      b2 = (-a - f12(i,j) + 3.0*d)/dt
+      c2 = (a - d - d)/(dt*dt)
 !
-         d = (f1(ip1,jp1) - f1(ip1,j))/dt
-         a = f12(ip1,j) + f12(ip1,jp1)
-         b3 = (-a - f12(ip1,j) + 3.0*d)/dt
-         c3 = (a - d - d)/(dt*dt)
+      d = (f1(ip1,jp1) - f1(ip1,j))/dt
+      a = f12(ip1,j) + f12(ip1,jp1)
+      b3 = (-a - f12(ip1,j) + 3.0*d)/dt
+      c3 = (a - d - d)/(dt*dt)
 !
-210 dy = yy - t(j)
+210   dy = yy - t(j)
       if (jder .eq. 0) go to 220
       if (jder - 2) 230,240,250
 !
-220 fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
+220   fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
       fip1 = ((c1*dy + b1)*dy + f2(ip1,j))*dy + f(ip1,j)
       dfi = ((c2*dy + b2)*dy + f12(i,j))*dy + f1(i,j)
       dfip1 = ((c3*dy + b3)*dy + f12(ip1,j))*dy + f1(ip1,j)
       go to 300
 !
-230 fi = (3.0*c*dy + 2.0*b)*dy + f2(i,j)
+230   fi = (3.0*c*dy + 2.0*b)*dy + f2(i,j)
       fip1 = (3.0*c1*dy + 2.0*b1)*dy + f2(ip1,j)
       dfi = (3.0*c2*dy + 2.0*b2)*dy + f12(i,j)
       dfip1 = (3.0*c3*dy + 2.0*b3)*dy + f12(ip1,j)
       go to 300
 !
-240 fi = 6.0*c*dy + 2.0*b
+240   fi = 6.0*c*dy + 2.0*b
       fip1 = 6.0*c1*dy + 2.0*b1
       dfi = 6.0*c2*dy + 2.0*b2
       dfip1 = 6.0*c3*dy + 2.0*b3
       go to 300
 !
-250 fi = 6.0*c
+250   fi = 6.0*c
       fip1 = 6.0*c1
       dfi = 6.0*c2
       dfip1 = 6.0*c3
@@ -244,7 +244,7 @@ do l = 1,my
 !           Computation of the ider-TH derivative
 !           at the point XX.
 !
-300 d = (fip1 - fi)/ds
+300   d = (fip1 - fi)/ds
       a = dfi + dfip1
       bx = (-a - dfi + 3.0*d)/ds
       cx = (a - d - d)/(ds*ds)
@@ -253,15 +253,15 @@ do l = 1,my
       if (ider .eq. 0) go to 310
       if (ider - 2) 320,330,340
 !
-310 z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
+310   z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
       go to 350
-320 z(k,l) = (3.0*cx*dx + 2.0*bx)*dx + dfi
+320   z(k,l) = (3.0*cx*dx + 2.0*bx)*dx + dfi
       go to 350
-330 z(k,l) = 6.0*cx*dx + 2.0*bx
+330   z(k,l) = 6.0*cx*dx + 2.0*bx
       go to 350
-340 z(k,l) = 6.0*cx
+340   z(k,l) = 6.0*cx
 !
-350 continue
+350   continue
    jold = j
 end do
 return
@@ -290,22 +290,22 @@ real, intent(in) :: s(m), t(n), f(m,n,4)
 !-----------------------------------------------------------------------
 !
 call csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
-&f(1,1,3), m, f(1,1,2), m, f(1,1,4), m)
+   & f(1,1,3), m, f(1,1,2), m, f(1,1,4), m)
 return
 end subroutine csurf1
 
 subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
-&f, kf, f1, kf1, f2, kf2, f12, kf12)
+   & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
-&my, n
+   & my, n
 real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
-&f12(kf12,n)
+   & f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
-&dt, dx, dy, fi, fip1, xx, yy
+   & dt, dx, dy, fi, fip1, xx, yy
 integer :: intrvl
 !-----------------------------------------------------------------------
 !
@@ -325,7 +325,7 @@ do l = 1,my
    if (yy .lt. t(2)) go to 10
    if (yy .ge. t(nm1)) go to 20
    if (l .eq. 1) go to 30
-   if (yy - y(l-1)) 30,50,40
+   if (yy - y(l - 1)) 30,50,40
 !
 10 j = 1
    go to 50
@@ -348,73 +348,73 @@ do l = 1,my
       if (xx .lt. s(2)) go to 100
       if (xx .ge. s(mm1)) go to 110
       if (k .eq. 1) go to 120
-      if (xx - x(k-1)) 120,130,140
+      if (xx - x(k - 1)) 120,130,140
 !
-100 i = 1
+100   i = 1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-110 i = mm1
+110   i = mm1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-120 i = intrvl (xx, s, m)
+120   i = intrvl (xx, s, m)
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-130 z(k,l) = z(k-1,l)
+130   z(k,l) = z(k - 1,l)
       go to 350
 !
 !           Linear forward search
 !
-140 if (xx .lt. s(i + 1)) go to 210
-150 i = i + 1
-         if (xx .ge. s(i + 1)) go to 150
+140   if (xx .lt. s(i + 1)) go to 210
+150   i = i + 1
+      if (xx .ge. s(i + 1)) go to 150
 !
 !           Computation of the jder-TH derivative of
 !           f(s(i),y), D1F(s(i),y), f(s(i+1),y), AND
 !           D1F(s(i+1),y) at the point YY.
 !
-200 iold = i
-         ip1 = i + 1
-         ds = s(ip1) - s(i)
+200   iold = i
+      ip1 = i + 1
+      ds = s(ip1) - s(i)
 !
-         d = (f(i,jp1) - f(i,j))/dt
-         a = d - dt*(2.0*f2(i,j) + f2(i,jp1))/6.0
-         c = (f2(i,jp1) - f2(i,j))/(6.0*dt)
+      d = (f(i,jp1) - f(i,j))/dt
+      a = d - dt*(2.0*f2(i,j) + f2(i,jp1))/6.0
+      c = (f2(i,jp1) - f2(i,j))/(6.0*dt)
 !
-         d = (f(ip1,jp1) - f(ip1,j))/dt
-         a1 = d - dt*(2.0*f2(ip1,j) + f2(ip1,jp1))/6.0
-         c1 = (f2(ip1,jp1) - f2(ip1,j))/(6.0*dt)
+      d = (f(ip1,jp1) - f(ip1,j))/dt
+      a1 = d - dt*(2.0*f2(ip1,j) + f2(ip1,jp1))/6.0
+      c1 = (f2(ip1,jp1) - f2(ip1,j))/(6.0*dt)
 !
-         d = (f1(i,jp1) - f1(i,j))/dt
-         a2 = d - dt*(2.0*f12(i,j) + f12(i,jp1))/6.0
-         c2 = (f12(i,jp1) - f12(i,j))/(6.0*dt)
+      d = (f1(i,jp1) - f1(i,j))/dt
+      a2 = d - dt*(2.0*f12(i,j) + f12(i,jp1))/6.0
+      c2 = (f12(i,jp1) - f12(i,j))/(6.0*dt)
 !
-         d = (f1(ip1,jp1) - f1(ip1,j))/dt
-         a3 = d - dt*(2.0*f12(ip1,j) + f12(ip1,jp1))/6.0
-         c3 = (f12(ip1,jp1) - f12(ip1,j))/(6.0*dt)
+      d = (f1(ip1,jp1) - f1(ip1,j))/dt
+      a3 = d - dt*(2.0*f12(ip1,j) + f12(ip1,jp1))/6.0
+      c3 = (f12(ip1,jp1) - f12(ip1,j))/(6.0*dt)
 !
-210 dy = yy - t(j)
+210   dy = yy - t(j)
       if (jder .eq. 0) go to 220
       if (jder - 2) 230,240,250
 !
-220 fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
+220   fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
       fip1 = ((c1*dy + 0.5*f2(ip1,j))*dy + a1)*dy + f(ip1,j)
       dfi = ((c2*dy + 0.5*f12(i,j))*dy + a2)*dy + f1(i,j)
       dfip1 = ((c3*dy + 0.5*f12(ip1,j))*dy + a3)*dy + f1(ip1,j)
       go to 300
 !
-230 fi = (3.0*c*dy + f2(i,j))*dy + a
+230   fi = (3.0*c*dy + f2(i,j))*dy + a
       fip1 = (3.0*c1*dy + f2(ip1,j))*dy + a1
       dfi = (3.0*c2*dy + f12(i,j))*dy + a2
       dfip1 = (3.0*c3*dy + f12(ip1,j))*dy + a3
       go to 300
 !
-240 fi = 6.0*c*dy + f2(i,j)
+240   fi = 6.0*c*dy + f2(i,j)
       fip1 = 6.0*c1*dy + f2(ip1,j)
       dfi = 6.0*c2*dy + f12(i,j)
       dfip1 = 6.0*c3*dy + f12(ip1,j)
       go to 300
 !
-250 fi = 6.0*c
+250   fi = 6.0*c
       fip1 = 6.0*c1
       dfi = 6.0*c2
       dfip1 = 6.0*c3
@@ -422,7 +422,7 @@ do l = 1,my
 !           Computation of the ider-TH derivative
 !           at the point XX.
 !
-300 d = (fip1 - fi)/ds
+300   d = (fip1 - fi)/ds
       ax = d - ds*(2.0*dfi + dfip1)/6.0
       cx = (dfip1 - dfi)/(6.0*ds)
 !
@@ -430,15 +430,15 @@ do l = 1,my
       if (ider .eq. 0) go to 310
       if (ider - 2) 320,330,340
 !
-310 z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
+310   z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
       go to 350
-320 z(k,l) = (3.0*cx*dx + dfi)*dx + ax
+320   z(k,l) = (3.0*cx*dx + dfi)*dx + ax
       go to 350
-330 z(k,l) = 6.0*cx*dx + dfi
+330   z(k,l) = 6.0*cx*dx + dfi
       go to 350
-340 z(k,l) = 6.0*cx
+340   z(k,l) = 6.0*cx
 !
-350 continue
+350   continue
    jold = j
 end do
 return
@@ -454,7 +454,7 @@ return
 end subroutine csrf
 
 subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
-&f, kf, ddf)
+   & f, kf, ddf)
 implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
 real, intent(in) :: x(mx), y(my)
@@ -468,7 +468,7 @@ real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 !-----------------------------------------------------------------------
 !
 call csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, kf, &
-&ddf(1,1,2), m, ddf, m, ddf(1,1,3), m)
+   & ddf(1,1,2), m, ddf, m, ddf(1,1,3), m)
 return
 end subroutine csrf2
 
@@ -480,10 +480,10 @@ real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
 integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, &
-&key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
+   & key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
 real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
-&dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
-&sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
+   & dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
+   & sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
 integer :: ind(8), loc(8), num(8)
 !
 !
@@ -565,11 +565,11 @@ integer :: ind(8), loc(8), num(8)
 !
 data num(5)/1/, num(6)/1/, num(7)/1/, num(8)/1/
 !
-mm1 = m-1
-mp1 = m+1
-nm1 = n-1
-np1 = n+1
-npm = n+m
+mm1 = m - 1
+mp1 = m + 1
+nm1 = n - 1
+np1 = n + 1
+npm = n + m
 ierr = 0
 if (n .le. 1 .or. m .le. 1) go to 46
 if (y(n) .le. y(1)) go to 47
@@ -594,80 +594,80 @@ l = 1
 if (key) 48,110,101
 101 if (key .gt. 8) go to 48
 ind(key) = 1
-l = l+1
+l = l + 1
 loc(key) = l
 l = l + num(key)
 go to 100
 !
 ! Denormalize tension factor in y-direction
 !
-110 sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
+110 sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 !
 ! Obtain y-partial derivatives along y = y(1)
 !
 if (ind(3) .eq. 0) go to 2
 l = loc(3)
 do 1 i = 1,m
-  zp(i,1,1) = opt(l)
-1 l = l+1
+   zp(i,1,1) = opt(l)
+1  l = l + 1
 go to 5
-2 dely1 = y(2)-y(1)
-dely2 = dely1+dely1
-if (n .gt. 2) dely2 = y(3)-y(1)
+2 dely1 = y(2) - y(1)
+dely2 = dely1 + dely1
+if (n .gt. 2) dely2 = y(3) - y(1)
 if (dely1 .le. 0. .or. dely2 .le. dely1) go to 47
 call ceez (dely1,dely2,sigmay,c1,c2,c3,n)
 do 3 i = 1,m
-3 zp(i,1,1) = c1*z(i,1)+c2*z(i,2)
+3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
 if (n .eq. 2) go to 5
 do 4 i = 1,m
-4 zp(i,1,1) = zp(i,1,1)+c3*z(i,3)
+4  zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
 !
 ! Obtain y-partial derivatives along y = y(n)
 !
 5 if (ind(4) .eq. 0) go to 7
 l = loc(4)
 do 6 i = 1,m
-  npi = n+i
-  temp(npi) = opt(l)
-6 l = l+1
+   npi = n + i
+   temp(npi) = opt(l)
+6  l = l + 1
 go to 10
-7 delyn = y(n)-y(nm1)
-delynm = delyn+delyn
-if (n .gt. 2) delynm = y(n)-y(n-2)
+7 delyn = y(n) - y(nm1)
+delynm = delyn + delyn
+if (n .gt. 2) delynm = y(n) - y(n - 2)
 if (delyn .le. 0. .or. delynm .le. delyn) go to 47
 call ceez (-delyn,-delynm,sigmay,c1,c2,c3,n)
 do 8 i = 1,m
-  npi = n+i
-8 temp(npi) = c1*z(i,n)+c2*z(i,nm1)
+   npi = n + i
+8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
 if (n .eq. 2) go to 10
 do 9 i = 1,m
-  npi = n+i
-9 temp(npi) = temp(npi)+c3*z(i,n-2)
+   npi = n + i
+9  temp(npi) = temp(npi) + c3*z(i,n - 2)
 10 if (x(m) .le. x(1)) go to 47
 !
 ! Denormalize tension factor in x-direction
 !
-sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
+sigmax = abs(sigma)*float(m - 1)/(x(m) - x(1))
 !
 ! Obtain x-partial derivatives along x = x(1)
 !
 if (ind(1) .eq. 0) go to 12
 l = loc(1)
 do 11 j = 1,n
-  zp(1,j,2) = opt(l)
-11 l = l+1
-if (ind(5)+ind(7) .eq. 2) go to 15
-12 delx1 = x(2)-x(1)
-delx2 = delx1+delx1
-if (m .gt. 2) delx2 = x(3)-x(1)
+   zp(1,j,2) = opt(l)
+11 l = l + 1
+if (ind(5) + ind(7) .eq. 2) go to 15
+12 delx1 = x(2) - x(1)
+delx2 = delx1 + delx1
+if (m .gt. 2) delx2 = x(3) - x(1)
 if (delx1 .le. 0. .or. delx2 .le. delx1) go to 47
 call ceez (delx1,delx2,sigmax,c1,c2,c3,m)
 if (ind(1) .eq. 1) go to 15
 do 13 j = 1,n
-13 zp(1,j,2) = c1*z(1,j)+c2*z(2,j)
+13 zp(1,j,2) = c1*z(1,j) + c2*z(2,j)
 if (m .eq. 2) go to 15
 do 14 j = 1,n
-14 zp(1,j,2) = zp(1,j,2)+c3*z(3,j)
+14 zp(1,j,2) = zp(1,j,2) + c3*z(3,j)
 !
 ! Obtain x-y-partial derivative at (x(1),y(1))
 !
@@ -675,8 +675,8 @@ do 14 j = 1,n
 l = loc(5)
 zp(1,1,3) = opt(l)
 go to 17
-16 zp(1,1,3) = c1*zp(1,1,1)+c2*zp(2,1,1)
-if (m .gt. 2) zp(1,1,3) = zp(1,1,3)+c3*zp(3,1,1)
+16 zp(1,1,3) = c1*zp(1,1,1) + c2*zp(2,1,1)
+if (m .gt. 2) zp(1,1,3) = zp(1,1,3) + c3*zp(3,1,1)
 !
 ! Obtain x-y-partial derivative at (x(1),y(n))
 !
@@ -684,31 +684,31 @@ if (m .gt. 2) zp(1,1,3) = zp(1,1,3)+c3*zp(3,1,1)
 l = loc(7)
 zxy1ns = opt(l)
 go to 19
-18 zxy1ns = c1*temp(n+1)+c2*temp(n+2)
-if (m .gt. 2) zxy1ns = zxy1ns+c3*temp(n+3)
+18 zxy1ns = c1*temp(n + 1) + c2*temp(n + 2)
+if (m .gt. 2) zxy1ns = zxy1ns + c3*temp(n + 3)
 !
 ! Obtain x-partial derivative along x = x(m)
 !
 19 if (ind(2) .eq. 0) go to 21
 l = loc(2)
 do 20 j = 1,n
-  npmpj = npm+j
-  temp(npmpj) = opt(l)
-20 l = l+1
-21 if (ind(6)+ind(8) .eq. 2) go to 24
-delxm = x(m)-x(mm1)
-delxmm = delxm+delxm
-if (m .gt. 2) delxmm = x(m)-x(m-2)
+   npmpj = npm + j
+   temp(npmpj) = opt(l)
+20 l = l + 1
+21 if (ind(6) + ind(8) .eq. 2) go to 24
+delxm = x(m) - x(mm1)
+delxmm = delxm + delxm
+if (m .gt. 2) delxmm = x(m) - x(m - 2)
 if (delxm .le. 0. .or. delxmm .le. delxm) go to 47
 call ceez (-delxm,-delxmm,sigmax,c1,c2,c3,m)
 if (ind(2) .eq. 1) go to 24
 do 22 j = 1,n
-  npmpj = npm+j
-22 temp(npmpj) = c1*z(m,j)+c2*z(mm1,j)
+   npmpj = npm + j
+22 temp(npmpj) = c1*z(m,j) + c2*z(mm1,j)
 if (m .eq. 2) go to 24
 do 23 j = 1,n
-  npmpj = npm+j
-23 temp(npmpj) = temp(npmpj)+c3*z(m-2,j)
+   npmpj = npm + j
+23 temp(npmpj) = temp(npmpj) + c3*z(m - 2,j)
 !
 ! Obtain x-y-partial derivative at (x(m),y(1))
 !
@@ -716,8 +716,8 @@ do 23 j = 1,n
 l = loc(6)
 zp(m,1,3) = opt(l)
 go to 26
-25 zp(m,1,3) = c1*zp(m,1,1)+c2*zp(mm1,1,1)
-if (m .gt. 2) zp(m,1,3) = zp(m,1,3)+c3*zp(m-2,1,1)
+25 zp(m,1,3) = c1*zp(m,1,1) + c2*zp(mm1,1,1)
+if (m .gt. 2) zp(m,1,3) = zp(m,1,3) + c3*zp(m - 2,1,1)
 !
 ! Obtain x-y-partial derivative at (x(m),y(n))
 !
@@ -725,125 +725,125 @@ if (m .gt. 2) zp(m,1,3) = zp(m,1,3)+c3*zp(m-2,1,1)
 l = loc(8)
 zxymns = opt(l)
 go to 28
-27 zxymns = c1*temp(npm)+c2*temp(npm-1)
-if (m .gt. 2) zxymns = zxymns+c3*temp(npm-2)
+27 zxymns = c1*temp(npm) + c2*temp(npm - 1)
+if (m .gt. 2) zxymns = zxymns + c3*temp(npm - 2)
 !
 ! Set up right hand sides and tridiagonal system for y-grid
 ! perform forward elimination
 !
-28 del1 = y(2)-y(1)
+28 del1 = y(2) - y(1)
 if (del1 .le. 0.) go to 47
 deli = 1./del1
 do 29 i = 1,m
-29 zp(i,2,1) = deli*(z(i,2)-z(i,1))
-zp(1,2,3) = deli*(zp(1,2,2)-zp(1,1,2))
-zp(m,2,3) = deli*(temp(npm+2)-temp(npm+1))
+29 zp(i,2,1) = deli*(z(i,2) - z(i,1))
+zp(1,2,3) = deli*(zp(1,2,2) - zp(1,1,2))
+zp(m,2,3) = deli*(temp(npm + 2) - temp(npm + 1))
 call terms (diag1,sdiag1,sigmay,del1)
 diagi = 1./diag1
 do 30 i = 1,m
-30 zp(i,1,1) = diagi*(zp(i,2,1)-zp(i,1,1))
-zp(1,1,3) = diagi*(zp(1,2,3)-zp(1,1,3))
-zp(m,1,3) = diagi*(zp(m,2,3)-zp(m,1,3))
+30 zp(i,1,1) = diagi*(zp(i,2,1) - zp(i,1,1))
+zp(1,1,3) = diagi*(zp(1,2,3) - zp(1,1,3))
+zp(m,1,3) = diagi*(zp(m,2,3) - zp(m,1,3))
 temp(1) = diagi*sdiag1
 if (n .eq. 2) go to 34
 do 33 j = 2,nm1
-  jm1 = j-1
-  jp1 = j+1
-  npmpj = npm+j
-  del2 = y(jp1)-y(j)
-  if (del2 .le. 0.) go to 47
-  deli = 1./del2
-  do 31 i = 1,m
-31 zp(i,jp1,1) = deli*(z(i,jp1)-z(i,j))
-  zp(1,jp1,3) = deli*(zp(1,jp1,2)-zp(1,j,2))
-  zp(m,jp1,3) = deli*(temp(npmpj+1)-temp(npmpj))
-  call terms (diag2,sdiag2,sigmay,del2)
-  diagin = 1./(diag1+diag2-sdiag1*temp(jm1))
-  do 32 i = 1,m
-32 zp(i,j,1) = diagin*(zp(i,jp1,1)-zp(i,j,1)- &
-&sdiag1*zp(i,jm1,1))
-  zp(1,j,3) = diagin*(zp(1,jp1,3)-zp(1,j,3)- &
-&sdiag1*zp(1,jm1,3))
-  zp(m,j,3) = diagin*(zp(m,jp1,3)-zp(m,j,3)- &
-&sdiag1*zp(m,jm1,3))
-  temp(j) = diagin*sdiag2
-  diag1 = diag2
+   jm1 = j - 1
+   jp1 = j + 1
+   npmpj = npm + j
+   del2 = y(jp1) - y(j)
+   if (del2 .le. 0.) go to 47
+   deli = 1./del2
+   do 31 i = 1,m
+31    zp(i,jp1,1) = deli*(z(i,jp1) - z(i,j))
+   zp(1,jp1,3) = deli*(zp(1,jp1,2) - zp(1,j,2))
+   zp(m,jp1,3) = deli*(temp(npmpj + 1) - temp(npmpj))
+   call terms (diag2,sdiag2,sigmay,del2)
+   diagin = 1./(diag1 + diag2 - sdiag1*temp(jm1))
+   do 32 i = 1,m
+32    zp(i,j,1) = diagin*(zp(i,jp1,1) - zp(i,j,1) - &
+         & sdiag1*zp(i,jm1,1))
+   zp(1,j,3) = diagin*(zp(1,jp1,3) - zp(1,j,3) - &
+      & sdiag1*zp(1,jm1,3))
+   zp(m,j,3) = diagin*(zp(m,jp1,3) - zp(m,j,3) - &
+      & sdiag1*zp(m,jm1,3))
+   temp(j) = diagin*sdiag2
+   diag1 = diag2
 33 sdiag1 = sdiag2
-34 diagin = 1./(diag1-sdiag1*temp(nm1))
+34 diagin = 1./(diag1 - sdiag1*temp(nm1))
 do 35 i = 1,m
-  npi = n+i
-35 zp(i,n,1) = diagin*(temp(npi)-zp(i,n,1)- &
-&sdiag1*zp(i,nm1,1))
-zp(1,n,3) = diagin*(zxy1ns-zp(1,n,3)- &
-&sdiag1*zp(1,nm1,3))
-temp(n) = diagin*(zxymns-zp(m,n,3)- &
-&sdiag1*zp(m,nm1,3))
+   npi = n + i
+35 zp(i,n,1) = diagin*(temp(npi) - zp(i,n,1) - &
+      & sdiag1*zp(i,nm1,1))
+zp(1,n,3) = diagin*(zxy1ns - zp(1,n,3) - &
+   & sdiag1*zp(1,nm1,3))
+temp(n) = diagin*(zxymns - zp(m,n,3) - &
+   & sdiag1*zp(m,nm1,3))
 !
 ! Perform back substitution
 !
 do 37 j = 2,n
-  jbak = np1-j
-  jbakp1 = jbak+1
-  t = temp(jbak)
-  do 36 i = 1,m
-36 zp(i,jbak,1) = zp(i,jbak,1)-t*zp(i,jbakp1,1)
-  zp(1,jbak,3) = zp(1,jbak,3)-t*zp(1,jbakp1,3)
-37 temp(jbak) = zp(m,jbak,3)-t*temp(jbakp1)
+   jbak = np1 - j
+   jbakp1 = jbak + 1
+   t = temp(jbak)
+   do 36 i = 1,m
+36    zp(i,jbak,1) = zp(i,jbak,1) - t*zp(i,jbakp1,1)
+   zp(1,jbak,3) = zp(1,jbak,3) - t*zp(1,jbakp1,3)
+37 temp(jbak) = zp(m,jbak,3) - t*temp(jbakp1)
 !
 ! Set up right hand sides and tridiagonal system for x-grid
 ! perform forward elimination
 !
-del1 = x(2)-x(1)
+del1 = x(2) - x(1)
 if (del1 .le. 0.) go to 47
 deli = 1./del1
 do 38 j = 1,n
-  zp(2,j,2) = deli*(z(2,j)-z(1,j))
-38 zp(2,j,3) = deli*(zp(2,j,1)-zp(1,j,1))
+   zp(2,j,2) = deli*(z(2,j) - z(1,j))
+38 zp(2,j,3) = deli*(zp(2,j,1) - zp(1,j,1))
 call terms (diag1,sdiag1,sigmax,del1)
 diagi = 1./diag1
 do 39 j = 1,n
-  zp(1,j,2) = diagi*(zp(2,j,2)-zp(1,j,2))
-39 zp(1,j,3) = diagi*(zp(2,j,3)-zp(1,j,3))
-temp(n+1) = diagi*sdiag1
+   zp(1,j,2) = diagi*(zp(2,j,2) - zp(1,j,2))
+39 zp(1,j,3) = diagi*(zp(2,j,3) - zp(1,j,3))
+temp(n + 1) = diagi*sdiag1
 if (m  .eq. 2) go to 43
 do 42 i = 2,mm1
-  im1 = i-1
-  ip1 = i+1
-  npi = n+i
-  del2 = x(ip1)-x(i)
-  if (del2 .le. 0.) go to 47
-  deli = 1./del2
-  do 40 j = 1,n
-    zp(ip1,j,2) = deli*(z(ip1,j)-z(i,j))
-40 zp(ip1,j,3) = deli*(zp(ip1,j,1)-zp(i,j,1))
-  call terms (diag2,sdiag2,sigmax,del2)
-  diagin = 1./(diag1+diag2-sdiag1*temp(npi-1))
-  do 41 j = 1,n
-    zp(i,j,2) = diagin*(zp(ip1,j,2)-zp(i,j,2)- &
-&sdiag1*zp(im1,j,2))
-41 zp(i,j,3) = diagin*(zp(ip1,j,3)-zp(i,j,3)- &
-&sdiag1*zp(im1,j,3))
-  temp(npi) = diagin*sdiag2
-  diag1 = diag2
+   im1 = i - 1
+   ip1 = i + 1
+   npi = n + i
+   del2 = x(ip1) - x(i)
+   if (del2 .le. 0.) go to 47
+   deli = 1./del2
+   do 40 j = 1,n
+      zp(ip1,j,2) = deli*(z(ip1,j) - z(i,j))
+40    zp(ip1,j,3) = deli*(zp(ip1,j,1) - zp(i,j,1))
+   call terms (diag2,sdiag2,sigmax,del2)
+   diagin = 1./(diag1 + diag2 - sdiag1*temp(npi - 1))
+   do 41 j = 1,n
+      zp(i,j,2) = diagin*(zp(ip1,j,2) - zp(i,j,2) - &
+         & sdiag1*zp(im1,j,2))
+41    zp(i,j,3) = diagin*(zp(ip1,j,3) - zp(i,j,3) - &
+         & sdiag1*zp(im1,j,3))
+   temp(npi) = diagin*sdiag2
+   diag1 = diag2
 42 sdiag1 = sdiag2
-43 diagin = 1./(diag1-sdiag1*temp(npm-1))
+43 diagin = 1./(diag1 - sdiag1*temp(npm - 1))
 do 44 j = 1,n
-  npmpj = npm+j
-  zp(m,j,2) = diagin*(temp(npmpj)-zp(m,j,2)- &
-&sdiag1*zp(mm1,j,2))
-44 zp(m,j,3) = diagin*(temp(j)-zp(m,j,3)- &
-&sdiag1*zp(mm1,j,3))
+   npmpj = npm + j
+   zp(m,j,2) = diagin*(temp(npmpj) - zp(m,j,2) - &
+      & sdiag1*zp(mm1,j,2))
+44 zp(m,j,3) = diagin*(temp(j) - zp(m,j,3) - &
+      & sdiag1*zp(mm1,j,3))
 !
 ! Perform back substitution
 !
 do 45 i = 2,m
-  ibak = mp1-i
-  ibakp1 = ibak+1
-  npibak = n+ibak
-  t = temp(npibak)
-  do 45 j = 1,n
-    zp(ibak,j,2) = zp(ibak,j,2)-t*zp(ibakp1,j,2)
-45 zp(ibak,j,3) = zp(ibak,j,3)-t*zp(ibakp1,j,3)
+   ibak = mp1 - i
+   ibakp1 = ibak + 1
+   npibak = n + ibak
+   t = temp(npibak)
+   do 45 j = 1,n
+      zp(ibak,j,2) = zp(ibak,j,2) - t*zp(ibakp1,j,2)
+45    zp(ibak,j,3) = zp(ibak,j,3) - t*zp(ibakp1,j,3)
 return
 !
 ! Too few points
@@ -870,8 +870,8 @@ real :: z(iz,n), zp(m,n,*)
 real, intent(in) :: sigma
 integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
-&f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
-&sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
+   & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
+   & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
 real :: hermnz
 real :: surf2
 real :: hermz
@@ -932,51 +932,51 @@ integer :: intrvl
 !
 ! Inline one dimensional cubic spline interpolation
 !
-hermz (f1,f2,fp1,fp2) = (f2*del1+f1*del2)/dels-del1* &
-&del2*(fp2*(del1+dels)+ &
-&fp1*(del2+dels))/ &
-&(6.*dels)
+hermz (f1,f2,fp1,fp2) = (f2*del1 + f1*del2)/dels - del1* &
+   & del2*(fp2*(del1 + dels) + &
+   & fp1*(del2 + dels))/ &
+   & (6.*dels)
 !
 ! Inline one dimensional spline under tension interpolation
 !
-hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1+f1*del2)/dels &
-&+(fp2*(sinhm1*del2-del1*(2.*(coshp1+1.)* &
-&sinhp2+sigmap*coshp1*del2)) &
-&+fp1*(sinhm2*del1-del2*(2.*(coshp2+1.)* &
-&sinhp1+sigmap*coshp2*del1)) &
-&)/(sigmap*sigmap*dels*(sinhms+sigmap*dels))
+hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1 + f1*del2)/dels &
+   & + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
+   & sinhp2 + sigmap*coshp1*del2)) &
+   & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
+   & sinhp1 + sigmap*coshp2*del1)) &
+   & )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
 !
 ! Denormalize tension factor in x and y direction
 !
-sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
-sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
+sigmax = abs(sigma)*float(m - 1)/(x(m) - x(1))
+sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 !
 ! Determine y interval
 !
 jm1 = intrvl (yy,y,n)
-j = jm1+1
+j = jm1 + 1
 !
 ! Determine x interval
 !
 im1 = intrvl (xx,x,m)
-i = im1+1
-del1 = yy-y(jm1)
-del2 = y(j)-yy
-dels = y(j)-y(jm1)
+i = im1 + 1
+del1 = yy - y(jm1)
+del2 = y(j) - yy
+dels = y(j) - y(jm1)
 if (sigmay .ne. 0.) go to 1
 !
 ! Perform four interpolations in y-direction
 !
-zim1 = hermz(z(i-1,j-1),z(i-1,j),zp(i-1,j-1,1), &
-&zp(i-1,j,1))
-zi = hermz(z(i,j-1),z(i,j),zp(i,j-1,1),zp(i,j,1))
-zxxim1 = hermz(zp(i-1,j-1,2),zp(i-1,j,2), &
-&zp(i-1,j-1,3),zp(i-1,j,3))
-zxxi = hermz(zp(i,j-1,2),zp(i,j,2), &
-&zp(i,j-1,3),zp(i,j,3))
+zim1 = hermz(z(i - 1,j - 1),z(i - 1,j),zp(i - 1,j - 1,1), &
+   & zp(i - 1,j,1))
+zi = hermz(z(i,j - 1),z(i,j),zp(i,j - 1,1),zp(i,j,1))
+zxxim1 = hermz(zp(i - 1,j - 1,2),zp(i - 1,j,2), &
+   & zp(i - 1,j - 1,3),zp(i - 1,j,3))
+zxxi = hermz(zp(i,j - 1,2),zp(i,j,2), &
+   & zp(i,j - 1,3),zp(i,j,3))
 go to 2
-1 delp1 = (del1+dels)/2.
-delp2 = (del2+dels)/2.
+1 delp1 = (del1 + dels)/2.
+delp2 = (del2 + dels)/2.
 call snhcsh (sinhm1,dummy,sigmay*del1,-1)
 call snhcsh (sinhm2,dummy,sigmay*del2,-1)
 call snhcsh (sinhms,dummy,sigmay*dels,-1)
@@ -984,25 +984,25 @@ call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
 call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
 call snhcsh (dummy,coshp1,sigmay*delp1,1)
 call snhcsh (dummy,coshp2,sigmay*delp2,1)
-zim1 = hermnz(z(i-1,j-1),z(i-1,j),zp(i-1,j-1,1), &
-&zp(i-1,j,1),sigmay)
-zi = hermnz(z(i,j-1),z(i,j),zp(i,j-1,1),zp(i,j,1), &
-&sigmay)
-zxxim1 = hermnz(zp(i-1,j-1,2),zp(i-1,j,2), &
-&zp(i-1,j-1,3),zp(i-1,j,3),sigmay)
-zxxi = hermnz(zp(i,j-1,2),zp(i,j,2), &
-&zp(i,j-1,3),zp(i,j,3),sigmay)
+zim1 = hermnz(z(i - 1,j - 1),z(i - 1,j),zp(i - 1,j - 1,1), &
+   & zp(i - 1,j,1),sigmay)
+zi = hermnz(z(i,j - 1),z(i,j),zp(i,j - 1,1),zp(i,j,1), &
+   & sigmay)
+zxxim1 = hermnz(zp(i - 1,j - 1,2),zp(i - 1,j,2), &
+   & zp(i - 1,j - 1,3),zp(i - 1,j,3),sigmay)
+zxxi = hermnz(zp(i,j - 1,2),zp(i,j,2), &
+   & zp(i,j - 1,3),zp(i,j,3),sigmay)
 !
 ! Perform final interpolation in x-direction
 !
-2 del1 = xx-x(im1)
-del2 = x(i)-xx
-dels = x(i)-x(im1)
+2 del1 = xx - x(im1)
+del2 = x(i) - xx
+dels = x(i) - x(im1)
 if (sigmax .ne. 0.) go to 3
 surf2 = hermz(zim1,zi,zxxim1,zxxi)
 return
-3 delp1 = (del1+dels)/2.
-delp2 = (del2+dels)/2.
+3 delp1 = (del1 + dels)/2.
+delp2 = (del2 + dels)/2.
 call snhcsh (sinhm1,dummy,sigmax*del1,-1)
 call snhcsh (sinhm2,dummy,sigmax*del2,-1)
 call snhcsh (sinhms,dummy,sigmax*dels,-1)
@@ -1015,7 +1015,7 @@ return
 end function surf2
 
 subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
-&idz,m,n,x,y,z,iz,zp,work,sigma)
+   & idz,m,n,x,y,z,iz,zp,work,sigma)
 implicit none
 integer, intent(in) :: md, nd, idz, m, n, iz
 real, intent(in) :: dxmin, dxmax, dymin, dymax
@@ -1025,8 +1025,8 @@ real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
 integer :: i, ii, im1, j, jj, jm1, lasti, lastj
 real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
-&dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
-&sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
+   & dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
+   & sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
 !
 !
 !                      From the spline under tension package
@@ -1099,109 +1099,109 @@ real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
 !
 ! Denormalize tension factor in x and y direction
 !
-sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
-sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
+sigmax = abs(sigma)*float(m - 1)/(x(m) - x(1))
+sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 !
 ! Find intervals of second x grid with respect to original x
 ! grid
 !
 deltdx = 0.
-if (md .ge. 2) deltdx = (dxmax-dxmin)/float(md-1)
+if (md .ge. 2) deltdx = (dxmax - dxmin)/float(md - 1)
 lasti = 1
 do 3 ii = 1,md
-  xii = dxmin+float(ii-1)*deltdx
-  i = lasti
-1 i = i+1
-  if (xii .gt. x(i) .and. i .lt. m) go to 1
-  im1 = i-1
-  lasti = im1
-  del1 = xii-x(im1)
-  del2 = x(i)-xii
-  dels = x(i)-x(im1)
-  work(1,ii) = del2/dels
-  work(2,ii) = del1/dels
-  if (sigmax .ne. 0.) go to 2
-  temp = -del1*del2/(6.*dels)
-  work(3,ii) = temp*(del2+dels)
-  work(4,ii) = temp*(del1+dels)
-  go to 3
-2 delp1 = (del1+dels)/2.
-  delp2 = (del2+dels)/2.
-  call snhcsh (sinhm1,dummy,sigmax*del1,-1)
-  call snhcsh (sinhm2,dummy,sigmax*del2,-1)
-  call snhcsh (sinhms,dummy,sigmax*dels,-1)
-  call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
-  call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
-  call snhcsh (dummy,coshp1,sigmax*delp1,1)
-  call snhcsh (dummy,coshp2,sigmax*delp2,1)
-  temp = sigmax*sigmax*dels*(sinhms+sigmax*dels)
-  work(3,ii) = (sinhm2*del1-del2*(2.*(coshp2+1.)* &
-&sinhp1+sigmax*coshp2*del1))/temp
-  work(4,ii) = (sinhm1*del2-del1*(2.*(coshp1+1.)* &
-&sinhp2+sigmax*coshp1*del2))/temp
-3 continue
+   xii = dxmin + float(ii - 1)*deltdx
+   i = lasti
+1  i = i + 1
+   if (xii .gt. x(i) .and. i .lt. m) go to 1
+   im1 = i - 1
+   lasti = im1
+   del1 = xii - x(im1)
+   del2 = x(i) - xii
+   dels = x(i) - x(im1)
+   work(1,ii) = del2/dels
+   work(2,ii) = del1/dels
+   if (sigmax .ne. 0.) go to 2
+   temp = -del1*del2/(6.*dels)
+   work(3,ii) = temp*(del2 + dels)
+   work(4,ii) = temp*(del1 + dels)
+   go to 3
+2  delp1 = (del1 + dels)/2.
+   delp2 = (del2 + dels)/2.
+   call snhcsh (sinhm1,dummy,sigmax*del1,-1)
+   call snhcsh (sinhm2,dummy,sigmax*del2,-1)
+   call snhcsh (sinhms,dummy,sigmax*dels,-1)
+   call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
+   call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
+   call snhcsh (dummy,coshp1,sigmax*delp1,1)
+   call snhcsh (dummy,coshp2,sigmax*delp2,1)
+   temp = sigmax*sigmax*dels*(sinhms + sigmax*dels)
+   work(3,ii) = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
+      & sinhp1 + sigmax*coshp2*del1))/temp
+   work(4,ii) = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
+      & sinhp2 + sigmax*coshp1*del2))/temp
+3  continue
 !
 ! Find intervals of second y grid with respect to original y
 ! grid and perform intrpolation
 !
 deltdy = 0.
-if (nd .ge. 2) deltdy = (dymax-dymin)/float(nd-1)
+if (nd .ge. 2) deltdy = (dymax - dymin)/float(nd - 1)
 lastj = 1
 do 8 jj = 1,nd
-  yjj = dymin+float(jj-1)*deltdy
-  j = lastj
-4 j = j+1
-  if (yjj .gt. y(j) .and. j .lt. n) go to 4
-  jm1 = j-1
-  lastj = jm1
-  del1 = yjj-y(jm1)
-  del2 = y(j)-yjj
-  dels = y(j)-y(jm1)
-  c1 = del2/dels
-  c2 = del1/dels
-  if (sigmay .ne. 0.) go to 5
-  temp = -del1*del2/(6.*dels)
-  c3 = temp*(del2+dels)
-  c4 = temp*(del1+dels)
-  go to 6
-5 delp1 = (del1+dels)/2.
-  delp2 = (del2+dels)/2.
-  call snhcsh (sinhm1,dummy,sigmay*del1,-1)
-  call snhcsh (sinhm2,dummy,sigmay*del2,-1)
-  call snhcsh (sinhms,dummy,sigmay*dels,-1)
-  call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
-  call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
-  call snhcsh (dummy,coshp1,sigmay*delp1,1)
-  call snhcsh (dummy,coshp2,sigmay*delp2,1)
-  temp = sigmay*sigmay*dels*(sinhms+sigmay*dels)
-  c3 = (sinhm2*del1-del2*(2.*(coshp2+1.)* &
-&sinhp1+sigmay*coshp2*del1))/temp
-  c4 = (sinhm1*del2-del1*(2.*(coshp1+1.)* &
-&sinhp2+sigmay*coshp1*del2))/temp
-6 lasti = 0
-  do 8 ii = 1,md
-    xii = dxmin+float(ii-1)*deltdx
-    i = max0 (1, lasti)
-7 i = i+1
-    if (xii .gt. x(i) .and. i .lt. m) go to 7
-    im1 = i-1
-    if (im1 .eq. lasti) go to 8
-    lasti = im1
-    zim1 = c1*z(im1,jm1)+c2*z(im1,j) &
-&+c3*zp(im1,jm1,1)+c4*zp(im1,j,1)
-    zi = c1*z(i,jm1)+c2*z(i,j) &
-&+c3*zp(i,jm1,1)+c4*zp(i,j,1)
-    zxxim1 = c1*zp(im1,jm1,2)+c2*zp(im1,j,2) &
-&+c3*zp(im1,jm1,3)+c4*zp(im1,j,3)
-    zxxi = c1*zp(i,jm1,2)+c2*zp(i,j,2) &
-&+c3*zp(i,jm1,3)+c4*zp(i,j,3)
-8 dz(ii,jj) = work(1,ii)*zim1+work(2,ii)*zi &
-&+work(3,ii)*zxxim1+work(4,ii)*zxxi
+   yjj = dymin + float(jj - 1)*deltdy
+   j = lastj
+4  j = j + 1
+   if (yjj .gt. y(j) .and. j .lt. n) go to 4
+   jm1 = j - 1
+   lastj = jm1
+   del1 = yjj - y(jm1)
+   del2 = y(j) - yjj
+   dels = y(j) - y(jm1)
+   c1 = del2/dels
+   c2 = del1/dels
+   if (sigmay .ne. 0.) go to 5
+   temp = -del1*del2/(6.*dels)
+   c3 = temp*(del2 + dels)
+   c4 = temp*(del1 + dels)
+   go to 6
+5  delp1 = (del1 + dels)/2.
+   delp2 = (del2 + dels)/2.
+   call snhcsh (sinhm1,dummy,sigmay*del1,-1)
+   call snhcsh (sinhm2,dummy,sigmay*del2,-1)
+   call snhcsh (sinhms,dummy,sigmay*dels,-1)
+   call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
+   call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
+   call snhcsh (dummy,coshp1,sigmay*delp1,1)
+   call snhcsh (dummy,coshp2,sigmay*delp2,1)
+   temp = sigmay*sigmay*dels*(sinhms + sigmay*dels)
+   c3 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
+      & sinhp1 + sigmay*coshp2*del1))/temp
+   c4 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
+      & sinhp2 + sigmay*coshp1*del2))/temp
+6  lasti = 0
+   do 8 ii = 1,md
+      xii = dxmin + float(ii - 1)*deltdx
+      i = max0 (1, lasti)
+7     i = i + 1
+      if (xii .gt. x(i) .and. i .lt. m) go to 7
+      im1 = i - 1
+      if (im1 .eq. lasti) go to 8
+      lasti = im1
+      zim1 = c1*z(im1,jm1) + c2*z(im1,j) &
+         & + c3*zp(im1,jm1,1) + c4*zp(im1,j,1)
+      zi = c1*z(i,jm1) + c2*z(i,j) &
+         & + c3*zp(i,jm1,1) + c4*zp(i,j,1)
+      zxxim1 = c1*zp(im1,jm1,2) + c2*zp(im1,j,2) &
+         & + c3*zp(im1,jm1,3) + c4*zp(im1,j,3)
+      zxxi = c1*zp(i,jm1,2) + c2*zp(i,j,2) &
+         & + c3*zp(i,jm1,3) + c4*zp(i,j,3)
+8     dz(ii,jj) = work(1,ii)*zim1 + work(2,ii)*zi &
+         & + work(3,ii)*zxxim1 + work(4,ii)*zxxi
 return
 end subroutine nsurf2
 
 subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
-&a, ka, wk, l, iflag)
+   & a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
@@ -1293,7 +1293,7 @@ return
 end subroutine bstrp1
 
 subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
-&ty, ny, ky, a, ka, wk, l, iflag)
+   & ty, ny, ky, a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
@@ -1331,12 +1331,12 @@ if (l .lt. m) go to 120
 iw = nx*my + 1
 iq = iw + nx
 call bslsq1 (x, wx, mx, z, kz, my, tx, nx, kx, &
-&wk, my, wk(iw), wk(iq), ierr)
+   & wk, my, wk(iw), wk(iq), ierr)
 if (ierr .lt. 0) go to 100
 !
 iq = iw + ny
 call bslsq1 (y, wy, my, wk, my, nx, ty, ny, ky, &
-&a, ka, wk(iw), wk(iq), iflag)
+   & a, ka, wk(iw), wk(iq), iflag)
 if (iflag .lt. 0) go to 110
 iflag = max0(ierr,iflag)
 return
@@ -1353,7 +1353,7 @@ return
 end subroutine bslsq2
 
 subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
-&a, ka, wk, q, ierr)
+   & a, ka, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, ka, kz, m, n, ntau
@@ -1431,9 +1431,9 @@ do l = 1,ntau
 !            t(left) .LE. tau(l) .LT. t(left+1)
 !
 40 if (left .eq. n) go to 50
-      if (tau(l) .lt. t(left+1)) go to 50
-      left = left + 1
-      go to 40
+   if (tau(l) .lt. t(left + 1)) go to 50
+   left = left + 1
+   go to 40
 !
 50 jj = 0
    call bspvb (t, k, k, jj, tau(l), left, wk)
@@ -1529,25 +1529,25 @@ do 40 k = 1,n
 !
 k = n
 50 t = w(1,k)
+do i = 1,m
+   b(i,k) = t*b(i,k)
+end do
+jmax = min0(nbm1,n - k)
+if (jmax .lt. 1) go to 80
+do j = 1,jmax
+   jpk = j + k
+   t = w(j + 1,k)
    do i = 1,m
-      b(i,k) = t*b(i,k)
+      b(i,k) = b(i,k) - t*b(i,jpk)
    end do
-   jmax = min0(nbm1,n - k)
-   if (jmax .lt. 1) go to 80
-   do j = 1,jmax
-      jpk = j + k
-      t = w(j + 1,k)
-      do i = 1,m
-         b(i,k) = b(i,k) - t*b(i,jpk)
-      end do
-   end do
+end do
 80 k = k - 1
-   if (k .gt. 0) go to 50
+if (k .gt. 0) go to 50
 return
 end subroutine bchsv1
 
 subroutine bval2 (a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
-&idx, idy, f, wk)
+   & idx, idy, f, wk)
 implicit none
 integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
 real, intent(out) :: f
@@ -1608,7 +1608,7 @@ integer, intent(inout) :: iadj(*), iend(n)
 integer, intent(out) :: ier
 real :: x(n), y(n)
 integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
-&kmi, i, kmin
+   & kmi, i, kmin
 real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
 !***********************************************************
@@ -1728,8 +1728,8 @@ k = 2
 !
 ! Begin loop on nodes 3,4,...
 !
-1 dxr = xr-xl
-dyr = yr-yl
+1 dxr = xr - xl
+dyr = yr - yl
 !
 ! Next loop begins here if nl and nr are unchanged
 !
@@ -1738,8 +1738,8 @@ km1 = k
 k = km1 + 1
 xk = x(k)
 yk = y(k)
-dxk = xk-xl
-dyk = yk-yl
+dxk = xk - xl
+dyk = yk - yl
 cprod = dxr*dyk - dxk*dyr
 if (cprod .gt. 0.) go to 6
 if (cprod .lt. 0.) go to 8
@@ -1764,11 +1764,11 @@ go to 1
 !   Set sprod to (n0-nl,n0-k).
 !
 3 do 4 ind = 2,km1
-  n0 = iend(ind)
-  sprod = (xl-x(n0))*(xk-x(n0)) + &
-&(yl-y(n0))*(yk-y(n0))
-  if (sprod .ge. 0.) go to 5
-4 continue
+   n0 = iend(ind)
+   sprod = (xl - x(n0))*(xk - x(n0)) + &
+      & (yl - y(n0))*(yk - y(n0))
+   if (sprod .ge. 0.) go to 5
+4  continue
 !
 ! Node k is to the right of nr.  Insert k as the last
 !   (rightmost) node in iend and set nr to k.
@@ -1790,11 +1790,11 @@ go to 2
 !
 6 km1d2 = km1/2
 do i = 1,km1d2
-  kmi = k-i
-  itemp = iend(i)
-  iend(i) = iend(kmi)
-  iend(kmi) = itemp
-  end do
+   kmi = k - i
+   itemp = iend(i)
+   iend(i) = iend(kmi)
+   iend(kmi) = itemp
+end do
 !
 ! Node k is to the right of nl-nr.  Create a triangulation
 !   consisting of nodes 1,2,...,k.
@@ -1807,46 +1807,46 @@ nr = iend(km1)
 !   neighbors except nl and nr which have three.
 !
 do 9 ind = 1,km1
-  n0 = iend(ind)
-  indx = 4*n0
-  if (n0 .ge. nl) indx = indx-1
-  if (n0 .ge. nr) indx = indx-1
-  iadj(indx) = 0
-  indx = indx-1
-  if (ind .lt. km1) iadj(indx) = iend(ind+1)
-  if (ind .lt. km1) indx = indx-1
-  iadj(indx) = k
-  if (ind .eq. 1) go to 9
-  iadj(indx-1) = iend(ind-1)
-9 continue
+   n0 = iend(ind)
+   indx = 4*n0
+   if (n0 .ge. nl) indx = indx - 1
+   if (n0 .ge. nr) indx = indx - 1
+   iadj(indx) = 0
+   indx = indx - 1
+   if (ind .lt. km1) iadj(indx) = iend(ind + 1)
+   if (ind .lt. km1) indx = indx - 1
+   iadj(indx) = k
+   if (ind .eq. 1) go to 9
+   iadj(indx - 1) = iend(ind - 1)
+9  continue
 !
 ! Create the adjacency list for node k
 !
 indx = 5*km1 - 1
 iadj(indx) = 0
 do ind = 1,km1
-  indx = indx-1
-  iadj(indx) = iend(ind)
-  end do
+   indx = indx - 1
+   iadj(indx) = iend(ind)
+end do
 !
 ! Replace iend elements with pointers to iadj
 !
 indx = 0
 do ind = 1,km1
-  indx = indx + 4
-  if (ind .eq. nl  .or.  ind .eq. nr) indx = indx-1
-  iend(ind) = indx
-  end do
+   indx = indx + 4
+   if (ind .eq. nl  .or.  ind .eq. nr) indx = indx - 1
+   iend(ind) = indx
+end do
 indx = indx + k
 iend(k) = indx
 !
 ! Add the remaining nodes to the triangulation
 !
 if (k .eq. nn) return
-kmin = k+1
+kmin = k + 1
 do k = kmin,nn
-  call adnode(k,x,y, iadj,iend, ierr)
-  end do
+   call adnode(k,x,y, iadj,iend, ierr)
+end do
 return
 !
 ! All nodes are collinear
@@ -1864,7 +1864,7 @@ real :: x(kk), y(kk)
 logical :: swptst
 integer :: tindx
 integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
-&in1, indk1, ind2f, ind21
+   & in1, indk1, ind2f, ind21
 real :: xk, yk
 !
 !***********************************************************
@@ -1963,10 +1963,10 @@ io1 = iadj(indk1)
 ! Begin loop -- find the vertex opposite k
 !
 1 ind2f = 1
-if (io2 .ne. 1) ind2f = iend(io2-1) + 1
+if (io2 .ne. 1) ind2f = iend(io2 - 1) + 1
 ind21 = tindx(io2,io1,iadj,iend)
 if (ind2f .eq. ind21) go to 2
-in1 = iadj(ind21-1)
+in1 = iadj(ind21 - 1)
 go to 3
 !
 ! IN1 is the last neighbor of io2
@@ -2008,7 +2008,7 @@ implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
 integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
-&kend, next, indx
+   & kend, next, indx
 !
 !***********************************************************
 !
@@ -2085,18 +2085,18 @@ nleft = i2
 !
 nl = iend(km1)
 n1 = 1
-if (nleft .ne. 1) n1 = iend(nleft-1) + 1
+if (nleft .ne. 1) n1 = iend(nleft - 1) + 1
 n2 = iend(nright)
 nf = max0(n1,n2)
 !
 ! Insert k as a neighbor of max(nright,nleft)
 !
 call shiftd(nf,nl,2, iadj )
-iadj(nf+1) = k
+iadj(nf + 1) = k
 imin = max0(nright,nleft)
 do 1 i = imin,km1
-  iend(i) = iend(i) + 2
-1 continue
+   iend(i) = iend(i) + 2
+1  continue
 !
 ! Initialize KEND and insert k as a neighbor of
 !   min(nright,nleft)
@@ -2109,8 +2109,8 @@ iadj(nf) = k
 imax = imin - 1
 imin = min0(nright,nleft)
 do 2 i = imin,imax
-  iend(i) = iend(i) + 1
-2 continue
+   iend(i) = iend(i) + 1
+2  continue
 !
 ! Insert nright as the first neighbor of k
 !
@@ -2134,7 +2134,7 @@ go to 3
 !
 ! Insert nleft and 0 as the last neighbors of k
 !
-4 iadj(kend+1) = nleft
+4 iadj(kend + 1) = nleft
 kend = kend + 2
 iadj(kend) = 0
 iend(k) = kend
@@ -2146,7 +2146,7 @@ implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
 integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
-&n2, imin, imax, i, itemp
+   & n2, imin, imax, i, itemp
 !
 !***********************************************************
 !
@@ -2223,17 +2223,17 @@ n(3) = i3
 ! Set up nft
 !
 do 2 i = 1,3
-  n1 = n(i)
-  indx = mod(i,3) + 1
-  n2 = n(indx)
-  indx = iend(n1) + 1
+   n1 = n(i)
+   indx = mod(i,3) + 1
+   n2 = n(indx)
+   indx = iend(n1) + 1
 !
 ! Find the index of N2 as a neighbor of n1
 !
-1 indx = indx - 1
-  if (iadj(indx) .ne. n2) go to 1
-  nft(i) = indx + 1
-2 continue
+1  indx = indx - 1
+   if (iadj(indx) .ne. n2) go to 1
+   nft(i) = indx + 1
+2  continue
 !
 ! Order the vertices by decreasing magnitude.
 !   n(IP(I+1)) precedes n(IP(I)) in iend for
@@ -2248,7 +2248,7 @@ ip2 = 1
 3 if ( n(3) .le. n(ip1) ) go to 4
 ip3 = ip1
 ip1 = 3
-4 if ( n(ip3) .le. n(ip2) )  go to 5
+4 if ( n(ip3) .le. n(ip2) ) go to 5
 itemp = ip2
 ip2 = ip3
 ip3 = itemp
@@ -2262,22 +2262,22 @@ ip3 = itemp
 nl = iend(km1)
 nf = nft(ip1)
 if (nf .le. nl) call shiftd(nf,nl,3, iadj )
-iadj(nf+2) = k
+iadj(nf + 2) = k
 imin = n(ip1)
 imax = km1
 do i = imin,imax
-  iend(i) = iend(i) + 3
-  end do
+   iend(i) = iend(i) + 3
+end do
 !
 nl = nf - 1
 nf = nft(ip2)
 call shiftd(nf,nl,2, iadj )
-iadj(nf+1) = k
+iadj(nf + 1) = k
 imax = imin - 1
 imin = n(ip2)
 do i = imin,imax
-  iend(i) = iend(i) + 2
-  end do
+   iend(i) = iend(i) + 2
+end do
 !
 nl = nf - 1
 nf = nft(ip3)
@@ -2286,17 +2286,17 @@ iadj(nf) = k
 imax = imin - 1
 imin = n(ip3)
 do i = imin,imax
-  iend(i) = iend(i) + 1
-  end do
+   iend(i) = iend(i) + 1
+end do
 !
 ! Add node k to iend and its neighbors to iadj
 !
 indx = iend(km1)
 iend(k) = indx + 3
 do i = 1,3
-  indx = indx + 1
-  iadj(indx) = n(i)
-  end do
+   indx = indx + 1
+   iadj(indx) = n(i)
+end do
 return
 end subroutine intadd
 
@@ -2372,14 +2372,14 @@ if ( k .lt. 0) go to 4
 !
 if (nsl .le. 0) go to 2
 do 1 i = 1,nsl,inc
-  ibak = nlp1 - i
-  indx = ibak + k
-  iarr(indx) = iarr(ibak)
-  iarr(indx-1) = iarr(ibak-1)
-  iarr(indx-2) = iarr(ibak-2)
-  iarr(indx-3) = iarr(ibak-3)
-  iarr(indx-4) = iarr(ibak-4)
-1 continue
+   ibak = nlp1 - i
+   indx = ibak + k
+   iarr(indx) = iarr(ibak)
+   iarr(indx - 1) = iarr(ibak - 1)
+   iarr(indx - 2) = iarr(ibak - 2)
+   iarr(indx - 3) = iarr(ibak - 3)
+   iarr(indx - 4) = iarr(ibak - 4)
+1  continue
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -2395,13 +2395,13 @@ go to 3
 4 if (nsl .le. 0) go to 6
 imax = nlp1 - inc
 do 5 i = nf,imax,inc
-  indx = i + k
-  iarr(indx) = iarr(i)
-  iarr(indx+1) = iarr(i+1)
-  iarr(indx+2) = iarr(i+2)
-  iarr(indx+3) = iarr(i+3)
-  iarr(indx+4) = iarr(i+4)
-5 continue
+   indx = i + k
+   iarr(indx) = iarr(i)
+   iarr(indx + 1) = iarr(i + 1)
+   iarr(indx + 2) = iarr(i + 2)
+   iarr(indx + 3) = iarr(i + 3)
+   iarr(indx + 4) = iarr(i + 4)
+5  continue
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -2496,39 +2496,39 @@ if (in(2) .lt. io(1)) go to 12
 !   and insert in(k) as a neighbor of in(j).
 !
 do 7 j = 1,2
-  k = 3 - j
-  if (in(j) .gt. io(j)) go to 4
+   k = 3 - j
+   if (in(j) .gt. io(j)) go to 4
 !
 !   The neighbors of in(j) precede those of io(j) -- shift
 !     down by 1
 !
-  nf = 1 + tindx(in(j),io(ip1),iadj,iend)
-  nl = -1 + tindx(io(j),io(k),iadj,iend)
-  if (nf .le. nl) call shiftd(nf,nl,1, iadj )
-  iadj(nf) = in(k)
-  imin = in(j)
-  imax = io(j)-1
-  do 3 i = imin,imax
-3 iend(i) = iend(i) + 1
-  go to 6
+   nf = 1 + tindx(in(j),io(ip1),iadj,iend)
+   nl = -1 + tindx(io(j),io(k),iadj,iend)
+   if (nf .le. nl) call shiftd(nf,nl,1, iadj )
+   iadj(nf) = in(k)
+   imin = in(j)
+   imax = io(j) - 1
+   do 3 i = imin,imax
+3     iend(i) = iend(i) + 1
+   go to 6
 !
 !   The neighbors of io(j) precede those of in(j) -- shift
 !     up by 1
 !
-4 nf = 1 + tindx(io(j),io(k),iadj,iend)
-  nl = -1 + tindx(in(j),io(ip2),iadj,iend)
-  if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
-  iadj(nl) = in(k)
-  imin = io(j)
-  imax = in(j) - 1
-  do 5 i = imin,imax
-5 iend(i) = iend(i) - 1
+4  nf = 1 + tindx(io(j),io(k),iadj,iend)
+   nl = -1 + tindx(in(j),io(ip2),iadj,iend)
+   if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
+   iadj(nl) = in(k)
+   imin = io(j)
+   imax = in(j) - 1
+   do 5 i = imin,imax
+5     iend(i) = iend(i) - 1
 !
 !   REVERSE (ip1,ip2) FOR (j,k) = (2,1)
 !
-6 ip1 = ip2
-  ip2 = 3 - ip1
-7 continue
+6  ip1 = ip2
+   ip2 = 3 - ip1
+7  continue
 return
 !
 ! The vertices are ordered (io(1),io(2),in(1),in(2)).
@@ -2538,18 +2538,18 @@ return
 nl = -1 + tindx(io(2),io(1),iadj,iend)
 if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
 imin = io(1)
-imax = io(2)-1
+imax = io(2) - 1
 do 9 i = imin,imax
-9 iend(i) = iend(i) - 1
+9  iend(i) = iend(i) - 1
 !
 !   Delete io(1) by shifting up by 2 and insert in(2)
 !
 nf = nl + 2
 nl = -1 + tindx(in(1),io(ip2),iadj,iend)
 if (nf .le. nl) call shiftd(nf,nl,-2, iadj )
-iadj(nl-1) = in(2)
+iadj(nl - 1) = in(2)
 imin = io(2)
-imax = in(1)-1
+imax = in(1) - 1
 do 10 i = imin,imax
 10 iend(i) = iend(i) - 2
 !
@@ -2560,7 +2560,7 @@ nl = -1 + tindx(in(2),io(ip1),iadj,iend)
 call shiftd(nf,nl,-1, iadj )
 iadj(nl) = in(1)
 imin = in(1)
-imax = in(2)-1
+imax = in(2) - 1
 do 11 i = imin,imax
 11 iend(i) = iend(i) - 1
 return
@@ -2581,7 +2581,7 @@ do 13 i = imin,imax
 nl = nf - 2
 nf = 1 + tindx(in(2),io(ip2),iadj,iend)
 if (nf .le. nl) call shiftd(nf,nl,2, iadj )
-iadj(nf+1) = in(1)
+iadj(nf + 1) = in(1)
 imin = in(2)
 imax = io(1) - 1
 do 14 i = imin,imax
@@ -2605,7 +2605,7 @@ implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
 real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
-&sin2, cos1, cos2, sin12
+   & sin2, cos1, cos2, sin12
 !
 !***********************************************************
 !
@@ -2841,8 +2841,8 @@ logical :: left
 !               y0) = .TRUE. IFF (x0,y0) is on or to the
 !               left of the vector from (x1,y1) to (x2,y2).
 !
-left(x1,y1,x2,y2,x0,y0) = (x2-x1)*(y0-y1) .ge. &
-&(x0-x1)*(y2-y1)
+left(x1,y1,x2,y2,x0,y0) = (x2 - x1)*(y0 - y1) .ge. &
+   & (x0 - x1)*(y2 - y1)
 xp = px
 yp = py
 !
@@ -2852,7 +2852,7 @@ n0 = max0(nst,1)
 1 indx = iend(n0)
 nl = iadj(indx)
 indx = 1
-if (n0 .ne. 1) indx = iend(n0-1) + 1
+if (n0 .ne. 1) indx = iend(n0 - 1) + 1
 nf = iadj(indx)
 n1 = nf
 if (nl .ne. 0) go to 3
@@ -2890,11 +2890,11 @@ go to 3
 4 indx = indx + 1
 n2 = iadj(indx)
 if ( .not. left(x(n0),y(n0),x(n2),y(n2),xp,yp) ) &
-&go to 8
+   & go to 8
 n1 = n2
 if (n1 .ne. nl) go to 4
 if ( .not. left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) &
-&go to 7
+   & go to 7
 if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
 !
 ! P is left of or on arcs n0-NB for all neighbors NB
@@ -2905,7 +2905,7 @@ if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
 !   nl.
 !
 5 if ( .not. left(x(n1),y(n1),x(n0),y(n0),xp,yp) ) &
-&go to 6
+   & go to 6
 if (n1 .eq. nf) go to 20
 indx = indx - 1
 n1 = iadj(indx)
@@ -2936,15 +2936,15 @@ if (iadj(indx) .ne. n1) go to 10
 ! Set n4 to the first neighbor.
 !
 indx = 1
-if (n2 .ne. 1) indx = iend(n2-1) + 1
+if (n2 .ne. 1) indx = iend(n2 - 1) + 1
 n4 = iadj(indx)
 go to 11
 !
 ! n1 is not the last neighbor of n2
 !
-10 indx = indx-1
+10 indx = indx - 1
 if (iadj(indx) .ne. n1) go to 10
-n4 = iadj(indx+1)
+n4 = iadj(indx + 1)
 if (n4 .ne. 0) go to 11
 !
 ! P is outside the boundary
@@ -2974,12 +2974,12 @@ if (iadj(indx) .ne. 0) go to 15
 ! n1 is a boundary node.  n3-n1 is a boundary arc IFF n3
 !   is the last nonzero neighbor of n1.
 !
-if (n3 .ne. iadj(indx-1)) go to 14
+if (n3 .ne. iadj(indx - 1)) go to 14
 !
 ! n3-n1 is a boundary arc
 !
 if ( .not. left(x(n1),y(n1),x(n3),y(n3),xp,yp) ) &
-&go to 14
+   & go to 14
 !
 ! P lies on n1-n3
 !
@@ -2992,13 +2992,13 @@ return
 !   boundary arc IFF n2 is the first neighbor of n1.
 !
 14 indx = 1
-if (n1 .ne. 1) indx = iend(n1-1) + 1
+if (n1 .ne. 1) indx = iend(n1 - 1) + 1
 if (n2 .ne. iadj(indx)) go to 15
 !
 ! n1-n2 is a boundary arc
 !
 if ( .not. left(x(n2),y(n2),x(n1),y(n1),xp,yp) ) &
-&go to 15
+   & go to 15
 !
 ! P lies on n1-n2
 !
@@ -3019,10 +3019,10 @@ return
 ! Set next to the first neighbor of nf.
 !
 16 indx = 1
-if (nf .ne. 1) indx = iend(nf-1) + 1
+if (nf .ne. 1) indx = iend(nf - 1) + 1
 next = iadj(indx)
 if ( left(x(nf),y(nf),x(next),y(next),xp,yp) ) &
-&go to 17
+   & go to 17
 nf = next
 go to 16
 !
@@ -3037,7 +3037,7 @@ go to 16
 18 indx = iend(nl) - 1
 next = iadj(indx)
 if ( left(x(next),y(next),x(nl),y(nl),xp,yp) ) &
-&go to 19
+   & go to 19
 nl = next
 go to 18
 !
@@ -3087,7 +3087,7 @@ return
 end subroutine gradg
 
 subroutine gradg1 (n,x,y,z,iadj,iend,eps, nit, &
-&zxzy, ier)
+   & zxzy, ier)
 implicit none
 integer, intent(in) :: n, iadj(*), iend(n)
 integer, intent(inout) :: nit, ier
@@ -3095,7 +3095,7 @@ real, intent(in) :: x(n), y(n), z(n), eps
 real, intent(inout) :: zxzy(2,n)
 integer :: nn, maxit, iter, k, indf, indl, indx, nb
 real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
-&delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
+   & delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !
 !***********************************************************
 !
@@ -3222,7 +3222,7 @@ maxit = nit
 ! Error checks and initialization
 !
 if (nn .lt. 3  .or.  tol .lt. 0.  .or.  maxit .lt. 0) &
-&go to 5
+   & go to 5
 iter = 0
 !
 ! Top of iteration loop
@@ -3231,58 +3231,58 @@ iter = 0
 dgmax = 0.
 indl = 0
 do 3 k = 1,nn
-  xk = x(k)
-  yk = y(k)
-  zk = z(k)
-  zxk = zxzy(1,k)
-  zyk = zxzy(2,k)
+   xk = x(k)
+   yk = y(k)
+   zk = z(k)
+   zxk = zxzy(1,k)
+   zyk = zxzy(2,k)
 !
 !   Initialize components of the 2 by 2 system
 !
-  a11 = 0.
-  a12 = 0.
-  a22 = 0.
-  r1 = 0.
-  r2 = 0.
+   a11 = 0.
+   a12 = 0.
+   a22 = 0.
+   r1 = 0.
+   r2 = 0.
 !
 !   Loop on neighbors nb of k
 !
-  indf = indl + 1
-  indl = iend(k)
-  do 2 indx = indf,indl
-    nb = iadj(indx)
-    if (nb .eq. 0) go to 2
+   indf = indl + 1
+   indl = iend(k)
+   do 2 indx = indf,indl
+      nb = iadj(indx)
+      if (nb .eq. 0) go to 2
 !
 !   Compute the components of arc nb-k
 !
-    delx = x(nb) - xk
-    dely = y(nb) - yk
-    delxs = delx*delx
-    delys = dely*dely
-    dsq = delxs + delys
-    dcub = dsq*sqrt(dsq)
+      delx = x(nb) - xk
+      dely = y(nb) - yk
+      delxs = delx*delx
+      delys = dely*dely
+      dsq = delxs + delys
+      dcub = dsq*sqrt(dsq)
 !
 !   Update the system components for node nb
 !
-    a11 = a11 + delxs/dcub
-    a12 = a12 + delx*dely/dcub
-    a22 = a22 + delys/dcub
-    t = ( 1.5*(z(nb)-zk) - ((zxzy(1,nb)/2.+zxk)*delx + &
-&(zxzy(2,nb)/2.+zyk)*dely) )/dcub
-    r1 = r1 + t*delx
-    r2 = r2 + t*dely
-2 continue
+      a11 = a11 + delxs/dcub
+      a12 = a12 + delx*dely/dcub
+      a22 = a22 + delys/dcub
+      t = ( 1.5*(z(nb) - zk) - ((zxzy(1,nb)/2. + zxk)*delx + &
+         & (zxzy(2,nb)/2. + zyk)*dely) )/dcub
+      r1 = r1 + t*delx
+      r2 = r2 + t*dely
+2     continue
 !
 !   Solve the 2 by 2 system and update dgmax
 !
-  dzy = (a11*r2 - a12*r1)/(a11*a22 - a12*a12)
-  dzx = (r1 - a12*dzy)/a11
-  dgmax = amax1(dgmax,abs(dzx),abs(dzy))
+   dzy = (a11*r2 - a12*r1)/(a11*a22 - a12*a12)
+   dzx = (r1 - a12*dzy)/a11
+   dgmax = amax1(dgmax,abs(dzx),abs(dzy))
 !
 !   Update the partials at node k
 !
-  zxzy(1,k) = zxk + dzx
-3 zxzy(2,k) = zyk + dzy
+   zxzy(1,k) = zxk + dzx
+3  zxzy(2,k) = zyk + dzy
 !
 !   Increment iter and test for convergence
 !
@@ -3324,7 +3324,7 @@ if (n .lt. 3) go to 20
 !
 do j = 1,n
    call gradl1 (n, j, x, y, z, iadj, iend, zxzy(1,j), &
-&zxzy(2,j), ierr)
+      & zxzy(2,j), ierr)
    if (ierr .lt. 0) go to 30
 end do
 ierr = 0
@@ -3346,9 +3346,9 @@ integer, intent(inout) :: iend(n), ier
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: dx, dy
 integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
-&np, i, j, im1, jp1, ip1, l
+   & np, i, j, im1, jp1, ip1, l
 real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
-&dmin, dtol, sf
+   & dmin, dtol, sf
 !
 !***********************************************************
 !
@@ -3483,7 +3483,7 @@ kk = k
 ! Check for errors and initialize lmin, lmax
 !
 if (nn .lt. 3  .or.  kk .lt. 1  .or.  kk .gt. nn) &
-&go to 16
+   & go to 16
 lmin = min0(lmn,nn)
 lmax = min0(lmx,nn)
 !
@@ -3494,17 +3494,17 @@ sum = 0.
 npts(1) = kk
 lm1 = lmin - 1
 do 1 lnp = 2,lm1
-  call getnp (x,y,iadj,iend,lnp, npts, ds,ierr)
-1 sum = sum + ds
+   call getnp (x,y,iadj,iend,lnp, npts, ds,ierr)
+1  sum = sum + ds
 !
 ! Add additional nodes to npts until the relative increase
 !   in ds is at least rtol.
 !
 do 2 lnp = lmin,lmax
-  call getnp (x,y,iadj,iend,lnp, npts, rs,ierr)
-  if ((rs-ds)/ds .le. rtol) go to 2
-  if (lnp .gt. 6) go to 3
-2 sum = sum + rs
+   call getnp (x,y,iadj,iend,lnp, npts, rs,ierr)
+   if ((rs - ds)/ds .le. rtol) go to 2
+   if (lnp .gt. 6) go to 3
+2  sum = sum + rs
 !
 ! Use all lmax nodes in the least squares fit.  rs is
 !   arbitrarily increased by 10 per cent.
@@ -3515,7 +3515,7 @@ lnp = lmax + 1
 ! There are lnp-2 equations corresponding to nodes npts(2),
 !   ...,npts(lnp-1).
 !
-3 avsq = sum/float(lnp-2)
+3 avsq = sum/float(lnp - 2)
 av = sqrt(avsq)
 r = sqrt(rs)
 xk = x(kk)
@@ -3529,38 +3529,38 @@ if (lnp .lt. 7) go to 12
 !   rotations
 !
 do 5 i = 1,5
-  np = npts(i+1)
-  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
-&r, a(1,i))
-  if (i .eq. 1) go to 5
-  im1 = i - 1
-  do 4 j = 1,im1
-    jp1 = j + 1
-    l = 6 - j
-    call srotg (a(j,j),a(j,i),c,s)
-4 call srot (l,a(jp1,j),1,a(jp1,i),1,c,s)
-5 continue
+   np = npts(i + 1)
+   call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+      & r, a(1,i))
+   if (i .eq. 1) go to 5
+   im1 = i - 1
+   do 4 j = 1,im1
+      jp1 = j + 1
+      l = 6 - j
+      call srotg (a(j,j),a(j,i),c,s)
+4     call srot (l,a(jp1,j),1,a(jp1,i),1,c,s)
+5  continue
 !
 ! Add the additional equations to the system using
 !   the last column of a -- I .LE. lnp.
 !
 i = 7
 6 if (i .eq. lnp) go to 8
-  np = npts(i)
-  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
-&r, a(1,6))
-  do 7 j = 1,5
-    jp1 = j + 1
-    l = 6 - j
-    call srotg (a(j,j),a(j,6),c,s)
-7 call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
-  i = i + 1
-  go to 6
+np = npts(i)
+call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+   & r, a(1,6))
+do 7 j = 1,5
+   jp1 = j + 1
+   l = 6 - j
+   call srotg (a(j,j),a(j,6),c,s)
+7  call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+i = i + 1
+go to 6
 !
 ! Test the system for ill-conditioning
 !
 8 dmin = amin1( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
-&abs(a(4,4)),abs(a(5,5)) )
+   & abs(a(4,4)),abs(a(5,5)) )
 if (dmin .ge. dtol) go to 15
 if (lnp .gt. lmax) go to 9
 !
@@ -3569,7 +3569,7 @@ if (lnp .gt. lmax) go to 9
 !
 lnp = lnp + 1
 if (lnp .le. lmax) call getnp (x,y,iadj,iend,lnp, &
-&npts, rs,ierr)
+   & npts, rs,ierr)
 r = sqrt(1.1*rs)
 go to 6
 !
@@ -3578,15 +3578,15 @@ go to 6
 !   three equations.
 !
 9 do 11 i = 1,3
-  a(i,6) = sf
-  ip1 = i + 1
-  do 10 j = ip1,6
-10 a(j,6) = 0.
-  do 11 j = i,5
-    jp1 = j + 1
-    l = 6 - j
-    call srotg (a(j,j),a(j,6),c,s)
-11 call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+   a(i,6) = sf
+   ip1 = i + 1
+   do 10 j = ip1,6
+10    a(j,6) = 0.
+   do 11 j = i,5
+      jp1 = j + 1
+      l = 6 - j
+      call srotg (a(j,j),a(j,6),c,s)
+11    call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
 go to 14
 !
 ! 4 .LE. lnp .LE. 6 (2, 3, OR 4 EQUATIONS) -- fit a plane to
@@ -3594,22 +3594,22 @@ go to 14
 !
 12 np = npts(2)
 call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
-&r, a(1,4))
+   & r, a(1,4))
 np = npts(3)
 call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
-&r, a(1,5))
+   & r, a(1,5))
 call srotg (a(4,4),a(4,5),c,s)
 call srot (2,a(5,4),1,a(5,5),1,c,s)
 if (lnp .eq. 4) go to 14
 !
 lm1 = lnp - 1
 do 13 i = 4,lm1
-  np = npts(i)
-  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
-&r, a(1,6))
-  call srotg (a(4,4),a(4,6),c,s)
-  call srot (2,a(5,4),1,a(5,6),1,c,s)
-  call srotg (a(5,5),a(5,6),c,s)
+   np = npts(i)
+   call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+      & r, a(1,6))
+   call srotg (a(4,4),a(4,6),c,s)
+   call srot (2,a(5,4),1,a(5,6),1,c,s)
+   call srotg (a(5,5),a(5,6),c,s)
 13 call srot (1,a(6,5),1,a(6,6),1,c,s)
 !
 ! Test the linear fit for ill-conditioning
@@ -3702,7 +3702,7 @@ dxsq = dx*dx
 dysq = dy*dy
 d = sqrt(dxsq + dysq)
 if (d .le. 0.  .or.  d .ge. r) go to 1
-w = (r-d)/r/d
+w = (r - d)/r/d
 w1 = w/s1
 w2 = w/s2
 row(1) = dxsq*w2
@@ -3717,7 +3717,7 @@ return
 !   of influence.  Set row to the zero vector.
 !
 1 do 2 i = 1,6
-2 row(i) = 0.
+2  row(i) = 0.
 return
 end subroutine setrm
 
@@ -3820,9 +3820,9 @@ y1 = y(n1)
 ! Mark the elements of npts
 !
 do 1 i = 1,lm1
-  ni = npts(i)
-  iend(ni) = -iend(ni)
-1 continue
+   ni = npts(i)
+   iend(ni) = -iend(ni)
+1  continue
 !
 ! Candidates for np = npts(l) are the unmarked neighbors
 !   of nodes in npts.  np=0 Is a flag to set np to the
@@ -3834,34 +3834,34 @@ dnp = 0.
 ! Loop on nodes ni in npts
 !
 do 2 i = 1,lm1
-  ni = npts(i)
-  indf = 1
-  if (ni .gt. 1) indf = iabs(iend(ni-1)) + 1
-  indl = -iend(ni)
+   ni = npts(i)
+   indf = 1
+   if (ni .gt. 1) indf = iabs(iend(ni - 1)) + 1
+   indl = -iend(ni)
 !
 ! Loop on neighbors nb of ni
 !
-  do 2 indx = indf,indl
-    nb = iadj(indx)
-    if (nb .eq. 0  .or.  iend(nb) .lt. 0) go to 2
+   do 2 indx = indf,indl
+      nb = iadj(indx)
+      if (nb .eq. 0  .or.  iend(nb) .lt. 0) go to 2
 !
 ! nb is an unmarked neighbor of ni.  Replace np if nb is
 !   closer to n1 or is the first candidate encountered.
 !
-    dnb = (x(nb)-x1)**2 + (y(nb)-y1)**2
-    if (np .ne. 0  .and.  dnb .ge. dnp) go to 2
-    np = nb
-    dnp = dnb
-2 continue
+      dnb = (x(nb) - x1)**2 + (y(nb) - y1)**2
+      if (np .ne. 0  .and.  dnb .ge. dnp) go to 2
+      np = nb
+      dnp = dnb
+2     continue
 npts(l) = np
 ds = dnp
 !
 ! Unmark the elements of npts
 !
 do i = 1,lm1
-  ni = npts(i)
-  iend(ni) = -iend(ni)
-  end do
+   ni = npts(i)
+   iend(ni) = -iend(ni)
+end do
 return
 !
 ! l is out of range
@@ -3871,7 +3871,7 @@ return
 end subroutine getnp
 
 subroutine sfval (n, x, y, z, m, xi, yi, zi, iadj, iend, &
-&zxzy, ierr)
+   & zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -3891,7 +3891,7 @@ if (n .lt. 3 .or. m .lt. 1) go to 20
 ist = 1
 do j = 1,m
    call intrc1 (n, xi(j), yi(j), x, y, z, iadj, iend, &
-&1, zxzy, ist, zi(j), ierr)
+      & 1, zxzy, ist, zi(j), ierr)
    if (ierr .lt. 0) go to 30
 end do
 ierr = 0
@@ -3906,7 +3906,7 @@ return
 end subroutine sfval
 
 subroutine sfval2 (n, x, y, z, l, m, nrows, xi, yi, zi, &
-&iadj, iend, zxzy, ierr)
+   & iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, nrows
@@ -3922,13 +3922,13 @@ integer :: i, ist, j
 !-----------------------------------------------------------------------
 !
 if (n .lt. 3 .or. l .lt. 1 .or. m .lt. 1 .or. nrows .lt. l) &
-&go to 30
+   & go to 30
 !
 ist = 1
 do j = 1,m
    do i = 1,l
       call intrc1 (n, xi(i), yi(j), x, y, z, iadj, iend, &
-&1, zxzy, ist, zi(i,j), ierr)
+         & 1, zxzy, ist, zi(i,j), ierr)
       if (ierr .lt. 0) go to 40
    end do
 end do
@@ -3944,7 +3944,7 @@ return
 end subroutine sfval2
 
 subroutine intrc1 (n,px,py,x,y,z,iadj,iend,iflag, &
-&zxzy, ist, pz,ier)
+   & zxzy, ist, pz,ier)
 implicit none
 integer, intent(in) :: n, iadj(*)
 integer, intent(inout) :: iend(n)
@@ -3956,8 +3956,8 @@ real, intent(in) :: z(n), zxzy(2,n)
 real, intent(out) :: pz
 integer :: nn, i1, i2, i3, ierr, n1, n2, indx
 real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
-&y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
-&c2, f1, f2
+   & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
+   & c2, f1, f2
 !
 !***********************************************************
 !
@@ -4086,7 +4086,7 @@ real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
 nn = n
 pz = 0.
 if (nn .lt. 3  .or.  iflag .lt. 0  .or.  iflag .gt. 1 &
-&.or.  ist .lt. 1  .or.  ist .gt. nn) go to 11
+   & .or.  ist .lt. 1  .or.  ist .gt. nn) go to 11
 xp = px
 yp = py
 !
@@ -4127,7 +4127,7 @@ z1 = z(i1)
 z2 = z(i2)
 z3 = z(i3)
 call tval(xp,yp,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1,zx2, &
-&zx3,zy1,zy2,zy3,0, pz,dum,dum,ierr)
+   & zx3,zy1,zy2,zy3,0, pz,dum,dum,ierr)
 if (ierr .ne. 0) go to 12
 ier = 0
 return
@@ -4151,9 +4151,9 @@ x1 = x(n1)
 y1 = y(n1)
 x2 = x(n2)
 y2 = y(n2)
-dp = (x1-x2)*(xp-x2) + (y1-y2)*(yp-y2)
+dp = (x1 - x2)*(xp - x2) + (y1 - y2)*(yp - y2)
 if (dp .le. 0.) go to 5
-if ((xp-x1)*(x2-x1) + (yp-y1)*(y2-y1) .gt. 0.) go to 8
+if ((xp - x1)*(x2 - x1) + (yp - y1)*(y2 - y1) .gt. 0.) go to 8
 n2 = n1
 go to 4
 !
@@ -4168,7 +4168,7 @@ go to 7
 !
 ! Compute extrapolated value at P
 !
-7 pz = z(n2) + zx2*(xp-x2) + zy2*(yp-y2)
+7 pz = z(n2) + zx2*(xp - x2) + zy2*(yp - y2)
 ier = 1
 return
 !
@@ -4187,16 +4187,16 @@ call gradl1(nn,n2,x,y,z,iadj,iend, zx2,zy2,ierr)
 ! Compute Q, its barycentric coordinates, and the cardinal
 !   functions for extrapolation
 !
-10 u = x2-x1
-v = y2-y1
+10 u = x2 - x1
+v = y2 - y1
 r1 = dp/(u**2 + v**2)
 r2 = 1. - r1
 xq = r1*x1 + r2*x2
 yq = r1*y1 + r2*y2
 f1 = r1*r1*r2
 f2 = r1*r2*r2
-a1 = r1 + (f1-f2)
-a2 = r2 - (f1-f2)
+a1 = r1 + (f1 - f2)
+a2 = r2 - (f1 - f2)
 b1 = u*f1
 b2 = -u*f2
 c1 = v*f1
@@ -4206,12 +4206,12 @@ c2 = -v*f2
 !   AT Q
 !
 pz = a1*z(n1) + a2*z(n2) + b1*zx1 + b2*zx2 + &
-&c1*zy1 + c2*zy2
+   & c1*zy1 + c2*zy2
 !
 ! Compute the extrapolated value at P
 !
-pz = pz + (r1*zx1 + r2*zx2)*(xp-xq) + &
-&(r1*zy1 + r2*zy2)*(yp-yq)
+pz = pz + (r1*zx1 + r2*zx2)*(xp - xq) + &
+   & (r1*zy1 + r2*zy2)*(yp - yq)
 ier = 1
 return
 !
@@ -4227,19 +4227,19 @@ return
 end subroutine intrc1
 
 subroutine tval (x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
-&zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
-&ier)
+   & zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
+   & ier)
 implicit none
 integer, intent(in) :: iflag
 integer, intent(inout) :: ier
 real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
-&zx2, zx3, zy1, zy2, zy3
+   & zx2, zx3, zy1, zy2, zy3
 real, intent(inout) :: w, wx, wy
 integer :: i, ip1, ip2, ip3
 real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
-&phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
-&f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
-&a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
+   & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
+   & f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
+   & a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
 !
 !***********************************************************
 !
@@ -4359,8 +4359,8 @@ v(2) = y1 - y3
 v(3) = y2 - y1
 !
 do 1 i = 1,3
-  sl(i) = u(i)*u(i) + v(i)*v(i)
-1 continue
+   sl(i) = u(i)*u(i) + v(i)*v(i)
+1  continue
 !
 ! area = 3-1 x 3-2
 !
@@ -4370,7 +4370,7 @@ if (area .eq. 0.) go to 9
 ! r(1) = (2-3 x 2-(x,y))/area, r(2) = (1-(x,y) x 1-3)/area,
 !   r(3) = (1-2 x 1-(x,y))/area
 !
-r(1) = (u(1)*(y-y2) - v(1)*(x-x2))/area
+r(1) = (u(1)*(y - y2) - v(1)*(x - x2))/area
 xp = x - x1
 yp = y - y1
 r(2) = (u(2)*yp - v(2)*xp)/area
@@ -4402,18 +4402,18 @@ ro(ip1) = (phi(ip1) + 5.*c1/3.)*r(ip1) - c1
 ro(ip2) = c1*(r(ip3) - c2)
 ro(ip3) = c1*(r(ip2) - c2)
 !
-f(1) = 3.*(sl(2)-sl(3))/sl(1)
-f(2) = 3.*(sl(3)-sl(1))/sl(2)
-f(3) = 3.*(sl(1)-sl(2))/sl(3)
+f(1) = 3.*(sl(2) - sl(3))/sl(1)
+f(2) = 3.*(sl(3) - sl(1))/sl(2)
+f(3) = 3.*(sl(1) - sl(2))/sl(3)
 !
-g(1) = (r(2)-r(3))*phi(1) + f(1)*ro(1) - ro(2) + ro(3)
-g(2) = (r(3)-r(1))*phi(2) + f(2)*ro(2) - ro(3) + ro(1)
-g(3) = (r(1)-r(2))*phi(3) + f(3)*ro(3) - ro(1) + ro(2)
+g(1) = (r(2) - r(3))*phi(1) + f(1)*ro(1) - ro(2) + ro(3)
+g(2) = (r(3) - r(1))*phi(2) + f(2)*ro(2) - ro(3) + ro(1)
+g(3) = (r(1) - r(2))*phi(3) + f(3)*ro(3) - ro(1) + ro(2)
 !
 do i = 1,3
-  p(i) = g(i) + phi(i)
-  q(i) = g(i) - phi(i)
-  end do
+   p(i) = g(i) + phi(i)
+   q(i) = g(i) - phi(i)
+end do
 !
 a(1) = r(1) + g(3) - g(2)
 a(2) = r(2) + g(1) - g(3)
@@ -4430,15 +4430,15 @@ c(3) = v(2)*p(2) + v(1)*q(1)
 ! w is a linear combination of the cardinal functions
 !
 w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
-&+ b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
+   & + b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
 if (iflag .ne. 1) return
 !
 ! Compute wx and wy
 !
 do i = 1,3
-  rx(i) = -v(i)/area
-  ry(i) = u(i)/area
-  end do
+   rx(i) = -v(i)/area
+   ry(i) = u(i)/area
+end do
 phix(1) = r(2)*rx(3) + rx(2)*r(3)
 phiy(1) = r(2)*ry(3) + ry(2)*r(3)
 phix(2) = r(3)*rx(1) + rx(3)*r(1)
@@ -4447,33 +4447,33 @@ phix(3) = r(1)*rx(2) + rx(1)*r(2)
 phiy(3) = r(1)*ry(2) + ry(1)*r(2)
 !
 rox(ip1) = rx(ip1)*(phi(ip1) + 5.*c1) + &
-&r(ip1)*(phix(ip1) - rx(ip1))
+   & r(ip1)*(phix(ip1) - rx(ip1))
 roy(ip1) = ry(ip1)*(phi(ip1) + 5.*c1) + &
-&r(ip1)*(phiy(ip1) - ry(ip1))
+   & r(ip1)*(phiy(ip1) - ry(ip1))
 rox(ip2) = rx(ip1)*(phi(ip2) - c1) + c1*rx(ip3)
 roy(ip2) = ry(ip1)*(phi(ip2) - c1) + c1*ry(ip3)
 rox(ip3) = rx(ip1)*(phi(ip3) - c1) + c1*rx(ip2)
 roy(ip3) = ry(ip1)*(phi(ip3) - c1) + c1*ry(ip2)
 !
 gx(1) = (rx(2) - rx(3))*phi(1) + (r(2) - r(3))*phix(1) &
-&+ f(1)*rox(1) - rox(2) + rox(3)
+   & + f(1)*rox(1) - rox(2) + rox(3)
 gy(1) = (ry(2) - ry(3))*phi(1) + (r(2) - r(3))*phiy(1) &
-&+ f(1)*roy(1) - roy(2) + roy(3)
+   & + f(1)*roy(1) - roy(2) + roy(3)
 gx(2) = (rx(3) - rx(1))*phi(2) + (r(3) - r(1))*phix(2) &
-&+ f(2)*rox(2) - rox(3) + rox(1)
+   & + f(2)*rox(2) - rox(3) + rox(1)
 gy(2) = (ry(3) - ry(1))*phi(2) + (r(3) - r(1))*phiy(2) &
-&+ f(2)*roy(2) - roy(3) + roy(1)
+   & + f(2)*roy(2) - roy(3) + roy(1)
 gx(3) = (rx(1) - rx(2))*phi(3) + (r(1) - r(2))*phix(3) &
-&+ f(3)*rox(3) - rox(1) + rox(2)
+   & + f(3)*rox(3) - rox(1) + rox(2)
 gy(3) = (ry(1) - ry(2))*phi(3) + (r(1) - r(2))*phiy(3) &
-&+ f(3)*roy(3) - roy(1) + roy(2)
+   & + f(3)*roy(3) - roy(1) + roy(2)
 !
 do i = 1,3
-  px(i) = gx(i) + phix(i)
-  py(i) = gy(i) + phiy(i)
-  qx(i) = gx(i) - phix(i)
-  qy(i) = gy(i) - phiy(i)
-  end do
+   px(i) = gx(i) + phix(i)
+   py(i) = gy(i) + phiy(i)
+   qx(i) = gx(i) - phix(i)
+   qy(i) = gy(i) - phiy(i)
+end do
 !
 ax(1) = rx(1) + gx(3) - gx(2)
 ay(1) = ry(1) + gy(3) - gy(2)
@@ -4500,11 +4500,11 @@ cy(3) = v(2)*py(2) + v(1)*qy(1)
 !   functions
 !
 wx = ax(1)*z1 + ax(2)*z2 + ax(3)*z3 + (bx(1)*zx1 + &
-&bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
-&cx(3)*zy3)/2.
+   & bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
+   & cx(3)*zy3)/2.
 wy = ay(1)*z1 + ay(2)*z2 + ay(3)*z3 + (by(1)*zx1 + &
-&by(2)*zx2 + by(3)*zx3 + cy(1)*zy1 + cy(2)*zy2 + &
-&cy(3)*zy3)/2.
+   & by(2)*zx2 + by(3)*zx3 + cy(1)*zy1 + cy(2)*zy2 + &
+   & cy(3)*zy3)/2.
 return
 !
 ! Vertices are collinear
@@ -4518,9 +4518,9 @@ return
 end subroutine tval
 
 subroutine mfit(dimen,fitdeg,nfpols,nfpts, &
-&fitcds,ncrows,fitvls,wts, &
-&resids,error,fitiwk,fitdwk, &
-&fiwkln,fdwkln,ireqd,dreqd)
+   & fitcds,ncrows,fitvls,wts, &
+   & resids,error,fitiwk,fitdwk, &
+   & fiwkln,fdwkln,ireqd,dreqd)
 implicit none
 !
 integer, intent(inout) :: nfpols, fitdeg
@@ -4533,7 +4533,7 @@ real, intent(inout) :: fitvls(nfpts), resids(nfpts)
 real, intent(in) :: wts(nfpts)
 integer :: indstt, p, dimp1
 integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-&alfl
+   & alfl
 real :: scale
 !
 !     ***************
@@ -4649,12 +4649,12 @@ dimp1 = dimen + 1
 !     ***************
 !
 call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
-&error)
+   & error)
 if ( error .ge. 2 ) return
 !
 if ( fdwkln .ge. dreqd ) go to 10
-   error = 4
-   return
+error = 4
+return
 10 continue
 !
 psiwid = fitiwk(3)
@@ -4669,12 +4669,12 @@ psistt = ssqstt + nfpols
 !
 !     ***************
 !
-   call gnrtp(fitdeg,fitdwk(alfstt), &
-&fitdwk(psistt),fitiwk(indstt), &
-&fitiwk(newstt),fitdwk(ssqstt),fitcds, &
-&ncrows,nfpols,dimen,nfpts,fitvls,resids, &
-&fitdwk(cstt),psiwid,wts,alfl,dimp1, &
-&fitdwk(maxstt),error)
+call gnrtp(fitdeg,fitdwk(alfstt), &
+   & fitdwk(psistt),fitiwk(indstt), &
+   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+   & fitdwk(maxstt),error)
 !
 !     ***************
 !     Store the number of basis polynomials actually computed
@@ -4689,13 +4689,13 @@ fitiwk(1) = nfpols
 !
 scale = fitdwk(dimen + 1)
 do p = 1,nfpts
-  resids(p) = resids(p) * scale
+   resids(p) = resids(p) * scale
 end do
 return
 end subroutine mfit
 
 subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
-&ireqd,dreqd,error)
+   & ireqd,dreqd,error)
 implicit none
 !
 integer, intent(inout) :: ireqd, dreqd
@@ -4786,8 +4786,8 @@ call basiz(degree,npts,dimen,npolys,error)
 if ( error .ge. 2 ) return
 ireqd = 4 * npolys + degree * dimen
 if ( iwklen .ge. ireqd ) go to 5
-   error = 4
-   return
+error = 4
+return
 5 newstt = 4 * npolys + 1
 !
 !     ***************
@@ -4850,7 +4850,7 @@ if ( degree .gt. 2 ) go to 10
 !     Case 1
 !     ***************
 !
-   psiwid = npolys
+psiwid = npolys
 go to 40
 10 nplyt4 = 4 * npolys
 !
@@ -4859,16 +4859,16 @@ go to 40
 !                 npolys
 !     ***************
 !
-   kmxbas = iwork(nplyt4 - 2)
+kmxbas = iwork(nplyt4 - 2)
 !
-   if ( kmxbas .ne. dimen ) go to 20
+if ( kmxbas .ne. dimen ) go to 20
 !
 !     ***************
 !     Case 2
 !     ***************
 !
-      psiwid = npolys - iwork(4 * npolys - 1)
-   go to 40
+psiwid = npolys - iwork(4 * npolys - 1)
+go to 40
 !
 !     ***************
 !     index =  newkj( k      + 1 , degree(npolys-2) )
@@ -4876,21 +4876,21 @@ go to 40
 !     ***************
 !
 20 index = nplyt4 + (degree - 3) * dimen + kmxbas + 1
-      kjp1d2 = iwork(index)
+kjp1d2 = iwork(index)
 !
 !     ***************
 !     startj  =  indexs(3,npolys)
 !     ***************
 !
-      startj = iwork(nplyt4 - 1)
-      if ( startj .gt. kjp1d2 ) go to 30
+startj = iwork(nplyt4 - 1)
+if ( startj .gt. kjp1d2 ) go to 30
 !
 !     ***************
 !     Case 4
 !     ***************
 !
-         psiwid = npolys - startj + 1
-      go to 40
+psiwid = npolys - startj + 1
+go to 40
 !
 !     ***************
 !     Case 3
@@ -4949,32 +4949,32 @@ integer :: i, rowlen
 !
 error = 0
 if ( npts .ge. 1 .and. dimen .ge. 1 ) go to 10
-   error = 3
-   return
+error = 3
+return
 !
 10 continue
 if ( degree .lt. 0 ) go to 30
 !
-  rowlen = 1
-  npolys = 1
-  top = dimen - 1
-  bot = 0
-  if ( degree .lt. 1 )  go to 30
-    do i=1,degree
-      top = top + 1
-      bot = bot + 1
-      rowlen = (rowlen*top)/bot
-      npolys = npolys + rowlen
-    end do
+rowlen = 1
+npolys = 1
+top = dimen - 1
+bot = 0
+if ( degree .lt. 1 ) go to 30
+do i = 1,degree
+   top = top + 1
+   bot = bot + 1
+   rowlen = (rowlen*top)/bot
+   npolys = npolys + rowlen
+end do
 !
 30 continue
 if ( npolys .ge. 1 ) go to 40
-      error = 2
-      return
+error = 2
+return
 40 continue
 if ( npolys .lt. npts ) go to 50
-      npolys = npts
-      error = 1
+npolys = npts
+error = 1
 50 continue
 rowlen = 1
 i = 1
@@ -4982,13 +4982,13 @@ degree = 0
 top = dimen - 1
 bot = 0
 60 continue
-if ( i .ge. npolys )  go to 70
-    top = top + 1
-    bot = bot + 1
-    rowlen = (rowlen*top)/bot
-    i = i + rowlen
-    degree = degree + 1
-    if ( i .lt. npolys )  go to 60
+if ( i .ge. npolys ) go to 70
+top = top + 1
+bot = bot + 1
+rowlen = (rowlen*top)/bot
+i = i + rowlen
+degree = degree + 1
+if ( i .lt. npolys ) go to 60
 70 continue
 return
 end subroutine basiz
@@ -5000,7 +5000,7 @@ integer, intent(in) :: npolys, dimen, degree
 integer, intent(out) :: alflp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, &
-&dimm2
+   & dimm2
 integer :: dimp1
 !
 !     ***************
@@ -5110,27 +5110,27 @@ do 70 curdeg = 2,degree
 20 jprime = newkj(kj,curm1)
    newkj(kj,curdeg) = j
    if ( kj .eq. dimen ) go to 60
-      do 50 i = 1,nwithk
-         indexs(1,j) = jprime
-         indexs(2,j) = kj
+   do 50 i = 1,nwithk
+      indexs(1,j) = jprime
+      indexs(2,j) = kj
 !
 !     ***************
 !     CALCULATE  indexs (3, j ),  indexs (4, j )
 !     ***************
 !
-         if ( kj .lt. indexs(2,jprime) ) go to 30
-            indexs(3,j) = indexs(1,jprime)
-            go to 40
-30 indexs(3,j) = newkj(1,curdeg - 1)
-40 indexs(4,j) = alflp1
-         alflp1 = alflp1 + j - indexs(3,j)
-         if ( j .eq. npolys ) return
+      if ( kj .lt. indexs(2,jprime) ) go to 30
+      indexs(3,j) = indexs(1,jprime)
+      go to 40
+30    indexs(3,j) = newkj(1,curdeg - 1)
+40    indexs(4,j) = alflp1
+      alflp1 = alflp1 + j - indexs(3,j)
+      if ( j .eq. npolys ) return
 !
-         jprime = jprime + 1
-50 j = j + 1
-      kj = kj + 1
-      nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
-      go to 20
+      jprime = jprime + 1
+50    j = j + 1
+   kj = kj + 1
+   nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
+   go to 20
 60 indexs(1,j) = jprime
    indexs(2,j) = dimen
    indexs(3,j) = indexs(1,jprime)
@@ -5142,9 +5142,9 @@ return
 end subroutine mtable
 
 subroutine gnrtp(degree,alpha,psi,indexs, &
-&newkj,sumsqs,coord,ncrows,npolys, &
-&dimen,npts,f,z,c,psiwid,weight, &
-&alfl,dimp1,maxabs,error)
+   & newkj,sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,dimp1,maxabs,error)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(inout) :: degree
@@ -5221,15 +5221,15 @@ sttdeg = 1
 onplys = 1
 !
 call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
-&coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
-&weight,alfl,onplys,sttdeg,error)
+   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+   & weight,alfl,onplys,sttdeg,error)
 return
 end subroutine gnrtp
 
 subroutine incdg(degree,alpha,psi,indexs,newkj, &
-&sumsqs,coord,ncrows,npolys, &
-&dimen,npts,f,z,c,psiwid,weight, &
-&alfl,onplys,sttdeg,error)
+   & sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,onplys,sttdeg,error)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(inout) :: error
@@ -5268,11 +5268,11 @@ real :: arc, runtot, rntot1, rntot2
 !     ****************
 !
 if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
-   error = 6
+error = 6
 return
 10 if ( indexs(2,onplys) .eq. dimen ) go to 20
-      curdeg = sttdeg
-   go to 30
+curdeg = sttdeg
+go to 30
 20 curdeg = sttdeg + 1
 30 onpp1 = onplys + 1
 do 170 j = onpp1,npolys
@@ -5311,14 +5311,14 @@ do 170 j = onpp1,npolys
 !     previous and 8-TH previous statements.
 !     ***************
 !
-      j1mj2 = j1 - newkj(kj,curdeg - 2)
+   j1mj2 = j1 - newkj(kj,curdeg - 2)
 !
-      do 40 l = m,j3
-         q = j1mj2 + l
-         index1 = starta + l
-         index2 = indexs(4,q) - indexs(3,q) + jprime
-40 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-&sumsqs(l)
+   do 40 l = m,j3
+      q = j1mj2 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
 !
 !     ***************
 !     Calculate  alpha ( j , m ) for  m  between the 2
@@ -5331,16 +5331,16 @@ do 170 j = onpp1,npolys
 !
    m = j3 + 1
 50 if ( jprime .eq. j1 ) go to 100
-      if ( kj .eq. 1 ) go to 80
-      j1m1 = j1 - 1
-      do 70 l = m,j1m1
-         runtot = 0.0
-         do 60 p = 1,npts
-            index1 = l - ((l - 1) / psiwid) * psiwid
-60 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-&psi(p,index1) * weight(p)
-         index1 = starta + l
-70 alpha(index1) = runtot / sumsqs(l)
+   if ( kj .eq. 1 ) go to 80
+   j1m1 = j1 - 1
+   do 70 l = m,j1m1
+      runtot = 0.0
+      do 60 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      index1 = starta + l
+70    alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     Calculate  alpha ( j , m ) for  m  between
@@ -5349,14 +5349,14 @@ do 170 j = onpp1,npolys
 !     ***************
 !
 80 j0mj1 = newkj(kj,curdeg) - j1
-      jpm1 = jprime - 1
-      do 90 l = j1,jpm1
-         q = j0mj1 + l
-         index1 = starta + l
-         index2 = indexs(4,q) - indexs(3,q) + jprime
-90 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-&sumsqs(l)
-      m = jprime
+   jpm1 = jprime - 1
+   do 90 l = j1,jpm1
+      q = j0mj1 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+   m = jprime
 !
 !     ***************
 !     Calculate the remaining  alpha ( j , m ) from
@@ -5371,10 +5371,10 @@ do 170 j = onpp1,npolys
       runtot = 0.0
       do 110 p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-110 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-&psi(p,index1) * weight(p)
+110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
       index1 = starta + l
-120 alpha(index1) = runtot / sumsqs(l)
+120   alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
@@ -5391,25 +5391,25 @@ do 170 j = onpp1,npolys
 !     ***************
 !
 130 jm1 = j - 1
-    arc = 0.0
-    rntot1 = 0.0
-    rntot2 = 0.0
-    do 150 p = 1,npts
-        runtot = coord(p,kj) * psi(p,jpindx)
-        do 140 l = start,jm1
-           index1 = starta + l
-           index2 = l - ((l - 1) / psiwid) * psiwid
-140 runtot = runtot - alpha(index1) * psi(p,index2)
-        psi(p,jindex) = runtot
-        arc = arc + psi(p,index2) * psi(p,jindex) * &
-&weight(p)
-        rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
-&weight(p)
-150 rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
-    if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.e-03) &
-&go to 200
-    sumsqs(j) = rntot1
-    c(j) = rntot2 / rntot1
+   arc = 0.0
+   rntot1 = 0.0
+   rntot2 = 0.0
+   do 150 p = 1,npts
+      runtot = coord(p,kj) * psi(p,jpindx)
+      do 140 l = start,jm1
+         index1 = starta + l
+         index2 = l - ((l - 1) / psiwid) * psiwid
+140      runtot = runtot - alpha(index1) * psi(p,index2)
+      psi(p,jindex) = runtot
+      arc = arc + psi(p,index2) * psi(p,jindex) * &
+         & weight(p)
+      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+         & weight(p)
+150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+   if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.e-03) &
+      & go to 200
+   sumsqs(j) = rntot1
+   c(j) = rntot2 / rntot1
 !
 !     ***************
 !     Calculate the new  z ( p ) and the new  SSRES  using
@@ -5418,9 +5418,9 @@ do 170 j = onpp1,npolys
 !              j      j
 !     ***************
 !
-    do 160 p = 1,npts
-160 z(p) = z(p) - c(j) * psi(p,jindex)
-    sttdeg = curdeg
+   do 160 p = 1,npts
+160   z(p) = z(p) - c(j) * psi(p,jindex)
+   sttdeg = curdeg
 170 if ( kj .eq. dimen ) curdeg = curdeg + 1
 return
 !
@@ -5498,13 +5498,13 @@ integer :: p
 !     ****************
 !
 if ( maxabs .eq. 0.0e+00 ) return
-   do 10 p = 1,npts
+do 10 p = 1,npts
 10 coord(p) = coord(p) / maxabs
-   return
+return
 end subroutine scaldn
 
 subroutine meval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
-&error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
+   & error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
 implicit none
 integer, intent(in) :: nerows
 integer, intent(in) :: fiwkln, fdwkln
@@ -5648,8 +5648,8 @@ psistt = cstt + fitiwk(2)
 !     ***************
 !
 call meval1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
-&fitdwk(alfstt),fitiwk,fitdwk(psistt), &
-&evlvls,alfl,fitdwk(maxstt),temp,dimp1)
+   & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
+   & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
 return
 !
 !     ***************
@@ -5663,7 +5663,7 @@ return
 end subroutine meval
 
 subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
-&indexs,psi,f,alfl,maxabs,x,dimp1)
+   & indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
@@ -5714,8 +5714,8 @@ do 40 p = 1,nepts
 !     ***************
 !
    do k = 1,dimen
-        x(k) = coord(p,k)
-        if (maxabs(k) .ne. 0.0) x(k) = x(k) / maxabs(k)
+      x(k) = coord(p,k)
+      if (maxabs(k) .ne. 0.0) x(k) = x(k) / maxabs(k)
    end do
 !
 !     ***************
@@ -5726,16 +5726,16 @@ do 40 p = 1,nepts
 !
    rntot1 = c(1)
    do 30 j = 2,npolys
-        k = indexs(2,j)
-        jprime = indexs(1,j)
-        runtot = x(k) * psi(jprime)
-        i = indexs(3,j)
-        jm1 = j - 1
-        do 20 m = i,jm1
-           index = indexs(4,j) + m - i
-20 runtot = runtot - psi(m) * alpha(index)
-        psi(j) = runtot
-30 rntot1 = rntot1 + c(j) * psi(j)
+      k = indexs(2,j)
+      jprime = indexs(1,j)
+      runtot = x(k) * psi(jprime)
+      i = indexs(3,j)
+      jm1 = j - 1
+      do 20 m = i,jm1
+         index = indexs(4,j) + m - i
+20       runtot = runtot - psi(m) * alpha(index)
+      psi(j) = runtot
+30    rntot1 = rntot1 + c(j) * psi(j)
 40 f(p) = rntot1 * maxabs(dimp1)
 return
 !
@@ -5750,9 +5750,9 @@ return
 end subroutine meval1
 
 subroutine dmfit(dimen,fitdeg,nfpols,nfpts, &
-&fitcds,ncrows,fitvls,wts, &
-&resids,error,fitiwk,fitdwk, &
-&fiwkln,fdwkln,ireqd,dreqd)
+   & fitcds,ncrows,fitvls,wts, &
+   & resids,error,fitiwk,fitdwk, &
+   & fiwkln,fdwkln,ireqd,dreqd)
 implicit none
 !
 integer, intent(inout) :: nfpols, fitdeg
@@ -5761,12 +5761,12 @@ integer, intent(inout) :: error, ireqd, dreqd
 integer, intent(in) :: ncrows
 integer, intent(inout) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln), &
-&fitcds(ncrows,dimen)
+   & fitcds(ncrows,dimen)
 double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
 double precision, intent(in) :: wts(nfpts)
 integer :: indstt, p, dimp1
 integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-&alfl
+   & alfl
 double precision :: scale
 !
 !     ***************
@@ -5883,12 +5883,12 @@ dimp1 = dimen + 1
 !     ***************
 !
 call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
-&error)
+   & error)
 if ( error .ge. 2 ) return
 !
 if ( fdwkln .ge. dreqd ) go to 10
-   error = 4
-   return
+error = 4
+return
 10 continue
 !
 psiwid = fitiwk(3)
@@ -5903,12 +5903,12 @@ psistt = ssqstt + nfpols
 !
 !     ***************
 !
-   call dgnrtp(fitdeg,fitdwk(alfstt), &
-&fitdwk(psistt),fitiwk(indstt), &
-&fitiwk(newstt),fitdwk(ssqstt),fitcds, &
-&ncrows,nfpols,dimen,nfpts,fitvls,resids, &
-&fitdwk(cstt),psiwid,wts,alfl,dimp1, &
-&fitdwk(maxstt),error)
+call dgnrtp(fitdeg,fitdwk(alfstt), &
+   & fitdwk(psistt),fitiwk(indstt), &
+   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+   & fitdwk(maxstt),error)
 !
 !     ***************
 !     Store the number of basis polynomials actually computed
@@ -5923,15 +5923,15 @@ fitiwk(1) = nfpols
 !
 scale = fitdwk(dimen + 1)
 do p = 1,nfpts
-  resids(p) = resids(p) * scale
+   resids(p) = resids(p) * scale
 end do
 return
 end subroutine dmfit
 
 subroutine dgnrtp(degree,alpha,psi,indexs, &
-&newkj,sumsqs,coord,ncrows,npolys, &
-&dimen,npts,f,z,c,psiwid,weight, &
-&alfl,dimp1,maxabs,error)
+   & newkj,sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,dimp1,maxabs,error)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(inout) :: degree
@@ -5943,12 +5943,12 @@ integer, intent(inout) :: error
 integer :: dimp1
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
 double precision, intent(inout) :: psi(npts,psiwid), alpha(alfl), &
-&f(npts)
+   & f(npts)
 double precision, intent(inout) :: coord(ncrows,dimen), &
-&maxabs(dimp1)
+   & maxabs(dimp1)
 double precision, intent(in) :: weight(npts)
 double precision, intent(inout) :: z(npts), sumsqs(npolys), &
-&c(npolys)
+   & c(npolys)
 integer :: k
 integer :: p, sttdeg, onplys
 double precision :: runtot, rntot1
@@ -6011,15 +6011,15 @@ sttdeg = 1
 onplys = 1
 !
 call dincdg(degree,alpha,psi,indexs,newkj,sumsqs, &
-&coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
-&weight,alfl,onplys,sttdeg,error)
+   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+   & weight,alfl,onplys,sttdeg,error)
 return
 end subroutine dgnrtp
 
 subroutine dincdg(degree,alpha,psi,indexs,newkj, &
-&sumsqs,coord,ncrows,npolys, &
-&dimen,npts,f,z,c,psiwid,weight, &
-&alfl,onplys,sttdeg,error)
+   & sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,onplys,sttdeg,error)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(inout) :: error
@@ -6058,11 +6058,11 @@ double precision :: arc, runtot, rntot1, rntot2
 !     ****************
 !
 if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
-   error = 6
+error = 6
 return
 10 if ( indexs(2,onplys) .eq. dimen ) go to 20
-      curdeg = sttdeg
-   go to 30
+curdeg = sttdeg
+go to 30
 20 curdeg = sttdeg + 1
 30 onpp1 = onplys + 1
 do 170 j = onpp1,npolys
@@ -6101,14 +6101,14 @@ do 170 j = onpp1,npolys
 !     previous and 8-TH previous statements.
 !     ***************
 !
-      j1mj2 = j1 - newkj(kj,curdeg - 2)
+   j1mj2 = j1 - newkj(kj,curdeg - 2)
 !
-      do 40 l = m,j3
-         q = j1mj2 + l
-         index1 = starta + l
-         index2 = indexs(4,q) - indexs(3,q) + jprime
-40 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-&sumsqs(l)
+   do 40 l = m,j3
+      q = j1mj2 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
 !
 !     ***************
 !     Calculate  alpha ( j , m ) for  m  between the 2
@@ -6121,16 +6121,16 @@ do 170 j = onpp1,npolys
 !
    m = j3 + 1
 50 if ( jprime .eq. j1 ) go to 100
-      if ( kj .eq. 1 ) go to 80
-      j1m1 = j1 - 1
-      do 70 l = m,j1m1
-         runtot = 0.d0
-         do 60 p = 1,npts
-            index1 = l - ((l - 1) / psiwid) * psiwid
-60 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-&psi(p,index1) * weight(p)
-         index1 = starta + l
-70 alpha(index1) = runtot / sumsqs(l)
+   if ( kj .eq. 1 ) go to 80
+   j1m1 = j1 - 1
+   do 70 l = m,j1m1
+      runtot = 0.d0
+      do 60 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      index1 = starta + l
+70    alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     Calculate  alpha ( j , m ) for  m  between
@@ -6139,14 +6139,14 @@ do 170 j = onpp1,npolys
 !     ***************
 !
 80 j0mj1 = newkj(kj,curdeg) - j1
-      jpm1 = jprime - 1
-      do 90 l = j1,jpm1
-         q = j0mj1 + l
-         index1 = starta + l
-         index2 = indexs(4,q) - indexs(3,q) + jprime
-90 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-&sumsqs(l)
-      m = jprime
+   jpm1 = jprime - 1
+   do 90 l = j1,jpm1
+      q = j0mj1 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+   m = jprime
 !
 !     ***************
 !     Calculate the remaining  alpha ( j , m ) from
@@ -6161,10 +6161,10 @@ do 170 j = onpp1,npolys
       runtot = 0.d0
       do 110 p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-110 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-&psi(p,index1) * weight(p)
+110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
       index1 = starta + l
-120 alpha(index1) = runtot / sumsqs(l)
+120   alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
@@ -6181,25 +6181,25 @@ do 170 j = onpp1,npolys
 !     ***************
 !
 130 jm1 = j - 1
-    arc = 0.d0
-    rntot1 = 0.d0
-    rntot2 = 0.d0
-    do 150 p = 1,npts
-        runtot = coord(p,kj) * psi(p,jpindx)
-        do 140 l = start,jm1
-           index1 = starta + l
-           index2 = l - ((l - 1) / psiwid) * psiwid
-140 runtot = runtot - alpha(index1) * psi(p,index2)
-        psi(p,jindex) = runtot
-        arc = arc + psi(p,index2) * psi(p,jindex) * &
-&weight(p)
-        rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
-&weight(p)
-150 rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
-    if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.d-06) &
-&go to 200
-    sumsqs(j) = rntot1
-    c(j) = rntot2 / rntot1
+   arc = 0.d0
+   rntot1 = 0.d0
+   rntot2 = 0.d0
+   do 150 p = 1,npts
+      runtot = coord(p,kj) * psi(p,jpindx)
+      do 140 l = start,jm1
+         index1 = starta + l
+         index2 = l - ((l - 1) / psiwid) * psiwid
+140      runtot = runtot - alpha(index1) * psi(p,index2)
+      psi(p,jindex) = runtot
+      arc = arc + psi(p,index2) * psi(p,jindex) * &
+         & weight(p)
+      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+         & weight(p)
+150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+   if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.d-06) &
+      & go to 200
+   sumsqs(j) = rntot1
+   c(j) = rntot2 / rntot1
 !
 !     ***************
 !     Calculate the new  z ( p ) and the new  SSRES  using
@@ -6208,9 +6208,9 @@ do 170 j = onpp1,npolys
 !              j      j
 !     ***************
 !
-    do 160 p = 1,npts
-160 z(p) = z(p) - c(j) * psi(p,jindex)
-    sttdeg = curdeg
+   do 160 p = 1,npts
+160   z(p) = z(p) - c(j) * psi(p,jindex)
+   sttdeg = curdeg
 170 if ( kj .eq. dimen ) curdeg = curdeg + 1
 return
 !
@@ -6288,13 +6288,13 @@ integer :: p
 !     ****************
 !
 if ( maxabs .eq. 0.0d+00 ) return
-   do 10 p = 1,npts
+do 10 p = 1,npts
 10 coord(p) = coord(p) / maxabs
-   return
+return
 end subroutine dscald
 
 subroutine dmeval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
-&error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
+   & error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
 implicit none
 integer, intent(in) :: nerows
 integer, intent(in) :: fiwkln, fdwkln
@@ -6439,8 +6439,8 @@ psistt = cstt + fitiwk(2)
 !     ***************
 !
 call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
-&fitdwk(alfstt),fitiwk,fitdwk(psistt), &
-&evlvls,alfl,fitdwk(maxstt),temp,dimp1)
+   & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
+   & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
 return
 !
 !     ***************
@@ -6454,7 +6454,7 @@ return
 end subroutine dmeval
 
 subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
-&indexs,psi,f,alfl,maxabs,x,dimp1)
+   & indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
@@ -6505,8 +6505,8 @@ do 40 p = 1,nepts
 !     ***************
 !
    do k = 1,dimen
-        x(k) = coord(p,k)
-        if (maxabs(k) .ne. 0.d0) x(k) = x(k) / maxabs(k)
+      x(k) = coord(p,k)
+      if (maxabs(k) .ne. 0.d0) x(k) = x(k) / maxabs(k)
    end do
 !
 !     ***************
@@ -6517,16 +6517,16 @@ do 40 p = 1,nepts
 !
    rntot1 = c(1)
    do 30 j = 2,npolys
-        k = indexs(2,j)
-        jprime = indexs(1,j)
-        runtot = x(k) * psi(jprime)
-        i = indexs(3,j)
-        jm1 = j - 1
-        do 20 m = i,jm1
-           index = indexs(4,j) + m - i
-20 runtot = runtot - psi(m) * alpha(index)
-        psi(j) = runtot
-30 rntot1 = rntot1 + c(j) * psi(j)
+      k = indexs(2,j)
+      jprime = indexs(1,j)
+      runtot = x(k) * psi(jprime)
+      i = indexs(3,j)
+      jm1 = j - 1
+      do 20 m = i,jm1
+         index = indexs(4,j) + m - i
+20       runtot = runtot - psi(m) * alpha(index)
+      psi(j) = runtot
+30    rntot1 = rntot1 + c(j) * psi(j)
 40 f(p) = rntot1 * maxabs(dimp1)
 return
 !
@@ -6550,7 +6550,7 @@ real :: f
 external f
 integer :: icheck, is, ismax, k, nf, npts
 real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
-&tol, x
+   & tol, x
 real :: spmpar
 !-----------------------------------------------------------------------
 !
@@ -6596,7 +6596,7 @@ data ismax/100/
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.0 + eps .GT. 1.0.
 !
-                eps = spmpar(1)
+eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 qsuba = 0.0
@@ -6620,19 +6620,19 @@ is = 1
 sub2 = 0.5*(sub1 + sub3)
 call quad (sub1, sub2, result, k, tol, nf, icheck, f)
 npts = npts + nf
-err = abs(result(k) - result(k-1))
+err = abs(result(k) - result(k - 1))
 sum = qsuba + result(k)
 if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
 !
 !        Stack the subinterval (sub1,sub2) for further
 !        examination if there is sufficient storage.
 !
-   if (is .ge. ismax) go to 20
-      stack(is) = sub1
-      is = is + 1
-      stack(is) = sub2
-      is = is + 1
-      go to 40
+if (is .ge. ismax) go to 20
+stack(is) = sub1
+is = is + 1
+stack(is) = sub2
+is = is + 1
+go to 40
 20 ind = 3
 !
 !     Update qsuba and check if any significant digits are lost
@@ -6649,14 +6649,14 @@ if (abs(qsuba) .le. x) ind = 1
 40 if (npts .ge. mcount) go to 110
 call quad (sub2, sub3, result, k, tol, nf, icheck, f)
 npts = npts + nf
-err = abs(result(k) - result(k-1))
+err = abs(result(k) - result(k - 1))
 sum = qsuba + result(k)
 if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 50
 !
 !        Subdivide the interval (sub2,sub3)
 !
-   sub1 = sub2
-   go to 10
+sub1 = sub2
+go to 10
 !
 !     Update qsuba and check if any significant digits are lost
 !
@@ -6680,7 +6680,7 @@ go to 10
 !
 100 qsuba = result(k)
 if (a .gt. b) qsuba = -qsuba
-relerr = abs(result(k) - result(k-1))
+relerr = abs(result(k) - result(k - 1))
 if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
 return
 !
@@ -6737,257 +6737,257 @@ real :: acum, diff, funct(127), fzero, p(381), sum, x
 ! array *p* in the order in which they are needed.
 !     --------------------
 data p( 1),p( 2),p( 3),p( 4),p( 5),p( 6),p( 7), &
-&p( 8),p( 9),p(10),p(11),p(12),p(13),p(14), &
-&p(15),p(16),p(17),p(18),p(19),p(20),p(21), &
-&p(22),p(23),p(24),p(25),p(26),p(27),p(28)/ &
-&0.77459666924148337704e00,0.55555555555555555556e00, &
-&0.88888888888888888889e00,0.26848808986833344073e00, &
-&0.96049126870802028342e00,0.10465622602646726519e00, &
-&0.43424374934680255800e00,0.40139741477596222291e00, &
-&0.45091653865847414235e00,0.13441525524378422036e00, &
-&0.51603282997079739697e-01,0.20062852937698902103e00, &
-&0.99383196321275502221e00,0.17001719629940260339e-01, &
-&0.88845923287225699889e00,0.92927195315124537686e-01, &
-&0.62110294673722640294e00,0.17151190913639138079e00, &
-&0.22338668642896688163e00,0.21915685840158749640e00, &
-&0.22551049979820668739e00,0.67207754295990703540e-01, &
-&0.25807598096176653565e-01,0.10031427861179557877e00, &
-&0.84345657393211062463e-02,0.46462893261757986541e-01, &
-&0.85755920049990351154e-01,0.10957842105592463824e00/
+   & p( 8),p( 9),p(10),p(11),p(12),p(13),p(14), &
+   & p(15),p(16),p(17),p(18),p(19),p(20),p(21), &
+   & p(22),p(23),p(24),p(25),p(26),p(27),p(28)/ &
+   & 0.77459666924148337704e00,0.55555555555555555556e00, &
+   & 0.88888888888888888889e00,0.26848808986833344073e00, &
+   & 0.96049126870802028342e00,0.10465622602646726519e00, &
+   & 0.43424374934680255800e00,0.40139741477596222291e00, &
+   & 0.45091653865847414235e00,0.13441525524378422036e00, &
+   & 0.51603282997079739697e-01,0.20062852937698902103e00, &
+   & 0.99383196321275502221e00,0.17001719629940260339e-01, &
+   & 0.88845923287225699889e00,0.92927195315124537686e-01, &
+   & 0.62110294673722640294e00,0.17151190913639138079e00, &
+   & 0.22338668642896688163e00,0.21915685840158749640e00, &
+   & 0.22551049979820668739e00,0.67207754295990703540e-01, &
+   & 0.25807598096176653565e-01,0.10031427861179557877e00, &
+   & 0.84345657393211062463e-02,0.46462893261757986541e-01, &
+   & 0.85755920049990351154e-01,0.10957842105592463824e00/
 data p(29),p(30),p(31),p(32),p(33),p(34),p(35), &
-&p(36),p(37),p(38),p(39),p(40),p(41),p(42), &
-&p(43),p(44),p(45),p(46),p(47),p(48),p(49), &
-&p(50),p(51),p(52),p(53),p(54),p(55),p(56)/ &
-&0.99909812496766759766e00,0.25447807915618744154e-02, &
-&0.98153114955374010687e00,0.16446049854387810934e-01, &
-&0.92965485742974005667e00,0.35957103307129322097e-01, &
-&0.83672593816886873550e00,0.56979509494123357412e-01, &
-&0.70249620649152707861e00,0.76879620499003531043e-01, &
-&0.53131974364437562397e00,0.93627109981264473617e-01, &
-&0.33113539325797683309e00,0.10566989358023480974e00, &
-&0.11248894313318662575e00,0.11195687302095345688e00, &
-&0.11275525672076869161e00,0.33603877148207730542e-01, &
-&0.12903800100351265626e-01,0.50157139305899537414e-01, &
-&0.42176304415588548391e-02,0.23231446639910269443e-01, &
-&0.42877960025007734493e-01,0.54789210527962865032e-01, &
-&0.12651565562300680114e-02,0.82230079572359296693e-02, &
-&0.17978551568128270333e-01,0.28489754745833548613e-01/
+   & p(36),p(37),p(38),p(39),p(40),p(41),p(42), &
+   & p(43),p(44),p(45),p(46),p(47),p(48),p(49), &
+   & p(50),p(51),p(52),p(53),p(54),p(55),p(56)/ &
+   & 0.99909812496766759766e00,0.25447807915618744154e-02, &
+   & 0.98153114955374010687e00,0.16446049854387810934e-01, &
+   & 0.92965485742974005667e00,0.35957103307129322097e-01, &
+   & 0.83672593816886873550e00,0.56979509494123357412e-01, &
+   & 0.70249620649152707861e00,0.76879620499003531043e-01, &
+   & 0.53131974364437562397e00,0.93627109981264473617e-01, &
+   & 0.33113539325797683309e00,0.10566989358023480974e00, &
+   & 0.11248894313318662575e00,0.11195687302095345688e00, &
+   & 0.11275525672076869161e00,0.33603877148207730542e-01, &
+   & 0.12903800100351265626e-01,0.50157139305899537414e-01, &
+   & 0.42176304415588548391e-02,0.23231446639910269443e-01, &
+   & 0.42877960025007734493e-01,0.54789210527962865032e-01, &
+   & 0.12651565562300680114e-02,0.82230079572359296693e-02, &
+   & 0.17978551568128270333e-01,0.28489754745833548613e-01/
 data p(57),p(58),p(59),p(60),p(61),p(62),p(63), &
-&p(64),p(65),p(66),p(67),p(68),p(69),p(70), &
-&p(71),p(72),p(73),p(74),p(75),p(76),p(77), &
-&p(78),p(79),p(80),p(81),p(82),p(83),p(84)/ &
-&0.38439810249455532039e-01,0.46813554990628012403e-01, &
-&0.52834946790116519862e-01,0.55978436510476319408e-01, &
-&0.99987288812035761194e00,0.36322148184553065969e-03, &
-&0.99720625937222195908e00,0.25790497946856882724e-02, &
-&0.98868475754742947994e00,0.61155068221172463397e-02, &
-&0.97218287474858179658e00,0.10498246909621321898e-01, &
-&0.94634285837340290515e00,0.15406750466559497802e-01, &
-&0.91037115695700429250e00,0.20594233915912711149e-01, &
-&0.86390793819369047715e00,0.25869679327214746911e-01, &
-&0.80694053195021761186e00,0.31073551111687964880e-01, &
-&0.73975604435269475868e00,0.36064432780782572640e-01, &
-&0.66290966002478059546e00,0.40715510116944318934e-01, &
-&0.57719571005204581484e00,0.44914531653632197414e-01, &
-&0.48361802694584102756e00,0.48564330406673198716e-01/
+   & p(64),p(65),p(66),p(67),p(68),p(69),p(70), &
+   & p(71),p(72),p(73),p(74),p(75),p(76),p(77), &
+   & p(78),p(79),p(80),p(81),p(82),p(83),p(84)/ &
+   & 0.38439810249455532039e-01,0.46813554990628012403e-01, &
+   & 0.52834946790116519862e-01,0.55978436510476319408e-01, &
+   & 0.99987288812035761194e00,0.36322148184553065969e-03, &
+   & 0.99720625937222195908e00,0.25790497946856882724e-02, &
+   & 0.98868475754742947994e00,0.61155068221172463397e-02, &
+   & 0.97218287474858179658e00,0.10498246909621321898e-01, &
+   & 0.94634285837340290515e00,0.15406750466559497802e-01, &
+   & 0.91037115695700429250e00,0.20594233915912711149e-01, &
+   & 0.86390793819369047715e00,0.25869679327214746911e-01, &
+   & 0.80694053195021761186e00,0.31073551111687964880e-01, &
+   & 0.73975604435269475868e00,0.36064432780782572640e-01, &
+   & 0.66290966002478059546e00,0.40715510116944318934e-01, &
+   & 0.57719571005204581484e00,0.44914531653632197414e-01, &
+   & 0.48361802694584102756e00,0.48564330406673198716e-01/
 data p( 85),p( 86),p( 87),p( 88),p( 89),p( 90),p( 91), &
-&p( 92),p( 93),p( 94),p( 95),p( 96),p( 97),p( 98), &
-&p( 99),p(100),p(101),p(102),p(103),p(104),p(105), &
-&p(106),p(107),p(108),p(109),p(110),p(111),p(112)/ &
-&0.38335932419873034692e00,0.51583253952048458777e-01, &
-&0.27774982202182431507e00,0.53905499335266063927e-01, &
-&0.16823525155220746498e00,0.55481404356559363988e-01, &
-&0.56344313046592789972e-01,0.56277699831254301273e-01, &
-&0.56377628360384717388e-01,0.16801938574103865271e-01, &
-&0.64519000501757369228e-02,0.25078569652949768707e-01, &
-&0.21088152457266328793e-02,0.11615723319955134727e-01, &
-&0.21438980012503867246e-01,0.27394605263981432516e-01, &
-&0.63260731936263354422e-03,0.41115039786546930472e-02, &
-&0.89892757840641357233e-02,0.14244877372916774306e-01, &
-&0.19219905124727766019e-01,0.23406777495314006201e-01, &
-&0.26417473395058259931e-01,0.27989218255238159704e-01, &
-&0.18073956444538835782e-03,0.12895240826104173921e-02, &
-&0.30577534101755311361e-02,0.52491234548088591251e-02/
+   & p( 92),p( 93),p( 94),p( 95),p( 96),p( 97),p( 98), &
+   & p( 99),p(100),p(101),p(102),p(103),p(104),p(105), &
+   & p(106),p(107),p(108),p(109),p(110),p(111),p(112)/ &
+   & 0.38335932419873034692e00,0.51583253952048458777e-01, &
+   & 0.27774982202182431507e00,0.53905499335266063927e-01, &
+   & 0.16823525155220746498e00,0.55481404356559363988e-01, &
+   & 0.56344313046592789972e-01,0.56277699831254301273e-01, &
+   & 0.56377628360384717388e-01,0.16801938574103865271e-01, &
+   & 0.64519000501757369228e-02,0.25078569652949768707e-01, &
+   & 0.21088152457266328793e-02,0.11615723319955134727e-01, &
+   & 0.21438980012503867246e-01,0.27394605263981432516e-01, &
+   & 0.63260731936263354422e-03,0.41115039786546930472e-02, &
+   & 0.89892757840641357233e-02,0.14244877372916774306e-01, &
+   & 0.19219905124727766019e-01,0.23406777495314006201e-01, &
+   & 0.26417473395058259931e-01,0.27989218255238159704e-01, &
+   & 0.18073956444538835782e-03,0.12895240826104173921e-02, &
+   & 0.30577534101755311361e-02,0.52491234548088591251e-02/
 data p(113),p(114),p(115),p(116),p(117),p(118),p(119), &
-&p(120),p(121),p(122),p(123),p(124),p(125),p(126), &
-&p(127),p(128),p(129),p(130),p(131),p(132),p(133), &
-&p(134),p(135),p(136),p(137),p(138),p(139),p(140)/ &
-&0.77033752332797418482e-02,0.10297116957956355524e-01, &
-&0.12934839663607373455e-01,0.15536775555843982440e-01, &
-&0.18032216390391286320e-01,0.20357755058472159467e-01, &
-&0.22457265826816098707e-01,0.24282165203336599358e-01, &
-&0.25791626976024229388e-01,0.26952749667633031963e-01, &
-&0.27740702178279681994e-01,0.28138849915627150636e-01, &
-&0.99998243035489159858e00,0.50536095207862517625e-04, &
-&0.99959879967191068325e00,0.37774664632698466027e-03, &
-&0.99831663531840739253e00,0.93836984854238150079e-03, &
-&0.99572410469840718851e00,0.16811428654214699063e-02, &
-&0.99149572117810613240e00,0.25687649437940203731e-02, &
-&0.98537149959852037111e00,0.35728927835172996494e-02, &
-&0.97714151463970571416e00,0.46710503721143217474e-02, &
-&0.96663785155841656709e00,0.58434498758356395076e-02/
+   & p(120),p(121),p(122),p(123),p(124),p(125),p(126), &
+   & p(127),p(128),p(129),p(130),p(131),p(132),p(133), &
+   & p(134),p(135),p(136),p(137),p(138),p(139),p(140)/ &
+   & 0.77033752332797418482e-02,0.10297116957956355524e-01, &
+   & 0.12934839663607373455e-01,0.15536775555843982440e-01, &
+   & 0.18032216390391286320e-01,0.20357755058472159467e-01, &
+   & 0.22457265826816098707e-01,0.24282165203336599358e-01, &
+   & 0.25791626976024229388e-01,0.26952749667633031963e-01, &
+   & 0.27740702178279681994e-01,0.28138849915627150636e-01, &
+   & 0.99998243035489159858e00,0.50536095207862517625e-04, &
+   & 0.99959879967191068325e00,0.37774664632698466027e-03, &
+   & 0.99831663531840739253e00,0.93836984854238150079e-03, &
+   & 0.99572410469840718851e00,0.16811428654214699063e-02, &
+   & 0.99149572117810613240e00,0.25687649437940203731e-02, &
+   & 0.98537149959852037111e00,0.35728927835172996494e-02, &
+   & 0.97714151463970571416e00,0.46710503721143217474e-02, &
+   & 0.96663785155841656709e00,0.58434498758356395076e-02/
 data p(141),p(142),p(143),p(144),p(145),p(146),p(147), &
-&p(148),p(149),p(150),p(151),p(152),p(153),p(154), &
-&p(155),p(156),p(157),p(158),p(159),p(160),p(161), &
-&p(162),p(163),p(164),p(165),p(166),p(167),p(168)/ &
-&0.95373000642576113641e00,0.70724899954335554680e-02, &
-&0.93832039777959288365e00,0.83428387539681577056e-02, &
-&0.92034002547001242073e00,0.96411777297025366953e-02, &
-&0.89974489977694003664e00,0.10955733387837901648e-01, &
-&0.87651341448470526974e00,0.12275830560082770087e-01, &
-&0.85064449476835027976e00,0.13591571009765546790e-01, &
-&0.82215625436498040737e00,0.14893641664815182035e-01, &
-&0.79108493379984836143e00,0.16173218729577719942e-01, &
-&0.75748396638051363793e00,0.17421930159464173747e-01, &
-&0.72142308537009891548e00,0.18631848256138790186e-01, &
-&0.68298743109107922809e00,0.19795495048097499488e-01, &
-&0.64227664250975951377e00,0.20905851445812023852e-01, &
-&0.59940393024224289297e00,0.21956366305317824939e-01, &
-&0.55449513263193254887e00,0.22940964229387748761e-01/
+   & p(148),p(149),p(150),p(151),p(152),p(153),p(154), &
+   & p(155),p(156),p(157),p(158),p(159),p(160),p(161), &
+   & p(162),p(163),p(164),p(165),p(166),p(167),p(168)/ &
+   & 0.95373000642576113641e00,0.70724899954335554680e-02, &
+   & 0.93832039777959288365e00,0.83428387539681577056e-02, &
+   & 0.92034002547001242073e00,0.96411777297025366953e-02, &
+   & 0.89974489977694003664e00,0.10955733387837901648e-01, &
+   & 0.87651341448470526974e00,0.12275830560082770087e-01, &
+   & 0.85064449476835027976e00,0.13591571009765546790e-01, &
+   & 0.82215625436498040737e00,0.14893641664815182035e-01, &
+   & 0.79108493379984836143e00,0.16173218729577719942e-01, &
+   & 0.75748396638051363793e00,0.17421930159464173747e-01, &
+   & 0.72142308537009891548e00,0.18631848256138790186e-01, &
+   & 0.68298743109107922809e00,0.19795495048097499488e-01, &
+   & 0.64227664250975951377e00,0.20905851445812023852e-01, &
+   & 0.59940393024224289297e00,0.21956366305317824939e-01, &
+   & 0.55449513263193254887e00,0.22940964229387748761e-01/
 data p(169),p(170),p(171),p(172),p(173),p(174),p(175), &
-&p(176),p(177),p(178),p(179),p(180),p(181),p(182), &
-&p(183),p(184),p(185),p(186),p(187),p(188),p(189), &
-&p(190),p(191),p(192),p(193),p(194),p(195),p(196)/ &
-&0.50768775753371660215e00,0.23854052106038540080e-01, &
-&0.45913001198983233287e00,0.24690524744487676909e-01, &
-&0.40897982122988867241e00,0.25445769965464765813e-01, &
-&0.35740383783153215238e00,0.26115673376706097680e-01, &
-&0.30457644155671404334e00,0.26696622927450359906e-01, &
-&0.25067873030348317661e00,0.27185513229624791819e-01, &
-&0.19589750271110015392e00,0.27579749566481873035e-01, &
-&0.14042423315256017459e00,0.27877251476613701609e-01, &
-&0.84454040083710883710e-01,0.28076455793817246607e-01, &
-&0.28184648949745694339e-01,0.28176319033016602131e-01, &
-&0.28188814180192358694e-01,0.84009692870519326354e-02, &
-&0.32259500250878684614e-02,0.12539284826474884353e-01, &
-&0.10544076228633167722e-02,0.58078616599775673635e-02, &
-&0.10719490006251933623e-01,0.13697302631990716258e-01/
+   & p(176),p(177),p(178),p(179),p(180),p(181),p(182), &
+   & p(183),p(184),p(185),p(186),p(187),p(188),p(189), &
+   & p(190),p(191),p(192),p(193),p(194),p(195),p(196)/ &
+   & 0.50768775753371660215e00,0.23854052106038540080e-01, &
+   & 0.45913001198983233287e00,0.24690524744487676909e-01, &
+   & 0.40897982122988867241e00,0.25445769965464765813e-01, &
+   & 0.35740383783153215238e00,0.26115673376706097680e-01, &
+   & 0.30457644155671404334e00,0.26696622927450359906e-01, &
+   & 0.25067873030348317661e00,0.27185513229624791819e-01, &
+   & 0.19589750271110015392e00,0.27579749566481873035e-01, &
+   & 0.14042423315256017459e00,0.27877251476613701609e-01, &
+   & 0.84454040083710883710e-01,0.28076455793817246607e-01, &
+   & 0.28184648949745694339e-01,0.28176319033016602131e-01, &
+   & 0.28188814180192358694e-01,0.84009692870519326354e-02, &
+   & 0.32259500250878684614e-02,0.12539284826474884353e-01, &
+   & 0.10544076228633167722e-02,0.58078616599775673635e-02, &
+   & 0.10719490006251933623e-01,0.13697302631990716258e-01/
 data p(197),p(198),p(199),p(200),p(201),p(202),p(203), &
-&p(204),p(205),p(206),p(207),p(208),p(209),p(210), &
-&p(211),p(212),p(213),p(214),p(215),p(216),p(217), &
-&p(218),p(219),p(220),p(221),p(222),p(223),p(224)/ &
-&0.31630366082226447689e-03,0.20557519893273465236e-02, &
-&0.44946378920320678616e-02,0.71224386864583871532e-02, &
-&0.96099525623638830097e-02,0.11703388747657003101e-01, &
-&0.13208736697529129966e-01,0.13994609127619079852e-01, &
-&0.90372734658751149261e-04,0.64476204130572477933e-03, &
-&0.15288767050877655684e-02,0.26245617274044295626e-02, &
-&0.38516876166398709241e-02,0.51485584789781777618e-02, &
-&0.64674198318036867274e-02,0.77683877779219912200e-02, &
-&0.90161081951956431600e-02,0.10178877529236079733e-01, &
-&0.11228632913408049354e-01,0.12141082601668299679e-01, &
-&0.12895813488012114694e-01,0.13476374833816515982e-01, &
-&0.13870351089139840997e-01,0.14069424957813575318e-01, &
-&0.25157870384280661489e-04,0.18887326450650491366e-03, &
-&0.46918492424785040975e-03,0.84057143271072246365e-03/
+   & p(204),p(205),p(206),p(207),p(208),p(209),p(210), &
+   & p(211),p(212),p(213),p(214),p(215),p(216),p(217), &
+   & p(218),p(219),p(220),p(221),p(222),p(223),p(224)/ &
+   & 0.31630366082226447689e-03,0.20557519893273465236e-02, &
+   & 0.44946378920320678616e-02,0.71224386864583871532e-02, &
+   & 0.96099525623638830097e-02,0.11703388747657003101e-01, &
+   & 0.13208736697529129966e-01,0.13994609127619079852e-01, &
+   & 0.90372734658751149261e-04,0.64476204130572477933e-03, &
+   & 0.15288767050877655684e-02,0.26245617274044295626e-02, &
+   & 0.38516876166398709241e-02,0.51485584789781777618e-02, &
+   & 0.64674198318036867274e-02,0.77683877779219912200e-02, &
+   & 0.90161081951956431600e-02,0.10178877529236079733e-01, &
+   & 0.11228632913408049354e-01,0.12141082601668299679e-01, &
+   & 0.12895813488012114694e-01,0.13476374833816515982e-01, &
+   & 0.13870351089139840997e-01,0.14069424957813575318e-01, &
+   & 0.25157870384280661489e-04,0.18887326450650491366e-03, &
+   & 0.46918492424785040975e-03,0.84057143271072246365e-03/
 data p(225),p(226),p(227),p(228),p(229),p(230),p(231), &
-&p(232),p(233),p(234),p(235),p(236),p(237),p(238), &
-&p(239),p(240),p(241),p(242),p(243),p(244),p(245), &
-&p(246),p(247),p(248),p(249),p(250),p(251),p(252)/ &
-&0.12843824718970101768e-02,0.17864463917586498247e-02, &
-&0.23355251860571608737e-02,0.29217249379178197538e-02, &
-&0.35362449977167777340e-02,0.41714193769840788528e-02, &
-&0.48205888648512683476e-02,0.54778666939189508240e-02, &
-&0.61379152800413850435e-02,0.67957855048827733948e-02, &
-&0.74468208324075910174e-02,0.80866093647888599710e-02, &
-&0.87109650797320868736e-02,0.93159241280693950932e-02, &
-&0.98977475240487497440e-02,0.10452925722906011926e-01, &
-&0.10978183152658912470e-01,0.11470482114693874380e-01, &
-&0.11927026053019270040e-01,0.12345262372243838455e-01, &
-&0.12722884982732382906e-01,0.13057836688353048840e-01, &
-&0.13348311463725179953e-01,0.13592756614812395910e-01, &
-&0.13789874783240936517e-01,0.13938625738306850804e-01, &
-&0.14038227896908623303e-01,0.14088159516508301065e-01/
+   & p(232),p(233),p(234),p(235),p(236),p(237),p(238), &
+   & p(239),p(240),p(241),p(242),p(243),p(244),p(245), &
+   & p(246),p(247),p(248),p(249),p(250),p(251),p(252)/ &
+   & 0.12843824718970101768e-02,0.17864463917586498247e-02, &
+   & 0.23355251860571608737e-02,0.29217249379178197538e-02, &
+   & 0.35362449977167777340e-02,0.41714193769840788528e-02, &
+   & 0.48205888648512683476e-02,0.54778666939189508240e-02, &
+   & 0.61379152800413850435e-02,0.67957855048827733948e-02, &
+   & 0.74468208324075910174e-02,0.80866093647888599710e-02, &
+   & 0.87109650797320868736e-02,0.93159241280693950932e-02, &
+   & 0.98977475240487497440e-02,0.10452925722906011926e-01, &
+   & 0.10978183152658912470e-01,0.11470482114693874380e-01, &
+   & 0.11927026053019270040e-01,0.12345262372243838455e-01, &
+   & 0.12722884982732382906e-01,0.13057836688353048840e-01, &
+   & 0.13348311463725179953e-01,0.13592756614812395910e-01, &
+   & 0.13789874783240936517e-01,0.13938625738306850804e-01, &
+   & 0.14038227896908623303e-01,0.14088159516508301065e-01/
 data p(253),p(254),p(255),p(256),p(257),p(258),p(259), &
-&p(260),p(261),p(262),p(263),p(264),p(265),p(266), &
-&p(267),p(268),p(269),p(270),p(271),p(272),p(273), &
-&p(274),p(275),p(276),p(277),p(278),p(279),p(280)/ &
-&0.99999759637974846462e00,0.69379364324108267170e-05, &
-&0.99994399620705437576e00,0.53275293669780613125e-04, &
-&0.99976049092443204733e00,0.13575491094922871973e-03, &
-&0.99938033802502358193e00,0.24921240048299729402e-03, &
-&0.99874561446809511470e00,0.38974528447328229322e-03, &
-&0.99780535449595727456e00,0.55429531493037471492e-03, &
-&0.99651414591489027385e00,0.74028280424450333046e-03, &
-&0.99483150280062100052e00,0.94536151685852538246e-03, &
-&0.99272134428278861533e00,0.11674841174299594077e-02, &
-&0.99015137040077015918e00,0.14049079956551446427e-02, &
-&0.98709252795403406719e00,0.16561127281544526052e-02, &
-&0.98351865757863272876e00,0.19197129710138724125e-02, &
-&0.97940628167086268381e00,0.21944069253638388388e-02, &
-&0.97473445975240266776e00,0.24789582266575679307e-02/
+   & p(260),p(261),p(262),p(263),p(264),p(265),p(266), &
+   & p(267),p(268),p(269),p(270),p(271),p(272),p(273), &
+   & p(274),p(275),p(276),p(277),p(278),p(279),p(280)/ &
+   & 0.99999759637974846462e00,0.69379364324108267170e-05, &
+   & 0.99994399620705437576e00,0.53275293669780613125e-04, &
+   & 0.99976049092443204733e00,0.13575491094922871973e-03, &
+   & 0.99938033802502358193e00,0.24921240048299729402e-03, &
+   & 0.99874561446809511470e00,0.38974528447328229322e-03, &
+   & 0.99780535449595727456e00,0.55429531493037471492e-03, &
+   & 0.99651414591489027385e00,0.74028280424450333046e-03, &
+   & 0.99483150280062100052e00,0.94536151685852538246e-03, &
+   & 0.99272134428278861533e00,0.11674841174299594077e-02, &
+   & 0.99015137040077015918e00,0.14049079956551446427e-02, &
+   & 0.98709252795403406719e00,0.16561127281544526052e-02, &
+   & 0.98351865757863272876e00,0.19197129710138724125e-02, &
+   & 0.97940628167086268381e00,0.21944069253638388388e-02, &
+   & 0.97473445975240266776e00,0.24789582266575679307e-02/
 data p(281),p(282),p(283),p(284),p(285),p(286),p(287), &
-&p(288),p(289),p(290),p(291),p(292),p(293),p(294), &
-&p(295),p(296),p(297),p(298),p(299),p(300),p(301), &
-&p(302),p(303),p(304),p(305),p(306),p(307),p(308)/ &
-&0.96948465950245923177e00,0.27721957645934509940e-02, &
-&0.96364062156981213252e00,0.30730184347025783234e-02, &
-&0.95718821610986096274e00,0.33803979910869203823e-02, &
-&0.95011529752129487656e00,0.36933779170256508183e-02, &
-&0.94241156519108305981e00,0.40110687240750233989e-02, &
-&0.93406843615772578800e00,0.43326409680929828545e-02, &
-&0.92507893290707565236e00,0.46573172997568547773e-02, &
-&0.91543758715576504064e00,0.49843645647655386012e-02, &
-&0.90514035881326159519e00,0.53130866051870565663e-02, &
-&0.89418456833555902286e00,0.56428181013844441585e-02, &
-&0.88256884024734190684e00,0.59729195655081658049e-02, &
-&0.87029305554811390585e00,0.63027734490857587172e-02, &
-&0.85735831088623215653e00,0.66317812429018878941e-02, &
-&0.84376688267270860104e00,0.69593614093904229394e-02/
+   & p(288),p(289),p(290),p(291),p(292),p(293),p(294), &
+   & p(295),p(296),p(297),p(298),p(299),p(300),p(301), &
+   & p(302),p(303),p(304),p(305),p(306),p(307),p(308)/ &
+   & 0.96948465950245923177e00,0.27721957645934509940e-02, &
+   & 0.96364062156981213252e00,0.30730184347025783234e-02, &
+   & 0.95718821610986096274e00,0.33803979910869203823e-02, &
+   & 0.95011529752129487656e00,0.36933779170256508183e-02, &
+   & 0.94241156519108305981e00,0.40110687240750233989e-02, &
+   & 0.93406843615772578800e00,0.43326409680929828545e-02, &
+   & 0.92507893290707565236e00,0.46573172997568547773e-02, &
+   & 0.91543758715576504064e00,0.49843645647655386012e-02, &
+   & 0.90514035881326159519e00,0.53130866051870565663e-02, &
+   & 0.89418456833555902286e00,0.56428181013844441585e-02, &
+   & 0.88256884024734190684e00,0.59729195655081658049e-02, &
+   & 0.87029305554811390585e00,0.63027734490857587172e-02, &
+   & 0.85735831088623215653e00,0.66317812429018878941e-02, &
+   & 0.84376688267270860104e00,0.69593614093904229394e-02/
 data p(309),p(310),p(311),p(312),p(313),p(314),p(315), &
-&p(316),p(317),p(318),p(319),p(320),p(321),p(322), &
-&p(323),p(324),p(325),p(326),p(327),p(328),p(329), &
-&p(330),p(331),p(332),p(333),p(334),p(335),p(336)/ &
-&0.82952219463740140018e00,0.72849479805538070639e-02, &
-&0.81462878765513741344e00,0.76079896657190565832e-02, &
-&0.79909229096084140180e00,0.79279493342948491103e-02, &
-&0.78291939411828301639e00,0.82443037630328680306e-02, &
-&0.76611781930376009072e00,0.85565435613076896192e-02, &
-&0.74869629361693660282e00,0.88641732094824942641e-02, &
-&0.73066452124218126133e00,0.91667111635607884067e-02, &
-&0.71203315536225203459e00,0.94636899938300652943e-02, &
-&0.69281376977911470289e00,0.97546565363174114611e-02, &
-&0.67301883023041847920e00,0.10039172044056840798e-01, &
-&0.65266166541001749610e00,0.10316812330947621682e-01, &
-&0.63175643771119423041e00,0.10587167904885197931e-01, &
-&0.61031811371518640016e00,0.10849844089337314099e-01, &
-&0.58836243444766254143e00,0.11104461134006926537e-01/
+   & p(316),p(317),p(318),p(319),p(320),p(321),p(322), &
+   & p(323),p(324),p(325),p(326),p(327),p(328),p(329), &
+   & p(330),p(331),p(332),p(333),p(334),p(335),p(336)/ &
+   & 0.82952219463740140018e00,0.72849479805538070639e-02, &
+   & 0.81462878765513741344e00,0.76079896657190565832e-02, &
+   & 0.79909229096084140180e00,0.79279493342948491103e-02, &
+   & 0.78291939411828301639e00,0.82443037630328680306e-02, &
+   & 0.76611781930376009072e00,0.85565435613076896192e-02, &
+   & 0.74869629361693660282e00,0.88641732094824942641e-02, &
+   & 0.73066452124218126133e00,0.91667111635607884067e-02, &
+   & 0.71203315536225203459e00,0.94636899938300652943e-02, &
+   & 0.69281376977911470289e00,0.97546565363174114611e-02, &
+   & 0.67301883023041847920e00,0.10039172044056840798e-01, &
+   & 0.65266166541001749610e00,0.10316812330947621682e-01, &
+   & 0.63175643771119423041e00,0.10587167904885197931e-01, &
+   & 0.61031811371518640016e00,0.10849844089337314099e-01, &
+   & 0.58836243444766254143e00,0.11104461134006926537e-01/
 data p(337),p(338),p(339),p(340),p(341),p(342),p(343), &
-&p(344),p(345),p(346),p(347),p(348),p(349),p(350), &
-&p(351),p(352),p(353),p(354),p(355),p(356),p(357), &
-&p(358),p(359),p(360),p(361),p(362),p(363),p(364)/ &
-&0.56590588542365442262e00,0.11350654315980596602e-01, &
-&0.54296566649831149049e00,0.11588074033043952568e-01, &
-&0.51955966153745702199e00,0.11816385890830235763e-01, &
-&0.49570640791876146017e00,0.12035270785279562630e-01, &
-&0.47142506587165887693e00,0.12244424981611985899e-01, &
-&0.44673538766202847374e00,0.12443560190714035263e-01, &
-&0.42165768662616330006e00,0.12632403643542078765e-01, &
-&0.39621280605761593918e00,0.12810698163877361967e-01, &
-&0.37042208795007823014e00,0.12978202239537399286e-01, &
-&0.34430734159943802278e00,0.13134690091960152836e-01, &
-&0.31789081206847668318e00,0.13279951743930530650e-01, &
-&0.29119514851824668196e00,0.13413793085110098513e-01, &
-&0.26424337241092676194e00,0.13536035934956213614e-01, &
-&0.23705884558982972721e00,0.13646518102571291428e-01/
+   & p(344),p(345),p(346),p(347),p(348),p(349),p(350), &
+   & p(351),p(352),p(353),p(354),p(355),p(356),p(357), &
+   & p(358),p(359),p(360),p(361),p(362),p(363),p(364)/ &
+   & 0.56590588542365442262e00,0.11350654315980596602e-01, &
+   & 0.54296566649831149049e00,0.11588074033043952568e-01, &
+   & 0.51955966153745702199e00,0.11816385890830235763e-01, &
+   & 0.49570640791876146017e00,0.12035270785279562630e-01, &
+   & 0.47142506587165887693e00,0.12244424981611985899e-01, &
+   & 0.44673538766202847374e00,0.12443560190714035263e-01, &
+   & 0.42165768662616330006e00,0.12632403643542078765e-01, &
+   & 0.39621280605761593918e00,0.12810698163877361967e-01, &
+   & 0.37042208795007823014e00,0.12978202239537399286e-01, &
+   & 0.34430734159943802278e00,0.13134690091960152836e-01, &
+   & 0.31789081206847668318e00,0.13279951743930530650e-01, &
+   & 0.29119514851824668196e00,0.13413793085110098513e-01, &
+   & 0.26424337241092676194e00,0.13536035934956213614e-01, &
+   & 0.23705884558982972721e00,0.13646518102571291428e-01/
 data p(365),p(366),p(367),p(368),p(369),p(370),p(371), &
-&p(372),p(373),p(374),p(375),p(376),p(377),p(378), &
-&p(379),p(380),p(381)/ &
-&0.20966523824318119477e00,0.13745093443001896632e-01, &
-&0.18208649675925219825e00,0.13831631909506428676e-01, &
-&0.15434681148137810869e00,0.13906019601325461264e-01, &
-&0.12647058437230196685e00,0.13968158806516938516e-01, &
-&0.98482396598119202090e-01,0.14017968039456608810e-01, &
-&0.70406976042855179063e-01,0.14055382072649964277e-01, &
-&0.42269164765363603212e-01,0.14080351962553661325e-01, &
-&0.14093886410782462614e-01,0.14092845069160408355e-01, &
-&0.14094407090096179347e-01/
+   & p(372),p(373),p(374),p(375),p(376),p(377),p(378), &
+   & p(379),p(380),p(381)/ &
+   & 0.20966523824318119477e00,0.13745093443001896632e-01, &
+   & 0.18208649675925219825e00,0.13831631909506428676e-01, &
+   & 0.15434681148137810869e00,0.13906019601325461264e-01, &
+   & 0.12647058437230196685e00,0.13968158806516938516e-01, &
+   & 0.98482396598119202090e-01,0.14017968039456608810e-01, &
+   & 0.70406976042855179063e-01,0.14055382072649964277e-01, &
+   & 0.42269164765363603212e-01,0.14080351962553661325e-01, &
+   & 0.14093886410782462614e-01,0.14092845069160408355e-01, &
+   & 0.14094407090096179347e-01/
 icheck = 0
 ! Check for trivial case.
 if (a.eq.b) go to 70
 ! Scale factors.
-sum = (b+a)/2.0
-diff = (b-a)/2.0
+sum = (b + a)/2.0
+diff = (b - a)/2.0
 ! 1-Point Gauss
 fzero = f(sum)
 result(1) = 2.0*fzero*diff
@@ -7002,24 +7002,24 @@ k = k + 1
 acum = 0.0
 ! Contribution from function values already computed.
 do 20 j = 1,iold
-  i = i + 1
-  acum = acum + p(i)*funct(j)
+   i = i + 1
+   acum = acum + p(i)*funct(j)
 20 continue
 ! Contribution from new function values.
 30 iold = iold + inew
 do 40 j = inew,iold
-  i = i + 1
-  x = p(i)*diff
-  funct(j) = f(sum+x) + f(sum-x)
-  i = i + 1
-  acum = acum + p(i)*funct(j)
+   i = i + 1
+   x = p(i)*diff
+   funct(j) = f(sum + x) + f(sum - x)
+   i = i + 1
+   acum = acum + p(i)*funct(j)
 40 continue
 inew = iold + 1
 i = i + 1
-result(k) = (acum+p(i)*fzero)*diff
+result(k) = (acum + p(i)*fzero)*diff
 ! Check for convergence.
-if (abs(result(k)-result(k-1))-epsil*abs(result(k))) 60, &
-&60, 10
+if (abs(result(k) - result(k - 1)) - epsil*abs(result(k))) 60, &
+   & 60, 10
 ! Convergence not achieved.
 50 icheck = 1
 ! Normal termination.
@@ -7034,7 +7034,7 @@ return
 end subroutine quad
 
 subroutine qags (f, a, b, epsabs, epsrel, result, abserr, &
-&neval, ier, limit, lenw, last, iwork, work)
+   & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 real :: f
 integer, intent(out) :: ier, last
@@ -7211,12 +7211,12 @@ l2 = limit + l1
 l3 = limit + l2
 !
 call qagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
-&ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine qags
 
 subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,alist,blist,rlist,elist,iord,last)
+   & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -7379,7 +7379,7 @@ real :: area, area1, area12, area2, a1, a2
 real :: b1, b2, correc, defabs, defab1, defab2, dres
 real :: epmach
 real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, oflow, rerr, resabs, reseps
+   & errsum, ertest, oflow, rerr, resabs, reseps
 real :: res3la(3)
 real :: rlist2(52), small, spmpar, t, uflow
 integer :: id
@@ -7390,7 +7390,7 @@ integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit)
+   & rlist(limit)
 !
 !
 !            The dimension of rlist2 is determined by the value of
@@ -7471,7 +7471,7 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 ierro = 0
 call qk21f (f, a, b, result, abserr, defabs, resabs, &
-&epmach, uflow, id)
+   & epmach, uflow, id)
 if (id .ne. 0) go to 999
 neval = 21
 !
@@ -7484,7 +7484,7 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
-&errbnd) ier = 2
+   & errbnd) ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0) go to 999
 !
@@ -7519,68 +7519,68 @@ do 90 last = 2,limit
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
-&epmach, uflow, ier)
-  if (ier .ne. 0) go to 100
-  call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
-&epmach, uflow, ier)
-  neval = neval + 42
+   a1 = alist(maxerr)
+   b1 = 0.5*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
+      & epmach, uflow, ier)
+   if (ier .ne. 0) go to 100
+   call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
+      & epmach, uflow, ier)
+   neval = neval + 42
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
-&.or. erro12 .lt. 0.99*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+      & .or. erro12 .lt. 0.99*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = amax1(epsabs,rerr*abs(area))
+   rlist(last) = area2
+   errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of
 !           subintervals equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-  if (amax1(abs(a1),abs(b2)) .le. &
-&t*(abs(a2) + 0.1e+04*uflow)) ier = 4
+   if (amax1(abs(a1),abs(b2)) .le. &
+      & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   go to 30
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
 !
 !           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the
@@ -7589,21 +7589,21 @@ do 90 last = 2,limit
 !
 30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
-  if (errsum .le. errbnd) go to 115
+   if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           The smallest interval has the largest error.
@@ -7611,49 +7611,49 @@ do 90 last = 2,limit
 !           over the larger intervals (erlarg) and perform
 !           extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
 ! ***Jump out of do-loop
-    if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+      if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
-&epmach, oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = amax1(epsabs,rerr*abs(reseps))
+   rlist2(numrl2) = area
+   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+      & epmach, oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = amax1(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-  if (abserr .le. ertest) go to 100
+   if (abserr .le. ertest) go to 100
 !
 !           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5
+   erlarg = errsum
+   go to 90
 80 small = abs(b - a)*0.375
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -7672,9 +7672,9 @@ go to 110
 !           Test on divergence.
 !
 110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
-&defabs*0.1e-01) go to 130
+   & defabs*0.1e-01) go to 130
 if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
-&.or. errsum .gt. abs(area)) ier = 6
+   & .or. errsum .gt. abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -7689,7 +7689,7 @@ abserr = errsum
 end subroutine qagse
 
 subroutine qk21f (f, a, b, result, abserr, resabs, resasc, &
-&epmach, uflow, isig)
+   & epmach, uflow, isig)
 implicit none
 integer, intent(out) :: isig
 real, intent(in) :: a
@@ -7701,7 +7701,7 @@ real :: f
 external f
 integer :: j, jtw, jtwm1
 real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
-&resk, reskh, tol
+   & resk, reskh, tol
 real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
 !-----------------------------------------------------------------------
 !
@@ -7775,27 +7775,27 @@ real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
 !           wg     - Weights of the 10-point Gauss rule
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-&xgk(8),xgk(9),xgk(10),xgk(11)/ &
-&0.9956571630258081e+00,     0.9739065285171717e+00, &
-&0.9301574913557082e+00,     0.8650633666889845e+00, &
-&0.7808177265864169e+00,     0.6794095682990244e+00, &
-&0.5627571346686047e+00,     0.4333953941292472e+00, &
-&0.2943928627014602e+00,     0.1488743389816312e+00, &
-&0.0000000000000000e+00/
+   & xgk(8),xgk(9),xgk(10),xgk(11)/ &
+   & 0.9956571630258081e+00,     0.9739065285171717e+00, &
+   & 0.9301574913557082e+00,     0.8650633666889845e+00, &
+   & 0.7808177265864169e+00,     0.6794095682990244e+00, &
+   & 0.5627571346686047e+00,     0.4333953941292472e+00, &
+   & 0.2943928627014602e+00,     0.1488743389816312e+00, &
+   & 0.0000000000000000e+00/
 !
 data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-&wgk(8),wgk(9),wgk(10),wgk(11)/ &
-&0.1169463886737187e-01,     0.3255816230796473e-01, &
-&0.5475589657435200e-01,     0.7503967481091995e-01, &
-&0.9312545458369761e-01,     0.1093871588022976e+00, &
-&0.1234919762620659e+00,     0.1347092173114733e+00, &
-&0.1427759385770601e+00,     0.1477391049013385e+00, &
-&0.1494455540029169e+00/
+   & wgk(8),wgk(9),wgk(10),wgk(11)/ &
+   & 0.1169463886737187e-01,     0.3255816230796473e-01, &
+   & 0.5475589657435200e-01,     0.7503967481091995e-01, &
+   & 0.9312545458369761e-01,     0.1093871588022976e+00, &
+   & 0.1234919762620659e+00,     0.1347092173114733e+00, &
+   & 0.1427759385770601e+00,     0.1477391049013385e+00, &
+   & 0.1494455540029169e+00/
 !
 data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
-&0.6667134430868814e-01,     0.1494513491505806e+00, &
-&0.2190863625159820e+00,     0.2692667193099964e+00, &
-&0.2955242247147529e+00/
+   & 0.6667134430868814e-01,     0.1494513491505806e+00, &
+   & 0.2190863625159820e+00,     0.2692667193099964e+00, &
+   & 0.2955242247147529e+00/
 !
 !
 !           List of major variables
@@ -7830,47 +7830,47 @@ fc = f(centr)
 resk = wgk(11)*fc
 resabs = abs(resk)
 do 10 j = 1,5
-  jtw = 2*j
-  absc = hlgth*xgk(jtw)
-  fval1 = f(centr - absc)
-  fval2 = f(centr + absc)
-  fv1(jtw) = fval1
-  fv2(jtw) = fval2
-  fsum = fval1 + fval2
-  resg = resg + wg(j)*fsum
-  resk = resk + wgk(jtw)*fsum
-  resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
+   jtw = 2*j
+   absc = hlgth*xgk(jtw)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtw) = fval1
+   fv2(jtw) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(jtw)*fsum
+   resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
 do j = 1,5
-  jtwm1 = 2*j - 1
-  absc = hlgth*xgk(jtwm1)
-  fval1 = f(centr - absc)
-  fval2 = f(centr + absc)
-  fv1(jtwm1) = fval1
-  fv2(jtwm1) = fval2
-  fsum = fval1 + fval2
-  resk = resk + wgk(jtwm1)*fsum
-  resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
+   jtwm1 = 2*j - 1
+   absc = hlgth*xgk(jtwm1)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtwm1) = fval1
+   fv2(jtwm1) = fval2
+   fsum = fval1 + fval2
+   resk = resk + wgk(jtwm1)*fsum
+   resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
 end do
 reskh = resk*0.5
 resasc = wgk(11)*abs(fc - reskh)
 do j = 1,10
-  resasc = resasc + wgk(j)*(abs(fv1(j)-reskh) + abs(fv2(j)-reskh))
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + abs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resabs = resabs*dhlgth
 resasc = resasc*dhlgth
 abserr = abs((resk - resg)*hlgth)
 if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
-&abserr = resasc*amin1(1.0, &
-&(0.2e+03*abserr/resasc)**1.5)
+   & abserr = resasc*amin1(1.0, &
+   & (0.2e+03*abserr/resasc)**1.5)
 tol = epmach*0.5e+02
 if (resabs .gt. uflow/tol) abserr = amax1(abserr,tol*resabs)
 return
 end subroutine qk21f
 
 subroutine qagi (f, bound, inf, epsabs, epsrel, result, abserr, &
-&neval, ier, limit, lenw, last, iwork, work)
+   & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: ier
 integer, intent(in) :: inf
@@ -8055,12 +8055,12 @@ l2 = limit + l1
 l3 = limit + l2
 !
 call qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+   & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine qagi
 
 subroutine qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,alist,blist,rlist,elist,iord,last)
+   & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -8233,7 +8233,7 @@ real :: boun
 real :: b1, b2, correc, defabs, defab1, defab2, dres
 real :: epmach
 real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, oflow, rerr, resabs, reseps
+   & errsum, ertest, oflow, rerr, resabs, reseps
 real :: res3la(3)
 real :: rlist2(52), small, spmpar, t, uflow
 integer :: id
@@ -8244,7 +8244,7 @@ integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit)
+   & rlist(limit)
 !
 !
 !            The dimension of rlist2 is determined by the value of
@@ -8332,7 +8332,7 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 boun = bound
 if (inf .eq. 2) boun = 0.0
 call qk15i (f, boun, inf, 0.0, 1.0, result, abserr, &
-&defabs, resabs, epmach, uflow)
+   & defabs, resabs, epmach, uflow)
 !
 !           Test on accuracy
 !
@@ -8343,10 +8343,10 @@ iord(1) = 1
 dres = abs(result)
 errbnd = amax1(epsabs,rerr*dres)
 if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. errbnd) &
-&ier = 2
+   & ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
-&.or. abserr .eq. 0.0) go to 130
+   & .or. abserr .eq. 0.0) go to 130
 !
 !           Initialization
 !           --------------
@@ -8380,67 +8380,67 @@ do 90 last = 2,limit
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call qk15i (f, boun, inf, a1, b1, area1, error1, &
-&resabs, defab1, epmach, uflow)
-  call qk15i (f, boun, inf, a2, b2, area2, error2, &
-&resabs, defab2, epmach, uflow)
+   a1 = alist(maxerr)
+   b1 = 0.5*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call qk15i (f, boun, inf, a1, b1, area1, error1, &
+      & resabs, defab1, epmach, uflow)
+   call qk15i (f, boun, inf, a2, b2, area2, error2, &
+      & resabs, defab2, epmach, uflow)
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
-&.or. erro12 .lt. 0.99*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+      & .or. erro12 .lt. 0.99*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = amax1(epsabs,rerr*abs(area))
+   rlist(last) = area2
+   errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of
 !           subintervals equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at some points of the integration range.
 !
 
-  if (amax1(abs(a1),abs(b2)) .le. &
-&t*(abs(a2) + 0.1e+04*uflow)) ier = 4
+   if (amax1(abs(a1),abs(b2)) .le. &
+      & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   go to 30
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
 !
 !           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the
@@ -8448,20 +8448,20 @@ do 90 last = 2,limit
 !           bisected next).
 !
 30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
-  if (errsum .le. errbnd) go to 115
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (errsum .le. errbnd) go to 115
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           The smallest interval has the largest error.
@@ -8469,47 +8469,47 @@ do 90 last = 2,limit
 !           over the larger intervals (erlarg) and perform
 !           extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
-    if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
+      if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
-&epmach, oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = amax1(epsabs,rerr*abs(reseps))
-  if (abserr .le. ertest) go to 100
+   rlist2(numrl2) = area
+   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+      & epmach, oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = amax1(epsabs,rerr*abs(reseps))
+   if (abserr .le. ertest) go to 100
 !
 !            Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5
+   erlarg = errsum
+   go to 90
 80 small = 0.375
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -8528,16 +8528,16 @@ go to 110
 !           Test on divergence
 !
 110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
-&defabs*0.1e-01) go to 130
+   & defabs*0.1e-01) go to 130
 if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
-&.or. errsum .gt. abs(area)) ier = 6
+   & .or. errsum .gt. abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
 !
 115 result = 0.0
 do k = 1,last
-  result = result + rlist(k)
+   result = result + rlist(k)
 end do
 abserr = errsum
 130 neval = 30*last - 15
@@ -8547,7 +8547,7 @@ if (ier .gt. 2) ier = ier - 1
 end subroutine qagie
 
 subroutine qk15i (f, boun, inf, a, b, result, abserr, resabs, &
-&resasc, epmach, uflow)
+   & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
 real, intent(in) :: a
@@ -8559,7 +8559,7 @@ real :: f
 external f
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
-&hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
+   & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
 real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !-----------------------------------------------------------------------
 !
@@ -8650,24 +8650,24 @@ real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !                    wg(1), wg(3), ... are set to zero.
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-&xgk(8)/ &
-&0.9914553711208126e+00,     0.9491079123427585e+00, &
-&0.8648644233597691e+00,     0.7415311855993944e+00, &
-&0.5860872354676911e+00,     0.4058451513773972e+00, &
-&0.2077849550078985e+00,     0.0000000000000000e+00/
+   & xgk(8)/ &
+   & 0.9914553711208126e+00,     0.9491079123427585e+00, &
+   & 0.8648644233597691e+00,     0.7415311855993944e+00, &
+   & 0.5860872354676911e+00,     0.4058451513773972e+00, &
+   & 0.2077849550078985e+00,     0.0000000000000000e+00/
 !
 data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-&wgk(8)/ &
-&0.2293532201052922e-01,     0.6309209262997855e-01, &
-&0.1047900103222502e+00,     0.1406532597155259e+00, &
-&0.1690047266392679e+00,     0.1903505780647854e+00, &
-&0.2044329400752989e+00,     0.2094821410847278e+00/
+   & wgk(8)/ &
+   & 0.2293532201052922e-01,     0.6309209262997855e-01, &
+   & 0.1047900103222502e+00,     0.1406532597155259e+00, &
+   & 0.1690047266392679e+00,     0.1903505780647854e+00, &
+   & 0.2044329400752989e+00,     0.2094821410847278e+00/
 !
 data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
-&0.0000000000000000e+00,     0.1294849661688697e+00, &
-&0.0000000000000000e+00,     0.2797053914892767e+00, &
-&0.0000000000000000e+00,     0.3818300505051189e+00, &
-&0.0000000000000000e+00,     0.4179591836734694e+00/
+   & 0.0000000000000000e+00,     0.1294849661688697e+00, &
+   & 0.0000000000000000e+00,     0.2797053914892767e+00, &
+   & 0.0000000000000000e+00,     0.3818300505051189e+00, &
+   & 0.0000000000000000e+00,     0.4179591836734694e+00/
 !
 !
 !           List of major variables
@@ -8700,36 +8700,36 @@ resg = wg(8)*fc
 resk = wgk(8)*fc
 resabs = abs(resk)
 do j = 1,7
-  absc = hlgth*xgk(j)
-  absc1 = centr - absc
-  absc2 = centr + absc
-  tabsc1 = boun + dinf*(1.0 - absc1)/absc1
-  tabsc2 = boun + dinf*(1.0 - absc2)/absc2
-  fval1 = f(tabsc1)
-  fval2 = f(tabsc2)
-  if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
-  if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
-  fval1 = (fval1/absc1)/absc1
-  fval2 = (fval2/absc2)/absc2
-  fv1(j) = fval1
-  fv2(j) = fval2
-  fsum = fval1 + fval2
-  resg = resg + wg(j)*fsum
-  resk = resk + wgk(j)*fsum
-  resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
+   absc = hlgth*xgk(j)
+   absc1 = centr - absc
+   absc2 = centr + absc
+   tabsc1 = boun + dinf*(1.0 - absc1)/absc1
+   tabsc2 = boun + dinf*(1.0 - absc2)/absc2
+   fval1 = f(tabsc1)
+   fval2 = f(tabsc2)
+   if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+   if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
+   fval1 = (fval1/absc1)/absc1
+   fval2 = (fval2/absc2)/absc2
+   fv1(j) = fval1
+   fv2(j) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(j)*fsum
+   resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
 end do
 reskh = resk*0.5
 resasc = wgk(8)*abs(fc - reskh)
 do j = 1,7
-  resasc = resasc + wgk(j)*(abs(fv1(j)-reskh) + &
-&abs(fv2(j)-reskh))
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + &
+      & abs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resasc = resasc*hlgth
 resabs = resabs*hlgth
 abserr = abs((resk - resg)*hlgth)
 if (resasc .ne. 0.0 .and. abserr .ne. 0.0) abserr = resasc* &
-&amin1(1.0, (0.2e+03*abserr/resasc)**1.5)
+   & amin1(1.0, (0.2e+03*abserr/resasc)**1.5)
 tol = 50.0*epmach
 if (resabs .gt. uflow/tol) abserr = amax1(abserr, tol*resabs)
 return
@@ -8806,7 +8806,7 @@ dimension elist(last),iord(last)
 !           two error estimates.
 !
 !***First executable statement  qpsrt
-if(last.gt.2) go to 10
+if (last.gt.2) go to 10
 iord(1) = 1
 iord(2) = 2
 go to 90
@@ -8818,15 +8818,15 @@ go to 90
 !           nrmax-TH largest error estimate.
 !
 10 errmax = elist(maxerr)
-if(nrmax.eq.1) go to 30
-ido = nrmax-1
+if (nrmax.eq.1) go to 30
+ido = nrmax - 1
 do i = 1,ido
-  isucc = iord(nrmax-1)
+   isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-  if(errmax.le.elist(isucc)) go to 30
-  iord(nrmax) = isucc
-  nrmax = nrmax-1
-   end do
+   if (errmax.le.elist(isucc)) go to 30
+   iord(nrmax) = isucc
+   nrmax = nrmax - 1
+end do
 !
 !           Compute the number of elements in the list to
 !           be maintained in descending order. This number
@@ -8834,20 +8834,20 @@ do i = 1,ido
 !           allowed.
 !
 30 jupbn = last
-if(last.gt.(limit/2+2)) jupbn = limit+3-last
+if (last.gt.(limit/2 + 2)) jupbn = limit + 3 - last
 errmin = elist(last)
 !
 !           Insert errmax by traversing the list top-down,
 !           starting comparison from the element elist(iord(nrmax+1)).
 !
-jbnd = jupbn-1
-ibeg = nrmax+1
-if(ibeg.gt.jbnd) go to 50
-do i=ibeg,jbnd
-  isucc = iord(i)
+jbnd = jupbn - 1
+ibeg = nrmax + 1
+if (ibeg.gt.jbnd) go to 50
+do i = ibeg,jbnd
+   isucc = iord(i)
 ! ***Jump out of do-loop
-  if(errmax.ge.elist(isucc)) go to 60
-  iord(i-1) = isucc
+   if (errmax.ge.elist(isucc)) go to 60
+   iord(i - 1) = isucc
 end do
 50 iord(jbnd) = maxerr
 iord(jupbn) = last
@@ -8855,18 +8855,18 @@ go to 90
 !
 !           Insert errmin by traversing the list bottom-up.
 !
-60 iord(i-1) = maxerr
+60 iord(i - 1) = maxerr
 k = jbnd
-do j=i,jbnd
-  isucc = iord(k)
+do j = i,jbnd
+   isucc = iord(k)
 ! ***Jump out of do-loop
-  if(errmin.lt.elist(isucc)) go to 80
-  iord(k+1) = isucc
-  k = k-1
+   if (errmin.lt.elist(isucc)) go to 80
+   iord(k + 1) = isucc
+   k = k - 1
 end do
 iord(i) = last
 go to 90
-80 iord(k+1) = last
+80 iord(k + 1) = last
 !
 !           Set maxerr and ermax.
 !
@@ -8876,7 +8876,7 @@ return
 end subroutine qpsrt
 
 subroutine qelg (n, epstab, result, abserr, res3la, nres, &
-&epmach, oflow)
+   & epmach, oflow)
 implicit none
 integer, intent(inout) :: n, nres
 real, intent(out) :: abserr
@@ -8885,7 +8885,7 @@ real, intent(out) :: result
 real, intent(inout) :: epstab(52), res3la(3)
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
-&err1, err2, err3, error, res, ss, tol1, tol2, tol3
+   & err1, err2, err3, error, res, ss, tol1, tol2, tol3
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -8966,62 +8966,62 @@ epstab(n) = oflow
 num = n
 k1 = n
 do 40 i = 1,newelm
-  k2 = k1 - 1
-  k3 = k1 - 2
-  res = epstab(k1 + 2)
-  e0 = epstab(k3)
-  e1 = epstab(k2)
-  e2 = res
-  e1abs = abs(e1)
-  delta2 = e2 - e1
-  err2 = abs(delta2)
-  tol2 = amax1(abs(e2),e1abs)*epmach
-  delta3 = e1 - e0
-  err3 = abs(delta3)
-  tol3 = amax1(e1abs,abs(e0))*epmach
-  if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
+   k2 = k1 - 1
+   k3 = k1 - 2
+   res = epstab(k1 + 2)
+   e0 = epstab(k3)
+   e1 = epstab(k2)
+   e2 = res
+   e1abs = abs(e1)
+   delta2 = e2 - e1
+   err2 = abs(delta2)
+   tol2 = amax1(abs(e2),e1abs)*epmach
+   delta3 = e1 - e0
+   err3 = abs(delta3)
+   tol3 = amax1(e1abs,abs(e0))*epmach
+   if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
 !           If e0, e1 and e2 are equal to within machine
 !           accuracy, convergence is assumed.
 !           result = e2
 !           abserr = abs(e1-e0) + abs(e2-e1)
 !
-  result = res
-  abserr = err2 + err3
+   result = res
+   abserr = err2 + err3
 ! ***Jump out of do-loop
-  go to 100
+   go to 100
 10 e3 = epstab(k1)
-  epstab(k1) = e1
-  delta1 = e1 - e3
-  err1 = abs(delta1)
-  tol1 = amax1(e1abs,abs(e3))*epmach
+   epstab(k1) = e1
+   delta1 = e1 - e3
+   err1 = abs(delta1)
+   tol1 = amax1(e1abs,abs(e3))*epmach
 !
 !           If two elements are very close to each other, omit
 !           a part of the table by adjusting the value of n
 !
-  if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
-  ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
-  epsinf = abs(ss*e1)
+   if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
+   ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
+   epsinf = abs(ss*e1)
 !
 !           Test to detect irregular behaviour in the table, and
 !           eventually omit a part of the table adjusting the value
 !           OF n.
 !
-  if (epsinf .gt. 0.1e-03) go to 30
+   if (epsinf .gt. 0.1e-03) go to 30
 20 n = i + i - 1
 ! ***Jump out of do-loop
-  go to 50
+   go to 50
 !
 !           Compute a new element and eventually adjust
 !           the value of result.
 !
 30 res = e1 + 1.0/ss
-  epstab(k1) = res
-  k1 = k1 - 2
-  error = err2 + abs(res - e2) + err3
-  if (error .gt. abserr) go to 40
-  abserr = error
-  result = res
+   epstab(k1) = res
+   k1 = k1 - 2
+   error = err2 + abs(res - e2) + err3
+   if (error .gt. abserr) go to 40
+   abserr = error
+   result = res
 40 continue
 !
 !           Shift the table.
@@ -9031,15 +9031,15 @@ ib = 1
 if ((num/2)*2 .eq. num) ib = 2
 ie = newelm + 1
 do i = 1,ie
-  ib2 = ib + 2
-  epstab(ib) = epstab(ib2)
-  ib = ib2
+   ib2 = ib + 2
+   epstab(ib) = epstab(ib2)
+   ib = ib2
 end do
 if (num .eq. n) go to 80
 indx = num - n + 1
 do i = 1,n
-  epstab(i) = epstab(indx)
-  indx = indx + 1
+   epstab(i) = epstab(indx)
+   indx = indx + 1
 end do
 80 if (nres .ge. 4) go to 90
 res3la(nres) = result
@@ -9049,7 +9049,7 @@ go to 100
 !           Compute error estimate
 !
 90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
-&abs(result - res3la(1))
+   & abs(result - res3la(1))
 res3la(1) = res3la(2)
 res3la(2) = res3la(3)
 res3la(3) = result
@@ -9058,7 +9058,7 @@ return
 end subroutine qelg
 
 subroutine qxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
-&limit,leniw,lenw,last,iwork,work)
+   & limit,leniw,lenw,last,iwork,work)
 implicit none
 !
 !            The routine calculates an approximation result to a given
@@ -9220,7 +9220,7 @@ last = 0
 result = 0.0
 abserr = 0.0
 if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
-&return
+   & return
 !
 !         Prepare call for qxgse.
 !
@@ -9231,14 +9231,14 @@ l4 = limit + l3
 l5 = 21*limit + l4
 !
 call qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-&ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
-&work(l4),work(l5),iwork(l1),iwork(l2))
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
+   & work(l4),work(l5),iwork(l1),iwork(l2))
 !
 return
 end subroutine qxgs
 
 subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-&ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
+   & ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
 implicit none
 !
 !            The routine calculates an approximation result to A
@@ -9396,7 +9396,7 @@ real :: area, area1, area12, area2, a1, a2
 real :: b1, b2, correc, defabs, defab1, defab2, dres
 real :: epmach
 real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, oflow, rerr, resabs, reseps
+   & errsum, ertest, oflow, rerr, resabs, reseps
 real :: res3la(3)
 real :: rlist2(52), small, t, uflow
 real :: vp1(21), vp2(21), vn1(21), vn2(21), spmpar
@@ -9408,7 +9408,7 @@ integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit), valp(21,limit), valn(21,limit)
+   & rlist(limit), valp(21,limit), valn(21,limit)
 !
 !
 !            Machine dependent constants
@@ -9445,8 +9445,8 @@ ln(1) = 1
 valp(1,1) = f((a + b)*0.5)
 valn(1,1) = valp(1,1)
 call qxlqm (f,a,b,result,abserr,defabs,resabs, &
-&valp(1,1),valn(1,1),lp(1),ln(1),2, &
-&epmach,uflow,oflow)
+   & valp(1,1),valn(1,1),lp(1),ln(1),2, &
+   & epmach,uflow,oflow)
 !
 !           Test on accuracy.
 !
@@ -9457,10 +9457,10 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
-&errbnd) ier = 2
+   & errbnd) ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
-&abserr .eq. 0.0) go to 999
+   & abserr .eq. 0.0) go to 999
 !
 !           Initialization
 !           --------------
@@ -9492,84 +9492,84 @@ do 90 last = 2,limit
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
-  call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
-&2,epmach,uflow,oflow)
-  call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
-  call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
-&2,epmach,uflow,oflow)
+   a1 = alist(maxerr)
+   b1 = 0.5*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
+   call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
+      & 2,epmach,uflow,oflow)
+   call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
+   call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
+      & 2,epmach,uflow,oflow)
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
-&.or. erro12 .lt. 0.99*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+      & .or. erro12 .lt. 0.99*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last.gt.10 .and. erro12.gt.errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = amax1(epsabs,rerr*abs(area))
+   rlist(last) = area2
+   errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of subintervals
 !           equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-  if (amax1(abs(a1),abs(b2)) .le. &
-&t*(abs(a2) + 1.e+03*uflow)) ier = 4
+   if (amax1(abs(a1),abs(b2)) .le. &
+      & t*(abs(a2) + 1.e+03*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  call qxcpy(valp(1,maxerr),vp1,lp1)
-  lp(maxerr) = lp1
-  call qxcpy(valn(1,maxerr),vn1,ln1)
-  ln(maxerr) = ln1
-  call qxcpy(valp(1,last),vp2,lp2)
-  lp(last) = lp2
-  call qxcpy(valn(1,last),vn2,ln2)
-  ln(last) = ln2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   call qxcpy(valp(1,maxerr),vp1,lp1)
+   lp(maxerr) = lp1
+   call qxcpy(valn(1,maxerr),vn1,ln1)
+   ln(maxerr) = ln1
+   call qxcpy(valp(1,last),vp2,lp2)
+   lp(last) = lp2
+   call qxcpy(valn(1,last),vn2,ln2)
+   ln(last) = ln2
+   go to 30
 !
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
-  call qxcpy(valp(1,maxerr),vp2,lp2)
-  lp(maxerr) = lp2
-  call qxcpy(valn(1,maxerr),vn2,ln2)
-  ln(maxerr) = ln2
-  call qxcpy(valp(1,last),vp1,lp1)
-  lp(last) = lp1
-  call qxcpy(valn(1,last),vn1,ln1)
-  ln(last) = ln1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
+   call qxcpy(valp(1,maxerr),vp2,lp2)
+   lp(maxerr) = lp2
+   call qxcpy(valn(1,maxerr),vn2,ln2)
+   ln(maxerr) = ln2
+   call qxcpy(valp(1,last),vp1,lp1)
+   lp(last) = lp1
+   call qxcpy(valn(1,last),vn1,ln1)
+   ln(last) = ln1
 !
 !           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the subinterval
@@ -9577,21 +9577,21 @@ do 90 last = 2,limit
 !
 30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
-  if(errsum .le. errbnd) go to 115
+   if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 !
 !           The bound 0.3*ERTEST has been introduced to perform A
 !           more cautious extrapolation than in the original dqagse
@@ -9603,49 +9603,49 @@ do 90 last = 2,limit
 !           Before bisecting decrease the sum of the errors over the
 !           larger intervals (erlarg) and perform extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
 ! ***Jump out of do-loop
-    if(abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+      if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call qelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
-&epmach,oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = amax1(epsabs,rerr*abs(reseps))
+   rlist2(numrl2) = area
+   call qelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+      & epmach,oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = amax1(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-  if (abserr .le. ertest) go to 100
+   if (abserr .le. ertest) go to 100
 !
 !           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5
+   erlarg = errsum
+   go to 90
 80 small = abs(b - a)*0.375
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -9663,10 +9663,10 @@ go to 110
 !
 !           Test on divergence.
 !
-110 if(ksgn.eq.(-1).and.amax1(abs(result),abs(area)).le. &
-&defabs*0.1e-01) go to 130
-if(0.1e-01.gt.(result/area).or.(result/area).gt.0.1e+03 &
-&.or.errsum.gt.abs(area)) ier = 6
+110 if (ksgn.eq.(-1).and.amax1(abs(result),abs(area)).le. &
+   & defabs*0.1e-01) go to 130
+if (0.1e-01.gt.(result/area).or.(result/area).gt.0.1e+03 &
+   & .or.errsum.gt.abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -9697,7 +9697,7 @@ return
 end subroutine qxcpy
 
 subroutine qxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
-&key,epmach,uflow,oflow)
+   & key,epmach,uflow,oflow)
 implicit none
 !
 !            To compute I = Integral of f over (a,b), with error
@@ -9795,24 +9795,24 @@ integer :: key1
 !
 key1 = max0(key ,  0)
 key1 = min0(key1,  4)
-k0   = max0(key1-2,0)
-k1   = k0 + 1
-k2   = min0(key1+1,3)
+k0 = max0(key1 - 2,0)
+k1 = k0 + 1
+k2 = min0(key1 + 1,3)
 !
 call qxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.0*epmach
 do 10 k = k1,k2
-  call qxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
-  result = resk
-  abserr = abs(resk - resg)
-  if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
-&abserr = resasc*amin1(1.0,(200.0*abserr/resasc)**1.5)
-  if (resabs .gt. uflow/t) abserr = amax1(t*resabs,abserr)
-  resg = resk
-  if (abserr .gt. errold*0.16) go to 3000
-  if (abserr .lt. 1000.0*epmach*resabs) go to 3000
-  errold = abserr
+   call qxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+   result = resk
+   abserr = abs(resk - resg)
+   if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
+      & abserr = resasc*amin1(1.0,(200.0*abserr/resasc)**1.5)
+   if (resabs .gt. uflow/t) abserr = amax1(t*resabs,abserr)
+   resg = resk
+   if (abserr .gt. errold*0.16) go to 3000
+   if (abserr .lt. 1000.0*epmach*resabs) go to 3000
+   errold = abserr
 10 continue
 3000 continue
 return
@@ -10069,29 +10069,29 @@ real :: dlen, centr
 !
 dlen = (xu - xl)*0.5
 centr = xl + dlen
-r(1) =  z(3)
-r(2) =  z(9)
-r(3) =  z(4)
-r(4) =  z(5)
-r(5) =  z(6)
-r(6) =  z(10)
-r(7) =  z(7)
-s(1) =  z(3)
-s(2) =  z(8)
-s(3) =  z(2)
-s(7) =  z(1)
+r(1) = z(3)
+r(2) = z(9)
+r(3) = z(4)
+r(4) = z(5)
+r(5) = z(6)
+r(6) = z(10)
+r(7) = z(7)
+s(1) = z(3)
+s(2) = z(8)
+s(3) = z(2)
+s(7) = z(1)
 if (lz .gt. 11) go to 10
 !
-r(8) =  f(centr + dlen*0.375)
-r(9) =  f(centr + dlen*0.625)
+r(8) = f(centr + dlen*0.375)
+r(9) = f(centr + dlen*0.625)
 r(10) = f(centr + dlen*0.96875)
 lr = 10
 if (lz .ne. 11) s(4) = f(centr - dlen*0.75)
 if (lz .eq. 11) s(4) = z(11)
-s(5) =  f(centr - dlen*0.875)
-s(6) =  f(centr - dlen*0.9375)
-s(8) =  f(centr - dlen*0.375)
-s(9) =  f(centr - dlen*0.625)
+s(5) = f(centr - dlen*0.875)
+s(6) = f(centr - dlen*0.9375)
+s(8) = f(centr - dlen*0.375)
+s(9) = f(centr - dlen*0.625)
 s(10) = f(centr - dlen*0.96875)
 ls = 10
 return
@@ -10104,8 +10104,8 @@ s(4) = z(11)
 s(5) = f(centr - dlen*0.875)
 s(6) = f(centr - dlen*0.9375)
 if (lz .gt. 14) go to 20
-s(8)  = f(centr - dlen*0.375)
-s(9)  = f(centr - dlen*0.625)
+s(8) = f(centr - dlen*0.375)
+s(9) = f(centr - dlen*0.625)
 s(10) = f(centr - dlen*0.96875)
 ls = 10
 return
@@ -10124,7 +10124,7 @@ return
 end subroutine qxrrd
 
 subroutine dqags (f, a, b, epsabs, epsrel, result, abserr, &
-&neval, ier, limit, lenw, last, iwork, work)
+   & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: last
 double precision, intent(in) :: a
@@ -10304,12 +10304,12 @@ l2 = limit + l1
 l3 = limit + l2
 !
 call dqagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
-&ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine dqags
 
 subroutine dqagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,alist,blist,rlist,elist,iord,last)
+   & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -10470,10 +10470,10 @@ external f
 double precision :: abseps
 double precision :: area, area1, area12, area2, a1, a2
 double precision :: b1, b2, correc, defabs, defab1, defab2, &
-&dpmpar, dres
+   & dpmpar, dres
 double precision :: epmach
 double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
 double precision :: res3la(3)
 double precision :: rlist2(52), small, t, uflow
 integer :: id
@@ -10484,7 +10484,7 @@ integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit)
+   & rlist(limit)
 !
 !
 !            The dimension of rlist2 is determined by the value of
@@ -10565,7 +10565,7 @@ rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
 ierro = 0
 call dqk21 (f, a, b, result, abserr, defabs, resabs, &
-&epmach, uflow, id)
+   & epmach, uflow, id)
 if (id .ne. 0) go to 999
 neval = 21
 !
@@ -10578,7 +10578,7 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. &
-&errbnd) ier = 2
+   & errbnd) ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0) go to 999
 !
@@ -10613,68 +10613,68 @@ do 90 last = 2,limit
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call dqk21 (f, a1, b1, area1, error1, resabs, defab1, &
-&epmach, uflow, ier)
-  if (ier .ne. 0) go to 100
-  call dqk21 (f, a2, b2, area2, error2, resabs, defab2, &
-&epmach, uflow, ier)
-  neval = neval + 42
+   a1 = alist(maxerr)
+   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call dqk21 (f, a1, b1, area1, error1, resabs, defab1, &
+      & epmach, uflow, ier)
+   if (ier .ne. 0) go to 100
+   call dqk21 (f, a2, b2, area2, error2, resabs, defab2, &
+      & epmach, uflow, ier)
+   neval = neval + 42
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
-&.or. erro12 .lt. 0.99d0*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+      & .or. erro12 .lt. 0.99d0*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = dmax1(epsabs,rerr*dabs(area))
+   rlist(last) = area2
+   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of
 !           subintervals equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-  if (dmax1(dabs(a1),dabs(b2)) .le. &
-&t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
+   if (dmax1(dabs(a1),dabs(b2)) .le. &
+      & t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   go to 30
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
 !
 !           CALL SUBROUTINE dqpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the
@@ -10683,21 +10683,21 @@ do 90 last = 2,limit
 !
 30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
-  if (errsum .le. errbnd) go to 115
+   if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           The smallest interval has the largest error.
@@ -10705,49 +10705,49 @@ do 90 last = 2,limit
 !           over the larger intervals (erlarg) and perform
 !           extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
 ! ***Jump out of do-loop
-    if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+      if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
-&epmach, oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = dmax1(epsabs,rerr*dabs(reseps))
+   rlist2(numrl2) = area
+   call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+      & epmach, oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = dmax1(epsabs,rerr*dabs(reseps))
 ! ***Jump out of do-loop
-  if (abserr .le. ertest) go to 100
+   if (abserr .le. ertest) go to 100
 !
 !           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5d0
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5d0
+   erlarg = errsum
+   go to 90
 80 small = dabs(b - a)*0.375d0
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -10766,9 +10766,9 @@ go to 110
 !           Test on divergence.
 !
 110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
-&defabs*0.1d-01) go to 130
+   & defabs*0.1d-01) go to 130
 if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
-&.or. errsum .gt. dabs(area)) ier = 6
+   & .or. errsum .gt. dabs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.

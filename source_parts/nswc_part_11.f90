@@ -1,5 +1,5 @@
 subroutine dqk21 (f, a, b, result, abserr, resabs, resasc, &
-&epmach, uflow, isig)
+   & epmach, uflow, isig)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -71,7 +71,7 @@ external f
 double precision :: absc
 double precision :: centr, dhlgth
 double precision :: fc, fsum, fval1, fval2, fv1(10), fv2(10), &
-&hlgth
+   & hlgth
 double precision :: resg, resk, reskh
 double precision :: tol
 double precision :: wg(5), wgk(11), xgk(11)
@@ -93,39 +93,39 @@ integer :: j, jtw, jtwm1
 !           wg     - Weights of the 10-point Gauss rule
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-&xgk(8),xgk(9),xgk(10),xgk(11)/ &
-&0.995657163025808080735527280689d+00, &
-&0.973906528517171720077964012084d+00, &
-&0.930157491355708226001207180060d+00, &
-&0.865063366688984510732096688423d+00, &
-&0.780817726586416897063717578345d+00, &
-&0.679409568299024406234327365115d+00, &
-&0.562757134668604683339000099273d+00, &
-&0.433395394129247190799265943166d+00, &
-&0.294392862701460198131126603104d+00, &
-&0.148874338981631210884826001130d+00, &
-&0.000000000000000000000000000000d+00/
+   & xgk(8),xgk(9),xgk(10),xgk(11)/ &
+   & 0.995657163025808080735527280689d+00, &
+   & 0.973906528517171720077964012084d+00, &
+   & 0.930157491355708226001207180060d+00, &
+   & 0.865063366688984510732096688423d+00, &
+   & 0.780817726586416897063717578345d+00, &
+   & 0.679409568299024406234327365115d+00, &
+   & 0.562757134668604683339000099273d+00, &
+   & 0.433395394129247190799265943166d+00, &
+   & 0.294392862701460198131126603104d+00, &
+   & 0.148874338981631210884826001130d+00, &
+   & 0.000000000000000000000000000000d+00/
 !
 data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-&wgk(8),wgk(9),wgk(10),wgk(11)/ &
-&0.116946388673718742780643960622d-01, &
-&0.325581623079647274788189724594d-01, &
-&0.547558965743519960313813002446d-01, &
-&0.750396748109199527670431409162d-01, &
-&0.931254545836976055350654650834d-01, &
-&0.109387158802297641899210590326d+00, &
-&0.123491976262065851077958109831d+00, &
-&0.134709217311473325928054001772d+00, &
-&0.142775938577060080797094273139d+00, &
-&0.147739104901338491374841515972d+00, &
-&0.149445554002916905664936468390d+00/
+   & wgk(8),wgk(9),wgk(10),wgk(11)/ &
+   & 0.116946388673718742780643960622d-01, &
+   & 0.325581623079647274788189724594d-01, &
+   & 0.547558965743519960313813002446d-01, &
+   & 0.750396748109199527670431409162d-01, &
+   & 0.931254545836976055350654650834d-01, &
+   & 0.109387158802297641899210590326d+00, &
+   & 0.123491976262065851077958109831d+00, &
+   & 0.134709217311473325928054001772d+00, &
+   & 0.142775938577060080797094273139d+00, &
+   & 0.147739104901338491374841515972d+00, &
+   & 0.149445554002916905664936468390d+00/
 !
 data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
-&0.666713443086881375935688098933d-01, &
-&0.149451349150580593145776339658d+00, &
-&0.219086362515982043995534934228d+00, &
-&0.269266719309996355091226921569d+00, &
-&0.295524224714752870173892994651d+00/
+   & 0.666713443086881375935688098933d-01, &
+   & 0.149451349150580593145776339658d+00, &
+   & 0.219086362515982043995534934228d+00, &
+   & 0.269266719309996355091226921569d+00, &
+   & 0.295524224714752870173892994651d+00/
 !
 !
 !           List of major variables
@@ -160,48 +160,48 @@ fc = f(centr)
 resk = wgk(11)*fc
 resabs = dabs(resk)
 do 10 j = 1,5
-  jtw = 2*j
-  absc = hlgth*xgk(jtw)
-  fval1 = f(centr - absc)
-  fval2 = f(centr + absc)
-  fv1(jtw) = fval1
-  fv2(jtw) = fval2
-  fsum = fval1 + fval2
-  resg = resg + wg(j)*fsum
-  resk = resk + wgk(jtw)*fsum
-  resabs = resabs + wgk(jtw)*(dabs(fval1) + dabs(fval2))
+   jtw = 2*j
+   absc = hlgth*xgk(jtw)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtw) = fval1
+   fv2(jtw) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(jtw)*fsum
+   resabs = resabs + wgk(jtw)*(dabs(fval1) + dabs(fval2))
 10 continue
 do j = 1,5
-  jtwm1 = 2*j - 1
-  absc = hlgth*xgk(jtwm1)
-  fval1 = f(centr - absc)
-  fval2 = f(centr + absc)
-  fv1(jtwm1) = fval1
-  fv2(jtwm1) = fval2
-  fsum = fval1 + fval2
-  resk = resk + wgk(jtwm1)*fsum
-  resabs = resabs + wgk(jtwm1)*(dabs(fval1) + dabs(fval2))
+   jtwm1 = 2*j - 1
+   absc = hlgth*xgk(jtwm1)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtwm1) = fval1
+   fv2(jtwm1) = fval2
+   fsum = fval1 + fval2
+   resk = resk + wgk(jtwm1)*fsum
+   resabs = resabs + wgk(jtwm1)*(dabs(fval1) + dabs(fval2))
 end do
 reskh = resk*0.5d0
 resasc = wgk(11)*dabs(fc - reskh)
 do j = 1,10
-  resasc = resasc + wgk(j)*(dabs(fv1(j)-reskh) &
-&+ dabs(fv2(j)-reskh))
+   resasc = resasc + wgk(j)*(dabs(fv1(j) - reskh) &
+      & + dabs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resabs = resabs*dhlgth
 resasc = resasc*dhlgth
 abserr = dabs((resk - resg)*hlgth)
 if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
-&abserr = resasc*dmin1(1.d0, &
-&(0.2d+03*abserr/resasc)**1.5d0)
+   & abserr = resasc*dmin1(1.d0, &
+   & (0.2d+03*abserr/resasc)**1.5d0)
 tol = epmach*0.5d+02
 if (resabs .gt. uflow/tol) abserr = dmax1(abserr,tol*resabs)
 return
 end subroutine dqk21
 
 subroutine dqagi (f, bound, inf, epsabs, epsrel, result, abserr, &
-&neval, ier, limit, lenw, last, iwork, work)
+   & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(in) :: inf
 integer, intent(out) :: last
@@ -389,12 +389,12 @@ l2 = limit + l1
 l3 = limit + l2
 !
 call dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+   & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine dqagi
 
 subroutine dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
-&neval,ier,alist,blist,rlist,elist,iord,last)
+   & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -565,10 +565,10 @@ double precision :: abseps
 double precision :: area, area1, area12, area2, a1, a2
 double precision :: boun
 double precision :: b1, b2, correc, defabs, defab1, defab2, dres, &
-&dpmpar
+   & dpmpar
 double precision :: epmach
 double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
 double precision :: res3la(3)
 double precision :: rlist2(52), small, t, uflow
 integer :: id
@@ -579,7 +579,7 @@ integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit)
+   & rlist(limit)
 !
 !
 !            The dimension of rlist2 is determined by the value of
@@ -667,7 +667,7 @@ rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 boun = bound
 if (inf .eq. 2) boun = 0.d0
 call dqk15i (f, boun, inf, 0.d0, 1.d0, result, abserr, &
-&defabs, resabs, epmach, uflow)
+   & defabs, resabs, epmach, uflow)
 !
 !           Test on accuracy
 !
@@ -678,10 +678,10 @@ iord(1) = 1
 dres = dabs(result)
 errbnd = dmax1(epsabs,rerr*dres)
 if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. errbnd) &
-&ier = 2
+   & ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
-&.or. abserr .eq. 0.d0) go to 130
+   & .or. abserr .eq. 0.d0) go to 130
 !
 !           Initialization
 !           --------------
@@ -715,67 +715,67 @@ do 90 last = 2,limit
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call dqk15i (f, boun, inf, a1, b1, area1, error1, &
-&resabs, defab1, epmach, uflow)
-  call dqk15i (f, boun, inf, a2, b2, area2, error2, &
-&resabs, defab2, epmach, uflow)
+   a1 = alist(maxerr)
+   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call dqk15i (f, boun, inf, a1, b1, area1, error1, &
+      & resabs, defab1, epmach, uflow)
+   call dqk15i (f, boun, inf, a2, b2, area2, error2, &
+      & resabs, defab2, epmach, uflow)
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
-&.or. erro12 .lt. 0.99d0*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+      & .or. erro12 .lt. 0.99d0*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = dmax1(epsabs,rerr*dabs(area))
+   rlist(last) = area2
+   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of
 !           subintervals equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at some points of the integration range.
 !
 
-  if (dmax1(dabs(a1),dabs(b2)) .le. &
-&t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
+   if (dmax1(dabs(a1),dabs(b2)) .le. &
+      & t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   go to 30
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
 !
 !           CALL SUBROUTINE dqpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the
@@ -783,20 +783,20 @@ do 90 last = 2,limit
 !           bisected next).
 !
 30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
-  if (errsum .le. errbnd) go to 115
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (errsum .le. errbnd) go to 115
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           The smallest interval has the largest error.
@@ -804,47 +804,47 @@ do 90 last = 2,limit
 !           over the larger intervals (erlarg) and perform
 !           extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
-    if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
+      if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
-&epmach, oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = dmax1(epsabs,rerr*dabs(reseps))
-  if (abserr .le. ertest) go to 100
+   rlist2(numrl2) = area
+   call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+      & epmach, oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = dmax1(epsabs,rerr*dabs(reseps))
+   if (abserr .le. ertest) go to 100
 !
 !            Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5d0
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5d0
+   erlarg = errsum
+   go to 90
 80 small = 0.375d0
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -863,16 +863,16 @@ go to 110
 !           Test on divergence
 !
 110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
-&defabs*0.1d-01) go to 130
+   & defabs*0.1d-01) go to 130
 if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
-&.or. errsum .gt. dabs(area)) ier = 6
+   & .or. errsum .gt. dabs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
 !
 115 result = 0.d0
 do k = 1,last
-  result = result + rlist(k)
+   result = result + rlist(k)
 end do
 abserr = errsum
 130 neval = 30*last - 15
@@ -882,7 +882,7 @@ if (ier .gt. 2) ier = ier - 1
 end subroutine dqagie
 
 subroutine dqk15i (f, boun, inf, a, b, result, abserr, resabs, &
-&resasc, epmach, uflow)
+   & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
 double precision, intent(in) :: a
@@ -990,32 +990,32 @@ double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !                    wg(1), wg(3), ... are set to zero.
 !
 data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-&xgk(8)/ &
-&0.991455371120812639206854697526d+00, &
-&0.949107912342758524526189684048d+00, &
-&0.864864423359769072789712788641d+00, &
-&0.741531185599394439863864773281d+00, &
-&0.586087235467691130294144838259d+00, &
-&0.405845151377397166906606412077d+00, &
-&0.207784955007898467600689403773d+00, &
-&0.000000000000000000000000000000d+00/
+   & xgk(8)/ &
+   & 0.991455371120812639206854697526d+00, &
+   & 0.949107912342758524526189684048d+00, &
+   & 0.864864423359769072789712788641d+00, &
+   & 0.741531185599394439863864773281d+00, &
+   & 0.586087235467691130294144838259d+00, &
+   & 0.405845151377397166906606412077d+00, &
+   & 0.207784955007898467600689403773d+00, &
+   & 0.000000000000000000000000000000d+00/
 !
 data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-&wgk(8)/ &
-&0.229353220105292249637320080590d-01, &
-&0.630920926299785532907006631892d-01, &
-&0.104790010322250183839876322542d+00, &
-&0.140653259715525918745189590510d+00, &
-&0.169004726639267902826583426599d+00, &
-&0.190350578064785409913256402421d+00, &
-&0.204432940075298892414161999235d+00, &
-&0.209482141084727828012999174892d+00/
+   & wgk(8)/ &
+   & 0.229353220105292249637320080590d-01, &
+   & 0.630920926299785532907006631892d-01, &
+   & 0.104790010322250183839876322542d+00, &
+   & 0.140653259715525918745189590510d+00, &
+   & 0.169004726639267902826583426599d+00, &
+   & 0.190350578064785409913256402421d+00, &
+   & 0.204432940075298892414161999235d+00, &
+   & 0.209482141084727828012999174892d+00/
 !
 data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
-&0.0d+00,    0.129484966168869693270611432679d+00, &
-&0.0d+00,    0.279705391489276667901467771424d+00, &
-&0.0d+00,    0.381830050505118944950369775489d+00, &
-&0.0d+00,    0.417959183673469387755102040816d+00/
+   & 0.0d+00,    0.129484966168869693270611432679d+00, &
+   & 0.0d+00,    0.279705391489276667901467771424d+00, &
+   & 0.0d+00,    0.381830050505118944950369775489d+00, &
+   & 0.0d+00,    0.417959183673469387755102040816d+00/
 !
 !
 !           List of major variables
@@ -1048,36 +1048,36 @@ resg = wg(8)*fc
 resk = wgk(8)*fc
 resabs = dabs(resk)
 do j = 1,7
-  absc = hlgth*xgk(j)
-  absc1 = centr - absc
-  absc2 = centr + absc
-  tabsc1 = boun + dinf*(1.d0 - absc1)/absc1
-  tabsc2 = boun + dinf*(1.d0 - absc2)/absc2
-  fval1 = f(tabsc1)
-  fval2 = f(tabsc2)
-  if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
-  if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
-  fval1 = (fval1/absc1)/absc1
-  fval2 = (fval2/absc2)/absc2
-  fv1(j) = fval1
-  fv2(j) = fval2
-  fsum = fval1 + fval2
-  resg = resg + wg(j)*fsum
-  resk = resk + wgk(j)*fsum
-  resabs = resabs + wgk(j)*(dabs(fval1) + dabs(fval2))
+   absc = hlgth*xgk(j)
+   absc1 = centr - absc
+   absc2 = centr + absc
+   tabsc1 = boun + dinf*(1.d0 - absc1)/absc1
+   tabsc2 = boun + dinf*(1.d0 - absc2)/absc2
+   fval1 = f(tabsc1)
+   fval2 = f(tabsc2)
+   if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+   if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
+   fval1 = (fval1/absc1)/absc1
+   fval2 = (fval2/absc2)/absc2
+   fv1(j) = fval1
+   fv2(j) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(j)*fsum
+   resabs = resabs + wgk(j)*(dabs(fval1) + dabs(fval2))
 end do
 reskh = resk*0.5d0
 resasc = wgk(8)*dabs(fc - reskh)
 do j = 1,7
-  resasc = resasc + wgk(j)*(dabs(fv1(j)-reskh) + &
-&dabs(fv2(j)-reskh))
+   resasc = resasc + wgk(j)*(dabs(fv1(j) - reskh) + &
+      & dabs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resasc = resasc*hlgth
 resabs = resabs*hlgth
 abserr = dabs((resk - resg)*hlgth)
 if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) abserr = resasc* &
-&dmin1(1.d0, (0.2d+03*abserr/resasc)**1.5d0)
+   & dmin1(1.d0, (0.2d+03*abserr/resasc)**1.5d0)
 tol = 50.d0*epmach
 if (resabs .gt. uflow/tol) abserr = dmax1(abserr, tol*resabs)
 return
@@ -1154,7 +1154,7 @@ dimension elist(last),iord(last)
 !           two error estimates.
 !
 !***First executable statement dqpsrt
-if(last.gt.2) go to 10
+if (last.gt.2) go to 10
 iord(1) = 1
 iord(2) = 2
 go to 90
@@ -1166,15 +1166,15 @@ go to 90
 !           nrmax-TH largest error estimate.
 !
 10 errmax = elist(maxerr)
-if(nrmax.eq.1) go to 30
-ido = nrmax-1
+if (nrmax.eq.1) go to 30
+ido = nrmax - 1
 do i = 1,ido
-  isucc = iord(nrmax-1)
+   isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-  if(errmax.le.elist(isucc)) go to 30
-  iord(nrmax) = isucc
-  nrmax = nrmax-1
-   end do
+   if (errmax.le.elist(isucc)) go to 30
+   iord(nrmax) = isucc
+   nrmax = nrmax - 1
+end do
 !
 !           Compute the number of elements in the list to
 !           be maintained in descending order. This number
@@ -1182,20 +1182,20 @@ do i = 1,ido
 !           allowed.
 !
 30 jupbn = last
-if(last.gt.(limit/2+2)) jupbn = limit+3-last
+if (last.gt.(limit/2 + 2)) jupbn = limit + 3 - last
 errmin = elist(last)
 !
 !           Insert errmax by traversing the list top-down,
 !           starting comparison from the element elist(iord(nrmax+1)).
 !
-jbnd = jupbn-1
-ibeg = nrmax+1
-if(ibeg.gt.jbnd) go to 50
-do i=ibeg,jbnd
-  isucc = iord(i)
+jbnd = jupbn - 1
+ibeg = nrmax + 1
+if (ibeg.gt.jbnd) go to 50
+do i = ibeg,jbnd
+   isucc = iord(i)
 ! ***Jump out of do-loop
-  if(errmax.ge.elist(isucc)) go to 60
-  iord(i-1) = isucc
+   if (errmax.ge.elist(isucc)) go to 60
+   iord(i - 1) = isucc
 end do
 50 iord(jbnd) = maxerr
 iord(jupbn) = last
@@ -1203,18 +1203,18 @@ go to 90
 !
 !           Insert errmin by traversing the list bottom-up.
 !
-60 iord(i-1) = maxerr
+60 iord(i - 1) = maxerr
 k = jbnd
-do j=i,jbnd
-  isucc = iord(k)
+do j = i,jbnd
+   isucc = iord(k)
 ! ***Jump out of do-loop
-  if(errmin.lt.elist(isucc)) go to 80
-  iord(k+1) = isucc
-  k = k-1
+   if (errmin.lt.elist(isucc)) go to 80
+   iord(k + 1) = isucc
+   k = k - 1
 end do
 iord(i) = last
 go to 90
-80 iord(k+1) = last
+80 iord(k + 1) = last
 !
 !           Set maxerr and ermax.
 !
@@ -1224,7 +1224,7 @@ return
 end subroutine dqpsrt
 
 subroutine dqelg (n, epstab, result, abserr, res3la, nres, &
-&epmach, oflow)
+   & epmach, oflow)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -1322,62 +1322,62 @@ epstab(n) = oflow
 num = n
 k1 = n
 do 40 i = 1,newelm
-  k2 = k1 - 1
-  k3 = k1 - 2
-  res = epstab(k1 + 2)
-  e0 = epstab(k3)
-  e1 = epstab(k2)
-  e2 = res
-  e1abs = dabs(e1)
-  delta2 = e2 - e1
-  err2 = dabs(delta2)
-  tol2 = dmax1(dabs(e2),e1abs)*epmach
-  delta3 = e1 - e0
-  err3 = dabs(delta3)
-  tol3 = dmax1(e1abs,dabs(e0))*epmach
-  if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
+   k2 = k1 - 1
+   k3 = k1 - 2
+   res = epstab(k1 + 2)
+   e0 = epstab(k3)
+   e1 = epstab(k2)
+   e2 = res
+   e1abs = dabs(e1)
+   delta2 = e2 - e1
+   err2 = dabs(delta2)
+   tol2 = dmax1(dabs(e2),e1abs)*epmach
+   delta3 = e1 - e0
+   err3 = dabs(delta3)
+   tol3 = dmax1(e1abs,dabs(e0))*epmach
+   if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
 !           If e0, e1 and e2 are equal to within machine
 !           accuracy, convergence is assumed.
 !           result = e2
 !           abserr = abs(e1-e0) + abs(e2-e1)
 !
-  result = res
-  abserr = err2 + err3
+   result = res
+   abserr = err2 + err3
 ! ***Jump out of do-loop
-  go to 100
+   go to 100
 10 e3 = epstab(k1)
-  epstab(k1) = e1
-  delta1 = e1 - e3
-  err1 = dabs(delta1)
-  tol1 = dmax1(e1abs,dabs(e3))*epmach
+   epstab(k1) = e1
+   delta1 = e1 - e3
+   err1 = dabs(delta1)
+   tol1 = dmax1(e1abs,dabs(e3))*epmach
 !
 !           If two elements are very close to each other, omit
 !           a part of the table by adjusting the value of n
 !
-  if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
-  ss = 1.d0/delta1 + 1.d0/delta2 - 1.d0/delta3
-  epsinf = dabs(ss*e1)
+   if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
+   ss = 1.d0/delta1 + 1.d0/delta2 - 1.d0/delta3
+   epsinf = dabs(ss*e1)
 !
 !           Test to detect irregular behaviour in the table, and
 !           eventually omit a part of the table adjusting the value
 !           OF n.
 !
-  if (epsinf .gt. 0.1d-03) go to 30
+   if (epsinf .gt. 0.1d-03) go to 30
 20 n = i + i - 1
 ! ***Jump out of do-loop
-  go to 50
+   go to 50
 !
 !           Compute a new element and eventually adjust
 !           the value of result.
 !
 30 res = e1 + 1.d0/ss
-  epstab(k1) = res
-  k1 = k1 - 2
-  error = err2 + dabs(res - e2) + err3
-  if (error .gt. abserr) go to 40
-  abserr = error
-  result = res
+   epstab(k1) = res
+   k1 = k1 - 2
+   error = err2 + dabs(res - e2) + err3
+   if (error .gt. abserr) go to 40
+   abserr = error
+   result = res
 40 continue
 !
 !           Shift the table.
@@ -1387,15 +1387,15 @@ ib = 1
 if ((num/2)*2 .eq. num) ib = 2
 ie = newelm + 1
 do i = 1,ie
-  ib2 = ib + 2
-  epstab(ib) = epstab(ib2)
-  ib = ib2
+   ib2 = ib + 2
+   epstab(ib) = epstab(ib2)
+   ib = ib2
 end do
 if (num .eq. n) go to 80
 indx = num - n + 1
 do i = 1,n
-  epstab(i) = epstab(indx)
-  indx = indx + 1
+   epstab(i) = epstab(indx)
+   indx = indx + 1
 end do
 80 if (nres .ge. 4) go to 90
 res3la(nres) = result
@@ -1405,7 +1405,7 @@ go to 100
 !           Compute error estimate
 !
 90 abserr = dabs(result - res3la(3)) + dabs(result - res3la(2)) + &
-&dabs(result - res3la(1))
+   & dabs(result - res3la(1))
 res3la(1) = res3la(2)
 res3la(2) = res3la(3)
 res3la(3) = result
@@ -1414,7 +1414,7 @@ return
 end subroutine dqelg
 
 subroutine dqxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
-&limit,leniw,lenw,last,iwork,work)
+   & limit,leniw,lenw,last,iwork,work)
 implicit none
 !
 !            The routine calculates an approximation result to a given
@@ -1576,7 +1576,7 @@ last = 0
 result = 0.d0
 abserr = 0.d0
 if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
-&return
+   & return
 !
 !         Prepare call for dqxgse.
 !
@@ -1587,14 +1587,14 @@ l4 = limit + l3
 l5 = 21*limit + l4
 !
 call dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-&ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
-&work(l4),work(l5),iwork(l1),iwork(l2))
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
+   & work(l4),work(l5),iwork(l1),iwork(l2))
 !
 return
 end subroutine dqxgs
 
 subroutine dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-&ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
+   & ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
 implicit none
 !
 !            The routine calculates an approximation result to A
@@ -1752,7 +1752,7 @@ double precision :: area, area1, area12, area2, a1, a2
 double precision :: b1, b2, correc, defabs, defab1, defab2, dres
 double precision :: epmach
 double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
 double precision :: res3la(3)
 double precision :: rlist2(52), small, t, uflow
 double precision :: vp1(21), vp2(21), vn1(21), vn2(21), dpmpar
@@ -1764,7 +1764,7 @@ integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-&rlist(limit), valp(21,limit), valn(21,limit)
+   & rlist(limit), valp(21,limit), valn(21,limit)
 !
 !
 !            Machine dependent constants
@@ -1801,8 +1801,8 @@ ln(1) = 1
 valp(1,1) = f((a + b)*0.5d0)
 valn(1,1) = valp(1,1)
 call dqxlqm (f,a,b,result,abserr,defabs,resabs, &
-&valp(1,1),valn(1,1),lp(1),ln(1),2, &
-&epmach,uflow,oflow)
+   & valp(1,1),valn(1,1),lp(1),ln(1),2, &
+   & epmach,uflow,oflow)
 !
 !           Test on accuracy.
 !
@@ -1813,10 +1813,10 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. &
-&errbnd) ier = 2
+   & errbnd) ier = 2
 if (limit .eq. 1) ier = 1
 if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
-&abserr .eq. 0.d0) go to 999
+   & abserr .eq. 0.d0) go to 999
 !
 !           Initialization
 !           --------------
@@ -1848,84 +1848,84 @@ do 90 last = 2,limit
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
 !
-  a1 = alist(maxerr)
-  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
-  a2 = b1
-  b2 = blist(maxerr)
-  erlast = errmax
-  call dqxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
-  call dqxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
-&2,epmach,uflow,oflow)
-  call dqxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
-  call dqxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
-&2,epmach,uflow,oflow)
+   a1 = alist(maxerr)
+   b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call dqxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
+   call dqxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
+      & 2,epmach,uflow,oflow)
+   call dqxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
+   call dqxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
+      & 2,epmach,uflow,oflow)
 !
 !           Improve previous approximations to integral
 !           and error and test for accuracy.
 !
-  area12 = area1 + area2
-  erro12 = error1 + error2
-  errsum = errsum + erro12 - errmax
-  area = area + area12 - rlist(maxerr)
-  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
-&.or. erro12 .lt. 0.99d0*errmax) go to 10
-  if (extrap) iroff2 = iroff2 + 1
-  if (.not.extrap) iroff1 = iroff1 + 1
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+      & .or. erro12 .lt. 0.99d0*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last.gt.10 .and. erro12.gt.errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
-  rlist(last) = area2
-  errbnd = dmax1(epsabs,rerr*dabs(area))
+   rlist(last) = area2
+   errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           Test for roundoff error and eventually set error flag.
 !
-  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-  if (iroff2 .ge. 5) ierro = 3
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
 !
 !           Set error flag in the case that the number of subintervals
 !           equals limit.
 !
-  if (last .eq. limit) ier = 1
+   if (last .eq. limit) ier = 1
 !
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-  if (dmax1(dabs(a1),dabs(b2)) .le. &
-&t*(dabs(a2) + 1.d+03*uflow)) ier = 4
+   if (dmax1(dabs(a1),dabs(b2)) .le. &
+      & t*(dabs(a2) + 1.d+03*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
-  if (error2 .gt. error1) go to 20
-  alist(last) = a2
-  blist(maxerr) = b1
-  blist(last) = b2
-  elist(maxerr) = error1
-  elist(last) = error2
-  call dqxcpy(valp(1,maxerr),vp1,lp1)
-  lp(maxerr) = lp1
-  call dqxcpy(valn(1,maxerr),vn1,ln1)
-  ln(maxerr) = ln1
-  call dqxcpy(valp(1,last),vp2,lp2)
-  lp(last) = lp2
-  call dqxcpy(valn(1,last),vn2,ln2)
-  ln(last) = ln2
-  go to 30
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   call dqxcpy(valp(1,maxerr),vp1,lp1)
+   lp(maxerr) = lp1
+   call dqxcpy(valn(1,maxerr),vn1,ln1)
+   ln(maxerr) = ln1
+   call dqxcpy(valp(1,last),vp2,lp2)
+   lp(last) = lp2
+   call dqxcpy(valn(1,last),vn2,ln2)
+   ln(last) = ln2
+   go to 30
 !
 20 alist(maxerr) = a2
-  alist(last) = a1
-  blist(last) = b1
-  rlist(maxerr) = area2
-  rlist(last) = area1
-  elist(maxerr) = error2
-  elist(last) = error1
-  call dqxcpy(valp(1,maxerr),vp2,lp2)
-  lp(maxerr) = lp2
-  call dqxcpy(valn(1,maxerr),vn2,ln2)
-  ln(maxerr) = ln2
-  call dqxcpy(valp(1,last),vp1,lp1)
-  lp(last) = lp1
-  call dqxcpy(valn(1,last),vn1,ln1)
-  ln(last) = ln1
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
+   call dqxcpy(valp(1,maxerr),vp2,lp2)
+   lp(maxerr) = lp2
+   call dqxcpy(valn(1,maxerr),vn2,ln2)
+   ln(maxerr) = ln2
+   call dqxcpy(valp(1,last),vp1,lp1)
+   lp(last) = lp1
+   call dqxcpy(valn(1,last),vn1,ln1)
+   ln(last) = ln1
 !
 !           CALL SUBROUTINE dqpsrt TO MAINTAIN THE DESCENDING ORDERING
 !           in the list of error estimates and select the subinterval
@@ -1933,21 +1933,21 @@ do 90 last = 2,limit
 !
 30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
-  if(errsum .le. errbnd) go to 115
+   if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
-  if (ier .ne. 0) go to 100
-  if (last .eq. 2) go to 80
-  if (noext) go to 90
-  erlarg = erlarg - erlast
-  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-  if (extrap) go to 40
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-  extrap = .true.
-  nrmax = 2
+   if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
 !
 !           The bound 0.3*ERTEST has been introduced to perform A
 !           more cautious extrapolation than in the original dqagse
@@ -1959,49 +1959,49 @@ do 90 last = 2,limit
 !           Before bisecting decrease the sum of the errors over the
 !           larger intervals (erlarg) and perform extrapolation.
 !
-  id = nrmax
-  jupbnd = last
-  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-  do 50 k = id,jupbnd
-    maxerr = iord(nrmax)
-    errmax = elist(maxerr)
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
 ! ***Jump out of do-loop
-    if(dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-    nrmax = nrmax + 1
-50 continue
+      if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
 !
 !           Perform extrapolation.
 !
 60 numrl2 = numrl2 + 1
-  rlist2(numrl2) = area
-  call dqelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
-&epmach,oflow)
-  ktmin = ktmin + 1
-  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
-  if (abseps .ge. abserr) go to 70
-  ktmin = 0
-  abserr = abseps
-  result = reseps
-  correc = erlarg
-  ertest = dmax1(epsabs,rerr*dabs(reseps))
+   rlist2(numrl2) = area
+   call dqelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+      & epmach,oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = dmax1(epsabs,rerr*dabs(reseps))
 ! ***Jump out of do-loop
-  if (abserr .le. ertest) go to 100
+   if (abserr .le. ertest) go to 100
 !
 !           Prepare bisection of the smallest interval.
 !
 70 if (numrl2 .eq. 1) noext = .true.
-  if (ier .eq. 5) go to 100
-  maxerr = iord(1)
-  errmax = elist(maxerr)
-  nrmax = 1
-  extrap = .false.
-  small = small*0.5d0
-  erlarg = errsum
-  go to 90
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5d0
+   erlarg = errsum
+   go to 90
 80 small = dabs(b - a)*0.375d0
-  erlarg = errsum
-  ertest = errbnd
-  rlist2(2) = area
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
 90 continue
 !
 !           Set final result and error estimate.
@@ -2019,10 +2019,10 @@ go to 110
 !
 !           Test on divergence.
 !
-110 if(ksgn.eq.(-1).and.dmax1(dabs(result),dabs(area)).le. &
-&defabs*0.1d-01) go to 130
-if(0.1d-01.gt.(result/area).or.(result/area).gt.0.1d+03 &
-&.or.errsum.gt.dabs(area)) ier = 6
+110 if (ksgn.eq.(-1).and.dmax1(dabs(result),dabs(area)).le. &
+   & defabs*0.1d-01) go to 130
+if (0.1d-01.gt.(result/area).or.(result/area).gt.0.1d+03 &
+   & .or.errsum.gt.dabs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -2053,7 +2053,7 @@ return
 end subroutine dqxcpy
 
 subroutine dqxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
-&key,epmach,uflow,oflow)
+   & key,epmach,uflow,oflow)
 implicit none
 !
 !            To compute I = Integral of f over (a,b), with error
@@ -2151,24 +2151,24 @@ integer :: key1
 !
 key1 = max0(key ,  0)
 key1 = min0(key1,  4)
-k0   = max0(key1-2,0)
-k1   = k0 + 1
-k2   = min0(key1+1,3)
+k0 = max0(key1 - 2,0)
+k1 = k0 + 1
+k2 = min0(key1 + 1,3)
 !
 call dqxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.d0*epmach
 do 10 k = k1,k2
-  call dqxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
-  result = resk
-  abserr = dabs(resk - resg)
-  if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
-&abserr = resasc*dmin1(1.d0,(200.d0*abserr/resasc)**1.5d0)
-  if (resabs .gt. uflow/t) abserr = dmax1(t*resabs,abserr)
-  resg = resk
-  if (abserr .gt. errold*0.16d0) go to 3000
-  if (abserr .lt. 1000.d0*epmach*resabs) go to 3000
-  errold = abserr
+   call dqxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+   result = resk
+   abserr = dabs(resk - resg)
+   if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
+      & abserr = resasc*dmin1(1.d0,(200.d0*abserr/resasc)**1.5d0)
+   if (resabs .gt. uflow/t) abserr = dmax1(t*resabs,abserr)
+   resg = resk
+   if (abserr .gt. errold*0.16d0) go to 3000
+   if (abserr .lt. 1000.d0*epmach*resabs) go to 3000
+   errold = abserr
 10 continue
 3000 continue
 return
@@ -2425,29 +2425,29 @@ double precision :: dlen, centr
 !
 dlen = (xu - xl)*0.5d0
 centr = xl + dlen
-r(1) =  z(3)
-r(2) =  z(9)
-r(3) =  z(4)
-r(4) =  z(5)
-r(5) =  z(6)
-r(6) =  z(10)
-r(7) =  z(7)
-s(1) =  z(3)
-s(2) =  z(8)
-s(3) =  z(2)
-s(7) =  z(1)
+r(1) = z(3)
+r(2) = z(9)
+r(3) = z(4)
+r(4) = z(5)
+r(5) = z(6)
+r(6) = z(10)
+r(7) = z(7)
+s(1) = z(3)
+s(2) = z(8)
+s(3) = z(2)
+s(7) = z(1)
 if (lz .gt. 11) go to 10
 !
-r(8) =  f(centr + dlen*0.375d0)
-r(9) =  f(centr + dlen*0.625d0)
+r(8) = f(centr + dlen*0.375d0)
+r(9) = f(centr + dlen*0.625d0)
 r(10) = f(centr + dlen*0.96875d0)
 lr = 10
 if (lz .ne. 11) s(4) = f(centr - dlen*0.75d0)
 if (lz .eq. 11) s(4) = z(11)
-s(5) =  f(centr - dlen*0.875d0)
-s(6) =  f(centr - dlen*0.9375d0)
-s(8) =  f(centr - dlen*0.375d0)
-s(9) =  f(centr - dlen*0.625d0)
+s(5) = f(centr - dlen*0.875d0)
+s(6) = f(centr - dlen*0.9375d0)
+s(8) = f(centr - dlen*0.375d0)
+s(9) = f(centr - dlen*0.625d0)
 s(10) = f(centr - dlen*0.96875d0)
 ls = 10
 return
@@ -2460,8 +2460,8 @@ s(4) = z(11)
 s(5) = f(centr - dlen*0.875d0)
 s(6) = f(centr - dlen*0.9375d0)
 if (lz .gt. 14) go to 20
-s(8)  = f(centr - dlen*0.375d0)
-s(9)  = f(centr - dlen*0.625d0)
+s(8) = f(centr - dlen*0.375d0)
+s(9) = f(centr - dlen*0.625d0)
 s(10) = f(centr - dlen*0.96875d0)
 ls = 10
 return
@@ -2480,7 +2480,7 @@ return
 end subroutine dqxrrd
 
 subroutine cubtri(f, t, eps, mcalls, ans, err, ncalls, w, nw, &
-&idata, rdata, ier)
+   & idata, rdata, ier)
 implicit none
 real :: f
 external f
@@ -2490,7 +2490,7 @@ integer :: i, j, jkp, k, l, maxc, maxk, mw, nfe
 real :: one, point5, zero
 real :: rnderr
 real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, d(2,4), &
-&s(4), vec(2,3), x(2)
+   & s(4), vec(2,3), x(2)
 double precision :: tans, terr, dzero
 !
 !       Adaptive cubature over a triangle
@@ -2561,26 +2561,26 @@ common /cubsta/ tans, terr
 !       This common is required to preserve tans and terr between calls
 !       and to save variables in function rnderr
 data nfe /19/, s(1), s(2), s(3), s(4) /3*1e0,-1e0/, d(1,1), &
-&d(2,1) /0.0,0.0/, d(1,2), d(2,2) /0.0,1.0/, d(1,3), d(2,3) &
-&/1.0,0.0/, d(1,4), d(2,4) /1.0,1.0/
+   & d(2,1) /0.0,0.0/, d(1,2), d(2,2) /0.0,1.0/, d(1,3), d(2,3) &
+   & /1.0,0.0/, d(1,4), d(2,4) /1.0,1.0/
 !       nfe is the number of function evaluations per call to cubrul.
 data zero /0.e0/, one /1.e0/, dzero /0.d0/, point5 /.5e0/
 !
 !      Calculate direction vectors, area and maximum number
 !      of subdivisions that may be performed
-do i=1,2
-  vec(i,3) = t(i,3)
-  do j=1,2
-    vec(i,j) = t(i,j) - t(i,3)
-  end do
+do i = 1,2
+   vec(i,3) = t(i,3)
+   do j = 1,2
+      vec(i,j) = t(i,j) - t(i,3)
+   end do
 end do
-maxc = (mcalls/nfe+3)/4
+maxc = (mcalls/nfe + 3)/4
 ier = 1
-maxk = min0(maxc,(nw/6+2)/3)
+maxk = min0(maxc,(nw/6 + 2)/3)
 if (maxc.gt.maxk) ier = 2
-area = abs(vec(1,1)*vec(2,2)-vec(1,2)*vec(2,1))*point5
-k = (ncalls/nfe+3)/4
-mw = 3*(k-1) + 1
+area = abs(vec(1,1)*vec(2,2) - vec(1,2)*vec(2,1))*point5
+k = (ncalls/nfe + 3)/4
+mw = 3*(k - 1) + 1
 if (ncalls.gt.0) go to 30
 !
 !       Test for trivial cases
@@ -2610,14 +2610,14 @@ if (k.eq.maxk) go to 120
 !       Find triangle with largest error
 errmax = zero
 do 40 i = 1,mw
-  if (w(6,i).le.errmax) go to 40
-  errmax = w(6,i)
-  j = i
+   if (w(6,i).le.errmax) go to 40
+   errmax = w(6,i)
+   j = i
 40 continue
 !
 !       Subdivide triangle into four subtriangles and update data list
-do i=1,2
-  x(i) = w(i,j)
+do i = 1,2
+   x(i) = w(i,j)
 end do
 h = w(3,j)*point5
 if (rnderr(x(1),h,x(1),h).ne.zero) go to 130
@@ -2630,24 +2630,24 @@ r2 = w(5,j)
 jkp = j
 q1 = zero
 q2 = zero
-do i=1,4
-  do l=1,2
-    w(l,j) = x(l) + h*d(l,i)
-  end do
-  w(3,j) = h*s(i)
-  call cubrul(f, vec, w(1,j), idata, rdata)
-  q2 = q2 + w(5,j)
-  q1 = q1 + w(4,j)
-  j = mw + i
+do i = 1,4
+   do l = 1,2
+      w(l,j) = x(l) + h*d(l,i)
+   end do
+   w(3,j) = h*s(i)
+   call cubrul(f, vec, w(1,j), idata, rdata)
+   q2 = q2 + w(5,j)
+   q1 = q1 + w(4,j)
+   j = mw + i
 end do
 alfa = 1e15
-if (q2.ne.r2) alfa = abs((q1-r1)/(q2-r2)-one)
+if (q2.ne.r2) alfa = abs((q1 - r1)/(q2 - r2) - one)
 j = jkp
-do i=1,4
-  w(6,j) = w(6,j)/alfa
-  tans = tans + w(5,j)
-  terr = terr + w(6,j)
-  j = mw + i
+do i = 1,4
+   w(6,j) = w(6,j)/alfa
+   tans = tans + w(5,j)
+   terr = terr + w(6,j)
+   j = mw + i
 end do
 mw = mw + 3
 ncalls = ncalls + 4*nfe
@@ -2657,7 +2657,7 @@ k = k + 1
 if (anskp.eq.sngl(tans)) go to 150
 !
 !       Remove this if statement to disable rounding error test
-if (k.gt.3 .and. abs(q2-r2).gt.abs(q1-r1)) go to 140
+if (k.gt.3 .and. abs(q2 - r2).gt.abs(q1 - r1)) go to 140
 go to 30
 !
 !       Exits from subroutine
@@ -2771,75 +2771,75 @@ real :: w(5,6)
 !
 data nquad /6/
 data w(1,1), w(2,1), w(3,1) /3*.3333333333333333333333333e0/, &
-&w(4,1), w(5,1) /.225e0,.3786109120031468330830822e-1/, &
-&w(1,2), w(2,2), w(3,2) /.7974269853530873223980253e0,2* &
-&.1012865073234563388009874e0/, w(4,2), w(5,2) &
-&/.3778175416344814577870518e0,.1128612762395489164329420e0/, &
-&w(1,3), w(2,3), w(3,3) /.5971587178976982045911758e-1,2* &
-&.4701420641051150897704412e0/, w(4,3), w(5,3) &
-&/.3971824583655185422129482e0,.2350720567323520126663380e0/
+   & w(4,1), w(5,1) /.225e0,.3786109120031468330830822e-1/, &
+   & w(1,2), w(2,2), w(3,2) /.7974269853530873223980253e0,2* &
+   & .1012865073234563388009874e0/, w(4,2), w(5,2) &
+   & /.3778175416344814577870518e0,.1128612762395489164329420e0/, &
+   & w(1,3), w(2,3), w(3,3) /.5971587178976982045911758e-1,2* &
+   & .4701420641051150897704412e0/, w(4,3), w(5,3) &
+   & /.3971824583655185422129482e0,.2350720567323520126663380e0/
 data w(1,4), w(2,4), w(3,4) /.5357953464498992646629509e0,2* &
-&.2321023267750503676685246e0/, w(4,4), w(5,4) &
-&/0.e0,.3488144389708976891842461e0/, w(1,5), w(2,5), w(3,5) &
-&/.9410382782311208665596304e0,2*.2948086088443956672018481e-1/, &
-&w(4,5), w(5,5) /0.e0,.4033280212549620569433320e-1/, w(1,6), &
-&w(2,6), w(3,6) /.7384168123405100656112906e0, &
-&.2321023267750503676685246e0,.2948086088443956672018481e-1/, &
-&w(4,6), w(5,6) /0.e0,.2250583347313904927138324e0/
+   & .2321023267750503676685246e0/, w(4,4), w(5,4) &
+   & /0.e0,.3488144389708976891842461e0/, w(1,5), w(2,5), w(3,5) &
+   & /.9410382782311208665596304e0,2*.2948086088443956672018481e-1/, &
+   & w(4,5), w(5,5) /0.e0,.4033280212549620569433320e-1/, w(1,6), &
+   & w(2,6), w(3,6) /.7384168123405100656112906e0, &
+   & .2321023267750503676685246e0,.2948086088443956672018481e-1/, &
+   & w(4,6), w(5,6) /0.e0,.2250583347313904927138324e0/
 !
 data dzero /0.d0/, done /1.d0/, dthree /3.d0/, dsix /6.d0/, &
-&point5 /.5e0/
+   & point5 /.5e0/
 !
 !       Scale base vectors and obtain area
 !
-do i=1,2
-  origin(i) = vec(i,3) + p(1)*vec(i,1) + p(2)*vec(i,2)
-  do j=1,2
-    tvec(i,j) = p(3)*vec(i,j)
-  end do
+do i = 1,2
+   origin(i) = vec(i,3) + p(1)*vec(i,1) + p(2)*vec(i,2)
+   do j = 1,2
+      tvec(i,j) = p(3)*vec(i,j)
+   end do
 end do
-area = point5*abs(tvec(1,1)*tvec(2,2)-tvec(1,2)*tvec(2,1))
+area = point5*abs(tvec(1,1)*tvec(2,2) - tvec(1,2)*tvec(2,1))
 a1 = dzero
 a2 = dzero
 !
 !       Compute estimates for integral and error
 !
-do k=1,nquad
-  x = origin(1) + w(1,k)*tvec(1,1) + w(2,k)*tvec(1,2)
-  y = origin(2) + w(1,k)*tvec(2,1) + w(2,k)*tvec(2,2)
-  s = dble(f(x,y,idata,rdata))
-  sn = done
-  if (w(1,k).eq.w(2,k)) go to 30
-  x = origin(1) + w(2,k)*tvec(1,1) + w(1,k)*tvec(1,2)
-  y = origin(2) + w(2,k)*tvec(2,1) + w(1,k)*tvec(2,2)
-  s = s + dble(f(x,y,idata,rdata))
-  x = origin(1) + w(2,k)*tvec(1,1) + w(3,k)*tvec(1,2)
-  y = origin(2) + w(2,k)*tvec(2,1) + w(3,k)*tvec(2,2)
-  s = s + dble(f(x,y,idata,rdata))
-  sn = dthree
-  if (w(2,k).eq.w(3,k)) go to 30
-  x = origin(1) + w(1,k)*tvec(1,1) + w(3,k)*tvec(1,2)
-  y = origin(2) + w(1,k)*tvec(2,1) + w(3,k)*tvec(2,2)
-  s = s + dble(f(x,y,idata,rdata))
-  x = origin(1) + w(3,k)*tvec(1,1) + w(1,k)*tvec(1,2)
-  y = origin(2) + w(3,k)*tvec(2,1) + w(1,k)*tvec(2,2)
-  s = s + dble(f(x,y,idata,rdata))
-  x = origin(1) + w(3,k)*tvec(1,1) + w(2,k)*tvec(1,2)
-  y = origin(2) + w(3,k)*tvec(2,1) + w(2,k)*tvec(2,2)
-  s = s + dble(f(x,y,idata,rdata))
-  sn = dsix
+do k = 1,nquad
+   x = origin(1) + w(1,k)*tvec(1,1) + w(2,k)*tvec(1,2)
+   y = origin(2) + w(1,k)*tvec(2,1) + w(2,k)*tvec(2,2)
+   s = dble(f(x,y,idata,rdata))
+   sn = done
+   if (w(1,k).eq.w(2,k)) go to 30
+   x = origin(1) + w(2,k)*tvec(1,1) + w(1,k)*tvec(1,2)
+   y = origin(2) + w(2,k)*tvec(2,1) + w(1,k)*tvec(2,2)
+   s = s + dble(f(x,y,idata,rdata))
+   x = origin(1) + w(2,k)*tvec(1,1) + w(3,k)*tvec(1,2)
+   y = origin(2) + w(2,k)*tvec(2,1) + w(3,k)*tvec(2,2)
+   s = s + dble(f(x,y,idata,rdata))
+   sn = dthree
+   if (w(2,k).eq.w(3,k)) go to 30
+   x = origin(1) + w(1,k)*tvec(1,1) + w(3,k)*tvec(1,2)
+   y = origin(2) + w(1,k)*tvec(2,1) + w(3,k)*tvec(2,2)
+   s = s + dble(f(x,y,idata,rdata))
+   x = origin(1) + w(3,k)*tvec(1,1) + w(1,k)*tvec(1,2)
+   y = origin(2) + w(3,k)*tvec(2,1) + w(1,k)*tvec(2,2)
+   s = s + dble(f(x,y,idata,rdata))
+   x = origin(1) + w(3,k)*tvec(1,1) + w(2,k)*tvec(1,2)
+   y = origin(2) + w(3,k)*tvec(2,1) + w(2,k)*tvec(2,2)
+   s = s + dble(f(x,y,idata,rdata))
+   sn = dsix
 30 s = s/sn
-  a1 = a1 + w(4,k)*s
-  a2 = a2 + w(5,k)*s
+   a1 = a1 + w(4,k)*s
+   a2 = a2 + w(5,k)*s
 end do
 p(4) = sngl(a1)*area
 p(5) = sngl(a2)*area
-p(6) = abs(p(5)-p(4))
+p(6) = abs(p(5) - p(4))
 return
 end subroutine cubrul
 
 subroutine ieslv (kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
-&mupper,nf,mf,norm,w,ier)
+   & mupper,nf,mf,norm,w,ier)
 implicit none
 integer :: ier, iflag, mf, mupper, nf, nt, nupper
 real :: a, b, ep, t(*), w(*), x(*)
@@ -2847,8 +2847,8 @@ real :: rhfcn
 real :: kernel, norm
 external kernel, rhfcn
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, &
-&i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nmax, nsq, &
-&nup
+   & i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nmax, nsq, &
+   & nup
 real :: cutoff, rootrt, unitrd
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
@@ -2960,7 +2960,7 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !   used. There is also an upper limit of 128 on N imposed by the  *
 !   SUBROUTINE lnsys.                                              *
 !                                                                  *
-        data nmax /64/
+data nmax /64/
 !                                                                  *
 !*******************************************************************
 !                                                                  *
@@ -2968,7 +2968,7 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !     VALUE U WHERE U IS THE SMALLEST FLOATING POINT NUMBER SUCH   *
 !     THAT 1.0 + U .GT. 1.0.                                       *
 !                                                                  *
-        unitrd = spmpar(1)
+unitrd = spmpar(1)
 !                                                                  *
 !*******************************************************************
 !
@@ -2978,59 +2978,59 @@ nup = min0(nupper,nmax)
 !
 !   Set up the relative base addresses for the various arrays into
 !   which w is to be split.
-n=nup
-m=mupper
-nsq=n*n
-i1=1
-i2=i1+nsq
-i3=i2+nsq
-i4=i3+nsq/2
-i5=i4+nsq/2
-i6=i5+m
-i7=i6+m
-i8=i7+n
-i9=i8+n
-i10=i9+m
-i11=i10+n
-i12=i11+m
-i13=i12+m
-i14=i13+m
-i15=i14+n
-i16=i15+m
-i17=i16+m
-i18=i17+n
-i19=i18+m
-i20=i19+4*n
-i21=i20+nsq
-nhalf=n/2
+n = nup
+m = mupper
+nsq = n*n
+i1 = 1
+i2 = i1 + nsq
+i3 = i2 + nsq
+i4 = i3 + nsq/2
+i5 = i4 + nsq/2
+i6 = i5 + m
+i7 = i6 + m
+i8 = i7 + n
+i9 = i8 + n
+i10 = i9 + m
+i11 = i10 + n
+i12 = i11 + m
+i13 = i12 + m
+i14 = i13 + m
+i15 = i14 + n
+i16 = i15 + m
+i17 = i16 + m
+i18 = i17 + n
+i19 = i18 + m
+i20 = i19 + 4*n
+i21 = i20 + nsq
+nhalf = n/2
 call iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mupper,ier, &
-&cutoff,rootrt,unitrd,nhalf,w(i1),w(i2),w(i3),w(i4),w(i5), &
-&w(i6),w(i7),w(i8),w(i9),w(i10),w(i11),w(i12),w(i13), &
-&w(i14),w(i15),w(i16),w(i17),w(i18),w(i19),w(i20),w(i21))
-norm=normk
-nf=nfinal
-mf=mfinal
+   & cutoff,rootrt,unitrd,nhalf,w(i1),w(i2),w(i3),w(i4),w(i5), &
+   & w(i6),w(i7),w(i8),w(i9),w(i10),w(i11),w(i12),w(i13), &
+   & w(i14),w(i15),w(i16),w(i17),w(i18),w(i19),w(i20),w(i21))
+norm = normk
+nf = nfinal
+mf = mfinal
 return
 end subroutine ieslv
 
 subroutine iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mup,ier, &
-&cutoff,rootrt,unitrd,nhalf,lufact,kmm,kmn,knm,rhs,r,rh, &
-&deln,tm,tn,xm,xmz,wm,wn,oldx,save,xn,save2,aside,aside3, &
-&imknn)
+   & cutoff,rootrt,unitrd,nhalf,lufact,kmm,kmn,knm,rhs,r,rh, &
+   & deln,tm,tn,xm,xmz,wm,wn,oldx,save,xn,save2,aside,aside3, &
+   & imknn)
 implicit none
 integer :: ier, iflag, mup, nhalf, nt, nup
 real :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
-&ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
-&save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
-&x(*), xm(mup), xmz(mup), xn(nup)
+   & ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
+   & save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
+   & x(*), xm(mup), xmz(mup), xn(nup)
 real :: rhfcn
 real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
-&knm(nhalf,nup), imknn(nup,nup)
+   & knm(nhalf,nup), imknn(nup,nup)
 external kernel, rhfcn
 integer :: i, ind, j, loop, m, mnew, n
 real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
-&pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
-&xnorm
+   & pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
+   & xnorm
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
 real :: elinsy, relrsd
@@ -3047,15 +3047,15 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !
 !   Initialization
 !
-loop=1
-n=2
-r2=0.5
-m=2*n
-r1rat=rootrt
-cond=1.0
-pastc=1.0
-pastre=0.0
-eps=ep
+loop = 1
+n = 2
+r2 = 0.5
+m = 2*n
+r1rat = rootrt
+cond = 1.0
+pastc = 1.0
+pastre = 0.0
+eps = ep
 !
 !   Stage A. direct solution of linear system (i-KN)*XN=RHS, while
 !   trying to find a good approximate inverse to implement
@@ -3065,21 +3065,21 @@ eps=ep
 call wandt(wn,tn,n,a,b)
 !   Set up matrix for (i-KN)*XN=rhfcn
 do 2 j = 1,n
-do 1 i = 1,n
-1 imknn(i,j)=-wn(j)*kernel(tn(i),tn(j))
-xmz(j)=rhfcn(tn(j))
-2 imknn(j,j)=imknn(j,j)+1.0
+   do 1 i = 1,n
+1     imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
+   xmz(j) = rhfcn(tn(j))
+2  imknn(j,j) = imknn(j,j) + 1.0
 go to 6
 !   This is entrance for an increased value of n, using previously
 !   stored values in kmm to define matrix for (i-KN)*XN=rhfcn with
 !   new value of n.
 3 do 5 j = 1,n
-do 4 i = 1,n
-4 imknn(i,j)=-kmm(i,j)
-wn(j)=wm(j)
-tn(j)=tm(j)
-xmz(j)=rhs(j)
-5 imknn(j,j)=imknn(j,j)+1.0
+   do 4 i = 1,n
+4     imknn(i,j) = -kmm(i,j)
+   wn(j) = wm(j)
+   tn(j) = tm(j)
+   xmz(j) = rhs(j)
+5  imknn(j,j) = imknn(j,j) + 1.0
 !   This is the entrance when iteration in stage b fails and we need
 !   to increase n to obtain a better iterative rate.
 6 continue
@@ -3097,38 +3097,38 @@ call lnsys(imknn,lufact,nup,n,xmz,xn,2,ind)
 !                                                                  *
 !*******************************************************************
 !
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-relmin=rmin(n,n,cond,unitrd,averr)
-if(loop .eq. 1) go to 11
-if(loop .eq. 2) go to 9
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+relmin = rmin(n,n,cond,unitrd,averr)
+if (loop .eq. 1) go to 11
+if (loop .eq. 2) go to 9
 !   Set up approximate rate of convergence of solutions XN to true
 !   solution X. also set up desired ratio for iterative method.
-numr2=rnrm(xn,oldx,n,1)
-r2=amin1(0.5,amax1(numr2/denr2,1.0e-4))
-r1rat=amin1(rootrt,sqrt(r2))
+numr2 = rnrm(xn,oldx,n,1)
+r2 = amin1(0.5,amax1(numr2/denr2,1.0e-4))
+r1rat = amin1(rootrt,sqrt(r2))
 !   Check for error in XN using test involving r2 and OLDX,according
 !   to theory for asymptotic error bounds. Modify error if it is
 !   outside precision range of computer, possibly due to
 !   ill-conditioning.
-8 error=(r2/(1.0-r2))*numr2
-xnorm=rnrm(xn,xn,n,0)
-relerr=error/xnorm
-if(iflag .eq. 0) eps=amax1(ep,xnorm*relmin)
-if(iflag .eq. 1) eps=amax1(ep,relmin)
-if(iflag .eq. 1)error=amax1(relerr,relmin)
-if((iflag .eq. 0) .and. (relerr .lt. relmin)) &
-&error=relmin*xnorm
-if(error .le. eps) go to 10
-denr2=numr2
+8 error = (r2/(1.0 - r2))*numr2
+xnorm = rnrm(xn,xn,n,0)
+relerr = error/xnorm
+if (iflag .eq. 0) eps = amax1(ep,xnorm*relmin)
+if (iflag .eq. 1) eps = amax1(ep,relmin)
+if (iflag .eq. 1) error = amax1(relerr,relmin)
+if ((iflag .eq. 0) .and. (relerr .lt. relmin)) &
+   & error = relmin*xnorm
+if (error .le. eps) go to 10
+denr2 = numr2
 go to 11
 !   Entrance for loop=2.
-9 numr2=rnrm(xn,oldx,n,1)
-denr2=0.0
+9 numr2 = rnrm(xn,oldx,n,1)
+denr2 = 0.0
 go to 8
 !   Exit for successful return. Iteration was not necessary.
 10 call leave(0,n,n,xn,tn,wn,error, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !
 !   Attempt to solve (i-km)*XM=rhfcn iteratively, checking to see if
@@ -3137,187 +3137,187 @@ return
 !
 !   Calculate TM(i) and WM(i), i=1,...,m.
 11 call wandt(wm,tm,m,a,b)
-flag=0
+flag = 0
 !   Calculate initial guess XMZ for iteration method.
 call nsterp(tm,wm,xmz,m,tn,wn,xn,n, &
-&kernel,rhfcn,rhs,kmn,nhalf,nup)
+   & kernel,rhfcn,rhs,kmn,nhalf,nup)
 do 12 i = 1,m
-12 oldx(i)=xmz(i)
+12 oldx(i) = xmz(i)
 !   Calculate first iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-denr1=rnrm(xm,xmz,m,1)
-flag=1
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+denr1 = rnrm(xm,xmz,m,1)
+flag = 1
 do 13 i = 1,m
-13 xmz(i)=xm(i)
+13 xmz(i) = xm(i)
 !   Calculate second iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-numr1=rnrm(xm,xmz,m,1)
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1 = rnrm(xm,xmz,m,1)
 !   Check on the speed of convergence of iterative method. If it is
 !   sufficiently rapid, then fix n and go to stage b.
-r1=amax1(numr1/denr1,.0001)
-rate=r1
-if(m .gt. nup) go to 19
-if(r1 .le. r1rat) go to 15
+r1 = amax1(numr1/denr1,.0001)
+rate = r1
+if (m .gt. nup) go to 19
+if (r1 .le. r1rat) go to 15
 !   The iteration did not work well enough, and stage A is to be
 !   repeated. RE-initialize for solving (i-KN)*XN=rhfcn again
 !   with a larger n.
-14 n=m
-loop=loop+1
-m=2*n
+14 n = m
+loop = loop + 1
+m = 2*n
 go to 3
 !   The iterative rate is sufficiently rapid, and control will go to
 !   stage b. save information in case stage b aborts at a larger
 !   value of m and stage A has to be returned to.
 15 do 16 i = 1,m
-aside(i,1)=oldx(i)
-aside(i,2)=wm(i)
-aside(i,3)=tm(i)
-16 aside(i,4)=rhs(i)
-aside2(1)=loop
-aside2(3)=r2
-aside2(4)=denr2
-aside2(5)=r1rat
+   aside(i,1) = oldx(i)
+   aside(i,2) = wm(i)
+   aside(i,3) = tm(i)
+16 aside(i,4) = rhs(i)
+aside2(1) = loop
+aside2(3) = r2
+aside2(4) = denr2
+aside2(5) = r1rat
 do 17 j = 1,m
-do 17 i = 1,m
-17 aside3(i,j)=kmm(i,j)
+   do 17 i = 1,m
+17    aside3(i,j) = kmm(i,j)
 !
 !   Stage b. iterative method of solution of (i-km)*XM=RHS.
 !
-19 oldm=n
-aside2(2)=m
-if(r1 .le. cutoff) go to 22
+19 oldm = n
+aside2(2) = m
+if (r1 .le. cutoff) go to 22
 !   The iterates are converging very slowly or not at all. Thus
 !   RETURN WITHOUT FURTHER ATTEMPTS TO LESSEN THE ERROR.
-if(loop .ne. 1) go to 21
+if (loop .ne. 1) go to 21
 20 call leave(2,n,n,xn,tn,wn,0.0, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 21 call leave(1,n,n,xn,tn,wn,error, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !   Test to see if the current iterate XM is sufficiently accurate
 !   compared to the true XM.
-22 rate=r1*rate
-temp=rnrm(xm,oldx,m,1)
-if(loop .eq. 1) temp2=0.5
-if(loop .gt. 1) temp2=temp/denr2
-rt=  amin1(0.01,amax1(temp2,0.0001))/2.0
-xnorm=rnrm(xm,xm,m,0)
-esterr=(rt/(1.0-rt))*temp/xnorm
-if(esterr .lt. relmin) esterr=relmin
-esterr=esterr*xnorm
-test=((1.0-r1)/r1)*esterr
-if(numr1 .le. test) go to 33
+22 rate = r1*rate
+temp = rnrm(xm,oldx,m,1)
+if (loop .eq. 1) temp2 = 0.5
+if (loop .gt. 1) temp2 = temp/denr2
+rt = amin1(0.01,amax1(temp2,0.0001))/2.0
+xnorm = rnrm(xm,xm,m,0)
+esterr = (rt/(1.0 - rt))*temp/xnorm
+if (esterr .lt. relmin) esterr = relmin
+esterr = esterr*xnorm
+test = ((1.0 - r1)/r1)*esterr
+if (numr1 .le. test) go to 33
 !   Iterate not sufficiently accurate. Initialize for computation
 !   of another iterate.
-25 denr1=numr1
+25 denr1 = numr1
 do 26 i = 1,m
-26 xmz(i)=xm(i)
+26 xmz(i) = xm(i)
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-numr1=rnrm(xm,xmz,m,1)
-r1=amax1(numr1/denr1,.0001)
-if(r1 .le. cutoff) go to 22
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1 = rnrm(xm,xmz,m,1)
+r1 = amax1(numr1/denr1,.0001)
+if (r1 .le. cutoff) go to 22
 !   This is entrance for case where iteration fails in stage b.
 !   Parameters must be reset for a return to stage A or for an
 !   abortive exit if n cannot be increased any further.
-27 mnew=aside2(2)
-if(mnew .gt. nup) go to 30
-n=mnew
+27 mnew = aside2(2)
+if (mnew .gt. nup) go to 30
+n = mnew
 do 29 j = 1,n
-do 28 i = 1,n
-28 imknn(i,j)=-aside3(i,j)
-oldx(j)=aside(j,1)
-wn(j)=aside(j,2)
-tn(j)=aside(j,3)
-xmz(j)=aside(j,4)
-29 imknn(j,j)=imknn(j,j)+1.0
-m=2*n
-loop=aside2(1)+1.0
-r2=aside2(3)
-denr2=aside2(4)
-r1rat=aside2(5)
+   do 28 i = 1,n
+28    imknn(i,j) = -aside3(i,j)
+   oldx(j) = aside(j,1)
+   wn(j) = aside(j,2)
+   tn(j) = aside(j,3)
+   xmz(j) = aside(j,4)
+29 imknn(j,j) = imknn(j,j) + 1.0
+m = 2*n
+loop = aside2(1) + 1.0
+r2 = aside2(3)
+denr2 = aside2(4)
+r1rat = aside2(5)
 go to 6
 !   Abortive exit from stage b. n cannot be increased further, and
 !   r1 is not sufficiently small.
-30 if(loop .eq. 1) go to 20
+30 if (loop .eq. 1) go to 20
 call wandt(wm,tm,oldm,a,b)
 call leave(1,n,oldm,save,tm,wm,error, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !   An accurate value of XM has been obtained. r2 is to be tested as
 !   to whether it should be reset. Then check error in XM compared
 !   with the true solution X.
-33 if(loop .eq. 1) go to 37
-numr2=temp
-r2=amax1(1.0e-4,rate,amin1(numr2/denr2,0.5))
-denr2=numr2
-34 error=(r2/(1.0-r2))*temp
-xnorm=rnrm(xm,xm,m,0)
-relerr=error/xnorm
-relmin=rmin(n,m,cond,unitrd,averr)
-if(iflag .eq. 0) eps=amax1(ep,xnorm*relmin)
-if(iflag .eq. 1) eps=amax1(ep,relmin)
-if(iflag .eq. 1)error=amax1(relerr,relmin)
-if((iflag .eq. 0) .and. (relerr .lt. relmin)) &
-&error=relmin*xnorm
-if(error .gt. eps) go to 35
+33 if (loop .eq. 1) go to 37
+numr2 = temp
+r2 = amax1(1.0e-4,rate,amin1(numr2/denr2,0.5))
+denr2 = numr2
+34 error = (r2/(1.0 - r2))*temp
+xnorm = rnrm(xm,xm,m,0)
+relerr = error/xnorm
+relmin = rmin(n,m,cond,unitrd,averr)
+if (iflag .eq. 0) eps = amax1(ep,xnorm*relmin)
+if (iflag .eq. 1) eps = amax1(ep,relmin)
+if (iflag .eq. 1) error = amax1(relerr,relmin)
+if ((iflag .eq. 0) .and. (relerr .lt. relmin)) &
+   & error = relmin*xnorm
+if (error .gt. eps) go to 35
 call leave(0,n,m,xm,tm,wm,error, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-35 mnew=2*m
-if(mnew .le. mup) go to 39
+35 mnew = 2*m
+if (mnew .le. mup) go to 39
 !   m cannot be increased any further.
 call leave(1,n,m,xm,tm,wm,error, &
-&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-37 denr2=temp
-loop=2
+37 denr2 = temp
+loop = 2
 go to 34
 !   Error not sufficiently small. m is increased and two more
 !   more iterates are computed with the new m.
-39 oldm=m
-m=mnew
+39 oldm = m
+m = mnew
 do 41 i = 1,oldm
-save2(i)=wm(i)
-41 save(i)=tm(i)
+   save2(i) = wm(i)
+41 save(i) = tm(i)
 call wandt(wm,tm,m,a,b)
-flag=0
+flag = 0
 call nsterp(tm,wm,xmz,m,save,save2,xm,oldm, &
-&kernel,rhfcn,rhs,kmn,nhalf,nup)
+   & kernel,rhfcn,rhs,kmn,nhalf,nup)
 do 43 i = 1,oldm
-43 save(i)=xm(i)
+43 save(i) = xm(i)
 do 45 i = 1,m
-45 oldx(i)=xmz(i)
+45 oldx(i) = xmz(i)
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-denr1=rnrm(xm,xmz,m,1)
-flag=1
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+denr1 = rnrm(xm,xmz,m,1)
+flag = 1
 do 47 i = 1,m
-47 xmz(i)=xm(i)
+47 xmz(i) = xm(i)
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
-numr1=rnrm(xm,xmz,m,1)
-r1=amax1(numr1/denr1,.0001)
-rate=r1
-if(r1 .le. cutoff) go to 22
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1 = rnrm(xm,xmz,m,1)
+r1 = amax1(numr1/denr1,.0001)
+rate = r1
+if (r1 .le. cutoff) go to 22
 go to 27
 end subroutine iegs
 
 subroutine nsterp(tm,wm,xm,m,tn,wn,xn,n,kernel,rhfcn,rhs,kmn, &
-&nhalf,nup)
+   & nhalf,nup)
 implicit none
 integer, intent(in) :: m, n, nhalf, nup
 real, intent(inout) :: rhs(m)
@@ -3334,27 +3334,27 @@ integer :: i, j
 !   INTERPOLATES xm(i), i=1,...,m.
 !
 !
-if(m .gt. nup) go to 4
+if (m .gt. nup) go to 4
 !   SINCE m .LE. NUPPER, SAVE K(tm(i),tn(j))=kmn(i,j) AND
 !   rhs(i)=rhfcn(tm(i)) for later use in itert.
 do 1 i = 1,m
-do 1 j = 1,n
-1 kmn(i,j)=wn(j)*kernel(tm(i),tn(j))
+   do 1 j = 1,n
+1     kmn(i,j) = wn(j)*kernel(tm(i),tn(j))
 do 2 i = 1,m
-rhs(i)=rhfcn(tm(i))
-2 xm(i)=rhs(i)
+   rhs(i) = rhfcn(tm(i))
+2  xm(i) = rhs(i)
 !   Calculate Nystrom interpolating formula.
 do 3 i = 1,m
-do 3 j = 1,n
-3 xm(i)=xm(i)+kmn(i,j)*xn(j)
+   do 3 j = 1,n
+3     xm(i) = xm(i) + kmn(i,j)*xn(j)
 return
 !   m .GT. NUPPER, so save just rhs(i) for later use in itert.
 !   Calculate Nystrom interpolating formula.
 4 do 5 i = 1,m
-rhs(i)=rhfcn(tm(i))
-xm(i)=rhs(i)
-do 5 j = 1,n
-5 xm(i)=xm(i)+wn(j)*kernel(tm(i),tn(j))*xn(j)
+   rhs(i) = rhfcn(tm(i))
+   xm(i) = rhs(i)
+   do 5 j = 1,n
+5     xm(i) = xm(i) + wn(j)*kernel(tm(i),tn(j))*xn(j)
 return
 end subroutine nsterp
 
@@ -3372,10 +3372,10 @@ real :: rmin
 !   It is unlikely that a solution X can be found for the original
 !   integral equation with a smaller relative error than rmin.
 !
-float1=m
-float2=float(m)/float(n)
-rmin=amax1((float1**1.5)*cond*unitrd, &
-&(float2**1.5)*averr)
+float1 = m
+float2 = float(m)/float(n)
+rmin = amax1((float1**1.5)*cond*unitrd, &
+   & (float2**1.5)*averr)
 return
 end function rmin
 
@@ -3388,16 +3388,16 @@ integer :: i
 !   iflag=0    Calculate the maximum norm of x.
 !   iflag=1    Calculate the maximum norm of x-y.
 !
-if(iflag .eq. 1) go to 2
+if (iflag .eq. 1) go to 2
 !   Find the norm of x.
-rnrm=0.0
+rnrm = 0.0
 do 1 i = 1,n
-1 rnrm=amax1(rnrm,abs(x(i)))
+1  rnrm = amax1(rnrm,abs(x(i)))
 return
 !   Find the norm of x-y.
-2 rnrm=0.0
+2 rnrm = 0.0
 do 3 i = 1,n
-3 rnrm=amax1(rnrm,abs(x(i)-y(i)))
+3  rnrm = amax1(rnrm,abs(x(i) - y(i)))
 return
 end function rnrm
 
@@ -3413,14 +3413,14 @@ real :: conew
 !   This is used in updating the value of the condition number
 !   IN iegs.
 !
-averr=sqrt(elinsy*pastre)
-pastre=elinsy
-if(relrsd .eq. 0.0) go to 1
-c=amax1(1.0,elinsy/relrsd)
-conew=sqrt(c*pastc)
-pastc=c
+averr = sqrt(elinsy*pastre)
+pastre = elinsy
+if (relrsd .eq. 0.0) go to 1
+c = amax1(1.0,elinsy/relrsd)
+conew = sqrt(c*pastc)
+pastc = c
 return
-1 conew=cond
+1 conew = cond
 return
 end function conew
 
@@ -3439,276 +3439,276 @@ real :: al, bl, fl, floop, h, r, s, scale, t(255), w(255)
 !   point formula is applied to each subinterval.
 !
 data t(1),t(2),t(3),t(4),t(5),t(6),t(7),t(8),t(9),t(10),t(11), &
-&t(12),t(13),t(14),t(15)/.577350269189626e0, &
-&.861136311594053e0,.339981043584856e0,.960289856497536e0, &
-&.796666477413627e0,.525532409916329e0,.183434642495650e0, &
-&.989400934991650e0,.944575023073233e0,.865631202387832e0, &
-&.755404408355003e0,.617876244402644e0,.458016777657227e0, &
-&.281603550779259e0,.950125098376374e-1/
+   & t(12),t(13),t(14),t(15)/.577350269189626e0, &
+   & .861136311594053e0,.339981043584856e0,.960289856497536e0, &
+   & .796666477413627e0,.525532409916329e0,.183434642495650e0, &
+   & .989400934991650e0,.944575023073233e0,.865631202387832e0, &
+   & .755404408355003e0,.617876244402644e0,.458016777657227e0, &
+   & .281603550779259e0,.950125098376374e-1/
 data t(16),t(17),t(18),t(19),t(20),t(21),t(22),t(23),t(24),t(25), &
-&t(26),t(27),t(28),t(29),t(30),t(31)/.997263861849482e0, &
-&.985611511545268e0,.964762255587506e0,.934906075937740e0, &
-&.896321155766052e0,.849367613732570e0,.794483795967942e0, &
-&.732182118740290e0,.663044266930215e0,.587715757240762e0, &
-&.506899908932229e0,.421351276130635e0,.331868602282128e0, &
-&.239287362252137e0,.144471961582796e0,.483076656877383e-1/
+   & t(26),t(27),t(28),t(29),t(30),t(31)/.997263861849482e0, &
+   & .985611511545268e0,.964762255587506e0,.934906075937740e0, &
+   & .896321155766052e0,.849367613732570e0,.794483795967942e0, &
+   & .732182118740290e0,.663044266930215e0,.587715757240762e0, &
+   & .506899908932229e0,.421351276130635e0,.331868602282128e0, &
+   & .239287362252137e0,.144471961582796e0,.483076656877383e-1/
 data t(32),t(33),t(34),t(35),t(36),t(37),t(38),t(39),t(40),t(41), &
-&t(42),t(43),t(44),t(45),t(46),t(47)/.999305041735772e0, &
-&.996340116771955e0,.991013371476744e0,.983336253884626e0, &
-&.973326827789911e0,.961008799652054e0,.946411374858403e0, &
-&.929569172131940e0,.910522137078503e0,.889315445995114e0, &
-&.865999398154093e0,.840629296252580e0,.813265315122798e0, &
-&.783972358943341e0,.752819907260532e0,.719881850171611e0/
+   & t(42),t(43),t(44),t(45),t(46),t(47)/.999305041735772e0, &
+   & .996340116771955e0,.991013371476744e0,.983336253884626e0, &
+   & .973326827789911e0,.961008799652054e0,.946411374858403e0, &
+   & .929569172131940e0,.910522137078503e0,.889315445995114e0, &
+   & .865999398154093e0,.840629296252580e0,.813265315122798e0, &
+   & .783972358943341e0,.752819907260532e0,.719881850171611e0/
 data t(48),t(49),t(50),t(51),t(52),t(53),t(54),t(55),t(56),t(57), &
-&t(58),t(59),t(60),t(61),t(62),t(63)/.685236313054233e0, &
-&.648965471254657e0,.611155355172393e0,.571895646202634e0, &
-&.531279464019895e0,.489403145707053e0,.446366017253464e0, &
-&.402270157963992e0,.357220158337668e0,.311322871990211e0, &
-&.264687162208767e0,.217423643740007e0,.169644420423993e0, &
-&.121462819296121e0,.729931217877990e-1,.243502926634244e-1/
+   & t(58),t(59),t(60),t(61),t(62),t(63)/.685236313054233e0, &
+   & .648965471254657e0,.611155355172393e0,.571895646202634e0, &
+   & .531279464019895e0,.489403145707053e0,.446366017253464e0, &
+   & .402270157963992e0,.357220158337668e0,.311322871990211e0, &
+   & .264687162208767e0,.217423643740007e0,.169644420423993e0, &
+   & .121462819296121e0,.729931217877990e-1,.243502926634244e-1/
 data t(64),t(65),t(66),t(67),t(68),t(69),t(70),t(71),t(72),t(73), &
-&t(74),t(75),t(76),t(77),t(78),t(79)/.999824887947132e0, &
-&.999077459977376e0,.997733248625514e0,.995792758534981e0, &
-&.993257112900213e0,.990127818491734e0,.986406742724586e0, &
-&.982096108435719e0,.977198491463907e0,.971716818747137e0, &
-&.965654366431965e0,.959014757853700e0,.951801961341264e0, &
-&.944020287830220e0,.935674388277916e0,.926769250878948e0/
+   & t(74),t(75),t(76),t(77),t(78),t(79)/.999824887947132e0, &
+   & .999077459977376e0,.997733248625514e0,.995792758534981e0, &
+   & .993257112900213e0,.990127818491734e0,.986406742724586e0, &
+   & .982096108435719e0,.977198491463907e0,.971716818747137e0, &
+   & .965654366431965e0,.959014757853700e0,.951801961341264e0, &
+   & .944020287830220e0,.935674388277916e0,.926769250878948e0/
 data t(80),t(81),t(82),t(83),t(84),t(85),t(86),t(87),t(88),t(89), &
-&t(90),t(91),t(92),t(93),t(94),t(95),t(96),t(97)/ &
-&.917310198080961e0,.907302883401757e0,.896753288049158e0, &
-&.885667717345397e0,.874052796958032e0,.861915468939548e0, &
-&.849262987577969e0,.836102915060907e0,.822443116955644e0, &
-&.808291757507914e0,.793657294762193e0,.778548475506412e0, &
-&.762974330044095e0,.746944166797062e0,.730467566741909e0, &
-&.713554377683587e0,.696214708369514e0,.678458922447719e0/
+   & t(90),t(91),t(92),t(93),t(94),t(95),t(96),t(97)/ &
+   & .917310198080961e0,.907302883401757e0,.896753288049158e0, &
+   & .885667717345397e0,.874052796958032e0,.861915468939548e0, &
+   & .849262987577969e0,.836102915060907e0,.822443116955644e0, &
+   & .808291757507914e0,.793657294762193e0,.778548475506412e0, &
+   & .762974330044095e0,.746944166797062e0,.730467566741909e0, &
+   & .713554377683587e0,.696214708369514e0,.678458922447719e0/
 data t(98),t(99),t(100),t(101),t(102),t(103),t(104),t(105),t(106), &
-&t(107),t(108),t(109),t(110),t(111),t(112),t(113),t(114)/ &
-&.660297632272646e0,.641741692562308e0,.622802193910585e0, &
-&.603490456158549e0,.583818021628763e0,.563796648226618e0, &
-&.543438302412810e0,.522755152051175e0,.501759559136144e0, &
-&.480464072404172e0,.458881419833552e0,.437024501037104e0, &
-&.414906379552275e0,.392540275033267e0,.369939555349859e0, &
-&.347117728597636e0,.324088435024413e0/
+   & t(107),t(108),t(109),t(110),t(111),t(112),t(113),t(114)/ &
+   & .660297632272646e0,.641741692562308e0,.622802193910585e0, &
+   & .603490456158549e0,.583818021628763e0,.563796648226618e0, &
+   & .543438302412810e0,.522755152051175e0,.501759559136144e0, &
+   & .480464072404172e0,.458881419833552e0,.437024501037104e0, &
+   & .414906379552275e0,.392540275033267e0,.369939555349859e0, &
+   & .347117728597636e0,.324088435024413e0/
 data t(115),t(116),t(117),t(118),t(119),t(120),t(121),t(122), &
-&t(123),t(124),t(125),t(126),t(127)/.300865438877677e0, &
-&.277462620177904e0,.253893966422694e0,.230173564226660e0, &
-&.206315590902079e0,.182334305985337e0,.158244042714225e0, &
-&.134059199461188e0,.109794231127644e0, &
-&.854636405045155e-1,.610819696041396e-1,.366637909687335e-1, &
-&.122236989606158e-1/
+   & t(123),t(124),t(125),t(126),t(127)/.300865438877677e0, &
+   & .277462620177904e0,.253893966422694e0,.230173564226660e0, &
+   & .206315590902079e0,.182334305985337e0,.158244042714225e0, &
+   & .134059199461188e0,.109794231127644e0, &
+   & .854636405045155e-1,.610819696041396e-1,.366637909687335e-1, &
+   & .122236989606158e-1/
 data t(128),t(129),t(130),t(131),t(132),t(133),t(134),t(135), &
-&t(136),t(137),t(138),t(139),t(140),t(141),t(142)/ &
-&.999956050018992e0,.999768437409263e0,.999430937466261e0, &
-&.998943525843409e0,.998306266473006e0,.997519252756721e0, &
-&.996582602023382e0,.995496454481096e0,.994260972922410e0, &
-&.992876342608822e0,.991342771207583e0,.989660488745065e0, &
-&.987829747564861e0,.985850822286126e0,.983724009760315e0/
+   & t(136),t(137),t(138),t(139),t(140),t(141),t(142)/ &
+   & .999956050018992e0,.999768437409263e0,.999430937466261e0, &
+   & .998943525843409e0,.998306266473006e0,.997519252756721e0, &
+   & .996582602023382e0,.995496454481096e0,.994260972922410e0, &
+   & .992876342608822e0,.991342771207583e0,.989660488745065e0, &
+   & .987829747564861e0,.985850822286126e0,.983724009760315e0/
 data t(143),t(144),t(145),t(146),t(147),t(148),t(149),t(150), &
-&t(151),t(152),t(153),t(154),t(155),t(156),t(157)/ &
-&.981449629025464e0,.979028021257622e0,.976459549719234e0, &
-&.973744599704370e0,.970883578480743e0,.967876915228489e0, &
-&.964725060975706e0,.961428488530732e0,.957987692411178e0, &
-&.954403188769716e0,.950675515316628e0,.946805231239127e0, &
-&.942792917117462e0,.938639174837814e0, .934344627502003e0/
+   & t(151),t(152),t(153),t(154),t(155),t(156),t(157)/ &
+   & .981449629025464e0,.979028021257622e0,.976459549719234e0, &
+   & .973744599704370e0,.970883578480743e0,.967876915228489e0, &
+   & .964725060975706e0,.961428488530732e0,.957987692411178e0, &
+   & .954403188769716e0,.950675515316628e0,.946805231239127e0, &
+   & .942792917117462e0,.938639174837814e0, .934344627502003e0/
 data t(158),t(159),t(160),t(161),t(162),t(163),t(164),t(165), &
-&t(166),t(167),t(168),t(169),t(170),t(171),t(172)/ &
-&.929909919334006e0,.925335715583316e0,.920622702425146e0, &
-&.915771586857490e0,.910783096595065e0,.905657979960145e0, &
-&.900397005770304e0,.895000963223085e0,.889470661777611e0, &
-&.883806931033158e0,.878010620604707e0,.872082599995488e0, &
-&.866023758466555e0,.859835004903376e0,.853517267679503e0/
+   & t(166),t(167),t(168),t(169),t(170),t(171),t(172)/ &
+   & .929909919334006e0,.925335715583316e0,.920622702425146e0, &
+   & .915771586857490e0,.910783096595065e0,.905657979960145e0, &
+   & .900397005770304e0,.895000963223085e0,.889470661777611e0, &
+   & .883806931033158e0,.878010620604707e0,.872082599995488e0, &
+   & .866023758466555e0,.859835004903376e0,.853517267679503e0/
 data t(173),t(174),t(175),t(176),t(177),t(178),t(179),t(180), &
-&t(181),t(182),t(183),t(184),t(185),t(186),t(187)/ &
-&.847071494517296e0,.840498652345763e0,.833799727155505e0, &
-&.826975723850813e0,.820027666098917e0,.812956596176432e0, &
-&.805763574812999e0,.798449681032171e0,.791016011989546e0, &
-&.783463682808184e0,.775793826411326e0,.768007593352446e0, &
-&.760106151642655e0,.752090686575492e0,.743962400549112e0/
+   & t(181),t(182),t(183),t(184),t(185),t(186),t(187)/ &
+   & .847071494517296e0,.840498652345763e0,.833799727155505e0, &
+   & .826975723850813e0,.820027666098917e0,.812956596176432e0, &
+   & .805763574812999e0,.798449681032171e0,.791016011989546e0, &
+   & .783463682808184e0,.775793826411326e0,.768007593352446e0, &
+   & .760106151642655e0,.752090686575492e0,.743962400549112e0/
 data t(188),t(189),t(190),t(191),t(192),t(193),t(194),t(195), &
-&t(196),t(197),t(198),t(199),t(200),t(201),t(202)/ &
-&.735722512885918e0,.727372259649652e0,.718912893459971e0, &
-&.710345683304543e0,.701671914348685e0,.692892887742577e0, &
-&.684009920426076e0,.675024344931163e0,.665937509182049e0, &
-&.656750776292973e0,.647465524363725e0,.638083146272911e0, &
-&.628605049469015e0,.619032655759261e0,.609367401096334e0/
+   & t(196),t(197),t(198),t(199),t(200),t(201),t(202)/ &
+   & .735722512885918e0,.727372259649652e0,.718912893459971e0, &
+   & .710345683304543e0,.701671914348685e0,.692892887742577e0, &
+   & .684009920426076e0,.675024344931163e0,.665937509182049e0, &
+   & .656750776292973e0,.647465524363725e0,.638083146272911e0, &
+   & .628605049469015e0,.619032655759261e0,.609367401096334e0/
 data t(203),t(204),t(205),t(206),t(207),t(208),t(209),t(210), &
-&t(211),t(212),t(213),t(214),t(215),t(216),t(217)/ &
-&.599610735362968e0,.589764122154454e0,.579829038559083e0, &
-&.569806974936569e0,.559699434694481e0,.549507934062719e0, &
-&.539234001866059e0,.528879179294822e0,.518445019673674e0, &
-&.507933088228616e0,.497344961852181e0,.486682228866890e0, &
-&.475946488786983e0,.465139352078479e0,.454262439917590e0/
+   & t(211),t(212),t(213),t(214),t(215),t(216),t(217)/ &
+   & .599610735362968e0,.589764122154454e0,.579829038559083e0, &
+   & .569806974936569e0,.559699434694481e0,.549507934062719e0, &
+   & .539234001866059e0,.528879179294822e0,.518445019673674e0, &
+   & .507933088228616e0,.497344961852181e0,.486682228866890e0, &
+   & .475946488786983e0,.465139352078479e0,.454262439917590e0/
 data t(218),t(219),t(220),t(221),t(222),t(223),t(224),t(225), &
-&t(226),t(227),t(228),t(229),t(230),t(231),t(232)/ &
-&.443317383947527e0,.432305826033741e0,.421229418017624e0, &
-&.410089821468717e0,.398888707435459e0,.387627756194516e0, &
-&.376308656998716e0,.364933107823654e0,.353502815112970e0, &
-&.342019493522372e0,.330484865662417e0,.318900661840106e0, &
-&.307268619799319e0,.295590484460136e0,.283868007657082e0/
+   & t(226),t(227),t(228),t(229),t(230),t(231),t(232)/ &
+   & .443317383947527e0,.432305826033741e0,.421229418017624e0, &
+   & .410089821468717e0,.398888707435459e0,.387627756194516e0, &
+   & .376308656998716e0,.364933107823654e0,.353502815112970e0, &
+   & .342019493522372e0,.330484865662417e0,.318900661840106e0, &
+   & .307268619799319e0,.295590484460136e0,.283868007657082e0/
 data t(233),t(234),t(235),t(236),t(237),t(238),t(239),t(240), &
-&t(241),t(242),t(243),t(244),t(245),t(246),t(247)/ &
-&.272102947876337e0,.260297069991943e0,.248452145001057e0, &
-&.236569949758284e0,.224652266709132e0,.212700883622626e0, &
-&.200717593323127e0,.188704193421389e0,.176662486044902e0, &
-&.164594277567554e0,.152501378338656e0,.140385602411376e0, &
-&.128248767270607e0,.116092693560333e0,.103919204810509e0/
+   & t(241),t(242),t(243),t(244),t(245),t(246),t(247)/ &
+   & .272102947876337e0,.260297069991943e0,.248452145001057e0, &
+   & .236569949758284e0,.224652266709132e0,.212700883622626e0, &
+   & .200717593323127e0,.188704193421389e0,.176662486044902e0, &
+   & .164594277567554e0,.152501378338656e0,.140385602411376e0, &
+   & .128248767270607e0,.116092693560333e0,.103919204810509e0/
 data   t(248),t(249),t(250),t(251),t(252),t(253),t(254),t(255)/ &
-&.917301271635196e-1,.795272891002330e-1,.673125211657164e-1, &
-&.550876556946340e-1,.428545265363791e-1,.306149687799790e-1, &
-&.183708184788137e-1,.612391237518953e-2/
+   & .917301271635196e-1,.795272891002330e-1,.673125211657164e-1, &
+   & .550876556946340e-1,.428545265363791e-1,.306149687799790e-1, &
+   & .183708184788137e-1,.612391237518953e-2/
 data w(1),w(2),w(3),w(4),w(5),w(6),w(7),w(8),w(9),w(10),w(11), &
-&w(12),w(13),w(14),w(15)/1.0e0,.347854845137454e0, &
-&.652145154862546e0,.101228536290376e0,.222381034453374e0, &
-&.313706645877887e0,.362683783378362e0,.271524594117541e-1, &
-&.622535239386479e-1,.951585116824928e-1,.124628971255534e0, &
-&.149595988816577e0,.169156519395003e0,.182603415044924e0, &
-&.189450610455068e0/
+   & w(12),w(13),w(14),w(15)/1.0e0,.347854845137454e0, &
+   & .652145154862546e0,.101228536290376e0,.222381034453374e0, &
+   & .313706645877887e0,.362683783378362e0,.271524594117541e-1, &
+   & .622535239386479e-1,.951585116824928e-1,.124628971255534e0, &
+   & .149595988816577e0,.169156519395003e0,.182603415044924e0, &
+   & .189450610455068e0/
 data w(16),w(17),w(18),w(19),w(20),w(21),w(22),w(23),w(24),w(25), &
-&w(26),w(27),w(28),w(29),w(30),w(31)/.701861000947010e-2, &
-&.162743947309057e-1,.253920653092621e-1,.342738629130214e-1, &
-&.428358980222267e-1,.509980592623762e-1,.586840934785355e-1, &
-&.658222227763618e-1,.723457941088485e-1,.781938957870703e-1, &
-&.833119242269468e-1,.876520930044038e-1,.911738786957639e-1, &
-&.938443990808046e-1,.956387200792749e-1,.965400885147278e-1/
+   & w(26),w(27),w(28),w(29),w(30),w(31)/.701861000947010e-2, &
+   & .162743947309057e-1,.253920653092621e-1,.342738629130214e-1, &
+   & .428358980222267e-1,.509980592623762e-1,.586840934785355e-1, &
+   & .658222227763618e-1,.723457941088485e-1,.781938957870703e-1, &
+   & .833119242269468e-1,.876520930044038e-1,.911738786957639e-1, &
+   & .938443990808046e-1,.956387200792749e-1,.965400885147278e-1/
 data w(32),w(33),w(34),w(35),w(36),w(37),w(38),w(39),w(40),w(41), &
-&w(42),w(43),w(44),w(45),w(46),w(47)/.178328072169643e-2, &
-&.414703326056247e-2,.650445796897836e-2,.884675982636395e-2, &
-&.111681394601311e-1,.134630478967186e-1,.157260304760247e-1, &
-&.179517157756973e-1,.201348231535302e-1,.222701738083833e-1, &
-&.243527025687109e-1,.263774697150547e-1,.283396726142595e-1, &
-&.302346570724025e-1,.320579283548516e-1,.338051618371416e-1/
+   & w(42),w(43),w(44),w(45),w(46),w(47)/.178328072169643e-2, &
+   & .414703326056247e-2,.650445796897836e-2,.884675982636395e-2, &
+   & .111681394601311e-1,.134630478967186e-1,.157260304760247e-1, &
+   & .179517157756973e-1,.201348231535302e-1,.222701738083833e-1, &
+   & .243527025687109e-1,.263774697150547e-1,.283396726142595e-1, &
+   & .302346570724025e-1,.320579283548516e-1,.338051618371416e-1/
 data w(48),w(49),w(50),w(51),w(52),w(53),w(54),w(55),w(56),w(57), &
-&w(58),w(59),w(60),w(61),w(62),w(63)/ .354722132568824e-1, &
-&.370551285402400e-1,.385501531786156e-1,.399537411327203e-1, &
-&.412625632426235e-1,.424735151236536e-1,.435837245293235e-1, &
-&.445905581637566e-1,.454916279274181e-1, .462847965813144e-1, &
-&.469681828162100e-1,.475401657148303e-1,.479993885964583e-1, &
-&.483447622348030e-1,.485754674415034e-1,.486909570091397e-1/
+   & w(58),w(59),w(60),w(61),w(62),w(63)/ .354722132568824e-1, &
+   & .370551285402400e-1,.385501531786156e-1,.399537411327203e-1, &
+   & .412625632426235e-1,.424735151236536e-1,.435837245293235e-1, &
+   & .445905581637566e-1,.454916279274181e-1, .462847965813144e-1, &
+   & .469681828162100e-1,.475401657148303e-1,.479993885964583e-1, &
+   & .483447622348030e-1,.485754674415034e-1,.486909570091397e-1/
 data w(64),w(65),w(66),w(67),w(68),w(69),w(70),w(71),w(72),w(73), &
-&w(74),w(75),w(76),w(77),w(78),w(79)/ .449380960292090e-3, &
-&.104581267934035e-2,.164250301866903e-2,.223828843096262e-2, &
-&.283275147145799e-2,.342552604091022e-2,.401625498373864e-2, &
-&.460458425670296e-2,.519016183267633e-2,.577263754286570e-2, &
-&.635166316170719e-2,.692689256689881e-2,.749798192563473e-2, &
-&.806458989048606e-2,.862637779861675e-2,.918300987166087e-2/
+   & w(74),w(75),w(76),w(77),w(78),w(79)/ .449380960292090e-3, &
+   & .104581267934035e-2,.164250301866903e-2,.223828843096262e-2, &
+   & .283275147145799e-2,.342552604091022e-2,.401625498373864e-2, &
+   & .460458425670296e-2,.519016183267633e-2,.577263754286570e-2, &
+   & .635166316170719e-2,.692689256689881e-2,.749798192563473e-2, &
+   & .806458989048606e-2,.862637779861675e-2,.918300987166087e-2/
 data w(80),w(81),w(82),w(83),w(84),w(85),w(86),w(87),w(88), &
-&w(89),w(90),w(91),w(92),w(93),w(94),w(95)/.973415341500681e-2, &
-&.102794790158322e-1,.108186607395031e-1,.113513763240804e-1, &
-&.118773073727403e-1,.123961395439509e-1,.129075627392673e-1, &
-&.134112712886163e-1,.139069641329520e-1,.143943450041668e-1, &
-&.148731226021473e-1,.153430107688651e-1,.158037286593993e-1, &
-&.162550009097852e-1,.166965578015892e-1,.171281354231114e-1/
+   & w(89),w(90),w(91),w(92),w(93),w(94),w(95)/.973415341500681e-2, &
+   & .102794790158322e-1,.108186607395031e-1,.113513763240804e-1, &
+   & .118773073727403e-1,.123961395439509e-1,.129075627392673e-1, &
+   & .134112712886163e-1,.139069641329520e-1,.143943450041668e-1, &
+   & .148731226021473e-1,.153430107688651e-1,.158037286593993e-1, &
+   & .162550009097852e-1,.166965578015892e-1,.171281354231114e-1/
 data w(96),w(97),w(98),w(99),w(100),w(101),w(102),w(103),w(104), &
-&w(105),w(106),w(107),w(108),w(109),w(110),w(111),w(112)/ &
-&.175494758271177e-1,.179603271850087e-1,.183604439373313e-1, &
-&.187495869405447e-1,.191275236099509e-1,.194940280587066e-1, &
-&.198488812328309e-1,.201918710421300e-1,.205227924869601e-1, &
-&.208414477807511e-1,.211476464682213e-1,.214412055392085e-1, &
-&.217219495380521e-1,.219897106684605e-1,.222443288937998e-1, &
-&.224856520327450e-1,.227135358502365e-1/
+   & w(105),w(106),w(107),w(108),w(109),w(110),w(111),w(112)/ &
+   & .175494758271177e-1,.179603271850087e-1,.183604439373313e-1, &
+   & .187495869405447e-1,.191275236099509e-1,.194940280587066e-1, &
+   & .198488812328309e-1,.201918710421300e-1,.205227924869601e-1, &
+   & .208414477807511e-1,.211476464682213e-1,.214412055392085e-1, &
+   & .217219495380521e-1,.219897106684605e-1,.222443288937998e-1, &
+   & .224856520327450e-1,.227135358502365e-1/
 data w(113),w(114),w(115),w(116),w(117),w(118),w(119),w(120), &
-&w(121),w(122),w(123),w(124),w(125),w(126),w(127)/ &
-&.229278441436868e-1,.231284488243870e-1,.233152299940628e-1, &
-&.234880760165359e-1,.236468835844476e-1,.237915577810034e-1, &
-&.239220121367035e-1,.240381686810241e-1,.241399579890193e-1, &
-&.242273192228152e-1,.243002001679719e-1,.243585572646906e-1, &
-&.244023556338496e-1,.244315690978500e-1,.244461801962625e-1/
+   & w(121),w(122),w(123),w(124),w(125),w(126),w(127)/ &
+   & .229278441436868e-1,.231284488243870e-1,.233152299940628e-1, &
+   & .234880760165359e-1,.236468835844476e-1,.237915577810034e-1, &
+   & .239220121367035e-1,.240381686810241e-1,.241399579890193e-1, &
+   & .242273192228152e-1,.243002001679719e-1,.243585572646906e-1, &
+   & .244023556338496e-1,.244315690978500e-1,.244461801962625e-1/
 data w(128),w(129),w(130),w(131),w(132),w(133),w(134),w(135), &
-&w(136),w(137),w(138),w(139),w(140),w(141),w(142)/ &
-&.112789017822272e-3,.262534944296446e-3,.412463254426176e-3, &
-&.562348954031410e-3,.712154163473321e-3,.861853701420089e-3, &
-&.101142439320844e-2,.116084355756772e-2,.131008868190250e-2, &
-&.145913733331073e-2,.160796713074933e-2,.175655573633073e-2, &
-&.190488085349972e-2,.205292022796614e-2,.220065164983991e-2/
+   & w(136),w(137),w(138),w(139),w(140),w(141),w(142)/ &
+   & .112789017822272e-3,.262534944296446e-3,.412463254426176e-3, &
+   & .562348954031410e-3,.712154163473321e-3,.861853701420089e-3, &
+   & .101142439320844e-2,.116084355756772e-2,.131008868190250e-2, &
+   & .145913733331073e-2,.160796713074933e-2,.175655573633073e-2, &
+   & .190488085349972e-2,.205292022796614e-2,.220065164983991e-2/
 data w(143),w(144),w(145),w(146),w(147),w(148),w(149),w(150), &
-&w(151),w(152),w(153),w(154),w(155),w(156),w(157)/ &
-&.234805295632731e-2,.249510203470371e-2,.264177682542749e-2, &
-&.278805532532771e-2,.293391559082972e-2,.307933574119934e-2, &
-&.322429396179420e-2,.336876850731555e-2,.351273770505631e-2, &
-&.365617995814250e-2,.379907374876626e-2,.394139764140883e-2, &
-&.408313028605267e-2,.422425042138154e-2,.436473687796806e-2/
+   & w(151),w(152),w(153),w(154),w(155),w(156),w(157)/ &
+   & .234805295632731e-2,.249510203470371e-2,.264177682542749e-2, &
+   & .278805532532771e-2,.293391559082972e-2,.307933574119934e-2, &
+   & .322429396179420e-2,.336876850731555e-2,.351273770505631e-2, &
+   & .365617995814250e-2,.379907374876626e-2,.394139764140883e-2, &
+   & .408313028605267e-2,.422425042138154e-2,.436473687796806e-2/
 data w(158),w(159),w(160),w(161),w(162),w(163),w(164),w(165), &
-&w(166),w(167),w(168),w(169),w(170),w(171),w(172)/ &
-&.450456858144790e-2,.464372455568006e-2,.478218392589269e-2, &
-&.491992592181387e-2,.505692988078684e-2,.519317525086928e-2, &
-&.532864159391593e-2,.546330858864431e-2,.559715603368291e-2, &
-&.573016385060144e-2,.586231208692265e-2,.599358091911534e-2, &
-&.612395065556793e-2,.625340173954240e-2,.638191475210788e-2/
+   & w(166),w(167),w(168),w(169),w(170),w(171),w(172)/ &
+   & .450456858144790e-2,.464372455568006e-2,.478218392589269e-2, &
+   & .491992592181387e-2,.505692988078684e-2,.519317525086928e-2, &
+   & .532864159391593e-2,.546330858864431e-2,.559715603368291e-2, &
+   & .573016385060144e-2,.586231208692265e-2,.599358091911534e-2, &
+   & .612395065556793e-2,.625340173954240e-2,.638191475210788e-2/
 data w(173),w(174),w(175),w(176),w(177),w(178),w(179),w(180), &
-&w(181),w(182),w(183),w(184),w(185),w(186),w(187)/ &
-&.650947041505366e-2,.663604959378107e-2,.676163330017380e-2, &
-&.688620269544632e-2,.700973909296982e-2,.713222396107539e-2, &
-&.725363892583391e-2,.737396577381235e-2,.749318645480588e-2, &
-&.761128308454566e-2,.772823794738156e-2,.784403349893971e-2, &
-&.795865236875435e-2,.807207736287350e-2,.818429146643827e-2/
+   & w(181),w(182),w(183),w(184),w(185),w(186),w(187)/ &
+   & .650947041505366e-2,.663604959378107e-2,.676163330017380e-2, &
+   & .688620269544632e-2,.700973909296982e-2,.713222396107539e-2, &
+   & .725363892583391e-2,.737396577381235e-2,.749318645480588e-2, &
+   & .761128308454566e-2,.772823794738156e-2,.784403349893971e-2, &
+   & .795865236875435e-2,.807207736287350e-2,.818429146643827e-2/
 data w(188),w(189),w(190),w(191),w(192),w(193),w(194),w(195), &
-&w(196),w(197),w(198),w(199),w(200),w(201),w(202)/ &
-&.829527784623523e-2,.840501985322154e-2,.851350102502249e-2, &
-&.862070508840101e-2,.872661596169881e-2,.883121775724875e-2, &
-&.893449478375821e-2,.903643154866287e-2,.913701276045081e-2, &
-&.923622333095630e-2,.933404837762327e-2,.943047322573775e-2, &
-&.952548341062928e-2,.961906467984073e-2,.971120299526628e-2/
+   & w(196),w(197),w(198),w(199),w(200),w(201),w(202)/ &
+   & .829527784623523e-2,.840501985322154e-2,.851350102502249e-2, &
+   & .862070508840101e-2,.872661596169881e-2,.883121775724875e-2, &
+   & .893449478375821e-2,.903643154866287e-2,.913701276045081e-2, &
+   & .923622333095630e-2,.933404837762327e-2,.943047322573775e-2, &
+   & .952548341062928e-2,.961906467984073e-2,.971120299526628e-2/
 data w(203),w(204),w(205),w(206),w(207),w(208),w(209),w(210), &
-&w(211),w(212),w(213),w(214),w(215),w(216),w(217)/ &
-&.980188453525733e-2,.989109569669583e-2,.997882309703491e-2, &
-&.100650535763064e-1,.101497741990949e-1,.102329722564782e-1, &
-&.103146352679340e-1,.103947509832117e-1,.104733073841704e-1, &
-&.105502926865815e-1,.106256953418966e-1,.106995040389798e-1, &
-&.107717077058046e-1,.108422955111148e-1,.109112568660490e-1/
+   & w(211),w(212),w(213),w(214),w(215),w(216),w(217)/ &
+   & .980188453525733e-2,.989109569669583e-2,.997882309703491e-2, &
+   & .100650535763064e-1,.101497741990949e-1,.102329722564782e-1, &
+   & .103146352679340e-1,.103947509832117e-1,.104733073841704e-1, &
+   & .105502926865815e-1,.106256953418966e-1,.106995040389798e-1, &
+   & .107717077058046e-1,.108422955111148e-1,.109112568660490e-1/
 data w(218),w(219),w(220),w(221),w(222),w(223),w(224),w(225), &
-&w(226),w(227),w(228),w(229),w(230),w(231),w(232)/ &
-&.109785814257296e-1,.110442590908139e-1,.111082800090098e-1, &
-&.111706345765534e-1,.112313134396497e-1,.112903074958755e-1, &
-&.113476078955455e-1,.114032060430392e-1,.114570935980906e-1, &
-&.115092624770395e-1,.115597048540436e-1,.116084131622531e-1, &
-&.116553800949452e-1,.117005986066207e-1,.117440619140606e-1/
+   & w(226),w(227),w(228),w(229),w(230),w(231),w(232)/ &
+   & .109785814257296e-1,.110442590908139e-1,.111082800090098e-1, &
+   & .111706345765534e-1,.112313134396497e-1,.112903074958755e-1, &
+   & .113476078955455e-1,.114032060430392e-1,.114570935980906e-1, &
+   & .115092624770395e-1,.115597048540436e-1,.116084131622531e-1, &
+   & .116553800949452e-1,.117005986066207e-1,.117440619140606e-1/
 data w(233),w(234),w(235),w(236),w(237),w(238),w(239),w(240), &
-&w(241),w(242),w(243),w(244),w(245),w(246),w(247)/ &
-&.117857634973434e-1,.118256971008240e-1,.118638567340711e-1, &
-&.119002366727665e-1,.119348314595636e-1,.119676359049059e-1, &
-&.119986450878058e-1,.120278543565826e-1,.120552593295601e-1, &
-&.120808558957245e-1,.121046402153405e-1,.121266087205273e-1, &
-&.121467581157945e-1,.121650853785355e-1,.121815877594818e-1/
+   & w(241),w(242),w(243),w(244),w(245),w(246),w(247)/ &
+   & .117857634973434e-1,.118256971008240e-1,.118638567340711e-1, &
+   & .119002366727665e-1,.119348314595636e-1,.119676359049059e-1, &
+   & .119986450878058e-1,.120278543565826e-1,.120552593295601e-1, &
+   & .120808558957245e-1,.121046402153405e-1,.121266087205273e-1, &
+   & .121467581157945e-1,.121650853785355e-1,.121815877594818e-1/
 data w(248),w(249),w(250),w(251),w(252),w(253),w(254),w(255)/ &
-&.121962627831147e-1,.122091082480372e-1,.122201222273040e-1, &
-&.122293030687103e-1,.122366493950402e-1,.122421601042728e-1, &
-&.122458343697479e-1,.122476716402898e-1/
-loop=max0(1,n/256)
-floop=loop
-h=(b-a)/floop
-scale=h/2.0
-m=min0(128,n/2)
-mt=2*m
-nplace=m-1
+   & .121962627831147e-1,.122091082480372e-1,.122201222273040e-1, &
+   & .122293030687103e-1,.122366493950402e-1,.122421601042728e-1, &
+   & .122458343697479e-1,.122476716402898e-1/
+loop = max0(1,n/256)
+floop = loop
+h = (b - a)/floop
+scale = h/2.0
+m = min0(128,n/2)
+mt = 2*m
+nplace = m - 1
 do 1 l = 1,loop
-fl=l
-al=a+(fl-1.0)*h
-bl=a+fl*h
-k=256*(l-1)
-do 1 i = 1,m
-npi=nplace+i
-s=t(npi)
-r=w(npi)*scale
-i1=k+i
-i2=k+mt+1-i
-tv(i1)=  (al*(1.0+s)+(1.0-s)*bl)/2.0
-tv(i2)=  (al*(1.0-s)+(1.0+s)*bl)/2.0
-wv(i1)=r
-1 wv(i2)=r
+   fl = l
+   al = a + (fl - 1.0)*h
+   bl = a + fl*h
+   k = 256*(l - 1)
+   do 1 i = 1,m
+      npi = nplace + i
+      s = t(npi)
+      r = w(npi)*scale
+      i1 = k + i
+      i2 = k + mt + 1 - i
+      tv(i1) = (al*(1.0 + s) + (1.0 - s)*bl)/2.0
+      tv(i2) = (al*(1.0 - s) + (1.0 + s)*bl)/2.0
+      wv(i1) = r
+1     wv(i2) = r
 return
 end subroutine wandt
 
 subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
-&iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+   & iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm,xmz,kmm,kmn,knm, &
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 implicit none
 integer :: ier, ierset, iflag, mf, nf, nhalf, nt, nup
 real :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
-&t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
-&xm(mf), xmz(mf), xnorm, xv(mf)
+   & t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
+   & xm(mf), xmz(mf), xnorm, xv(mf)
 real :: rhfcn
 real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
-&imknn(nup,nup), lufact(nup,nup)
+   & imknn(nup,nup), lufact(nup,nup)
 external kernel, rhfcn
 integer :: i, itloop, j
 real :: derror, savep, sum, temp
@@ -3725,93 +3725,93 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !
 !   Set error parameters for return.
 !
-normk=0.0
-nfinal=nf
-mfinal=mf
-finlep=eps
-if((eps .gt. ep) .and. (error .le. eps)) go to 10
-ier=ierset
-ep=error
-if(nt .eq. 0) go to 20
+normk = 0.0
+nfinal = nf
+mfinal = mf
+finlep = eps
+if ((eps .gt. ep) .and. (error .le. eps)) go to 10
+ier = ierset
+ep = error
+if (nt .eq. 0) go to 20
 go to 30
-10 ier=3
+10 ier = 3
 !
 !   Since eps is the smallest error possible, set ep=eps for the
 !   RETURN ERROR ESTIMATE.
 !
-ep=eps
-if(nt .gt. 0) go to 30
+ep = eps
+if (nt .gt. 0) go to 30
 !
 !   No Nystrom interpolation is desired. Return the values at the
 !   Gaussian node points.
 !
 20 do 21 i = 1,mf
-x(i)=xv(i)
-21 t(i)=tv(i)
-nt=mf
+   x(i) = xv(i)
+21 t(i) = tv(i)
+nt = mf
 return
 !   Calculate norm(K).
-30 savep=ep
+30 savep = ep
 do 31 i = 1,nf
-31 imknn(i,i)=imknn(i,i)-1.0
-normk=0.0
+31 imknn(i,i) = imknn(i,i) - 1.0
+normk = 0.0
 do 33 i = 1,nf
-sum=0.0
-do 32 j = 1,nf
-32 sum=sum+abs(imknn(i,j))
-33 normk=amax1(normk,sum)
+   sum = 0.0
+   do 32 j = 1,nf
+32    sum = sum + abs(imknn(i,j))
+33 normk = amax1(normk,sum)
 do 34 i = 1,nf
-34 imknn(i,i)=imknn(i,i)+1.0
-if(nf .eq. mf) go to 50
+34 imknn(i,i) = imknn(i,i) + 1.0
+if (nf .eq. mf) go to 50
 !
 !   Iterate to decrease the noise level in X. this should reduce
 !   possible errors in Nystrom interpolation.
 !
-derror=((1.0-r1)/r1)*eps/normk
-if(iflag .eq. 1) derror=derror*xnorm
-itloop=0
+derror = ((1.0 - r1)/r1)*eps/normk
+if (iflag .eq. 1) derror = derror*xnorm
+itloop = 0
 do 41 i = 1,mf
-41 xm(i)=xv(i)
+41 xm(i) = xv(i)
 42 do 43 i = 1,mf
-43 xmz(i)=xm(i)
+43 xmz(i) = xm(i)
 call itert(kernel,rhfcn,nf,tn,wn,mf,tm,wm,xm,xmz,kmm,kmn,knm, &
-&rhs,imknn,lufact,r,rh,deln,nup,nhalf,1)
-numr1=rnrm(xm,xmz,mf,1)
-itloop=itloop+1
-if((numr1 .gt. derror) .and. (itloop .lt. 5)) go to 42
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,1)
+numr1 = rnrm(xm,xmz,mf,1)
+itloop = itloop + 1
+if ((numr1 .gt. derror) .and. (itloop .lt. 5)) go to 42
 do 44 i = 1,mf
-44 xv(i)=xm(i)
+44 xv(i) = xm(i)
 !
 !   Estimate new error bound for Nystrom interpolates.
 !
-temp=normk*(r1/(1.0-r1))*numr1
-if(iflag .eq. 1) temp=temp/xnorm
-ep=amax1(ep,temp)
+temp = normk*(r1/(1.0 - r1))*numr1
+if (iflag .eq. 1) temp = temp/xnorm
+ep = amax1(ep,temp)
 go to 60
 !
 !   No iteration used in computing X. just compute error estimate
 !   in Nystrom interpolate.
 !
-50 temp=normk*elinsy
-if(iflag .eq. 0) temp=temp*xnorm
-if(ier .ne. 2) ep=amax1(ep,temp)
+50 temp = normk*elinsy
+if (iflag .eq. 0) temp = temp*xnorm
+if (ier .ne. 2) ep = amax1(ep,temp)
 !
 !   Compute Nystrom interpolates at the nodes in T.
 !
 60 do 62 i = 1,nt
-sum=0.0
-do 61 j = 1,mf
-61 sum=sum+wv(j)*kernel(t(i),tv(j))*xv(j)
-62 x(i)=rhfcn(t(i))+sum
-if((ier .eq. 0) .and. (ep .gt. eps)) ier=4
-if((ier .eq. 1) .and. (ep .gt. error)) ier=5
-if((ier .eq. 3) .and. (ep .gt. eps)) ier=6
-ep=savep
+   sum = 0.0
+   do 61 j = 1,mf
+61    sum = sum + wv(j)*kernel(t(i),tv(j))*xv(j)
+62 x(i) = rhfcn(t(i)) + sum
+if ((ier .eq. 0) .and. (ep .gt. eps)) ier = 4
+if ((ier .eq. 1) .and. (ep .gt. error)) ier = 5
+if ((ier .eq. 3) .and. (ep .gt. eps)) ier = 6
+ep = savep
 return
 end subroutine leave
 
 subroutine itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn, &
-&knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,iflg)
+   & knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,iflg)
 implicit none
 integer, intent(in) :: iflg, m
 integer :: n
@@ -3839,26 +3839,26 @@ real :: sum
 !   m .GT. NUPPER means that the matrices kmm,kmn,knm can no longer
 !   be stored due to lack of space.
 if (m .gt. nup) go to 13
-if(iflg .eq. 1) go to 3
+if (iflg .eq. 1) go to 3
 !   If iflg=0, then the matrices kmm and knm must be computed
 !   and stored.
 do 2 j = 1,m
-do 1 i = 1,m
-1 kmm(i,j)=wm(j)*kernel(tm(i),tm(j))
-do 2 i = 1,n
-2 knm(i,j)=wm(j)*kernel(tn(i),tm(j))
+   do 1 i = 1,m
+1     kmm(i,j) = wm(j)*kernel(tm(i),tm(j))
+   do 2 i = 1,n
+2     knm(i,j) = wm(j)*kernel(tn(i),tm(j))
 !   Compute  residuals r(i)=rhfcn(tm(i))-xmz(i)+km(tm(i))*xmz(i)
 3 do 5 i = 1,m
-sum=0.0
-do 4 j = 1,m
-4 sum=sum+kmm(i,j)*xmz(j)
-5 r(i)=rhs(i)-(xmz(i)-sum)
+   sum = 0.0
+   do 4 j = 1,m
+4     sum = sum + kmm(i,j)*xmz(j)
+5  r(i) = rhs(i) - (xmz(i) - sum)
 !
 !   COMPUTE rh=km*r AT ALL tn(i).
 do 7 i = 1,n
-rh(i)=0.0
-do 7 j = 1,m
-7 rh(i)=rh(i)+knm(i,j)*r(j)
+   rh(i) = 0.0
+   do 7 j = 1,m
+7     rh(i) = rh(i) + knm(i,j)*r(j)
 !   CALCULATE deln=((i-KN)**(-1))*km*r AT ALL tn(i).
 !
 !*******************************************************************
@@ -3870,25 +3870,25 @@ call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 !
 !   Calculate new xm.
 do 12 i = 1,m
-sum=0.0
-do 10 j = 1,m
-10 sum=sum+kmm(i,j)*r(j)
-do 11 j = 1,n
-11 sum=sum+kmn(i,j)*deln(j)
-12 xm(i)=sum+r(i)+xmz(i)
+   sum = 0.0
+   do 10 j = 1,m
+10    sum = sum + kmm(i,j)*r(j)
+   do 11 j = 1,n
+11    sum = sum + kmn(i,j)*deln(j)
+12 xm(i) = sum + r(i) + xmz(i)
 return
 !   Entrance when m .GT. nup.
 !   Calculate residuals.
 13 do 15 i = 1,m
-sum=0.0
-do 14 j = 1,m
-14 sum=sum+wm(j)*kernel(tm(i),tm(j))*xmz(j)
-15 r(i)=rhs(i)-(xmz(i)-sum)
+   sum = 0.0
+   do 14 j = 1,m
+14    sum = sum + wm(j)*kernel(tm(i),tm(j))*xmz(j)
+15 r(i) = rhs(i) - (xmz(i) - sum)
 !   CALCULATE rh=km*r.
 do 17 i = 1,n
-rh(i)=0.0
-do 17 j = 1,m
-17 rh(i)=rh(i)+wm(j)*kernel(tn(i),tm(j))*r(j)
+   rh(i) = 0.0
+   do 17 j = 1,m
+17    rh(i) = rh(i) + wm(j)*kernel(tn(i),tm(j))*r(j)
 !
 !*******************************************************************
 !                                                                  *
@@ -3899,12 +3899,12 @@ call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 !
 !   CALCULATE xm.
 do 22 i = 1,m
-sum=0.0
-do 20 j = 1,m
-20 sum=sum+wm(j)*kernel(tm(i),tm(j))*r(j)
-do 21 j = 1,n
-21 sum=sum+wn(j)*kernel(tm(i),tn(j))*deln(j)
-22 xm(i)=sum+r(i)+xmz(i)
+   sum = 0.0
+   do 20 j = 1,m
+20    sum = sum + wm(j)*kernel(tm(i),tm(j))*r(j)
+   do 21 j = 1,n
+21    sum = sum + wn(j)*kernel(tm(i),tn(j))*deln(j)
+22 xm(i) = sum + r(i) + xmz(i)
 return
 end subroutine itert
 
@@ -3959,53 +3959,53 @@ iswit = 1
 if (option .gt. 2) go to 100
 !
 do 11 i = 1,n
-scale(i) = 0.0
-  do 10 j = 1,n
-  d(i,j) = a(i,j)
-10 scale(i) = scale(i) + abs(d(i,j))
-if (scale(i) .ne. 0.0) go to 11
-ierr = -i
-return
+   scale(i) = 0.0
+   do 10 j = 1,n
+      d(i,j) = a(i,j)
+10    scale(i) = scale(i) + abs(d(i,j))
+   if (scale(i) .ne. 0.0) go to 11
+   ierr = -i
+   return
 11 continue
 !
 !             Obtain the LU decomposition of A
 !
 ierr = 0
 do k = 1,nm1
-c = abs(d(k,k))/scale(k)
-l = k
-kp1 = k + 1
-  do 20 i = kp1,n
-  t = abs(d(i,k))/scale(i)
-  if (t .le. c) go to 20
-  c = t
-  l = i
-20 continue
+   c = abs(d(k,k))/scale(k)
+   l = k
+   kp1 = k + 1
+   do 20 i = kp1,n
+      t = abs(d(i,k))/scale(i)
+      if (t .le. c) go to 20
+      c = t
+      l = i
+20    continue
 !
-if (c .ne. 0.0) go to 30
-ierr = k
-return
+   if (c .ne. 0.0) go to 30
+   ierr = k
+   return
 !
 !     Interchange rows k and l
 !
 30 pivot(k) = l
-if (k .eq. l) go to 40
-  do 31 j = k,n
-  t = d(k,j)
-  d(k,j) = d(l,j)
-31 d(l,j) = t
-t = scale(k)
-scale(k) = scale(l)
-scale(l) = t
+   if (k .eq. l) go to 40
+   do 31 j = k,n
+      t = d(k,j)
+      d(k,j) = d(l,j)
+31    d(l,j) = t
+   t = scale(k)
+   scale(k) = scale(l)
+   scale(l) = t
 !
 !     Eliminate the k-TH unknown below the diagonal
 !
 40 do i = kp1,n
-  d(i,k) = d(i,k)/d(k,k)
-  t = d(i,k)
-    do 41 j = kp1,n
-41 d(i,j) = d(i,j) - t*d(k,j)
-  end do
+      d(i,k) = d(i,k)/d(k,k)
+      t = d(i,k)
+      do 41 j = kp1,n
+41       d(i,j) = d(i,j) - t*d(k,j)
+   end do
 end do
 !
 if (d(n,n) .ne. 0.0) go to 100
@@ -4015,22 +4015,22 @@ return
 !               Store b in r and set x = 0
 !
 100 do 110 i = 1,n
-r(i) = b(i)
+   r(i) = b(i)
 110 x(i) = 0.0
 go to 200
 !
 !             Compute the residual r = b - AX
 !
 120 do 131 i = 1,n
-sum = 0.0
-  do 130 j = 1,n
-130 sum = sum + a(i,j)*x(j)
+   sum = 0.0
+   do 130 j = 1,n
+130   sum = sum + a(i,j)*x(j)
 131 r(i) = b(i) - sum
 !
 normb = 0.0
 normr = 0.0
 do 140 i = 1,n
-normb = amax1(normb,abs(b(i)))
+   normb = amax1(normb,abs(b(i)))
 140 normr = amax1(normr,abs(r(i)))
 relrsd = 0.0
 if (normb .ne. 0.0) relrsd = normr/normb
@@ -4039,14 +4039,14 @@ iswit = 2
 !             SOLVE LZ = r AND STORE Z IN r
 !
 200 do k = 1,nm1
-l = pivot(k)
-if (k .eq. l) go to 210
-t = r(k)
-r(k) = r(l)
-r(l) = t
+   l = pivot(k)
+   if (k .eq. l) go to 210
+   t = r(k)
+   r(k) = r(l)
+   r(l) = t
 210 kp1 = k + 1
-  do 211 i = kp1,n
-211 r(i) = r(i) - d(i,k)*r(k)
+   do 211 i = kp1,n
+211   r(i) = r(i) - d(i,k)*r(k)
 end do
 !
 !      Solve UE = r, store E in r, and set x = x + E
@@ -4054,12 +4054,12 @@ end do
 r(n) = r(n)/d(n,n)
 x(n) = x(n) + r(n)
 do 221 nmi = 1,nm1
-i = n - nmi
-ip1 = i + 1
-sum = 0.0
-  do 220 j = ip1,n
-220 sum = sum + d(i,j)*r(j)
-r(i) = (r(i) - sum)/d(i,i)
+   i = n - nmi
+   ip1 = i + 1
+   sum = 0.0
+   do 220 j = ip1,n
+220   sum = sum + d(i,j)*r(j)
+   r(i) = (r(i) - sum)/d(i,i)
 221 x(i) = x(i) + r(i)
 !
 go to (300,230,300,230),option
@@ -4070,7 +4070,7 @@ go to (300,230,300,230),option
 normx = 0.0
 norme = 0.0
 do 250 i = 1,n
-normx = amax1(normx,abs(x(i)))
+   normx = amax1(normx,abs(x(i)))
 250 norme = amax1(norme,abs(r(i)))
 error = 0.0
 if (normx .ne. 0.0) error = norme/normx
@@ -4086,7 +4086,7 @@ real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
 integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
-&ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
+   & ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
 logical :: start, phase1, nornd
 !
 !     Sandia mathematical program library
@@ -4218,7 +4218,7 @@ logical :: start, phase1, nornd
 !   remain unchanged.
 !
 data ialpha,ibeta,isig,iv,iw,ig,iphase,ipsi,ix,ih,ihold,istart, &
-&itold,idelsn/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
+   & itold,idelsn/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
 !
 iyy = 100
 iwt = iyy + neqn
@@ -4226,34 +4226,34 @@ ip = iwt + neqn
 iyp = ip + neqn
 iypout = iyp + neqn
 iphi = iypout + neqn
-if(iabs(iflag) .lt. 2  .or.  iabs(iflag) .gt. 6) go to 1
+if (iabs(iflag) .lt. 2  .or.  iabs(iflag) .gt. 6) go to 1
 start = work(istart) .gt. 0.0
 phase1 = work(iphase) .gt. 0.0
 nornd = iwork(2) .ne. -1
 1 call de1(f,neqn,y,t,tout,relerr,abserr,iflag,work(iyy), &
-&work(iwt),work(ip),work(iyp),work(iypout),work(iphi), &
-&work(ialpha),work(ibeta),work(isig),work(iv),work(iw),work(ig), &
-&phase1,work(ipsi),work(ix),work(ih),work(ihold),start, &
-&work(itold),work(idelsn),iwork(1),nornd,iwork(3),iwork(4), &
-&iwork(5))
+   & work(iwt),work(ip),work(iyp),work(iypout),work(iphi), &
+   & work(ialpha),work(ibeta),work(isig),work(iv),work(iw),work(ig), &
+   & phase1,work(ipsi),work(ix),work(ih),work(ihold),start, &
+   & work(itold),work(idelsn),iwork(1),nornd,iwork(3),iwork(4), &
+   & iwork(5))
 work(istart) = -1.0
-if(start) work(istart) = 1.0
+if (start) work(istart) = 1.0
 work(iphase) = -1.0
-if(phase1) work(iphase) = 1.0
+if (phase1) work(iphase) = 1.0
 iwork(2) = -1
-if(nornd) iwork(2) = 1
+if (nornd) iwork(2) = 1
 return
 end subroutine ode
 
 subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
-&yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
-&start,told,delsgn,ns,nornd,k,kold,isnold)
+   & yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
+   & start,told,delsgn,ns,nornd,k,kold,isnold)
 implicit none
 integer, intent(inout) :: iflag, isnold, k, kold
 integer, intent(in) :: neqn
 integer, intent(inout) :: ns
 real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
-&h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
+   & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
 real, intent(in) :: tout
 real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
 real :: yp(neqn)
@@ -4290,18 +4290,18 @@ fouru = 4.0*u
 !
 !   Test for improper parameters
 !
-if(neqn .lt. 1) go to 10
-if(t .eq. tout) go to 10
-if(relerr .lt. 0.0  .or.  abserr .lt. 0.0) go to 10
+if (neqn .lt. 1) go to 10
+if (t .eq. tout) go to 10
+if (relerr .lt. 0.0  .or.  abserr .lt. 0.0) go to 10
 eps = amax1(relerr,abserr)
-if(eps .le. 0.0) go to 10
-if(iflag .eq. 0) go to 10
+if (eps .le. 0.0) go to 10
+if (iflag .eq. 0) go to 10
 isn = isign(1,iflag)
 iflag = iabs(iflag)
-if(iflag .eq. 1) go to 20
-if(t .ne. told) go to 10
-if(iflag .ge. 2  .and.  iflag .le. 5) go to 20
-if(iflag .eq. 6  .and.  abserr .gt. 0.0) go to 20
+if (iflag .eq. 1) go to 20
+if (t .ne. told) go to 10
+if (iflag .ge. 2  .and.  iflag .le. 5) go to 20
+if (iflag .eq. 6  .and.  abserr .gt. 0.0) go to 20
 10 iflag = 7
 return
 !
@@ -4312,15 +4312,15 @@ return
 20 del = tout - t
 absdel = abs(del)
 tend = t + 10.0*del
-if(isn .lt. 0) tend = tout
+if (isn .lt. 0) tend = tout
 nostep = 0
 kle4 = 0
 stiff = .false.
 releps = relerr/eps
 abseps = abserr/eps
-if(iflag .eq. 1) go to 30
-if(isnold .lt. 0) go to 30
-if(delsgn*del .gt. 0.0) go to 50
+if (iflag .eq. 1) go to 30
+if (isnold .lt. 0) go to 30
+if (delsgn*del .gt. 0.0) go to 50
 !
 !   On start and restart also set work variables x and yy(*), store the
 !   direction of integration and initialize the step size
@@ -4330,11 +4330,11 @@ x = t
 do 40 l = 1,neqn
 40 yy(l) = y(l)
 delsgn = sign(1.0,del)
-h = sign(amax1(fouru*abs(x),abs(tout-x)),tout-x)
+h = sign(amax1(fouru*abs(x),abs(tout - x)),tout - x)
 !
 !   If already past output point, interpolate and return
 !
-50 if(abs(x-t) .lt. absdel) go to 60
+50 if (abs(x - t) .lt. absdel) go to 60
 call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
 iflag = 2
 t = tout
@@ -4345,7 +4345,7 @@ return
 !   If cannot go past output point and sufficiently close,
 !   extrapolate and return
 !
-60 if(isn .gt. 0  .or.  abs(tout-x) .ge. fouru*abs(x)) go to 80
+60 if (isn .gt. 0  .or.  abs(tout - x) .ge. fouru*abs(x)) go to 80
 h = tout - x
 call f(x,yy,yp)
 do 70 l = 1,neqn
@@ -4358,9 +4358,9 @@ return
 !
 !   Test for too many steps
 !
-80 if(nostep .lt. maxnum) go to 100
+80 if (nostep .lt. maxnum) go to 100
 iflag = isn*4
-if(stiff) iflag = isn*5
+if (stiff) iflag = isn*5
 do 90 l = 1,neqn
 90 y(l) = yy(l)
 t = x
@@ -4370,18 +4370,18 @@ return
 !
 !   Limit step size, set weight vector and take a step
 !
-100 h = sign(amin1(abs(h),abs(tend-x)),h)
+100 h = sign(amin1(abs(h),abs(tend - x)),h)
 do l = 1,neqn
-  wt(l) = releps*abs(yy(l)) + abseps
-  if(wt(l) .le. 0.0) go to 140
-  end do
+   wt(l) = releps*abs(yy(l)) + abseps
+   if (wt(l) .le. 0.0) go to 140
+end do
 call step1(f,neqn,yy,x,h,eps,wt,start, &
-&hold,k,kold,crash,phi,p,yp,psi, &
-&alpha,beta,sig,v,w,g,phase1,ns,nornd)
+   & hold,k,kold,crash,phi,p,yp,psi, &
+   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
 !
 !   Test for tolerances too small
 !
-if(.not.crash) go to 130
+if (.not.crash) go to 130
 iflag = isn*3
 relerr = eps*releps
 abserr = eps*abseps
@@ -4396,8 +4396,8 @@ return
 !
 130 nostep = nostep + 1
 kle4 = kle4 + 1
-if(kold .gt. 4) kle4 = 0
-if(kle4 .ge. 50) stiff = .true.
+if (kold .gt. 4) kle4 = 0
+if (kle4 .ge. 50) stiff = .true.
 go to 50
 !
 !   Relative error criterion inappropriate
@@ -4412,14 +4412,14 @@ return
 end subroutine de1
 
 subroutine step1(f,neqn,y,x,h,eps,wt,start, &
-&hold,k,kold,crash,phi,p,yp,psi, &
-&alpha,beta,sig,v,w,g,phase1,ns,nornd)
+   & hold,k,kold,crash,phi,p,yp,psi, &
+   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
 implicit none
 integer, intent(inout) :: k, kold
 integer, intent(in) :: neqn
 integer, intent(inout) :: ns
 real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
-&p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
+   & p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
 real :: wt(neqn)
 real, intent(inout) :: x, y(neqn)
 real :: yp(neqn)
@@ -4428,10 +4428,10 @@ logical, intent(out) :: crash
 logical, intent(inout) :: phase1, nornd
 external f
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
-&limit1, limit2, nsm2, nsp1, nsp2
+   & limit1, limit2, nsm2, nsp1, nsp2
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
-&hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, &
-&temp3, temp4, temp5, temp6, two(13), twou, u, xold
+   & hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, &
+   & temp3, temp4, temp5, temp6, two(13), twou, u, xold
 real :: spmpar
 !
 !   Written by L. F. Shampine and M. K. Gordon
@@ -4559,14 +4559,14 @@ real :: spmpar
 !
 !
 data two(1)/2.0/, two(2)/4.0/, two(3)/8.0/, two(4)/16.0/, &
-&two(5)/32.0/, two(6)/64.0/, two(7)/128.0/, two(8)/256.0/, &
-&two(9)/512.0/, two(10)/1024.0/, two(11)/2048.0/, &
-&two(12)/4096.0/, two(13)/8192.0/
+   & two(5)/32.0/, two(6)/64.0/, two(7)/128.0/, two(8)/256.0/, &
+   & two(9)/512.0/, two(10)/1024.0/, two(11)/2048.0/, &
+   & two(12)/4096.0/, two(13)/8192.0/
 data gstr(1)/0.500/, gstr(2)/0.0833/, gstr(3)/0.0417/, &
-&gstr(4)/0.0264/, gstr(5)/0.0188/, gstr(6)/0.0143/, &
-&gstr(7)/0.0114/, gstr(8)/0.00936/, gstr(9)/0.00789/, &
-&gstr(10)/0.00679/, gstr(11)/0.00592/, gstr(12)/0.00524/, &
-&gstr(13)/0.00468/
+   & gstr(4)/0.0264/, gstr(5)/0.0188/, gstr(6)/0.0143/, &
+   & gstr(7)/0.0114/, gstr(8)/0.00936/, gstr(9)/0.00789/, &
+   & gstr(10)/0.00679/, gstr(11)/0.00592/, gstr(12)/0.00524/, &
+   & gstr(13)/0.00468/
 !
 !   ****** U is a machine dependent parameter. It is the smallest
 !          positive number for which 1.0 + U .GT. 1.0.
@@ -4586,7 +4586,7 @@ fouru = 4.0*u
 !   If step size is too small, determine an acceptable one
 !
 crash = .true.
-if(abs(h) .ge. fouru*abs(x)) go to 5
+if (abs(h) .ge. fouru*abs(x)) go to 5
 h = sign(fouru*abs(x),h)
 return
 5 p5eps = 0.5*eps
@@ -4597,26 +4597,26 @@ round = 0.0
 do 10 l = 1,neqn
 10 round = round + (y(l)/wt(l))**2
 round = twou*sqrt(round)
-if(p5eps .ge. round) go to 15
+if (p5eps .ge. round) go to 15
 eps = 2.0*round*(1.0 + fouru)
 return
 15 crash = .false.
 g(1) = 1.0
 g(2) = 0.5
 sig(1) = 1.0
-if(.not.start) go to 99
+if (.not.start) go to 99
 !
 !   Initialize.  Compute appropriate step size for first step
 !
 call f(x,y,yp)
 sum = 0.0
 do 20 l = 1,neqn
-  phi(l,1) = yp(l)
-  phi(l,2) = 0.0
+   phi(l,1) = yp(l)
+   phi(l,2) = 0.0
 20 sum = sum + (yp(l)/wt(l))**2
 sum = sqrt(sum)
 absh = abs(h)
-if(eps .lt. 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
+if (eps .lt. 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
 h = sign(amax1(absh,fouru*abs(x)),h)
 hold = 0.0
 k = 1
@@ -4624,7 +4624,7 @@ kold = 0
 start = .false.
 phase1 = .true.
 nornd = .true.
-if(p5eps .gt. 100.0*round) go to 99
+if (p5eps .gt. 100.0*round) go to 99
 nornd = .false.
 do 25 l = 1,neqn
 25 phi(l,15) = 0.0
@@ -4639,17 +4639,17 @@ do 25 l = 1,neqn
 !
 !                   ***
 !
-100 kp1 = k+1
-kp2 = k+2
-km1 = k-1
-km2 = k-2
+100 kp1 = k + 1
+kp2 = k + 2
+km1 = k - 1
+km2 = k - 2
 !
 !   ns is the number of steps taken with size h, including the current
 !   one.  When k.LT.ns, no coefficients change
 !
-if(h .ne. hold) ns = 0
-if (ns.le.kold) ns = ns+1
-nsp1 = ns+1
+if (h .ne. hold) ns = 0
+if (ns.le.kold) ns = ns + 1
+nsp1 = ns + 1
 if (k .lt. ns) go to 199
 !
 !   Compute those components of alpha(*),beta(*),psi(*),sig(*) which
@@ -4660,58 +4660,58 @@ realns = ns
 alpha(ns) = 1.0/realns
 temp1 = h*realns
 sig(nsp1) = 1.0
-if(k .lt. nsp1) go to 110
+if (k .lt. nsp1) go to 110
 do 105 i = nsp1,k
-  im1 = i-1
-  temp2 = psi(im1)
-  psi(im1) = temp1
-  beta(i) = beta(im1)*psi(im1)/temp2
-  temp1 = temp2 + h
-  alpha(i) = h/temp1
-  reali = i
-105 sig(i+1) = reali*alpha(i)*sig(i)
+   im1 = i - 1
+   temp2 = psi(im1)
+   psi(im1) = temp1
+   beta(i) = beta(im1)*psi(im1)/temp2
+   temp1 = temp2 + h
+   alpha(i) = h/temp1
+   reali = i
+105 sig(i + 1) = reali*alpha(i)*sig(i)
 110 psi(k) = temp1
 !
 !   Compute coefficients g(*)
 !
 !   Initialize V(*) and set W(*).
 !
-if(ns .gt. 1) go to 120
+if (ns .gt. 1) go to 120
 do 115 iq = 1,k
-  temp3 = iq*(iq+1)
-  v(iq) = 1.0/temp3
+   temp3 = iq*(iq + 1)
+   v(iq) = 1.0/temp3
 115 w(iq) = v(iq)
 go to 140
 !
 !   If order was raised, update diagonal part of V(*)
 !
-120 if(k .le. kold) go to 130
+120 if (k .le. kold) go to 130
 temp4 = k*kp1
 v(k) = 1.0/temp4
-nsm2 = ns-2
-if(nsm2 .lt. 1) go to 130
+nsm2 = ns - 2
+if (nsm2 .lt. 1) go to 130
 do 125 j = 1,nsm2
-  i = k-j
-125 v(i) = v(i) - alpha(j+1)*v(i+1)
+   i = k - j
+125 v(i) = v(i) - alpha(j + 1)*v(i + 1)
 !
 !   Update V(*) and set W(*)
 !
 130 limit1 = kp1 - ns
 temp5 = alpha(ns)
 do 135 iq = 1,limit1
-  v(iq) = v(iq) - temp5*v(iq+1)
+   v(iq) = v(iq) - temp5*v(iq + 1)
 135 w(iq) = v(iq)
 g(nsp1) = w(1)
 !
 !   Compute the g(*) in the work vector W(*)
 !
 140 nsp2 = ns + 2
-if(kp1 .lt. nsp2) go to 199
+if (kp1 .lt. nsp2) go to 199
 do 150 i = nsp2,kp1
-  limit2 = kp2 - i
-  temp6 = alpha(i-1)
-  do 145 iq = 1,limit2
-145 w(iq) = w(iq) - temp6*w(iq+1)
+   limit2 = kp2 - i
+   temp6 = alpha(i - 1)
+   do 145 iq = 1,limit2
+145   w(iq) = w(iq) - temp6*w(iq + 1)
 150 g(i) = w(1)
 199 continue
 !
@@ -4727,31 +4727,31 @@ do 150 i = nsp2,kp1
 !
 !   Change phi to phi star
 !
-if(k .lt. nsp1) go to 215
+if (k .lt. nsp1) go to 215
 do i = nsp1,k
-  temp1 = beta(i)
-  do 205 l = 1,neqn
-205 phi(l,i) = temp1*phi(l,i)
-  end do
+   temp1 = beta(i)
+   do 205 l = 1,neqn
+205   phi(l,i) = temp1*phi(l,i)
+end do
 !
 !   Predict solution and differences
 !
 215 do 220 l = 1,neqn
-  phi(l,kp2) = phi(l,kp1)
-  phi(l,kp1) = 0.0
+   phi(l,kp2) = phi(l,kp1)
+   phi(l,kp1) = 0.0
 220 p(l) = 0.0
 do j = 1,k
-  i = kp1 - j
-  ip1 = i+1
-  temp2 = g(i)
-  do 225 l = 1,neqn
-    p(l) = p(l) + temp2*phi(l,i)
-225 phi(l,i) = phi(l,i) + phi(l,ip1)
-  end do
-if(nornd) go to 240
+   i = kp1 - j
+   ip1 = i + 1
+   temp2 = g(i)
+   do 225 l = 1,neqn
+      p(l) = p(l) + temp2*phi(l,i)
+225   phi(l,i) = phi(l,i) + phi(l,ip1)
+end do
+if (nornd) go to 240
 do 235 l = 1,neqn
-  tau = h*p(l) - phi(l,15)
-  p(l) = y(l) + tau
+   tau = h*p(l) - phi(l,15)
+   p(l) = y(l) + tau
 235 phi(l,16) = (p(l) - y(l)) - tau
 go to 250
 240 do 245 l = 1,neqn
@@ -4767,30 +4767,30 @@ erkm2 = 0.0
 erkm1 = 0.0
 erk = 0.0
 do 265 l = 1,neqn
-  temp3 = 1.0/wt(l)
-  temp4 = yp(l) - phi(l,1)
-  if(km2)265,260,255
-255 erkm2 = erkm2 + ((phi(l,km1)+temp4)*temp3)**2
-260 erkm1 = erkm1 + ((phi(l,k)+temp4)*temp3)**2
+   temp3 = 1.0/wt(l)
+   temp4 = yp(l) - phi(l,1)
+   if (km2) 265,260,255
+255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
+260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
 265 erk = erk + (temp4*temp3)**2
-if(km2)280,275,270
+if (km2) 280,275,270
 270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
 275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
 280 temp5 = absh*sqrt(erk)
-err = temp5*(g(k)-g(kp1))
+err = temp5*(g(k) - g(kp1))
 erk = temp5*sig(kp1)*gstr(k)
 knew = k
 !
 !   Test if order should be lowered
 !
-if(km2)299,290,285
-285 if(amax1(erkm1,erkm2) .le. erk) knew = km1
+if (km2) 299,290,285
+285 if (amax1(erkm1,erkm2) .le. erk) knew = km1
 go to 299
-290 if(erkm1 .le. 0.5*erk) knew = km1
+290 if (erkm1 .le. 0.5*erk) knew = km1
 !
 !   Test if step successful
 !
-299 if(err .le. eps) go to 400
+299 if (err .le. eps) go to 400
 !
 !       ***     End block 2     ***
 !
@@ -4808,26 +4808,26 @@ go to 299
 phase1 = .false.
 x = xold
 do i = 1,k
-  temp1 = 1.0/beta(i)
-  ip1 = i+1
-  do 305 l = 1,neqn
-305 phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
-  end do
-if(k .lt. 2) go to 320
+   temp1 = 1.0/beta(i)
+   ip1 = i + 1
+   do 305 l = 1,neqn
+305   phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
+end do
+if (k .lt. 2) go to 320
 do 315 i = 2,k
-315 psi(i-1) = psi(i) - h
+315 psi(i - 1) = psi(i) - h
 !
 !   On third failure, set order to one.  Thereafter, use optimal step
 !   size
 !
 320 ifail = ifail + 1
 temp2 = 0.5
-if(ifail - 3) 335,330,325
-325 if(p5eps .lt. 0.25*erk) temp2 = sqrt(p5eps/erk)
+if (ifail - 3) 335,330,325
+325 if (p5eps .lt. 0.25*erk) temp2 = sqrt(p5eps/erk)
 330 knew = 1
 335 h = temp2*h
 k = knew
-if(abs(h) .ge. fouru*abs(x)) go to 340
+if (abs(h) .ge. fouru*abs(x)) go to 340
 crash = .true.
 h = sign(fouru*abs(x),h)
 eps = eps + eps
@@ -4849,10 +4849,10 @@ hold = h
 !   Correct and evaluate
 !
 temp1 = h*g(kp1)
-if(nornd) go to 410
+if (nornd) go to 410
 do 405 l = 1,neqn
-  rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
-  y(l) = p(l) + rho
+   rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
+   y(l) = p(l) + rho
 405 phi(l,15) = (y(l) - p(l)) - rho
 go to 420
 410 do 415 l = 1,neqn
@@ -4862,12 +4862,12 @@ go to 420
 !   Update differences for next step
 !
 do 425 l = 1,neqn
-  phi(l,kp1) = yp(l) - phi(l,1)
+   phi(l,kp1) = yp(l) - phi(l,1)
 425 phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
 do i = 1,k
-  do 430 l = 1,neqn
-430 phi(l,i) = phi(l,i) + phi(l,kp1)
-  end do
+   do 430 l = 1,neqn
+430   phi(l,i) = phi(l,i) + phi(l,kp1)
+end do
 !
 !   Estimate error at order k+1 unless...
 !     in first phase when always raise order,
@@ -4875,10 +4875,10 @@ do i = 1,k
 !     step size not constant so estimate unreliable
 !
 erkp1 = 0.0
-if(knew .eq. km1  .or.  k .eq. 12) phase1 = .false.
-if(phase1) go to 450
-if(knew .eq. km1) go to 455
-if(kp1 .gt. ns) go to 460
+if (knew .eq. km1  .or.  k .eq. 12) phase1 = .false.
+if (phase1) go to 450
+if (knew .eq. km1) go to 455
+if (kp1 .gt. ns) go to 460
 do 440 l = 1,neqn
 440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
 erkp1 = absh*gstr(kp1)*sqrt(erkp1)
@@ -4886,11 +4886,11 @@ erkp1 = absh*gstr(kp1)*sqrt(erkp1)
 !   Using estimated error at order k+1, determine appropriate order
 !   for next step
 !
-if(k .gt. 1) go to 445
-if(erkp1 .ge. 0.5*erk) go to 460
+if (k .gt. 1) go to 445
+if (erkp1 .ge. 0.5*erk) go to 460
 go to 450
-445 if(erkm1 .le. amin1(erk,erkp1)) go to 455
-if(erkp1 .ge. erk  .or.  k .eq. 12) go to 460
+445 if (erkm1 .le. amin1(erk,erkp1)) go to 455
+if (erkp1 .ge. erk  .or.  k .eq. 12) go to 460
 !
 !   Here erkp1 .LT. erk .LT. AMAX1(erkm1,erkm2) else order would have
 !   been lowered in block 2.  Thus order is to be raised
@@ -4909,11 +4909,11 @@ erk = erkm1
 !   With new order determine appropriate step size for next step
 !
 460 hnew = h + h
-if(phase1) go to 465
-if(p5eps .ge. erk*two(k+1)) go to 465
+if (phase1) go to 465
+if (p5eps .ge. erk*two(k + 1)) go to 465
 hnew = h
-if(p5eps .ge. erk) go to 465
-temp2 = k+1
+if (p5eps .ge. erk) go to 465
+temp2 = k + 1
 r = (p5eps/erk)**(1.0/temp2)
 hnew = absh*amax1(0.5,amin1(0.9,r))
 hnew = sign(amax1(hnew,fouru*abs(x)),h)
@@ -4933,7 +4933,7 @@ real :: y(neqn)
 real, intent(inout) :: yout(neqn), ypout(neqn)
 integer :: i, j, jm1, ki, kip1, l, limit1
 real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
-&temp3, term, w(13)
+   & temp3, term, w(13)
 !
 !   Written by L. F. Shampine and M. K. Gordon
 !
@@ -4974,44 +4974,44 @@ kip1 = ki + 1
 !   Initialize W(*) for computing g(*)
 !
 do 5 i = 1,ki
-  temp1 = i
-5 w(i) = 1.0/temp1
+   temp1 = i
+5  w(i) = 1.0/temp1
 term = 0.0
 !
 !   Compute g(*)
 !
 do 15 j = 2,ki
-  jm1 = j - 1
-  psijm1 = psi(jm1)
-  gamma = (hi + term)/psijm1
-  eta = hi/psijm1
-  limit1 = kip1 - j
-  do 10 i = 1,limit1
-10 w(i) = gamma*w(i) - eta*w(i+1)
-  g(j) = w(1)
-  rho(j) = gamma*rho(jm1)
+   jm1 = j - 1
+   psijm1 = psi(jm1)
+   gamma = (hi + term)/psijm1
+   eta = hi/psijm1
+   limit1 = kip1 - j
+   do 10 i = 1,limit1
+10    w(i) = gamma*w(i) - eta*w(i + 1)
+   g(j) = w(1)
+   rho(j) = gamma*rho(jm1)
 15 term = psijm1
 !
 !   Interpolate
 !
 do 20 l = 1,neqn
-  ypout(l) = 0.0
+   ypout(l) = 0.0
 20 yout(l) = 0.0
 do j = 1,ki
-  i = kip1 - j
-  temp2 = g(i)
-  temp3 = rho(i)
-  do 25 l = 1,neqn
-    yout(l) = yout(l) + temp2*phi(l,i)
-25 ypout(l) = ypout(l) + temp3*phi(l,i)
-  end do
+   i = kip1 - j
+   temp2 = g(i)
+   temp3 = rho(i)
+   do 25 l = 1,neqn
+      yout(l) = yout(l) + temp2*phi(l,i)
+25    ypout(l) = ypout(l) + temp3*phi(l,i)
+end do
 do 35 l = 1,neqn
 35 yout(l) = y(l) + hi*yout(l)
 return
 end subroutine intrp
 
 subroutine brkf45 (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
-&work,iwork)
+   & work,iwork)
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
 integer, intent(in) :: neqn
@@ -5021,7 +5021,7 @@ real, intent(in) :: tend, tout
 real, intent(inout) :: work(*), y(neqn), yp(neqn)
 external fcn
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
-&kwp, kx, ky1, ky2
+   & kwp, kx, ky1, ky2
 logical :: endpnt, blkout
 !
 !     Block Fehlberg fourth-fifth order Runge-Kutta method advancing
@@ -5276,8 +5276,8 @@ kt = ksa + 1
 !     The work space totals  6 + 9*neqn .
 !
 if (iabs(iflag) .eq. 1) go to 10
-   endpnt = (iwork(4) .eq. -1)
-   blkout = (iwork(5) .eq. -1)
+endpnt = (iwork(4) .eq. -1)
+blkout = (iwork(5) .eq. -1)
 !
 !***********************************************************************
 !     This interfacing routine merely relieves the user of a long
@@ -5287,9 +5287,9 @@ if (iabs(iflag) .eq. 1) go to 10
 !***********************************************************************
 !
 10 call rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
-&work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
-&work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
-&work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
+   & work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
+   & work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
+   & work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
 !
 iwork(4) = 0
 if (endpnt) iwork(4) = -1
@@ -5300,8 +5300,8 @@ return
 end subroutine brkf45
 
 subroutine rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
-&w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
-&told,nfe,jflag,kflag,endpnt,blkout)
+   & w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
+   & told,nfe,jflag,kflag,endpnt,blkout)
 implicit none
 integer, intent(inout) :: iflag, jflag, kflag
 integer, intent(in) :: neqn
@@ -5315,18 +5315,18 @@ real, intent(in) :: tend
 real, intent(inout) :: told
 real, intent(in) :: tout
 real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
-&y2(neqn), yp(neqn)
+   & y2(neqn), yp(neqn)
 logical, intent(inout) :: endpnt
 logical, intent(inout) :: blkout
 external fcn
 integer :: k, maxnfe, mflag, n
 real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
-&a62, a63, a64, a65, a81, a82, a83, a84, a85, a86, a87, a91, a92, &
-&a93, a94, a95, a96, a97, a98, ae, b1, b1b, b3, b3b, b4, b4b, b5, &
-&b5b, b6, b6b, b7, b8, b9, c2, c3, c4, c6, c8, c9, dt, dtsign, ee, &
-&eeoet, erc11, erc13, erc14, erc15, erc21, erc23, erc24, erc25, &
-&erc26, erc27, erc28, erc29, errtol, esttol, ez, hmin, hstop, &
-&remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
+   & a62, a63, a64, a65, a81, a82, a83, a84, a85, a86, a87, a91, a92, &
+   & a93, a94, a95, a96, a97, a98, ae, b1, b1b, b3, b3b, b4, b4b, b5, &
+   & b5b, b6, b6b, b7, b8, b9, c2, c3, c4, c6, c8, c9, dt, dtsign, ee, &
+   & eeoet, erc11, erc13, erc14, erc15, erc21, erc23, erc24, erc25, &
+   & erc26, erc27, erc28, erc29, errtol, esttol, ez, hmin, hstop, &
+   & remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 real :: spmpar
 logical :: hfaild
 logical :: interp
@@ -5375,24 +5375,24 @@ logical :: interp
 !                erc15=1.0e+0/50.0e+0
 !
 data c2 /.250000000000000e+00/, c3 /.375000000000000e+00/, &
-&c4 /.923076923076923e+00/, c6 /.500000000000000e+00/, &
-&c8 /.150000000000000e+01/, c9 /.200000000000000e+01/
+   & c4 /.923076923076923e+00/, c6 /.500000000000000e+00/, &
+   & c8 /.150000000000000e+01/, c9 /.200000000000000e+01/
 !
 data a21 / .250000000000000e+00/, a31 / .937500000000000e-01/, &
-&a32 / .281250000000000e+00/, a41 / .879380974055530e+00/, &
-&a42 /-.327719617660446e+01/, a43 / .332089212562585e+01/, &
-&a51 / .203240740740741e+01/, a52 /-.800000000000000e+01/, &
-&a53 / .717348927875244e+01/, a54 /-.205896686159844e+00/, &
-&a61 /-.296296296296296e+00/, a62 / .200000000000000e+01/, &
-&a63 /-.138167641325536e+01/, a64 / .452972709551657e+00/, &
-&a65 /-.275000000000000e+00/
+   & a32 / .281250000000000e+00/, a41 / .879380974055530e+00/, &
+   & a42 /-.327719617660446e+01/, a43 / .332089212562585e+01/, &
+   & a51 / .203240740740741e+01/, a52 /-.800000000000000e+01/, &
+   & a53 / .717348927875244e+01/, a54 /-.205896686159844e+00/, &
+   & a61 /-.296296296296296e+00/, a62 / .200000000000000e+01/, &
+   & a63 /-.138167641325536e+01/, a64 / .452972709551657e+00/, &
+   & a65 /-.275000000000000e+00/
 !
 data b1b /.118518518518519e+00/, b3b / .518986354775828e+00/, &
-&b4b /.506131490342017e+00/, b5b /-.180000000000000e+00/, &
-&b6b /.363636363636364e-01/
+   & b4b /.506131490342017e+00/, b5b /-.180000000000000e+00/, &
+   & b6b /.363636363636364e-01/
 !
 data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
-&erc14/-.291998936735779e-01/, erc15/ .200000000000000e-01/
+   & erc14/-.291998936735779e-01/, erc15/ .200000000000000e-01/
 !
 !     The above define the coefficients for brkf45 used to generate
 !     the solution at the first block point. Below are additional
@@ -5426,19 +5426,19 @@ data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
 !                a98=232648.0e+0/96795.0e+0
 !
 data b1 /.143672839506173e+00/, b3 / .210187767614668e+00/, &
-&b4 /.603140025990903e+00/, b5 / .200000000000000e-01/, &
-&b6 /.400000000000000e+00/, b7 /-.266666666666667e+00/, &
-&b8 /.736460905349794e+00/, b9 / .153205128205128e+00/
+   & b4 /.603140025990903e+00/, b5 / .200000000000000e-01/, &
+   & b6 /.400000000000000e+00/, b7 /-.266666666666667e+00/, &
+   & b8 /.736460905349794e+00/, b9 / .153205128205128e+00/
 !
 data a81 /-.785774430040232e+00/, a82 / .269557443004023e+01/, &
-&a83 /-.387868820553843e+00/, a84 /-.323463729234086e+01/, &
-&a85 / .141740175234689e+01/, a86 /-.739340252773601e+00/, &
-&a87 / .253464461332141e+01/
+   & a83 /-.387868820553843e+00/, a84 /-.323463729234086e+01/, &
+   & a85 / .141740175234689e+01/, a86 /-.739340252773601e+00/, &
+   & a87 / .253464461332141e+01/
 !
 data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
-&a93 /-.540556629238679e+01/, a94 / .195138152603181e+02/, &
-&a95 /-.627825575453278e+01/, a96 / .753363921389629e+01/, &
-&a97 /-.139246861924514e+02/, a98 / .240351257812904e+01/
+   & a93 /-.540556629238679e+01/, a94 / .195138152603181e+02/, &
+   & a95 /-.627825575453278e+01/, a96 / .753363921389629e+01/, &
+   & a97 /-.139246861924514e+02/, a98 / .240351257812904e+01/
 !
 !     Next we define coefficients for the error estimate formula.
 !
@@ -5462,9 +5462,9 @@ data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
 !     erc29 = -0.005e+0
 !
 data erc21 /.224905375494686e-01/, erc23 /-.186601479161668e+00/, &
-&erc24 /.224620349650851e+00/, erc25 /-.384622777202128e-01/, &
-&erc26 /.180000000000000e+00/, erc27 /-.233333333333333e+00/, &
-&erc28 /.362862030148937e-01/, erc29 /-.500000000000000e-02/
+   & erc24 /.224620349650851e+00/, erc25 /-.384622777202128e-01/, &
+   & erc26 /.180000000000000e+00/, erc27 /-.233333333333333e+00/, &
+   & erc28 /.362862030148937e-01/, erc29 /-.500000000000000e-02/
 !
 !***********************************************************************
 !
@@ -5488,7 +5488,7 @@ data maxnfe / 18000 /
 !  The computer unit roundoff error U is the smallest positive value
 !  representable in the machine such that  1 + U .GT. 1.
 !
- u = spmpar(1)
+u = spmpar(1)
 !
 !***********************************************************************
 !
@@ -5499,13 +5499,13 @@ if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 500
 if (t .eq. tend) go to 500
 mflag = iabs(iflag)
 if (mflag .ne. 1) go to 10
-   told = t
-   if (tout .eq. t) go to 70
-   if (sign(1.0, tend-t) .ne. sign(1.0, tout-t)) go to 500
-   go to 70
+told = t
+if (tout .eq. t) go to 70
+if (sign(1.0, tend - t) .ne. sign(1.0, tout - t)) go to 500
+go to 70
 10 if (mflag .eq. 0 .or. mflag .gt. 7) go to 500
 if (tout .eq. told) go to 20
-if (sign(1.0, tend-told) .ne. sign(1.0, tout-told)) go to 500
+if (sign(1.0, tend - told) .ne. sign(1.0, tout - told)) go to 500
 !
 !     Check continuation possibilities
 !
@@ -5518,7 +5518,7 @@ if (kflag .eq. 3) go to 60
 if (kflag .eq. 4) go to 50
 if (kflag .eq. 5 .and. abserr .eq. 0.0) go to 40
 if (kflag .eq. 6 .and. relerr .le. savre .and. abserr .le. savae) &
-&go to 40
+   & go to 40
 go to 70
 !
 !     iflag = 3,4,5,6 or 7
@@ -5626,7 +5626,7 @@ if (toler .le. 1.e-9) sf = 0.9
 !     and set the sign of the direction of integration.
 !
 t = x
-dtsign = sign(1.0, tend-t)
+dtsign = sign(1.0, tend - t)
 !
 !     Have we already integrated past the present data output point?
 !     If so jump to 390 and perform interpolation.
@@ -5634,13 +5634,13 @@ dtsign = sign(1.0, tend-t)
 !     If not, see if results at the end of the block step need to be
 !     reported.
 !
-if ((tout-t)*dtsign .gt. 0.0) go to 110
-   if (tout .eq. t) go to 510
-   go to 390
+if ((tout - t)*dtsign .gt. 0.0) go to 110
+if (tout .eq. t) go to 510
+go to 390
 110 if (endpnt) go to 510
 if (iflag .ne. -2  .or. .not.blkout) go to 150
-   blkout = .false.
-   go to 400
+blkout = .false.
+go to 400
 !
 !***********************************************************************
 !***********************************************************************
@@ -5649,12 +5649,12 @@ if (iflag .ne. -2  .or. .not.blkout) go to 150
 !     See if we are too close to the end point.  If so, do linear
 !     extrapolation and return.
 !
-150 if (abs(tend-t) .gt. u26*abs(t)) go to 190
-if (dtsign*(tend-tout) .le. 0.0) go to 160
-   dt = tout - t
-   endpnt = .false.
-   t = tout
-   go to 170
+150 if (abs(tend - t) .gt. u26*abs(t)) go to 190
+if (dtsign*(tend - tout) .le. 0.0) go to 160
+dt = tout - t
+endpnt = .false.
+t = tout
+go to 170
 160 dt = tend - t
 endpnt = .true.
 t = tend
@@ -5680,7 +5680,7 @@ return
 !
 190 hmin = u26*abs(t)
 hfaild = .false.
-hstop = 0.5*(tend-t)
+hstop = 0.5*(tend - t)
 if (abs(hstop) .gt. abs(h)) go to 200
 endpnt = .true.
 h = hstop
@@ -5720,23 +5720,23 @@ do n = 1, neqn
 end do
 call fcn (t + c4*h, y1, f4)
 do n = 1, neqn
-   y1(n) = w(n) + h*(a51*wp(n)+a52*f2(n)+a53*f3(n)+a54*f4(n))
+   y1(n) = w(n) + h*(a51*wp(n) + a52*f2(n) + a53*f3(n) + a54*f4(n))
 end do
 call fcn (t + h, y1, y)
 do n = 1, neqn
-   y1(n) = w(n) + h*(a61*wp(n)+a62*f2(n)+a63*f3(n)+a64*f4(n)+ &
-&a65*y(n))
+   y1(n) = w(n) + h*(a61*wp(n) + a62*f2(n) + a63*f3(n) + a64*f4(n) + &
+      & a65*y(n))
 end do
 call fcn (t + c6*h, y1, yp)
 nfe = nfe + 5
 eeoet = 0.0
 do n = 1, neqn
-   y1(n) = w(n) + h*(b1b*wp(n)+b3b*f3(n)+b4b*f4(n)+b5b*y(n)+ &
-&b6b*yp(n))
+   y1(n) = w(n) + h*(b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
+      & b6b*yp(n))
    errtol = abs(w(n)) + abs(y1(n)) + ae
    if (errtol .le. 0.0) go to 540
-   ez = abs(h*(erc11*wp(n)+erc13*f3(n)+erc14*f4(n)+erc15*y(n)+ &
-&b6b*yp(n)))
+   ez = abs(h*(erc11*wp(n) + erc13*f3(n) + erc14*f4(n) + erc15*y(n) + &
+      & b6b*yp(n)))
    eeoet = amax1(eeoet,ez/errtol)
 end do
 esttol = eeoet*scale
@@ -5751,22 +5751,22 @@ if (esttol .gt. 1.0) go to 320
 !
 call fcn (t + h, y1, f1)
 do n = 1, neqn
-   y2(n) = w(n) + h*(a81*wp(n)+a82*f2(n)+a83*f3(n)+a84*f4(n)+ &
-&a85*y(n)+a86*yp(n)+a87*f1(n))
+   y2(n) = w(n) + h*(a81*wp(n) + a82*f2(n) + a83*f3(n) + a84*f4(n) + &
+      & a85*y(n) + a86*yp(n) + a87*f1(n))
 end do
 call fcn (t + c8*h, y2, f7)
 do n = 1, neqn
-   y2(n) = w(n) + h*(a91*wp(n)+a92*f2(n)+a93*f3(n)+a94*f4(n)+ &
-&a95*y(n)+a96*yp(n)+a97*f1(n)+a98*f7(n))
+   y2(n) = w(n) + h*(a91*wp(n) + a92*f2(n) + a93*f3(n) + a94*f4(n) + &
+      & a95*y(n) + a96*yp(n) + a97*f1(n) + a98*f7(n))
 end do
 call fcn (t + c9*h, y2, f2)
 nfe = nfe + 3
 eeoet = 0.0
 do n = 1, neqn
-   ee = abs(h*(erc21*wp(n)+erc23*f3(n)+erc24*f4(n)+erc25*y(n)+ &
-&erc26*yp(n)+erc27*f1(n)+erc28*f7(n)+erc29*f2(n)))
-   y2(n) = w(n)+h*(b1*wp(n)+b3*f3(n)+b4*f4(n)+b5*y(n)+b6*yp(n)+ &
-&b7*f1(n)+b8*f7(n)+b9*f2(n))
+   ee = abs(h*(erc21*wp(n) + erc23*f3(n) + erc24*f4(n) + erc25*y(n) + &
+      & erc26*yp(n) + erc27*f1(n) + erc28*f7(n) + erc29*f2(n)))
+   y2(n) = w(n) + h*(b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
+      & b7*f1(n) + b8*f7(n) + b9*f2(n))
    errtol = abs(y2(n)) + abs(y1(n)) + ae
    if (errtol .le. 0.0) go to 540
    eeoet = amax1(eeoet,ee/errtol)
@@ -5777,10 +5777,10 @@ esttol = eeoet*scale
 !     derivative more stable is the following do-loop.
 !
 do n = 1, neqn
-   y1(n) = b1b*wp(n)+b3b*f3(n)+b4b*f4(n)+b5b*y(n)+ &
-&b6b*yp(n)
-   f3(n) = b1*wp(n)+b3*f3(n)+b4*f4(n)+b5*y(n)+b6*yp(n)+ &
-&b7*f1(n)+b8*f7(n)+b9*f2(n)
+   y1(n) = b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
+      & b6b*yp(n)
+   f3(n) = b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
+      & b7*f1(n) + b8*f7(n) + b9*f2(n)
 end do
 !
 !     Check the error estimate over the second step of the block.
@@ -5808,13 +5808,13 @@ told = x
 x = t
 hint = h
 interp = .false.
-if ((t-tout)*dtsign .ge. 0.0) interp = .true.
+if ((t - tout)*dtsign .ge. 0.0) interp = .true.
 !
 if (interp) go to 350
-   do n = 1,neqn
-      w(n) = y2(n)
-   end do
-   go to 360
+do n = 1,neqn
+   w(n) = y2(n)
+end do
+go to 360
 !
 350 do n = 1,neqn
    swap = w(n)
@@ -5948,10 +5948,10 @@ do n = 1, neqn
    a3 = hf1 + hf - 2.0*h*yinc1(n)
    a4 = h*yinc1(n) - hf
    yex(n) = ((((a1*0.125*(sig - 2.0) + 0.25*a2)*(sig - 1.0) + &
-&a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
+      & a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
    ypex(n) = ((((0.625*a1*sig + (a2 - 2.0*a1))*sig + (1.875*a1 - &
-&1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
-&2.0*(a3 - a4)))*sig + hf)/h
+      & 1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
+      & 2.0*(a3 - a4)))*sig + hf)/h
 end do
 return
 end subroutine extra
@@ -6135,13 +6135,13 @@ integer :: k1, k2, k3, k4, k5, k6, k1m
 !
 !     Compute indices for the splitting of the work array
 !
-k1m=neqn+1
-k1=k1m+1
-k2=k1+neqn
-k3=k2+neqn
-k4=k3+neqn
-k5=k4+neqn
-k6=k5+neqn
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
 !
 !     This interfacing routine merely relieves the user of a long
 !     calling list via the splitting apart of two working storage
@@ -6149,14 +6149,14 @@ k6=k5+neqn
 !     he must use rkfs directly.
 !
 call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
-&work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
-&work(k6+1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+   & work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
+   & work(k6 + 1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
 !
 return
 end subroutine rkf45
 
 subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
-&f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
+   & f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
 implicit none
 !
 !
@@ -6185,7 +6185,7 @@ real, intent(inout) :: f5(neqn), savre, savae
 external f
 logical :: hfaild, output
 real :: a, ae, dt, ee, eeoet, esttol, et, hmin, remin, rer, s, &
-&scale, tol, toln, u26, eps, ypk, spmpar
+   & scale, tol, toln, u26, eps, ypk, spmpar
 integer :: k, maxnfe, mflag
 !
 !
@@ -6235,7 +6235,7 @@ if (init .eq. 0) go to 45
 if (kflag .eq. 4) go to 40
 if ((kflag .eq. 5)  .and.  (abserr .eq. 0.0)) go to 30
 if ((kflag .eq. 6)  .and.  (relerr .le. savre)  .and. &
-&(abserr .le. savae)) go to 30
+   & (abserr .le. savae)) go to 30
 go to 50
 !
 !     iflag = 3,4,5,6,7 or 8
@@ -6315,9 +6315,9 @@ do 70 k = 1,neqn
    if (tol .le. 0.) go to 70
    toln = tol
    ypk = abs(yp(k))
-   if (ypk*h**5 .gt. tol) h=(tol/ypk)**0.2
+   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
 70 continue
-if (toln .le. 0.0) h=0.0
+if (toln .le. 0.0) h = 0.0
 h = amax1(h,u26*amax1(abs(t),abs(dt)))
 jflag = isign(2,iflag)
 !
@@ -6381,7 +6381,7 @@ output = .true.
 h = dt
 go to 200
 !
-150 h=0.5*dt
+150 h = 0.5*dt
 !
 !
 !     Core integrator for taking a single step
@@ -6437,8 +6437,8 @@ do 250 k = 1,neqn
    iflag = 5
    return
 !
-240 ee = abs((-2090.0*yp(k)+(21970.0*f3(k)-15048.0*f4(k)))+ &
-&(22528.0*f2(k)-27360.0*f5(k)))
+240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
+      & (22528.0*f2(k) - 27360.0*f5(k)))
 250 eeoet = amax1(eeoet,ee/et)
 !
 esttol = abs(h)*eeoet*scale/752400.0
@@ -6477,10 +6477,10 @@ nfe = nfe + 1
 !                       if step failure has just occurred, next
 !                          stepsize is not allowed to increase
 !
-s=5.0
-if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
-if (hfaild) s=amin1(s,1.0)
-h=sign(amax1(s*abs(h),hmin),h)
+s = 5.0
+if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = amin1(s,1.0)
+h = sign(amax1(s*abs(h),hmin),h)
 !
 !     END OF CORE INTEGRATOR
 !
@@ -6537,46 +6537,46 @@ real :: ch
 integer :: k
 !
 !
-ch=h/4.0
+ch = h/4.0
 do 221 k = 1,neqn
-221 f5(k)=y(k)+ch*yp(k)
-call f(t+ch,f5,f1)
+221 f5(k) = y(k) + ch*yp(k)
+call f(t + ch,f5,f1)
 !
-ch=3.0*h/32.0
+ch = 3.0*h/32.0
 do 222 k = 1,neqn
-222 f5(k)=y(k)+ch*(yp(k)+3.0*f1(k))
-call f(t+3.0*h/8.0,f5,f2)
+222 f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
+call f(t + 3.0*h/8.0,f5,f2)
 !
-ch=h/2197.0
+ch = h/2197.0
 do 223 k = 1,neqn
-223 f5(k)=y(k)+ch*(1932.0*yp(k)+(7296.0*f2(k)-7200.0*f1(k)))
-call f(t+12.0*h/13.0,f5,f3)
+223 f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
+call f(t + 12.0*h/13.0,f5,f3)
 !
-ch=h/4104.0
+ch = h/4104.0
 do 224 k = 1,neqn
-224 f5(k)=y(k)+ch*((8341.0*yp(k)-845.0*f3(k))+ &
-&(29440.0*f2(k)-32832.0*f1(k)))
-call f(t+h,f5,f4)
+224 f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
+      & (29440.0*f2(k) - 32832.0*f1(k)))
+call f(t + h,f5,f4)
 !
-ch=h/20520.0
+ch = h/20520.0
 do 225 k = 1,neqn
-225 f1(k)=y(k)+ch*((-6080.0*yp(k)+(9295.0*f3(k)- &
-&5643.0*f4(k)))+(41040.0*f1(k)-28352.0*f2(k)))
-call f(t+h/2.0,f1,f5)
+225 f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
+      & 5643.0*f4(k))) + (41040.0*f1(k) - 28352.0*f2(k)))
+call f(t + h/2.0,f1,f5)
 !
 !     Compute approximate solution at t+h
 !
-ch=h/7618050.0
+ch = h/7618050.0
 do 230 k = 1,neqn
-230 s(k)=y(k)+ch*((902880.0*yp(k)+(3855735.0*f3(k)- &
-&1371249.0*f4(k)))+(3953664.0*f2(k)+ &
-&277020.0*f5(k)))
+230 s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
+      & 1371249.0*f4(k))) + (3953664.0*f2(k) + &
+      & 277020.0*f5(k)))
 !
 return
 end subroutine fehl
 
 subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-&work,iwork)
+   & work,iwork)
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
 integer, intent(in) :: neqn
@@ -6771,15 +6771,15 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !
 !     Compute indices for the splitting of the work array
 !
-k1m=neqn+1
-k1=k1m+1
-k2=k1+neqn
-k3=k2+neqn
-k4=k3+neqn
-k5=k4+neqn
-k6=k5+neqn
-k7=k6+neqn
-k8=k7+neqn
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
+k7 = k6 + neqn
+k8 = k7 + neqn
 !
 !***********************************************************************
 !     This interfacing routine merely relieves the user of a long
@@ -6789,16 +6789,16 @@ k8=k7+neqn
 !***********************************************************************
 !
 call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-&work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
-&work(k5),work(k6),work(k7),work(k8),work(k8+1), &
-&iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+   & work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
+   & work(k5),work(k6),work(k7),work(k8),work(k8 + 1), &
+   & iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
 !
 return
 end subroutine gerk
 
 subroutine gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-&yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
-&nfe,kop,init,jflag,kflag)
+   & yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
+   & nfe,kop,init,jflag,kflag)
 implicit none
 integer, intent(inout) :: iflag, init, jflag, kflag, kop
 integer, intent(in) :: neqn
@@ -6815,7 +6815,7 @@ real :: yp(neqn)
 external f
 integer :: k, maxnfe, mflag
 real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
-&scale, tol, toln, ts, u, u26, ypk
+   & scale, tol, toln, ts, u, u26, ypk
 real :: spmpar
 logical :: hfaild, output
 !
@@ -6871,11 +6871,11 @@ maxnfe = 9000
 !
 if (neqn .lt. 1) go to 10
 if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
-mflag=iabs(iflag)
+mflag = iabs(iflag)
 if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
 !
 !     Invalid input
-10 iflag=7
+10 iflag = 7
 return
 !
 !     Is this the first call
@@ -6891,7 +6891,7 @@ if (init .eq. 0) go to 45
 if (kflag .eq. 3) go to 40
 if ((kflag .eq. 4)  .and.  (abserr .eq. 0.)) go to 30
 if ((kflag .eq. 5)  .and.  (relerr .le. savre)  .and. &
-&(abserr .le. savae)) go to 30
+   & (abserr .le. savae)) go to 30
 go to 50
 !
 !     iflag = 3,4,5,6, or 7
@@ -6905,30 +6905,30 @@ if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
 !***********************************************************************
 !
 !     Reset function evaluation counter
-40 nfe=0
+40 nfe = 0
 if (mflag .eq. 2) go to 50
 !
 !     Reset flag VALUE from previous call
-45 iflag=jflag
+45 iflag = jflag
 !
 !     Save input iflag and set continuation flag VALUE for subsequent
 !     input checking
-50 jflag=iflag
-kflag=0
+50 jflag = iflag
+kflag = 0
 !
 !     Save relerr and abserr for checking input on subsequent calls
-savre=relerr
-savae=abserr
+savre = relerr
+savae = abserr
 !
 !     Restrict relative error tolerance to be at least as large as
 !     32U+remin to avoid limiting precision difficulties arising from
 !     impossible accuracy requests
 !
-rer=amax1(relerr,32.*u+remin)
+rer = amax1(relerr,32.*u + remin)
 !
-u26=26.*u
+u26 = 26.*u
 !
-dt=tout-t
+dt = tout - t
 !
 if (mflag .eq. 1) go to 60
 if (init .eq. 0) go to 65
@@ -6946,46 +6946,46 @@ go to 80
 !                       set counter for function evaluations,nfe
 !                       estimate starting stepsize
 !
-60 init=0
-kop=0
+60 init = 0
+kop = 0
 !
-a=t
+a = t
 call f(a,y,yp)
-nfe=1
+nfe = 1
 if (t .ne. tout) go to 65
-iflag=2
+iflag = 2
 return
 !
 !
-65 init=1
-h=abs(dt)
-toln=0.
+65 init = 1
+h = abs(dt)
+toln = 0.
 do 70 k = 1,neqn
-  yg(k)=y(k)
-  ygp(k)=yp(k)
-  tol=rer*abs(y(k))+abserr
-  if (tol .le. 0.) go to 70
-  toln=tol
-  ypk=abs(yp(k))
-  if (ypk*h**5 .gt. tol) h=(tol/ypk)**0.2
+   yg(k) = y(k)
+   ygp(k) = yp(k)
+   tol = rer*abs(y(k)) + abserr
+   if (tol .le. 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
 70 continue
-if (toln .le. 0.) h=0.
-h=amax1(h,u26*amax1(abs(t),abs(dt)))
+if (toln .le. 0.) h = 0.
+h = amax1(h,u26*amax1(abs(t),abs(dt)))
 !
 !
 !***********************************************************************
 !
 !     Set stepsize for integration in the direction from t to tout
 !
-80 h=sign(h,dt)
+80 h = sign(h,dt)
 !
 !     Test to see if gerk is being severely impacted by too many
 !     output points
 !
-if (abs(h) .gt. 2.*abs(dt)) kop=kop+1
+if (abs(h) .gt. 2.*abs(dt)) kop = kop + 1
 if (kop .ne. 100) go to 85
-kop=0
-iflag=6
+kop = 0
+iflag = 6
 return
 !
 85 if (abs(dt) .gt. u26*abs(t)) go to 95
@@ -6993,51 +6993,51 @@ return
 !     If too close to output point,extrapolate and return
 !
 do 90 k = 1,neqn
-  yg(k)=yg(k)+dt*ygp(k)
-90 y(k)=y(k)+dt*yp(k)
-a=tout
+   yg(k) = yg(k) + dt*ygp(k)
+90 y(k) = y(k) + dt*yp(k)
+a = tout
 call f(a,yg,ygp)
 call f(a,y,yp)
-nfe=nfe+2
+nfe = nfe + 2
 go to 300
 !
 !     Initialize output point indicator
 !
-95 output= .false.
+95 output = .false.
 !
 !     To avoid premature underflow in the error tolerance function,
 !     scale the error tolerances
 !
-scale=2./rer
-ae=scale*abserr
+scale = 2./rer
+ae = scale*abserr
 !
 !
 !***********************************************************************
 !***********************************************************************
 !     Step by step integration
 !
-100 hfaild= .false.
+100 hfaild = .false.
 !
 !     Set smallest allowable stepsize
 !
-hmin=u26*abs(t)
+hmin = u26*abs(t)
 !
 !     Adjust stepsize if necessary to hit the output point.
 !     Look ahead two steps to avoid drastic changes in the stepsize
 !     and thus lessen the impact of output points on the code.
 !
-dt=tout-t
+dt = tout - t
 if (abs(dt) .ge. 2.*abs(h)) go to 200
 if (abs(dt) .gt. abs(h)) go to 150
 !
 !     The next successful step will complete the integration to the
 !     output point
 !
-output= .true.
-h=dt
+output = .true.
+h = dt
 go to 200
 !
-150 h=0.5*dt
+150 h = 0.5*dt
 !
 !
 !
@@ -7072,35 +7072,35 @@ go to 200
 200 if (nfe .le. maxnfe) go to 220
 !
 !     Too much work
-iflag=3
-kflag=3
+iflag = 3
+kflag = 3
 return
 !
 !     Advance an approximate solution over one step of length h
 !
 220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
-nfe=nfe+5
+nfe = nfe + 5
 !
 !     Compute and test allowable tolerances versus local error estimates
 !     and remove scaling of tolerances. Note that relative error is
 !     measured with respect to the average of the magnitudes of the
 !     solution at the beginning and end of the step.
 !
-eeoet=0.
+eeoet = 0.
 do 250 k = 1,neqn
-  et=abs(yg(k))+abs(f1(k))+ae
-  if (et .gt. 0.) go to 240
+   et = abs(yg(k)) + abs(f1(k)) + ae
+   if (et .gt. 0.) go to 240
 !
 !       Inappropriate error tolerance
-  iflag=4
-  kflag=4
-  return
+   iflag = 4
+   kflag = 4
+   return
 !
-240 ee=abs((-2090.*ygp(k)+(21970.*f3(k)-15048.*f4(k)))+ &
-&(22528.*f2(k)-27360.*f5(k)))
-250 eeoet=amax1(eeoet,ee/et)
+240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
+      & (22528.*f2(k) - 27360.*f5(k)))
+250 eeoet = amax1(eeoet,ee/et)
 !
-esttol=abs(h)*eeoet*scale/752400.
+esttol = abs(h)*eeoet*scale/752400.
 !
 if (esttol .le. 1.) go to 260
 !
@@ -7109,16 +7109,16 @@ if (esttol .le. 1.) go to 260
 !                       reduce the stepsize , try again
 !                       the decrease is limited to a factor of 1/10
 !
-hfaild= .true.
-output= .false.
-s=0.1
-if (esttol .lt. 59049.) s=0.9/esttol**0.2
-h=s*h
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol .lt. 59049.) s = 0.9/esttol**0.2
+h = s*h
 if (abs(h) .gt. hmin) go to 200
 !
 !     Requested error unattainable at smallest allowable stepsize
-iflag=5
-kflag=5
+iflag = 5
+kflag = 5
 return
 !
 !
@@ -7126,26 +7126,26 @@ return
 !                        store one-step solution yg at t+h
 !                        and evaluate derivatives there
 !
-260 ts=t
-t=t+h
+260 ts = t
+t = t + h
 do 270 k = 1,neqn
-270 yg(k)=f1(k)
-a=t
+270 yg(k) = f1(k)
+a = t
 call f(a,yg,ygp)
-nfe=nfe+1
+nfe = nfe + 1
 !
 !                        Now advance the y solution over two steps of
 !                        length h/2 and evaluate derivatives there
 !
-hh=0.5*h
+hh = 0.5*h
 call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
-ts=ts+hh
-a=ts
+ts = ts + hh
+a = ts
 call f(a,y,yp)
 call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
-a=t
+a = t
 call f(a,y,yp)
-nfe=nfe+12
+nfe = nfe + 12
 !
 !
 !                       Choose next stepsize
@@ -7153,10 +7153,10 @@ nfe=nfe+12
 !                       if step failure has just occurred, next
 !                          stepsize is not allowed to increase
 !
-s=5.
-if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
-if (hfaild) s=amin1(s,1.)
-h=sign(amax1(s*abs(h),hmin),h)
+s = 5.
+if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = amin1(s,1.)
+h = sign(amax1(s*abs(h),hmin),h)
 !
 !***********************************************************************
 !     END OF CORE INTEGRATOR
@@ -7176,21 +7176,21 @@ if (iflag .gt. 0) go to 100
 !     Integration successfully completed
 !
 !     One-step mode
-iflag=-2
+iflag = -2
 go to 400
 !
 !     Interval mode
-300 t=tout
-iflag=2
+300 t = tout
+iflag = 2
 !
 400 do 450 k = 1,neqn
-450 gerror(k)=(yg(k)-y(k))/31.
+450 gerror(k) = (yg(k) - y(k))/31.
 !
 return
 end subroutine gerks
 
 subroutine sfode (f,neq,y,t,tout,info,rerr,aerr,idid, &
-&rwork,lrw,iwork,liw,rpar,ipar)
+   & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
 integer :: liw, lrw, neq
@@ -7218,7 +7218,7 @@ info1(6) = info(4)
 rtol(1) = rerr
 atol(1) = aerr
 call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
-&rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
 info(1) = info1(1)
 rerr = rtol(1)
 aerr = atol(1)
@@ -7226,7 +7226,7 @@ return
 end subroutine sfode
 
 subroutine sfode1 (f,neq,y,t,tout,info,rtol,atol,idid, &
-&rwork,lrw,iwork,liw,rpar,ipar)
+   & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
 integer :: liw, lrw, neq
@@ -7250,7 +7250,7 @@ info1(5) = 0
 info1(6) = info(4)
 !
 call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
-&rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
 info(1) = info1(1)
 return
 end subroutine sfode1
@@ -7271,16 +7271,16 @@ return
 end subroutine zzzjac
 
 subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
-&rwork,lrw,iwork,liw,rpar,ipar,jac)
+   & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
 integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
-&mu
+   & mu
 integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
-&iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
-&ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+   & iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
+   & ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 logical :: intout
 !***********************************************************************
@@ -7973,11 +7973,11 @@ logical :: intout
 dimension iwork(liw)
 !
 common /debdf1/ told, rowns(210), &
-&el0, h, hmin, hmxi, hu, tn, uround, &
-&iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
-&ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
-&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-&nje, nqu
+   & el0, h, hmin, hmxi, hu, tn, uround, &
+   & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
+   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
 !
 !
 !.......................................................................
@@ -8005,13 +8005,13 @@ ml = iwork(1)
 mu = iwork(2)
 ilrw = 2*ml + mu + 1
 if (ml .ge. 0  .and.  ml .lt. neq      .and. &
-&mu .ge. 0  .and.  mu .lt. neq)    go to 80
+   & mu .ge. 0  .and.  mu .lt. neq) go to 80
 idid = -40
 return
 !
 !     Check lrw and liw for sufficient storage allocation
 !
-80 if (lrw .ge. 250+(10+ilrw)*neq) go to 100
+80 if (lrw .ge. 250 + (10 + ilrw)*neq) go to 100
 !
 if (info(6) .eq. 1) go to 90
 idid = -41
@@ -8020,7 +8020,7 @@ return
 90 idid = -42
 return
 !
-100 if (liw .ge. 55+neq) go to 200
+100 if (liw .ge. 55 + neq) go to 200
 idid = -43
 return
 !
@@ -8043,7 +8043,7 @@ iewt = iyh + 6*neq
 isavf = iewt + neq
 iacor = isavf + neq
 iwm = iacor + neq
-idelsn = iwm + 2+ilrw*neq
+idelsn = iwm + 2 + ilrw*neq
 !
 ibegin = info(1)
 itol = info(2)
@@ -8054,9 +8054,9 @@ iband = info(6)
 rwork(itstar) = t
 !
 call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout), &
-&rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
-&rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
-&rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
+   & rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
+   & rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
+   & rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
 !
 iwork(iinout) = -1
 if (intout) iwork(iinout) = 1
@@ -8115,20 +8115,20 @@ return
 end subroutine svco
 
 subroutine lsod1 (f,neq,t,y,tout,rtol,atol,idid,ypout, &
-&yh,yh1,ewt,savf,acor,wm,iwm,jac,intout, &
-&tstop,tolfac,delsgn,rpar,ipar)
+   & yh,yh1,ewt,savf,acor,wm,iwm,jac,intout, &
+   & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
 integer :: idid, ipar(*), iwm(*), neq
 real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
-&savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
-&yh1(*), ypout(neq)
+   & savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
+   & yh1(*), ypout(neq)
 logical :: intout
 external f, jac
 integer :: intflg, k, l, ltol, max, maxnum
 real :: absdel, big, del, dt, ha, tol
 integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
-&itol, itstop, jstart, kflag, ksteps, lacor, ldum, lewt, lsavf, &
-&lwm, lyh, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+   & itol, itstop, jstart, kflag, ksteps, lacor, ldum, lewt, lsavf, &
+   & lwm, lyh, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
 real :: vnwrms
 real :: spmpar
@@ -8142,11 +8142,11 @@ real :: spmpar
 !
 !
 common /debdf1/ told, rowns(210), &
-&el0, h, hmin, hmxi, hu, x, u, &
-&iquit, init, lyh, lewt, lacor, lsavf, lwm, ksteps, &
-&ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
-&ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
-&nfe, nje, nqu
+   & el0, h, hmin, hmxi, hu, x, u, &
+   & iquit, init, lyh, lewt, lacor, lsavf, lwm, ksteps, &
+   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
+   & ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
+   & nfe, nje, nqu
 !
 !
 !.......................................................................
@@ -8167,19 +8167,19 @@ if (ibegin .ne. 0) go to 10
 !        function routine  spmpar. The user must make sure that the
 !        values set in spmpar are relevant to the computer being used.
 !
-u=spmpar(1)
+u = spmpar(1)
 !                       -- Set associated machine dependent parameter
-wm(1)=sqrt(u)
+wm(1) = sqrt(u)
 !                       -- Set termination flag
-iquit=0
+iquit = 0
 !                       -- Set initialization indicator
-init=0
+init = 0
 !                       -- Set counter for attempted steps
-ksteps=0
+ksteps = 0
 !                       -- Set indicator for intermediate-output
-intout= .false.
+intout = .false.
 !                       -- Set start indicator for stod code
-jstart= 0
+jstart = 0
 !                       -- Set BDF method indicator
 meth = 2
 !                       -- Set maximum order for BDF method
@@ -8212,17 +8212,17 @@ go to 110
 20 max = 1
 if (itol .ne. 0) max = neq
 do 60 k = 1,max
-  if (rtol(k) .ge. 0.) go to 30
-     idid = -34
-     go to 110
+   if (rtol(k) .ge. 0.) go to 30
+   idid = -34
+   go to 110
 30 if (atol(k) .ge. 0.) go to 60
-     idid = -35
-     go to 110
+   idid = -35
+   go to 110
 60 continue
 !
 if (itstop .ne. 1) go to 80
 if ((tout - t)*(tstop - t) .ge. 0.0 &
-&.and. abs(tout-t) .le. abs(tstop-t)) go to 80
+   & .and. abs(tout - t) .le. abs(tstop - t)) go to 80
 idid = -36
 go to 110
 !
@@ -8237,7 +8237,7 @@ idid = -38
 go to 110
 !
 100 if (init .eq. 1) go to 150
-if (delsgn*(tout-t) .ge. 0.) go to 150
+if (delsgn*(tout - t) .ge. 0.) go to 150
 idid = -39
 !
 !                       Invalid input detected
@@ -8253,9 +8253,9 @@ return
 !     100*u which is likely to be reasonable for this method and machine
 !
 150 do 170 k = 1,max
-  if (rtol(k) + atol(k) .gt. 0.) go to 170
-  rtol(k) = 100.*u
-  idid = -2
+   if (rtol(k) + atol(k) .gt. 0.) go to 170
+   rtol(k) = 100.*u
+   idid = -2
 170 continue
 if (idid .eq. -2) return
 !
@@ -8291,19 +8291,19 @@ return
 !
 220 ltol = 1
 do 225 l = 1,neq
-  if (itol .eq. 1) ltol = l
-  tol = rtol(ltol)*abs(y(l)) + atol(ltol)
-  if (tol .eq. 0.) go to 380
+   if (itol .eq. 1) ltol = l
+   tol = rtol(ltol)*abs(y(l)) + atol(ltol)
+   if (tol .eq. 0.) go to 380
 225 ewt(l) = tol
 !
 big = sqrt(spmpar(3))
 call hstart (f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
-&yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,h)
+   & yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,h)
 !
-delsgn = sign(1.0,tout-t)
+delsgn = sign(1.0,tout - t)
 x = t
 do 230 l = 1,neq
-  yh(l,1) = y(l)
+   yh(l,1) = y(l)
 230 yh(l,2) = h*yh(l,2)
 init = 2
 !
@@ -8319,7 +8319,7 @@ absdel = abs(del)
 !
 !   If already past output point, interpolate and return
 !
-250 if (abs(x-t) .lt. absdel) go to 270
+250 if (abs(x - t) .lt. absdel) go to 270
 call intyd(tout,0,yh,neq,y,intflg)
 call intyd(tout,1,yh,neq,ypout,intflg)
 idid = 3
@@ -8334,7 +8334,7 @@ return
 !   extrapolate and return
 !
 270 if (itstop .ne. 1) go to 290
-if (abs(tstop-x) .ge. 100.*u*abs(x)) go to 290
+if (abs(tstop - x) .ge. 100.*u*abs(x)) go to 290
 dt = tout - x
 do 280 l = 1,neq
 280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
@@ -8370,14 +8370,14 @@ go to 500
 330 hmin = 100.*u*abs(x)
 ha = amax1(abs(h),hmin)
 if (itstop .ne. 1) go to 340
-ha = amin1(ha,abs(tstop-x))
+ha = amin1(ha,abs(tstop - x))
 340 h = sign(ha,h)
 ltol = 1
 do l = 1,neq
-  if (itol .eq. 1) ltol = l
-  ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)
-  if (ewt(l) .le. 0.0) go to 380
-  end do
+   if (itol .eq. 1) ltol = l
+   ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)
+   if (ewt(l) .le. 0.0) go to 380
+end do
 tolfac = u*vnwrms(neq,yh,ewt)
 if (tolfac .le. 1.) go to 400
 !
@@ -8385,7 +8385,7 @@ if (tolfac .le. 1.) go to 400
 idid = -2
 tolfac = 2.*tolfac
 do 360 l = 1,max
-  rtol(l) = tolfac*rtol(l)
+   rtol(l) = tolfac*rtol(l)
 360 atol(l) = tolfac*atol(l)
 go to 500
 !
@@ -8423,7 +8423,7 @@ ibegin = -1
 !
 !                       Store values before returning to stfode
 500 do 555 l = 1,neq
-  y(l) = yh(l,1)
+   y(l) = yh(l,1)
 555 ypout(l) = yh(l,2)/h
 t = x
 told = t
@@ -8432,7 +8432,7 @@ return
 end subroutine lsod1
 
 subroutine hstart(f,neq,a,b,y,yprime,etol,morder,small,big, &
-&spy,pv,yp,sf,rpar,ipar,h)
+   & spy,pv,yp,sf,rpar,ipar,h)
 implicit none
 integer :: ipar(*)
 integer, intent(in) :: morder, neq
@@ -8449,7 +8449,7 @@ real :: yprime(neq)
 external f
 integer :: j, k, lk
 real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
-&srydpb, tolexp, tolmin, tolp, tolsum, ydpb
+   & srydpb, tolexp, tolmin, tolp, tolsum, ydpb
 real :: vnorm
 !
 !   hstart computes a starting step size to be used in solving initial
@@ -8575,9 +8575,9 @@ real :: vnorm
 !
 !.......................................................................
 !
-dx=b-a
-absdx=abs(dx)
-relper=small**0.375
+dx = b - a
+absdx = abs(dx)
+relper = small**0.375
 !
 !.......................................................................
 !
@@ -8586,15 +8586,15 @@ relper=small**0.375
 !     independent variable. Protect against an overflow.
 !     Also compute a bound (fbnd) on the first derivative locally.
 !
-da=sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
-if (da .eq. 0.) da=relper*dx
-call f(a+da,y,sf,rpar,ipar)
+da = sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
+if (da .eq. 0.) da = relper*dx
+call f(a + da,y,sf,rpar,ipar)
 do 10 j = 1,neq
-10 yp(j)=sf(j)-yprime(j)
-delf=vnorm(yp,neq)
-dfdxb=big
-if (delf .lt. big*abs(da)) dfdxb=delf/abs(da)
-fbnd=vnorm(sf,neq)
+10 yp(j) = sf(j) - yprime(j)
+delf = vnorm(yp,neq)
+dfdxb = big
+if (delf .lt. big*abs(da)) dfdxb = delf/abs(da)
+fbnd = vnorm(sf,neq)
 !
 !.......................................................................
 !
@@ -8617,70 +8617,70 @@ fbnd=vnorm(sf,neq)
 !                       Perturbation vector SIZE is held constant for
 !                       all iterations. Compute this change from the
 !                               size of the vector of initial values.
-dely=relper*vnorm(y,neq)
-if (dely .eq. 0.) dely=relper
-dely=sign(dely,dx)
-delf=vnorm(yprime,neq)
-fbnd=amax1(fbnd,delf)
+dely = relper*vnorm(y,neq)
+if (dely .eq. 0.) dely = relper
+dely = sign(dely,dx)
+delf = vnorm(yprime,neq)
+fbnd = amax1(fbnd,delf)
 if (delf .eq. 0.) go to 30
 !                       Use initial derivatives for first perturbation
 do 20 j = 1,neq
-  spy(j)=yprime(j)
-20 yp(j)=yprime(j)
+   spy(j) = yprime(j)
+20 yp(j) = yprime(j)
 go to 50
 !                       Cannot have a null perturbation vector
 30 do 40 j = 1,neq
-  spy(j)=0.
-40 yp(j)=1.
-delf=vnorm(yp,neq)
+   spy(j) = 0.
+40 yp(j) = 1.
+delf = vnorm(yp,neq)
 !
-50 dfdub=0.
-lk=min0(neq+1,3)
+50 dfdub = 0.
+lk = min0(neq + 1,3)
 do 140 k = 1,lk
 !                       Define perturbed vector of initial values
-  do 60 j = 1,neq
-60 pv(j)=y(j)+dely*(yp(j)/delf)
-  if (k .eq. 2) go to 80
+   do 60 j = 1,neq
+60    pv(j) = y(j) + dely*(yp(j)/delf)
+   if (k .eq. 2) go to 80
 !                       Evaluate derivatives associated with perturbed
 !                       vector  and  compute corresponding differences
-  call f(a,pv,yp,rpar,ipar)
-  do 70 j = 1,neq
-70 pv(j)=yp(j)-yprime(j)
-  go to 100
+   call f(a,pv,yp,rpar,ipar)
+   do 70 j = 1,neq
+70    pv(j) = yp(j) - yprime(j)
+   go to 100
 !                       Use a shifted value of the independent variable
 !                                             in computing one estimate
-80 call f(a+da,pv,yp,rpar,ipar)
-  do 90 j = 1,neq
-90 pv(j)=yp(j)-sf(j)
+80 call f(a + da,pv,yp,rpar,ipar)
+   do 90 j = 1,neq
+90    pv(j) = yp(j) - sf(j)
 !                       Choose largest bounds on the first derivative
 !                                      and a local Lipschitz constant
-100 fbnd=amax1(fbnd,vnorm(yp,neq))
-  delf=vnorm(pv,neq)
-  if (delf .ge. big*abs(dely)) go to 150
-  dfdub=amax1(dfdub,delf/abs(dely))
-  if (k .eq. lk) go to 160
+100 fbnd = amax1(fbnd,vnorm(yp,neq))
+   delf = vnorm(pv,neq)
+   if (delf .ge. big*abs(dely)) go to 150
+   dfdub = amax1(dfdub,delf/abs(dely))
+   if (k .eq. lk) go to 160
 !                       Choose next perturbation vector
-  if (delf .eq. 0.) delf=1.
-  do 130 j = 1,neq
-    if (k .eq. 2) go to 110
-    dy=abs(pv(j))
-    if (dy .eq. 0.) dy=delf
-    go to 120
-110 dy=y(j)
-    if (dy .eq. 0.) dy=dely/relper
-120 if (spy(j) .eq. 0.) spy(j)=yp(j)
-    if (spy(j) .ne. 0.) dy=sign(dy,spy(j))
-130 yp(j)=dy
-140 delf=vnorm(yp,neq)
+   if (delf .eq. 0.) delf = 1.
+   do 130 j = 1,neq
+      if (k .eq. 2) go to 110
+      dy = abs(pv(j))
+      if (dy .eq. 0.) dy = delf
+      go to 120
+110   dy = y(j)
+      if (dy .eq. 0.) dy = dely/relper
+120   if (spy(j) .eq. 0.) spy(j) = yp(j)
+      if (spy(j) .ne. 0.) dy = sign(dy,spy(j))
+130   yp(j) = dy
+140 delf = vnorm(yp,neq)
 !
 !                       Protect against an overflow
-150 dfdub=big
+150 dfdub = big
 !
 !.......................................................................
 !
 !     Compute a bound (YDPB) on the norm of the second derivative
 !
-160 ydpb=dfdxb+dfdub*fbnd
+160 ydpb = dfdxb + dfdub*fbnd
 !
 !.......................................................................
 !
@@ -8688,13 +8688,13 @@ do 140 k = 1,lk
 !     is to be based.  A value in the middle of the error tolerance
 !     range is selected.
 !
-tolmin=big
-tolsum=0.
+tolmin = big
+tolsum = 0.
 do 170 k = 1,neq
-  tolexp=alog10(etol(k))
-  tolmin=amin1(tolmin,tolexp)
-170 tolsum=tolsum+tolexp
-tolp=10.**(0.5*(tolsum/float(neq)+tolmin)/float(morder+1))
+   tolexp = alog10(etol(k))
+   tolmin = amin1(tolmin,tolexp)
+170 tolsum = tolsum + tolexp
+tolp = 10.**(0.5*(tolsum/float(neq) + tolmin)/float(morder + 1))
 !
 !.......................................................................
 !
@@ -8703,39 +8703,39 @@ tolp=10.**(0.5*(tolsum/float(neq)+tolmin)/float(morder+1))
 !
 !                       Restrict the step length to be not bigger than
 !                       abs(b-a).   (UNLESS  b  IS TOO CLOSE TO  A)
-h=absdx
+h = absdx
 !
 if (ydpb .ne. 0.  .or.  fbnd .ne. 0.) go to 180
 !
 !                       Both first derivative term (fbnd) and second
 !                                    derivative term (YDPB) are zero
-if (tolp .lt. 1.) h=absdx*tolp
+if (tolp .lt. 1.) h = absdx*tolp
 go to 200
 !
 180 if (ydpb .ne. 0.) go to 190
 !
 !                       Only second derivative term (YDPB) is zero
-if (tolp .lt. fbnd*absdx) h=tolp/fbnd
+if (tolp .lt. fbnd*absdx) h = tolp/fbnd
 go to 200
 !
 !                       Second derivative term (YDPB) is non-zero
-190 srydpb=sqrt(0.5*ydpb)
-if (tolp .lt. srydpb*absdx) h=tolp/srydpb
+190 srydpb = sqrt(0.5*ydpb)
+if (tolp .lt. srydpb*absdx) h = tolp/srydpb
 !
 !                       Further restrict the step length to be not
 !                                                 bigger than  1/dfdub
-200 if (h*dfdub .gt. 1.) h=1./dfdub
+200 if (h*dfdub .gt. 1.) h = 1./dfdub
 !
 !                       Finally, restrict the step length to be not
 !                       smaller than  100*small*abs(a).  However, if
 !                       a=0. And the computed h UNDERFLOWED to zero,
 !                       the algorithm returns  small*abs(b)  for the
 !                                                       step length.
-h=amax1(h,100.*small*abs(a))
-if (h .eq. 0.) h=small*abs(b)
+h = amax1(h,100.*small*abs(a))
+if (h .eq. 0.) h = small*abs(b)
 !
 !                       Now set direction of integration
-h=sign(h,dx)
+h = sign(h,dx)
 !
 return
 end subroutine hstart
@@ -8769,18 +8769,18 @@ implicit none
 integer :: k, nyh, iflag
 real :: t, yh(nyh,*), dky(*)
 integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
-&jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+   & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, c, r, s, &
-&tp
+   & tp
 common /debdf1/ rownd, rowns(210), &
-&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-&nje, nqu
+   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
 !
 iflag = 0
 if (k .lt. 0 .or. k .gt. nq) go to 80
 tp = tn - hu*(1.0e0 + 100.0e0*uround)
-if ((t-tp)*(t-tn) .gt. 0.0e0) go to 90
+if ((t - tp)*(t - tn) .gt. 0.0e0) go to 90
 !
 s = (t - tn)/h
 ic = 1
@@ -8794,17 +8794,17 @@ do 20 i = 1,n
 if (k .eq. nq) go to 55
 jb2 = nq - k
 do jb = 1,jb2
-  j = nq - jb
-  jp1 = j + 1
-  ic = 1
-  if (k .eq. 0) go to 35
-  jj1 = jp1 - k
-  do 30 jj = jj1,j
-30 ic = ic*jj
+   j = nq - jb
+   jp1 = j + 1
+   ic = 1
+   if (k .eq. 0) go to 35
+   jj1 = jp1 - k
+   do 30 jj = jj1,j
+30    ic = ic*jj
 35 c = float(ic)
-  do 40 i = 1,n
-40 dky(i) = c*yh(i,jp1) + s*dky(i)
-  end do
+   do 40 i = 1,n
+40    dky(i) = c*yh(i,jp1) + s*dky(i)
+end do
 if (k .eq. 0) return
 55 r = h**(-k)
 do 60 i = 1,n
@@ -8819,7 +8819,7 @@ return
 end subroutine intyd
 
 subroutine stod  (neq, y, yh, nyh, yh1, ewt, savf, acor, &
-&wm, iwm, f, jac, rpar, ipar)
+   & wm, iwm, f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
@@ -8829,11 +8829,11 @@ real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
 integer :: ipnyh
 integer :: iod, ksteps
 integer :: i, i1, ialth, ier, iownd, iredo, iret, ipup, j, jb, &
-&jstart, kflag, l, lmax, m, maxord, meo, meth, miter, n, ncf, newq, &
-&nfe, nje, nq, nqnyh, nqu, nst, nstepj
+   & jstart, kflag, l, lmax, m, maxord, meo, meth, miter, n, ncf, newq, &
+   & nfe, nje, nq, nqnyh, nqu, nst, nstepj
 real :: rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, &
-&h, hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, &
-&exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told, vnwrms
+   & h, hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, &
+   & exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told, vnwrms
 !-----------------------------------------------------------------------
 ! stod  performs one step of the integration of an initial value
 ! problem for a system of ordinary differential equations.
@@ -8901,11 +8901,11 @@ real :: rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, &
 !
 !
 common /debdf1/ rownd, conit, crate, el(13), elco(13,12), &
-&hold, rc, rmax, tesco(3,12), &
-&el0, h, hmin, hmxi, hu, tn, uround, iownd(7), ksteps, iod(6), &
-&ialth, ipup, lmax, meo, nqnyh, nstepj, &
-&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-&nje, nqu
+   & hold, rc, rmax, tesco(3,12), &
+   & el0, h, hmin, hmxi, hu, tn, uround, iownd(7), ksteps, iod(6), &
+   & ialth, ipup, lmax, meo, nqnyh, nstepj, &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
 !
 !
 kflag = 0
@@ -8967,7 +8967,7 @@ do 125 i = 1,l
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
-conit = 0.5e0/float(nq+2)
+conit = 0.5e0/float(nq + 2)
 ddn = vnwrms (n, savf, ewt)/tesco(1,l)
 exdn = 1.0e0/float(l)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
@@ -8988,7 +8988,7 @@ go to 175
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
-conit = 0.5e0/float(nq+2)
+conit = 0.5e0/float(nq + 2)
 go to (160, 170, 200), iret
 !-----------------------------------------------------------------------
 ! If H is being changed, the H ratio RH is checked against
@@ -9006,9 +9006,9 @@ go to 175
 rh = rh/amax1(1.0e0,abs(h)*hmxi*rh)
 r = 1.0e0
 do 180 j = 2,l
-  r = r*rh
-  do 180 i = 1,n
-180 yh(i,j) = yh(i,j)*r
+   r = r*rh
+   do 180 i = 1,n
+180   yh(i,j) = yh(i,j)*r
 h = h*rh
 rc = rc*rh
 ialth = l
@@ -9021,16 +9021,16 @@ if (iredo .eq. 0) go to 680
 ! to force pjac to be called, if a Jacobian is involved.
 ! In any case, pjac is called at least every 20-TH step.
 !-----------------------------------------------------------------------
-200 if (abs(rc-1.0e0) .gt. 0.3e0) ipup = miter
-if (nst .ge. nstepj+20) ipup = miter
+200 if (abs(rc - 1.0e0) .gt. 0.3e0) ipup = miter
+if (nst .ge. nstepj + 20) ipup = miter
 tn = tn + h
 i1 = nqnyh + 1
 do jb = 1,nq
-  i1 = i1 - nyh
-  do 210 i = i1,nqnyh
-    ipnyh = i + nyh
-210 yh1(i) = yh1(i) + yh1(ipnyh)
-  end do
+   i1 = i1 - nyh
+   do 210 i = i1,nqnyh
+      ipnyh = i + nyh
+210   yh1(i) = yh1(i) + yh1(ipnyh)
+end do
 ksteps = ksteps + 1
 !-----------------------------------------------------------------------
 ! Up to 3 corrector iterations are taken.  A convergence test is
@@ -9054,7 +9054,7 @@ rc = 1.0e0
 nstepj = nst
 crate = 0.7e0
 call pjac (neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
-&rpar, ipar)
+   & rpar, ipar)
 if (ier .ne. 0) go to 430
 250 do 260 i = 1,n
 260 acor(i) = 0.0e0
@@ -9064,11 +9064,11 @@ if (ier .ne. 0) go to 430
 ! the result of the last function evaluation.
 !-----------------------------------------------------------------------
 do 290 i = 1,n
-  savf(i) = h*savf(i) - yh(i,2)
+   savf(i) = h*savf(i) - yh(i,2)
 290 y(i) = savf(i) - acor(i)
 del = vnwrms (n, y, ewt)
 do 300 i = 1,n
-  y(i) = yh(i,1) + el(1)*savf(i)
+   y(i) = yh(i,1) + el(1)*savf(i)
 300 acor(i) = savf(i)
 go to 400
 !-----------------------------------------------------------------------
@@ -9082,7 +9082,7 @@ call slvs (wm, iwm, y, savf)
 if (ier .ne. 0) go to 410
 del = vnwrms (n, y, ewt)
 do 380 i = 1,n
-  acor(i) = acor(i) + y(i)
+   acor(i) = acor(i) + y(i)
 380 y(i) = yh(i,1) + el(1)*acor(i)
 !-----------------------------------------------------------------------
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
@@ -9113,11 +9113,11 @@ ncf = ncf + 1
 rmax = 2.0e0
 i1 = nqnyh + 1
 do jb = 1,nq
-  i1 = i1 - nyh
-  do 440 i = i1,nqnyh
-    ipnyh = i + nyh
-440 yh1(i) = yh1(i) - yh1(ipnyh)
-  end do
+   i1 = i1 - nyh
+   do 440 i = i1,nqnyh
+      ipnyh = i + nyh
+440   yh1(i) = yh1(i) - yh1(ipnyh)
+end do
 if (abs(h) .le. hmin*1.00001e0) go to 670
 if (ncf .eq. 10) go to 670
 rh = 0.25e0
@@ -9150,8 +9150,8 @@ nst = nst + 1
 hu = h
 nqu = nq
 do 470 j = 1,l
-  do 470 i = 1,n
-470 yh(i,j) = yh(i,j) + el(j)*acor(i)
+   do 470 i = 1,n
+470   yh(i,j) = yh(i,j) + el(j)*acor(i)
 ialth = ialth - 1
 if (ialth .eq. 0) go to 520
 if (ialth .gt. 1) go to 690
@@ -9170,11 +9170,11 @@ go to 690
 tn = told
 i1 = nqnyh + 1
 do jb = 1,nq
-  i1 = i1 - nyh
-  do 510 i = i1,nqnyh
-    ipnyh = i + nyh
-510 yh1(i) = yh1(i) - yh1(ipnyh)
-  end do
+   i1 = i1 - nyh
+   do 510 i = i1,nqnyh
+      ipnyh = i + nyh
+510   yh1(i) = yh1(i) - yh1(ipnyh)
+end do
 rmax = 2.0e0
 if (abs(h) .le. hmin*1.00001e0) go to 660
 if (kflag .le. -3) go to 640
@@ -9195,7 +9195,7 @@ if (l .eq. lmax) go to 540
 do 530 i = 1,n
 530 savf(i) = acor(i) - yh(i,lmax)
 dup = vnwrms (n, savf, ewt)/tesco(3,nq)
-exup = 1.0e0/float(l+1)
+exup = 1.0e0/float(l + 1)
 rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
 540 exsm = 1.0e0/float(l)
 rhsm = 1.0e0/(1.2e0*dsm**exsm + 0.0000012e0)
@@ -9220,7 +9220,7 @@ rh = rhup
 if (rh .lt. 1.1e0) go to 610
 r = el(l)/float(l)
 do 600 i = 1,n
-600 yh(i,newq+1) = acor(i)*r
+600 yh(i,newq + 1) = acor(i)*r
 go to 630
 610 ialth = 3
 go to 690
@@ -9289,7 +9289,7 @@ integer, intent(in) :: meth
 real, intent(inout) :: elco(13, *), tesco(3, *)
 integer :: i, ib, nq, nqm1, nqp1
 real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
-&tsign, xpin
+   & tsign, xpin
 !-----------------------------------------------------------------------
 ! cfod  is called by the integrator routine to set coefficients
 ! needed there.  The coefficients for the current method, as
@@ -9333,36 +9333,36 @@ do nq = 2,12
 !     p(x) = (x+1)*(x+2)*...*(x+nq-1).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
-  rq1fac = rqfac
-  rqfac = rqfac/float(nq)
-  nqm1 = nq - 1
-  fnqm1 = float(nqm1)
-  nqp1 = nq + 1
+   rq1fac = rqfac
+   rqfac = rqfac/float(nq)
+   nqm1 = nq - 1
+   fnqm1 = float(nqm1)
+   nqp1 = nq + 1
 ! Form coefficients of P(X)*(X+nq-1). ----------------------------------
-  pc(nq) = 0.0e0
-  do 110 ib = 1,nqm1
-    i = nqp1 - ib
-110 pc(i) = pc(i-1) + fnqm1*pc(i)
-  pc(1) = fnqm1*pc(1)
+   pc(nq) = 0.0e0
+   do 110 ib = 1,nqm1
+      i = nqp1 - ib
+110   pc(i) = pc(i - 1) + fnqm1*pc(i)
+   pc(1) = fnqm1*pc(1)
 ! Compute integral, -1 To 0, of P(X) and X*P(X). -----------------------
-  pint = pc(1)
-  xpin = pc(1)/2.0e0
-  tsign = 1.0e0
-  do 120 i = 2,nq
-    tsign = -tsign
-    pint = pint + tsign*pc(i)/float(i)
-120 xpin = xpin + tsign*pc(i)/float(i+1)
+   pint = pc(1)
+   xpin = pc(1)/2.0e0
+   tsign = 1.0e0
+   do 120 i = 2,nq
+      tsign = -tsign
+      pint = pint + tsign*pc(i)/float(i)
+120   xpin = xpin + tsign*pc(i)/float(i + 1)
 ! Store coefficients in elco and tesco. --------------------------------
-  elco(1,nq) = pint*rq1fac
-  elco(2,nq) = 1.0e0
-  do 130 i = 2,nq
-130 elco(i+1,nq) = rq1fac*pc(i)/float(i)
-  agamq = rqfac*xpin
-  ragq = 1.0e0/agamq
-  tesco(2,nq) = ragq
-if(nq.lt.12)tesco(1,nqp1)=ragq*rqfac/float(nqp1)
-  tesco(3,nqm1) = ragq
-  end do
+   elco(1,nq) = pint*rq1fac
+   elco(2,nq) = 1.0e0
+   do 130 i = 2,nq
+130   elco(i + 1,nq) = rq1fac*pc(i)/float(i)
+   agamq = rqfac*xpin
+   ragq = 1.0e0/agamq
+   tesco(2,nq) = ragq
+   if (nq.lt.12) tesco(1,nqp1) = ragq*rqfac/float(nqp1)
+   tesco(3,nqm1) = ragq
+end do
 return
 !
 200 pc(1) = 1.0e0
@@ -9373,29 +9373,29 @@ do nq = 1,5
 !     p(x) = (x+1)*(x+2)*...*(x+nq).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
-  fnq = float(nq)
-  nqp1 = nq + 1
+   fnq = float(nq)
+   nqp1 = nq + 1
 ! Form coefficients of P(X)*(X+nq). ------------------------------------
-  pc(nqp1) = 0.0e0
-  do 210 ib = 1,nq
-    i = nq + 2 - ib
-210 pc(i) = pc(i-1) + fnq*pc(i)
-  pc(1) = fnq*pc(1)
+   pc(nqp1) = 0.0e0
+   do 210 ib = 1,nq
+      i = nq + 2 - ib
+210   pc(i) = pc(i - 1) + fnq*pc(i)
+   pc(1) = fnq*pc(1)
 ! Store coefficients in elco and tesco. --------------------------------
-  do 220 i = 1,nqp1
-220 elco(i,nq) = pc(i)/pc(2)
-  elco(2,nq) = 1.0e0
-  tesco(1,nq) = rq1fac
-  tesco(2,nq) = float(nqp1)/elco(1,nq)
-  tesco(3,nq) = float(nq+2)/elco(1,nq)
-  rq1fac = rq1fac/fnq
-  end do
+   do 220 i = 1,nqp1
+220   elco(i,nq) = pc(i)/pc(2)
+   elco(2,nq) = 1.0e0
+   tesco(1,nq) = rq1fac
+   tesco(2,nq) = float(nqp1)/elco(1,nq)
+   tesco(3,nq) = float(nq + 2)/elco(1,nq)
+   rq1fac = rq1fac/fnq
+end do
 return
 !----------------------- End of subroutine cfod  -----------------------
 end subroutine cfod
 
 subroutine pjac (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
-&f, jac, rpar, ipar)
+   & f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
@@ -9403,10 +9403,10 @@ integer :: neq, nyh, iwm( *)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
-&kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
-&ml3, mu, n, nfe, nje, nq, nqu, nst
+   & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
+   & ml3, mu, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, &
-&fac, hl0, r, r0, srur, yi, yj, yjj, vnwrms
+   & fac, hl0, r, r0, srur, yi, yj, yjj, vnwrms
 !
 !   pjac sets up the iteration matrix (involving the Jacobian) for the
 !   integration package sfode.
@@ -9414,9 +9414,9 @@ real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, &
 !***Routines called  vnwrms,sgefa,sgbfa
 !
 common /debdf1/ rownd, rowns(210), &
-&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-&nje, nqu
+   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
 !-----------------------------------------------------------------------
 ! pjac is called by stod  to compute and process the matrix
 ! P = i - h*EL(1)*j , where j is an approximation to the Jacobian.
@@ -9455,11 +9455,11 @@ go to (100, 200, 300, 400, 500), miter
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
 100 lenp = n*n
 do 110 i = 1,lenp
-110 wm(i+2) = 0.0e0
+110 wm(i + 2) = 0.0e0
 call jac (tn, y, wm(3), n, rpar, ipar)
 con = -hl0
 do 120 i = 1,lenp
-120 wm(i+2) = wm(i+2)*con
+120 wm(i + 2) = wm(i + 2)*con
 go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
 200 fac = vnwrms (n, savf, ewt)
@@ -9468,21 +9468,21 @@ if (r0 .eq. 0.0e0) r0 = 1.0e0
 srur = wm(1)
 j1 = 2
 do j = 1,n
-  yj = y(j)
-  r = amax1(srur*abs(yj),r0*ewt(j))
-  y(j) = y(j) + r
-  fac = -hl0/r
-  call f (tn, y, ftem, rpar, ipar)
-  do 220 i = 1,n
-220 wm(i+j1) = (ftem(i) - savf(i))*fac
-  y(j) = yj
-  j1 = j1 + n
-  end do
+   yj = y(j)
+   r = amax1(srur*abs(yj),r0*ewt(j))
+   y(j) = y(j) + r
+   fac = -hl0/r
+   call f (tn, y, ftem, rpar, ipar)
+   do 220 i = 1,n
+220   wm(i + j1) = (ftem(i) - savf(i))*fac
+   y(j) = yj
+   j1 = j1 + n
+end do
 nfe = nfe + n
 ! Add identity matrix. -------------------------------------------------
 240 j = 3
 do 250 i = 1,n
-  wm(j) = wm(j) + 1.0e0
+   wm(j) = wm(j) + 1.0e0
 250 j = j + (n + 1)
 ! Do LU decomposition on P. --------------------------------------------
 call sgefa (wm(3), n, n, iwm(21), ier)
@@ -9496,12 +9496,12 @@ do 310 i = 1,n
 call f (tn, y, wm(3), rpar, ipar)
 nfe = nfe + 1
 do 320 i = 1,n
-  r0 = h*savf(i) - yh(i,2)
-  di = 0.1e0*r0 - h*(wm(i+2) - savf(i))
-  wm(i+2) = 1.0e0
-  if (abs(r0) .lt. uround*ewt(i)) go to 320
-  if (abs(di) .eq. 0.0e0) go to 330
-  wm(i+2) = 0.1e0*r0/di
+   r0 = h*savf(i) - yh(i,2)
+   di = 0.1e0*r0 - h*(wm(i + 2) - savf(i))
+   wm(i + 2) = 1.0e0
+   if (abs(r0) .lt. uround*ewt(i)) go to 320
+   if (abs(di) .eq. 0.0e0) go to 330
+   wm(i + 2) = 0.1e0*r0/di
 320 continue
 return
 330 ier = -1
@@ -9509,16 +9509,16 @@ return
 ! If miter = 4, call JAC and multiply by scalar. -----------------------
 400 ml = iwm(1)
 mu = iwm(2)
-ml3 =  3
+ml3 = 3
 mband = ml + mu + 1
 meband = mband + ml
 lenp = meband*n
 do 410 i = 1,lenp
-410 wm(i+2) = 0.0e0
+410 wm(i + 2) = 0.0e0
 call jac (tn, y, wm(ml3), meband, rpar, ipar)
 con = -hl0
 do 420 i = 1,lenp
-420 wm(i+2) = wm(i+2)*con
+420 wm(i + 2) = wm(i + 2)*con
 go to 570
 ! If miter = 5, make MBAND calls to F to approximate j. ----------------
 500 ml = iwm(1)
@@ -9532,28 +9532,28 @@ fac = vnwrms (n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
 if (r0 .eq. 0.0e0) r0 = 1.0e0
 do j = 1,mba
-  do 530 i = j,n,mband
-    yi = y(i)
-    r = amax1(srur*abs(yi),r0*ewt(i))
-530 y(i) = y(i) + r
-  call f (tn, y, ftem, rpar, ipar)
-  do jj = j,n,mband
-    y(jj) = yh(jj,1)
-    yjj = y(jj)
-    r = amax1(srur*abs(yjj),r0*ewt(jj))
-    fac = -hl0/r
-    i1 = max0(jj-mu,1)
-    i2 = min0(jj+ml,n)
-    ii = jj*meb1 - ml + 2
-    do 540 i = i1,i2
-540 wm(ii+i) = (ftem(i) - savf(i))*fac
-    end do
-  end do
+   do 530 i = j,n,mband
+      yi = y(i)
+      r = amax1(srur*abs(yi),r0*ewt(i))
+530   y(i) = y(i) + r
+   call f (tn, y, ftem, rpar, ipar)
+   do jj = j,n,mband
+      y(jj) = yh(jj,1)
+      yjj = y(jj)
+      r = amax1(srur*abs(yjj),r0*ewt(jj))
+      fac = -hl0/r
+      i1 = max0(jj - mu,1)
+      i2 = min0(jj + ml,n)
+      ii = jj*meb1 - ml + 2
+      do 540 i = i1,i2
+540      wm(ii + i) = (ftem(i) - savf(i))*fac
+   end do
+end do
 nfe = nfe + mba
 ! Add identity matrix. -------------------------------------------------
 570 ii = mband + 2
 do 580 i = 1,n
-  wm(ii) = wm(ii) + 1.0e0
+   wm(ii) = wm(ii) + 1.0e0
 580 ii = ii + meband
 ! Do LU decomposition of P. --------------------------------------------
 call sgbfa (wm(3), meband, n, ml, mu, iwm(21), ier)
@@ -9572,13 +9572,13 @@ implicit none
 integer :: iwm( *)
 real :: wm(*), x(*), tem(*)
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
-&meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
+   & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, di, hl0, &
-&phl0, r
+   & phl0, r
 common /debdf1/ rownd, rowns(210), &
-&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-&nje, nqu
+   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
 !-----------------------------------------------------------------------
 ! This routine manages the solution of the linear system arising from
 ! a chord iteration.  It is called by stod  if miter .NE. 0.
@@ -9614,11 +9614,11 @@ wm(2) = hl0
 if (hl0 .eq. phl0) go to 330
 r = hl0/phl0
 do 320 i = 1,n
-  di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i+2))
-  if (abs(di) .eq. 0.0e0) go to 390
-320 wm(i+2) = 1.0e0/di
+   di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i + 2))
+   if (abs(di) .eq. 0.0e0) go to 390
+320 wm(i + 2) = 1.0e0/di
 330 do 340 i = 1,n
-340 x(i) = wm(i+2)*x(i)
+340 x(i) = wm(i + 2)*x(i)
 return
 390 ier = -1
 return
@@ -9639,7 +9639,7 @@ integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
 real :: t
 integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
-&nm1
+   & nm1
 !
 !     sgbfa factors a real band matrix BY elimination.
 !
@@ -9752,15 +9752,15 @@ do k = 1, nm1
    jz = jz + 1
    if (jz .gt. n) go to 50
    if (ml .lt. 1) go to 50
-      do i = 1, ml
-         abd(i,jz) = 0.0e0
-      end do
+   do i = 1, ml
+      abd(i,jz) = 0.0e0
+   end do
 50 continue
 !
 !        Find l = Pivot index
 !
-   lm = min0(ml,n-k)
-   l = isamax(lm+1,abd(m,k),1) + m - 1
+   lm = min0(ml,n - k)
+   l = isamax(lm + 1,abd(m,k),1) + m - 1
    ipvt(k) = l + k - m
 !
 !        Zero pivot implies this column already triangularized
@@ -9769,36 +9769,36 @@ do k = 1, nm1
 !
 !           Interchange if necessary
 !
-      if (l .eq. m) go to 60
-         t = abd(l,k)
-         abd(l,k) = abd(m,k)
-         abd(m,k) = t
+   if (l .eq. m) go to 60
+   t = abd(l,k)
+   abd(l,k) = abd(m,k)
+   abd(m,k) = t
 60 continue
 !
 !           Compute multipliers
 !
-      t = -1.0e0/abd(m,k)
-      call sscal(lm,t,abd(m+1,k),1)
+   t = -1.0e0/abd(m,k)
+   call sscal(lm,t,abd(m + 1,k),1)
 !
 !           Row elimination with column indexing
 !
-      ju = min0(max0(ju,mu+ipvt(k)),n)
-      mm = m
-      if (ju .lt. kp1) go to 90
-      do j = kp1, ju
-         l = l - 1
-         mm = mm - 1
-         t = abd(l,j)
-         if (l .eq. mm) go to 70
-            abd(l,j) = abd(mm,j)
-            abd(mm,j) = t
-70 continue
-         call saxpy(lm,t,abd(m+1,k),1,abd(mm+1,j),1)
-      end do
+   ju = min0(max0(ju,mu + ipvt(k)),n)
+   mm = m
+   if (ju .lt. kp1) go to 90
+   do j = kp1, ju
+      l = l - 1
+      mm = mm - 1
+      t = abd(l,j)
+      if (l .eq. mm) go to 70
+      abd(l,j) = abd(mm,j)
+      abd(mm,j) = t
+70    continue
+      call saxpy(lm,t,abd(m + 1,k),1,abd(mm + 1,j),1)
+   end do
 90 continue
    go to 110
 100 continue
-      info = k
+   info = k
 110 continue
 end do
 130 continue
@@ -9884,60 +9884,60 @@ if (job .ne. 0) go to 50
 !        job = 0 , SOLVE  A * X = b
 !        first solve l*Y = b
 !
-   if (ml .eq. 0) go to 30
-   if (nm1 .lt. 1) go to 30
-      do k = 1, nm1
-         lm = min0(ml,n-k)
-         l = ipvt(k)
-         t = b(l)
-         if (l .eq. k) go to 10
-            b(l) = b(k)
-            b(k) = t
+if (ml .eq. 0) go to 30
+if (nm1 .lt. 1) go to 30
+do k = 1, nm1
+   lm = min0(ml,n - k)
+   l = ipvt(k)
+   t = b(l)
+   if (l .eq. k) go to 10
+   b(l) = b(k)
+   b(k) = t
 10 continue
-         call saxpy(lm,t,abd(m+1,k),1,b(k+1),1)
-      end do
+   call saxpy(lm,t,abd(m + 1,k),1,b(k + 1),1)
+end do
 30 continue
 !
 !        Now solve  U*X = Y
 !
-   do kb = 1, n
-      k = n + 1 - kb
-      b(k) = b(k)/abd(m,k)
-      lm = min0(k,m) - 1
-      la = m - lm
-      lb = k - lm
-      t = -b(k)
-      call saxpy(lm,t,abd(la,k),1,b(lb),1)
-   end do
+do kb = 1, n
+   k = n + 1 - kb
+   b(k) = b(k)/abd(m,k)
+   lm = min0(k,m) - 1
+   la = m - lm
+   lb = k - lm
+   t = -b(k)
+   call saxpy(lm,t,abd(la,k),1,b(lb),1)
+end do
 go to 100
 50 continue
 !
 !        job = NONZERO, SOLVE  TRANS(A) * X = b
 !        first solve  trans(U)*Y = b
 !
-   do k = 1, n
-      lm = min0(k,m) - 1
-      la = m - lm
-      lb = k - lm
-      t = sdot(lm,abd(la,k),1,b(lb),1)
-      b(k) = (b(k) - t)/abd(m,k)
-   end do
+do k = 1, n
+   lm = min0(k,m) - 1
+   la = m - lm
+   lb = k - lm
+   t = sdot(lm,abd(la,k),1,b(lb),1)
+   b(k) = (b(k) - t)/abd(m,k)
+end do
 !
 !        Now solve trans(l)*X = Y
 !
-   if (ml .eq. 0) go to 90
-   if (nm1 .lt. 1) go to 90
-      do kb = 1, nm1
-         k = n - kb
-         lm = min0(ml,n-k)
-         b(k) = b(k) + sdot(lm,abd(m+1,k),1,b(k+1),1)
-         l = ipvt(k)
-         if (l .eq. k) go to 70
-            t = b(l)
-            b(l) = b(k)
-            b(k) = t
+if (ml .eq. 0) go to 90
+if (nm1 .lt. 1) go to 90
+do kb = 1, nm1
+   k = n - kb
+   lm = min0(ml,n - k)
+   b(k) = b(k) + sdot(lm,abd(m + 1,k),1,b(k + 1),1)
+   l = ipvt(k)
+   if (l .eq. k) go to 70
+   t = b(l)
+   b(l) = b(k)
+   b(k) = t
 70 continue
-      end do
+end do
 90 continue
 100 continue
 return
@@ -9954,9 +9954,9 @@ real :: vnorm
 !     RETURN THE RESULT AS vnorm
 !
 !
-vnorm=0.
+vnorm = 0.
 do 10 k = 1,ncomp
-10 vnorm=amax1(vnorm,abs(v(k)))
+10 vnorm = amax1(vnorm,abs(v(k)))
 return
 end function vnorm
 
@@ -9993,48 +9993,48 @@ real :: ha, ta
 !     ******************************************************************
 !     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
 !     ******************************************************************
-np1=n+1
+np1 = n + 1
 if (h.eq.0.0) go to 50
 !
-ha=.5*h
-ta=t+ha
-m=n+n
-m1=m+1
+ha = .5*h
+ta = t + ha
+m = n + n
+m1 = m + 1
 !
 do 10 k = 1,n
-nk=n+k
-mk=m+k
-a(nk)=ha*a(nk)
-10 a(mk)=a(k)+a(nk)
+   nk = n + k
+   mk = m + k
+   a(nk) = ha*a(nk)
+10 a(mk) = a(k) + a(nk)
 call f(ta,a(m1))
 !
 do 20 k = 1,n
-nk=n+k
-mk=m+k
-a(nk)=a(nk)+h*a(mk)
-20 a(mk)=a(k)+ha*a(mk)
+   nk = n + k
+   mk = m + k
+   a(nk) = a(nk) + h*a(mk)
+20 a(mk) = a(k) + ha*a(mk)
 call f(ta,a(m1))
 !
-t=t+h
+t = t + h
 do 30 k = 1,n
-nk=n+k
-mk=m+k
-a(mk)=h*a(mk)
-a(nk)=a(nk)+a(mk)
-30 a(mk)=a(k)+a(mk)
+   nk = n + k
+   mk = m + k
+   a(mk) = h*a(mk)
+   a(nk) = a(nk) + a(mk)
+30 a(mk) = a(k) + a(mk)
 call f(t,a(m1))
 !
 do 40 k = 1,n
-nk=n+k
-mk=m+k
-a(k)=a(k)+(a(nk)+ha*a(mk))/3.0
-40 a(nk)=a(k)
+   nk = n + k
+   mk = m + k
+   a(k) = a(k) + (a(nk) + ha*a(mk))/3.0
+40 a(nk) = a(k)
 call f(t,a(np1))
 return
 !
 50 do 51 k = 1,n
-nk=n+k
-51 a(nk)=a(k)
+   nk = n + k
+51 a(nk) = a(k)
 call f(t,a(np1))
 return
 end subroutine rk
@@ -10054,67 +10054,67 @@ real :: a(7), b(8,7), c(7), d(9)
 !     ******************************************************************
 !     -------------------
 data a(1)/.3333333333333333/,  a(2)/.5/,  a(3)/.6666666666666666/, &
-&a(4)/.1666666666666666/,  a(5)/1./,  a(6)/.8333333333333333/, &
-&a(7)/1./
+   & a(4)/.1666666666666666/,  a(5)/1./,  a(6)/.8333333333333333/, &
+   & a(7)/1./
 data b(1,1)/1./,  b(2,1)/3./
 data b(1,2)/1./,  b(2,2)/0./,  b(3,2)/3./
 data b(1,3)/13./,  b(2,3)/-27./,  b(3,3)/42./,  b(4,3)/8./
 data b(1,4)/389./,  b(2,4)/-54./,  b(3,4)/966./,  b(4,4)/-824./, &
-&b(5,4)/243./
+   & b(5,4)/243./
 data b(1,5)/-231./,  b(2,5)/81./,  b(3,5)/-1164./,  b(4,5)/656./, &
-&b(5,5)/-122./,  b(6,5)/800./
+   & b(5,5)/-122./,  b(6,5)/800./
 data b(1,6)/-127./,  b(2,6)/18./,  b(3,6)/-678./,  b(4,6)/456./, &
-&b(5,6)/-9./,  b(6,6)/576./,  b(7,6)/4./
+   & b(5,6)/-9./,  b(6,6)/576./,  b(7,6)/4./
 data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
-&b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
-&b(7,7)/-60./,  b(8,7)/720./
+   & b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
+   & b(7,7)/-60./,  b(8,7)/720./
 data c(1)/12./,  c(2)/8./,  c(3)/54./,  c(4)/4320./,  c(5)/20./, &
-&c(6)/288./,  c(7)/820./
+   & c(6)/288./,  c(7)/820./
 data d(1)/41./,  d(2)/0./,  d(3)/27./,  d(4)/272./,  d(5)/27./, &
-&d(6)/216./,  d(7)/0./,  d(8)/216./,  d(9)/41./
+   & d(6)/216./,  d(7)/0./,  d(8)/216./,  d(9)/41./
 !     -------------------
 if (h.eq.0.) go to 40
-ha=h*4./27.
+ha = h*4./27.
 do 10 k = 1,n
-10 w(k)=y(k)+ha*dy(k)
-call f(t+ha,w(1))
+10 w(k) = y(k) + ha*dy(k)
+call f(t + ha,w(1))
 do 11 k = 1,n
-11 w(k)=y(k)+h*(dy(k)/18.+w(k)/6.)
-call f(t+h*2./9.,w(1))
+11 w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
+call f(t + h*2./9.,w(1))
 !
-i=1
+i = 1
 do 22 m = 2,8
-i=i+n
-m1=m-1
-do 21 k = 1,n
-sum=b(1,m1)*dy(k)
-l=k
-do 20 j = 2,m
-sum=sum+b(j,m1)*w(l)
-20 l=l+n
-21 w(l)=y(k)+sum*h/c(m1)
-22 call f(t+a(m1)*h,w(i))
+   i = i + n
+   m1 = m - 1
+   do 21 k = 1,n
+      sum = b(1,m1)*dy(k)
+      l = k
+      do 20 j = 2,m
+         sum = sum + b(j,m1)*w(l)
+20       l = l + n
+21    w(l) = y(k) + sum*h/c(m1)
+22 call f(t + a(m1)*h,w(i))
 !
 do 31 k = 1,n
-sum=d(1)*dy(k)
-l=k
-do 30 m = 2,9
-sum=sum+d(m)*w(l)
-30 l=l+n
-y(k)=y(k)+h*sum/840.
-31 dy(k)=y(k)
-t=t+h
+   sum = d(1)*dy(k)
+   l = k
+   do 30 m = 2,9
+      sum = sum + d(m)*w(l)
+30    l = l + n
+   y(k) = y(k) + h*sum/840.
+31 dy(k) = y(k)
+t = t + h
 call f(t,dy)
 return
 !
 40 do 41 k = 1,n
-41 dy(k)=y(k)
+41 dy(k) = y(k)
 call f(t,dy)
 return
 end subroutine rk8
 
 subroutine sepde (cofx, cofy, g, edge, bval, iord, a, b, mp1, &
-&c, d, np1, u, ku, w, nw, ierr)
+   & c, d, np1, u, ku, w, nw, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: iord, ku, mp1
@@ -10127,7 +10127,7 @@ real, intent(inout) :: u(ku,np1), w(nw)
 integer, intent(in) :: edge(4)
 external cofx, cofy
 integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
-&jcol, jmax, jmin, l, m, mn, n
+   & jcol, jmax, jmin, l, m, mn, n
 real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin
 real :: dum(1)
 ! ----------------------------------------------------------------------
@@ -10176,10 +10176,10 @@ mn = 0
 !
 yj = ymin
 do 31 j = jmin,jmax
-xi = xmin
+   xi = xmin
    do 30 i = imin,imax
-   u(i,j) = g(xi, yj)
-30 xi = xi + hx
+      u(i,j) = g(xi, yj)
+30    xi = xi + hx
 31 yj = yj + hy
 go to 60
 !
@@ -10191,12 +10191,12 @@ if (mn .ge. nw) go to 100
 !
 yj = ymin
 do 51 j = jmin,jmax
-xi = xmin
+   xi = xmin
    do 50 i = imin,imax
-   ij = i + jcol
-   w(ij) = g(xi, yj)
-50 xi = xi + hx
-yj = yj + hy
+      ij = i + jcol
+      w(ij) = g(xi, yj)
+50    xi = xi + hx
+   yj = yj + hy
 51 jcol = jcol + mp1
 !
 !     Store the boundary values of u
@@ -10287,13 +10287,13 @@ w(iw) = nw - mn
 if (iord .eq. 4) go to 210
 !
 call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
-&c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
-&u, ku, u, ku, w(iw), p, ierr)
+   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+   & u, ku, u, ku, w(iw), p, ierr)
 go to 220
 !
 210 call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
-&c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
-&w(1),mp1, u, ku, w(iw), p, ierr)
+   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+   & w(1),mp1, u, ku, w(iw), p, ierr)
 !
 220 nw = w(iw) + mn
 if (ierr .ne. 0) return
@@ -10321,8 +10321,8 @@ return
 !
 350 dum(1) = 1.0
 call sepell (0, iord, a, b, m, indx, dum, alpha, dum, beta, &
-&c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
-&u, ku, u, ku, dum, p, ierr)
+   & c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
+   & u, ku, u, ku, dum, p, ierr)
 nw = dum(1) + mn
 return
 end subroutine sepde
@@ -10380,8 +10380,8 @@ return
 end subroutine pdedge
 
 subroutine sepell (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
-&d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
-&usol,idmn,w,pertrb,ierror)
+   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
+   & usol,idmn,w,pertrb,ierror)
 implicit none
 integer :: idmn
 integer, intent(inout) :: ierror
@@ -10394,7 +10394,7 @@ real :: bda(*), bdb(*), bdc(*), bdd(*)
 real, intent(inout) :: w(*)
 external cofx, cofy
 integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
-&k, l, length, linput, ll, logb2n, loutpt
+   & k, l, length, linput, ll, logb2n, loutpt
 !
 !
 ! DIMENSION OF           bda(n+1), bdb(n+1), bdc(m+1), bdd(m+1),
@@ -10837,45 +10837,45 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !     Check input parameters
 !
 call chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
-&idmn,mn,ierror)
+   & idmn,mn,ierror)
 if (ierror .ne. 0) return
 !
 !     Compute minimum work space and check work space length input
 !
-l = n+1
+l = n + 1
 if (nbdcnd .eq. 0) l = n
-logb2n = int(alog(float(l)+0.5)/alog(2.0))+1
-ll = 2**(logb2n+1)
-k = m+1
-l = n+1
-length = (logb2n-2)*ll+logb2n+max0(2*l,6*k)+5
-if (nbdcnd .eq. 0) length = length+2*l
+logb2n = int(alog(float(l) + 0.5)/alog(2.0)) + 1
+ll = 2**(logb2n + 1)
+k = m + 1
+l = n + 1
+length = (logb2n - 2)*ll + logb2n + max0(2*l,6*k) + 5
+if (nbdcnd .eq. 0) length = length + 2*l
 ierror = 11
-linput = int(w(1)+0.5)
-loutpt = length+6*(k+l)+1
+linput = int(w(1) + 0.5)
+loutpt = length + 6*(k + l) + 1
 w(1) = float(loutpt)
 if (loutpt .gt. linput) return
 ierror = 0
 !
 !     Set work space indices
 !
-i1 = length+2
-i2 = i1+l
-i3 = i2+l
-i4 = i3+l
-i5 = i4+l
-i6 = i5+l
-i7 = i6+l
-i8 = i7+k
-i9 = i8+k
-i10 = i9+k
-i11 = i10+k
-i12 = i11+k
+i1 = length + 2
+i2 = i1 + l
+i3 = i2 + l
+i4 = i3 + l
+i5 = i4 + l
+i6 = i5 + l
+i7 = i6 + l
+i8 = i7 + k
+i9 = i8 + k
+i10 = i9 + k
+i11 = i10 + k
+i12 = i11 + k
 i13 = 2
 call sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
-&nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
-&w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
-&w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
+   & nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
+   & w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
+   & w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
 return
 end subroutine sepell
 
