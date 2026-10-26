@@ -1,8 +1,12 @@
 program test_pure_elemental
-   use nswc_interfaces, only: cbrt, dcbrt, cpabs, dcpabs, esum, desum, srotg, drotg
+   use nswc_interfaces, only: cbrt, dcbrt, cpabs, dcpabs, esum, desum, srotg, drotg, ipmpar, dgamma
    implicit none
    real :: a(2), b(2), c(2), s(2), y(3)
    double precision :: da(2), db(2), dc(2), ds(2)
+
+   if (any(ipmpar([1,2,3]) /= [2,31,2147483647])) error stop 'elemental constant table'
+   if (maxval(abs(dgamma([1d0,2d0,3d0,4d0]) - [1d0,1d0,2d0,6d0])) > 1d-12) &
+      error stop 'elemental double gamma table'
 
    y = pure_roots([-8.0, 0.0, 27.0])
    if (maxval(abs(y - [-2.0, 0.0, 3.0])) > 2.0e-5) error stop 'pure call chain'

@@ -131,8 +131,8 @@ to compare all signatures and test callers using the module.
 
 ## Pure and elemental procedures
 
-Both free-form versions declare **27 procedures `pure elemental`** and another
-**319 `pure`**. In `nswc.f90`, implementations remain external. Internal calls have
+Both free-form versions declare **175 procedures `pure elemental`** and another
+**505 `pure`**. In `nswc.f90`, implementations remain external. Internal calls have
 local interfaces wherever pure or elemental calls require them, so compiling
 `nswc.f90` still needs no additional source file or module dependency.
 
@@ -148,6 +148,15 @@ remaining blockers, and a legacy interface view for unchanged `nswc.f`.
 The [review manifest](tools/procedure-purity.json) records each contract
 and code hash. `python tools/validate_procedure_purity.py` checks unchanged data
 and executable compiler trees, pure callers, and elemental array calls.
+
+## Named constants
+
+Both free-form versions use `parameter` declarations for **1,828 read-only DATA
+objects in 279 procedures**. Original literal spellings, types, array bounds,
+and element order are preserved. Mutable state, storage aliases, partial
+initializers, and objects passed without confirmed read-only contracts remain
+unchanged. GNU and Intel checks compare the initializer storage bits.
+See the [constant-conversion guide](docs/data-constants.md).
 
 ## Regenerating the source
 

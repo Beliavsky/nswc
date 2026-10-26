@@ -1,3 +1,501 @@
+pure subroutine dspfa(ap,n,kpvt,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+integer, intent(out) :: info
+double precision, intent(inout) :: ap(*)
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
+double precision :: absakk, alpha, colmax, rowmax
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
+integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
+   & km2, kstep
+logical :: swap
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
+!
+!     dspfa factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting.
+!
+!     To solve  A*X = B , follow dspfa by dspsl.
+!     To compute  inverse(A)*C , follow dspfa by dspsl.
+!     To compute  determinant(A) , follow dspfa by dspdi.
+!     To compute  inertia(A) , follow dspfa by dspdi.
+!     To compute  inverse(A) , follow dspfa by dspdi.
+!
+!     On entry
+!
+!        ap      DOUBLE PRECISION (n*(n+1)/2)
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  n*(n+1)/2 .
+!                See comments below for details.
+!
+!        n       INTEGER
+!                the order of the matrix  A .
+!
+!     Output
+!
+!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
+!                were used to obtain it stored in packed form.
+!                The factorization can be written  A = U*D*trans(U)
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , trans(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
+!
+!        kpvt    INTEGER(n)
+!                an integer vector of pivot indices.
+!
+!        INFO    INTEGER
+!                = 0  Normal value.
+!                = k  if the k-TH pivot block is singular. This is
+!                     not an error condition for this subroutine,
+!                     but it does indicate that dspsl or dspdi may
+!                     divide by zero if called.
+!
+!     Packed storage
+!
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
+!
+!                k = 0
+!                do 20 j = 1, n
+!                   do 10 i = 1, j
+!                      k = k + 1
+!                      ap(k)  = a(i,j)
+!             10    continue
+!             20 continue
+!
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
+!
+!     Subroutines and functions
+!
+!     BLAS daxpy,dswap,idamax
+!     Fortran dabs,DMAX1,DSQRT
+!
+!     Internal variables
+!
+!
+!
+!     Initialize
+!
+!     alpha is used in choosing pivot block SIZE.
+alpha = (1.0d0 + dsqrt(17.0d0))/8.0d0
+!
+info = 0
+!
+!     Main loop on k, which goes from n to 1.
+!
+k = n
+ik = (n*(n - 1))/2
+10 continue
+!
+!        Leave the loop if k=0 Or k=1.
+!
+!     ...Exit
+if (k .eq. 0) go to 200
+if (k .gt. 1) go to 20
+kpvt(1) = 1
+if (ap(1) .eq. 0.0d0) info = 1
+!     ......Exit
+go to 200
+20 continue
+!
+!        This section of code determines the kind of
+!        elimination to be performed.  When it is completed,
+!        KSTEP will be set to the size of the pivot block, and
+!        swap will be set to .TRUE. if an interchange is
+!        required.
+!
+km1 = k - 1
+kk = ik + k
+absakk = dabs(ap(kk))
+!
+!        Determine the largest off-diagonal element in
+!        column k.
+!
+imax = idamax(k - 1,ap(ik + 1),1)
+imk = ik + imax
+colmax = dabs(ap(imk))
+if (absakk .lt. alpha*colmax) go to 30
+kstep = 1
+swap = .false.
+go to 90
+30 continue
+!
+!           Determine the largest off-diagonal element in
+!           row imax.
+!
+rowmax = 0.0d0
+imaxp1 = imax + 1
+im = imax*(imax - 1)/2
+imj = im + 2*imax
+do j = imaxp1, k
+   rowmax = dmax1(rowmax,dabs(ap(imj)))
+   imj = imj + j
+end do
+if (imax .eq. 1) go to 50
+jmax = idamax(imax - 1,ap(im + 1),1)
+jmim = jmax + im
+rowmax = dmax1(rowmax,dabs(ap(jmim)))
+50 continue
+imim = imax + im
+if (dabs(ap(imim)) .lt. alpha*rowmax) go to 60
+kstep = 1
+swap = .true.
+go to 80
+60 continue
+if (absakk .lt. alpha*colmax*(colmax/rowmax)) go to 70
+kstep = 1
+swap = .false.
+go to 80
+70 continue
+kstep = 2
+swap = imax .ne. km1
+80 continue
+90 continue
+if (dmax1(absakk,colmax) .ne. 0.0d0) go to 100
+!
+!           Column k is zero.  Set info and iterate the loop.
+!
+kpvt(k) = k
+info = k
+go to 190
+100 continue
+if (kstep .eq. 2) go to 140
+!
+!           1 X 1 pivot block.
+!
+if (.not.swap) go to 120
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ik + 1),1)
+imj = ik + imax
+do jj = imax, k
+   j = k + imax - jj
+   jk = ik + j
+   t = ap(jk)
+   ap(jk) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+120 continue
+!
+!           Perform the elimination.
+!
+ij = ik - (k - 1)
+do jj = 1, km1
+   j = k - jj
+   jk = ik + j
+   mulk = -ap(jk)/ap(kk)
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   ijj = ij + j
+   ap(jk) = mulk
+   ij = ij - (j - 1)
+end do
+!
+!           Set the pivot array.
+!
+kpvt(k) = k
+if (swap) kpvt(k) = imax
+go to 190
+140 continue
+!
+!           2 X 2 pivot block.
+!
+km1k = ik + k - 1
+ikm1 = ik - (k - 1)
+if (.not.swap) go to 160
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ikm1 + 1),1)
+imj = ikm1 + imax
+do jj = imax, km1
+   j = km1 + imax - jj
+   jkm1 = ikm1 + j
+   t = ap(jkm1)
+   ap(jkm1) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+t = ap(km1k)
+ap(km1k) = ap(imk)
+ap(imk) = t
+160 continue
+!
+!           Perform the elimination.
+!
+km2 = k - 2
+if (km2 .eq. 0) go to 180
+ak = ap(kk)/ap(km1k)
+km1km1 = ikm1 + k - 1
+akm1 = ap(km1km1)/ap(km1k)
+denom = 1.0d0 - ak*akm1
+ij = ik - (k - 1) - (k - 2)
+do jj = 1, km2
+   j = km1 - jj
+   jk = ik + j
+   bk = ap(jk)/ap(km1k)
+   jkm1 = ikm1 + j
+   bkm1 = ap(jkm1)/ap(km1k)
+   mulk = (akm1*bk - bkm1)/denom
+   mulkm1 = (ak*bkm1 - bk)/denom
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   t = mulkm1
+   call daxpy(j,t,ap(ikm1 + 1),1,ap(ij + 1),1)
+   ap(jk) = mulk
+   ap(jkm1) = mulkm1
+   ijj = ij + j
+   ij = ij - (j - 1)
+end do
+180 continue
+!
+!           Set the pivot array.
+!
+kpvt(k) = 1 - k
+if (swap) kpvt(k) = -imax
+kpvt(k - 1) = kpvt(k)
+190 continue
+ik = ik - (k - 1)
+if (kstep .eq. 2) ik = ik - (k - 2)
+k = k - kstep
+go to 10
+200 continue
+return
+end subroutine dspfa
+
+pure subroutine dspsl(ap,n,kpvt,b)
+implicit none
+integer, intent(in) :: n, kpvt(*)
+double precision, intent(in) :: ap(*)
+double precision, intent(inout) :: b(*)
+double precision :: ak, akm1, bk, bkm1, denom, temp
+integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+end interface
+!
+!     DSISL solves the double precision symmetric system
+!     A * X = b
+!     using the factors computed by dspfa.
+!
+!     On entry
+!
+!        ap      DOUBLE PRECISION(n*(n+1)/2)
+!                the output from dspfa.
+!
+!        n       INTEGER
+!                the order of the matrix  A .
+!
+!        kpvt    INTEGER(n)
+!                the pivot vector from dspfa.
+!
+!        b       DOUBLE PRECISION(n)
+!                the right hand side vector.
+!
+!     On return
+!
+!        b       THE SOLUTION VECTOR  X .
+!
+!     Error condition
+!
+!        A division by zero may occur if  dspco  has set RCOND .EQ. 0.0
+!        or  dspfa  has set info .NE. 0  .
+!
+!     To compute  inverse(A) * C  where  C  is a matrix
+!     with  P  columns
+!           call dspfa(ap,n,kpvt,info)
+!           if (info .ne. 0) go to ...
+!           do 10 j = 1, p
+!              call dspsl(ap,n,kpvt,c(1,j))
+!        10 continue
+!
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
+!
+!     Subroutines and functions
+!
+!     BLAS daxpy,ddot
+!     FORTRAN IABS
+!
+!     Internal variables.
+!
+!
+!     Loop backward applying the transformations and
+!     D inverse to b.
+!
+k = n
+ik = (n*(n - 1))/2
+10 if (k .eq. 0) go to 80
+kk = ik + k
+if (kpvt(k) .lt. 0) go to 40
+!
+!           1 X 1 pivot block.
+!
+if (k .eq. 1) go to 30
+kp = kpvt(k)
+if (kp .eq. k) go to 20
+!
+!                 Interchange.
+!
+temp = b(k)
+b(k) = b(kp)
+b(kp) = temp
+20 continue
+!
+!              Apply the transformation.
+!
+call daxpy(k - 1,b(k),ap(ik + 1),1,b(1),1)
+30 continue
+!
+!           Apply D inverse.
+!
+b(k) = b(k)/ap(kk)
+k = k - 1
+ik = ik - k
+go to 70
+40 continue
+!
+!           2 X 2 pivot block.
+!
+ikm1 = ik - (k - 1)
+if (k .eq. 2) go to 60
+kp = iabs(kpvt(k))
+if (kp .eq. k - 1) go to 50
+!
+!                 Interchange.
+!
+temp = b(k - 1)
+b(k - 1) = b(kp)
+b(kp) = temp
+50 continue
+!
+!              Apply the transformation.
+!
+call daxpy(k - 2,b(k),ap(ik + 1),1,b(1),1)
+call daxpy(k - 2,b(k - 1),ap(ikm1 + 1),1,b(1),1)
+60 continue
+!
+!           Apply D inverse.
+!
+km1k = ik + k - 1
+kk = ik + k
+ak = ap(kk)/ap(km1k)
+km1km1 = ikm1 + k - 1
+akm1 = ap(km1km1)/ap(km1k)
+bk = b(k)/ap(km1k)
+bkm1 = b(k - 1)/ap(km1k)
+denom = ak*akm1 - 1.0d0
+b(k) = (akm1*bk - bkm1)/denom
+b(k - 1) = (ak*bkm1 - bk)/denom
+k = k - 2
+ik = ik - (k + 1) - k
+70 continue
+go to 10
+80 continue
+!
+!     Loop forward applying the transformations.
+!
+k = 1
+ik = 0
+90 if (k .gt. n) go to 160
+if (kpvt(k) .lt. 0) go to 120
+!
+!           1 X 1 pivot block.
+!
+if (k .eq. 1) go to 110
+!
+!              Apply the transformation.
+!
+b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
+kp = kpvt(k)
+if (kp .eq. k) go to 100
+!
+!                 Interchange.
+!
+temp = b(k)
+b(k) = b(kp)
+b(kp) = temp
+100 continue
+110 continue
+ik = ik + k
+k = k + 1
+go to 150
+120 continue
+!
+!           2 X 2 pivot block.
+!
+if (k .eq. 1) go to 140
+!
+!              Apply the transformation.
+!
+b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
+ikp1 = ik + k
+b(k + 1) = b(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,b(1),1)
+kp = iabs(kpvt(k))
+if (kp .eq. k) go to 130
+!
+!                 Interchange.
+!
+temp = b(k)
+b(k) = b(kp)
+b(kp) = temp
+130 continue
+140 continue
+ik = ik + k + k + 1
+k = k + 2
+150 continue
+go to 90
+160 continue
+return
+end subroutine dspsl
+
 subroutine dspdi(ap,n,kpvt,det,inert,work,job)
 implicit none
 integer, intent(in) :: n, job
@@ -1247,7 +1745,7 @@ call cluimp(a, ka, n, wk(1), n, iwk, b, x, wk(ir), ierr)
 return
 end subroutine cslvmp
 
-subroutine cluimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
+pure subroutine cluimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
 implicit none
 integer, intent(out) :: ind
 integer, intent(in) :: ka, kq, n
@@ -1256,8 +1754,23 @@ complex, intent(inout) :: x(n), r(n)
 integer, intent(in) :: ipvt(n)
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
-real :: spmpar
 double precision :: ra, ia, rx, ix, rsum, isum
+interface
+   pure subroutine cgesl(a,lda,n,ipvt,b,job)
+      implicit none
+      integer, intent(in) :: lda
+      complex, intent(in) :: a(lda,*)
+      integer, intent(in) :: n
+      integer, intent(in) :: ipvt(*)
+      complex, intent(inout) :: b(*)
+      integer, intent(in) :: job
+   end subroutine cgesl
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a complex system AX = b
@@ -1960,7 +2473,7 @@ return
 return
 end subroutine dcmslv
 
-subroutine dcfact (ar, ai, ka, n, ipvt, ierr)
+pure subroutine dcfact (ar, ai, ka, n, ipvt, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, n
@@ -1968,6 +2481,17 @@ double precision, intent(inout) :: ar(ka,n), ai(ka,n)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, k, kp1, l, nm1
 double precision :: p, pr, pi, t, tr, ti
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+end interface
 !-----------------------------------------------------------------------
 !     Decomposes a complex matrix BY partial pivot Gauss elimination
 !-----------------------------------------------------------------------
@@ -2067,7 +2591,7 @@ return
 return
 end subroutine dcfact
 
-subroutine dcsol (n, m, ar, ai, ka, br, bi, kb, ipvt)
+pure subroutine dcsol (n, m, ar, ai, ka, br, bi, kb, ipvt)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: ar(ka,n), ai(ka,n)
@@ -2075,6 +2599,17 @@ double precision, intent(inout) :: br(kb,m), bi(kb,m)
 integer, intent(in) :: ipvt(n)
 integer :: i, j, k, km1, kp1, l, nm1
 double precision :: pr, pi, tr, ti
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+end interface
 !-----------------------------------------------------------------------
 !     Solution of the system of m equations A*X = B using the
 !     decomposition obtained by dcfact. This routine CANNOT be
@@ -2167,6 +2702,17 @@ double precision, intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
 integer, intent(in) :: ipvt(n)
 integer :: i, ip1, j, jb, k, kp1, l, nm1, nmi, nmk, np1
 double precision :: sr, si, tr, ti
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+end interface
 !-----------------------------------------------------------------------
 !     Computation of the inverse of A matrix A using the LU
 !     decomposition obtained by dcfact. This routine CANNOT
@@ -2252,7 +2798,7 @@ do 60 nmk = 1,nm1
 return
 end subroutine dcminv
 
-subroutine ssvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+pure subroutine ssvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
@@ -2260,11 +2806,45 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
    & work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-real :: sdot, t
-real :: b, c, cs, el, emm1, f, g, snrm2, scale, shift, sl, sm, sn, &
-   & smm1, t1, test, ztest
+real :: t
+real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 interface
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+   pure function snrm2(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: snrm2
+   end function snrm2
+   pure subroutine srot(n,sx,incx,sy,incy,c,s)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+      real, intent(in) :: c
+      real, intent(in) :: s
+   end subroutine srot
    pure elemental subroutine srotg(sa,sb,sc,ss)
       implicit none
       real, intent(inout) :: sa
@@ -2272,6 +2852,21 @@ interface
       real, intent(inout) :: sc
       real, intent(inout) :: ss
    end subroutine srotg
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+   pure subroutine sswap(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine sswap
 end interface
 !
 !
@@ -2745,7 +3340,7 @@ go to 360
 return
 end subroutine ssvdc
 
-subroutine dsvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+pure subroutine dsvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
@@ -2753,11 +3348,45 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-double precision :: ddot, t
-double precision :: b, c, cs, el, emm1, f, g, dnrm2, scale, shift, &
-   & sl, sm, sn, smm1, t1, test, ztest
+double precision :: t
+double precision :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine drot(n,dx,incx,dy,incy,c,s)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+      double precision, intent(in) :: c
+      double precision, intent(in) :: s
+   end subroutine drot
    pure elemental subroutine drotg(da,db,dc,ds)
       implicit none
       double precision, intent(inout) :: da
@@ -2765,6 +3394,21 @@ interface
       double precision, intent(inout) :: dc
       double precision, intent(inout) :: ds
    end subroutine drotg
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
 end interface
 !
 !
@@ -3238,7 +3882,7 @@ go to 360
 return
 end subroutine dsvdc
 
-subroutine csvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+pure subroutine csvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
@@ -3246,13 +3890,62 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-complex :: cdotc, t, r
-real :: b, c, cs, el, emm1, f, g, scnrm2, scale, shift, sl, sm, &
-   & sn, smm1, t1, test, ztest
+complex :: t, r
+real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 complex :: csign, zdum, zdum1, zdum2
 real :: cabs1
 interface
+   pure subroutine caxpy(n,ca,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: ca
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(inout) :: cy(*)
+      integer, intent(in) :: incy
+   end subroutine caxpy
+   pure function cdotc(n,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(in) :: cy(*)
+      integer, intent(in) :: incy
+      complex :: cdotc
+   end function cdotc
+   pure subroutine cscal(n,ca,cx,incx)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: ca
+      complex, intent(inout) :: cx(*)
+      integer, intent(in) :: incx
+   end subroutine cscal
+   pure subroutine csrot(n,cx,incx,cy,incy,c,s)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(inout) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(inout) :: cy(*)
+      integer, intent(in) :: incy
+      real, intent(in) :: c
+      real, intent(in) :: s
+   end subroutine csrot
+   pure subroutine cswap(n,cx,incx,cy,incy)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(inout) :: cx(*)
+      integer, intent(in) :: incx
+      complex, intent(inout) :: cy(*)
+      integer, intent(in) :: incy
+   end subroutine cswap
+   pure function scnrm2(n,cx,incx)
+      implicit none
+      integer, intent(in) :: n
+      complex, intent(in) :: cx(*)
+      integer, intent(in) :: incx
+      real :: scnrm2
+   end function scnrm2
    pure elemental subroutine srotg(sa,sb,sc,ss)
       implicit none
       real, intent(inout) :: sa
@@ -3908,8 +4601,9 @@ integer, intent(in) :: ka, n
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
-complex :: pivot, t, zero
+complex :: pivot, t
 real :: s, c
+complex, parameter :: zero = (0.0,0.0)
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -3917,7 +4611,6 @@ real :: s, c
 !     ka is the row dimension of A in the calling program. It is
 !     assumed that ka is greater than or equal to n.
 !     -------------------
-data zero/(0.0,0.0)/
 !
 if (n .ge. 2) go to 10
 cdet = a(1,1) - x
@@ -6437,7 +7130,7 @@ end do
 260 return
 end subroutine cqzhes
 
-subroutine cqzit(nm, n, a, b, eps1, mats, z, f, ierr)
+pure subroutine cqzit(nm, n, a, b, eps1, mats, z, f, ierr)
 implicit none
 !
 !
@@ -6502,7 +7195,13 @@ complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44
 complex :: a1, a2, u1, u2, v1, v2, t, rr, sh, ss
 complex :: tf
 real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
-real :: spmpar
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !     integer max0, min0
 !     real sqrt, cabs
 !     complex cmplx, conjg, csqrt
@@ -6806,7 +7505,8 @@ integer :: n
 real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np6
 real :: anorm, anorm1, factor, p, q, s, s1
-real :: c(8)
+real, parameter :: c(8) = [real :: .500000000000000e+00, .116666666666667e+00, .166666666666667e-01, .160256410256410e-02, &
+   & .106837606837607e-03, .485625485625486e-05, .138750138750139e-06, .192708526041859e-08]
 ! ----------------------------------------------------------------------
 !     mexp computes exp(a) and stores it in z where A is a matrix
 !     of order n. A is destroyed by the routine.
@@ -6826,10 +7526,6 @@ real :: c(8)
 !     ---------------
 !     Coefficients for (8,8) Pade table entry
 !     ---------------
-data c(1)/.500000000000000e+00/, c(2)/.116666666666667e+00/, &
-   & c(3)/.166666666666667e-01/, c(4)/.160256410256410e-02/, &
-   & c(5)/.106837606837607e-03/, c(6)/.485625485625486e-05/, &
-   & c(7)/.138750138750139e-06/, c(8)/.192708526041859e-08/
 ! ----------------------------------------------------------------------
 ierr = 0
 if (n .gt. 1) go to 10
@@ -6960,7 +7656,12 @@ integer, intent(in) :: ka, kz
 integer :: n
 double precision, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
-double precision :: anorm, anorm1, c(12), factor, p, q, s, s1
+double precision :: anorm, anorm1, factor, p, q, s, s1
+double precision, parameter :: c(12) = [double precision :: .500000000000000000000000000000d+00, &
+   & .119565217391304347826086956522d+00, .181159420289855072463768115942d-01, .194099378881987577639751552795d-02, &
+   & .155279503105590062111801242236d-03, .953470633104500381388253241800d-05, .454033634811666848280120591333d-06, &
+   & .166924130445465753044161982108d-07, .463678140126293758456005505855d-09, .927356280252587516912011011710d-11, &
+   & .120435880552284093105455975547d-12, .772024875335154442983692150941d-15]
 ! ----------------------------------------------------------------------
 !     dmexp computes exp(a) and stores it in z where A is a matrix
 !     of order n. A is destroyed by the routine.
@@ -6980,18 +7681,6 @@ double precision :: anorm, anorm1, c(12), factor, p, q, s, s1
 !     ---------------
 !     Coefficients for (12,12) Pade table entry
 !     ---------------
-data c(1) /.500000000000000000000000000000d+00/, &
-   & c(2) /.119565217391304347826086956522d+00/, &
-   & c(3) /.181159420289855072463768115942d-01/, &
-   & c(4) /.194099378881987577639751552795d-02/, &
-   & c(5) /.155279503105590062111801242236d-03/, &
-   & c(6) /.953470633104500381388253241800d-05/, &
-   & c(7) /.454033634811666848280120591333d-06/, &
-   & c(8) /.166924130445465753044161982108d-07/, &
-   & c(9) /.463678140126293758456005505855d-09/
-data c(10)/.927356280252587516912011011710d-11/, &
-   & c(11)/.120435880552284093105455975547d-12/, &
-   & c(12)/.772024875335154442983692150941d-15/
 ! ----------------------------------------------------------------------
 ierr = 0
 if (n .gt. 1) go to 10
@@ -7125,11 +7814,11 @@ integer, intent(inout) :: ip(*)
 external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-real :: bk, c1, cj, ck, dkj, zero
+real :: bk, c1, cj, ck, dkj
+real, parameter :: zero = 0.0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
-data zero/0.0/
 !
 !     Set the necessary constants
 !
@@ -7295,11 +7984,11 @@ integer, intent(inout) :: ip(*)
 external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-double precision :: bk, cj, ck, c1, dkj, zero
+double precision :: bk, cj, ck, c1, dkj
+double precision, parameter :: zero = 0.d0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
-data zero/0.d0/
 !
 !     Set the necessary constants
 !
@@ -7466,11 +8155,11 @@ external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: s, si
-complex :: bk, cj, ck, c1, dkj, zero
+complex :: bk, cj, ck, c1, dkj
+complex, parameter :: zero = (0.0,0.0)
 !     ******************************************************************
 !     Solution of complex linear equations with reduced storage
 !     ******************************************************************
-data zero/(0.0,0.0)/
 !
 !     Set the necessary constants
 !
@@ -9944,568 +10633,4 @@ return
 200 ierr = num
 return
 end subroutine cbsubt
-
-pure subroutine bprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-real :: sum
-!-----------------------------------------------------------------------
-!                Multiplication of real banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do 10 i = 1,m
-10    c(i,j) = 0.0
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min0(m - 1,ml + nl)
-jc = 0
-if (mcl .eq. 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) .ne. 0.0) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl .ge. nc) go to 100
-jc = 1
-if (mcl .eq. 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
-if (mcu .eq. 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) .ne. 0.0) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last .gt. nc) go to 200
-if (mcu .eq. 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = 0.0
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max0(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-return
-end subroutine bprod
-
-pure subroutine dbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-double precision :: sum
-!-----------------------------------------------------------------------
-!          Multiplication of double precision banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do 10 i = 1,m
-10    c(i,j) = 0.d0
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min0(m - 1,ml + nl)
-jc = 0
-if (mcl .eq. 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) .ne. 0.d0) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl .ge. nc) go to 100
-jc = 1
-if (mcl .eq. 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
-if (mcu .eq. 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) .ne. 0.d0) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last .gt. nc) go to 200
-if (mcu .eq. 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = 0.d0
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max0(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-return
-end subroutine dbprod
-
-pure subroutine cbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-complex :: sum
-!-----------------------------------------------------------------------
-!             Multiplication of complex banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do 10 i = 1,m
-10    c(i,j) = (0.0,0.0)
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min0(m - 1,ml + nl)
-jc = 0
-if (mcl .eq. 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) .ne. (0.0,0.0)) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl .ge. nc) go to 100
-jc = 1
-if (mcl .eq. 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
-if (mcu .eq. 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) .ne. (0.0,0.0)) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last .gt. nc) go to 200
-if (mcu .eq. 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = (0.0,0.0)
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max0(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-return
-end subroutine cbprod
-
-pure subroutine bvprd (m,n,a,ka,ml,mu,x,y)
-implicit none
-integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
-integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
-real :: sum
-!-----------------------------------------------------------------------
-!         Product of a real banded matrix and a real vector
-!-----------------------------------------------------------------------
-!
-!     Compute the first ml components
-!
-mlp1 = ml + 1
-if (ml .eq. 0) go to 20
-jmin = mlp1
-do i = 1,ml
-   kmax = min0(n,i + mu)
-   kk = jmin
-   sum = 0.0
-   do k = 1,kmax
-      sum = sum + a(i,kk)*x(k)
-      kk = kk + 1
-   end do
-   y(i) = sum
-   jmin = jmin - 1
-end do
-!
-!     Compute the remaining nonzero components
-!
-20 imax = min0(m,n + ml)
-do i = mlp1,imax
-   kmin = i - ml
-   kmax = min0(n,i + mu)
-   kk = 1
-   sum = 0.0
-   do k = kmin,kmax
-      sum = sum + a(i,kk)*x(k)
-      kk = kk + 1
-   end do
-   y(i) = sum
-end do
-!
-!     Store zeros in the final m-imax components
-!
-if (imax .eq. m) return
-imin = imax + 1
-do i = imin,m
-   y(i) = 0.0
-end do
-return
-end subroutine bvprd
-
-pure subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
-implicit none
-integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
-integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
-real :: sum
-!-----------------------------------------------------------------------
-!        Setting y = a*x + y where A is a real banded matrix
-!                     and x,y are real vectors
-!-----------------------------------------------------------------------
-!
-!     Compute the first ml components
-!
-mlp1 = ml + 1
-if (ml .eq. 0) go to 20
-jmin = mlp1
-do i = 1,ml
-   kmax = min0(n,i + mu)
-   kk = jmin
-   sum = y(i)
-   do k = 1,kmax
-      sum = sum + a(i,kk)*x(k)
-      kk = kk + 1
-   end do
-   y(i) = sum
-   jmin = jmin - 1
-end do
-!
-!     Compute the remaining components
-!
-20 imax = min0(m,n + ml)
-do i = mlp1,imax
-   kmin = i - ml
-   kmax = min0(n,i + mu)
-   kk = 1
-   sum = y(i)
-   do k = kmin,kmax
-      sum = sum + a(i,kk)*x(k)
-      kk = kk + 1
-   end do
-   y(i) = sum
-end do
-return
-end subroutine bvprd1
 

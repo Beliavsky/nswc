@@ -84,8 +84,10 @@ The generator expects `ifx` on the command search path. Alternatively, use
 initialize the Intel and Visual Studio environment in a child process. A local
 setup batch file is also supported. No system environment settings are changed.
 
-Generation checks the complete free-form library together in a temporary
-directory. `COMPB` now supplies separate real and complex work arrays to `PPADD`,
+Generation checks all external procedure bodies in temporary batches of 100,
+which keeps Intel interface extraction manageable after constant conversion.
+Independent compiler records compare the generated interfaces with the complete
+source, and numerical checks compile the complete library. `COMPB` supplies separate real and complex work arrays to `PPADD`,
 so interface extraction no longer needs to isolate that call. Every procedure
 must produce exactly one generated interface.
 

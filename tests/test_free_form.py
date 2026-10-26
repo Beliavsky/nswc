@@ -14,6 +14,8 @@ from sentence_case_comments import sentence_case
 from format_free_form import format_source, semantic_statements
 from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform as apply_purity
+from data_constants import transform as apply_constants
+from portable_intrinsics import transform as portable_intrinsics
 
 
 def canonical(statement):
@@ -121,7 +123,7 @@ class FreeFormTests(unittest.TestCase):
                          [s for s in comments.text.splitlines(True) if not s.lstrip().startswith('!')])
         self.assertEqual(statements(formatted, False), statements(comments.text, False))
         self.assertEqual(sentence_case(comments.text).text, comments.text)
-        self.assertEqual(apply_free_fixes(apply_purity(comments.text)), (ROOT / "nswc.f90").read_text())
+        self.assertEqual(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))), (ROOT / "nswc.f90").read_text())
 
     def test_generated_partitions_and_links(self):
         outputs, count = generate()

@@ -1,3 +1,443 @@
+subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
+implicit none
+integer :: nn
+double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+integer :: l2, nz
+integer :: n
+double precision :: svu, svv, ui, vi, s
+real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+integer :: type, i, j, iflag
+logical :: vpass, spass, vtry, stry
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     Computes up to  l2  fixed shift k-polynomials,
+!     testing for convergence in the linear or quadratic
+!     case. Initiates one of the variable SHIFT
+!     iterations and returns with the number of zeros
+!     found.
+!
+!     l2 - Limit of fixed shift steps
+!     nz - Number of zeros found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+betav = .25
+betas = .25
+oss = sr
+ovv = v
+!
+!     Evaluate polynomial by synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+call calcsc(type, n, k, qk)
+do j = 1,l2
+!
+!     Calculate next k polynomial and estimate v
+!
+   call nextk(type, n, qp, k, qk)
+   call calcsc(type, n, k, qk)
+   call newest(type, ui, vi, nn, p, k)
+   vv = vi
+!
+!     Estimate s
+!
+   ss = 0.0
+   if (k(n) .ne. 0.d0) ss = -p(nn)/k(n)
+   tv = 1.0
+   ts = 1.0
+   if (j .eq. 1 .or. type .eq. 3) go to 70
+!
+!     Compute relative measures of convergence of s and v
+!     sequences
+!
+   if (vv .ne. 0.0) tv = abs((vv - ovv)/vv)
+   if (ss .ne. 0.0) ts = abs((ss - oss)/ss)
+!
+!     If decreasing, multiply two most recent
+!     convergence measures
+!
+   tvv = 1.0
+   if (tv .lt. otv) tvv = tv*otv
+   tss = 1.0
+   if (ts .lt. ots) tss = ts*ots
+!
+!     Compare with convergence criteria
+!
+   vpass = tvv.lt.betav
+   spass = tss.lt.betas
+   if (.not.(spass .or. vpass)) go to 70
+!
+!     At least one sequence has passed the convergence
+!     test. Store variables before iterating
+!
+   svu = u
+   svv = v
+   do i = 1,n
+      svk(i) = k(i)
+   end do
+   s = ss
+!
+!     Choose iteration according to the fastest
+!     converging sequence
+!
+   vtry = .false.
+   stry = .false.
+   if (spass .and. ((.not.vpass) .or. &
+      & tss .lt. tvv)) go to 40
+20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
+   if (nz .gt. 0) return
+!
+!     Quadratic iteration has failed. Flag that it has
+!     been tried and decrease the convergence criterion.
+!
+   vtry = .true.
+   betav = betav*0.25
+!
+!     Try linear iteration if it has not been tried and
+!     the s sequence is converging
+!
+   if (stry .or. (.not.spass)) go to 50
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+40 call realit(s, nz, iflag, nn, p, qp, k, qk)
+   if (nz .gt. 0) return
+!
+!     Linear iteration has failed. Flag that it has been
+!     tried and decrease the convergence criterion
+!
+   stry = .true.
+   betas = betas*0.25
+   if (iflag .eq. 0) go to 50
+!
+!     If linear iteration signals an almost double real
+!     zero attempt quadratic interation
+!
+   ui = -(s + s)
+   vi = s*s
+   go to 20
+!
+!     Restore variables
+!
+50 u = svu
+   v = svv
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+!
+!     Try quadratic iteration if it has not been tried
+!     and the v sequence is converging
+!
+   if (vpass .and. (.not.vtry)) go to 20
+!
+!     Recompute qp and scalar values to continue the
+!     second stage
+!
+   call quadsd(nn, u, v, p, qp, a, b)
+   call calcsc(type, n, k, qk)
+70 ovv = vv
+   oss = ss
+   otv = tv
+   ots = ts
+end do
+return
+end subroutine fxshfr
+
+subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
+implicit none
+integer :: nn
+double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
+integer :: nz
+integer :: n
+double precision :: ui, vi
+real :: mp, omp, ee, relstp, t, zm
+integer :: type, i, j
+logical :: tried
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
+!
+!     Variable-shift k-polynomial iteration for A
+!     quadratic factor converges only if the zeros are
+!     equimodular or nearly so.
+!
+!     uu,vv - Coefficients of starting quadratic
+!     nz - Number of zero found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+tried = .false.
+u = uu
+v = vv
+j = 0
+! Main loop
+10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
+!
+!     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
+!     to multiple or nearly equal and of opposite sign
+!
+if (dabs(dabs(szr) - dabs(lzr)) .gt. 1.d-2*dabs(lzr)) &
+   & return
+!
+!     Evaluate polynomial by quadratic synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+mp = dabs(a - szr*b) + dabs(szi*b)
+!
+!     Compute a rigorous bound on the rounding error in
+!     EVALUTING p
+!
+zm = sqrt(abs(sngl(v)))
+ee = 2.0*abs(sngl(qp(1)))
+t = -szr*b
+do 20 i = 2,n
+   ee = ee*zm + abs(sngl(qp(i)))
+20 continue
+ee = ee*zm + abs(sngl(a) + t)
+ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
+   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
+   & 2.0*are*abs(t)
+!
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
+!
+if (mp .gt. 20.0*ee) go to 30
+nz = 2
+return
+30 j = j + 1
+!
+!     STOP ITERATION AFTER 20 STEPS
+!
+if (j .gt. 20) return
+if (j .lt. 2) go to 50
+if (relstp .gt. 0.01 .or. mp .lt. omp .or. tried) go to 50
+!
+!     A cluster appears to be stalling the convergence.
+!     Five fixed shift steps are taken with A u,v close
+!     to the cluster
+!
+if (relstp .lt. eta) relstp = eta
+relstp = sqrt(relstp)
+u = u - u*relstp
+v = v + v*relstp
+call quadsd(nn, u, v, p, qp, a, b)
+do i = 1,5
+   call calcsc(type, n, k, qk)
+   call nextk(type, n, qp, k, qk)
+end do
+tried = .true.
+j = 0
+50 omp = mp
+!
+!     Calculate next k polynomial and new u and v
+!
+call calcsc(type, n, k, qk)
+call nextk(type, n, qp, k, qk)
+call calcsc(type, n, k, qk)
+call newest(type, ui, vi, nn, p, k)
+!
+!     If vi is zero the iteration is not converging
+!
+if (vi .eq. 0.d0) return
+relstp = dabs((vi - v)/vi)
+u = ui
+v = vi
+go to 10
+end subroutine quadit
+
+subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
+implicit none
+integer :: iflag, nn, nz
+double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+integer :: i, j, n
+double precision :: pv, kv, t, s
+real :: ms, mp, omp, ee
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     Variable-shift H polynomial iteration for a real zero.
+!
+!     sss   - Starting iterate
+!     nz    - Number of zero found
+!     iflag - Flag to indicate a pair of zeros near the real
+!             axis.
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+s = sss
+iflag = 0
+j = 0
+!
+!     Evaluate p at s
+!
+10 pv = p(1)
+qp(1) = pv
+do 20 i = 2,nn
+   pv = pv*s + p(i)
+   qp(i) = pv
+20 continue
+mp = dabs(pv)
+!
+!     Compute a rigorous bound on the error in evaluating p
+!
+ms = dabs(s)
+ee = (mre/(are + mre))*abs(sngl(qp(1)))
+do i = 2,nn
+   ee = ee*ms + abs(sngl(qp(i)))
+end do
+!
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
+!
+if (mp .gt. 20.0*((are + mre)*ee - mre*mp)) go to 40
+nz = 1
+szr = s
+szi = 0.d0
+return
+40 j = j + 1
+!
+!     STOP ITERATION AFTER 10 STEPS
+!
+if (j .gt. 10) return
+if (j .lt. 2) go to 50
+if (dabs(t) .gt. 1.d-3*dabs(s - t) .or. mp .le. omp) &
+   & go to 50
+!
+!     A cluster of zeros near the real axis has been
+!     encountered return with iflag set to initiate A
+!     quadratic iteration
+!
+iflag = 1
+sss = s
+return
+!
+!     RETURN IF THE POLYNOMIAL VALUE HAS INCREASED
+!     significantly
+!
+50 omp = mp
+!
+!     Compute t, the next polynomial, and the new iterate
+!
+kv = k(1)
+qk(1) = kv
+do i = 2,n
+   kv = kv*s + k(i)
+   qk(i) = kv
+end do
+if (dabs(kv) .le. dabs(k(n))*10.*eta) go to 80
+!
+!     Use the scaled form of the recurrence if the value
+!     of k at s is nonzero
+!
+t = -pv/kv
+k(1) = qp(1)
+do i = 2,n
+   k(i) = t*qk(i - 1) + qp(i)
+end do
+go to 100
+!
+!     Use unscaled form
+!
+80 k(1) = 0.0d0
+do i = 2,n
+   k(i) = qk(i - 1)
+end do
+100 kv = k(1)
+do i = 2,n
+   kv = kv*s + k(i)
+end do
+t = 0.d0
+if (dabs(kv) .gt. dabs(k(n))*10.*eta) t = -pv/kv
+s = s + t
+go to 10
+end subroutine realit
+
+subroutine calcsc(type, n, k, qk)
+implicit none
+integer :: n
+integer :: type
+double precision :: k(n), qk(n)
+double precision :: tol
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     This routine calculates scalar quantities used to
+!     compute the next k polynomial and new estimates of
+!     the quadratic coefficients.
+!
+!     type - Integer variable SET here indicating how the
+!            calculations are normalized to avoid overflow
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+!     Synthetic division of k by the quadratic 1,u,v
+!
+call quadsd(n, u, v, k, qk, c, d)
+tol = 100.0*eta
+if (dabs(c) .gt. tol*dabs(k(n))) go to 10
+if (dabs(d) .gt. tol*dabs(k(n - 1))) go to 10
+type = 3
+!
+!     type=3 Indicates the quadratic is almost a factor of k
+!
+return
+10 if (dabs(d) .lt. dabs(c)) go to 20
+type = 2
+!
+!     type=2 Indicates that all formulas are divided by d
+!
+e = a/d
+f = c/d
+g = u*b
+h = v*b
+a3 = (a + g)*e + h*(b/d)
+a1 = b*f - a
+a7 = (f + u)*a + h
+return
+20 type = 1
+!
+!     type=1 Indicates that all formulas are divided by c
+!
+e = a/c
+f = d/c
+g = u*e
+h = v*b
+a3 = a*e + (h/c + g)*b
+a1 = b - a*(d/c)
+a7 = a + g*d + h*f
+return
+end subroutine calcsc
+
 subroutine nextk(type, n, qp, k, qk)
 implicit none
 integer :: n
@@ -264,18 +704,36 @@ double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
    & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
 integer :: i, nn
-integer :: ipmpar
 double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
-double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd, dpmpar, scalcp
+double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd, scalcp
 logical :: conv
 integer :: cnt1, cnt2
 interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
    pure elemental function dcpabs(x,y)
       implicit none
       double precision, intent(in) :: x
       double precision, intent(in) :: y
       double precision :: dcpabs
    end function dcpabs
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
 end interface
 !-------------------------
 !-------------------------
@@ -509,7 +967,7 @@ go to 50
 return
 end subroutine cauchy
 
-subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
+pure subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
 implicit none
 integer, intent(in) :: l1, nn
 double precision, intent(inout) :: tr, ti
@@ -518,6 +976,15 @@ double precision, intent(inout) :: hr(nn), hi(nn)
 integer :: i, j, jj, n, nm1
 double precision :: dn, t1, t2, xni
 interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
    pure elemental function dcpabs(x,y)
       implicit none
       double precision, intent(in) :: x
@@ -567,7 +1034,7 @@ do 50 jj = 1,l1
 return
 end subroutine noshft
 
-subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
+pure subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
    & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
    & are,mre,eta,infin)
 implicit none
@@ -583,12 +1050,81 @@ integer :: i, j, n
 double precision :: otr, oti, svsr, svsi
 logical :: test, pasd, bool
 interface
+   pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr, &
+      & qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(inout) :: bool
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(in) :: pvr
+      double precision, intent(in) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: hr(n)
+      double precision, intent(in) :: hi(n)
+      double precision, intent(inout) :: qhr(n)
+      double precision, intent(inout) :: qhi(n)
+   end subroutine calct
    pure elemental function dcpabs(x,y)
       implicit none
       double precision, intent(in) :: x
       double precision, intent(in) :: y
       double precision :: dcpabs
    end function dcpabs
+   pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(in) :: bool
+      double precision, intent(in) :: tr
+      double precision, intent(in) :: ti
+      double precision, intent(inout) :: hr(n)
+      double precision, intent(inout) :: hi(n)
+      double precision, intent(in) :: qpr(n)
+      double precision, intent(in) :: qpi(n)
+      double precision, intent(in) :: qhr(n)
+      double precision, intent(in) :: qhi(n)
+   end subroutine nexth
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
+   pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
+      & qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+      implicit none
+      integer, intent(in) :: nn
+      integer, intent(in) :: l3
+      double precision, intent(inout) :: zr
+      double precision, intent(inout) :: zi
+      logical, intent(out) :: conv
+      double precision, intent(in) :: pr(nn)
+      double precision, intent(in) :: pi(nn)
+      double precision, intent(inout) :: hr(nn)
+      double precision, intent(inout) :: hi(nn)
+      double precision, intent(inout) :: qpr(nn)
+      double precision, intent(inout) :: qpi(nn)
+      double precision, intent(inout) :: qhr(nn)
+      double precision, intent(inout) :: qhi(nn)
+      double precision, intent(out) :: sr
+      double precision, intent(out) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(inout) :: pvr
+      double precision, intent(inout) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: mre
+      double precision, intent(in) :: eta
+      double precision, intent(in) :: infin
+   end subroutine vrshft
 end interface
 !
 !     Computes l2 fixed-shift H polynomials and tests for convergence.
@@ -675,7 +1211,7 @@ call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
 return
 end subroutine fxshft
 
-subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
+pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
    & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l3, nn
@@ -688,15 +1224,68 @@ double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
 double precision, intent(inout) :: zr, zi
 logical, intent(out) :: conv
 integer :: i, j, n
-double precision :: mp, ms, omp, relstp, r1, r2, tp, errev
+double precision :: mp, ms, omp, relstp, r1, r2, tp
 logical :: b, bool
 interface
+   pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr, &
+      & qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(inout) :: bool
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(in) :: pvr
+      double precision, intent(in) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: hr(n)
+      double precision, intent(in) :: hi(n)
+      double precision, intent(inout) :: qhr(n)
+      double precision, intent(inout) :: qhi(n)
+   end subroutine calct
    pure elemental function dcpabs(x,y)
       implicit none
       double precision, intent(in) :: x
       double precision, intent(in) :: y
       double precision :: dcpabs
    end function dcpabs
+   pure function errev(nn,qr,qi,ms,mp,are,mre)
+      implicit none
+      integer, intent(in) :: nn
+      double precision, intent(in) :: qr(nn)
+      double precision, intent(in) :: qi(nn)
+      double precision, intent(in) :: ms
+      double precision, intent(in) :: mp
+      double precision, intent(in) :: are
+      double precision, intent(in) :: mre
+      double precision :: errev
+   end function errev
+   pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(in) :: bool
+      double precision, intent(in) :: tr
+      double precision, intent(in) :: ti
+      double precision, intent(inout) :: hr(n)
+      double precision, intent(inout) :: hi(n)
+      double precision, intent(in) :: qpr(n)
+      double precision, intent(in) :: qpi(n)
+      double precision, intent(in) :: qhr(n)
+      double precision, intent(in) :: qhi(n)
+   end subroutine nexth
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
 end interface
 !
 !     Carries out the third stage iteration.
@@ -775,7 +1364,7 @@ do 60 i = 1,l3
 return
 end subroutine vrshft
 
-subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
 logical, intent(inout) :: bool
@@ -785,12 +1374,33 @@ double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
 double precision, intent(inout) :: qhr(n), qhi(n)
 double precision :: hvr, hvi
 interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
    pure elemental function dcpabs(x,y)
       implicit none
       double precision, intent(in) :: x
       double precision, intent(in) :: y
       double precision :: dcpabs
    end function dcpabs
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
 end interface
 !
 !     This subroutine computes T = -P(S)/H(S)
@@ -908,7 +1518,7 @@ errev = e*(are + mre) - mp*mre
 return
 end function errev
 
-subroutine rbnd (n, c, w, abserr, relerr, klust, ker)
+pure subroutine rbnd (n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
@@ -918,7 +1528,6 @@ real, intent(in) :: c(*)
 real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
-real :: spmpar
 complex :: z
 double precision :: xr, xi, vr, vi, vt
 logical :: shrunk
@@ -929,6 +1538,11 @@ interface
       real, intent(in) :: y
       real :: cpabs
    end function cpabs
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
 end interface
 !-----------------------------------------------------------------------
 !
@@ -1072,7 +1686,7 @@ return
 return
 end subroutine rbnd
 
-subroutine cbnd (n, c, w, abserr, relerr, klust, ker)
+pure subroutine cbnd (n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
@@ -1081,7 +1695,6 @@ integer, intent(inout) :: klust(n)
 real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
-real :: spmpar
 complex :: z
 double precision :: xr, xi, vr, vi, vt
 logical :: shrunk
@@ -1092,6 +1705,11 @@ interface
       real, intent(in) :: y
       real :: cpabs
    end function cpabs
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
 end interface
 !-----------------------------------------------------------------------
 !
@@ -1765,12 +2383,17 @@ end do
 return
 end subroutine csrot
 
-subroutine srotmg (sd1,sd2,sx1,sy1,sparam)
+pure subroutine srotmg (sd1,sd2,sx1,sy1,sparam)
 implicit none
 real, intent(inout) :: sd1, sd2, sparam(5), sx1
 real, intent(in) :: sy1
-real :: gam, gamsq, one, rgamsq, sflag, sh11, sh12, sh21, sh22, &
-   & sp1, sp2, sq1, sq2, stemp, su, two, zero
+real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: two = 2.e0
+real, parameter :: gam = 4096.e0
+real, parameter :: gamsq = 1.67772e7
+real, parameter :: rgamsq = 5.96046e-8
 !
 !     Construct the modified Givens transformation matrix H which zeros
 !     the second component of the 2-vector  (sqrt(sd1)*sx1,sqrt(sd2)*
@@ -1793,8 +2416,6 @@ real :: gam, gamsq, one, rgamsq, sflag, sh11, sh12, sh21, sh22, &
 !     of sd1 and sd2.  All actual scaling of data is done using gam.
 !
 !
-data zero,one,two /0.e0,1.e0,2.e0/
-data gam,gamsq,rgamsq/4096.e0,1.67772e7,5.96046e-8/
 !
 if (sd1 .lt. zero) go to 60
 sp2 = sd2*sy1
@@ -1922,7 +2543,9 @@ integer, intent(in) :: incx, incy, n
 real :: sparam(5)
 real, intent(inout) :: sx(*), sy(*)
 integer :: i, kx, ky, nsteps
-real :: sflag, sh11, sh12, sh21, sh22, two, w, z, zero
+real :: sflag, sh11, sh12, sh21, sh22, w, z
+real, parameter :: zero = 0.e0
+real, parameter :: two = 2.e0
 !
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !
@@ -1941,7 +2564,6 @@ real :: sflag, sh11, sh12, sh21, sh22, two, w, z, zero
 !       (sh21  sh22),   (sh21  1.E0),   (-1.E0 sh22),   (0.E0  1.E0).
 !
 !
-data zero,two/0.e0,2.e0/
 !
 sflag = sparam(1)
 if (n .le. 0 .or.(sflag + two.eq.zero)) go to 140
@@ -2029,7 +2651,7 @@ end do
 return
 end subroutine srotm
 
-subroutine drotmg (dd1,dd2,dx1,dy1,dparam)
+pure subroutine drotmg (dd1,dd2,dx1,dy1,dparam)
 implicit none
 !
 !     Construct the modified Givens transformation matrix H which zeros
@@ -2057,15 +2679,16 @@ double precision, intent(inout) :: dparam(5)
 double precision, intent(in) :: dy1
 double precision, intent(inout) :: dd1
 double precision, intent(inout) :: dx1
-double precision :: gam, one, rgamsq
 double precision :: dh11, dh21
 double precision :: dp2, dq2, du
-double precision :: zero, gamsq
 double precision :: dflag, dh12, dh22, dp1, dq1, dtemp
-double precision :: two
+double precision, parameter :: zero = 0.d0
+double precision, parameter :: one = 1.d0
+double precision, parameter :: two = 2.d0
+double precision, parameter :: gam = 4096.d0
+double precision, parameter :: gamsq = 16777216.d0
+double precision, parameter :: rgamsq = 5.9604645d-8
 !
-data zero,one,two /0.d0,1.d0,2.d0/
-data gam,gamsq,rgamsq/4096.d0,16777216.d0,5.9604645d-8/
 !
 if (dd1 .lt. zero) go to 60
 dp2 = dd2*dy1
@@ -2195,8 +2818,10 @@ double precision :: dparam(5)
 double precision, intent(inout) :: dy(*)
 integer :: i, kx, ky, nsteps
 double precision :: dflag, dh12, dh22
-double precision :: two, z, dh11, dh21
-double precision :: w, zero
+double precision :: z, dh11, dh21
+double precision :: w
+double precision, parameter :: zero = 0.d0
+double precision, parameter :: two = 2.d0
 !
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !
@@ -2215,7 +2840,6 @@ double precision :: w, zero
 !       (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
 !
 !
-data zero,two/0.d0,2.d0/
 !
 dflag = dparam(1)
 if (n .le. 0 .or.(dflag + two.eq.zero)) go to 140
@@ -2935,14 +3559,17 @@ scasum = stemp
 return
 end function scasum
 
-real function snrm2 ( n, sx, incx)
+pure real function snrm2 ( n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
 integer :: i, j, nn
 integer :: next
-real :: cutlo, cuthi, hitest, sum, xmax, zero, one
-data   zero, one /0.0e0, 1.0e0/
+real :: hitest, sum, xmax
+real, parameter :: zero = 0.0e0
+real, parameter :: one = 1.0e0
+real, parameter :: cutlo = 4.441e-16
+real, parameter :: cuthi = 1.304e19
 !
 !     Euclidean norm of the n-vector stored in sx() with storage
 !     increment incx .
@@ -2981,7 +3608,6 @@ data   zero, one /0.0e0, 1.0e0/
 !     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
-data cutlo, cuthi / 4.441e-16,  1.304e19 /
 !
 if (n .gt. 0) go to 10
 snrm2 = zero
@@ -3062,14 +3688,17 @@ snrm2 = xmax * sqrt(sum)
 return
 end function snrm2
 
-double precision function dnrm2 ( n, dx, incx)
+pure double precision function dnrm2 ( n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
 integer :: i, j, nn
 integer :: next
-double precision :: cutlo, cuthi, hitest, sum, xmax, zero, one
-data   zero, one /0.0d0, 1.0d0/
+double precision :: hitest, sum, xmax
+double precision, parameter :: zero = 0.0d0
+double precision, parameter :: one = 1.0d0
+double precision, parameter :: cutlo = 8.232d-11
+double precision, parameter :: cuthi = 1.304d19
 !
 !     Euclidean norm of the n-vector stored in dx() with storage
 !     increment incx .
@@ -3108,7 +3737,6 @@ data   zero, one /0.0d0, 1.0d0/
 !     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
-data cutlo, cuthi / 8.232d-11,  1.304d19 /
 !
 if (n .gt. 0) go to 10
 dnrm2 = zero
@@ -3189,15 +3817,18 @@ dnrm2 = xmax * dsqrt(sum)
 return
 end function dnrm2
 
-real function scnrm2( n, cx, incx)
+pure real function scnrm2( n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
 complex, intent(in) :: cx(*)
 integer :: i, nn
 logical :: imag, scale
 integer :: next
-real :: cutlo, cuthi, hitest, sum, xmax, absx, zero, one
-data         zero, one /0.0e0, 1.0e0/
+real :: hitest, sum, xmax, absx
+real, parameter :: zero = 0.0e0
+real, parameter :: one = 1.0e0
+real, parameter :: cutlo = 4.441e-16
+real, parameter :: cuthi = 1.304e19
 !
 !     Unitary norm of the complex n-vector stored in cx() with storage
 !     increment incx .
@@ -3236,7 +3867,6 @@ data         zero, one /0.0e0, 1.0e0/
 !     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
-data cutlo, cuthi / 4.441e-16,  1.304e19 /
 !
 if (n .gt. 0) go to 10
 scnrm2 = zero
@@ -4694,13 +5324,13 @@ cloc = .false.
 return
 end function cloc
 
-subroutine cychg (x, y, yold)
+pure subroutine cychg (x, y, yold)
 implicit none
 complex, intent(in) :: x(*)
 complex, intent(inout) :: y(*)
 complex, intent(in) :: yold
-complex :: zero, one
-data zero/(0.0,0.0)/, one/(1.0,0.0)/
+complex, parameter :: zero = (0.0,0.0)
+complex, parameter :: one = (1.0,0.0)
 !
 y(1) = zero
 if (yold .eq. zero) y(1) = one
@@ -4885,7 +5515,7 @@ end do
 return
 end subroutine ckprod
 
-subroutine rnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+pure subroutine rnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
@@ -4894,7 +5524,51 @@ real, intent(inout) :: a(mda,n), work(*)
 integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 real :: eps, rerr
-real :: spmpar
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+   pure subroutine u11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+      & ic,ir)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      real, intent(inout) :: a(mda,n)
+      real, intent(inout) :: ub(n)
+      real, intent(inout) :: db(n)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      real, intent(inout) :: h(n)
+      real, intent(inout) :: w(n)
+      real, intent(inout) :: eb(n)
+      integer, intent(inout) :: ic(n)
+      integer, intent(inout) :: ir(m)
+   end subroutine u11ls
+   pure subroutine u11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+      & ir,ic)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      real, intent(inout) :: a(mda,n)
+      real, intent(inout) :: ub(m)
+      real, intent(inout) :: db(m)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      real, intent(inout) :: h(m)
+      real, intent(inout) :: w(m)
+      real, intent(inout) :: eb(m)
+      integer, intent(inout) :: ir(m)
+      integer, intent(inout) :: ic(n)
+   end subroutine u11us
+end interface
 !-----------------------------------------------------------------------
 !
 !          Upper and lower bounds of the rank of a real matrix
@@ -4939,7 +5613,7 @@ return
 return
 end subroutine rnk
 
-subroutine drnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+pure subroutine drnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
@@ -4949,7 +5623,51 @@ double precision, intent(inout) :: work(*)
 integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 double precision :: eps, rerr
-double precision :: dpmpar
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure subroutine du11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb &
+      & ,ic,ir)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: ub(n)
+      double precision, intent(inout) :: db(n)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      double precision, intent(inout) :: h(n)
+      double precision, intent(inout) :: w(n)
+      double precision, intent(inout) :: eb(n)
+      integer, intent(inout) :: ic(n)
+      integer, intent(inout) :: ir(m)
+   end subroutine du11ls
+   pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb &
+      & ,ir,ic)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: ub(m)
+      double precision, intent(inout) :: db(m)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      double precision, intent(inout) :: h(m)
+      double precision, intent(inout) :: w(m)
+      double precision, intent(inout) :: eb(m)
+      integer, intent(inout) :: ir(m)
+      integer, intent(inout) :: ic(n)
+   end subroutine du11us
+end interface
 !-----------------------------------------------------------------------
 !
 !              Upper and lower bounds of the rank of A
@@ -5905,8 +6623,14 @@ real :: a(ka,n), b(n), q(kq,n)
 real, intent(inout) :: r(n), x(n)
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
-real :: spmpar
 double precision :: dsum
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a linear system AX = b
@@ -7496,7 +8220,7 @@ call arcesl(array, mtrstr, nmblks, pivot, b, x)
 return
 end subroutine arceco
 
-subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
+pure subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
 implicit none
 integer, intent(inout) :: iflag, mtrstr(3,*)
 integer, intent(in) :: n, nmblks
@@ -7504,7 +8228,34 @@ real, intent(inout) :: array(*)
 integer, intent(inout) :: pivot(*)
 integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
    & nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
-real :: pivmax, zero
+real :: pivmax
+real, parameter :: zero = 0.0
+interface
+   pure subroutine arcepc(topblk,nrwtop,novrlp,botblk,nrwbot, &
+      & nclpiv,pivot,pivmax,iflag)
+      implicit none
+      integer, intent(in) :: nrwbot
+      integer, intent(in) :: novrlp
+      integer, intent(in) :: nrwtop
+      real, intent(inout) :: topblk(nrwtop,novrlp)
+      real, intent(inout) :: botblk(nrwbot,novrlp)
+      integer, intent(in) :: nclpiv
+      integer, intent(inout) :: pivot(nrwtop)
+      real, intent(inout) :: pivmax
+      integer, intent(inout) :: iflag
+   end subroutine arcepc
+   pure subroutine arcepr(block,nrwblk,nclblk,nrwpiv,pivot, &
+      & pivmax,iflag)
+      implicit none
+      integer, intent(in) :: nclblk
+      integer, intent(in) :: nrwblk
+      real, intent(inout) :: block(nrwblk,nclblk)
+      integer, intent(in) :: nrwpiv
+      integer, intent(inout) :: pivot(nrwblk)
+      real, intent(inout) :: pivmax
+      integer, intent(inout) :: iflag
+   end subroutine arcepr
+end interface
 !
 !***************************************************************
 !
@@ -7589,7 +8340,6 @@ real :: pivmax, zero
 !
 !***************************************************************
 !
-data zero /0.0/
 !
 !***************************************************************
 !
@@ -10071,502 +10821,4 @@ if (anorm .ne. 0.0d0) rcond = ynorm/anorm
 if (anorm .eq. 0.0d0) rcond = 0.0d0
 return
 end subroutine dspco
-
-pure subroutine dspfa(ap,n,kpvt,info)
-implicit none
-integer, intent(in) :: n
-integer, intent(inout) :: kpvt(*)
-integer, intent(out) :: info
-double precision, intent(inout) :: ap(*)
-double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
-double precision :: absakk, alpha, colmax, rowmax
-integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
-integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
-   & km2, kstep
-logical :: swap
-interface
-   pure subroutine daxpy(n,da,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: da
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine daxpy
-   pure subroutine dswap(n,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(inout) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine dswap
-   pure function idamax(n,dx,incx)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      integer :: idamax
-   end function idamax
-end interface
-!
-!     dspfa factors a double precision symmetric matrix stored in
-!     packed form by elimination with symmetric pivoting.
-!
-!     To solve  A*X = B , follow dspfa by dspsl.
-!     To compute  inverse(A)*C , follow dspfa by dspsl.
-!     To compute  determinant(A) , follow dspfa by dspdi.
-!     To compute  inertia(A) , follow dspfa by dspdi.
-!     To compute  inverse(A) , follow dspfa by dspdi.
-!
-!     On entry
-!
-!        ap      DOUBLE PRECISION (n*(n+1)/2)
-!                the packed form of A symmetric matrix  A .  The
-!                columns of the upper triangle are stored sequentially
-!                in a one-dimensional array of length  n*(n+1)/2 .
-!                See comments below for details.
-!
-!        n       INTEGER
-!                the order of the matrix  A .
-!
-!     Output
-!
-!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                were used to obtain it stored in packed form.
-!                The factorization can be written  A = U*D*trans(U)
-!                where  U  is a product of permutation and unit
-!                upper triangular matrices , trans(U) is the
-!                transpose of  U , and  D  is block diagonal
-!                with 1 by 1 and 2 by 2 blocks.
-!
-!        kpvt    INTEGER(n)
-!                an integer vector of pivot indices.
-!
-!        INFO    INTEGER
-!                = 0  Normal value.
-!                = k  if the k-TH pivot block is singular. This is
-!                     not an error condition for this subroutine,
-!                     but it does indicate that dspsl or dspdi may
-!                     divide by zero if called.
-!
-!     Packed storage
-!
-!          The following program segment will pack the upper
-!          triangle of a symmetric matrix.
-!
-!                k = 0
-!                do 20 j = 1, n
-!                   do 10 i = 1, j
-!                      k = k + 1
-!                      ap(k)  = a(i,j)
-!             10    continue
-!             20 continue
-!
-!     LINPACK. This version dated 08/14/78 .
-!     James bunch, univ. Calif. San diego, argonne nat. Lab.
-!
-!     Subroutines and functions
-!
-!     BLAS daxpy,dswap,idamax
-!     Fortran dabs,DMAX1,DSQRT
-!
-!     Internal variables
-!
-!
-!
-!     Initialize
-!
-!     alpha is used in choosing pivot block SIZE.
-alpha = (1.0d0 + dsqrt(17.0d0))/8.0d0
-!
-info = 0
-!
-!     Main loop on k, which goes from n to 1.
-!
-k = n
-ik = (n*(n - 1))/2
-10 continue
-!
-!        Leave the loop if k=0 Or k=1.
-!
-!     ...Exit
-if (k .eq. 0) go to 200
-if (k .gt. 1) go to 20
-kpvt(1) = 1
-if (ap(1) .eq. 0.0d0) info = 1
-!     ......Exit
-go to 200
-20 continue
-!
-!        This section of code determines the kind of
-!        elimination to be performed.  When it is completed,
-!        KSTEP will be set to the size of the pivot block, and
-!        swap will be set to .TRUE. if an interchange is
-!        required.
-!
-km1 = k - 1
-kk = ik + k
-absakk = dabs(ap(kk))
-!
-!        Determine the largest off-diagonal element in
-!        column k.
-!
-imax = idamax(k - 1,ap(ik + 1),1)
-imk = ik + imax
-colmax = dabs(ap(imk))
-if (absakk .lt. alpha*colmax) go to 30
-kstep = 1
-swap = .false.
-go to 90
-30 continue
-!
-!           Determine the largest off-diagonal element in
-!           row imax.
-!
-rowmax = 0.0d0
-imaxp1 = imax + 1
-im = imax*(imax - 1)/2
-imj = im + 2*imax
-do j = imaxp1, k
-   rowmax = dmax1(rowmax,dabs(ap(imj)))
-   imj = imj + j
-end do
-if (imax .eq. 1) go to 50
-jmax = idamax(imax - 1,ap(im + 1),1)
-jmim = jmax + im
-rowmax = dmax1(rowmax,dabs(ap(jmim)))
-50 continue
-imim = imax + im
-if (dabs(ap(imim)) .lt. alpha*rowmax) go to 60
-kstep = 1
-swap = .true.
-go to 80
-60 continue
-if (absakk .lt. alpha*colmax*(colmax/rowmax)) go to 70
-kstep = 1
-swap = .false.
-go to 80
-70 continue
-kstep = 2
-swap = imax .ne. km1
-80 continue
-90 continue
-if (dmax1(absakk,colmax) .ne. 0.0d0) go to 100
-!
-!           Column k is zero.  Set info and iterate the loop.
-!
-kpvt(k) = k
-info = k
-go to 190
-100 continue
-if (kstep .eq. 2) go to 140
-!
-!           1 X 1 pivot block.
-!
-if (.not.swap) go to 120
-!
-!              Perform an interchange.
-!
-call dswap(imax,ap(im + 1),1,ap(ik + 1),1)
-imj = ik + imax
-do jj = imax, k
-   j = k + imax - jj
-   jk = ik + j
-   t = ap(jk)
-   ap(jk) = ap(imj)
-   ap(imj) = t
-   imj = imj - (j - 1)
-end do
-120 continue
-!
-!           Perform the elimination.
-!
-ij = ik - (k - 1)
-do jj = 1, km1
-   j = k - jj
-   jk = ik + j
-   mulk = -ap(jk)/ap(kk)
-   t = mulk
-   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
-   ijj = ij + j
-   ap(jk) = mulk
-   ij = ij - (j - 1)
-end do
-!
-!           Set the pivot array.
-!
-kpvt(k) = k
-if (swap) kpvt(k) = imax
-go to 190
-140 continue
-!
-!           2 X 2 pivot block.
-!
-km1k = ik + k - 1
-ikm1 = ik - (k - 1)
-if (.not.swap) go to 160
-!
-!              Perform an interchange.
-!
-call dswap(imax,ap(im + 1),1,ap(ikm1 + 1),1)
-imj = ikm1 + imax
-do jj = imax, km1
-   j = km1 + imax - jj
-   jkm1 = ikm1 + j
-   t = ap(jkm1)
-   ap(jkm1) = ap(imj)
-   ap(imj) = t
-   imj = imj - (j - 1)
-end do
-t = ap(km1k)
-ap(km1k) = ap(imk)
-ap(imk) = t
-160 continue
-!
-!           Perform the elimination.
-!
-km2 = k - 2
-if (km2 .eq. 0) go to 180
-ak = ap(kk)/ap(km1k)
-km1km1 = ikm1 + k - 1
-akm1 = ap(km1km1)/ap(km1k)
-denom = 1.0d0 - ak*akm1
-ij = ik - (k - 1) - (k - 2)
-do jj = 1, km2
-   j = km1 - jj
-   jk = ik + j
-   bk = ap(jk)/ap(km1k)
-   jkm1 = ikm1 + j
-   bkm1 = ap(jkm1)/ap(km1k)
-   mulk = (akm1*bk - bkm1)/denom
-   mulkm1 = (ak*bkm1 - bk)/denom
-   t = mulk
-   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
-   t = mulkm1
-   call daxpy(j,t,ap(ikm1 + 1),1,ap(ij + 1),1)
-   ap(jk) = mulk
-   ap(jkm1) = mulkm1
-   ijj = ij + j
-   ij = ij - (j - 1)
-end do
-180 continue
-!
-!           Set the pivot array.
-!
-kpvt(k) = 1 - k
-if (swap) kpvt(k) = -imax
-kpvt(k - 1) = kpvt(k)
-190 continue
-ik = ik - (k - 1)
-if (kstep .eq. 2) ik = ik - (k - 2)
-k = k - kstep
-go to 10
-200 continue
-return
-end subroutine dspfa
-
-pure subroutine dspsl(ap,n,kpvt,b)
-implicit none
-integer, intent(in) :: n, kpvt(*)
-double precision, intent(in) :: ap(*)
-double precision, intent(inout) :: b(*)
-double precision :: ak, akm1, bk, bkm1, denom, temp
-integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
-interface
-   pure subroutine daxpy(n,da,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: da
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine daxpy
-   pure function ddot(n,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(in) :: dy(*)
-      integer, intent(in) :: incy
-      double precision :: ddot
-   end function ddot
-end interface
-!
-!     DSISL solves the double precision symmetric system
-!     A * X = b
-!     using the factors computed by dspfa.
-!
-!     On entry
-!
-!        ap      DOUBLE PRECISION(n*(n+1)/2)
-!                the output from dspfa.
-!
-!        n       INTEGER
-!                the order of the matrix  A .
-!
-!        kpvt    INTEGER(n)
-!                the pivot vector from dspfa.
-!
-!        b       DOUBLE PRECISION(n)
-!                the right hand side vector.
-!
-!     On return
-!
-!        b       THE SOLUTION VECTOR  X .
-!
-!     Error condition
-!
-!        A division by zero may occur if  dspco  has set RCOND .EQ. 0.0
-!        or  dspfa  has set info .NE. 0  .
-!
-!     To compute  inverse(A) * C  where  C  is a matrix
-!     with  P  columns
-!           call dspfa(ap,n,kpvt,info)
-!           if (info .ne. 0) go to ...
-!           do 10 j = 1, p
-!              call dspsl(ap,n,kpvt,c(1,j))
-!        10 continue
-!
-!     LINPACK. This version dated 08/14/78 .
-!     James bunch, univ. Calif. San diego, argonne nat. Lab.
-!
-!     Subroutines and functions
-!
-!     BLAS daxpy,ddot
-!     FORTRAN IABS
-!
-!     Internal variables.
-!
-!
-!     Loop backward applying the transformations and
-!     D inverse to b.
-!
-k = n
-ik = (n*(n - 1))/2
-10 if (k .eq. 0) go to 80
-kk = ik + k
-if (kpvt(k) .lt. 0) go to 40
-!
-!           1 X 1 pivot block.
-!
-if (k .eq. 1) go to 30
-kp = kpvt(k)
-if (kp .eq. k) go to 20
-!
-!                 Interchange.
-!
-temp = b(k)
-b(k) = b(kp)
-b(kp) = temp
-20 continue
-!
-!              Apply the transformation.
-!
-call daxpy(k - 1,b(k),ap(ik + 1),1,b(1),1)
-30 continue
-!
-!           Apply D inverse.
-!
-b(k) = b(k)/ap(kk)
-k = k - 1
-ik = ik - k
-go to 70
-40 continue
-!
-!           2 X 2 pivot block.
-!
-ikm1 = ik - (k - 1)
-if (k .eq. 2) go to 60
-kp = iabs(kpvt(k))
-if (kp .eq. k - 1) go to 50
-!
-!                 Interchange.
-!
-temp = b(k - 1)
-b(k - 1) = b(kp)
-b(kp) = temp
-50 continue
-!
-!              Apply the transformation.
-!
-call daxpy(k - 2,b(k),ap(ik + 1),1,b(1),1)
-call daxpy(k - 2,b(k - 1),ap(ikm1 + 1),1,b(1),1)
-60 continue
-!
-!           Apply D inverse.
-!
-km1k = ik + k - 1
-kk = ik + k
-ak = ap(kk)/ap(km1k)
-km1km1 = ikm1 + k - 1
-akm1 = ap(km1km1)/ap(km1k)
-bk = b(k)/ap(km1k)
-bkm1 = b(k - 1)/ap(km1k)
-denom = ak*akm1 - 1.0d0
-b(k) = (akm1*bk - bkm1)/denom
-b(k - 1) = (ak*bkm1 - bk)/denom
-k = k - 2
-ik = ik - (k + 1) - k
-70 continue
-go to 10
-80 continue
-!
-!     Loop forward applying the transformations.
-!
-k = 1
-ik = 0
-90 if (k .gt. n) go to 160
-if (kpvt(k) .lt. 0) go to 120
-!
-!           1 X 1 pivot block.
-!
-if (k .eq. 1) go to 110
-!
-!              Apply the transformation.
-!
-b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
-kp = kpvt(k)
-if (kp .eq. k) go to 100
-!
-!                 Interchange.
-!
-temp = b(k)
-b(k) = b(kp)
-b(kp) = temp
-100 continue
-110 continue
-ik = ik + k
-k = k + 1
-go to 150
-120 continue
-!
-!           2 X 2 pivot block.
-!
-if (k .eq. 1) go to 140
-!
-!              Apply the transformation.
-!
-b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
-ikp1 = ik + k
-b(k + 1) = b(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,b(1),1)
-kp = iabs(kpvt(k))
-if (kp .eq. k) go to 130
-!
-!                 Interchange.
-!
-temp = b(k)
-b(k) = b(kp)
-b(kp) = temp
-130 continue
-140 continue
-ik = ik + k + k + 1
-k = k + 2
-150 continue
-go to 90
-160 continue
-return
-end subroutine dspsl
 

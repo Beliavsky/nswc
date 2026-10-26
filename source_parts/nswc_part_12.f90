@@ -1,3 +1,2178 @@
+subroutine extra (neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
+implicit none
+integer, intent(in) :: neqn
+real :: f(neqn), f1(neqn), f2(neqn)
+real, intent(in) :: h, t, tex
+real :: y(neqn)
+real, intent(inout) :: yex(neqn)
+real :: yinc1(neqn), yinc2(neqn)
+real, intent(inout) :: ypex(neqn)
+integer :: n
+real :: a1, a2, a3, a4, hf, hf1, hf2, sig
+!
+!     This version of extra is the third of the three changes
+!     needed to make the interpolant derivative more stable.
+!
+!     t is the independent variable.
+!     y is the value at t-2H. the values at t-h and t are
+!     y + h*yinc1 and y + h*yinc2 respectively.
+!     f,f1 and f2 are the derivatives at t-2H, t-h and t.
+!     Tex is the point where the output is required.
+!     yex will hold the approximate solution at tex and ypex will
+!     hold the derivative approximation at this point.
+!
+!
+!     Perform quintic interpolation based on the values
+!     y(n),y(n)+h*yinc1(n),y(n)+h*yinc2(n),f(n),f1(n),f2(n) at the
+!     points t-2H, t-h, t.  this polynomial is evaluated at the point
+!     tex to obtain the approximate value of y(tex) and this is stored
+!     in the array yex.  The derivative of the interpolating polynomial
+!     is also evaluated at tex to obtain an approximation to DY/DT
+!     at this point and this approximation is stored in ypex.
+!
+sig = (tex - t)/h + 2.0
+do n = 1, neqn
+   hf = h*f(n)
+   hf1 = h*f1(n)
+   hf2 = h*f2(n)
+   a1 = 2.0*(hf2 + hf) - 6.0*h*yinc2(n) + 8.0*hf1
+   a2 = h*yinc2(n) + 4.0*h*yinc1(n) - 4.0*hf1 - 2.0*hf
+   a3 = hf1 + hf - 2.0*h*yinc1(n)
+   a4 = h*yinc1(n) - hf
+   yex(n) = ((((a1*0.125*(sig - 2.0) + 0.25*a2)*(sig - 1.0) + &
+      & a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
+   ypex(n) = ((((0.625*a1*sig + (a2 - 2.0*a1))*sig + (1.875*a1 - &
+      & 1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
+      & 2.0*(a3 - a4)))*sig + hf)/h
+end do
+return
+end subroutine extra
+
+subroutine rkf45 (f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
+implicit none
+!
+!     Fehlberg fourth-fifth order Runge-Kutta method
+!
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!                  albuquerque,new mexico
+!
+!    rkf45 is primarily designed to solve non-stiff and mildly stiff
+!    differential equations when derivative evaluations are inexpensive.
+!    rkf45 should generally not be used when the user is demanding
+!    high accuracy.
+!
+! Abstract
+!
+!    Subroutine  rkf45  integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
+!              where the y(I) are given at t .
+!    Typically the subroutine is used to integrate from t to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout.  On return the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call rkf45 again (and perhaps define a new value for tout).
+!    Actually, rkf45 is an interfacing routine which calls subroutine
+!    rkfs for the solution.  rkfs in turn calls subroutine  fehl which
+!    computes an approximate solution over one step.
+!
+!    rkf45  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
+!
+!    The parameters represent-
+!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
+!      neqn -- number of equations to be integrated
+!      y(*) -- solution vector at t
+!      t -- independent variable
+!      tout -- output point at which solution is desired
+!      relerr,abserr -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
+!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
+!            for each component of the local error and solution vectors
+!      iflag -- indicator for status of integration
+!      work(*) -- array to hold information internal to rkf45 which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+6*neqn
+!      iwork(*) -- integer array used to hold information internal to
+!            rkf45 which is necessary for subsequent calls. Must be
+!            dimensioned at least  5
+!
+!  First call to rkf45
+!
+!    The user must provide storage in his calling program for the arrays
+!    IN THE CALL LIST  -      y(neqn) , work(3+6*neqn) , iwork(5)  ,
+!    declare F in an external statement, supply subroutine F(t,y,YP) and
+!    initialize the following parameters-
+!
+!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
+!      y(*) -- vector of initial conditions
+!      t -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
+!            t=tout is allowed on the first call only, in which case
+!            rkf45 returns with iflag=2 If continuation is possible.
+!      relerr,abserr -- relative and absolute local error tolerances
+!            which must be non-negative. relerr must be a variable while
+!            abserr may be a constant. The code should normally not be
+!            used with relative error control smaller than about 1.E-8 .
+!            To avoid limiting precision difficulties the code requires
+!            relerr to be larger than an internally computed relative
+!            error parameter which is machine dependent. In particular,
+!            pure absolute error is not permitted. If a smaller than
+!            allowable value of relerr is attempted, rkf45 increases
+!            relerr appropriately and returns control to the user before
+!            continuing the integration.
+!      iflag -- +1,-1  indicator to initialize the code for each new
+!            problem. Normal input is +1. The user should set iflag=-1
+!            only when one-step integrator control is essential. In this
+!            case, rkf45 attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
+!
+!  Output from rkf45
+!
+!      y(*) -- solution at t
+!      t -- last point reached in integration.
+!      iflag = 2 -- integration reached tout.
+!            =-2 -- A single successful step in the direction of tout
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
+!            = 3 -- Integration was not completed because relative error
+!                   tolerance was too small. relerr has been increased
+!                   appropriately for continuing.
+!            = 4 -- Integration was not completed because more than
+!                   3000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
+!            = 5 -- Integration was not completed because solution
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero abserr to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
+!            = 6 -- Integration was not completed because requested
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
+!            = 7 -- It is likely that rkf45 is inefficient for solving
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step integrator
+!                   mode.
+!            = 8 -- Invalid input parameters
+!                   this indicator occurs if any of the following is
+!                   SATISFIED -   neqn .LE. 0
+!                                 t=tout  and  iflag .NE. +1 or -1
+!                                 relerr OR abserr .LT. 0.
+!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 8
+!      work(*),iwork(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   work(1),...,work(neqn) contain the first derivatives
+!                   of the solution vector y at t. work(neqn+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   iwork(1) contains the derivative evaluation counter.
+!
+!  Subsequent calls to rkf45
+!
+!    Subroutine rkf45 returns with all information needed to continue
+!    integration. If the integration reached tout, the user need only
+!    define a new tout and call rkf45 again. In the one-step integrator
+!    mode (iflag=-2) the user must keep in mind that each step taken is
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing iflag to 2),the user must then define a new tout and
+!    reset iflag to -2 To continue in the one-step integrator mode.
+!
+!    If the integration was not completed but the user still wants to
+!    CONTINUE (iflag=3,4 CASES), HE JUST CALLS rkf45 AGAIN. WITH iflag=3
+!    the relerr parameter HAS been adjusted appropriately for continuing
+!    the integration. In the case of iflag=4 The function counter will
+!    be reset to 0 and another 3000 function evaluations are allowed.
+!
+!    However,in the case iflag=5, the user must first alter the error
+!    criterion to use a positive value of abserr before integration can
+!    proceed. If he does not,execution is terminated.
+!
+!    Also,in the case iflag=6, it is necessary for the user to reset
+!    iflag to 2 (or -2 When the one-step integration mode is being used)
+!    as well as increasing either abserr,relerr or both before the
+!    integration can be continued. If this is not done, execution will
+!    be terminated. The occurrence of iflag=6 Indicates a trouble spot
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
+!
+!    If iflag=7 Is encountered, the user should use the one-step mode
+!    or switch to another routine. If the user insists upon continuing
+!    the integration with rkf45, then he must reset iflag to 2 or -2
+!    before recalling rkf45. Otherwise, execution will be terminated.
+!
+!    If iflag=8 Is obtained, integration cannot be continued unless
+!    the invalid input parameters are corrected.
+!
+!    It should be noted that the arrays work,iwork contain information
+!    required for subsequent integration. Accordingly, work and iwork
+!    should not be altered.
+!
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, iwork(5)
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: work(*)
+external f
+integer :: k1, k2, k3, k4, k5, k6, k1m
+!
+!
+!
+!     Compute indices for the splitting of the work array
+!
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
+!
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use rkfs directly.
+!
+call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
+   & work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
+   & work(k6 + 1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+!
+return
+end subroutine rkf45
+
+subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
+   & f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
+implicit none
+!
+!
+!     rkfs integrates a system of first order ordinary differential
+!     equations as described in the comments for rkf45 .
+!     The arrays yp,f1,f2,f3,f4,and f5 (of dimension at least neqn) and
+!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         yp - Derivative of solution vector at t
+!         h  - An appropriate stepsize to be used for the next step
+!         nfe- counter on the number of derivative function evaluations
+!
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: h
+real :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), savre, savae
+external f
+logical :: hfaild, output
+real :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
+integer :: k, mflag
+real, parameter :: remin = 1.e-12
+integer, parameter :: maxnfe = 3000
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!
+!
+!
+!
+!     remin is the minimum acceptable value of relerr.  Attempts
+!     to obtain higher accuracy with this subroutine are usually
+!     very expensive and often unsuccessful.
+!
+!
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately maxnfe.
+!     As set, this corresponds to about 500 steps.
+!
+!
+!     Check input parameters
+!
+if (neqn .lt. 1) go to 10
+if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 10
+mflag = iabs(iflag)
+if (mflag .eq. 0 .or. mflag .gt. 8) go to 10
+!
+!     Compute the relative machine precision
+!
+eps = spmpar(1)
+u26 = 26.0*eps
+if (mflag .ne. 1) go to 20
+go to 50
+!
+!     Invalid input
+!
+10 iflag = 8
+return
+!
+!     Check continuation possibilities
+!
+20 if (t .eq. tout .and. kflag .ne. 3) go to 10
+if (mflag .ne. 2) go to 25
+!
+!     iflag = +2 or -2
+!
+if (kflag .eq. 3) go to 45
+if (init .eq. 0) go to 45
+if (kflag .eq. 4) go to 40
+if ((kflag .eq. 5)  .and.  (abserr .eq. 0.0)) go to 30
+if ((kflag .eq. 6)  .and.  (relerr .le. savre)  .and. &
+   & (abserr .le. savae)) go to 30
+go to 50
+!
+!     iflag = 3,4,5,6,7 or 8
+!
+25 if (iflag .eq. 3) go to 45
+if (iflag .eq. 4) go to 40
+if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
+!
+!     Integration cannot be continued since user did not respond to
+!     the instructions pertaining to iflag=5,6,7 or 8
+!
+30 stop
+!
+!     Reset function evaluation counter
+!
+40 nfe = 0
+if (mflag .eq. 2) go to 50
+!
+!     Reset flag VALUE from previous call
+!
+45 iflag = jflag
+if (kflag .eq. 3) mflag = iabs(iflag)
+!
+!     Save input iflag and set continuation flag VALUE for subsequent
+!     input checking
+!
+50 jflag = iflag
+kflag = 0
+!
+!     Save relerr and abserr for checking input on subsequent calls
+!
+savre = relerr
+savae = abserr
+!
+!     Restrict relative error tolerance to be at least as large as
+!     2*eps+remin to avoid limiting precision difficulties arising
+!     from impossible accuracy requests
+!
+rer = 2.0*eps + remin
+if (relerr .ge. rer) go to 55
+!
+!     Relative error tolerance too small
+!
+relerr = rer
+iflag = 3
+kflag = 3
+return
+!
+55 dt = tout - t
+!
+if (mflag .eq. 1) go to 60
+if (init .eq. 0) go to 65
+go to 80
+!
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       set counter for function evaluations,nfe
+!                       estimate starting stepsize
+!
+60 init = 0
+kop = 0
+!
+a = t
+call f(a,y,yp)
+nfe = 1
+if (t .ne. tout) go to 65
+iflag = 2
+return
+!
+65 init = 1
+h = abs(dt)
+toln = 0.0
+do 70 k = 1,neqn
+   tol = relerr*abs(y(k)) + abserr
+   if (tol .le. 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
+70 continue
+if (toln .le. 0.0) h = 0.0
+h = amax1(h,u26*amax1(abs(t),abs(dt)))
+jflag = isign(2,iflag)
+!
+!     Set stepsize for integration in the direction from t to tout
+!
+80 h = sign(h,dt)
+!
+!     Test to see if rkf45 is being severely impacted by too many
+!     output points
+!
+if (abs(h) .ge. 2.0*abs(dt)) kop = kop + 1
+if (kop .ne. 100) go to 85
+!
+!     Unnecessary frequency of output
+kop = 0
+iflag = 7
+return
+!
+85 if (abs(dt) .gt. u26*abs(t)) go to 95
+!
+!     If too close to output point,extrapolate and return
+!
+do 90 k = 1,neqn
+90 y(k) = y(k) + dt*yp(k)
+a = tout
+call f(a,y,yp)
+nfe = nfe + 1
+go to 300
+!
+!
+!     Initialize output point indicator
+!
+95 output = .false.
+!
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
+!
+scale = 2.0/relerr
+ae = scale*abserr
+!
+!     Step by step integration
+!
+100 hfaild = .false.
+!
+!     Set smallest allowable stepsize
+!
+hmin = u26*abs(t)
+!
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize and
+!     thus lessen the impact of output points on the code.
+!
+dt = tout - t
+if (abs(dt) .ge. 2.0*abs(h)) go to 200
+if (abs(dt) .gt. abs(h)) go to 150
+!
+!     The next successful step will complete the integration to the
+!     output point
+!
+output = .true.
+h = dt
+go to 200
+!
+150 h = 0.5*dt
+!
+!
+!     Core integrator for taking a single step
+!
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function et.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, h is not permitted
+!     to become smaller than 26 units of roundoff in t.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and extra caution seems
+!     warranted.
+!
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from t to t+h
+!
+200 if (nfe .le. maxnfe) go to 220
+!
+!     Too much work
+!
+iflag = 4
+kflag = 4
+return
+!
+!     Advance an approximate solution over one step of length h
+!
+220 call fehl (f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
+nfe = nfe + 5
+!
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
+!
+eeoet = 0.0
+do 250 k = 1,neqn
+   et = abs(y(k)) + abs(f1(k)) + ae
+   if (et .gt. 0.0) go to 240
+!
+!        Inappropriate error tolerance
+!
+   iflag = 5
+   return
+!
+240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
+      & (22528.0*f2(k) - 27360.0*f5(k)))
+250 eeoet = amax1(eeoet,ee/et)
+!
+esttol = abs(h)*eeoet*scale/752400.0
+if (esttol .le. 1.0) go to 260
+!
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
+!
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol .lt. 59049.0) s = 0.9/esttol**0.2
+h = s*h
+if (abs(h) .gt. hmin) go to 200
+!
+!     Requested error unattainable at smallest allowable stepsize
+!
+iflag = 6
+kflag = 6
+return
+!
+!     Successful step
+!                        store solution at t+h
+!                        and evaluate derivatives there
+!
+260 t = t + h
+do 270 k = 1,neqn
+270 y(k) = f1(k)
+a = t
+call f(a,y,yp)
+nfe = nfe + 1
+!
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
+!
+s = 5.0
+if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = amin1(s,1.0)
+h = sign(amax1(s*abs(h),hmin),h)
+!
+!     END OF CORE INTEGRATOR
+!
+!
+!     Should we take another step
+!
+if (output) go to 300
+if (iflag .gt. 0) go to 100
+!
+!     Integration successfully completed
+!
+!     One-step mode
+!
+iflag = -2
+return
+!
+!     Interval mode
+!
+300 t = tout
+iflag = 2
+return
+end subroutine rkfs
+
+subroutine fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,s)
+implicit none
+!
+!     Fehlberg fourth-fifth order Runge-Kutta method
+!
+!    fehl integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT=F(t,y(1),---,y(neqn))
+!    where the initial values y(I) and the initial derivatives
+!    yp(I) are specified at the starting point t. fehl advances
+!    the solution over the fixed step h and returns
+!    the fifth order (sixth order accurate locally) solution
+!    approximation at t+h in array s(I).
+!    f1,---,f5 are arrays of dimension neqn which are needed
+!    for internal storage.
+!    The formulas have been grouped to control loss of significance.
+!    fehl should be called with an h not smaller than 13 units of
+!    roundoff in t so that the various independent arguments can be
+!    distinguished.
+!
+!
+integer, intent(in) :: neqn
+real, intent(in) :: y(neqn)
+real :: t, h
+real, intent(in) :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), s(neqn)
+external f
+real :: ch
+integer :: k
+!
+!
+ch = h/4.0
+do 221 k = 1,neqn
+221 f5(k) = y(k) + ch*yp(k)
+call f(t + ch,f5,f1)
+!
+ch = 3.0*h/32.0
+do 222 k = 1,neqn
+222 f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
+call f(t + 3.0*h/8.0,f5,f2)
+!
+ch = h/2197.0
+do 223 k = 1,neqn
+223 f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
+call f(t + 12.0*h/13.0,f5,f3)
+!
+ch = h/4104.0
+do 224 k = 1,neqn
+224 f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
+      & (29440.0*f2(k) - 32832.0*f1(k)))
+call f(t + h,f5,f4)
+!
+ch = h/20520.0
+do 225 k = 1,neqn
+225 f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
+      & 5643.0*f4(k))) + (41040.0*f1(k) - 28352.0*f2(k)))
+call f(t + h/2.0,f1,f5)
+!
+!     Compute approximate solution at t+h
+!
+ch = h/7618050.0
+do 230 k = 1,neqn
+230 s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
+      & 1371249.0*f4(k))) + (3953664.0*f2(k) + &
+      & 277020.0*f5(k)))
+!
+return
+end subroutine fehl
+
+subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(in) :: abserr
+real, intent(inout) :: gerror(neqn)
+real, intent(in) :: relerr
+real, intent(inout) :: t
+real, intent(in) :: tout
+real, intent(inout) :: work(*), y(neqn)
+external f
+integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
+!
+!     Fehlberg fourth(fifth) order Runge-Kutta method with
+!     global error assessment
+!
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!
+!    gerk is designed to solve systems of differential equations when
+!    it is important to have a readily available global error estimate.
+!    Parallel integration is performed to yield two solutions on
+!    different mesh spacings and global extrapolation is applied to
+!    provide an estimate of the global error in the more accurate
+!    solution.
+!
+!***********************************************************************
+! Abstract
+!***********************************************************************
+!
+!    Subroutine  gerk  integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
+!              where the y(I) are given at t .
+!    Typically the subroutine is used to integrate from t to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout. On return,an estimate of the
+!    global error in the solution at t is provided and the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call gerk again (and perhaps define a new value for tout).
+!    Actually, gerk  is merely an interfacing routine which allocates
+!    virtual storage in the arrays work,iwork and calls subroutine gerks
+!    for the solution.  gerks  in turn calls subroutine  fehl  which
+!    computes an approximate solution over one step.
+!
+!    gerk  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
+!
+!
+!    The parameters represent-
+!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
+!      neqn -- number of equations to be integrated
+!      y(*) -- solution vector at t
+!      t -- independent variable
+!      tout -- output point at which solution is desired
+!      relerr,abserr -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
+!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
+!            for each component of the local error and solution vectors
+!      iflag -- indicator for status of integration
+!      gerror(*) -- vector which estimates the global error at t. that
+!                   is, gerror(I) approximates  y(I)-true solution(I).
+!      work(*) -- array to hold information internal to gerk which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+8*neqn.
+!      iwork(*) -- integer array used to hold information internal to
+!            gerk which is necessary for subsequent calls. Must be
+!            dimensioned at least  5.
+!
+!
+!***********************************************************************
+!  First call to gerk
+!***********************************************************************
+!
+!    The user must provide storage in his calling program for the arrays
+!    IN THE CALL LIST  -      y(neqn) , work(3+8*neqn) , iwork(5)  ,
+!    declare F in an external statement, supply subroutine F(t,y,YP) and
+!    initialize the following parameters-
+!
+!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
+!      y(*) -- vector of initial conditions
+!      t -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
+!            t=tout is allowed on the first call only,in which case gerk
+!            returns with iflag=2 If continuation is possible.
+!      relerr,abserr -- relative and absolute local error tolerances
+!            which must be non-negative but may be constants. We can
+!            usually expect the global errors to be somewhat smaller
+!            than the requested local error tolerances. To avoid
+!            limiting precision difficulties the code always uses the
+!            larger of relerr and an internal relative error parameter
+!            which is machine dependent.
+!      iflag -- +1,-1  indicator to initialize the code for each new
+!            problem. Normal input is +1. The user should set iflag=-1
+!            only when one-step integrator control is essential. In this
+!            case, gerk attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
+!
+!
+!***********************************************************************
+!  Output from gerk
+!***********************************************************************
+!
+!      y(*) -- solution at t
+!      t -- last point reached in integration.
+!      iflag = 2 -- integration reached tout.Indicates successful return
+!                   and is the normal mode for continuing integration.
+!            =-2 -- A single successful step in the direction of tout
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
+!            = 3 -- Integration was not completed because more than
+!                   9000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
+!            = 4 -- Integration was not completed because solution
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero abserr to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
+!            = 5 -- Integration was not completed because requested
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
+!            = 6 -- gerk is being used inefficiently in solving
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step
+!                   integrator mode.
+!            = 7 -- Invalid input parameters
+!                   this indicator occurs if any of the following is
+!                   SATISFIED -   neqn .LE. 0
+!                                 t=tout  and  iflag .NE. +1 or -1
+!                                 relerr OR abserr .LT. 0.
+!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 7
+!      gerror(*) -- estimate of the global error in the solution at t
+!      work(*),iwork(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   work(1),...,work(neqn) contain the first derivatives
+!                   of the solution vector y at t. work(neqn+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   iwork(1) contains the derivative evaluation counter.
+!
+!
+!***********************************************************************
+!  Subsequent calls to gerk
+!***********************************************************************
+!
+!    Subroutine gerk returns with all information needed to continue the
+!    integration. If the integration reached tout,the user need only
+!    define a new tout and call gerk again. In the one-step integrator
+!    mode (iflag=-2) the user must keep in mind that each step taken is
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing iflag to 2),the user must then define a new tout and
+!    reset iflag to -2 To continue in the one-step integrator mode.
+!
+!    If the integration was not completed but the user still wants to
+!    CONTINUE (iflag=3 CASE), HE JUST CALLS gerk AGAIN. THE FUNCTION
+!    counter is then reset to 0 and another 9000 function evaluations
+!    are allowed.
+!
+!    However,in the case iflag=4, the user must first alter the error
+!    criterion to use a positive value of abserr before integration can
+!    proceed. If he does not,execution is terminated.
+!
+!    Also,in the case iflag=5, it is necessary for the user to reset
+!    iflag to 2 (or -2 When the one-step integration mode is being used)
+!    as well as increasing either abserr,relerr or both before the
+!    integration can be continued. If this is not done, execution will
+!    be terminated. The occurrence of iflag=5 Indicates a trouble spot
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
+!
+!    If iflag=6 Is encountered, the user should use the one-step
+!    integration mode with the stepsize determined by the code. If the
+!    user insists upon continuing the integration with gerk in the
+!    interval mode, he must reset iflag to 2 before calling gerk again.
+!    Otherwise,execution will be terminated.
+!
+!    If iflag=7 Is obtained, integration can not be continued unless
+!    the invalid input parameters are corrected.
+!
+!    It should be noted that the arrays work,iwork contain information
+!    required for subsequent integration. Accordingly, work and iwork
+!    should not be altered.
+!
+!***********************************************************************
+!
+!
+!
+!
+!     Compute indices for the splitting of the work array
+!
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
+k7 = k6 + neqn
+k8 = k7 + neqn
+!
+!***********************************************************************
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use gerks directly.
+!***********************************************************************
+!
+call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
+   & work(k5),work(k6),work(k7),work(k8),work(k8 + 1), &
+   & iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+!
+return
+end subroutine gerk
+
+subroutine gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
+   & nfe,kop,init,jflag,kflag)
+implicit none
+integer, intent(inout) :: iflag, init, jflag, kflag, kop
+integer, intent(in) :: neqn
+integer, intent(inout) :: nfe
+real, intent(in) :: abserr
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), gerror(neqn), h
+real, intent(in) :: relerr
+real, intent(inout) :: savae, savre, t
+real, intent(in) :: tout
+real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
+real :: yp(neqn)
+external f
+integer :: k, maxnfe, mflag
+real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
+   & scale, tol, toln, ts, u, u26, ypk
+logical :: hfaild, output
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!     Fehlberg fourth(fifth) order Runge-Kutta method with
+!     global error assessment
+!
+!***********************************************************************
+!
+!     gerks integrates a system of first order ordinary differential
+!     equations as described in the comments for gerk.  The arrays
+!     yp,f1,f2,f3,f4,f5,yg and ygp (of dimension at least neqn) and
+!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         yp - Derivative of solution vector at t
+!         h  - An appropriate stepsize to be used for the next step
+!         nfe- counter on the number of derivative function evaluations
+!
+!***********************************************************************
+!
+!
+!
+!
+!***********************************************************************
+!  The computer unit roundoff error U is the smallest positive value
+!  representable in the machine such that  1.+ U .GT. 1.
+!
+u = spmpar(1)
+!
+!***********************************************************************
+!
+!  remin is a tolerance threshold which is also determined by the
+!  integration method. In particular, a fifth order method will
+!  generally not be capable of delivering accuracies near limiting
+!  precision on computers with long wordlengths.
+!
+remin = 3.e-11
+!
+!***********************************************************************
+!
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately maxnfe.
+!     As set,this corresponds to about 500 steps.
+!
+maxnfe = 9000
+!
+!***********************************************************************
+!
+!
+!     Check input parameters
+!
+!
+if (neqn .lt. 1) go to 10
+if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
+mflag = iabs(iflag)
+if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
+!
+!     Invalid input
+10 iflag = 7
+return
+!
+!     Is this the first call
+20 if (mflag .eq. 1) go to 50
+!
+!     Check continuation possibilities
+!
+if (t .eq. tout) go to 10
+if (mflag .ne. 2) go to 25
+!
+!     iflag = +2 or -2
+if (init .eq. 0) go to 45
+if (kflag .eq. 3) go to 40
+if ((kflag .eq. 4)  .and.  (abserr .eq. 0.)) go to 30
+if ((kflag .eq. 5)  .and.  (relerr .le. savre)  .and. &
+   & (abserr .le. savae)) go to 30
+go to 50
+!
+!     iflag = 3,4,5,6, or 7
+25 if (iflag .eq. 3) go to 40
+if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
+!
+!     Integration cannot be continued since user did not respond to
+!     the instructions pertaining to iflag=4,5,6 or 7
+30 stop
+!
+!***********************************************************************
+!
+!     Reset function evaluation counter
+40 nfe = 0
+if (mflag .eq. 2) go to 50
+!
+!     Reset flag VALUE from previous call
+45 iflag = jflag
+!
+!     Save input iflag and set continuation flag VALUE for subsequent
+!     input checking
+50 jflag = iflag
+kflag = 0
+!
+!     Save relerr and abserr for checking input on subsequent calls
+savre = relerr
+savae = abserr
+!
+!     Restrict relative error tolerance to be at least as large as
+!     32U+remin to avoid limiting precision difficulties arising from
+!     impossible accuracy requests
+!
+rer = amax1(relerr,32.*u + remin)
+!
+u26 = 26.*u
+!
+dt = tout - t
+!
+if (mflag .eq. 1) go to 60
+if (init .eq. 0) go to 65
+go to 80
+!
+!
+!***********************************************************************
+!
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       copy initial values and derivatives for the
+!                             parallel solution
+!                       set counter for function evaluations,nfe
+!                       estimate starting stepsize
+!
+60 init = 0
+kop = 0
+!
+a = t
+call f(a,y,yp)
+nfe = 1
+if (t .ne. tout) go to 65
+iflag = 2
+return
+!
+!
+65 init = 1
+h = abs(dt)
+toln = 0.
+do 70 k = 1,neqn
+   yg(k) = y(k)
+   ygp(k) = yp(k)
+   tol = rer*abs(y(k)) + abserr
+   if (tol .le. 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
+70 continue
+if (toln .le. 0.) h = 0.
+h = amax1(h,u26*amax1(abs(t),abs(dt)))
+!
+!
+!***********************************************************************
+!
+!     Set stepsize for integration in the direction from t to tout
+!
+80 h = sign(h,dt)
+!
+!     Test to see if gerk is being severely impacted by too many
+!     output points
+!
+if (abs(h) .gt. 2.*abs(dt)) kop = kop + 1
+if (kop .ne. 100) go to 85
+kop = 0
+iflag = 6
+return
+!
+85 if (abs(dt) .gt. u26*abs(t)) go to 95
+!
+!     If too close to output point,extrapolate and return
+!
+do 90 k = 1,neqn
+   yg(k) = yg(k) + dt*ygp(k)
+90 y(k) = y(k) + dt*yp(k)
+a = tout
+call f(a,yg,ygp)
+call f(a,y,yp)
+nfe = nfe + 2
+go to 300
+!
+!     Initialize output point indicator
+!
+95 output = .false.
+!
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
+!
+scale = 2./rer
+ae = scale*abserr
+!
+!
+!***********************************************************************
+!***********************************************************************
+!     Step by step integration
+!
+100 hfaild = .false.
+!
+!     Set smallest allowable stepsize
+!
+hmin = u26*abs(t)
+!
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize
+!     and thus lessen the impact of output points on the code.
+!
+dt = tout - t
+if (abs(dt) .ge. 2.*abs(h)) go to 200
+if (abs(dt) .gt. abs(h)) go to 150
+!
+!     The next successful step will complete the integration to the
+!     output point
+!
+output = .true.
+h = dt
+go to 200
+!
+150 h = 0.5*dt
+!
+!
+!
+!***********************************************************************
+!     Core integrator for taking a single step
+!***********************************************************************
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function et.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, h is not permitted
+!     to become smaller than 26 units of roundoff in t.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and the error estimate
+!     may be unreliable or unacceptable when a step fails.
+!***********************************************************************
+!
+!
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from t to t+h
+!
+200 if (nfe .le. maxnfe) go to 220
+!
+!     Too much work
+iflag = 3
+kflag = 3
+return
+!
+!     Advance an approximate solution over one step of length h
+!
+220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
+nfe = nfe + 5
+!
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
+!
+eeoet = 0.
+do 250 k = 1,neqn
+   et = abs(yg(k)) + abs(f1(k)) + ae
+   if (et .gt. 0.) go to 240
+!
+!       Inappropriate error tolerance
+   iflag = 4
+   kflag = 4
+   return
+!
+240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
+      & (22528.*f2(k) - 27360.*f5(k)))
+250 eeoet = amax1(eeoet,ee/et)
+!
+esttol = abs(h)*eeoet*scale/752400.
+!
+if (esttol .le. 1.) go to 260
+!
+!
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
+!
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol .lt. 59049.) s = 0.9/esttol**0.2
+h = s*h
+if (abs(h) .gt. hmin) go to 200
+!
+!     Requested error unattainable at smallest allowable stepsize
+iflag = 5
+kflag = 5
+return
+!
+!
+!     Successful step
+!                        store one-step solution yg at t+h
+!                        and evaluate derivatives there
+!
+260 ts = t
+t = t + h
+do 270 k = 1,neqn
+270 yg(k) = f1(k)
+a = t
+call f(a,yg,ygp)
+nfe = nfe + 1
+!
+!                        Now advance the y solution over two steps of
+!                        length h/2 and evaluate derivatives there
+!
+hh = 0.5*h
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+ts = ts + hh
+a = ts
+call f(a,y,yp)
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+a = t
+call f(a,y,yp)
+nfe = nfe + 12
+!
+!
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
+!
+s = 5.
+if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = amin1(s,1.)
+h = sign(amax1(s*abs(h),hmin),h)
+!
+!***********************************************************************
+!     END OF CORE INTEGRATOR
+!***********************************************************************
+!
+!
+!
+!     Should we take another step
+!
+if (output) go to 300
+if (iflag .gt. 0) go to 100
+!
+!***********************************************************************
+!***********************************************************************
+!
+!
+!     Integration successfully completed
+!
+!     One-step mode
+iflag = -2
+go to 400
+!
+!     Interval mode
+300 t = tout
+iflag = 2
+!
+400 do 450 k = 1,neqn
+450 gerror(k) = (yg(k) - y(k))/31.
+!
+return
+end subroutine gerks
+
+subroutine sfode (f,neq,y,t,tout,info,rerr,aerr,idid, &
+   & rwork,lrw,iwork,liw,rpar,ipar)
+implicit none
+integer, intent(inout) :: idid
+integer :: liw, lrw, neq
+real, intent(inout) :: aerr, rerr, t
+real :: tout
+external f
+real, intent(inout) :: y(neq)
+real, intent(inout) :: rwork(lrw)
+real :: rpar(*)
+integer, intent(inout) :: info(*)
+integer, intent(inout) :: iwork(liw)
+integer :: ipar(*)
+external zzzjac
+real :: rtol(1), atol(1)
+integer :: info1(15)
+!     --------------
+!     --------------
+info1(1) = info(1)
+info1(2) = 0
+info1(3) = info(2)
+info1(4) = info(3)
+info1(5) = 0
+info1(6) = info(4)
+!
+rtol(1) = rerr
+atol(1) = aerr
+call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+info(1) = info1(1)
+rerr = rtol(1)
+aerr = atol(1)
+return
+end subroutine sfode
+
+subroutine sfode1 (f,neq,y,t,tout,info,rtol,atol,idid, &
+   & rwork,lrw,iwork,liw,rpar,ipar)
+implicit none
+integer, intent(inout) :: idid
+integer :: liw, lrw, neq
+real, intent(inout) :: t
+real :: tout
+external f
+real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
+real :: rpar(*)
+integer, intent(inout) :: info(*)
+integer, intent(inout) :: iwork(liw)
+integer :: ipar(*)
+external zzzjac
+integer :: info1(15)
+!     --------------
+!     --------------
+info1(1) = info(1)
+info1(2) = 1
+info1(3) = info(2)
+info1(4) = info(3)
+info1(5) = 0
+info1(6) = info(4)
+!
+call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+info(1) = info1(1)
+return
+end subroutine sfode1
+
+subroutine zzzjac(t,y,pd,n,rpar,ipar)
+implicit none
+integer :: ipar(*)
+integer, intent(in) :: n
+real :: pd(n,*), rpar(*)
+real, intent(out) :: t
+real :: y(n)
+!     -------------
+!     Dummy Jacobian subroutine
+!     -------------
+!     -------------
+t = 0.0
+return
+end subroutine zzzjac
+
+subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
+   & rwork,lrw,iwork,liw,rpar,ipar,jac)
+implicit none
+integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
+real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
+external f, jac
+integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
+   & mu
+integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
+   & iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
+   & ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
+logical :: intout
+!***********************************************************************
+!***PURPOSE
+!   stfode solves initial value problems in ordinary differential
+!   equations using backward differentiation formulas. It is
+!   both variable order (1-5) and variable step.
+!***DESCRIPTION
+!
+!   This is a modification by A. H. Morris (NSWC) of the code
+!   DEBDF, designed by  L. F. Shampine and H. A. Watts (1980).
+!   DEBDF is documented in
+!        SAND79-2374 , DEPAC - Design of a user oriented package
+!                              of ODE solvers.
+!
+!   stfode is a driver for a modification of the code lsode written by
+!             A. C. Hindmarsh
+!             Lawrence Livermore Laboratory
+!             livermore, california 94550
+!
+!***********************************************************************
+!** ABSTRACT **
+!**************
+!
+!   Subroutine stfode uses the backward differentiation formulas of
+!   orders one through five to integrate a system of neq first order
+!   ordinary differential equations of the form
+!                         DU/DX = F(X,U)
+!   when the vector y(*) of initial values for U(*) at X=t is given.
+!   The subroutine integrates from t to tout. It is easy to continue the
+!   integration to get results at additional tout. This is the interval
+!   mode of operation. It is also easy for the routine to return with
+!   the solution at each intermediate step on the way to tout. This is
+!   the intermediate-output mode of operation.
+!
+!   stfode uses subprograms lsod1, intyd, stod, cfod, pjac, slvs,vnwrms,
+!   hstart, vnorm, svco, rsco, spmpar, and the LINPACK routines sgefa,
+!   sgesl, sgbfa, sgbsl (which also use the BLAS routines saxpy, sscal,
+!   isamax and sdot). The only machine dependent parameters used appear
+!   IN spmpar.
+!
+!***********************************************************************
+!** Description of the arguments to stfode (an overview) **
+!**********************************************************
+!
+!   The parameters are
+!
+!      F -- this is the name of a subroutine which you provide to
+!             define the differential equations.
+!
+!      neq -- this is the number of (first order) differential
+!             equations to be integrated.
+!
+!      t -- this is a value of the independent variable.
+!
+!      y(*) -- this array contains the solution components at t.
+!
+!      tout -- this is a point at which a solution is desired.
+!
+!      info(*) -- the BASIC task of the code is to integrate the
+!             differential equations from t to tout and return an
+!             answer at tout. info(*) is an integer array which is used
+!             to communicate exactly how you want this task to be
+!             carried out.
+!
+!      rtol, atol -- these quantities represent relative and absolute
+!             error tolerances which you provide to indicate how
+!             accurately you wish the solution to be computed. You may
+!             choose them to be both scalars or else both vectors.
+!
+!      idid -- this scalar quantity is an indicator reporting what
+!             the code did. You must monitor this integer variable to
+!             decide what action to take next.
+!
+!      rwork(*), lrw -- rwork(*) is a real work array of length lrw
+!             which provides the code with needed storage space.
+!
+!      iwork(*), liw -- iwork(*) is an integer work array of length liw
+!             which provides the code with needed storage space.
+!
+!      Rpar, ipar -- these are real and integer parameter arrays which
+!             you can use for communication between your calling
+!             program and the F subroutine (and the JAC subroutine).
+!
+!      JAC -- this is the name of a subroutine which you may choose to
+!             provide for defining the Jacobian matrix of partial
+!             DERIVATIVES DF/DU.
+!
+!  Quantities which are used as input items are
+!             neq, t, y(*), tout, info(*),
+!             rtol, atol, rwork(1), lrw,
+!             iwork(1), iwork(2), AND liw.
+!
+!  Quantities which may be altered by the code are
+!             t, y(*), info(1), rtol, atol,
+!             idid, rwork(*) AND iwork(*).
+!
+!***********************************************************************
+!** Input -- what to do on the first call to stfode **
+!*****************************************************
+!
+!   The first call of the code is defined to be the start of each new
+!   problem. Read through the descriptions of all the following items,
+!   provide sufficient storage space for designated arrays, set
+!   appropriate variables for the initialization of the problem, and
+!   give information about how you want the problem to be solved.
+!
+!
+!      F -- provide a subroutine of the form
+!                               F(X,U,UPRIME,rpar,ipar)
+!             to define the system of first order differential equations
+!             which is to be solved. For the given values of X and the
+!             vector  U(*)=(U(1),U(2),...,U(neq)) , the subroutine must
+!             evaluate the neq components of the system of differential
+!             equations  DU/DX=F(X,U)  and store the derivatives in the
+!             array uprime(*), that is,  uprime(I) = * DU(I)/DX *  for
+!             EQUATIONS I=1,...,neq.
+!
+!             Subroutine F must not alter X or U(*). You must declare
+!             the name F in an external statement in your program that
+!             calls stfode. You must dimension U and UPRIME in F.
+!
+!             Rpar and ipar are real and integer parameter arrays which
+!             you can use for communication between your calling program
+!             and subroutine F. they are not used or altered by stfode.
+!             If you do not need rpar or ipar, ignore these parameters
+!             by treating them as dummy arguments. If you do choose to
+!             use them, dimension them in your calling program and in F
+!             as arrays of appropriate length.
+!
+!      neq -- set it to the number of differential equations.
+!             (neq .GE. 1)
+!
+!      t -- set it to the initial point of the integration.
+!             You must use a program variable for t because the code
+!             changes its value.
+!
+!      y(*) -- set this vector to the initial values of the neq solution
+!             components at the initial point. You must dimension y at
+!             least neq in your calling program.
+!
+!      tout -- set it to the first point at which a solution
+!             is desired. You can take tout = t, in which case the code
+!             will evaluate the derivative of the solution at t and
+!             RETURN. INTEGRATION EITHER FORWARD IN t  (tout .GT. t)  OR
+!             backward in t  (tout .LT. t)  is permitted.
+!
+!             The code advances the solution from t to tout using
+!             step sizes which are automatically selected so as to
+!             achieve the desired accuracy. If you wish, the code will
+!             RETURN WITH THE SOLUTION AND ITS DERIVATIVE FOLLOWING
+!             each intermediate step (intermediate-output mode) so that
+!             you can monitor them, but you still must provide tout in
+!             accord with the BASIC aim of the code.
+!
+!             The first step taken by the code is a critical one
+!             because it must reflect how fast the solution changes near
+!             the initial point. The code automatically selects an
+!             initial step size which is practically always suitable for
+!             the problem. By using the fact that the code will not step
+!             past tout in the first step, you could, if necessary,
+!             restrict the length of the initial step size.
+!
+!             For some problems it may not be permissible to integrate
+!             past a point TSTOP because a discontinuity occurs there
+!             or the solution or its derivative is not defined beyond
+!             TSTOP. When you have declared A TSTOP point (see info(4)
+!             and rwork(1)), you have told the code not to integrate
+!             past TSTOP. In this case any tout beyond TSTOP is invalid
+!             input.
+!
+!      info(*) -- use the info array to give the code more details about
+!             how you want your problem solved. This array should be
+!             dimensioned of length 15 to accomodate other members of
+!             DEPAC or possible future extensions, though stfode uses
+!             only the first six entries. You must respond to all of
+!             the following items which are arranged as questions. The
+!             simplest use of the code corresponds to answering all
+!             questions as yes ,I.E. setting all entries of info to 0.
+!
+!        info(1) -- this parameter enables the code to initialize
+!               itself. You must set it to indicate the start of every
+!               new problem.
+!
+!            **** Is this the first call for this problem ...
+!                  YES -- SET info(1) = 0
+!                   no -- not applicable here.
+!                         See below for continuation calls.  ****
+!
+!        info(2) -- how much accuracy you want of your solution
+!               is specified by the error tolerances rtol and atol.
+!               The simplest use is to take them both to be scalars.
+!               To obtain more flexibility, they can both be vectors.
+!               The code must be told your choice.
+!
+!            **** Are both error tolerances rtol, atol scalars ...
+!                  YES -- SET info(2) = 0
+!                         and input scalars for both rtol and atol
+!                   NO -- SET info(2) = 1
+!                         and input arrays for both rtol and atol ****
+!
+!        info(3) -- the code integrates from t in the direction
+!               of tout by steps. If you wish, it will return the
+!               computed solution and derivative at the next
+!               intermediate step (the intermediate-output mode) or
+!               tout, whichever comes first. This is a good way to
+!               proceed if you want to see the behavior of the solution.
+!               If you must have solutions at a great many specific
+!               tout points, this code will compute them efficiently.
+!
+!            **** Do you want the solution only at
+!                 tout (and not at the next intermediate step) ...
+!                  YES -- SET info(3) = 0
+!                   NO -- SET info(3) = 1 ****
+!
+!        info(4) -- to handle solutions at a great many specific
+!               values tout efficiently, this code may integrate past
+!               tout and interpolate to obtain the result at tout.
+!               Sometimes it is not possible to integrate beyond some
+!               point TSTOP because the equation changes there or it is
+!               not defined past TSTOP. Then you must tell the code
+!               not to go past.
+!
+!            **** Can the integration be carried out without any
+!                 restrictions on the independent variable t ...
+!                  YES -- SET info(4)=0
+!                   NO -- SET info(4)=1
+!                         and define the stopping point TSTOP by
+!                         SETTING rwork(1)=TSTOP ****
+!
+!        info(5) -- to solve stiff problems it is necessary to use the
+!               Jacobian matrix of partial derivatives of the system
+!               of differential equations. If you do not provide A
+!               subroutine to evaluate it analytically (see the
+!               description of the item JAC in the call list), it will
+!               be approximated by numerical differencing in this code.
+!               Although it is less trouble for you to have the code
+!               compute partial derivatives by numerical differencing,
+!               the solution will be more reliable if you provide the
+!               derivatives via JAC. Sometimes numerical differencing
+!               is cheaper than evaluating derivatives in JAC and
+!               sometimes it is not - This depends on your problem.
+!
+!               If your problem is linear, I.E. has the form
+!               DU/DX = F(X,U) = J(X)*U + G(X)   for some matrix J(X)
+!               and vector G(X), the Jacobian matrix  df/DU = J(X).
+!               Since you must provide a subroutine to evaluate F(X,U)
+!               analytically, it is little extra trouble to provide
+!               subroutine jac for evaluating J(X) analytically.
+!               Furthermore, in such cases, numerical differencing is
+!               much more expensive than analytic evaluation.
+!
+!            **** Do you want the code to evaluate the partial
+!                 derivatives automatically by numerical differences ...
+!                  YES -- SET info(5)=0
+!                   NO -- SET info(5)=1
+!                         and provide subroutine jac for evaluating the
+!                         Jacobian matrix ****
+!
+!        info(6) -- stfode will perform much better if the Jacobian
+!               matrix is banded and the code is told this. In this
+!               case, the storage needed will be greatly reduced,
+!               numerical differencing will be performed more cheaply,
+!               and a number of important algorithms will execute much
+!               faster. The differential equation is said to have
+!               half-bandwidths ml (lower) and mu (UPPER) if equation I
+!               involves only unknowns y(J) with
+!                              I-ml .LE. J .LE. I+MU
+!               for all I=1,2,...,neq. Thus, ml and mu are the widths
+!               of the lower and upper parts of the band, respectively,
+!               with the main diagonal being excluded. If you do not
+!               indicate that the equation has a banded Jacobian,
+!               the code works with a full matrix of neq**2 elements
+!               (stored in the conventional way). Computations with
+!               banded matrices cost less time and storage than with
+!               full matrices if  2*ml+mu .LT. neq.  If you tell the
+!               code that the Jacobian matrix HAS a banded structure and
+!               you want to provide subroutine jac to compute the
+!               partial derivatives, then you must be careful to store
+!               the elements of the Jacobian matrix in the special form
+!               indicated in the description of JAC.
+!
+!            **** Do you want to solve the problem using a full
+!                 (dense) Jacobian matrix (and not a special banded
+!                 structure) ...
+!                  YES -- SET info(6)=0
+!                   NO -- SET info(6)=1
+!                         and provide the lower (ml) and upper (MU)
+!                         bandwidths by setting
+!                         iwork(1)=ml
+!                         iwork(2)=mu ****
+!
+!      rtol, atol -- you must assign relative (rtol) and absolute (atol)
+!             error tolerances to tell the code how accurately you want
+!             the solution to be computed. They must be defined as
+!             program variables because the code may change them. You
+!             have two choices --
+!                  both rtol and atol are scalars. (info(2)=0)
+!                  both rtol and atol are vectors. (info(2)=1)
+!             in either case all components must be non-negative.
+!
+!             The tolerances are used by the code in a local error test
+!             at each step which requires roughly that
+!                     abs(LOCAL ERROR) .LE. rtol*abs(y)+atol
+!             for each vector component.
+!             (More specifically, a root-mean-square norm is used to
+!             measure the size of vectors, and the error test uses the
+!             magnitude of the solution at the beginning of the step.)
+!
+!             The true (GLOBAL) error is the difference between the true
+!             solution of the initial value problem and the computed
+!             approximation. Practically all present day codes,
+!             including this one, control the local error at each step
+!             and do not even attempt to control the global error
+!             directly. Roughly speaking, they produce a solution y(t)
+!             which satisfies the differential equations with A
+!             RESIDUAL R(t),    DY(t)/DT = F(t,y(t)) + R(t)   ,
+!             and, almost always, R(t) is bounded by the error
+!             tolerances. Usually, but not always, the true accuracy of
+!             the computed y is comparable to the error tolerances. This
+!             code will usually, but not always, deliver a more accurate
+!             solution if you reduce the tolerances and integrate again.
+!             By comparing two such solutions you can get a fairly
+!             reliable idea of the true error in the solution at the
+!             bigger tolerances.
+!
+!             Setting atol=0. Results in a pure relative error test on
+!             that component. Setting rtol=0. Results in a pure absolute
+!             error test on that component. A mixed test with non-zero
+!             rtol and atol corresponds roughly to a relative error
+!             test when the solution component is much bigger than atol
+!             and to an absolute error test when the solution component
+!             is smaller than the threshold atol.
+!
+!             Proper selection of the absolute error control parameters
+!             atol  requires you to have some idea of the scale of the
+!             solution components. To acquire this information may mean
+!             that you will have to solve the problem more than once. In
+!             the absence of scale information, you should ask for some
+!             relative accuracy in all the components (by setting  rtol
+!             values non-zero) and perhaps impose extremely small
+!             absolute error tolerances to protect against the danger of
+!             a solution component becoming zero.
+!
+!             The code will not attempt to compute a solution at an
+!             accuracy unreasonable for the machine being used. It will
+!             advise you if you ask for too much accuracy and inform
+!             you as to the maximum accuracy it believes possible.
+!
+!      rwork(*) -- dimension this real work array of length lrw in your
+!             calling program.
+!
+!      rwork(1) -- if you have set info(4)=0, you can ignore this
+!             optional input parameter. Otherwise you must define A
+!             stopping point TSTOP by setting   rwork(1) = TSTOP.
+!             (For some problems it may not be permissible to integrate
+!             past a point TSTOP because a discontinuity occurs there
+!             or the solution or its derivative is not defined beyond
+!             TSTOP.)
+!
+!      lrw -- set it to the declared length of the rwork array.
+!             You must have
+!                  lrw .GE. 250+10*neq+neq**2
+!             for the full (dense) Jacobian case (when info(6)=0),  or
+!                  lrw .GE. 250+10*neq+(2*ml+MU+1)*neq
+!             for the banded Jacobian case (when info(6)=1).
+!
+!      iwork(*) -- dimension this integer work array of length liw in
+!             your calling program.
+!
+!      iwork(1), iwork(2) -- if you have set info(6)=0, you can ignore
+!             these optional input parameters. Otherwise you must define
+!             the half-bandwidths ml (lower) and mu (UPPER) of the
+!             Jacobian matrix BY setting    iwork(1) = ml   and
+!             iwork(2) = Mu.  (The code will work with a full matrix
+!             of neq**2 elements unless it is told that the problem has
+!             a banded Jacobian, in which case the code will work with
+!             a matrix containing at most  (2*ml+MU+1)*neq  elements.)
+!
+!      liw -- set it to the declared length of the iwork array.
+!             You must have liw .GE. 55+neq.
+!
+!      Rpar, ipar -- these are parameter arrays, of real and integer
+!             type, respectively. You can use them for communication
+!             between your program that calls stfode and the  F
+!             subroutine (and the JAC subroutine). They are not used or
+!             altered by stfode. If you do not need rpar or ipar, ignore
+!             these parameters by treating them as dummy arguments. If
+!             you do choose to use them, dimension them in your calling
+!             program and in F (and in JAC) as arrays of appropriate
+!             length.
+!
+!      JAC -- if you have set info(5)=0, you can ignore this parameter
+!             by treating it as a dummy argument. (For some compilers
+!             you may have to write a dummy subroutine named  jac  in
+!             order to avoid problems associated with missing external
+!             routine names.)  Otherwise, you must provide a subroutine
+!             of the form
+!                          JAC(X,U,PD,NROWPD,rpar,ipar)
+!             to define the Jacobian matrix of partial derivatives DF/DU
+!             of the system of differential equations   DU/DX = F(X,U).
+!             For the given values of X and the vector
+!             U(*)=(U(1),U(2),...,U(neq)), the subroutine must evaluate
+!             the non-zero partial derivatives  DF(I)/DU(J)  for each
+!             differential equation I=1,...,neq and each solution
+!             component J=1,...,neq , and store these values in the
+!             matrix pd. The elements of pd are set to zero before each
+!             CALL TO JAC SO ONLY NON-ZERO ELEMENTS NEED TO BE DEFINED.
+!
+!             Subroutine jac must not alter X, U(*), or NROWPD. You must
+!             declare the name JAC in an external statement in your
+!             program that calls stfode. NROWPD is the row dimension of
+!             the PD matrix and is assigned by the code. Therefore you
+!             must dimension PD in JAC according to
+!                              dimension pd(nrowpd,1)
+!             you must also dimension U in JAC.
+!
+!             The way you must store the elements into the PD matrix
+!             depends on the structure of the Jacobian which you
+!             indicated by info(6).
+!             *** info(6)=0 -- FULL (DENSE) JACOBIAN ***
+!                 when you evaluate the (NON-ZERO) partial derivative
+!                 of equation I with respect to variable J, you must
+!                 store it in PD according to
+!                                pd(i,j) = * df(i)/du(j) *
+!             *** info(6)=1 -- banded Jacobian with ml lower and mu
+!                 upper diagonal bands (refer to info(6) description of
+!                 ml AND MU) ***
+!                 when you evaluate the (NON-ZERO) partial derivative
+!                 of equation I with respect to variable J, you must
+!                 store it in PD according to
+!                                irow = i - j + ml + mu + 1
+!                                pd(irow,j) = * df(i)/du(j) *
+!
+!             Rpar and ipar are real and integer parameter arrays which
+!             you can use for communication between your calling
+!             program and your Jacobian subroutine jac. They are not
+!             altered by stfode. If you do not need rpar or ipar, ignore
+!             these parameters by treating them as dummy arguments. If
+!             you do choose to use them, dimension them in your calling
+!             program and in JAC as arrays of appropriate length.
+!
+!***********************************************************************
+!** Output -- after any return from stfode **
+!********************************************
+!
+!   The principal aim of the code is to return a computed solution at
+!   tout, although it is also possible to obtain intermediate results
+!   along the way. To find out whether the code achieved its goal
+!   or if the integration process was interrupted before the task was
+!   completed, you must check the idid parameter.
+!
+!
+!      t -- the solution was successfully advanced to the
+!             output value of t.
+!
+!      y(*) -- contains the computed solution approximation at t.
+!             You may also be interested in the approximate derivative
+!             of the solution at t. it is contained in
+!             rwork(21),...,rwork(20+neq).
+!
+!      idid -- reports what the code did
+!
+!                         *** Task completed ***
+!                   reported by positive values of idid
+!
+!             idid = 1 -- a step was successfully taken in the
+!                       intermediate-output mode. The code has not
+!                       yet reached tout.
+!
+!             idid = 2 -- the integration to tout was successfully
+!                       completed (t=tout) by stepping exactly to tout.
+!
+!             idid = 3 -- the integration to tout was successfully
+!                       completed (t=tout) by stepping past tout.
+!                       y(*) is obtained by interpolation.
+!
+!                         *** Task interrupted ***
+!                   reported by negative values of idid
+!
+!             idid = -1 -- a large amount of work has been expended.
+!                       (500 Steps performed)
+!
+!             idid = -2 -- the error tolerances are too stringent.
+!
+!             idid = -3 -- the local error test cannot be satisfied
+!                       since the L-TH solution component is 0 and
+!                       the corresponding absolute error tolerance
+!                       is 0 for L = -info(1). A pure relative error
+!                       test cannot be applied to this component.
+!
+!             idid = -4,-5  -- not applicable for this code.
+!
+!             idid = -6 -- stfode had repeated convergence test failures
+!                       on the last attempted step.
+!
+!             idid = -7 -- stfode had repeated error test failures on
+!                       the last attempted step.
+!
+!             idid = -8,..,-32  -- not applicable for this code.
+!
+!                         *** Task terminated ***
+!                 reported by the value of idid .LE. -33
+!
+!             idid = -33  -- neq .lt. 1
+!
+!             idid = -34  -- rtol(K) .LT. 0 for some K
+!
+!             idid = -35  -- atol(K) .LT. 0 for some K
+!
+!             idid = -36  -- the code has been called with tout but
+!                       the code has also been told not to integrate
+!                       past the point TSTOP.
+!
+!             idid = -37  -- the code has been called with t = tout.
+!                       This is not permitted on continuation calls.
+!
+!             idid = -38  -- the user has modified the value of t.
+!                       This is not permitted on continuation calls.
+!
+!             idid = -39  -- by calling the code with tout, an
+!                       attempt is being made to change the direction
+!                       of integration without restarting.
+!
+!             idid = -40  -- the Jacobian matrix is banded. However
+!                       the bandwidths ml and mu do not satisfy the
+!                       CONSTRAINTS  0 .LE. ml,MU .LT. neq.
+!
+!             idid = -41  -- lrw .lt. 250 + 10*neq + neq*neq
+!
+!             idid = -42  -- lrw .lt. 250 + 10*neq + (2*ml+mu+1)*neq
+!
+!             idid = -43  -- liw .lt. 55 + neq
+!
+!             idid = -44  -- info(1) is incorrect.
+!
+!      rtol, atol -- these quantities remain unchanged except when
+!             idid = -2. In this case, the error tolerances have been
+!             increased by the code to values which are estimated to be
+!             appropriate for continuing the integration. However, the
+!             reported solution at t was obtained using the input values
+!             of rtol and atol.
+!
+!      rwork, iwork -- contain information which is usually of no
+!             interest to the user but necessary for subsequent calls.
+!             However, you may find use for
+!
+!             rwork(11)--which contains the step size h to be
+!                        attempted on the next step.
+!
+!             rwork(12)--if the tolerances have been increased by the
+!                        code (idid = -2) , they were multiplied by the
+!                        value in rwork(12).
+!
+!             rwork(13)--which contains the current value of the
+!                        independent variable, I.E. the farthest point
+!                        integration has reached. This will be different
+!                        from t only when interpolation has been
+!                        PERFORMED (idid=3).
+!
+!             rwork(20+I)--which contains the approximate derivative
+!                        of the solution component y(I). In stfode it is
+!                        never obtained by calling subroutine F to
+!                        evaluate the differential equation using t and
+!                        y(*), except at the initial point of
+!                        integration.
+!
+!***********************************************************************
+!** Input -- what to do to continue the integration **
+!**             (calls after the first)             **
+!*****************************************************
+!
+!        This code is organized so that subsequent calls to continue the
+!        integration involve little (if any) additional effort on your
+!        part. You must monitor the idid parameter in order to determine
+!        what to do next.
+!
+!        Recalling that the principal task of the code is to integrate
+!        from t to tout (the interval mode), usually all you will need
+!        to do is specify a new tout upon reaching the current tout.
+!
+!        Do not alter any quantity not specifically permitted below,
+!        in particular do not alter neq, t, y(*), rwork(*), iwork(*) or
+!        the differential equation in subroutine F. any such alteration
+!        constitutes a new problem and must be treated as such, I.E.
+!        You must start afresh.
+!
+!        You cannot change from vector to scalar error control or vice
+!        versa (info(2)) but you can change the size of the entries of
+!        rtol, atol. Increasing a tolerance makes the equation easier
+!        to integrate. Decreasing a tolerance will make the equation
+!        harder to integrate and should generally be avoided.
+!
+!        You can switch from the intermediate-output mode to the
+!        interval mode (info(3)) or vice versa at any time.
+!
+!        If it has been necessary to prevent the integration from going
+!        past a point TSTOP (info(4), rwork(1)), keep in mind that the
+!        code will not integrate to any tout beyond the currently
+!        specified TSTOP. Once TSTOP has been reached you must change
+!        the value of TSTOP or set info(4)=0. You may change info(4)
+!        or TSTOP at any time but you must supply the value of TSTOP in
+!        rwork(1) whenever you set info(4)=1.
+!
+!        Do not change info(5), info(6), iwork(1), or iwork(2)
+!        unless you are going to restart the code.
+!
+!        The parameter info(1) is used by the code to indicate the
+!        beginning of a new problem and to indicate whether integration
+!        is to be continued. You must input the value  info(1) = 0
+!        when starting a new problem. You must input the value
+!        info(1) = 1  If you wish to continue after an interrupted task
+!        for which idid = -3, -6, or -7. Do not set info(1) = 0 On A
+!        continuation call unless you want the code to restart at the
+!        CURRENT t.
+!
+!                         *** Following a completed task ***
+!         if
+!             idid = 1, call the code again to continue the integration
+!                     another step in the direction of tout.
+!
+!             idid = 2 Or 3, define a new tout and call the code again.
+!                     Tout must be different from t. you cannot change
+!                     the direction of integration without restarting.
+!
+!                         *** Following an interrupted task ***
+!         if
+!             idid = -1, the code has performed 500 steps.
+!                     If you want to continue, call the code again.
+!
+!             idid = -2, the error tolerances rtol and atol have been
+!                     increased to values the code estimates appropriate
+!                     for continuing. You may want to change them
+!                     yourself. If you want to continue, call the code
+!                     again.
+!
+!             idid = -3, the L-TH solution component is 0 and the
+!                     corresponding absolute error tolerance is 0
+!                     for L = -info(1). To continue, reset the
+!                     absolute tolerance to a positive value, set
+!                     info(1) = 1, and call the code again.
+!
+!             idid = -4,-5  --- cannot occur with this code.
+!
+!             idid = -6, repeated convergence test failures occurred
+!                     on the last attempted step. An inaccurate
+!                     Jacobian may be the problem. If you are absolutely
+!                     certain you want to continue, restart the
+!                     integration at the current t by setting  info(1)=0
+!                     and call the code again.
+!
+!             idid = -7, repeated error test failures occurred on the
+!                     last attempted step. A singularity in the
+!                     solution may be present. You should RE-examine the
+!                     problem being solved. If you are absolutely
+!                     certain you want to continue, restart the
+!                     integration at the current t by setting  info(1)=0
+!                     and call the code again.
+!
+!             idid = -8,..,-32  --- cannot occur with this code.
+!
+!                         *** Following a terminated task ***
+!         if
+!             idid .LE. -33, an input error has been detected. After the
+!                     error is corrected, restart by setting info(1) = 0
+!                     and call the code again.
+!
+!***********************************************************************
+!
+!         ***** WARNING *****
+!
+!     If stfode is to be used in an overlay situation, you must save and
+!     restore certain items used internally by stfode  (values in the
+!     common block debdf1). This can be accomplished as follows.
+!
+!     To save the necessary values upon return from stfode, simply call
+!        svco(rwork(22+neq),iwork(21+neq)).
+!
+!     To restore the necessary values before the next call to stfode,
+!     SIMPLY CALL    rsco(rwork(22+neq),iwork(21+neq)).
+!
+!***********************************************************************
+!
+!***REFERENCES
+!   Shampine L.F., Watts H.A., *DEPAC - Design of a user oriented
+!   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
+!
+!
+!
+dimension iwork(liw)
+!
+common /debdf1/ told, rowns(210), &
+   & el0, h, hmin, hmxi, hu, tn, uround, &
+   & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
+   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
+   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+   & nje, nqu
+!
+!
+!.......................................................................
+!
+idid = 0
+!
+if (info(1) .eq. 0) go to 20
+if (info(1) .ne. 1) go to 10
+if (iquit .eq. 0) go to 20
+10 idid = -44
+return
+!
+20 if (info(2) .ne. 0) info(2) = 1
+if (info(3) .ne. 0) info(3) = 1
+if (info(4) .ne. 0) info(4) = 1
+if (info(5) .ne. 0) info(5) = 1
+if (info(6) .ne. 0) info(6) = 1
+!
+ilrw = neq
+if (info(6) .eq. 0) go to 80
+!
+!     Check bandwidth parameters
+!
+ml = iwork(1)
+mu = iwork(2)
+ilrw = 2*ml + mu + 1
+if (ml .ge. 0  .and.  ml .lt. neq      .and. &
+   & mu .ge. 0  .and.  mu .lt. neq) go to 80
+idid = -40
+return
+!
+!     Check lrw and liw for sufficient storage allocation
+!
+80 if (lrw .ge. 250 + (10 + ilrw)*neq) go to 100
+!
+if (info(6) .eq. 1) go to 90
+idid = -41
+return
+!
+90 idid = -42
+return
+!
+100 if (liw .ge. 55 + neq) go to 200
+idid = -43
+return
+!
+!     Compute the indices for the arrays to be stored in the work array
+!     and restore common block DATA
+!
+200 icomi = 21 + neq
+iinout = icomi + 33
+!
+iypout = 21
+itstar = 21 + neq
+icomr = 22 + neq
+!
+if (info(1) .eq. 0) go to 250
+intout = iwork(iinout) .ne. (-1)
+!     call rsco(rwork(icomr),iwork(icomi))
+!
+250 iyh = icomr + 218
+iewt = iyh + 6*neq
+isavf = iewt + neq
+iacor = isavf + neq
+iwm = iacor + neq
+idelsn = iwm + 2 + ilrw*neq
+!
+ibegin = info(1)
+itol = info(2)
+iinteg = info(3)
+itstop = info(4)
+ijac = info(5)
+iband = info(6)
+rwork(itstar) = t
+!
+call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout), &
+   & rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
+   & rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
+   & rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
+!
+iwork(iinout) = -1
+if (intout) iwork(iinout) = 1
+!
+!     call svco(rwork(icomr),iwork(icomi))
+rwork(11) = h
+rwork(13) = tn
+info(1) = ibegin
+!
+return
+end subroutine stfode
+
 subroutine rsco (rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
@@ -6,10 +2181,11 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
-integer :: i, ils, lenils, lenrls
+integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
-data lenrls/218/, lenils/33/
+integer, parameter :: lenrls = 218
+integer, parameter :: lenils = 33
 !
 do 10 i = 1,lenrls
 10 rls(i) = rsav(i)
@@ -30,10 +2206,11 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
-integer :: i, ils, lenils, lenrls
+integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
-data lenrls/218/, lenils/33/
+integer, parameter :: lenrls = 218
+integer, parameter :: lenils = 33
 !
 do 10 i = 1,lenrls
 10 rsav(i) = rls(i)
@@ -53,14 +2230,13 @@ real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
    & yh1(*), ypout(neq)
 logical :: intout
 external f, jac
-integer :: intflg, k, l, ltol, max, maxnum
+integer :: intflg, k, l, ltol, max
 real :: absdel, big, del, dt, ha, tol
 integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
    & itol, itstop, jstart, kflag, ksteps, lacor, ldum, lewt, lsavf, &
    & lwm, lyh, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
 real :: vnwrms
-real :: spmpar
 !
 !   stfode  merely allocates storage for lsod1 to relieve the user of
 !   the inconvenience of a long call list.  Consequently lsod1 is used
@@ -76,6 +2252,14 @@ common /debdf1/ told, rowns(210), &
    & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
    & ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
    & nfe, nje, nqu
+integer, parameter :: maxnum = 500
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !
 !.......................................................................
@@ -85,7 +2269,6 @@ common /debdf1/ told, rowns(210), &
 !  is reset to zero and the user is informed about possible excessive
 !  work.
 !
-data maxnum/500/
 !
 !.......................................................................
 !
@@ -2021,14 +4204,14 @@ real, intent(inout) :: y(n), dy(n), w(*)
 external f
 integer :: i, j, k, l, m, m1
 real :: ha, sum
-real :: a(7), b(8,7), c(7), d(9)
+real :: b(8,7)
+real, parameter :: a(7) = [real :: .3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
+real, parameter :: c(7) = [real :: 12., 8., 54., 4320., 20., 288., 820.]
+real, parameter :: d(9) = [real :: 41., 0., 27., 272., 27., 216., 0., 216., 41.]
 !     ******************************************************************
 !     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
 !     ******************************************************************
 !     -------------------
-data a(1)/.3333333333333333/,  a(2)/.5/,  a(3)/.6666666666666666/, &
-   & a(4)/.1666666666666666/,  a(5)/1./,  a(6)/.8333333333333333/, &
-   & a(7)/1./
 data b(1,1)/1./,  b(2,1)/3./
 data b(1,2)/1./,  b(2,2)/0./,  b(3,2)/3./
 data b(1,3)/13./,  b(2,3)/-27./,  b(3,3)/42./,  b(4,3)/8./
@@ -2041,10 +4224,6 @@ data b(1,6)/-127./,  b(2,6)/18./,  b(3,6)/-678./,  b(4,6)/456./, &
 data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
    & b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
    & b(7,7)/-60./,  b(8,7)/720./
-data c(1)/12./,  c(2)/8./,  c(3)/54./,  c(4)/4320./,  c(5)/20./, &
-   & c(6)/288./,  c(7)/820./
-data d(1)/41./,  d(2)/0./,  d(3)/27./,  d(4)/272./,  d(5)/27./, &
-   & d(6)/216./,  d(7)/0./,  d(8)/216./,  d(9)/41./
 !     -------------------
 if (h.eq.0.) go to 40
 ha = h*4./27.
@@ -4641,9 +6820,15 @@ integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
 real :: arg, bnorm, d1, d2, d3
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
-real :: spmpar
 complex, allocatable :: root_complex(:)
 real, allocatable :: root_real(:)
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !     compb computes the roots of the b polynomials using tqlrt0,
 !     which is a modification of the EISPACK subroutine tqlrat.
@@ -5147,15 +7332,20 @@ ppspf = sum
 return
 end function ppspf
 
-subroutine urget (n, ibeg, iend, ix, l, ierr)
+pure subroutine urget (n, ibeg, iend, ix, l, ierr)
 implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer, intent(inout) :: l(n)
 integer :: i, k, leftlo
-integer :: a, b15, b16, fhi, p, xalo, xhi
-double precision :: c, m, s, t
+integer :: fhi, xalo, xhi
+double precision :: c, m, t
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+double precision, parameter :: s = .4656612877413d-09
 !-----------------------------------------------------------------------
 !
 !               Uniform random selection of values from
@@ -5203,8 +7393,6 @@ double precision :: c, m, s, t
 !                    error does not produce variates that
 !                    EXCEED iend.)
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data s /.4656612877413d-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ibeg .ge. iend) go to 110
@@ -5251,14 +7439,19 @@ return
 return
 end subroutine urget
 
-subroutine urng (ix, x, n, ierr)
+pure subroutine urng (ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
 integer :: k, l, leftlo
-real :: s, t
-integer :: a, b15, b16, fhi, p, xalo, xhi
+real :: t
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+real, parameter :: s = .465661e-09
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !
@@ -5274,8 +7467,6 @@ integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data s/.465661e-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -5332,14 +7523,19 @@ return
 return
 end subroutine urng
 
-subroutine durng (ix, x, n, ierr)
+pure subroutine durng (ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n)
 integer :: k, l, leftlo
-integer :: a, b15, b16, fhi, p, xalo, xhi
-double precision :: s, t
+integer :: fhi, xalo, xhi
+double precision :: t
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+double precision, parameter :: s = .465661d-09
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !
@@ -5355,8 +7551,6 @@ double precision :: s, t
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data s/.465661d-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -5412,13 +7606,18 @@ return
 return
 end subroutine durng
 
-subroutine urng0 (ix, u, v)
+pure elemental subroutine urng0 (ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: u, v
 integer :: k, leftlo
 real :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -5436,8 +7635,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
 !-------------------
 !
 !                 Get 15 high order bits of ix
@@ -5483,13 +7680,18 @@ u = 0.5 + (0.5 - v)
 return
 end subroutine urng0
 
-subroutine durng0 (ix, u, v)
+pure elemental subroutine durng0 (ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v
 integer :: k, leftlo
 double precision :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -5507,8 +7709,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
 !-------------------
 !
 !                 Get 15 high order bits of ix
@@ -5554,13 +7754,18 @@ u = 0.5d0 + (0.5d0 - v)
 return
 end subroutine durng0
 
-subroutine urng1 (ix, u, v, d)
+pure elemental subroutine urng1 (ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
 integer :: j, k, leftlo
 real :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -5579,8 +7784,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
 !-------------------
 !
 !                 Get 15 high order bits of ix
@@ -5629,13 +7832,18 @@ u = 0.5 + (0.5 - v)
 return
 end subroutine urng1
 
-subroutine durng1 (ix, u, v, d)
+pure elemental subroutine durng1 (ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v, d
 integer :: j, k, leftlo
 double precision :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -5654,8 +7862,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
 !-------------------
 !
 !                 Get 15 high order bits of ix
@@ -5704,14 +7910,19 @@ u = 0.5d0 + (0.5d0 - v)
 return
 end subroutine durng1
 
-subroutine urng2 (ix, x, y, n, ierr)
+pure subroutine urng2 (ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo
-real :: s, t
-integer :: a, b15, b16, fhi, p, xalo, xhi
+real :: t
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+real, parameter :: s = .465661e-09
 !-----------------------------------------------------------------------
 !
 !         Generation of uniform random points (x(I),y(I))
@@ -5730,8 +7941,6 @@ integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data s/.465661e-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -5771,14 +7980,19 @@ return
 return
 end subroutine urng2
 
-subroutine durng2 (ix, x, y, n, ierr)
+pure subroutine durng2 (ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo
-double precision :: s, t
-integer :: a, b15, b16, fhi, p, xalo, xhi
+double precision :: t
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+double precision, parameter :: s = .465661d-09
 !-----------------------------------------------------------------------
 !
 !         Generation of uniform random points (x(I),y(I))
@@ -5797,8 +8011,6 @@ integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data s/.465661d-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -5838,11 +8050,23 @@ return
 return
 end subroutine durng2
 
-subroutine rcir (n, ix, x, y, ierr)
+pure subroutine rcir (n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n), y(n)
+interface
+   pure subroutine rcir1(n,ix,x,kx,y,ky,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: x(*)
+      integer, intent(in) :: kx
+      real, intent(inout) :: y(*)
+      integer, intent(in) :: ky
+      integer, intent(inout) :: ierr
+   end subroutine rcir1
+end interface
 !-----------------------------------------------------------------------
 !
 !          Generation of n uniform random points (x(I),y(I))
@@ -5854,14 +8078,20 @@ call rcir1 (n, ix, x, 1, y, 1, ierr)
 return
 end subroutine rcir
 
-subroutine rcir1 (n, ix, x, kx, y, ky, ierr)
+pure subroutine rcir1 (n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 real, intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo
-real :: r, s, u, v
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+real :: r, u, v
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
+real, parameter :: s = .931322e-09
 !-----------------------------------------------------------------------
 !
 !      Generation of n uniform random points in the unit circle
@@ -5877,9 +8107,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     p0 = 2**30 - 1
 !     s  = 2/p
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
-data s/.931322e-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -5942,11 +8169,23 @@ return
 return
 end subroutine rcir1
 
-subroutine drcir (n, ix, x, y, ierr)
+pure subroutine drcir (n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n), y(n)
+interface
+   pure subroutine drcir1(n,ix,x,kx,y,ky,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: x(*)
+      integer, intent(in) :: kx
+      double precision, intent(inout) :: y(*)
+      integer, intent(in) :: ky
+      integer, intent(inout) :: ierr
+   end subroutine drcir1
+end interface
 !-----------------------------------------------------------------------
 !
 !          Generation of n uniform random points (x(I),y(I))
@@ -5958,14 +8197,20 @@ call drcir1 (n, ix, x, 1, y, 1, ierr)
 return
 end subroutine drcir
 
-subroutine drcir1 (n, ix, x, kx, y, ky, ierr)
+pure subroutine drcir1 (n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 double precision, intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo
-double precision :: r, s, u, v
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
+double precision :: r, u, v
+integer :: fhi, xalo, xhi
+integer, parameter :: a = 16807
+integer, parameter :: b15 = 32768
+integer, parameter :: b16 = 65536
+integer, parameter :: p = 2147483647
+integer, parameter :: p0 = 1073741823
+double precision, parameter :: s = .931322d-09
 !-----------------------------------------------------------------------
 !
 !      Generation of n uniform random points in the unit circle
@@ -5981,9 +8226,6 @@ integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !     p0 = 2**30 - 1
 !     s  = 2/p
 !-------------------
-data a/16807/, b15/32768/, b16/65536/, p/2147483647/
-data p0/1073741823/
-data s/.931322d-09/
 !-------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. p) go to 110
@@ -6046,19 +8288,31 @@ return
 return
 end subroutine drcir1
 
-subroutine rnor (ix, a, n, ierr)
+pure subroutine rnor (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
-integer :: i, m, max
+integer :: i, m
 real :: r, s, u, v
 real :: t(2)
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine rcir1(n,ix,x,kx,y,ky,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: x(*)
+      integer, intent(in) :: kx
+      real, intent(inout) :: y(*)
+      integer, intent(in) :: ky
+      integer, intent(inout) :: ierr
+   end subroutine rcir1
+end interface
 !-----------------------------------------------------------------------
 !                 Normal random number generator
 !-----------------------------------------------------------------------
 !---------------------
-data max /2147483647/
 !---------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. max) go to 110
@@ -6097,18 +8351,30 @@ return
 return
 end subroutine rnor
 
-subroutine drnor (ix, a, n, ierr)
+pure subroutine drnor (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
-integer :: i, m, max
+integer :: i, m
 double precision :: r, s, u, v, t(2)
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine drcir1(n,ix,x,kx,y,ky,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: x(*)
+      integer, intent(in) :: kx
+      double precision, intent(inout) :: y(*)
+      integer, intent(in) :: ky
+      integer, intent(inout) :: ierr
+   end subroutine drcir1
+end interface
 !-----------------------------------------------------------------------
 !                 Normal random number generator
 !-----------------------------------------------------------------------
 !---------------------
-data max /2147483647/
 !---------------------
 if (n .le. 0) go to 100
 if (ix .le. 0 .or. ix .ge. max) go to 110
@@ -6147,18 +8413,27 @@ return
 return
 end subroutine drnor
 
-subroutine nrng (ix, a, n, ierr)
+pure subroutine nrng (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, m
-real :: phi, pi2, r
+real :: phi, r
 real :: temp(1)
+real, parameter :: pi2 = 6.2831853071796
+interface
+   pure subroutine urng(ix,x,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: x(n)
+      integer, intent(inout) :: ierr
+   end subroutine urng
+end interface
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
-data pi2 /6.2831853071796/
 !
 call urng (ix,a,n,ierr)
 if (ierr .ne. 0) return
@@ -6179,18 +8454,27 @@ a(n) = r*cos(pi2*temp(1))
 return
 end subroutine nrng
 
-subroutine dnrng (ix, a, n, ierr)
+pure subroutine dnrng (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer :: i, m
-double precision :: phi, pi2, r, temp(1)
+double precision :: phi, r, temp(1)
+double precision, parameter :: pi2 = 6.28318530717958647692528676656d0
+interface
+   pure subroutine durng(ix,x,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: x(n)
+      integer, intent(inout) :: ierr
+   end subroutine durng
+end interface
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
 !
-data pi2 /6.28318530717958647692528676656d0/
 !
 call durng (ix, a, n, ierr)
 if (ierr .ne. 0) return
@@ -6211,15 +8495,31 @@ a(n) = r*dcos(pi2*temp(1))
 return
 end subroutine dnrng
 
-subroutine nrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine nrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(*)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
-integer :: i, ii, j, k, l, l0, ldim, max
+integer :: i, ii, j, k, l, l0, ldim
 real :: sum
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine rnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine rnor
+   pure subroutine sppfa(ap,n,info)
+      implicit none
+      real, intent(inout) :: ap(*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: info
+   end subroutine sppfa
+end interface
 !-----------------------------------------------------------------------
 !
 !           Generation of n random normal vectors of length m
@@ -6300,7 +8600,6 @@ real :: sum
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
@@ -6350,14 +8649,24 @@ return
 return
 end subroutine nrvg
 
-subroutine nrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine nrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(m)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
-integer :: i, j, max
+integer :: i, j
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine rnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine rnor
+end interface
 !-----------------------------------------------------------------------
 !
 !           Generation of n random normal vectors of length m
@@ -6424,7 +8733,6 @@ integer :: i, j, max
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
@@ -6460,15 +8768,31 @@ return
 return
 end subroutine nrvg1
 
-subroutine dnrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine dnrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(*)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
-integer :: i, ii, j, k, l, l0, ldim, max
+integer :: i, ii, j, k, l, l0, ldim
 double precision :: sum
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine dppfa(ap,n,info)
+      implicit none
+      double precision, intent(inout) :: ap(*)
+      integer, intent(in) :: n
+      integer, intent(inout) :: info
+   end subroutine dppfa
+   pure subroutine drnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine drnor
+end interface
 !-----------------------------------------------------------------------
 !
 !           Generation of n random normal vectors of length m
@@ -6549,7 +8873,6 @@ double precision :: sum
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
@@ -6599,14 +8922,24 @@ return
 return
 end subroutine dnrvg
 
-subroutine dnrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine dnrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(m)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
-integer :: i, j, max
+integer :: i, j
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine drnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine drnor
+end interface
 !-----------------------------------------------------------------------
 !
 !           Generation of n random normal vectors of length m
@@ -6673,7 +9006,6 @@ integer :: i, j, max
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (m .le. 1 .or. m .gt. kx) go to 110
@@ -6709,13 +9041,22 @@ return
 return
 end subroutine dnrvg1
 
-subroutine ranexp (n,a,iseed,x,ierror)
+pure subroutine ranexp (n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
 integer :: i
+interface
+   pure subroutine urng(ix,x,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: x(n)
+      integer, intent(inout) :: ierr
+   end subroutine urng
+end interface
 !
 !              ***Subroutine purpose and description***
 !
@@ -6796,13 +9137,22 @@ return
 return
 end subroutine ranexp
 
-subroutine drnexp (n,a,iseed,x,ierror)
+pure subroutine drnexp (n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
 integer :: i
+interface
+   pure subroutine durng(ix,x,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: x(n)
+      integer, intent(inout) :: ierr
+   end subroutine durng
+end interface
 !
 !              ***Subroutine purpose and description***
 !
@@ -6883,14 +9233,32 @@ return
 return
 end subroutine drnexp
 
-subroutine rgam (ix, a, n, x, ierr)
+pure subroutine rgam (ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 real :: u, v, w
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
+      implicit none
+      real, intent(in) :: a
+      real, intent(out) :: x
+      real, intent(in) :: x0
+      real, intent(in) :: p
+      real, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine gaminv
+   pure elemental subroutine urng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine urng0
+end interface
 !-----------------------------------------------------------------------
 !
 !               Computation of n variates x(1),...,x(n)
@@ -6917,7 +9285,6 @@ real :: u, v, w
 !
 !-----------------------------------------------------------------------
 !
-data max /2147483647/
 !
 if (n .le. 0) go to 100
 if (a .lt. 0.1) go to 110
@@ -6946,14 +9313,31 @@ return
 return
 end subroutine rgam
 
-subroutine drgam (ix, a, n, x, ierr)
+pure subroutine drgam (ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 double precision :: u, v, w
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine dginv(a,x,p,q,ierr)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(out) :: x
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine dginv
+   pure elemental subroutine durng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine durng0
+end interface
 !-----------------------------------------------------------------------
 !
 !             Computation of n double precision variates
@@ -6980,7 +9364,6 @@ double precision :: u, v, w
 !
 !-----------------------------------------------------------------------
 !
-data max /2147483647/
 !
 if (n .le. 0) go to 100
 if (a .lt. 0.1d0) go to 110
@@ -7009,14 +9392,32 @@ return
 return
 end subroutine drgam
 
-subroutine rbeta (n, a, b, ix, x, ierr)
+pure subroutine rbeta (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 real :: u, v, x1, x2
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
+      implicit none
+      real, intent(in) :: a
+      real, intent(out) :: x
+      real, intent(in) :: x0
+      real, intent(in) :: p
+      real, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine gaminv
+   pure elemental subroutine urng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine urng0
+end interface
 !-----------------------------------------------------------------------
 !
 !                Generation of beta random variates
@@ -7065,7 +9466,6 @@ real :: u, v, x1, x2
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (amin1(a,b) .lt. 0.25) go to 110
@@ -7104,14 +9504,31 @@ return
 return
 end subroutine rbeta
 
-subroutine drbeta (n, a, b, ix, x, ierr)
+pure subroutine drbeta (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 double precision :: u, v, x1, x2
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine dginv(a,x,p,q,ierr)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(out) :: x
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine dginv
+   pure elemental subroutine durng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine durng0
+end interface
 !-----------------------------------------------------------------------
 !
 !                         Double precision
@@ -7161,7 +9578,6 @@ double precision :: u, v, x1, x2
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (dmin1(a,b) .lt. 0.25d0) go to 110
@@ -7200,15 +9616,37 @@ return
 return
 end subroutine drbeta
 
-subroutine fran (n, a, b, ix, x, ierr)
+pure subroutine fran (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
-real :: spmpar
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
+      implicit none
+      real, intent(in) :: a
+      real, intent(out) :: x
+      real, intent(in) :: x0
+      real, intent(in) :: p
+      real, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine gaminv
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+   pure elemental subroutine urng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine urng0
+end interface
 !-----------------------------------------------------------------------
 !
 !          Generation of variates from the F-distribution
@@ -7248,7 +9686,6 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 !
 !     ****** xmax is a machine dependent constant. Xmax is the
@@ -7305,16 +9742,37 @@ return
 return
 end subroutine fran
 
-subroutine dfran (n, a, b, ix, x, ierr)
+pure subroutine dfran (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
    & x1, x2
-double precision :: dpmpar
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine dginv(a,x,p,q,ierr)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(out) :: x
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine dginv
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure elemental subroutine durng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine durng0
+end interface
 !-----------------------------------------------------------------------
 !
 !                  Double precision generation of
@@ -7355,7 +9813,6 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 !
 !     ****** xmax is a machine dependent constant. Xmax is the
@@ -7412,14 +9869,47 @@ return
 return
 end subroutine dfran
 
-subroutine tran (n, a, ix, x, ierr)
+pure subroutine tran (n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 real :: ahalf, d, s, u, v, w, z
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
+      implicit none
+      real, intent(in) :: a
+      real, intent(out) :: x
+      real, intent(in) :: x0
+      real, intent(in) :: p
+      real, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine gaminv
+   pure elemental subroutine pni(p,q,d,w,ierr)
+      implicit none
+      real, intent(in) :: p
+      real, intent(in) :: q
+      real, intent(in) :: d
+      real, intent(inout) :: w
+      integer, intent(inout) :: ierr
+   end subroutine pni
+   pure elemental subroutine urng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+   end subroutine urng0
+   pure elemental subroutine urng1(ix,u,v,d)
+      implicit none
+      integer, intent(inout) :: ix
+      real, intent(inout) :: u
+      real, intent(inout) :: v
+      real, intent(inout) :: d
+   end subroutine urng1
+end interface
 !-----------------------------------------------------------------------
 !
 !          Generation of variates from the T-distribution
@@ -7457,7 +9947,6 @@ real :: ahalf, d, s, u, v, w, z
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (a .lt. 0.5) go to 110
@@ -7500,14 +9989,46 @@ return
 return
 end subroutine tran
 
-subroutine dtran (n, a, ix, x, ierr)
+pure subroutine dtran (n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
-integer :: i, ind, max
+integer :: i, ind
 double precision :: ahalf, d, s, u, v, w, z
+integer, parameter :: max = 2147483647
+interface
+   pure elemental subroutine dginv(a,x,p,q,ierr)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(out) :: x
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      integer, intent(inout) :: ierr
+   end subroutine dginv
+   pure elemental subroutine dpni(p,q,d,w,ierr)
+      implicit none
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      double precision, intent(in) :: d
+      double precision, intent(inout) :: w
+      integer, intent(inout) :: ierr
+   end subroutine dpni
+   pure elemental subroutine durng0(ix,u,v)
+      implicit none
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+   end subroutine durng0
+   pure elemental subroutine durng1(ix,u,v,d)
+      implicit none
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: u
+      double precision, intent(inout) :: v
+      double precision, intent(inout) :: d
+   end subroutine durng1
+end interface
 !-----------------------------------------------------------------------
 !
 !                  Double precision generation of
@@ -7546,7 +10067,6 @@ double precision :: ahalf, d, s, u, v, w, z
 !
 !-----------------------------------------------------------------------
 !--------------------
-data max /2147483647/
 !--------------------
 if (n .le. 0) go to 100
 if (a .lt. 0.5d0) go to 110
@@ -7589,7 +10109,7 @@ return
 return
 end subroutine dtran
 
-subroutine rmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+pure subroutine rmk1 (n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -7597,6 +10117,15 @@ real, intent(in) :: alpha, fmu, sig
 real, intent(inout) :: x(n)
 integer :: i
 real :: c, sigi, t
+interface
+   pure subroutine rnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine rnor
+end interface
 !
 !              ***Subroutine purpose and description***
 !
@@ -7709,7 +10238,7 @@ return
 return
 end subroutine rmk1
 
-subroutine drmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+pure subroutine drmk1 (n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -7717,6 +10246,15 @@ double precision, intent(in) :: fmu, sig, alpha
 double precision, intent(inout) :: x(n)
 integer :: i
 double precision :: c, sigi, t
+interface
+   pure subroutine drnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      double precision, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine drnor
+end interface
 !
 !              ***Subroutine purpose and description***
 !

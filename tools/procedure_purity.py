@@ -38,7 +38,10 @@ def transform(text, manifest=None):
         body = lines[start:end]
         edits, removed, anchor = {}, set(), None
         for records, logical in groups(body):
-            decl = type_declaration(logical)
+            constant = bool(re.match(r'^\s*(?:integer|real|double\s+(?:precision|complex)|complex|logical|character)\b.*?,\s*parameter\b', logical, re.I))
+            decl = None if constant else type_declaration(logical)
+            if constant:
+                anchor = records[-1].index + 1
             external = re.match(r'^\s*external\s+(?:::)?\s*(.*)', logical, re.I)
             if decl:
                 anchor = records[-1].index + 1

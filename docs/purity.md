@@ -1,14 +1,14 @@
 # Pure and elemental contracts
 
-`nswc.f90` has 319 PURE procedures and 27 PURE ELEMENTAL procedures. The fixed-form
+`nswc.f90` has 505 PURE procedures and 175 PURE ELEMENTAL procedures. The fixed-form
 sources retain their existing declarations. Numerical algorithms, argument order,
 argument types, bounds, intents, and external linker names remain unchanged.
 
-The elemental procedures are:
-
-CBRT, DCBRT, ARTNQ, DARTNQ, CPABS, DCPABS, CREC, DCREC, CDIV, POCA, CAPO, ROTA,
-SROTG, DROTG, CONSTR, ESUM, DESUM, CFLECT, SCDM, PEQ, PEQ1, PLEM, PLEM1, XL1,
-TVAL, BASIZ, and RMIN.
+The [review manifest](../tools/procedure-purity.json) lists all procedures and
+attributes. Elemental examples include IPMPAR, GAMMA, DGAMMA, CBRT, DCBRT, ESUM,
+DESUM, SROTG, and DROTG. The read-only [DATA conversion](data-constants.md)
+removed a purity blocker from coefficient tables and machine constants, expanding
+the annotated set from 346 to 680 procedures.
 
 ## Calling the procedures
 
@@ -59,8 +59,8 @@ interfaces, call references, candidate rejections, and elemental downgrades.
 Many remaining procedures have DATA or SAVE state, I/O, incomplete intent
 contracts, calls to impure procedures, or callbacks whose existing interfaces do not promise
 purity. Those contracts are preserved. Marking a procedure PURE does not require
-its algorithm to be rewritten, and this pass does not replace DATA tables with
-PARAMETER constants or tighten callback requirements.
+its algorithm to be rewritten, and the separate DATA conversion replaces only reviewed read-only tables and constants.
+Callback requirements are preserved.
 
 To repeat the analysis with an installed Fortran-Tools checkout, create a new
 review file and inspect it before replacing the checked-in manifest:
@@ -86,6 +86,6 @@ The purity validator compiles both the unannotated and annotated code, compares
 data records, argument lists, result types and executable compiler trees, and
 checks each PURE/ELEMENTAL attribute against the review. Its numerical tests
 exercise array functions, scalar broadcasting, elemental subroutines and a PURE
-caller of SCOPY. A negative test rejects an impure machine-constant function in
+caller of SCOPY. A negative test rejects the impure polynomial helper POLYDD in
 a PURE caller. `--ifx` and `--intel-env` can additionally run these checks with
 Intel Fortran using the same options as the interface validator.

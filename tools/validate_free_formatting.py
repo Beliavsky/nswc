@@ -10,6 +10,8 @@ from format_free_form import format_source, semantic_statements
 from validate_explicit_typing import symbols
 from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform as apply_purity
+from data_constants import transform as apply_constants
+from portable_intrinsics import transform as portable_intrinsics
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -46,7 +48,7 @@ def main():
     args = parser.parse_args()
     original = lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii')))
     formatted = format_source(original)
-    if semantic_statements(apply_free_fixes(apply_purity(formatted))) != semantic_statements((ROOT / 'nswc.f90').read_text(encoding='ascii')):
+    if semantic_statements(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(formatted))))) != semantic_statements((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Maintained free-form code differs from formatted fixed-form conversion')
     dumps = []
     with tempfile.TemporaryDirectory(prefix='nswc-free-formatting-') as folder:

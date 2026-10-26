@@ -1,3 +1,2142 @@
+pure subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
+implicit none
+integer, intent(in) :: kdx, kx, kz, l, m, n
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
+real, intent(inout) :: z(kz, n)
+integer :: i, il, ir, j, k
+real :: a, b, c, d, dt, h, t0, told, w
+!-----------------------------------------------------------------------
+!            Evaluation of a cubic spline closed curve
+!                     in n-dimensional space
+!-----------------------------------------------------------------------
+!
+!     Reduction of ti(k) to t0 where 0 .LE. t0 .LT. 1
+!
+k = 1
+j = ti(1)
+t0 = ti(1) - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 60
+il = 1
+ir = m
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i .eq. il) go to 50
+if (t0 - t(i)) 20,50,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+40 if (t0 .lt. t(i + 1)) go to 50
+i = i + 1
+go to 40
+!
+!     Computation when t(i) .LE. t0 .LT. t(i+1)
+!
+50 h = t(i + 1) - t(i)
+dt = t0 - t(i)
+do j = 1,n
+   a = dx(i,j)
+   d = (x(i + 1,j) - x(i,j))/h
+   w = a + dx(i + 1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(k,j) = x(i,j) + dt*(a + dt*(b + dt*c))
+end do
+go to 100
+!
+!     Computation when t0 .GE. t(m)
+!
+60 i = m
+h = 1.0 - t(m)
+dt = t0 - t(m)
+do j = 1,n
+   a = dx(m,j)
+   d = (x(1,j) - x(m,j))/h
+   w = a + dx(1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(k,j) = x(m,j) + dt*(a + dt*(b + dt*c))
+end do
+!
+!     Next point
+!
+100 if (k .ge. l) return
+told = t0
+k = k + 1
+j = ti(k)
+t0 = ti(k) - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 60
+if (t0 - told) 110,50,40
+!
+110 il = 1
+ir = min0(i + 1,m)
+go to 10
+end subroutine lopcmp
+
+pure subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
+implicit none
+integer, intent(in) :: kdx, kx, m, n
+real, intent(in) :: ti
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
+real, intent(inout) :: z(n), dz(n), ddz(n)
+integer :: i, il, ir, j
+real :: a, b, c, d, dt, h, t0, w
+!-----------------------------------------------------------------------
+!          Evaluation and differentiation of a cubic spline
+!                closed curve in n-dimensional space
+!-----------------------------------------------------------------------
+!
+!     Reduction of ti to t0 where 0 .LE. t0 .LT. 1
+!
+j = ti
+t0 = ti - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 50
+il = 1
+ir = m
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i .eq. il) go to 40
+if (t0 - t(i)) 20,40,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Computation when t(i) .LE. t0 .LT. t(i+1)
+!
+40 h = t(i + 1) - t(i)
+dt = t0 - t(i)
+do j = 1,n
+   a = dx(i,j)
+   d = (x(i + 1,j) - x(i,j))/h
+   w = a + dx(i + 1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(j) = x(i,j) + dt*(a + dt*(b + dt*c))
+   b = b + b
+   c = 3.0*c
+   dz(j) = a + dt*(b + c*dt)
+   ddz(j) = b + (c + c)*dt
+end do
+return
+!
+!     Computation when t0 .GE. t(m)
+!
+50 h = 1.0 - t(m)
+dt = t0 - t(m)
+do j = 1,n
+   a = dx(m,j)
+   d = (x(1,j) - x(m,j))/h
+   w = a + dx(1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(j) = x(m,j) + dt*(a + dt*(b + dt*c))
+   b = b + b
+   c = 3.0*c
+   dz(j) = a + dt*(b + c*dt)
+   ddz(j) = b + (c + c)*dt
+end do
+return
+end subroutine lopdf
+
+pure subroutine curv1 (n,x,y,slp1,slpn,islpsw,yp,temp, &
+   & sigma,ierr)
+implicit none
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), slp1, slpn
+real, intent(inout) :: yp(n), temp(n)
+real, intent(in) :: sigma
+integer :: i, ibak, nm1, np1
+real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
+   & diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
+interface
+   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+      implicit none
+      real, intent(in) :: del1
+      real, intent(in) :: del2
+      real, intent(in) :: sigma
+      real, intent(inout) :: c1
+      real, intent(inout) :: c2
+      real, intent(inout) :: c3
+      integer, intent(in) :: n
+   end subroutine ceez
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine determines the parameters necessary to
+! compute an interpolatory spline under tension through
+! a sequence of functional values. The slopes at the two
+! ends of the curve may be specified or omitted.  For actual
+! computation of points on the curve it is necessary to call
+! the function curv2.
+!
+! On input--
+!
+!   n is the number of values to be interpolated (n.GE.2).
+!
+!   x is an array of the n increasing abscissae of the
+!   functional values.
+!
+!   y is an array of the n ordinates of the values, (I. E.
+!   y(K) is the functional value corresponding to x(K) ).
+!
+!   slp1 and slpn contain the desired values for the first
+!   derivative of the curve at x(1) and x(n), respectively.
+!   The user may omit values for either or both of these
+!   parameters and signal this with islpsw.
+!
+!   islpsw contains a switch indicating which slope data
+!   should be used and which should be estimated by this
+!   subroutine,
+!          = 0 If slp1 and slpn are to be used,
+!          = 1 If slp1 is to be used but not slpn,
+!          = 2 If slpn is to be used but not slp1,
+!          = 3 If both slp1 and slpn are to be estimated
+!              internally.
+!
+!   yp is an array of length at least n.
+!
+!   Temp is an array of length at least n which is used for
+!   scratch storage.
+!
+! And
+!
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately A
+!   cubic spline. If abs(sigma) is large (E.G. 50.) The
+!   resulting curve is nearly a polygonal line. If sigma
+!   equals zero a cubic spline results.  A standard value
+!   for sigma is approximately 1. In absolute value.
+!
+! On output--
+!
+!   yp contains the values of the second derivative of the
+!   curve at the given nodes.
+!
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If x-values are not strictly increasing.
+!
+! And
+!
+!   n, x, y, slp1, slpn, islpsw and sigma are unaltered.
+!
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
+!
+!-----------------------------------------------------------
+!
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n .le. 1) go to 8
+if (x(n) .le. x(1)) go to 9
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
+!
+! Approximate end slopes
+!
+if (islpsw .ge. 2) go to 1
+slpp1 = slp1
+go to 2
+1 delx1 = x(2) - x(1)
+delx2 = delx1 + delx1
+if (n .gt. 2) delx2 = x(3) - x(1)
+if (delx1 .le. 0. .or. delx2 .le. delx1) go to 9
+call ceez (delx1,delx2,sigmap,c1,c2,c3,n)
+slpp1 = c1*y(1) + c2*y(2)
+if (n .gt. 2) slpp1 = slpp1 + c3*y(3)
+2 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 3
+slppn = slpn
+go to 4
+3 delxn = x(n) - x(nm1)
+delxnm = delxn + delxn
+if (n .gt. 2) delxnm = x(n) - x(n - 2)
+if (delxn .le. 0. .or. delxnm .le. delxn) go to 9
+call ceez (-delxn,-delxnm,sigmap,c1,c2,c3,n)
+slppn = c1*y(n) + c2*y(nm1)
+if (n .gt. 2) slppn = slppn + c3*y(n - 2)
+!
+! Set up right hand side and tridiagonal system for yp and
+! perform forward elimination
+!
+4 delx1 = x(2) - x(1)
+if (delx1 .le. 0.) go to 9
+dx1 = (y(2) - y(1))/delx1
+call terms (diag1,sdiag1,sigmap,delx1)
+yp(1) = (dx1 - slpp1)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 6
+do 5 i = 2,nm1
+   delx2 = x(i + 1) - x(i)
+   if (delx2 .le. 0.) go to 9
+   dx2 = (y(i + 1) - y(i))/delx2
+   call terms (diag2,sdiag2,sigmap,delx2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   yp(i) = (dx2 - dx1 - sdiag1*yp(i - 1))/diag
+   temp(i) = sdiag2/diag
+   dx1 = dx2
+   diag1 = diag2
+5  sdiag1 = sdiag2
+6 diag = diag1 - sdiag1*temp(nm1)
+yp(n) = (slppn - dx1 - sdiag1*yp(nm1))/diag
+!
+! Perform back substitution
+!
+do 7 i = 2,n
+   ibak = np1 - i
+7  yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+return
+!
+! Too few points
+!
+8 ierr = 1
+return
+!
+! x-values not strictly increasing
+!
+9 ierr = 2
+return
+end subroutine curv1
+
+pure function curv2 (t,n,x,y,yp,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
+integer :: i, im1
+real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
+   & sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
+real :: curv2
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This function interpolates a curve at a given point
+! using a spline under tension. The subroutine curv1 should
+! be called earlier to determine certain necessary
+! parameters.
+!
+! On input--
+!
+!   t contains a real value to be mapped onto the interpo-
+!   LATING CURVE.
+!
+!   n contains the number of points which were specified to
+!   determine the curve.
+!
+!   x and y are arrays containing the abscissae and
+!   ordinates, respectively, of the specified points.
+!
+!   yp is an array of second derivative values of the curve
+!   at the nodes.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, yp, and sigma should be input
+! unaltered from the output of curv1.
+!
+! On output--
+!
+!   curv2 contains the interpolated value.
+!
+! None of the input parameters are altered.
+!
+! This function references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Determine interval
+!
+im1 = intrvl(t,x,n)
+i = im1 + 1
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
+!
+! Set up and perform interpolation
+!
+del1 = t - x(im1)
+del2 = x(i) - t
+dels = x(i) - x(im1)
+sum = (y(i)*del1 + y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+curv2 = sum - del1*del2*(yp(i)*(del1 + dels) + yp(im1)* &
+   & (del2 + dels))/(6.*dels)
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh (sinhm1,dummy,sigmap*del1,-1)
+call snhcsh (sinhm2,dummy,sigmap*del2,-1)
+call snhcsh (sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+curv2 = sum + (yp(i)*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
+   & sinhp2 + sigmap*coshp1*del2)) + yp(im1)*(sinhm2* &
+   & del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
+   & coshp2*del1)))/(sigmap*sigmap*dels*(sinhms + &
+   & sigmap*dels))
+return
+end function curv2
+
+pure function curvd (t,n,x,y,yp,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
+integer :: i, im1
+real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
+   & sum
+real :: curvd
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This function differentiates a curve at a given point
+! using a spline under tension. The subroutine curv1 should
+! be called earlier to determine certain necessary
+! parameters.
+!
+! On input--
+!
+!   t contains a real value at which the derivative is to be
+!   determined.
+!
+!   n contains the number of points which were specified to
+!   determine the curve.
+!
+!   x and y are arrays containing the abscissae and
+!   ordinates, respectively, of the specified points.
+!
+!   yp is an array of second derivative values of the curve
+!   at the nodes.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, yp, and sigma should be input
+! unaltered from the output of curv1.
+!
+! On output--
+!
+!   curvd contains the derivative value.
+!
+! None of the input parameters are altered.
+!
+! This function references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Determine interval
+!
+im1 = intrvl(t,x,n)
+i = im1 + 1
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
+!
+! Set up and perform differentiation
+!
+del1 = t - x(im1)
+del2 = x(i) - t
+dels = x(i) - x(im1)
+sum = (y(i) - y(im1))/dels
+if (sigmap .ne. 0.) go to 1
+curvd = sum + (yp(i)*(2.*del1*del1 - del2*(del1 + dels)) - &
+   & yp(im1)*(2.*del2*del2 - del1*(del2 + dels))) &
+   & /(6.*dels)
+return
+1 call snhcsh (dummy,coshm1,sigmap*del1,1)
+call snhcsh (dummy,coshm2,sigmap*del2,1)
+call snhcsh (sinhms,dummy,sigmap*dels,-1)
+curvd = sum + (yp(i)*(dels*sigmap*coshm1 - sinhms) - &
+   & yp(im1)*(dels*sigmap*coshm2 - sinhms))/ &
+   & (sigmap*sigmap*dels*(sinhms + sigmap*dels))
+return
+end function curvd
+
+pure function curvi (xl,xu,n,x,y,yp,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
+integer :: i, il, ilm1, ilp1, iu, ium1
+real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
+   & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
+   & sum, t, t1, t2, xxl, xxu
+real :: curvi
+real :: term
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This function integrates a curve specified by a spline
+! under tension between two given limits. The subroutine
+! curv1 should be called earlier to determine necessary
+! parameters.
+!
+! On input--
+!
+!   xl and xu contain the lower and upper limits of inte-
+!   gration, respectively. (xl need not be less than or
+!   equal to xu, curvi (xl,xu,...) .EQ. -curvi (xu,xl,...) ).
+!
+!   n contains the number of points which were specified to
+!   determine the curve.
+!
+!   x and y are arrays containing the abscissae and
+!   ordinates, respectively, of the specified points.
+!
+!   yp is an array of second derivative values of the curve
+!   at the nodes.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, yp, and sigma should be input
+! unaltered from the output of curv1.
+!
+! On output--
+!
+!   curvi contains the integral value.
+!
+! None of the input parameters are altered.
+!
+! This function references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Statement function for coefficient associated with
+! derivative terms
+!
+term (cmm1,cmm2,t) = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap* &
+   & sigmap*sigmap*(ss + sigmap*dels))
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
+!
+! Determine actual upper and lower bounds
+!
+xxl = xl
+xxu = xu
+ssign = 1.
+if (xl .lt. xu) go to 1
+xxl = xu
+xxu = xl
+ssign = -1.
+if (xl .gt. xu) go to 1
+!
+! RETURN ZERO IF xl .EQ. xu
+!
+curvi = 0.
+return
+!
+! Search for proper intervals
+!
+1 ilm1 = intrvl (xxl,x,n)
+il = ilm1 + 1
+ium1 = intrvl (xxu,x,n)
+iu = ium1 + 1
+if (il .eq. iu) go to 8
+!
+! Integrate from xxl to x(il)
+!
+sum = 0.
+if (xxl .eq. x(il)) go to 3
+del1 = xxl - x(ilm1)
+del2 = x(il) - xxl
+dels = x(il) - x(ilm1)
+t1 = (del1 + dels)*del2/(2.*dels)
+t2 = del2*del2/(2.*dels)
+sum = t1*y(il) + t2*y(ilm1)
+if (sigma .eq. 0.) go to 2
+call snhcsh (dummy,c1,sigmap*del1,2)
+call snhcsh (dummy,c2,sigmap*del2,2)
+call snhcsh (ss,cs,sigmap*dels,3)
+sum = sum + term(cs,c1,t1)*yp(il) &
+   & + term(c2,0.,t2)*yp(ilm1)
+go to 3
+2 sum = sum - t1*t1*dels*yp(il)/6. &
+   & - t2*(del1*(del2 + dels) + dels*dels)*yp(ilm1)/12.
+!
+! Integrate over interior intervals
+!
+3 if (iu - il .eq. 1) go to 6
+ilp1 = il + 1
+do 5 i = ilp1,ium1
+   dels = x(i) - x(i - 1)
+   sum = sum + (y(i) + y(i - 1))*dels/2.
+   if (sigma .eq. 0.) go to 4
+   call snhcsh (ss,cs,sigmap*dels,3)
+   sum = sum + (yp(i) + yp(i - 1))*(cs - ss*sigmap*dels/2.)/ &
+      & (sigmap*sigmap*sigmap*(ss + sigmap*dels))
+   go to 5
+4  sum = sum - (yp(i) + yp(i - 1))*dels*dels*dels/24.
+5  continue
+!
+! Integrate from x(iu-1) to XXU
+!
+6 if (xxu .eq. x(ium1)) go to 10
+del1 = xxu - x(ium1)
+del2 = x(iu) - xxu
+dels = x(iu) - x(ium1)
+t1 = del1*del1/(2.*dels)
+t2 = (del2 + dels)*del1/(2.*dels)
+sum = sum + t1*y(iu) + t2*y(ium1)
+if (sigma .eq. 0.) go to 7
+call snhcsh (dummy,c1,sigmap*del1,2)
+call snhcsh (dummy,c2,sigmap*del2,2)
+call snhcsh (ss,cs,sigmap*dels,3)
+sum = sum + term(c1,0.,t1)*yp(iu) &
+   & + term(cs,c2,t2)*yp(ium1)
+go to 10
+7 sum = sum - t1*(del2*(del1 + dels) + dels*dels)*yp(iu)/12. &
+   & - t2*t2*dels*yp(ium1)/6.
+go to 10
+!
+! Integrate from xxl to XXU
+!
+8 delu1 = xxu - x(ium1)
+delu2 = x(iu) - xxu
+dell1 = xxl - x(ium1)
+dell2 = x(iu) - xxl
+dels = x(iu) - x(ium1)
+deli = xxu - xxl
+t1 = (delu1 + dell1)*deli/(2.*dels)
+t2 = (delu2 + dell2)*deli/(2.*dels)
+sum = t1*y(iu) + t2*y(ium1)
+if (sigma .eq. 0.) go to 9
+call snhcsh (dummy,cu1,sigmap*delu1,2)
+call snhcsh (dummy,cu2,sigmap*delu2,2)
+call snhcsh (dummy,cl1,sigmap*dell1,2)
+call snhcsh (dummy,cl2,sigmap*dell2,2)
+call snhcsh (ss,dummy,sigmap*dels,-1)
+sum = sum + term(cu1,cl1,t1)*yp(iu) &
+   & + term(cl2,cu2,t2)*yp(ium1)
+go to 10
+9 sum = sum - t1*(delu2*(dels + delu1) + dell2*(dels + dell1))* &
+   & yp(iu)/12. &
+   & - t2*(dell1*(dels + dell2) + delu1*(dels + delu2))* &
+   & yp(ium1)/12.
+!
+! Correct sign and return
+!
+10 curvi = ssign*sum
+return
+end function curvi
+
+pure subroutine kurv1 (n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
+   & sigma,ierr)
+implicit none
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), slp1, slpn
+real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
+real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+   & diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
+   & slpp1x, slpp1y, slppnx, slppny, sx, sy
+interface
+   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+      implicit none
+      real, intent(in) :: del1
+      real, intent(in) :: del2
+      real, intent(in) :: sigma
+      real, intent(inout) :: c1
+      real, intent(inout) :: c2
+      real, intent(inout) :: c3
+      integer, intent(in) :: n
+   end subroutine ceez
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine determines the parameters necessary to
+! compute a spline under tension forming a curve in the
+! plane and passing through a sequence of pairs (x(1),y(1)),
+! ...,(x(n),y(n)). For actual computation of points on the
+! curve it is necessary to call the subroutine kurv2.
+!
+! On input--
+!
+!   n is the number of points to be interpolated (n.GE.2).
+!
+!   x is an array containing the n x-coordinates of the
+!   points.
+!
+!   y is an array containing the n y-coordinates of the
+!   points. (Adjacent x-y pairs must be distinct, I. E.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
+!   i = 1,...,n-1.)
+!
+!   slp1 and slpn contain the desired values for the angles
+!   (in radians) of the slope at (x(1),y(1)) and (x(n),y(n))
+!   respectively. The angles are measured counter-clock-
+!   wise from the x-axis and the positive sense of the curve
+!   is assumed to be that moving from point 1 to point n.
+!   The user may omit values for either or both of these
+!   parameters and signal this with islpsw.
+!
+!   islpsw contains a switch indicating which slope data
+!   should be used and which should be estimated by this
+!   subroutine,
+!          = 0 If slp1 and slpn are to be used,
+!          = 1 If slp1 is to be used but not slpn,
+!          = 2 If slpn is to be used but not slp1,
+!          = 3 If both slp1 and slpn are to be estimated
+!              internally.
+!
+!   xp and yp are arrays of length at least n.
+!
+!   Temp is an array of length at least n which is used
+!   for scratch storage.
+!
+!   s is an array of length at least n.
+!
+! And
+!
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately a cubic
+!   spline. If abs(sigma) is large (E. G. 50.) The resulting
+!   curve is nearly a polygonal line. If sigma equals zero A
+!   cubic spline results. A standard value for sigma is
+!   approximately 1. In absolute value.
+!
+! On output--
+!
+!   xp and yp contain information about the curvature of the
+!   curve at the given nodes.
+!
+!   s contains the polygonal arclengths of the curve.
+!
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent coordinate pairs coincide.
+!
+! And
+!
+!   n, x, y, slp1, slpn, islpsw, and sigma are unaltered.
+!
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
+!
+!-----------------------------------------------------------
+!
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n .le. 1) go to 11
+!
+! Determine polygonal arclengths
+!
+s(1) = 0.
+do 1 i = 2,n
+   im1 = i - 1
+1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
+      & (y(i) - y(im1))**2)
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/s(n)
+!
+! Approximate end slopes
+!
+if (islpsw .ge. 2) go to 2
+slpp1x = cos(slp1)
+slpp1y = sin(slp1)
+go to 4
+2 dels1 = s(2) - s(1)
+dels2 = dels1 + dels1
+if (n .gt. 2) dels2 = s(3) - s(1)
+if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 12
+call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+sx = c1*x(1) + c2*x(2)
+sy = c1*y(1) + c2*y(2)
+if (n .eq. 2) go to 3
+sx = sx + c3*x(3)
+sy = sy + c3*y(3)
+3 delt = sqrt(sx*sx + sy*sy)
+slpp1x = sx/delt
+slpp1y = sy/delt
+4 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 5
+slppnx = cos(slpn)
+slppny = sin(slpn)
+go to 7
+5 delsn = s(n) - s(nm1)
+delsnm = delsn + delsn
+if (n .gt. 2) delsnm = s(n) - s(n - 2)
+if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 12
+call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+sx = c1*x(n) + c2*x(nm1)
+sy = c1*y(n) + c2*y(nm1)
+if (n .eq. 2) go to 6
+sx = sx + c3*x(n - 2)
+sy = sy + c3*y(n - 2)
+6 delt = sqrt(sx*sx + sy*sy)
+slppnx = sx/delt
+slppny = sy/delt
+!
+! Set up right hand sides and tridiagonal system for xp and
+! yp and perform forward elimination
+!
+7 dx1 = (x(2) - x(1))/s(2)
+dy1 = (y(2) - y(1))/s(2)
+call terms (diag1,sdiag1,sigmap,s(2))
+xp(1) = (dx1 - slpp1x)/diag1
+yp(1) = (dy1 - slpp1y)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 9
+do 8 i = 2,nm1
+   dels2 = s(i + 1) - s(i)
+   if (dels2 .eq. 0.) go to 12
+   dx2 = (x(i + 1) - x(i))/dels2
+   dy2 = (y(i + 1) - y(i))/dels2
+   call terms (diag2,sdiag2,sigmap,dels2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   diagin = 1./diag
+   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
+   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
+   temp(i) = sdiag2*diagin
+   dx1 = dx2
+   dy1 = dy2
+   diag1 = diag2
+8  sdiag1 = sdiag2
+9 diag = diag1 - sdiag1*temp(nm1)
+xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
+yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
+!
+! Perform back substitution
+!
+do 10 i = 2,n
+   ibak = np1 - i
+   xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
+10 yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+return
+!
+! Too few points
+!
+11 ierr = 1
+return
+!
+! Coincident adjacent points
+!
+12 ierr = 2
+return
+end subroutine kurv1
+
+pure subroutine kurv2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+   & tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a curve in the plane. The subroutine
+! kurv1 should be called earlier to determine certain
+! necessary parameters. The resulting curve has a parametric
+! representation both of whose components are splines under
+! tension and functions of the polygonal arclength
+! parameter.
+!
+! On input--
+!
+!   t contains a real value to be mapped to a point on the
+!   curve. The interval (0.,1.) Is mapped onto the entire
+!   curve, with 0. Mapping to (x(1),y(1)) and 1. Mapping
+!   to (x(n),y(n)). Values outside this interval result in
+!   extrapolation.
+!
+!   n contains the number of points which were specified
+!   to determine the curve.
+!
+!   x and y are arrays containing the x- and y-coordinates
+!   of the specified points.
+!
+!   xp and yp are the arrays output from kurv1 containing
+!   curvature information.
+!
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, xp, yp, s, and sigma should be
+! input unaltered from the output of kurv1.
+!
+! On output--
+!
+!   xs and ys contain the x- and y-coordinates of the image
+!   point on the curve.
+!
+! None of the input parameters are altered.
+!
+! This subroutine references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Determine interval
+!
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1 + 1
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/s(n)
+!
+! Set up and perform interpolation
+!
+del1 = tn - s(im1)
+del2 = s(i) - tn
+dels = s(i) - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
+   & coshp2*del1))/d
+xs = sumx + xp(i)*c1 + xp(im1)*c2
+ys = sumy + yp(i)*c1 + yp(im1)*c2
+return
+end subroutine kurv2
+
+pure subroutine kurvp1 (n,x,y,xp,yp,temp,s,sigma,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
+real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1, npi, npibak
+real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
+   & dy2, sdiag1, sdiag2, sigmap, xpn, ypn
+interface
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine determines the parameters necessary to
+! compute a spline under tension forming a closed curve in
+! the plane and passing through a sequence of pairs
+! (x(1),y(1)),...,(x(n),y(n)). For actual computation of
+! points on the curve it is necessary to call the subroutine
+! kurvp2.
+!
+! On input--
+!
+!   n is the number of points to be interpolated (n.GE.2).
+!
+!   x is an array containing the n x-coordinates of the
+!   points.
+!
+!   y is an array containing the n y-coordinates of the
+!   points. (Adjacent x-y pairs must be distinct, I. E.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
+!   i = 1,...,n-1.)
+!
+!   xp and yp are arrays of length at least n.
+!
+!   Temp is an array of length at least 2*n which is used
+!   for scratch storage.
+!
+!   s is an array of length at least n.
+!
+! And
+!
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately a cubic
+!   spline. If abs(sigma) is large (E. G. 50.) The resulting
+!   curve is nearly a polygonal line. If sigma equals zero A
+!   cubic spline results. A standard value for sigma is
+!   approximately 1. In absolute value.
+!
+! On output--
+!
+!   xp and yp contain information about the curvature of the
+!   curve at the given nodes.
+!
+!   s contains the polygonal arclengths of the curve.
+!
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent coordinate pairs coincide.
+!
+! And
+!
+!   n, x, y, and sigma are unaltered,
+!
+! This subroutine references package modules terms and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n .le. 1) go to 7
+!
+! Determine polygonal arclengths
+!
+s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
+do 1 i = 2,n
+   im1 = i - 1
+1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
+      & (y(i) - y(im1))**2)
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n)/s(n)
+!
+! Set up right hand sides of tridiagonal (with corner
+! elements) linear system for xp and yp
+!
+dels1 = s(1)
+if (dels1 .eq. 0.) go to 8
+dx1 = (x(1) - x(n))/dels1
+dy1 = (y(1) - y(n))/dels1
+call terms(diag1,sdiag1,sigmap,dels1)
+dels2 = s(2) - s(1)
+if (dels2 .eq. 0.) go to 8
+dx2 = (x(2) - x(1))/dels2
+dy2 = (y(2) - y(1))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+diag = diag1 + diag2
+diagin = 1./diag
+xp(1) = (dx2 - dx1)*diagin
+yp(1) = (dy2 - dy1)*diagin
+temp(np1) = -sdiag1*diagin
+temp(1) = sdiag2*diagin
+dx1 = dx2
+dy1 = dy2
+diag1 = diag2
+sdiag1 = sdiag2
+if (n .eq. 2) go to 3
+do 2 i = 2,nm1
+   npi = n + i
+   dels2 = s(i + 1) - s(i)
+   if (dels2 .eq. 0.) go to 8
+   dx2 = (x(i + 1) - x(i))/dels2
+   dy2 = (y(i + 1) - y(i))/dels2
+   call terms(diag2,sdiag2,sigmap,dels2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   diagin = 1./diag
+   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
+   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
+   temp(npi) = -temp(npi - 1)*sdiag1*diagin
+   temp(i) = sdiag2*diagin
+   dx1 = dx2
+   dy1 = dy2
+   diag1 = diag2
+2  sdiag1 = sdiag2
+3 dels2 = s(1)
+dx2 = (x(1) - x(n))/dels2
+dy2 = (y(1) - y(n))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+xp(n) = dx2 - dx1
+yp(n) = dy2 - dy1
+temp(nm1) = temp(2*n - 1) - temp(nm1)
+if (n.eq.2) go to 5
+!
+! Perform first step of back substitution
+!
+do 4 i = 3,n
+   ibak = np1 - i
+   npibak = n + ibak
+   xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
+   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+4  temp(ibak) = temp(npibak) - temp(ibak)*temp(ibak + 1)
+5 xp(n) = (xp(n) - sdiag2*xp(1) - sdiag1*xp(nm1))/ &
+   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
+yp(n) = (yp(n) - sdiag2*yp(1) - sdiag1*yp(nm1))/ &
+   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
+!
+! Perform second step of back substitution
+!
+xpn = xp(n)
+ypn = yp(n)
+do 6 i = 1,nm1
+   xp(i) = xp(i) + temp(i)*xpn
+6  yp(i) = yp(i) + temp(i)*ypn
+return
+!
+! Too few points
+!
+7 ierr = 1
+return
+!
+! Coincident adjacent points
+!
+8 ierr = 2
+return
+end subroutine kurvp1
+
+pure subroutine kurvp2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+integer :: i, im1
+real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
+   & delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
+   & sinhp2, sumx, sumy, tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a closed curve in the plane. The
+! subroutine kurvp1 should be called earlier to determine
+! certain necessary parameters. The resulting curve has A
+! parametric representation both of whose components are
+! periodic splines under tension and functions of the poly-
+! gonal arclength parameter.
+!
+! On input--
+!
+!   t contains a value to be mapped onto the curve. The
+!   interval (0.,1.) Is mapped onto the entire closed curve
+!   with both 0. And 1. Mapping to (x(1),y(1)). The mapping
+!   is periodic with period one thus any interval of the
+!   form (TT,TT+1.) Maps onto the entire curve.
+!
+!   n contains the number of points which were specified
+!   to determine the curve.
+!
+!   x and y are arrays containing the x- and y-coordinates
+!   of the specified points.
+!
+!   xp and yp are the arrays output from kurvp1 containing
+!   curvature information.
+!
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, xp, yp, s and sigma should
+! be input unaltered from the output of kurvp1.
+!
+! On output--
+!
+!   xs and ys contain the x- and y-coordinates of the image
+!   point on the curve.
+!
+! None of the input parameters are altered.
+!
+! This subroutine references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Determine interval
+!
+tn = t - float(ifix(t))
+if (tn .lt. 0.) tn = tn + 1.
+tn = s(n)*tn + s(1)
+im1 = n
+if (tn .lt. s(n)) im1 = intrvl(tn,s,n)
+i = im1 + 1
+if (i .gt. n) i = 1
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n)/s(n)
+!
+! Set up and perform interpolation
+!
+si = s(i)
+if (im1 .eq. n) si = s(n) + s(1)
+del1 = tn - s(im1)
+del2 = si - tn
+dels = si - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+ci = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+cim1 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + &
+   & sigmap*coshp2*del1))/d
+xs = sumx + ci*xp(i) + cim1*xp(im1)
+ys = sumy + ci*yp(i) + cim1*yp(im1)
+return
+end subroutine kurvp2
+
+pure subroutine qurv1 (n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
+   & slpny,slpnz,islpsw,xp,yp,zp,temp, &
+   & s,sigma,ierr)
+implicit none
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
+   & slpny, slpnz
+real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
+real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+   & diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
+   & sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
+interface
+   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+      implicit none
+      real, intent(in) :: del1
+      real, intent(in) :: del2
+      real, intent(in) :: sigma
+      real, intent(inout) :: c1
+      real, intent(inout) :: c2
+      real, intent(inout) :: c3
+      integer, intent(in) :: n
+   end subroutine ceez
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine determines the parameters necessary to
+! compute a spline under tension passing through a sequence
+! of triples (x(1),y(1),z(1)),...,(x(n),y(n),z(n)). The
+! slopes at the two ends of the curve may be specified or
+! omitted. For actual computation of points on the curve
+! it is necessary to call the subroutine qurv2.
+!
+! On input--
+!
+!   n is the number of points to be interpolated (n.GE.2).
+!
+!   x is an array containing the n x-coordinates of the
+!   points.
+!
+!   y is an array containing the n y-coordinates of the
+!   points.
+!
+!   z is an array containing the n z-coordinates of the
+!   points. (Adjacent x-y-z triples must be distinct, I. E.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1) or z(i) .NE.
+!   z(i+1), FOR i = 1,...,n-1 ).
+!
+!   slp1x, slp1y, slp1z and slpnx, SLPNY, SLPNZ contain the
+!   desired values of the components of tangent vectors to
+!   the curve at (x(1),y(1),z(1)) and(x(n),y(n),z(n)),
+!   respectively. The positive sense of the curve is assumed
+!   to be that moving from point 1 to point n. the user may
+!   omit values for either or both of these triples and
+!   signal this with islpsw.
+!
+!   islpsw contains a switch indicating which slope data
+!   should be used and which should be estimated by this
+!   subroutine,
+!          = 0 IF slp1x, slp1y, slp1z AND slpnx, SLPNY,
+!              SLPNZ are to be used,
+!          = 1 If slp1x, slp1y, slp1z are to be used but
+!              NOT slpnx, SLPNY, SLPNZ,
+!          = 2 If slpnx, SLPNY, SLPNZ are to be used but
+!              NOT slp1x, slp1y, slp1z,
+!          = 3 If both end-tangents are to be estimated
+!              internally.
+!
+!   xp, yp, and zp are arrays of length at least n.
+!
+!   Temp is an array of length at least n which is used
+!   for scratch storage.
+!
+!   s is an array of length at least n.
+!
+! And
+!
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately a cubic
+!   spline. If abs(sigma) is large (E. G. 50.) The resulting
+!   curve is nearly a polygonal line. If sigma equals zero A
+!   cubic spline results. A standard value for sigma is
+!   approximately 1. In absolute value.
+!
+! On output--
+!
+!   xp, yp, and zp contain information about the curvature
+!   of the curve at the given nodes.
+!
+!   s contains the polygonal arclengths of the curve.
+!
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent triples coincide.
+!
+! And
+!
+!   n, x, y, z, slp1x, slp1y, slp1z, slpnx, SLPNY, SLPNZ,
+!   islpsw, and sigma are unaltered,
+!
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
+!
+!-----------------------------------------------------------
+!
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n .le. 1) go to 9
+!
+! Determine polygonal arclengths
+!
+s(1) = 0.
+do 1 i = 2,n
+   im1 = i - 1
+1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
+      & + (z(i) - z(im1))**2)
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/s(n)
+!
+! Approximate end slopes
+!
+if (islpsw .ge. 2) go to 2
+slpp1x = slp1x
+slpp1y = slp1y
+slpp1z = slp1z
+go to 3
+2 dels1 = s(2) - s(1)
+dels2 = dels1 + dels1
+if (n .gt. 2) dels2 = s(3) - s(1)
+if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 9
+call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+slpp1x = c1*x(1) + c2*x(2)
+slpp1y = c1*y(1) + c2*y(2)
+slpp1z = c1*z(1) + c2*z(2)
+if (n .eq. 2) go to 3
+slpp1x = slpp1x + c3*x(3)
+slpp1y = slpp1y + c3*y(3)
+slpp1z = slpp1z + c3*z(3)
+3 delt = sqrt(slpp1x*slpp1x + slpp1y*slpp1y + slpp1z*slpp1z)
+slpp1x = slpp1x/delt
+slpp1y = slpp1y/delt
+slpp1z = slpp1z/delt
+if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 4
+slppnx = slpnx
+slppny = slpny
+slppnz = slpnz
+go to 5
+4 delsn = s(n) - s(nm1)
+delsnm = delsn + delsn
+if (n .gt. 2) delsnm = s(n) - s(n - 2)
+if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 10
+call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+slppnx = c1*x(n) + c2*x(nm1)
+slppny = c1*y(n) + c2*y(nm1)
+slppnz = c1*z(n) + c2*z(nm1)
+if (n .eq. 2) go to 5
+slppnx = slppnx + c3*x(n - 2)
+slppny = slppny + c3*y(n - 2)
+slppnz = slppnz + c3*z(n - 2)
+5 delt = sqrt(slppnx*slppnx + slppny*slppny + slppnz*slppnz)
+slppnx = slppnx/delt
+slppny = slppny/delt
+slppnz = slppnz/delt
+!
+! Set up right hand sides and tridiagonal system for xp, yp
+! and zp and perform forward elimination
+!
+dx1 = (x(2) - x(1))/s(2)
+dy1 = (y(2) - y(1))/s(2)
+dz1 = (z(2) - z(1))/s(2)
+call terms (diag1,sdiag1,sigmap,s(2))
+xp(1) = (dx1 - slpp1x)/diag1
+yp(1) = (dy1 - slpp1y)/diag1
+zp(1) = (dz1 - slpp1z)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 7
+do 6 i = 2,nm1
+   dels2 = s(i + 1) - s(i)
+   if (dels2 .eq. 0.) go to 10
+   dx2 = (x(i + 1) - x(i))/dels2
+   dy2 = (y(i + 1) - y(i))/dels2
+   dz2 = (z(i + 1) - z(i))/dels2
+   call terms (diag2,sdiag2,sigmap,dels2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   diagin = 1./diag
+   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
+   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
+   zp(i) = (dz2 - dz1 - sdiag1*zp(i - 1))*diagin
+   temp(i) = sdiag2*diagin
+   dx1 = dx2
+   dy1 = dy2
+   dz1 = dz2
+   diag1 = diag2
+6  sdiag1 = sdiag2
+7 diag = diag1 - sdiag1*temp(nm1)
+xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
+yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
+zp(n) = (slppnz - dz1 - sdiag1*zp(nm1))/diag
+!
+! Perform back substitution
+!
+do 8 i = 2,n
+   ibak = np1 - i
+   t = temp(ibak)
+   xp(ibak) = xp(ibak) - t*xp(ibak + 1)
+   yp(ibak) = yp(ibak) - t*yp(ibak + 1)
+8  zp(ibak) = zp(ibak) - t*zp(ibak + 1)
+return
+!
+! Too few points
+!
+9 ierr = 1
+return
+!
+! Coincident adjacent points
+!
+10 ierr = 2
+return
+end subroutine qurv1
+
+pure subroutine qurv2 (t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys, zs
+real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
+real, intent(in) :: sigma
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+   & sumz, tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a curve in space.  The subroutine
+! qurv1 should be called earlier to determine certain
+! necessary parameters. The resulting curve has a parametric
+! representation all of whose components are splines under
+! tension and functions of the polygonal arclength
+! parameter.
+!
+! On input--
+!
+!   t contains a real value to be mapped to a point on the
+!   curve. The interval (0.,1.) Is mapped onto the entire
+!   curve, with 0. Mapping to (x(1),y(1,z(1)) and 1. Mapping
+!   to (x(n),y(n),z(n)). Values outside this interval result
+!   in extrapolation.
+!
+!   n contains the number of points which were specified
+!   to determine the curve.
+!
+!   x, y, and z are arrays containing the x-, y- and z-
+!   coordinates of the specified points.
+!
+!   xp, yp, and zp are the arrays output from qurv1
+!   containing curvature information.
+!
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+!
+! And
+!
+!   sigma contains the tension factor (its sign is ignored).
+!
+! The parameters n, x, y, z, xp, yp, zp, s, and sigma
+! should be input unaltered from the output of qurv1.
+!
+! On output--
+!
+!   xs, ys and zs contain the x-, y- and z-coordinates of
+!   the image point on the curve.
+!
+! None of the input parameters are altered.
+!
+! This subroutine references package modules intrvl and
+! snhcsh.
+!
+!-----------------------------------------------------------
+!
+! Determine interval
+!
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1 + 1
+!
+! Denormalize tension factor
+!
+sigmap = abs(sigma)*float(n - 1)/s(n)
+!
+! Set up and perform interpolation
+!
+del1 = tn - s(im1)
+del2 = s(i) - tn
+dels = s(i) - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+sumz = (z(i)*del1 + z(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+zs = sumz - zp(i)*c1 - zp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
+   & coshp2*del1))/d
+xs = sumx + xp(i)*c1 + xp(im1)*c2
+ys = sumy + yp(i)*c1 + yp(im1)*c2
+zs = sumz + zp(i)*c1 + zp(im1)*c2
+return
+end subroutine qurv2
+
+pure elemental subroutine ceez (del1,del2,sigma,c1,c2,c3,n)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: del1, del2, sigma
+real, intent(inout) :: c1, c2, c3
+real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
+   & sinhmp
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine determines the coefficients c1, c2, and c3
+! used to determine endpoint slopes. Specifically, if
+! function values Y1, Y2, and Y3 are given at points X1, X2,
+! and X3, respectively, the quantity c1*Y1 + c2*Y2 + c3*Y3
+! is the value of the derivative at X1 of a spline under
+! tension (with tension factor sigma) passing through the
+! three points and having third derivative equal to zero at
+! X1. Optionally, only two values, c1 and c2 are determined.
+!
+! On input--
+!
+!   del1 IS X2-X1 (.GT. 0.).
+!
+!   del2 is X3-X1 (.GT. 0.). If n .EQ. 2, this parameter is
+!   ignored.
+!
+!   sigma is the tension factor.
+!
+! And
+!
+!   n is a switch indicating the number of coefficients to
+!   be returned. If n .EQ. 2 only two coefficients are
+!   returned. Otherwise all three are returned.
+!
+! On output--
+!
+!   c1, c2, and c3 contain the coefficients.
+!
+! None of the input parameters are altered.
+!
+! This subroutine references package module snhcsh.
+!
+!-----------------------------------------------------------
+!
+if (n .eq. 2) go to 2
+if (sigma .ne. 0.) go to 1
+del = del2 - del1
+!
+! TENSION .EQ. 0.
+!
+c1 = -(del1 + del2)/(del1*del2)
+c2 = del2/(del1*del)
+c3 = -del1/(del2*del)
+return
+!
+! TENSION .NE. 0.
+!
+1 call snhcsh (dummy,coshm1,sigma*del1,1)
+call snhcsh (dummy,coshm2,sigma*del2,1)
+delp = sigma*(del2 + del1)/2.
+delm = sigma*(del2 - del1)/2.
+call snhcsh (sinhmp,dummy,delp,-1)
+call snhcsh (sinhmm,dummy,delm,-1)
+denom = coshm1*(del2 - del1) - 2.*del1*(sinhmp + delp)* &
+   & (sinhmm + delm)
+c1 = 2.*(sinhmp + delp)*(sinhmm + delm)/denom
+c2 = -coshm2/denom
+c3 = coshm1/denom
+return
+!
+! Two coefficients
+!
+2 c1 = -1./del1
+c2 = -c1
+return
+end subroutine ceez
+
+pure elemental subroutine terms (diag,sdiag,sigma,del)
+implicit none
+real, intent(inout) :: diag, sdiag
+real, intent(in) :: sigma, del
+real :: coshm, denom, sigdel, sinhm
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!
+!
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!
+! This subroutine computes the diagonal and superdiagonal
+! terms of the tridiagonal linear system associated with
+! spline under tension interpolation.
+!
+! On input--
+!
+!   sigma contains the tension factor.
+!
+! And
+!
+!   Del contains the step size.
+!
+! On output--
+!
+!               (sigma*del*cosh(sigma*del) - Sinh(sigma*del)
+!   diag = del*--------------------------------------------.
+!                     (sigma*del)**2 * SINH(sigma*del)
+!
+!                   Sinh(sigma*del) - sigma*del
+!   sdiag = del*----------------------------------.
+!                (sigma*del)**2 * SINH(sigma*del)
+!
+! And
+!
+!   sigma and del are unaltered.
+!
+! This subroutine references package module snhcsh.
+!
+!-----------------------------------------------------------
+!
+if (sigma .ne. 0.) go to 1
+diag = del/3.
+sdiag = del/6.
+return
+1 sigdel = sigma*del
+call snhcsh (sinhm,coshm,sigdel,0)
+denom = del/((sinhm + sigdel)*sigdel*sigdel)
+diag = denom*(sigdel*coshm - sinhm)
+sdiag = denom*sinhm
+return
+end subroutine terms
+
+pure integer function intrvl (x, t, m)
+implicit none
+integer, intent(in) :: m
+real, intent(in) :: x, t(m)
+integer :: i, il, ir
+real :: tm
+!-----------------------------------------------------------------------
+!
+!             Location of a value x in a sequence t
+!
+!                       ----------------
+!
+!     Input--
+!
+!        x is a real number.
+!
+!        t is an array of nondecreasing values. It is
+!          assumed that t(1) .LT. t(m).
+!
+!        m is the length of t (m .GE. 2).
+!
+!     Output--
+!
+!        intrvl has the value i when  t(i) .LE. x .LT. t(i+1).
+!        Otherwise, if L is the integer where t(L) .LT. t(L+1)
+!        and t(L+1) = ... = t(m), then intrvl has the value i
+!        where
+!                  i = 1   IF x .LT. t(1)
+!                  i = L   IF x .GE. t(L)
+!
+!-----------------------------------------------------------------------
+if (x .lt. t(2)) go to 100
+tm = t(m)
+i = m - 1
+10 if (t(i) .lt. tm) go to 20
+i = i - 1
+go to 10
+20 if (x .ge. t(i)) go to 110
+il = 2
+ir = i
+!
+!     Bisection search
+!
+30 i = (il + ir)/2
+if (i .eq. il) go to 110
+if (x - t(i)) 40,60,50
+40 ir = i
+go to 30
+50 il = i
+go to 30
+!
+!     Case when x = t(i) for some i
+!
+60 if (x .lt. t(i + 1)) go to 110
+i = i + 1
+go to 60
+!
+!     Left end
+!
+100 intrvl = 1
+return
+!
+!     Normal exit
+!
+110 intrvl = i
+return
+end function intrvl
+
+pure subroutine bval (t, bcoef, n, k, x, jderiv, w, wk)
+implicit none
+integer, intent(in) :: jderiv, k, n
+real, intent(inout) :: w
+real, intent(in) :: x
+real, intent(in) :: t(*), bcoef(n)
+real, intent(inout) :: wk(k,3)
+integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
+   & l, nmi, npk
+real :: dl, dr, fkmj
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+end interface
+!-----------------------------------------------------------------------
+!
+!     bval calculates the value at x of the jderiv-TH derivative
+!     of a spline F from its B-representation.
+!
+!******  i n P U t ******
+!
+!  t     AN ARRAY OF DIMENSION n + k CONTAING THE KNOTS OF THE
+!        spline. It is assumed that t(i) .LE. t(i+1) for each i.
+!  bcoef an array of dimension n containing the B-coefficients
+!        of the spline F.
+!  n     LENGTH OF bcoef (n .GE. 1).
+!  k     ORDER OF THE SPLINE.
+!  x     THE POINT AT WHICH TO EVALUATE.
+!  jderiv  integer giving the order of the derivative to be
+!        evaluated. It is assumed that jderiv .GE. 0.
+!
+!******  O U t P U t  ******
+!
+!  w     THE VALUE OF THE (jderiv)-TH DERIVATIVE OF F AT x.
+!
+!******  w O R k  S P A C E ******
+!
+!  wk    AN ARRAY OF DIMENSION 3*k OR LARGER.
+!
+!******  M E t H O D  ******
+!
+!     The nontrivial knot interval (t(i),t(i+1)) containing x is first
+!  obtained. Then the  k  B-coefficients of F relevant for this interval
+!  are obtained from bcoef (or taken to be zero if not explicitly avail-
+!  able), and DIFFERENCED jderiv times to obtain the B-coefficients of
+!  (D**jderiv)F  relevant for the interval. Specifically, if j = jderiv
+!  then from x.(12) Of the reference we have
+!
+!     (D**j)F  =  sum ( bcoef(.,j)*B(.,k-j,t) )
+!
+!  Where
+!                   / bcoef(.),                     ,  j .EQ. 0
+!                   /
+!    bcoef(.,j)  =  / bcoef(.,j-1) - bcoef(.-1,j-1)
+!                   / ----------------------------- ,  j .GT. 0
+!                   /    (t(.+k-j) - t(.))/(k-j)
+!
+!     Then, we use repeatedly the fact that
+!
+!    sum ( A(.)*B(.,M,t)(x) )  =  sum ( A(.,x)*B(.,M-1,t)(x) )
+!  with
+!                 (x - t(.))*A(.) + (t(.+M-1) - x)*A(.-1)
+!    a(.,x)  =    ---------------------------------------
+!                 (x - t(.))      + (t(.+M-1) - x)
+!
+!  To write (D**j)F(x) eventually as a linear combination of B-splines
+!  of order 1. The coefficient for B(i,1,t)(x) must then be the desired
+!  number  (D**j)F(x). (See x.(17)-(19) Of the reference).
+!
+!-----------------------------------------------------------------------
+!  Reference. DE boor, carl, A PRATICAL guide to splines, springer-
+!  verlag, new york, 1978.
+!-----------------------------------------------------------------------
+!
+w = 0.0
+if (jderiv .ge. k) return
+!
+! *** FIND i WHERE 1 .LE. i .LT. n+k  AND  t(i) .LE. x .LT. t(i+1).
+!     If no such i exists, then x lies outside the support of the
+!     SPLINE F AND w = 0.
+!
+npk = n + k
+if (x .lt. t(1) .or. x .gt. t(npk)) return
+i = intrvl(x, t, npk)
+!
+!  *** IF k = 1 (AND jderiv = 0), w = bcoef(i).
+!
+km1 = k - 1
+if (km1 .gt. 0) go to 10
+w = bcoef(i)
+return
+!
+!  *** Store the k B-spline coefficients relevant for the knot interval
+!     (t(i),t(i+1)) in the first column of wk and compute wk(j,2) =
+!     x - t(i+1-j), wk(j,3) = t(i+j) - x, j=1,...,k-1 . Set any of the
+!     wk(j,1) not obtainable from input to zero. Set any t.S not obtain-
+!     able equal to t(1) or to t(n+k) appropriately.
+!
+10 jcmin = 1
+imk = i - k
+if (imk .ge. 0) go to 40
+!
+jcmin = 1 - imk
+l = i
+do j = 1,i
+   wk(j,2) = x - t(l)
+   l = l - 1
+end do
+do j = i,km1
+   l = k - j
+   wk(l,1) = 0.0
+   wk(j,2) = wk(i,2)
+end do
+go to 60
+!
+40 l = i
+do j = 1,km1
+   wk(j,2) = x - t(l)
+   l = l - 1
+end do
+!
+60 jcmax = k
+nmi = n - i
+if (nmi .ge. 0) go to 100
+!
+jcmax = k + nmi
+do j = 1,jcmax
+   ipj = i + j
+   wk(j,3) = t(ipj) - x
+end do
+do j = jcmax,km1
+   wk(j + 1,1) = 0.0
+   wk(j,3) = wk(jcmax,3)
+end do
+go to 120
+!
+100 do j = 1,km1
+   ipj = i + j
+   wk(j,3) = t(ipj) - x
+end do
+!
+120 do jc = jcmin,jcmax
+   l = imk + jc
+   wk(jc,1) = bcoef(l)
+end do
+!
+!               *** Difference the coefficients  jderiv  times.
+!
+if (jderiv .eq. 0) go to 170
+do j = 1,jderiv
+   kmj = k - j
+   fkmj = kmj
+   l = kmj
+   do 150 jj = 1,kmj
+      dl = wk(l,2)
+      dr = wk(jj,3)
+      wk(jj,1) = ((wk(jj + 1,1) - wk(jj,1))/(dl + dr))*fkmj
+150   l = l - 1
+end do
+!
+!  *** Compute value at x in (t(i),t(i+1)) of jderiv-TH derivative,
+!     given its relevant B-spline coeffs in wk(1,1),...,wk(k-jderiv,1).
+!
+170 if (jderiv .eq. km1) go to 200
+jdrvp1 = jderiv + 1
+do j = jdrvp1,km1
+   kmj = k - j
+   l = kmj
+   do 180 jj = 1,kmj
+      dl = wk(l,2)
+      dr = wk(jj,3)
+      wk(jj,1) = (wk(jj + 1,1)*dl + wk(jj,1)*dr)/(dl + dr)
+180   l = l - 1
+end do
+!
+200 w = wk(1,1)
+return
+end subroutine bval
+
 pure subroutine bvali (t, bcoeff, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
@@ -2225,8 +4364,8 @@ real, intent(inout) :: f(*)
 real, intent(inout) :: s(*), t(*), wk(num)
 integer :: i, imax, j, l, ld, m, n, nu
 interface
-   pure subroutine bslsq2(x,wx,mx,y,wy,my,z,kz,tx,nx,kx,ty,ny,ky,a, &
-      & ka,wk,l,iflag)
+   pure subroutine bslsq2(x,wx,mx,y,wy,my,z,kz,tx,nx,kx,ty,ny, &
+      & ky,a,ka,wk,l,iflag)
       implicit none
       integer, intent(in) :: l
       integer, intent(in) :: ka
@@ -2681,8 +4820,8 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(m,n,4)
 interface
-   pure subroutine csurf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf,f1, &
-      & kf1,f2,kf2,f12,kf12)
+   pure subroutine csurf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf, &
+      & f1,kf1,f2,kf2,f12,kf12)
       implicit none
       integer, intent(in) :: kf12
       integer, intent(in) :: kf2
@@ -2893,8 +5032,8 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 interface
-   pure subroutine csrf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf,f1,kf1 &
-      & ,f2,kf2,f12,kf12)
+   pure subroutine csrf(ider,jder,x,mx,y,my,z,kz,s,m,t,n,f,kf, &
+      & f1,kf1,f2,kf2,f12,kf12)
       implicit none
       integer, intent(in) :: kf12
       integer, intent(in) :: kf2
@@ -2943,6 +5082,25 @@ real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
    & dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
    & sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
 integer :: ind(8), loc(8), num(8)
+interface
+   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+      implicit none
+      real, intent(in) :: del1
+      real, intent(in) :: del2
+      real, intent(in) :: sigma
+      real, intent(inout) :: c1
+      real, intent(inout) :: c2
+      real, intent(inout) :: c3
+      integer, intent(in) :: n
+   end subroutine ceez
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
 !
 !
 !                      From the spline under tension package
@@ -3334,6 +5492,15 @@ real :: hermnz
 real :: surf2
 real :: hermz
 integer :: intrvl
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
 !
 !
 !                      From the spline under tension package
@@ -3472,7 +5639,7 @@ surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
 return
 end function surf2
 
-subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
+pure subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
    & idz,m,n,x,y,z,iz,zp,work,sigma)
 implicit none
 integer, intent(in) :: md, nd, idz, m, n, iz
@@ -3485,6 +5652,15 @@ integer :: i, ii, im1, j, jj, jm1, lasti, lastj
 real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
    & dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
    & sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
 !
 !
 !                      From the spline under tension package
@@ -3789,7 +5965,8 @@ real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
 integer :: ierr, iq, iw, m
 interface
-   pure subroutine bslsq1(tau,wgt,ntau,z,kz,m,t,n,k,a,ka,wk,q,ierr)
+   pure subroutine bslsq1(tau,wgt,ntau,z,kz,m,t,n,k,a,ka,wk,q, &
+      & ierr)
       implicit none
       integer, intent(in) :: ka
       integer, intent(in) :: k
@@ -4557,12 +6734,21 @@ return
 return
 end subroutine adnode
 
-subroutine bdyadd (kk,i1,i2, iadj,iend )
+pure subroutine bdyadd (kk,i1,i2, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
 integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
    & kend, next, indx
+interface
+   pure subroutine shiftd(nfrst,nlast,kk,iarr)
+      implicit none
+      integer, intent(in) :: nfrst
+      integer, intent(in) :: nlast
+      integer, intent(in) :: kk
+      integer, intent(inout) :: iarr(*)
+   end subroutine shiftd
+end interface
 !
 !***********************************************************
 !
@@ -4695,12 +6881,21 @@ iend(k) = kend
 return
 end subroutine bdyadd
 
-subroutine intadd (kk,i1,i2,i3, iadj,iend )
+pure subroutine intadd (kk,i1,i2,i3, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
 integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
    & n2, imin, imax, i, itemp
+interface
+   pure subroutine shiftd(nfrst,nlast,kk,iarr)
+      implicit none
+      integer, intent(in) :: nfrst
+      integer, intent(in) :: nlast
+      integer, intent(in) :: kk
+      integer, intent(inout) :: iarr(*)
+   end subroutine shiftd
+end interface
 !
 !***********************************************************
 !
@@ -4854,11 +7049,12 @@ end do
 return
 end subroutine intadd
 
-subroutine shiftd (nfrst,nlast,kk, iarr )
+pure subroutine shiftd (nfrst,nlast,kk, iarr )
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
-integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
+integer :: k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
+integer, parameter :: inc = 5
 !
 !***********************************************************
 !
@@ -4894,7 +7090,6 @@ integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 !
 !***********************************************************
 !
-data    inc/5/
 !
 ! Local parameters -
 !
@@ -4967,12 +7162,28 @@ i = i + 1
 go to 7
 end subroutine shiftd
 
-subroutine swapd (nin1,nin2,nout1,nout2, iadj,iend)
+pure subroutine swapd (nin1,nin2,nout1,nout2, iadj,iend)
 implicit none
 integer, intent(in) :: nin1, nin2, nout1, nout2
 integer, intent(inout) :: iadj(*), iend(*)
-integer :: tindx
 integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
+interface
+   pure subroutine shiftd(nfrst,nlast,kk,iarr)
+      implicit none
+      integer, intent(in) :: nfrst
+      integer, intent(in) :: nlast
+      integer, intent(in) :: kk
+      integer, intent(inout) :: iarr(*)
+   end subroutine shiftd
+   pure function tindx(nvertx,nabor,iadj,iend)
+      implicit none
+      integer, intent(in) :: nvertx
+      integer, intent(in) :: nabor
+      integer, intent(in) :: iadj(*)
+      integer, intent(in) :: iend(*)
+      integer :: tindx
+   end function tindx
+end interface
 !
 !***********************************************************
 !
@@ -5876,7 +8087,7 @@ ier = 2
 return
 end subroutine gradg1
 
-subroutine gradl (n, x, y, z, iadj, iend, zxzy, ierr)
+pure subroutine gradl (n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -5885,6 +8096,21 @@ real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
 integer :: j
+interface
+   pure subroutine gradl1(n,k,x,y,z,iadj,iend,dx,dy,ier)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: k
+      real, intent(in) :: x(n)
+      real, intent(in) :: y(n)
+      real, intent(in) :: z(n)
+      integer, intent(in) :: iadj(*)
+      integer, intent(inout) :: iend(n)
+      real, intent(inout) :: dx
+      real, intent(inout) :: dy
+      integer, intent(inout) :: ier
+   end subroutine gradl1
+end interface
 !-----------------------------------------------------------------------
 !                      Derivative estimation
 !-----------------------------------------------------------------------
@@ -5908,17 +8134,54 @@ return
 return
 end subroutine gradl
 
-subroutine gradl1 (n,k,x,y,z,iadj,iend, dx,dy,ier)
+pure subroutine gradl1 (n,k,x,y,z,iadj,iend, dx,dy,ier)
 implicit none
 integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: dx, dy
-integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
-   & np, i, j, im1, jp1, ip1, l
-real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
-   & dmin, dtol, sf
+integer :: nn, kk, lmin, lmax, lm1, lnp, npts(30), ierr, np, i, j, im1, jp1, ip1, l
+real :: sum, ds, r, rs, avsq, av, xk, yk, zk, a(6,6), c, s, dmin
+integer, parameter :: lmn = 10
+integer, parameter :: lmx = 30
+real, parameter :: rtol = 1.e-5
+real, parameter :: dtol = .01
+real, parameter :: sf = 1.
 interface
+   pure subroutine getnp(x,y,iadj,iend,l,npts,ds,ier)
+      implicit none
+      integer, intent(in) :: l
+      real, intent(in) :: x(*)
+      real, intent(in) :: y(*)
+      integer, intent(in) :: iadj(*)
+      integer, intent(inout) :: iend(*)
+      integer, intent(inout) :: npts(l)
+      real, intent(inout) :: ds
+      integer, intent(inout) :: ier
+   end subroutine getnp
+   pure subroutine setrm(xk,yk,zk,xi,yi,zi,s1,s2,r,row)
+      implicit none
+      real, intent(in) :: xk
+      real, intent(in) :: yk
+      real, intent(in) :: zk
+      real, intent(in) :: xi
+      real, intent(in) :: yi
+      real, intent(in) :: zi
+      real, intent(in) :: s1
+      real, intent(in) :: s2
+      real, intent(in) :: r
+      real, intent(inout) :: row(6)
+   end subroutine setrm
+   pure subroutine srot(n,sx,incx,sy,incy,c,s)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+      real, intent(in) :: c
+      real, intent(in) :: s
+   end subroutine srot
    pure elemental subroutine srotg(sa,sb,sc,ss)
       implicit none
       real, intent(inout) :: sa
@@ -5994,8 +8257,6 @@ end interface
 !
 !***********************************************************
 !
-data    lmn/10/
-data    lmx/30/, rtol/1.e-5/, dtol/.01/, sf/1./
 !
 ! Local parameters -
 !
@@ -6537,8 +8798,8 @@ real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
    & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
    & c2, f1, f2
 interface
-   pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1,zx2,zx3, &
-      & zy1,zy2,zy3,iflag,w,wx,wy,ier)
+   pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2, &
+      & z3,zx1,zx2,zx3,zy1,zy2,zy3,iflag,w,wx,wy,ier)
       implicit none
       real, intent(in) :: x
       real, intent(in) :: y
@@ -7313,7 +9574,8 @@ integer :: alfl
 integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
 integer :: nplyt4
 interface
-   pure elemental subroutine basiz(degree,npts,dimen,npolys,error)
+   pure elemental subroutine basiz(degree,npts,dimen,npolys, &
+      & error)
       implicit none
       integer, intent(inout) :: degree
       integer, intent(in) :: npts
@@ -7321,7 +9583,8 @@ interface
       integer, intent(inout) :: npolys
       integer, intent(out) :: error
    end subroutine basiz
-   pure subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
+   pure subroutine mtable(degree,dimen,npolys,indexs,newkj, &
+      & alflp1)
       implicit none
       integer, intent(in) :: npolys
       integer, intent(in) :: dimen
@@ -7851,7 +10114,7 @@ call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
 return
 end subroutine gnrtp
 
-subroutine incdg(degree,alpha,psi,indexs,newkj, &
+pure subroutine incdg(degree,alpha,psi,indexs,newkj, &
    & sumsqs,coord,ncrows,npolys, &
    & dimen,npts,f,z,c,psiwid,weight, &
    & alfl,onplys,sttdeg,error)
@@ -8128,7 +10391,7 @@ do 10 p = 1,npts
 return
 end subroutine scaldn
 
-subroutine meval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
+pure subroutine meval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
    & error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
 implicit none
 integer, intent(in) :: nerows
@@ -8144,6 +10407,26 @@ real, intent(inout) :: evlvls(nepts), temp(dimen)
 integer :: maxstt, alfstt, cstt
 integer :: gbasiz, alfl, dimp1
 integer :: top, bot, curdeg, psistt
+interface
+   pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
+      & indexs,psi,f,alfl,maxabs,x,dimp1)
+      implicit none
+      integer, intent(in) :: dimp1
+      integer, intent(in) :: alfl
+      integer, intent(in) :: npolys
+      integer, intent(in) :: dimen
+      integer, intent(in) :: nepts
+      integer, intent(in) :: ncrows
+      real, intent(in) :: coord(ncrows,dimen)
+      real, intent(in) :: c(npolys)
+      real, intent(in) :: alpha(alfl)
+      integer, intent(in) :: indexs(4,npolys)
+      real, intent(inout) :: psi(npolys)
+      real, intent(inout) :: f(nepts)
+      real, intent(in) :: maxabs(dimp1)
+      real, intent(inout) :: x(dimen)
+   end subroutine meval1
+end interface
 !
 !
 !     ***************
@@ -8286,2401 +10569,4 @@ return
 110 error = -2
 return
 end subroutine meval
-
-subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
-   & indexs,psi,f,alfl,maxabs,x,dimp1)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
-integer, intent(in) :: indexs(4,npolys)
-real, intent(in) :: alpha(alfl), coord(ncrows,dimen)
-real, intent(inout) :: psi(npolys)
-real, intent(in) :: c(npolys)
-real, intent(inout) :: f(nepts)
-real, intent(in) :: maxabs(dimp1)
-real, intent(inout) :: x(dimen)
-integer :: jm1, jprime, m, p, k, i, j, index
-real :: runtot, rntot1
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     This subroutine performs the main work of evaluating the
-!     fitting multinomial (or the initial portion of it  which
-!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
-!     CALL TO SUBROUTINE  meval .
-!
-!     This subroutine is called by  meval .  It is  not  called
-!     directly by the user.
-!
-!     The body of this subroutine FOLLOWS the explanation
-!     given in
-!          least squares fitting using
-!          orthogonal multinomials
-!     by
-!          Bartels and Jezioranski
-!     in
-!          ACM transactions on mathematical software
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!
-!     ****************
-!
-if (npolys .eq. 1) go to 50
-!
-psi(1) = 1.0
-do 40 p = 1,nepts
-!
-!     ***************
-!     Scale the coordinates of the p-TH point
-!     ***************
-!
-   do k = 1,dimen
-      x(k) = coord(p,k)
-      if (maxabs(k) .ne. 0.0) x(k) = x(k) / maxabs(k)
-   end do
-!
-!     ***************
-!     Use the  basis function coefficients  c  and recurrence
-!     coefficients  alpha  to evaluate the fitted multinomial
-!     at the p-TH point.
-!     ***************
-!
-   rntot1 = c(1)
-   do 30 j = 2,npolys
-      k = indexs(2,j)
-      jprime = indexs(1,j)
-      runtot = x(k) * psi(jprime)
-      i = indexs(3,j)
-      jm1 = j - 1
-      do 20 m = i,jm1
-         index = indexs(4,j) + m - i
-20       runtot = runtot - psi(m) * alpha(index)
-      psi(j) = runtot
-30    rntot1 = rntot1 + c(j) * psi(j)
-40 f(p) = rntot1 * maxabs(dimp1)
-return
-!
-!     ***************
-!     Compute the degree 0 polynomial
-!     ***************
-!
-50 runtot = c(1) * maxabs(dimp1)
-do 60 p = 1,nepts
-60 f(p) = runtot
-return
-end subroutine meval1
-
-subroutine dmfit(dimen,fitdeg,nfpols,nfpts, &
-   & fitcds,ncrows,fitvls,wts, &
-   & resids,error,fitiwk,fitdwk, &
-   & fiwkln,fdwkln,ireqd,dreqd)
-implicit none
-!
-integer, intent(inout) :: nfpols, fitdeg
-integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
-integer, intent(inout) :: error, ireqd, dreqd
-integer, intent(in) :: ncrows
-integer, intent(inout) :: fitiwk(fiwkln)
-double precision, intent(inout) :: fitdwk(fdwkln), &
-   & fitcds(ncrows,dimen)
-double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
-double precision, intent(in) :: wts(nfpts)
-integer :: indstt, p, dimp1
-integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-   & alfl
-double precision :: scale
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     This subroutine constructs a least-squares  multinomial  fit  to
-!     given data using a basis of orthogonal multinomials. The computa-
-!     tion is performed in double precision.
-!
-!     The data for the fit is given in the arrays FITCDS, fitvls, and
-!     wts. FITCDS is a matrix, each row of which contains an observa-
-!     tion point. fitvls is a singly-indexed array, each element of
-!     which contains a function VALUE corresponding to an observation
-!     point. wts is a singly-indexed array, each element of which is
-!     a nonnegative weight for the corresponding observation.
-!
-!     The fit which is produced is a multinomial expressed in the form
-!
-!      C  psi  (X ,...,X     ) +...+ C       psi       (X ,...,X     )
-!       1    1   1      dimen         nfpols    nfpols   1      dimen
-!
-!     Where the value of  nfpols  will be as given (if  fitdeg .LT. 0)
-!     or  as  computed  by  dmfit  to give a full-degree fit (in case
-!     fitdeg  is specified .GE. 0).  The elements
-!
-!         psi  (X ,...,X     )
-!            K   1      dimen
-!
-!     Form a basis for the multinomials which is orthogonal with
-!     respect to the weights and observation points.
-!
-!     The extent of the fit can be specified in one of two ways.
-!         If the parameter fitdeg is set .GE. 0, then a complete basis
-!         for the multinomials of degree =  fitdeg  will be used.  (An
-!         error will be  flagged  if  this  will  require  more  basis
-!         multinomials  than  the  number  of  data  points which were
-!         given.)
-!         if the parameter  fitdeg  is .LT.  0, then  nfpols  will  be
-!         taken as the count of the number of basis multinomials to be
-!         used for a partial-degree fit.  (An error will be flagged if
-!         nfpols  .LT. 0.)
-!
-!     Variables
-!     ---------
-!
-!      dimen  -- (INTEGER) -- (passed)
-!         the number of variables.
-!      fitdeg  - (INTEGER) -- (PASSED/RETURNED)
-!         ignored if .LT. 0.
-!         If fitdeg .GE. 0 then  fitdeg  is  checked  against  nfpts .
-!         The value of  fitdeg  will be reduced if there is a basis of
-!         multinomials, all of  degree  .LE. fitdeg ,  of  cardinality
-!         nfpts .  See  error  below.
-!      nfpols  - (INTEGER) -- (PASSED/RETURNED)
-!         ignored if  fitdeg  .GE. 0.
-!         If  fitdeg .LT. 0 then the value of nfpols will be taken  as
-!         the size of the basis of multinomials to be used in the fit.
-!         nfpols  MUST SATISFY  nfpols  .LT. nfpts  AND nfpols .GE. 1
-!         see  error  below.
-!      nfpts  --- (INTEGER) -- (passed)
-!         the number of data points to be used in the fit.
-!         nfpts  must be .GE. 1.  See  error  below.
-!      FITCDS  -- (double precision 2-subscript array) -- (passed)
-!         FITCDS (p,K) is the value of the K-TH variable at the  p-TH
-!         data point.
-!      ncrows  -- (INTEGER) -- (passed)
-!         THE ROW DIMENSION  DECLARED  FOR   FITCDS   IN  THE  CALLING
-!         program.
-!      fitvls  -- (double precision 1-subscript array) -- (passed)
-!         fitvls (p) is the observed function VALUE of the p-TH  data
-!         point.
-!      wts  ----- (double precision 1-subscript array) -- (passed)
-!         wts (p) is the weight attached to the p-TH data point.
-!      resids  -- (double precision 1-subscript array) -- (returned)
-!         resids (p) is the difference between the fitted function at
-!         point p and  fitvls (p).
-!      error  -- (INTEGER) -- (returned)
-!       0 the desired least square multinomial fit was obtained.
-!      -1 Only the first nfpols basis polynomials were obtained.
-!         fitdeg is the degree of the fit.
-!       1 If  fitdeg  .GE. 0 but there is an interpolating multinomial
-!         of smaller degree or if fitdeg .LT. 0 and nfpols .GT. nfpts.
-!       2 IF  fitdeg  .LT. 0 AND  nfpols  .LE. 0.
-!       3 IF  nfpts  .LT. 1 AND/OR  dimen  .LT. 1.
-!       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
-!         the value returned in  ireqd , and set  DWKLEN  to the value
-!         returned in  dreqd  to resolve this problem.)
-!      fitiwk  -- (integer, 1-subscript array) -- (returned)
-!         an integer work array of length  fiwkln .  Upon return  from
-!         dmfit, fitiwk contains dimension and array LENGTH information.
-!      fitdwk  -- (double precision 1-subscript array) -- (returned)
-!         an array of length  fdwkln  containing the coefficients
-!         needed for computing the multinomial fit at a point.
-!      fiwkln  -- (INTEGER) -- (passed)
-!         the length of the array  fitiwk .
-!      fdwkln  -- (INTEGER) -- (passed)
-!         the length of the array  fitdwk .
-!      ireqd  -- (INTEGER) -- (returned)
-!         the length which the array  fitiwk  really needs to be.
-!      dreqd  -- (INTEGER) -- (returned)
-!         the length which the array  fitdwk  really needs to be.
-!
-!
-!     Note. The 20 loop depends on the scaling scheme being used. The
-!     residual scaling must be consistent with that defined by dscalp
-!     AND dscald.
-!
-!     dmfit  calls  allot  and  dgnrtp.
-!     ****************
-!
-dimp1 = dimen + 1
-!
-!     ***************
-!
-call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
-   & error)
-if ( error .ge. 2 ) return
-!
-if ( fdwkln .ge. dreqd ) go to 10
-error = 4
-return
-10 continue
-!
-psiwid = fitiwk(3)
-alfl = fitiwk(4)
-indstt = 1
-newstt = 4 * nfpols + indstt
-maxstt = 1
-alfstt = maxstt + dimp1
-cstt = alfstt + alfl
-ssqstt = cstt + nfpols
-psistt = ssqstt + nfpols
-!
-!     ***************
-!
-call dgnrtp(fitdeg,fitdwk(alfstt), &
-   & fitdwk(psistt),fitiwk(indstt), &
-   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
-   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
-   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
-   & fitdwk(maxstt),error)
-!
-!     ***************
-!     Store the number of basis polynomials actually computed
-!     by the modified routine dincdg called by dgnrtp.
-!     ***************
-!
-fitiwk(1) = nfpols
-!
-!     ***************
-!     Unscale the residuals for the benefit of the user.
-!     ***************
-!
-scale = fitdwk(dimen + 1)
-do p = 1,nfpts
-   resids(p) = resids(p) * scale
-end do
-return
-end subroutine dmfit
-
-subroutine dgnrtp(degree,alpha,psi,indexs, &
-   & newkj,sumsqs,coord,ncrows,npolys, &
-   & dimen,npts,f,z,c,psiwid,weight, &
-   & alfl,dimp1,maxabs,error)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(inout) :: degree
-integer, intent(in) :: dimen
-integer, intent(inout) :: npolys
-integer, intent(in) :: npts
-integer, intent(in) :: psiwid, alfl
-integer, intent(inout) :: error
-integer :: dimp1
-integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-double precision, intent(inout) :: psi(npts,psiwid), alpha(alfl), &
-   & f(npts)
-double precision, intent(inout) :: coord(ncrows,dimen), &
-   & maxabs(dimp1)
-double precision, intent(in) :: weight(npts)
-double precision, intent(inout) :: z(npts), sumsqs(npolys), &
-   & c(npolys)
-integer :: k
-integer :: p, sttdeg, onplys
-double precision :: runtot, rntot1
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     The multinomial fit is generated incrementally, a basis  element
-!     at a time.  This subroutine starts the process off by setting up
-!     the first basis element, scaling the  data,  finding  the  first
-!     coefficient,  and  initializing  the  work array z.  dgnrtp then
-!     calls  dincdg  if more than one basis element is required.
-!
-!     This subroutine is called by  dmfit .  It is not called by  the
-!     user.
-!
-!     This subroutine calls  dscalp ,  dscald , and  dincdg .
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!     ****************
-!
-!     ***************
-!     Set up the scaling.
-!     ***************
-!
-do 10 k = 1,dimen
-   call dscalp(coord(1,k),npts,maxabs(k))
-10 call dscald(coord(1,k),npts,maxabs(k))
-call dscalp(f,npts,maxabs(dimp1))
-call dscald(f,npts,maxabs(dimp1))
-!
-!     ***************
-!      sumsqs (1) = (1,1)
-!     c  = (f,1) / (1,1)
-!      1
-!     ***************
-!
-runtot = 0.d0
-rntot1 = 0.d0
-do 20 p = 1,npts
-   psi(p,1) = 1.d0
-   rntot1 = rntot1 + weight(p)
-20 runtot = runtot + f(p) * weight(p)
-sumsqs(1) = rntot1
-c(1) = runtot / rntot1
-!
-!     ***************
-!     z = f - c
-!              1
-!     ***************
-!
-do 30 p = 1,npts
-30 z(p) = f(p) - c(1)
-!
-if ( npolys .eq. 1 ) return
-sttdeg = 1
-onplys = 1
-!
-call dincdg(degree,alpha,psi,indexs,newkj,sumsqs, &
-   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
-   & weight,alfl,onplys,sttdeg,error)
-return
-end subroutine dgnrtp
-
-subroutine dincdg(degree,alpha,psi,indexs,newkj, &
-   & sumsqs,coord,ncrows,npolys, &
-   & dimen,npts,f,z,c,psiwid,weight, &
-   & alfl,onplys,sttdeg,error)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(inout) :: error
-integer, intent(in) :: onplys
-integer, intent(inout) :: sttdeg
-integer, intent(inout) :: degree, npolys
-integer, intent(in) :: npts, dimen, psiwid, alfl
-integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-double precision, intent(inout) :: alpha(alfl)
-double precision, intent(in) :: coord(ncrows,dimen)
-double precision, intent(inout) :: psi(npts,psiwid)
-double precision, intent(inout) :: sumsqs(npolys), c(npolys)
-double precision, intent(in) :: f(npts), weight(npts)
-double precision, intent(inout) :: z(npts)
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
-integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
-integer :: j0mj1, j1m1, starta
-integer :: onpp1
-integer :: index1, index2
-double precision :: arc, runtot, rntot1, rntot2
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     The multinomial fit is generated incrementally, a basis  element
-!     at a time.  This subroutine continues the process started off by
-!      dgnrtp .
-!
-!     This subroutine is called by  dgnrtp  and not by the user.
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!
-!     ****************
-!
-if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
-error = 6
-return
-10 if ( indexs(2,onplys) .eq. dimen ) go to 20
-curdeg = sttdeg
-go to 30
-20 curdeg = sttdeg + 1
-30 onpp1 = onplys + 1
-do 170 j = onpp1,npolys
-   jprime = indexs(1,j)
-   jindex = j - ((j - 1) / psiwid) * psiwid
-   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
-   kj = indexs(2,j)
-   start = indexs(3,j)
-   m = start
-   starta = indexs(4,j) - start
-   if ( curdeg .eq. 1 ) go to 100
-   kjp = indexs(2,jprime)
-   j1 = newkj(kj,curdeg - 1)
-!
-!     ***************
-!     Calculate those  alpha ( j , m ) that can be calculated from
-!     previously calculated alphas.
-!     ***************
-!
-   if ( kj .lt. kjp ) go to 50
-!
-!     ***************
-!     First calculate those between  JPP  and the end of 2 rows back.
-!     Calculate  alpha ( j , JPP )
-!     ***************
-!
-   index1 = indexs(4,j)
-   alpha(index1) = sumsqs(jprime) / sumsqs(start)
-!
-   m = start + 1
-   j3 = newkj(1,curdeg - 1) - 1
-   if ( m .gt. j3 ) go to 50
-!
-!     ***************
-!     curdeg .GT. 2 if control has passed the branches in the 3-RD
-!     previous and 8-TH previous statements.
-!     ***************
-!
-   j1mj2 = j1 - newkj(kj,curdeg - 2)
-!
-   do 40 l = m,j3
-      q = j1mj2 + l
-      index1 = starta + l
-      index2 = indexs(4,q) - indexs(3,q) + jprime
-40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-         & sumsqs(l)
-!
-!     ***************
-!     Calculate  alpha ( j , m ) for  m  between the 2
-!     ranges calculated before using
-!
-!        alpha ( j , l ) = (X  *  psi  ,psi )  / (psi ,psi )
-!                             K      JP    l         l    l
-!                              j
-!     ***************
-!
-   m = j3 + 1
-50 if ( jprime .eq. j1 ) go to 100
-   if ( kj .eq. 1 ) go to 80
-   j1m1 = j1 - 1
-   do 70 l = m,j1m1
-      runtot = 0.d0
-      do 60 p = 1,npts
-         index1 = l - ((l - 1) / psiwid) * psiwid
-60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-            & psi(p,index1) * weight(p)
-      index1 = starta + l
-70    alpha(index1) = runtot / sumsqs(l)
-!
-!     ***************
-!     Calculate  alpha ( j , m ) for  m  between
-!      newkj ( kj , curdeg  - 1)  AND
-!      JP  - 1.
-!     ***************
-!
-80 j0mj1 = newkj(kj,curdeg) - j1
-   jpm1 = jprime - 1
-   do 90 l = j1,jpm1
-      q = j0mj1 + l
-      index1 = starta + l
-      index2 = indexs(4,q) - indexs(3,q) + jprime
-90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-         & sumsqs(l)
-   m = jprime
-!
-!     ***************
-!     Calculate the remaining  alpha ( j , m ) from
-!
-!      alpha ( j , l ) = (X   * psi  ,psi ) / (psi ,psi )
-!                          K       JP    l        l    l
-!                           j
-!     ***************
-!
-100 jm1 = j - 1
-   do 120 l = m,jm1
-      runtot = 0.d0
-      do 110 p = 1,npts
-         index1 = l - ((l - 1) / psiwid) * psiwid
-110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-            & psi(p,index1) * weight(p)
-      index1 = starta + l
-120   alpha(index1) = runtot / sumsqs(l)
-!
-!     ***************
-!     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
-!
-!                          j-1
-!     psi  = X  * psi   -  SUM   alpha(j,l) * psi
-!        j    K      JP    l=JPP                 l
-!
-!     sumsqs  = (psi ,psi )
-!           j       j    j
-!
-!     c  = (z,psi )
-!      j         j
-!     ***************
-!
-130 jm1 = j - 1
-   arc = 0.d0
-   rntot1 = 0.d0
-   rntot2 = 0.d0
-   do 150 p = 1,npts
-      runtot = coord(p,kj) * psi(p,jpindx)
-      do 140 l = start,jm1
-         index1 = starta + l
-         index2 = l - ((l - 1) / psiwid) * psiwid
-140      runtot = runtot - alpha(index1) * psi(p,index2)
-      psi(p,jindex) = runtot
-      arc = arc + psi(p,index2) * psi(p,jindex) * &
-         & weight(p)
-      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
-         & weight(p)
-150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
-   if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.d-06) &
-      & go to 200
-   sumsqs(j) = rntot1
-   c(j) = rntot2 / rntot1
-!
-!     ***************
-!     Calculate the new  z ( p ) and the new  SSRES  using
-!
-!     z = z - c  * psi
-!              j      j
-!     ***************
-!
-   do 160 p = 1,npts
-160   z(p) = z(p) - c(j) * psi(p,jindex)
-   sttdeg = curdeg
-170 if ( kj .eq. dimen ) curdeg = curdeg + 1
-return
-!
-!     ***************
-!     The j-TH basis multinomial cannot be computed accurately.
-!     Only j - 1 Basis multinomials are generated.
-!     ***************
-!
-200 error = -1
-degree = sttdeg
-npolys = jm1
-return
-end subroutine dincdg
-
-pure subroutine dscalp(coord,npts,maxabs)
-implicit none
-!
-integer, intent(in) :: npts
-double precision, intent(out) :: maxabs
-double precision, intent(in) :: coord(npts)
-integer :: p
-double precision :: a
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     Find scaling parameter(S) for the problem. If the scaling scheme
-!     is changed, all four of the following would have to be changed
-!
-!     1)  dscalp  - Find the scaling parameters
-!     2)  dscald  - Scale the problem data
-!     3)  the scaling of the residuals in  dmfit
-!     4)  the scaling performed in  dmevl1
-!
-!     This subroutine is called by  dgnrtp .  It is not called  by  the
-!     user.
-!
-!     The scaling which  it  defines  must  be  coordinated  with  the
-!     scaling  of residuals which is carried out toward the end of the
-!     subroutine  dmfit.  The scaling must also be coordinated with the
-!     scaling performed in the 10 loop  and  at statements 40 and 50
-!     (with the scale factor maxabs(DIMP1)) in  dmevl1.
-!
-!     ****************
-!
-maxabs = 0.d0
-do 10 p = 1,npts
-   a = dabs(coord(p))
-10 if ( a .gt. maxabs ) maxabs = a
-return
-end subroutine dscalp
-
-pure subroutine dscald(coord,npts,maxabs)
-implicit none
-!
-integer, intent(in) :: npts
-double precision, intent(in) :: maxabs
-double precision, intent(inout) :: coord(npts)
-integer :: p
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     Carry out the data-scaling which is defined  by  the subroutine
-!     dscalp .
-!
-!     This subroutine is called by  dgnrtp .  It is not called by the
-!     user.
-!
-!     The scaling which this routine carries out must  be  consistent
-!     with the scaling in the subroutines dmfit and dmevl1.
-!
-!     ****************
-!
-if ( maxabs .eq. 0.0d+00 ) return
-do 10 p = 1,npts
-10 coord(p) = coord(p) / maxabs
-return
-end subroutine dscald
-
-subroutine dmeval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
-   & error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
-implicit none
-integer, intent(in) :: nerows
-integer, intent(in) :: fiwkln, fdwkln
-integer, intent(inout) :: nepols
-integer, intent(in) :: nepts, dimen
-integer, intent(inout) :: error
-integer, intent(in) :: evldeg
-integer, intent(in) :: fitiwk(fiwkln)
-double precision, intent(inout) :: fitdwk(fdwkln)
-double precision, intent(in) :: evlcds(nerows,dimen)
-double precision, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt
-integer :: gbasiz, alfl, dimp1
-integer :: top, bot, curdeg, psistt
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     This subroutine  evaluates  the  least-squares  multinomial  fit
-!     which has been previously produced by  dmfit .  The computation
-!     is performed in double precision. Either the full
-!     multinomial as produced may be evaluated,  or  only  an  initial
-!     segment thereof.  As in the case with  dmfit , it is possible
-!     (1) to specify multinomials of a full given degree, or
-!     (2) to specify  the  number  of  orthogonal  basis  elements  to
-!         achieve a partial-degree fit.
-!
-!     In case (1), the  desired  degree  is  given  as  the  value  of
-!     evldeg   (WHICH  MUST  BE  NONNEGATIVE AND NOT GREATER THAN THE
-!     value used for  FITDEG  in  dmfit ), and the parameter  nepols
-!     will be set  by  dmeval  to specify the number of basis elements
-!     required. If  evldeg  .LT.  FITDEG   is  given,  then  only  the
-!     initial  portion of the fitting multinomial (of degree  evldeg )
-!     will be evaluated.
-!
-!     In case (2),  evldeg  is to be set negative, in which  case  the
-!     VALUE  OF   nepols  (WHICH MUST BE POSITIVE AND NOT GREATER THAN
-!     THE VALUE USED FOR   NFPOLS   IN   dmfit )  WILL  BE  TAKEN  AS
-!     defining  the  initial  portion of the fitting multinomial to be
-!     evaluated.
-!
-!     IF  nepols  =  NFPOLS  (WITH  evldeg  .LT.  0),  OR   evldeg   =
-!     FITDEG  (with   evldeg   .GT.  0),  then  the  full  multinomial
-!     generated by  dmfit  will be evaluated.
-!
-!     THE  EVALUATION  WILL  TAKE  PLACE  FOR  EACH  OF   THE   POINTS
-!     (collection  of  variable  values)  given as a row of the matrix
-!      evlcds .  The  values  produced  from  the  full,  or  partial,
-!     multinomial will be placed in the array  evlvls .
-!
-!     Variables
-!     ---------
-!
-!      dimen  -- (INTEGER) -- (passed)
-!         the number of variables.
-!      evldeg  -- (INTEGER) -- (passed)
-!         if  evldeg  .LT. 0, then this parameter will be ignored.
-!         If  evldeg  .GE. 0, then the value of  evldeg  must  satisfy
-!         evldeg  .LE. (the  degree  of the approximating multinomial
-!         generated in  dmfit ).  In this case  evldeg  will  specify
-!         the degree of the initial portion of the fitting multinomial
-!         to be evaluated.
-!      nepols  -- (INTEGER) -- (PASSED/RETURNED)
-!         if  evldeg  .GE. 0, then this parameter will be ignored.
-!         If evldeg .LT. 0, then the partial multinomial involving the
-!         FIRST   nepols  ORTHOGONAL BASIS FUNCTIONS WILL BE EVALUATED
-!         at the points given by  evlcds .  The resulting values  will
-!         be stored in  evlvls .
-!         The value of nepols must be .GE. 1 and .LE. (the size of the
-!         BASIS  GENERATED  IN   dmfit ),  WHICH  WAS RETURNED AS THE
-!         value of  NFPOLS .
-!         nepols  will be changed if evldeg .GT. 0 to give the size of
-!         basis required for the multinomial of degree  evldeg .
-!      nepts  -- (INTEGER) -- (passed)
-!         the number of evaluation points.
-!      evlcds  -- (double precision 2-subscript array) -- (passed)
-!         evlcds (P,K) is the value of the K-TH variable at the  P-TH
-!         evaluation point.
-!      nerows  -- (INTEGER) -- (passed)
-!         the row dimension declared for evlcds in the calling program.
-!      evlvls  -- (INTEGER) -- (returned)
-!         evlvls (P) is the value of the evaluated multinomial at the
-!         P-TH evaluation point.
-!      error  -- (INTEGER) -- (returned)
-!          0 .........  if no errors
-!         -1 .........  IF  nepols  .GT.  NFPOLS  OR  nepols  .LT. 1
-!         -2 .........  IF  nepts  .LT. 1 OR  dimen  .LT. 1
-!      fitiwk  -- (integer, 1-subscript array) -- (passed)
-!         the integer work array of length  fiwkln  that was  used  in
-!          dmfit .
-!      fitdwk  -- (double precision 2-subscript array) -- (passed)
-!         the real work array of length  fdwkln  that was
-!         used in  dmfit .
-!      fiwkln  -- (INTEGER) -- (passed)
-!         the length of  fitiwk .
-!      fdwkln  -- (INTEGER) -- (passed)
-!         the length of  fitdwk .
-!      temp    -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY)
-!         a work array of length  dimen  (or longer).
-!
-!     The subroutine  dmevl1  is called to do the actual evaluation.
-!
-!     Modified by A.H. Morris (NSWC)
-!
-!     ****************
-!
-!
-!     ***************
-!     Set up index pointers to the beginning of each row of
-!     the mtable -- this sets the beginning point for each
-!     full multinomial degree.
-!     ***************
-!
-if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
-if (evldeg) 40,10,20
-!
-10 nepols = 1
-go to 50
-!
-20 top = 1
-bot = 1
-do 30 curdeg = 1,evldeg
-   top = top * (dimen + curdeg)
-30 bot = bot * curdeg
-nepols = top / bot
-!
-40 gbasiz = fitiwk(1)
-if (nepols .gt. gbasiz .or. nepols .lt. 1) go to 100
-!
-50 error = 0
-dimp1 = dimen + 1
-alfl = fitiwk(4)
-maxstt = 1
-alfstt = dimp1 + maxstt
-cstt = alfstt + alfl
-psistt = cstt + fitiwk(2)
-!
-!     ***************
-!     The actual evaluation is done inside  dmevl1.
-!     ***************
-!
-call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
-   & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
-   & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
-return
-!
-!     ***************
-!     Error return
-!     ***************
-!
-100 error = -1
-return
-110 error = -2
-return
-end subroutine dmeval
-
-subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
-   & indexs,psi,f,alfl,maxabs,x,dimp1)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
-integer, intent(in) :: indexs(4,npolys)
-double precision, intent(in) :: alpha(alfl), coord(ncrows,dimen)
-double precision, intent(inout) :: psi(npolys)
-double precision, intent(in) :: c(npolys)
-double precision, intent(inout) :: f(nepts)
-double precision, intent(in) :: maxabs(dimp1)
-double precision, intent(inout) :: x(dimen)
-integer :: jm1, jprime, m, p, k, i, j, index
-double precision :: runtot, rntot1
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     This subroutine performs the main work of evaluating the
-!     fitting multinomial (or the initial portion of it  which
-!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
-!     CALL TO SUBROUTINE  dmeval .
-!
-!     This subroutine is called by  dmeval .  It is  not  called
-!     directly by the user.
-!
-!     The body of this subroutine FOLLOWS the explanation
-!     given in
-!          least squares fitting using
-!          orthogonal multinomials
-!     by
-!          Bartels and Jezioranski
-!     in
-!          ACM transactions on mathematical software
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!
-!     ****************
-!
-if (npolys .eq. 1) go to 50
-!
-psi(1) = 1.d0
-do 40 p = 1,nepts
-!
-!     ***************
-!     Scale the coordinates of the p-TH point
-!     ***************
-!
-   do k = 1,dimen
-      x(k) = coord(p,k)
-      if (maxabs(k) .ne. 0.d0) x(k) = x(k) / maxabs(k)
-   end do
-!
-!     ***************
-!     Use the  basis function coefficients  c  and recurrence
-!     coefficients  alpha  to evaluate the fitted multinomial
-!     at the p-TH point.
-!     ***************
-!
-   rntot1 = c(1)
-   do 30 j = 2,npolys
-      k = indexs(2,j)
-      jprime = indexs(1,j)
-      runtot = x(k) * psi(jprime)
-      i = indexs(3,j)
-      jm1 = j - 1
-      do 20 m = i,jm1
-         index = indexs(4,j) + m - i
-20       runtot = runtot - psi(m) * alpha(index)
-      psi(j) = runtot
-30    rntot1 = rntot1 + c(j) * psi(j)
-40 f(p) = rntot1 * maxabs(dimp1)
-return
-!
-!     ***************
-!     Compute the degree 0 polynomial
-!     ***************
-!
-50 runtot = c(1) * maxabs(dimp1)
-do 60 p = 1,nepts
-60 f(p) = runtot
-return
-end subroutine dmevl1
-
-real function qsuba (f, a, b, epsil, mcount, relerr, ind)
-implicit none
-integer, intent(inout) :: ind
-integer, intent(in) :: mcount
-real, intent(in) :: a, b, epsil
-real, intent(inout) :: relerr
-real :: f
-external f
-integer :: icheck, is, ismax, k, nf, npts
-real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
-   & tol, x
-real :: spmpar
-!-----------------------------------------------------------------------
-!
-!                Integration over a finite interval
-!
-!                          ----------
-!
-!     qsuba computes the integral of f(X) from A to b where the
-!     relative error does not exceed epsil.
-!
-!     mcount is the maximum number of points at which f(X) may be
-!     evaluated.
-!
-!     relerr is a variable. When qsuba terminates, if the value
-!     of the integral is nonzero then relerr is a crude estimate
-!     of the relative error of the value. Otherwise, if qsuba = 0
-!     then relerr is an estimate of the absolute error.
-!
-!     Ind is a variable. When qsuba terminates, ind has one of the
-!     following values ...
-!
-!     ind=0   qsuba is satisfied that the integral has been
-!             computed to the desired accuracy.
-!     ind=1   The integral has been computed, but qsuba is
-!             not certain of the accuracy of the result.
-!     ind=2   The integrand has been evaluated at mcount
-!             points. If more evaluations are needed then
-!             qsuba TERMINATES.
-!     ind=3   qsuba cannot compute the integral to the desired
-!             accuracy. Ind is set to 3 whenever the stack of
-!             intervals becomes full (it currently can hold 50
-!             intervals). A result is obtained by continuing
-!             the integration ignoring convergence failures
-!             which cannot be accommodated on the stack.
-!
-!     The reliability of the algorithm decreases for large values
-!     of epsil. It is recommended that epsil be less than 0.001.
-!
-!-----------------------------------------------------------------------
-data ismax/100/
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant. Eps is the
-!            smallest number such that 1.0 + eps .GT. 1.0.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-qsuba = 0.0
-relerr = 0.0
-ind = 0
-if (a .eq. b) return
-!
-!     Apply quad to the entire interval
-!
-sub1 = amin1(a,b)
-sub3 = amax1(a,b)
-tol = amax1(epsil, 10.0*eps)
-call quad (sub1, sub3, result, k, tol, npts, icheck, f)
-if (icheck .eq. 0) go to 100
-is = 1
-!
-!     Subdivide the interval (sub1,sub3) into the subintervals
-!     (sub1,sub2) and (sub2,sub3). Call quad for (sub1,sub2).
-!
-10 if (npts .ge. mcount) go to 110
-sub2 = 0.5*(sub1 + sub3)
-call quad (sub1, sub2, result, k, tol, nf, icheck, f)
-npts = npts + nf
-err = abs(result(k) - result(k - 1))
-sum = qsuba + result(k)
-if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
-!
-!        Stack the subinterval (sub1,sub2) for further
-!        examination if there is sufficient storage.
-!
-if (is .ge. ismax) go to 20
-stack(is) = sub1
-is = is + 1
-stack(is) = sub2
-is = is + 1
-go to 40
-20 ind = 3
-!
-!     Update qsuba and check if any significant digits are lost
-!
-30 x = qsuba
-qsuba = sum
-relerr = relerr + err
-if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 40
-x = 0.1*amin1(abs(x),abs(result(k)))
-if (abs(qsuba) .le. x) ind = 1
-!
-!     CALL QUAD FOR THE INTERVAL (sub2,sub3)
-!
-40 if (npts .ge. mcount) go to 110
-call quad (sub2, sub3, result, k, tol, nf, icheck, f)
-npts = npts + nf
-err = abs(result(k) - result(k - 1))
-sum = qsuba + result(k)
-if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 50
-!
-!        Subdivide the interval (sub2,sub3)
-!
-sub1 = sub2
-go to 10
-!
-!     Update qsuba and check if any significant digits are lost
-!
-50 x = qsuba
-qsuba = sum
-relerr = relerr + err
-if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 60
-x = 0.1*amin1(abs(x),abs(result(k)))
-if (abs(qsuba) .le. x) ind = 1
-!
-!     Subdivide the interval last stacked
-!
-60 if (is .eq. 1) go to 120
-is = is - 1
-sub3 = stack(is)
-is = is - 1
-sub1 = stack(is)
-go to 10
-!
-!     Termination when subdivision is not needed
-!
-100 qsuba = result(k)
-if (a .gt. b) qsuba = -qsuba
-relerr = abs(result(k) - result(k - 1))
-if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
-return
-!
-!     Subdivision result
-!
-110 ind = 2
-120 if (a .gt. b) qsuba = -qsuba
-if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
-return
-end function qsuba
-
-subroutine quad(a, b, result, k, epsil, npts, icheck, f)
-implicit none
-integer, intent(out) :: icheck
-integer, intent(inout) :: k, npts
-real, intent(in) :: a, b, epsil
-real, intent(inout) :: result(*)
-real :: f
-external f
-integer :: i, inew, iold, j
-real :: acum, diff, funct(127), fzero, p(381), sum, x
-!     --------------------
-! This subroutine attempts to calculate the integral of f(x)
-! over the interval *a* to *b* with relative error not
-! EXCEEDING *epsil*.
-! The result is obtained using a sequence of 1,3,7,15,31,63,
-! 127, and 255 point interlacing formulae(no integrand
-! evaluations are wasted) of respective degree 1,5,11,23,
-! 47,95,191 and 383. The formulae are based on the optimal
-! extension of the 3-point Gauss formula.  Details of
-! the formulae are given in *the optimum addition of points
-! to quadrature formulae* by T.N.L. patterson,maths.COMP.
-! Vol 22,847-856,1968.
-!                     *** INPUT ***
-! A       LOWER LIMIT OF INTEGRATION.
-! b       UPPER LIMIT OF INTEGRATION.
-! epsil   RELATIVE ACCURACY REQUIRED. WHEN THE RELATIVE
-!         difference of two successive formulae does not
-!         exceed *epsil* the last formula computed is taken
-!         as the result.
-! f       f(x) IS THE INTEGRAND.
-!                     *** OUTPUT ***
-! result  this array,which should be declared to have at
-!         least 8 elements, holds the results obtained by
-!         the 1,3,7, etc., point formulae. The number of
-!         formulae computed depents on *epsil*.
-! k       result(k) HOLDS THE VALUE OF THE INTEGRAL TO THE
-!         specified relative accuracy.
-! npts    NUMBER INTEGRAND EVALUATIONS.
-! icheck  on exit normally icheck=0. However if convergence
-!         to the accuracy requested is not achieved icheck=1
-!         on exit.
-! Abscissae and weights of quadrature rules are stacked in
-! array *p* in the order in which they are needed.
-!     --------------------
-data p( 1),p( 2),p( 3),p( 4),p( 5),p( 6),p( 7), &
-   & p( 8),p( 9),p(10),p(11),p(12),p(13),p(14), &
-   & p(15),p(16),p(17),p(18),p(19),p(20),p(21), &
-   & p(22),p(23),p(24),p(25),p(26),p(27),p(28)/ &
-   & 0.77459666924148337704e00,0.55555555555555555556e00, &
-   & 0.88888888888888888889e00,0.26848808986833344073e00, &
-   & 0.96049126870802028342e00,0.10465622602646726519e00, &
-   & 0.43424374934680255800e00,0.40139741477596222291e00, &
-   & 0.45091653865847414235e00,0.13441525524378422036e00, &
-   & 0.51603282997079739697e-01,0.20062852937698902103e00, &
-   & 0.99383196321275502221e00,0.17001719629940260339e-01, &
-   & 0.88845923287225699889e00,0.92927195315124537686e-01, &
-   & 0.62110294673722640294e00,0.17151190913639138079e00, &
-   & 0.22338668642896688163e00,0.21915685840158749640e00, &
-   & 0.22551049979820668739e00,0.67207754295990703540e-01, &
-   & 0.25807598096176653565e-01,0.10031427861179557877e00, &
-   & 0.84345657393211062463e-02,0.46462893261757986541e-01, &
-   & 0.85755920049990351154e-01,0.10957842105592463824e00/
-data p(29),p(30),p(31),p(32),p(33),p(34),p(35), &
-   & p(36),p(37),p(38),p(39),p(40),p(41),p(42), &
-   & p(43),p(44),p(45),p(46),p(47),p(48),p(49), &
-   & p(50),p(51),p(52),p(53),p(54),p(55),p(56)/ &
-   & 0.99909812496766759766e00,0.25447807915618744154e-02, &
-   & 0.98153114955374010687e00,0.16446049854387810934e-01, &
-   & 0.92965485742974005667e00,0.35957103307129322097e-01, &
-   & 0.83672593816886873550e00,0.56979509494123357412e-01, &
-   & 0.70249620649152707861e00,0.76879620499003531043e-01, &
-   & 0.53131974364437562397e00,0.93627109981264473617e-01, &
-   & 0.33113539325797683309e00,0.10566989358023480974e00, &
-   & 0.11248894313318662575e00,0.11195687302095345688e00, &
-   & 0.11275525672076869161e00,0.33603877148207730542e-01, &
-   & 0.12903800100351265626e-01,0.50157139305899537414e-01, &
-   & 0.42176304415588548391e-02,0.23231446639910269443e-01, &
-   & 0.42877960025007734493e-01,0.54789210527962865032e-01, &
-   & 0.12651565562300680114e-02,0.82230079572359296693e-02, &
-   & 0.17978551568128270333e-01,0.28489754745833548613e-01/
-data p(57),p(58),p(59),p(60),p(61),p(62),p(63), &
-   & p(64),p(65),p(66),p(67),p(68),p(69),p(70), &
-   & p(71),p(72),p(73),p(74),p(75),p(76),p(77), &
-   & p(78),p(79),p(80),p(81),p(82),p(83),p(84)/ &
-   & 0.38439810249455532039e-01,0.46813554990628012403e-01, &
-   & 0.52834946790116519862e-01,0.55978436510476319408e-01, &
-   & 0.99987288812035761194e00,0.36322148184553065969e-03, &
-   & 0.99720625937222195908e00,0.25790497946856882724e-02, &
-   & 0.98868475754742947994e00,0.61155068221172463397e-02, &
-   & 0.97218287474858179658e00,0.10498246909621321898e-01, &
-   & 0.94634285837340290515e00,0.15406750466559497802e-01, &
-   & 0.91037115695700429250e00,0.20594233915912711149e-01, &
-   & 0.86390793819369047715e00,0.25869679327214746911e-01, &
-   & 0.80694053195021761186e00,0.31073551111687964880e-01, &
-   & 0.73975604435269475868e00,0.36064432780782572640e-01, &
-   & 0.66290966002478059546e00,0.40715510116944318934e-01, &
-   & 0.57719571005204581484e00,0.44914531653632197414e-01, &
-   & 0.48361802694584102756e00,0.48564330406673198716e-01/
-data p( 85),p( 86),p( 87),p( 88),p( 89),p( 90),p( 91), &
-   & p( 92),p( 93),p( 94),p( 95),p( 96),p( 97),p( 98), &
-   & p( 99),p(100),p(101),p(102),p(103),p(104),p(105), &
-   & p(106),p(107),p(108),p(109),p(110),p(111),p(112)/ &
-   & 0.38335932419873034692e00,0.51583253952048458777e-01, &
-   & 0.27774982202182431507e00,0.53905499335266063927e-01, &
-   & 0.16823525155220746498e00,0.55481404356559363988e-01, &
-   & 0.56344313046592789972e-01,0.56277699831254301273e-01, &
-   & 0.56377628360384717388e-01,0.16801938574103865271e-01, &
-   & 0.64519000501757369228e-02,0.25078569652949768707e-01, &
-   & 0.21088152457266328793e-02,0.11615723319955134727e-01, &
-   & 0.21438980012503867246e-01,0.27394605263981432516e-01, &
-   & 0.63260731936263354422e-03,0.41115039786546930472e-02, &
-   & 0.89892757840641357233e-02,0.14244877372916774306e-01, &
-   & 0.19219905124727766019e-01,0.23406777495314006201e-01, &
-   & 0.26417473395058259931e-01,0.27989218255238159704e-01, &
-   & 0.18073956444538835782e-03,0.12895240826104173921e-02, &
-   & 0.30577534101755311361e-02,0.52491234548088591251e-02/
-data p(113),p(114),p(115),p(116),p(117),p(118),p(119), &
-   & p(120),p(121),p(122),p(123),p(124),p(125),p(126), &
-   & p(127),p(128),p(129),p(130),p(131),p(132),p(133), &
-   & p(134),p(135),p(136),p(137),p(138),p(139),p(140)/ &
-   & 0.77033752332797418482e-02,0.10297116957956355524e-01, &
-   & 0.12934839663607373455e-01,0.15536775555843982440e-01, &
-   & 0.18032216390391286320e-01,0.20357755058472159467e-01, &
-   & 0.22457265826816098707e-01,0.24282165203336599358e-01, &
-   & 0.25791626976024229388e-01,0.26952749667633031963e-01, &
-   & 0.27740702178279681994e-01,0.28138849915627150636e-01, &
-   & 0.99998243035489159858e00,0.50536095207862517625e-04, &
-   & 0.99959879967191068325e00,0.37774664632698466027e-03, &
-   & 0.99831663531840739253e00,0.93836984854238150079e-03, &
-   & 0.99572410469840718851e00,0.16811428654214699063e-02, &
-   & 0.99149572117810613240e00,0.25687649437940203731e-02, &
-   & 0.98537149959852037111e00,0.35728927835172996494e-02, &
-   & 0.97714151463970571416e00,0.46710503721143217474e-02, &
-   & 0.96663785155841656709e00,0.58434498758356395076e-02/
-data p(141),p(142),p(143),p(144),p(145),p(146),p(147), &
-   & p(148),p(149),p(150),p(151),p(152),p(153),p(154), &
-   & p(155),p(156),p(157),p(158),p(159),p(160),p(161), &
-   & p(162),p(163),p(164),p(165),p(166),p(167),p(168)/ &
-   & 0.95373000642576113641e00,0.70724899954335554680e-02, &
-   & 0.93832039777959288365e00,0.83428387539681577056e-02, &
-   & 0.92034002547001242073e00,0.96411777297025366953e-02, &
-   & 0.89974489977694003664e00,0.10955733387837901648e-01, &
-   & 0.87651341448470526974e00,0.12275830560082770087e-01, &
-   & 0.85064449476835027976e00,0.13591571009765546790e-01, &
-   & 0.82215625436498040737e00,0.14893641664815182035e-01, &
-   & 0.79108493379984836143e00,0.16173218729577719942e-01, &
-   & 0.75748396638051363793e00,0.17421930159464173747e-01, &
-   & 0.72142308537009891548e00,0.18631848256138790186e-01, &
-   & 0.68298743109107922809e00,0.19795495048097499488e-01, &
-   & 0.64227664250975951377e00,0.20905851445812023852e-01, &
-   & 0.59940393024224289297e00,0.21956366305317824939e-01, &
-   & 0.55449513263193254887e00,0.22940964229387748761e-01/
-data p(169),p(170),p(171),p(172),p(173),p(174),p(175), &
-   & p(176),p(177),p(178),p(179),p(180),p(181),p(182), &
-   & p(183),p(184),p(185),p(186),p(187),p(188),p(189), &
-   & p(190),p(191),p(192),p(193),p(194),p(195),p(196)/ &
-   & 0.50768775753371660215e00,0.23854052106038540080e-01, &
-   & 0.45913001198983233287e00,0.24690524744487676909e-01, &
-   & 0.40897982122988867241e00,0.25445769965464765813e-01, &
-   & 0.35740383783153215238e00,0.26115673376706097680e-01, &
-   & 0.30457644155671404334e00,0.26696622927450359906e-01, &
-   & 0.25067873030348317661e00,0.27185513229624791819e-01, &
-   & 0.19589750271110015392e00,0.27579749566481873035e-01, &
-   & 0.14042423315256017459e00,0.27877251476613701609e-01, &
-   & 0.84454040083710883710e-01,0.28076455793817246607e-01, &
-   & 0.28184648949745694339e-01,0.28176319033016602131e-01, &
-   & 0.28188814180192358694e-01,0.84009692870519326354e-02, &
-   & 0.32259500250878684614e-02,0.12539284826474884353e-01, &
-   & 0.10544076228633167722e-02,0.58078616599775673635e-02, &
-   & 0.10719490006251933623e-01,0.13697302631990716258e-01/
-data p(197),p(198),p(199),p(200),p(201),p(202),p(203), &
-   & p(204),p(205),p(206),p(207),p(208),p(209),p(210), &
-   & p(211),p(212),p(213),p(214),p(215),p(216),p(217), &
-   & p(218),p(219),p(220),p(221),p(222),p(223),p(224)/ &
-   & 0.31630366082226447689e-03,0.20557519893273465236e-02, &
-   & 0.44946378920320678616e-02,0.71224386864583871532e-02, &
-   & 0.96099525623638830097e-02,0.11703388747657003101e-01, &
-   & 0.13208736697529129966e-01,0.13994609127619079852e-01, &
-   & 0.90372734658751149261e-04,0.64476204130572477933e-03, &
-   & 0.15288767050877655684e-02,0.26245617274044295626e-02, &
-   & 0.38516876166398709241e-02,0.51485584789781777618e-02, &
-   & 0.64674198318036867274e-02,0.77683877779219912200e-02, &
-   & 0.90161081951956431600e-02,0.10178877529236079733e-01, &
-   & 0.11228632913408049354e-01,0.12141082601668299679e-01, &
-   & 0.12895813488012114694e-01,0.13476374833816515982e-01, &
-   & 0.13870351089139840997e-01,0.14069424957813575318e-01, &
-   & 0.25157870384280661489e-04,0.18887326450650491366e-03, &
-   & 0.46918492424785040975e-03,0.84057143271072246365e-03/
-data p(225),p(226),p(227),p(228),p(229),p(230),p(231), &
-   & p(232),p(233),p(234),p(235),p(236),p(237),p(238), &
-   & p(239),p(240),p(241),p(242),p(243),p(244),p(245), &
-   & p(246),p(247),p(248),p(249),p(250),p(251),p(252)/ &
-   & 0.12843824718970101768e-02,0.17864463917586498247e-02, &
-   & 0.23355251860571608737e-02,0.29217249379178197538e-02, &
-   & 0.35362449977167777340e-02,0.41714193769840788528e-02, &
-   & 0.48205888648512683476e-02,0.54778666939189508240e-02, &
-   & 0.61379152800413850435e-02,0.67957855048827733948e-02, &
-   & 0.74468208324075910174e-02,0.80866093647888599710e-02, &
-   & 0.87109650797320868736e-02,0.93159241280693950932e-02, &
-   & 0.98977475240487497440e-02,0.10452925722906011926e-01, &
-   & 0.10978183152658912470e-01,0.11470482114693874380e-01, &
-   & 0.11927026053019270040e-01,0.12345262372243838455e-01, &
-   & 0.12722884982732382906e-01,0.13057836688353048840e-01, &
-   & 0.13348311463725179953e-01,0.13592756614812395910e-01, &
-   & 0.13789874783240936517e-01,0.13938625738306850804e-01, &
-   & 0.14038227896908623303e-01,0.14088159516508301065e-01/
-data p(253),p(254),p(255),p(256),p(257),p(258),p(259), &
-   & p(260),p(261),p(262),p(263),p(264),p(265),p(266), &
-   & p(267),p(268),p(269),p(270),p(271),p(272),p(273), &
-   & p(274),p(275),p(276),p(277),p(278),p(279),p(280)/ &
-   & 0.99999759637974846462e00,0.69379364324108267170e-05, &
-   & 0.99994399620705437576e00,0.53275293669780613125e-04, &
-   & 0.99976049092443204733e00,0.13575491094922871973e-03, &
-   & 0.99938033802502358193e00,0.24921240048299729402e-03, &
-   & 0.99874561446809511470e00,0.38974528447328229322e-03, &
-   & 0.99780535449595727456e00,0.55429531493037471492e-03, &
-   & 0.99651414591489027385e00,0.74028280424450333046e-03, &
-   & 0.99483150280062100052e00,0.94536151685852538246e-03, &
-   & 0.99272134428278861533e00,0.11674841174299594077e-02, &
-   & 0.99015137040077015918e00,0.14049079956551446427e-02, &
-   & 0.98709252795403406719e00,0.16561127281544526052e-02, &
-   & 0.98351865757863272876e00,0.19197129710138724125e-02, &
-   & 0.97940628167086268381e00,0.21944069253638388388e-02, &
-   & 0.97473445975240266776e00,0.24789582266575679307e-02/
-data p(281),p(282),p(283),p(284),p(285),p(286),p(287), &
-   & p(288),p(289),p(290),p(291),p(292),p(293),p(294), &
-   & p(295),p(296),p(297),p(298),p(299),p(300),p(301), &
-   & p(302),p(303),p(304),p(305),p(306),p(307),p(308)/ &
-   & 0.96948465950245923177e00,0.27721957645934509940e-02, &
-   & 0.96364062156981213252e00,0.30730184347025783234e-02, &
-   & 0.95718821610986096274e00,0.33803979910869203823e-02, &
-   & 0.95011529752129487656e00,0.36933779170256508183e-02, &
-   & 0.94241156519108305981e00,0.40110687240750233989e-02, &
-   & 0.93406843615772578800e00,0.43326409680929828545e-02, &
-   & 0.92507893290707565236e00,0.46573172997568547773e-02, &
-   & 0.91543758715576504064e00,0.49843645647655386012e-02, &
-   & 0.90514035881326159519e00,0.53130866051870565663e-02, &
-   & 0.89418456833555902286e00,0.56428181013844441585e-02, &
-   & 0.88256884024734190684e00,0.59729195655081658049e-02, &
-   & 0.87029305554811390585e00,0.63027734490857587172e-02, &
-   & 0.85735831088623215653e00,0.66317812429018878941e-02, &
-   & 0.84376688267270860104e00,0.69593614093904229394e-02/
-data p(309),p(310),p(311),p(312),p(313),p(314),p(315), &
-   & p(316),p(317),p(318),p(319),p(320),p(321),p(322), &
-   & p(323),p(324),p(325),p(326),p(327),p(328),p(329), &
-   & p(330),p(331),p(332),p(333),p(334),p(335),p(336)/ &
-   & 0.82952219463740140018e00,0.72849479805538070639e-02, &
-   & 0.81462878765513741344e00,0.76079896657190565832e-02, &
-   & 0.79909229096084140180e00,0.79279493342948491103e-02, &
-   & 0.78291939411828301639e00,0.82443037630328680306e-02, &
-   & 0.76611781930376009072e00,0.85565435613076896192e-02, &
-   & 0.74869629361693660282e00,0.88641732094824942641e-02, &
-   & 0.73066452124218126133e00,0.91667111635607884067e-02, &
-   & 0.71203315536225203459e00,0.94636899938300652943e-02, &
-   & 0.69281376977911470289e00,0.97546565363174114611e-02, &
-   & 0.67301883023041847920e00,0.10039172044056840798e-01, &
-   & 0.65266166541001749610e00,0.10316812330947621682e-01, &
-   & 0.63175643771119423041e00,0.10587167904885197931e-01, &
-   & 0.61031811371518640016e00,0.10849844089337314099e-01, &
-   & 0.58836243444766254143e00,0.11104461134006926537e-01/
-data p(337),p(338),p(339),p(340),p(341),p(342),p(343), &
-   & p(344),p(345),p(346),p(347),p(348),p(349),p(350), &
-   & p(351),p(352),p(353),p(354),p(355),p(356),p(357), &
-   & p(358),p(359),p(360),p(361),p(362),p(363),p(364)/ &
-   & 0.56590588542365442262e00,0.11350654315980596602e-01, &
-   & 0.54296566649831149049e00,0.11588074033043952568e-01, &
-   & 0.51955966153745702199e00,0.11816385890830235763e-01, &
-   & 0.49570640791876146017e00,0.12035270785279562630e-01, &
-   & 0.47142506587165887693e00,0.12244424981611985899e-01, &
-   & 0.44673538766202847374e00,0.12443560190714035263e-01, &
-   & 0.42165768662616330006e00,0.12632403643542078765e-01, &
-   & 0.39621280605761593918e00,0.12810698163877361967e-01, &
-   & 0.37042208795007823014e00,0.12978202239537399286e-01, &
-   & 0.34430734159943802278e00,0.13134690091960152836e-01, &
-   & 0.31789081206847668318e00,0.13279951743930530650e-01, &
-   & 0.29119514851824668196e00,0.13413793085110098513e-01, &
-   & 0.26424337241092676194e00,0.13536035934956213614e-01, &
-   & 0.23705884558982972721e00,0.13646518102571291428e-01/
-data p(365),p(366),p(367),p(368),p(369),p(370),p(371), &
-   & p(372),p(373),p(374),p(375),p(376),p(377),p(378), &
-   & p(379),p(380),p(381)/ &
-   & 0.20966523824318119477e00,0.13745093443001896632e-01, &
-   & 0.18208649675925219825e00,0.13831631909506428676e-01, &
-   & 0.15434681148137810869e00,0.13906019601325461264e-01, &
-   & 0.12647058437230196685e00,0.13968158806516938516e-01, &
-   & 0.98482396598119202090e-01,0.14017968039456608810e-01, &
-   & 0.70406976042855179063e-01,0.14055382072649964277e-01, &
-   & 0.42269164765363603212e-01,0.14080351962553661325e-01, &
-   & 0.14093886410782462614e-01,0.14092845069160408355e-01, &
-   & 0.14094407090096179347e-01/
-icheck = 0
-! Check for trivial case.
-if (a.eq.b) go to 70
-! Scale factors.
-sum = (b + a)/2.0
-diff = (b - a)/2.0
-! 1-Point Gauss
-fzero = f(sum)
-result(1) = 2.0*fzero*diff
-i = 0
-iold = 0
-inew = 1
-k = 2
-acum = 0.0
-go to 30
-10 if (k.eq.8) go to 50
-k = k + 1
-acum = 0.0
-! Contribution from function values already computed.
-do 20 j = 1,iold
-   i = i + 1
-   acum = acum + p(i)*funct(j)
-20 continue
-! Contribution from new function values.
-30 iold = iold + inew
-do 40 j = inew,iold
-   i = i + 1
-   x = p(i)*diff
-   funct(j) = f(sum + x) + f(sum - x)
-   i = i + 1
-   acum = acum + p(i)*funct(j)
-40 continue
-inew = iold + 1
-i = i + 1
-result(k) = (acum + p(i)*fzero)*diff
-! Check for convergence.
-if (abs(result(k) - result(k - 1)) - epsil*abs(result(k))) 60, &
-   & 60, 10
-! Convergence not achieved.
-50 icheck = 1
-! Normal termination.
-60 npts = inew + iold
-return
-! Trivial case
-70 k = 2
-result(1) = 0.0
-result(2) = 0.0
-npts = 0
-return
-end subroutine quad
-
-subroutine qags (f, a, b, epsabs, epsrel, result, abserr, &
-   & neval, ier, limit, lenw, last, iwork, work)
-implicit none
-real :: f
-integer, intent(out) :: ier, last
-integer, intent(in) :: lenw, limit
-integer, intent(out) :: neval
-real, intent(in) :: a
-real, intent(out) :: abserr
-real, intent(in) :: b, epsabs, epsrel
-real, intent(out) :: result
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f
-integer :: l1, l2, l3
-!-----------------------------------------------------------------------
-!
-!                 Computation of a definite integral
-!
-!-----------------------------------------------------------------------
-!
-!        Purpose
-!           the routine calculates an approximation  result  to a given
-!           definite integral   I = Integral of  f  over (a,b),
-!           hopefully satisfying following claim for accuracy
-!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X T E R N A L in the driver program.
-!
-!            a      - REAL
-!                     lower limit of integration
-!
-!            b      - REAL
-!                     upper limit of integration
-!
-!            epsabs - REAL
-!                     absolute accuracy requested
-!
-!            epsrel - REAL
-!                     relative accuracy requested
-!
-!         On return
-!            result - Real
-!                     approximation to the integral
-!
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!
-!            neval  - INTEGER
-!                     number of integrand evaluations
-!
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                     ier.GT.0 abnormal termination of the routine
-!                             the estimates for integral and error are
-!                             less reliable. It is assumed that the
-!                             requested accuracy has not been achieved.
-!
-!                     ier = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more sub-
-!                             divisions by increasing the value of
-!                             limit (and taking the according
-!                             dimension adjustments into account).
-!                             However, if this yields no improvement
-!                             it is advised to analyze the integrand
-!                             in order to determine the integration
-!                             difficulties. If the position of A
-!                             local difficulty can be determined (E.G.
-!                             Singularity, discontinuity within the
-!                             interval) one will probably gain from
-!                             splitting up the interval at this point
-!                             and calling the integrator on the sub-
-!                             ranges. If possible, an appropriate
-!                             special-purpose integrator should be used,
-!                             which is designed for handling the type
-!                             of difficulty involved.
-!                         = 2 The occurrence of roundoff error is DETEC-
-!                             ted, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour
-!                             occurs at some  points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             It is presumed that the requested
-!                             tolerance cannot be achieved, and that the
-!                             returned result is the best which can be
-!                             obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted
-!                             that divergence can occur with any other
-!                             value of ier.
-!                         = 6 The input is invalid because epsabs
-!                             or epsrel is negative, limit .LT. 1,
-!                             OR lenw .LT. 4 * limit.
-!                             Result, abserr, neval, last are
-!                             set to zero.
-!
-!         Dimensioning parameters
-!            limit - Integer
-!                    dimensioning parameter for iwork
-!                    limit determines the maximum number
-!                    of subintervals in the partition of the given
-!                    INTEGRATION INTERVAL (a,b), limit.GE.1.
-!                    If limit.LT.1, the routine will end with
-!                    ier = 6.
-!
-!            lenw  - INTEGER
-!                    dimensioning parameter for work
-!                    lenw must be at least limit*4.
-!                    If lenw.LT.limit*4, the routine will end
-!                    with ier = 6.
-!
-!            last  - Integer
-!                    on return, last equals the number of
-!                    subintervals produced in the subdivision
-!                    process, which determines the number of
-!                    significant elements actually in the work
-!                    arrays.
-!
-!         Work arrays
-!            iwork - INTEGER
-!                    vector of dimension at least limit, the first K
-!                    elements of which contain pointers
-!                    to the error estimates over the subintervals
-!                    such that work(limit*3+iwork(1)),... ,
-!                    work(limit*3+iwork(K)) form a decreasing
-!                    sequence, with K = last if last.LE.(limit/2+2), and
-!                    K = limit+1-last otherwise
-!
-!            work  - Real
-!                    vector of dimension at least lenw
-!                    on return
-!                    work(1), ..., work(last) contain the left
-!                     END POINTS OF THE SUBINTERVALS IN THE
-!                     partition of (a,b),
-!                    work(limit+1), ..., work(limit+last) contain
-!                     the right end points,
-!                    work(limit*2+1), ..., work(limit*2+last)
-!                     contain the integral approximations over
-!                     the subintervals,
-!                    work(limit*3+1), ..., work(limit*3+last)
-!                     contain the error estimates.
-!
-!         Subroutines or functions needed
-!              - qagse
-!              - qk21f
-!              - qpsrt
-!              - qelg
-!              - f (user-provided function)
-!              - spmpar
-!
-!-----------------------------------------------------------------------
-!
-!         Check validity of limit and lenw.
-!
-ier = 6
-neval = 0
-last = 0
-result = 0.0
-abserr = 0.0
-if (limit .lt. 1 .or. lenw .lt. limit*4) return
-!
-!         Prepare call for qagse.
-!
-l1 = limit + 1
-l2 = limit + l1
-l3 = limit + l2
-!
-call qagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
-   & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
-return
-end subroutine qags
-
-subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
-   & neval,ier,alist,blist,rlist,elist,iord,last)
-implicit none
-!-----------------------------------------------------------------------
-!
-!                 Computation of a definite integral
-!
-!-----------------------------------------------------------------------
-!
-!        Purpose
-!           the routine calculates an approximation  result  to a given
-!           definite integral   I = Integral of  f  over (a,b),
-!           hopefully satisfying following claim for accuracy
-!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X t E R N A L in the driver program.
-!
-!            a      - REAL
-!                     lower limit of integration
-!
-!            b      - REAL
-!                     upper limit of integration
-!
-!            epsabs - REAL
-!                     absolute accuracy requested
-!
-!            epsrel - REAL
-!                     relative accuracy requested
-!
-!            limit  - Integer
-!                     gives an upperbound on the number of
-!                     subintervals in the partition of (a,b)
-!
-!         On return
-!            result - Real
-!                     approximation to the integral
-!
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!
-!            neval  - INTEGER
-!                     number of integrand evaluations
-!
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                     ier.GT.0 abnormal termination of the routine
-!                             the estimates for integral and error are
-!                             less reliable. It is assumed that the
-!                             requested accuracy has not been achieved.
-!
-!                         = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more sub-
-!                             divisions by increasing the value of
-!                             limit (and taking the according
-!                             dimension adjustments into account).
-!                             However, if this yields no improvement
-!                             it is advised to analyze the integrand
-!                             in order to determine the integration
-!                             difficulties. If the position of A
-!                             local difficulty can be determined (E.G.
-!                             Singularity, discontinuity within the
-!                             interval) one will probably gain from
-!                             splitting up the interval at this point
-!                             and calling the integrator on the sub-
-!                             ranges. If possible, an appropriate
-!                             special-purpose integrator should be used,
-!                             which is designed for handling the type
-!                             of difficulty involved.
-!                         = 2 The occurrence of roundoff error is DETEC-
-!                             ted, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour
-!                             occurs at some  points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             It is presumed that the requested
-!                             tolerance cannot be achieved, and that the
-!                             returned result is the best which can be
-!                             obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted
-!                             that divergence can occur with any other
-!                             value of ier.
-!                         = 6 The input is invalid because epsabs
-!                             or epsrel is negative.
-!                             Result, abserr, neval, last, rlist(1),
-!                             iord(1) and elist(1) are set to zero.
-!                             alist(1) and blist(1) are set to A and b
-!                             respectively.
-!
-!            alist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the left
-!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     of the given integration range (a,b)
-!
-!            blist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the right
-!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     of the given integration range (a,b)
-!
-!            rlist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the integral
-!                     approximations on the subintervals
-!
-!            elist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the moduli
-!                     of the absolute error estimates on the
-!                     SUBINERVALS
-!
-!            iord   - INTEGER
-!                     vector of dimension at least limit, the first k
-!                     elements of which are pointers to the error
-!                     estimates over the subintervals, such
-!                     THAT elist(iord(1)), ..., elist(iord(k))
-!                     form a decreasing sequence, with k = last
-!                     if last.LE.(limit/2+2), and k = limit+1-last
-!                     otherwise
-!
-!            last   - INTEGER
-!                     number of subintervals actually produced in the
-!                     subdivision process
-!
-!         Subroutines or functions needed
-!              - qk21f
-!              - qpsrt
-!              - qelg
-!              - f (user-provided function)
-!              - spmpar
-!
-!-----------------------------------------------------------------------
-real, intent(in) :: a
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real, intent(in) :: b
-real, intent(inout) :: blist
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
-integer, intent(out) :: ier
-integer, intent(inout) :: iord
-integer, intent(out) :: last
-integer, intent(in) :: limit
-integer, intent(out) :: neval
-external f
-real :: abseps
-real :: area, area1, area12, area2, a1, a2
-real :: b1, b2, correc, defabs, defab1, defab2, dres
-real :: epmach
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-   & errsum, ertest, oflow, rerr, resabs, reseps
-real :: res3la(3)
-real :: rlist2(52), small, spmpar, t, uflow
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr
-integer :: nres, nrmax, numrl2
-logical :: extrap, noext
-!
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
-!
-!
-!            The dimension of rlist2 is determined by the value of
-!            LIMEXP in subroutine qelg (rlist2 should be of dimension
-!            (LIMEXP+2) at least).
-!
-!            List of major variables
-!            -----------------------
-!
-!           alist     - List of left end points of all subintervals
-!                       considered up to now
-!           blist     - List of right end points of all subintervals
-!                       considered up to now
-!           rlist(I)  - Approximation to the integral over
-!                       (alist(I),blist(I))
-!           rlist2    - Array of dimension at least LIMEXP+2
-!                       containing the part of the epsilon table
-!                       which is still needed for further computations
-!           elist(I)  - Error estimate applying to rlist(I)
-!           maxerr    - Pointer to the interval with largest error
-!                       estimate
-!           errmax    - elist(maxerr)
-!           erlast    - Error on the interval currently subdivided
-!                       (before that subdivision has taken place)
-!           area      - Sum of the integrals over the subintervals
-!           ERRSUM    - Sum of the errors over the subintervals
-!           errbnd    - Requested accuracy max(epsabs,epsrel*
-!                       abs(result))
-!           *****1    - Variable for the left interval
-!           *****2    - Variable for the right interval
-!           last      - Index for subdivision
-!           nres      - Number of calls to the extrapolation routine
-!           numrl2    - Number of elements currently in rlist2. If an
-!                       appropriate approximation to the compounded
-!                       integral has been obtained it is put in
-!                       rlist2(numrl2) after numrl2 has been increased
-!                       by one.
-!           small     - Length of the smallest interval considered
-!                       up to now, multiplied by 1.5
-!           erlarg    - Sum of the errors over the intervals larger
-!                       than the smallest interval considered up to now
-!           extrap    - Logical variable denoting that the routine
-!                       is attempting to perform extrapolation
-!                       I.E. before subdividing the smallest interval
-!                       we try to decrease the value of erlarg.
-!           noext     - Logical variable denoting that extrapolation
-!                       is no longer allowed (true value)
-!
-!            Machine dependent constants
-!            ---------------------------
-!
-!           epmach is the largest relative spacing.
-!           uflow is the smallest positive magnitude.
-!           OFLOW is the largest positive magnitude.
-!
-epmach = spmpar(1)
-uflow = spmpar(2)
-oflow = spmpar(3)
-!
-!            Check epsabs and epsrel
-!            -----------------------
-!
-neval = 0
-last = 0
-result = 0.0
-abserr = 0.0
-alist(1) = a
-blist(1) = b
-rlist(1) = 0.0
-elist(1) = 0.0
-ier = 6
-if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
-ier = 0
-rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
-!
-!           First approximation to the integral
-!           -----------------------------------
-!
-ierro = 0
-call qk21f (f, a, b, result, abserr, defabs, resabs, &
-   & epmach, uflow, id)
-if (id .ne. 0) go to 999
-neval = 21
-!
-!           Test on accuracy.
-!
-dres = abs(result)
-errbnd = amax1(epsabs,rerr*dres)
-last = 1
-rlist(1) = result
-elist(1) = abserr
-iord(1) = 1
-if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
-   & errbnd) ier = 2
-if (limit .eq. 1) ier = 1
-if (ier .ne. 0) go to 999
-!
-!           Initialization
-!           --------------
-!
-rlist2(1) = result
-errmax = abserr
-maxerr = 1
-area = result
-errsum = abserr
-abserr = oflow
-correc = 0.0
-nrmax = 1
-nres = 0
-numrl2 = 2
-ktmin = 0
-extrap = .false.
-noext = .false.
-iroff1 = 0
-iroff2 = 0
-iroff3 = 0
-ksgn = -1
-if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
-t = 1.0 + 100.0*epmach
-!
-!           Main do-loop
-!           ------------
-!
-do 90 last = 2,limit
-!
-!           Bisect the subinterval with the nrmax-TH largest
-!           error estimate.
-!
-   a1 = alist(maxerr)
-   b1 = 0.5*(alist(maxerr) + blist(maxerr))
-   a2 = b1
-   b2 = blist(maxerr)
-   erlast = errmax
-   call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
-      & epmach, uflow, ier)
-   if (ier .ne. 0) go to 100
-   call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
-      & epmach, uflow, ier)
-   neval = neval + 42
-!
-!           Improve previous approximations to integral
-!           and error and test for accuracy.
-!
-   area12 = area1 + area2
-   erro12 = error1 + error2
-   errsum = errsum + erro12 - errmax
-   area = area + area12 - rlist(maxerr)
-   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
-   if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
-      & .or. erro12 .lt. 0.99*errmax) go to 10
-   if (extrap) iroff2 = iroff2 + 1
-   if (.not.extrap) iroff1 = iroff1 + 1
-10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
-15 rlist(maxerr) = area1
-   rlist(last) = area2
-   errbnd = amax1(epsabs,rerr*abs(area))
-!
-!           Test for roundoff error and eventually
-!           set error flag.
-!
-   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
-   if (iroff2 .ge. 5) ierro = 3
-!
-!           Set error flag in the case that the number of
-!           subintervals equals limit.
-!
-   if (last .eq. limit) ier = 1
-!
-!           Set error flag in the case of bad integrand behaviour
-!           at a point of the integration range.
-!
-   if (amax1(abs(a1),abs(b2)) .le. &
-      & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
-!
-!           Append the newly-created intervals to the list.
-!
-   if (error2 .gt. error1) go to 20
-   alist(last) = a2
-   blist(maxerr) = b1
-   blist(last) = b2
-   elist(maxerr) = error1
-   elist(last) = error2
-   go to 30
-20 alist(maxerr) = a2
-   alist(last) = a1
-   blist(last) = b1
-   rlist(maxerr) = area2
-   rlist(last) = area1
-   elist(maxerr) = error2
-   elist(last) = error1
-!
-!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
-!           in the list of error estimates and select the
-!           subinterval with nrmax-TH largest error estimate (to be
-!           bisected next).
-!
-30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
-! ***Jump out of do-loop
-   if (errsum .le. errbnd) go to 115
-! ***Jump out of do-loop
-   if (ier .ne. 0) go to 100
-   if (last .eq. 2) go to 80
-   if (noext) go to 90
-   erlarg = erlarg - erlast
-   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
-   if (extrap) go to 40
-!
-!           Test whether the interval to be bisected next is the
-!           smallest interval.
-!
-   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-   extrap = .true.
-   nrmax = 2
-40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
-!
-!           The smallest interval has the largest error.
-!           Before bisecting decrease the sum of the errors
-!           over the larger intervals (erlarg) and perform
-!           extrapolation.
-!
-   id = nrmax
-   jupbnd = last
-   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
-      maxerr = iord(nrmax)
-      errmax = elist(maxerr)
-! ***Jump out of do-loop
-      if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
-      nrmax = nrmax + 1
-50    continue
-!
-!           Perform extrapolation.
-!
-60 numrl2 = numrl2 + 1
-   rlist2(numrl2) = area
-   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
-      & epmach, oflow)
-   ktmin = ktmin + 1
-   if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
-   if (abseps .ge. abserr) go to 70
-   ktmin = 0
-   abserr = abseps
-   result = reseps
-   correc = erlarg
-   ertest = amax1(epsabs,rerr*abs(reseps))
-! ***Jump out of do-loop
-   if (abserr .le. ertest) go to 100
-!
-!           Prepare bisection of the smallest interval.
-!
-70 if (numrl2 .eq. 1) noext = .true.
-   if (ier .eq. 5) go to 100
-   maxerr = iord(1)
-   errmax = elist(maxerr)
-   nrmax = 1
-   extrap = .false.
-   small = small*0.5
-   erlarg = errsum
-   go to 90
-80 small = abs(b - a)*0.375
-   erlarg = errsum
-   ertest = errbnd
-   rlist2(2) = area
-90 continue
-!
-!           Set final result and error estimate.
-!           ------------------------------------
-!
-100 if (abserr .eq. oflow) go to 115
-if (ier + ierro .eq. 0) go to 110
-if (ierro .eq. 3) abserr = abserr + correc
-if (ier .eq. 0) ier = 3
-if (result .ne. 0.0 .and. area .ne. 0.0) go to 105
-if (abserr .gt. errsum) go to 115
-if (area .eq. 0.0) go to 130
-go to 110
-105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
-!
-!           Test on divergence.
-!
-110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
-   & defabs*0.1e-01) go to 130
-if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
-   & .or. errsum .gt. abs(area)) ier = 6
-go to 130
-!
-!           Compute global integral sum.
-!
-115 result = 0.0
-do k = 1,last
-   result = result + rlist(k)
-end do
-abserr = errsum
-130 if (ier .gt. 2) ier = ier - 1
-999 return
-end subroutine qagse
-
-subroutine qk21f (f, a, b, result, abserr, resabs, resasc, &
-   & epmach, uflow, isig)
-implicit none
-integer, intent(out) :: isig
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: f
-external f
-integer :: j, jtw, jtwm1
-real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
-   & resk, reskh, tol
-real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
-!-----------------------------------------------------------------------
-!
-! 1.        PURPOSE
-!              to compute I = Integral of f over (a,b), with error
-!                             estimate
-!                         j = Integral of abs(f) over (a,b)
-!
-! 2.        PARAMETERS
-!            on entry
-!              f      - REAL
-!                       function subprogram defining the integrand
-!                       function f(x). the actual name for f needs
-!                       to be declared E X T E R N A L in the
-!                       calling program.
-!
-!              a      - REAL
-!                       lower limit of integration
-!
-!              b      - REAL
-!                       upper limit of integration
-!
-!              epmach - REAL
-!                       the relative precision of the floating
-!                       arithmetic being used.
-!
-!              uflow  - REAL
-!                       the smallest positive magnitude.
-!
-!            On return
-!              result - Real
-!                       approximation to the integral I
-!                       result is computed by applying the 21-point
-!                       Kronrod rule (RESK) obtained by optimal
-!                       addition of abscissae to the 10-point Gauss
-!                       RULE (resg).
-!
-!              abserr - REAL
-!                       estimate of the modulus of the absolute error,
-!                       which should not exceed abs(I-result)
-!
-!              resabs - REAL
-!                       approximation to the integral j
-!
-!              resasc - REAL
-!                       approximation to the integral of abs(f-I/(b-a))
-!                       OVER (a,b)
-!
-!              isig   - INTEGER
-!                       isig=0  The integral was approximated.
-!                       isig=5  The interval (a,b) is too short.
-!                               The integral cannot be computed.
-!
-! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - f (user-provided function)
-!
-!-----------------------------------------------------------------------
-!
-!           The abscissae and weights are given for the interval (-1,1).
-!           Because of symmetry only the positive abscissae and their
-!           corresponding weights are given.
-!
-!           xgk    - Abscissae of the 21-point Kronrod rule
-!                    xgk(2), xgk(4), ...  abscissae of the 10-point
-!                    Gauss rule
-!                    xgk(1), xgk(3), ...  abscissae which are optimally
-!                    added to the 10-point Gauss rule
-!
-!           wgk    - Weights of the 21-point Kronrod rule
-!
-!           wg     - Weights of the 10-point Gauss rule
-!
-data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-   & xgk(8),xgk(9),xgk(10),xgk(11)/ &
-   & 0.9956571630258081e+00,     0.9739065285171717e+00, &
-   & 0.9301574913557082e+00,     0.8650633666889845e+00, &
-   & 0.7808177265864169e+00,     0.6794095682990244e+00, &
-   & 0.5627571346686047e+00,     0.4333953941292472e+00, &
-   & 0.2943928627014602e+00,     0.1488743389816312e+00, &
-   & 0.0000000000000000e+00/
-!
-data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-   & wgk(8),wgk(9),wgk(10),wgk(11)/ &
-   & 0.1169463886737187e-01,     0.3255816230796473e-01, &
-   & 0.5475589657435200e-01,     0.7503967481091995e-01, &
-   & 0.9312545458369761e-01,     0.1093871588022976e+00, &
-   & 0.1234919762620659e+00,     0.1347092173114733e+00, &
-   & 0.1427759385770601e+00,     0.1477391049013385e+00, &
-   & 0.1494455540029169e+00/
-!
-data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
-   & 0.6667134430868814e-01,     0.1494513491505806e+00, &
-   & 0.2190863625159820e+00,     0.2692667193099964e+00, &
-   & 0.2955242247147529e+00/
-!
-!
-!           List of major variables
-!           -----------------------
-!
-!           centr  - Mid point of the interval
-!           hlgth  - Half-length of the interval
-!           absc   - ABSCISSA
-!           FVAL*  - Function VALUE
-!           resg   - result of the 10-point Gauss formula
-!           RESK   - result of the 21-point Kronrod formula
-!           RESKH  - Approximation to the mean value of f over (a,b),
-!                    I.E. TO I/(b-a)
-!
-!
-centr = 0.5*(a + b)
-hlgth = 0.5*(b - a)
-dhlgth = abs(hlgth)
-!
-!             Check if the interval (a,b) is too short
-!
-isig = 5
-absc = abs(centr) + dhlgth*0.14
-if (absc .eq. abs(centr)) return
-!
-!           Compute the 21-point Kronrod approximation to
-!           the integral, and estimate the absolute error.
-!
-isig = 0
-resg = 0.0
-fc = f(centr)
-resk = wgk(11)*fc
-resabs = abs(resk)
-do 10 j = 1,5
-   jtw = 2*j
-   absc = hlgth*xgk(jtw)
-   fval1 = f(centr - absc)
-   fval2 = f(centr + absc)
-   fv1(jtw) = fval1
-   fv2(jtw) = fval2
-   fsum = fval1 + fval2
-   resg = resg + wg(j)*fsum
-   resk = resk + wgk(jtw)*fsum
-   resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
-10 continue
-do j = 1,5
-   jtwm1 = 2*j - 1
-   absc = hlgth*xgk(jtwm1)
-   fval1 = f(centr - absc)
-   fval2 = f(centr + absc)
-   fv1(jtwm1) = fval1
-   fv2(jtwm1) = fval2
-   fsum = fval1 + fval2
-   resk = resk + wgk(jtwm1)*fsum
-   resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
-end do
-reskh = resk*0.5
-resasc = wgk(11)*abs(fc - reskh)
-do j = 1,10
-   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + abs(fv2(j) - reskh))
-end do
-result = resk*hlgth
-resabs = resabs*dhlgth
-resasc = resasc*dhlgth
-abserr = abs((resk - resg)*hlgth)
-if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
-   & abserr = resasc*amin1(1.0, &
-   & (0.2e+03*abserr/resasc)**1.5)
-tol = epmach*0.5e+02
-if (resabs .gt. uflow/tol) abserr = amax1(abserr,tol*resabs)
-return
-end subroutine qk21f
-
-subroutine qagi (f, bound, inf, epsabs, epsrel, result, abserr, &
-   & neval, ier, limit, lenw, last, iwork, work)
-implicit none
-integer, intent(out) :: ier
-integer, intent(in) :: inf
-integer, intent(out) :: last
-integer, intent(in) :: lenw, limit
-integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(in) :: bound, epsabs, epsrel
-real, intent(out) :: result
-real :: f
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f
-integer :: l1, l2, l3
-!-----------------------------------------------------------------------
-!
-!                   Integration over infinite intervals
-!
-!-----------------------------------------------------------------------
-!
-!        Purpose
-!           the routine calculates an approximation  result  to a given
-!           integral    I = Integral of  f  over (bound,+INFINITY)
-!                    or I = Integral of  f  over (-INFINITY,bound)
-!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
-!           hopefully satisfying following claim for accuracy
-!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X T E R N A L in the driver program.
-!
-!            bound  - Real
-!                     finite bound of integration range
-!                     (has no meaning if interval is doubly-infinite)
-!
-!            inf    - INTEGER
-!                     indicating the kind of integration range
-!                     involved
-!                     inf = 1 CORRESPONDS TO  (bound,+INFINITY),
-!                     inf = -1            to  (-infinity,bound),
-!                     inf = 2             to (-infinity,+infinity).
-!
-!            epsabs - REAL
-!                     absolute accuracy requested
-!
-!            epsrel - REAL
-!                     relative accuracy requested
-!
-!         On return
-!            result - Real
-!                     approximation to the integral
-!
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!
-!            neval  - INTEGER
-!                     number of integrand evaluations
-!
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                   - ier.GT.0 abnormal termination of the routine. The
-!                             estimates for result and error are less
-!                             reliable. It is assumed that the requested
-!                             accuracy has not been achieved.
-!
-!                     ier = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more
-!                             subdivisions by increasing the value
-!                             of limit (and taking the according
-!                             dimension adjustments into account).
-!                             However, if this yields no improvement
-!                             it is advised to analyze the integrand
-!                             in order to determine the integration
-!                             difficulties. If the position of a local
-!                             difficulty can be determined (E.G.
-!                             Singularity, discontinuity within the
-!                             interval) one will probably gain from
-!                             splitting up the interval at this point
-!                             and calling the integrator on the
-!                             subranges. If possible, an appropriate
-!                             special-purpose integrator should be used,
-!                             which is designed for handling the type
-!                             of difficulty involved.
-!                         = 2 The occurrence of roundoff error is
-!                             detected, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour occurs
-!                             at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table.
-!                             It is assumed that the requested tolerance
-!                             cannot be achieved, and that the returned
-!                             result is the best which can be obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs
-!                             or epsrel is negative, limit .LT. 1,
-!                             OR lenw .LT. 4 * limit.
-!                             Result, abserr, neval, last are
-!                             set to zero.
-!
-!         Dimensioning parameters
-!            limit - Integer
-!                    dimensioning parameter for iwork
-!                    limit determines the maximum number
-!                    of subintervals in the partition of the given
-!                    INTEGRATION INTERVAL (A,B), limit.GE.1.
-!                    If limit.LT.1, the routine will end with
-!                    ier = 6.
-!
-!            lenw  - INTEGER
-!                    dimensioning parameter for work
-!                    lenw must be at least limit*4.
-!                    If lenw.LT.limit*4, the routine will end
-!                    with ier = 6.
-!
-!            last  - Integer
-!                    on return, last equals the number of
-!                    subintervals produced in the subdivision
-!                    process, which determines the number of significant
-!                    elements actually in the work arrays.
-!
-!         Work arrays
-!            iwork - INTEGER
-!                    vector of dimension at least limit, the first
-!                    K elements of which contain pointers
-!                    to the error estimates over the subintervals,
-!                    such that work(limit*3+iwork(1)),... ,
-!                    work(limit*3+iwork(K)) form a decreasing
-!                    sequence, with K = last if last.LE.(limit/2+2), and
-!                    K = limit+1-last otherwise
-!
-!            work  - Real
-!                    vector of dimension at least lenw
-!                    on return
-!                    work(1), ..., work(last) contain the left
-!                     END POINTS OF THE SUBINTERVALS IN THE
-!                     partition of (A,B),
-!                    work(limit+1), ..., work(limit+last) contain
-!                     the right end points,
-!                    work(limit*2+1), ..., work(limit*2+last)
-!                     contain the integral approximations over
-!                     the subintervals,
-!                    work(limit*3+1), ..., work(limit*3+last)
-!                     contain the error estimates.
-!
-!        Subroutines or functions needed
-!              - qagie
-!              - qk15i
-!              - qpsrt
-!              - qelg
-!              - f (user provided function)
-!              - spmpar
-!
-!-----------------------------------------------------------------------
-!
-!         Check validity of limit and lenw.
-!
-ier = 6
-neval = 0
-last = 0
-result = 0.0
-abserr = 0.0
-if (limit .lt. 1 .or. lenw .lt. limit*4) return
-!
-!         Prepare call for qagie.
-!
-l1 = limit + 1
-l2 = limit + l1
-l3 = limit + l2
-!
-call qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
-   & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
-return
-end subroutine qagi
 

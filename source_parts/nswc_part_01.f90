@@ -1,7 +1,7 @@
-integer function ipmpar (i)
+pure elemental integer function ipmpar (i)
 implicit none
 integer, intent(in) :: i
-integer :: imach(10)
+integer, parameter :: imach(10) = [integer :: 2, 31, 2147483647, 2, 24, -125, 128, 53, -1021, 1024]
 !-----------------------------------------------------------------------
 !
 !     ipmpar provides the integer machine constants for the computer
@@ -309,16 +309,6 @@ integer :: imach(10)
 !
 !     Machine constants for the IBM PC.
 !
-data imach( 1) /     2 /
-data imach( 2) /    31 /
-data imach( 3) / 2147483647 /
-data imach( 4) /     2 /
-data imach( 5) /    24 /
-data imach( 6) /  -125 /
-data imach( 7) /   128 /
-data imach( 8) /    53 /
-data imach( 9) / -1021 /
-data imach(10) /  1024 /
 !
 !     Machine constants for the Macintosh II - Absoft
 !     MACFORTRAN II.
@@ -1249,13 +1239,19 @@ d2 = b
 return
 end subroutine dstor2
 
-real function spmpar (i)
+pure elemental real function spmpar (i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m
 real :: b, binv, bm1, one, w, z
-integer :: ipmpar
 integer :: emin, emax
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !     spmpar provides the single precision machine constants for
@@ -1307,13 +1303,19 @@ spmpar = ((w * z) * b) * b
 return
 end function spmpar
 
-double precision function dpmpar (i)
+pure elemental double precision function dpmpar (i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m
-integer :: ipmpar
 integer :: emin, emax
 double precision :: b, binv, bm1, one, w, z
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !     dpmpar provides the double precision machine constants for
@@ -1365,13 +1367,19 @@ dpmpar = ((w * z) * b) * b
 return
 end function dpmpar
 
-real function epsln (l)
+pure real function epsln (l)
 implicit none
 integer, intent(in) :: l
 integer :: m
-integer :: ipmpar
 integer :: b
 real :: lnb
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.0 + eps .GT. 1.0 .  l is a dummy argument.
@@ -1394,12 +1402,18 @@ epsln = m * lnb
 return
 end function epsln
 
-double precision function depsln (l)
+pure elemental double precision function depsln (l)
 implicit none
 integer, intent(in) :: l
-integer :: ipmpar
 integer :: b
 double precision :: db, lnb, m
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.D0 + eps .GT. 1.D0 .  l is a dummy argument.
@@ -1423,13 +1437,19 @@ depsln = m * lnb
 return
 end function depsln
 
-real function exparg (l)
+pure elemental real function exparg (l)
 implicit none
 integer, intent(in) :: l
 integer :: m
-integer :: ipmpar
 integer :: b
 real :: lnb
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !--------------------------------------------------------------------
 !     If l = 0 Then  exparg(l) = The largest positive W for which
 !     exp(W) can be computed.
@@ -1461,13 +1481,19 @@ exparg = 0.99999 * (m * lnb)
 return
 end function exparg
 
-double precision function dxparg (l)
+pure elemental double precision function dxparg (l)
 implicit none
 integer, intent(in) :: l
 integer :: m
-integer :: ipmpar
 integer :: b
 double precision :: db, lnb
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !--------------------------------------------------------------------
 !     If l = 0 Then  dxparg(l) = The largest positive W for which
 !     dexp(W) can be computed.
@@ -1500,19 +1526,18 @@ dxparg = 0.999999999999d+00 * (m * lnb)
 return
 end function dxparg
 
-subroutine ishell (a, n)
+pure subroutine ishell (a, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-integer :: k(10), s
+integer :: s
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1549,20 +1574,18 @@ do 40 ii = 1,imax
 return
 end subroutine ishell
 
-subroutine shell (a, n)
+pure subroutine shell (a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1599,21 +1622,19 @@ do 40 ii = 1,imax
 return
 end subroutine shell
 
-subroutine shell2 (a, b, n)
+pure subroutine shell2 (a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1654,20 +1675,18 @@ do 40 ii = 1,imax
 return
 end subroutine shell2
 
-subroutine rsort (a, n)
+pure subroutine rsort (a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1704,7 +1723,7 @@ do 40 ii = 1,imax
 return
 end subroutine rsort
 
-subroutine risort (a, m, n)
+pure subroutine risort (a, m, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
@@ -1712,15 +1731,13 @@ integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 integer :: t
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on m that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1761,21 +1778,19 @@ do 40 ii = 1,imax
 return
 end subroutine risort
 
-subroutine rrsort (a, b, n)
+pure subroutine rrsort (a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1816,20 +1831,18 @@ do 40 ii = 1,imax
 return
 end subroutine rrsort
 
-subroutine dsort (a, n)
+pure subroutine dsort (a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1866,7 +1879,7 @@ do 40 ii = 1,imax
 return
 end subroutine dsort
 
-subroutine disort (a, m, n)
+pure subroutine disort (a, m, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
@@ -1874,15 +1887,13 @@ integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
 integer :: t
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on m that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1923,21 +1934,19 @@ do 40 ii = 1,imax
 return
 end subroutine disort
 
-subroutine ddsort (a, b, n)
+pure subroutine ddsort (a, b, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s, t
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -1978,21 +1987,19 @@ do 40 ii = 1,imax
 return
 end subroutine ddsort
 
-subroutine aord (a, n)
+pure subroutine aord (a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The aord sorting procedure is used to reorder the elements of
 !     a so that abs(a(i)) .LE. abs(a(i+1)) for i = 1,...,n-1. It is
 !     assumed that n .GE. 1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -2029,21 +2036,19 @@ do 40 ii = 1,imax
 return
 end subroutine aord
 
-subroutine daord (a, n)
+pure subroutine daord (a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
-integer :: k(10)
+integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     daord is used to reorder the elements of the double precision
 !     array a so that dabs(a(i)) .LE. dabs(a(i+1)) for i = 1,...,n-1.
 !     It is assumed that n .GE. 1.
 !-----------------------------------------------------------------------
 !------------------------
-data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
-   & k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             Selection of the increments k(i) = (3**i-1)/2
@@ -3097,7 +3102,7 @@ cdiv = cmplx(u,v)
 return
 end function cdiv
 
-subroutine cdivid (ar,ai,br,bi,cr,ci)
+pure elemental subroutine cdivid (ar,ai,br,bi,cr,ci)
 implicit none
 !-----------------------------------------------------------------------
 !     Double precision complex division C = A/B avoiding overflow
@@ -3105,7 +3110,13 @@ implicit none
 double precision, intent(in) :: ar, ai, br, bi
 double precision, intent(inout) :: cr, ci
 double precision :: d, t, u, v
-double precision :: dpmpar
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !
 if (dabs(br) .le. dabs(bi)) go to 10
 t = bi/br
@@ -3387,8 +3398,8 @@ subroutine rot3 (a, theta)
 implicit none
 real :: a(3,3)
 real, intent(inout) :: theta(3)
-real :: pihalf, r, t, u, v
-data pihalf/1.5707963267949/
+real :: r, t, u, v
+real, parameter :: pihalf = 1.5707963267949
 !     --------------------
 if (abs(a(1,1)) .gt. abs(a(2,1))) go to 10
 if (a(2,1) .ne. 0.0) go to 11
@@ -3474,13 +3485,21 @@ sx = 0.
 return
 end subroutine constr
 
-real function ang (n, x, y)
+pure real function ang (n, x, y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x(n), y(n)
 integer :: i
 real :: d, rx, ry
-real :: snrm2
+interface
+   pure function snrm2(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: snrm2
+   end function snrm2
+end interface
 !-----------------------------------------------------------------------
 !           Computation of the angle between two vectors
 !-----------------------------------------------------------------------
@@ -3512,17 +3531,20 @@ return
 return
 end function ang
 
-real function sin0 (x)
+pure elemental real function sin0 (x)
 implicit none
 real, intent(in) :: x
-real :: a0, a1, a2, a3, a4, a5, a6, t
+real :: t
+real, parameter :: a0 = .157079632679490e+01
+real, parameter :: a1 = -.645964097506244e+00
+real, parameter :: a2 = .796926262460396e-01
+real, parameter :: a3 = -.468175413228242e-02
+real, parameter :: a4 = .160441150291651e-03
+real, parameter :: a5 = -.359864175444606e-05
+real, parameter :: a6 = .563372101191893e-07
 !-----------------------------------------------------------------------
 !          Computation of sin(x*PI/2) for abs(x) .LE. 0.5
 !-----------------------------------------------------------------------
-data a0 /.157079632679490e+01/, a1 /-.645964097506244e+00/, &
-   & a2 /.796926262460396e-01/, a3 /-.468175413228242e-02/, &
-   & a4 /.160441150291651e-03/, a5 /-.359864175444606e-05/, &
-   & a6 /.563372101191893e-07/
 !------------------------
 t = x*x
 sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
@@ -3530,38 +3552,53 @@ sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 return
 end function sin0
 
-real function cos0 (x)
+pure elemental real function cos0 (x)
 implicit none
 real, intent(in) :: x
-real :: a1, a2, a3, a4, a5, a6, t
+real :: t
+real, parameter :: a1 = -.123370055013615e+01
+real, parameter :: a2 = .253669507899753e+00
+real, parameter :: a3 = -.208634807330586e-01
+real, parameter :: a4 = .919259935580283e-03
+real, parameter :: a5 = -.252000841382533e-04
+real, parameter :: a6 = .465461768260405e-06
 !-----------------------------------------------------------------------
 !          Computation of cos(x*PI/2) for abs(x) .LE. 0.5
 !-----------------------------------------------------------------------
-data a1 /-.123370055013615e+01/, a2 /.253669507899753e+00/, &
-   & a3 /-.208634807330586e-01/, a4 /.919259935580283e-03/, &
-   & a5 /-.252000841382533e-04/, a6 /.465461768260405e-06/
 !------------------------
 t = x*x
 cos0 = (((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t + a1)*t + 1.0
 return
 end function cos0
 
-real function sin1 (x)
+pure elemental real function sin1 (x)
 implicit none
 real, intent(in) :: x
 integer :: max, n
-real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
-integer :: ipmpar
+real :: a, t
+real, parameter :: a0 = .314159265358979e+01
+real, parameter :: a1 = -.516771278004995e+01
+real, parameter :: a2 = .255016403987327e+01
+real, parameter :: a3 = -.599264528932149e+00
+real, parameter :: a4 = .821458689493251e-01
+real, parameter :: a5 = -.737001831310553e-02
+real, parameter :: a6 = .461514425296398e-03
+real, parameter :: b1 = -.493480220054460e+01
+real, parameter :: b2 = .405871212639605e+01
+real, parameter :: b3 = -.133526276691575e+01
+real, parameter :: b4 = .235330543508553e+00
+real, parameter :: b5 = -.258048861575714e-01
+real, parameter :: b6 = .190653140279462e-02
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !                   Evaluation  of sin(x*PI)
 !-----------------------------------------------------------------------
-data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
-   & a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
-   & a4 /.821458689493251e-01/, a5 /-.737001831310553e-02/, &
-   & a6 /.461514425296398e-03/
-data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
-   & b3 /-.133526276691575e+01/, b4 /.235330543508553e+00/, &
-   & b5 /-.258048861575714e-01/, b6 /.190653140279462e-02/
 !------------------------
 !
 !     ****** max is a machine dependent constant. Max is the
@@ -3602,22 +3639,34 @@ if (mod(n,2) .ne. 0) sin1 = - sin1
 return
 end function sin1
 
-real function cos1 (x)
+pure elemental real function cos1 (x)
 implicit none
 real, intent(in) :: x
 integer :: max, n
-real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
-integer :: ipmpar
+real :: a, t
+real, parameter :: a0 = .314159265358979e+01
+real, parameter :: a1 = -.516771278004995e+01
+real, parameter :: a2 = .255016403987327e+01
+real, parameter :: a3 = -.599264528932149e+00
+real, parameter :: a4 = .821458689493251e-01
+real, parameter :: a5 = -.737001831310553e-02
+real, parameter :: a6 = .461514425296398e-03
+real, parameter :: b1 = -.493480220054460e+01
+real, parameter :: b2 = .405871212639605e+01
+real, parameter :: b3 = -.133526276691575e+01
+real, parameter :: b4 = .235330543508553e+00
+real, parameter :: b5 = -.258048861575714e-01
+real, parameter :: b6 = .190653140279462e-02
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !                   Evaluation  of cos(x*PI)
 !-----------------------------------------------------------------------
-data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
-   & a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
-   & a4 /.821458689493251e-01/, a5 /-.737001831310553e-02/, &
-   & a6 /.461514425296398e-03/
-data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
-   & b3 /-.133526276691575e+01/, b4 /.235330543508553e+00/, &
-   & b5 /-.258048861575714e-01/, b6 /.190653140279462e-02/
 !------------------------
 !
 !     ****** max is a machine dependent constant. Max is the
@@ -3658,16 +3707,45 @@ cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 return
 end function cos1
 
-double precision function dsin1 (x)
+pure elemental double precision function dsin1 (x)
 implicit none
 double precision, intent(in) :: x
 integer :: max, n
-integer :: ipmpar
-double precision :: a, pi, t, w
-double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
-   & a12, a13
-double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
-   & b12, b13
+double precision :: a, t, w
+double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
+double precision, parameter :: a1 = -.1028083791780141522795259479153765743002d+00
+double precision, parameter :: a2 = .3170868848763100170457042079710451905600d-02
+double precision, parameter :: a3 = -.4657026956105571623449026167864697920000d-04
+double precision, parameter :: a4 = .3989844942879455643410226655783424000000d-06
+double precision, parameter :: a5 = -.2237397227721999776371894030796800000000d-08
+double precision, parameter :: a6 = .8847045483056962709715066675200000000000d-11
+double precision, parameter :: a7 = -.2598715447506450292885585920000000000000d-13
+double precision, parameter :: a8 = .5893449774331011070033920000000000000000d-16
+double precision, parameter :: a9 = -.1062975472045522550784000000000000000000d-18
+double precision, parameter :: a10 = .1561182648301780992000000000000000000000d-21
+double precision, parameter :: a11 = -.1903193516670976000000000000000000000000d-24
+double precision, parameter :: a12 = .1956617650176000000000000000000000000000d-27
+double precision, parameter :: a13 = -.1711276032000000000000000000000000000000d-30
+double precision, parameter :: b1 = -.3084251375340424568385778437461297229882d+00
+double precision, parameter :: b2 = .1585434424381550085228521039855226435920d-01
+double precision, parameter :: b3 = -.3259918869273900136414318317506279360000d-03
+double precision, parameter :: b4 = .3590860448591510079069203991239232000000d-05
+double precision, parameter :: b5 = -.2461136950494199754009084061808640000000d-07
+double precision, parameter :: b6 = .1150115912797405152263195572224000000000d-09
+double precision, parameter :: b7 = -.3898073171259675439899172864000000000000d-12
+double precision, parameter :: b8 = .1001886461636271969091584000000000000000d-14
+double precision, parameter :: b9 = -.2019653396886572027084800000000000000000d-17
+double precision, parameter :: b10 = .3278483561466560512000000000000000000000d-20
+double precision, parameter :: b11 = -.4377345082051788800000000000000000000000d-23
+double precision, parameter :: b12 = .4891532381388800000000000000000000000000d-26
+double precision, parameter :: b13 = -.4617089843200000000000000000000000000000d-29
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !                Double precision evaluation of sin(pi*x)
@@ -3681,35 +3759,8 @@ double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
 !
 !-----------------------------------------------------------------------
 !------------------------
-data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
-data a1  /-.1028083791780141522795259479153765743002d+00/, &
-   & a2  / .3170868848763100170457042079710451905600d-02/, &
-   & a3  /-.4657026956105571623449026167864697920000d-04/, &
-   & a4  / .3989844942879455643410226655783424000000d-06/, &
-   & a5  /-.2237397227721999776371894030796800000000d-08/, &
-   & a6  / .8847045483056962709715066675200000000000d-11/, &
-   & a7  /-.2598715447506450292885585920000000000000d-13/, &
-   & a8  / .5893449774331011070033920000000000000000d-16/, &
-   & a9  /-.1062975472045522550784000000000000000000d-18/, &
-   & a10 / .1561182648301780992000000000000000000000d-21/, &
-   & a11 /-.1903193516670976000000000000000000000000d-24/, &
-   & a12 / .1956617650176000000000000000000000000000d-27/, &
-   & a13 /-.1711276032000000000000000000000000000000d-30/
 !------------------------
-data b1  /-.3084251375340424568385778437461297229882d+00/, &
-   & b2  / .1585434424381550085228521039855226435920d-01/, &
-   & b3  /-.3259918869273900136414318317506279360000d-03/, &
-   & b4  / .3590860448591510079069203991239232000000d-05/, &
-   & b5  /-.2461136950494199754009084061808640000000d-07/, &
-   & b6  / .1150115912797405152263195572224000000000d-09/, &
-   & b7  /-.3898073171259675439899172864000000000000d-12/, &
-   & b8  / .1001886461636271969091584000000000000000d-14/, &
-   & b9  /-.2019653396886572027084800000000000000000d-17/, &
-   & b10 / .3278483561466560512000000000000000000000d-20/, &
-   & b11 /-.4377345082051788800000000000000000000000d-23/, &
-   & b12 / .4891532381388800000000000000000000000000d-26/, &
-   & b13 /-.4617089843200000000000000000000000000000d-29/
 !------------------------
 !
 !     ****** max is a machine dependent constant. Max is the
@@ -3755,16 +3806,45 @@ if (mod(n,2) .ne. 0) dsin1 = - dsin1
 return
 end function dsin1
 
-double precision function dcos1 (x)
+pure elemental double precision function dcos1 (x)
 implicit none
 double precision, intent(in) :: x
 integer :: max, n
-integer :: ipmpar
-double precision :: a, pi, t, w
-double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
-   & a12, a13
-double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
-   & b12, b13
+double precision :: a, t, w
+double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
+double precision, parameter :: a1 = -.1028083791780141522795259479153765743002d+00
+double precision, parameter :: a2 = .3170868848763100170457042079710451905600d-02
+double precision, parameter :: a3 = -.4657026956105571623449026167864697920000d-04
+double precision, parameter :: a4 = .3989844942879455643410226655783424000000d-06
+double precision, parameter :: a5 = -.2237397227721999776371894030796800000000d-08
+double precision, parameter :: a6 = .8847045483056962709715066675200000000000d-11
+double precision, parameter :: a7 = -.2598715447506450292885585920000000000000d-13
+double precision, parameter :: a8 = .5893449774331011070033920000000000000000d-16
+double precision, parameter :: a9 = -.1062975472045522550784000000000000000000d-18
+double precision, parameter :: a10 = .1561182648301780992000000000000000000000d-21
+double precision, parameter :: a11 = -.1903193516670976000000000000000000000000d-24
+double precision, parameter :: a12 = .1956617650176000000000000000000000000000d-27
+double precision, parameter :: a13 = -.1711276032000000000000000000000000000000d-30
+double precision, parameter :: b1 = -.3084251375340424568385778437461297229882d+00
+double precision, parameter :: b2 = .1585434424381550085228521039855226435920d-01
+double precision, parameter :: b3 = -.3259918869273900136414318317506279360000d-03
+double precision, parameter :: b4 = .3590860448591510079069203991239232000000d-05
+double precision, parameter :: b5 = -.2461136950494199754009084061808640000000d-07
+double precision, parameter :: b6 = .1150115912797405152263195572224000000000d-09
+double precision, parameter :: b7 = -.3898073171259675439899172864000000000000d-12
+double precision, parameter :: b8 = .1001886461636271969091584000000000000000d-14
+double precision, parameter :: b9 = -.2019653396886572027084800000000000000000d-17
+double precision, parameter :: b10 = .3278483561466560512000000000000000000000d-20
+double precision, parameter :: b11 = -.4377345082051788800000000000000000000000d-23
+double precision, parameter :: b12 = .4891532381388800000000000000000000000000d-26
+double precision, parameter :: b13 = -.4617089843200000000000000000000000000000d-29
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !                Double precision evaluation of cos(pi*x)
@@ -3778,35 +3858,8 @@ double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
 !
 !-----------------------------------------------------------------------
 !------------------------
-data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
-data a1  /-.1028083791780141522795259479153765743002d+00/, &
-   & a2  / .3170868848763100170457042079710451905600d-02/, &
-   & a3  /-.4657026956105571623449026167864697920000d-04/, &
-   & a4  / .3989844942879455643410226655783424000000d-06/, &
-   & a5  /-.2237397227721999776371894030796800000000d-08/, &
-   & a6  / .8847045483056962709715066675200000000000d-11/, &
-   & a7  /-.2598715447506450292885585920000000000000d-13/, &
-   & a8  / .5893449774331011070033920000000000000000d-16/, &
-   & a9  /-.1062975472045522550784000000000000000000d-18/, &
-   & a10 / .1561182648301780992000000000000000000000d-21/, &
-   & a11 /-.1903193516670976000000000000000000000000d-24/, &
-   & a12 / .1956617650176000000000000000000000000000d-27/, &
-   & a13 /-.1711276032000000000000000000000000000000d-30/
 !------------------------
-data b1  /-.3084251375340424568385778437461297229882d+00/, &
-   & b2  / .1585434424381550085228521039855226435920d-01/, &
-   & b3  /-.3259918869273900136414318317506279360000d-03/, &
-   & b4  / .3590860448591510079069203991239232000000d-05/, &
-   & b5  /-.2461136950494199754009084061808640000000d-07/, &
-   & b6  / .1150115912797405152263195572224000000000d-09/, &
-   & b7  /-.3898073171259675439899172864000000000000d-12/, &
-   & b8  / .1001886461636271969091584000000000000000d-14/, &
-   & b9  /-.2019653396886572027084800000000000000000d-17/, &
-   & b10 / .3278483561466560512000000000000000000000d-20/, &
-   & b11 /-.4377345082051788800000000000000000000000d-23/, &
-   & b12 / .4891532381388800000000000000000000000000d-26/, &
-   & b13 /-.4617089843200000000000000000000000000000d-29/
 !------------------------
 !
 !     ****** max is a machine dependent constant. Max is the
@@ -3852,14 +3905,32 @@ dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
 return
 end function dcos1
 
-subroutine snhcsh (sinhm,coshm,x,isw)
+pure elemental subroutine snhcsh (sinhm,coshm,x,isw)
 implicit none
 integer, intent(in) :: isw
 real, intent(inout) :: sinhm, coshm
 real, intent(in) :: x
-real :: ax, cp1, cp2, cp3, cp4, cp5, cq1, expx, sp1, sp2, sp3, &
-   & sp4, sp5, sq1, xs, xx, zp1, zp2, zp3, zq1, zq2, zq3, zq4
-real :: cut(5)
+real :: ax, expx, xs, xx
+real, parameter :: sp5 = .255251817302048e-09
+real, parameter :: sp4 = .723809046696880e-07
+real, parameter :: sp3 = .109233297700241e-04
+real, parameter :: sp2 = .954811583154274e-03
+real, parameter :: sp1 = .452867078563929e-01
+real, parameter :: sq1 = -.471329214363072e-02
+real, parameter :: cp5 = .116744361560051e-08
+real, parameter :: cp4 = .280407224259429e-06
+real, parameter :: cp3 = .344417983443219e-04
+real, parameter :: cp2 = .232293648552398e-02
+real, parameter :: cp1 = .778752378267155e-01
+real, parameter :: cq1 = -.545809550662099e-02
+real, parameter :: zp3 = 5.59297116264720e-07
+real, parameter :: zp2 = 1.77943488030894e-04
+real, parameter :: zp1 = 1.69800461894792e-02
+real, parameter :: zq4 = 1.33412535492375e-09
+real, parameter :: zq3 = -5.80858944138663e-07
+real, parameter :: zq2 = 1.27814964403863e-04
+real, parameter :: zq1 = -1.63532871439181e-02
+real, parameter :: cut(5) = [real :: 1.65, 1.2, 1.2, 2.7, 1.65]
 !
 !
 !                      From the spline under tension package
@@ -3901,27 +3972,6 @@ real :: cut(5)
 !
 !-----------------------------------------------------------
 !
-data sp5/.255251817302048e-09/, &
-   & sp4/.723809046696880e-07/, &
-   & sp3/.109233297700241e-04/, &
-   & sp2/.954811583154274e-03/, &
-   & sp1/.452867078563929e-01/, &
-   & sq1/-.471329214363072e-02/
-data cp5/.116744361560051e-08/, &
-   & cp4/.280407224259429e-06/, &
-   & cp3/.344417983443219e-04/, &
-   & cp2/.232293648552398e-02/, &
-   & cp1/.778752378267155e-01/, &
-   & cq1/-.545809550662099e-02/
-data zp3/5.59297116264720e-07/, &
-   & zp2/1.77943488030894e-04/, &
-   & zp1/1.69800461894792e-02/, &
-   & zq4/1.33412535492375e-09/, &
-   & zq3/-5.80858944138663e-07/, &
-   & zq2/1.27814964403863e-04/, &
-   & zq1/-1.63532871439181e-02/
-data cut(1)/1.65/, cut(2)/1.2/, cut(3)/1.2/, cut(4)/2.7/, &
-   & cut(5)/1.65/
 !
 xx = x
 ax = abs(xx)
@@ -4013,16 +4063,19 @@ desum = dexp(w)*dexp(x)
 return
 end function desum
 
-real function rexp (x)
+pure elemental real function rexp (x)
 implicit none
 real, intent(in) :: x
-real :: e, p1, p2, q1, q2, q3, q4
+real :: e
+real, parameter :: p1 = .914041914819518e-09
+real, parameter :: p2 = .238082361044469e-01
+real, parameter :: q1 = -.499999999085958e+00
+real, parameter :: q2 = .107141568980644e+00
+real, parameter :: q3 = -.119041179760821e-01
+real, parameter :: q4 = .595130811860248e-03
 !-----------------------------------------------------------------------
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
-data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
-   & q1/-.499999999085958e+00/, q2/ .107141568980644e+00/, &
-   & q3/-.119041179760821e-01/, q4/ .595130811860248e-03/
 !-----------------------
 if (abs(x) .gt. 0.15) go to 10
 rexp = x*(((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
@@ -4040,33 +4093,31 @@ return
 return
 end function rexp
 
-double precision function drexp (x)
+pure elemental double precision function drexp (x)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: e, w, z
-double precision :: a0, a1, a2, a3, a4, b1, b2, b3, b4
-double precision :: c1, c2, c3, c4, c5
+double precision, parameter :: a0 = .248015873015873015873016d-04
+double precision, parameter :: a1 = -.344452080605731005808147d-05
+double precision, parameter :: a2 = .206664230430046597475413d-06
+double precision, parameter :: a3 = -.447300111094328162971036d-08
+double precision, parameter :: a4 = .114734027080634968083920d-11
+double precision, parameter :: b1 = -.249994190011341852652396d+00
+double precision, parameter :: b2 = .249987228833107957725728d-01
+double precision, parameter :: b3 = -.119037506846942249362528d-02
+double precision, parameter :: b4 = .228908693387350391768682d-04
+double precision, parameter :: c1 = .1666666666666666666666666666666667d+00
+double precision, parameter :: c2 = .4166666666666666666666666666666667d-01
+double precision, parameter :: c3 = .8333333333333333333333333333333333d-02
+double precision, parameter :: c4 = .1388888888888888888888888888888889d-02
+double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
 !---------------------------
-data a0/ .248015873015873015873016d-04/, &
-   & a1/-.344452080605731005808147d-05/, &
-   & a2/ .206664230430046597475413d-06/, &
-   & a3/-.447300111094328162971036d-08/, &
-   & a4/ .114734027080634968083920d-11/
-data b1/-.249994190011341852652396d+00/, &
-   & b2/ .249987228833107957725728d-01/, &
-   & b3/-.119037506846942249362528d-02/, &
-   & b4/ .228908693387350391768682d-04/
 !---------------------------
 !     ci = 1/factorial(i + 2)
 !---------------------------
-data c1 / .1666666666666666666666666666666667d+00/, &
-   & c2 / .4166666666666666666666666666666667d-01/, &
-   & c3 / .8333333333333333333333333333333333d-02/, &
-   & c4 / .1388888888888888888888888888888889d-02/, &
-   & c5 / .1984126984126984126984126984126984d-03/
 !---------------------------
 if (dabs(x) .gt. 0.15d0) go to 10
 !
@@ -4098,11 +4149,16 @@ return
 return
 end function drexp
 
-subroutine rexp1 (x, e, w)
+pure elemental subroutine rexp1 (x, e, w)
 implicit none
 real, intent(inout) :: e, w
 real, intent(in) :: x
-real :: p1, p2, q1, q2, q3, q4
+real, parameter :: p1 = .914041914819518e-09
+real, parameter :: p2 = .238082361044469e-01
+real, parameter :: q1 = -.499999999085958e+00
+real, parameter :: q2 = .107141568980644e+00
+real, parameter :: q3 = -.119041179760821e-01
+real, parameter :: q4 = .595130811860248e-03
 !-----------------------------------------------------------------------
 !
 !                  Evaluation of w = (exp(x) - 1)/x
@@ -4112,9 +4168,6 @@ real :: p1, p2, q1, q2, q3, q4
 !     then e is set to exp(x) when this value is needed.
 !
 !-----------------------------------------------------------------------
-data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
-   & q1/-.499999999085958e+00/, q2/ .107141568980644e+00/, &
-   & q3/-.119041179760821e-01/, q4/ .595130811860248e-03/
 !-----------------------
 if (abs(x) .gt. 0.15) go to 10
 w = ((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
@@ -4133,7 +4186,7 @@ return
 return
 end subroutine rexp1
 
-subroutine drexp1 (x, e, w)
+pure elemental subroutine drexp1 (x, e, w)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4148,26 +4201,24 @@ double precision, intent(in) :: x
 double precision, intent(inout) :: e
 double precision, intent(out) :: w
 double precision :: z
-double precision :: a0, a1, a2, a3, a4, b1, b2, b3, b4
-double precision :: c1, c2, c3, c4, c5
+double precision, parameter :: a0 = .248015873015873015873016d-04
+double precision, parameter :: a1 = -.344452080605731005808147d-05
+double precision, parameter :: a2 = .206664230430046597475413d-06
+double precision, parameter :: a3 = -.447300111094328162971036d-08
+double precision, parameter :: a4 = .114734027080634968083920d-11
+double precision, parameter :: b1 = -.249994190011341852652396d+00
+double precision, parameter :: b2 = .249987228833107957725728d-01
+double precision, parameter :: b3 = -.119037506846942249362528d-02
+double precision, parameter :: b4 = .228908693387350391768682d-04
+double precision, parameter :: c1 = .1666666666666666666666666666666667d+00
+double precision, parameter :: c2 = .4166666666666666666666666666666667d-01
+double precision, parameter :: c3 = .8333333333333333333333333333333333d-02
+double precision, parameter :: c4 = .1388888888888888888888888888888889d-02
+double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
 !---------------------------
-data a0/ .248015873015873015873016d-04/, &
-   & a1/-.344452080605731005808147d-05/, &
-   & a2/ .206664230430046597475413d-06/, &
-   & a3/-.447300111094328162971036d-08/, &
-   & a4/ .114734027080634968083920d-11/
-data b1/-.249994190011341852652396d+00/, &
-   & b2/ .249987228833107957725728d-01/, &
-   & b3/-.119037506846942249362528d-02/, &
-   & b4/ .228908693387350391768682d-04/
 !---------------------------
 !     ci = 1/factorial(i + 2)
 !---------------------------
-data c1 / .1666666666666666666666666666666667d+00/, &
-   & c2 / .4166666666666666666666666666666667d-01/, &
-   & c3 / .8333333333333333333333333333333333d-02/, &
-   & c4 / .1388888888888888888888888888888889d-02/, &
-   & c5 / .1984126984126984126984126984126984d-03/
 !---------------------------
 w = 1.d0
 if (dabs(x) .lt. 1.d-33) return
@@ -4201,17 +4252,19 @@ return
 return
 end subroutine drexp1
 
-real function alnrel(a)
+pure elemental real function alnrel(a)
 implicit none
 real, intent(in) :: a
-real :: p1, p2, p3, q1, q2, q3, t, t2, w, x
+real :: t, t2, w, x
+real, parameter :: p1 = -.129418923021993e+01
+real, parameter :: p2 = .405303492862024e+00
+real, parameter :: p3 = -.178874546012214e-01
+real, parameter :: q1 = -.162752256355323e+01
+real, parameter :: q2 = .747811014037616e+00
+real, parameter :: q3 = -.845104217945565e-01
 !-----------------------------------------------------------------------
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
-data p1/-.129418923021993e+01/, p2/.405303492862024e+00/, &
-   & p3/-.178874546012214e-01/
-data q1/-.162752256355323e+01/, q2/.747811014037616e+00/, &
-   & q3/-.845104217945565e-01/
 !--------------------------
 if (abs(a) .gt. 0.375) go to 10
 t = a/(a + 2.0)
@@ -4227,32 +4280,30 @@ alnrel = alog(x)
 return
 end function alnrel
 
-double precision function dlnrel (a)
+pure elemental double precision function dlnrel (a)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: t, t2, w, z
-double precision :: p0, p1, p2, p3, q1, q2, q3, q4
-double precision :: c1, c2, c3, c4, c5
+double precision, parameter :: p0 = .7692307692307692307680d-01
+double precision, parameter :: p1 = -.1505958055914600184836d+00
+double precision, parameter :: p2 = .9302355725278521726994d-01
+double precision, parameter :: p3 = -.1787900022182327735804d-01
+double precision, parameter :: q1 = -.2824412139355646910683d+01
+double precision, parameter :: q2 = .2892424216041495392509d+01
+double precision, parameter :: q3 = -.1263560605948009364422d+01
+double precision, parameter :: q4 = .1966769435894561313526d+00
+double precision, parameter :: c1 = .3333333333333333333333333333333d+00
+double precision, parameter :: c2 = .2000000000000000000000000000000d+00
+double precision, parameter :: c3 = .1428571428571428571428571428571d+00
+double precision, parameter :: c4 = .1111111111111111111111111111111d+00
+double precision, parameter :: c5 = .9090909090909090909090909090909d-01
 !-------------------------
-data p0 / .7692307692307692307680d-01/, &
-   & p1 /-.1505958055914600184836d+00/, &
-   & p2 / .9302355725278521726994d-01/, &
-   & p3 /-.1787900022182327735804d-01/
-data q1 /-.2824412139355646910683d+01/, &
-   & q2 / .2892424216041495392509d+01/, &
-   & q3 /-.1263560605948009364422d+01/, &
-   & q4 / .1966769435894561313526d+00/
 !-------------------------
 !     ci = 1/(2i + 1)
 !-------------------------
-data c1 /.3333333333333333333333333333333d+00/, &
-   & c2 /.2000000000000000000000000000000d+00/, &
-   & c3 /.1428571428571428571428571428571d+00/, &
-   & c4 /.1111111111111111111111111111111d+00/, &
-   & c5 /.9090909090909090909090909090909d-01/
 !-------------------------
 if (dabs(a) .lt. 0.375d0) go to 10
 t = 1.d0 + a
@@ -4280,22 +4331,24 @@ dlnrel = 2.d0*t*(1.d0 + t2*z)
 return
 end function dlnrel
 
-real function rlog(x)
+pure elemental real function rlog(x)
 implicit none
 real, intent(in) :: x
-real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
+real :: r, t, u, up2, w, w1
+real, parameter :: a = .566749439387324e-01
+real, parameter :: b = .456512608815524e-01
+real, parameter :: p0 = .333333333333333e+00
+real, parameter :: p1 = -.224696413112536e+00
+real, parameter :: p2 = .620886815375787e-02
+real, parameter :: q1 = -.127408923933623e+01
+real, parameter :: q2 = .354508718369557e+00
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - 1 - LN(x)
 !-----------------------------------------------------------------------
 !     a = rlog (0.7)
 !     b = rlog (4/3)
 !------------------------
-data a/.566749439387324e-01/
-data b/.456512608815524e-01/
 !------------------------
-data p0/ .333333333333333e+00/, p1/-.224696413112536e+00/, &
-   & p2/ .620886815375787e-02/
-data q1/-.127408923933623e+01/, q2/ .354508718369557e+00/
 !------------------------
 if (x .lt. 0.61 .or. x .gt. 1.57) go to 100
 if (x .lt. 0.82) go to 10
@@ -4332,22 +4385,24 @@ rlog = r - alog(x)
 return
 end function rlog
 
-real function rlog1(x)
+pure elemental real function rlog1(x)
 implicit none
 real, intent(in) :: x
-real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
+real :: r, t, u, up2, w, w1
+real, parameter :: a = .566749439387324e-01
+real, parameter :: b = .456512608815524e-01
+real, parameter :: p0 = .333333333333333e+00
+real, parameter :: p1 = -.224696413112536e+00
+real, parameter :: p2 = .620886815375787e-02
+real, parameter :: q1 = -.127408923933623e+01
+real, parameter :: q2 = .354508718369557e+00
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - LN(1 + x)
 !-----------------------------------------------------------------------
 !     a = rlog (0.7)
 !     b = rlog (4/3)
 !------------------------
-data a/.566749439387324e-01/
-data b/.456512608815524e-01/
 !------------------------
-data p0/ .333333333333333e+00/, p1/-.224696413112536e+00/, &
-   & p2/ .620886815375787e-02/
-data q1/-.127408923933623e+01/, q2/ .354508718369557e+00/
 !------------------------
 if (x .lt. -0.39 .or. x .gt. 0.57) go to 100
 if (x .lt. -0.18) go to 10
@@ -4384,38 +4439,36 @@ rlog1 = x - alog(w)
 return
 end function rlog1
 
-double precision function drlog (x)
+pure elemental double precision function drlog (x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - 1 - LN(x)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: a, b, r, t, u, up2, w, w1, z
-double precision :: p0, p1, p2, p3, q1, q2, q3, q4
-double precision :: c1, c2, c3, c4, c5
+double precision :: r, t, u, up2, w, w1, z
+double precision, parameter :: a = .566749439387323789126387112411845d-01
+double precision, parameter :: b = .456512608815524058941143273395059d-01
+double precision, parameter :: p0 = .7692307692307692307680d-01
+double precision, parameter :: p1 = -.1505958055914600184836d+00
+double precision, parameter :: p2 = .9302355725278521726994d-01
+double precision, parameter :: p3 = -.1787900022182327735804d-01
+double precision, parameter :: q1 = -.2824412139355646910683d+01
+double precision, parameter :: q2 = .2892424216041495392509d+01
+double precision, parameter :: q3 = -.1263560605948009364422d+01
+double precision, parameter :: q4 = .1966769435894561313526d+00
+double precision, parameter :: c1 = .333333333333333333333333333333333d+00
+double precision, parameter :: c2 = .200000000000000000000000000000000d+00
+double precision, parameter :: c3 = .142857142857142857142857142857143d+00
+double precision, parameter :: c4 = .111111111111111111111111111111111d+00
+double precision, parameter :: c5 = .909090909090909090909090909090909d-01
 !-------------------------
 !     a = drlog (0.7)
 !     b = drlog (4/3)
 !-------------------------
-data a /.566749439387323789126387112411845d-01/
-data b /.456512608815524058941143273395059d-01/
 !-------------------------
-data p0 / .7692307692307692307680d-01/, &
-   & p1 /-.1505958055914600184836d+00/, &
-   & p2 / .9302355725278521726994d-01/, &
-   & p3 /-.1787900022182327735804d-01/
-data q1 /-.2824412139355646910683d+01/, &
-   & q2 / .2892424216041495392509d+01/, &
-   & q3 /-.1263560605948009364422d+01/, &
-   & q4 / .1966769435894561313526d+00/
 !-------------------------
 !     ci = 1/(2i + 1)
 !-------------------------
-data c1 /.333333333333333333333333333333333d+00/, &
-   & c2 /.200000000000000000000000000000000d+00/, &
-   & c3 /.142857142857142857142857142857143d+00/, &
-   & c4 /.111111111111111111111111111111111d+00/, &
-   & c5 /.909090909090909090909090909090909d-01/
 !-------------------------
 if (x .lt. 0.61d0 .or. x .gt. 1.57d0) go to 100
 if (x .lt. 0.82d0) go to 10
@@ -4464,38 +4517,36 @@ drlog = r - dlog(x)
 return
 end function drlog
 
-double precision function drlog1 (x)
+pure elemental double precision function drlog1 (x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - LN(1 + x)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: a, b, r, t, u, up2, w, w1, z
-double precision :: p0, p1, p2, p3, q1, q2, q3, q4
-double precision :: c1, c2, c3, c4, c5
+double precision :: r, t, u, up2, w, w1, z
+double precision, parameter :: a = .566749439387323789126387112411845d-01
+double precision, parameter :: b = .456512608815524058941143273395059d-01
+double precision, parameter :: p0 = .7692307692307692307680d-01
+double precision, parameter :: p1 = -.1505958055914600184836d+00
+double precision, parameter :: p2 = .9302355725278521726994d-01
+double precision, parameter :: p3 = -.1787900022182327735804d-01
+double precision, parameter :: q1 = -.2824412139355646910683d+01
+double precision, parameter :: q2 = .2892424216041495392509d+01
+double precision, parameter :: q3 = -.1263560605948009364422d+01
+double precision, parameter :: q4 = .1966769435894561313526d+00
+double precision, parameter :: c1 = .333333333333333333333333333333333d+00
+double precision, parameter :: c2 = .200000000000000000000000000000000d+00
+double precision, parameter :: c3 = .142857142857142857142857142857143d+00
+double precision, parameter :: c4 = .111111111111111111111111111111111d+00
+double precision, parameter :: c5 = .909090909090909090909090909090909d-01
 !-------------------------
 !     a = drlog (0.7)
 !     b = drlog (4/3)
 !-------------------------
-data a /.566749439387323789126387112411845d-01/
-data b /.456512608815524058941143273395059d-01/
 !-------------------------
-data p0 / .7692307692307692307680d-01/, &
-   & p1 /-.1505958055914600184836d+00/, &
-   & p2 / .9302355725278521726994d-01/, &
-   & p3 /-.1787900022182327735804d-01/
-data q1 /-.2824412139355646910683d+01/, &
-   & q2 / .2892424216041495392509d+01/, &
-   & q3 /-.1263560605948009364422d+01/, &
-   & q4 / .1966769435894561313526d+00/
 !-------------------------
 !     ci = 1/(2i + 1)
 !-------------------------
-data c1 /.333333333333333333333333333333333d+00/, &
-   & c2 /.200000000000000000000000000000000d+00/, &
-   & c3 /.142857142857142857142857142857143d+00/, &
-   & c4 /.111111111111111111111111111111111d+00/, &
-   & c5 /.909090909090909090909090909090909d-01/
 !-------------------------
 if (x .lt. -0.39d0 .or. x .gt. 0.57d0) go to 100
 if (x .lt. -0.18d0) go to 10
@@ -4544,7 +4595,7 @@ drlog1 = x - dlog(w)
 return
 end function drlog1
 
-subroutine locpt (x0, y0, x, y, n, l, m)
+pure subroutine locpt (x0, y0, x, y, n, l, m)
 implicit none
 integer, intent(inout) :: l, m
 integer, intent(in) :: n
@@ -4552,7 +4603,13 @@ real, intent(in) :: x0, y0
 real, intent(in) :: x(n), y(n)
 integer :: i, n0
 real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
-real :: spmpar
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !     Given a polygonal line connecting the vertices (x(i),y(i))
 !     (i = 1,...,n) taken in this order. It is assumed that the
@@ -4628,7 +4685,7 @@ return
 return
 end subroutine locpt
 
-subroutine pfind (a, b, x, y, n, u, v, m, num, ierr)
+pure subroutine pfind (a, b, x, y, n, u, v, m, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -4638,8 +4695,14 @@ real, intent(inout) :: u(m), v(m)
 integer :: i, ind, nm1
 real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, &
    & tmin, tol, tol0
-real :: spmpar
 real :: k, ki
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !                 Intersection of a stright line
@@ -4796,7 +4859,7 @@ return
 return
 end subroutine pfind
 
-subroutine hull (x, y, m, bx, by, k, vx, vy, n)
+pure subroutine hull (x, y, m, bx, by, k, vx, vy, n)
 implicit none
 integer, intent(inout) :: k
 integer, intent(in) :: m
@@ -4807,8 +4870,20 @@ integer :: i, ii, isav, j, j0, k0, kp1, ksav, l, lbeg, lmax, lmin, &
    & lsav, mm1, mp1, nn
 real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
    & ymax, ymin
-real :: spmpar
 logical :: ibeg
+interface
+   pure subroutine rrsort(a,b,n)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: a(n)
+      real, intent(inout) :: b(n)
+   end subroutine rrsort
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !           Obtaining the convex hull for a finite planar set
 !-----------------------------------------------------------------------
@@ -5235,8 +5310,8 @@ integer, intent(inout) :: ar(m), s(n), iwk(num)
 integer :: i, ii, np1
 integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
 interface
-   pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p,subr, &
-      & rbus,tor,jr,k,ind0)
+   pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p, &
+      & subr,rbus,tor,jr,k,ind0)
       implicit none
       integer, intent(in) :: np1
       integer, intent(in) :: n
@@ -5402,8 +5477,8 @@ interface
       integer, intent(in) :: i1
       integer, intent(in) :: k1
    end subroutine fupd
-   pure subroutine ipath(i,j,subr,rbus,ar,pr,s,n,np,i1,i2,k,jr,m,np1 &
-      & )
+   pure subroutine ipath(i,j,subr,rbus,ar,pr,s,n,np,i1,i2,k,jr, &
+      & m,np1)
       implicit none
       integer, intent(in) :: np1
       integer, intent(in) :: m
@@ -5437,7 +5512,8 @@ interface
       integer, intent(inout) :: v2(n)
       integer, intent(in) :: k1
    end subroutine iupd
-   pure subroutine rarc(ia,ib,ar,ac,pr,pc,vr,vc,k1,jj,ll,n,m,np1)
+   pure subroutine rarc(ia,ib,ar,ac,pr,pc,vr,vc,k1,jj,ll,n,m, &
+      & np1)
       implicit none
       integer, intent(in) :: np1
       integer, intent(in) :: m
@@ -6000,14 +6076,23 @@ return
 return
 end subroutine rarc
 
-subroutine cerf (mo, z, w)
+pure elemental subroutine cerf (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c, c2, dm, pm, qm, r, sn, ss, x, y
-real :: cd(18), ce(18), ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
+real :: c2, dm, pm, qm, r, sn, ss, x, y
+real :: ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
+real, parameter :: c = .564189583547756
+real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+   & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
+   & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
+   & 1.25710718314784e+1, 1.72483537216334e+1]
+real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+   & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
+   & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
+   & 2.05173509616121e-6, 2.63564823682747e-8]
 !-----------------------------------------------------------------------
 !
 !               Computation of the complex error function
@@ -6021,26 +6106,7 @@ real :: cd(18), ce(18), ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
-data c /.564189583547756/
 !------------------------
-data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
-   & cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
-   & cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
-   & cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
-   & cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
-   & cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
-   & cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
-   & cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
-   & cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
-data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
-   & ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
-   & ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
-   & ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
-   & ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
-   & ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
-   & ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
-   & ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
-   & ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
 x = real(z)
 y = aimag(z)
@@ -6157,15 +6223,23 @@ w = cmplx(ef(1),ef(2))
 return
 end subroutine cerf
 
-subroutine cerfc (mo, z, w)
+pure elemental subroutine cerfc (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c, c2, dm, pm, qm, r, sn, ss, x, y
-real :: exparg
-real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
+real :: c2, dm, pm, qm, r, sn, ss, x, y
+real :: qf(2), sm(2), sz(2), tm(2), ts(2)
+real, parameter :: c = .564189583547756
+real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+   & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
+   & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
+   & 1.25710718314784e+1, 1.72483537216334e+1]
+real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+   & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
+   & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
+   & 2.05173509616121e-6, 2.63564823682747e-8]
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -6174,6 +6248,11 @@ interface
       real, intent(inout) :: u
       real, intent(inout) :: v
    end subroutine crec
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
 end interface
 !-----------------------------------------------------------------------
 !
@@ -6188,26 +6267,7 @@ end interface
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
-data c /.564189583547756/
 !------------------------
-data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
-   & cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
-   & cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
-   & cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
-   & cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
-   & cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
-   & cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
-   & cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
-   & cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
-data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
-   & ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
-   & ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
-   & ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
-   & ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
-   & ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
-   & ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
-   & ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
-   & ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
 x = real(z)
 y = aimag(z)
@@ -6346,37 +6406,28 @@ w = cmplx(sm(1),sm(2))
 return
 end subroutine cerfc
 
-real function erf (x)
+pure elemental real function erf (x)
 implicit none
 real, intent(in) :: x
-real :: ax, bot, c, t, top, x2
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
+real :: ax, bot, t, top, x2
+real, parameter :: c = .564189583547756
+real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+   & .128379167095513e+00]
+real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+   & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
+real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+   & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
+real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+   & 2.82094791773523e-01]
+real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !             Evaluation of the real error function
 !-----------------------------------------------------------------------
 !-------------------------
-data c /.564189583547756/
 !-------------------------
-data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
-   & a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
-   & a(5) /.128379167095513e+00/
-data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
-   & b(3) /.375795757275549e+00/
 !-------------------------
-data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
-   & p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
-   & p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
-   & p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
-data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
-   & q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
-   & q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
-   & q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
-   & r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
-   & r(5) /2.82094791773523e-01/
-data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
-   & s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
 ax = abs(x)
 if (ax .gt. 0.5) go to 10
@@ -6409,39 +6460,36 @@ return
 return
 end function erf
 
-real function erfc (x)
+pure elemental real function erfc (x)
 implicit none
 real, intent(in) :: x
-real :: ax, bot, c, e, t, top
-real :: exparg
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
+real :: ax, bot, e, t, top
 double precision :: w
+real, parameter :: c = .564189583547756
+real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+   & .128379167095513e+00]
+real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+   & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
+real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+   & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
+real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+   & 2.82094791773523e-01]
+real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+interface
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+end interface
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
 !-------------------------
-data c /.564189583547756/
 !-------------------------
-data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
-   & a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
-   & a(5) /.128379167095513e+00/
-data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
-   & b(3) /.375795757275549e+00/
 !-------------------------
-data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
-   & p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
-   & p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
-   & p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
-data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
-   & q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
-   & q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
-   & q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
-   & r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
-   & r(5) /2.82094791773523e-01/
-data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
-   & s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
 !
 !                     abs(x) .LE. 0.5
@@ -6496,14 +6544,30 @@ return
 return
 end function erfc
 
-real function erfc1 (ind, x)
+pure elemental real function erfc1 (ind, x)
 implicit none
 integer, intent(in) :: ind
 real, intent(in) :: x
-real :: exparg
-real :: ax, bot, c, e, t, top
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
+real :: ax, bot, e, t, top
 double precision :: w
+real, parameter :: c = .564189583547756
+real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+   & .128379167095513e+00]
+real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+   & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
+real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+   & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
+real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+   & 2.82094791773523e-01]
+real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+interface
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+end interface
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !
@@ -6511,28 +6575,9 @@ double precision :: w
 !          erfc1(ind,x) = exp(x*x)*erfc(x)   otherwise
 !-----------------------------------------------------------------------
 !-------------------------
-data c /.564189583547756/
 !-------------------------
-data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
-   & a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
-   & a(5) /.128379167095513e+00/
-data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
-   & b(3) /.375795757275549e+00/
 !-------------------------
-data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
-   & p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
-   & p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
-   & p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
-data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
-   & q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
-   & q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
-   & q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
-   & r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
-   & r(5) /2.82094791773523e-01/
-data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
-   & s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
 !
 !                     abs(x) .LE. 0.5
@@ -6593,19 +6638,29 @@ return
 return
 end function erfc1
 
-subroutine dcerf (mo, z, w)
+pure subroutine dcerf (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1
-double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: c2, d, d2, e, eps, r, sn, tol, x, y
 double precision :: a0(2), an(2), b0(2), bn(2)
 double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
-double precision :: anorm, dpmpar
+double precision :: anorm
+double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
    pure elemental subroutine dcrec(x,y,u,v)
       implicit none
       double precision, intent(in) :: x
@@ -6613,6 +6668,17 @@ interface
       double precision, intent(inout) :: u
       double precision, intent(inout) :: v
    end subroutine dcrec
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure subroutine erfcm2(mo,z,w)
+      implicit none
+      integer, intent(in) :: mo
+      double precision, intent(in) :: z(2)
+      double precision, intent(inout) :: w(2)
+   end subroutine erfcm2
 end interface
 !-----------------------------------------------------------------------
 !
@@ -6629,7 +6695,6 @@ anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
-data c /.56418958354775628694807945156077d0/
 !------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -6884,19 +6949,29 @@ w(2) = - w(2)
 return
 end subroutine dcerf
 
-subroutine dcerfc (mo, z, w)
+pure subroutine dcerfc (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 double precision :: m, n, n2, n4, np1
-double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: c2, d, d2, e, eps, r, sn, tol, x, y
 double precision :: a0(2), an(2), b0(2), bn(2)
 double precision :: g0(2), gn(2), h0(2), hn(2)
 double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
    & wn(2)
-double precision :: anorm, dpmpar, dxparg
+double precision :: anorm
+double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
    pure elemental subroutine dcrec(x,y,u,v)
       implicit none
       double precision, intent(in) :: x
@@ -6904,6 +6979,22 @@ interface
       double precision, intent(inout) :: u
       double precision, intent(inout) :: v
    end subroutine dcrec
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure elemental function dxparg(l)
+      implicit none
+      integer, intent(in) :: l
+      double precision :: dxparg
+   end function dxparg
+   pure subroutine erfcm2(mo,z,w)
+      implicit none
+      integer, intent(in) :: mo
+      double precision, intent(in) :: z(2)
+      double precision, intent(inout) :: w(2)
+   end subroutine erfcm2
 end interface
 !-----------------------------------------------------------------------
 !
@@ -6920,7 +7011,6 @@ anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
-data c /.56418958354775628694807945156077d0/
 !------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -7180,14 +7270,49 @@ w(2) = e*dsin(sz(2)) + sm(2)
 return
 end subroutine dcerfc
 
-subroutine erfcm2 (mo, z, w)
+pure subroutine erfcm2 (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
 integer :: j, n
-double precision :: a(63), c, e, eps, h(2), t(2), tol, x, y
-double precision :: anorm, dpmpar
+double precision :: eps, h(2), t(2), tol, x, y
+double precision :: anorm
+double precision, parameter :: c = .20666985354092053857068941306585476d-01
+double precision, parameter :: e = .46777349810472658379307436327470714d-02
+double precision, parameter :: a(63) = [double precision :: .20000000000000000000000000000000000d+01, &
+   & .23333333333333333333333333333333333d+01, .16666666666666666666666666666666667d+01, .63333333333333333333333333333333333d+00, &
+   & -.22222222222222222222222222222222222d-01, -.16349206349206349206349206349206349d+00, - &
+   & .76984126984126984126984126984126984d-01, -.24250440917107583774250440917107584d-02, .12716049382716049382716049382716049d-01 &
+   & , .50208433541766875100208433541766875d-02, -.25305969750414194858639303083747528d-03, - &
+   & .78593217482106370995259884148773038d-03, -.19118154038788959423880058800693721d-03, .46324144207742091339974937858535742d-04 &
+   & , .33885549097189308829520469732109944d-04, .28637897646612243562134629672756034d-05, - &
+   & .29071891082127275370004560446169188d-05, -.89674405786490646425523560263096103d-06, .96069103941908684338469767911200105d-07 &
+   & , .99432863129093191401848891268744113d-07, .97610310501460621303387795457283579d-08, - &
+   & .65557500375673133822289344530892436d-08, -.18706782059105426900361744016236561d-08, .20329898993447386223176373714372370d-09 &
+   & , .16941915827254374668448114614201210d-09, .10619149520827430973786114446699534d-10, - &
+   & .10136148256511788733365237088810952d-10, -.21042890133669970575386166675721692d-11, .37186985840699828780916522245407087d-12 &
+   & , .17921843632701679986488128324051002d-12, -.89823991804248069863542565948598397d-16, - &
+   & .10533182313660970970232171410372199d-13, -.12340742690978398320850088252659714d-14, .44315624546581333350568244777175883d-15 &
+   & , .11584041639989442481950487524296214d-15, -.10765703619385988116658460442219647d-16, - &
+   & .70653158723054941879586082239984222d-17, -.18708903154917138727191793341667090d-18, .32549879318817103966053527398133297d-18 &
+   & , .40654116689599228385911733319215613d-19, -.11250074516817311101947327325293424d-19, - &
+   & .28923865378584966737386008432031980d-20, .23653053641701517160704870522922706d-21, .14665384680061888088099002254334292d-21, &
+   & .26971039707314316218154193225264469d-23, -.58753834789274356433279671015522650d-23, - &
+   & .59960357240498652932299485494869633d-24, .18586826578121663981412155416486531d-24, .38364131854692721721867481914852428d-25, &
+   & -.41342210492630142578080062451711039d-26, -.17646283105274988992381528904600860d-26, &
+   & .19828685934364181151988692232131608d-28, .65592252170840353572672782446212733d-28, .40626551379996340638338449938639730d-29, &
+   & -.20097984104191034713653294173834095d-29, -.28104226475997460044096389060743131d-30, &
+   & .48705319298749358709127987806547949d-31, .12664655832830787747161769929972617d-31, -.75168312488894341862391776330113688d-33 &
+   & , -.45760473722605993842481669806804415d-33, -.56725491529575395930156379514718000d-35, &
+   & .13932664042920082608489441616061541d-34, .10452448992516358449586503951463322d-35]
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !-----------------------------------------------------------------------
 !           Calculation of erfc(z) using the Taylor series
 !                          AROUND Z0 = 2
@@ -7198,72 +7323,7 @@ anorm(x,y) = dmax1(dabs(x),dabs(y))
 !     c = (2/sqrt(pi))*exp(-4)
 !     e = erfc(2)
 !------------------------------
-data c /.20666985354092053857068941306585476d-01/
-data e /.46777349810472658379307436327470714d-02/
 !------------------------------
-data a(1)  / .20000000000000000000000000000000000d+01/, &
-   & a(2)  / .23333333333333333333333333333333333d+01/, &
-   & a(3)  / .16666666666666666666666666666666667d+01/, &
-   & a(4)  / .63333333333333333333333333333333333d+00/, &
-   & a(5)  /-.22222222222222222222222222222222222d-01/, &
-   & a(6)  /-.16349206349206349206349206349206349d+00/, &
-   & a(7)  /-.76984126984126984126984126984126984d-01/, &
-   & a(8)  /-.24250440917107583774250440917107584d-02/, &
-   & a(9)  / .12716049382716049382716049382716049d-01/, &
-   & a(10) / .50208433541766875100208433541766875d-02/
-data a(11) /-.25305969750414194858639303083747528d-03/, &
-   & a(12) /-.78593217482106370995259884148773038d-03/, &
-   & a(13) /-.19118154038788959423880058800693721d-03/, &
-   & a(14) / .46324144207742091339974937858535742d-04/, &
-   & a(15) / .33885549097189308829520469732109944d-04/, &
-   & a(16) / .28637897646612243562134629672756034d-05/, &
-   & a(17) /-.29071891082127275370004560446169188d-05/, &
-   & a(18) /-.89674405786490646425523560263096103d-06/, &
-   & a(19) / .96069103941908684338469767911200105d-07/, &
-   & a(20) / .99432863129093191401848891268744113d-07/
-data a(21) / .97610310501460621303387795457283579d-08/, &
-   & a(22) /-.65557500375673133822289344530892436d-08/, &
-   & a(23) /-.18706782059105426900361744016236561d-08/, &
-   & a(24) / .20329898993447386223176373714372370d-09/, &
-   & a(25) / .16941915827254374668448114614201210d-09/, &
-   & a(26) / .10619149520827430973786114446699534d-10/, &
-   & a(27) /-.10136148256511788733365237088810952d-10/, &
-   & a(28) /-.21042890133669970575386166675721692d-11/, &
-   & a(29) / .37186985840699828780916522245407087d-12/, &
-   & a(30) / .17921843632701679986488128324051002d-12/
-data a(31) /-.89823991804248069863542565948598397d-16/, &
-   & a(32) /-.10533182313660970970232171410372199d-13/, &
-   & a(33) /-.12340742690978398320850088252659714d-14/, &
-   & a(34) / .44315624546581333350568244777175883d-15/, &
-   & a(35) / .11584041639989442481950487524296214d-15/, &
-   & a(36) /-.10765703619385988116658460442219647d-16/, &
-   & a(37) /-.70653158723054941879586082239984222d-17/, &
-   & a(38) /-.18708903154917138727191793341667090d-18/, &
-   & a(39) / .32549879318817103966053527398133297d-18/, &
-   & a(40) / .40654116689599228385911733319215613d-19/
-data a(41) /-.11250074516817311101947327325293424d-19/, &
-   & a(42) /-.28923865378584966737386008432031980d-20/, &
-   & a(43) / .23653053641701517160704870522922706d-21/, &
-   & a(44) / .14665384680061888088099002254334292d-21/, &
-   & a(45) / .26971039707314316218154193225264469d-23/, &
-   & a(46) /-.58753834789274356433279671015522650d-23/, &
-   & a(47) /-.59960357240498652932299485494869633d-24/, &
-   & a(48) / .18586826578121663981412155416486531d-24/, &
-   & a(49) / .38364131854692721721867481914852428d-25/, &
-   & a(50) /-.41342210492630142578080062451711039d-26/
-data a(51) /-.17646283105274988992381528904600860d-26/, &
-   & a(52) / .19828685934364181151988692232131608d-28/, &
-   & a(53) / .65592252170840353572672782446212733d-28/, &
-   & a(54) / .40626551379996340638338449938639730d-29/, &
-   & a(55) /-.20097984104191034713653294173834095d-29/, &
-   & a(56) /-.28104226475997460044096389060743131d-30/, &
-   & a(57) / .48705319298749358709127987806547949d-31/, &
-   & a(58) / .12664655832830787747161769929972617d-31/, &
-   & a(59) /-.75168312488894341862391776330113688d-33/, &
-   & a(60) /-.45760473722605993842481669806804415d-33/
-data a(61) /-.56725491529575395930156379514718000d-35/, &
-   & a(62) / .13932664042920082608489441616061541d-34/, &
-   & a(63) / .10452448992516358449586503951463322d-35/
 !------------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -7321,39 +7381,31 @@ w(2) = y
 return
 end subroutine erfcm2
 
-double precision function derf (x)
+pure elemental double precision function derf (x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t
 double precision :: w
-double precision :: a(21)
-double precision :: derfc0
+double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+   & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
+   & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
+   & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
+   & .1480719281587021715400818627811d-07, -.1229055530145120140800510155331d-08, .9422759058437197017313055084212d-10, - &
+   & .6711366740969385085896257227159d-11, .4463222608295664017461758843550d-12, -.2783497395542995487275065856998d-13, &
+   & .1634095572365337143933023780777d-14, -.9052845786901123985710019387938d-16, .4708274559689744439341671426731d-17, - &
+   & .2187159356685015949749948252160d-18, .7043407712019701609635599701333d-20]
+interface
+   pure elemental function derfc0(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: derfc0
+   end function derfc0
+end interface
 !-----------------------------------------------------------------------
 !        Double precision evaluation of the error function
 !-----------------------------------------------------------------------
 !-------------------------------
-data a(1)  / .1283791670955125738961589031215d+00/, &
-   & a(2)  /-.3761263890318375246320529677070d+00/, &
-   & a(3)  / .1128379167095512573896158902931d+00/, &
-   & a(4)  /-.2686617064513125175943235372542d-01/, &
-   & a(5)  / .5223977625442187842111812447877d-02/, &
-   & a(6)  /-.8548327023450852832540164081187d-03/, &
-   & a(7)  / .1205533298178966425020717182498d-03/, &
-   & a(8)  /-.1492565035840625090430728526820d-04/, &
-   & a(9)  / .1646211436588924261080723578109d-05/, &
-   & a(10) /-.1636584469123468757408968429674d-06/
-data a(11) / .1480719281587021715400818627811d-07/, &
-   & a(12) /-.1229055530145120140800510155331d-08/, &
-   & a(13) / .9422759058437197017313055084212d-10/, &
-   & a(14) /-.6711366740969385085896257227159d-11/, &
-   & a(15) / .4463222608295664017461758843550d-12/, &
-   & a(16) /-.2783497395542995487275065856998d-13/, &
-   & a(17) / .1634095572365337143933023780777d-14/, &
-   & a(18) /-.9052845786901123985710019387938d-16/, &
-   & a(19) / .4708274559689744439341671426731d-17/, &
-   & a(20) /-.2187159356685015949749948252160d-18/, &
-   & a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     dabs(x) .LE. 1
@@ -7382,38 +7434,35 @@ return
 return
 end function derf
 
-double precision function derfc (x)
+pure elemental double precision function derfc (x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t, w
-double precision :: a(21)
-double precision :: derfc0, dxparg
+double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+   & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
+   & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
+   & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
+   & .1480719281587021715400818627811d-07, -.1229055530145120140800510155331d-08, .9422759058437197017313055084212d-10, - &
+   & .6711366740969385085896257227159d-11, .4463222608295664017461758843550d-12, -.2783497395542995487275065856998d-13, &
+   & .1634095572365337143933023780777d-14, -.9052845786901123985710019387938d-16, .4708274559689744439341671426731d-17, - &
+   & .2187159356685015949749948252160d-18, .7043407712019701609635599701333d-20]
+interface
+   pure elemental function derfc0(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: derfc0
+   end function derfc0
+   pure elemental function dxparg(l)
+      implicit none
+      integer, intent(in) :: l
+      double precision :: dxparg
+   end function dxparg
+end interface
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
 !-------------------------------
-data a(1)  / .1283791670955125738961589031215d+00/, &
-   & a(2)  /-.3761263890318375246320529677070d+00/, &
-   & a(3)  / .1128379167095512573896158902931d+00/, &
-   & a(4)  /-.2686617064513125175943235372542d-01/, &
-   & a(5)  / .5223977625442187842111812447877d-02/, &
-   & a(6)  /-.8548327023450852832540164081187d-03/, &
-   & a(7)  / .1205533298178966425020717182498d-03/, &
-   & a(8)  /-.1492565035840625090430728526820d-04/, &
-   & a(9)  / .1646211436588924261080723578109d-05/, &
-   & a(10) /-.1636584469123468757408968429674d-06/
-data a(11) / .1480719281587021715400818627811d-07/, &
-   & a(12) /-.1229055530145120140800510155331d-08/, &
-   & a(13) / .9422759058437197017313055084212d-10/, &
-   & a(14) /-.6711366740969385085896257227159d-11/, &
-   & a(15) / .4463222608295664017461758843550d-12/, &
-   & a(16) /-.2783497395542995487275065856998d-13/, &
-   & a(17) / .1634095572365337143933023780777d-14/, &
-   & a(18) /-.9052845786901123985710019387938d-16/, &
-   & a(19) / .4708274559689744439341671426731d-17/, &
-   & a(20) /-.2187159356685015949749948252160d-18/, &
-   & a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     dabs(x) .LE. 1
@@ -7448,14 +7497,32 @@ derfc = dexp(-t) * derfc0(x)
 return
 end function derfc
 
-double precision function derfc1 (ind, x)
+pure elemental double precision function derfc1 (ind, x)
 implicit none
 integer, intent(in) :: ind
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t, w
-double precision :: a(21)
-double precision :: derfc0, dxparg
+double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+   & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
+   & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
+   & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
+   & .1480719281587021715400818627811d-07, -.1229055530145120140800510155331d-08, .9422759058437197017313055084212d-10, - &
+   & .6711366740969385085896257227159d-11, .4463222608295664017461758843550d-12, -.2783497395542995487275065856998d-13, &
+   & .1634095572365337143933023780777d-14, -.9052845786901123985710019387938d-16, .4708274559689744439341671426731d-17, - &
+   & .2187159356685015949749948252160d-18, .7043407712019701609635599701333d-20]
+interface
+   pure elemental function derfc0(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: derfc0
+   end function derfc0
+   pure elemental function dxparg(l)
+      implicit none
+      integer, intent(in) :: l
+      double precision :: dxparg
+   end function dxparg
+end interface
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the complementary error function
@@ -7465,27 +7532,6 @@ double precision :: derfc0, dxparg
 !
 !-----------------------------------------------------------------------
 !-------------------------------
-data a(1)  / .1283791670955125738961589031215d+00/, &
-   & a(2)  /-.3761263890318375246320529677070d+00/, &
-   & a(3)  / .1128379167095512573896158902931d+00/, &
-   & a(4)  /-.2686617064513125175943235372542d-01/, &
-   & a(5)  / .5223977625442187842111812447877d-02/, &
-   & a(6)  /-.8548327023450852832540164081187d-03/, &
-   & a(7)  / .1205533298178966425020717182498d-03/, &
-   & a(8)  /-.1492565035840625090430728526820d-04/, &
-   & a(9)  / .1646211436588924261080723578109d-05/, &
-   & a(10) /-.1636584469123468757408968429674d-06/
-data a(11) / .1480719281587021715400818627811d-07/, &
-   & a(12) /-.1229055530145120140800510155331d-08/, &
-   & a(13) / .9422759058437197017313055084212d-10/, &
-   & a(14) /-.6711366740969385085896257227159d-11/, &
-   & a(15) / .4463222608295664017461758843550d-12/, &
-   & a(16) /-.2783497395542995487275065856998d-13/, &
-   & a(17) / .1634095572365337143933023780777d-14/, &
-   & a(18) /-.9052845786901123985710019387938d-16/, &
-   & a(19) / .4708274559689744439341671426731d-17/, &
-   & a(20) /-.2187159356685015949749948252160d-18/, &
-   & a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     dabs(x) .LE. 1
@@ -7531,7 +7577,7 @@ if (ind .ne. 0) derfc1 = 2.d0*dexp(x*x)
 return
 end function derfc1
 
-double precision function derfc0 (x)
+pure elemental double precision function derfc0 (x)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -7544,105 +7590,96 @@ implicit none
 !        April 1992
 !-------------------------------
 double precision, intent(in) :: x
-double precision :: t, u, v, z, rpinv
-double precision :: p0, p1, p2, p3, p4, p5, p6, p7, q1, q2, q3, &
-   & q4, q5, q6, q7
-double precision :: r0, r1, r2, r3, r4, r5, r6, r7, r8
-double precision :: a0, a1, a2, a3, a4, a5, a6, a7, a8, b1, b2, &
-   & b3, b4, b5, b6, b7, b8, b9, b10, b11
-double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, d1, d2, &
-   & d3, d4, d5, d6, d7, d8, d9
-double precision :: e0, e1, e2, e3
-double precision :: s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11
+double precision :: t, u, v, z
+double precision, parameter :: rpinv = .56418958354775628694807945156077259d0
+double precision, parameter :: p0 = .16506148041280876191828601d-03
+double precision, parameter :: p1 = .15471455377139313353998665d-03
+double precision, parameter :: p2 = .44852548090298868465196794d-04
+double precision, parameter :: p3 = -.49177280017226285450486205d-05
+double precision, parameter :: p4 = -.69353602078656412367801676d-05
+double precision, parameter :: p5 = -.20508667787746282746857743d-05
+double precision, parameter :: p6 = -.28982842617824971177267380d-06
+double precision, parameter :: p7 = -.17272433544836633301127174d-07
+double precision, parameter :: q1 = .16272656776533322859856317d+01
+double precision, parameter :: q2 = .12040996037066026106794322d+01
+double precision, parameter :: q3 = .52400246352158386907601472d+00
+double precision, parameter :: q4 = .14497345252798672362384241d+00
+double precision, parameter :: q5 = .25592517111042546492590736d-01
+double precision, parameter :: q6 = .26869088293991371028123158d-02
+double precision, parameter :: q7 = .13133767840925681614496481d-03
+double precision, parameter :: r0 = .145589721275038539045668824025d+00
+double precision, parameter :: r1 = -.273421931495426482902320421863d+00
+double precision, parameter :: r2 = .226008066916621506788789064272d+00
+double precision, parameter :: r3 = -.163571895523923805648814425592d+00
+double precision, parameter :: r4 = .102604312032193978662297299832d+00
+double precision, parameter :: r5 = -.548023266949835519254211506880d-01
+double precision, parameter :: r6 = .241432239725390106956523668160d-01
+double precision, parameter :: r7 = -.822062115403915116036874169600d-02
+double precision, parameter :: r8 = .180296241564687154310619200000d-02
+double precision, parameter :: a0 = -.45894433406309678202825375d-03
+double precision, parameter :: a1 = -.12281298722544724287816236d-01
+double precision, parameter :: a2 = -.91144359512342900801764781d-01
+double precision, parameter :: a3 = -.28412489223839285652511367d-01
+double precision, parameter :: a4 = .14083827189977123530129812d+01
+double precision, parameter :: a5 = .11532175281537044570477189d+01
+double precision, parameter :: a6 = -.72170903389442152112483632d+01
+double precision, parameter :: a7 = -.19685597805218214001309225d+01
+double precision, parameter :: a8 = .93846891504541841150916038d+01
+double precision, parameter :: b1 = .25136329960926527692263725d+02
+double precision, parameter :: b2 = .15349442087145759184067981d+03
+double precision, parameter :: b3 = -.29971215958498680905476402d+03
+double precision, parameter :: b4 = -.33876477506888115226730368d+04
+double precision, parameter :: b5 = .28301829314924804988873701d+04
+double precision, parameter :: b6 = .22979620942196507068034887d+05
+double precision, parameter :: b7 = -.24280681522998071562462041d+05
+double precision, parameter :: b8 = -.36680620673264731899504580d+05
+double precision, parameter :: b9 = .42278731622295627627042436d+05
+double precision, parameter :: b10 = .28834257644413614344549790d+03
+double precision, parameter :: b11 = .70226293775648358646587341d+03
+double precision, parameter :: c0 = -.7040906288250128001000086d-04
+double precision, parameter :: c1 = -.3858822461760510359506941d-02
+double precision, parameter :: c2 = -.7708202127512212359395078d-01
+double precision, parameter :: c3 = -.6713655014557429480440263d+00
+double precision, parameter :: c4 = -.2081992124162995545731882d+01
+double precision, parameter :: c5 = .2898831421475282558867888d+01
+double precision, parameter :: c6 = .2199509380600429331650192d+02
+double precision, parameter :: c7 = .2907064664404115316722996d+01
+double precision, parameter :: c8 = -.4766208741588182425380950d+02
+double precision, parameter :: d1 = .5238852785508439144747174d+02
+double precision, parameter :: d2 = .9646843357714742409535148d+03
+double precision, parameter :: d3 = .7007152775135939601804416d+04
+double precision, parameter :: d4 = .8515386792259821780601162d+04
+double precision, parameter :: d5 = -.1002360095177164564992134d+06
+double precision, parameter :: d6 = -.2065250031331232815791912d+06
+double precision, parameter :: d7 = .5695324805290370358175984d+06
+double precision, parameter :: d8 = .6589752493461331195697873d+06
+double precision, parameter :: d9 = -.1192930193156561957631462d+07
+double precision, parameter :: e0 = .540464821348814822409610122136d+00
+double precision, parameter :: e1 = -.261515522487415653487049835220d-01
+double precision, parameter :: e2 = -.288573438386338758794591212600d-02
+double precision, parameter :: e3 = -.529353396945788057720258856000d-03
+double precision, parameter :: s1 = .75000000000000000000d+00
+double precision, parameter :: s2 = -.18750000000000000000d+01
+double precision, parameter :: s3 = .65625000000000000000d+01
+double precision, parameter :: s4 = -.29531250000000000000d+02
+double precision, parameter :: s5 = .16242187500000000000d+03
+double precision, parameter :: s6 = -.10557421875000000000d+04
+double precision, parameter :: s7 = .79180664062500000000d+04
+double precision, parameter :: s8 = -.67303564453125000000d+05
+double precision, parameter :: s9 = .63938386230468750000d+06
+double precision, parameter :: s10 = -.67135305541992187500d+07
+double precision, parameter :: s11 = .77205601373291015625d+08
 !-------------------------------
 !     rpinv = 1/sqrt(pi)
 !-------------------------------
-data rpinv /.56418958354775628694807945156077259d0/
 !-------------------------------
-data p0 / .16506148041280876191828601d-03/, &
-   & p1 / .15471455377139313353998665d-03/, &
-   & p2 / .44852548090298868465196794d-04/, &
-   & p3 /-.49177280017226285450486205d-05/, &
-   & p4 /-.69353602078656412367801676d-05/, &
-   & p5 /-.20508667787746282746857743d-05/, &
-   & p6 /-.28982842617824971177267380d-06/, &
-   & p7 /-.17272433544836633301127174d-07/
-data q1  /.16272656776533322859856317d+01/, &
-   & q2  /.12040996037066026106794322d+01/, &
-   & q3  /.52400246352158386907601472d+00/, &
-   & q4  /.14497345252798672362384241d+00/, &
-   & q5  /.25592517111042546492590736d-01/, &
-   & q6  /.26869088293991371028123158d-02/, &
-   & q7  /.13133767840925681614496481d-03/
 !-------------------------------
-data r0  / .145589721275038539045668824025d+00/, &
-   & r1  /-.273421931495426482902320421863d+00/, &
-   & r2  / .226008066916621506788789064272d+00/, &
-   & r3  /-.163571895523923805648814425592d+00/, &
-   & r4  / .102604312032193978662297299832d+00/, &
-   & r5  /-.548023266949835519254211506880d-01/, &
-   & r6  / .241432239725390106956523668160d-01/, &
-   & r7  /-.822062115403915116036874169600d-02/, &
-   & r8  / .180296241564687154310619200000d-02/
 !-------------------------------
-data a0 /-.45894433406309678202825375d-03/, &
-   & a1 /-.12281298722544724287816236d-01/, &
-   & a2 /-.91144359512342900801764781d-01/, &
-   & a3 /-.28412489223839285652511367d-01/, &
-   & a4 / .14083827189977123530129812d+01/, &
-   & a5 / .11532175281537044570477189d+01/, &
-   & a6 /-.72170903389442152112483632d+01/, &
-   & a7 /-.19685597805218214001309225d+01/, &
-   & a8 / .93846891504541841150916038d+01/
-data b1 / .25136329960926527692263725d+02/, &
-   & b2 / .15349442087145759184067981d+03/, &
-   & b3 /-.29971215958498680905476402d+03/, &
-   & b4 /-.33876477506888115226730368d+04/, &
-   & b5 / .28301829314924804988873701d+04/, &
-   & b6 / .22979620942196507068034887d+05/, &
-   & b7 /-.24280681522998071562462041d+05/, &
-   & b8 /-.36680620673264731899504580d+05/, &
-   & b9 / .42278731622295627627042436d+05/, &
-   & b10/ .28834257644413614344549790d+03/, &
-   & b11/ .70226293775648358646587341d+03/
 !-------------------------------
-data c0 /-.7040906288250128001000086d-04/, &
-   & c1 /-.3858822461760510359506941d-02/, &
-   & c2 /-.7708202127512212359395078d-01/, &
-   & c3 /-.6713655014557429480440263d+00/, &
-   & c4 /-.2081992124162995545731882d+01/, &
-   & c5 / .2898831421475282558867888d+01/, &
-   & c6 / .2199509380600429331650192d+02/, &
-   & c7 / .2907064664404115316722996d+01/, &
-   & c8 /-.4766208741588182425380950d+02/
-data d1 / .5238852785508439144747174d+02/, &
-   & d2 / .9646843357714742409535148d+03/, &
-   & d3 / .7007152775135939601804416d+04/, &
-   & d4 / .8515386792259821780601162d+04/, &
-   & d5 /-.1002360095177164564992134d+06/, &
-   & d6 /-.2065250031331232815791912d+06/, &
-   & d7 / .5695324805290370358175984d+06/, &
-   & d8 / .6589752493461331195697873d+06/, &
-   & d9 /-.1192930193156561957631462d+07/
 !-------------------------------
-data e0 / .540464821348814822409610122136d+00/, &
-   & e1 /-.261515522487415653487049835220d-01/, &
-   & e2 /-.288573438386338758794591212600d-02/, &
-   & e3 /-.529353396945788057720258856000d-03/
 !-------------------------------
 !     Coefficients for the asymptotic expansion
 !-------------------------------
-data s1  / .75000000000000000000d+00/, &
-   & s2  /-.18750000000000000000d+01/, &
-   & s3  / .65625000000000000000d+01/, &
-   & s4  /-.29531250000000000000d+02/, &
-   & s5  / .16242187500000000000d+03/, &
-   & s6  /-.10557421875000000000d+04/, &
-   & s7  / .79180664062500000000d+04/, &
-   & s8  /-.67303564453125000000d+05/, &
-   & s9  / .63938386230468750000d+06/, &
-   & s10 /-.67135305541992187500d+07/, &
-   & s11 / .77205601373291015625d+08/
 !-------------------------------
 !
 !                     1 .LE. x .LE. 2
@@ -7694,12 +7731,36 @@ derfc0 = rpinv*(z/x)
 return
 end function derfc0
 
-real function erfi (p, q)
+pure elemental real function erfi (p, q)
 implicit none
 real, intent(in) :: p, q
-real :: c, c1, c2, eps, s, t, v, v1
-real :: spmpar
-real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
+real :: eps, s, t, v, v1
+real, parameter :: c = .5625
+real, parameter :: c1 = .87890625
+real, parameter :: c2 = -.2302585092994046e+03
+real, parameter :: a(6) = [real :: .1400216916161353e+03, -.7204275515686407e+03, .1296708621660511e+04, -.9697932901514031e+03, &
+   & .2762427049269425e+03, -.2012940180552054e+02]
+real, parameter :: b(6) = [real :: .1291046303114685e+03, -.7312308064260973e+03, .1494970492915789e+04, -.1337793793683419e+04, &
+   & .5033747142783567e+03, -.6220205554529216e+02]
+real, parameter :: a1(7) = [real :: -.1690478046781745e+00, .3524374318100228e+01, -.2698143370550352e+02, .9340783041018743e+02, &
+   & -.1455364428646732e+03, .8805852004723659e+02, -.1349018591231947e+02]
+real, parameter :: b1(7) = [real :: -.1203221171313429e+00, .2684812231556632e+01, -.2242485268704865e+02, .8723495028643494e+02, &
+   & -.1604352408444319e+03, .1259117982101525e+03, -.3184861786248824e+02]
+real, parameter :: a2(9) = [real :: .3100808562552958e-04, .4097487603011940e-02, .1214902662897276e+00, .1109167694639028e+01, &
+   & .3228379855663924e+01, .2881691815651599e+01, .2047972087262996e+01, .8545922081972148e+00, .3551095884622383e-02]
+real, parameter :: b2(8) = [real :: .3100809298564522e-04, .4097528678663915e-02, .1215907800748757e+00, .1118627167631696e+01, &
+   & .3432363984305290e+01, .4140284677116202e+01, .4119797271272204e+01, .2162961962641435e+01]
+real, parameter :: a3(9) = [real :: .3205405422062050e-08, .1899479322632128e-05, .2814223189858532e-03, .1370504879067817e-01, &
+   & .2268143542005976e+00, .1098421959892340e+01, .6791143397056208e+00, -.834334189167721e+00, .3421951267240343e+00]
+real, parameter :: b3(6) = [real :: .3205405053282398e-08, .1899480592260143e-05, .2814349691098940e-03, .1371092249602266e-01, &
+   & .2275172815174473e+00, .1125348514036959e+01]
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !              Evaluation of the inverse error function
@@ -7717,51 +7778,18 @@ real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
 !     c2 = ln(1.e-100)
 !-----------------------------------------------------------------------
-data c /.5625/, c1 /.87890625/
-data c2 /-.2302585092994046e+03/
 !-----------------------------------------------------------------------
 !                            Table no.16
 !-----------------------------------------------------------------------
-data a(1)/.1400216916161353e+03/,  a(2)/-.7204275515686407e+03/, &
-   & a(3)/.1296708621660511e+04/,  a(4)/-.9697932901514031e+03/, &
-   & a(5)/.2762427049269425e+03/,  a(6)/-.2012940180552054e+02/
-data b(1)/.1291046303114685e+03/,  b(2)/-.7312308064260973e+03/, &
-   & b(3)/.1494970492915789e+04/,  b(4)/-.1337793793683419e+04/, &
-   & b(5)/.5033747142783567e+03/,  b(6)/-.6220205554529216e+02/
 !-----------------------------------------------------------------------
 !                            Table no.36
 !-----------------------------------------------------------------------
-data a1(1)/-.1690478046781745e+00/, a1(2)/.3524374318100228e+01/, &
-   & a1(3)/-.2698143370550352e+02/, a1(4)/.9340783041018743e+02/, &
-   & a1(5)/-.1455364428646732e+03/, a1(6)/.8805852004723659e+02/, &
-   & a1(7)/-.1349018591231947e+02/
-data b1(1)/-.1203221171313429e+00/, b1(2)/.2684812231556632e+01/, &
-   & b1(3)/-.2242485268704865e+02/, b1(4)/.8723495028643494e+02/, &
-   & b1(5)/-.1604352408444319e+03/, b1(6)/.1259117982101525e+03/, &
-   & b1(7)/-.3184861786248824e+02/
 !-----------------------------------------------------------------------
 !                            Table no.56
 !-----------------------------------------------------------------------
-data a2(1)/.3100808562552958e-04/, a2(2)/.4097487603011940e-02/, &
-   & a2(3)/.1214902662897276e+00/, a2(4)/.1109167694639028e+01/, &
-   & a2(5)/.3228379855663924e+01/, a2(6)/.2881691815651599e+01/, &
-   & a2(7)/.2047972087262996e+01/, a2(8)/.8545922081972148e+00/, &
-   & a2(9)/.3551095884622383e-02/
-data b2(1)/.3100809298564522e-04/, b2(2)/.4097528678663915e-02/, &
-   & b2(3)/.1215907800748757e+00/, b2(4)/.1118627167631696e+01/, &
-   & b2(5)/.3432363984305290e+01/, b2(6)/.4140284677116202e+01/, &
-   & b2(7)/.4119797271272204e+01/, b2(8)/.2162961962641435e+01/
 !-----------------------------------------------------------------------
 !                            Table no.79
 !-----------------------------------------------------------------------
-data a3(1)/.3205405422062050e-08/, a3(2)/.1899479322632128e-05/, &
-   & a3(3)/.2814223189858532e-03/, a3(4)/.1370504879067817e-01/, &
-   & a3(5)/.2268143542005976e+00/, a3(6)/.1098421959892340e+01/, &
-   & a3(7)/.6791143397056208e+00/, a3(8)/-.834334189167721e+00/, &
-   & a3(9)/.3421951267240343e+00/
-data b3(1)/.3205405053282398e-08/, b3(2)/.1899480592260143e-05/, &
-   & b3(3)/.2814349691098940e-03/, b3(4)/.1371092249602266e-01/, &
-   & b3(5)/.2275172815174473e+00/, b3(6)/.1125348514036959e+01/
 !-----------------------------------------------------------------------
 if (p .lt. 0.0 .or. q .le. 0.0) go to 100
 eps = amax1(spmpar(1),1.e-15)
@@ -7816,7 +7844,7 @@ return
 return
 end function erfi
 
-double precision function derfi (p, q)
+pure elemental double precision function derfi (p, q)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -7834,69 +7862,62 @@ implicit none
 !                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
-double precision :: c, c1, c2, r, eps, f, lnq, s, t, x
-double precision :: a(7), a1(7), a2(7), a3(11), a4(9), b(7), &
-   & b1(6), b2(6), b3(10), b4(9)
-double precision :: dpmpar, derf, derfc1
+double precision :: eps, f, lnq, s, t, x
+double precision :: derf
+double precision, parameter :: c = .5625d0
+double precision, parameter :: c1 = .87890625d0
+double precision, parameter :: c2 = -.2302585092994045684017991454684364d+03
+double precision, parameter :: r = .8862269254527580136490837416705726d+00
+double precision, parameter :: a(7) = [double precision :: .841467547194693616d-01, .160499904248262200d+01, &
+   & .809451641478547505d+01, .164273396973002581d+02, .154297507839223692d+02, .669584134660994039d+01, .108455979679682472d+01]
+double precision, parameter :: b(7) = [double precision :: .352281538790042405d-02, .293409069065309557d+00, &
+   & .326709873508963100d+01, .123611641257633210d+02, .207984023857547070d+02, .170791197367677668d+02, .669253523595376683d+01]
+double precision, parameter :: a1(7) = [double precision :: .552755110179178015d+2, .657347545992519152d+3, .124276851197202733d+4 &
+   & , .818859792456464820d+3, .234425632359410093d+3, .299942187305427917d+2, .140496035731853946d+1]
+double precision, parameter :: b1(6) = [double precision :: .179209835890172156d+3, .991315839349539886d+3, .138271033653003487d+4 &
+   & , .764020340925985926d+3, .194354053300991923d+3, .228139510050586581d+2]
+double precision, parameter :: a2(7) = [double precision :: .500926197430588206d+1, .111349802614499199d+3, .353872732756132161d+3 &
+   & , .356000407341490731d+3, .143264457509959760d+3, .240823237485307567d+2, .140496035273226366d+1]
+double precision, parameter :: b2(6) = [double precision :: .209004294324106981d+2, .198607335199741185d+3, .439311287748524270d+3 &
+   & , .355415991280861051d+3, .123303672628828521d+3, .186060775181898848d+2]
+double precision, parameter :: a3(11) = [double precision :: .237121026548776092d4, .732899958728969905d6, .182063754893444775d7, &
+   & .269191299062422172d7, .304817224671614253d7, .130643103351072345d7, .296799076241952125d6, .457006532030955554d5, &
+   & .373449801680687213d4, .118062255483596543d3, .100000329157954960d1]
+double precision, parameter :: b3(10) = [double precision :: .851911109952055378d6, .194746720192729966d7, .373640079258593694d7, &
+   & .397271370110424145d7, .339457682064283712d7, .136888294898155938d7, .303357770911491406d6, .459721480357533823d5, &
+   & .373762573565814355d4, .118064334590001264d3]
+double precision, parameter :: a4(9) = [double precision :: .154269429680540807d12, .430207405012067454d12, .182623446525965017d12 &
+   & , .248740194409838713d11, .133506080294978121d10, .302446226073105850d08, .285909602878724425d06, .101789226017835707d04, &
+   & .100000004821118676d01]
+double precision, parameter :: b4(9) = [double precision :: .220533001293836387d12, .347822938010402687d12, .468373326975152250d12 &
+   & , .185251723580351631d12, .249464490520921771d11, .133587491840784926d10, .302480682561295591d08, .285913799407861384d06, &
+   & .101789250893050230d04]
+interface
+   pure elemental function derfc1(ind,x)
+      implicit none
+      integer, intent(in) :: ind
+      double precision, intent(in) :: x
+      double precision :: derfc1
+   end function derfc1
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !-----------------------------------------------------------------------
 !     c2 = ln(1.e-100)
 !     r  = sqrt(pi)/2
 !-----------------------------------------------------------------------
-data c /.5625d0/, c1 /.87890625d0/
-data c2 /-.2302585092994045684017991454684364d+03/
-data r   /.8862269254527580136490837416705726d+00/
 !-----------------------
-data a(1)/.841467547194693616d-01/, a(2)/.160499904248262200d+01/, &
-   & a(3)/.809451641478547505d+01/, a(4)/.164273396973002581d+02/, &
-   & a(5)/.154297507839223692d+02/, a(6)/.669584134660994039d+01/, &
-   & a(7)/.108455979679682472d+01/
-data b(1)/.352281538790042405d-02/, b(2)/.293409069065309557d+00/, &
-   & b(3)/.326709873508963100d+01/, b(4)/.123611641257633210d+02/, &
-   & b(5)/.207984023857547070d+02/, b(6)/.170791197367677668d+02/, &
-   & b(7)/.669253523595376683d+01/
 !-----------------------
-data a1(1)/.552755110179178015d+2/, a1(2)/.657347545992519152d+3/, &
-   & a1(3)/.124276851197202733d+4/, a1(4)/.818859792456464820d+3/, &
-   & a1(5)/.234425632359410093d+3/, a1(6)/.299942187305427917d+2/, &
-   & a1(7)/.140496035731853946d+1/
-data b1(1)/.179209835890172156d+3/, b1(2)/.991315839349539886d+3/, &
-   & b1(3)/.138271033653003487d+4/, b1(4)/.764020340925985926d+3/, &
-   & b1(5)/.194354053300991923d+3/, b1(6)/.228139510050586581d+2/
 !-----------------------
-data a2(1)/.500926197430588206d+1/, a2(2)/.111349802614499199d+3/, &
-   & a2(3)/.353872732756132161d+3/, a2(4)/.356000407341490731d+3/, &
-   & a2(5)/.143264457509959760d+3/, a2(6)/.240823237485307567d+2/, &
-   & a2(7)/.140496035273226366d+1/
-data b2(1)/.209004294324106981d+2/, b2(2)/.198607335199741185d+3/, &
-   & b2(3)/.439311287748524270d+3/, b2(4)/.355415991280861051d+3/, &
-   & b2(5)/.123303672628828521d+3/, b2(6)/.186060775181898848d+2/
 !-----------------------------------------------------------------------
 !                       Modified table no.59
 !-----------------------------------------------------------------------
-data a3(1) /.237121026548776092d4/, a3(2) /.732899958728969905d6/, &
-   & a3(3) /.182063754893444775d7/, a3(4) /.269191299062422172d7/, &
-   & a3(5) /.304817224671614253d7/, a3(6) /.130643103351072345d7/, &
-   & a3(7) /.296799076241952125d6/, a3(8) /.457006532030955554d5/, &
-   & a3(9) /.373449801680687213d4/, a3(10)/.118062255483596543d3/, &
-   & a3(11)/.100000329157954960d1/
-data b3(1) /.851911109952055378d6/, b3(2) /.194746720192729966d7/, &
-   & b3(3) /.373640079258593694d7/, b3(4) /.397271370110424145d7/, &
-   & b3(5) /.339457682064283712d7/, b3(6) /.136888294898155938d7/, &
-   & b3(7) /.303357770911491406d6/, b3(8) /.459721480357533823d5/, &
-   & b3(9) /.373762573565814355d4/, b3(10)/.118064334590001264d3/
 !-----------------------------------------------------------------------
 !                       Modified table no.82
 !-----------------------------------------------------------------------
-data a4(1)/.154269429680540807d12/, a4(2)/.430207405012067454d12/, &
-   & a4(3)/.182623446525965017d12/, a4(4)/.248740194409838713d11/, &
-   & a4(5)/.133506080294978121d10/, a4(6)/.302446226073105850d08/, &
-   & a4(7)/.285909602878724425d06/, a4(8)/.101789226017835707d04/, &
-   & a4(9)/.100000004821118676d01/
-data b4(1)/.220533001293836387d12/, b4(2)/.347822938010402687d12/, &
-   & b4(3)/.468373326975152250d12/, b4(4)/.185251723580351631d12/, &
-   & b4(5)/.249464490520921771d11/, b4(6)/.133587491840784926d10/, &
-   & b4(7)/.302480682561295591d08/, b4(8)/.285913799407861384d06/, &
-   & b4(9)/.101789250893050230d04/
 !-----------------------------------------------------------------------
 if (p .lt. 0.d0 .or. q .le. 0.d0) go to 100
 eps = dpmpar(1)
@@ -7980,22 +8001,36 @@ return
 return
 end function derfi
 
-real function aerf (x, h)
+pure elemental real function aerf (x, h)
 implicit none
 real, intent(in) :: h, x
 integer :: j, n, n1
-real :: a2, ah, ax, c, dn2, e, eps, h2, h3, hf, hg, p, s, st, t, &
-   & u, v, x2, xmh, xph, z
-real :: epsln
-real :: exparg
-real :: spmpar
+real :: a2, ah, ax, dn2, e, eps, h2, h3, hf, hg, s, st, t, u, v, x2, xmh, xph, z
+real, parameter :: c = 1.12837916709551257
+real, parameter :: p = 2.76959
+interface
+   pure function epsln(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: epsln
+   end function epsln
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !             Computation of erf(x + h) - erf(x - h)
 !-----------------------------------------------------------------------
 !     c = 2/sqrt(pi)
 !     p = ln(9*sqrt(pi))
 !---------------------
-data c /1.12837916709551257/, p /2.76959/
 !---------------------
 !
 !     **** eps is a machine dependent constant. Eps is the
@@ -8110,13 +8145,31 @@ return
 return
 end function aerf
 
-double precision function daerf (x, h)
+pure elemental double precision function daerf (x, h)
 implicit none
 double precision, intent(in) :: x, h
 integer :: j
-double precision :: ah, ax, a2, c, dn2, e, eps, hf, hg, h2, h3, n, &
-   & n1, p, s, st, t, u, v, xmh, xph, x2, z
-double precision :: derf, derfc, dpmpar, depsln, dxparg
+double precision :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
+double precision :: derf, derfc
+double precision, parameter :: c = 1.12837916709551257389615890312155d0
+double precision, parameter :: p = 2.76959d0
+interface
+   pure elemental function depsln(l)
+      implicit none
+      integer, intent(in) :: l
+      double precision :: depsln
+   end function depsln
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure elemental function dxparg(l)
+      implicit none
+      integer, intent(in) :: l
+      double precision :: dxparg
+   end function dxparg
+end interface
 !-----------------------------------------------------------------------
 !             Computation of erf(x + h) - erf(x - h)
 !-----------------------------------------------------------------------
@@ -8124,8 +8177,6 @@ double precision :: derf, derfc, dpmpar, depsln, dxparg
 !     c = 2/sqrt(pi)
 !     p = ln(9*sqrt(pi))
 !---------------------
-data c /1.12837916709551257389615890312155d0/
-data p /2.76959d0/
 !---------------------
 !
 !     **** eps is a machine dependent constant. Eps is the
@@ -8240,19 +8291,26 @@ return
 return
 end function daerf
 
-function pndf(x,ind)
+pure elemental function pndf(x,ind)
 implicit none
 integer, intent(in) :: ind
 real, intent(in) :: x
-real :: a, c, t
+real :: t
 real :: pndf
-real :: erfc1
+real, parameter :: a = .707106781186548
+real, parameter :: c = .797884560802865
+interface
+   pure elemental function erfc1(ind,x)
+      implicit none
+      integer, intent(in) :: ind
+      real, intent(in) :: x
+      real :: erfc1
+   end function erfc1
+end interface
 !     ---------------
 !     a = 1/sqrt(2)
 !     c = sqrt(2/pi)
 !     ---------------
-data a/.707106781186548/
-data c/.797884560802865/
 !     ---------------
 t = a*x
 if (ind .ne. 0) go to 20
@@ -8268,14 +8326,26 @@ return
 return
 end function pndf
 
-subroutine pni (p, q, d, w, ierr)
+pure elemental subroutine pni (p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: d, p, q
 real, intent(inout) :: w
-real :: eps, rt2, t, u, v
-real :: erfi
-real :: spmpar
+real :: eps, t, u, v
+real, parameter :: rt2 = 1.414213562373095
+interface
+   pure elemental function erfi(p,q)
+      implicit none
+      real, intent(in) :: p
+      real, intent(in) :: q
+      real :: erfi
+   end function erfi
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the inverse normal distribution function
@@ -8299,7 +8369,6 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     rt2 = sqrt(2)
 !------------------------
-data rt2 /1.414213562373095/
 !------------------------
 t = amin1(p,q)
 if (t .le. 0.0) go to 10
@@ -8325,13 +8394,26 @@ return
 return
 end subroutine pni
 
-subroutine dpni (p, q, d, w, ierr)
+pure elemental subroutine dpni (p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: p, q, d
 double precision, intent(inout) :: w
-double precision :: eps, rt2, u, v, t
-double precision :: dpmpar, derfi
+double precision :: eps, u, v, t
+double precision, parameter :: rt2 = 1.4142135623730950488016887242097d0
+interface
+   pure elemental function derfi(p,q)
+      implicit none
+      double precision, intent(in) :: p
+      double precision, intent(in) :: q
+      double precision :: derfi
+   end function derfi
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the inverse normal distribution function
@@ -8356,7 +8438,6 @@ double precision :: dpmpar, derfi
 !------------------------
 !     rt2 = sqrt(2)
 !------------------------
-data rt2 /1.4142135623730950488016887242097d0/
 !------------------------
 t = dmin1(p,q)
 if (t .le. 0.d0) go to 10
@@ -8382,13 +8463,30 @@ return
 return
 end subroutine dpni
 
-real function daw(x)
+pure elemental real function daw(x)
 implicit none
 real, intent(in) :: x
 integer :: i
-real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
-   & frac, sump, sumq, w2
-real :: y, xlarge, xsmall
+real :: frac, sump, sumq, w2
+real :: y
+real, parameter :: xlarge = 16777216.0
+real, parameter :: xsmall = .59604644775391e-07
+real, parameter :: p1(9) = [real :: .100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
+   & .360079463580992e-03, -.944375029163387e-05, .634674256878843e-06, -.711645839183817e-08, .977985913592343e-10]
+real, parameter :: q1(9) = [real :: .100000000000000e+01, .531067616851310e+00, .133052308640737e+00, .206907491644210e-01, &
+   & .220437428972266e-02, .166706801664365e-03, .887964712053131e-05, .311750854173480e-06, .574807177698046e-08]
+real, parameter :: p2(8) = [real :: -.150695651187161e+01, .293365747395449e+02, -.400000893643550e+02, -.757931918089369e-01, - &
+   & .889106479747812e+01, .152644099623699e+02, -.597678086823489e+01, .500236896088668e+00]
+real, parameter :: q2(7) = [real :: -.673106069744813e+00, .124486788262252e+04, .721193217600229e+01, .112461662024575e+03, &
+   & .729177556415532e+02, .115840292551888e+03, .226064666074309e+00]
+real, parameter :: p3(8) = [real :: .476405645273229e+01, -.266167674896399e+02, -.916804879813552e+01, -.150507703496692e+02, &
+   & .506460153742231e+01, -.498544802986608e+01, -.149838042036691e+01, .499999902705054e+00]
+real, parameter :: q3(7) = [real :: .287776122973187e+03, .256105722342226e+02, .751701277744067e+02, .146515167783109e+03, &
+   & .330707724676114e+02, -.148715811787195e+01, .250011459611839e+00]
+real, parameter :: p4(7) = [real :: -.315576735766984e+02, -.100791496592972e+02, -.710713709224200e+01, -.596879853243925e+01, - &
+   & .449773645376092e+01, -.249999965398199e+01, .499999999999330e+00]
+real, parameter :: q4(6) = [real :: .168874162155616e+03, .698280748271071e+01, -.213029621139181e+02, -.712157348463305e+01, - &
+   & .250005973192356e+01, .750000000715687e+00]
 !-----------------------------------------------------------------------
 !
 !     This function computes single precision values of dawsons
@@ -8404,23 +8502,12 @@ real :: y, xlarge, xsmall
 !
 !-----------------------------------------------------------------------
 !---------------
-data xlarge/16777216.0/, xsmall/.59604644775391e-07/
 !---------------
 !
 !           Coefficients for R(8,8) approximation,
 !           used for abs(x)  .LT.  2.5
 !
 !---------------
-data p1(1)/.100000000000000e+01/, p1(2)/-.135599049815353e+00/, &
-   & p1(3)/.456738974064825e-01/, p1(4)/-.258323495918050e-02/, &
-   & p1(5)/.360079463580992e-03/, p1(6)/-.944375029163387e-05/, &
-   & p1(7)/.634674256878843e-06/, p1(8)/-.711645839183817e-08/, &
-   & p1(9)/.977985913592343e-10/
-data q1(1)/.100000000000000e+01/, q1(2)/.531067616851310e+00/, &
-   & q1(3)/.133052308640737e+00/, q1(4)/.206907491644210e-01/, &
-   & q1(5)/.220437428972266e-02/, q1(6)/.166706801664365e-03/, &
-   & q1(7)/.887964712053131e-05/, q1(8)/.311750854173480e-06/, &
-   & q1(9)/.574807177698046e-08/
 !---------------
 !
 !           Coefficients for R(7,7) approximation,
@@ -8428,14 +8515,6 @@ data q1(1)/.100000000000000e+01/, q1(2)/.531067616851310e+00/, &
 !           2.5 .LE. abs(x) .LT. 3.5
 !
 !---------------
-data p2(1)/-.150695651187161e+01/, p2(2)/ .293365747395449e+02/, &
-   & p2(3)/-.400000893643550e+02/, p2(4)/-.757931918089369e-01/, &
-   & p2(5)/-.889106479747812e+01/, p2(6)/ .152644099623699e+02/, &
-   & p2(7)/-.597678086823489e+01/, p2(8)/ .500236896088668e+00/
-data q2(1)/-.673106069744813e+00/, q2(2)/ .124486788262252e+04/, &
-   & q2(3)/ .721193217600229e+01/, q2(4)/ .112461662024575e+03/, &
-   & q2(5)/ .729177556415532e+02/, q2(6)/ .115840292551888e+03/, &
-   & q2(7)/ .226064666074309e+00/
 !---------------
 !
 !           Coefficients for R(7,7) approximation,
@@ -8443,27 +8522,12 @@ data q2(1)/-.673106069744813e+00/, q2(2)/ .124486788262252e+04/, &
 !           3.5 .LE. abs(x) .LE. 5.0
 !
 !---------------
-data p3(1)/ .476405645273229e+01/, p3(2)/-.266167674896399e+02/, &
-   & p3(3)/-.916804879813552e+01/, p3(4)/-.150507703496692e+02/, &
-   & p3(5)/ .506460153742231e+01/, p3(6)/-.498544802986608e+01/, &
-   & p3(7)/-.149838042036691e+01/, p3(8)/ .499999902705054e+00/
-data q3(1)/ .287776122973187e+03/, q3(2)/ .256105722342226e+02/, &
-   & q3(3)/ .751701277744067e+02/, q3(4)/ .146515167783109e+03/, &
-   & q3(5)/ .330707724676114e+02/, q3(6)/-.148715811787195e+01/, &
-   & q3(7)/ .250011459611839e+00/
 !---------------
 !
 !           Coefficients for R(6,6) approximation,
 !           in J-fraction form, used for abs(x) .GT. 5.0
 !
 !---------------
-data p4(1)/-.315576735766984e+02/, p4(2)/-.100791496592972e+02/, &
-   & p4(3)/-.710713709224200e+01/, p4(4)/-.596879853243925e+01/, &
-   & p4(5)/-.449773645376092e+01/, p4(6)/-.249999965398199e+01/, &
-   & p4(7)/ .499999999999330e+00/
-data q4(1)/ .168874162155616e+03/, q4(2)/ .698280748271071e+01/, &
-   & q4(3)/-.213029621139181e+02/, q4(4)/-.712157348463305e+01/, &
-   & q4(5)/-.250005973192356e+01/, q4(6)/ .750000000715687e+00/
 !-----------------------------------------------------------------------
 !
 if (abs(x) .gt. xlarge) go to 500
@@ -8528,84 +8592,56 @@ go to 1000
 1000 return
 end function daw
 
-double precision function dpdaw (x)
+pure elemental double precision function dpdaw (x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
-double precision :: a(20), b(45), ax, eps, t, w
-double precision :: dcsevl, dpdaw0
+double precision :: ax, t, w
+double precision, parameter :: eps = 1.d-31
+double precision, parameter :: a(20) = [double precision :: -.6666666666666666666666666666657d+00, &
+   & .2666666666666666666666666665302d+00, -.7619047619047619047619046823290d-01, .1693121693121693121693097101950d-01, - &
+   & .3078403078403078403073750370528d-02, .4736004736004736004148385001356d-03, -.6314672981339647953899064401849d-04, &
+   & .7429027036870170692270376716931d-05, -.7820028459863171536925638117632d-06, .7447646152244351276445219666744d-07, - &
+   & .6476214045244314289022051868963d-08, .5180971231894821888421654461823d-09, -.3837756389504541092817011259727d-10, &
+   & .2646727414301012080897585412600d-11, -.1707553348198261876085879075486d-12, .1034770025122653524451023758330d-13, - &
+   & .5905667147861158816695814259561d-15, .3157018166820009192834256496230d-16, -.1501742103181747984387915732309d-17, &
+   & .4921379778280206677674574916266d-19]
+double precision, parameter :: b(45) = [double precision :: -.56886544105215527114160533733674d-01, - &
+   & .31811346996168131279322878048822d+00, .20873845413642236789741580198858d+00, -.12475409913779131214073498314784d+00, &
+   & .67869305186676777092847516423676d-01, -.33659144895270939503068230966587d-01, .15260781271987971743682460381640d-01, - &
+   & .63483709625962148230586094788535d-02, .24326740920748520596865966109343d-02, -.86219541491065032038526983549637d-03, &
+   & .28376573336321625302857636538295d-03, -.87057549874170423699396581464335d-04, .24986849985481658331800044137276d-04, - &
+   & .67319286764160294344603050339520d-05, .17078578785573543710504524047844d-05, -.40917551226475381271896592490038d-06, &
+   & .92828292216755773260751785312273d-07, -.19991403610147617829845096332198d-07, .40963490644082195241210487868917d-08, - &
+   & .80032409540993168075706781753561d-09, .14938503128761465059143225550110d-09, -.26687999885622329284924651063339d-10, &
+   & .45712216985159458151405617724103d-11, -.75187305222043565872243727326771d-12, .11893100052629681879029828987302d-12, - &
+   & .18116907933852346973490318263084d-13, .26611733684358969193001612199626d-14, -.37738863052129419795444109905930d-15, &
+   & .51727953789087172679680082229329d-16, -.68603684084077500979419564670102d-17, .88123751354161071806469337321745d-18, - &
+   & .10974248249996606292106299624652d-18, .13261199326367178513595545891635d-19, -.15562732768137380785488776571562d-20, &
+   & .17751425583655720607833415570773d-21, -.19695006967006578384953608765439d-22, .21270074896998699661924010120533d-23, - &
+   & .22375398124627973794182113962666d-24, .22942768578582348946971383125333d-25, -.22943788846552928693329592319999d-26, &
+   & .22391702100592453618342297600000d-27, -.21338230616608897703678225066666d-28, .19866196585123531518028458666666d-29, - &
+   & .18079295866694391771955199999999d-30, .16090686015283030305450666666666d-31]
+interface
+   pure function dcsevl(x,a,n)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: x
+      double precision, intent(in) :: a(n)
+      double precision :: dcsevl
+   end function dcsevl
+   pure elemental function dpdaw0(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: dpdaw0
+   end function dpdaw0
+end interface
 !-----------------------------------------------------------------------
 !            Double precision computation of dawsons integral
 !-----------------------------------------------------------------------
 !----------------------------
-data eps /1.d-31/
 !----------------------------
-data a(1)  /-.6666666666666666666666666666657d+00/, &
-   & a(2)  / .2666666666666666666666666665302d+00/, &
-   & a(3)  /-.7619047619047619047619046823290d-01/, &
-   & a(4)  / .1693121693121693121693097101950d-01/, &
-   & a(5)  /-.3078403078403078403073750370528d-02/, &
-   & a(6)  / .4736004736004736004148385001356d-03/, &
-   & a(7)  /-.6314672981339647953899064401849d-04/, &
-   & a(8)  / .7429027036870170692270376716931d-05/, &
-   & a(9)  /-.7820028459863171536925638117632d-06/, &
-   & a(10) / .7447646152244351276445219666744d-07/
-data a(11) /-.6476214045244314289022051868963d-08/, &
-   & a(12) / .5180971231894821888421654461823d-09/, &
-   & a(13) /-.3837756389504541092817011259727d-10/, &
-   & a(14) / .2646727414301012080897585412600d-11/, &
-   & a(15) /-.1707553348198261876085879075486d-12/, &
-   & a(16) / .1034770025122653524451023758330d-13/, &
-   & a(17) /-.5905667147861158816695814259561d-15/, &
-   & a(18) / .3157018166820009192834256496230d-16/, &
-   & a(19) /-.1501742103181747984387915732309d-17/, &
-   & a(20) / .4921379778280206677674574916266d-19/
 !----------------------------
-data b(1)  /-.56886544105215527114160533733674d-01/, &
-   & b(2)  /-.31811346996168131279322878048822d+00/, &
-   & b(3)  / .20873845413642236789741580198858d+00/, &
-   & b(4)  /-.12475409913779131214073498314784d+00/, &
-   & b(5)  / .67869305186676777092847516423676d-01/, &
-   & b(6)  /-.33659144895270939503068230966587d-01/, &
-   & b(7)  / .15260781271987971743682460381640d-01/, &
-   & b(8)  /-.63483709625962148230586094788535d-02/, &
-   & b(9)  / .24326740920748520596865966109343d-02/, &
-   & b(10) /-.86219541491065032038526983549637d-03/
-data b(11) / .28376573336321625302857636538295d-03/, &
-   & b(12) /-.87057549874170423699396581464335d-04/, &
-   & b(13) / .24986849985481658331800044137276d-04/, &
-   & b(14) /-.67319286764160294344603050339520d-05/, &
-   & b(15) / .17078578785573543710504524047844d-05/, &
-   & b(16) /-.40917551226475381271896592490038d-06/, &
-   & b(17) / .92828292216755773260751785312273d-07/, &
-   & b(18) /-.19991403610147617829845096332198d-07/, &
-   & b(19) / .40963490644082195241210487868917d-08/, &
-   & b(20) /-.80032409540993168075706781753561d-09/
-data b(21) / .14938503128761465059143225550110d-09/, &
-   & b(22) /-.26687999885622329284924651063339d-10/, &
-   & b(23) / .45712216985159458151405617724103d-11/, &
-   & b(24) /-.75187305222043565872243727326771d-12/, &
-   & b(25) / .11893100052629681879029828987302d-12/, &
-   & b(26) /-.18116907933852346973490318263084d-13/, &
-   & b(27) / .26611733684358969193001612199626d-14/, &
-   & b(28) /-.37738863052129419795444109905930d-15/, &
-   & b(29) / .51727953789087172679680082229329d-16/, &
-   & b(30) /-.68603684084077500979419564670102d-17/
-data b(31) / .88123751354161071806469337321745d-18/, &
-   & b(32) /-.10974248249996606292106299624652d-18/, &
-   & b(33) / .13261199326367178513595545891635d-19/, &
-   & b(34) /-.15562732768137380785488776571562d-20/, &
-   & b(35) / .17751425583655720607833415570773d-21/, &
-   & b(36) /-.19695006967006578384953608765439d-22/, &
-   & b(37) / .21270074896998699661924010120533d-23/, &
-   & b(38) /-.22375398124627973794182113962666d-24/, &
-   & b(39) / .22942768578582348946971383125333d-25/, &
-   & b(40) /-.22943788846552928693329592319999d-26/
-data b(41) / .22391702100592453618342297600000d-27/, &
-   & b(42) /-.21338230616608897703678225066666d-28/, &
-   & b(43) / .19866196585123531518028458666666d-29/, &
-   & b(44) /-.18079295866694391771955199999999d-30/, &
-   & b(45) / .16090686015283030305450666666666d-31/
 !----------------------------
 ax = dabs(x)
 if (ax .ge. 4.d0) go to 30
@@ -8636,7 +8672,7 @@ return
 return
 end function dpdaw
 
-double precision function dpdaw0 (x)
+pure elemental double precision function dpdaw0 (x)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -8646,132 +8682,122 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: t, u, v, w
-double precision :: a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, &
-   & a11, a12, a13, a14, a15, a16, a17, a18, b1, b2, b3, b4
-double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, &
-   & c11, c12, c13, c14, d1, d2, d3, d4, d5, d6, d7, d8
-double precision :: e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, &
-   & f1, f2, f3, f4, f5, f6, f7, f8, f9, f10
-double precision :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, &
-   & g11, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10
-double precision :: s0, s1, s2, s3, s4, s5
-double precision :: p0, p1, p2, p3, p4, p5, q1, q2, q3, q4, q5
+double precision, parameter :: a0 = .59682223611279114961181337d-06
+double precision, parameter :: a1 = .17685355947137064277328544d-05
+double precision, parameter :: a2 = .46539151619719879425847199d-05
+double precision, parameter :: a3 = .60206549750426063518629015d-05
+double precision, parameter :: a4 = .71968323029042065431569341d-05
+double precision, parameter :: a5 = .30632314265730271259576310d-05
+double precision, parameter :: a6 = .58023977792358623878717970d-06
+double precision, parameter :: a7 = -.79009104459686847104040749d-06
+double precision, parameter :: a8 = -.48136647436848802449955585d-06
+double precision, parameter :: a9 = .15516701696125663593787151d-05
+double precision, parameter :: a10 = .41907470564012404920368069d-05
+double precision, parameter :: a11 = .58027971313506864533128271d-05
+double precision, parameter :: a12 = .55370618938769991926278955d-05
+double precision, parameter :: a13 = .38921890500515083447099834d-05
+double precision, parameter :: a14 = .20373391058442140223632125d-05
+double precision, parameter :: a15 = .77894504402267231707108862d-06
+double precision, parameter :: a16 = .20671717275442647450228015d-06
+double precision, parameter :: a17 = .34163346266402336952767687d-07
+double precision, parameter :: a18 = .26550833614486808486653527d-08
+double precision, parameter :: b1 = .24655153970246619491575782d+01
+double precision, parameter :: b2 = .62943144539382480033771054d+01
+double precision, parameter :: b3 = .62122304537339562619049238d+01
+double precision, parameter :: b4 = .72256247680648550388609993d+01
+double precision, parameter :: c0 = .59682220964671964619429990d-06
+double precision, parameter :: c1 = .15714896176335781761895194d-05
+double precision, parameter :: c2 = .38969553030269966874001463d-05
+double precision, parameter :: c3 = .52383725295173020317044495d-05
+double precision, parameter :: c4 = .68105053752194312932660379d-05
+double precision, parameter :: c5 = .54424292166005622934118953d-05
+double precision, parameter :: c6 = .42426204827598626398351706d-05
+double precision, parameter :: c7 = .16034175582037599078896885d-05
+double precision, parameter :: c8 = .40869743822567069272296881d-06
+double precision, parameter :: c9 = -.28877279517645392833652391d-06
+double precision, parameter :: c10 = -.23330912423546272053845073d-06
+double precision, parameter :: c11 = -.52391219684126122047201575d-07
+double precision, parameter :: c12 = .21002079856304960793765863d-07
+double precision, parameter :: c13 = .15999459808634652894884878d-07
+double precision, parameter :: c14 = .30942877932880022278704223d-08
+double precision, parameter :: d1 = .21353586303464124681525146d+01
+double precision, parameter :: d2 = .51903635881846225790635588d+01
+double precision, parameter :: d3 = .55426108503039000945912263d+01
+double precision, parameter :: d4 = .72404445472735688881512590d+01
+double precision, parameter :: d5 = .42043425514299588216548098d+01
+double precision, parameter :: d6 = .39555198251457455938284071d+01
+double precision, parameter :: d7 = .96558431899415447517392039d+00
+double precision, parameter :: d8 = .85802563214754700974536646d+00
+double precision, parameter :: e0 = .59682220964671964619429989d-06
+double precision, parameter :: e1 = .84093250039847132132545694d-06
+double precision, parameter :: e2 = .21215362314612857942015465d-05
+double precision, parameter :: e3 = .17544801458346344458699925d-05
+double precision, parameter :: e4 = .23300467572238537581015267d-05
+double precision, parameter :: e5 = .10789302963153438789721000d-05
+double precision, parameter :: e6 = .84593690165753140097573765d-06
+double precision, parameter :: e7 = .58921927492401852305814815d-07
+double precision, parameter :: e8 = .88699252882391671775568852d-08
+double precision, parameter :: e9 = -.45367333700483839577191791d-07
+double precision, parameter :: e10 = -.57476692572774473717756092d-08
+double precision, parameter :: f1 = .91128032791938035312580060d+00
+double precision, parameter :: f2 = .28248447610354665352098820d+01
+double precision, parameter :: f3 = .12208226691968579661669930d+01
+double precision, parameter :: f4 = .26127044898109340807106578d+01
+double precision, parameter :: f5 = .34850941500747816686718301d+00
+double precision, parameter :: f6 = .11058424028893031129155960d+01
+double precision, parameter :: f7 = -.58583432304677947215235382d-01
+double precision, parameter :: f8 = .22235753204903993496120223d+00
+double precision, parameter :: f9 = -.22116625272550591073419658d-01
+double precision, parameter :: f10 = .14938281115881437851795141d-01
+double precision, parameter :: g0 = .59682220962853689178993039d-06
+double precision, parameter :: g1 = .10399202637216492921747166d-05
+double precision, parameter :: g2 = .20011159669496258291170369d-05
+double precision, parameter :: g3 = .19689301951834731308289277d-05
+double precision, parameter :: g4 = .18861506874082130108404839d-05
+double precision, parameter :: g5 = .10403672611266773427898830d-05
+double precision, parameter :: g6 = .42700287233074049241986613d-06
+double precision, parameter :: g7 = -.16199303908856237550380048d-07
+double precision, parameter :: g8 = -.73900110466591484816182863d-07
+double precision, parameter :: g9 = -.21369058482679700785965255d-07
+double precision, parameter :: g10 = .42853587024761116737793072d-08
+double precision, parameter :: g11 = -.27226352610679391576406666d-09
+double precision, parameter :: h1 = .12446924554654251972427023d+01
+double precision, parameter :: h2 = .24571243397858142676189669d+01
+double precision, parameter :: h3 = .16710488988253927773151334d+01
+double precision, parameter :: h4 = .17260859791081983044753913d+01
+double precision, parameter :: h5 = .67406536368694046314885196d+00
+double precision, parameter :: h6 = .47403526893401885333000527d+00
+double precision, parameter :: h7 = .96251479080923959509108658d-01
+double precision, parameter :: h8 = .53334517885765587426678624d-01
+double precision, parameter :: h9 = .39450307003297031975491216d-02
+double precision, parameter :: h10 = .20209221166462656808887976d-02
+double precision, parameter :: s0 = .8210986449041747719684610504710d-02
+double precision, parameter :: s1 = .8646073144815053170065230898334d-02
+double precision, parameter :: s2 = .4768322737615973285410030924398d-03
+double precision, parameter :: s3 = .4792593707378225992657970685396d-04
+double precision, parameter :: s4 = .7507677744363576693833551190204d-05
+double precision, parameter :: s5 = .1737929446861228512373840727547d-05
+double precision, parameter :: p0 = .29531250000000000000002d+02
+double precision, parameter :: p1 = -.14571781607273299440392d+04
+double precision, parameter :: p2 = .24285318385898860175073d+05
+double precision, parameter :: p3 = -.15843555052114168113822d+06
+double precision, parameter :: p4 = .32969397422638395586636d+06
+double precision, parameter :: p5 = -.55331506994311967089636d+04
+double precision, parameter :: q1 = -.54843599093412230906873d+02
+double precision, parameter :: q2 = .10882497826844164906477d+04
+double precision, parameter :: q3 = -.96578534881552358457185d+04
+double precision, parameter :: q4 = .37803382357862589384458d+05
+double precision, parameter :: q5 = -.51283783372259864777146d+05
 !----------------------------
-data a0  / .59682223611279114961181337d-06/, &
-   & a1  / .17685355947137064277328544d-05/, &
-   & a2  / .46539151619719879425847199d-05/, &
-   & a3  / .60206549750426063518629015d-05/, &
-   & a4  / .71968323029042065431569341d-05/, &
-   & a5  / .30632314265730271259576310d-05/, &
-   & a6  / .58023977792358623878717970d-06/, &
-   & a7  /-.79009104459686847104040749d-06/, &
-   & a8  /-.48136647436848802449955585d-06/, &
-   & a9  / .15516701696125663593787151d-05/
-data a10 / .41907470564012404920368069d-05/, &
-   & a11 / .58027971313506864533128271d-05/, &
-   & a12 / .55370618938769991926278955d-05/, &
-   & a13 / .38921890500515083447099834d-05/, &
-   & a14 / .20373391058442140223632125d-05/, &
-   & a15 / .77894504402267231707108862d-06/, &
-   & a16 / .20671717275442647450228015d-06/, &
-   & a17 / .34163346266402336952767687d-07/, &
-   & a18 / .26550833614486808486653527d-08/
 !----------------------------
-data b1  / .24655153970246619491575782d+01/, &
-   & b2  / .62943144539382480033771054d+01/, &
-   & b3  / .62122304537339562619049238d+01/, &
-   & b4  / .72256247680648550388609993d+01/
 !----------------------------
-data c0  / .59682220964671964619429990d-06/, &
-   & c1  / .15714896176335781761895194d-05/, &
-   & c2  / .38969553030269966874001463d-05/, &
-   & c3  / .52383725295173020317044495d-05/, &
-   & c4  / .68105053752194312932660379d-05/, &
-   & c5  / .54424292166005622934118953d-05/, &
-   & c6  / .42426204827598626398351706d-05/, &
-   & c7  / .16034175582037599078896885d-05/, &
-   & c8  / .40869743822567069272296881d-06/, &
-   & c9  /-.28877279517645392833652391d-06/
-data c10 /-.23330912423546272053845073d-06/, &
-   & c11 /-.52391219684126122047201575d-07/, &
-   & c12 / .21002079856304960793765863d-07/, &
-   & c13 / .15999459808634652894884878d-07/, &
-   & c14 / .30942877932880022278704223d-08/
 !----------------------------
-data d1  / .21353586303464124681525146d+01/, &
-   & d2  / .51903635881846225790635588d+01/, &
-   & d3  / .55426108503039000945912263d+01/, &
-   & d4  / .72404445472735688881512590d+01/, &
-   & d5  / .42043425514299588216548098d+01/, &
-   & d6  / .39555198251457455938284071d+01/, &
-   & d7  / .96558431899415447517392039d+00/, &
-   & d8  / .85802563214754700974536646d+00/
 !----------------------------
-data e0  / .59682220964671964619429989d-06/, &
-   & e1  / .84093250039847132132545694d-06/, &
-   & e2  / .21215362314612857942015465d-05/, &
-   & e3  / .17544801458346344458699925d-05/, &
-   & e4  / .23300467572238537581015267d-05/, &
-   & e5  / .10789302963153438789721000d-05/, &
-   & e6  / .84593690165753140097573765d-06/, &
-   & e7  / .58921927492401852305814815d-07/, &
-   & e8  / .88699252882391671775568852d-08/, &
-   & e9  /-.45367333700483839577191791d-07/
-data e10 /-.57476692572774473717756092d-08/
 !----------------------------
-data f1  / .91128032791938035312580060d+00/, &
-   & f2  / .28248447610354665352098820d+01/, &
-   & f3  / .12208226691968579661669930d+01/, &
-   & f4  / .26127044898109340807106578d+01/, &
-   & f5  / .34850941500747816686718301d+00/, &
-   & f6  / .11058424028893031129155960d+01/, &
-   & f7  /-.58583432304677947215235382d-01/, &
-   & f8  / .22235753204903993496120223d+00/, &
-   & f9  /-.22116625272550591073419658d-01/, &
-   & f10 / .14938281115881437851795141d-01/
 !----------------------------
-data g0  / .59682220962853689178993039d-06/, &
-   & g1  / .10399202637216492921747166d-05/, &
-   & g2  / .20011159669496258291170369d-05/, &
-   & g3  / .19689301951834731308289277d-05/, &
-   & g4  / .18861506874082130108404839d-05/, &
-   & g5  / .10403672611266773427898830d-05/, &
-   & g6  / .42700287233074049241986613d-06/, &
-   & g7  /-.16199303908856237550380048d-07/, &
-   & g8  /-.73900110466591484816182863d-07/, &
-   & g9  /-.21369058482679700785965255d-07/
-data g10 / .42853587024761116737793072d-08/, &
-   & g11 /-.27226352610679391576406666d-09/
 !----------------------------
-data h1  / .12446924554654251972427023d+01/, &
-   & h2  / .24571243397858142676189669d+01/, &
-   & h3  / .16710488988253927773151334d+01/, &
-   & h4  / .17260859791081983044753913d+01/, &
-   & h5  / .67406536368694046314885196d+00/, &
-   & h6  / .47403526893401885333000527d+00/, &
-   & h7  / .96251479080923959509108658d-01/, &
-   & h8  / .53334517885765587426678624d-01/, &
-   & h9  / .39450307003297031975491216d-02/, &
-   & h10 / .20209221166462656808887976d-02/
 !----------------------------
-data s0  / .8210986449041747719684610504710d-02/, &
-   & s1  / .8646073144815053170065230898334d-02/, &
-   & s2  / .4768322737615973285410030924398d-03/, &
-   & s3  / .4792593707378225992657970685396d-04/, &
-   & s4  / .7507677744363576693833551190204d-05/, &
-   & s5  / .1737929446861228512373840727547d-05/
 !----------------------------
-data p0 / .29531250000000000000002d+02/, &
-   & p1 /-.14571781607273299440392d+04/, &
-   & p2 / .24285318385898860175073d+05/, &
-   & p3 /-.15843555052114168113822d+06/, &
-   & p4 / .32969397422638395586636d+06/, &
-   & p5 /-.55331506994311967089636d+04/
-data q1 /-.54843599093412230906873d+02/, &
-   & q2 / .10882497826844164906477d+04/, &
-   & q3 /-.96578534881552358457185d+04/, &
-   & q4 / .37803382357862589384458d+05/, &
-   & q5 /-.51283783372259864777146d+05/
 !----------------------------
 if (x .ge. 12.d0) go to 50
 t = (32.d0/(x*x) - 0.5d0) - 0.5d0
@@ -8835,15 +8861,24 @@ dpdaw0 = 0.5d0*w
 return
 end function dpdaw0
 
-subroutine cfrnli (mo, z, w)
+pure elemental subroutine cfrnli (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c, c0, dm, pm, qm, r, ss, x, y
-real :: exparg
-real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
+real :: dm, pm, qm, r, ss, x, y
+real :: qf(2), sm(2), tm(2), ts(2), zr(2)
+real, parameter :: c = .564189583547756
+real, parameter :: c0 = -.707106781186548
+real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+   & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
+   & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
+   & 1.25710718314784e+1, 1.72483537216334e+1]
+real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+   & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
+   & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
+   & 2.05173509616121e-6, 2.63564823682747e-8]
 interface
    pure elemental function cpabs(x,y)
       implicit none
@@ -8851,6 +8886,11 @@ interface
       real, intent(in) :: y
       real :: cpabs
    end function cpabs
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
 end interface
 !-----------------------------------------------------------------------
 !
@@ -8866,27 +8906,7 @@ end interface
 !     c = 1/sqrt(pi)
 !     c0 = -1/sqrt(2)
 !------------------------
-data c  / .564189583547756/
-data c0 /-.707106781186548/
 !------------------------
-data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
-   & cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
-   & cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
-   & cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
-   & cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
-   & cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
-   & cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
-   & cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
-   & cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
-data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
-   & ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
-   & ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
-   & ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
-   & ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
-   & ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
-   & ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
-   & ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
-   & ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
 x = real(z)
 y = aimag(z)
@@ -9021,101 +9041,82 @@ w = cmplx(sm(1),sm(2))
 return
 end subroutine cfrnli
 
-subroutine frnl (t, c, s)
+pure elemental subroutine frnl (t, c, s)
 implicit none
 real, intent(inout) :: c, s
 real, intent(in) :: t
 integer :: i, l, m, max
-real :: cy, f, fd, fn, g, gd, gn, pi, pix, pixx, r, sy, x, xx, y
-real :: sin1
-real :: cos1
-integer :: ipmpar
+real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y
 real :: n
-real :: a(6), b(6), cp(13), sp(13)
-real :: pn(6), pd(6), qn(6), qd(6)
-real :: an(6), ad(6), bn(6), bd(6)
-real :: cn(5), cd(5), dn(5), dd(5)
-real :: fp(7), gp(7), p(6), q(6)
+real, parameter :: pi = 3.1415926535898
+real, parameter :: a(6) = [real :: -.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
+   & .246740110027210e+00, .100000000000000e+01]
+real, parameter :: b(6) = [real :: -.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
+   & .922805853580325e-01, .523598775598300e+00]
+real, parameter :: cp(13) = [real :: .114739945188034e-20, -.384444827287950e-18, .832125729394275e-16, -.142979507360076e-13, &
+   & .198954961821465e-11, -.220226545457144e-09, .188434924092257e-07, -.120009722914157e-05, .540741337442140e-04, - &
+   & .160488313553028e-02, .281855008777956e-01, -.246740110027196e+00, .999999999999996e+00]
+real, parameter :: sp(13) = [real :: .705700784853927e-22, -.252757991492418e-19, .594117488940008e-17, -.112161631555448e-14, &
+   & .173332189994074e-12, -.215742302078015e-10, .210821173208116e-08, -.156471443116560e-06, .844427287845253e-05, - &
+   & .312116942346186e-03, .724478420418951e-02, -.922805853580323e-01, .523598775598300e+00]
+real, parameter :: pn(6) = [real :: .318309816100920e+00, .134919391391516e+02, .158258097490377e+03, .598796451682535e+03, &
+   & .632369782194966e+03, .967985390141920e+02]
+real, parameter :: pd(6) = [real :: .100000000000000e+01, .426900960480796e+02, .509085485682426e+03, .200034664144742e+04, &
+   & .231910140792937e+04, .486678558201084e+03]
+real, parameter :: qn(6) = [real :: .101320876178478e+00, .490534697099052e+01, .652095157811808e+02, .274183825747887e+03, &
+   & .305040725009211e+03, .364566615872326e+02]
+real, parameter :: qd(6) = [real :: .100000000000000e+01, .499330024470621e+02, .709854097670206e+03, .343470762861172e+04, &
+   & .522213879312684e+04, .168801831831851e+04]
+real, parameter :: an(6) = [real :: .318309885869756e+00, .254179177393500e+02, .575003792540838e+03, .426673405867140e+04, &
+   & .891831887923938e+04, .267955736537967e+04]
+real, parameter :: ad(6) = [real :: .100000000000000e+01, .801567066285184e+02, .182971463354850e+04, .138848884373420e+05, &
+   & .309228411873207e+05, .120421274105856e+05]
+real, parameter :: bn(6) = [real :: .101321181932417e+00, .925021984290547e+01, .240932023056602e+03, .206079616836437e+04, &
+   & .484901973010149e+04, .130680669688315e+04]
+real, parameter :: bd(6) = [real :: .100000000000000e+01, .928158182389149e+02, .250926840439955e+04, .233924458152954e+05, &
+   & .685638896406835e+05, .418593101455019e+05]
+real, parameter :: cn(5) = [real :: .318309886182000e+00, .299191968327887e+02, .691428839605668e+03, .394539800974744e+04, &
+   & .290314254767015e+04]
+real, parameter :: cd(5) = [real :: .100000000000000e+01, .942978925136851e+02, .219977296283666e+04, .129726479671006e+05, &
+   & .114991427758165e+05]
+real, parameter :: dn(5) = [real :: .101321183630876e+00, .110988033615242e+02, .306282306497228e+03, .213130259794164e+04, &
+   & .171270676541694e+04]
+real, parameter :: dd(5) = [real :: .100000000000000e+01, .111060616085627e+03, .318197586347414e+04, .249342095714049e+05, &
+   & .359241903823488e+05]
+real, parameter :: fp(7) = [real :: .449763389301234e+05, -.188763642051836e+04, .669261097103246e+02, -.343966606879114e+01, &
+   & .343112896133346e+00, -.967546019461500e-01, .318309886183465e+00]
+real, parameter :: gp(7) = [real :: .316642183365360e+06, -.120618995106638e+05, .359164749179351e+03, -.142252603258172e+02, &
+   & .982934118445454e+00, -.153989722912325e+00, .101321183639714e+00]
+real, parameter :: p(6) = [real :: -654729075.0, 2027025.0, -10395.0, 105.0, -3.0, 1.0]
+real, parameter :: q(6) = [real :: -13749310575.0, 34459425.0, -135135.0, 945.0, -15.0, 1.0]
+interface
+   pure elemental function cos1(x)
+      implicit none
+      real, intent(in) :: x
+      real :: cos1
+   end function cos1
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+   pure elemental function sin1(x)
+      implicit none
+      real, intent(in) :: x
+      real :: sin1
+   end function sin1
+end interface
 !-----------------------------------------------------------------------
 !             Evaluation of the real fresnel integrals
 !-----------------------------------------------------------------------
 !--------------------------
-data pi/3.1415926535898/
 !--------------------------
-data a(1)/-.119278241233760e-05/,  a(2)/.540730666359417e-04/, &
-   & a(3)/-.160488306381990e-02/,  a(4)/.281855008757077e-01/, &
-   & a(5)/-.246740110027210e+00/,  a(6)/.100000000000000e+01/
-data b(1)/-.155653074871090e-06/,  b(2)/.844415353045065e-05/, &
-   & b(3)/-.312116934326082e-03/,  b(4)/.724478420395276e-02/, &
-   & b(5)/-.922805853580325e-01/,  b(6)/.523598775598300e+00/
 !--------------------------
-data cp(1) /.114739945188034e-20/,  cp(2) /-.384444827287950e-18/, &
-   & cp(3) /.832125729394275e-16/,  cp(4) /-.142979507360076e-13/, &
-   & cp(5) /.198954961821465e-11/,  cp(6) /-.220226545457144e-09/, &
-   & cp(7) /.188434924092257e-07/,  cp(8) /-.120009722914157e-05/, &
-   & cp(9) /.540741337442140e-04/,  cp(10)/-.160488313553028e-02/, &
-   & cp(11)/.281855008777956e-01/,  cp(12)/-.246740110027196e+00/, &
-   & cp(13)/.999999999999996e+00/
-data sp(1) /.705700784853927e-22/,  sp(2) /-.252757991492418e-19/, &
-   & sp(3) /.594117488940008e-17/,  sp(4) /-.112161631555448e-14/, &
-   & sp(5) /.173332189994074e-12/,  sp(6) /-.215742302078015e-10/, &
-   & sp(7) /.210821173208116e-08/,  sp(8) /-.156471443116560e-06/, &
-   & sp(9) /.844427287845253e-05/,  sp(10)/-.312116942346186e-03/, &
-   & sp(11)/.724478420418951e-02/,  sp(12)/-.922805853580323e-01/, &
-   & sp(13)/.523598775598300e+00/
 !--------------------------
-data pn(1)/.318309816100920e+00/,  pn(2)/.134919391391516e+02/, &
-   & pn(3)/.158258097490377e+03/,  pn(4)/.598796451682535e+03/, &
-   & pn(5)/.632369782194966e+03/,  pn(6)/.967985390141920e+02/
-data pd(1)/.100000000000000e+01/,  pd(2)/.426900960480796e+02/, &
-   & pd(3)/.509085485682426e+03/,  pd(4)/.200034664144742e+04/, &
-   & pd(5)/.231910140792937e+04/,  pd(6)/.486678558201084e+03/
-data qn(1)/.101320876178478e+00/,  qn(2)/.490534697099052e+01/, &
-   & qn(3)/.652095157811808e+02/,  qn(4)/.274183825747887e+03/, &
-   & qn(5)/.305040725009211e+03/,  qn(6)/.364566615872326e+02/
-data qd(1)/.100000000000000e+01/,  qd(2)/.499330024470621e+02/, &
-   & qd(3)/.709854097670206e+03/,  qd(4)/.343470762861172e+04/, &
-   & qd(5)/.522213879312684e+04/,  qd(6)/.168801831831851e+04/
 !--------------------------
-data an(1)/.318309885869756e+00/,  an(2)/.254179177393500e+02/, &
-   & an(3)/.575003792540838e+03/,  an(4)/.426673405867140e+04/, &
-   & an(5)/.891831887923938e+04/,  an(6)/.267955736537967e+04/
-data ad(1)/.100000000000000e+01/,  ad(2)/.801567066285184e+02/, &
-   & ad(3)/.182971463354850e+04/,  ad(4)/.138848884373420e+05/, &
-   & ad(5)/.309228411873207e+05/,  ad(6)/.120421274105856e+05/
-data bn(1)/.101321181932417e+00/,  bn(2)/.925021984290547e+01/, &
-   & bn(3)/.240932023056602e+03/,  bn(4)/.206079616836437e+04/, &
-   & bn(5)/.484901973010149e+04/,  bn(6)/.130680669688315e+04/
-data bd(1)/.100000000000000e+01/,  bd(2)/.928158182389149e+02/, &
-   & bd(3)/.250926840439955e+04/,  bd(4)/.233924458152954e+05/, &
-   & bd(5)/.685638896406835e+05/,  bd(6)/.418593101455019e+05/
 !--------------------------
-data cn(1)/.318309886182000e+00/,  cn(2)/.299191968327887e+02/, &
-   & cn(3)/.691428839605668e+03/,  cn(4)/.394539800974744e+04/, &
-   & cn(5)/.290314254767015e+04/
-data cd(1)/.100000000000000e+01/,  cd(2)/.942978925136851e+02/, &
-   & cd(3)/.219977296283666e+04/,  cd(4)/.129726479671006e+05/, &
-   & cd(5)/.114991427758165e+05/
-data dn(1)/.101321183630876e+00/,  dn(2)/.110988033615242e+02/, &
-   & dn(3)/.306282306497228e+03/,  dn(4)/.213130259794164e+04/, &
-   & dn(5)/.171270676541694e+04/
-data dd(1)/.100000000000000e+01/,  dd(2)/.111060616085627e+03/, &
-   & dd(3)/.318197586347414e+04/,  dd(4)/.249342095714049e+05/, &
-   & dd(5)/.359241903823488e+05/
 !--------------------------
-data fp(1)/.449763389301234e+05/,  fp(2)/-.188763642051836e+04/, &
-   & fp(3)/.669261097103246e+02/,  fp(4)/-.343966606879114e+01/, &
-   & fp(5)/.343112896133346e+00/,  fp(6)/-.967546019461500e-01/, &
-   & fp(7)/.318309886183465e+00/
-data gp(1)/.316642183365360e+06/,  gp(2)/-.120618995106638e+05/, &
-   & gp(3)/.359164749179351e+03/,  gp(4)/-.142252603258172e+02/, &
-   & gp(5)/.982934118445454e+00/,  gp(6)/-.153989722912325e+00/, &
-   & gp(7)/.101321183639714e+00/
 !--------------------------
-data p(1)/-654729075.0/,  p(2)/2027025.0/,  p(3)/-10395.0/, &
-   & p(4)/105.0/,  p(5)/-3.0/,  p(6)/1.0/
-data q(1)/-13749310575.0/,  q(2)/34459425.0/,  q(3)/-135135.0/, &
-   & q(4)/945.0/,  q(5)/-15.0/,  q(6)/1.0/
 !--------------------------
 !
 !     ****** max is a machine dependent constant. Max is the
@@ -9244,20 +9245,28 @@ s = -0.5
 return
 end subroutine frnl
 
-subroutine cexpli (mo, z, w)
+pure elemental subroutine cexpli (mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c, cy, d, e, eps, euler, pi, qm, r, ss, sy, tol, u, x, y
+real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y
 real :: anorm
-real :: spmpar
 real :: n, np1
-real :: cd(18), ce(18)
 real :: qf(2), sm(2), tm(2), ts(2)
 real :: g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
+real, parameter :: pi = 3.14159265358979
+real, parameter :: euler = .577215664901533
+real, parameter :: cd(18) = [real :: 0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+   & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
+   & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
+   & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
+real, parameter :: ce(18) = [real :: .850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+   & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
+   & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
+   & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
 interface
    pure elemental function cpabs(x,y)
       implicit none
@@ -9265,6 +9274,11 @@ interface
       real, intent(in) :: y
       real :: cpabs
    end function cpabs
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
 end interface
 !-----------------------------------------------------------------------
 !           Evaluation of the complex exponential integral
@@ -9272,27 +9286,7 @@ end interface
 !-------------------------
 anorm(x,y) = amax1(abs(x),abs(y))
 !-------------------------
-data pi /3.14159265358979/
-data euler /.577215664901533/
 !-------------------------
-data cd(1)  /0.00000000000000e+00/, cd(2)  /.311105957086528e-01/, &
-   & cd(3)  /.103661260539112e+00/, cd(4)  /.216532335244554e+00/, &
-   & cd(5)  /.369931427960192e+00/, cd(6)  /.566766259990589e+00/, &
-   & cd(7)  /.814042066324748e+00/, cd(8)  /.112384247540813e+01/, &
-   & cd(9)  /.151400478148512e+01/, cd(10) /.200886795032284e+01/, &
-   & cd(11) /.264052411823592e+01/, cd(12) /.345098449933392e+01/, &
-   & cd(13) /.449583360763202e+01/, cd(14) /.585058263409822e+01/, &
-   & cd(15) /.762273501463380e+01/, cd(16) /.997814501584578e+01/, &
-   & cd(17) /.132122064896408e+02/, cd(18) /.180322948376021e+02/
-data ce(1)  /.850156516121093e-02/, ce(2)  /.505037465849058e-01/, &
-   & ce(3)  /.836817368956407e-01/, ce(4)  /.107047582417607e+00/, &
-   & ce(5)  /.120424719029462e+00/, ce(6)  /.125096631582229e+00/, &
-   & ce(7)  /.122314435224685e+00/, ce(8)  /.112621417553907e+00/, &
-   & ce(9)  /.963419407392582e-01/, ce(10) /.747398422757511e-01/, &
-   & ce(11) /.508596135953441e-01/, ce(12) /.290822706773628e-01/, &
-   & ce(13) /.132201640530101e-01/, ce(14) /.443802939829067e-02/, &
-   & ce(15) /.992612478987576e-03/, ce(16) /.126579795112011e-03/, &
-   & ce(17) /.702150908253350e-05/, ce(18) /.910281532564632e-07/
 !-------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -9441,21 +9435,70 @@ if (.not. ind) sm(2) = sm(2) + c
 return
 end subroutine cexpli
 
-subroutine expli(int,arg,result,ierr)
+pure elemental subroutine expli(int,arg,result,ierr)
 implicit none
 real, intent(in) :: arg
 real, intent(inout) :: result
 integer, intent(in) :: int
 integer, intent(out) :: ierr
 integer :: m
-real :: csevl
-real :: alnrel
-real :: a(6), b(5), c(7), d(7), e(7), f(7), p1(8), q1(8), p2(8), &
-   & q2(7), p3(8), q3(7), p4(8), q4(7), r(20), px(9), qx(9), frac, &
-   & sump, sumq, t, w, x, x0, xx0, xmx0, y, dexp40, xmax, xmin, ei
-real :: exparg
+real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei
 integer :: i
-double precision :: dx0
+real, parameter :: dexp40 = .235385266837020e+18
+real, parameter :: x0 = .372507410781366
+double precision, parameter :: dx0 = .37250741078136663446199186658d0
+real, parameter :: a(6) = [real :: -.577215664901531e+00, .758833087029943e+00, .125660818982053e+00, .204158408934305e-01, &
+   & .825035122466538e-03, .962949813453924e-05]
+real, parameter :: b(5) = [real :: .100000000000000e+01, .417810755380398e+00, .730228560396799e-01, .642720224671078e-02, &
+   & .245134203588369e-03]
+real, parameter :: c(7) = [real :: .465627107975096e-06, .999979577051595e+00, .904161556946328e+01, .243784088791317e+02, &
+   & .230192559391334e+02, .690522522784443e+01, .430967839469389e+00]
+real, parameter :: d(7) = [real :: .100000000000000e+01, .100411643829054e+02, .324264210695138e+02, .412807841891424e+02, &
+   & .204494785013794e+02, .331909213593302e+01, .103400130404874e+00]
+real, parameter :: e(7) = [real :: -.999999999998447e+00, -.266271060431811e+02, -.241055827097015e+03, -.895927957772937e+03, - &
+   & .129885688746484e+04, -.545374158883133e+03, -.566575206533869e+01]
+real, parameter :: f(7) = [real :: .100000000000000e+01, .286271060422192e+02, .292310039388533e+03, .133278537748257e+04, &
+   & .277761949509163e+04, .240401713225909e+04, .631657483280800e+03]
+real, parameter :: p1(8) = [real :: -.866937339951070e+01, -.549142265521085e+03, -.421001615357070e+04, -.249301393458648e+06, - &
+   & .119623669349247e+06, -.221744627758845e+08, .389280421311201e+07, -.195773036904548e+09]
+real, parameter :: q1(8) = [real :: .341718750000000e+02, -.160708926587221e+04, .357300298058508e+05, -.483547436162164e+06, &
+   & .428559624611749e+07, -.249033375740540e+08, .891925767575612e+08, -.826271498626055e+08]
+real, parameter :: r(20) = [real :: .636295897967470e+00, -.130811686750676e+00, -.843674102130539e-02, .265684915310067e-02, &
+   & .328227217816581e-03, -.237834477714302e-04, -.114398043081001e-04, -.144059434332383e-05, .524159566511488e-08, &
+   & .384073064078443e-07, .858802448602672e-08, .102192266258550e-08, .217491323232897e-10, -.220902381426231e-10, - &
+   & .634575335449288e-11, -.108377465668577e-11, -.119098228722226e-12, -.284386823892656e-14, .250803270266868e-14, &
+   & .787296415285598e-15]
+real, parameter :: p2(8) = [real :: -.218086381520723e+01, -.219010233854881e+02, .930816385662165e+01, .250762811293560e+02, - &
+   & .331842531997221e+02, .601217990830080e+02, -.432531132878135e+02, .100443109228078e+01]
+real, parameter :: q2(7) = [real :: .393707701852715e+01, .300892648372915e+03, -.625041161671876e+01, .100367439516726e+04, &
+   & .143256738121938e+02, .273624119889328e+04, .527468851962908e+00]
+real, parameter :: p3(8) = [real :: -.348334653602852e+01, -.186545454883399e+02, -.828561994140641e+01, -.323467330305403e+02, &
+   & .179601688769252e+02, .175656315469614e+01, -.195022321289660e+01, .999994296074708e+00]
+real, parameter :: q3(7) = [real :: .695000655887434e+02, .572837193837324e+02, .257776384238440e+02, .760761148007735e+03, &
+   & .289516727925135e+02, -.343942266899870e+01, .100083867402639e+01]
+real, parameter :: p4(8) = [real :: -.531686623494482e+02, .891263822573708e+01, -.139381360364405e+01, -.308336269051763e+02, - &
+   & .749289167792884e+01, -.500140345515924e+01, -.300000016782086e+01, .100000000000058e+01]
+real, parameter :: q4(7) = [real :: .104745362652468e+04, -.674704580465832e+01, .295999399486831e+03, -.431325836146628e+01, - &
+   & .790404992298926e+01, -.299996432944446e+01, .199999999924131e+01]
+interface
+   pure elemental function alnrel(a)
+      implicit none
+      real, intent(in) :: a
+      real :: alnrel
+   end function alnrel
+   pure function csevl(x,a,n)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: x
+      real, intent(in) :: a(n)
+      real :: csevl
+   end function csevl
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+end interface
 !
 !-----------------------------------------------------------------------
 !
@@ -9518,53 +9561,29 @@ double precision :: dx0
 !     Value of exp(40.0)
 !
 !     ----------
-data dexp40/.235385266837020e+18/
 !     ----------
 !
 !     Zero of EI(X)
 !
 !     ----------
-data x0/.372507410781366/,dx0/.37250741078136663446199186658d0/
 !     ----------
 !
 !     Coefficients for R(5,4) approximation,
 !     used for -1.0 .LE. X .LT. 0.0
 !
 !     ----------
-data a(1)/-.577215664901531e+00/, a(2) /.758833087029943e+00/, &
-   & a(3) /.125660818982053e+00/, a(4) /.204158408934305e-01/, &
-   & a(5) /.825035122466538e-03/, a(6) /.962949813453924e-05/
-data b(1) /.100000000000000e+01/, b(2) /.417810755380398e+00/, &
-   & b(3) /.730228560396799e-01/, b(4) /.642720224671078e-02/, &
-   & b(5) /.245134203588369e-03/
 !     ----------
 !
 !     Coefficients for R(6,6) approximation,
 !     used for -4.0 .LE. X .LT. -1.0
 !
 !     ----------
-data c(1) /.465627107975096e-06/, c(2) /.999979577051595e+00/, &
-   & c(3) /.904161556946328e+01/, c(4) /.243784088791317e+02/, &
-   & c(5) /.230192559391334e+02/, c(6) /.690522522784443e+01/, &
-   & c(7) /.430967839469389e+00/
-data d(1) /.100000000000000e+01/, d(2) /.100411643829054e+02/, &
-   & d(3) /.324264210695138e+02/, d(4) /.412807841891424e+02/, &
-   & d(5) /.204494785013794e+02/, d(6) /.331909213593302e+01/, &
-   & d(7) /.103400130404874e+00/
 !     ----------
 !
 !     Coefficients for R(6,6) approximation,
 !     used for X .LT. -4.0
 !
 !     ----------
-data e(1)/-.999999999998447e+00/, e(2)/-.266271060431811e+02/, &
-   & e(3)/-.241055827097015e+03/, e(4)/-.895927957772937e+03/, &
-   & e(5)/-.129885688746484e+04/, e(6)/-.545374158883133e+03/, &
-   & e(7)/-.566575206533869e+01/
-data f(1) /.100000000000000e+01/, f(2) /.286271060422192e+02/, &
-   & f(3) /.292310039388533e+03/, f(4) /.133278537748257e+04/, &
-   & f(5) /.277761949509163e+04/, f(6) /.240401713225909e+04/, &
-   & f(7) /.631657483280800e+03/
 !     ----------
 !
 !     Coefficients for R(7,7) approximation,
@@ -9572,44 +9591,18 @@ data f(1) /.100000000000000e+01/, f(2) /.286271060422192e+02/, &
 !     0.0 .LT. X .LT. 4.0
 !
 !     ----------
-data p1(1)/-.866937339951070e+01/, p1(2)/-.549142265521085e+03/, &
-   & p1(3)/-.421001615357070e+04/, p1(4)/-.249301393458648e+06/, &
-   & p1(5)/-.119623669349247e+06/, p1(6)/-.221744627758845e+08/, &
-   & p1(7) /.389280421311201e+07/, p1(8)/-.195773036904548e+09/
-data q1(1) /.341718750000000e+02/, q1(2)/-.160708926587221e+04/, &
-   & q1(3) /.357300298058508e+05/, q1(4)/-.483547436162164e+06/, &
-   & q1(5) /.428559624611749e+07/, q1(6)/-.249033375740540e+08/, &
-   & q1(7) /.891925767575612e+08/, q1(8)/-.826271498626055e+08/
 !     ----------
 !
 !     Coefficients for Chebyshev expansion for
 !     4.0 .LE. X .LE. 8.0
 !
 !     ----------
-data r(1) / .636295897967470e+00/, r(2) /-.130811686750676e+00/, &
-   & r(3) /-.843674102130539e-02/, r(4) / .265684915310067e-02/, &
-   & r(5) / .328227217816581e-03/, r(6) /-.237834477714302e-04/, &
-   & r(7) /-.114398043081001e-04/, r(8) /-.144059434332383e-05/, &
-   & r(9) / .524159566511488e-08/, r(10)/ .384073064078443e-07/, &
-   & r(11)/ .858802448602672e-08/, r(12)/ .102192266258550e-08/, &
-   & r(13)/ .217491323232897e-10/, r(14)/-.220902381426231e-10/, &
-   & r(15)/-.634575335449288e-11/, r(16)/-.108377465668577e-11/, &
-   & r(17)/-.119098228722226e-12/, r(18)/-.284386823892656e-14/, &
-   & r(19)/ .250803270266868e-14/, r(20)/ .787296415285598e-15/
 !
 !     Coefficients for R(7,7) approximation,
 !     in J-fraction form, used for
 !     8.0 .LT. X .LT. 12.0
 !
 !     ----------
-data p2(1)/-.218086381520723e+01/, p2(2)/-.219010233854881e+02/, &
-   & p2(3)/ .930816385662165e+01/, p2(4) /.250762811293560e+02/, &
-   & p2(5)/-.331842531997221e+02/, p2(6) /.601217990830080e+02/, &
-   & p2(7)/-.432531132878135e+02/, p2(8) /.100443109228078e+01/
-data q2(1)/ .393707701852715e+01/, q2(2) /.300892648372915e+03/, &
-   & q2(3)/-.625041161671876e+01/, q2(4) /.100367439516726e+04/, &
-   & q2(5)/ .143256738121938e+02/, q2(6) /.273624119889328e+04/, &
-   & q2(7)/ .527468851962908e+00/
 !     ----------
 !
 !     Coefficients for R(7,7) approximation,
@@ -9617,28 +9610,12 @@ data q2(1)/ .393707701852715e+01/, q2(2) /.300892648372915e+03/, &
 !     12.0 .LE. X .LT. 24.0
 !
 !     ----------
-data p3(1)/-.348334653602852e+01/, p3(2)/-.186545454883399e+02/, &
-   & p3(3)/-.828561994140641e+01/, p3(4)/-.323467330305403e+02/, &
-   & p3(5)/ .179601688769252e+02/, p3(6) /.175656315469614e+01/, &
-   & p3(7)/-.195022321289660e+01/, p3(8) /.999994296074708e+00/
-data q3(1) /.695000655887434e+02/, q3(2) /.572837193837324e+02/, &
-   & q3(3) /.257776384238440e+02/, q3(4) /.760761148007735e+03/, &
-   & q3(5) /.289516727925135e+02/, q3(6)/-.343942266899870e+01/, &
-   & q3(7) /.100083867402639e+01/
 !     ----------
 !
 !     Coefficients for R(7.7) approximation,
 !     in J-fraction form, used for X .GE. 24.0
 !
 !     ----------
-data p4(1)/-.531686623494482e+02/, p4(2)/ .891263822573708e+01/, &
-   & p4(3)/-.139381360364405e+01/, p4(4)/-.308336269051763e+02/, &
-   & p4(5)/-.749289167792884e+01/, p4(6)/-.500140345515924e+01/, &
-   & p4(7)/-.300000016782086e+01/, p4(8)/ .100000000000058e+01/
-data q4(1)/ .104745362652468e+04/, q4(2)/-.674704580465832e+01/, &
-   & q4(3)/ .295999399486831e+03/, q4(4)/-.431325836146628e+01/, &
-   & q4(5)/-.790404992298926e+01/, q4(6)/-.299996432944446e+01/, &
-   & q4(7)/ .199999999924131e+01/
 !-----------------------------------------------------------------------
 !
 x = arg
@@ -9782,26 +9759,38 @@ return
 return
 end subroutine expli
 
-double precision function dei (x)
+pure elemental double precision function dei (x)
 implicit none
 !-----------------------------------------------------------------------
 !        Double precision evaluation of the exponential integral
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: de1e
+interface
+   pure elemental function de1e(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: de1e
+   end function de1e
+end interface
 !
 dei = -de1e(-x)
 if (x .gt. 4.d0 .or. x .lt. -1.d0) dei = dexp(x) * dei
 return
 end function dei
 
-double precision function dei1 (x)
+pure elemental double precision function dei1 (x)
 implicit none
 !-----------------------------------------------------------------------
 !          Double precision evaluation of exp(-x)*EI(x)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: de1e
+interface
+   pure elemental function de1e(x)
+      implicit none
+      double precision, intent(in) :: x
+      double precision :: de1e
+   end function de1e
+end interface
 !
 dei1 = -de1e(-x)
 if (x .gt. 4.d0 .or. x .lt. -1.d0) return
@@ -9809,14 +9798,146 @@ dei1 = dexp(-x) * dei1
 return
 end function dei1
 
-double precision function de1e(x)
+pure elemental double precision function de1e(x)
 implicit none
 double precision, intent(in) :: x
 integer :: m
 double precision :: c, eps, t, w
-double precision :: a(50), b(60), d(41), e(29), r(25), p(50), &
-   & q(64)
-double precision :: dei0, dcsevl, dpmpar
+double precision, parameter :: a(50) = [double precision :: .3284394579616699087873844201881d-01, - &
+   & .1669920452031362851476184343387d-01, .2845284724361346807424899853252d-03, -.7563944358516206489487866938533d-05, &
+   & .2798971289450859157504843180879d-06, -.1357901828534531069525563926255d-07, .8343596202040469255856102904906d-09, - &
+   & .6370971727640248438275242988532d-10, .6007247608811861235760831561584d-11, -.7022876174679773590750626150088d-12, &
+   & .1018302673703687693096652346883d-12, -.1761812903430880040406309966422d-13, .3250828614235360694244030353877d-14, - &
+   & .5071770025505818678824872259044d-15, .1665177387043294298172486084156d-16, .3166753890797514400677003536555d-16, - &
+   & .1588403763664141515133118343538d-16, .4175513256138018833003034618484d-17, -.2892347749707141906710714478852d-18, - &
+   & .2800625903396608103506340589669d-18, .1322938639539270903707580023781d-18, -.1804447444177301627283887833557d-19, - &
+   & .7905384086522616076291644817604d-20, .4435711366369570103946235838027d-20, -.4264103994978120868865309206555d-21, - &
+   & .3920101766937117541553713162048d-21, .1527378051343994266343752326971d-21, .1024849527049372339310308783117d-22, - &
+   & .2134907874771433576262711405882d-22, .3239139475160028267061694700366d-23, .2142183762299889954762643168296d-23, - &
+   & .8234609419601018414700348082312d-24, -.1524652829645809479613694401140d-24, .1378208282460639134668480364325d-24, &
+   & .2131311202833947879523224999253d-26, -.2012649651526484121817466763127d-25, .1995535662263358016106311782673d-26, &
+   & .2798995808984003464948686520319d-26, -.5534511845389626637640819277823d-27, -.3884995396159968861682544026146d-27, &
+   & .1121304434507359382850680354679d-27, .5566568152423740948256563833514d-28, -.2045482929810499700448533938176d-28, - &
+   & .8453813992712336233411457493674d-29, .3565758433431291562816111116287d-29, .1383653872125634705539949098871d-29, - &
+   & .6062167864451372436584533764778d-30, -.2447198043989313267437655119189d-30, .1006850640933998348011548180480d-30, &
+   & .4623685555014869015664341461674d-31]
+double precision, parameter :: b(60) = [double precision :: .20263150647078889499401236517381d+00, - &
+   & .73655140991203130439536898728034d-01, .63909349118361915862753283840020d-02, -.60797252705247911780653153363999d-03, - &
+   & .73706498620176629330681411493484d-04, .48732857449450183453464992488076d-04, -.23837064840448290766588489460235d-05, - &
+   & .30518612628561521027027332246121d-05, .17050331572564559009688032992907d-06, .23834204527487747258601598136403d-06, &
+   & .10781772556163166562596872364020d-07, -.17955692847399102653642691446599d-07, -.41284072341950457727912394640436d-08, &
+   & .68622148588631968618346844526664d-09, .53130183120506356147602009675961d-09, .78796880261490694831305022893515d-10, - &
+   & .26261762329356522290341675271232d-10, -.15483687636308261963125756294100d-10, -.25818962377261390492802405122591d-11, &
+   & .59542879191591072658903529959352d-12, .46451400387681525833784919321405d-12, .11557855023255861496288006203731d-12, - &
+   & .10475236870835799012317547189670d-14, -.11896653502709004368104489260929d-13, -.47749077490261778752643019349950d-14, - &
+   & .81077649615772777976249734754135d-15, .13435569250031554199376987998178d-15, .14134530022913106260248873881287d-15, &
+   & .49451592573953173115520663232883d-16, .79884048480080665648858587399367d-17, -.14008632188089809829248711935393d-17, - &
+   & .14814246958417372107722804001680d-17, -.55826173646025601904010693937113d-18, -.11442074542191647264783072544598d-18, &
+   & .25371823879566853500524018479923d-20, .13205328154805359813278863389097d-19, .62930261081586809166287426789485d-20, &
+   & .17688270424882713734999261332548d-20, .23266187985146045209674296887432d-21, -.67803060811125233043773831844113d-22, - &
+   & .59440876959676373802874150531891d-22, -.23618214531184415968532592503466d-22, -.60214499724601478214168478744576d-23, - &
+   & .65517906474348299071370444144639d-24, .29388755297497724587042038699349d-24, .22601606200642115173215728758510d-24, &
+   & .89534369245958628745091206873087d-25, .24015923471098457555772067457706d-25, .34118376888907172955666423043413d-26, - &
+   & .71617071694630342052355013345279d-27, -.75620390659281725157928651980799d-27, -.33774612157467324637952920780800d-27, - &
+   & .10479325703300941711526430332245d-27, -.21654550252170342240854880201386d-28, -.75297125745288269994689298432000d-30, &
+   & .19103179392798935768638084000426d-29, .11492104966530338547790728833706d-29, .43896970582661751514410359193600d-30, &
+   & .12320883239205686471647157725866d-30, .22220174457553175317538581162666d-31]
+double precision, parameter :: d(41) = [double precision :: .63629589796747038767129887806803d+00, - &
+   & .13081168675067634385812671121135d+00, -.84367410213053930014487662129752d-02, .26568491531006685413029428068906d-02, &
+   & .32822721781658133778792170142517d-03, -.23783447771430248269579807851050d-04, -.11439804308100055514447076797047d-04, - &
+   & .14405943433238338455239717699323d-05, .52415956651148829963772818061664d-08, .38407306407844323480979203059716d-07, &
+   & .85880244860267195879660515759344d-08, .10219226625855003286339969553911d-08, .21749132323289724542821339805992d-10, - &
+   & .22090238142623144809523503811741d-10, -.63457533544928753294383622208801d-11, -.10837746566857661115340539732919d-11, - &
+   & .11909822872222586730262200440277d-12, -.28438682389265590299508766008661d-14, .25080327026686769668587195487546d-14, &
+   & .78729641528559842431597726421265d-15, .15475066347785217148484334637329d-15, .22575322831665075055272608197290d-16, &
+   & .22233352867266608760281380836693d-17, .16967819563544153513464194662399d-19, -.57608316255947682105310087304533d-19, - &
+   & .17591235774646878055625369408853d-19, -.36286056375103174394755328682666d-20, -.59235569797328991652558143488000d-21, - &
+   & .76030380926310191114429136895999d-22, -.62547843521711763842641428479999d-23, .25483360759307648606037606400000d-24, &
+   & .25598615731739857020168874666666d-24, .71376239357899318800207052800000d-25, .14703759939567568181578956800000d-25, &
+   & .25105524765386733555198634666666d-26, .35886666387790890886583637333333d-27, .39886035156771301763317759999999d-28, &
+   & .21763676947356220478805333333333d-29, -.46146998487618942367607466666666d-30, -.20713517877481987707153066666666d-30, - &
+   & .51890378563534371596970666666666d-31]
+double precision, parameter :: e(29) = [double precision :: -.16113461655571494025720663927566180d+02, &
+   & .77940727787426802769272245891741497d+01, -.19554058188631419507127283812814491d+01, .37337293866277945611517190865690209d+00 &
+   & , -.56925031910929019385263892220051166d-01, .72110777696600918537847724812635813d-02, - &
+   & .78104901449841593997715184089064148d-03, .73880933562621681878974881366177858d-04, -.62028618758082045134358133607909712d-05 &
+   & , .46816002303176735524405823868362657d-06, -.32092888533298649524072553027228719d-07, &
+   & .20151997487404533394826262213019548d-08, -.11673686816697793105356271695015419d-09, .62762706672039943397788748379615573d-11 &
+   & , -.31481541672275441045246781802393600d-12, .14799041744493474210894472251733333d-13, - &
+   & .65457091583979673774263401588053333d-15, .27336872223137291142508012748799999d-16, -.10813524349754406876721727624533333d-17 &
+   & , .40628328040434303295300348586666666d-19, -.14535539358960455858914372266666666d-20, &
+   & .49632746181648636830198442666666666d-22, -.16208612696636044604866560000000000d-23, .50721448038607422226431999999999999d-25 &
+   & , -.15235811133372207813973333333333333d-26, .44001511256103618696533333333333333d-28, - &
+   & .12236141945416231594666666666666666d-29, .32809216661066001066666666666666666d-31, -.84933452268306432000000000000000000d-33]
+double precision, parameter :: r(25) = [double precision :: -.3739021479220279511668698204827d-01, &
+   & .4272398606220957726049179176528d-01, -.130318207984970054415392055219726d+00, .144191240246988907341095893982137d-01, - &
+   & .134617078051068022116121527983553d-02, .107310292530637799976115850970073d-03, -.742999951611943649610283062223163d-05, &
+   & .453773256907537139386383211511827d-06, -.247641721139060131846547423802912d-07, .122076581374590953700228167846102d-08, - &
+   & .548514148064092393821357398028261d-10, .226362142130078799293688162377002d-11, -.863589727169800979404172916282240d-13, &
+   & .306291553669332997581032894881279d-14, -.101485718855944147557128906734933d-15, .315482174034069877546855328426666d-17, - &
+   & .923604240769240954484015923200000d-19, .255504267970814002440435029333333d-20, -.669912805684566847217882453333333d-22, &
+   & .166925405435387319431987199999999d-23, -.396254925184379641856000000000000d-25, .898135896598511332010666666666666d-27, - &
+   & .194763366993016433322666666666666d-28, .404836019024630033066666666666666d-30, -.807981567699845120000000000000000d-32]
+double precision, parameter :: p(50) = [double precision :: -.60577324664060345999319382737747d+00, - &
+   & .11253524348366090030649768852718d+00, .13432266247902779492487859329414d-01, -.19268451873811457249246838991303d-02, &
+   & .30911833772060318335586737475368d-03, -.53564132129618418776393559795147d-04, .98278128802474923952491882717237d-05, - &
+   & .18853689849165182826902891938910d-05, .37494319356894735406964042190531d-06, -.76823455870552639273733465680556d-07, &
+   & .16143270567198777552956300060868d-07, -.34668022114907354566309060226027d-08, .75875420919036277572889747054114d-09, - &
+   & .16886433329881412573514526636703d-09, .38145706749552265682804250927272d-10, -.87330266324446292706851718272334d-11, &
+   & .20236728645867960961794311064330d-11, -.47413283039555834655210340820160d-12, .11221172048389864324731799928920d-12, - &
+   & .26804225434840309912826809093395d-13, .64578514417716530343580369067212d-14, -.15682760501666478830305702849194d-14, &
+   & .38367865399315404861821516441408d-15, -.94517173027579130478871048932556d-16, .23434812288949573293896666439133d-16, - &
+   & .58458661580214714576123194419882d-17, .14666229867947778605873617419195d-17, -.36993923476444472706592538274474d-18, &
+   & .93790159936721242136014291817813d-19, -.23893673221937873136308224087381d-19, .61150624629497608051934223837866d-20, - &
+   & .15718585327554025507719853288106d-20, .40572387285585397769519294491306d-21, -.10514026554738034990566367122773d-21, &
+   & .27349664930638667785806003131733d-22, -.71401604080205796099355574271999d-23, .18705552432235079986756924211199d-23, - &
+   & .49167468166870480520478020949333d-24, .12964988119684031730916087125333d-24, -.34292515688362864461623940437333d-25, &
+   & .90972241643887034329104820906666d-26, -.24202112314316856489934847999999d-26, .64563612934639510757670475093333d-27, - &
+   & .17269132735340541122315987626666d-27, .46308611659151500715194231466666d-28, -.12448703637214131241755170133333d-28, &
+   & .33544574090520678532907007999999d-29, -.90598868521070774437543935999999d-30, .24524147051474238587273216000000d-30, - &
+   & .66528178733552062817107967999999d-31]
+double precision, parameter :: q(64) = [double precision :: -.1892918000753016825495679942820d+00, - &
+   & .8648117855259871489968817056824d-01, .7224101543746594747021514839184d-02, -.8097559457557386197159655610181d-03, &
+   & .1099913443266138867179251157002d-03, -.1717332998937767371495358814487d-04, .2985627514479283322825342495003d-05, - &
+   & .5659649145771930056560167267155d-06, .1152680839714140019226583501663d-06, -.2495030440269338228842128765065d-07, &
+   & .5692324201833754367039370368140d-08, -.1359957664805600338490030939176d-08, .3384662888760884590184512925859d-09, - &
+   & .8737853904474681952350849316580d-10, .2331588663222659718612613400470d-10, -.6411481049213785969753165196326d-11, &
+   & .1812246980204816433384359484682d-11, -.5253831761558460688819403840466d-12, .1559218272591925698855028609825d-12, - &
+   & .4729168297080398718476429369466d-13, .1463761864393243502076199493808d-13, -.4617388988712924102232173623604d-14, &
+   & .1482710348289369323789239660371d-14, -.4841672496239229146973165734417d-15, .1606215575700290408116571966188d-15, - &
+   & .5408917538957170947895023784252d-16, .1847470159346897881370231402310d-16, -.6395830792759094470500610425050d-17, &
+   & .2242780721699759457250233276170d-17, -.7961369173983947552744555308646d-18, .2859308111540197459808619929272d-18, - &
+   & .1038450244701137145900697137446d-18, .3812040607097975780866841008319d-19, -.1413795417717200768717562723696d-19, &
+   & .5295367865182740958305442594815d-20, -.2002264245026825902137211131439d-20, .7640262751275196014736848610918d-21, - &
+   & .2941119006868787883311263523362d-21, .1141823539078927193037691483586d-21, -.4469308475955298425247020718489d-22, &
+   & .1763262410571750770630491408520d-22, -.7009968187925902356351518262340d-23, .2807573556558378922287757507515d-23, - &
+   & .1132560944981086432141888891562d-23, .4600574684375017946156764233727d-24, -.1881448598976133459864609148108d-24, &
+   & .7744916111507730845444328478037d-25, -.3208512760585368926702703826261d-25, .1337445542910839760619930421384d-25, - &
+   & .5608671881802217048894771735210d-26, .2365839716528537483710069473279d-26, -.1003656195025305334065834526856d-26, &
+   & .4281490878094161131286642556927d-27, -.1836345261815318199691326958250d-27, .7917798231349540000097468678144d-28, - &
+   & .3431542358742220361025015775231d-28, .1494705493897103237475066008917d-28, -.6542620279865705439739042420053d-29, &
+   & .2877581395199171114340487353685d-29, -.1271557211796024711027981200042d-29, .5644615555648722522388044622506d-30, - &
+   & .2516994994284095106080616830293d-30, .1127259818927510206370368804181d-30, -.5069814875800460855562584719360d-31]
+interface
+   pure function dcsevl(x,a,n)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: x
+      double precision, intent(in) :: a(n)
+      double precision :: dcsevl
+   end function dcsevl
+   pure elemental function dei0(x,eps)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: eps
+      double precision :: dei0
+   end function dei0
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !-----------------------------------------------------------------------
 !
 !     Let E1(x) denote the exponential integral for positive x and
@@ -9885,331 +10006,12 @@ double precision :: dei0, dcsevl, dpmpar
 !
 !-----------------------------------------------------------------------
 !------------------------------
-data a(1)  / .3284394579616699087873844201881d-01/, &
-   & a(2)  /-.1669920452031362851476184343387d-01/, &
-   & a(3)  / .2845284724361346807424899853252d-03/, &
-   & a(4)  /-.7563944358516206489487866938533d-05/, &
-   & a(5)  / .2798971289450859157504843180879d-06/, &
-   & a(6)  /-.1357901828534531069525563926255d-07/, &
-   & a(7)  / .8343596202040469255856102904906d-09/, &
-   & a(8)  /-.6370971727640248438275242988532d-10/, &
-   & a(9)  / .6007247608811861235760831561584d-11/, &
-   & a(10) /-.7022876174679773590750626150088d-12/
-data a(11) / .1018302673703687693096652346883d-12/, &
-   & a(12) /-.1761812903430880040406309966422d-13/, &
-   & a(13) / .3250828614235360694244030353877d-14/, &
-   & a(14) /-.5071770025505818678824872259044d-15/, &
-   & a(15) / .1665177387043294298172486084156d-16/, &
-   & a(16) / .3166753890797514400677003536555d-16/, &
-   & a(17) /-.1588403763664141515133118343538d-16/, &
-   & a(18) / .4175513256138018833003034618484d-17/, &
-   & a(19) /-.2892347749707141906710714478852d-18/, &
-   & a(20) /-.2800625903396608103506340589669d-18/
-data a(21) / .1322938639539270903707580023781d-18/, &
-   & a(22) /-.1804447444177301627283887833557d-19/, &
-   & a(23) /-.7905384086522616076291644817604d-20/, &
-   & a(24) / .4435711366369570103946235838027d-20/, &
-   & a(25) /-.4264103994978120868865309206555d-21/, &
-   & a(26) /-.3920101766937117541553713162048d-21/, &
-   & a(27) / .1527378051343994266343752326971d-21/, &
-   & a(28) / .1024849527049372339310308783117d-22/, &
-   & a(29) /-.2134907874771433576262711405882d-22/, &
-   & a(30) / .3239139475160028267061694700366d-23/
-data a(31) / .2142183762299889954762643168296d-23/, &
-   & a(32) /-.8234609419601018414700348082312d-24/, &
-   & a(33) /-.1524652829645809479613694401140d-24/, &
-   & a(34) / .1378208282460639134668480364325d-24/, &
-   & a(35) / .2131311202833947879523224999253d-26/, &
-   & a(36) /-.2012649651526484121817466763127d-25/, &
-   & a(37) / .1995535662263358016106311782673d-26/, &
-   & a(38) / .2798995808984003464948686520319d-26/, &
-   & a(39) /-.5534511845389626637640819277823d-27/, &
-   & a(40) /-.3884995396159968861682544026146d-27/
-data a(41) / .1121304434507359382850680354679d-27/, &
-   & a(42) / .5566568152423740948256563833514d-28/, &
-   & a(43) /-.2045482929810499700448533938176d-28/, &
-   & a(44) /-.8453813992712336233411457493674d-29/, &
-   & a(45) / .3565758433431291562816111116287d-29/, &
-   & a(46) / .1383653872125634705539949098871d-29/, &
-   & a(47) /-.6062167864451372436584533764778d-30/, &
-   & a(48) /-.2447198043989313267437655119189d-30/, &
-   & a(49) / .1006850640933998348011548180480d-30/, &
-   & a(50) / .4623685555014869015664341461674d-31/
 !------------------------------
-data b(1)  / .20263150647078889499401236517381d+00/, &
-   & b(2)  /-.73655140991203130439536898728034d-01/, &
-   & b(3)  / .63909349118361915862753283840020d-02/, &
-   & b(4)  /-.60797252705247911780653153363999d-03/, &
-   & b(5)  /-.73706498620176629330681411493484d-04/, &
-   & b(6)  / .48732857449450183453464992488076d-04/, &
-   & b(7)  /-.23837064840448290766588489460235d-05/, &
-   & b(8)  /-.30518612628561521027027332246121d-05/, &
-   & b(9)  / .17050331572564559009688032992907d-06/, &
-   & b(10) / .23834204527487747258601598136403d-06/
-data b(11) / .10781772556163166562596872364020d-07/, &
-   & b(12) /-.17955692847399102653642691446599d-07/, &
-   & b(13) /-.41284072341950457727912394640436d-08/, &
-   & b(14) / .68622148588631968618346844526664d-09/, &
-   & b(15) / .53130183120506356147602009675961d-09/, &
-   & b(16) / .78796880261490694831305022893515d-10/, &
-   & b(17) /-.26261762329356522290341675271232d-10/, &
-   & b(18) /-.15483687636308261963125756294100d-10/, &
-   & b(19) /-.25818962377261390492802405122591d-11/, &
-   & b(20) / .59542879191591072658903529959352d-12/
-data b(21) / .46451400387681525833784919321405d-12/, &
-   & b(22) / .11557855023255861496288006203731d-12/, &
-   & b(23) /-.10475236870835799012317547189670d-14/, &
-   & b(24) /-.11896653502709004368104489260929d-13/, &
-   & b(25) /-.47749077490261778752643019349950d-14/, &
-   & b(26) /-.81077649615772777976249734754135d-15/, &
-   & b(27) / .13435569250031554199376987998178d-15/, &
-   & b(28) / .14134530022913106260248873881287d-15/, &
-   & b(29) / .49451592573953173115520663232883d-16/, &
-   & b(30) / .79884048480080665648858587399367d-17/
-data b(31) /-.14008632188089809829248711935393d-17/, &
-   & b(32) /-.14814246958417372107722804001680d-17/, &
-   & b(33) /-.55826173646025601904010693937113d-18/, &
-   & b(34) /-.11442074542191647264783072544598d-18/, &
-   & b(35) / .25371823879566853500524018479923d-20/, &
-   & b(36) / .13205328154805359813278863389097d-19/, &
-   & b(37) / .62930261081586809166287426789485d-20/, &
-   & b(38) / .17688270424882713734999261332548d-20/, &
-   & b(39) / .23266187985146045209674296887432d-21/, &
-   & b(40) /-.67803060811125233043773831844113d-22/
-data b(41) /-.59440876959676373802874150531891d-22/, &
-   & b(42) /-.23618214531184415968532592503466d-22/, &
-   & b(43) /-.60214499724601478214168478744576d-23/, &
-   & b(44) /-.65517906474348299071370444144639d-24/, &
-   & b(45) / .29388755297497724587042038699349d-24/, &
-   & b(46) / .22601606200642115173215728758510d-24/, &
-   & b(47) / .89534369245958628745091206873087d-25/, &
-   & b(48) / .24015923471098457555772067457706d-25/, &
-   & b(49) / .34118376888907172955666423043413d-26/, &
-   & b(50) /-.71617071694630342052355013345279d-27/
-data b(51) /-.75620390659281725157928651980799d-27/, &
-   & b(52) /-.33774612157467324637952920780800d-27/, &
-   & b(53) /-.10479325703300941711526430332245d-27/, &
-   & b(54) /-.21654550252170342240854880201386d-28/, &
-   & b(55) /-.75297125745288269994689298432000d-30/, &
-   & b(56) / .19103179392798935768638084000426d-29/, &
-   & b(57) / .11492104966530338547790728833706d-29/, &
-   & b(58) / .43896970582661751514410359193600d-30/, &
-   & b(59) / .12320883239205686471647157725866d-30/, &
-   & b(60) / .22220174457553175317538581162666d-31/
 !------------------------------
-data d(1)  / .63629589796747038767129887806803d+00/, &
-   & d(2)  /-.13081168675067634385812671121135d+00/, &
-   & d(3)  /-.84367410213053930014487662129752d-02/, &
-   & d(4)  / .26568491531006685413029428068906d-02/, &
-   & d(5)  / .32822721781658133778792170142517d-03/, &
-   & d(6)  /-.23783447771430248269579807851050d-04/, &
-   & d(7)  /-.11439804308100055514447076797047d-04/, &
-   & d(8)  /-.14405943433238338455239717699323d-05/, &
-   & d(9)  / .52415956651148829963772818061664d-08/, &
-   & d(10) / .38407306407844323480979203059716d-07/
-data d(11) / .85880244860267195879660515759344d-08/, &
-   & d(12) / .10219226625855003286339969553911d-08/, &
-   & d(13) / .21749132323289724542821339805992d-10/, &
-   & d(14) /-.22090238142623144809523503811741d-10/, &
-   & d(15) /-.63457533544928753294383622208801d-11/, &
-   & d(16) /-.10837746566857661115340539732919d-11/, &
-   & d(17) /-.11909822872222586730262200440277d-12/, &
-   & d(18) /-.28438682389265590299508766008661d-14/, &
-   & d(19) / .25080327026686769668587195487546d-14/, &
-   & d(20) / .78729641528559842431597726421265d-15/
-data d(21) / .15475066347785217148484334637329d-15/, &
-   & d(22) / .22575322831665075055272608197290d-16/, &
-   & d(23) / .22233352867266608760281380836693d-17/, &
-   & d(24) / .16967819563544153513464194662399d-19/, &
-   & d(25) /-.57608316255947682105310087304533d-19/, &
-   & d(26) /-.17591235774646878055625369408853d-19/, &
-   & d(27) /-.36286056375103174394755328682666d-20/, &
-   & d(28) /-.59235569797328991652558143488000d-21/, &
-   & d(29) /-.76030380926310191114429136895999d-22/, &
-   & d(30) /-.62547843521711763842641428479999d-23/
-data d(31) / .25483360759307648606037606400000d-24/, &
-   & d(32) / .25598615731739857020168874666666d-24/, &
-   & d(33) / .71376239357899318800207052800000d-25/, &
-   & d(34) / .14703759939567568181578956800000d-25/, &
-   & d(35) / .25105524765386733555198634666666d-26/, &
-   & d(36) / .35886666387790890886583637333333d-27/, &
-   & d(37) / .39886035156771301763317759999999d-28/, &
-   & d(38) / .21763676947356220478805333333333d-29/, &
-   & d(39) /-.46146998487618942367607466666666d-30/, &
-   & d(40) /-.20713517877481987707153066666666d-30/
-data d(41) /-.51890378563534371596970666666666d-31/
 !------------------------------
-data e(1)  /-.16113461655571494025720663927566180d+02/, &
-   & e(2)  / .77940727787426802769272245891741497d+01/, &
-   & e(3)  /-.19554058188631419507127283812814491d+01/, &
-   & e(4)  / .37337293866277945611517190865690209d+00/, &
-   & e(5)  /-.56925031910929019385263892220051166d-01/, &
-   & e(6)  / .72110777696600918537847724812635813d-02/, &
-   & e(7)  /-.78104901449841593997715184089064148d-03/, &
-   & e(8)  / .73880933562621681878974881366177858d-04/, &
-   & e(9)  /-.62028618758082045134358133607909712d-05/, &
-   & e(10) / .46816002303176735524405823868362657d-06/
-data e(11) /-.32092888533298649524072553027228719d-07/, &
-   & e(12) / .20151997487404533394826262213019548d-08/, &
-   & e(13) /-.11673686816697793105356271695015419d-09/, &
-   & e(14) / .62762706672039943397788748379615573d-11/, &
-   & e(15) /-.31481541672275441045246781802393600d-12/, &
-   & e(16) / .14799041744493474210894472251733333d-13/, &
-   & e(17) /-.65457091583979673774263401588053333d-15/, &
-   & e(18) / .27336872223137291142508012748799999d-16/, &
-   & e(19) /-.10813524349754406876721727624533333d-17/, &
-   & e(20) / .40628328040434303295300348586666666d-19/
-data e(21) /-.14535539358960455858914372266666666d-20/, &
-   & e(22) / .49632746181648636830198442666666666d-22/, &
-   & e(23) /-.16208612696636044604866560000000000d-23/, &
-   & e(24) / .50721448038607422226431999999999999d-25/, &
-   & e(25) /-.15235811133372207813973333333333333d-26/, &
-   & e(26) / .44001511256103618696533333333333333d-28/, &
-   & e(27) /-.12236141945416231594666666666666666d-29/, &
-   & e(28) / .32809216661066001066666666666666666d-31/, &
-   & e(29) /-.84933452268306432000000000000000000d-33/
 !------------------------------
-data r(1)  /-.3739021479220279511668698204827d-01/, &
-   & r(2)  / .4272398606220957726049179176528d-01/, &
-   & r(3)  /-.130318207984970054415392055219726d+00/, &
-   & r(4)  / .144191240246988907341095893982137d-01/, &
-   & r(5)  /-.134617078051068022116121527983553d-02/, &
-   & r(6)  / .107310292530637799976115850970073d-03/, &
-   & r(7)  /-.742999951611943649610283062223163d-05/, &
-   & r(8)  / .453773256907537139386383211511827d-06/, &
-   & r(9)  /-.247641721139060131846547423802912d-07/, &
-   & r(10) / .122076581374590953700228167846102d-08/
-data r(11) /-.548514148064092393821357398028261d-10/, &
-   & r(12) / .226362142130078799293688162377002d-11/, &
-   & r(13) /-.863589727169800979404172916282240d-13/, &
-   & r(14) / .306291553669332997581032894881279d-14/, &
-   & r(15) /-.101485718855944147557128906734933d-15/, &
-   & r(16) / .315482174034069877546855328426666d-17/, &
-   & r(17) /-.923604240769240954484015923200000d-19/, &
-   & r(18) / .255504267970814002440435029333333d-20/, &
-   & r(19) /-.669912805684566847217882453333333d-22/, &
-   & r(20) / .166925405435387319431987199999999d-23/
-data r(21) /-.396254925184379641856000000000000d-25/, &
-   & r(22) / .898135896598511332010666666666666d-27/, &
-   & r(23) /-.194763366993016433322666666666666d-28/, &
-   & r(24) / .404836019024630033066666666666666d-30/, &
-   & r(25) /-.807981567699845120000000000000000d-32/
 !------------------------------
-data p(1)  /-.60577324664060345999319382737747d+00/, &
-   & p(2)  /-.11253524348366090030649768852718d+00/, &
-   & p(3)  / .13432266247902779492487859329414d-01/, &
-   & p(4)  /-.19268451873811457249246838991303d-02/, &
-   & p(5)  / .30911833772060318335586737475368d-03/, &
-   & p(6)  /-.53564132129618418776393559795147d-04/, &
-   & p(7)  / .98278128802474923952491882717237d-05/, &
-   & p(8)  /-.18853689849165182826902891938910d-05/, &
-   & p(9)  / .37494319356894735406964042190531d-06/, &
-   & p(10) /-.76823455870552639273733465680556d-07/
-data p(11) / .16143270567198777552956300060868d-07/, &
-   & p(12) /-.34668022114907354566309060226027d-08/, &
-   & p(13) / .75875420919036277572889747054114d-09/, &
-   & p(14) /-.16886433329881412573514526636703d-09/, &
-   & p(15) / .38145706749552265682804250927272d-10/, &
-   & p(16) /-.87330266324446292706851718272334d-11/, &
-   & p(17) / .20236728645867960961794311064330d-11/, &
-   & p(18) /-.47413283039555834655210340820160d-12/, &
-   & p(19) / .11221172048389864324731799928920d-12/, &
-   & p(20) /-.26804225434840309912826809093395d-13/
-data p(21) / .64578514417716530343580369067212d-14/, &
-   & p(22) /-.15682760501666478830305702849194d-14/, &
-   & p(23) / .38367865399315404861821516441408d-15/, &
-   & p(24) /-.94517173027579130478871048932556d-16/, &
-   & p(25) / .23434812288949573293896666439133d-16/, &
-   & p(26) /-.58458661580214714576123194419882d-17/, &
-   & p(27) / .14666229867947778605873617419195d-17/, &
-   & p(28) /-.36993923476444472706592538274474d-18/, &
-   & p(29) / .93790159936721242136014291817813d-19/, &
-   & p(30) /-.23893673221937873136308224087381d-19/
-data p(31) / .61150624629497608051934223837866d-20/, &
-   & p(32) /-.15718585327554025507719853288106d-20/, &
-   & p(33) / .40572387285585397769519294491306d-21/, &
-   & p(34) /-.10514026554738034990566367122773d-21/, &
-   & p(35) / .27349664930638667785806003131733d-22/, &
-   & p(36) /-.71401604080205796099355574271999d-23/, &
-   & p(37) / .18705552432235079986756924211199d-23/, &
-   & p(38) /-.49167468166870480520478020949333d-24/, &
-   & p(39) / .12964988119684031730916087125333d-24/, &
-   & p(40) /-.34292515688362864461623940437333d-25/
-data p(41) / .90972241643887034329104820906666d-26/, &
-   & p(42) /-.24202112314316856489934847999999d-26/, &
-   & p(43) / .64563612934639510757670475093333d-27/, &
-   & p(44) /-.17269132735340541122315987626666d-27/, &
-   & p(45) / .46308611659151500715194231466666d-28/, &
-   & p(46) /-.12448703637214131241755170133333d-28/, &
-   & p(47) / .33544574090520678532907007999999d-29/, &
-   & p(48) /-.90598868521070774437543935999999d-30/, &
-   & p(49) / .24524147051474238587273216000000d-30/, &
-   & p(50) /-.66528178733552062817107967999999d-31/
 !------------------------------
-data q(1)  /-.1892918000753016825495679942820d+00/, &
-   & q(2)  /-.8648117855259871489968817056824d-01/, &
-   & q(3)  / .7224101543746594747021514839184d-02/, &
-   & q(4)  /-.8097559457557386197159655610181d-03/, &
-   & q(5)  / .1099913443266138867179251157002d-03/, &
-   & q(6)  /-.1717332998937767371495358814487d-04/, &
-   & q(7)  / .2985627514479283322825342495003d-05/, &
-   & q(8)  /-.5659649145771930056560167267155d-06/, &
-   & q(9)  / .1152680839714140019226583501663d-06/, &
-   & q(10) /-.2495030440269338228842128765065d-07/
-data q(11) / .5692324201833754367039370368140d-08/, &
-   & q(12) /-.1359957664805600338490030939176d-08/, &
-   & q(13) / .3384662888760884590184512925859d-09/, &
-   & q(14) /-.8737853904474681952350849316580d-10/, &
-   & q(15) / .2331588663222659718612613400470d-10/, &
-   & q(16) /-.6411481049213785969753165196326d-11/, &
-   & q(17) / .1812246980204816433384359484682d-11/, &
-   & q(18) /-.5253831761558460688819403840466d-12/, &
-   & q(19) / .1559218272591925698855028609825d-12/, &
-   & q(20) /-.4729168297080398718476429369466d-13/
-data q(21) / .1463761864393243502076199493808d-13/, &
-   & q(22) /-.4617388988712924102232173623604d-14/, &
-   & q(23) / .1482710348289369323789239660371d-14/, &
-   & q(24) /-.4841672496239229146973165734417d-15/, &
-   & q(25) / .1606215575700290408116571966188d-15/, &
-   & q(26) /-.5408917538957170947895023784252d-16/, &
-   & q(27) / .1847470159346897881370231402310d-16/, &
-   & q(28) /-.6395830792759094470500610425050d-17/, &
-   & q(29) / .2242780721699759457250233276170d-17/, &
-   & q(30) /-.7961369173983947552744555308646d-18/
-data q(31) / .2859308111540197459808619929272d-18/, &
-   & q(32) /-.1038450244701137145900697137446d-18/, &
-   & q(33) / .3812040607097975780866841008319d-19/, &
-   & q(34) /-.1413795417717200768717562723696d-19/, &
-   & q(35) / .5295367865182740958305442594815d-20/, &
-   & q(36) /-.2002264245026825902137211131439d-20/, &
-   & q(37) / .7640262751275196014736848610918d-21/, &
-   & q(38) /-.2941119006868787883311263523362d-21/, &
-   & q(39) / .1141823539078927193037691483586d-21/, &
-   & q(40) /-.4469308475955298425247020718489d-22/
-data q(41) / .1763262410571750770630491408520d-22/, &
-   & q(42) /-.7009968187925902356351518262340d-23/, &
-   & q(43) / .2807573556558378922287757507515d-23/, &
-   & q(44) /-.1132560944981086432141888891562d-23/, &
-   & q(45) / .4600574684375017946156764233727d-24/, &
-   & q(46) /-.1881448598976133459864609148108d-24/, &
-   & q(47) / .7744916111507730845444328478037d-25/, &
-   & q(48) /-.3208512760585368926702703826261d-25/, &
-   & q(49) / .1337445542910839760619930421384d-25/, &
-   & q(50) /-.5608671881802217048894771735210d-26/
-data q(51) / .2365839716528537483710069473279d-26/, &
-   & q(52) /-.1003656195025305334065834526856d-26/, &
-   & q(53) / .4281490878094161131286642556927d-27/, &
-   & q(54) /-.1836345261815318199691326958250d-27/, &
-   & q(55) / .7917798231349540000097468678144d-28/, &
-   & q(56) /-.3431542358742220361025015775231d-28/, &
-   & q(57) / .1494705493897103237475066008917d-28/, &
-   & q(58) /-.6542620279865705439739042420053d-29/, &
-   & q(59) / .2877581395199171114340487353685d-29/, &
-   & q(60) /-.1271557211796024711027981200042d-29/
-data q(61) / .5644615555648722522388044622506d-30/, &
-   & q(62) /-.2516994994284095106080616830293d-30/, &
-   & q(63) / .1127259818927510206370368804181d-30/, &
-   & q(64) /-.5069814875800460855562584719360d-31/
 !------------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -10284,15 +10086,41 @@ de1e = (1.d0 + w)/x
 return
 end function de1e
 
-double precision function dei0 (x, eps)
+pure elemental double precision function dei0 (x, eps)
 implicit none
 double precision, intent(in) :: eps
 double precision, intent(in) :: x
 integer :: n
-double precision :: a(40), c
+double precision :: c
 double precision :: h, t
 double precision :: w
-double precision :: dk1, dk2, dk3, db, db2, dx
+double precision :: db2
+double precision, parameter :: dk1 = 25598514349.d0
+double precision, parameter :: dk2 = 12212826724.d0
+double precision, parameter :: dk3 = 52346020729.d0
+double precision, parameter :: db = 68719476736.d0
+double precision, parameter :: dx = .64725688445954142292644880487403537155379408215561d-33
+double precision, parameter :: a(40) = [double precision :: .3896215733907167310156502703593482682018d+01, - &
+   & .3281607866398561670879044070702055058438d+01, .6522376145438925697728352767902339522245d+01, - &
+   & .1296969738353651703636356975116693457132d+02, .2788629796294204997855360701398702087604d+02, - &
+   & .6237880152891541873078526672920295283143d+02, .1435349488096750987841265647073135861344d+03, - &
+   & .3371558271787468916821364466977375583658d+03, .8045318399821382506595322457265602778098d+03, - &
+   & .1943796645723498840655451915157946462648d+04, .4743765650402430835228269085129777320454d+04, - &
+   & .1167346399116716364394668734600584330571d+05, .2892695530543545087445160311373446386859d+05, - &
+   & .7210794586837158996878001987822898188198d+05, .1806695585893919626172098163733836311447d+06, - &
+   & .4546962188544665746524572520110515778526d+06, .1148834546817744310374556891236080193473d+07, - &
+   & .2912721663850837498392234670693435881386d+07, .7407692958000587759747953639495510375408d+07, - &
+   & .1889172700038153127288849726417780854730d+08, .4830003493086024720868271496253148288055d+08, - &
+   & .1237682190024917092137405370407916520821d+09, .3178111056663621852260468265468336116367d+09, - &
+   & .8176185693184928170769596413793786736279d+09, .2107109291864363741291032089276432438927d+10, - &
+   & .5438996831077284596300440196418865401363d+10, .1406026390995585037838894210474681627693d+11, - &
+   & .3639689100149205333626392754168250384373d+11, .9433859509219164512733865811047107199412d+11, - &
+   & .2448111705066430130314746602027041462835d+12, .6359981818273706257655285041587660739835d+12, - &
+   & .1653989211524391716301960841541179924503d+13, .4305601123377464671923711939926758523701d+13, - &
+   & .1121847693567642152208443795868288937687d+14, .2925565695557339262045727352754930716608d+14, - &
+   & .7635552741959392076619218035480359307499d+14, .1994372792759425025753893705017248674884d+15, - &
+   & .5213021921201092276891722450906568692592d+15, .1363558024737805584657706536660107687818d+16, - &
+   & .3568973490569445692988895507297245137908d+16]
 !-----------------------------------------------------------------------
 !
 !            Taylor series expansion of EI(x) around X0,
@@ -10305,51 +10133,7 @@ double precision :: dk1, dk2, dk3, db, db2, dx
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !-------------------------
-data dk1 /25598514349.d0/, dk2 /12212826724.d0/, &
-   & dk3 /52346020729.d0/
-data db  /68719476736.d0/
-data dx  /.64725688445954142292644880487403537155379408215561d-33/
 !-------------------------
-data a(1)  / .3896215733907167310156502703593482682018d+01/, &
-   & a(2)  /-.3281607866398561670879044070702055058438d+01/, &
-   & a(3)  / .6522376145438925697728352767902339522245d+01/, &
-   & a(4)  /-.1296969738353651703636356975116693457132d+02/, &
-   & a(5)  / .2788629796294204997855360701398702087604d+02/, &
-   & a(6)  /-.6237880152891541873078526672920295283143d+02/, &
-   & a(7)  / .1435349488096750987841265647073135861344d+03/, &
-   & a(8)  /-.3371558271787468916821364466977375583658d+03/, &
-   & a(9)  / .8045318399821382506595322457265602778098d+03/, &
-   & a(10) /-.1943796645723498840655451915157946462648d+04/
-data a(11) / .4743765650402430835228269085129777320454d+04/, &
-   & a(12) /-.1167346399116716364394668734600584330571d+05/, &
-   & a(13) / .2892695530543545087445160311373446386859d+05/, &
-   & a(14) /-.7210794586837158996878001987822898188198d+05/, &
-   & a(15) / .1806695585893919626172098163733836311447d+06/, &
-   & a(16) /-.4546962188544665746524572520110515778526d+06/, &
-   & a(17) / .1148834546817744310374556891236080193473d+07/, &
-   & a(18) /-.2912721663850837498392234670693435881386d+07/, &
-   & a(19) / .7407692958000587759747953639495510375408d+07/, &
-   & a(20) /-.1889172700038153127288849726417780854730d+08/
-data a(21) / .4830003493086024720868271496253148288055d+08/, &
-   & a(22) /-.1237682190024917092137405370407916520821d+09/, &
-   & a(23) / .3178111056663621852260468265468336116367d+09/, &
-   & a(24) /-.8176185693184928170769596413793786736279d+09/, &
-   & a(25) / .2107109291864363741291032089276432438927d+10/, &
-   & a(26) /-.5438996831077284596300440196418865401363d+10/, &
-   & a(27) / .1406026390995585037838894210474681627693d+11/, &
-   & a(28) /-.3639689100149205333626392754168250384373d+11/, &
-   & a(29) / .9433859509219164512733865811047107199412d+11/, &
-   & a(30) /-.2448111705066430130314746602027041462835d+12/
-data a(31) / .6359981818273706257655285041587660739835d+12/, &
-   & a(32) /-.1653989211524391716301960841541179924503d+13/, &
-   & a(33) / .4305601123377464671923711939926758523701d+13/, &
-   & a(34) /-.1121847693567642152208443795868288937687d+14/, &
-   & a(35) / .2925565695557339262045727352754930716608d+14/, &
-   & a(36) /-.7635552741959392076619218035480359307499d+14/, &
-   & a(37) / .1994372792759425025753893705017248674884d+15/, &
-   & a(38) /-.5213021921201092276891722450906568692592d+15/, &
-   & a(39) / .1363558024737805584657706536660107687818d+16/, &
-   & a(40) /-.3568973490569445692988895507297245137908d+16/
 !-------------------------
 !
 !     Set  h = x - X0  where X0 is the zero of EI(x). X0 has the
@@ -10382,14 +10166,38 @@ do 10 n = 2,40
 return
 end function dei0
 
-function si(x)
+pure function si(x)
 implicit none
 real, intent(in) :: x
-integer :: i, j, m1, m2, n1, n2
-real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), pio2, rc, temp, &
-   & tx
+integer :: i, j
+real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
 real :: si
-real :: spmpar
+integer, parameter :: n1 = 16
+integer, parameter :: n2 = 46
+integer, parameter :: m1 = 14
+integer, parameter :: m2 = 21
+real, parameter :: pio2 = 1.5707963267949
+real, parameter :: bb(16) = [real :: 6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
+   & 8.99242948380352e-04, -1.09884251456048e-03, 5.81151604367358e-05, 2.28802638122969e-05, -1.35078982929539e-06, - &
+   & 3.13213946132892e-07, 1.86619586786257e-08, 3.03991719607226e-09, -1.76437788946489e-10, -2.20236421792690e-11, &
+   & 1.22710107703240e-12, 1.23680681116783e-13]
+real, parameter :: cc(46) = [real :: 9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+   & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
+   & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
+   & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
+   & 1.92576544441700e-08, -1.00735358217200e-08, 3.36359194377000e-09, 1.28049619406000e-09, -2.42546870827000e-09, &
+   & 1.86917288950000e-10, 7.13431298340000e-10, -1.70673483710000e-10, -1.14604070350000e-10, 5.88004411500000e-11, - &
+   & 6.78417843000000e-12, -1.21572380900000e-11, 1.26561248700000e-11, 4.74814180000000e-13, -5.32309477000000e-12, &
+   & 9.05903810000000e-13, 1.40046450000000e-12, -5.00968320000000e-13, -1.80458040000000e-13, 1.66162910000000e-13, - &
+   & 5.02616400000000e-14, -3.48453600000000e-14, 4.60056600000000e-14, 5.74000000000000e-16, -1.95310700000000e-14, &
+   & 3.68837000000000e-15, 5.62862000000000e-15]
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !     Written by D.E. Amos and S.L. Daniel, November,1975.
 !     Modified by A.H. Morris
@@ -10413,41 +10221,8 @@ real :: spmpar
 !
 !
 !     -------------------
-data n1,n2,m1,m2/16,46,14,21/
-data pio2/1.5707963267949/
 !     -------------------
-data bb(1) / 6.84101190850653e-01/, bb(2) /-3.74538448460062e-01/, &
-   & bb(3) /-2.82656062651542e-02/, bb(4) / 3.06078454012071e-02/, &
-   & bb(5) /-8.99242948380352e-04/, bb(6) /-1.09884251456048e-03/, &
-   & bb(7) / 5.81151604367358e-05/, bb(8) / 2.28802638122969e-05/, &
-   & bb(9) /-1.35078982929539e-06/, bb(10)/-3.13213946132892e-07/, &
-   & bb(11)/ 1.86619586786257e-08/, bb(12)/ 3.03991719607226e-09/, &
-   & bb(13)/-1.76437788946489e-10/, bb(14)/-2.20236421792690e-11/, &
-   & bb(15)/ 1.22710107703240e-12/, bb(16)/ 1.23680681116783e-13/
 !     -------------------
-data cc(1) / 9.76155271128712e-01/, cc(2) / 8.96845854916423e-02/, &
-   & cc(3) /-3.04656658030696e-02/, cc(4) / 8.50892472922945e-02/, &
-   & cc(5) /-5.78073683148386e-03/, cc(6) /-5.07182677775691e-03/, &
-   & cc(7) / 8.38643256650893e-04/, cc(8) /-3.34223415981738e-04/, &
-   & cc(9) /-2.15746207281216e-05/, cc(10)/ 1.28560650086065e-04/, &
-   & cc(11)/-1.56456413510232e-05/, cc(12)/-1.52025513597262e-05/, &
-   & cc(13)/ 4.04001013843204e-06/, cc(14)/-5.95896122752160e-07/, &
-   & cc(15)/-4.34985305974340e-07/, cc(16)/ 7.13472533530840e-07/, &
-   & cc(17)/-5.34302186061100e-08/, cc(18)/-1.76003581156610e-07/, &
-   & cc(19)/ 3.85028855125900e-08/, cc(20)/ 1.92576544441700e-08/, &
-   & cc(21)/-1.00735358217200e-08/, cc(22)/ 3.36359194377000e-09/, &
-   & cc(23)/ 1.28049619406000e-09/, cc(24)/-2.42546870827000e-09/, &
-   & cc(25)/ 1.86917288950000e-10/, cc(26)/ 7.13431298340000e-10/, &
-   & cc(27)/-1.70673483710000e-10/, cc(28)/-1.14604070350000e-10/, &
-   & cc(29)/ 5.88004411500000e-11/, cc(30)/-6.78417843000000e-12/, &
-   & cc(31)/-1.21572380900000e-11/, cc(32)/ 1.26561248700000e-11/, &
-   & cc(33)/ 4.74814180000000e-13/, cc(34)/-5.32309477000000e-12/, &
-   & cc(35)/ 9.05903810000000e-13/, cc(36)/ 1.40046450000000e-12/, &
-   & cc(37)/-5.00968320000000e-13/, cc(38)/-1.80458040000000e-13/
-data cc(39)/ 1.66162910000000e-13/, cc(40)/-5.02616400000000e-14/, &
-   & cc(41)/-3.48453600000000e-14/, cc(42)/ 4.60056600000000e-14/, &
-   & cc(43)/ 5.74000000000000e-16/, cc(44)/-1.95310700000000e-14/, &
-   & cc(45)/ 3.68837000000000e-15/, cc(46)/ 5.62862000000000e-15/
 !     -------------------
 !     ****** amax is a machine dependent constant. It is assumed that
 !            sin(x) and cos(x) are defined for  abs(x) .LE. amax, and
@@ -10502,4 +10277,318 @@ return
 50 si = sign(pio2,x)
 return
 end function si
+
+pure elemental function cin(x)
+implicit none
+real, intent(in) :: x
+integer :: i, j
+real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
+real :: cin
+integer, parameter :: n1 = 16
+integer, parameter :: n2 = 46
+integer, parameter :: m1 = 14
+integer, parameter :: m2 = 21
+real, parameter :: econ = 5.77215664901533e-01
+real, parameter :: bb(16) = [real :: 1.82820351064538e-01, -8.23768704567135e-02, -1.03468764544958e-02, 5.05085201960312e-03, &
+   & 5.73772812356328e-05, -1.42717916181096e-04, 2.89263664732599e-06, 2.43068098304909e-06, -7.90337487433443e-08, - &
+   & 2.80205535437371e-08, 1.05488738052065e-09, 2.34186901801115e-10, -9.27762554764014e-12, -1.48682586858284e-12, &
+   & 5.95210263082868e-14, 7.42057835287916e-15]
+real, parameter :: cc(46) = [real :: 9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+   & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
+   & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
+   & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
+   & 1.92576544441700e-08, -1.00735358217200e-08, 3.36359194377000e-09, 1.28049619406000e-09, -2.42546870827000e-09, &
+   & 1.86917288950000e-10, 7.13431298340000e-10, -1.70673483710000e-10, -1.14604070350000e-10, 5.88004411500000e-11, - &
+   & 6.78417843000000e-12, -1.21572380900000e-11, 1.26561248700000e-11, 4.74814180000000e-13, -5.32309477000000e-12, &
+   & 9.05903810000000e-13, 1.40046450000000e-12, -5.00968320000000e-13, -1.80458040000000e-13, 1.66162910000000e-13, - &
+   & 5.02616400000000e-14, -3.48453600000000e-14, 4.60056600000000e-14, 5.74000000000000e-16, -1.95310700000000e-14, &
+   & 3.68837000000000e-15, 5.62862000000000e-15]
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!     Written by D.E. Amos and S.L. Daniel, November, 1975.
+!     Modified by A.H. Morris
+!
+!     References
+!         SAND76-0062
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
+!
+!     Abstract
+!         cin computes the integral of (1-cos(T))/T on (0,x) by means
+!         of Chebyshev expansions on (0,5) and (5,INFINITY).
+!
+!     Description of arguments
+!
+!         Input
+!           x      - Limit of integration, unrestricted
+!
+!         Output
+!           cin    - Value of the integral
+!
+!
+!     -------------------
+!     -------------------
+!     -------------------
+!     -------------------
+!     ****** amax is a machine dependent constant. It is assumed that
+!            sin(x) and cos(x) are defined for  abs(x) .LE. amax, and
+!            that econ + LN(x) - (1 + 1/x)/x = econ + LN(x)
+!            FOR x .GT. amax.
+!
+amax = 0.1/spmpar(1)
+!
+!
+ax = abs(x)
+if (ax.gt.5.0) go to 20
+j = n1
+bx = 0.40*ax - 1.0
+tx = bx + bx
+b1 = bb(j)
+b2 = 0.
+do 10 i = 1,m1
+   j = j - 1
+   temp = b1
+   b1 = tx*b1 - b2 + bb(j)
+10 b2 = temp
+cin = x*x*(bx*b1 - b2 + bb(1))
+return
+!
+20 if (ax.gt.amax) go to 50
+bx = 10./ax - 1.0
+tx = bx + bx
+j = n2
+b1 = cc(j)
+b2 = 0.0
+do 30 i = 1,m2
+   j = j - 2
+   temp = b1
+   b1 = tx*b1 - b2 + cc(j)
+30 b2 = temp
+aic = bx*b1 - b2 + cc(2)
+!
+j = n2 - 1
+b1 = cc(j)
+b2 = 0.0
+do 40 i = 1,m2
+   j = j - 2
+   temp = b1
+   b1 = tx*b1 - b2 + cc(j)
+40 b2 = temp
+rc = bx*b1 - b2 + cc(1)
+!
+cin = (rc*sin(ax) - aic*cos(ax))/ax
+cin = (econ - cin) + alog(ax)
+return
+!
+50 cin = econ + alog(ax)
+return
+end function cin
+
+pure elemental subroutine cexexi (z, w)
+implicit none
+complex, intent(in) :: z
+complex, intent(inout) :: w
+integer :: i
+real :: pm, qm, r, ss, x, y
+real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real, parameter :: const = 2.46740110027234
+real, parameter :: euler = .577215664901533
+real, parameter :: zeta2 = 1.64493406684823
+real, parameter :: ed(18) = [real :: 0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+   & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
+   & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
+   & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
+real, parameter :: ee(18) = [real :: .850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+   & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
+   & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
+   & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
+real, parameter :: dd(19) = [real :: 0.00000000000000e+00, .419556678374293e-01, .117533661648665e+00, .228560237455987e+00, &
+   & .375667350161240e+00, .791594846276672e+00, .107546889623058e+01, .142659208030841e+01, .186290554952377e+01, &
+   & .240730009509856e+01, .308854035607524e+01, .394277605155259e+01, .501593196543981e+01, .636759180748651e+01, &
+   & .807776193096055e+01, .102598961138887e+02, .130896768422610e+02, .168832169085916e+02, .224083240941713e+02]
+real, parameter :: de(19) = [real :: -.346911733535892e-03, -.603787732461745e-02, -.152461305949249e-01, -.210582169827291e-01, - &
+   & .171894208720754e-01, .314323467033032e-01, .750898531566972e-01, .124689787807260e+00, .168579075090035e+00, &
+   & .191715080699511e+00, .182600794550836e+00, .142345674307147e+00, .874862222419327e-01, .402175083288425e-01, &
+   & .128575005680180e-01, .257673782598441e-02, .275955003784349e-03, .119139315517122e-04, .107292980199386e-06]
+real, parameter :: cd(18) = [real :: 0.00000000000000e+00, .237286128313683e-01, .854113210668760e-01, .185276627282059e+00, &
+   & .323741526616688e+00, .503045460381267e+00, .728806607587188e+00, .101122770102872e+01, .136598448171249e+01, &
+   & .181510139038929e+01, .238824701955419e+01, .312490532008812e+01, .407802489894445e+01, .532033545554865e+01, &
+   & .695624307290579e+01, .914759902547031e+01, .121829074388544e+02, .167511311969873e+02]
+real, parameter :: ce(18) = [real :: .349517258926827e-01, .135849105925897e+00, .158850581552296e+00, .153001434535435e+00, &
+   & .134520752856461e+00, .111913051619671e+00, .892008386656190e-01, .679227205472067e-01, .486723197887211e-01, &
+   & .320170976532266e-01, .187008965021111e-01, .929708414427865e-02, .372604763161087e-02, .111989537559823e-02, &
+   & .228057496872353e-03, .269596227781453e-04, .141255430224301e-05, .176352326808806e-07]
+!-----------------------------------------------------------------------
+!        Computation of the exponential exponential integral
+!-----------------------------------------------------------------------
+!-------------------------
+!     euler = euler constant
+!     const = (pi*pi)/4
+!     zeta2 = The Riemann zeta function evaluated at 2
+!-------------------------
+!-------------------------
+!-------------------------
+!-------------------------
+!-------------------------
+x = real(z)
+y = aimag(z)
+r = x*x + y*y
+!
+if (r .le. 1.0) go to 100
+if (r .ge. 1296.0) go to 10
+if (x .lt. 0.07*y*y) go to 30
+go to 40
+!-----------------------------------------------------------------------
+!                     Asymptotic expansion
+!-----------------------------------------------------------------------
+10 qf(1) = x/r
+qf(2) = -y/r
+sm(1) = -qf(1)
+sm(2) = -qf(2)
+tm(1) = sm(1)
+tm(2) = sm(2)
+pm = 1.0
+20 ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+tm(1) = pm*ts(1)
+tm(2) = pm*ts(2)
+pm = pm + 1.0
+ts(1) = tm(1)/pm
+ts(2) = tm(2)/pm
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 21
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 130
+21 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+if (pm .lt. 36.0) go to 20
+go to 130
+!-----------------------------------------------------------------------
+!                      Rational expansion
+!-----------------------------------------------------------------------
+30 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = x - cd(i)
+   ts(2) = y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = -ce(i)*ts(1)/ss
+   tm(2) = ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+go to 130
+!-----------------------------------------------------------------------
+!                 Expansion involving EI and DI
+!-----------------------------------------------------------------------
+40 zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
+!
+!                    SET sm = exp(z)*EI(-z)
+!
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = -x - ed(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = ee(i)*ts(1)/ss
+   tm(2) = -ee(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+sr(1) = zl(1)*sm(1) - zl(2)*sm(2)
+sr(2) = zl(1)*sm(2) + zl(2)*sm(1)
+!
+!                    SET sm = exp(z)*DI(-z)
+!
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,19
+   ts(1) = -x - dd(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = de(i)*ts(1)/ss
+   tm(2) = -de(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ts(1) = -(x*sm(1) + y*sm(2))/r
+ts(2) = -(x*sm(2) - y*sm(1))/r
+!
+!                    Compute the expansion
+!
+sr(1) = sr(1) - ts(1) - zeta2
+sr(2) = sr(2) - ts(2)
+sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = zeta2
+70 pm = pm + 1.0
+qm = qm - 1.0/(pm*pm)
+ts(1) = tm(1)*x - tm(2)*y
+ts(2) = tm(1)*y + tm(2)*x
+tm(1) = ts(1)/pm
+tm(2) = ts(2)/pm
+ts(1) = qm*tm(1)
+ts(2) = qm*tm(2)
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) - ts(1)
+sm(2) = sm(2) - ts(2)
+go to 70
+80 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
+!
+!                      Compute exp(-z)*sm
+!
+qm = exp(-x)
+qf(1) = qm*cos(-y)
+qf(2) = qm*sin(-y)
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
+go to 130
+!-----------------------------------------------------------------------
+!                  Series for x*x + y*y .LE. 1
+!-----------------------------------------------------------------------
+100 sm(1) = 0.0
+sm(2) = 0.0
+zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
+sr(1) = const + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
+sr(2) = zl(1)*zl(2)
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = 0.0
+110 pm = pm + 1.0
+qm = qm + 1.0/pm
+ts(1) = -tm(1)*x + tm(2)*y
+ts(2) = -tm(1)*y - tm(2)*x
+tm(1) = ts(1)/pm
+tm(2) = ts(2)/pm
+r = (zl(1) - 1.0/pm) - qm
+ts(1) = (r*tm(1) - zl(2)*tm(2))/pm
+ts(2) = (r*tm(2) + zl(2)*tm(1))/pm
+if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 111
+if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 120
+111 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+go to 110
+120 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
+!-----------------------------------------------------------------------
+!                         Termination
+!-----------------------------------------------------------------------
+130 w = cmplx(sm(1), sm(2))
+return
+end subroutine cexexi
 

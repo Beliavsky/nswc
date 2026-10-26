@@ -16,6 +16,8 @@ from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform, MANIFEST
 from validate_explicit_typing import symbols
 from generate_interfaces import compiler_environment
+from data_constants import transform as apply_constants
+from portable_intrinsics import transform as portable_intrinsics
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -59,18 +61,19 @@ def numerical_probe(compiler, folder, env=None, intel=False):
         raise ValueError(output.stdout + output.stderr)
     negative = folder / 'negative.f90'
     negative.write_text('''program probe
-use nswc_interfaces, only: ipmpar
+use nswc_interfaces, only: polydd
 implicit none
 contains
-pure integer function invalid()
-invalid = ipmpar(1)
+pure double precision function invalid(x)
+double precision, intent(in) :: x
+invalid = polydd(x)
 end function invalid
 end program probe
 ''', newline='\n')
     command = ([compiler, '/nologo', '/c', str(negative)] if intel else
                [compiler, '-std=f2008', '-pedantic-errors', '-c', str(negative)])
     if run(command, folder, env, success=False).returncode == 0:
-        raise ValueError('Compiler accepted a non-pure machine-constant function in a pure caller')
+        raise ValueError('Compiler accepted the impure polynomial helper in a pure caller')
     print(('Intel' if intel else 'GNU') + ': pure callers, elemental arrays and scalar broadcasting passed; impure call rejected.', flush=True)
 
 
@@ -80,7 +83,7 @@ def main():
     parser.add_argument('--ifx')
     parser.add_argument('--intel-env', type=Path)
     args = parser.parse_args()
-    baseline = sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text
+    baseline = portable_intrinsics(apply_constants(sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text))
     manifest = json.loads(MANIFEST.read_text())
     annotated = transform(baseline, manifest)
     if apply_free_fixes(annotated) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):

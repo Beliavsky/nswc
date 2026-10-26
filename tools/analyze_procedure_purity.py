@@ -26,6 +26,8 @@ from fortran_procedures import HEADER, procedure_blocks, procedure_spans
 from interface_variants import legacy_interfaces
 from procedure_purity import code_hash, transform
 from validate_explicit_typing import symbols
+from data_constants import transform as apply_constants
+from portable_intrinsics import transform as portable_intrinsics
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -67,7 +69,8 @@ def calls_in(block, inventory, definitions):
             if values[i + 1:i + 2] == ('(',) or (i and values[i - 1].lower() == 'call'):
                 used.add(word.upper())
     return sorted(n.upper() for n, value in inventory.items() if n.upper() in used & definitions
-                  and 'PROCEDURE' in value.get('attributes', '') and 'DUMMY' not in value.get('attributes', ''))
+                  and 'PROCEDURE' in value.get('attributes', '') and 'DUMMY' not in value.get('attributes', '')
+                  and 'INTRINSIC-PROC' not in value.get('attributes', ''))
 
 
 def diagnostic_owners(text):
@@ -178,7 +181,7 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('Output must name a new file')
-    text = sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text
+    text = portable_intrinsics(apply_constants(sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text))
     with tempfile.TemporaryDirectory(prefix='nswc-purity-review-') as work:
         folder = Path(work)
         source = folder / 'baseline.f90'

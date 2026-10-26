@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import signal
 import tempfile
 
 from fortran_procedures import HEADER, procedure_blocks
@@ -19,6 +20,22 @@ MODULE = ROOT / 'nswc_interfaces.f90'
 METADATA = Path(__file__).with_name('interface-generation.json')
 KINDS = {'REAL(KIND=4)': 'REAL', 'REAL(KIND=8)': 'DOUBLE PRECISION',
          'COMPLEX(KIND=4)': 'COMPLEX', 'INTEGER(KIND=4)': 'INTEGER', 'LOGICAL(KIND=4)': 'LOGICAL'}
+
+
+def run_interface_compiler(command, work, env, timeout=300):
+    process = subprocess.Popen(command, cwd=work, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               text=True, start_new_session=os.name != 'nt')
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        # Kill this owned compiler tree before closing its driver's pipe handles.
+        if os.name == 'nt':
+            subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], capture_output=True, timeout=30)
+        else:
+            os.killpg(process.pid, signal.SIGKILL)
+        process.communicate(timeout=30)
+        raise RuntimeError(f'Intel interface extraction timed out in {work.name}') from None
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
 
 
 def compiler_environment(setup=None):
@@ -85,22 +102,25 @@ def generate(compiler, source, env=None):
         raise ValueError('Expected the complete maintained NSWC source')
     raw, diagnostics = {}, []
     with tempfile.TemporaryDirectory(prefix='nswc-ifx-interfaces-') as folder:
-        work = Path(folder) / 'library'
-        work.mkdir()
-        (work / 'input.f90').write_text(''.join(definitions.values()), encoding='ascii', newline='\n')
-        command = [compiler, '/nologo', '/syntax-only', '/gen-interfaces:source', '/warn:interfaces', 'input.f90']
-        result = subprocess.run(command, cwd=work, env=env, capture_output=True, text=True, timeout=300)
-        diagnostics.append(result.stdout + result.stderr)
-        if result.returncode:
-            raise RuntimeError(f'ifx generation failed:\n{diagnostics[-1]}')
-        generated = list(work.glob('*__genmod.f90'))
-        if len(generated) != len(definitions):
-            raise ValueError('Missing generated interfaces')
-        for path in generated:
-            name = path.name[:-len('__genmod.f90')].upper()
-            if name in raw:
-                raise ValueError(f'Duplicate generated file: {name}')
-            raw[name] = path.read_text()
+        names = list(definitions)
+        for start in range(0, len(names), 100):
+            selected = names[start:start + 100]
+            work = Path(folder) / f'batch_{start // 100:02d}'
+            work.mkdir()
+            (work / 'input.f90').write_text(''.join(definitions[n] for n in selected), encoding='ascii', newline='\n')
+            command = [compiler, '/nologo', '/syntax-only', '/gen-interfaces:source', '/warn:interfaces', 'input.f90']
+            result = run_interface_compiler(command, work, env)
+            diagnostics.append(result.stdout + result.stderr)
+            if result.returncode:
+                raise RuntimeError(f'ifx generation failed:\n{diagnostics[-1]}')
+            generated = {path.name[:-len('__genmod.f90')].upper(): path for path in work.glob('*__genmod.f90')}
+            if not set(selected) <= generated.keys():
+                raise ValueError('Missing generated interfaces')
+            for name in selected:
+                if name in raw:
+                    raise ValueError(f'Duplicate generated file: {name}')
+                raw[name] = generated[name].read_text()
+            print(f'Intel interface generation: {min(start + 100, len(names))}/{len(names)} procedures.', flush=True)
         version = subprocess.run([compiler, '/QV'], env=env, capture_output=True, text=True, timeout=30)
         if version.returncode:
             raise RuntimeError(version.stdout + version.stderr)
@@ -110,7 +130,7 @@ def generate(compiler, source, env=None):
                 'procedures': len(raw), 'kind_mappings': KINDS,
                 'callback_review_sha256': sha(Path(__file__).with_name('callback_interfaces.py').read_bytes()),
                 'explicit_callbacks': len(BINDINGS), 'callback_exceptions': EXCEPTIONS,
-                'isolated_procedures': {}}
+                'isolated_procedures': {}, 'generation_batch_size': 100}
     return module, metadata, '\n'.join(diagnostics)
 
 

@@ -45,6 +45,7 @@ def module_source(text, calls=None, intrinsics=None):
         intrinsic_names = {aliases.get(n, n) for n in intrinsic_names}
         removed, replacements = set(), {}
         called_dummies, declared_callbacks = set(), set()
+        declared_intrinsics = set()
         interface_start = None
         for i, line in enumerate(body):
             if re.match(r'^\s*interface\s*$', line, re.I):
@@ -65,6 +66,9 @@ def module_source(text, calls=None, intrinsics=None):
             if records[0].index in removed:
                 continue
             external = re.match(r'^\s*external\s+(?:::)?\s*(.*)', logical, re.I)
+            intrinsic = re.match(r'^\s*intrinsic\s+(?:::)?\s*(.*)', logical, re.I)
+            if intrinsic:
+                declared_intrinsics.update(n.upper() for n in split_list(intrinsic[1]))
             if external:
                 declared_callbacks.update(n.upper() for n in split_list(external[1]))
                 references.update(n.upper() for n in split_list(external[1]) if n.upper() in library - dummies - {name})
@@ -74,7 +78,8 @@ def module_source(text, calls=None, intrinsics=None):
         for records, logical in logical_groups:
             if records[0].index in removed:
                 continue
-            declaration = type_declaration(logical)
+            constant = bool(re.match(r'^\s*(?:integer|real|double\s+(?:precision|complex)|complex|logical|character)\b.*?,\s*parameter\b', logical, re.I))
+            declaration = None if constant else type_declaration(logical)
             external = re.match(r'^\s*external\s+(?:::)?\s*(.*)', logical, re.I)
             if declaration:
                 kept = [(n, shape, length) for n, shape, length in declaration[2] if n.upper() not in references]
@@ -96,6 +101,7 @@ def module_source(text, calls=None, intrinsics=None):
             replacements[records[0].index] = (wrap_line('', replacement, '', '', records[0].newline, 3) if replacement else '') + comments
         output.extend(lines[previous:start])
         missing = sorted(called_dummies - declared_callbacks)
+        intrinsic_names -= declared_intrinsics
         for i, line in enumerate(body):
             output.append(replacements.get(i, '') + (line if i not in removed else ''))
             if (missing or intrinsic_names) and i not in removed and re.match(r'^\s*implicit\s+none\s*$', line, re.I):

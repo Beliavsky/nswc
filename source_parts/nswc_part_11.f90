@@ -1,3 +1,2271 @@
+pure subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+   & indexs,psi,f,alfl,maxabs,x,dimp1)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
+integer, intent(in) :: indexs(4,npolys)
+real, intent(in) :: alpha(alfl), coord(ncrows,dimen)
+real, intent(inout) :: psi(npolys)
+real, intent(in) :: c(npolys)
+real, intent(inout) :: f(nepts)
+real, intent(in) :: maxabs(dimp1)
+real, intent(inout) :: x(dimen)
+integer :: jm1, jprime, m, p, k, i, j, index
+real :: runtot, rntot1
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     This subroutine performs the main work of evaluating the
+!     fitting multinomial (or the initial portion of it  which
+!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
+!     CALL TO SUBROUTINE  meval .
+!
+!     This subroutine is called by  meval .  It is  not  called
+!     directly by the user.
+!
+!     The body of this subroutine FOLLOWS the explanation
+!     given in
+!          least squares fitting using
+!          orthogonal multinomials
+!     by
+!          Bartels and Jezioranski
+!     in
+!          ACM transactions on mathematical software
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!
+!     ****************
+!
+if (npolys .eq. 1) go to 50
+!
+psi(1) = 1.0
+do 40 p = 1,nepts
+!
+!     ***************
+!     Scale the coordinates of the p-TH point
+!     ***************
+!
+   do k = 1,dimen
+      x(k) = coord(p,k)
+      if (maxabs(k) .ne. 0.0) x(k) = x(k) / maxabs(k)
+   end do
+!
+!     ***************
+!     Use the  basis function coefficients  c  and recurrence
+!     coefficients  alpha  to evaluate the fitted multinomial
+!     at the p-TH point.
+!     ***************
+!
+   rntot1 = c(1)
+   do 30 j = 2,npolys
+      k = indexs(2,j)
+      jprime = indexs(1,j)
+      runtot = x(k) * psi(jprime)
+      i = indexs(3,j)
+      jm1 = j - 1
+      do 20 m = i,jm1
+         index = indexs(4,j) + m - i
+20       runtot = runtot - psi(m) * alpha(index)
+      psi(j) = runtot
+30    rntot1 = rntot1 + c(j) * psi(j)
+40 f(p) = rntot1 * maxabs(dimp1)
+return
+!
+!     ***************
+!     Compute the degree 0 polynomial
+!     ***************
+!
+50 runtot = c(1) * maxabs(dimp1)
+do 60 p = 1,nepts
+60 f(p) = runtot
+return
+end subroutine meval1
+
+subroutine dmfit(dimen,fitdeg,nfpols,nfpts, &
+   & fitcds,ncrows,fitvls,wts, &
+   & resids,error,fitiwk,fitdwk, &
+   & fiwkln,fdwkln,ireqd,dreqd)
+implicit none
+!
+integer, intent(inout) :: nfpols, fitdeg
+integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
+integer, intent(inout) :: error, ireqd, dreqd
+integer, intent(in) :: ncrows
+integer, intent(inout) :: fitiwk(fiwkln)
+double precision, intent(inout) :: fitdwk(fdwkln), &
+   & fitcds(ncrows,dimen)
+double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
+double precision, intent(in) :: wts(nfpts)
+integer :: indstt, p, dimp1
+integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
+   & alfl
+double precision :: scale
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     This subroutine constructs a least-squares  multinomial  fit  to
+!     given data using a basis of orthogonal multinomials. The computa-
+!     tion is performed in double precision.
+!
+!     The data for the fit is given in the arrays FITCDS, fitvls, and
+!     wts. FITCDS is a matrix, each row of which contains an observa-
+!     tion point. fitvls is a singly-indexed array, each element of
+!     which contains a function VALUE corresponding to an observation
+!     point. wts is a singly-indexed array, each element of which is
+!     a nonnegative weight for the corresponding observation.
+!
+!     The fit which is produced is a multinomial expressed in the form
+!
+!      C  psi  (X ,...,X     ) +...+ C       psi       (X ,...,X     )
+!       1    1   1      dimen         nfpols    nfpols   1      dimen
+!
+!     Where the value of  nfpols  will be as given (if  fitdeg .LT. 0)
+!     or  as  computed  by  dmfit  to give a full-degree fit (in case
+!     fitdeg  is specified .GE. 0).  The elements
+!
+!         psi  (X ,...,X     )
+!            K   1      dimen
+!
+!     Form a basis for the multinomials which is orthogonal with
+!     respect to the weights and observation points.
+!
+!     The extent of the fit can be specified in one of two ways.
+!         If the parameter fitdeg is set .GE. 0, then a complete basis
+!         for the multinomials of degree =  fitdeg  will be used.  (An
+!         error will be  flagged  if  this  will  require  more  basis
+!         multinomials  than  the  number  of  data  points which were
+!         given.)
+!         if the parameter  fitdeg  is .LT.  0, then  nfpols  will  be
+!         taken as the count of the number of basis multinomials to be
+!         used for a partial-degree fit.  (An error will be flagged if
+!         nfpols  .LT. 0.)
+!
+!     Variables
+!     ---------
+!
+!      dimen  -- (INTEGER) -- (passed)
+!         the number of variables.
+!      fitdeg  - (INTEGER) -- (PASSED/RETURNED)
+!         ignored if .LT. 0.
+!         If fitdeg .GE. 0 then  fitdeg  is  checked  against  nfpts .
+!         The value of  fitdeg  will be reduced if there is a basis of
+!         multinomials, all of  degree  .LE. fitdeg ,  of  cardinality
+!         nfpts .  See  error  below.
+!      nfpols  - (INTEGER) -- (PASSED/RETURNED)
+!         ignored if  fitdeg  .GE. 0.
+!         If  fitdeg .LT. 0 then the value of nfpols will be taken  as
+!         the size of the basis of multinomials to be used in the fit.
+!         nfpols  MUST SATISFY  nfpols  .LT. nfpts  AND nfpols .GE. 1
+!         see  error  below.
+!      nfpts  --- (INTEGER) -- (passed)
+!         the number of data points to be used in the fit.
+!         nfpts  must be .GE. 1.  See  error  below.
+!      FITCDS  -- (double precision 2-subscript array) -- (passed)
+!         FITCDS (p,K) is the value of the K-TH variable at the  p-TH
+!         data point.
+!      ncrows  -- (INTEGER) -- (passed)
+!         THE ROW DIMENSION  DECLARED  FOR   FITCDS   IN  THE  CALLING
+!         program.
+!      fitvls  -- (double precision 1-subscript array) -- (passed)
+!         fitvls (p) is the observed function VALUE of the p-TH  data
+!         point.
+!      wts  ----- (double precision 1-subscript array) -- (passed)
+!         wts (p) is the weight attached to the p-TH data point.
+!      resids  -- (double precision 1-subscript array) -- (returned)
+!         resids (p) is the difference between the fitted function at
+!         point p and  fitvls (p).
+!      error  -- (INTEGER) -- (returned)
+!       0 the desired least square multinomial fit was obtained.
+!      -1 Only the first nfpols basis polynomials were obtained.
+!         fitdeg is the degree of the fit.
+!       1 If  fitdeg  .GE. 0 but there is an interpolating multinomial
+!         of smaller degree or if fitdeg .LT. 0 and nfpols .GT. nfpts.
+!       2 IF  fitdeg  .LT. 0 AND  nfpols  .LE. 0.
+!       3 IF  nfpts  .LT. 1 AND/OR  dimen  .LT. 1.
+!       4 IF  IWKLEN  AND/OR  DWKLEN  IS TOO SMALL.  (SET  IWKLEN   TO
+!         the value returned in  ireqd , and set  DWKLEN  to the value
+!         returned in  dreqd  to resolve this problem.)
+!      fitiwk  -- (integer, 1-subscript array) -- (returned)
+!         an integer work array of length  fiwkln .  Upon return  from
+!         dmfit, fitiwk contains dimension and array LENGTH information.
+!      fitdwk  -- (double precision 1-subscript array) -- (returned)
+!         an array of length  fdwkln  containing the coefficients
+!         needed for computing the multinomial fit at a point.
+!      fiwkln  -- (INTEGER) -- (passed)
+!         the length of the array  fitiwk .
+!      fdwkln  -- (INTEGER) -- (passed)
+!         the length of the array  fitdwk .
+!      ireqd  -- (INTEGER) -- (returned)
+!         the length which the array  fitiwk  really needs to be.
+!      dreqd  -- (INTEGER) -- (returned)
+!         the length which the array  fitdwk  really needs to be.
+!
+!
+!     Note. The 20 loop depends on the scaling scheme being used. The
+!     residual scaling must be consistent with that defined by dscalp
+!     AND dscald.
+!
+!     dmfit  calls  allot  and  dgnrtp.
+!     ****************
+!
+dimp1 = dimen + 1
+!
+!     ***************
+!
+call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
+   & error)
+if ( error .ge. 2 ) return
+!
+if ( fdwkln .ge. dreqd ) go to 10
+error = 4
+return
+10 continue
+!
+psiwid = fitiwk(3)
+alfl = fitiwk(4)
+indstt = 1
+newstt = 4 * nfpols + indstt
+maxstt = 1
+alfstt = maxstt + dimp1
+cstt = alfstt + alfl
+ssqstt = cstt + nfpols
+psistt = ssqstt + nfpols
+!
+!     ***************
+!
+call dgnrtp(fitdeg,fitdwk(alfstt), &
+   & fitdwk(psistt),fitiwk(indstt), &
+   & fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+   & ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+   & fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+   & fitdwk(maxstt),error)
+!
+!     ***************
+!     Store the number of basis polynomials actually computed
+!     by the modified routine dincdg called by dgnrtp.
+!     ***************
+!
+fitiwk(1) = nfpols
+!
+!     ***************
+!     Unscale the residuals for the benefit of the user.
+!     ***************
+!
+scale = fitdwk(dimen + 1)
+do p = 1,nfpts
+   resids(p) = resids(p) * scale
+end do
+return
+end subroutine dmfit
+
+subroutine dgnrtp(degree,alpha,psi,indexs, &
+   & newkj,sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,dimp1,maxabs,error)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(inout) :: degree
+integer, intent(in) :: dimen
+integer, intent(inout) :: npolys
+integer, intent(in) :: npts
+integer, intent(in) :: psiwid, alfl
+integer, intent(inout) :: error
+integer :: dimp1
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+double precision, intent(inout) :: psi(npts,psiwid), alpha(alfl), &
+   & f(npts)
+double precision, intent(inout) :: coord(ncrows,dimen), &
+   & maxabs(dimp1)
+double precision, intent(in) :: weight(npts)
+double precision, intent(inout) :: z(npts), sumsqs(npolys), &
+   & c(npolys)
+integer :: k
+integer :: p, sttdeg, onplys
+double precision :: runtot, rntot1
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine starts the process off by setting up
+!     the first basis element, scaling the  data,  finding  the  first
+!     coefficient,  and  initializing  the  work array z.  dgnrtp then
+!     calls  dincdg  if more than one basis element is required.
+!
+!     This subroutine is called by  dmfit .  It is not called by  the
+!     user.
+!
+!     This subroutine calls  dscalp ,  dscald , and  dincdg .
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!     ****************
+!
+!     ***************
+!     Set up the scaling.
+!     ***************
+!
+do 10 k = 1,dimen
+   call dscalp(coord(1,k),npts,maxabs(k))
+10 call dscald(coord(1,k),npts,maxabs(k))
+call dscalp(f,npts,maxabs(dimp1))
+call dscald(f,npts,maxabs(dimp1))
+!
+!     ***************
+!      sumsqs (1) = (1,1)
+!     c  = (f,1) / (1,1)
+!      1
+!     ***************
+!
+runtot = 0.d0
+rntot1 = 0.d0
+do 20 p = 1,npts
+   psi(p,1) = 1.d0
+   rntot1 = rntot1 + weight(p)
+20 runtot = runtot + f(p) * weight(p)
+sumsqs(1) = rntot1
+c(1) = runtot / rntot1
+!
+!     ***************
+!     z = f - c
+!              1
+!     ***************
+!
+do 30 p = 1,npts
+30 z(p) = f(p) - c(1)
+!
+if ( npolys .eq. 1 ) return
+sttdeg = 1
+onplys = 1
+!
+call dincdg(degree,alpha,psi,indexs,newkj,sumsqs, &
+   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+   & weight,alfl,onplys,sttdeg,error)
+return
+end subroutine dgnrtp
+
+pure subroutine dincdg(degree,alpha,psi,indexs,newkj, &
+   & sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,onplys,sttdeg,error)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(inout) :: error
+integer, intent(in) :: onplys
+integer, intent(inout) :: sttdeg
+integer, intent(inout) :: degree, npolys
+integer, intent(in) :: npts, dimen, psiwid, alfl
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+double precision, intent(inout) :: alpha(alfl)
+double precision, intent(in) :: coord(ncrows,dimen)
+double precision, intent(inout) :: psi(npts,psiwid)
+double precision, intent(inout) :: sumsqs(npolys), c(npolys)
+double precision, intent(in) :: f(npts), weight(npts)
+double precision, intent(inout) :: z(npts)
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
+integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
+integer :: j0mj1, j1m1, starta
+integer :: onpp1
+integer :: index1, index2
+double precision :: arc, runtot, rntot1, rntot2
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine continues the process started off by
+!      dgnrtp .
+!
+!     This subroutine is called by  dgnrtp  and not by the user.
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!
+!     ****************
+!
+if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
+error = 6
+return
+10 if ( indexs(2,onplys) .eq. dimen ) go to 20
+curdeg = sttdeg
+go to 30
+20 curdeg = sttdeg + 1
+30 onpp1 = onplys + 1
+do 170 j = onpp1,npolys
+   jprime = indexs(1,j)
+   jindex = j - ((j - 1) / psiwid) * psiwid
+   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
+   kj = indexs(2,j)
+   start = indexs(3,j)
+   m = start
+   starta = indexs(4,j) - start
+   if ( curdeg .eq. 1 ) go to 100
+   kjp = indexs(2,jprime)
+   j1 = newkj(kj,curdeg - 1)
+!
+!     ***************
+!     Calculate those  alpha ( j , m ) that can be calculated from
+!     previously calculated alphas.
+!     ***************
+!
+   if ( kj .lt. kjp ) go to 50
+!
+!     ***************
+!     First calculate those between  JPP  and the end of 2 rows back.
+!     Calculate  alpha ( j , JPP )
+!     ***************
+!
+   index1 = indexs(4,j)
+   alpha(index1) = sumsqs(jprime) / sumsqs(start)
+!
+   m = start + 1
+   j3 = newkj(1,curdeg - 1) - 1
+   if ( m .gt. j3 ) go to 50
+!
+!     ***************
+!     curdeg .GT. 2 if control has passed the branches in the 3-RD
+!     previous and 8-TH previous statements.
+!     ***************
+!
+   j1mj2 = j1 - newkj(kj,curdeg - 2)
+!
+   do 40 l = m,j3
+      q = j1mj2 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+!
+!     ***************
+!     Calculate  alpha ( j , m ) for  m  between the 2
+!     ranges calculated before using
+!
+!        alpha ( j , l ) = (X  *  psi  ,psi )  / (psi ,psi )
+!                             K      JP    l         l    l
+!                              j
+!     ***************
+!
+   m = j3 + 1
+50 if ( jprime .eq. j1 ) go to 100
+   if ( kj .eq. 1 ) go to 80
+   j1m1 = j1 - 1
+   do 70 l = m,j1m1
+      runtot = 0.d0
+      do 60 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      index1 = starta + l
+70    alpha(index1) = runtot / sumsqs(l)
+!
+!     ***************
+!     Calculate  alpha ( j , m ) for  m  between
+!      newkj ( kj , curdeg  - 1)  AND
+!      JP  - 1.
+!     ***************
+!
+80 j0mj1 = newkj(kj,curdeg) - j1
+   jpm1 = jprime - 1
+   do 90 l = j1,jpm1
+      q = j0mj1 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+   m = jprime
+!
+!     ***************
+!     Calculate the remaining  alpha ( j , m ) from
+!
+!      alpha ( j , l ) = (X   * psi  ,psi ) / (psi ,psi )
+!                          K       JP    l        l    l
+!                           j
+!     ***************
+!
+100 jm1 = j - 1
+   do 120 l = m,jm1
+      runtot = 0.d0
+      do 110 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      index1 = starta + l
+120   alpha(index1) = runtot / sumsqs(l)
+!
+!     ***************
+!     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
+!
+!                          j-1
+!     psi  = X  * psi   -  SUM   alpha(j,l) * psi
+!        j    K      JP    l=JPP                 l
+!
+!     sumsqs  = (psi ,psi )
+!           j       j    j
+!
+!     c  = (z,psi )
+!      j         j
+!     ***************
+!
+130 jm1 = j - 1
+   arc = 0.d0
+   rntot1 = 0.d0
+   rntot2 = 0.d0
+   do 150 p = 1,npts
+      runtot = coord(p,kj) * psi(p,jpindx)
+      do 140 l = start,jm1
+         index1 = starta + l
+         index2 = l - ((l - 1) / psiwid) * psiwid
+140      runtot = runtot - alpha(index1) * psi(p,index2)
+      psi(p,jindex) = runtot
+      arc = arc + psi(p,index2) * psi(p,jindex) * &
+         & weight(p)
+      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+         & weight(p)
+150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+   if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.d-06) &
+      & go to 200
+   sumsqs(j) = rntot1
+   c(j) = rntot2 / rntot1
+!
+!     ***************
+!     Calculate the new  z ( p ) and the new  SSRES  using
+!
+!     z = z - c  * psi
+!              j      j
+!     ***************
+!
+   do 160 p = 1,npts
+160   z(p) = z(p) - c(j) * psi(p,jindex)
+   sttdeg = curdeg
+170 if ( kj .eq. dimen ) curdeg = curdeg + 1
+return
+!
+!     ***************
+!     The j-TH basis multinomial cannot be computed accurately.
+!     Only j - 1 Basis multinomials are generated.
+!     ***************
+!
+200 error = -1
+degree = sttdeg
+npolys = jm1
+return
+end subroutine dincdg
+
+pure subroutine dscalp(coord,npts,maxabs)
+implicit none
+!
+integer, intent(in) :: npts
+double precision, intent(out) :: maxabs
+double precision, intent(in) :: coord(npts)
+integer :: p
+double precision :: a
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     Find scaling parameter(S) for the problem. If the scaling scheme
+!     is changed, all four of the following would have to be changed
+!
+!     1)  dscalp  - Find the scaling parameters
+!     2)  dscald  - Scale the problem data
+!     3)  the scaling of the residuals in  dmfit
+!     4)  the scaling performed in  dmevl1
+!
+!     This subroutine is called by  dgnrtp .  It is not called  by  the
+!     user.
+!
+!     The scaling which  it  defines  must  be  coordinated  with  the
+!     scaling  of residuals which is carried out toward the end of the
+!     subroutine  dmfit.  The scaling must also be coordinated with the
+!     scaling performed in the 10 loop  and  at statements 40 and 50
+!     (with the scale factor maxabs(DIMP1)) in  dmevl1.
+!
+!     ****************
+!
+maxabs = 0.d0
+do 10 p = 1,npts
+   a = dabs(coord(p))
+10 if ( a .gt. maxabs ) maxabs = a
+return
+end subroutine dscalp
+
+pure subroutine dscald(coord,npts,maxabs)
+implicit none
+!
+integer, intent(in) :: npts
+double precision, intent(in) :: maxabs
+double precision, intent(inout) :: coord(npts)
+integer :: p
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     Carry out the data-scaling which is defined  by  the subroutine
+!     dscalp .
+!
+!     This subroutine is called by  dgnrtp .  It is not called by the
+!     user.
+!
+!     The scaling which this routine carries out must  be  consistent
+!     with the scaling in the subroutines dmfit and dmevl1.
+!
+!     ****************
+!
+if ( maxabs .eq. 0.0d+00 ) return
+do 10 p = 1,npts
+10 coord(p) = coord(p) / maxabs
+return
+end subroutine dscald
+
+pure subroutine dmeval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
+   & error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
+implicit none
+integer, intent(in) :: nerows
+integer, intent(in) :: fiwkln, fdwkln
+integer, intent(inout) :: nepols
+integer, intent(in) :: nepts, dimen
+integer, intent(inout) :: error
+integer, intent(in) :: evldeg
+integer, intent(in) :: fitiwk(fiwkln)
+double precision, intent(inout) :: fitdwk(fdwkln)
+double precision, intent(in) :: evlcds(nerows,dimen)
+double precision, intent(inout) :: evlvls(nepts), temp(dimen)
+integer :: maxstt, alfstt, cstt
+integer :: gbasiz, alfl, dimp1
+integer :: top, bot, curdeg, psistt
+interface
+   pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
+      & indexs,psi,f,alfl,maxabs,x,dimp1)
+      implicit none
+      integer, intent(in) :: dimp1
+      integer, intent(in) :: alfl
+      integer, intent(in) :: npolys
+      integer, intent(in) :: dimen
+      integer, intent(in) :: nepts
+      integer, intent(in) :: ncrows
+      double precision, intent(in) :: coord(ncrows,dimen)
+      double precision, intent(in) :: c(npolys)
+      double precision, intent(in) :: alpha(alfl)
+      integer, intent(in) :: indexs(4,npolys)
+      double precision, intent(inout) :: psi(npolys)
+      double precision, intent(inout) :: f(nepts)
+      double precision, intent(in) :: maxabs(dimp1)
+      double precision, intent(inout) :: x(dimen)
+   end subroutine dmevl1
+end interface
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     This subroutine  evaluates  the  least-squares  multinomial  fit
+!     which has been previously produced by  dmfit .  The computation
+!     is performed in double precision. Either the full
+!     multinomial as produced may be evaluated,  or  only  an  initial
+!     segment thereof.  As in the case with  dmfit , it is possible
+!     (1) to specify multinomials of a full given degree, or
+!     (2) to specify  the  number  of  orthogonal  basis  elements  to
+!         achieve a partial-degree fit.
+!
+!     In case (1), the  desired  degree  is  given  as  the  value  of
+!     evldeg   (WHICH  MUST  BE  NONNEGATIVE AND NOT GREATER THAN THE
+!     value used for  FITDEG  in  dmfit ), and the parameter  nepols
+!     will be set  by  dmeval  to specify the number of basis elements
+!     required. If  evldeg  .LT.  FITDEG   is  given,  then  only  the
+!     initial  portion of the fitting multinomial (of degree  evldeg )
+!     will be evaluated.
+!
+!     In case (2),  evldeg  is to be set negative, in which  case  the
+!     VALUE  OF   nepols  (WHICH MUST BE POSITIVE AND NOT GREATER THAN
+!     THE VALUE USED FOR   NFPOLS   IN   dmfit )  WILL  BE  TAKEN  AS
+!     defining  the  initial  portion of the fitting multinomial to be
+!     evaluated.
+!
+!     IF  nepols  =  NFPOLS  (WITH  evldeg  .LT.  0),  OR   evldeg   =
+!     FITDEG  (with   evldeg   .GT.  0),  then  the  full  multinomial
+!     generated by  dmfit  will be evaluated.
+!
+!     THE  EVALUATION  WILL  TAKE  PLACE  FOR  EACH  OF   THE   POINTS
+!     (collection  of  variable  values)  given as a row of the matrix
+!      evlcds .  The  values  produced  from  the  full,  or  partial,
+!     multinomial will be placed in the array  evlvls .
+!
+!     Variables
+!     ---------
+!
+!      dimen  -- (INTEGER) -- (passed)
+!         the number of variables.
+!      evldeg  -- (INTEGER) -- (passed)
+!         if  evldeg  .LT. 0, then this parameter will be ignored.
+!         If  evldeg  .GE. 0, then the value of  evldeg  must  satisfy
+!         evldeg  .LE. (the  degree  of the approximating multinomial
+!         generated in  dmfit ).  In this case  evldeg  will  specify
+!         the degree of the initial portion of the fitting multinomial
+!         to be evaluated.
+!      nepols  -- (INTEGER) -- (PASSED/RETURNED)
+!         if  evldeg  .GE. 0, then this parameter will be ignored.
+!         If evldeg .LT. 0, then the partial multinomial involving the
+!         FIRST   nepols  ORTHOGONAL BASIS FUNCTIONS WILL BE EVALUATED
+!         at the points given by  evlcds .  The resulting values  will
+!         be stored in  evlvls .
+!         The value of nepols must be .GE. 1 and .LE. (the size of the
+!         BASIS  GENERATED  IN   dmfit ),  WHICH  WAS RETURNED AS THE
+!         value of  NFPOLS .
+!         nepols  will be changed if evldeg .GT. 0 to give the size of
+!         basis required for the multinomial of degree  evldeg .
+!      nepts  -- (INTEGER) -- (passed)
+!         the number of evaluation points.
+!      evlcds  -- (double precision 2-subscript array) -- (passed)
+!         evlcds (P,K) is the value of the K-TH variable at the  P-TH
+!         evaluation point.
+!      nerows  -- (INTEGER) -- (passed)
+!         the row dimension declared for evlcds in the calling program.
+!      evlvls  -- (INTEGER) -- (returned)
+!         evlvls (P) is the value of the evaluated multinomial at the
+!         P-TH evaluation point.
+!      error  -- (INTEGER) -- (returned)
+!          0 .........  if no errors
+!         -1 .........  IF  nepols  .GT.  NFPOLS  OR  nepols  .LT. 1
+!         -2 .........  IF  nepts  .LT. 1 OR  dimen  .LT. 1
+!      fitiwk  -- (integer, 1-subscript array) -- (passed)
+!         the integer work array of length  fiwkln  that was  used  in
+!          dmfit .
+!      fitdwk  -- (double precision 2-subscript array) -- (passed)
+!         the real work array of length  fdwkln  that was
+!         used in  dmfit .
+!      fiwkln  -- (INTEGER) -- (passed)
+!         the length of  fitiwk .
+!      fdwkln  -- (INTEGER) -- (passed)
+!         the length of  fitdwk .
+!      temp    -- (DOUBLE PRECISION 1-SUBSCRIPT ARRAY)
+!         a work array of length  dimen  (or longer).
+!
+!     The subroutine  dmevl1  is called to do the actual evaluation.
+!
+!     Modified by A.H. Morris (NSWC)
+!
+!     ****************
+!
+!
+!     ***************
+!     Set up index pointers to the beginning of each row of
+!     the mtable -- this sets the beginning point for each
+!     full multinomial degree.
+!     ***************
+!
+if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
+if (evldeg) 40,10,20
+!
+10 nepols = 1
+go to 50
+!
+20 top = 1
+bot = 1
+do 30 curdeg = 1,evldeg
+   top = top * (dimen + curdeg)
+30 bot = bot * curdeg
+nepols = top / bot
+!
+40 gbasiz = fitiwk(1)
+if (nepols .gt. gbasiz .or. nepols .lt. 1) go to 100
+!
+50 error = 0
+dimp1 = dimen + 1
+alfl = fitiwk(4)
+maxstt = 1
+alfstt = dimp1 + maxstt
+cstt = alfstt + alfl
+psistt = cstt + fitiwk(2)
+!
+!     ***************
+!     The actual evaluation is done inside  dmevl1.
+!     ***************
+!
+call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
+   & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
+   & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
+return
+!
+!     ***************
+!     Error return
+!     ***************
+!
+100 error = -1
+return
+110 error = -2
+return
+end subroutine dmeval
+
+pure subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+   & indexs,psi,f,alfl,maxabs,x,dimp1)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
+integer, intent(in) :: indexs(4,npolys)
+double precision, intent(in) :: alpha(alfl), coord(ncrows,dimen)
+double precision, intent(inout) :: psi(npolys)
+double precision, intent(in) :: c(npolys)
+double precision, intent(inout) :: f(nepts)
+double precision, intent(in) :: maxabs(dimp1)
+double precision, intent(inout) :: x(dimen)
+integer :: jm1, jprime, m, p, k, i, j, index
+double precision :: runtot, rntot1
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     This subroutine performs the main work of evaluating the
+!     fitting multinomial (or the initial portion of it  which
+!     is requested by the setting of  NEPOLS ,  EVLDEG  in the
+!     CALL TO SUBROUTINE  dmeval .
+!
+!     This subroutine is called by  dmeval .  It is  not  called
+!     directly by the user.
+!
+!     The body of this subroutine FOLLOWS the explanation
+!     given in
+!          least squares fitting using
+!          orthogonal multinomials
+!     by
+!          Bartels and Jezioranski
+!     in
+!          ACM transactions on mathematical software
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!
+!     ****************
+!
+if (npolys .eq. 1) go to 50
+!
+psi(1) = 1.d0
+do 40 p = 1,nepts
+!
+!     ***************
+!     Scale the coordinates of the p-TH point
+!     ***************
+!
+   do k = 1,dimen
+      x(k) = coord(p,k)
+      if (maxabs(k) .ne. 0.d0) x(k) = x(k) / maxabs(k)
+   end do
+!
+!     ***************
+!     Use the  basis function coefficients  c  and recurrence
+!     coefficients  alpha  to evaluate the fitted multinomial
+!     at the p-TH point.
+!     ***************
+!
+   rntot1 = c(1)
+   do 30 j = 2,npolys
+      k = indexs(2,j)
+      jprime = indexs(1,j)
+      runtot = x(k) * psi(jprime)
+      i = indexs(3,j)
+      jm1 = j - 1
+      do 20 m = i,jm1
+         index = indexs(4,j) + m - i
+20       runtot = runtot - psi(m) * alpha(index)
+      psi(j) = runtot
+30    rntot1 = rntot1 + c(j) * psi(j)
+40 f(p) = rntot1 * maxabs(dimp1)
+return
+!
+!     ***************
+!     Compute the degree 0 polynomial
+!     ***************
+!
+50 runtot = c(1) * maxabs(dimp1)
+do 60 p = 1,nepts
+60 f(p) = runtot
+return
+end subroutine dmevl1
+
+real function qsuba (f, a, b, epsil, mcount, relerr, ind)
+implicit none
+integer, intent(inout) :: ind
+integer, intent(in) :: mcount
+real, intent(in) :: a, b, epsil
+real, intent(inout) :: relerr
+real :: f
+external f
+integer :: icheck, is, k, nf, npts
+real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
+   & tol, x
+integer, parameter :: ismax = 100
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!
+!                Integration over a finite interval
+!
+!                          ----------
+!
+!     qsuba computes the integral of f(X) from A to b where the
+!     relative error does not exceed epsil.
+!
+!     mcount is the maximum number of points at which f(X) may be
+!     evaluated.
+!
+!     relerr is a variable. When qsuba terminates, if the value
+!     of the integral is nonzero then relerr is a crude estimate
+!     of the relative error of the value. Otherwise, if qsuba = 0
+!     then relerr is an estimate of the absolute error.
+!
+!     Ind is a variable. When qsuba terminates, ind has one of the
+!     following values ...
+!
+!     ind=0   qsuba is satisfied that the integral has been
+!             computed to the desired accuracy.
+!     ind=1   The integral has been computed, but qsuba is
+!             not certain of the accuracy of the result.
+!     ind=2   The integrand has been evaluated at mcount
+!             points. If more evaluations are needed then
+!             qsuba TERMINATES.
+!     ind=3   qsuba cannot compute the integral to the desired
+!             accuracy. Ind is set to 3 whenever the stack of
+!             intervals becomes full (it currently can hold 50
+!             intervals). A result is obtained by continuing
+!             the integration ignoring convergence failures
+!             which cannot be accommodated on the stack.
+!
+!     The reliability of the algorithm decreases for large values
+!     of epsil. It is recommended that epsil be less than 0.001.
+!
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1.0 + eps .GT. 1.0.
+!
+eps = spmpar(1)
+!
+!-----------------------------------------------------------------------
+qsuba = 0.0
+relerr = 0.0
+ind = 0
+if (a .eq. b) return
+!
+!     Apply quad to the entire interval
+!
+sub1 = amin1(a,b)
+sub3 = amax1(a,b)
+tol = amax1(epsil, 10.0*eps)
+call quad (sub1, sub3, result, k, tol, npts, icheck, f)
+if (icheck .eq. 0) go to 100
+is = 1
+!
+!     Subdivide the interval (sub1,sub3) into the subintervals
+!     (sub1,sub2) and (sub2,sub3). Call quad for (sub1,sub2).
+!
+10 if (npts .ge. mcount) go to 110
+sub2 = 0.5*(sub1 + sub3)
+call quad (sub1, sub2, result, k, tol, nf, icheck, f)
+npts = npts + nf
+err = abs(result(k) - result(k - 1))
+sum = qsuba + result(k)
+if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
+!
+!        Stack the subinterval (sub1,sub2) for further
+!        examination if there is sufficient storage.
+!
+if (is .ge. ismax) go to 20
+stack(is) = sub1
+is = is + 1
+stack(is) = sub2
+is = is + 1
+go to 40
+20 ind = 3
+!
+!     Update qsuba and check if any significant digits are lost
+!
+30 x = qsuba
+qsuba = sum
+relerr = relerr + err
+if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 40
+x = 0.1*amin1(abs(x),abs(result(k)))
+if (abs(qsuba) .le. x) ind = 1
+!
+!     CALL QUAD FOR THE INTERVAL (sub2,sub3)
+!
+40 if (npts .ge. mcount) go to 110
+call quad (sub2, sub3, result, k, tol, nf, icheck, f)
+npts = npts + nf
+err = abs(result(k) - result(k - 1))
+sum = qsuba + result(k)
+if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 50
+!
+!        Subdivide the interval (sub2,sub3)
+!
+sub1 = sub2
+go to 10
+!
+!     Update qsuba and check if any significant digits are lost
+!
+50 x = qsuba
+qsuba = sum
+relerr = relerr + err
+if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 60
+x = 0.1*amin1(abs(x),abs(result(k)))
+if (abs(qsuba) .le. x) ind = 1
+!
+!     Subdivide the interval last stacked
+!
+60 if (is .eq. 1) go to 120
+is = is - 1
+sub3 = stack(is)
+is = is - 1
+sub1 = stack(is)
+go to 10
+!
+!     Termination when subdivision is not needed
+!
+100 qsuba = result(k)
+if (a .gt. b) qsuba = -qsuba
+relerr = abs(result(k) - result(k - 1))
+if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
+return
+!
+!     Subdivision result
+!
+110 ind = 2
+120 if (a .gt. b) qsuba = -qsuba
+if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
+return
+end function qsuba
+
+subroutine quad(a, b, result, k, epsil, npts, icheck, f)
+implicit none
+integer, intent(out) :: icheck
+integer, intent(inout) :: k, npts
+real, intent(in) :: a, b, epsil
+real, intent(inout) :: result(*)
+real :: f
+external f
+integer :: i, inew, iold, j
+real :: acum, diff, funct(127), fzero, sum, x
+real, parameter :: p(381) = [real :: 0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
+   & 0.26848808986833344073e00, 0.96049126870802028342e00, 0.10465622602646726519e00, 0.43424374934680255800e00, &
+   & 0.40139741477596222291e00, 0.45091653865847414235e00, 0.13441525524378422036e00, 0.51603282997079739697e-01, &
+   & 0.20062852937698902103e00, 0.99383196321275502221e00, 0.17001719629940260339e-01, 0.88845923287225699889e00, &
+   & 0.92927195315124537686e-01, 0.62110294673722640294e00, 0.17151190913639138079e00, 0.22338668642896688163e00, &
+   & 0.21915685840158749640e00, 0.22551049979820668739e00, 0.67207754295990703540e-01, 0.25807598096176653565e-01, &
+   & 0.10031427861179557877e00, 0.84345657393211062463e-02, 0.46462893261757986541e-01, 0.85755920049990351154e-01, &
+   & 0.10957842105592463824e00, 0.99909812496766759766e00, 0.25447807915618744154e-02, 0.98153114955374010687e00, &
+   & 0.16446049854387810934e-01, 0.92965485742974005667e00, 0.35957103307129322097e-01, 0.83672593816886873550e00, &
+   & 0.56979509494123357412e-01, 0.70249620649152707861e00, 0.76879620499003531043e-01, 0.53131974364437562397e00, &
+   & 0.93627109981264473617e-01, 0.33113539325797683309e00, 0.10566989358023480974e00, 0.11248894313318662575e00, &
+   & 0.11195687302095345688e00, 0.11275525672076869161e00, 0.33603877148207730542e-01, 0.12903800100351265626e-01, &
+   & 0.50157139305899537414e-01, 0.42176304415588548391e-02, 0.23231446639910269443e-01, 0.42877960025007734493e-01, &
+   & 0.54789210527962865032e-01, 0.12651565562300680114e-02, 0.82230079572359296693e-02, 0.17978551568128270333e-01, &
+   & 0.28489754745833548613e-01, 0.38439810249455532039e-01, 0.46813554990628012403e-01, 0.52834946790116519862e-01, &
+   & 0.55978436510476319408e-01, 0.99987288812035761194e00, 0.36322148184553065969e-03, 0.99720625937222195908e00, &
+   & 0.25790497946856882724e-02, 0.98868475754742947994e00, 0.61155068221172463397e-02, 0.97218287474858179658e00, &
+   & 0.10498246909621321898e-01, 0.94634285837340290515e00, 0.15406750466559497802e-01, 0.91037115695700429250e00, &
+   & 0.20594233915912711149e-01, 0.86390793819369047715e00, 0.25869679327214746911e-01, 0.80694053195021761186e00, &
+   & 0.31073551111687964880e-01, 0.73975604435269475868e00, 0.36064432780782572640e-01, 0.66290966002478059546e00, &
+   & 0.40715510116944318934e-01, 0.57719571005204581484e00, 0.44914531653632197414e-01, 0.48361802694584102756e00, &
+   & 0.48564330406673198716e-01, 0.38335932419873034692e00, 0.51583253952048458777e-01, 0.27774982202182431507e00, &
+   & 0.53905499335266063927e-01, 0.16823525155220746498e00, 0.55481404356559363988e-01, 0.56344313046592789972e-01, &
+   & 0.56277699831254301273e-01, 0.56377628360384717388e-01, 0.16801938574103865271e-01, 0.64519000501757369228e-02, &
+   & 0.25078569652949768707e-01, 0.21088152457266328793e-02, 0.11615723319955134727e-01, 0.21438980012503867246e-01, &
+   & 0.27394605263981432516e-01, 0.63260731936263354422e-03, 0.41115039786546930472e-02, 0.89892757840641357233e-02, &
+   & 0.14244877372916774306e-01, 0.19219905124727766019e-01, 0.23406777495314006201e-01, 0.26417473395058259931e-01, &
+   & 0.27989218255238159704e-01, 0.18073956444538835782e-03, 0.12895240826104173921e-02, 0.30577534101755311361e-02, &
+   & 0.52491234548088591251e-02, 0.77033752332797418482e-02, 0.10297116957956355524e-01, 0.12934839663607373455e-01, &
+   & 0.15536775555843982440e-01, 0.18032216390391286320e-01, 0.20357755058472159467e-01, 0.22457265826816098707e-01, &
+   & 0.24282165203336599358e-01, 0.25791626976024229388e-01, 0.26952749667633031963e-01, 0.27740702178279681994e-01, &
+   & 0.28138849915627150636e-01, 0.99998243035489159858e00, 0.50536095207862517625e-04, 0.99959879967191068325e00, &
+   & 0.37774664632698466027e-03, 0.99831663531840739253e00, 0.93836984854238150079e-03, 0.99572410469840718851e00, &
+   & 0.16811428654214699063e-02, 0.99149572117810613240e00, 0.25687649437940203731e-02, 0.98537149959852037111e00, &
+   & 0.35728927835172996494e-02, 0.97714151463970571416e00, 0.46710503721143217474e-02, 0.96663785155841656709e00, &
+   & 0.58434498758356395076e-02, 0.95373000642576113641e00, 0.70724899954335554680e-02, 0.93832039777959288365e00, &
+   & 0.83428387539681577056e-02, 0.92034002547001242073e00, 0.96411777297025366953e-02, 0.89974489977694003664e00, &
+   & 0.10955733387837901648e-01, 0.87651341448470526974e00, 0.12275830560082770087e-01, 0.85064449476835027976e00, &
+   & 0.13591571009765546790e-01, 0.82215625436498040737e00, 0.14893641664815182035e-01, 0.79108493379984836143e00, &
+   & 0.16173218729577719942e-01, 0.75748396638051363793e00, 0.17421930159464173747e-01, 0.72142308537009891548e00, &
+   & 0.18631848256138790186e-01, 0.68298743109107922809e00, 0.19795495048097499488e-01, 0.64227664250975951377e00, &
+   & 0.20905851445812023852e-01, 0.59940393024224289297e00, 0.21956366305317824939e-01, 0.55449513263193254887e00, &
+   & 0.22940964229387748761e-01, 0.50768775753371660215e00, 0.23854052106038540080e-01, 0.45913001198983233287e00, &
+   & 0.24690524744487676909e-01, 0.40897982122988867241e00, 0.25445769965464765813e-01, 0.35740383783153215238e00, &
+   & 0.26115673376706097680e-01, 0.30457644155671404334e00, 0.26696622927450359906e-01, 0.25067873030348317661e00, &
+   & 0.27185513229624791819e-01, 0.19589750271110015392e00, 0.27579749566481873035e-01, 0.14042423315256017459e00, &
+   & 0.27877251476613701609e-01, 0.84454040083710883710e-01, 0.28076455793817246607e-01, 0.28184648949745694339e-01, &
+   & 0.28176319033016602131e-01, 0.28188814180192358694e-01, 0.84009692870519326354e-02, 0.32259500250878684614e-02, &
+   & 0.12539284826474884353e-01, 0.10544076228633167722e-02, 0.58078616599775673635e-02, 0.10719490006251933623e-01, &
+   & 0.13697302631990716258e-01, 0.31630366082226447689e-03, 0.20557519893273465236e-02, 0.44946378920320678616e-02, &
+   & 0.71224386864583871532e-02, 0.96099525623638830097e-02, 0.11703388747657003101e-01, 0.13208736697529129966e-01, &
+   & 0.13994609127619079852e-01, 0.90372734658751149261e-04, 0.64476204130572477933e-03, 0.15288767050877655684e-02, &
+   & 0.26245617274044295626e-02, 0.38516876166398709241e-02, 0.51485584789781777618e-02, 0.64674198318036867274e-02, &
+   & 0.77683877779219912200e-02, 0.90161081951956431600e-02, 0.10178877529236079733e-01, 0.11228632913408049354e-01, &
+   & 0.12141082601668299679e-01, 0.12895813488012114694e-01, 0.13476374833816515982e-01, 0.13870351089139840997e-01, &
+   & 0.14069424957813575318e-01, 0.25157870384280661489e-04, 0.18887326450650491366e-03, 0.46918492424785040975e-03, &
+   & 0.84057143271072246365e-03, 0.12843824718970101768e-02, 0.17864463917586498247e-02, 0.23355251860571608737e-02, &
+   & 0.29217249379178197538e-02, 0.35362449977167777340e-02, 0.41714193769840788528e-02, 0.48205888648512683476e-02, &
+   & 0.54778666939189508240e-02, 0.61379152800413850435e-02, 0.67957855048827733948e-02, 0.74468208324075910174e-02, &
+   & 0.80866093647888599710e-02, 0.87109650797320868736e-02, 0.93159241280693950932e-02, 0.98977475240487497440e-02, &
+   & 0.10452925722906011926e-01, 0.10978183152658912470e-01, 0.11470482114693874380e-01, 0.11927026053019270040e-01, &
+   & 0.12345262372243838455e-01, 0.12722884982732382906e-01, 0.13057836688353048840e-01, 0.13348311463725179953e-01, &
+   & 0.13592756614812395910e-01, 0.13789874783240936517e-01, 0.13938625738306850804e-01, 0.14038227896908623303e-01, &
+   & 0.14088159516508301065e-01, 0.99999759637974846462e00, 0.69379364324108267170e-05, 0.99994399620705437576e00, &
+   & 0.53275293669780613125e-04, 0.99976049092443204733e00, 0.13575491094922871973e-03, 0.99938033802502358193e00, &
+   & 0.24921240048299729402e-03, 0.99874561446809511470e00, 0.38974528447328229322e-03, 0.99780535449595727456e00, &
+   & 0.55429531493037471492e-03, 0.99651414591489027385e00, 0.74028280424450333046e-03, 0.99483150280062100052e00, &
+   & 0.94536151685852538246e-03, 0.99272134428278861533e00, 0.11674841174299594077e-02, 0.99015137040077015918e00, &
+   & 0.14049079956551446427e-02, 0.98709252795403406719e00, 0.16561127281544526052e-02, 0.98351865757863272876e00, &
+   & 0.19197129710138724125e-02, 0.97940628167086268381e00, 0.21944069253638388388e-02, 0.97473445975240266776e00, &
+   & 0.24789582266575679307e-02, 0.96948465950245923177e00, 0.27721957645934509940e-02, 0.96364062156981213252e00, &
+   & 0.30730184347025783234e-02, 0.95718821610986096274e00, 0.33803979910869203823e-02, 0.95011529752129487656e00, &
+   & 0.36933779170256508183e-02, 0.94241156519108305981e00, 0.40110687240750233989e-02, 0.93406843615772578800e00, &
+   & 0.43326409680929828545e-02, 0.92507893290707565236e00, 0.46573172997568547773e-02, 0.91543758715576504064e00, &
+   & 0.49843645647655386012e-02, 0.90514035881326159519e00, 0.53130866051870565663e-02, 0.89418456833555902286e00, &
+   & 0.56428181013844441585e-02, 0.88256884024734190684e00, 0.59729195655081658049e-02, 0.87029305554811390585e00, &
+   & 0.63027734490857587172e-02, 0.85735831088623215653e00, 0.66317812429018878941e-02, 0.84376688267270860104e00, &
+   & 0.69593614093904229394e-02, 0.82952219463740140018e00, 0.72849479805538070639e-02, 0.81462878765513741344e00, &
+   & 0.76079896657190565832e-02, 0.79909229096084140180e00, 0.79279493342948491103e-02, 0.78291939411828301639e00, &
+   & 0.82443037630328680306e-02, 0.76611781930376009072e00, 0.85565435613076896192e-02, 0.74869629361693660282e00, &
+   & 0.88641732094824942641e-02, 0.73066452124218126133e00, 0.91667111635607884067e-02, 0.71203315536225203459e00, &
+   & 0.94636899938300652943e-02, 0.69281376977911470289e00, 0.97546565363174114611e-02, 0.67301883023041847920e00, &
+   & 0.10039172044056840798e-01, 0.65266166541001749610e00, 0.10316812330947621682e-01, 0.63175643771119423041e00, &
+   & 0.10587167904885197931e-01, 0.61031811371518640016e00, 0.10849844089337314099e-01, 0.58836243444766254143e00, &
+   & 0.11104461134006926537e-01, 0.56590588542365442262e00, 0.11350654315980596602e-01, 0.54296566649831149049e00, &
+   & 0.11588074033043952568e-01, 0.51955966153745702199e00, 0.11816385890830235763e-01, 0.49570640791876146017e00, &
+   & 0.12035270785279562630e-01, 0.47142506587165887693e00, 0.12244424981611985899e-01, 0.44673538766202847374e00, &
+   & 0.12443560190714035263e-01, 0.42165768662616330006e00, 0.12632403643542078765e-01, 0.39621280605761593918e00, &
+   & 0.12810698163877361967e-01, 0.37042208795007823014e00, 0.12978202239537399286e-01, 0.34430734159943802278e00, &
+   & 0.13134690091960152836e-01, 0.31789081206847668318e00, 0.13279951743930530650e-01, 0.29119514851824668196e00, &
+   & 0.13413793085110098513e-01, 0.26424337241092676194e00, 0.13536035934956213614e-01, 0.23705884558982972721e00, &
+   & 0.13646518102571291428e-01, 0.20966523824318119477e00, 0.13745093443001896632e-01, 0.18208649675925219825e00, &
+   & 0.13831631909506428676e-01, 0.15434681148137810869e00, 0.13906019601325461264e-01, 0.12647058437230196685e00, &
+   & 0.13968158806516938516e-01, 0.98482396598119202090e-01, 0.14017968039456608810e-01, 0.70406976042855179063e-01, &
+   & 0.14055382072649964277e-01, 0.42269164765363603212e-01, 0.14080351962553661325e-01, 0.14093886410782462614e-01, &
+   & 0.14092845069160408355e-01, 0.14094407090096179347e-01]
+!     --------------------
+! This subroutine attempts to calculate the integral of f(x)
+! over the interval *a* to *b* with relative error not
+! EXCEEDING *epsil*.
+! The result is obtained using a sequence of 1,3,7,15,31,63,
+! 127, and 255 point interlacing formulae(no integrand
+! evaluations are wasted) of respective degree 1,5,11,23,
+! 47,95,191 and 383. The formulae are based on the optimal
+! extension of the 3-point Gauss formula.  Details of
+! the formulae are given in *the optimum addition of points
+! to quadrature formulae* by T.N.L. patterson,maths.COMP.
+! Vol 22,847-856,1968.
+!                     *** INPUT ***
+! A       LOWER LIMIT OF INTEGRATION.
+! b       UPPER LIMIT OF INTEGRATION.
+! epsil   RELATIVE ACCURACY REQUIRED. WHEN THE RELATIVE
+!         difference of two successive formulae does not
+!         exceed *epsil* the last formula computed is taken
+!         as the result.
+! f       f(x) IS THE INTEGRAND.
+!                     *** OUTPUT ***
+! result  this array,which should be declared to have at
+!         least 8 elements, holds the results obtained by
+!         the 1,3,7, etc., point formulae. The number of
+!         formulae computed depents on *epsil*.
+! k       result(k) HOLDS THE VALUE OF THE INTEGRAL TO THE
+!         specified relative accuracy.
+! npts    NUMBER INTEGRAND EVALUATIONS.
+! icheck  on exit normally icheck=0. However if convergence
+!         to the accuracy requested is not achieved icheck=1
+!         on exit.
+! Abscissae and weights of quadrature rules are stacked in
+! array *p* in the order in which they are needed.
+!     --------------------
+icheck = 0
+! Check for trivial case.
+if (a.eq.b) go to 70
+! Scale factors.
+sum = (b + a)/2.0
+diff = (b - a)/2.0
+! 1-Point Gauss
+fzero = f(sum)
+result(1) = 2.0*fzero*diff
+i = 0
+iold = 0
+inew = 1
+k = 2
+acum = 0.0
+go to 30
+10 if (k.eq.8) go to 50
+k = k + 1
+acum = 0.0
+! Contribution from function values already computed.
+do 20 j = 1,iold
+   i = i + 1
+   acum = acum + p(i)*funct(j)
+20 continue
+! Contribution from new function values.
+30 iold = iold + inew
+do 40 j = inew,iold
+   i = i + 1
+   x = p(i)*diff
+   funct(j) = f(sum + x) + f(sum - x)
+   i = i + 1
+   acum = acum + p(i)*funct(j)
+40 continue
+inew = iold + 1
+i = i + 1
+result(k) = (acum + p(i)*fzero)*diff
+! Check for convergence.
+if (abs(result(k) - result(k - 1)) - epsil*abs(result(k))) 60, &
+   & 60, 10
+! Convergence not achieved.
+50 icheck = 1
+! Normal termination.
+60 npts = inew + iold
+return
+! Trivial case
+70 k = 2
+result(1) = 0.0
+result(2) = 0.0
+npts = 0
+return
+end subroutine quad
+
+subroutine qags (f, a, b, epsabs, epsrel, result, abserr, &
+   & neval, ier, limit, lenw, last, iwork, work)
+implicit none
+real :: f
+integer, intent(out) :: ier, last
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+real, intent(in) :: a
+real, intent(out) :: abserr
+real, intent(in) :: b, epsabs, epsrel
+real, intent(out) :: result
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
+integer :: l1, l2, l3
+!-----------------------------------------------------------------------
+!
+!                 Computation of a definite integral
+!
+!-----------------------------------------------------------------------
+!
+!        Purpose
+!           the routine calculates an approximation  result  to a given
+!           definite integral   I = Integral of  f  over (a,b),
+!           hopefully satisfying following claim for accuracy
+!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
+!
+!        Parameters
+!         on entry
+!            f      - REAL
+!                     function subprogram defining the integrand
+!                     function f(x). the actual name for f needs to be
+!                     declared E X T E R N A L in the driver program.
+!
+!            a      - REAL
+!                     lower limit of integration
+!
+!            b      - REAL
+!                     upper limit of integration
+!
+!            epsabs - REAL
+!                     absolute accuracy requested
+!
+!            epsrel - REAL
+!                     relative accuracy requested
+!
+!         On return
+!            result - Real
+!                     approximation to the integral
+!
+!            abserr - REAL
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed abs(I-result)
+!
+!            neval  - INTEGER
+!                     number of integrand evaluations
+!
+!            ier    - INTEGER
+!                     ier = 0 Normal and reliable termination of the
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
+!                     ier.GT.0 abnormal termination of the routine
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!
+!                     ier = 1 Maximum number of subdivisions allowed
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
+!                         = 2 The occurrence of roundoff error is DETEC-
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
+!                         = 3 Extremely bad integrand behaviour
+!                             occurs at some  points of the integration
+!                             interval.
+!                         = 4 The algorithm does not converge.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
+!                         = 5 The integral is probably divergent, or
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
+!                         = 6 The input is invalid because epsabs
+!                             or epsrel is negative, limit .LT. 1,
+!                             OR lenw .LT. 4 * limit.
+!                             Result, abserr, neval, last are
+!                             set to zero.
+!
+!         Dimensioning parameters
+!            limit - Integer
+!                    dimensioning parameter for iwork
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
+!                    INTEGRATION INTERVAL (a,b), limit.GE.1.
+!                    If limit.LT.1, the routine will end with
+!                    ier = 6.
+!
+!            lenw  - INTEGER
+!                    dimensioning parameter for work
+!                    lenw must be at least limit*4.
+!                    If lenw.LT.limit*4, the routine will end
+!                    with ier = 6.
+!
+!            last  - Integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of
+!                    significant elements actually in the work
+!                    arrays.
+!
+!         Work arrays
+!            iwork - INTEGER
+!                    vector of dimension at least limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that work(limit*3+iwork(1)),... ,
+!                    work(limit*3+iwork(K)) form a decreasing
+!                    sequence, with K = last if last.LE.(limit/2+2), and
+!                    K = limit+1-last otherwise
+!
+!            work  - Real
+!                    vector of dimension at least lenw
+!                    on return
+!                    work(1), ..., work(last) contain the left
+!                     END POINTS OF THE SUBINTERVALS IN THE
+!                     partition of (a,b),
+!                    work(limit+1), ..., work(limit+last) contain
+!                     the right end points,
+!                    work(limit*2+1), ..., work(limit*2+last)
+!                     contain the integral approximations over
+!                     the subintervals,
+!                    work(limit*3+1), ..., work(limit*3+last)
+!                     contain the error estimates.
+!
+!         Subroutines or functions needed
+!              - qagse
+!              - qk21f
+!              - qpsrt
+!              - qelg
+!              - f (user-provided function)
+!              - spmpar
+!
+!-----------------------------------------------------------------------
+!
+!         Check validity of limit and lenw.
+!
+ier = 6
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
+!
+!         Prepare call for qagse.
+!
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
+!
+call qagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine qags
+
+subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
+   & neval,ier,alist,blist,rlist,elist,iord,last)
+implicit none
+!-----------------------------------------------------------------------
+!
+!                 Computation of a definite integral
+!
+!-----------------------------------------------------------------------
+!
+!        Purpose
+!           the routine calculates an approximation  result  to a given
+!           definite integral   I = Integral of  f  over (a,b),
+!           hopefully satisfying following claim for accuracy
+!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
+!
+!        Parameters
+!         on entry
+!            f      - REAL
+!                     function subprogram defining the integrand
+!                     function f(x). the actual name for f needs to be
+!                     declared E X t E R N A L in the driver program.
+!
+!            a      - REAL
+!                     lower limit of integration
+!
+!            b      - REAL
+!                     upper limit of integration
+!
+!            epsabs - REAL
+!                     absolute accuracy requested
+!
+!            epsrel - REAL
+!                     relative accuracy requested
+!
+!            limit  - Integer
+!                     gives an upperbound on the number of
+!                     subintervals in the partition of (a,b)
+!
+!         On return
+!            result - Real
+!                     approximation to the integral
+!
+!            abserr - REAL
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed abs(I-result)
+!
+!            neval  - INTEGER
+!                     number of integrand evaluations
+!
+!            ier    - INTEGER
+!                     ier = 0 Normal and reliable termination of the
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
+!                     ier.GT.0 abnormal termination of the routine
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!
+!                         = 1 Maximum number of subdivisions allowed
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of
+!                             limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of A
+!                             local difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the sub-
+!                             ranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
+!                         = 2 The occurrence of roundoff error is DETEC-
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
+!                         = 3 Extremely bad integrand behaviour
+!                             occurs at some  points of the integration
+!                             interval.
+!                         = 4 The algorithm does not converge.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
+!                         = 5 The integral is probably divergent, or
+!                             slowly convergent. It must be noted
+!                             that divergence can occur with any other
+!                             value of ier.
+!                         = 6 The input is invalid because epsabs
+!                             or epsrel is negative.
+!                             Result, abserr, neval, last, rlist(1),
+!                             iord(1) and elist(1) are set to zero.
+!                             alist(1) and blist(1) are set to A and b
+!                             respectively.
+!
+!            alist  - REAL
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left
+!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
+!                     of the given integration range (a,b)
+!
+!            blist  - REAL
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right
+!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
+!                     of the given integration range (a,b)
+!
+!            rlist  - REAL
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
+!
+!            elist  - REAL
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli
+!                     of the absolute error estimates on the
+!                     SUBINERVALS
+!
+!            iord   - INTEGER
+!                     vector of dimension at least limit, the first k
+!                     elements of which are pointers to the error
+!                     estimates over the subintervals, such
+!                     THAT elist(iord(1)), ..., elist(iord(k))
+!                     form a decreasing sequence, with k = last
+!                     if last.LE.(limit/2+2), and k = limit+1-last
+!                     otherwise
+!
+!            last   - INTEGER
+!                     number of subintervals actually produced in the
+!                     subdivision process
+!
+!         Subroutines or functions needed
+!              - qk21f
+!              - qpsrt
+!              - qelg
+!              - f (user-provided function)
+!              - spmpar
+!
+!-----------------------------------------------------------------------
+real, intent(in) :: a
+real, intent(out) :: abserr
+real, intent(inout) :: alist
+real, intent(in) :: b
+real, intent(inout) :: blist
+real, intent(inout) :: elist
+real, intent(in) :: epsabs, epsrel
+real :: f
+real, intent(out) :: result
+real, intent(inout) :: rlist
+integer, intent(out) :: ier
+integer, intent(inout) :: iord
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer, intent(out) :: neval
+external f
+real :: abseps
+real :: area, area1, area12, area2, a1, a2
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real :: epmach
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+   & errsum, ertest, oflow, rerr, resabs, reseps
+real :: res3la(3)
+real :: rlist2(52), small, t, uflow
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr
+integer :: nres, nrmax, numrl2
+logical :: extrap, noext
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!
+!
+!            The dimension of rlist2 is determined by the value of
+!            LIMEXP in subroutine qelg (rlist2 should be of dimension
+!            (LIMEXP+2) at least).
+!
+!            List of major variables
+!            -----------------------
+!
+!           alist     - List of left end points of all subintervals
+!                       considered up to now
+!           blist     - List of right end points of all subintervals
+!                       considered up to now
+!           rlist(I)  - Approximation to the integral over
+!                       (alist(I),blist(I))
+!           rlist2    - Array of dimension at least LIMEXP+2
+!                       containing the part of the epsilon table
+!                       which is still needed for further computations
+!           elist(I)  - Error estimate applying to rlist(I)
+!           maxerr    - Pointer to the interval with largest error
+!                       estimate
+!           errmax    - elist(maxerr)
+!           erlast    - Error on the interval currently subdivided
+!                       (before that subdivision has taken place)
+!           area      - Sum of the integrals over the subintervals
+!           ERRSUM    - Sum of the errors over the subintervals
+!           errbnd    - Requested accuracy max(epsabs,epsrel*
+!                       abs(result))
+!           *****1    - Variable for the left interval
+!           *****2    - Variable for the right interval
+!           last      - Index for subdivision
+!           nres      - Number of calls to the extrapolation routine
+!           numrl2    - Number of elements currently in rlist2. If an
+!                       appropriate approximation to the compounded
+!                       integral has been obtained it is put in
+!                       rlist2(numrl2) after numrl2 has been increased
+!                       by one.
+!           small     - Length of the smallest interval considered
+!                       up to now, multiplied by 1.5
+!           erlarg    - Sum of the errors over the intervals larger
+!                       than the smallest interval considered up to now
+!           extrap    - Logical variable denoting that the routine
+!                       is attempting to perform extrapolation
+!                       I.E. before subdividing the smallest interval
+!                       we try to decrease the value of erlarg.
+!           noext     - Logical variable denoting that extrapolation
+!                       is no longer allowed (true value)
+!
+!            Machine dependent constants
+!            ---------------------------
+!
+!           epmach is the largest relative spacing.
+!           uflow is the smallest positive magnitude.
+!           OFLOW is the largest positive magnitude.
+!
+epmach = spmpar(1)
+uflow = spmpar(2)
+oflow = spmpar(3)
+!
+!            Check epsabs and epsrel
+!            -----------------------
+!
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.0
+elist(1) = 0.0
+ier = 6
+if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
+ier = 0
+rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
+!
+!           First approximation to the integral
+!           -----------------------------------
+!
+ierro = 0
+call qk21f (f, a, b, result, abserr, defabs, resabs, &
+   & epmach, uflow, id)
+if (id .ne. 0) go to 999
+neval = 21
+!
+!           Test on accuracy.
+!
+dres = abs(result)
+errbnd = amax1(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
+   & errbnd) ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0) go to 999
+!
+!           Initialization
+!           --------------
+!
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+correc = 0.0
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
+t = 1.0 + 100.0*epmach
+!
+!           Main do-loop
+!           ------------
+!
+do 90 last = 2,limit
+!
+!           Bisect the subinterval with the nrmax-TH largest
+!           error estimate.
+!
+   a1 = alist(maxerr)
+   b1 = 0.5*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
+      & epmach, uflow, ier)
+   if (ier .ne. 0) go to 100
+   call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
+      & epmach, uflow, ier)
+   neval = neval + 42
+!
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
+!
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+   if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+      & .or. erro12 .lt. 0.99*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+   rlist(last) = area2
+   errbnd = amax1(epsabs,rerr*abs(area))
+!
+!           Test for roundoff error and eventually
+!           set error flag.
+!
+   if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+   if (iroff2 .ge. 5) ierro = 3
+!
+!           Set error flag in the case that the number of
+!           subintervals equals limit.
+!
+   if (last .eq. limit) ier = 1
+!
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
+!
+   if (amax1(abs(a1),abs(b2)) .le. &
+      & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
+!
+!           Append the newly-created intervals to the list.
+!
+   if (error2 .gt. error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   go to 30
+20 alist(maxerr) = a2
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
+!
+!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
+!           in the list of error estimates and select the
+!           subinterval with nrmax-TH largest error estimate (to be
+!           bisected next).
+!
+30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+! ***Jump out of do-loop
+   if (errsum .le. errbnd) go to 115
+! ***Jump out of do-loop
+   if (ier .ne. 0) go to 100
+   if (last .eq. 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+   if (extrap) go to 40
+!
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
+!
+   if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+   extrap = .true.
+   nrmax = 2
+40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
+!
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors
+!           over the larger intervals (erlarg) and perform
+!           extrapolation.
+!
+   id = nrmax
+   jupbnd = last
+   if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+   do 50 k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
+! ***Jump out of do-loop
+      if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+      nrmax = nrmax + 1
+50    continue
+!
+!           Perform extrapolation.
+!
+60 numrl2 = numrl2 + 1
+   rlist2(numrl2) = area
+   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+      & epmach, oflow)
+   ktmin = ktmin + 1
+   if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+   if (abseps .ge. abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = amax1(epsabs,rerr*abs(reseps))
+! ***Jump out of do-loop
+   if (abserr .le. ertest) go to 100
+!
+!           Prepare bisection of the smallest interval.
+!
+70 if (numrl2 .eq. 1) noext = .true.
+   if (ier .eq. 5) go to 100
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5
+   erlarg = errsum
+   go to 90
+80 small = abs(b - a)*0.375
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
+90 continue
+!
+!           Set final result and error estimate.
+!           ------------------------------------
+!
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.0 .and. area .ne. 0.0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.0) go to 130
+go to 110
+105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
+!
+!           Test on divergence.
+!
+110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
+   & defabs*0.1e-01) go to 130
+if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
+   & .or. errsum .gt. abs(area)) ier = 6
+go to 130
+!
+!           Compute global integral sum.
+!
+115 result = 0.0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine qagse
+
+subroutine qk21f (f, a, b, result, abserr, resabs, resasc, &
+   & epmach, uflow, isig)
+implicit none
+integer, intent(out) :: isig
+real, intent(in) :: a
+real, intent(inout) :: abserr
+real, intent(in) :: b, epmach
+real, intent(inout) :: resabs, resasc, result
+real, intent(in) :: uflow
+real :: f
+external f
+integer :: j, jtw, jtwm1
+real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
+   & resk, reskh, tol
+real :: fv1(10), fv2(10)
+real, parameter :: xgk(11) = [real :: 0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
+   & 0.8650633666889845e+00, 0.7808177265864169e+00, 0.6794095682990244e+00, 0.5627571346686047e+00, 0.4333953941292472e+00, &
+   & 0.2943928627014602e+00, 0.1488743389816312e+00, 0.0000000000000000e+00]
+real, parameter :: wgk(11) = [real :: 0.1169463886737187e-01, 0.3255816230796473e-01, 0.5475589657435200e-01, &
+   & 0.7503967481091995e-01, 0.9312545458369761e-01, 0.1093871588022976e+00, 0.1234919762620659e+00, 0.1347092173114733e+00, &
+   & 0.1427759385770601e+00, 0.1477391049013385e+00, 0.1494455540029169e+00]
+real, parameter :: wg(5) = [real :: 0.6667134430868814e-01, 0.1494513491505806e+00, 0.2190863625159820e+00, 0.2692667193099964e+00 &
+   & , 0.2955242247147529e+00]
+!-----------------------------------------------------------------------
+!
+! 1.        PURPOSE
+!              to compute I = Integral of f over (a,b), with error
+!                             estimate
+!                         j = Integral of abs(f) over (a,b)
+!
+! 2.        PARAMETERS
+!            on entry
+!              f      - REAL
+!                       function subprogram defining the integrand
+!                       function f(x). the actual name for f needs
+!                       to be declared E X T E R N A L in the
+!                       calling program.
+!
+!              a      - REAL
+!                       lower limit of integration
+!
+!              b      - REAL
+!                       upper limit of integration
+!
+!              epmach - REAL
+!                       the relative precision of the floating
+!                       arithmetic being used.
+!
+!              uflow  - REAL
+!                       the smallest positive magnitude.
+!
+!            On return
+!              result - Real
+!                       approximation to the integral I
+!                       result is computed by applying the 21-point
+!                       Kronrod rule (RESK) obtained by optimal
+!                       addition of abscissae to the 10-point Gauss
+!                       RULE (resg).
+!
+!              abserr - REAL
+!                       estimate of the modulus of the absolute error,
+!                       which should not exceed abs(I-result)
+!
+!              resabs - REAL
+!                       approximation to the integral j
+!
+!              resasc - REAL
+!                       approximation to the integral of abs(f-I/(b-a))
+!                       OVER (a,b)
+!
+!              isig   - INTEGER
+!                       isig=0  The integral was approximated.
+!                       isig=5  The interval (a,b) is too short.
+!                               The integral cannot be computed.
+!
+! 3.        SUBROUTINES OR FUNCTIONS NEEDED
+!                 - f (user-provided function)
+!
+!-----------------------------------------------------------------------
+!
+!           The abscissae and weights are given for the interval (-1,1).
+!           Because of symmetry only the positive abscissae and their
+!           corresponding weights are given.
+!
+!           xgk    - Abscissae of the 21-point Kronrod rule
+!                    xgk(2), xgk(4), ...  abscissae of the 10-point
+!                    Gauss rule
+!                    xgk(1), xgk(3), ...  abscissae which are optimally
+!                    added to the 10-point Gauss rule
+!
+!           wgk    - Weights of the 21-point Kronrod rule
+!
+!           wg     - Weights of the 10-point Gauss rule
+!
+!
+!
+!
+!
+!           List of major variables
+!           -----------------------
+!
+!           centr  - Mid point of the interval
+!           hlgth  - Half-length of the interval
+!           absc   - ABSCISSA
+!           FVAL*  - Function VALUE
+!           resg   - result of the 10-point Gauss formula
+!           RESK   - result of the 21-point Kronrod formula
+!           RESKH  - Approximation to the mean value of f over (a,b),
+!                    I.E. TO I/(b-a)
+!
+!
+centr = 0.5*(a + b)
+hlgth = 0.5*(b - a)
+dhlgth = abs(hlgth)
+!
+!             Check if the interval (a,b) is too short
+!
+isig = 5
+absc = abs(centr) + dhlgth*0.14
+if (absc .eq. abs(centr)) return
+!
+!           Compute the 21-point Kronrod approximation to
+!           the integral, and estimate the absolute error.
+!
+isig = 0
+resg = 0.0
+fc = f(centr)
+resk = wgk(11)*fc
+resabs = abs(resk)
+do 10 j = 1,5
+   jtw = 2*j
+   absc = hlgth*xgk(jtw)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtw) = fval1
+   fv2(jtw) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(jtw)*fsum
+   resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
+10 continue
+do j = 1,5
+   jtwm1 = 2*j - 1
+   absc = hlgth*xgk(jtwm1)
+   fval1 = f(centr - absc)
+   fval2 = f(centr + absc)
+   fv1(jtwm1) = fval1
+   fv2(jtwm1) = fval2
+   fsum = fval1 + fval2
+   resk = resk + wgk(jtwm1)*fsum
+   resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
+end do
+reskh = resk*0.5
+resasc = wgk(11)*abs(fc - reskh)
+do j = 1,10
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + abs(fv2(j) - reskh))
+end do
+result = resk*hlgth
+resabs = resabs*dhlgth
+resasc = resasc*dhlgth
+abserr = abs((resk - resg)*hlgth)
+if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
+   & abserr = resasc*amin1(1.0, &
+   & (0.2e+03*abserr/resasc)**1.5)
+tol = epmach*0.5e+02
+if (resabs .gt. uflow/tol) abserr = amax1(abserr,tol*resabs)
+return
+end subroutine qk21f
+
+subroutine qagi (f, bound, inf, epsabs, epsrel, result, abserr, &
+   & neval, ier, limit, lenw, last, iwork, work)
+implicit none
+integer, intent(out) :: ier
+integer, intent(in) :: inf
+integer, intent(out) :: last
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+real, intent(out) :: abserr
+real, intent(in) :: bound, epsabs, epsrel
+real, intent(out) :: result
+real :: f
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
+integer :: l1, l2, l3
+!-----------------------------------------------------------------------
+!
+!                   Integration over infinite intervals
+!
+!-----------------------------------------------------------------------
+!
+!        Purpose
+!           the routine calculates an approximation  result  to a given
+!           integral    I = Integral of  f  over (bound,+INFINITY)
+!                    or I = Integral of  f  over (-INFINITY,bound)
+!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
+!           hopefully satisfying following claim for accuracy
+!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
+!
+!        Parameters
+!         on entry
+!            f      - REAL
+!                     function subprogram defining the integrand
+!                     function f(x). the actual name for f needs to be
+!                     declared E X T E R N A L in the driver program.
+!
+!            bound  - Real
+!                     finite bound of integration range
+!                     (has no meaning if interval is doubly-infinite)
+!
+!            inf    - INTEGER
+!                     indicating the kind of integration range
+!                     involved
+!                     inf = 1 CORRESPONDS TO  (bound,+INFINITY),
+!                     inf = -1            to  (-infinity,bound),
+!                     inf = 2             to (-infinity,+infinity).
+!
+!            epsabs - REAL
+!                     absolute accuracy requested
+!
+!            epsrel - REAL
+!                     relative accuracy requested
+!
+!         On return
+!            result - Real
+!                     approximation to the integral
+!
+!            abserr - REAL
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed abs(I-result)
+!
+!            neval  - INTEGER
+!                     number of integrand evaluations
+!
+!            ier    - INTEGER
+!                     ier = 0 Normal and reliable termination of the
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
+!                   - ier.GT.0 abnormal termination of the routine. The
+!                             estimates for result and error are less
+!                             reliable. It is assumed that the requested
+!                             accuracy has not been achieved.
+!
+!                     ier = 1 Maximum number of subdivisions allowed
+!                             has been achieved. One can allow more
+!                             subdivisions by increasing the value
+!                             of limit (and taking the according
+!                             dimension adjustments into account).
+!                             However, if this yields no improvement
+!                             it is advised to analyze the integrand
+!                             in order to determine the integration
+!                             difficulties. If the position of a local
+!                             difficulty can be determined (E.G.
+!                             Singularity, discontinuity within the
+!                             interval) one will probably gain from
+!                             splitting up the interval at this point
+!                             and calling the integrator on the
+!                             subranges. If possible, an appropriate
+!                             special-purpose integrator should be used,
+!                             which is designed for handling the type
+!                             of difficulty involved.
+!                         = 2 The occurrence of roundoff error is
+!                             detected, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
+!                         = 3 Extremely bad integrand behaviour occurs
+!                             at some points of the integration
+!                             interval.
+!                         = 4 The algorithm does not converge.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is assumed that the requested tolerance
+!                             cannot be achieved, and that the returned
+!                             result is the best which can be obtained.
+!                         = 5 The integral is probably divergent, or
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
+!                         = 6 The input is invalid because epsabs
+!                             or epsrel is negative, limit .LT. 1,
+!                             OR lenw .LT. 4 * limit.
+!                             Result, abserr, neval, last are
+!                             set to zero.
+!
+!         Dimensioning parameters
+!            limit - Integer
+!                    dimensioning parameter for iwork
+!                    limit determines the maximum number
+!                    of subintervals in the partition of the given
+!                    INTEGRATION INTERVAL (A,B), limit.GE.1.
+!                    If limit.LT.1, the routine will end with
+!                    ier = 6.
+!
+!            lenw  - INTEGER
+!                    dimensioning parameter for work
+!                    lenw must be at least limit*4.
+!                    If lenw.LT.limit*4, the routine will end
+!                    with ier = 6.
+!
+!            last  - Integer
+!                    on return, last equals the number of
+!                    subintervals produced in the subdivision
+!                    process, which determines the number of significant
+!                    elements actually in the work arrays.
+!
+!         Work arrays
+!            iwork - INTEGER
+!                    vector of dimension at least limit, the first
+!                    K elements of which contain pointers
+!                    to the error estimates over the subintervals,
+!                    such that work(limit*3+iwork(1)),... ,
+!                    work(limit*3+iwork(K)) form a decreasing
+!                    sequence, with K = last if last.LE.(limit/2+2), and
+!                    K = limit+1-last otherwise
+!
+!            work  - Real
+!                    vector of dimension at least lenw
+!                    on return
+!                    work(1), ..., work(last) contain the left
+!                     END POINTS OF THE SUBINTERVALS IN THE
+!                     partition of (A,B),
+!                    work(limit+1), ..., work(limit+last) contain
+!                     the right end points,
+!                    work(limit*2+1), ..., work(limit*2+last)
+!                     contain the integral approximations over
+!                     the subintervals,
+!                    work(limit*3+1), ..., work(limit*3+last)
+!                     contain the error estimates.
+!
+!        Subroutines or functions needed
+!              - qagie
+!              - qk15i
+!              - qpsrt
+!              - qelg
+!              - f (user provided function)
+!              - spmpar
+!
+!-----------------------------------------------------------------------
+!
+!         Check validity of limit and lenw.
+!
+ier = 6
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
+!
+!         Prepare call for qagie.
+!
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
+!
+call qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+   & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine qagi
+
 subroutine qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
@@ -174,13 +2442,20 @@ real :: epmach
 real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
    & errsum, ertest, oflow, rerr, resabs, reseps
 real :: res3la(3)
-real :: rlist2(52), small, spmpar, t, uflow
+real :: rlist2(52), small, t, uflow
 integer :: id
 integer :: ierro
 integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
    & rlist(limit)
@@ -499,7 +2774,13 @@ external f
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
    & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
-real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
+real :: fv1(7), fv2(7)
+real, parameter :: xgk(8) = [real :: 0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+   & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
+real, parameter :: wgk(8) = [real :: 0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+   & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
+real, parameter :: wg(8) = [real :: 0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+   & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -588,25 +2869,8 @@ real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !                    to the abscissae xgk(2), xgk(4), ...
 !                    wg(1), wg(3), ... are set to zero.
 !
-data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-   & xgk(8)/ &
-   & 0.9914553711208126e+00,     0.9491079123427585e+00, &
-   & 0.8648644233597691e+00,     0.7415311855993944e+00, &
-   & 0.5860872354676911e+00,     0.4058451513773972e+00, &
-   & 0.2077849550078985e+00,     0.0000000000000000e+00/
 !
-data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-   & wgk(8)/ &
-   & 0.2293532201052922e-01,     0.6309209262997855e-01, &
-   & 0.1047900103222502e+00,     0.1406532597155259e+00, &
-   & 0.1690047266392679e+00,     0.1903505780647854e+00, &
-   & 0.2044329400752989e+00,     0.2094821410847278e+00/
 !
-data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
-   & 0.0000000000000000e+00,     0.1294849661688697e+00, &
-   & 0.0000000000000000e+00,     0.2797053914892767e+00, &
-   & 0.0000000000000000e+00,     0.3818300505051189e+00, &
-   & 0.0000000000000000e+00,     0.4179591836734694e+00/
 !
 !
 !           List of major variables
@@ -1338,13 +3602,20 @@ real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
    & errsum, ertest, oflow, rerr, resabs, reseps
 real :: res3la(3)
 real :: rlist2(52), small, t, uflow
-real :: vp1(21), vp2(21), vn1(21), vn2(21), spmpar
+real :: vp1(21), vp2(21), vn1(21), vn2(21)
 integer :: id
 integer :: ierro
 integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer :: maxerr, nres, nrmax, numrl2
 integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
    & rlist(limit), valp(21,limit), valn(21,limit)
@@ -1769,9 +4040,38 @@ integer, intent(inout) :: l1, l2
 external f
 integer :: i, is, k, ks
 real :: ldl
-real :: y2, xx(41), ww(52)
+real :: y2, xx(41)
 real :: aa, bb, c
-integer :: istart(4), len(4), j
+integer :: j
+integer, parameter :: istart(4) = [integer :: 0, 7, 17, 31]
+integer, parameter :: len(4) = [integer :: 7, 10, 14, 21]
+real, parameter :: ww(52) = [real :: 1.303262173284849021810473057638590518409112513421e-1, &
+   & 2.390632866847646220320329836544615917290026806242e-1, 2.630626354774670227333506083741355715758124943143e-1, &
+   & 2.186819313830574175167853094864355208948886875898e-1, 2.757897646642836865859601197607471574336674206700e-2, &
+   & 1.055750100538458443365034879086669791305550493830e-1, 1.571194260595182254168429283636656908546309467968e-2, &
+   & 1.298751627936015783241173611320651866834051160074e-1, 2.249996826462523640447834514709508786970828213187e-1, &
+   & 1.680415725925575286319046726692683040162290325505e-1, 1.415567675701225879892811622832845252125600939627e-1, &
+   & 1.006482260551160175038684459742336605269707889822e-1, 2.510604860724282479058338820428989444699235030871e-2, &
+   & 9.402964360009747110031098328922608224934320397592e-3, 5.542699233295875168406783695143646338274805359780e-2, &
+   & 9.986735247403367525720377847755415293097913496236e-2, 4.507523056810492466415880450799432587809828791196e-2, &
+   & 6.300942249647773931746170540321811473310938661469e-2, 1.261383225537664703012999637242003647020326905948e-1, &
+   & 1.273864433581028272878709981850307363453523117880e-1, 8.576500414311820514214087864326799153427368592787e-2, &
+   & 7.102884842310253397447305465997026228407227220665e-2, 5.026383572857942403759829860675892897279675661654e-2, &
+   & 4.683670010609093810432609684738393586390722052124e-3, 1.235837891364555000245004813294817451524633100256e-1, &
+   & 1.148933497158144016800199601785309838604146040215e-1, 1.252575774226122633391477702593585307254527198070e-2, &
+   & 1.239572396231834242194189674243818619042280816640e-1, 2.501306413750310579525950767549691151739047969345e-2, &
+   & 4.915957918146130094258849161350510503556792927578e-2, 2.259167374956474713302030584548274729936249753832e-2, &
+   & 6.362762978782724559269342300509058175967124446839e-2, 9.950065827346794643193261975720606296171462239514e-2, &
+   & 7.048220002718565366098742295389607994441704889441e-2, 6.512297339398335645872697307762912795346716454337e-2, &
+   & 3.998229150313659724790527138690215186863915308702e-2, 3.456512257080287509832054272964315588028252136044e-2, &
+   & 2.212167975884114432760321569298651047876071264944e-3, 8.140326425945938045967829319725797511040878579808e-2, &
+   & 6.583213447600552906273539578430361199084485578379e-2, 2.592913726450792546064232192976262988065252032902e-2, &
+   & 1.187141856692283347609436153545356484256869129472e-1, 5.999947605385971985589674757013565610751028128731e-2, &
+   & 5.500937980198041736910257988346101839062581489820e-2, 5.264422421764655969760271538981443718440340270116e-3, &
+   & 1.533126874056586959338368742803997744815413565014e-2, 3.527159369750123100455704702965541866345781113903e-2, &
+   & 5.000556431653955124212795201196389006184693561679e-2, 5.744164831179720106340717579281831675999717767532e-2, &
+   & 1.598823797283813438301248206397233634639162043386e-2, 2.635660410220884993472478832884065450876913559421e-2, &
+   & 1.196003937945541091670106760660561117114584656319e-2]
 !
 !            To compute i = Integral of f over (A,B), with error
 !                           estimate
@@ -1842,8 +4142,6 @@ integer :: istart(4), len(4), j
 !
 !------------------------
 !------------------------
-data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
-data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
 !------------------------
 data xx( 1)/.0                       /
 data xx( 2)/.25000000000000000000e+00/
@@ -1867,61 +4165,9 @@ data xx(19)/.84375000000000000000e+00/
 data xx(20)/.90625000000000000000e+00/
 data xx(21)/.99218750000000000000e+00/
 !   Number of nodes 13
-data ww(1)/1.303262173284849021810473057638590518409112513421e-1/
-data ww(2)/2.390632866847646220320329836544615917290026806242e-1/
-data ww(3)/2.630626354774670227333506083741355715758124943143e-1/
-data ww(4)/2.186819313830574175167853094864355208948886875898e-1/
-data ww(5)/2.757897646642836865859601197607471574336674206700e-2/
-data ww(6)/1.055750100538458443365034879086669791305550493830e-1/
-data ww(7)/1.571194260595182254168429283636656908546309467968e-2/
 !   Number of nodes 19
-data ww(8)/1.298751627936015783241173611320651866834051160074e-1/
-data ww(9)/2.249996826462523640447834514709508786970828213187e-1/
-data ww(15)/5.542699233295875168406783695143646338274805359780e-2/
-data ww(10)/1.680415725925575286319046726692683040162290325505e-1/
-data ww(16)/9.986735247403367525720377847755415293097913496236e-2/
-data ww(11)/1.415567675701225879892811622832845252125600939627e-1/
-data ww(12)/1.006482260551160175038684459742336605269707889822e-1/
-data ww(13)/2.510604860724282479058338820428989444699235030871e-2/
-data ww(17)/4.507523056810492466415880450799432587809828791196e-2/
-data ww(14)/9.402964360009747110031098328922608224934320397592e-3/
 !   Number of nodes 27
-data ww(18)/6.300942249647773931746170540321811473310938661469e-2/
-data ww(28)/1.239572396231834242194189674243818619042280816640e-1/
-data ww(19)/1.261383225537664703012999637242003647020326905948e-1/
-data ww(25)/1.235837891364555000245004813294817451524633100256e-1/
-data ww(20)/1.273864433581028272878709981850307363453523117880e-1/
-data ww(26)/1.148933497158144016800199601785309838604146040215e-1/
-data ww(29)/2.501306413750310579525950767549691151739047969345e-2/
-data ww(21)/8.576500414311820514214087864326799153427368592787e-2/
-data ww(30)/4.915957918146130094258849161350510503556792927578e-2/
-data ww(22)/7.102884842310253397447305465997026228407227220665e-2/
-data ww(23)/5.026383572857942403759829860675892897279675661654e-2/
-data ww(27)/1.252575774226122633391477702593585307254527198070e-2/
-data ww(31)/2.259167374956474713302030584548274729936249753832e-2/
-data ww(24)/4.683670010609093810432609684738393586390722052124e-3/
 !   Number of nodes 41
-data ww(32)/6.362762978782724559269342300509058175967124446839e-2/
-data ww(42)/1.187141856692283347609436153545356484256869129472e-1/
-data ww(46)/1.533126874056586959338368742803997744815413565014e-2/
-data ww(33)/9.950065827346794643193261975720606296171462239514e-2/
-data ww(47)/3.527159369750123100455704702965541866345781113903e-2/
-data ww(39)/8.140326425945938045967829319725797511040878579808e-2/
-data ww(48)/5.000556431653955124212795201196389006184693561679e-2/
-data ww(34)/7.048220002718565366098742295389607994441704889441e-2/
-data ww(49)/5.744164831179720106340717579281831675999717767532e-2/
-data ww(40)/6.583213447600552906273539578430361199084485578379e-2/
-data ww(43)/5.999947605385971985589674757013565610751028128731e-2/
-data ww(35)/6.512297339398335645872697307762912795346716454337e-2/
-data ww(44)/5.500937980198041736910257988346101839062581489820e-2/
-data ww(50)/1.598823797283813438301248206397233634639162043386e-2/
-data ww(36)/3.998229150313659724790527138690215186863915308702e-2/
-data ww(51)/2.635660410220884993472478832884065450876913559421e-2/
-data ww(37)/3.456512257080287509832054272964315588028252136044e-2/
-data ww(41)/2.592913726450792546064232192976262988065252032902e-2/
-data ww(45)/5.264422421764655969760271538981443718440340270116e-3/
-data ww(52)/1.196003937945541091670106760660561117114584656319e-2/
-data ww(38)/2.212167975884114432760321569298651047876071264944e-3/
 !------------------------
 k = ke + 1
 is = istart(k)
@@ -2408,8 +4654,7 @@ integer, intent(out) :: neval
 external f
 double precision :: abseps
 double precision :: area, area1, area12, area2, a1, a2
-double precision :: b1, b2, correc, defabs, defab1, defab2, &
-   & dpmpar, dres
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres
 double precision :: epmach
 double precision :: erlarg, erlast, errbnd, errmax, error1, &
    & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
@@ -2421,6 +4666,13 @@ integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
    & rlist(limit)
@@ -2797,8 +5049,20 @@ double precision :: fc, fsum, fval1, fval2, fv1(10), fv2(10), &
    & hlgth
 double precision :: resg, resk, reskh
 double precision :: tol
-double precision :: wg(5), wgk(11), xgk(11)
 integer :: j, jtw, jtwm1
+double precision, parameter :: xgk(11) = [double precision :: 0.995657163025808080735527280689d+00, &
+   & 0.973906528517171720077964012084d+00, 0.930157491355708226001207180060d+00, 0.865063366688984510732096688423d+00, &
+   & 0.780817726586416897063717578345d+00, 0.679409568299024406234327365115d+00, 0.562757134668604683339000099273d+00, &
+   & 0.433395394129247190799265943166d+00, 0.294392862701460198131126603104d+00, 0.148874338981631210884826001130d+00, &
+   & 0.000000000000000000000000000000d+00]
+double precision, parameter :: wgk(11) = [double precision :: 0.116946388673718742780643960622d-01, &
+   & 0.325581623079647274788189724594d-01, 0.547558965743519960313813002446d-01, 0.750396748109199527670431409162d-01, &
+   & 0.931254545836976055350654650834d-01, 0.109387158802297641899210590326d+00, 0.123491976262065851077958109831d+00, &
+   & 0.134709217311473325928054001772d+00, 0.142775938577060080797094273139d+00, 0.147739104901338491374841515972d+00, &
+   & 0.149445554002916905664936468390d+00]
+double precision, parameter :: wg(5) = [double precision :: 0.666713443086881375935688098933d-01, &
+   & 0.149451349150580593145776339658d+00, 0.219086362515982043995534934228d+00, 0.269266719309996355091226921569d+00, &
+   & 0.295524224714752870173892994651d+00]
 !
 !
 !           The abscissae and weights are given for the interval (-1,1).
@@ -2815,40 +5079,8 @@ integer :: j, jtw, jtwm1
 !
 !           wg     - Weights of the 10-point Gauss rule
 !
-data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-   & xgk(8),xgk(9),xgk(10),xgk(11)/ &
-   & 0.995657163025808080735527280689d+00, &
-   & 0.973906528517171720077964012084d+00, &
-   & 0.930157491355708226001207180060d+00, &
-   & 0.865063366688984510732096688423d+00, &
-   & 0.780817726586416897063717578345d+00, &
-   & 0.679409568299024406234327365115d+00, &
-   & 0.562757134668604683339000099273d+00, &
-   & 0.433395394129247190799265943166d+00, &
-   & 0.294392862701460198131126603104d+00, &
-   & 0.148874338981631210884826001130d+00, &
-   & 0.000000000000000000000000000000d+00/
 !
-data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-   & wgk(8),wgk(9),wgk(10),wgk(11)/ &
-   & 0.116946388673718742780643960622d-01, &
-   & 0.325581623079647274788189724594d-01, &
-   & 0.547558965743519960313813002446d-01, &
-   & 0.750396748109199527670431409162d-01, &
-   & 0.931254545836976055350654650834d-01, &
-   & 0.109387158802297641899210590326d+00, &
-   & 0.123491976262065851077958109831d+00, &
-   & 0.134709217311473325928054001772d+00, &
-   & 0.142775938577060080797094273139d+00, &
-   & 0.147739104901338491374841515972d+00, &
-   & 0.149445554002916905664936468390d+00/
 !
-data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
-   & 0.666713443086881375935688098933d-01, &
-   & 0.149451349150580593145776339658d+00, &
-   & 0.219086362515982043995534934228d+00, &
-   & 0.269266719309996355091226921569d+00, &
-   & 0.295524224714752870173892994651d+00/
 !
 !
 !           List of major variables
@@ -3287,8 +5519,7 @@ external f
 double precision :: abseps
 double precision :: area, area1, area12, area2, a1, a2
 double precision :: boun
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres, &
-   & dpmpar
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres
 double precision :: epmach
 double precision :: erlarg, erlast, errbnd, errmax, error1, &
    & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
@@ -3300,6 +5531,13 @@ integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
    & rlist(limit)
@@ -3623,7 +5861,18 @@ double precision :: centr, dinf
 double precision :: fc, fsum, fval1, fval2, hlgth
 double precision :: resg, resk, reskh
 double precision :: tabsc1, tabsc2, tol
-double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
+double precision :: fv1(7), fv2(7)
+double precision, parameter :: xgk(8) = [double precision :: 0.991455371120812639206854697526d+00, &
+   & 0.949107912342758524526189684048d+00, 0.864864423359769072789712788641d+00, 0.741531185599394439863864773281d+00, &
+   & 0.586087235467691130294144838259d+00, 0.405845151377397166906606412077d+00, 0.207784955007898467600689403773d+00, &
+   & 0.000000000000000000000000000000d+00]
+double precision, parameter :: wgk(8) = [double precision :: 0.229353220105292249637320080590d-01, &
+   & 0.630920926299785532907006631892d-01, 0.104790010322250183839876322542d+00, 0.140653259715525918745189590510d+00, &
+   & 0.169004726639267902826583426599d+00, 0.190350578064785409913256402421d+00, 0.204432940075298892414161999235d+00, &
+   & 0.209482141084727828012999174892d+00]
+double precision, parameter :: wg(8) = [double precision :: 0.0d+00, 0.129484966168869693270611432679d+00, 0.0d+00, &
+   & 0.279705391489276667901467771424d+00, 0.0d+00, 0.381830050505118944950369775489d+00, 0.0d+00, &
+   & 0.417959183673469387755102040816d+00]
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -3712,33 +5961,8 @@ double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !                    to the abscissae xgk(2), xgk(4), ...
 !                    wg(1), wg(3), ... are set to zero.
 !
-data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
-   & xgk(8)/ &
-   & 0.991455371120812639206854697526d+00, &
-   & 0.949107912342758524526189684048d+00, &
-   & 0.864864423359769072789712788641d+00, &
-   & 0.741531185599394439863864773281d+00, &
-   & 0.586087235467691130294144838259d+00, &
-   & 0.405845151377397166906606412077d+00, &
-   & 0.207784955007898467600689403773d+00, &
-   & 0.000000000000000000000000000000d+00/
 !
-data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
-   & wgk(8)/ &
-   & 0.229353220105292249637320080590d-01, &
-   & 0.630920926299785532907006631892d-01, &
-   & 0.104790010322250183839876322542d+00, &
-   & 0.140653259715525918745189590510d+00, &
-   & 0.169004726639267902826583426599d+00, &
-   & 0.190350578064785409913256402421d+00, &
-   & 0.204432940075298892414161999235d+00, &
-   & 0.209482141084727828012999174892d+00/
 !
-data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
-   & 0.0d+00,    0.129484966168869693270611432679d+00, &
-   & 0.0d+00,    0.279705391489276667901467771424d+00, &
-   & 0.0d+00,    0.381830050505118944950369775489d+00, &
-   & 0.0d+00,    0.417959183673469387755102040816d+00/
 !
 !
 !           List of major variables
@@ -4478,13 +6702,20 @@ double precision :: erlarg, erlast, errbnd, errmax, error1, &
    & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
 double precision :: res3la(3)
 double precision :: rlist2(52), small, t, uflow
-double precision :: vp1(21), vp2(21), vn1(21), vn2(21), dpmpar
+double precision :: vp1(21), vp2(21), vn1(21), vn2(21)
 integer :: id
 integer :: ierro
 integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer :: maxerr, nres, nrmax, numrl2
 integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
    & rlist(limit), valp(21,limit), valn(21,limit)
@@ -4909,9 +7140,38 @@ integer, intent(inout) :: l1, l2
 external f
 integer :: i, is, k, ks
 double precision :: ldl
-double precision :: y2, xx(41), ww(52)
+double precision :: y2, xx(41)
 double precision :: aa, bb, c
-integer :: istart(4), len(4), j
+integer :: j
+integer, parameter :: istart(4) = [integer :: 0, 7, 17, 31]
+integer, parameter :: len(4) = [integer :: 7, 10, 14, 21]
+double precision, parameter :: ww(52) = [double precision :: 1.303262173284849021810473057638590518409112513421d-1, &
+   & 2.390632866847646220320329836544615917290026806242d-1, 2.630626354774670227333506083741355715758124943143d-1, &
+   & 2.186819313830574175167853094864355208948886875898d-1, 2.757897646642836865859601197607471574336674206700d-2, &
+   & 1.055750100538458443365034879086669791305550493830d-1, 1.571194260595182254168429283636656908546309467968d-2, &
+   & 1.298751627936015783241173611320651866834051160074d-1, 2.249996826462523640447834514709508786970828213187d-1, &
+   & 1.680415725925575286319046726692683040162290325505d-1, 1.415567675701225879892811622832845252125600939627d-1, &
+   & 1.006482260551160175038684459742336605269707889822d-1, 2.510604860724282479058338820428989444699235030871d-2, &
+   & 9.402964360009747110031098328922608224934320397592d-3, 5.542699233295875168406783695143646338274805359780d-2, &
+   & 9.986735247403367525720377847755415293097913496236d-2, 4.507523056810492466415880450799432587809828791196d-2, &
+   & 6.300942249647773931746170540321811473310938661469d-2, 1.261383225537664703012999637242003647020326905948d-1, &
+   & 1.273864433581028272878709981850307363453523117880d-1, 8.576500414311820514214087864326799153427368592787d-2, &
+   & 7.102884842310253397447305465997026228407227220665d-2, 5.026383572857942403759829860675892897279675661654d-2, &
+   & 4.683670010609093810432609684738393586390722052124d-3, 1.235837891364555000245004813294817451524633100256d-1, &
+   & 1.148933497158144016800199601785309838604146040215d-1, 1.252575774226122633391477702593585307254527198070d-2, &
+   & 1.239572396231834242194189674243818619042280816640d-1, 2.501306413750310579525950767549691151739047969345d-2, &
+   & 4.915957918146130094258849161350510503556792927578d-2, 2.259167374956474713302030584548274729936249753832d-2, &
+   & 6.362762978782724559269342300509058175967124446839d-2, 9.950065827346794643193261975720606296171462239514d-2, &
+   & 7.048220002718565366098742295389607994441704889441d-2, 6.512297339398335645872697307762912795346716454337d-2, &
+   & 3.998229150313659724790527138690215186863915308702d-2, 3.456512257080287509832054272964315588028252136044d-2, &
+   & 2.212167975884114432760321569298651047876071264944d-3, 8.140326425945938045967829319725797511040878579808d-2, &
+   & 6.583213447600552906273539578430361199084485578379d-2, 2.592913726450792546064232192976262988065252032902d-2, &
+   & 1.187141856692283347609436153545356484256869129472d-1, 5.999947605385971985589674757013565610751028128731d-2, &
+   & 5.500937980198041736910257988346101839062581489820d-2, 5.264422421764655969760271538981443718440340270116d-3, &
+   & 1.533126874056586959338368742803997744815413565014d-2, 3.527159369750123100455704702965541866345781113903d-2, &
+   & 5.000556431653955124212795201196389006184693561679d-2, 5.744164831179720106340717579281831675999717767532d-2, &
+   & 1.598823797283813438301248206397233634639162043386d-2, 2.635660410220884993472478832884065450876913559421d-2, &
+   & 1.196003937945541091670106760660561117114584656319d-2]
 !
 !            To compute i = Integral of f over (A,B), with error
 !                           estimate
@@ -4982,8 +7242,6 @@ integer :: istart(4), len(4), j
 !
 !------------------------
 !------------------------
-data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
-data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
 !------------------------
 data xx( 1)/0.d0                     /
 data xx( 2)/.25000000000000000000d+00/
@@ -5007,61 +7265,9 @@ data xx(19)/.84375000000000000000d+00/
 data xx(20)/.90625000000000000000d+00/
 data xx(21)/.99218750000000000000d+00/
 !   Number of nodes 13
-data ww(1)/1.303262173284849021810473057638590518409112513421d-1/
-data ww(2)/2.390632866847646220320329836544615917290026806242d-1/
-data ww(3)/2.630626354774670227333506083741355715758124943143d-1/
-data ww(4)/2.186819313830574175167853094864355208948886875898d-1/
-data ww(5)/2.757897646642836865859601197607471574336674206700d-2/
-data ww(6)/1.055750100538458443365034879086669791305550493830d-1/
-data ww(7)/1.571194260595182254168429283636656908546309467968d-2/
 !   Number of nodes 19
-data ww(8)/1.298751627936015783241173611320651866834051160074d-1/
-data ww(9)/2.249996826462523640447834514709508786970828213187d-1/
-data ww(15)/5.542699233295875168406783695143646338274805359780d-2/
-data ww(10)/1.680415725925575286319046726692683040162290325505d-1/
-data ww(16)/9.986735247403367525720377847755415293097913496236d-2/
-data ww(11)/1.415567675701225879892811622832845252125600939627d-1/
-data ww(12)/1.006482260551160175038684459742336605269707889822d-1/
-data ww(13)/2.510604860724282479058338820428989444699235030871d-2/
-data ww(17)/4.507523056810492466415880450799432587809828791196d-2/
-data ww(14)/9.402964360009747110031098328922608224934320397592d-3/
 !   Number of nodes 27
-data ww(18)/6.300942249647773931746170540321811473310938661469d-2/
-data ww(28)/1.239572396231834242194189674243818619042280816640d-1/
-data ww(19)/1.261383225537664703012999637242003647020326905948d-1/
-data ww(25)/1.235837891364555000245004813294817451524633100256d-1/
-data ww(20)/1.273864433581028272878709981850307363453523117880d-1/
-data ww(26)/1.148933497158144016800199601785309838604146040215d-1/
-data ww(29)/2.501306413750310579525950767549691151739047969345d-2/
-data ww(21)/8.576500414311820514214087864326799153427368592787d-2/
-data ww(30)/4.915957918146130094258849161350510503556792927578d-2/
-data ww(22)/7.102884842310253397447305465997026228407227220665d-2/
-data ww(23)/5.026383572857942403759829860675892897279675661654d-2/
-data ww(27)/1.252575774226122633391477702593585307254527198070d-2/
-data ww(31)/2.259167374956474713302030584548274729936249753832d-2/
-data ww(24)/4.683670010609093810432609684738393586390722052124d-3/
 !   Number of nodes 41
-data ww(32)/6.362762978782724559269342300509058175967124446839d-2/
-data ww(42)/1.187141856692283347609436153545356484256869129472d-1/
-data ww(46)/1.533126874056586959338368742803997744815413565014d-2/
-data ww(33)/9.950065827346794643193261975720606296171462239514d-2/
-data ww(47)/3.527159369750123100455704702965541866345781113903d-2/
-data ww(39)/8.140326425945938045967829319725797511040878579808d-2/
-data ww(48)/5.000556431653955124212795201196389006184693561679d-2/
-data ww(34)/7.048220002718565366098742295389607994441704889441d-2/
-data ww(49)/5.744164831179720106340717579281831675999717767532d-2/
-data ww(40)/6.583213447600552906273539578430361199084485578379d-2/
-data ww(43)/5.999947605385971985589674757013565610751028128731d-2/
-data ww(35)/6.512297339398335645872697307762912795346716454337d-2/
-data ww(44)/5.500937980198041736910257988346101839062581489820d-2/
-data ww(50)/1.598823797283813438301248206397233634639162043386d-2/
-data ww(36)/3.998229150313659724790527138690215186863915308702d-2/
-data ww(51)/2.635660410220884993472478832884065450876913559421d-2/
-data ww(37)/3.456512257080287509832054272964315588028252136044d-2/
-data ww(41)/2.592913726450792546064232192976262988065252032902d-2/
-data ww(45)/5.264422421764655969760271538981443718440340270116d-3/
-data ww(52)/1.196003937945541091670106760660561117114584656319d-2/
-data ww(38)/2.212167975884114432760321569298651047876071264944d-3/
 !------------------------
 k = ke + 1
 is = istart(k)
@@ -5209,12 +7415,10 @@ real :: f
 external f
 integer :: idata(*), ier, mcalls, ncalls, nw
 real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
-integer :: i, j, jkp, k, l, maxc, maxk, mw, nfe
-real :: one, point5, zero
+integer :: i, j, jkp, k, l, maxc, maxk, mw
 real :: rnderr
-real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, d(2,4), &
-   & s(4), vec(2,3), x(2)
-double precision :: tans, terr, dzero
+real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
+double precision :: tans, terr
 !
 !       Adaptive cubature over a triangle
 !
@@ -5281,13 +7485,16 @@ double precision :: tans, terr, dzero
 !       Actual dimension of w is (6,nw/6)
 !
 common /cubsta/ tans, terr
+integer, parameter :: nfe = 19
+real, parameter :: s(4) = [real :: 1e0, 1e0, 1e0, -1e0]
+real, parameter :: d(2,4) = reshape([real :: 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+double precision, parameter :: dzero = 0.d0
+real, parameter :: point5 = .5e0
 !       This common is required to preserve tans and terr between calls
 !       and to save variables in function rnderr
-data nfe /19/, s(1), s(2), s(3), s(4) /3*1e0,-1e0/, d(1,1), &
-   & d(2,1) /0.0,0.0/, d(1,2), d(2,2) /0.0,1.0/, d(1,3), d(2,3) &
-   & /1.0,0.0/, d(1,4), d(2,4) /1.0,1.0/
 !       nfe is the number of function evaluations per call to cubrul.
-data zero /0.e0/, one /1.e0/, dzero /0.d0/, point5 /.5e0/
 !
 !      Calculate direction vectors, area and maximum number
 !      of subdivisions that may be performed
@@ -5427,12 +7634,25 @@ real :: rdata(*)
 real, intent(in) :: vec(2,*)
 integer :: idata(*)
 external f
-integer :: i, j, k, nquad
-real :: point5, x, y
-double precision :: a1, a2, s, sn, dzero, done, dthree, dsix
+integer :: i, j, k
+real :: x, y
+double precision :: a1, a2, s, sn
 real :: area, origin(2)
 real :: tvec(2,3)
-real :: w(5,6)
+integer, parameter :: nquad = 6
+real, parameter :: w(5,6) = reshape([real :: .3333333333333333333333333e0, .3333333333333333333333333e0, &
+   & .3333333333333333333333333e0, .225e0, .3786109120031468330830822e-1, .7974269853530873223980253e0, &
+   & .1012865073234563388009874e0, .1012865073234563388009874e0, .3778175416344814577870518e0, .1128612762395489164329420e0, &
+   & .5971587178976982045911758e-1, .4701420641051150897704412e0, .4701420641051150897704412e0, .3971824583655185422129482e0, &
+   & .2350720567323520126663380e0, .5357953464498992646629509e0, .2321023267750503676685246e0, .2321023267750503676685246e0, 0.e0, &
+   & .3488144389708976891842461e0, .9410382782311208665596304e0, .2948086088443956672018481e-1, .2948086088443956672018481e-1, &
+   & 0.e0, .4033280212549620569433320e-1, .7384168123405100656112906e0, .2321023267750503676685246e0, &
+   & .2948086088443956672018481e-1, 0.e0, .2250583347313904927138324e0], [5, 6])
+double precision, parameter :: dzero = 0.d0
+double precision, parameter :: done = 1.d0
+double precision, parameter :: dthree = 3.d0
+double precision, parameter :: dsix = 6.d0
+real, parameter :: point5 = .5e0
 !
 !       BASIC cubature rule pair over a triangle
 !
@@ -5492,26 +7712,7 @@ real :: w(5,6)
 !     w(4,6) = 0
 !     w(5,6) = 11075/8064 - 125*sigma/288
 !
-data nquad /6/
-data w(1,1), w(2,1), w(3,1) /3*.3333333333333333333333333e0/, &
-   & w(4,1), w(5,1) /.225e0,.3786109120031468330830822e-1/, &
-   & w(1,2), w(2,2), w(3,2) /.7974269853530873223980253e0,2* &
-   & .1012865073234563388009874e0/, w(4,2), w(5,2) &
-   & /.3778175416344814577870518e0,.1128612762395489164329420e0/, &
-   & w(1,3), w(2,3), w(3,3) /.5971587178976982045911758e-1,2* &
-   & .4701420641051150897704412e0/, w(4,3), w(5,3) &
-   & /.3971824583655185422129482e0,.2350720567323520126663380e0/
-data w(1,4), w(2,4), w(3,4) /.5357953464498992646629509e0,2* &
-   & .2321023267750503676685246e0/, w(4,4), w(5,4) &
-   & /0.e0,.3488144389708976891842461e0/, w(1,5), w(2,5), w(3,5) &
-   & /.9410382782311208665596304e0,2*.2948086088443956672018481e-1/, &
-   & w(4,5), w(5,5) /0.e0,.4033280212549620569433320e-1/, w(1,6), &
-   & w(2,6), w(3,6) /.7384168123405100656112906e0, &
-   & .2321023267750503676685246e0,.2948086088443956672018481e-1/, &
-   & w(4,6), w(5,6) /0.e0,.2250583347313904927138324e0/
 !
-data dzero /0.d0/, done /1.d0/, dthree /3.d0/, dsix /6.d0/, &
-   & point5 /.5e0/
 !
 !       Scale base vectors and obtain area
 !
@@ -5569,13 +7770,10 @@ real :: a, b, ep, t(*), w(*), x(*)
 real :: rhfcn
 real :: kernel, norm
 external kernel, rhfcn
-integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, &
-   & i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nmax, nsq, &
-   & nup
+integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
 real :: cutoff, rootrt, unitrd
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
-real :: spmpar
 real :: normk
 !
 !   The integral equation being solved is
@@ -5662,6 +7860,14 @@ real :: normk
 !*******************************************************************
 !                                                                  *
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
+integer, parameter :: nmax = 64
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !                                                                  *
 !   THE NUMBERS IN XXINFO GIVE ADDITIONAL INFORMATION ABOUT THE    *
 !   functioning of ieslv. r1 is the iterative rate of convergence  *
@@ -5683,7 +7889,6 @@ common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !   used. There is also an upper limit of 128 on N imposed by the  *
 !   SUBROUTINE lnsys.                                              *
 !                                                                  *
-data nmax /64/
 !                                                                  *
 !*******************************************************************
 !                                                                  *
@@ -6157,13 +8362,99 @@ return
 return
 end function conew
 
-subroutine wandt(wv,tv,n,a,b)
+pure subroutine wandt(wv,tv,n,a,b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: tv(n), wv(n)
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
-real :: al, bl, fl, floop, h, r, s, scale, t(255), w(255)
+real :: al, bl, fl, floop, h, r, s, scale
+real, parameter :: t(255) = [real :: .577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
+   & .796666477413627e0, .525532409916329e0, .183434642495650e0, .989400934991650e0, .944575023073233e0, .865631202387832e0, &
+   & .755404408355003e0, .617876244402644e0, .458016777657227e0, .281603550779259e0, .950125098376374e-1, .997263861849482e0, &
+   & .985611511545268e0, .964762255587506e0, .934906075937740e0, .896321155766052e0, .849367613732570e0, .794483795967942e0, &
+   & .732182118740290e0, .663044266930215e0, .587715757240762e0, .506899908932229e0, .421351276130635e0, .331868602282128e0, &
+   & .239287362252137e0, .144471961582796e0, .483076656877383e-1, .999305041735772e0, .996340116771955e0, .991013371476744e0, &
+   & .983336253884626e0, .973326827789911e0, .961008799652054e0, .946411374858403e0, .929569172131940e0, .910522137078503e0, &
+   & .889315445995114e0, .865999398154093e0, .840629296252580e0, .813265315122798e0, .783972358943341e0, .752819907260532e0, &
+   & .719881850171611e0, .685236313054233e0, .648965471254657e0, .611155355172393e0, .571895646202634e0, .531279464019895e0, &
+   & .489403145707053e0, .446366017253464e0, .402270157963992e0, .357220158337668e0, .311322871990211e0, .264687162208767e0, &
+   & .217423643740007e0, .169644420423993e0, .121462819296121e0, .729931217877990e-1, .243502926634244e-1, .999824887947132e0, &
+   & .999077459977376e0, .997733248625514e0, .995792758534981e0, .993257112900213e0, .990127818491734e0, .986406742724586e0, &
+   & .982096108435719e0, .977198491463907e0, .971716818747137e0, .965654366431965e0, .959014757853700e0, .951801961341264e0, &
+   & .944020287830220e0, .935674388277916e0, .926769250878948e0, .917310198080961e0, .907302883401757e0, .896753288049158e0, &
+   & .885667717345397e0, .874052796958032e0, .861915468939548e0, .849262987577969e0, .836102915060907e0, .822443116955644e0, &
+   & .808291757507914e0, .793657294762193e0, .778548475506412e0, .762974330044095e0, .746944166797062e0, .730467566741909e0, &
+   & .713554377683587e0, .696214708369514e0, .678458922447719e0, .660297632272646e0, .641741692562308e0, .622802193910585e0, &
+   & .603490456158549e0, .583818021628763e0, .563796648226618e0, .543438302412810e0, .522755152051175e0, .501759559136144e0, &
+   & .480464072404172e0, .458881419833552e0, .437024501037104e0, .414906379552275e0, .392540275033267e0, .369939555349859e0, &
+   & .347117728597636e0, .324088435024413e0, .300865438877677e0, .277462620177904e0, .253893966422694e0, .230173564226660e0, &
+   & .206315590902079e0, .182334305985337e0, .158244042714225e0, .134059199461188e0, .109794231127644e0, .854636405045155e-1, &
+   & .610819696041396e-1, .366637909687335e-1, .122236989606158e-1, .999956050018992e0, .999768437409263e0, .999430937466261e0, &
+   & .998943525843409e0, .998306266473006e0, .997519252756721e0, .996582602023382e0, .995496454481096e0, .994260972922410e0, &
+   & .992876342608822e0, .991342771207583e0, .989660488745065e0, .987829747564861e0, .985850822286126e0, .983724009760315e0, &
+   & .981449629025464e0, .979028021257622e0, .976459549719234e0, .973744599704370e0, .970883578480743e0, .967876915228489e0, &
+   & .964725060975706e0, .961428488530732e0, .957987692411178e0, .954403188769716e0, .950675515316628e0, .946805231239127e0, &
+   & .942792917117462e0, .938639174837814e0, .934344627502003e0, .929909919334006e0, .925335715583316e0, .920622702425146e0, &
+   & .915771586857490e0, .910783096595065e0, .905657979960145e0, .900397005770304e0, .895000963223085e0, .889470661777611e0, &
+   & .883806931033158e0, .878010620604707e0, .872082599995488e0, .866023758466555e0, .859835004903376e0, .853517267679503e0, &
+   & .847071494517296e0, .840498652345763e0, .833799727155505e0, .826975723850813e0, .820027666098917e0, .812956596176432e0, &
+   & .805763574812999e0, .798449681032171e0, .791016011989546e0, .783463682808184e0, .775793826411326e0, .768007593352446e0, &
+   & .760106151642655e0, .752090686575492e0, .743962400549112e0, .735722512885918e0, .727372259649652e0, .718912893459971e0, &
+   & .710345683304543e0, .701671914348685e0, .692892887742577e0, .684009920426076e0, .675024344931163e0, .665937509182049e0, &
+   & .656750776292973e0, .647465524363725e0, .638083146272911e0, .628605049469015e0, .619032655759261e0, .609367401096334e0, &
+   & .599610735362968e0, .589764122154454e0, .579829038559083e0, .569806974936569e0, .559699434694481e0, .549507934062719e0, &
+   & .539234001866059e0, .528879179294822e0, .518445019673674e0, .507933088228616e0, .497344961852181e0, .486682228866890e0, &
+   & .475946488786983e0, .465139352078479e0, .454262439917590e0, .443317383947527e0, .432305826033741e0, .421229418017624e0, &
+   & .410089821468717e0, .398888707435459e0, .387627756194516e0, .376308656998716e0, .364933107823654e0, .353502815112970e0, &
+   & .342019493522372e0, .330484865662417e0, .318900661840106e0, .307268619799319e0, .295590484460136e0, .283868007657082e0, &
+   & .272102947876337e0, .260297069991943e0, .248452145001057e0, .236569949758284e0, .224652266709132e0, .212700883622626e0, &
+   & .200717593323127e0, .188704193421389e0, .176662486044902e0, .164594277567554e0, .152501378338656e0, .140385602411376e0, &
+   & .128248767270607e0, .116092693560333e0, .103919204810509e0, .917301271635196e-1, .795272891002330e-1, .673125211657164e-1, &
+   & .550876556946340e-1, .428545265363791e-1, .306149687799790e-1, .183708184788137e-1, .612391237518953e-2]
+real, parameter :: w(255) = [real :: 1.0e0, .347854845137454e0, .652145154862546e0, .101228536290376e0, .222381034453374e0, &
+   & .313706645877887e0, .362683783378362e0, .271524594117541e-1, .622535239386479e-1, .951585116824928e-1, .124628971255534e0, &
+   & .149595988816577e0, .169156519395003e0, .182603415044924e0, .189450610455068e0, .701861000947010e-2, .162743947309057e-1, &
+   & .253920653092621e-1, .342738629130214e-1, .428358980222267e-1, .509980592623762e-1, .586840934785355e-1, .658222227763618e-1, &
+   & .723457941088485e-1, .781938957870703e-1, .833119242269468e-1, .876520930044038e-1, .911738786957639e-1, .938443990808046e-1, &
+   & .956387200792749e-1, .965400885147278e-1, .178328072169643e-2, .414703326056247e-2, .650445796897836e-2, .884675982636395e-2, &
+   & .111681394601311e-1, .134630478967186e-1, .157260304760247e-1, .179517157756973e-1, .201348231535302e-1, .222701738083833e-1, &
+   & .243527025687109e-1, .263774697150547e-1, .283396726142595e-1, .302346570724025e-1, .320579283548516e-1, .338051618371416e-1, &
+   & .354722132568824e-1, .370551285402400e-1, .385501531786156e-1, .399537411327203e-1, .412625632426235e-1, .424735151236536e-1, &
+   & .435837245293235e-1, .445905581637566e-1, .454916279274181e-1, .462847965813144e-1, .469681828162100e-1, .475401657148303e-1, &
+   & .479993885964583e-1, .483447622348030e-1, .485754674415034e-1, .486909570091397e-1, .449380960292090e-3, .104581267934035e-2, &
+   & .164250301866903e-2, .223828843096262e-2, .283275147145799e-2, .342552604091022e-2, .401625498373864e-2, .460458425670296e-2, &
+   & .519016183267633e-2, .577263754286570e-2, .635166316170719e-2, .692689256689881e-2, .749798192563473e-2, .806458989048606e-2, &
+   & .862637779861675e-2, .918300987166087e-2, .973415341500681e-2, .102794790158322e-1, .108186607395031e-1, .113513763240804e-1, &
+   & .118773073727403e-1, .123961395439509e-1, .129075627392673e-1, .134112712886163e-1, .139069641329520e-1, .143943450041668e-1, &
+   & .148731226021473e-1, .153430107688651e-1, .158037286593993e-1, .162550009097852e-1, .166965578015892e-1, .171281354231114e-1, &
+   & .175494758271177e-1, .179603271850087e-1, .183604439373313e-1, .187495869405447e-1, .191275236099509e-1, .194940280587066e-1, &
+   & .198488812328309e-1, .201918710421300e-1, .205227924869601e-1, .208414477807511e-1, .211476464682213e-1, .214412055392085e-1, &
+   & .217219495380521e-1, .219897106684605e-1, .222443288937998e-1, .224856520327450e-1, .227135358502365e-1, .229278441436868e-1, &
+   & .231284488243870e-1, .233152299940628e-1, .234880760165359e-1, .236468835844476e-1, .237915577810034e-1, .239220121367035e-1, &
+   & .240381686810241e-1, .241399579890193e-1, .242273192228152e-1, .243002001679719e-1, .243585572646906e-1, .244023556338496e-1, &
+   & .244315690978500e-1, .244461801962625e-1, .112789017822272e-3, .262534944296446e-3, .412463254426176e-3, .562348954031410e-3, &
+   & .712154163473321e-3, .861853701420089e-3, .101142439320844e-2, .116084355756772e-2, .131008868190250e-2, .145913733331073e-2, &
+   & .160796713074933e-2, .175655573633073e-2, .190488085349972e-2, .205292022796614e-2, .220065164983991e-2, .234805295632731e-2, &
+   & .249510203470371e-2, .264177682542749e-2, .278805532532771e-2, .293391559082972e-2, .307933574119934e-2, .322429396179420e-2, &
+   & .336876850731555e-2, .351273770505631e-2, .365617995814250e-2, .379907374876626e-2, .394139764140883e-2, .408313028605267e-2, &
+   & .422425042138154e-2, .436473687796806e-2, .450456858144790e-2, .464372455568006e-2, .478218392589269e-2, .491992592181387e-2, &
+   & .505692988078684e-2, .519317525086928e-2, .532864159391593e-2, .546330858864431e-2, .559715603368291e-2, .573016385060144e-2, &
+   & .586231208692265e-2, .599358091911534e-2, .612395065556793e-2, .625340173954240e-2, .638191475210788e-2, .650947041505366e-2, &
+   & .663604959378107e-2, .676163330017380e-2, .688620269544632e-2, .700973909296982e-2, .713222396107539e-2, .725363892583391e-2, &
+   & .737396577381235e-2, .749318645480588e-2, .761128308454566e-2, .772823794738156e-2, .784403349893971e-2, .795865236875435e-2, &
+   & .807207736287350e-2, .818429146643827e-2, .829527784623523e-2, .840501985322154e-2, .851350102502249e-2, .862070508840101e-2, &
+   & .872661596169881e-2, .883121775724875e-2, .893449478375821e-2, .903643154866287e-2, .913701276045081e-2, .923622333095630e-2, &
+   & .933404837762327e-2, .943047322573775e-2, .952548341062928e-2, .961906467984073e-2, .971120299526628e-2, .980188453525733e-2, &
+   & .989109569669583e-2, .997882309703491e-2, .100650535763064e-1, .101497741990949e-1, .102329722564782e-1, .103146352679340e-1, &
+   & .103947509832117e-1, .104733073841704e-1, .105502926865815e-1, .106256953418966e-1, .106995040389798e-1, .107717077058046e-1, &
+   & .108422955111148e-1, .109112568660490e-1, .109785814257296e-1, .110442590908139e-1, .111082800090098e-1, .111706345765534e-1, &
+   & .112313134396497e-1, .112903074958755e-1, .113476078955455e-1, .114032060430392e-1, .114570935980906e-1, .115092624770395e-1, &
+   & .115597048540436e-1, .116084131622531e-1, .116553800949452e-1, .117005986066207e-1, .117440619140606e-1, .117857634973434e-1, &
+   & .118256971008240e-1, .118638567340711e-1, .119002366727665e-1, .119348314595636e-1, .119676359049059e-1, .119986450878058e-1, &
+   & .120278543565826e-1, .120552593295601e-1, .120808558957245e-1, .121046402153405e-1, .121266087205273e-1, .121467581157945e-1, &
+   & .121650853785355e-1, .121815877594818e-1, .121962627831147e-1, .122091082480372e-1, .122201222273040e-1, .122293030687103e-1, &
+   & .122366493950402e-1, .122421601042728e-1, .122458343697479e-1, .122476716402898e-1]
 !
 !   Integration weights and nodes are to be calculated and stored in
 !   wv and tv, respectively. n is assumed to be a power of two. If
@@ -6171,241 +8462,6 @@ real :: al, bl, fl, floop, h, r, s, scale, t(255), w(255)
 !   256, Then the interval (a,b) is divided n/256 times and the 256
 !   point formula is applied to each subinterval.
 !
-data t(1),t(2),t(3),t(4),t(5),t(6),t(7),t(8),t(9),t(10),t(11), &
-   & t(12),t(13),t(14),t(15)/.577350269189626e0, &
-   & .861136311594053e0,.339981043584856e0,.960289856497536e0, &
-   & .796666477413627e0,.525532409916329e0,.183434642495650e0, &
-   & .989400934991650e0,.944575023073233e0,.865631202387832e0, &
-   & .755404408355003e0,.617876244402644e0,.458016777657227e0, &
-   & .281603550779259e0,.950125098376374e-1/
-data t(16),t(17),t(18),t(19),t(20),t(21),t(22),t(23),t(24),t(25), &
-   & t(26),t(27),t(28),t(29),t(30),t(31)/.997263861849482e0, &
-   & .985611511545268e0,.964762255587506e0,.934906075937740e0, &
-   & .896321155766052e0,.849367613732570e0,.794483795967942e0, &
-   & .732182118740290e0,.663044266930215e0,.587715757240762e0, &
-   & .506899908932229e0,.421351276130635e0,.331868602282128e0, &
-   & .239287362252137e0,.144471961582796e0,.483076656877383e-1/
-data t(32),t(33),t(34),t(35),t(36),t(37),t(38),t(39),t(40),t(41), &
-   & t(42),t(43),t(44),t(45),t(46),t(47)/.999305041735772e0, &
-   & .996340116771955e0,.991013371476744e0,.983336253884626e0, &
-   & .973326827789911e0,.961008799652054e0,.946411374858403e0, &
-   & .929569172131940e0,.910522137078503e0,.889315445995114e0, &
-   & .865999398154093e0,.840629296252580e0,.813265315122798e0, &
-   & .783972358943341e0,.752819907260532e0,.719881850171611e0/
-data t(48),t(49),t(50),t(51),t(52),t(53),t(54),t(55),t(56),t(57), &
-   & t(58),t(59),t(60),t(61),t(62),t(63)/.685236313054233e0, &
-   & .648965471254657e0,.611155355172393e0,.571895646202634e0, &
-   & .531279464019895e0,.489403145707053e0,.446366017253464e0, &
-   & .402270157963992e0,.357220158337668e0,.311322871990211e0, &
-   & .264687162208767e0,.217423643740007e0,.169644420423993e0, &
-   & .121462819296121e0,.729931217877990e-1,.243502926634244e-1/
-data t(64),t(65),t(66),t(67),t(68),t(69),t(70),t(71),t(72),t(73), &
-   & t(74),t(75),t(76),t(77),t(78),t(79)/.999824887947132e0, &
-   & .999077459977376e0,.997733248625514e0,.995792758534981e0, &
-   & .993257112900213e0,.990127818491734e0,.986406742724586e0, &
-   & .982096108435719e0,.977198491463907e0,.971716818747137e0, &
-   & .965654366431965e0,.959014757853700e0,.951801961341264e0, &
-   & .944020287830220e0,.935674388277916e0,.926769250878948e0/
-data t(80),t(81),t(82),t(83),t(84),t(85),t(86),t(87),t(88),t(89), &
-   & t(90),t(91),t(92),t(93),t(94),t(95),t(96),t(97)/ &
-   & .917310198080961e0,.907302883401757e0,.896753288049158e0, &
-   & .885667717345397e0,.874052796958032e0,.861915468939548e0, &
-   & .849262987577969e0,.836102915060907e0,.822443116955644e0, &
-   & .808291757507914e0,.793657294762193e0,.778548475506412e0, &
-   & .762974330044095e0,.746944166797062e0,.730467566741909e0, &
-   & .713554377683587e0,.696214708369514e0,.678458922447719e0/
-data t(98),t(99),t(100),t(101),t(102),t(103),t(104),t(105),t(106), &
-   & t(107),t(108),t(109),t(110),t(111),t(112),t(113),t(114)/ &
-   & .660297632272646e0,.641741692562308e0,.622802193910585e0, &
-   & .603490456158549e0,.583818021628763e0,.563796648226618e0, &
-   & .543438302412810e0,.522755152051175e0,.501759559136144e0, &
-   & .480464072404172e0,.458881419833552e0,.437024501037104e0, &
-   & .414906379552275e0,.392540275033267e0,.369939555349859e0, &
-   & .347117728597636e0,.324088435024413e0/
-data t(115),t(116),t(117),t(118),t(119),t(120),t(121),t(122), &
-   & t(123),t(124),t(125),t(126),t(127)/.300865438877677e0, &
-   & .277462620177904e0,.253893966422694e0,.230173564226660e0, &
-   & .206315590902079e0,.182334305985337e0,.158244042714225e0, &
-   & .134059199461188e0,.109794231127644e0, &
-   & .854636405045155e-1,.610819696041396e-1,.366637909687335e-1, &
-   & .122236989606158e-1/
-data t(128),t(129),t(130),t(131),t(132),t(133),t(134),t(135), &
-   & t(136),t(137),t(138),t(139),t(140),t(141),t(142)/ &
-   & .999956050018992e0,.999768437409263e0,.999430937466261e0, &
-   & .998943525843409e0,.998306266473006e0,.997519252756721e0, &
-   & .996582602023382e0,.995496454481096e0,.994260972922410e0, &
-   & .992876342608822e0,.991342771207583e0,.989660488745065e0, &
-   & .987829747564861e0,.985850822286126e0,.983724009760315e0/
-data t(143),t(144),t(145),t(146),t(147),t(148),t(149),t(150), &
-   & t(151),t(152),t(153),t(154),t(155),t(156),t(157)/ &
-   & .981449629025464e0,.979028021257622e0,.976459549719234e0, &
-   & .973744599704370e0,.970883578480743e0,.967876915228489e0, &
-   & .964725060975706e0,.961428488530732e0,.957987692411178e0, &
-   & .954403188769716e0,.950675515316628e0,.946805231239127e0, &
-   & .942792917117462e0,.938639174837814e0, .934344627502003e0/
-data t(158),t(159),t(160),t(161),t(162),t(163),t(164),t(165), &
-   & t(166),t(167),t(168),t(169),t(170),t(171),t(172)/ &
-   & .929909919334006e0,.925335715583316e0,.920622702425146e0, &
-   & .915771586857490e0,.910783096595065e0,.905657979960145e0, &
-   & .900397005770304e0,.895000963223085e0,.889470661777611e0, &
-   & .883806931033158e0,.878010620604707e0,.872082599995488e0, &
-   & .866023758466555e0,.859835004903376e0,.853517267679503e0/
-data t(173),t(174),t(175),t(176),t(177),t(178),t(179),t(180), &
-   & t(181),t(182),t(183),t(184),t(185),t(186),t(187)/ &
-   & .847071494517296e0,.840498652345763e0,.833799727155505e0, &
-   & .826975723850813e0,.820027666098917e0,.812956596176432e0, &
-   & .805763574812999e0,.798449681032171e0,.791016011989546e0, &
-   & .783463682808184e0,.775793826411326e0,.768007593352446e0, &
-   & .760106151642655e0,.752090686575492e0,.743962400549112e0/
-data t(188),t(189),t(190),t(191),t(192),t(193),t(194),t(195), &
-   & t(196),t(197),t(198),t(199),t(200),t(201),t(202)/ &
-   & .735722512885918e0,.727372259649652e0,.718912893459971e0, &
-   & .710345683304543e0,.701671914348685e0,.692892887742577e0, &
-   & .684009920426076e0,.675024344931163e0,.665937509182049e0, &
-   & .656750776292973e0,.647465524363725e0,.638083146272911e0, &
-   & .628605049469015e0,.619032655759261e0,.609367401096334e0/
-data t(203),t(204),t(205),t(206),t(207),t(208),t(209),t(210), &
-   & t(211),t(212),t(213),t(214),t(215),t(216),t(217)/ &
-   & .599610735362968e0,.589764122154454e0,.579829038559083e0, &
-   & .569806974936569e0,.559699434694481e0,.549507934062719e0, &
-   & .539234001866059e0,.528879179294822e0,.518445019673674e0, &
-   & .507933088228616e0,.497344961852181e0,.486682228866890e0, &
-   & .475946488786983e0,.465139352078479e0,.454262439917590e0/
-data t(218),t(219),t(220),t(221),t(222),t(223),t(224),t(225), &
-   & t(226),t(227),t(228),t(229),t(230),t(231),t(232)/ &
-   & .443317383947527e0,.432305826033741e0,.421229418017624e0, &
-   & .410089821468717e0,.398888707435459e0,.387627756194516e0, &
-   & .376308656998716e0,.364933107823654e0,.353502815112970e0, &
-   & .342019493522372e0,.330484865662417e0,.318900661840106e0, &
-   & .307268619799319e0,.295590484460136e0,.283868007657082e0/
-data t(233),t(234),t(235),t(236),t(237),t(238),t(239),t(240), &
-   & t(241),t(242),t(243),t(244),t(245),t(246),t(247)/ &
-   & .272102947876337e0,.260297069991943e0,.248452145001057e0, &
-   & .236569949758284e0,.224652266709132e0,.212700883622626e0, &
-   & .200717593323127e0,.188704193421389e0,.176662486044902e0, &
-   & .164594277567554e0,.152501378338656e0,.140385602411376e0, &
-   & .128248767270607e0,.116092693560333e0,.103919204810509e0/
-data   t(248),t(249),t(250),t(251),t(252),t(253),t(254),t(255)/ &
-   & .917301271635196e-1,.795272891002330e-1,.673125211657164e-1, &
-   & .550876556946340e-1,.428545265363791e-1,.306149687799790e-1, &
-   & .183708184788137e-1,.612391237518953e-2/
-data w(1),w(2),w(3),w(4),w(5),w(6),w(7),w(8),w(9),w(10),w(11), &
-   & w(12),w(13),w(14),w(15)/1.0e0,.347854845137454e0, &
-   & .652145154862546e0,.101228536290376e0,.222381034453374e0, &
-   & .313706645877887e0,.362683783378362e0,.271524594117541e-1, &
-   & .622535239386479e-1,.951585116824928e-1,.124628971255534e0, &
-   & .149595988816577e0,.169156519395003e0,.182603415044924e0, &
-   & .189450610455068e0/
-data w(16),w(17),w(18),w(19),w(20),w(21),w(22),w(23),w(24),w(25), &
-   & w(26),w(27),w(28),w(29),w(30),w(31)/.701861000947010e-2, &
-   & .162743947309057e-1,.253920653092621e-1,.342738629130214e-1, &
-   & .428358980222267e-1,.509980592623762e-1,.586840934785355e-1, &
-   & .658222227763618e-1,.723457941088485e-1,.781938957870703e-1, &
-   & .833119242269468e-1,.876520930044038e-1,.911738786957639e-1, &
-   & .938443990808046e-1,.956387200792749e-1,.965400885147278e-1/
-data w(32),w(33),w(34),w(35),w(36),w(37),w(38),w(39),w(40),w(41), &
-   & w(42),w(43),w(44),w(45),w(46),w(47)/.178328072169643e-2, &
-   & .414703326056247e-2,.650445796897836e-2,.884675982636395e-2, &
-   & .111681394601311e-1,.134630478967186e-1,.157260304760247e-1, &
-   & .179517157756973e-1,.201348231535302e-1,.222701738083833e-1, &
-   & .243527025687109e-1,.263774697150547e-1,.283396726142595e-1, &
-   & .302346570724025e-1,.320579283548516e-1,.338051618371416e-1/
-data w(48),w(49),w(50),w(51),w(52),w(53),w(54),w(55),w(56),w(57), &
-   & w(58),w(59),w(60),w(61),w(62),w(63)/ .354722132568824e-1, &
-   & .370551285402400e-1,.385501531786156e-1,.399537411327203e-1, &
-   & .412625632426235e-1,.424735151236536e-1,.435837245293235e-1, &
-   & .445905581637566e-1,.454916279274181e-1, .462847965813144e-1, &
-   & .469681828162100e-1,.475401657148303e-1,.479993885964583e-1, &
-   & .483447622348030e-1,.485754674415034e-1,.486909570091397e-1/
-data w(64),w(65),w(66),w(67),w(68),w(69),w(70),w(71),w(72),w(73), &
-   & w(74),w(75),w(76),w(77),w(78),w(79)/ .449380960292090e-3, &
-   & .104581267934035e-2,.164250301866903e-2,.223828843096262e-2, &
-   & .283275147145799e-2,.342552604091022e-2,.401625498373864e-2, &
-   & .460458425670296e-2,.519016183267633e-2,.577263754286570e-2, &
-   & .635166316170719e-2,.692689256689881e-2,.749798192563473e-2, &
-   & .806458989048606e-2,.862637779861675e-2,.918300987166087e-2/
-data w(80),w(81),w(82),w(83),w(84),w(85),w(86),w(87),w(88), &
-   & w(89),w(90),w(91),w(92),w(93),w(94),w(95)/.973415341500681e-2, &
-   & .102794790158322e-1,.108186607395031e-1,.113513763240804e-1, &
-   & .118773073727403e-1,.123961395439509e-1,.129075627392673e-1, &
-   & .134112712886163e-1,.139069641329520e-1,.143943450041668e-1, &
-   & .148731226021473e-1,.153430107688651e-1,.158037286593993e-1, &
-   & .162550009097852e-1,.166965578015892e-1,.171281354231114e-1/
-data w(96),w(97),w(98),w(99),w(100),w(101),w(102),w(103),w(104), &
-   & w(105),w(106),w(107),w(108),w(109),w(110),w(111),w(112)/ &
-   & .175494758271177e-1,.179603271850087e-1,.183604439373313e-1, &
-   & .187495869405447e-1,.191275236099509e-1,.194940280587066e-1, &
-   & .198488812328309e-1,.201918710421300e-1,.205227924869601e-1, &
-   & .208414477807511e-1,.211476464682213e-1,.214412055392085e-1, &
-   & .217219495380521e-1,.219897106684605e-1,.222443288937998e-1, &
-   & .224856520327450e-1,.227135358502365e-1/
-data w(113),w(114),w(115),w(116),w(117),w(118),w(119),w(120), &
-   & w(121),w(122),w(123),w(124),w(125),w(126),w(127)/ &
-   & .229278441436868e-1,.231284488243870e-1,.233152299940628e-1, &
-   & .234880760165359e-1,.236468835844476e-1,.237915577810034e-1, &
-   & .239220121367035e-1,.240381686810241e-1,.241399579890193e-1, &
-   & .242273192228152e-1,.243002001679719e-1,.243585572646906e-1, &
-   & .244023556338496e-1,.244315690978500e-1,.244461801962625e-1/
-data w(128),w(129),w(130),w(131),w(132),w(133),w(134),w(135), &
-   & w(136),w(137),w(138),w(139),w(140),w(141),w(142)/ &
-   & .112789017822272e-3,.262534944296446e-3,.412463254426176e-3, &
-   & .562348954031410e-3,.712154163473321e-3,.861853701420089e-3, &
-   & .101142439320844e-2,.116084355756772e-2,.131008868190250e-2, &
-   & .145913733331073e-2,.160796713074933e-2,.175655573633073e-2, &
-   & .190488085349972e-2,.205292022796614e-2,.220065164983991e-2/
-data w(143),w(144),w(145),w(146),w(147),w(148),w(149),w(150), &
-   & w(151),w(152),w(153),w(154),w(155),w(156),w(157)/ &
-   & .234805295632731e-2,.249510203470371e-2,.264177682542749e-2, &
-   & .278805532532771e-2,.293391559082972e-2,.307933574119934e-2, &
-   & .322429396179420e-2,.336876850731555e-2,.351273770505631e-2, &
-   & .365617995814250e-2,.379907374876626e-2,.394139764140883e-2, &
-   & .408313028605267e-2,.422425042138154e-2,.436473687796806e-2/
-data w(158),w(159),w(160),w(161),w(162),w(163),w(164),w(165), &
-   & w(166),w(167),w(168),w(169),w(170),w(171),w(172)/ &
-   & .450456858144790e-2,.464372455568006e-2,.478218392589269e-2, &
-   & .491992592181387e-2,.505692988078684e-2,.519317525086928e-2, &
-   & .532864159391593e-2,.546330858864431e-2,.559715603368291e-2, &
-   & .573016385060144e-2,.586231208692265e-2,.599358091911534e-2, &
-   & .612395065556793e-2,.625340173954240e-2,.638191475210788e-2/
-data w(173),w(174),w(175),w(176),w(177),w(178),w(179),w(180), &
-   & w(181),w(182),w(183),w(184),w(185),w(186),w(187)/ &
-   & .650947041505366e-2,.663604959378107e-2,.676163330017380e-2, &
-   & .688620269544632e-2,.700973909296982e-2,.713222396107539e-2, &
-   & .725363892583391e-2,.737396577381235e-2,.749318645480588e-2, &
-   & .761128308454566e-2,.772823794738156e-2,.784403349893971e-2, &
-   & .795865236875435e-2,.807207736287350e-2,.818429146643827e-2/
-data w(188),w(189),w(190),w(191),w(192),w(193),w(194),w(195), &
-   & w(196),w(197),w(198),w(199),w(200),w(201),w(202)/ &
-   & .829527784623523e-2,.840501985322154e-2,.851350102502249e-2, &
-   & .862070508840101e-2,.872661596169881e-2,.883121775724875e-2, &
-   & .893449478375821e-2,.903643154866287e-2,.913701276045081e-2, &
-   & .923622333095630e-2,.933404837762327e-2,.943047322573775e-2, &
-   & .952548341062928e-2,.961906467984073e-2,.971120299526628e-2/
-data w(203),w(204),w(205),w(206),w(207),w(208),w(209),w(210), &
-   & w(211),w(212),w(213),w(214),w(215),w(216),w(217)/ &
-   & .980188453525733e-2,.989109569669583e-2,.997882309703491e-2, &
-   & .100650535763064e-1,.101497741990949e-1,.102329722564782e-1, &
-   & .103146352679340e-1,.103947509832117e-1,.104733073841704e-1, &
-   & .105502926865815e-1,.106256953418966e-1,.106995040389798e-1, &
-   & .107717077058046e-1,.108422955111148e-1,.109112568660490e-1/
-data w(218),w(219),w(220),w(221),w(222),w(223),w(224),w(225), &
-   & w(226),w(227),w(228),w(229),w(230),w(231),w(232)/ &
-   & .109785814257296e-1,.110442590908139e-1,.111082800090098e-1, &
-   & .111706345765534e-1,.112313134396497e-1,.112903074958755e-1, &
-   & .113476078955455e-1,.114032060430392e-1,.114570935980906e-1, &
-   & .115092624770395e-1,.115597048540436e-1,.116084131622531e-1, &
-   & .116553800949452e-1,.117005986066207e-1,.117440619140606e-1/
-data w(233),w(234),w(235),w(236),w(237),w(238),w(239),w(240), &
-   & w(241),w(242),w(243),w(244),w(245),w(246),w(247)/ &
-   & .117857634973434e-1,.118256971008240e-1,.118638567340711e-1, &
-   & .119002366727665e-1,.119348314595636e-1,.119676359049059e-1, &
-   & .119986450878058e-1,.120278543565826e-1,.120552593295601e-1, &
-   & .120808558957245e-1,.121046402153405e-1,.121266087205273e-1, &
-   & .121467581157945e-1,.121650853785355e-1,.121815877594818e-1/
-data w(248),w(249),w(250),w(251),w(252),w(253),w(254),w(255)/ &
-   & .121962627831147e-1,.122091082480372e-1,.122201222273040e-1, &
-   & .122293030687103e-1,.122366493950402e-1,.122421601042728e-1, &
-   & .122458343697479e-1,.122476716402898e-1/
 loop = max0(1,n/256)
 floop = loop
 h = (b - a)/floop
@@ -6818,9 +8874,22 @@ real, intent(inout) :: abserr, relerr, t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
-integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
-   & ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
+integer :: ip, iphi, iwt, iyp, iypout, iyy
 logical :: start, phase1, nornd
+integer, parameter :: ialpha = 1
+integer, parameter :: ibeta = 13
+integer, parameter :: isig = 25
+integer, parameter :: iv = 38
+integer, parameter :: iw = 50
+integer, parameter :: ig = 62
+integer, parameter :: iphase = 75
+integer, parameter :: ipsi = 76
+integer, parameter :: ix = 88
+integer, parameter :: ih = 89
+integer, parameter :: ihold = 90
+integer, parameter :: istart = 91
+integer, parameter :: itold = 92
+integer, parameter :: idelsn = 93
 !
 !     Sandia mathematical program library
 !     applied mathematics division 2642
@@ -6950,8 +9019,6 @@ logical :: start, phase1, nornd
 !   be changed by the user before continuing.  All other parameters must
 !   remain unchanged.
 !
-data ialpha,ibeta,isig,iv,iw,ig,iphase,ipsi,ix,ih,ihold,istart, &
-   & itold,idelsn/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
 !
 iyy = 100
 iwt = iyy + neqn
@@ -6993,10 +9060,17 @@ real :: yp(neqn)
 real, intent(inout) :: ypout(neqn), yy(neqn)
 logical, intent(inout) :: start, phase1, nornd
 external f
-integer :: isn, kle4, l, maxnum, nostep
+integer :: isn, kle4, l, nostep
 real :: absdel, abseps, del, eps, fouru, releps, tend, u
-real :: spmpar
 logical :: stiff, crash
+integer, parameter :: maxnum = 500
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !   ODE  merely allocates storage for  de1 to relieve the user of the
 !   inconvenience of a long call list.  Consequently  de1 is used as
@@ -7011,7 +9085,6 @@ logical :: stiff, crash
 !   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
 !   following statement
 !
-data maxnum/500/
 !
 !   ****** u is a machine dependent parameter. u is the smallest
 !          positive number for which 1.0 + u .GT. 1.0.
@@ -7162,10 +9235,18 @@ logical, intent(inout) :: phase1, nornd
 external f
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
    & limit1, limit2, nsm2, nsp1, nsp2
-real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
-   & hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, &
-   & temp3, temp4, temp5, temp6, two(13), twou, u, xold
-real :: spmpar
+real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
+   & temp4, temp5, temp6, twou, u, xold
+real, parameter :: two(13) = [real :: 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
+real, parameter :: gstr(13) = [real :: 0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
+   & 0.00524, 0.00468]
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !   Written by L. F. Shampine and M. K. Gordon
 !
@@ -7291,15 +9372,6 @@ real :: spmpar
 !   desirable.
 !
 !
-data two(1)/2.0/, two(2)/4.0/, two(3)/8.0/, two(4)/16.0/, &
-   & two(5)/32.0/, two(6)/64.0/, two(7)/128.0/, two(8)/256.0/, &
-   & two(9)/512.0/, two(10)/1024.0/, two(11)/2048.0/, &
-   & two(12)/4096.0/, two(13)/8192.0/
-data gstr(1)/0.500/, gstr(2)/0.0833/, gstr(3)/0.0417/, &
-   & gstr(4)/0.0264/, gstr(5)/0.0188/, gstr(6)/0.0143/, &
-   & gstr(7)/0.0114/, gstr(8)/0.00936/, gstr(9)/0.00789/, &
-   & gstr(10)/0.00679/, gstr(11)/0.00592/, gstr(12)/0.00524/, &
-   & gstr(13)/0.00468/
 !
 !   ****** U is a machine dependent parameter. It is the smallest
 !          positive number for which 1.0 + U .GT. 1.0.
@@ -8052,17 +10124,80 @@ real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
 logical, intent(inout) :: endpnt
 logical, intent(inout) :: blkout
 external fcn
-integer :: k, maxnfe, mflag, n
-real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
-   & a62, a63, a64, a65, a81, a82, a83, a84, a85, a86, a87, a91, a92, &
-   & a93, a94, a95, a96, a97, a98, ae, b1, b1b, b3, b3b, b4, b4b, b5, &
-   & b5b, b6, b6b, b7, b8, b9, c2, c3, c4, c6, c8, c9, dt, dtsign, ee, &
-   & eeoet, erc11, erc13, erc14, erc15, erc21, erc23, erc24, erc25, &
-   & erc26, erc27, erc28, erc29, errtol, esttol, ez, hmin, hstop, &
-   & remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
-real :: spmpar
+integer :: k, mflag, n
+real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 logical :: hfaild
 logical :: interp
+real, parameter :: c2 = .250000000000000e+00
+real, parameter :: c3 = .375000000000000e+00
+real, parameter :: c4 = .923076923076923e+00
+real, parameter :: c6 = .500000000000000e+00
+real, parameter :: c8 = .150000000000000e+01
+real, parameter :: c9 = .200000000000000e+01
+real, parameter :: a21 = .250000000000000e+00
+real, parameter :: a31 = .937500000000000e-01
+real, parameter :: a32 = .281250000000000e+00
+real, parameter :: a41 = .879380974055530e+00
+real, parameter :: a42 = -.327719617660446e+01
+real, parameter :: a43 = .332089212562585e+01
+real, parameter :: a51 = .203240740740741e+01
+real, parameter :: a52 = -.800000000000000e+01
+real, parameter :: a53 = .717348927875244e+01
+real, parameter :: a54 = -.205896686159844e+00
+real, parameter :: a61 = -.296296296296296e+00
+real, parameter :: a62 = .200000000000000e+01
+real, parameter :: a63 = -.138167641325536e+01
+real, parameter :: a64 = .452972709551657e+00
+real, parameter :: a65 = -.275000000000000e+00
+real, parameter :: b1b = .118518518518519e+00
+real, parameter :: b3b = .518986354775828e+00
+real, parameter :: b4b = .506131490342017e+00
+real, parameter :: b5b = -.180000000000000e+00
+real, parameter :: b6b = .363636363636364e-01
+real, parameter :: erc11 = .277777777777778e-02
+real, parameter :: erc13 = -.299415204678363e-01
+real, parameter :: erc14 = -.291998936735779e-01
+real, parameter :: erc15 = .200000000000000e-01
+real, parameter :: b1 = .143672839506173e+00
+real, parameter :: b3 = .210187767614668e+00
+real, parameter :: b4 = .603140025990903e+00
+real, parameter :: b5 = .200000000000000e-01
+real, parameter :: b6 = .400000000000000e+00
+real, parameter :: b7 = -.266666666666667e+00
+real, parameter :: b8 = .736460905349794e+00
+real, parameter :: b9 = .153205128205128e+00
+real, parameter :: a81 = -.785774430040232e+00
+real, parameter :: a82 = .269557443004023e+01
+real, parameter :: a83 = -.387868820553843e+00
+real, parameter :: a84 = -.323463729234086e+01
+real, parameter :: a85 = .141740175234689e+01
+real, parameter :: a86 = -.739340252773601e+00
+real, parameter :: a87 = .253464461332141e+01
+real, parameter :: a91 = .277678804896947e+01
+real, parameter :: a92 = -.461924686192469e+01
+real, parameter :: a93 = -.540556629238679e+01
+real, parameter :: a94 = .195138152603181e+02
+real, parameter :: a95 = -.627825575453278e+01
+real, parameter :: a96 = .753363921389629e+01
+real, parameter :: a97 = -.139246861924514e+02
+real, parameter :: a98 = .240351257812904e+01
+real, parameter :: erc21 = .224905375494686e-01
+real, parameter :: erc23 = -.186601479161668e+00
+real, parameter :: erc24 = .224620349650851e+00
+real, parameter :: erc25 = -.384622777202128e-01
+real, parameter :: erc26 = .180000000000000e+00
+real, parameter :: erc27 = -.233333333333333e+00
+real, parameter :: erc28 = .362862030148937e-01
+real, parameter :: erc29 = -.500000000000000e-02
+real, parameter :: remin = 1.e-12
+integer, parameter :: maxnfe = 18000
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !
 !     Two step block Runge-Kutta Fehlberg method.
 !     A standard 5(4) formula is used at the first point in the block
@@ -8107,25 +10242,9 @@ logical :: interp
 !                erc14=-2197.0e+0/75240.0e+0
 !                erc15=1.0e+0/50.0e+0
 !
-data c2 /.250000000000000e+00/, c3 /.375000000000000e+00/, &
-   & c4 /.923076923076923e+00/, c6 /.500000000000000e+00/, &
-   & c8 /.150000000000000e+01/, c9 /.200000000000000e+01/
 !
-data a21 / .250000000000000e+00/, a31 / .937500000000000e-01/, &
-   & a32 / .281250000000000e+00/, a41 / .879380974055530e+00/, &
-   & a42 /-.327719617660446e+01/, a43 / .332089212562585e+01/, &
-   & a51 / .203240740740741e+01/, a52 /-.800000000000000e+01/, &
-   & a53 / .717348927875244e+01/, a54 /-.205896686159844e+00/, &
-   & a61 /-.296296296296296e+00/, a62 / .200000000000000e+01/, &
-   & a63 /-.138167641325536e+01/, a64 / .452972709551657e+00/, &
-   & a65 /-.275000000000000e+00/
 !
-data b1b /.118518518518519e+00/, b3b / .518986354775828e+00/, &
-   & b4b /.506131490342017e+00/, b5b /-.180000000000000e+00/, &
-   & b6b /.363636363636364e-01/
 !
-data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
-   & erc14/-.291998936735779e-01/, erc15/ .200000000000000e-01/
 !
 !     The above define the coefficients for brkf45 used to generate
 !     the solution at the first block point. Below are additional
@@ -8158,20 +10277,8 @@ data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
 !                a97=-3385330161.0e+0/243117160.0e+0
 !                a98=232648.0e+0/96795.0e+0
 !
-data b1 /.143672839506173e+00/, b3 / .210187767614668e+00/, &
-   & b4 /.603140025990903e+00/, b5 / .200000000000000e-01/, &
-   & b6 /.400000000000000e+00/, b7 /-.266666666666667e+00/, &
-   & b8 /.736460905349794e+00/, b9 / .153205128205128e+00/
 !
-data a81 /-.785774430040232e+00/, a82 / .269557443004023e+01/, &
-   & a83 /-.387868820553843e+00/, a84 /-.323463729234086e+01/, &
-   & a85 / .141740175234689e+01/, a86 /-.739340252773601e+00/, &
-   & a87 / .253464461332141e+01/
 !
-data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
-   & a93 /-.540556629238679e+01/, a94 / .195138152603181e+02/, &
-   & a95 /-.627825575453278e+01/, a96 / .753363921389629e+01/, &
-   & a97 /-.139246861924514e+02/, a98 / .240351257812904e+01/
 !
 !     Next we define coefficients for the error estimate formula.
 !
@@ -8194,10 +10301,6 @@ data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
 !     erc28 = (b8 - b8e)/2.0e+0
 !     erc29 = -0.005e+0
 !
-data erc21 /.224905375494686e-01/, erc23 /-.186601479161668e+00/, &
-   & erc24 /.224620349650851e+00/, erc25 /-.384622777202128e-01/, &
-   & erc26 /.180000000000000e+00/, erc27 /-.233333333333333e+00/, &
-   & erc28 /.362862030148937e-01/, erc29 /-.500000000000000e-02/
 !
 !***********************************************************************
 !
@@ -8207,14 +10310,12 @@ data erc21 /.224905375494686e-01/, erc23 /-.186601479161668e+00/, &
 !  precision on computers with long wordlengths. This does not have
 !  to be changed for different machines.
 !
-data remin / 1.e-12 /
 !
 !***********************************************************************
 !
 !     The expense is controlled by restricting the number
 !     of function evaluations to be approximately maxnfe.
 !
-data maxnfe / 18000 /
 !
 !***********************************************************************
 !
@@ -8638,2167 +10739,4 @@ go to 400
 kflag = 6
 go to 400
 end subroutine rkfc
-
-subroutine extra (neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
-implicit none
-integer, intent(in) :: neqn
-real :: f(neqn), f1(neqn), f2(neqn)
-real, intent(in) :: h, t, tex
-real :: y(neqn)
-real, intent(inout) :: yex(neqn)
-real :: yinc1(neqn), yinc2(neqn)
-real, intent(inout) :: ypex(neqn)
-integer :: n
-real :: a1, a2, a3, a4, hf, hf1, hf2, sig
-!
-!     This version of extra is the third of the three changes
-!     needed to make the interpolant derivative more stable.
-!
-!     t is the independent variable.
-!     y is the value at t-2H. the values at t-h and t are
-!     y + h*yinc1 and y + h*yinc2 respectively.
-!     f,f1 and f2 are the derivatives at t-2H, t-h and t.
-!     Tex is the point where the output is required.
-!     yex will hold the approximate solution at tex and ypex will
-!     hold the derivative approximation at this point.
-!
-!
-!     Perform quintic interpolation based on the values
-!     y(n),y(n)+h*yinc1(n),y(n)+h*yinc2(n),f(n),f1(n),f2(n) at the
-!     points t-2H, t-h, t.  this polynomial is evaluated at the point
-!     tex to obtain the approximate value of y(tex) and this is stored
-!     in the array yex.  The derivative of the interpolating polynomial
-!     is also evaluated at tex to obtain an approximation to DY/DT
-!     at this point and this approximation is stored in ypex.
-!
-sig = (tex - t)/h + 2.0
-do n = 1, neqn
-   hf = h*f(n)
-   hf1 = h*f1(n)
-   hf2 = h*f2(n)
-   a1 = 2.0*(hf2 + hf) - 6.0*h*yinc2(n) + 8.0*hf1
-   a2 = h*yinc2(n) + 4.0*h*yinc1(n) - 4.0*hf1 - 2.0*hf
-   a3 = hf1 + hf - 2.0*h*yinc1(n)
-   a4 = h*yinc1(n) - hf
-   yex(n) = ((((a1*0.125*(sig - 2.0) + 0.25*a2)*(sig - 1.0) + &
-      & a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
-   ypex(n) = ((((0.625*a1*sig + (a2 - 2.0*a1))*sig + (1.875*a1 - &
-      & 1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
-      & 2.0*(a3 - a4)))*sig + hf)/h
-end do
-return
-end subroutine extra
-
-subroutine rkf45 (f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
-implicit none
-!
-!     Fehlberg fourth-fifth order Runge-Kutta method
-!
-!     Written by H.A.Watts and L.F.Shampine
-!                   Sandia Laboratories
-!                  albuquerque,new mexico
-!
-!    rkf45 is primarily designed to solve non-stiff and mildly stiff
-!    differential equations when derivative evaluations are inexpensive.
-!    rkf45 should generally not be used when the user is demanding
-!    high accuracy.
-!
-! Abstract
-!
-!    Subroutine  rkf45  integrates a system of neqn first order
-!    ordinary differential equations of the form
-!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
-!              where the y(I) are given at t .
-!    Typically the subroutine is used to integrate from t to tout but it
-!    can be used as a one-step integrator to advance the solution A
-!    single step in the direction of tout.  On return the parameters in
-!    the call list are set for continuing the integration. The user has
-!    only to call rkf45 again (and perhaps define a new value for tout).
-!    Actually, rkf45 is an interfacing routine which calls subroutine
-!    rkfs for the solution.  rkfs in turn calls subroutine  fehl which
-!    computes an approximate solution over one step.
-!
-!    rkf45  uses the Runge-Kutta-Fehlberg (4,5)  method described
-!    in the reference
-!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
-!                 control , nasa TR R-315
-!
-!    The parameters represent-
-!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
-!      neqn -- number of equations to be integrated
-!      y(*) -- solution vector at t
-!      t -- independent variable
-!      tout -- output point at which solution is desired
-!      relerr,abserr -- relative and absolute error tolerances for local
-!            error test. At each step the code requires that
-!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
-!            for each component of the local error and solution vectors
-!      iflag -- indicator for status of integration
-!      work(*) -- array to hold information internal to rkf45 which is
-!            necessary for subsequent calls. Must be dimensioned
-!            at least  3+6*neqn
-!      iwork(*) -- integer array used to hold information internal to
-!            rkf45 which is necessary for subsequent calls. Must be
-!            dimensioned at least  5
-!
-!  First call to rkf45
-!
-!    The user must provide storage in his calling program for the arrays
-!    IN THE CALL LIST  -      y(neqn) , work(3+6*neqn) , iwork(5)  ,
-!    declare F in an external statement, supply subroutine F(t,y,YP) and
-!    initialize the following parameters-
-!
-!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
-!      y(*) -- vector of initial conditions
-!      t -- starting point of integration , must be a variable
-!      tout -- output point at which solution is desired.
-!            t=tout is allowed on the first call only, in which case
-!            rkf45 returns with iflag=2 If continuation is possible.
-!      relerr,abserr -- relative and absolute local error tolerances
-!            which must be non-negative. relerr must be a variable while
-!            abserr may be a constant. The code should normally not be
-!            used with relative error control smaller than about 1.E-8 .
-!            To avoid limiting precision difficulties the code requires
-!            relerr to be larger than an internally computed relative
-!            error parameter which is machine dependent. In particular,
-!            pure absolute error is not permitted. If a smaller than
-!            allowable value of relerr is attempted, rkf45 increases
-!            relerr appropriately and returns control to the user before
-!            continuing the integration.
-!      iflag -- +1,-1  indicator to initialize the code for each new
-!            problem. Normal input is +1. The user should set iflag=-1
-!            only when one-step integrator control is essential. In this
-!            case, rkf45 attempts to advance the solution a single step
-!            in the direction of tout each time it is called. Since this
-!            mode of operation results in extra computing overhead, it
-!            should be avoided unless needed.
-!
-!  Output from rkf45
-!
-!      y(*) -- solution at t
-!      t -- last point reached in integration.
-!      iflag = 2 -- integration reached tout.
-!            =-2 -- A single successful step in the direction of tout
-!                   has been taken. Normal mode for continuing
-!                   integration one step at a time.
-!            = 3 -- Integration was not completed because relative error
-!                   tolerance was too small. relerr has been increased
-!                   appropriately for continuing.
-!            = 4 -- Integration was not completed because more than
-!                   3000 derivative evaluations were needed. This
-!                   is approximately 500 steps.
-!            = 5 -- Integration was not completed because solution
-!                   vanished making a pure relative error test
-!                   impossible. Must use non-zero abserr to continue.
-!                   Using the one-step integration mode for one step
-!                   is a good way to proceed.
-!            = 6 -- Integration was not completed because requested
-!                   accuracy could not be achieved using smallest
-!                   allowable stepsize. User must increase the error
-!                   tolerance before continued integration can be
-!                   attempted.
-!            = 7 -- It is likely that rkf45 is inefficient for solving
-!                   this problem. Too much output is restricting the
-!                   natural stepsize choice. Use the one-step integrator
-!                   mode.
-!            = 8 -- Invalid input parameters
-!                   this indicator occurs if any of the following is
-!                   SATISFIED -   neqn .LE. 0
-!                                 t=tout  and  iflag .NE. +1 or -1
-!                                 relerr OR abserr .LT. 0.
-!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 8
-!      work(*),iwork(*) -- information which is usually of no interest
-!                   to the user but necessary for subsequent calls.
-!                   work(1),...,work(neqn) contain the first derivatives
-!                   of the solution vector y at t. work(neqn+1) contains
-!                   the stepsize H to be attempted on the next step.
-!                   iwork(1) contains the derivative evaluation counter.
-!
-!  Subsequent calls to rkf45
-!
-!    Subroutine rkf45 returns with all information needed to continue
-!    integration. If the integration reached tout, the user need only
-!    define a new tout and call rkf45 again. In the one-step integrator
-!    mode (iflag=-2) the user must keep in mind that each step taken is
-!    in the direction of the current tout. Upon reaching tout (indicated
-!    by changing iflag to 2),the user must then define a new tout and
-!    reset iflag to -2 To continue in the one-step integrator mode.
-!
-!    If the integration was not completed but the user still wants to
-!    CONTINUE (iflag=3,4 CASES), HE JUST CALLS rkf45 AGAIN. WITH iflag=3
-!    the relerr parameter HAS been adjusted appropriately for continuing
-!    the integration. In the case of iflag=4 The function counter will
-!    be reset to 0 and another 3000 function evaluations are allowed.
-!
-!    However,in the case iflag=5, the user must first alter the error
-!    criterion to use a positive value of abserr before integration can
-!    proceed. If he does not,execution is terminated.
-!
-!    Also,in the case iflag=6, it is necessary for the user to reset
-!    iflag to 2 (or -2 When the one-step integration mode is being used)
-!    as well as increasing either abserr,relerr or both before the
-!    integration can be continued. If this is not done, execution will
-!    be terminated. The occurrence of iflag=6 Indicates a trouble spot
-!    (solution is changing rapidly,singularity may be present) and it
-!    often is inadvisable to continue.
-!
-!    If iflag=7 Is encountered, the user should use the one-step mode
-!    or switch to another routine. If the user insists upon continuing
-!    the integration with rkf45, then he must reset iflag to 2 or -2
-!    before recalling rkf45. Otherwise, execution will be terminated.
-!
-!    If iflag=8 Is obtained, integration cannot be continued unless
-!    the invalid input parameters are corrected.
-!
-!    It should be noted that the arrays work,iwork contain information
-!    required for subsequent integration. Accordingly, work and iwork
-!    should not be altered.
-!
-integer, intent(in) :: neqn
-integer, intent(inout) :: iflag, iwork(5)
-real, intent(inout) :: y(neqn), t
-real, intent(in) :: tout
-real, intent(inout) :: relerr
-real, intent(in) :: abserr
-real, intent(inout) :: work(*)
-external f
-integer :: k1, k2, k3, k4, k5, k6, k1m
-!
-!
-!
-!     Compute indices for the splitting of the work array
-!
-k1m = neqn + 1
-k1 = k1m + 1
-k2 = k1 + neqn
-k3 = k2 + neqn
-k4 = k3 + neqn
-k5 = k4 + neqn
-k6 = k5 + neqn
-!
-!     This interfacing routine merely relieves the user of a long
-!     calling list via the splitting apart of two working storage
-!     arrays. If this is not compatible with the users compiler,
-!     he must use rkfs directly.
-!
-call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
-   & work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
-   & work(k6 + 1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
-!
-return
-end subroutine rkf45
-
-subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
-   & f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
-implicit none
-!
-!
-!     rkfs integrates a system of first order ordinary differential
-!     equations as described in the comments for rkf45 .
-!     The arrays yp,f1,f2,f3,f4,and f5 (of dimension at least neqn) and
-!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
-!     internally by the code and appear in the call list to eliminate
-!     local retention of variables between calls. Accordingly, they
-!     should not be altered. Items of possible interest are
-!         yp - Derivative of solution vector at t
-!         h  - An appropriate stepsize to be used for the next step
-!         nfe- counter on the number of derivative function evaluations
-!
-integer, intent(in) :: neqn
-integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
-real, intent(inout) :: y(neqn), t
-real, intent(in) :: tout
-real, intent(inout) :: relerr
-real, intent(in) :: abserr
-real, intent(inout) :: h
-real :: yp(neqn)
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), savre, savae
-external f
-logical :: hfaild, output
-real :: a, ae, dt, ee, eeoet, esttol, et, hmin, remin, rer, s, &
-   & scale, tol, toln, u26, eps, ypk, spmpar
-integer :: k, maxnfe, mflag
-!
-!
-!
-!
-!
-!     remin is the minimum acceptable value of relerr.  Attempts
-!     to obtain higher accuracy with this subroutine are usually
-!     very expensive and often unsuccessful.
-!
-data remin/1.e-12/
-!
-!     The expense is controlled by restricting the number
-!     of function evaluations to be approximately maxnfe.
-!     As set, this corresponds to about 500 steps.
-!
-data maxnfe/3000/
-!
-!     Check input parameters
-!
-if (neqn .lt. 1) go to 10
-if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 10
-mflag = iabs(iflag)
-if (mflag .eq. 0 .or. mflag .gt. 8) go to 10
-!
-!     Compute the relative machine precision
-!
-eps = spmpar(1)
-u26 = 26.0*eps
-if (mflag .ne. 1) go to 20
-go to 50
-!
-!     Invalid input
-!
-10 iflag = 8
-return
-!
-!     Check continuation possibilities
-!
-20 if (t .eq. tout .and. kflag .ne. 3) go to 10
-if (mflag .ne. 2) go to 25
-!
-!     iflag = +2 or -2
-!
-if (kflag .eq. 3) go to 45
-if (init .eq. 0) go to 45
-if (kflag .eq. 4) go to 40
-if ((kflag .eq. 5)  .and.  (abserr .eq. 0.0)) go to 30
-if ((kflag .eq. 6)  .and.  (relerr .le. savre)  .and. &
-   & (abserr .le. savae)) go to 30
-go to 50
-!
-!     iflag = 3,4,5,6,7 or 8
-!
-25 if (iflag .eq. 3) go to 45
-if (iflag .eq. 4) go to 40
-if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
-!
-!     Integration cannot be continued since user did not respond to
-!     the instructions pertaining to iflag=5,6,7 or 8
-!
-30 stop
-!
-!     Reset function evaluation counter
-!
-40 nfe = 0
-if (mflag .eq. 2) go to 50
-!
-!     Reset flag VALUE from previous call
-!
-45 iflag = jflag
-if (kflag .eq. 3) mflag = iabs(iflag)
-!
-!     Save input iflag and set continuation flag VALUE for subsequent
-!     input checking
-!
-50 jflag = iflag
-kflag = 0
-!
-!     Save relerr and abserr for checking input on subsequent calls
-!
-savre = relerr
-savae = abserr
-!
-!     Restrict relative error tolerance to be at least as large as
-!     2*eps+remin to avoid limiting precision difficulties arising
-!     from impossible accuracy requests
-!
-rer = 2.0*eps + remin
-if (relerr .ge. rer) go to 55
-!
-!     Relative error tolerance too small
-!
-relerr = rer
-iflag = 3
-kflag = 3
-return
-!
-55 dt = tout - t
-!
-if (mflag .eq. 1) go to 60
-if (init .eq. 0) go to 65
-go to 80
-!
-!     Initialization --
-!                       set initialization completion indicator,init
-!                       set indicator for too many output points,kop
-!                       evaluate initial derivatives
-!                       set counter for function evaluations,nfe
-!                       estimate starting stepsize
-!
-60 init = 0
-kop = 0
-!
-a = t
-call f(a,y,yp)
-nfe = 1
-if (t .ne. tout) go to 65
-iflag = 2
-return
-!
-65 init = 1
-h = abs(dt)
-toln = 0.0
-do 70 k = 1,neqn
-   tol = relerr*abs(y(k)) + abserr
-   if (tol .le. 0.) go to 70
-   toln = tol
-   ypk = abs(yp(k))
-   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
-70 continue
-if (toln .le. 0.0) h = 0.0
-h = amax1(h,u26*amax1(abs(t),abs(dt)))
-jflag = isign(2,iflag)
-!
-!     Set stepsize for integration in the direction from t to tout
-!
-80 h = sign(h,dt)
-!
-!     Test to see if rkf45 is being severely impacted by too many
-!     output points
-!
-if (abs(h) .ge. 2.0*abs(dt)) kop = kop + 1
-if (kop .ne. 100) go to 85
-!
-!     Unnecessary frequency of output
-kop = 0
-iflag = 7
-return
-!
-85 if (abs(dt) .gt. u26*abs(t)) go to 95
-!
-!     If too close to output point,extrapolate and return
-!
-do 90 k = 1,neqn
-90 y(k) = y(k) + dt*yp(k)
-a = tout
-call f(a,y,yp)
-nfe = nfe + 1
-go to 300
-!
-!
-!     Initialize output point indicator
-!
-95 output = .false.
-!
-!     To avoid premature underflow in the error tolerance function,
-!     scale the error tolerances
-!
-scale = 2.0/relerr
-ae = scale*abserr
-!
-!     Step by step integration
-!
-100 hfaild = .false.
-!
-!     Set smallest allowable stepsize
-!
-hmin = u26*abs(t)
-!
-!     Adjust stepsize if necessary to hit the output point.
-!     Look ahead two steps to avoid drastic changes in the stepsize and
-!     thus lessen the impact of output points on the code.
-!
-dt = tout - t
-if (abs(dt) .ge. 2.0*abs(h)) go to 200
-if (abs(dt) .gt. abs(h)) go to 150
-!
-!     The next successful step will complete the integration to the
-!     output point
-!
-output = .true.
-h = dt
-go to 200
-!
-150 h = 0.5*dt
-!
-!
-!     Core integrator for taking a single step
-!
-!     The tolerances have been scaled to avoid premature underflow in
-!     computing the error tolerance function et.
-!     To avoid problems with zero crossings,relative error is measured
-!     using the average of the magnitudes of the solution at the
-!     beginning and end of a step.
-!     The error estimate formula has been grouped to control loss of
-!     significance.
-!     To distinguish the various arguments, h is not permitted
-!     to become smaller than 26 units of roundoff in t.
-!     Practical limits on the change in the stepsize are enforced to
-!     smooth the stepsize selection process and to avoid excessive
-!     chattering on problems having discontinuities.
-!     To prevent unnecessary failures, the code uses 9/10 the stepsize
-!     it estimates will succeed.
-!     After a step failure, the stepsize is not allowed to increase for
-!     the next attempted step. This makes the code more efficient on
-!     problems having discontinuities and more effective in general
-!     since local extrapolation is being used and extra caution seems
-!     warranted.
-!
-!     Test number of derivative function evaluations.
-!     If okay,try to advance the integration from t to t+h
-!
-200 if (nfe .le. maxnfe) go to 220
-!
-!     Too much work
-!
-iflag = 4
-kflag = 4
-return
-!
-!     Advance an approximate solution over one step of length h
-!
-220 call fehl (f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
-nfe = nfe + 5
-!
-!     Compute and test allowable tolerances versus local error estimates
-!     and remove scaling of tolerances. Note that relative error is
-!     measured with respect to the average of the magnitudes of the
-!     solution at the beginning and end of the step.
-!
-eeoet = 0.0
-do 250 k = 1,neqn
-   et = abs(y(k)) + abs(f1(k)) + ae
-   if (et .gt. 0.0) go to 240
-!
-!        Inappropriate error tolerance
-!
-   iflag = 5
-   return
-!
-240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
-      & (22528.0*f2(k) - 27360.0*f5(k)))
-250 eeoet = amax1(eeoet,ee/et)
-!
-esttol = abs(h)*eeoet*scale/752400.0
-if (esttol .le. 1.0) go to 260
-!
-!     Unsuccessful step
-!                       reduce the stepsize , try again
-!                       the decrease is limited to a factor of 1/10
-!
-hfaild = .true.
-output = .false.
-s = 0.1
-if (esttol .lt. 59049.0) s = 0.9/esttol**0.2
-h = s*h
-if (abs(h) .gt. hmin) go to 200
-!
-!     Requested error unattainable at smallest allowable stepsize
-!
-iflag = 6
-kflag = 6
-return
-!
-!     Successful step
-!                        store solution at t+h
-!                        and evaluate derivatives there
-!
-260 t = t + h
-do 270 k = 1,neqn
-270 y(k) = f1(k)
-a = t
-call f(a,y,yp)
-nfe = nfe + 1
-!
-!                       Choose next stepsize
-!                       the increase is limited to a factor of 5
-!                       if step failure has just occurred, next
-!                          stepsize is not allowed to increase
-!
-s = 5.0
-if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
-if (hfaild) s = amin1(s,1.0)
-h = sign(amax1(s*abs(h),hmin),h)
-!
-!     END OF CORE INTEGRATOR
-!
-!
-!     Should we take another step
-!
-if (output) go to 300
-if (iflag .gt. 0) go to 100
-!
-!     Integration successfully completed
-!
-!     One-step mode
-!
-iflag = -2
-return
-!
-!     Interval mode
-!
-300 t = tout
-iflag = 2
-return
-end subroutine rkfs
-
-subroutine fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,s)
-implicit none
-!
-!     Fehlberg fourth-fifth order Runge-Kutta method
-!
-!    fehl integrates a system of neqn first order
-!    ordinary differential equations of the form
-!             DY(I)/DT=F(t,y(1),---,y(neqn))
-!    where the initial values y(I) and the initial derivatives
-!    yp(I) are specified at the starting point t. fehl advances
-!    the solution over the fixed step h and returns
-!    the fifth order (sixth order accurate locally) solution
-!    approximation at t+h in array s(I).
-!    f1,---,f5 are arrays of dimension neqn which are needed
-!    for internal storage.
-!    The formulas have been grouped to control loss of significance.
-!    fehl should be called with an h not smaller than 13 units of
-!    roundoff in t so that the various independent arguments can be
-!    distinguished.
-!
-!
-integer, intent(in) :: neqn
-real, intent(in) :: y(neqn)
-real :: t, h
-real, intent(in) :: yp(neqn)
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), s(neqn)
-external f
-real :: ch
-integer :: k
-!
-!
-ch = h/4.0
-do 221 k = 1,neqn
-221 f5(k) = y(k) + ch*yp(k)
-call f(t + ch,f5,f1)
-!
-ch = 3.0*h/32.0
-do 222 k = 1,neqn
-222 f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
-call f(t + 3.0*h/8.0,f5,f2)
-!
-ch = h/2197.0
-do 223 k = 1,neqn
-223 f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
-call f(t + 12.0*h/13.0,f5,f3)
-!
-ch = h/4104.0
-do 224 k = 1,neqn
-224 f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
-      & (29440.0*f2(k) - 32832.0*f1(k)))
-call f(t + h,f5,f4)
-!
-ch = h/20520.0
-do 225 k = 1,neqn
-225 f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
-      & 5643.0*f4(k))) + (41040.0*f1(k) - 28352.0*f2(k)))
-call f(t + h/2.0,f1,f5)
-!
-!     Compute approximate solution at t+h
-!
-ch = h/7618050.0
-do 230 k = 1,neqn
-230 s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
-      & 1371249.0*f4(k))) + (3953664.0*f2(k) + &
-      & 277020.0*f5(k)))
-!
-return
-end subroutine fehl
-
-subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-   & work,iwork)
-implicit none
-integer, intent(inout) :: iflag, iwork(5)
-integer, intent(in) :: neqn
-real, intent(in) :: abserr
-real, intent(inout) :: gerror(neqn)
-real, intent(in) :: relerr
-real, intent(inout) :: t
-real, intent(in) :: tout
-real, intent(inout) :: work(*), y(neqn)
-external f
-integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
-!
-!     Fehlberg fourth(fifth) order Runge-Kutta method with
-!     global error assessment
-!
-!     Written by H.A.Watts and L.F.Shampine
-!                   Sandia Laboratories
-!
-!    gerk is designed to solve systems of differential equations when
-!    it is important to have a readily available global error estimate.
-!    Parallel integration is performed to yield two solutions on
-!    different mesh spacings and global extrapolation is applied to
-!    provide an estimate of the global error in the more accurate
-!    solution.
-!
-!***********************************************************************
-! Abstract
-!***********************************************************************
-!
-!    Subroutine  gerk  integrates a system of neqn first order
-!    ordinary differential equations of the form
-!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
-!              where the y(I) are given at t .
-!    Typically the subroutine is used to integrate from t to tout but it
-!    can be used as a one-step integrator to advance the solution A
-!    single step in the direction of tout. On return,an estimate of the
-!    global error in the solution at t is provided and the parameters in
-!    the call list are set for continuing the integration. The user has
-!    only to call gerk again (and perhaps define a new value for tout).
-!    Actually, gerk  is merely an interfacing routine which allocates
-!    virtual storage in the arrays work,iwork and calls subroutine gerks
-!    for the solution.  gerks  in turn calls subroutine  fehl  which
-!    computes an approximate solution over one step.
-!
-!    gerk  uses the Runge-Kutta-Fehlberg (4,5)  method described
-!    in the reference
-!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
-!                 control , nasa TR R-315
-!
-!
-!    The parameters represent-
-!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
-!      neqn -- number of equations to be integrated
-!      y(*) -- solution vector at t
-!      t -- independent variable
-!      tout -- output point at which solution is desired
-!      relerr,abserr -- relative and absolute error tolerances for local
-!            error test. At each step the code requires that
-!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
-!            for each component of the local error and solution vectors
-!      iflag -- indicator for status of integration
-!      gerror(*) -- vector which estimates the global error at t. that
-!                   is, gerror(I) approximates  y(I)-true solution(I).
-!      work(*) -- array to hold information internal to gerk which is
-!            necessary for subsequent calls. Must be dimensioned
-!            at least  3+8*neqn.
-!      iwork(*) -- integer array used to hold information internal to
-!            gerk which is necessary for subsequent calls. Must be
-!            dimensioned at least  5.
-!
-!
-!***********************************************************************
-!  First call to gerk
-!***********************************************************************
-!
-!    The user must provide storage in his calling program for the arrays
-!    IN THE CALL LIST  -      y(neqn) , work(3+8*neqn) , iwork(5)  ,
-!    declare F in an external statement, supply subroutine F(t,y,YP) and
-!    initialize the following parameters-
-!
-!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
-!      y(*) -- vector of initial conditions
-!      t -- starting point of integration , must be a variable
-!      tout -- output point at which solution is desired.
-!            t=tout is allowed on the first call only,in which case gerk
-!            returns with iflag=2 If continuation is possible.
-!      relerr,abserr -- relative and absolute local error tolerances
-!            which must be non-negative but may be constants. We can
-!            usually expect the global errors to be somewhat smaller
-!            than the requested local error tolerances. To avoid
-!            limiting precision difficulties the code always uses the
-!            larger of relerr and an internal relative error parameter
-!            which is machine dependent.
-!      iflag -- +1,-1  indicator to initialize the code for each new
-!            problem. Normal input is +1. The user should set iflag=-1
-!            only when one-step integrator control is essential. In this
-!            case, gerk attempts to advance the solution a single step
-!            in the direction of tout each time it is called. Since this
-!            mode of operation results in extra computing overhead, it
-!            should be avoided unless needed.
-!
-!
-!***********************************************************************
-!  Output from gerk
-!***********************************************************************
-!
-!      y(*) -- solution at t
-!      t -- last point reached in integration.
-!      iflag = 2 -- integration reached tout.Indicates successful return
-!                   and is the normal mode for continuing integration.
-!            =-2 -- A single successful step in the direction of tout
-!                   has been taken. Normal mode for continuing
-!                   integration one step at a time.
-!            = 3 -- Integration was not completed because more than
-!                   9000 derivative evaluations were needed. This
-!                   is approximately 500 steps.
-!            = 4 -- Integration was not completed because solution
-!                   vanished making a pure relative error test
-!                   impossible. Must use non-zero abserr to continue.
-!                   Using the one-step integration mode for one step
-!                   is a good way to proceed.
-!            = 5 -- Integration was not completed because requested
-!                   accuracy could not be achieved using smallest
-!                   allowable stepsize. User must increase the error
-!                   tolerance before continued integration can be
-!                   attempted.
-!            = 6 -- gerk is being used inefficiently in solving
-!                   this problem. Too much output is restricting the
-!                   natural stepsize choice. Use the one-step
-!                   integrator mode.
-!            = 7 -- Invalid input parameters
-!                   this indicator occurs if any of the following is
-!                   SATISFIED -   neqn .LE. 0
-!                                 t=tout  and  iflag .NE. +1 or -1
-!                                 relerr OR abserr .LT. 0.
-!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 7
-!      gerror(*) -- estimate of the global error in the solution at t
-!      work(*),iwork(*) -- information which is usually of no interest
-!                   to the user but necessary for subsequent calls.
-!                   work(1),...,work(neqn) contain the first derivatives
-!                   of the solution vector y at t. work(neqn+1) contains
-!                   the stepsize H to be attempted on the next step.
-!                   iwork(1) contains the derivative evaluation counter.
-!
-!
-!***********************************************************************
-!  Subsequent calls to gerk
-!***********************************************************************
-!
-!    Subroutine gerk returns with all information needed to continue the
-!    integration. If the integration reached tout,the user need only
-!    define a new tout and call gerk again. In the one-step integrator
-!    mode (iflag=-2) the user must keep in mind that each step taken is
-!    in the direction of the current tout. Upon reaching tout (indicated
-!    by changing iflag to 2),the user must then define a new tout and
-!    reset iflag to -2 To continue in the one-step integrator mode.
-!
-!    If the integration was not completed but the user still wants to
-!    CONTINUE (iflag=3 CASE), HE JUST CALLS gerk AGAIN. THE FUNCTION
-!    counter is then reset to 0 and another 9000 function evaluations
-!    are allowed.
-!
-!    However,in the case iflag=4, the user must first alter the error
-!    criterion to use a positive value of abserr before integration can
-!    proceed. If he does not,execution is terminated.
-!
-!    Also,in the case iflag=5, it is necessary for the user to reset
-!    iflag to 2 (or -2 When the one-step integration mode is being used)
-!    as well as increasing either abserr,relerr or both before the
-!    integration can be continued. If this is not done, execution will
-!    be terminated. The occurrence of iflag=5 Indicates a trouble spot
-!    (solution is changing rapidly,singularity may be present) and it
-!    often is inadvisable to continue.
-!
-!    If iflag=6 Is encountered, the user should use the one-step
-!    integration mode with the stepsize determined by the code. If the
-!    user insists upon continuing the integration with gerk in the
-!    interval mode, he must reset iflag to 2 before calling gerk again.
-!    Otherwise,execution will be terminated.
-!
-!    If iflag=7 Is obtained, integration can not be continued unless
-!    the invalid input parameters are corrected.
-!
-!    It should be noted that the arrays work,iwork contain information
-!    required for subsequent integration. Accordingly, work and iwork
-!    should not be altered.
-!
-!***********************************************************************
-!
-!
-!
-!
-!     Compute indices for the splitting of the work array
-!
-k1m = neqn + 1
-k1 = k1m + 1
-k2 = k1 + neqn
-k3 = k2 + neqn
-k4 = k3 + neqn
-k5 = k4 + neqn
-k6 = k5 + neqn
-k7 = k6 + neqn
-k8 = k7 + neqn
-!
-!***********************************************************************
-!     This interfacing routine merely relieves the user of a long
-!     calling list via the splitting apart of two working storage
-!     arrays. If this is not compatible with the users compiler,
-!     he must use gerks directly.
-!***********************************************************************
-!
-call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-   & work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
-   & work(k5),work(k6),work(k7),work(k8),work(k8 + 1), &
-   & iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
-!
-return
-end subroutine gerk
-
-subroutine gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
-   & yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
-   & nfe,kop,init,jflag,kflag)
-implicit none
-integer, intent(inout) :: iflag, init, jflag, kflag, kop
-integer, intent(in) :: neqn
-integer, intent(inout) :: nfe
-real, intent(in) :: abserr
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), gerror(neqn), h
-real, intent(in) :: relerr
-real, intent(inout) :: savae, savre, t
-real, intent(in) :: tout
-real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
-real :: yp(neqn)
-external f
-integer :: k, maxnfe, mflag
-real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
-   & scale, tol, toln, ts, u, u26, ypk
-real :: spmpar
-logical :: hfaild, output
-!
-!     Fehlberg fourth(fifth) order Runge-Kutta method with
-!     global error assessment
-!
-!***********************************************************************
-!
-!     gerks integrates a system of first order ordinary differential
-!     equations as described in the comments for gerk.  The arrays
-!     yp,f1,f2,f3,f4,f5,yg and ygp (of dimension at least neqn) and
-!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
-!     internally by the code and appear in the call list to eliminate
-!     local retention of variables between calls. Accordingly, they
-!     should not be altered. Items of possible interest are
-!         yp - Derivative of solution vector at t
-!         h  - An appropriate stepsize to be used for the next step
-!         nfe- counter on the number of derivative function evaluations
-!
-!***********************************************************************
-!
-!
-!
-!
-!***********************************************************************
-!  The computer unit roundoff error U is the smallest positive value
-!  representable in the machine such that  1.+ U .GT. 1.
-!
-u = spmpar(1)
-!
-!***********************************************************************
-!
-!  remin is a tolerance threshold which is also determined by the
-!  integration method. In particular, a fifth order method will
-!  generally not be capable of delivering accuracies near limiting
-!  precision on computers with long wordlengths.
-!
-remin = 3.e-11
-!
-!***********************************************************************
-!
-!     The expense is controlled by restricting the number
-!     of function evaluations to be approximately maxnfe.
-!     As set,this corresponds to about 500 steps.
-!
-maxnfe = 9000
-!
-!***********************************************************************
-!
-!
-!     Check input parameters
-!
-!
-if (neqn .lt. 1) go to 10
-if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
-mflag = iabs(iflag)
-if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
-!
-!     Invalid input
-10 iflag = 7
-return
-!
-!     Is this the first call
-20 if (mflag .eq. 1) go to 50
-!
-!     Check continuation possibilities
-!
-if (t .eq. tout) go to 10
-if (mflag .ne. 2) go to 25
-!
-!     iflag = +2 or -2
-if (init .eq. 0) go to 45
-if (kflag .eq. 3) go to 40
-if ((kflag .eq. 4)  .and.  (abserr .eq. 0.)) go to 30
-if ((kflag .eq. 5)  .and.  (relerr .le. savre)  .and. &
-   & (abserr .le. savae)) go to 30
-go to 50
-!
-!     iflag = 3,4,5,6, or 7
-25 if (iflag .eq. 3) go to 40
-if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
-!
-!     Integration cannot be continued since user did not respond to
-!     the instructions pertaining to iflag=4,5,6 or 7
-30 stop
-!
-!***********************************************************************
-!
-!     Reset function evaluation counter
-40 nfe = 0
-if (mflag .eq. 2) go to 50
-!
-!     Reset flag VALUE from previous call
-45 iflag = jflag
-!
-!     Save input iflag and set continuation flag VALUE for subsequent
-!     input checking
-50 jflag = iflag
-kflag = 0
-!
-!     Save relerr and abserr for checking input on subsequent calls
-savre = relerr
-savae = abserr
-!
-!     Restrict relative error tolerance to be at least as large as
-!     32U+remin to avoid limiting precision difficulties arising from
-!     impossible accuracy requests
-!
-rer = amax1(relerr,32.*u + remin)
-!
-u26 = 26.*u
-!
-dt = tout - t
-!
-if (mflag .eq. 1) go to 60
-if (init .eq. 0) go to 65
-go to 80
-!
-!
-!***********************************************************************
-!
-!     Initialization --
-!                       set initialization completion indicator,init
-!                       set indicator for too many output points,kop
-!                       evaluate initial derivatives
-!                       copy initial values and derivatives for the
-!                             parallel solution
-!                       set counter for function evaluations,nfe
-!                       estimate starting stepsize
-!
-60 init = 0
-kop = 0
-!
-a = t
-call f(a,y,yp)
-nfe = 1
-if (t .ne. tout) go to 65
-iflag = 2
-return
-!
-!
-65 init = 1
-h = abs(dt)
-toln = 0.
-do 70 k = 1,neqn
-   yg(k) = y(k)
-   ygp(k) = yp(k)
-   tol = rer*abs(y(k)) + abserr
-   if (tol .le. 0.) go to 70
-   toln = tol
-   ypk = abs(yp(k))
-   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
-70 continue
-if (toln .le. 0.) h = 0.
-h = amax1(h,u26*amax1(abs(t),abs(dt)))
-!
-!
-!***********************************************************************
-!
-!     Set stepsize for integration in the direction from t to tout
-!
-80 h = sign(h,dt)
-!
-!     Test to see if gerk is being severely impacted by too many
-!     output points
-!
-if (abs(h) .gt. 2.*abs(dt)) kop = kop + 1
-if (kop .ne. 100) go to 85
-kop = 0
-iflag = 6
-return
-!
-85 if (abs(dt) .gt. u26*abs(t)) go to 95
-!
-!     If too close to output point,extrapolate and return
-!
-do 90 k = 1,neqn
-   yg(k) = yg(k) + dt*ygp(k)
-90 y(k) = y(k) + dt*yp(k)
-a = tout
-call f(a,yg,ygp)
-call f(a,y,yp)
-nfe = nfe + 2
-go to 300
-!
-!     Initialize output point indicator
-!
-95 output = .false.
-!
-!     To avoid premature underflow in the error tolerance function,
-!     scale the error tolerances
-!
-scale = 2./rer
-ae = scale*abserr
-!
-!
-!***********************************************************************
-!***********************************************************************
-!     Step by step integration
-!
-100 hfaild = .false.
-!
-!     Set smallest allowable stepsize
-!
-hmin = u26*abs(t)
-!
-!     Adjust stepsize if necessary to hit the output point.
-!     Look ahead two steps to avoid drastic changes in the stepsize
-!     and thus lessen the impact of output points on the code.
-!
-dt = tout - t
-if (abs(dt) .ge. 2.*abs(h)) go to 200
-if (abs(dt) .gt. abs(h)) go to 150
-!
-!     The next successful step will complete the integration to the
-!     output point
-!
-output = .true.
-h = dt
-go to 200
-!
-150 h = 0.5*dt
-!
-!
-!
-!***********************************************************************
-!     Core integrator for taking a single step
-!***********************************************************************
-!     The tolerances have been scaled to avoid premature underflow in
-!     computing the error tolerance function et.
-!     To avoid problems with zero crossings,relative error is measured
-!     using the average of the magnitudes of the solution at the
-!     beginning and end of a step.
-!     The error estimate formula has been grouped to control loss of
-!     significance.
-!     To distinguish the various arguments, h is not permitted
-!     to become smaller than 26 units of roundoff in t.
-!     Practical limits on the change in the stepsize are enforced to
-!     smooth the stepsize selection process and to avoid excessive
-!     chattering on problems having discontinuities.
-!     To prevent unnecessary failures, the code uses 9/10 the stepsize
-!     it estimates will succeed.
-!     After a step failure, the stepsize is not allowed to increase for
-!     the next attempted step. This makes the code more efficient on
-!     problems having discontinuities and more effective in general
-!     since local extrapolation is being used and the error estimate
-!     may be unreliable or unacceptable when a step fails.
-!***********************************************************************
-!
-!
-!     Test number of derivative function evaluations.
-!     If okay,try to advance the integration from t to t+h
-!
-200 if (nfe .le. maxnfe) go to 220
-!
-!     Too much work
-iflag = 3
-kflag = 3
-return
-!
-!     Advance an approximate solution over one step of length h
-!
-220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
-nfe = nfe + 5
-!
-!     Compute and test allowable tolerances versus local error estimates
-!     and remove scaling of tolerances. Note that relative error is
-!     measured with respect to the average of the magnitudes of the
-!     solution at the beginning and end of the step.
-!
-eeoet = 0.
-do 250 k = 1,neqn
-   et = abs(yg(k)) + abs(f1(k)) + ae
-   if (et .gt. 0.) go to 240
-!
-!       Inappropriate error tolerance
-   iflag = 4
-   kflag = 4
-   return
-!
-240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
-      & (22528.*f2(k) - 27360.*f5(k)))
-250 eeoet = amax1(eeoet,ee/et)
-!
-esttol = abs(h)*eeoet*scale/752400.
-!
-if (esttol .le. 1.) go to 260
-!
-!
-!     Unsuccessful step
-!                       reduce the stepsize , try again
-!                       the decrease is limited to a factor of 1/10
-!
-hfaild = .true.
-output = .false.
-s = 0.1
-if (esttol .lt. 59049.) s = 0.9/esttol**0.2
-h = s*h
-if (abs(h) .gt. hmin) go to 200
-!
-!     Requested error unattainable at smallest allowable stepsize
-iflag = 5
-kflag = 5
-return
-!
-!
-!     Successful step
-!                        store one-step solution yg at t+h
-!                        and evaluate derivatives there
-!
-260 ts = t
-t = t + h
-do 270 k = 1,neqn
-270 yg(k) = f1(k)
-a = t
-call f(a,yg,ygp)
-nfe = nfe + 1
-!
-!                        Now advance the y solution over two steps of
-!                        length h/2 and evaluate derivatives there
-!
-hh = 0.5*h
-call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
-ts = ts + hh
-a = ts
-call f(a,y,yp)
-call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
-a = t
-call f(a,y,yp)
-nfe = nfe + 12
-!
-!
-!                       Choose next stepsize
-!                       the increase is limited to a factor of 5
-!                       if step failure has just occurred, next
-!                          stepsize is not allowed to increase
-!
-s = 5.
-if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
-if (hfaild) s = amin1(s,1.)
-h = sign(amax1(s*abs(h),hmin),h)
-!
-!***********************************************************************
-!     END OF CORE INTEGRATOR
-!***********************************************************************
-!
-!
-!
-!     Should we take another step
-!
-if (output) go to 300
-if (iflag .gt. 0) go to 100
-!
-!***********************************************************************
-!***********************************************************************
-!
-!
-!     Integration successfully completed
-!
-!     One-step mode
-iflag = -2
-go to 400
-!
-!     Interval mode
-300 t = tout
-iflag = 2
-!
-400 do 450 k = 1,neqn
-450 gerror(k) = (yg(k) - y(k))/31.
-!
-return
-end subroutine gerks
-
-subroutine sfode (f,neq,y,t,tout,info,rerr,aerr,idid, &
-   & rwork,lrw,iwork,liw,rpar,ipar)
-implicit none
-integer, intent(inout) :: idid
-integer :: liw, lrw, neq
-real, intent(inout) :: aerr, rerr, t
-real :: tout
-external f
-real, intent(inout) :: y(neq)
-real, intent(inout) :: rwork(lrw)
-real :: rpar(*)
-integer, intent(inout) :: info(*)
-integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
-external zzzjac
-real :: rtol(1), atol(1)
-integer :: info1(15)
-!     --------------
-!     --------------
-info1(1) = info(1)
-info1(2) = 0
-info1(3) = info(2)
-info1(4) = info(3)
-info1(5) = 0
-info1(6) = info(4)
-!
-rtol(1) = rerr
-atol(1) = aerr
-call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
-   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
-info(1) = info1(1)
-rerr = rtol(1)
-aerr = atol(1)
-return
-end subroutine sfode
-
-subroutine sfode1 (f,neq,y,t,tout,info,rtol,atol,idid, &
-   & rwork,lrw,iwork,liw,rpar,ipar)
-implicit none
-integer, intent(inout) :: idid
-integer :: liw, lrw, neq
-real, intent(inout) :: t
-real :: tout
-external f
-real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
-real :: rpar(*)
-integer, intent(inout) :: info(*)
-integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
-external zzzjac
-integer :: info1(15)
-!     --------------
-!     --------------
-info1(1) = info(1)
-info1(2) = 1
-info1(3) = info(2)
-info1(4) = info(3)
-info1(5) = 0
-info1(6) = info(4)
-!
-call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
-   & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
-info(1) = info1(1)
-return
-end subroutine sfode1
-
-subroutine zzzjac(t,y,pd,n,rpar,ipar)
-implicit none
-integer :: ipar(*)
-integer, intent(in) :: n
-real :: pd(n,*), rpar(*)
-real, intent(out) :: t
-real :: y(n)
-!     -------------
-!     Dummy Jacobian subroutine
-!     -------------
-!     -------------
-t = 0.0
-return
-end subroutine zzzjac
-
-subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
-   & rwork,lrw,iwork,liw,rpar,ipar,jac)
-implicit none
-integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
-real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
-external f, jac
-integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
-   & mu
-integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
-   & iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
-   & ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
-real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
-logical :: intout
-!***********************************************************************
-!***PURPOSE
-!   stfode solves initial value problems in ordinary differential
-!   equations using backward differentiation formulas. It is
-!   both variable order (1-5) and variable step.
-!***DESCRIPTION
-!
-!   This is a modification by A. H. Morris (NSWC) of the code
-!   DEBDF, designed by  L. F. Shampine and H. A. Watts (1980).
-!   DEBDF is documented in
-!        SAND79-2374 , DEPAC - Design of a user oriented package
-!                              of ODE solvers.
-!
-!   stfode is a driver for a modification of the code lsode written by
-!             A. C. Hindmarsh
-!             Lawrence Livermore Laboratory
-!             livermore, california 94550
-!
-!***********************************************************************
-!** ABSTRACT **
-!**************
-!
-!   Subroutine stfode uses the backward differentiation formulas of
-!   orders one through five to integrate a system of neq first order
-!   ordinary differential equations of the form
-!                         DU/DX = F(X,U)
-!   when the vector y(*) of initial values for U(*) at X=t is given.
-!   The subroutine integrates from t to tout. It is easy to continue the
-!   integration to get results at additional tout. This is the interval
-!   mode of operation. It is also easy for the routine to return with
-!   the solution at each intermediate step on the way to tout. This is
-!   the intermediate-output mode of operation.
-!
-!   stfode uses subprograms lsod1, intyd, stod, cfod, pjac, slvs,vnwrms,
-!   hstart, vnorm, svco, rsco, spmpar, and the LINPACK routines sgefa,
-!   sgesl, sgbfa, sgbsl (which also use the BLAS routines saxpy, sscal,
-!   isamax and sdot). The only machine dependent parameters used appear
-!   IN spmpar.
-!
-!***********************************************************************
-!** Description of the arguments to stfode (an overview) **
-!**********************************************************
-!
-!   The parameters are
-!
-!      F -- this is the name of a subroutine which you provide to
-!             define the differential equations.
-!
-!      neq -- this is the number of (first order) differential
-!             equations to be integrated.
-!
-!      t -- this is a value of the independent variable.
-!
-!      y(*) -- this array contains the solution components at t.
-!
-!      tout -- this is a point at which a solution is desired.
-!
-!      info(*) -- the BASIC task of the code is to integrate the
-!             differential equations from t to tout and return an
-!             answer at tout. info(*) is an integer array which is used
-!             to communicate exactly how you want this task to be
-!             carried out.
-!
-!      rtol, atol -- these quantities represent relative and absolute
-!             error tolerances which you provide to indicate how
-!             accurately you wish the solution to be computed. You may
-!             choose them to be both scalars or else both vectors.
-!
-!      idid -- this scalar quantity is an indicator reporting what
-!             the code did. You must monitor this integer variable to
-!             decide what action to take next.
-!
-!      rwork(*), lrw -- rwork(*) is a real work array of length lrw
-!             which provides the code with needed storage space.
-!
-!      iwork(*), liw -- iwork(*) is an integer work array of length liw
-!             which provides the code with needed storage space.
-!
-!      Rpar, ipar -- these are real and integer parameter arrays which
-!             you can use for communication between your calling
-!             program and the F subroutine (and the JAC subroutine).
-!
-!      JAC -- this is the name of a subroutine which you may choose to
-!             provide for defining the Jacobian matrix of partial
-!             DERIVATIVES DF/DU.
-!
-!  Quantities which are used as input items are
-!             neq, t, y(*), tout, info(*),
-!             rtol, atol, rwork(1), lrw,
-!             iwork(1), iwork(2), AND liw.
-!
-!  Quantities which may be altered by the code are
-!             t, y(*), info(1), rtol, atol,
-!             idid, rwork(*) AND iwork(*).
-!
-!***********************************************************************
-!** Input -- what to do on the first call to stfode **
-!*****************************************************
-!
-!   The first call of the code is defined to be the start of each new
-!   problem. Read through the descriptions of all the following items,
-!   provide sufficient storage space for designated arrays, set
-!   appropriate variables for the initialization of the problem, and
-!   give information about how you want the problem to be solved.
-!
-!
-!      F -- provide a subroutine of the form
-!                               F(X,U,UPRIME,rpar,ipar)
-!             to define the system of first order differential equations
-!             which is to be solved. For the given values of X and the
-!             vector  U(*)=(U(1),U(2),...,U(neq)) , the subroutine must
-!             evaluate the neq components of the system of differential
-!             equations  DU/DX=F(X,U)  and store the derivatives in the
-!             array uprime(*), that is,  uprime(I) = * DU(I)/DX *  for
-!             EQUATIONS I=1,...,neq.
-!
-!             Subroutine F must not alter X or U(*). You must declare
-!             the name F in an external statement in your program that
-!             calls stfode. You must dimension U and UPRIME in F.
-!
-!             Rpar and ipar are real and integer parameter arrays which
-!             you can use for communication between your calling program
-!             and subroutine F. they are not used or altered by stfode.
-!             If you do not need rpar or ipar, ignore these parameters
-!             by treating them as dummy arguments. If you do choose to
-!             use them, dimension them in your calling program and in F
-!             as arrays of appropriate length.
-!
-!      neq -- set it to the number of differential equations.
-!             (neq .GE. 1)
-!
-!      t -- set it to the initial point of the integration.
-!             You must use a program variable for t because the code
-!             changes its value.
-!
-!      y(*) -- set this vector to the initial values of the neq solution
-!             components at the initial point. You must dimension y at
-!             least neq in your calling program.
-!
-!      tout -- set it to the first point at which a solution
-!             is desired. You can take tout = t, in which case the code
-!             will evaluate the derivative of the solution at t and
-!             RETURN. INTEGRATION EITHER FORWARD IN t  (tout .GT. t)  OR
-!             backward in t  (tout .LT. t)  is permitted.
-!
-!             The code advances the solution from t to tout using
-!             step sizes which are automatically selected so as to
-!             achieve the desired accuracy. If you wish, the code will
-!             RETURN WITH THE SOLUTION AND ITS DERIVATIVE FOLLOWING
-!             each intermediate step (intermediate-output mode) so that
-!             you can monitor them, but you still must provide tout in
-!             accord with the BASIC aim of the code.
-!
-!             The first step taken by the code is a critical one
-!             because it must reflect how fast the solution changes near
-!             the initial point. The code automatically selects an
-!             initial step size which is practically always suitable for
-!             the problem. By using the fact that the code will not step
-!             past tout in the first step, you could, if necessary,
-!             restrict the length of the initial step size.
-!
-!             For some problems it may not be permissible to integrate
-!             past a point TSTOP because a discontinuity occurs there
-!             or the solution or its derivative is not defined beyond
-!             TSTOP. When you have declared A TSTOP point (see info(4)
-!             and rwork(1)), you have told the code not to integrate
-!             past TSTOP. In this case any tout beyond TSTOP is invalid
-!             input.
-!
-!      info(*) -- use the info array to give the code more details about
-!             how you want your problem solved. This array should be
-!             dimensioned of length 15 to accomodate other members of
-!             DEPAC or possible future extensions, though stfode uses
-!             only the first six entries. You must respond to all of
-!             the following items which are arranged as questions. The
-!             simplest use of the code corresponds to answering all
-!             questions as yes ,I.E. setting all entries of info to 0.
-!
-!        info(1) -- this parameter enables the code to initialize
-!               itself. You must set it to indicate the start of every
-!               new problem.
-!
-!            **** Is this the first call for this problem ...
-!                  YES -- SET info(1) = 0
-!                   no -- not applicable here.
-!                         See below for continuation calls.  ****
-!
-!        info(2) -- how much accuracy you want of your solution
-!               is specified by the error tolerances rtol and atol.
-!               The simplest use is to take them both to be scalars.
-!               To obtain more flexibility, they can both be vectors.
-!               The code must be told your choice.
-!
-!            **** Are both error tolerances rtol, atol scalars ...
-!                  YES -- SET info(2) = 0
-!                         and input scalars for both rtol and atol
-!                   NO -- SET info(2) = 1
-!                         and input arrays for both rtol and atol ****
-!
-!        info(3) -- the code integrates from t in the direction
-!               of tout by steps. If you wish, it will return the
-!               computed solution and derivative at the next
-!               intermediate step (the intermediate-output mode) or
-!               tout, whichever comes first. This is a good way to
-!               proceed if you want to see the behavior of the solution.
-!               If you must have solutions at a great many specific
-!               tout points, this code will compute them efficiently.
-!
-!            **** Do you want the solution only at
-!                 tout (and not at the next intermediate step) ...
-!                  YES -- SET info(3) = 0
-!                   NO -- SET info(3) = 1 ****
-!
-!        info(4) -- to handle solutions at a great many specific
-!               values tout efficiently, this code may integrate past
-!               tout and interpolate to obtain the result at tout.
-!               Sometimes it is not possible to integrate beyond some
-!               point TSTOP because the equation changes there or it is
-!               not defined past TSTOP. Then you must tell the code
-!               not to go past.
-!
-!            **** Can the integration be carried out without any
-!                 restrictions on the independent variable t ...
-!                  YES -- SET info(4)=0
-!                   NO -- SET info(4)=1
-!                         and define the stopping point TSTOP by
-!                         SETTING rwork(1)=TSTOP ****
-!
-!        info(5) -- to solve stiff problems it is necessary to use the
-!               Jacobian matrix of partial derivatives of the system
-!               of differential equations. If you do not provide A
-!               subroutine to evaluate it analytically (see the
-!               description of the item JAC in the call list), it will
-!               be approximated by numerical differencing in this code.
-!               Although it is less trouble for you to have the code
-!               compute partial derivatives by numerical differencing,
-!               the solution will be more reliable if you provide the
-!               derivatives via JAC. Sometimes numerical differencing
-!               is cheaper than evaluating derivatives in JAC and
-!               sometimes it is not - This depends on your problem.
-!
-!               If your problem is linear, I.E. has the form
-!               DU/DX = F(X,U) = J(X)*U + G(X)   for some matrix J(X)
-!               and vector G(X), the Jacobian matrix  df/DU = J(X).
-!               Since you must provide a subroutine to evaluate F(X,U)
-!               analytically, it is little extra trouble to provide
-!               subroutine jac for evaluating J(X) analytically.
-!               Furthermore, in such cases, numerical differencing is
-!               much more expensive than analytic evaluation.
-!
-!            **** Do you want the code to evaluate the partial
-!                 derivatives automatically by numerical differences ...
-!                  YES -- SET info(5)=0
-!                   NO -- SET info(5)=1
-!                         and provide subroutine jac for evaluating the
-!                         Jacobian matrix ****
-!
-!        info(6) -- stfode will perform much better if the Jacobian
-!               matrix is banded and the code is told this. In this
-!               case, the storage needed will be greatly reduced,
-!               numerical differencing will be performed more cheaply,
-!               and a number of important algorithms will execute much
-!               faster. The differential equation is said to have
-!               half-bandwidths ml (lower) and mu (UPPER) if equation I
-!               involves only unknowns y(J) with
-!                              I-ml .LE. J .LE. I+MU
-!               for all I=1,2,...,neq. Thus, ml and mu are the widths
-!               of the lower and upper parts of the band, respectively,
-!               with the main diagonal being excluded. If you do not
-!               indicate that the equation has a banded Jacobian,
-!               the code works with a full matrix of neq**2 elements
-!               (stored in the conventional way). Computations with
-!               banded matrices cost less time and storage than with
-!               full matrices if  2*ml+mu .LT. neq.  If you tell the
-!               code that the Jacobian matrix HAS a banded structure and
-!               you want to provide subroutine jac to compute the
-!               partial derivatives, then you must be careful to store
-!               the elements of the Jacobian matrix in the special form
-!               indicated in the description of JAC.
-!
-!            **** Do you want to solve the problem using a full
-!                 (dense) Jacobian matrix (and not a special banded
-!                 structure) ...
-!                  YES -- SET info(6)=0
-!                   NO -- SET info(6)=1
-!                         and provide the lower (ml) and upper (MU)
-!                         bandwidths by setting
-!                         iwork(1)=ml
-!                         iwork(2)=mu ****
-!
-!      rtol, atol -- you must assign relative (rtol) and absolute (atol)
-!             error tolerances to tell the code how accurately you want
-!             the solution to be computed. They must be defined as
-!             program variables because the code may change them. You
-!             have two choices --
-!                  both rtol and atol are scalars. (info(2)=0)
-!                  both rtol and atol are vectors. (info(2)=1)
-!             in either case all components must be non-negative.
-!
-!             The tolerances are used by the code in a local error test
-!             at each step which requires roughly that
-!                     abs(LOCAL ERROR) .LE. rtol*abs(y)+atol
-!             for each vector component.
-!             (More specifically, a root-mean-square norm is used to
-!             measure the size of vectors, and the error test uses the
-!             magnitude of the solution at the beginning of the step.)
-!
-!             The true (GLOBAL) error is the difference between the true
-!             solution of the initial value problem and the computed
-!             approximation. Practically all present day codes,
-!             including this one, control the local error at each step
-!             and do not even attempt to control the global error
-!             directly. Roughly speaking, they produce a solution y(t)
-!             which satisfies the differential equations with A
-!             RESIDUAL R(t),    DY(t)/DT = F(t,y(t)) + R(t)   ,
-!             and, almost always, R(t) is bounded by the error
-!             tolerances. Usually, but not always, the true accuracy of
-!             the computed y is comparable to the error tolerances. This
-!             code will usually, but not always, deliver a more accurate
-!             solution if you reduce the tolerances and integrate again.
-!             By comparing two such solutions you can get a fairly
-!             reliable idea of the true error in the solution at the
-!             bigger tolerances.
-!
-!             Setting atol=0. Results in a pure relative error test on
-!             that component. Setting rtol=0. Results in a pure absolute
-!             error test on that component. A mixed test with non-zero
-!             rtol and atol corresponds roughly to a relative error
-!             test when the solution component is much bigger than atol
-!             and to an absolute error test when the solution component
-!             is smaller than the threshold atol.
-!
-!             Proper selection of the absolute error control parameters
-!             atol  requires you to have some idea of the scale of the
-!             solution components. To acquire this information may mean
-!             that you will have to solve the problem more than once. In
-!             the absence of scale information, you should ask for some
-!             relative accuracy in all the components (by setting  rtol
-!             values non-zero) and perhaps impose extremely small
-!             absolute error tolerances to protect against the danger of
-!             a solution component becoming zero.
-!
-!             The code will not attempt to compute a solution at an
-!             accuracy unreasonable for the machine being used. It will
-!             advise you if you ask for too much accuracy and inform
-!             you as to the maximum accuracy it believes possible.
-!
-!      rwork(*) -- dimension this real work array of length lrw in your
-!             calling program.
-!
-!      rwork(1) -- if you have set info(4)=0, you can ignore this
-!             optional input parameter. Otherwise you must define A
-!             stopping point TSTOP by setting   rwork(1) = TSTOP.
-!             (For some problems it may not be permissible to integrate
-!             past a point TSTOP because a discontinuity occurs there
-!             or the solution or its derivative is not defined beyond
-!             TSTOP.)
-!
-!      lrw -- set it to the declared length of the rwork array.
-!             You must have
-!                  lrw .GE. 250+10*neq+neq**2
-!             for the full (dense) Jacobian case (when info(6)=0),  or
-!                  lrw .GE. 250+10*neq+(2*ml+MU+1)*neq
-!             for the banded Jacobian case (when info(6)=1).
-!
-!      iwork(*) -- dimension this integer work array of length liw in
-!             your calling program.
-!
-!      iwork(1), iwork(2) -- if you have set info(6)=0, you can ignore
-!             these optional input parameters. Otherwise you must define
-!             the half-bandwidths ml (lower) and mu (UPPER) of the
-!             Jacobian matrix BY setting    iwork(1) = ml   and
-!             iwork(2) = Mu.  (The code will work with a full matrix
-!             of neq**2 elements unless it is told that the problem has
-!             a banded Jacobian, in which case the code will work with
-!             a matrix containing at most  (2*ml+MU+1)*neq  elements.)
-!
-!      liw -- set it to the declared length of the iwork array.
-!             You must have liw .GE. 55+neq.
-!
-!      Rpar, ipar -- these are parameter arrays, of real and integer
-!             type, respectively. You can use them for communication
-!             between your program that calls stfode and the  F
-!             subroutine (and the JAC subroutine). They are not used or
-!             altered by stfode. If you do not need rpar or ipar, ignore
-!             these parameters by treating them as dummy arguments. If
-!             you do choose to use them, dimension them in your calling
-!             program and in F (and in JAC) as arrays of appropriate
-!             length.
-!
-!      JAC -- if you have set info(5)=0, you can ignore this parameter
-!             by treating it as a dummy argument. (For some compilers
-!             you may have to write a dummy subroutine named  jac  in
-!             order to avoid problems associated with missing external
-!             routine names.)  Otherwise, you must provide a subroutine
-!             of the form
-!                          JAC(X,U,PD,NROWPD,rpar,ipar)
-!             to define the Jacobian matrix of partial derivatives DF/DU
-!             of the system of differential equations   DU/DX = F(X,U).
-!             For the given values of X and the vector
-!             U(*)=(U(1),U(2),...,U(neq)), the subroutine must evaluate
-!             the non-zero partial derivatives  DF(I)/DU(J)  for each
-!             differential equation I=1,...,neq and each solution
-!             component J=1,...,neq , and store these values in the
-!             matrix pd. The elements of pd are set to zero before each
-!             CALL TO JAC SO ONLY NON-ZERO ELEMENTS NEED TO BE DEFINED.
-!
-!             Subroutine jac must not alter X, U(*), or NROWPD. You must
-!             declare the name JAC in an external statement in your
-!             program that calls stfode. NROWPD is the row dimension of
-!             the PD matrix and is assigned by the code. Therefore you
-!             must dimension PD in JAC according to
-!                              dimension pd(nrowpd,1)
-!             you must also dimension U in JAC.
-!
-!             The way you must store the elements into the PD matrix
-!             depends on the structure of the Jacobian which you
-!             indicated by info(6).
-!             *** info(6)=0 -- FULL (DENSE) JACOBIAN ***
-!                 when you evaluate the (NON-ZERO) partial derivative
-!                 of equation I with respect to variable J, you must
-!                 store it in PD according to
-!                                pd(i,j) = * df(i)/du(j) *
-!             *** info(6)=1 -- banded Jacobian with ml lower and mu
-!                 upper diagonal bands (refer to info(6) description of
-!                 ml AND MU) ***
-!                 when you evaluate the (NON-ZERO) partial derivative
-!                 of equation I with respect to variable J, you must
-!                 store it in PD according to
-!                                irow = i - j + ml + mu + 1
-!                                pd(irow,j) = * df(i)/du(j) *
-!
-!             Rpar and ipar are real and integer parameter arrays which
-!             you can use for communication between your calling
-!             program and your Jacobian subroutine jac. They are not
-!             altered by stfode. If you do not need rpar or ipar, ignore
-!             these parameters by treating them as dummy arguments. If
-!             you do choose to use them, dimension them in your calling
-!             program and in JAC as arrays of appropriate length.
-!
-!***********************************************************************
-!** Output -- after any return from stfode **
-!********************************************
-!
-!   The principal aim of the code is to return a computed solution at
-!   tout, although it is also possible to obtain intermediate results
-!   along the way. To find out whether the code achieved its goal
-!   or if the integration process was interrupted before the task was
-!   completed, you must check the idid parameter.
-!
-!
-!      t -- the solution was successfully advanced to the
-!             output value of t.
-!
-!      y(*) -- contains the computed solution approximation at t.
-!             You may also be interested in the approximate derivative
-!             of the solution at t. it is contained in
-!             rwork(21),...,rwork(20+neq).
-!
-!      idid -- reports what the code did
-!
-!                         *** Task completed ***
-!                   reported by positive values of idid
-!
-!             idid = 1 -- a step was successfully taken in the
-!                       intermediate-output mode. The code has not
-!                       yet reached tout.
-!
-!             idid = 2 -- the integration to tout was successfully
-!                       completed (t=tout) by stepping exactly to tout.
-!
-!             idid = 3 -- the integration to tout was successfully
-!                       completed (t=tout) by stepping past tout.
-!                       y(*) is obtained by interpolation.
-!
-!                         *** Task interrupted ***
-!                   reported by negative values of idid
-!
-!             idid = -1 -- a large amount of work has been expended.
-!                       (500 Steps performed)
-!
-!             idid = -2 -- the error tolerances are too stringent.
-!
-!             idid = -3 -- the local error test cannot be satisfied
-!                       since the L-TH solution component is 0 and
-!                       the corresponding absolute error tolerance
-!                       is 0 for L = -info(1). A pure relative error
-!                       test cannot be applied to this component.
-!
-!             idid = -4,-5  -- not applicable for this code.
-!
-!             idid = -6 -- stfode had repeated convergence test failures
-!                       on the last attempted step.
-!
-!             idid = -7 -- stfode had repeated error test failures on
-!                       the last attempted step.
-!
-!             idid = -8,..,-32  -- not applicable for this code.
-!
-!                         *** Task terminated ***
-!                 reported by the value of idid .LE. -33
-!
-!             idid = -33  -- neq .lt. 1
-!
-!             idid = -34  -- rtol(K) .LT. 0 for some K
-!
-!             idid = -35  -- atol(K) .LT. 0 for some K
-!
-!             idid = -36  -- the code has been called with tout but
-!                       the code has also been told not to integrate
-!                       past the point TSTOP.
-!
-!             idid = -37  -- the code has been called with t = tout.
-!                       This is not permitted on continuation calls.
-!
-!             idid = -38  -- the user has modified the value of t.
-!                       This is not permitted on continuation calls.
-!
-!             idid = -39  -- by calling the code with tout, an
-!                       attempt is being made to change the direction
-!                       of integration without restarting.
-!
-!             idid = -40  -- the Jacobian matrix is banded. However
-!                       the bandwidths ml and mu do not satisfy the
-!                       CONSTRAINTS  0 .LE. ml,MU .LT. neq.
-!
-!             idid = -41  -- lrw .lt. 250 + 10*neq + neq*neq
-!
-!             idid = -42  -- lrw .lt. 250 + 10*neq + (2*ml+mu+1)*neq
-!
-!             idid = -43  -- liw .lt. 55 + neq
-!
-!             idid = -44  -- info(1) is incorrect.
-!
-!      rtol, atol -- these quantities remain unchanged except when
-!             idid = -2. In this case, the error tolerances have been
-!             increased by the code to values which are estimated to be
-!             appropriate for continuing the integration. However, the
-!             reported solution at t was obtained using the input values
-!             of rtol and atol.
-!
-!      rwork, iwork -- contain information which is usually of no
-!             interest to the user but necessary for subsequent calls.
-!             However, you may find use for
-!
-!             rwork(11)--which contains the step size h to be
-!                        attempted on the next step.
-!
-!             rwork(12)--if the tolerances have been increased by the
-!                        code (idid = -2) , they were multiplied by the
-!                        value in rwork(12).
-!
-!             rwork(13)--which contains the current value of the
-!                        independent variable, I.E. the farthest point
-!                        integration has reached. This will be different
-!                        from t only when interpolation has been
-!                        PERFORMED (idid=3).
-!
-!             rwork(20+I)--which contains the approximate derivative
-!                        of the solution component y(I). In stfode it is
-!                        never obtained by calling subroutine F to
-!                        evaluate the differential equation using t and
-!                        y(*), except at the initial point of
-!                        integration.
-!
-!***********************************************************************
-!** Input -- what to do to continue the integration **
-!**             (calls after the first)             **
-!*****************************************************
-!
-!        This code is organized so that subsequent calls to continue the
-!        integration involve little (if any) additional effort on your
-!        part. You must monitor the idid parameter in order to determine
-!        what to do next.
-!
-!        Recalling that the principal task of the code is to integrate
-!        from t to tout (the interval mode), usually all you will need
-!        to do is specify a new tout upon reaching the current tout.
-!
-!        Do not alter any quantity not specifically permitted below,
-!        in particular do not alter neq, t, y(*), rwork(*), iwork(*) or
-!        the differential equation in subroutine F. any such alteration
-!        constitutes a new problem and must be treated as such, I.E.
-!        You must start afresh.
-!
-!        You cannot change from vector to scalar error control or vice
-!        versa (info(2)) but you can change the size of the entries of
-!        rtol, atol. Increasing a tolerance makes the equation easier
-!        to integrate. Decreasing a tolerance will make the equation
-!        harder to integrate and should generally be avoided.
-!
-!        You can switch from the intermediate-output mode to the
-!        interval mode (info(3)) or vice versa at any time.
-!
-!        If it has been necessary to prevent the integration from going
-!        past a point TSTOP (info(4), rwork(1)), keep in mind that the
-!        code will not integrate to any tout beyond the currently
-!        specified TSTOP. Once TSTOP has been reached you must change
-!        the value of TSTOP or set info(4)=0. You may change info(4)
-!        or TSTOP at any time but you must supply the value of TSTOP in
-!        rwork(1) whenever you set info(4)=1.
-!
-!        Do not change info(5), info(6), iwork(1), or iwork(2)
-!        unless you are going to restart the code.
-!
-!        The parameter info(1) is used by the code to indicate the
-!        beginning of a new problem and to indicate whether integration
-!        is to be continued. You must input the value  info(1) = 0
-!        when starting a new problem. You must input the value
-!        info(1) = 1  If you wish to continue after an interrupted task
-!        for which idid = -3, -6, or -7. Do not set info(1) = 0 On A
-!        continuation call unless you want the code to restart at the
-!        CURRENT t.
-!
-!                         *** Following a completed task ***
-!         if
-!             idid = 1, call the code again to continue the integration
-!                     another step in the direction of tout.
-!
-!             idid = 2 Or 3, define a new tout and call the code again.
-!                     Tout must be different from t. you cannot change
-!                     the direction of integration without restarting.
-!
-!                         *** Following an interrupted task ***
-!         if
-!             idid = -1, the code has performed 500 steps.
-!                     If you want to continue, call the code again.
-!
-!             idid = -2, the error tolerances rtol and atol have been
-!                     increased to values the code estimates appropriate
-!                     for continuing. You may want to change them
-!                     yourself. If you want to continue, call the code
-!                     again.
-!
-!             idid = -3, the L-TH solution component is 0 and the
-!                     corresponding absolute error tolerance is 0
-!                     for L = -info(1). To continue, reset the
-!                     absolute tolerance to a positive value, set
-!                     info(1) = 1, and call the code again.
-!
-!             idid = -4,-5  --- cannot occur with this code.
-!
-!             idid = -6, repeated convergence test failures occurred
-!                     on the last attempted step. An inaccurate
-!                     Jacobian may be the problem. If you are absolutely
-!                     certain you want to continue, restart the
-!                     integration at the current t by setting  info(1)=0
-!                     and call the code again.
-!
-!             idid = -7, repeated error test failures occurred on the
-!                     last attempted step. A singularity in the
-!                     solution may be present. You should RE-examine the
-!                     problem being solved. If you are absolutely
-!                     certain you want to continue, restart the
-!                     integration at the current t by setting  info(1)=0
-!                     and call the code again.
-!
-!             idid = -8,..,-32  --- cannot occur with this code.
-!
-!                         *** Following a terminated task ***
-!         if
-!             idid .LE. -33, an input error has been detected. After the
-!                     error is corrected, restart by setting info(1) = 0
-!                     and call the code again.
-!
-!***********************************************************************
-!
-!         ***** WARNING *****
-!
-!     If stfode is to be used in an overlay situation, you must save and
-!     restore certain items used internally by stfode  (values in the
-!     common block debdf1). This can be accomplished as follows.
-!
-!     To save the necessary values upon return from stfode, simply call
-!        svco(rwork(22+neq),iwork(21+neq)).
-!
-!     To restore the necessary values before the next call to stfode,
-!     SIMPLY CALL    rsco(rwork(22+neq),iwork(21+neq)).
-!
-!***********************************************************************
-!
-!***REFERENCES
-!   Shampine L.F., Watts H.A., *DEPAC - Design of a user oriented
-!   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
-!
-!
-!
-dimension iwork(liw)
-!
-common /debdf1/ told, rowns(210), &
-   & el0, h, hmin, hmxi, hu, tn, uround, &
-   & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
-   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
-!
-!
-!.......................................................................
-!
-idid = 0
-!
-if (info(1) .eq. 0) go to 20
-if (info(1) .ne. 1) go to 10
-if (iquit .eq. 0) go to 20
-10 idid = -44
-return
-!
-20 if (info(2) .ne. 0) info(2) = 1
-if (info(3) .ne. 0) info(3) = 1
-if (info(4) .ne. 0) info(4) = 1
-if (info(5) .ne. 0) info(5) = 1
-if (info(6) .ne. 0) info(6) = 1
-!
-ilrw = neq
-if (info(6) .eq. 0) go to 80
-!
-!     Check bandwidth parameters
-!
-ml = iwork(1)
-mu = iwork(2)
-ilrw = 2*ml + mu + 1
-if (ml .ge. 0  .and.  ml .lt. neq      .and. &
-   & mu .ge. 0  .and.  mu .lt. neq) go to 80
-idid = -40
-return
-!
-!     Check lrw and liw for sufficient storage allocation
-!
-80 if (lrw .ge. 250 + (10 + ilrw)*neq) go to 100
-!
-if (info(6) .eq. 1) go to 90
-idid = -41
-return
-!
-90 idid = -42
-return
-!
-100 if (liw .ge. 55 + neq) go to 200
-idid = -43
-return
-!
-!     Compute the indices for the arrays to be stored in the work array
-!     and restore common block DATA
-!
-200 icomi = 21 + neq
-iinout = icomi + 33
-!
-iypout = 21
-itstar = 21 + neq
-icomr = 22 + neq
-!
-if (info(1) .eq. 0) go to 250
-intout = iwork(iinout) .ne. (-1)
-!     call rsco(rwork(icomr),iwork(icomi))
-!
-250 iyh = icomr + 218
-iewt = iyh + 6*neq
-isavf = iewt + neq
-iacor = isavf + neq
-iwm = iacor + neq
-idelsn = iwm + 2 + ilrw*neq
-!
-ibegin = info(1)
-itol = info(2)
-iinteg = info(3)
-itstop = info(4)
-ijac = info(5)
-iband = info(6)
-rwork(itstar) = t
-!
-call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout), &
-   & rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
-   & rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
-   & rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
-!
-iwork(iinout) = -1
-if (intout) iwork(iinout) = 1
-!
-!     call svco(rwork(icomr),iwork(icomi))
-rwork(11) = h
-rwork(13) = tn
-info(1) = ibegin
-!
-return
-end subroutine stfode
 

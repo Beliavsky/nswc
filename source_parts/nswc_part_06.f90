@@ -1,3 +1,567 @@
+pure subroutine bprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+   & c, kc, nc, mcl, mcu, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nc, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,nc)
+integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
+   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+real :: sum
+!-----------------------------------------------------------------------
+!                Multiplication of real banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+do j = 1,nc
+   do 10 i = 1,m
+10    c(i,j) = 0.0
+end do
+!
+mlp1 = ml + 1
+nlp1 = nl + 1
+npml = n + ml
+npnu = n + nu
+mcl = min0(m - 1,ml + nl)
+jc = 0
+if (mcl .eq. 0) go to 100
+!
+!     Find the first nonzero lower diagonal
+!
+maxd = mcl
+do ndiag = 1,maxd
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,1) = sum
+   end do
+!
+   do j = 1,jmax
+      i = j + imj
+      if (c(i,1) .ne. 0.0) go to 40
+   end do
+   mcl = mcl - 1
+end do
+go to 100
+!
+40 if (mcl .ge. nc) go to 100
+jc = 1
+if (mcl .eq. 1) go to 100
+!
+!     Compute the remaining lower diagonals
+!
+mind = ndiag + 1
+do ndiag = mind,maxd
+   jc = jc + 1
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+end do
+!
+!     Find the last nonzero upper diagonal
+!
+100 jc = jc + 1
+mcu = min0(l - 1,mu + nu)
+if (mcu .eq. 0) go to 130
+!
+maxd = mcu
+do ndiag = 1,maxd
+   jmi = maxd + 1 - ndiag
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+!
+   do i = 1,imax
+      if (c(i,jc) .ne. 0.0) go to 130
+   end do
+   mcu = mcu - 1
+end do
+!
+130 last = mcl + mcu + 1
+if (last .gt. nc) go to 200
+if (mcu .eq. 0) go to 140
+do i = 1,imax
+   c(i,last) = c(i,jc)
+   c(i,jc) = 0.0
+end do
+!
+!     Compute the main diagonal and the remaining upper diagonals
+!
+140 maxd = max0(1,mcu)
+do ndiag = 1,maxd
+   jmi = ndiag - 1
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+   jc = jc + 1
+end do
+return
+!
+!     Error return
+!
+200 ierr = last
+return
+end subroutine bprod
+
+pure subroutine dbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+   & c, kc, nc, mcl, mcu, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nc, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,nc)
+integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
+   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+double precision :: sum
+!-----------------------------------------------------------------------
+!          Multiplication of double precision banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+do j = 1,nc
+   do 10 i = 1,m
+10    c(i,j) = 0.d0
+end do
+!
+mlp1 = ml + 1
+nlp1 = nl + 1
+npml = n + ml
+npnu = n + nu
+mcl = min0(m - 1,ml + nl)
+jc = 0
+if (mcl .eq. 0) go to 100
+!
+!     Find the first nonzero lower diagonal
+!
+maxd = mcl
+do ndiag = 1,maxd
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.d0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,1) = sum
+   end do
+!
+   do j = 1,jmax
+      i = j + imj
+      if (c(i,1) .ne. 0.d0) go to 40
+   end do
+   mcl = mcl - 1
+end do
+go to 100
+!
+40 if (mcl .ge. nc) go to 100
+jc = 1
+if (mcl .eq. 1) go to 100
+!
+!     Compute the remaining lower diagonals
+!
+mind = ndiag + 1
+do ndiag = mind,maxd
+   jc = jc + 1
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.d0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+end do
+!
+!     Find the last nonzero upper diagonal
+!
+100 jc = jc + 1
+mcu = min0(l - 1,mu + nu)
+if (mcu .eq. 0) go to 130
+!
+maxd = mcu
+do ndiag = 1,maxd
+   jmi = maxd + 1 - ndiag
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.d0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+!
+   do i = 1,imax
+      if (c(i,jc) .ne. 0.d0) go to 130
+   end do
+   mcu = mcu - 1
+end do
+!
+130 last = mcl + mcu + 1
+if (last .gt. nc) go to 200
+if (mcu .eq. 0) go to 140
+do i = 1,imax
+   c(i,last) = c(i,jc)
+   c(i,jc) = 0.d0
+end do
+!
+!     Compute the main diagonal and the remaining upper diagonals
+!
+140 maxd = max0(1,mcu)
+do ndiag = 1,maxd
+   jmi = ndiag - 1
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.d0
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+   jc = jc + 1
+end do
+return
+!
+!     Error return
+!
+200 ierr = last
+return
+end subroutine dbprod
+
+pure subroutine cbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+   & c, kc, nc, mcl, mcu, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nc, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,nc)
+integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
+   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+complex :: sum
+!-----------------------------------------------------------------------
+!             Multiplication of complex banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+do j = 1,nc
+   do 10 i = 1,m
+10    c(i,j) = (0.0,0.0)
+end do
+!
+mlp1 = ml + 1
+nlp1 = nl + 1
+npml = n + ml
+npnu = n + nu
+mcl = min0(m - 1,ml + nl)
+jc = 0
+if (mcl .eq. 0) go to 100
+!
+!     Find the first nonzero lower diagonal
+!
+maxd = mcl
+do ndiag = 1,maxd
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = (0.0,0.0)
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,1) = sum
+   end do
+!
+   do j = 1,jmax
+      i = j + imj
+      if (c(i,1) .ne. (0.0,0.0)) go to 40
+   end do
+   mcl = mcl - 1
+end do
+go to 100
+!
+40 if (mcl .ge. nc) go to 100
+jc = 1
+if (mcl .eq. 1) go to 100
+!
+!     Compute the remaining lower diagonals
+!
+mind = ndiag + 1
+do ndiag = mind,maxd
+   jc = jc + 1
+   imj = maxd + 1 - ndiag
+   jmax = min0(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = (0.0,0.0)
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+end do
+!
+!     Find the last nonzero upper diagonal
+!
+100 jc = jc + 1
+mcu = min0(l - 1,mu + nu)
+if (mcu .eq. 0) go to 130
+!
+maxd = mcu
+do ndiag = 1,maxd
+   jmi = maxd + 1 - ndiag
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = (0.0,0.0)
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+!
+   do i = 1,imax
+      if (c(i,jc) .ne. (0.0,0.0)) go to 130
+   end do
+   mcu = mcu - 1
+end do
+!
+130 last = mcl + mcu + 1
+if (last .gt. nc) go to 200
+if (mcu .eq. 0) go to 140
+do i = 1,imax
+   c(i,last) = c(i,jc)
+   c(i,jc) = (0.0,0.0)
+end do
+!
+!     Compute the main diagonal and the remaining upper diagonals
+!
+140 maxd = max0(1,mcu)
+do ndiag = 1,maxd
+   jmi = ndiag - 1
+   imax = min0(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = (0.0,0.0)
+      kmin = max0(1,i - ml,j - nu)
+      kmax = min0(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+   jc = jc + 1
+end do
+return
+!
+!     Error return
+!
+200 ierr = last
+return
+end subroutine cbprod
+
+pure subroutine bvprd (m,n,a,ka,ml,mu,x,y)
+implicit none
+integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(n)
+real, intent(inout) :: y(m)
+integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
+real :: sum
+!-----------------------------------------------------------------------
+!         Product of a real banded matrix and a real vector
+!-----------------------------------------------------------------------
+!
+!     Compute the first ml components
+!
+mlp1 = ml + 1
+if (ml .eq. 0) go to 20
+jmin = mlp1
+do i = 1,ml
+   kmax = min0(n,i + mu)
+   kk = jmin
+   sum = 0.0
+   do k = 1,kmax
+      sum = sum + a(i,kk)*x(k)
+      kk = kk + 1
+   end do
+   y(i) = sum
+   jmin = jmin - 1
+end do
+!
+!     Compute the remaining nonzero components
+!
+20 imax = min0(m,n + ml)
+do i = mlp1,imax
+   kmin = i - ml
+   kmax = min0(n,i + mu)
+   kk = 1
+   sum = 0.0
+   do k = kmin,kmax
+      sum = sum + a(i,kk)*x(k)
+      kk = kk + 1
+   end do
+   y(i) = sum
+end do
+!
+!     Store zeros in the final m-imax components
+!
+if (imax .eq. m) return
+imin = imax + 1
+do i = imin,m
+   y(i) = 0.0
+end do
+return
+end subroutine bvprd
+
+pure subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
+implicit none
+integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(n)
+real, intent(inout) :: y(m)
+integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
+real :: sum
+!-----------------------------------------------------------------------
+!        Setting y = a*x + y where A is a real banded matrix
+!                     and x,y are real vectors
+!-----------------------------------------------------------------------
+!
+!     Compute the first ml components
+!
+mlp1 = ml + 1
+if (ml .eq. 0) go to 20
+jmin = mlp1
+do i = 1,ml
+   kmax = min0(n,i + mu)
+   kk = jmin
+   sum = y(i)
+   do k = 1,kmax
+      sum = sum + a(i,kk)*x(k)
+      kk = kk + 1
+   end do
+   y(i) = sum
+   jmin = jmin - 1
+end do
+!
+!     Compute the remaining components
+!
+20 imax = min0(m,n + ml)
+do i = mlp1,imax
+   kmin = i - ml
+   kmax = min0(n,i + mu)
+   kk = 1
+   sum = y(i)
+   do k = kmin,kmax
+      sum = sum + a(i,kk)*x(k)
+      kk = kk + 1
+   end do
+   y(i) = sum
+end do
+return
+end subroutine bvprd1
+
 pure subroutine dbvpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
@@ -1810,7 +2374,7 @@ return
 return
 end subroutine dbsl
 
-subroutine b1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
+pure subroutine b1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
@@ -1819,7 +2383,54 @@ real, intent(inout) :: a(ka,*), wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
-real :: b1nrm
+interface
+   pure function b1nrm(a,ka,m,n,ml,mu)
+      implicit none
+      real, intent(in) :: a(*)
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      real :: b1nrm
+   end function b1nrm
+   pure subroutine bslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      integer, intent(in) :: m0
+      real, intent(inout) :: a(ka,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      real, intent(inout) :: b(n)
+      integer, intent(inout) :: iwk(n)
+      integer, intent(inout) :: ierr
+   end subroutine bslv
+   pure subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      integer, intent(in) :: m0
+      real, intent(inout) :: a(ka,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      real, intent(inout) :: b(n)
+      integer, intent(inout) :: iwk(n)
+      integer, intent(inout) :: ierr
+   end subroutine bslv1
+   pure subroutine sonest(n,v,x,isgn,anorm,kase,iter,j,jump)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: v(n)
+      real, intent(inout) :: x(n)
+      integer, intent(inout) :: isgn(n)
+      real, intent(inout) :: anorm
+      integer, intent(inout) :: kase
+      integer, intent(inout) :: iter
+      integer, intent(inout) :: j
+      integer, intent(inout) :: jump
+   end subroutine sonest
+end interface
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a banded matrix a
@@ -1882,7 +2493,7 @@ return
 return
 end subroutine b1cnd
 
-subroutine db1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
+pure subroutine db1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
@@ -1892,7 +2503,54 @@ double precision, intent(inout) :: wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
 double precision :: anorm, ainorm
-double precision :: db1nrm
+interface
+   pure function db1nrm(a,ka,m,n,ml,mu)
+      implicit none
+      double precision, intent(in) :: a(*)
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      double precision :: db1nrm
+   end function db1nrm
+   pure subroutine dbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      integer, intent(in) :: m0
+      double precision, intent(inout) :: a(ka,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      double precision, intent(inout) :: b(n)
+      integer, intent(inout) :: iwk(n)
+      integer, intent(inout) :: ierr
+   end subroutine dbslv
+   pure subroutine dbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: ka
+      integer, intent(in) :: m0
+      double precision, intent(inout) :: a(ka,*)
+      integer, intent(in) :: ml
+      integer, intent(in) :: mu
+      double precision, intent(inout) :: b(n)
+      integer, intent(inout) :: iwk(n)
+      integer, intent(inout) :: ierr
+   end subroutine dbslv1
+   pure subroutine donest(n,v,x,isgn,anorm,kase,iter,j,jump)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: v(n)
+      double precision, intent(inout) :: x(n)
+      integer, intent(inout) :: isgn(n)
+      double precision, intent(inout) :: anorm
+      integer, intent(inout) :: kase
+      integer, intent(inout) :: iter
+      integer, intent(inout) :: j
+      integer, intent(inout) :: jump
+   end subroutine donest
+end interface
 !-----------------------------------------------------------------------
 !            Computation of the L1 condition number of
 !               a double precision banded matrix a
@@ -2524,7 +3182,7 @@ return
 return
 end subroutine cvds
 
-subroutine cvcs (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvcs (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -2532,8 +3190,7 @@ complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, j
-complex :: zero
-data zero /(0.0,0.0)/
+complex, parameter :: zero = (0.0,0.0)
 !
 !                 Store the i-TH row
 !
@@ -2898,11 +3555,10 @@ complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
-complex :: zero
+complex, parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
 !                 Copying a sparse complex matrix
 !-----------------------------------------------------------------------
-data zero /(0.0,0.0)/
 !
 l = 1
 do 20 i = 1,m
@@ -4440,8 +5096,8 @@ integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: iperm(n), iw(n,4)
 interface
-   pure subroutine mc21b(n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv, &
-      & out)
+   pure subroutine mc21b(n,icn,licn,ip,lenr,iperm,numnz,pr,arp, &
+      & cv,out)
       implicit none
       integer, intent(in) :: licn
       integer, intent(in) :: n
@@ -4622,8 +5278,8 @@ integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: ior(n), ib(n), iw(n,3)
 interface
-   pure subroutine mc13e(n,icn,licn,ip,lenr,arp,ib,num,lowl,numb, &
-      & prev)
+   pure subroutine mc13e(n,icn,licn,ip,lenr,arp,ib,num,lowl, &
+      & numb,prev)
       implicit none
       integer, intent(in) :: licn
       integer, intent(in) :: n
@@ -6820,17 +7476,40 @@ return
 return
 end subroutine ds1cnd
 
-subroutine sonest (n, v, x, isgn, anorm, kase, iter, j, jump)
+pure subroutine sonest (n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
 real, intent(inout) :: anorm
 real, intent(inout) :: v(n), x(n)
 integer, intent(inout) :: isgn(n)
-integer :: i, itmax, jlast, l
+integer :: i, jlast, l
 real :: altsgn, anrm, t
-integer :: isamax
-real :: sasum
+integer, parameter :: itmax = 5
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure function sasum(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: sasum
+   end function sasum
+   pure subroutine scopy(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine scopy
+end interface
 !-----------------------------------------------------------------------
 !
 !     sonest estimates the 1-norm of A square, real matrix  A.
@@ -6878,7 +7557,6 @@ real :: sasum
 !     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
-data itmax /5/
 !
 if (kase .ne. 0) go to 20
 t = 1.0/float(n)
@@ -6985,16 +7663,39 @@ anorm = anrm
 return
 end subroutine sonest
 
-subroutine donest (n, v, x, isgn, anorm, kase, iter, j, jump)
+pure subroutine donest (n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
 double precision, intent(inout) :: anorm, v(n), x(n)
 integer, intent(inout) :: isgn(n)
-integer :: i, itmax, jlast, l
-integer :: idamax
+integer :: i, jlast, l
 double precision :: altsgn, an, anm1, anrm, t
-double precision :: dasum
+integer, parameter :: itmax = 5
+interface
+   pure function dasum(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dasum
+   end function dasum
+   pure subroutine dcopy(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dcopy
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
 !-----------------------------------------------------------------------
 !
 !     donest estimates the 1-norm of A square, real matrix  A.
@@ -7042,7 +7743,6 @@ double precision :: dasum
 !     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
-data itmax /5/
 !
 an = n
 anm1 = n - 1
@@ -7887,8 +8587,9 @@ integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
    & maxil
 integer :: pm
-complex :: const, zero
+complex :: const
 real :: wi, wmax
+complex, parameter :: zero = (0.0, 0.0)
 !-----------------------------------------------------------------------
 !     csplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a complex sparse matrix.
@@ -7948,7 +8649,6 @@ real :: wi, wmax
 !     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
 !--------------------
-data zero /(0.0, 0.0)/
 !--------------------
 jptr = 0
 it(1) = 1
@@ -8098,13 +8798,44 @@ return
 return
 end subroutine csplu
 
-subroutine eig (ibal,a,ka,n,wr,wi,ierr)
+pure subroutine eig (ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
+interface
+   pure subroutine balanc(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      real, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine balanc
+   pure subroutine elmhs0(nm,n,low,igh,a,int)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: a(nm,n)
+      real, intent(inout) :: int(igh)
+   end subroutine elmhs0
+   pure subroutine hqr(nm,n,low,igh,h,wr,wi,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(inout) :: h(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
+      integer, intent(out) :: ierr
+   end subroutine hqr
+end interface
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
 !-----------------------------------------------------------------------
@@ -8117,13 +8848,44 @@ call hqr (ka,n,low,igh,a,wr,wi,ierr)
 return
 end subroutine eig
 
-subroutine eig1 (ibal,a,ka,n,wr,wi,ierr)
+pure subroutine eig1 (ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
+interface
+   pure subroutine balanc(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      real, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine balanc
+   pure subroutine hqr(nm,n,low,igh,h,wr,wi,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(inout) :: h(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
+      integer, intent(out) :: ierr
+   end subroutine hqr
+   pure subroutine orthes(nm,n,low,igh,a,ort)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: a(nm,n)
+      real, intent(inout) :: ort(igh)
+   end subroutine orthes
+end interface
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
 !-----------------------------------------------------------------------
@@ -8136,13 +8898,65 @@ call hqr (ka,n,low,igh,a,wr,wi,ierr)
 return
 end subroutine eig1
 
-subroutine eigv (ibal,a,ka,n,wr,wi,zr,zi,ierr)
+pure subroutine eigv (ibal,a,ka,n,wr,wi,zr,zi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
+interface
+   pure subroutine balanc(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      real, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine balanc
+   pure subroutine balbak(nm,n,low,igh,scale,m,z)
+      implicit none
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(in) :: scale(n)
+      real, intent(inout) :: z(nm,m)
+   end subroutine balbak
+   pure subroutine elmhs0(nm,n,low,igh,a,int)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: a(nm,n)
+      real, intent(inout) :: int(igh)
+   end subroutine elmhs0
+   pure subroutine eltrn0(nm,n,low,igh,a,int,z)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(in) :: a(nm,igh)
+      real, intent(in) :: int(igh)
+      real, intent(inout) :: z(nm,n)
+   end subroutine eltrn0
+   pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(inout) :: h(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
+      real, intent(inout) :: z(nm,n)
+      integer, intent(out) :: ierr
+   end subroutine hqr2
+end interface
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
@@ -8170,13 +8984,65 @@ do 30 k = 1,n
 return
 end subroutine eigv
 
-subroutine eigv1 (ibal,a,ka,n,wr,wi,zr,zi,ierr)
+pure subroutine eigv1 (ibal,a,ka,n,wr,wi,zr,zi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
+interface
+   pure subroutine balanc(nm,n,a,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      real, intent(inout) :: a(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine balanc
+   pure subroutine balbak(nm,n,low,igh,scale,m,z)
+      implicit none
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(in) :: scale(n)
+      real, intent(inout) :: z(nm,m)
+   end subroutine balbak
+   pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(inout) :: h(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
+      real, intent(inout) :: z(nm,n)
+      integer, intent(out) :: ierr
+   end subroutine hqr2
+   pure subroutine orthes(nm,n,low,igh,a,ort)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: a(nm,n)
+      real, intent(inout) :: ort(igh)
+   end subroutine orthes
+   pure subroutine ortran(nm,n,low,igh,a,ort,z)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(in) :: a(nm,igh)
+      real, intent(inout) :: ort(igh)
+      real, intent(inout) :: z(nm,n)
+   end subroutine ortran
+end interface
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
@@ -8204,7 +9070,7 @@ do 30 k = 1,n
 return
 end subroutine eigv1
 
-subroutine balanc(nm,n,a,low,igh,scale)
+pure subroutine balanc(nm,n,a,low,igh,scale)
 implicit none
 !
 integer, intent(in) :: n
@@ -8215,8 +9081,14 @@ integer :: i, j, k, l, m
 integer :: jj
 integer :: iexc
 real :: c, f, g, r, s, b2, radix
-integer :: ipmpar
 logical :: noconv
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
 !     real abs
 !-----------------------------------------------------------------------
 !
@@ -8775,7 +9647,7 @@ do 180 m = kp1, la
 200 return
 end subroutine orthes
 
-subroutine hqr(nm,n,low,igh,h,wr,wi,ierr)
+pure subroutine hqr(nm,n,low,igh,h,wr,wi,ierr)
 implicit none
 !
 integer, intent(in) :: n
@@ -8787,8 +9659,15 @@ integer :: i, j, k, l, m
 integer :: en, ll, mm, na
 integer :: its
 integer :: mp2, enm2
-real :: p, q, r, s, t, w, x, y, zz, norm, machep, spmpar
+real :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !     real sqrt,abs
 !     integer min0
 !-----------------------------------------------------------------------
@@ -9429,7 +10308,7 @@ do 140 mm = 1, kl
 200 return
 end subroutine ortrn1
 
-subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
 implicit none
 !
 integer, intent(in) :: n
@@ -9443,10 +10322,16 @@ integer :: en, ii, jj, ll, mm, na
 integer :: nn
 integer :: its
 integer :: mp2, enm2
-real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, &
-   & spmpar
+real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep
 logical :: notlas
 complex :: z3
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
 !     real sqrt,abs
 !     integer min0
 !     complex cmplx
@@ -9851,657 +10736,4 @@ go to 1001
 1000 ierr = en
 1001 return
 end subroutine hqr2
-
-subroutine deig (ibal,a,ka,n,wr,wi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
-integer :: igh, low
-!-----------------------------------------------------------------------
-!                Eigenvalues of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal .ne. 0) call dbal (ka,n,a,low,igh,wr)
-call dorth (ka,n,low,igh,a,wr)
-call dhqr (ka,n,low,igh,a,wr,wi,ierr)
-return
-end subroutine deig
-
-subroutine deigv (ibal,a,ka,n,wr,wi,zr,zi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
-   & zr(ka,n), zi(ka,n)
-integer :: igh, j, k, kp1, low
-!-----------------------------------------------------------------------
-!     Eigenvalues and eigenvectors of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal .ne. 0) call dbal (ka,n,a,low,igh,zi)
-call dorth (ka,n,low,igh,a,wr)
-call dortrn (ka,n,low,igh,a,wr,zr)
-call dhqr2 (ka,n,low,igh,a,wr,wi,zr,ierr)
-if (ierr .ne. 0) return
-if (ibal .ne. 0) call dbabk (ka,n,low,igh,zi,n,zr)
-!
-do 30 k = 1,n
-   if (wi(k)) 30,10,20
-10 do 11 j = 1,n
-11    zi(j,k) = 0.d0
-   go to 30
-20 kp1 = k + 1
-   do 21 j = 1,n
-      zi(j,k) = zr(j,kp1)
-      zr(j,kp1) = zr(j,k)
-21    zi(j,kp1) = -zi(j,k)
-30 continue
-return
-end subroutine deigv
-
-subroutine dbal(nm,n,a,low,igh,scale)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm
-integer, intent(inout) :: igh, low
-double precision, intent(inout) :: a(nm,n), scale(n)
-integer :: i, j, k, l, m
-integer :: jj
-integer :: iexc
-double precision :: c, f, g, r, s, b2, radix
-integer :: ipmpar
-logical :: noconv
-!     double precision dabs
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure balance,
-!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
-!
-!     Dbal balances a double precision real matrix and isolates
-!     eigenvalues whenever possible.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        A contains the input matrix to be balanced.
-!
-!     On output-
-!
-!        A contains the balanced matrix,
-!
-!        Low and igh are two integers such that a(i,j)
-!          is equal to zero if
-!           (1) i is greater than j and
-!           (2) j=1,...,low-1 OR i=igh+1,...,n,
-!
-!        Scale contains information determining the
-!           permutations and scaling factors used.
-!
-!     Suppose that the principal submatrix in rows low through igh
-!     has been balanced, that P(j) denotes the index interchanged
-!     with j during the permutation step, and that the elements
-!     of the diagonal matrix used are denoted by D(i,j).  Then
-!        scale(j) = P(j),    FOR j = 1,...,low-1
-!                 = D(j,j),      j = low,...,igh
-!                 = P(j)         j = igh+1,...,n.
-!     The order in which the interchanges are made is n to igh+1,
-!     then 1 to low-1.
-!
-!     Note that 1 is returned for igh if igh is zero formally.
-!
-!     The Algol procedure exc contained in balance appears in
-!     dbal in line.  (Note that the Algol roles of identifiers
-!     k,l have been reversed.)
-!
-!-----------------------------------------------------------------------
-!
-!     ********** radix is a machine dependent parameter specifying
-!                the base of the machine floating point representation.
-!
-radix = ipmpar(4)
-!
-!                **********
-!
-b2 = radix * radix
-k = 1
-l = n
-go to 100
-!     ********** In-line procedure for row and
-!                column exchange **********
-20 scale(m) = j
-if (j .eq. m) go to 50
-!
-do i = 1, l
-   f = a(i,j)
-   a(i,j) = a(i,m)
-   a(i,m) = f
-end do
-!
-do i = k, n
-   f = a(j,i)
-   a(j,i) = a(m,i)
-   a(m,i) = f
-end do
-!
-50 go to (80,130), iexc
-!     ********** Search for rows isolating an eigenvalue
-!                and push them down **********
-80 if (l .eq. 1) go to 280
-l = l - 1
-!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
-100 do 120 jj = 1, l
-   j = l + 1 - jj
-!
-   do 110 i = 1, l
-      if (i .eq. j) go to 110
-      if (a(j,i) .ne. 0.d0) go to 120
-110   continue
-!
-   m = l
-   iexc = 1
-   go to 20
-120 continue
-!
-go to 140
-!     ********** Search for columns isolating an eigenvalue
-!                and push them left **********
-130 k = k + 1
-!
-140 do 170 j = k, l
-!
-   do 150 i = k, l
-      if (i .eq. j) go to 150
-      if (a(i,j) .ne. 0.d0) go to 170
-150   continue
-!
-   m = k
-   iexc = 2
-   go to 20
-170 continue
-!     ********** Now balance the submatrix in rows k to l **********
-do 180 i = k, l
-180 scale(i) = 1.d0
-!     ********** Iterative loop for norm reduction **********
-190 noconv = .false.
-!
-do 270 i = k, l
-   c = 0.d0
-   r = 0.d0
-!
-   do 200 j = k, l
-      if (j .eq. i) go to 200
-      c = c + dabs(a(j,i))
-      r = r + dabs(a(i,j))
-200   continue
-!     ********** Guard against zero c or r due to underflow **********
-   if (c .eq. 0.d0 .or. r .eq. 0.d0) go to 270
-   g = r / radix
-   f = 1.d0
-   s = c + r
-210 if (c .ge. g) go to 220
-   f = f * radix
-   c = c * b2
-   go to 210
-220 g = r * radix
-230 if (c .lt. g) go to 240
-   f = f / radix
-   c = c / b2
-   go to 230
-!     ********** Now balance **********
-240 if ((c + r) / f .ge. 0.95d0 * s) go to 270
-   g = 1.d0 / f
-   scale(i) = scale(i) * f
-   noconv = .true.
-!
-   do 250 j = k, n
-250   a(i,j) = a(i,j) * g
-!
-   do 260 j = 1, l
-260   a(j,i) = a(j,i) * f
-!
-270 continue
-!
-if (noconv) go to 190
-!
-280 low = k
-igh = l
-return
-end subroutine dbal
-
-pure subroutine dbalnv (nz,n,z,low,igh,scale)
-implicit none
-integer, intent(in) :: n
-integer, intent(in) :: nz, igh, low
-double precision, intent(inout) :: z(nz,n)
-double precision, intent(in) :: scale(n)
-integer :: i, j, k
-integer :: ii
-double precision :: s
-!-----------------------------------------------------------------------
-!        Given A matrix A of order n. dbal transforms A into
-!     the matrix B by the similarity transformation
-!             b = d**(-1)*transpose(p)*a*p*d
-!     where D is a diagonal matrix and P a permutation matrix.
-!     The information concerning D and P is stored in igh, low,
-!     and scale. The order in which the interchanges were made
-!     is n to igh + 1, and then 1 to low - 1.
-!
-!        z is a matrix of order n. dbalnv transforms z into the
-!     matrix W using the inverse similarity transform
-!             w = p*d*z*d**(-1)*transpose(p)
-!
-!     On input-
-!
-!        nz is the row dimension of the matrix z in the calling
-!          program,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by  dbal,
-!
-!        Scale contains information determining the permutations
-!          and scaling factors used by  dbal,
-!
-!     On output-
-!
-!        z contains the transformed matrix W
-!
-!-----------------------------------------------------------------------
-!
-if (igh .eq. low) go to 30
-!
-do i = low, igh
-   s = scale(i)
-   do 10 j = 1, n
-10    z(i,j) = z(i,j) * s
-end do
-!
-do j = low, igh
-   s = 1.d0/scale(j)
-   do 20 i = 1, n
-20    z(i,j) = z(i,j) * s
-end do
-!
-!     ********- FOR i=low-1 STEP -1 UNTIL 1,
-!               igh+1 STEP 1 UNTIL n DO -- **********
-!
-30 do 60 ii = 1, n
-   i = ii
-   if (i .ge. low .and. i .le. igh) go to 60
-   if (i .lt. low) i = low - ii
-   k = scale(i)
-   if (k .eq. i) go to 60
-!
-   do 40 j = 1, n
-      s = z(i,j)
-      z(i,j) = z(k,j)
-40    z(k,j) = s
-!
-   do 50 j = 1, n
-      s = z(j,i)
-      z(j,i) = z(j,k)
-50    z(j,k) = s
-60 continue
-return
-end subroutine dbalnv
-
-pure subroutine dorth(nm,n,low,igh,a,ort)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh
-integer, intent(in) :: low
-double precision, intent(inout) :: a(nm,n), ort(igh)
-integer :: i, j, m
-integer :: ii, jj, la, mp
-integer :: kp1
-double precision :: f, g, h, scale
-!     double precision dsqrt,dabs
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure orthes,
-!     NUM. Math. 12, 349-368(1968) By Martin and Wilkinson.
-!     Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
-!
-!     Given a real general matrix, this subroutine
-!     reduces a submatrix situated in rows and columns
-!     low through igh to upper Hessenberg form by
-!     orthogonal similarity transformations.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine dbal.  If dbal has not been used then
-!          set low=1, igh=n,
-!
-!        A contains the input matrix.
-!
-!     On output-
-!
-!        A contains the Hessenberg matrix.  Information about
-!          the orthogonal transformations used in the reduction
-!          is stored in the remaining triangle under the
-!          Hessenberg matrix,
-!
-!        Ort contains further information about the transformations.
-!          Only elements low through igh are used.
-!
-!-----------------------------------------------------------------------
-!
-la = igh - 1
-kp1 = low + 1
-if (la .lt. kp1) go to 200
-!
-do 180 m = kp1, la
-   h = 0.d0
-   ort(m) = 0.d0
-   scale = 0.d0
-!     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
-   do 90 i = m, igh
-90    scale = scale + dabs(a(i,m - 1))
-!
-   if (scale .eq. 0.d0) go to 180
-   mp = m + igh
-!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
-   do ii = m, igh
-      i = mp - ii
-      ort(i) = a(i,m - 1) / scale
-      h = h + ort(i) * ort(i)
-   end do
-!
-   g = dsqrt(h)
-   if (ort(m) .ge. 0.d0) g = -g
-   h = h - ort(m) * g
-   ort(m) = ort(m) - g
-!     ********** FORM (i-(U*UT)/h) * a **********
-   do j = m, n
-      f = 0.d0
-!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
-      do ii = m, igh
-         i = mp - ii
-         f = f + ort(i) * a(i,j)
-      end do
-!
-      f = f / h
-!
-      do 120 i = m, igh
-120      a(i,j) = a(i,j) - f * ort(i)
-!
-   end do
-!     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
-   do i = 1, igh
-      f = 0.d0
-!     ********** FOR j=igh STEP -1 UNTIL m DO -- **********
-      do jj = m, igh
-         j = mp - jj
-         f = f + ort(j) * a(i,j)
-      end do
-!
-      f = f / h
-!
-      do 150 j = m, igh
-150      a(i,j) = a(i,j) - f * ort(j)
-!
-   end do
-!
-   ort(m) = scale * ort(m)
-   a(m,m - 1) = scale * g
-180 continue
-!
-200 return
-end subroutine dorth
-
-subroutine dhqr(nm,n,low,igh,h,wr,wi,ierr)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh
-integer, intent(in) :: low
-integer, intent(out) :: ierr
-double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
-integer :: i, j, k, l, m
-integer :: en, ll, mm, na
-integer :: its
-integer :: mp2, enm2
-double precision :: p, q, r, s, t, w, x, y, zz, norm, machep, &
-   & dpmpar
-logical :: notlas
-!     double precision dsqrt,dabs
-!     integer min0
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure hqr,
-!     NUM. Math. 14, 219-231(1970) By Martin, peters, and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 359-371(1971).
-!
-!     dhqr finds the eigenvalues of a double precision real
-!     upper Hessenberg matrix BY the QR method.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine dbal.  If dbal has not been used then
-!          set low=1, igh=n,
-!
-!        h contains the upper Hessenberg matrix.  Information about
-!          the transformations used in the reduction to Hessenberg
-!          form by dorth, if performed, is stored
-!          in the remaining triangle under the Hessenberg matrix.
-!
-!     On output-
-!
-!        h has been destroyed.  Therefore, it must be saved
-!          before calling  hqr  if subsequent calculation and
-!          back transformation of eigenvectors is to be performed,
-!
-!        wr and wi contain the real and imaginary parts,
-!          respectively, of the eigenvalues.  The eigenvalues
-!          are unordered except that complex conjugate pairs
-!          of values appear consecutively with the eigenvalue
-!          having the positive imaginary part first.  If an
-!          error exit is made, the eigenvalues should be correct
-!          for indices ierr+1,...,n,
-!
-!        ierr is set to
-!          ZERO       FOR NORMAL RETURN,
-!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
-!                     determined after 50 iterations.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** machep is a machine dependent parameter. Assign
-!                machep the value U where U is the smallest positive
-!                floating point number such that 1.0 + U .GT. 1.0
-!                in the double precision arithmetic being used.
-!
-machep = dpmpar(1)
-!
-!                **********
-!
-ierr = 0
-norm = 0.d0
-k = 1
-!     ********** Store roots isolated by dbal
-!                and compute matrix norm **********
-do 50 i = 1, n
-!
-   do 40 j = k, n
-40    norm = norm + dabs(h(i,j))
-!
-   k = i
-   if (i .ge. low .and. i .le. igh) go to 50
-   wr(i) = h(i,i)
-   wi(i) = 0.d0
-50 continue
-!
-en = igh
-t = 0.d0
-!     ********** Search for next eigenvalues **********
-60 if (en .lt. low) go to 1001
-its = 0
-na = en - 1
-enm2 = na - 1
-!     ********** Look for single small sub-diagonal element
-!                for l=en step -1 Until low do -- **********
-70 do ll = low, en
-   l = en + low - ll
-   if (l .eq. low) go to 100
-   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
-   if (s .eq. 0.d0) s = norm
-   if (dabs(h(l,l - 1)) .le. machep * s) go to 100
-end do
-!     ********** Form shift **********
-100 x = h(en,en)
-if (l .eq. en) go to 270
-y = h(na,na)
-w = h(en,na) * h(na,en)
-if (l .eq. na) go to 280
-if (its .eq. 50) go to 1000
-if (its .ne. 10 .and. its .ne. 20 .and. its .ne. 30) go to 130
-!     ********** Form exceptional shift **********
-t = t + x
-!
-do 120 i = low, en
-120 h(i,i) = h(i,i) - x
-!
-s = dabs(h(en,na)) + dabs(h(na,enm2))
-x = .75d0 * s
-y = x
-w = -.4375d0 * s * s
-130 its = its + 1
-!     ********** Look for two consecutive small
-!                sub-diagonal elements.
-!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
-do mm = l, enm2
-   m = enm2 + l - mm
-   zz = h(m,m)
-   r = x - zz
-   s = y - zz
-   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
-   q = h(m + 1,m + 1) - zz - r - s
-   r = h(m + 2,m + 1)
-   s = dabs(p) + dabs(q) + dabs(r)
-   p = p / s
-   q = q / s
-   r = r / s
-   if (m .eq. l) go to 150
-   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) .le. machep * dabs(p) &
-      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
-end do
-!
-150 mp2 = m + 2
-!
-do 160 i = mp2, en
-   h(i,i - 2) = 0.d0
-   if (i .eq. mp2) go to 160
-   h(i,i - 3) = 0.d0
-160 continue
-!     ********** Double QR step involving rows l to en and
-!                COLUMNS m TO en **********
-do 260 k = m, na
-   notlas = k .ne. na
-   if (k .eq. m) go to 170
-   p = h(k,k - 1)
-   q = h(k + 1,k - 1)
-   r = 0.d0
-   if (notlas) r = h(k + 2,k - 1)
-   x = dabs(p) + dabs(q) + dabs(r)
-   if (x .eq. 0.d0) go to 260
-   p = p / x
-   q = q / x
-   r = r / x
-170 s = dsqrt(p*p + q*q + r*r)
-   if (p .lt. 0.d0) s = -s
-   if (k .eq. m) go to 180
-   h(k,k - 1) = -s * x
-   go to 190
-180 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
-190 p = p + s
-   x = p / s
-   y = q / s
-   zz = r / s
-   q = q / p
-   r = r / p
-!     ********** Row modification **********
-   do j = k, en
-      p = h(k,j) + q * h(k + 1,j)
-      if (.not. notlas) go to 200
-      p = p + r * h(k + 2,j)
-      h(k + 2,j) = h(k + 2,j) - p * zz
-200   h(k + 1,j) = h(k + 1,j) - p * y
-      h(k,j) = h(k,j) - p * x
-   end do
-!
-   j = min0(en,k + 3)
-!     ********** Column modification **********
-   do i = l, j
-      p = x * h(i,k) + y * h(i,k + 1)
-      if (.not. notlas) go to 220
-      p = p + zz * h(i,k + 2)
-      h(i,k + 2) = h(i,k + 2) - p * r
-220   h(i,k + 1) = h(i,k + 1) - p * q
-      h(i,k) = h(i,k) - p
-   end do
-!
-260 continue
-!
-go to 70
-!     ********** One root found **********
-270 wr(en) = x + t
-wi(en) = 0.d0
-en = na
-go to 60
-!     ********** Two roots found **********
-280 p = (y - x) / 2.d0
-q = p * p + w
-zz = dsqrt(dabs(q))
-x = x + t
-if (q .lt. 0.d0) go to 320
-!     ********** Real pair **********
-if (p .lt. 0.d0) zz = -zz
-zz = p + zz
-wr(na) = x + zz
-wr(en) = wr(na)
-if (zz .ne. 0.d0) wr(en) = x - w / zz
-wi(na) = 0.d0
-wi(en) = 0.d0
-go to 330
-!     ********** Complex pair **********
-320 wr(na) = x + p
-wr(en) = x + p
-wi(na) = zz
-wi(en) = -zz
-330 en = enm2
-go to 60
-!     ********** Set error -- no convergence to an
-!                eigenvalue after 50 iterations **********
-1000 ierr = en
-1001 return
-end subroutine dhqr
 

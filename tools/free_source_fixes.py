@@ -13,7 +13,7 @@ def transform(text):
     lines = text.splitlines(True)
     start, end = next((s, e) for n, s, e in procedure_spans(text) if n == 'COMPB')
     body = ''.join(lines[start:end])
-    declaration = 'real :: spmpar\n'
+    declaration = 'real :: cnv, eps\n'
     call = 'call ppadd (nm + 1,ierror,an,cn,b(j1),b(j1),b(j2))\n'
     if body.count(declaration) != 1 or body.count(call) != 1:
         raise ValueError('COMPB workspace correction: source needs review')

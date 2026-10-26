@@ -47,11 +47,12 @@ The checked-in `tools/module-bindings.json` records the compiler-resolved
 intrinsics that share names with library routines. The generator adds explicit
 INTRINSIC declarations at 17 such sites, preserving calls to compiler intrinsics
 such as ERF and GAMMA when library procedures become visible through the module.
-The two GNU-specific DGAMMA intrinsic references use the standard generic GAMMA
-with double-precision arguments in the module, so Intel also accepts the source.
-The exported library DGAMMA implementation is unchanged. Intel's external source
-resolves those two names to the library routine; the module uses its compiler's
-double-precision GAMMA intrinsic instead. Numerical comparisons cover both compilers.
+Both free-form versions normalize two GNU-specific DGAMMA intrinsic references
+to standard generic GAMMA with double-precision arguments, so Intel also accepts
+the new pure callers. The exported library DGAMMA implementation is unchanged.
+The archived fixed-form source resolves those names to the library routine with
+Intel; the free-form versions use its double-precision GAMMA intrinsic instead.
+Numerical comparisons cover both compilers.
 After code changes, refresh that review from the regenerated external source:
 
 ```sh
