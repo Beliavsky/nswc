@@ -817,7 +817,7 @@ qf(1) = qm*cos(-0.5*zl(2) - tm(2))
 qf(2) = qm*sin(-0.5*zl(2) - tm(2))
 if (an > 1.0) go to 012
 pn = an
-assign 011 to la
+la = 11
 go to 100
 011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -825,12 +825,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 012 pn = 1.0
-assign 013 to la
+la = 13
 go to 100
 013 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 014 to la
+la = 14
 go to 100
 014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -840,7 +840,7 @@ qf(1) = qm*cos(-0.5*zl(2) - tm(2))
 qf(2) = qm*sin(-0.5*zl(2) - tm(2))
 if (an > 1.0) go to 017
 pn = an
-assign 016 to lr
+lr = 16
 go to 104
 016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -848,12 +848,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 017 pn = 1.0
-assign 018 to lr
+lr = 18
 go to 104
 018 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 019 to lr
+lr = 19
 go to 104
 019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -866,7 +866,7 @@ qf(1) = qm*cos(az(2))
 qf(2) = qm*sin(az(2))
 021 if (an > 1.0) go to 023
 pn = an
-assign 022 to lk
+lk = 22
 go to 106
 022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -874,12 +874,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 023 pn = 1.0
-assign 024 to lk
+lk = 24
 go to 106
 024 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 025 to lk
+lk = 25
 go to 106
 025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -917,12 +917,19 @@ if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 103
 102 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
 if (pm < 36.0) go to 101
-103 go to la,(011,013,014)
+103 select case ( la )
+case ( 11 )
+   go to 11
+case ( 13 )
+   go to 13
+case ( 14 )
+   go to 14
+end select
 104 sm(1) = 1.0
 sm(2) = 0.0
 m = 15.0*pn + 2.0
 n = 15.0*pn + 15.0
-do 105 i = m,n
+do i = m,n
    ts(1) = az(1) - cd(i)
    ts(2) = az(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -931,7 +938,15 @@ do 105 i = m,n
    sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
 105 continue
-go to lr,(016,018,019)
+end do
+select case ( lr )
+case ( 16 )
+   go to 16
+case ( 18 )
+   go to 18
+case ( 19 )
+   go to 19
+end select
 106 aq(1) = 1.0
 aq(2) = 0.0
 rn = 0.0
@@ -990,7 +1005,14 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 111
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-go to lk,(022,024,025)
+select case ( lk )
+case ( 22 )
+   go to 22
+case ( 24 )
+   go to 24
+case ( 25 )
+   go to 25
+end select
 end subroutine bsslk
 
 subroutine cai(ind,z,ai,aip,ierr)
@@ -1090,11 +1112,12 @@ z3 = z*z2
 !
 f = cmplx(a(8),0.0)
 g = cmplx(b(8),0.0)
-do 10 n = 1, 7
+do n = 1, 7
    i = 8 - n
    f = a(i) + z3*f
    g = b(i) + z3*g
 10 continue
+end do
 f = 1.0 + z3*f
 g = z + z2*z2*g
 !
@@ -1297,11 +1320,12 @@ if (t > 30.0) m = 8
 s1 = cmplx(c(m),0.0)
 s2 = cmplx(d(m),0.0)
 i = m
-do 20 k = 2,m
+do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
 20 continue
+end do
 !
 ai = 0.5*c1*z2r*s1
 aip = - 0.5*c1*z2*s2
@@ -1627,11 +1651,12 @@ if (t > 30.0) m = 8
 s1 = cmplx(c(m), 0.0)
 s2 = cmplx(d(m), 0.0)
 i = m
-do 20 k = 2,m
+do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
 20 continue
+end do
 !
 bi = c1*z2r*s1
 bip = c1*z2*s2
@@ -3165,10 +3190,11 @@ do i = 1,12
 41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
 end do
 f3 = (0.0, 0.0)
-do 42 i = 1,12
+do i = 1,12
    xx = .25*(3. - x2(i))
    fxk = ak*xx
 42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
 !
@@ -3575,13 +3601,14 @@ do i = 1,12
 end do
 f3 = (0.0, 0.0)
 e3 = (0.0, 0.0)
-do 42 i = 1,12
+do i = 1,12
    xx = .25*(3. - x2(i))
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
    e3 = e3 + w2(i)*fb(i)*(1.0 + at)
 42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
 ce = al*(c1*e1 + c2*(e2 + e3))
@@ -7822,11 +7849,12 @@ if (mo == 0) go to 004
 if (mo == 1) go to 006
 if (mo >= 2) go to 008
 002 ql = nc
-do 003 k = 1,nc
+do k = 1,nc
    fv = ac(l)/ql + au*fv
    l = l - 1
    ql = ql - 1.0
 003 continue
+end do
 fv = au*fv
 return
 004 do k = 1,nc
@@ -7960,13 +7988,14 @@ logical :: ln
 !
 001 ln = .true.
 tm = 1.0
-do 003 k = 1,na
+do k = 1,na
    if (qu /= au(k)) go to 002
    ln = .false.
    go to 003
 002 dm = qu - au(k)
    tm = dm*tm
 003 continue
+end do
 do k = 1,na
    if (ln) go to 005
    if (qu /= au(k)) go to 005
@@ -8064,18 +8093,20 @@ real :: sm, td, tm
 !     na = Number of arguments     (N)
 !     ac = Polynomial coefficients (NX(N+1) array)
 !
-001 do 003 i = 1,na
+001 do i = 1,na
    k = (i - 1)*na
    l = k + i
    ac(l) = 1.0
    sm = 0.0
-   do 002 j = 1,i
+   do j = 1,i
       k = k + 1
       l = k + na
       ac(l) = sm - au(i)*ac(k)
       sm = ac(k)
 002   continue
+   end do
 003 continue
+end do
 do i = 1,na
    k = na + na*na
    l = i*na
@@ -8121,9 +8152,10 @@ real :: rm, rn, sm, sn
 !
 001 sn = na
 rn = sqrt(sn)
-do 002 i = 1,na
+do i = 1,na
    aa(i) = 1.0/rn
 002 continue
+end do
 if (ma == 1) return
 003 sm = 0.0
 do i = 1,na
@@ -8132,11 +8164,12 @@ end do
 ar(2) = sm/sn
 sm = 0.0
 l = na
-do 005 i = 1,na
+do i = 1,na
    l = l + 1
    aa(l) = au(i) - ar(2)
    sm = sm + aa(l)*aa(l)
 005 continue
+end do
 rm = sqrt(sm)
 l = na
 do i = 1,na
@@ -8216,10 +8249,11 @@ if (nf <= 1) go to 003
 ff(2) = (au - ar(2))*ff(1)/ar(1)
 if (nf == 2) go to 003
 l = 2
-do 002 k = 3,nf
+do k = 3,nf
    l = l + 2
    ff(k) = ((au - ar(l))*ff(k - 1) - ar(l - 3)*ff(k - 2))/ar(l - 1)
 002 continue
+end do
 003 if (mo <= 0) return
 df(1) = 0.0
 if (nf <= 1) go to 005
@@ -8258,9 +8292,10 @@ real :: rn, sn, tm
 !     nc = Number of coefficients  (m)
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
 !
-001 do 002 n = 1,nc
+001 do n = 1,nc
    ac(n) = 0.0
 002 continue
+end do
 sn = na
 rn = sqrt(sn)
 ac(1) = 1.0/rn
@@ -8884,9 +8919,10 @@ if (n <= 0 .or. xtol < zero .or. maxfev <= 0 &
    & .or. ml < 0 .or. mu < 0 .or. factor <= zero &
    & .or. ldfjac < n .or. lr < (n*(n + 1))/2) go to 300
 if (mode /= 2) go to 20
-do 10 j = 1, n
+do j = 1, n
    if (diag(j) <= zero) go to 300
 10 continue
+end do
 20 continue
 !
 !     Evaluate the function at the starting point

@@ -1,14 +1,14 @@
 # Numerical test programs
 
 The suite contains the original `tests/source_smoke.f90`, 41 standalone main
-programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`, and two new
-programs checking quadratic/cubic roots and integral iteration, plus four callback
+programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`, and three new
+programs checking quadratic/cubic roots, integral iteration and norm scaling, plus four callback
 test programs and a periodic block-system test listed below. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 49 programs against each of the three source versions:
+Run all 50 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -22,11 +22,11 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 147 numerical
+working directories are temporary. The default therefore performs 150 numerical
 test runs. The same command runs in GitHub Actions.
 
-To compare all 49 mains using external procedures with callers importing the
-standalone module, run `python tools/validate_module.py`. This performs 100 numerical
+To compare all 50 mains using external procedures with callers importing the
+standalone module, run `python tools/validate_module.py`. This performs 102 numerical
 runs, including a focused double-precision gamma test, and checks module signatures,
 elemental arrays and invalid data arguments.
 See the [module guide](module.md).
@@ -52,6 +52,7 @@ directly with any one of those library files.
 | `test_callback_rows.f90` | Real, double precision, and complex row callbacks, pivoting, and a singular-system status |
 | `test_callback_pde.f90` | A separable Poisson problem with an analytic solution and nonzero boundary data, using second and fourth order schemes |
 | `test_real_blas1.f90` | Single and double precision vector operations, strides, rotations, and reductions |
+| `test_norm_scaling.f90` | Real and complex norm scaling states, tiny/large values, zero vectors, mixed scales and strides |
 | `test_dense_solvers.f90` | Known real and complex solutions using `MSLV`, `CMSLV`, and `SLVMP` |
 | `test_dense_matrix_utils.f90` | Real, double precision, and complex matrix products, conversions, transposes, and adjoints |
 | `test_matrix_utility_continuation.f90` | In-place rectangular transposes, transpose products, Gram matrices, and packed symmetric products |
@@ -105,7 +106,12 @@ exit status, that completion marker, and identical output across source versions
 when several versions are selected. A result shared by all versions still has
 to satisfy the mathematical checks inside the driver.
 
-The GNU Fortran build uses `-std=legacy -fallow-argument-mismatch` for the library.
+The GNU Fortran runner uses legacy mode to compare against the archive. Only
+`nswc_orig.f` permits argument-mismatch tolerance; maintained sources reject it.
+`tools/validate_remaining_features.py` separately compiles all maintained
+versions in strict modern Fortran modes. `test_norm_scaling.f90` exercises the
+real and complex norm dispatch states with tiny, ordinary and large magnitudes,
+mixed scales, zero vectors and strides greater than one.
 Test main programs enable `-ffpe-trap=invalid,zero,overflow`, so invalid arithmetic
 cannot silently pass a comparison involving a NaN. Each execution has a default
 30 second timeout, adjustable with `--timeout`. The runner continues after a

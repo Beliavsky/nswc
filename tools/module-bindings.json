@@ -1,5 +1,5 @@
 {
-  "code_sha256": "3aae4ce7cb1acbf1d0c316ae8ff8838fa799ecccdee64e8eca28ea311c6bbac3",
+  "code_sha256": "f86cd7218f637cccb13f2fbaf8372c18927a888599e9fc72568dd57adfedda1f",
   "compiler": "GNU Fortran (GCC) 17.0.0 20260510 (experimental)",
   "intrinsic_overrides": {
     "DGINV": [
@@ -28,14 +28,14 @@
       "gamma"
     ],
     "DGRAT": [
-      "derf"
+      "erf"
     ],
     "DERFI": [
-      "derf"
+      "erf"
     ],
     "DAERF": [
-      "derf",
-      "derfc"
+      "erf",
+      "erfc"
     ],
     "VALR2": [
       "erf"

@@ -26,7 +26,23 @@ class Result:
     loops: tuple
 
 
-def transform(data):
+def branch_references(unit):
+    """Explicit control transfers; declarations, constants and FORMATs are not branches."""
+    refs = defaultdict(set)
+    for i, s in enumerate(unit):
+        code = masked(s.code).upper()
+        for match in re.finditer(r'\bGO\s*TO\s*(\d+|\([\d,\s]+\))', code):
+            for label in re.findall(r'\d+', match[1]):
+                refs[str(int(label))].add(i)
+        for match in re.finditer(r'\b(?:ERR|END|EOR)\s*=\s*(\d+)', code):
+            refs[str(int(match[1]))].add(i)
+        if re.match(r'^\s*(?:IF\s*\(.*\)\s*)?CALL\b', code):
+            for match in re.finditer(r'\*\s*(\d+)', code):
+                refs[str(int(match[1]))].add(i)
+    return refs
+
+
+def transform(data, precise=False):
     lines, scopes = units(data)
     all_statements = list(statements(lines))
     edits, insertions, report = {}, defaultdict(list), []
@@ -48,6 +64,8 @@ def transform(data):
                 headers[i] = str(int(match[1]))
         if not headers:
             continue
+        if precise:
+            mentions = branch_references(unit)
         reason = ''
         if any(c.startswith('ASSIGN') or re.search(r'GOTO[A-Z_]', c) for c in codes):
             reason = 'procedure has assigned/indirect control flow'
@@ -55,7 +73,8 @@ def transform(data):
         for i, code in enumerate(codes):
             if i in headers:
                 stack.append((i, headers[i]))
-            elif re.match(r'^DO(?:[A-Z][A-Z0-9_]*=|WHILE\(|$)', code):
+            elif re.match(r'^DO(?:[A-Z][A-Z0-9_]*=|WHILE\(|$)', code) and (
+                    not precise or code.startswith('DOWHILE(') or code == 'DO' or has_comma(code[2:])):
                 stack.append((i, None))
             if code == 'ENDDO':
                 if not stack or stack[-1][1] is not None:

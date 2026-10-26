@@ -37,7 +37,7 @@ def main():
             raise ValueError('Generic intrinsic binding review does not reproduce')
         verify(before, compile_dump(converted, work), manifest)
     print(json.dumps(manifest['summary']))
-    print('Identical object files, unchanged data/procedure records and normalized executable trees.')
+    print('Assembly agrees except diagnostic source lines; compiler records and executable trees agree.')
 
 
 if __name__ == '__main__':

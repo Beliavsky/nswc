@@ -2552,15 +2552,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2580,6 +2581,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine ishell
 
 pure subroutine shell(a, n)
@@ -2600,15 +2602,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2628,6 +2631,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine shell
 
 pure subroutine shell2(a, b, n)
@@ -2649,15 +2653,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2680,6 +2685,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine shell2
 
 pure subroutine rsort(a, n)
@@ -2700,15 +2706,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2728,6 +2735,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine rsort
 
 pure subroutine risort(a, m, n)
@@ -2750,15 +2758,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2781,6 +2790,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine risort
 
 pure subroutine rrsort(a, b, n)
@@ -2802,15 +2812,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2833,6 +2844,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine rrsort
 
 pure subroutine dsort(a, n)
@@ -2853,15 +2865,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2881,6 +2894,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine dsort
 
 pure subroutine disort(a, m, n)
@@ -2903,15 +2917,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2934,6 +2949,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine disort
 
 pure subroutine ddsort(a, b, n)
@@ -2955,15 +2971,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2986,6 +3003,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine ddsort
 
 pure subroutine aord(a, n)
@@ -3007,15 +3025,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -3035,6 +3054,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine aord
 
 pure subroutine daord(a, n)
@@ -3056,15 +3076,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -3084,6 +3105,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine daord
 
 pure subroutine qsorti(x, ind, n)
@@ -3155,8 +3177,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -3356,8 +3379,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -3558,8 +3582,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -8031,7 +8056,7 @@ x = 1.d0
 y = 0.d0
 w(1) = a(30)
 w(2) = 0.d0
-do 10 n = 31,63
+do n = 31,63
    t(1) = x*h(1) - y*h(2)
    t(2) = x*h(2) + y*h(1)
    x = t(1)
@@ -8042,13 +8067,15 @@ do 10 n = 31,63
    w(2) = w(2) + t(2)
    if (anorm(t(1),t(2)) <= tol*anorm(w(1),w(2))) go to 20
 10 continue
+end do
 !
-20 do 21 j = 1,29
+20 do j = 1,29
    n = 30 - j
    x = h(1)*w(1) - h(2)*w(2)
    w(2) = h(1)*w(2) + h(2)*w(1)
    w(1) = a(n) + x
 21 continue
+end do
 x = h(1)*w(1) - h(2)*w(2)
 w(2) = h(1)*w(2) + h(2)*w(1)
 w(1) = 1.d0 + x
@@ -8096,10 +8123,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derf = x*(1.d0 + w)
 return
 !
@@ -8140,10 +8168,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derfc = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 return
 !
@@ -8196,10 +8225,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derfc1 = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 if (ind /= 0) derfc1 = exp(t) * derfc1
 return
@@ -8492,7 +8522,7 @@ end function erfi
 
 pure elemental double precision function derfi(p, q)
 implicit none
-intrinsic :: derf
+intrinsic :: erf
 !-----------------------------------------------------------------------
 !
 !                  Double precision computation of
@@ -8510,7 +8540,6 @@ intrinsic :: derf
 !-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
 double precision :: eps, f, lnq, s, t, x
-double precision :: derf
 double precision, parameter :: c = .5625d0
 double precision, parameter :: c1 = .87890625d0
 double precision, parameter :: c2 = -.2302585092994045684017991454684364d+03
@@ -8570,7 +8599,7 @@ derfi = p*(s/t)
 if (eps > 1.d-19) return
 !
 x = derfi
-f = derf(x) - p
+f = erf(x) - p
 derfi = x - r * exp(x*x) * f
 return
 !
@@ -8763,11 +8792,10 @@ end function aerf
 
 pure elemental double precision function daerf(x, h)
 implicit none
-intrinsic :: derf, derfc
+intrinsic :: erf, erfc
 double precision, intent(in) :: x, h
 integer :: j
 double precision :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
-double precision :: derf, derfc
 double precision, parameter :: c = 1.12837916709551257389615890312155d0
 double precision, parameter :: p = 2.76959d0
 !-----------------------------------------------------------------------
@@ -8864,15 +8892,15 @@ if (xmh > -8.3d0) go to 120
 daerf = sign(2.d0,h)
 return
 !
-110 daerf = derf(xph) - derf(xmh)
+110 daerf = erf(xph) - erf(xmh)
 if (h < 0.d0) daerf = -daerf
 return
 !
-120 daerf = derfc(xmh)
+120 daerf = erfc(xmh)
 if (h < 0.d0) daerf = -daerf
 return
 !
-130 daerf = derfc(xmh) - derfc(xph)
+130 daerf = erfc(xmh) - erfc(xph)
 if (h < 0.d0) daerf = -daerf
 return
 !
@@ -8887,7 +8915,7 @@ if (x2 >= eps) t = 2.d0*exp(-x2)
 if (h*h >= 3.d0*eps) go to 160
 daerf = c*h*t
 return
-160 daerf = t*derf(h)
+160 daerf = t*erf(h)
 end function daerf
 
 pure elemental function pndf(x,ind)
@@ -9204,10 +9232,11 @@ dpdaw = x
 if (t < eps) return
 !
 w = a(20)
-do 10 i = 1,19
+do i = 1,19
    k = 20 - i
    w = t*w + a(k)
 10 continue
+end do
 dpdaw = x * (0.75d0 + (0.25d0 + t*w))
 return
 !
@@ -9658,9 +9687,10 @@ return
 10 if (x >= 1.65) go to 20
 c = cp(1)
 s = sp(1)
-do 11 i = 2,13
+do i = 2,13
    c = cp(i) + c*y
 11 s = sp(i) + s*y
+end do
 c = t*c
 s = t*xx*s
 return
@@ -10601,12 +10631,13 @@ h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
 !-------------------------
 t = h
 w = 0.d0
-do 10 n = 2,40
+do n = 2,40
    c = a(n)*t
    w = w + c
    if (abs(c) < eps) go to 20
    t = h*t
 10 continue
+end do
 !
 20 dei0 = h * (a(1) + w)
 end function dei0
@@ -10676,11 +10707,12 @@ bx = 0.40*ax - 1.0
 tx = bx + bx
 b1 = bb(j)
 b2 = 0.
-do 10 i = 1,m1
+do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
 10 b2 = temp
+end do
 si = (bx*b1 - b2 + bb(1))*x
 return
 !
@@ -10690,21 +10722,23 @@ tx = bx + bx
 j = n2
 b1 = cc(j)
 b2 = 0.0
-do 30 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 30 b2 = temp
+end do
 aic = bx*b1 - b2 + cc(2)
 !
 j = n2 - 1
 b1 = cc(j)
 b2 = 0.0
-do 40 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 40 b2 = temp
+end do
 rc = bx*b1 - b2 + cc(1)
 !
 si = (rc*cos(ax) + aic*sin(ax))/ax
@@ -10781,11 +10815,12 @@ bx = 0.40*ax - 1.0
 tx = bx + bx
 b1 = bb(j)
 b2 = 0.
-do 10 i = 1,m1
+do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
 10 b2 = temp
+end do
 cin = x*x*(bx*b1 - b2 + bb(1))
 return
 !
@@ -10795,21 +10830,23 @@ tx = bx + bx
 j = n2
 b1 = cc(j)
 b2 = 0.0
-do 30 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 30 b2 = temp
+end do
 aic = bx*b1 - b2 + cc(2)
 !
 j = n2 - 1
 b1 = cc(j)
 b2 = 0.0
-do 40 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 40 b2 = temp
+end do
 rc = bx*b1 - b2 + cc(1)
 !
 cin = (rc*sin(ax) - aic*cos(ax))/ax
@@ -11524,10 +11561,11 @@ if (x*x + y*y <= 0.04) n = 14
 !
 k = n
 w = a(n)
-do 10 i = 2,n
+do i = 2,n
    k = k - 1
    w = a(k) + z*w
 10 continue
+end do
 cgam0 = 1.0 + z*w
 end function cgam0
 
@@ -12259,10 +12297,11 @@ double precision, parameter :: a(15) = [.833333333333333333333333333333d-01, - &
 !-----------------------------------------------------------------------
 t = (10.d0/x)**2
 w = a(15)
-do 10 i = 1,14
+do i = 1,14
    k = 15 - i
    w = t*w + a(k)
 10 continue
+end do
 dpdel = w/x
 end function dpdel
 
@@ -13032,10 +13071,11 @@ nswc_ai_i4 = n
 if ( nswc_ai_i4 < 0 ) go to 20
 if ( nswc_ai_i4 == 0 ) go to 12
 go to 10
-10 do 11 j = 1,n
+10 do j = 1,n
    x = x - 1.d0
    t = 1.d0/x + t
 11 continue
+end do
 12 x = x - 1.d0
 go to 40
 !
@@ -13050,11 +13090,12 @@ if (abs(a)*xmax <= 1.000000001d0) return
 if (a > 0.d0) go to 40
 n = - n - 1
 if (n == 0) go to 32
-do 31 j = 1,n
+do j = 1,n
    x = x + 1.d0
    if (x == 0.d0) return
    t = t - 1.d0/x
 31 continue
+end do
 32 x = (x + 0.5d0) + 0.5d0
 if (x == 0.d0) return
 t = t - 1.d0/x
@@ -13154,10 +13195,11 @@ h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
 n = 20
 nm1 = n - 1
 w = a(n)
-do 10 i = 1,nm1
+do i = 1,nm1
    l = n - i
    w = a(l) + h*w
 10 continue
+end do
 dpsi0 = h*w
 end function dpsi0
 
@@ -13817,18 +13859,20 @@ x2 = x*x
 !            Store these values in s(1),s(2),...
 !
 s(1) = 1.d0
-do 10 j = 1,14
+do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 10 continue
+end do
 !
 !                SET w = DEL(b) - DEL(a + b)
 !
 t = (10.d0/b)**2
 w = e(15)*s(15)
-do 20 j = 1,14
+do j = 1,14
    k = 15 - j
    w = t*w + e(k)*s(k)
 20 continue
+end do
 w = w*(c/b)
 !
 !                    Compute  del(a) + w
@@ -13884,9 +13928,10 @@ d = b + (a - 0.5d0)
 !
 20 x2 = x*x
 s(1) = 1.d0
-do 21 j = 1,14
+do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 21 continue
+end do
 !
 !                SET w = DEL(b) - DEL(a + b)
 !
@@ -14097,10 +14142,11 @@ sum = sum + t
 if (t > tol) go to 61
 !
 max = n - 1
-do 70 m = 1,max
+do m = 1,max
    n = n - 1
    sum = sum + wk(n)
 70 continue
+end do
 ans = (r/a)*(1.0 + sum)
 qans = 0.5 + (0.5 - ans)
 return
@@ -14725,13 +14771,12 @@ end subroutine gaminv
 
 pure elemental subroutine dgrat(a, x, ans, qans, ierr)
 implicit none
-intrinsic :: derf
+intrinsic :: erf
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a, x
 double precision, intent(inout) :: ans, qans
 integer :: i, m, max, n
 double precision :: amn, apn, a2n, a2nm1, big, b2n, b2nm1, c, e, g, h, j, l, r, rta, rtx, s, sum, t, tol, twoa, u, x0, y, z, wk(20)
-double precision :: derf
 double precision, parameter :: alog10 = 2.30258509299404568401799145468d0
 double precision, parameter :: rtpi = 1.77245385090551602729816748334d0
 !-----------------------------------------------------------------------
@@ -14958,7 +15003,7 @@ qans = 0.d0
 return
 !
 320 if (x >= 0.25d0) go to 321
-ans = derf(sqrt(x))
+ans = erf(sqrt(x))
 qans = 0.5d0 + (0.5d0 - ans)
 return
 321 qans = derfc1(0,sqrt(x))
@@ -17354,11 +17399,12 @@ l = 6
 60 l = l + 1
 alpha = a(l)
 p = cmplx(a(l),0.0)
-do 70 k = 2,m
+do k = 2,m
    l = l + 1
    alpha = a(l) + aq*alpha
    p = a(l) + eta*p
 70 continue
+end do
 !
 !          Only the s1 sum is formed when ind = 0
 !
@@ -17622,7 +17668,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 019 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -17638,6 +17684,7 @@ do 019 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 019 continue
+end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
 sm(1) = 0.5*(sm(1) + sm(3))
@@ -17694,7 +17741,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 026 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -17710,6 +17757,7 @@ do 026 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 026 continue
+end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
 sm(1) = 0.5*(sm(1) + sm(3))
@@ -18542,7 +18590,7 @@ data gama(1),   gama(2),   gama(3),   gama(4),   gama(5), &
 !     ------------------------------------------------------------------
 fn = fnu
 iflw = 0
-do 170 jn = 1,in
+do jn = 1,in
    xx = x/fn
    wk(1) = 1.0e0 - xx*xx
    abw2 = abs(wk(1))
@@ -18562,18 +18610,20 @@ do 170 jn = 1,in
    if (abw2 == 0.0e0) go to 10
    sa = tols/log(abw2)
 10 sb = sa
-   do 20 i = 1,5
+   do i = 1,5
       akm = max(sa,2.0e0)
       kmax(i) = int(akm)
       sa = sa + sb
 20    continue
+   end do
    kb = kmax(5)
    klast = kb - 1
    sa = gama(kb)
-   do 30 k = 1,klast
+   do k = 1,klast
       kb = kb - 1
       sa = sa*wk(1) + gama(kb)
 30    continue
+   end do
    z = wk(1)*sa
    az = abs(z)
    rtz = sqrt(az)
@@ -18592,10 +18642,11 @@ do 170 jn = 1,in
    kb = kmax(5)
    klast = kb - 1
    sb = beta(kb,1)
-   do 40 k = 1,klast
+   do k = 1,klast
       kb = kb - 1
       sb = sb*wk(1) + beta(kb,1)
 40    continue
+   end do
    ksp1 = 1
    fn2 = fn*fn
    rfn2 = 1.0e0/fn2
@@ -18603,7 +18654,7 @@ do 170 jn = 1,in
    asum = 1.0e0
    relb = tol*abs(sb)
    bsum = sb
-   do 60 ks = 1,4
+   do ks = 1,4
       ksp1 = ksp1 + 1
       rden = rden*rfn2
 !
@@ -18614,17 +18665,19 @@ do 170 jn = 1,in
       klast = kb - 1
       sa = alfa(kb,ks)
       sb = beta(kb,ksp1)
-      do 50 k = 1,klast
+      do k = 1,klast
          kb = kb - 1
          sa = sa*wk(1) + alfa(kb,ks)
          sb = sb*wk(1) + beta(kb,ksp1)
 50       continue
+      end do
       ta = sa*rden
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
       if (abs(ta) <= tol .and. abs(tb) <= relb) go to 70
 60    continue
+   end do
 70 continue
    bsum = bsum/(fn*wk(7))
    go to 160
@@ -18719,6 +18772,7 @@ do 170 jn = 1,in
    y(jn) = flgjy*phi*(fi*asum + dfi*bsum)/wk(7)
    fn = fn - flgjy
 170 continue
+end do
 end subroutine asjy
 
 pure subroutine jairy(x,rx,c,ai,dai)
@@ -19065,7 +19119,7 @@ qf(1) = qm*cos(-0.5*zl(2))
 qf(2) = qm*sin(-0.5*zl(2))
 if (an > 1.0) go to 012
 pn = an
-assign 011 to la
+la = 11
 go to 100
 011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19073,12 +19127,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 012 pn = 1.0
-assign 013 to la
+la = 13
 go to 100
 013 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 014 to la
+la = 14
 go to 100
 014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19088,7 +19142,7 @@ qf(1) = qm*cos(-0.5*zl(2))
 qf(2) = qm*sin(-0.5*zl(2))
 if (an > 1.0) go to 017
 pn = an
-assign 016 to lr
+lr = 16
 go to 112
 016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19096,12 +19150,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 017 pn = 1.0
-assign 018 to lr
+lr = 18
 go to 112
 018 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 019 to lr
+lr = 19
 go to 112
 019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19110,7 +19164,7 @@ go to 026
 qf(2) = 0.0
 021 if (an > 1.0) go to 023
 pn = an
-assign 022 to ly
+ly = 22
 go to 122
 022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19118,12 +19172,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 023 pn = 1.0
-assign 024 to ly
+ly = 24
 go to 122
 024 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 025 to ly
+ly = 25
 go to 122
 025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -19200,14 +19254,21 @@ sm(2) = -sm(2)
 go to 111
 110 sm(1) = tm(3)
 sm(2) = tm(4)
-111 go to la,(011,013,014)
+111 select case ( la )
+case ( 11 )
+   go to 11
+case ( 13 )
+   go to 13
+case ( 14 )
+   go to 14
+end select
 112 sm(1) = 1.0
 sm(2) = 0.0
 sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*pn + 2.0
 n = 15.0*pn + 15.0
-do 113 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -19223,6 +19284,7 @@ do 113 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 113 continue
+end do
 114 aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
@@ -19252,7 +19314,14 @@ sm(2) = -sm(2)
 go to 121
 120 sm(1) = tm(3)
 sm(2) = tm(4)
-121 go to lr,(016,018,019)
+121 select case ( lr )
+case ( 16 )
+   go to 16
+case ( 18 )
+   go to 18
+case ( 19 )
+   go to 19
+end select
 122 aq(1) = 1.0
 aq(2) = 0.0
 rn = 0.0
@@ -19307,7 +19376,14 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 127
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-go to ly,(022,024,025)
+select case ( ly )
+case ( 22 )
+   go to 22
+case ( 24 )
+   go to 24
+case ( 25 )
+   go to 25
+end select
 end subroutine bssly
 
 subroutine cbssli(z, cnu, w)
@@ -19463,7 +19539,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 018 i = m,n
+do i = m,n
    ts(1) = -qz(1) - cd(i)
    ts(2) = -qz(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -19479,6 +19555,7 @@ do 018 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 018 continue
+end do
 019 rm(1) = sm(1)
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 023
@@ -19539,7 +19616,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 030 i = m,n
+do i = m,n
    ts(1) = -qz(1) - cd(i)
    ts(2) = -qz(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -19555,6 +19632,7 @@ do 030 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 030 continue
+end do
 031 rm(1) = sm(1)
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 036
@@ -20205,7 +20283,7 @@ real, parameter :: c(65) = [-2.08333333333333e-01, 1.25000000000000e-01, 3.34201
 fn = fnu
 z = (3.0e0 - flgik)/2.0e0
 kk = int(z)
-do 50 jn = 1,in
+do jn = 1,in
    if (jn == 1) go to 10
    fn = fn - flgik
    z = x/fn
@@ -20222,22 +20300,25 @@ do 50 jn = 1,in
    s2 = 1.0e0
    ap = 1.0e0
    l = 0
-   do 30 k = 2,11
+   do k = 2,11
       l = l + 1
       s1 = c(l)
-      do 20 j = 2,k
+      do j = 2,k
          l = l + 1
          s1 = s1*t2 + c(l)
 20       continue
+      end do
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
       if (max(abs(ak),abs(ap)) < tol) go to 40
 30    continue
+   end do
 40 continue
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
 50 continue
+end do
 end subroutine asik
 
 subroutine cbesk(z, cnu, w)
@@ -21238,7 +21319,7 @@ qf(1) = qm*cos(-0.5*zl(2) - tm(2))
 qf(2) = qm*sin(-0.5*zl(2) - tm(2))
 if (an > 1.0) go to 012
 pn = an
-assign 011 to la
+la = 11
 go to 100
 011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21246,12 +21327,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 012 pn = 1.0
-assign 013 to la
+la = 13
 go to 100
 013 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 014 to la
+la = 14
 go to 100
 014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21261,7 +21342,7 @@ qf(1) = qm*cos(-0.5*zl(2) - tm(2))
 qf(2) = qm*sin(-0.5*zl(2) - tm(2))
 if (an > 1.0) go to 017
 pn = an
-assign 016 to lr
+lr = 16
 go to 104
 016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21269,12 +21350,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 017 pn = 1.0
-assign 018 to lr
+lr = 18
 go to 104
 018 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 019 to lr
+lr = 19
 go to 104
 019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21287,7 +21368,7 @@ qf(1) = qm*cos(az(2))
 qf(2) = qm*sin(az(2))
 021 if (an > 1.0) go to 023
 pn = an
-assign 022 to lk
+lk = 22
 go to 106
 022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21295,12 +21376,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 023 pn = 1.0
-assign 024 to lk
+lk = 24
 go to 106
 024 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
 pn = 0.0
-assign 025 to lk
+lk = 25
 go to 106
 025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -21338,12 +21419,19 @@ if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 103
 102 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
 if (pm < 36.0) go to 101
-103 go to la,(011,013,014)
+103 select case ( la )
+case ( 11 )
+   go to 11
+case ( 13 )
+   go to 13
+case ( 14 )
+   go to 14
+end select
 104 sm(1) = 1.0
 sm(2) = 0.0
 m = 15.0*pn + 2.0
 n = 15.0*pn + 15.0
-do 105 i = m,n
+do i = m,n
    ts(1) = az(1) - cd(i)
    ts(2) = az(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -21352,7 +21440,15 @@ do 105 i = m,n
    sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
 105 continue
-go to lr,(016,018,019)
+end do
+select case ( lr )
+case ( 16 )
+   go to 16
+case ( 18 )
+   go to 18
+case ( 19 )
+   go to 19
+end select
 106 aq(1) = 1.0
 aq(2) = 0.0
 rn = 0.0
@@ -21411,7 +21507,14 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 111
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-go to lk,(022,024,025)
+select case ( lk )
+case ( 22 )
+   go to 22
+case ( 24 )
+   go to 24
+case ( 25 )
+   go to 25
+end select
 end subroutine bsslk
 
 subroutine cai(ind,z,ai,aip,ierr)
@@ -21486,11 +21589,12 @@ z3 = z*z2
 !
 f = cmplx(a(8),0.0)
 g = cmplx(b(8),0.0)
-do 10 n = 1, 7
+do n = 1, 7
    i = 8 - n
    f = a(i) + z3*f
    g = b(i) + z3*g
 10 continue
+end do
 f = 1.0 + z3*f
 g = z + z2*z2*g
 !
@@ -21658,11 +21762,12 @@ if (t > 30.0) m = 8
 s1 = cmplx(c(m),0.0)
 s2 = cmplx(d(m),0.0)
 i = m
-do 20 k = 2,m
+do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
 20 continue
+end do
 !
 ai = 0.5*c1*z2r*s1
 aip = - 0.5*c1*z2*s2
@@ -21928,11 +22033,12 @@ if (t > 30.0) m = 8
 s1 = cmplx(c(m), 0.0)
 s2 = cmplx(d(m), 0.0)
 i = m
-do 20 k = 2,m
+do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
 20 continue
+end do
 !
 bi = c1*z2r*s1
 bip = c1*z2*s2
@@ -23359,10 +23465,11 @@ do i = 1,12
 41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
 end do
 f3 = (0.0, 0.0)
-do 42 i = 1,12
+do i = 1,12
    xx = .25*(3. - x2(i))
    fxk = ak*xx
 42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
 !
@@ -23712,13 +23819,14 @@ do i = 1,12
 end do
 f3 = (0.0, 0.0)
 e3 = (0.0, 0.0)
-do 42 i = 1,12
+do i = 1,12
    xx = .25*(3. - x2(i))
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
    e3 = e3 + w2(i)*fb(i)*(1.0 + at)
 42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
 ce = al*(c1*e1 + c2*(e2 + e3))
@@ -27596,11 +27704,12 @@ if (mo == 0) go to 004
 if (mo == 1) go to 006
 if (mo >= 2) go to 008
 002 ql = nc
-do 003 k = 1,nc
+do k = 1,nc
    fv = ac(l)/ql + au*fv
    l = l - 1
    ql = ql - 1.0
 003 continue
+end do
 fv = au*fv
 return
 004 do k = 1,nc
@@ -27734,13 +27843,14 @@ logical :: ln
 !
 001 ln = .true.
 tm = 1.0
-do 003 k = 1,na
+do k = 1,na
    if (qu /= au(k)) go to 002
    ln = .false.
    go to 003
 002 dm = qu - au(k)
    tm = dm*tm
 003 continue
+end do
 do k = 1,na
    if (ln) go to 005
    if (qu /= au(k)) go to 005
@@ -27838,18 +27948,20 @@ real :: sm, td, tm
 !     na = Number of arguments     (N)
 !     ac = Polynomial coefficients (NX(N+1) array)
 !
-001 do 003 i = 1,na
+001 do i = 1,na
    k = (i - 1)*na
    l = k + i
    ac(l) = 1.0
    sm = 0.0
-   do 002 j = 1,i
+   do j = 1,i
       k = k + 1
       l = k + na
       ac(l) = sm - au(i)*ac(k)
       sm = ac(k)
 002   continue
+   end do
 003 continue
+end do
 do i = 1,na
    k = na + na*na
    l = i*na
@@ -27895,9 +28007,10 @@ real :: rm, rn, sm, sn
 !
 001 sn = na
 rn = sqrt(sn)
-do 002 i = 1,na
+do i = 1,na
    aa(i) = 1.0/rn
 002 continue
+end do
 if (ma == 1) return
 003 sm = 0.0
 do i = 1,na
@@ -27906,11 +28019,12 @@ end do
 ar(2) = sm/sn
 sm = 0.0
 l = na
-do 005 i = 1,na
+do i = 1,na
    l = l + 1
    aa(l) = au(i) - ar(2)
    sm = sm + aa(l)*aa(l)
 005 continue
+end do
 rm = sqrt(sm)
 l = na
 do i = 1,na
@@ -27990,10 +28104,11 @@ if (nf <= 1) go to 003
 ff(2) = (au - ar(2))*ff(1)/ar(1)
 if (nf == 2) go to 003
 l = 2
-do 002 k = 3,nf
+do k = 3,nf
    l = l + 2
    ff(k) = ((au - ar(l))*ff(k - 1) - ar(l - 3)*ff(k - 2))/ar(l - 1)
 002 continue
+end do
 003 if (mo <= 0) return
 df(1) = 0.0
 if (nf <= 1) go to 005
@@ -28032,9 +28147,10 @@ real :: rn, sn, tm
 !     nc = Number of coefficients  (m)
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
 !
-001 do 002 n = 1,nc
+001 do n = 1,nc
    ac(n) = 0.0
 002 continue
+end do
 sn = na
 rn = sqrt(sn)
 ac(1) = 1.0/rn
@@ -28636,9 +28752,10 @@ if (n <= 0 .or. xtol < zero .or. maxfev <= 0 &
    & .or. ml < 0 .or. mu < 0 .or. factor <= zero &
    & .or. ldfjac < n .or. lr < (n*(n + 1))/2) go to 300
 if (mode /= 2) go to 20
-do 10 j = 1, n
+do j = 1, n
    if (diag(j) <= zero) go to 300
 10 continue
+end do
 20 continue
 !
 !     Evaluate the function at the starting point
@@ -30290,9 +30407,10 @@ mp = abs(a - szr*b) + abs(szi*b)
 zm = sqrt(abs(sngl(v)))
 ee = 2.0*abs(sngl(qp(1)))
 t = -szr*b
-do 20 i = 2,n
+do i = 2,n
    ee = ee*zm + abs(sngl(qp(i)))
 20 continue
+end do
 ee = ee*zm + abs(sngl(a) + t)
 ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
    & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
@@ -30377,10 +30495,11 @@ j = 0
 !
 10 pv = p(1)
 qp(1) = pv
-do 20 i = 2,nn
+do i = 2,nn
    pv = pv*s + p(i)
    qp(i) = pv
 20 continue
+end do
 mp = abs(pv)
 !
 !     Compute a rigorous bound on the error in evaluating p
@@ -30542,9 +30661,10 @@ if (abs(a1) > abs(temp)*eta*10.) go to 20
 !
 k(1) = 0.d0
 k(2) = -a7*qp(1)
-do 10 i = 3,n
+do i = 3,n
    k(i) = a3*qk(i - 2) - a7*qp(i - 1)
 10 continue
+end do
 return
 !
 !     Use scaled form of the recurrence
@@ -31023,11 +31143,12 @@ double precision :: dn, t1, t2, xni
 n = nn - 1
 nm1 = n - 1
 dn = n
-do 10 i = 1,n
+do i = 1,n
    xni = nn - i
    hr(i) = xni*pr(i)/dn
    hi(i) = xni*pi(i)/dn
 10 continue
+end do
 !
 do jj = 1,l1
    if (dcpabs(hr(n),hi(n)) <= 10.d0*eta*dcpabs(pr(n),pi(n))) &
@@ -31097,7 +31218,7 @@ call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 !
 !     Main loop for one second stage step.
 !
-do 50 j = 1,l2
+do j = 1,l2
    otr = tr
    oti = ti
 !
@@ -31120,10 +31241,11 @@ do 50 j = 1,l2
 !     third shift iteration after saving the current H polynomial
 !     and shift.
 !
-   do 10 i = 1,n
+   do i = 1,n
       shr(i) = hr(i)
       shi(i) = hi(i)
 10    continue
+   end do
    svsr = sr
    svsi = si
    call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
@@ -31149,6 +31271,7 @@ do 50 j = 1,l2
 !
 40 pasd = .false.
 50 continue
+end do
 !
 !     Attempt an iteration with final H polynomial from second stage.
 !
@@ -31222,10 +31345,11 @@ do i = 1,l3
    si = sr*r1 + si*(1.d0 + r1)
    sr = r2
    call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   do 20 j = 1,5
+   do j = 1,5
       call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
       call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
 20    continue
+   end do
    omp = infin
    go to 50
 !
@@ -33396,14 +33520,23 @@ if (n > 0) go to 10
 snrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 go to next,(30, 50, 70, 110)
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
 30 if ( abs(sx(i)) > cutlo) go to 85
-assign 50 to next
+next = 50
 xmax = zero
 !
 !                        Phase 1.  Sum is zero
@@ -33412,13 +33545,13 @@ xmax = zero
 if ( abs(sx(i)) > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-assign 70 to next
+next = 70
 go to 105
 !
 !                                Prepare for phase 4.
 !
 100 i = j
-assign 110 to next
+next = 110
 sum = (sum / sx(i)) / sx(i)
 105 xmax = abs(sx(i))
 go to 115
@@ -33452,9 +33585,10 @@ go to 200
 !
 !                   Phase 3.  Sum is mid-range.  No scaling.
 !
-do 95 j = i,nn,incx
+do j = i,nn,incx
    if (abs(sx(j)) >= hitest) go to 100
 95 sum = sum + sx(j)**2
+end do
 snrm2 = sqrt( sum )
 go to 300
 !
@@ -33523,14 +33657,23 @@ if (n > 0) go to 10
 dnrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 go to next,(30, 50, 70, 110)
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
 30 if ( abs(dx(i)) > cutlo) go to 85
-assign 50 to next
+next = 50
 xmax = zero
 !
 !                        Phase 1.  Sum is zero
@@ -33539,13 +33682,13 @@ xmax = zero
 if ( abs(dx(i)) > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-assign 70 to next
+next = 70
 go to 105
 !
 !                                Prepare for phase 4.
 !
 100 i = j
-assign 110 to next
+next = 110
 sum = (sum / dx(i)) / dx(i)
 105 xmax = abs(dx(i))
 go to 115
@@ -33579,9 +33722,10 @@ go to 200
 !
 !                   Phase 3.  Sum is mid-range.  No scaling.
 !
-do 95 j = i,nn,incx
+do j = i,nn,incx
    if (abs(dx(j)) >= hitest) go to 100
 95 sum = sum + dx(j)**2
+end do
 dnrm2 = sqrt( sum )
 go to 300
 !
@@ -33651,16 +33795,27 @@ if (n > 0) go to 10
 scnrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
-do 210 i = 1,nn,incx
+do i = 1,nn,incx
    absx = abs(real(cx(i)))
    imag = .false.
-   go to next,(30, 50, 70, 90, 110)
+   select case ( next )
+   case ( 30 )
+      go to 30
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
 30 if ( absx > cutlo) go to 85
-   assign 50 to next
+   next = 50
    scale = .false.
 !
 !                        Phase 1.  Sum is zero
@@ -33669,12 +33824,12 @@ do 210 i = 1,nn,incx
    if ( absx > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-   assign 70 to next
+   next = 70
    go to 105
 !
 !                                Prepare for phase 4.
 !
-100 assign 110 to next
+100 next = 110
    sum = (sum / absx) / absx
 105 scale = .true.
    xmax = absx
@@ -33701,7 +33856,7 @@ do 210 i = 1,nn,incx
 !
 75 sum = (sum * xmax) * xmax
 !
-85 assign 90 to next
+85 next = 90
    scale = .false.
 !
 !     For real or D.P. set hitest = cuthi/n
@@ -33720,9 +33875,19 @@ do 210 i = 1,nn,incx
    if (imag) go to 210
    absx = abs(aimag(cx(i)))
    imag = .true.
-   go to next,(  50, 70, 90, 110 )
+   select case ( next )
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
 !
 210 continue
+end do
 !
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
@@ -36221,10 +36386,11 @@ if (t == 1.0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call sgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -36899,7 +37065,7 @@ if (job/10 == 0) go to 70
 det(1) = 1.0e0
 det(2) = 0.0e0
 ten = 10.0e0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -36915,6 +37081,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -36983,10 +37150,11 @@ if (t == 1.d0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call dgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -37530,7 +37698,7 @@ if (job/10 == 0) go to 70
 det(1) = 1.0d0
 det(2) = 0.0d0
 ten = 10.0d0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -37546,6 +37714,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -38582,15 +38751,16 @@ real :: dotprd, swap
 !
 !***************************************************************
 !
-do 40 nj = 1,nclpiv
+do nj = 1,nclpiv
    j = nclpiv + 1 - nj
    i = nrwblk + 1 - nj
    dotprd = x(j)
    if (j == novrlp) go to 20
    jplus1 = j + 1
-   do 10 j1 = jplus1,novrlp
+   do j1 = jplus1,novrlp
       dotprd = dotprd - x(j1)*block(i,j1)
 10    continue
+   end do
 20 continue
    x(j) = dotprd
    pivotj = pivot(j)
@@ -38600,6 +38770,7 @@ do 40 nj = 1,nclpiv
    x(j) = swap
 30 continue
 40 continue
+end do
 end subroutine arcebe
 
 subroutine btslv(mo, m, n, a, b, c, x, ip, ierr)
@@ -39676,7 +39847,7 @@ ten = 10.0e0
 20 continue
 t = 0.0e0
 ik = 0
-do 130 k = 1, n
+do k = 1, n
    kk = ik + k
    d = ap(kk)
 !
@@ -39725,6 +39896,7 @@ do 130 k = 1, n
 120 continue
    ik = ik + k
 130 continue
+end do
 140 continue
 !
 !     Compute inverse(A)
@@ -40688,7 +40860,7 @@ ten = 10.0d0
 20 continue
 t = 0.0d0
 ik = 0
-do 130 k = 1, n
+do k = 1, n
    kk = ik + k
    d = ap(kk)
 !
@@ -40737,6 +40909,7 @@ do 130 k = 1, n
 120 continue
    ik = ik + k
 130 continue
+end do
 140 continue
 !
 !     Compute inverse(A)
@@ -41083,7 +41256,7 @@ det(1) = 1.0e0
 det(2) = 0.0e0
 s = 10.0e0
 ii = 0
-do 50 i = 1, n
+do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
@@ -41099,6 +41272,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -41397,7 +41571,7 @@ det(1) = 1.0d0
 det(2) = 0.0d0
 s = 10.0d0
 ii = 0
-do 50 i = 1, n
+do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
@@ -41413,6 +41587,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -41675,10 +41850,11 @@ if (t == 1.0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call cgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -42365,7 +42541,7 @@ if (job/10 == 0) go to 70
 det(1) = (1.0e0,0.0e0)
 det(2) = (0.0e0,0.0e0)
 ten = 10.0e0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -42381,6 +42557,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -42887,7 +43064,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -42903,7 +43080,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (s(l) == 0.0e0) go to 30
 !
@@ -42918,6 +43095,7 @@ do 160 l = 1, lu
 !
       e(j) = x(l,j)
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -42947,9 +43125,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = 0.0e0
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call saxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call saxpy(n - l,-e(j)/e(lp1),work(lp1),1,x(lp1,j),1)
    end do
@@ -42965,6 +43144,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -43368,7 +43548,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -43384,7 +43564,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (s(l) == 0.0d0) go to 30
 !
@@ -43399,6 +43579,7 @@ do 160 l = 1, lu
 !
       e(j) = x(l,j)
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -43428,9 +43609,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = 0.0d0
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call daxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call daxpy(n - l,-e(j)/e(lp1),work(lp1),1,x(lp1,j),1)
    end do
@@ -43446,6 +43628,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -43855,7 +44038,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -43871,7 +44054,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (cabs1(s(l)) == 0.0e0) go to 30
 !
@@ -43886,6 +44069,7 @@ do 160 l = 1, lu
 !
       e(j) = conjg(x(l,j))
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -43915,9 +44099,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = (0.0e0,0.0e0)
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call caxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call caxpy(n - l,conjg(-e(j)/e(lp1)),work(lp1),1, &
          & x(lp1,j),1)
@@ -43934,6 +44119,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -44728,17 +44914,19 @@ norm = 0.0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 20 i = 1,n
+do i = 1,n
 !
-   do 10 j = k,n
+   do j = k,n
       norm = norm + abs(h(i,j))
 10    continue
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.0
 20 continue
+end do
 !
 en = igh
 t = 0.0
@@ -45332,17 +45520,19 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 20 i = 1,n
+do i = 1,n
 !
-   do 10 j = k,n
+   do j = k,n
       norm = norm + abs(h(i,j))
 10    continue
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.d0
 20 continue
+end do
 !
 en = igh
 t = 0.d0
@@ -45353,7 +45543,7 @@ na = en - 1
 enm2 = na - 1
 !     ********** Look for single small sub-diagonal element
 !                for l=en step -1 Until low do -- **********
-40 do 50 ll = low,en
+40 do ll = low,en
    l = en + low - ll
    if (l == low) go to 60
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
@@ -45362,6 +45552,7 @@ enm2 = na - 1
    s2 = s1 + abs(h(l,l - 1))
    if (s1 == s2) go to 60
 50 continue
+end do
 !     ********** Form shift **********
 60 x = h(en,en)
 if (l == en) go to 220
@@ -46472,8 +46663,8 @@ if (nm < n) go to 460
 if (n <= 0) go to 460
 if (maxits <= 0) maxits = 30
 !     ********** Initialize arrays **********
-do 20 i = 1,n
-   do 10 j = 1,n
+do i = 1,n
+   do j = 1,n
       l(i,j) = cmplx(0.0,0.0)
       u(i,j) = cmplx(0.0,0.0)
       v(i,j) = cmplx(0.0,0.0)
@@ -46481,25 +46672,29 @@ do 20 i = 1,n
       xold(i,j) = cmplx(0.0,0.0)
       eye(i,j) = cmplx(0.0,0.0)
 10    continue
+   end do
    temp(i) = cmplx(0.0,0.0)
 20 continue
+end do
 !     ********** Set initial guess(ES) **********
 anorm = 0.0
 bnorm = 0.0
 cnorm = 0.0
-do 40 i = 1,n
+do i = 1,n
    ani = 0.0
    bni = 0.0
    cni = 0.0
-   do 30 j = 1,n
+   do j = 1,n
       ani = ani + abs(a(i,j))
       bni = bni + abs(b(i,j))
       cni = cni + abs(c(i,j))
 30    continue
+   end do
    if (ani > anorm) anorm = ani
    if (bni > bnorm) bnorm = bni
    if (cni > cnorm) cnorm = cni
 40 continue
+end do
 gnorm = (bnorm + sqrt(bnorm**2 + 4.0*anorm*cnorm))/(2.0*anorm)
 if (iguess == 0) go to 70
 do i = 1,n
@@ -46930,17 +47125,19 @@ ierr = 0
 !     ********** COMPUTE epsa, epsb **********
 anorm = 0.0
 bnorm = 0.0
-do 20 i = 1,n
+do i = 1,n
    ani = 0.0
    if (i /= 1) ani = abs(a(i,i - 1))
    bni = 0.0
-   do 10 j = i,n
+   do j = i,n
       ani = ani + abs(a(i,j))
       bni = bni + abs(b(i,j))
 10    continue
+   end do
    if (ani > anorm) anorm = ani
    if (bni > bnorm) bnorm = bni
 20 continue
+end do
 if (anorm == 0.0) anorm = 1.0
 if (bnorm == 0.0) bnorm = 1.0
 srelpr = eps1
@@ -47424,14 +47621,16 @@ return
 10 call dbal(ka,n,a,low,igh,wk(1,n + 12))
 anorm = 0.d0
 anorm1 = 0.d0
-do 12 j = 1,n
+do j = 1,n
    s = 0.d0
    s1 = 0.d0
-   do 11 i = 1,n
+   do i = 1,n
       s = s + abs(a(j,i))
 11    s1 = s1 + abs(a(i,j))
+   end do
    anorm = max(s,anorm)
 12 anorm1 = max(s1,anorm1)
+end do
 !
 anorm = min(anorm,anorm1)
 s = anorm + 0.1d0
@@ -61174,7 +61373,7 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by dbal
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
    do j = k, n
 40    norm = norm + abs(h(i,j))
@@ -61185,6 +61384,7 @@ do 50 i = 1, n
    wr(i) = h(i,i)
    wi(i) = 0.d0
 50 continue
+end do
 !
 en = igh
 t = 0.d0
@@ -61688,7 +61888,7 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by dbal
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
    do j = k, n
 40    norm = norm + abs(h(i,j))
@@ -61699,6 +61899,7 @@ do 50 i = 1, n
    wr(i) = h(i,i)
    wi(i) = 0.d0
 50 continue
+end do
 !
 en = igh
 t = 0.d0
@@ -72239,11 +72440,12 @@ mode = 2
 return
 120 key = prgopt(last + 1)
 if (.not.(key == 6 .and. prgopt(last + 2) /= zero)) go to 140
-do 130 j = 1,n
+do j = 1,n
    t = snrm2(m,w(1,j),1)
    if (t /= zero) t = one/t
    d(j) = t
 130 continue
+end do
 140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
 if (key == 8) tau = max(srelpr,prgopt(last + 2))
 if (key == 9) blowup = max(srelpr,prgopt(last + 2))
@@ -72254,9 +72456,10 @@ return
 150 last = link
 link = next
 go to 110
-160 do 170 j = 1,n
+160 do j = 1,n
    call sscal(m, d(j), w(1,j), 1)
 170 continue
+end do
 go to 220
 !
 !     To initialize-variables
@@ -72283,9 +72486,10 @@ nm1 = n - 1
 l1 = min(m,l)
 !
 !     Compute scale factor to apply to equal. Constraint equas.
-do 230 j = 1,n
+do j = 1,n
    wd(j) = sasum(m,w(1,j),1)
 230 continue
+end do
 imax = isamax(n,wd,1)
 eanorm = wd(imax)
 bnorm = sasum(m,w(1,np1),1)
@@ -72294,7 +72498,7 @@ alamda = eanorm/(srelpr*fac)
 !     Define scaling diag matrix for mod Givens usage and
 !     classify equation types.
 alsq = alamda**2
-do 260 i = 1,m
+do i = 1,m
 !
 !     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
    if (.not.(i <= me)) go to 240
@@ -72306,14 +72510,16 @@ do 260 i = 1,m
 250 scale(i) = t
    itype(i) = itemp
 260 continue
+end do
 !
 !     Set the soln vector x(*) to zero and the col interchange
 !     matrix to the identity.
 x(1) = zero
 call scopy(n, x, 0, x, 1)
-do 270 i = 1,n
+do i = 1,n
    ipivot(i) = i
 270 continue
+end do
 go to 10
 280 continue
 !
@@ -72360,7 +72566,7 @@ go to 20
 !     variables and store the solution in z(*).
 !
 !     Solve-system
-assign 310 to igo958
+igo958 = 310
 go to 1110
 !
 !     Increment iteration counter and check against max. Number
@@ -72376,7 +72582,7 @@ done = .true.
 320 alpha = two
 hitcon = .false.
 if (.not.(l < nsoln)) go to 360
-do 350 j = lp1,nsoln
+do j = lp1,nsoln
    zz = z(j)
    if (.not.(zz <= zero)) go to 350
    t = x(j)/(x(j) - zz)
@@ -72385,6 +72591,7 @@ do 350 j = lp1,nsoln
    jcon = j
 330 hitcon = .true.
 350 continue
+end do
 360 go to 30
 370 continue
 !
@@ -72394,9 +72601,10 @@ do 350 j = lp1,nsoln
 !     feasible solution x(*) and current unconstrained
 !     (and infeasible) solution z(*).
 if (.not.(lp1 <= nsoln)) go to 390
-do 380 j = lp1,nsoln
+do j = lp1,nsoln
    x(j) = x(j) + alpha*(z(j) - x(j))
 380 continue
+end do
 390 feasbl = .false.
 go to 410
 400 if (feasbl) go to 20
@@ -72405,18 +72613,20 @@ go to 410
 !     left. Swap col JCON into the n-TH position.  This achieves
 !     upper Hessenberg form for the nonactive constraints and
 !     leaves an upper Hessenberg matrix to retriangularize.
-410 do 420 i = 1,m
+410 do i = 1,m
    t = w(i,jcon)
    call scopy(n - jcon, w(i,jcon + 1), mdw, w(i,jcon), mdw)
    w(i,n) = t
 420 continue
+end do
 !
 !     Update permuted index vector to reflect this shift and swap.
 itemp = ipivot(jcon)
 if (.not.(jcon < n)) go to 440
-do 430 i = jcon,nm1
+do i = jcon,nm1
    ipivot(i) = ipivot(i + 1)
 430 continue
+end do
 440 ipivot(n) = itemp
 !
 !     Similarly repermute x(*) vector.
@@ -72432,13 +72642,13 @@ j = jcon
 i = krank + jcon - l
 450 if (.not.(j <= nsoln)) go to 570
 if (.not.(itype(i) == 0 .and. itype(i + 1) == 0)) go to 470
-assign 460 to igo938
+igo938 = 460
 go to 620
 !
 !     (itype(i).EQ.0 .AND. itype(i+1).EQ.0) ZERO-IP1-TO-i-IN-COL-J
 460 go to 560
 470 if (.not.(itype(i) == 1 .and. itype(i + 1) == 1)) go to 490
-assign 480 to igo938
+igo938 = 480
 go to 620
 !
 !     (itype(i).EQ.1 .AND. itype(i+1).EQ.1) ZERO-IP1-TO-i-IN-COL-J
@@ -72452,7 +72662,7 @@ itype(i) = itemp
 !
 !     Swapped row was formerly a pivot elt., So it will
 !     be large enough to perform ELIM.
-assign 500 to igo938
+igo938 = 500
 go to 620
 !
 !     Zero-IP1-to-i-in-col-J
@@ -72460,7 +72670,7 @@ go to 620
 510 if (.not.(itype(i) == 0 .and. itype(i + 1) == 1)) go to 550
 t = scale(i)*w(i,j)**2/alsq
 if (.not.(t > tau**2*eanorm**2)) go to 530
-assign 520 to igo938
+igo938 = 520
 go to 620
 520 go to 540
 530 call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
@@ -72480,9 +72690,10 @@ go to 450
 !     infeasible it is due to roundoff error.  Any that are non-
 !     positive will be set to zero and removed from the soln set.
 570 if (.not.(lp1 <= nsoln)) go to 590
-do 580 jcon = lp1,nsoln
+do jcon = lp1,nsoln
    if (x(jcon) <= zero) go to 600
 580 continue
+end do
 590 feasbl = .true.
 600 continue
 go to 400
@@ -72520,14 +72731,16 @@ me = me - 1
 !
 !     Form inner product vector wd(*) of dual coeffs.
 690 if (.not.(nsp1 <= n)) go to 730
-do 720 j = nsp1,n
+do j = nsp1,n
    sm = zero
    if (.not.(nsoln < m)) go to 710
-   do 700 i = nsp1,m
+   do i = nsp1,m
       sm = sm + scale(i)*w(i,j)*w(i,np1)
 700   continue
+   end do
 710 wd(j) = sm
 720 continue
+end do
 730 go to 750
 740 if (pos .or. done) go to 970
 !
@@ -72537,12 +72750,13 @@ do 720 j = nsp1,n
 750 wmax = zero
 iwmax = nsp1
 if (.not.(nsp1 <= n)) go to 780
-do 770 j = nsp1,n
+do j = nsp1,n
    if (.not.(wd(j) > wmax)) go to 760
    wmax = wd(j)
    iwmax = j
 760 continue
 770 continue
+end do
 780 if (.not.(wmax <= zero)) go to 790
 done = .true.
 go to 960
@@ -72603,7 +72817,7 @@ go to 810
 !     the col as dependent.
 870 if (.not.(w(niv,nsoln) /= zero)) go to 890
 isol = niv
-assign 880 to igo897
+igo897 = 880
 go to 980
 !
 !     Test-proposed-new-component
@@ -72614,7 +72828,7 @@ go to 980
 !     Check size of proposed new soln component.
 !     Reject it if it is too large.
 isol = mep1
-assign 900 to igo897
+igo897 = 900
 go to 980
 !
 !     Test-proposed-new-component
@@ -72653,16 +72867,17 @@ pos = .not.(blowup*z2*eanorm >= bnorm)
 !
 !     Solve system, store results in x(*).
 !
-assign 1010 to igo958
+igo958 = 1010
 go to 1110
 !     Solve-system
 1010 call scopy(nsoln, z, 1, x, 1)
 !
 !     Apply Householder transformations to x(*) if KRANK.LT.l
 if (.not.(0 < krank .and. krank < l)) go to 1030
-do 1020 i = 1,krank
+do i = 1,krank
    call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
 1020 continue
+end do
 !
 !     Fill in trailing zeroes for constrained variables not in soln.
 1030 if (.not.(nsoln < n)) go to 1040
@@ -72670,7 +72885,7 @@ x(nsp1) = zero
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 !
 !     Repermute soln vector to natural order.
-1040 do 1070 i = 1,n
+1040 do i = 1,n
    j = i
 1050 if (ipivot(j) == i) go to 1060
    j = j + 1
@@ -72679,18 +72894,21 @@ call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
    ipivot(i) = j
    call sswap(1, x(j), 1, x(i), 1)
 1070 continue
+end do
 !
 !     Rescale the soln using the col scaling.
-do 1080 j = 1,n
+do j = 1,n
    x(j) = x(j)*d(j)
 1080 continue
+end do
 if (.not.(niv < m)) go to 1100
-do 1090 i = niv1,m
+do i = niv1,m
    t = w(i,np1)
    if (i <= me) t = t/alamda
    t = (scale(i)*t)*t
    rnorm = rnorm + t
 1090 continue
+end do
 1100 rnorm = sqrt(rnorm)
 return
 !
@@ -72705,7 +72923,7 @@ go to 1130
 !
 !     Copy RT. Hand side into temp vector to use overwriting method.
 call scopy(niv, w(1,np1), 1, temp, 1)
-do 1180 jj = isol,nsoln
+do jj = isol,nsoln
    j = nsoln - jj + isol
    if (.not.(j > krank)) go to 1140
    i = niv - jj + isol
@@ -72718,10 +72936,30 @@ do 1180 jj = isol,nsoln
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
 1170 continue
 1180 continue
+end do
 !
-1270 go to igo958, (310, 1010)
-1280 go to igo897, (880, 900)
-1290 go to igo938, (460, 480, 500, 520)
+1270 select case ( igo958 )
+case ( 310 )
+   go to 310
+case ( 1010 )
+   go to 1010
+end select
+1280 select case ( igo897 )
+case ( 880 )
+   go to 880
+case ( 900 )
+   go to 900
+end select
+1290 select case ( igo938 )
+case ( 460 )
+   go to 460
+case ( 480 )
+   go to 480
+case ( 500 )
+   go to 500
+case ( 520 )
+   go to 520
+end select
 end subroutine wnlsm
 
 subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
@@ -72785,18 +73023,18 @@ if (.not.(i <= me)) go to 130
 !     Set ir to point to the i-TH row.
 ir = i
 mend = m
-assign 20 to igo996
+igo996 = 20
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-20 assign 30 to igo993
+20 igo993 = 30
 go to 560
 !
 !     Perform-col-interchange
 !
 !     Set ic to point to i-TH col.
 30 ic = i
-assign 40 to igo990
+igo990 = 40
 go to 520
 !
 !     Test-indep-of-incoming-col
@@ -72805,7 +73043,7 @@ go to 520
 !     Eliminate i-TH col below diag. Using mod. Givens transformations
 !     applied to (A B).
 j = m
-do 100 jj = ip1,m
+do jj = ip1,m
    jm1 = j - 1
    jp = jm1
    if (.not.(jj == m)) go to 70
@@ -72825,6 +73063,7 @@ do 100 jj = ip1,m
    call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
 90 j = jm1
 100 continue
+end do
 go to 140
 110 continue
 if (.not.(lend > i)) go to 130
@@ -72833,7 +73072,7 @@ if (.not.(lend > i)) go to 130
 max = lend
 !
 !     Perform-col-interchange
-assign 120 to igo993
+igo993 = 120
 go to 560
 120 continue
 lend = lend - 1
@@ -72853,10 +73092,11 @@ go to 10
 krp1 = krank + 1
 if (.not.(krank < me)) go to 290
 factor = alsq
-do 170 i = krp1,me
+do i = krp1,me
    if (l > 0) w(i,1) = zero
    call scopy(l, w(i,1), 0, w(i,1), mdw)
 170 continue
+end do
 !
 !     Determine the rank of the remaining equality constraint
 !     equations by eliminating within the block of constrained
@@ -72873,11 +73113,11 @@ ip1 = i + 1
 ir = krank + i - l
 lend = n
 mend = me
-assign 190 to igo996
+igo996 = 190
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-190 assign 200 to igo993
+190 igo993 = 200
 go to 560
 !
 !     Perform-col-interchange
@@ -72895,7 +73135,7 @@ go to 210
 !
 !     Set ic=i=Col being eliminated
 230 ic = i
-assign 240 to igo990
+igo990 = 240
 go to 520
 !
 !     Test-indep-of-incoming-col
@@ -72947,11 +73187,11 @@ ip1 = i + 1
 ir = mep1
 lend = l
 mend = m
-assign 320 to igo996
+igo996 = 320
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-320 assign 330 to igo993
+320 igo993 = 330
 go to 560
 !
 !     Perform-col-interchange
@@ -72960,7 +73200,7 @@ go to 560
 330 irp1 = ir + 1
 if (.not.(irp1 <= m)) go to 355
 j = m
-do 350 jj = irp1,m
+do jj = irp1,m
    jm1 = j - 1
    if (.not.(w(j,i) /= zero)) go to 340
    call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
@@ -72968,6 +73208,7 @@ do 350 jj = irp1,m
    call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 340 j = jm1
 350 continue
+end do
 355 continue
 !
 !     Test if new pivot element is near zero. If so, the col is
@@ -72979,11 +73220,13 @@ if (.not.indep) go to 380
 !     Col test passed. Now must pass row norm test to be classified
 !     as independent.
 rn = zero
-do 370 i1 = ir,m
-   do 360 j1 = ip1,n
+do i1 = ir,m
+   do j1 = ip1,n
       rn = amax1(rn,scale(i1)*w(i1,j1)**2)
 360   continue
+   end do
 370 continue
+end do
 indep = t > tau**2*rn
 !
 !     If independent, swap the ir-TH and KRP1-ST rows to maintain the
@@ -73014,10 +73257,11 @@ go to 310
 !     If pseudorank is less than l, apply Householder trans.
 !     From right.
 if (.not.(krank < l)) go to 450
-do 440 i = 1,krank
+do i = 1,krank
    j = krp1 - i
    call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j - 1)
 440 continue
+end do
 450 niv = krank + nsoln - l
 niv1 = niv + 1
 if (l == n) done = .true.
@@ -73041,9 +73285,10 @@ return
 !
 if (.not.(ir /= 1 .and. (.not.recalc))) go to 480
 !     Update col SS =Sum of squares.
-do 470 j = i,lend
+do j = i,lend
    h(j) = h(j) - scale(ir - 1)*w(ir - 1,j)**2
 470 continue
+end do
 !
 !     Test for numerical accuracy.
 max = isamax(lend - i + 1,h(i),1) + i - 1
@@ -73051,12 +73296,14 @@ recalc = hbar + tenm3*h(max) == hbar
 !
 !     If required, recalculate col SS, using rows ir through mend.
 480 if (.not.(recalc)) go to 510
-do 500 j = i,lend
+do j = i,lend
    h(j) = zero
-   do 490 k = ir,mend
+   do k = ir,mend
       h(j) = h(j) + scale(k)*w(k,j)**2
 490   continue
+   end do
 500 continue
+end do
 !
 !     Find col with largest SS.
 max = isamax(lend - i + 1,h(i),1) + i - 1
@@ -73084,7 +73331,7 @@ hbar = h(max)
 !     CALL THE COL INDEPENDENT WHEN rn .GT. tau*sn
 sn = zero
 rn = zero
-do 550 j = 1,mend
+do j = 1,mend
    t = scale(j)
    if (j <= me) t = t/factor
    t = t*w(j,ic)**2
@@ -73094,6 +73341,7 @@ do 550 j = 1,mend
 530 rn = rn + t
 540 continue
 550 continue
+end do
 indep = rn > tau**2*sn
 go to 590
 560 continue
@@ -73110,9 +73358,30 @@ call sswap(m, w(1,max), 1, w(1,i), 1)
 t = h(max)
 h(max) = h(i)
 h(i) = t
-570 go to igo993, (30, 200, 330, 120)
-590 go to igo990, (40, 240)
-600 go to igo996, (20, 190, 320)
+570 select case ( igo993 )
+case ( 30 )
+   go to 30
+case ( 200 )
+   go to 200
+case ( 330 )
+   go to 330
+case ( 120 )
+   go to 120
+end select
+590 select case ( igo990 )
+case ( 40 )
+   go to 40
+case ( 240 )
+   go to 240
+end select
+600 select case ( igo996 )
+case ( 20 )
+   go to 20
+case ( 190 )
+   go to 190
+case ( 320 )
+   go to 320
+end select
 end subroutine wnlit
 
 pure subroutine l2slv(m, n, m1, l, a, mm, b, mb, w, tol, n1, ipivot, &
@@ -73759,7 +74028,7 @@ eta2 = eta*eta
 mp1 = m + 1
 mpn = m + n
 n1p1 = n1 + 1
-do 10 i = 1,m
+do i = 1,m
    f(i) = b(i)*w(i)
    g(i) = 0.0
    wres(i) = 0.0
@@ -73767,6 +74036,7 @@ do 10 i = 1,m
    y1(i) = 0.0
    if (w(i) == 0.0) kz = kz + 1
 10 continue
+end do
 do ns = 1,n
    j = m + ns
    f(j) = 0.0
@@ -75561,10 +75831,11 @@ if (eps < 1.e-13) steptl = 1.e2*eps
 mo = 0
 itnlim = iter
 iter = 0
-do 10 i = 1,n
+do i = 1,n
    wrk(i,1) = xpls(i)
    wrk(i,2) = 1.0
 10 continue
+end do
 fscale = 1.0
 !
 !     OPTIMIZE FCN
@@ -75956,10 +76227,11 @@ return
 !
 d = max(abs(fpls),fscale)
 rgx = 0.0
-do 20 i = 1,n
+do i = 1,n
    grd = abs(gpls(i))*max(abs(xpls(i)),typsiz(i))
    rgx = max(rgx, grd)
 20 continue
+end do
 jerr = 1
 if (rgx > gradtl*d) go to 30
 if (abs(fpls) <= 1.e-9) go to 100
@@ -76057,17 +76329,19 @@ real :: big, c, t, xmin
 !     Rescale the variables
 !-----------------------------------------------------------------------
 xmin = 1.e-5*spmpar(3)
-do 10 i = 1,n
+do i = 1,n
    t = max(abs(x(i)), 1.e-20)
    xmin = min(t, xmin)
 10 continue
+end do
 !
 c = 1.e3
 if (mo /= 0) c = 1.e2
 big = c*xmin
-do 20 i = 1,n
+do i = 1,n
    if (abs(x(i)) >= big) go to 30
 20 continue
+end do
 ierr = 0
 return
 !
@@ -76270,9 +76544,10 @@ real :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, t2, t3, tlmbd
 mxtake = .false.
 iretcd = 2
 tmp = 0.0
-do 10 i = 1,n
+do i = 1,n
    tmp = tmp + (p(i)/typsiz(i))**2
 10 continue
+end do
 sln = sqrt(tmp)
 !
 if (sln <= stepmx) go to 30
@@ -77275,7 +77550,7 @@ x1max = 0.0
 x3max = 0.0
 floatn = n
 agiant = rgiant/floatn
-do 90 i = 1, n
+do i = 1, n
    xabs = abs(x(i))
    if (xabs > rdwarf .and. xabs < agiant) go to 70
    if (xabs <= rdwarf) go to 30
@@ -77310,6 +77585,7 @@ do 90 i = 1, n
    s2 = s2 + xabs**2
 80 continue
 90 continue
+end do
 !
 !     Calculation of norm.
 !
@@ -77891,11 +78167,12 @@ dwarf = spmpar(2)
 !     Jacobian is rank-deficient, obtain a least squares solution.
 !
 nsing = n
-do 10 j = 1, n
+do j = 1, n
    wa1(j) = qtb(j)
    if (r(j,j) == zero .and. nsing == n) nsing = j - 1
    if (nsing < n) wa1(j) = zero
 10 continue
+end do
 if (nsing < 1) go to 50
 do k = 1, nsing
    j = nsing - k + 1
@@ -82331,13 +82608,14 @@ call cond(fun,x1,cnd,num,ier)
 if (cnd) go to 20
 !
 x2 = 10.1269
-do 10 i = 1,4
+do i = 1,4
    if (x2 <= x1) go to 10
    call cond(fun,x2,cnd,num1,ier)
    num = num + num1
    if (cnd) go to 200
    x1 = x2
 10 x2 = 10.0*x2
+end do
 go to 300
 !
 20 if (x1 == xl) go to 400
@@ -82876,12 +83154,13 @@ pid16 = atan(1.0e+00)/4.0e+00
 !   Computation of the elements of the array si
 !
 ak = 1.0e+00
-do 10 k = 1,7
+do k = 1,7
    si(k) = sin(ak*pid16)
    ak = ak + 1.0e+00
    kk = 16 - k
    si(kk) = si(k)
 10 continue
+end do
 ier = 0
 nres = 0
 do k = 17,32
@@ -83699,7 +83978,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with NRMAX-TH largest
 !           error estimate.
@@ -83795,12 +84074,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -83834,6 +84114,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -86537,8 +86818,9 @@ xlb = zero
 dn = n
 dnp1 = np1
 !
-do 10 i = 1,lp1
+do i = 1,lp1
 10 p(i) = zero
+end do
 do i = 1,mp1
 11 q(i) = zero
 end do
@@ -86926,12 +87208,13 @@ charf = dx
 edist = mo
 nbreak = kbreak
 if (nbreak <= 0 .or. nbreak >= 21) go to 30
-do 20 k = 1,nbreak
+do k = 1,nbreak
    xbreak(k) = brakpt(k)
    dbreak(k) = kdiff(k)
    bleft(k) = vallft(k)
    bright(k) = valrgt(k)
 20 continue
+end do
 30 continue
 !
 kdimen = kmax + 1
@@ -87246,9 +87529,10 @@ if (nbreak == 0) go to 150
 j = 1
 if (xbreak(1) < a .or. xbreak(nbreak) > b) go to 230
 if (nbreak == 1) go to 110
-do 100 j = 2,nbreak
+do j = 2,nbreak
    if (xbreak(j - 1) >= xbreak(j)) go to 230
 100 continue
+end do
 110 limsm = (degree - 1)/2
 do j = 1,nbreak
    if (dbreak(j) < 0 .or. dbreak(j) > limsm) go to 240
@@ -87467,10 +87751,11 @@ if (nintrp == 0) go to 20
 !             Generate equal spaced interpolation points
 aj = nintrp + 1
 dx = (xright(nstack) - xleft(nstack))/aj
-do 10 j = 1,nintrp
+do j = 1,nintrp
    aj = j
    xintrp(j) = xleft(nstack) + aj*dx
 10 continue
+end do
 !
 !             Get left and right f-values, put f-value in first element
 !             of arrays FLEFT and fright.  Get derivatives back as
@@ -87563,13 +87848,14 @@ p = abs(norm)
 !              Initialize the quadrature rule
 errint = abs(f(pj,fdumb) - fit(pj))**p*weight(1)
 !              Loop through remaining points
-do 10 j = 2,4
+do j = 2,4
    pj = abmid + ba*points(j)
    f1 = f(pj,fdumb)
    f2 = fit(pj)
    er = abs(f1 - f2)**p
    errint = errint + abs(f(pj,fdumb) - fit(pj))**p*weight(j)
 10 continue
+end do
 errint = errint*ba
 go to 40
 !
@@ -87651,14 +87937,16 @@ nr2 = nr + 1
 nrl = nr + nl
 !
 !         Put X-values in a single array with nddx = nl+nr+ni points
-do 10 nddx = 1,nl
+do nddx = 1,nl
    xdd(nddx) = xleft(nstack)
 10 continue
+end do
 nddx = nl
-do 20 k = 1,nr
+do k = 1,nr
    nddx = nddx + 1
    xdd(nddx) = xright(nstack)
 20 continue
+end do
 !            Check if there are any interpolation points to add to XDD
 if (ni == 0) go to 40
 do k = 1,ni
@@ -87669,9 +87957,10 @@ end do
 !           Fill border of first triangle - Size nl.
 40 continue
 !         Top border
-do 50 idif = 1,nl
+do idif = 1,nl
    ddtemp(idif,1) = fleft(idif)/factor(idif)
 50 continue
+end do
 if (nl1 == 0) go to 70
 !                   Bottom border
 do idif = 1,nl1
@@ -87763,10 +88052,11 @@ common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
    & leftx, nintrp, rightx
 !
 polydd = ddtemp(degree + 1,1)
-do 10 k = 1,degree
+do k = 1,degree
    j = degree + 1 - k
    polydd = ddtemp(j,1) + (x - xdd(j))*polydd
 10 continue
+end do
 end function polydd
 
 subroutine adchk
@@ -88008,12 +88298,13 @@ end do
 !
 !         Do the repeated synthetic division to replace the xtemp
 !         = XINTRP points of the Newton expansion by the xr points
-do 70 k = 1,ni1
+do k = 1,ni1
 !              powers(ni) is fixed and set above
-   do 50 ii = 1,ni1
+   do ii = 1,ni1
       i = ni - ii
       powers(i) = powers(i) + (xr - xtemp(i))*powers(i + 1)
 50    continue
+   end do
 !              Shift the Newton expansion pts. Up, put in one more xr
    do ii = 1,ni1
       i = ni - ii
@@ -88021,6 +88312,7 @@ do 70 k = 1,ni1
    end do
    xtemp(1) = xr
 70 continue
+end do
 80 continue
 !             Shift the coefficients to the top of the powers array
 do k = 1,ni
@@ -88134,11 +88426,12 @@ fv(2) = (0.,-1.)
 r1 = sqrt(0.5)
 ra = 1.0/r1
 fv(3) = cmplx(r1,-r1)
-do 10 i = 2,4
+do i = 2,4
    sc(i) = .5*sc(i - 1)
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
 10 fv(i + 2) = cmplx(cos(ang),-sin(ang))
+end do
 !
 !  Start execution.
 !
@@ -88163,28 +88456,32 @@ is = iw(kn)
 !
 !  Function values of f are stored ready permutated for the FFT.
 !
-do 40 i = is,32,is
+do i = is,32,is
    iq = ip(i)
    v = v*fv(km)
    a(iq) = f(z + v)
 40 a(iq - 1) = f(z - v)
+end do
 ln = 2
 jn = 1
 !
 !  The loop  do 70 ... constitutes the FFT.
 !
-do 70 l = 1,km
+do l = 1,km
    u = (1.,0.)
    w = fv(l)
-   do 60 j = 1,jn
-      do 50 i = j,ix,ln
+   do j = 1,jn
+      do i = j,ix,ln
          it = i + jn
          t = a(it)*u
          a(it) = a(i) - t
 50       a(i) = a(i) + t
+      end do
 60    u = u*w
+   end do
    ln = ln + ln
 70 jn = jn + jn
+end do
 cx = 0.0
 b = 1.0
 !
@@ -88396,12 +88693,13 @@ r1 = sqrt(0.5d0)
 ra = 1.d0/r1
 fv1(3) = r1
 fv2(3) = -r1
-do 10 i = 2,4
+do i = 2,4
    sc(i) = 0.5d0*sc(i - 1)
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
    fv1(i + 2) = cos(ang)
 10 fv2(i + 2) = -sin(ang)
+end do
 !
 !  Start execution.
 !
@@ -88427,7 +88725,7 @@ v = 0.d0
 !
 !  Function values of F are stored ready permutated for the FFT.
 !
-do 40 i = is,32,is
+do i = is,32,is
    iq = ip(i)
    t = u*fv1(km) - v*fv2(km)
    v = u*fv2(km) + v*fv1(km)
@@ -88435,16 +88733,17 @@ do 40 i = is,32,is
    call fun(x + u, y + v, a1(iq), a2(iq))
    call fun(x - u, y - v, a1(iq - 1), a2(iq - 1))
 40 continue
+end do
 ln = 2
 jn = 1
 !
 !  The loop  do 70 ... constitutes the FFT.
 !
-do 70 l = 1,km
+do l = 1,km
    u = 1.0
    v = 0.0
-   do 60 j = 1,jn
-      do 50 i = j,ix,ln
+   do j = 1,jn
+      do i = j,ix,ln
          it = i + jn
          s = u*a1(it) - v*a2(it)
          t = u*a2(it) + v*a1(it)
@@ -88452,11 +88751,14 @@ do 70 l = 1,km
          a2(it) = a2(i) - t
          a1(i) = a1(i) + s
 50       a2(i) = a2(i) + t
+      end do
       t = u*fv1(l) - v*fv2(l)
       v = u*fv2(l) + v*fv1(l)
 60    u = t
+   end do
    ln = ln + ln
 70 jn = jn + jn
+end do
 cx = 0.d0
 b = 1.d0
 !
@@ -89470,18 +89772,20 @@ if (n < 4) go to 200
 nm1 = n - 1
 nm2 = n - 2
 if (isx > 0) go to 40
-do 10 i = 2,n
+do i = 2,n
    if (x(i) <= x(i - 1)) go to 300
 10 continue
+end do
 !
 !     Define the tridiagonal matrix
 !
 w(1,3) = x(2) - x(1)
-do 20 i = 2,nm1
+do i = 2,nm1
    w(i,2) = w(i - 1,3)
    w(i,3) = x(i + 1) - x(i)
    w(i,1) = 2.0*(w(i,2) + w(i,3))
 20 continue
+end do
 w(1,1) = 4.0
 w(1,3) = -4.0*a1
 w(n,1) = 4.0
@@ -89489,21 +89793,23 @@ w(n,2) = -4.0*an
 !
 !     LU decomposition
 !
-do 30 i = 2,n
+do i = 2,n
    w(i - 1,3) = w(i - 1,3)/w(i - 1,1)
    w(i,1) = w(i,1) - w(i,2)*w(i - 1,3)
 30 continue
+end do
 !
 !     Define *constant* vector
 !
 40 ypp(1) = 4.0*b1
 dold = (y(2) - y(1))/w(2,2)
-do 50 i = 2,nm2
+do i = 2,nm2
    dnew = (y(i + 1) - y(i))/w(i + 1,2)
    ypp(i) = 6.0*(dnew - dold)
    yp(i) = dold
    dold = dnew
 50 continue
+end do
 dnew = (y(n) - y(nm1))/(x(n) - x(nm1))
 ypp(nm1) = 6.0*(dnew - dold)
 ypp(n) = 4.0*bn
@@ -89513,24 +89819,27 @@ yp(n) = dnew
 !     Forward substitution
 !
 ypp(1) = ypp(1)/w(1,1)
-do 60 i = 2,n
+do i = 2,n
    ypp(i) = (ypp(i) - w(i,2)*ypp(i - 1))/w(i,1)
 60 continue
+end do
 !
 !     Backward substitution
 !
-do 70 j = 1,nm1
+do j = 1,nm1
    i = n - j
    ypp(i) = ypp(i) - w(i,3)*ypp(i + 1)
 70 continue
+end do
 !
 !     Compute first derivatives
 !
 h = x(2) - x(1)
 yp(1) = (y(2) - y(1))/h - h*(2.0*ypp(1) + ypp(2))/6.0
-do 80 i = 2,nm1
+do i = 2,nm1
    yp(i) = yp(i) + w(i,2)*(ypp(i - 1) + 2.0*ypp(i))/6.0
 80 continue
+end do
 yp(n) = yp(n) + (x(n) - x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0
 ierr = 0
 return
@@ -89589,13 +89898,14 @@ ierr = 0
 call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lq), lm1, temp)
 k = lq
-do 20 j = 1,lm1
+do j = 1,lm1
    z(j) = wk(k)
    a(j) = wk(k + 1)
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
 20 continue
+end do
 return
 !
 !                       Error return
@@ -89670,13 +89980,14 @@ if (ierr < 0 .or. ierr == 2) return
 call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lw), lm1, temp)
 k = lw
-do 20 j = 1,lm1
+do j = 1,lm1
    z(j) = wk(k)
    a(j) = wk(k + 1)
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
 20 continue
+end do
 return
 !
 !                       Error return
@@ -90868,13 +91179,14 @@ if (ierr /= 0) go to 30
 !
 call bspp(wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
 k = lw
-do 20 j = 1,lm1
+do j = 1,lm1
    z(j) = wk(k)
    a(j) = wk(k + 1)
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
 20 continue
+end do
 return
 !
 !                The coefficients were not obtained
@@ -92036,10 +92348,11 @@ if (n <= 1) go to 11
 ! Determine polygonal arclengths
 !
 s(1) = 0.
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -92319,10 +92632,11 @@ if (n <= 1) go to 7
 ! Determine polygonal arclengths
 !
 s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -92352,7 +92666,7 @@ dy1 = dy2
 diag1 = diag2
 sdiag1 = sdiag2
 if (n == 2) go to 3
-do 2 i = 2,nm1
+do i = 2,nm1
    npi = n + i
    dels2 = s(i + 1) - s(i)
    if (dels2 == 0.) go to 8
@@ -92369,6 +92683,7 @@ do 2 i = 2,nm1
    dy1 = dy2
    diag1 = diag2
 2  sdiag1 = sdiag2
+end do
 3 dels2 = s(1)
 dx2 = (x(1) - x(n))/dels2
 dy2 = (y(1) - y(n))/dels2
@@ -92634,10 +92949,11 @@ if (n <= 1) go to 9
 ! Determine polygonal arclengths
 !
 s(1) = 0.
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
       & + (z(i) - z(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -96122,38 +96438,43 @@ go to 100
 !
 if (ind(3) == 0) go to 2
 l = loc(3)
-do 1 i = 1,m
+do i = 1,m
    zp(i,1,1) = opt(l)
 1  l = l + 1
+end do
 go to 5
 2 dely1 = y(2) - y(1)
 dely2 = dely1 + dely1
 if (n > 2) dely2 = y(3) - y(1)
 if (dely1 <= 0. .or. dely2 <= dely1) go to 47
 call ceez(dely1,dely2,sigmay,c1,c2,c3,n)
-do 3 i = 1,m
+do i = 1,m
 3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
+end do
 if (n == 2) go to 5
-do 4 i = 1,m
+do i = 1,m
 4  zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
+end do
 !
 ! Obtain y-partial derivatives along y = y(n)
 !
 5 if (ind(4) == 0) go to 7
 l = loc(4)
-do 6 i = 1,m
+do i = 1,m
    npi = n + i
    temp(npi) = opt(l)
 6  l = l + 1
+end do
 go to 10
 7 delyn = y(n) - y(nm1)
 delynm = delyn + delyn
 if (n > 2) delynm = y(n) - y(n - 2)
 if (delyn <= 0. .or. delynm <= delyn) go to 47
 call ceez(-delyn,-delynm,sigmay,c1,c2,c3,n)
-do 8 i = 1,m
+do i = 1,m
    npi = n + i
 8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
+end do
 if (n == 2) go to 10
 do i = 1,m
    npi = n + i
@@ -96643,7 +96964,7 @@ sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 deltdx = 0.
 if (md >= 2) deltdx = (dxmax - dxmin)/float(md - 1)
 lasti = 1
-do 3 ii = 1,md
+do ii = 1,md
    xii = dxmin + float(ii - 1)*deltdx
    i = lasti
 1  i = i + 1
@@ -96675,6 +96996,7 @@ do 3 ii = 1,md
    work(4,ii) = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
       & sinhp2 + sigmax*coshp1*del2))/temp
 3  continue
+end do
 !
 ! Find intervals of second y grid with respect to original y
 ! grid and perform intrpolation
@@ -96682,7 +97004,7 @@ do 3 ii = 1,md
 deltdy = 0.
 if (nd >= 2) deltdy = (dymax - dymin)/float(nd - 1)
 lastj = 1
-do 8 jj = 1,nd
+do jj = 1,nd
    yjj = dymin + float(jj - 1)*deltdy
    j = lastj
 4  j = j + 1
@@ -96714,7 +97036,7 @@ do 8 jj = 1,nd
    c4 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
       & sinhp2 + sigmay*coshp1*del2))/temp
 6  lasti = 0
-   do 8 ii = 1,md
+   do ii = 1,md
       xii = dxmin + float(ii - 1)*deltdx
       i = max (1, lasti)
 7     i = i + 1
@@ -96732,6 +97054,8 @@ do 8 jj = 1,nd
          & + c3*zp(i,jm1,3) + c4*zp(i,j,3)
 8     dz(ii,jj) = work(1,ii)*zim1 + work(2,ii)*zi &
          & + work(3,ii)*zxxim1 + work(4,ii)*zxxi
+   end do
+end do
 end subroutine nsurf2
 
 pure subroutine bstrp2(x, y, z, kz, tx, nx, kx, ty, ny, ky, &
@@ -97291,12 +97615,13 @@ go to 1
 !   n0 which lies to the right of k.
 !   Set sprod to (n0-nl,n0-k).
 !
-3 do 4 ind = 2,km1
+3 do ind = 2,km1
    n0 = iend(ind)
    sprod = (xl - x(n0))*(xk - x(n0)) + &
       & (yl - y(n0))*(yk - y(n0))
    if (sprod >= 0.) go to 5
 4  continue
+end do
 !
 ! Node k is to the right of nr.  Insert k as the last
 !   (rightmost) node in iend and set nr to k.
@@ -97619,9 +97944,10 @@ nf = max(n1,n2)
 call shiftd(nf,nl,2, iadj )
 iadj(nf + 1) = k
 imin = max(nright,nleft)
-do 1 i = imin,km1
+do i = imin,km1
    iend(i) = iend(i) + 2
 1  continue
+end do
 !
 ! Initialize KEND and insert k as a neighbor of
 !   min(nright,nleft)
@@ -97633,9 +97959,10 @@ call shiftd(nf,nl,1, iadj )
 iadj(nf) = k
 imax = imin - 1
 imin = min(nright,nleft)
-do 2 i = imin,imax
+do i = imin,imax
    iend(i) = iend(i) + 1
 2  continue
+end do
 !
 ! Insert nright as the first neighbor of k
 !
@@ -97746,7 +98073,7 @@ n(3) = i3
 !
 ! Set up nft
 !
-do 2 i = 1,3
+do i = 1,3
    n1 = n(i)
    indx = mod(i,3) + 1
    n2 = n(indx)
@@ -97758,6 +98085,7 @@ do 2 i = 1,3
    if (iadj(indx) /= n2) go to 1
    nft(i) = indx + 1
 2  continue
+end do
 !
 ! Order the vertices by decreasing magnitude.
 !   n(IP(I+1)) precedes n(IP(I)) in iend for
@@ -97894,7 +98222,7 @@ if ( k < 0) go to 4
 ! Shift downward starting from the bottom
 !
 if (nsl <= 0) go to 2
-do 1 i = 1,nsl,inc
+do i = 1,nsl,inc
    ibak = nlp1 - i
    indx = ibak + k
    iarr(indx) = iarr(ibak)
@@ -97903,6 +98231,7 @@ do 1 i = 1,nsl,inc
    iarr(indx - 3) = iarr(ibak - 3)
    iarr(indx - 4) = iarr(ibak - 4)
 1  continue
+end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -97917,7 +98246,7 @@ go to 3
 !
 4 if (nsl <= 0) go to 6
 imax = nlp1 - inc
-do 5 i = nf,imax,inc
+do i = nf,imax,inc
    indx = i + k
    iarr(indx) = iarr(i)
    iarr(indx + 1) = iarr(i + 1)
@@ -97925,6 +98254,7 @@ do 5 i = nf,imax,inc
    iarr(indx + 3) = iarr(i + 3)
    iarr(indx + 4) = iarr(i + 4)
 5  continue
+end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -98017,7 +98347,7 @@ if (in(2) < io(1)) go to 12
 !   by shifting a portion of iadj either up or down and
 !   and insert in(k) as a neighbor of in(j).
 !
-do 7 j = 1,2
+do j = 1,2
    k = 3 - j
    if (in(j) > io(j)) go to 4
 !
@@ -98030,8 +98360,9 @@ do 7 j = 1,2
    iadj(nf) = in(k)
    imin = in(j)
    imax = io(j) - 1
-   do 3 i = imin,imax
+   do i = imin,imax
 3     iend(i) = iend(i) + 1
+   end do
    go to 6
 !
 !   The neighbors of io(j) precede those of in(j) -- shift
@@ -98052,6 +98383,7 @@ do 7 j = 1,2
 6  ip1 = ip2
    ip2 = 3 - ip1
 7  continue
+end do
 return
 !
 ! The vertices are ordered (io(1),io(2),in(1),in(2)).
@@ -98753,7 +99085,7 @@ iter = 0
 1 if (iter == maxit) go to 4
 dgmax = 0.
 indl = 0
-do 3 k = 1,nn
+do k = 1,nn
    xk = x(k)
    yk = y(k)
    zk = z(k)
@@ -98772,7 +99104,7 @@ do 3 k = 1,nn
 !
    indf = indl + 1
    indl = iend(k)
-   do 2 indx = indf,indl
+   do indx = indf,indl
       nb = iadj(indx)
       if (nb == 0) go to 2
 !
@@ -98795,6 +99127,7 @@ do 3 k = 1,nn
       r1 = r1 + t*delx
       r2 = r2 + t*dely
 2     continue
+   end do
 !
 !   Solve the 2 by 2 system and update dgmax
 !
@@ -98806,6 +99139,7 @@ do 3 k = 1,nn
 !
    zxzy(1,k) = zxk + dzx
 3  zxzy(2,k) = zyk + dzy
+end do
 !
 !   Increment iter and test for convergence
 !
@@ -99015,18 +99349,20 @@ lmax = min(lmx,nn)
 sum = 0.
 npts(1) = kk
 lm1 = lmin - 1
-do 1 lnp = 2,lm1
+do lnp = 2,lm1
    call getnp(x,y,iadj,iend,lnp, npts, ds,ierr)
 1  sum = sum + ds
+end do
 !
 ! Add additional nodes to npts until the relative increase
 !   in ds is at least rtol.
 !
-do 2 lnp = lmin,lmax
+do lnp = lmin,lmax
    call getnp(x,y,iadj,iend,lnp, npts, rs,ierr)
    if ((rs - ds)/ds <= rtol) go to 2
    if (lnp > 6) go to 3
 2  sum = sum + rs
+end do
 !
 ! Use all lmax nodes in the least squares fit.  rs is
 !   arbitrarily increased by 10 per cent.
@@ -99050,18 +99386,20 @@ if (lnp < 7) go to 12
 !   the lower triangle (upper triangle of A) with Givens
 !   rotations
 !
-do 5 i = 1,5
+do i = 1,5
    np = npts(i + 1)
    call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
       & r, a(1,i))
    if (i == 1) go to 5
    im1 = i - 1
-   do 4 j = 1,im1
+   do j = 1,im1
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,i),c,s)
 4     call srot(l,a(jp1,j),1,a(jp1,i),1,c,s)
+   end do
 5  continue
+end do
 !
 ! Add the additional equations to the system using
 !   the last column of a -- I .LE. lnp.
@@ -99071,11 +99409,12 @@ i = 7
 np = npts(i)
 call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,6))
-do 7 j = 1,5
+do j = 1,5
    jp1 = j + 1
    l = 6 - j
    call srotg(a(j,j),a(j,6),c,s)
 7  call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+end do
 i = i + 1
 go to 6
 !
@@ -99099,16 +99438,19 @@ go to 6
 !   multiples of the first three unit vectors to the first
 !   three equations.
 !
-9 do 11 i = 1,3
+9 do i = 1,3
    a(i,6) = sf
    ip1 = i + 1
-   do 10 j = ip1,6
+   do j = ip1,6
 10    a(j,6) = 0.
-   do 11 j = i,5
+   end do
+   do j = i,5
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,6),c,s)
 11    call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+   end do
+end do
 go to 14
 !
 ! 4 .LE. lnp .LE. 6 (2, 3, OR 4 EQUATIONS) -- fit a plane to
@@ -99238,8 +99580,9 @@ return
 ! Nodes K and i coincide or node i is outside of the radius
 !   of influence.  Set row to the zero vector.
 !
-1 do 2 i = 1,6
+1 do i = 1,6
 2  row(i) = 0.
+end do
 end subroutine setrm
 
 pure subroutine getnp(x,y,iadj,iend,l, npts, ds,ier)
@@ -99340,10 +99683,11 @@ y1 = y(n1)
 !
 ! Mark the elements of npts
 !
-do 1 i = 1,lm1
+do i = 1,lm1
    ni = npts(i)
    iend(ni) = -iend(ni)
 1  continue
+end do
 !
 ! Candidates for np = npts(l) are the unmarked neighbors
 !   of nodes in npts.  np=0 Is a flag to set np to the
@@ -99877,9 +100221,10 @@ v(1) = y3 - y2
 v(2) = y1 - y3
 v(3) = y2 - y1
 !
-do 1 i = 1,3
+do i = 1,3
    sl(i) = u(i)*u(i) + v(i)*v(i)
 1  continue
+end do
 !
 ! area = 3-1 x 3-2
 !
@@ -102378,19 +102723,21 @@ go to 30
 k = k + 1
 acum = 0.0
 ! Contribution from function values already computed.
-do 20 j = 1,iold
+do j = 1,iold
    i = i + 1
    acum = acum + p(i)*funct(j)
 20 continue
+end do
 ! Contribution from new function values.
 30 iold = iold + inew
-do 40 j = inew,iold
+do j = inew,iold
    i = i + 1
    x = p(i)*diff
    funct(j) = f(sum + x) + f(sum - x)
    i = i + 1
    acum = acum + p(i)*funct(j)
 40 continue
+end do
 inew = iold + 1
 i = i + 1
 result(k) = (acum + p(i)*fzero)*diff
@@ -102880,7 +103227,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
@@ -102980,13 +103327,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -103021,6 +103369,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -103181,7 +103530,7 @@ resg = 0.0
 fc = f(centr)
 resk = wgk(11)*fc
 resabs = abs(resk)
-do 10 j = 1,5
+do j = 1,5
    jtw = 2*j
    absc = hlgth*xgk(jtw)
    fval1 = f(centr - absc)
@@ -103193,6 +103542,7 @@ do 10 j = 1,5
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
+end do
 do j = 1,5
    jtwm1 = 2*j - 1
    absc = hlgth*xgk(jtwm1)
@@ -103714,7 +104064,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
@@ -103811,12 +104161,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -103850,6 +104201,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -104799,7 +105151,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
@@ -104918,13 +105270,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -104959,6 +105312,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -105112,7 +105466,7 @@ k2 = min(key1 + 1,3)
 call qxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.0*epmach
-do 10 k = k1,k2
+do k = k1,k2
    call qxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = abs(resk - resg)
@@ -105124,6 +105478,7 @@ do 10 k = k1,k2
    if (abserr < 1000.0*epmach*resabs) go to 3000
    errold = abserr
 10 continue
+end do
 3000 continue
 end subroutine qxlqm
 
@@ -105273,13 +105628,14 @@ bb = ldl*0.5
 aa = xl + bb
 !
 y = 0.0
-do 10 i = 1,ks
+do i = 1,ks
    c = bb*xx(i)
    if (i > l1) fv1(i) = f(aa + c)
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
 10 continue
+end do
 !
 y2 = y
 y = y*bb
@@ -105288,18 +105644,20 @@ if (l2 < ks) l2 = ks
 if (ke /= k1) return
 !
 ya = 0.0
-do 20 i = 1,ks
+do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
 20 continue
+end do
 ya = ya*abs(bb)
 !
 y2 = y2*0.5
 ym = 0.0
-do 30 i = 1,ks
+do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
 30 continue
+end do
 ym = ym*abs(bb)
 end subroutine qxrul
 
@@ -105876,7 +106234,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
@@ -105976,13 +106334,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -106017,6 +106376,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -106186,7 +106546,7 @@ resg = 0.d0
 fc = f(centr)
 resk = wgk(11)*fc
 resabs = abs(resk)
-do 10 j = 1,5
+do j = 1,5
    jtw = 2*j
    absc = hlgth*xgk(jtw)
    fval1 = f(centr - absc)
@@ -106198,6 +106558,7 @@ do 10 j = 1,5
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
+end do
 do j = 1,5
    jtwm1 = 2*j - 1
    absc = hlgth*xgk(jtwm1)
@@ -106724,7 +107085,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
@@ -106821,12 +107182,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -106860,6 +107222,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -107819,7 +108182,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
@@ -107938,13 +108301,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -107979,6 +108343,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -108132,7 +108497,7 @@ k2 = min(key1 + 1,3)
 call dqxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.d0*epmach
-do 10 k = k1,k2
+do k = k1,k2
    call dqxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = abs(resk - resg)
@@ -108144,6 +108509,7 @@ do 10 k = k1,k2
    if (abserr < 1000.d0*epmach*resabs) go to 3000
    errold = abserr
 10 continue
+end do
 3000 continue
 end subroutine dqxlqm
 
@@ -108293,13 +108659,14 @@ bb = ldl*0.5d0
 aa = xl + bb
 !
 y = 0.d0
-do 10 i = 1,ks
+do i = 1,ks
    c = bb*xx(i)
    if (i > l1) fv1(i) = f(aa + c)
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
 10 continue
+end do
 !
 y2 = y
 y = y*bb
@@ -108308,18 +108675,20 @@ if (l2 < ks) l2 = ks
 if (ke /= k1) return
 !
 ya = 0.d0
-do 20 i = 1,ks
+do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
 20 continue
+end do
 ya = ya*abs(bb)
 !
 y2 = y2*0.5d0
 ym = 0.d0
-do 30 i = 1,ks
+do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
 30 continue
+end do
 ym = ym*abs(bb)
 end subroutine dqxrul
 
@@ -108991,22 +109360,26 @@ eps = ep
 !   Create the nodes and weights TN(i) and WN(i), i=1,...,n
 call wandt(wn,tn,n,a,b)
 !   Set up matrix for (i-KN)*XN=rhfcn
-do 2 j = 1,n
-   do 1 i = 1,n
+do j = 1,n
+   do i = 1,n
 1     imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
+   end do
    xmz(j) = rhfcn(tn(j))
 2  imknn(j,j) = imknn(j,j) + 1.0
+end do
 go to 6
 !   This is entrance for an increased value of n, using previously
 !   stored values in kmm to define matrix for (i-KN)*XN=rhfcn with
 !   new value of n.
-3 do 5 j = 1,n
-   do 4 i = 1,n
+3 do j = 1,n
+   do i = 1,n
 4     imknn(i,j) = -kmm(i,j)
+   end do
    wn(j) = wm(j)
    tn(j) = tm(j)
    xmz(j) = rhs(j)
 5  imknn(j,j) = imknn(j,j) + 1.0
+end do
 !   This is the entrance when iteration in stage b fails and we need
 !   to increase n to obtain a better iterative rate.
 6 continue
@@ -109335,8 +109708,9 @@ integer :: i
 if (iflag == 1) go to 2
 !   Find the norm of x.
 rnrm = 0.0
-do 1 i = 1,n
+do i = 1,n
 1  rnrm = max(rnrm,abs(x(i)))
+end do
 return
 !   Find the norm of x-y.
 2 rnrm = 0.0
@@ -109474,12 +109848,12 @@ scale = h/2.0
 m = min(128,n/2)
 mt = 2*m
 nplace = m - 1
-do 1 l = 1,loop
+do l = 1,loop
    fl = l
    al = a + (fl - 1.0)*h
    bl = a + fl*h
    k = 256*(l - 1)
-   do 1 i = 1,m
+   do i = 1,m
       npi = nplace + i
       s = t(npi)
       r = w(npi)*scale
@@ -109489,6 +109863,8 @@ do 1 l = 1,loop
       tv(i2) = (al*(1.0 - s) + (1.0 + s)*bl)/2.0
       wv(i1) = r
 1     wv(i2) = r
+   end do
+end do
 end subroutine wandt
 
 subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
@@ -109643,17 +110019,22 @@ if (m > nup) go to 13
 if (iflg == 1) go to 3
 !   If iflg=0, then the matrices kmm and knm must be computed
 !   and stored.
-do 2 j = 1,m
-   do 1 i = 1,m
+do j = 1,m
+   do i = 1,m
 1     kmm(i,j) = wm(j)*kernel(tm(i),tm(j))
-   do 2 i = 1,n
+   end do
+   do i = 1,n
 2     knm(i,j) = wm(j)*kernel(tn(i),tm(j))
+   end do
+end do
 !   Compute  residuals r(i)=rhfcn(tm(i))-xmz(i)+km(tm(i))*xmz(i)
-3 do 5 i = 1,m
+3 do i = 1,m
    sum = 0.0
-   do 4 j = 1,m
+   do j = 1,m
 4     sum = sum + kmm(i,j)*xmz(j)
+   end do
 5  r(i) = rhs(i) - (xmz(i) - sum)
+end do
 !
 !   COMPUTE rh=km*r AT ALL tn(i).
 do i = 1,n
@@ -110423,8 +110804,9 @@ return
 !   If error tolerance is too small, increase it to an acceptable value
 !
 round = 0.0
-do 10 l = 1,neqn
+do l = 1,neqn
 10 round = round + (y(l)/wt(l))**2
+end do
 round = twou*sqrt(round)
 if (p5eps >= round) go to 15
 eps = 2.0*round*(1.0 + fouru)
@@ -110456,8 +110838,9 @@ phase1 = .true.
 nornd = .true.
 if (p5eps > 100.0*round) go to 99
 nornd = .false.
-do 25 l = 1,neqn
+do l = 1,neqn
 25 phi(l,15) = 0.0
+end do
 99 ifail = 0
 !
 !       ***     End block 0     ***
@@ -114170,8 +114553,9 @@ call f(t,y,yh(1,2),rpar,ipar)
 nfe = 1
 if (t /= tout) go to 220
 idid = 2
-do 210 l = 1,neq
+do l = 1,neq
 210 ypout(l) = yh(l,2)
+end do
 told = t
 return
 !
@@ -114483,8 +114867,9 @@ relper = small**0.375
 da = sign(max(min(relper*abs(a),absdx),100.*small*abs(a)),dx)
 if (da == 0.) da = relper*dx
 call f(a + da,y,sf,rpar,ipar)
-do 10 j = 1,neq
+do j = 1,neq
 10 yp(j) = sf(j) - yprime(j)
+end do
 delf = vnorm(yp,neq)
 dfdxb = big
 if (delf < big*abs(da)) dfdxb = delf/abs(da)
@@ -114532,7 +114917,7 @@ delf = vnorm(yp,neq)
 !
 50 dfdub = 0.
 lk = min(neq + 1,3)
-do 140 k = 1,lk
+do k = 1,lk
 !                       Define perturbed vector of initial values
    do j = 1,neq
 60    pv(j) = y(j) + dely*(yp(j)/delf)
@@ -114572,6 +114957,7 @@ do 140 k = 1,lk
 130   yp(j) = dy
    end do
 140 delf = vnorm(yp,neq)
+end do
 !
 !                       Protect against an overflow
 150 dfdub = big
@@ -116018,17 +116404,20 @@ end do
 call f(t + h*2./9.,w(1))
 !
 i = 1
-do 22 m = 2,8
+do m = 2,8
    i = i + n
    m1 = m - 1
-   do 21 k = 1,n
+   do k = 1,n
       sum = b(1,m1)*dy(k)
       l = k
-      do 20 j = 2,m
+      do j = 2,m
          sum = sum + b(j,m1)*w(l)
 20       l = l + n
+      end do
 21    w(l) = y(k) + sum*h/c(m1)
+   end do
 22 call f(t + a(m1)*h,w(i))
+end do
 !
 do k = 1,n
    sum = d(1)*dy(k)
@@ -116044,8 +116433,9 @@ t = t + h
 call f(t,dy)
 return
 !
-40 do 41 k = 1,n
+40 do k = 1,n
 41 dy(k) = y(k)
+end do
 call f(t,dy)
 end subroutine rk8
 
@@ -118875,13 +119265,14 @@ do l = 1,n
 !
 !     ********** Look for small squared sub-diagonal element **********
 !
-20 do 30 m = l,n
+20 do m = l,n
       if (e2(m) <= c) go to  40
 !
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
 !
 30    continue
+   end do
 !
 40 if (m == l) go to  80
 50 if (j == 30) go to 140

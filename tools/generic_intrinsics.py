@@ -22,9 +22,14 @@ MAPPING = {
     'cabs': 'abs', 'ccos': 'cos', 'cexp': 'exp', 'clog': 'log',
     'csin': 'sin', 'csqrt': 'sqrt', 'dabs': 'abs', 'datan': 'atan',
     'datan2': 'atan2', 'dcos': 'cos', 'dexp': 'exp', 'dlog': 'log',
+    'derf': 'erf', 'derfc': 'erfc',
     'dmax1': 'max', 'dmin1': 'min', 'dsign': 'sign', 'dsin': 'sin',
     'dsqrt': 'sqrt', 'iabs': 'abs', 'isign': 'sign', 'max0': 'max', 'min0': 'min',
 }
+# These GNU aliases need explicit generic bindings because this library also
+# exports procedures named ERF and ERFC. Local data/procedure collisions still
+# prevent replacement, and only compiler-confirmed intrinsic calls qualify.
+EXPLICIT_BINDINGS = {'derf', 'derfc'}
 # GNU's frontend retains these specific names until later lowering. The
 # generic forms already carry type/kind suffixes at the dump stage.
 LOWERED_NAMES = {'amax1': '__max_r4', 'amin1': '__min_r4',
@@ -47,7 +52,7 @@ def review(text, inventory):
                       if 'INTRINSIC-PROC' in records.get(alias, {}).get('attributes', '')}
         calls, reasons = {}, {}
         for alias, target in candidates.items():
-            if target in library or (target in records and
+            if (target in library and alias not in EXPLICIT_BINDINGS) or (target in records and
                     'INTRINSIC-PROC' not in records[target].get('attributes', '')):
                 reasons[alias] = 'generic name conflicts with a data object or procedure'
         for physical, logical in groups(body.splitlines(True)):
@@ -86,6 +91,7 @@ def transform(text, manifest=None):
     if manifest['mapping'] != MAPPING:
         raise ValueError('Generic intrinsic mapping needs review')
     lines, output, previous = text.splitlines(True), [], 0
+    library = {n.lower() for n in procedure_blocks(text)}
     for name, start, end in procedure_spans(text):
         entry = manifest['procedures'].get(name)
         if entry is None:
@@ -132,6 +138,21 @@ def transform(text, manifest=None):
                     edits[record.index] = code + record.comment + record.newline
         if counts != entry['calls']:
             raise ValueError(f'{name}: reviewed call counts differ')
+        required = {MAPPING[n] for n in selected & EXPLICIT_BINDINGS} & library
+        declared = set()
+        for _, logical in groups(body.splitlines(True)):
+            intrinsic = re.match(r'^\s*intrinsic\s+(?:::)?\s*(.*)', logical, re.I)
+            if intrinsic:
+                declared.update(MAPPING.get(n.lower(), n.lower()) if n.lower() in selected else n.lower()
+                                for n in split_list(intrinsic[1]))
+        if required - declared:
+            implicit = [(physical, logical) for physical, logical in groups(body.splitlines(True))
+                        if re.match(r'^\s*implicit\s+none\b', logical, re.I)]
+            if not implicit:
+                raise ValueError(f'{name}: explicit intrinsic binding needs IMPLICIT NONE')
+            record = implicit[0][0][-1]
+            edits[record.index] = edits.get(record.index, body.splitlines(True)[record.index]) + \
+                'intrinsic :: ' + ', '.join(sorted(required - declared)) + record.newline
         output.extend(lines[previous:start])
         output.extend(edits.get(i, '' if i in removed else line) for i, line in enumerate(body.splitlines(True)))
         previous = end
@@ -144,11 +165,17 @@ def compile_dump(text, work, compiler='gfortran'):
     path.write_text(text, encoding='ascii', newline='\n')
     obj = Path(work) / 'input.o'
     result = subprocess.run([compiler, '-std=legacy', '-fno-allow-argument-mismatch',
-                             '-c', '-fdump-fortran-original', str(path), '-o', str(obj)],
+                             '-c', '-save-temps=obj', '-fdump-fortran-original', str(path), '-o', str(obj)],
                             cwd=work, capture_output=True, text=True, timeout=180)
     if result.returncode:
         raise RuntimeError(result.stderr)
-    return result.stdout, result.stderr, obj.read_bytes()
+    assembly = (Path(work) / 'input.s').read_text()
+    lines = assembly.splitlines()
+    for i, line in enumerate(lines):
+        if re.match(r'^\s*\.(?:ascii|string)\s', line):
+            line = re.sub(r'\bAt line \d+ of file\b', 'At line <source> of file', line)
+            lines[i] = re.sub(r'\baround line \d+\b', 'around line <source>', line)
+    return result.stdout, result.stderr, obj.read_bytes(), lines
 
 
 def normalized_dump(dump, manifest):
@@ -173,8 +200,8 @@ def normalized_dump(dump, manifest):
 
 
 def verify(before, after, manifest):
-    if before[2] != after[2]:
-        raise ValueError('Generic replacement changed the compiled object file')
+    if before[2] != after[2] and before[3] != after[3]:
+        raise ValueError('Generic replacement changed assembly beyond diagnostic line text')
     if normalized_dump(before[0], manifest) != normalized_dump(after[0], manifest):
         raise ValueError('Generic replacement changed unreviewed symbols or executable compiler trees')
     if before[1] != after[1]:
@@ -204,7 +231,7 @@ def main():
             verify(before, after, manifest)
         args.review.write_text(json.dumps(manifest, indent=2) + '\n', encoding='ascii', newline='\n')
         print(json.dumps(manifest['summary']))
-        print('Identical object files; unreviewed symbols and normalized executable trees are unchanged.')
+        print('Identical assembly except diagnostic source lines; unreviewed symbols and executable trees agree.')
     else:
         result = transform(source, json.loads(args.manifest.read_text()))
         args.output.write_text(result, encoding='ascii', newline='\n')

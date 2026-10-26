@@ -2360,11 +2360,12 @@ mode = 2
 return
 120 key = prgopt(last + 1)
 if (.not.(key == 6 .and. prgopt(last + 2) /= zero)) go to 140
-do 130 j = 1,n
+do j = 1,n
    t = snrm2(m,w(1,j),1)
    if (t /= zero) t = one/t
    d(j) = t
 130 continue
+end do
 140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
 if (key == 8) tau = max(srelpr,prgopt(last + 2))
 if (key == 9) blowup = max(srelpr,prgopt(last + 2))
@@ -2375,9 +2376,10 @@ return
 150 last = link
 link = next
 go to 110
-160 do 170 j = 1,n
+160 do j = 1,n
    call sscal(m, d(j), w(1,j), 1)
 170 continue
+end do
 go to 220
 !
 !     To initialize-variables
@@ -2404,9 +2406,10 @@ nm1 = n - 1
 l1 = min(m,l)
 !
 !     Compute scale factor to apply to equal. Constraint equas.
-do 230 j = 1,n
+do j = 1,n
    wd(j) = sasum(m,w(1,j),1)
 230 continue
+end do
 imax = isamax(n,wd,1)
 eanorm = wd(imax)
 bnorm = sasum(m,w(1,np1),1)
@@ -2415,7 +2418,7 @@ alamda = eanorm/(srelpr*fac)
 !     Define scaling diag matrix for mod Givens usage and
 !     classify equation types.
 alsq = alamda**2
-do 260 i = 1,m
+do i = 1,m
 !
 !     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
    if (.not.(i <= me)) go to 240
@@ -2427,14 +2430,16 @@ do 260 i = 1,m
 250 scale(i) = t
    itype(i) = itemp
 260 continue
+end do
 !
 !     Set the soln vector x(*) to zero and the col interchange
 !     matrix to the identity.
 x(1) = zero
 call scopy(n, x, 0, x, 1)
-do 270 i = 1,n
+do i = 1,n
    ipivot(i) = i
 270 continue
+end do
 go to 10
 280 continue
 !
@@ -2481,7 +2486,7 @@ go to 20
 !     variables and store the solution in z(*).
 !
 !     Solve-system
-assign 310 to igo958
+igo958 = 310
 go to 1110
 !
 !     Increment iteration counter and check against max. Number
@@ -2497,7 +2502,7 @@ done = .true.
 320 alpha = two
 hitcon = .false.
 if (.not.(l < nsoln)) go to 360
-do 350 j = lp1,nsoln
+do j = lp1,nsoln
    zz = z(j)
    if (.not.(zz <= zero)) go to 350
    t = x(j)/(x(j) - zz)
@@ -2506,6 +2511,7 @@ do 350 j = lp1,nsoln
    jcon = j
 330 hitcon = .true.
 350 continue
+end do
 360 go to 30
 370 continue
 !
@@ -2515,9 +2521,10 @@ do 350 j = lp1,nsoln
 !     feasible solution x(*) and current unconstrained
 !     (and infeasible) solution z(*).
 if (.not.(lp1 <= nsoln)) go to 390
-do 380 j = lp1,nsoln
+do j = lp1,nsoln
    x(j) = x(j) + alpha*(z(j) - x(j))
 380 continue
+end do
 390 feasbl = .false.
 go to 410
 400 if (feasbl) go to 20
@@ -2526,18 +2533,20 @@ go to 410
 !     left. Swap col JCON into the n-TH position.  This achieves
 !     upper Hessenberg form for the nonactive constraints and
 !     leaves an upper Hessenberg matrix to retriangularize.
-410 do 420 i = 1,m
+410 do i = 1,m
    t = w(i,jcon)
    call scopy(n - jcon, w(i,jcon + 1), mdw, w(i,jcon), mdw)
    w(i,n) = t
 420 continue
+end do
 !
 !     Update permuted index vector to reflect this shift and swap.
 itemp = ipivot(jcon)
 if (.not.(jcon < n)) go to 440
-do 430 i = jcon,nm1
+do i = jcon,nm1
    ipivot(i) = ipivot(i + 1)
 430 continue
+end do
 440 ipivot(n) = itemp
 !
 !     Similarly repermute x(*) vector.
@@ -2553,13 +2562,13 @@ j = jcon
 i = krank + jcon - l
 450 if (.not.(j <= nsoln)) go to 570
 if (.not.(itype(i) == 0 .and. itype(i + 1) == 0)) go to 470
-assign 460 to igo938
+igo938 = 460
 go to 620
 !
 !     (itype(i).EQ.0 .AND. itype(i+1).EQ.0) ZERO-IP1-TO-i-IN-COL-J
 460 go to 560
 470 if (.not.(itype(i) == 1 .and. itype(i + 1) == 1)) go to 490
-assign 480 to igo938
+igo938 = 480
 go to 620
 !
 !     (itype(i).EQ.1 .AND. itype(i+1).EQ.1) ZERO-IP1-TO-i-IN-COL-J
@@ -2573,7 +2582,7 @@ itype(i) = itemp
 !
 !     Swapped row was formerly a pivot elt., So it will
 !     be large enough to perform ELIM.
-assign 500 to igo938
+igo938 = 500
 go to 620
 !
 !     Zero-IP1-to-i-in-col-J
@@ -2581,7 +2590,7 @@ go to 620
 510 if (.not.(itype(i) == 0 .and. itype(i + 1) == 1)) go to 550
 t = scale(i)*w(i,j)**2/alsq
 if (.not.(t > tau**2*eanorm**2)) go to 530
-assign 520 to igo938
+igo938 = 520
 go to 620
 520 go to 540
 530 call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
@@ -2601,9 +2610,10 @@ go to 450
 !     infeasible it is due to roundoff error.  Any that are non-
 !     positive will be set to zero and removed from the soln set.
 570 if (.not.(lp1 <= nsoln)) go to 590
-do 580 jcon = lp1,nsoln
+do jcon = lp1,nsoln
    if (x(jcon) <= zero) go to 600
 580 continue
+end do
 590 feasbl = .true.
 600 continue
 go to 400
@@ -2641,14 +2651,16 @@ me = me - 1
 !
 !     Form inner product vector wd(*) of dual coeffs.
 690 if (.not.(nsp1 <= n)) go to 730
-do 720 j = nsp1,n
+do j = nsp1,n
    sm = zero
    if (.not.(nsoln < m)) go to 710
-   do 700 i = nsp1,m
+   do i = nsp1,m
       sm = sm + scale(i)*w(i,j)*w(i,np1)
 700   continue
+   end do
 710 wd(j) = sm
 720 continue
+end do
 730 go to 750
 740 if (pos .or. done) go to 970
 !
@@ -2658,12 +2670,13 @@ do 720 j = nsp1,n
 750 wmax = zero
 iwmax = nsp1
 if (.not.(nsp1 <= n)) go to 780
-do 770 j = nsp1,n
+do j = nsp1,n
    if (.not.(wd(j) > wmax)) go to 760
    wmax = wd(j)
    iwmax = j
 760 continue
 770 continue
+end do
 780 if (.not.(wmax <= zero)) go to 790
 done = .true.
 go to 960
@@ -2724,7 +2737,7 @@ go to 810
 !     the col as dependent.
 870 if (.not.(w(niv,nsoln) /= zero)) go to 890
 isol = niv
-assign 880 to igo897
+igo897 = 880
 go to 980
 !
 !     Test-proposed-new-component
@@ -2735,7 +2748,7 @@ go to 980
 !     Check size of proposed new soln component.
 !     Reject it if it is too large.
 isol = mep1
-assign 900 to igo897
+igo897 = 900
 go to 980
 !
 !     Test-proposed-new-component
@@ -2774,16 +2787,17 @@ pos = .not.(blowup*z2*eanorm >= bnorm)
 !
 !     Solve system, store results in x(*).
 !
-assign 1010 to igo958
+igo958 = 1010
 go to 1110
 !     Solve-system
 1010 call scopy(nsoln, z, 1, x, 1)
 !
 !     Apply Householder transformations to x(*) if KRANK.LT.l
 if (.not.(0 < krank .and. krank < l)) go to 1030
-do 1020 i = 1,krank
+do i = 1,krank
    call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
 1020 continue
+end do
 !
 !     Fill in trailing zeroes for constrained variables not in soln.
 1030 if (.not.(nsoln < n)) go to 1040
@@ -2791,7 +2805,7 @@ x(nsp1) = zero
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 !
 !     Repermute soln vector to natural order.
-1040 do 1070 i = 1,n
+1040 do i = 1,n
    j = i
 1050 if (ipivot(j) == i) go to 1060
    j = j + 1
@@ -2800,18 +2814,21 @@ call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
    ipivot(i) = j
    call sswap(1, x(j), 1, x(i), 1)
 1070 continue
+end do
 !
 !     Rescale the soln using the col scaling.
-do 1080 j = 1,n
+do j = 1,n
    x(j) = x(j)*d(j)
 1080 continue
+end do
 if (.not.(niv < m)) go to 1100
-do 1090 i = niv1,m
+do i = niv1,m
    t = w(i,np1)
    if (i <= me) t = t/alamda
    t = (scale(i)*t)*t
    rnorm = rnorm + t
 1090 continue
+end do
 1100 rnorm = sqrt(rnorm)
 return
 !
@@ -2826,7 +2843,7 @@ go to 1130
 !
 !     Copy RT. Hand side into temp vector to use overwriting method.
 call scopy(niv, w(1,np1), 1, temp, 1)
-do 1180 jj = isol,nsoln
+do jj = isol,nsoln
    j = nsoln - jj + isol
    if (.not.(j > krank)) go to 1140
    i = niv - jj + isol
@@ -2839,10 +2856,30 @@ do 1180 jj = isol,nsoln
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
 1170 continue
 1180 continue
+end do
 !
-1270 go to igo958, (310, 1010)
-1280 go to igo897, (880, 900)
-1290 go to igo938, (460, 480, 500, 520)
+1270 select case ( igo958 )
+case ( 310 )
+   go to 310
+case ( 1010 )
+   go to 1010
+end select
+1280 select case ( igo897 )
+case ( 880 )
+   go to 880
+case ( 900 )
+   go to 900
+end select
+1290 select case ( igo938 )
+case ( 460 )
+   go to 460
+case ( 480 )
+   go to 480
+case ( 500 )
+   go to 500
+case ( 520 )
+   go to 520
+end select
 end subroutine wnlsm
 
 subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
@@ -2907,18 +2944,18 @@ if (.not.(i <= me)) go to 130
 !     Set ir to point to the i-TH row.
 ir = i
 mend = m
-assign 20 to igo996
+igo996 = 20
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-20 assign 30 to igo993
+20 igo993 = 30
 go to 560
 !
 !     Perform-col-interchange
 !
 !     Set ic to point to i-TH col.
 30 ic = i
-assign 40 to igo990
+igo990 = 40
 go to 520
 !
 !     Test-indep-of-incoming-col
@@ -2927,7 +2964,7 @@ go to 520
 !     Eliminate i-TH col below diag. Using mod. Givens transformations
 !     applied to (A B).
 j = m
-do 100 jj = ip1,m
+do jj = ip1,m
    jm1 = j - 1
    jp = jm1
    if (.not.(jj == m)) go to 70
@@ -2947,6 +2984,7 @@ do 100 jj = ip1,m
    call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
 90 j = jm1
 100 continue
+end do
 go to 140
 110 continue
 if (.not.(lend > i)) go to 130
@@ -2955,7 +2993,7 @@ if (.not.(lend > i)) go to 130
 max = lend
 !
 !     Perform-col-interchange
-assign 120 to igo993
+igo993 = 120
 go to 560
 120 continue
 lend = lend - 1
@@ -2975,10 +3013,11 @@ go to 10
 krp1 = krank + 1
 if (.not.(krank < me)) go to 290
 factor = alsq
-do 170 i = krp1,me
+do i = krp1,me
    if (l > 0) w(i,1) = zero
    call scopy(l, w(i,1), 0, w(i,1), mdw)
 170 continue
+end do
 !
 !     Determine the rank of the remaining equality constraint
 !     equations by eliminating within the block of constrained
@@ -2995,11 +3034,11 @@ ip1 = i + 1
 ir = krank + i - l
 lend = n
 mend = me
-assign 190 to igo996
+igo996 = 190
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-190 assign 200 to igo993
+190 igo993 = 200
 go to 560
 !
 !     Perform-col-interchange
@@ -3017,7 +3056,7 @@ go to 210
 !
 !     Set ic=i=Col being eliminated
 230 ic = i
-assign 240 to igo990
+igo990 = 240
 go to 520
 !
 !     Test-indep-of-incoming-col
@@ -3069,11 +3108,11 @@ ip1 = i + 1
 ir = mep1
 lend = l
 mend = m
-assign 320 to igo996
+igo996 = 320
 go to 460
 !
 !     Update-col-SS-and-find-pivot-col
-320 assign 330 to igo993
+320 igo993 = 330
 go to 560
 !
 !     Perform-col-interchange
@@ -3082,7 +3121,7 @@ go to 560
 330 irp1 = ir + 1
 if (.not.(irp1 <= m)) go to 355
 j = m
-do 350 jj = irp1,m
+do jj = irp1,m
    jm1 = j - 1
    if (.not.(w(j,i) /= zero)) go to 340
    call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
@@ -3090,6 +3129,7 @@ do 350 jj = irp1,m
    call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 340 j = jm1
 350 continue
+end do
 355 continue
 !
 !     Test if new pivot element is near zero. If so, the col is
@@ -3101,11 +3141,13 @@ if (.not.indep) go to 380
 !     Col test passed. Now must pass row norm test to be classified
 !     as independent.
 rn = zero
-do 370 i1 = ir,m
-   do 360 j1 = ip1,n
+do i1 = ir,m
+   do j1 = ip1,n
       rn = amax1(rn,scale(i1)*w(i1,j1)**2)
 360   continue
+   end do
 370 continue
+end do
 indep = t > tau**2*rn
 !
 !     If independent, swap the ir-TH and KRP1-ST rows to maintain the
@@ -3136,10 +3178,11 @@ go to 310
 !     If pseudorank is less than l, apply Householder trans.
 !     From right.
 if (.not.(krank < l)) go to 450
-do 440 i = 1,krank
+do i = 1,krank
    j = krp1 - i
    call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j - 1)
 440 continue
+end do
 450 niv = krank + nsoln - l
 niv1 = niv + 1
 if (l == n) done = .true.
@@ -3163,9 +3206,10 @@ return
 !
 if (.not.(ir /= 1 .and. (.not.recalc))) go to 480
 !     Update col SS =Sum of squares.
-do 470 j = i,lend
+do j = i,lend
    h(j) = h(j) - scale(ir - 1)*w(ir - 1,j)**2
 470 continue
+end do
 !
 !     Test for numerical accuracy.
 max = isamax(lend - i + 1,h(i),1) + i - 1
@@ -3173,12 +3217,14 @@ recalc = hbar + tenm3*h(max) == hbar
 !
 !     If required, recalculate col SS, using rows ir through mend.
 480 if (.not.(recalc)) go to 510
-do 500 j = i,lend
+do j = i,lend
    h(j) = zero
-   do 490 k = ir,mend
+   do k = ir,mend
       h(j) = h(j) + scale(k)*w(k,j)**2
 490   continue
+   end do
 500 continue
+end do
 !
 !     Find col with largest SS.
 max = isamax(lend - i + 1,h(i),1) + i - 1
@@ -3206,7 +3252,7 @@ hbar = h(max)
 !     CALL THE COL INDEPENDENT WHEN rn .GT. tau*sn
 sn = zero
 rn = zero
-do 550 j = 1,mend
+do j = 1,mend
    t = scale(j)
    if (j <= me) t = t/factor
    t = t*w(j,ic)**2
@@ -3216,6 +3262,7 @@ do 550 j = 1,mend
 530 rn = rn + t
 540 continue
 550 continue
+end do
 indep = rn > tau**2*sn
 go to 590
 560 continue
@@ -3232,9 +3279,30 @@ call sswap(m, w(1,max), 1, w(1,i), 1)
 t = h(max)
 h(max) = h(i)
 h(i) = t
-570 go to igo993, (30, 200, 330, 120)
-590 go to igo990, (40, 240)
-600 go to igo996, (20, 190, 320)
+570 select case ( igo993 )
+case ( 30 )
+   go to 30
+case ( 200 )
+   go to 200
+case ( 330 )
+   go to 330
+case ( 120 )
+   go to 120
+end select
+590 select case ( igo990 )
+case ( 40 )
+   go to 40
+case ( 240 )
+   go to 240
+end select
+600 select case ( igo996 )
+case ( 20 )
+   go to 20
+case ( 190 )
+   go to 190
+case ( 320 )
+   go to 320
+end select
 end subroutine wnlit
 
 pure subroutine l2slv(m, n, m1, l, a, mm, b, mb, w, tol, n1, ipivot, &
@@ -3955,7 +4023,7 @@ eta2 = eta*eta
 mp1 = m + 1
 mpn = m + n
 n1p1 = n1 + 1
-do 10 i = 1,m
+do i = 1,m
    f(i) = b(i)*w(i)
    g(i) = 0.0
    wres(i) = 0.0
@@ -3963,6 +4031,7 @@ do 10 i = 1,m
    y1(i) = 0.0
    if (w(i) == 0.0) kz = kz + 1
 10 continue
+end do
 do ns = 1,n
    j = m + ns
    f(j) = 0.0
@@ -5787,10 +5856,11 @@ if (eps < 1.e-13) steptl = 1.e2*eps
 mo = 0
 itnlim = iter
 iter = 0
-do 10 i = 1,n
+do i = 1,n
    wrk(i,1) = xpls(i)
    wrk(i,2) = 1.0
 10 continue
+end do
 fscale = 1.0
 !
 !     OPTIMIZE FCN
@@ -6189,10 +6259,11 @@ return
 !
 d = max(abs(fpls),fscale)
 rgx = 0.0
-do 20 i = 1,n
+do i = 1,n
    grd = abs(gpls(i))*max(abs(xpls(i)),typsiz(i))
    rgx = max(rgx, grd)
 20 continue
+end do
 jerr = 1
 if (rgx > gradtl*d) go to 30
 if (abs(fpls) <= 1.e-9) go to 100
@@ -6297,17 +6368,19 @@ end interface
 !     Rescale the variables
 !-----------------------------------------------------------------------
 xmin = 1.e-5*spmpar(3)
-do 10 i = 1,n
+do i = 1,n
    t = max(abs(x(i)), 1.e-20)
    xmin = min(t, xmin)
 10 continue
+end do
 !
 c = 1.e3
 if (mo /= 0) c = 1.e2
 big = c*xmin
-do 20 i = 1,n
+do i = 1,n
    if (abs(x(i)) >= big) go to 30
 20 continue
+end do
 ierr = 0
 return
 !
@@ -6513,9 +6586,10 @@ real :: lambda
 mxtake = .false.
 iretcd = 2
 tmp = 0.0
-do 10 i = 1,n
+do i = 1,n
    tmp = tmp + (p(i)/typsiz(i))**2
 10 continue
+end do
 sln = sqrt(tmp)
 !
 if (sln <= stepmx) go to 30
@@ -7564,7 +7638,7 @@ x1max = 0.0
 x3max = 0.0
 floatn = n
 agiant = rgiant/floatn
-do 90 i = 1, n
+do i = 1, n
    xabs = abs(x(i))
    if (xabs > rdwarf .and. xabs < agiant) go to 70
    if (xabs <= rdwarf) go to 30
@@ -7599,6 +7673,7 @@ do 90 i = 1, n
    s2 = s2 + xabs**2
 80 continue
 90 continue
+end do
 !
 !     Calculation of norm.
 !
@@ -8232,11 +8307,12 @@ dwarf = spmpar(2)
 !     Jacobian is rank-deficient, obtain a least squares solution.
 !
 nsing = n
-do 10 j = 1, n
+do j = 1, n
    wa1(j) = qtb(j)
    if (r(j,j) == zero .and. nsing == n) nsing = j - 1
    if (nsing < n) wa1(j) = zero
 10 continue
+end do
 if (nsing < 1) go to 50
 do k = 1, nsing
    j = nsing - k + 1

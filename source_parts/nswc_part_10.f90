@@ -1,3 +1,96 @@
+subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, m
+real, intent(in) :: x(m), y(m)
+real, intent(inout) :: break(l)
+real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+integer, intent(inout) :: iwk(*)
+integer :: j, k, la, lm1, lw, n
+real :: r, temp(20), con(3), xcon(3)
+integer, parameter :: nder(3) = [3, 7, 11]
+!-----------------------------------------------------------------------
+!            Least squares periodic cubic spline fitting
+!-----------------------------------------------------------------------
+!--------------------
+!     real z(l-1), a(l-1), b(l-1), c(l-1)
+!     real wk((l + 6)*(l + 15) + 10)
+!     integer iwk(2*l + 6)
+!--------------------
+!--------------------
+!--------------------
+if (m <= 0 .or. l < 2) go to 100
+n = l + 2
+!
+!                Define the nodes for the b-splines
+!
+wk(1) = break(1)
+wk(2) = break(1)
+wk(3) = break(1)
+wk(4) = break(1)
+do j = 2,l
+   if (break(j - 1) >= break(j)) go to 110
+   wk(j + 3) = break(j)
+end do
+wk(l + 4) = break(l)
+wk(l + 5) = break(l)
+wk(l + 6) = break(l)
+!
+!                Define the periodicity constraints
+!
+con(1) = break(1)
+con(2) = break(1)
+con(3) = break(1)
+xcon(1) = break(l)
+xcon(2) = break(l)
+xcon(3) = break(l)
+!
+!     Obtain the b-spline coefficients of the periodic spline
+!
+ierr = 0
+la = n + 5
+lw = la + n
+iwk(1) = iwk(1) - (l + l + 8)
+call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
+   & wk(la), r, wk(lw), iwk)
+iwk(1) = iwk(1) + (l + l + 8)
+if (ierr /= 0) go to 30
+!
+!     Obtain the coefficients of the spline in Taylor series form
+!
+call bspp(wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
+k = lw
+do j = 1,lm1
+   z(j) = wk(k)
+   a(j) = wk(k + 1)
+   b(j) = wk(k + 2)
+   c(j) = wk(k + 3)
+   k = k + 4
+20 continue
+end do
+return
+!
+!                The coefficients were not obtained
+!
+30 if (ierr == -4) go to 120
+if (ierr == -6) go to 130
+if (ierr == -7) go to 140
+ierr = 1
+return
+!
+!                           Error return
+!
+100 ierr = 2
+return
+110 ierr = 3
+return
+120 ierr = 4
+return
+130 ierr = 5
+return
+140 ierr = 6
+end subroutine pdfit
+
 pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -1248,10 +1341,11 @@ if (n <= 1) go to 11
 ! Determine polygonal arclengths
 !
 s(1) = 0.
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -1556,10 +1650,11 @@ if (n <= 1) go to 7
 ! Determine polygonal arclengths
 !
 s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -1589,7 +1684,7 @@ dy1 = dy2
 diag1 = diag2
 sdiag1 = sdiag2
 if (n == 2) go to 3
-do 2 i = 2,nm1
+do i = 2,nm1
    npi = n + i
    dels2 = s(i + 1) - s(i)
    if (dels2 == 0.) go to 8
@@ -1606,6 +1701,7 @@ do 2 i = 2,nm1
    dy1 = dy2
    diag1 = diag2
 2  sdiag1 = sdiag2
+end do
 3 dels2 = s(1)
 dx2 = (x(1) - x(n))/dels2
 dy2 = (y(1) - y(n))/dels2
@@ -1906,10 +2002,11 @@ if (n <= 1) go to 9
 ! Determine polygonal arclengths
 !
 s(1) = 0.
-do 1 i = 2,n
+do i = 2,n
    im1 = i - 1
 1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
       & + (z(i) - z(im1))**2)
+end do
 !
 ! Denormalize tension factor
 !
@@ -5670,38 +5767,43 @@ go to 100
 !
 if (ind(3) == 0) go to 2
 l = loc(3)
-do 1 i = 1,m
+do i = 1,m
    zp(i,1,1) = opt(l)
 1  l = l + 1
+end do
 go to 5
 2 dely1 = y(2) - y(1)
 dely2 = dely1 + dely1
 if (n > 2) dely2 = y(3) - y(1)
 if (dely1 <= 0. .or. dely2 <= dely1) go to 47
 call ceez(dely1,dely2,sigmay,c1,c2,c3,n)
-do 3 i = 1,m
+do i = 1,m
 3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
+end do
 if (n == 2) go to 5
-do 4 i = 1,m
+do i = 1,m
 4  zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
+end do
 !
 ! Obtain y-partial derivatives along y = y(n)
 !
 5 if (ind(4) == 0) go to 7
 l = loc(4)
-do 6 i = 1,m
+do i = 1,m
    npi = n + i
    temp(npi) = opt(l)
 6  l = l + 1
+end do
 go to 10
 7 delyn = y(n) - y(nm1)
 delynm = delyn + delyn
 if (n > 2) delynm = y(n) - y(n - 2)
 if (delyn <= 0. .or. delynm <= delyn) go to 47
 call ceez(-delyn,-delynm,sigmay,c1,c2,c3,n)
-do 8 i = 1,m
+do i = 1,m
    npi = n + i
 8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
+end do
 if (n == 2) go to 10
 do i = 1,m
    npi = n + i
@@ -6210,7 +6312,7 @@ sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 deltdx = 0.
 if (md >= 2) deltdx = (dxmax - dxmin)/float(md - 1)
 lasti = 1
-do 3 ii = 1,md
+do ii = 1,md
    xii = dxmin + float(ii - 1)*deltdx
    i = lasti
 1  i = i + 1
@@ -6242,6 +6344,7 @@ do 3 ii = 1,md
    work(4,ii) = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
       & sinhp2 + sigmax*coshp1*del2))/temp
 3  continue
+end do
 !
 ! Find intervals of second y grid with respect to original y
 ! grid and perform intrpolation
@@ -6249,7 +6352,7 @@ do 3 ii = 1,md
 deltdy = 0.
 if (nd >= 2) deltdy = (dymax - dymin)/float(nd - 1)
 lastj = 1
-do 8 jj = 1,nd
+do jj = 1,nd
    yjj = dymin + float(jj - 1)*deltdy
    j = lastj
 4  j = j + 1
@@ -6281,7 +6384,7 @@ do 8 jj = 1,nd
    c4 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
       & sinhp2 + sigmay*coshp1*del2))/temp
 6  lasti = 0
-   do 8 ii = 1,md
+   do ii = 1,md
       xii = dxmin + float(ii - 1)*deltdx
       i = max (1, lasti)
 7     i = i + 1
@@ -6299,6 +6402,8 @@ do 8 jj = 1,nd
          & + c3*zp(i,jm1,3) + c4*zp(i,j,3)
 8     dz(ii,jj) = work(1,ii)*zim1 + work(2,ii)*zi &
          & + work(3,ii)*zxxim1 + work(4,ii)*zxxi
+   end do
+end do
 end subroutine nsurf2
 
 pure subroutine bstrp2(x, y, z, kz, tx, nx, kx, ty, ny, ky, &
@@ -6956,12 +7061,13 @@ go to 1
 !   n0 which lies to the right of k.
 !   Set sprod to (n0-nl,n0-k).
 !
-3 do 4 ind = 2,km1
+3 do ind = 2,km1
    n0 = iend(ind)
    sprod = (xl - x(n0))*(xk - x(n0)) + &
       & (yl - y(n0))*(yk - y(n0))
    if (sprod >= 0.) go to 5
 4  continue
+end do
 !
 ! Node k is to the right of nr.  Insert k as the last
 !   (rightmost) node in iend and set nr to k.
@@ -7295,9 +7401,10 @@ nf = max(n1,n2)
 call shiftd(nf,nl,2, iadj )
 iadj(nf + 1) = k
 imin = max(nright,nleft)
-do 1 i = imin,km1
+do i = imin,km1
    iend(i) = iend(i) + 2
 1  continue
+end do
 !
 ! Initialize KEND and insert k as a neighbor of
 !   min(nright,nleft)
@@ -7309,9 +7416,10 @@ call shiftd(nf,nl,1, iadj )
 iadj(nf) = k
 imax = imin - 1
 imin = min(nright,nleft)
-do 2 i = imin,imax
+do i = imin,imax
    iend(i) = iend(i) + 1
 2  continue
+end do
 !
 ! Insert nright as the first neighbor of k
 !
@@ -7431,7 +7539,7 @@ n(3) = i3
 !
 ! Set up nft
 !
-do 2 i = 1,3
+do i = 1,3
    n1 = n(i)
    indx = mod(i,3) + 1
    n2 = n(indx)
@@ -7443,6 +7551,7 @@ do 2 i = 1,3
    if (iadj(indx) /= n2) go to 1
    nft(i) = indx + 1
 2  continue
+end do
 !
 ! Order the vertices by decreasing magnitude.
 !   n(IP(I+1)) precedes n(IP(I)) in iend for
@@ -7579,7 +7688,7 @@ if ( k < 0) go to 4
 ! Shift downward starting from the bottom
 !
 if (nsl <= 0) go to 2
-do 1 i = 1,nsl,inc
+do i = 1,nsl,inc
    ibak = nlp1 - i
    indx = ibak + k
    iarr(indx) = iarr(ibak)
@@ -7588,6 +7697,7 @@ do 1 i = 1,nsl,inc
    iarr(indx - 3) = iarr(ibak - 3)
    iarr(indx - 4) = iarr(ibak - 4)
 1  continue
+end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -7602,7 +7712,7 @@ go to 3
 !
 4 if (nsl <= 0) go to 6
 imax = nlp1 - inc
-do 5 i = nf,imax,inc
+do i = nf,imax,inc
    indx = i + k
    iarr(indx) = iarr(i)
    iarr(indx + 1) = iarr(i + 1)
@@ -7610,6 +7720,7 @@ do 5 i = nf,imax,inc
    iarr(indx + 3) = iarr(i + 3)
    iarr(indx + 4) = iarr(i + 4)
 5  continue
+end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
 !
@@ -7719,7 +7830,7 @@ if (in(2) < io(1)) go to 12
 !   by shifting a portion of iadj either up or down and
 !   and insert in(k) as a neighbor of in(j).
 !
-do 7 j = 1,2
+do j = 1,2
    k = 3 - j
    if (in(j) > io(j)) go to 4
 !
@@ -7732,8 +7843,9 @@ do 7 j = 1,2
    iadj(nf) = in(k)
    imin = in(j)
    imax = io(j) - 1
-   do 3 i = imin,imax
+   do i = imin,imax
 3     iend(i) = iend(i) + 1
+   end do
    go to 6
 !
 !   The neighbors of io(j) precede those of in(j) -- shift
@@ -7754,6 +7866,7 @@ do 7 j = 1,2
 6  ip1 = ip2
    ip2 = 3 - ip1
 7  continue
+end do
 return
 !
 ! The vertices are ordered (io(1),io(2),in(1),in(2)).
@@ -8470,7 +8583,7 @@ iter = 0
 1 if (iter == maxit) go to 4
 dgmax = 0.
 indl = 0
-do 3 k = 1,nn
+do k = 1,nn
    xk = x(k)
    yk = y(k)
    zk = z(k)
@@ -8489,7 +8602,7 @@ do 3 k = 1,nn
 !
    indf = indl + 1
    indl = iend(k)
-   do 2 indx = indf,indl
+   do indx = indf,indl
       nb = iadj(indx)
       if (nb == 0) go to 2
 !
@@ -8512,6 +8625,7 @@ do 3 k = 1,nn
       r1 = r1 + t*delx
       r2 = r2 + t*dely
 2     continue
+   end do
 !
 !   Solve the 2 by 2 system and update dgmax
 !
@@ -8523,6 +8637,7 @@ do 3 k = 1,nn
 !
    zxzy(1,k) = zxk + dzx
 3  zxzy(2,k) = zyk + dzy
+end do
 !
 !   Increment iter and test for convergence
 !
@@ -8790,18 +8905,20 @@ lmax = min(lmx,nn)
 sum = 0.
 npts(1) = kk
 lm1 = lmin - 1
-do 1 lnp = 2,lm1
+do lnp = 2,lm1
    call getnp(x,y,iadj,iend,lnp, npts, ds,ierr)
 1  sum = sum + ds
+end do
 !
 ! Add additional nodes to npts until the relative increase
 !   in ds is at least rtol.
 !
-do 2 lnp = lmin,lmax
+do lnp = lmin,lmax
    call getnp(x,y,iadj,iend,lnp, npts, rs,ierr)
    if ((rs - ds)/ds <= rtol) go to 2
    if (lnp > 6) go to 3
 2  sum = sum + rs
+end do
 !
 ! Use all lmax nodes in the least squares fit.  rs is
 !   arbitrarily increased by 10 per cent.
@@ -8825,18 +8942,20 @@ if (lnp < 7) go to 12
 !   the lower triangle (upper triangle of A) with Givens
 !   rotations
 !
-do 5 i = 1,5
+do i = 1,5
    np = npts(i + 1)
    call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
       & r, a(1,i))
    if (i == 1) go to 5
    im1 = i - 1
-   do 4 j = 1,im1
+   do j = 1,im1
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,i),c,s)
 4     call srot(l,a(jp1,j),1,a(jp1,i),1,c,s)
+   end do
 5  continue
+end do
 !
 ! Add the additional equations to the system using
 !   the last column of a -- I .LE. lnp.
@@ -8846,11 +8965,12 @@ i = 7
 np = npts(i)
 call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,6))
-do 7 j = 1,5
+do j = 1,5
    jp1 = j + 1
    l = 6 - j
    call srotg(a(j,j),a(j,6),c,s)
 7  call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+end do
 i = i + 1
 go to 6
 !
@@ -8874,16 +8994,19 @@ go to 6
 !   multiples of the first three unit vectors to the first
 !   three equations.
 !
-9 do 11 i = 1,3
+9 do i = 1,3
    a(i,6) = sf
    ip1 = i + 1
-   do 10 j = ip1,6
+   do j = ip1,6
 10    a(j,6) = 0.
-   do 11 j = i,5
+   end do
+   do j = i,5
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,6),c,s)
 11    call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+   end do
+end do
 go to 14
 !
 ! 4 .LE. lnp .LE. 6 (2, 3, OR 4 EQUATIONS) -- fit a plane to
@@ -9013,8 +9136,9 @@ return
 ! Nodes K and i coincide or node i is outside of the radius
 !   of influence.  Set row to the zero vector.
 !
-1 do 2 i = 1,6
+1 do i = 1,6
 2  row(i) = 0.
+end do
 end subroutine setrm
 
 pure subroutine getnp(x,y,iadj,iend,l, npts, ds,ier)
@@ -9115,10 +9239,11 @@ y1 = y(n1)
 !
 ! Mark the elements of npts
 !
-do 1 i = 1,lm1
+do i = 1,lm1
    ni = npts(i)
    iend(ni) = -iend(ni)
 1  continue
+end do
 !
 ! Candidates for np = npts(l) are the unmarked neighbors
 !   of nodes in npts.  np=0 Is a flag to set np to the
@@ -9680,9 +9805,10 @@ v(1) = y3 - y2
 v(2) = y1 - y3
 v(3) = y2 - y1
 !
-do 1 i = 1,3
+do i = 1,3
    sl(i) = u(i)*u(i) + v(i)*v(i)
 1  continue
+end do
 !
 ! area = 3-1 x 3-2
 !
@@ -10474,90 +10600,4 @@ do curdeg = 2,degree
 70 j = j + 1
 end do
 end subroutine mtable
-
-subroutine gnrtp(degree,alpha,psi,indexs, &
-   & newkj,sumsqs,coord,ncrows,npolys, &
-   & dimen,npts,f,z,c,psiwid,weight, &
-   & alfl,dimp1,maxabs,error)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(inout) :: degree
-integer, intent(in) :: dimen
-integer, intent(inout) :: npolys
-integer, intent(in) :: npts
-integer, intent(in) :: psiwid, alfl
-integer, intent(inout) :: error
-integer :: dimp1
-integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
-real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
-real, intent(in) :: weight(npts)
-real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
-integer :: k, p, sttdeg, onplys
-real :: runtot, rntot1
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     The multinomial fit is generated incrementally, a basis  element
-!     at a time.  This subroutine starts the process off by setting up
-!     the first basis element, scaling the  data,  finding  the  first
-!     coefficient,  and  initializing  the  work array z.  gnrtp  then
-!     calls  incdg  if more than one basis element is required.
-!
-!     This subroutine is called by  mfit .  It is not called by  the
-!     user.
-!
-!     This subroutine calls  scalpm ,  scaldn , and  incdg .
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!     ****************
-!
-!     ***************
-!     Set up the scaling.
-!     ***************
-!
-do k = 1,dimen
-   call scalpm(coord(1,k),npts,maxabs(k))
-10 call scaldn(coord(1,k),npts,maxabs(k))
-end do
-call scalpm(f,npts,maxabs(dimp1))
-call scaldn(f,npts,maxabs(dimp1))
-!
-!     ***************
-!      sumsqs (1) = (1,1)
-!     c  = (f,1) / (1,1)
-!      1
-!     ***************
-!
-runtot = 0.0
-rntot1 = 0.0
-do p = 1,npts
-   psi(p,1) = 1.0
-   rntot1 = rntot1 + weight(p)
-20 runtot = runtot + f(p) * weight(p)
-end do
-sumsqs(1) = rntot1
-c(1) = runtot / rntot1
-!
-!     ***************
-!     z = f - c
-!              1
-!     ***************
-!
-do p = 1,npts
-30 z(p) = f(p) - c(1)
-end do
-!
-if ( npolys == 1 ) return
-sttdeg = 1
-onplys = 1
-!
-call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
-   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
-   & weight,alfl,onplys,sttdeg,error)
-end subroutine gnrtp
 

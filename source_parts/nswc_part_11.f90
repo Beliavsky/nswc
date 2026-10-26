@@ -1,3 +1,89 @@
+subroutine gnrtp(degree,alpha,psi,indexs, &
+   & newkj,sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,dimp1,maxabs,error)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(inout) :: degree
+integer, intent(in) :: dimen
+integer, intent(inout) :: npolys
+integer, intent(in) :: npts
+integer, intent(in) :: psiwid, alfl
+integer, intent(inout) :: error
+integer :: dimp1
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
+real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
+real, intent(in) :: weight(npts)
+real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+integer :: k, p, sttdeg, onplys
+real :: runtot, rntot1
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine starts the process off by setting up
+!     the first basis element, scaling the  data,  finding  the  first
+!     coefficient,  and  initializing  the  work array z.  gnrtp  then
+!     calls  incdg  if more than one basis element is required.
+!
+!     This subroutine is called by  mfit .  It is not called by  the
+!     user.
+!
+!     This subroutine calls  scalpm ,  scaldn , and  incdg .
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!     ****************
+!
+!     ***************
+!     Set up the scaling.
+!     ***************
+!
+do k = 1,dimen
+   call scalpm(coord(1,k),npts,maxabs(k))
+10 call scaldn(coord(1,k),npts,maxabs(k))
+end do
+call scalpm(f,npts,maxabs(dimp1))
+call scaldn(f,npts,maxabs(dimp1))
+!
+!     ***************
+!      sumsqs (1) = (1,1)
+!     c  = (f,1) / (1,1)
+!      1
+!     ***************
+!
+runtot = 0.0
+rntot1 = 0.0
+do p = 1,npts
+   psi(p,1) = 1.0
+   rntot1 = rntot1 + weight(p)
+20 runtot = runtot + f(p) * weight(p)
+end do
+sumsqs(1) = rntot1
+c(1) = runtot / rntot1
+!
+!     ***************
+!     z = f - c
+!              1
+!     ***************
+!
+do p = 1,npts
+30 z(p) = f(p) - c(1)
+end do
+!
+if ( npolys == 1 ) return
+sttdeg = 1
+onplys = 1
+!
+call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
+   & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+   & weight,alfl,onplys,sttdeg,error)
+end subroutine gnrtp
+
 pure subroutine incdg(degree,alpha,psi,indexs,newkj, &
    & sumsqs,coord,ncrows,npolys, &
    & dimen,npts,f,z,c,psiwid,weight, &
@@ -1686,19 +1772,21 @@ go to 30
 k = k + 1
 acum = 0.0
 ! Contribution from function values already computed.
-do 20 j = 1,iold
+do j = 1,iold
    i = i + 1
    acum = acum + p(i)*funct(j)
 20 continue
+end do
 ! Contribution from new function values.
 30 iold = iold + inew
-do 40 j = inew,iold
+do j = inew,iold
    i = i + 1
    x = p(i)*diff
    funct(j) = f(sum + x) + f(sum - x)
    i = i + 1
    acum = acum + p(i)*funct(j)
 40 continue
+end do
 inew = iold + 1
 i = i + 1
 result(k) = (acum + p(i)*fzero)*diff
@@ -2195,7 +2283,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
@@ -2295,13 +2383,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -2336,6 +2425,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -2496,7 +2586,7 @@ resg = 0.0
 fc = f(centr)
 resk = wgk(11)*fc
 resabs = abs(resk)
-do 10 j = 1,5
+do j = 1,5
    jtw = 2*j
    absc = hlgth*xgk(jtw)
    fval1 = f(centr - absc)
@@ -2508,6 +2598,7 @@ do 10 j = 1,5
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
+end do
 do j = 1,5
    jtwm1 = 2*j - 1
    absc = hlgth*xgk(jtwm1)
@@ -3036,7 +3127,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
@@ -3133,12 +3224,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -3172,6 +3264,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -4128,7 +4221,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
@@ -4247,13 +4340,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -4288,6 +4382,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -4441,7 +4536,7 @@ k2 = min(key1 + 1,3)
 call qxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.0*epmach
-do 10 k = k1,k2
+do k = k1,k2
    call qxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = abs(resk - resg)
@@ -4453,6 +4548,7 @@ do 10 k = k1,k2
    if (abserr < 1000.0*epmach*resabs) go to 3000
    errold = abserr
 10 continue
+end do
 3000 continue
 end subroutine qxlqm
 
@@ -4602,13 +4698,14 @@ bb = ldl*0.5
 aa = xl + bb
 !
 y = 0.0
-do 10 i = 1,ks
+do i = 1,ks
    c = bb*xx(i)
    if (i > l1) fv1(i) = f(aa + c)
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
 10 continue
+end do
 !
 y2 = y
 y = y*bb
@@ -4617,18 +4714,20 @@ if (l2 < ks) l2 = ks
 if (ke /= k1) return
 !
 ya = 0.0
-do 20 i = 1,ks
+do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
 20 continue
+end do
 ya = ya*abs(bb)
 !
 y2 = y2*0.5
 ym = 0.0
-do 30 i = 1,ks
+do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
 30 continue
+end do
 ym = ym*abs(bb)
 end subroutine qxrul
 
@@ -5212,7 +5311,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest
 !           error estimate.
@@ -5312,13 +5411,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -5353,6 +5453,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -5522,7 +5623,7 @@ resg = 0.d0
 fc = f(centr)
 resk = wgk(11)*fc
 resabs = abs(resk)
-do 10 j = 1,5
+do j = 1,5
    jtw = 2*j
    absc = hlgth*xgk(jtw)
    fval1 = f(centr - absc)
@@ -5534,6 +5635,7 @@ do 10 j = 1,5
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
+end do
 do j = 1,5
    jtwm1 = 2*j - 1
    absc = hlgth*xgk(jtwm1)
@@ -6067,7 +6169,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with nrmax-TH largest
 !           error estimate.
@@ -6164,12 +6266,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -6203,6 +6306,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -7169,7 +7273,7 @@ t = 1.d0 + 100.d0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with the nrmax-TH largest error
 !           estimate.
@@ -7288,13 +7392,14 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -7329,6 +7434,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -7482,7 +7588,7 @@ k2 = min(key1 + 1,3)
 call dqxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.d0*epmach
-do 10 k = k1,k2
+do k = k1,k2
    call dqxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = abs(resk - resg)
@@ -7494,6 +7600,7 @@ do 10 k = k1,k2
    if (abserr < 1000.d0*epmach*resabs) go to 3000
    errold = abserr
 10 continue
+end do
 3000 continue
 end subroutine dqxlqm
 
@@ -7643,13 +7750,14 @@ bb = ldl*0.5d0
 aa = xl + bb
 !
 y = 0.d0
-do 10 i = 1,ks
+do i = 1,ks
    c = bb*xx(i)
    if (i > l1) fv1(i) = f(aa + c)
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
 10 continue
+end do
 !
 y2 = y
 y = y*bb
@@ -7658,18 +7766,20 @@ if (l2 < ks) l2 = ks
 if (ke /= k1) return
 !
 ya = 0.d0
-do 20 i = 1,ks
+do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
 20 continue
+end do
 ya = ya*abs(bb)
 !
 y2 = y2*0.5d0
 ym = 0.d0
-do 30 i = 1,ks
+do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
 30 continue
+end do
 ym = ym*abs(bb)
 end subroutine dqxrul
 
@@ -8362,22 +8472,26 @@ eps = ep
 !   Create the nodes and weights TN(i) and WN(i), i=1,...,n
 call wandt(wn,tn,n,a,b)
 !   Set up matrix for (i-KN)*XN=rhfcn
-do 2 j = 1,n
-   do 1 i = 1,n
+do j = 1,n
+   do i = 1,n
 1     imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
+   end do
    xmz(j) = rhfcn(tn(j))
 2  imknn(j,j) = imknn(j,j) + 1.0
+end do
 go to 6
 !   This is entrance for an increased value of n, using previously
 !   stored values in kmm to define matrix for (i-KN)*XN=rhfcn with
 !   new value of n.
-3 do 5 j = 1,n
-   do 4 i = 1,n
+3 do j = 1,n
+   do i = 1,n
 4     imknn(i,j) = -kmm(i,j)
+   end do
    wn(j) = wm(j)
    tn(j) = tm(j)
    xmz(j) = rhs(j)
 5  imknn(j,j) = imknn(j,j) + 1.0
+end do
 !   This is the entrance when iteration in stage b fails and we need
 !   to increase n to obtain a better iterative rate.
 6 continue
@@ -8706,8 +8820,9 @@ integer :: i
 if (iflag == 1) go to 2
 !   Find the norm of x.
 rnrm = 0.0
-do 1 i = 1,n
+do i = 1,n
 1  rnrm = max(rnrm,abs(x(i)))
+end do
 return
 !   Find the norm of x-y.
 2 rnrm = 0.0
@@ -8845,12 +8960,12 @@ scale = h/2.0
 m = min(128,n/2)
 mt = 2*m
 nplace = m - 1
-do 1 l = 1,loop
+do l = 1,loop
    fl = l
    al = a + (fl - 1.0)*h
    bl = a + fl*h
    k = 256*(l - 1)
-   do 1 i = 1,m
+   do i = 1,m
       npi = nplace + i
       s = t(npi)
       r = w(npi)*scale
@@ -8860,6 +8975,8 @@ do 1 l = 1,loop
       tv(i2) = (al*(1.0 - s) + (1.0 + s)*bl)/2.0
       wv(i1) = r
 1     wv(i2) = r
+   end do
+end do
 end subroutine wandt
 
 subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
@@ -9015,17 +9132,22 @@ if (m > nup) go to 13
 if (iflg == 1) go to 3
 !   If iflg=0, then the matrices kmm and knm must be computed
 !   and stored.
-do 2 j = 1,m
-   do 1 i = 1,m
+do j = 1,m
+   do i = 1,m
 1     kmm(i,j) = wm(j)*kernel(tm(i),tm(j))
-   do 2 i = 1,n
+   end do
+   do i = 1,n
 2     knm(i,j) = wm(j)*kernel(tn(i),tm(j))
+   end do
+end do
 !   Compute  residuals r(i)=rhfcn(tm(i))-xmz(i)+km(tm(i))*xmz(i)
-3 do 5 i = 1,m
+3 do i = 1,m
    sum = 0.0
-   do 4 j = 1,m
+   do j = 1,m
 4     sum = sum + kmm(i,j)*xmz(j)
+   end do
 5  r(i) = rhs(i) - (xmz(i) - sum)
+end do
 !
 !   COMPUTE rh=km*r AT ALL tn(i).
 do i = 1,n
@@ -9809,8 +9931,9 @@ return
 !   If error tolerance is too small, increase it to an acceptable value
 !
 round = 0.0
-do 10 l = 1,neqn
+do l = 1,neqn
 10 round = round + (y(l)/wt(l))**2
+end do
 round = twou*sqrt(round)
 if (p5eps >= round) go to 15
 eps = 2.0*round*(1.0 + fouru)
@@ -9842,8 +9965,9 @@ phase1 = .true.
 nornd = .true.
 if (p5eps > 100.0*round) go to 99
 nornd = .false.
-do 25 l = 1,neqn
+do l = 1,neqn
 25 phi(l,15) = 0.0
+end do
 99 ifail = 0
 !
 !       ***     End block 0     ***

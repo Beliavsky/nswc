@@ -77,10 +77,10 @@ Choose one implementation for each executable.
 Documentation source links point into free-form files in `source_parts/`;
 displayed line numbers refer to the complete `nswc.f90`.
 
-The library retains legacy Fortran features. For GNU Fortran, for example:
+The maintained versions compile in strict modern Fortran modes. For GNU Fortran:
 
 ```sh
-gfortran -c -std=legacy nswc_mod.f90
+gfortran -c -std=f2018 nswc_mod.f90
 gfortran myprogram.f90 nswc_mod.o -o myprogram
 ```
 
@@ -95,8 +95,10 @@ The module object links independently. It needs neither `nswc.o` nor
 compiler. See the [module guide](docs/module.md) for generation and verification.
 For external callers, compile `nswc.f90` instead and link `nswc.o`.
 
-`-std=legacy` accommodates existing legacy constructs. Only the archival `nswc_orig.f`
-requires legacy argument-mismatch handling. Both maintained source forms use
+Use `-std=f2023` with compilers supporting that option; `-std=f2018` also accepts
+all maintained versions. COMMON, EQUIVALENCE, statement functions and computed
+GO TO still produce obsolescent-feature warnings. Only the archival `nswc_orig.f`
+requires `-std=legacy -fallow-argument-mismatch`. Both maintained source forms use
 separate real and complex root work arrays in `COMPB`, with explicit packing
 back into the solver workspace. See the [warning review](docs/compiler-warnings.md).
 Machine constants retain
@@ -119,7 +121,7 @@ use nswc_interfaces, only: sgefa, sgesl
 For GNU Fortran with the external implementation:
 
 ```sh
-gfortran -c -std=legacy nswc.f90
+gfortran -c -std=f2018 nswc.f90
 gfortran -c nswc_interfaces.f90
 gfortran myprogram.f90 nswc.o -o myprogram
 ```
@@ -212,7 +214,7 @@ and verify unchanged GNU compiler dumps and diagnostics:
 python tools/simplify_free_style.py input.f90 --output simplified.f90 --compiler gfortran
 ```
 
-The subsequent `tools/generic_intrinsics.py` pass replaces 2,041 confirmed
+The subsequent `tools/generic_intrinsics.py` pass replaces 2,049 confirmed
 specific intrinsic calls with generic names, such as `dabs` to `abs` and
 `dsqrt` to `sqrt`. Conflicting names and conversion intrinsics are retained.
 The [generic-intrinsic guide](docs/generic-intrinsics.md) describes the binding
@@ -273,9 +275,9 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 49 numerical test programs
-against all three versions with GNU Fortran (144 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 47 main
+Run `python tools/validate_sources.py` to build and run 50 numerical test programs
+against all three versions with GNU Fortran (150 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 49 main
 programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, nonlinear solving and minimization, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
@@ -309,8 +311,9 @@ review. It also skips loops with possible branches into their bodies.
 
 A second reviewed pass now converts **1,425 additional loops**, including
 executable terminal statements and shared termination labels. Existing terminal
-operations and branch-target labels are preserved. The remaining 274 loops have
-recorded review reasons. See [deleted-feature modernization](docs/deleted-features.md)
+operations and branch-target labels are preserved. A final pass converts the
+remaining 274 loops using explicit branch references and removes all 48 ASSIGN
+and 16 assigned GO TO statements. See [deleted-feature modernization](docs/deleted-features.md)
 for the tool, compiler checks and strict-standard diagnostic progress.
 
 All **303 arithmetic IF statements** have also been replaced with logical IFs

@@ -116,7 +116,47 @@ and intrinsic selections are unchanged; only their source review hashes are
 refreshed. Source partitions, source links, module bindings and Intel-generated
 interfaces are regenerated together.
 
-Next passes should review the remaining legacy DO loops and replace assigned
-labels after checking their possible use as FORMAT identifiers. COMMON,
-EQUIVALENCE, statement functions and computed GO TO are obsolescent features and
-can be addressed separately after the deleted features.
+## Final assigned-label and DO pass
+
+`tools/modernize_remaining_features.py` replaces all remaining deleted features:
+48 ASSIGN statements, 16 assigned GO TO statements, and 274 labelled loops.
+The assigned transfers occur in `BSSLY`, `BSSLK`, `SNRM2`, `DNRM2`, `SCNRM2`,
+`WNLSM` and `WNLIT`. The 15 local integer selectors are used only in declarations,
+ASSIGN and assigned GO TO. A selector assignment now stores the numeric label;
+SELECT CASE branches to exactly the original dispatch list. The converter rejects
+selectors used for arithmetic, argument passing, storage aliases or I/O formats.
+The mapping preserves every valid old assigned-label state.
+
+The final loop pass examines actual direct/computed GO TO targets, I/O error/end
+branches and alternate-return labels. It no longer counts ordinary constants as
+possible transfers. It also distinguishes DO statements from assignments to
+variables such as `DONE` and `DOLD`. These refinements leave the historical passes
+unchanged and allow all 274 remaining loops to be converted. Every original
+terminal operation and statement label is retained.
+
+The [final review report](../tools/remaining-features.json) records each transfer
+replacement and loop conversion. Compiler records agree except for removal of
+GNU's ASSIGN marker on the reviewed local selectors. Loop-generated assembly
+agrees before/after conversion, allowing only source line numbers in runtime
+diagnostic strings to differ. Existing numerical tests compare all maintained
+versions with the archive and exercise the external and module interfaces.
+
+```sh
+python tools/validate_remaining_features.py
+gfortran -c -std=f2023 nswc.f
+gfortran -c -std=f2023 nswc.f90
+gfortran -c -std=f2023 nswc_mod.f90
+```
+
+All three maintained sources compile without deleted-feature errors. The
+free-form versions also replace GNU-only intrinsic `derf`/`derfc` calls with
+explicitly bound standard generics, preserving double precision and leaving
+the public library procedures unchanged. See the [intrinsic guide](generic-intrinsics.md).
+The validator also uses `-pedantic-errors` and rejects reintroduced deleted-feature
+diagnostics. It uses Fortran 2023 when supported and Fortran 2018 on older GNU
+compilers. The archive deliberately retains its original code and legacy build
+options.
+
+The remaining standards warnings concern permitted obsolescent features:
+COMMON, EQUIVALENCE, statement functions and computed GO TO. Their removal would
+be a separate modernization effort, especially for shared storage and state.

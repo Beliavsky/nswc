@@ -1045,7 +1045,7 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by dbal
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
    do j = k, n
 40    norm = norm + abs(h(i,j))
@@ -1056,6 +1056,7 @@ do 50 i = 1, n
    wr(i) = h(i,i)
    wi(i) = 0.d0
 50 continue
+end do
 !
 en = igh
 t = 0.d0
@@ -1566,7 +1567,7 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by dbal
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
    do j = k, n
 40    norm = norm + abs(h(i,j))
@@ -1577,6 +1578,7 @@ do 50 i = 1, n
    wr(i) = h(i,i)
    wi(i) = 0.d0
 50 continue
+end do
 !
 en = igh
 t = 0.d0

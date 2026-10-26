@@ -16,7 +16,7 @@ end program roots
 For GNU Fortran:
 
 ```sh
-gfortran -c -std=legacy nswc_mod.f90
+gfortran -c -std=f2018 nswc_mod.f90
 gfortran roots.f90 nswc_mod.o -o roots
 ```
 
@@ -87,7 +87,7 @@ python tools/validate_module.py
 ```
 
 GNU compiler records check all procedure/argument/result characteristics, local
-data declarations, and intrinsic bindings against `nswc.f90`. Each of the 49 numerical mains runs once
+data declarations, and intrinsic bindings against `nswc.f90`. Each of the 50 numerical mains runs once
 with external calls and once using the module, and the outputs must agree.
 An additional paired main checks DRCOMP against LOG_GAMMA references and DGINV
 against analytic distributions, exercising the two normalized intrinsic calls

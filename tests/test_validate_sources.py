@@ -14,7 +14,8 @@ from validate_sources import check_result, run, test_programs
 class ValidationRunnerTests(unittest.TestCase):
     def test_all_standalone_programs_are_discovered(self):
         programs = test_programs()
-        self.assertEqual(len(programs), 49)
+        self.assertEqual(len(programs), 50)
+        self.assertIn('test_norm_scaling', {p.stem for p in programs})
         self.assertEqual(len({p.stem for p in programs}), len(programs))
         for path in programs:
             text = path.read_text()

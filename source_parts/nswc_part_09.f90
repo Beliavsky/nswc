@@ -1859,13 +1859,14 @@ call cond(fun,x1,cnd,num,ier)
 if (cnd) go to 20
 !
 x2 = 10.1269
-do 10 i = 1,4
+do i = 1,4
    if (x2 <= x1) go to 10
    call cond(fun,x2,cnd,num1,ier)
    num = num + num1
    if (cnd) go to 200
    x1 = x2
 10 x2 = 10.0*x2
+end do
 go to 300
 !
 20 if (x1 == xl) go to 400
@@ -2444,12 +2445,13 @@ pid16 = atan(1.0e+00)/4.0e+00
 !   Computation of the elements of the array si
 !
 ak = 1.0e+00
-do 10 k = 1,7
+do k = 1,7
    si(k) = sin(ak*pid16)
    ak = ak + 1.0e+00
    kk = 16 - k
    si(kk) = si(k)
 10 continue
+end do
 ier = 0
 nres = 0
 do k = 17,32
@@ -3290,7 +3292,7 @@ t = 1.0 + 100.0*epmach
 !           Main do-loop
 !           ------------
 !
-do 90 last = 2,limit
+do last = 2,limit
 !
 !           Bisect the subinterval with NRMAX-TH largest
 !           error estimate.
@@ -3386,12 +3388,13 @@ do 90 last = 2,limit
    id = nrmax
    jupbnd = last
    if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do 50 k = id,jupbnd
+   do k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
+   end do
 !
 !           Perform extrapolation.
 !
@@ -3425,6 +3428,7 @@ do 90 last = 2,limit
    ertest = errbnd
    rlist2(2) = area
 90 continue
+end do
 !
 !           Set final result and error estimate.
 !           ------------------------------------
@@ -6128,8 +6132,9 @@ xlb = zero
 dn = n
 dnp1 = np1
 !
-do 10 i = 1,lp1
+do i = 1,lp1
 10 p(i) = zero
+end do
 do i = 1,mp1
 11 q(i) = zero
 end do
@@ -6517,12 +6522,13 @@ charf = dx
 edist = mo
 nbreak = kbreak
 if (nbreak <= 0 .or. nbreak >= 21) go to 30
-do 20 k = 1,nbreak
+do k = 1,nbreak
    xbreak(k) = brakpt(k)
    dbreak(k) = kdiff(k)
    bleft(k) = vallft(k)
    bright(k) = valrgt(k)
 20 continue
+end do
 30 continue
 !
 kdimen = kmax + 1
@@ -6844,9 +6850,10 @@ if (nbreak == 0) go to 150
 j = 1
 if (xbreak(1) < a .or. xbreak(nbreak) > b) go to 230
 if (nbreak == 1) go to 110
-do 100 j = 2,nbreak
+do j = 2,nbreak
    if (xbreak(j - 1) >= xbreak(j)) go to 230
 100 continue
+end do
 110 limsm = (degree - 1)/2
 do j = 1,nbreak
    if (dbreak(j) < 0 .or. dbreak(j) > limsm) go to 240
@@ -7067,10 +7074,11 @@ if (nintrp == 0) go to 20
 !             Generate equal spaced interpolation points
 aj = nintrp + 1
 dx = (xright(nstack) - xleft(nstack))/aj
-do 10 j = 1,nintrp
+do j = 1,nintrp
    aj = j
    xintrp(j) = xleft(nstack) + aj*dx
 10 continue
+end do
 !
 !             Get left and right f-values, put f-value in first element
 !             of arrays FLEFT and fright.  Get derivatives back as
@@ -7163,13 +7171,14 @@ p = abs(norm)
 !              Initialize the quadrature rule
 errint = abs(f(pj,fdumb) - fit(pj))**p*weight(1)
 !              Loop through remaining points
-do 10 j = 2,4
+do j = 2,4
    pj = abmid + ba*points(j)
    f1 = f(pj,fdumb)
    f2 = fit(pj)
    er = abs(f1 - f2)**p
    errint = errint + abs(f(pj,fdumb) - fit(pj))**p*weight(j)
 10 continue
+end do
 errint = errint*ba
 go to 40
 !
@@ -7251,14 +7260,16 @@ nr2 = nr + 1
 nrl = nr + nl
 !
 !         Put X-values in a single array with nddx = nl+nr+ni points
-do 10 nddx = 1,nl
+do nddx = 1,nl
    xdd(nddx) = xleft(nstack)
 10 continue
+end do
 nddx = nl
-do 20 k = 1,nr
+do k = 1,nr
    nddx = nddx + 1
    xdd(nddx) = xright(nstack)
 20 continue
+end do
 !            Check if there are any interpolation points to add to XDD
 if (ni == 0) go to 40
 do k = 1,ni
@@ -7269,9 +7280,10 @@ end do
 !           Fill border of first triangle - Size nl.
 40 continue
 !         Top border
-do 50 idif = 1,nl
+do idif = 1,nl
    ddtemp(idif,1) = fleft(idif)/factor(idif)
 50 continue
+end do
 if (nl1 == 0) go to 70
 !                   Bottom border
 do idif = 1,nl1
@@ -7363,10 +7375,11 @@ common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
    & leftx, nintrp, rightx
 !
 polydd = ddtemp(degree + 1,1)
-do 10 k = 1,degree
+do k = 1,degree
    j = degree + 1 - k
    polydd = ddtemp(j,1) + (x - xdd(j))*polydd
 10 continue
+end do
 end function polydd
 
 subroutine adchk
@@ -7608,12 +7621,13 @@ end do
 !
 !         Do the repeated synthetic division to replace the xtemp
 !         = XINTRP points of the Newton expansion by the xr points
-do 70 k = 1,ni1
+do k = 1,ni1
 !              powers(ni) is fixed and set above
-   do 50 ii = 1,ni1
+   do ii = 1,ni1
       i = ni - ii
       powers(i) = powers(i) + (xr - xtemp(i))*powers(i + 1)
 50    continue
+   end do
 !              Shift the Newton expansion pts. Up, put in one more xr
    do ii = 1,ni1
       i = ni - ii
@@ -7621,6 +7635,7 @@ do 70 k = 1,ni1
    end do
    xtemp(1) = xr
 70 continue
+end do
 80 continue
 !             Shift the coefficients to the top of the powers array
 do k = 1,ni
@@ -7741,11 +7756,12 @@ fv(2) = (0.,-1.)
 r1 = sqrt(0.5)
 ra = 1.0/r1
 fv(3) = cmplx(r1,-r1)
-do 10 i = 2,4
+do i = 2,4
    sc(i) = .5*sc(i - 1)
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
 10 fv(i + 2) = cmplx(cos(ang),-sin(ang))
+end do
 !
 !  Start execution.
 !
@@ -7770,28 +7786,32 @@ is = iw(kn)
 !
 !  Function values of f are stored ready permutated for the FFT.
 !
-do 40 i = is,32,is
+do i = is,32,is
    iq = ip(i)
    v = v*fv(km)
    a(iq) = f(z + v)
 40 a(iq - 1) = f(z - v)
+end do
 ln = 2
 jn = 1
 !
 !  The loop  do 70 ... constitutes the FFT.
 !
-do 70 l = 1,km
+do l = 1,km
    u = (1.,0.)
    w = fv(l)
-   do 60 j = 1,jn
-      do 50 i = j,ix,ln
+   do j = 1,jn
+      do i = j,ix,ln
          it = i + jn
          t = a(it)*u
          a(it) = a(i) - t
 50       a(i) = a(i) + t
+      end do
 60    u = u*w
+   end do
    ln = ln + ln
 70 jn = jn + jn
+end do
 cx = 0.0
 b = 1.0
 !
@@ -8015,12 +8035,13 @@ r1 = sqrt(0.5d0)
 ra = 1.d0/r1
 fv1(3) = r1
 fv2(3) = -r1
-do 10 i = 2,4
+do i = 2,4
    sc(i) = 0.5d0*sc(i - 1)
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
    fv1(i + 2) = cos(ang)
 10 fv2(i + 2) = -sin(ang)
+end do
 !
 !  Start execution.
 !
@@ -8046,7 +8067,7 @@ v = 0.d0
 !
 !  Function values of F are stored ready permutated for the FFT.
 !
-do 40 i = is,32,is
+do i = is,32,is
    iq = ip(i)
    t = u*fv1(km) - v*fv2(km)
    v = u*fv2(km) + v*fv1(km)
@@ -8054,16 +8075,17 @@ do 40 i = is,32,is
    call fun(x + u, y + v, a1(iq), a2(iq))
    call fun(x - u, y - v, a1(iq - 1), a2(iq - 1))
 40 continue
+end do
 ln = 2
 jn = 1
 !
 !  The loop  do 70 ... constitutes the FFT.
 !
-do 70 l = 1,km
+do l = 1,km
    u = 1.0
    v = 0.0
-   do 60 j = 1,jn
-      do 50 i = j,ix,ln
+   do j = 1,jn
+      do i = j,ix,ln
          it = i + jn
          s = u*a1(it) - v*a2(it)
          t = u*a2(it) + v*a1(it)
@@ -8071,11 +8093,14 @@ do 70 l = 1,km
          a2(it) = a2(i) - t
          a1(i) = a1(i) + s
 50       a2(i) = a2(i) + t
+      end do
       t = u*fv1(l) - v*fv2(l)
       v = u*fv2(l) + v*fv1(l)
 60    u = t
+   end do
    ln = ln + ln
 70 jn = jn + jn
+end do
 cx = 0.d0
 b = 1.d0
 !
@@ -9089,18 +9114,20 @@ if (n < 4) go to 200
 nm1 = n - 1
 nm2 = n - 2
 if (isx > 0) go to 40
-do 10 i = 2,n
+do i = 2,n
    if (x(i) <= x(i - 1)) go to 300
 10 continue
+end do
 !
 !     Define the tridiagonal matrix
 !
 w(1,3) = x(2) - x(1)
-do 20 i = 2,nm1
+do i = 2,nm1
    w(i,2) = w(i - 1,3)
    w(i,3) = x(i + 1) - x(i)
    w(i,1) = 2.0*(w(i,2) + w(i,3))
 20 continue
+end do
 w(1,1) = 4.0
 w(1,3) = -4.0*a1
 w(n,1) = 4.0
@@ -9108,21 +9135,23 @@ w(n,2) = -4.0*an
 !
 !     LU decomposition
 !
-do 30 i = 2,n
+do i = 2,n
    w(i - 1,3) = w(i - 1,3)/w(i - 1,1)
    w(i,1) = w(i,1) - w(i,2)*w(i - 1,3)
 30 continue
+end do
 !
 !     Define *constant* vector
 !
 40 ypp(1) = 4.0*b1
 dold = (y(2) - y(1))/w(2,2)
-do 50 i = 2,nm2
+do i = 2,nm2
    dnew = (y(i + 1) - y(i))/w(i + 1,2)
    ypp(i) = 6.0*(dnew - dold)
    yp(i) = dold
    dold = dnew
 50 continue
+end do
 dnew = (y(n) - y(nm1))/(x(n) - x(nm1))
 ypp(nm1) = 6.0*(dnew - dold)
 ypp(n) = 4.0*bn
@@ -9132,24 +9161,27 @@ yp(n) = dnew
 !     Forward substitution
 !
 ypp(1) = ypp(1)/w(1,1)
-do 60 i = 2,n
+do i = 2,n
    ypp(i) = (ypp(i) - w(i,2)*ypp(i - 1))/w(i,1)
 60 continue
+end do
 !
 !     Backward substitution
 !
-do 70 j = 1,nm1
+do j = 1,nm1
    i = n - j
    ypp(i) = ypp(i) - w(i,3)*ypp(i + 1)
 70 continue
+end do
 !
 !     Compute first derivatives
 !
 h = x(2) - x(1)
 yp(1) = (y(2) - y(1))/h - h*(2.0*ypp(1) + ypp(2))/6.0
-do 80 i = 2,nm1
+do i = 2,nm1
    yp(i) = yp(i) + w(i,2)*(ypp(i - 1) + 2.0*ypp(i))/6.0
 80 continue
+end do
 yp(n) = yp(n) + (x(n) - x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0
 ierr = 0
 return
@@ -9235,13 +9267,14 @@ ierr = 0
 call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lq), lm1, temp)
 k = lq
-do 20 j = 1,lm1
+do j = 1,lm1
    z(j) = wk(k)
    a(j) = wk(k + 1)
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
 20 continue
+end do
 return
 !
 !                       Error return
@@ -9316,13 +9349,14 @@ if (ierr < 0 .or. ierr == 2) return
 call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lw), lm1, temp)
 k = lw
-do 20 j = 1,lm1
+do j = 1,lm1
    z(j) = wk(k)
    a(j) = wk(k + 1)
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
 20 continue
+end do
 return
 !
 !                       Error return
@@ -10478,96 +10512,4 @@ return
 return
 110 ierr = 2
 end subroutine pdspl
-
-subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: l, m
-real, intent(in) :: x(m), y(m)
-real, intent(inout) :: break(l)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
-integer, intent(inout) :: iwk(*)
-integer :: j, k, la, lm1, lw, n
-real :: r, temp(20), con(3), xcon(3)
-integer, parameter :: nder(3) = [3, 7, 11]
-!-----------------------------------------------------------------------
-!            Least squares periodic cubic spline fitting
-!-----------------------------------------------------------------------
-!--------------------
-!     real z(l-1), a(l-1), b(l-1), c(l-1)
-!     real wk((l + 6)*(l + 15) + 10)
-!     integer iwk(2*l + 6)
-!--------------------
-!--------------------
-!--------------------
-if (m <= 0 .or. l < 2) go to 100
-n = l + 2
-!
-!                Define the nodes for the b-splines
-!
-wk(1) = break(1)
-wk(2) = break(1)
-wk(3) = break(1)
-wk(4) = break(1)
-do j = 2,l
-   if (break(j - 1) >= break(j)) go to 110
-   wk(j + 3) = break(j)
-end do
-wk(l + 4) = break(l)
-wk(l + 5) = break(l)
-wk(l + 6) = break(l)
-!
-!                Define the periodicity constraints
-!
-con(1) = break(1)
-con(2) = break(1)
-con(3) = break(1)
-xcon(1) = break(l)
-xcon(2) = break(l)
-xcon(3) = break(l)
-!
-!     Obtain the b-spline coefficients of the periodic spline
-!
-ierr = 0
-la = n + 5
-lw = la + n
-iwk(1) = iwk(1) - (l + l + 8)
-call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
-   & wk(la), r, wk(lw), iwk)
-iwk(1) = iwk(1) + (l + l + 8)
-if (ierr /= 0) go to 30
-!
-!     Obtain the coefficients of the spline in Taylor series form
-!
-call bspp(wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
-k = lw
-do 20 j = 1,lm1
-   z(j) = wk(k)
-   a(j) = wk(k + 1)
-   b(j) = wk(k + 2)
-   c(j) = wk(k + 3)
-   k = k + 4
-20 continue
-return
-!
-!                The coefficients were not obtained
-!
-30 if (ierr == -4) go to 120
-if (ierr == -6) go to 130
-if (ierr == -7) go to 140
-ierr = 1
-return
-!
-!                           Error return
-!
-100 ierr = 2
-return
-110 ierr = 3
-return
-120 ierr = 4
-return
-130 ierr = 5
-return
-140 ierr = 6
-end subroutine pdfit
 

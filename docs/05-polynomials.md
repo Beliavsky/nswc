@@ -12,8 +12,8 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PLCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L28332`](../source_parts/nswc_part_03.f90#L7216) |
-| `DPCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L28359`](../source_parts/nswc_part_03.f90#L7243) |
+| `PLCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L28443`](../source_parts/nswc_part_03.f90#L7243) |
+| `DPCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L28470`](../source_parts/nswc_part_03.f90#L7270) |
 
 
 m--1 . If p(x) = > a;2? and the coefficients a; are stored in an array A, then the following j=0 subroutines are available fer copying the first n coefficients a, into an array B.
@@ -41,8 +41,8 @@ Note If n>m then B(1+7-kb) = 0 for 7 > m.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28386`](../source_parts/nswc_part_03.f90#L7270) |
-| `DPADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28409`](../source_parts/nswc_part_03.f90#L7293) |
+| `PADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28497`](../source_parts/nswc_part_03.f90#L7297) |
+| `DPADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28520`](../source_parts/nswc_part_03.f90#L7320) |
 
 
 ```text
@@ -75,8 +75,8 @@ The arguments ¢,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28432`](../source_parts/nswc_part_03.f90#L7316) |
-| `DPSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28455`](../source_parts/nswc_part_03.f90#L7339) |
+| `PSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28543`](../source_parts/nswc_part_03.f90#L7343) |
+| `DPSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28566`](../source_parts/nswc_part_03.f90#L7366) |
 
 
 £-1 m-- 1 : If p(z) = 33 a;: q{z) == 33 6,2? then the following subroutines are available for j=0 pd computing the first, ; ients of the polynomial p(x) ~ q(x) = 30, ¢;27. CALL PSU'S) ka, ¢, B, kb, m,C, ke, n) CALL DPSWUE I A, ka, é, Bj kb,m,C, ke, n) A, B and C are ari: PSUBT is used if A, B and C are real arrays and DPSUBT is used if A, B and C are! ble precision arrays. The arguments f, ka,kb,ke are positive integers. The coefficients a; and 6; are assumed to be stored nd B where A(l + 7+ka} (7 =0,1,...,8- 1) B(1 + 7-kb) (7 =0,1,...,m—1).
@@ -100,8 +100,8 @@ j=0,1,...,n-1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28478`](../source_parts/nswc_part_03.f90#L7362) |
-| `DPMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28520`](../source_parts/nswc_part_03.f90#L7404) |
+| `PMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28589`](../source_parts/nswc_part_03.f90#L7389) |
+| `DPMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L28631`](../source_parts/nswc_part_03.f90#L7431) |
 
 
 t—1 : m—1 , If p(z) = 30 ayx? and g(x) = > 6,27 then the following subroutines are available for gr g=0
@@ -131,8 +131,8 @@ The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and b, 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L28562`](../source_parts/nswc_part_03.f90#L7446) |
-| `DPDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L28620`](../source_parts/nswc_part_03.f90#L7504) |
+| `PDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L28673`](../source_parts/nswc_part_03.f90#L7473) |
+| `DPDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L28731`](../source_parts/nswc_part_03.f90#L7531) |
 
 
 ```text
@@ -165,8 +165,8 @@ The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L28677`](../source_parts/nswc_part_03.f90#L7561) |
-| `DPLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L28734`](../source_parts/nswc_part_03.f90#L7618) |
+| `PLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L28788`](../source_parts/nswc_part_03.f90#L7588) |
+| `DPLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L28845`](../source_parts/nswc_part_03.f90#L7645) |
 
 
 ```text
@@ -204,8 +204,8 @@ Consequently, 6; = = So (ri+a—- j)a,;b;_, is used for j > 1. Also bo = a}.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PINV` | `SUBROUTINE` | `A, D, N, Q` | [`L28790`](../source_parts/nswc_part_03.f90#L7674) |
-| `DPINV` | `SUBROUTINE` | `A, D, N, Q` | [`L28851`](../source_parts/nswc_part_03.f90#L7735) |
+| `PINV` | `SUBROUTINE` | `A, D, N, Q` | [`L28901`](../source_parts/nswc_part_03.f90#L7701) |
+| `DPINV` | `SUBROUTINE` | `A, D, N, Q` | [`L28962`](../source_parts/nswc_part_03.f90#L7762) |
 
 
 Given an analytic function w = f(z) = >> ayz* where f(0) =: 0. Then the inverse i>1 function z = f~!(w) exists when a; 4 0, and f~'(w) = 3 djw*. The subroutines PINV i>
@@ -235,7 +235,7 @@ WK is an array of dimension n(n + 1)/2 or larger. WK is a work space for the rou
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MPLNMV` | `SUBROUTINE` | `MO, AU, NC, AC, FV` | [`L28912`](../source_parts/nswc_part_03.f90#L7796) |
+| `MPLNMV` | `SUBROUTINE` | `MO, AU, NC, AC, FV` | [`L29023`](../source_parts/nswc_part_03.f90#L7823) |
 
 
 n--} . Let f(z) = 5) ayz* be a polynomial with real coefficients a,. The polynomial can be
@@ -269,8 +269,8 @@ Programmer, Allen V. Hershey.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSEVL` | `REAL FUNCTION` | `X, A, N` | [`L28970`](../source_parts/nswc_part_03.f90#L7854) |
-| `DCSEVL` | `DOUBLE PRECISION FUNCTION` | `X, A, N` | [`L28998`](../source_parts/nswc_part_03.f90#L7882) |
+| `CSEVL` | `REAL FUNCTION` | `X, A, N` | [`L29082`](../source_parts/nswc_part_03.f90#L7882) |
+| `DCSEVL` | `DOUBLE PRECISION FUNCTION` | `X, A, N` | [`L29110`](../source_parts/nswc_part_03.f90#L7910) |
 
 
 ```text
@@ -308,9 +308,9 @@ is the double precision value of f(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LGRNGN` | `SUBROUTINE` | `AU, NA, AN` | [`L29025`](../source_parts/nswc_part_03.f90#L7909) |
-| `LGRNGV` | `SUBROUTINE` | `MO, NA, QU, AU, AN, FF, DF, SF` | [`L29051`](../source_parts/nswc_part_03.f90#L7935) |
-| `LGRNGX` | `SUBROUTINE` | `AU, NA, AC` | [`L29169`](../source_parts/nswc_part_03.f90#L8053) |
+| `LGRNGN` | `SUBROUTINE` | `AU, NA, AN` | [`L29137`](../source_parts/nswc_part_03.f90#L7937) |
+| `LGRNGV` | `SUBROUTINE` | `MO, NA, QU, AU, AN, FF, DF, SF` | [`L29163`](../source_parts/nswc_part_03.f90#L7963) |
+| `LGRNGX` | `SUBROUTINE` | `AU, NA, AC` | [`L29282`](../source_parts/nswc_part_03.f90#L8082) |
 
 
 Let ay, ...,@n be n distinct real numbers. Then the t** Lagrange polynomial is defined by
@@ -377,9 +377,9 @@ g(x) = (2 — a1) +++ (2 - ay) are stored in the (n + 1)** column of C.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ORTHOS` | `SUBROUTINE` | `AU, MA, AA, NA, AR` | [`L29222`](../source_parts/nswc_part_03.f90#L8106) |
-| `ORTHOV` | `SUBROUTINE` | `MO, NA, AU, AR, NF, FF, DF, SF` | [`L29304`](../source_parts/nswc_part_03.f90#L8188) |
-| `ORTHOX` | `SUBROUTINE` | `NA, AR, NC, AC` | [`L29362`](../source_parts/nswc_part_03.f90#L8246) |
+| `ORTHOS` | `SUBROUTINE` | `AU, MA, AA, NA, AR` | [`L29337`](../source_parts/nswc_part_03.f90#L8137) |
+| `ORTHOV` | `SUBROUTINE` | `MO, NA, AU, AR, NF, FF, DF, SF` | [`L29421`](../source_parts/nswc_part_03.f90#L8221) |
+| `ORTHOX` | `SUBROUTINE` | `NA, AR, NC, AC` | [`L29480`](../source_parts/nswc_part_03.f90#L8280) |
 
 
 Let uz, ...,U, be n distinct real numbers. For any real-valued functions ‘,g defined

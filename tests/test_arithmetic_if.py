@@ -8,6 +8,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 from modernize_arithmetic_if import candidates, review, transform, verify
+from modernize_remaining_features import strict_standard
 
 
 @unittest.skipUnless(shutil.which('gfortran'), 'GNU Fortran required for type review')
@@ -94,7 +95,7 @@ class ArithmeticIfTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='nswc-branch-wrap-') as work:
             path = Path(work) / 'input.f90'
             path.write_text(free)
-            run = subprocess.run(['gfortran', '-std=f2023', '-pedantic-errors', '-fsyntax-only', str(path)],
+            run = subprocess.run(['gfortran', strict_standard(), '-pedantic-errors', '-fsyntax-only', str(path)],
                                  capture_output=True, text=True, timeout=30)
             self.assertEqual(run.returncode, 0, run.stderr)
 
@@ -121,7 +122,7 @@ end program probe
                 changed = transform(source, review(source))
                 for optimization in ('-O0', '-O2'):
                     outputs = []
-                    for data, standard in ((source, '-std=legacy'), (changed, '-std=f2023')):
+                    for data, standard in ((source, '-std=legacy'), (changed, strict_standard())):
                         library = folder / 'library.f'
                         library.write_bytes(data)
                         result = subprocess.run(['gfortran', optimization, standard, str(library), str(driver), '-o', 'probe.exe'],

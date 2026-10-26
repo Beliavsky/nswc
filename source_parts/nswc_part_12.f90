@@ -3036,8 +3036,9 @@ call f(t,y,yh(1,2),rpar,ipar)
 nfe = 1
 if (t /= tout) go to 220
 idid = 2
-do 210 l = 1,neq
+do l = 1,neq
 210 ypout(l) = yh(l,2)
+end do
 told = t
 return
 !
@@ -3350,8 +3351,9 @@ relper = small**0.375
 da = sign(max(min(relper*abs(a),absdx),100.*small*abs(a)),dx)
 if (da == 0.) da = relper*dx
 call f(a + da,y,sf,rpar,ipar)
-do 10 j = 1,neq
+do j = 1,neq
 10 yp(j) = sf(j) - yprime(j)
+end do
 delf = vnorm(yp,neq)
 dfdxb = big
 if (delf < big*abs(da)) dfdxb = delf/abs(da)
@@ -3399,7 +3401,7 @@ delf = vnorm(yp,neq)
 !
 50 dfdub = 0.
 lk = min(neq + 1,3)
-do 140 k = 1,lk
+do k = 1,lk
 !                       Define perturbed vector of initial values
    do j = 1,neq
 60    pv(j) = y(j) + dely*(yp(j)/delf)
@@ -3439,6 +3441,7 @@ do 140 k = 1,lk
 130   yp(j) = dy
    end do
 140 delf = vnorm(yp,neq)
+end do
 !
 !                       Protect against an overflow
 150 dfdub = big
@@ -4932,17 +4935,20 @@ end do
 call f(t + h*2./9.,w(1))
 !
 i = 1
-do 22 m = 2,8
+do m = 2,8
    i = i + n
    m1 = m - 1
-   do 21 k = 1,n
+   do k = 1,n
       sum = b(1,m1)*dy(k)
       l = k
-      do 20 j = 2,m
+      do j = 2,m
          sum = sum + b(j,m1)*w(l)
 20       l = l + n
+      end do
 21    w(l) = y(k) + sum*h/c(m1)
+   end do
 22 call f(t + a(m1)*h,w(i))
+end do
 !
 do k = 1,n
    sum = d(1)*dy(k)
@@ -4958,8 +4964,9 @@ t = t + h
 call f(t,dy)
 return
 !
-40 do 41 k = 1,n
+40 do k = 1,n
 41 dy(k) = y(k)
+end do
 call f(t,dy)
 end subroutine rk8
 
@@ -7793,13 +7800,14 @@ do l = 1,n
 !
 !     ********** Look for small squared sub-diagonal element **********
 !
-20 do 30 m = l,n
+20 do m = l,n
       if (e2(m) <= c) go to  40
 !
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
 !
 30    continue
+   end do
 !
 40 if (m == l) go to  80
 50 if (j == 30) go to 140

@@ -60,9 +60,10 @@ mp = abs(a - szr*b) + abs(szi*b)
 zm = sqrt(abs(sngl(v)))
 ee = 2.0*abs(sngl(qp(1)))
 t = -szr*b
-do 20 i = 2,n
+do i = 2,n
    ee = ee*zm + abs(sngl(qp(i)))
 20 continue
+end do
 ee = ee*zm + abs(sngl(a) + t)
 ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
    & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
@@ -147,10 +148,11 @@ j = 0
 !
 10 pv = p(1)
 qp(1) = pv
-do 20 i = 2,nn
+do i = 2,nn
    pv = pv*s + p(i)
    qp(i) = pv
 20 continue
+end do
 mp = abs(pv)
 !
 !     Compute a rigorous bound on the error in evaluating p
@@ -312,9 +314,10 @@ if (abs(a1) > abs(temp)*eta*10.) go to 20
 !
 k(1) = 0.d0
 k(2) = -a7*qp(1)
-do 10 i = 3,n
+do i = 3,n
    k(i) = a3*qk(i - 2) - a7*qp(i - 1)
 10 continue
+end do
 return
 !
 !     Use scaled form of the recurrence
@@ -839,11 +842,12 @@ end interface
 n = nn - 1
 nm1 = n - 1
 dn = n
-do 10 i = 1,n
+do i = 1,n
    xni = nn - i
    hr(i) = xni*pr(i)/dn
    hi(i) = xni*pi(i)/dn
 10 continue
+end do
 !
 do jj = 1,l1
    if (dcpabs(hr(n),hi(n)) <= 10.d0*eta*dcpabs(pr(n),pi(n))) &
@@ -990,7 +994,7 @@ call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 !
 !     Main loop for one second stage step.
 !
-do 50 j = 1,l2
+do j = 1,l2
    otr = tr
    oti = ti
 !
@@ -1013,10 +1017,11 @@ do 50 j = 1,l2
 !     third shift iteration after saving the current H polynomial
 !     and shift.
 !
-   do 10 i = 1,n
+   do i = 1,n
       shr(i) = hr(i)
       shi(i) = hi(i)
 10    continue
+   end do
    svsr = sr
    svsi = si
    call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
@@ -1042,6 +1047,7 @@ do 50 j = 1,l2
 !
 40 pasd = .false.
 50 continue
+end do
 !
 !     Attempt an iteration with final H polynomial from second stage.
 !
@@ -1176,10 +1182,11 @@ do i = 1,l3
    si = sr*r1 + si*(1.d0 + r1)
    sr = r2
    call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
-   do 20 j = 1,5
+   do j = 1,5
       call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
       call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
 20    continue
+   end do
    omp = infin
    go to 50
 !
@@ -3413,14 +3420,23 @@ if (n > 0) go to 10
 snrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 go to next,(30, 50, 70, 110)
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
 30 if ( abs(sx(i)) > cutlo) go to 85
-assign 50 to next
+next = 50
 xmax = zero
 !
 !                        Phase 1.  Sum is zero
@@ -3429,13 +3445,13 @@ xmax = zero
 if ( abs(sx(i)) > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-assign 70 to next
+next = 70
 go to 105
 !
 !                                Prepare for phase 4.
 !
 100 i = j
-assign 110 to next
+next = 110
 sum = (sum / sx(i)) / sx(i)
 105 xmax = abs(sx(i))
 go to 115
@@ -3469,9 +3485,10 @@ go to 200
 !
 !                   Phase 3.  Sum is mid-range.  No scaling.
 !
-do 95 j = i,nn,incx
+do j = i,nn,incx
    if (abs(sx(j)) >= hitest) go to 100
 95 sum = sum + sx(j)**2
+end do
 snrm2 = sqrt( sum )
 go to 300
 !
@@ -3540,14 +3557,23 @@ if (n > 0) go to 10
 dnrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
 i = 1
-20 go to next,(30, 50, 70, 110)
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
 30 if ( abs(dx(i)) > cutlo) go to 85
-assign 50 to next
+next = 50
 xmax = zero
 !
 !                        Phase 1.  Sum is zero
@@ -3556,13 +3582,13 @@ xmax = zero
 if ( abs(dx(i)) > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-assign 70 to next
+next = 70
 go to 105
 !
 !                                Prepare for phase 4.
 !
 100 i = j
-assign 110 to next
+next = 110
 sum = (sum / dx(i)) / dx(i)
 105 xmax = abs(dx(i))
 go to 115
@@ -3596,9 +3622,10 @@ go to 200
 !
 !                   Phase 3.  Sum is mid-range.  No scaling.
 !
-do 95 j = i,nn,incx
+do j = i,nn,incx
    if (abs(dx(j)) >= hitest) go to 100
 95 sum = sum + dx(j)**2
+end do
 dnrm2 = sqrt( sum )
 go to 300
 !
@@ -3668,16 +3695,27 @@ if (n > 0) go to 10
 scnrm2 = zero
 go to 300
 !
-10 assign 30 to next
+10 next = 30
 sum = zero
 nn = n * incx
 !                                                 Begin main loop
-do 210 i = 1,nn,incx
+do i = 1,nn,incx
    absx = abs(real(cx(i)))
    imag = .false.
-   go to next,(30, 50, 70, 90, 110)
+   select case ( next )
+   case ( 30 )
+      go to 30
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
 30 if ( absx > cutlo) go to 85
-   assign 50 to next
+   next = 50
    scale = .false.
 !
 !                        Phase 1.  Sum is zero
@@ -3686,12 +3724,12 @@ do 210 i = 1,nn,incx
    if ( absx > cutlo) go to 85
 !
 !                                Prepare for phase 2.
-   assign 70 to next
+   next = 70
    go to 105
 !
 !                                Prepare for phase 4.
 !
-100 assign 110 to next
+100 next = 110
    sum = (sum / absx) / absx
 105 scale = .true.
    xmax = absx
@@ -3718,7 +3756,7 @@ do 210 i = 1,nn,incx
 !
 75 sum = (sum * xmax) * xmax
 !
-85 assign 90 to next
+85 next = 90
    scale = .false.
 !
 !     For real or D.P. set hitest = cuthi/n
@@ -3737,9 +3775,19 @@ do 210 i = 1,nn,incx
    if (imag) go to 210
    absx = abs(aimag(cx(i)))
    imag = .true.
-   go to next,(  50, 70, 90, 110 )
+   select case ( next )
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
 !
 210 continue
+end do
 !
 !              END OF MAIN LOOP.
 !              Compute square root and adjust for scaling.
@@ -6361,10 +6409,11 @@ if (t == 1.0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call sgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -7133,7 +7182,7 @@ if (job/10 == 0) go to 70
 det(1) = 1.0e0
 det(2) = 0.0e0
 ten = 10.0e0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -7149,6 +7198,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -7217,10 +7267,11 @@ if (t == 1.d0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call dgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -7851,7 +7902,7 @@ if (job/10 == 0) go to 70
 det(1) = 1.0d0
 det(2) = 0.0d0
 ten = 10.0d0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -7867,6 +7918,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -8929,15 +8981,16 @@ real :: dotprd, swap
 !
 !***************************************************************
 !
-do 40 nj = 1,nclpiv
+do nj = 1,nclpiv
    j = nclpiv + 1 - nj
    i = nrwblk + 1 - nj
    dotprd = x(j)
    if (j == novrlp) go to 20
    jplus1 = j + 1
-   do 10 j1 = jplus1,novrlp
+   do j1 = jplus1,novrlp
       dotprd = dotprd - x(j1)*block(i,j1)
 10    continue
+   end do
 20 continue
    x(j) = dotprd
    pivotj = pivot(j)
@@ -8947,6 +9000,7 @@ do 40 nj = 1,nclpiv
    x(j) = swap
 30 continue
 40 continue
+end do
 end subroutine arcebe
 
 subroutine btslv(mo, m, n, a, b, c, x, ip, ierr)
@@ -10111,7 +10165,7 @@ ten = 10.0e0
 20 continue
 t = 0.0e0
 ik = 0
-do 130 k = 1, n
+do k = 1, n
    kk = ik + k
    d = ap(kk)
 !
@@ -10160,6 +10214,7 @@ do 130 k = 1, n
 120 continue
    ik = ik + k
 130 continue
+end do
 140 continue
 !
 !     Compute inverse(A)

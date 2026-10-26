@@ -1527,15 +1527,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1555,6 +1556,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine ishell
 
 pure subroutine shell(a, n)
@@ -1575,15 +1577,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1603,6 +1606,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine shell
 
 pure subroutine shell2(a, b, n)
@@ -1624,15 +1628,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1655,6 +1660,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine shell2
 
 pure subroutine rsort(a, n)
@@ -1675,15 +1681,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1703,6 +1710,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine rsort
 
 pure subroutine risort(a, m, n)
@@ -1725,15 +1733,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1756,6 +1765,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine risort
 
 pure subroutine rrsort(a, b, n)
@@ -1777,15 +1787,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1808,6 +1819,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine rrsort
 
 pure subroutine dsort(a, n)
@@ -1828,15 +1840,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1856,6 +1869,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine dsort
 
 pure subroutine disort(a, m, n)
@@ -1878,15 +1892,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1909,6 +1924,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine disort
 
 pure subroutine ddsort(a, b, n)
@@ -1930,15 +1946,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -1961,6 +1978,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine ddsort
 
 pure subroutine aord(a, n)
@@ -1982,15 +2000,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2010,6 +2029,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine aord
 
 pure subroutine daord(a, n)
@@ -2031,15 +2051,16 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 if (n < 2) return
 imax = 1
-do 10 i = 3,10
+do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
+end do
 !
 !            Stepping through the increments k(imax),...,k(1)
 !
 20 i = imax
-do 40 ii = 1,imax
+do ii = 1,imax
    ki = k(i)
 !
 !             Sorting elements that are ki positions apart
@@ -2059,6 +2080,7 @@ do 40 ii = 1,imax
    end do
 !
 40 i = i - 1
+end do
 end subroutine daord
 
 pure subroutine qsorti(x, ind, n)
@@ -2130,8 +2152,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -2331,8 +2354,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -2533,8 +2557,9 @@ if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
-do 1 i = 1,n
+do i = 1,n
 1  ind(i) = i
+end do
 m = 1
 i = 1
 j = n
@@ -7292,7 +7317,7 @@ x = 1.d0
 y = 0.d0
 w(1) = a(30)
 w(2) = 0.d0
-do 10 n = 31,63
+do n = 31,63
    t(1) = x*h(1) - y*h(2)
    t(2) = x*h(2) + y*h(1)
    x = t(1)
@@ -7303,13 +7328,15 @@ do 10 n = 31,63
    w(2) = w(2) + t(2)
    if (anorm(t(1),t(2)) <= tol*anorm(w(1),w(2))) go to 20
 10 continue
+end do
 !
-20 do 21 j = 1,29
+20 do j = 1,29
    n = 30 - j
    x = h(1)*w(1) - h(2)*w(2)
    w(2) = h(1)*w(2) + h(2)*w(1)
    w(1) = a(n) + x
 21 continue
+end do
 x = h(1)*w(1) - h(2)*w(2)
 w(2) = h(1)*w(2) + h(2)*w(1)
 w(1) = 1.d0 + x
@@ -7364,10 +7391,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derf = x*(1.d0 + w)
 return
 !
@@ -7420,10 +7448,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derfc = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 return
 !
@@ -7488,10 +7517,11 @@ ax = abs(x)
 if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
-do 10 i = 1,20
+do i = 1,20
    k = 21 - i
    w = t*w + a(k)
 10 continue
+end do
 derfc1 = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 if (ind /= 0) derfc1 = exp(t) * derfc1
 return
@@ -7791,6 +7821,7 @@ end function erfi
 
 pure elemental double precision function derfi(p, q)
 implicit none
+intrinsic :: erf
 !-----------------------------------------------------------------------
 !
 !                  Double precision computation of
@@ -7808,7 +7839,6 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
 double precision :: eps, f, lnq, s, t, x
-double precision :: derf
 double precision, parameter :: c = .5625d0
 double precision, parameter :: c1 = .87890625d0
 double precision, parameter :: c2 = -.2302585092994045684017991454684364d+03
@@ -7881,7 +7911,7 @@ derfi = p*(s/t)
 if (eps > 1.d-19) return
 !
 x = derfi
-f = derf(x) - p
+f = erf(x) - p
 derfi = x - r * exp(x*x) * f
 return
 !
@@ -8090,10 +8120,10 @@ end function aerf
 
 pure elemental double precision function daerf(x, h)
 implicit none
+intrinsic :: erf, erfc
 double precision, intent(in) :: x, h
 integer :: j
 double precision :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
-double precision :: derf, derfc
 double precision, parameter :: c = 1.12837916709551257389615890312155d0
 double precision, parameter :: p = 2.76959d0
 interface
@@ -8207,15 +8237,15 @@ if (xmh > -8.3d0) go to 120
 daerf = sign(2.d0,h)
 return
 !
-110 daerf = derf(xph) - derf(xmh)
+110 daerf = erf(xph) - erf(xmh)
 if (h < 0.d0) daerf = -daerf
 return
 !
-120 daerf = derfc(xmh)
+120 daerf = erfc(xmh)
 if (h < 0.d0) daerf = -daerf
 return
 !
-130 daerf = derfc(xmh) - derfc(xph)
+130 daerf = erfc(xmh) - erfc(xph)
 if (h < 0.d0) daerf = -daerf
 return
 !
@@ -8230,7 +8260,7 @@ if (x2 >= eps) t = 2.d0*exp(-x2)
 if (h*h >= 3.d0*eps) go to 160
 daerf = c*h*t
 return
-160 daerf = t*derf(h)
+160 daerf = t*erf(h)
 end function daerf
 
 pure elemental function pndf(x,ind)
@@ -8595,10 +8625,11 @@ dpdaw = x
 if (t < eps) return
 !
 w = a(20)
-do 10 i = 1,19
+do i = 1,19
    k = 20 - i
    w = t*w + a(k)
 10 continue
+end do
 dpdaw = x * (0.75d0 + (0.25d0 + t*w))
 return
 !
@@ -9079,9 +9110,10 @@ return
 10 if (x >= 1.65) go to 20
 c = cp(1)
 s = sp(1)
-do 11 i = 2,13
+do i = 2,13
    c = cp(i) + c*y
 11 s = sp(i) + s*y
+end do
 c = t*c
 s = t*xx*s
 return
@@ -10088,12 +10120,13 @@ h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
 !-------------------------
 t = h
 w = 0.d0
-do 10 n = 2,40
+do n = 2,40
    c = a(n)*t
    w = w + c
    if (abs(c) < eps) go to 20
    t = h*t
 10 continue
+end do
 !
 20 dei0 = h * (a(1) + w)
 end function dei0
@@ -10170,11 +10203,12 @@ bx = 0.40*ax - 1.0
 tx = bx + bx
 b1 = bb(j)
 b2 = 0.
-do 10 i = 1,m1
+do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
 10 b2 = temp
+end do
 si = (bx*b1 - b2 + bb(1))*x
 return
 !
@@ -10184,21 +10218,23 @@ tx = bx + bx
 j = n2
 b1 = cc(j)
 b2 = 0.0
-do 30 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 30 b2 = temp
+end do
 aic = bx*b1 - b2 + cc(2)
 !
 j = n2 - 1
 b1 = cc(j)
 b2 = 0.0
-do 40 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 40 b2 = temp
+end do
 rc = bx*b1 - b2 + cc(1)
 !
 si = (rc*cos(ax) + aic*sin(ax))/ax
@@ -10282,11 +10318,12 @@ bx = 0.40*ax - 1.0
 tx = bx + bx
 b1 = bb(j)
 b2 = 0.
-do 10 i = 1,m1
+do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
 10 b2 = temp
+end do
 cin = x*x*(bx*b1 - b2 + bb(1))
 return
 !
@@ -10296,21 +10333,23 @@ tx = bx + bx
 j = n2
 b1 = cc(j)
 b2 = 0.0
-do 30 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 30 b2 = temp
+end do
 aic = bx*b1 - b2 + cc(2)
 !
 j = n2 - 1
 b1 = cc(j)
 b2 = 0.0
-do 40 i = 1,m2
+do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
 40 b2 = temp
+end do
 rc = bx*b1 - b2 + cc(1)
 !
 cin = (rc*sin(ax) - aic*cos(ax))/ax

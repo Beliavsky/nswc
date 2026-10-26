@@ -528,10 +528,11 @@ if (x*x + y*y <= 0.04) n = 14
 !
 k = n
 w = a(n)
-do 10 i = 2,n
+do i = 2,n
    k = k - 1
    w = a(k) + z*w
 10 continue
+end do
 cgam0 = 1.0 + z*w
 end function cgam0
 
@@ -1331,10 +1332,11 @@ double precision, parameter :: a(15) = [.833333333333333333333333333333d-01, - &
 !-----------------------------------------------------------------------
 t = (10.d0/x)**2
 w = a(15)
-do 10 i = 1,14
+do i = 1,14
    k = 15 - i
    w = t*w + a(k)
 10 continue
+end do
 dpdel = w/x
 end function dpdel
 
@@ -2198,10 +2200,11 @@ nswc_ai_i4 = n
 if ( nswc_ai_i4 < 0 ) go to 20
 if ( nswc_ai_i4 == 0 ) go to 12
 go to 10
-10 do 11 j = 1,n
+10 do j = 1,n
    x = x - 1.d0
    t = 1.d0/x + t
 11 continue
+end do
 12 x = x - 1.d0
 go to 40
 !
@@ -2216,11 +2219,12 @@ if (abs(a)*xmax <= 1.000000001d0) return
 if (a > 0.d0) go to 40
 n = - n - 1
 if (n == 0) go to 32
-do 31 j = 1,n
+do j = 1,n
    x = x + 1.d0
    if (x == 0.d0) return
    t = t - 1.d0/x
 31 continue
+end do
 32 x = (x + 0.5d0) + 0.5d0
 if (x == 0.d0) return
 t = t - 1.d0/x
@@ -2320,10 +2324,11 @@ h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
 n = 20
 nm1 = n - 1
 w = a(n)
-do 10 i = 1,nm1
+do i = 1,nm1
    l = n - i
    w = a(l) + h*w
 10 continue
+end do
 dpsi0 = h*w
 end function dpsi0
 
@@ -3091,18 +3096,20 @@ x2 = x*x
 !            Store these values in s(1),s(2),...
 !
 s(1) = 1.d0
-do 10 j = 1,14
+do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 10 continue
+end do
 !
 !                SET w = DEL(b) - DEL(a + b)
 !
 t = (10.d0/b)**2
 w = e(15)*s(15)
-do 20 j = 1,14
+do j = 1,14
    k = 15 - j
    w = t*w + e(k)*s(k)
 20 continue
+end do
 w = w*(c/b)
 !
 !                    Compute  del(a) + w
@@ -3165,9 +3172,10 @@ d = b + (a - 0.5d0)
 !
 20 x2 = x*x
 s(1) = 1.d0
-do 21 j = 1,14
+do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 21 continue
+end do
 !
 !                SET w = DEL(b) - DEL(a + b)
 !
@@ -3411,10 +3419,11 @@ sum = sum + t
 if (t > tol) go to 61
 !
 max = n - 1
-do 70 m = 1,max
+do m = 1,max
    n = n - 1
    sum = sum + wk(n)
 70 continue
+end do
 ans = (r/a)*(1.0 + sum)
 qans = 0.5 + (0.5 - ans)
 return
@@ -4120,12 +4129,12 @@ end subroutine gaminv
 
 pure elemental subroutine dgrat(a, x, ans, qans, ierr)
 implicit none
+intrinsic :: erf
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a, x
 double precision, intent(inout) :: ans, qans
 integer :: i, m, max, n
 double precision :: amn, apn, a2n, a2nm1, big, b2n, b2nm1, c, e, g, h, j, l, r, rta, rtx, s, sum, t, tol, twoa, u, x0, y, z, wk(20)
-double precision :: derf
 double precision, parameter :: alog10 = 2.30258509299404568401799145468d0
 double precision, parameter :: rtpi = 1.77245385090551602729816748334d0
 interface
@@ -4406,7 +4415,7 @@ qans = 0.d0
 return
 !
 320 if (x >= 0.25d0) go to 321
-ans = derf(sqrt(x))
+ans = erf(sqrt(x))
 qans = 0.5d0 + (0.5d0 - ans)
 return
 321 qans = derfc1(0,sqrt(x))
@@ -7249,11 +7258,12 @@ l = 6
 60 l = l + 1
 alpha = a(l)
 p = cmplx(a(l),0.0)
-do 70 k = 2,m
+do k = 2,m
    l = l + 1
    alpha = a(l) + aq*alpha
    p = a(l) + eta*p
 70 continue
+end do
 !
 !          Only the s1 sum is formed when ind = 0
 !
@@ -7541,7 +7551,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 019 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -7557,6 +7567,7 @@ do 019 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 019 continue
+end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
 sm(1) = 0.5*(sm(1) + sm(3))
@@ -7613,7 +7624,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 026 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -7629,6 +7640,7 @@ do 026 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 026 continue
+end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
 sm(1) = 0.5*(sm(1) + sm(3))
@@ -8479,7 +8491,7 @@ data gama(1),   gama(2),   gama(3),   gama(4),   gama(5), &
 !     ------------------------------------------------------------------
 fn = fnu
 iflw = 0
-do 170 jn = 1,in
+do jn = 1,in
    xx = x/fn
    wk(1) = 1.0e0 - xx*xx
    abw2 = abs(wk(1))
@@ -8499,18 +8511,20 @@ do 170 jn = 1,in
    if (abw2 == 0.0e0) go to 10
    sa = tols/log(abw2)
 10 sb = sa
-   do 20 i = 1,5
+   do i = 1,5
       akm = max(sa,2.0e0)
       kmax(i) = int(akm)
       sa = sa + sb
 20    continue
+   end do
    kb = kmax(5)
    klast = kb - 1
    sa = gama(kb)
-   do 30 k = 1,klast
+   do k = 1,klast
       kb = kb - 1
       sa = sa*wk(1) + gama(kb)
 30    continue
+   end do
    z = wk(1)*sa
    az = abs(z)
    rtz = sqrt(az)
@@ -8529,10 +8543,11 @@ do 170 jn = 1,in
    kb = kmax(5)
    klast = kb - 1
    sb = beta(kb,1)
-   do 40 k = 1,klast
+   do k = 1,klast
       kb = kb - 1
       sb = sb*wk(1) + beta(kb,1)
 40    continue
+   end do
    ksp1 = 1
    fn2 = fn*fn
    rfn2 = 1.0e0/fn2
@@ -8540,7 +8555,7 @@ do 170 jn = 1,in
    asum = 1.0e0
    relb = tol*abs(sb)
    bsum = sb
-   do 60 ks = 1,4
+   do ks = 1,4
       ksp1 = ksp1 + 1
       rden = rden*rfn2
 !
@@ -8551,17 +8566,19 @@ do 170 jn = 1,in
       klast = kb - 1
       sa = alfa(kb,ks)
       sb = beta(kb,ksp1)
-      do 50 k = 1,klast
+      do k = 1,klast
          kb = kb - 1
          sa = sa*wk(1) + alfa(kb,ks)
          sb = sb*wk(1) + beta(kb,ksp1)
 50       continue
+      end do
       ta = sa*rden
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
       if (abs(ta) <= tol .and. abs(tb) <= relb) go to 70
 60    continue
+   end do
 70 continue
    bsum = bsum/(fn*wk(7))
    go to 160
@@ -8656,6 +8673,7 @@ do 170 jn = 1,in
    y(jn) = flgjy*phi*(fi*asum + dfi*bsum)/wk(7)
    fn = fn - flgjy
 170 continue
+end do
 end subroutine asjy
 
 pure subroutine jairy(x,rx,c,ai,dai)
@@ -9002,7 +9020,7 @@ qf(1) = qm*cos(-0.5*zl(2))
 qf(2) = qm*sin(-0.5*zl(2))
 if (an > 1.0) go to 012
 pn = an
-assign 011 to la
+la = 11
 go to 100
 011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9010,12 +9028,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 012 pn = 1.0
-assign 013 to la
+la = 13
 go to 100
 013 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 014 to la
+la = 14
 go to 100
 014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9025,7 +9043,7 @@ qf(1) = qm*cos(-0.5*zl(2))
 qf(2) = qm*sin(-0.5*zl(2))
 if (an > 1.0) go to 017
 pn = an
-assign 016 to lr
+lr = 16
 go to 112
 016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9033,12 +9051,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 017 pn = 1.0
-assign 018 to lr
+lr = 18
 go to 112
 018 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 019 to lr
+lr = 19
 go to 112
 019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9047,7 +9065,7 @@ go to 026
 qf(2) = 0.0
 021 if (an > 1.0) go to 023
 pn = an
-assign 022 to ly
+ly = 22
 go to 122
 022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
 ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9055,12 +9073,12 @@ sm(1) = ts(1)
 sm(2) = ts(2)
 go to 029
 023 pn = 1.0
-assign 024 to ly
+ly = 24
 go to 122
 024 sq(1) = -qf(1)*sm(1) + qf(2)*sm(2)
 sq(2) = -qf(1)*sm(2) - qf(2)*sm(1)
 pn = 0.0
-assign 025 to ly
+ly = 25
 go to 122
 025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
 sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
@@ -9137,14 +9155,21 @@ sm(2) = -sm(2)
 go to 111
 110 sm(1) = tm(3)
 sm(2) = tm(4)
-111 go to la,(011,013,014)
+111 select case ( la )
+case ( 11 )
+   go to 11
+case ( 13 )
+   go to 13
+case ( 14 )
+   go to 14
+end select
 112 sm(1) = 1.0
 sm(2) = 0.0
 sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*pn + 2.0
 n = 15.0*pn + 15.0
-do 113 i = m,n
+do i = m,n
    ts(1) = qz(2) - cd(i)
    ts(2) = -qz(1)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -9160,6 +9185,7 @@ do 113 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 113 continue
+end do
 114 aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
@@ -9189,7 +9215,14 @@ sm(2) = -sm(2)
 go to 121
 120 sm(1) = tm(3)
 sm(2) = tm(4)
-121 go to lr,(016,018,019)
+121 select case ( lr )
+case ( 16 )
+   go to 16
+case ( 18 )
+   go to 18
+case ( 19 )
+   go to 19
+end select
 122 aq(1) = 1.0
 aq(2) = 0.0
 rn = 0.0
@@ -9244,7 +9277,14 @@ sm(2) = sm(2) + tm(2)
 if (qm + rm > qm) go to 127
 sm(1) = sr(1) + sm(1)
 sm(2) = sr(2) + sm(2)
-go to ly,(022,024,025)
+select case ( ly )
+case ( 22 )
+   go to 22
+case ( 24 )
+   go to 24
+case ( 25 )
+   go to 25
+end select
 end subroutine bssly
 
 subroutine cbssli(z, cnu, w)
@@ -9417,7 +9457,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 018 i = m,n
+do i = m,n
    ts(1) = -qz(1) - cd(i)
    ts(2) = -qz(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -9433,6 +9473,7 @@ do 018 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 018 continue
+end do
 019 rm(1) = sm(1)
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 023
@@ -9493,7 +9534,7 @@ sm(3) = 1.0
 sm(4) = 0.0
 m = 15.0*qn + 2.0
 n = 15.0*qn + 15.0
-do 030 i = m,n
+do i = m,n
    ts(1) = -qz(1) - cd(i)
    ts(2) = -qz(2)
    ss = ts(1)*ts(1) + ts(2)*ts(2)
@@ -9509,6 +9550,7 @@ do 030 i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 030 continue
+end do
 031 rm(1) = sm(1)
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 036
@@ -10188,7 +10230,7 @@ real, parameter :: c(65) = [-2.08333333333333e-01, 1.25000000000000e-01, 3.34201
 fn = fnu
 z = (3.0e0 - flgik)/2.0e0
 kk = int(z)
-do 50 jn = 1,in
+do jn = 1,in
    if (jn == 1) go to 10
    fn = fn - flgik
    z = x/fn
@@ -10205,22 +10247,25 @@ do 50 jn = 1,in
    s2 = 1.0e0
    ap = 1.0e0
    l = 0
-   do 30 k = 2,11
+   do k = 2,11
       l = l + 1
       s1 = c(l)
-      do 20 j = 2,k
+      do j = 2,k
          l = l + 1
          s1 = s1*t2 + c(l)
 20       continue
+      end do
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
       if (max(abs(ak),abs(ap)) < tol) go to 40
 30    continue
+   end do
 40 continue
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
 50 continue
+end do
 end subroutine asik
 
 subroutine cbesk(z, cnu, w)

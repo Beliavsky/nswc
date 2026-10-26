@@ -1,16 +1,49 @@
 """Compiler binding, precision, namespace and callback guards for generics."""
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 from generic_intrinsics import MAPPING, compile_dump, review, symbols, transform, verify
+from modernize_remaining_features import strict_standard
 
 
 @unittest.skipUnless(shutil.which('gfortran'), 'GNU compiler required')
 class GenericIntrinsicTests(unittest.TestCase):
+    def test_gnu_error_function_aliases_keep_intrinsic_binding(self):
+        source = '''pure elemental double precision function f(x)
+implicit none
+double precision, intent(in) :: x
+double precision :: derf,derfc
+f = derf(x) + derfc(x)
+end function f
+real function erf(x)
+implicit none
+real, intent(in) :: x
+erf = x
+end function erf
+real function erfc(x)
+implicit none
+real, intent(in) :: x
+erfc = x
+end function erfc
+'''
+        result, manifest = self.checked(source)
+        self.assertIn('intrinsic :: erf, erfc', result)
+        self.assertEqual(manifest['procedures']['F']['calls'], {'derf': 1, 'derfc': 1})
+        self.assertIn('f = erf(x) + erfc(x)', result)
+        self.assertIn('real function erf(x)', result)
+        with tempfile.TemporaryDirectory() as work:
+            path = Path(work) / 'input.f90'
+            path.write_text(result)
+            check = subprocess.run(['gfortran', strict_standard(), '-pedantic-errors',
+                                    '-fsyntax-only', str(path)], cwd=work,
+                                   capture_output=True, text=True, timeout=30)
+            self.assertEqual(check.returncode, 0, check.stderr)
+
     def checked(self, source):
         with tempfile.TemporaryDirectory() as work:
             before = compile_dump(source, work)

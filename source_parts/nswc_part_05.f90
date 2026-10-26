@@ -584,7 +584,7 @@ ten = 10.0d0
 20 continue
 t = 0.0d0
 ik = 0
-do 130 k = 1, n
+do k = 1, n
    kk = ik + k
    d = ap(kk)
 !
@@ -633,6 +633,7 @@ do 130 k = 1, n
 120 continue
    ik = ik + k
 130 continue
+end do
 140 continue
 !
 !     Compute inverse(A)
@@ -1010,7 +1011,7 @@ det(1) = 1.0e0
 det(2) = 0.0e0
 s = 10.0e0
 ii = 0
-do 50 i = 1, n
+do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
@@ -1026,6 +1027,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -1355,7 +1357,7 @@ det(1) = 1.0d0
 det(2) = 0.0d0
 s = 10.0d0
 ii = 0
-do 50 i = 1, n
+do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
@@ -1371,6 +1373,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -1633,10 +1636,11 @@ if (t == 1.0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call cgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -2360,7 +2364,7 @@ if (job/10 == 0) go to 70
 det(1) = (1.0e0,0.0e0)
 det(2) = (0.0e0,0.0e0)
 ten = 10.0e0
-do 50 i = 1, n
+do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
@@ -2376,6 +2380,7 @@ do 50 i = 1, n
    go to 30
 40 continue
 50 continue
+end do
 60 continue
 70 continue
 !
@@ -2974,7 +2979,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -2990,7 +2995,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (s(l) == 0.0e0) go to 30
 !
@@ -3005,6 +3010,7 @@ do 160 l = 1, lu
 !
       e(j) = x(l,j)
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -3034,9 +3040,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = 0.0e0
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call saxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call saxpy(n - l,-e(j)/e(lp1),work(lp1),1,x(lp1,j),1)
    end do
@@ -3052,6 +3059,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -3514,7 +3522,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -3530,7 +3538,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (s(l) == 0.0d0) go to 30
 !
@@ -3545,6 +3553,7 @@ do 160 l = 1, lu
 !
       e(j) = x(l,j)
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -3574,9 +3583,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = 0.0d0
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call daxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call daxpy(n - l,-e(j)/e(lp1),work(lp1),1,x(lp1,j),1)
    end do
@@ -3592,6 +3602,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -4060,7 +4071,7 @@ nct = min(n - 1,p)
 nrt = max(0,min(p - 2,n))
 lu = max(nct,nrt)
 if (lu < 1) go to 170
-do 160 l = 1, lu
+do l = 1, lu
    lp1 = l + 1
    if (l > nct) go to 20
 !
@@ -4076,7 +4087,7 @@ do 160 l = 1, lu
    s(l) = -s(l)
 20 continue
    if (p < lp1) go to 50
-   do 40 j = lp1, p
+   do j = lp1, p
       if (l > nct) go to 30
       if (cabs1(s(l)) == 0.0e0) go to 30
 !
@@ -4091,6 +4102,7 @@ do 160 l = 1, lu
 !
       e(j) = conjg(x(l,j))
 40    continue
+   end do
 50 continue
    if (.not.wantu .or. l > nct) go to 70
 !
@@ -4120,9 +4132,10 @@ do 160 l = 1, lu
    do i = lp1, n
       work(i) = (0.0e0,0.0e0)
    end do
-   do 100 j = lp1, p
+   do j = lp1, p
       call caxpy(n - l,e(j),x(lp1,j),1,work(lp1),1)
 100   continue
+   end do
    do j = lp1, p
       call caxpy(n - l,conjg(-e(j)/e(lp1)),work(lp1),1, &
          & x(lp1,j),1)
@@ -4139,6 +4152,7 @@ do 160 l = 1, lu
 140 continue
 150 continue
 160 continue
+end do
 170 continue
 !
 !     Set up the final bidiagonal matrix of order M.
@@ -4933,17 +4947,19 @@ norm = 0.0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 20 i = 1,n
+do i = 1,n
 !
-   do 10 j = k,n
+   do j = k,n
       norm = norm + abs(h(i,j))
 10    continue
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.0
 20 continue
+end do
 !
 en = igh
 t = 0.0
@@ -5549,17 +5565,19 @@ norm = 0.d0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 20 i = 1,n
+do i = 1,n
 !
-   do 10 j = k,n
+   do j = k,n
       norm = norm + abs(h(i,j))
 10    continue
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.d0
 20 continue
+end do
 !
 en = igh
 t = 0.d0
@@ -5570,7 +5588,7 @@ na = en - 1
 enm2 = na - 1
 !     ********** Look for single small sub-diagonal element
 !                for l=en step -1 Until low do -- **********
-40 do 50 ll = low,en
+40 do ll = low,en
    l = en + low - ll
    if (l == low) go to 60
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
@@ -5579,6 +5597,7 @@ enm2 = na - 1
    s2 = s1 + abs(h(l,l - 1))
    if (s1 == s2) go to 60
 50 continue
+end do
 !     ********** Form shift **********
 60 x = h(en,en)
 if (l == en) go to 220
@@ -6725,8 +6744,8 @@ if (nm < n) go to 460
 if (n <= 0) go to 460
 if (maxits <= 0) maxits = 30
 !     ********** Initialize arrays **********
-do 20 i = 1,n
-   do 10 j = 1,n
+do i = 1,n
+   do j = 1,n
       l(i,j) = cmplx(0.0,0.0)
       u(i,j) = cmplx(0.0,0.0)
       v(i,j) = cmplx(0.0,0.0)
@@ -6734,25 +6753,29 @@ do 20 i = 1,n
       xold(i,j) = cmplx(0.0,0.0)
       eye(i,j) = cmplx(0.0,0.0)
 10    continue
+   end do
    temp(i) = cmplx(0.0,0.0)
 20 continue
+end do
 !     ********** Set initial guess(ES) **********
 anorm = 0.0
 bnorm = 0.0
 cnorm = 0.0
-do 40 i = 1,n
+do i = 1,n
    ani = 0.0
    bni = 0.0
    cni = 0.0
-   do 30 j = 1,n
+   do j = 1,n
       ani = ani + abs(a(i,j))
       bni = bni + abs(b(i,j))
       cni = cni + abs(c(i,j))
 30    continue
+   end do
    if (ani > anorm) anorm = ani
    if (bni > bnorm) bnorm = bni
    if (cni > cnorm) cnorm = cni
 40 continue
+end do
 gnorm = (bnorm + sqrt(bnorm**2 + 4.0*anorm*cnorm))/(2.0*anorm)
 if (iguess == 0) go to 70
 do i = 1,n
@@ -7190,17 +7213,19 @@ ierr = 0
 !     ********** COMPUTE epsa, epsb **********
 anorm = 0.0
 bnorm = 0.0
-do 20 i = 1,n
+do i = 1,n
    ani = 0.0
    if (i /= 1) ani = abs(a(i,i - 1))
    bni = 0.0
-   do 10 j = i,n
+   do j = i,n
       ani = ani + abs(a(i,j))
       bni = bni + abs(b(i,j))
 10    continue
+   end do
    if (ani > anorm) anorm = ani
    if (bni > bnorm) bnorm = bni
 20 continue
+end do
 if (anorm == 0.0) anorm = 1.0
 if (bnorm == 0.0) bnorm = 1.0
 srelpr = eps1
@@ -7684,14 +7709,16 @@ return
 10 call dbal(ka,n,a,low,igh,wk(1,n + 12))
 anorm = 0.d0
 anorm1 = 0.d0
-do 12 j = 1,n
+do j = 1,n
    s = 0.d0
    s1 = 0.d0
-   do 11 i = 1,n
+   do i = 1,n
       s = s + abs(a(j,i))
 11    s1 = s1 + abs(a(i,j))
+   end do
    anorm = max(s,anorm)
 12 anorm1 = max(s1,anorm1)
+end do
 !
 anorm = min(anorm,anorm1)
 s = anorm + 0.1d0
