@@ -32,32 +32,32 @@ arguments are unchanged.
   `POLYDD`, `ADCHK`, `ADPUT`, and `ADTRAN`. This pass preserves all shared storage
   declarations and their layout. Reordering them could affect other code using
   the same block; suppressing the warning would not establish compatibility.
-- In the fixed-form sources, `COMPB` passes real workspace to complex `CBP` in `PPADD`. The same address is
-  also passed as real `BP`; the routine uses overlapping real and complex views
-  of that workspace. A numerical type conversion would not preserve that storage
-  relationship. Removing it needs a separate review of workspace sizes, complex
-  root storage, and every consuming routine.
+The archival `nswc_orig.f` retains the real/complex workspace overlap in the
+`COMPB` call to `PPADD` and requires `-fallow-argument-mismatch`. Both maintained
+source forms now use separate work arrays and compile without that option.
+The declaration-stage validator retains its historical 12-warning inventory;
+its source reconstruction then applies the workspace correction described below.
+The maintained fixed-form build has 11 remaining COMMON-alignment warnings.
 
-For the fixed-form sources, `-fallow-argument-mismatch` remains necessary. Its purpose is to
-accept mismatches in legacy calls, not to prove those calls valid.
-[GNU Fortran dialect options](https://gcc.gnu.org/onlinedocs/gfortran/Fortran-Dialect-Options.html)
 No warning suppression or global alignment change was added.
 
-## Free-form periodic-root workspace correction
+## Periodic-root workspace correction
 
-In `nswc.f90`, `COMPB` allocates separate complex and real work arrays before
-calling `PPADD`. The real array receives the input polynomial roots. After a
-successful call, `TRANSFER` copies the complex roots into the existing packed
+In `nswc.f`, `nswc.f90`, and `nswc_mod.f90`, `COMPB` allocates separate complex
+and real work arrays before calling `PPADD`. The real array receives the input
+polynomial roots. After a successful call, `TRANSFER` copies the complex roots into the existing packed
 real solver workspace. When all roots are real, the compact real result replaces
 the first half of that workspace, including the first root that formerly relied
 on overlapping storage. An error return does not copy incomplete roots back.
 The allocatable arrays are released automatically when `COMPB` returns.
 
 External procedure signatures and the packed layout consumed by `BLKTR1` are
-unchanged. `PPADD` itself is unchanged. The correction is applied reproducibly by
-`tools/free_source_fixes.py` after purity annotation; neither fixed-form source
-is edited. The free-form library compiles without `-fallow-argument-mismatch`,
-including with `gfortran -c -w nswc.f90`.
+unchanged. `PPADD` itself is unchanged. The fixed-form correction is applied
+reproducibly by `tools/periodic_root_workspace.py` after declaration ordering and
+terminal RETURN cleanup. `tools/free_source_fixes.py` recognizes that corrected block during
+free-form generation and preserves the existing generated implementation.
+The archive is unchanged. Both maintained source forms compile without
+`-fallow-argument-mismatch`, including with `gfortran -c -w nswc.f`.
 
 `test_blktri_periodic` checks manufactured solutions for both real and complex
 roots, sizes 3 through 8, both boundary conditions in the other dimension, and

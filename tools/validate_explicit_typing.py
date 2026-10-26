@@ -14,6 +14,7 @@ from name_procedure_ends import transform as name_ends
 from reviewed_source_fixes import apply_fixes, normalize_reviewed_symbols, check_warning_inventory
 from combine_declarations import transform as combine_declarations
 from order_declarations import transform as order_declarations
+from periodic_root_workspace import transform_fixed as correct_workspace
 from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -153,7 +154,7 @@ def main():
     after = remove_final_returns(after, cleanup_report)
     if cleanup_report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise RuntimeError('Terminal RETURN cleanup report is stale')
-    if after != (ROOT / "nswc.f").read_bytes():
+    if correct_workspace(after) != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
         raise RuntimeError('Declaration ordering report is stale')
@@ -181,6 +182,18 @@ def main():
                 warning_count = check_warning_inventory(result.stderr, data)
                 inventory = normalize_reviewed_symbols(inventories[0], inventory)
             inventories.append(inventory)
+        maintained = Path(folder) / 'maintained.f'
+        maintained.write_bytes(correct_workspace(after))
+        result = subprocess.run([compiler, '-fsyntax-only', '-std=legacy',
+                                 '-fno-allow-argument-mismatch', str(maintained)],
+                                cwd=folder, capture_output=True, text=True, timeout=180,
+                                env={**os.environ, 'LC_ALL': 'C'})
+        if result.returncode:
+            raise RuntimeError(result.stderr)
+        fixed_warnings = {'remaining_warnings': [r for r in json.loads(
+            (ROOT / 'tools/reviewed-source-fixes.json').read_text())['remaining_warnings']
+            if r['procedure'] != 'COMPB']}
+        maintained_warning_count = check_warning_inventory(result.stderr, maintained.read_bytes(), fixed_warnings)
     count = 0
     mismatches = {}
     for name in manifest["procedures"]:
@@ -208,7 +221,8 @@ def main():
                            + json.dumps(mismatches, indent=2))
     print(f"Checked {count} compiler symbol records across {len(manifest['procedures'])} procedures; "
           "preserved all except three separately confirmed warning corrections.")
-    print(f"Confirmed {warning_count} remaining compiler warnings against the reviewed inventory.")
+    print(f"Confirmed {warning_count} historical pre-workspace-fix warnings against the reviewed inventory.")
+    print(f"Maintained fixed form rejects argument mismatches; confirmed {maintained_warning_count} COMMON-alignment warnings.")
     print(f"Declaration formatting preserves all {sum(map(len, reviewed_inventory.values()))} compiler records, "
           f"including intrinsics; combined {formatting.intents_combined} intents and {formatting.dimensions_combined} dimensions.")
     print("Declaration formatting preserves non-declaration statements and comment text/order.")

@@ -53,7 +53,7 @@ def main():
             obj = Path(folder) / (source.replace(".", "_") + ".o")
             try:
                 compiled = run([args.compiler, "-c", "-std=legacy",
-                                "-fno-allow-argument-mismatch" if source == "nswc.f90" else "-fallow-argument-mismatch",
+                                "-fallow-argument-mismatch" if source == "nswc_orig.f" else "-fno-allow-argument-mismatch",
                                 str(ROOT / source), "-o", str(obj)], folder, 180)
                 if compiled.returncode:
                     print(f"{source}: library compilation failed\n{compiled.stderr}", flush=True)

@@ -4,6 +4,7 @@ from pathlib import Path
 
 from remove_final_returns import transform_fixed, transform_free, verify
 from validate_explicit_typing import fixed_stages
+from periodic_root_workspace import transform_fixed as correct_workspace
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -12,7 +13,7 @@ def main():
     original = fixed_stages()[3].data
     report = {}
     cleaned = transform_fixed(original, report)
-    if cleaned != (ROOT / 'nswc.f').read_bytes():
+    if correct_workspace(cleaned) != (ROOT / 'nswc.f').read_bytes():
         raise ValueError('Maintained fixed-form source differs from final RETURN cleanup')
     if report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise ValueError('Fixed-form cleanup report does not reproduce')

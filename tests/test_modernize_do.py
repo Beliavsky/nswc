@@ -138,7 +138,8 @@ class ModernizeDoTests(unittest.TestCase):
         from combine_declarations import transform as combine_declarations
         from order_declarations import transform as order_declarations
         from remove_final_returns import transform_fixed as remove_final_returns
-        self.assertEqual(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data),
+        from periodic_root_workspace import transform_fixed as correct_workspace
+        self.assertEqual(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data)),
                          (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 

@@ -95,8 +95,8 @@ The module object links independently. It needs neither `nswc.o` nor
 compiler. See the [module guide](docs/module.md) for generation and verification.
 For external callers, compile `nswc.f90` instead and link `nswc.o`.
 
-`-std=legacy` accommodates existing legacy constructs. The fixed-form sources
-still require legacy argument-mismatch handling. The free-form source uses
+`-std=legacy` accommodates existing legacy constructs. Only the archival `nswc_orig.f`
+requires legacy argument-mismatch handling. Both maintained source forms use
 separate real and complex root work arrays in `COMPB`, with explicit packing
 back into the solver workspace. See the [warning review](docs/compiler-warnings.md).
 Machine constants retain
@@ -160,9 +160,9 @@ See the [constant-conversion guide](docs/data-constants.md).
 
 ## Regenerating the source
 
-Maintain `nswc.f` and the reviewed free-form corrections in
-`tools/free_source_fixes.py`, then generate `nswc.f90`, `nswc_mod.f90`, the browsable
-partitions, and the Markdown source links together:
+Maintain `nswc.f` and its reviewed reconstruction stages, then generate
+`nswc.f90`, `nswc_mod.f90`, the browsable partitions, and the Markdown source links
+together:
 
 ```sh
 python tools/regenerate_sources.py
@@ -367,10 +367,11 @@ comparison checks every added intent as well as the original types and shapes.
 
 ## Compiler warnings
 
-The warning review reduces the local GNU Fortran build from 28 warnings to 12.
+The warning review and periodic-root correction reduce the maintained fixed-form
+GNU Fortran build from 28 warnings to 11.
 It corrects the unused `ITERT` callback declaration and quadratic output extents,
 and replaces old FORMAT text with quoted strings. The external procedure names
-and argument order are unchanged. The remaining warnings involve shared storage
-and a real/complex workspace overlap; the legacy compiler options are still
-required. The [warning review](docs/compiler-warnings.md) records the changes,
+and argument order are unchanged. The remaining warnings involve shared storage.
+The maintained sources compile without argument-mismatch tolerance; the archive
+still needs it. The [warning review](docs/compiler-warnings.md) records the changes,
 remaining issues, and the checks that reject new compiler warnings.

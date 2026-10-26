@@ -248,11 +248,11 @@ def verify_calls(compiler, folder, library_names, intel=False, env=None, sources
         command_run(command, folder, env)
         library = folder / ('library.obj' if intel else 'library.o')
         if intel:
-            # Fixed-form versions retain the legacy workspace association.
+            # External legacy calls are checked separately through caller probes.
             command = [compiler, '/nologo', '/Od', '/fp:strict', '/warn:nointerfaces', '/c', str(ROOT / source), obj(library)]
         else:
             command = [compiler, '-c', '-std=legacy',
-                       '-fno-allow-argument-mismatch' if source == 'nswc.f90' else '-fallow-argument-mismatch',
+                       '-fno-allow-argument-mismatch',
                        str(ROOT / source), '-o', str(library)]
         command_run(command, folder, env, timeout=300)
         for path in test_programs():
