@@ -12,9 +12,9 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCOPY` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L33504`](../source_parts/nswc_part_04.f90#L1697) |
-| `DCOPY` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L33557`](../source_parts/nswc_part_04.f90#L1750) |
-| `CCOPY` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L33610`](../source_parts/nswc_part_04.f90#L1803) |
+| `SCOPY` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L29555`](../source_parts/nswc_part_03.f90#L8512) |
+| `DCOPY` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L29599`](../source_parts/nswc_part_03.f90#L8556) |
+| `CCOPY` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L29643`](../source_parts/nswc_part_03.f90#L8600) |
 
 
 A copy of a vector X = (a1, ...,2,) can be made and stored in the array Y by the following subroutines:
@@ -45,9 +45,9 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSWAP` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L33736`](../source_parts/nswc_part_04.f90#L1929) |
-| `DSWAP` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L33795`](../source_parts/nswc_part_04.f90#L1988) |
-| `CSWAP` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L33854`](../source_parts/nswc_part_04.f90#L2047) |
+| `SSWAP` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L29745`](../source_parts/nswc_part_03.f90#L8702) |
+| `DSWAP` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L29795`](../source_parts/nswc_part_03.f90#L8752) |
+| `CSWAP` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L29845`](../source_parts/nswc_part_03.f90#L8802) |
 
 
 The components of two vectors X = (x1, ...,2n) and Y = (yi, ..., yn) can be interchanged by the following subroutines:
@@ -78,9 +78,9 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROT` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, C, S` | [`L33893`](../source_parts/nswc_part_04.f90#L2086) |
-| `DROT` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, C, S` | [`L33934`](../source_parts/nswc_part_04.f90#L2127) |
-| `CSROT` | `SUBROUTINE` | `N, CX, INCX, CY, INCY, C, S` | [`L33975`](../source_parts/nswc_part_04.f90#L2168) |
+| `SROT` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, C, S` | [`L29878`](../source_parts/nswc_part_03.f90#L8835) |
+| `DROT` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, C, S` | [`L29912`](../source_parts/nswc_part_03.f90#L8869) |
+| `CSROT` | `SUBROUTINE` | `N, CX, INCX, CY, INCY, C, S` | [`L29946`](../source_parts/nswc_part_03.f90#L8903) |
 
 
 Let X = (21,...,2n) and Y = (y1, ...,yn) be vectors and ec and ¢ be real numbers such that c? +e? = 1. X and Y can be replaced with cX + sY and —sX + cY by the following subroutines:
@@ -113,10 +113,10 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROTMG` | `SUBROUTINE` | `SD1, SD2, SX1, SY1, SPARAM` | [`L34017`](../source_parts/nswc_part_04.f90#L2210) |
-| `SROTM` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, SPARAM` | [`L34173`](../source_parts/nswc_part_04.f90#L2366) |
-| `DROTMG` | `SUBROUTINE` | `DD1, DD2, DX1, DY1, DPARAM` | [`L34292`](../source_parts/nswc_part_04.f90#L2485) |
-| `DROTM` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, DPARAM` | [`L34451`](../source_parts/nswc_part_04.f90#L2644) |
+| `SROTMG` | `SUBROUTINE` | `SD1, SD2, SX1, SY1, SPARAM` | [`L29981`](../source_parts/nswc_part_03.f90#L8938) |
+| `SROTM` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, SPARAM` | [`L30113`](../source_parts/nswc_part_03.f90#L9070) |
+| `DROTMG` | `SUBROUTINE` | `DD1, DD2, DX1, DY1, DPARAM` | [`L30221`](../source_parts/nswc_part_03.f90#L9178) |
+| `DROTM` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, DPARAM` | [`L30356`](../source_parts/nswc_part_03.f90#L9313) |
 
 
 If a; and ag are real numbers where r* = a? + a? #% 0, then there is an orthogonal
@@ -213,10 +213,10 @@ tee)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SDOT` | `REAL FUNCTION` | `N, SX, INCX, SY, INCY` | [`L34571`](../source_parts/nswc_part_04.f90#L2764) |
-| `DDOT` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX, DY, INCY` | [`L34623`](../source_parts/nswc_part_04.f90#L2816) |
-| `CDOTC` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L34675`](../source_parts/nswc_part_04.f90#L2868) |
-| `CDOTU` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L34716`](../source_parts/nswc_part_04.f90#L2909) |
+| `SDOT` | `REAL FUNCTION` | `N, SX, INCX, SY, INCY` | [`L30465`](../source_parts/nswc_part_03.f90#L9422) |
+| `DDOT` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX, DY, INCY` | [`L30508`](../source_parts/nswc_part_03.f90#L9465) |
+| `CDOTC` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L30551`](../source_parts/nswc_part_03.f90#L9508) |
+| `CDOTU` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L30585`](../source_parts/nswc_part_03.f90#L9542) |
 
 
 The following functions are available for computing the sums >>, 2,y; and 30. Z.iys where X = (21,...,%n) and Y = {y), ..., Yn) are real or complex vectors.
@@ -249,10 +249,10 @@ nm the value 5” z,y, and CDOTU (n, X,kz,Y, ky) is assigned the value >7 2,y.. 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSCAL` | `SUBROUTINE` | `N, SA, SX, INCX` | [`L34756`](../source_parts/nswc_part_04.f90#L2949) |
-| `DSCAL` | `SUBROUTINE` | `N, DA, DX, INCX` | [`L34801`](../source_parts/nswc_part_04.f90#L2994) |
-| `CSCAL` | `SUBROUTINE` | `N, CA, CX, INCX` | [`L34846`](../source_parts/nswc_part_04.f90#L3039) |
-| `CSSCAL` | `SUBROUTINE` | `N, SA, CX, INCX` | [`L34875`](../source_parts/nswc_part_04.f90#L3068) |
+| `SSCAL` | `SUBROUTINE` | `N, SA, SX, INCX` | [`L30618`](../source_parts/nswc_part_03.f90#L9575) |
+| `DSCAL` | `SUBROUTINE` | `N, DA, DX, INCX` | [`L30654`](../source_parts/nswc_part_03.f90#L9611) |
+| `CSCAL` | `SUBROUTINE` | `N, CA, CX, INCX` | [`L30690`](../source_parts/nswc_part_03.f90#L9647) |
+| `CSSCAL` | `SUBROUTINE` | `N, SA, CX, INCX` | [`L30712`](../source_parts/nswc_part_03.f90#L9669) |
 
 
 If a is a real or complex number and X = (x1, ...,2,) a vector, then the vector X can be replaced with the vector aX by the following subroutines:
@@ -282,9 +282,9 @@ SSCAL is used if @ is a real number and X a real array, DSCAL is used if « is a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SAXPY` | `SUBROUTINE` | `N, SA, SX, INCX, SY, INCY` | [`L34904`](../source_parts/nswc_part_04.f90#L3097) |
-| `DAXPY` | `SUBROUTINE` | `N, DA, DX, INCX, DY, INCY` | [`L34956`](../source_parts/nswc_part_04.f90#L3149) |
-| `CAXPY` | `SUBROUTINE` | `N, CA, CX, INCX, CY, INCY` | [`L35008`](../source_parts/nswc_part_04.f90#L3201) |
+| `SAXPY` | `SUBROUTINE` | `N, SA, SX, INCX, SY, INCY` | [`L30734`](../source_parts/nswc_part_03.f90#L9691) |
+| `DAXPY` | `SUBROUTINE` | `N, DA, DX, INCX, DY, INCY` | [`L30777`](../source_parts/nswc_part_03.f90#L9734) |
+| `CAXPY` | `SUBROUTINE` | `N, CA, CX, INCX, CY, INCY` | [`L30820`](../source_parts/nswc_part_03.f90#L9777) |
 
 
 ```text
@@ -316,9 +316,9 @@ SAXPY ‘s used if 418 a real number aid X, Y are real arrays, DAXPY is used if 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SASUM` | `REAL FUNCTION` | `N, SX, INCX` | [`L35046`](../source_parts/nswc_part_04.f90#L3239) |
-| `DASUM` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L35092`](../source_parts/nswc_part_04.f90#L3285) |
-| `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L35137`](../source_parts/nswc_part_04.f90#L3330) |
+| `SASUM` | `REAL FUNCTION` | `N, SX, INCX` | [`L30851`](../source_parts/nswc_part_03.f90#L9808) |
+| `DASUM` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L30888`](../source_parts/nswc_part_03.f90#L9845) |
+| `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L30924`](../source_parts/nswc_part_03.f90#L9881) |
 
 
 The following functions are available for computing the 2; norm of a real vector or a modified LZ, norm of a complex vector.
@@ -350,9 +350,9 @@ t=1 Remarks. (1) DASUM must be declared in the calling program to be of type DOU
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNRM2` | `REAL FUNCTION` | `N, SX, INCX` | [`L35171`](../source_parts/nswc_part_04.f90#L3364) |
-| `DNRM2` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L35308`](../source_parts/nswc_part_04.f90#L3501) |
-| `SCNRM2` | `REAL FUNCTION` | `N, CX, INCX` | [`L35445`](../source_parts/nswc_part_04.f90#L3638) |
+| `SNRM2` | `REAL FUNCTION` | `N, SX, INCX` | [`L30951`](../source_parts/nswc_part_03.f90#L9908) |
+| `DNRM2` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L31058`](../source_parts/nswc_part_03.f90#L10015) |
+| `SCNRM2` | `REAL FUNCTION` | `N, CX, INCX` | [`L31165`](../source_parts/nswc_part_03.f90#L10122) |
 
 
 The following functions are available for computing the Zz norm of a real or complex vector.
@@ -388,9 +388,9 @@ L79
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ISAMAX` | `INTEGER FUNCTION` | `N, SX, INCX` | [`L35601`](../source_parts/nswc_part_04.f90#L3794) |
-| `IDAMAX` | `INTEGER FUNCTION` | `N, DX, INCX` | [`L35643`](../source_parts/nswc_part_04.f90#L3836) |
-| `ICAMAX` | `INTEGER FUNCTION` | `N, CX, INCX` | [`L35685`](../source_parts/nswc_part_04.f90#L3878) |
+| `ISAMAX` | `INTEGER FUNCTION` | `N, SX, INCX` | [`L31291`](../source_parts/nswc_part_03.f90#L10248) |
+| `IDAMAX` | `INTEGER FUNCTION` | `N, DX, INCX` | [`L31326`](../source_parts/nswc_part_03.f90#L10283) |
+| `ICAMAX` | `INTEGER FUNCTION` | `N, CX, INCX` | [`L31361`](../source_parts/nswc_part_03.f90#L10318) |
 
 
 The following functions are available for finding the largest component z, of a vector X = (r1,...,2n).

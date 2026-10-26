@@ -1,2554 +1,3 @@
-subroutine ckps(z, r, zr, nu, w1, w2)
-implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex :: nu
-complex, intent(inout) :: w1, w2
-integer :: k
-real :: ak, eps, eps0, phi, s, u, x, y
-complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
-   & t2
-real, parameter :: tol = 1.e-10
-real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
-   & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
-interface
-   pure elemental function cdiv(a,b)
-      implicit none
-      complex, intent(in) :: a
-      complex, intent(in) :: b
-      complex :: cdiv
-   end function cdiv
-   pure elemental function cgam0(z)
-      implicit none
-      complex, intent(in) :: z
-      complex :: cgam0
-   end function cgam0
-   pure elemental subroutine cgamma(mo,z,w)
-      implicit none
-      integer, intent(in) :: mo
-      complex, intent(in) :: z
-      complex, intent(inout) :: w
-   end subroutine cgamma
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!
-!        Calculation of the modified Bessel functions
-!
-!                  w1 = k  (z)  AND  w2 = k    (z)
-!                        nu                nu+1
-!
-!     For a complex argument z where abs(z) .LE. 2 and a complex
-!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
-!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
-!     series expansions are used.
-!
-!-----------------------------------------------------------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = max(eps, 5.e-15)
-!
-!                     cl = - ln(z/2)
-!
-phi = atan2(aimag(z),real(z))
-cl = cmplx(-log(r), -phi)
-mu = nu*cl
-c = exp(mu)
-!
-!                   g1 = gamma(1 + nu)
-!                   g2 = gamma(1 - nu)
-!
-t = pi*nu
-if (anorm(nu) > tol) go to 10
-a = 1.0 + (t*t)/6.0
-go to 20
-10 a = t/sin(t)
-!
-20 s = real(nu)**2 + aimag(nu)**2
-if (s >= 1.0) go to 21
-t = cgam0(nu)
-g1 = 1.0/t
-g2 = a*t
-go to 30
-21 t = 0.5 + (0.5 + nu)
-call cgamma(0, t, g1)
-g2 = cdiv(a,g1)
-!
-30 gm2 = 0.5*(g1 + g2)
-if (s > 0.04) go to 31
-!
-!         The following is the Taylor series for
-!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
-!
-t = nu*nu
-w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
-   & d(3))*t + d(2))*t + d(1))
-gm1 = a*w1
-go to 40
-31 gm1 = 0.5*(g1 - g2)/nu
-!
-!            Initialization of the summation
-!
-40 p = 0.5*c*g1
-q = 0.5*cdiv(g2,c)
-x = real(mu)
-y = aimag(mu)
-if (anorm(mu) > tol) go to 50
-u = x*y
-sh = cmplx(1.0, u/3.0)
-ch = cmplx(1.0, u)
-go to 60
-50 t = cmplx (-y, x)
-sh = sin(t)/t
-ch = cos(t)
-!
-60 f = gm1*ch + gm2*cl*sh
-c = (1.0, 0.0)
-w1 = f
-w2 = p
-!
-!                 Summation of series
-!
-t = 0.25*(z*z)
-do k = 1, 50
-   ak = k
-   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
-   p = p/(ak - nu)
-   q = q/(ak + nu)
-   c = c*t/ak
-   t1 = c*f
-   w1 = w1 + t1
-   t2 = c*(p - ak*f)
-   w2 = w2 + t2
-   if (anorm(t1) <= eps0*anorm(w1)) go to 80
-end do
-!
-80 w2 = w2 * zr
-contains
-   pure function anorm(t) result(nswc_sf_result)
-      implicit none
-      complex, intent(in) :: t
-      real :: nswc_sf_result
-      nswc_sf_result = max(abs(real(t)), abs(aimag(t)))
-   end function anorm
-end subroutine ckps
-
-pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: r
-complex, intent(in) :: z, zr, nu
-complex, intent(inout) :: w, w0
-integer :: i, m, num
-real :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y, inu, l
-complex :: al, bl, s, u1, u2, u3
-real, parameter :: c1 = 1.25331413731559e+00
-real, parameter :: c2 = 1.77245385090552e+00
-interface
-   pure elemental function cos1(x)
-      implicit none
-      real, intent(in) :: x
-      real :: cos1
-   end function cos1
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!
-!             Computation of the scaled Bessel function
-!
-!                   w = (exp(z)*sqrt(z)) k  (z)
-!                                         nu
-!     and the value
-!
-!                   w0 = k    (z) /k  (z)
-!                         nu+1      nu
-!
-!     For complex orders nu and nu + 1 and for complex argument z
-!     by use of the Miller algorithm. For the greatest accuracy,
-!     z should lie in a sector slightly larger than the right half
-!     plane. It is assumed that abs(real(nu)) .LT. 0.5, and that
-!     r = abs(z/2) AND zr = 2/z.
-!
-!-----------------------------------------------------------------------
-!---------------------
-!     c1 = sqrt(pi/2)
-!     c2 = sqrt(pi)
-!---------------------
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = max(eps, 5.e-15)
-!
-x = real(z)
-y = aimag(z)
-rnu = real(nu)
-inu = aimag(nu)
-!
-!     Calculation of m for use in Miller algorithm.
-!
-th = atan2(y,x)
-a = 3.0/(1.0 + r)
-b = 14.7/(28.0 + r)
-f = (2.0*r)**(0.25)
-if (rnu == 0.5 .and. inu /= 0.0) go to 10
-c = 4.0*cos1(rnu)/(c1*eps0*f)
-go to 20
-10 c = 4.0*c2/f
-20 m = (0.485/r)*(log(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-   & (2.0*cos(b*th))**2 + 1.5
-t = 0.0
-if (r > 22.5) t = 0.01*(r - 22.5)**2
-num = 35.0 + 0.8*(r - 22.5) + t
-if (inu /= 0.0) m = m + num
-c = n
-if (c + rnu < 0.327*abs(inu)) m = m + 10
-!
-!     Backward recurrence in Miller algorithm.
-!
-a = (0.5 - rnu)*(0.5 + rnu) + inu*inu
-e = 2.0*rnu*inu
-u2 = (0.0, 0.0)
-u1 = (1.0, 0.0)
-s = u1
-l = m
-do i = 2, m
-   u3 = u2
-   u2 = u1
-   c = a/l + (l - 1.0)
-   al = cmplx(c, - e/l)
-   bl = 2.0*(l + z)
-   u1 = (bl*u2 - (l + 1.0)*u3)/al
-   s = s + u1
-   c = abs(real(u1)) + abs(aimag(u1))
-   if (i == m .or. c < 1.e+8) go to 30
-!
-!           Rescale to avoid overflow
-!
-   u2 = u2/c
-   u1 = u1/c
-   s = s/c
-!
-30 l = l - 1.0
-end do
-!
-!     Last step in the Miller algorithm.
-!
-if (c < 2.0) go to 40
-u2 = u2/c
-u1 = u1/c
-s = s/c
-40 u3 = u2
-u2 = u1
-al = cmplx(0.5*a, - 0.5*e)
-bl = 1.0 + z
-u1 = (bl*u2 - u3)/al
-s = s + u1
-!
-!     Final assembly
-!
-w = c1*(u1/s)
-w0 = 1.0 + 0.5*(nu + 0.5 - u2/u1)*zr
-end subroutine cbkml
-
-subroutine cbsslk(z, r, w)
-implicit none
-real, intent(in) :: r
-complex :: z
-complex, intent(inout) :: w
-integer :: i, ind, m, n, n1
-real :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
-complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real, parameter :: pi = 3.14159265358979
-real, parameter :: cpi = 1.25331413731550
-interface
-   pure elemental subroutine ckm(z,r,zr,nu,w1,w2)
-      implicit none
-      complex, intent(in) :: z
-      real, intent(in) :: r
-      complex, intent(in) :: zr
-      real, intent(in) :: nu
-      complex, intent(inout) :: w1
-      complex, intent(inout) :: w2
-   end subroutine ckm
-   pure elemental subroutine ckml(z,r,zr,nu,k1,k2)
-      implicit none
-      complex, intent(in) :: z
-      real, intent(in) :: r
-      complex, intent(in) :: zr
-      real, intent(in) :: nu
-      complex, intent(inout) :: k1
-      complex, intent(inout) :: k2
-   end subroutine ckml
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-   pure elemental function cxp(n,nu)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: nu
-      complex :: cxp
-   end function cxp
-end interface
-!-----------------------------------------------------------------------
-!
-!         Calculation of the modified Bessel function of the
-!         second kind for real order r and complex argument z.
-!         It is assumed that -pi .LT. arg z .LE. pi.
-!
-!-----------------------------------------------------------------------
-!     Written by
-!         Andrew H. van Tuyl
-!         Naval Surface Warfare Center
-!     modified by A.H. Morris (NSWC)
-!     revised ... oct 1992
-!---------------------------
-!---------------------------
-!     cpi = sqrt(pi/2)
-!---------------------------
-!
-rz = cpabs(real(z), aimag(z))
-!
-!     Asymptotic expansion
-!
-if (rz < 17.5 + 0.5*r*r) go to 5
-call cka(z, r, w)
-return
-!
-!          Reduction of r to the range -0.5 .LT. nu .LE. 0.5
-!
-5 a = abs(r)
-n = a
-nu = a - float(n)
-t = nu - 0.5
-if (t <= 0.0) go to 10
-nu = t - 0.5
-n = n + 1
-10 m = n
-nu1 = nu
-!
-ind = 1
-cz = z
-x = 0.5*real(z)
-y = 0.5*aimag(z)
-call crec(x, y, zr1, zr2)
-zr = cmplx (zr1, zr2)
-if (t /= 0.0) go to 20
-!
-!               Calculation for nu = 0.5
-!
-w = cmplx(cpi, 0.0)
-if (n == 0) go to 90
-if (x >= 0.0) go to 15
-ind = -1
-cz = - z
-zr = - zr
-15 u1 = w
-u2 = w
-n = n + 1
-nu = - 0.5
-go to 70
-!
-!           Calculation for abs(nu) .LT. 0.5
-!
-20 znorm = 0.5*rz
-if (znorm > 1.0) go to 30
-ind = 0
-call ckm(z, znorm, zr, nu, u1, u2)
-go to 50
-30 if (x < 0.0) go to 40
-call ckml(z, znorm, zr, nu, u1, u2)
-go to 50
-40 ind = -1
-cz = - z
-zr = - zr
-call ckml(cz, znorm, zr, nu, u1, u2)
-!
-50 if (n > 1) go to 70
-w = u1
-if (n /= 0) w = u2
-go to 90
-!
-!                 Recursion
-!
-70 n1 = n - 1
-do i = 1, n1
-   ai = i
-   u3 = (nu + ai)*zr*u2 + u1
-   u1 = u2
-   u2 = u3
-end do
-w = u3
-!
-90 if (ind == 0) return
-w = w*exp(-cz)/sqrt(cz)
-if (ind > 0) return
-!
-!            Analytic continuation
-!
-ex = cxp(m, nu1)
-cn = cmplx (a, 0.0)
-if (y < 0.0) go to 100
-w1 = cmplx (aimag(z), -real(z))
-call cbsslj(w1, cn, w2)
-w2 = cmplx (pi*aimag(w2), -pi*real(w2))
-w = ex*(ex*w + w2)
-return
-100 ex = conjg(ex)
-w1 = cmplx (-aimag(z), real(z))
-call cbsslj(w1, cn, w2)
-w2 = cmplx (-pi*aimag(w2), pi*real(w2))
-w = ex*(ex*w + w2)
-end subroutine cbsslk
-
-subroutine cka(z, nu, w)
-implicit none
-complex :: z
-complex, intent(inout) :: w
-real, intent(in) :: nu
-integer :: i
-real :: a, eps, u, v
-real :: m
-complex :: p, t, zr
-real, parameter :: c = 1.77245385090552
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!        Computation of the Bessel function K for real order nu
-!        and complex argument z by the asymptotic expansion
-!-----------------------------------------------------------------------
-!--------------------------
-!--------------------------
-!     c = pi**(1/2)
-!--------------------------
-!--------------------------
-!
-!     ****** eps is a machine dependent constant. Eps is the
-!            smallest number such that 1.0 + eps .GT. 1.0 .
-!
-eps = spmpar(1)
-!
-!--------------------------
-call crec(real(z), aimag(z), u, v)
-zr = cmplx(0.5*u, 0.5*v)
-a = nu*nu - 0.25
-m = 1.0
-t = a*zr
-p = t
-!
-do i = 1, 16
-   a = a - 2.0*m
-   m = m + 1.0
-   t = (a/m)*t*zr
-   p = p + t
-   if (anorm(t) <= eps*anorm(p)) go to 20
-end do
-!
-20 p = p + 1.0
-t = sqrt(zr)
-if (aimag(z) == 0.0) t = conjg(t)
-w = c*t*p*exp(-z)
-contains
-   pure function anorm(z) result(nswc_sf_result)
-      implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
-      nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
-   end function anorm
-end subroutine cka
-
-pure elemental subroutine ckm(z, r, zr, nu, w1, w2)
-implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex, intent(inout) :: w1, w2
-real, intent(in) :: nu
-integer :: k
-real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
-complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
-real, parameter :: tol = 1.e-10
-real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
-   & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
-interface
-   pure elemental function gam1(a)
-      implicit none
-      real, intent(in) :: a
-      real :: gam1
-   end function gam1
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!
-!        Calculation of the modified Bessel functions
-!
-!                  w1 = k  (z)  AND  w2 = k    (z)
-!                        nu                nu+1
-!
-!     For a complex argument z where abs(z) .LE. 2  and a real
-!     order nu where abs(nu) .LE. 0.5.  It is assumed that
-!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z. power
-!     series expansions are used.
-!
-!-----------------------------------------------------------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = max(eps, 5.e-15)
-!
-!                     cl = - ln(z/2)
-!
-phi = atan2(aimag(z),real(z))
-cl = cmplx(-log(r), -phi)
-mu = nu*cl
-c = exp(mu)
-!
-!                   g1 = gamma(1 + nu)
-!                   g2 = gamma(1 - nu)
-!
-t = pi*nu
-if (abs(nu) > tol) go to 10
-a = 1.0 + (t*t)/6.0
-go to 20
-10 a = t/sin(t)
-!
-20 t = 0.5 + (0.5 + gam1(nu))
-g1 = 1.0/t
-g2 = a*t
-gm2 = 0.5*(g1 + g2)
-if (abs(nu) > 0.2) go to 30
-!
-!         The following is the Taylor series for
-!     t = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
-!
-t = nu*nu
-t = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
-   & d(3))*t + d(2))*t + d(1))
-gm1 = a*t
-go to 40
-30 gm1 = 0.5*(g1 - g2)/nu
-!
-!            Initialization of the summation
-!
-40 p = (0.5*g1)*c
-q = (0.5*g2)/c
-x = real(mu)
-y = aimag(mu)
-if (anorm(mu) > tol) go to 50
-t = x*y
-sh = cmplx(1.0, t/3.0)
-ch = cmplx(1.0, t)
-go to 60
-50 w = cmplx (-y, x)
-sh = sin(w)/w
-ch = cos(w)
-!
-60 f = gm1*ch + gm2*cl*sh
-c = (1.0, 0.0)
-w1 = f
-w2 = p
-!
-!                 Summation of series
-!
-w = 0.25*(z*z)
-do k = 1, 50
-   ak = k
-   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
-   p = p/(ak - nu)
-   q = q/(ak + nu)
-   c = c*w/ak
-   t1 = c*f
-   w1 = w1 + t1
-   t2 = c*(p - ak*f)
-   w2 = w2 + t2
-   if (anorm(t1) <= eps0*anorm(w1)) go to 80
-end do
-!
-80 w2 = w2 * zr
-contains
-   pure function anorm(w) result(nswc_sf_result)
-      implicit none
-      complex, intent(in) :: w
-      real :: nswc_sf_result
-      nswc_sf_result = max(abs(real(w)), abs(aimag(w)))
-   end function anorm
-end subroutine ckm
-
-pure elemental subroutine ckml(z, r, zr, nu, k1, k2)
-implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex, intent(inout) :: k1, k2
-real, intent(in) :: nu
-integer :: i, m
-real :: a, al, b, c, e, eps, eps0, th, x, y, l, nu2
-complex :: bl, s, u1, u2, u3
-real, parameter :: c1 = 1.25331413731559
-interface
-   pure elemental function cos1(x)
-      implicit none
-      real, intent(in) :: x
-      real :: cos1
-   end function cos1
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!
-!             Computation of the scaled Bessel functions
-!
-!                   k1 = (exp(z)*sqrt(z)) k  (z)
-!                                          nu
-!                   k2 = (exp(z)*sqrt(z)) k    (z)
-!                                          nu+1
-!
-!     For real orders nu and nu + 1 and for complex argument z
-!     by use of the Miller algorithm. For the greatest accuracy,
-!     z should lie in a sector slightly larger than the right
-!     half plane. It is assumed that abs(nu) .LT. 0.5, and that
-!     r = abs(z/2) AND zr = 2/z.
-!
-!-----------------------------------------------------------------------
-!---------------------
-!     c1 = sqrt(pi/2)
-!---------------------
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = max(eps, 5.e-15)
-x = real(z)
-y = aimag(z)
-nu2 = nu*nu
-!
-!     Calculation of m for use in Miller algorithm.
-!
-th = atan2(y,x)
-a = 3.0/(1.0 + r)
-b = 14.7/(28.0 + r)
-c = 4.0*cos1(nu)/(c1*eps0*(2.0*r)**(0.25))
-m = (0.485/r)*(log(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-   & (2.0*cos(b*th))**2 + 1.5
-!
-!     Backward recurrence in Miller algorithm.
-!
-u2 = (0.0, 0.0)
-u1 = (1.0, 0.0)
-s = u1
-l = m
-do i = 2, m
-   u3 = u2
-   u2 = u1
-   e = l - 0.5
-   al = (e*e - nu2)/(l*(l + 1.0))
-   bl = (2.0/(l + 1.0))*(l + z)
-   u1 = (bl*u2 - u3)/al
-   s = s + u1
-   c = abs(real(u1)) + abs(aimag(u1))
-   if (i == m .or. c < 1.e+6) go to 10
-!
-!           Rescale to avoid overflow
-!
-   u2 = u2/c
-   u1 = u1/c
-   s = s/c
-!
-10 l = l - 1.0
-end do
-!
-!     Last step in the Miller algorithm.
-!
-if (c < 2.0) go to 20
-u2 = u2/c
-u1 = u1/c
-s = s/c
-20 u3 = u2
-u2 = u1
-al = 0.5*(0.5 - nu)*(0.5 + nu)
-bl = 1.0 + z
-u1 = (bl*u2 - u3)/al
-s = s + u1
-!
-!     Final assembly
-!
-k1 = c1*(u1/s)
-k2 = k1*(1.0 + 0.5*(nu + 0.5 - u2/u1)*zr)
-end subroutine ckml
-
-pure elemental complex function cxp(n, nu)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: nu
-integer :: k
-real :: c, s
-interface
-   pure elemental function cos0(x)
-      implicit none
-      real, intent(in) :: x
-      real :: cos0
-   end function cos0
-   pure elemental function sin0(x)
-      implicit none
-      real, intent(in) :: x
-      real :: sin0
-   end function sin0
-end interface
-!-----------------------------------------------------------------------
-!                 Computation of exp(-R*(pi/2)*I)
-!              where R = n + nu for abs(nu) .LE. 0.5
-!-----------------------------------------------------------------------
-!
-c = cos0(nu)
-s = sin0(nu)
-k = mod(n,4)
-if (k == 0) go to 10
-if (k == 1) go to 20
-if (k == 2) go to 30
-go to 40
-!
-10 cxp = cmplx (c, -s)
-return
-!
-20 cxp = cmplx (-s, -c)
-return
-!
-30 cxp = cmplx (-c, s)
-return
-!
-40 cxp = cmplx (s, c)
-end function cxp
-
-pure elemental subroutine bsslk(mo, a, in, w)
-implicit none
-integer, intent(in) :: in, mo
-complex, intent(in) :: a
-complex, intent(inout) :: w
-integer :: i, la, lk, lr, m, n
-real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), ts(2), zl(2), zs
-real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
-   & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
-   & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
-   & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
-   & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
-   & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
-   & 7.87863959810677e00]
-real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
-   & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
-   & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
-   & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
-   & 4.13305359441492e-2, 3.01350573947510e-2, 2.01043439592720e-2, 1.18552223068074e-2, 5.86055510956010e-3, 2.25465148267325e-3, &
-   & 6.08173041536336e-4, 9.84215550625747e-5, 7.32139093038089e-6, 1.37279667384666e-7]
-!     ******************************************************************
-!     Fortran subroutine for modified Bessel function of integral order
-!     ******************************************************************
-!     mo = Mode of operation
-!     a  = ARGUMENT (COMPLEX NUMBER)
-!     in = order (integer)
-!     w  = Function of second kind (complex number)
-!     -------------------
-!     -------------------
-az(1) = real(a)
-az(2) = aimag(a)
-zs = az(1)*az(1) + az(2)*az(2)
-zl(1) = 0.5*log(zs)
-zl(2) = atan2(az(2),az(1))
-an = abs(in)
-tm(1) = 0.0
-tm(2) = 0.0
-if (mo /= 0) go to 002
-tm(1) = az(1)
-tm(2) = az(2)
-002 if ( ( zs - 1.0 ) <= 0 ) go to 020
-go to 003
-003 if ( ( zs - 289.0 ) < 0 ) go to 004
-go to 010
-004 if ( ( az ( 1 ) + 0.096 * az ( 2 ) * az ( 2 ) ) <= 0 ) go to 020
-go to 015
-010 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
-qf(1) = qm*cos(-0.5*zl(2) - tm(2))
-qf(2) = qm*sin(-0.5*zl(2) - tm(2))
-if (an > 1.0) go to 012
-pn = an
-la = 11
-go to 100
-011 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
-ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
-sm(1) = ts(1)
-sm(2) = ts(2)
-go to 029
-012 pn = 1.0
-la = 13
-go to 100
-013 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
-pn = 0.0
-la = 14
-go to 100
-014 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
-go to 026
-015 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
-qf(1) = qm*cos(-0.5*zl(2) - tm(2))
-qf(2) = qm*sin(-0.5*zl(2) - tm(2))
-if (an > 1.0) go to 017
-pn = an
-lr = 16
-go to 104
-016 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
-ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
-sm(1) = ts(1)
-sm(2) = ts(2)
-go to 029
-017 pn = 1.0
-lr = 18
-go to 104
-018 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
-pn = 0.0
-lr = 19
-go to 104
-019 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
-go to 026
-020 qf(1) = 1.0
-qf(2) = 0.0
-if (mo == 0) go to 021
-qm = exp(az(1))
-qf(1) = qm*cos(az(2))
-qf(2) = qm*sin(az(2))
-021 if (an > 1.0) go to 023
-pn = an
-lk = 22
-go to 106
-022 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
-ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
-sm(1) = ts(1)
-sm(2) = ts(2)
-go to 029
-023 pn = 1.0
-lk = 24
-go to 106
-024 sq(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sq(2) = qf(1)*sm(2) + qf(2)*sm(1)
-pn = 0.0
-lk = 25
-go to 106
-025 sr(1) = qf(1)*sm(1) - qf(2)*sm(2)
-sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
-026 rz(1) = az(1)/zs
-rz(2) = -az(2)/zs
-pn = 0.0
-go to 028
-027 sq(1) = sr(1)
-sq(2) = sr(2)
-sr(1) = sm(1)
-sr(2) = sm(2)
-028 sm(1) = 2.0*pn*(rz(1)*sr(1) - rz(2)*sr(2)) + sq(1)
-sm(2) = 2.0*pn*(rz(1)*sr(2) + rz(2)*sr(1)) + sq(2)
-pn = pn + 1.0
-if (pn < an) go to 027
-029 w = cmplx(sm(1),sm(2))
-return
-100 sm(1) = 0.0
-sm(2) = 0.0
-rz(1) = 0.5*az(1)/zs
-rz(2) = -0.5*az(2)/zs
-qn = (pn - 0.5)*(pn + 0.5)
-tm(1) = 1.0
-tm(2) = 0.0
-pm = 0.0
-go to 102
-101 qn = qn - 2.0*pm
-pm = pm + 1.0
-ts(1) = rz(1)*tm(1) - rz(2)*tm(2)
-ts(2) = rz(1)*tm(2) + rz(2)*tm(1)
-tm(1) = qn*ts(1)/pm
-tm(2) = qn*ts(2)/pm
-if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 102
-if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 103
-102 sm(1) = sm(1) + tm(1)
-sm(2) = sm(2) + tm(2)
-if (pm < 36.0) go to 101
-103 select case ( la )
-case ( 11 )
-   go to 11
-case ( 13 )
-   go to 13
-case ( 14 )
-   go to 14
-end select
-104 sm(1) = 1.0
-sm(2) = 0.0
-m = 15.0*pn + 2.0
-n = 15.0*pn + 15.0
-do i = m,n
-   ts(1) = az(1) - cd(i)
-   ts(2) = az(2)
-   ss = ts(1)*ts(1) + ts(2)*ts(2)
-   tm(1) = ce(i)*ts(1)/ss
-   tm(2) = -ce(i)*ts(2)/ss
-   sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-select case ( lr )
-case ( 16 )
-   go to 16
-case ( 18 )
-   go to 18
-case ( 19 )
-   go to 19
-end select
-106 aq(1) = 1.0
-aq(2) = 0.0
-rn = 0.0
-sn = -1.0
-pm = 0.0
-go to 108
-107 pm = pm + 1.0
-rn = rn + 0.5/pm
-sn = -sn
-ts(1) = 0.5*(az(1)*aq(1) - az(2)*aq(2))
-ts(2) = 0.5*(az(1)*aq(2) + az(2)*aq(1))
-aq(1) = ts(1)/pm
-aq(2) = ts(2)/pm
-108 if (pm < pn) go to 107
-sz(1) = 0.25*(az(1) - az(2))*(az(1) + az(2))
-sz(2) = 0.5*az(1)*az(2)
-sr(1) = 0.0
-sr(2) = 0.0
-ss = aq(1)*aq(1) + aq(2)*aq(2)
-tm(1) = aq(1)/ss
-tm(2) = -aq(2)/ss
-pm = 0.0
-go to 110
-109 tm(1) = tm(1)/(pn - pm)
-tm(2) = tm(2)/(pn - pm)
-sr(1) = sr(1) + 0.5*tm(1)
-sr(2) = sr(2) + 0.5*tm(2)
-pm = pm + 1.0
-ts(1) = sz(1)*tm(1) - sz(2)*tm(2)
-ts(2) = sz(1)*tm(2) + sz(2)*tm(1)
-tm(1) = -ts(1)/pm
-tm(2) = -ts(2)/pm
-110 if (pm < pn) go to 109
-sm(1) = 0.0
-sm(2) = 0.0
-rm = 1.0
-qm = 0.0
-aq(1) = sn*aq(1)
-aq(2) = sn*aq(2)
-sl(1) = -0.115931515658412 + zl(1) - rn
-sl(2) = zl(2)
-pm = 0.0
-go to 112
-111 qm = qm + rm
-pm = pm + 1.0
-rm = 0.25*zs*rm/(pm*(pn + pm))
-ts(1) = sz(1)*aq(1) - sz(2)*aq(2)
-ts(2) = sz(1)*aq(2) + sz(2)*aq(1)
-aq(1) = ts(1)/(pm*(pn + pm))
-aq(2) = ts(2)/(pm*(pn + pm))
-sl(1) = sl(1) - 0.5/pm - 0.5/(pn + pm)
-112 tm(1) = aq(1)*sl(1) - aq(2)*sl(2)
-tm(2) = aq(1)*sl(2) + aq(2)*sl(1)
-sm(1) = sm(1) + tm(1)
-sm(2) = sm(2) + tm(2)
-if (qm + rm > qm) go to 111
-sm(1) = sr(1) + sm(1)
-sm(2) = sr(2) + sm(2)
-select case ( lk )
-case ( 22 )
-   go to 22
-case ( 24 )
-   go to 24
-case ( 25 )
-   go to 25
-end select
-end subroutine bsslk
-
-subroutine cai(ind,z,ai,aip,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: ai
-complex, intent(inout) :: aip
-real :: a, b, r
-complex :: bi, bip
-interface
-   pure elemental subroutine aia(ind,z,ai,aip,ierr)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: ai
-      complex, intent(inout) :: aip
-      integer, intent(out) :: ierr
-   end subroutine aia
-   pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: ai
-      complex, intent(inout) :: aip
-      complex, intent(inout) :: bi
-      complex, intent(inout) :: bip
-   end subroutine airm
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!------------------------------------------------------------
-!     Calculates the Airy function ai and its derivative aip
-!     for complex argument z.
-!------------------------------------------------------------
-ierr = 0
-a = real(z)
-b = aimag(z)
-r = cpabs(a,b)
-if (r > 1.0) go to 10
-!
-!     Maclaurin expansion
-!
-call airm(ind,z,ai,aip,bi,bip)
-return
-10 if (r > 10.0) go to 20
-!
-!     Intermediate range calculation
-!
-call aii(ind,z,ai,aip,ierr)
-return
-!
-!     Asymptotic expansion
-!
-20 call aia(ind,z,ai,aip,ierr)
-end subroutine cai
-
-pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
-implicit none
-integer, intent(in) :: ind
-complex, intent(inout) :: ai, aip, bi, bip
-complex, intent(in) :: z
-integer :: i, n
-real :: x, y
-complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
-real, parameter :: c1 = 3.55028053887817e-01
-real, parameter :: c2 = 2.58819403792807e-01
-real, parameter :: sqt3 = 1.73205080756888e+00
-real, parameter :: a(8) = [.166666666666667e+00, .555555555555556e-02, .771604938271605e-04, .584549195660307e-06, &
-   & .278356759838241e-08, .909662613850462e-11, .216586336631062e-13, .392366551867867e-16]
-real, parameter :: b(8) = [.833333333333333e-01, .198412698412698e-02, .220458553791887e-04, .141319585764030e-06, &
-   & .588831607350126e-09, .172172984605300e-11, .372668797846970e-14, .621114663078283e-17]
-real, parameter :: c(8) = [.333333333333333e-01, .694444444444444e-03, .701459034792368e-05, .417535139757362e-07, &
-   & .163739270493083e-09, .454831306925231e-12, .941679724482880e-15, .150910212256872e-17]
-real, parameter :: d(8) = [.333333333333333e+00, .138888888888889e-01, .220458553791887e-03, .183715461493239e-05, &
-   & .942130571760201e-08, .327128670750070e-10, .819871355263333e-13, .155278665769571e-15]
-!--------------------------------------------------------------
-!     Calculates the Airy functions ai and bi and their
-!     derivatives aip and bip by use of their Maclaurin
-!     expansions.
-!--------------------------------------------------------------
-!-----------------------
-!     c1 = 3**(-2/3)/gamma(2/3)
-!     c2 = 3**(-1/3)/gamma(1/3)
-!-----------------------
-!-----------------------
-!-----------------------
-z2 = z*z
-z3 = z*z2
-!
-!     Summation of f and g
-!
-f = cmplx(a(8),0.0)
-g = cmplx(b(8),0.0)
-do n = 1, 7
-   i = 8 - n
-   f = a(i) + z3*f
-   g = b(i) + z3*g
-end do
-f = 1.0 + z3*f
-g = z + z2*z2*g
-!
-!     Summation of f1 and g1
-!
-f1 = cmplx(c(8),0.0)
-g1 = cmplx(d(8),0.0)
-do n = 1,7
-   i = 8 - n
-   f1 = c(i) + z3*f1
-   g1 = d(i) + z3*g1
-end do
-f1 = z2*(0.5 + z3*f1)
-g1 = 1.0 + z3*g1
-!
-!     Final assembly
-!
-ai = c1*f - c2*g
-bi = sqt3*(c1*f + c2*g)
-aip = c1*f1 - c2*g1
-bip = sqt3*(c1*f1 + c2*g1)
-if (ind == 0) return
-x = real(z)
-y = aimag(z)
-z1 = sqrt(z)
-zz = z*z1/1.5
-e = exp(zz)
-e1 = 1.0/e
-ai = ai*e
-aip = aip*e
-if (abs(y) > x*sqt3) go to 30
-bi = bi*e1
-bip = bip*e1
-return
-30 bi = bi*e
-bip = bip*e
-end subroutine airm
-
-subroutine aii(ind, z, ai, aip, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: ai, aip
-real :: a, b, r
-complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
-real, parameter :: c1 = 1.83776298473931e-01
-interface
-   pure elemental subroutine aia(ind,z,ai,aip,ierr)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: ai
-      complex, intent(inout) :: aip
-      integer, intent(out) :: ierr
-   end subroutine aia
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!------------------------------------------------------------
-!     Calculates the Airy function ai and its derivative aip
-!     for complex argument z in the intermediate range 1 .LE.
-!     CABS(z) .LE. 10.0.
-!------------------------------------------------------------
-!
-!     c1 = 1/(pi*sqrt(3))
-!
-ierr = 0
-a = real(z)
-b = aimag(z)
-r = cpabs(a, b)
-z1 = sqrt(z)
-z2 = z1*z/1.5
-if (abs(b) < -5.0*a) go to 10
-!
-!           ----  abs(b) .GE. -5.0*a  ----
-!
-call ka(ind, z2, w1, w2)
-ai = c1*z1*w1
-aip = -c1*z*w2
-return
-!
-!           ----  abs(b) .LT. -5.0*a  ----
-!
-10 if (abs(b) < -1.74*a) go to 30
-if (r >= 8.2) go to 40
-20 zm = -z
-z1 = sqrt(zm)
-z3 = z1*zm/1.5
-call ja(z3, w1, w2, w1m, w2m)
-ai = (z1/3.0)*(w1m + w1)
-aip = (z/3.0)*(w2m - w2)
-if (ind == 0) return
-e = exp(z2)
-ai = ai*e
-aip = aip*e
-return
-30 if (r < 7.4) go to 20
-40 call aia(ind,z,ai,aip,ierr)
-end subroutine aii
-
-pure elemental subroutine aia(ind, z, ai, aip, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(inout) :: ai, aip
-complex, intent(in) :: z
-integer :: i, k, m, m2
-real :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, alpha, beta, j
-real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
-   & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
-   & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
-   & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
-   & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
-   & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
-   & .899520742705838e+20]
-real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
-   & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
-   & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
-   & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
-   & .196352378899103e+10, -.186439310881072e+11, -.186352996385294e+12, -.195588293238984e+13, -.215064446351972e+14, - &
-   & .247236992290621e+15, -.296588243029521e+16, -.370624400063547e+17, -.481678264794522e+18, -.650098408075106e+19, - &
-   & .909919826436541e+20]
-real, parameter :: c1 = .564189583547756
-real, parameter :: c2 = .398942280401433
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!     Calculates the Airy function ai and its derivative aip for
-!     complex argument z by means of asymptotic expansions.
-!-----------------------------------------------------------------------
-!------------------------
-!------------------------
-!------------------------
-!     c1 = pi**(-1/2)
-!     c2 = (2*pi)**(-1/2)
-!------------------------
-!------------------------
-!
-!     Eps, xpos, and xneg are machine dependent constants. Eps is
-!     the smallest number such that 1.0 + eps .GT. 1.0, xpos is the
-!     the largest postive number for which exp(X) can be computed,
-!     and xneg is the largest negative number for which exp(X) does
-!     not underflow.
-!
-eps = spmpar(1)
-xpos = exparg(0)
-xneg = exparg(1)
-!
-!------------------------
-ierr = 0
-if (real(z) < 0.0) go to 30
-!
-!             -----   real(z) .GE. 0    -----
-!
-z1 = sqrt(z)
-z2 = sqrt(z1)
-z2r = 1.0/z2
-call crec(real(z), aimag(z), u, v)
-w = -1.5*cmplx(u,v)/z1
-u = abs(real(w))
-v = abs(aimag(w))
-t = max(u,v)
-if (ind /= 0) go to 10
-!
-if (t == 0.0) go to 90
-u1 = u/t
-v1 = v/t
-r = u*u1 + v*v1
-xm = xpos
-if (real(w) < 0.0) xm = -xneg
-if (u1 >= r*xm .or. v1 >= 0.1*r/eps) go to 90
-zeta = z1*z/1.5
-e = exp(-zeta)
-!
-10 m = 20
-if (t > 30.0) m = 8
-s1 = cmplx(c(m),0.0)
-s2 = cmplx(d(m),0.0)
-i = m
-do k = 2,m
-   i = i - 1
-   s1 = c(i) + w*s1
-   s2 = d(i) + w*s2
-end do
-!
-ai = 0.5*c1*z2r*s1
-aip = - 0.5*c1*z2*s2
-if (ind /= 0) return
-ai = e*ai
-aip = e*aip
-return
-!
-!             -----   real(z) .LT. 0    -----
-!
-30 zz = -z
-z1 = sqrt(zz)
-z2 = sqrt(z1)
-z2r = 1.0/z2
-call crec(real(zz), aimag(zz), u, v)
-w = 1.5*cmplx(u,v)/z1
-u = abs(real(w))
-v = abs(aimag(w))
-t = max(u,v)
-!
-if (t == 0.0) go to 90
-u1 = u/t
-v1 = v/t
-r = u*u1 + v*v1
-if (ind /= 0) go to 40
-if (v1 >= r*xpos .or. u1 >= 0.1*r/eps) go to 90
-zeta = z1*zz/1.5
-go to 50
-40 e = (0.0, 0.0)
-j = (0.0, -1.0)
-if (aimag(z) < 0.0) j = (0.0, 1.0)
-if (v1 > 0.5*r*abs(xneg)) go to 50
-if (u1 >= 0.05*r/eps) go to 90
-zeta = z1*zz/1.5
-e = exp(2.0*j*zeta)
-!
-50 w2 = w*w
-m = 15
-if (t > 30.0) m = 5
-m2 = m + m
-i = m2 - 1
-s1 = cmplx(c(i),0.0)
-s2 = cmplx(c(m2),0.0)
-s3 = cmplx(d(i),0.0)
-s4 = cmplx(d(m2),0.0)
-do k = 2,m
-   i = i - 1
-   s2 = c(i) - s2*w2
-   s4 = d(i) - s4*w2
-   i = i - 1
-   s1 = c(i) - s1*w2
-   s3 = d(i) - s3*w2
-end do
-s2 = w*s2
-s4 = w*s4
-!
-if (ind /= 0) go to 70
-cn = cos(zeta)
-si = sin(zeta)
-go to 80
-70 cn = 0.5*(1.0 + e)
-si = 0.5*(1.0 - e)*j
-!
-80 alpha = s1 - s2
-beta = s1 + s2
-ai = c2*z2r*(alpha*cn + beta*si)
-alpha = s3 - s4
-beta = s3 + s4
-aip = c2*z2*(alpha*si - beta*cn)
-return
-!
-!         RETURN WITH ZERO VALUES IF SCALING IS NEEDED
-!
-90 ai = (0.0, 0.0)
-aip = (0.0, 0.0)
-ierr = 1
-end subroutine aia
-
-subroutine cbi(ind,z,bi,bip,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi
-complex, intent(inout) :: bip
-real :: a, b, r
-complex :: ai, aip
-interface
-   pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: ai
-      complex, intent(inout) :: aip
-      complex, intent(inout) :: bi
-      complex, intent(inout) :: bip
-   end subroutine airm
-   pure elemental subroutine bia(ind,z,bi,bip,ierr)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: bi
-      complex, intent(inout) :: bip
-      integer, intent(out) :: ierr
-   end subroutine bia
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!------------------------------------------------------------
-!     Calculates the Airy function bi and its derivative bip
-!     for complex argument z.
-!------------------------------------------------------------
-ierr = 0
-a = real(z)
-b = aimag(z)
-r = cpabs(a,b)
-if (r > 1.0) go to 10
-!
-!     Maclaurin expansion
-!
-call airm(ind,z,ai,aip,bi,bip)
-return
-10 if (r > 9.6) go to 20
-!
-!     Intermediate range calculation
-!
-call bii(ind,z,bi,bip,ierr)
-return
-!
-!     Asymptotic expansion
-!
-20 call bia(ind,z,bi,bip,ierr)
-end subroutine cbi
-
-subroutine bii(ind, z, bi, bip, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
-real :: a, r, x, y
-complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
-real, parameter :: c1 = 5.77350269189626e-01
-real, parameter :: sqt3 = 1.73205080756888e+00
-interface
-   pure elemental subroutine bia(ind,z,bi,bip,ierr)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: bi
-      complex, intent(inout) :: bip
-      integer, intent(out) :: ierr
-   end subroutine bia
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!------------------------------------------------------------
-!     Calculates the Airy function bi and its derivative bip
-!     for complex argument z in the intermediate range 1 .LE.
-!     CABS(z) .LE. 10.0.
-!------------------------------------------------------------
-!
-!     c1 = 1/sqrt(3)
-!     sqt3 = sqrt(3)
-!
-!
-ierr = 0
-x = real(z)
-y = aimag(z)
-r = cpabs(x, y)
-z1 = sqrt(z)
-z2 = z1*z/1.5
-e = exp(-z2)
-e1 = 1.0/e
-if (real(z) < 0.0) go to 10
-!
-!               ----  real(z) .GE. 0  ----
-!
-if (r < 8.9) go to 5
-a = 0.156*r - 0.913
-if (abs(y) < a*x .or. abs(y) > 0.58*x) go to 40
-5 call ia(z2, w1, w2, w1m, w2m)
-bi = c1*z1*(w1 + w1m)
-bip = c1*z*(w2 + w2m)
-if (ind == 0) return
-go to 20
-!
-!               ----  real(z) .LT. 0  ----
-!
-10 if (r < 8.1) go to 15
-if (abs(y) < 3.89*abs(x)) go to 40
-15 zm = -z
-z1 = sqrt(zm)
-z2 = z1*zm/1.5
-call ja(z2, w1, w2, w1m, w2m)
-bi = c1*z1*(w1m - w1)
-bip = c1*zm*(w2m + w2)
-if (ind == 0) return
-20 if (x >= c1*abs(y)) go to 30
-bi = bi*e1
-bip = bip*e1
-return
-30 bi = bi*e
-bip = bip*e
-return
-40 call bia(ind, z, bi, bip, ierr)
-end subroutine bii
-
-pure elemental subroutine bia(ind,z,bi,bip,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
-integer :: i, k, m, m2
-real :: ce, cf, eps, r, s, t, u, u1, v, v1, x, xneg, xpos, y
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, cf1, cf2, alpha, beta, j, cz
-real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
-   & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
-   & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
-   & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
-   & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
-   & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
-   & .899520742705838e+20]
-real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
-   & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
-   & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
-   & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
-   & .196352378899103e+10, -.186439310881072e+11, -.186352996385294e+12, -.195588293238984e+13, -.215064446351972e+14, - &
-   & .247236992290621e+15, -.296588243029521e+16, -.370624400063547e+17, -.481678264794522e+18, -.650098408075106e+19, - &
-   & .909919826436541e+20]
-real, parameter :: sqt3 = 1.73205080756888
-complex, parameter :: ex3c = (5.e-01, -8.66025403784439e-01)
-complex, parameter :: ex6 = (8.66025403784439e-01, 5.e-01)
-complex, parameter :: ex6c = (8.66025403784439e-01, -5.e-01)
-complex, parameter :: cln2 = (0.0, 3.46573590279973e-01)
-real, parameter :: c1 = 5.64189583547756e-01
-real, parameter :: c2 = 3.98942280401433e-01
-real, parameter :: c3 = 7.07106781186548e-01
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!---------------------------------------------------------------
-!     Calculates the Airy function bi and its derivative bip for
-!     complex argument z by means of asymptotic expansions.
-!---------------------------------------------------------------
-!------------------------
-!------------------------
-!-------------------------
-!     sqt3 = sqrt(3)
-!     ex3c = exp(-i*pi/3)
-!     ex6 = exp(i*pi/6)
-!     ex6c = exp(-i*pi/6)
-!     cln2 = 0.5*i*ln(2)
-!     c1 = pi**(-1/2)
-!     c2 = (2*pi)**(-1/2)
-!     c3 = 2**(-1/2)
-!--------------------------
-!--------------------------
-!
-!     Eps and XM are machine dependent constants. Eps is the
-!     smallest number such that 1.0 + eps .GT. 1.0, xpos is the
-!     largest positive number for which exp(XM) can be computed,
-!     and XNEG is the negative number of largest magnitude for
-!     which exp(X) does not underflow.
-!
-eps = spmpar(1)
-xpos = exparg(0)
-xneg = exparg(1)
-!
-!------------------------
-ierr = 0
-x = real(z)
-y = aimag(z)
-if (x < abs(y)*sqt3) go to 30
-!
-!          -----  abs(ARG(z)) .LE. PI/6  ----
-!
-z1 = sqrt(z)
-z2 = sqrt(z1)
-z2r = 1.0/z2
-call crec(x, y, u, v)
-w = 1.5*cmplx(u, v)/z1
-u = abs(real(w))
-v = abs(aimag(w))
-t = max(u, v)
-if (ind /= 0) go to 10
-if (t == 0.0) go to 90
-u1 = u/t
-v1 = v/t
-r = u*u1 + v*v1
-if (u1 >= r*xpos .or. v1 >= 0.1*r/eps) go to 90
-zeta = z1*z/1.5
-e = exp(zeta)
-!
-10 m = 20
-t = max(x, abs(y))
-if (t > 30.0) m = 8
-s1 = cmplx(c(m), 0.0)
-s2 = cmplx(d(m), 0.0)
-i = m
-do k = 2,m
-   i = i - 1
-   s1 = c(i) + w*s1
-   s2 = d(i) + w*s2
-end do
-!
-bi = c1*z2r*s1
-bip = c1*z2*s2
-if (ind /= 0) return
-bi = e*bi
-bip = e*bip
-return
-30 if (x < 0.0) go to 50
-!
-!          ----  PI/6 .LT. abs(ARG(z)) .LE. PI/2  ----
-!
-cz = z
-if (y < 0.0) cz = conjg(cz)
-zz = cz*ex3c
-z1 = sqrt(zz)
-z2 = sqrt(z1)
-z2r = 1.0/z2
-cf1 = c1*z2r*ex6
-cf2 = c1*z2*ex6c
-call crec(real(zz), aimag(zz), u, v)
-w = 1.5*cmplx(u, v)/z1
-u = abs(real(w))
-v = abs(aimag(w))
-t = max(u, v)
-!
-if (t == 0.0) go to 90
-u1 = u/t
-v1 = v/t
-r = u*u1 + v*v1
-if (ind /= 0) go to 40
-if (v1 >= r*xpos .or. u1 >= 0.1*r/eps) go to 90
-zeta = z1*zz/1.5
-cn = cos(zeta - cln2)
-si = sin(zeta - cln2)
-go to 70
-!
-!        e = exp(-2*i*(zeta - CLN2)) IF abs(ARG(zz)) .LE. PI/3
-!        e = exp( 2*i*(zeta - CLN2)) IF abs(ARG(zz)) .GT. PI/3
-!
-40 e = (0.0, 0.0)
-j = (0.0, -1.0)
-s = 1.0
-ce = 1.0
-cf = 0.5
-if (aimag(zz) <= 0.0) go to 44
-s = -1.0
-ce = 0.5
-cf = 2.0
-44 if (v1 >= 0.5*r*abs(xneg)) go to 45
-if (u1 >= 0.05*r/eps) go to 90
-zeta = z1*zz/1.5
-e = cf*exp(2.0*s*j*zeta)
-45 cn = ce*c3*(1 + e)
-si = ce*s*c3*(1 - e)*j
-go to 70
-!
-!                  ----  real(z) .LT. 0  ----
-!
-50 zz = -z
-if (y < 0.0) zz = conjg(zz)
-z1 = sqrt(zz)
-z2 = sqrt(z1)
-z2r = 1.0/z2
-cf1 = c2*z2r
-cf2 = c2*z2
-call crec(real(zz), aimag(zz), u, v)
-w = 1.5*cmplx(u, v)/z1
-u = abs(real(w))
-v = abs(aimag(w))
-t = max(u, v)
-!
-if (t == 0.0) go to 90
-u1 = u/t
-v1 = v/t
-r = u*u1 + v*v1
-if (ind /= 0) go to 60
-if (v1 >= r*xpos .or. u1 >= 0.1*r/eps) go to 90
-zeta = z1*zz/1.5
-cn = cos(zeta)
-si = sin(zeta)
-go to 70
-60 e = (0.0, 0.0)
-j = (0.0, -1.0)
-if (v1 >= 0.5*r*abs(xneg)) go to 65
-if (u1 >= 0.05*r/eps) go to 90
-zeta = z1*zz/1.5
-e = exp(2.0*j*zeta)
-65 cn = 0.5*(1.0 + e)
-si = 0.5*(1.0 - e)*j
-!
-70 w2 = w*w
-m = 15
-t = max(abs(x), abs(y))
-if (t > 30.0) m = 5
-m2 = m + m
-i = m2 - 1
-s1 = cmplx(c(i), 0.0)
-s2 = cmplx(c(m2), 0.0)
-s3 = cmplx(d(i), 0.0)
-s4 = cmplx(d(m2), 0.0)
-do k = 2,m
-   i = i - 1
-   s2 = c(i) - s2*w2
-   s4 = d(i) - s4*w2
-   i = i - 1
-   s1 = c(i) - s1*w2
-   s3 = d(i) - s3*w2
-end do
-s2 = w*s2
-s4 = w*s4
-if (x >= 0.0) go to 81
-alpha = s1 + s2
-beta = s2 - s1
-go to 82
-81 alpha = s1 - s2
-beta = s1 + s2
-82 bi = cf1*(alpha*cn + beta*si)
-if (x >= 0.0) go to 83
-alpha = s3 - s4
-beta = s3 + s4
-go to 84
-83 alpha = s3 + s4
-beta = s4 - s3
-84 bip = cf2*(alpha*cn + beta*si)
-if (y >= 0.0) return
-bi = conjg(bi)
-bip = conjg(bip)
-return
-!
-!            RETURN WITH ZERO VALUES IF SCALING IS NEEDED.
-!
-90 bi = (0.0, 0.0)
-bip = (0.0, 0.0)
-ierr = 1
-end subroutine bia
-
-subroutine ia(z, i1, i2, i1m, i2m)
-implicit none
-!-------------------------------------------------------------
-!     Calculates the modified Bessel function of the first
-!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z, where -Pi .LT. arg(z) .LE. pi.  i1 and i2
-!     are replaced by the functions of orders 1/3 and 2/3,
-!     respectively, and i1m and i2m by the functions of orders
-!     -1/3 and -2/3, respectively.
-!-------------------------------------------------------------
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: cz
-complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
-!
-!     ex13 = exp(i*pi/3)
-!     ex13c = exp(-i*pi/3)
-!     ex23 = exp(2*i*pi/3)
-!     ex23c = exp(-2*i*pi/3)
-!
-if (real(z) >= 0.0) go to 20
-cz = -z
-!
-!     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.
-!
-call imc(cz, i1, i2, i1m, i2m)
-!
-!     Final assembly
-!
-if (aimag(z) < 0.0) go to 10
-i1 = ex13*i1
-i2 = ex23*i2
-i1m = ex13c*i1m
-i2m = ex23c*i2m
-return
-10 i1 = ex13c*i1
-i2 = ex23c*i2
-i1m = ex13*i1m
-i2m = ex23*i2m
-return
-20 call imc(z, i1, i2, i1m, i2m)
-end subroutine ia
-
-subroutine imc(z, i1, i2, i1m, i2m)
-implicit none
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2, m
-complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
-real, parameter :: c1 = .333333333333333e+00
-real, parameter :: c2 = .666666666666667e+00
-real, parameter :: gm1 = .892979511569248e+00
-real, parameter :: gm2 = .902745292950932e+00
-!----------------------------------------------------------------
-!     Calculates the modified Bessel function of the first
-!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. the Maclaurin expansion and backward recurrence
-!     are used. i1 and i2 are replaced by the functions of orders
-!     1/3 and 2/3, respectively, and i1m and i2m by the functions
-!     of orders -1/3 and -2/3, respectively.  For greatest
-!     accuracy, z should lie in the region real(z) .GE. 0.
-!----------------------------------------------------------------
-!
-!     gm1 = gamma(4.0/3.0)
-!     gm2 = gamma(5.0/3.0)
-!
-zh = 0.5*z
-sz = zh*zh
-a = real(zh)
-b = aimag(zh)
-an = aint(a*a + b*b)
-cn1 = c1 + an
-cn2 = c2 + an
-!
-!     Calculation of initial values for backward recurrence by
-!     use of the Maclaurin expansion.
-!
-call bim(z, cn1, ia1)
-call bim(z, cn1 + 1.0, ia2)
-call bim(z, cn2, ib1)
-call bim(z, cn2 + 1.0, ib2)
-!
-!     Backward recurrence
-!
-n = an
-m = an
-n1 = n + 1
-do i = 1, n1
-   ia3 = ia2
-   ia2 = ia1
-   ib3 = ib2
-   ib2 = ib1
-   cfa = (m + c1)*(m + c1 + 1.0)
-   cfb = (m + c2)*(m + c2 + 1.0)
-   m = m - 1.0
-   ia1 = ia2 + (sz/cfa)*ia3
-   ib1 = ib2 + (sz/cfb)*ib3
-end do
-e = exp(c1*log(zh))
-cf1 = e/gm1
-cf2 = e*e/gm2
-cf3 = c2*cf2/zh
-cf4 = c1*cf1/zh
-i1 = cf1*ia2
-i2 = cf2*ib2
-i1m = cf3*ib1
-i2m = cf4*ia1
-end subroutine imc
-
-subroutine bim(z,cn,w)
-implicit none
-real, intent(in) :: cn
-complex :: z
-complex, intent(inout) :: w
-real :: d, eps
-real :: m
-complex :: sz, t
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-------------------------------------------------------------
-!     Calculates the modified Bessel function of the first kind
-!     for real order cn .GT. -1 And complex argument z by means
-!     of the Maclaurin expansion.  w is replaced by the
-!     calculated value.
-!-------------------------------------------------------------
-!------------------
-!-------------------------------------------------------------
-!     Eps is a machine dependent constant.  Eps is the smallest
-!     number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-------------------------------------------------------------
-sz = 0.25*z*z
-!
-!     Initialization of Maclaurin expansion
-!
-m = 1.0
-t = sz/(cn + 1.0)
-w = t
-!
-!     Summation of Maclaurin expansion
-!
-10 m = m + 1.0
-d = m*(cn + m)
-t = t*(sz/d)
-w = w + t
-if (anorm(t) > eps*anorm(w)) go to 10
-!
-w = w + 1.0
-contains
-   pure function anorm(z) result(nswc_sf_result)
-      implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
-      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
-   end function anorm
-end subroutine bim
-
-subroutine ja(z, i1, i2, i1m, i2m)
-implicit none
-!------------------------------------------------------------
-!     Calculates the Bessel function of the first kind for
-!     orders 1/3, 2/3, -1/3, and -2/3 and for complex argument
-!     z, where -Pi .LT. arg(z) .LE. pi.  i1 and i2 are replaced
-!     by the functions of orders 1/3 and 2/3, respectively, and
-!     i1m and i2m by functions of orders -1/3 and -2/3,
-!     respectively.
-!--------------------------------------------------------------
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: cz
-complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
-!
-!     ex13 = exp(i*pi/3)
-!     ex13c = exp(-i*pi/3)
-!     ex23 = exp(2*i*pi/3)
-!     ex23c = exp(-2*i*pi/3)
-!
-if (real(z) >= 0.0) go to 20
-cz = -z
-!
-!     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.0
-!
-call jmc(cz, i1, i2, i1m, i2m)
-!
-!     Final assembly
-!
-if (aimag(z) < 0.0) go to 10
-i1 = ex13*i1
-i2 = ex23*i2
-i1m = ex13c*i1m
-i2m = ex23c*i2m
-return
-10 i1 = ex13c*i1
-i2 = ex23c*i2
-i1m = ex13*i1m
-i2m = ex23*i2m
-return
-20 call jmc(z, i1, i2, i1m, i2m)
-end subroutine ja
-
-subroutine jmc(z, i1, i2, i1m, i2m)
-implicit none
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2, m
-complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
-real, parameter :: c1 = .333333333333333e+00
-real, parameter :: c2 = .666666666666667e+00
-real, parameter :: gm1 = .892979511569248e+00
-real, parameter :: gm2 = .902745292950932e+00
-!----------------------------------------------------------------
-!     Calculates the Bessel function of the first
-!     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. the Maclaurin expansion and backward recurrence
-!     are used. i1 and i2 are replaced by the functions of orders
-!     1/3 and 2/3, respectively, and i1m and i2m by the functions
-!     of orders -1/3 and -2/3, respectively.  For greatest
-!     accuracy, z should lie in the region real(z) .GE. 0.
-!----------------------------------------------------------------
-!
-!     gm1 = gamma(4.0/3.0)
-!     gm2 = gamma(5.0/3.0)
-!
-zh = 0.5*z
-sz = zh*zh
-a = real(zh)
-b = aimag(zh)
-an = aint(a*a + b*b)
-cn1 = c1 + an
-cn2 = c2 + an
-!
-!     Calculation of initial values for backward recurrence by
-!     use of the Maclaurin expansion.
-!
-call bjm(z, cn1, ia1)
-call bjm(z, cn1 + 1.0, ia2)
-call bjm(z, cn2, ib1)
-call bjm(z, cn2 + 1.0, ib2)
-!
-!     Backward recurrence
-!
-n = an
-n1 = n + 1
-m = an
-do i = 1, n1
-   ia3 = ia2
-   ia2 = ia1
-   ib3 = ib2
-   ib2 = ib1
-   cfa = (m + c1)*(m + c1 + 1.0)
-   cfb = (m + c2)*(m + c2 + 1.0)
-   m = m - 1.0
-   ia1 = ia2 - (sz/cfa)*ia3
-   ib1 = ib2 - (sz/cfb)*ib3
-end do
-e = exp(c1*log(zh))
-cf1 = e/gm1
-cf2 = e*e/gm2
-cf3 = c2*cf2/zh
-cf4 = c1*cf1/zh
-i1 = cf1*ia2
-i2 = cf2*ib2
-i1m = cf3*ib1
-i2m = cf4*ia1
-end subroutine jmc
-
-subroutine bjm(z,cn,w)
-implicit none
-real, intent(in) :: cn
-complex :: z
-complex, intent(inout) :: w
-real :: d, eps
-real :: m
-complex :: sz, t
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-------------------------------------------------------------
-!     Calculates the Bessel function of the first kind
-!     for real order cn .GT. -1 And complex argument z by means
-!     of the Maclaurin expansion.  w is replaced by the
-!     calculated value.
-!-------------------------------------------------------------
-!------------------
-!-------------------------------------------------------------
-!     Eps is a machine dependent constant.  Eps is the smallest
-!     number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-------------------------------------------------------------
-sz = -0.25*z*z
-!
-!     Initialization of Maclaurin expansion
-!
-m = 1.0
-t = sz/(cn + 1.0)
-w = t
-!
-!     Summation of Maclaurin expansion
-!
-10 m = m + 1.0
-d = m*(cn + m)
-t = t*(sz/d)
-w = w + t
-if (anorm(t) > eps*anorm(w)) go to 10
-!
-w = w + 1.0
-contains
-   pure function anorm(z) result(nswc_sf_result)
-      implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
-      nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
-   end function anorm
-end subroutine bjm
-
-subroutine ka(ind, z, k1, k2)
-implicit none
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
-integer :: ind1
-real :: a, b
-complex :: i1, i2, i1m, i2m, cz, e
-real, parameter :: pi = 3.14159265358979e+00
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
-complex, parameter :: j = (0.0, 1.0)
-interface
-   pure elemental subroutine kml(ind,z,k1,k2)
-      implicit none
-      integer, intent(in) :: ind
-      complex, intent(in) :: z
-      complex, intent(inout) :: k1
-      complex, intent(inout) :: k2
-   end subroutine kml
-end interface
-!------------------------------------------------------------
-!     Calculates the modified Bessel function of the second
-!     kind for orders 1/3 and 2/3 and for complex argument z,
-!     where -pi .LT. arg(z) .le pi.  k1 is replaced by the
-!     function of order 1/3, and k2 by the function of order
-!     2/3.
-!------------------------------------------------------------
-!
-!     ex13c = exp(-pi*i/3)
-!     ex23c = exp(-2*pi*i/3)
-!
-a = real(z)
-b = aimag(z)
-if (abs(b) < -0.5*a) go to 10
-!
-!            ----  abs(b) .GE. -0.5*a  ----
-!
-call kml(ind, z, k1, k2)
-return
-!
-!            ----  abs(b) .LT. -0.5*a  ----
-!
-10 cz = -z
-if (aimag(z) < 0.0) cz = conjg(cz)
-ind1 = 0
-call kml(ind1, cz, k1, k2)
-call imc(cz, i1, i2, i1m, i2m)
-k1 = ex13c*k1 - j*pi*i1
-k2 = ex23c*k2 - j*pi*i2
-if (ind == 0) go to 20
-e = exp(z)
-k1 = k1*e
-k2 = k2*e
-20 if (aimag(z) >= 0.0) return
-k1 = conjg(k1)
-k2 = conjg(k2)
-end subroutine ka
-
-pure elemental subroutine kml(ind, z, k1, k2)
-implicit none
-integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
-integer :: i, l, m
-real :: a, ai, al, b, c, eps, r, th, x1, x2
-complex :: bi, u1, u2, u3, s, e
-real, parameter :: c1 = 1.25331413731550e+00
-interface
-   pure elemental subroutine capo(x,y,r,theta)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: r
-      real, intent(inout) :: theta
-   end subroutine capo
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!------------------------------------------------------------
-!     Calculates the modified Bessel function of the second
-!     kind for orders 1/3 and 2/3 and for complex argument z
-!     by use of the Miller algorithm.  k1 is replaced by the
-!     function of order 1/3, and k2 by the function of order
-!     2/3.  For greatest accuracy, z should lie in the region
-!     real(z) .GE. 0.
-!------------------------------------------------------------
-!
-!     c1 = sqrt(pi/2)
-!
-eps = spmpar(1)
-x1 = real(z)
-x2 = aimag(z)
-!
-!     Calculation of m for use in Miller algorithm.
-!
-call capo(x1, x2, r, th)
-a = 3.0/(1.0 + r)
-b = 14.7/(28.0 + r)
-c = 2.0/(c1*eps*(2.0*r)**(0.25))
-m = (0.485/r)*(log(c) + r*cos(a*th)/(1.0 + 0.008*r))**2/ &
-   & (2.0*cos(b*th))**2 + 1.5
-!
-!     Backward recurrence in Miller algorithm.
-!
-s = 0.0
-u2 = 0.0
-u1 = eps
-l = m
-do i = 1, m
-   al = l
-   u3 = u2
-   u2 = u1
-   ai = ((al - 0.5)**2 - 1.0/9.0)/(al*(al + 1.0))
-   bi = 2.0*(al + z)/(al + 1.0)
-   u1 = (bi*u2 - u3)/ai
-   s = s + u1
-   l = l - 1
-end do
-!
-!     Final assembly
-!
-k1 = c1*u1/(s*sqrt(z))
-k2 = k1*(z + 1.0/6.0 - u2/u1)/z
-if (ind /= 0) return
-e = exp(-z)
-k1 = k1*e
-k2 = k2*e
-end subroutine kml
-
-pure real function ai(x)
-implicit none
-real, intent(in) :: x
-integer :: n, n2
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 1.58740105196820
-real, parameter :: c = 1.94773404105468
-real, parameter :: an0 = .355028053887818e+00
-real, parameter :: an1 = -.187394912983414e+00
-real, parameter :: an2 = -.383735973881972e-01
-real, parameter :: an3 = .491952571236878e-01
-real, parameter :: an4 = -.967017625191329e-02
-real, parameter :: an5 = -.205648610308316e-02
-real, parameter :: an6 = .114176040526844e-02
-real, parameter :: an7 = -.117114823456866e-03
-real, parameter :: an8 = -.270165470074755e-04
-real, parameter :: an9 = .789002965889206e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .201179850513612e+00
-real, parameter :: ad2 = .385762517106249e-01
-real, parameter :: ad3 = .230887443780120e-04
-real, parameter :: bn0 = .355028053887817e+00
-real, parameter :: bn1 = -.997169317338190e-01
-real, parameter :: bn2 = -.602216060213075e-01
-real, parameter :: bn3 = .297705337630730e-01
-real, parameter :: bn4 = -.152969932286570e-02
-real, parameter :: bn5 = -.147868368189372e-02
-real, parameter :: bn6 = .350518617006107e-03
-real, parameter :: bn7 = -.257766924610873e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .448140563306831e+00
-real, parameter :: bd2 = .157074537566686e+00
-real, parameter :: bd3 = .316964519364865e-01
-real, parameter :: bd4 = .485922740843953e-02
-real, parameter :: bd5 = .423326964456309e-03
-real, parameter :: pn0 = .282094378896566e+00
-real, parameter :: pn1 = .807868561687271e-01
-real, parameter :: pn2 = .630644564152247e-02
-real, parameter :: pn3 = .147116711467936e-03
-real, parameter :: pn4 = .750490748341483e-06
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .292890323271551e+00
-real, parameter :: pd2 = .239376862143358e-01
-real, parameter :: pd3 = .612353984250624e-03
-real, parameter :: pd4 = .384461189764830e-05
-real, parameter :: pd5 = .123247804102182e-08
-real, parameter :: qn0 = .282094791017188e+00
-real, parameter :: qn1 = .149585822742689e+00
-real, parameter :: qn2 = .241876418864958e-01
-real, parameter :: qn3 = .138190913282142e-02
-real, parameter :: qn4 = .241862862465003e-04
-real, parameter :: qn5 = .709733720554615e-07
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .536778341756648e+00
-real, parameter :: qd2 = .889112579703465e-01
-real, parameter :: qd3 = .533368703697049e-02
-real, parameter :: qd4 = .103812739863315e-03
-real, parameter :: qd5 = .408838544650398e-06
-real, parameter :: rn0 = .282094791773878e+00
-real, parameter :: rn1 = .203731967781874e+00
-real, parameter :: rn2 = .436660479870037e-01
-real, parameter :: rn3 = .306595563073142e-02
-real, parameter :: rn4 = .517398800281618e-04
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .728721438361672e+00
-real, parameter :: rd2 = .159210021472267e+00
-real, parameter :: rd3 = .116985268534248e-01
-real, parameter :: rd4 = .225973894323078e-03
-real, parameter :: rd5 = .232707159780478e-06
-interface
-   pure elemental subroutine aimp(x,r,phi)
-      implicit none
-      real, intent(in) :: x
-      real, intent(inout) :: r
-      real, intent(inout) :: phi
-   end subroutine aimp
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-end interface
-!-----------------------------------------------------------------------
-!     Evaluation of the Airy function ai(x)
-!-----------------------------------------------------------------------
-!     x0 = 2**(2/3)
-!     c = exp(2/3)
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-if (x >= -1.0) go to 10
-call aimp(-x, r, phi)
-ai = r*sin(phi)
-return
-!
-10 if (x >= 0.0) go to 20
-ai = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
-   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
-   & (((ad3*x + ad2)*x + ad1)*x + ad0)
-return
-!
-20 if (x >= 1.0) go to 30
-ai = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
-   & + bn1)*x + bn0) / &
-   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
-return
-!
-30 rtx = sqrt(x)
-if (x > x0) go to 40
-t = 16.0/(x*rtx)
-w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
-   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
-ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
-return
-!
-40 if (x > 4.0d0) go to 50
-t = 16.0/(x*rtx)
-w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
-   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
-ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
-return
-!
-50 if (x*rtx > 1.5*exparg(0)) go to 60
-t = 16.0/(x*rtx)
-w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
-   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
-n = rtx
-n2 = n*n
-t = (x - n2)/(rtx + n)
-ai = ((w/sqrt(rtx)) / c**(n2*n)) * exp(-2.0*t*(n*rtx + t*t/3.0))
-return
-!
-60 ai = 0.0
-end function ai
-
-pure elemental real function aie(x)
-implicit none
-real, intent(in) :: x
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = .158740105196820e+01
-real, parameter :: an0 = .355028053887818e+00
-real, parameter :: an1 = -.187394912983414e+00
-real, parameter :: an2 = -.383735973881972e-01
-real, parameter :: an3 = .491952571236878e-01
-real, parameter :: an4 = -.967017625191329e-02
-real, parameter :: an5 = -.205648610308316e-02
-real, parameter :: an6 = .114176040526844e-02
-real, parameter :: an7 = -.117114823456866e-03
-real, parameter :: an8 = -.270165470074755e-04
-real, parameter :: an9 = .789002965889206e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .201179850513612e+00
-real, parameter :: ad2 = .385762517106249e-01
-real, parameter :: ad3 = .230887443780120e-04
-real, parameter :: bn0 = .355028053887817e+00
-real, parameter :: bn1 = -.997169317338190e-01
-real, parameter :: bn2 = -.602216060213075e-01
-real, parameter :: bn3 = .297705337630730e-01
-real, parameter :: bn4 = -.152969932286570e-02
-real, parameter :: bn5 = -.147868368189372e-02
-real, parameter :: bn6 = .350518617006107e-03
-real, parameter :: bn7 = -.257766924610873e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .448140563306831e+00
-real, parameter :: bd2 = .157074537566686e+00
-real, parameter :: bd3 = .316964519364865e-01
-real, parameter :: bd4 = .485922740843953e-02
-real, parameter :: bd5 = .423326964456309e-03
-real, parameter :: pn0 = .282094378896566e+00
-real, parameter :: pn1 = .807868561687271e-01
-real, parameter :: pn2 = .630644564152247e-02
-real, parameter :: pn3 = .147116711467936e-03
-real, parameter :: pn4 = .750490748341483e-06
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .292890323271551e+00
-real, parameter :: pd2 = .239376862143358e-01
-real, parameter :: pd3 = .612353984250624e-03
-real, parameter :: pd4 = .384461189764830e-05
-real, parameter :: pd5 = .123247804102182e-08
-real, parameter :: qn0 = .282094791017188e+00
-real, parameter :: qn1 = .149585822742689e+00
-real, parameter :: qn2 = .241876418864958e-01
-real, parameter :: qn3 = .138190913282142e-02
-real, parameter :: qn4 = .241862862465003e-04
-real, parameter :: qn5 = .709733720554615e-07
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .536778341756648e+00
-real, parameter :: qd2 = .889112579703465e-01
-real, parameter :: qd3 = .533368703697049e-02
-real, parameter :: qd4 = .103812739863315e-03
-real, parameter :: qd5 = .408838544650398e-06
-real, parameter :: rn0 = .282094791773878e+00
-real, parameter :: rn1 = .203731967781874e+00
-real, parameter :: rn2 = .436660479870037e-01
-real, parameter :: rn3 = .306595563073142e-02
-real, parameter :: rn4 = .517398800281618e-04
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .728721438361672e+00
-real, parameter :: rd2 = .159210021472267e+00
-real, parameter :: rd3 = .116985268534248e-01
-real, parameter :: rd4 = .225973894323078e-03
-real, parameter :: rd5 = .232707159780478e-06
-interface
-   pure elemental subroutine aimp(x,r,phi)
-      implicit none
-      real, intent(in) :: x
-      real, intent(inout) :: r
-      real, intent(inout) :: phi
-   end subroutine aimp
-end interface
-!-----------------------------------------------------------------------
-!
-!                   Scaled Airy function ai(x)
-!
-!
-!             aie(x) = exp(ZETA)*ai(x)  WHEN x .GE. 0
-!             aie(x) = ai(x)            WHEN x .LT. 0
-!
-!             zeta = (2/3) * x**(3/2)
-!
-!-----------------------------------------------------------------------
-!     x0 = 2**(2/3)
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-if (x >= -1.0) go to 10
-call aimp(-x, r, phi)
-aie = r*sin(phi)
-return
-!
-10 if (x >= 0.0) go to 20
-aie = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
-   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
-   & (((ad3*x + ad2)*x + ad1)*x + ad0)
-return
-!
-20 if (x >= 1.0) go to 30
-aie = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
-   & + bn1)*x + bn0) / &
-   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
-if (x > 1.e-20) aie = aie * exp(2.0*x*sqrt(x)/3.0)
-return
-!
-30 rtx = sqrt(x)
-if (x > x0) go to 40
-t = 16.0/(x*rtx)
-w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
-   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
-aie = w/sqrt(rtx)
-return
-!
-40 if (x > 4.0d0) go to 50
-t = 16.0/(x*rtx)
-w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
-   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
-aie = w/sqrt(rtx)
-return
-!
-50 if (x > 1.e20) go to 60
-t = 16.0/(x*rtx)
-w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
-   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
-aie = w/sqrt(rtx)
-return
-!
-60 aie = rn0/sqrt(rtx)
-end function aie
-
 pure real function bi(x)
 implicit none
 real, intent(in) :: x
@@ -2663,13 +112,9 @@ interface
    end function exparg
 end interface
 !-----------------------------------------------------------------------
-!
 !             Evaluation of the Airy function bi(x)
-!
-!
-!     Note... if x is a positive number where bi(x) is too large
+!     note... if x is a positive number where bi(x) is too large
 !     to be computed, then bi(x) is set to 0.
-!
 !-----------------------------------------------------------------------
 !     x0 = 16**(2/3)
 !     c = exp(2/3)
@@ -2685,21 +130,18 @@ if (x >= -1.0) go to 10
 call aimp(-x, r, phi)
 bi = r*cos(phi)
 return
-!
 10 if (x >= 0.0) go to 20
 bi = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
    & + an6)*x + an5)*x + an4)*x + an3)*x &
    & + an2)*x + an1)*x + an0) / &
    & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
-!
 20 if (x > 1.0) go to 30
 bi = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
    & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
    & + bn2)*x + bn1)*x + bn0) / &
    & (((bd3*x + bd2)*x + bd1)*x + bd0)
 return
-!
 30 rtx = sqrt(x)
 if (x > 2.0) go to 40
 t = x - 1.0
@@ -2709,7 +151,6 @@ w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
    & + pd2)*t + pd1)*t + pd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
-!
 40 if (x > 4.0) go to 50
 t = x - 2.0
 w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
@@ -2718,7 +159,6 @@ w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
    & + qd3)*t + qd2)*t + qd1)*t + qd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
-!
 50 if (x > x0) go to 60
 t = 16.0/(x*rtx) - 1.0
 w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
@@ -2727,7 +167,6 @@ w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
    & ((rd2*t + rd1)*t + rd0)
 bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
 return
-!
 60 if (x*rtx > 1.5*exparg(0)) go to 70
 t = 16.0/(x*rtx)
 w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
@@ -2739,7 +178,6 @@ n2 = n*n
 t = (x - n2)/(rtx + n)
 bi = (w/sqrt(rtx)) * c**(n2*n) * exp(2.0*t*(n*rtx + t*t/3.0))
 return
-!
 70 bi = 0.0
 end function bi
 
@@ -2850,15 +288,10 @@ interface
    end subroutine aimp
 end interface
 !-----------------------------------------------------------------------
-!
 !                    Scaled Airy function bi(x)
-!
-!
 !             bie(x) = exp(-ZETA)*bi(x)  WHEN x .GE. 0
 !             bie(x) = bi(x)             WHEN x .LT. 0
-!
 !             zeta = (2/3) * x**(3/2)
-!
 !-----------------------------------------------------------------------
 !     x0 = 16**(2/3)
 !-----------------------
@@ -2873,14 +306,12 @@ if (x >= -1.0) go to 10
 call aimp(-x, r, phi)
 bie = r*cos(phi)
 return
-!
 10 if (x >= 0.0) go to 20
 bie = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
    & + an6)*x + an5)*x + an4)*x + an3)*x &
    & + an2)*x + an1)*x + an0) / &
    & (((ad3*x + ad2)*x + ad1)*x + ad0)
 return
-!
 20 if (x > 1.0) go to 30
 bie = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
    & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
@@ -2888,7 +319,6 @@ bie = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
    & (((bd3*x + bd2)*x + bd1)*x + bd0)
 if (x > 1.e-20) bie = bie * exp(-2.0*x*sqrt(x)/3.0)
 return
-!
 30 rtx = sqrt(x)
 if (x > 2.0) go to 40
 t = x - 1.0
@@ -2898,7 +328,6 @@ w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
    & + pd2)*t + pd1)*t + pd0)
 bie = w/sqrt(rtx)
 return
-!
 40 if (x > 4.0) go to 50
 t = x - 2.0
 w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
@@ -2907,7 +336,6 @@ w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
    & + qd3)*t + qd2)*t + qd1)*t + qd0)
 bie = w/sqrt(rtx)
 return
-!
 50 if (x > x0) go to 60
 t = 16.0/(x*rtx) - 1.0
 w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
@@ -2916,7 +344,6 @@ w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
    & ((rd2*t + rd1)*t + rd0)
 bie = w/sqrt(rtx)
 return
-!
 60 if (x > 1.e20) go to 70
 t = 16.0/(x*rtx)
 w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
@@ -2925,7 +352,6 @@ w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
    & (sd1*t + sd0)
 bie = w/sqrt(rtx)
 return
-!
 70 bie = sn0/sqrt(rtx)
 end function bie
 
@@ -3031,7 +457,6 @@ phi = ((((((bn6*z + bn5)*z + bn4)*z + bn3)*z + bn2)*z &
    & ((((((bd6*z + bd5)*z + bd4)*z + bd3)*z + bd2)*z &
    & + bd1)*z + bd0)
 go to 40
-!
 10 if (x >= 4.0) go to 20
 z = x - 2.0
 r = (((((cn5*z + cn4)*z + cn3)*z + cn2)*z + cn1)*z + cn0) / &
@@ -3041,7 +466,6 @@ phi = (((((dn5*z + dn4)*z + dn3)*z + dn2)*z + dn1)*z + dn0) / &
    & ((((((dd6*z + dd5)*z + dd4)*z + dd3)*z + dd2)*z &
    & + dd1)*z + dd0)
 go to 40
-!
 20 if (x > 1.e10) go to 30
 z = 64.0/x**3
 r = (((((pn5*z + pn4)*z + pn3)*z + pn2)*z + pn1)*z + pn0) / &
@@ -3049,10 +473,8 @@ r = (((((pn5*z + pn4)*z + pn3)*z + pn2)*z + pn1)*z + pn0) / &
 phi = ((((qn4*z + qn3)*z + qn2)*z + qn1)*z + qn0) / &
    & (((((qd5*z + qd4)*z + qd3)*z + qd2)*z + qd1)*z + qd0)
 go to 40
-!
 30 r = pn0
 phi = qn0
-!
 40 rtx = sqrt(x)
 r = sqrt(r/rtx)
 phi = pi4 + x*rtx*phi
@@ -3132,32 +554,25 @@ end interface
 !     --------------------------------------------------------------
 !     --------------------------------------------------------------
 !     ---------------------------------------------------
-!
 !     Eps is a machine dependent constant.  Eps is the
 !     smallest number such that 1. + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 !     ---------------------------------------------------
 if (l == (0.0, 0.0)) go to 200
 ind = 0
 branch = .true.
 tol = 8.0*max(eps, 1.e-14)
-!
 ak1 = cflect(k)
 al1 = cflect(l)
 ak = ak1
 al = al1
-!
 x = real(ak)
 y = aimag(ak)
 u = real(al)
 v = aimag(al)
 if (max(x,abs(y)) >= 1.0/eps) go to 90
 if (max(u,abs(v)) >= 1.1/eps) go to 200
-!
 !     Check that k**2 + l**2 = 1
-!
 if (x < u) go to 1
 t = u/x
 if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) > tol) go to 200
@@ -3166,10 +581,8 @@ go to 10
 1 t = x/u
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) > tol) go to 200
 if (abs(v + t*y) > tol*max(1.0, abs(y))) go to 200
-!
 !     Uses  logarithmic series when cabs(al)
 !     is less than or equal to 0.55
-!
 10 if (u > 1.42 .or. abs(v) > 1.42) go to 50
 11 if (abs(al) > 0.55) go to 20
 call kl(al,ckk,ckp)
@@ -3178,10 +591,8 @@ ck1 = ckk
 ck = ckp
 al = ak
 go to 80
-!
 !     Uses Maclaurin expansion when the absolute value of
 !     the modulus ak is less than or equal to 0.55
-!
 20 r = abs(ak)
 if (r > 0.55) go to 30
 if (branch) go to 21
@@ -3192,12 +603,9 @@ go to 80
 21 ckk = km(ak*ak)
 22 ck = ckk
 go to 70
-!
 !     Numerical quadrature approximation
-!
 30 if (ind == 0 .and. r > 1.0) go to 50
 31 al2 = al*al
-!
 f1 = (0.0, 0.0)
 do i = 1,12
    xx = x1(i)/2.
@@ -3216,60 +624,43 @@ do i = 1,12
    fxk = ak*xx
    f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
 end do
-!
 ck = al*(c1*f1 + c2*(f2 + f3))
-!
 !     END OF NUMERICAL QUADRATURE APPROXIMATION
-!
 if (branch) go to 70
 ck1 = ck
 branch = .true.
-!
 !     Interchange ak and al
-!
 aktemp = ak
 ak = al
 al = aktemp
 go to 31
-!
 !     Uses inverse modulus transformation when cabs(ak) is greater
 !     than 1 and real(ak**2) is greater than 0.5.
-!
 50 if (x*x <= y*y + 0.5) go to 60
 ind = 1
 branch = .false.
 ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
-!
 !     Uses complementary inverse modulus transformation when cabs(ak)
 !     is greater than 1 and real(ak**2) is less than or equal to 0.5
-!
 60 ind = 2
 ak = cflect(j*ak1/al1)
 al = 1.0/al1
 go to 11
-!
 !     RETURN IF NO TRANSFORMATIONS HAVE BEEN PERFORMED
-!
 70 if (ind == 0) return
 if (ind == 1) go to 80
-!
 !     Complementary inverse modulus transformation
-!
 ck = al*ck
 return
-!
 !     Inverse modulus transformation
-!
 80 if (aimag(ak1) >= 0.0) go to 81
 ck = al*(ck1 - j*ck)
 return
 81 ck = al*(ck1 + j*ck)
 return
-!
 !     Calculation of F(k) for large k and l
-!
 90 if (x <= abs(y)) go to 100
 if (abs(abs(v/x) - 1.0) > tol) go to 200
 if (abs(u/x + y/v) > tol) go to 200
@@ -3279,16 +670,13 @@ r = (ln4 + 0.5*alnrel(t*t)) + log(x)
 if (y < 0.0) r = -r
 ck = (cmplx(phi,r)/cmplx(1.0,t))/x
 return
-!
 100 if (abs(abs(u/y) - 1.0) > tol) go to 200
 if (abs(x/u + v/y) > tol) go to 200
 t = v/u
 z = cmplx((ln4 + 0.5*alnrel(t*t)) + log(u), atan2(v,u))
 ck = (z/cmplx(1.0,t))/u
 return
-!
 !     Error return
-!
 200 ck = (0.0, 0.0)
 end function ck
 
@@ -3331,14 +719,10 @@ end interface
 !     value of k2 = K**2 by use of the Maclaurin expansion.
 !---------------------------------------------------------------------
 ! ---------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 ! ---------------
-!
 tol = max(eps,1.e-14)
 s1 = (1.0, 0.0)
 an = (1.0, 0.0)
@@ -3349,7 +733,6 @@ do i = 1,50
    s1 = s1 + an
    if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
 end do
-!
 20 km = hpi*s1
 end function km
 
@@ -3382,17 +765,12 @@ end interface
 ! ----------------------------------------------------------------------
 !     --------------
 ! ---------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 ! ---------------
-!
 !            The logarithmic expansion is used for F(K)
 !              and the Maclaurin expansion for F(l)
-!
 tol = max(eps,1.e-14)
 l2 = l*l
 s1 = (0.0, 0.0)
@@ -3409,27 +787,21 @@ do i = 1,50
    if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
 end do
 20 s1 = s1 + (1.0, 0.0)
-!
 !                   SET w = 0.5*CLOG(16.0/l2)
-!
 x = real(l)
 y = aimag(l)
 if (x /= 0.0) go to 30
 w = cmplx(ln4 - log(abs(y)), hpi)
 go to 50
-!
 30 if (abs(x) > abs(y)) go to 31
 u = (ln4 - 0.5*alnrel((x/y)**2)) - log(abs(y))
 go to 40
 31 u = (ln4 - 0.5*alnrel((y/x)**2)) - log(abs(x))
-!
 40 if (x > 0.0) go to 41
 w = cmplx(u, -atan2(-y,-x))
 go to 50
 41 w = cmplx(u, -atan2(y,x))
-!
 !                        Final assembly
-!
 50 fk = w*s1 - s2
 fl = hpi*s1
 end subroutine kl
@@ -3521,33 +893,26 @@ end interface
 !     --------------------------------------------------------------
 !     --------------------------------------------------------------
 !     ---------------------------------------------------
-!
 !     Eps is a machine dependent constant.  Eps is the
 !     smallest number such that 1. + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 !     ---------------------------------------------------
 if (l == (0.0, 0.0)) go to 200
 ind = 0
 branch = .true.
 tol = 8.0*max(eps, 1.e-14)
-!
 ak1 = cflect(k)
 al1 = cflect(l)
 ak = ak1
 al = al1
 ierr = 0
-!
 x = real(ak)
 y = aimag(ak)
 u = real(al)
 v = aimag(al)
 if (max(x,abs(y)) >= 1.0/eps) go to 90
 if (max(u,abs(v)) >= 1.1/eps) go to 210
-!
 !     Check that k**2 + l**2 = 1
-!
 if (x < u) go to 1
 t = u/x
 if (abs(x*x/(v*v + 1.0/(1.0 + t*t)) - 1.0) > tol) go to 210
@@ -3556,10 +921,8 @@ go to 10
 1 t = x/u
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) > tol) go to 210
 if (abs(v + t*y) > tol*max(1.0, abs(y))) go to 210
-!
 !     Uses  logarithmic series when cabs(al)
 !     is less than or equal to 0.55
-!
 10 if (u > 1.42 .or. abs(v) > 1.42) go to 50
 11 if (abs(al) > 0.55) go to 20
 call ekl(al,ckk,ckp,cee,cep,gg,gp)
@@ -3574,10 +937,8 @@ ak2 = al*al
 al = ak
 al2 = al*al
 go to 81
-!
 !     Uses Maclaurin expansion when the absolute value of
 !     the modulus ak is less than or equal to 0.55
-!
 20 r = abs(ak)
 if (r > 0.55) go to 30
 if (branch) go to 21
@@ -3593,13 +954,10 @@ go to 81
 22 ck = ckk
 ce = cee
 go to 70
-!
 !     Numerical quadrature approximation
-!
 30 if (ind == 0 .and. r > 1.0) go to 50
 31 al2 = al*al
 ak2 = ak*ak
-!
 f1 = (0.0, 0.0)
 e1 = (0.0, 0.0)
 do i = 1,12
@@ -3630,55 +988,40 @@ do i = 1,12
    e3 = e3 + w2(i)*fb(i)*(1.0 + at)
    f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
 end do
-!
 ck = al*(c1*f1 + c2*(f2 + f3))
 ce = al*(c1*e1 + c2*(e2 + e3))
-!
 !     END OF NUMERICAL QUADRATURE APPROXIMATION
-!
 if (branch) go to 70
 ck1 = ck
 ce1 = ce
 branch = .true.
-!
 !     Interchange ak and al
-!
 aktemp = ak
 ak = al
 al = aktemp
 go to 31
-!
 !     Uses inverse modulus transformation when cabs(ak) is greater
 !     than 1 and real(ak**2) is greater than 0.5.
-!
 50 if (x*x <= y*y + 0.5) go to 60
 ind = 1
 branch = .false.
 ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
-!
 !     Uses complementary inverse modulus transformation when cabs(ak)
 !     is greater than 1 and real(ak**2) is less than or equal to 0.5
-!
 60 ind = 2
 ak = cflect(j*ak1/al1)
 al = 1.0/al1
 go to 11
-!
 !     RETURN IF NO TRANSFORMATIONS HAVE BEEN PERFORMED
-!
 70 if (ind == 0) return
 if (ind == 1) go to 80
-!
 !     Complementary inverse modulus transformation
-!
 ck = al*ck
 ce = ce/al
 return
-!
 !     Inverse modulus transformation
-!
 80 g = ce - al2*ck
 g1 = ce1 - ak2*ck1
 81 if (aimag(ak2) >= 0.0) go to 82
@@ -3688,9 +1031,7 @@ return
 82 ce = (g1 - j*g)/al
 ck = al*(ck1 + j*ck)
 return
-!
 !     Calculation of F(k) and E(k) for large k and l
-!
 90 if (x <= abs(y)) go to 100
 if (abs(abs(v/x) - 1.0) > tol) go to 210
 if (abs(u/x + y/v) > tol) go to 210
@@ -3707,7 +1048,6 @@ z = -z
 91 ck = (cmplx(phi,r)/k1)/x
 ce = z + (cmplx(0.5*phi,c)/k1)/x
 return
-!
 100 if (abs(abs(u/y) - 1.0) > tol) go to 210
 if (abs(x/u + v/y) > tol) go to 210
 t = v/u
@@ -3717,9 +1057,7 @@ phi = atan2(v,u)
 ck = (cmplx(r, phi)/l1)/u
 ce = al + (cmplx(0.5*r - 0.25, 0.5*phi)/l1)/u
 return
-!
 !     Error return
-!
 200 ierr = 1
 return
 210 ierr = 2
@@ -3774,14 +1112,10 @@ end interface
 !     a given value of k2 = K**2 by use of the Maclaurin expansions.
 ! ----------------------------------------------------------------------
 ! ---------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 ! ---------------
-!
 tol = max(eps,1.e-14)
 s1 = (1.0, 0.0)
 s2 = (1.0, 0.0)
@@ -3795,7 +1129,6 @@ do i = 1,50
    s2 = s2 - cn
    if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
 end do
-!
 20 fk = hpi*s1
 ek = hpi*s2
 end subroutine ekm
@@ -3831,17 +1164,12 @@ end interface
 ! ----------------------------------------------------------------------
 !     ------------------
 ! ---------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1 + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 ! ---------------
-!
 !            The logarithmic expansions are used for F(K) and E(K)
 !            and the Maclaurin expansions for F(l) and E(l)
-!
 tol = max(eps,1.e-14)
 l2 = l*l
 s1 = (0.0, 0.0)
@@ -3876,27 +1204,21 @@ end do
 s3 = s3 + (1.0, 0.0)
 s5 = s5 + (1.0, 0.0)
 s7 = s7 + (0.5, 0.0)
-!
 !              SET w = 0.5*CLOG(16.0/l2)
-!
 x = real(l)
 y = aimag(l)
 if (x /= 0.0) go to 30
 w = cmplx(ln4 - log(abs(y)), hpi)
 go to 50
-!
 30 if (abs(x) > abs(y)) go to 31
 u = (ln4 - 0.5*alnrel((x/y)**2)) - log(abs(y))
 go to 40
 31 u = (ln4 - 0.5*alnrel((y/x)**2)) - log(abs(x))
-!
 40 if (x > 0.0) go to 41
 w = cmplx(u, -atan2(-y,-x))
 go to 50
 41 w = cmplx(u, -atan2(y,x))
-!
 !              Final assembly
-!
 50 fk = w*s1 - s2
 fl = hpi*s1
 ek = w*s6 - s4 + s5
@@ -3930,11 +1252,8 @@ interface
    end function cpabs
 end interface
 !-----------------------------------------------------------------------
-!
 !          Real elliptic integrals of the first and second kinds
-!
 !                        -----------------
-!
 !     phi = argument                    (0.0 .le. phi  .le. pi/2)
 !     cphi = pi/2 - phi                 (0.0 .le. cphi .le. pi/2)
 !     k = modulus                       (abs(k) .le. 1.0)
@@ -3955,23 +1274,19 @@ if (phi /= 0.0) go to 10
 f = 0.0
 e = 0.0
 return
-!
 10 if (phi < 0.79) go to 11
 sn = cos(cphi)
 cn = sin(cphi)
 go to 20
 11 sn = sin(phi)
 cn = cos(phi)
-!
 20 k2 = k*k
 l2 = l*l
 ss = sn*sn
 px = abs(k*sn)
 qx = abs(k*cn)
 if (px >= th1) go to 50
-!
 !     Series expansion for abs(k*sin(phi)) .LE. tanh(1)
-!
 pn = 1.0
 qn = 2.0
 an = phi
@@ -3980,7 +1295,6 @@ s1 = 0.0
 s2 = 0.0
 tr = phi*ss
 ts = sn*cn
-!
 30 an = (pn*an - ts)/qn
 r = k2*hn/qn
 s2 = s2 + r*an
@@ -3994,13 +1308,10 @@ qn = pn + 1.0
 tr = ss*tr
 ts = ss*ts
 go to 30
-!
 40 f = phi + s1
 e = phi - s2
 return
-!
 !     Series expansion for abs(k*sin(phi)) .GT. tanh(1)
-!
 50 r = cpabs(l,qx)
 if (r == 0.0) go to 120
 r2 = r*r
@@ -4016,7 +1327,6 @@ s4 = 0.0
 td = qx*r
 dn = 2.0
 go to 70
-!
 60 si = ri
 sj = rj
 sk = rk
@@ -4040,7 +1350,6 @@ s2 = s2 + d2
 s3 = s3 + d3
 s4 = s4 + d4
 if (s3 < r0) go to 60
-!
 w = 1.0 + px
 p = ln4 - log(r + qx)
 t1 = (1.0 + s1)*p + qx/r*alnrel(-0.5*r2/w)
@@ -4048,9 +1357,7 @@ t2 = (0.5 + s2)*l2*p + (1.0 - qx*r/w)
 f = t1 + s3
 e = t2 + s4
 return
-!
 !     Error return
-!
 100 ierr = 1
 return
 110 ierr = 2
@@ -4081,12 +1388,9 @@ interface
    end function dlnrel
 end interface
 !-----------------------------------------------------------------------
-!
 !                  Double precision computation of the
 !          real elliptic integrals of the first and second kinds
-!
 !                        -----------------
-!
 !     phi = argument                    (0.0 .le. phi  .le. pi/2)
 !     cphi = pi/2 - phi                 (0.0 .le. cphi .le. pi/2)
 !     k = modulus                       (dabs(k) .le. 1.0)
@@ -4107,23 +1411,19 @@ if (phi /= 0.d0) go to 10
 f = 0.d0
 e = 0.d0
 return
-!
 10 if (phi < 0.79d0) go to 11
 sn = cos(cphi)
 cn = sin(cphi)
 go to 20
 11 sn = sin(phi)
 cn = cos(phi)
-!
 20 k2 = k*k
 l2 = l*l
 ss = sn*sn
 px = abs(k*sn)
 qx = abs(k*cn)
 if (px >= th1) go to 50
-!
 !     Series expansion for abs(k*sin(phi)) .LE. tanh(1)
-!
 pn = 1.d0
 qn = 2.d0
 an = phi
@@ -4132,7 +1432,6 @@ s1 = 0.d0
 s2 = 0.d0
 tr = phi*ss
 ts = sn*cn
-!
 30 an = (pn*an - ts)/qn
 r = k2*hn/qn
 s2 = s2 + r*an
@@ -4146,13 +1445,10 @@ qn = pn + 1.d0
 tr = ss*tr
 ts = ss*ts
 go to 30
-!
 40 f = phi + s1
 e = phi - s2
 return
-!
 !     Series expansion for abs(k*sin(phi)) .GT. tanh(1)
-!
 50 r = dcpabs(l,qx)
 if (r == 0.d0) go to 120
 r2 = r*r
@@ -4168,7 +1464,6 @@ s4 = 0.d0
 td = qx*r
 dn = 2.d0
 go to 70
-!
 60 si = ri
 sj = rj
 sk = rk
@@ -4192,7 +1487,6 @@ s2 = s2 + d2
 s3 = s3 + d3
 s4 = s4 + d4
 if (s3 < r0) go to 60
-!
 w = 1.d0 + px
 p = ln4 - log(r + qx)
 t1 = (1.d0 + s1)*p + qx/r*dlnrel(-0.5d0*r2/w)
@@ -4200,9 +1494,7 @@ t2 = (0.5d0 + s2)*l2*p + (1.d0 - qx*r/w)
 f = t1 + s3
 e = t2 + s4
 return
-!
 !     Error return
-!
 100 ierr = 1
 return
 110 ierr = 2
@@ -4246,12 +1538,9 @@ end interface
 !-----------------------------------------------------------------------
 !---------------------
 !-----------------------------------------------------------------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.0 + eps .GT. 1.0.
-!
 eps = spmpar(1)
-!
 !-----------------------------------------------------------------------
 tol = 4.0 * eps
 if (min(phi,cphi) < 0.0) go to 100
@@ -4259,7 +1548,6 @@ if (abs((phi + cphi) - pihalf) > tol * pihalf) go to 100
 if (abs(n) > 1.0) go to 110
 if (k2 < 0.0 .or. l2 < 0.0) go to 120
 if (abs((k2 + l2) - 1.0) > tol) go to 120
-!
 if (phi < 0.79) go to 10
 s = cos(cphi)
 c = sin(cphi)
@@ -4269,23 +1557,19 @@ c = cos(phi)
 11 a = c*c
 b = l2 + k2*a
 s2 = s*s
-!
 if (n > 0.0) go to 20
 r = 1.0 - n*s2
 go to 30
 20 if (m < 0.0 .or. m > 1.0) go to 110
 if (abs((m + n) - 1.0) > tol) go to 110
 r = m + n*a
-!
 30 call rjval(a, b, 1.0, r, p, ierr)
 if (ierr /= 0) go to 130
 p = p * (s * s2) * n/3.0
 call rfval(a, b, 1.0, rf, ierr)
 p = p + s * rf
 return
-!
 !     Error return
-!
 100 ierr = 1
 return
 110 ierr = 2
@@ -4332,12 +1616,9 @@ end interface
 !-----------------------------------------------------------------------
 !---------------------
 !-----------------------------------------------------------------------
-!
 !     ****** eps is a machine dependent constant. Eps is the
 !            smallest number such that 1.D0 + eps .GT. 1.D0.
-!
 eps = dpmpar(1)
-!
 !-----------------------------------------------------------------------
 tol = 4.d0 * eps
 if (min(phi,cphi) < 0.d0) go to 100
@@ -4345,7 +1626,6 @@ if (abs((phi + cphi) - pihalf) > tol * pihalf) go to 100
 if (abs(n) > 1.d0) go to 110
 if (k2 < 0.d0 .or. l2 < 0.d0) go to 120
 if (abs((k2 + l2) - 1.d0) > tol) go to 120
-!
 if (phi < 0.79d0) go to 10
 s = cos(cphi)
 c = sin(cphi)
@@ -4355,23 +1635,19 @@ c = cos(phi)
 11 a = c*c
 b = l2 + k2*a
 s2 = s*s
-!
 if (n > 0.d0) go to 20
 r = 1.d0 - n*s2
 go to 30
 20 if (m < 0.d0 .or. m > 1.d0) go to 110
 if (abs((m + n) - 1.d0) > tol) go to 110
 r = m + n*a
-!
 30 call drjval(a, b, 1.d0, r, p, ierr)
 if (ierr /= 0) go to 130
 p = p * (s * s2) * n/3.d0
 call drfval(a, b, 1.d0, rf, ierr)
 p = p + s * rf
 return
-!
 !     Error return
-!
 100 ierr = 1
 return
 110 ierr = 2
@@ -4384,16 +1660,12 @@ end subroutine depi
 pure elemental subroutine rfval(x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the first kind
-!
 !          rf(x,y,z) = Integral from zero to infinity of
-!
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
-!
-!          Where x, y, and z are nonnegative and at most one of them
+!          where x, y, and z are nonnegative and at most one of them
 !          is zero.  If one of them is zero, the integral is complete.
 !          The duplication theorem is iterated until the variables are
 !          nearly equal, and the function is then expanded in Taylor
@@ -4402,7 +1674,6 @@ implicit none
 !          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
 !          laboratory-doe, Iowa State University, ames, iowa 50011.
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rf
@@ -4418,52 +1689,37 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, and z are the variables in the integral rf(x,y,z).
-!
 !          Output ...
-!
 !          rf is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, or z is negative.
 !               ierr = 2  x+y, x+z, or y+z is too small.
 !               ierr = 3  x, y, or z is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
-!
 lolim = 5.0 * spmpar(2)
 uplim = 0.2 * spmpar(3)
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          errtol ** 6 / (4 * (1 - errtol)).
-!
 errtol = (3.6 * spmpar(1))**(1.0/6.0)
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z) < 0.0) go to 100
 if (min(x + y,x + z,y + z) < lolim) go to 110
 if (max(x,y,z) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
 zn = z
-!
 10 mu = (xn + yn + zn) / 3.0
 xndev = 2.0 - (mu + xn) / mu
 yndev = 2.0 - (mu + yn) / mu
@@ -4478,7 +1734,6 @@ xn = (xn + lamda) * 0.25
 yn = (yn + lamda) * 0.25
 zn = (zn + lamda) * 0.25
 go to 10
-!
 20 c1 = 1.0 / 24.0
 c2 = 3.0 / 44.0
 c3 = 1.0 / 14.0
@@ -4487,9 +1742,7 @@ e3 = xndev * yndev * zndev
 s = 1.0 + (c1 * e2 - 0.1 - c2 * e3) * e2 + c3 * e3
 rf = s / sqrt(mu)
 return
-!
 !                      Error return
-!
 100 rf = 0.0
 ierr = 1
 return
@@ -4503,16 +1756,12 @@ end subroutine rfval
 pure elemental subroutine drfval(x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the first kind
-!
 !          rf(x,y,z) = Integral from zero to infinity of
-!
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
-!
-!          Where x, y, and z are nonnegative and at most one of them
+!          where x, y, and z are nonnegative and at most one of them
 !          is zero.  If one of them is zero, the integral is complete.
 !          The duplication theorem is iterated until the variables are
 !          nearly equal, and the function is then expanded in Taylor
@@ -4521,7 +1770,6 @@ implicit none
 !          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
 !          laboratory-doe, Iowa State University, ames, iowa 50011.
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rf
@@ -4538,52 +1786,37 @@ interface
    end function dpmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, and z are the variables in the integral rf(x,y,z).
-!
 !          Output ...
-!
 !          rf is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, or z is negative.
 !               ierr = 2  x+y, x+z, or y+z is too small.
 !               ierr = 3  x, y, or z is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
-!
 lolim = 5.0d0 * dpmpar(2)
 uplim = 0.2d0 * dpmpar(3)
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          errtol ** 6 / (4 * (1 - errtol)).
-!
 errtol = (3.6 * sngl(dpmpar(1)))**(1.0/6.0)
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z) < 0.d0) go to 100
 if (min(x + y,x + z,y + z) < lolim) go to 110
 if (max(x,y,z) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
 zn = z
-!
 10 mu = (xn + yn + zn) / 3.d0
 xndev = 2.d0 - (mu + xn) / mu
 yndev = 2.d0 - (mu + yn) / mu
@@ -4598,7 +1831,6 @@ xn = (xn + lamda) * 0.25d0
 yn = (yn + lamda) * 0.25d0
 zn = (zn + lamda) * 0.25d0
 go to 10
-!
 20 c1 = 1.d0 / 24.d0
 c2 = 3.d0 / 44.d0
 c3 = 1.d0 / 14.d0
@@ -4607,9 +1839,7 @@ e3 = xndev * yndev * zndev
 s = 1.d0 + (c1 * e2 - 0.1d0 - c2 * e3) * e2 + c3 * e3
 rf = s / sqrt(mu)
 return
-!
 !                      Error return
-!
 100 rf = 0.d0
 ierr = 1
 return
@@ -4623,16 +1853,12 @@ end subroutine drfval
 pure elemental subroutine rdval(x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the second kind
-!
 !          rd(x,y,z) = Integral from zero to infinity of
-!
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
-!
-!          Where x and y are nonnegative, x + y is positive, and z is
+!          where x and y are nonnegative, x + y is positive, and z is
 !          positive.  If x or y is zero, the integral is complete.
 !          The duplication theorem is iterated until the variables are
 !          nearly equal, and the function is then expanded in Taylor
@@ -4641,7 +1867,6 @@ implicit none
 !          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
 !          laboratory-doe, Iowa State University, ames, iowa 50011.
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rd
@@ -4658,56 +1883,41 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, and z are the variables in the integral rd(x,y,z).
-!
 !          Output ...
-!
 !          rd is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, or z is negative.
 !               ierr = 2  x+y or z is too small.
 !               ierr = 3  x, y, or z is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          3 * errtol ** 6 / (1 - errtol) ** 3/2.
-!
 errtol = (.28 * spmpar(1)) ** (1.0/6.0)
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * errtol / machine
 !          MINIMUM) ** (2/3).
-!
 mu = -2.0/3.0
 lolim = 2.0001 * spmpar(3) ** mu
 uplim = (10.0 * spmpar(2) / errtol) ** mu
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z) < 0.0) go to 100
 if (min(x + y,z) < lolim) go to 110
 if (max(x,y,z) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
 zn = z
 sigma = 0.0
 power4 = 1.0
-!
 10 mu = (xn + yn + 3.0 * zn) * 0.2
 xndev = (mu - xn) / mu
 yndev = (mu - yn) / mu
@@ -4724,7 +1934,6 @@ xn = (xn + lamda) * 0.25
 yn = (yn + lamda) * 0.25
 zn = (zn + lamda) * 0.25
 go to 10
-!
 20 c1 = 3.0 / 14.0
 c2 = 1.0 / 6.0
 c3 = 9.0 / 22.0
@@ -4738,9 +1947,7 @@ s1 = ed * (- c1 + 0.25 * c3 * ed - 1.5 * c4 * zndev * ef)
 s2 = zndev * (c2 * ef + zndev * (- c3 * ec + zndev * c4 * ea))
 rd = 3.0 * sigma + power4 * (1.0 + s1 + s2) / (mu * sqrt(mu))
 return
-!
 !                        Error return
-!
 100 rd = 0.0
 ierr = 1
 return
@@ -4754,16 +1961,12 @@ end subroutine rdval
 pure elemental subroutine drdval(x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the second kind
-!
 !          rd(x,y,z) = Integral from zero to infinity of
-!
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
-!
-!          Where x and y are nonnegative, x + y is positive, and z is
+!          where x and y are nonnegative, x + y is positive, and z is
 !          positive.  If x or y is zero, the integral is complete.
 !          The duplication theorem is iterated until the variables are
 !          nearly equal, and the function is then expanded in Taylor
@@ -4772,7 +1975,6 @@ implicit none
 !          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
 !          laboratory-doe, Iowa State University, ames, iowa 50011.
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rd
@@ -4789,56 +1991,41 @@ interface
    end function dpmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, and z are the variables in the integral rd(x,y,z).
-!
 !          Output ...
-!
 !          rd is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, or z is negative.
 !               ierr = 2  x+y or z is too small.
 !               ierr = 3  x, y, or z is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          ERRTOL is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          3 * ERRTOL ** 6 / (1 - ERRTOL) ** 3/2.
-!
 errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * ERRTOL / machine
 !          MINIMUM) ** (2/3).
-!
 mu = -2.d0/3.d0
 lolim = 2.00000000001d0 * dpmpar(3) ** mu
 uplim = (10.d0 * dpmpar(2) / errtol) ** mu
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z) < 0.d0) go to 100
 if (min(x + y,z) < lolim) go to 110
 if (max(x,y,z) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
 zn = z
 sigma = 0.d0
 power4 = 1.d0
-!
 10 mu = (xn + yn + 3.d0 * zn) * 0.2d0
 xndev = (mu - xn) / mu
 yndev = (mu - yn) / mu
@@ -4855,7 +2042,6 @@ xn = (xn + lamda) * 0.25d0
 yn = (yn + lamda) * 0.25d0
 zn = (zn + lamda) * 0.25d0
 go to 10
-!
 20 c1 = 3.d0 / 14.d0
 c2 = 1.d0 / 6.d0
 c3 = 9.d0 / 22.d0
@@ -4869,9 +2055,7 @@ s1 = ed * (- c1 + 0.25d0 * c3 * ed - 1.5d0 * c4 * zndev * ef)
 s2 = zndev * (c2 * ef + zndev * (- c3 * ec + zndev * c4 * ea))
 rd = 3.d0 * sigma + power4 * (1.d0 + s1 + s2) / (mu * sqrt(mu))
 return
-!
 !                        Error return
-!
 100 rd = 0.d0
 ierr = 1
 return
@@ -4885,16 +2069,12 @@ end subroutine drdval
 pure elemental subroutine rjval(x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the third kind
-!
 !          rj(x,y,z,p) = Integral from zero to infinity of
-!
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
-!
-!          Where x, y, and z are nonnegative, at most one of them is
+!          where x, y, and z are nonnegative, at most one of them is
 !          zero, and p is positive.  If x or y or z is zero, the
 !          integral is complete.  The duplication theorem is iterated
 !          until the variables are nearly equal, and the function is
@@ -4904,7 +2084,6 @@ implicit none
 !          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
 !          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rj
@@ -4930,53 +2109,39 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, z, and p are the variables in the integral rj(x,y,z,p).
-!
 !          Output ...
-!
 !          rj is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, z, or p is negative.
 !               ierr = 2  x+y, x+z, y+z, or p is too small.
 !               ierr = 3  x, y, z, or p is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          rc is a function computed by the subroutine rcval1.
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the cube root of the value
 !          of lolim used in the code for rc, and
 !          uplim is not greater than 0.3 times the cube root of
 !          the value of uplim used in the code for rc.
-!
 mu = 1.0/3.0
 lolim = 1.0001 * (5.0 * spmpar(2))**mu
 uplim = .29999 * (0.2 * spmpar(3))**mu
-!
 !          errtol is set to the desired error tolerance. The
 !          relative error due to truncation of the series for rj
 !          is less than 3 * errtol ** 6 / (1 - errtol) ** 3/2.
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
-!
 errtol = (.28 * spmpar(1))**(1.0/6.0)
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z,p) < 0.0) go to 100
 if (min(x + y,x + z,y + z,p) < lolim) go to 110
 if (max(x,y,z,p) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
@@ -4985,7 +2150,6 @@ pn = p
 sigma = 0.0
 power4 = 1.0
 etolrc = 0.5 * errtol
-!
 10 mu = (xn + yn + zn + pn + pn) * 0.2
 xndev = (mu - xn) / mu
 yndev = (mu - yn) / mu
@@ -5009,7 +2173,6 @@ yn = (yn + lamda) * 0.25
 zn = (zn + lamda) * 0.25
 pn = (pn + lamda) * 0.25
 go to 10
-!
 20 c1 = 3.0 / 14.0
 c2 = 1.0 / 3.0
 c3 = 3.0 / 22.0
@@ -5024,9 +2187,7 @@ s2 = eb * (0.5 * c2 + pndev * (- c3 - c3 + pndev * c4))
 s3 = pndev * ea * (c2 - pndev * c3) - c2 * pndev * ec
 rj = 3.0 * sigma + power4 * (s1 + s2 + s3) / (mu * sqrt(mu))
 return
-!
 !                        Error return
-!
 100 rj = 0.0
 ierr = 1
 return
@@ -5040,16 +2201,12 @@ end subroutine rjval
 pure elemental subroutine drjval(x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the incomplete elliptic integral
 !          of the third kind
-!
 !          rj(x,y,z,p) = Integral from zero to infinity of
-!
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
-!
-!          Where x, y, and z are nonnegative, at most one of them is
+!          where x, y, and z are nonnegative, at most one of them is
 !          zero, and p is positive.  If x or y or z is zero, the
 !          integral is complete.  The duplication theorem is iterated
 !          until the variables are nearly equal, and the function is
@@ -5059,7 +2216,6 @@ implicit none
 !          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
 !          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rj
@@ -5085,53 +2241,39 @@ interface
    end subroutine drcvl1
 end interface
 !-----------------------------------------------------------------------
-!
 !          Input ...
-!
 !          x, y, z, and p are the variables in the integral rj(x,y,z,p).
-!
 !          Output ...
-!
 !          rj is the value of the incomplete elliptic integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x, y, z, or p is negative.
 !               ierr = 2  x+y, x+z, y+z, or p is too small.
 !               ierr = 3  x, y, z, or p is too large.
-!
 !-----------------------------------------------------------------------
-!
 !          Machine dependent parameters ...
-!
 !          rc is a function computed by the subroutine drcvl1.
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the cube root of the value
 !          of lolim used in the code for rc, and
 !          uplim is not greater than 0.3 times the cube root of
 !          the value of uplim used in the code for rc.
-!
 mu = 1.d0/3.d0
 lolim = 1.00000000001d0 * (5.0d0 * dpmpar(2))**mu
 uplim = .299999999999d0 * (0.2d0 * dpmpar(3))**mu
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation of the series for rj
 !          is less than 3 * errtol ** 6 / (1 - errtol) ** 3/2.
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
-!
 errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (min(x,y,z,p) < 0.d0) go to 100
 if (min(x + y,x + z,y + z,p) < lolim) go to 110
 if (max(x,y,z,p) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
@@ -5140,7 +2282,6 @@ pn = p
 sigma = 0.d0
 power4 = 1.d0
 etolrc = 0.5d0 * errtol
-!
 10 mu = (xn + yn + zn + pn + pn) * 0.2d0
 xndev = (mu - xn) / mu
 yndev = (mu - yn) / mu
@@ -5164,7 +2305,6 @@ yn = (yn + lamda) * 0.25d0
 zn = (zn + lamda) * 0.25d0
 pn = (pn + lamda) * 0.25d0
 go to 10
-!
 20 c1 = 3.d0 / 14.d0
 c2 = 1.d0 / 3.d0
 c3 = 3.d0 / 22.d0
@@ -5179,9 +2319,7 @@ s2 = eb * (0.5d0 * c2 + pndev * (- c3 - c3 + pndev * c4))
 s3 = pndev * ea * (c2 - pndev * c3) - c2 * pndev * ec
 rj = 3.d0 * sigma + power4 * (s1 + s2 + s3) / (mu * sqrt(mu))
 return
-!
 !                        Error return
-!
 100 rj = 0.d0
 ierr = 1
 return
@@ -5195,15 +2333,11 @@ end subroutine drjval
 pure elemental subroutine rcval1(x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the integral
-!
 !          rc(x,y) = Integral from zero to infinity of
-!
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
-!
-!          Where x is nonnegative and y is positive.  The duplication
+!          where x is nonnegative and y is positive.  The duplication
 !          theorem is iterated until the variables are nearly equal,
 !          and the function is then expanded in Taylor series to fifth
 !          order.  Logarithmic, inverse circular, and inverse hyper-
@@ -5213,7 +2347,6 @@ implicit none
 !          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
 !          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rc
@@ -5229,22 +2362,16 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
-!
 lolim = 5.0 * spmpar(2)
 uplim = 0.2 * spmpar(3)
-!
 !          Input ...
-!
 !          x and y are the variables in the integral rc(x,y).
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          16 * errtol ** 6 / (1 - 2 * errtol).
-!
 !          SAMPLE CHOICES   errtol   RELATIVE TRUNCATION
 !                                    error less than
 !                           1.E-3    2.E-17
@@ -5252,30 +2379,23 @@ uplim = 0.2 * spmpar(3)
 !                           1.E-2    2.E-11
 !                           3.E-2    2.E-8
 !                           1.E-1    2.E-5
-!
-!          Output ...
-!
+!          output ...
 !          rc is the value of the integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x OR y IS NEGATIVE, OR y = 0.
 !               ierr = 2  x+y is too small.
 !               ierr = 3  x or y is too large.
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (x < 0.0 .or. y <= 0.0) go to 100
 if ((x + y) < lolim) go to 110
 if (max(x,y) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
-!
 10 mu = (xn + yn + yn) / 3.0
 sn = (yn + mu) / mu - 2.0
 if (abs(sn) < errtol) go to 20
@@ -5283,15 +2403,12 @@ lamda = 2.0 * sqrt(xn) * sqrt(yn) + yn
 xn = (xn + lamda) * 0.25
 yn = (yn + lamda) * 0.25
 go to 10
-!
 20 c1 = 1.0 / 7.0
 c2 = 9.0 / 22.0
 s = sn * sn * (0.3 + sn * (c1 + sn * (0.375 + sn * c2)))
 rc = (1.0 + s) / sqrt(mu)
 return
-!
 !                      Error return
-!
 100 rc = 0.0
 ierr = 1
 return
@@ -5305,15 +2422,11 @@ end subroutine rcval1
 pure elemental subroutine drcvl1(x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !          This subroutine computes the integral
-!
 !          rc(x,y) = Integral from zero to infinity of
-!
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
-!
-!          Where x is nonnegative and y is positive.  The duplication
+!          where x is nonnegative and y is positive.  The duplication
 !          theorem is iterated until the variables are nearly equal,
 !          and the function is then expanded in Taylor series to fifth
 !          order.  Logarithmic, inverse circular, and inverse hyper-
@@ -5323,7 +2436,6 @@ implicit none
 !          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
 !          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
-!
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rc
@@ -5339,45 +2451,33 @@ interface
    end function dpmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
 !          uplim is not greater than the machine maximum divided by 5.
-!
 lolim = 5.0d0 * dpmpar(2)
 uplim = 0.2d0 * dpmpar(3)
-!
 !          Input ...
-!
 !          x and y are the variables in the integral rc(x,y).
-!
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation is less than
 !          16 * errtol ** 6 / (1 - 2 * errtol).
-!
 !          Output ...
-!
 !          rc is the value of the integral.
-!
 !          ierr is the return error code.
 !               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x OR y IS NEGATIVE, OR y = 0.
 !               ierr = 2  x+y is too small.
 !               ierr = 3  x or y is too large.
-!
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
 !          expense of robustness.
 !-----------------------------------------------------------------------
-!
 if (x < 0.d0  .or.  y <= 0.d0) go to 100
 if ((x + y) < lolim) go to 110
 if (max(x,y) > uplim) go to 120
-!
 ierr = 0
 xn = x
 yn = y
-!
 10 mu = (xn + yn + yn) / 3.d0
 sn = (yn + mu) / mu - 2.d0
 if (abs(sn) < errtol) go to 20
@@ -5385,15 +2485,12 @@ lamda = 2.d0 * sqrt(xn) * sqrt(yn) + yn
 xn = (xn + lamda) * 0.25d0
 yn = (yn + lamda) * 0.25d0
 go to 10
-!
 20 c1 = 1.d0 / 7.d0
 c2 = 9.d0 / 22.d0
 s = sn * sn * (0.3d0 + sn * (c1 + sn * (0.375d0 + sn * c2)))
 rc = (1.d0 + s) / sqrt(mu)
 return
-!
 !                      Error return
-!
 100 rc = 0.d0
 ierr = 1
 return
@@ -5455,13 +2552,10 @@ end interface
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest real number
 !            for which 1 + eps .GT. 1.
-!
 max = ipmpar(3)
 eps = spmpar(1)
-!
 !     ----------------
 !     Calculation for l = 0.0
-!
 if (l /= 0.0) go to 10
 s = tanh(u)
 e = exp(-abs(u))
@@ -5469,19 +2563,14 @@ c = 2.0*e/(1.0 + e*e)
 d = c
 ierr = 0
 return
-!
 !     Check that k**2 + l**2 = 1
-!
 10 tol = 2.0*eps
 z = dble(k*k) + (dble(l*l) - 1.d0)
 if (abs(z) > tol) go to 100
-!
 f = pihalf
 if (k /= 0.0) call ellpi(pihalf,0.0,k,l,f,e,ierr)
 f2 = 2.0*f
-!
 !                   Argument reduction
-!
 u1 = abs(u)
 r = u1/f2
 if (r >= min(float(max),1.0/eps)) go to 110
@@ -5489,37 +2578,28 @@ n = int(r)
 u1 = u1 - float(n)*f2
 sg = 1.0
 if (mod(n,2) /= 0) sg = -1.0
-!
 if (u1 <= 0.0) go to 30
 if (u1 <= f) go to 20
 u1 = u1 - f2
 sg = -sg
 if (u1 >= 0.0) go to 30
-!
 !     Calculation of elliptic functions for 0.0 .LE. u2 .LE. f(k)
-!
 20 u2 = abs(u1)
 call scd(u2,abs(k),abs(l),f,s,c,d)
 ierr = 0
 if (u1 < 0.0) s = -s
-!
 !     Final assembly
-!
 s = sg*s
 c = sg*c
 if (u < 0.0) s = -s
 return
-!
 !             u is an integer multiple of f2
-!
 30 s = 0.0
 c = sg
 d = 1.0
 ierr = 0
 return
-!
 !                      Error return
-!
 100 ierr = 1
 return
 110 ierr = 2
@@ -5588,9 +2668,7 @@ end interface
 !     ------------------------
 if (k == 0.0) go to 40
 v = f - u
-!
 !     Uses Maclaurin expansion when u or v .LE. 0.01
-!
 if (u > 0.01) go to 10
 call scdm(u,k,s,c,d)
 return
@@ -5600,23 +2678,16 @@ s = c1/d1
 c = l*s1/d1
 d = l/d1
 return
-!
 !     Uses Fourier expansion when k .LE. l
-!
 20 call ellpi(pihalf,0.0,l,k,f1,e1,ierr)
-!
 if (k > l) go to 30
 call scdf(u,k,l,f,f1,s,c,d)
 return
-!
 !     Uses imaginary transformation of Jacobi and Fourier
 !     expansion when k .GT. l
-!
 30 call scdj(u,k,l,f,f1,s,c,d)
 return
-!
 !     Computation for k = 0.0
-!
 40 s = sin(u)
 c = cos(u)
 d = 1.0
@@ -5633,7 +2704,6 @@ real :: c1, c2, c3, c4, u2, k2
 !     0.0 .LE. u .LE. 0.01 and for 0.0 .LE. k .LE. 1.0
 !     by use of the Maclaurin expansion for SN(u,k)
 !     -------------------------------------------------
-!
 k2 = k*k
 u2 = u*u
 c1 = -(1.0 + k2)/6.0
@@ -5673,9 +2743,7 @@ end interface
 !     -------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the
 !     smallest number such that 1. + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 !     -------------------------------------------------
 tol = eps/10.0
 v = f - u
@@ -5687,9 +2755,7 @@ qn = 1.0
 qd = q1
 w = min(u,v)
 x = pihalf*w/f
-!
 !     Calculation of series for W = AMIN1(u,V)
-!
 i = 1.0
 sum = 0.0
 10 ai = qn/(1.0 - qd)
@@ -5700,16 +2766,12 @@ qn = qn*q1
 qd = qd*q2
 i = i + 2.0
 go to 10
-!
 !     Assembly for u .LE. V
-!
 20 s = coef*sum
 c = sqrt(1.0 - s*s)
 d = sqrt(1.0 - (k*s)**2)
 if (u == w) return
-!
 !     Assembly for u .GT. V
-!
 temp = s
 s = c/d
 c = l*temp/d
@@ -5751,34 +2813,27 @@ end interface
 !     ------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the
 !     smallest number such that 1. + eps .GT. 1.
-!
 eps = spmpar(1)
-!
 !     ------------------------------------------------
 tol = eps/10.0
 v = f - u
 q1 = -exp(-pi*f/f1)
 q2 = q1*q1
-!
 w = min(u,v)
 e1 = pi*max(u,v)/f1
 e2 = pi*(f + w)/f1
 e1 = exp(-e1)
 e2 = exp(-e2)
-!
 coef = pihalf/(k*f1)
 x = pihalf*w/f1
 x2 = 2.0*x
-!
 !     Calculation of series for W = AMIN1(u,V)
-!
 n = 1.0
 q1n = q1
 q2n = q2
 e1n = e1
 e2n = e2
 sum = 0.0
-!
 20 xn = n*x2
 if (xn > 1.0) go to 30
 call snhcsh(sh,ch,xn,-1)
@@ -5794,16 +2849,12 @@ e1n = e1n*e1
 e2n = e2n*e2
 n = n + 1.0
 go to 20
-!
 !     Assembly for u .LE. V
-!
 50 s = coef*(tanh(x) + 2.0*sum)
 c = sqrt(1.0 - s*s)
 d = sqrt(1.0 - (k*s)**2)
 if (u == w) return
-!
 !     Assembly for u .GT. V
-!
 temp = s
 s = c/d
 c = l*temp/d
@@ -5834,24 +2885,19 @@ end interface
 !     DN(u,k) for complex u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
-!
 u1 = real(u)
 u2 = aimag(u)
 k2 = k*k
 if (u1 == 0.0) go to 10
 if (u2 /= 0.0) go to 20
-!
 !     Calculation for U2 = 0.
-!
 call ellpf(u1,k,l,s1,c1,d1,ierr)
 if (ierr /= 0) return
 s2 = 0.0
 c2 = 0.0
 d2 = 0.0
 go to 40
-!
 !     Calculation for U1 = 0.
-!
 10 call ellpf(u2,l,k,s2,c2,d2,ierr)
 if (ierr /= 0) return
 if (c2 == 0.0) go to 50
@@ -5862,9 +2908,7 @@ d2 = 0.0
 c1 = 1.0/c2
 c2 = 0.0
 go to 40
-!
 !     Calculation for U1 and U2 .NE. 0.
-!
 20 call ellpf(u1,k,l,sk,ck,dk,ierr)
 if (ierr /= 0) return
 call ellpf(u2,l,k,sl,cl,dl,ierr)
@@ -5896,34 +2940,26 @@ c1 = ck*r/t1
 c2 = -dk*sl*dl*t*r/td1
 d1 = dk*dl*r/t1
 d2 = -k2*ck*sl*t*r/td1
-!
 !     Final assembly
-!
 40 s = cmplx (s1, s2)
 c = cmplx (c1, c2)
 d = cmplx (d1, d2)
 return
-!
 !     Error return
-!
 50 ierr = 3
 end subroutine elpfc1
 
 pure elemental subroutine peq(z, w, ierr)
 implicit none
-!
 !     Weierstrass P-function in the equianharmonic case
 !     for complex argument with unit period parallelogram
-!
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
 complex :: z1, z4, z6
 real :: zr, zi
 integer :: m, n
-!
 !     Reduction to fundamental parallelogram
-!
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
 m = int(zi)
 if (zi < 0e0) m = m - 1
@@ -5931,18 +2967,14 @@ zr = real(z) - 0.5e0*float(m) + 0.5e0
 n = int(zr)
 if (zr < 0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
-!
 !     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for P.
-!
 w = z1*z1
 zr = abs(real(w)) + abs(aimag(w))
 if (zr /= 0e0) go to 10
 ierr = 1
 return
-!
 !     Evaluation of P(z1)
-!
 10 ierr = 0
 z4 = w*w
 z6 = z4*w
@@ -5956,20 +2988,16 @@ end subroutine peq
 
 pure elemental subroutine peq1(z, w, ierr)
 implicit none
-!
 !     First derivative of Weierstrass P-function in the
 !     equianharmonic case for complex argument
 !     with unit period parallelogram
-!
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
 complex :: z1, z3, z6
 real :: zr, zi
 integer :: m, n
-!
 !     Reduction to fundamental parallelogram
-!
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
 m = int(zi)
 if (zi < 0e0) m = m - 1
@@ -5977,10 +3005,8 @@ zr = real(z) - 0.5e0*float(m) + 0.5e0
 n = int(zr)
 if (zr < 0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
-!
 !     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for DP.
-!
 z3 = z1*z1*z1
 z6 = z3*z3
 w = z3*(1e0 - z6)**3
@@ -5988,9 +3014,7 @@ zr = abs(real(w)) + abs(aimag(w))
 if (zr /= 0e0) go to 10
 ierr = 1
 return
-!
 !     Evaluation of DP(z1)
-!
 10 ierr = 0
 w = (((14e0*z6 + 294e0)*z6 + 126e0)*z6 - 2e0)/w + &
    & z3*((((((-2.95539175e-9*z6 - 2.6764693031e-7)*z6 + 2.402192743346e-5) &
@@ -6003,19 +3027,15 @@ end subroutine peq1
 
 pure elemental subroutine plem(z, w, ierr)
 implicit none
-!
 !     Weierstrass P-function in the lemniscatic case
 !     for complex argument with unit period parallelogram
-!
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
 complex :: z1, z4, z6
 real :: zr, zi
 integer :: m, n
-!
 !     Reduction to fundamental parallelogram
-!
 zr = real(z) + 0.5e0
 zi = aimag(z) + 0.5e0
 m = int(zr)
@@ -6023,18 +3043,14 @@ n = int(zi)
 if (zr < 0e0) m = m - 1
 if (zi < 0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
-!
 !     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for P.
-!
 w = z1*z1
 zr = abs(real(w)) + abs(aimag(w))
 if (zr /= 0e0) go to 10
 ierr = 1
 return
-!
 !     Evaluation of P(z1)
-!
 10 ierr = 0
 z4 = w*w
 z6 = z4*w
@@ -6050,20 +3066,16 @@ end subroutine plem
 
 pure elemental subroutine plem1(z, w, ierr)
 implicit none
-!
 !     First derivative of Weierstrass P-function in the
 !     lemniscatic case for complex argument
 !     with unit period parallelogram
-!
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
 complex :: z1, z3, z4
 real :: zr, zi
 integer :: m, n
-!
 !     Reduction to fundamental parallelogram
-!
 zr = real(z) + 0.5e0
 zi = aimag(z) + 0.5e0
 m = int(zr)
@@ -6071,10 +3083,8 @@ n = int(zi)
 if (zr < 0e0) m = m - 1
 if (zi < 0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
-!
 !     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for DP.
-!
 z3 = z1*z1*z1
 z4 = z3*z1
 w = (z1*(1e0 - z4))**3
@@ -6082,9 +3092,7 @@ zr = abs(real(w)) + abs(aimag(w))
 if (zr /= 0e0) go to 10
 ierr = 1
 return
-!
 !     Evaluation of DP(z1)
-!
 10 ierr = 0
 w = (((1e1*z4 + 9e1)*z4 + 3e1)*z4 - 2e0)/w + &
    & z1*((((((((((-3.9046302e-9*z4 - 1.001487137e-8)*z4 + 5.9573043092e-7) &
@@ -6154,14 +3162,12 @@ if (tau < 3.e-11) tau = max(5.0*tau,1.e-14)
 n = n0
 if (n == 2.or.n < 1) go to 4021
 tausq = tau*tau
-!
 p = 0.0
 ind = 0
 a = 0.0
 kom = 0.0
 k = 1
 if (n /= 1) go to 10
-!
 w = x(2) - x(1)
 z = y(2) - y(1)
 u = x(3) - x(1)
@@ -6169,7 +3175,6 @@ v = y(3) - y(1)
 xk = 0.0
 psi1 = v*w - u*z
 if (psi1 >= 0.0) go to 21
-!
 p = -1.0
 t1 = w
 w = u
@@ -6178,7 +3183,6 @@ t1 = v
 v = z
 z = t1
 go to 21
-!
 10 ko = 0
 x(n + 1) = x(1)
 y(n + 1) = y(1)
@@ -6186,7 +3190,6 @@ u = x(2) - x(1)
 v = y(2) - y(1)
 xk = x(1)
 yk = y(1)
-!
 20 w = x(1) - x(n)
 z = y(1) - y(n)
 21 d1sq = w*w + z*z
@@ -6195,7 +3198,6 @@ if (n == 1) go to 4011
 n = n - 1
 if (n == 2) return
 go to 20
-!
 30 d2sq = u*u + v*v
 if (d2sq > tausq) go to 40
 if (n == 1) go to 4011
@@ -6205,13 +3207,10 @@ v = y(k + 1) - yk
 d2sq = u*u + v*v
 if (d2sq <= tausq) go to 31
 if (k == n - 1) return
-!
 40 a = xk*(y(k + 1) - y(n))
 bgd1 = sqrt(d1sq + d1sq)
 bgd2 = sqrt(d2sq + d2sq)
-!
 !             Processing vertex (XK,YK)
-!
 50 psi1 = v*w - u*z
 cee = u*w + v*z
 aj0 = atan2(psi1,cee)
@@ -6221,7 +3220,6 @@ b = .5*(x(k)*x(k) + y(k)*y(k))
 if (b > aph1(iop)) go to 60
 p1 = aj0/twopi
 go to 3621
-!
 60 g(1) = (w*x(k) + z*y(k))/bgd1
 g(2) = (u*x(k) + v*y(k))/bgd2
 h(1) = (-y(k)*w + x(k)*z)/bgd1
@@ -6231,21 +3229,17 @@ if (cee < 0.0) go to 70
 if (abs(aj0) > tau.and.g(1) < 0.0) go to 80
 p1 = 0.0
 go to 3621
-!
 70 if (abs(psi1) <= (.5*tau*bgd1*bgd2)) ind = 2
 if (psi1 < 0.0) go to 71
 p1 = .5*erfc1(0,h(2))
 go to 3621
 71 p1 = -.5*erfc1(0,h(1))
 go to 3621
-!
 80 if (b > aph2(iop)) go to 90
 c = rtpi*(h(2) - h(1)) - (g(2)*h(2) - g(1)*h(1))
 p1 = (aj0 - c)/twopi
 go to 3621
-!
 !                 Computation of l
-!
 90 if (g(1) < 0.0) go to 100
 if (g(2) >= 0.0) go to 130
 g(2) = -g(2)
@@ -6255,7 +3249,6 @@ l = .5*erfc1(0,-h(2))
 go to 120
 91 l = .5 + rtpii*h(2)
 go to 120
-!
 100 g(1) = -g(1)
 h(1) = -h(1)
 if (g(2) < 0.0) go to 110
@@ -6264,7 +3257,6 @@ l = .5*erfc1(0,h(1))
 go to 120
 101 l = .5 - rtpii*h(1)
 go to 120
-!
 110 g(2) = -g(2)
 h(2) = -h(2)
 if (abs(h(1)) <= aph4(iop)) go to 112
@@ -6278,16 +3270,13 @@ l = .5*erf(h(2)) - rtpii*h(1)
 go to 130
 113 l = rtpii*(h(2) - h(1))
 go to 130
-!
 120 psi1 = -psi1
 if (psi1 <= 0.0) go to 121
 l = l - 1.0
 aj0 = aj0 + pi
 go to 130
 121 aj0 = aj0 - pi
-!
 !                 Series evaluation
-!
 130 if (b >= rsq(iop)) go to 171
 cape = aj0
 caph = .5*aj0
@@ -6299,7 +3288,6 @@ nswc_ai_i4 = iop - 2
 if ( nswc_ai_i4 < 0 ) go to 140
 if ( nswc_ai_i4 == 0 ) go to 150
 go to 160
-!
 140 sum = e(m)*aj1
 141 m = m + 1
 h(1) = h(1)*g(1)
@@ -6312,7 +3300,6 @@ if (m >= 5) go to 170
 cape = circm
 circm = capv
 go to 141
-!
 150 sum = e2(m)*aj1
 151 m = m + 1
 h(1) = h(1)*g(1)
@@ -6325,7 +3312,6 @@ if (m >= 10) go to 170
 cape = circm
 circm = capv
 go to 151
-!
 160 sum = e3(m)*aj1
 161 m = m + 1
 h(1) = h(1)*g(1)
@@ -6338,18 +3324,14 @@ if (m >= 15) go to 170
 cape = circm
 circm = capv
 go to 161
-!
 170 p1 = l + exp(-(b + alnpi))*(caph - sum)
 go to 3621
 171 p1 = l
-!
 !               Standard termination
-!
 3621 if (k /= n) go to 3651
 if (n /= 1) go to 3631
 p = abs(p + abs(p1))
 return
-!
 3631 p = p - p1
 kom = kom/twopi
 a = .5*a
@@ -6359,9 +3341,7 @@ go to 3645
 3641 ko = int(kom - .125)
 3645 p = p + float(ko)
 return
-!
 !              Set up the next vertex
-!
 3651 w = u
 z = v
 bgd1 = bgd2
@@ -6377,9 +3357,7 @@ bgd2 = sqrt(d2sq + d2sq)
 p = p - p1
 a = a + xk*(y(k + 1) - ykm1)
 go to 50
-!
 !                  Error return
-!
 4011 ind = 1
 p = 5.0
 return
@@ -6449,18 +3427,15 @@ end interface
 !       with mean (0,0) and equal standard deviations, S, in a circle
 !       of radius R0, offset a distance D0 from (0,0).
 !       Input is r = R0/S, d = D0/S.
-!
 !       If j = 0, output is p = Generalized circular error function.
 !       p gives the probability of a shot falling ,under a normal
 !       bivariate distribution with mean (0,0) and standard deviations
 !       SMIN and S, in a circle of radius R0 centered at (0,0).
 !       Input for j = 0, r = R0/S, d = SMIN/S .LE. 1.
 !       IF SMIN = 0, S .NE. 0, p = erf(r/(SQR(2)).
-!
 !       If ierr .NE. 0, some portion of the input is unacceptable.
 !       IF r .LT. 0., THEN circv SETS ierr = 1.
 !       IF d .LT. 0, OR j = 0 AND d .GT. 1., THEN circv SETS ierr = 2.
-!
 !       References
 !       math of comp April 1961,PP169,173 and oct.1961, PP 375, 382.
 !       NWL report N0.1768, jan. 1962. NSWC report N0.83-13, nov. 1982.
@@ -6479,7 +3454,6 @@ if (r < 0.0) goto 115
 if (d < 0.0) goto 120
 ierr = 0
 if (r == 0.0) return
-!
 eps0 = spmpar(1)
 z = - log(eps0)
 if (j /= 0) goto 40
@@ -6510,7 +3484,6 @@ t = 0.5*y1
 zm = (0.5 - d2) + 0.5
 t2 = t*t
 t = t2*zm
-!
 eps = 10.0*eps0
 if (t > 14.0) go to 25
 !-------------------------------------------------
@@ -6526,7 +3499,6 @@ t0 = 0.5 + (0.5 - s0)
 if (bk2 <= 0.15) t0 = -rexp(-bk2)
 t0 = c0*t0
 s0 = c0*s0
-!
 p = t0
 an = 0.0
 20 an = an + 2.0
@@ -6548,19 +3520,14 @@ x = 2.0*(c1*c2)/(r*delta)
 expt = exp(-0.5*r*r)
 call erfc0(1, c1*r, expt, m)
 m = m/delta
-!
 p = 1.0
 sum = m
 an = 0.0
 if (expt*m < 5.e-3) go to 30
-!
 !          SET  p = 1 - exp(-r*r/2)*m
-!
 p = (erf(c1*r) - d2/(1.0 + delta))/delta
 sum = 0.0
-!
 !          Compute the asymptotic expansion
-!
 30 an = an + 2.0
 anm1 = an - 1.0
 f = anm1/an
@@ -6598,9 +3565,7 @@ if (r >= 1.7 .and. t > 16.0) go to 75
 !------------------------------------------------------------------
 tr = 0.5*(r*r)
 td = 0.5*(d*d)
-!
 !       Find the number n of terms to be used in the series
-!
 z = 0.5*t
 n = z*e + 1.0
 tn = ((e*z/n)**(n + n))/(c3*n)
@@ -6608,9 +3573,7 @@ tn = ((e*z/n)**(n + n))/(c3*n)
 w = z/n
 tn = tn*(w*w)
 if (tn > eps) go to 65
-!
 !       Compute the series
-!
 m = n
 call gratio(m + 1.0, tr, s, w, 0)
 w = rcomp(m,tr)/m
@@ -6629,7 +3592,6 @@ go to 110
 75 z = c1*abs(a1)
 w = exp(-a)
 call erfc0(1, z, w, s1)
-!
 a = 0.5*z/t
 t = 0.25/t
 m = c2 - z*s1
@@ -6638,7 +3600,6 @@ m = 0.5*a*m
 x = 0.5*c2*t
 s1 = s1 + m
 s2 = c2 + x
-!
 an = 2.0
 80 an = an + 2.0
 anm1 = an - 1.0
@@ -6650,7 +3611,6 @@ s2 = s2 + x
 if (m <= 0.0 .or. m >= m0) go to 90
 s1 = s1 + m
 if (m > eps*s1) go to 80
-!
 90 an = an + 2.0
 anm1 = an - 1.0
 x0 = x
@@ -6658,15 +3618,12 @@ x = (anm1/an)*(anm1*t)*x
 if (x >= x0) go to 100
 s2 = s2 + x
 if (x > eps*s2) go to 90
-!
 100 s1 = 0.5*(r + d)*s1
 s2 = c1*s2
 w = w/sqrt(r*d)
 p = 0.5*w*abs(s1 - s2)
 if (a1 > 0.0) p = abs(1.0 - 0.5*w*(s1 + s2))
-!
 !       Termination
-!
 110 if (p > 1.0) p = 1.0
 return
 115 ierr = 1
@@ -6697,21 +3654,16 @@ real, parameter :: s(5) = [9.41537750555460e01, 1.87114811799590e02, 9.901918146
    & 1.00000000000000e00]
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
-!
 !               y = erfc(x)            if ind = 0
 !               y = exp(x*x)*erfc(x)   otherwise
-!
 !     e is an input/output variable. If e .GE. 0 then it is assumed
 !     that e = exp(-x*x). In this case e is not modified. If e is
 !     negative then e is set to exp(-x*x) when this value is needed.
-!
 !-----------------------------------------------------------------------
 !-------------------------
 !-------------------------
 !-------------------------
-!
 !                     abs(x) .LT. 0.47
-!
 ax = abs(x)
 if (ax >= 0.47) go to 10
 t = x*x
@@ -6719,20 +3671,16 @@ top = ((a(1)*t + a(2))*t + a(3))*t + a(4)
 bot = ((b(1)*t + b(2))*t + b(3))*t + b(4)
 y = 0.5 + (0.5 - x*top/bot)
 if (ind == 0) return
-!
 if (e < 0.0) e = exp(-t)
 y = y/e
 return
-!
 !                  0.47 .LE. abs(x) .LE. 4
-!
 10 if (ax > 4.0) go to 30
 top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
    & + p(6))*ax + p(7))*ax + p(8)
 bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
    & + q(6))*ax + q(7))*ax + q(8)
 y = top/bot
-!
 20 if (ind == 0) go to 21
 if (x >= 0.0) return
 if (e < 0.0) e = exp(-x*x)
@@ -6745,9 +3693,7 @@ if (e < 0.0) e = exp(-t)
 y = ((0.5 + (0.5 - eps)) * e) * y
 if (x < 0.0) y = 2.0 - y
 return
-!
 !                      abs(x) .GT. 4
-!
 30 if (x <= -5.5) go to 40
 if (ind == 0 .and. x > 50.0) go to 50
 t = (1.0/x)**2
@@ -6755,18 +3701,14 @@ top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
 bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + s(5)
 y = (c - t*top/bot) / ax
 go to 20
-!
 !             Limit value for large negative x
-!
 40 y = 2.0
 if (ind == 0) return
 if (e < 0.0) e = exp(-x*x)
 y = 2.0/e
 return
-!
 !             Limit value for large positive x
 !                       when ind = 0
-!
 50 y = 0.0
 end subroutine erfc0
 
@@ -6841,15 +3783,11 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !           Computation of the elliptical coverage function
-!
 !                         ---------------
-!
 !     The result p is accurate to at least 6 significant digits if
 !     p .GE. 1.E-20 AND max(h/S,k/S,sx/S,sy/S) .LE. 10/sqrt(spmpar(1))
 !     FOR S = min(sx,sy).
-!
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !   v(*), w(*)-- Gaussian abscissas and weights of order 32, on (-1,1).
@@ -6859,7 +3797,6 @@ end interface
 !     rpi = 1/sqrt(pi)
 !     rt2 = sqrt(2)
 !----------------------------------------
-!
 p = 0.0
 if (sx > 0.0 .and. sy > 0.0) go to 5
 p = -1.e10
@@ -6873,7 +3810,6 @@ a = 6.5
 !----------------------------------------
 z3 = min(sqrt(sqrt(spmpar(2))),1.e-30)*sx*sy
 if (r0*r0 <= z3) return
-!
 h2 = h*h + k*k
 h8 = abs(h)
 k8 = abs(k)
@@ -6992,7 +3928,6 @@ go to 70
 65 p = 0.5*(erf((h8 + r)/rt2) - erf(g2))
 70 if (h1*exp(-g2*g2) > p*seps1) go to 85
 return
-!
 75 z = (r - k8)*(r + k8)
 g2 = sqrt(z)
 h1 = abs(h8 - g2)
@@ -7039,7 +3974,6 @@ if (yy >= 5.e-15) go to 95
 z = yy
 go to 100
 95 z = min(yy,z)
-!
 100 if (z >= 0.5) go to 105
 a = a + .5
 if (z >= 5.e-4) go to 105
@@ -7066,7 +4000,6 @@ if (z > 1.e-25) go to 105
 a = a + 1.
 if (z > 1.e-30) go to 105
 a = a + 2.
-!
 105 if (s2 >= 5.e-2 .or. h3 <= z2) go to 107
 t9 = r8*u*exp(-h2*h2)
 if (t9 < 5.e-2 * z) a = a + 0.5
@@ -7202,7 +4135,6 @@ iy = 0
 p = 0.0
 t = h2 - r8 + r8*(d1 - e3*v(16))**2
 if (t > 0.0 .and. t*t > -exparg(1)) return
-!
 q1 = rpi*e3*r8
 g3 = 0.0
 nt = 2*n1 + 1
@@ -7270,7 +4202,6 @@ integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying real polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 jmax = min(m, n)
@@ -7280,7 +4211,6 @@ do j = 1,jmax
    lb = lb + kb
 end do
 if (jmax == n) return
-!
 mp1 = m + 1
 do j = mp1,n
    b(lb) = 0.0
@@ -7297,7 +4227,6 @@ integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying double precision polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 jmax = min(m, n)
@@ -7307,7 +4236,6 @@ do j = 1,jmax
    lb = lb + kb
 end do
 if (jmax == n) return
-!
 mp1 = m + 1
 do j = mp1,n
    b(lb) = 0.d0
@@ -7324,7 +4252,6 @@ integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of real polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 lc = 1
@@ -7347,7 +4274,6 @@ integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of double precision polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 lc = 1
@@ -7370,7 +4296,6 @@ integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of real polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 lc = 1
@@ -7393,7 +4318,6 @@ integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of double precision polynomials
 !     ------------------------------------------------------------------
-!
 la = 1
 lb = 1
 lc = 1
@@ -7417,7 +4341,6 @@ double precision :: dsum
 !     ------------------------------------------------------------------
 !     Multiplication of real polynomials
 !     ------------------------------------------------------------------
-!
 lc = 1
 jmax = min(l + m - 1, n)
 do j = 1,jmax
@@ -7429,7 +4352,6 @@ do j = 1,jmax
 10 imin = 1
    la = 1 + (j - 1)*ka
    lb = 1
-!
 20 imax = min(j, m)
    dsum = 0.d0
    do i = imin,imax
@@ -7441,7 +4363,6 @@ do j = 1,jmax
    lc = lc + kc
 end do
 if (jmax == n) return
-!
 jmin = jmax + 1
 do j = jmin,n
    c(lc) = 0.0
@@ -7459,7 +4380,6 @@ double precision :: sum
 !     ------------------------------------------------------------------
 !     Multiplication of double precision polynomials
 !     ------------------------------------------------------------------
-!
 lc = 1
 jmax = min(l + m - 1, n)
 do j = 1,jmax
@@ -7471,7 +4391,6 @@ do j = 1,jmax
 10 imin = 1
    la = 1 + (j - 1)*ka
    lb = 1
-!
 20 imax = min(j, m)
    sum = 0.d0
    do i = imin,imax
@@ -7483,7 +4402,6 @@ do j = 1,jmax
    lc = lc + kc
 end do
 if (jmax == n) return
-!
 jmin = jmax + 1
 do j = jmin,n
    c(lc) = 0.d0
@@ -7503,15 +4421,12 @@ double precision :: dsum
 !     ------------------------------------------------------------------
 !     Division of real polynomials
 !     ------------------------------------------------------------------
-!
 b0 = b(1)
 if (b0 == 0.0) go to 100
 ierr = 0
 c(1) = a(1)/b0
 if (n == 1) return
-!
 !               Case when m = 1
-!
 if (m > 1) go to 20
 la = 1
 lc = 1
@@ -7522,9 +4437,7 @@ do j = 2,n
    if (j <= l) c(lc) = a(la)/b0
 end do
 return
-!
 !              Case when m .GT. 1
-!
 20 la = 1
 lc = 1
 do j = 2,n
@@ -7543,9 +4456,7 @@ do j = 2,n
    c(lc) = sngl(dsum)/b0
 end do
 return
-!
 !                Error return
-!
 100 ierr = 1
 end subroutine pdiv
 
@@ -7560,15 +4471,12 @@ double precision :: b0, sum
 !     ------------------------------------------------------------------
 !     Division of double precision polynomials
 !     ------------------------------------------------------------------
-!
 b0 = b(1)
 if (b0 == 0.d0) go to 100
 ierr = 0
 c(1) = a(1)/b0
 if (n == 1) return
-!
 !               Case when m = 1
-!
 if (m > 1) go to 20
 la = 1
 lc = 1
@@ -7579,9 +4487,7 @@ do j = 2,n
    if (j <= l) c(lc) = a(la)/b0
 end do
 return
-!
 !              Case when m .GT. 1
-!
 20 la = 1
 lc = 1
 do j = 2,n
@@ -7600,9 +4506,7 @@ do j = 2,n
    c(lc) = sum/b0
 end do
 return
-!
 !                Error return
-!
 100 ierr = 1
 end subroutine dpdiv
 
@@ -7619,15 +4523,12 @@ double precision :: coeff, dsum, rp1
 !     ------------------------------------------------------------------
 !     SET b = a**r WHERE A IS A REAL POLYNOMIAL
 !     ------------------------------------------------------------------
-!
 a0 = a(1)
 if (a0 <= 0.0) go to 100
 ierr = 0
 b(1) = a0**r
 if (n == 1) return
-!
 !            Case when m = 1 Or r = 0
-!
 if (m > 1 .and. r /= 0.0) go to 20
 lb = 1
 do j = 2,n
@@ -7635,9 +4536,7 @@ do j = 2,n
    b(lb) = 0.0
 end do
 return
-!
 !                  General case
-!
 20 rp1 = dble(r) + 1.d0
 lb = 1
 do j = 2,n
@@ -7657,9 +4556,7 @@ do j = 2,n
    b(lb) = sngl(dsum)/(jm1*a0)
 end do
 return
-!
 !                Error return
-!
 100 ierr = 1
 end subroutine plpwr
 
@@ -7675,15 +4572,12 @@ double precision :: a0, coeff, jm1, rp1, sum
 !     ------------------------------------------------------------------
 !     Set b = a**r where A is a double precision polynomial
 !     ------------------------------------------------------------------
-!
 a0 = a(1)
 if (a0 <= 0.d0) go to 100
 ierr = 0
 b(1) = a0**r
 if (n == 1) return
-!
 !            Case when m = 1 Or r = 0
-!
 if (m > 1 .and. r /= 0.d0) go to 20
 lb = 1
 do j = 2,n
@@ -7691,9 +4585,7 @@ do j = 2,n
    b(lb) = 0.d0
 end do
 return
-!
 !                  General case
-!
 20 rp1 = r + 1.d0
 lb = 1
 do j = 2,n
@@ -7713,9 +4605,7 @@ do j = 2,n
    b(lb) = sum/(jm1*a0)
 end do
 return
-!
 !                Error return
-!
 100 ierr = 1
 end subroutine dplpwr
 
@@ -7734,16 +4624,13 @@ real :: s, sum, t, u
 !     num = (n*(n + 1))/2
 !     real q(num)
 !----------------------------
-!
 !                 Compute the coefficient matrix q
-!
 q(1) = 1.0
 k = 2
 do i = 2,n
    q(k) = 0.0
    k = k + i
 end do
-!
 jj = 1
 do j = 2,n
    l0 = jj
@@ -7762,9 +4649,7 @@ do j = 2,n
       k = k + i
    end do
 end do
-!
 !              Compute the coefficients of the inverse
-!
 k = 1
 do j = 1,n
    u = 1.0/(j*a(1)**j)
@@ -7795,16 +4680,13 @@ double precision :: s, sum, t, u
 !     num = (n*(n + 1))/2
 !     real q(num)
 !----------------------------
-!
 !                 Compute the coefficient matrix q
-!
 q(1) = 1.d0
 k = 2
 do i = 2,n
    q(k) = 0.d0
    k = k + i
 end do
-!
 jj = 1
 do j = 2,n
    l0 = jj
@@ -7823,9 +4705,7 @@ do j = 2,n
       k = k + i
    end do
 end do
-!
 !              Compute the coefficients of the inverse
-!
 k = 1
 do j = 1,n
    u = 1.d0/(j*a(1)**j)
@@ -7857,12 +4737,10 @@ real :: ql
 !     nc = Number of coefficients
 !     ac = Array of coefficients
 !     fv = FUNCTION V
-!
 !     mo = -1 For integral
 !     mo =  0 For function
 !     mo = +1 For first derivative
 !     mo = +2 For second derivative
-!
 fv = 0.0
 l = nc
 if (mo < 0) go to 002
@@ -7910,11 +4788,9 @@ real :: s0, s1, s2, x2
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
-!
 if (n > 1) go to 10
 csevl = 0.5 * a(1)
 return
-!
 10 x2 = x + x
 s0 = a(n)
 s1 = 0.0
@@ -7937,11 +4813,9 @@ double precision :: x2, s0, s1, s2
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
-!
 if (n > 1) go to 10
 dcsevl = 0.5d0 * a(1)
 return
-!
 10 x2 = x + x
 s0 = a(n)
 s1 = 0.d0
@@ -7967,7 +4841,6 @@ real :: dm, tm
 !     au = COORDINATE ARGUMENTS  (N-ARRAY)
 !     na = Number of arguments   (N)
 !     an = NORMALIZATION FACTORS (N-ARRAY)
-!
 do k = 1,na
    tm = 1.0
    do m = 1,na
@@ -8001,11 +4874,9 @@ logical :: ln
 !     ff = LAGRANGIAN FUNCTIONS                   (N-ARRAY)
 !     df = FIRST DERIVATIVES                      (N-ARRAY)
 !     sf = SECOND DERIVATIVES                     (N-ARRAY)
-!
 !     call lgrngv (0, na, qu, au, an, ff)         for functions
 !     call lgrngv (1, na, qu, au, an, ff, df)     for first derivatives
 !     call lgrngv (2, na, qu, au, an, ff, df, sf) for second derivatives
-!
 ln = .true.
 tm = 1.0
 do k = 1,na
@@ -8112,7 +4983,6 @@ real :: sm, td, tm
 !     au = COORDINATE ARGUMENTS    (N-ARRAY)
 !     na = Number of arguments     (N)
 !     ac = Polynomial coefficients (NX(N+1) array)
-!
 do i = 1,na
    k = (i - 1)*na
    l = k + i
@@ -8167,7 +5037,6 @@ real :: rm, rn, sm, sn
 !     aa = Matrix of polynomials   (NXM array)
 !     na = Number of rows          (N)
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
-!
 sn = na
 rn = sqrt(sn)
 do i = 1,na
@@ -8253,11 +5122,9 @@ real :: rn, sn
 !     ff = ORTHONORMAL FUNCTIONS                  (M-ARRAY)
 !     df = FIRST DERIVATIVES                      (M-ARRAY)
 !     sf = SECOND DERIVATIVES                     (M-ARRAY)
-!
 !     call orthov (0, na, au, ar, nf, ff)         for functions
 !     call orthov (1, na, au, ar, nf, ff, df)     for first derivatives
 !     call orthov (2, na, au, ar, nf, ff, df, sf) for second derivatives
-!
 sn = na
 rn = sqrt(sn)
 ff(1) = 1.0/rn
@@ -8306,7 +5173,6 @@ real :: rn, sn, tm
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
 !     nc = Number of coefficients  (m)
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
-!
 do n = 1,nc
    ac(n) = 0.0
 end do
@@ -8338,13 +5204,9 @@ end subroutine orthox
 real function zeroin(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !         Finding a zero of the function f(X) in the interval (ax,bx)
-!
 !                       ------------------------
-!
 !  Input...
-!
 !  f      FUNCTION SUBPROGRAM WHICH EVALUATES f(X) FOR ANY X IN THE
 !         closed interval (ax,bx). It is assumed that f is continuous,
 !         and that f(ax) and f(bx) have different signs.
@@ -8352,11 +5214,8 @@ implicit none
 !  bx     RIGHT ENDPOINT OF THE INTERVAL
 !  aerr   THE ABSOLUTE ERROR TOLERANCE TO BE SATISFIED
 !  rerr   THE RELATIVE ERROR TOLERANCE TO BE SATISFIED
-!
-!  Output...
-!
-!         Abcissa approximating a zero of f in the interval (ax,bx)
-!
+!  output...
+!         abcissa approximating a zero of f in the interval (ax,bx)
 !-----------------------------------------------------------------------
 !  zeroin is a slightly modified translation of the Algol procedure
 !  zero given by richard Brent in algorithms for minimization without
@@ -8374,22 +5233,16 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-!
 !  Compute eps, the relative machine precision
-!
 eps = spmpar(1)
-!
 ! Initialization
-!
 a = ax
 b = bx
 fa = f(a)
 fb = f(b)
 atol = 0.5*aerr
 rtol = max(0.5*rerr,2.0*eps)
-!
 ! Begin step
-!
 10 c = a
 fc = fa
 d = b - a
@@ -8401,58 +5254,40 @@ c = a
 fa = fb
 fb = fc
 fc = fa
-!
 ! Convergence test
-!
 40 tol = rtol*max(abs(b),abs(c)) + atol
 xm = 0.5*(c - b)
 if (abs(xm) <= tol) go to 90
 if (fb == 0.0) go to 90
-!
 ! Is bisection necessary
-!
 if (abs(e) < tol) go to 70
 if (abs(fa) <= abs(fb)) go to 70
-!
 ! Is quadratic interpolation possible
-!
 if (a /= c) go to 50
-!
 ! Linear interpolation
-!
 s = fb/fc
 p = (c - b)*s
 q = 1.0 - s
 go to 60
-!
 ! Inverse quadratic interpolation
-!
 50 q = fa/fc
 r = fb/fc
 s = fb/fa
 p = s*((c - b)*q*(q - r) - (b - a)*(r - 1.0))
 q = (q - 1.0)*(r - 1.0)*(s - 1.0)
-!
 ! Adjust signs
-!
 60 if (p > 0.0) q = -q
 p = abs(p)
-!
 ! Is interpolation acceptable
-!
 if (2.0*p >= (3.0*xm*q - abs(tol*q))) go to 70
 if (p >= abs(0.5*e*q)) go to 70
 e = d
 d = p/q
 go to 80
-!
 ! Bisection
-!
 70 d = xm
 e = d
-!
 ! Complete step
-!
 80 a = b
 fa = fb
 if (abs(d) > tol) b = b + d
@@ -8460,22 +5295,16 @@ if (abs(d) <= tol) b = b + sign(tol,xm)
 fb = f(b)
 if ((fb*(fc/abs(fc))) > 0.0) go to 10
 go to 20
-!
 ! Done
-!
 90 zeroin = b
 end function zeroin
 
 double precision function dzero(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
-!
 !         Finding a zero of the function f(X) in the interval (ax,bx)
-!
 !                       ------------------------
-!
 !  Input...
-!
 !  f      FUNCTION SUBPROGRAM WHICH EVALUATES f(X) FOR ANY X IN THE
 !         closed interval (ax,bx). It is assumed that f is continuous,
 !         and that f(ax) and f(bx) have different signs.
@@ -8483,11 +5312,8 @@ implicit none
 !  bx     RIGHT ENDPOINT OF THE INTERVAL
 !  aerr   THE ABSOLUTE ERROR TOLERANCE TO BE SATISFIED
 !  rerr   THE RELATIVE ERROR TOLERANCE TO BE SATISFIED
-!
-!  Output...
-!
-!         Abcissa approximating a zero of f in the interval (ax,bx)
-!
+!  output...
+!         abcissa approximating a zero of f in the interval (ax,bx)
 !-----------------------------------------------------------------------
 !  dzero is a slightly modified translation of the Algol procedure
 !  zero given by richard Brent in algorithms for minimization without
@@ -8505,22 +5331,16 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-!
 !  Compute eps, the relative machine precision
-!
 eps = dpmpar(1)
-!
 ! Initialization
-!
 a = ax
 b = bx
 fa = f(a)
 fb = f(b)
 atol = 0.5d0*aerr
 rtol = max(0.5d0*rerr,2.d0*eps)
-!
 ! Begin step
-!
 10 c = a
 fc = fa
 d = b - a
@@ -8532,58 +5352,40 @@ c = a
 fa = fb
 fb = fc
 fc = fa
-!
 ! Convergence test
-!
 40 tol = rtol*max(abs(b),abs(c)) + atol
 xm = 0.5d0*(c - b)
 if (abs(xm) <= tol) go to 90
 if (fb == 0.d0) go to 90
-!
 ! Is bisection necessary
-!
 if (abs(e) < tol) go to 70
 if (abs(fa) <= abs(fb)) go to 70
-!
 ! Is quadratic interpolation possible
-!
 if (a /= c) go to 50
-!
 ! Linear interpolation
-!
 s = fb/fc
 p = (c - b)*s
 q = 1.d0 - s
 go to 60
-!
 ! Inverse quadratic interpolation
-!
 50 q = fa/fc
 r = fb/fc
 s = fb/fa
 p = s*((c - b)*q*(q - r) - (b - a)*(r - 1.d0))
 q = (q - 1.d0)*(r - 1.d0)*(s - 1.d0)
-!
 ! Adjust signs
-!
 60 if (p > 0.d0) q = -q
 p = abs(p)
-!
 ! Is interpolation acceptable
-!
 if (2.d0*p >= (3.d0*xm*q - abs(tol*q))) go to 70
 if (p >= abs(0.5d0*e*q)) go to 70
 e = d
 d = p/q
 go to 80
-!
 ! Bisection
-!
 70 d = xm
 e = d
-!
 ! Complete step
-!
 80 a = b
 fa = fb
 if (abs(d) > tol) b = b + d
@@ -8591,9 +5393,7 @@ if (abs(d) <= tol) b = b + sign(tol,xm)
 fb = f(b)
 if ((fb*(fc/abs(fc))) > 0.d0) go to 10
 go to 20
-!
 ! Done
-!
 90 dzero = b
 end function dzero
 
@@ -8611,28 +5411,21 @@ real, parameter :: factor = 1.0e2
 real, parameter :: one = 1.0e0
 real, parameter :: zero = 0.0e0
 !     **********
-!
 !     SUBROUTINE hbrd
-!
-!       The purpose of hbrd is to find a zero of a system of
+!       the purpose of hbrd is to find a zero of a system of
 !     n nonlinear functions in n variables by a modification
 !     of the Powell hybrid method. This is done by using the
 !     more general nonlinear equation solver hybrd. The user
 !     must provide a subroutine which calculates the functions.
 !     The Jacobian is then calculated by a forward-difference
 !     approximation.
-!
 !     The subroutine statement is
-!
 !       subroutine hbrd(fcn,n,x,fvec,epsfcn,tol,info,wa,lwa)
-!
-!     Where
-!
+!     where
 !       FCN is the name of the user-supplied subroutine which
 !         calculates the functions. FCN must be declared
 !         in an external statement in the user calling
 !         program, and should be written as follows.
-!
 !         subroutine fcn(n,x,fvec,iflag)
 !         integer n,iflag
 !         real x(n),fvec(n)
@@ -8642,21 +5435,16 @@ real, parameter :: zero = 0.0e0
 !         ---------
 !         return
 !         end
-!
-!         The value of IFLAG should not be changed by FCN unless
+!         the value of IFLAG should not be changed by FCN unless
 !         the user wants to terminate the execution of hbrd.
 !         In this case set IFLAG to a negative integer.
-!
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
-!
 !       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
-!
 !       fvec is an output array of length n which contains
 !         the functions evaluated at the output x.
-!
 !       epsfcn is an input variable used in determining a suitable
 !         step length for the forward-difference approximation. This
 !         approximation assumes that the relative errors in the
@@ -8664,53 +5452,35 @@ real, parameter :: zero = 0.0e0
 !         than the machine precision, it is assumed that the relative
 !         errors in the functions are of the order of the machine
 !         precision.
-!
 !       tol is a nonnegative input variable. Termination occurs
 !         when the algorithm estimates that the relative error
 !         between x and the solution is at most tol.
-!
 !       Info is an integer output variable. If the user has
 !         terminated execution, info is set to the (negative)
 !         value of IFLAG. See description of FCN. Otherwise,
 !         info is set as follows.
-!
 !         info = 0   Improper input parameters.
-!
 !         info = 1   Algorithm estimates that the relative error
 !                    between x and the solution is at most tol.
-!
 !         info = 2   Number of calls to FCN has reached or exceeded
 !                    200*(n+1).
-!
 !         info = 3   tol is too small. No further improvement in
 !                    the approximate solution x is possible.
-!
 !         info = 4   Iteration is not making good progress.
-!
 !       wa is a work array of length lwa.
-!
 !       lwa is a positive integer input variable NOT less than
 !         (n*(3*n+13))/2.
-!
 !     Subprograms called
-!
-!       User-supplied ...... FCN
-!
+!       user-supplied ...... FCN
 !       MINPACK-supplied ... hybrd
-!
 !     Argonne National Laboratory. MINPACK project. March 1980.
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
-!
 !     **********
 info = 0
-!
 !     Check the input parameters for errors.
-!
 if (n <= 0 .or. epsfcn < zero .or. tol < zero .or. &
    & lwa < (n*(3*n + 13))/2) go to 20
-!
 !     CALL hybrd.
-!
 maxfev = 200*(n + 1)
 xtol = tol
 ml = n - 1
@@ -8727,9 +5497,7 @@ call hybrd(fcn,n,x,fvec,xtol,maxfev,ml,mu,epsfcn,wa(1),mode, &
    & wa(n + 1),wa(2*n + 1),wa(3*n + 1),wa(4*n + 1),wa(5*n + 1))
 if (info == 5) info = 4
 20 continue
-!
 !     Last card of subroutine hbrd.
-!
 end subroutine hbrd
 
 subroutine hybrd(fcn,n,x,fvec,xtol,maxfev,ml,mu,epsfcn,diag, &
@@ -8763,28 +5531,21 @@ interface
    end function spmpar
 end interface
 !     **********
-!
 !     SUBROUTINE hybrd
-!
-!     The purpose of hybrd is to find a zero of a system of
+!     the purpose of hybrd is to find a zero of a system of
 !     n nonlinear functions in n variables by a modification
 !     of the Powell hybrid method. The user must provide A
 !     subroutine which calculates the functions. The Jacobian is
 !     then calculated by a forward-difference approximation.
-!
 !     The subroutine statement is
-!
 !       subroutine hybrd(fcn,n,x,fvec,xtol,maxfev,ml,mu,epsfcn,
 !                        diag,mode,factor,nprint,info,nfev,fjac,
 !                        ldfjac,R,lr,QTF,WA1,WA2,WA3,wa4)
-!
-!     Where
-!
+!     where
 !       FCN is the name of the user-supplied subroutine which
 !         calculates the functions. FCN must be declared
 !         in an external statement in the user calling
 !         program, and should be written as follows.
-!
 !         subroutine fcn(n,x,fvec,iflag)
 !         integer n,iflag
 !         real x(n),fvec(n)
@@ -8794,39 +5555,30 @@ end interface
 !         ---------
 !         return
 !         end
-!
-!         The value of iflag should not be changed by FCN unless
+!         the value of iflag should not be changed by FCN unless
 !         the user wants to terminate execution of hybrd.
 !         In this case set iflag to a negative integer.
-!
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
-!
 !       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
-!
 !       fvec is an output array of length n which contains
 !         the functions evaluated at the output x.
-!
 !       xtol is a nonnegative input variable. Termination
 !         occurs when the relative error between two consecutive
 !         iterates is at most xtol.
-!
 !       maxfev is a positive integer input variable. Termination
 !         occurs when the number of calls to FCN is at least maxfev
 !         by the end of an iteration.
-!
 !       ml is a nonnegative integer input variable which specifies
 !         the number of subdiagonals within the band of the
 !         Jacobian matrix. If the Jacobian is not banded, set
 !         ml to at least n - 1.
-!
 !       mu is a nonnegative integer input variable which specifies
 !         the number of superdiagonals within the band of the
 !         Jacobian matrix. If the Jacobian is not banded, set
 !         mu to at least n - 1.
-!
 !       epsfcn is an input variable used in determining a suitable
 !         step length for the forward-difference approximation. This
 !         approximation assumes that the relative errors in the
@@ -8834,23 +5586,19 @@ end interface
 !         than the machine precision, it is assumed that the relative
 !         errors in the functions are of the order of the machine
 !         precision.
-!
 !       Diag is an array of length n. if mode = 1 (see
 !         below), diag is internally set. If mode = 2, diag
 !         must contain positive entries that serve as
 !         multiplicative scale factors for the variables.
-!
 !       Mode is an integer input variable. If mode = 1, the
 !         variables will be scaled internally. If mode = 2,
 !         the scaling is specified by the input diag. Other
 !         values of mode are equivalent to mode = 1.
-!
 !       Factor is a positive input variable used in determining the
 !         initial step bound. This bound is set to the product of
 !         factor and the Euclidean norm of diag*x if nonzero, or else
 !         to factor itself. In most cases factor should lie in the
 !         interval (.1,100.). 100. Is a generally recommended value.
-!
 !       nprint is an integer input variable that enables controlled
 !         printing of iterates if it is positive. In this case,
 !         FCN is called with iflag = 0 At the beginning of the first
@@ -8858,77 +5606,52 @@ end interface
 !         immediately prior to return, with x and fvec available
 !         for printing. If nprint is not positive, no special calls
 !         of FCN with iflag = 0 Are made.
-!
 !       Info is an integer output variable. If the user has
 !         terminated execution, info is set to the (negative)
 !         value of iflag. See description of FCN. Otherwise,
 !         info is set as follows.
-!
 !         info = 0   Improper input parameters.
-!
 !         info = 1   Relative error between two consecutive iterates
 !                    is at most xtol.
-!
 !         info = 2   Number of calls to FCN has reached or exceeded
 !                    maxfev.
-!
 !         info = 3   xtol is too small. No further improvement in
 !                    the approximate solution x is possible.
-!
 !         info = 4   Iteration is not making good progress, as
 !                    measured by the improvement from the last
 !                    five Jacobian evaluations.
-!
 !         info = 5   Iteration is not making good progress, as
 !                    measured by the improvement from the last
 !                    ten iterations.
-!
 !       nfev is an integer output variable SET to the number of
 !         calls to FCN.
-!
 !       fjac is an output n by n array which contains the
 !         orthogonal matrix Q produced by the QR factorization
 !         of the final approximate Jacobian.
-!
 !       ldfjac is a positive integer input variable NOT less than n
 !         which specifies the leading dimension of the array fjac.
-!
 !       R is an output array of length lr which contains the
 !         upper triangular matrix produced by the QR factorization
 !         of the final approximate Jacobian, stored rowwise.
-!
 !       lr is a positive integer input variable NOT less than
 !         (n*(n+1))/2.
-!
 !       QTF is an output array of length n which contains
 !         the vector (Q transpose)*fvec.
-!
 !       WA1, WA2, WA3, and wa4 are work arrays of length n.
-!
 !     Subprograms called
-!
-!       User-supplied ...... FCN
-!
+!       user-supplied ...... FCN
 !       MINPACK-supplied ... dogleg,spmpar,enorm,fdjac1,
 !                            qform,qrfac,r1mpyq,r1updt
-!
 !       Fortran-supplied ... abs,AMAX1,AMIN1,MIN0,mod
-!
 !     Argonne National Laboratory. MINPACK project. March 1980.
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
-!
 !     **********
-!
 !     epsmch is the machine precision.
-!
 epsmch = spmpar(1)
-!
 info = 0
 iflag = 0
 nfev = 0
-!
 !     Check the input parameters for errors.
-!
 if (n <= 0 .or. xtol < zero .or. maxfev <= 0 &
    & .or. ml < 0 .or. mu < 0 .or. factor <= zero &
    & .or. ldfjac < n .or. lr < (n*(n + 1))/2) go to 300
@@ -8937,49 +5660,35 @@ do j = 1, n
    if (diag(j) <= zero) go to 300
 end do
 20 continue
-!
 !     Evaluate the function at the starting point
 !     and calculate its norm.
-!
 iflag = 1
 call fcn(n,x,fvec,iflag)
 nfev = 1
 if (iflag < 0) go to 300
 fnorm = enorm(n,fvec)
-!
 !     Determine the number of calls to FCN needed to compute
 !     the Jacobian matrix.
-!
 msum = min(ml + mu + 1,n)
-!
 !     Initialize iteration counter and monitors.
-!
 iter = 1
 ncsuc = 0
 ncfail = 0
 nslow1 = 0
 nslow2 = 0
-!
 !     Beginning of the outer loop.
-!
 30 continue
 jeval = .true.
-!
 !        Calculate the Jacobian matrix.
-!
 iflag = 2
 call fdjac1(fcn,n,x,fvec,fjac,ldfjac,iflag,ml,mu,epsfcn,wa1, &
    & wa2)
 nfev = nfev + msum
 if (iflag < 0) go to 300
-!
 !        Compute the QR factorization of the Jacobian.
-!
 call qrfac(n,n,fjac,ldfjac,.false.,iwa,1,wa1,wa2,wa3)
-!
 !        On the first iteration and if mode is 1, scale according
 !        to the norms of the columns of the initial Jacobian.
-!
 if (iter /= 1) go to 70
 if (mode == 2) go to 50
 do j = 1, n
@@ -8987,10 +5696,8 @@ do j = 1, n
    if (wa2(j) == zero) diag(j) = one
 end do
 50 continue
-!
 !        On the first iteration, calculate the norm of the scaled x
 !        and initialize the step bound delta.
-!
 do j = 1, n
    wa3(j) = diag(j)*x(j)
 end do
@@ -8998,9 +5705,7 @@ xnorm = enorm(n,wa3)
 delta = factor*xnorm
 if (delta == zero) delta = factor
 70 continue
-!
 !        Form (Q transpose)*fvec and store in QTF.
-!
 do i = 1, n
    qtf(i) = fvec(i)
 end do
@@ -9016,9 +5721,7 @@ do j = 1, n
    end do
 110 continue
 end do
-!
 !        Copy the triangular factor of the QR factorization into R.
-!
 sing = .false.
 do j = 1, n
    l = j
@@ -9032,63 +5735,43 @@ do j = 1, n
    r(l) = wa1(j)
    if (wa1(j) == zero) sing = .true.
 end do
-!
 !        Accumulate the orthogonal factor in fjac.
-!
 call qform(n,n,fjac,ldfjac,wa1)
-!
 !        Rescale if necessary.
-!
 if (mode == 2) go to 170
 do j = 1, n
    diag(j) = max(diag(j),wa2(j))
 end do
 170 continue
-!
 !        Beginning of the inner loop.
-!
 180 continue
-!
 !           If requested, call FCN to enable printing of iterates.
-!
 if (nprint <= 0) go to 190
 iflag = 0
 if (mod(iter - 1,nprint) == 0) call fcn(n,x,fvec,iflag)
 if (iflag < 0) go to 300
 190 continue
-!
 !           Determine the direction P.
-!
 call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
-!
 !           Store the direction P and x + P. calculate the norm of P.
-!
 do j = 1, n
    wa1(j) = -wa1(j)
    wa2(j) = x(j) + wa1(j)
    wa3(j) = diag(j)*wa1(j)
 end do
 pnorm = enorm(n,wa3)
-!
 !           On the first iteration, adjust the initial step bound.
-!
 if (iter == 1) delta = min(delta,pnorm)
-!
 !           Evaluate the function at x + P and calculate its norm.
-!
 iflag = 1
 call fcn(n,wa2,wa4,iflag)
 nfev = nfev + 1
 if (iflag < 0) go to 300
 fnorm1 = enorm(n,wa4)
-!
 !           Compute the scaled actual reduction.
-!
 actred = -one
 if (fnorm1 < fnorm) actred = one - (fnorm1/fnorm)**2
-!
 !           Compute the scaled predicted reduction.
-!
 l = 1
 do i = 1, n
    sum = zero
@@ -9101,15 +5784,11 @@ end do
 temp = enorm(n,wa3)
 prered = zero
 if (temp < fnorm) prered = one - (temp/fnorm)**2
-!
 !           Compute the ratio of the actual to the predicted
 !           reduction.
-!
 ratio = zero
 if (prered > zero) ratio = actred/prered
-!
 !           Update the step bound.
-!
 if (ratio >= p1) go to 230
 ncsuc = 0
 ncfail = ncfail + 1
@@ -9122,13 +5801,9 @@ if (ratio >= p5 .or. ncsuc > 1) &
    & delta = max(delta,pnorm/p5)
 if (abs(ratio - one) <= p1) delta = pnorm/p5
 240 continue
-!
 !           Test for successful iteration.
-!
 if (ratio < p0001) go to 260
-!
 !           Successful iteration. Update x, fvec, and their norms.
-!
 do j = 1, n
    x(j) = wa2(j)
    wa2(j) = diag(j)*x(j)
@@ -9138,35 +5813,25 @@ xnorm = enorm(n,wa2)
 fnorm = fnorm1
 iter = iter + 1
 260 continue
-!
 !           Determine the progress of the iteration.
-!
 nslow1 = nslow1 + 1
 if (actred >= p001) nslow1 = 0
 if (jeval) nslow2 = nslow2 + 1
 if (actred >= p1) nslow2 = 0
-!
 !           Test for convergence.
-!
 if (delta <= xtol*xnorm .or. fnorm == zero) info = 1
 if (info /= 0) go to 300
-!
 !           Tests for termination and stringent tolerances.
-!
 if (nfev >= maxfev) info = 2
 if (p1*max(p1*delta,pnorm) <= epsmch*xnorm) info = 3
 if (nslow2 == 5) info = 4
 if (nslow1 == 10) info = 5
 if (info /= 0) go to 300
-!
 !           Criterion for recalculating Jacobian approximation
 !           by forward differences.
-!
 if (ncfail == 2) go to 290
-!
 !           Calculate the rank one modification to the Jacobian
 !           and update QTF if necessary.
-!
 do j = 1, n
    sum = zero
    do i = 1, n
@@ -9176,32 +5841,22 @@ do j = 1, n
    wa1(j) = diag(j)*((diag(j)*wa1(j))/pnorm)
    if (ratio >= p0001) qtf(j) = sum
 end do
-!
 !           Compute the QR factorization of the updated Jacobian.
-!
 call r1updt(n,n,r,lr,wa1,wa2,wa3,sing)
 call r1mpyq(n,n,fjac,ldfjac,wa2,wa3)
 call r1mpyq(1,n,qtf,1,wa2,wa3)
-!
 !           END OF THE INNER LOOP.
-!
 jeval = .false.
 go to 180
 290 continue
-!
 !        END OF THE OUTER LOOP.
-!
 go to 30
 300 continue
-!
 !     Termination, either normal or user imposed.
-!
 if (iflag < 0) info = iflag
 iflag = 0
 if (nprint > 0) call fcn(n,x,fvec,iflag)
-!
 !     Last card of subroutine hybrd.
-!
 end subroutine hybrd
 
 pure subroutine qdcrt(a, z)
@@ -9217,29 +5872,22 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !        qdcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2
 !     and stores the results in z. it is assumed that a(3)
 !     is nonzero.
-!
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
-!
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.0 + eps .GT. 1.0.
-!
 eps = spmpar(1)
-!
 !-------------------
 if (a(1) == 0.0) go to 40
 d = a(2)*a(2) - 4.0*a(1)*a(3)
 if (abs(d) <= 2.0*eps*a(2)*a(2)) go to 20
 r = sqrt(abs(d))
 if (d < 0.0) go to 30
-!
 !                 Distinct real roots
-!
 if (a(2) /= 0.0) go to 10
 x = abs(0.5*r/a(3))
 z(1) = cmplx(x, 0.0)
@@ -9249,23 +5897,17 @@ return
 z(1) = cmplx(2.0*a(1)/w, 0.0)
 z(2) = cmplx(0.5*w/a(3), 0.0)
 return
-!
 !                  Equal real roots
-!
 20 z(1) = cmplx(-0.5*a(2)/a(3), 0.0)
 z(2) = z(1)
 return
-!
 !                   complex roots
-!
 30 x = -0.5*a(2)/a(3)
 y = abs(0.5*r/a(3))
 z(1) = cmplx(x, y)
 z(2) = cmplx(x,-y)
 return
-!
 !                 Case when a(1) = 0
-!
 40 z(1) = (0.0, 0.0)
 z(2) = cmplx(-a(2)/a(3), 0.0)
 end subroutine qdcrt
@@ -9273,12 +5915,10 @@ end subroutine qdcrt
 pure subroutine dqdcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
-!
 !        dqdcrt computes the roots of the real polynomial
 !                a(1) + a(2)*Z + a(3)*Z**2
 !     and stores the results in zr and zi. It is assumed that
 !     a(3) is nonzero.
-!
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(3)
 double precision, intent(inout) :: zr(2), zi(2)
@@ -9291,21 +5931,16 @@ interface
    end function dpmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.D0 + eps .GT. 1.D0.
-!
 eps = dpmpar(1)
-!
 !-------------------
 if (a(1) == 0.d0) go to 40
 d = a(2)*a(2) - 4.d0*a(1)*a(3)
 if (abs(d) <= 2.d0*eps*a(2)*a(2)) go to 20
 r = sqrt(abs(d))
 if (d < 0.d0) go to 30
-!
 !                 Distinct real roots
-!
 zi(1) = 0.d0
 zi(2) = 0.d0
 if (a(2) /= 0.d0) go to 10
@@ -9316,25 +5951,19 @@ return
 zr(1) = 2.d0*a(1)/w
 zr(2) = 0.5d0*w/a(3)
 return
-!
 !                  Equal real roots
-!
 20 zr(1) = -0.5d0*a(2)/a(3)
 zr(2) = zr(1)
 zi(1) = 0.d0
 zi(2) = 0.d0
 return
-!
 !                   complex roots
-!
 30 zr(1) = -0.5d0*a(2)/a(3)
 zr(2) = zr(1)
 zi(1) = abs(0.5d0*r/a(3))
 zi(2) = -zi(1)
 return
-!
 !                 Case when a(1) = 0
-!
 40 zr(1) = 0.d0
 zr(2) = -a(2)/a(3)
 zi(1) = 0.d0
@@ -9366,12 +5995,10 @@ interface
    end function spmpar
 end interface
 !-----------------------------------------------------------------------
-!
 !        cbcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2 + a(4)*z**3
 !     and stores the results in z. it is assumed that a(4)
 !     is nonzero.
-!
 !-----------------------------------------------------------------------
 !     Written by Alfred H. Morris
 !        naval surface weapons center
@@ -9379,35 +6006,27 @@ end interface
 !-----------------------------------------------------------------------
 !-------------------
 !-----------------------------------------------------------------------
-!
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.0 + eps .GT. 1.0.
-!
 eps = spmpar(1)
-!
 !-------------------
 if (a(1) == 0.0) go to 100
 p = a(3)/(3.0*a(4))
 q = a(2)/a(4)
 r = a(1)/a(4)
 tol = 4.0*eps
-!
 c = 0.0
 t = a(2) - p*a(3)
 if (abs(t) > tol*abs(a(2))) c = t/a(4)
-!
 t = 2.0*p*p - q
 if (abs(t) <= tol*abs(q)) t = 0.0
 d = r + p*t
 if (abs(d) <= tol*abs(r)) go to 110
-!
 !           SET  SQ = (a(4)/S)**2 * (c**3/27 + d**2/4)
-!
 s = max(abs(a(1)),abs(a(2)),abs(a(3)))
 p1 = a(3)/(3.0*s)
 q1 = a(2)/s
 r1 = a(1)/s
-!
 t1 = q - 2.25*p*p
 if (abs(t1) <= tol*abs(q)) t1 = 0.0
 w = 0.25*r1*r1
@@ -9425,9 +6044,7 @@ go to 12
 12 if (abs(sq) <= tol*w) sq = 0.0
 rq = abs(s/a(4))*sqrt(abs(sq))
 if (sq >= 0.0) go to 40
-!
 !                   All roots are real
-!
 arg = atan2(rq, -0.5*d)
 cf = cos(arg/3.0)
 sf = sin(arg/3.0)
@@ -9435,7 +6052,6 @@ rt = sqrt(-c/3.0)
 y1 = 2.0*rt*cf
 y2 = -rt*(cf + rt3*sf)
 y3 = -(d/y1)/y2
-!
 x1 = y1 - p
 x2 = y2 - p
 x3 = y3 - p
@@ -9451,7 +6067,6 @@ if (abs(x1) <= abs(x2)) go to 30
 t = x1
 x1 = x2
 x2 = t
-!
 30 w = x3
 if (abs(x2) < 0.1*abs(x3)) go to 70
 if (abs(x1) < 0.1*abs(x2)) x1 = - (r/x3)/x2
@@ -9459,9 +6074,7 @@ z(1) = cmplx(x1, 0.0)
 z(2) = cmplx(x2, 0.0)
 z(3) = cmplx(x3, 0.0)
 return
-!
 !                  Real and complex roots
-!
 40 ra = cbrt(-0.5*d - sign(rq,d))
 rb = -c/(3.0*ra)
 t = ra + rb
@@ -9473,7 +6086,6 @@ x = -0.5*t - p
 if (abs(x) <= tol*abs(p)) x = 0.0
 41 t = abs(ra - rb)
 y = 0.5*rt3*t
-!
 if (t <= tol*abs(ra)) go to 60
 if (abs(x) < abs(y)) go to 50
 s = abs(x)
@@ -9489,9 +6101,7 @@ z(1) = cmplx(w,0.0)
 z(2) = cmplx(x, y)
 z(3) = cmplx(x,-y)
 return
-!
 !               At least two roots are equal
-!
 60 if (abs(x) < abs(w)) go to 61
 if (abs(w) < 0.1*abs(x)) w = - (r/x)/x
 z(1) = cmplx(w, 0.0)
@@ -9503,48 +6113,38 @@ z(1) = cmplx(x, 0.0)
 z(2) = z(1)
 z(3) = cmplx(w, 0.0)
 return
-!
 !     Here W is much larger in magnitude than the other roots.
 !     As a result, the other roots may be exceedingly inaccurate
 !     because of roundoff error. To deal with this, a quadratic
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
-!
 !     This code was written by william L. Davis (NSWC).
-!
 70 aq(1) = a(1)
 aq(2) = a(2) + a(1)/w
 aq(3) = -a(4)*w
 call qdcrt(aq, z)
 z(3) = cmplx(w, 0.0)
-!
 if (aimag(z(1)) == 0.0) return
 z(3) = z(2)
 z(2) = z(1)
 z(1) = cmplx(w, 0.0)
 return
 !-----------------------------------------------------------------------
-!
 !                  Case when a(1) = 0
-!
 100 z(1) = (0.0, 0.0)
 call qdcrt(a(2), z(2))
 return
-!
 !                   Case when d = 0
-!
 110 z(1) = cmplx(-p, 0.0)
 w = sqrt(abs(c))
 if (c < 0.0) go to 120
 z(2) = cmplx(-p, w)
 z(3) = cmplx(-p,-w)
 return
-!
 120 if (p /= 0.0) go to 130
 z(2) = cmplx(w, 0.0)
 z(3) = cmplx(-w, 0.0)
 return
-!
 130 x = -(p + sign(w,p))
 z(3) = cmplx(x, 0.0)
 t = 3.0*a(1)/(a(3)*x)
@@ -9558,12 +6158,10 @@ end subroutine cbcrt
 pure subroutine dcbcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
-!
 !        dcbcrt computes the roots of the real polynomial
 !              a(1) + a(2)*Z + a(3)*Z**2 + a(4)*Z**3
 !     and stores the results in zr and zi. It is assumed that
 !     a(4) is nonzero.
-!
 !-----------------------------------------------------------------------
 !     Written by Alfred H. Morris
 !        naval surface weapons center
@@ -9594,35 +6192,27 @@ interface
 end interface
 !-------------------
 !-----------------------------------------------------------------------
-!
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.D0 + eps .GT. 1.D0.
-!
 eps = dpmpar(1)
-!
 !-------------------
 if (a(1) == 0.d0) go to 100
 p = a(3)/(3.d0*a(4))
 q = a(2)/a(4)
 r = a(1)/a(4)
 tol = 4.d0*eps
-!
 c = 0.d0
 t = a(2) - p*a(3)
 if (abs(t) > tol*abs(a(2))) c = t/a(4)
-!
 t = 2.d0*p*p - q
 if (abs(t) <= tol*abs(q)) t = 0.d0
 d = r + p*t
 if (abs(d) <= tol*abs(r)) go to 110
-!
 !           SET  SQ = (a(4)/S)**2 * (c**3/27 + d**2/4)
-!
 s = max(abs(a(1)),abs(a(2)),abs(a(3)))
 p1 = a(3)/(3.d0*s)
 q1 = a(2)/s
 r1 = a(1)/s
-!
 t1 = q - 2.25d0*p*p
 if (abs(t1) <= tol*abs(q)) t1 = 0.d0
 w = 0.25d0*r1*r1
@@ -9640,9 +6230,7 @@ go to 12
 12 if (abs(sq) <= tol*w) sq = 0.d0
 rq = abs(s/a(4))*sqrt(abs(sq))
 if (sq >= 0.d0) go to 40
-!
 !                   All roots are real
-!
 arg = atan2(rq, -0.5d0*d)
 cf = cos(arg/3.d0)
 sf = sin(arg/3.d0)
@@ -9650,7 +6238,6 @@ rt = sqrt(-c/3.d0)
 y1 = 2.d0*rt*cf
 y2 = -rt*(cf + rt3*sf)
 y3 = -(d/y1)/y2
-!
 x1 = y1 - p
 x2 = y2 - p
 x3 = y3 - p
@@ -9666,7 +6253,6 @@ if (abs(x1) <= abs(x2)) go to 30
 t = x1
 x1 = x2
 x2 = t
-!
 30 w = x3
 if (abs(x2) < 0.1d0*abs(x3)) go to 70
 if (abs(x1) < 0.1d0*abs(x2)) x1 = - (r/x3)/x2
@@ -9677,9 +6263,7 @@ zi(1) = 0.d0
 zi(2) = 0.d0
 zi(3) = 0.d0
 return
-!
 !                  Real and complex roots
-!
 40 ra = dcbrt(-0.5d0*d - sign(rq,d))
 rb = -c/(3.d0*ra)
 t = ra + rb
@@ -9691,7 +6275,6 @@ x = -0.5d0*t - p
 if (abs(x) <= tol*abs(p)) x = 0.d0
 41 t = abs(ra - rb)
 y = 0.5d0*rt3*t
-!
 if (t <= tol*abs(ra)) go to 60
 if (abs(x) < abs(y)) go to 50
 s = abs(x)
@@ -9710,9 +6293,7 @@ zi(1) = 0.d0
 zi(2) = y
 zi(3) = -y
 return
-!
 !               At least two roots are equal
-!
 60 zi(1) = 0.d0
 zi(2) = 0.d0
 zi(3) = 0.d0
@@ -9727,22 +6308,18 @@ zr(1) = x
 zr(2) = x
 zr(3) = w
 return
-!
 !     Here W is much larger in magnitude than the other roots.
 !     As a result, the other roots may be exceedingly inaccurate
 !     because of roundoff error. To deal with this, a quadratic
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
-!
 !     This code was written by william L. Davis (NSWC).
-!
 70 aq(1) = a(1)
 aq(2) = a(2) + a(1)/w
 aq(3) = -a(4)*w
 call dqdcrt(aq, zr, zi)
 zr(3) = w
 zi(3) = 0.d0
-!
 if (zi(1) == 0.d0) return
 zr(3) = zr(2)
 zi(3) = zi(2)
@@ -9752,16 +6329,12 @@ zr(1) = w
 zi(1) = 0.d0
 return
 !-----------------------------------------------------------------------
-!
 !                  Case when a(1) = 0
-!
 100 zr(1) = 0.d0
 zi(1) = 0.d0
 call dqdcrt(a(2), zr(2), zi(2))
 return
-!
 !                   Case when d = 0
-!
 110 zr(1) = -p
 zi(1) = 0.d0
 w = sqrt(abs(c))
@@ -9771,14 +6344,12 @@ zr(3) = zr(2)
 zi(2) = w
 zi(3) = -w
 return
-!
 120 if (p /= 0.d0) go to 130
 zr(2) = w
 zr(3) = -w
 zi(2) = 0.d0
 zi(3) = 0.d0
 return
-!
 130 x = -(p + sign(w,p))
 zr(3) = x
 zi(2) = 0.d0
@@ -9810,49 +6381,39 @@ interface
    end subroutine cbcrt
 end interface
 !-----------------------------------------------------------------------
-!
 !         qtcrt computes the roots of the real polynomial
 !               a(1) + a(2)*z + ... + a(5)*z**4
 !         and stores the results in z. it is assumed that a(5)
 !         is nonzero.
-!
 !-----------------------------------------------------------------------
 !     Written by Alfred h. Morris
 !        naval surface weapons center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-!
 if (a(1) == 0.0) go to 100
 b = a(4)/(4.0*a(5))
 c = a(3)/a(5)
 d = a(2)/a(5)
 e = a(1)/a(5)
 b2 = b*b
-!
 p = 0.5*(c - 6.0*b2)
 q = d - 2.0*b*(c - 4.0*b2)
 r = b2*(c - 3.0*b2) - b*d + e
-!
 !          Solve the resolvent cubic equation. The cubic has
 !          at least one nonnegative real root. If W1, W2, W3
 !          are the roots of the cubic then the roots of the
 !          originial equation are
-!
 !             z = -b + csqrt(w1) + csqrt(w2) + csqrt(w3)
-!
-!          Where the signs of the square roots are chosen so
+!          where the signs of the square roots are chosen so
 !          THAT CSQRT(W1) * CSQRT(W2) * CSQRT(W3) = -q/8.
-!
 temp(1) = -q*q/64.0
 temp(2) = 0.25*(p*p - r)
 temp(3) = p
 temp(4) = 1.0
 call cbcrt(temp,z)
 if (aimag(z(2)) /= 0.0) go to 60
-!
 !               The resolvent cubic has only real roots
 !                reorder the roots in increasing order
-!
 x1 = real(z(1))
 x2 = real(z(2))
 x3 = real(z(3))
@@ -9868,14 +6429,12 @@ if (x1 <= x2) go to 20
 t = x1
 x1 = x2
 x2 = t
-!
 20 u = 0.0
 if (x3 > 0.0) u = sqrt(x3)
 if (x2 <= 0.0) go to 41
 if (x1 >= 0.0) go to 30
 if (abs(x1) > x2) go to 40
 x1 = 0.0
-!
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.0) x1 = -x1
@@ -9892,14 +6451,12 @@ z(2) = cmplx(temp(2), 0.0)
 z(3) = cmplx(temp(3), 0.0)
 z(4) = cmplx(temp(4), 0.0)
 return
-!
 40 v1 = sqrt(abs(x1))
 v2 = 0.0
 go to 50
 41 v1 = sqrt(abs(x1))
 v2 = sqrt(abs(x2))
 if (q < 0.0) u = -u
-!
 50 x = -u - b
 y = v1 - v2
 z(1) = cmplx(x, y)
@@ -9909,9 +6466,7 @@ y = v1 + v2
 z(3) = cmplx(x, y)
 z(4) = cmplx(x,-y)
 return
-!
 !                The resolvent cubic has complex roots
-!
 60 t = real(z(1))
 x = 0.0
 nswc_ai_r4 = t
@@ -9923,7 +6478,6 @@ if (abs(t) <= h) go to 70
 go to 80
 62 x = sqrt(t)
 if (q > 0.0) x = -x
-!
 70 w = sqrt(z(2))
 u = 2.0*real(w)
 v = 2.0*abs(aimag(w))
@@ -9942,16 +6496,13 @@ z(2) = cmplx(x2, 0.0)
 z(3) = cmplx(u, v)
 z(4) = cmplx(u,-v)
 return
-!
 80 v = sqrt(abs(t))
 z(1) = cmplx(-b, v)
 z(2) = cmplx(-b,-v)
 z(3) = z(1)
 z(4) = z(2)
 return
-!
 !                         Case when a(1) = 0
-!
 100 z(1) = (0.0, 0.0)
 call cbcrt(a(2), z(2))
 end subroutine qtcrt
@@ -9959,12 +6510,10 @@ end subroutine qtcrt
 pure subroutine dqtcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
-!
 !         dqtcrt computes the roots of the real polynomial
 !               a(1) + a(2)*Z + ... + a(5)*Z**4
 !         and stores the results in zr and zi. It is assumed
 !         that a(5) is nonzero.
-!
 !-----------------------------------------------------------------------
 !     Written by Alfred h. Morris
 !        naval surface weapons center
@@ -9991,38 +6540,30 @@ interface
       double precision, intent(inout) :: w(2)
    end subroutine dcsqrt
 end interface
-!
 if (a(1) == 0.d0) go to 100
 b = a(4)/(4.d0*a(5))
 c = a(3)/a(5)
 d = a(2)/a(5)
 e = a(1)/a(5)
 b2 = b*b
-!
 p = 0.5d0*(c - 6.d0*b2)
 q = d - 2.d0*b*(c - 4.d0*b2)
 r = b2*(c - 3.d0*b2) - b*d + e
-!
 !          Solve the resolvent cubic equation. The cubic has
 !          at least one nonnegative real root. If W1, W2, W3
 !          are the roots of the cubic then the roots of the
 !          originial equation are
-!
 !             z = -b + csqrt(w1) + csqrt(w2) + csqrt(w3)
-!
-!          Where the signs of the square roots are chosen so
+!          where the signs of the square roots are chosen so
 !          THAT CSQRT(W1) * CSQRT(W2) * CSQRT(W3) = -q/8.
-!
 temp(1) = -q*q/64.d0
 temp(2) = 0.25d0*(p*p - r)
 temp(3) = p
 temp(4) = 1.d0
 call dcbcrt(temp, zr, zi)
 if (zi(2) /= 0.d0) go to 60
-!
 !               The resolvent cubic has only real roots
 !                reorder the roots in increasing order
-!
 x1 = zr(1)
 x2 = zr(2)
 x3 = zr(3)
@@ -10038,14 +6579,12 @@ if (x1 <= x2) go to 20
 t = x1
 x1 = x2
 x2 = t
-!
 20 u = 0.d0
 if (x3 > 0.d0) u = sqrt(x3)
 if (x2 <= 0.d0) go to 41
 if (x1 >= 0.d0) go to 30
 if (abs(x1) > x2) go to 40
 x1 = 0.d0
-!
 30 x1 = sqrt(x1)
 x2 = sqrt(x2)
 if (q > 0.d0) x1 = -x1
@@ -10062,14 +6601,12 @@ zi(2) = 0.d0
 zi(3) = 0.d0
 zi(4) = 0.d0
 return
-!
 40 v1 = sqrt(abs(x1))
 v2 = 0.d0
 go to 50
 41 v1 = sqrt(abs(x1))
 v2 = sqrt(abs(x2))
 if (q < 0.d0) u = -u
-!
 50 zr(1) = -u - b
 zi(1) = v1 - v2
 zr(2) = zr(1)
@@ -10079,9 +6616,7 @@ zi(3) = v1 + v2
 zr(4) = zr(3)
 zi(4) = -zi(3)
 return
-!
 !                The resolvent cubic has complex roots
-!
 60 t = zr(1)
 x = 0.d0
 nswc_ai_r8 = t
@@ -10093,7 +6628,6 @@ if (abs(t) <= h) go to 70
 go to 80
 62 x = sqrt(t)
 if (q > 0.d0) x = -x
-!
 70 w(1) = zr(2)
 w(2) = zi(2)
 call dcsqrt(w, w)
@@ -10118,7 +6652,6 @@ zr(4) = u
 zi(3) = v
 zi(4) = -v
 return
-!
 80 v = sqrt(abs(t))
 zr(1) = -b
 zr(2) = -b
@@ -10129,9 +6662,7 @@ zi(2) = -v
 zi(3) = v
 zi(4) = -v
 return
-!
 !                         Case when a(1) = 0
-!
 100 zr(1) = 0.d0
 zi(1) = 0.d0
 call dcbcrt(a(2), zr(2), zi(2))
@@ -10146,19 +6677,14 @@ double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
 real, intent(inout) :: wk(*)
 integer :: idp1, p, qp, k, qk, svk, tmp
-!
 !     This subroutine finds the zeros of a real polynomial.
-!
 !     op          - Double precision array of length ideg + 1.
 !                   On input this array contains the coefficients
 !                   in order of decreasing powers.
-!
 !     ideg        - Integer degree of the polynomial.
-!
 !     zeror,zeroi - Double precision arrays if length ideg.
 !                   On output these arrays contain the real and
 !                   imaginary parts of the zeros.
-!
 !     num         - Variable that reports the status of the results.
 !                   If num = -1 Then the leading coefficient of the
 !                   polynomial is 0 or ideg .LT. 1. Otherwise, num
@@ -10166,38 +6692,26 @@ integer :: idp1, p, qp, k, qk, svk, tmp
 !                   num .GE. 1 then the real and imaginary parts of
 !                   the zeros are stored in zeror(J) and zeroi(J)
 !                   FOR J = 1,...,num.
-!
 !     wk          - Real array of length ideg + 1. The array is
 !                   a work space for the routine.
-!
 !     DWK         - Double precision array of length 6*(ideg + 1).
 !                   The array is a work space for the routine.
-!
 !     The subroutine uses single precision calculations for scaling,
 !     bounds, and error calculations. All other calculations are done
 !     in double precision.
-!
-!
-!
 if (ideg < 1) go to 10
-!
 !     Partition the workspace DWK and obtain the zeros
-!
 idp1 = ideg + 1
-!
 p = 1
 qp = p + idp1
 k = qp + idp1
 qk = k + idp1
 svk = qk + idp1
 tmp = svk + idp1
-!
 call drply1(op,ideg,idp1,zeror,zeroi,dwk(p),dwk(qp),dwk(k), &
    & dwk(qk),dwk(svk),dwk(tmp),wk,num)
 return
-!
 !     Error return
-!
 10 num = -1
 end subroutine drpoly
 
@@ -10244,15 +6758,12 @@ interface
    end function spmpar
 end interface
 !-------------------------
-!
-!
 !-------------------------
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !-------------------------
 !     The following statements set the machine constants used
 !     in the code. The meaning of the constants are ...
-!
 !     eta     THE SMALLEST POSITIVE NUMBER SUCH THAT
 !             1.D0 + eta is greater than 1.D0
 !     SMALNO  the smallest positive floating point number.
@@ -10262,22 +6773,17 @@ common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !     INFIN   THE LARGEST POSITIVE FLOATING POINT NUMBER.
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETICS
 !             being used.
-!
 eta = dpmpar(1)
 smalno = spmpar(2)
 infin = spmpar(3)
 base = ipmpar(4)
 !-------------------------
-!
 !     Are and mre refer to the unit error in + and *
 !     respectively. They are assumed to be the same as eta.
-!
 are = eta
 mre = eta
 lo = smalno/eta
-!
 !     Initialization of constants for shift rotation
-!
 xx = .70710678
 yy = -xx
 cosr = -.069756474
@@ -10285,15 +6791,11 @@ sinr = .99756405
 n = ideg
 nn = idp1
 num = 0
-!
 !     Algorithm fails if the leading coefficient is zero.
-!
 if (op(1) /= 0.d0) go to 10
 num = -1
 return
-!
 !     Remove the zeros at the origin if any
-!
 10 if (op(nn) /= 0.0d0) go to 20
 num = num + 1
 zeror(num) = 0.d0
@@ -10301,20 +6803,14 @@ zeroi(num) = 0.d0
 nn = nn - 1
 n = n - 1
 go to 10
-!
 !     Make a copy of the coefficients
-!
 20 do i = 1,nn
    p(i) = op(i)
 end do
-!
 !     Start the algorithm for obtaining a zero
-!
 40 if (n > 2) go to 60
 if (n < 1) return
-!
 !     Calculate the final zero or pair of zeros
-!
 num = ideg
 if (n == 2) go to 50
 zeror(ideg) = -p(2)/p(1)
@@ -10323,9 +6819,7 @@ return
 50 call quadpl(p(1), p(2), p(3), zeror(ideg - 1), zeroi(ideg - 1), &
    & zeror(ideg), zeroi(ideg))
 return
-!
 !     Find largest and smallest moduli of coefficients.
-!
 60 max = 0.0
 min = infin
 do i = 1,nn
@@ -10333,14 +6827,12 @@ do i = 1,nn
    if (x > max) max = x
    if (x /= 0.0 .and. x < min) min = x
 end do
-!
 !     Scale if there are large or very small coefficients.
 !     Computes a scale factor to multiply the
 !     coefficients of the polynomial. The scaling is done
 !     to avoid overflow and to avoid undetected underflow
 !     interfering with the convergence criterion.
 !     The factor is a power of the base.
-!
 sc = lo/min
 if (sc > 1.0) go to 80
 if (max < 10.0) go to 110
@@ -10353,26 +6845,18 @@ if (factor == 1.d0) go to 110
 do i = 1,nn
    p(i) = factor*p(i)
 end do
-!
 !     Compute lower bound on moduli of zeros.
-!
 110 do i = 1,nn
    pt(i) = abs(sngl(p(i)))
 end do
 pt(nn) = -pt(nn)
-!
 !     Compute upper estimate of bound
-!
 x = exp((log(-pt(nn)) - log(pt(1)))/float(n))
 if (pt(n) == 0.0) go to 130
-!
 !     If the Newton step at the origin is better then use it.
-!
 xm = -pt(nn)/pt(n)
 if (xm < x) x = xm
-!
 !     Chop the interval (0,x) until ff .LE. 0.
-!
 130 xm = x*.1
 ff = pt(1)
 do i = 2,nn
@@ -10382,9 +6866,7 @@ if (ff <= 0.0) go to 150
 x = xm
 go to 130
 150 dx = x
-!
 !     Do Newton iteration until x converges to two decimal places.
-!
 160 if (abs(dx/x) <= 0.005) go to 180
 ff = pt(1)
 df = ff
@@ -10397,10 +6879,8 @@ dx = ff/df
 x = x - dx
 go to 160
 180 bnd = x
-!
 !     Compute the derivative as the intial K polynomial
 !     and do 5 steps with no shift.
-!
 nm1 = n - 1
 do i = 2,n
    k(i) = float(nn - i)*p(i)/float(n)
@@ -10412,9 +6892,7 @@ zerok = k(n) == 0.d0
 do jj = 1,5
    cc = k(n)
    if (zerok) go to 210
-!
 !     Use scaled form of recurrence if value of K at 0 is nonzero.
-!
    t = -aa/cc
    do i = 1,nm1
       j = nn - i
@@ -10423,9 +6901,7 @@ do jj = 1,5
    k(1) = p(1)
    zerok = abs(k(n)) <= abs(bb)*eta*10.
    go to 230
-!
 !     Use unscaled form of recurrence
-!
 210 do i = 1,nm1
       j = nn - i
       k(j) = k(j - 1)
@@ -10434,23 +6910,17 @@ do jj = 1,5
    zerok = k(n) == 0.d0
 230 continue
 end do
-!
 !     Save K for restarts with new shifts
-!
 do i = 1,n
    temp(i) = k(i)
 end do
-!
 !     Loop to select the quadratic  corresponding to each
 !     new shift
-!
 do cnt = 1,20
-!
 !     Quadratic corresponds to a double shift to A
 !     non-real point and its complex conjugate. The point
 !     has modulus bnd and amplitude rotated by 94 degrees
 !     from the previous shift.
-!
    xxx = cosr*xx - sinr*yy
    yy = sinr*xx + cosr*yy
    xx = xxx
@@ -10458,27 +6928,19 @@ do cnt = 1,20
    si = bnd*yy
    u = -2.0d0*sr
    v = bnd
-!
 !     Second stage calculation, fixed quadratic. The second stage
 !     jumps directly to one of the third stage iterations.
-!
    call fxshfr(20*cnt, nz, nn, p, qp, k, qk, svk)
    if (nz /= 0) go to 300
-!
 !     If the iteration is unsuccessful another quadratic
 !     is chosen after restoring K.
-!
    do i = 1,n
       k(i) = temp(i)
    end do
 end do
-!
 !     Convergence was not achieved after 20 shifts.
-!
 return
-!
 !     Store the zeros obtained and deflate the polynomial.
-!
 300 num = num + 1
 zeror(num) = szr
 zeroi(num) = szi
@@ -10506,134 +6968,99 @@ logical :: vpass, spass, vtry, stry
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi
-!
 !     Computes up to  l2  fixed shift k-polynomials,
 !     testing for convergence in the linear or quadratic
 !     case. Initiates one of the variable SHIFT
 !     iterations and returns with the number of zeros
 !     found.
-!
 !     l2 - Limit of fixed shift steps
 !     nz - Number of zeros found
-!
-!
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
    & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
 n = nn - 1
 nz = 0
 betav = .25
 betas = .25
 oss = sr
 ovv = v
-!
 !     Evaluate polynomial by synthetic division
-!
 call quadsd(nn, u, v, p, qp, a, b)
 call calcsc(type, n, k, qk)
 do j = 1,l2
-!
 !     Calculate next k polynomial and estimate v
-!
    call nextk(type, n, qp, k, qk)
    call calcsc(type, n, k, qk)
    call newest(type, ui, vi, nn, p, k)
    vv = vi
-!
 !     Estimate s
-!
    ss = 0.0
    if (k(n) /= 0.d0) ss = -p(nn)/k(n)
    tv = 1.0
    ts = 1.0
    if (j == 1 .or. type == 3) go to 70
-!
 !     Compute relative measures of convergence of s and v
 !     sequences
-!
    if (vv /= 0.0) tv = abs((vv - ovv)/vv)
    if (ss /= 0.0) ts = abs((ss - oss)/ss)
-!
 !     If decreasing, multiply two most recent
 !     convergence measures
-!
    tvv = 1.0
    if (tv < otv) tvv = tv*otv
    tss = 1.0
    if (ts < ots) tss = ts*ots
-!
 !     Compare with convergence criteria
-!
    vpass = tvv < betav
    spass = tss < betas
    if (.not.(spass .or. vpass)) go to 70
-!
 !     At least one sequence has passed the convergence
 !     test. Store variables before iterating
-!
    svu = u
    svv = v
    do i = 1,n
       svk(i) = k(i)
    end do
    s = ss
-!
 !     Choose iteration according to the fastest
 !     converging sequence
-!
    vtry = .false.
    stry = .false.
    if (spass .and. ((.not.vpass) .or. &
       & tss < tvv)) go to 40
 20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
    if (nz > 0) return
-!
 !     Quadratic iteration has failed. Flag that it has
 !     been tried and decrease the convergence criterion.
-!
    vtry = .true.
    betav = betav*0.25
-!
 !     Try linear iteration if it has not been tried and
 !     the s sequence is converging
-!
    if (stry .or. (.not.spass)) go to 50
    do i = 1,n
       k(i) = svk(i)
    end do
 40 call realit(s, nz, iflag, nn, p, qp, k, qk)
    if (nz > 0) return
-!
 !     Linear iteration has failed. Flag that it has been
 !     tried and decrease the convergence criterion
-!
    stry = .true.
    betas = betas*0.25
    if (iflag == 0) go to 50
-!
 !     If linear iteration signals an almost double real
 !     zero attempt quadratic interation
-!
    ui = -(s + s)
    vi = s*s
    go to 20
-!
 !     Restore variables
-!
 50 u = svu
    v = svv
    do i = 1,n
       k(i) = svk(i)
    end do
-!
 !     Try quadratic iteration if it has not been tried
 !     and the v sequence is converging
-!
    if (vpass .and. (.not.vtry)) go to 20
-!
 !     Recompute qp and scalar values to continue the
 !     second stage
-!
    call quadsd(nn, u, v, p, qp, a, b)
    call calcsc(type, n, k, qk)
 70 ovv = vv
@@ -10642,4 +7069,3441 @@ do j = 1,l2
    ots = ts
 end do
 end subroutine fxshfr
+
+subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
+implicit none
+integer :: nn
+double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
+integer :: nz
+integer :: n, type, i, j
+double precision :: ui, vi
+real :: mp, omp, ee, relstp, t, zm
+logical :: tried
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
+!     Variable-shift k-polynomial iteration for A
+!     quadratic factor converges only if the zeros are
+!     equimodular or nearly so.
+!     uu,vv - Coefficients of starting quadratic
+!     nz - Number of zero found
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+n = nn - 1
+nz = 0
+tried = .false.
+u = uu
+v = vv
+j = 0
+! Main loop
+10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
+!     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
+!     to multiple or nearly equal and of opposite sign
+if (abs(abs(szr) - abs(lzr)) > 1.d-2*abs(lzr)) &
+   & return
+!     Evaluate polynomial by quadratic synthetic division
+call quadsd(nn, u, v, p, qp, a, b)
+mp = abs(a - szr*b) + abs(szi*b)
+!     Compute a rigorous bound on the rounding error in
+!     EVALUTING p
+zm = sqrt(abs(sngl(v)))
+ee = 2.0*abs(sngl(qp(1)))
+t = -szr*b
+do i = 2,n
+   ee = ee*zm + abs(sngl(qp(i)))
+end do
+ee = ee*zm + abs(sngl(a) + t)
+ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
+   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
+   & 2.0*are*abs(t)
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
+if (mp > 20.0*ee) go to 30
+nz = 2
+return
+30 j = j + 1
+!     STOP ITERATION AFTER 20 STEPS
+if (j > 20) return
+if (j < 2) go to 50
+if (relstp > 0.01 .or. mp < omp .or. tried) go to 50
+!     A cluster appears to be stalling the convergence.
+!     Five fixed shift steps are taken with A u,v close
+!     to the cluster
+if (relstp < eta) relstp = eta
+relstp = sqrt(relstp)
+u = u - u*relstp
+v = v + v*relstp
+call quadsd(nn, u, v, p, qp, a, b)
+do i = 1,5
+   call calcsc(type, n, k, qk)
+   call nextk(type, n, qp, k, qk)
+end do
+tried = .true.
+j = 0
+50 omp = mp
+!     Calculate next k polynomial and new u and v
+call calcsc(type, n, k, qk)
+call nextk(type, n, qp, k, qk)
+call calcsc(type, n, k, qk)
+call newest(type, ui, vi, nn, p, k)
+!     If vi is zero the iteration is not converging
+if (vi == 0.d0) return
+relstp = abs((vi - v)/vi)
+u = ui
+v = vi
+go to 10
+end subroutine quadit
+
+subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
+implicit none
+integer :: iflag, nn, nz
+double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+integer :: i, j, n
+double precision :: pv, kv, t, s
+real :: ms, mp, omp, ee
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!     Variable-shift H polynomial iteration for a real zero.
+!     sss   - Starting iterate
+!     nz    - Number of zero found
+!     iflag - Flag to indicate a pair of zeros near the real
+!             axis.
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+n = nn - 1
+nz = 0
+s = sss
+iflag = 0
+j = 0
+!     Evaluate p at s
+10 pv = p(1)
+qp(1) = pv
+do i = 2,nn
+   pv = pv*s + p(i)
+   qp(i) = pv
+end do
+mp = abs(pv)
+!     Compute a rigorous bound on the error in evaluating p
+ms = abs(s)
+ee = (mre/(are + mre))*abs(sngl(qp(1)))
+do i = 2,nn
+   ee = ee*ms + abs(sngl(qp(i)))
+end do
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
+if (mp > 20.0*((are + mre)*ee - mre*mp)) go to 40
+nz = 1
+szr = s
+szi = 0.d0
+return
+40 j = j + 1
+!     STOP ITERATION AFTER 10 STEPS
+if (j > 10) return
+if (j < 2) go to 50
+if (abs(t) > 1.d-3*abs(s - t) .or. mp <= omp) &
+   & go to 50
+!     A cluster of zeros near the real axis has been
+!     encountered return with iflag set to initiate A
+!     quadratic iteration
+iflag = 1
+sss = s
+return
+!     RETURN IF THE POLYNOMIAL VALUE HAS INCREASED
+!     significantly
+50 omp = mp
+!     Compute t, the next polynomial, and the new iterate
+kv = k(1)
+qk(1) = kv
+do i = 2,n
+   kv = kv*s + k(i)
+   qk(i) = kv
+end do
+if (abs(kv) <= abs(k(n))*10.*eta) go to 80
+!     Use the scaled form of the recurrence if the value
+!     of k at s is nonzero
+t = -pv/kv
+k(1) = qp(1)
+do i = 2,n
+   k(i) = t*qk(i - 1) + qp(i)
+end do
+go to 100
+!     Use unscaled form
+80 k(1) = 0.0d0
+do i = 2,n
+   k(i) = qk(i - 1)
+end do
+100 kv = k(1)
+do i = 2,n
+   kv = kv*s + k(i)
+end do
+t = 0.d0
+if (abs(kv) > abs(k(n))*10.*eta) t = -pv/kv
+s = s + t
+go to 10
+end subroutine realit
+
+subroutine calcsc(type, n, k, qk)
+implicit none
+integer :: n
+integer :: type
+double precision :: k(n), qk(n)
+double precision :: tol
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!     This routine calculates scalar quantities used to
+!     compute the next k polynomial and new estimates of
+!     the quadratic coefficients.
+!     type - Integer variable SET here indicating how the
+!            calculations are normalized to avoid overflow
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!     Synthetic division of k by the quadratic 1,u,v
+call quadsd(n, u, v, k, qk, c, d)
+tol = 100.0*eta
+if (abs(c) > tol*abs(k(n))) go to 10
+if (abs(d) > tol*abs(k(n - 1))) go to 10
+type = 3
+!     type=3 Indicates the quadratic is almost a factor of k
+return
+10 if (abs(d) < abs(c)) go to 20
+type = 2
+!     type=2 Indicates that all formulas are divided by d
+e = a/d
+f = c/d
+g = u*b
+h = v*b
+a3 = (a + g)*e + h*(b/d)
+a1 = b*f - a
+a7 = (f + u)*a + h
+return
+20 type = 1
+!     type=1 Indicates that all formulas are divided by c
+e = a/c
+f = d/c
+g = u*e
+h = v*b
+a3 = a*e + (h/c + g)*b
+a1 = b - a*(d/c)
+a7 = a + g*d + h*f
+end subroutine calcsc
+
+subroutine nextk(type, n, qp, k, qk)
+implicit none
+integer :: n
+integer :: type
+double precision :: qp(n), k(n), qk(n)
+integer :: i
+double precision :: temp
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!     Computes the next k polynomials using the scalars
+!     computed in calcsc.
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+if (type == 3) go to 40
+temp = a
+if (type == 1) temp = b
+if (abs(a1) > abs(temp)*eta*10.) go to 20
+!     If a1 is nearly zero then use a special form of the
+!     recurrence
+k(1) = 0.d0
+k(2) = -a7*qp(1)
+do i = 3,n
+   k(i) = a3*qk(i - 2) - a7*qp(i - 1)
+end do
+return
+!     Use scaled form of the recurrence
+20 a7 = a7/a1
+a3 = a3/a1
+k(1) = qp(1)
+k(2) = qp(2) - a7*qp(1)
+do i = 3,n
+   k(i) = a3*qk(i - 2) - a7*qp(i - 1) + qp(i)
+end do
+return
+!     Use unscaled form of the recurrence if type is 3
+40 k(1) = 0.d0
+k(2) = 0.d0
+do i = 3,n
+   k(i) = qk(i - 2)
+end do
+end subroutine nextk
+
+subroutine newest(type, uu, vv, nn, p, k)
+implicit none
+integer :: nn
+integer :: type
+double precision :: uu, vv, p(nn), k(nn)
+integer :: n
+double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!     Compute new estimates of the quadratic coefficients
+!     using the scalars computed in calcsc.
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!     Use formulas appropriate to setting of type.
+n = nn - 1
+if (type == 3) go to 30
+if (type == 2) go to 10
+a4 = a + u*b + h*f
+a5 = c + (u + v*f)*d
+go to 20
+10 a4 = (a + g)*f + h
+a5 = (f + u)*c + v*d
+!     Evaluate new quadratic coefficients.
+20 b1 = -k(n)/p(nn)
+b2 = -(k(n - 1) + b1*p(n))/p(nn)
+c1 = v*b2*a1
+c2 = b1*a7
+c3 = b1*b1*a3
+c4 = c1 - c2 - c3
+temp = a5 + b1*a4 - c4
+if (temp == 0.d0) go to 30
+uu = u - (u*(c3 + c2) + v*(b1*a1 + b2*a7))/temp
+vv = v*(1.d0 + c4/temp)
+return
+!     If type=3 The quadratic is zeroed
+30 uu = 0.d0
+vv = 0.d0
+end subroutine newest
+
+pure subroutine quadsd(nn, u, v, p, q, a, b)
+implicit none
+integer, intent(in) :: nn
+double precision, intent(in) :: p(nn)
+double precision, intent(inout) :: q(nn)
+double precision, intent(in) :: u, v
+double precision, intent(out) :: a, b
+integer :: i
+double precision :: c
+!     Divides p by the quadratic  1,u,v  placing the
+!     quotient in q and the remainder in A,b.
+b = p(1)
+q(1) = b
+a = p(2) - u*b
+q(2) = a
+do i = 3,nn
+   c = p(i) - u*a - v*b
+   q(i) = c
+   b = a
+   a = c
+end do
+end subroutine quadsd
+
+pure elemental subroutine quadpl(a, b1, c, sr, si, lr, li)
+implicit none
+!     Calculate the zeros of the quadratic a*Z**2+b1*Z+c.
+!     The quadratic formula, modified to avoid overflow,
+!     is used to find the larger zero if the zeros are
+!     real, and both zeros if the zeros are complex.
+!     The smaller real zero is found directly from the
+!     product of the zeros c/a.
+double precision, intent(in) :: a, b1, c
+double precision, intent(inout) :: sr, si, lr, li
+double precision :: b, d, e
+if (a /= 0.d0) go to 20
+sr = 0.d0
+if (b1 /= 0.d0) sr = -c/b1
+lr = 0.d0
+10 si = 0.d0
+li = 0.d0
+return
+20 if (c /= 0.d0) go to 30
+sr = 0.d0
+lr = -b1/a
+go to 10
+!     Compute discriminant avoiding overflow
+30 b = b1/2.d0
+if (abs(b) < abs(c)) go to 40
+e = 1.d0 - (a/b)*(c/b)
+d = sqrt(abs(e))*abs(b)
+go to 50
+40 e = a
+if (c < 0.d0) e = -a
+e = b*(b/abs(c)) - e
+d = sqrt(abs(e))*sqrt(abs(c))
+50 if (e < 0.d0) go to 60
+!     real zeros
+if (b >= 0.d0) d = -d
+lr = (-b + d)/a
+sr = 0.d0
+if (lr /= 0.d0) sr = (c/lr)/a
+go to 10
+!     Complex conjugate zeros
+60 sr = -b/a
+lr = sr
+si = abs(d/a)
+li = -si
+end subroutine quadpl
+
+subroutine dcpoly(opr,opi,ideg,zeror,zeroi,num,wk)
+implicit none
+integer, intent(inout) :: num
+integer :: ideg
+double precision, intent(in) :: opr(*), opi(*)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
+integer :: idp1, pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
+!     This subroutine finds the zeros of a complex polynomial.
+!     opr,opi     - DOUBLE PRECISION ARRAYS OF LENGTH ideg + 1.
+!                   On input these arrays contain the real and imaginary
+!                   parts of the coefficients in order of decreasing
+!                   powers.
+!     ideg        - Integer degree of the polynomial.
+!     zeror,zeroi - Double precision arrays of length ideg.
+!                   On output these arrays contain the real and
+!                   imaginary parts of the zeros.
+!     num         - Variable that reports the status of the results.
+!                   If num = -1 Then the leading coefficient of the
+!                   polynomial is 0 or ideg .LT. 1. Otherwise, num
+!                   is the number of zeros that were obtained. If
+!                   num .GE. 1 then the real and imaginary parts of
+!                   the zeros are stored in zeror(J) and zeroi(J)
+!                   FOR J = 1,...,num.
+!     wk          - Double precision array of length 10*(ideg + 1).
+!                   The array is a work space for the routine.
+!     The code has been written to reduce the chance of overflow
+!     occurring. If it does occur, there is still a possibility that
+!     the zerofinder will work provided the overflowed quantity is
+!     replaced by a large number.
+if (ideg < 1) go to 10
+!     Partition the workspace and obtain the zeros
+idp1 = ideg + 1
+pr = 1
+pi = pr + idp1
+qpr = pi + idp1
+qpi = qpr + idp1
+hr = qpi + idp1
+hi = hr + idp1
+qhr = hi + idp1
+qhi = qhr + idp1
+shr = qhi + idp1
+shi = shr + idp1
+call dcply1(opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
+   & wk(qpr),wk(qpi),wk(hr),wk(hi),wk(qhr),wk(qhi), &
+   & wk(shr),wk(shi),num)
+return
+!     Error return
+10 num = -1
+end subroutine dcpoly
+
+subroutine dcply1(opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
+   & hr,hi,qhr,qhi,shr,shi,num)
+implicit none
+integer :: ideg
+integer, intent(in) :: idp1
+integer, intent(out) :: num
+double precision, intent(in) :: opr(idp1), opi(idp1)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
+   & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
+   & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
+integer :: i, nn
+double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
+double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd, scalcp
+logical :: conv
+integer :: cnt1, cnt2
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
+!-------------------------
+!-------------------------
+!     The following statements set the machine constants used
+!     in the code. The meaning of the constants are ...
+!     eta     THE SMALLEST POSITIVE NUMBER SUCH THAT
+!             1.D0 + eta is greater than 1.D0
+!     smalno  the smallest positive floating point number.
+!     INFIN   THE LARGEST POSITIVE FLOATING POINT NUMBER.
+!     BASE    THE BASE OF THE FLOATING POINT ARITHMETIC
+!             being used.
+eta = dpmpar(1)
+smalno = dpmpar(2)
+infin = dpmpar(3)
+base = ipmpar(4)
+!-------------------------
+!     Initialization
+are = eta
+mre = 2.d0*sqrt(2.d0)*eta
+xx = .70710678
+yy = -xx
+cosr = -.069756474
+sinr = .99756405
+num = 0
+nn = idp1
+!     The algorithm fails if the leading coefficient is zero
+if (opr(1) /= 0.d0 .or. opi(1) /= 0.d0) go to 10
+num = -1
+return
+!     Remove the zeros at the origin if any.
+10 if (opr(nn) /= 0.d0 .or. opi(nn) /= 0.d0) go to 20
+num = num + 1
+zeror(num) = 0.d0
+zeroi(num) = 0.d0
+nn = nn - 1
+go to 10
+!     Make a copy of the coefficients.
+20 if (nn < 2) return
+do i = 1,nn
+   pr(i) = opr(i)
+   pi(i) = opi(i)
+   shr(i) = dcpabs(pr(i),pi(i))
+end do
+!     Scale the polynomial.
+bnd = scalcp(nn,shr,eta,infin,smalno,base)
+if (bnd == 1.d0) go to 40
+do i = 1,nn
+   pr(i) = bnd*pr(i)
+   pi(i) = bnd*pi(i)
+end do
+!     Start the algorithm for obtaining a zero.
+40 if (nn > 2) go to 50
+num = ideg
+call cdivid(-pr(2),-pi(2),pr(1),pi(1),zeror(ideg), &
+   & zeroi(ideg))
+return
+!     Calculate BND, a lower bound on the modulus of the zeros.
+50 do i = 1,nn
+   shr(i) = dcpabs(pr(i),pi(i))
+end do
+call cauchy(nn,bnd,shr,shi)
+!     Outer loop to control two major passes with different
+!     sequences of shifts.
+do cnt1 = 1,2
+!     First stage calculation. No shift.
+   call noshft(5,nn,tr,ti,eta,pr,pi,hr,hi)
+!     Inner loop to select a shift.
+   do cnt2 = 1,9
+!     The shift is chosen with modulus BND and amplitude rotated
+!     by 94 degrees from the previous shift.
+      xxx = cosr*xx - sinr*yy
+      yy = sinr*xx + cosr*yy
+      xx = xxx
+      sr = bnd*xx
+      si = bnd*yy
+!     Second stage calculation, fixed shift. The second stage jumps
+!     directly to the third stage iteration.
+      call fxshft(10*cnt2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
+         & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
+         & are,mre,eta,infin)
+      if (conv) go to 100
+!     If the iteration is unsuccessful another shift is chosen.
+   end do
+!     If 9 shifts fail, the outer loop is repeated with another
+!     sequence of shifts.
+end do
+return
+!     A zero has been obtained. Store the zero and deflate
+!     the polynomial.
+100 num = num + 1
+zeror(num) = zr
+zeroi(num) = zi
+nn = nn - 1
+do i = 1,nn
+   pr(i) = qpr(i)
+   pi(i) = qpi(i)
+end do
+go to 40
+end subroutine dcply1
+
+pure double precision function scalcp(nn,pt,eta,infin,smalno,base)
+implicit none
+integer, intent(in) :: nn
+double precision, intent(in) :: pt(nn), eta, infin, smalno, base
+integer :: i, l
+double precision :: hi, lo, max, min, x, sc
+!     Returns a scale factor to multiply the coefficients of the
+!     polynomial. The scaling is done to avoid overflow and to avoid
+!     undetected underflow interfering with the convergence criterion.
+!     The factor is a power of the base.
+!     pt - Modulus of the coefficients of P
+!     eta,infin,smalno,base - Constants describing the
+!            floating point arithmetic.
+!     Find the largest and smallest moduli of coefficients.
+hi = sqrt(infin)
+lo = smalno/eta
+max = 0.d0
+min = infin
+do i = 1,nn
+   x = pt(i)
+   if (x > max) max = x
+   if (x /= 0.d0 .and. x < min) min = x
+end do
+!     Scale only if there are very large or very small coefficients.
+scalcp = 1.d0
+sc = lo/min
+if (sc > 1.d0) go to 20
+if (max <= hi) return
+sc = 1.d0/(sqrt(max)*sqrt(min))
+go to 30
+20 if (infin/sc < max) return
+30 l = log(sc)/log(base) + 0.5d0
+scalcp = base**l
+end function scalcp
+
+pure subroutine cauchy(nn,bnd,pt,q)
+implicit none
+integer, intent(in) :: nn
+double precision, intent(inout) :: q(nn), pt(nn)
+double precision, intent(inout) :: bnd
+integer :: i, n
+double precision :: x, xm, f, dx, df
+!     Cauchy computes a lower bound bnd on the moduli of the zeros
+!     of a polynomial. pt is the modulus of the coefficients.
+pt(nn) = -pt(nn)
+!     Compute upper estimate of bound.
+n = nn - 1
+x = exp((log(-pt(nn)) - log(pt(1)))/dble(float(n)))
+if (pt(n) == 0.d0) go to 20
+!     If the Newton step at the origin is better then use it.
+xm = -pt(nn)/pt(n)
+if (xm < x) x = xm
+!     Chop the interval (0,x) until f .LE. 0.
+20 xm = 0.1d0*x
+f = pt(1)
+do i = 2,nn
+   f = f*xm + pt(i)
+end do
+if (f <= 0.d0) go to 40
+x = xm
+go to 20
+40 dx = x
+!     Do Newton iteration until x converges to two decimal places.
+50 if (abs(dx/x) <= 0.005d0) go to 70
+q(1) = pt(1)
+do i = 2,nn
+   q(i) = q(i - 1)*x + pt(i)
+end do
+f = q(nn)
+df = q(1)
+do i = 2,n
+   df = df*x + q(i)
+end do
+dx = f/df
+x = x - dx
+go to 50
+70 bnd = x
+end subroutine cauchy
+
+pure subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
+implicit none
+integer, intent(in) :: l1, nn
+double precision, intent(inout) :: tr, ti
+double precision, intent(in) :: eta, pr(nn), pi(nn)
+double precision, intent(inout) :: hr(nn), hi(nn)
+integer :: i, j, jj, n, nm1
+double precision :: dn, t1, t2, xni
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
+!     Computes the derivative polynomial as the initial H
+!     polynomial and computes l1 no-shift H polynomials.
+n = nn - 1
+nm1 = n - 1
+dn = n
+do i = 1,n
+   xni = nn - i
+   hr(i) = xni*pr(i)/dn
+   hi(i) = xni*pi(i)/dn
+end do
+do jj = 1,l1
+   if (dcpabs(hr(n),hi(n)) <= 10.d0*eta*dcpabs(pr(n),pi(n))) &
+      & go to 30
+   call cdivid(-pr(nn),-pi(nn),hr(n),hi(n),tr,ti)
+   do i = 1,nm1
+      j = nn - i
+      t1 = hr(j - 1)
+      t2 = hi(j - 1)
+      hr(j) = tr*t1 - ti*t2 + pr(j)
+      hi(j) = tr*t2 + ti*t1 + pi(j)
+   end do
+   hr(1) = pr(1)
+   hi(1) = pi(1)
+   go to 50
+!     If the constant term is essentially zero, shift H coefficients.
+30 do i = 1,nm1
+      j = nn - i
+      hr(j) = hr(j - 1)
+      hi(j) = hi(j - 1)
+   end do
+   hr(1) = 0.d0
+   hi(1) = 0.d0
+50 continue
+end do
+end subroutine noshft
+
+pure subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
+   & qhr,qhi,shr,shi,sr,si,tr,ti,pvr,pvi, &
+   & are,mre,eta,infin)
+implicit none
+integer, intent(in) :: l2, nn
+double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
+double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+   & pi(nn)
+double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+   & hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
+double precision, intent(inout) :: zr, zi
+logical, intent(inout) :: conv
+integer :: i, j, n
+double precision :: otr, oti, svsr, svsi
+logical :: test, pasd, bool
+interface
+   pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr, &
+      & qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(inout) :: bool
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(in) :: pvr
+      double precision, intent(in) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: hr(n)
+      double precision, intent(in) :: hi(n)
+      double precision, intent(inout) :: qhr(n)
+      double precision, intent(inout) :: qhi(n)
+   end subroutine calct
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(in) :: bool
+      double precision, intent(in) :: tr
+      double precision, intent(in) :: ti
+      double precision, intent(inout) :: hr(n)
+      double precision, intent(inout) :: hi(n)
+      double precision, intent(in) :: qpr(n)
+      double precision, intent(in) :: qpi(n)
+      double precision, intent(in) :: qhr(n)
+      double precision, intent(in) :: qhi(n)
+   end subroutine nexth
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
+   pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
+      & qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+      implicit none
+      integer, intent(in) :: nn
+      integer, intent(in) :: l3
+      double precision, intent(inout) :: zr
+      double precision, intent(inout) :: zi
+      logical, intent(out) :: conv
+      double precision, intent(in) :: pr(nn)
+      double precision, intent(in) :: pi(nn)
+      double precision, intent(inout) :: hr(nn)
+      double precision, intent(inout) :: hi(nn)
+      double precision, intent(inout) :: qpr(nn)
+      double precision, intent(inout) :: qpi(nn)
+      double precision, intent(inout) :: qhr(nn)
+      double precision, intent(inout) :: qhi(nn)
+      double precision, intent(out) :: sr
+      double precision, intent(out) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(inout) :: pvr
+      double precision, intent(inout) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: mre
+      double precision, intent(in) :: eta
+      double precision, intent(in) :: infin
+   end subroutine vrshft
+end interface
+!     Computes l2 fixed-shift H polynomials and tests for convergence.
+!     Initiates a variable-shift iteration and returns with the
+!     approximate zero if successful.
+!     l2 - Limit of fixed-shift steps
+!     zr,zi - Approximate zero if conv is .TRUE.
+!     conv - Logical variable indicating convergence of stage 3
+!            iteration
+n = nn - 1
+!     Evaluate P at S
+call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+test = .true.
+pasd = .false.
+!     CALCULATE T = -P(S)/H(S)
+call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+!     Main loop for one second stage step.
+do j = 1,l2
+   otr = tr
+   oti = ti
+!     Compute next H polynomial and new T.
+   call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   zr = sr + tr
+   zi = si + ti
+!     Test for convergence unless stage 3 has failed once or this
+!     is the last H polynomial.
+   if (bool .or. (.not. test) .or. j == l2) go to 50
+   if (dcpabs(tr - otr,ti - oti) >= 0.5d0*dcpabs(zr,zi)) &
+      & go to 40
+   if (.not. pasd) go to 30
+!     The weak convergence test has been passed twice. Start the
+!     third shift iteration after saving the current H polynomial
+!     and shift.
+   do i = 1,n
+      shr(i) = hr(i)
+      shi(i) = hi(i)
+   end do
+   svsr = sr
+   svsi = si
+   call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr, &
+      & qhi,sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+   if (conv) return
+!     The iteration failed to converge. Turn off testing and restore
+!     H,S,PV AND T.
+   test = .false.
+   do i = 1,n
+      hr(i) = shr(i)
+      hi(i) = shi(i)
+   end do
+   sr = svsr
+   si = svsi
+   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   go to 50
+30 pasd = .true.
+   go to 50
+40 pasd = .false.
+50 continue
+end do
+!     Attempt an iteration with final H polynomial from second stage.
+call vrshft(10,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
+   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+end subroutine fxshft
+
+pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
+   & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
+implicit none
+integer, intent(in) :: l3, nn
+double precision, intent(out) :: sr, si
+double precision, intent(inout) :: tr, ti, pvr, pvi
+double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+   & pi(nn)
+double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+   & hi(nn), qhr(nn), qhi(nn)
+double precision, intent(inout) :: zr, zi
+logical, intent(out) :: conv
+integer :: i, j, n
+double precision :: mp, ms, omp, relstp, r1, r2, tp
+logical :: b, bool
+interface
+   pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr, &
+      & qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(inout) :: bool
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(inout) :: tr
+      double precision, intent(inout) :: ti
+      double precision, intent(in) :: pvr
+      double precision, intent(in) :: pvi
+      double precision, intent(in) :: are
+      double precision, intent(in) :: hr(n)
+      double precision, intent(in) :: hi(n)
+      double precision, intent(inout) :: qhr(n)
+      double precision, intent(inout) :: qhi(n)
+   end subroutine calct
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure function errev(nn,qr,qi,ms,mp,are,mre)
+      implicit none
+      integer, intent(in) :: nn
+      double precision, intent(in) :: qr(nn)
+      double precision, intent(in) :: qi(nn)
+      double precision, intent(in) :: ms
+      double precision, intent(in) :: mp
+      double precision, intent(in) :: are
+      double precision, intent(in) :: mre
+      double precision :: errev
+   end function errev
+   pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+      implicit none
+      integer, intent(in) :: n
+      logical, intent(in) :: bool
+      double precision, intent(in) :: tr
+      double precision, intent(in) :: ti
+      double precision, intent(inout) :: hr(n)
+      double precision, intent(inout) :: hi(n)
+      double precision, intent(in) :: qpr(n)
+      double precision, intent(in) :: qpi(n)
+      double precision, intent(in) :: qhr(n)
+      double precision, intent(in) :: qhi(n)
+   end subroutine nexth
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
+end interface
+!     Carries out the third stage iteration.
+!     l3 - Limit of steps in stage 3.
+!     zr,zi - On entry contain the initial iterate. If the
+!             iteration converges zr,zi contain the final
+!             iterate on exit.
+!     conv  - The value is .TRUE. if the iteration converges.
+conv = .false.
+b = .false.
+sr = zr
+si = zi
+n = nn - 1
+!     Main loop for stage 3.
+do i = 1,l3
+!     Evaluate P at S and test for convergence.
+   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+   mp = dcpabs(pvr,pvi)
+   ms = dcpabs(sr,si)
+   if (mp > 20.d0*errev(nn,qpr,qpi,ms,mp,are,mre)) &
+      & go to 10
+!     Polynomial value is smaller than a bound on the error
+!     in evaluating P. terminate the iteration.
+   conv = .true.
+   zr = sr
+   zi = si
+   return
+10 if (i == 1) go to 40
+   if (b .or. mp < omp .or. relstp >= 0.05d0) &
+      & go to 30
+!     Iteration has stalled. Probably a cluster of zeros. Do 5 fixed
+!     shift steps into the cluster to force one zero to dominate.
+   tp = relstp
+   b = .true.
+   if (relstp < eta) tp = eta
+   r1 = sqrt(tp)
+   r2 = sr*(1.d0 + r1) - si*r1
+   si = sr*r1 + si*(1.d0 + r1)
+   sr = r2
+   call polyev(nn,sr,si,pr,pi,qpr,qpi,pvr,pvi)
+   do j = 1,5
+      call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+      call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+   end do
+   omp = infin
+   go to 50
+!     Exit if the polynomial value increases significantly.
+30 if (0.1d0*mp > omp) return
+!     Calculate the next iterate.
+40 omp = mp
+50 call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   call nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+   call calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+   if (bool) go to 60
+   relstp = dcpabs(tr,ti)/dcpabs(sr,si)
+   sr = sr + tr
+   si = si + ti
+60 continue
+end do
+end subroutine vrshft
+
+pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+implicit none
+integer, intent(in) :: n
+logical, intent(inout) :: bool
+double precision, intent(in) :: sr, si
+double precision, intent(inout) :: tr, ti
+double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
+double precision, intent(inout) :: qhr(n), qhi(n)
+double precision :: hvr, hvi
+interface
+   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
+      implicit none
+      double precision, intent(in) :: ar
+      double precision, intent(in) :: ai
+      double precision, intent(in) :: br
+      double precision, intent(in) :: bi
+      double precision, intent(inout) :: cr
+      double precision, intent(inout) :: ci
+   end subroutine cdivid
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: sr
+      double precision, intent(in) :: si
+      double precision, intent(in) :: pr(n)
+      double precision, intent(in) :: pi(n)
+      double precision, intent(inout) :: qr(n)
+      double precision, intent(inout) :: qi(n)
+      double precision, intent(out) :: pvr
+      double precision, intent(out) :: pvi
+   end subroutine polyev
+end interface
+!     This subroutine computes T = -P(S)/H(S)
+!     bool - Logical variable, which is set to .TRUE. if H(S) is
+!            essentially zero.
+!     Evaluate H(S)
+call polyev(n,sr,si,hr,hi,qhr,qhi,hvr,hvi)
+bool = dcpabs(hvr,hvi) <= 10.d0*are*dcpabs(hr(n),hi(n))
+if (bool) go to 10
+call cdivid(-pvr,-pvi,hvr,hvi,tr,ti)
+return
+10 tr = 0.d0
+ti = 0.d0
+end subroutine calct
+
+pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+implicit none
+integer, intent(in) :: n
+logical, intent(in) :: bool
+double precision, intent(in) :: tr, ti
+double precision, intent(inout) :: hr(n), hi(n)
+double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
+integer :: j
+double precision :: t1, t2
+!     Calculates the next shifted H polynomial.
+!     bool - Logical variable. If .TRUE. H(S) is essentially zero.
+if (bool) go to 20
+do j = 2,n
+   t1 = qhr(j - 1)
+   t2 = qhi(j - 1)
+   hr(j) = tr*t1 - ti*t2 + qpr(j)
+   hi(j) = tr*t2 + ti*t1 + qpi(j)
+end do
+hr(1) = qpr(1)
+hi(1) = qpi(1)
+return
+!     If H(S) is zero then replace H with QH.
+20 do j = 2,n
+   hr(j) = qhr(j - 1)
+   hi(j) = qhi(j - 1)
+end do
+hr(1) = 0.d0
+hi(1) = 0.d0
+end subroutine nexth
+
+pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+implicit none
+integer, intent(in) :: n
+double precision, intent(in) :: pr(n), pi(n)
+double precision, intent(inout) :: qr(n), qi(n)
+double precision, intent(in) :: sr, si
+double precision, intent(out) :: pvr, pvi
+integer :: i
+double precision :: t
+!     Evaluates a polynomial P at S by the Horner recurrence algo.,
+!     placing the partial sums in Q and the computed value in PV.
+qr(1) = pr(1)
+qi(1) = pi(1)
+pvr = qr(1)
+pvi = qi(1)
+do i = 2,n
+   t = pvr*sr - pvi*si + pr(i)
+   pvi = pvr*si + pvi*sr + pi(i)
+   pvr = t
+   qr(i) = pvr
+   qi(i) = pvi
+end do
+end subroutine polyev
+
+pure double precision function errev(nn,qr,qi,ms,mp,are,mre)
+implicit none
+integer, intent(in) :: nn
+double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
+integer :: i
+double precision :: e
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+end interface
+!     Bounds the error in evaluating the polynomial by the Horner
+!     recurrence algorithm.
+!     QR,qi   - THE PARTIAL SUMS
+!     ms      - Modulus of the point
+!     mp      - Modulus of the polynomial value
+!     are,mre - Error bounds on complex addition and multiplication
+e = dcpabs(qr(1),qi(1))*mre/(are + mre)
+do i = 1,nn
+   e = e*ms + dcpabs(qr(i),qi(i))
+end do
+errev = e*(are + mre) - mp*mre
+end function errev
+
+pure subroutine rbnd(n, c, w, abserr, relerr, klust, ker)
+implicit none
+integer, intent(inout) :: ker
+integer, intent(in) :: n
+complex, intent(in) :: w(n)
+integer, intent(inout) :: klust(n)
+real, intent(in) :: c(*)
+real, intent(inout) :: abserr(n), relerr(n)
+integer :: j, jp1, k, l, m, nm1, np1
+real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+complex :: z
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!     Abstract
+!         this routine computes error bounds and cluster counts
+!         for approximate zeros of a polynomial with real coefficients.
+!         The zeros may have been computed by any appropriate routine.
+!         The method used is based on the fact that the value of A
+!         polynomial at any point is equal to the leading coefficient
+!         times the product of the distances from that point to each
+!         of the zeros.  Given the value of the polynomial at an
+!         approximate zero, rbnd computes for each approximate zero
+!         the radius of a circle about that approximate zero which
+!         contains a true zero of the polynomial.  Using the known
+!         distribution of approximate zeros, an iterative procedure
+!         is used to shrink the radii of the circles.
+!     Description of arguments
+!         input---
+!         n      - Degree of the polynomial (number of zeros).
+!         c      - Real array of n+1 coefficients of the polynomial
+!                  c(1) + c(2)*z + ... + c(n+1)*z**n
+!         w      - Complex array of n approximate zeros.
+!         Output--
+!         abserr - Real array of n absolute error bounds.  abserr(I) is
+!                  the absolute error bound in the zero (WR(I),WI(I)).
+!         relerr - Real array of n relative error bounds.  relerr(I) is
+!                  the relative error bound in the zero (WR(I),WI(I)).
+!         klust  - Integer array of cluster counts for zeros.  The true
+!                  zero corresponding to I-TH approximate zero lies in
+!                  a circle of radius abserr(I). klust(I) is the number
+!                  of circles including the I-TH circle which overlap
+!                  the I-TH circle.  The cluster count often indicates
+!                  the multiplicity of a zero.
+!         ker    - An error flag
+!                --normal code
+!                  0  means the bounds and counts were computed.
+!                --Abnormal codes
+!                  1  n (DEGREE) must be .GE. 1
+!                  2  leading coefficient is zero
+!-------------------
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+eps = spmpar(1)
+!-----------------------------------------------------------------------
+if (n < 1) go to 200
+np1 = n + 1
+power = 1.0/float(n)
+p = abs(c(np1))
+if (p == 0.0) go to 210
+rat = 4.0*eps*abs(c(1))/p
+do l = 1,n
+   xr = real(w(l))
+   xi = aimag(w(l))
+   vr = c(np1)
+   vi = 0.0d0
+   do j = 1,n
+      m = np1 - j
+      vt = xr*vr - xi*vi + dble(c(m))
+      vi = xr*vi + xi*vr
+      vr = vt
+   end do
+   b = max(rat,cpabs(sngl(vr),sngl(vi))/p)
+!        Save product of distances temporarily
+   relerr(l) = b
+   abserr(l) = b ** power
+end do
+30 shrunk = .false.
+do j = 1,n
+   if (abserr(j) == 0.0) go to 50
+   p = 1.0
+   m = n
+   do k = 1,n
+      if (k == j) go to 40
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      cert = dist - abserr(k)
+      if (cert < abserr(j)) go to 40
+      p = p*cert
+      m = m - 1
+40    continue
+   end do
+   olderr = abserr(j)
+   abserr(j) = relerr(j)/p
+   if (m > 1) abserr(j) = abserr(j)**(1.0/float(m))
+   if (abserr(j) < olderr*0.99) shrunk = .true.
+50 continue
+end do
+if (shrunk) go to 30
+do j = 1,n
+   klust(j) = 1
+   wrad = abserr(j)
+   wnrm = cpabs(real(w(j)),aimag(w(j)))
+   if (wrad /= 0.0) go to 60
+   r = 0.0
+   go to 80
+60 if (wnrm /= 0.0) go to 70
+   r = -1.0
+   go to 80
+70 r = wrad/wnrm
+80 relerr(j) = r
+end do
+nm1 = n - 1
+do j = 1,nm1
+   jp1 = j + 1
+   do k = jp1,n
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      if (dist > (abserr(j) + abserr(k))) go to 90
+      klust(j) = klust(j) + 1
+      klust(k) = klust(k) + 1
+90    continue
+   end do
+end do
+ker = 0
+return
+!             Error return
+200 ker = 1
+return
+210 ker = 2
+end subroutine rbnd
+
+pure subroutine cbnd(n, c, w, abserr, relerr, klust, ker)
+implicit none
+integer, intent(inout) :: ker
+integer, intent(in) :: n
+complex, intent(in) :: c(*), w(n)
+integer, intent(inout) :: klust(n)
+real, intent(inout) :: abserr(n), relerr(n)
+integer :: j, jp1, k, l, m, nm1, np1
+real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+complex :: z
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!     Abstract
+!         this routine computes error bounds and cluster counts for
+!         approximate zeros of a polynomial with complex coefficients.
+!         The zeros may have been computed by any appropriate routine.
+!         The method used is based on the fact that the value of A
+!         polynomial at any point is equal to the leading coefficient
+!         times the product of the distances from that point to each
+!         of the zeros.  Given the value of the polynomial at an
+!         approximate zero, cbnd computes for each approximate zero
+!         the radius of a circle about that approximate zero which
+!         contains a true zero of the polynomial.  Using the known
+!         distribution of approximate zeros, an iterative procedure
+!         is used to shrink the radii of the circles.
+!     Description of arguments
+!         input---
+!         n      - Degree of the polynomial (number of zeros).
+!         c      - Complex array of n+1 coefficients of the polynomial
+!                  c(1) + c(2)*z + ... + c(n+1)*z**n
+!         w      - Complex array of n approximate zeros.
+!         Output--
+!         abserr - Real array of absolute error bounds.  abserr(I) is
+!                  the absolute error bound in the zero (WR(I),WI(I)).
+!         relerr - Real array of relative error bounds.  relerr(I) is
+!                  the relative error bound in the zero (WR(I),WI(I)).
+!         klust  - Integer array of cluster counts for zeros.  The true
+!                  zero corresponding to I-TH approximate zero lies in
+!                  a circle of radius abserr(I).  klust(I) is the number
+!                  of circles including the I-TH circle which overlap
+!                  the I-TH circle.  The cluster count often indicates
+!                  the multiplicity of a zero.
+!         ker    - An error code
+!                --normal codes
+!                  0  means the bounds and counts were computed.
+!                --Abnormal codes
+!                  1  n (DEGREE) must be .GE. 1
+!                  2  leading coefficient is zero
+!-------------------
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+eps = spmpar(1)
+!-----------------------------------------------------------------------
+if (n < 1) go to 200
+np1 = n + 1
+power = 1.0/float(n)
+p = cpabs(real(c(np1)),aimag(c(np1)))
+if (p == 0.0) go to 210
+rat = 4.0*eps*cpabs(real(c(1)),aimag(c(1)))/p
+do l = 1,n
+   xr = real(w(l))
+   xi = aimag(w(l))
+   vr = real(c(np1))
+   vi = aimag(c(np1))
+   do j = 1,n
+      m = np1 - j
+      vt = xr*vr - xi*vi + dble(real(c(m)))
+      vi = xr*vi + xi*vr + dble(aimag(c(m)))
+      vr = vt
+   end do
+   b = max(rat,cpabs(sngl(vr),sngl(vi))/p)
+!        Save product of distances temporarily
+   relerr(l) = b
+   abserr(l) = b ** power
+end do
+30 shrunk = .false.
+do j = 1,n
+   if (abserr(j) == 0.0) go to 50
+   p = 1.0
+   m = n
+   do k = 1,n
+      if (k == j) go to 40
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      cert = dist - abserr(k)
+      if (cert < abserr(j)) go to 40
+      p = p*cert
+      m = m - 1
+40    continue
+   end do
+   olderr = abserr(j)
+   abserr(j) = relerr(j)/p
+   if (m > 1) abserr(j) = abserr(j)**(1.0/float(m))
+   if (abserr(j) < olderr*0.99) shrunk = .true.
+50 continue
+end do
+if (shrunk) go to 30
+do j = 1,n
+   klust(j) = 1
+   wrad = abserr(j)
+   wnrm = cpabs(real(w(j)),aimag(w(j)))
+   if (wrad /= 0.0) go to 60
+   r = 0.0
+   go to 80
+60 if (wnrm /= 0.0) go to 70
+   r = -1.0
+   go to 80
+70 r = wrad/wnrm
+80 relerr(j) = r
+end do
+nm1 = n - 1
+do j = 1,nm1
+   jp1 = j + 1
+   do k = jp1,n
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      if (dist > (abserr(j) + abserr(k))) go to 90
+      klust(j) = klust(j) + 1
+      klust(k) = klust(k) + 1
+90    continue
+   end do
+end do
+ker = 0
+return
+!             Error return
+200 ker = 1
+return
+210 ker = 2
+end subroutine cbnd
+
+pure subroutine  scopy(n,sx,incx,sy,incy)
+implicit none
+!     Copies a vector, X, to a vector, Y.
+!     Uses unrolled loops for increments equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*)
+real, intent(inout) :: sy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   sy(iy) = sx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,7)
+if ( m == 0 ) go to 40
+do i = 1,m
+   sy(i) = sx(i)
+end do
+if ( n < 7 ) return
+40 mp1 = m + 1
+do i = mp1,n,7
+   sy(i) = sx(i)
+   sy(i + 1) = sx(i + 1)
+   sy(i + 2) = sx(i + 2)
+   sy(i + 3) = sx(i + 3)
+   sy(i + 4) = sx(i + 4)
+   sy(i + 5) = sx(i + 5)
+   sy(i + 6) = sx(i + 6)
+end do
+end subroutine scopy
+
+pure subroutine  dcopy(n,dx,incx,dy,incy)
+implicit none
+!     Copies a vector, X, to a vector, Y.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: dx(*)
+double precision, intent(inout) :: dy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   dy(iy) = dx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,7)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dy(i) = dx(i)
+end do
+if ( n < 7 ) return
+40 mp1 = m + 1
+do i = mp1,n,7
+   dy(i) = dx(i)
+   dy(i + 1) = dx(i + 1)
+   dy(i + 2) = dx(i + 2)
+   dy(i + 3) = dx(i + 3)
+   dy(i + 4) = dx(i + 4)
+   dy(i + 5) = dx(i + 5)
+   dy(i + 6) = dx(i + 6)
+end do
+end subroutine dcopy
+
+pure subroutine  ccopy(n,cx,incx,cy,incy)
+implicit none
+!     Copies a vector, X, to a vector, Y.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(in) :: cx(*)
+complex, intent(inout) :: cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   cy(iy) = cx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+20 do i = 1,n
+   cy(i) = cx(i)
+end do
+end subroutine ccopy
+
+pure subroutine iswap(n,ix,incx,iy,incy)
+implicit none
+integer, intent(in) :: incx, incy, n
+integer, intent(inout) :: ix(*), iy(*)
+integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3, nswc_ai_i4
+!                Extended B L A S  subprogram
+!    description of parameters
+!     --input--
+!        n  number of elements in input vector(S)
+!       ix  integer vector with n elements
+!     incx  storage spacing between elements of ix
+!       iy  integer vector with n elements
+!     incy  storage spacing between elements of iy
+!     --output--
+!       ix  INPUT VECTOR iy (UNCHANGED IF n .LE. 0)
+!       iy  INPUT VECTOR ix (UNCHANGED IF n .LE. 0)
+!     interchange integer ix and integer iy.
+!     For i = 0 To n-1, interchange  ix(LX+i*incx) and iy(LY+i*incy),
+!     WHERE LX = 1 IF incx .GE. 0, ELSE LX = (-incx)*n, AND LY IS
+!     defined in a similar way using incy.
+!***AUTHOR  VANDEVENDER, W. (SNLA), 1985
+if (n <= 0) return
+if (incx /= incy) go to 5
+nswc_ai_i4 = incx - 1
+if ( nswc_ai_i4 < 0 ) go to 5
+if ( nswc_ai_i4 == 0 ) go to 20
+go to 60
+5 continue
+!       Code for unequal or nonpositive increments.
+iix = 1
+iiy = 1
+if (incx < 0) iix = (1 - n)*incx + 1
+if (incy < 0) iiy = (1 - n)*incy + 1
+do i = 1,n
+   itemp1 = ix(iix)
+   ix(iix) = iy(iiy)
+   iy(iiy) = itemp1
+   iix = iix + incx
+   iiy = iiy + incy
+end do
+return
+!       Code for both increments equal to 1
+!       clean-up loop so remaining vector LENGTH is a multiple of 3.
+20 m = mod(n,3)
+if (m == 0) go to 40
+do i = 1,m
+   itemp1 = ix(i)
+   ix(i) = iy(i)
+   iy(i) = itemp1
+end do
+if (n < 3) return
+40 mp1 = m + 1
+do i = mp1,n,3
+   itemp1 = ix(i)
+   itemp2 = ix(i + 1)
+   itemp3 = ix(i + 2)
+   ix(i) = iy(i)
+   ix(i + 1) = iy(i + 1)
+   ix(i + 2) = iy(i + 2)
+   iy(i) = itemp1
+   iy(i + 1) = itemp2
+   iy(i + 2) = itemp3
+end do
+return
+!     Code for equal, positive, nonunit increments.
+60 ns = n*incx
+do i = 1,ns,incx
+   itemp1 = ix(i)
+   ix(i) = iy(i)
+   iy(i) = itemp1
+end do
+end subroutine iswap
+
+pure subroutine  sswap(n,sx,incx,sy,incy)
+implicit none
+!     Interchanges two vectors.
+!     Uses unrolled loops for increments equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(inout) :: sx(*), sy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+real :: stemp
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   stemp = sx(ix)
+   sx(ix) = sy(iy)
+   sy(iy) = stemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+!       clean-up loop
+20 m = mod(n,3)
+if ( m == 0 ) go to 40
+do i = 1,m
+   stemp = sx(i)
+   sx(i) = sy(i)
+   sy(i) = stemp
+end do
+if ( n < 3 ) return
+40 mp1 = m + 1
+do i = mp1,n,3
+   stemp = sx(i)
+   sx(i) = sy(i)
+   sy(i) = stemp
+   stemp = sx(i + 1)
+   sx(i + 1) = sy(i + 1)
+   sy(i + 1) = stemp
+   stemp = sx(i + 2)
+   sx(i + 2) = sy(i + 2)
+   sy(i + 2) = stemp
+end do
+end subroutine sswap
+
+pure subroutine  dswap(n,dx,incx,dy,incy)
+implicit none
+!     Interchanges two vectors.
+!     Uses unrolled loops for increments equal one.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(inout) :: dx(*), dy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+double precision :: dtemp
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   dtemp = dx(ix)
+   dx(ix) = dy(iy)
+   dy(iy) = dtemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+!       clean-up loop
+20 m = mod(n,3)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dtemp = dx(i)
+   dx(i) = dy(i)
+   dy(i) = dtemp
+end do
+if ( n < 3 ) return
+40 mp1 = m + 1
+do i = mp1,n,3
+   dtemp = dx(i)
+   dx(i) = dy(i)
+   dy(i) = dtemp
+   dtemp = dx(i + 1)
+   dx(i + 1) = dy(i + 1)
+   dy(i + 1) = dtemp
+   dtemp = dx(i + 2)
+   dx(i + 2) = dy(i + 2)
+   dy(i + 2) = dtemp
+end do
+end subroutine dswap
+
+pure subroutine  cswap(n,cx,incx,cy,incy)
+implicit none
+!     Interchanges two vectors.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(inout) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+complex :: ctemp
+integer :: i, ix, iy
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   ctemp = cx(ix)
+   cx(ix) = cy(iy)
+   cy(iy) = ctemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+20 do i = 1,n
+   ctemp = cx(i)
+   cx(i) = cy(i)
+   cy(i) = ctemp
+end do
+end subroutine cswap
+
+pure subroutine  srot(n,sx,incx,sy,incy,c,s)
+implicit none
+!     Applies a plane rotation.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(inout) :: sx(*), sy(*)
+real, intent(in) :: c, s
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+real :: stemp
+integer :: i, ix, iy
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   stemp = c*sx(ix) + s*sy(iy)
+   sy(iy) = c*sy(iy) - s*sx(ix)
+   sx(ix) = stemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+20 do i = 1,n
+   stemp = c*sx(i) + s*sy(i)
+   sy(i) = c*sy(i) - s*sx(i)
+   sx(i) = stemp
+end do
+end subroutine srot
+
+pure subroutine  drot(n,dx,incx,dy,incy,c,s)
+implicit none
+!     Applies a plane rotation.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(inout) :: dx(*), dy(*)
+double precision, intent(in) :: c, s
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+double precision :: dtemp
+integer :: i, ix, iy
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   dtemp = c*dx(ix) + s*dy(iy)
+   dy(iy) = c*dy(iy) - s*dx(ix)
+   dx(ix) = dtemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+20 do i = 1,n
+   dtemp = c*dx(i) + s*dy(i)
+   dy(i) = c*dy(i) - s*dx(i)
+   dx(i) = dtemp
+end do
+end subroutine drot
+
+pure subroutine  csrot(n,cx,incx,cy,incy,c,s)
+implicit none
+!     Applies a plane rotation, where the cos and sin (c and s) are real
+!     and the vectors cx and cy are complex.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(inout) :: cx(*), cy(*)
+real, intent(in) :: c, s
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+complex :: ctemp
+integer :: i, ix, iy
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!       Code for unequal increments or equal increments not equal
+!         to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   ctemp = c*cx(ix) + s*cy(iy)
+   cy(iy) = c*cy(iy) - s*cx(ix)
+   cx(ix) = ctemp
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!       Code for both increments equal to 1
+20 do i = 1,n
+   ctemp = c*cx(i) + s*cy(i)
+   cy(i) = c*cy(i) - s*cx(i)
+   cx(i) = ctemp
+end do
+end subroutine csrot
+
+pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
+implicit none
+real, intent(inout) :: sd1, sd2, sparam(5), sx1
+real, intent(in) :: sy1
+real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: two = 2.e0
+real, parameter :: gam = 4096.e0
+real, parameter :: gamsq = 1.67772e7
+real, parameter :: rgamsq = 5.96046e-8
+!     Construct the modified Givens transformation matrix H which zeros
+!     the second component of the 2-vector  (sqrt(sd1)*sx1,sqrt(sd2)*
+!     sy1)**T.
+!     With sparam(1)=sflag, H has one of the following forms..
+!     sflag=-1.e0     sflag=0.e0        sflag=1.e0     sflag=-2.e0
+!       (sh11  sh12)    (1.E0  sh12)    (sh11  1.E0)    (1.E0  0.E0)
+!     h=(          )    (          )    (          )    (          )
+!       (sh21  sh22),   (sh21  1.E0),   (-1.E0 sh22),   (0.E0  1.E0).
+!     Locations 2-4 of sparam contain sh11,sh21,sh12, and sh22
+!     respectively. (Values of 1.E0, -1.E0, or 0.E0 implied by the
+!     value of sparam(1) are not stored in sparam.)
+!     it is assumed that gamsq = gam*gam and rgamsq = one/(gam*gam).
+!     The values of gamsq and rgamsq set in the data statement may be
+!     inexact.  This is OK as they are only used for testing the size
+!     of sd1 and sd2.  All actual scaling of data is done using gam.
+if (sd1 < zero) go to 60
+sp2 = sd2*sy1
+if (sp2 /= zero) go to 20
+sflag = -two
+go to 260
+!     Regular-case..
+20 sp1 = sd1*sx1
+sq1 = sp1*sx1
+sq2 = sp2*sy1
+if (abs(sq1) <= abs(sq2)) go to 40
+sh21 = -sy1/sx1
+sh12 = sp2/sp1
+su = one - sh12*sh21
+if (su <= zero) go to 60
+sflag = zero
+sh11 = one
+sh22 = one
+sd1 = sd1/su
+sd2 = sd2/su
+sx1 = sx1*su
+!         Go scale-check..
+go to 100
+40 continue
+if (sd2 < zero) go to 60
+sflag = one
+sh11 = sp1/sp2
+sh21 = -one
+sh12 = one
+sh22 = sx1/sy1
+su = one + sh11*sh22
+stemp = sd2/su
+sd2 = sd1/su
+sd1 = stemp
+sx1 = sy1*su
+!         Go scale-check
+go to 100
+!     Procedure..zero-H-D-and-sx1..
+60 continue
+sflag = -one
+sh11 = zero
+sh12 = zero
+sh21 = zero
+sh22 = zero
+sd1 = zero
+sd2 = zero
+sx1 = zero
+go to 250
+!     Procedure..scale-check
+100 continue
+110 continue
+if (sd1 > rgamsq) go to 130
+if (sd1 == zero) go to 160
+sflag = -one
+sd1 = sd1*(gam*gam)
+sx1 = sx1/gam
+sh11 = sh11/gam
+sh12 = sh12/gam
+go to 110
+130 continue
+140 continue
+if (sd1 < gamsq) go to 160
+sflag = -one
+sd1 = sd1/(gam*gam)
+sx1 = sx1*gam
+sh11 = sh11*gam
+sh12 = sh12*gam
+go to 140
+160 continue
+170 continue
+if (abs(sd2) > rgamsq) go to 190
+if (sd2 == zero) go to 220
+sflag = -one
+sd2 = sd2*(gam*gam)
+sh21 = sh21/gam
+sh22 = sh22/gam
+go to 170
+190 continue
+200 continue
+if (abs(sd2) < gamsq) go to 220
+sflag = -one
+sd2 = sd2/(gam*gam)
+sh21 = sh21*gam
+sh22 = sh22*gam
+go to 200
+220 continue
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 250
+if ( nswc_ai_r4 == 0 ) go to 230
+go to 240
+230 continue
+sparam(3) = sh21
+sparam(4) = sh12
+go to 260
+240 continue
+sparam(2) = sh11
+sparam(5) = sh22
+go to 260
+250 continue
+sparam(2) = sh11
+sparam(3) = sh21
+sparam(4) = sh12
+sparam(5) = sh22
+260 continue
+sparam(1) = sflag
+end subroutine srotmg
+
+subroutine srotm(n,sx,incx,sy,incy,sparam)
+implicit none
+integer, intent(in) :: incx, incy, n
+real :: sparam(5)
+real, intent(inout) :: sx(*), sy(*)
+integer :: i, kx, ky, nsteps
+real :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
+real, parameter :: zero = 0.e0
+real, parameter :: two = 2.e0
+!     Apply the modified Givens transformation, H, to the 2 by n matrix
+!     (sx**T), where **T indicates transpose. The elements of sx are in
+!     (sy**T)
+!     sx(LX+i*incx), i = 0 TO n-1, WHERE LX = 1 IF incx .GE. 0, ELSE
+!     LX = (-incx)*n, and similarly for sy using using LY and incy.
+!     With sparam(1)=sflag, H has one of the following forms..
+!     sflag=-1.e0     sflag=0.e0        sflag=1.e0     sflag=-2.e0
+!       (sh11  sh12)    (1.E0  sh12)    (sh11  1.E0)    (1.E0  0.E0)
+!     h=(          )    (          )    (          )    (          )
+!       (sh21  sh22),   (sh21  1.E0),   (-1.E0 sh22),   (0.E0  1.E0).
+sflag = sparam(1)
+if (n <= 0 .or.(sflag + two == zero)) go to 140
+if (.not.(incx == incy.and. incx > 0)) go to 70
+nsteps = n*incx
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 50
+if ( nswc_ai_r4 == 0 ) go to 10
+go to 30
+10 continue
+sh21 = sparam(3)
+sh12 = sparam(4)
+do i = 1,nsteps,incx
+   w = sx(i)
+   z = sy(i)
+   sx(i) = w + z*sh12
+   sy(i) = w*sh21 + z
+end do
+go to 140
+30 continue
+sh11 = sparam(2)
+sh22 = sparam(5)
+do i = 1,nsteps,incx
+   w = sx(i)
+   z = sy(i)
+   sx(i) = w*sh11 + z
+   sy(i) = -w + sh22*z
+end do
+go to 140
+50 continue
+sh11 = sparam(2)
+sh21 = sparam(3)
+sh12 = sparam(4)
+sh22 = sparam(5)
+do i = 1,nsteps,incx
+   w = sx(i)
+   z = sy(i)
+   sx(i) = w*sh11 + z*sh12
+   sy(i) = w*sh21 + z*sh22
+end do
+go to 140
+70 continue
+kx = 1
+ky = 1
+if (incx < 0) kx = 1 + (1 - n)*incx
+if (incy < 0) ky = 1 + (1 - n)*incy
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 120
+if ( nswc_ai_r4 == 0 ) go to 80
+go to 100
+80 continue
+sh21 = sparam(3)
+sh12 = sparam(4)
+do i = 1,n
+   w = sx(kx)
+   z = sy(ky)
+   sx(kx) = w + z*sh12
+   sy(ky) = w*sh21 + z
+   kx = kx + incx
+   ky = ky + incy
+end do
+go to 140
+100 continue
+sh11 = sparam(2)
+sh22 = sparam(5)
+do i = 1,n
+   w = sx(kx)
+   z = sy(ky)
+   sx(kx) = w*sh11 + z
+   sy(ky) = -w + sh22*z
+   kx = kx + incx
+   ky = ky + incy
+end do
+go to 140
+120 continue
+sh11 = sparam(2)
+sh21 = sparam(3)
+sh12 = sparam(4)
+sh22 = sparam(5)
+do i = 1,n
+   w = sx(kx)
+   z = sy(ky)
+   sx(kx) = w*sh11 + z*sh12
+   sy(ky) = w*sh21 + z*sh22
+   kx = kx + incx
+   ky = ky + incy
+end do
+140 continue
+end subroutine srotm
+
+pure subroutine drotmg(dd1,dd2,dx1,dy1,dparam)
+implicit none
+!     Construct the modified Givens transformation matrix H which zeros
+!     the second component of the 2-vector  (dsqrt(dd1)*dx1,dsqrt(dd2)*
+!     dy1)**T.
+!     With dparam(1)=dflag, H has one of the following forms..
+!     dflag=-1.d0     dflag=0.d0        dflag=1.d0     dflag=-2.d0
+!       (dh11  dh12)    (1.D0  dh12)    (dh11  1.D0)    (1.D0  0.D0)
+!     h=(          )    (          )    (          )    (          )
+!       (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
+!     Locations 2-4 of dparam contain dh11,dh21,dh12, and dh22
+!     respectively. (Values of 1.D0, -1.D0, or 0.D0 implied by the
+!     value of dparam(1) are not stored in dparam.)
+!     it is assumed that gamsq = gam*gam and rgamsq = one/(gam*gam).
+!     The values of gamsq and rgamsq set in the data statement may be
+!     inexact.  This is OK as they are only used for testing the size
+!     of dd1 and dd2.  All actual scaling of data is done using gam.
+double precision, intent(inout) :: dd2
+double precision, intent(inout) :: dparam(5)
+double precision, intent(in) :: dy1
+double precision, intent(inout) :: dd1
+double precision, intent(inout) :: dx1
+double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
+double precision, parameter :: zero = 0.d0
+double precision, parameter :: one = 1.d0
+double precision, parameter :: two = 2.d0
+double precision, parameter :: gam = 4096.d0
+double precision, parameter :: gamsq = 16777216.d0
+double precision, parameter :: rgamsq = 5.9604645d-8
+if (dd1 < zero) go to 60
+dp2 = dd2*dy1
+if (dp2 /= zero) go to 20
+dflag = -two
+go to 260
+!     Regular-case..
+20 dp1 = dd1*dx1
+dq1 = dp1*dx1
+dq2 = dp2*dy1
+if (abs(dq1) <= abs(dq2)) go to 40
+dh21 = -dy1/dx1
+dh12 = dp2/dp1
+du = one - dh12*dh21
+if (du <= zero) go to 60
+dflag = zero
+dh11 = one
+dh22 = one
+dd1 = dd1/du
+dd2 = dd2/du
+dx1 = dx1*du
+!         Go scale-check..
+go to 100
+40 continue
+if (dd2 < zero) go to 60
+dflag = one
+dh11 = dp1/dp2
+dh21 = -one
+dh12 = one
+dh22 = dx1/dy1
+du = one + dh11*dh22
+dtemp = dd2/du
+dd2 = dd1/du
+dd1 = dtemp
+dx1 = dy1*du
+!         Go scale-check
+go to 100
+!     Procedure..zero-H-D-and-dx1..
+60 continue
+dflag = -one
+dh11 = zero
+dh12 = zero
+dh21 = zero
+dh22 = zero
+dd1 = zero
+dd2 = zero
+dx1 = zero
+go to 250
+!     Procedure..scale-check
+100 continue
+110 continue
+if (dd1 > rgamsq) go to 130
+if (dd1 == zero) go to 160
+dflag = -one
+dd1 = dd1*(gam*gam)
+dx1 = dx1/gam
+dh11 = dh11/gam
+dh12 = dh12/gam
+go to 110
+130 continue
+140 continue
+if (dd1 < gamsq) go to 160
+dflag = -one
+dd1 = dd1/(gam*gam)
+dx1 = dx1*gam
+dh11 = dh11*gam
+dh12 = dh12*gam
+go to 140
+160 continue
+170 continue
+if (abs(dd2) > rgamsq) go to 190
+if (dd2 == zero) go to 220
+dflag = -one
+dd2 = dd2*(gam*gam)
+dh21 = dh21/gam
+dh22 = dh22/gam
+go to 170
+190 continue
+200 continue
+if (abs(dd2) < gamsq) go to 220
+dflag = -one
+dd2 = dd2/(gam*gam)
+dh21 = dh21*gam
+dh22 = dh22*gam
+go to 200
+220 continue
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 250
+if ( nswc_ai_r8 == 0 ) go to 230
+go to 240
+230 continue
+dparam(3) = dh21
+dparam(4) = dh12
+go to 260
+240 continue
+dparam(2) = dh11
+dparam(5) = dh22
+go to 260
+250 continue
+dparam(2) = dh11
+dparam(3) = dh21
+dparam(4) = dh12
+dparam(5) = dh22
+260 continue
+dparam(1) = dflag
+end subroutine drotmg
+
+subroutine drotm(n,dx,incx,dy,incy,dparam)
+implicit none
+integer, intent(in) :: incx, incy, n
+double precision, intent(inout) :: dx(*)
+double precision :: dparam(5)
+double precision, intent(inout) :: dy(*)
+integer :: i, kx, ky, nsteps
+double precision :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
+double precision, parameter :: zero = 0.d0
+double precision, parameter :: two = 2.d0
+!     Apply the modified Givens transformation, H, to the 2 by n matrix
+!     (dx**T), where **T indicates transpose. The elements of dx are in
+!     (dy**T)
+!     dx(LX+i*incx), i = 0 TO n-1, WHERE LX = 1 IF incx .GE. 0, ELSE
+!     LX = (-incx)*n, and similarly for SY using LY and incy.
+!     With dparam(1)=dflag, H has one of the following forms..
+!     dflag=-1.d0     dflag=0.d0        dflag=1.d0     dflag=-2.d0
+!       (dh11  dh12)    (1.D0  dh12)    (dh11  1.D0)    (1.D0  0.D0)
+!     h=(          )    (          )    (          )    (          )
+!       (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
+dflag = dparam(1)
+if (n <= 0 .or.(dflag + two == zero)) go to 140
+if (.not.(incx == incy.and. incx > 0)) go to 70
+nsteps = n*incx
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 50
+if ( nswc_ai_r8 == 0 ) go to 10
+go to 30
+10 continue
+dh21 = dparam(3)
+dh12 = dparam(4)
+do i = 1,nsteps,incx
+   w = dx(i)
+   z = dy(i)
+   dx(i) = w + z*dh12
+   dy(i) = w*dh21 + z
+end do
+go to 140
+30 continue
+dh11 = dparam(2)
+dh22 = dparam(5)
+do i = 1,nsteps,incx
+   w = dx(i)
+   z = dy(i)
+   dx(i) = w*dh11 + z
+   dy(i) = -w + dh22*z
+end do
+go to 140
+50 continue
+dh11 = dparam(2)
+dh21 = dparam(3)
+dh12 = dparam(4)
+dh22 = dparam(5)
+do i = 1,nsteps,incx
+   w = dx(i)
+   z = dy(i)
+   dx(i) = w*dh11 + z*dh12
+   dy(i) = w*dh21 + z*dh22
+end do
+go to 140
+70 continue
+kx = 1
+ky = 1
+if (incx < 0) kx = 1 + (1 - n)*incx
+if (incy < 0) ky = 1 + (1 - n)*incy
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 120
+if ( nswc_ai_r8 == 0 ) go to 80
+go to 100
+80 continue
+dh21 = dparam(3)
+dh12 = dparam(4)
+do i = 1,n
+   w = dx(kx)
+   z = dy(ky)
+   dx(kx) = w + z*dh12
+   dy(ky) = w*dh21 + z
+   kx = kx + incx
+   ky = ky + incy
+end do
+go to 140
+100 continue
+dh11 = dparam(2)
+dh22 = dparam(5)
+do i = 1,n
+   w = dx(kx)
+   z = dy(ky)
+   dx(kx) = w*dh11 + z
+   dy(ky) = -w + dh22*z
+   kx = kx + incx
+   ky = ky + incy
+end do
+go to 140
+120 continue
+dh11 = dparam(2)
+dh21 = dparam(3)
+dh12 = dparam(4)
+dh22 = dparam(5)
+do i = 1,n
+   w = dx(kx)
+   z = dy(ky)
+   dx(kx) = w*dh11 + z*dh12
+   dy(ky) = w*dh21 + z*dh22
+   kx = kx + incx
+   ky = ky + incy
+end do
+140 continue
+end subroutine drotm
+
+pure real function sdot(n,sx,incx,sy,incy)
+implicit none
+!     Forms the dot product of two vectors.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*), sy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+real :: stemp
+integer :: i, ix, iy, m, mp1
+stemp = 0.0e0
+sdot = 0.0e0
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   stemp = stemp + sx(ix)*sy(iy)
+   ix = ix + incx
+   iy = iy + incy
+end do
+sdot = stemp
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,5)
+if ( m == 0 ) go to 40
+do i = 1,m
+   stemp = stemp + sx(i)*sy(i)
+end do
+if ( n < 5 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,5
+   stemp = stemp + sx(i)*sy(i) + sx(i + 1)*sy(i + 1) + &
+      & sx(i + 2)*sy(i + 2) + sx(i + 3)*sy(i + 3) + sx(i + 4)*sy(i + 4)
+end do
+60 sdot = stemp
+end function sdot
+
+pure double precision function ddot(n,dx,incx,dy,incy)
+implicit none
+!     Forms the dot product of two vectors.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: dx(*), dy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+double precision :: dtemp
+integer :: i, ix, iy, m, mp1
+ddot = 0.0d0
+dtemp = 0.0d0
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   dtemp = dtemp + dx(ix)*dy(iy)
+   ix = ix + incx
+   iy = iy + incy
+end do
+ddot = dtemp
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,5)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dtemp = dtemp + dx(i)*dy(i)
+end do
+if ( n < 5 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,5
+   dtemp = dtemp + dx(i)*dy(i) + dx(i + 1)*dy(i + 1) + &
+      & dx(i + 2)*dy(i + 2) + dx(i + 3)*dy(i + 3) + dx(i + 4)*dy(i + 4)
+end do
+60 ddot = dtemp
+end function ddot
+
+pure complex function cdotc(n,cx,incx,cy,incy)
+implicit none
+!     Forms the dot product of two vectors, conjugating the first
+!     vector.
+!     Jack dongarra, LINPACK,  3/11/78.
+complex, intent(in) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+complex :: ctemp
+integer :: i, ix, iy
+ctemp = (0.0,0.0)
+cdotc = (0.0,0.0)
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   ctemp = ctemp + conjg(cx(ix))*cy(iy)
+   ix = ix + incx
+   iy = iy + incy
+end do
+cdotc = ctemp
+return
+!        Code for both increments equal to 1
+20 do i = 1,n
+   ctemp = ctemp + conjg(cx(i))*cy(i)
+end do
+cdotc = ctemp
+end function cdotc
+
+pure complex function cdotu(n,cx,incx,cy,incy)
+implicit none
+!     Forms the dot product of two vectors.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(in) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+complex :: ctemp
+integer :: i, ix, iy
+ctemp = (0.0,0.0)
+cdotu = (0.0,0.0)
+if (n <= 0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   ctemp = ctemp + cx(ix)*cy(iy)
+   ix = ix + incx
+   iy = iy + incy
+end do
+cdotu = ctemp
+return
+!        Code for both increments equal to 1
+20 do i = 1,n
+   ctemp = ctemp + cx(i)*cy(i)
+end do
+cdotu = ctemp
+end function cdotu
+
+pure subroutine  sscal(n,sa,sx,incx)
+implicit none
+!     Scales a vector BY a constant.
+!     Uses unrolled loops for increment equal to 1.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sa
+real, intent(inout) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+integer :: i, m, mp1, nincx
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   sx(i) = sa*sx(i)
+end do
+return
+!        Code for increment equal to 1
+!        clean-up loop
+20 m = mod(n,5)
+if ( m == 0 ) go to 40
+do i = 1,m
+   sx(i) = sa*sx(i)
+end do
+if ( n < 5 ) return
+40 mp1 = m + 1
+do i = mp1,n,5
+   sx(i) = sa*sx(i)
+   sx(i + 1) = sa*sx(i + 1)
+   sx(i + 2) = sa*sx(i + 2)
+   sx(i + 3) = sa*sx(i + 3)
+   sx(i + 4) = sa*sx(i + 4)
+end do
+end subroutine sscal
+
+pure subroutine  dscal(n,da,dx,incx)
+implicit none
+!     Scales a vector BY a constant.
+!     Uses unrolled loops for increment equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: da
+double precision, intent(inout) :: dx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+integer :: i, m, mp1, nincx
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   dx(i) = da*dx(i)
+end do
+return
+!        Code for increment equal to 1
+!        clean-up loop
+20 m = mod(n,5)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dx(i) = da*dx(i)
+end do
+if ( n < 5 ) return
+40 mp1 = m + 1
+do i = mp1,n,5
+   dx(i) = da*dx(i)
+   dx(i + 1) = da*dx(i + 1)
+   dx(i + 2) = da*dx(i + 2)
+   dx(i + 3) = da*dx(i + 3)
+   dx(i + 4) = da*dx(i + 4)
+end do
+end subroutine dscal
+
+pure subroutine  cscal(n,ca,cx,incx)
+implicit none
+!     Scales a vector BY a constant.
+!     Jack dongarra, LINPACK,  3/11/78.
+complex, intent(in) :: ca
+complex, intent(inout) :: cx(*)
+integer, intent(in) :: incx, n
+integer :: i, nincx
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   cx(i) = ca*cx(i)
+end do
+return
+!        Code for increment equal to 1
+20 do i = 1,n
+   cx(i) = ca*cx(i)
+end do
+end subroutine cscal
+
+pure subroutine  csscal(n,sa,cx,incx)
+implicit none
+!     Scales a complex vector BY a real constant.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(inout) :: cx(*)
+real, intent(in) :: sa
+integer, intent(in) :: incx, n
+integer :: i, nincx
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
+end do
+return
+!        Code for increment equal to 1
+20 do i = 1,n
+   cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
+end do
+end subroutine csscal
+
+pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+implicit none
+!     Constant times a vector plus a vector.
+!     Uses unrolled loop for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*)
+real, intent(inout) :: sy(*)
+real, intent(in) :: sa
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (sa == 0.0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   sy(iy) = sy(iy) + sa*sx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,4)
+if ( m == 0 ) go to 40
+do i = 1,m
+   sy(i) = sy(i) + sa*sx(i)
+end do
+if ( n < 4 ) return
+40 mp1 = m + 1
+do i = mp1,n,4
+   sy(i) = sy(i) + sa*sx(i)
+   sy(i + 1) = sy(i + 1) + sa*sx(i + 1)
+   sy(i + 2) = sy(i + 2) + sa*sx(i + 2)
+   sy(i + 3) = sy(i + 3) + sa*sx(i + 3)
+end do
+end subroutine saxpy
+
+pure subroutine daxpy(n,da,dx,incx,dy,incy)
+implicit none
+!     Constant times a vector plus a vector.
+!     Uses unrolled loops for increments equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: dx(*)
+double precision, intent(inout) :: dy(*)
+double precision, intent(in) :: da
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy, m, mp1
+if (n <= 0) return
+if (da == 0.0d0) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   dy(iy) = dy(iy) + da*dx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+!        clean-up loop
+20 m = mod(n,4)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dy(i) = dy(i) + da*dx(i)
+end do
+if ( n < 4 ) return
+40 mp1 = m + 1
+do i = mp1,n,4
+   dy(i) = dy(i) + da*dx(i)
+   dy(i + 1) = dy(i + 1) + da*dx(i + 1)
+   dy(i + 2) = dy(i + 2) + da*dx(i + 2)
+   dy(i + 3) = dy(i + 3) + da*dx(i + 3)
+end do
+end subroutine daxpy
+
+pure subroutine caxpy(n,ca,cx,incx,cy,incy)
+implicit none
+!     Constant times a vector plus a vector.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(in) :: cx(*)
+complex, intent(inout) :: cy(*)
+complex, intent(in) :: ca
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
+integer :: i, ix, iy
+if (n <= 0) return
+if (abs(real(ca)) + abs(aimag(ca)) == 0.0 ) return
+if (incx == 1.and.incy == 1) go to 20
+!        Code for unequal increments or equal increments
+!          not equal to 1
+ix = 1
+iy = 1
+if (incx < 0) ix = (-n + 1)*incx + 1
+if (incy < 0) iy = (-n + 1)*incy + 1
+do i = 1,n
+   cy(iy) = cy(iy) + ca*cx(ix)
+   ix = ix + incx
+   iy = iy + incy
+end do
+return
+!        Code for both increments equal to 1
+20 do i = 1,n
+   cy(i) = cy(i) + ca*cx(i)
+end do
+end subroutine caxpy
+
+pure real function sasum(n,sx,incx)
+implicit none
+!     Takes the sum of the absolute values.
+!     Uses unrolled loops for increment equal to one.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+real :: stemp
+integer :: i, m, mp1, nincx
+sasum = 0.0e0
+stemp = 0.0e0
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   stemp = stemp + abs(sx(i))
+end do
+sasum = stemp
+return
+!        Code for increment equal to 1
+!        clean-up loop
+20 m = mod(n,6)
+if ( m == 0 ) go to 40
+do i = 1,m
+   stemp = stemp + abs(sx(i))
+end do
+if ( n < 6 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,6
+   stemp = stemp + abs(sx(i)) + abs(sx(i + 1)) + abs(sx(i + 2)) &
+      & + abs(sx(i + 3)) + abs(sx(i + 4)) + abs(sx(i + 5))
+end do
+60 sasum = stemp
+end function sasum
+
+pure double precision function dasum(n,dx,incx)
+implicit none
+!     Takes the sum of the absolute values.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: dx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+double precision :: dtemp
+integer :: i, m, mp1, nincx
+dasum = 0.0d0
+dtemp = 0.0d0
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   dtemp = dtemp + abs(dx(i))
+end do
+dasum = dtemp
+return
+!        Code for increment equal to 1
+!        clean-up loop
+20 m = mod(n,6)
+if ( m == 0 ) go to 40
+do i = 1,m
+   dtemp = dtemp + abs(dx(i))
+end do
+if ( n < 6 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,6
+   dtemp = dtemp + abs(dx(i)) + abs(dx(i + 1)) + abs(dx(i + 2)) &
+      & + abs(dx(i + 3)) + abs(dx(i + 4)) + abs(dx(i + 5))
+end do
+60 dasum = dtemp
+end function dasum
+
+pure real function scasum(n,cx,incx)
+implicit none
+!     Takes the sum of the absolute values of a complex vector and
+!     returns a single precision result.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex, intent(in) :: cx(*)
+integer, intent(in) :: incx, n
+real :: stemp
+integer :: i, nincx
+scasum = 0.0e0
+stemp = 0.0e0
+if (n <= 0) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+nincx = n*incx
+do i = 1,nincx,incx
+   stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
+end do
+scasum = stemp
+return
+!        Code for increment equal to 1
+20 do i = 1,n
+   stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
+end do
+scasum = stemp
+end function scasum
+
+pure real function snrm2( n, sx, incx)
+implicit none
+integer, intent(in) :: incx, n
+real, intent(in) :: sx(*)
+integer :: i, j, nn, next
+real :: hitest, sum, xmax
+real, parameter :: zero = 0.0e0
+real, parameter :: one = 1.0e0
+real, parameter :: cutlo = 4.441e-16
+real, parameter :: cuthi = 1.304e19
+!     Euclidean norm of the n-vector stored in sx() with storage
+!     increment incx .
+!     If    n .LE. 0 return with result = 0.
+!     If n .GE. 1 then incx must be .GE. 1
+!           C.L.Lawson, 1978 jan 08
+!     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
+!     hopefully applicable to all machines.
+!         cutlo = Maximum of  sqrt(U/EPS)  over all known machines.
+!         cuthi = Minimum of  sqrt(V)      over all known machines.
+!     Where
+!         eps = Smallest no. such that eps + 1. .GT. 1.
+!         U   = Smallest positive no.   (underflow limit)
+!         V   = Largest  no.            (overflow  limit)
+!     brief outline of algorithm..
+!     PHASE 1    SCANS ZERO COMPONENTS.
+!     Move to phase 2 when a component is nonzero and .LE. cutlo
+!     move to phase 3 when a component is .GT. cutlo
+!     move to phase 4 when a component is .GE. cuthi/M
+!     where M = n for X() real and M = 2*n for complex.
+!     Values for cutlo and cuthi..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
+!     cutlo, S.P.   U/eps = 2**(-102) for  Honeywell.  Close seconds are
+!                   Univac and DEC at 2**(-103)
+!                   THUS cutlo = 2**(-51) = 4.44089E-16
+!     cuthi, S.P.   V = 2**127 for Univac, Honeywell, and DEC.
+!                   THUS cuthi = 2**(63.5) = 1.30438E19
+!     cutlo, D.P.   U/eps = 2**(-67) for Honeywell and DEC.
+!                   THUS cutlo = 2**(-33.5) = 8.23181D-11
+!     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
+!     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
+!     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
+if (n > 0) go to 10
+snrm2 = zero
+go to 300
+10 next = 30
+sum = zero
+nn = n * incx
+!                                                 Begin main loop
+i = 1
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
+30 if ( abs(sx(i)) > cutlo) go to 85
+next = 50
+xmax = zero
+!                        Phase 1.  Sum is zero
+50 if ( sx(i) == zero) go to 200
+if ( abs(sx(i)) > cutlo) go to 85
+!                                Prepare for phase 2.
+next = 70
+go to 105
+!                                Prepare for phase 4.
+100 i = j
+next = 110
+sum = (sum / sx(i)) / sx(i)
+105 xmax = abs(sx(i))
+go to 115
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
+70 if ( abs(sx(i)) > cutlo ) go to 75
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
+110 if ( abs(sx(i)) <= xmax ) go to 115
+sum = one + sum * (xmax / sx(i))**2
+xmax = abs(sx(i))
+go to 200
+115 sum = sum + (sx(i)/xmax)**2
+go to 200
+!                  Prepare for phase 3.
+75 sum = (sum * xmax) * xmax
+!     For real or D.P. set hitest = cuthi/n
+!     for complex      set hitest = cuthi/(2*n)
+85 hitest = cuthi/float( n )
+!                   Phase 3.  Sum is mid-range.  No scaling.
+do j = i,nn,incx
+   if (abs(sx(j)) >= hitest) go to 100
+   sum = sum + sx(j)**2
+end do
+snrm2 = sqrt( sum )
+go to 300
+200 continue
+i = i + incx
+if ( i <= nn ) go to 20
+!              END OF MAIN LOOP.
+!              Compute square root and adjust for scaling.
+snrm2 = xmax * sqrt(sum)
+300 continue
+end function snrm2
+
+pure double precision function dnrm2( n, dx, incx)
+implicit none
+integer, intent(in) :: incx, n
+double precision, intent(in) :: dx(*)
+integer :: i, j, nn, next
+double precision :: hitest, sum, xmax
+double precision, parameter :: zero = 0.0d0
+double precision, parameter :: one = 1.0d0
+double precision, parameter :: cutlo = 8.232d-11
+double precision, parameter :: cuthi = 1.304d19
+!     Euclidean norm of the n-vector stored in dx() with storage
+!     increment incx .
+!     If    n .LE. 0 return with result = 0.
+!     If n .GE. 1 then incx must be .GE. 1
+!           C.L.Lawson, 1978 jan 08
+!     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
+!     hopefully applicable to all machines.
+!         cutlo = Maximum of  dsqrt(U/EPS)  over all known machines.
+!         cuthi = Minimum of  dsqrt(V)      over all known machines.
+!     Where
+!         eps = Smallest no. such that eps + 1. .GT. 1.
+!         U   = Smallest positive no.   (underflow limit)
+!         V   = Largest  no.            (overflow  limit)
+!     brief outline of algorithm..
+!     PHASE 1    SCANS ZERO COMPONENTS.
+!     Move to phase 2 when a component is nonzero and .LE. cutlo
+!     move to phase 3 when a component is .GT. cutlo
+!     move to phase 4 when a component is .GE. cuthi/M
+!     where M = n for X() real and M = 2*n for complex.
+!     Values for cutlo and cuthi..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
+!     cutlo, S.P.   U/eps = 2**(-102) for  Honeywell.  Close seconds are
+!                   Univac and DEC at 2**(-103)
+!                   THUS cutlo = 2**(-51) = 4.44089E-16
+!     cuthi, S.P.   V = 2**127 for Univac, Honeywell, and DEC.
+!                   THUS cuthi = 2**(63.5) = 1.30438E19
+!     cutlo, D.P.   U/eps = 2**(-67) for Honeywell and DEC.
+!                   THUS cutlo = 2**(-33.5) = 8.23181D-11
+!     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
+!     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
+!     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
+if (n > 0) go to 10
+dnrm2 = zero
+go to 300
+10 next = 30
+sum = zero
+nn = n * incx
+!                                                 Begin main loop
+i = 1
+20 select case ( next )
+case ( 30 )
+   go to 30
+case ( 50 )
+   go to 50
+case ( 70 )
+   go to 70
+case ( 110 )
+   go to 110
+end select
+30 if ( abs(dx(i)) > cutlo) go to 85
+next = 50
+xmax = zero
+!                        Phase 1.  Sum is zero
+50 if ( dx(i) == zero) go to 200
+if ( abs(dx(i)) > cutlo) go to 85
+!                                Prepare for phase 2.
+next = 70
+go to 105
+!                                Prepare for phase 4.
+100 i = j
+next = 110
+sum = (sum / dx(i)) / dx(i)
+105 xmax = abs(dx(i))
+go to 115
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
+70 if ( abs(dx(i)) > cutlo ) go to 75
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
+110 if ( abs(dx(i)) <= xmax ) go to 115
+sum = one + sum * (xmax / dx(i))**2
+xmax = abs(dx(i))
+go to 200
+115 sum = sum + (dx(i)/xmax)**2
+go to 200
+!                  Prepare for phase 3.
+75 sum = (sum * xmax) * xmax
+!     For real or D.P. set hitest = cuthi/n
+!     for complex      set hitest = cuthi/(2*n)
+85 hitest = cuthi/float( n )
+!                   Phase 3.  Sum is mid-range.  No scaling.
+do j = i,nn,incx
+   if (abs(dx(j)) >= hitest) go to 100
+   sum = sum + dx(j)**2
+end do
+dnrm2 = sqrt( sum )
+go to 300
+200 continue
+i = i + incx
+if ( i <= nn ) go to 20
+!              END OF MAIN LOOP.
+!              Compute square root and adjust for scaling.
+dnrm2 = xmax * sqrt(sum)
+300 continue
+end function dnrm2
+
+pure real function scnrm2( n, cx, incx)
+implicit none
+integer, intent(in) :: incx, n
+complex, intent(in) :: cx(*)
+integer :: i, nn, next
+logical :: imag, scale
+real :: hitest, sum, xmax, absx
+real, parameter :: zero = 0.0e0
+real, parameter :: one = 1.0e0
+real, parameter :: cutlo = 4.441e-16
+real, parameter :: cuthi = 1.304e19
+!     Unitary norm of the complex n-vector stored in cx() with storage
+!     increment incx .
+!     If    n .LE. 0 return with result = 0.
+!     If n .GE. 1 then incx must be .GE. 1
+!           C.L.Lawson , 1978 jan 08
+!     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
+!     hopefully applicable to all machines.
+!         cutlo = Maximum of  sqrt(U/EPS)  over all known machines.
+!         cuthi = Minimum of  sqrt(V)      over all known machines.
+!     Where
+!         eps = Smallest no. such that eps + 1. .GT. 1.
+!         U   = Smallest positive no.   (underflow limit)
+!         V   = Largest  no.            (overflow  limit)
+!     brief outline of algorithm..
+!     PHASE 1    SCANS ZERO COMPONENTS.
+!     Move to phase 2 when a component is nonzero and .LE. cutlo
+!     move to phase 3 when a component is .GT. cutlo
+!     move to phase 4 when a component is .GE. cuthi/M
+!     where M = n for X() real and M = 2*n for complex.
+!     Values for cutlo and cuthi..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
+!     cutlo, S.P.   U/eps = 2**(-102) for  Honeywell.  Close seconds are
+!                   Univac and DEC at 2**(-103)
+!                   THUS cutlo = 2**(-51) = 4.44089E-16
+!     cuthi, S.P.   V = 2**127 for Univac, Honeywell, and DEC.
+!                   THUS cuthi = 2**(63.5) = 1.30438E19
+!     cutlo, D.P.   U/eps = 2**(-67) for Honeywell and DEC.
+!                   THUS cutlo = 2**(-33.5) = 8.23181D-11
+!     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
+!     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
+!     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
+if (n > 0) go to 10
+scnrm2 = zero
+go to 300
+10 next = 30
+sum = zero
+nn = n * incx
+!                                                 Begin main loop
+do i = 1,nn,incx
+   absx = abs(real(cx(i)))
+   imag = .false.
+   select case ( next )
+   case ( 30 )
+      go to 30
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
+30 if ( absx > cutlo) go to 85
+   next = 50
+   scale = .false.
+!                        Phase 1.  Sum is zero
+50 if ( absx == zero) go to 200
+   if ( absx > cutlo) go to 85
+!                                Prepare for phase 2.
+   next = 70
+   go to 105
+!                                Prepare for phase 4.
+100 next = 110
+   sum = (sum / absx) / absx
+105 scale = .true.
+   xmax = absx
+   go to 115
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
+70 if ( absx > cutlo ) go to 75
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
+110 if ( absx <= xmax ) go to 115
+   sum = one + sum * (xmax / absx)**2
+   xmax = absx
+   go to 200
+115 sum = sum + (absx/xmax)**2
+   go to 200
+!                  Prepare for phase 3.
+75 sum = (sum * xmax) * xmax
+85 next = 90
+   scale = .false.
+!     For real or D.P. set hitest = cuthi/n
+!     for complex      set hitest = cuthi/(2*n)
+   hitest = cuthi/float( n )
+   hitest = hitest * 0.5
+!                   Phase 3.  Sum is mid-range.  No scaling.
+90 if (absx >= hitest) go to 100
+   sum = sum + absx**2
+200 continue
+!                  Control selection of real and imaginary parts.
+   if (imag) go to 210
+   absx = abs(aimag(cx(i)))
+   imag = .true.
+   select case ( next )
+   case ( 50 )
+      go to 50
+   case ( 70 )
+      go to 70
+   case ( 90 )
+      go to 90
+   case ( 110 )
+      go to 110
+   end select
+210 continue
+end do
+!              END OF MAIN LOOP.
+!              Compute square root and adjust for scaling.
+scnrm2 = sqrt(sum)
+if (scale) scnrm2 = scnrm2 * xmax
+300 continue
+end function scnrm2
+
+pure integer function isamax(n,sx,incx)
+implicit none
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+real :: smax
+integer :: i, ix
+isamax = 0
+if ( n < 1 ) return
+isamax = 1
+if (n == 1) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+ix = 1
+smax = abs(sx(1))
+ix = ix + incx
+do i = 2,n
+   if (abs(sx(ix)) <= smax) go to 5
+   isamax = i
+   smax = abs(sx(ix))
+5  ix = ix + incx
+end do
+return
+!        Code for increment equal to 1
+20 smax = abs(sx(1))
+do i = 2,n
+   if (abs(sx(i)) <= smax) go to 30
+   isamax = i
+   smax = abs(sx(i))
+30 continue
+end do
+end function isamax
+
+pure integer function idamax(n,dx,incx)
+implicit none
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
+double precision, intent(in) :: dx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+double precision :: dmax
+integer :: i, ix
+idamax = 0
+if ( n < 1 ) return
+idamax = 1
+if (n == 1) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+ix = 1
+dmax = abs(dx(1))
+ix = ix + incx
+do i = 2,n
+   if (abs(dx(ix)) <= dmax) go to 5
+   idamax = i
+   dmax = abs(dx(ix))
+5  ix = ix + incx
+end do
+return
+!        Code for increment equal to 1
+20 dmax = abs(dx(1))
+do i = 2,n
+   if (abs(dx(i)) <= dmax) go to 30
+   idamax = i
+   dmax = abs(dx(i))
+30 continue
+end do
+end function idamax
+
+integer function icamax(n,cx,incx)
+implicit none
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
+complex :: cx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+real :: smax
+integer :: i, ix
+complex :: zdum
+icamax = 0
+if ( n < 1 ) return
+icamax = 1
+if (n == 1) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+ix = 1
+smax = cabs1(cx(1))
+ix = ix + incx
+do i = 2,n
+   if (cabs1(cx(ix)) <= smax) go to 5
+   icamax = i
+   smax = cabs1(cx(ix))
+5  ix = ix + incx
+end do
+return
+!        Code for increment equal to 1
+20 smax = cabs1(cx(1))
+do i = 2,n
+   if (cabs1(cx(i)) <= smax) go to 30
+   icamax = i
+   smax = cabs1(cx(i))
+30 continue
+end do
+contains
+   pure function cabs1(zdum) result(nswc_sf_result)
+      implicit none
+      complex, intent(in) :: zdum
+      real :: nswc_sf_result
+      nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
+   end function cabs1
+end function icamax
+
+pure subroutine mcvfs(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(*)
+integer :: i, j, l
+l = 0
+do j = 1,n
+   do i = 1,j
+      l = l + 1
+      b(l) = a(i,j)
+   end do
+end do
+end subroutine mcvfs
+
+pure subroutine dmcvfs(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(*)
+integer :: i, j, l
+l = 0
+do j = 1,n
+   do i = 1,j
+      l = l + 1
+      b(l) = a(i,j)
+   end do
+end do
+end subroutine dmcvfs
+
+pure subroutine mcvsf(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+real, intent(inout) :: a(ka,n)
+real, intent(in) :: b(*)
+integer :: i, ii, im1, j, jj, l
+a(1,1) = b(1)
+if (n < 2) return
+l = (n*(n + 1))/2
+j = n
+do jj = 2,n
+   i = j
+   do ii = 1,j
+      a(i,j) = b(l)
+      i = i - 1
+      l = l - 1
+   end do
+   j = j - 1
+end do
+do i = 2,n
+   im1 = i - 1
+   do j = 1,im1
+      a(i,j) = a(j,i)
+   end do
+end do
+end subroutine mcvsf
+
+pure subroutine dmcvsf(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n)
+double precision, intent(in) :: b(*)
+integer :: i, ii, im1, j, jj, l
+a(1,1) = b(1)
+if (n < 2) return
+l = (n*(n + 1))/2
+j = n
+do jj = 2,n
+   i = j
+   do ii = 1,j
+      a(i,j) = b(l)
+      i = i - 1
+      l = l - 1
+   end do
+   j = j - 1
+end do
+do i = 2,n
+   im1 = i - 1
+   do j = 1,im1
+      a(i,j) = a(j,i)
+   end do
+end do
+end subroutine dmcvsf
+
+pure subroutine mcvrd(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+real, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = a(i,j)
+   end do
+end do
+end subroutine mcvrd
+
+pure subroutine mcvdr(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+double precision, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = a(i,j)
+   end do
+end do
+end subroutine mcvdr
+
+pure subroutine mcvrc(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+real, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = cmplx(a(i,j),0.0)
+   end do
+end do
+end subroutine mcvrc
+
+pure subroutine cmreal(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+complex, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = real(a(i,j))
+   end do
+end do
+end subroutine cmreal
+
+pure subroutine cmimag(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+complex, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = aimag(a(i,j))
+   end do
+end do
+end subroutine cmimag
 

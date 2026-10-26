@@ -362,7 +362,7 @@
   "computed_gotos": [
     {
       "procedure": "BESJ",
-      "line": 18471,
+      "line": 16212,
       "selector": "is",
       "targets": [
         320,
@@ -372,7 +372,7 @@
     },
     {
       "procedure": "BESJ",
-      "line": 18506,
+      "line": 16245,
       "selector": "is",
       "targets": [
         370,
@@ -382,7 +382,7 @@
     },
     {
       "procedure": "BESI",
-      "line": 20446,
+      "line": 18080,
       "selector": "is",
       "targets": [
         180,
@@ -392,7 +392,7 @@
     },
     {
       "procedure": "BESI",
-      "line": 20473,
+      "line": 18105,
       "selector": "is",
       "targets": [
         270,
@@ -402,7 +402,7 @@
     },
     {
       "procedure": "SSVDC",
-      "line": 45654,
+      "line": 39846,
       "selector": "kase",
       "targets": [
         490,
@@ -413,7 +413,7 @@
     },
     {
       "procedure": "DSVDC",
-      "line": 46194,
+      "line": 40309,
       "selector": "kase",
       "targets": [
         490,
@@ -424,7 +424,7 @@
     },
     {
       "procedure": "CSVDC",
-      "line": 46763,
+      "line": 40799,
       "selector": "kase",
       "targets": [
         530,
@@ -435,7 +435,7 @@
     },
     {
       "procedure": "SONEST",
-      "line": 60791,
+      "line": 52765,
       "selector": "jump",
       "targets": [
         100,
@@ -447,7 +447,7 @@
     },
     {
       "procedure": "DONEST",
-      "line": 60978,
+      "line": 52915,
       "selector": "jump",
       "targets": [
         100,
@@ -459,7 +459,7 @@
     },
     {
       "procedure": "BALANC",
-      "line": 62406,
+      "line": 54083,
       "selector": "iexc",
       "targets": [
         80,
@@ -468,7 +468,7 @@
     },
     {
       "procedure": "DBAL",
-      "line": 64253,
+      "line": 55628,
       "selector": "iexc",
       "targets": [
         80,
@@ -477,7 +477,7 @@
     },
     {
       "procedure": "CBAL",
-      "line": 67680,
+      "line": 58511,
       "selector": "iexc",
       "targets": [
         80,
@@ -486,7 +486,7 @@
     },
     {
       "procedure": "DCBAL",
-      "line": 68901,
+      "line": 59560,
       "selector": "iexc",
       "targets": [
         80,
@@ -495,7 +495,7 @@
     },
     {
       "procedure": "BNDSL",
-      "line": 100684,
+      "line": 86754,
       "selector": "mode",
       "targets": [
         10,
@@ -505,7 +505,7 @@
     },
     {
       "procedure": "LNSYS",
-      "line": 115820,
+      "line": 99642,
       "selector": "option",
       "targets": [
         300,
@@ -516,7 +516,7 @@
     },
     {
       "procedure": "STOD",
-      "line": 120880,
+      "line": 103827,
       "selector": "iret",
       "targets": [
         160,
@@ -526,7 +526,7 @@
     },
     {
       "procedure": "CFOD",
-      "line": 121226,
+      "line": 104168,
       "selector": "meth",
       "targets": [
         100,
@@ -535,7 +535,7 @@
     },
     {
       "procedure": "PJAC",
-      "line": 121364,
+      "line": 104300,
       "selector": "miter",
       "targets": [
         100,
@@ -547,7 +547,7 @@
     },
     {
       "procedure": "SLVS",
-      "line": 121527,
+      "line": 104460,
       "selector": "miter",
       "targets": [
         100,
@@ -559,7 +559,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 123003,
+      "line": 105719,
       "selector": "kswx",
       "targets": [
         170,
@@ -571,7 +571,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 123042,
+      "line": 105748,
       "selector": "kswy",
       "targets": [
         220,

@@ -12,10 +12,10 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L35735`](../source_parts/nswc_part_04.f90#L3928) |
-| `DMCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L35751`](../source_parts/nswc_part_04.f90#L3944) |
-| `MCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L35767`](../source_parts/nswc_part_04.f90#L3960) |
-| `DMCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L35797`](../source_parts/nswc_part_04.f90#L3990) |
+| `MCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L31404`](../source_parts/nswc_part_03.f90#L10361) |
+| `DMCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L31419`](../source_parts/nswc_part_03.f90#L10376) |
+| `MCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L31434`](../source_parts/nswc_part_03.f90#L10391) |
+| `DMCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L31461`](../source_parts/nswc_part_03.f90#L10418) |
 
 
 Ann Xn symmetric matrix A = (a,;) can be represented by either its lower triangular elements 411 412 G13 G21 @22 423 S3i_432_ 233
@@ -54,8 +54,8 @@ B is an array containing the elements of a packed n x n symmetric matrix and A i
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVRD` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35827`](../source_parts/nswc_part_04.f90#L4020) |
-| `MCVDR` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35841`](../source_parts/nswc_part_04.f90#L4034) |
+| `MCVRD` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31488`](../source_parts/nswc_part_03.f90#L10445) |
+| `MCVDR` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31501`](../source_parts/nswc_part_03.f90#L10458) |
 
 
 The subroutines MCVRD and MCVDR are available for converting real matrices to and from double precision form.
@@ -94,7 +94,7 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVRC` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35855`](../source_parts/nswc_part_04.f90#L4048) |
+| `MCVRC` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31514`](../source_parts/nswc_part_03.f90#L10471) |
 
 
 The following subroutine is available for storing a real matrix A in the complex matrix format.
@@ -121,8 +121,8 @@ kb == the number of rows in the dimension statement for B in the calling program
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMREAL` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35869`](../source_parts/nswc_part_04.f90#L4062) |
-| `CMIMAG` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35883`](../source_parts/nswc_part_04.f90#L4076) |
+| `CMREAL` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31527`](../source_parts/nswc_part_03.f90#L10484) |
+| `CMIMAG` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31540`](../source_parts/nswc_part_03.f90#L10497) |
 
 
 if A = (a,j) is a complex matrix then let Re(A) = (Re(a,,)) and Im(A) = (In(a,,)) denote the real and imaginary parts of A. The following subroutines are available for obtaining Re(A) and Im(A).
@@ -161,10 +161,10 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35897`](../source_parts/nswc_part_04.f90#L4090) |
-| `SMCOPY` | `SUBROUTINE` | `N, A, B` | [`L35911`](../source_parts/nswc_part_04.f90#L4104) |
-| `DMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35924`](../source_parts/nswc_part_04.f90#L4117) |
-| `CMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35938`](../source_parts/nswc_part_04.f90#L4131) |
+| `MCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31553`](../source_parts/nswc_part_04.f90#L1) |
+| `SMCOPY` | `SUBROUTINE` | `N, A, B` | [`L31566`](../source_parts/nswc_part_04.f90#L14) |
+| `DMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31578`](../source_parts/nswc_part_04.f90#L26) |
+| `CMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31591`](../source_parts/nswc_part_04.f90#L39) |
 
 
 ‘The following subroutines are available for copying matrices.
@@ -221,7 +221,7 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMCONJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35952`](../source_parts/nswc_part_04.f90#L4145) |
+| `CMCONJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31604`](../source_parts/nswc_part_04.f90#L52) |
 
 
 If A = (a,;) ig a complex matrix then let A = (a,;) denote the conjugate of A. The following subroutine is available for computing the conjugate matrix A: CALL CMCONJ(m,n, A, ka, B, kb}
@@ -242,12 +242,12 @@ Ais a complex mxn matrix and B a complex 2-dimensional array. CMCONJ computes A 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35966`](../source_parts/nswc_part_04.f90#L4159) |
-| `DTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35980`](../source_parts/nswc_part_04.f90#L4173) |
-| `CTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L35994`](../source_parts/nswc_part_04.f90#L4187) |
-| `TIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L36008`](../source_parts/nswc_part_04.f90#L4201) |
-| `DTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L36133`](../source_parts/nswc_part_04.f90#L4326) |
-| `CTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L36258`](../source_parts/nswc_part_04.f90#L4451) |
+| `TPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31617`](../source_parts/nswc_part_04.f90#L65) |
+| `DTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31630`](../source_parts/nswc_part_04.f90#L78) |
+| `CTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L31643`](../source_parts/nswc_part_04.f90#L91) |
+| `TIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L31656`](../source_parts/nswc_part_04.f90#L104) |
+| `DTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L31781`](../source_parts/nswc_part_04.f90#L229) |
+| `CTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L31906`](../source_parts/nswc_part_04.f90#L354) |
 
 
 The subroutines TPOSE, DTPOSE, C £POSE and TIP, DTIP, CTIP are available for transposing a matrix A. TPOSE, DTPOSE, and CTPOSE are used if the results are to be stored in a separate storage area B. TIP, DTIP, and CTIP are used if the results are to be stored in A (i.e., if the transposition is to be done in place).
@@ -303,8 +303,8 @@ LOG
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMADJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L36433`](../source_parts/nswc_part_04.f90#L4626) |
-| `CTRANS` | `SUBROUTINE` | `NM, N, A` | [`L36447`](../source_parts/nswc_part_04.f90#L4640) |
+| `CMADJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L32081`](../source_parts/nswc_part_04.f90#L529) |
+| `CTRANS` | `SUBROUTINE` | `NM, N, A` | [`L32094`](../source_parts/nswc_part_04.f90#L542) |
 
 
 If A = (a,;) then let A* = (a,;) denote the adjoint of A. The following subroutines are available for computing A”*.
@@ -335,10 +335,10 @@ A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36483`](../source_parts/nswc_part_04.f90#L4676) |
-| `DMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36500`](../source_parts/nswc_part_04.f90#L4693) |
-| `CMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36517`](../source_parts/nswc_part_04.f90#L4710) |
-| `SMADD` | `SUBROUTINE` | `N, A, B, C` | [`L36534`](../source_parts/nswc_part_04.f90#L4727) |
+| `MADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32117`](../source_parts/nswc_part_04.f90#L565) |
+| `DMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32133`](../source_parts/nswc_part_04.f90#L581) |
+| `CMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32149`](../source_parts/nswc_part_04.f90#L597) |
+| `SMADD` | `SUBROUTINE` | `N, A, B, C` | [`L32165`](../source_parts/nswc_part_04.f90#L613) |
 
 
 The matrix sum C = A+ B can be computed by the following subroutines: CALL MADD(ta,n, A, ka, B, kb, C, kc)
@@ -394,10 +394,10 @@ Programmer. A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36546`](../source_parts/nswc_part_04.f90#L4739) |
-| `DMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36563`](../source_parts/nswc_part_04.f90#L4756) |
-| `CMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L36580`](../source_parts/nswc_part_04.f90#L4773) |
-| `SMSUBT` | `SUBROUTINE` | `N, A, B, C` | [`L36597`](../source_parts/nswc_part_04.f90#L4790) |
+| `MSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32177`](../source_parts/nswc_part_04.f90#L625) |
+| `DMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32193`](../source_parts/nswc_part_04.f90#L641) |
+| `CMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L32209`](../source_parts/nswc_part_04.f90#L657) |
+| `SMSUBT` | `SUBROUTINE` | `N, A, B, C` | [`L32225`](../source_parts/nswc_part_04.f90#L673) |
 
 
 The matrix difference C = A - B can be computed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
@@ -457,12 +457,12 @@ Programmer. A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L36609`](../source_parts/nswc_part_04.f90#L4802) |
-| `DMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L36631`](../source_parts/nswc_part_04.f90#L4824) |
-| `CMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L36653`](../source_parts/nswc_part_04.f90#L4846) |
-| `MPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L36675`](../source_parts/nswc_part_04.f90#L4868) |
-| `DMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L36782`](../source_parts/nswc_part_04.f90#L4975) |
-| `CMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L36889`](../source_parts/nswc_part_04.f90#L5082) |
+| `MTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L32237`](../source_parts/nswc_part_04.f90#L685) |
+| `DMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L32258`](../source_parts/nswc_part_04.f90#L706) |
+| `CMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L32279`](../source_parts/nswc_part_04.f90#L727) |
+| `MPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L32300`](../source_parts/nswc_part_04.f90#L748) |
+| `DMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L32393`](../source_parts/nswc_part_04.f90#L841) |
+| `CMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L32486`](../source_parts/nswc_part_04.f90#L934) |
 
 
 The matrix product C -= AB may be computed by the subroutines MTMS, DMTMS, CMTMS cor MPROD, DMPROD, CMPROD. MTMS, DMTMS, and CMTMS can be used if the storage area for C does not overlap with the storage areas for A and 8. Otherwise, if the components of C are to be stored in the storage area for A or B, then MPROD, DMPROD, or CMPROD must be used.
@@ -524,8 +524,8 @@ the subroutines DLOC and DYCHG, and CMPROD employs the subroutines CLOC and CYCH
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L36997`](../source_parts/nswc_part_04.f90#L5190) |
-| `DSVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L37024`](../source_parts/nswc_part_04.f90#L5217) |
+| `SVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L32580`](../source_parts/nswc_part_04.f90#L1028) |
+| `DSVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L32604`](../source_parts/nswc_part_04.f90#L1052) |
 
 
 Let A denote a packed symmetric matrix of order n and x a column vector of dimension vn where n > 1. Then the following subroutines are available for computing the product Az.
@@ -549,7 +549,7 @@ The argument y is an array of dimension n. SVPRD is called when A,z,y are real a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L37051`](../source_parts/nswc_part_04.f90#L5244) |
+| `TMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L32628`](../source_parts/nswc_part_04.f90#L1076) |
 
 
 If At denotes the transpose of A, then the matrix product C =: AtB can be computed by the following subroutine:
@@ -582,7 +582,7 @@ in single precision.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMPROD` | `SUBROUTINE` | `M, N, A, KA, B` | [`L37069`](../source_parts/nswc_part_04.f90#L5262) |
+| `SMPROD` | `SUBROUTINE` | `M, N, A, KA, B` | [`L32646`](../source_parts/nswc_part_04.f90#L1094) |
 
 
 If A’ denotes the transpose of A, then the matrix product A&A can be computed and its packed form stored in the array B by the following subroutine:
@@ -611,9 +611,9 @@ in single precision.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L37089`](../source_parts/nswc_part_04.f90#L5282) |
-| `DKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L37118`](../source_parts/nswc_part_04.f90#L5311) |
-| `CKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L37147`](../source_parts/nswc_part_04.f90#L5340) |
+| `KPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L32666`](../source_parts/nswc_part_04.f90#L1114) |
+| `DKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L32691`](../source_parts/nswc_part_04.f90#L1139) |
+| `CKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L32716`](../source_parts/nswc_part_04.f90#L1164) |
 
 
 If Ais anm xn matrix and Bak « @ matrix, then the Kronecker product A ® 8 is
@@ -658,8 +658,8 @@ The arguments ka, kb, and ke have the following values: ka = the number of rows 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L37176`](../source_parts/nswc_part_04.f90#L5369) |
-| `DRNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L37273`](../source_parts/nswc_part_04.f90#L5466) |
+| `RNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L32741`](../source_parts/nswc_part_04.f90#L1189) |
+| `DRNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L32827`](../source_parts/nswc_part_04.f90#L1275) |
 
 
 The following subroutines are available for obtaining lower and upper bounds for the rank of real matrix.
@@ -702,13 +702,13 @@ in Linear Least Squares Problems, Report SAND 80-0655, Sandia Laboratories, Albu
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, D, INDEX, TEMP` | [`L37372`](../source_parts/nswc_part_04.f90#L5565) |
-| `KROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, INDEX, TEMP` | [`L37585`](../source_parts/nswc_part_04.f90#L5778) |
-| `NPIVOT` | `SUBROUTINE` | `N, M, A, KA, B, KB, D, IERR` | [`L37937`](../source_parts/nswc_part_04.f90#L6130) |
-| `MSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L38192`](../source_parts/nswc_part_04.f90#L6385) |
-| `MSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L38235`](../source_parts/nswc_part_04.f90#L6428) |
-| `DMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L39048`](../source_parts/nswc_part_04.f90#L7241) |
-| `DMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L39091`](../source_parts/nswc_part_04.f90#L7284) |
+| `CROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, D, INDEX, TEMP` | [`L32915`](../source_parts/nswc_part_04.f90#L1363) |
+| `KROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, INDEX, TEMP` | [`L33094`](../source_parts/nswc_part_04.f90#L1542) |
+| `NPIVOT` | `SUBROUTINE` | `N, M, A, KA, B, KB, D, IERR` | [`L33404`](../source_parts/nswc_part_04.f90#L1852) |
+| `MSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L33622`](../source_parts/nswc_part_04.f90#L2070) |
+| `MSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L33657`](../source_parts/nswc_part_04.f90#L2105) |
+| `DMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L34329`](../source_parts/nswc_part_04.f90#L2777) |
+| `DMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L34364`](../source_parts/nswc_part_04.f90#L2812) |
 
 
 The subroutines CROUT, KROUT, MSLV, MSLV1, NPIVOT, DMSLV, and DMSLV1 are available for inverting real matrices A and solving systems of real linear equations AX = B. CROUT, KROUT, MSLV, MSLV1, and NPIVOT solve single precision problems, and DMSLV and DMSLV1 solve double precision problems.
@@ -895,7 +895,7 @@ IERR = &k The k*® column of A has been reduced to a column containing only zero
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L38276`](../source_parts/nswc_part_04.f90#L6469) |
+| `SLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L33689`](../source_parts/nswc_part_04.f90#L2137) |
 
 
 Given a real n <1 matrix A and column vector 6. The following, subroutine is available for solving the equation Ax = 4. Iterative improvement 's performed to compute the solution x to machine accuracy,
@@ -938,8 +938,8 @@ IND = 1 X was obtained, but not to machine accuracy. Programming. SLY MP calls t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ARCECO` | `SUBROUTINE` | `N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG` | [`L39766`](../source_parts/nswc_part_04.f90#L7959) |
-| `ARCESL` | `SUBROUTINE` | `ARRAY, MTRSTR, NMBLKS, PIVOT, B, X` | [`L40409`](../source_parts/nswc_part_04.f90#L8602) |
+| `ARCECO` | `SUBROUTINE` | `N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG` | [`L34918`](../source_parts/nswc_part_04.f90#L3366) |
+| `ARCESL` | `SUBROUTINE` | `ARRAY, MTRSTR, NMBLKS, PIVOT, B, X` | [`L35451`](../source_parts/nswc_part_04.f90#L3899) |
 
 
 Consider a system Az == 6 of linear equations where A is ann x n matrix having the block structure
@@ -1038,7 +1038,7 @@ The argument m is the number of blocks A,,...,Am in the matrix A. ARCESL may be 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BTSLV` | `SUBROUTINE` | `MO, M, N, A, B, C, X, IP, IERR` | [`L40806`](../source_parts/nswc_part_04.f90#L8999) |
+| `BTSLV` | `SUBROUTINE` | `MO, M, N, A, B, C, X, IP, IERR` | [`L35776`](../source_parts/nswc_part_04.f90#L4224) |
 
 
 Consider a system J7'r =: 6 of linear equations where 7’ is a square matrix having the block structure
@@ -1092,8 +1092,8 @@ Programming. BTSLV employs the subroutines DECBT, SOLBT, DEC, and SOL. These sub
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L41015`](../source_parts/nswc_part_04.f90#L9208) |
-| `DSMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L42115`](../source_parts/nswc_part_04.f90#L10308) |
+| `SMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L35979`](../source_parts/nswc_part_04.f90#L4427) |
+| `DSMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L36904`](../source_parts/nswc_part_04.f90#L5352) |
 
 
 ‘The subroutines SMSLV and DSMSLV are available for inverting symmetric real matrices A and solving systems of real linear equations AX = B. SMSLV handles single precision problems and DSMSLV handles double precision problems. it is assumed that the matrix A is in packed form. [f the inverse of A is computed, then the verse is a symmetric matrix which will be stored in packed form.
@@ -1173,8 +1173,8 @@ f2) Bunch, JO Ro, CAnatysis of the Diagonal Pivefttie Method,” STAAT J. Numeri
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L43215`](../source_parts/nswc_part_05.f90#L734) |
-| `DPCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L43560`](../source_parts/nswc_part_05.f90#L1079) |
+| `PCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L37829`](../source_parts/nswc_part_04.f90#L6277) |
+| `DPCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L38112`](../source_parts/nswc_part_04.f90#L6560) |
 
 
 The subroutines PCHOL and DPCHOL are available for inverting positive definite symmetric real matrices A and solving systems of real linear equations AX = B. PCHOL handles single precision problems and DPCHOL handles double precision problems. It is assumed that the matrix A is in packed form. If the inverse of A is computed then the inverse is a symmetric matrix which will be stored in packed form.
@@ -1224,8 +1224,8 @@ Us re’ Gourde, Society for Industrial and Applied Mathematics, Philadelphia, 1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L43905`](../source_parts/nswc_part_05.f90#L1424) |
-| `DTOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L43998`](../source_parts/nswc_part_05.f90#L1517) |
+| `TOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L38395`](../source_parts/nswc_part_04.f90#L6843) |
+| `DTOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L38475`](../source_parts/nswc_part_04.f90#L6923) |
 
 
 Ann xn Toeplitz matrix is a matrix of the form
@@ -1273,9 +1273,9 @@ po. 47 2.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L44091`](../source_parts/nswc_part_05.f90#L1610) |
-| `CMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L44134`](../source_parts/nswc_part_05.f90#L1653) |
-| `DCMSLV` | `SUBROUTINE` | `MO, N, M, AR, AI, KA, BR, BI, KB, IERR, IPVT, WK` | [`L44923`](../source_parts/nswc_part_05.f90#L2442) |
+| `CMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L38555`](../source_parts/nswc_part_04.f90#L7003) |
+| `CMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L38590`](../source_parts/nswc_part_04.f90#L7038) |
+| `DCMSLV` | `SUBROUTINE` | `MO, N, M, AR, AI, KA, BR, BI, KB, IERR, IPVT, WK` | [`L39239`](../source_parts/nswc_part_04.f90#L7687) |
 
 
 The subroutines CMSLV, CMSLV1, and DCMSLV are available for inverting complex matrices and solving systems of complex linear equations. CMSLV and CMSLV1 solve single precision problems and DCMSLV solves double precision problems.
@@ -1394,7 +1394,7 @@ containing zeros, The requested results were not obtained
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L44176`](../source_parts/nswc_part_05.f90#L1695) |
+| `CSLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L38623`](../source_parts/nswc_part_04.f90#L7071) |
 
 
 Given a complex n x n matrix A and a complex column vector 5. The following routine is available for solving the equation Aa == b. Iterative improvement is performed to compute the solution x to machine accuracy.
@@ -1439,9 +1439,9 @@ Programming CSLV MIP calls the subroutine CLUIME. ('These routines were written 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L45287`](../source_parts/nswc_part_05.f90#L2806) |
-| `DSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L45836`](../source_parts/nswc_part_05.f90#L3355) |
-| `CSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L46385`](../source_parts/nswc_part_05.f90#L3904) |
+| `SSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L39540`](../source_parts/nswc_part_04.f90#L7988) |
+| `DSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L40012`](../source_parts/nswc_part_04.f90#L8460) |
+| `CSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L40484`](../source_parts/nswc_part_04.f90#L8932) |
 
 
 If 4 is a complex m x n matrix then there exists an m x m unitary matrix U and an n Xn unitary matrix V such that D = U* AV is a diagonal matrix?. Let di,...,d, be the diagonal elements of D where & = min{m,n}. Then U and V can be selected so that the diagonal elements are real numbers and d,; > dz > ++: > dy > 0. The nonnegative diagonal elements d@,; are unique, and if A is a real matrix then U and V can be chosen to be real orthogonal matrices. The decomposition D = U* AV is called the singular value decomposition of A. The elements dy, ...,d, are the singular values of A, the columns of U are left singular vectors, and the columns of V are right stnguédar vectors.
@@ -1505,9 +1505,9 @@ LAR
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DET` | `FUNCTION` | `A, KA, N, X` | [`L46974`](../source_parts/nswc_part_05.f90#L4493) |
-| `DPDET` | `DOUBLE PRECISION FUNCTION` | `A, KA, N, X` | [`L47050`](../source_parts/nswc_part_05.f90#L4569) |
-| `CDET` | `COMPLEX FUNCTION` | `A, KA, N, X` | [`L47125`](../source_parts/nswc_part_05.f90#L4644) |
+| `DET` | `FUNCTION` | `A, KA, N, X` | [`L40994`](../source_parts/nswc_part_04.f90#L9442) |
+| `DPDET` | `DOUBLE PRECISION FUNCTION` | `A, KA, N, X` | [`L41056`](../source_parts/nswc_part_04.f90#L9504) |
+| `CDET` | `COMPLEX FUNCTION` | `A, KA, N, X` | [`L41117`](../source_parts/nswc_part_04.f90#L9565) |
 
 
 The following functions are available for computing the determinant of A -- x] where Ais an n X n matrix, « a number, and J the n x n identity matrix.
@@ -1536,8 +1536,8 @@ argument ka has the value: ka = the number of rows in the dimension statement fo
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L47203`](../source_parts/nswc_part_05.f90#L4722) |
-| `DABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L47819`](../source_parts/nswc_part_05.f90#L5338) |
+| `ABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L41180`](../source_parts/nswc_part_04.f90#L9628) |
+| `DABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L41731`](../source_parts/nswc_part_04.f90#L10179) |
 
 
 Given ap m xX m matrix A, n X n matrix B, and mx n matrix C. The subroutines ABSLV and DABSLV are available for obtaining the m x n matrix X which solves the equation AX + XB =C. ABSLV yields single precision results and DABSLV yields double precision results.
@@ -1601,8 +1601,8 @@ When the routine ix recalled, it is assumed that m,n, and Wik have not been modi
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L48436`](../source_parts/nswc_part_05.f90#L5955) |
-| `DTASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L48762`](../source_parts/nswc_part_05.f90#L6281) |
+| `TASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L42283`](../source_parts/nswc_part_05.f90#L122) |
+| `DTASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L42574`](../source_parts/nswc_part_05.f90#L413) |
 
 
 Given matrices A and C of order 2 where C is symmetric. Then she subroutines TASLV and DTASLV are available for obtaining the symmetric matrix X which solves the equation A‘X + X 4=:C. TASLV yields single precision results and DTASLV yields double precision results.
@@ -1649,7 +1649,7 @@ When IND . 0, A contains the upper Schur form of the matrix 4 and WH contains th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SQUINT` | `SUBROUTINE` | `NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR` | [`L49089`](../source_parts/nswc_part_05.f90#L6608) |
+| `SQUINT` | `SUBROUTINE` | `NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR` | [`L42866`](../source_parts/nswc_part_05.f90#L705) |
 
 
 Given complex n x n matrices A,B, and C. The following subroutine is available for obtaining a complex n X n matrix X which solves the equation AX* + BX +C = 0.
@@ -1703,8 +1703,8 @@ O40
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L50022`](../source_parts/nswc_part_05.f90#L7541) |
-| `DMEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L50185`](../source_parts/nswc_part_05.f90#L7704) |
+| `MEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L43680`](../source_parts/nswc_part_05.f90#L1519) |
+| `DMEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L43818`](../source_parts/nswc_part_05.f90#L1657) |
 
 
 Let A be a real matrix of order n > 1. Then the subroutines MEXP and DMEXP oo . are available for computing the exponential matrix e4 = )7> A'/t!, MEXP yields single t= 0 precision results and DMEXP yields double precision results.

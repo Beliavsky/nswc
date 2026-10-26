@@ -24,7 +24,7 @@ from simplify_free_style import transform as simplify_style
 from generic_intrinsics import transform as apply_generics
 from coalesce_local_declarations import transform as coalesce_locals
 from remove_final_returns import transform_free as remove_final_returns
-from modernize_obsolescent import transform as modernize_obsolescent
+from modernize_obsolescent import transform as modernize_obsolescent, computed_gotos
 from storage_modernization import equivalence_free
 
 
@@ -36,7 +36,11 @@ LINK = re.compile(
 def generate(root=ROOT):
     original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
-    free = equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text))))))))))
+    baseline = apply_constants(comments.text)
+    baseline = apply_purity(portable_intrinsics(baseline))
+    baseline = simplify_style(apply_free_fixes(baseline))
+    baseline = remove_final_returns(coalesce_locals(apply_generics(baseline)))
+    free = equivalence_free(modernize_obsolescent(baseline))
     lines = free.splitlines(keepends=True)
     declarations = {}
     for name, start, end in procedure_spans(free):
@@ -64,6 +68,16 @@ def generate(root=ROOT):
     outputs = {root / "nswc.f90": free,
                root / 'nswc_mod.f90': module_source(free),
                root / 'tools/comment-case-review.json': json.dumps(report, indent=2) + '\n'}
+    # Comments affect physical locations but not reviewed transfer bindings.
+    review_path = root / 'tools/obsolescent-features.json'
+    review = json.loads(review_path.read_text())
+    transfers = []
+    computed_gotos(baseline, transfers)
+    bindings = lambda entries: [{k: v for k, v in e.items() if k != 'line'} for e in entries]
+    if bindings(transfers) != bindings(review['computed_gotos']):
+        raise ValueError('Computed-transfer bindings changed; refresh their review')
+    review['computed_gotos'] = transfers
+    outputs[review_path] = json.dumps(review, indent=2) + '\n'
     locations = {}
     for index, start in enumerate(starts):
         end = bounds[index + 1]

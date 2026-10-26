@@ -52,8 +52,8 @@ procedure, original statement and input line number, along with source hashes.
 The input is the maintained fixed-form source after the empty-factor correction,
 before this cleanup. The fixed-form reconstruction applies label cleanup after
 the control-flow and workspace fixes. Reviewed comment-only corrections follow
-it; `tools/source_comment_fixes.py` removes SHELL's empty separator before the
-final index update.
+it; `tools/source_comment_fixes.py` removes every empty `C` or `c` comment record
+from the maintained fixed-form source. Nonempty comments and `nswc_orig.f` remain.
 
 ```sh
 python tools/validate_unused_labels.py

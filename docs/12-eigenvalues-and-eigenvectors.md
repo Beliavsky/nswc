@@ -12,8 +12,8 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L62145`](../source_parts/nswc_part_06.f90#L9160) |
-| `EIG1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L62194`](../source_parts/nswc_part_06.f90#L9209) |
+| `EIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L53850`](../source_parts/nswc_part_06.f90#L1180) |
+| `EIG1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L53898`](../source_parts/nswc_part_06.f90#L1228) |
 
 
 The subroutines EIG and EIG1 are available for computing the eigenvalues of real matrices. These routines frequently yield results accurate to 13~—14 significant digits. Indeed, for symmetric matrices they may give 2 or more digits better accuracy than the routines designed specifically for symmetric matrices. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur when the matrix is not symmetric. In this case one should not expect more than 7-8 digit accuracy.
@@ -54,8 +54,8 @@ ay we
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L62243`](../source_parts/nswc_part_06.f90#L9258) |
-| `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L62335`](../source_parts/nswc_part_06.f90#L9350) |
+| `EIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L53946`](../source_parts/nswc_part_06.f90#L1276) |
+| `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L54036`](../source_parts/nswc_part_06.f90#L1366) |
 
 
 The subroutines EIGV and EIGV1 are available for computing the eigenvalues and eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGV1. In particular, EIGV and EIGV1 can frequently yield high precision results for the eigenvalues if they are distinct. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significant digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
@@ -106,7 +106,7 @@ ad Edition}, Springer- Verlag, 1975.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DEIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L64137`](../source_parts/nswc_part_07.f90#L631) |
+| `DEIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L55537`](../source_parts/nswc_part_06.f90#L2867) |
 
 
 The subroutine DEIG is available for the double precision computation of the eigenvalues of real matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
@@ -144,7 +144,7 @@ Se qn on
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DEIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L64186`](../source_parts/nswc_part_07.f90#L680) |
+| `DEIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L55585`](../source_parts/nswc_part_06.f90#L2915) |
 
 
 The subroutine DEIGV +> available for the double precision computation of the eigenvalues and eigenvectors of real matrices. This routine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. i: the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
@@ -187,8 +187,8 @@ IBAL is an input argument that can be assigned any integer value. If If AL # O t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L65615`](../source_parts/nswc_part_07.f90#L2109) |
-| `SEIG1` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L65636`](../source_parts/nswc_part_07.f90#L2130) |
+| `SEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L56802`](../source_parts/nswc_part_06.f90#L4132) |
+| `SEIG1` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L56822`](../source_parts/nswc_part_06.f90#L4152) |
 
 
 The subroutines SEIG and SEIGt are available for computing the eigenvalues of symmetric real matrices. These routines frequently yield high precision results, SIG is faster than SEIG1, but at times SEIG1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference ia the reliability of the routines.
@@ -230,8 +230,8 @@ TRor details othe parked format see the section on packing acl umpe oo symmetric
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L65683`](../source_parts/nswc_part_07.f90#L2177) |
-| `SEIGV1` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L65717`](../source_parts/nswc_part_07.f90#L2211) |
+| `SEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L56868`](../source_parts/nswc_part_06.f90#L4198) |
+| `SEIGV1` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L56901`](../source_parts/nswc_part_06.f90#L4231) |
 
 
 The subroutines SEIGV and SEIC: Vi are available for computing the eigenvalues and eigenvectors of symmetric real matrices. These routines frequently yield high precision results for the eigenvalues. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate tc 9--10 significant digits. SEIGV is faster than SEICVI1, but at times SEIGV1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference in the reliability of the routines.
@@ -267,7 +267,7 @@ Laboratory. The function SPMPAR is also used.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L66791`](../source_parts/nswc_part_07.f90#L3285) |
+| `DSEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L57784`](../source_parts/nswc_part_06.f90#L5114) |
 
 
 The subroutine DSEIG is available for the double precision computation of the eigenvalues of symmetric real matrices. The subroutine frequently yields results accurate to 27-28 significant digits.
@@ -306,7 +306,7 @@ T is a double precision array of dimension 2n or larger that is a work space for
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L66813`](../source_parts/nswc_part_07.f90#L3307) |
+| `DSEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L57805`](../source_parts/nswc_part_06.f90#L5135) |
 
 
 The subroutine DSEIGV is available for the double precision computation of the eigenvalues and eigenvectors of symmetric real matrices. This subroutine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 28" significant digit, but the components of the eigenvector are only accurate to 22-24 significant digits.
@@ -351,7 +351,7 @@ TPQL2 developed at Argonne National Laboratory. The double precision versions we
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L67570`](../source_parts/nswc_part_07.f90#L4064) |
+| `CEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L58424`](../source_parts/nswc_part_06.f90#L5754) |
 
 
 The subroutine CEIG is available for computing the eigenvalues of complex matrices. This routine frequently yields results accurate to 13-14 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 7-8 digit accuracy.
@@ -392,7 +392,7 @@ trurde (Second Edition), Springer Verlag, £6
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L67623`](../source_parts/nswc_part_07.f90#L4117) |
+| `CEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L58476`](../source_parts/nswc_part_06.f90#L5806) |
 
 
 The subroutine CEIGV is available for computing the eigenvalues and eigenvectors of complex matrices. This routine frequently yields values for the eigenvalues that are accurate to 13-14 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14** significant digit, but the components of the corresponding eigenvector are only a-curate to 9-10 significant digits. If the eigenvalues of a matrix are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 7-8 digit accuracy, and the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector may be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
@@ -446,7 +446,7 @@ Usage. lf one has a complex matrix A, then AR and AI can be obtained using the m
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L68794`](../source_parts/nswc_part_07.f90#L5288) |
+| `DCEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L59476`](../source_parts/nswc_part_06.f90#L6806) |
 
 
 The subroutine DCEIG is available for the double precision computation of the eigenvalues of complex matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct ur if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
@@ -482,7 +482,7 @@ IBAL and ka are input arguments. It is assumed that ka is the number of rows in 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L68848`](../source_parts/nswc_part_07.f90#L5342) |
+| `DCEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L59529`](../source_parts/nswc_part_06.f90#L6859) |
 
 
 The subroutine DCEIGV is available for the double precision computation of the eigenvalues and eigenvectors of comp!ex matrices. The routine frequently yields values for the eigenvalues that are accurate to 26-26 significant digits However, be aware that the errors in the eigenvalues, no matter bow seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. If the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
