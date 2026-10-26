@@ -1064,6 +1064,169 @@ public :: tran
 public :: dtran
 public :: rmk1
 public :: drmk1
+real, save, volatile :: nswc_state_spdata_d1
+real, save, volatile :: nswc_state_spdata_d2
+double precision, save, volatile :: nswc_state_dpdata_d1
+double precision, save, volatile :: nswc_state_dpdata_d2
+double precision, save :: nswc_state_global_sr
+double precision, save :: nswc_state_global_si
+double precision, save :: nswc_state_global_u
+double precision, save :: nswc_state_global_v
+double precision, save :: nswc_state_global_a
+double precision, save :: nswc_state_global_b
+double precision, save :: nswc_state_global_c
+double precision, save :: nswc_state_global_d
+double precision, save :: nswc_state_global_a1
+double precision, save :: nswc_state_global_a2
+double precision, save :: nswc_state_global_a3
+double precision, save :: nswc_state_global_a6
+double precision, save :: nswc_state_global_a7
+double precision, save :: nswc_state_global_e
+double precision, save :: nswc_state_global_f
+double precision, save :: nswc_state_global_g
+double precision, save :: nswc_state_global_h
+double precision, save :: nswc_state_global_szr
+double precision, save :: nswc_state_global_szi
+double precision, save :: nswc_state_global_lzr
+double precision, save :: nswc_state_global_lzi
+real, save :: nswc_state_global_eta
+real, save :: nswc_state_global_are
+real, save :: nswc_state_global_mre
+double precision, save :: nswc_state_inputz_a
+double precision, save :: nswc_state_inputz_b
+double precision, save :: nswc_state_inputz_accur
+double precision, save :: nswc_state_inputz_norm
+double precision, save :: nswc_state_inputz_charf
+double precision, save :: nswc_state_inputz_xbreak(20)
+double precision, save :: nswc_state_inputz_bleft(20)
+double precision, save :: nswc_state_inputz_bright(20)
+integer, save :: nswc_state_inputz_dbreak(20)
+integer, save :: nswc_state_inputz_degree
+integer, save :: nswc_state_inputz_smooth
+integer, save :: nswc_state_inputz_level
+integer, save :: nswc_state_inputz_edist
+integer, save :: nswc_state_inputz_nbreak
+integer, save :: nswc_state_inputz_kntdim
+integer, save :: nswc_state_inputz_npardm
+double precision, save :: nswc_state_resulz_error
+integer, save :: nswc_state_resulz_knots
+double precision, save :: nswc_state_kontrl_dsctol
+double precision, save :: nswc_state_kontrl_errori
+double precision, save :: nswc_state_kontrl_xleft(50)
+double precision, save :: nswc_state_kontrl_xright(50)
+integer, save :: nswc_state_kontrl_break
+integer, save :: nswc_state_kontrl_both
+double precision, save :: nswc_state_kontrl_factor(20)
+integer, save :: nswc_state_kontrl_ibreak
+integer, save :: nswc_state_kontrl_interp
+integer, save :: nswc_state_kontrl_left
+integer, save :: nswc_state_kontrl_maxaux
+integer, save :: nswc_state_kontrl_maxknt
+integer, save :: nswc_state_kontrl_maxpar
+integer, save :: nswc_state_kontrl_maxstk
+integer, save :: nswc_state_kontrl_npar
+integer, save :: nswc_state_kontrl_nstack
+integer, save :: nswc_state_kontrl_right
+logical, save :: nswc_state_kontrl_discrd
+double precision, save :: nswc_state_kontrl_buffer
+double precision, save :: nswc_state_comdif_ddtemp(20,20)
+double precision, save :: nswc_state_comdif_fintrp(18)
+double precision, save :: nswc_state_comdif_fleft(10)
+double precision, save :: nswc_state_comdif_fright(10)
+double precision, save :: nswc_state_comdif_xdd(20)
+double precision, save :: nswc_state_comdif_xintrp(18)
+integer, save :: nswc_state_comdif_leftx
+integer, save :: nswc_state_comdif_nintrp
+integer, save :: nswc_state_comdif_rightx
+double precision, save :: nswc_state_cubsta_tans
+double precision, save :: nswc_state_cubsta_terr
+real, save, volatile :: nswc_state_cubatb_s
+real, save, volatile :: nswc_state_cubatb_t
+real, save :: nswc_state_xxinfo_r1
+real, save :: nswc_state_xxinfo_r2
+real, save :: nswc_state_xxinfo_finlep
+real, save :: nswc_state_xxinfo_normk
+integer, save :: nswc_state_xxinfo_nfinal
+integer, save :: nswc_state_xxinfo_mfinal
+real, save :: nswc_state_xxlin_elinsy
+real, save :: nswc_state_xxlin_relrsd
+integer, save :: nswc_state_xxlin_pivot(128)
+real, save :: nswc_state_debdf1_told
+real, save :: nswc_state_debdf1_conit
+real, save :: nswc_state_debdf1_crate
+real, save :: nswc_state_debdf1_el(13)
+real, save :: nswc_state_debdf1_elco(13,12)
+real, save :: nswc_state_debdf1_hold
+real, save :: nswc_state_debdf1_rc
+real, save :: nswc_state_debdf1_rmax
+real, save :: nswc_state_debdf1_tesco(3,12)
+real, save :: nswc_state_debdf1_el0
+real, save :: nswc_state_debdf1_h
+real, save :: nswc_state_debdf1_hmin
+real, save :: nswc_state_debdf1_hmxi
+real, save :: nswc_state_debdf1_hu
+real, save :: nswc_state_debdf1_tn
+real, save :: nswc_state_debdf1_u
+integer, save :: nswc_state_debdf1_iquit
+integer, save :: nswc_state_debdf1_init
+integer, save :: nswc_state_debdf1_iyh
+integer, save :: nswc_state_debdf1_iewt
+integer, save :: nswc_state_debdf1_iacor
+integer, save :: nswc_state_debdf1_isavf
+integer, save :: nswc_state_debdf1_iwm
+integer, save :: nswc_state_debdf1_ksteps
+integer, save :: nswc_state_debdf1_ibegin
+integer, save :: nswc_state_debdf1_itol
+integer, save :: nswc_state_debdf1_iinteg
+integer, save :: nswc_state_debdf1_itstop
+integer, save :: nswc_state_debdf1_ijac
+integer, save :: nswc_state_debdf1_iband
+integer, save :: nswc_state_debdf1_ialth
+integer, save :: nswc_state_debdf1_ipup
+integer, save :: nswc_state_debdf1_lmax
+integer, save :: nswc_state_debdf1_meo
+integer, save :: nswc_state_debdf1_nqnyh
+integer, save :: nswc_state_debdf1_nstepj
+integer, save :: nswc_state_debdf1_ier
+integer, save :: nswc_state_debdf1_jstart
+integer, save :: nswc_state_debdf1_kflag
+integer, save :: nswc_state_debdf1_l
+integer, save :: nswc_state_debdf1_meth
+integer, save :: nswc_state_debdf1_miter
+integer, save :: nswc_state_debdf1_maxord
+integer, save :: nswc_state_debdf1_n
+integer, save :: nswc_state_debdf1_nq
+integer, save :: nswc_state_debdf1_nst
+integer, save :: nswc_state_debdf1_nfe
+integer, save :: nswc_state_debdf1_nje
+integer, save :: nswc_state_debdf1_nqu
+integer, save :: nswc_state_splp_kswx
+integer, save :: nswc_state_splp_kswy
+integer, save :: nswc_state_splp_k
+integer, save :: nswc_state_splp_l
+real, save :: nswc_state_splp_ait
+real, save :: nswc_state_splp_bit
+real, save :: nswc_state_splp_cit
+real, save :: nswc_state_splp_dit
+integer, save :: nswc_state_splp_mit
+integer, save :: nswc_state_splp_nit
+integer, save :: nswc_state_splp_is
+integer, save :: nswc_state_splp_ms
+integer, save :: nswc_state_splp_js
+integer, save :: nswc_state_splp_ns
+real, save :: nswc_state_splp_dlx
+real, save :: nswc_state_splp_dly
+real, save :: nswc_state_splp_tdlx3
+real, save :: nswc_state_splp_tdly3
+real, save :: nswc_state_splp_dlx4
+real, save :: nswc_state_splp_dly4
+integer, save :: nswc_state_cblkt_npp
+integer, save :: nswc_state_cblkt_k
+real, save :: nswc_state_cblkt_eps
+real, save :: nswc_state_cblkt_cnv
+integer, save :: nswc_state_cblkt_nm
+integer, save :: nswc_state_cblkt_ncmplx
+integer, save :: nswc_state_cblkt_ik
 contains
 pure elemental integer function ipmpar(i)
 implicit none
@@ -1766,26 +1929,24 @@ subroutine radix(ibeta)
 implicit none
 integer :: ibeta
 real :: a, b, one, y
-real :: d1, d2
 !-----------------------------------------------------------------------
 !     Set  ibeta = The radix of the floating point arithmetic
 !-----------------------------------------------------------------------
-common /spdata/ d1, d2
 !
 one = float(1)
 !
 a = one
 10 a = a + a
 call store2(a + one, a)
-y = d1 - d2
+y = nswc_state_spdata_d1 - nswc_state_spdata_d2
 if (y == one) go to 10
 !
 b = one
 20 b = b + b
 call store2(a + b, a)
-if (d1 == d2) go to 20
+if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 20
 !
-ibeta = int(d1 - d2)
+ibeta = int(nswc_state_spdata_d1 - nswc_state_spdata_d2)
 end subroutine radix
 
 subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
@@ -1794,7 +1955,7 @@ implicit none
 integer :: ibeta, m, maxexp, minexp, n
 real :: eps, xint, xmin, xmax
 integer :: j, k, km, l
-real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
+real :: b, b2, binv, bm1, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
 !
 !                 Computation of the environmental constants
@@ -1888,7 +2049,6 @@ real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
 !
 !-----------------------------------------------------------------------
 !----------------
-common /spdata/ d1, d2
 !
 zero = float(0)
 one = float(1)
@@ -1905,7 +2065,7 @@ t = b
 z = t
 t = b*t
 call store2(t + one, t)
-x = d1*binv - z
+x = nswc_state_spdata_d1*binv - z
 if (x == binv) go to 10
 !
 xint = (z - one)*b + bm1
@@ -1931,10 +2091,10 @@ z = binv
 30 x = z
 z = (x*x)*one
 call store2(z*xint, z*t)
-if (d1 == d2) go to 40
+if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 40
 if (z + z == zero .or. abs(z) >= x) go to 40
 call store2(z, p*z)
-if (t*d2 == t*z) go to 40
+if (t*nswc_state_spdata_d2 == t*z) go to 40
 k = k + k
 go to 30
 !
@@ -1946,10 +2106,10 @@ j = 0
 50 xmin = x
 x = (x*binv)*one
 call store2(x*xint, x*t)
-if (d1 == d2) go to 90
+if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 90
 if (x + x == zero .or. abs(x) >= xmin) go to 90
 call store2(x, p*x)
-if (t*d2 == t*x) go to 80
+if (t*nswc_state_spdata_d2 == t*x) go to 80
 k = k + 1
 go to 50
 !
@@ -1958,12 +2118,12 @@ go to 50
 !     this loss of accuracy.
 !
 80 call store2(x, q*x)
-if (t*d2 /= t*x) go to 90
+if (t*nswc_state_spdata_d2 /= t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
 call store2(x*xint, x*t)
-if (d1 == d2) go to 90
+if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 90
 if (x + x /= zero .and. abs(x) < z) go to 81
 !
 90 minexp = 1 - k
@@ -1991,7 +2151,7 @@ xmax = ((xmax*t)*b)*b
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
 110 call store2(t, t*p)
-if (d1 == d2) go to 150
+if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 150
 if (n <= 0) return
 !-----------------------------------------------------------------------
 !     Loop to find the exact largest value for maxexp
@@ -2002,7 +2162,7 @@ do l = 1,500
    xmax = xmax*b
    maxexp = maxexp + 1
    call store2(t, t*p)
-   if (d1 == d2) go to 150
+   if (nswc_state_spdata_d1 == nswc_state_spdata_d2) go to 150
    write (n,220) maxexp
 end do
 write (n,240)
@@ -2035,13 +2195,11 @@ end subroutine mach1
 subroutine store2(a, b)
 implicit none
 real :: a, b
-real :: d1, d2
 !-----------------------------------------------------------------------
 !     Storage of single precision information into memory
 !-----------------------------------------------------------------------
-common /spdata/ d1, d2
-d1 = a
-d2 = b
+nswc_state_spdata_d1 = a
+nswc_state_spdata_d2 = b
 end subroutine store2
 
 subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
@@ -2050,8 +2208,7 @@ implicit none
 integer :: ibeta, m, maxexp, minexp, n
 double precision :: eps, xint, xmin, xmax
 integer :: j, k, km, l
-double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
-   & zero
+double precision :: b, b2, binv, bm1, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
 !
 !                 Computation of the environmental constants
@@ -2145,7 +2302,6 @@ double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
 !
 !-----------------------------------------------------------------------
 !----------------
-common /dpdata/ d1, d2
 !
 zero = dble(float(0))
 one = dble(float(1))
@@ -2162,7 +2318,7 @@ t = b
 z = t
 t = b*t
 call dstor2(t + one, t)
-x = d1*binv - z
+x = nswc_state_dpdata_d1*binv - z
 if (x == binv) go to 10
 !
 xint = (z - one)*b + bm1
@@ -2188,10 +2344,10 @@ z = binv
 30 x = z
 z = (x*x)*one
 call dstor2(z*xint, z*t)
-if (d1 == d2) go to 40
+if (nswc_state_dpdata_d1 == nswc_state_dpdata_d2) go to 40
 if (z + z == zero .or. abs(z) >= x) go to 40
 call dstor2(z, p*z)
-if (t*d2 == t*z) go to 40
+if (t*nswc_state_dpdata_d2 == t*z) go to 40
 k = k + k
 go to 30
 !
@@ -2203,10 +2359,10 @@ j = 0
 50 xmin = x
 x = (x*binv)*one
 call dstor2(x*xint, x*t)
-if (d1 == d2) go to 90
+if (nswc_state_dpdata_d1 == nswc_state_dpdata_d2) go to 90
 if (x + x == zero .or. abs(x) >= xmin) go to 90
 call dstor2(x, p*x)
-if (t*d2 == t*x) go to 80
+if (t*nswc_state_dpdata_d2 == t*x) go to 80
 k = k + 1
 go to 50
 !
@@ -2215,12 +2371,12 @@ go to 50
 !     this loss of accuracy.
 !
 80 call dstor2(x, q*x)
-if (t*d2 /= t*x) go to 90
+if (t*nswc_state_dpdata_d2 /= t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
 call dstor2(x*xint, x*t)
-if (d1 == d2) go to 90
+if (nswc_state_dpdata_d1 == nswc_state_dpdata_d2) go to 90
 if (x + x /= zero .and. abs(x) < z) go to 81
 !
 90 minexp = 1 - k
@@ -2248,7 +2404,7 @@ xmax = ((xmax*t)*b)*b
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
 110 call dstor2(t, t*p)
-if (d1 == d2) go to 150
+if (nswc_state_dpdata_d1 == nswc_state_dpdata_d2) go to 150
 if (n <= 0) return
 !-----------------------------------------------------------------------
 !     Loop to find the exact largest value for maxexp
@@ -2259,7 +2415,7 @@ do l = 1,500
    xmax = xmax*b
    maxexp = maxexp + 1
    call dstor2(t, t*p)
-   if (d1 == d2) go to 150
+   if (nswc_state_dpdata_d1 == nswc_state_dpdata_d2) go to 150
    write (n,220) maxexp
 end do
 write (n,240)
@@ -2295,10 +2451,8 @@ implicit none
 !     Storage of double precision information into memory
 !-----------------------------------------------------------------------
 double precision :: a, b
-double precision :: d1, d2
-common /dpdata/ d1, d2
-d1 = a
-d2 = b
+nswc_state_dpdata_d1 = a
+nswc_state_dpdata_d2 = b
 end subroutine dstor2
 
 pure elemental real function spmpar(i)
@@ -18426,17 +18580,9 @@ real :: elim, flgjy, fnu, tol, wk(*), x, y(*)
 external funjy
 integer :: i, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, ks, ksp1, &
    & kstemp, l, lr, lrp1
-real :: abw2, akm, alfa(26,4), alfa1(26,2), alfa2(26,2), ap, &
-   & ar(8), asum, az, beta(26,5), beta1(26,2), beta2(26,2), &
-   & beta3(26,1), br(10), bsum, c(65), con1, con2, con3, con548, &
-   & cr(10), crz32, dfi, dr(10), fi, fn, fn2, gama(26), phi, rcz, rden, &
-   & relb, rfn2, rtz, rzden, sa, sb, suma, sumb, s1, ta, tau, tb, tfn, &
-   & tols, t2, upol(10), xx, z, z32
-equivalence (alfa(1,1),alfa1(1,1))
-equivalence (alfa(1,3),alfa2(1,1))
-equivalence (beta(1,1),beta1(1,1))
-equivalence (beta(1,3),beta2(1,1))
-equivalence (beta(1,5),beta3(1,1))
+real :: abw2, akm, alfa(26,4), ap, ar(8), asum, az, beta(26,5), br(10), bsum, c(65), con1, con2, con3, con548, cr(10), crz32, dfi, &
+   & dr(10), fi, fn, fn2, gama(26), phi, rcz, rden, relb, rfn2, rtz, rzden, sa, sb, suma, sumb, s1, ta, tau, tb, tfn, tols, t2, &
+   & upol(10), xx, z, z32
 data tols            /-6.90775527898214e+00/
 data con1,con2,con3,con548/ &
    & 6.66666666666667e-01, 3.33333333333333e-01, 1.41421356237310e+00, &
@@ -18492,131 +18638,77 @@ data c(49), c(50), c(51), c(52), c(53), c(54), c(55), c(56), &
    & 1.32887671664218e+07,       -2.78561812808645e+06, &
    & 3.08186404612662e+05,       -1.38860897537170e+04, &
    & 1.10017140269247e+02/
-data alfa1(1,1), alfa1(2,1), alfa1(3,1), alfa1(4,1), alfa1(5,1), &
-   & alfa1(6,1), alfa1(7,1), alfa1(8,1), alfa1(9,1), alfa1(10,1), &
-   & alfa1(11,1),alfa1(12,1),alfa1(13,1),alfa1(14,1),alfa1(15,1), &
-   & alfa1(16,1),alfa1(17,1),alfa1(18,1),alfa1(19,1),alfa1(20,1), &
-   & alfa1(21,1),alfa1(22,1),alfa1(23,1),alfa1(24,1),alfa1(25,1), &
-   & alfa1(26,1)     /-4.44444444444444e-03,-9.22077922077922e-04, &
-   & -8.84892884892885e-05, 1.65927687832450e-04, 2.46691372741793e-04, &
-   & 2.65995589346255e-04, 2.61824297061501e-04, 2.48730437344656e-04, &
-   & 2.32721040083232e-04, 2.16362485712365e-04, 2.00738858762752e-04, &
-   & 1.86267636637545e-04, 1.73060775917876e-04, 1.61091705929016e-04, &
-   & 1.50274774160908e-04, 1.40503497391270e-04, 1.31668816545923e-04, &
-   & 1.23667445598253e-04, 1.16405271474738e-04, 1.09798298372713e-04, &
-   & 1.03772410422993e-04, 9.82626078369363e-05, 9.32120517249503e-05, &
+data alfa(1,1), alfa(2,1), alfa(3,1), alfa(4,1), alfa(5,1),   alfa(6,1), alfa(7,1), alfa(8,1), alfa(9,1), alfa(10,1),   alfa(11,1) &
+   & ,alfa(12,1),alfa(13,1),alfa(14,1),alfa(15,1),   alfa(16,1),alfa(17,1),alfa(18,1),alfa(19,1),alfa(20,1),   alfa(21,1),alfa(22, &
+   & 1),alfa(23,1),alfa(24,1),alfa(25,1),   alfa(26,1)     /-4.44444444444444e-03,-9.22077922077922e-04,   -8.84892884892885e-05, &
+   & 1.65927687832450e-04, 2.46691372741793e-04,   2.65995589346255e-04, 2.61824297061501e-04, 2.48730437344656e-04, &
+   & 2.32721040083232e-04, 2.16362485712365e-04, 2.00738858762752e-04,   1.86267636637545e-04, 1.73060775917876e-04, &
+   & 1.61091705929016e-04,   1.50274774160908e-04, 1.40503497391270e-04, 1.31668816545923e-04,   1.23667445598253e-04, &
+   & 1.16405271474738e-04, 1.09798298372713e-04,   1.03772410422993e-04, 9.82626078369363e-05, 9.32120517249503e-05, &
    & 8.85710852478712e-05, 8.42963105715700e-05, 8.03497548407791e-05/
-data alfa1(1,2), alfa1(2,2), alfa1(3,2), alfa1(4,2), alfa1(5,2), &
-   & alfa1(6,2), alfa1(7,2), alfa1(8,2), alfa1(9,2), alfa1(10,2), &
-   & alfa1(11,2),alfa1(12,2),alfa1(13,2),alfa1(14,2),alfa1(15,2), &
-   & alfa1(16,2),alfa1(17,2),alfa1(18,2),alfa1(19,2),alfa1(20,2), &
-   & alfa1(21,2),alfa1(22,2),alfa1(23,2),alfa1(24,2),alfa1(25,2), &
-   & alfa1(26,2)     / 6.93735541354589e-04, 2.32241745182922e-04, &
-   & -1.41986273556691e-05,-1.16444931672049e-04,-1.50803558053049e-04, &
-   & -1.55121924918096e-04,-1.46809756646466e-04,-1.33815503867491e-04, &
-   & -1.19744975684254e-04,-1.06184319207974e-04,-9.37699549891194e-05, &
-   & -8.26923045588193e-05,-7.29374348155221e-05,-6.44042357721016e-05, &
-   & -5.69611566009369e-05,-5.04731044303562e-05,-4.48134868008883e-05, &
-   & -3.98688727717599e-05,-3.55400532972042e-05,-3.17414256609022e-05, &
-   & -2.83996793904175e-05,-2.54522720634871e-05,-2.28459297164725e-05, &
-   & -2.05352753106481e-05,-1.84816217627666e-05,-1.66519330021394e-05/
-data alfa2(1,1), alfa2(2,1), alfa2(3,1), alfa2(4,1), alfa2(5,1), &
-   & alfa2(6,1), alfa2(7,1), alfa2(8,1), alfa2(9,1), alfa2(10,1), &
-   & alfa2(11,1),alfa2(12,1),alfa2(13,1),alfa2(14,1),alfa2(15,1), &
-   & alfa2(16,1),alfa2(17,1),alfa2(18,1),alfa2(19,1),alfa2(20,1), &
-   & alfa2(21,1),alfa2(22,1),alfa2(23,1),alfa2(24,1),alfa2(25,1), &
-   & alfa2(26,1)     /-3.54211971457744e-04,-1.56161263945159e-04, &
-   & 3.04465503594936e-05, 1.30198655773243e-04, 1.67471106699712e-04, &
-   & 1.70222587683593e-04, 1.56501427608595e-04, 1.36339170977445e-04, &
-   & 1.14886692029825e-04, 9.45869093034688e-05, 7.64498419250898e-05, &
-   & 6.07570334965197e-05, 4.74394299290509e-05, 3.62757512005344e-05, &
-   & 2.69939714979225e-05, 1.93210938247939e-05, 1.30056674793963e-05, &
-   & 7.82620866744497e-06, 3.59257485819352e-06, 1.44040049814252e-07, &
-   & -2.65396769697939e-06,-4.91346867098486e-06,-6.72739296091248e-06, &
-   & -8.17269379678658e-06,-9.31304715093561e-06,-1.02011418798016e-05/
-data alfa2(1,2), alfa2(2,2), alfa2(3,2), alfa2(4,2), alfa2(5,2), &
-   & alfa2(6,2), alfa2(7,2), alfa2(8,2), alfa2(9,2), alfa2(10,2), &
-   & alfa2(11,2),alfa2(12,2),alfa2(13,2),alfa2(14,2),alfa2(15,2), &
-   & alfa2(16,2),alfa2(17,2),alfa2(18,2),alfa2(19,2),alfa2(20,2), &
-   & alfa2(21,2),alfa2(22,2),alfa2(23,2),alfa2(24,2),alfa2(25,2), &
-   & alfa2(26,2)     / 3.78194199201773e-04, 2.02471952761816e-04, &
-   & -6.37938506318862e-05,-2.38598230603006e-04,-3.10916256027362e-04, &
-   & -3.13680115247576e-04,-2.78950273791323e-04,-2.28564082619141e-04, &
-   & -1.75245280340847e-04,-1.25544063060690e-04,-8.22982872820208e-05, &
-   & -4.62860730588116e-05,-1.72334302366962e-05, 5.60690482304602e-06, &
-   & 2.31395443148287e-05, 3.62642745856794e-05, 4.58006124490189e-05, &
-   & 5.24595294959114e-05, 5.68396208545815e-05, 5.94349820393104e-05, &
-   & 6.06478527578422e-05, 6.08023907788436e-05, 6.01577894539460e-05, &
+data alfa(1,2), alfa(2,2), alfa(3,2), alfa(4,2), alfa(5,2),   alfa(6,2), alfa(7,2), alfa(8,2), alfa(9,2), alfa(10,2),   alfa(11,2) &
+   & ,alfa(12,2),alfa(13,2),alfa(14,2),alfa(15,2),   alfa(16,2),alfa(17,2),alfa(18,2),alfa(19,2),alfa(20,2),   alfa(21,2),alfa(22, &
+   & 2),alfa(23,2),alfa(24,2),alfa(25,2),   alfa(26,2)     / 6.93735541354589e-04, 2.32241745182922e-04,   -1.41986273556691e-05,- &
+   & 1.16444931672049e-04,-1.50803558053049e-04,   -1.55121924918096e-04,-1.46809756646466e-04,-1.33815503867491e-04,   - &
+   & 1.19744975684254e-04,-1.06184319207974e-04,-9.37699549891194e-05,   -8.26923045588193e-05,-7.29374348155221e-05,- &
+   & 6.44042357721016e-05,   -5.69611566009369e-05,-5.04731044303562e-05,-4.48134868008883e-05,   -3.98688727717599e-05,- &
+   & 3.55400532972042e-05,-3.17414256609022e-05,   -2.83996793904175e-05,-2.54522720634871e-05,-2.28459297164725e-05,   - &
+   & 2.05352753106481e-05,-1.84816217627666e-05,-1.66519330021394e-05/
+data alfa(1,3), alfa(2,3), alfa(3,3), alfa(4,3), alfa(5,3),   alfa(6,3), alfa(7,3), alfa(8,3), alfa(9,3), alfa(10,3),   alfa(11,3) &
+   & ,alfa(12,3),alfa(13,3),alfa(14,3),alfa(15,3),   alfa(16,3),alfa(17,3),alfa(18,3),alfa(19,3),alfa(20,3),   alfa(21,3),alfa(22, &
+   & 3),alfa(23,3),alfa(24,3),alfa(25,3),   alfa(26,3)     /-3.54211971457744e-04,-1.56161263945159e-04,   3.04465503594936e-05, &
+   & 1.30198655773243e-04, 1.67471106699712e-04,   1.70222587683593e-04, 1.56501427608595e-04, 1.36339170977445e-04, &
+   & 1.14886692029825e-04, 9.45869093034688e-05, 7.64498419250898e-05,   6.07570334965197e-05, 4.74394299290509e-05, &
+   & 3.62757512005344e-05,   2.69939714979225e-05, 1.93210938247939e-05, 1.30056674793963e-05,   7.82620866744497e-06, &
+   & 3.59257485819352e-06, 1.44040049814252e-07,   -2.65396769697939e-06,-4.91346867098486e-06,-6.72739296091248e-06,   - &
+   & 8.17269379678658e-06,-9.31304715093561e-06,-1.02011418798016e-05/
+data alfa(1,4), alfa(2,4), alfa(3,4), alfa(4,4), alfa(5,4),   alfa(6,4), alfa(7,4), alfa(8,4), alfa(9,4), alfa(10,4),   alfa(11,4) &
+   & ,alfa(12,4),alfa(13,4),alfa(14,4),alfa(15,4),   alfa(16,4),alfa(17,4),alfa(18,4),alfa(19,4),alfa(20,4),   alfa(21,4),alfa(22, &
+   & 4),alfa(23,4),alfa(24,4),alfa(25,4),   alfa(26,4)     / 3.78194199201773e-04, 2.02471952761816e-04,   -6.37938506318862e-05,- &
+   & 2.38598230603006e-04,-3.10916256027362e-04,   -3.13680115247576e-04,-2.78950273791323e-04,-2.28564082619141e-04,   - &
+   & 1.75245280340847e-04,-1.25544063060690e-04,-8.22982872820208e-05,   -4.62860730588116e-05,-1.72334302366962e-05, &
+   & 5.60690482304602e-06,   2.31395443148287e-05, 3.62642745856794e-05, 4.58006124490189e-05,   5.24595294959114e-05, &
+   & 5.68396208545815e-05, 5.94349820393104e-05,   6.06478527578422e-05, 6.08023907788436e-05, 6.01577894539460e-05, &
    & 5.89199657344698e-05, 5.72515823777593e-05, 5.52804375585853e-05/
-data beta1(1,1), beta1(2,1), beta1(3,1), beta1(4,1), beta1(5,1), &
-   & beta1(6,1), beta1(7,1), beta1(8,1), beta1(9,1), beta1(10,1), &
-   & beta1(11,1),beta1(12,1),beta1(13,1),beta1(14,1),beta1(15,1), &
-   & beta1(16,1),beta1(17,1),beta1(18,1),beta1(19,1),beta1(20,1), &
-   & beta1(21,1),beta1(22,1),beta1(23,1),beta1(24,1),beta1(25,1), &
-   & beta1(26,1)     / 1.79988721413553e-02, 5.59964911064388e-03, &
-   & 2.88501402231133e-03, 1.80096606761054e-03, 1.24753110589199e-03, &
-   & 9.22878876572938e-04, 7.14430421727287e-04, 5.71787281789705e-04, &
-   & 4.69431007606482e-04, 3.93232835462917e-04, 3.34818889318298e-04, &
-   & 2.88952148495752e-04, 2.52211615549573e-04, 2.22280580798883e-04, &
-   & 1.97541838033063e-04, 1.76836855019718e-04, 1.59316899661821e-04, &
-   & 1.44347930197334e-04, 1.31448068119965e-04, 1.20245444949303e-04, &
-   & 1.10449144504599e-04, 1.01828770740567e-04, 9.41998224204238e-05, &
+data beta(1,1), beta(2,1), beta(3,1), beta(4,1), beta(5,1),   beta(6,1), beta(7,1), beta(8,1), beta(9,1), beta(10,1),   beta(11,1) &
+   & ,beta(12,1),beta(13,1),beta(14,1),beta(15,1),   beta(16,1),beta(17,1),beta(18,1),beta(19,1),beta(20,1),   beta(21,1),beta(22, &
+   & 1),beta(23,1),beta(24,1),beta(25,1),   beta(26,1)     / 1.79988721413553e-02, 5.59964911064388e-03,   2.88501402231133e-03, &
+   & 1.80096606761054e-03, 1.24753110589199e-03,   9.22878876572938e-04, 7.14430421727287e-04, 5.71787281789705e-04, &
+   & 4.69431007606482e-04, 3.93232835462917e-04, 3.34818889318298e-04,   2.88952148495752e-04, 2.52211615549573e-04, &
+   & 2.22280580798883e-04,   1.97541838033063e-04, 1.76836855019718e-04, 1.59316899661821e-04,   1.44347930197334e-04, &
+   & 1.31448068119965e-04, 1.20245444949303e-04,   1.10449144504599e-04, 1.01828770740567e-04, 9.41998224204238e-05, &
    & 8.74130545753834e-05, 8.13466262162801e-05, 7.59002269646219e-05/
-data beta1(1,2), beta1(2,2), beta1(3,2), beta1(4,2), beta1(5,2), &
-   & beta1(6,2), beta1(7,2), beta1(8,2), beta1(9,2), beta1(10,2), &
-   & beta1(11,2),beta1(12,2),beta1(13,2),beta1(14,2),beta1(15,2), &
-   & beta1(16,2),beta1(17,2),beta1(18,2),beta1(19,2),beta1(20,2), &
-   & beta1(21,2),beta1(22,2),beta1(23,2),beta1(24,2),beta1(25,2), &
-   & beta1(26,2)     /-1.49282953213429e-03,-8.78204709546389e-04, &
-   & -5.02916549572035e-04,-2.94822138512746e-04,-1.75463996970783e-04, &
-   & -1.04008550460816e-04,-5.96141953046458e-05,-3.12038929076098e-05, &
-   & -1.26089735980230e-05,-2.42892608575730e-07, 8.05996165414274e-06, &
-   & 1.36507009262147e-05, 1.73964125472926e-05, 1.98672978842134e-05, &
-   & 2.14463263790823e-05, 2.23954659232457e-05, 2.28967783814713e-05, &
-   & 2.30785389811178e-05, 2.30321976080909e-05, 2.28236073720349e-05, &
-   & 2.25005881105292e-05, 2.20981015361991e-05, 2.16418427448104e-05, &
+data beta(1,2), beta(2,2), beta(3,2), beta(4,2), beta(5,2),   beta(6,2), beta(7,2), beta(8,2), beta(9,2), beta(10,2),   beta(11,2) &
+   & ,beta(12,2),beta(13,2),beta(14,2),beta(15,2),   beta(16,2),beta(17,2),beta(18,2),beta(19,2),beta(20,2),   beta(21,2),beta(22, &
+   & 2),beta(23,2),beta(24,2),beta(25,2),   beta(26,2)     /-1.49282953213429e-03,-8.78204709546389e-04,   -5.02916549572035e-04,- &
+   & 2.94822138512746e-04,-1.75463996970783e-04,   -1.04008550460816e-04,-5.96141953046458e-05,-3.12038929076098e-05,   - &
+   & 1.26089735980230e-05,-2.42892608575730e-07, 8.05996165414274e-06,   1.36507009262147e-05, 1.73964125472926e-05, &
+   & 1.98672978842134e-05,   2.14463263790823e-05, 2.23954659232457e-05, 2.28967783814713e-05,   2.30785389811178e-05, &
+   & 2.30321976080909e-05, 2.28236073720349e-05,   2.25005881105292e-05, 2.20981015361991e-05, 2.16418427448104e-05, &
    & 2.11507649256221e-05, 2.06388749782171e-05, 2.01165241997082e-05/
-data beta2(1,1), beta2(2,1), beta2(3,1), beta2(4,1), beta2(5,1), &
-   & beta2(6,1), beta2(7,1), beta2(8,1), beta2(9,1), beta2(10,1), &
-   & beta2(11,1),beta2(12,1),beta2(13,1),beta2(14,1),beta2(15,1), &
-   & beta2(16,1),beta2(17,1),beta2(18,1),beta2(19,1),beta2(20,1), &
-   & beta2(21,1),beta2(22,1),beta2(23,1),beta2(24,1),beta2(25,1), &
-   & beta2(26,1)     / 5.52213076721293e-04, 4.47932581552385e-04, &
-   & 2.79520653992021e-04, 1.52468156198447e-04, 6.93271105657044e-05, &
-   & 1.76258683069991e-05,-1.35744996343269e-05,-3.17972413350427e-05, &
-   & -4.18861861696693e-05,-4.69004889379141e-05,-4.87665447413787e-05, &
-   & -4.87010031186735e-05,-4.74755620890087e-05,-4.55813058138628e-05, &
-   & -4.33309644511266e-05,-4.09230193157750e-05,-3.84822638603221e-05, &
-   & -3.60857167535411e-05,-3.37793306123367e-05,-3.15888560772110e-05, &
-   & -2.95269561750807e-05,-2.75978914828336e-05,-2.58006174666884e-05, &
-   & -2.41308356761280e-05,-2.25823509518346e-05,-2.11479656768913e-05/
-data beta2(1,2), beta2(2,2), beta2(3,2), beta2(4,2), beta2(5,2), &
-   & beta2(6,2), beta2(7,2), beta2(8,2), beta2(9,2), beta2(10,2), &
-   & beta2(11,2),beta2(12,2),beta2(13,2),beta2(14,2),beta2(15,2), &
-   & beta2(16,2),beta2(17,2),beta2(18,2),beta2(19,2),beta2(20,2), &
-   & beta2(21,2),beta2(22,2),beta2(23,2),beta2(24,2),beta2(25,2), &
-   & beta2(26,2)     /-4.74617796559960e-04,-4.77864567147321e-04, &
-   & -3.20390228067038e-04,-1.61105016119962e-04,-4.25778101285435e-05, &
-   & 3.44571294294968e-05, 7.97092684075675e-05, 1.03138236708272e-04, &
-   & 1.12466775262204e-04, 1.13103642108481e-04, 1.08651634848774e-04, &
-   & 1.01437951597662e-04, 9.29298396593364e-05, 8.40293133016090e-05, &
-   & 7.52727991349134e-05, 6.69632521975731e-05, 5.92564547323195e-05, &
-   & 5.22169308826976e-05, 4.58539485165361e-05, 4.01445513891487e-05, &
-   & 3.50481730031328e-05, 3.05157995034347e-05, 2.64956119950516e-05, &
+data beta(1,3), beta(2,3), beta(3,3), beta(4,3), beta(5,3),   beta(6,3), beta(7,3), beta(8,3), beta(9,3), beta(10,3),   beta(11,3) &
+   & ,beta(12,3),beta(13,3),beta(14,3),beta(15,3),   beta(16,3),beta(17,3),beta(18,3),beta(19,3),beta(20,3),   beta(21,3),beta(22, &
+   & 3),beta(23,3),beta(24,3),beta(25,3),   beta(26,3)     / 5.52213076721293e-04, 4.47932581552385e-04,   2.79520653992021e-04, &
+   & 1.52468156198447e-04, 6.93271105657044e-05,   1.76258683069991e-05,-1.35744996343269e-05,-3.17972413350427e-05,   - &
+   & 4.18861861696693e-05,-4.69004889379141e-05,-4.87665447413787e-05,   -4.87010031186735e-05,-4.74755620890087e-05,- &
+   & 4.55813058138628e-05,   -4.33309644511266e-05,-4.09230193157750e-05,-3.84822638603221e-05,   -3.60857167535411e-05,- &
+   & 3.37793306123367e-05,-3.15888560772110e-05,   -2.95269561750807e-05,-2.75978914828336e-05,-2.58006174666884e-05,   - &
+   & 2.41308356761280e-05,-2.25823509518346e-05,-2.11479656768913e-05/
+data beta(1,4), beta(2,4), beta(3,4), beta(4,4), beta(5,4),   beta(6,4), beta(7,4), beta(8,4), beta(9,4), beta(10,4),   beta(11,4) &
+   & ,beta(12,4),beta(13,4),beta(14,4),beta(15,4),   beta(16,4),beta(17,4),beta(18,4),beta(19,4),beta(20,4),   beta(21,4),beta(22, &
+   & 4),beta(23,4),beta(24,4),beta(25,4),   beta(26,4)     /-4.74617796559960e-04,-4.77864567147321e-04,   -3.20390228067038e-04,- &
+   & 1.61105016119962e-04,-4.25778101285435e-05,   3.44571294294968e-05, 7.97092684075675e-05, 1.03138236708272e-04, &
+   & 1.12466775262204e-04, 1.13103642108481e-04, 1.08651634848774e-04,   1.01437951597662e-04, 9.29298396593364e-05, &
+   & 8.40293133016090e-05,   7.52727991349134e-05, 6.69632521975731e-05, 5.92564547323195e-05,   5.22169308826976e-05, &
+   & 4.58539485165361e-05, 4.01445513891487e-05,   3.50481730031328e-05, 3.05157995034347e-05, 2.64956119950516e-05, &
    & 2.29363633690998e-05, 1.97893056664022e-05, 1.70091984636413e-05/
-data beta3(1,1), beta3(2,1), beta3(3,1), beta3(4,1), beta3(5,1), &
-   & beta3(6,1), beta3(7,1), beta3(8,1), beta3(9,1), beta3(10,1), &
-   & beta3(11,1),beta3(12,1),beta3(13,1),beta3(14,1),beta3(15,1), &
-   & beta3(16,1),beta3(17,1),beta3(18,1),beta3(19,1),beta3(20,1), &
-   & beta3(21,1),beta3(22,1),beta3(23,1),beta3(24,1),beta3(25,1), &
-   & beta3(26,1)     / 7.36465810572578e-04, 8.72790805146194e-04, &
-   & 6.22614862573135e-04, 2.85998154194304e-04, 3.84737672879366e-06, &
-   & -1.87906003636972e-04,-2.97603646594555e-04,-3.45998126832656e-04, &
-   & -3.53382470916038e-04,-3.35715635775049e-04,-3.04321124789040e-04, &
-   & -2.66722723047613e-04,-2.27654214122820e-04,-1.89922611854562e-04, &
-   & -1.55058918599094e-04,-1.23778240761874e-04,-9.62926147717644e-05, &
-   & -7.25178327714425e-05,-5.22070028895634e-05,-3.50347750511901e-05, &
-   & -2.06489761035552e-05,-8.70106096849767e-06, 1.13698686675100e-06, &
+data beta(1,5), beta(2,5), beta(3,5), beta(4,5), beta(5,5),   beta(6,5), beta(7,5), beta(8,5), beta(9,5), beta(10,5),   beta(11,5) &
+   & ,beta(12,5),beta(13,5),beta(14,5),beta(15,5),   beta(16,5),beta(17,5),beta(18,5),beta(19,5),beta(20,5),   beta(21,5),beta(22, &
+   & 5),beta(23,5),beta(24,5),beta(25,5),   beta(26,5)     / 7.36465810572578e-04, 8.72790805146194e-04,   6.22614862573135e-04, &
+   & 2.85998154194304e-04, 3.84737672879366e-06,   -1.87906003636972e-04,-2.97603646594555e-04,-3.45998126832656e-04,   - &
+   & 3.53382470916038e-04,-3.35715635775049e-04,-3.04321124789040e-04,   -2.66722723047613e-04,-2.27654214122820e-04,- &
+   & 1.89922611854562e-04,   -1.55058918599094e-04,-1.23778240761874e-04,-9.62926147717644e-05,   -7.25178327714425e-05,- &
+   & 5.22070028895634e-05,-3.50347750511901e-05,   -2.06489761035552e-05,-8.70106096849767e-06, 1.13698686675100e-06, &
    & 9.16426474122779e-06, 1.56477785428873e-05, 2.08223629482467e-05/
 data gama(1),   gama(2),   gama(3),   gama(4),   gama(5), &
    & gama(6),   gama(7),   gama(8),   gama(9),   gama(10), &
@@ -30039,15 +30131,10 @@ double precision :: aa, bb, cc, factor, t
 real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
    & df, dx, base, smalno, infin
 logical :: zerok
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !-------------------------
 !
 !
 !-------------------------
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !-------------------------
 !     The following statements set the machine constants used
 !     in the code. The meaning of the constants are ...
@@ -30062,7 +30149,7 @@ common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !     BASE    THE BASE OF THE FLOATING POINT ARITHMETICS
 !             being used.
 !
-eta = dpmpar(1)
+nswc_state_global_eta = dpmpar(1)
 smalno = spmpar(2)
 infin = spmpar(3)
 base = ipmpar(4)
@@ -30071,9 +30158,9 @@ base = ipmpar(4)
 !     Are and mre refer to the unit error in + and *
 !     respectively. They are assumed to be the same as eta.
 !
-are = eta
-mre = eta
-lo = smalno/eta
+nswc_state_global_are = nswc_state_global_eta
+nswc_state_global_mre = nswc_state_global_eta
+lo = smalno/nswc_state_global_eta
 !
 !     Initialization of constants for shift rotation
 !
@@ -30220,7 +30307,7 @@ do jj = 1,5
       k(j) = t*k(j - 1) + p(j)
    end do
    k(1) = p(1)
-   zerok = abs(k(n)) <= abs(bb)*eta*10.
+   zerok = abs(k(n)) <= abs(bb)*nswc_state_global_eta*10.
    go to 230
 !
 !     Use unscaled form of recurrence
@@ -30253,10 +30340,10 @@ do cnt = 1,20
    xxx = cosr*xx - sinr*yy
    yy = sinr*xx + cosr*yy
    xx = xxx
-   sr = bnd*xx
-   si = bnd*yy
-   u = -2.0d0*sr
-   v = bnd
+   nswc_state_global_sr = bnd*xx
+   nswc_state_global_si = bnd*yy
+   nswc_state_global_u = -2.0d0*nswc_state_global_sr
+   nswc_state_global_v = bnd
 !
 !     Second stage calculation, fixed quadratic. The second stage
 !     jumps directly to one of the third stage iterations.
@@ -30279,8 +30366,8 @@ return
 !     Store the zeros obtained and deflate the polynomial.
 !
 300 num = num + 1
-zeror(num) = szr
-zeroi(num) = szi
+zeror(num) = nswc_state_global_szr
+zeroi(num) = nswc_state_global_szi
 nn = nn - nz
 n = nn - 1
 do i = 1,nn
@@ -30288,8 +30375,8 @@ do i = 1,nn
 end do
 if (nz == 1) go to 40
 num = num + 1
-zeror(num) = lzr
-zeroi(num) = lzi
+zeror(num) = nswc_state_global_lzr
+zeroi(num) = nswc_state_global_lzi
 go to 40
 end subroutine drply1
 
@@ -30302,9 +30389,6 @@ integer :: n, type, i, j, iflag
 double precision :: svu, svv, ui, vi, s
 real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
 logical :: vpass, spass, vtry, stry
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Computes up to  l2  fixed shift k-polynomials,
 !     testing for convergence in the linear or quadratic
@@ -30316,19 +30400,17 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !     nz - Number of zeros found
 !
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
 betav = .25
 betas = .25
-oss = sr
-ovv = v
+oss = nswc_state_global_sr
+ovv = nswc_state_global_v
 !
 !     Evaluate polynomial by synthetic division
 !
-call quadsd(nn, u, v, p, qp, a, b)
+call quadsd(nn, nswc_state_global_u, nswc_state_global_v, p, qp, nswc_state_global_a, nswc_state_global_b)
 call calcsc(type, n, k, qk)
 do j = 1,l2
 !
@@ -30370,8 +30452,8 @@ do j = 1,l2
 !     At least one sequence has passed the convergence
 !     test. Store variables before iterating
 !
-   svu = u
-   svv = v
+   svu = nswc_state_global_u
+   svv = nswc_state_global_v
    do i = 1,n
       svk(i) = k(i)
    end do
@@ -30419,8 +30501,8 @@ do j = 1,l2
 !
 !     Restore variables
 !
-50 u = svu
-   v = svv
+50 nswc_state_global_u = svu
+   nswc_state_global_v = svv
    do i = 1,n
       k(i) = svk(i)
    end do
@@ -30433,7 +30515,7 @@ do j = 1,l2
 !     Recompute qp and scalar values to continue the
 !     second stage
 !
-   call quadsd(nn, u, v, p, qp, a, b)
+   call quadsd(nn, nswc_state_global_u, nswc_state_global_v, p, qp, nswc_state_global_a, nswc_state_global_b)
    call calcsc(type, n, k, qk)
 70 ovv = vv
    oss = ss
@@ -30451,9 +30533,6 @@ integer :: n, type, i, j
 double precision :: ui, vi
 real :: mp, omp, ee, relstp, t, zm
 logical :: tried
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -30463,43 +30542,40 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !     nz - Number of zero found
 !
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
 tried = .false.
-u = uu
-v = vv
+nswc_state_global_u = uu
+nswc_state_global_v = vv
 j = 0
 ! Main loop
-10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
+10 call quadpl(1.d0, nswc_state_global_u, nswc_state_global_v, nswc_state_global_szr, nswc_state_global_szi, nswc_state_global_lzr &
+   & , nswc_state_global_lzi)
 !
 !     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
 !     to multiple or nearly equal and of opposite sign
 !
-if (abs(abs(szr) - abs(lzr)) > 1.d-2*abs(lzr)) &
-   & return
+if (abs(abs(nswc_state_global_szr) - abs(nswc_state_global_lzr)) > 1.d-2*abs(nswc_state_global_lzr))   return
 !
 !     Evaluate polynomial by quadratic synthetic division
 !
-call quadsd(nn, u, v, p, qp, a, b)
-mp = abs(a - szr*b) + abs(szi*b)
+call quadsd(nn, nswc_state_global_u, nswc_state_global_v, p, qp, nswc_state_global_a, nswc_state_global_b)
+mp = abs(nswc_state_global_a - nswc_state_global_szr*nswc_state_global_b) + abs(nswc_state_global_szi*nswc_state_global_b)
 !
 !     Compute a rigorous bound on the rounding error in
 !     EVALUTING p
 !
-zm = sqrt(abs(sngl(v)))
+zm = sqrt(abs(sngl(nswc_state_global_v)))
 ee = 2.0*abs(sngl(qp(1)))
-t = -szr*b
+t = -nswc_state_global_szr*nswc_state_global_b
 do i = 2,n
    ee = ee*zm + abs(sngl(qp(i)))
 20 continue
 end do
-ee = ee*zm + abs(sngl(a) + t)
-ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
-   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
-   & 2.0*are*abs(t)
+ee = ee*zm + abs(sngl(nswc_state_global_a) + t)
+ee = (5.0*nswc_state_global_mre + 4.0*nswc_state_global_are)*ee - (5.0*nswc_state_global_mre + 2.0*nswc_state_global_are)*   (abs( &
+   & sngl(nswc_state_global_a) + t) + abs(sngl(nswc_state_global_b))*zm) +   2.0*nswc_state_global_are*abs(t)
 !
 !     Iteration has converged sufficiently if the
 !     polynomial value is less than 20 times this bound
@@ -30519,11 +30595,11 @@ if (relstp > 0.01 .or. mp < omp .or. tried) go to 50
 !     Five fixed shift steps are taken with A u,v close
 !     to the cluster
 !
-if (relstp < eta) relstp = eta
+if (relstp < nswc_state_global_eta) relstp = nswc_state_global_eta
 relstp = sqrt(relstp)
-u = u - u*relstp
-v = v + v*relstp
-call quadsd(nn, u, v, p, qp, a, b)
+nswc_state_global_u = nswc_state_global_u - nswc_state_global_u*relstp
+nswc_state_global_v = nswc_state_global_v + nswc_state_global_v*relstp
+call quadsd(nn, nswc_state_global_u, nswc_state_global_v, p, qp, nswc_state_global_a, nswc_state_global_b)
 do i = 1,5
    call calcsc(type, n, k, qk)
    call nextk(type, n, qp, k, qk)
@@ -30542,9 +30618,9 @@ call newest(type, ui, vi, nn, p, k)
 !     If vi is zero the iteration is not converging
 !
 if (vi == 0.d0) return
-relstp = abs((vi - v)/vi)
-u = ui
-v = vi
+relstp = abs((vi - nswc_state_global_v)/vi)
+nswc_state_global_u = ui
+nswc_state_global_v = vi
 go to 10
 end subroutine quadit
 
@@ -30555,9 +30631,6 @@ double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
 integer :: i, j, n
 double precision :: pv, kv, t, s
 real :: ms, mp, omp, ee
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift H polynomial iteration for a real zero.
 !
@@ -30567,8 +30640,6 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !             axis.
 !
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 n = nn - 1
 nz = 0
@@ -30590,7 +30661,7 @@ mp = abs(pv)
 !     Compute a rigorous bound on the error in evaluating p
 !
 ms = abs(s)
-ee = (mre/(are + mre))*abs(sngl(qp(1)))
+ee = (nswc_state_global_mre/(nswc_state_global_are + nswc_state_global_mre))*abs(sngl(qp(1)))
 do i = 2,nn
    ee = ee*ms + abs(sngl(qp(i)))
 end do
@@ -30598,10 +30669,10 @@ end do
 !     Iteration has converged sufficiently if the
 !     polynomial value is less than 20 times this bound
 !
-if (mp > 20.0*((are + mre)*ee - mre*mp)) go to 40
+if (mp > 20.0*((nswc_state_global_are + nswc_state_global_mre)*ee - nswc_state_global_mre*mp)) go to 40
 nz = 1
-szr = s
-szi = 0.d0
+nswc_state_global_szr = s
+nswc_state_global_szi = 0.d0
 return
 40 j = j + 1
 !
@@ -30633,7 +30704,7 @@ do i = 2,n
    kv = kv*s + k(i)
    qk(i) = kv
 end do
-if (abs(kv) <= abs(k(n))*10.*eta) go to 80
+if (abs(kv) <= abs(k(n))*10.*nswc_state_global_eta) go to 80
 !
 !     Use the scaled form of the recurrence if the value
 !     of k at s is nonzero
@@ -30656,7 +30727,7 @@ do i = 2,n
    kv = kv*s + k(i)
 end do
 t = 0.d0
-if (abs(kv) > abs(k(n))*10.*eta) t = -pv/kv
+if (abs(kv) > abs(k(n))*10.*nswc_state_global_eta) t = -pv/kv
 s = s + t
 go to 10
 end subroutine realit
@@ -30667,9 +30738,6 @@ integer :: n
 integer :: type
 double precision :: k(n), qk(n)
 double precision :: tol
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     This routine calculates scalar quantities used to
 !     compute the next k polynomial and new estimates of
@@ -30679,44 +30747,44 @@ double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 !            calculations are normalized to avoid overflow
 !
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 !     Synthetic division of k by the quadratic 1,u,v
 !
-call quadsd(n, u, v, k, qk, c, d)
-tol = 100.0*eta
-if (abs(c) > tol*abs(k(n))) go to 10
-if (abs(d) > tol*abs(k(n - 1))) go to 10
+call quadsd(n, nswc_state_global_u, nswc_state_global_v, k, qk, nswc_state_global_c, nswc_state_global_d)
+tol = 100.0*nswc_state_global_eta
+if (abs(nswc_state_global_c) > tol*abs(k(n))) go to 10
+if (abs(nswc_state_global_d) > tol*abs(k(n - 1))) go to 10
 type = 3
 !
 !     type=3 Indicates the quadratic is almost a factor of k
 !
 return
-10 if (abs(d) < abs(c)) go to 20
+10 if (abs(nswc_state_global_d) < abs(nswc_state_global_c)) go to 20
 type = 2
 !
 !     type=2 Indicates that all formulas are divided by d
 !
-e = a/d
-f = c/d
-g = u*b
-h = v*b
-a3 = (a + g)*e + h*(b/d)
-a1 = b*f - a
-a7 = (f + u)*a + h
+nswc_state_global_e = nswc_state_global_a/nswc_state_global_d
+nswc_state_global_f = nswc_state_global_c/nswc_state_global_d
+nswc_state_global_g = nswc_state_global_u*nswc_state_global_b
+nswc_state_global_h = nswc_state_global_v*nswc_state_global_b
+nswc_state_global_a3 = (nswc_state_global_a + nswc_state_global_g)*nswc_state_global_e + nswc_state_global_h*(nswc_state_global_b/ &
+   & nswc_state_global_d)
+nswc_state_global_a1 = nswc_state_global_b*nswc_state_global_f - nswc_state_global_a
+nswc_state_global_a7 = (nswc_state_global_f + nswc_state_global_u)*nswc_state_global_a + nswc_state_global_h
 return
 20 type = 1
 !
 !     type=1 Indicates that all formulas are divided by c
 !
-e = a/c
-f = d/c
-g = u*e
-h = v*b
-a3 = a*e + (h/c + g)*b
-a1 = b - a*(d/c)
-a7 = a + g*d + h*f
+nswc_state_global_e = nswc_state_global_a/nswc_state_global_c
+nswc_state_global_f = nswc_state_global_d/nswc_state_global_c
+nswc_state_global_g = nswc_state_global_u*nswc_state_global_e
+nswc_state_global_h = nswc_state_global_v*nswc_state_global_b
+nswc_state_global_a3 = nswc_state_global_a*nswc_state_global_e + (nswc_state_global_h/nswc_state_global_c + nswc_state_global_g)* &
+   & nswc_state_global_b
+nswc_state_global_a1 = nswc_state_global_b - nswc_state_global_a*(nswc_state_global_d/nswc_state_global_c)
+nswc_state_global_a7 = nswc_state_global_a + nswc_state_global_g*nswc_state_global_d + nswc_state_global_h*nswc_state_global_f
 end subroutine calcsc
 
 subroutine nextk(type, n, qp, k, qk)
@@ -30726,40 +30794,35 @@ integer :: type
 double precision :: qp(n), k(n), qk(n)
 integer :: i
 double precision :: temp
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Computes the next k polynomials using the scalars
 !     computed in calcsc.
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 if (type == 3) go to 40
-temp = a
-if (type == 1) temp = b
-if (abs(a1) > abs(temp)*eta*10.) go to 20
+temp = nswc_state_global_a
+if (type == 1) temp = nswc_state_global_b
+if (abs(nswc_state_global_a1) > abs(temp)*nswc_state_global_eta*10.) go to 20
 !
 !     If a1 is nearly zero then use a special form of the
 !     recurrence
 !
 k(1) = 0.d0
-k(2) = -a7*qp(1)
+k(2) = -nswc_state_global_a7*qp(1)
 do i = 3,n
-   k(i) = a3*qk(i - 2) - a7*qp(i - 1)
+   k(i) = nswc_state_global_a3*qk(i - 2) - nswc_state_global_a7*qp(i - 1)
 10 continue
 end do
 return
 !
 !     Use scaled form of the recurrence
 !
-20 a7 = a7/a1
-a3 = a3/a1
+20 nswc_state_global_a7 = nswc_state_global_a7/nswc_state_global_a1
+nswc_state_global_a3 = nswc_state_global_a3/nswc_state_global_a1
 k(1) = qp(1)
-k(2) = qp(2) - a7*qp(1)
+k(2) = qp(2) - nswc_state_global_a7*qp(1)
 do i = 3,n
-   k(i) = a3*qk(i - 2) - a7*qp(i - 1) + qp(i)
+   k(i) = nswc_state_global_a3*qk(i - 2) - nswc_state_global_a7*qp(i - 1) + qp(i)
 end do
 return
 !
@@ -30779,40 +30842,36 @@ integer :: type
 double precision :: uu, vv, p(nn), k(nn)
 integer :: n
 double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
 !
 !     Compute new estimates of the quadratic coefficients
 !     using the scalars computed in calcsc.
 !
 !
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
 !     Use formulas appropriate to setting of type.
 !
 n = nn - 1
 if (type == 3) go to 30
 if (type == 2) go to 10
-a4 = a + u*b + h*f
-a5 = c + (u + v*f)*d
+a4 = nswc_state_global_a + nswc_state_global_u*nswc_state_global_b + nswc_state_global_h*nswc_state_global_f
+a5 = nswc_state_global_c + (nswc_state_global_u + nswc_state_global_v*nswc_state_global_f)*nswc_state_global_d
 go to 20
-10 a4 = (a + g)*f + h
-a5 = (f + u)*c + v*d
+10 a4 = (nswc_state_global_a + nswc_state_global_g)*nswc_state_global_f + nswc_state_global_h
+a5 = (nswc_state_global_f + nswc_state_global_u)*nswc_state_global_c + nswc_state_global_v*nswc_state_global_d
 !
 !     Evaluate new quadratic coefficients.
 !
 20 b1 = -k(n)/p(nn)
 b2 = -(k(n - 1) + b1*p(n))/p(nn)
-c1 = v*b2*a1
-c2 = b1*a7
-c3 = b1*b1*a3
+c1 = nswc_state_global_v*b2*nswc_state_global_a1
+c2 = b1*nswc_state_global_a7
+c3 = b1*b1*nswc_state_global_a3
 c4 = c1 - c2 - c3
 temp = a5 + b1*a4 - c4
 if (temp == 0.d0) go to 30
-uu = u - (u*(c3 + c2) + v*(b1*a1 + b2*a7))/temp
-vv = v*(1.d0 + c4/temp)
+uu = nswc_state_global_u - (nswc_state_global_u*(c3 + c2) + nswc_state_global_v*(b1*nswc_state_global_a1 + b2*nswc_state_global_a7 &
+   & ))/temp
+vv = nswc_state_global_v*(1.d0 + c4/temp)
 return
 !
 !     If type=3 The quadratic is zeroed
@@ -84628,13 +84687,11 @@ subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
 implicit none
 integer :: ierr, isn, n, nspan, ntot
 real :: a(*), b(*)
-integer :: i, ii, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, &
-   & kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, &
-   & np(209), nt, num
+integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
+   & nt, num, nswc_ai_i4
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
    & bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
    & s120, s2, s3, s72, sd, sk(23), u, v
-integer :: nswc_ai_i4
 !  Multivariate complex Fourier transform, computed in place
 !    using mixed-radix fast Fourier transform algorithm.
 !  By R. C. Singleton, Stanford Research Institute, oct. 1968
@@ -84686,7 +84743,6 @@ integer :: nswc_ai_i4
 !  If n has more than one square-free factor, the product of the
 !    square-free factors must be .LE. 210
 !  array storage for maximum prime factor of 23
-equivalence (i,ii)
 !  The following constants should agree with the array dimensions.
 maxn = 15
 maxf = 23
@@ -85184,7 +85240,7 @@ jj = jc
 if (jj > maxf) kspan = maxf
 jj = jj - kspan
 k = np(j)
-kk = jc*k + ii + jj
+kk = jc*k + i + jj
 k1 = kk + kspan
 k2 = 0
 928 k2 = k2 + 1
@@ -85213,7 +85269,7 @@ if (jj /= 0) go to 926
 if (j /= 1) go to 924
 950 j = k3 + 1
 nt = nt - kspnn
-ii = nt - inc + 1
+i = nt - inc + 1
 if (nt >= 0) go to 924
 960 return
 !  Error finish - There is an input error
@@ -87336,18 +87392,6 @@ double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
 double precision :: f
 external f
 integer :: k, kdimen, ndimen
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 !
 !        ===============================================================
 !
@@ -87377,31 +87421,23 @@ logical :: discrd
 !     BRIGHT     VALRGT
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
 !
-10 a = xlft
-b = xrgt
-accur = epsln
-degree = ndeg
-smooth = nsmth
-norm = anorm
-charf = dx
-edist = mo
-nbreak = kbreak
-if (nbreak <= 0 .or. nbreak >= 21) go to 30
-do k = 1,nbreak
-   xbreak(k) = brakpt(k)
-   dbreak(k) = kdiff(k)
-   bleft(k) = vallft(k)
-   bright(k) = valrgt(k)
+10 nswc_state_inputz_a = xlft
+nswc_state_inputz_b = xrgt
+nswc_state_inputz_accur = epsln
+nswc_state_inputz_degree = ndeg
+nswc_state_inputz_smooth = nsmth
+nswc_state_inputz_norm = anorm
+nswc_state_inputz_charf = dx
+nswc_state_inputz_edist = mo
+nswc_state_inputz_nbreak = kbreak
+if (nswc_state_inputz_nbreak <= 0 .or. nswc_state_inputz_nbreak >= 21) go to 30
+do k = 1,nswc_state_inputz_nbreak
+   nswc_state_inputz_xbreak(k) = brakpt(k)
+   nswc_state_inputz_dbreak(k) = kdiff(k)
+   nswc_state_inputz_bleft(k) = vallft(k)
+   nswc_state_inputz_bright(k) = valrgt(k)
 20 continue
 end do
 30 continue
@@ -87409,8 +87445,8 @@ end do
 kdimen = kmax + 1
 ndimen = ndeg + 1
 call adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
-npiece = knots
-errest = error
+npiece = nswc_state_resulz_knots
+errest = nswc_state_resulz_error
 end subroutine adapt
 
 subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
@@ -87419,18 +87455,6 @@ integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
 double precision :: f
 external f
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 !
 !     This algorithm computes a piecewise polynomial approximation
 !  of specified smoothness, accuracy and degree.  The input to the
@@ -87560,16 +87584,10 @@ logical :: discrd
 !     4. Change dpmpar to spmpar in adset.
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
 !                      kntdim - kdimen, name changed to put in common
 !                      npardm - ndimen, name changed to put in common
-common /resulz/ error, knots
 !                      knots = Final no. of knots, includes b as one.
 !                      Error = Estimate of error actually achieved.
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
 !             KONTRL contains generally useful variables
 !                      maxstk - See comments above
 !                      buffer - The machine dependent tolerance used
@@ -87589,8 +87607,6 @@ common /kontrl/ dsctol, errori, xleft, xright, break, both, &
 !                               left  = break at XLEFT(NSTACK)
 !                               right = break at XRIGHT(NSTACK)
 !                               both  = break at both ends
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !             COMDIF contains variables used only by adcomp and friends.
 !                      nintrp - Number of interior interpolation points
 !                               for the current interval
@@ -87629,11 +87645,11 @@ if (ierr /= 0) return
 !
 !                    Test for normal termination
 !
-if (nstack == 0) return
+if (nswc_state_kontrl_nstack == 0) return
 !
 !                Check on the number of knots generated
 !
-if (knots < maxknt) go to 10
+if (nswc_state_resulz_knots < nswc_state_kontrl_maxknt) go to 10
 ierr = 1
 end subroutine adapt1
 
@@ -87642,18 +87658,6 @@ implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: j, k, limsm
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: akmax, eps, km1, ratio
 !
 !        ===============================================================
@@ -87661,14 +87665,6 @@ double precision :: akmax, eps, km1, ratio
 ! **  This program checks the input data and initializes the computation
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 double precision, parameter :: eps0 = 1.d-30
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: one = 1.d0
@@ -87681,82 +87677,83 @@ integer, parameter :: kboth = 3
 !
 !
 eps = dpmpar(1)
-buffer = c100*max(eps,eps0)
+nswc_state_kontrl_buffer = c100*max(eps,eps0)
 !
 !         Put data statement items into common variables
 !
-left = kleft
-right = kright
-both = kboth
+nswc_state_kontrl_left = kleft
+nswc_state_kontrl_right = kright
+nswc_state_kontrl_both = kboth
 !
 ! -------- Set current values of limits on dimensions ------------------
 !
-kntdim = kdimen
-npardm = ndimen
-maxknt = kntdim
-maxstk = 50
-maxpar = min(20,npardm)
-maxaux = 20
+nswc_state_inputz_kntdim = kdimen
+nswc_state_inputz_npardm = ndimen
+nswc_state_kontrl_maxknt = nswc_state_inputz_kntdim
+nswc_state_kontrl_maxstk = 50
+nswc_state_kontrl_maxpar = min(20,nswc_state_inputz_npardm)
+nswc_state_kontrl_maxaux = 20
 !
 ! -------- Check input data --------------------------------------------
 !
 ierr = 0
-if (a >= b .or. accur <= zero) go to 200
-if (degree >= maxpar .or. 2*smooth >= degree) go to 200
+if (nswc_state_inputz_a >= nswc_state_inputz_b .or. nswc_state_inputz_accur <= zero) go to 200
+if (nswc_state_inputz_degree >= nswc_state_kontrl_maxpar .or. 2*nswc_state_inputz_smooth >= nswc_state_inputz_degree) go to 200
 akmax = kmax
-ratio = (b - a)/(abs(a) + abs(b))
-if (ratio <= two*buffer*akmax) go to 210
-if (charf < (b - a)/akmax) go to 220
-if (norm >= zero .and. (norm - one)*(norm - two)*(norm - three) /= zero) &
-   & go to 200
-if (edist*(edist - 1)*(edist - 2) /= 0) go to 200
-if (nbreak < 0 .or. nbreak > maxaux) go to 200
-if (nbreak == 0) go to 150
+ratio = (nswc_state_inputz_b - nswc_state_inputz_a)/(abs(nswc_state_inputz_a) + abs(nswc_state_inputz_b))
+if (ratio <= two*nswc_state_kontrl_buffer*akmax) go to 210
+if (nswc_state_inputz_charf < (nswc_state_inputz_b - nswc_state_inputz_a)/akmax) go to 220
+if (nswc_state_inputz_norm >= zero .and. (nswc_state_inputz_norm - one)*(nswc_state_inputz_norm - two)*(nswc_state_inputz_norm - &
+   & three) /= zero)   go to 200
+if (nswc_state_inputz_edist*(nswc_state_inputz_edist - 1)*(nswc_state_inputz_edist - 2) /= 0) go to 200
+if (nswc_state_inputz_nbreak < 0 .or. nswc_state_inputz_nbreak > nswc_state_kontrl_maxaux) go to 200
+if (nswc_state_inputz_nbreak == 0) go to 150
 !
 !         Check the break point data, monotonicity and degree
 !
 j = 1
-if (xbreak(1) < a .or. xbreak(nbreak) > b) go to 230
-if (nbreak == 1) go to 110
-do j = 2,nbreak
-   if (xbreak(j - 1) >= xbreak(j)) go to 230
+if (nswc_state_inputz_xbreak(1) < nswc_state_inputz_a .or. nswc_state_inputz_xbreak(nswc_state_inputz_nbreak) > &
+   & nswc_state_inputz_b) go to 230
+if (nswc_state_inputz_nbreak == 1) go to 110
+do j = 2,nswc_state_inputz_nbreak
+   if (nswc_state_inputz_xbreak(j - 1) >= nswc_state_inputz_xbreak(j)) go to 230
 100 continue
 end do
-110 limsm = (degree - 1)/2
-do j = 1,nbreak
-   if (dbreak(j) < 0 .or. dbreak(j) > limsm) go to 240
+110 limsm = (nswc_state_inputz_degree - 1)/2
+do j = 1,nswc_state_inputz_nbreak
+   if (nswc_state_inputz_dbreak(j) < 0 .or. nswc_state_inputz_dbreak(j) > limsm) go to 240
 end do
 !
 ! -------- Initialization of variables ---------------------------------
 !
 !             Active interval stack
 !
-150 nstack = 1
-xleft(1) = a
-xright(1) = b
+150 nswc_state_kontrl_nstack = 1
+nswc_state_kontrl_xleft(1) = nswc_state_inputz_a
+nswc_state_kontrl_xright(1) = nswc_state_inputz_b
 !
 !             Termination and error values
 !
-error = zero
-dsctol = accur**abs(norm)
-if (edist == 0) dsctol = dsctol/(b - a)
-if (norm == three) dsctol = accur
+nswc_state_resulz_error = zero
+nswc_state_kontrl_dsctol = nswc_state_inputz_accur**abs(nswc_state_inputz_norm)
+if (nswc_state_inputz_edist == 0) nswc_state_kontrl_dsctol = nswc_state_kontrl_dsctol/(nswc_state_inputz_b - nswc_state_inputz_a)
+if (nswc_state_inputz_norm == three) nswc_state_kontrl_dsctol = nswc_state_inputz_accur
 !
 !             Miscellaneous variables and pointers
 !
-ibreak = 1
-knots = 1
-interp = degree + 2 - 2*smooth
-xknots(1) = a
-npar = degree + 1
+nswc_state_kontrl_ibreak = 1
+nswc_state_resulz_knots = 1
+nswc_state_kontrl_interp = nswc_state_inputz_degree + 2 - 2*nswc_state_inputz_smooth
+xknots(1) = nswc_state_inputz_a
+nswc_state_kontrl_npar = nswc_state_inputz_degree + 1
 !
 !             Compute array of NPAR factorials
 !
-factor(1) = one
-factor(2) = one
-do k = 3,npar
+nswc_state_kontrl_factor(1) = one
+nswc_state_kontrl_factor(2) = one
+do k = 3,nswc_state_kontrl_npar
    km1 = k - 1
-   factor(k) = km1*factor(k - 1)
+   nswc_state_kontrl_factor(k) = km1*nswc_state_kontrl_factor(k - 1)
 end do
 return
 !
@@ -87788,18 +87785,6 @@ end subroutine adset
 subroutine adtake(ierr)
 implicit none
 integer :: ierr
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: dx, ratio
 !
 !        ===============================================================
@@ -87809,54 +87794,46 @@ double precision :: dx, ratio
 !     break points
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
 !         Check for break point
-break = 0
-if (nbreak == 0 .or. ibreak > nbreak) go to 20
-if (xbreak(ibreak) > xright(nstack)) go to 20
+nswc_state_kontrl_break = 0
+if (nswc_state_inputz_nbreak == 0 .or. nswc_state_kontrl_ibreak > nswc_state_inputz_nbreak) go to 20
+if (nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak) > nswc_state_kontrl_xright(nswc_state_kontrl_nstack)) go to 20
 !
 !               Set control variable break, check for location
-if (xbreak(ibreak) > xleft(nstack)) go to 10
-break = left
-if (ibreak == nbreak) go to 20
+if (nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak) > nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)) go to 10
+nswc_state_kontrl_break = nswc_state_kontrl_left
+if (nswc_state_kontrl_ibreak == nswc_state_inputz_nbreak) go to 20
 !             Check for second break point in this interval
-if (xbreak(ibreak + 1) >= xright(nstack)) go to 20
+if (nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak + 1) >= nswc_state_kontrl_xright(nswc_state_kontrl_nstack)) go to 20
 !                 Next break is inside interval, split top interval
-break = both
+nswc_state_kontrl_break = nswc_state_kontrl_both
 !                  Check exceeding stack limit. If so, stop
-if (nstack == maxstk) go to 30
+if (nswc_state_kontrl_nstack == nswc_state_kontrl_maxstk) go to 30
 !                     Dont split very small intervals, stop instead
-dx = xbreak(ibreak + 1) - xleft(nstack)
-ratio = dx/(abs(a) + abs(b))
-if (ratio <= buffer) go to 30
-nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xright(nstack) = xbreak(ibreak + 1)
-xleft(nstack - 1) = xright(nstack)
+dx = nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak + 1) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
+ratio = dx/(abs(nswc_state_inputz_a) + abs(nswc_state_inputz_b))
+if (ratio <= nswc_state_kontrl_buffer) go to 30
+nswc_state_kontrl_nstack = nswc_state_kontrl_nstack + 1
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1)
+nswc_state_kontrl_xright(nswc_state_kontrl_nstack) = nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak + 1)
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1) = nswc_state_kontrl_xright(nswc_state_kontrl_nstack)
 go to 20
 !
-10 break = right
+10 nswc_state_kontrl_break = nswc_state_kontrl_right
 !                 Check to see if break is already at right end point
-if (xbreak(ibreak) >= xright(nstack)) go to 20
+if (nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak) >= nswc_state_kontrl_xright(nswc_state_kontrl_nstack)) go to 20
 !                 The break is inside interval, split top interval
 !                  check exceeding stack limit. If so, stop
-if (nstack == maxstk) go to 30
+if (nswc_state_kontrl_nstack == nswc_state_kontrl_maxstk) go to 30
 !                     Dont split very small intervals, stop instead
-dx = xbreak(ibreak) - xleft(nstack)
-ratio = dx/(abs(a) + abs(b))
-if (ratio <= buffer) go to 30
-nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xright(nstack) = xbreak(ibreak)
-xleft(nstack - 1) = xright(nstack)
+dx = nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
+ratio = dx/(abs(nswc_state_inputz_a) + abs(nswc_state_inputz_b))
+if (ratio <= nswc_state_kontrl_buffer) go to 30
+nswc_state_kontrl_nstack = nswc_state_kontrl_nstack + 1
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1)
+nswc_state_kontrl_xright(nswc_state_kontrl_nstack) = nswc_state_inputz_xbreak(nswc_state_kontrl_ibreak)
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1) = nswc_state_kontrl_xright(nswc_state_kontrl_nstack)
 20 continue
 return
 !
@@ -87873,20 +87850,7 @@ implicit none
 double precision :: f
 external f
 integer :: j
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: absc(4), aj, dx, fdervl(9), fdervr(9), &
-   & fdumb(9), r, wgts(4)
+double precision :: absc(4), aj, dx, fdumb(9), r, wgts(4)
 !
 !        ===============================================================
 !
@@ -87894,16 +87858,7 @@ double precision :: absc(4), aj, dx, fdervl(9), fdervr(9), &
 !     the current interval. It also estimates the error
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
-equivalence (fleft(2),fdervl(1)), (fright(2),fdervr(1))
 data r/1.5d0/
 !
 !     Thirty digit values for the Gauss integration constants
@@ -87927,60 +87882,63 @@ data wgts(3) / .652145154862546142626936050778d0 /
 data wgts(4) / .347854845137453857373063949222d0 /
 !
 !             Compute interpolation information
-nintrp = degree - 2*smooth - 1
+nswc_state_comdif_nintrp = nswc_state_inputz_degree - 2*nswc_state_inputz_smooth - 1
 !
 !          Increase number of interpolation points if break points are
 !          specified with fewer derivatives than smooth
-if (break == left .or. break == right) nintrp = nintrp + smooth - &
-   & dbreak(ibreak)
-if (break == both) nintrp = nintrp + 2*smooth - dbreak(ibreak) - &
-   & dbreak(ibreak + 1)
-if (nintrp == 0) go to 20
+if (nswc_state_kontrl_break == nswc_state_kontrl_left .or. nswc_state_kontrl_break == nswc_state_kontrl_right) &
+   & nswc_state_comdif_nintrp = nswc_state_comdif_nintrp + nswc_state_inputz_smooth -   nswc_state_inputz_dbreak( &
+   & nswc_state_kontrl_ibreak)
+if (nswc_state_kontrl_break == nswc_state_kontrl_both) nswc_state_comdif_nintrp = nswc_state_comdif_nintrp + 2* &
+   & nswc_state_inputz_smooth - nswc_state_inputz_dbreak(nswc_state_kontrl_ibreak) -   nswc_state_inputz_dbreak( &
+   & nswc_state_kontrl_ibreak + 1)
+if (nswc_state_comdif_nintrp == 0) go to 20
 !
 !             Generate equal spaced interpolation points
-aj = nintrp + 1
-dx = (xright(nstack) - xleft(nstack))/aj
-do j = 1,nintrp
+aj = nswc_state_comdif_nintrp + 1
+dx = (nswc_state_kontrl_xright(nswc_state_kontrl_nstack) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack))/aj
+do j = 1,nswc_state_comdif_nintrp
    aj = j
-   xintrp(j) = xleft(nstack) + aj*dx
+   nswc_state_comdif_xintrp(j) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack) + aj*dx
 10 continue
 end do
 !
 !             Get left and right f-values, put f-value in first element
 !             of arrays FLEFT and fright.  Get derivatives back as
 !             other elements via the subarrays fdervl and fdervr.
-20 fleft(1) = f(xleft(nstack),fdervl)
-fright(1) = f(xright(nstack),fdervr)
-leftx = smooth + 1
-rightx = leftx
+20 nswc_state_comdif_fleft(1) = f(nswc_state_kontrl_xleft(nswc_state_kontrl_nstack),nswc_state_comdif_fleft(2:10))
+nswc_state_comdif_fright(1) = f(nswc_state_kontrl_xright(nswc_state_kontrl_nstack),nswc_state_comdif_fright(2:10))
+nswc_state_comdif_leftx = nswc_state_inputz_smooth + 1
+nswc_state_comdif_rightx = nswc_state_comdif_leftx
 !            Get f-values at other interpolation points, if any
-if (nintrp == 0) go to 40
-do j = 1,nintrp
-   fintrp(j) = f(xintrp(j),fdumb)
+if (nswc_state_comdif_nintrp == 0) go to 40
+do j = 1,nswc_state_comdif_nintrp
+   nswc_state_comdif_fintrp(j) = f(nswc_state_comdif_xintrp(j),fdumb)
 end do
 !
 !          Check for break points, modify values if necessary
 40 continue
-if (break /= left) go to 50
-leftx = dbreak(ibreak) + 1
-fleft(leftx) = bright(ibreak)
-50 if (break /= right) go to 60
-rightx = dbreak(ibreak) + 1
-fright(rightx) = bleft(ibreak)
-60 if (break /= both) go to 70
-leftx = dbreak(ibreak) + 1
-rightx = dbreak(ibreak + 1) + 1
-fleft(leftx) = bright(ibreak)
-fright(rightx) = bleft(ibreak + 1)
+if (nswc_state_kontrl_break /= nswc_state_kontrl_left) go to 50
+nswc_state_comdif_leftx = nswc_state_inputz_dbreak(nswc_state_kontrl_ibreak) + 1
+nswc_state_comdif_fleft(nswc_state_comdif_leftx) = nswc_state_inputz_bright(nswc_state_kontrl_ibreak)
+50 if (nswc_state_kontrl_break /= nswc_state_kontrl_right) go to 60
+nswc_state_comdif_rightx = nswc_state_inputz_dbreak(nswc_state_kontrl_ibreak) + 1
+nswc_state_comdif_fright(nswc_state_comdif_rightx) = nswc_state_inputz_bleft(nswc_state_kontrl_ibreak)
+60 if (nswc_state_kontrl_break /= nswc_state_kontrl_both) go to 70
+nswc_state_comdif_leftx = nswc_state_inputz_dbreak(nswc_state_kontrl_ibreak) + 1
+nswc_state_comdif_rightx = nswc_state_inputz_dbreak(nswc_state_kontrl_ibreak + 1) + 1
+nswc_state_comdif_fleft(nswc_state_comdif_leftx) = nswc_state_inputz_bright(nswc_state_kontrl_ibreak)
+nswc_state_comdif_fright(nswc_state_comdif_rightx) = nswc_state_inputz_bleft(nswc_state_kontrl_ibreak + 1)
 70 continue
 !
 !           Compute divided differences, Newton form of polynomial
-call newton(leftx, rightx, nintrp)
+call newton(nswc_state_comdif_leftx, nswc_state_comdif_rightx, nswc_state_comdif_nintrp)
 !
 !         Compute norm of error of this appromimation using four pts
 !         add 50 percent fudge factor
-errori = errint(f,polydd,xleft(nstack),xright(nstack),absc,wgts)
-errori = r*errori
+nswc_state_kontrl_errori = errint(f,polydd,nswc_state_kontrl_xleft(nswc_state_kontrl_nstack),nswc_state_kontrl_xright( &
+   & nswc_state_kontrl_nstack),absc,wgts)
+nswc_state_kontrl_errori = r*nswc_state_kontrl_errori
 end subroutine adcomp
 
 double precision function errint(f, fit, aaa, bbb, points, weight)
@@ -87989,18 +87947,6 @@ double precision :: aaa, bbb, fit, points(*), weight(*)
 double precision :: f
 external f, fit
 integer :: j
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: abmid, ba, fdumb(9), p, pj, er, f1, f2
 !
 !        ===============================================================
@@ -88012,14 +87958,6 @@ double precision :: abmid, ba, fdumb(9), p, pj, er, f1, f2
 !     from (-1,1) to (aaa,bbb)
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 double precision, parameter :: two = 2.0d0
 double precision, parameter :: three = 3.0d0
 !
@@ -88030,10 +87968,10 @@ ba = (bbb - aaa)/two
 pj = abmid + ba*points(1)
 !
 !         Test for Tchebycheff (minimax) norm which uses special code
-if (norm == three) go to 20
+if (nswc_state_inputz_norm == three) go to 20
 !
 !         Have general LP norm or least squares or least deviations
-p = abs(norm)
+p = abs(nswc_state_inputz_norm)
 !              Initialize the quadrature rule
 errint = abs(f(pj,fdumb) - fit(pj))**p*weight(1)
 !              Loop through remaining points
@@ -88066,18 +88004,6 @@ implicit none
 integer :: ni, nl, nr
 integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
    & nrlj, nrlj1
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: difff, diffx
 !
 !        ===============================================================
@@ -88108,14 +88034,6 @@ double precision :: difff, diffx
 !
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
 !                 Main calculation of divided differences
 !         define a few short constants
@@ -88127,47 +88045,47 @@ nrl = nr + nl
 !
 !         Put X-values in a single array with nddx = nl+nr+ni points
 do nddx = 1,nl
-   xdd(nddx) = xleft(nstack)
+   nswc_state_comdif_xdd(nddx) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
 10 continue
 end do
 nddx = nl
 do k = 1,nr
    nddx = nddx + 1
-   xdd(nddx) = xright(nstack)
+   nswc_state_comdif_xdd(nddx) = nswc_state_kontrl_xright(nswc_state_kontrl_nstack)
 20 continue
 end do
 !            Check if there are any interpolation points to add to XDD
 if (ni == 0) go to 40
 do k = 1,ni
    nddx = nddx + 1
-   xdd(nddx) = xintrp(k)
+   nswc_state_comdif_xdd(nddx) = nswc_state_comdif_xintrp(k)
 end do
 !
 !           Fill border of first triangle - Size nl.
 40 continue
 !         Top border
 do idif = 1,nl
-   ddtemp(idif,1) = fleft(idif)/factor(idif)
+   nswc_state_comdif_ddtemp(idif,1) = nswc_state_comdif_fleft(idif)/nswc_state_kontrl_factor(idif)
 50 continue
 end do
 if (nl1 == 0) go to 70
 !                   Bottom border
 do idif = 1,nl1
    ipt = nl2 - idif
-   ddtemp(idif,ipt) = ddtemp(idif,1)
+   nswc_state_comdif_ddtemp(idif,ipt) = nswc_state_comdif_ddtemp(idif,1)
 end do
 !
 !          Fill border of second triangle - Size nr
 70 continue
 !         Top border
 do idif = 1,nr
-   ddtemp(idif,nl2) = fright(idif)/factor(idif)
+   nswc_state_comdif_ddtemp(idif,nl2) = nswc_state_comdif_fright(idif)/nswc_state_kontrl_factor(idif)
 end do
 if (nrl == nl2) go to 100
 !                   Bottom border
 do idif = 1,nr1
    ipt = nrl + 1 - idif
-   ddtemp(idif,ipt) = ddtemp(idif,nl2)
+   nswc_state_comdif_ddtemp(idif,ipt) = nswc_state_comdif_ddtemp(idif,nl2)
 end do
 !
 !           Fill parallogram between the two triangles just filled
@@ -88180,10 +88098,10 @@ do j = 2,nr2
 !             Loop stepping parallel to bottom side of first triangle
    do k = 2,nl2
       ipt = nl + 2 - k
-      difff = ddtemp(idif - 1,ipt + 1) - ddtemp(idif - 1,ipt)
+      difff = nswc_state_comdif_ddtemp(idif - 1,ipt + 1) - nswc_state_comdif_ddtemp(idif - 1,ipt)
       ipt2 = ipt - 1 + idif
-      diffx = xdd(ipt2) - xdd(ipt)
-      ddtemp(idif,ipt) = difff/diffx
+      diffx = nswc_state_comdif_xdd(ipt2) - nswc_state_comdif_xdd(ipt)
+      nswc_state_comdif_ddtemp(idif,ipt) = difff/diffx
       idif = idif + 1
    end do
 end do
@@ -88194,14 +88112,14 @@ if (ni == 0) go to 150
 do j = 1,ni
    idif = 2
    nrlj = nrl + j
-   ddtemp(1,nrlj) = fintrp(j)
+   nswc_state_comdif_ddtemp(1,nrlj) = nswc_state_comdif_fintrp(j)
 !         Loop through the differences (idif index)
    nrlj1 = nrlj - 1
    do k = 1,nrlj1
       ipt = nrlj - k
-      difff = ddtemp(idif - 1,ipt + 1) - ddtemp(idif - 1,ipt)
-      diffx = xdd(nrlj) - xdd(ipt)
-      ddtemp(idif,ipt) = difff/diffx
+      difff = nswc_state_comdif_ddtemp(idif - 1,ipt + 1) - nswc_state_comdif_ddtemp(idif - 1,ipt)
+      diffx = nswc_state_comdif_xdd(nrlj) - nswc_state_comdif_xdd(ipt)
+      nswc_state_comdif_ddtemp(idif,ipt) = difff/diffx
       idif = idif + 1
    end do
 end do
@@ -88212,18 +88130,6 @@ double precision function polydd(x)
 implicit none
 double precision :: x
 integer :: j, k
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 !
 !        ===============================================================
 !
@@ -88231,37 +88137,17 @@ logical :: discrd
 !     by the divided differences DDTEMP on the point set XDD.
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
-polydd = ddtemp(degree + 1,1)
-do k = 1,degree
-   j = degree + 1 - k
-   polydd = ddtemp(j,1) + (x - xdd(j))*polydd
+polydd = nswc_state_comdif_ddtemp(nswc_state_inputz_degree + 1,1)
+do k = 1,nswc_state_inputz_degree
+   j = nswc_state_inputz_degree + 1 - k
+   polydd = nswc_state_comdif_ddtemp(j,1) + (x - nswc_state_comdif_xdd(j))*polydd
 10 continue
 end do
 end function polydd
 
 subroutine adchk
 implicit none
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: aknots, dtest, dx
 integer :: nswc_ai_i4
 !
@@ -88271,42 +88157,35 @@ integer :: nswc_ai_i4
 !     tests about discarding involving edist and charf.
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 double precision, parameter :: three = 3.0d0
 double precision, parameter :: five = 5.0d0
 !
 !
-discrd = .false.
-dx = xright(nstack) - xleft(nstack)
-if (dx > charf) return
+nswc_state_kontrl_discrd = .false.
+dx = nswc_state_kontrl_xright(nswc_state_kontrl_nstack) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
+if (dx > nswc_state_inputz_charf) return
 !
 !         Compute dtest for the local error criterion
 !
-if (norm == three) go to 30
-nswc_ai_i4 = edist - 1
+if (nswc_state_inputz_norm == three) go to 30
+nswc_ai_i4 = nswc_state_inputz_edist - 1
 if ( nswc_ai_i4 < 0 ) go to 10
 if ( nswc_ai_i4 == 0 ) go to 20
 go to 30
-10 dtest = dx*dsctol
+10 dtest = dx*nswc_state_kontrl_dsctol
 go to 40
 !         For the approximate fixed error distribution type we estimate
 !         the final number of knots by( limiting it a little )
 !             (NSTACK+knots+2)((b-a)/(XRIGHT-a))
-20 aknots = nstack + knots + 2
-dtest = dsctol/(aknots*min((b - a)/(xright(nstack) - a),five))
+20 aknots = nswc_state_kontrl_nstack + nswc_state_resulz_knots + 2
+dtest = nswc_state_kontrl_dsctol/(aknots*min((nswc_state_inputz_b - nswc_state_inputz_a)/(nswc_state_kontrl_xright( &
+   & nswc_state_kontrl_nstack) - nswc_state_inputz_a),five))
 go to 40
-30 dtest = dsctol
+30 dtest = nswc_state_kontrl_dsctol
 !
 !             Check for discard of interval
 !
-40 if (errori <= dtest) discrd = .true.
+40 if (nswc_state_kontrl_errori <= dtest) nswc_state_kontrl_discrd = .true.
 end subroutine adchk
 
 subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
@@ -88314,18 +88193,6 @@ implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: k
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: dx, powers(20), p, ratio
 !
 !        ===============================================================
@@ -88336,63 +88203,56 @@ double precision :: dx, powers(20), p, ratio
 !     the array coefs.  It also checks for passing break points
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 double precision, parameter :: half = .5d0
 double precision, parameter :: one = 1.d0
 double precision, parameter :: three = 3.d0
 !
 !
 !            Check for discarding the interval
-if (discrd) go to 30
+if (nswc_state_kontrl_discrd) go to 30
 !
 !         Subdivide interval and place on stack
-if (nstack < maxstk) go to 10
+if (nswc_state_kontrl_nstack < nswc_state_kontrl_maxstk) go to 10
 !             Fatal error, exceeded active stack size
 ierr = 4
-dx = xright(nstack) - xleft(nstack)
-if (dx > charf) ierr = 3
+dx = nswc_state_kontrl_xright(nswc_state_kontrl_nstack) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
+if (dx > nswc_state_inputz_charf) ierr = 3
 return
 !
-10 dx = (xright(nstack) - xleft(nstack))*half
+10 dx = (nswc_state_kontrl_xright(nswc_state_kontrl_nstack) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack))*half
 !              Check for small intervals
-ratio = dx/(abs(a) + abs(b))
-if (ratio > buffer) go to 20
+ratio = dx/(abs(nswc_state_inputz_a) + abs(nswc_state_inputz_b))
+if (ratio > nswc_state_kontrl_buffer) go to 20
 ierr = 4
 return
 !
-20 nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xleft(nstack - 1) = xright(nstack - 1) - dx
-xright(nstack) = xleft(nstack - 1)
+20 nswc_state_kontrl_nstack = nswc_state_kontrl_nstack + 1
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1)
+nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1) = nswc_state_kontrl_xright(nswc_state_kontrl_nstack - 1) - dx
+nswc_state_kontrl_xright(nswc_state_kontrl_nstack) = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack - 1)
 return
 !
 !            Discard interval, update global error, xknots and coefs
-30 p = abs(norm)
-if (norm == three) error = max(error,errori)
-if (norm /= three) error = (error**p + errori)**(one/p)
+30 p = abs(nswc_state_inputz_norm)
+if (nswc_state_inputz_norm == three) nswc_state_resulz_error = max(nswc_state_resulz_error,nswc_state_kontrl_errori)
+if (nswc_state_inputz_norm /= three) nswc_state_resulz_error = (nswc_state_resulz_error**p + nswc_state_kontrl_errori)**(one/p)
 !
 !              Check for passing break points
-if (break == left .or. break == both) ibreak = ibreak + 1
+if (nswc_state_kontrl_break == nswc_state_kontrl_left .or. nswc_state_kontrl_break == nswc_state_kontrl_both) &
+   & nswc_state_kontrl_ibreak = nswc_state_kontrl_ibreak + 1
 !
 !             Transform representation of polynomial from divided
 !             differences to powers of X with origin at xknots (knots)
-call adtran(ddtemp, powers)
+call adtran(nswc_state_comdif_ddtemp, powers)
 !
 !             Put coefs into the main array
-do k = 1,npar
-   coefs(knots,k) = powers(k)
+do k = 1,nswc_state_kontrl_npar
+   coefs(nswc_state_resulz_knots,k) = powers(k)
 end do
 !            Put the new knots in xknots
-knots = knots + 1
-xknots(knots) = xright(nstack)
-nstack = nstack - 1
+nswc_state_resulz_knots = nswc_state_resulz_knots + 1
+xknots(nswc_state_resulz_knots) = nswc_state_kontrl_xright(nswc_state_kontrl_nstack)
+nswc_state_kontrl_nstack = nswc_state_kontrl_nstack - 1
 end subroutine adput
 
 subroutine adtran(d, powers)
@@ -88400,18 +88260,6 @@ implicit none
 double precision :: d(20,*), powers(*)
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
 double precision :: shift, xl, xr, xtemp(20)
 !
 !        ===============================================================
@@ -88424,22 +88272,14 @@ double precision :: shift, xl, xr, xtemp(20)
 !     See subroutine newton for more details
 !
 !
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
 !
 !         Set some short local variable names
 !
-xl = xleft(nstack)
-xr = xright(nstack)
-nl = leftx
-nr = rightx
-ni = nintrp
+xl = nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
+xr = nswc_state_kontrl_xright(nswc_state_kontrl_nstack)
+nl = nswc_state_comdif_leftx
+nr = nswc_state_comdif_rightx
+ni = nswc_state_comdif_nintrp
 nrl = nr + nl
 nri = nr + ni
 nri1 = nri - 1
@@ -88472,7 +88312,7 @@ if (ni == 2) go to 20
 go to 30
 10 powers(1) = d(nrl + 1,1)
 go to 80
-20 powers(1) = d(nrl + 1,1) + (xr - xintrp(1))*d(nrl + 2,1)
+20 powers(1) = d(nrl + 1,1) + (xr - nswc_state_comdif_xintrp(1))*d(nrl + 2,1)
 powers(2) = d(nrl + 2,1)
 go to 80
 !
@@ -88480,7 +88320,7 @@ go to 80
 30 ni1 = ni - 1
 !         Initialize the powers and xtemp arrays
 do k = 1,ni
-   xtemp(k) = xintrp(k)
+   xtemp(k) = nswc_state_comdif_xintrp(k)
    nrlk = nrl + k
    powers(k) = d(nrlk,1)
 end do
@@ -109026,7 +108866,6 @@ integer :: idata(*), ier, mcalls, ncalls, nw
 real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
 integer :: i, j, jkp, k, l, maxc, maxk, mw
 real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
-double precision :: tans, terr
 !
 !       Adaptive cubature over a triangle
 !
@@ -109092,7 +108931,6 @@ double precision :: tans, terr
 !
 !       Actual dimension of w is (6,nw/6)
 !
-common /cubsta/ tans, terr
 integer, parameter :: nfe = 19
 real, parameter :: s(4) = [1e0, 1e0, 1e0, -1e0]
 real, parameter :: d(2,4) = reshape([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
@@ -109122,8 +108960,8 @@ mw = 3*(k - 1) + 1
 if (ncalls > 0) go to 30
 !
 !       Test for trivial cases
-tans = dzero
-terr = dzero
+nswc_state_cubsta_tans = dzero
+nswc_state_cubsta_terr = dzero
 if (area == zero) go to 90
 if (mcalls < nfe) go to 100
 if (nw < 6) go to 110
@@ -109135,13 +108973,13 @@ w(1,1) = zero
 w(2,1) = zero
 w(3,1) = one
 call cubrul(f, vec, w(1,1), idata, rdata)
-tans = w(5,1)
-terr = w(6,1)
+nswc_state_cubsta_tans = w(5,1)
+nswc_state_cubsta_terr = w(6,1)
 ncalls = nfe
 !
 !       Test termination criteria
-30 ans = tans
-err = terr
+30 ans = nswc_state_cubsta_tans
+err = nswc_state_cubsta_terr
 if (err < max(one,abs(ans))*eps) go to 90
 if (k == maxk) go to 120
 !
@@ -109161,9 +108999,9 @@ end do
 h = w(3,j)*point5
 if (rnderr(x(1),h,x(1),h) /= zero) go to 130
 if (rnderr(x(2),h,x(2),h) /= zero) go to 130
-anskp = sngl(tans)
-tans = tans - dble(w(5,j))
-terr = terr - dble(w(6,j))
+anskp = sngl(nswc_state_cubsta_tans)
+nswc_state_cubsta_tans = nswc_state_cubsta_tans - dble(w(5,j))
+nswc_state_cubsta_terr = nswc_state_cubsta_terr - dble(w(6,j))
 r1 = w(4,j)
 r2 = w(5,j)
 jkp = j
@@ -109184,8 +109022,8 @@ if (q2 /= r2) alfa = abs((q1 - r1)/(q2 - r2) - one)
 j = jkp
 do i = 1,4
    w(6,j) = w(6,j)/alfa
-   tans = tans + w(5,j)
-   terr = terr + w(6,j)
+   nswc_state_cubsta_tans = nswc_state_cubsta_tans + w(5,j)
+   nswc_state_cubsta_terr = nswc_state_cubsta_terr + w(6,j)
    j = mw + i
 end do
 mw = mw + 3
@@ -109193,7 +109031,7 @@ ncalls = ncalls + 4*nfe
 k = k + 1
 !
 !       If answer is unchanged, it cannot be improved
-if (anskp == sngl(tans)) go to 150
+if (anskp == sngl(nswc_state_cubsta_tans)) go to 150
 !
 !       Remove this if statement to disable rounding error test
 if (k > 3 .and. abs(q2 - r2) > abs(q1 - r1)) go to 140
@@ -109205,8 +109043,8 @@ go to 120
 100 ier = 1
 go to 120
 110 ier = 2
-120 ans = tans
-err = terr
+120 ans = nswc_state_cubsta_tans
+err = nswc_state_cubsta_terr
 return
 130 ier = 3
 go to 120
@@ -109219,7 +109057,6 @@ end subroutine cubtri
 function rnderr(x, a, y, b)
 implicit none
 real :: a, b, x, y
-real :: s, t
 real :: rnderr
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
@@ -109228,10 +109065,9 @@ real :: rnderr
 !       variables s and t are put into common, in order to defend
 !       against the well-meaning actions of some officious optimizing
 !       Fortran compilers.
-common /cubatb/ s, t
-s = x + a
-t = s - y
-rnderr = t - b
+nswc_state_cubatb_s = x + a
+nswc_state_cubatb_t = nswc_state_cubatb_s - y
+rnderr = nswc_state_cubatb_t - b
 end function rnderr
 
 subroutine cubrul(f, vec, p, idata, rdata)
@@ -109377,9 +109213,6 @@ real :: kernel, norm
 external kernel, rhfcn
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
 real :: cutoff, rootrt, unitrd
-integer :: mfinal, nfinal
-real :: finlep, r1, r2
-real :: normk
 !
 !   The integral equation being solved is
 !
@@ -109464,7 +109297,6 @@ real :: normk
 !
 !*******************************************************************
 !                                                                  *
-common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 integer, parameter :: nmax = 64
 !                                                                  *
 !   THE NUMBERS IN XXINFO GIVE ADDITIONAL INFORMATION ABOUT THE    *
@@ -109533,9 +109365,9 @@ call iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mupper,ier, &
    & cutoff,rootrt,unitrd,nhalf,w(i1),w(i2),w(i3),w(i4),w(i5), &
    & w(i6),w(i7),w(i8),w(i9),w(i10),w(i11),w(i12),w(i13), &
    & w(i14),w(i15),w(i16),w(i17),w(i18),w(i19),w(i20),w(i21))
-norm = normk
-nf = nfinal
-mf = mfinal
+norm = nswc_state_xxinfo_normk
+nf = nswc_state_xxinfo_nfinal
+mf = nswc_state_xxinfo_mfinal
 end subroutine ieslv
 
 subroutine iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mup,ier, &
@@ -109556,22 +109388,17 @@ integer :: i, ind, j, loop, m, mnew, n
 real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
    & pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
    & xnorm
-integer :: mfinal, nfinal
-real :: finlep, r1, r2
-real :: elinsy, relrsd
-real :: normk, numr1, numr2
-integer :: flag, oldm, pivot(128)
+real :: numr1, numr2
+integer :: flag, oldm
 !
 !   This routine controls the solution of the integral equation.
 !
-common/xxlin/elinsy,relrsd,pivot
-common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !
 !   Initialization
 !
 loop = 1
 n = 2
-r2 = 0.5
+nswc_state_xxinfo_r2 = 0.5
 m = 2*n
 r1rat = rootrt
 cond = 1.0
@@ -109623,20 +109450,20 @@ call lnsys(imknn,lufact,nup,n,xmz,xn,2,ind)
 !                                                                  *
 !*******************************************************************
 !
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 relmin = rmin(n,n,cond,unitrd,averr)
 if (loop == 1) go to 11
 if (loop == 2) go to 9
 !   Set up approximate rate of convergence of solutions XN to true
 !   solution X. also set up desired ratio for iterative method.
 numr2 = rnrm(xn,oldx,n,1)
-r2 = min(0.5,max(numr2/denr2,1.0e-4))
-r1rat = min(rootrt,sqrt(r2))
+nswc_state_xxinfo_r2 = min(0.5,max(numr2/denr2,1.0e-4))
+r1rat = min(rootrt,sqrt(nswc_state_xxinfo_r2))
 !   Check for error in XN using test involving r2 and OLDX,according
 !   to theory for asymptotic error bounds. Modify error if it is
 !   outside precision range of computer, possibly due to
 !   ill-conditioning.
-8 error = (r2/(1.0 - r2))*numr2
+8 error = (nswc_state_xxinfo_r2/(1.0 - nswc_state_xxinfo_r2))*numr2
 xnorm = rnrm(xn,xn,n,0)
 relerr = error/xnorm
 if (iflag == 0) eps = max(ep,xnorm*relmin)
@@ -109652,9 +109479,8 @@ go to 11
 denr2 = 0.0
 go to 8
 !   Exit for successful return. Iteration was not necessary.
-10 call leave(0,n,n,xn,tn,wn,error, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+10 call leave(0,n,n,xn,tn,wn,error,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn, &
+   & knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !
 !   Attempt to solve (i-km)*XM=rhfcn iteratively, checking to see if
@@ -109673,7 +109499,7 @@ end do
 !   Calculate first iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 denr1 = rnrm(xm,xmz,m,1)
 flag = 1
 do i = 1,m
@@ -109682,14 +109508,14 @@ end do
 !   Calculate second iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
 !   Check on the speed of convergence of iterative method. If it is
 !   sufficiently rapid, then fix n and go to stage b.
-r1 = max(numr1/denr1,.0001)
-rate = r1
+nswc_state_xxinfo_r1 = max(numr1/denr1,.0001)
+rate = nswc_state_xxinfo_r1
 if (m > nup) go to 19
-if (r1 <= r1rat) go to 15
+if (nswc_state_xxinfo_r1 <= r1rat) go to 15
 !   The iteration did not work well enough, and stage A is to be
 !   repeated. RE-initialize for solving (i-KN)*XN=rhfcn again
 !   with a larger n.
@@ -109707,7 +109533,7 @@ go to 3
 16 aside(i,4) = rhs(i)
 end do
 aside2(1) = loop
-aside2(3) = r2
+aside2(3) = nswc_state_xxinfo_r2
 aside2(4) = denr2
 aside2(5) = r1rat
 do j = 1,m
@@ -109720,21 +109546,19 @@ end do
 !
 19 oldm = n
 aside2(2) = m
-if (r1 <= cutoff) go to 22
+if (nswc_state_xxinfo_r1 <= cutoff) go to 22
 !   The iterates are converging very slowly or not at all. Thus
 !   RETURN WITHOUT FURTHER ATTEMPTS TO LESSEN THE ERROR.
 if (loop /= 1) go to 21
-20 call leave(2,n,n,xn,tn,wn,0.0, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+20 call leave(2,n,n,xn,tn,wn,0.0,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn,knm &
+   & ,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-21 call leave(1,n,n,xn,tn,wn,error, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+21 call leave(1,n,n,xn,tn,wn,error,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn, &
+   & knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !   Test to see if the current iterate XM is sufficiently accurate
 !   compared to the true XM.
-22 rate = r1*rate
+22 rate = nswc_state_xxinfo_r1*rate
 temp = rnrm(xm,oldx,m,1)
 if (loop == 1) temp2 = 0.5
 if (loop > 1) temp2 = temp/denr2
@@ -109743,7 +109567,7 @@ xnorm = rnrm(xm,xm,m,0)
 esterr = (rt/(1.0 - rt))*temp/xnorm
 if (esterr < relmin) esterr = relmin
 esterr = esterr*xnorm
-test = ((1.0 - r1)/r1)*esterr
+test = ((1.0 - nswc_state_xxinfo_r1)/nswc_state_xxinfo_r1)*esterr
 if (numr1 <= test) go to 33
 !   Iterate not sufficiently accurate. Initialize for computation
 !   of another iterate.
@@ -109753,10 +109577,10 @@ do i = 1,m
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
-r1 = max(numr1/denr1,.0001)
-if (r1 <= cutoff) go to 22
+nswc_state_xxinfo_r1 = max(numr1/denr1,.0001)
+if (nswc_state_xxinfo_r1 <= cutoff) go to 22
 !   This is entrance for case where iteration fails in stage b.
 !   Parameters must be reset for a return to stage A or for an
 !   abortive exit if n cannot be increased any further.
@@ -109775,7 +109599,7 @@ do j = 1,n
 end do
 m = 2*n
 loop = aside2(1) + 1.0
-r2 = aside2(3)
+nswc_state_xxinfo_r2 = aside2(3)
 denr2 = aside2(4)
 r1rat = aside2(5)
 go to 6
@@ -109783,18 +109607,17 @@ go to 6
 !   r1 is not sufficiently small.
 30 if (loop == 1) go to 20
 call wandt(wm,tm,oldm,a,b)
-call leave(1,n,oldm,save,tm,wm,error, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+call leave(1,n,oldm,save,tm,wm,error,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn &
+   & ,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 !   An accurate value of XM has been obtained. r2 is to be tested as
 !   to whether it should be reset. Then check error in XM compared
 !   with the true solution X.
 33 if (loop == 1) go to 37
 numr2 = temp
-r2 = max(1.0e-4,rate,min(numr2/denr2,0.5))
+nswc_state_xxinfo_r2 = max(1.0e-4,rate,min(numr2/denr2,0.5))
 denr2 = numr2
-34 error = (r2/(1.0 - r2))*temp
+34 error = (nswc_state_xxinfo_r2/(1.0 - nswc_state_xxinfo_r2))*temp
 xnorm = rnrm(xm,xm,m,0)
 relerr = error/xnorm
 relmin = rmin(n,m,cond,unitrd,averr)
@@ -109804,16 +109627,14 @@ if (iflag == 1) error = max(relerr,relmin)
 if ((iflag == 0) .and. (relerr < relmin)) &
    & error = relmin*xnorm
 if (error > eps) go to 35
-call leave(0,n,m,xm,tm,wm,error, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+call leave(0,n,m,xm,tm,wm,error,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn,knm, &
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 35 mnew = 2*m
 if (mnew <= mup) go to 39
 !   m cannot be increased any further.
-call leave(1,n,m,xm,tm,wm,error, &
-   & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
-   & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+call leave(1,n,m,xm,tm,wm,error,   kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,nswc_state_xxlin_elinsy,tn,wn,tm,wm,xm,   xmz,kmm,kmn,knm, &
+   & rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
 37 denr2 = temp
 loop = 2
@@ -109838,7 +109659,7 @@ do i = 1,m
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 denr1 = rnrm(xm,xmz,m,1)
 flag = 1
 do i = 1,m
@@ -109846,11 +109667,11 @@ do i = 1,m
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
-cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
+cond = conew(cond,nswc_state_xxlin_elinsy,nswc_state_xxlin_relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
-r1 = max(numr1/denr1,.0001)
-rate = r1
-if (r1 <= cutoff) go to 22
+nswc_state_xxinfo_r1 = max(numr1/denr1,.0001)
+rate = nswc_state_xxinfo_r1
+if (nswc_state_xxinfo_r1 <= cutoff) go to 22
 go to 27
 end subroutine iegs
 
@@ -110107,22 +109928,19 @@ real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
 external kernel, rhfcn
 integer :: i, itloop, j
 real :: derror, savep, sum, temp
-integer :: mfinal, nfinal
-real :: finlep, r1, r2
-real :: normk, numr1
+real :: numr1
 !
 !   This routine sets all necessary parameters for leaving IEGAUS.
 !   If nt .GT. 0, it also performs the necessary Nystrom
 !   interpolation at the nodes given in T.
 !
-common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !
 !   Set error parameters for return.
 !
-normk = 0.0
-nfinal = nf
-mfinal = mf
-finlep = eps
+nswc_state_xxinfo_normk = 0.0
+nswc_state_xxinfo_nfinal = nf
+nswc_state_xxinfo_mfinal = mf
+nswc_state_xxinfo_finlep = eps
 if ((eps > ep) .and. (error <= eps)) go to 10
 ier = ierset
 ep = error
@@ -110150,13 +109968,13 @@ return
 do i = 1,nf
 31 imknn(i,i) = imknn(i,i) - 1.0
 end do
-normk = 0.0
+nswc_state_xxinfo_normk = 0.0
 do i = 1,nf
    sum = 0.0
    do j = 1,nf
 32    sum = sum + abs(imknn(i,j))
    end do
-33 normk = max(normk,sum)
+33 nswc_state_xxinfo_normk = max(nswc_state_xxinfo_normk,sum)
 end do
 do i = 1,nf
 34 imknn(i,i) = imknn(i,i) + 1.0
@@ -110166,7 +109984,7 @@ if (nf == mf) go to 50
 !   Iterate to decrease the noise level in X. this should reduce
 !   possible errors in Nystrom interpolation.
 !
-derror = ((1.0 - r1)/r1)*eps/normk
+derror = ((1.0 - nswc_state_xxinfo_r1)/nswc_state_xxinfo_r1)*eps/nswc_state_xxinfo_normk
 if (iflag == 1) derror = derror*xnorm
 itloop = 0
 do i = 1,mf
@@ -110186,7 +110004,7 @@ end do
 !
 !   Estimate new error bound for Nystrom interpolates.
 !
-temp = normk*(r1/(1.0 - r1))*numr1
+temp = nswc_state_xxinfo_normk*(nswc_state_xxinfo_r1/(1.0 - nswc_state_xxinfo_r1))*numr1
 if (iflag == 1) temp = temp/xnorm
 ep = max(ep,temp)
 go to 60
@@ -110194,7 +110012,7 @@ go to 60
 !   No iteration used in computing X. just compute error estimate
 !   in Nystrom interpolate.
 !
-50 temp = normk*elinsy
+50 temp = nswc_state_xxinfo_normk*elinsy
 if (iflag == 0) temp = temp*xnorm
 if (ier /= 2) ep = max(ep,temp)
 !
@@ -110334,8 +110152,6 @@ real :: a(m,n), d(m,n), b(n), x(n)
 integer :: option
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
 real :: c, sum, t
-real :: error, relrsd
-integer :: pivot(128)
 real :: normx, norme, normb, normr, r(128), scale(128)
 !
 !   Solve AX = b where A is a matrix of order n. m is the number of
@@ -110371,7 +110187,6 @@ real :: normx, norme, normb, normr, r(128), scale(128)
 !   and scale. Also modify the dimension statement for pivot in the
 !   SUBROUTINE iegs.
 !
-common /xxlin/ error,relrsd,pivot
 !
 nm1 = n - 1
 iswit = 1
@@ -110410,7 +110225,7 @@ do k = 1,nm1
 !
 !     Interchange rows k and l
 !
-30 pivot(k) = l
+30 nswc_state_xxlin_pivot(k) = l
    if (k == l) go to 40
    do j = k,n
       t = d(k,j)
@@ -110460,14 +110275,14 @@ do i = 1,n
    normb = max(normb,abs(b(i)))
 140 normr = max(normr,abs(r(i)))
 end do
-relrsd = 0.0
-if (normb /= 0.0) relrsd = normr/normb
+nswc_state_xxlin_relrsd = 0.0
+if (normb /= 0.0) nswc_state_xxlin_relrsd = normr/normb
 iswit = 2
 !
 !             SOLVE LZ = r AND STORE Z IN r
 !
 200 do k = 1,nm1
-   l = pivot(k)
+   l = nswc_state_xxlin_pivot(k)
    if (k == l) go to 210
    t = r(k)
    r(k) = r(l)
@@ -110513,8 +110328,8 @@ do i = 1,n
    normx = max(normx,abs(x(i)))
 250 norme = max(norme,abs(r(i)))
 end do
-error = 0.0
-if (normx /= 0.0) error = norme/normx
+nswc_state_xxlin_elinsy = 0.0
+if (normx /= 0.0) nswc_state_xxlin_elinsy = norme/normx
 300 return
 end subroutine lnsys
 
@@ -113784,10 +113599,6 @@ real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
    & mu
-integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
-   & iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
-   & ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
-real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 logical :: intout
 !***********************************************************************
 !***PURPOSE
@@ -114478,12 +114289,6 @@ logical :: intout
 !
 dimension iwork(liw)
 !
-common /debdf1/ told, rowns(210), &
-   & el0, h, hmin, hmxi, hu, tn, uround, &
-   & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
-   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
 !
 !
 !.......................................................................
@@ -114492,7 +114297,7 @@ idid = 0
 !
 if (info(1) == 0) go to 20
 if (info(1) /= 1) go to 10
-if (iquit == 0) go to 20
+if (nswc_state_debdf1_iquit == 0) go to 20
 10 idid = -44
 return
 !
@@ -114544,33 +114349,32 @@ if (info(1) == 0) go to 250
 intout = iwork(iinout) /= (-1)
 !     call rsco(rwork(icomr),iwork(icomi))
 !
-250 iyh = icomr + 218
-iewt = iyh + 6*neq
-isavf = iewt + neq
-iacor = isavf + neq
-iwm = iacor + neq
-idelsn = iwm + 2 + ilrw*neq
+250 nswc_state_debdf1_iyh = icomr + 218
+nswc_state_debdf1_iewt = nswc_state_debdf1_iyh + 6*neq
+nswc_state_debdf1_isavf = nswc_state_debdf1_iewt + neq
+nswc_state_debdf1_iacor = nswc_state_debdf1_isavf + neq
+nswc_state_debdf1_iwm = nswc_state_debdf1_iacor + neq
+idelsn = nswc_state_debdf1_iwm + 2 + ilrw*neq
 !
-ibegin = info(1)
-itol = info(2)
-iinteg = info(3)
-itstop = info(4)
-ijac = info(5)
-iband = info(6)
+nswc_state_debdf1_ibegin = info(1)
+nswc_state_debdf1_itol = info(2)
+nswc_state_debdf1_iinteg = info(3)
+nswc_state_debdf1_itstop = info(4)
+nswc_state_debdf1_ijac = info(5)
+nswc_state_debdf1_iband = info(6)
 rwork(itstar) = t
 !
-call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout), &
-   & rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
-   & rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
-   & rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
+call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout),   rwork(nswc_state_debdf1_iyh),rwork(nswc_state_debdf1_iyh),rwork( &
+   & nswc_state_debdf1_iewt),rwork(nswc_state_debdf1_isavf),   rwork(nswc_state_debdf1_iacor),rwork(nswc_state_debdf1_iwm),iwork(1 &
+   & ),jac,intout,   rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
 !
 iwork(iinout) = -1
 if (intout) iwork(iinout) = 1
 !
 !     call svco(rwork(icomr),iwork(icomi))
-rwork(11) = h
-rwork(13) = tn
-info(1) = ibegin
+rwork(11) = nswc_state_debdf1_h
+rwork(13) = nswc_state_debdf1_tn
+info(1) = nswc_state_debdf1_ibegin
 !
 end subroutine stfode
 
@@ -114582,18 +114386,59 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
-integer :: i, ils
-real :: rls
-common /debdf1/ rls(218), ils(33)
+integer :: i
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
-do i = 1,lenrls
-10 rls(i) = rsav(i)
-end do
-do i = 1,lenils
-20 ils(i) = isav(i)
-end do
+nswc_state_debdf1_told = rsav(1)
+nswc_state_debdf1_conit = rsav(2)
+nswc_state_debdf1_crate = rsav(3)
+nswc_state_debdf1_el = rsav(4:16)
+nswc_state_debdf1_elco = reshape(rsav(17:172), [13, 12])
+nswc_state_debdf1_hold = rsav(173)
+nswc_state_debdf1_rc = rsav(174)
+nswc_state_debdf1_rmax = rsav(175)
+nswc_state_debdf1_tesco = reshape(rsav(176:211), [3, 12])
+nswc_state_debdf1_el0 = rsav(212)
+nswc_state_debdf1_h = rsav(213)
+nswc_state_debdf1_hmin = rsav(214)
+nswc_state_debdf1_hmxi = rsav(215)
+nswc_state_debdf1_hu = rsav(216)
+nswc_state_debdf1_tn = rsav(217)
+nswc_state_debdf1_u = rsav(218)
+nswc_state_debdf1_iquit = isav(1)
+nswc_state_debdf1_init = isav(2)
+nswc_state_debdf1_iyh = isav(3)
+nswc_state_debdf1_iewt = isav(4)
+nswc_state_debdf1_iacor = isav(5)
+nswc_state_debdf1_isavf = isav(6)
+nswc_state_debdf1_iwm = isav(7)
+nswc_state_debdf1_ksteps = isav(8)
+nswc_state_debdf1_ibegin = isav(9)
+nswc_state_debdf1_itol = isav(10)
+nswc_state_debdf1_iinteg = isav(11)
+nswc_state_debdf1_itstop = isav(12)
+nswc_state_debdf1_ijac = isav(13)
+nswc_state_debdf1_iband = isav(14)
+nswc_state_debdf1_ialth = isav(15)
+nswc_state_debdf1_ipup = isav(16)
+nswc_state_debdf1_lmax = isav(17)
+nswc_state_debdf1_meo = isav(18)
+nswc_state_debdf1_nqnyh = isav(19)
+nswc_state_debdf1_nstepj = isav(20)
+nswc_state_debdf1_ier = isav(21)
+nswc_state_debdf1_jstart = isav(22)
+nswc_state_debdf1_kflag = isav(23)
+nswc_state_debdf1_l = isav(24)
+nswc_state_debdf1_meth = isav(25)
+nswc_state_debdf1_miter = isav(26)
+nswc_state_debdf1_maxord = isav(27)
+nswc_state_debdf1_n = isav(28)
+nswc_state_debdf1_nq = isav(29)
+nswc_state_debdf1_nst = isav(30)
+nswc_state_debdf1_nfe = isav(31)
+nswc_state_debdf1_nje = isav(32)
+nswc_state_debdf1_nqu = isav(33)
 !----------------------- End of subroutine rsco -----------------------
 end subroutine rsco
 
@@ -114608,18 +114453,59 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
-integer :: i, ils
-real :: rls
-common /debdf1/ rls(218), ils(33)
+integer :: i
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
-do i = 1,lenrls
-10 rsav(i) = rls(i)
-end do
-do i = 1,lenils
-20 isav(i) = ils(i)
-end do
+rsav(1) = nswc_state_debdf1_told
+rsav(2) = nswc_state_debdf1_conit
+rsav(3) = nswc_state_debdf1_crate
+rsav(4:16) = nswc_state_debdf1_el
+rsav(17:172) = reshape(nswc_state_debdf1_elco, [156])
+rsav(173) = nswc_state_debdf1_hold
+rsav(174) = nswc_state_debdf1_rc
+rsav(175) = nswc_state_debdf1_rmax
+rsav(176:211) = reshape(nswc_state_debdf1_tesco, [36])
+rsav(212) = nswc_state_debdf1_el0
+rsav(213) = nswc_state_debdf1_h
+rsav(214) = nswc_state_debdf1_hmin
+rsav(215) = nswc_state_debdf1_hmxi
+rsav(216) = nswc_state_debdf1_hu
+rsav(217) = nswc_state_debdf1_tn
+rsav(218) = nswc_state_debdf1_u
+isav(1) = nswc_state_debdf1_iquit
+isav(2) = nswc_state_debdf1_init
+isav(3) = nswc_state_debdf1_iyh
+isav(4) = nswc_state_debdf1_iewt
+isav(5) = nswc_state_debdf1_iacor
+isav(6) = nswc_state_debdf1_isavf
+isav(7) = nswc_state_debdf1_iwm
+isav(8) = nswc_state_debdf1_ksteps
+isav(9) = nswc_state_debdf1_ibegin
+isav(10) = nswc_state_debdf1_itol
+isav(11) = nswc_state_debdf1_iinteg
+isav(12) = nswc_state_debdf1_itstop
+isav(13) = nswc_state_debdf1_ijac
+isav(14) = nswc_state_debdf1_iband
+isav(15) = nswc_state_debdf1_ialth
+isav(16) = nswc_state_debdf1_ipup
+isav(17) = nswc_state_debdf1_lmax
+isav(18) = nswc_state_debdf1_meo
+isav(19) = nswc_state_debdf1_nqnyh
+isav(20) = nswc_state_debdf1_nstepj
+isav(21) = nswc_state_debdf1_ier
+isav(22) = nswc_state_debdf1_jstart
+isav(23) = nswc_state_debdf1_kflag
+isav(24) = nswc_state_debdf1_l
+isav(25) = nswc_state_debdf1_meth
+isav(26) = nswc_state_debdf1_miter
+isav(27) = nswc_state_debdf1_maxord
+isav(28) = nswc_state_debdf1_n
+isav(29) = nswc_state_debdf1_nq
+isav(30) = nswc_state_debdf1_nst
+isav(31) = nswc_state_debdf1_nfe
+isav(32) = nswc_state_debdf1_nje
+isav(33) = nswc_state_debdf1_nqu
 !----------------------- End of subroutine svco -----------------------
 end subroutine svco
 
@@ -114635,10 +114521,6 @@ logical :: intout
 external f, jac
 integer :: intflg, k, l, ltol, max
 real :: absdel, big, del, dt, ha, tol
-integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
-   & itol, itstop, jstart, kflag, ksteps, lacor, ldum, lewt, lsavf, &
-   & lwm, lyh, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
-real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
 !
 !   stfode  merely allocates storage for lsod1 to relieve the user of
 !   the inconvenience of a long call list.  Consequently lsod1 is used
@@ -114648,12 +114530,6 @@ real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
 !
 !
 !
-common /debdf1/ told, rowns(210), &
-   & el0, h, hmin, hmxi, hu, x, u, &
-   & iquit, init, lyh, lewt, lacor, lsavf, lwm, ksteps, &
-   & ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
-   & ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
-   & nfe, nje, nqu
 integer, parameter :: maxnum = 500
 !
 !
@@ -114667,46 +114543,46 @@ integer, parameter :: maxnum = 500
 !
 !.......................................................................
 !
-if (ibegin /= 0) go to 10
+if (nswc_state_debdf1_ibegin /= 0) go to 10
 !
 ! On the first call , perform initialization --
 !        define the machine unit roundoff quantity  u  by calling the
 !        function routine  spmpar. The user must make sure that the
 !        values set in spmpar are relevant to the computer being used.
 !
-u = spmpar(1)
+nswc_state_debdf1_u = spmpar(1)
 !                       -- Set associated machine dependent parameter
-wm(1) = sqrt(u)
+wm(1) = sqrt(nswc_state_debdf1_u)
 !                       -- Set termination flag
-iquit = 0
+nswc_state_debdf1_iquit = 0
 !                       -- Set initialization indicator
-init = 0
+nswc_state_debdf1_init = 0
 !                       -- Set counter for attempted steps
-ksteps = 0
+nswc_state_debdf1_ksteps = 0
 !                       -- Set indicator for intermediate-output
 intout = .false.
 !                       -- Set start indicator for stod code
-jstart = 0
+nswc_state_debdf1_jstart = 0
 !                       -- Set BDF method indicator
-meth = 2
+nswc_state_debdf1_meth = 2
 !                       -- Set maximum order for BDF method
-maxord = 5
+nswc_state_debdf1_maxord = 5
 !                       -- Set iteration matrix indicator
 !
-if (ijac == 0  .and.  iband == 0) miter = 2
-if (ijac == 1  .and.  iband == 0) miter = 1
-if (ijac == 0  .and.  iband == 1) miter = 5
-if (ijac == 1  .and.  iband == 1) miter = 4
+if (nswc_state_debdf1_ijac == 0  .and.  nswc_state_debdf1_iband == 0) nswc_state_debdf1_miter = 2
+if (nswc_state_debdf1_ijac == 1  .and.  nswc_state_debdf1_iband == 0) nswc_state_debdf1_miter = 1
+if (nswc_state_debdf1_ijac == 0  .and.  nswc_state_debdf1_iband == 1) nswc_state_debdf1_miter = 5
+if (nswc_state_debdf1_ijac == 1  .and.  nswc_state_debdf1_iband == 1) nswc_state_debdf1_miter = 4
 !
 !                       -- Set other necessary items in common block
-n = neq
-nst = 0
-nje = 0
-hmxi = 0.
-nq = 1
-h = 1.
+nswc_state_debdf1_n = neq
+nswc_state_debdf1_nst = 0
+nswc_state_debdf1_nje = 0
+nswc_state_debdf1_hmxi = 0.
+nswc_state_debdf1_nq = 1
+nswc_state_debdf1_h = 1.
 !                       -- Reset ibegin for subsequent calls
-ibegin = 1
+nswc_state_debdf1_ibegin = 1
 !
 !.......................................................................
 !
@@ -114717,7 +114593,7 @@ idid = -33
 go to 110
 !
 20 max = 1
-if (itol /= 0) max = neq
+if (nswc_state_debdf1_itol /= 0) max = neq
 do k = 1,max
    if (rtol(k) >= 0.) go to 30
    idid = -34
@@ -114728,29 +114604,29 @@ do k = 1,max
 60 continue
 end do
 !
-if (itstop /= 1) go to 80
+if (nswc_state_debdf1_itstop /= 1) go to 80
 if ((tout - t)*(tstop - t) >= 0.0 &
    & .and. abs(tout - t) <= abs(tstop - t)) go to 80
 idid = -36
 go to 110
 !
-80 if (init == 0) go to 150
+80 if (nswc_state_debdf1_init == 0) go to 150
 !                       Check some continuation possibilities
 if (t /= tout) go to 90
 idid = -37
 go to 110
 !
-90 if (t == told) go to 100
+90 if (t == nswc_state_debdf1_told) go to 100
 idid = -38
 go to 110
 !
-100 if (init == 1) go to 150
+100 if (nswc_state_debdf1_init == 1) go to 150
 if (delsgn*(tout - t) >= 0.) go to 150
 idid = -39
 !
 !                       Invalid input detected
-110 iquit = -33
-ibegin = -1
+110 nswc_state_debdf1_iquit = -33
+nswc_state_debdf1_ibegin = -1
 return
 !
 !.......................................................................
@@ -114762,7 +114638,7 @@ return
 !
 150 do k = 1,max
    if (rtol(k) + atol(k) > 0.) go to 170
-   rtol(k) = 100.*u
+   rtol(k) = 100.*nswc_state_debdf1_u
    idid = -2
 170 continue
 end do
@@ -114774,8 +114650,8 @@ if (idid == -2) return
 !            init=1 Means nominal step size and direction not yet set
 !            init=2 Means no FUTHER initialization required
 !
-if (init == 0) go to 200
-if (init == 1) go to 220
+if (nswc_state_debdf1_init == 0) go to 200
+if (nswc_state_debdf1_init == 1) go to 220
 go to 240
 !
 !.......................................................................
@@ -114783,15 +114659,15 @@ go to 240
 !     More initialization --
 !                         -- evaluate initial derivatives
 !
-200 init = 1
+200 nswc_state_debdf1_init = 1
 call f(t,y,yh(1,2),rpar,ipar)
-nfe = 1
+nswc_state_debdf1_nfe = 1
 if (t /= tout) go to 220
 idid = 2
 do l = 1,neq
 210 ypout(l) = yh(l,2)
 end do
-told = t
+nswc_state_debdf1_told = t
 return
 !
 !                         -- Compute initial step size
@@ -114801,23 +114677,22 @@ return
 !
 220 ltol = 1
 do l = 1,neq
-   if (itol == 1) ltol = l
+   if (nswc_state_debdf1_itol == 1) ltol = l
    tol = rtol(ltol)*abs(y(l)) + atol(ltol)
    if (tol == 0.) go to 380
 225 ewt(l) = tol
 end do
 !
 big = sqrt(spmpar(3))
-call hstart(f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
-   & yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,h)
+call hstart(f,neq,t,tout,y,yh(1,2),ewt,1,nswc_state_debdf1_u,big,   yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,nswc_state_debdf1_h)
 !
 delsgn = sign(1.0,tout - t)
-x = t
+nswc_state_debdf1_tn = t
 do l = 1,neq
    yh(l,1) = y(l)
-230 yh(l,2) = h*yh(l,2)
+230 yh(l,2) = nswc_state_debdf1_h*yh(l,2)
 end do
-init = 2
+nswc_state_debdf1_init = 2
 !
 !.......................................................................
 !
@@ -114831,34 +114706,34 @@ absdel = abs(del)
 !
 !   If already past output point, interpolate and return
 !
-250 if (abs(x - t) < absdel) go to 270
+250 if (abs(nswc_state_debdf1_tn - t) < absdel) go to 270
 call intyd(tout,0,yh,neq,y,intflg)
 call intyd(tout,1,yh,neq,ypout,intflg)
 idid = 3
-if (x /= tout) go to 260
+if (nswc_state_debdf1_tn /= tout) go to 260
 idid = 2
 intout = .false.
 260 t = tout
-told = t
+nswc_state_debdf1_told = t
 return
 !
 !   If cannot go past TSTOP and sufficiently close,
 !   extrapolate and return
 !
-270 if (itstop /= 1) go to 290
-if (abs(tstop - x) >= 100.*u*abs(x)) go to 290
-dt = tout - x
+270 if (nswc_state_debdf1_itstop /= 1) go to 290
+if (abs(tstop - nswc_state_debdf1_tn) >= 100.*nswc_state_debdf1_u*abs(nswc_state_debdf1_tn)) go to 290
+dt = tout - nswc_state_debdf1_tn
 do l = 1,neq
-280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
+280 y(l) = yh(l,1) + (dt/nswc_state_debdf1_h)*yh(l,2)
 end do
 call f(tout,y,ypout,rpar,ipar)
-nfe = nfe + 1
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + 1
 idid = 3
 t = tout
-told = t
+nswc_state_debdf1_told = t
 return
 !
-290 if (iinteg == 0  .or.  .not.intout) go to 300
+290 if (nswc_state_debdf1_iinteg == 0  .or.  .not.intout) go to 300
 !
 !   Intermediate-output mode
 !
@@ -114869,29 +114744,29 @@ go to 500
 !
 !     Monitor number of steps attempted
 !
-300 if (ksteps <= maxnum) go to 330
+300 if (nswc_state_debdf1_ksteps <= maxnum) go to 330
 !
 !                       A significant amount of work has been expended
 idid = -1
-ksteps = 0
+nswc_state_debdf1_ksteps = 0
 go to 500
 !
 !.......................................................................
 !
 !   Limit step size and set weight vector
 !
-330 hmin = 100.*u*abs(x)
-ha = amax1(abs(h),hmin)
-if (itstop /= 1) go to 340
-ha = min(ha,abs(tstop - x))
-340 h = sign(ha,h)
+330 nswc_state_debdf1_hmin = 100.*nswc_state_debdf1_u*abs(nswc_state_debdf1_tn)
+ha = amax1(abs(nswc_state_debdf1_h),nswc_state_debdf1_hmin)
+if (nswc_state_debdf1_itstop /= 1) go to 340
+ha = min(ha,abs(tstop - nswc_state_debdf1_tn))
+340 nswc_state_debdf1_h = sign(ha,nswc_state_debdf1_h)
 ltol = 1
 do l = 1,neq
-   if (itol == 1) ltol = l
+   if (nswc_state_debdf1_itol == 1) ltol = l
    ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)
    if (ewt(l) <= 0.0) go to 380
 end do
-tolfac = u*vnwrms(neq,yh,ewt)
+tolfac = nswc_state_debdf1_u*vnwrms(neq,yh,ewt)
 if (tolfac <= 1.) go to 400
 !
 !                       Tolerances too small
@@ -114905,7 +114780,7 @@ go to 500
 !
 !                       Relative error criterion inappropriate
 380 idid = -3
-ibegin = -l
+nswc_state_debdf1_ibegin = -l
 go to 500
 !
 !.......................................................................
@@ -114914,34 +114789,34 @@ go to 500
 !
 400 call stod(neq,y,yh,neq,yh1,ewt,savf,acor,wm,iwm,f,jac,rpar,ipar)
 !
-jstart = -2
+nswc_state_debdf1_jstart = -2
 intout = .true.
-if (kflag == 0) go to 250
+if (nswc_state_debdf1_kflag == 0) go to 250
 !
 !.......................................................................
 !
-if (kflag == -1) go to 450
+if (nswc_state_debdf1_kflag == -1) go to 450
 !
 !                       Repeated corrector convergence failures
 idid = -6
-iquit = -6
-ibegin = -1
+nswc_state_debdf1_iquit = -6
+nswc_state_debdf1_ibegin = -1
 go to 500
 !
 !                       Repeated error test failures
 450 idid = -7
-iquit = -7
-ibegin = -1
+nswc_state_debdf1_iquit = -7
+nswc_state_debdf1_ibegin = -1
 !
 !.......................................................................
 !
 !                       Store values before returning to stfode
 500 do l = 1,neq
    y(l) = yh(l,1)
-555 ypout(l) = yh(l,2)/h
+555 ypout(l) = yh(l,2)/nswc_state_debdf1_h
 end do
-t = x
-told = t
+t = nswc_state_debdf1_tn
+nswc_state_debdf1_told = t
 intout = .false.
 end subroutine lsod1
 
@@ -115289,35 +115164,29 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag
 real :: t, yh(nyh,*), dky(*)
-integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
-   & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
-real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, c, r, s, &
-   & tp
-common /debdf1/ rownd, rowns(210), &
-   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
+integer :: i, ic, j, jb, jb2, jj, jj1, jp1
+real :: c, r, s, tp
 !
 iflag = 0
-if (k < 0 .or. k > nq) go to 80
-tp = tn - hu*(1.0e0 + 100.0e0*uround)
-if ((t - tp)*(t - tn) > 0.0e0) go to 90
+if (k < 0 .or. k > nswc_state_debdf1_nq) go to 80
+tp = nswc_state_debdf1_tn - nswc_state_debdf1_hu*(1.0e0 + 100.0e0*nswc_state_debdf1_u)
+if ((t - tp)*(t - nswc_state_debdf1_tn) > 0.0e0) go to 90
 !
-s = (t - tn)/h
+s = (t - nswc_state_debdf1_tn)/nswc_state_debdf1_h
 ic = 1
 if (k == 0) go to 15
-jj1 = l - k
-do jj = jj1,nq
+jj1 = nswc_state_debdf1_l - k
+do jj = jj1,nswc_state_debdf1_nq
 10 ic = ic*jj
 end do
 15 c = float(ic)
-do i = 1,n
-20 dky(i) = c*yh(i,l)
+do i = 1,nswc_state_debdf1_n
+20 dky(i) = c*yh(i,nswc_state_debdf1_l)
 end do
-if (k == nq) go to 55
-jb2 = nq - k
+if (k == nswc_state_debdf1_nq) go to 55
+jb2 = nswc_state_debdf1_nq - k
 do jb = 1,jb2
-   j = nq - jb
+   j = nswc_state_debdf1_nq - jb
    jp1 = j + 1
    ic = 1
    if (k == 0) go to 35
@@ -115326,13 +115195,13 @@ do jb = 1,jb2
 30    ic = ic*jj
    end do
 35 c = float(ic)
-   do i = 1,n
+   do i = 1,nswc_state_debdf1_n
 40    dky(i) = c*yh(i,jp1) + s*dky(i)
    end do
 end do
 if (k == 0) return
-55 r = h**(-k)
-do i = 1,n
+55 r = nswc_state_debdf1_h**(-k)
+do i = 1,nswc_state_debdf1_n
 60 dky(i) = r*dky(i)
 end do
 return
@@ -115352,12 +115221,8 @@ external f, jac
 integer :: neq, nyh, iwm(*)
 real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
 integer :: ipnyh
-integer :: iod, ksteps
-integer :: i, i1, ialth, ier, iownd, iredo, iret, ipup, j, jb, &
-   & jstart, kflag, l, lmax, m, maxord, meo, meth, miter, n, ncf, newq, &
-   & nfe, nje, nq, nqnyh, nqu, nst, nstepj
-real :: rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, h, hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, &
-   & exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told
+integer :: i, i1, iredo, iret, j, jb, m, ncf, newq
+real :: dcon, ddn, del, delp, dsm, dup, exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told
 !-----------------------------------------------------------------------
 ! stod  performs one step of the integration of an initial value
 ! problem for a system of ordinary differential equations.
@@ -115424,20 +115289,14 @@ real :: rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, h, hmin, hmxi
 !***Routines called  cfod,slvs,pjac,vnwrms
 !
 !
-common /debdf1/ rownd, conit, crate, el(13), elco(13,12), &
-   & hold, rc, rmax, tesco(3,12), &
-   & el0, h, hmin, hmxi, hu, tn, uround, iownd(7), ksteps, iod(6), &
-   & ialth, ipup, lmax, meo, nqnyh, nstepj, &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
 !
 !
-kflag = 0
-told = tn
+nswc_state_debdf1_kflag = 0
+told = nswc_state_debdf1_tn
 ncf = 0
-if (jstart > 0) go to 200
-if (jstart == -1) go to 100
-if (jstart == -2) go to 160
+if (nswc_state_debdf1_jstart > 0) go to 200
+if (nswc_state_debdf1_jstart == -1) go to 100
+if (nswc_state_debdf1_jstart == -2) go to 160
 !-----------------------------------------------------------------------
 ! On the first call, the order is set to 1, and other variables are
 ! initialized.  rmax is the maximum ratio by which H can be increased
@@ -115446,18 +115305,18 @@ if (jstart == -2) go to 160
 ! occurs (in corrector convergence or error test), rmax is set at 2
 ! for the next increase.
 !-----------------------------------------------------------------------
-lmax = maxord + 1
-nq = 1
-l = 2
-ialth = 2
-rmax = 10000.0e0
-rc = 0.0e0
-el0 = 1.0e0
-crate = 0.7e0
+nswc_state_debdf1_lmax = nswc_state_debdf1_maxord + 1
+nswc_state_debdf1_nq = 1
+nswc_state_debdf1_l = 2
+nswc_state_debdf1_ialth = 2
+nswc_state_debdf1_rmax = 10000.0e0
+nswc_state_debdf1_rc = 0.0e0
+nswc_state_debdf1_el0 = 1.0e0
+nswc_state_debdf1_crate = 0.7e0
 delp = 0.0e0
-hold = h
-meo = meth
-nstepj = 0
+nswc_state_debdf1_hold = nswc_state_debdf1_h
+nswc_state_debdf1_meo = nswc_state_debdf1_meth
+nswc_state_debdf1_nstepj = 0
 iret = 3
 go to 140
 !-----------------------------------------------------------------------
@@ -115473,48 +115332,48 @@ go to 140
 ! If H or meth is being changed, ialth is reset to L = NQ + 1
 ! to prevent further changes in H for that many steps.
 !-----------------------------------------------------------------------
-100 ipup = miter
-lmax = maxord + 1
-if (ialth == 1) ialth = 2
-if (meth == meo) go to 110
-call cfod(meth, elco, tesco)
-meo = meth
-if (nq > maxord) go to 120
-ialth = l
+100 nswc_state_debdf1_ipup = nswc_state_debdf1_miter
+nswc_state_debdf1_lmax = nswc_state_debdf1_maxord + 1
+if (nswc_state_debdf1_ialth == 1) nswc_state_debdf1_ialth = 2
+if (nswc_state_debdf1_meth == nswc_state_debdf1_meo) go to 110
+call cfod(nswc_state_debdf1_meth, nswc_state_debdf1_elco, nswc_state_debdf1_tesco)
+nswc_state_debdf1_meo = nswc_state_debdf1_meth
+if (nswc_state_debdf1_nq > nswc_state_debdf1_maxord) go to 120
+nswc_state_debdf1_ialth = nswc_state_debdf1_l
 iret = 1
 go to 150
-110 if (nq <= maxord) go to 160
-120 nq = maxord
-l = lmax
-do i = 1,l
-125 el(i) = elco(i,nq)
+110 if (nswc_state_debdf1_nq <= nswc_state_debdf1_maxord) go to 160
+120 nswc_state_debdf1_nq = nswc_state_debdf1_maxord
+nswc_state_debdf1_l = nswc_state_debdf1_lmax
+do i = 1,nswc_state_debdf1_l
+125 nswc_state_debdf1_el(i) = nswc_state_debdf1_elco(i,nswc_state_debdf1_nq)
 end do
-nqnyh = nq*nyh
-rc = rc*el(1)/el0
-el0 = el(1)
-conit = 0.5e0/float(nq + 2)
-ddn = vnwrms(n, savf, ewt)/tesco(1,l)
-exdn = 1.0e0/float(l)
+nswc_state_debdf1_nqnyh = nswc_state_debdf1_nq*nyh
+nswc_state_debdf1_rc = nswc_state_debdf1_rc*nswc_state_debdf1_el(1)/nswc_state_debdf1_el0
+nswc_state_debdf1_el0 = nswc_state_debdf1_el(1)
+nswc_state_debdf1_conit = 0.5e0/float(nswc_state_debdf1_nq + 2)
+ddn = vnwrms(nswc_state_debdf1_n, savf, ewt)/nswc_state_debdf1_tesco(1,nswc_state_debdf1_l)
+exdn = 1.0e0/float(nswc_state_debdf1_l)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
 rh = min(rhdn,1.0e0)
 iredo = 3
-if (h == hold) go to 170
-rh = min(rh,abs(h/hold))
-h = hold
+if (nswc_state_debdf1_h == nswc_state_debdf1_hold) go to 170
+rh = min(rh,abs(nswc_state_debdf1_h/nswc_state_debdf1_hold))
+nswc_state_debdf1_h = nswc_state_debdf1_hold
 go to 175
 !-----------------------------------------------------------------------
 ! cfod  is called to get all the integration coefficients for the
 ! current meth.  Then the el vector and related constants are reset
 ! whenever the order NQ is changed, or at the start of the problem.
 !-----------------------------------------------------------------------
-140 call cfod(meth, elco, tesco)
-150 do i = 1,l
-155 el(i) = elco(i,nq)
+140 call cfod(nswc_state_debdf1_meth, nswc_state_debdf1_elco, nswc_state_debdf1_tesco)
+150 do i = 1,nswc_state_debdf1_l
+155 nswc_state_debdf1_el(i) = nswc_state_debdf1_elco(i,nswc_state_debdf1_nq)
 end do
-nqnyh = nq*nyh
-rc = rc*el(1)/el0
-el0 = el(1)
-conit = 0.5e0/float(nq + 2)
+nswc_state_debdf1_nqnyh = nswc_state_debdf1_nq*nyh
+nswc_state_debdf1_rc = nswc_state_debdf1_rc*nswc_state_debdf1_el(1)/nswc_state_debdf1_el0
+nswc_state_debdf1_el0 = nswc_state_debdf1_el(1)
+nswc_state_debdf1_conit = 0.5e0/float(nswc_state_debdf1_nq + 2)
 select case (iret)
 case (1)
    go to 160
@@ -115529,24 +115388,24 @@ end select
 ! L = NQ + 1 to prevent a change of H for that many steps, unless
 ! forced by a convergence or error test failure.
 !-----------------------------------------------------------------------
-160 if (h == hold) go to 200
-rh = h/hold
-h = hold
+160 if (nswc_state_debdf1_h == nswc_state_debdf1_hold) go to 200
+rh = nswc_state_debdf1_h/nswc_state_debdf1_hold
+nswc_state_debdf1_h = nswc_state_debdf1_hold
 iredo = 3
 go to 175
-170 rh = max(rh,hmin/abs(h))
-175 rh = min(rh,rmax)
-rh = rh/max(1.0e0,abs(h)*hmxi*rh)
+170 rh = max(rh,nswc_state_debdf1_hmin/abs(nswc_state_debdf1_h))
+175 rh = min(rh,nswc_state_debdf1_rmax)
+rh = rh/max(1.0e0,abs(nswc_state_debdf1_h)*nswc_state_debdf1_hmxi*rh)
 r = 1.0e0
-do j = 2,l
+do j = 2,nswc_state_debdf1_l
    r = r*rh
-   do i = 1,n
+   do i = 1,nswc_state_debdf1_n
 180   yh(i,j) = yh(i,j)*r
    end do
 end do
-h = h*rh
-rc = rc*rh
-ialth = l
+nswc_state_debdf1_h = nswc_state_debdf1_h*rh
+nswc_state_debdf1_rc = nswc_state_debdf1_rc*rh
+nswc_state_debdf1_ialth = nswc_state_debdf1_l
 if (iredo == 0) go to 680
 !-----------------------------------------------------------------------
 ! This section computes the predicted values by effectively
@@ -115556,18 +115415,18 @@ if (iredo == 0) go to 680
 ! to force pjac to be called, if a Jacobian is involved.
 ! In any case, pjac is called at least every 20-TH step.
 !-----------------------------------------------------------------------
-200 if (abs(rc - 1.0e0) > 0.3e0) ipup = miter
-if (nst >= nstepj + 20) ipup = miter
-tn = tn + h
-i1 = nqnyh + 1
-do jb = 1,nq
+200 if (abs(nswc_state_debdf1_rc - 1.0e0) > 0.3e0) nswc_state_debdf1_ipup = nswc_state_debdf1_miter
+if (nswc_state_debdf1_nst >= nswc_state_debdf1_nstepj + 20) nswc_state_debdf1_ipup = nswc_state_debdf1_miter
+nswc_state_debdf1_tn = nswc_state_debdf1_tn + nswc_state_debdf1_h
+i1 = nswc_state_debdf1_nqnyh + 1
+do jb = 1,nswc_state_debdf1_nq
    i1 = i1 - nyh
-   do i = i1,nqnyh
+   do i = i1,nswc_state_debdf1_nqnyh
       ipnyh = i + nyh
 210   yh1(i) = yh1(i) + yh1(ipnyh)
    end do
 end do
-ksteps = ksteps + 1
+nswc_state_debdf1_ksteps = nswc_state_debdf1_ksteps + 1
 !-----------------------------------------------------------------------
 ! Up to 3 corrector iterations are taken.  A convergence test is
 ! made on the R.M.S. norm of each correction, weighted by the error
@@ -115575,39 +115434,39 @@ ksteps = ksteps + 1
 ! vector acor(i).  The yh array is not altered in the corrector loop.
 !-----------------------------------------------------------------------
 220 m = 0
-do i = 1,n
+do i = 1,nswc_state_debdf1_n
 230 y(i) = yh(i,1)
 end do
-call f(tn, y, savf, rpar, ipar)
-nfe = nfe + 1
-if (ipup <= 0) go to 250
+call f(nswc_state_debdf1_tn, y, savf, rpar, ipar)
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + 1
+if (nswc_state_debdf1_ipup <= 0) go to 250
 !-----------------------------------------------------------------------
 ! If indicated, the matrix P = i - H*el(1)*j is reevaluated and
 ! preprocessed before starting the corrector iteration.  ipup is set
 ! to 0 as an indicator that this has been done.
 !-----------------------------------------------------------------------
-ipup = 0
-rc = 1.0e0
-nstepj = nst
-crate = 0.7e0
+nswc_state_debdf1_ipup = 0
+nswc_state_debdf1_rc = 1.0e0
+nswc_state_debdf1_nstepj = nswc_state_debdf1_nst
+nswc_state_debdf1_crate = 0.7e0
 call pjac(neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
    & rpar, ipar)
-if (ier /= 0) go to 430
-250 do i = 1,n
+if (nswc_state_debdf1_ier /= 0) go to 430
+250 do i = 1,nswc_state_debdf1_n
 260 acor(i) = 0.0e0
 end do
-270 if (miter /= 0) go to 350
+270 if (nswc_state_debdf1_miter /= 0) go to 350
 !-----------------------------------------------------------------------
 ! In the case of functional iteration, update y directly from
 ! the result of the last function evaluation.
 !-----------------------------------------------------------------------
-do i = 1,n
-   savf(i) = h*savf(i) - yh(i,2)
+do i = 1,nswc_state_debdf1_n
+   savf(i) = nswc_state_debdf1_h*savf(i) - yh(i,2)
 290 y(i) = savf(i) - acor(i)
 end do
-del = vnwrms(n, y, ewt)
-do i = 1,n
-   y(i) = yh(i,1) + el(1)*savf(i)
+del = vnwrms(nswc_state_debdf1_n, y, ewt)
+do i = 1,nswc_state_debdf1_n
+   y(i) = yh(i,1) + nswc_state_debdf1_el(1)*savf(i)
 300 acor(i) = savf(i)
 end do
 go to 400
@@ -115616,29 +115475,29 @@ go to 400
 ! and solve the linear system with that as right-hand side and
 ! P as coefficient matrix.
 !-----------------------------------------------------------------------
-350 do i = 1,n
-360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
+350 do i = 1,nswc_state_debdf1_n
+360 y(i) = nswc_state_debdf1_h*savf(i) - (yh(i,2) + acor(i))
 end do
 call slvs(wm, iwm, y, savf)
-if (ier /= 0) go to 410
-del = vnwrms(n, y, ewt)
-do i = 1,n
+if (nswc_state_debdf1_ier /= 0) go to 410
+del = vnwrms(nswc_state_debdf1_n, y, ewt)
+do i = 1,nswc_state_debdf1_n
    acor(i) = acor(i) + y(i)
-380 y(i) = yh(i,1) + el(1)*acor(i)
+380 y(i) = yh(i,1) + nswc_state_debdf1_el(1)*acor(i)
 end do
 !-----------------------------------------------------------------------
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
 ! rate constant is stored in crate, and this is used in the test.
 !-----------------------------------------------------------------------
-400 if (m /= 0) crate = max(0.2e0*crate,del/delp)
-dcon = del*min(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
+400 if (m /= 0) nswc_state_debdf1_crate = max(0.2e0*nswc_state_debdf1_crate,del/delp)
+dcon = del*min(1.0e0,1.5e0*nswc_state_debdf1_crate)/(nswc_state_debdf1_tesco(2,nswc_state_debdf1_nq)*nswc_state_debdf1_conit)
 if (dcon <= 1.0e0) go to 450
 m = m + 1
 if (m == 3) go to 410
 if (m >= 2 .and. del > 2.0e0*delp) go to 410
 delp = del
-call f(tn, y, savf, rpar, ipar)
-nfe = nfe + 1
+call f(nswc_state_debdf1_tn, y, savf, rpar, ipar)
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + 1
 go to 270
 !-----------------------------------------------------------------------
 ! The corrector iteration failed to converge in 3 tries.
@@ -115647,24 +115506,24 @@ go to 270
 ! before prediction, and H is reduced, if possible.  If H cannot be
 ! reduced or 10 failures have occurred, exit with KFLAG = -2.
 !-----------------------------------------------------------------------
-410 if (ipup == 0) go to 430
-ipup = miter
+410 if (nswc_state_debdf1_ipup == 0) go to 430
+nswc_state_debdf1_ipup = nswc_state_debdf1_miter
 go to 220
-430 tn = told
+430 nswc_state_debdf1_tn = told
 ncf = ncf + 1
-rmax = 2.0e0
-i1 = nqnyh + 1
-do jb = 1,nq
+nswc_state_debdf1_rmax = 2.0e0
+i1 = nswc_state_debdf1_nqnyh + 1
+do jb = 1,nswc_state_debdf1_nq
    i1 = i1 - nyh
-   do i = i1,nqnyh
+   do i = i1,nswc_state_debdf1_nqnyh
       ipnyh = i + nyh
 440   yh1(i) = yh1(i) - yh1(ipnyh)
    end do
 end do
-if (abs(h) <= hmin*1.00001e0) go to 670
+if (abs(nswc_state_debdf1_h) <= nswc_state_debdf1_hmin*1.00001e0) go to 670
 if (ncf == 10) go to 670
 rh = 0.25e0
-ipup = miter
+nswc_state_debdf1_ipup = nswc_state_debdf1_miter
 iredo = 1
 go to 170
 !-----------------------------------------------------------------------
@@ -115673,9 +115532,9 @@ go to 170
 ! The local error test is made and control passes to statement 500
 ! if it fails.
 !-----------------------------------------------------------------------
-450 if (miter /= 0) ipup = -1
-if (m == 0) dsm = del/tesco(2,nq)
-if (m > 0) dsm = vnwrms(n, acor, ewt)/tesco(2,nq)
+450 if (nswc_state_debdf1_miter /= 0) nswc_state_debdf1_ipup = -1
+if (m == 0) dsm = del/nswc_state_debdf1_tesco(2,nswc_state_debdf1_nq)
+if (m > 0) dsm = vnwrms(nswc_state_debdf1_n, acor, ewt)/nswc_state_debdf1_tesco(2,nswc_state_debdf1_nq)
 if (dsm > 1.0e0) go to 500
 !-----------------------------------------------------------------------
 ! After a successful step, update the yh array.
@@ -115687,22 +115546,22 @@ if (dsm > 1.0e0) go to 500
 ! factor of at least 1.1.  If not, ialth is set to 3 to prevent
 ! testing for that many steps.
 !-----------------------------------------------------------------------
-kflag = 0
+nswc_state_debdf1_kflag = 0
 iredo = 0
-nst = nst + 1
-hu = h
-nqu = nq
-do j = 1,l
-   do i = 1,n
-470   yh(i,j) = yh(i,j) + el(j)*acor(i)
+nswc_state_debdf1_nst = nswc_state_debdf1_nst + 1
+nswc_state_debdf1_hu = nswc_state_debdf1_h
+nswc_state_debdf1_nqu = nswc_state_debdf1_nq
+do j = 1,nswc_state_debdf1_l
+   do i = 1,nswc_state_debdf1_n
+470   yh(i,j) = yh(i,j) + nswc_state_debdf1_el(j)*acor(i)
    end do
 end do
-ialth = ialth - 1
-if (ialth == 0) go to 520
-if (ialth > 1) go to 690
-if (l == lmax) go to 690
-do i = 1,n
-490 yh(i,lmax) = acor(i)
+nswc_state_debdf1_ialth = nswc_state_debdf1_ialth - 1
+if (nswc_state_debdf1_ialth == 0) go to 520
+if (nswc_state_debdf1_ialth > 1) go to 690
+if (nswc_state_debdf1_l == nswc_state_debdf1_lmax) go to 690
+do i = 1,nswc_state_debdf1_n
+490 yh(i,nswc_state_debdf1_lmax) = acor(i)
 end do
 go to 690
 !-----------------------------------------------------------------------
@@ -115712,19 +115571,19 @@ go to 690
 ! one lower order.  After 2 or more failures, H is forced to decrease
 ! by a factor of 0.2 or less.
 !-----------------------------------------------------------------------
-500 kflag = kflag - 1
-tn = told
-i1 = nqnyh + 1
-do jb = 1,nq
+500 nswc_state_debdf1_kflag = nswc_state_debdf1_kflag - 1
+nswc_state_debdf1_tn = told
+i1 = nswc_state_debdf1_nqnyh + 1
+do jb = 1,nswc_state_debdf1_nq
    i1 = i1 - nyh
-   do i = i1,nqnyh
+   do i = i1,nswc_state_debdf1_nqnyh
       ipnyh = i + nyh
 510   yh1(i) = yh1(i) - yh1(ipnyh)
    end do
 end do
-rmax = 2.0e0
-if (abs(h) <= hmin*1.00001e0) go to 660
-if (kflag <= -3) go to 640
+nswc_state_debdf1_rmax = 2.0e0
+if (abs(nswc_state_debdf1_h) <= nswc_state_debdf1_hmin*1.00001e0) go to 660
+if (nswc_state_debdf1_kflag <= -3) go to 640
 iredo = 2
 rhup = 0.0e0
 go to 540
@@ -115738,51 +115597,51 @@ go to 540
 ! additional scaled derivative.
 !-----------------------------------------------------------------------
 520 rhup = 0.0e0
-if (l == lmax) go to 540
-do i = 1,n
-530 savf(i) = acor(i) - yh(i,lmax)
+if (nswc_state_debdf1_l == nswc_state_debdf1_lmax) go to 540
+do i = 1,nswc_state_debdf1_n
+530 savf(i) = acor(i) - yh(i,nswc_state_debdf1_lmax)
 end do
-dup = vnwrms(n, savf, ewt)/tesco(3,nq)
-exup = 1.0e0/float(l + 1)
+dup = vnwrms(nswc_state_debdf1_n, savf, ewt)/nswc_state_debdf1_tesco(3,nswc_state_debdf1_nq)
+exup = 1.0e0/float(nswc_state_debdf1_l + 1)
 rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
-540 exsm = 1.0e0/float(l)
+540 exsm = 1.0e0/float(nswc_state_debdf1_l)
 rhsm = 1.0e0/(1.2e0*dsm**exsm + 0.0000012e0)
 rhdn = 0.0e0
-if (nq == 1) go to 560
-ddn = vnwrms(n, yh(1,l), ewt)/tesco(1,nq)
-exdn = 1.0e0/float(nq)
+if (nswc_state_debdf1_nq == 1) go to 560
+ddn = vnwrms(nswc_state_debdf1_n, yh(1,nswc_state_debdf1_l), ewt)/nswc_state_debdf1_tesco(1,nswc_state_debdf1_nq)
+exdn = 1.0e0/float(nswc_state_debdf1_nq)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
 560 if (rhsm >= rhup) go to 570
 if (rhup > rhdn) go to 590
 go to 580
 570 if (rhsm < rhdn) go to 580
-newq = nq
+newq = nswc_state_debdf1_nq
 rh = rhsm
 go to 620
-580 newq = nq - 1
+580 newq = nswc_state_debdf1_nq - 1
 rh = rhdn
-if (kflag < 0 .and. rh > 1.0e0) rh = 1.0e0
+if (nswc_state_debdf1_kflag < 0 .and. rh > 1.0e0) rh = 1.0e0
 go to 620
-590 newq = l
+590 newq = nswc_state_debdf1_l
 rh = rhup
 if (rh < 1.1e0) go to 610
-r = el(l)/float(l)
-do i = 1,n
+r = nswc_state_debdf1_el(nswc_state_debdf1_l)/float(nswc_state_debdf1_l)
+do i = 1,nswc_state_debdf1_n
 600 yh(i,newq + 1) = acor(i)*r
 end do
 go to 630
-610 ialth = 3
+610 nswc_state_debdf1_ialth = 3
 go to 690
-620 if ((kflag == 0) .and. (rh < 1.1e0)) go to 610
-if (kflag <= -2) rh = min(rh,0.2e0)
+620 if ((nswc_state_debdf1_kflag == 0) .and. (rh < 1.1e0)) go to 610
+if (nswc_state_debdf1_kflag <= -2) rh = min(rh,0.2e0)
 !-----------------------------------------------------------------------
 ! If there is a change of order, reset NQ, L, and the coefficients.
 ! In any case H is reset according to RH and the yh array is rescaled.
 ! Then exit from 680 if the step was OK, or redo the step otherwise.
 !-----------------------------------------------------------------------
-if (newq == nq) go to 170
-630 nq = newq
-l = nq + 1
+if (newq == nswc_state_debdf1_nq) go to 170
+630 nswc_state_debdf1_nq = newq
+nswc_state_debdf1_l = nswc_state_debdf1_nq + 1
 iret = 2
 go to 150
 !-----------------------------------------------------------------------
@@ -115794,40 +115653,40 @@ go to 150
 ! H is reduced by a factor of 10, and the step is retried,
 ! until it succeeds or H reaches HMIN.
 !-----------------------------------------------------------------------
-640 if (kflag == -10) go to 660
+640 if (nswc_state_debdf1_kflag == -10) go to 660
 rh = 0.1e0
-rh = max(hmin/abs(h),rh)
-h = h*rh
-do i = 1,n
+rh = max(nswc_state_debdf1_hmin/abs(nswc_state_debdf1_h),rh)
+nswc_state_debdf1_h = nswc_state_debdf1_h*rh
+do i = 1,nswc_state_debdf1_n
 645 y(i) = yh(i,1)
 end do
-call f(tn, y, savf, rpar, ipar)
-nfe = nfe + 1
-do i = 1,n
-650 yh(i,2) = h*savf(i)
+call f(nswc_state_debdf1_tn, y, savf, rpar, ipar)
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + 1
+do i = 1,nswc_state_debdf1_n
+650 yh(i,2) = nswc_state_debdf1_h*savf(i)
 end do
-ipup = miter
-ialth = 5
-if (nq == 1) go to 200
-nq = 1
-l = 2
+nswc_state_debdf1_ipup = nswc_state_debdf1_miter
+nswc_state_debdf1_ialth = 5
+if (nswc_state_debdf1_nq == 1) go to 200
+nswc_state_debdf1_nq = 1
+nswc_state_debdf1_l = 2
 iret = 3
 go to 150
 !-----------------------------------------------------------------------
 ! All returns are made through this section.  H is saved in hold
 ! to allow the caller to change H on the next step.
 !-----------------------------------------------------------------------
-660 kflag = -1
+660 nswc_state_debdf1_kflag = -1
 go to 700
-670 kflag = -2
+670 nswc_state_debdf1_kflag = -2
 go to 700
-680 rmax = 10.0e0
-690 r = 1.0e0/tesco(2,nqu)
-do i = 1,n
+680 nswc_state_debdf1_rmax = 10.0e0
+690 r = 1.0e0/nswc_state_debdf1_tesco(2,nswc_state_debdf1_nqu)
+do i = 1,nswc_state_debdf1_n
 695 acor(i) = acor(i)*r
 end do
-700 hold = h
-jstart = 1
+700 nswc_state_debdf1_hold = nswc_state_debdf1_h
+nswc_state_debdf1_jstart = 1
 !----------------------- End of subroutine stod  -----------------------
 end subroutine stod
 
@@ -115962,20 +115821,14 @@ real :: rpar(*)
 integer :: neq, nyh, iwm( *)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
-integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
-   & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
-   & ml3, mu, n, nfe, nje, nq, nqu, nst
-real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, fac, hl0, r, r0, srur, yi, yj, yjj
+integer :: i, i1, i2, ii, j, j1, jj, lenp, mba, mband, meb1, meband, ml, ml3, mu
+real :: con, di, fac, hl0, r, r0, srur, yi, yj, yjj
 !
 !   pjac sets up the iteration matrix (involving the Jacobian) for the
 !   integration package sfode.
 !
 !***Routines called  vnwrms,sgefa,sgbfa
 !
-common /debdf1/ rownd, rowns(210), &
-   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
 !-----------------------------------------------------------------------
 ! pjac is called by stod  to compute and process the matrix
 ! P = i - h*EL(1)*j , where j is an approximation to the Jacobian.
@@ -116008,9 +115861,9 @@ common /debdf1/ rownd, rowns(210), &
 ! This routine also uses the common variables el0, h, tn, uround,
 ! miter, N, NFE, and NJE.
 !-----------------------------------------------------------------------
-nje = nje + 1
-hl0 = h*el0
-select case (miter)
+nswc_state_debdf1_nje = nswc_state_debdf1_nje + 1
+hl0 = nswc_state_debdf1_h*nswc_state_debdf1_el0
+select case (nswc_state_debdf1_miter)
 case (1)
    go to 100
 case (2)
@@ -116023,64 +115876,64 @@ case (5)
    go to 500
 end select
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
-100 lenp = n*n
+100 lenp = nswc_state_debdf1_n*nswc_state_debdf1_n
 do i = 1,lenp
 110 wm(i + 2) = 0.0e0
 end do
-call jac(tn, y, wm(3), n, rpar, ipar)
+call jac(nswc_state_debdf1_tn, y, wm(3), nswc_state_debdf1_n, rpar, ipar)
 con = -hl0
 do i = 1,lenp
 120 wm(i + 2) = wm(i + 2)*con
 end do
 go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
-200 fac = vnwrms(n, savf, ewt)
-r0 = 1000.0e0*abs(h)*uround*float(n)*fac
+200 fac = vnwrms(nswc_state_debdf1_n, savf, ewt)
+r0 = 1000.0e0*abs(nswc_state_debdf1_h)*nswc_state_debdf1_u*float(nswc_state_debdf1_n)*fac
 if (r0 == 0.0e0) r0 = 1.0e0
 srur = wm(1)
 j1 = 2
-do j = 1,n
+do j = 1,nswc_state_debdf1_n
    yj = y(j)
    r = max(srur*abs(yj),r0*ewt(j))
    y(j) = y(j) + r
    fac = -hl0/r
-   call f(tn, y, ftem, rpar, ipar)
-   do i = 1,n
+   call f(nswc_state_debdf1_tn, y, ftem, rpar, ipar)
+   do i = 1,nswc_state_debdf1_n
 220   wm(i + j1) = (ftem(i) - savf(i))*fac
    end do
    y(j) = yj
-   j1 = j1 + n
+   j1 = j1 + nswc_state_debdf1_n
 end do
-nfe = nfe + n
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + nswc_state_debdf1_n
 ! Add identity matrix. -------------------------------------------------
 240 j = 3
-do i = 1,n
+do i = 1,nswc_state_debdf1_n
    wm(j) = wm(j) + 1.0e0
-250 j = j + (n + 1)
+250 j = j + (nswc_state_debdf1_n + 1)
 end do
 ! Do LU decomposition on P. --------------------------------------------
-call sgefa(wm(3), n, n, iwm(21), ier)
+call sgefa(wm(3), nswc_state_debdf1_n, nswc_state_debdf1_n, iwm(21), nswc_state_debdf1_ier)
 return
 ! If miter = 3, construct a diagonal approximation to j and P. ---------
 300 wm(2) = hl0
-ier = 0
-r = el0*0.1e0
-do i = 1,n
-310 y(i) = y(i) + r*(h*savf(i) - yh(i,2))
+nswc_state_debdf1_ier = 0
+r = nswc_state_debdf1_el0*0.1e0
+do i = 1,nswc_state_debdf1_n
+310 y(i) = y(i) + r*(nswc_state_debdf1_h*savf(i) - yh(i,2))
 end do
-call f(tn, y, wm(3), rpar, ipar)
-nfe = nfe + 1
-do i = 1,n
-   r0 = h*savf(i) - yh(i,2)
-   di = 0.1e0*r0 - h*(wm(i + 2) - savf(i))
+call f(nswc_state_debdf1_tn, y, wm(3), rpar, ipar)
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + 1
+do i = 1,nswc_state_debdf1_n
+   r0 = nswc_state_debdf1_h*savf(i) - yh(i,2)
+   di = 0.1e0*r0 - nswc_state_debdf1_h*(wm(i + 2) - savf(i))
    wm(i + 2) = 1.0e0
-   if (abs(r0) < uround*ewt(i)) go to 320
+   if (abs(r0) < nswc_state_debdf1_u*ewt(i)) go to 320
    if (abs(di) == 0.0e0) go to 330
    wm(i + 2) = 0.1e0*r0/di
 320 continue
 end do
 return
-330 ier = -1
+330 nswc_state_debdf1_ier = -1
 return
 ! If miter = 4, call JAC and multiply by scalar. -----------------------
 400 ml = iwm(1)
@@ -116088,11 +115941,11 @@ mu = iwm(2)
 ml3 = 3
 mband = ml + mu + 1
 meband = mband + ml
-lenp = meband*n
+lenp = meband*nswc_state_debdf1_n
 do i = 1,lenp
 410 wm(i + 2) = 0.0e0
 end do
-call jac(tn, y, wm(ml3), meband, rpar, ipar)
+call jac(nswc_state_debdf1_tn, y, wm(ml3), meband, rpar, ipar)
 con = -hl0
 do i = 1,lenp
 420 wm(i + 2) = wm(i + 2)*con
@@ -116102,42 +115955,42 @@ go to 570
 500 ml = iwm(1)
 mu = iwm(2)
 mband = ml + mu + 1
-mba = min(mband,n)
+mba = min(mband,nswc_state_debdf1_n)
 meband = mband + ml
 meb1 = meband - 1
 srur = wm(1)
-fac = vnwrms(n, savf, ewt)
-r0 = 1000.0e0*abs(h)*uround*float(n)*fac
+fac = vnwrms(nswc_state_debdf1_n, savf, ewt)
+r0 = 1000.0e0*abs(nswc_state_debdf1_h)*nswc_state_debdf1_u*float(nswc_state_debdf1_n)*fac
 if (r0 == 0.0e0) r0 = 1.0e0
 do j = 1,mba
-   do i = j,n,mband
+   do i = j,nswc_state_debdf1_n,mband
       yi = y(i)
       r = max(srur*abs(yi),r0*ewt(i))
 530   y(i) = y(i) + r
    end do
-   call f(tn, y, ftem, rpar, ipar)
-   do jj = j,n,mband
+   call f(nswc_state_debdf1_tn, y, ftem, rpar, ipar)
+   do jj = j,nswc_state_debdf1_n,mband
       y(jj) = yh(jj,1)
       yjj = y(jj)
       r = max(srur*abs(yjj),r0*ewt(jj))
       fac = -hl0/r
       i1 = max(jj - mu,1)
-      i2 = min(jj + ml,n)
+      i2 = min(jj + ml,nswc_state_debdf1_n)
       ii = jj*meb1 - ml + 2
       do i = i1,i2
 540      wm(ii + i) = (ftem(i) - savf(i))*fac
       end do
    end do
 end do
-nfe = nfe + mba
+nswc_state_debdf1_nfe = nswc_state_debdf1_nfe + mba
 ! Add identity matrix. -------------------------------------------------
 570 ii = mband + 2
-do i = 1,n
+do i = 1,nswc_state_debdf1_n
    wm(ii) = wm(ii) + 1.0e0
 580 ii = ii + meband
 end do
 ! Do LU decomposition of P. --------------------------------------------
-call sgbfa(wm(3), meband, n, ml, mu, iwm(21), ier)
+call sgbfa(wm(3), meband, nswc_state_debdf1_n, ml, mu, iwm(21), nswc_state_debdf1_ier)
 !----------------------- End of subroutine pjac -----------------------
 end subroutine pjac
 
@@ -116151,14 +116004,8 @@ implicit none
 !
 integer :: iwm( *)
 real :: wm(*), x(*), tem(*)
-integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
-   & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
-real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, di, hl0, &
-   & phl0, r
-common /debdf1/ rownd, rowns(210), &
-   & el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
-   & ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
-   & nje, nqu
+integer :: i, meband, ml, mu
+real :: di, hl0, phl0, r
 !-----------------------------------------------------------------------
 ! This routine manages the solution of the linear system arising from
 ! a chord iteration.  It is called by stod  if miter .NE. 0.
@@ -116183,8 +116030,8 @@ common /debdf1/ rownd, rowns(210), &
 !       ier = -1 If a singular matrix arose with miter = 3.
 ! This routine also uses the common variables el0, h, miter, and N.
 !-----------------------------------------------------------------------
-ier = 0
-select case (miter)
+nswc_state_debdf1_ier = 0
+select case (nswc_state_debdf1_miter)
 case (1)
    go to 100
 case (2)
@@ -116196,30 +116043,30 @@ case (4)
 case (5)
    go to 400
 end select
-100 call sgesl(wm(3), n, n, iwm(21), x, 0)
+100 call sgesl(wm(3), nswc_state_debdf1_n, nswc_state_debdf1_n, iwm(21), x, 0)
 return
 !
 300 phl0 = wm(2)
-hl0 = h*el0
+hl0 = nswc_state_debdf1_h*nswc_state_debdf1_el0
 wm(2) = hl0
 if (hl0 == phl0) go to 330
 r = hl0/phl0
-do i = 1,n
+do i = 1,nswc_state_debdf1_n
    di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i + 2))
    if (abs(di) == 0.0e0) go to 390
 320 wm(i + 2) = 1.0e0/di
 end do
-330 do i = 1,n
+330 do i = 1,nswc_state_debdf1_n
 340 x(i) = wm(i + 2)*x(i)
 end do
 return
-390 ier = -1
+390 nswc_state_debdf1_ier = -1
 return
 !
 400 ml = iwm(1)
 mu = iwm(2)
 meband = 2*ml + mu + 1
-call sgbsl(wm(3), meband, n, ml, mu, iwm(21), x, 0)
+call sgbsl(wm(3), meband, nswc_state_debdf1_n, ml, mu, iwm(21), x, 0)
 !----------------------- End of subroutine slvs -----------------------
 end subroutine slvs
 
@@ -117499,8 +117346,6 @@ external cofx, cofy
 integer :: i, i1, iord, j, mp, np
 real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
    & eyj, fj, fyj, fyn, prtrb, xi, yj
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 logical :: singlr
 !
 !     sepel1 sets up vectors and arrays for input to blktri
@@ -117508,23 +117353,18 @@ logical :: singlr
 !     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
 !     solution is generated in USOL.
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     Set parameters internally
 !
-kswx = mbdcnd + 1
-kswy = nbdcnd + 1
-k = m + 1
-l = n + 1
-ait = a
-bit = b
-cit = c
-dit = d
+nswc_state_splp_kswx = mbdcnd + 1
+nswc_state_splp_kswy = nbdcnd + 1
+nswc_state_splp_k = m + 1
+nswc_state_splp_l = n + 1
+nswc_state_splp_ait = a
+nswc_state_splp_bit = b
+nswc_state_splp_cit = c
+nswc_state_splp_dit = d
 !
 !     Set right hand side values from GRHS in USOL on the interior
 !     and non-specified boundaries.
@@ -117534,76 +117374,76 @@ do i = 2,m
       usol(i,j) = grhs(i,j)
    end do
 end do
-if (kswx == 2 .or. kswx == 3) go to  40
+if (nswc_state_splp_kswx == 2 .or. nswc_state_splp_kswx == 3) go to  40
 do j = 2,n
    usol(1,j) = grhs(1,j)
 end do
 40 continue
-if (kswx == 2 .or. kswx == 5) go to  60
+if (nswc_state_splp_kswx == 2 .or. nswc_state_splp_kswx == 5) go to  60
 do j = 2,n
-   usol(k,j) = grhs(k,j)
+   usol(nswc_state_splp_k,j) = grhs(nswc_state_splp_k,j)
 end do
 60 continue
-if (kswy == 2 .or. kswy == 3) go to  80
+if (nswc_state_splp_kswy == 2 .or. nswc_state_splp_kswy == 3) go to  80
 do i = 2,m
    usol(i,1) = grhs(i,1)
 end do
 80 continue
-if (kswy == 2 .or. kswy == 5) go to 100
+if (nswc_state_splp_kswy == 2 .or. nswc_state_splp_kswy == 5) go to 100
 do i = 2,m
-   usol(i,l) = grhs(i,l)
+   usol(i,nswc_state_splp_l) = grhs(i,nswc_state_splp_l)
 end do
 100 continue
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
+if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 3 .and. nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 3) &
    & usol(1,1) = grhs(1,1)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
-   & usol(k,1) = grhs(k,1)
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(1,l) = grhs(1,l)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(k,l) = grhs(k,l)
+if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 5 .and. nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 3) &
+   & usol(nswc_state_splp_k,1) = grhs(nswc_state_splp_k,1)
+if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 3 .and. nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 5) &
+   & usol(1,nswc_state_splp_l) = grhs(1,nswc_state_splp_l)
+if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 5 .and. nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 5) &
+   & usol(nswc_state_splp_k,nswc_state_splp_l) = grhs(nswc_state_splp_k,nswc_state_splp_l)
 i1 = 1
 !
 !     Set switches for periodic or non-periodic boundaries
 !
 mp = 1
 np = 1
-if (kswx == 1) mp = 0
-if (kswy == 1) np = 0
+if (nswc_state_splp_kswx == 1) mp = 0
+if (nswc_state_splp_kswy == 1) np = 0
 !
 !     Set dlx,dly and size of block tri-diagonal system generated
 !     in NINT,mint
 !
-dlx = (bit - ait)/float(m)
-mit = k - 1
-if (kswx == 2) mit = k - 2
-if (kswx == 4) mit = k
-dly = (dit - cit)/float(n)
-nit = l - 1
-if (kswy == 2) nit = l - 2
-if (kswy == 4) nit = l
-tdlx3 = 2.0*dlx**3
-dlx4 = dlx**4
-tdly3 = 2.0*dly**3
-dly4 = dly**4
+nswc_state_splp_dlx = (nswc_state_splp_bit - nswc_state_splp_ait)/float(m)
+nswc_state_splp_mit = nswc_state_splp_k - 1
+if (nswc_state_splp_kswx == 2) nswc_state_splp_mit = nswc_state_splp_k - 2
+if (nswc_state_splp_kswx == 4) nswc_state_splp_mit = nswc_state_splp_k
+nswc_state_splp_dly = (nswc_state_splp_dit - nswc_state_splp_cit)/float(n)
+nswc_state_splp_nit = nswc_state_splp_l - 1
+if (nswc_state_splp_kswy == 2) nswc_state_splp_nit = nswc_state_splp_l - 2
+if (nswc_state_splp_kswy == 4) nswc_state_splp_nit = nswc_state_splp_l
+nswc_state_splp_tdlx3 = 2.0*nswc_state_splp_dlx**3
+nswc_state_splp_dlx4 = nswc_state_splp_dlx**4
+nswc_state_splp_tdly3 = 2.0*nswc_state_splp_dly**3
+nswc_state_splp_dly4 = nswc_state_splp_dly**4
 !
 !     Set subscript limits for portion of array to input to blktri
 !
-is = 1
-js = 1
-if (kswx == 2 .or. kswx == 3) is = 2
-if (kswy == 2 .or. kswy == 3) js = 2
-ns = nit + js - 1
-ms = mit + is - 1
+nswc_state_splp_is = 1
+nswc_state_splp_js = 1
+if (nswc_state_splp_kswx == 2 .or. nswc_state_splp_kswx == 3) nswc_state_splp_is = 2
+if (nswc_state_splp_kswy == 2 .or. nswc_state_splp_kswy == 3) nswc_state_splp_js = 2
+nswc_state_splp_ns = nswc_state_splp_nit + nswc_state_splp_js - 1
+nswc_state_splp_ms = nswc_state_splp_mit + nswc_state_splp_is - 1
 !
 !     Set X - Direction
 !
-do i = 1,mit
-   xi = ait + float(is + i - 2)*dlx
+do i = 1,nswc_state_splp_mit
+   xi = nswc_state_splp_ait + float(nswc_state_splp_is + i - 2)*nswc_state_splp_dlx
    call cofx(xi,ai,bi,ci)
-   axi = (ai/dlx - 0.5*bi)/dlx
-   bxi = -2.*ai/dlx**2 + ci
-   cxi = (ai/dlx + 0.5*bi)/dlx
+   axi = (ai/nswc_state_splp_dlx - 0.5*bi)/nswc_state_splp_dlx
+   bxi = -2.*ai/nswc_state_splp_dlx**2 + ci
+   cxi = (ai/nswc_state_splp_dlx + 0.5*bi)/nswc_state_splp_dlx
    am(i) = axi
    bm(i) = bxi
    cm(i) = cxi
@@ -117611,12 +117451,12 @@ end do
 !
 !     Set Y direction
 !
-do j = 1,nit
-   yj = cit + float(js + j - 2)*dly
+do j = 1,nswc_state_splp_nit
+   yj = nswc_state_splp_cit + float(nswc_state_splp_js + j - 2)*nswc_state_splp_dly
    call cofy(yj,dj,ej,fj)
-   dyj = (dj/dly - 0.5*ej)/dly
-   eyj = (-2.*dj/dly**2 + fj)
-   fyj = (dj/dly + 0.5*ej)/dly
+   dyj = (dj/nswc_state_splp_dly - 0.5*ej)/nswc_state_splp_dly
+   eyj = (-2.*dj/nswc_state_splp_dly**2 + fj)
+   fyj = (dj/nswc_state_splp_dly + 0.5*ej)/nswc_state_splp_dly
    an(j) = dyj
    bn(j) = eyj
    cn(j) = fyj
@@ -117625,8 +117465,8 @@ end do
 !     Adjust edges in X direction unless periodic
 !
 ax1 = am(1)
-cxm = cm(mit)
-select case (kswx)
+cxm = cm(nswc_state_splp_mit)
+select case (nswc_state_splp_kswx)
 case (1)
    go to 170
 case (2)
@@ -117642,41 +117482,41 @@ end select
 !     Dirichlet-Dirichlet in X direction
 !
 130 am(1) = 0.0
-cm(mit) = 0.0
+cm(nswc_state_splp_mit) = 0.0
 go to 170
 !
 !     Mixed-Dirichlet in X direction
 !
 140 am(1) = 0.0
-bm(1) = bm(1) + 2.*alpha*dlx*ax1
+bm(1) = bm(1) + 2.*alpha*nswc_state_splp_dlx*ax1
 cm(1) = cm(1) + ax1
-cm(mit) = 0.0
+cm(nswc_state_splp_mit) = 0.0
 go to 170
 !
 !     Dirichlet-mixed in X direction
 !
 150 am(1) = 0.0
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*beta*dlx*cxm
-cm(mit) = 0.0
+am(nswc_state_splp_mit) = am(nswc_state_splp_mit) + cxm
+bm(nswc_state_splp_mit) = bm(nswc_state_splp_mit) - 2.*beta*nswc_state_splp_dlx*cxm
+cm(nswc_state_splp_mit) = 0.0
 go to 170
 !
 !     Mixed - Mixed in X direction
 !
 160 continue
 am(1) = 0.0
-bm(1) = bm(1) + 2.*dlx*alpha*ax1
+bm(1) = bm(1) + 2.*nswc_state_splp_dlx*alpha*ax1
 cm(1) = cm(1) + ax1
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*dlx*beta*cxm
-cm(mit) = 0.0
+am(nswc_state_splp_mit) = am(nswc_state_splp_mit) + cxm
+bm(nswc_state_splp_mit) = bm(nswc_state_splp_mit) - 2.*nswc_state_splp_dlx*beta*cxm
+cm(nswc_state_splp_mit) = 0.0
 170 continue
 !
 !     Adjust in Y direction unless periodic
 !
 dy1 = an(1)
-fyn = cn(nit)
-select case (kswy)
+fyn = cn(nswc_state_splp_nit)
+select case (nswc_state_splp_kswy)
 case (1)
    go to 220
 case (2)
@@ -117693,63 +117533,63 @@ end select
 !
 180 continue
 an(1) = 0.0
-cn(nit) = 0.0
+cn(nswc_state_splp_nit) = 0.0
 go to 220
 !
 !     Mixed-Dirichlet in Y direction
 !
 190 continue
 an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
+bn(1) = bn(1) + 2.*nswc_state_splp_dly*gama*dy1
 cn(1) = cn(1) + dy1
-cn(nit) = 0.0
+cn(nswc_state_splp_nit) = 0.0
 go to 220
 !
 !     Dirichlet-mixed in Y direction
 !
 200 an(1) = 0.0
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.*dly*xnu*fyn
-cn(nit) = 0.0
+an(nswc_state_splp_nit) = an(nswc_state_splp_nit) + fyn
+bn(nswc_state_splp_nit) = bn(nswc_state_splp_nit) - 2.*nswc_state_splp_dly*xnu*fyn
+cn(nswc_state_splp_nit) = 0.0
 go to 220
 !
 !     Mixed - Mixed direction in Y direction
 !
 210 continue
 an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
+bn(1) = bn(1) + 2.*nswc_state_splp_dly*gama*dy1
 cn(1) = cn(1) + dy1
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
-cn(nit) = 0.0
-220 if (kswx == 1) go to 270
+an(nswc_state_splp_nit) = an(nswc_state_splp_nit) + fyn
+bn(nswc_state_splp_nit) = bn(nswc_state_splp_nit) - 2.0*nswc_state_splp_dly*xnu*fyn
+cn(nswc_state_splp_nit) = 0.0
+220 if (nswc_state_splp_kswx == 1) go to 270
 !
 !     Adjust USOL along X edge
 !
-do j = js,ns
-   if (kswx /= 2 .and. kswx /= 3) go to 230
-   usol(is,j) = usol(is,j) - ax1*usol(1,j)
+do j = nswc_state_splp_js,nswc_state_splp_ns
+   if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 3) go to 230
+   usol(nswc_state_splp_is,j) = usol(nswc_state_splp_is,j) - ax1*usol(1,j)
    go to 240
-230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
-240 if (kswx /= 2 .and. kswx /= 5) go to 250
-   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
+230 usol(nswc_state_splp_is,j) = usol(nswc_state_splp_is,j) + 2.0*nswc_state_splp_dlx*ax1*bda(j)
+240 if (nswc_state_splp_kswx /= 2 .and. nswc_state_splp_kswx /= 5) go to 250
+   usol(nswc_state_splp_ms,j) = usol(nswc_state_splp_ms,j) - cxm*usol(nswc_state_splp_k,j)
    go to 260
-250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
+250 usol(nswc_state_splp_ms,j) = usol(nswc_state_splp_ms,j) - 2.0*nswc_state_splp_dlx*cxm*bdb(j)
 260 continue
 end do
-270 if (kswy == 1) go to 320
+270 if (nswc_state_splp_kswy == 1) go to 320
 !
 !     Adjust USOL along Y edge
 !
-do i = is,ms
-   if (kswy /= 2 .and. kswy /= 3) go to 280
-   usol(i,js) = usol(i,js) - dy1*usol(i,1)
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   if (nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 3) go to 280
+   usol(i,nswc_state_splp_js) = usol(i,nswc_state_splp_js) - dy1*usol(i,1)
    go to 290
-280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
-290 if (kswy /= 2 .and. kswy /= 5) go to 300
-   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
+280 usol(i,nswc_state_splp_js) = usol(i,nswc_state_splp_js) + 2.0*nswc_state_splp_dly*dy1*bdc(i)
+290 if (nswc_state_splp_kswy /= 2 .and. nswc_state_splp_kswy /= 5) go to 300
+   usol(i,nswc_state_splp_ns) = usol(i,nswc_state_splp_ns) - fyn*usol(i,nswc_state_splp_l)
    go to 310
-300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
+300 usol(i,nswc_state_splp_ns) = usol(i,nswc_state_splp_ns) - 2.0*nswc_state_splp_dly*fyn*bdd(i)
 310 continue
 end do
 320 continue
@@ -117757,13 +117597,13 @@ end do
 !     Save adjusted edges in GRHS if iorder=4
 !
 if (iorder /= 4) go to 350
-do j = js,ns
-   grhs(is,j) = usol(is,j)
-   grhs(ms,j) = usol(ms,j)
+do j = nswc_state_splp_js,nswc_state_splp_ns
+   grhs(nswc_state_splp_is,j) = usol(nswc_state_splp_is,j)
+   grhs(nswc_state_splp_ms,j) = usol(nswc_state_splp_ms,j)
 end do
-do i = is,ms
-   grhs(i,js) = usol(i,js)
-   grhs(i,ns) = usol(i,ns)
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   grhs(i,nswc_state_splp_js) = usol(i,nswc_state_splp_js)
+   grhs(i,nswc_state_splp_ns) = usol(i,nswc_state_splp_ns)
 end do
 350 continue
 iord = iorder
@@ -117776,14 +117616,13 @@ call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
 !     Compute non-zero eigenvector in null space of transpose
 !     if singular
 !
-if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
-if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
+if (singlr) call trisp(nswc_state_splp_mit,am,bm,cm,dm,um,zm)
+if (singlr) call trisp(nswc_state_splp_nit,an,bn,cn,dn,un,zn)
 !
 !     Make initialization call to blktri
 !
-if (intl == 0) &
-   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
-   & usol(is,js),ierror,w)
+if (intl == 0)   call blktri(intl,np,nswc_state_splp_nit,an,bn,cn,mp,nswc_state_splp_mit,am,bm,cm,idmn,   usol(nswc_state_splp_is, &
+   & nswc_state_splp_js),ierror,w)
 if (ierror /= 0) return
 !
 !     Adjust right hand side if necessary
@@ -117793,19 +117632,19 @@ if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
 !
 !     Compute solution
 !
-call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
+call blktri(i1,np,nswc_state_splp_nit,an,bn,cn,mp,nswc_state_splp_mit,am,bm,cm,idmn,usol(nswc_state_splp_is,nswc_state_splp_js), &
    & ierror,w)
 if (ierror /= 0) return
 !
 !     Set periodic boundaries if necessary
 !
-if (kswx /= 1) go to 380
-do j = 1,l
-   usol(k,j) = usol(1,j)
+if (nswc_state_splp_kswx /= 1) go to 380
+do j = 1,nswc_state_splp_l
+   usol(nswc_state_splp_k,j) = usol(1,j)
 end do
-380 if (kswy /= 1) go to 400
-do i = 1,k
-   usol(i,l) = usol(i,1)
+380 if (nswc_state_splp_kswy /= 1) go to 400
+do i = 1,nswc_state_splp_k
+   usol(i,nswc_state_splp_l) = usol(i,1)
 end do
 400 continue
 !
@@ -117909,17 +117748,10 @@ real :: alpha, beta, gama, xnu
 logical :: singlr
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE CHECKS IF THE PDE   sepell
 !     must solve is a singular operator
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 singlr = .false.
@@ -117941,13 +117773,13 @@ if (gama /= 0.0 .or. xnu /= 0.0) return
 !     Check that non-derivative coefficient functions
 !     are zero
 !
-do i = is,ms
-   xi = ait + float(i - 1)*dlx
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   xi = nswc_state_splp_ait + float(i - 1)*nswc_state_splp_dlx
    call cofx(xi,ai,bi,ci)
    if (ci /= 0.0) return
 end do
-do j = js,ns
-   yj = cit + float(j - 1)*dly
+do j = nswc_state_splp_js,nswc_state_splp_ns
+   yj = nswc_state_splp_cit + float(j - 1)*nswc_state_splp_dly
    call cofy(yj,dj,ej,fj)
    if (fj /= 0.0) return
 end do
@@ -117963,31 +117795,24 @@ integer :: idmn
 real :: pertrb, usol(idmn,*), zm(*), zn(*)
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, ute
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This subroutine orthogonalizes the array usol with respect to
 !     the constant array in a weighted least squares norm
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-istr = is
-ifnl = ms
-jstr = js
-jfnl = ns
+istr = nswc_state_splp_is
+ifnl = nswc_state_splp_ms
+jstr = nswc_state_splp_js
+jfnl = nswc_state_splp_ns
 !
 !     Compute weighted inner products
 !
 ute = 0.0
 ete = 0.0
-do i = is,ms
-   ii = i - is + 1
-   do j = js,ns
-      jj = j - js + 1
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   ii = i - nswc_state_splp_is + 1
+   do j = nswc_state_splp_js,nswc_state_splp_ns
+      jj = j - nswc_state_splp_js + 1
       ete = ete + zm(ii)*zn(jj)
       ute = ute + usol(i,j)*zm(ii)*zn(jj)
    end do
@@ -118012,35 +117837,28 @@ integer :: idmn
 real :: pertb, usol(idmn,*), zm(*), zn(*)
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, pertrb, ute
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This subroutine orthogonalizes the array usol with respect to
 !     the constant array in a weighted least squares norm
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !     Entry at minsol occurrs when the final solution is
 !     to be minimized with respect to the weighted
 !     least squares norm
 !
 istr = 1
-ifnl = k
+ifnl = nswc_state_splp_k
 jstr = 1
-jfnl = l
+jfnl = nswc_state_splp_l
 !
 !     Compute weighted inner products
 !
 ute = 0.0
 ete = 0.0
-do i = is,ms
-   ii = i - is + 1
-   do j = js,ns
-      jj = j - js + 1
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   ii = i - nswc_state_splp_is + 1
+   do j = nswc_state_splp_js,nswc_state_splp_ns
+      jj = j - nswc_state_splp_js + 1
       ete = ete + zm(ii)*zn(jj)
       ute = ute + usol(i,j)*zm(ii)*zn(jj)
    end do
@@ -118111,8 +117929,6 @@ real :: grhs(mn,*), usol(idmn,*)
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
    & xi, yj
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This subroutine first approximates the truncation error given
 !     BY  TRUN1(X,Y)=dlx**2*tx+dly**2*ty WHERE
@@ -118129,20 +117945,15 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     and then transferred to usol to be used as a new right
 !     hand side when calling blktri for a fourth order solution.
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     Compute truncation error approximation over the entire mesh
 !
-do j = js,ns
-   yj = cit + float(j - 1)*dly
+do j = nswc_state_splp_js,nswc_state_splp_ns
+   yj = nswc_state_splp_cit + float(j - 1)*nswc_state_splp_dly
    call cofy(yj,dj,ej,fj)
-   do i = is,ms
-      xi = ait + float(i - 1)*dlx
+   do i = nswc_state_splp_is,nswc_state_splp_ms
+      xi = nswc_state_splp_ait + float(i - 1)*nswc_state_splp_dlx
       call cofx(xi,ai,bi,ci)
 !
 !     Compute partial derivative approximations at (XI,YJ)
@@ -118154,18 +117965,18 @@ do j = js,ns
 !
 !     Reset form of truncation if at boundary which is non-periodic
 !
-      if (kswx == 1 .or. (i > 1 .and. i < k)) go to  10
-      tx = ai/3.0*(uxxxx/4.0 + uxxx/dlx)
-10    if (kswy == 1 .or. (j > 1 .and. j < l)) go to  20
-      ty = dj/3.0*(uyyyy/4.0 + uyyy/dly)
-20    grhs(i,j) = grhs(i,j) + dlx**2*tx + dly**2*ty
+      if (nswc_state_splp_kswx == 1 .or. (i > 1 .and. i < nswc_state_splp_k)) go to  10
+      tx = ai/3.0*(uxxxx/4.0 + uxxx/nswc_state_splp_dlx)
+10    if (nswc_state_splp_kswy == 1 .or. (j > 1 .and. j < nswc_state_splp_l)) go to  20
+      ty = dj/3.0*(uyyyy/4.0 + uyyy/nswc_state_splp_dly)
+20    grhs(i,j) = grhs(i,j) + nswc_state_splp_dlx**2*tx + nswc_state_splp_dly**2*ty
    end do
 end do
 !
 !     Reset the right hand side in usol
 !
-do i = is,ms
-   do j = js,ns
+do i = nswc_state_splp_is,nswc_state_splp_ms
+   do j = nswc_state_splp_js,nswc_state_splp_ns
       usol(i,j) = grhs(i,j)
    end do
 end do
@@ -118175,171 +117986,147 @@ subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uxxx, uxxxx
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This program computes second order finite difference
 !     approximations to the third and fourth X
 !     partial derivatives of u at the (i,j) mesh point
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (i > 2 .and. i < (k - 1)) go to  50
+if (i > 2 .and. i < (nswc_state_splp_k - 1)) go to  50
 if (i == 1) go to  10
 if (i == 2) go to  30
-if (i == k - 1) go to  60
-if (i == k) go to  80
+if (i == nswc_state_splp_k - 1) go to  60
+if (i == nswc_state_splp_k) go to  80
 !
 !     Compute partial derivative approximations at X=A
 !
-10 if (kswx == 1) go to  20
-uxxx = (-5.0*u(1,j) + 18.0*u(2,j) - 24.0*u(3,j) + 14.0*u(4,j) - &
-   & 3.0*u(5,j))/(tdlx3)
-uxxxx = (3.0*u(1,j) - 14.0*u(2,j) + 26.0*u(3,j) - 24.0*u(4,j) + &
-   & 11.0*u(5,j) - 2.0*u(6,j))/dlx4
+10 if (nswc_state_splp_kswx == 1) go to  20
+uxxx = (-5.0*u(1,j) + 18.0*u(2,j) - 24.0*u(3,j) + 14.0*u(4,j) -   3.0*u(5,j))/(nswc_state_splp_tdlx3)
+uxxxx = (3.0*u(1,j) - 14.0*u(2,j) + 26.0*u(3,j) - 24.0*u(4,j) +   11.0*u(5,j) - 2.0*u(6,j))/nswc_state_splp_dlx4
 return
 !
 !     Periodic at X=A
 !
-20 uxxx = (-u(k - 2,j) + 2.0*u(k - 1,j) - 2.0*u(2,j) + u(3,j))/(tdlx3)
-uxxxx = (u(k - 2,j) - 4.0*u(k - 1,j) + 6.0*u(1,j) - 4.0*u(2,j) + u(3,j))/dlx4
+20 uxxx = (-u(nswc_state_splp_k - 2,j) + 2.0*u(nswc_state_splp_k - 1,j) - 2.0*u(2,j) + u(3,j))/(nswc_state_splp_tdlx3)
+uxxxx = (u(nswc_state_splp_k - 2,j) - 4.0*u(nswc_state_splp_k - 1,j) + 6.0*u(1,j) - 4.0*u(2,j) + u(3,j))/nswc_state_splp_dlx4
 return
 !
 !     Compute partial derivative approximations at X=A+dlx
 !
-30 if (kswx == 1) go to  40
-uxxx = (-3.0*u(1,j) + 10.0*u(2,j) - 12.0*u(3,j) + 6.0*u(4,j) - u(5,j))/ &
-   & tdlx3
-uxxxx = (2.0*u(1,j) - 9.0*u(2,j) + 16.0*u(3,j) - 14.0*u(4,j) + 6.0*u(5,j) - &
-   & u(6,j))/dlx4
+30 if (nswc_state_splp_kswx == 1) go to  40
+uxxx = (-3.0*u(1,j) + 10.0*u(2,j) - 12.0*u(3,j) + 6.0*u(4,j) - u(5,j))/   nswc_state_splp_tdlx3
+uxxxx = (2.0*u(1,j) - 9.0*u(2,j) + 16.0*u(3,j) - 14.0*u(4,j) + 6.0*u(5,j) -   u(6,j))/nswc_state_splp_dlx4
 return
 !
 !     Periodic at X=A+dlx
 !
-40 uxxx = (-u(k - 1,j) + 2.0*u(1,j) - 2.0*u(3,j) + u(4,j))/(tdlx3)
-uxxxx = (u(k - 1,j) - 4.0*u(1,j) + 6.0*u(2,j) - 4.0*u(3,j) + u(4,j))/dlx4
+40 uxxx = (-u(nswc_state_splp_k - 1,j) + 2.0*u(1,j) - 2.0*u(3,j) + u(4,j))/(nswc_state_splp_tdlx3)
+uxxxx = (u(nswc_state_splp_k - 1,j) - 4.0*u(1,j) + 6.0*u(2,j) - 4.0*u(3,j) + u(4,j))/nswc_state_splp_dlx4
 return
 !
 !     Compute partial derivative approximations on the interior
 !
 50 continue
-uxxx = (-u(i - 2,j) + 2.0*u(i - 1,j) - 2.0*u(i + 1,j) + u(i + 2,j))/tdlx3
-uxxxx = (u(i - 2,j) - 4.0*u(i - 1,j) + 6.0*u(i,j) - 4.0*u(i + 1,j) + u(i + 2,j))/ &
-   & dlx4
+uxxx = (-u(i - 2,j) + 2.0*u(i - 1,j) - 2.0*u(i + 1,j) + u(i + 2,j))/nswc_state_splp_tdlx3
+uxxxx = (u(i - 2,j) - 4.0*u(i - 1,j) + 6.0*u(i,j) - 4.0*u(i + 1,j) + u(i + 2,j))/   nswc_state_splp_dlx4
 return
 !
 !     Compute partial derivative approximations at X=B-dlx
 !
-60 if (kswx == 1) go to  70
-uxxx = (u(k - 4,j) - 6.0*u(k - 3,j) + 12.0*u(k - 2,j) - 10.0*u(k - 1,j) + &
-   & 3.0*u(k,j))/tdlx3
-uxxxx = (-u(k - 5,j) + 6.0*u(k - 4,j) - 14.0*u(k - 3,j) + 16.0*u(k - 2,j) - &
-   & 9.0*u(k - 1,j) + 2.0*u(k,j))/dlx4
+60 if (nswc_state_splp_kswx == 1) go to  70
+uxxx = (u(nswc_state_splp_k - 4,j) - 6.0*u(nswc_state_splp_k - 3,j) + 12.0*u(nswc_state_splp_k - 2,j) - 10.0*u(nswc_state_splp_k - &
+   & 1,j) +   3.0*u(nswc_state_splp_k,j))/nswc_state_splp_tdlx3
+uxxxx = (-u(nswc_state_splp_k - 5,j) + 6.0*u(nswc_state_splp_k - 4,j) - 14.0*u(nswc_state_splp_k - 3,j) + 16.0*u(nswc_state_splp_k &
+   & - 2,j) -   9.0*u(nswc_state_splp_k - 1,j) + 2.0*u(nswc_state_splp_k,j))/nswc_state_splp_dlx4
 return
 !
 !     Periodic at X=B-dlx
 !
-70 uxxx = (-u(k - 3,j) + 2.0*u(k - 2,j) - 2.0*u(1,j) + u(2,j))/tdlx3
-uxxxx = (u(k - 3,j) - 4.0*u(k - 2,j) + 6.0*u(k - 1,j) - 4.0*u(1,j) + u(2,j))/ &
-   & dlx4
+70 uxxx = (-u(nswc_state_splp_k - 3,j) + 2.0*u(nswc_state_splp_k - 2,j) - 2.0*u(1,j) + u(2,j))/nswc_state_splp_tdlx3
+uxxxx = (u(nswc_state_splp_k - 3,j) - 4.0*u(nswc_state_splp_k - 2,j) + 6.0*u(nswc_state_splp_k - 1,j) - 4.0*u(1,j) + u(2,j))/ &
+   & nswc_state_splp_dlx4
 return
 !
 !     Compute partial derivative approximations at X=B
 !
-80 uxxx = -(3.0*u(k - 4,j) - 14.0*u(k - 3,j) + 24.0*u(k - 2,j) - 18.0*u(k - 1,j) + &
-   & 5.0*u(k,j))/tdlx3
-uxxxx = (-2.0*u(k - 5,j) + 11.0*u(k - 4,j) - 24.0*u(k - 3,j) + 26.0*u(k - 2,j) - &
-   & 14.0*u(k - 1,j) + 3.0*u(k,j))/dlx4
+80 uxxx = -(3.0*u(nswc_state_splp_k - 4,j) - 14.0*u(nswc_state_splp_k - 3,j) + 24.0*u(nswc_state_splp_k - 2,j) - 18.0*u( &
+   & nswc_state_splp_k - 1,j) +   5.0*u(nswc_state_splp_k,j))/nswc_state_splp_tdlx3
+uxxxx = (-2.0*u(nswc_state_splp_k - 5,j) + 11.0*u(nswc_state_splp_k - 4,j) - 24.0*u(nswc_state_splp_k - 3,j) + 26.0*u( &
+   & nswc_state_splp_k - 2,j) -   14.0*u(nswc_state_splp_k - 1,j) + 3.0*u(nswc_state_splp_k,j))/nswc_state_splp_dlx4
 end subroutine dxfn
 
 subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uyyy, uyyyy
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This program computes second order finite difference
 !     approximations to the third and fourth Y
 !     partial derivatives of u at the (i,j) mesh point
 !
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (j > 2 .and. j < (l - 1)) go to  50
+if (j > 2 .and. j < (nswc_state_splp_l - 1)) go to  50
 if (j == 1) go to  10
 if (j == 2) go to  30
-if (j == l - 1) go to  60
-if (j == l) go to  80
+if (j == nswc_state_splp_l - 1) go to  60
+if (j == nswc_state_splp_l) go to  80
 !
 !     Compute partial derivative approximations at Y=C
 !
-10 if (kswy == 1) go to  20
-uyyy = (-5.0*u(i,1) + 18.0*u(i,2) - 24.0*u(i,3) + 14.0*u(i,4) - &
-   & 3.0*u(i,5))/tdly3
-uyyyy = (3.0*u(i,1) - 14.0*u(i,2) + 26.0*u(i,3) - 24.0*u(i,4) + &
-   & 11.0*u(i,5) - 2.0*u(i,6))/dly4
+10 if (nswc_state_splp_kswy == 1) go to  20
+uyyy = (-5.0*u(i,1) + 18.0*u(i,2) - 24.0*u(i,3) + 14.0*u(i,4) -   3.0*u(i,5))/nswc_state_splp_tdly3
+uyyyy = (3.0*u(i,1) - 14.0*u(i,2) + 26.0*u(i,3) - 24.0*u(i,4) +   11.0*u(i,5) - 2.0*u(i,6))/nswc_state_splp_dly4
 return
 !
 !     Periodic at X=A
 !
-20 uyyy = (-u(i,l - 2) + 2.0*u(i,l - 1) - 2.0*u(i,2) + u(i,3))/tdly3
-uyyyy = (u(i,l - 2) - 4.0*u(i,l - 1) + 6.0*u(i,1) - 4.0*u(i,2) + u(i,3))/dly4
+20 uyyy = (-u(i,nswc_state_splp_l - 2) + 2.0*u(i,nswc_state_splp_l - 1) - 2.0*u(i,2) + u(i,3))/nswc_state_splp_tdly3
+uyyyy = (u(i,nswc_state_splp_l - 2) - 4.0*u(i,nswc_state_splp_l - 1) + 6.0*u(i,1) - 4.0*u(i,2) + u(i,3))/nswc_state_splp_dly4
 return
 !
 !     Compute partial derivative approximations at Y=C+dly
 !
-30 if (kswy == 1) go to  40
-uyyy = (-3.0*u(i,1) + 10.0*u(i,2) - 12.0*u(i,3) + 6.0*u(i,4) - u(i,5))/ &
-   & tdly3
-uyyyy = (2.0*u(i,1) - 9.0*u(i,2) + 16.0*u(i,3) - 14.0*u(i,4) + 6.0*u(i,5) - &
-   & u(i,6))/dly4
+30 if (nswc_state_splp_kswy == 1) go to  40
+uyyy = (-3.0*u(i,1) + 10.0*u(i,2) - 12.0*u(i,3) + 6.0*u(i,4) - u(i,5))/   nswc_state_splp_tdly3
+uyyyy = (2.0*u(i,1) - 9.0*u(i,2) + 16.0*u(i,3) - 14.0*u(i,4) + 6.0*u(i,5) -   u(i,6))/nswc_state_splp_dly4
 return
 !
 !     Periodic at Y=C+dly
 !
-40 uyyy = (-u(i,l - 1) + 2.0*u(i,1) - 2.0*u(i,3) + u(i,4))/tdly3
-uyyyy = (u(i,l - 1) - 4.0*u(i,1) + 6.0*u(i,2) - 4.0*u(i,3) + u(i,4))/dly4
+40 uyyy = (-u(i,nswc_state_splp_l - 1) + 2.0*u(i,1) - 2.0*u(i,3) + u(i,4))/nswc_state_splp_tdly3
+uyyyy = (u(i,nswc_state_splp_l - 1) - 4.0*u(i,1) + 6.0*u(i,2) - 4.0*u(i,3) + u(i,4))/nswc_state_splp_dly4
 return
 !
 !     Compute partial derivative approximations on the interior
 !
 50 continue
-uyyy = (-u(i,j - 2) + 2.0*u(i,j - 1) - 2.0*u(i,j + 1) + u(i,j + 2))/tdly3
-uyyyy = (u(i,j - 2) - 4.0*u(i,j - 1) + 6.0*u(i,j) - 4.0*u(i,j + 1) + u(i,j + 2))/ &
-   & dly4
+uyyy = (-u(i,j - 2) + 2.0*u(i,j - 1) - 2.0*u(i,j + 1) + u(i,j + 2))/nswc_state_splp_tdly3
+uyyyy = (u(i,j - 2) - 4.0*u(i,j - 1) + 6.0*u(i,j) - 4.0*u(i,j + 1) + u(i,j + 2))/   nswc_state_splp_dly4
 return
 !
 !     Compute partial derivative approximations at Y=D-dly
 !
-60 if (kswy == 1) go to  70
-uyyy = (u(i,l - 4) - 6.0*u(i,l - 3) + 12.0*u(i,l - 2) - 10.0*u(i,l - 1) + &
-   & 3.0*u(i,l))/tdly3
-uyyyy = (-u(i,l - 5) + 6.0*u(i,l - 4) - 14.0*u(i,l - 3) + 16.0*u(i,l - 2) - &
-   & 9.0*u(i,l - 1) + 2.0*u(i,l))/dly4
+60 if (nswc_state_splp_kswy == 1) go to  70
+uyyy = (u(i,nswc_state_splp_l - 4) - 6.0*u(i,nswc_state_splp_l - 3) + 12.0*u(i,nswc_state_splp_l - 2) - 10.0*u(i,nswc_state_splp_l &
+   & - 1) +   3.0*u(i,nswc_state_splp_l))/nswc_state_splp_tdly3
+uyyyy = (-u(i,nswc_state_splp_l - 5) + 6.0*u(i,nswc_state_splp_l - 4) - 14.0*u(i,nswc_state_splp_l - 3) + 16.0*u(i, &
+   & nswc_state_splp_l - 2) -   9.0*u(i,nswc_state_splp_l - 1) + 2.0*u(i,nswc_state_splp_l))/nswc_state_splp_dly4
 return
 !
 !     Periodic at Y=D-dly
 !
 70 continue
-uyyy = (-u(i,l - 3) + 2.0*u(i,l - 2) - 2.0*u(i,1) + u(i,2))/tdly3
-uyyyy = (u(i,l - 3) - 4.0*u(i,l - 2) + 6.0*u(i,l - 1) - 4.0*u(i,1) + u(i,2))/ &
-   & dly4
+uyyy = (-u(i,nswc_state_splp_l - 3) + 2.0*u(i,nswc_state_splp_l - 2) - 2.0*u(i,1) + u(i,2))/nswc_state_splp_tdly3
+uyyyy = (u(i,nswc_state_splp_l - 3) - 4.0*u(i,nswc_state_splp_l - 2) + 6.0*u(i,nswc_state_splp_l - 1) - 4.0*u(i,1) + u(i,2))/ &
+   & nswc_state_splp_dly4
 return
 !
 !     Compute partial derivative approximations at Y=D
 !
-80 uyyy = -(3.0*u(i,l - 4) - 14.0*u(i,l - 3) + 24.0*u(i,l - 2) - 18.0*u(i,l - 1) + &
-   & 5.0*u(i,l))/tdly3
-uyyyy = (-2.0*u(i,l - 5) + 11.0*u(i,l - 4) - 24.0*u(i,l - 3) + 26.0*u(i,l - 2) - &
-   & 14.0*u(i,l - 1) + 3.0*u(i,l))/dly4
+80 uyyy = -(3.0*u(i,nswc_state_splp_l - 4) - 14.0*u(i,nswc_state_splp_l - 3) + 24.0*u(i,nswc_state_splp_l - 2) - 18.0*u(i, &
+   & nswc_state_splp_l - 1) +   5.0*u(i,nswc_state_splp_l))/nswc_state_splp_tdly3
+uyyyy = (-2.0*u(i,nswc_state_splp_l - 5) + 11.0*u(i,nswc_state_splp_l - 4) - 24.0*u(i,nswc_state_splp_l - 3) + 26.0*u(i, &
+   & nswc_state_splp_l - 2) -   14.0*u(i,nswc_state_splp_l - 1) + 3.0*u(i,nswc_state_splp_l))/nswc_state_splp_dly4
 end subroutine dyfn
 
 subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
@@ -118348,8 +118135,6 @@ implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 !
 !
 !***********************************************************************
@@ -118487,18 +118272,16 @@ real :: cnv, eps
 !
 !
 !
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 ! Test m and n for the proper form
 !
-nm = n
+nswc_state_cblkt_nm = n
 ierror = 0
 if ( ( m - 5 ) < 0 ) go to 10
 go to 20
 10 ierror = 1
 go to 190
-20 if ( ( nm - 3 ) < 0 ) go to 30
+20 if ( ( nswc_state_cblkt_nm - 3 ) < 0 ) go to 30
 go to 40
 30 ierror = 2
 go to 190
@@ -118507,33 +118290,33 @@ go to 60
 50 ierror = 3
 go to 190
 60 nh = n
-npp = np
-if ( ( npp ) == 0 ) go to 80
+nswc_state_cblkt_npp = np
+if ( ( nswc_state_cblkt_npp ) == 0 ) go to 80
 go to 70
 70 nh = nh + 1
-80 ik = 2
-k = 1
-90 ik = ik + ik
-k = k + 1
-if ( ( nh - ik ) <= 0 ) go to 100
+80 nswc_state_cblkt_ik = 2
+nswc_state_cblkt_k = 1
+90 nswc_state_cblkt_ik = nswc_state_cblkt_ik + nswc_state_cblkt_ik
+nswc_state_cblkt_k = nswc_state_cblkt_k + 1
+if ( ( nh - nswc_state_cblkt_ik ) <= 0 ) go to 100
 go to 90
-100 nl = ik
-ik = ik + ik
+100 nl = nswc_state_cblkt_ik
+nswc_state_cblkt_ik = nswc_state_cblkt_ik + nswc_state_cblkt_ik
 nl = nl - 1
-iwah = (k - 2)*ik + k + 6
-if ( ( npp ) == 0 ) go to 120
+iwah = (nswc_state_cblkt_k - 2)*nswc_state_cblkt_ik + nswc_state_cblkt_k + 6
+if ( ( nswc_state_cblkt_npp ) == 0 ) go to 120
 go to 110
 !
 !     Divide w into working sub arrays
 !
 110 iw1 = iwah
-iwbh = iw1 + nm
-w(1) = float(iw1 - 1 + max(2*nm,6*m))
+iwbh = iw1 + nswc_state_cblkt_nm
+w(1) = float(iw1 - 1 + max(2*nswc_state_cblkt_nm,6*m))
 go to 130
-120 iwbh = iwah + nm + nm
+120 iwbh = iwah + nswc_state_cblkt_nm + nswc_state_cblkt_nm
 iw1 = iwbh
-w(1) = float(iw1 - 1 + max(2*nm,6*m))
-nm = nm - 1
+w(1) = float(iw1 - 1 + max(2*nswc_state_cblkt_nm,6*m))
+nswc_state_cblkt_nm = nswc_state_cblkt_nm - 1
 !
 ! Subroutine compb computes the roots of the B polynomials
 !
@@ -118572,8 +118355,6 @@ integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
    & imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
    & izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
 real :: dum
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 !
 ! blktr1 solves the linear system
 !
@@ -118586,12 +118367,10 @@ real :: cnv, eps
 ! of the roots of the b sub P polynomial are complex
 !
 !
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 ! Begin reduction phase
 !
-kdo = k - 1
+kdo = nswc_state_cblkt_k - 1
 do l = 1,kdo
    ir = l - 1
    i2 = 2**ir
@@ -118604,9 +118383,9 @@ do l = 1,kdo
    call indxb(i3,irm1,im1,nm1)
    call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
       & m,am,bm,cm,wd,ww,wu)
-   if = 2**k
+   if = 2**nswc_state_cblkt_k
    do i = i4,if,i4
-      if ( ( i - nm ) <= 0 ) go to 10
+      if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 10
       go to 80
 10    ipi1 = i + i1
       ipi2 = i + i2
@@ -118621,7 +118400,7 @@ do l = 1,kdo
       call indxb(ipi3,irm1,ip3,np3)
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
-      if ( ( ipi2 - nm ) <= 0 ) go to 50
+      if ( ( ipi2 - nswc_state_cblkt_nm ) <= 0 ) go to 50
       go to 30
 30    do j = 1,m
          w3(j) = 0.
@@ -118638,25 +118417,25 @@ do l = 1,kdo
 80    continue
    end do
 end do
-if ( ( npp ) == 0 ) go to 100
+if ( ( nswc_state_cblkt_npp ) == 0 ) go to 100
 go to 320
 !
 !     The periodic case is treated using the capacitance matrix method
 !
-100 if = 2**k
+100 if = 2**nswc_state_cblkt_k
 i = if/2
 i1 = i/2
-call indxb(i - i1,k - 2,im1,nm1)
-call indxb(i + i1,k - 2,ip1,np1)
-call indxb(i,k - 1,iz,nz)
+call indxb(i - i1,nswc_state_cblkt_k - 2,im1,nm1)
+call indxb(i + i1,nswc_state_cblkt_k - 2,ip1,np1)
+call indxb(i,nswc_state_cblkt_k - 1,iz,nz)
 call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
    & bm,cm,wd,ww,wu)
 izr = i
 do j = 1,m
    w2(j) = w1(j)
 end do
-do ll = 2,k
-   l = k - ll + 1
+do ll = 2,nswc_state_cblkt_k
+   l = nswc_state_cblkt_k - ll + 1
    ir = l - 1
    i2 = 2**ir
    i1 = i2/2
@@ -118673,8 +118452,8 @@ do ll = 2,k
    call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
 end do
-do ll = 2,k
-   l = k - ll + 1
+do ll = 2,nswc_state_cblkt_k
+   l = nswc_state_cblkt_k - ll + 1
    ir = l - 1
    i2 = 2**ir
    i1 = i2/2
@@ -118683,7 +118462,7 @@ do ll = 2,k
    do i = i2,ifd,i4
       if ( ( i - i2 - izr ) == 0 ) go to 140
       go to 170
-140   if ( ( i - nm ) <= 0 ) go to 150
+140   if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 150
       go to 180
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
@@ -118697,29 +118476,30 @@ do ll = 2,k
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
-      if ( ( i - nm ) == 0 ) go to 190
+      if ( ( i - nswc_state_cblkt_nm ) == 0 ) go to 190
       go to 170
 170   continue
    end do
 180 continue
 end do
 190 do j = 1,m
-   y(j,nm + 1) = y(j,nm + 1) - cn(nm + 1)*w1(j) - an(nm + 1)*w2(j)
+   y(j,nswc_state_cblkt_nm + 1) = y(j,nswc_state_cblkt_nm + 1) - cn(nswc_state_cblkt_nm + 1)*w1(j) - an(nswc_state_cblkt_nm + 1)* &
+      & w2(j)
 end do
-call indxb(if/2,k - 1,im1,nm1)
-call indxb(if,k - 1,ip,np)
-if ( ( ncmplx ) == 0 ) go to 220
+call indxb(if/2,nswc_state_cblkt_k - 1,im1,nm1)
+call indxb(if,nswc_state_cblkt_k - 1,ip,np)
+if ( ( nswc_state_cblkt_ncmplx ) == 0 ) go to 220
 go to 210
-210 call cprdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
-   & y(1,nm + 1),m,am,bm,cm,w1,w3,ww)
+210 call cprdct(nswc_state_cblkt_nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nswc_state_cblkt_nm + 1),   y(1,nswc_state_cblkt_nm + 1), &
+   & m,am,bm,cm,w1,w3,ww)
 go to 230
-220 call prdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
-   & y(1,nm + 1),m,am,bm,cm,wd,ww,wu)
+220 call prdct(nswc_state_cblkt_nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nswc_state_cblkt_nm + 1),   y(1,nswc_state_cblkt_nm + 1),m &
+   & ,am,bm,cm,wd,ww,wu)
 230 do j = 1,m
-   w1(j) = an(1)*y(j,nm + 1)
-   w2(j) = cn(nm)*y(j,nm + 1)
+   w1(j) = an(1)*y(j,nswc_state_cblkt_nm + 1)
+   w2(j) = cn(nswc_state_cblkt_nm)*y(j,nswc_state_cblkt_nm + 1)
    y(j,1) = y(j,1) - w1(j)
-   y(j,nm) = y(j,nm) - w2(j)
+   y(j,nswc_state_cblkt_nm) = y(j,nswc_state_cblkt_nm) - w2(j)
 end do
 do l = 1,kdo
    ir = l - 1
@@ -118740,7 +118520,7 @@ do l = 1,kdo
    end do
 end do
 !
-izr = nm
+izr = nswc_state_cblkt_nm
 do l = 1,kdo
    ir = l - 1
    i2 = 2**ir
@@ -118776,8 +118556,8 @@ end do
 !
 ! Begin back substitution phase
 !
-320 do ll = 1,k
-   l = k - ll + 1
+320 do ll = 1,nswc_state_cblkt_k
+   l = nswc_state_cblkt_k - ll + 1
    ir = l - 1
    irm1 = ir - 1
    i2 = 2**ir
@@ -118785,7 +118565,7 @@ end do
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if ( ( i - nm ) <= 0 ) go to 330
+      if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 330
       go to 430
 330   imi1 = i - i1
       imi2 = i - i2
@@ -118804,7 +118584,7 @@ end do
       go to 370
 360   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
          & w1,m,am,bm,cm,wd,ww,wu)
-370   if ( ( ipi2 - nm ) <= 0 ) go to 400
+370   if ( ( ipi2 - nswc_state_cblkt_nm ) <= 0 ) go to 400
       go to 380
 380   do j = 1,m
          w2(j) = 0.
@@ -118825,14 +118605,10 @@ end subroutine blktr1
 subroutine indxa(i,ir,idxa,na)
 implicit none
 integer :: i, idxa, ir, na
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 na = 2**ir
 idxa = i - na + 1
-if ( ( i - nm ) <= 0 ) go to 20
+if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 20
 go to 10
 10 na = 0
 20 return
@@ -118841,14 +118617,10 @@ end subroutine indxa
 subroutine indxc(i,ir,idxc,nc)
 implicit none
 integer :: i, idxc, ir, nc
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 nc = 2**ir
 idxc = i
-if ( ( idxc + nc - 1 - nm ) <= 0 ) go to 20
+if ( ( idxc + nc - 1 - nswc_state_cblkt_nm ) <= 0 ) go to 20
 go to 10
 10 nc = 0
 20 return
@@ -118858,37 +118630,33 @@ subroutine indxb(i,ir,idx,idp)
 implicit none
 integer :: i, idp, idx, ir
 integer :: id, ipl, izh
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 integer :: nswc_ai_i4
 !
 ! B(idx) is the location of the first root of the B(i,ir) polynomial
 !
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 idp = 0
 nswc_ai_i4 = ir
 if ( nswc_ai_i4 < 0 ) go to 70
 if ( nswc_ai_i4 == 0 ) go to 10
 go to 30
-10 if ( ( i - nm ) <= 0 ) go to 20
+10 if ( ( i - nswc_state_cblkt_nm ) <= 0 ) go to 20
 go to 70
 20 idx = i
 idp = 1
 return
 30 izh = 2**ir
 id = i - izh - izh
-idx = id + id + (ir - 1)*ik + ir + (ik - i)/izh + 4
+idx = id + id + (ir - 1)*nswc_state_cblkt_ik + ir + (nswc_state_cblkt_ik - i)/izh + 4
 ipl = izh - 1
 idp = izh + izh - 1
-if ( ( i - ipl - nm ) <= 0 ) go to 50
+if ( ( i - ipl - nswc_state_cblkt_nm ) <= 0 ) go to 50
 go to 40
 40 idp = 0
 return
-50 if ( ( i + ipl - nm ) <= 0 ) go to 70
+50 if ( ( i + ipl - nswc_state_cblkt_nm ) <= 0 ) go to 70
 go to 60
-60 idp = nm + ipl - i + 1
+60 idp = nswc_state_cblkt_nm + ipl - i + 1
 70 return
 end subroutine indxb
 
@@ -119376,8 +119144,6 @@ real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
 integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
    & kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
 real :: arg, bnorm, d1, d2, d3
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 complex, allocatable :: root_complex(:)
 real, allocatable :: root_real(:)
 !
@@ -119386,21 +119152,19 @@ real, allocatable :: root_real(:)
 !     Ierror is set to 4 if either tqlrt0 fails or A(j+1)*C(j) is
 !     less than 0 for some j. ah and bh are temporary work arrays.
 !
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
-eps = spmpar(1)
+nswc_state_cblkt_eps = spmpar(1)
 bnorm = abs(bn(1))
-do j = 2,nm
+do j = 2,nswc_state_cblkt_nm
    bnorm = max(bnorm,abs(bn(j)))
    arg = an(j)*cn(j - 1)
    if ( ( arg ) < 0 ) go to 220
    go to 30
 30 b(j) = sign(sqrt(arg),an(j))
 end do
-cnv = eps*bnorm
-if = 2**k
-kdo = k - 1
+nswc_state_cblkt_cnv = nswc_state_cblkt_eps*bnorm
+if = 2**nswc_state_cblkt_k
+kdo = nswc_state_cblkt_k - 1
 do l = 1,kdo
    ir = l - 1
    i2 = 2**ir
@@ -119430,16 +119194,16 @@ do l = 1,kdo
    end do
 100 continue
 end do
-do j = 1,nm
+do j = 1,nswc_state_cblkt_nm
    b(j) = -bn(j)
 end do
-if (npp /= 0) return
+if (nswc_state_cblkt_npp /= 0) return
 !
-nmp = nm + 1
-nb = nm + nmp
+nmp = nswc_state_cblkt_nm + 1
+nb = nswc_state_cblkt_nm + nmp
 do j = 1,nb
    l1 = mod(j - 1,nmp) + 1
-   l2 = mod(j + nm - 1,nmp) + 1
+   l2 = mod(j + nswc_state_cblkt_nm - 1,nmp) + 1
    arg = an(l1)*cn(l2)
    if (arg < 0.0) go to 220
    bh(j) = sign(sqrt(arg),-an(l1))
@@ -119448,11 +119212,11 @@ end do
 call tqlrt0(nb,ah,bh,ierror)
 if (ierror /= 0) go to 210
 !
-call indxb(if,k - 1,j2,lh)
-call indxb(if/2,k - 1,j1,lh)
+call indxb(if,nswc_state_cblkt_k - 1,j2,lh)
+call indxb(if/2,nswc_state_cblkt_k - 1,j1,lh)
 j2 = j2 + 1
 lh = j2
-n2m2 = j2 + nm + nm - 2
+n2m2 = j2 + nswc_state_cblkt_nm + nswc_state_cblkt_nm - 2
 170 d1 = abs(b(j1) - b(j2 - 1))
 d2 = abs(b(j1) - b(j2))
 d3 = abs(b(j1) - b(j2 + 1))
@@ -119467,16 +119231,16 @@ j1 = j1 + 1
 if ( ( j2 - n2m2 ) <= 0 ) go to 170
 go to 190
 190 b(lh) = b(n2m2 + 1)
-call indxb(if,k - 1,j1,j2)
+call indxb(if,nswc_state_cblkt_k - 1,j1,j2)
 j2 = j1 + nmp + nmp
 allocate(root_complex(nmp),root_real(nmp))
-root_real = b(j1:j1 + nm)
+root_real = b(j1:j1 + nswc_state_cblkt_nm)
 call ppadd(nmp,ierror,an,cn,root_complex,root_real,b(j2))
 if (ierror /= 0) return
 b(j1:j1 + 2*nmp - 1) = transfer(root_complex,b(j1),2*nmp)
-if (ncmplx == 0) then
+if (nswc_state_cblkt_ncmplx == 0) then
    root_real(1) = real(root_complex(1))
-   b(j1:j1 + nm) = root_real
+   b(j1:j1 + nswc_state_cblkt_nm) = root_real
 end if
 return
 !
@@ -119493,14 +119257,10 @@ integer :: n, ierr
 real :: d(n), e2(n)
 integer :: nhalf, ntop
 real :: dhold
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv
 integer :: i, j, l, m, ii, l1, mml
-real :: b, c, f, g, h, p, r, s, machep
+real :: b, c, f, g, h, p, r, s
 !
 !
-common /cblkt/  npp        ,k          ,machep     ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
 !
 !     This subroutine is a modification of the EISPACK subroutine
@@ -119549,7 +119309,7 @@ e2(n) = 0.0
 !
 do l = 1,n
    j = 0
-   h = machep*(abs(d(l)) + sqrt(e2(l)))
+   h = nswc_state_cblkt_eps*(abs(d(l)) + sqrt(e2(l)))
    if (b > h) go to  20
    b = h
    c = b*b
@@ -119659,8 +119419,6 @@ complex :: cbp(*)
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
    & nhalf, nt
 real :: db, psg, scnv, sgn, xl, xm, xr
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3
 real :: nswc_ai_r4
 !
@@ -119673,10 +119431,8 @@ real :: nswc_ai_r4
 ! bh  is used to temporarily store the roots of the B hat polynomial
 !     which enters through bp.
 !
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 !
-scnv = sqrt(cnv)
+scnv = sqrt(nswc_state_cblkt_cnv)
 iz = n
 izm = iz - 1
 izm2 = iz - 2
@@ -119692,7 +119448,7 @@ go to  50
 30 do j = 1,n
    bh(j) = bp(j)
 end do
-50 ncmplx = 0
+50 nswc_state_cblkt_ncmplx = 0
 modiz = mod(iz,2)
 is = 1
 if ( ( modiz ) == 0 ) go to 70
@@ -119730,7 +119486,7 @@ if = iz - 2
    sgn = -1.
    xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
    psg = psgf(xm,iz,c,a,bh)
-   if ( ( abs ( psg ) - eps ) <= 0 ) go to 180
+   if ( ( abs ( psg ) - nswc_state_cblkt_eps ) <= 0 ) go to 180
    go to 160
 160 nswc_ai_r4 = psg * ppsgf( xm , iz , c , a , bh )
    if ( nswc_ai_r4 < 0 ) go to 170
@@ -119819,13 +119575,13 @@ do j = 1,nhalf
    cbp(j) = cbp(nt + 1)
    cbp(nt + 1) = cx
 end do
-390 ncmplx = 1
+390 nswc_state_cblkt_ncmplx = 1
 do j = 2,iz
    if ( ( aimag ( cbp ( j ) ) ) == 0 ) go to 400
    go to 430
 400 continue
 end do
-ncmplx = 0
+nswc_state_cblkt_ncmplx = 0
 do j = 2,iz
    bp(j) = real(cbp(j))
 end do
@@ -119862,12 +119618,8 @@ integer :: iz
 real :: a(*), bh(*), c(*), sgn, xll, xrr
 real :: f
 real :: dx, x, xl, xr
-integer :: ik, k, ncmplx, nm, npp
-real :: cnv, eps
 real :: bsrh
 real :: nswc_ai_r4
-common /cblkt/  npp        ,k          ,eps        ,cnv        , &
-   & nm         ,ncmplx     ,ik
 xl = xll
 xr = xrr
 dx = .5*abs(xr - xl)
@@ -119880,7 +119632,7 @@ go to 20
 go to  40
 30 xl = x
 40 dx = .5*dx
-if ( ( dx - cnv ) <= 0 ) go to 50
+if ( ( dx - nswc_state_cblkt_cnv ) <= 0 ) go to 50
 go to 10
 50 bsrh = .5*(xl + xr)
 end function bsrh

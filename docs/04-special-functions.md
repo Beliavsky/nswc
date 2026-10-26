@@ -1343,7 +1343,7 @@ k> 0 The last k components of W have been set to 0 because of underflow,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L19573`](../source_parts/nswc_part_02.f90#L8988) |
+| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L19511`](../source_parts/nswc_part_02.f90#L8926) |
 
 
 If » is any complex number not an integer, then Y,(z) can be defined by
@@ -1380,9 +1380,9 @@ The argument z is a complex number, n is an integer, and w is a complex variable
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L19899`](../source_parts/nswc_part_02.f90#L9314) |
-| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L19950`](../source_parts/nswc_part_02.f90#L9365) |
-| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L20264`](../source_parts/nswc_part_02.f90#L9679) |
+| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L19837`](../source_parts/nswc_part_02.f90#L9252) |
+| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L19888`](../source_parts/nswc_part_02.f90#L9303) |
+| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L20202`](../source_parts/nswc_part_02.f90#L9617) |
 
 
 If v is complex then [,,(z) is defined by (z/2) yytek H(z) = 3 <kID(y +k +1)
@@ -1456,9 +1456,9 @@ k k k k k k
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L20894`](../source_parts/nswc_part_02.f90#L10309) |
-| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L21543`](../source_parts/nswc_part_03.f90#L416) |
-| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L22051`](../source_parts/nswc_part_03.f90#L924) |
+| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L20832`](../source_parts/nswc_part_02.f90#L10247) |
+| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L21481`](../source_parts/nswc_part_03.f90#L276) |
+| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L21989`](../source_parts/nswc_part_03.f90#L784) |
 
 
 If v is any complex number not an integer, then K,{z) is defined by
@@ -1544,12 +1544,12 @@ MO is an integer, z a complex number, n an integer, and w a complex variable. It
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L22300`](../source_parts/nswc_part_03.f90#L1173) |
-| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L22689`](../source_parts/nswc_part_03.f90#L1562) |
-| `AI` | `REAL FUNCTION` | `X` | [`L23547`](../source_parts/nswc_part_03.f90#L2420) |
-| `AIE` | `REAL FUNCTION` | `X` | [`L23686`](../source_parts/nswc_part_03.f90#L2559) |
-| `BI` | `REAL FUNCTION` | `X` | [`L23823`](../source_parts/nswc_part_03.f90#L2696) |
-| `BIE` | `REAL FUNCTION` | `X` | [`L24017`](../source_parts/nswc_part_03.f90#L2890) |
+| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L22238`](../source_parts/nswc_part_03.f90#L1033) |
+| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L22627`](../source_parts/nswc_part_03.f90#L1422) |
+| `AI` | `REAL FUNCTION` | `X` | [`L23485`](../source_parts/nswc_part_03.f90#L2280) |
+| `AIE` | `REAL FUNCTION` | `X` | [`L23624`](../source_parts/nswc_part_03.f90#L2419) |
+| `BI` | `REAL FUNCTION` | `X` | [`L23761`](../source_parts/nswc_part_03.f90#L2556) |
+| `BIE` | `REAL FUNCTION` | `X` | [`L23955`](../source_parts/nswc_part_03.f90#L2750) |
 
 
 3
@@ -1669,8 +1669,8 @@ If zc > 0 then BIE(z) = e~$ Bi(z) where ¢ = 223/?. Otherwise, if x < 0 then BIE
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L24332`](../source_parts/nswc_part_03.f90#L3205) |
-| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L24708`](../source_parts/nswc_part_03.f90#L3581) |
+| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L24270`](../source_parts/nswc_part_03.f90#L3065) |
+| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L24646`](../source_parts/nswc_part_03.f90#L3441) |
 
 
 If k is complex then the complete elliptic integrals of the first and second kinds can be defined by
@@ -1754,12 +1754,12 @@ arg(k) < —7/2, then K(k) = K(~k) and #(k) = E(--k) are applied.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L25179`](../source_parts/nswc_part_03.f90#L4052) |
-| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L25332`](../source_parts/nswc_part_03.f90#L4205) |
-| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L25655`](../source_parts/nswc_part_03.f90#L4528) |
-| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L25774`](../source_parts/nswc_part_03.f90#L4647) |
-| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L25894`](../source_parts/nswc_part_03.f90#L4767) |
-| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L26025`](../source_parts/nswc_part_03.f90#L4898) |
+| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L25117`](../source_parts/nswc_part_03.f90#L3912) |
+| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L25270`](../source_parts/nswc_part_03.f90#L4065) |
+| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L25593`](../source_parts/nswc_part_03.f90#L4388) |
+| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L25712`](../source_parts/nswc_part_03.f90#L4507) |
+| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L25832`](../source_parts/nswc_part_03.f90#L4627) |
+| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L25963`](../source_parts/nswc_part_03.f90#L4758) |
 
 
 1°0 < $< w/2, then the elliptic integrals of the first and second kinds are defined by
@@ -1910,10 +1910,10 @@ IERR = 3 Either a, 6, or c is too large.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L25484`](../source_parts/nswc_part_03.f90#L4357) |
-| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L25569`](../source_parts/nswc_part_03.f90#L4442) |
-| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L26156`](../source_parts/nswc_part_03.f90#L5029) |
-| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L26311`](../source_parts/nswc_part_03.f90#L5184) |
+| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L25422`](../source_parts/nswc_part_03.f90#L4217) |
+| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L25507`](../source_parts/nswc_part_03.f90#L4302) |
+| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L26094`](../source_parts/nswc_part_03.f90#L4889) |
+| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L26249`](../source_parts/nswc_part_03.f90#L5044) |
 
 
 For any 0 < ¢ < 1/2 the elliptic integral I{¢,n, x) is defined by ¢ II(¢,n,k) = / (1 — nsin? 6)~1(1 — k? sin? 6)~ 3d0 0
@@ -2019,8 +2019,8 @@ _ and Notis, E. M., “Algorithm 577,Algorithms for Incomplete Elliptic Integral
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L26678`](../source_parts/nswc_part_03.f90#L5551) |
-| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L27084`](../source_parts/nswc_part_03.f90#L5957) |
+| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L26616`](../source_parts/nswc_part_03.f90#L5411) |
+| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L27022`](../source_parts/nswc_part_03.f90#L5817) |
 
 
 For any complex number k # 0,+1 the elliptic function sn(z,#) may be defined as the meromorphic function w(z) that satisfies
@@ -2135,10 +2135,10 @@ SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFC1 was writ
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L27183`](../source_parts/nswc_part_03.f90#L6056) |
-| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L27228`](../source_parts/nswc_part_03.f90#L6101) |
-| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L27275`](../source_parts/nswc_part_03.f90#L6148) |
-| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L27322`](../source_parts/nswc_part_03.f90#L6195) |
+| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L27121`](../source_parts/nswc_part_03.f90#L5916) |
+| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L27166`](../source_parts/nswc_part_03.f90#L5961) |
+| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L27213`](../source_parts/nswc_part_03.f90#L6008) |
+| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L27260`](../source_parts/nswc_part_03.f90#L6055) |
 
 
 Lei w and w’ be complex numbers where Im(w’/w) > 0, and Wm, = 2mw + 2nw’ for all integers m,n. Then for any complex z, the Weierstrass elliptic function P(z;w,w') can be
@@ -2262,7 +2262,7 @@ niscatic Case,” Computing (Arch. Elektron. Rechnen) 18 (1977), pp. 341-349.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L27372`](../source_parts/nswc_part_03.f90#L6245) |
+| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L27310`](../source_parts/nswc_part_03.f90#L6105) |
 
 
 Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose boundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
@@ -2342,7 +2342,7 @@ Jf dds g tal p* A(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L27660`](../source_parts/nswc_part_03.f90#L6533) |
+| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L27598`](../source_parts/nswc_part_03.f90#L6393) |
 
 
 The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian distribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
@@ -2420,7 +2420,7 @@ Weapons Laboratory, Dahlgren, Virginia, 62
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L28062`](../source_parts/nswc_part_03.f90#L6935) |
+| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L28000`](../source_parts/nswc_part_03.f90#L6795) |
 
 
 The subroutine PKILL is available for evaluating the integral of an uncorrelated elliptical Gaussian distribution over the area A of a circle (x — h)* + (y—k)? = R?. The probability to be computed is given by

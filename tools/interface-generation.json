@@ -1,7 +1,7 @@
 {
   "source": "nswc.f90",
-  "source_sha256": "1038bc6a33e4eb3a1873cd472ded38bc09c79ef4aea4809db6ffd21a4b75268a",
-  "module_sha256": "254d0334f12dfdc6a3fc421078a4d85dc14af9c73166b4607e574920c9f17fe1",
+  "source_sha256": "661c8c3f55b94e7a9af1f06d1c2e969a7a872cdcdd4c9bb0f6fe892d0ef1e359",
+  "module_sha256": "bf58901b8a4aefb2c9af3ecc758ec8d1dbd791f2de338ffe59f223e226dd760f",
   "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
   "procedures": 1062,
   "kind_mappings": {
@@ -11,7 +11,7 @@
     "INTEGER(KIND=4)": "INTEGER",
     "LOGICAL(KIND=4)": "LOGICAL"
   },
-  "callback_review_sha256": "2edfa053b5bffe18052e271965bfefe3cf54610d4e715e0df6f0dfbea7ba2ad7",
+  "callback_review_sha256": "9f3f40db0a4f50be4f69143c352f41b68dc3834c06b4ddf2ffcc396561462074",
   "explicit_callbacks": 116,
   "callback_exceptions": {
     "SRCH:COND": "ACOND and XCOND have incompatible argument intents.",

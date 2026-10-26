@@ -31,6 +31,12 @@ have different linker names, so `nswc_mod.o` cannot replace `nswc.o` in a progra
 that still uses external declarations. Change those callers to `use nswc_mod`.
 Choose one implementation per executable.
 
+The module uses private saved variables instead of COMMON blocks. Programs or
+callbacks that access legacy COMMON directly should use the external
+implementation. Packed `RSCO`/`SVCO` state layouts are preserved. This change
+keeps shared state and does not support simultaneous independent problems; see the
+[storage review](shared-storage.md).
+
 ## Generation
 
 Both implementations come from the same maintained inputs:
@@ -70,8 +76,9 @@ The reviewed call graph distinguishes function references from array references.
 Dummy subroutines that were identified only by CALL statements receive explicit
 EXTERNAL declarations, needed by Intel when exposing their enclosing module
 procedure interfaces. These declarations retain implicit callback interfaces.
-Apart from that intrinsic-name normalization, executable statements, argument
-order, types, shapes, intents, and pure/elemental attributes are preserved.
+The storage pass also replaces COMMON references and explicitly packs/unpacks
+ODE state. Argument order, types, shapes, intents and pure/elemental attributes
+are preserved.
 Machine constants are unchanged.
 
 Dummy callback interfaces retain the historical contracts in the implementation.
@@ -87,7 +94,9 @@ python tools/validate_module.py
 ```
 
 GNU compiler records check all procedure/argument/result characteristics, local
-data declarations, and intrinsic bindings against `nswc.f90`. Each of the 50 numerical mains runs once
+data declarations, and intrinsic bindings against `nswc.f90`. The reviewed
+COMMON bindings are checked against module variable types, bounds, SAVE lifetime
+and rounding fences before normalization. Each of the 52 numerical mains runs once
 with external calls and once using the module, and the outputs must agree.
 An additional paired main checks DRCOMP against LOG_GAMMA references and DGINV
 against analytic distributions, exercising the two normalized intrinsic calls

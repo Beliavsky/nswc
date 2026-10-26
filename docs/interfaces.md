@@ -122,7 +122,7 @@ inference is distinguished from the callback's declared interface.
 The combined module must also compile as standard Fortran 2008 with GNU Fortran.
 Source and module hashes detect stale artifacts.
 
-The validator makes temporary copies of all 50 numerical main programs. It
+The validator makes temporary copies of all 52 numerical main programs. It
 replaces their library interface blocks and external declarations with selected
 module imports, preserving their own callback interfaces and executable tests.
 Each original and modified caller is built, run, and checked for identical

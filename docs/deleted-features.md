@@ -160,5 +160,7 @@ options.
 The remaining standards warnings concern permitted obsolescent features.
 A subsequent [free-form pass](obsolescent-features.md) removes all statement
 functions and computed GO TO statements from `nswc.f90` and `nswc_mod.f90`.
-The fixed-form reference retains them. COMMON and EQUIVALENCE still require
-individual review of shared storage and state.
+The fixed-form reference retains them. The subsequent
+[storage pass](shared-storage.md) removes EQUIVALENCE from both free-form versions
+and COMMON from the standalone module, preserving external COMMON compatibility
+in `nswc.f90`.

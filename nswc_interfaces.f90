@@ -73,7 +73,7 @@ module nswc_interfaces
     double precision function nswc_cb_value_derivative(x,derivative)
       implicit none
       double precision, intent(in) :: x
-      double precision, intent(out) :: derivative
+      double precision, intent(out) :: derivative(*)
     end function nswc_cb_value_derivative
     double precision function nswc_cb_polynomial(x)
       implicit none

@@ -12,8 +12,29 @@ from validate_explicit_typing import symbols
 from validate_interfaces import (command_run, compare_signatures, module_caller,
                                  PROBE_PREFIX, PROBE_SUFFIX, PROBES)
 from validate_sources import check_result, test_programs
+from storage_modernization import MANIFEST as STORAGE_REVIEW, normalize_module_records, new_state_intrinsics
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def state_test_module(text):
+    """Expose one diagnostic in a temporary test build; production stays private."""
+    return text.replace('\ncontains\n', '\npublic :: nswc_state_cblkt_ncmplx\ncontains\n', 1)
+
+
+def standalone_caller(text, names):
+    text = module_caller(text, names).replace('use nswc_interfaces,', 'use nswc_mod,')
+    # The periodic test deliberately checks which root-storage branch ran.
+    # Import that diagnostic from the temporary test build instead of COMMON.
+    if re.search(r'^\s*common\s*/cblkt/', text, re.M | re.I):
+        text = re.sub(r'^\s*common\s*/cblkt/[^\n]*\n', '', text, flags=re.M | re.I)
+        old = 'integer :: npp, k, nm, ncmplx, ik'
+        if old not in text:
+            raise ValueError('Periodic COMMON diagnostic declaration needs review')
+        text = text.replace(old, 'integer :: npp, k, nm, ik')
+        text = text.replace('   implicit none',
+                            '   use nswc_mod, only: ncmplx => nswc_state_cblkt_ncmplx\n   implicit none', 1)
+    return text
 
 
 def verify(compiler, folder, intel=False, env=None):
@@ -24,6 +45,10 @@ def verify(compiler, folder, intel=False, env=None):
     for stem in ('nswc', 'nswc_mod'):
         obj = folder / (stem + suffix)
         source = ROOT / (stem + '.f90')
+        if stem == 'nswc_mod':
+            temporary_source = folder / 'nswc_test_module.f90'
+            temporary_source.write_text(state_test_module(source.read_text()), newline='\n')
+            source = temporary_source
         if intel:
             flags = ['/nologo', '/Od', '/fp:strict',
                      '/warn:interfaces' if stem == 'nswc_mod' else '/warn:nointerfaces']
@@ -41,16 +66,19 @@ def verify(compiler, folder, intel=False, env=None):
             intrinsic_bindings.append({(scope, n) for scope, records in complete.items() if scope != 'NSWC_MOD'
                                        for n, record in records.items() if 'INTRINSIC-PROC' in record.get('attributes', '')})
             inventory = symbols(normalized)
-            parent = inventory.pop('NSWC_MOD', {})
-            for name, scope in inventory.items():
-                if name.lower() in parent:
-                    scope[name.lower()] = parent[name.lower()]
+            if stem == 'nswc_mod':
+                storage = json.loads(STORAGE_REVIEW.read_text())['module_state']
+                inventory = normalize_module_records(inventories[0], inventory, storage)
             inventories.append(inventory)
     if not intel:
         overrides = json.loads(BINDINGS.read_text())['intrinsic_overrides']
         intrinsic_bindings[0] = {(scope, INTRINSIC_ALIASES.get(n.upper(), n).lower()
                                   if n in overrides.get(scope, []) else n)
                                  for scope, n in intrinsic_bindings[0]}
+        added = new_state_intrinsics(storage)
+        if not added <= intrinsic_bindings[1]:
+            raise ValueError('Packed module state is missing reviewed reshape intrinsics')
+        intrinsic_bindings[1] -= added
         if intrinsic_bindings[0] != intrinsic_bindings[1]:
             raise ValueError('Module conversion changed intrinsic bindings: ' +
                              str(intrinsic_bindings[0] ^ intrinsic_bindings[1]))
@@ -78,7 +106,7 @@ def verify(compiler, folder, intel=False, env=None):
             caller = path
             if module:
                 caller = folder / path.name
-                caller.write_text(module_caller(path.read_text(), names).replace('use nswc_interfaces,', 'use nswc_mod,'), newline='\n')
+                caller.write_text(standalone_caller(path.read_text(), names), newline='\n')
             exe = folder / 'test.exe'
             command = ([compiler, *flags, '/fpe:0', str(caller), str(library), '/exe:' + str(exe)] if intel else
                        [compiler, *flags, '-ffpe-trap=invalid,zero,overflow', str(caller), str(library), '-o', str(exe)])

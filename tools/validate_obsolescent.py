@@ -15,6 +15,7 @@ from remove_final_returns import transform_free as returns
 from validate_explicit_typing import symbols
 from validate_generic_intrinsics import baseline_source
 from validate_interfaces import compare_signatures
+from storage_modernization import equivalence_free
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -69,7 +70,7 @@ def main():
     before = baseline()
     manifest = json.loads(MANIFEST.read_text())
     after = transform(before, manifest)
-    if after != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if equivalence_free(after) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Obsolescent-feature generation differs from maintained free form')
     if transform(after, manifest) != after:
         raise ValueError('Obsolescent cleanup is not idempotent')

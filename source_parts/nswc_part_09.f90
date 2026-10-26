@@ -4730,9 +4730,8 @@ subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
 implicit none
 integer :: ierr, isn, n, nspan, ntot
 real :: a(*), b(*)
-integer :: i, ii, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, &
-   & kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, &
-   & np(209), nt, num
+integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
+   & nt, num
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
    & bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
    & s120, s2, s3, s72, sd, sk(23), u, v
@@ -4788,7 +4787,6 @@ integer :: nswc_ai_i4
 !  If n has more than one square-free factor, the product of the
 !    square-free factors must be .LE. 210
 !  array storage for maximum prime factor of 23
-equivalence (i,ii)
 !  The following constants should agree with the array dimensions.
 maxn = 15
 maxf = 23
@@ -5286,7 +5284,7 @@ jj = jc
 if (jj > maxf) kspan = maxf
 jj = jj - kspan
 k = np(j)
-kk = jc*k + ii + jj
+kk = jc*k + i + jj
 k1 = kk + kspan
 k2 = 0
 928 k2 = k2 + 1
@@ -5315,7 +5313,7 @@ if (jj /= 0) go to 926
 if (j /= 1) go to 924
 950 j = k3 + 1
 nt = nt - kspnn
-ii = nt - inc + 1
+i = nt - inc + 1
 if (nt >= 0) go to 924
 960 return
 !  Error finish - There is an input error
@@ -7994,8 +7992,7 @@ double precision :: a, accur, b, bleft(20), bright(20), charf, &
 integer :: both, break, dbreak(20), degree, edist, right, rightx, &
    & smooth
 logical :: discrd
-double precision :: absc(4), aj, dx, fdervl(9), fdervr(9), &
-   & fdumb(9), r, wgts(4)
+double precision :: absc(4), aj, dx, fdumb(9), r, wgts(4)
 double precision :: errint, polydd
 external polydd
 !
@@ -8014,7 +8011,6 @@ common /kontrl/ dsctol, errori, xleft, xright, break, both, &
 common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
    & leftx, nintrp, rightx
 !
-equivalence (fleft(2),fdervl(1)), (fright(2),fdervr(1))
 data r/1.5d0/
 !
 !     Thirty digit values for the Gauss integration constants
@@ -8060,8 +8056,8 @@ end do
 !             Get left and right f-values, put f-value in first element
 !             of arrays FLEFT and fright.  Get derivatives back as
 !             other elements via the subarrays fdervl and fdervr.
-20 fleft(1) = f(xleft(nstack),fdervl)
-fright(1) = f(xright(nstack),fdervr)
+20 fleft(1) = f(xleft(nstack),fleft(2:10))
+fright(1) = f(xright(nstack),fright(2:10))
 leftx = smooth + 1
 rightx = leftx
 !            Get f-values at other interpolation points, if any

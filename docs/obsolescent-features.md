@@ -74,4 +74,6 @@ python tools/modernize_obsolescent.py input.f90 --manifest new-review.json --out
 The converter deliberately rejects unsupported scalar kinds, arrays used as
 statement-function dummies, labelled definitions and stale source hashes.
 Existing internal procedures in an affected host require a separate review.
-COMMON and EQUIVALENCE remain for individual storage/state analysis.
+The subsequent [shared-storage pass](shared-storage.md) removes EQUIVALENCE from
+both free-form versions and COMMON from the standalone module. External COMMON
+layouts remain available in `nswc.f90` for legacy callers.

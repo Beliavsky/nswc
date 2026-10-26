@@ -1,10 +1,12 @@
 # Compiler warning review
 
-The maintained fixed-form source compiles with 12 warnings under the documented
-GNU Fortran legacy options; the free-form source has 11, compared with 28 for
+The maintained fixed-form and external free-form sources compile with 11 warnings
+under the documented GNU Fortran legacy options, compared with 28 for
 `nswc_orig.f`. Procedure names,
 argument order, and external linking remain unchanged. No module is required.
 The archived source is unchanged.
+The standalone module replaces COMMON with private saved state and compiles
+without warnings in strict modern Fortran mode; see the [storage review](shared-storage.md).
 
 ## Corrected warnings
 
@@ -27,7 +29,7 @@ arguments are unchanged.
 
 ## Remaining warnings
 
-- Eleven `COMMON /KONTRL/` declarations require alignment padding before
+- In the external/reference implementations, eleven `COMMON /KONTRL/` declarations require alignment padding before
   `BUFFER`: `ADAPT`, `ADAPT1`, `ADSET`, `ADTAKE`, `ADCOMP`, `ERRINT`, `NEWTON`,
   `POLYDD`, `ADCHK`, `ADPUT`, and `ADTRAN`. This pass preserves all shared storage
   declarations and their layout. Reordering them could affect other code using

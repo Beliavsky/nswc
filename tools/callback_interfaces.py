@@ -71,7 +71,7 @@ contract('objective', 'subroutine @(n,x,f)', '''integer, intent(in) :: n
 real, intent(in) :: x(n)
 real, intent(out) :: f''', 'OPTF:FCN OPTDRV:FCN FXDEC:FCN FSTOFD:FCN FSTOCD:FCN LNSRCH:FCN')
 contract('value_derivative', 'double precision function @(x,derivative)',
-         'double precision, intent(in) :: x\ndouble precision, intent(out) :: derivative',
+         'double precision, intent(in) :: x\ndouble precision, intent(out) :: derivative(*)',
          'ADAPT:F ADAPT1:F ADCOMP:F ERRINT:F', 'DOUBLE PRECISION')
 # POLYDD, the library-supplied implementation, has no intent on X.
 contract('polynomial', 'double precision function @(x)', 'double precision :: x',

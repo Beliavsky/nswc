@@ -96,9 +96,10 @@ compiler. See the [module guide](docs/module.md) for generation and verification
 For external callers, compile `nswc.f90` instead and link `nswc.o`.
 
 Use `-std=f2023` with compilers supporting that option; `-std=f2018` also accepts
-all maintained versions. COMMON and EQUIVALENCE still produce obsolescent-feature
-warnings. The fixed-form reference also retains statement functions and computed
-GO TO; both are removed from the recommended free-form implementations. Only the archival `nswc_orig.f`
+all maintained versions. The standalone module compiles without warnings in
+strict mode. The external `nswc.f90` retains COMMON for legacy shared-storage
+compatibility; both free-form versions remove EQUIVALENCE. The fixed-form
+reference also retains statement functions and computed GO TO. Only the archival `nswc_orig.f`
 requires `-std=legacy -fallow-argument-mismatch`. Both maintained source forms use
 separate real and complex root work arrays in `COMPB`, with explicit packing
 back into the solver workspace. See the [warning review](docs/compiler-warnings.md).
@@ -228,6 +229,11 @@ internal functions. It preserves out-of-range fall-through, helper argument/resu
 types and captured host variables. Both fixed-form implementations remain
 comparison targets; existing external interfaces remain unchanged.
 
+The [shared-storage pass](docs/shared-storage.md) removes seven EQUIVALENCE
+statements and replaces all 14 COMMON blocks in the standalone module with
+private saved variables. Packed ODE save/restore layouts and forced rounding
+storage are preserved. External callers that access COMMON can use `nswc.f90`.
+
 The final `tools/coalesce_local_declarations.py` pass combines matching local
 declarations within contiguous blocks. Argument declarations, comments,
 initializers, and type/bound dependencies retain their boundaries. See the
@@ -283,9 +289,9 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 50 numerical test programs
-against all three versions with GNU Fortran (150 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 49 main
+Run `python tools/validate_sources.py` to build and run 52 numerical test programs
+against all three versions with GNU Fortran (156 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 51 main
 programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, nonlinear solving and minimization, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
@@ -393,7 +399,8 @@ The warning review and periodic-root correction reduce the maintained fixed-form
 GNU Fortran build from 28 warnings to 11.
 It corrects the unused `ITERT` callback declaration and quadratic output extents,
 and replaces old FORMAT text with quoted strings. The external procedure names
-and argument order are unchanged. The remaining warnings involve shared storage.
+and argument order are unchanged. External/reference builds retain shared-storage
+warnings; the standalone module compiles without warnings.
 The maintained sources compile without argument-mismatch tolerance; the archive
 still needs it. The [warning review](docs/compiler-warnings.md) records the changes,
 remaining issues, and the checks that reject new compiler warnings.
