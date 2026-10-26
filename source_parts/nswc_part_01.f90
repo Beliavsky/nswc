@@ -1295,11 +1295,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1337,11 +1337,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1380,11 +1380,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1425,11 +1425,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1469,11 +1469,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1515,11 +1515,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1560,11 +1560,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1604,11 +1604,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1650,11 +1650,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1696,11 +1696,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -1739,11 +1739,11 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 if (n < 2) return
 imax = 1
 do i = 3,10
-   if (n <= k(i)) go to 20
+   if ( n <= k ( i ) ) exit
    imax = imax + 1
 end do
 !            Stepping through the increments k(imax),...,k(1)
-20 i = imax
+i = imax
 do ii = 1,imax
    ki = k(i)
 !             Sorting elements that are ki positions apart
@@ -4747,9 +4747,9 @@ go to 220
 130 l1 = pr(j) + 1
 l2 = pr(j + 1)
 do l = l1,l2
-   if (ar(l) > 0) go to 150
+   if ( ar ( l ) > 0 ) exit
 end do
-150 jl = ar(l)
+jl = ar(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
 ! of the largest path of implied arcs containing  (j,jl) .
 call ipath(j, jl, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
@@ -4769,9 +4769,9 @@ go to 210
 170 l1 = pc(j) + 1
 l2 = pc(j + 1)
 do l = l1,l2
-   if (ac(l) > 0) go to 190
+   if ( ac ( l ) > 0 ) exit
 end do
-190 jl = ac(l)
+jl = ac(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
 ! of the largest path of implied arcs containing  (jl,j) .
 call ipath(jl, j, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
@@ -4913,9 +4913,9 @@ go to 420
       ll1 = pc(jl) + 1
       ll2 = pc(jl + 1)
       do ll = ll1,ll2
-         if (k1 - ac(ll) == j) go to 390
+         if ( k1 - ac ( ll ) == j ) exit
       end do
-390   ac(ll) = j
+      ac(ll) = j
       vc(jl) = vc(jl) + 1
 400   continue
    end do
@@ -5034,9 +5034,9 @@ do j = j1,j2
    l1 = p2(ia) + 1
    l2 = p2(ia + 1)
    do l = l1,l2
-      if (a2(l) == i1) go to 20
+      if ( a2 ( l ) == i1 ) exit
    end do
-20 v2(ia) = v2(ia) - 1
+   v2(ia) = v2(ia) - 1
    a2(l) = k1 - a2(l)
    a1(j) = k1 - ia
 30 continue
@@ -5063,9 +5063,9 @@ do l = l1,l2
    ll1 = p2(ia) + 1
    ll2 = p2(ia + 1)
    do ll = ll1,ll2
-      if (k1 - a2(ll) == ii) go to 20
+      if ( k1 - a2 ( ll ) == ii ) exit
    end do
-20 a2(ll) = ii
+   a2(ll) = ii
    v2(ia) = v2(ia) + 1
 30 continue
 end do
@@ -5092,7 +5092,7 @@ do mm = m1,m2
 10 j1 = p2(iarc) + 1
    j2 = p2(iarc + 1)
    do jj = j1,j2
-      if (a2(jj) == ib) go to 30
+      if ( a2 ( jj ) == ib ) exit
    end do
 30 a2(jj) = k1 - a2(jj)
    v2(iarc) = v2(iarc) - 1
@@ -6275,9 +6275,10 @@ do n = 31,63
    t(2) = a(n)*y
    w(1) = w(1) + t(1)
    w(2) = w(2) + t(2)
-   if (anorm(t(1),t(2)) <= tol*anorm(w(1),w(2))) go to 20
+   if ( anorm ( t ( 1 ) , t ( 2 ) ) <= tol * anorm ( w ( 1 ) , w &
+      & ( 2 ) ) ) exit
 end do
-20 do j = 1,29
+do j = 1,29
    n = 30 - j
    x = h(1)*w(1) - h(2)*w(2)
    w(2) = h(1)*w(2) + h(2)*w(1)
@@ -8756,10 +8757,10 @@ w = 0.d0
 do n = 2,40
    c = a(n)*t
    w = w + c
-   if (abs(c) < eps) go to 20
+   if ( abs ( c ) < eps ) exit
    t = h*t
 end do
-20 dei0 = h * (a(1) + w)
+dei0 = h * (a(1) + w)
 end function dei0
 
 pure function si(x)
@@ -9248,7 +9249,8 @@ do n = 1,25
    tm(1) = ts(1)
    tm(2) = ts(2)
    if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
-   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
+   if ( abs ( sm ( 2 ) ) + abs ( tm ( 2 ) ) == abs ( sm ( 2 ) ) &
+      & ) exit
 60 sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
 end do
@@ -10136,7 +10138,7 @@ do j = 1,30
    a1 = a1 + c0(j)*u1
    a2 = a2 + c0(j)*u2
    if (a1 /= t1) go to 90
-   if (a2 == t2) go to 100
+   if ( a2 == t2 ) exit
 90 t1 = u1*q1 - u2*q2
    t2 = u1*q2 + u2*q1
    u1 = t1
@@ -10145,7 +10147,7 @@ end do
 !-----------------------------------------------------------------------
 !                 Gathering together the results
 !-----------------------------------------------------------------------
-100 w1 = (((a1 + hl2p) - w1) + v1) - n
+w1 = (((a1 + hl2p) - w1) + v1) - n
 w2 = (a2 - w2) + v2
 if (z(1) < 0.d0) go to 120
 if (mo /= 0) go to 110

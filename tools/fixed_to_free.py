@@ -357,7 +357,11 @@ def flush_stmt(pending: Optional[PendingStmt], out_lines: List[str]) -> Optional
         ):
             # Keep a separating blank when a declaration keyword ends the prior
             # fragment (e.g. "INTEGER" + "NX,NY" should become "INTEGER NX,NY").
-            if re.search(
+            continued_loop_name = (
+                re.fullmatch(r"(?i)(?:if\s*\(.*\)\s*)?(?:exit|cycle)", prev_r.strip())
+                and re.fullmatch(r"(?i)[a-z_]\w*", nxt_l)
+            )
+            if continued_loop_name or re.search(
                 r"(?i)\b(?:integer|real|logical|complex|character|double\s*precision)\s*$",
                 prev_r,
             ):

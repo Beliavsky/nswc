@@ -1,4 +1,4 @@
-"""Refresh review hashes after compiler-verified unused-label cleanup.
+"""Refresh review hashes after verified label cleanup or structured loop exits.
 
 Only hashes and computed-transfer source line numbers may change. Types,
 constant values, purity/intents, calls, intrinsic bindings, helper expressions,
@@ -30,9 +30,9 @@ def without_locations(value):
     return value
 
 
-def migrate(before, after):
-    if transform(before) != after:
-        raise ValueError('Source change is not exactly the unused-label cleanup')
+def migrate(before, after, transformer=transform):
+    if transformer(before) != after:
+        raise ValueError('Source change does not match the requested transformation')
     read = lambda name: json.loads((ROOT/'tools'/name).read_text())
     data, pure, generic, obsolete, storage = [read(n) for n in
         ('data-constants.json', 'procedure-purity.json', 'generic-intrinsics.json',
@@ -50,13 +50,13 @@ def migrate(before, after):
     with tempfile.TemporaryDirectory(prefix='nswc-label-review-') as work:
         obsolete_new = review(new, symbols(compile_dump(new, work)[0], True))
     if without_locations(obsolete_new) != without_locations(obsolete):
-        raise ValueError('Label cleanup changed the statement-function/transfer review')
+        raise ValueError('Control-flow cleanup changed the statement-function/transfer review')
     old = obsolescent(old, obsolete)
     new = obsolescent(new, obsolete_new)
     storage_new = copy.deepcopy(storage)
     storage_new.update(equivalence_review(new))
     if without_locations(storage_new) != without_locations(storage):
-        raise ValueError('Label cleanup changed equivalence bindings')
+        raise ValueError('Control-flow cleanup changed equivalence bindings')
     old = equivalence_free(old, storage)
     new = equivalence_free(new, storage_new)
     if old != (ROOT/'nswc.f90').read_text():
@@ -64,7 +64,7 @@ def migrate(before, after):
     state = {}
     module_state(module_source(new, modern_state=False), state)
     if state != storage['module_state']:
-        raise ValueError('Label cleanup changed private state bindings')
+        raise ValueError('Control-flow cleanup changed private state bindings')
     return {'data-constants.json': data_new, 'procedure-purity.json': pure_new,
             'generic-intrinsics.json': generic_new, 'obsolescent-features.json': obsolete_new,
             'shared-storage.json': storage_new}, {'data': dc, 'purity': pc, 'generics': gc}
@@ -75,13 +75,20 @@ def main():
     parser.add_argument('before', type=Path)
     parser.add_argument('after', type=Path)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--conversion', choices=['labels', 'exits'], default='labels')
     parser.add_argument('--compiler', help='Also verify fixed-form symbols, warnings and assembly')
     args = parser.parse_args()
     before, after = args.before.read_bytes(), args.after.read_bytes()
+    transformer = transform
+    if args.conversion == 'exits':
+        from goto_to_exit import transform as transformer
     if args.compiler:
-        from remove_unused_labels import verify
+        if args.conversion == 'exits':
+            from goto_to_exit import verify
+        else:
+            from remove_unused_labels import verify
         verify(before, after, args.compiler)
-    manifests, counts = migrate(before, after)
+    manifests, counts = migrate(before, after, transformer)
     if args.apply:
         for name, data in manifests.items():
             (ROOT/'tools'/name).write_text(json.dumps(data, indent=2)+'\n', newline='\n')

@@ -1,0 +1,2010 @@
+{
+  "input_sha256": "41f0e8361a6eb0518ffbc9c07695912af98c815eac3929c87f6b218d8cd246c3",
+  "output_sha256": "543bc45eb55098bf9eeab218634fc510e17a151076d144ff6ffd6a41179e4e7f",
+  "conversions": [
+    {
+      "procedure": "ISHELL",
+      "line": 1279,
+      "target": 20,
+      "loop_line": 1278,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "SHELL",
+      "line": 1323,
+      "target": 20,
+      "loop_line": 1322,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "SHELL2",
+      "line": 1368,
+      "target": 20,
+      "loop_line": 1367,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "RSORT",
+      "line": 1415,
+      "target": 20,
+      "loop_line": 1414,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "RISORT",
+      "line": 1462,
+      "target": 20,
+      "loop_line": 1461,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "RRSORT",
+      "line": 1510,
+      "target": 20,
+      "loop_line": 1509,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "DSORT",
+      "line": 1557,
+      "target": 20,
+      "loop_line": 1556,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "DISORT",
+      "line": 1604,
+      "target": 20,
+      "loop_line": 1603,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "DDSORT",
+      "line": 1652,
+      "target": 20,
+      "loop_line": 1651,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "AORD",
+      "line": 1700,
+      "target": 20,
+      "loop_line": 1699,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "DAORD",
+      "line": 1745,
+      "target": 20,
+      "loop_line": 1744,
+      "exit": "EXIT",
+      "before": "IF (N .LE. K(I)) GO TO 20"
+    },
+    {
+      "procedure": "HC1",
+      "line": 4578,
+      "target": 150,
+      "loop_line": 4577,
+      "exit": "EXIT",
+      "before": "IF (AR(L).GT.0) GO TO 150"
+    },
+    {
+      "procedure": "HC1",
+      "line": 4600,
+      "target": 190,
+      "loop_line": 4599,
+      "exit": "EXIT",
+      "before": "IF (AC(L).GT.0) GO TO 190"
+    },
+    {
+      "procedure": "HC1",
+      "line": 4744,
+      "target": 390,
+      "loop_line": 4743,
+      "exit": "EXIT",
+      "before": "IF (K1-AC(LL).EQ.J) GO TO 390"
+    },
+    {
+      "procedure": "FUPD",
+      "line": 4865,
+      "target": 20,
+      "loop_line": 4864,
+      "exit": "EXIT",
+      "before": "IF (A2(L).EQ.I1) GO TO 20"
+    },
+    {
+      "procedure": "BUPD",
+      "line": 4894,
+      "target": 20,
+      "loop_line": 4893,
+      "exit": "EXIT",
+      "before": "IF (K1-A2(LL).EQ.II) GO TO 20"
+    },
+    {
+      "procedure": "IUPD",
+      "line": 4923,
+      "target": 30,
+      "loop_line": 4922,
+      "exit": "EXIT",
+      "before": "IF (A2(JJ).EQ.IB) GO TO 30"
+    },
+    {
+      "procedure": "ERFCM2",
+      "line": 6095,
+      "target": 20,
+      "loop_line": 6086,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T(1),T(2)) .LE. TOL*ANORM(W(1),W(2))) GO TO 20"
+    },
+    {
+      "procedure": "DEI0",
+      "line": 8835,
+      "target": 20,
+      "loop_line": 8832,
+      "exit": "EXIT",
+      "before": "IF (DABS(C) .LT. EPS) GO TO 20"
+    },
+    {
+      "procedure": "CLI",
+      "line": 9380,
+      "target": 80,
+      "loop_line": 9374,
+      "exit": "EXIT",
+      "before": "IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80"
+    },
+    {
+      "procedure": "DCGAMA",
+      "line": 10314,
+      "target": 100,
+      "loop_line": 10308,
+      "exit": "EXIT",
+      "before": "IF (A2 .EQ. T2) GO TO 100"
+    },
+    {
+      "procedure": "DCPSI",
+      "line": 11125,
+      "target": 70,
+      "loop_line": 11119,
+      "exit": "EXIT",
+      "before": "IF (A2 .EQ. T2) GO TO 70"
+    },
+    {
+      "procedure": "PSIDF",
+      "line": 11538,
+      "target": 80,
+      "loop_line": 11535,
+      "exit": "EXIT",
+      "before": "IF (ABS(TRM(K)) .LT. TST) GO TO 80"
+    },
+    {
+      "procedure": "PSIDF",
+      "line": 11580,
+      "target": 120,
+      "loop_line": 11578,
+      "exit": "EXIT",
+      "before": "IF (ABS(TRM(K)) .LT. TST) GO TO 120"
+    },
+    {
+      "procedure": "PSIDF",
+      "line": 11637,
+      "target": 240,
+      "loop_line": 11633,
+      "exit": "EXIT",
+      "before": "IF (TRM(I) .LT. TOLS) GO TO 240"
+    },
+    {
+      "procedure": "BUP",
+      "line": 14113,
+      "target": 50,
+      "loop_line": 14109,
+      "exit": "EXIT",
+      "before": "IF (D .LE. EPS*W) GO TO 50"
+    },
+    {
+      "procedure": "BGRAT",
+      "line": 14439,
+      "target": 30,
+      "loop_line": 14420,
+      "exit": "EXIT",
+      "before": "IF (ABS(DJ) .LE. EPS*(SUM + L)) GO TO 30"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 14624,
+      "target": 60,
+      "loop_line": 14588,
+      "exit": "EXIT",
+      "before": "IF ((ABS(T0) + ABS(T1)) .LE. EPS*SUM) GO TO 60"
+    },
+    {
+      "procedure": "CBJA",
+      "line": 15504,
+      "target": 30,
+      "loop_line": 15495,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T) .LE. TOL) GO TO 30"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 16048,
+      "target": 360,
+      "loop_line": 16044,
+      "exit": "EXIT",
+      "before": "IF (ABS(T).LT.TOL) GO TO 360"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 16164,
+      "target": 540,
+      "loop_line": 16150,
+      "exit": "EXIT",
+      "before": "IF (ABS(T2).LE.RELB) GO TO 540"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 16617,
+      "target": 70,
+      "loop_line": 16599,
+      "exit": "EXIT",
+      "before": "IF (ABS(TA).LE.TOL .AND. ABS(TB).LE.RELB) GO TO 70"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 16694,
+      "target": 150,
+      "loop_line": 16664,
+      "exit": "EXIT",
+      "before": "IF (ABS(SUMA).LE.TOL .AND. ABS(SUMB).LE.RELB) GO TO 150"
+    },
+    {
+      "procedure": "BESI",
+      "line": 17980,
+      "target": 260,
+      "loop_line": 17976,
+      "exit": "EXIT",
+      "before": "IF (ABS(T).LT.TOL) GO TO 260"
+    },
+    {
+      "procedure": "BESI",
+      "line": 18096,
+      "target": 480,
+      "loop_line": 18089,
+      "exit": "EXIT",
+      "before": "IF (ABS(T).LE.ATOL) GO TO 480"
+    },
+    {
+      "procedure": "ASIK",
+      "line": 18308,
+      "target": 40,
+      "loop_line": 18298,
+      "exit": "EXIT",
+      "before": "IF (AMAX1(ABS(AK),ABS(AP)) .LT. TOL) GO TO 40"
+    },
+    {
+      "procedure": "CBKA",
+      "line": 18478,
+      "target": 20,
+      "loop_line": 18473,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T) .LE. EPS*ANORM(P)) GO TO 20"
+    },
+    {
+      "procedure": "CKPS",
+      "line": 18688,
+      "target": 80,
+      "loop_line": 18678,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80"
+    },
+    {
+      "procedure": "CKA",
+      "line": 18933,
+      "target": 20,
+      "loop_line": 18928,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T) .LE. EPS*ANORM(P)) GO TO 20"
+    },
+    {
+      "procedure": "CKM",
+      "line": 19033,
+      "target": 80,
+      "loop_line": 19023,
+      "exit": "EXIT",
+      "before": "IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80"
+    },
+    {
+      "procedure": "KM",
+      "line": 21229,
+      "target": 20,
+      "loop_line": 21224,
+      "exit": "EXIT",
+      "before": "IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) GO TO 20"
+    },
+    {
+      "procedure": "KL",
+      "line": 21273,
+      "target": 20,
+      "loop_line": 21266,
+      "exit": "EXIT",
+      "before": "IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) GO TO 20"
+    },
+    {
+      "procedure": "EKM",
+      "line": 21591,
+      "target": 20,
+      "loop_line": 21584,
+      "exit": "EXIT",
+      "before": "IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) GO TO 20"
+    },
+    {
+      "procedure": "EKL",
+      "line": 21654,
+      "target": 20,
+      "loop_line": 21637,
+      "exit": "EXIT",
+      "before": "IF (ABS(REAL(AN)) + ABS(AIMAG(AN)) .LT. TOL) GO TO 20"
+    },
+    {
+      "procedure": "SGEDI",
+      "line": 32936,
+      "target": 60,
+      "loop_line": 32932,
+      "exit": "EXIT",
+      "before": "IF (DET(1) .EQ. 0.0E0) GO TO 60"
+    },
+    {
+      "procedure": "DGEDI",
+      "line": 33442,
+      "target": 60,
+      "loop_line": 33438,
+      "exit": "EXIT",
+      "before": "IF (DET(1) .EQ. 0.0D0) GO TO 60"
+    },
+    {
+      "procedure": "SPPDI",
+      "line": 36422,
+      "target": 60,
+      "loop_line": 36418,
+      "exit": "EXIT",
+      "before": "IF (DET(1) .EQ. 0.0E0) GO TO 60"
+    },
+    {
+      "procedure": "DPPDI",
+      "line": 36677,
+      "target": 60,
+      "loop_line": 36673,
+      "exit": "EXIT",
+      "before": "IF (DET(1) .EQ. 0.0D0) GO TO 60"
+    },
+    {
+      "procedure": "CGEDI",
+      "line": 37476,
+      "target": 60,
+      "loop_line": 37472,
+      "exit": "EXIT",
+      "before": "IF (CABS1(DET(1)) .EQ. 0.0E0) GO TO 60"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 38054,
+      "target": 400,
+      "loop_line": 38051,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. 0) GO TO 400"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 38060,
+      "target": 400,
+      "loop_line": 38051,
+      "exit": "EXIT",
+      "before": "GO TO 400"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 38073,
+      "target": 440,
+      "loop_line": 38070,
+      "exit": "EXIT",
+      "before": "IF (LS .EQ. L) GO TO 440"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 38081,
+      "target": 440,
+      "loop_line": 38070,
+      "exit": "EXIT",
+      "before": "GO TO 440"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 38460,
+      "target": 400,
+      "loop_line": 38457,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. 0) GO TO 400"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 38466,
+      "target": 400,
+      "loop_line": 38457,
+      "exit": "EXIT",
+      "before": "GO TO 400"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 38479,
+      "target": 440,
+      "loop_line": 38476,
+      "exit": "EXIT",
+      "before": "IF (LS .EQ. L) GO TO 440"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 38487,
+      "target": 440,
+      "loop_line": 38476,
+      "exit": "EXIT",
+      "before": "GO TO 440"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 38857,
+      "target": 390,
+      "loop_line": 38848,
+      "exit": "EXIT",
+      "before": "IF (I .EQ. M) GO TO 390"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 38892,
+      "target": 440,
+      "loop_line": 38889,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. 0) GO TO 440"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 38898,
+      "target": 440,
+      "loop_line": 38889,
+      "exit": "EXIT",
+      "before": "GO TO 440"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 38911,
+      "target": 480,
+      "loop_line": 38908,
+      "exit": "EXIT",
+      "before": "IF (LS .EQ. L) GO TO 480"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 38919,
+      "target": 480,
+      "loop_line": 38908,
+      "exit": "EXIT",
+      "before": "GO TO 480"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 39479,
+      "target": 60,
+      "loop_line": 39477,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 60"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 39484,
+      "target": 60,
+      "loop_line": 39477,
+      "exit": "EXIT",
+      "before": "IF (S1 .EQ. S2) GO TO 60"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 39519,
+      "target": 100,
+      "loop_line": 39507,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 100"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 39522,
+      "target": 100,
+      "loop_line": 39507,
+      "exit": "EXIT",
+      "before": "IF (S1 .EQ. S2) GO TO 100"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 40023,
+      "target": 60,
+      "loop_line": 40021,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 60"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 40028,
+      "target": 60,
+      "loop_line": 40021,
+      "exit": "EXIT",
+      "before": "IF (S1 .EQ. S2) GO TO 60"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 40063,
+      "target": 100,
+      "loop_line": 40051,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 100"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 40066,
+      "target": 100,
+      "loop_line": 40051,
+      "exit": "EXIT",
+      "before": "IF (S1 .EQ. S2) GO TO 100"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 41080,
+      "target": 370,
+      "loop_line": 41039,
+      "exit": "EXIT",
+      "before": "IF (FXNORM.LT.TOL) GO TO 370"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 41084,
+      "target": 370,
+      "loop_line": 41039,
+      "exit": "EXIT",
+      "before": "IF (T.EQ.1.0) GO TO 370"
+    },
+    {
+      "procedure": "CQZIT",
+      "line": 41459,
+      "target": 80,
+      "loop_line": 41455,
+      "exit": "EXIT",
+      "before": "IF (CABS(A(L,LM1)).LE.EPSA) GO TO 80"
+    },
+    {
+      "procedure": "CVRB1",
+      "line": 42561,
+      "target": 20,
+      "loop_line": 42557,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (A(I,J) .NE. 0.0) GO TO 20"
+    },
+    {
+      "procedure": "CVRB1",
+      "line": 42573,
+      "target": 30,
+      "loop_line": 42569,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF (A(I,J) .NE. 0.0) GO TO 30"
+    },
+    {
+      "procedure": "CVDB1",
+      "line": 42739,
+      "target": 20,
+      "loop_line": 42735,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (A(I,J) .NE. 0.D0) GO TO 20"
+    },
+    {
+      "procedure": "CVDB1",
+      "line": 42751,
+      "target": 30,
+      "loop_line": 42747,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF (A(I,J) .NE. 0.D0) GO TO 30"
+    },
+    {
+      "procedure": "CVCB1",
+      "line": 42917,
+      "target": 20,
+      "loop_line": 42913,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (A(I,J) .NE. (0.0,0.0)) GO TO 20"
+    },
+    {
+      "procedure": "CVCB1",
+      "line": 42929,
+      "target": 30,
+      "loop_line": 42925,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF (A(I,J) .NE. (0.0,0.0)) GO TO 30"
+    },
+    {
+      "procedure": "BREAL",
+      "line": 43348,
+      "target": 30,
+      "loop_line": 43346,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (REAL(A(I,J)) .NE. 0.0) GO TO 30"
+    },
+    {
+      "procedure": "BREAL",
+      "line": 43358,
+      "target": 60,
+      "loop_line": 43356,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF (REAL(A(I,J)) .NE. 0.0) GO TO 60"
+    },
+    {
+      "procedure": "BIMAG",
+      "line": 43397,
+      "target": 30,
+      "loop_line": 43395,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (AIMAG(A(I,J)) .NE. 0.0) GO TO 30"
+    },
+    {
+      "procedure": "BIMAG",
+      "line": 43407,
+      "target": 60,
+      "loop_line": 43405,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF (AIMAG(A(I,J)) .NE. 0.0) GO TO 60"
+    },
+    {
+      "procedure": "BADD",
+      "line": 43701,
+      "target": 40,
+      "loop_line": 43699,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) + B(I,J)) .NE. 0.0) GO TO 40"
+    },
+    {
+      "procedure": "BADD",
+      "line": 43764,
+      "target": 170,
+      "loop_line": 43762,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) + B(I,LB)) .NE. 0.0) GO TO 170"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 43836,
+      "target": 40,
+      "loop_line": 43834,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) + B(I,J)) .NE. 0.D0) GO TO 40"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 43899,
+      "target": 170,
+      "loop_line": 43897,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) + B(I,LB)) .NE. 0.D0) GO TO 170"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 43971,
+      "target": 40,
+      "loop_line": 43969,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) + B(I,J)) .NE. (0.0,0.0)) GO TO 40"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 44034,
+      "target": 170,
+      "loop_line": 44032,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) + B(I,LB)) .NE. (0.0,0.0)) GO TO 170"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 44106,
+      "target": 40,
+      "loop_line": 44104,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) - B(I,J)) .NE. 0.0) GO TO 40"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 44169,
+      "target": 170,
+      "loop_line": 44167,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) - B(I,LB)) .NE. 0.0) GO TO 170"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 44241,
+      "target": 40,
+      "loop_line": 44239,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) - B(I,J)) .NE. 0.D0) GO TO 40"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 44304,
+      "target": 170,
+      "loop_line": 44302,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) - B(I,LB)) .NE. 0.D0) GO TO 170"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 44376,
+      "target": 40,
+      "loop_line": 44374,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ((A(I,J) - B(I,J)) .NE. (0.0,0.0)) GO TO 40"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 44439,
+      "target": 170,
+      "loop_line": 44437,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "IF ((A(I,LA) - B(I,LB)) .NE. (0.0,0.0)) GO TO 170"
+    },
+    {
+      "procedure": "BPROD",
+      "line": 44563,
+      "target": 130,
+      "loop_line": 44545,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (C(I,JC) .NE. 0.0) GO TO 130"
+    },
+    {
+      "procedure": "DBPROD",
+      "line": 44701,
+      "target": 130,
+      "loop_line": 44683,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (C(I,JC) .NE. 0.D0) GO TO 130"
+    },
+    {
+      "procedure": "CBPROD",
+      "line": 44839,
+      "target": 130,
+      "loop_line": 44821,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (C(I,JC) .NE. (0.0,0.0)) GO TO 130"
+    },
+    {
+      "procedure": "MC21B",
+      "line": 48624,
+      "target": 110,
+      "loop_line": 48616,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF (IPERM(I) .EQ. 0) GO TO 110"
+    },
+    {
+      "procedure": "MC21B",
+      "line": 48646,
+      "target": 100,
+      "loop_line": 48631,
+      "exit": "EXIT NSWC_EXIT_2",
+      "before": "GO TO 100"
+    },
+    {
+      "procedure": "MC21B",
+      "line": 48661,
+      "target": 130,
+      "loop_line": 48659,
+      "exit": "EXIT",
+      "before": "IF (J .EQ. -1) GO TO 130"
+    },
+    {
+      "procedure": "MC13E",
+      "line": 48802,
+      "target": 50,
+      "loop_line": 48797,
+      "exit": "EXIT",
+      "before": "IF (IW.EQ.IV) GO TO 50"
+    },
+    {
+      "procedure": "MC13E",
+      "line": 48809,
+      "target": 90,
+      "loop_line": 48772,
+      "exit": "EXIT",
+      "before": "IF (ICNT.LT.N) GO TO 90"
+    },
+    {
+      "procedure": "MC13E",
+      "line": 48810,
+      "target": 100,
+      "loop_line": 48761,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "GO TO 100"
+    },
+    {
+      "procedure": "HQR",
+      "line": 52113,
+      "target": 100,
+      "loop_line": 52111,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 100"
+    },
+    {
+      "procedure": "HQR",
+      "line": 52116,
+      "target": 100,
+      "loop_line": 52111,
+      "exit": "EXIT",
+      "before": "IF (ABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100"
+    },
+    {
+      "procedure": "HQR",
+      "line": 52151,
+      "target": 150,
+      "loop_line": 52139,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 150"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 52673,
+      "target": 100,
+      "loop_line": 52671,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 100"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 52676,
+      "target": 100,
+      "loop_line": 52671,
+      "exit": "EXIT",
+      "before": "IF (ABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 52711,
+      "target": 150,
+      "loop_line": 52699,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 150"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 53416,
+      "target": 100,
+      "loop_line": 53414,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 100"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 53419,
+      "target": 100,
+      "loop_line": 53414,
+      "exit": "EXIT",
+      "before": "IF (DABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 53454,
+      "target": 150,
+      "loop_line": 53442,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 150"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 53846,
+      "target": 100,
+      "loop_line": 53844,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 100"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 53849,
+      "target": 100,
+      "loop_line": 53844,
+      "exit": "EXIT",
+      "before": "IF (DABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 53884,
+      "target": 150,
+      "loop_line": 53872,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. L) GO TO 150"
+    },
+    {
+      "procedure": "TQLRAT",
+      "line": 54462,
+      "target": 120,
+      "loop_line": 54461,
+      "exit": "EXIT",
+      "before": "IF (E2(M) .LE. C) GO TO 120"
+    },
+    {
+      "procedure": "IMTQL1",
+      "line": 54575,
+      "target": 120,
+      "loop_line": 54574,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. N) GO TO 120"
+    },
+    {
+      "procedure": "TQL2",
+      "line": 54824,
+      "target": 120,
+      "loop_line": 54823,
+      "exit": "EXIT",
+      "before": "IF (ABS(E(M)) .LE. B) GO TO 120"
+    },
+    {
+      "procedure": "IMTQL2",
+      "line": 54971,
+      "target": 120,
+      "loop_line": 54970,
+      "exit": "EXIT",
+      "before": "IF (M .EQ. N) GO TO 120"
+    },
+    {
+      "procedure": "DTQL",
+      "line": 55334,
+      "target": 120,
+      "loop_line": 55333,
+      "exit": "EXIT",
+      "before": "IF (E2(M) .LE. C) GO TO 120"
+    },
+    {
+      "procedure": "DTQL2",
+      "line": 55584,
+      "target": 120,
+      "loop_line": 55583,
+      "exit": "EXIT",
+      "before": "IF (DABS(E(M)) .LE. B) GO TO 120"
+    },
+    {
+      "procedure": "COMQR",
+      "line": 56091,
+      "target": 300,
+      "loop_line": 56089,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 300"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 56429,
+      "target": 300,
+      "loop_line": 56427,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 300"
+    },
+    {
+      "procedure": "DCOMQR",
+      "line": 57045,
+      "target": 300,
+      "loop_line": 57043,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 300"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 57381,
+      "target": 300,
+      "loop_line": 57379,
+      "exit": "EXIT",
+      "before": "IF (L .EQ. LOW) GO TO 300"
+    },
+    {
+      "procedure": "U11LS",
+      "line": 59055,
+      "target": 320,
+      "loop_line": 59044,
+      "exit": "EXIT",
+      "before": "IF (IS .EQ. 0) GO TO 320"
+    },
+    {
+      "procedure": "U11LS",
+      "line": 59061,
+      "target": 330,
+      "loop_line": 59059,
+      "exit": "EXIT",
+      "before": "IF (R2 + SUM .GE. 1.0) GO TO 330"
+    },
+    {
+      "procedure": "U11US",
+      "line": 59400,
+      "target": 320,
+      "loop_line": 59389,
+      "exit": "EXIT",
+      "before": "IF (IS .EQ. 0) GO TO 320"
+    },
+    {
+      "procedure": "U11US",
+      "line": 59406,
+      "target": 330,
+      "loop_line": 59404,
+      "exit": "EXIT",
+      "before": "IF (R2 + SUM .GE. 1.0) GO TO 330"
+    },
+    {
+      "procedure": "U12US",
+      "line": 59516,
+      "target": 170,
+      "loop_line": 59514,
+      "exit": "EXIT",
+      "before": "IF (I .EQ. K) GO TO 170"
+    },
+    {
+      "procedure": "DU11LS",
+      "line": 59954,
+      "target": 320,
+      "loop_line": 59943,
+      "exit": "EXIT",
+      "before": "IF (IS .EQ. 0) GO TO 320"
+    },
+    {
+      "procedure": "DU11LS",
+      "line": 59960,
+      "target": 330,
+      "loop_line": 59958,
+      "exit": "EXIT",
+      "before": "IF (R2 + SUM .GE. 1.D0) GO TO 330"
+    },
+    {
+      "procedure": "DU11US",
+      "line": 60296,
+      "target": 320,
+      "loop_line": 60285,
+      "exit": "EXIT",
+      "before": "IF (IS .EQ. 0) GO TO 320"
+    },
+    {
+      "procedure": "DU11US",
+      "line": 60302,
+      "target": 330,
+      "loop_line": 60300,
+      "exit": "EXIT",
+      "before": "IF (R2 + SUM .GE. 1.D0) GO TO 330"
+    },
+    {
+      "procedure": "DU12US",
+      "line": 60409,
+      "target": 170,
+      "loop_line": 60407,
+      "exit": "EXIT",
+      "before": "IF (I .EQ. K) GO TO 170"
+    },
+    {
+      "procedure": "LSEI",
+      "line": 61863,
+      "target": 200,
+      "loop_line": 61839,
+      "exit": "EXIT",
+      "before": "GO TO 200"
+    },
+    {
+      "procedure": "FDJAC1",
+      "line": 67338,
+      "target": 30,
+      "loop_line": 67332,
+      "exit": "EXIT",
+      "before": "IF (IFLAG .LT. 0) GO TO 30"
+    },
+    {
+      "procedure": "FDJAC1",
+      "line": 67356,
+      "target": 100,
+      "loop_line": 67348,
+      "exit": "EXIT",
+      "before": "IF (IFLAG .LT. 0) GO TO 100"
+    },
+    {
+      "procedure": "FDJAC2",
+      "line": 67449,
+      "target": 30,
+      "loop_line": 67443,
+      "exit": "EXIT",
+      "before": "IF (IFLAG .LT. 0) GO TO 30"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68802,
+      "target": 522,
+      "loop_line": 68793,
+      "exit": "EXIT",
+      "before": "IF (K .GE. MCHECK) GO TO 522"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68814,
+      "target": 582,
+      "loop_line": 68813,
+      "exit": "EXIT",
+      "before": "IF (JP .EQ. IBASIS(IP)) GO TO 582"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69648,
+      "target": 522,
+      "loop_line": 69636,
+      "exit": "EXIT",
+      "before": "IF (K .GE. MCHECK) GO TO 522"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69660,
+      "target": 582,
+      "loop_line": 69659,
+      "exit": "EXIT",
+      "before": "IF (JP .EQ. IBASIS(IP)) GO TO 582"
+    },
+    {
+      "procedure": "MKP1",
+      "line": 70691,
+      "target": 90,
+      "loop_line": 70688,
+      "exit": "EXIT",
+      "before": "GO TO 90"
+    },
+    {
+      "procedure": "MKP1",
+      "line": 70733,
+      "target": 180,
+      "loop_line": 70718,
+      "exit": "EXIT",
+      "before": "IF ( IBV .EQ. V(I) ) GO TO 180"
+    },
+    {
+      "procedure": "SKNP1",
+      "line": 71036,
+      "target": 20,
+      "loop_line": 71034,
+      "exit": "EXIT",
+      "before": "IF ( WS(L) .GT. MS ) GO TO 20"
+    },
+    {
+      "procedure": "SRCH",
+      "line": 71456,
+      "target": 200,
+      "loop_line": 71452,
+      "exit": "EXIT",
+      "before": "IF(.NOT. CND) GO TO 200"
+    },
+    {
+      "procedure": "CQEXT",
+      "line": 72097,
+      "target": 50,
+      "loop_line": 72037,
+      "exit": "EXIT",
+      "before": "GO TO 50"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 72659,
+      "target": 100,
+      "loop_line": 72600,
+      "exit": "EXIT",
+      "before": "IF(IER.NE.0) GO TO 100"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 72697,
+      "target": 100,
+      "loop_line": 72600,
+      "exit": "EXIT",
+      "before": "IF(ABSERR.LE.ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 72700,
+      "target": 100,
+      "loop_line": 72600,
+      "exit": "EXIT",
+      "before": "IF(IER.EQ.5) GO TO 100"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 82164,
+      "target": 230,
+      "loop_line": 82163,
+      "exit": "EXIT",
+      "before": "IF (XVAL .LT. BKPT(I)) GO TO 230"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 82210,
+      "target": 330,
+      "loop_line": 82209,
+      "exit": "EXIT",
+      "before": "IF (XVAL .LT. BKPT(I)) GO TO 330"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 82228,
+      "target": 360,
+      "loop_line": 82227,
+      "exit": "EXIT",
+      "before": "IF (YVAL .LT. BKPT(I)) GO TO 360"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 82262,
+      "target": 520,
+      "loop_line": 82261,
+      "exit": "EXIT",
+      "before": "IF (XVAL .LT. BKPT(I)) GO TO 520"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 89093,
+      "target": 100,
+      "loop_line": 89083,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 89146,
+      "target": 100,
+      "loop_line": 89083,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 89186,
+      "target": 100,
+      "loop_line": 89083,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 89189,
+      "target": 100,
+      "loop_line": 89083,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 89879,
+      "target": 100,
+      "loop_line": 89819,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 89917,
+      "target": 100,
+      "loop_line": 89819,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 89920,
+      "target": 100,
+      "loop_line": 89819,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "QPSRT",
+      "line": 90193,
+      "target": 30,
+      "loop_line": 90190,
+      "exit": "EXIT",
+      "before": "IF(ERRMAX.LE.ELIST(ISUCC)) GO TO 30"
+    },
+    {
+      "procedure": "QELG",
+      "line": 90350,
+      "target": 50,
+      "loop_line": 90311,
+      "exit": "EXIT",
+      "before": "GO TO 50"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 90839,
+      "target": 100,
+      "loop_line": 90762,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 90881,
+      "target": 100,
+      "loop_line": 90762,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 90884,
+      "target": 100,
+      "loop_line": 90762,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "QXLQM",
+      "line": 91029,
+      "target": 3000,
+      "loop_line": 91021,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .GT. ERROLD*0.16) GO TO 3000"
+    },
+    {
+      "procedure": "QXLQM",
+      "line": 91030,
+      "target": 3000,
+      "loop_line": 91021,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LT. 1000.0*EPMACH*RESABS) GO TO 3000"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 91734,
+      "target": 100,
+      "loop_line": 91724,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 91787,
+      "target": 100,
+      "loop_line": 91724,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 91827,
+      "target": 100,
+      "loop_line": 91724,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 91830,
+      "target": 100,
+      "loop_line": 91724,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 92542,
+      "target": 100,
+      "loop_line": 92482,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 92580,
+      "target": 100,
+      "loop_line": 92482,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 92583,
+      "target": 100,
+      "loop_line": 92482,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "DQPSRT",
+      "line": 92869,
+      "target": 30,
+      "loop_line": 92866,
+      "exit": "EXIT",
+      "before": "IF(ERRMAX.LE.ELIST(ISUCC)) GO TO 30"
+    },
+    {
+      "procedure": "DQELG",
+      "line": 93034,
+      "target": 50,
+      "loop_line": 92995,
+      "exit": "EXIT",
+      "before": "GO TO 50"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 93523,
+      "target": 100,
+      "loop_line": 93446,
+      "exit": "EXIT",
+      "before": "IF (IER .NE. 0) GO TO 100"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 93565,
+      "target": 100,
+      "loop_line": 93446,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LE. ERTEST) GO TO 100"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 93568,
+      "target": 100,
+      "loop_line": 93446,
+      "exit": "EXIT",
+      "before": "IF (IER .EQ. 5) GO TO 100"
+    },
+    {
+      "procedure": "DQXLQM",
+      "line": 93713,
+      "target": 3000,
+      "loop_line": 93705,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .GT. ERROLD*0.16D0) GO TO 3000"
+    },
+    {
+      "procedure": "DQXLQM",
+      "line": 93714,
+      "target": 3000,
+      "loop_line": 93705,
+      "exit": "EXIT",
+      "before": "IF (ABSERR .LT. 1000.D0*EPMACH*RESABS) GO TO 3000"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 99330,
+      "target": 150,
+      "loop_line": 99307,
+      "exit": "EXIT",
+      "before": "IF (DELF .GE. BIG*ABS(DELY)) GO TO 150"
+    },
+    {
+      "procedure": "BLKTR1",
+      "line": 102337,
+      "target": 180,
+      "loop_line": 102333,
+      "exit": "EXIT",
+      "before": "GO TO 180"
+    },
+    {
+      "procedure": "BLKTR1",
+      "line": 102353,
+      "target": 190,
+      "loop_line": 102326,
+      "exit": "EXIT NSWC_EXIT_1",
+      "before": "IF ( ( I - NM ) .EQ. 0 ) GO TO 190"
+    },
+    {
+      "procedure": "BLKTR1",
+      "line": 102413,
+      "target": 310,
+      "loop_line": 102407,
+      "exit": "EXIT",
+      "before": "IF ( ( I - IZR ) .EQ. 0 ) GO TO 310"
+    },
+    {
+      "procedure": "BLKTR1",
+      "line": 102430,
+      "target": 310,
+      "loop_line": 102407,
+      "exit": "EXIT",
+      "before": "GO TO 310"
+    },
+    {
+      "procedure": "COMPB",
+      "line": 103031,
+      "target": 100,
+      "loop_line": 103029,
+      "exit": "EXIT",
+      "before": "IF ( ( NB ) .LE. 0 ) GO TO 100"
+    },
+    {
+      "procedure": "TQLRT0",
+      "line": 103154,
+      "target": 40,
+      "loop_line": 103153,
+      "exit": "EXIT",
+      "before": "IF (E2(M) .LE. C) GO TO  40"
+    }
+  ],
+  "removed_targets": [
+    {
+      "procedure": "ISHELL",
+      "label": 20
+    },
+    {
+      "procedure": "SHELL",
+      "label": 20
+    },
+    {
+      "procedure": "SHELL2",
+      "label": 20
+    },
+    {
+      "procedure": "RSORT",
+      "label": 20
+    },
+    {
+      "procedure": "RISORT",
+      "label": 20
+    },
+    {
+      "procedure": "RRSORT",
+      "label": 20
+    },
+    {
+      "procedure": "DSORT",
+      "label": 20
+    },
+    {
+      "procedure": "DISORT",
+      "label": 20
+    },
+    {
+      "procedure": "DDSORT",
+      "label": 20
+    },
+    {
+      "procedure": "AORD",
+      "label": 20
+    },
+    {
+      "procedure": "DAORD",
+      "label": 20
+    },
+    {
+      "procedure": "HC1",
+      "label": 150
+    },
+    {
+      "procedure": "HC1",
+      "label": 190
+    },
+    {
+      "procedure": "HC1",
+      "label": 390
+    },
+    {
+      "procedure": "FUPD",
+      "label": 20
+    },
+    {
+      "procedure": "BUPD",
+      "label": 20
+    },
+    {
+      "procedure": "ERFCM2",
+      "label": 20
+    },
+    {
+      "procedure": "DEI0",
+      "label": 20
+    },
+    {
+      "procedure": "DCGAMA",
+      "label": 100
+    },
+    {
+      "procedure": "DCPSI",
+      "label": 70
+    },
+    {
+      "procedure": "PSIDF",
+      "label": 240
+    },
+    {
+      "procedure": "BGRAT",
+      "label": 30
+    },
+    {
+      "procedure": "BASYM",
+      "label": 60
+    },
+    {
+      "procedure": "CBJA",
+      "label": 30
+    },
+    {
+      "procedure": "BESJ",
+      "label": 540
+    },
+    {
+      "procedure": "ASJY",
+      "label": 70
+    },
+    {
+      "procedure": "ASJY",
+      "label": 150
+    },
+    {
+      "procedure": "BESI",
+      "label": 480
+    },
+    {
+      "procedure": "ASIK",
+      "label": 40
+    },
+    {
+      "procedure": "CBKA",
+      "label": 20
+    },
+    {
+      "procedure": "CKPS",
+      "label": 80
+    },
+    {
+      "procedure": "CKA",
+      "label": 20
+    },
+    {
+      "procedure": "CKM",
+      "label": 80
+    },
+    {
+      "procedure": "KM",
+      "label": 20
+    },
+    {
+      "procedure": "KL",
+      "label": 20
+    },
+    {
+      "procedure": "EKM",
+      "label": 20
+    },
+    {
+      "procedure": "EKL",
+      "label": 20
+    },
+    {
+      "procedure": "SGEDI",
+      "label": 60
+    },
+    {
+      "procedure": "DGEDI",
+      "label": 60
+    },
+    {
+      "procedure": "SPPDI",
+      "label": 60
+    },
+    {
+      "procedure": "DPPDI",
+      "label": 60
+    },
+    {
+      "procedure": "CGEDI",
+      "label": 60
+    },
+    {
+      "procedure": "SSVDC",
+      "label": 400
+    },
+    {
+      "procedure": "SSVDC",
+      "label": 440
+    },
+    {
+      "procedure": "DSVDC",
+      "label": 400
+    },
+    {
+      "procedure": "DSVDC",
+      "label": 440
+    },
+    {
+      "procedure": "CSVDC",
+      "label": 390
+    },
+    {
+      "procedure": "CSVDC",
+      "label": 440
+    },
+    {
+      "procedure": "CSVDC",
+      "label": 480
+    },
+    {
+      "procedure": "SCHUR",
+      "label": 60
+    },
+    {
+      "procedure": "SCHUR",
+      "label": 100
+    },
+    {
+      "procedure": "DSCHUR",
+      "label": 60
+    },
+    {
+      "procedure": "DSCHUR",
+      "label": 100
+    },
+    {
+      "procedure": "SQUIN2",
+      "label": 370
+    },
+    {
+      "procedure": "MC21B",
+      "label": 100
+    },
+    {
+      "procedure": "MC21B",
+      "label": 110
+    },
+    {
+      "procedure": "MC13E",
+      "label": 50
+    },
+    {
+      "procedure": "MC13E",
+      "label": 100
+    },
+    {
+      "procedure": "HQR",
+      "label": 100
+    },
+    {
+      "procedure": "HQR2",
+      "label": 100
+    },
+    {
+      "procedure": "DHQR",
+      "label": 100
+    },
+    {
+      "procedure": "DHQR2",
+      "label": 100
+    },
+    {
+      "procedure": "TQLRAT",
+      "label": 120
+    },
+    {
+      "procedure": "TQL2",
+      "label": 120
+    },
+    {
+      "procedure": "DTQL",
+      "label": 120
+    },
+    {
+      "procedure": "DTQL2",
+      "label": 120
+    },
+    {
+      "procedure": "U11LS",
+      "label": 320
+    },
+    {
+      "procedure": "U11LS",
+      "label": 330
+    },
+    {
+      "procedure": "U11US",
+      "label": 320
+    },
+    {
+      "procedure": "U11US",
+      "label": 330
+    },
+    {
+      "procedure": "U12US",
+      "label": 170
+    },
+    {
+      "procedure": "DU11LS",
+      "label": 320
+    },
+    {
+      "procedure": "DU11LS",
+      "label": 330
+    },
+    {
+      "procedure": "DU11US",
+      "label": 320
+    },
+    {
+      "procedure": "DU11US",
+      "label": 330
+    },
+    {
+      "procedure": "DU12US",
+      "label": 170
+    },
+    {
+      "procedure": "FDJAC1",
+      "label": 30
+    },
+    {
+      "procedure": "FDJAC1",
+      "label": 100
+    },
+    {
+      "procedure": "FDJAC2",
+      "label": 30
+    },
+    {
+      "procedure": "SMPLX1",
+      "label": 522
+    },
+    {
+      "procedure": "SMPLX1",
+      "label": 582
+    },
+    {
+      "procedure": "SSPLX1",
+      "label": 522
+    },
+    {
+      "procedure": "SSPLX1",
+      "label": 582
+    },
+    {
+      "procedure": "MKP1",
+      "label": 90
+    },
+    {
+      "procedure": "SKNP1",
+      "label": 20
+    },
+    {
+      "procedure": "CQEXT",
+      "label": 50
+    },
+    {
+      "procedure": "QAGIE1",
+      "label": 100
+    },
+    {
+      "procedure": "QAGSE",
+      "label": 100
+    },
+    {
+      "procedure": "QAGIE",
+      "label": 100
+    },
+    {
+      "procedure": "QELG",
+      "label": 50
+    },
+    {
+      "procedure": "QXGSE",
+      "label": 100
+    },
+    {
+      "procedure": "QXLQM",
+      "label": 3000
+    },
+    {
+      "procedure": "DQAGSE",
+      "label": 100
+    },
+    {
+      "procedure": "DQAGIE",
+      "label": 100
+    },
+    {
+      "procedure": "DQELG",
+      "label": 50
+    },
+    {
+      "procedure": "DQXGSE",
+      "label": 100
+    },
+    {
+      "procedure": "DQXLQM",
+      "label": 3000
+    },
+    {
+      "procedure": "HSTART",
+      "label": 150
+    },
+    {
+      "procedure": "BLKTR1",
+      "label": 180
+    },
+    {
+      "procedure": "BLKTR1",
+      "label": 190
+    },
+    {
+      "procedure": "BLKTR1",
+      "label": 310
+    },
+    {
+      "procedure": "COMPB",
+      "label": 100
+    },
+    {
+      "procedure": "TQLRT0",
+      "label": 40
+    }
+  ],
+  "skipped": [
+    {
+      "procedure": "HQR",
+      "line": 52152,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 52712,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 53455,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 53885,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "IMTQL1",
+      "line": 54576,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "IMTQL2",
+      "line": 54972,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "COMQR",
+      "line": 56092,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 56430,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "DCOMQR",
+      "line": 57046,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 57382,
+      "reason": "continued statement requires review"
+    },
+    {
+      "procedure": "RADBG",
+      "reason": "Hollerith data requires review"
+    },
+    {
+      "procedure": "RADFG",
+      "reason": "Hollerith data requires review"
+    }
+  ],
+  "converted": 191,
+  "named_exits": 29
+}

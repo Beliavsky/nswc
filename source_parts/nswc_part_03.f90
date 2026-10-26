@@ -1,186 +1,3 @@
-pure real function bi(x)
-implicit none
-real, intent(in) :: x
-integer :: n, n2
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 6.3496042078728
-real, parameter :: c = 1.94773404105468
-real, parameter :: an0 = .614926627446001e+00
-real, parameter :: an1 = .462726943978834e+00
-real, parameter :: an2 = .867811386408974e-02
-real, parameter :: an3 = .974670609357959e-01
-real, parameter :: an4 = .370856545413908e-01
-real, parameter :: an5 = .569193415071716e-03
-real, parameter :: an6 = .269172131237236e-02
-real, parameter :: an7 = .746473849872868e-03
-real, parameter :: an8 = .105638036899269e-04
-real, parameter :: an9 = .242726195973978e-04
-real, parameter :: an10 = .557260250681542e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .234801779278695e-01
-real, parameter :: ad2 = -.300487317759152e-02
-real, parameter :: ad3 = -.597414466459612e-02
-real, parameter :: bn0 = .614926627446001e+00
-real, parameter :: bn1 = .548653374523520e+00
-real, parameter :: bn2 = .582684047163842e-01
-real, parameter :: bn3 = .871954925712688e-01
-real, parameter :: bn4 = .508547058449004e-01
-real, parameter :: bn5 = .361412623711710e-02
-real, parameter :: bn6 = .177269722794511e-02
-real, parameter :: bn7 = .117774184027185e-02
-real, parameter :: bn8 = .627004834186143e-04
-real, parameter :: bn9 = .774782269814080e-06
-real, parameter :: bn10 = .118116474369315e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .163214622184402e+00
-real, parameter :: bd2 = -.242285981710408e-01
-real, parameter :: bd3 = -.720554280297616e-02
-real, parameter :: pn0 = .619911943572678e+00
-real, parameter :: pn1 = .100411558489626e+01
-real, parameter :: pn2 = .563659963795768e+00
-real, parameter :: pn3 = .274925508033015e+00
-real, parameter :: pn4 = .115641822943246e+00
-real, parameter :: pn5 = .120048517441127e-01
-real, parameter :: pn6 = .501838091254330e-02
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .159751878026937e+01
-real, parameter :: pd2 = .104664867034140e+01
-real, parameter :: pd3 = .512560333664022e+00
-real, parameter :: pd4 = .159144727666995e+00
-real, parameter :: pd5 = .394456748956258e-01
-real, parameter :: pd6 = .529926873250079e-02
-real, parameter :: pd7 = .288921845412576e-03
-real, parameter :: qn0 = .595123543430856e+00
-real, parameter :: qn1 = .652692120245803e+00
-real, parameter :: qn2 = .436851872835894e+00
-real, parameter :: qn3 = .201626141057807e+00
-real, parameter :: qn4 = .649535170626944e-01
-real, parameter :: qn5 = .171798867787816e-01
-real, parameter :: qn6 = .287998748038892e-02
-real, parameter :: qn7 = .359634362348937e-03
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .114259871204893e+01
-real, parameter :: qd2 = .766390439057101e+00
-real, parameter :: qd3 = .348287281255683e+00
-real, parameter :: qd4 = .117049276946157e+00
-real, parameter :: qd5 = .294545450289541e-01
-real, parameter :: qd6 = .523951773968125e-02
-real, parameter :: qd7 = .622692248774973e-03
-real, parameter :: qd8 = .674811395957744e-06
-real, parameter :: rn0 = .568067636505865e+00
-real, parameter :: rn1 = .462183136291541e-01
-real, parameter :: rn2 = .268519638203645e+00
-real, parameter :: rn3 = .199427104235673e-02
-real, parameter :: rn4 = .135599161332010e-03
-real, parameter :: rn5 = .229937707171804e-04
-real, parameter :: rn6 = .697888081361175e-05
-real, parameter :: rn7 = .153277172934286e-05
-real, parameter :: rn8 = -.149322381877245e-05
-real, parameter :: rn9 = -.113533571972859e-05
-real, parameter :: rn10 = .740721412702102e-06
-real, parameter :: rn11 = -.120160431596119e-06
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .741293424676788e-01
-real, parameter :: rd2 = .471695968238457e+00
-real, parameter :: sn0 = .564189583547757e+00
-real, parameter :: sn1 = .112605519585866e+00
-real, parameter :: sn2 = .893329124921909e-03
-real, parameter :: sn3 = .532139134120350e-04
-real, parameter :: sn4 = .592725458717738e-05
-real, parameter :: sn5 = .921448923850546e-06
-real, parameter :: sn6 = .404558310611815e-06
-real, parameter :: sn7 = -.660517686759109e-06
-real, parameter :: sn8 = .174667472383815e-05
-real, parameter :: sn9 = -.287037710548882e-05
-real, parameter :: sn10 = .322304072982791e-05
-real, parameter :: sn11 = -.231569499551950e-05
-real, parameter :: sn12 = .963478964685941e-06
-real, parameter :: sn13 = -.173784488565533e-06
-real, parameter :: sd0 = .100000000000000e+01
-real, parameter :: sd1 = .193077670156841e+00
-interface
-   pure elemental subroutine aimp(x,r,phi)
-      implicit none
-      real, intent(in) :: x
-      real, intent(inout) :: r
-      real, intent(inout) :: phi
-   end subroutine aimp
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-end interface
-!-----------------------------------------------------------------------
-!             Evaluation of the Airy function bi(x)
-!     note... if x is a positive number where bi(x) is too large
-!     to be computed, then bi(x) is set to 0.
-!-----------------------------------------------------------------------
-!     x0 = 16**(2/3)
-!     c = exp(2/3)
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-if (x >= -1.0) go to 10
-call aimp(-x, r, phi)
-bi = r*cos(phi)
-return
-10 if (x >= 0.0) go to 20
-bi = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
-   & + an6)*x + an5)*x + an4)*x + an3)*x &
-   & + an2)*x + an1)*x + an0) / &
-   & (((ad3*x + ad2)*x + ad1)*x + ad0)
-return
-20 if (x > 1.0) go to 30
-bi = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
-   & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
-   & + bn2)*x + bn1)*x + bn0) / &
-   & (((bd3*x + bd2)*x + bd1)*x + bd0)
-return
-30 rtx = sqrt(x)
-if (x > 2.0) go to 40
-t = x - 1.0
-w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
-   & + pn1)*t + pn0) / &
-   & (((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
-   & + pd2)*t + pd1)*t + pd0)
-bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
-return
-40 if (x > 4.0) go to 50
-t = x - 2.0
-w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
-   & + qn2)*t + qn1)*t + qn0) / &
-   & ((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
-   & + qd3)*t + qd2)*t + qd1)*t + qd0)
-bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
-return
-50 if (x > x0) go to 60
-t = 16.0/(x*rtx) - 1.0
-w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
-   & + rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
-   & + rn2)*t + rn1)*t + rn0) / &
-   & ((rd2*t + rd1)*t + rd0)
-bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
-return
-60 if (x*rtx > 1.5*exparg(0)) go to 70
-t = 16.0/(x*rtx)
-w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
-   & + sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
-   & + sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
-   & (sd1*t + sd0)
-n = rtx
-n2 = n*n
-t = (x - n2)/(rtx + n)
-bi = (w/sqrt(rtx)) * c**(n2*n) * exp(2.0*t*(n*rtx + t*t/3.0))
-return
-70 bi = 0.0
-end function bi
-
 pure elemental real function bie(x)
 implicit none
 real, intent(in) :: x
@@ -731,9 +548,9 @@ do i = 1,50
    c = ((ri - 0.5)/ri)**2
    an = c*(an*k2)
    s1 = s1 + an
-   if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
+   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
 end do
-20 km = hpi*s1
+km = hpi*s1
 end function km
 
 pure subroutine kl(l, fk, fl)
@@ -784,9 +601,9 @@ do i = 1,50
    bn = bn + 1.0/(ri*(2.0*ri - 1.0))
    s1 = s1 + an
    s2 = s2 + an*bn
-   if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
+   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
 end do
-20 s1 = s1 + (1.0, 0.0)
+s1 = s1 + (1.0, 0.0)
 !                   SET w = 0.5*CLOG(16.0/l2)
 x = real(l)
 y = aimag(l)
@@ -1127,9 +944,9 @@ do i = 1,50
    cn = an/(2.0*ri - 1.0)
    s1 = s1 + an
    s2 = s2 - cn
-   if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
+   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
 end do
-20 fk = hpi*s1
+fk = hpi*s1
 ek = hpi*s2
 end subroutine ekm
 
@@ -1198,9 +1015,9 @@ do i = 1,300
    s5 = s5 + en
    s6 = s6 + an*fn
    s7 = s7 + an*gn
-   if (abs(real(an)) + abs(aimag(an)) < tol) go to 20
+   if ( abs ( real ( an ) ) + abs ( aimag ( an ) ) < tol ) exit
 end do
-20 s1 = s1 + (1.0, 0.0)
+s1 = s1 + (1.0, 0.0)
 s3 = s3 + (1.0, 0.0)
 s5 = s5 + (1.0, 0.0)
 s7 = s7 + (0.5, 0.0)
@@ -10506,4 +10323,232 @@ do j = 1,n
    end do
 end do
 end subroutine cmimag
+
+pure subroutine mcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = a(i,j)
+   end do
+end do
+end subroutine mcopy
+
+pure subroutine smcopy(n,a,b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a(*)
+real, intent(inout) :: b(*)
+integer :: k, l
+l = (n*(n + 1))/2
+do k = 1,l
+   b(k) = a(k)
+end do
+end subroutine smcopy
+
+pure subroutine dmcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = a(i,j)
+   end do
+end do
+end subroutine dmcopy
+
+pure subroutine cmcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = a(i,j)
+   end do
+end do
+end subroutine cmcopy
+
+pure subroutine cmconj(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(i,j) = conjg(a(i,j))
+   end do
+end do
+end subroutine cmconj
+
+pure subroutine tpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,m)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(j,i) = a(i,j)
+   end do
+end do
+end subroutine tpose
+
+pure subroutine dtpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,m)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(j,i) = a(i,j)
+   end do
+end do
+end subroutine dtpose
+
+pure subroutine ctpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,m)
+integer :: i, j
+do j = 1,n
+   do i = 1,m
+      b(j,i) = a(i,j)
+   end do
+end do
+end subroutine ctpose
+
+pure subroutine tip(a, n1, n2, moved, nwork, ndim)
+implicit none
+integer, intent(in) :: n1, n2
+integer, intent(inout) :: ndim
+integer, intent(in) :: nwork
+real, intent(inout) :: a(*)
+integer, intent(inout) :: moved(nwork)
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+   & npower, ifact(8), ipower(8), nexp(8), iexp(8)
+real :: atemp, btemp
+interface
+   pure subroutine infctr(n,ifact,ipower,nexp,npower)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ifact(*)
+      integer, intent(inout) :: ipower(*)
+      integer, intent(inout) :: nexp(*)
+      integer, intent(inout) :: npower
+   end subroutine infctr
+end interface
+! ----------------------------------------------------------
+! Transposition of a rectangular matrix in situ.
+! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
+! Transposition of the n1 by n2 matrix a amounts to
+! replacing the element at vector position i (0-ORIGIN)
+! with the element at position n1*i (mod n1*n2-1).
+! Each subcycle of this permutation is completed in order.
+! ----------------------------------------------------------
+if (n1 < 2 .or. n2 < 2) go to 200
+n12 = n1*n2
+n = n1
+m = n12 - 1
+if (n1 /= n2) go to 30
+! Square matrices are done separately for speed
+i1min = 2
+do i1max = n,m,n
+   i2 = i1min + n - 1
+   do i1 = i1min,i1max
+      atemp = a(i1)
+      a(i1) = a(i2)
+      a(i2) = atemp
+      i2 = i2 + n
+   end do
+   i1min = i1min + n + 1
+end do
+return
+! Modulus M is factored into prime powers.  Eight factors
+! suffice up to M = 2*3*5*7*11*13*17*19 = 9,767,520.
+30 ndim = 0
+call infctr(m, ifact, ipower, nexp, npower)
+do ip = 1,npower
+   iexp(ip) = 0
+end do
+! Generate every divisor of M less than M/2
+idiv = 1
+mhalf = m/2
+50 if (idiv >= mhalf) return
+! The number of elements whose index is divisible by idiv
+! and by no other divisor of M is the Euler totient
+! function, phi(M/idiv).
+ncount = m/idiv
+do ip = 1,npower
+   if (iexp(ip) == nexp(ip)) go to 60
+   ncount = (ncount/ifact(ip))*(ifact(ip) - 1)
+60 continue
+end do
+if (nwork <= 0) go to 75
+do i = 1,nwork
+   moved(i) = 0
+end do
+75 istart = idiv
+! The starting point of a subcycle is divisible only by idiv
+! and must not appear in any other subcycle.
+80 mmist = m - istart
+if (istart == idiv) go to 120
+ndim = max(ndim,istart)
+if (istart > nwork) go to 90
+if (moved(istart) /= 0) go to 160
+90 isoid = istart/idiv
+do ip = 1,npower
+   if (iexp(ip) == nexp(ip)) go to 100
+   if (mod(isoid,ifact(ip)) == 0) go to 160
+100 continue
+end do
+if (istart <= nwork) go to 120
+itest = istart
+110 itest = mod(n*itest,m)
+if (itest < istart .or. itest > mmist) go to 160
+if (itest > istart .and. itest < mmist) go to 110
+120 atemp = a(istart + 1)
+btemp = a(mmist + 1)
+ia1 = istart
+130 ia2 = mod(n*ia1,m)
+mmia1 = m - ia1
+mmia2 = m - ia2
+if (ia1 <= nwork) moved(ia1) = 1
+if (mmia1 <= nwork) moved(mmia1) = 1
+ncount = ncount - 2
+! Move two elements, the second from the negative
+! subcycle.  Check first for subcycle closure.
+if (ia2 == istart) go to 140
+if (mmia2 == istart) go to 150
+a(ia1 + 1) = a(ia2 + 1)
+a(mmia1 + 1) = a(mmia2 + 1)
+ia1 = ia2
+go to 130
+140 a(ia1 + 1) = atemp
+a(mmia1 + 1) = btemp
+go to 160
+150 a(ia1 + 1) = btemp
+a(mmia1 + 1) = atemp
+160 istart = istart + idiv
+if (ncount > 0) go to 80
+do ip = 1,npower
+   if (iexp(ip) == nexp(ip)) go to 170
+   iexp(ip) = iexp(ip) + 1
+   idiv = idiv*ifact(ip)
+   go to 50
+170 iexp(ip) = 0
+   idiv = idiv/ipower(ip)
+end do
+return
+200 if (n1 /= n2) ndim = 0
+end subroutine tip
 

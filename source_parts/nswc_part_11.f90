@@ -1,283 +1,3 @@
-subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
-   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
-   & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
-   & idmn,w,pertrb,ierror)
-implicit none
-integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
-   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
-   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
-   & zn(*)
-external cofx, cofy
-integer :: i, i1, iord, j, mp, np
-real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
-   & eyj, fj, fyj, fyn, prtrb, xi, yj
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
-logical :: singlr
-!     sepel1 sets up vectors and arrays for input to blktri
-!     and computes a second order solution in USOL.  A return jump to
-!     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
-!     solution is generated in USOL.
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
-!     Set parameters internally
-kswx = mbdcnd + 1
-kswy = nbdcnd + 1
-k = m + 1
-l = n + 1
-ait = a
-bit = b
-cit = c
-dit = d
-!     Set right hand side values from GRHS in USOL on the interior
-!     and non-specified boundaries.
-do i = 2,m
-   do j = 2,n
-      usol(i,j) = grhs(i,j)
-   end do
-end do
-if (kswx == 2 .or. kswx == 3) go to  40
-do j = 2,n
-   usol(1,j) = grhs(1,j)
-end do
-40 continue
-if (kswx == 2 .or. kswx == 5) go to  60
-do j = 2,n
-   usol(k,j) = grhs(k,j)
-end do
-60 continue
-if (kswy == 2 .or. kswy == 3) go to  80
-do i = 2,m
-   usol(i,1) = grhs(i,1)
-end do
-80 continue
-if (kswy == 2 .or. kswy == 5) go to 100
-do i = 2,m
-   usol(i,l) = grhs(i,l)
-end do
-100 continue
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
-   & usol(1,1) = grhs(1,1)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
-   & usol(k,1) = grhs(k,1)
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(1,l) = grhs(1,l)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(k,l) = grhs(k,l)
-i1 = 1
-!     Set switches for periodic or non-periodic boundaries
-mp = 1
-np = 1
-if (kswx == 1) mp = 0
-if (kswy == 1) np = 0
-!     Set dlx,dly and size of block tri-diagonal system generated
-!     in NINT,mint
-dlx = (bit - ait)/float(m)
-mit = k - 1
-if (kswx == 2) mit = k - 2
-if (kswx == 4) mit = k
-dly = (dit - cit)/float(n)
-nit = l - 1
-if (kswy == 2) nit = l - 2
-if (kswy == 4) nit = l
-tdlx3 = 2.0*dlx**3
-dlx4 = dlx**4
-tdly3 = 2.0*dly**3
-dly4 = dly**4
-!     Set subscript limits for portion of array to input to blktri
-is = 1
-js = 1
-if (kswx == 2 .or. kswx == 3) is = 2
-if (kswy == 2 .or. kswy == 3) js = 2
-ns = nit + js - 1
-ms = mit + is - 1
-!     Set X - Direction
-do i = 1,mit
-   xi = ait + float(is + i - 2)*dlx
-   call cofx(xi,ai,bi,ci)
-   axi = (ai/dlx - 0.5*bi)/dlx
-   bxi = -2.*ai/dlx**2 + ci
-   cxi = (ai/dlx + 0.5*bi)/dlx
-   am(i) = axi
-   bm(i) = bxi
-   cm(i) = cxi
-end do
-!     Set Y direction
-do j = 1,nit
-   yj = cit + float(js + j - 2)*dly
-   call cofy(yj,dj,ej,fj)
-   dyj = (dj/dly - 0.5*ej)/dly
-   eyj = (-2.*dj/dly**2 + fj)
-   fyj = (dj/dly + 0.5*ej)/dly
-   an(j) = dyj
-   bn(j) = eyj
-   cn(j) = fyj
-end do
-!     Adjust edges in X direction unless periodic
-ax1 = am(1)
-cxm = cm(mit)
-select case (kswx)
-case (1)
-   go to 170
-case (2)
-   go to 130
-case (3)
-   go to 150
-case (4)
-   go to 160
-case (5)
-   go to 140
-end select
-!     Dirichlet-Dirichlet in X direction
-130 am(1) = 0.0
-cm(mit) = 0.0
-go to 170
-!     Mixed-Dirichlet in X direction
-140 am(1) = 0.0
-bm(1) = bm(1) + 2.*alpha*dlx*ax1
-cm(1) = cm(1) + ax1
-cm(mit) = 0.0
-go to 170
-!     Dirichlet-mixed in X direction
-150 am(1) = 0.0
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*beta*dlx*cxm
-cm(mit) = 0.0
-go to 170
-!     Mixed - Mixed in X direction
-160 continue
-am(1) = 0.0
-bm(1) = bm(1) + 2.*dlx*alpha*ax1
-cm(1) = cm(1) + ax1
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*dlx*beta*cxm
-cm(mit) = 0.0
-170 continue
-!     Adjust in Y direction unless periodic
-dy1 = an(1)
-fyn = cn(nit)
-select case (kswy)
-case (1)
-   go to 220
-case (2)
-   go to 180
-case (3)
-   go to 200
-case (4)
-   go to 210
-case (5)
-   go to 190
-end select
-!     Dirichlet-Dirichlet in Y direction
-180 continue
-an(1) = 0.0
-cn(nit) = 0.0
-go to 220
-!     Mixed-Dirichlet in Y direction
-190 continue
-an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
-cn(1) = cn(1) + dy1
-cn(nit) = 0.0
-go to 220
-!     Dirichlet-mixed in Y direction
-200 an(1) = 0.0
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.*dly*xnu*fyn
-cn(nit) = 0.0
-go to 220
-!     Mixed - Mixed direction in Y direction
-210 continue
-an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
-cn(1) = cn(1) + dy1
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
-cn(nit) = 0.0
-220 if (kswx == 1) go to 270
-!     Adjust USOL along X edge
-do j = js,ns
-   if (kswx /= 2 .and. kswx /= 3) go to 230
-   usol(is,j) = usol(is,j) - ax1*usol(1,j)
-   go to 240
-230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
-240 if (kswx /= 2 .and. kswx /= 5) go to 250
-   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
-   go to 260
-250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
-260 continue
-end do
-270 if (kswy == 1) go to 320
-!     Adjust USOL along Y edge
-do i = is,ms
-   if (kswy /= 2 .and. kswy /= 3) go to 280
-   usol(i,js) = usol(i,js) - dy1*usol(i,1)
-   go to 290
-280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
-290 if (kswy /= 2 .and. kswy /= 5) go to 300
-   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
-   go to 310
-300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
-310 continue
-end do
-320 continue
-!     Save adjusted edges in GRHS if iorder=4
-if (iorder /= 4) go to 350
-do j = js,ns
-   grhs(is,j) = usol(is,j)
-   grhs(ms,j) = usol(ms,j)
-end do
-do i = is,ms
-   grhs(i,js) = usol(i,js)
-   grhs(i,ns) = usol(i,ns)
-end do
-350 continue
-iord = iorder
-pertrb = 0.0
-!     Check if operator is singular
-call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
-!     Compute non-zero eigenvector in null space of transpose
-!     if singular
-if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
-if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
-!     Make initialization call to blktri
-if (intl == 0) &
-   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
-   & usol(is,js),ierror,w)
-if (ierror /= 0) return
-!     Adjust right hand side if necessary
-360 continue
-if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
-!     Compute solution
-call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
-   & ierror,w)
-if (ierror /= 0) return
-!     Set periodic boundaries if necessary
-if (kswx /= 1) go to 380
-do j = 1,l
-   usol(k,j) = usol(1,j)
-end do
-380 if (kswy /= 1) go to 400
-do i = 1,k
-   usol(i,l) = usol(i,1)
-end do
-400 continue
-!     Minimize solution with respect to weighted least squares
-!     norm if operator is singular
-if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
-!     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
-!     not flagged
-if (iord == 2) return
-iord = 2
-!     Compute new right hand side for fourth order solution
-call defer(cofx,cofy,usol,idmn,grhs,mn)
-go to 360
-end subroutine sepel1
-
 subroutine chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
    & cofy,idmn,mn,ierror)
 implicit none
@@ -971,7 +691,7 @@ do ll = 2,k
    call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
 end do
-do ll = 2,k
+nswc_exit_1 : do ll = 2 , k
    l = k - ll + 1
    ir = l - 1
    i2 = 2**ir
@@ -982,7 +702,7 @@ do ll = 2,k
       if ( ( i - i2 - izr ) == 0 ) go to 140
       go to 170
 140   if ( ( i - nm ) <= 0 ) go to 150
-      go to 180
+      exit
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
       if (nz == 0) iz = 1
@@ -998,13 +718,12 @@ do ll = 2,k
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
-      if ( ( i - nm ) == 0 ) go to 190
+      if ( ( i - nm ) == 0 ) exit nswc_exit_1
       go to 170
 170   continue
    end do
-180 continue
-end do
-190 do j = 1,m
+end do nswc_exit_1
+do j = 1,m
    y(j,nm + 1) = y(j,nm + 1) - cn(nm + 1)*w1(j) - an(nm + 1)*w2(j)
 end do
 call indxb(if/2,k - 1,im1,nm1)
@@ -1058,7 +777,7 @@ do l = 1,kdo
       ipi3 = i + i3
       if ( ( ipi2 - izr ) == 0 ) go to 280
       go to 270
-270   if ( ( i - izr ) == 0 ) go to 310
+270   if ( ( i - izr ) == 0 ) exit
       go to 300
 280   call indxc(i,ir,idxc,nc)
       call indxb(ipi2,ir,ip2,np2)
@@ -1075,10 +794,9 @@ do l = 1,kdo
          y(j,i) = y(j,i) - w2(j)
       end do
       izr = i
-      go to 310
+      exit
 300   continue
    end do
-310 continue
 end do
 ! Begin back substitution phase
 320 do ll = 1,k
@@ -1682,7 +1400,7 @@ do l = 1,kdo
    ifd = if - i4
    do i = i4,ifd,i4
       call indxb(i,l,ib,nb)
-      if ( ( nb ) <= 0 ) go to 100
+      if ( ( nb ) <= 0 ) exit
       go to 50
 50    js = i - ipl
       jf = js + nb - 1
@@ -1701,7 +1419,6 @@ do l = 1,kdo
          b(lh) = -bh(j)
       end do
    end do
-100 continue
 end do
 do j = 1,nm
    b(j) = -bn(j)
@@ -1805,11 +1522,11 @@ do l = 1,n
    c = b*b
 !     ********** Look for small squared sub-diagonal element **********
 20 do m = l,n
-      if (e2(m) <= c) go to  40
+      if ( e2 ( m ) <= c ) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
-40 if (m == l) go to  80
+   if (m == l) go to  80
 50 if (j == 30) go to 140
    j = j + 1
 !     ********** Form shift **********

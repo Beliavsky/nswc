@@ -181,7 +181,9 @@ def format_source(text):
             if left[0].isdigit() and right[0].lower().startswith('h') and left.end() == right.start():
                 raise ValueError('Unquoted Hollerith data require review')
         lowered = [t.lower() for t in tokens]
-        first = lowered[0] if lowered else ''
+        control = tokens[2:] if len(tokens) > 2 and tokens[1] == ':' else tokens
+        controls = [t.lower() for t in control]
+        first = controls[0] if controls else ''
         compact = re.sub(r'\s+', '', logical).lower()
         label_match = re.match(r'^\s*(\d+)\s+', records[0].code)
         label = label_match[1] if label_match else None
@@ -192,8 +194,9 @@ def format_source(text):
             if stack and not prototype:
                 raise ValueError(f'Line {records[0].index + 1}: unclosed block at procedure boundary')
         prototype_end = compact.startswith(('endfunction', 'endsubroutine')) and stack and stack[-1][0] == 'prototype'
+        do_end = re.fullmatch(r'(?i)end\s*do(?:\s+[a-z_]\w*)?', logical.strip())
         ending = ('prototype' if prototype_end else 'interface' if compact == 'endinterface' else
-                  'do' if compact == 'enddo' else 'if' if compact == 'endif' else 'select' if compact == 'endselect' else None)
+                  'do' if do_end else 'if' if compact == 'endif' else 'select' if compact == 'endselect' else None)
         if ending:
             if not stack or stack[-1][0] != ending:
                 raise ValueError(f'Line {records[0].index + 1}: unmatched END {ending}')
@@ -244,9 +247,9 @@ def format_source(text):
             else:
                 result[record.index] = wrap_line(prefix, code, suffix, tail, record.newline, 3*(depth + 1))
         close = conditional_end(tokens)
-        if first == 'do' and (len(tokens) == 1 or tokens[1].isdigit() or
-                              lowered[1] in ('while', 'concurrent') or tokens[2:3] == ['=']):
-            target = str(int(tokens[1])) if len(tokens) > 1 and tokens[1].isdigit() else None
+        if first == 'do' and (len(control) == 1 or control[1].isdigit() or
+                              controls[1] in ('while', 'concurrent') or control[2:3] == ['=']):
+            target = str(int(control[1])) if len(control) > 1 and control[1].isdigit() else None
             stack.append(('do', target))
         elif first == 'if' and close is not None and lowered[close + 1:] == ['then']:
             stack.append(('if', None))

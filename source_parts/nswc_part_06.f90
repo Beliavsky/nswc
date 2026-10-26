@@ -1,279 +1,3 @@
-subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-real, intent(out) :: cond
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
-integer :: isgn, iter, iv, ix, j, jump, kase
-real :: ainorm, anorm
-!-----------------------------------------------------------------------
-!              Computation of the L1 condition number
-!                       of a sparse matrix a
-!-----------------------------------------------------------------------
-!-----------------------
-!     real wk(4*n + max)
-!     integer iwk(5*n + max + 2)
-!-----------------------
-cond = 0.0
-call s1nrm(a, ia, ja, n, n, anorm, wk)
-if (anorm == 0.0) go to 50
-ix = 2*n + max + 1
-iv = ix + n
-isgn = 4*n + max + 3
-kase = 0
-ainorm = 0.0
-call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-call rslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-!     Check if A is singular or if there are errors
-if (ierr > 0) go to 20
-if (abs(ierr) <= n) go to 50
-ierr = ierr + n
-if (abs(ierr) <= n) return
-ierr = ierr + n
-if (abs(ierr) <= n) go to 50
-return
-!     General loop to estimate the norm  ainorm
-!     of the inverse of A
-20 call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-if (kase == 0) go to 40
-if (kase /= 1) go to 30
-call rslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-30 call tslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-!     Compute the value of cond
-40 cond = anorm*ainorm
-return
-!     Singular case
-50 ierr = 0
-end subroutine s1cnd
-
-subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: cond
-double precision, intent(inout) :: wk(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
-integer :: isgn, iter, iv, ix, j, jump, kase
-double precision :: anorm, ainorm
-!-----------------------------------------------------------------------
-!              Computation of the L1 condition number
-!                       of a sparse matrix a
-!-----------------------------------------------------------------------
-!-----------------------
-!     double precision wk(4*n + max)
-!     integer iwk(5*n + max + 2)
-!-----------------------
-cond = 0.d0
-call ds1nrm(a, ia, ja, n, n, anorm, wk)
-if (anorm == 0.d0) go to 50
-ix = 2*n + max + 1
-iv = ix + n
-isgn = 4*n + max + 3
-kase = 0
-ainorm = 0.d0
-call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-call dslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-!     Check if A is singular or if there are errors
-if (ierr > 0) go to 20
-if (abs(ierr) <= n) go to 50
-ierr = ierr + n
-if (abs(ierr) <= n) return
-ierr = ierr + n
-if (abs(ierr) <= n) go to 50
-return
-!     General loop to estimate the norm  ainorm
-!     of the inverse of A
-20 call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-if (kase == 0) go to 40
-if (kase /= 1) go to 30
-call dslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-30 call dtslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-!     Compute the value of cond
-40 cond = anorm*ainorm
-return
-!     Singular case
-50 ierr = 0
-end subroutine ds1cnd
-
-pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
-implicit none
-integer, intent(inout) :: iter, j, jump, kase
-integer, intent(in) :: n
-real, intent(inout) :: anorm
-real, intent(inout) :: v(n), x(n)
-integer, intent(inout) :: isgn(n)
-integer :: i, jlast, l
-real :: altsgn, anrm, t
-integer, parameter :: itmax = 5
-interface
-   pure function isamax(n,sx,incx)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      integer :: isamax
-   end function isamax
-   pure function sasum(n,sx,incx)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      real :: sasum
-   end function sasum
-   pure subroutine scopy(n,sx,incx,sy,incy)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      real, intent(inout) :: sy(*)
-      integer, intent(in) :: incy
-   end subroutine scopy
-end interface
-!-----------------------------------------------------------------------
-!     sonest estimates the 1-norm of A square, real matrix  A.
-!     Reverse communication is used for evaluating
-!     matrix-vector products.
-!     On entry
-!        n       the order of the matrix.  n .GE. 1.
-!        kase    INTEGER  (= 0).
-!     On intermediate returns
-!        kase    = 1 or 2.
-!        x       MUST BE OVERWRITTEN BY
-!                     A*x,             IF kase = 1,
-!                     TRANSPOSE(A)*x,  IF kase = 2,
-!                and sonest must be RE-called, with all the other
-!                parameters unchanged.
-!        ITER    NUMBER OF THE CURRENT ITERATION.
-!     On final return
-!        kase    = 0.
-!        anorm   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
-!        v       = A*W,   WHERE  anorm = NORM(v)/NORM(W)
-!                         (W  is not returned).
-!        ITER    NUMBER OF INTERATIONS TAKEN.
-!        Written by nick Higham, university of manchester. Modified
-!        by A.H. Morris (NSWC).
-!     Reference
-!     N.J. Higham (1987) Fortran codes for estimating
-!     the 1-norm of a real or complex matrix, with applications
-!     to condition  estimation, numerical analysis report no. 135,
-!     university of manchester, manchester M13 9PL, england.
-!-----------------------------------------------------------------------
-if (kase /= 0) go to 20
-t = 1.0/float(n)
-do i = 1,n
-   x(i) = t
-end do
-iter = 0
-kase = 1
-jump = 1
-return
-20 select case (jump)
-case (1)
-   go to 100
-case (2)
-   go to 200
-case (3)
-   go to 300
-case (4)
-   go to 400
-case (5)
-   go to 500
-end select
-!     ................ ENTRY   (jump = 1)
-!     first iteration.  x has been overwritten by A*x.
-100 iter = 1
-if (n > 1) go to 110
-v(1) = x(1)
-anorm = abs(v(1))
-go to 510
-110 anorm = sasum(n,x,1)
-do i = 1,n
-   isgn(i) = 1
-   if (x(i) < 0.0) isgn(i) = -1
-   x(i) = isgn(i)
-end do
-kase = 2
-jump = 2
-return
-!     ................ ENTRY   (jump = 2)
-!     first iteration.  x has been overwritten by transpose(A)*x.
-200 iter = 2
-j = isamax(n,x,1)
-!     Main loop - Iterations 2,3,...,itmax.
-210 do i = 1,n
-   x(i) = 0.0
-end do
-x(j) = 1.0
-kase = 1
-jump = 3
-return
-!     ................ ENTRY   (jump = 3)
-!     x has been overwritten by A*x.
-300 call scopy(n,x,1,v,1)
-anrm = anorm
-anorm = sasum(n,v,1)
-do i = 1,n
-   l = 1
-   if (x(i) < 0.0) l = -1
-   if (l /= isgn(i)) go to 320
-end do
-!     Repeated sign vector detected, hence algorithm has converged.
-go to 410
-!     Test for cycling.
-320 if (anorm <= anrm) go to 410
-do i = 1,n
-   isgn(i) = 1
-   if (x(i) < 0.0) isgn(i) = -1
-   x(i) = isgn(i)
-end do
-kase = 2
-jump = 4
-return
-!     ................ ENTRY   (jump = 4)
-!     x has been overwritten by transpose(A)*x.
-400 jlast = j
-j = isamax(n,x,1)
-if (x(jlast) == abs(x(j)) .or. &
-   & iter >= itmax) go to 410
-iter = iter + 1
-go to 210
-!     Iteration complete.  Final stage.
-410 altsgn = 1.0
-do i = 1,n
-   x(i) = altsgn * (1.0 + float(i - 1)/float(n - 1))
-   altsgn = -altsgn
-end do
-kase = 1
-jump = 5
-return
-!     ................ ENTRY   (jump = 5)
-!     x has been overwritten by A*x.
-500 anrm = 2.0*sasum(n,x,1)/float(3*n)
-if (anrm <= anorm) go to 510
-call scopy(n,x,1,v,1)
-anorm = anrm
-510 kase = 0
-end subroutine sonest
-
 pure subroutine donest(n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
@@ -2013,13 +1737,13 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 100
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if (abs(h(l,l - 1)) <= machep * s) go to 100
+   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
 end do
 !     ********** Form shift **********
-100 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 270
 y = h(na,na)
 w = h(en,na) * h(na,en)
@@ -2051,7 +1775,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if (m == l) go to 150
+   if ( m == l ) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -2565,13 +2289,13 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 100
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
-   if (abs(h(l,l - 1)) <= machep * s) go to 100
+   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
 end do
 !     ********** Form shift **********
-100 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 270
 y = h(na,na)
 w = h(en,na) * h(na,en)
@@ -2603,7 +2327,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if (m == l) go to 150
+   if ( m == l ) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -3400,13 +3124,13 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 100
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if (abs(h(l,l - 1)) <= machep * s) go to 100
+   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
 end do
 !     ********** Form shift **********
-100 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 270
 y = h(na,na)
 w = h(en,na) * h(na,en)
@@ -3438,7 +3162,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if (m == l) go to 150
+   if ( m == l ) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -3825,13 +3549,13 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 70 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 100
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if (abs(h(l,l - 1)) <= machep * s) go to 100
+   if ( abs ( h ( l , l - 1 ) ) <= machep * s ) exit
 end do
 !     ********** Form shift **********
-100 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 270
 y = h(na,na)
 w = h(en,na) * h(na,en)
@@ -3863,7 +3587,7 @@ do mm = l, enm2
    p = p / s
    q = q / s
    r = r / s
-   if (m == l) go to 150
+   if ( m == l ) exit
    if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
       & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
@@ -4510,11 +4234,11 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if (e2(m) <= c) go to 120
+      if ( e2 ( m ) <= c ) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
-120 if (m == l) go to 210
+   if (m == l) go to 210
 130 if (j == 30) go to 1000
    j = j + 1
 !     ********** Form shift **********
@@ -4628,7 +4352,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if (m == n) go to 120
+      if ( m == n ) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -4879,11 +4603,11 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if (abs(e(m)) <= b) go to 120
+      if ( abs ( e ( m ) ) <= b ) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
-120 if (m == l) go to 220
+   if (m == l) go to 220
 130 if (j == 30) go to 1000
    j = j + 1
 !     ********** Form shift **********
@@ -5030,7 +4754,7 @@ do l = 1, n
    j = 0
 !     ********** Look for small sub-diagonal element **********
 105 do m = l, n
-      if (m == n) go to 120
+      if ( m == n ) exit
       if (abs(e(m)) <= machep * (abs(d(m)) + abs(d(m + 1)))) &
          & go to 120
    end do
@@ -5415,11 +5139,11 @@ do l = 1, n
    c = b * b
 !     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
-      if (e2(m) <= c) go to 120
+      if ( e2 ( m ) <= c ) exit
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
-120 if (m == l) go to 210
+   if (m == l) go to 210
 130 if (j == 50) go to 1000
    j = j + 1
 !     ********** Form shift **********
@@ -5667,11 +5391,11 @@ do l = 1, n
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if (abs(e(m)) <= b) go to 120
+      if ( abs ( e ( m ) ) <= b ) exit
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
-120 if (m == l) go to 220
+   if (m == l) go to 220
 130 if (j == 50) go to 1000
    j = j + 1
 !     ********** Form shift **********
@@ -6270,7 +5994,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 300
+   if ( l == low ) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -6608,7 +6332,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 300
+   if ( l == low ) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -7336,7 +7060,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 300
+   if ( l == low ) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -7681,7 +7405,7 @@ enm1 = en - 1
 !                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
-   if (l == low) go to 300
+   if ( l == low ) exit
    if (abs(hr(l,l - 1)) <= &
       & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
       & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
@@ -9458,19 +9182,19 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if (is == 0) go to 320
+   if ( is == 0 ) exit
 end do
-320 ksure = 0
+ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if (r2 + sum >= 1.0) go to 330
+   if ( r2 + sum >= 1.0 ) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
 !     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
-330 if (krank == n .or. mode < 2) return
+if (krank == n .or. mode < 2) return
 nmk = n - krank
 kp1 = krank + 1
 i = krank
@@ -9857,19 +9581,19 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if (is == 0) go to 320
+   if ( is == 0 ) exit
 end do
-320 ksure = 0
+ksure = 0
 sum = 0.0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if (r2 + sum >= 1.0) go to 330
+   if ( r2 + sum >= 1.0 ) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
 !     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
-330 if (krank == m .or. mode < 2) return
+if (krank == m .or. mode < 2) return
 mmk = m - krank
 kp1 = krank + 1
 i = krank
@@ -9973,11 +9697,10 @@ end do
 do jb = 1,nb
    do i = 1,k
       b(i,jb) = b(i,jb)/a(i,i)
-      if (i == k) go to 170
+      if ( i == k ) exit
       ip1 = i + 1
       call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
    end do
-170 continue
 end do
 !      Truncated solution
 if (k == n) go to 210
@@ -10546,19 +10269,19 @@ do i = 1,km1
       ub(ii + 1) = temp
 310   continue
    end do
-   if (is == 0) go to 320
+   if ( is == 0 ) exit
 end do
-320 ksure = 0
+ksure = 0
 sum = 0.d0
 do i = 1,krank
    r2 = ub(i)*ub(i)
-   if (r2 + sum >= 1.d0) go to 330
+   if ( r2 + sum >= 1.d0 ) exit
    sum = sum + r2
    ksure = ksure + 1
 end do
 !     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
-330 if (krank == n .or. mode < 2) return
+if (krank == n .or. mode < 2) return
 nmk = n - krank
 kp1 = krank + 1
 i = krank
@@ -10584,4 +10307,435 @@ return
 return
 410 krank = j - 1
 end subroutine du11ls
+
+pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
+integer :: i, ij, im1, j, jb, k, kp1, nmk
+double precision :: bb, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+end interface
+!        Given the Householder QR factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
+go to 40
+100 do i = 1,m
+   ir(i) = abs(ir(i))
+end do
+!     Apply Householder transformations to b
+do j = 1,k
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do i = 1,nb
+      bb = -ddot(m - j + 1,a(j,j),1,b(j,i),1)/h(j)
+      call daxpy(m - j + 1,bb,a(j,j),1,b(j,i),1)
+   end do
+   a(j,j) = tt
+end do
+!        Find norms of residual vector(S)..(before overwrite b)
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve upper triangular R
+i = k
+150 do jb = 1,nb
+   b(i,jb) = b(i,jb)/a(i,i)
+end do
+if (i == 1) go to 200
+im1 = i - 1
+do jb = 1,nb
+   call daxpy(im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+end do
+i = im1
+go to 150
+!     RANK LT n
+!      truncated solution
+200 if (k == n) go to 230
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+if (mode == 1) go to 230
+!      Minimal length solution
+nmk = n - k
+do jb = 1,nb
+   do i = 1,k
+      tt = -ddot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call daxpy(nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Reorder b to reflect column interchanges
+230 i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call dswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine du12ls
+
+pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+   & ir,ic)
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
+   & w(m), eb(m)
+integer, intent(inout) :: ic(n), ir(m)
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+   & kp1, kz, l, lm1, mmk, nn
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+   pure subroutine iswap(n,ix,incx,iy,incy)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix(*)
+      integer, intent(in) :: incx
+      integer, intent(inout) :: iy(*)
+      integer, intent(in) :: incy
+   end subroutine iswap
+end interface
+!       This routine performs an LQ factorization of the
+!       matrix a using Householder transformations. Row
+!       and column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
+!        Initialization
+j = 0
+krank = m
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
+!        Determine rel and abs error vectors
+!        calculate row length
+do i = 1,m
+   h(i) = dnrm2(n,a(i,1),mda)
+   w(i) = h(i)
+end do
+!         Initialize error bounds
+do i = 1,m
+   eb(i) = max(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.d0
+end do
+!          Discard self dependent rows
+i = 1
+50 if (eb(i) >= h(i)) go to 60
+if (i == krank) go to 70
+i = i + 1
+go to 50
+!          Matrix reduction
+60 kk = krank
+krank = krank - 1
+if (mode == 0) return
+if (i <= np) go to 400
+if (i > krank) go to 70
+call dswap(1,eb(i),1,eb(kk),1)
+call dswap(1,ub(i),1,ub(kk),1)
+call dswap(1,w(i),1,w(kk),1)
+call dswap(1,h(i),1,h(kk),1)
+call iswap(1,ir(i),1,ir(kk),1)
+call dswap(n,a(i,1),mda,a(kk,1),mda)
+go to 50
+!           Test for zero rank
+70 if (krank > 0) go to 100
+krank = 0
+ksure = 0
+return
+!        m A i n    L O O P
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j <= np) kz = j
+!        Each row has NN=n-j+1 components
+nn = n - j + 1
+!         ub determines row pivot
+110 imin = j
+if (h(j) == 0.d0) go to 170
+rmin = ub(j)/h(j)
+do i = j,kz
+   if (ub(i) >= h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
+end do
+!     Test for rank deficiency
+if (rmin < 1.d0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt >= 1.d0) go to 170
+!     Compute exact ub
+do i = 1,jm1
+   w(i) = a(imin,i)
+end do
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l == 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(i,lm1)*w(i)
+end do
+l = lm1
+go to 130
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) >= 1.d0) go to 170
+go to 200
+!        Matrix reduction
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode == 0) return
+if (j <= np) go to 410
+if (imin > krank) go to 180
+call iswap(1,ir(imin),1,ir(kk),1)
+call dswap(n,a(imin,1),mda,a(kk,1),mda)
+call dswap(1,eb(imin),1,eb(kk),1)
+call dswap(1,ub(imin),1,ub(kk),1)
+call dswap(1,db(imin),1,db(kk),1)
+call dswap(1,w(imin),1,w(kk),1)
+call dswap(1,h(imin),1,h(kk),1)
+180 if (j > krank) go to 300
+go to 110
+!        Row pivot
+200 if (imin == j) go to 210
+call dswap(1,h(j),1,h(imin),1)
+call dswap(n,a(j,1),mda,a(imin,1),mda)
+call dswap(1,eb(j),1,eb(imin),1)
+call dswap(1,ub(j),1,ub(imin),1)
+call dswap(1,db(j),1,db(imin),1)
+call dswap(1,w(j),1,w(imin),1)
+call iswap(1,ir(j),1,ir(imin),1)
+!        Column pivot
+210 jmax = idamax(nn,a(j,j),mda)
+jmax = jmax + j - 1
+if (jmax == j) go to 220
+call dswap(m,a(1,j),1,a(1,jmax),1)
+call iswap(1,ic(j),1,ic(jmax),1)
+!     Apply Householder transformation
+220 tn = dnrm2(nn,a(j,j),mda)
+if (tn == 0.d0) go to 170
+if (a(j,j) /= 0.d0) tn = sign(tn,a(j,j))
+call dscal(nn,1.d0/tn,a(j,j),mda)
+a(j,j) = a(j,j) + 1.d0
+if (j == m) go to 250
+do i = jp1,m
+   bb = -ddot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
+   call daxpy(nn,bb,a(j,j),mda,a(i,j),mda)
+   if (i <= np) go to 240
+   if (h(i) == 0.d0) go to 240
+   tt = 1.0 - (a(i,j)/h(i))**2
+   tt = max(tt,0.d0)
+   t = tt
+   tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
+   if (tt == 1.d0) go to 230
+   h(i) = h(i)*sqrt(t)
+   go to 240
+230 h(i) = dnrm2(n - j,a(i,j + 1),mda)
+   w(i) = h(i)
+240 continue
+end do
+250 h(j) = a(j,j)
+a(j,j) = -tn
+!          Update ub, db
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j == krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(i,j))*ub(j)
+   db(i) = db(i) - a(i,j)*db(j)
+end do
+go to 100
+!        E n D    m A i n    L O O P
+300 continue
+!        Compute ksure
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do ii = 1,kmi
+      if (ub(ii) <= ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310   continue
+   end do
+   if ( is == 0 ) exit
+end do
+ksure = 0
+sum = 0.d0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if ( r2 + sum >= 1.d0 ) exit
+   sum = sum + r2
+   ksure = ksure + 1
+end do
+!     If system is of reduced rank and mode = 2
+!     complete the decomposition for shortest least squares solution
+if (krank == m .or. mode < 2) return
+mmk = m - krank
+kp1 = krank + 1
+i = krank
+340 tn = dnrm2(mmk,a(kp1,i),1)/a(i,i)
+tn = a(i,i)*sqrt(1.d0 + tn*tn)
+call dscal(mmk,1.d0/tn,a(kp1,i),1)
+w(i) = a(i,i)/tn + 1.d0
+a(i,i) = -tn
+if (i == 1) go to 350
+im1 = i - 1
+do ii = 1,im1
+   tt = -ddot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
+   tt = tt - a(i,ii)
+   call daxpy(mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+   a(i,ii) = a(i,ii) + tt*w(i)
+end do
+i = i - 1
+go to 340
+350 continue
+return
+!     First np rows are linearly dependent
+400 krank = i - 1
+return
+410 krank = j - 1
+end subroutine du11us
 

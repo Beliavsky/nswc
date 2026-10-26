@@ -449,7 +449,7 @@ do j = 1,m
    a1 = a1 + c0(j)*v1
    a2 = a2 + c0(j)*v2
    if (a1 /= t1) go to 60
-   if (a2 == t2) go to 70
+   if ( a2 == t2 ) exit
 60 t1 = v1*q1 - v2*q2
    t2 = v1*q2 + v2*q1
    v1 = t1
@@ -458,7 +458,7 @@ end do
 !-----------------------------------------------------------------------
 !                 Gathering together the results
 !-----------------------------------------------------------------------
-70 a1 = a1 + 0.5d0*u1
+a1 = a1 + 0.5d0*u1
 a2 = a2 + 0.5d0*u2
 w(1) = (w1 - a1) - s1
 w(2) = (w2 - a2) - s2
@@ -839,7 +839,7 @@ tk = 2.0
 do k = 4,22
    t = t*((tk + fn + 1.0)/(tk + 1.0))*((tk + fn)/(tk + 2.0))*rxsq
    trm(k) = t*b(k)
-   if (abs(trm(k)) < tst) go to 80
+   if ( abs ( trm ( k ) ) < tst ) exit
    s = s + trm(k)
    tk = tk + 2.0
 end do
@@ -881,7 +881,7 @@ do j = 2,m
    tk = 3.0e0 + fnp
    do k = 4,22
       trm(k) = trm(k)*fnp/tk
-      if (abs(trm(k)) < tst) go to 120
+      if ( abs ( trm ( k ) ) < tst ) exit
       s = s + trm(k)
       tk = tk + 2.0
    end do
@@ -938,9 +938,9 @@ do j = 2,m
       den = den + 1.0
       trm(i) = trm(i)/den
       s = s + trm(i)
-      if (trm(i) < tols) go to 240
+      if ( trm ( i ) < tols ) exit
    end do
-240 ans(j) = s
+   ans(j) = s
 end do
 return
 !-----------------------------------------------------------------------
@@ -3664,7 +3664,7 @@ do i = kp1,nm1
    l = i - 1
    d = ((apb + l)/(ap1 + l))*x*d
    w = w + d
-   if (d <= eps*w) go to 50
+   if ( d <= eps * w ) exit
 end do
 !               Terminate the procedure
 50 bup = bup*w
@@ -4103,10 +4103,10 @@ do n = 1,30
    dj = d(n)*j
    sum = sum + dj
    if (sum <= 0.0) go to 100
-   if (abs(dj) <= eps*(sum + l)) go to 30
+   if ( abs ( dj ) <= eps * ( sum + l ) ) exit
 end do
 !                    Add the results to w
-30 ierr = 0
+ierr = 0
 w = w + u*sum
 return
 !               The expansion cannot be computed
@@ -4319,9 +4319,9 @@ do n = 2, num, 2
    w = w0*w
    t1 = d(np1)*w*j1
    sum = sum + (t0 + t1)
-   if ((abs(t0) + abs(t1)) <= eps*sum) go to 60
+   if ( ( abs ( t0 ) + abs ( t1 ) ) <= eps * sum ) exit
 end do
-60 u = exp(-bcorr(a,b))
+u = exp(-bcorr(a,b))
 basym = e0*t*u*sum
 end function basym
 
@@ -5187,9 +5187,9 @@ do i = 1,16
    m = m + 1.0
    t = t*a/m
    q = q + t
-   if (anorm(t) <= tol) go to 30
+   if ( anorm ( t ) <= tol ) exit
 end do
-30 p = p + 1.0
+p = p + 1.0
 q = (q + a1)*zr
 w = z - pihalf*nu
 if (abs(aimag(w)) > 1.0) go to 40
@@ -5733,7 +5733,7 @@ do k = 1,17
    s2 = t2 + s1
    t = -t*sxo2/s2
    s = s + t
-   if (abs(t) < tol) go to 360
+   if ( abs ( t ) < tol ) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -5856,10 +5856,10 @@ do k = 1,13
    ap = trx + tm
    t2 = t2*ap/t1
    s2 = s2 + t2
-   if (abs(t2) <= relb) go to 540
+   if ( abs ( t2 ) <= relb ) exit
    ak = ak + 8.0e0
 end do
-540 temp(is) = coef*(s1*sb - s2*sa)
+temp(is) = coef*(s1*sb - s2*sa)
 if (is == 2) go to 560
 fidal = fidal + 1.0e0
 dalpha = fidal + fnf
@@ -6247,9 +6247,8 @@ do jn = 1,in
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
-      if (abs(ta) <= tol .and. abs(tb) <= relb) go to 70
+      if ( abs ( ta ) <= tol .and. abs ( tb ) <= relb ) exit
    end do
-70 continue
    bsum = bsum/(fn*wk(7))
    go to 160
 75 continue
@@ -6324,9 +6323,9 @@ do jn = 1,in
       if (wk(1) > 0.0e0) tb = abs(tb)
       asum = asum + suma*tb
       bsum = bsum + sumb*tb
-      if (abs(suma) <= tol .and. abs(sumb) <= relb) go to 150
+      if ( abs ( suma ) <= tol .and. abs ( sumb ) <= relb ) exit
    end do
-150 tb = wk(5)
+   tb = wk(5)
    if (wk(1) > 0.0e0) tb = -tb
    bsum = bsum/tb
 160 continue
@@ -7545,7 +7544,7 @@ do k = 1,17
    s2 = t2 + s1
    t = t*sxo2/s2
    s = s + t
-   if (abs(t) < tol) go to 260
+   if ( abs ( t ) < tol ) exit
    t2 = t2 + ak
    ak = ak + 2.0e0
    s1 = s1 + fn
@@ -7668,10 +7667,10 @@ do k = 1,25
    ap = dx + tm
    t = -t*ap/s1
    s = s + t
-   if (abs(t) <= atol) go to 480
+   if ( abs ( t ) <= atol ) exit
    ak = ak + 8.0e0
 end do
-480 temp(is) = s*earg
+temp(is) = s*earg
 if (is == 2) go to 360
 is = 2
 fni = fni - 1.0e0
@@ -7844,9 +7843,8 @@ do jn = 1,in
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
-      if (max(abs(ak),abs(ap)) < tol) go to 40
+      if ( max ( abs ( ak ) , abs ( ap ) ) < tol ) exit
    end do
-40 continue
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
 end do
@@ -8047,9 +8045,9 @@ do i = 1, 16
    m = m + 1.0
    t = t*a*zr/m
    p = p + t
-   if (anorm(t) <= eps*anorm(p)) go to 20
+   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
 end do
-20 p = p + 1.0
+p = p + 1.0
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
@@ -8304,9 +8302,9 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if (anorm(t1) <= eps0*anorm(w1)) go to 80
+   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
 end do
-80 w2 = w2 * zr
+w2 = w2 * zr
 contains
    pure function anorm(t) result(nswc_sf_result)
       implicit none
@@ -8612,9 +8610,9 @@ do i = 1, 16
    m = m + 1.0
    t = (a/m)*t*zr
    p = p + t
-   if (anorm(t) <= eps*anorm(p)) go to 20
+   if ( anorm ( t ) <= eps * anorm ( p ) ) exit
 end do
-20 p = p + 1.0
+p = p + 1.0
 t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
 w = c*t*p*exp(-z)
@@ -8724,9 +8722,9 @@ do k = 1, 50
    w1 = w1 + t1
    t2 = c*(p - ak*f)
    w2 = w2 + t2
-   if (anorm(t1) <= eps0*anorm(w1)) go to 80
+   if ( anorm ( t1 ) <= eps0 * anorm ( w1 ) ) exit
 end do
-80 w2 = w2 * zr
+w2 = w2 * zr
 contains
    pure function anorm(w) result(nswc_sf_result)
       implicit none
@@ -10497,4 +10495,187 @@ aie = w/sqrt(rtx)
 return
 60 aie = rn0/sqrt(rtx)
 end function aie
+
+pure real function bi(x)
+implicit none
+real, intent(in) :: x
+integer :: n, n2
+real :: phi, r, rtx, t, w
+real, parameter :: x0 = 6.3496042078728
+real, parameter :: c = 1.94773404105468
+real, parameter :: an0 = .614926627446001e+00
+real, parameter :: an1 = .462726943978834e+00
+real, parameter :: an2 = .867811386408974e-02
+real, parameter :: an3 = .974670609357959e-01
+real, parameter :: an4 = .370856545413908e-01
+real, parameter :: an5 = .569193415071716e-03
+real, parameter :: an6 = .269172131237236e-02
+real, parameter :: an7 = .746473849872868e-03
+real, parameter :: an8 = .105638036899269e-04
+real, parameter :: an9 = .242726195973978e-04
+real, parameter :: an10 = .557260250681542e-05
+real, parameter :: ad0 = .100000000000000e+01
+real, parameter :: ad1 = .234801779278695e-01
+real, parameter :: ad2 = -.300487317759152e-02
+real, parameter :: ad3 = -.597414466459612e-02
+real, parameter :: bn0 = .614926627446001e+00
+real, parameter :: bn1 = .548653374523520e+00
+real, parameter :: bn2 = .582684047163842e-01
+real, parameter :: bn3 = .871954925712688e-01
+real, parameter :: bn4 = .508547058449004e-01
+real, parameter :: bn5 = .361412623711710e-02
+real, parameter :: bn6 = .177269722794511e-02
+real, parameter :: bn7 = .117774184027185e-02
+real, parameter :: bn8 = .627004834186143e-04
+real, parameter :: bn9 = .774782269814080e-06
+real, parameter :: bn10 = .118116474369315e-04
+real, parameter :: bd0 = .100000000000000e+01
+real, parameter :: bd1 = .163214622184402e+00
+real, parameter :: bd2 = -.242285981710408e-01
+real, parameter :: bd3 = -.720554280297616e-02
+real, parameter :: pn0 = .619911943572678e+00
+real, parameter :: pn1 = .100411558489626e+01
+real, parameter :: pn2 = .563659963795768e+00
+real, parameter :: pn3 = .274925508033015e+00
+real, parameter :: pn4 = .115641822943246e+00
+real, parameter :: pn5 = .120048517441127e-01
+real, parameter :: pn6 = .501838091254330e-02
+real, parameter :: pd0 = .100000000000000e+01
+real, parameter :: pd1 = .159751878026937e+01
+real, parameter :: pd2 = .104664867034140e+01
+real, parameter :: pd3 = .512560333664022e+00
+real, parameter :: pd4 = .159144727666995e+00
+real, parameter :: pd5 = .394456748956258e-01
+real, parameter :: pd6 = .529926873250079e-02
+real, parameter :: pd7 = .288921845412576e-03
+real, parameter :: qn0 = .595123543430856e+00
+real, parameter :: qn1 = .652692120245803e+00
+real, parameter :: qn2 = .436851872835894e+00
+real, parameter :: qn3 = .201626141057807e+00
+real, parameter :: qn4 = .649535170626944e-01
+real, parameter :: qn5 = .171798867787816e-01
+real, parameter :: qn6 = .287998748038892e-02
+real, parameter :: qn7 = .359634362348937e-03
+real, parameter :: qd0 = .100000000000000e+01
+real, parameter :: qd1 = .114259871204893e+01
+real, parameter :: qd2 = .766390439057101e+00
+real, parameter :: qd3 = .348287281255683e+00
+real, parameter :: qd4 = .117049276946157e+00
+real, parameter :: qd5 = .294545450289541e-01
+real, parameter :: qd6 = .523951773968125e-02
+real, parameter :: qd7 = .622692248774973e-03
+real, parameter :: qd8 = .674811395957744e-06
+real, parameter :: rn0 = .568067636505865e+00
+real, parameter :: rn1 = .462183136291541e-01
+real, parameter :: rn2 = .268519638203645e+00
+real, parameter :: rn3 = .199427104235673e-02
+real, parameter :: rn4 = .135599161332010e-03
+real, parameter :: rn5 = .229937707171804e-04
+real, parameter :: rn6 = .697888081361175e-05
+real, parameter :: rn7 = .153277172934286e-05
+real, parameter :: rn8 = -.149322381877245e-05
+real, parameter :: rn9 = -.113533571972859e-05
+real, parameter :: rn10 = .740721412702102e-06
+real, parameter :: rn11 = -.120160431596119e-06
+real, parameter :: rd0 = .100000000000000e+01
+real, parameter :: rd1 = .741293424676788e-01
+real, parameter :: rd2 = .471695968238457e+00
+real, parameter :: sn0 = .564189583547757e+00
+real, parameter :: sn1 = .112605519585866e+00
+real, parameter :: sn2 = .893329124921909e-03
+real, parameter :: sn3 = .532139134120350e-04
+real, parameter :: sn4 = .592725458717738e-05
+real, parameter :: sn5 = .921448923850546e-06
+real, parameter :: sn6 = .404558310611815e-06
+real, parameter :: sn7 = -.660517686759109e-06
+real, parameter :: sn8 = .174667472383815e-05
+real, parameter :: sn9 = -.287037710548882e-05
+real, parameter :: sn10 = .322304072982791e-05
+real, parameter :: sn11 = -.231569499551950e-05
+real, parameter :: sn12 = .963478964685941e-06
+real, parameter :: sn13 = -.173784488565533e-06
+real, parameter :: sd0 = .100000000000000e+01
+real, parameter :: sd1 = .193077670156841e+00
+interface
+   pure elemental subroutine aimp(x,r,phi)
+      implicit none
+      real, intent(in) :: x
+      real, intent(inout) :: r
+      real, intent(inout) :: phi
+   end subroutine aimp
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+end interface
+!-----------------------------------------------------------------------
+!             Evaluation of the Airy function bi(x)
+!     note... if x is a positive number where bi(x) is too large
+!     to be computed, then bi(x) is set to 0.
+!-----------------------------------------------------------------------
+!     x0 = 16**(2/3)
+!     c = exp(2/3)
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------------------------------------------------------
+if (x >= -1.0) go to 10
+call aimp(-x, r, phi)
+bi = r*cos(phi)
+return
+10 if (x >= 0.0) go to 20
+bi = ((((((((((an10*x + an9)*x + an8)*x + an7)*x &
+   & + an6)*x + an5)*x + an4)*x + an3)*x &
+   & + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
+return
+20 if (x > 1.0) go to 30
+bi = ((((((((((bn10*x + bn9)*x + bn8)*x + bn7)*x &
+   & + bn6)*x + bn5)*x + bn4)*x + bn3)*x &
+   & + bn2)*x + bn1)*x + bn0) / &
+   & (((bd3*x + bd2)*x + bd1)*x + bd0)
+return
+30 rtx = sqrt(x)
+if (x > 2.0) go to 40
+t = x - 1.0
+w = ((((((pn6*t + pn5)*t + pn4)*t + pn3)*t + pn2)*t &
+   & + pn1)*t + pn0) / &
+   & (((((((pd7*t + pd6)*t + pd5)*t + pd4)*t + pd3)*t &
+   & + pd2)*t + pd1)*t + pd0)
+bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
+return
+40 if (x > 4.0) go to 50
+t = x - 2.0
+w = (((((((qn7*t + qn6)*t + qn5)*t + qn4)*t + qn3)*t &
+   & + qn2)*t + qn1)*t + qn0) / &
+   & ((((((((qd8*t + qd7)*t + qd6)*t + qd5)*t + qd4)*t &
+   & + qd3)*t + qd2)*t + qd1)*t + qd0)
+bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
+return
+50 if (x > x0) go to 60
+t = 16.0/(x*rtx) - 1.0
+w = (((((((((((rn11*t + rn10)*t + rn9)*t + rn8)*t &
+   & + rn7)*t + rn6)*t + rn5)*t + rn4)*t + rn3)*t &
+   & + rn2)*t + rn1)*t + rn0) / &
+   & ((rd2*t + rd1)*t + rd0)
+bi = (w/sqrt(rtx)) * exp(2.0*x*rtx/3.0)
+return
+60 if (x*rtx > 1.5*exparg(0)) go to 70
+t = 16.0/(x*rtx)
+w = (((((((((((((sn13*t + sn12)*t + sn11)*t + sn10)*t &
+   & + sn9)*t + sn8)*t + sn7)*t + sn6)*t + sn5)*t &
+   & + sn4)*t + sn3)*t + sn2)*t + sn1)*t + sn0) / &
+   & (sd1*t + sd0)
+n = rtx
+n2 = n*n
+t = (x - n2)/(rtx + n)
+bi = (w/sqrt(rtx)) * c**(n2*n) * exp(2.0*t*(n*rtx + t*t/3.0))
+return
+70 bi = 0.0
+end function bi
 

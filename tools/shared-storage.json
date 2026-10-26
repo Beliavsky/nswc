@@ -1,7 +1,7 @@
 {
   "equivalences": {
     "ASJY": {
-      "source_hash": "e10da08200bb1c4a7193cc4490982b5ba354df0ad8d10924ae70a522ccc7a9fb",
+      "source_hash": "1b79fa5941577f9b59c5a88175bf941ece408bbe581ae014a9bb76d17e062099",
       "statements": [
         "equivalence (alfa(1,1),alfa1(1,1))",
         "equivalence (alfa(1,3),alfa2(1,1))",
@@ -9,7 +9,7 @@
         "equivalence (beta(1,3),beta2(1,1))",
         "equivalence (beta(1,5),beta3(1,1))"
       ],
-      "output_hash": "f5dd375e889b89db70bed37bd68b3f19690141095fb5885022f51a8c5d2ab29c"
+      "output_hash": "947705ac12f005365b406c33ac7082f8eba183eae6fb5652d2dc853441573b5d"
     },
     "SFFT": {
       "source_hash": "c3b495e4624acbae62924a52e047bf03978f931e51e502a81116727a67dac10c",

@@ -1,379 +1,3 @@
-subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-   & ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
-implicit none
-!            The routine calculates an approximation result to A
-!            definite integral I = Integral of f over (a,b),
-!            hopefully satisfying following claim for accuracy
-!            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X t E R N A L in the driver program.
-!            a      - REAL
-!                     lower limit of integration
-!            b      - REAL
-!                     upper limit of integration
-!            epsabs - Real
-!                     absolute accuracy requested
-!            epsrel - Real
-!                     relative accuracy requested
-!            limit  - Integer
-!                     gives an upperbound on the number of subintervals
-!                     in the partition of (a,b)
-!         on return
-!            result - Real
-!                     approximation to the integral
-!            abserr - Real
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                     ier.GT.0 abnormal termination of the routine
-!                             the estimates for integral and error are
-!                             less reliable. It is assumed that the
-!                             requested accuracy has not been achieved.
-!            Error messages
-!                         = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more sub-
-!                             divisions by increasing the value of limit
-!                             (and taking the according dimension
-!                             adjustments into account). However, if
-!                             this yields no improvement it is advised
-!                             to analyze the integrand in order to
-!                             determine the integration difficulties. If
-!                             the position of a local difficulty can be
-!                             determined (E.G. singularity,
-!                             discontinuity within the interval) one
-!                             will probably gain from splitting up the
-!                             interval at this point and calling the
-!                             integrator on the subranges. If possible,
-!                             an appropriate special-purpose integrator
-!                             should be used, which is designed for
-!                             handling the type of difficulty involved.
-!                         = 2 The occurrence of roundoff error is DETEC-
-!                             ted, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour
-!                             occurs at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table.
-!                             It is presumed that the requested
-!                             tolerance cannot be achieved, and that the
-!                             returned result is the best which can be
-!                             obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs or
-!                             epsrel is negative. Result, abserr,
-!                             last, rlist(1), iord(1), and elist(1)
-!                             are set to zero. alist(1) and blist(1)
-!                             are set to A and b respectively.
-!            alist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the left end points
-!                     of the subintervals in the partition of the
-!                     given integration range (a,b)
-!            blist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the right end points
-!                     of the subintervals in the partition of the given
-!                     integration range (a,b)
-!            rlist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the integral
-!                     approximations on the subintervals
-!            elist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the moduli of the
-!                     absolute error estimates on the subintervals
-!            iord   - INTEGER
-!                     vector of dimension at least limit, the first k
-!                     elements of which are pointers to the
-!                     error estimates over the subintervals,
-!                     such that elist(iord(1)), ..., elist(iord(k))
-!                     form a decreasing sequence, with k = last
-!                     if last.LE.(limit/2+2), and k = limit+1-last
-!                     otherwise
-!            last   - INTEGER
-!                     number of subintervals actually produced in the
-!                     subdivision process
-!            valp   - REAL
-!            valn     ARRAYS OF DIMENSION AT LEAST (21,limit) USED TO
-!                     save the functional values
-!            lp     - INTEGER
-!            ln       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
-!                     store the actual number of functional values
-!                     saved in the corresponding column
-!                     of valp,valn
-!***routines called  f,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
-real :: a
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real :: b
-real, intent(inout) :: blist
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
-real, intent(inout) :: valp, valn
-integer, intent(out) :: ier
-integer, intent(inout) :: iord
-integer, intent(out) :: last
-integer, intent(in) :: limit
-integer, intent(inout) :: lp(limit), ln(limit)
-external f
-real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
-   & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
-   & vp2(21), vn1(21), vn2(21)
-integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
-logical :: extrap, noext
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit), valp(21,limit), valn(21,limit)
-!            Machine dependent constants
-!            ---------------------------
-!          epmach is the largest relative spacing.
-!          uflow is the smallest positive magnitude.
-!          OFLOW is the largest positive magnitude.
-epmach = spmpar(1)
-uflow = spmpar(2)
-oflow = spmpar(3)
-!            Test on validity of parameters
-!            ------------------------------
-last = 0
-result = 0.0
-abserr = 0.0
-alist(1) = a
-blist(1) = b
-rlist(1) = 0.0
-elist(1) = 0.0
-ier = 6
-if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
-ier = 0
-rerr = max(epsrel, 50.0*epmach)
-!           First approximation to the integral
-!           -----------------------------------
-ierro = 0
-lp(1) = 1
-ln(1) = 1
-valp(1,1) = f((a + b)*0.5)
-valn(1,1) = valp(1,1)
-call qxlqm(f,a,b,result,abserr,defabs,resabs, &
-   & valp(1,1),valn(1,1),lp(1),ln(1),2, &
-   & epmach,uflow,oflow)
-!           Test on accuracy.
-dres = abs(result)
-errbnd = max(epsabs,rerr*dres)
-last = 1
-rlist(1) = result
-elist(1) = abserr
-iord(1) = 1
-if (abserr <= 100.0*epmach*defabs .and. abserr > &
-   & errbnd) ier = 2
-if (limit == 1) ier = 1
-if (ier /= 0 .or. (abserr <= errbnd.and.abserr /= resabs) .or. &
-   & abserr == 0.0) go to 999
-!           Initialization
-!           --------------
-rlist2(1) = result
-errmax = abserr
-maxerr = 1
-area = result
-errsum = abserr
-abserr = oflow
-nrmax = 1
-nres = 0
-numrl2 = 2
-ktmin = 0
-extrap = .false.
-noext = .false.
-iroff1 = 0
-iroff2 = 0
-iroff3 = 0
-ksgn = -1
-if (dres >= (1.0 - 50.0*epmach)*defabs) ksgn = 1
-t = 1.0 + 100.0*epmach
-!           Main do-loop
-!           ------------
-do last = 2,limit
-!           Bisect the subinterval with the nrmax-TH largest error
-!           estimate.
-   a1 = alist(maxerr)
-   b1 = 0.5*(alist(maxerr) + blist(maxerr))
-   a2 = b1
-   b2 = blist(maxerr)
-   erlast = errmax
-   call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
-   call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
-      & 2,epmach,uflow,oflow)
-   call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
-   call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
-      & 2,epmach,uflow,oflow)
-!           Improve previous approximations to integral
-!           and error and test for accuracy.
-   area12 = area1 + area2
-   erro12 = error1 + error2
-   errsum = errsum + erro12 - errmax
-   area = area + area12 - rlist(maxerr)
-   if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (abs(rlist(maxerr) - area12) > 0.1e-04*abs(area12) &
-      & .or. erro12 < 0.99*errmax) go to 10
-   if (extrap) iroff2 = iroff2 + 1
-   if (.not.extrap) iroff1 = iroff1 + 1
-10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
-15 rlist(maxerr) = area1
-   rlist(last) = area2
-   errbnd = max(epsabs,rerr*abs(area))
-!           Test for roundoff error and eventually set error flag.
-   if (iroff1 + iroff2 >= 10 .or. iroff3 >= 20) ier = 2
-   if (iroff2 >= 5) ierro = 3
-!           Set error flag in the case that the number of subintervals
-!           equals limit.
-   if (last == limit) ier = 1
-!           Set error flag in the case of bad integrand behaviour
-!           at a point of the integration range.
-   if (max(abs(a1),abs(b2)) <= &
-      & t*(abs(a2) + 1.e+03*uflow)) ier = 4
-!           Append the newly-created intervals to the list.
-   if (error2 > error1) go to 20
-   alist(last) = a2
-   blist(maxerr) = b1
-   blist(last) = b2
-   elist(maxerr) = error1
-   elist(last) = error2
-   call qxcpy(valp(1,maxerr),vp1,lp1)
-   lp(maxerr) = lp1
-   call qxcpy(valn(1,maxerr),vn1,ln1)
-   ln(maxerr) = ln1
-   call qxcpy(valp(1,last),vp2,lp2)
-   lp(last) = lp2
-   call qxcpy(valn(1,last),vn2,ln2)
-   ln(last) = ln2
-   go to 30
-20 alist(maxerr) = a2
-   alist(last) = a1
-   blist(last) = b1
-   rlist(maxerr) = area2
-   rlist(last) = area1
-   elist(maxerr) = error2
-   elist(last) = error1
-   call qxcpy(valp(1,maxerr),vp2,lp2)
-   lp(maxerr) = lp2
-   call qxcpy(valn(1,maxerr),vn2,ln2)
-   ln(maxerr) = ln2
-   call qxcpy(valp(1,last),vp1,lp1)
-   lp(last) = lp1
-   call qxcpy(valn(1,last),vn1,ln1)
-   ln(last) = ln1
-!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
-!           in the list of error estimates and select the subinterval
-!           with nrmax-TH largest error estimate (to be bisected next).
-30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
-! ***Jump out of do-loop
-   if (errsum <= errbnd) go to 115
-! ***Jump out of do-loop
-   if (ier /= 0) go to 100
-   if (last == 2) go to 80
-   if (noext) go to 90
-   erlarg = erlarg - erlast
-   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
-   if (extrap) go to 40
-!           Test whether the interval to be bisected next is the
-!           smallest interval.
-   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-   extrap = .true.
-   nrmax = 2
-!           The bound 0.3*ERTEST has been introduced to perform A
-!           more cautious extrapolation than in the original dqagse
-!           routine
-40 if (ierro == 3 .or. erlarg <= 0.3*ertest) go to 60
-!           The smallest interval has the largest error.
-!           Before bisecting decrease the sum of the errors over the
-!           larger intervals (erlarg) and perform extrapolation.
-   id = nrmax
-   jupbnd = last
-   if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do k = id,jupbnd
-      maxerr = iord(nrmax)
-      errmax = elist(maxerr)
-! ***Jump out of do-loop
-      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-      nrmax = nrmax + 1
-   end do
-!           Perform extrapolation.
-60 numrl2 = numrl2 + 1
-   rlist2(numrl2) = area
-   call qelg(numrl2,rlist2,reseps,abseps,res3la,nres, &
-      & epmach,oflow)
-   ktmin = ktmin + 1
-   if (ktmin > 5 .and. abserr < 0.1e-02*errsum) ier = 5
-   if (abseps >= abserr) go to 70
-   ktmin = 0
-   abserr = abseps
-   result = reseps
-   correc = erlarg
-   ertest = max(epsabs,rerr*abs(reseps))
-! ***Jump out of do-loop
-   if (abserr <= ertest) go to 100
-!           Prepare bisection of the smallest interval.
-70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) go to 100
-   maxerr = iord(1)
-   errmax = elist(maxerr)
-   nrmax = 1
-   extrap = .false.
-   small = small*0.5
-   erlarg = errsum
-   go to 90
-80 small = abs(b - a)*0.375
-   erlarg = errsum
-   ertest = errbnd
-   rlist2(2) = area
-90 continue
-end do
-!           Set final result and error estimate.
-!           ------------------------------------
-100 if (abserr == oflow) go to 115
-if (ier + ierro == 0) go to 110
-if (ierro == 3) abserr = abserr + correc
-if (ier == 0) ier = 3
-if (result /= 0.0 .and. area /= 0.0) go to 105
-if (abserr > errsum) go to 115
-if (area == 0.0) go to 130
-go to 110
-105 if (abserr/abs(result) > errsum/abs(area)) go to 115
-!           Test on divergence.
-110 if (ksgn == (-1).and.max(abs(result),abs(area)) <= &
-   & defabs*0.1e-01) go to 130
-if (0.1e-01 > (result/area).or.(result/area) > 0.1e+03 &
-   & .or.errsum > abs(area)) ier = 6
-go to 130
-!           Compute global integral sum.
-115 result = 0.0
-do k = 1,last
-   result = result + rlist(k)
-end do
-abserr = errsum
-130 if (ier > 2) ier = ier - 1
-999 return
-end subroutine qxgse
-
 pure subroutine qxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
@@ -476,11 +100,10 @@ do k = k1,k2
       & abserr = resasc*min(1.0,(200.0*abserr/resasc)**1.5)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if (abserr > errold*0.16) go to 3000
-   if (abserr < 1000.0*epmach*resabs) go to 3000
+   if ( abserr > errold * 0.16 ) exit
+   if ( abserr < 1000.0 * epmach * resabs ) exit
    errold = abserr
 end do
-3000 continue
 end subroutine qxlqm
 
 subroutine qxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
@@ -1150,7 +773,7 @@ do last = 2,limit
    erlast = errmax
    call dqk21(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
-   if (ier /= 0) go to 100
+   if ( ier /= 0 ) exit
    call dqk21(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
@@ -1203,7 +826,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if (ier /= 0) go to 100
+   if ( ier /= 0 ) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -1243,10 +866,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if (abserr <= ertest) go to 100
+   if ( abserr <= ertest ) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) go to 100
+   if ( ier == 5 ) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -1262,7 +885,7 @@ do last = 2,limit
 end do
 !           Set final result and error estimate.
 !           ------------------------------------
-100 if (abserr == oflow) go to 115
+if (abserr == oflow) go to 115
 if (ier + ierro == 0) go to 110
 if (ierro == 3) abserr = abserr + correc
 if (ier == 0) ier = 3
@@ -1929,7 +1552,7 @@ do last = 2,limit
 !           bisected next).
 30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum <= errbnd) go to 115
-   if (ier /= 0) go to 100
+   if ( ier /= 0 ) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -1967,10 +1590,10 @@ do last = 2,limit
    result = reseps
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
-   if (abserr <= ertest) go to 100
+   if ( abserr <= ertest ) exit
 !            Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) go to 100
+   if ( ier == 5 ) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -1986,7 +1609,7 @@ do last = 2,limit
 end do
 !           Set final result and error estimate.
 !           ------------------------------------
-100 if (abserr == oflow) go to 115
+if (abserr == oflow) go to 115
 if (ier + ierro == 0) go to 110
 if (ierro == 3) abserr = abserr + correc
 if (ier == 0) ier = 3
@@ -2237,7 +1860,7 @@ ido = nrmax - 1
 do i = 1,ido
    isucc = iord(nrmax - 1)
 ! ***Jump out of do-loop
-   if (errmax <= elist(isucc)) go to 30
+   if ( errmax <= elist ( isucc ) ) exit
    iord(nrmax) = isucc
    nrmax = nrmax - 1
 end do
@@ -2396,7 +2019,7 @@ do i = 1,newelm
    if (epsinf > 0.1d-03) go to 30
 20 n = i + i - 1
 ! ***Jump out of do-loop
-   go to 50
+   exit
 !           Compute a new element and eventually adjust
 !           the value of result.
 30 res = e1 + 1.d0/ss
@@ -2409,7 +2032,7 @@ do i = 1,newelm
 40 continue
 end do
 !           Shift the table.
-50 if (n == limexp) n = 2*(limexp/2) - 1
+if (n == limexp) n = 2*(limexp/2) - 1
 ib = 1
 if ((num/2)*2 == num) ib = 2
 ie = newelm + 1
@@ -2882,7 +2505,7 @@ do last = 2,limit
 ! ***Jump out of do-loop
    if (errsum <= errbnd) go to 115
 ! ***Jump out of do-loop
-   if (ier /= 0) go to 100
+   if ( ier /= 0 ) exit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
@@ -2924,10 +2547,10 @@ do last = 2,limit
    correc = erlarg
    ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
-   if (abserr <= ertest) go to 100
+   if ( abserr <= ertest ) exit
 !           Prepare bisection of the smallest interval.
 70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) go to 100
+   if ( ier == 5 ) exit
    maxerr = iord(1)
    errmax = elist(maxerr)
    nrmax = 1
@@ -2943,7 +2566,7 @@ do last = 2,limit
 end do
 !           Set final result and error estimate.
 !           ------------------------------------
-100 if (abserr == oflow) go to 115
+if (abserr == oflow) go to 115
 if (ier + ierro == 0) go to 110
 if (ierro == 3) abserr = abserr + correc
 if (ier == 0) ier = 3
@@ -3070,11 +2693,10 @@ do k = k1,k2
       & abserr = resasc*min(1.d0,(200.d0*abserr/resasc)**1.5d0)
    if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
-   if (abserr > errold*0.16d0) go to 3000
-   if (abserr < 1000.d0*epmach*resabs) go to 3000
+   if ( abserr > errold * 0.16d0 ) exit
+   if ( abserr < 1000.d0 * epmach * resabs ) exit
    errold = abserr
 end do
-3000 continue
 end subroutine dqxlqm
 
 subroutine dqxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
@@ -8588,7 +8210,7 @@ do k = 1,lk
 !                                      and a local Lipschitz constant
 100 fbnd = max(fbnd,vnorm(yp,neq))
    delf = vnorm(pv,neq)
-   if (delf >= big*abs(dely)) go to 150
+   if ( delf >= big * abs ( dely ) ) exit
    dfdub = max(dfdub,delf/abs(dely))
    if (k == lk) go to 160
 !                       Choose next perturbation vector
@@ -8607,7 +8229,7 @@ do k = 1,lk
    delf = vnorm(yp,neq)
 end do
 !                       Protect against an overflow
-150 dfdub = big
+dfdub = big
 !.......................................................................
 !     Compute a bound (YDPB) on the norm of the second derivative
 160 ydpb = dfdxb + dfdub*fbnd
@@ -10704,4 +10326,284 @@ call sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
    & w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
    & w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
 end subroutine sepell
+
+subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
+   & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
+   & idmn,w,pertrb,ierror)
+implicit none
+integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
+   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
+   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
+   & zn(*)
+external cofx, cofy
+integer :: i, i1, iord, j, mp, np
+real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
+   & eyj, fj, fyj, fyn, prtrb, xi, yj
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
+logical :: singlr
+!     sepel1 sets up vectors and arrays for input to blktri
+!     and computes a second order solution in USOL.  A return jump to
+!     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
+!     solution is generated in USOL.
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
+!     Set parameters internally
+kswx = mbdcnd + 1
+kswy = nbdcnd + 1
+k = m + 1
+l = n + 1
+ait = a
+bit = b
+cit = c
+dit = d
+!     Set right hand side values from GRHS in USOL on the interior
+!     and non-specified boundaries.
+do i = 2,m
+   do j = 2,n
+      usol(i,j) = grhs(i,j)
+   end do
+end do
+if (kswx == 2 .or. kswx == 3) go to  40
+do j = 2,n
+   usol(1,j) = grhs(1,j)
+end do
+40 continue
+if (kswx == 2 .or. kswx == 5) go to  60
+do j = 2,n
+   usol(k,j) = grhs(k,j)
+end do
+60 continue
+if (kswy == 2 .or. kswy == 3) go to  80
+do i = 2,m
+   usol(i,1) = grhs(i,1)
+end do
+80 continue
+if (kswy == 2 .or. kswy == 5) go to 100
+do i = 2,m
+   usol(i,l) = grhs(i,l)
+end do
+100 continue
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
+   & usol(1,1) = grhs(1,1)
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
+   & usol(k,1) = grhs(k,1)
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
+   & usol(1,l) = grhs(1,l)
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
+   & usol(k,l) = grhs(k,l)
+i1 = 1
+!     Set switches for periodic or non-periodic boundaries
+mp = 1
+np = 1
+if (kswx == 1) mp = 0
+if (kswy == 1) np = 0
+!     Set dlx,dly and size of block tri-diagonal system generated
+!     in NINT,mint
+dlx = (bit - ait)/float(m)
+mit = k - 1
+if (kswx == 2) mit = k - 2
+if (kswx == 4) mit = k
+dly = (dit - cit)/float(n)
+nit = l - 1
+if (kswy == 2) nit = l - 2
+if (kswy == 4) nit = l
+tdlx3 = 2.0*dlx**3
+dlx4 = dlx**4
+tdly3 = 2.0*dly**3
+dly4 = dly**4
+!     Set subscript limits for portion of array to input to blktri
+is = 1
+js = 1
+if (kswx == 2 .or. kswx == 3) is = 2
+if (kswy == 2 .or. kswy == 3) js = 2
+ns = nit + js - 1
+ms = mit + is - 1
+!     Set X - Direction
+do i = 1,mit
+   xi = ait + float(is + i - 2)*dlx
+   call cofx(xi,ai,bi,ci)
+   axi = (ai/dlx - 0.5*bi)/dlx
+   bxi = -2.*ai/dlx**2 + ci
+   cxi = (ai/dlx + 0.5*bi)/dlx
+   am(i) = axi
+   bm(i) = bxi
+   cm(i) = cxi
+end do
+!     Set Y direction
+do j = 1,nit
+   yj = cit + float(js + j - 2)*dly
+   call cofy(yj,dj,ej,fj)
+   dyj = (dj/dly - 0.5*ej)/dly
+   eyj = (-2.*dj/dly**2 + fj)
+   fyj = (dj/dly + 0.5*ej)/dly
+   an(j) = dyj
+   bn(j) = eyj
+   cn(j) = fyj
+end do
+!     Adjust edges in X direction unless periodic
+ax1 = am(1)
+cxm = cm(mit)
+select case (kswx)
+case (1)
+   go to 170
+case (2)
+   go to 130
+case (3)
+   go to 150
+case (4)
+   go to 160
+case (5)
+   go to 140
+end select
+!     Dirichlet-Dirichlet in X direction
+130 am(1) = 0.0
+cm(mit) = 0.0
+go to 170
+!     Mixed-Dirichlet in X direction
+140 am(1) = 0.0
+bm(1) = bm(1) + 2.*alpha*dlx*ax1
+cm(1) = cm(1) + ax1
+cm(mit) = 0.0
+go to 170
+!     Dirichlet-mixed in X direction
+150 am(1) = 0.0
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*beta*dlx*cxm
+cm(mit) = 0.0
+go to 170
+!     Mixed - Mixed in X direction
+160 continue
+am(1) = 0.0
+bm(1) = bm(1) + 2.*dlx*alpha*ax1
+cm(1) = cm(1) + ax1
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*dlx*beta*cxm
+cm(mit) = 0.0
+170 continue
+!     Adjust in Y direction unless periodic
+dy1 = an(1)
+fyn = cn(nit)
+select case (kswy)
+case (1)
+   go to 220
+case (2)
+   go to 180
+case (3)
+   go to 200
+case (4)
+   go to 210
+case (5)
+   go to 190
+end select
+!     Dirichlet-Dirichlet in Y direction
+180 continue
+an(1) = 0.0
+cn(nit) = 0.0
+go to 220
+!     Mixed-Dirichlet in Y direction
+190 continue
+an(1) = 0.0
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
+cn(nit) = 0.0
+go to 220
+!     Dirichlet-mixed in Y direction
+200 an(1) = 0.0
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.*dly*xnu*fyn
+cn(nit) = 0.0
+go to 220
+!     Mixed - Mixed direction in Y direction
+210 continue
+an(1) = 0.0
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
+cn(nit) = 0.0
+220 if (kswx == 1) go to 270
+!     Adjust USOL along X edge
+do j = js,ns
+   if (kswx /= 2 .and. kswx /= 3) go to 230
+   usol(is,j) = usol(is,j) - ax1*usol(1,j)
+   go to 240
+230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
+240 if (kswx /= 2 .and. kswx /= 5) go to 250
+   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
+   go to 260
+250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
+260 continue
+end do
+270 if (kswy == 1) go to 320
+!     Adjust USOL along Y edge
+do i = is,ms
+   if (kswy /= 2 .and. kswy /= 3) go to 280
+   usol(i,js) = usol(i,js) - dy1*usol(i,1)
+   go to 290
+280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
+290 if (kswy /= 2 .and. kswy /= 5) go to 300
+   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
+   go to 310
+300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
+310 continue
+end do
+320 continue
+!     Save adjusted edges in GRHS if iorder=4
+if (iorder /= 4) go to 350
+do j = js,ns
+   grhs(is,j) = usol(is,j)
+   grhs(ms,j) = usol(ms,j)
+end do
+do i = is,ms
+   grhs(i,js) = usol(i,js)
+   grhs(i,ns) = usol(i,ns)
+end do
+350 continue
+iord = iorder
+pertrb = 0.0
+!     Check if operator is singular
+call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
+!     Compute non-zero eigenvector in null space of transpose
+!     if singular
+if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
+if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
+!     Make initialization call to blktri
+if (intl == 0) &
+   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
+   & usol(is,js),ierror,w)
+if (ierror /= 0) return
+!     Adjust right hand side if necessary
+360 continue
+if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
+!     Compute solution
+call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
+   & ierror,w)
+if (ierror /= 0) return
+!     Set periodic boundaries if necessary
+if (kswx /= 1) go to 380
+do j = 1,l
+   usol(k,j) = usol(1,j)
+end do
+380 if (kswy /= 1) go to 400
+do i = 1,k
+   usol(i,l) = usol(i,1)
+end do
+400 continue
+!     Minimize solution with respect to weighted least squares
+!     norm if operator is singular
+if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
+!     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
+!     not flagged
+if (iord == 2) return
+iord = 2
+!     Compute new right hand side for fourth order solution
+call defer(cofx,cofy,usol,idmn,grhs,mn)
+go to 360
+end subroutine sepel1
 

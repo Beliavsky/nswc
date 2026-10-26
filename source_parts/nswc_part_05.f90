@@ -1,180 +1,3 @@
-pure subroutine dshslv(a,b,c,m,n,na,nb,nc,ierr)
-implicit none
-!     ------------------------------------------------------------------
-!     dshslv solves the matrix equation AX + XB = c where
-!     A is in lower Schur form and b in upper Schur form.
-!     ------------------------------------------------------------------
-integer, intent(in) :: m, n, na, nb, nc
-integer, intent(inout) :: ierr
-double precision, intent(in) :: a(na,m), b(nb,n)
-double precision, intent(inout) :: c(nc,n)
-double precision :: sum, p(4), t(4,4)
-integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
-interface
-   pure subroutine dpslv(n,m,a,ka,b,kb,ierr)
-      implicit none
-      integer, intent(in) :: kb
-      integer, intent(in) :: ka
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      double precision, intent(inout) :: a(ka,n)
-      double precision, intent(inout) :: b(kb,m)
-      integer, intent(out) :: ierr
-   end subroutine dpslv
-end interface
-l = 1
-10 lm1 = l - 1
-dl = 1
-if (l == n) go to 15
-if (b(l + 1,l) /= 0.d0) dl = 2
-15 ll = l + dl - 1
-if (l == 1) go to 30
-do j = l,ll
-   do i = 1,m
-      sum = c(i,j)
-      do ib = 1,lm1
-         sum = sum - c(i,ib)*b(ib,j)
-      end do
-      c(i,j) = sum
-   end do
-end do
-30 k = 1
-40 km1 = k - 1
-dk = 1
-if (k == m) go to 45
-if (a(k,k + 1) /= 0.d0) dk = 2
-45 kk = k + dk - 1
-if (k == 1) go to 60
-do i = k,kk
-   do j = l,ll
-      sum = c(i,j)
-      do ja = 1,km1
-         sum = sum - a(i,ja)*c(ja,j)
-      end do
-      c(i,j) = sum
-   end do
-end do
-60 if (dl == 2) go to 80
-if (dk == 2) go to 70
-t(1,1) = a(k,k) + b(l,l)
-if (t(1,1) == 0.d0) go to 200
-c(k,l) = c(k,l)/t(1,1)
-ierr = 0
-go to 100
-70 t(1,1) = a(k,k) + b(l,l)
-t(1,2) = a(k,kk)
-t(2,1) = a(kk,k)
-t(2,2) = a(kk,kk) + b(l,l)
-p(1) = c(k,l)
-p(2) = c(kk,l)
-call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(kk,l) = p(2)
-go to 100
-80 if (dk == 2) go to 90
-t(1,1) = a(k,k) + b(l,l)
-t(1,2) = b(ll,l)
-t(2,1) = b(l,ll)
-t(2,2) = a(k,k) + b(ll,ll)
-p(1) = c(k,l)
-p(2) = c(k,ll)
-call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(k,ll) = p(2)
-go to 100
-90 t(1,1) = a(k,k) + b(l,l)
-t(1,2) = a(k,kk)
-t(1,3) = b(ll,l)
-t(1,4) = 0.d0
-t(2,1) = a(kk,k)
-t(2,2) = a(kk,kk) + b(l,l)
-t(2,3) = 0.d0
-t(2,4) = t(1,3)
-t(3,1) = b(l,ll)
-t(3,2) = 0.d0
-t(3,3) = a(k,k) + b(ll,ll)
-t(3,4) = t(1,2)
-t(4,1) = 0.d0
-t(4,2) = t(3,1)
-t(4,3) = t(2,1)
-t(4,4) = a(kk,kk) + b(ll,ll)
-p(1) = c(k,l)
-p(2) = c(kk,l)
-p(3) = c(k,ll)
-p(4) = c(kk,ll)
-call dpslv(4, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(kk,l) = p(2)
-c(k,ll) = p(3)
-c(kk,ll) = p(4)
-100 k = k + dk
-if (k <= m) go to 40
-l = l + dl
-if (l <= n) go to 10
-return
-!     Error return
-200 ierr = 1
-end subroutine dshslv
-
-subroutine taslv(mo,n,a,na,c,nc,wk,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: mo
-integer :: n
-integer, intent(in) :: na, nc
-real, intent(inout) :: a(na,n), c(nc,n), wk(*)
-integer :: iw
-! ----------------------------------------------------------------------
-!     taslv solves the real matrix equation transpose(a)*X + X*a = c
-!     where c is a symmetric matrix. A is reduced to upper Schur form
-!     and the transformed system is solved.
-! ----------------------------------------------------------------------
-!        mo is an input argument which specifies if the routine is
-!     being called for the first time. On an initial call mo = 0 And
-!     we have the following setup.
-!        a(na,n)
-!           A is a matrix of order n. it is assumed that
-!           na .GE. n .GE. 1.
-!        c(nc,n)
-!           c is a symmetric matrix of order n. it is
-!           assumed that nc .GE. n.
-!        wk(---)
-!           wk is an array of dimension n**2 + 2n that
-!           is a general storage area for the routine.
-!     ierr is a variable that reports the status of the results. When
-!     the routine terminates, ierr has one of the following values...
-!        ierr =  0  The solution was obtained and stored in c.
-!        ierr =  1  The equations are inconsistent for A. the
-!                   problem cannot be solved.
-!        ierr = -1  A could not be REDUCEDTO upper Schur form.
-!                   The problem cannot be solved.
-!     When ierr = 0, a contains the upper Schur form of the matrix
-!     A and wk contains the orthogonal matrix involved in the Schur
-!     decomposition of A. this information can be reused to solve A
-!     new set of equations transpose(a)*X + X*a = c without having
-!     to redecompose A. in this case, the input argument mo may be
-!     set to any nonzero value. When mo .NE. 0, it is assumed that
-!     only c has been modified. On output the solution for the new
-!     set of equations is stored in c.
-! ----------------------------------------------------------------------
-!     This subroutine is a modification by
-!        Alfred H. Morris, Jr.
-!        naval surface weapons center
-!        Dahlgren, Virginia
-!     of the subroutine atxpxa written by
-!        R.H. Bartels and G.W. Stewart
-!        University of Texas at Austin.
-!     Reference. Bartels, R.H. and Stewart, G.W., algorithm 432,
-!        solution of the matrix equation AX + XB = c, comm. ACM
-!        15 (1972), PP. 820-826.
-! ----------------------------------------------------------------------
-iw = n*n + 1
-call taslv1(mo,n,a,na,wk(1),n,c,nc,wk(iw),ierr)
-end subroutine taslv
-
 subroutine taslv1(mo,n,a,na,u,nu,c,nc,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -911,11 +734,11 @@ end do
       if (fxni > fxnorm) fxnorm = fxni
    end do
    if (tol <= 0.0) go to 230
-   if (fxnorm < tol) go to 370
+   if ( fxnorm < tol ) exit
 230 tnorm = 8.0*float(n)*anorm*xnorm**2 + 5.0*float(n)*bnorm*xnorm &
       & + cnorm
    t = 1.0 + fxnorm/tnorm
-   if (t == 1.0) go to 370
+   if ( t == 1.0 ) exit
    if (its >= maxits) go to 400
 !        ********** Upper triangularization **********
    if (its /= 1) go to 240
@@ -972,7 +795,7 @@ end do
    end do
 end do
 !     ********** CONVERGENCE **********
-370 iguess = its - 1
+iguess = its - 1
 l(1,1) = cmplx(fxnorm,0.0)
 do i = 1,n
    do j = 1,n
@@ -1285,7 +1108,7 @@ do ll = 1,en
    lm1 = en - ll
    l = lm1 + 1
    if (l == 1) go to 90
-   if (abs(a(l,lm1)) <= epsa) go to 80
+   if ( abs ( a ( l , lm1 ) ) <= epsa ) exit
 end do
 80 a(l,lm1) = cmplx(0.0,0.0)
 if (l < na) go to 90
@@ -2384,27 +2207,27 @@ end interface
 nm1 = n - 1
 imin = m
 if (m == 1) go to 20
-do l = 2,m
+nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if (a(i,j) /= 0.0) go to 20
+      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
-end do
+end do nswc_exit_1
 20 mm1 = m - 1
 jmin = n
 if (n == 1) go to 30
-do l = 2,n
+nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if (a(i,j) /= 0.0) go to 30
+      if ( a ( i , j ) /= 0.0 ) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
-end do
+end do nswc_exit_2
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
@@ -2575,27 +2398,27 @@ end interface
 nm1 = n - 1
 imin = m
 if (m == 1) go to 20
-do l = 2,m
+nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if (a(i,j) /= 0.d0) go to 20
+      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
-end do
+end do nswc_exit_1
 20 mm1 = m - 1
 jmin = n
 if (n == 1) go to 30
-do l = 2,n
+nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if (a(i,j) /= 0.d0) go to 30
+      if ( a ( i , j ) /= 0.d0 ) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
-end do
+end do nswc_exit_2
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
@@ -2766,27 +2589,27 @@ end interface
 nm1 = n - 1
 imin = m
 if (m == 1) go to 20
-do l = 2,m
+nswc_exit_1 : do l = 2 , m
    j = 1
    imax = min(m,imin + nm1)
    do i = imin,imax
-      if (a(i,j) /= (0.0,0.0)) go to 20
+      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
       j = j + 1
    end do
    imin = imin - 1
-end do
+end do nswc_exit_1
 20 mm1 = m - 1
 jmin = n
 if (n == 1) go to 30
-do l = 2,n
+nswc_exit_2 : do l = 2 , n
    i = 1
    jmax = min(n,jmin + mm1)
    do j = jmin,jmax
-      if (a(i,j) /= (0.0,0.0)) go to 30
+      if ( a ( i , j ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_2
       i = i + 1
    end do
    jmin = jmin - 1
-end do
+end do nswc_exit_2
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
@@ -3199,23 +3022,23 @@ integer :: i, imin, j, k, num
 nl = ml
 if (ml == 0) go to 30
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if (real(a(i,j)) /= 0.0) go to 30
+      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 30 nu = mu
 if (mu == 0) go to 60
 j = ml + mu + 1
-do k = 1,mu
+nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if (real(a(i,j)) /= 0.0) go to 60
+      if ( real ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
-end do
+end do nswc_exit_2
 !     Store the real part of A in b
 60 num = nl + nu + 1
 if (num > l) go to 100
@@ -3248,23 +3071,23 @@ integer :: i, imin, j, k, num
 nl = ml
 if (ml == 0) go to 30
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if (aimag(a(i,j)) /= 0.0) go to 30
+      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_1
    end do
    nl = nl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 30 nu = mu
 if (mu == 0) go to 60
 j = ml + mu + 1
-do k = 1,mu
+nswc_exit_2 : do k = 1 , mu
    do i = 1,m
-      if (aimag(a(i,j)) /= 0.0) go to 60
+      if ( aimag ( a ( i , j ) ) /= 0.0 ) exit nswc_exit_2
    end do
    nu = nu - 1
    j = j - 1
-end do
+end do nswc_exit_2
 !     Store the imaginary part of A in b
 60 num = nl + nu + 1
 if (num > l) go to 100
@@ -3551,13 +3374,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) /= 0.0) go to 40
+      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -3614,14 +3437,14 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) /= 0.0) go to 170
+      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -3685,13 +3508,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) /= 0.d0) go to 40
+      if ( ( a ( i , j ) + b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -3748,14 +3571,14 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) /= 0.d0) go to 170
+      if ( ( a ( i , la ) + b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -3819,13 +3642,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) /= (0.0,0.0)) go to 40
+      if ( ( a ( i , j ) + b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -3882,14 +3705,15 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) /= (0.0,0.0)) go to 170
+      if ( ( a ( i , la ) + b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+         & exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -3953,13 +3777,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) /= 0.0) go to 40
+      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.0 ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -4016,14 +3840,14 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= 0.0) go to 170
+      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.0 ) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -4087,13 +3911,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) /= 0.d0) go to 40
+      if ( ( a ( i , j ) - b ( i , j ) ) /= 0.d0 ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -4150,14 +3974,14 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= 0.d0) go to 170
+      if ( ( a ( i , la ) - b ( i , lb ) ) /= 0.d0 ) exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -4221,13 +4045,13 @@ go to 50
 30 mcl = ml
 if (ml == 0) go to 40
 imin = ml + 1
-do j = 1,ml
+nswc_exit_1 : do j = 1 , ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) /= (0.0,0.0)) go to 40
+      if ( ( a ( i , j ) - b ( i , j ) ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
    end do
    mcl = mcl - 1
    imin = imin - 1
-end do
+end do nswc_exit_1
 40 ja = ml - mcl
 jb = ja
 jc = 0
@@ -4284,14 +4108,15 @@ return
 if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
-do j = 1,mu
+nswc_exit_2 : do j = 1 , mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= (0.0,0.0)) go to 170
+      if ( ( a ( i , la ) - b ( i , lb ) ) /= ( 0.0 , 0.0 ) ) &
+         & exit nswc_exit_2
    end do
    mcu = mcu - 1
    la = la - 1
    lb = lb - 1
-end do
+end do nswc_exit_2
 !     Addition of the remaining columns when mu = nu
 170 num = mcl + mcu + 1
 if (num > l) go to 200
@@ -4392,7 +4217,7 @@ end do
 mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 maxd = mcu
-do ndiag = 1,maxd
+nswc_exit_1 : do ndiag = 1 , maxd
    jmi = maxd + 1 - ndiag
    imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
@@ -4410,10 +4235,10 @@ do ndiag = 1,maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if (c(i,jc) /= 0.0) go to 130
+      if ( c ( i , jc ) /= 0.0 ) exit nswc_exit_1
    end do
    mcu = mcu - 1
-end do
+end do nswc_exit_1
 130 last = mcl + mcu + 1
 if (last > nc) go to 200
 if (mcu == 0) go to 140
@@ -4530,7 +4355,7 @@ end do
 mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 maxd = mcu
-do ndiag = 1,maxd
+nswc_exit_1 : do ndiag = 1 , maxd
    jmi = maxd + 1 - ndiag
    imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
@@ -4548,10 +4373,10 @@ do ndiag = 1,maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if (c(i,jc) /= 0.d0) go to 130
+      if ( c ( i , jc ) /= 0.d0 ) exit nswc_exit_1
    end do
    mcu = mcu - 1
-end do
+end do nswc_exit_1
 130 last = mcl + mcu + 1
 if (last > nc) go to 200
 if (mcu == 0) go to 140
@@ -4668,7 +4493,7 @@ end do
 mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 maxd = mcu
-do ndiag = 1,maxd
+nswc_exit_1 : do ndiag = 1 , maxd
    jmi = maxd + 1 - ndiag
    imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
@@ -4686,10 +4511,10 @@ do ndiag = 1,maxd
       c(i,jc) = sum
    end do
    do i = 1,imax
-      if (c(i,jc) /= (0.0,0.0)) go to 130
+      if ( c ( i , jc ) /= ( 0.0 , 0.0 ) ) exit nswc_exit_1
    end do
    mcu = mcu - 1
-end do
+end do nswc_exit_1
 130 last = mcl + mcu + 1
 if (last > nc) go to 200
 if (mcu == 0) go to 140
@@ -8801,7 +8626,7 @@ numnz = 0
 do jord = 1,n
    j = jord
    pr(j) = -1
-   do k = 1,jord
+   nswc_exit_1 : do k = 1 , jord
 !     Look for a cheap assignment
       in1 = arp(j)
       if (in1 < 0) go to 60
@@ -8809,14 +8634,14 @@ do jord = 1,n
       in1 = in2 - in1
       do ii = in1,in2
          i = icn(ii)
-         if (iperm(i) == 0) go to 110
+         if ( iperm ( i ) == 0 ) exit nswc_exit_1
       end do
 !     No cheap assignment in row
       arp(j) = -1
 !     Begin looking for assignment chain starting with row j
 60    out(j) = lenr(j) - 1
 !     Inner loop.  Extends chain by one or backtracks.
-      do kk = 1,jord
+      nswc_exit_2 : do kk = 1 , jord
          in1 = out(j)
          if (in1 < 0) go to 80
          in2 = ip(j) + lenr(j) - 1
@@ -8831,22 +8656,21 @@ do jord = 1,n
             cv(i) = jord
             pr(j) = j1
             out(j1) = in2 - ii - 1
-            go to 100
+            exit nswc_exit_2
 70          continue
          end do
 !        Backtracking step
 80       j = pr(j)
          if (j == -1) go to 130
-      end do
-100   continue
-   end do
+      end do nswc_exit_2
+   end do nswc_exit_1
 !     New assignment is made
-110 iperm(i) = j
+   iperm(i) = j
    arp(j) = in2 - ii - 1
    numnz = numnz + 1
    do k = 1,jord
       j = pr(j)
-      if (j == -1) go to 130
+      if ( j == - 1 ) exit
       ii = ip(j) + lenr(j) - out(j) - 2
       i = icn(ii)
       iperm(i) = j
@@ -8961,7 +8785,7 @@ do j = 1,n
    numb(j) = 0
    arp(j) = lenr(j) - 1
 end do
-do isn = 1,n
+nswc_exit_1 : do isn = 1 , n
 ! Look for a starting node
    if (numb(isn) /= 0) go to 90
    iv = isn
@@ -9002,15 +8826,15 @@ do isn = 1,n
          lowl(iw) = n + 1
          icnt = icnt + 1
          numb(iw) = icnt
-         if (iw == iv) go to 50
+         if ( iw == iv ) exit
       end do
-50    ist = n - stp
+      ist = n - stp
       ib(num) = lcnt
 ! Are there any nodes left on the stack.
       if (ist /= 0) go to 60
 ! Have all the nodes been ordered.
-      if (icnt < n) go to 90
-      go to 100
+      if ( icnt < n ) exit
+      exit nswc_exit_1
 ! Backtrack to previous node on path.
 60    iw = iv
       iv = prev(iv)
@@ -9029,9 +8853,9 @@ do isn = 1,n
 80    continue
    end do
 90 continue
-end do
+end do nswc_exit_1
 ! Put permutation in the required form.
-100 do i = 1,n
+do i = 1,n
    ii = numb(i)
    arp(ii) = i
 end do
@@ -10506,4 +10330,280 @@ return
 !     Storage for L and U exceeded on row r(k)
 230 ierr = -(3*n + k)
 end subroutine dsplu
+
+subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: max, n
+real, intent(out) :: cond
+real, intent(in) :: a(*)
+real, intent(inout) :: wk(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), iwk(*)
+integer :: isgn, iter, iv, ix, j, jump, kase
+real :: ainorm, anorm
+!-----------------------------------------------------------------------
+!              Computation of the L1 condition number
+!                       of a sparse matrix a
+!-----------------------------------------------------------------------
+!-----------------------
+!     real wk(4*n + max)
+!     integer iwk(5*n + max + 2)
+!-----------------------
+cond = 0.0
+call s1nrm(a, ia, ja, n, n, anorm, wk)
+if (anorm == 0.0) go to 50
+ix = 2*n + max + 1
+iv = ix + n
+isgn = 4*n + max + 3
+kase = 0
+ainorm = 0.0
+call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+   & iter, j, jump)
+call rslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+!     Check if A is singular or if there are errors
+if (ierr > 0) go to 20
+if (abs(ierr) <= n) go to 50
+ierr = ierr + n
+if (abs(ierr) <= n) return
+ierr = ierr + n
+if (abs(ierr) <= n) go to 50
+return
+!     General loop to estimate the norm  ainorm
+!     of the inverse of A
+20 call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+   & iter, j, jump)
+if (kase == 0) go to 40
+if (kase /= 1) go to 30
+call rslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
+30 call tslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
+!     Compute the value of cond
+40 cond = anorm*ainorm
+return
+!     Singular case
+50 ierr = 0
+end subroutine s1cnd
+
+subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: max, n
+double precision, intent(in) :: a(*)
+double precision, intent(out) :: cond
+double precision, intent(inout) :: wk(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), iwk(*)
+integer :: isgn, iter, iv, ix, j, jump, kase
+double precision :: anorm, ainorm
+!-----------------------------------------------------------------------
+!              Computation of the L1 condition number
+!                       of a sparse matrix a
+!-----------------------------------------------------------------------
+!-----------------------
+!     double precision wk(4*n + max)
+!     integer iwk(5*n + max + 2)
+!-----------------------
+cond = 0.d0
+call ds1nrm(a, ia, ja, n, n, anorm, wk)
+if (anorm == 0.d0) go to 50
+ix = 2*n + max + 1
+iv = ix + n
+isgn = 4*n + max + 3
+kase = 0
+ainorm = 0.d0
+call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+   & iter, j, jump)
+call dslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+!     Check if A is singular or if there are errors
+if (ierr > 0) go to 20
+if (abs(ierr) <= n) go to 50
+ierr = ierr + n
+if (abs(ierr) <= n) return
+ierr = ierr + n
+if (abs(ierr) <= n) go to 50
+return
+!     General loop to estimate the norm  ainorm
+!     of the inverse of A
+20 call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+   & iter, j, jump)
+if (kase == 0) go to 40
+if (kase /= 1) go to 30
+call dslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
+30 call dtslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+   & iwk(1), wk(1), ierr)
+go to 20
+!     Compute the value of cond
+40 cond = anorm*ainorm
+return
+!     Singular case
+50 ierr = 0
+end subroutine ds1cnd
+
+pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
+implicit none
+integer, intent(inout) :: iter, j, jump, kase
+integer, intent(in) :: n
+real, intent(inout) :: anorm
+real, intent(inout) :: v(n), x(n)
+integer, intent(inout) :: isgn(n)
+integer :: i, jlast, l
+real :: altsgn, anrm, t
+integer, parameter :: itmax = 5
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure function sasum(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: sasum
+   end function sasum
+   pure subroutine scopy(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine scopy
+end interface
+!-----------------------------------------------------------------------
+!     sonest estimates the 1-norm of A square, real matrix  A.
+!     Reverse communication is used for evaluating
+!     matrix-vector products.
+!     On entry
+!        n       the order of the matrix.  n .GE. 1.
+!        kase    INTEGER  (= 0).
+!     On intermediate returns
+!        kase    = 1 or 2.
+!        x       MUST BE OVERWRITTEN BY
+!                     A*x,             IF kase = 1,
+!                     TRANSPOSE(A)*x,  IF kase = 2,
+!                and sonest must be RE-called, with all the other
+!                parameters unchanged.
+!        ITER    NUMBER OF THE CURRENT ITERATION.
+!     On final return
+!        kase    = 0.
+!        anorm   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
+!        v       = A*W,   WHERE  anorm = NORM(v)/NORM(W)
+!                         (W  is not returned).
+!        ITER    NUMBER OF INTERATIONS TAKEN.
+!        Written by nick Higham, university of manchester. Modified
+!        by A.H. Morris (NSWC).
+!     Reference
+!     N.J. Higham (1987) Fortran codes for estimating
+!     the 1-norm of a real or complex matrix, with applications
+!     to condition  estimation, numerical analysis report no. 135,
+!     university of manchester, manchester M13 9PL, england.
+!-----------------------------------------------------------------------
+if (kase /= 0) go to 20
+t = 1.0/float(n)
+do i = 1,n
+   x(i) = t
+end do
+iter = 0
+kase = 1
+jump = 1
+return
+20 select case (jump)
+case (1)
+   go to 100
+case (2)
+   go to 200
+case (3)
+   go to 300
+case (4)
+   go to 400
+case (5)
+   go to 500
+end select
+!     ................ ENTRY   (jump = 1)
+!     first iteration.  x has been overwritten by A*x.
+100 iter = 1
+if (n > 1) go to 110
+v(1) = x(1)
+anorm = abs(v(1))
+go to 510
+110 anorm = sasum(n,x,1)
+do i = 1,n
+   isgn(i) = 1
+   if (x(i) < 0.0) isgn(i) = -1
+   x(i) = isgn(i)
+end do
+kase = 2
+jump = 2
+return
+!     ................ ENTRY   (jump = 2)
+!     first iteration.  x has been overwritten by transpose(A)*x.
+200 iter = 2
+j = isamax(n,x,1)
+!     Main loop - Iterations 2,3,...,itmax.
+210 do i = 1,n
+   x(i) = 0.0
+end do
+x(j) = 1.0
+kase = 1
+jump = 3
+return
+!     ................ ENTRY   (jump = 3)
+!     x has been overwritten by A*x.
+300 call scopy(n,x,1,v,1)
+anrm = anorm
+anorm = sasum(n,v,1)
+do i = 1,n
+   l = 1
+   if (x(i) < 0.0) l = -1
+   if (l /= isgn(i)) go to 320
+end do
+!     Repeated sign vector detected, hence algorithm has converged.
+go to 410
+!     Test for cycling.
+320 if (anorm <= anrm) go to 410
+do i = 1,n
+   isgn(i) = 1
+   if (x(i) < 0.0) isgn(i) = -1
+   x(i) = isgn(i)
+end do
+kase = 2
+jump = 4
+return
+!     ................ ENTRY   (jump = 4)
+!     x has been overwritten by transpose(A)*x.
+400 jlast = j
+j = isamax(n,x,1)
+if (x(jlast) == abs(x(j)) .or. &
+   & iter >= itmax) go to 410
+iter = iter + 1
+go to 210
+!     Iteration complete.  Final stage.
+410 altsgn = 1.0
+do i = 1,n
+   x(i) = altsgn * (1.0 + float(i - 1)/float(n - 1))
+   altsgn = -altsgn
+end do
+kase = 1
+jump = 5
+return
+!     ................ ENTRY   (jump = 5)
+!     x has been overwritten by A*x.
+500 anrm = 2.0*sasum(n,x,1)/float(3*n)
+if (anrm <= anorm) go to 510
+call scopy(n,x,1,v,1)
+anorm = anrm
+510 kase = 0
+end subroutine sonest
 

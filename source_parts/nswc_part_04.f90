@@ -1,231 +1,3 @@
-pure subroutine mcopy(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,n)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(i,j) = a(i,j)
-   end do
-end do
-end subroutine mcopy
-
-pure subroutine smcopy(n,a,b)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
-integer :: k, l
-l = (n*(n + 1))/2
-do k = 1,l
-   b(k) = a(k)
-end do
-end subroutine smcopy
-
-pure subroutine dmcopy(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,n)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(i,j) = a(i,j)
-   end do
-end do
-end subroutine dmcopy
-
-pure subroutine cmcopy(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,n)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(i,j) = a(i,j)
-   end do
-end do
-end subroutine cmcopy
-
-pure subroutine cmconj(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,n)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(i,j) = conjg(a(i,j))
-   end do
-end do
-end subroutine cmconj
-
-pure subroutine tpose(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,m)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(j,i) = a(i,j)
-   end do
-end do
-end subroutine tpose
-
-pure subroutine dtpose(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,m)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(j,i) = a(i,j)
-   end do
-end do
-end subroutine dtpose
-
-pure subroutine ctpose(m,n,a,ka,b,kb)
-implicit none
-integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,m)
-integer :: i, j
-do j = 1,n
-   do i = 1,m
-      b(j,i) = a(i,j)
-   end do
-end do
-end subroutine ctpose
-
-pure subroutine tip(a, n1, n2, moved, nwork, ndim)
-implicit none
-integer, intent(in) :: n1, n2
-integer, intent(inout) :: ndim
-integer, intent(in) :: nwork
-real, intent(inout) :: a(*)
-integer, intent(inout) :: moved(nwork)
-integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
-   & npower, ifact(8), ipower(8), nexp(8), iexp(8)
-real :: atemp, btemp
-interface
-   pure subroutine infctr(n,ifact,ipower,nexp,npower)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ifact(*)
-      integer, intent(inout) :: ipower(*)
-      integer, intent(inout) :: nexp(*)
-      integer, intent(inout) :: npower
-   end subroutine infctr
-end interface
-! ----------------------------------------------------------
-! Transposition of a rectangular matrix in situ.
-! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
-! Transposition of the n1 by n2 matrix a amounts to
-! replacing the element at vector position i (0-ORIGIN)
-! with the element at position n1*i (mod n1*n2-1).
-! Each subcycle of this permutation is completed in order.
-! ----------------------------------------------------------
-if (n1 < 2 .or. n2 < 2) go to 200
-n12 = n1*n2
-n = n1
-m = n12 - 1
-if (n1 /= n2) go to 30
-! Square matrices are done separately for speed
-i1min = 2
-do i1max = n,m,n
-   i2 = i1min + n - 1
-   do i1 = i1min,i1max
-      atemp = a(i1)
-      a(i1) = a(i2)
-      a(i2) = atemp
-      i2 = i2 + n
-   end do
-   i1min = i1min + n + 1
-end do
-return
-! Modulus M is factored into prime powers.  Eight factors
-! suffice up to M = 2*3*5*7*11*13*17*19 = 9,767,520.
-30 ndim = 0
-call infctr(m, ifact, ipower, nexp, npower)
-do ip = 1,npower
-   iexp(ip) = 0
-end do
-! Generate every divisor of M less than M/2
-idiv = 1
-mhalf = m/2
-50 if (idiv >= mhalf) return
-! The number of elements whose index is divisible by idiv
-! and by no other divisor of M is the Euler totient
-! function, phi(M/idiv).
-ncount = m/idiv
-do ip = 1,npower
-   if (iexp(ip) == nexp(ip)) go to 60
-   ncount = (ncount/ifact(ip))*(ifact(ip) - 1)
-60 continue
-end do
-if (nwork <= 0) go to 75
-do i = 1,nwork
-   moved(i) = 0
-end do
-75 istart = idiv
-! The starting point of a subcycle is divisible only by idiv
-! and must not appear in any other subcycle.
-80 mmist = m - istart
-if (istart == idiv) go to 120
-ndim = max(ndim,istart)
-if (istart > nwork) go to 90
-if (moved(istart) /= 0) go to 160
-90 isoid = istart/idiv
-do ip = 1,npower
-   if (iexp(ip) == nexp(ip)) go to 100
-   if (mod(isoid,ifact(ip)) == 0) go to 160
-100 continue
-end do
-if (istart <= nwork) go to 120
-itest = istart
-110 itest = mod(n*itest,m)
-if (itest < istart .or. itest > mmist) go to 160
-if (itest > istart .and. itest < mmist) go to 110
-120 atemp = a(istart + 1)
-btemp = a(mmist + 1)
-ia1 = istart
-130 ia2 = mod(n*ia1,m)
-mmia1 = m - ia1
-mmia2 = m - ia2
-if (ia1 <= nwork) moved(ia1) = 1
-if (mmia1 <= nwork) moved(mmia1) = 1
-ncount = ncount - 2
-! Move two elements, the second from the negative
-! subcycle.  Check first for subcycle closure.
-if (ia2 == istart) go to 140
-if (mmia2 == istart) go to 150
-a(ia1 + 1) = a(ia2 + 1)
-a(mmia1 + 1) = a(mmia2 + 1)
-ia1 = ia2
-go to 130
-140 a(ia1 + 1) = atemp
-a(mmia1 + 1) = btemp
-go to 160
-150 a(ia1 + 1) = btemp
-a(mmia1 + 1) = atemp
-160 istart = istart + idiv
-if (ncount > 0) go to 80
-do ip = 1,npower
-   if (iexp(ip) == nexp(ip)) go to 170
-   iexp(ip) = iexp(ip) + 1
-   idiv = idiv*ifact(ip)
-   go to 50
-170 iexp(ip) = 0
-   idiv = idiv/ipower(ip)
-end do
-return
-200 if (n1 /= n2) ndim = 0
-end subroutine tip
-
 pure subroutine dtip(a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
@@ -2724,7 +2496,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if (det(1) == 0.0e0) go to 60
+   if ( det( 1 ) == 0.0e0 ) exit
 10 if (abs(det(1)) >= 1.0e0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0e0
@@ -2736,7 +2508,6 @@ do i = 1, n
    go to 30
 40 continue
 end do
-60 continue
 70 continue
 !     Compute inverse(U)
 if (mod(job,10) == 0) go to 150
@@ -3313,7 +3084,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if (det(1) == 0.0d0) go to 60
+   if ( det( 1 ) == 0.0d0 ) exit
 10 if (abs(det(1)) >= 1.0d0) go to 20
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0d0
@@ -3325,7 +3096,6 @@ do i = 1, n
    go to 30
 40 continue
 end do
-60 continue
 70 continue
 !     Compute inverse(U)
 if (mod(job,10) == 0) go to 150
@@ -6499,7 +6269,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if (det(1) == 0.0e0) go to 60
+   if ( det( 1 ) == 0.0e0 ) exit
 10 if (det(1) >= 1.0e0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0e0
@@ -6511,7 +6281,6 @@ do i = 1, n
    go to 30
 40 continue
 end do
-60 continue
 70 continue
 !     Compute inverse(R)
 if (mod(job,10) == 0) go to 140
@@ -6782,7 +6551,7 @@ do i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if (det(1) == 0.0d0) go to 60
+   if ( det( 1 ) == 0.0d0 ) exit
 10 if (det(1) >= 1.0d0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0d0
@@ -6794,7 +6563,6 @@ do i = 1, n
    go to 30
 40 continue
 end do
-60 continue
 70 continue
 !     Compute inverse(R)
 if (mod(job,10) == 0) go to 140
@@ -7627,7 +7395,7 @@ do i = 1, n
    if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if (cabs1(det(1)) == 0.0e0) go to 60
+   if ( cabs1 ( det( 1 ) ) == 0.0e0 ) exit
 10 if (cabs1(det(1)) >= 1.0e0) go to 20
    det(1) = cmplx(ten,0.0e0)*det(1)
    det(2) = det(2) - (1.0e0,0.0e0)
@@ -7639,7 +7407,6 @@ do i = 1, n
    go to 30
 40 continue
 end do
-60 continue
 70 continue
 !     Compute inverse(U)
 if (mod(job,10) == 0) go to 150
@@ -8302,16 +8069,15 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l == 0) go to 400
+   if ( l == 0 ) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
    e(l) = 0.0e0
 !        ......Exit
-   go to 400
+   exit
 380 continue
 end do
-400 continue
 if (l /= m - 1) go to 410
 kase = 4
 go to 480
@@ -8321,7 +8087,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls == l) go to 440
+   if ( ls == l ) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -8329,10 +8095,9 @@ do lls = lp1, mp1
    if (ztest /= test) go to 420
    s(ls) = 0.0e0
 !           ......Exit
-   go to 440
+   exit
 420 continue
 end do
-440 continue
 if (ls /= l) go to 450
 kase = 3
 go to 470
@@ -8774,16 +8539,15 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l == 0) go to 400
+   if ( l == 0 ) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 380
    e(l) = 0.0d0
 !        ......Exit
-   go to 400
+   exit
 380 continue
 end do
-400 continue
 if (l /= m - 1) go to 410
 kase = 4
 go to 480
@@ -8793,7 +8557,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls == l) go to 440
+   if ( ls == l ) exit
    test = 0.0d0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -8801,10 +8565,9 @@ do lls = lp1, mp1
    if (ztest /= test) go to 420
    s(ls) = 0.0d0
 !           ......Exit
-   go to 440
+   exit
 420 continue
 end do
-440 continue
 if (ls /= l) go to 450
 kase = 3
 go to 470
@@ -9235,7 +8998,7 @@ do i = 1, m
    if (wantu) call cscal(n,r,u(1,i),1)
 360 continue
 !     ...Exit
-   if (i == m) go to 390
+   if ( i == m ) exit
    if (cabs1(e(i)) == 0.0e0) go to 370
    t = cmplx(abs(e(i)),0.0e0)
    r = t/e(i)
@@ -9244,7 +9007,6 @@ do i = 1, m
    if (wantv) call cscal(p,r,v(1,i + 1),1)
 370 continue
 end do
-390 continue
 !     Main iteration loop for the singular values.
 mm = m
 iter = 0
@@ -9270,16 +9032,15 @@ go to 660
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l == 0) go to 440
+   if ( l == 0 ) exit
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
    if (ztest /= test) go to 420
    e(l) = (0.0e0,0.0e0)
 !        ......Exit
-   go to 440
+   exit
 420 continue
 end do
-440 continue
 if (l /= m - 1) go to 450
 kase = 4
 go to 520
@@ -9289,7 +9050,7 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls == l) go to 480
+   if ( ls == l ) exit
    test = 0.0e0
    if (ls /= m) test = test + abs(e(ls))
    if (ls /= l + 1) test = test + abs(e(ls - 1))
@@ -9297,10 +9058,9 @@ do lls = lp1, mp1
    if (ztest /= test) go to 460
    s(ls) = (0.0e0,0.0e0)
 !           ......Exit
-   go to 480
+   exit
 460 continue
 end do
-480 continue
 if (ls /= l) go to 490
 kase = 3
 go to 510
@@ -9876,15 +9636,15 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if (l == low) go to 60
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if (s1 == s2) go to 60
+   if ( s1 == s2 ) exit
 end do
 !     ********** Form shift **********
-60 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 220
 y = h(na,na)
 w = h(en,na)*h(na,en)
@@ -9916,12 +9676,12 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if (m == l) go to 100
+   if ( m == l ) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if (s1 == s2) go to 100
+   if ( s1 == s2 ) exit
 end do
-100 mp2 = m + 2
+mp2 = m + 2
 do i = mp2,en
    h(i,i - 2) = 0.0
    if (i == mp2) go to 110
@@ -10428,15 +10188,15 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if (l == low) go to 60
+   if ( l == low ) exit
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if (s1 == s2) go to 60
+   if ( s1 == s2 ) exit
 end do
 !     ********** Form shift **********
-60 x = h(en,en)
+x = h(en,en)
 if (l == en) go to 220
 y = h(na,na)
 w = h(en,na)*h(na,en)
@@ -10468,12 +10228,12 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if (m == l) go to 100
+   if ( m == l ) exit
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if (s1 == s2) go to 100
+   if ( s1 == s2 ) exit
 end do
-100 mp2 = m + 2
+mp2 = m + 2
 do i = mp2,en
    h(i,i - 2) = 0.d0
    if (i == mp2) go to 110
@@ -10606,4 +10366,181 @@ return
 320 continue
 end do
 end subroutine dschur
+
+pure subroutine dshslv(a,b,c,m,n,na,nb,nc,ierr)
+implicit none
+!     ------------------------------------------------------------------
+!     dshslv solves the matrix equation AX + XB = c where
+!     A is in lower Schur form and b in upper Schur form.
+!     ------------------------------------------------------------------
+integer, intent(in) :: m, n, na, nb, nc
+integer, intent(inout) :: ierr
+double precision, intent(in) :: a(na,m), b(nb,n)
+double precision, intent(inout) :: c(nc,n)
+double precision :: sum, p(4), t(4,4)
+integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
+interface
+   pure subroutine dpslv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      double precision, intent(inout) :: a(ka,n)
+      double precision, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine dpslv
+end interface
+l = 1
+10 lm1 = l - 1
+dl = 1
+if (l == n) go to 15
+if (b(l + 1,l) /= 0.d0) dl = 2
+15 ll = l + dl - 1
+if (l == 1) go to 30
+do j = l,ll
+   do i = 1,m
+      sum = c(i,j)
+      do ib = 1,lm1
+         sum = sum - c(i,ib)*b(ib,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+30 k = 1
+40 km1 = k - 1
+dk = 1
+if (k == m) go to 45
+if (a(k,k + 1) /= 0.d0) dk = 2
+45 kk = k + dk - 1
+if (k == 1) go to 60
+do i = k,kk
+   do j = l,ll
+      sum = c(i,j)
+      do ja = 1,km1
+         sum = sum - a(i,ja)*c(ja,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+60 if (dl == 2) go to 80
+if (dk == 2) go to 70
+t(1,1) = a(k,k) + b(l,l)
+if (t(1,1) == 0.d0) go to 200
+c(k,l) = c(k,l)/t(1,1)
+ierr = 0
+go to 100
+70 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+call dpslv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+go to 100
+80 if (dk == 2) go to 90
+t(1,1) = a(k,k) + b(l,l)
+t(1,2) = b(ll,l)
+t(2,1) = b(l,ll)
+t(2,2) = a(k,k) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(k,ll)
+call dpslv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(k,ll) = p(2)
+go to 100
+90 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(1,3) = b(ll,l)
+t(1,4) = 0.d0
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+t(2,3) = 0.d0
+t(2,4) = t(1,3)
+t(3,1) = b(l,ll)
+t(3,2) = 0.d0
+t(3,3) = a(k,k) + b(ll,ll)
+t(3,4) = t(1,2)
+t(4,1) = 0.d0
+t(4,2) = t(3,1)
+t(4,3) = t(2,1)
+t(4,4) = a(kk,kk) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+p(3) = c(k,ll)
+p(4) = c(kk,ll)
+call dpslv(4, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+c(k,ll) = p(3)
+c(kk,ll) = p(4)
+100 k = k + dk
+if (k <= m) go to 40
+l = l + dl
+if (l <= n) go to 10
+return
+!     Error return
+200 ierr = 1
+end subroutine dshslv
+
+subroutine taslv(mo,n,a,na,c,nc,wk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: mo
+integer :: n
+integer, intent(in) :: na, nc
+real, intent(inout) :: a(na,n), c(nc,n), wk(*)
+integer :: iw
+! ----------------------------------------------------------------------
+!     taslv solves the real matrix equation transpose(a)*X + X*a = c
+!     where c is a symmetric matrix. A is reduced to upper Schur form
+!     and the transformed system is solved.
+! ----------------------------------------------------------------------
+!        mo is an input argument which specifies if the routine is
+!     being called for the first time. On an initial call mo = 0 And
+!     we have the following setup.
+!        a(na,n)
+!           A is a matrix of order n. it is assumed that
+!           na .GE. n .GE. 1.
+!        c(nc,n)
+!           c is a symmetric matrix of order n. it is
+!           assumed that nc .GE. n.
+!        wk(---)
+!           wk is an array of dimension n**2 + 2n that
+!           is a general storage area for the routine.
+!     ierr is a variable that reports the status of the results. When
+!     the routine terminates, ierr has one of the following values...
+!        ierr =  0  The solution was obtained and stored in c.
+!        ierr =  1  The equations are inconsistent for A. the
+!                   problem cannot be solved.
+!        ierr = -1  A could not be REDUCEDTO upper Schur form.
+!                   The problem cannot be solved.
+!     When ierr = 0, a contains the upper Schur form of the matrix
+!     A and wk contains the orthogonal matrix involved in the Schur
+!     decomposition of A. this information can be reused to solve A
+!     new set of equations transpose(a)*X + X*a = c without having
+!     to redecompose A. in this case, the input argument mo may be
+!     set to any nonzero value. When mo .NE. 0, it is assumed that
+!     only c has been modified. On output the solution for the new
+!     set of equations is stored in c.
+! ----------------------------------------------------------------------
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
+!     Reference. Bartels, R.H. and Stewart, G.W., algorithm 432,
+!        solution of the matrix equation AX + XB = c, comm. ACM
+!        15 (1972), PP. 820-826.
+! ----------------------------------------------------------------------
+iw = n*n + 1
+call taslv1(mo,n,a,na,wk(1),n,c,nc,wk(iw),ierr)
+end subroutine taslv
 
