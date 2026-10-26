@@ -1,3 +1,314 @@
+pure subroutine cbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,l)
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
+!-----------------------------------------------------------------------
+!             Subtraction of complex banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
+!
+!     Insert the first abs(ml - nl) diagonals
+!
+10 mcl = ml
+if (ml >= l) go to 50
+ja = ml - nl
+jb = 0
+jc = ja
+jmax = nl + 1
+do j = 1,jc
+   do i = 1,m
+11    c(i,j) = a(i,j)
+   end do
+end do
+go to 50
+!
+20 mcl = nl
+if (nl >= l) go to 50
+ja = 0
+jb = nl - ml
+jc = jb
+jmax = ml + 1
+do j = 1,jc
+   do i = 1,m
+21    c(i,j) = -b(i,j)
+   end do
+end do
+go to 50
+!
+!     COMPUTE mcl WHEN ml = nl
+!
+30 mcl = ml
+if (ml == 0) go to 40
+imin = ml + 1
+do j = 1,ml
+   do i = imin,m
+      if ((a(i,j) - b(i,j)) /= (0.0,0.0)) go to 40
+   end do
+   mcl = mcl - 1
+   imin = imin - 1
+end do
+!
+40 ja = ml - mcl
+jb = ja
+jc = 0
+jmax = mcl + 1
+!
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
+!
+!     Insertion of the remaining diagonals when mu .NE. nu
+!
+100 mcu = mu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + nu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = mu - nu
+do j = 1,jmax
+   ja = ja + 1
+   jc = jc + 1
+   do i = 1,m
+120   c(i,jc) = a(i,ja)
+   end do
+end do
+return
+!
+130 mcu = nu
+num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+!
+jmax = nu - mu
+do j = 1,jmax
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+150   c(i,jc) = -b(i,jb)
+   end do
+end do
+return
+!
+!     Compute mcu when mu = nu
+!
+160 mcu = mu
+if (mu == 0) go to 170
+la = ml + mu + 1
+lb = nl + nu + 1
+do j = 1,mu
+   do i = 1,m
+      if ((a(i,la) - b(i,lb)) /= (0.0,0.0)) go to 170
+   end do
+   mcu = mcu - 1
+   la = la - 1
+   lb = lb - 1
+end do
+!
+!     Addition of the remaining columns when mu = nu
+!
+170 num = mcl + mcu + 1
+if (num > l) go to 200
+!
+jmax = jmax + mcu
+do j = 1,jmax
+   ja = ja + 1
+   jb = jb + 1
+   jc = jc + 1
+   do i = 1,m
+      c(i,jc) = a(i,ja) - b(i,jb)
+   end do
+end do
+return
+!
+!     Error return
+!
+200 ierr = num
+end subroutine cbsubt
+
+pure subroutine bprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+   & c, kc, nc, mcl, mcu, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nc, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,nc)
+integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
+   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+real :: sum
+!-----------------------------------------------------------------------
+!                Multiplication of real banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+do j = 1,nc
+   do i = 1,m
+10    c(i,j) = 0.0
+   end do
+end do
+!
+mlp1 = ml + 1
+nlp1 = nl + 1
+npml = n + ml
+npnu = n + nu
+mcl = min(m - 1,ml + nl)
+jc = 0
+if (mcl == 0) go to 100
+!
+!     Find the first nonzero lower diagonal
+!
+maxd = mcl
+do ndiag = 1,maxd
+   imj = maxd + 1 - ndiag
+   jmax = min(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,1) = sum
+   end do
+!
+   do j = 1,jmax
+      i = j + imj
+      if (c(i,1) /= 0.0) go to 40
+   end do
+   mcl = mcl - 1
+end do
+go to 100
+!
+40 if (mcl >= nc) go to 100
+jc = 1
+if (mcl == 1) go to 100
+!
+!     Compute the remaining lower diagonals
+!
+mind = ndiag + 1
+do ndiag = mind,maxd
+   jc = jc + 1
+   imj = maxd + 1 - ndiag
+   jmax = min(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+end do
+!
+!     Find the last nonzero upper diagonal
+!
+100 jc = jc + 1
+mcu = min(l - 1,mu + nu)
+if (mcu == 0) go to 130
+!
+maxd = mcu
+do ndiag = 1,maxd
+   jmi = maxd + 1 - ndiag
+   imax = min(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+!
+   do i = 1,imax
+      if (c(i,jc) /= 0.0) go to 130
+   end do
+   mcu = mcu - 1
+end do
+!
+130 last = mcl + mcu + 1
+if (last > nc) go to 200
+if (mcu == 0) go to 140
+do i = 1,imax
+   c(i,last) = c(i,jc)
+   c(i,jc) = 0.0
+end do
+!
+!     Compute the main diagonal and the remaining upper diagonals
+!
+140 maxd = max(1,mcu)
+do ndiag = 1,maxd
+   jmi = ndiag - 1
+   imax = min(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+   jc = jc + 1
+end do
+return
+!
+!     Error return
+!
+200 ierr = last
+end subroutine bprod
+
 pure subroutine dbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
@@ -5436,7 +5747,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 real :: dk, lki, xpv, xpvmax, yk
 !
 !
@@ -5531,7 +5842,10 @@ do k = 1,n
    ppk = n + 1
 30 pk = ppk
    ppk = p(pk)
-   if (ppk - vj) 30,1003,40
+   nswc_ai_i4 = ppk - vj
+   if ( nswc_ai_i4 < 0 ) go to 30
+   if ( nswc_ai_i4 == 0 ) go to 1003
+   go to 40
 40 p(vj) = ppk
    p(pk) = vj
    j = j - 1
@@ -5571,11 +5885,17 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-      if (vj - ppk) 60,90,70
+      nswc_ai_i4 = vj - ppk
+      if ( nswc_ai_i4 < 0 ) go to 60
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
-      if (ppk - vj) 70,90,80
+      nswc_ai_i4 = ppk - vj
+      if ( nswc_ai_i4 < 0 ) go to 70
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 80
 80    p(vj) = ppk
       p(pk) = vj
       ppk = vj
@@ -6023,7 +6343,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 real :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     splu employs Gaussian elimination with column interchanges
@@ -6108,7 +6428,10 @@ do k = 1,n
    pm = n + 1
 21 m = pm
    pm = p(m)
-   if (pm - j) 21,210,22
+   nswc_ai_i4 = pm - j
+   if ( nswc_ai_i4 < 0 ) go to 21
+   if ( nswc_ai_i4 == 0 ) go to 210
+   go to 22
 22 p(m) = j
    p(j) = pm
    jj = jj - 1
@@ -6140,11 +6463,17 @@ do k = 1,n
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= 0.0) go to 43
-      if (j - pm) 40,43,41
+      nswc_ai_i4 = j - pm
+      if ( nswc_ai_i4 < 0 ) go to 40
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
-      if (pm - j) 41,43,42
+      nswc_ai_i4 = pm - j
+      if ( nswc_ai_i4 < 0 ) go to 41
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 42
 42    p(m) = j
       p(j) = pm
       pm = j
@@ -6367,7 +6696,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 double precision :: dk, lki, xpv, xpvmax, yk
 !
 !
@@ -6462,7 +6791,10 @@ do k = 1,n
    ppk = n + 1
 30 pk = ppk
    ppk = p(pk)
-   if (ppk - vj) 30,1003,40
+   nswc_ai_i4 = ppk - vj
+   if ( nswc_ai_i4 < 0 ) go to 30
+   if ( nswc_ai_i4 == 0 ) go to 1003
+   go to 40
 40 p(vj) = ppk
    p(pk) = vj
    j = j - 1
@@ -6502,11 +6834,17 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-      if (vj - ppk) 60,90,70
+      nswc_ai_i4 = vj - ppk
+      if ( nswc_ai_i4 < 0 ) go to 60
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
-      if (ppk - vj) 70,90,80
+      nswc_ai_i4 = ppk - vj
+      if ( nswc_ai_i4 < 0 ) go to 70
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 80
 80    p(vj) = ppk
       p(pk) = vj
       ppk = vj
@@ -6956,7 +7294,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 double precision :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     dsplu employs Gaussian elimination with column interchanges
@@ -7042,7 +7380,10 @@ do k = 1,n
    pm = n + 1
 21 m = pm
    pm = p(m)
-   if (pm - j) 21,210,22
+   nswc_ai_i4 = pm - j
+   if ( nswc_ai_i4 < 0 ) go to 21
+   if ( nswc_ai_i4 == 0 ) go to 210
+   go to 22
 22 p(m) = j
    p(j) = pm
    jj = jj - 1
@@ -7074,11 +7415,17 @@ do k = 1,n
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= 0.d0) go to 43
-      if (j - pm) 40,43,41
+      nswc_ai_i4 = j - pm
+      if ( nswc_ai_i4 < 0 ) go to 40
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
-      if (pm - j) 41,43,42
+      nswc_ai_i4 = pm - j
+      if ( nswc_ai_i4 < 0 ) go to 41
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 42
 42    p(m) = j
       p(j) = pm
       pm = j
@@ -7808,7 +8155,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 complex :: dk, lki, one, yk, zero
 real :: xpv, xpvmax
 !
@@ -7907,7 +8254,10 @@ do k = 1,n
    ppk = n + 1
 30 pk = ppk
    ppk = p(pk)
-   if (ppk - vj) 30,1003,40
+   nswc_ai_i4 = ppk - vj
+   if ( nswc_ai_i4 < 0 ) go to 30
+   if ( nswc_ai_i4 == 0 ) go to 1003
+   go to 40
 40 p(vj) = ppk
    p(pk) = vj
    j = j - 1
@@ -7947,11 +8297,17 @@ do k = 1,n
 !  insertion spot.  (This happens when the adjacency of
 !  vi is not in current column order due to pivoting.)
 !
-      if (vj - ppk) 60,90,70
+      nswc_ai_i4 = vj - ppk
+      if ( nswc_ai_i4 < 0 ) go to 60
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 70
 60    ppk = vi
 70    pk = ppk
       ppk = p(pk)
-      if (ppk - vj) 70,90,80
+      nswc_ai_i4 = ppk - vj
+      if ( nswc_ai_i4 < 0 ) go to 70
+      if ( nswc_ai_i4 == 0 ) go to 90
+      go to 80
 80    p(vj) = ppk
       p(pk) = vj
       ppk = vj
@@ -8401,7 +8757,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 complex :: const
 real :: wi, wmax
 complex, parameter :: zero = (0.0, 0.0)
@@ -8489,7 +8845,10 @@ do k = 1,n
    pm = n + 1
 21 m = pm
    pm = p(m)
-   if (pm - j) 21,210,22
+   nswc_ai_i4 = pm - j
+   if ( nswc_ai_i4 < 0 ) go to 21
+   if ( nswc_ai_i4 == 0 ) go to 210
+   go to 22
 22 p(m) = j
    p(j) = pm
    jj = jj - 1
@@ -8521,11 +8880,17 @@ do k = 1,n
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= zero) go to 43
-      if (j - pm) 40,43,41
+      nswc_ai_i4 = j - pm
+      if ( nswc_ai_i4 < 0 ) go to 40
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 41
 40    pm = i
 41    m = pm
       pm = p(m)
-      if (pm - j) 41,43,42
+      nswc_ai_i4 = pm - j
+      if ( nswc_ai_i4 < 0 ) go to 41
+      if ( nswc_ai_i4 == 0 ) go to 43
+      go to 42
 42    p(m) = j
       p(j) = pm
       pm = j
@@ -8719,6 +9084,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
+real :: nswc_ai_r4
 interface
    pure subroutine balanc(nm,n,a,low,igh,scale)
       implicit none
@@ -8785,7 +9151,10 @@ if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
 do k = 1,n
-   if (wi(k)) 30,10,20
+   nswc_ai_r4 = wi ( k )
+   if ( nswc_ai_r4 < 0 ) go to 30
+   if ( nswc_ai_r4 == 0 ) go to 10
+   go to 20
 10 do j = 1,n
 11    zi(j,k) = 0.0
    end do
@@ -8807,6 +9176,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
+real :: nswc_ai_r4
 interface
    pure subroutine balanc(nm,n,a,low,igh,scale)
       implicit none
@@ -8873,7 +9243,10 @@ if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
 do k = 1,n
-   if (wi(k)) 30,10,20
+   nswc_ai_r4 = wi ( k )
+   if ( nswc_ai_r4 < 0 ) go to 30
+   if ( nswc_ai_r4 == 0 ) go to 10
+   go to 20
 10 do j = 1,n
 11    zi(j,k) = 0.0
    end do
@@ -10151,443 +10524,4 @@ end do
 !
 200 return
 end subroutine ortrn1
-
-pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm
-integer, intent(in) :: igh
-integer, intent(in) :: low
-integer, intent(out) :: ierr
-real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
-integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
-real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep
-logical :: notlas
-complex :: z3
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!     real sqrt,abs
-!     integer min0
-!     complex cmplx
-!     real real,aimag
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure hqr2,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
-!
-!     This subroutine finds the eigenvalues and eigenvectors
-!     of a real upper Hessenberg matrix BY the QR method.  The
-!     eigenvectors of a real general matrix can also be found
-!     if  elmhes  and  eltran  or  orthes  and  ortran  have
-!     been used to reduce this general matrix to Hessenberg form
-!     and to accumulate the similarity transformations.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        h contains the upper Hessenberg matrix,
-!
-!        z contains the transformation matrix produced by  eltran
-!          after the reduction by  elmhes, or by  ortran  after the
-!          reduction by  orthes, if performed.  If the eigenvectors
-!          of the Hessenberg matrix are desired, z must contain the
-!          identity matrix.
-!
-!     On output-
-!
-!        h has been destroyed,
-!
-!        wr and wi contain the real and imaginary parts,
-!          respectively, of the eigenvalues.  The eigenvalues
-!          are unordered except that complex conjugate pairs
-!          of values appear consecutively with the eigenvalue
-!          having the positive imaginary part first.  If an
-!          error exit is made, the eigenvalues should be correct
-!          for indices ierr+1,...,n,
-!
-!        z contains the real and imaginary parts of the eigenvectors.
-!          If the i-TH eigenvalue is real, the i-TH column of z
-!          contains its eigenvector.  If the i-TH eigenvalue is complex
-!          with positive imaginary part, the i-TH and (i+1)-TH
-!          columns of z contain the real and imaginary parts of its
-!          eigenvector.  The eigenvectors are unnormalized.  If an
-!          error exit is made, none of the eigenvectors has been found,
-!
-!        ierr is set to
-!          ZERO       FOR NORMAL RETURN,
-!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
-!                     determined after 30 iterations.
-!
-!     Arithmetic is real except for the replacement of the Algol
-!     procedure cdiv by complex division.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** machep is a machine dependent parameter. Assign
-!                machep the value U where U is the smallest positive
-!                floating point number such that 1.0 + U .GT. 1.0 .
-!
-machep = spmpar(1)
-!
-!                **********
-!
-ierr = 0
-norm = 0.0
-k = 1
-!     ********** Store roots isolated by balanc
-!                and compute matrix norm **********
-do i = 1, n
-!
-   do j = k, n
-40    norm = norm + abs(h(i,j))
-   end do
-!
-   k = i
-   if (i >= low .and. i <= igh) go to 50
-   wr(i) = h(i,i)
-   wi(i) = 0.0
-50 continue
-end do
-!
-en = igh
-t = 0.0
-!     ********** Search for next eigenvalues **********
-60 if (en < low) go to 340
-its = 0
-na = en - 1
-enm2 = na - 1
-!     ********** Look for single small sub-diagonal element
-!                for l=en step -1 Until low do -- **********
-70 do ll = low, en
-   l = en + low - ll
-   if (l == low) go to 100
-   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
-   if (s == 0.0) s = norm
-   if (abs(h(l,l - 1)) <= machep * s) go to 100
-end do
-!     ********** Form shift **********
-100 x = h(en,en)
-if (l == en) go to 270
-y = h(na,na)
-w = h(en,na) * h(na,en)
-if (l == na) go to 280
-if (its == 30) go to 1000
-if (its /= 10 .and. its /= 20) go to 130
-!     ********** Form exceptional shift **********
-t = t + x
-!
-do i = low, en
-120 h(i,i) = h(i,i) - x
-end do
-!
-s = abs(h(en,na)) + abs(h(na,enm2))
-x = 0.75 * s
-y = x
-w = -0.4375 * s * s
-130 its = its + 1
-!     ********** Look for two consecutive small
-!                sub-diagonal elements.
-!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
-do mm = l, enm2
-   m = enm2 + l - mm
-   zz = h(m,m)
-   r = x - zz
-   s = y - zz
-   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
-   q = h(m + 1,m + 1) - zz - r - s
-   r = h(m + 2,m + 1)
-   s = abs(p) + abs(q) + abs(r)
-   p = p / s
-   q = q / s
-   r = r / s
-   if (m == l) go to 150
-   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
-      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
-end do
-!
-150 mp2 = m + 2
-!
-do i = mp2, en
-   h(i,i - 2) = 0.0
-   if (i == mp2) go to 160
-   h(i,i - 3) = 0.0
-160 continue
-end do
-!     ********** Double QR step involving rows l to en and
-!                COLUMNS m TO en **********
-do k = m, na
-   notlas = k /= na
-   if (k == m) go to 170
-   p = h(k,k - 1)
-   q = h(k + 1,k - 1)
-   r = 0.0
-   if (notlas) r = h(k + 2,k - 1)
-   x = abs(p) + abs(q) + abs(r)
-   if (x == 0.0) go to 260
-   p = p / x
-   q = q / x
-   r = r / x
-170 s = sqrt(p*p + q*q + r*r)
-   if (p < 0.0) s = -s
-   if (k == m) go to 180
-   h(k,k - 1) = -s * x
-   go to 190
-180 if (l /= m) h(k,k - 1) = -h(k,k - 1)
-190 p = p + s
-   x = p / s
-   y = q / s
-   zz = r / s
-   q = q / p
-   r = r / p
-!     ********** Row modification **********
-   do j = k, n
-      p = h(k,j) + q * h(k + 1,j)
-      if (.not. notlas) go to 200
-      p = p + r * h(k + 2,j)
-      h(k + 2,j) = h(k + 2,j) - p * zz
-200   h(k + 1,j) = h(k + 1,j) - p * y
-      h(k,j) = h(k,j) - p * x
-   end do
-!
-   j = min(en,k + 3)
-!     ********** Column modification **********
-   do i = 1, j
-      p = x * h(i,k) + y * h(i,k + 1)
-      if (.not. notlas) go to 220
-      p = p + zz * h(i,k + 2)
-      h(i,k + 2) = h(i,k + 2) - p * r
-220   h(i,k + 1) = h(i,k + 1) - p * q
-      h(i,k) = h(i,k) - p
-   end do
-!     ********** Accumulate transformations **********
-   do i = low, igh
-      p = x * z(i,k) + y * z(i,k + 1)
-      if (.not. notlas) go to 240
-      p = p + zz * z(i,k + 2)
-      z(i,k + 2) = z(i,k + 2) - p * r
-240   z(i,k + 1) = z(i,k + 1) - p * q
-      z(i,k) = z(i,k) - p
-   end do
-!
-260 continue
-end do
-!
-go to 70
-!     ********** One root found **********
-270 h(en,en) = x + t
-wr(en) = h(en,en)
-wi(en) = 0.0
-en = na
-go to 60
-!     ********** Two roots found **********
-280 p = (y - x) / 2.0
-q = p * p + w
-zz = sqrt(abs(q))
-h(en,en) = x + t
-x = h(en,en)
-h(na,na) = y + t
-if (q < 0.0) go to 320
-!     ********** Real pair **********
-if (p < 0.0) zz = -zz
-zz = p + zz
-wr(na) = x + zz
-wr(en) = wr(na)
-if (zz /= 0.0) wr(en) = x - w / zz
-wi(na) = 0.0
-wi(en) = 0.0
-x = h(en,na)
-s = abs(x) + abs(zz)
-p = x / s
-q = zz / s
-r = sqrt(p*p + q*q)
-p = p / r
-q = q / r
-!     ********** Row modification **********
-do j = na, n
-   zz = h(na,j)
-   h(na,j) = q * zz + p * h(en,j)
-   h(en,j) = q * h(en,j) - p * zz
-end do
-!     ********** Column modification **********
-do i = 1, en
-   zz = h(i,na)
-   h(i,na) = q * zz + p * h(i,en)
-   h(i,en) = q * h(i,en) - p * zz
-end do
-!     ********** Accumulate transformations **********
-do i = low, igh
-   zz = z(i,na)
-   z(i,na) = q * zz + p * z(i,en)
-   z(i,en) = q * z(i,en) - p * zz
-end do
-!
-go to 330
-!     ********** Complex pair **********
-320 wr(na) = x + p
-wr(en) = x + p
-wi(na) = zz
-wi(en) = -zz
-330 en = enm2
-go to 60
-!     ********** All roots found.  Backsubstitute to find
-!                vectors of upper triangular form **********
-340 if (norm == 0.0) go to 1001
-!     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
-do nn = 1, n
-   en = n + 1 - nn
-   p = wr(en)
-   q = wi(en)
-   na = en - 1
-   if (q) 710, 600, 800
-!     ********** Real vector **********
-600 m = en
-   h(en,en) = 1.0
-   if (na == 0) go to 800
-!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
-   do ii = 1, na
-      i = en - ii
-      w = h(i,i) - p
-      r = h(i,en)
-      if (m > na) go to 620
-!
-      do j = m, na
-610      r = r + h(i,j) * h(j,en)
-      end do
-!
-620   if (wi(i) >= 0.0) go to 630
-      zz = w
-      s = r
-      go to 700
-630   m = i
-      if (wi(i) /= 0.0) go to 640
-      t = w
-      if (w == 0.0) t = machep * norm
-      h(i,en) = -r / t
-      go to 700
-!     ********** Solve real equations **********
-640   x = h(i,i + 1)
-      y = h(i + 1,i)
-      q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
-      t = (x * s - zz * r) / q
-      h(i,en) = t
-      if (abs(x) <= abs(zz)) go to 650
-      h(i + 1,en) = (-r - w * t) / x
-      go to 700
-650   h(i + 1,en) = (-s - y * t) / zz
-700   continue
-   end do
-!     ********** End real vector **********
-   go to 800
-!     ********** Complex vector **********
-710 m = na
-!     ********** Last vector component chosen imaginary so that
-!                eigenvector matrix is triangular **********
-   if (abs(h(en,na)) <= abs(h(na,en))) go to 720
-   h(na,na) = q / h(en,na)
-   h(na,en) = -(h(en,en) - p) / h(en,na)
-   go to 730
-720 z3 = cmplx(0.0,-h(na,en)) / cmplx(h(na,na) - p,q)
-   h(na,na) = real(z3)
-   h(na,en) = aimag(z3)
-730 h(en,na) = 0.0
-   h(en,en) = 1.0
-   enm2 = na - 1
-   if (enm2 == 0) go to 800
-!     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
-   do ii = 1, enm2
-      i = na - ii
-      w = h(i,i) - p
-      ra = 0.0
-      sa = h(i,en)
-!
-      do j = m, na
-         ra = ra + h(i,j) * h(j,na)
-         sa = sa + h(i,j) * h(j,en)
-      end do
-!
-      if (wi(i) >= 0.0) go to 770
-      zz = w
-      r = ra
-      s = sa
-      go to 790
-770   m = i
-      if (wi(i) /= 0.0) go to 780
-      z3 = cmplx(-ra,-sa) / cmplx(w,q)
-      h(i,na) = real(z3)
-      h(i,en) = aimag(z3)
-      go to 790
-!     ********** Solve complex equations **********
-780   x = h(i,i + 1)
-      y = h(i + 1,i)
-      vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
-      vi = (wr(i) - p) * 2.0 * q
-      if (vr == 0.0 .and. vi == 0.0) vr = machep * norm &
-         & * (abs(w) + abs(q) + abs(x) + abs(y) + abs(zz))
-      z3 = cmplx(x*r - zz*ra + q*sa,x*s - zz*sa - q*ra) / cmplx(vr,vi)
-      h(i,na) = real(z3)
-      h(i,en) = aimag(z3)
-      if (abs(x) <= abs(zz) + abs(q)) go to 785
-      h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
-      h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
-      go to 790
-785   z3 = cmplx(-r - y*h(i,na),-s - y*h(i,en)) / cmplx(zz,q)
-      h(i + 1,na) = real(z3)
-      h(i + 1,en) = aimag(z3)
-790   continue
-   end do
-!     ********** End complex vector **********
-800 continue
-end do
-!     ********** End back substitution.
-!                Vectors of isolated roots **********
-do i = 1, n
-   if (i >= low .and. i <= igh) go to 840
-!
-   do j = i, n
-820   z(i,j) = h(i,j)
-   end do
-!
-840 continue
-end do
-!     ********** Multiply by transformation matrix to give
-!                vectors of original full matrix.
-!                For j=n step -1 Until low do -- **********
-do jj = low, n
-   j = n + low - jj
-   m = min(j,igh)
-!
-   do i = low, igh
-      zz = 0.0
-!
-      do k = low, m
-860      zz = zz + z(i,k) * h(k,j)
-      end do
-!
-      z(i,j) = zz
-880   continue
-   end do
-end do
-!
-go to 1001
-!     ********** Set error -- no convergence to an
-!                eigenvalue after 30 iterations **********
-1000 ierr = en
-1001 return
-end subroutine hqr2
 

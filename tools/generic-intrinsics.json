@@ -64,20 +64,20 @@
       }
     },
     "CBRT": {
-      "source_hash": "eb1540dbfe732a6cdf42cbeea64a5cfa2537021ee773a51146304251562466de",
+      "source_hash": "f4aa32d52beb4690c0ce08257eb302b1aaa8719a111a2cf73ce95a6d800bdd09",
       "calls": {
         "alog": 2
       }
     },
     "DCBRT": {
-      "source_hash": "8b9de97c0f78efb71cad8db7658e72962209898b56433f114a4d4b505364638f",
+      "source_hash": "2db5bfdd074deb6cd2bfc987cd12d1eac473c9dc5c2fda5a9468d143dd5d0e70",
       "calls": {
         "dlog": 2,
         "dexp": 2
       }
     },
     "DARTNQ": {
-      "source_hash": "b245c1bd0a1921f0bc9ca63ae36eab7013fe09169cfc5162f24e23837ace4f76",
+      "source_hash": "8cc82bb6f627cc82bb834cdd2fd81a54538e037d139234e60c2b62f66300363f",
       "calls": {
         "datan": 3
       }
@@ -102,7 +102,7 @@
       }
     },
     "DCSQRT": {
-      "source_hash": "ebd979c852b9de73fecb651a0aaea4bfd7d716b62d74187bd2ca747c3e14e37e",
+      "source_hash": "e29b3c58090bd4dfaabf2133efb8ed578cf1a4ac6b16e7da9b127523bb63125a",
       "calls": {
         "dsqrt": 5,
         "dabs": 2,
@@ -309,7 +309,7 @@
       }
     },
     "EXPLI": {
-      "source_hash": "bfbef3768c4d18aab759e694f814fa9cefba3f9a5ec238389018ad41473ce505",
+      "source_hash": "3ab55e3945aa37394e400d1df8485193d4c0063cb7c38dc7018a1a534901a4c9",
       "calls": {
         "alog": 2
       }
@@ -395,7 +395,7 @@
       }
     },
     "DGAMMA": {
-      "source_hash": "d7cb7490ae07ebe78325f56ffa132b845b6b3714d5b29f2f3c4484ac9b456a0a",
+      "source_hash": "ac026a2b99c889332f39136cbfa27a9772797f3e215682674376cc8ce0dedd9a",
       "calls": {
         "dabs": 4,
         "dlog": 1,
@@ -435,7 +435,7 @@
       }
     },
     "DPSI": {
-      "source_hash": "5598e7b6789ecc32d99ef02e6e34a00a3a688b2aea14533f51adbac7690a6d1b",
+      "source_hash": "906781599bb92e51e3bf9e78d46b56834d3407ab73dc0b345874695c079d1c92",
       "calls": {
         "dabs": 6,
         "dmin1": 1,
@@ -507,7 +507,7 @@
       }
     },
     "GRATIO": {
-      "source_hash": "815cfd890cbdfcb4befbd02ad54c886cfd582a5643715198131d0c19ac318d9d",
+      "source_hash": "806db4e586baf468f6c2bd66ee9ab1820bce92ce5fb8a7eb8b2f7225197c6f1e",
       "calls": {
         "alog": 1
       }
@@ -669,13 +669,13 @@
       }
     },
     "BSSLJ": {
-      "source_hash": "8c12aff23ba3f8048d3b404442a81dfb12748e32967812b3d7b501f788be66fd",
+      "source_hash": "61edf196543d11c8a03e9995b8ae6c6fbae26c5088f4981e40aaee9258c2c8fd",
       "calls": {
         "iabs": 1
       }
     },
     "BESJ": {
-      "source_hash": "77939412cc658fdb8e22aa98c0ae05d24928110dbcf87ea2d509dcd1d9f58403",
+      "source_hash": "61df0a3456c4d61f0af8212852b0b55dab3df572eb65a44080235cb780b3a352",
       "calls": {
         "alog": 4,
         "amax1": 4,
@@ -692,20 +692,20 @@
       }
     },
     "BSSLY": {
-      "source_hash": "91f3b804e91695895aaf9c33444e578c2585b478a9412b8ecdca9d51d72c87ff",
+      "source_hash": "3a89bad890badfd13b4bda8cd1b6a905abaef016c66770c7bbe162b37038d436",
       "calls": {
         "alog": 1,
         "iabs": 1
       }
     },
     "BSSLI": {
-      "source_hash": "fda82936a53c1aba824c110c90e9c952df23fcfe6413e4f8e994ae08c086bf4b",
+      "source_hash": "6ef038cf22675e973f432c2054afaec46e221327951dc8e977dc7a98540d253b",
       "calls": {
         "iabs": 1
       }
     },
     "BESI": {
-      "source_hash": "47d36d07cf229d510ed01bc772c3997caab3361c62dda2ee79897020a432c13c",
+      "source_hash": "30eb182e48ab7362a2b790316e3b8595ae3107cb4d6cea42d9e94b72fda54070",
       "calls": {
         "alog": 7,
         "amax1": 4,
@@ -786,7 +786,7 @@
       }
     },
     "BSSLK": {
-      "source_hash": "64b805b9676784d14c2a7ab0bb4207b1218ea2b16802d86733316b1ae6c40d2d",
+      "source_hash": "2bac77471bb92ef920452d6cc4c05260e1d0c07e16221dbd9f356ec4c225d6db",
       "calls": {
         "alog": 1,
         "iabs": 1
@@ -1027,7 +1027,7 @@
       }
     },
     "VALR2": {
-      "source_hash": "e4ad55afb3d8119cdf7ae69de1c95dc34f74d613e32051238509c4d4903c641d",
+      "source_hash": "02b947bf8284028bd28615b30d8322ff2d0ef3b87eb862adcb70b994ad93ecb3",
       "calls": {
         "amax1": 1
       }
@@ -1039,7 +1039,7 @@
       }
     },
     "PKILL": {
-      "source_hash": "0552bfa48320c888d9aec45c157ca0b50c1c30e036d3c1a7c513968bd7bb489c",
+      "source_hash": "1e8f0d5e30df32ecdd1d0c8c88fe02cb2554431225c9df1766a710f7d7531385",
       "calls": {
         "amin1": 5,
         "amax1": 7,
@@ -1144,14 +1144,14 @@
       }
     },
     "QTCRT": {
-      "source_hash": "2dd42354363a5d2ce2d1cc595f5497cf88125d042d00ab91ea87bc12ce06d057",
+      "source_hash": "cbf9fb129f1d424f5cd7fba6d10178316ec832cdb022da35a80786aa4e257fff",
       "calls": {
         "csqrt": 1,
         "amin1": 1
       }
     },
     "DQTCRT": {
-      "source_hash": "98523f1607c81be18f06b0bc4fcdadce26ed8bb51a240fcfb1b4fc5e16404f50",
+      "source_hash": "c35734272d25644b08495e0086a7e474e137ab52f75de5aa0840451aac0ab101",
       "calls": {
         "dsqrt": 8,
         "dabs": 13,
@@ -1236,7 +1236,7 @@
       }
     },
     "DROTMG": {
-      "source_hash": "289473e81d55d2c96b5054d86f5cb328f2d18e597153b31767e9a0c4d5ba8bdf",
+      "source_hash": "708f45c6b04c3e8638d4c8c2eed83cf8ec443cc405a13880da6c01fec75c0c14",
       "calls": {
         "dabs": 4
       }
@@ -1804,13 +1804,13 @@
       }
     },
     "DNSPIV": {
-      "source_hash": "85c354645307044d515afdbbb79056d743af68f3d3afcebc0d8d8ff7b9c5257d",
+      "source_hash": "29e39a2bf5ea0572676c91afe58c1f91bdce36fe9cbb3897cefb2ad474096057",
       "calls": {
         "dabs": 2
       }
     },
     "DSPLU": {
-      "source_hash": "5b1dccd9b35deccedbd3961f0dbdca37bfa965663febfcf72534bf1cb0457bed",
+      "source_hash": "273c1d2bac2d5952991d7512acfbb125feedd08b728c3d3fdbca20462bf217f7",
       "calls": {
         "dabs": 2
       }
@@ -1840,7 +1840,7 @@
       }
     },
     "HQR2": {
-      "source_hash": "67145f555cbf548ea13c2dd936384a5179a47bc1d87d98fef174a8c6cb4da47c",
+      "source_hash": "adb536fb8c9c045725174852af93122fb7c5ccec29ca7f5c70da9160e53432b7",
       "calls": {
         "min0": 2
       }
@@ -1867,7 +1867,7 @@
       }
     },
     "DHQR2": {
-      "source_hash": "5650ed35eea702c1389427e5d34c204ba6ba79b180663618184c18854deff840",
+      "source_hash": "a1a0a9631b8e7a43d4b94dc561bd6c92cf17342608be38454561c1cc9ced8947",
       "calls": {
         "dabs": 34,
         "dsqrt": 3,
@@ -1924,7 +1924,7 @@
       }
     },
     "COMQR2": {
-      "source_hash": "121a9bda82df7bbd1fb50e2ea1d5a2782225c18ed1ec05860a3b7d21c22b6c16",
+      "source_hash": "d60fe74500f63de3cf0cba7c8a59e98d2280514d12095ebe687a83e9f689fecb",
       "calls": {
         "min0": 2,
         "cabs": 2,
@@ -1953,7 +1953,7 @@
       }
     },
     "DCMQR2": {
-      "source_hash": "f2a357d87157ea5ede43c0028d2625ed452bdbf27fa504c5d82cabf3a8b7ca51",
+      "source_hash": "f043cf351efcea55d74f346bccb02d0a3ab5e8d9c14789e4342c5c6f48934622",
       "calls": {
         "min0": 2,
         "dabs": 9,
@@ -1961,7 +1961,7 @@
       }
     },
     "XL1": {
-      "source_hash": "ca4b2ad749de06dc5f8501f3955dde0301c635eb3108a5e693b18cd4ab993e19",
+      "source_hash": "a6c1b79defb27f66f457e9f5cbf961bd0c918b30c82d1a1b38bd1292771db98e",
       "calls": {
         "iabs": 1
       }
@@ -2069,7 +2069,7 @@
       }
     },
     "H12": {
-      "source_hash": "70afeb96ccb64a5ead5318ab6766d189cf88f81c06b1719681a78136fcd7c385",
+      "source_hash": "5dd97b6d776854b23c99c3c24ec5aa009b97494b014944d838ea1a277388dd35",
       "calls": {
         "amax1": 1
       }
@@ -2092,7 +2092,7 @@
       }
     },
     "DH12": {
-      "source_hash": "88cb0ba64fb9a27f5c35ae9dfcdddc6d500dec59bf24590e2f8ce9d6af60cf58",
+      "source_hash": "996815c07600a32c2753064d43dce8d5e77dfb2450dc1804c176ebb0183b362d",
       "calls": {
         "dabs": 2,
         "dmax1": 1,
@@ -2141,7 +2141,7 @@
       }
     },
     "FMIN": {
-      "source_hash": "92c3f028979940a05c741b27c816304be549aa53f3fb2ed2c5fbb07be014d92e",
+      "source_hash": "e0689f0b7fce840dc423bf793f8e5eae7e470768b0aaa88af9289fb056122a94",
       "calls": {
         "amax1": 8,
         "amin1": 3
@@ -2256,7 +2256,7 @@
       }
     },
     "SMPLX1": {
-      "source_hash": "d9a6a89ac23a9d72bae16f6f6f9e6718ff0f69a6d0f1e7844b45ce405b29d380",
+      "source_hash": "812071dac319ab1893290c50a48f174c847f817a4c272ca9e02d1332b62744a6",
       "calls": {
         "min0": 1,
         "amin1": 4,
@@ -2264,7 +2264,7 @@
       }
     },
     "SSPLX1": {
-      "source_hash": "219ebae6975fe677d9733f929666a57db56f332d854c8c66f8a2cf42ca4310e2",
+      "source_hash": "5c6007f617a8d846d30a552278ae83bed99d556191b8ff1d2cf0a201fabb648c",
       "calls": {
         "min0": 1,
         "amin1": 4,
@@ -2377,7 +2377,7 @@
       }
     },
     "ADCHK": {
-      "source_hash": "244a284ac7e51be2d4e91eb9de53b7d413391d958e2c18c879a1f23ba58af8da",
+      "source_hash": "d844df31a307a746d03890195b984b85e9a297bdec10c5997fdd58f62e94bbfc",
       "calls": {
         "dmin1": 1
       }
@@ -2390,14 +2390,14 @@
       }
     },
     "CPSC": {
-      "source_hash": "d2abf0487176534cd33bf676f632861525eaae8f24532bb0967fb2dbcc466012",
+      "source_hash": "a7ae2386556609315eadf48ff472ee53fe1a25d5a743aa7c7c28c938bc4f4a3b",
       "calls": {
         "amax1": 1,
         "cabs": 4
       }
     },
     "DCPSC": {
-      "source_hash": "d39db771bd248be3c5ce484b895fa62c2fa799540cb5bfa8ab1d3525cf2b4c40",
+      "source_hash": "66e3e7e35e181b42c3dde92bb32b9cb96b29ea485678d3df847891999a89b6aa",
       "calls": {
         "dmax1": 1,
         "datan": 1,
@@ -2408,55 +2408,55 @@
       }
     },
     "LTRP": {
-      "source_hash": "02f23aed069b06c4ec32743a9f91f6b2ad1c2eb4202ee4c5e96aaf0db478ffaf",
+      "source_hash": "5c94816ade172b6bc0fabee1ad599c03289b03749d92d5a6efbc59397b761210",
       "calls": {
         "min0": 1
       }
     },
     "SCOMP": {
-      "source_hash": "ecd175caace3eaf44989019154d7a2caebe53820e06b971f26cc524041f427ca",
+      "source_hash": "bdb91a8694f205712dc83f23ea71b770561d26132ac9dbfcacb14bf71a673c51",
       "calls": {
         "min0": 1
       }
     },
     "SCOMP1": {
-      "source_hash": "d7b83aa91cab6915abb63d7d2434b05f548f96af5bbf4ac8ac1d5db8281d4e95",
+      "source_hash": "a7357189b579fc1076dd1e0279c33cc1a7f8b9024ba6abe38240248526a9c4b3",
       "calls": {
         "min0": 1
       }
     },
     "SCOMP2": {
-      "source_hash": "73dbf6ec3b0f09ddcb0c9a27a124eb82effe2926efe44a4d9543812320b49611",
+      "source_hash": "a9260ead99ac97ee336b1e984bce49163a8c0b45249cdf0584bdc2a9a40bd265",
       "calls": {
         "min0": 1
       }
     },
     "SEVAL": {
-      "source_hash": "53078377c8942782520245a04ac7e327756fadf48a93a2431b3ed8048b7d50b8",
+      "source_hash": "20092d01fd7a88bd6601bb5861e26e307ea5f1fa2f9b8a4ce231b6327952e9b2",
       "calls": {
         "min0": 1
       }
     },
     "SEVAL1": {
-      "source_hash": "dad20f184b7d63508df24109dcce5a0785cd869c01d2cd777bbeb03a2e7b76a6",
+      "source_hash": "a2353f5cb6f5582914a6e80d35c193a5014f3ec0229b40b3a003be276c547025",
       "calls": {
         "min0": 1
       }
     },
     "SEVAL2": {
-      "source_hash": "5cca6fa5891115e069784276d0d64551b7ebf8665db485b2e5551f4aa917b5a4",
+      "source_hash": "5875c76037f936d1324c1e30bce9e5cc60480a09d666bd665ac86b861b84a661",
       "calls": {
         "min0": 1
       }
     },
     "PSCMP": {
-      "source_hash": "3ddb08f4832d56686ca7fb7e23a3ff596d84d475145a000c6a649cd441ce35fc",
+      "source_hash": "08858ef4571f1cc39ad0b63cd4e114632a39550a3c6b981b548ef7f2aba1ef03",
       "calls": {
         "min0": 1
       }
     },
     "PSEVL": {
-      "source_hash": "1fa0292c139032bf387deded439df2cac2f77edf41705d3a0400a3f36e982e95",
+      "source_hash": "c1f714e7c061fe2227e4be99de8d7c3a1861f3f4022162650dcabddee572ca60",
       "calls": {
         "min0": 1
       }
@@ -2468,7 +2468,7 @@
       }
     },
     "LOPCMP": {
-      "source_hash": "b726a8b440ae422b78cce3f8a86bc5c25645042d2b0e1906f674953cd33ca00e",
+      "source_hash": "f383686f774cff9a611c3a76faa5e4ac2010fb3ed1a1d6ab784d794a526256bf",
       "calls": {
         "min0": 1
       }
@@ -2486,7 +2486,7 @@
       }
     },
     "PPVAL": {
-      "source_hash": "d0568696ca66af146e63d6f29adef765ec86dd4cb33690c36244cc50e2a38f19",
+      "source_hash": "727c78a9603a44b6ab6b87c0efe7ab1128e298e1a7f442d43145d1544d3a2159",
       "calls": {
         "min0": 1
       }
@@ -2506,7 +2506,7 @@
       }
     },
     "BANFAC": {
-      "source_hash": "959defebc375d788278f6ca378814a58594104672e699a79077124aab7d13728",
+      "source_hash": "f6e8f731c0e9835da7be16c1699d6b662d57488002599f3bdd443d0e2321dbcf",
       "calls": {
         "min0": 3
       }
@@ -2824,7 +2824,7 @@
       }
     },
     "STEP1": {
-      "source_hash": "d33e34a2b7ec1fb3f3f0a8c90ea17091c4f7cdb41cb78cdbfa816cd60e735c2b",
+      "source_hash": "51aa28d8e16a5d413d85286709304a00032b37445d950946a641a2fd507eed2a",
       "calls": {
         "amax1": 4,
         "amin1": 2
@@ -2912,7 +2912,7 @@
       }
     },
     "PDEDGE": {
-      "source_hash": "74cc8c86411b442aaa492ba72b7a68657e330d7c7c113d145bee5d6c7330e9de",
+      "source_hash": "5f45885812b4b8775373498e4bc764fe6d34d5c668139f293f3a869c9333b340",
       "calls": {
         "iabs": 4
       }
@@ -2925,31 +2925,31 @@
       }
     },
     "BLKTRI": {
-      "source_hash": "52dab3aa79ed1fb6d3f2f5673f6acdb5c0b13db3dee7ddde7a34154afbd5b825",
+      "source_hash": "3bdef3bbeff413ef15c6f2575718e5f31c7c4f7ef8718f2b215abb67dc57e979",
       "calls": {
         "max0": 2
       }
     },
     "CPROD0": {
-      "source_hash": "e72c1fd1166221e8933f3592b936d20fb8e58a7ea0b9447c5b6a2348ae478a02",
+      "source_hash": "757bb2dc8168c4451a08d2f848c0ff2464e438f1c79fc6da0c4b97e0d0b49b04",
       "calls": {
         "cabs": 1
       }
     },
     "CPRODP": {
-      "source_hash": "0c91be3401287588a954732e11239446c510408fa81cc8fc22106b36bc0fa87f",
+      "source_hash": "c7c4027e7015f4ddc036c5527d54de57b6928e249cc40ab4a73cf867a28323e5",
       "calls": {
         "cabs": 1
       }
     },
     "COMPB": {
-      "source_hash": "17912e627f9f941e51548e8d5a4f957a03195aefc6876024d7dc14e61e379820",
+      "source_hash": "3d32738c2bbf9f7bf19b7a530cbb5bbee0e74aa82241f0a2dc3adb82f1e4a3ae",
       "calls": {
         "amax1": 1
       }
     },
     "PPADD": {
-      "source_hash": "6de19c115430223ef73eb65b47434cfcfeb6c7af1ff6d838e2ac12eabe538ab7",
+      "source_hash": "c0ffaa406759f9a7c255b4b20724a569b54c4059c155d7e173eeccfd48ab85ff",
       "calls": {
         "cabs": 11,
         "csqrt": 1

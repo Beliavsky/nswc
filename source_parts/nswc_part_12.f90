@@ -1,3 +1,639 @@
+subroutine rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+   & w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
+   & told,nfe,jflag,kflag,endpnt,blkout)
+implicit none
+integer, intent(inout) :: iflag, jflag, kflag
+integer, intent(in) :: neqn
+integer, intent(inout) :: nfe
+real, intent(in) :: abserr
+real :: f1(neqn)
+real, intent(inout) :: f2(neqn), f3(neqn)
+real :: f4(neqn), f7(neqn)
+real, intent(inout) :: h, hint, relerr, savae, savre, t
+real, intent(in) :: tend
+real, intent(inout) :: told
+real, intent(in) :: tout
+real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
+   & y2(neqn), yp(neqn)
+logical, intent(inout) :: endpnt
+logical, intent(inout) :: blkout
+external fcn
+integer :: k, mflag, n
+real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
+logical :: hfaild, interp
+real, parameter :: c2 = .250000000000000e+00
+real, parameter :: c3 = .375000000000000e+00
+real, parameter :: c4 = .923076923076923e+00
+real, parameter :: c6 = .500000000000000e+00
+real, parameter :: c8 = .150000000000000e+01
+real, parameter :: c9 = .200000000000000e+01
+real, parameter :: a21 = .250000000000000e+00
+real, parameter :: a31 = .937500000000000e-01
+real, parameter :: a32 = .281250000000000e+00
+real, parameter :: a41 = .879380974055530e+00
+real, parameter :: a42 = -.327719617660446e+01
+real, parameter :: a43 = .332089212562585e+01
+real, parameter :: a51 = .203240740740741e+01
+real, parameter :: a52 = -.800000000000000e+01
+real, parameter :: a53 = .717348927875244e+01
+real, parameter :: a54 = -.205896686159844e+00
+real, parameter :: a61 = -.296296296296296e+00
+real, parameter :: a62 = .200000000000000e+01
+real, parameter :: a63 = -.138167641325536e+01
+real, parameter :: a64 = .452972709551657e+00
+real, parameter :: a65 = -.275000000000000e+00
+real, parameter :: b1b = .118518518518519e+00
+real, parameter :: b3b = .518986354775828e+00
+real, parameter :: b4b = .506131490342017e+00
+real, parameter :: b5b = -.180000000000000e+00
+real, parameter :: b6b = .363636363636364e-01
+real, parameter :: erc11 = .277777777777778e-02
+real, parameter :: erc13 = -.299415204678363e-01
+real, parameter :: erc14 = -.291998936735779e-01
+real, parameter :: erc15 = .200000000000000e-01
+real, parameter :: b1 = .143672839506173e+00
+real, parameter :: b3 = .210187767614668e+00
+real, parameter :: b4 = .603140025990903e+00
+real, parameter :: b5 = .200000000000000e-01
+real, parameter :: b6 = .400000000000000e+00
+real, parameter :: b7 = -.266666666666667e+00
+real, parameter :: b8 = .736460905349794e+00
+real, parameter :: b9 = .153205128205128e+00
+real, parameter :: a81 = -.785774430040232e+00
+real, parameter :: a82 = .269557443004023e+01
+real, parameter :: a83 = -.387868820553843e+00
+real, parameter :: a84 = -.323463729234086e+01
+real, parameter :: a85 = .141740175234689e+01
+real, parameter :: a86 = -.739340252773601e+00
+real, parameter :: a87 = .253464461332141e+01
+real, parameter :: a91 = .277678804896947e+01
+real, parameter :: a92 = -.461924686192469e+01
+real, parameter :: a93 = -.540556629238679e+01
+real, parameter :: a94 = .195138152603181e+02
+real, parameter :: a95 = -.627825575453278e+01
+real, parameter :: a96 = .753363921389629e+01
+real, parameter :: a97 = -.139246861924514e+02
+real, parameter :: a98 = .240351257812904e+01
+real, parameter :: erc21 = .224905375494686e-01
+real, parameter :: erc23 = -.186601479161668e+00
+real, parameter :: erc24 = .224620349650851e+00
+real, parameter :: erc25 = -.384622777202128e-01
+real, parameter :: erc26 = .180000000000000e+00
+real, parameter :: erc27 = -.233333333333333e+00
+real, parameter :: erc28 = .362862030148937e-01
+real, parameter :: erc29 = -.500000000000000e-02
+real, parameter :: remin = 1.e-12
+integer, parameter :: maxnfe = 18000
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!     Two step block Runge-Kutta Fehlberg method.
+!     A standard 5(4) formula is used at the first point in the block
+!     and A 6(4) formula is used at the second point.
+!
+!
+!***********************************************************************
+!
+!     Coefficients defining the method ...
+!
+!                c2=0.25e+0
+!                c3=3.0e+0/8.0e+0
+!                c4=12.0e+0/13.0e+0
+!                c6=0.5e+0
+!                c8=3.0e+0/2.0e+0
+!                c9=2.0e+0
+!
+!                a21=1.0e+0/4.0e+0
+!                a31=3.0e+0/32.0e+0
+!                a32=9.0e+0/32.0e+0
+!                a41=1932.0e+0/2197.0e+0
+!                a42=-7200.0e+0/2197.0e+0
+!                a43=7296.0e+0/2197.0e+0
+!                a51=439.0e+0/216.0e+0
+!                a52=-8.0e+0
+!                a53=3680.0e+0/513.0e+0
+!                a54=-845.0e+0/4104.0e+0
+!                a61=-8.0e+0/27.0e+0
+!                a62=2.0e+0
+!                a63=-3544.0e+0/2565.0e+0
+!                a64=1859.0e+0/4104.0e+0
+!                a65=-11.0e+0/40.0e+0
+!
+!                b1b=16.0e+0/135.0e+0
+!                b3b=6656.0e+0/12825.0e+0
+!                b4b=28561.0e+0/56430.0e+0
+!                b5b=-9.0e+0/50.0e+0
+!                b6b=2.0e+0/55.0e+0
+!
+!                erc11=1.0e+0/360.0e+0
+!                erc13=-128.0e+0/4275.0e+0
+!                erc14=-2197.0e+0/75240.0e+0
+!                erc15=1.0e+0/50.0e+0
+!
+!
+!
+!
+!
+!     The above define the coefficients for brkf45 used to generate
+!     the solution at the first block point. Below are additional
+!     coefficients needed to generate the solution at the second block
+!     point.
+!
+!                b1=931.0e+0/6480.0e+0
+!                b3=315392.0e+0/1500525.0e+0
+!                b4=371293.0e+0/615600.0e+0
+!                b5=1.0e+0/50.0e+0
+!                b6=0.4e+0
+!                b7=-4.0e+0/15.0e+0
+!                b8=85006.0e+0/115425.0e+0
+!                b9=239.0e+0/1560.0e+0
+!
+!                a81=-119397029895.0e+0/151948225000.0e+0
+!                a82=78390.0e+0/29081.0e+0
+!                a83=-51517464.0e+0/132821875.0e+0
+!                a84=-3780749193.0e+0/1168832500.0e+0
+!                a85=79268193.0e+0/55925000.0e+0
+!                a86=-11370591.0e+0/15379375.0e+0
+!                a87=5670.0e+0/2237.0e+0
+!
+!                a91=23406188597.0e+0/8429231250.0e+0
+!                a92=-62928.0e+0/13623.0e+0
+!                a93=-31066887488.0e+0/5747203125.0e+0
+!                a94=164486461399.0e+0/8429231250.0e+0
+!                a95=-70336084.0e+0/11203125.0e+0
+!                a96=185680664.0e+0/24646875.0e+0
+!                a97=-3385330161.0e+0/243117160.0e+0
+!                a98=232648.0e+0/96795.0e+0
+!
+!
+!
+!
+!     Next we define coefficients for the error estimate formula.
+!
+!     b3e = 1067091077380.0e+0/1829119027671.0e+0
+!     b4e = 3284168845918.0e+0/21339721989495.0e+0
+!     b5e = 110317750789.0e+0/240996319200.0e+0-
+!    *      4448925830089.0E+0/12329617149531.0E+0
+!     b6e = 1.0e+0/25.0e+0
+!     b7e = 0.2e+0
+!     b8e = 239992027043.0e+0/361494478800.0e+0
+!     b9e = 1273.0e+0/7800.0e+0
+!     b1e = 2.0e+0-b3e-b4e-b5e-b6e-b7e-b8e-b9e
+!
+!     erc21 = (b1-b1e)/2.0e+0
+!     erc23 = (b3-b3e)/2.0e+0
+!     erc24 = (b4-b4e)/2.0e+0
+!     erc25 = (b5-b5e)/2.0e+0
+!     erc26 = 9.0e+0/50.0e+0
+!     erc27 = -7.0e+0/30.0e+0
+!     erc28 = (b8 - b8e)/2.0e+0
+!     erc29 = -0.005e+0
+!
+!
+!***********************************************************************
+!
+!  REMIN is a tolerance threshold which is also determined by the
+!  integration method. In particular, a fifth order method will
+!  generally not be capable of delivering accuracies near limiting
+!  precision on computers with long wordlengths. This does not have
+!  to be changed for different machines.
+!
+!
+!***********************************************************************
+!
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately maxnfe.
+!
+!
+!***********************************************************************
+!
+!  The computer unit roundoff error U is the smallest positive value
+!  representable in the machine such that  1 + U .GT. 1.
+!
+u = spmpar(1)
+!
+!***********************************************************************
+!
+!     Check input parameters
+!
+if (neqn < 1) go to 500
+if (relerr < 0.0 .or. abserr < 0.0) go to 500
+if (t == tend) go to 500
+mflag = abs(iflag)
+if (mflag /= 1) go to 10
+told = t
+if (tout == t) go to 70
+if (sign(1.0, tend - t) /= sign(1.0, tout - t)) go to 500
+go to 70
+10 if (mflag == 0 .or. mflag > 7) go to 500
+if (tout == told) go to 20
+if (sign(1.0, tend - told) /= sign(1.0, tout - told)) go to 500
+!
+!     Check continuation possibilities
+!
+20 if (mflag /= 2) go to 30
+!
+!     iflag = +2 or -2
+!
+if (kflag < 3) go to 70
+if (kflag == 3) go to 60
+if (kflag == 4) go to 50
+if (kflag == 5 .and. abserr == 0.0) go to 40
+if (kflag == 6 .and. relerr <= savre .and. abserr <= savae) &
+   & go to 40
+go to 70
+!
+!     iflag = 3,4,5,6 or 7
+!
+30 if (iflag == 3) go to 60
+if (iflag == 4) go to 50
+if (iflag == 5 .and. abserr > 0.0) go to 60
+!
+!     Integration cannot be continued since user did not respond to
+!     the instructions pertaining to iflag=5,6 or 7
+!
+40 stop
+!
+!***********************************************************************
+!
+!     Reset function evaluation counter
+!
+50 nfe = 0
+if (mflag == 2) go to 70
+!
+!     Reset flag VALUE from previous call
+!
+60 iflag = jflag
+if (kflag == 3) mflag = abs(iflag)
+!
+!     Save input iflag and set continuation flag VALUE for subsequent
+!     input checking
+!
+70 jflag = iflag
+kflag = 0
+!
+!     Save relerr and abserr for checking input on subsequent calls
+!
+savre = relerr
+savae = abserr
+!
+!     Restrict relative error tolerance to be at least as large as
+!     2U+REMIN to avoid limiting precision difficulties arising from
+!     impossible accuracy requests. If tolerance too small, increase
+!     and return.
+!
+rer = 2.0*u + remin
+if (relerr < rer) go to 520
+!
+u26 = 26.0*u
+if (mflag /= 1) go to 100
+!
+!***********************************************************************
+!
+!     Initialization --
+!                       define integration independent variable x
+!                       evaluate initial derivatives
+!                       set up working arrays for integration variables
+!                       set counter for function evaluations,nfe
+!                       estimate starting stepsize
+!
+x = t
+endpnt = .false.
+blkout = .false.
+!
+a = t
+call fcn(a, y, yp)
+nfe = 1
+do n = 1, neqn
+   w(n) = y(n)
+   wp(n) = yp(n)
+end do
+!
+!     Compute initial steplength.
+!
+dt = tout - t
+if (dt == 0.0) dt = tend - t
+h = abs(dt)
+toln = 0.0
+do k = 1, neqn
+   tol = relerr*abs(y(k)) + abserr
+   if (tol <= 0.0) go to 90
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
+90 continue
+end do
+if (toln <= 0.0) h = 0.0
+h = max(h, u26*max(abs(t),abs(dt)))
+jflag = sign(2,iflag)
+h = sign(h,dt)
+!
+!     Initial steplength now computed. Compute first solution.
+!
+!***********************************************************************
+!
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances.
+!
+100 scale = 2.0/relerr
+ae = scale*abserr
+!
+!     Set safety factor for stepsize adjustment, based on tolerances.
+!
+toler = max(abserr,relerr)
+sf = 0.85
+if (toler >= 1.e-5) sf = 0.8
+if (toler <= 1.e-9) sf = 0.9
+!
+!     Restore integration variable to end of last block step taken
+!     and set the sign of the direction of integration.
+!
+t = x
+dtsign = sign(1.0, tend - t)
+!
+!     Have we already integrated past the present data output point?
+!     If so jump to 390 and perform interpolation.
+!     If not, see if we have reached the end point of integration.
+!     If not, see if results at the end of the block step need to be
+!     reported.
+!
+if ((tout - t)*dtsign > 0.0) go to 110
+if (tout == t) go to 510
+go to 390
+110 if (endpnt) go to 510
+if (iflag /= -2  .or. .not.blkout) go to 150
+blkout = .false.
+go to 400
+!
+!***********************************************************************
+!***********************************************************************
+!     Block BY block integration
+!
+!     See if we are too close to the end point.  If so, do linear
+!     extrapolation and return.
+!
+150 if (abs(tend - t) > u26*abs(t)) go to 190
+if (dtsign*(tend - tout) <= 0.0) go to 160
+dt = tout - t
+endpnt = .false.
+t = tout
+go to 170
+160 dt = tend - t
+endpnt = .true.
+t = tend
+x = tend
+!
+170 do k = 1, neqn
+   y(k) = w(k) + dt*wp(k)
+end do
+call fcn(t, y, yp)
+nfe = nfe + 1
+iflag = 2
+if (.not.endpnt) return
+!
+do n = 1,neqn
+   w(n) = y(n)
+   wp(n) = yp(n)
+end do
+endpnt = .false.
+return
+!
+!     Set smallest allowable stepsize and step failure flag.
+!     Adjust stepsize if necessary to hit the end point of integration.
+!
+190 hmin = u26*abs(t)
+hfaild = .false.
+hstop = 0.5*(tend - t)
+if (abs(hstop) > abs(h)) go to 200
+endpnt = .true.
+h = hstop
+!
+!***********************************************************************
+!     Core integrator for a single block
+!***********************************************************************
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function errtol.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end  points of a block.
+!     To distinguish the various arguments, h is not permitted
+!     to become smaller than 26 units of roundoff in t.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!***********************************************************************
+!
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from t to t+h
+!
+200 if (nfe > maxnfe) go to 530
+!
+!     Advance an approximate solution over one step of length h
+!
+do n = 1, neqn
+   y1(n) = w(n) + a21*h*wp(n)
+end do
+call fcn(t + c2*h, y1, f2)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a31*wp(n) + a32*f2(n))
+end do
+call fcn(t + c3*h, y1, f3)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a41*wp(n) + a42*f2(n) + a43*f3(n))
+end do
+call fcn(t + c4*h, y1, f4)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a51*wp(n) + a52*f2(n) + a53*f3(n) + a54*f4(n))
+end do
+call fcn(t + h, y1, y)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a61*wp(n) + a62*f2(n) + a63*f3(n) + a64*f4(n) + &
+      & a65*y(n))
+end do
+call fcn(t + c6*h, y1, yp)
+nfe = nfe + 5
+eeoet = 0.0
+do n = 1, neqn
+   y1(n) = w(n) + h*(b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
+      & b6b*yp(n))
+   errtol = abs(w(n)) + abs(y1(n)) + ae
+   if (errtol <= 0.0) go to 540
+   ez = abs(h*(erc11*wp(n) + erc13*f3(n) + erc14*f4(n) + erc15*y(n) + &
+      & b6b*yp(n)))
+   eeoet = max(eeoet,ez/errtol)
+end do
+esttol = eeoet*scale
+!
+!     Check the error estimate. If steplength has failed for first step
+!     in the block, go and compute a smaller step for A RE-try.
+!
+if (esttol > 1.0) go to 320
+!
+!     Integration successful for first step.  Now integrate over
+!     the second step in the block
+!
+call fcn(t + h, y1, f1)
+do n = 1, neqn
+   y2(n) = w(n) + h*(a81*wp(n) + a82*f2(n) + a83*f3(n) + a84*f4(n) + &
+      & a85*y(n) + a86*yp(n) + a87*f1(n))
+end do
+call fcn(t + c8*h, y2, f7)
+do n = 1, neqn
+   y2(n) = w(n) + h*(a91*wp(n) + a92*f2(n) + a93*f3(n) + a94*f4(n) + &
+      & a95*y(n) + a96*yp(n) + a97*f1(n) + a98*f7(n))
+end do
+call fcn(t + c9*h, y2, f2)
+nfe = nfe + 3
+eeoet = 0.0
+do n = 1, neqn
+   ee = abs(h*(erc21*wp(n) + erc23*f3(n) + erc24*f4(n) + erc25*y(n) + &
+      & erc26*yp(n) + erc27*f1(n) + erc28*f7(n) + erc29*f2(n)))
+   y2(n) = w(n) + h*(b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
+      & b7*f1(n) + b8*f7(n) + b9*f2(n))
+   errtol = abs(y2(n)) + abs(y1(n)) + ae
+   if (errtol <= 0.0) go to 540
+   eeoet = max(eeoet,ee/errtol)
+end do
+esttol = eeoet*scale
+!
+!     The first of the three changes needed to make the interpolant
+!     derivative more stable is the following do-loop.
+!
+do n = 1, neqn
+   y1(n) = b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
+      & b6b*yp(n)
+   f3(n) = b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
+      & b7*f1(n) + b8*f7(n) + b9*f2(n)
+end do
+!
+!     Check the error estimate over the second step of the block.
+!
+if (esttol <= 1.0) go to 330
+!
+!     Unsuccessful block
+!     reduce the stepsize , try again
+!     the decrease is limited to a factor of about 1/10
+!
+320 hfaild = .true.
+s = 0.1
+endpnt = .false.
+if (esttol < 1.0e+5) s = sf/esttol**0.2
+h = s*h
+if (abs(h) < hmin) go to 550
+go to 200
+!
+!     Successful block. Check for need to interpolate.
+!     Store solution at t+2*h.
+!
+330 t = t + 2.0*h
+if (endpnt) t = tend
+told = x
+x = t
+hint = h
+interp = .false.
+if ((t - tout)*dtsign >= 0.0) interp = .true.
+!
+if (interp) go to 350
+do n = 1,neqn
+   w(n) = y2(n)
+end do
+go to 360
+!
+350 do n = 1,neqn
+   swap = w(n)
+   w(n) = y2(n)
+   y2(n) = swap
+   f2(n) = wp(n)
+end do
+!
+360 a = t
+call fcn(a, w, wp)
+nfe = nfe + 1
+!
+!     Choose next stepsize
+!     the increase is limited to a factor of about 10
+!     if step failure has just occured, next step is not allowed
+!     to increase.
+!
+s = 10.0
+if (esttol > 1.e-5) s = sf/esttol**0.2
+if (hfaild) s = min(s,1.0)
+h = sign(max(s*abs(h),hmin), h)
+!
+!     Have we integrated past an output point?
+!     If so, call the interpolation routine at t=tout.
+!     If not, see if we are at the end point of integration.
+!     Otherwise, check if user wants solutions at the end of the block
+!     step, or else continue the integration.
+!
+if (interp) go to 390
+if (endpnt) go to 510
+if (iflag > 0) go to 150
+iflag = -2
+go to 400
+!
+!     Interpolate to get data at off-step point and return.
+!
+!     The second of the three changes needed to make the interpolant
+!     derivative more stable is the new statement 390 given below.
+!
+390 call extra(neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
+t = tout
+if (iflag < 0 .and. tout /= x) blkout = .true.
+iflag = 2
+return
+!
+!     RETURN WITH THE SOLUTION AT THE END OF THE LAST SUCCESSFUL
+!     block step.
+!
+400 do n = 1,neqn
+   y(n) = w(n)
+   yp(n) = wp(n)
+end do
+return
+!
+!     Invalid input, return
+!
+500 iflag = 7
+return
+!
+!     We have reached the endpoint
+!
+510 iflag = 2
+endpnt = .false.
+go to 400
+!
+!     Relative error tolerance too small
+!
+520 relerr = rer
+iflag = 3
+kflag = 3
+return
+!
+!     Too much work
+!
+530 iflag = 4
+kflag = 4
+go to 400
+!
+!     Inappropriate error tolerance
+!
+540 iflag = 5
+kflag = 5
+go to 400
+!
+!     Requested error unattainable at smallest allowable stepsize
+!
+550 iflag = 6
+kflag = 6
+go to 400
+end subroutine rkfc
+
 subroutine extra(neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
 implicit none
 integer, intent(in) :: neqn
@@ -4551,6 +5187,7 @@ pure subroutine pdedge(edge, indx, indy, ierr)
 implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)
+integer :: nswc_ai_i4
 !
 if (abs(edge(1)) > 1) go to 200
 if (abs(edge(2)) > 1) go to 200
@@ -4560,7 +5197,10 @@ ierr = 0
 !
 !               Process edges 1 and 3
 !
-if (edge(1)) 10,20,30
+nswc_ai_i4 = edge ( 1 )
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 20
+go to 30
 !
 10 if (edge(3) /= -1) go to 210
 indy = 0
@@ -4575,7 +5215,10 @@ indy = 4 - edge(3)
 !
 !               Process edges 2 and 4
 !
-100 if (edge(2)) 110,120,130
+100 nswc_ai_i4 = edge ( 2 )
+if ( nswc_ai_i4 < 0 ) go to 110
+if ( nswc_ai_i4 == 0 ) go to 120
+go to 130
 !
 110 if (edge(4) /= -1) go to 220
 indx = 0
@@ -6082,29 +6725,35 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 !
 nm = n
 ierror = 0
-if (m - 5) 10, 20, 20
+if ( ( m - 5 ) < 0 ) go to 10
+go to 20
 10 ierror = 1
 go to 190
-20 if (nm - 3) 30, 40, 40
+20 if ( ( nm - 3 ) < 0 ) go to 30
+go to 40
 30 ierror = 2
 go to 190
-40 if (idimy - m) 50, 60, 60
+40 if ( ( idimy - m ) < 0 ) go to 50
+go to 60
 50 ierror = 3
 go to 190
 60 nh = n
 npp = np
-if (npp) 70, 80, 70
+if ( ( npp ) == 0 ) go to 80
+go to 70
 70 nh = nh + 1
 80 ik = 2
 k = 1
 90 ik = ik + ik
 k = k + 1
-if (nh - ik) 100,100, 90
+if ( ( nh - ik ) <= 0 ) go to 100
+go to 90
 100 nl = ik
 ik = ik + ik
 nl = nl - 1
 iwah = (k - 2)*ik + k + 6
-if (npp) 110,120,110
+if ( ( npp ) == 0 ) go to 120
+go to 110
 !
 !     Divide w into working sub arrays
 !
@@ -6119,16 +6768,19 @@ nm = nm - 1
 !
 ! Subroutine compb computes the roots of the B polynomials
 !
-130 if (ierror) 190,140,190
+130 if ( ( ierror ) == 0 ) go to 140
+go to 190
 140 iw2 = iw1 + m
 iw3 = iw2 + m
 iwd = iw3 + m
 iww = iwd + m
 iwu = iww + m
-if (iflg) 160,150,160
+if ( ( iflg ) == 0 ) go to 150
+go to 160
 150 call compb(nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
 go to 190
-160 if (mp) 170,180,170
+160 if ( ( mp ) == 0 ) go to 180
+go to 170
 !
 ! Subroutine blktr1 solves the linear system
 !
@@ -6184,12 +6836,14 @@ do l = 1,kdo
       & m,am,bm,cm,wd,ww,wu)
    if = 2**k
    do i = i4,if,i4
-      if (i - nm) 10, 10, 80
+      if ( ( i - nm ) <= 0 ) go to 10
+      go to 80
 10    ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
       call indxc(i,ir,idxc,nc)
-      if (i - if) 20, 80, 80
+      if ( ( i - if ) < 0 ) go to 20
+      go to 80
 20    call indxa(i,ir,idxa,na)
       call indxb(i - i1,irm1,im1,nm1)
       call indxb(ipi2,ir,ip2,np2)
@@ -6197,7 +6851,8 @@ do l = 1,kdo
       call indxb(ipi3,irm1,ip3,np3)
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
-      if (ipi2 - nm) 50, 50, 30
+      if ( ( ipi2 - nm ) <= 0 ) go to 50
+      go to 30
 30    do j = 1,m
          w3(j) = 0.
          w2(j) = 0.
@@ -6213,7 +6868,8 @@ do l = 1,kdo
 80    continue
    end do
 end do
-if (npp) 320,100,320
+if ( ( npp ) == 0 ) go to 100
+go to 320
 !
 !     The periodic case is treated using the capacitance matrix method
 !
@@ -6255,8 +6911,10 @@ do ll = 2,k
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if (i - i2 - izr) 170,140,170
-140   if (i - nm) 150,150,180
+      if ( ( i - i2 - izr ) == 0 ) go to 140
+      go to 170
+140   if ( ( i - nm ) <= 0 ) go to 150
+      go to 180
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
       call indxb(i - i1,ir - 1,im1,nm1)
@@ -6269,7 +6927,8 @@ do ll = 2,k
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
-      if (i - nm) 170,190,170
+      if ( ( i - nm ) == 0 ) go to 190
+      go to 170
 170   continue
    end do
 180 continue
@@ -6279,7 +6938,8 @@ end do
 end do
 call indxb(if/2,k - 1,im1,nm1)
 call indxb(if,k - 1,ip,np)
-if (ncmplx) 210,220,210
+if ( ( ncmplx ) == 0 ) go to 220
+go to 210
 210 call cprdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
    & y(1,nm + 1),m,am,bm,cm,w1,w3,ww)
 go to 230
@@ -6322,8 +6982,10 @@ do l = 1,kdo
       ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
-      if (ipi2 - izr) 270,280,270
-270   if (i - izr) 300,310,300
+      if ( ( ipi2 - izr ) == 0 ) go to 280
+      go to 270
+270   if ( ( i - izr ) == 0 ) go to 310
+      go to 300
 280   call indxc(i,ir,idxc,nc)
       call indxb(ipi2,ir,ip2,np2)
       call indxb(ipi1,irm1,ip1,np1)
@@ -6353,7 +7015,8 @@ end do
    i4 = i2 + i2
    ifd = if - i2
    do i = i2,ifd,i4
-      if (i - nm) 330,330,430
+      if ( ( i - nm ) <= 0 ) go to 330
+      go to 430
 330   imi1 = i - i1
       imi2 = i - i2
       ipi1 = i + i1
@@ -6363,14 +7026,16 @@ end do
       call indxb(i,ir,iz,nz)
       call indxb(imi1,irm1,im1,nm1)
       call indxb(ipi1,irm1,ip1,np1)
-      if (i - i2) 340,340,360
+      if ( ( i - i2 ) <= 0 ) go to 340
+      go to 360
 340   do j = 1,m
          w1(j) = 0.
       end do
       go to 370
 360   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
          & w1,m,am,bm,cm,wd,ww,wu)
-370   if (ipi2 - nm) 400,400,380
+370   if ( ( ipi2 - nm ) <= 0 ) go to 400
+      go to 380
 380   do j = 1,m
          w2(j) = 0.
       end do
@@ -6397,7 +7062,8 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 !
 na = 2**ir
 idxa = i - na + 1
-if (i - nm) 20, 20, 10
+if ( ( i - nm ) <= 0 ) go to 20
+go to 10
 10 na = 0
 20 return
 end subroutine indxa
@@ -6412,7 +7078,8 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 !
 nc = 2**ir
 idxc = i
-if (idxc + nc - 1 - nm) 20, 20, 10
+if ( ( idxc + nc - 1 - nm ) <= 0 ) go to 20
+go to 10
 10 nc = 0
 20 return
 end subroutine indxc
@@ -6423,6 +7090,7 @@ integer :: i, idp, idx, ir
 integer :: id, ipl, izh
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
+integer :: nswc_ai_i4
 !
 ! B(idx) is the location of the first root of the B(i,ir) polynomial
 !
@@ -6430,8 +7098,12 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
 !
 idp = 0
-if (ir) 70, 10, 30
-10 if (i - nm) 20, 20, 70
+nswc_ai_i4 = ir
+if ( nswc_ai_i4 < 0 ) go to 70
+if ( nswc_ai_i4 == 0 ) go to 10
+go to 30
+10 if ( ( i - nm ) <= 0 ) go to 20
+go to 70
 20 idx = i
 idp = 1
 return
@@ -6440,10 +7112,12 @@ id = i - izh - izh
 idx = id + id + (ir - 1)*ik + ir + (ik - i)/izh + 4
 ipl = izh - 1
 idp = izh + izh - 1
-if (i - ipl - nm) 50, 50, 40
+if ( ( i - ipl - nm ) <= 0 ) go to 50
+go to 40
 40 idp = 0
 return
-50 if (i + ipl - nm) 70, 70, 60
+50 if ( ( i + ipl - nm ) <= 0 ) go to 70
+go to 60
 60 idp = nm + ipl - i + 1
 70 return
 end subroutine indxb
@@ -6484,7 +7158,8 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if (ia) 50, 50, 30
+20 if ( ( ia ) <= 0 ) go to 50
+go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
 ia = ia - 1
@@ -6494,7 +7169,8 @@ ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if (id) 250,250, 60
+50 if ( ( id ) <= 0 ) go to 250
+go to 60
 60 rt = bd(id)
 id = id - 1
 if (id == 0) ibr = 1
@@ -6511,28 +7187,41 @@ do j = 2,mm
 end do
 den = b(1) - rt - c(1)*d(2)
 w(1) = 1.
-if (den) 80, 90, 80
+if ( ( den ) == 0 ) go to 90
+go to 80
 80 w(1) = (y(1) - c(1)*w(2))/den
 90 do j = 2,m
    w(j) = w(j) - d(j)*w(j - 1)
 end do
-if (na) 130,130, 20
+if ( ( na ) <= 0 ) go to 130
+go to 20
 110 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-130 if (m1) 140,140,150
-140 if (m2) 110,110,200
-150 if (m2) 170,170,160
-160 if (abs(bm1(m1)) - abs(bm2(m2))) 200,200,170
-170 if (ibr) 180,180,190
-180 if (abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) 110,190,190
+130 if ( ( m1 ) <= 0 ) go to 140
+go to 150
+140 if ( ( m2 ) <= 0 ) go to 110
+go to 200
+150 if ( ( m2 ) <= 0 ) go to 170
+go to 160
+160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+   & go to 200
+go to 170
+170 if ( ( ibr ) <= 0 ) go to 180
+go to 190
+180 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
+   & < 0 ) go to 110
+go to 190
 190 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 230
-200 if (ibr) 210,210,220
-210 if (abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) 110,220,220
+200 if ( ( ibr ) <= 0 ) go to 210
+go to 220
+210 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
+   & < 0 ) go to 110
+go to 220
 220 rt = rt - bm2(m2)
 m2 = m2 - 1
 230 do j = 1,m
@@ -6577,14 +7266,16 @@ ibr = 0
 m1 = nm1
 m2 = nm2
 ia = na
-20 if (ia) 50, 50, 30
+20 if ( ( ia ) <= 0 ) go to 50
+go to 30
 30 rt = aa(ia)
 if (nd == 0) rt = -rt
 ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
 end do
-50 if (id) 280,280, 60
+50 if ( ( id ) <= 0 ) go to 280
+go to 60
 60 rt = bd(id)
 id = id - 1
 if (id == 0) ibr = 1
@@ -6598,7 +7289,8 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 w(1) = y(1)/den
 v = c(m)
-if (mm2 - 2) 90, 70, 70
+if ( ( mm2 - 2 ) < 0 ) go to 90
+go to 70
 70 do j = 2,mm2
    den = b(j) - rt - a(j)*d(j - 1)
    d(j) = c(j)/den
@@ -6615,7 +7307,8 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*w(m - 2)
 den = bh - am*d(m - 1)
-if (den) 100,110,100
+if ( ( den ) == 0 ) go to 110
+go to 100
 100 w(m) = (ym - am*w(m - 1))/den
 go to 120
 110 w(m) = 1.
@@ -6624,23 +7317,35 @@ do j = 2,mm
    k = m - j
    w(k) = w(k) - d(k)*w(k + 1) - u(k)*w(m)
 end do
-if (na) 160,160, 20
+if ( ( na ) <= 0 ) go to 160
+go to 20
 140 do j = 1,m
    y(j) = w(j)
 end do
 ibr = 1
 go to  20
-160 if (m1) 170,170,180
-170 if (m2) 140,140,230
-180 if (m2) 200,200,190
-190 if (abs(bm1(m1)) - abs(bm2(m2))) 230,230,200
-200 if (ibr) 210,210,220
-210 if (abs(bm1(m1) - bd(id)) - abs(bm1(m1) - rt)) 140,220,220
+160 if ( ( m1 ) <= 0 ) go to 170
+go to 180
+170 if ( ( m2 ) <= 0 ) go to 140
+go to 230
+180 if ( ( m2 ) <= 0 ) go to 200
+go to 190
+190 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+   & go to 230
+go to 200
+200 if ( ( ibr ) <= 0 ) go to 210
+go to 220
+210 if ( ( abs ( bm1 ( m1 ) - bd ( id ) ) - abs ( bm1 ( m1 ) - rt ) ) &
+   & < 0 ) go to 140
+go to 220
 220 rt = rt - bm1(m1)
 m1 = m1 - 1
 go to 260
-230 if (ibr) 240,240,250
-240 if (abs(bm2(m2) - bd(id)) - abs(bm2(m2) - rt)) 140,250,250
+230 if ( ( ibr ) <= 0 ) go to 240
+go to 250
+240 if ( ( abs ( bm2 ( m2 ) - bd ( id ) ) - abs ( bm2 ( m2 ) - rt ) ) &
+   & < 0 ) go to 140
+go to 250
 250 rt = rt - bm2(m2)
 m2 = m2 - 1
 260 do j = 1,m
@@ -6684,7 +7389,8 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if (id) 90, 90, 30
+if ( ( id ) <= 0 ) go to 90
+go to 30
 30 crt = bd(id)
 id = id - 1
 !
@@ -6699,30 +7405,37 @@ do j = 2,mm
    w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
 den = b(1) - crt - c(1)*d(2)
-if (abs(den)) 50, 60, 50
+if ( ( abs ( den ) ) == 0 ) go to 60
+go to 50
 50 y(1) = (y(1) - c(1)*w(2))/den
 go to  70
 60 y(1) = (1.,0.)
 70 do j = 2,m
    y(j) = w(j) - d(j)*y(j - 1)
 end do
-90 if (m1) 100,100,120
-100 if (m2) 210,210,110
+90 if ( ( m1 ) <= 0 ) go to 100
+go to 120
+100 if ( ( m2 ) <= 0 ) go to 210
+go to 110
 110 rt = bm2(m2)
 m2 = m2 - 1
 go to 170
-120 if (m2) 130,130,140
+120 if ( ( m2 ) <= 0 ) go to 130
+go to 140
 130 rt = bm1(m1)
 m1 = m1 - 1
 go to 170
-140 if (abs(bm1(m1)) - abs(bm2(m2))) 160,160,150
+140 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+   & go to 160
+go to 150
 150 rt = bm1(m1)
 m1 = m1 - 1
 go to 170
 160 rt = bm2(m2)
 m2 = m2 - 1
 170 y1 = (b(1) - rt)*y(1) + c(1)*y(2)
-if (mm - 2) 200,180,180
+if ( ( mm - 2 ) < 0 ) go to 200
+go to 180
 !
 ! Matrix multiplication
 !
@@ -6735,7 +7448,8 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-210 if (ia) 240,240,220
+210 if ( ( ia ) <= 0 ) go to 240
+go to 220
 220 rt = aa(ia)
 ia = ia - 1
 iflg = 1
@@ -6745,7 +7459,8 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-240 if (iflg) 250,250, 20
+240 if ( ( iflg ) <= 0 ) go to 250
+go to 20
 250 do j = 1,m
    yy(j) = real(y(j))
 end do
@@ -6787,7 +7502,8 @@ m1 = nm1
 m2 = nm2
 ia = na
 20 iflg = 0
-if (id) 110,110, 30
+if ( ( id ) <= 0 ) go to 110
+go to 30
 30 crt = bd(id)
 id = id - 1
 iflg = 1
@@ -6801,7 +7517,8 @@ d(1) = c(1)/den
 u(1) = a(1)/den
 y(1) = y(1)/den
 v = cmplx(c(m),0.)
-if (mm2 - 2) 60, 40, 40
+if ( ( mm2 - 2 ) < 0 ) go to 60
+go to 40
 40 do j = 2,mm2
    den = b(j) - crt - a(j)*d(j - 1)
    d(j) = c(j)/den
@@ -6818,7 +7535,8 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*y(m - 2)
 den = bh - am*d(m - 1)
-if (abs(den)) 70, 80, 70
+if ( ( abs ( den ) ) == 0 ) go to 80
+go to 70
 70 y(m) = (ym - am*y(m - 1))/den
 go to  90
 80 y(m) = (1.,0.)
@@ -6827,16 +7545,21 @@ do j = 2,mm
    k = m - j
    y(k) = y(k) - d(k)*y(k + 1) - u(k)*y(m)
 end do
-110 if (m1) 120,120,140
-120 if (m2) 230,230,130
+110 if ( ( m1 ) <= 0 ) go to 120
+go to 140
+120 if ( ( m2 ) <= 0 ) go to 230
+go to 130
 130 rt = bm2(m2)
 m2 = m2 - 1
 go to 190
-140 if (m2) 150,150,160
+140 if ( ( m2 ) <= 0 ) go to 150
+go to 160
 150 rt = bm1(m1)
 m1 = m1 - 1
 go to 190
-160 if (abs(bm1(m1)) - abs(bm2(m2))) 180,180,170
+160 if ( ( abs ( bm1 ( m1 ) ) - abs ( bm2 ( m2 ) ) ) <= 0 ) &
+   & go to 180
+go to 170
 170 rt = bm1(m1)
 m1 = m1 - 1
 go to 190
@@ -6847,7 +7570,8 @@ m2 = m2 - 1
 !
 190 yh = y(1)
 y1 = (b(1) - rt)*y(1) + c(1)*y(2) + a(1)*y(m)
-if (mm - 2) 220,200,200
+if ( ( mm - 2 ) < 0 ) go to 220
+go to 200
 200 do j = 2,mm
    y2 = a(j)*y(j - 1) + (b(j) - rt)*y(j) + c(j)*y(j + 1)
    y(j - 1) = y1
@@ -6857,7 +7581,8 @@ end do
 y(m - 1) = y1
 iflg = 1
 go to  20
-230 if (ia) 260,260,240
+230 if ( ( ia ) <= 0 ) go to 260
+go to 240
 240 rt = aa(ia)
 ia = ia - 1
 iflg = 1
@@ -6867,7 +7592,8 @@ iflg = 1
 do j = 1,m
    y(j) = rt*y(j)
 end do
-260 if (iflg) 270,270, 20
+260 if ( ( iflg ) <= 0 ) go to 270
+go to 20
 270 do j = 1,m
    yy(j) = real(y(j))
 end do
@@ -6905,7 +7631,8 @@ bnorm = abs(bn(1))
 do j = 2,nm
    bnorm = max(bnorm,abs(bn(j)))
    arg = an(j)*cn(j - 1)
-   if (arg) 220, 30, 30
+   if ( ( arg ) < 0 ) go to 220
+   go to 30
 30 b(j) = sign(sqrt(arg),an(j))
 end do
 cnv = eps*bnorm
@@ -6919,7 +7646,8 @@ do l = 1,kdo
    ifd = if - i4
    do i = i4,ifd,i4
       call indxb(i,l,ib,nb)
-      if (nb) 100,100, 50
+      if ( ( nb ) <= 0 ) go to 100
+      go to 50
 50    js = i - ipl
       jf = js + nb - 1
       ls = 0
@@ -6929,7 +7657,8 @@ do l = 1,kdo
          ah(ls) = b(j)
       end do
       call tqlrt0(nb,bh,ah,ierror)
-      if (ierror) 210, 70,210
+      if ( ( ierror ) == 0 ) go to 70
+      go to 210
 70    lh = ib - 1
       do j = 1,nb
          lh = lh + 1
@@ -6968,10 +7697,12 @@ if ((d2 < d1) .and. (d2 < d3)) go to 180
 b(lh) = b(j2)
 j2 = j2 + 1
 lh = lh + 1
-if (j2 - n2m2) 170,170,190
+if ( ( j2 - n2m2 ) <= 0 ) go to 170
+go to 190
 180 j2 = j2 + 1
 j1 = j1 + 1
-if (j2 - n2m2) 170,170,190
+if ( ( j2 - n2m2 ) <= 0 ) go to 170
+go to 190
 190 b(lh) = b(n2m2 + 1)
 call indxb(if,k - 1,j1,j2)
 j2 = j1 + nmp + nmp
@@ -7172,6 +7903,7 @@ real :: bsrh
 real :: psgf
 complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3
 external psgf, ppspf, ppsgf
+real :: nswc_ai_r4
 !
 !     ppadd computes the eigenvalues of the periodic tridiagonal matrix
 !     with coefficients an,BN,CN
@@ -7189,7 +7921,10 @@ scnv = sqrt(cnv)
 iz = n
 izm = iz - 1
 izm2 = iz - 2
-if (bp(n) - bp(1)) 10,420, 30
+nswc_ai_r4 = bp ( n ) - bp ( 1 )
+if ( nswc_ai_r4 < 0 ) go to 10
+if ( nswc_ai_r4 == 0 ) go to 420
+go to 30
 10 do j = 1,n
    nt = n - j
    bh(j) = bp(nt + 1)
@@ -7201,22 +7936,32 @@ end do
 50 ncmplx = 0
 modiz = mod(iz,2)
 is = 1
-if (modiz) 60, 70, 60
-60 if (a(1)) 100,420, 70
+if ( ( modiz ) == 0 ) go to 70
+go to 60
+60 nswc_ai_r4 = a ( 1 )
+if ( nswc_ai_r4 < 0 ) go to 100
+if ( nswc_ai_r4 == 0 ) go to 420
+go to 70
 70 xl = bh(1)
 db = bh(3) - bh(1)
 80 xl = xl - db
-if (psgf(xl,iz,c,a,bh)) 80, 80, 90
+if ( ( psgf( xl , iz , c , a , bh ) ) <= 0 ) go to 80
+go to 90
 90 sgn = -1.
 cbp(1) = cmplx(bsrh(xl,bh(1),iz,c,a,bh,psgf,sgn),0.)
 is = 2
 100 if = iz - 1
-if (modiz) 110,120,110
-110 if (a(1)) 120,420,150
+if ( ( modiz ) == 0 ) go to 120
+go to 110
+110 nswc_ai_r4 = a ( 1 )
+if ( nswc_ai_r4 < 0 ) go to 120
+if ( nswc_ai_r4 == 0 ) go to 420
+go to 150
 120 xr = bh(iz)
 db = bh(iz) - bh(iz - 2)
 130 xr = xr + db
-if (psgf(xr,iz,c,a,bh)) 130,140,140
+if ( ( psgf( xr , iz , c , a , bh ) ) < 0 ) go to 130
+go to 140
 140 sgn = 1.
 cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
 if = iz - 2
@@ -7226,8 +7971,12 @@ if = iz - 2
    sgn = -1.
    xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
    psg = psgf(xm,iz,c,a,bh)
-   if (abs(psg) - eps) 180,180,160
-160 if (psg*ppsgf(xm,iz,c,a,bh)) 170,180,190
+   if ( ( abs ( psg ) - eps ) <= 0 ) go to 180
+   go to 160
+160 nswc_ai_r4 = psg * ppsgf( xm , iz , c , a , bh )
+   if ( nswc_ai_r4 < 0 ) go to 170
+   if ( nswc_ai_r4 == 0 ) go to 180
+   go to 190
 !
 !     Case of a real zero
 !
@@ -7259,27 +8008,32 @@ if = iz - 2
       fp = fp + dd
       fpp = fpp - dd*dd
    end do
-   if (modiz) 230,220,230
+   if ( ( modiz ) == 0 ) go to 220
+   go to 230
 220 f = (1.,0.) - fsg - hsg
    go to 240
 230 f = (1.,0.) + fsg + hsg
 240 i3 = 0
-   if (abs(fp)) 260,260,250
+   if ( ( abs ( fp ) ) <= 0 ) go to 260
+   go to 250
 250 i3 = 1
    r3 = -f/fp
 260 i2 = 0
-   if (abs(fpp)) 320,320,270
+   if ( ( abs ( fpp ) ) <= 0 ) go to 320
+   go to 270
 270 i2 = 1
    cdis = sqrt(fp**2 - 2.*f*fpp)
    r1 = cdis - fp
    r2 = -fp - cdis
-   if (abs(r1) - abs(r2)) 290,290,280
+   if ( ( abs ( r1 ) - abs ( r2 ) ) <= 0 ) go to 290
+   go to 280
 280 r1 = r1/fpp
    go to 300
 290 r1 = r2/fpp
 300 r2 = 2.*f/fpp/r1
    if (abs(r2) < abs(r1)) r1 = r2
-   if (i3) 330,330,310
+   if ( ( i3 ) <= 0 ) go to 330
+   go to 310
 310 if (abs(r3) < abs(r1)) r1 = r3
    go to 330
 320 r1 = r3
@@ -7287,14 +8041,18 @@ if = iz - 2
    it = it + 1
    if (it > 50) go to 420
    if (abs(r1) > scnv) go to 200
-   if (icv) 340,340,350
+   if ( ( icv ) <= 0 ) go to 340
+   go to 350
 340 icv = 1
    go to 200
 350 cbp(ig) = cx
    cbp(ig + 1) = conjg(cx)
 360 continue
 end do
-if (abs(cbp(n)) - abs(cbp(1))) 370,420,390
+nswc_ai_r4 = abs ( cbp ( n ) ) - abs ( cbp ( 1 ) )
+if ( nswc_ai_r4 < 0 ) go to 370
+if ( nswc_ai_r4 == 0 ) go to 420
+go to 390
 370 nhalf = n/2
 do j = 1,nhalf
    nt = n - j
@@ -7304,7 +8062,8 @@ do j = 1,nhalf
 end do
 390 ncmplx = 1
 do j = 2,iz
-   if (aimag(cbp(j))) 430,400,430
+   if ( ( aimag ( cbp ( j ) ) ) == 0 ) go to 400
+   go to 430
 400 continue
 end do
 ncmplx = 0
@@ -7331,7 +8090,8 @@ do j = 1,iz
    fsg = fsg*a(j)*dd
    hsg = hsg*c(j)*dd
 end do
-if (mod(iz,2)) 30, 20, 30
+if ( ( mod ( iz , 2 ) ) == 0 ) go to 20
+go to 30
 20 psgf = 1. - fsg - hsg
 return
 30 psgf = 1. + fsg + hsg
@@ -7346,18 +8106,23 @@ real :: dx, x, xl, xr
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 real :: bsrh
+real :: nswc_ai_r4
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
 xl = xll
 xr = xrr
 dx = .5*abs(xr - xl)
 10 x = .5*(xl + xr)
-if (sgn*f(x,iz,c,a,bh)) 30, 50, 20
+nswc_ai_r4 = sgn * f ( x , iz , c , a , bh )
+if ( nswc_ai_r4 < 0 ) go to 30
+if ( nswc_ai_r4 == 0 ) go to 50
+go to 20
 20 xr = x
 go to  40
 30 xl = x
 40 dx = .5*dx
-if (dx - cnv) 50, 50, 10
+if ( ( dx - cnv ) <= 0 ) go to 50
+go to 10
 50 bsrh = .5*(xl + xr)
 end function bsrh
 
@@ -9764,622 +10529,3 @@ return
 130 ierr = 4
 end subroutine fran
 
-pure subroutine dfran(n, a, b, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
-integer :: i, ind
-double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
-   & x1, x2
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine dginv(a,x,p,q,ierr)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(out) :: x
-      double precision, intent(in) :: p
-      double precision, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine dginv
-   pure elemental function dpmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      double precision :: dpmpar
-   end function dpmpar
-   pure elemental subroutine durng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: u
-      double precision, intent(inout) :: v
-   end subroutine durng0
-end interface
-!-----------------------------------------------------------------------
-!
-!                  Double precision generation of
-!                 variates from the F-distribution
-!
-!                          --------------
-!
-!     dfran generates n variates from the F-distribution with
-!     parameters A and b (called the numerator and denominator
-!     degrees of freedom) where a .GE. 0.5 and b .GE. 0.5. The
-!     generation scheme is based on the fact that (b/a)*(X1/X2)
-!     is a variate from the F-distribution when X1 and X2 are
-!     independent variates from the standard gamma distributions
-!     with parameters a/2 and b/2 respectively.
-!
-!
-!     Input...
-!
-!        n       - Number of variates to be generated
-!        a       - Numerator degrees of freedom parameter
-!        b       - Denominator degrees of freedom parameter
-!        ix      - Integer seed used to initialize the
-!                  sequence of variates
-!
-!     Output...
-!
-!        ix      - Seed to be used for obtaining more
-!                  variates
-!        x       - Array of dimension n containing the
-!                  F distribution variates
-!        ierr    - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a or b is less than 0.5
-!                   3 - b is too small for the
-!                       floating arithmetic used
-!                   4 - Seed out of range       )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-!
-!     ****** xmax is a machine dependent constant. Xmax is the
-!            largest number in the floating arithmetic used.
-!
-xmax = dpmpar(3)
-!
-!--------------------
-if (n <= 0) go to 100
-if (min(a,b) < 0.5d0) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-ierr = 0
-!
-ahalf = 0.5d0*a
-bhalf = 0.5d0*b
-c = b/a
-big = 0.5d0*xmax
-bound = dmax1(c, 1.d0)
-!
-do i = 1,n
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call durng0(ix, u, v)
-   call dginv(ahalf, x1, u, v, ind)
-   if (ind == -3 .or. ind == -7) x1 = 0.d0
-!
-   call durng0(ix, u, v)
-   call dginv(bhalf, x2, u, v, ind)
-   if (ind == -3 .or. ind == -7) go to 120
-!
-!        Protect against overflow in computing the
-!        VARIATE c*(X1/X2).
-!
-   t = x1 + x2
-   x1 = x1/t
-   x2 = x2/t
-   if (x2*big <= bound) go to 120
-   x(i) = c * (x1/x2)
-end do
-return
-!
-!                      Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine dfran
-
-pure subroutine tran(n, a, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
-integer :: i, ind
-real :: ahalf, d, s, u, v, w, z
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine gaminv(a,x,x0,p,q,ierr)
-      implicit none
-      real, intent(in) :: a
-      real, intent(out) :: x
-      real, intent(in) :: x0
-      real, intent(in) :: p
-      real, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine gaminv
-   pure elemental subroutine pni(p,q,d,w,ierr)
-      implicit none
-      real, intent(in) :: p
-      real, intent(in) :: q
-      real, intent(in) :: d
-      real, intent(inout) :: w
-      integer, intent(inout) :: ierr
-   end subroutine pni
-   pure elemental subroutine urng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine urng0
-   pure elemental subroutine urng1(ix,u,v,d)
-      implicit none
-      integer, intent(inout) :: ix
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-      real, intent(inout) :: d
-   end subroutine urng1
-end interface
-!-----------------------------------------------------------------------
-!
-!          Generation of variates from the T-distribution
-!
-!                          --------------
-!
-!        Tran generates n random variates from A T-distribution
-!        with parameter a (called the degrees of freedom) where
-!        a .GE. 0.5. The generation scheme is based on the fact
-!        that x/sqrt(Y/a) is a variate from the T-distribution
-!        when x is a standard normal variate and Y a chi-square
-!        variate with a degrees of freedom.
-!
-!
-!        Input...
-!
-!           n    - Number of variates to be generated
-!           a    - Degrees of freedom parameter
-!           ix   - Integer seed used to initialize the
-!                  sequence of variates
-!
-!        Output...
-!
-!           ix   - Seed to be used for obtaining more
-!                  variates
-!           x    - Array of dimension n containing the
-!                  T-distribution variates
-!           ierr - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a .LT. 0.5
-!                   3 - a is too small for the
-!                       floating arithmetic used
-!                   4 - Seed out of range       )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (a < 0.5) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-!
-ierr = 0
-ahalf = 0.5*a
-!
-do i = 1,n
-!
-!                    Get a normal variate
-!
-   call urng1(ix, u, v, d)
-   call pni(u, v, d, z, ind)
-!
-!                    Get a gamma variate
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call urng0(ix, u, v)
-   call gaminv(ahalf, w, 0.0, u, v, ind)
-   if (ind == -3 .or. ind == -7) go to 120
-!
-   s = sqrt(w/ahalf)
-   x(i) = z/s
-end do
-return
-!
-!              Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine tran
-
-pure subroutine dtran(n, a, ix, x, ierr)
-implicit none
-integer, intent(inout) :: ierr, ix
-integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
-integer :: i, ind
-double precision :: ahalf, d, s, u, v, w, z
-integer, parameter :: max = 2147483647
-interface
-   pure elemental subroutine dginv(a,x,p,q,ierr)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(out) :: x
-      double precision, intent(in) :: p
-      double precision, intent(in) :: q
-      integer, intent(inout) :: ierr
-   end subroutine dginv
-   pure elemental subroutine dpni(p,q,d,w,ierr)
-      implicit none
-      double precision, intent(in) :: p
-      double precision, intent(in) :: q
-      double precision, intent(in) :: d
-      double precision, intent(inout) :: w
-      integer, intent(inout) :: ierr
-   end subroutine dpni
-   pure elemental subroutine durng0(ix,u,v)
-      implicit none
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: u
-      double precision, intent(inout) :: v
-   end subroutine durng0
-   pure elemental subroutine durng1(ix,u,v,d)
-      implicit none
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: u
-      double precision, intent(inout) :: v
-      double precision, intent(inout) :: d
-   end subroutine durng1
-end interface
-!-----------------------------------------------------------------------
-!
-!                  Double precision generation of
-!                 variates from the T-distribution
-!
-!                          --------------
-!
-!        dtran generates n random variates from A T-distribution
-!        with parameter a (called the degrees of freedom) where
-!        a .GE. 0.5. The generation scheme is based on the fact
-!        that x/sqrt(Y/a) is a variate from the T-distribution
-!        when x is a standard normal variate and Y a chi-square
-!        variate with a degrees of freedom.
-!
-!
-!        Input...
-!
-!           n    - Number of variates to be generated
-!           a    - Degrees of freedom parameter
-!           ix   - Integer seed used to initialize the
-!                  sequence of variates
-!
-!        Output...
-!
-!           ix   - Seed to be used for obtaining more
-!                  variates
-!           x    - Array of dimension n containing the
-!                  T-distribution variates
-!           ierr - Input error flag
-!                  (0 - No input errors
-!                   1 - n .LE. 0
-!                   2 - a .LT. 0.5
-!                   3 - a is too small for the
-!                       floating arithmetic used
-!                   4 - Seed out of range       )
-!
-!-----------------------------------------------------------------------
-!--------------------
-!--------------------
-if (n <= 0) go to 100
-if (a < 0.5d0) go to 110
-if (ix <= 0 .or. ix >= max) go to 130
-!
-ierr = 0
-ahalf = 0.5d0*a
-!
-do i = 1,n
-!
-!                    Get a normal variate
-!
-   call durng1(ix, u, v, d)
-   call dpni(u, v, d, z, ind)
-!
-!                    Get a gamma variate
-!
-!        The following code assumes that the uniform
-!        variates are far enough from 0 and 1 so that
-!        the setting ind = -8 In gaminv is avoided.
-!
-   call durng0(ix, u, v)
-   call dginv(ahalf, w, u, v, ind)
-   if (ind == -3 .or. ind == -7) go to 120
-!
-   s = sqrt(w/ahalf)
-   x(i) = z/s
-end do
-return
-!
-!              Error return
-!
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-return
-130 ierr = 4
-end subroutine dtran
-
-pure subroutine rmk1(n, fmu, sig, alpha, iseed, x, ierror)
-implicit none
-integer, intent(inout) :: ierror, iseed
-integer, intent(in) :: n
-real, intent(in) :: alpha, fmu, sig
-real, intent(inout) :: x(n)
-integer :: i
-real :: c, sigi, t
-interface
-   pure subroutine rnor(ix,a,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      real, intent(inout) :: a(n)
-      integer, intent(inout) :: ierr
-   end subroutine rnor
-end interface
-!
-!              ***Subroutine purpose and description***
-!
-!           rmk1 generates an autocorrelated sequence x of
-!           length n where x is a first-order markov process
-!           with parameter alpha (abs(alpha) .LT. 1). The sequence
-!           x(J) (J = 2,...,n) is generated by
-!
-!                  x(J) - fmu = alpha*(x(J-1) - fmu) + Z(J).
-!
-!           Z(J) is the random error term, assumed to be normally
-!           distributed with mean 0 and standard deviation sig
-!           (sig .GE. 0). The generation scheme assumes that x is
-!           a normal process with mean fmu and variance
-!
-!                      sig*sig / (1 - alpha*alpha) .
-!
-!           x is a stationary process provided that abs(alpha) .LT.
-!           1. The autocorrelation structure of the sequence is
-!           characterized by the fact that the correlation between
-!           terms becomes progressively weaker with increasing lag.
-!           We note that a first-order markov process is synonomous
-!           with a first-order autoregressive (AR) process.
-!
-!           ***Parameter list***
-!
-!           Input...
-!
-!           n       - Length of the sequence to be generated.
-!                     It is assumed that n .GE. 2.
-!           fmu     - Mean of the normal process
-!           sig     - Standard deviation of the normally
-!                     distributed error term
-!           alpha   - Value of the markov model parameter
-!           iseed   - Integer seed used to initialize the
-!                     sequence of normal variates generated
-!                     by subroutine rnor
-!
-!           Output...
-!
-!           iseed   - Seed to be used on the next call to the
-!                     routine
-!           x       - Output array of dimension n containing
-!                     the generated first-order markov sequence
-!           ierror  - Input error flag
-!                     ( 0 - No input errors
-!                       1 - n .LE. 1
-!                       2 - sig .LT. 0
-!                       3 - abs(alpha) .GE. 1
-!                       4 - Seed out of range )
-!
-!           ***REFERENCE***
-!
-!           Fishman, george S., Concepts and methods in discrete event
-!           digital simulation, john wiley and sons, new york, 1973,
-!           PP. 236 - 237.
-!
-!
-!        Check to ensure that the desired sequence length is within
-!        acceptable range
-!
-if (n <= 1) go to 100
-!
-!        Check to ensure that the standard deviation of the error term
-!        is within acceptable range
-!
-if (sig <= 0.0) go to 110
-!
-!        Check to ensure that the first-order markov model
-!        parameter is within the range required to guarantee
-!        PROCESS STATIONARITY
-!
-if (abs(alpha) >= 1.0) go to 120
-!
-!        Generation of standard normal random variates
-!
-call rnor(iseed,x,n,ierror)
-if (ierror /= 0) go to 130
-!
-!        Computes the standard deviation of the initial term of the
-!        autocorrelated sequence
-!
-c = 0.5 + (0.5 - alpha)
-t = 0.5 + (0.5 + alpha)
-sigi = sig/sqrt(c*t)
-!
-!        Computes the initial term of the required autocorrelated
-!        sequence
-!
-x(1) = fmu + sigi*x(1)
-!
-!        Generates the last n - 1 Terms of the required autocorrelated
-!        sequence
-!
-c = fmu*c
-do i = 2,n
-   x(i) = alpha*x(i - 1) + c + sig*x(i)
-end do
-return
-!
-!        Error return
-!
-100 ierror = 1
-return
-110 ierror = 2
-return
-120 ierror = 3
-return
-130 ierror = 4
-end subroutine rmk1
-
-pure subroutine drmk1(n, fmu, sig, alpha, iseed, x, ierror)
-implicit none
-integer, intent(inout) :: ierror, iseed
-integer, intent(in) :: n
-double precision, intent(in) :: fmu, sig, alpha
-double precision, intent(inout) :: x(n)
-integer :: i
-double precision :: c, sigi, t
-interface
-   pure subroutine drnor(ix,a,n,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: ix
-      double precision, intent(inout) :: a(n)
-      integer, intent(inout) :: ierr
-   end subroutine drnor
-end interface
-!
-!              ***Subroutine purpose and description***
-!
-!           drmk1 generates an autocorrelated sequence x of
-!           length n where x is a first-order markov process
-!           with parameter alpha (abs(alpha) .LT. 1). The sequence
-!           x(J) (J = 2,...,n) is generated by
-!
-!                  x(J) - fmu = alpha*(x(J-1) - fmu) + Z(J).
-!
-!           Z(J) is the random error term, assumed to be normally
-!           distributed with mean 0 and standard deviation sig
-!           (sig .GE. 0). The generation scheme assumes that x is
-!           a normal process with mean fmu and variance
-!
-!                      sig*sig / (1 - alpha*alpha) .
-!
-!           x is a stationary process provided that abs(alpha) .LT.
-!           1. The autocorrelation structure of the sequence is
-!           characterized by the fact that the correlation between
-!           terms becomes progressively weaker with increasing lag.
-!           We note that a first-order markov process is synonomous
-!           with a first-order autoregressive (AR) process.
-!
-!           ***Parameter list***
-!
-!           Input...
-!
-!           n       - Length of the sequence to be generated.
-!                     It is assumed that n .GE. 2.
-!           fmu     - Mean of the normal process
-!           sig     - Standard deviation of the normally
-!                     distributed error term
-!           alpha   - Value of the markov model parameter
-!           iseed   - Integer seed used to initialize the
-!                     sequence of normal variates generated
-!                     by subroutine drnor
-!
-!           Output...
-!
-!           iseed   - Seed to be used on the next call to the
-!                     routine
-!           x       - Output array of dimension n containing
-!                     the generated first-order markov sequence
-!           ierror  - Input error flag
-!                     ( 0 - No input errors
-!                       1 - n .LE. 1
-!                       2 - sig .LT. 0
-!                       3 - abs(alpha) .GE. 1
-!                       4 - Seed out of range )
-!
-!           ***REFERENCE***
-!
-!           Fishman, george S., Concepts and methods in discrete event
-!           digital simulation, john wiley and sons, new york, 1973,
-!           PP. 236 - 237.
-!
-!
-!        Check to ensure that the desired sequence length is within
-!        acceptable range
-!
-if (n <= 1) go to 100
-!
-!        Check to ensure that the standard deviation of the error term
-!        is within acceptable range
-!
-if (sig <= 0.d0) go to 110
-!
-!        Check to ensure that the first-order markov model
-!        parameter is within the range required to guarantee
-!        PROCESS STATIONARITY
-!
-if (abs(alpha) >= 1.d0) go to 120
-!
-!        Generation of standard normal random variates
-!
-call drnor(iseed,x,n,ierror)
-if (ierror /= 0) go to 130
-!
-!        Computes the standard deviation of the initial term of the
-!        autocorrelated sequence
-!
-c = 0.5d0 + (0.5d0 - alpha)
-t = 0.5d0 + (0.5d0 + alpha)
-sigi = sig/sqrt(c*t)
-!
-!        Computes the initial term of the required autocorrelated
-!        sequence
-!
-x(1) = fmu + sigi*x(1)
-!
-!        Generates the last n - 1 Terms of the required autocorrelated
-!        sequence
-!
-c = fmu*c
-do i = 2,n
-   x(i) = alpha*x(i - 1) + c + sig*x(i)
-end do
-return
-!
-!        Error return
-!
-100 ierror = 1
-return
-110 ierror = 2
-return
-120 ierror = 3
-return
-130 ierror = 4
-end subroutine drmk1

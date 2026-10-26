@@ -1,3 +1,294 @@
+pure subroutine dspfa(ap,n,kpvt,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+integer, intent(out) :: info
+double precision, intent(inout) :: ap(*)
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
+logical :: swap
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+end interface
+!
+!     dspfa factors a double precision symmetric matrix stored in
+!     packed form by elimination with symmetric pivoting.
+!
+!     To solve  A*X = B , follow dspfa by dspsl.
+!     To compute  inverse(A)*C , follow dspfa by dspsl.
+!     To compute  determinant(A) , follow dspfa by dspdi.
+!     To compute  inertia(A) , follow dspfa by dspdi.
+!     To compute  inverse(A) , follow dspfa by dspdi.
+!
+!     On entry
+!
+!        ap      DOUBLE PRECISION (n*(n+1)/2)
+!                the packed form of A symmetric matrix  A .  The
+!                columns of the upper triangle are stored sequentially
+!                in a one-dimensional array of length  n*(n+1)/2 .
+!                See comments below for details.
+!
+!        n       INTEGER
+!                the order of the matrix  A .
+!
+!     Output
+!
+!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
+!                were used to obtain it stored in packed form.
+!                The factorization can be written  A = U*D*trans(U)
+!                where  U  is a product of permutation and unit
+!                upper triangular matrices , trans(U) is the
+!                transpose of  U , and  D  is block diagonal
+!                with 1 by 1 and 2 by 2 blocks.
+!
+!        kpvt    INTEGER(n)
+!                an integer vector of pivot indices.
+!
+!        INFO    INTEGER
+!                = 0  Normal value.
+!                = k  if the k-TH pivot block is singular. This is
+!                     not an error condition for this subroutine,
+!                     but it does indicate that dspsl or dspdi may
+!                     divide by zero if called.
+!
+!     Packed storage
+!
+!          The following program segment will pack the upper
+!          triangle of a symmetric matrix.
+!
+!                k = 0
+!                do 20 j = 1, n
+!                   do 10 i = 1, j
+!                      k = k + 1
+!                      ap(k)  = a(i,j)
+!             10    continue
+!             20 continue
+!
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
+!
+!     Subroutines and functions
+!
+!     BLAS daxpy,dswap,idamax
+!     Fortran dabs,DMAX1,DSQRT
+!
+!     Internal variables
+!
+!
+!
+!     Initialize
+!
+!     alpha is used in choosing pivot block SIZE.
+alpha = (1.0d0 + sqrt(17.0d0))/8.0d0
+!
+info = 0
+!
+!     Main loop on k, which goes from n to 1.
+!
+k = n
+ik = (n*(n - 1))/2
+10 continue
+!
+!        Leave the loop if k=0 Or k=1.
+!
+!     ...Exit
+if (k == 0) go to 200
+if (k > 1) go to 20
+kpvt(1) = 1
+if (ap(1) == 0.0d0) info = 1
+!     ......Exit
+go to 200
+20 continue
+!
+!        This section of code determines the kind of
+!        elimination to be performed.  When it is completed,
+!        KSTEP will be set to the size of the pivot block, and
+!        swap will be set to .TRUE. if an interchange is
+!        required.
+!
+km1 = k - 1
+kk = ik + k
+absakk = abs(ap(kk))
+!
+!        Determine the largest off-diagonal element in
+!        column k.
+!
+imax = idamax(k - 1,ap(ik + 1),1)
+imk = ik + imax
+colmax = abs(ap(imk))
+if (absakk < alpha*colmax) go to 30
+kstep = 1
+swap = .false.
+go to 90
+30 continue
+!
+!           Determine the largest off-diagonal element in
+!           row imax.
+!
+rowmax = 0.0d0
+imaxp1 = imax + 1
+im = imax*(imax - 1)/2
+imj = im + 2*imax
+do j = imaxp1, k
+   rowmax = max(rowmax,abs(ap(imj)))
+   imj = imj + j
+end do
+if (imax == 1) go to 50
+jmax = idamax(imax - 1,ap(im + 1),1)
+jmim = jmax + im
+rowmax = max(rowmax,abs(ap(jmim)))
+50 continue
+imim = imax + im
+if (abs(ap(imim)) < alpha*rowmax) go to 60
+kstep = 1
+swap = .true.
+go to 80
+60 continue
+if (absakk < alpha*colmax*(colmax/rowmax)) go to 70
+kstep = 1
+swap = .false.
+go to 80
+70 continue
+kstep = 2
+swap = imax /= km1
+80 continue
+90 continue
+if (max(absakk,colmax) /= 0.0d0) go to 100
+!
+!           Column k is zero.  Set info and iterate the loop.
+!
+kpvt(k) = k
+info = k
+go to 190
+100 continue
+if (kstep == 2) go to 140
+!
+!           1 X 1 pivot block.
+!
+if (.not.swap) go to 120
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ik + 1),1)
+imj = ik + imax
+do jj = imax, k
+   j = k + imax - jj
+   jk = ik + j
+   t = ap(jk)
+   ap(jk) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+120 continue
+!
+!           Perform the elimination.
+!
+ij = ik - (k - 1)
+do jj = 1, km1
+   j = k - jj
+   jk = ik + j
+   mulk = -ap(jk)/ap(kk)
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   ijj = ij + j
+   ap(jk) = mulk
+   ij = ij - (j - 1)
+end do
+!
+!           Set the pivot array.
+!
+kpvt(k) = k
+if (swap) kpvt(k) = imax
+go to 190
+140 continue
+!
+!           2 X 2 pivot block.
+!
+km1k = ik + k - 1
+ikm1 = ik - (k - 1)
+if (.not.swap) go to 160
+!
+!              Perform an interchange.
+!
+call dswap(imax,ap(im + 1),1,ap(ikm1 + 1),1)
+imj = ikm1 + imax
+do jj = imax, km1
+   j = km1 + imax - jj
+   jkm1 = ikm1 + j
+   t = ap(jkm1)
+   ap(jkm1) = ap(imj)
+   ap(imj) = t
+   imj = imj - (j - 1)
+end do
+t = ap(km1k)
+ap(km1k) = ap(imk)
+ap(imk) = t
+160 continue
+!
+!           Perform the elimination.
+!
+km2 = k - 2
+if (km2 == 0) go to 180
+ak = ap(kk)/ap(km1k)
+km1km1 = ikm1 + k - 1
+akm1 = ap(km1km1)/ap(km1k)
+denom = 1.0d0 - ak*akm1
+ij = ik - (k - 1) - (k - 2)
+do jj = 1, km2
+   j = km1 - jj
+   jk = ik + j
+   bk = ap(jk)/ap(km1k)
+   jkm1 = ikm1 + j
+   bkm1 = ap(jkm1)/ap(km1k)
+   mulk = (akm1*bk - bkm1)/denom
+   mulkm1 = (ak*bkm1 - bk)/denom
+   t = mulk
+   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
+   t = mulkm1
+   call daxpy(j,t,ap(ikm1 + 1),1,ap(ij + 1),1)
+   ap(jk) = mulk
+   ap(jkm1) = mulkm1
+   ijj = ij + j
+   ij = ij - (j - 1)
+end do
+180 continue
+!
+!           Set the pivot array.
+!
+kpvt(k) = 1 - k
+if (swap) kpvt(k) = -imax
+kpvt(k - 1) = kpvt(k)
+190 continue
+ik = ik - (k - 1)
+if (kstep == 2) ik = ik - (k - 2)
+k = k - kstep
+go to 10
+200 continue
+end subroutine dspfa
+
 pure subroutine dspsl(ap,n,kpvt,b)
 implicit none
 integer, intent(in) :: n, kpvt(*)
@@ -9535,13 +9826,16 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                 Addition of real banded matrices
 !-----------------------------------------------------------------------
 !
 ierr = 0
-if (nl - ml) 10,30,20
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
 !
 !     Insert the first abs(ml - nl) diagonals
 !
@@ -9589,7 +9883,10 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 !
-50 if (nu - mu) 100,160,130
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
 !
 !     Insertion of the remaining diagonals when mu .NE. nu
 !
@@ -9685,13 +9982,16 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !           Addition of double precision banded matrices
 !-----------------------------------------------------------------------
 !
 ierr = 0
-if (nl - ml) 10,30,20
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
 !
 !     Insert the first abs(ml - nl) diagonals
 !
@@ -9739,7 +10039,10 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 !
-50 if (nu - mu) 100,160,130
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
 !
 !     Insertion of the remaining diagonals when mu .NE. nu
 !
@@ -9835,13 +10138,16 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Addition of complex banded matrices
 !-----------------------------------------------------------------------
 !
 ierr = 0
-if (nl - ml) 10,30,20
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
 !
 !     Insert the first abs(ml - nl) diagonals
 !
@@ -9889,7 +10195,10 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 !
-50 if (nu - mu) 100,160,130
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
 !
 !     Insertion of the remaining diagonals when mu .NE. nu
 !
@@ -9985,13 +10294,16 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Subtraction of real banded matrices
 !-----------------------------------------------------------------------
 !
 ierr = 0
-if (nl - ml) 10,30,20
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
 !
 !     Insert the first abs(ml - nl) diagonals
 !
@@ -10039,7 +10351,10 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 !
-50 if (nu - mu) 100,160,130
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
 !
 !     Insertion of the remaining diagonals when mu .NE. nu
 !
@@ -10135,13 +10450,16 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
+integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !          Subtraction of double precision banded matrices
 !-----------------------------------------------------------------------
 !
 ierr = 0
-if (nl - ml) 10,30,20
+nswc_ai_i4 = nl - ml
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 20
 !
 !     Insert the first abs(ml - nl) diagonals
 !
@@ -10189,7 +10507,10 @@ jb = ja
 jc = 0
 jmax = mcl + 1
 !
-50 if (nu - mu) 100,160,130
+50 nswc_ai_i4 = nu - mu
+if ( nswc_ai_i4 < 0 ) go to 100
+if ( nswc_ai_i4 == 0 ) go to 160
+go to 130
 !
 !     Insertion of the remaining diagonals when mu .NE. nu
 !
@@ -10276,309 +10597,4 @@ return
 !
 200 ierr = num
 end subroutine dbsubt
-
-pure subroutine cbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
-integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
-!-----------------------------------------------------------------------
-!             Subtraction of complex banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-if (nl - ml) 10,30,20
-!
-!     Insert the first abs(ml - nl) diagonals
-!
-10 mcl = ml
-if (ml >= l) go to 50
-ja = ml - nl
-jb = 0
-jc = ja
-jmax = nl + 1
-do j = 1,jc
-   do i = 1,m
-11    c(i,j) = a(i,j)
-   end do
-end do
-go to 50
-!
-20 mcl = nl
-if (nl >= l) go to 50
-ja = 0
-jb = nl - ml
-jc = jb
-jmax = ml + 1
-do j = 1,jc
-   do i = 1,m
-21    c(i,j) = -b(i,j)
-   end do
-end do
-go to 50
-!
-!     COMPUTE mcl WHEN ml = nl
-!
-30 mcl = ml
-if (ml == 0) go to 40
-imin = ml + 1
-do j = 1,ml
-   do i = imin,m
-      if ((a(i,j) - b(i,j)) /= (0.0,0.0)) go to 40
-   end do
-   mcl = mcl - 1
-   imin = imin - 1
-end do
-!
-40 ja = ml - mcl
-jb = ja
-jc = 0
-jmax = mcl + 1
-!
-50 if (nu - mu) 100,160,130
-!
-!     Insertion of the remaining diagonals when mu .NE. nu
-!
-100 mcu = mu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + nu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = mu - nu
-do j = 1,jmax
-   ja = ja + 1
-   jc = jc + 1
-   do i = 1,m
-120   c(i,jc) = a(i,ja)
-   end do
-end do
-return
-!
-130 mcu = nu
-num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-!
-jmax = nu - mu
-do j = 1,jmax
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-150   c(i,jc) = -b(i,jb)
-   end do
-end do
-return
-!
-!     Compute mcu when mu = nu
-!
-160 mcu = mu
-if (mu == 0) go to 170
-la = ml + mu + 1
-lb = nl + nu + 1
-do j = 1,mu
-   do i = 1,m
-      if ((a(i,la) - b(i,lb)) /= (0.0,0.0)) go to 170
-   end do
-   mcu = mcu - 1
-   la = la - 1
-   lb = lb - 1
-end do
-!
-!     Addition of the remaining columns when mu = nu
-!
-170 num = mcl + mcu + 1
-if (num > l) go to 200
-!
-jmax = jmax + mcu
-do j = 1,jmax
-   ja = ja + 1
-   jb = jb + 1
-   jc = jc + 1
-   do i = 1,m
-      c(i,jc) = a(i,ja) - b(i,jb)
-   end do
-end do
-return
-!
-!     Error return
-!
-200 ierr = num
-end subroutine cbsubt
-
-pure subroutine bprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
-   & c, kc, nc, mcl, mcu, ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: ka, kb, kc, l, m
-integer, intent(inout) :: mcl, mcu
-integer, intent(in) :: ml, mu, n, nc, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,nc)
-integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
-   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-real :: sum
-!-----------------------------------------------------------------------
-!                Multiplication of real banded matrices
-!-----------------------------------------------------------------------
-!
-ierr = 0
-do j = 1,nc
-   do i = 1,m
-10    c(i,j) = 0.0
-   end do
-end do
-!
-mlp1 = ml + 1
-nlp1 = nl + 1
-npml = n + ml
-npnu = n + nu
-mcl = min(m - 1,ml + nl)
-jc = 0
-if (mcl == 0) go to 100
-!
-!     Find the first nonzero lower diagonal
-!
-maxd = mcl
-do ndiag = 1,maxd
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,1) = sum
-   end do
-!
-   do j = 1,jmax
-      i = j + imj
-      if (c(i,1) /= 0.0) go to 40
-   end do
-   mcl = mcl - 1
-end do
-go to 100
-!
-40 if (mcl >= nc) go to 100
-jc = 1
-if (mcl == 1) go to 100
-!
-!     Compute the remaining lower diagonals
-!
-mind = ndiag + 1
-do ndiag = mind,maxd
-   jc = jc + 1
-   imj = maxd + 1 - ndiag
-   jmax = min(l,m - imj,npml - imj,npnu)
-   do j = 1,jmax
-      i = j + imj
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-end do
-!
-!     Find the last nonzero upper diagonal
-!
-100 jc = jc + 1
-mcu = min(l - 1,mu + nu)
-if (mcu == 0) go to 130
-!
-maxd = mcu
-do ndiag = 1,maxd
-   jmi = maxd + 1 - ndiag
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-!
-   do i = 1,imax
-      if (c(i,jc) /= 0.0) go to 130
-   end do
-   mcu = mcu - 1
-end do
-!
-130 last = mcl + mcu + 1
-if (last > nc) go to 200
-if (mcu == 0) go to 140
-do i = 1,imax
-   c(i,last) = c(i,jc)
-   c(i,jc) = 0.0
-end do
-!
-!     Compute the main diagonal and the remaining upper diagonals
-!
-140 maxd = max(1,mcu)
-do ndiag = 1,maxd
-   jmi = ndiag - 1
-   imax = min(m,l - jmi,npml,npnu - jmi)
-   do i = 1,imax
-      j = i + jmi
-      sum = 0.0
-      kmin = max(1,i - ml,j - nu)
-      kmax = min(n,i + mu,j + nl)
-      kk = mlp1 - i + kmin
-      jj = nlp1 + j - kmin
-      do k = kmin,kmax
-         sum = sum + a(i,kk)*b(k,jj)
-         kk = kk + 1
-         jj = jj - 1
-      end do
-      c(i,jc) = sum
-   end do
-   jc = jc + 1
-end do
-return
-!
-!     Error return
-!
-200 ierr = last
-end subroutine bprod
 

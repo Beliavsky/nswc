@@ -1,3 +1,376 @@
+pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+real, intent(inout) :: c(*), u(iue,m), up
+integer :: i, i2, i3, i4, incr, j
+real :: cl, d, sm1
+double precision :: sm, b
+!-----------------------------------------------------------------------
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!
+!     Construction and/or application of a single
+!     Householder transformation..     Q = i + u*(u**T)/b
+!
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!     lpivot is the index of the pivot element.
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
+!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!            the subroutine does an identity transformation.
+!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
+!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
+!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
+!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!            no operations will be done on c().
+!-----------------------------------------------------------------------
+!
+if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
+cl = abs(u(1,lpivot))
+if (mode == 2) go to 60
+!
+!                            ****** Construct the transformation. ******
+!
+do j = l1,m
+10 cl = max(abs(u(1,j)),cl)
+end do
+if (cl <= 0.0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+do j = l1,m
+   d = u(1,j)/cl
+20 sm = sm + dble(d*d)
+end do
+!
+sm1 = sm
+cl = cl*sqrt(sm1)
+if (u(1,lpivot) > 0.0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
+!
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
+!
+60 if ( ( cl ) <= 0 ) go to 130
+go to 70
+70 if (ncv <= 0) return
+b = dble(up)*dble(u(1,lpivot))
+!
+!                       b  must be nonpositive here.  If b = 0., Return.
+!
+if (b >= 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+do j = 1,ncv
+   i2 = i2 + icv
+   i3 = i2 + incr
+   i4 = i3
+   sm = dble(c(i2))*dble(up)
+   do i = l1,m
+      sm = sm + dble(c(i3))*dble(u(1,i))
+90    i3 = i3 + ice
+   end do
+   if (sm == 0.d0) go to 120
+   sm = sm*b
+   c(i2) = c(i2) + sm*dble(up)
+   do i = l1,m
+      c(i4) = c(i4) + sm*dble(u(1,i))
+110   i4 = i4 + ice
+   end do
+120 continue
+end do
+130 return
+end subroutine h12
+
+pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+double precision :: hmax, sm, sm1, tmp, z
+double precision, parameter :: factor = 1.d-3
+interface
+   pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv &
+      & )
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      double precision, intent(inout) :: u(iue,m)
+      double precision, intent(inout) :: up
+      double precision, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine dh12
+end interface
+!-----------------------------------------------------------------------
+!     double precision a(mda,n),(b(mdb,nb) or b(m))
+!     double precision tau,rnorm(nb),h(n),g(n)
+!     integer ip(n)
+!
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!
+!     Abstract
+!
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!
+!                       ax = b,
+!
+!     Where X is the n by nb solution matrix.
+!
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!
+!                       dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
+!
+!                       i = 1,...,l-1, where
+!
+!                       l = min(m,n).
+!
+!     The subroutine sets k to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first k rows of (R C).
+!
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!
+!     The entire set of parameters for dhfti are
+!
+!     Input..
+!
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti.
+!
+!     Output..
+!
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!
+!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!-----------------------------------------------------------------------
+!---------------------
+!
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+do j = 1,ldiag
+   if (j == 1) go to 20
+!
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.d0
+      do i = j,m
+30       h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!
+!     Do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+60    a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!
+!     Determine the pseudorank, k, using the tolerance, tau.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
+!
+!     Compute the norms of the residual vectors.
+!
+if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.d0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+120   tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+150   b(i,jb) = 0.d0
+   end do
+end do
+go to 270
+!
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+!
+!
+if (nb <= 0) go to 270
+do jb = 1,nb
+!
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+190      sm = sm + a(i,j)*b(j,jb)
+      end do
+200   sm1 = b(i,jb) - sm
+210   b(i,jb) = sm1/a(i,i)
+   end do
+!
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+220   b(j,jb) = 0.d0
+   end do
+   do i = 1,k
+230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+!
+270 return
+end subroutine dhfti
+
 pure subroutine dhfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -366,7 +739,8 @@ go to 70
 !
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
 !
-60 if (cl) 130,130,70
+60 if ( ( cl ) <= 0 ) go to 130
+go to 70
 70 if (ncv <= 0) return
 b = up*u(1,lpivot)
 !
@@ -5168,7 +5542,7 @@ real, intent(inout) :: x, w
 real, intent(in) :: aerr, rerr
 real, intent(inout) :: error
 external f
-real :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v
+real :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v, nswc_ai_r4
 real, parameter :: eps0 = 5.e-3
 real, parameter :: c1 = .3819660112501052
 real, parameter :: c2 = .6180339887498948
@@ -5208,7 +5582,10 @@ fv = f(v)
 !        Location of the region of a local minimum
 !
 10 if (e <= eps0*(1.0 + abs(a))) go to 40
-if (fu - fv) 20,11,30
+nswc_ai_r4 = fu - fv
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 11
+go to 30
 11 if (fu > f(b)) go to 30
 !
 20 b = v
@@ -5322,7 +5699,10 @@ go to 201
 !                    Report the results
 !
 240 ind = 0
-241 if (fu - fv) 242,243,244
+241 nswc_ai_r4 = fu - fv
+if ( nswc_ai_r4 < 0 ) go to 242
+if ( nswc_ai_r4 == 0 ) go to 243
+go to 244
 242 x = u
 w = fu
 error = c1*e
@@ -8855,9 +9235,8 @@ real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
-   & npos, nrow, ns, nstep, num, bflag
-real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
-   & ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
+   & npos, nrow, ns, nstep, num, bflag, nswc_ai_i4
+real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
 double precision :: dsum, dsump, dsumn, dt
 interface
    pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
@@ -9138,7 +9517,10 @@ do j = jmin,n
 202 continue
 end do
 203 if (jp /= 0) go to 300
-if (nstep - 2) 800,230,250
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 800
+if ( nswc_ai_i4 == 0 ) go to 230
+go to 250
 !
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -9237,7 +9619,10 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 !
-360 if (nstep - 2) 400,430,440
+360 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 400
+if ( nswc_ai_i4 == 0 ) go to 430
+go to 440
 !
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -9249,7 +9634,10 @@ epsi = xmax
 do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
-   if (ratio - epsi) 401,402,403
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 401
+   if ( nswc_ai_r4 == 0 ) go to 402
+   go to 403
 401 epsi = ratio
    npos = 1
    index(1) = i
@@ -9291,7 +9679,10 @@ epsi = xmax
 do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
-   if (ratio - epsi) 431,432,433
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 431
+   if ( nswc_ai_r4 == 0 ) go to 432
+   go to 433
 431 epsi = ratio
    npos = 1
    index(1) = i
@@ -9308,12 +9699,18 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   if (y(i)) 441,445,442
+   nswc_ai_r4 = y ( i )
+   if ( nswc_ai_r4 < 0 ) go to 441
+   if ( nswc_ai_r4 == 0 ) go to 445
+   go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
-   if (ratio - epsi) 443,444,445
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 443
+   if ( nswc_ai_r4 == 0 ) go to 444
+   go to 445
 443 epsi = ratio
    npos = 1
    index(1) = i
@@ -9437,7 +9834,10 @@ go to 220
 !
 !       Set up the r array for the NSTEP = 1 Case
 !
-600 if (nstep - 2) 601,630,700
+600 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 601
+if ( nswc_ai_i4 == 0 ) go to 630
+go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
 end do
@@ -9457,7 +9857,10 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      if (bi(l,j)) 620,622,621
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 620
+      if ( nswc_ai_r4 == 0 ) go to 622
+      go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
 621   dsump = dsump + dble(bi(l,j))
@@ -9488,7 +9891,10 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      if (bi(l,j)) 640,642,641
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 640
+      if ( nswc_ai_r4 == 0 ) go to 642
+      go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
 641   dsump = dsump + dble(bi(l,j))
@@ -9644,7 +10050,10 @@ end do
 850 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   if (xb(i)) 851,856,852
+   nswc_ai_r4 = xb ( i )
+   if ( nswc_ai_r4 < 0 ) go to 851
+   if ( nswc_ai_r4 == 0 ) go to 856
+   go to 852
 851 sgn = -1.0
    dsump = 0.d0
    dsumn = xb(i)
@@ -9669,7 +10078,10 @@ do i = 1,m
    if (abs(w) > tol) y(i) = w
 856 continue
 end do
-if (nstep - 2) 860,870,880
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 860
+if ( nswc_ai_i4 == 0 ) go to 870
+go to 880
 !
 !         Check the refinement (NSTEP = 1)
 !
@@ -9775,9 +10187,8 @@ integer, intent(in) :: ita(*), jta(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
-   & mcheck, ms, n, npos, ns, nstep, num, bflag
-real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
-   & ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
+   & mcheck, ms, n, npos, ns, nstep, num, bflag, nswc_ai_i4
+real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
 double precision :: dsum, dsump, dsumn, dt
 interface
    pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
@@ -10067,7 +10478,10 @@ do j = jmin,n
 202 continue
 end do
 203 if (jp /= 0) go to 300
-if (nstep - 2) 800,230,250
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 800
+if ( nswc_ai_i4 == 0 ) go to 230
+go to 250
 !
 !     Insert the values of the orginal, slack, and surplus
 !             variables into r. then terminate.
@@ -10163,7 +10577,10 @@ iter = iter - 1
 icount = icount - 1
 go to 200
 !
-360 if (nstep - 2) 400,430,440
+360 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 400
+if ( nswc_ai_i4 == 0 ) go to 430
+go to 440
 !
 !     Finding the variable xb(ip) to be made nonbasic
 !               for the NSTEP = 1 Case
@@ -10175,7 +10592,10 @@ epsi = xmax
 do i = 1,m
    if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
-   if (ratio - epsi) 401,402,403
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 401
+   if ( nswc_ai_r4 == 0 ) go to 402
+   go to 403
 401 epsi = ratio
    npos = 1
    index(1) = i
@@ -10217,7 +10637,10 @@ epsi = xmax
 do i = 1,m
    if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
-   if (ratio - epsi) 431,432,433
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 431
+   if ( nswc_ai_r4 == 0 ) go to 432
+   go to 433
 431 epsi = ratio
    npos = 1
    index(1) = i
@@ -10234,12 +10657,18 @@ go to 450
 440 npos = 0
 epsi = xmax
 do i = 1,m
-   if (y(i)) 441,445,442
+   nswc_ai_r4 = y ( i )
+   if ( nswc_ai_r4 < 0 ) go to 441
+   if ( nswc_ai_r4 == 0 ) go to 445
+   go to 442
 441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
-   if (ratio - epsi) 443,444,445
+   nswc_ai_r4 = ratio - epsi
+   if ( nswc_ai_r4 < 0 ) go to 443
+   if ( nswc_ai_r4 == 0 ) go to 444
+   go to 445
 443 epsi = ratio
    npos = 1
    index(1) = i
@@ -10366,7 +10795,10 @@ go to 220
 !
 !       Set up the r array for the NSTEP = 1 Case
 !
-600 if (nstep - 2) 601,630,700
+600 nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 601
+if ( nswc_ai_i4 == 0 ) go to 630
+go to 700
 601 do j = 1,m
    if (xb(j) < 0.0) go to 610
 end do
@@ -10386,7 +10818,10 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      if (bi(l,j)) 620,622,621
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 620
+      if ( nswc_ai_r4 == 0 ) go to 622
+      go to 621
 620   dsumn = dsumn + dble(bi(l,j))
       go to 622
 621   dsump = dsump + dble(bi(l,j))
@@ -10417,7 +10852,10 @@ do j = 1,m
    dsumn = 0.d0
    do ll = 1,m0
       l = index(ll)
-      if (bi(l,j)) 640,642,641
+      nswc_ai_r4 = bi( l , j )
+      if ( nswc_ai_r4 < 0 ) go to 640
+      if ( nswc_ai_r4 == 0 ) go to 642
+      go to 641
 640   dsumn = dsumn + dble(bi(l,j))
       go to 642
 641   dsump = dsump + dble(bi(l,j))
@@ -10589,7 +11027,10 @@ end do
 850 rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
-   if (xb(i)) 851,856,852
+   nswc_ai_r4 = xb ( i )
+   if ( nswc_ai_r4 < 0 ) go to 851
+   if ( nswc_ai_r4 == 0 ) go to 856
+   go to 852
 851 sgn = -1.0
    dsump = 0.d0
    dsumn = xb(i)
@@ -10614,7 +11055,10 @@ do i = 1,m
    if (abs(w) > tol) y(i) = w
 856 continue
 end do
-if (nstep - 2) 860,870,880
+nswc_ai_i4 = nstep - 2
+if ( nswc_ai_i4 < 0 ) go to 860
+if ( nswc_ai_i4 == 0 ) go to 870
+go to 880
 !
 !         Check the refinement (NSTEP = 1)
 !

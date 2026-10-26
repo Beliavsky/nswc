@@ -20,6 +20,7 @@ jobs:
       - run: python tools/validate_explicit_typing.py
       - run: python tools/validate_final_returns.py
       - run: python tools/validate_deleted_do.py
+      - run: python tools/validate_arithmetic_if.py
       - run: python tools/validate_free_formatting.py
       - run: python tools/validate_data_constants.py
       - run: python tools/validate_generic_intrinsics.py

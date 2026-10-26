@@ -1,3 +1,218 @@
+pure subroutine incdg(degree,alpha,psi,indexs,newkj, &
+   & sumsqs,coord,ncrows,npolys, &
+   & dimen,npts,f,z,c,psiwid,weight, &
+   & alfl,onplys,sttdeg,error)
+implicit none
+integer, intent(in) :: ncrows
+integer, intent(inout) :: error
+integer, intent(in) :: onplys
+integer, intent(inout) :: sttdeg
+integer, intent(inout) :: degree, npolys
+integer, intent(in) :: npts, dimen, psiwid, alfl
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+real, intent(inout) :: alpha(alfl)
+real, intent(in) :: coord(ncrows,dimen)
+real, intent(inout) :: psi(npts,psiwid)
+real, intent(inout) :: sumsqs(npolys), c(npolys)
+real, intent(in) :: f(npts), weight(npts)
+real, intent(inout) :: z(npts)
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
+   & index1, index2
+real :: arc, runtot, rntot1, rntot2
+!
+!
+!     ***************
+!     Purpose
+!     -------
+!
+!     The multinomial fit is generated incrementally, a basis  element
+!     at a time.  This subroutine continues the process started off by
+!      gnrtp .
+!
+!     This subroutine is called by  gnrtp  and not by the user.
+!
+!
+!     Modified by A.H. Morris (NSWC)
+!
+!     ****************
+!
+if ( onplys >= 1 .and. sttdeg >= 1 ) go to 10
+error = 6
+return
+10 if ( indexs(2,onplys) == dimen ) go to 20
+curdeg = sttdeg
+go to 30
+20 curdeg = sttdeg + 1
+30 onpp1 = onplys + 1
+do j = onpp1,npolys
+   jprime = indexs(1,j)
+   jindex = j - ((j - 1) / psiwid) * psiwid
+   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
+   kj = indexs(2,j)
+   start = indexs(3,j)
+   m = start
+   starta = indexs(4,j) - start
+   if ( curdeg == 1 ) go to 100
+   kjp = indexs(2,jprime)
+   j1 = newkj(kj,curdeg - 1)
+!
+!     ***************
+!     Calculate those  alpha ( j , m ) that can be calculated from
+!     previously calculated alphas.
+!     ***************
+!
+   if ( kj < kjp ) go to 50
+!
+!     ***************
+!     First calculate those between  JPP  and the end of 2 rows back.
+!     Calculate  alpha ( j , JPP )
+!     ***************
+!
+   index1 = indexs(4,j)
+   alpha(index1) = sumsqs(jprime) / sumsqs(start)
+!
+   m = start + 1
+   j3 = newkj(1,curdeg - 1) - 1
+   if ( m > j3 ) go to 50
+!
+!     ***************
+!     curdeg .GT. 2 if control has passed the branches in the 3-RD
+!     previous and 8-TH previous statements.
+!     ***************
+!
+   j1mj2 = j1 - newkj(kj,curdeg - 2)
+!
+   do l = m,j3
+      q = j1mj2 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+   end do
+!
+!     ***************
+!     Calculate  alpha ( j , m ) for  m  between the 2
+!     ranges calculated before using
+!
+!        alpha ( j , l ) = (X  *  psi  ,psi )  / (psi ,psi )
+!                             K      JP    l         l    l
+!                              j
+!     ***************
+!
+   m = j3 + 1
+50 if ( jprime == j1 ) go to 100
+   if ( kj == 1 ) go to 80
+   j1m1 = j1 - 1
+   do l = m,j1m1
+      runtot = 0.0
+      do p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      end do
+      index1 = starta + l
+70    alpha(index1) = runtot / sumsqs(l)
+   end do
+!
+!     ***************
+!     Calculate  alpha ( j , m ) for  m  between
+!      newkj ( kj , curdeg  - 1)  AND
+!      JP  - 1.
+!     ***************
+!
+80 j0mj1 = newkj(kj,curdeg) - j1
+   jpm1 = jprime - 1
+   do l = j1,jpm1
+      q = j0mj1 + l
+      index1 = starta + l
+      index2 = indexs(4,q) - indexs(3,q) + jprime
+90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+         & sumsqs(l)
+   end do
+   m = jprime
+!
+!     ***************
+!     Calculate the remaining  alpha ( j , m ) from
+!
+!      alpha ( j , l ) = (X   * psi  ,psi ) / (psi ,psi )
+!                          K       JP    l        l    l
+!                           j
+!     ***************
+!
+100 jm1 = j - 1
+   do l = m,jm1
+      runtot = 0.0
+      do p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+            & psi(p,index1) * weight(p)
+      end do
+      index1 = starta + l
+120   alpha(index1) = runtot / sumsqs(l)
+   end do
+!
+!     ***************
+!     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
+!
+!                          j-1
+!     psi  = X  * psi   -  SUM   alpha(j,l) * psi
+!        j    K      JP    l=JPP                 l
+!
+!     sumsqs  = (psi ,psi )
+!           j       j    j
+!
+!     c  = (z,psi )
+!      j         j
+!     ***************
+!
+130 jm1 = j - 1
+   arc = 0.0
+   rntot1 = 0.0
+   rntot2 = 0.0
+   do p = 1,npts
+      runtot = coord(p,kj) * psi(p,jpindx)
+      do l = start,jm1
+         index1 = starta + l
+         index2 = l - ((l - 1) / psiwid) * psiwid
+140      runtot = runtot - alpha(index1) * psi(p,index2)
+      end do
+      psi(p,jindex) = runtot
+      arc = arc + psi(p,index2) * psi(p,jindex) * &
+         & weight(p)
+      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+         & weight(p)
+150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+   end do
+   if (arc * arc >= sumsqs(jm1) * rntot1 * 1.e-03) &
+      & go to 200
+   sumsqs(j) = rntot1
+   c(j) = rntot2 / rntot1
+!
+!     ***************
+!     Calculate the new  z ( p ) and the new  SSRES  using
+!
+!     z = z - c  * psi
+!              j      j
+!     ***************
+!
+   do p = 1,npts
+160   z(p) = z(p) - c(j) * psi(p,jindex)
+   end do
+   sttdeg = curdeg
+170 if ( kj == dimen ) curdeg = curdeg + 1
+end do
+return
+!
+!     ***************
+!     The j-TH basis multinomial cannot be computed accurately.
+!     Only j - 1 Basis multinomials are generated.
+!     ***************
+!
+200 error = -1
+degree = sttdeg
+npolys = jm1
+end subroutine incdg
+
 pure subroutine scalpm(coord,npts,maxabs)
 implicit none
 !
@@ -79,7 +294,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
 interface
    pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)
@@ -201,7 +416,10 @@ end interface
 !     ***************
 !
 if (nepts < 1 .or. dimen < 1) go to 110
-if (evldeg) 40,10,20
+nswc_ai_i4 = evldeg
+if ( nswc_ai_i4 < 0 ) go to 40
+if ( nswc_ai_i4 == 0 ) go to 10
+go to 20
 !
 10 nepols = 1
 go to 50
@@ -894,7 +1112,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
 interface
    pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)
@@ -1017,7 +1235,10 @@ end interface
 !     ***************
 !
 if (nepts < 1 .or. dimen < 1) go to 110
-if (evldeg) 40,10,20
+nswc_ai_i4 = evldeg
+if ( nswc_ai_i4 < 0 ) go to 40
+if ( nswc_ai_i4 == 0 ) go to 10
+go to 20
 !
 10 nepols = 1
 go to 50
@@ -1482,8 +1703,9 @@ inew = iold + 1
 i = i + 1
 result(k) = (acum + p(i)*fzero)*diff
 ! Check for convergence.
-if (abs(result(k) - result(k - 1)) - epsil*abs(result(k))) 60, &
-   & 60, 10
+if ( ( abs ( result ( k ) - result ( k - 1 ) ) - epsil * abs ( &
+   & result ( k ) ) ) <= 0 ) go to 60
+go to 10
 ! Convergence not achieved.
 50 icheck = 1
 ! Normal termination.
@@ -9422,8 +9644,7 @@ logical, intent(inout) :: start
 logical, intent(out) :: crash
 logical, intent(inout) :: phase1, nornd
 external f
-integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
-   & limit1, limit2, nsm2, nsp1, nsp2
+integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
    & temp4, temp5, temp6, twou, u, xold
 real, parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
@@ -9775,12 +9996,18 @@ erk = 0.0
 do l = 1,neqn
    temp3 = 1.0/wt(l)
    temp4 = yp(l) - phi(l,1)
-   if (km2) 265,260,255
+   nswc_ai_i4 = km2
+   if ( nswc_ai_i4 < 0 ) go to 265
+   if ( nswc_ai_i4 == 0 ) go to 260
+   go to 255
 255 erkm2 = erkm2 + ((phi(l,km1) + temp4)*temp3)**2
 260 erkm1 = erkm1 + ((phi(l,k) + temp4)*temp3)**2
 265 erk = erk + (temp4*temp3)**2
 end do
-if (km2) 280,275,270
+nswc_ai_i4 = km2
+if ( nswc_ai_i4 < 0 ) go to 280
+if ( nswc_ai_i4 == 0 ) go to 275
+go to 270
 270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
 275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
 280 temp5 = absh*sqrt(erk)
@@ -9790,7 +10017,10 @@ knew = k
 !
 !   Test if order should be lowered
 !
-if (km2) 299,290,285
+nswc_ai_i4 = km2
+if ( nswc_ai_i4 < 0 ) go to 299
+if ( nswc_ai_i4 == 0 ) go to 290
+go to 285
 285 if (max(erkm1,erkm2) <= erk) knew = km1
 go to 299
 290 if (erkm1 <= 0.5*erk) knew = km1
@@ -9831,7 +10061,10 @@ end do
 !
 320 ifail = ifail + 1
 temp2 = 0.5
-if (ifail - 3) 335,330,325
+nswc_ai_i4 = ifail - 3
+if ( nswc_ai_i4 < 0 ) go to 335
+if ( nswc_ai_i4 == 0 ) go to 330
+go to 325
 325 if (p5eps < 0.25*erk) temp2 = sqrt(p5eps/erk)
 330 knew = 1
 335 h = temp2*h
@@ -10315,640 +10548,4 @@ iwork(5) = 0
 if (blkout) iwork(5) = -1
 !
 end subroutine brkf45
-
-subroutine rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
-   & w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
-   & told,nfe,jflag,kflag,endpnt,blkout)
-implicit none
-integer, intent(inout) :: iflag, jflag, kflag
-integer, intent(in) :: neqn
-integer, intent(inout) :: nfe
-real, intent(in) :: abserr
-real :: f1(neqn)
-real, intent(inout) :: f2(neqn), f3(neqn)
-real :: f4(neqn), f7(neqn)
-real, intent(inout) :: h, hint, relerr, savae, savre, t
-real, intent(in) :: tend
-real, intent(inout) :: told
-real, intent(in) :: tout
-real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
-   & y2(neqn), yp(neqn)
-logical, intent(inout) :: endpnt
-logical, intent(inout) :: blkout
-external fcn
-integer :: k, mflag, n
-real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
-logical :: hfaild, interp
-real, parameter :: c2 = .250000000000000e+00
-real, parameter :: c3 = .375000000000000e+00
-real, parameter :: c4 = .923076923076923e+00
-real, parameter :: c6 = .500000000000000e+00
-real, parameter :: c8 = .150000000000000e+01
-real, parameter :: c9 = .200000000000000e+01
-real, parameter :: a21 = .250000000000000e+00
-real, parameter :: a31 = .937500000000000e-01
-real, parameter :: a32 = .281250000000000e+00
-real, parameter :: a41 = .879380974055530e+00
-real, parameter :: a42 = -.327719617660446e+01
-real, parameter :: a43 = .332089212562585e+01
-real, parameter :: a51 = .203240740740741e+01
-real, parameter :: a52 = -.800000000000000e+01
-real, parameter :: a53 = .717348927875244e+01
-real, parameter :: a54 = -.205896686159844e+00
-real, parameter :: a61 = -.296296296296296e+00
-real, parameter :: a62 = .200000000000000e+01
-real, parameter :: a63 = -.138167641325536e+01
-real, parameter :: a64 = .452972709551657e+00
-real, parameter :: a65 = -.275000000000000e+00
-real, parameter :: b1b = .118518518518519e+00
-real, parameter :: b3b = .518986354775828e+00
-real, parameter :: b4b = .506131490342017e+00
-real, parameter :: b5b = -.180000000000000e+00
-real, parameter :: b6b = .363636363636364e-01
-real, parameter :: erc11 = .277777777777778e-02
-real, parameter :: erc13 = -.299415204678363e-01
-real, parameter :: erc14 = -.291998936735779e-01
-real, parameter :: erc15 = .200000000000000e-01
-real, parameter :: b1 = .143672839506173e+00
-real, parameter :: b3 = .210187767614668e+00
-real, parameter :: b4 = .603140025990903e+00
-real, parameter :: b5 = .200000000000000e-01
-real, parameter :: b6 = .400000000000000e+00
-real, parameter :: b7 = -.266666666666667e+00
-real, parameter :: b8 = .736460905349794e+00
-real, parameter :: b9 = .153205128205128e+00
-real, parameter :: a81 = -.785774430040232e+00
-real, parameter :: a82 = .269557443004023e+01
-real, parameter :: a83 = -.387868820553843e+00
-real, parameter :: a84 = -.323463729234086e+01
-real, parameter :: a85 = .141740175234689e+01
-real, parameter :: a86 = -.739340252773601e+00
-real, parameter :: a87 = .253464461332141e+01
-real, parameter :: a91 = .277678804896947e+01
-real, parameter :: a92 = -.461924686192469e+01
-real, parameter :: a93 = -.540556629238679e+01
-real, parameter :: a94 = .195138152603181e+02
-real, parameter :: a95 = -.627825575453278e+01
-real, parameter :: a96 = .753363921389629e+01
-real, parameter :: a97 = -.139246861924514e+02
-real, parameter :: a98 = .240351257812904e+01
-real, parameter :: erc21 = .224905375494686e-01
-real, parameter :: erc23 = -.186601479161668e+00
-real, parameter :: erc24 = .224620349650851e+00
-real, parameter :: erc25 = -.384622777202128e-01
-real, parameter :: erc26 = .180000000000000e+00
-real, parameter :: erc27 = -.233333333333333e+00
-real, parameter :: erc28 = .362862030148937e-01
-real, parameter :: erc29 = -.500000000000000e-02
-real, parameter :: remin = 1.e-12
-integer, parameter :: maxnfe = 18000
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!
-!     Two step block Runge-Kutta Fehlberg method.
-!     A standard 5(4) formula is used at the first point in the block
-!     and A 6(4) formula is used at the second point.
-!
-!
-!***********************************************************************
-!
-!     Coefficients defining the method ...
-!
-!                c2=0.25e+0
-!                c3=3.0e+0/8.0e+0
-!                c4=12.0e+0/13.0e+0
-!                c6=0.5e+0
-!                c8=3.0e+0/2.0e+0
-!                c9=2.0e+0
-!
-!                a21=1.0e+0/4.0e+0
-!                a31=3.0e+0/32.0e+0
-!                a32=9.0e+0/32.0e+0
-!                a41=1932.0e+0/2197.0e+0
-!                a42=-7200.0e+0/2197.0e+0
-!                a43=7296.0e+0/2197.0e+0
-!                a51=439.0e+0/216.0e+0
-!                a52=-8.0e+0
-!                a53=3680.0e+0/513.0e+0
-!                a54=-845.0e+0/4104.0e+0
-!                a61=-8.0e+0/27.0e+0
-!                a62=2.0e+0
-!                a63=-3544.0e+0/2565.0e+0
-!                a64=1859.0e+0/4104.0e+0
-!                a65=-11.0e+0/40.0e+0
-!
-!                b1b=16.0e+0/135.0e+0
-!                b3b=6656.0e+0/12825.0e+0
-!                b4b=28561.0e+0/56430.0e+0
-!                b5b=-9.0e+0/50.0e+0
-!                b6b=2.0e+0/55.0e+0
-!
-!                erc11=1.0e+0/360.0e+0
-!                erc13=-128.0e+0/4275.0e+0
-!                erc14=-2197.0e+0/75240.0e+0
-!                erc15=1.0e+0/50.0e+0
-!
-!
-!
-!
-!
-!     The above define the coefficients for brkf45 used to generate
-!     the solution at the first block point. Below are additional
-!     coefficients needed to generate the solution at the second block
-!     point.
-!
-!                b1=931.0e+0/6480.0e+0
-!                b3=315392.0e+0/1500525.0e+0
-!                b4=371293.0e+0/615600.0e+0
-!                b5=1.0e+0/50.0e+0
-!                b6=0.4e+0
-!                b7=-4.0e+0/15.0e+0
-!                b8=85006.0e+0/115425.0e+0
-!                b9=239.0e+0/1560.0e+0
-!
-!                a81=-119397029895.0e+0/151948225000.0e+0
-!                a82=78390.0e+0/29081.0e+0
-!                a83=-51517464.0e+0/132821875.0e+0
-!                a84=-3780749193.0e+0/1168832500.0e+0
-!                a85=79268193.0e+0/55925000.0e+0
-!                a86=-11370591.0e+0/15379375.0e+0
-!                a87=5670.0e+0/2237.0e+0
-!
-!                a91=23406188597.0e+0/8429231250.0e+0
-!                a92=-62928.0e+0/13623.0e+0
-!                a93=-31066887488.0e+0/5747203125.0e+0
-!                a94=164486461399.0e+0/8429231250.0e+0
-!                a95=-70336084.0e+0/11203125.0e+0
-!                a96=185680664.0e+0/24646875.0e+0
-!                a97=-3385330161.0e+0/243117160.0e+0
-!                a98=232648.0e+0/96795.0e+0
-!
-!
-!
-!
-!     Next we define coefficients for the error estimate formula.
-!
-!     b3e = 1067091077380.0e+0/1829119027671.0e+0
-!     b4e = 3284168845918.0e+0/21339721989495.0e+0
-!     b5e = 110317750789.0e+0/240996319200.0e+0-
-!    *      4448925830089.0E+0/12329617149531.0E+0
-!     b6e = 1.0e+0/25.0e+0
-!     b7e = 0.2e+0
-!     b8e = 239992027043.0e+0/361494478800.0e+0
-!     b9e = 1273.0e+0/7800.0e+0
-!     b1e = 2.0e+0-b3e-b4e-b5e-b6e-b7e-b8e-b9e
-!
-!     erc21 = (b1-b1e)/2.0e+0
-!     erc23 = (b3-b3e)/2.0e+0
-!     erc24 = (b4-b4e)/2.0e+0
-!     erc25 = (b5-b5e)/2.0e+0
-!     erc26 = 9.0e+0/50.0e+0
-!     erc27 = -7.0e+0/30.0e+0
-!     erc28 = (b8 - b8e)/2.0e+0
-!     erc29 = -0.005e+0
-!
-!
-!***********************************************************************
-!
-!  REMIN is a tolerance threshold which is also determined by the
-!  integration method. In particular, a fifth order method will
-!  generally not be capable of delivering accuracies near limiting
-!  precision on computers with long wordlengths. This does not have
-!  to be changed for different machines.
-!
-!
-!***********************************************************************
-!
-!     The expense is controlled by restricting the number
-!     of function evaluations to be approximately maxnfe.
-!
-!
-!***********************************************************************
-!
-!  The computer unit roundoff error U is the smallest positive value
-!  representable in the machine such that  1 + U .GT. 1.
-!
-u = spmpar(1)
-!
-!***********************************************************************
-!
-!     Check input parameters
-!
-if (neqn < 1) go to 500
-if (relerr < 0.0 .or. abserr < 0.0) go to 500
-if (t == tend) go to 500
-mflag = abs(iflag)
-if (mflag /= 1) go to 10
-told = t
-if (tout == t) go to 70
-if (sign(1.0, tend - t) /= sign(1.0, tout - t)) go to 500
-go to 70
-10 if (mflag == 0 .or. mflag > 7) go to 500
-if (tout == told) go to 20
-if (sign(1.0, tend - told) /= sign(1.0, tout - told)) go to 500
-!
-!     Check continuation possibilities
-!
-20 if (mflag /= 2) go to 30
-!
-!     iflag = +2 or -2
-!
-if (kflag < 3) go to 70
-if (kflag == 3) go to 60
-if (kflag == 4) go to 50
-if (kflag == 5 .and. abserr == 0.0) go to 40
-if (kflag == 6 .and. relerr <= savre .and. abserr <= savae) &
-   & go to 40
-go to 70
-!
-!     iflag = 3,4,5,6 or 7
-!
-30 if (iflag == 3) go to 60
-if (iflag == 4) go to 50
-if (iflag == 5 .and. abserr > 0.0) go to 60
-!
-!     Integration cannot be continued since user did not respond to
-!     the instructions pertaining to iflag=5,6 or 7
-!
-40 stop
-!
-!***********************************************************************
-!
-!     Reset function evaluation counter
-!
-50 nfe = 0
-if (mflag == 2) go to 70
-!
-!     Reset flag VALUE from previous call
-!
-60 iflag = jflag
-if (kflag == 3) mflag = abs(iflag)
-!
-!     Save input iflag and set continuation flag VALUE for subsequent
-!     input checking
-!
-70 jflag = iflag
-kflag = 0
-!
-!     Save relerr and abserr for checking input on subsequent calls
-!
-savre = relerr
-savae = abserr
-!
-!     Restrict relative error tolerance to be at least as large as
-!     2U+REMIN to avoid limiting precision difficulties arising from
-!     impossible accuracy requests. If tolerance too small, increase
-!     and return.
-!
-rer = 2.0*u + remin
-if (relerr < rer) go to 520
-!
-u26 = 26.0*u
-if (mflag /= 1) go to 100
-!
-!***********************************************************************
-!
-!     Initialization --
-!                       define integration independent variable x
-!                       evaluate initial derivatives
-!                       set up working arrays for integration variables
-!                       set counter for function evaluations,nfe
-!                       estimate starting stepsize
-!
-x = t
-endpnt = .false.
-blkout = .false.
-!
-a = t
-call fcn(a, y, yp)
-nfe = 1
-do n = 1, neqn
-   w(n) = y(n)
-   wp(n) = yp(n)
-end do
-!
-!     Compute initial steplength.
-!
-dt = tout - t
-if (dt == 0.0) dt = tend - t
-h = abs(dt)
-toln = 0.0
-do k = 1, neqn
-   tol = relerr*abs(y(k)) + abserr
-   if (tol <= 0.0) go to 90
-   toln = tol
-   ypk = abs(yp(k))
-   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
-90 continue
-end do
-if (toln <= 0.0) h = 0.0
-h = max(h, u26*max(abs(t),abs(dt)))
-jflag = sign(2,iflag)
-h = sign(h,dt)
-!
-!     Initial steplength now computed. Compute first solution.
-!
-!***********************************************************************
-!
-!     To avoid premature underflow in the error tolerance function,
-!     scale the error tolerances.
-!
-100 scale = 2.0/relerr
-ae = scale*abserr
-!
-!     Set safety factor for stepsize adjustment, based on tolerances.
-!
-toler = max(abserr,relerr)
-sf = 0.85
-if (toler >= 1.e-5) sf = 0.8
-if (toler <= 1.e-9) sf = 0.9
-!
-!     Restore integration variable to end of last block step taken
-!     and set the sign of the direction of integration.
-!
-t = x
-dtsign = sign(1.0, tend - t)
-!
-!     Have we already integrated past the present data output point?
-!     If so jump to 390 and perform interpolation.
-!     If not, see if we have reached the end point of integration.
-!     If not, see if results at the end of the block step need to be
-!     reported.
-!
-if ((tout - t)*dtsign > 0.0) go to 110
-if (tout == t) go to 510
-go to 390
-110 if (endpnt) go to 510
-if (iflag /= -2  .or. .not.blkout) go to 150
-blkout = .false.
-go to 400
-!
-!***********************************************************************
-!***********************************************************************
-!     Block BY block integration
-!
-!     See if we are too close to the end point.  If so, do linear
-!     extrapolation and return.
-!
-150 if (abs(tend - t) > u26*abs(t)) go to 190
-if (dtsign*(tend - tout) <= 0.0) go to 160
-dt = tout - t
-endpnt = .false.
-t = tout
-go to 170
-160 dt = tend - t
-endpnt = .true.
-t = tend
-x = tend
-!
-170 do k = 1, neqn
-   y(k) = w(k) + dt*wp(k)
-end do
-call fcn(t, y, yp)
-nfe = nfe + 1
-iflag = 2
-if (.not.endpnt) return
-!
-do n = 1,neqn
-   w(n) = y(n)
-   wp(n) = yp(n)
-end do
-endpnt = .false.
-return
-!
-!     Set smallest allowable stepsize and step failure flag.
-!     Adjust stepsize if necessary to hit the end point of integration.
-!
-190 hmin = u26*abs(t)
-hfaild = .false.
-hstop = 0.5*(tend - t)
-if (abs(hstop) > abs(h)) go to 200
-endpnt = .true.
-h = hstop
-!
-!***********************************************************************
-!     Core integrator for a single block
-!***********************************************************************
-!     The tolerances have been scaled to avoid premature underflow in
-!     computing the error tolerance function errtol.
-!     To avoid problems with zero crossings,relative error is measured
-!     using the average of the magnitudes of the solution at the
-!     beginning and end  points of a block.
-!     To distinguish the various arguments, h is not permitted
-!     to become smaller than 26 units of roundoff in t.
-!     Practical limits on the change in the stepsize are enforced to
-!     smooth the stepsize selection process and to avoid excessive
-!     chattering on problems having discontinuities.
-!***********************************************************************
-!
-!     Test number of derivative function evaluations.
-!     If okay,try to advance the integration from t to t+h
-!
-200 if (nfe > maxnfe) go to 530
-!
-!     Advance an approximate solution over one step of length h
-!
-do n = 1, neqn
-   y1(n) = w(n) + a21*h*wp(n)
-end do
-call fcn(t + c2*h, y1, f2)
-do n = 1, neqn
-   y1(n) = w(n) + h*(a31*wp(n) + a32*f2(n))
-end do
-call fcn(t + c3*h, y1, f3)
-do n = 1, neqn
-   y1(n) = w(n) + h*(a41*wp(n) + a42*f2(n) + a43*f3(n))
-end do
-call fcn(t + c4*h, y1, f4)
-do n = 1, neqn
-   y1(n) = w(n) + h*(a51*wp(n) + a52*f2(n) + a53*f3(n) + a54*f4(n))
-end do
-call fcn(t + h, y1, y)
-do n = 1, neqn
-   y1(n) = w(n) + h*(a61*wp(n) + a62*f2(n) + a63*f3(n) + a64*f4(n) + &
-      & a65*y(n))
-end do
-call fcn(t + c6*h, y1, yp)
-nfe = nfe + 5
-eeoet = 0.0
-do n = 1, neqn
-   y1(n) = w(n) + h*(b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
-      & b6b*yp(n))
-   errtol = abs(w(n)) + abs(y1(n)) + ae
-   if (errtol <= 0.0) go to 540
-   ez = abs(h*(erc11*wp(n) + erc13*f3(n) + erc14*f4(n) + erc15*y(n) + &
-      & b6b*yp(n)))
-   eeoet = max(eeoet,ez/errtol)
-end do
-esttol = eeoet*scale
-!
-!     Check the error estimate. If steplength has failed for first step
-!     in the block, go and compute a smaller step for A RE-try.
-!
-if (esttol > 1.0) go to 320
-!
-!     Integration successful for first step.  Now integrate over
-!     the second step in the block
-!
-call fcn(t + h, y1, f1)
-do n = 1, neqn
-   y2(n) = w(n) + h*(a81*wp(n) + a82*f2(n) + a83*f3(n) + a84*f4(n) + &
-      & a85*y(n) + a86*yp(n) + a87*f1(n))
-end do
-call fcn(t + c8*h, y2, f7)
-do n = 1, neqn
-   y2(n) = w(n) + h*(a91*wp(n) + a92*f2(n) + a93*f3(n) + a94*f4(n) + &
-      & a95*y(n) + a96*yp(n) + a97*f1(n) + a98*f7(n))
-end do
-call fcn(t + c9*h, y2, f2)
-nfe = nfe + 3
-eeoet = 0.0
-do n = 1, neqn
-   ee = abs(h*(erc21*wp(n) + erc23*f3(n) + erc24*f4(n) + erc25*y(n) + &
-      & erc26*yp(n) + erc27*f1(n) + erc28*f7(n) + erc29*f2(n)))
-   y2(n) = w(n) + h*(b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
-      & b7*f1(n) + b8*f7(n) + b9*f2(n))
-   errtol = abs(y2(n)) + abs(y1(n)) + ae
-   if (errtol <= 0.0) go to 540
-   eeoet = max(eeoet,ee/errtol)
-end do
-esttol = eeoet*scale
-!
-!     The first of the three changes needed to make the interpolant
-!     derivative more stable is the following do-loop.
-!
-do n = 1, neqn
-   y1(n) = b1b*wp(n) + b3b*f3(n) + b4b*f4(n) + b5b*y(n) + &
-      & b6b*yp(n)
-   f3(n) = b1*wp(n) + b3*f3(n) + b4*f4(n) + b5*y(n) + b6*yp(n) + &
-      & b7*f1(n) + b8*f7(n) + b9*f2(n)
-end do
-!
-!     Check the error estimate over the second step of the block.
-!
-if (esttol <= 1.0) go to 330
-!
-!     Unsuccessful block
-!     reduce the stepsize , try again
-!     the decrease is limited to a factor of about 1/10
-!
-320 hfaild = .true.
-s = 0.1
-endpnt = .false.
-if (esttol < 1.0e+5) s = sf/esttol**0.2
-h = s*h
-if (abs(h) < hmin) go to 550
-go to 200
-!
-!     Successful block. Check for need to interpolate.
-!     Store solution at t+2*h.
-!
-330 t = t + 2.0*h
-if (endpnt) t = tend
-told = x
-x = t
-hint = h
-interp = .false.
-if ((t - tout)*dtsign >= 0.0) interp = .true.
-!
-if (interp) go to 350
-do n = 1,neqn
-   w(n) = y2(n)
-end do
-go to 360
-!
-350 do n = 1,neqn
-   swap = w(n)
-   w(n) = y2(n)
-   y2(n) = swap
-   f2(n) = wp(n)
-end do
-!
-360 a = t
-call fcn(a, w, wp)
-nfe = nfe + 1
-!
-!     Choose next stepsize
-!     the increase is limited to a factor of about 10
-!     if step failure has just occured, next step is not allowed
-!     to increase.
-!
-s = 10.0
-if (esttol > 1.e-5) s = sf/esttol**0.2
-if (hfaild) s = min(s,1.0)
-h = sign(max(s*abs(h),hmin), h)
-!
-!     Have we integrated past an output point?
-!     If so, call the interpolation routine at t=tout.
-!     If not, see if we are at the end point of integration.
-!     Otherwise, check if user wants solutions at the end of the block
-!     step, or else continue the integration.
-!
-if (interp) go to 390
-if (endpnt) go to 510
-if (iflag > 0) go to 150
-iflag = -2
-go to 400
-!
-!     Interpolate to get data at off-step point and return.
-!
-!     The second of the three changes needed to make the interpolant
-!     derivative more stable is the new statement 390 given below.
-!
-390 call extra(neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
-t = tout
-if (iflag < 0 .and. tout /= x) blkout = .true.
-iflag = 2
-return
-!
-!     RETURN WITH THE SOLUTION AT THE END OF THE LAST SUCCESSFUL
-!     block step.
-!
-400 do n = 1,neqn
-   y(n) = w(n)
-   yp(n) = wp(n)
-end do
-return
-!
-!     Invalid input, return
-!
-500 iflag = 7
-return
-!
-!     We have reached the endpoint
-!
-510 iflag = 2
-endpnt = .false.
-go to 400
-!
-!     Relative error tolerance too small
-!
-520 relerr = rer
-iflag = 3
-kflag = 3
-return
-!
-!     Too much work
-!
-530 iflag = 4
-kflag = 4
-go to 400
-!
-!     Inappropriate error tolerance
-!
-540 iflag = 5
-kflag = 5
-go to 400
-!
-!     Requested error unattainable at smallest allowable stepsize
-!
-550 iflag = 6
-kflag = 6
-go to 400
-end subroutine rkfc
 

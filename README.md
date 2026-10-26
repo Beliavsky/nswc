@@ -313,6 +313,11 @@ operations and branch-target labels are preserved. The remaining 274 loops have
 recorded review reasons. See [deleted-feature modernization](docs/deleted-features.md)
 for the tool, compiler checks and strict-standard diagnostic progress.
 
+All **303 arithmetic IF statements** have also been replaced with logical IFs
+and GO TO statements. Three-way cases evaluate their expression once into a
+compiler-typed local temporary. Procedure interfaces are unchanged; see the
+[conversion and verification details](docs/deleted-features.md#arithmetic-if-conversion).
+
 ## Explicit typing
 
 All 1,062 procedures in `nswc.f` and the generated `nswc.f90` now have

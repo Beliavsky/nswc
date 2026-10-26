@@ -140,7 +140,8 @@ class ModernizeDoTests(unittest.TestCase):
         from remove_final_returns import transform_fixed as remove_final_returns
         from periodic_root_workspace import transform_fixed as correct_workspace
         from modernize_deleted_do import transform as modernize_deleted_loops
-        self.assertEqual(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data,
+        from modernize_arithmetic_if import transform as modernize_arithmetic_if
+        self.assertEqual(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data),
                          (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 

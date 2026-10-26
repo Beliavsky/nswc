@@ -1,3 +1,89 @@
+pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n
+real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real, intent(inout) :: yi(m)
+integer :: i, il, ir, j, k
+real :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
+!-----------------------------------------------------------------------
+!              Evaluation of a periodic cubic spline
+!-----------------------------------------------------------------------
+!----------------------
+!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m)
+!----------------------
+if (n >= 3 .and. m >= 1) go to 1
+ierr = 1
+return
+1 ierr = 0
+x1 = x(1)
+h = x(n) - x1
+!
+!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
+!
+k = 1
+t = (xi(1) - x1)/h
+j = t
+t0 = t - j
+if (t0 < 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx >= x(n)) go to 120
+il = 1
+ir = n
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 90
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 90
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+40 if (xx < x(i + 1)) go to 90
+i = i + 1
+go to 40
+!
+!     Computation when x(i) .LE. xx .LT. x(i+1)
+!
+90 dx = xx - x(i)
+yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
+!
+!     Next point
+!
+100 if (k >= m) return
+xold = xx
+k = k + 1
+t = (xi(k) - x1)/h
+j = t
+t0 = t - j
+if (t0 < 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx >= x(n)) go to 120
+nswc_ai_r4 = xx - xold
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 90
+go to 40
+!
+110 il = 1
+ir = min(i + 1,n)
+go to 10
+!
+!     Case when roundoff produces a value for xx where
+!     xx .GE. x(n). This case may never occur.
+!
+120 i = 1
+xx = x1
+yi(k) = y(1)
+go to 100
+end subroutine pscmp
+
 pure subroutine psevl(x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -5,7 +91,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
 real, intent(inout) :: yi(m), ypi(m), yppi(m)
 integer :: i, il, ir, j, k
-real :: bi2, ci3, dx, h, t, t0, x1, xold, xx
+real :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
 !     Evaluation and differentiation of a periodic cubic spline
 !-----------------------------------------------------------------------
@@ -36,7 +122,10 @@ ir = n
 !
 10 i = (il + ir)/2
 if (i == il) go to 90
-if (xx - x(i)) 20,90,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 90
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -68,7 +157,10 @@ t0 = t - j
 if (t0 < 0.0) t0 = 1.0 + t0
 xx = x1 + t0*h
 if (xx >= x(n)) go to 120
-if (xx - xold) 110,90,40
+nswc_ai_r4 = xx - xold
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 90
+go to 40
 !
 110 il = 1
 ir = min(i + 1,n)
@@ -316,7 +408,7 @@ integer, intent(in) :: kdx, kx, kz, l, m, n
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
 real, intent(inout) :: z(kz, n)
 integer :: i, il, ir, j, k
-real :: a, b, c, d, dt, h, t0, told, w
+real :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
 !-----------------------------------------------------------------------
 !            Evaluation of a cubic spline closed curve
 !                     in n-dimensional space
@@ -336,7 +428,10 @@ ir = m
 !
 10 i = (il + ir)/2
 if (i == il) go to 50
-if (t0 - t(i)) 20,50,30
+nswc_ai_r4 = t0 - t ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 50
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -385,7 +480,10 @@ j = ti(k)
 t0 = ti(k) - j
 if (t0 < 0.0) t0 = 1.0 + t0
 if (t0 >= t(m)) go to 60
-if (t0 - told) 110,50,40
+nswc_ai_r4 = t0 - told
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 50
+go to 40
 !
 110 il = 1
 ir = min(i + 1,m)
@@ -399,7 +497,7 @@ real, intent(in) :: ti
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
 real, intent(inout) :: z(n), dz(n), ddz(n)
 integer :: i, il, ir, j
-real :: a, b, c, d, dt, h, t0, w
+real :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
 !-----------------------------------------------------------------------
 !          Evaluation and differentiation of a cubic spline
 !                closed curve in n-dimensional space
@@ -418,7 +516,10 @@ ir = m
 !
 10 i = (il + ir)/2
 if (i == il) go to 40
-if (t0 - t(i)) 20,40,30
+nswc_ai_r4 = t0 - t ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 40
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -2198,7 +2299,7 @@ implicit none
 integer, intent(in) :: m
 real, intent(in) :: x, t(m)
 integer :: i, il, ir
-real :: tm
+real :: tm, nswc_ai_r4
 !-----------------------------------------------------------------------
 !
 !             Location of a value x in a sequence t
@@ -2238,7 +2339,10 @@ ir = i
 !
 30 i = (il + ir)/2
 if (i == il) go to 110
-if (x - t(i)) 40,60,50
+nswc_ai_r4 = x - t ( i )
+if ( nswc_ai_r4 < 0 ) go to 40
+if ( nswc_ai_r4 == 0 ) go to 60
+go to 50
 40 ir = i
 go to 30
 50 il = i
@@ -2724,7 +2828,7 @@ integer, intent(in) :: l, n, ni
 real :: a(l,n), x(n), xi(ni)
 real, intent(inout) :: yi(ni)
 integer :: i, il, ir, j, k, lm1, lmj
-real :: dx, s, xx
+real :: dx, s, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
 !
 !         This routine evaluates a piecewise polynomial at the
@@ -2769,7 +2873,10 @@ ir = n
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -2805,7 +2912,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-if (xx - xi(k - 1)) 130,120,40
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 130
+if ( nswc_ai_r4 == 0 ) go to 120
+go to 40
 130 il = 1
 ir = min(i + 1, n)
 go to 10
@@ -3206,8 +3316,7 @@ implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(inout) :: w(nroww,nrow)
-integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
-   & midmk, mj, nrowm1
+integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, midmk, mj, nrowm1, nswc_ai_i4
 real :: factor, pivot
 !  From  * a practical guide to splines *  by C. DE boor
 !  returns in  w  the LU-factorization (without pivoting) of the banded
@@ -3269,7 +3378,10 @@ iflag = 1
 middle = nbandu + 1
 !                         w(middle,.) Contains the main diagonal of  A .
 nrowm1 = nrow - 1
-if (nrowm1) 999,900,1
+nswc_ai_i4 = nrowm1
+if ( nswc_ai_i4 < 0 ) go to 999
+if ( nswc_ai_i4 == 0 ) go to 900
+go to 1
 1 if (nbandl > 0) go to 10
 !                A is upper triangular. Check that diagonal is nonzero .
 do i = 1,nrowm1
@@ -4963,9 +5075,8 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
-integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
-real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
-   & ds, dt, dx, dy, fi, fip1, xx, yy
+integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
+real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -4993,7 +5104,10 @@ do l = 1,my
    if (yy < t(2)) go to 10
    if (yy >= t(nm1)) go to 20
    if (l == 1) go to 30
-   if (yy - y(l - 1)) 30,50,40
+   nswc_ai_r4 = yy - y ( l - 1 )
+   if ( nswc_ai_r4 < 0 ) go to 30
+   if ( nswc_ai_r4 == 0 ) go to 50
+   go to 40
 !
 10 j = 1
    go to 50
@@ -5016,7 +5130,10 @@ do l = 1,my
       if (xx < s(2)) go to 100
       if (xx >= s(mm1)) go to 110
       if (k == 1) go to 120
-      if (xx - x(k - 1)) 120,130,140
+      nswc_ai_r4 = xx - x ( k - 1 )
+      if ( nswc_ai_r4 < 0 ) go to 120
+      if ( nswc_ai_r4 == 0 ) go to 130
+      go to 140
 !
 100   i = 1
       if (i == iold .and. j == jold) go to 210
@@ -5066,7 +5183,10 @@ do l = 1,my
 !
 210   dy = yy - t(j)
       if (jder == 0) go to 220
-      if (jder - 2) 230,240,250
+      nswc_ai_i4 = jder - 2
+      if ( nswc_ai_i4 < 0 ) go to 230
+      if ( nswc_ai_i4 == 0 ) go to 240
+      go to 250
 !
 220   fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
       fip1 = ((c1*dy + b1)*dy + f2(ip1,j))*dy + f(ip1,j)
@@ -5101,7 +5221,10 @@ do l = 1,my
 !
       dx = xx - s(i)
       if (ider == 0) go to 310
-      if (ider - 2) 320,330,340
+      nswc_ai_i4 = ider - 2
+      if ( nswc_ai_i4 < 0 ) go to 320
+      if ( nswc_ai_i4 == 0 ) go to 330
+      go to 340
 !
 310   z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
       go to 350
@@ -5178,9 +5301,8 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
-integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
-real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
-   & dt, dx, dy, fi, fip1, xx, yy
+integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
+real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -5208,7 +5330,10 @@ do l = 1,my
    if (yy < t(2)) go to 10
    if (yy >= t(nm1)) go to 20
    if (l == 1) go to 30
-   if (yy - y(l - 1)) 30,50,40
+   nswc_ai_r4 = yy - y ( l - 1 )
+   if ( nswc_ai_r4 < 0 ) go to 30
+   if ( nswc_ai_r4 == 0 ) go to 50
+   go to 40
 !
 10 j = 1
    go to 50
@@ -5231,7 +5356,10 @@ do l = 1,my
       if (xx < s(2)) go to 100
       if (xx >= s(mm1)) go to 110
       if (k == 1) go to 120
-      if (xx - x(k - 1)) 120,130,140
+      nswc_ai_r4 = xx - x ( k - 1 )
+      if ( nswc_ai_r4 < 0 ) go to 120
+      if ( nswc_ai_r4 == 0 ) go to 130
+      go to 140
 !
 100   i = 1
       if (i == iold .and. j == jold) go to 210
@@ -5277,7 +5405,10 @@ do l = 1,my
 !
 210   dy = yy - t(j)
       if (jder == 0) go to 220
-      if (jder - 2) 230,240,250
+      nswc_ai_i4 = jder - 2
+      if ( nswc_ai_i4 < 0 ) go to 230
+      if ( nswc_ai_i4 == 0 ) go to 240
+      go to 250
 !
 220   fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
       fip1 = ((c1*dy + 0.5*f2(ip1,j))*dy + a1)*dy + f(ip1,j)
@@ -5311,7 +5442,10 @@ do l = 1,my
 !
       dx = xx - s(i)
       if (ider == 0) go to 310
-      if (ider - 2) 320,330,340
+      nswc_ai_i4 = ider - 2
+      if ( nswc_ai_i4 < 0 ) go to 320
+      if ( nswc_ai_i4 == 0 ) go to 330
+      go to 340
 !
 310   z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
       go to 350
@@ -5388,7 +5522,7 @@ real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
 integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj, ind(8), &
-   & loc(8), num(8)
+   & loc(8), num(8), nswc_ai_i4
 real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
    & dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
    & sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
@@ -5517,7 +5651,10 @@ ind(8) = 0
 !
 l = 1
 100 key = opt(l)
-if (key) 48,110,101
+nswc_ai_i4 = key
+if ( nswc_ai_i4 < 0 ) go to 48
+if ( nswc_ai_i4 == 0 ) go to 110
+go to 101
 101 if (key > 8) go to 48
 ind(key) = 1
 l = l + 1
@@ -10423,219 +10560,4 @@ call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
    & coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
    & weight,alfl,onplys,sttdeg,error)
 end subroutine gnrtp
-
-pure subroutine incdg(degree,alpha,psi,indexs,newkj, &
-   & sumsqs,coord,ncrows,npolys, &
-   & dimen,npts,f,z,c,psiwid,weight, &
-   & alfl,onplys,sttdeg,error)
-implicit none
-integer, intent(in) :: ncrows
-integer, intent(inout) :: error
-integer, intent(in) :: onplys
-integer, intent(inout) :: sttdeg
-integer, intent(inout) :: degree, npolys
-integer, intent(in) :: npts, dimen, psiwid, alfl
-integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-real, intent(inout) :: alpha(alfl)
-real, intent(in) :: coord(ncrows,dimen)
-real, intent(inout) :: psi(npts,psiwid)
-real, intent(inout) :: sumsqs(npolys), c(npolys)
-real, intent(in) :: f(npts), weight(npts)
-real, intent(inout) :: z(npts)
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
-   & index1, index2
-real :: arc, runtot, rntot1, rntot2
-!
-!
-!     ***************
-!     Purpose
-!     -------
-!
-!     The multinomial fit is generated incrementally, a basis  element
-!     at a time.  This subroutine continues the process started off by
-!      gnrtp .
-!
-!     This subroutine is called by  gnrtp  and not by the user.
-!
-!
-!     Modified by A.H. Morris (NSWC)
-!
-!     ****************
-!
-if ( onplys >= 1 .and. sttdeg >= 1 ) go to 10
-error = 6
-return
-10 if ( indexs(2,onplys) == dimen ) go to 20
-curdeg = sttdeg
-go to 30
-20 curdeg = sttdeg + 1
-30 onpp1 = onplys + 1
-do j = onpp1,npolys
-   jprime = indexs(1,j)
-   jindex = j - ((j - 1) / psiwid) * psiwid
-   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
-   kj = indexs(2,j)
-   start = indexs(3,j)
-   m = start
-   starta = indexs(4,j) - start
-   if ( curdeg == 1 ) go to 100
-   kjp = indexs(2,jprime)
-   j1 = newkj(kj,curdeg - 1)
-!
-!     ***************
-!     Calculate those  alpha ( j , m ) that can be calculated from
-!     previously calculated alphas.
-!     ***************
-!
-   if ( kj < kjp ) go to 50
-!
-!     ***************
-!     First calculate those between  JPP  and the end of 2 rows back.
-!     Calculate  alpha ( j , JPP )
-!     ***************
-!
-   index1 = indexs(4,j)
-   alpha(index1) = sumsqs(jprime) / sumsqs(start)
-!
-   m = start + 1
-   j3 = newkj(1,curdeg - 1) - 1
-   if ( m > j3 ) go to 50
-!
-!     ***************
-!     curdeg .GT. 2 if control has passed the branches in the 3-RD
-!     previous and 8-TH previous statements.
-!     ***************
-!
-   j1mj2 = j1 - newkj(kj,curdeg - 2)
-!
-   do l = m,j3
-      q = j1mj2 + l
-      index1 = starta + l
-      index2 = indexs(4,q) - indexs(3,q) + jprime
-40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-         & sumsqs(l)
-   end do
-!
-!     ***************
-!     Calculate  alpha ( j , m ) for  m  between the 2
-!     ranges calculated before using
-!
-!        alpha ( j , l ) = (X  *  psi  ,psi )  / (psi ,psi )
-!                             K      JP    l         l    l
-!                              j
-!     ***************
-!
-   m = j3 + 1
-50 if ( jprime == j1 ) go to 100
-   if ( kj == 1 ) go to 80
-   j1m1 = j1 - 1
-   do l = m,j1m1
-      runtot = 0.0
-      do p = 1,npts
-         index1 = l - ((l - 1) / psiwid) * psiwid
-60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-            & psi(p,index1) * weight(p)
-      end do
-      index1 = starta + l
-70    alpha(index1) = runtot / sumsqs(l)
-   end do
-!
-!     ***************
-!     Calculate  alpha ( j , m ) for  m  between
-!      newkj ( kj , curdeg  - 1)  AND
-!      JP  - 1.
-!     ***************
-!
-80 j0mj1 = newkj(kj,curdeg) - j1
-   jpm1 = jprime - 1
-   do l = j1,jpm1
-      q = j0mj1 + l
-      index1 = starta + l
-      index2 = indexs(4,q) - indexs(3,q) + jprime
-90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
-         & sumsqs(l)
-   end do
-   m = jprime
-!
-!     ***************
-!     Calculate the remaining  alpha ( j , m ) from
-!
-!      alpha ( j , l ) = (X   * psi  ,psi ) / (psi ,psi )
-!                          K       JP    l        l    l
-!                           j
-!     ***************
-!
-100 jm1 = j - 1
-   do l = m,jm1
-      runtot = 0.0
-      do p = 1,npts
-         index1 = l - ((l - 1) / psiwid) * psiwid
-110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
-            & psi(p,index1) * weight(p)
-      end do
-      index1 = starta + l
-120   alpha(index1) = runtot / sumsqs(l)
-   end do
-!
-!     ***************
-!     Now calculate the  psi (p,j),  sumsqs (j) and  c (j) using
-!
-!                          j-1
-!     psi  = X  * psi   -  SUM   alpha(j,l) * psi
-!        j    K      JP    l=JPP                 l
-!
-!     sumsqs  = (psi ,psi )
-!           j       j    j
-!
-!     c  = (z,psi )
-!      j         j
-!     ***************
-!
-130 jm1 = j - 1
-   arc = 0.0
-   rntot1 = 0.0
-   rntot2 = 0.0
-   do p = 1,npts
-      runtot = coord(p,kj) * psi(p,jpindx)
-      do l = start,jm1
-         index1 = starta + l
-         index2 = l - ((l - 1) / psiwid) * psiwid
-140      runtot = runtot - alpha(index1) * psi(p,index2)
-      end do
-      psi(p,jindex) = runtot
-      arc = arc + psi(p,index2) * psi(p,jindex) * &
-         & weight(p)
-      rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
-         & weight(p)
-150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
-   end do
-   if (arc * arc >= sumsqs(jm1) * rntot1 * 1.e-03) &
-      & go to 200
-   sumsqs(j) = rntot1
-   c(j) = rntot2 / rntot1
-!
-!     ***************
-!     Calculate the new  z ( p ) and the new  SSRES  using
-!
-!     z = z - c  * psi
-!              j      j
-!     ***************
-!
-   do p = 1,npts
-160   z(p) = z(p) - c(j) * psi(p,jindex)
-   end do
-   sttdeg = curdeg
-170 if ( kj == dimen ) curdeg = curdeg + 1
-end do
-return
-!
-!     ***************
-!     The j-TH basis multinomial cannot be computed accurately.
-!     Only j - 1 Basis multinomials are generated.
-!     ***************
-!
-200 error = -1
-degree = sttdeg
-npolys = jm1
-end subroutine incdg
 

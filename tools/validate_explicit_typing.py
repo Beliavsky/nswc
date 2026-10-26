@@ -16,6 +16,7 @@ from combine_declarations import transform as combine_declarations
 from order_declarations import transform as order_declarations
 from periodic_root_workspace import transform_fixed as correct_workspace
 from modernize_deleted_do import transform as modernize_deleted_loops
+from modernize_arithmetic_if import transform as modernize_arithmetic_if
 from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -155,7 +156,7 @@ def main():
     after = remove_final_returns(after, cleanup_report)
     if cleanup_report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise RuntimeError('Terminal RETURN cleanup report is stale')
-    if modernize_deleted_loops(correct_workspace(after)).data != (ROOT / "nswc.f").read_bytes():
+    if modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data) != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
         raise RuntimeError('Declaration ordering report is stale')
@@ -184,7 +185,7 @@ def main():
                 inventory = normalize_reviewed_symbols(inventories[0], inventory)
             inventories.append(inventory)
         maintained = Path(folder) / 'maintained.f'
-        maintained.write_bytes(modernize_deleted_loops(correct_workspace(after)).data)
+        maintained.write_bytes(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data))
         result = subprocess.run([compiler, '-fsyntax-only', '-std=legacy',
                                  '-fno-allow-argument-mismatch', str(maintained)],
                                 cwd=folder, capture_output=True, text=True, timeout=180,

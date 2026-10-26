@@ -1,0 +1,4700 @@
+{
+  "input_sha256": "d297216cc1ddca15b3d997eb31a1dd5c12711d7956ab8e06c41cb84386872b0d",
+  "records": [
+    {
+      "procedure": "CBRT",
+      "lines": [
+        2902
+      ],
+      "expression": "X",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DCBRT",
+      "lines": [
+        2920
+      ],
+      "expression": "X",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "ARTNQ",
+      "lines": [
+        2934
+      ],
+      "expression": "X",
+      "targets": [
+        "1",
+        "2",
+        "5"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "ARTNQ",
+      "lines": [
+        2937
+      ],
+      "expression": "Y",
+      "targets": [
+        "3",
+        "8",
+        "4"
+      ],
+      "label": "2",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "ARTNQ",
+      "lines": [
+        2942
+      ],
+      "expression": "Y",
+      "targets": [
+        "6",
+        "8",
+        "7"
+      ],
+      "label": "5",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DARTNQ",
+      "lines": [
+        2953
+      ],
+      "expression": "X",
+      "targets": [
+        "1",
+        "2",
+        "5"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DARTNQ",
+      "lines": [
+        2956
+      ],
+      "expression": "Y",
+      "targets": [
+        "3",
+        "8",
+        "4"
+      ],
+      "label": "2",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DARTNQ",
+      "lines": [
+        2961
+      ],
+      "expression": "Y",
+      "targets": [
+        "6",
+        "8",
+        "7"
+      ],
+      "label": "5",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DCSQRT",
+      "lines": [
+        3127
+      ],
+      "expression": "X",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "PAREA",
+      "lines": [
+        5147
+      ],
+      "expression": "N - 3",
+      "targets": [
+        "10",
+        "20",
+        "30"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "HC1",
+      "lines": [
+        5370
+      ],
+      "expression": "VC(I)-MAXE",
+      "targets": [
+        "100",
+        "70",
+        "80"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "EXPLI",
+      "lines": [
+        9417
+      ],
+      "expression": "X",
+      "targets": [
+        "280",
+        "640",
+        "110"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "EXPLI",
+      "lines": [
+        9538
+      ],
+      "expression": "Y",
+      "targets": [
+        "660",
+        "640",
+        "300"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "GAMMA",
+      "lines": [
+        11235
+      ],
+      "expression": "M",
+      "targets": [
+        "20",
+        "12",
+        "10"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "GAM1",
+      "lines": [
+        11461
+      ],
+      "expression": "T",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DGAMMA",
+      "lines": [
+        11879
+      ],
+      "expression": "N",
+      "targets": [
+        "20",
+        "12",
+        "10"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DGAM1",
+      "lines": [
+        12110
+      ],
+      "expression": "T",
+      "targets": [
+        "40",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DPSI",
+      "lines": [
+        12823
+      ],
+      "expression": "N",
+      "targets": [
+        "20",
+        "12",
+        "10"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "GRATIO",
+      "lines": [
+        14079
+      ],
+      "expression": "IOP - 2",
+      "targets": [
+        "210",
+        "220",
+        "230"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "GRATIO",
+      "lines": [
+        14131
+      ],
+      "expression": "IOP - 2",
+      "targets": [
+        "260",
+        "270",
+        "280"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BSSLJ",
+      "lines": [
+        17728
+      ],
+      "expression": "IN",
+      "targets": [
+        "002",
+        "003",
+        "003"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLJ",
+      "lines": [
+        17731
+      ],
+      "expression": "AZ(1)",
+      "targets": [
+        "004",
+        "005",
+        "005"
+      ],
+      "label": "003",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLJ",
+      "lines": [
+        17751
+      ],
+      "expression": "ZS-1.0",
+      "targets": [
+        "011",
+        "010",
+        "010"
+      ],
+      "label": "009",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLJ",
+      "lines": [
+        17752
+      ],
+      "expression": "-ABS(AZ(2))+0.096*AZ(1)*AZ(1)",
+      "targets": [
+        "011",
+        "012",
+        "012"
+      ],
+      "label": "010",
+      "temporary": null
+    },
+    {
+      "procedure": "BESJ",
+      "lines": [
+        18097
+      ],
+      "expression": "N-1",
+      "targets": [
+        "720",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BESJ",
+      "lines": [
+        18100
+      ],
+      "expression": "X",
+      "targets": [
+        "730",
+        "30",
+        "80"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BESJ",
+      "lines": [
+        18101
+      ],
+      "expression": "ALPHA",
+      "targets": [
+        "710",
+        "40",
+        "50"
+      ],
+      "label": "30",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BESJ",
+      "lines": [
+        18220
+      ],
+      "expression": "NN-1",
+      "targets": [
+        "440",
+        "390",
+        "130"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BESJ",
+      "lines": [
+        18230
+      ],
+      "expression": "NN-1",
+      "targets": [
+        "440",
+        "410",
+        "420"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19301
+      ],
+      "expression": "IN",
+      "targets": [
+        "002",
+        "003",
+        "003"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19304
+      ],
+      "expression": "AZ(1)",
+      "targets": [
+        "004",
+        "005",
+        "005"
+      ],
+      "label": "003",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19310
+      ],
+      "expression": "ZS-1.0",
+      "targets": [
+        "020",
+        "020",
+        "007"
+      ],
+      "label": "006",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19311
+      ],
+      "expression": "ZS-289.0",
+      "targets": [
+        "008",
+        "010",
+        "010"
+      ],
+      "label": "007",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19312
+      ],
+      "expression": "-ABS(AZ(2))+0.096*AZ(1)*AZ(1)",
+      "targets": [
+        "020",
+        "020",
+        "015"
+      ],
+      "label": "008",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19438
+      ],
+      "expression": "AZ(1)",
+      "targets": [
+        "106",
+        "110",
+        "110"
+      ],
+      "label": "105",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19439
+      ],
+      "expression": "AZ(2)",
+      "targets": [
+        "107",
+        "108",
+        "108"
+      ],
+      "label": "106",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19488
+      ],
+      "expression": "AZ(1)",
+      "targets": [
+        "116",
+        "120",
+        "120"
+      ],
+      "label": "115",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLY",
+      "lines": [
+        19489
+      ],
+      "expression": "AZ(2)",
+      "targets": [
+        "117",
+        "118",
+        "118"
+      ],
+      "label": "116",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLI",
+      "lines": [
+        19652
+      ],
+      "expression": "AZ(1)",
+      "targets": [
+        "002",
+        "003",
+        "003"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLI",
+      "lines": [
+        19672
+      ],
+      "expression": "ZS-1.0",
+      "targets": [
+        "009",
+        "008",
+        "008"
+      ],
+      "label": "007",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLI",
+      "lines": [
+        19673
+      ],
+      "expression": "-ABS(AZ(1))+0.096*AZ(2)*AZ(2)",
+      "targets": [
+        "009",
+        "010",
+        "010"
+      ],
+      "label": "008",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLI",
+      "lines": [
+        19752
+      ],
+      "expression": "QZ(2)",
+      "targets": [
+        "020",
+        "021",
+        "021"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLI",
+      "lines": [
+        19827
+      ],
+      "expression": "QZ(2)",
+      "targets": [
+        "032",
+        "033",
+        "033"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BESI",
+      "lines": [
+        20048
+      ],
+      "expression": "N-1",
+      "targets": [
+        "590",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BESI",
+      "lines": [
+        20052
+      ],
+      "expression": "X",
+      "targets": [
+        "600",
+        "30",
+        "80"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BESI",
+      "lines": [
+        20053
+      ],
+      "expression": "ALPHA",
+      "targets": [
+        "580",
+        "40",
+        "50"
+      ],
+      "label": "30",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BESI",
+      "lines": [
+        20205
+      ],
+      "expression": "NN-1",
+      "targets": [
+        "340",
+        "290",
+        "130"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BESI",
+      "lines": [
+        20215
+      ],
+      "expression": "NN-1",
+      "targets": [
+        "340",
+        "310",
+        "320"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BSSLK",
+      "lines": [
+        21574
+      ],
+      "expression": "ZS-1.0",
+      "targets": [
+        "020",
+        "020",
+        "003"
+      ],
+      "label": "002",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLK",
+      "lines": [
+        21575
+      ],
+      "expression": "ZS-289.0",
+      "targets": [
+        "004",
+        "010",
+        "010"
+      ],
+      "label": "003",
+      "temporary": null
+    },
+    {
+      "procedure": "BSSLK",
+      "lines": [
+        21576
+      ],
+      "expression": "AZ(1)+0.096*AZ(2)*AZ(2)",
+      "targets": [
+        "020",
+        "020",
+        "015"
+      ],
+      "label": "004",
+      "temporary": null
+    },
+    {
+      "procedure": "CFLECT",
+      "lines": [
+        23727
+      ],
+      "expression": "REAL(Z)",
+      "targets": [
+        "10",
+        "20",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "VALR2",
+      "lines": [
+        26479
+      ],
+      "expression": "IOP-2",
+      "targets": [
+        "140",
+        "150",
+        "160"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "PKILL",
+      "lines": [
+        27303
+      ],
+      "expression": "D1 - T",
+      "targets": [
+        "200",
+        "180",
+        "195"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PKILL",
+      "lines": [
+        27311
+      ],
+      "expression": "E3 - F",
+      "targets": [
+        "200",
+        "190",
+        "195"
+      ],
+      "label": "180",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PKILL",
+      "lines": [
+        27312
+      ],
+      "expression": "E3 - F",
+      "targets": [
+        "195",
+        "190",
+        "200"
+      ],
+      "label": "185",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "QTCRT",
+      "lines": [
+        29973
+      ],
+      "expression": "T",
+      "targets": [
+        "61",
+        "70",
+        "62"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DQTCRT",
+      "lines": [
+        30123
+      ],
+      "expression": "T",
+      "targets": [
+        "61",
+        "70",
+        "62"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "ISWAP",
+      "lines": [
+        32281
+      ],
+      "expression": "INCX-1",
+      "targets": [
+        "5",
+        "20",
+        "60"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SROTMG",
+      "lines": [
+        32756
+      ],
+      "expression": "SFLAG",
+      "targets": [
+        "250",
+        "230",
+        "240"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SROTM",
+      "lines": [
+        32806
+      ],
+      "expression": "SFLAG",
+      "targets": [
+        "50",
+        "10",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SROTM",
+      "lines": [
+        32845
+      ],
+      "expression": "SFLAG",
+      "targets": [
+        "120",
+        "80",
+        "100"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DROTMG",
+      "lines": [
+        33025
+      ],
+      "expression": "DFLAG",
+      "targets": [
+        "250",
+        "230",
+        "240"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DROTM",
+      "lines": [
+        33078
+      ],
+      "expression": "DFLAG",
+      "targets": [
+        "50",
+        "10",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DROTM",
+      "lines": [
+        33117
+      ],
+      "expression": "DFLAG",
+      "targets": [
+        "120",
+        "80",
+        "100"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34932
+      ],
+      "expression": "NPART-IDIV*IQUOT",
+      "targets": [
+        "60",
+        "20",
+        "60"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34933
+      ],
+      "expression": "IDIV-IFCUR",
+      "targets": [
+        "40",
+        "40",
+        "30"
+      ],
+      "label": "20",
+      "temporary": null
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34944
+      ],
+      "expression": "IQUOT-IDIV",
+      "targets": [
+        "100",
+        "100",
+        "70"
+      ],
+      "label": "60",
+      "temporary": null
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34945
+      ],
+      "expression": "IDIV-2",
+      "targets": [
+        "80",
+        "80",
+        "90"
+      ],
+      "label": "70",
+      "temporary": null
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34950
+      ],
+      "expression": "NPART-1",
+      "targets": [
+        "140",
+        "140",
+        "110"
+      ],
+      "label": "100",
+      "temporary": null
+    },
+    {
+      "procedure": "INFCTR",
+      "lines": [
+        34951
+      ],
+      "expression": "NPART-IFCUR",
+      "targets": [
+        "130",
+        "130",
+        "120"
+      ],
+      "label": "110",
+      "temporary": null
+    },
+    {
+      "procedure": "BADD",
+      "lines": [
+        50060
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BADD",
+      "lines": [
+        50108
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DBADD",
+      "lines": [
+        50210
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DBADD",
+      "lines": [
+        50258
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CBADD",
+      "lines": [
+        50360
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CBADD",
+      "lines": [
+        50408
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BSUBT",
+      "lines": [
+        50510
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BSUBT",
+      "lines": [
+        50558
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DBSUBT",
+      "lines": [
+        50660
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DBSUBT",
+      "lines": [
+        50708
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CBSUBT",
+      "lines": [
+        50810
+      ],
+      "expression": "NL - ML",
+      "targets": [
+        "10",
+        "30",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CBSUBT",
+      "lines": [
+        50858
+      ],
+      "expression": "NU - MU",
+      "targets": [
+        "100",
+        "160",
+        "130"
+      ],
+      "label": "50",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "NSPIV1",
+      "lines": [
+        56284
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "30",
+        "1003",
+        "40"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "NSPIV1",
+      "lines": [
+        56324
+      ],
+      "expression": "VJ - PPK",
+      "targets": [
+        "60",
+        "90",
+        "70"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "NSPIV1",
+      "lines": [
+        56328
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "70",
+        "90",
+        "80"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SPLU",
+      "lines": [
+        56865
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "21",
+        "210",
+        "22"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SPLU",
+      "lines": [
+        56897
+      ],
+      "expression": "J - PM",
+      "targets": [
+        "40",
+        "43",
+        "41"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SPLU",
+      "lines": [
+        56901
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "41",
+        "43",
+        "42"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DNSPIV",
+      "lines": [
+        57222
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "30",
+        "1003",
+        "40"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DNSPIV",
+      "lines": [
+        57262
+      ],
+      "expression": "VJ - PPK",
+      "targets": [
+        "60",
+        "90",
+        "70"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DNSPIV",
+      "lines": [
+        57266
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "70",
+        "90",
+        "80"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DSPLU",
+      "lines": [
+        57806
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "21",
+        "210",
+        "22"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DSPLU",
+      "lines": [
+        57838
+      ],
+      "expression": "J - PM",
+      "targets": [
+        "40",
+        "43",
+        "41"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DSPLU",
+      "lines": [
+        57842
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "41",
+        "43",
+        "42"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CNSPIV",
+      "lines": [
+        58630
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "30",
+        "1003",
+        "40"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CNSPIV",
+      "lines": [
+        58670
+      ],
+      "expression": "VJ - PPK",
+      "targets": [
+        "60",
+        "90",
+        "70"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CNSPIV",
+      "lines": [
+        58674
+      ],
+      "expression": "PPK - VJ",
+      "targets": [
+        "70",
+        "90",
+        "80"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSPLU",
+      "lines": [
+        59216
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "21",
+        "210",
+        "22"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSPLU",
+      "lines": [
+        59248
+      ],
+      "expression": "J - PM",
+      "targets": [
+        "40",
+        "43",
+        "41"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSPLU",
+      "lines": [
+        59252
+      ],
+      "expression": "PM - J",
+      "targets": [
+        "41",
+        "43",
+        "42"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "EIGV",
+      "lines": [
+        59398
+      ],
+      "expression": "WI(K)",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "EIGV1",
+      "lines": [
+        59434
+      ],
+      "expression": "WI(K)",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "HQR2",
+      "lines": [
+        61023
+      ],
+      "expression": "Q",
+      "targets": [
+        "710",
+        "600",
+        "800"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "DEIGV",
+      "lines": [
+        61200
+      ],
+      "expression": "WI(K)",
+      "targets": [
+        "30",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "DHQR2",
+      "lines": [
+        62400
+      ],
+      "expression": "Q",
+      "targets": [
+        "710",
+        "600",
+        "800"
+      ],
+      "label": "",
+      "type": "REAL 8",
+      "temporary": "NSWC_AI_R8"
+    },
+    {
+      "procedure": "COMQR2",
+      "lines": [
+        65220
+      ],
+      "expression": "IEND",
+      "targets": [
+        "180",
+        "150",
+        "105"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DCMQR2",
+      "lines": [
+        66342
+      ],
+      "expression": "IEND",
+      "targets": [
+        "180",
+        "150",
+        "105"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "XL1",
+      "lines": [
+        66869
+      ],
+      "expression": "X(J)",
+      "targets": [
+        "90",
+        "110",
+        "100"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "XL1",
+      "lines": [
+        66879
+      ],
+      "expression": "RES(J)",
+      "targets": [
+        "120",
+        "140",
+        "130"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "H12",
+      "lines": [
+        70592
+      ],
+      "expression": "CL",
+      "targets": [
+        "130",
+        "130",
+        "70"
+      ],
+      "label": "60",
+      "temporary": null
+    },
+    {
+      "procedure": "DH12",
+      "lines": [
+        71236
+      ],
+      "expression": "CL",
+      "targets": [
+        "130",
+        "130",
+        "70"
+      ],
+      "label": "60",
+      "temporary": null
+    },
+    {
+      "procedure": "FMIN",
+      "lines": [
+        75976
+      ],
+      "expression": "FU - FV",
+      "targets": [
+        "20",
+        "11",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "FMIN",
+      "lines": [
+        76090
+      ],
+      "expression": "FU - FV",
+      "targets": [
+        "242",
+        "243",
+        "244"
+      ],
+      "label": "241",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79749
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "800",
+        "230",
+        "250"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79848
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "400",
+        "430",
+        "440"
+      ],
+      "label": "360",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79860
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "401",
+        "402",
+        "403"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79902
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "431",
+        "432",
+        "433"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79919
+      ],
+      "expression": "Y(I)",
+      "targets": [
+        "441",
+        "445",
+        "442"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        79924
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "443",
+        "444",
+        "445"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        80048
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "601",
+        "630",
+        "700"
+      ],
+      "label": "600",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        80068
+      ],
+      "expression": "BI(L,J)",
+      "targets": [
+        "620",
+        "622",
+        "621"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        80099
+      ],
+      "expression": "BI(L,J)",
+      "targets": [
+        "640",
+        "642",
+        "641"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        80255
+      ],
+      "expression": "XB(I)",
+      "targets": [
+        "851",
+        "856",
+        "852"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SMPLX1",
+      "lines": [
+        80280
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "860",
+        "870",
+        "880"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80657
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "800",
+        "230",
+        "250"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80753
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "400",
+        "430",
+        "440"
+      ],
+      "label": "360",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80765
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "401",
+        "402",
+        "403"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80807
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "431",
+        "432",
+        "433"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80824
+      ],
+      "expression": "Y(I)",
+      "targets": [
+        "441",
+        "445",
+        "442"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80829
+      ],
+      "expression": "RATIO - EPSI",
+      "targets": [
+        "443",
+        "444",
+        "445"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80956
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "601",
+        "630",
+        "700"
+      ],
+      "label": "600",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        80976
+      ],
+      "expression": "BI(L,J)",
+      "targets": [
+        "620",
+        "622",
+        "621"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        81007
+      ],
+      "expression": "BI(L,J)",
+      "targets": [
+        "640",
+        "642",
+        "641"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        81179
+      ],
+      "expression": "XB(I)",
+      "targets": [
+        "851",
+        "856",
+        "852"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SSPLX1",
+      "lines": [
+        81204
+      ],
+      "expression": "NSTEP - 2",
+      "targets": [
+        "860",
+        "870",
+        "880"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CROUT1",
+      "lines": [
+        81283
+      ],
+      "expression": "A(LK)",
+      "targets": [
+        "20",
+        "10",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "ASSGN1",
+      "lines": [
+        81581
+      ],
+      "expression": "S",
+      "targets": [
+        "20",
+        "40",
+        "30"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SKNP1",
+      "lines": [
+        82533
+      ],
+      "expression": "LL - (NS - 2)",
+      "targets": [
+        "240",
+        "220",
+        "210"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SKNP1",
+      "lines": [
+        82574
+      ],
+      "expression": "DIFF",
+      "targets": [
+        "390",
+        "340",
+        "350"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SFFT",
+      "lines": [
+        84815
+      ],
+      "expression": "N-1",
+      "targets": [
+        "1000",
+        "960",
+        "5"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "COSQF",
+      "lines": [
+        85430
+      ],
+      "expression": "N-2",
+      "targets": [
+        "102",
+        "101",
+        "103"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "COSQB",
+      "lines": [
+        85524
+      ],
+      "expression": "N-2",
+      "targets": [
+        "101",
+        "102",
+        "103"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "RFFTI1",
+      "lines": [
+        85754
+      ],
+      "expression": "J-4",
+      "targets": [
+        "102",
+        "102",
+        "103"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "RFFTI1",
+      "lines": [
+        85760
+      ],
+      "expression": "NR",
+      "targets": [
+        "101",
+        "105",
+        "101"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "RADB2",
+      "lines": [
+        85946
+      ],
+      "expression": "IDO-2",
+      "targets": [
+        "107",
+        "105",
+        "102"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "RADB4",
+      "lines": [
+        86066
+      ],
+      "expression": "IDO-2",
+      "targets": [
+        "107",
+        "105",
+        "102"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "RADF2",
+      "lines": [
+        86562
+      ],
+      "expression": "IDO-2",
+      "targets": [
+        "107",
+        "105",
+        "102"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "RADF4",
+      "lines": [
+        86678
+      ],
+      "expression": "IDO-2",
+      "targets": [
+        "107",
+        "105",
+        "102"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "ADCHK",
+      "lines": [
+        88366
+      ],
+      "expression": "EDIST-1",
+      "targets": [
+        "10",
+        "20",
+        "30"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CPSC",
+      "lines": [
+        88801
+      ],
+      "expression": "NP-15",
+      "targets": [
+        "190",
+        "190",
+        "260"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "DCPSC",
+      "lines": [
+        89088
+      ],
+      "expression": "NP-15",
+      "targets": [
+        "190",
+        "190",
+        "260"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "TRP",
+      "lines": [
+        89176
+      ],
+      "expression": "A-X(I)",
+      "targets": [
+        "20",
+        "60",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89225
+      ],
+      "expression": "XX-X(1)",
+      "targets": [
+        "10",
+        "11",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89234
+      ],
+      "expression": "X(N)-XX",
+      "targets": [
+        "21",
+        "22",
+        "23"
+      ],
+      "label": "20",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89249
+      ],
+      "expression": "XX-X(I)",
+      "targets": [
+        "31",
+        "32",
+        "33"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89259
+      ],
+      "expression": "XX-X(I+1)",
+      "targets": [
+        "50",
+        "41",
+        "42"
+      ],
+      "label": "40",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89331
+      ],
+      "expression": "XX-X(1)",
+      "targets": [
+        "10",
+        "11",
+        "111"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89332
+      ],
+      "expression": "X(N)-XX",
+      "targets": [
+        "21",
+        "22",
+        "120"
+      ],
+      "label": "111",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LTRP",
+      "lines": [
+        89334
+      ],
+      "expression": "XX-XI(K-1)",
+      "targets": [
+        "121",
+        "122",
+        "40"
+      ],
+      "label": "120",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "HTRP",
+      "lines": [
+        89371
+      ],
+      "expression": "X(K)-X(K-1)",
+      "targets": [
+        "10",
+        "20",
+        "10"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "HTRP",
+      "lines": [
+        89380
+      ],
+      "expression": "DIFF",
+      "targets": [
+        "11",
+        "31",
+        "11"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "WPFIT",
+      "lines": [
+        89619
+      ],
+      "expression": "W(K)",
+      "targets": [
+        "202",
+        "13",
+        "10"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "CBSPL",
+      "lines": [
+        89808
+      ],
+      "expression": "IBEG - 1",
+      "targets": [
+        "20",
+        "30",
+        "40"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CBSPL",
+      "lines": [
+        89847
+      ],
+      "expression": "IEND - 1",
+      "targets": [
+        "60",
+        "80",
+        "90"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SCOMP",
+      "lines": [
+        90287
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SCOMP",
+      "lines": [
+        90317
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SCOMP1",
+      "lines": [
+        90386
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SCOMP1",
+      "lines": [
+        90421
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SCOMP2",
+      "lines": [
+        90490
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SCOMP2",
+      "lines": [
+        90528
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL",
+      "lines": [
+        90603
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL",
+      "lines": [
+        90637
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL1",
+      "lines": [
+        90708
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL1",
+      "lines": [
+        90747
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL2",
+      "lines": [
+        90818
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "SEVAL2",
+      "lines": [
+        90859
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "110",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PSCMP",
+      "lines": [
+        91435
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "90",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PSCMP",
+      "lines": [
+        91463
+      ],
+      "expression": "XX - XOLD",
+      "targets": [
+        "110",
+        "90",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PSEVL",
+      "lines": [
+        91516
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "90",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PSEVL",
+      "lines": [
+        91548
+      ],
+      "expression": "XX - XOLD",
+      "targets": [
+        "110",
+        "90",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LOPCMP",
+      "lines": [
+        91791
+      ],
+      "expression": "T0 - T(I)",
+      "targets": [
+        "20",
+        "50",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LOPCMP",
+      "lines": [
+        91840
+      ],
+      "expression": "T0 - TOLD",
+      "targets": [
+        "110",
+        "50",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "LOPDF",
+      "lines": [
+        91873
+      ],
+      "expression": "T0 - T(I)",
+      "targets": [
+        "20",
+        "40",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "INTRVL",
+      "lines": [
+        93519
+      ],
+      "expression": "X - T(I)",
+      "targets": [
+        "40",
+        "60",
+        "50"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPVAL",
+      "lines": [
+        94021
+      ],
+      "expression": "XX - X(I)",
+      "targets": [
+        "20",
+        "100",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPVAL",
+      "lines": [
+        94057
+      ],
+      "expression": "XX - XI(K-1)",
+      "targets": [
+        "130",
+        "120",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BANFAC",
+      "lines": [
+        94479
+      ],
+      "expression": "NROWM1",
+      "targets": [
+        "999",
+        "900",
+        "1"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSURF",
+      "lines": [
+        96117
+      ],
+      "expression": "YY - Y(L-1)",
+      "targets": [
+        "30",
+        "50",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "CSURF",
+      "lines": [
+        96140
+      ],
+      "expression": "XX - X(K-1)",
+      "targets": [
+        "120",
+        "130",
+        "140"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "CSURF",
+      "lines": [
+        96190
+      ],
+      "expression": "JDER - 2",
+      "targets": [
+        "230",
+        "240",
+        "250"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSURF",
+      "lines": [
+        96225
+      ],
+      "expression": "IDER - 2",
+      "targets": [
+        "320",
+        "330",
+        "340"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSRF",
+      "lines": [
+        96298
+      ],
+      "expression": "YY - Y(L-1)",
+      "targets": [
+        "30",
+        "50",
+        "40"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "CSRF",
+      "lines": [
+        96321
+      ],
+      "expression": "XX - X(K-1)",
+      "targets": [
+        "120",
+        "130",
+        "140"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "CSRF",
+      "lines": [
+        96367
+      ],
+      "expression": "JDER - 2",
+      "targets": [
+        "230",
+        "240",
+        "250"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "CSRF",
+      "lines": [
+        96401
+      ],
+      "expression": "IDER - 2",
+      "targets": [
+        "320",
+        "330",
+        "340"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "SURF",
+      "lines": [
+        96563
+      ],
+      "expression": "KEY",
+      "targets": [
+        "48",
+        "110",
+        "101"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "MEVAL",
+      "lines": [
+        101610
+      ],
+      "expression": "EVLDEG",
+      "targets": [
+        "40",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "DMEVAL",
+      "lines": [
+        102414
+      ],
+      "expression": "EVLDEG",
+      "targets": [
+        "40",
+        "10",
+        "20"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "QUAD",
+      "lines": [
+        103037,
+        103038
+      ],
+      "expression": "ABS(RESULT(K)-RESULT(K-1))-EPSIL*ABS(RESULT(K))",
+      "targets": [
+        "60",
+        "60",
+        "10"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "STEP1",
+      "lines": [
+        111614
+      ],
+      "expression": "KM2",
+      "targets": [
+        "265",
+        "260",
+        "255"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "STEP1",
+      "lines": [
+        111619
+      ],
+      "expression": "KM2",
+      "targets": [
+        "280",
+        "275",
+        "270"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "STEP1",
+      "lines": [
+        111629
+      ],
+      "expression": "KM2",
+      "targets": [
+        "299",
+        "290",
+        "285"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "STEP1",
+      "lines": [
+        111670
+      ],
+      "expression": "IFAIL - 3",
+      "targets": [
+        "335",
+        "330",
+        "325"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "PDEDGE",
+      "lines": [
+        117267
+      ],
+      "expression": "EDGE(1)",
+      "targets": [
+        "10",
+        "20",
+        "30"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "PDEDGE",
+      "lines": [
+        117282
+      ],
+      "expression": "EDGE(2)",
+      "targets": [
+        "110",
+        "120",
+        "130"
+      ],
+      "label": "100",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118789
+      ],
+      "expression": "M-5",
+      "targets": [
+        "10",
+        "20",
+        "20"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118792
+      ],
+      "expression": "NM-3",
+      "targets": [
+        "30",
+        "40",
+        "40"
+      ],
+      "label": "20",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118795
+      ],
+      "expression": "IDIMY-M",
+      "targets": [
+        "50",
+        "60",
+        "60"
+      ],
+      "label": "40",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118800
+      ],
+      "expression": "NPP",
+      "targets": [
+        "70",
+        "80",
+        "70"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118806
+      ],
+      "expression": "NH-IK",
+      "targets": [
+        "100",
+        "100",
+        "90"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118811
+      ],
+      "expression": "NPP",
+      "targets": [
+        "110",
+        "120",
+        "110"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118826
+      ],
+      "expression": "IERROR",
+      "targets": [
+        "190",
+        "140",
+        "190"
+      ],
+      "label": "130",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118832
+      ],
+      "expression": "IFLG",
+      "targets": [
+        "160",
+        "150",
+        "160"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTRI",
+      "lines": [
+        118835
+      ],
+      "expression": "MP",
+      "targets": [
+        "170",
+        "180",
+        "170"
+      ],
+      "label": "160",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118891
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "10",
+        "10",
+        "80"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118896
+      ],
+      "expression": "I-IF",
+      "targets": [
+        "20",
+        "80",
+        "80"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118904
+      ],
+      "expression": "IPI2-NM",
+      "targets": [
+        "50",
+        "50",
+        "30"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118920
+      ],
+      "expression": "NPP",
+      "targets": [
+        "320",
+        "100",
+        "320"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118962
+      ],
+      "expression": "I-I2-IZR",
+      "targets": [
+        "170",
+        "140",
+        "170"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118963
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "150",
+        "150",
+        "180"
+      ],
+      "label": "140",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118976
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "170",
+        "190",
+        "170"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        118986
+      ],
+      "expression": "NCMPLX",
+      "targets": [
+        "210",
+        "220",
+        "210"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        119029
+      ],
+      "expression": "IPI2-IZR",
+      "targets": [
+        "270",
+        "280",
+        "270"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        119030
+      ],
+      "expression": "I-IZR",
+      "targets": [
+        "300",
+        "310",
+        "300"
+      ],
+      "label": "270",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        119060
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "330",
+        "330",
+        "430"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        119070
+      ],
+      "expression": "I-I2",
+      "targets": [
+        "340",
+        "340",
+        "360"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BLKTR1",
+      "lines": [
+        119077
+      ],
+      "expression": "IPI2-NM",
+      "targets": [
+        "400",
+        "400",
+        "380"
+      ],
+      "label": "370",
+      "temporary": null
+    },
+    {
+      "procedure": "INDXA",
+      "lines": [
+        119104
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "20",
+        "20",
+        "10"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "INDXC",
+      "lines": [
+        119119
+      ],
+      "expression": "IDXC+NC-1-NM",
+      "targets": [
+        "20",
+        "20",
+        "10"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "INDXB",
+      "lines": [
+        119137
+      ],
+      "expression": "IR",
+      "targets": [
+        "70",
+        "10",
+        "30"
+      ],
+      "label": "",
+      "type": "INTEGER 4",
+      "temporary": "NSWC_AI_I4"
+    },
+    {
+      "procedure": "INDXB",
+      "lines": [
+        119138
+      ],
+      "expression": "I-NM",
+      "targets": [
+        "20",
+        "20",
+        "70"
+      ],
+      "label": "10",
+      "temporary": null
+    },
+    {
+      "procedure": "INDXB",
+      "lines": [
+        119147
+      ],
+      "expression": "I-IPL-NM",
+      "targets": [
+        "50",
+        "50",
+        "40"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "INDXB",
+      "lines": [
+        119150
+      ],
+      "expression": "I+IPL-NM",
+      "targets": [
+        "70",
+        "70",
+        "60"
+      ],
+      "label": "50",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119191
+      ],
+      "expression": "IA",
+      "targets": [
+        "50",
+        "50",
+        "30"
+      ],
+      "label": "20",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119201
+      ],
+      "expression": "ID",
+      "targets": [
+        "250",
+        "250",
+        "60"
+      ],
+      "label": "50",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119218
+      ],
+      "expression": "DEN",
+      "targets": [
+        "80",
+        "90",
+        "80"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119223
+      ],
+      "expression": "NA",
+      "targets": [
+        "130",
+        "130",
+        "20"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119229
+      ],
+      "expression": "M1",
+      "targets": [
+        "140",
+        "140",
+        "150"
+      ],
+      "label": "130",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119230
+      ],
+      "expression": "M2",
+      "targets": [
+        "110",
+        "110",
+        "200"
+      ],
+      "label": "140",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119231
+      ],
+      "expression": "M2",
+      "targets": [
+        "170",
+        "170",
+        "160"
+      ],
+      "label": "150",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119232
+      ],
+      "expression": "ABS(BM1(M1))-ABS(BM2(M2))",
+      "targets": [
+        "200",
+        "200",
+        "170"
+      ],
+      "label": "160",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119233
+      ],
+      "expression": "IBR",
+      "targets": [
+        "180",
+        "180",
+        "190"
+      ],
+      "label": "170",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119234
+      ],
+      "expression": "ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)",
+      "targets": [
+        "110",
+        "190",
+        "190"
+      ],
+      "label": "180",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119238
+      ],
+      "expression": "IBR",
+      "targets": [
+        "210",
+        "210",
+        "220"
+      ],
+      "label": "200",
+      "temporary": null
+    },
+    {
+      "procedure": "PROD0",
+      "lines": [
+        119239
+      ],
+      "expression": "ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)",
+      "targets": [
+        "110",
+        "220",
+        "220"
+      ],
+      "label": "210",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119284
+      ],
+      "expression": "IA",
+      "targets": [
+        "50",
+        "50",
+        "30"
+      ],
+      "label": "20",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119291
+      ],
+      "expression": "ID",
+      "targets": [
+        "280",
+        "280",
+        "60"
+      ],
+      "label": "50",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119305
+      ],
+      "expression": "MM2-2",
+      "targets": [
+        "90",
+        "70",
+        "70"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119322
+      ],
+      "expression": "DEN",
+      "targets": [
+        "100",
+        "110",
+        "100"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119331
+      ],
+      "expression": "NA",
+      "targets": [
+        "160",
+        "160",
+        "20"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119337
+      ],
+      "expression": "M1",
+      "targets": [
+        "170",
+        "170",
+        "180"
+      ],
+      "label": "160",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119338
+      ],
+      "expression": "M2",
+      "targets": [
+        "140",
+        "140",
+        "230"
+      ],
+      "label": "170",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119339
+      ],
+      "expression": "M2",
+      "targets": [
+        "200",
+        "200",
+        "190"
+      ],
+      "label": "180",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119340
+      ],
+      "expression": "ABS(BM1(M1))-ABS(BM2(M2))",
+      "targets": [
+        "230",
+        "230",
+        "200"
+      ],
+      "label": "190",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119341
+      ],
+      "expression": "IBR",
+      "targets": [
+        "210",
+        "210",
+        "220"
+      ],
+      "label": "200",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119342
+      ],
+      "expression": "ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)",
+      "targets": [
+        "140",
+        "220",
+        "220"
+      ],
+      "label": "210",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119346
+      ],
+      "expression": "IBR",
+      "targets": [
+        "240",
+        "240",
+        "250"
+      ],
+      "label": "230",
+      "temporary": null
+    },
+    {
+      "procedure": "PRODP",
+      "lines": [
+        119347
+      ],
+      "expression": "ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)",
+      "targets": [
+        "140",
+        "250",
+        "250"
+      ],
+      "label": "240",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119391
+      ],
+      "expression": "ID",
+      "targets": [
+        "90",
+        "90",
+        "30"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119406
+      ],
+      "expression": "CABS(DEN)",
+      "targets": [
+        "50",
+        "60",
+        "50"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119413
+      ],
+      "expression": "M1",
+      "targets": [
+        "100",
+        "100",
+        "120"
+      ],
+      "label": "90",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119414
+      ],
+      "expression": "M2",
+      "targets": [
+        "210",
+        "210",
+        "110"
+      ],
+      "label": "100",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119418
+      ],
+      "expression": "M2",
+      "targets": [
+        "130",
+        "130",
+        "140"
+      ],
+      "label": "120",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119422
+      ],
+      "expression": "ABS(BM1(M1))-ABS(BM2(M2))",
+      "targets": [
+        "160",
+        "160",
+        "150"
+      ],
+      "label": "140",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119429
+      ],
+      "expression": "MM-2",
+      "targets": [
+        "200",
+        "180",
+        "180"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119442
+      ],
+      "expression": "IA",
+      "targets": [
+        "240",
+        "240",
+        "220"
+      ],
+      "label": "210",
+      "temporary": null
+    },
+    {
+      "procedure": "CPROD0",
+      "lines": [
+        119452
+      ],
+      "expression": "IFLG",
+      "targets": [
+        "250",
+        "250",
+        "20"
+      ],
+      "label": "240",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119494
+      ],
+      "expression": "ID",
+      "targets": [
+        "110",
+        "110",
+        "30"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119508
+      ],
+      "expression": "MM2-2",
+      "targets": [
+        "60",
+        "40",
+        "40"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119525
+      ],
+      "expression": "CABS(DEN)",
+      "targets": [
+        "70",
+        "80",
+        "70"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119534
+      ],
+      "expression": "M1",
+      "targets": [
+        "120",
+        "120",
+        "140"
+      ],
+      "label": "110",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119535
+      ],
+      "expression": "M2",
+      "targets": [
+        "230",
+        "230",
+        "130"
+      ],
+      "label": "120",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119539
+      ],
+      "expression": "M2",
+      "targets": [
+        "150",
+        "150",
+        "160"
+      ],
+      "label": "140",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119543
+      ],
+      "expression": "ABS(BM1(M1))-ABS(BM2(M2))",
+      "targets": [
+        "180",
+        "180",
+        "170"
+      ],
+      "label": "160",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119554
+      ],
+      "expression": "MM-2",
+      "targets": [
+        "220",
+        "200",
+        "200"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119564
+      ],
+      "expression": "IA",
+      "targets": [
+        "260",
+        "260",
+        "240"
+      ],
+      "label": "230",
+      "temporary": null
+    },
+    {
+      "procedure": "CPRODP",
+      "lines": [
+        119574
+      ],
+      "expression": "IFLG",
+      "targets": [
+        "270",
+        "270",
+        "20"
+      ],
+      "label": "260",
+      "temporary": null
+    },
+    {
+      "procedure": "COMPB",
+      "lines": [
+        119606
+      ],
+      "expression": "ARG",
+      "targets": [
+        "220",
+        "30",
+        "30"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "COMPB",
+      "lines": [
+        119620
+      ],
+      "expression": "NB",
+      "targets": [
+        "100",
+        "100",
+        "50"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "COMPB",
+      "lines": [
+        119630
+      ],
+      "expression": "IERROR",
+      "targets": [
+        "210",
+        "70",
+        "210"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "COMPB",
+      "lines": [
+        119669
+      ],
+      "expression": "J2-N2M2",
+      "targets": [
+        "170",
+        "170",
+        "190"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "COMPB",
+      "lines": [
+        119672
+      ],
+      "expression": "J2-N2M2",
+      "targets": [
+        "170",
+        "170",
+        "190"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119890
+      ],
+      "expression": "BP(N)-BP(1)",
+      "targets": [
+        "10",
+        "420",
+        "30"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119902
+      ],
+      "expression": "MODIZ",
+      "targets": [
+        "60",
+        "70",
+        "60"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119903
+      ],
+      "expression": "A(1)",
+      "targets": [
+        "100",
+        "420",
+        "70"
+      ],
+      "label": "60",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119907
+      ],
+      "expression": "PSGF(XL,IZ,C,A,BH)",
+      "targets": [
+        "80",
+        "80",
+        "90"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119912
+      ],
+      "expression": "MODIZ",
+      "targets": [
+        "110",
+        "120",
+        "110"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119913
+      ],
+      "expression": "A(1)",
+      "targets": [
+        "120",
+        "420",
+        "150"
+      ],
+      "label": "110",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119917
+      ],
+      "expression": "PSGF(XR,IZ,C,A,BH)",
+      "targets": [
+        "130",
+        "140",
+        "140"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119927
+      ],
+      "expression": "ABS(PSG)-EPS",
+      "targets": [
+        "180",
+        "180",
+        "160"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119928
+      ],
+      "expression": "PSG*PPSGF(XM,IZ,C,A,BH)",
+      "targets": [
+        "170",
+        "180",
+        "190"
+      ],
+      "label": "160",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119960
+      ],
+      "expression": "MODIZ",
+      "targets": [
+        "230",
+        "220",
+        "230"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119965
+      ],
+      "expression": "CABS(FP)",
+      "targets": [
+        "260",
+        "260",
+        "250"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119969
+      ],
+      "expression": "CABS(FPP)",
+      "targets": [
+        "320",
+        "320",
+        "270"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119974
+      ],
+      "expression": "CABS(R1)-CABS(R2)",
+      "targets": [
+        "290",
+        "290",
+        "280"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119980
+      ],
+      "expression": "I3",
+      "targets": [
+        "330",
+        "330",
+        "310"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119988
+      ],
+      "expression": "ICV",
+      "targets": [
+        "340",
+        "340",
+        "350"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        119995
+      ],
+      "expression": "CABS(CBP(N))-CABS(CBP(1))",
+      "targets": [
+        "370",
+        "420",
+        "390"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "PPADD",
+      "lines": [
+        120005
+      ],
+      "expression": "AIMAG(CBP(J))",
+      "targets": [
+        "430",
+        "400",
+        "430"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "PSGF",
+      "lines": [
+        120032
+      ],
+      "expression": "MOD(IZ,2)",
+      "targets": [
+        "30",
+        "20",
+        "30"
+      ],
+      "label": "",
+      "temporary": null
+    },
+    {
+      "procedure": "BSRH",
+      "lines": [
+        120053
+      ],
+      "expression": "SGN*F(X,IZ,C,A,BH)",
+      "targets": [
+        "30",
+        "50",
+        "20"
+      ],
+      "label": "",
+      "type": "REAL 4",
+      "temporary": "NSWC_AI_R4"
+    },
+    {
+      "procedure": "BSRH",
+      "lines": [
+        120058
+      ],
+      "expression": "DX-CNV",
+      "targets": [
+        "50",
+        "50",
+        "10"
+      ],
+      "label": "",
+      "temporary": null
+    }
+  ],
+  "declarations": {
+    "CBRT": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DCBRT": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "ARTNQ": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DARTNQ": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "DCSQRT": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "PAREA": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "HC1": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "EXPLI": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "GAMMA": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "GAM1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DGAMMA": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DGAM1": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "DPSI": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "GRATIO": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "BESJ": {
+      "NSWC_AI_I4": "INTEGER",
+      "NSWC_AI_R4": "REAL"
+    },
+    "BESI": {
+      "NSWC_AI_I4": "INTEGER",
+      "NSWC_AI_R4": "REAL"
+    },
+    "CFLECT": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "VALR2": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "PKILL": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "QTCRT": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DQTCRT": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "ISWAP": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SROTMG": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SROTM": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DROTMG": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "DROTM": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "BADD": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DBADD": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CBADD": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "BSUBT": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DBSUBT": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CBSUBT": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "NSPIV1": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SPLU": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DNSPIV": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DSPLU": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CNSPIV": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CSPLU": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "EIGV": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "EIGV1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "HQR2": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "DEIGV": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "DHQR2": {
+      "NSWC_AI_R8": "DOUBLE PRECISION"
+    },
+    "COMQR2": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DCMQR2": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "XL1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "FMIN": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SMPLX1": {
+      "NSWC_AI_I4": "INTEGER",
+      "NSWC_AI_R4": "REAL"
+    },
+    "SSPLX1": {
+      "NSWC_AI_I4": "INTEGER",
+      "NSWC_AI_R4": "REAL"
+    },
+    "CROUT1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "ASSGN1": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SKNP1": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SFFT": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "COSQF": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "COSQB": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "RADB2": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "RADB4": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "RADF2": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "RADF4": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "ADCHK": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "TRP": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "LTRP": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "WPFIT": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "CBSPL": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SCOMP": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SCOMP1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SCOMP2": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SEVAL": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SEVAL1": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "SEVAL2": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "PSCMP": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "PSEVL": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "LOPCMP": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "LOPDF": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "INTRVL": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "PPVAL": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "BANFAC": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CSURF": {
+      "NSWC_AI_R4": "REAL",
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "CSRF": {
+      "NSWC_AI_R4": "REAL",
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "SURF": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "MEVAL": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "DMEVAL": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "STEP1": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "PDEDGE": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "INDXB": {
+      "NSWC_AI_I4": "INTEGER"
+    },
+    "PPADD": {
+      "NSWC_AI_R4": "REAL"
+    },
+    "BSRH": {
+      "NSWC_AI_R4": "REAL"
+    }
+  },
+  "converted": 303,
+  "destination_counts": {
+    "3": 177,
+    "2": 126
+  },
+  "output_sha256": "6c7afa0a8f422d6afa01f26348897fb1b5a726cc3c263e3ba2823b2fa4398f80"
+}

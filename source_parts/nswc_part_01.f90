@@ -2890,11 +2890,14 @@ end subroutine dorder
 pure elemental real function cbrt(x)
 implicit none
 real, intent(in) :: x
-real :: r
+real :: r, nswc_ai_r4
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
-if (x) 30, 10, 20
+nswc_ai_r4 = x
+if ( nswc_ai_r4 < 0 ) go to 30
+if ( nswc_ai_r4 == 0 ) go to 10
+go to 20
 10 cbrt = 0.0
 return
 20 r = log(x)/3.0
@@ -2910,9 +2913,12 @@ implicit none
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: r
+double precision :: r, nswc_ai_r8
 !
-if (x) 30, 10, 20
+nswc_ai_r8 = x
+if ( nswc_ai_r8 < 0 ) go to 30
+if ( nswc_ai_r8 == 0 ) go to 10
+go to 20
 10 dcbrt = 0.d0
 return
 20 r = log(x)/3.d0
@@ -2926,15 +2932,25 @@ pure elemental function artnq(y,x)
 implicit none
 real, intent(in) :: x, y
 real :: artnq
-if (x) 1,2,5
+real :: nswc_ai_r4
+nswc_ai_r4 = x
+if ( nswc_ai_r4 < 0 ) go to 1
+if ( nswc_ai_r4 == 0 ) go to 2
+go to 5
 1 artnq = atan(y/x) + 3.1415926535898
 return
-2 if (y) 3,8,4
+2 nswc_ai_r4 = y
+if ( nswc_ai_r4 < 0 ) go to 3
+if ( nswc_ai_r4 == 0 ) go to 8
+go to 4
 3 artnq = 4.7123889803847
 return
 4 artnq = 1.5707963267949
 return
-5 if (y) 6,8,7
+5 nswc_ai_r4 = y
+if ( nswc_ai_r4 < 0 ) go to 6
+if ( nswc_ai_r4 == 0 ) go to 8
+go to 7
 6 artnq = atan(y/x) + 6.2831853071795
 return
 7 artnq = atan(y/x)
@@ -2945,15 +2961,25 @@ end function artnq
 pure elemental double precision function dartnq(y,x)
 implicit none
 double precision, intent(in) :: x, y
-if (x) 1,2,5
+double precision :: nswc_ai_r8
+nswc_ai_r8 = x
+if ( nswc_ai_r8 < 0 ) go to 1
+if ( nswc_ai_r8 == 0 ) go to 2
+go to 5
 1 dartnq = atan(y/x) + 3.14159265358979323846264338328d0
 return
-2 if (y) 3,8,4
+2 nswc_ai_r8 = y
+if ( nswc_ai_r8 < 0 ) go to 3
+if ( nswc_ai_r8 == 0 ) go to 8
+go to 4
 3 dartnq = 4.71238898038468985769396507492d0
 return
 4 dartnq = 1.57079632679489661923132169164d0
 return
-5 if (y) 6,8,7
+5 nswc_ai_r8 = y
+if ( nswc_ai_r8 < 0 ) go to 6
+if ( nswc_ai_r8 == 0 ) go to 8
+go to 7
 6 dartnq = atan(y/x) + 6.28318530717958647692528676656d0
 return
 7 dartnq = atan(y/x)
@@ -3110,7 +3136,7 @@ pure subroutine dcsqrt(z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
-double precision :: x, y, r
+double precision :: x, y, r, nswc_ai_r8
 interface
    pure elemental function dcpabs(x,y)
       implicit none
@@ -3132,7 +3158,10 @@ end interface
 !
 x = z(1)
 y = z(2)
-if (x) 30,10,20
+nswc_ai_r8 = x
+if ( nswc_ai_r8 < 0 ) go to 30
+if ( nswc_ai_r8 == 0 ) go to 10
+go to 20
 !
 10 if (y /= 0.d0) go to 11
 w(1) = 0.d0
@@ -5198,7 +5227,7 @@ pure real function parea(x, y, nb)
 implicit none
 integer, intent(in) :: nb
 real, intent(in) :: x(nb), y(nb)
-integer :: i, n, nm1
+integer :: i, n, nm1, nswc_ai_i4
 real :: a
 !
 !*****************************************************************
@@ -5214,7 +5243,10 @@ real :: a
 !
 n = nb
 if (x(1) == x(n) .and. y(1) == y(n)) n = n - 1
-if (n - 3) 10, 20, 30
+nswc_ai_i4 = n - 3
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 20
+go to 30
 !
 10 parea = 0.0
 return
@@ -5374,8 +5406,8 @@ integer, intent(in) :: np1
 integer, intent(in) :: pr(np1)
 integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
    & vc(n), p(n), subr(n), rbus(n), tor(n)
-integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
-   & jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
+integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np, &
+   & nswc_ai_i4
 real :: dens, score
 interface
    pure subroutine bupd(a1,a2,p1,p2,v1,v2,ii,k1,k2,n,m,np1)
@@ -5545,7 +5577,10 @@ maxe = vc(1)
 minu = vr(1)
 jr = 1
 do i = 2,n
-   if (vc(i) - maxe) 100, 70, 80
+   nswc_ai_i4 = vc ( i ) - maxe
+   if ( nswc_ai_i4 < 0 ) go to 100
+   if ( nswc_ai_i4 == 0 ) go to 70
+   go to 80
 70 if (vr(i) >= minu) go to 100
    go to 90
 80 maxe = vc(i)
@@ -9339,7 +9374,7 @@ real, intent(inout) :: result
 integer, intent(in) :: int
 integer, intent(out) :: ierr
 integer :: m, i
-real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei
+real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei, nswc_ai_r4
 real, parameter :: dexp40 = .235385266837020e+18
 real, parameter :: x0 = .372507410781366
 double precision, parameter :: dx0 = .37250741078136663446199186658d0
@@ -9517,7 +9552,10 @@ end interface
 x = arg
 ierr = 0
 if (int == 2) go to 450
-if (x) 280, 640, 110
+nswc_ai_r4 = x
+if ( nswc_ai_r4 < 0 ) go to 280
+if ( nswc_ai_r4 == 0 ) go to 640
+go to 110
 110 if (x >= 12.e0) go to 200
 if (x > 8.e0) go to 160
 if (x >= 4.e0) go to 150
@@ -9638,7 +9676,10 @@ if (t == 0.0e0) go to 600
 410 result = ei
 return
 450 y = x
-if (y) 660, 640, 300
+nswc_ai_r4 = y
+if ( nswc_ai_r4 < 0 ) go to 660
+if ( nswc_ai_r4 == 0 ) go to 640
+go to 300
 !     ---------- Error return for X .LT. xmin,
 !                causing underflow ----------
 600 ei = 0.0e0
@@ -10478,120 +10519,4 @@ sm(2) = sr(2) + sm(2)
 !-----------------------------------------------------------------------
 130 w = cmplx(sm(1), sm(2))
 end subroutine cexexi
-
-pure elemental complex function cli(z)
-implicit none
-complex, intent(in) :: z
-integer :: n
-real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
-real, parameter :: c = 1.64493406684823
-real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
-   & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
-   & 2.29178211549926e-2, -2.31276449354844e-2, -2.33038680700203e-2, -2.34539766464373e-2, -2.35833786876607e-2, - &
-   & 2.36960832049849e-2, -2.37951264448373e-2, -2.38828504258091e-2, -2.39610907251825e-2, -2.40313063764460e-2, - &
-   & 2.40946717197585e-2, -2.41521426124012e-2, -2.42045049812210e-2, -2.42524109782181e-2, -2.42964062815807e-2, - &
-   & 2.43369509729144e-2]
-interface
-   pure elemental function cpabs(x,y)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: cpabs
-   end function cpabs
-end interface
-!     ******************************************************************
-!     Computation of the complex logarithmic integral
-!     ******************************************************************
-!     ---------------------
-!     c = pi**2/6
-!     ---------------------
-!     ---------------------
-!     ---------------------
-az(1) = real(z)
-az(2) = aimag(z)
-r = cpabs(az(1),az(2))
-if (r > 0.5) go to 10
-sr(1) = 0.0
-sr(2) = 0.0
-qf(1) = -az(1)
-qf(2) = -az(2)
-tm(1) = az(1)
-tm(2) = az(2)
-go to 30
-!
-10 if (r < 3.0) go to 20
-zl(1) = log(r)
-zl(2) = atan2(az(2),az(1))
-sr(1) = c + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
-sr(2) = zl(1)*zl(2)
-qf(1) = (-az(1)/r)/r
-qf(2) = (az(2)/r)/r
-tm(1) = qf(1)
-tm(2) = qf(2)
-go to 30
-!
-20 zd(1) = 1.0 + az(1)
-zd(2) = az(2)
-ds = zd(1)*zd(1) + zd(2)*zd(2)
-if (ds == 0.0) go to 100
-dl(1) = 0.5*log(ds)
-dl(2) = atan2(zd(2),zd(1))
-if (ds > 0.25) go to 50
-zl(1) = log(r)
-zl(2) = atan2(-az(2),-az(1))
-sr(1) = -c + (dl(1)*zl(1) - dl(2)*zl(2))
-sr(2) = dl(1)*zl(2) + dl(2)*zl(1)
-qf(1) = zd(1)
-qf(2) = zd(2)
-tm(1) = qf(1)
-tm(2) = qf(2)
-!
-!             Evaluation of the Taylor series
-!
-30 sr(1) = sr(1) + tm(1)
-sr(2) = sr(2) + tm(2)
-sm(1) = 0.0
-sm(2) = 0.0
-pm = 1.0
-40 pm = pm + 1.0
-ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
-ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
-tm(1) = ts(1)
-tm(2) = ts(2)
-ts(1) = tm(1)/(pm*pm)
-ts(2) = tm(2)/(pm*pm)
-if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 41
-if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 80
-41 sm(1) = sm(1) + ts(1)
-sm(2) = sm(2) + ts(2)
-go to 40
-!
-!        Evaluation of the series in  U = -LN(1 + z)
-!
-50 qf(1) = dl(1)*dl(1) - dl(2)*dl(2)
-qf(2) = 2.0*dl(1)*dl(2)
-sr(1) = dl(1) + 0.25*qf(1)
-sr(2) = dl(2) + 0.25*qf(2)
-sm(1) = 0.0
-sm(2) = 0.0
-tm(1) = dl(1)
-tm(2) = dl(2)
-do n = 1,25
-   ts(1) = qb(n)*(tm(1)*qf(1) - tm(2)*qf(2))
-   ts(2) = qb(n)*(tm(1)*qf(2) + tm(2)*qf(1))
-   tm(1) = ts(1)
-   tm(2) = ts(2)
-   if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
-   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
-60 sm(1) = sm(1) + tm(1)
-   sm(2) = sm(2) + tm(2)
-end do
-!
-80 cli = cmplx(sr(1) + sm(1), sr(2) + sm(2))
-return
-!
-!                  Evaluation at z = -1
-!
-100 cli = cmplx(-c, 0.0)
-end function cli
 

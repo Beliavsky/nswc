@@ -1,6 +1,6 @@
 # Combining local declarations
 
-The final free-form pass combines matching local type declarations within
+The declaration-coalescing pass combines matching local type declarations within
 contiguous declaration blocks. For example:
 
 ```fortran
@@ -16,8 +16,8 @@ integer :: ibeta, m, emin, emax
 real :: b, binv, bm1, one, w, z
 ```
 
-The external version removes 546 separate declaration statements by merging
-locals across 299 procedures. The module
+The initial application removed 546 separate declaration statements by merging
+locals across 299 procedures. Later added locals are coalesced by the same pass. The module
 also applies the pass after removing redundant library procedure declarations,
 which creates additional opportunities to combine locals. The fixed-form files
 are unchanged.

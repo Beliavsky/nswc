@@ -1,3 +1,445 @@
+pure subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
+implicit none
+!
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(in) :: igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
+real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r4
+logical :: notlas
+complex :: z3
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!     real sqrt,abs
+!     integer min0
+!     complex cmplx
+!     real real,aimag
+!-----------------------------------------------------------------------
+!
+!     This subroutine is a translation of the Algol procedure hqr2,
+!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a real upper Hessenberg matrix BY the QR method.  The
+!     eigenvectors of a real general matrix can also be found
+!     if  elmhes  and  eltran  or  orthes  and  ortran  have
+!     been used to reduce this general matrix to Hessenberg form
+!     and to accumulate the similarity transformations.
+!
+!     On input-
+!
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!
+!        n is the order of the matrix,
+!
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          set low=1, igh=n,
+!
+!        h contains the upper Hessenberg matrix,
+!
+!        z contains the transformation matrix produced by  eltran
+!          after the reduction by  elmhes, or by  ortran  after the
+!          reduction by  orthes, if performed.  If the eigenvectors
+!          of the Hessenberg matrix are desired, z must contain the
+!          identity matrix.
+!
+!     On output-
+!
+!        h has been destroyed,
+!
+!        wr and wi contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  The eigenvalues
+!          are unordered except that complex conjugate pairs
+!          of values appear consecutively with the eigenvalue
+!          having the positive imaginary part first.  If an
+!          error exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!
+!        z contains the real and imaginary parts of the eigenvectors.
+!          If the i-TH eigenvalue is real, the i-TH column of z
+!          contains its eigenvector.  If the i-TH eigenvalue is complex
+!          with positive imaginary part, the i-TH and (i+1)-TH
+!          columns of z contain the real and imaginary parts of its
+!          eigenvector.  The eigenvectors are unnormalized.  If an
+!          error exit is made, none of the eigenvectors has been found,
+!
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!
+!     Arithmetic is real except for the replacement of the Algol
+!     procedure cdiv by complex division.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+!
+machep = spmpar(1)
+!
+!                **********
+!
+ierr = 0
+norm = 0.0
+k = 1
+!     ********** Store roots isolated by balanc
+!                and compute matrix norm **********
+do i = 1, n
+!
+   do j = k, n
+40    norm = norm + abs(h(i,j))
+   end do
+!
+   k = i
+   if (i >= low .and. i <= igh) go to 50
+   wr(i) = h(i,i)
+   wi(i) = 0.0
+50 continue
+end do
+!
+en = igh
+t = 0.0
+!     ********** Search for next eigenvalues **********
+60 if (en < low) go to 340
+its = 0
+na = en - 1
+enm2 = na - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
+70 do ll = low, en
+   l = en + low - ll
+   if (l == low) go to 100
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
+   if (s == 0.0) s = norm
+   if (abs(h(l,l - 1)) <= machep * s) go to 100
+end do
+!     ********** Form shift **********
+100 x = h(en,en)
+if (l == en) go to 270
+y = h(na,na)
+w = h(en,na) * h(na,en)
+if (l == na) go to 280
+if (its == 30) go to 1000
+if (its /= 10 .and. its /= 20) go to 130
+!     ********** Form exceptional shift **********
+t = t + x
+!
+do i = low, en
+120 h(i,i) = h(i,i) - x
+end do
+!
+s = abs(h(en,na)) + abs(h(na,enm2))
+x = 0.75 * s
+y = x
+w = -0.4375 * s * s
+130 its = its + 1
+!     ********** Look for two consecutive small
+!                sub-diagonal elements.
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
+do mm = l, enm2
+   m = enm2 + l - mm
+   zz = h(m,m)
+   r = x - zz
+   s = y - zz
+   p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
+   s = abs(p) + abs(q) + abs(r)
+   p = p / s
+   q = q / s
+   r = r / s
+   if (m == l) go to 150
+   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
+      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
+end do
+!
+150 mp2 = m + 2
+!
+do i = mp2, en
+   h(i,i - 2) = 0.0
+   if (i == mp2) go to 160
+   h(i,i - 3) = 0.0
+160 continue
+end do
+!     ********** Double QR step involving rows l to en and
+!                COLUMNS m TO en **********
+do k = m, na
+   notlas = k /= na
+   if (k == m) go to 170
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
+   r = 0.0
+   if (notlas) r = h(k + 2,k - 1)
+   x = abs(p) + abs(q) + abs(r)
+   if (x == 0.0) go to 260
+   p = p / x
+   q = q / x
+   r = r / x
+170 s = sqrt(p*p + q*q + r*r)
+   if (p < 0.0) s = -s
+   if (k == m) go to 180
+   h(k,k - 1) = -s * x
+   go to 190
+180 if (l /= m) h(k,k - 1) = -h(k,k - 1)
+190 p = p + s
+   x = p / s
+   y = q / s
+   zz = r / s
+   q = q / p
+   r = r / p
+!     ********** Row modification **********
+   do j = k, n
+      p = h(k,j) + q * h(k + 1,j)
+      if (.not. notlas) go to 200
+      p = p + r * h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p * zz
+200   h(k + 1,j) = h(k + 1,j) - p * y
+      h(k,j) = h(k,j) - p * x
+   end do
+!
+   j = min(en,k + 3)
+!     ********** Column modification **********
+   do i = 1, j
+      p = x * h(i,k) + y * h(i,k + 1)
+      if (.not. notlas) go to 220
+      p = p + zz * h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p * r
+220   h(i,k + 1) = h(i,k + 1) - p * q
+      h(i,k) = h(i,k) - p
+   end do
+!     ********** Accumulate transformations **********
+   do i = low, igh
+      p = x * z(i,k) + y * z(i,k + 1)
+      if (.not. notlas) go to 240
+      p = p + zz * z(i,k + 2)
+      z(i,k + 2) = z(i,k + 2) - p * r
+240   z(i,k + 1) = z(i,k + 1) - p * q
+      z(i,k) = z(i,k) - p
+   end do
+!
+260 continue
+end do
+!
+go to 70
+!     ********** One root found **********
+270 h(en,en) = x + t
+wr(en) = h(en,en)
+wi(en) = 0.0
+en = na
+go to 60
+!     ********** Two roots found **********
+280 p = (y - x) / 2.0
+q = p * p + w
+zz = sqrt(abs(q))
+h(en,en) = x + t
+x = h(en,en)
+h(na,na) = y + t
+if (q < 0.0) go to 320
+!     ********** Real pair **********
+if (p < 0.0) zz = -zz
+zz = p + zz
+wr(na) = x + zz
+wr(en) = wr(na)
+if (zz /= 0.0) wr(en) = x - w / zz
+wi(na) = 0.0
+wi(en) = 0.0
+x = h(en,na)
+s = abs(x) + abs(zz)
+p = x / s
+q = zz / s
+r = sqrt(p*p + q*q)
+p = p / r
+q = q / r
+!     ********** Row modification **********
+do j = na, n
+   zz = h(na,j)
+   h(na,j) = q * zz + p * h(en,j)
+   h(en,j) = q * h(en,j) - p * zz
+end do
+!     ********** Column modification **********
+do i = 1, en
+   zz = h(i,na)
+   h(i,na) = q * zz + p * h(i,en)
+   h(i,en) = q * h(i,en) - p * zz
+end do
+!     ********** Accumulate transformations **********
+do i = low, igh
+   zz = z(i,na)
+   z(i,na) = q * zz + p * z(i,en)
+   z(i,en) = q * z(i,en) - p * zz
+end do
+!
+go to 330
+!     ********** Complex pair **********
+320 wr(na) = x + p
+wr(en) = x + p
+wi(na) = zz
+wi(en) = -zz
+330 en = enm2
+go to 60
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
+340 if (norm == 0.0) go to 1001
+!     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
+do nn = 1, n
+   en = n + 1 - nn
+   p = wr(en)
+   q = wi(en)
+   na = en - 1
+   nswc_ai_r4 = q
+   if ( nswc_ai_r4 < 0 ) go to 710
+   if ( nswc_ai_r4 == 0 ) go to 600
+   go to 800
+!     ********** Real vector **********
+600 m = en
+   h(en,en) = 1.0
+   if (na == 0) go to 800
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
+   do ii = 1, na
+      i = en - ii
+      w = h(i,i) - p
+      r = h(i,en)
+      if (m > na) go to 620
+!
+      do j = m, na
+610      r = r + h(i,j) * h(j,en)
+      end do
+!
+620   if (wi(i) >= 0.0) go to 630
+      zz = w
+      s = r
+      go to 700
+630   m = i
+      if (wi(i) /= 0.0) go to 640
+      t = w
+      if (w == 0.0) t = machep * norm
+      h(i,en) = -r / t
+      go to 700
+!     ********** Solve real equations **********
+640   x = h(i,i + 1)
+      y = h(i + 1,i)
+      q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
+      t = (x * s - zz * r) / q
+      h(i,en) = t
+      if (abs(x) <= abs(zz)) go to 650
+      h(i + 1,en) = (-r - w * t) / x
+      go to 700
+650   h(i + 1,en) = (-s - y * t) / zz
+700   continue
+   end do
+!     ********** End real vector **********
+   go to 800
+!     ********** Complex vector **********
+710 m = na
+!     ********** Last vector component chosen imaginary so that
+!                eigenvector matrix is triangular **********
+   if (abs(h(en,na)) <= abs(h(na,en))) go to 720
+   h(na,na) = q / h(en,na)
+   h(na,en) = -(h(en,en) - p) / h(en,na)
+   go to 730
+720 z3 = cmplx(0.0,-h(na,en)) / cmplx(h(na,na) - p,q)
+   h(na,na) = real(z3)
+   h(na,en) = aimag(z3)
+730 h(en,na) = 0.0
+   h(en,en) = 1.0
+   enm2 = na - 1
+   if (enm2 == 0) go to 800
+!     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
+   do ii = 1, enm2
+      i = na - ii
+      w = h(i,i) - p
+      ra = 0.0
+      sa = h(i,en)
+!
+      do j = m, na
+         ra = ra + h(i,j) * h(j,na)
+         sa = sa + h(i,j) * h(j,en)
+      end do
+!
+      if (wi(i) >= 0.0) go to 770
+      zz = w
+      r = ra
+      s = sa
+      go to 790
+770   m = i
+      if (wi(i) /= 0.0) go to 780
+      z3 = cmplx(-ra,-sa) / cmplx(w,q)
+      h(i,na) = real(z3)
+      h(i,en) = aimag(z3)
+      go to 790
+!     ********** Solve complex equations **********
+780   x = h(i,i + 1)
+      y = h(i + 1,i)
+      vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
+      vi = (wr(i) - p) * 2.0 * q
+      if (vr == 0.0 .and. vi == 0.0) vr = machep * norm &
+         & * (abs(w) + abs(q) + abs(x) + abs(y) + abs(zz))
+      z3 = cmplx(x*r - zz*ra + q*sa,x*s - zz*sa - q*ra) / cmplx(vr,vi)
+      h(i,na) = real(z3)
+      h(i,en) = aimag(z3)
+      if (abs(x) <= abs(zz) + abs(q)) go to 785
+      h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
+      h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
+      go to 790
+785   z3 = cmplx(-r - y*h(i,na),-s - y*h(i,en)) / cmplx(zz,q)
+      h(i + 1,na) = real(z3)
+      h(i + 1,en) = aimag(z3)
+790   continue
+   end do
+!     ********** End complex vector **********
+800 continue
+end do
+!     ********** End back substitution.
+!                Vectors of isolated roots **********
+do i = 1, n
+   if (i >= low .and. i <= igh) go to 840
+!
+   do j = i, n
+820   z(i,j) = h(i,j)
+   end do
+!
+840 continue
+end do
+!     ********** Multiply by transformation matrix to give
+!                vectors of original full matrix.
+!                For j=n step -1 Until low do -- **********
+do jj = low, n
+   j = n + low - jj
+   m = min(j,igh)
+!
+   do i = low, igh
+      zz = 0.0
+!
+      do k = low, m
+860      zz = zz + z(i,k) * h(k,j)
+      end do
+!
+      z(i,j) = zz
+880   continue
+   end do
+end do
+!
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = en
+1001 return
+end subroutine hqr2
+
 pure subroutine deig(ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
@@ -55,6 +497,7 @@ integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
    & zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
+double precision :: nswc_ai_r8
 interface
    pure subroutine dbabk(nm,n,low,igh,scale,m,z)
       implicit none
@@ -121,7 +564,10 @@ if (ierr /= 0) return
 if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
 !
 do k = 1,n
-   if (wi(k)) 30,10,20
+   nswc_ai_r8 = wi ( k )
+   if ( nswc_ai_r8 < 0 ) go to 30
+   if ( nswc_ai_r8 == 0 ) go to 10
+   go to 20
 10 do j = 1,n
 11    zi(j,k) = 0.d0
    end do
@@ -1036,7 +1482,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
 integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
-double precision :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep
+double precision :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r8
 logical :: notlas
 interface
    pure elemental function dpmpar(i)
@@ -1321,7 +1767,10 @@ do nn = 1, n
    p = wr(en)
    q = wi(en)
    na = en - 1
-   if (q) 710, 600, 800
+   nswc_ai_r8 = q
+   if ( nswc_ai_r8 < 0 ) go to 710
+   if ( nswc_ai_r8 == 0 ) go to 600
+   go to 800
 !     ********** Real vector **********
 600 m = en
    h(en,en) = 1.d0
@@ -4236,7 +4685,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
    & zi(nm,n), ortr(igh), orti(igh)
-integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
 interface
@@ -4337,7 +4786,10 @@ end do
 !     ********** Form the matrix of accumulated transformations
 !                from the information left by corth **********
 iend = igh - low - 1
-if (iend) 180, 150, 105
+nswc_ai_i4 = iend
+if ( nswc_ai_i4 < 0 ) go to 180
+if ( nswc_ai_i4 == 0 ) go to 150
+go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
    i = igh - ii
@@ -5472,7 +5924,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
-integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 interface
    pure elemental function dcpabs(x,y)
@@ -5576,7 +6028,10 @@ end do
 !     ********** Form the matrix of accumulated transformations
 !                from the information left by dcorth **********
 iend = igh - low - 1
-if (iend) 180, 150, 105
+nswc_ai_i4 = iend
+if ( nswc_ai_i4 < 0 ) go to 180
+if ( nswc_ai_i4 == 0 ) go to 150
+go to 105
 !     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do ii = 1, iend
    i = igh - ii
@@ -6057,7 +6512,7 @@ integer, intent(inout) :: kode
 integer, intent(in) :: klm2d
 integer, intent(in) :: nklmd
 double precision :: sum
-real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot
+real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot, nswc_ai_r4
 integer :: i, j, ia, ii, in, js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1, iimn, iout, klm1, klm2, nklm, nkl1, maxit, iphase, &
    & kforce, iineg
 dimension q(klm2d,n2d), x(n2d), res(klmd), &
@@ -6117,7 +6572,10 @@ do j = nkl1,nklm
 end do
 80 if (kode == 0) go to 150
 do j = 1,n
-   if (x(j)) 90, 110, 100
+   nswc_ai_r4 = x ( j )
+   if ( nswc_ai_r4 < 0 ) go to 90
+   if ( nswc_ai_r4 == 0 ) go to 110
+   go to 100
 90 cu(1,j) = 1.
    iu(1,j) = 1
    go to 110
@@ -6127,7 +6585,10 @@ do j = 1,n
 end do
 do j = 1,k
    jpn = j + n
-   if (res(j)) 120, 140, 130
+   nswc_ai_r4 = res ( j )
+   if ( nswc_ai_r4 < 0 ) go to 120
+   if ( nswc_ai_r4 == 0 ) go to 140
+   go to 130
 120 cu(1,jpn) = 1.
    iu(1,jpn) = 1
    if (q(j,n2) > 0.0) iphase = 1
@@ -10211,376 +10672,4 @@ return
 return
 310 ierr = 2
 end subroutine hfti2
-
-pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
-implicit none
-integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
-real, intent(inout) :: c(*), u(iue,m), up
-integer :: i, i2, i3, i4, incr, j
-real :: cl, d, sm1
-double precision :: sm, b
-!-----------------------------------------------------------------------
-!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!
-!     Construction and/or application of a single
-!     Householder transformation..     Q = i + u*(u**T)/b
-!
-!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
-!     lpivot is the index of the pivot element.
-!     l1,m   if l1 .LE. m   the transformation will be constructed to
-!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            the subroutine does an identity transformation.
-!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue is the storage increment between elements.
-!                                       On exit from H1 u() and up
-!                   contain quantities defining the vector u of the
-!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   and up should contain quantities previously computed
-!                   by H1.  These will not be modified by H2.
-!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            regarded as a set of vectors to which the Householder
-!            transformation is to be applied.  On exit c() contains the
-!            set of transformed vectors.
-!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
-!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
-!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
-!            no operations will be done on c().
-!-----------------------------------------------------------------------
-!
-if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
-cl = abs(u(1,lpivot))
-if (mode == 2) go to 60
-!
-!                            ****** Construct the transformation. ******
-!
-do j = l1,m
-10 cl = max(abs(u(1,j)),cl)
-end do
-if (cl <= 0.0) go to 130
-d = u(1,lpivot)/cl
-sm = d*d
-do j = l1,m
-   d = u(1,j)/cl
-20 sm = sm + dble(d*d)
-end do
-!
-sm1 = sm
-cl = cl*sqrt(sm1)
-if (u(1,lpivot) > 0.0) cl = -cl
-up = u(1,lpivot) - cl
-u(1,lpivot) = cl
-go to 70
-!
-!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
-!
-60 if (cl) 130,130,70
-70 if (ncv <= 0) return
-b = dble(up)*dble(u(1,lpivot))
-!
-!                       b  must be nonpositive here.  If b = 0., Return.
-!
-if (b >= 0.d0) go to 130
-b = 1.d0/b
-i2 = 1 - icv + ice*(lpivot - 1)
-incr = ice*(l1 - lpivot)
-do j = 1,ncv
-   i2 = i2 + icv
-   i3 = i2 + incr
-   i4 = i3
-   sm = dble(c(i2))*dble(up)
-   do i = l1,m
-      sm = sm + dble(c(i3))*dble(u(1,i))
-90    i3 = i3 + ice
-   end do
-   if (sm == 0.d0) go to 120
-   sm = sm*b
-   c(i2) = c(i2) + sm*dble(up)
-   do i = l1,m
-      c(i4) = c(i4) + sm*dble(u(1,i))
-110   i4 = i4 + ice
-   end do
-120 continue
-end do
-130 return
-end subroutine h12
-
-pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
-implicit none
-integer, intent(out) :: k
-integer, intent(in) :: m, mda, mdb, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,*)
-double precision, intent(in) :: tau
-double precision, intent(inout) :: rnorm(*), h(n), g(n)
-integer, intent(inout) :: ip(n)
-integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-double precision :: hmax, sm, sm1, tmp, z
-double precision, parameter :: factor = 1.d-3
-interface
-   pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv &
-      & )
-      implicit none
-      integer, intent(in) :: iue
-      integer, intent(in) :: m
-      integer, intent(in) :: mode
-      integer, intent(in) :: lpivot
-      integer, intent(in) :: l1
-      double precision, intent(inout) :: u(iue,m)
-      double precision, intent(inout) :: up
-      double precision, intent(inout) :: c(*)
-      integer, intent(in) :: ice
-      integer, intent(in) :: icv
-      integer, intent(in) :: ncv
-   end subroutine dh12
-end interface
-!-----------------------------------------------------------------------
-!     double precision a(mda,n),(b(mdb,nb) or b(m))
-!     double precision tau,rnorm(nb),h(n),g(n)
-!     integer ip(n)
-!
-!     Written by C.L. Lawson and R.J. Hanson.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!     For algorithmic details see algorithm hfti in chapter 14.
-!
-!     Abstract
-!
-!     This subroutine solves a linear least squares problem or a set of
-!     linear least squares problems having the same matrix but different
-!     right-side vectors.  The problem data consists of an m by n matrix
-!     A, an m by nb matrix b, and an absolute tolerance parameter tau
-!     whose usage is described below.  The nb column vectors of b
-!     represent right-side vectors for nb distinct linear least squares
-!     problems.
-!
-!     This set of problems can also be written as the matrix least
-!     squares problem
-!
-!                       ax = b,
-!
-!     Where X is the n by nb solution matrix.
-!
-!     Note that if b is the m by m identity matrix, then X will be the
-!     pseudo-inverse of A.
-!
-!     This subroutine first transforms the augmented matrix (A b) to A
-!     matrix (R C) using premultiplying Householder transformations with
-!     column interchanges.  All subdiagonal elements in the matrix R are
-!     zero and its diagonal elements satisfy
-!
-!                       dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
-!
-!                       i = 1,...,l-1, where
-!
-!                       l = min(m,n).
-!
-!     The subroutine sets k to be the number of diagonal elements
-!     of R that exceed tau in magnitude. Then the solution of minimum
-!     Euclidean length is computed using the first k rows of (R C).
-!
-!     To be specific we suggest that the user consider an easily
-!     computable matrix NORM, such as, the maximum of all column sums of
-!     magnitudes.
-!
-!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
-!     norm of b), it is suggested that tau be set approximately equal to
-!     eps*(norm of A).
-!
-!     The entire set of parameters for dhfti are
-!
-!     Input..
-!
-!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       matrix a of the least squares problem AX = b.
-!                       The first dimensioning parameter of the array
-!                       a(*,*) is mda, which must satisfy mda.GE.m
-!                       either m.GE.n or m.LT.n is permitted.  There
-!                       is no restriction on the rank of A.  the
-!                       condition mda.LT.m is considered an error.
-!
-!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
-!                       orthogonal decomposition but will make no
-!                       references to the array b(*).  If nb.GT.0
-!                       the array b(*) must initially contain the m by
-!                       nb matrix b of the least squares problem AX =
-!                       b.  if nb.GE.2 the array b(*) must be doubly
-!                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
-!                       be either doubly or singly subscripted.  In
-!                       the latter case the value of mdb is arbitrary
-!                       but it should be set to some valid integer
-!                       value such as mdb = m.
-!
-!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
-!                       is considered an error.
-!
-!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       for pseudorank determination.
-!
-!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti.
-!
-!     Output..
-!
-!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       modified by the subroutine.  These contents
-!                       are not generally required by the user.
-!
-!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
-!                       nb solution matrix X.
-!
-!     k                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       pseudorank of A.
-!
-!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
-!                       norm of the residual vector for the problem
-!                       defined by the j-TH column vector of the array
-!                       b(*,*) FOR j = 1,...,nb.
-!
-!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       elements of the pre- and post-multiplying
-!                       Householder transformations used to compute
-!                       the minimum Euclidean length solution.
-!
-!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       describing the permutation of column vectors.
-!                       The contents of arrays h(*),g(*) and ip(*)
-!                       are not generally required by the user.
-!-----------------------------------------------------------------------
-!---------------------
-!
-k = 0
-ldiag = min(m,n)
-if (ldiag <= 0) go to 270
-do j = 1,ldiag
-   if (j == 1) go to 20
-!
-!     Update squared column lengths and find lmax
-!    ..
-   lmax = j
-   do l = j,n
-      h(l) = h(l) - a(j - 1,l)**2
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   z = hmax + factor*h(lmax)
-   if (z > hmax) go to 50
-!
-!     Compute squared column lengths and find lmax
-!    ..
-20 lmax = j
-   do l = j,n
-      h(l) = 0.d0
-      do i = j,m
-30       h(l) = h(l) + a(i,l)**2
-      end do
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   hmax = h(lmax)
-!    ..
-!     lmax has been determined
-!
-!     Do column interchanges if needed.
-!    ..
-50 ip(j) = lmax
-   if (ip(j) == j) go to 70
-   do i = 1,m
-      tmp = a(i,j)
-      a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
-   end do
-   h(lmax) = h(j)
-!
-!     Compute the j-TH transformation and apply it to A and b.
-!    ..
-70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
-end do
-!
-!     Determine the pseudorank, k, using the tolerance, tau.
-!    ..
-do j = 1,ldiag
-   if (abs(a(j,j)) <= tau) go to 100
-end do
-k = ldiag
-go to 110
-100 k = j - 1
-110 kp1 = k + 1
-!
-!     Compute the norms of the residual vectors.
-!
-if (nb <= 0) go to 140
-do jb = 1,nb
-   tmp = 0.d0
-   if (kp1 > m) go to 130
-   do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
-   end do
-130 rnorm(jb) = sqrt(tmp)
-end do
-140 continue
-!                                           Special for pseudorank = 0
-if (k > 0) go to 160
-if (nb <= 0) go to 270
-do jb = 1,nb
-   do i = 1,n
-150   b(i,jb) = 0.d0
-   end do
-end do
-go to 270
-!
-!     If the pseudorank is less than n compute Householder
-!     decomposition of first k rows.
-!    ..
-160 if (k == n) go to 180
-do ii = 1,k
-   i = kp1 - ii
-170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
-end do
-180 continue
-!
-!
-if (nb <= 0) go to 270
-do jb = 1,nb
-!
-!     Solve the k by k triangular system.
-!    ..
-   do l = 1,k
-      sm = 0.d0
-      i = kp1 - l
-      if (i == k) go to 200
-      ip1 = i + 1
-      do j = ip1,k
-190      sm = sm + a(i,j)*b(j,jb)
-      end do
-200   sm1 = b(i,jb) - sm
-210   b(i,jb) = sm1/a(i,i)
-   end do
-!
-!     Complete computation of solution vector.
-!    ..
-   if (k == n) go to 240
-   do j = kp1,n
-220   b(j,jb) = 0.d0
-   end do
-   do i = 1,k
-230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
-   end do
-!
-!      RE-order the solution vector to compensate for the
-!      column interchanges.
-!    ..
-240 do jj = 1,ldiag
-      j = ldiag + 1 - jj
-      if (ip(j) == j) go to 250
-      l = ip(j)
-      tmp = b(l,jb)
-      b(l,jb) = b(j,jb)
-      b(j,jb) = tmp
-250   continue
-   end do
-end do
-!    ..
-!     The solution vectors, X, are now
-!     in the first  n  rows of the array b(,).
-!
-270 return
-end subroutine dhfti
 

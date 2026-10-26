@@ -2897,10 +2897,14 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: R
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
-      IF (X) 30, 10, 20
+      NSWC_AI_R4 = X
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      GO TO 20
    10 CBRT = 0.0
       RETURN
    20 R = ALOG(X)/3.0
@@ -2917,8 +2921,12 @@ C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: R
+      DOUBLE PRECISION :: NSWC_AI_R8
 C
-      IF (X) 30, 10, 20
+      NSWC_AI_R8 = X
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      GO TO 20
    10 DCBRT = 0.D0
       RETURN
    20 R = DLOG(X)/3.D0
@@ -2932,15 +2940,25 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: X, Y
       REAL :: ARTNQ
-      IF (X) 1,2,5
+      REAL :: NSWC_AI_R4
+      NSWC_AI_R4 = X
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 1
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 2
+      GO TO 5
     1 ARTNQ=ATAN(Y/X)+3.1415926535898
       RETURN
-    2 IF (Y) 3,8,4
+    2 NSWC_AI_R4 = Y
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 3
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 8
+      GO TO 4
     3 ARTNQ=4.7123889803847
       RETURN
     4 ARTNQ=1.5707963267949
       RETURN
-    5 IF (Y) 6,8,7
+    5 NSWC_AI_R4 = Y
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 6
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 8
+      GO TO 7
     6 ARTNQ=ATAN(Y/X)+6.2831853071795
       RETURN
     7 ARTNQ=ATAN(Y/X)
@@ -2951,15 +2969,25 @@ C
       DOUBLE PRECISION FUNCTION DARTNQ(Y,X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X, Y
-      IF (X) 1,2,5
+      DOUBLE PRECISION :: NSWC_AI_R8
+      NSWC_AI_R8 = X
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 1
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 2
+      GO TO 5
     1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
       RETURN
-    2 IF (Y) 3,8,4
+    2 NSWC_AI_R8 = Y
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 3
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 8
+      GO TO 4
     3 DARTNQ=4.71238898038468985769396507492D0
       RETURN
     4 DARTNQ=1.57079632679489661923132169164D0
       RETURN
-    5 IF (Y) 6,8,7
+    5 NSWC_AI_R8 = Y
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 6
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 8
+      GO TO 7
     6 DARTNQ=DATAN(Y/X)+6.28318530717958647692528676656D0
       RETURN
     7 DARTNQ=DATAN(Y/X)
@@ -3112,6 +3140,7 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
       DOUBLE PRECISION :: X, Y, R
       DOUBLE PRECISION :: DCPABS
+      DOUBLE PRECISION :: NSWC_AI_R8
 C ----------------------------------------------------------------------
 C        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
 C
@@ -3125,7 +3154,10 @@ C ----------------------------------------------------------------------
 C
       X = Z(1)
       Y = Z(2)
-      IF (X) 30,10,20
+      NSWC_AI_R8 = X
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      GO TO 20
 C
    10 IF (Y .NE. 0.D0) GO TO 11
          W(1) = 0.D0
@@ -5131,6 +5163,7 @@ C
       REAL, INTENT(IN) :: X(NB), Y(NB)
       INTEGER :: I, N, NM1
       REAL :: A
+      INTEGER :: NSWC_AI_I4
 C
 C*****************************************************************
 C
@@ -5145,7 +5178,10 @@ C*****************************************************************
 C
       N = NB
       IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N = N - 1
-      IF (N - 3) 10, 20, 30
+      NSWC_AI_I4 = N - 3
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      GO TO 30
 C
    10 PAREA = 0.0
       RETURN
@@ -5284,6 +5320,7 @@ C
       INTEGER :: I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL,
      &JSUBR, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
       REAL :: DENS, SCORE
+      INTEGER :: NSWC_AI_I4
 C
 C MEANING OF THE WORK ARRAYS ...
 C
@@ -5368,7 +5405,10 @@ C (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
       MINU = VR(1)
       JR = 1
       DO I=2,N
-        IF (VC(I)-MAXE) 100, 70, 80
+        NSWC_AI_I4 = VC ( I ) - MAXE
+        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 70
+        GO TO 80
    70   IF (VR(I).GE.MINU) GO TO 100
         GO TO 90
    80   MAXE = VC(I)
@@ -9227,6 +9267,7 @@ C
       REAL :: EXPARG
       INTEGER :: I
       DOUBLE PRECISION :: DX0
+      REAL :: NSWC_AI_R4
 C
 C-----------------------------------------------------------------------
 C
@@ -9415,7 +9456,10 @@ C
       X = ARG
       IERR = 0
       IF (INT .EQ. 2) GO TO 450
-      IF (X) 280, 640, 110
+      NSWC_AI_R4 = X
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 280
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 640
+      GO TO 110
   110 IF (X .GE. 12.E0) GO TO 200
       IF (X .GT. 8.E0) GO TO 160
       IF (X .GE. 4.E0) GO TO 150
@@ -9536,7 +9580,10 @@ C     ---------- 4.0 .LT. -X ----------
   410 RESULT = EI
       RETURN
   450 Y = X
-      IF (Y) 660, 640, 300
+      NSWC_AI_R4 = Y
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 660
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 640
+      GO TO 300
 C     ---------- ERROR RETURN FOR X .LT. XMIN,
 C                CAUSING UNDERFLOW ----------
   600 EI = 0.0E0
@@ -11189,6 +11236,7 @@ C
       REAL :: SPMPAR
       REAL :: P(7), Q(7)
       DOUBLE PRECISION :: D, G, Z, LNX, GLOG
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE GAMMA FUNCTION FOR REAL ARGUMENTS
@@ -11233,7 +11281,10 @@ C-----------------------------------------------------------------------
 C
 C     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
 C
-      IF (M) 20,12,10
+      NSWC_AI_I4 = M
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      GO TO 10
    10 DO J = 1,M
         X = X - 1.0
    11   T = X*T
@@ -11435,6 +11486,7 @@ C
       REAL, INTENT(IN) :: A
       REAL :: BOT, D, S1, S2, T, TOP, W
       REAL :: P(7), Q(5), R(9)
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
 C-----------------------------------------------------------------------
@@ -11459,7 +11511,10 @@ C------------------------
       T = A
       D = A - 0.5
       IF (D .GT. 0.0) T = D - 0.5
-      IF (T) 30,10,20
+      NSWC_AI_R4 = T
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      GO TO 20
 C
    10 GAM1 = 0.0
       RETURN
@@ -11844,6 +11899,7 @@ C-----------------------------------------------------------------------
       INTEGER :: J, N
       DOUBLE PRECISION :: D, PI, S, T, X, W
       DOUBLE PRECISION :: DPMPAR, DSIN1, DGAM1, DPDEL, DXPARG
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C                EVALUATION OF THE GAMMA FUNCTION FOR
@@ -11877,7 +11933,10 @@ C-----------------------------------------------------------------------
 C
 C     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
 C
-      IF (N) 20,12,10
+      NSWC_AI_I4 = N
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      GO TO 10
    10 DO J = 1,N
          X = X - 1.D0
    11    T = X*T
@@ -12062,6 +12121,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4
       DOUBLE PRECISION :: C, C0, C1, C2, C3, C4, C5, C6, C7, C8, C9,
      &C10, C11, C12, C13
+      DOUBLE PRECISION :: NSWC_AI_R8
 C----------------------------
       DATA A0 / .611609510448141581788D-08/,
      *     A1 / .624730830116465516210D-08/
@@ -12108,7 +12168,10 @@ C----------------------------
       T = X
       D = X - 0.5D0
       IF (D .GT. 0.D0) T = D - 0.5D0
-      IF (T) 40,10,20
+      NSWC_AI_R8 = T
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 40
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+      GO TO 20
 C
    10 DGAM1 = 0.D0
       RETURN
@@ -12705,6 +12768,7 @@ C-----------------------------------------------------------------------
       INTEGER :: J, K, L, MAX, N
       DOUBLE PRECISION :: C(42), EPS, P(15), PI, S, T, X, X0, XMAX, W
       DOUBLE PRECISION :: DCSEVL, DPSI0, DPMPAR
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C               EVALUATION OF THE DIGAMMA FUNCTION FOR
@@ -12821,7 +12885,10 @@ C-----------------------------------------------------------------------
 C
 C     LET T BE THE SUM OF 1/(A-J) WHEN A .GE. 2
 C
-      IF (N) 20,12,10
+      NSWC_AI_I4 = N
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 12
+      GO TO 10
    10 DO 11 J = 1,N
          X = X - 1.D0
          T = 1.D0/X + T
@@ -13765,6 +13832,7 @@ C
      &A8(2)
       REAL :: B0(6), B1(4), B2(5), B3(5), B4(4), B5(3), B6(2), B7(2)
       REAL :: D0(6), D1(4), D2(2), D3(2), D4(1), D5(1), D6(1)
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -14077,7 +14145,10 @@ C
       U = 1.0/A
       Z = SQRT(Z + Z)
       IF (L .LT. 1.0) Z = -Z
-      IF (IOP - 2) 210,220,230
+      NSWC_AI_I4 = IOP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 210
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 220
+      GO TO 230
 C
   210 IF (ABS(S) .LE. 1.E-3) GO TO 260
 C
@@ -14129,7 +14200,10 @@ C
       U = 1.0/A
       Z = SQRT(Z + Z)
       IF (L .LT. 1.0) Z = -Z
-      IF (IOP - 2) 260,270,280
+      NSWC_AI_I4 = IOP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 260
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 270
+      GO TO 280
 C
   260 C0 = ((D0(3) * Z + D0(2)) * Z + D0(1)) * Z + D00
       C1 = ((D1(3) * Z + D1(2)) * Z + D1(1)) * Z + D10
@@ -17726,10 +17800,12 @@ C     -------------------
       ZM=SQRT(ZS)
       PN=IABS(IN)
       SN=+1.0
-      IF(IN)002,003,003
+      IF ( ( IN ) .LT. 0 ) GO TO 002
+      GO TO 003
   002 IF(IN.EQ.IN/2*2)GO TO 003
       SN=-1.0
-  003 IF(AZ(1))004,005,005
+  003 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 004
+      GO TO 005
   004 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
       IF(IN.EQ.IN/2*2)GO TO 006
@@ -17749,8 +17825,11 @@ C     -------------------
   008 IF(ZM.LE.17.5)GO TO 009
       QN=+AINT(SQRT(2.0*(ZM-17.5)))
       GO TO 013
-  009 IF(ZS-1.0)011,010,010
-  010 IF(-ABS(AZ(2))+0.096*AZ(1)*AZ(1))011,012,012
+  009 IF ( ( ZS - 1.0 ) .LT. 0 ) GO TO 011
+      GO TO 010
+  010 IF ( ( - ABS ( AZ ( 2 ) ) + 0.096 * AZ ( 1 ) * AZ ( 1 ) ) .LT. 0 )
+     &GO TO 011
+      GO TO 012
   011 QN=+AINT(0.0625*ZS)
       IF(PN.LE.QN)GO TO 031
       QN=PN
@@ -18057,6 +18136,8 @@ C
      &S2, T, TA, TAU, TB, TEMP(3), TFN, TM, TOL, TOLLN, TRX, TX, T1, T2,
      &WK(7), XO2, XO2L
       REAL :: GAMLN, SPMPAR
+      INTEGER :: NSWC_AI_I4
+      REAL :: NSWC_AI_R4
       DATA RTWO,PDF,RTTP,PIDT                    / 1.34839972492648E+00,
      1 7.85398163397448E-01, 7.97884560802865E-01, 1.57079632679490E+00/
       DATA  PP(1),  PP(2),  PP(3),  PP(4)        / 8.72909153935547E+00,
@@ -18095,11 +18176,20 @@ C
 C
       NZ = 0
       KT = 1
-      IF (N-1) 720, 10, 20
+      NSWC_AI_I4 = N - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 720
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      GO TO 20
    10 KT = 2
    20 NN = N
-      IF (X) 730, 30, 80
-   30 IF (ALPHA) 710, 40, 50
+      NSWC_AI_R4 = X
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 730
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 30
+      GO TO 80
+   30 NSWC_AI_R4 = ALPHA
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 710
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      GO TO 50
    40 Y(1) = 1.0E0
       IF (N.EQ.1) RETURN
       I1 = 2
@@ -18218,7 +18308,10 @@ C
       FNI = FNI - 1.0E0
       DFN = FNI + FNF
       FN = DFN
-      IF (NN-1) 440, 390, 130
+      NSWC_AI_I4 = NN - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 440
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 390
+      GO TO 130
   390 KT = 2
       IS = 2
       GO TO 130
@@ -18228,7 +18321,10 @@ C
       FNI = FNI - 1.0E0
       DFN = FNI + FNF
       FN = DFN
-      IF (NN-1) 440, 410, 420
+      NSWC_AI_I4 = NN - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 440
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 410
+      GO TO 420
   410 KT = 2
       IS = 2
   420 IF (SXO2.LE.FNP1) GO TO 430
@@ -19299,18 +19395,24 @@ C     -------------------
       ZL(2)=ATAN2(AZ(2),AZ(1))
       AN=IABS(IN)
       SN=+1.0
-      IF(IN)002,003,003
+      IF ( ( IN ) .LT. 0 ) GO TO 002
+      GO TO 003
   002 IF(IN.EQ.IN/2*2)GO TO 003
       SN=-1.0
-  003 IF(AZ(1))004,005,005
+  003 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 004
+      GO TO 005
   004 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
       GO TO 006
   005 QZ(1)=+AZ(1)
       QZ(2)=+AZ(2)
-  006 IF(ZS-1.0)020,020,007
-  007 IF(ZS-289.0)008,010,010
-  008 IF(-ABS(AZ(2))+0.096*AZ(1)*AZ(1))020,020,015
+  006 IF ( ( ZS - 1.0 ) .LE. 0 ) GO TO 020
+      GO TO 007
+  007 IF ( ( ZS - 289.0 ) .LT. 0 ) GO TO 008
+      GO TO 010
+  008 IF ( ( - ABS ( AZ ( 2 ) ) + 0.096 * AZ ( 1 ) * AZ ( 1 ) ) .LE. 0 )
+     &GO TO 020
+      GO TO 015
   010 QM=SN*0.797884560802865*EXP(-0.5*ZL(1))
       QF(1)=QM*COS(-0.5*ZL(2))
       QF(2)=QM*SIN(-0.5*ZL(2))
@@ -19436,8 +19538,10 @@ C     -------------------
       TM(2)=TM(2)-SM(3)*TS(2)-SM(4)*TS(1)
       TM(3)=TM(3)+SM(1)*TS(1)-SM(2)*TS(2)
       TM(4)=TM(4)+SM(1)*TS(2)+SM(2)*TS(1)
-  105 IF(AZ(1))106,110,110
-  106 IF(AZ(2))107,108,108
+  105 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 106
+      GO TO 110
+  106 IF ( ( AZ ( 2 ) ) .LT. 0 ) GO TO 107
+      GO TO 108
   107 SM(1)=-2.0*TM(1)+TM(4)
       SM(2)=-2.0*TM(2)-TM(3)
       GO TO 109
@@ -19486,8 +19590,10 @@ C     -------------------
       TM(2)=TM(2)+TS(1)*SM(1)-TS(2)*SM(2)-TS(1)*SM(3)+TS(2)*SM(4)
       TM(3)=TM(3)+TS(1)*SM(1)-TS(2)*SM(2)+TS(1)*SM(3)-TS(2)*SM(4)
       TM(4)=TM(4)+TS(1)*SM(2)+TS(2)*SM(1)+TS(1)*SM(4)+TS(2)*SM(3)
-  115 IF(AZ(1))116,120,120
-  116 IF(AZ(2))117,118,118
+  115 IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 116
+      GO TO 120
+  116 IF ( ( AZ ( 2 ) ) .LT. 0 ) GO TO 117
+      GO TO 118
   117 SM(1)=-2.0*TM(1)+TM(4)
       SM(2)=-2.0*TM(2)-TM(3)
       GO TO 119
@@ -19650,7 +19756,8 @@ C     -------------------
       ZM=SQRT(ZS)
       PN=IABS(IN)
       SN=+1.0
-      IF(AZ(1))002,003,003
+      IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 002
+      GO TO 003
   002 QZ(1)=-AZ(1)
       QZ(2)=-AZ(2)
       IF(IN.EQ.IN/2*2)GO TO 004
@@ -19670,8 +19777,11 @@ C     -------------------
   006 IF(ZM.LE.17.5)GO TO 007
       QN=+AINT(SQRT(2.0*(ZM-17.5)))
       GO TO 011
-  007 IF(ZS-1.0)009,008,008
-  008 IF(-ABS(AZ(1))+0.096*AZ(2)*AZ(2))009,010,010
+  007 IF ( ( ZS - 1.0 ) .LT. 0 ) GO TO 009
+      GO TO 008
+  008 IF ( ( - ABS ( AZ ( 1 ) ) + 0.096 * AZ ( 2 ) * AZ ( 2 ) ) .LT. 0 )
+     &GO TO 009
+      GO TO 010
   009 QN=AINT(0.0625*ZS)
       IF(PN.LE.QN)GO TO 039
       QN=PN
@@ -19750,7 +19860,8 @@ C     -------------------
       RM(2)=SM(2)
       IF(QZ(1).GE.17.5)GO TO 023
       AQ(1)=-2.0*QZ(1)
-      IF(QZ(2))020,021,021
+      IF ( ( QZ ( 2 ) ) .LT. 0 ) GO TO 020
+      GO TO 021
   020 AQ(2)=-2.0*QZ(2)-3.14159265358979*(QN+0.5)
       GO TO 022
   021 AQ(2)=-2.0*QZ(2)+3.14159265358979*(QN+0.5)
@@ -19825,7 +19936,8 @@ C     -------------------
       RM(2)=SM(2)
       IF(QZ(1).GE.17.5)GO TO 036
       AQ(1)=-2.0*QZ(1)
-      IF(QZ(2))032,033,033
+      IF ( ( QZ ( 2 ) ) .LT. 0 ) GO TO 032
+      GO TO 033
   032 AQ(2)=-2.0*QZ(2)-3.14159265358979*(QN+0.5)
       GO TO 034
   033 AQ(2)=-2.0*QZ(2)+3.14159265358979*(QN+0.5)
@@ -20012,6 +20124,8 @@ C
       REAL :: XO2, XO2L
       REAL :: Z
       REAL :: GAMLN, SPMPAR
+      INTEGER :: NSWC_AI_I4
+      REAL :: NSWC_AI_R4
       DATA RTTPI           / 3.98942280401433E-01/
       DATA INLIM           /          80         /
 C     -------------------
@@ -20046,12 +20160,21 @@ C
 C
       NZ = 0
       KT = 1
-      IF (N-1) 590, 10, 20
+      NSWC_AI_I4 = N - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 590
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      GO TO 20
    10 KT = 2
    20 NN = N
       IF (KODE.LT.1 .OR. KODE.GT.2) GO TO 570
-      IF (X) 600, 30, 80
-   30 IF (ALPHA) 580, 40, 50
+      NSWC_AI_R4 = X
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 600
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 30
+      GO TO 80
+   30 NSWC_AI_R4 = ALPHA
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 580
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      GO TO 50
    40 Y(1) = 1.0E0
       IF (N.EQ.1) RETURN
       I1 = 2
@@ -20203,7 +20326,10 @@ C
       FNI = FNI - 1.0E0
       DFN = FNI + FNF
       FN = DFN
-      IF (NN-1) 340, 290, 130
+      NSWC_AI_I4 = NN - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 340
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 290
+      GO TO 130
   290 KT = 2
       IS = 2
       GO TO 130
@@ -20213,7 +20339,10 @@ C
       FNI = FNI - 1.0E0
       DFN = FNI + FNF
       FN = DFN
-      IF (NN-1) 340, 310, 320
+      NSWC_AI_I4 = NN - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 340
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 310
+      GO TO 320
   310 KT = 2
       IS = 2
   320 IF (SXO2.LE.FNP1) GO TO 330
@@ -21572,9 +21701,12 @@ C     -------------------
       IF(MO.NE.0)GO TO 002
       TM(1)=AZ(1)
       TM(2)=AZ(2)
-  002 IF(ZS-1.0)020,020,003
-  003 IF(ZS-289.0)004,010,010
-  004 IF(AZ(1)+0.096*AZ(2)*AZ(2))020,020,015
+  002 IF ( ( ZS - 1.0 ) .LE. 0 ) GO TO 020
+      GO TO 003
+  003 IF ( ( ZS - 289.0 ) .LT. 0 ) GO TO 004
+      GO TO 010
+  004 IF ( ( AZ ( 1 ) + 0.096 * AZ ( 2 ) * AZ ( 2 ) ) .LE. 0 ) GO TO 020
+      GO TO 015
   010 QM=1.25331413731550*EXP(-0.5*ZL(1)-TM(1))
       QF(1)=QM*COS(-0.5*ZL(2)-TM(2))
       QF(2)=QM*SIN(-0.5*ZL(2)-TM(2))
@@ -23724,8 +23856,12 @@ C     REFLECTS Z WITH RESPECT TO THE ORIGIN IF REAL(Z)
 C     .LT. 0.0 OR IF Z IS ON THE NEGATIVE IMAGINARY AXIS.
 C---------------------------------------------------------
       COMPLEX, INTENT(IN) :: Z
+      REAL :: NSWC_AI_R4
 C     ----------
-      IF (REAL(Z)) 10,20,30
+      NSWC_AI_R4 = REAL ( Z )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 20
+      GO TO 30
    10 CFLECT = -Z
       RETURN
    20 CFLECT = CMPLX(0.0, ABS(AIMAG(Z)))
@@ -26296,6 +26432,7 @@ C
       REAL :: ERFC1
       REAL :: SPMPAR
       REAL :: KOM, L
+      INTEGER :: NSWC_AI_I4
 C     -------------------
 C     -------------------
       DATA PI/3.1415926535898/
@@ -26477,7 +26614,10 @@ C
       F=0.0
       AJ1=H(2)-H(1)
       CIRCM=AJ1
-      IF (IOP-2) 140,150,160
+      NSWC_AI_I4 = IOP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 140
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      GO TO 160
 C
   140 SUM=E(M)*AJ1
   141 M=M+1
@@ -26959,6 +27099,7 @@ C------------------------
       REAL :: EPSLN
       REAL :: SPMPAR
       REAL :: K8, V(16), W(16)
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C
 C           COMPUTATION OF THE ELLIPTICAL COVERAGE FUNCTION
@@ -27301,7 +27442,10 @@ C     DETERMINE IN WHICH ORDER THE X AMD Y INTEGRATIONS ARE CARRIED OUT.
 C-----------------------------------------------------------------------
   170 IF (S2 .GT. 2.E-2 .AND. H8 + K8 .LT. 2.E2) GO TO 172
       IF (ABS(E3 - F) .GT. 0.4*F) GO TO 172
-      IF (D1 - T) 200,180,195
+      NSWC_AI_R4 = D1 - T
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 200
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 180
+      GO TO 195
   172 IF (E3 .LT. 2.E4*EPS) GO TO 195
       IF (F .LT. 2.E4*EPS) GO TO 200
       IF (AMAX1(H8/S1,K8/S2) .LT. 2.0) GO TO 175
@@ -27309,8 +27453,14 @@ C-----------------------------------------------------------------------
       IF (S2 .GE. 5.E-4) GO TO 180
       IF (S1 .NE. S2) GO TO 195
   175 IF (AMIN1(E3,F) .LT. 2.5E-2*SQEPS) GOTO 185
-  180 IF (E3 - F) 200,190,195
-  185 IF (E3 - F) 195,190,200
+  180 NSWC_AI_R4 = E3 - F
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 200
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 190
+      GO TO 195
+  185 NSWC_AI_R4 = E3 - F
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 195
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 190
+      GO TO 200
   190 IF (S0 .GE. S9) GO TO 200
   195 E3 = F
       D1 = T
@@ -29866,6 +30016,7 @@ C
      &X3, Y
       REAL :: TEMP(4)
       COMPLEX :: W
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C
 C         QTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -29971,7 +30122,10 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
 C
    60 T = REAL(Z(1))
       X = 0.0
-      IF (T) 61,70,62
+      NSWC_AI_R4 = T
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 61
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 70
+      GO TO 62
    61 H = ABS(REAL(Z(2))) + ABS(AIMAG(Z(2)))
       IF (ABS(T) .LE. H) GO TO 70
       GO TO 80
@@ -30028,6 +30182,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(4), ZI(4)
       DOUBLE PRECISION :: B, B2, C, D, E, H, P, Q, R, T, TEMP(4), U, V,
      &V1, V2, W(2), X, X1, X2, X3
+      DOUBLE PRECISION :: NSWC_AI_R8
 C
       IF (A(1) .EQ. 0.D0) GO TO 100
       B = A(4)/(4.D0*A(5))
@@ -30121,7 +30276,10 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
 C
    60 T = ZR(1)
       X = 0.D0
-      IF (T) 61,70,62
+      NSWC_AI_R8 = T
+      IF ( NSWC_AI_R8 .LT. 0 ) GO TO 61
+      IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 70
+      GO TO 62
    61 H = DABS(ZR(2)) + DABS(ZI(2))
       IF (DABS(T) .LE. H) GO TO 70
       GO TO 80
@@ -32253,6 +32411,7 @@ C
       INTEGER, INTENT(INOUT) :: IX(*), IY(*)
       INTEGER :: I, IIX, IIY, M, MP1, NS
       INTEGER :: ITEMP1, ITEMP2, ITEMP3
+      INTEGER :: NSWC_AI_I4
 C
 C                EXTENDED B L A S  SUBPROGRAM
 C
@@ -32279,7 +32438,10 @@ C
 C
       IF (N .LE. 0) RETURN
       IF (INCX .NE. INCY) GO TO 5
-      IF (INCX-1) 5,20,60
+      NSWC_AI_I4 = INCX - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 5
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      GO TO 60
     5 CONTINUE
 C
 C       CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS.
@@ -32628,6 +32790,7 @@ C
       REAL, INTENT(IN) :: SY1
       REAL :: GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22,
      &SP1, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
+      REAL :: NSWC_AI_R4
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 C     THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*
@@ -32754,7 +32917,10 @@ C
           GO TO 200
 C
   220 CONTINUE
-          IF(SFLAG)250,230,240
+          NSWC_AI_R4 = SFLAG
+          IF ( NSWC_AI_R4 .LT. 0 ) GO TO 250
+          IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 230
+          GO TO 240
   230     CONTINUE
                SPARAM(3)=SH21
                SPARAM(4)=SH12
@@ -32779,6 +32945,7 @@ C
       REAL, INTENT(INOUT) :: SX(*), SY(*)
       INTEGER :: I, KX, KY, NSTEPS
       REAL :: SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
+      REAL :: NSWC_AI_R4
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 C
@@ -32804,7 +32971,10 @@ C
           IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
 C
                NSTEPS=N*INCX
-               IF(SFLAG) 50,10,30
+               NSWC_AI_R4 = SFLAG
+               IF ( NSWC_AI_R4 .LT. 0 ) GO TO 50
+               IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+               GO TO 30
    10          CONTINUE
                SH21=SPARAM(3)
                SH12=SPARAM(4)
@@ -32843,7 +33013,10 @@ C
           IF(INCX .LT. 0) KX=1+(1-N)*INCX
           IF(INCY .LT. 0) KY=1+(1-N)*INCY
 C
-          IF(SFLAG)120,80,100
+          NSWC_AI_R4 = SFLAG
+          IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
+          IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 80
+          GO TO 100
    80     CONTINUE
           SH21=SPARAM(3)
           SH12=SPARAM(4)
@@ -32918,6 +33091,7 @@ C
       DOUBLE PRECISION :: ZERO, GAMSQ
       DOUBLE PRECISION :: DFLAG, DH12, DH22, DP1, DQ1, DTEMP
       DOUBLE PRECISION :: TWO
+      DOUBLE PRECISION :: NSWC_AI_R8
 C
       DATA ZERO,ONE,TWO /0.D0,1.D0,2.D0/
       DATA GAM,GAMSQ,RGAMSQ/4096.D0,16777216.D0,5.9604645D-8/
@@ -33023,7 +33197,10 @@ C
           GO TO 200
 C
   220 CONTINUE
-          IF(DFLAG)250,230,240
+          NSWC_AI_R8 = DFLAG
+          IF ( NSWC_AI_R8 .LT. 0 ) GO TO 250
+          IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 230
+          GO TO 240
   230     CONTINUE
                DPARAM(3)=DH21
                DPARAM(4)=DH12
@@ -33051,6 +33228,7 @@ C
       DOUBLE PRECISION :: DFLAG, DH12, DH22
       DOUBLE PRECISION :: TWO, Z, DH11, DH21
       DOUBLE PRECISION :: W, ZERO
+      DOUBLE PRECISION :: NSWC_AI_R8
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 C
@@ -33076,7 +33254,10 @@ C
           IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
 C
                NSTEPS=N*INCX
-               IF(DFLAG) 50,10,30
+               NSWC_AI_R8 = DFLAG
+               IF ( NSWC_AI_R8 .LT. 0 ) GO TO 50
+               IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+               GO TO 30
    10          CONTINUE
                DH21=DPARAM(3)
                DH12=DPARAM(4)
@@ -33115,7 +33296,10 @@ C
           IF(INCX .LT. 0) KX=1+(1-N)*INCX
           IF(INCY .LT. 0) KY=1+(1-N)*INCY
 C
-          IF(DFLAG)120,80,100
+          NSWC_AI_R8 = DFLAG
+          IF ( NSWC_AI_R8 .LT. 0 ) GO TO 120
+          IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 80
+          GO TO 100
    80     CONTINUE
           DH21=DPARAM(3)
           DH12=DPARAM(4)
@@ -34930,8 +35114,10 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       NPART = N
       IDIV = 2
    10 IQUOT = NPART/IDIV
-      IF (NPART-IDIV*IQUOT) 60, 20, 60
-   20 IF (IDIV-IFCUR) 40, 40, 30
+      IF ( ( NPART - IDIV * IQUOT ) .EQ. 0 ) GO TO 20
+      GO TO 60
+   20 IF ( ( IDIV - IFCUR ) .LE. 0 ) GO TO 40
+      GO TO 30
    30 IP = IP + 1
       IFACT(IP) = IDIV
       IPOWER(IP) = IDIV
@@ -34942,14 +35128,18 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       NEXP(IP) = NEXP(IP) + 1
    50 NPART = IQUOT
       GO TO 10
-   60 IF (IQUOT-IDIV) 100, 100, 70
-   70 IF (IDIV-2) 80, 80, 90
+   60 IF ( ( IQUOT - IDIV ) .LE. 0 ) GO TO 100
+      GO TO 70
+   70 IF ( ( IDIV - 2 ) .LE. 0 ) GO TO 80
+      GO TO 90
    80 IDIV = 3
       GO TO 10
    90 IDIV = IDIV + 2
       GO TO 10
-  100 IF (NPART-1) 140, 140, 110
-  110 IF (NPART-IFCUR) 130, 130, 120
+  100 IF ( ( NPART - 1 ) .LE. 0 ) GO TO 140
+      GO TO 110
+  110 IF ( ( NPART - IFCUR ) .LE. 0 ) GO TO 130
+      GO TO 120
   120 IP = IP + 1
       IFACT(IP) = NPART
       IPOWER(IP) = NPART
@@ -50053,12 +50243,16 @@ C
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       REAL, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C                 ADDITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50106,7 +50300,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -50203,12 +50400,16 @@ C
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C           ADDITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50256,7 +50457,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -50353,12 +50557,16 @@ C
       COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C                ADDITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50406,7 +50614,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -50503,12 +50714,16 @@ C
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       REAL, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C                SUBTRACTION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50556,7 +50771,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -50653,12 +50871,16 @@ C
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50706,7 +50928,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -50803,12 +51028,16 @@ C
       COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
 C
       IERR = 0
-      IF (NL - ML) 10,30,20
+      NSWC_AI_I4 = NL - ML
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 20
 C
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
 C
@@ -50856,7 +51085,10 @@ C
       JC = 0
       JMAX = MCL + 1
 C
-   50 IF (NU - MU) 100,160,130
+   50 NSWC_AI_I4 = NU - MU
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 160
+      GO TO 130
 C
 C     INSERTION OF THE REMAINING DIAGONALS WHEN MU .NE. NU
 C
@@ -56189,6 +56421,7 @@ C
      &NZCNT
       REAL :: DK, LKI, XPV, XPVMAX, YK
       INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
+      INTEGER :: NSWC_AI_I4
 C
 C
 C  NSPIV1 USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -56282,7 +56515,10 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
           PPK = N+1
  30       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  30,1003,40
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
           J = J - 1
@@ -56322,11 +56558,17 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
 C
-          IF (VJ - PPK) 60,90,70
+          NSWC_AI_I4 = VJ - PPK
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  70,90,80
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
           PPK = VJ
@@ -56780,6 +57022,7 @@ C
      &MAXIL
       INTEGER :: PM
       REAL :: CONST, WI, WMAX
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C     SPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A REAL SPARSE MATRIX.
@@ -56863,7 +57106,10 @@ C
       PM = N + 1
    21 M = PM
       PM = P(M)
-      IF (PM - J) 21,210,22
+      NSWC_AI_I4 = PM - J
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      GO TO 22
    22 P(M) = J
       P(J) = PM
       JJ = JJ - 1
@@ -56895,11 +57141,17 @@ C
          LJ = JT(JJ)
          J = IC(LJ)
          IF (W(J) .NE. 0.0) GO TO 43
-         IF (J - PM) 40,43,41
+         NSWC_AI_I4 = J - PM
+         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
+         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
-            IF (PM - J) 41,43,42
+            NSWC_AI_I4 = PM - J
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            GO TO 42
    42       P(M) = J
             P(J) = PM
             PM = J
@@ -57127,6 +57379,7 @@ C
      &NZCNT
       DOUBLE PRECISION :: DK, LKI, XPV, XPVMAX, YK
       INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
+      INTEGER :: NSWC_AI_I4
 C
 C
 C  DNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -57220,7 +57473,10 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
           PPK = N+1
  30       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  30,1003,40
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
           J = J - 1
@@ -57260,11 +57516,17 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
 C
-          IF (VJ - PPK) 60,90,70
+          NSWC_AI_I4 = VJ - PPK
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  70,90,80
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
           PPK = VJ
@@ -57720,6 +57982,7 @@ C
      &MAXIL
       INTEGER :: PM
       DOUBLE PRECISION :: CONST, WI, WMAX
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C     DSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A DOUBLE PRECISION SPARSE
@@ -57804,7 +58067,10 @@ C
       PM = N + 1
    21 M = PM
       PM = P(M)
-      IF (PM - J) 21,210,22
+      NSWC_AI_I4 = PM - J
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      GO TO 22
    22 P(M) = J
       P(J) = PM
       JJ = JJ - 1
@@ -57836,11 +58102,17 @@ C
          LJ = JT(JJ)
          J = IC(LJ)
          IF (W(J) .NE. 0.D0) GO TO 43
-         IF (J - PM) 40,43,41
+         NSWC_AI_I4 = J - PM
+         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
+         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
-            IF (PM - J) 41,43,42
+            NSWC_AI_I4 = PM - J
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            GO TO 42
    42       P(M) = J
             P(J) = PM
             PM = J
@@ -58532,6 +58804,7 @@ C
       COMPLEX :: DK, LKI, ONE, YK, ZERO
       REAL :: XPV, XPVMAX
       INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
+      INTEGER :: NSWC_AI_I4
 C
 C
 C  CNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -58628,7 +58901,10 @@ C  THIS CODE INSERTS VJ INTO ADJACENCY LIST OF VK
           PPK = N+1
  30       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  30,1003,40
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 30
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 1003
+          GO TO 40
  40       P(VJ) = PPK
           P(PK) = VJ
           J = J - 1
@@ -58668,11 +58944,17 @@ C  RESET PPK TO VI IF WE HAVE PASSED THE CORRECT
 C  INSERTION SPOT.  (THIS HAPPENS WHEN THE ADJACENCY OF
 C  VI IS NOT IN CURRENT COLUMN ORDER DUE TO PIVOTING.)
 C
-          IF (VJ - PPK) 60,90,70
+          NSWC_AI_I4 = VJ - PPK
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 70
  60       PPK = VI
  70       PK = PPK
           PPK = P(PK)
-          IF (PPK - VJ)  70,90,80
+          NSWC_AI_I4 = PPK - VJ
+          IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
+          IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 90
+          GO TO 80
  80       P(VJ) = PPK
           P(PK) = VJ
           PPK = VJ
@@ -59129,6 +59411,7 @@ C
       INTEGER :: PM
       COMPLEX :: CONST, ZERO
       REAL :: WI, WMAX
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C     CSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A COMPLEX SPARSE MATRIX.
@@ -59214,7 +59497,10 @@ C
       PM = N + 1
    21 M = PM
       PM = P(M)
-      IF (PM - J) 21,210,22
+      NSWC_AI_I4 = PM - J
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 21
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 210
+      GO TO 22
    22 P(M) = J
       P(J) = PM
       JJ = JJ - 1
@@ -59246,11 +59532,17 @@ C
          LJ = JT(JJ)
          J = IC(LJ)
          IF (W(J) .NE. ZERO) GO TO 43
-         IF (J - PM) 40,43,41
+         NSWC_AI_I4 = J - PM
+         IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
+         IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+         GO TO 41
    40       PM = I
    41       M = PM
             PM = P(M)
-            IF (PM - J) 41,43,42
+            NSWC_AI_I4 = PM - J
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 41
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 43
+            GO TO 42
    42       P(M) = J
             P(J) = PM
             PM = J
@@ -59382,6 +59674,7 @@ C
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59396,7 +59689,10 @@ C
       IF (IBAL .NE. 0) CALL BALBAK (KA,N,LOW,IGH,ZI,N,ZR)
 C
       DO K = 1,N
-         IF (WI(K)) 30,10,20
+         NSWC_AI_R4 = WI ( K )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+         GO TO 20
    10    DO J = 1,N
    11       ZI(J,K) = 0.0
          END DO
@@ -59418,6 +59714,7 @@ C
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59432,7 +59729,10 @@ C
       IF (IBAL .NE. 0) CALL BALBAK (KA,N,LOW,IGH,ZI,N,ZR)
 C
       DO K = 1,N
-         IF (WI(K)) 30,10,20
+         NSWC_AI_R4 = WI ( K )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+         GO TO 20
    10    DO J = 1,N
    11       ZI(J,K) = 0.0
          END DO
@@ -60739,6 +61039,7 @@ C
      &SPMPAR
       LOGICAL :: NOTLAS
       COMPLEX :: Z3
+      REAL :: NSWC_AI_R4
 C     REAL SQRT,ABS
 C     INTEGER MIN0
 C     COMPLEX CMPLX
@@ -61021,7 +61322,10 @@ C     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
          P = WR(EN)
          Q = WI(EN)
          NA = EN - 1
-         IF (Q) 710, 600, 800
+         NSWC_AI_R4 = Q
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 710
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 600
+         GO TO 800
 C     ********** REAL VECTOR **********
   600    M = EN
          H(EN,EN) = 1.0
@@ -61184,6 +61488,7 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N),
      &ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
+      DOUBLE PRECISION :: NSWC_AI_R8
 C-----------------------------------------------------------------------
 C     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -61198,7 +61503,10 @@ C
       IF (IBAL .NE. 0) CALL DBABK (KA,N,LOW,IGH,ZI,N,ZR)
 C
       DO K = 1,N
-         IF (WI(K)) 30,10,20
+         NSWC_AI_R8 = WI ( K )
+         IF ( NSWC_AI_R8 .LT. 0 ) GO TO 30
+         IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 10
+         GO TO 20
    10    DO J = 1,N
    11       ZI(J,K) = 0.D0
          END DO
@@ -62122,6 +62430,7 @@ C
       DOUBLE PRECISION :: RA, SA, VI, VR, ZZ, NORM, MACHEP
       DOUBLE PRECISION :: DPMPAR
       LOGICAL :: NOTLAS
+      DOUBLE PRECISION :: NSWC_AI_R8
 C     INTEGER MIN0
 C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
@@ -62398,7 +62707,10 @@ C     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
          P = WR(EN)
          Q = WI(EN)
          NA = EN - 1
-         IF (Q) 710, 600, 800
+         NSWC_AI_R8 = Q
+         IF ( NSWC_AI_R8 .LT. 0 ) GO TO 710
+         IF ( NSWC_AI_R8 .EQ. 0 ) GO TO 600
+         GO TO 800
 C     ********** REAL VECTOR **********
   600    M = EN
          H(EN,EN) = 1.D0
@@ -65127,6 +65439,7 @@ C
       REAL :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, NORM, MACHEP
       COMPLEX :: Z3
       REAL :: SPMPAR
+      INTEGER :: NSWC_AI_I4
 C     INTEGER MIN0
 C     REAL SQRT,CABS,ABS,REAL,AIMAG
 C     COMPLEX CSQRT,CMPLX
@@ -65218,7 +65531,10 @@ C
 C     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 C                FROM THE INFORMATION LEFT BY CORTH **********
       IEND = IGH - LOW - 1
-      IF (IEND) 180, 150, 105
+      NSWC_AI_I4 = IEND
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 180
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      GO TO 105
 C     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
   105 DO II = 1, IEND
          I = IGH - II
@@ -66256,6 +66572,7 @@ C
      &NORM, MACHEP
       DOUBLE PRECISION :: R2, W(2), Z(2)
       DOUBLE PRECISION :: DPMPAR, DCPABS
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
@@ -66340,7 +66657,10 @@ C
 C     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 C                FROM THE INFORMATION LEFT BY DCORTH **********
       IEND = IGH - LOW - 1
-      IF (IEND) 180, 150, 105
+      NSWC_AI_I4 = IEND
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 180
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 150
+      GO TO 105
 C     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
   105 DO II = 1, IEND
          I = IGH - II
@@ -66810,6 +67130,7 @@ C
       INTEGER :: NKLM, NKL1
       INTEGER :: MAXIT
       INTEGER :: IPHASE, KFORCE, IINEG
+      REAL :: NSWC_AI_R4
       DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD),
      * CU(2,NKLMD), IU(2,NKLMD), S(KLMD)
 C
@@ -66867,7 +67188,10 @@ C SET UP PHASE 1 COSTS.
       END DO
    80 IF (KODE.EQ.0) GO TO 150
       DO J=1,N
-         IF (X(J)) 90, 110, 100
+         NSWC_AI_R4 = X ( J )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 90
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 110
+         GO TO 100
    90    CU(1,J) = 1.
          IU(1,J) = 1
          GO TO 110
@@ -66877,7 +67201,10 @@ C SET UP PHASE 1 COSTS.
       END DO
       DO J=1,K
          JPN = J + N
-         IF (RES(J)) 120, 140, 130
+         NSWC_AI_R4 = RES ( J )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 140
+         GO TO 130
   120    CU(1,JPN) = 1.
          IU(1,JPN) = 1
          IF (Q(J,N2).GT.0.0) IPHASE = 1
@@ -70590,7 +70917,8 @@ C
 C
 C            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
 C
-   60 IF (CL) 130,130,70
+   60 IF ( ( CL ) .LE. 0 ) GO TO 130
+      GO TO 70
    70 IF (NCV .LE. 0) RETURN
       B = DBLE(UP)*DBLE(U(1,LPIVOT))
 C
@@ -71234,7 +71562,8 @@ C
 C
 C            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
 C
-   60 IF (CL) 130,130,70
+   60 IF ( ( CL ) .LE. 0 ) GO TO 130
+      GO TO 70
    70 IF (NCV .LE. 0) RETURN
       B = UP*U(1,LPIVOT)
 C
@@ -75942,6 +76271,7 @@ C
       REAL :: EPS, EPS0, ATOL, FTOL, RTOL, TOL
       REAL :: A, B, C1, C2, E, FU, FV, U, V
       REAL :: SPMPAR
+      REAL :: NSWC_AI_R4
 C     ******************************************************************
 C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
 C     ******************************************************************
@@ -75974,7 +76304,10 @@ C
 C        LOCATION OF THE REGION OF A LOCAL MINIMUM
 C
    10 IF (E .LE. EPS0*(1.0 + ABS(A))) GO TO 40
-      IF (FU - FV) 20,11,30
+      NSWC_AI_R4 = FU - FV
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      GO TO 30
    11 IF (FU .GT. F(B)) GO TO 30
 C
    20 B = V
@@ -76088,7 +76421,10 @@ C
 C                    REPORT THE RESULTS
 C
   240 IND = 0
-  241 IF (FU - FV) 242,243,244
+  241 NSWC_AI_R4 = FU - FV
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 242
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 243
+      GO TO 244
   242 X = U
       W = FU
       ERROR = C1*E
@@ -79486,6 +79822,8 @@ C
       REAL :: SPMPAR
       INTEGER :: BFLAG
       DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
+      INTEGER :: NSWC_AI_I4
+      REAL :: NSWC_AI_R4
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -79747,7 +80085,10 @@ C
   202 CONTINUE
       END DO
   203 IF (JP .NE. 0) GO TO 300
-      IF (NSTEP - 2) 800,230,250
+      NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 800
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 230
+      GO TO 250
 C
 C     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
 C             VARIABLES INTO R. THEN TERMINATE.
@@ -79846,7 +80187,10 @@ C
       ICOUNT = ICOUNT - 1
       GO TO 200
 C
-  360 IF (NSTEP - 2) 400,430,440
+  360 NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 400
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 430
+      GO TO 440
 C
 C     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
 C               FOR THE NSTEP = 1 CASE
@@ -79858,7 +80202,10 @@ C
       DO I = 1,M
          IF (XB(I) .LT. 0.0 .OR. Y(I) .LE. 0.0) GO TO 403
          RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 401,402,403
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 401
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 402
+         GO TO 403
   401    EPSI = RATIO
          NPOS = 1
          INDEX(1) = I
@@ -79900,7 +80247,10 @@ C
       DO I = 1,M
          IF (Y(I) .LE. 0.0) GO TO 433
          RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 431,432,433
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 431
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 432
+         GO TO 433
   431    EPSI = RATIO
          NPOS = 1
          INDEX(1) = I
@@ -79917,12 +80267,18 @@ C
   440 NPOS = 0
       EPSI = XMAX
       DO I = 1,M
-         IF (Y(I)) 441,445,442
+         NSWC_AI_R4 = Y ( I )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 441
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 445
+         GO TO 442
   441    IF (IBASIS(I) .LE. N) GO TO 445
          IP = I
          GO TO 500
   442    RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 443,444,445
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 443
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 444
+         GO TO 445
   443       EPSI = RATIO
             NPOS = 1
             INDEX(1) = I
@@ -80046,7 +80402,10 @@ C
 C
 C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
 C
-  600 IF (NSTEP - 2) 601,630,700
+  600 NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 601
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 630
+      GO TO 700
   601 DO J = 1,M
          IF (XB(J) .LT. 0.0) GO TO 610
       END DO
@@ -80066,7 +80425,10 @@ C
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            IF (BI(L,J)) 620,622,621
+            NSWC_AI_R4 = BI ( L , J )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 620
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 622
+            GO TO 621
   620       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 622
   621       DSUMP = DSUMP + DBLE(BI(L,J))
@@ -80097,7 +80459,10 @@ C
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            IF (BI(L,J)) 640,642,641
+            NSWC_AI_R4 = BI ( L , J )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 640
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 642
+            GO TO 641
   640       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 642
   641       DSUMP = DSUMP + DBLE(BI(L,J))
@@ -80253,7 +80618,10 @@ C
   850 RERR1 = AMIN1(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
-         IF (XB(I)) 851,856,852
+         NSWC_AI_R4 = XB ( I )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 851
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 856
+         GO TO 852
   851    SGN = -1.0
          DSUMP = 0.D0
          DSUMN = XB(I)
@@ -80278,7 +80646,10 @@ C
          IF (ABS(W) .GT. TOL) Y(I) = W
   856 CONTINUE
       END DO
-      IF (NSTEP - 2) 860,870,880
+      NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 860
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 870
+      GO TO 880
 C
 C         CHECK THE REFINEMENT (NSTEP = 1)
 C
@@ -80385,6 +80756,8 @@ C
       REAL :: SPMPAR
       INTEGER :: BFLAG
       DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
+      INTEGER :: NSWC_AI_I4
+      REAL :: NSWC_AI_R4
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -80655,7 +81028,10 @@ C
   202 CONTINUE
       END DO
   203 IF (JP .NE. 0) GO TO 300
-      IF (NSTEP - 2) 800,230,250
+      NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 800
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 230
+      GO TO 250
 C
 C     INSERT THE VALUES OF THE ORGINAL, SLACK, AND SURPLUS
 C             VARIABLES INTO R. THEN TERMINATE.
@@ -80751,7 +81127,10 @@ C
       ICOUNT = ICOUNT - 1
       GO TO 200
 C
-  360 IF (NSTEP - 2) 400,430,440
+  360 NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 400
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 430
+      GO TO 440
 C
 C     FINDING THE VARIABLE XB(IP) TO BE MADE NONBASIC
 C               FOR THE NSTEP = 1 CASE
@@ -80763,7 +81142,10 @@ C
       DO I = 1,M
          IF (XB(I) .LT. 0.0 .OR. Y(I) .LE. 0.0) GO TO 403
          RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 401,402,403
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 401
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 402
+         GO TO 403
   401    EPSI = RATIO
          NPOS = 1
          INDEX(1) = I
@@ -80805,7 +81187,10 @@ C
       DO I = 1,M
          IF (Y(I) .LE. 0.0) GO TO 433
          RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 431,432,433
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 431
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 432
+         GO TO 433
   431    EPSI = RATIO
          NPOS = 1
          INDEX(1) = I
@@ -80822,12 +81207,18 @@ C
   440 NPOS = 0
       EPSI = XMAX
       DO I = 1,M
-         IF (Y(I)) 441,445,442
+         NSWC_AI_R4 = Y ( I )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 441
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 445
+         GO TO 442
   441    IF (IBASIS(I) .LE. N) GO TO 445
          IP = I
          GO TO 500
   442    RATIO = XB(I)/Y(I)
-         IF (RATIO - EPSI) 443,444,445
+         NSWC_AI_R4 = RATIO - EPSI
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 443
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 444
+         GO TO 445
   443       EPSI = RATIO
             NPOS = 1
             INDEX(1) = I
@@ -80954,7 +81345,10 @@ C
 C
 C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
 C
-  600 IF (NSTEP - 2) 601,630,700
+  600 NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 601
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 630
+      GO TO 700
   601 DO J = 1,M
          IF (XB(J) .LT. 0.0) GO TO 610
       END DO
@@ -80974,7 +81368,10 @@ C
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            IF (BI(L,J)) 620,622,621
+            NSWC_AI_R4 = BI ( L , J )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 620
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 622
+            GO TO 621
   620       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 622
   621       DSUMP = DSUMP + DBLE(BI(L,J))
@@ -81005,7 +81402,10 @@ C
          DSUMN = 0.D0
          DO LL = 1,M0
             L = INDEX(LL)
-            IF (BI(L,J)) 640,642,641
+            NSWC_AI_R4 = BI ( L , J )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 640
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 642
+            GO TO 641
   640       DSUMN = DSUMN + DBLE(BI(L,J))
             GO TO 642
   641       DSUMP = DSUMP + DBLE(BI(L,J))
@@ -81177,7 +81577,10 @@ C
   850 RERR1 = AMIN1(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
-         IF (XB(I)) 851,856,852
+         NSWC_AI_R4 = XB ( I )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 851
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 856
+         GO TO 852
   851    SGN = -1.0
          DSUMP = 0.D0
          DSUMN = XB(I)
@@ -81202,7 +81605,10 @@ C
          IF (ABS(W) .GT. TOL) Y(I) = W
   856 CONTINUE
       END DO
-      IF (NSTEP - 2) 860,870,880
+      NSWC_AI_I4 = NSTEP - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 860
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 870
+      GO TO 880
 C
 C         CHECK THE REFINEMENT (NSTEP = 1)
 C
@@ -81248,6 +81654,7 @@ C
      &NM1, NMJ, NMK, NN
       REAL :: C, PMIN, S
       DOUBLE PRECISION :: DSUM
+      REAL :: NSWC_AI_R4
 C     ******************************************************************
 C     CROUT PROCEDURE FOR INVERTING MATRICES
 C     ******************************************************************
@@ -81281,7 +81688,10 @@ C
       KK = KCOL + K
       NK = KCOL + N
       DO LK = KK,NK
-      IF (A(LK)) 20,10,30
+      NSWC_AI_R4 = A ( LK )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 10
+      GO TO 30
    10 CONTINUE
       END DO
       JP = K
@@ -81519,6 +81929,7 @@ C
      &NP1
       INTEGER :: IPMPAR
       INTEGER :: H, Q, R, S
+      INTEGER :: NSWC_AI_I4
 C
 C THIS SUBROUTINE SOLVES THE SQUARE ASSIGNMENT PROBLEM
 C THE MEANING OF THE INPUT PARAMETERS IS
@@ -81579,7 +81990,10 @@ C REDUCTION OF THE INITIAL COST MATRIX
         DO L=2,N
           IF ( A(L,J) .LT. S ) S = A(L,J)
         END DO
-        IF (S) 20,40,30
+        NSWC_AI_I4 = S
+        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
+        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 40
+        GO TO 30
    20   MM = MAXNUM + S
         IF (T .LT. -MM) GO TO 400
         T = T + S
@@ -82415,6 +82829,7 @@ C
      &MFIRST, MINK, MS, N1, NN
       REAL :: A, B, C
       INTEGER :: DIFF, PR, R, T
+      INTEGER :: NSWC_AI_I4
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
 C
@@ -82531,7 +82946,10 @@ C
       LOLD = LL
       QS = MS
       PR = PR + IP
-      IF ( LL - (NS - 2) ) 240, 220, 210
+      NSWC_AI_I4 = LL - ( NS - 2 )
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 240
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 220
+      GO TO 210
   210 II = NS
       GO TO 250
   220 IF ( QS .LT. WS(NS) ) GO TO 230
@@ -82572,7 +82990,10 @@ C
       II = KK
   330 IF ( VS .GE. PR + (QS*PS(NN))/WS(NN) ) GO TO 280
       DIFF = WS(NN) - WS(KK)
-      IF ( DIFF ) 390, 340, 350
+      NSWC_AI_I4 = DIFF
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 390
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 340
+      GO TO 350
   340 NN = NN + 1
       GO TO 330
   350 IF ( DIFF .GT. R ) GO TO 340
@@ -84746,6 +85167,7 @@ C
       REAL :: AA, AJ, AJM, AJP, AK, AKM, AKP, AT(23), BB, BJ, BJM, BJP,
      &BK, BKM, BKP, BT(23), C1, C2, C3, C72, CD, CK(23), RAD, RADF, S1,
      &S120, S2, S3, S72, SD, SK(23), U, V
+      INTEGER :: NSWC_AI_I4
 C  MULTIVARIATE COMPLEX FOURIER TRANSFORM, COMPUTED IN PLACE
 C    USING MIXED-RADIX FAST FOURIER TRANSFORM ALGORITHM.
 C  BY R. C. SINGLETON, STANFORD RESEARCH INSTITUTE, OCT. 1968
@@ -84813,7 +85235,10 @@ C     S120=SQRT(0.75)
       S120=.86602540378444
 C
       IERR=0
-      IF(N-1) 1000,960,5
+      NSWC_AI_I4 = N - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 1000
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 960
+      GO TO 5
     5 INC=ISN
       IF(ISN .GE. 0) GO TO 10
       S72=-S72
@@ -85427,8 +85852,12 @@ C
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
       REAL :: SQRT2, TSQX
+      INTEGER :: NSWC_AI_I4
       DATA SQRT2 /1.4142135623731/
-      IF (N-2) 102,101,103
+      NSWC_AI_I4 = N - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 102
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 101
+      GO TO 103
   101 TSQX = SQRT2*X(2)
       X(2) = X(1)-TSQX
       X(1) = X(1)+TSQX
@@ -85521,8 +85950,12 @@ C
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
       REAL :: TSQRT2, X1
+      INTEGER :: NSWC_AI_I4
       DATA TSQRT2 /2.82842712474619/
-      IF (N-2) 101,102,103
+      NSWC_AI_I4 = N - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 101
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 102
+      GO TO 103
   101 X(1) = 4.*X(1)
       RETURN
   102 X1 = 4.*(X(1)+X(2))
@@ -85752,13 +86185,15 @@ C
       NF = 0
       J = 0
   101 J = J+1
-      IF (J-4) 102,102,103
+      IF ( ( J - 4 ) .LE. 0 ) GO TO 102
+      GO TO 103
   102 NTRY = NTRYH(J)
       GO TO 104
   103 NTRY = NTRY+2
   104 NQ = NL/NTRY
       NR = NL-NTRY*NQ
-      IF (NR) 101,105,101
+      IF ( ( NR ) .EQ. 0 ) GO TO 105
+      GO TO 101
   105 NF = NF+1
       IFAC(NF+2) = NTRY
       NL = NQ
@@ -85940,11 +86375,15 @@ C
       REAL :: WA1(*)
       INTEGER :: I, IC, IDP2, K
       REAL :: TI2, TR2
+      INTEGER :: NSWC_AI_I4
       DO K=1,L1
          CH(1,K,1) = CC(1,1,K)+CC(IDO,2,K)
          CH(1,K,2) = CC(1,1,K)-CC(IDO,2,K)
       END DO
-      IF (IDO-2) 107,105,102
+      NSWC_AI_I4 = IDO - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
       DO K=1,L1
@@ -86053,6 +86492,7 @@ C
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CR2, CR3, CR4, SQRT2, TI1, TI2, TI3, TI4,
      &TR1, TR2, TR3, TR4
+      INTEGER :: NSWC_AI_I4
       DATA SQRT2 /1.414213562373095/
       DO K=1,L1
          TR1 = CC(1,1,K)-CC(IDO,4,K)
@@ -86064,7 +86504,10 @@ C
          CH(1,K,3) = TR2-TR3
          CH(1,K,4) = TR1+TR4
       END DO
-      IF (IDO-2) 107,105,102
+      NSWC_AI_I4 = IDO - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
       DO K=1,L1
@@ -86556,11 +86999,15 @@ C
       REAL :: WA1(*)
       INTEGER :: I, IC, IDP2, K
       REAL :: TI2, TR2
+      INTEGER :: NSWC_AI_I4
       DO K=1,L1
          CH(1,1,K) = CC(1,K,1)+CC(1,K,2)
          CH(IDO,2,K) = CC(1,K,1)-CC(1,K,2)
       END DO
-      IF (IDO-2) 107,105,102
+      NSWC_AI_I4 = IDO - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 108
       DO K=1,L1
@@ -86667,6 +87114,7 @@ C
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CR2, CR3, CR4, HSQT2, TI1, TI2, TI3, TI4,
      &TR1, TR2, TR3, TR4
+      INTEGER :: NSWC_AI_I4
       DATA HSQT2 /.7071067811865475/
       DO K=1,L1
          TR1 = CC(1,K,2)+CC(1,K,4)
@@ -86676,7 +87124,10 @@ C
          CH(IDO,2,K) = CC(1,K,1)-CC(1,K,3)
          CH(1,3,K) = CC(1,K,4)-CC(1,K,2)
       END DO
-      IF (IDO-2) 107,105,102
+      NSWC_AI_I4 = IDO - 2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 107
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 105
+      GO TO 102
   102 IDP2 = IDO+2
       IF((IDO-1)/2.LT.L1) GO TO 111
       DO K=1,L1
@@ -88339,6 +88790,7 @@ C
      &SMOOTH
       LOGICAL :: DISCRD
       DOUBLE PRECISION :: AKNOTS, DTEST, DX, THREE, FIVE
+      INTEGER :: NSWC_AI_I4
 C
 C        ===============================================================
 C
@@ -88364,7 +88816,10 @@ C
 C         COMPUTE DTEST FOR THE LOCAL ERROR CRITERION
 C
       IF (NORM.EQ.THREE) GO TO 30
-      IF (EDIST-1) 10,20,30
+      NSWC_AI_I4 = EDIST - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      GO TO 30
    10 DTEST = DX*DSCTOL
       GO TO 40
 C         FOR THE APPROXIMATE FIXED ERROR DISTRIBUTION TYPE WE ESTIMATE
@@ -88799,7 +89254,8 @@ C
   160 IF (L1 .NE. L2) GO TO 180
         IF (NR .GT. 0) GO TO 170
           NP = NP + 1
-          IF (NP-15) 190,190,260
+          IF ( ( NP - 15 ) .LE. 0 ) GO TO 190
+          GO TO 260
   170   FACT = 1.0/FACT
   180 FACT = 1.0/SQRT(FACT)
       NR = NR + 1
@@ -89086,7 +89542,8 @@ C
   160 IF (L1 .NE. L2) GO TO 180
          IF (NR .GT. 0) GO TO 170
             NP = NP + 1
-            IF (NP-15) 190,190,260
+            IF ( ( NP - 15 ) .LE. 0 ) GO TO 190
+            GO TO 260
   170    FACT = 1.D0/FACT
   180 FACT = 1.D0/DSQRT(FACT)
       NR = NR + 1
@@ -89163,6 +89620,7 @@ C
       INTEGER :: I, IL, IR, NM1
       REAL :: R
       REAL :: TRP
+      REAL :: NSWC_AI_R4
 C
       NM1 = N-1
       IF (A.LT.X(2)) GO TO 50
@@ -89174,7 +89632,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL+IR)/2
       IF (I.EQ.IL) GO TO 60
-      IF (A-X(I)) 20,60,30
+      NSWC_AI_R4 = A - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 60
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -89202,6 +89663,7 @@ C
       INTEGER :: I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L,
      &MM1, NUM
       REAL :: DL, DR, XX
+      REAL :: NSWC_AI_R4
 C     ******************************************************************
 C     LAGRANGE INTERPOLATION
 C     ******************************************************************
@@ -89223,7 +89685,10 @@ C
 C     FIND THE SUBINTERVAL WHICH CONTAINS XX. I = 1 IF XX.LT.X(2)
 C     AND I = N IF XX.GE.X(N). OTHERWISE X(I).LE.XX.LT.X(I+1).
 C
-      IF (XX-X(1)) 10,11,20
+      NSWC_AI_R4 = XX - X ( 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      GO TO 20
    10 I = 1
       IL = 1
       IR = M
@@ -89232,7 +89697,10 @@ C
       YI(K) = Y(1)
       GO TO 110
 C
-   20 IF (X(N)-XX) 21,22,23
+   20 NSWC_AI_R4 = X ( N ) - XX
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 21
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 22
+      GO TO 23
    21 I = N
       IL = N-M+1
       IR = N
@@ -89247,7 +89715,10 @@ C     BISECTION SEARCH
 C
    30 I = (IL+IR)/2
       IF (I.EQ.IL) GO TO 50
-      IF (XX-X(I)) 31,32,33
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 31
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 32
+      GO TO 33
    31 IR = I
       GO TO 30
    32 YI(K) = Y(I)
@@ -89257,7 +89728,10 @@ C
 C
 C     LINEAR FORWARD SEARCH
 C
-   40 IF (XX-X(I+1)) 50,41,42
+   40 NSWC_AI_R4 = XX - X ( I + 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 50
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 41
+      GO TO 42
    41 I = I+1
       YI(K) = Y(I)
       GO TO 110
@@ -89329,10 +89803,19 @@ C
   110 IF (K.GE.NI) RETURN
       K = K+1
       XX = XI(K)
-      IF (XX-X(1)) 10,11,111
-  111 IF (X(N)-XX) 21,22,120
+      NSWC_AI_R4 = XX - X ( 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 11
+      GO TO 111
+  111 NSWC_AI_R4 = X ( N ) - XX
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 21
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 22
+      GO TO 120
 C
-  120 IF (XX-XI(K-1)) 121,122,40
+  120 NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 121
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 122
+      GO TO 40
   121 IL = 1
       IR = MIN0(I+1,N)
       GO TO 30
@@ -89369,7 +89852,8 @@ C     ******************************************************************
       IBEG = 1
 C
       DO K=2,N
-      IF (X(K)-X(K-1)) 10,20,10
+      IF ( ( X ( K ) - X ( K - 1 ) ) .EQ. 0 ) GO TO 20
+      GO TO 10
 C
    10 F = 1.0
       R = 0.0
@@ -89378,7 +89862,8 @@ C
       T(1) = Y(K)
       DO I=1,IEND
       DIFF = X(I)-X(K)
-      IF (DIFF) 11,31,11
+      IF ( ( DIFF ) .EQ. 0 ) GO TO 31
+      GO TO 11
    11 T(I+1) = (A(I)-T(I))/DIFF
       END DO
       GO TO 22
@@ -89606,6 +90091,7 @@ C
       REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
       REAL :: LAMBDA
       DOUBLE PRECISION :: DALPHA, DSUM
+      REAL :: NSWC_AI_R4
 C     ******************************************************************
 C     WEIGHTED LEAST SQUARES POLYNOMIAL FIT
 C     ******************************************************************
@@ -89617,7 +90103,10 @@ C
       NW=0
       DSUM=0.D0
       DO K=1,NP
-      IF (W(K)) 202,13,10
+      NSWC_AI_R4 = W ( K )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 202
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 13
+      GO TO 10
    10 NW=NW+1
       DSUM=DSUM+DBLE(W(K))
       IF (NW.GT.1) GO TO 11
@@ -89783,6 +90272,7 @@ C
       REAL, INTENT(INOUT) :: A(N), B(N), C(N)
       INTEGER :: I, J, M, NM1
       REAL :: DEL, H, R, T
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C                   CUBIC SPLINE INTERPOLATION
 C-----------------------------------------------------------------------
@@ -89806,7 +90296,10 @@ C     THE FORM
 C
 C             C(1)*S(1) + B(1)*S(2) = A(1)
 C
-      IF (IBEG - 1) 20,30,40
+      NSWC_AI_I4 = IBEG - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 30
+      GO TO 40
 C
 C     NO CONDITION AT LEFT END.
 C
@@ -89845,7 +90338,10 @@ C     LAST EQUATION FROM THE SECOND BOUNDARY CONDITION, OF THE FORM
 C
 C                R*S(N-1) + C(N)*S(N) = A(N)
 C
-      IF (IEND - 1) 60,80,90
+      NSWC_AI_I4 = IEND - 1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 60
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 80
+      GO TO 90
    60 IF (N .EQ. 3 .AND. IBEG .EQ. 0) GO TO 70
 C
 C     NO CONDITION AT THE RIGHT END. EITHER  N .GE. 4  OR
@@ -90227,6 +90723,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K
       REAL :: DX, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90285,7 +90782,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90315,7 +90815,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
@@ -90329,6 +90832,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90384,7 +90888,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90419,7 +90926,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
@@ -90433,6 +90943,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90488,7 +90999,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90526,7 +91040,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
@@ -90540,6 +91057,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K
       REAL :: BI, CI, DX, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90601,7 +91119,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90635,7 +91156,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
@@ -90649,6 +91173,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90706,7 +91231,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90745,7 +91273,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
@@ -90759,6 +91290,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
+      REAL :: NSWC_AI_R4
 C
 C     ABSTRACT
 C
@@ -90816,7 +91348,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -90857,7 +91392,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(NM1)) GO TO 80
-      IF (XX - XI(K-1)) 110,100,50
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 50
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
@@ -91404,6 +91942,7 @@ C
       REAL, INTENT(INOUT) :: YI(M)
       INTEGER :: I, IL, IR, J, K
       REAL :: DX, H, T, T0, X1, XOLD, XX
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C              EVALUATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
@@ -91433,7 +91972,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 90
-      IF (XX - X(I)) 20,90,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -91461,7 +92003,10 @@ C
       IF (T0 .LT. 0.0) T0 = 1.0 + T0
       XX = X1 + T0*H
       IF (XX .GE. X(N)) GO TO 120
-      IF (XX - XOLD) 110,90,40
+      NSWC_AI_R4 = XX - XOLD
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      GO TO 40
 C
   110 IL = 1
       IR = MIN0(I+1,N)
@@ -91484,6 +92029,7 @@ C
       REAL, INTENT(INOUT) :: YI(M), YPI(M), YPPI(M)
       INTEGER :: I, IL, IR, J, K
       REAL :: BI2, CI3, DX, H, T, T0, X1, XOLD, XX
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C     EVALUATION AND DIFFERENTIATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
@@ -91514,7 +92060,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 90
-      IF (XX - X(I)) 20,90,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -91546,7 +92095,10 @@ C
       IF (T0 .LT. 0.0) T0 = 1.0 + T0
       XX = X1 + T0*H
       IF (XX .GE. X(N)) GO TO 120
-      IF (XX - XOLD) 110,90,40
+      NSWC_AI_R4 = XX - XOLD
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 90
+      GO TO 40
 C
   110 IL = 1
       IR = MIN0(I+1,N)
@@ -91770,6 +92322,7 @@ C
       REAL, INTENT(INOUT) :: Z(KZ, N)
       INTEGER :: I, IL, IR, J, K
       REAL :: A, B, C, D, DT, H, T0, TOLD, W
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C            EVALUATION OF A CUBIC SPLINE CLOSED CURVE
 C                     IN N-DIMENSIONAL SPACE
@@ -91789,7 +92342,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 50
-      IF (T0 - T(I)) 20,50,30
+      NSWC_AI_R4 = T0 - T ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -91838,7 +92394,10 @@ C
       T0 = TI(K) - J
       IF (T0 .LT. 0.0) T0 = 1.0 + T0
       IF (T0 .GE. T(M)) GO TO 60
-      IF (T0 - TOLD) 110,50,40
+      NSWC_AI_R4 = T0 - TOLD
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      GO TO 40
 C
   110 IL = 1
       IR = MIN0(I+1,M)
@@ -91853,6 +92412,7 @@ C
       REAL, INTENT(INOUT) :: Z(N), DZ(N), DDZ(N)
       INTEGER :: I, IL, IR, J
       REAL :: A, B, C, D, DT, H, T0, W
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C          EVALUATION AND DIFFERENTIATION OF A CUBIC SPLINE
 C                CLOSED CURVE IN N-DIMENSIONAL SPACE
@@ -91871,7 +92431,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 40
-      IF (T0 - T(I)) 20,40,30
+      NSWC_AI_R4 = T0 - T ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 40
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -93478,6 +94041,7 @@ C
       REAL, INTENT(IN) :: X, T(M)
       INTEGER :: I, IL, IR
       REAL :: TM
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C
 C             LOCATION OF A VALUE X IN A SEQUENCE T
@@ -93517,7 +94081,10 @@ C     BISECTION SEARCH
 C
    30 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 110
-      IF (X - T(I)) 40,60,50
+      NSWC_AI_R4 = X - T ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 40
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 60
+      GO TO 50
    40 IR = I
       GO TO 30
    50 IL = I
@@ -93975,6 +94542,7 @@ C
       REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, J, K, LM1, LMJ
       REAL :: DX, S, XX
+      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C
 C         THIS ROUTINE EVALUATES A PIECEWISE POLYNOMIAL AT THE
@@ -94019,7 +94587,10 @@ C     BISECTION SEARCH
 C
    10 I = (IL + IR)/2
       IF (I .EQ. IL) GO TO 100
-      IF (XX - X(I)) 20,100,30
+      NSWC_AI_R4 = XX - X ( I )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 20
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 100
+      GO TO 30
    20 IR = I
       GO TO 10
    30 IL = I
@@ -94055,7 +94626,10 @@ C
       XX = XI(K)
       IF (XX .LT. X(1)) GO TO 90
       IF (XX .GE. X(N)) GO TO 80
-      IF (XX - XI(K-1)) 130,120,40
+      NSWC_AI_R4 = XX - XI ( K - 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 130
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 120
+      GO TO 40
   130 IL = 1
       IR = MIN0(I + 1, N)
       GO TO 10
@@ -94417,6 +94991,7 @@ C
       INTEGER :: I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE,
      &MIDMK, MJ, NROWM1
       REAL :: FACTOR, PIVOT
+      INTEGER :: NSWC_AI_I4
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  RETURNS IN  W  THE LU-FACTORIZATION (WITHOUT PIVOTING) OF THE BANDED
 C  MATRIX  A  OF ORDER  NROW  WITH  (NBANDL + 1 + NBANDU) BANDS OR DIAG-
@@ -94477,7 +95052,10 @@ C
       MIDDLE = NBANDU + 1
 C                         W(MIDDLE,.) CONTAINS THE MAIN DIAGONAL OF  A .
       NROWM1 = NROW - 1
-      IF (NROWM1)                       999,900,1
+      NSWC_AI_I4 = NROWM1
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 999
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 900
+      GO TO 1
     1 IF (NBANDL .GT. 0)                GO TO 10
 C                A IS UPPER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO .
       DO I=1,NROWM1
@@ -96097,6 +96675,8 @@ C
       REAL :: A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1,
      &DS, DT, DX, DY, FI, FIP1, XX, YY
       INTEGER :: INTRVL
+      REAL :: NSWC_AI_R4
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -96115,7 +96695,10 @@ C
          IF (YY .LT. T(2)) GO TO 10
          IF (YY .GE. T(NM1)) GO TO 20
          IF (L .EQ. 1) GO TO 30
-         IF (YY - Y(L-1)) 30,50,40
+         NSWC_AI_R4 = YY - Y ( L - 1 )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+         GO TO 40
 C
    10    J = 1
          GO TO 50
@@ -96138,7 +96721,10 @@ C
             IF (XX .LT. S(2)) GO TO 100
             IF (XX .GE. S(MM1)) GO TO 110
             IF (K .EQ. 1) GO TO 120
-            IF (XX - X(K-1)) 120,130,140
+            NSWC_AI_R4 = XX - X ( K - 1 )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 130
+            GO TO 140
 C
   100       I = 1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
@@ -96188,7 +96774,10 @@ C
 C
   210       DY = YY - T(J)
             IF (JDER .EQ. 0) GO TO 220
-            IF (JDER - 2) 230,240,250
+            NSWC_AI_I4 = JDER - 2
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 230
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 240
+            GO TO 250
 C
   220       FI = ((C*DY + B)*DY + F2(I,J))*DY + F(I,J)
             FIP1 = ((C1*DY + B1)*DY + F2(IP1,J))*DY + F(IP1,J)
@@ -96223,7 +96812,10 @@ C
 C
             DX = XX - S(I)
             IF (IDER .EQ. 0) GO TO 310
-            IF (IDER - 2) 320,330,340
+            NSWC_AI_I4 = IDER - 2
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 320
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+            GO TO 340
 C
   310       Z(K,L) = ((CX*DX + BX)*DX + DFI)*DX + FI
             GO TO 350
@@ -96278,6 +96870,8 @@ C
       REAL :: A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS,
      &DT, DX, DY, FI, FIP1, XX, YY
       INTEGER :: INTRVL
+      REAL :: NSWC_AI_R4
+      INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -96296,7 +96890,10 @@ C
          IF (YY .LT. T(2)) GO TO 10
          IF (YY .GE. T(NM1)) GO TO 20
          IF (L .EQ. 1) GO TO 30
-         IF (YY - Y(L-1)) 30,50,40
+         NSWC_AI_R4 = YY - Y ( L - 1 )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+         GO TO 40
 C
    10    J = 1
          GO TO 50
@@ -96319,7 +96916,10 @@ C
             IF (XX .LT. S(2)) GO TO 100
             IF (XX .GE. S(MM1)) GO TO 110
             IF (K .EQ. 1) GO TO 120
-            IF (XX - X(K-1)) 120,130,140
+            NSWC_AI_R4 = XX - X ( K - 1 )
+            IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
+            IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 130
+            GO TO 140
 C
   100       I = 1
             IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
@@ -96365,7 +96965,10 @@ C
 C
   210       DY = YY - T(J)
             IF (JDER .EQ. 0) GO TO 220
-            IF (JDER - 2) 230,240,250
+            NSWC_AI_I4 = JDER - 2
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 230
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 240
+            GO TO 250
 C
   220       FI = ((C*DY + 0.5*F2(I,J))*DY + A)*DY + F(I,J)
             FIP1 = ((C1*DY + 0.5*F2(IP1,J))*DY + A1)*DY + F(IP1,J)
@@ -96399,7 +97002,10 @@ C
 C
             DX = XX - S(I)
             IF (IDER .EQ. 0) GO TO 310
-            IF (IDER - 2) 320,330,340
+            NSWC_AI_I4 = IDER - 2
+            IF ( NSWC_AI_I4 .LT. 0 ) GO TO 320
+            IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+            GO TO 340
 C
   310       Z(K,L) = ((CX*DX + 0.5*DFI)*DX + AX)*DX + FI
             GO TO 350
@@ -96455,6 +97061,7 @@ C
      &DELY1, DELY2, DELYN, DELYNM, DIAG1, DIAG2, DIAGI, DIAGIN, SDIAG1,
      &SDIAG2, SIGMAX, SIGMAY, T, ZXY1NS, ZXYMNS
       INTEGER :: IND(8), LOC(8), NUM(8)
+      INTEGER :: NSWC_AI_I4
 C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
@@ -96561,7 +97168,10 @@ C
 C
       L = 1
   100 KEY = OPT(L)
-      IF (KEY) 48,110,101
+      NSWC_AI_I4 = KEY
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 48
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 110
+      GO TO 101
   101 IF (KEY .GT. 8) GO TO 48
       IND(KEY) = 1
       L = L+1
@@ -101507,6 +102117,7 @@ C
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
+      INTEGER :: NSWC_AI_I4
 C
 C
 C     ***************
@@ -101608,7 +102219,10 @@ C     FULL MULTINOMIAL DEGREE.
 C     ***************
 C
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-      IF (EVLDEG) 40,10,20
+      NSWC_AI_I4 = EVLDEG
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      GO TO 20
 C
    10 NEPOLS = 1
       GO TO 50
@@ -102310,6 +102924,7 @@ C
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
+      INTEGER :: NSWC_AI_I4
 C
 C
 C     ***************
@@ -102412,7 +103027,10 @@ C     FULL MULTINOMIAL DEGREE.
 C     ***************
 C
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-      IF (EVLDEG) 40,10,20
+      NSWC_AI_I4 = EVLDEG
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 40
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      GO TO 20
 C
    10 NEPOLS = 1
       GO TO 50
@@ -103035,8 +103653,9 @@ C CONTRIBUTION FROM NEW FUNCTION VALUES.
       I = I + 1
       RESULT(K) = (ACUM+P(I)*FZERO)*DIFF
 C CHECK FOR CONVERGENCE.
-      IF (ABS(RESULT(K)-RESULT(K-1))-EPSIL*ABS(RESULT(K))) 60,
-     * 60, 10
+      IF ( ( ABS ( RESULT ( K ) - RESULT ( K - 1 ) ) - EPSIL * ABS (
+     &RESULT ( K ) ) ) .LE. 0 ) GO TO 60
+      GO TO 10
 C CONVERGENCE NOT ACHIEVED.
    50 ICHECK = 1
 C NORMAL TERMINATION.
@@ -111264,6 +111883,7 @@ C
      &HNEW, P5EPS, R, REALI, REALNS, RHO, ROUND, SUM, TAU, TEMP1, TEMP2,
      &TEMP3, TEMP4, TEMP5, TEMP6, TWO(13), TWOU, U, XOLD
       REAL :: SPMPAR
+      INTEGER :: NSWC_AI_I4
 C
 C   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 C
@@ -111612,12 +112232,18 @@ C
       DO L = 1,NEQN
         TEMP3 = 1.0/WT(L)
         TEMP4 = YP(L) - PHI(L,1)
-        IF(KM2)265,260,255
+        NSWC_AI_I4 = KM2
+        IF ( NSWC_AI_I4 .LT. 0 ) GO TO 265
+        IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 260
+        GO TO 255
  255    ERKM2 = ERKM2 + ((PHI(L,KM1)+TEMP4)*TEMP3)**2
  260    ERKM1 = ERKM1 + ((PHI(L,K)+TEMP4)*TEMP3)**2
  265    ERK = ERK + (TEMP4*TEMP3)**2
       END DO
-      IF(KM2)280,275,270
+      NSWC_AI_I4 = KM2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 280
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 275
+      GO TO 270
  270  ERKM2 = ABSH*SIG(KM1)*GSTR(KM2)*SQRT(ERKM2)
  275  ERKM1 = ABSH*SIG(K)*GSTR(KM1)*SQRT(ERKM1)
  280  TEMP5 = ABSH*SQRT(ERK)
@@ -111627,7 +112253,10 @@ C
 C
 C   TEST IF ORDER SHOULD BE LOWERED
 C
-      IF(KM2)299,290,285
+      NSWC_AI_I4 = KM2
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 299
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 290
+      GO TO 285
  285  IF(AMAX1(ERKM1,ERKM2) .LE. ERK) KNEW = KM1
       GO TO 299
  290  IF(ERKM1 .LE. 0.5*ERK) KNEW = KM1
@@ -111668,7 +112297,10 @@ C   SIZE
 C
  320  IFAIL = IFAIL + 1
       TEMP2 = 0.5
-      IF(IFAIL - 3) 335,330,325
+      NSWC_AI_I4 = IFAIL - 3
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 335
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 330
+      GO TO 325
  325  IF(P5EPS .LT. 0.25*ERK) TEMP2 = SQRT(P5EPS/ERK)
  330  KNEW = 1
  335  H = TEMP2*H
@@ -117256,6 +117888,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, INDX, INDY
       INTEGER, INTENT(IN) :: EDGE(4)
+      INTEGER :: NSWC_AI_I4
 C
       IF (IABS(EDGE(1)) .GT. 1) GO TO 200
       IF (IABS(EDGE(2)) .GT. 1) GO TO 200
@@ -117265,7 +117898,10 @@ C
 C
 C               PROCESS EDGES 1 AND 3
 C
-      IF (EDGE(1)) 10,20,30
+      NSWC_AI_I4 = EDGE ( 1 )
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 20
+      GO TO 30
 C
    10 IF (EDGE(3) .NE. -1) GO TO 210
       INDY = 0
@@ -117280,7 +117916,10 @@ C
 C
 C               PROCESS EDGES 2 AND 4
 C
-  100 IF (EDGE(2)) 110,120,130
+  100 NSWC_AI_I4 = EDGE ( 2 )
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 110
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 120
+      GO TO 130
 C
   110 IF (EDGE(4) .NE. -1) GO TO 220
       INDX = 0
@@ -118787,29 +119426,35 @@ C TEST M AND N FOR THE PROPER FORM
 C
       NM = N
       IERROR = 0
-      IF (M-5)  10, 20, 20
+      IF ( ( M - 5 ) .LT. 0 ) GO TO 10
+      GO TO 20
    10 IERROR = 1
       GO TO 190
-   20 IF (NM-3)  30, 40, 40
+   20 IF ( ( NM - 3 ) .LT. 0 ) GO TO 30
+      GO TO 40
    30 IERROR = 2
       GO TO 190
-   40 IF (IDIMY-M)  50, 60, 60
+   40 IF ( ( IDIMY - M ) .LT. 0 ) GO TO 50
+      GO TO 60
    50 IERROR = 3
       GO TO 190
    60 NH = N
       NPP = NP
-      IF (NPP)  70, 80, 70
+      IF ( ( NPP ) .EQ. 0 ) GO TO 80
+      GO TO 70
    70 NH = NH+1
    80 IK = 2
       K = 1
    90 IK = IK+IK
       K = K+1
-      IF (NH-IK) 100,100, 90
+      IF ( ( NH - IK ) .LE. 0 ) GO TO 100
+      GO TO 90
   100 NL = IK
       IK = IK+IK
       NL = NL-1
       IWAH = (K-2)*IK+K+6
-      IF (NPP) 110,120,110
+      IF ( ( NPP ) .EQ. 0 ) GO TO 120
+      GO TO 110
 C
 C     DIVIDE W INTO WORKING SUB ARRAYS
 C
@@ -118824,16 +119469,19 @@ C
 C
 C SUBROUTINE COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS
 C
-  130 IF (IERROR) 190,140,190
+  130 IF ( ( IERROR ) .EQ. 0 ) GO TO 140
+      GO TO 190
   140 IW2 = IW1+M
       IW3 = IW2+M
       IWD = IW3+M
       IWW = IWD+M
       IWU = IWW+M
-      IF (IFLG) 160,150,160
+      IF ( ( IFLG ) .EQ. 0 ) GO TO 150
+      GO TO 160
   150 CALL COMPB (NL,IERROR,AN,BN,CN,W(2),W(IWAH),W(IWBH))
       GO TO 190
-  160 IF (MP) 170,180,170
+  160 IF ( ( MP ) .EQ. 0 ) GO TO 180
+      GO TO 170
 C
 C SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
 C
@@ -118889,12 +119537,14 @@ C
      1               M,AM,BM,CM,WD,WW,WU)
          IF = 2**K
          DO I=I4,IF,I4
-            IF (I-NM)  10, 10, 80
+            IF ( ( I - NM ) .LE. 0 ) GO TO 10
+            GO TO 80
    10       IPI1 = I+I1
             IPI2 = I+I2
             IPI3 = I+I3
             CALL INDXC (I,IR,IDXC,NC)
-            IF (I-IF)  20, 80, 80
+            IF ( ( I - IF ) .LT. 0 ) GO TO 20
+            GO TO 80
    20       CALL INDXA (I,IR,IDXA,NA)
             CALL INDXB (I-I1,IRM1,IM1,NM1)
             CALL INDXB (IPI2,IR,IP2,NP2)
@@ -118902,7 +119552,8 @@ C
             CALL INDXB (IPI3,IRM1,IP3,NP3)
             CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W3,W1,M,AM,
      1                  BM,CM,WD,WW,WU)
-            IF (IPI2-NM)  50, 50, 30
+            IF ( ( IPI2 - NM ) .LE. 0 ) GO TO 50
+            GO TO 30
    30       DO J=1,M
                W3(J) = 0.
                W2(J) = 0.
@@ -118918,7 +119569,8 @@ C
    80    CONTINUE
          END DO
       END DO
-      IF (NPP) 320,100,320
+      IF ( ( NPP ) .EQ. 0 ) GO TO 100
+      GO TO 320
 C
 C     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
 C
@@ -118960,8 +119612,10 @@ C
          I4 = I2+I2
          IFD = IF-I2
          DO I=I2,IFD,I4
-            IF (I-I2-IZR) 170,140,170
-  140       IF (I-NM) 150,150,180
+            IF ( ( I - I2 - IZR ) .EQ. 0 ) GO TO 140
+            GO TO 170
+  140       IF ( ( I - NM ) .LE. 0 ) GO TO 150
+            GO TO 180
   150       CALL INDXA (I,IR,IDXA,NA)
             CALL INDXB (I,IR,IZ,NZ)
             CALL INDXB (I-I1,IR-1,IM1,NM1)
@@ -118974,7 +119628,8 @@ C
             CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W2,W2,M,
      1                  AM,BM,CM,WD,WW,WU)
             IZR = I
-            IF (I-NM) 170,190,170
+            IF ( ( I - NM ) .EQ. 0 ) GO TO 190
+            GO TO 170
   170    CONTINUE
          END DO
   180 CONTINUE
@@ -118984,7 +119639,8 @@ C
       END DO
       CALL INDXB (IF/2,K-1,IM1,NM1)
       CALL INDXB (IF,K-1,IP,NP)
-      IF (NCMPLX) 210,220,210
+      IF ( ( NCMPLX ) .EQ. 0 ) GO TO 220
+      GO TO 210
   210 CALL CPRDCT (NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1),
      1             Y(1,NM+1),M,AM,BM,CM,W1,W3,WW)
       GO TO 230
@@ -119027,8 +119683,10 @@ C
             IPI1 = I+I1
             IPI2 = I+I2
             IPI3 = I+I3
-            IF (IPI2-IZR) 270,280,270
-  270       IF (I-IZR) 300,310,300
+            IF ( ( IPI2 - IZR ) .EQ. 0 ) GO TO 280
+            GO TO 270
+  270       IF ( ( I - IZR ) .EQ. 0 ) GO TO 310
+            GO TO 300
   280       CALL INDXC (I,IR,IDXC,NC)
             CALL INDXB (IPI2,IR,IP2,NP2)
             CALL INDXB (IPI1,IRM1,IP1,NP1)
@@ -119058,7 +119716,8 @@ C
          I4 = I2+I2
          IFD = IF-I2
          DO I=I2,IFD,I4
-            IF (I-NM) 330,330,430
+            IF ( ( I - NM ) .LE. 0 ) GO TO 330
+            GO TO 430
   330       IMI1 = I-I1
             IMI2 = I-I2
             IPI1 = I+I1
@@ -119068,14 +119727,16 @@ C
             CALL INDXB (I,IR,IZ,NZ)
             CALL INDXB (IMI1,IRM1,IM1,NM1)
             CALL INDXB (IPI1,IRM1,IP1,NP1)
-            IF (I-I2) 340,340,360
+            IF ( ( I - I2 ) .LE. 0 ) GO TO 340
+            GO TO 360
   340       DO J=1,M
                W1(J) = 0.
             END DO
             GO TO 370
   360       CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),Y(1,IMI2),
      1                  W1,M,AM,BM,CM,WD,WW,WU)
-  370       IF (IPI2-NM) 400,400,380
+  370       IF ( ( IPI2 - NM ) .LE. 0 ) GO TO 400
+            GO TO 380
   380       DO J=1,M
                W2(J) = 0.
             END DO
@@ -119102,7 +119763,8 @@ C
 C
       NA = 2**IR
       IDXA = I-NA+1
-      IF (I-NM)  20, 20, 10
+      IF ( ( I - NM ) .LE. 0 ) GO TO 20
+      GO TO 10
    10 NA = 0
    20 RETURN
       END SUBROUTINE INDXA
@@ -119117,7 +119779,8 @@ C
 C
       NC = 2**IR
       IDXC = I
-      IF (IDXC+NC-1-NM)  20, 20, 10
+      IF ( ( IDXC + NC - 1 - NM ) .LE. 0 ) GO TO 20
+      GO TO 10
    10 NC = 0
    20 RETURN
       END SUBROUTINE INDXC
@@ -119128,6 +119791,7 @@ C
       INTEGER :: ID, IPL, IZH
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
+      INTEGER :: NSWC_AI_I4
 C
 C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
 C
@@ -119135,8 +119799,12 @@ C
      1                NM         ,NCMPLX     ,IK
 C
       IDP = 0
-      IF (IR)  70, 10, 30
-   10 IF (I-NM)  20, 20, 70
+      NSWC_AI_I4 = IR
+      IF ( NSWC_AI_I4 .LT. 0 ) GO TO 70
+      IF ( NSWC_AI_I4 .EQ. 0 ) GO TO 10
+      GO TO 30
+   10 IF ( ( I - NM ) .LE. 0 ) GO TO 20
+      GO TO 70
    20 IDX = I
       IDP = 1
       RETURN
@@ -119145,10 +119813,12 @@ C
       IDX = ID+ID+(IR-1)*IK+IR+(IK-I)/IZH+4
       IPL = IZH-1
       IDP = IZH+IZH-1
-      IF (I-IPL-NM)  50, 50, 40
+      IF ( ( I - IPL - NM ) .LE. 0 ) GO TO 50
+      GO TO 40
    40 IDP = 0
       RETURN
-   50 IF (I+IPL-NM)  70, 70, 60
+   50 IF ( ( I + IPL - NM ) .LE. 0 ) GO TO 70
+      GO TO 60
    60 IDP = NM+IPL-I+1
    70 RETURN
       END SUBROUTINE INDXB
@@ -119189,7 +119859,8 @@ C
       M1 = NM1
       M2 = NM2
       IA = NA
-   20 IF (IA)  50, 50, 30
+   20 IF ( ( IA ) .LE. 0 ) GO TO 50
+      GO TO 30
    30 RT = AA(IA)
       IF (ND .EQ. 0) RT = -RT
       IA = IA-1
@@ -119199,7 +119870,8 @@ C
       DO J=1,M
          Y(J) = RT*W(J)
       END DO
-   50 IF (ID) 250,250, 60
+   50 IF ( ( ID ) .LE. 0 ) GO TO 250
+      GO TO 60
    60 RT = BD(ID)
       ID = ID-1
       IF (ID .EQ. 0) IBR = 1
@@ -119216,28 +119888,41 @@ C
       END DO
       DEN = B(1)-RT-C(1)*D(2)
       W(1) = 1.
-      IF (DEN)  80, 90, 80
+      IF ( ( DEN ) .EQ. 0 ) GO TO 90
+      GO TO 80
    80 W(1) = (Y(1)-C(1)*W(2))/DEN
    90 DO J=2,M
          W(J) = W(J)-D(J)*W(J-1)
       END DO
-      IF (NA) 130,130, 20
+      IF ( ( NA ) .LE. 0 ) GO TO 130
+      GO TO 20
   110 DO J=1,M
          Y(J) = W(J)
       END DO
       IBR = 1
       GO TO  20
-  130 IF (M1) 140,140,150
-  140 IF (M2) 110,110,200
-  150 IF (M2) 170,170,160
-  160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 200,200,170
-  170 IF (IBR) 180,180,190
-  180 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 110,190,190
+  130 IF ( ( M1 ) .LE. 0 ) GO TO 140
+      GO TO 150
+  140 IF ( ( M2 ) .LE. 0 ) GO TO 110
+      GO TO 200
+  150 IF ( ( M2 ) .LE. 0 ) GO TO 170
+      GO TO 160
+  160 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+     &GO TO 200
+      GO TO 170
+  170 IF ( ( IBR ) .LE. 0 ) GO TO 180
+      GO TO 190
+  180 IF ( ( ABS ( BM1 ( M1 ) - BD ( ID ) ) - ABS ( BM1 ( M1 ) - RT ) )
+     &.LT. 0 ) GO TO 110
+      GO TO 190
   190 RT = RT-BM1(M1)
       M1 = M1-1
       GO TO 230
-  200 IF (IBR) 210,210,220
-  210 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 110,220,220
+  200 IF ( ( IBR ) .LE. 0 ) GO TO 210
+      GO TO 220
+  210 IF ( ( ABS ( BM2 ( M2 ) - BD ( ID ) ) - ABS ( BM2 ( M2 ) - RT ) )
+     &.LT. 0 ) GO TO 110
+      GO TO 220
   220 RT = RT-BM2(M2)
       M2 = M2-1
   230 DO J=1,M
@@ -119282,14 +119967,16 @@ C
       M1 = NM1
       M2 = NM2
       IA = NA
-   20 IF (IA)  50, 50, 30
+   20 IF ( ( IA ) .LE. 0 ) GO TO 50
+      GO TO 30
    30 RT = AA(IA)
       IF (ND .EQ. 0) RT = -RT
       IA = IA-1
       DO J=1,M
          Y(J) = RT*W(J)
       END DO
-   50 IF (ID) 280,280, 60
+   50 IF ( ( ID ) .LE. 0 ) GO TO 280
+      GO TO 60
    60 RT = BD(ID)
       ID = ID-1
       IF (ID .EQ. 0) IBR = 1
@@ -119303,7 +119990,8 @@ C
       U(1) = A(1)/DEN
       W(1) = Y(1)/DEN
       V = C(M)
-      IF (MM2-2)  90, 70, 70
+      IF ( ( MM2 - 2 ) .LT. 0 ) GO TO 90
+      GO TO 70
    70 DO J=2,MM2
          DEN = B(J)-RT-A(J)*D(J-1)
          D(J) = C(J)/DEN
@@ -119320,7 +120008,8 @@ C
       BH = BH-V*U(M-2)
       YM = YM-V*W(M-2)
       DEN = BH-AM*D(M-1)
-      IF (DEN) 100,110,100
+      IF ( ( DEN ) .EQ. 0 ) GO TO 110
+      GO TO 100
   100 W(M) = (YM-AM*W(M-1))/DEN
       GO TO 120
   110 W(M) = 1.
@@ -119329,23 +120018,35 @@ C
          K = M-J
          W(K) = W(K)-D(K)*W(K+1)-U(K)*W(M)
       END DO
-      IF (NA) 160,160, 20
+      IF ( ( NA ) .LE. 0 ) GO TO 160
+      GO TO 20
   140 DO J=1,M
          Y(J) = W(J)
       END DO
       IBR = 1
       GO TO  20
-  160 IF (M1) 170,170,180
-  170 IF (M2) 140,140,230
-  180 IF (M2) 200,200,190
-  190 IF (ABS(BM1(M1))-ABS(BM2(M2))) 230,230,200
-  200 IF (IBR) 210,210,220
-  210 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 140,220,220
+  160 IF ( ( M1 ) .LE. 0 ) GO TO 170
+      GO TO 180
+  170 IF ( ( M2 ) .LE. 0 ) GO TO 140
+      GO TO 230
+  180 IF ( ( M2 ) .LE. 0 ) GO TO 200
+      GO TO 190
+  190 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+     &GO TO 230
+      GO TO 200
+  200 IF ( ( IBR ) .LE. 0 ) GO TO 210
+      GO TO 220
+  210 IF ( ( ABS ( BM1 ( M1 ) - BD ( ID ) ) - ABS ( BM1 ( M1 ) - RT ) )
+     &.LT. 0 ) GO TO 140
+      GO TO 220
   220 RT = RT-BM1(M1)
       M1 = M1-1
       GO TO 260
-  230 IF (IBR) 240,240,250
-  240 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 140,250,250
+  230 IF ( ( IBR ) .LE. 0 ) GO TO 240
+      GO TO 250
+  240 IF ( ( ABS ( BM2 ( M2 ) - BD ( ID ) ) - ABS ( BM2 ( M2 ) - RT ) )
+     &.LT. 0 ) GO TO 140
+      GO TO 250
   250 RT = RT-BM2(M2)
       M2 = M2-1
   260 DO J=1,M
@@ -119389,7 +120090,8 @@ C
       M2 = NM2
       IA = NA
    20 IFLG = 0
-      IF (ID)  90, 90, 30
+      IF ( ( ID ) .LE. 0 ) GO TO 90
+      GO TO 30
    30 CRT = BD(ID)
       ID = ID-1
 C
@@ -119404,30 +120106,37 @@ C
          W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
       END DO
       DEN = B(1)-CRT-C(1)*D(2)
-      IF (CABS(DEN))  50, 60, 50
+      IF ( ( CABS ( DEN ) ) .EQ. 0 ) GO TO 60
+      GO TO 50
    50 Y(1) = (Y(1)-C(1)*W(2))/DEN
       GO TO  70
    60 Y(1) = (1.,0.)
    70 DO J=2,M
          Y(J) = W(J)-D(J)*Y(J-1)
       END DO
-   90 IF (M1) 100,100,120
-  100 IF (M2) 210,210,110
+   90 IF ( ( M1 ) .LE. 0 ) GO TO 100
+      GO TO 120
+  100 IF ( ( M2 ) .LE. 0 ) GO TO 210
+      GO TO 110
   110 RT = BM2(M2)
       M2 = M2-1
       GO TO 170
-  120 IF (M2) 130,130,140
+  120 IF ( ( M2 ) .LE. 0 ) GO TO 130
+      GO TO 140
   130 RT = BM1(M1)
       M1 = M1-1
       GO TO 170
-  140 IF (ABS(BM1(M1))-ABS(BM2(M2))) 160,160,150
+  140 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+     &GO TO 160
+      GO TO 150
   150 RT = BM1(M1)
       M1 = M1-1
       GO TO 170
   160 RT = BM2(M2)
       M2 = M2-1
   170 Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)
-      IF (MM-2) 200,180,180
+      IF ( ( MM - 2 ) .LT. 0 ) GO TO 200
+      GO TO 180
 C
 C MATRIX MULTIPLICATION
 C
@@ -119440,7 +120149,8 @@ C
       Y(M-1) = Y1
       IFLG = 1
       GO TO  20
-  210 IF (IA) 240,240,220
+  210 IF ( ( IA ) .LE. 0 ) GO TO 240
+      GO TO 220
   220 RT = AA(IA)
       IA = IA-1
       IFLG = 1
@@ -119450,7 +120160,8 @@ C
       DO J=1,M
          Y(J) = RT*Y(J)
       END DO
-  240 IF (IFLG) 250,250, 20
+  240 IF ( ( IFLG ) .LE. 0 ) GO TO 250
+      GO TO 20
   250 DO J=1,M
          YY(J) = REAL(Y(J))
       END DO
@@ -119492,7 +120203,8 @@ C
       M2 = NM2
       IA = NA
    20 IFLG = 0
-      IF (ID) 110,110, 30
+      IF ( ( ID ) .LE. 0 ) GO TO 110
+      GO TO 30
    30 CRT = BD(ID)
       ID = ID-1
       IFLG = 1
@@ -119506,7 +120218,8 @@ C
       U(1) = A(1)/DEN
       Y(1) = Y(1)/DEN
       V = CMPLX(C(M),0.)
-      IF (MM2-2)  60, 40, 40
+      IF ( ( MM2 - 2 ) .LT. 0 ) GO TO 60
+      GO TO 40
    40 DO J=2,MM2
          DEN = B(J)-CRT-A(J)*D(J-1)
          D(J) = C(J)/DEN
@@ -119523,7 +120236,8 @@ C
       BH = BH-V*U(M-2)
       YM = YM-V*Y(M-2)
       DEN = BH-AM*D(M-1)
-      IF (CABS(DEN))  70, 80, 70
+      IF ( ( CABS ( DEN ) ) .EQ. 0 ) GO TO 80
+      GO TO 70
    70 Y(M) = (YM-AM*Y(M-1))/DEN
       GO TO  90
    80 Y(M) = (1.,0.)
@@ -119532,16 +120246,21 @@ C
          K = M-J
          Y(K) = Y(K)-D(K)*Y(K+1)-U(K)*Y(M)
       END DO
-  110 IF (M1) 120,120,140
-  120 IF (M2) 230,230,130
+  110 IF ( ( M1 ) .LE. 0 ) GO TO 120
+      GO TO 140
+  120 IF ( ( M2 ) .LE. 0 ) GO TO 230
+      GO TO 130
   130 RT = BM2(M2)
       M2 = M2-1
       GO TO 190
-  140 IF (M2) 150,150,160
+  140 IF ( ( M2 ) .LE. 0 ) GO TO 150
+      GO TO 160
   150 RT = BM1(M1)
       M1 = M1-1
       GO TO 190
-  160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 180,180,170
+  160 IF ( ( ABS ( BM1 ( M1 ) ) - ABS ( BM2 ( M2 ) ) ) .LE. 0 )
+     &GO TO 180
+      GO TO 170
   170 RT = BM1(M1)
       M1 = M1-1
       GO TO 190
@@ -119552,7 +120271,8 @@ C MATRIX MULTIPLICATION
 C
   190 YH = Y(1)
       Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)+A(1)*Y(M)
-      IF (MM-2) 220,200,200
+      IF ( ( MM - 2 ) .LT. 0 ) GO TO 220
+      GO TO 200
   200 DO J=2,MM
          Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
          Y(J-1) = Y1
@@ -119562,7 +120282,8 @@ C
       Y(M-1) = Y1
       IFLG = 1
       GO TO  20
-  230 IF (IA) 260,260,240
+  230 IF ( ( IA ) .LE. 0 ) GO TO 260
+      GO TO 240
   240 RT = AA(IA)
       IA = IA-1
       IFLG = 1
@@ -119572,7 +120293,8 @@ C
       DO J=1,M
          Y(J) = RT*Y(J)
       END DO
-  260 IF (IFLG) 270,270, 20
+  260 IF ( ( IFLG ) .LE. 0 ) GO TO 270
+      GO TO 20
   270 DO J=1,M
          YY(J) = REAL(Y(J))
       END DO
@@ -119604,7 +120326,8 @@ C
       DO J=2,NM
          BNORM = AMAX1(BNORM,ABS(BN(J)))
          ARG = AN(J)*CN(J-1)
-         IF (ARG) 220, 30, 30
+         IF ( ( ARG ) .LT. 0 ) GO TO 220
+         GO TO 30
    30    B(J) = SIGN(SQRT(ARG),AN(J))
       END DO
       CNV = EPS*BNORM
@@ -119618,7 +120341,8 @@ C
          IFD = IF-I4
          DO I=I4,IFD,I4
             CALL INDXB (I,L,IB,NB)
-            IF (NB) 100,100, 50
+            IF ( ( NB ) .LE. 0 ) GO TO 100
+            GO TO 50
    50       JS = I-IPL
             JF = JS+NB-1
             LS = 0
@@ -119628,7 +120352,8 @@ C
                AH(LS) = B(J)
             END DO
             CALL TQLRT0 (NB,BH,AH,IERROR)
-            IF (IERROR) 210, 70,210
+            IF ( ( IERROR ) .EQ. 0 ) GO TO 70
+            GO TO 210
    70       LH = IB-1
             DO J=1,NB
                LH = LH+1
@@ -119667,10 +120392,12 @@ C
       B(LH) = B(J2)
       J2 = J2+1
       LH = LH+1
-      IF (J2-N2M2) 170,170,190
+      IF ( ( J2 - N2M2 ) .LE. 0 ) GO TO 170
+      GO TO 190
   180 J2 = J2+1
       J1 = J1+1
-      IF (J2-N2M2) 170,170,190
+      IF ( ( J2 - N2M2 ) .LE. 0 ) GO TO 170
+      GO TO 190
   190 B(LH) = B(N2M2+1)
       CALL INDXB (IF,K-1,J1,J2)
       J2 = J1+NMP+NMP
@@ -119871,6 +120598,7 @@ C
       REAL :: PSGF
       COMPLEX :: CF, CX, FSG, HSG, DD, F, FP, FPP, CDIS, R1, R2, R3
       EXTERNAL PSGF, PPSPF, PPSGF
+      REAL :: NSWC_AI_R4
 C
 C     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
 C     WITH COEFFICIENTS AN,BN,CN
@@ -119888,7 +120616,10 @@ C
       IZ = N
       IZM = IZ-1
       IZM2 = IZ-2
-      IF (BP(N)-BP(1))  10,420, 30
+      NSWC_AI_R4 = BP ( N ) - BP ( 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 10
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      GO TO 30
    10 DO J=1,N
          NT = N-J
          BH(J) = BP(NT+1)
@@ -119900,22 +120631,32 @@ C
    50 NCMPLX = 0
       MODIZ = MOD(IZ,2)
       IS = 1
-      IF (MODIZ)  60, 70, 60
-   60 IF (A(1)) 100,420, 70
+      IF ( ( MODIZ ) .EQ. 0 ) GO TO 70
+      GO TO 60
+   60 NSWC_AI_R4 = A ( 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 100
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      GO TO 70
    70 XL = BH(1)
       DB = BH(3)-BH(1)
    80 XL = XL-DB
-      IF (PSGF(XL,IZ,C,A,BH))  80, 80, 90
+      IF ( ( PSGF ( XL , IZ , C , A , BH ) ) .LE. 0 ) GO TO 80
+      GO TO 90
    90 SGN = -1.
       CBP(1) = CMPLX(BSRH(XL,BH(1),IZ,C,A,BH,PSGF,SGN),0.)
       IS = 2
   100 IF = IZ-1
-      IF (MODIZ) 110,120,110
-  110 IF (A(1)) 120,420,150
+      IF ( ( MODIZ ) .EQ. 0 ) GO TO 120
+      GO TO 110
+  110 NSWC_AI_R4 = A ( 1 )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 120
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      GO TO 150
   120 XR = BH(IZ)
       DB = BH(IZ)-BH(IZ-2)
   130 XR = XR+DB
-      IF (PSGF(XR,IZ,C,A,BH)) 130,140,140
+      IF ( ( PSGF ( XR , IZ , C , A , BH ) ) .LT. 0 ) GO TO 130
+      GO TO 140
   140 SGN = 1.
       CBP(IZ) = CMPLX(BSRH(BH(IZ),XR,IZ,C,A,BH,PSGF,SGN),0.)
       IF = IZ-2
@@ -119925,8 +120666,12 @@ C
          SGN = -1.
          XM = BSRH(XL,XR,IZ,C,A,BH,PPSPF,SGN)
          PSG = PSGF(XM,IZ,C,A,BH)
-         IF (ABS(PSG)-EPS) 180,180,160
-  160    IF (PSG*PPSGF(XM,IZ,C,A,BH)) 170,180,190
+         IF ( ( ABS ( PSG ) - EPS ) .LE. 0 ) GO TO 180
+         GO TO 160
+  160    NSWC_AI_R4 = PSG * PPSGF ( XM , IZ , C , A , BH )
+         IF ( NSWC_AI_R4 .LT. 0 ) GO TO 170
+         IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 180
+         GO TO 190
 C
 C     CASE OF A REAL ZERO
 C
@@ -119958,27 +120703,32 @@ C
             FP = FP+DD
             FPP = FPP-DD*DD
          END DO
-         IF (MODIZ) 230,220,230
+         IF ( ( MODIZ ) .EQ. 0 ) GO TO 220
+         GO TO 230
   220    F = (1.,0.)-FSG-HSG
          GO TO 240
   230    F = (1.,0.)+FSG+HSG
   240    I3 = 0
-         IF (CABS(FP)) 260,260,250
+         IF ( ( CABS ( FP ) ) .LE. 0 ) GO TO 260
+         GO TO 250
   250    I3 = 1
          R3 = -F/FP
   260    I2 = 0
-         IF (CABS(FPP)) 320,320,270
+         IF ( ( CABS ( FPP ) ) .LE. 0 ) GO TO 320
+         GO TO 270
   270    I2 = 1
          CDIS = CSQRT(FP**2-2.*F*FPP)
          R1 = CDIS-FP
          R2 = -FP-CDIS
-         IF (CABS(R1)-CABS(R2)) 290,290,280
+         IF ( ( CABS ( R1 ) - CABS ( R2 ) ) .LE. 0 ) GO TO 290
+         GO TO 280
   280    R1 = R1/FPP
          GO TO 300
   290    R1 = R2/FPP
   300    R2 = 2.*F/FPP/R1
          IF (CABS(R2) .LT. CABS(R1)) R1 = R2
-         IF (I3) 330,330,310
+         IF ( ( I3 ) .LE. 0 ) GO TO 330
+         GO TO 310
   310    IF (CABS(R3) .LT. CABS(R1)) R1 = R3
          GO TO 330
   320    R1 = R3
@@ -119986,14 +120736,18 @@ C
          IT = IT+1
          IF (IT .GT. 50) GO TO 420
          IF (CABS(R1) .GT. SCNV) GO TO 200
-         IF (ICV) 340,340,350
+         IF ( ( ICV ) .LE. 0 ) GO TO 340
+         GO TO 350
   340    ICV = 1
          GO TO 200
   350    CBP(IG) = CX
          CBP(IG+1) = CONJG(CX)
   360 CONTINUE
       END DO
-      IF (CABS(CBP(N))-CABS(CBP(1))) 370,420,390
+      NSWC_AI_R4 = CABS ( CBP ( N ) ) - CABS ( CBP ( 1 ) )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 370
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 420
+      GO TO 390
   370 NHALF = N/2
       DO J=1,NHALF
          NT = N-J
@@ -120003,7 +120757,8 @@ C
       END DO
   390 NCMPLX = 1
       DO J=2,IZ
-         IF (AIMAG(CBP(J))) 430,400,430
+         IF ( ( AIMAG ( CBP ( J ) ) ) .EQ. 0 ) GO TO 400
+         GO TO 430
   400 CONTINUE
       END DO
       NCMPLX = 0
@@ -120030,7 +120785,8 @@ C
          FSG = FSG*A(J)*DD
          HSG = HSG*C(J)*DD
       END DO
-      IF (MOD(IZ,2))  30, 20, 30
+      IF ( ( MOD ( IZ , 2 ) ) .EQ. 0 ) GO TO 20
+      GO TO 30
    20 PSGF = 1.-FSG-HSG
       RETURN
    30 PSGF = 1.+FSG+HSG
@@ -120045,18 +120801,23 @@ C
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
       REAL :: BSRH
+      REAL :: NSWC_AI_R4
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
       XL = XLL
       XR = XRR
       DX = .5*ABS(XR-XL)
    10 X = .5*(XL+XR)
-      IF (SGN*F(X,IZ,C,A,BH))  30, 50, 20
+      NSWC_AI_R4 = SGN * F ( X , IZ , C , A , BH )
+      IF ( NSWC_AI_R4 .LT. 0 ) GO TO 30
+      IF ( NSWC_AI_R4 .EQ. 0 ) GO TO 50
+      GO TO 20
    20 XR = X
       GO TO  40
    30 XL = X
    40 DX = .5*DX
-      IF (DX-CNV)  50, 50, 10
+      IF ( ( DX - CNV ) .LE. 0 ) GO TO 50
+      GO TO 10
    50 BSRH = .5*(XL+XR)
       END FUNCTION BSRH
 

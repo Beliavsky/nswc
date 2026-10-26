@@ -63,8 +63,60 @@ arithmetic IF statements can also cause secondary undefined-label and callback
 diagnostics. Successful legacy compilation and numerical comparisons do not
 yet imply strict Fortran 2023 conformance.
 
-Next passes should review the remaining legacy DO loops, convert arithmetic IF
-while preserving single evaluation and numeric precision, and replace assigned
+## Arithmetic IF conversion
+
+`tools/modernize_arithmetic_if.py` replaces all 303 arithmetic IF statements.
+The strict-standard arithmetic IF diagnostic count is now zero; deleted DO and
+assigned-label features remain for subsequent passes.
+The 126 cases with two distinct destinations become one logical IF followed by
+an unconditional GO TO. The 177 three-way cases first assign the expression to
+a local temporary, then test its sign and zero value. Each expression is
+evaluated once. Every original destination label and labelled entry point is
+preserved, including labels attached to the arithmetic IF itself.
+
+GNU type inference confirms the expression types before conversion: 83 integer,
+82 default real, and 12 double precision expressions require temporaries.
+There are 93 new local variables in 87 procedures, shared between expressions
+of the same type within each procedure. They have no initialization or SAVE
+attribute and do not change procedure signatures. Generated free-form sources
+coalesce their declarations with other locals where appropriate.
+
+The review uses ASSOCIATE in a temporary compiler probe to infer expression
+types; maintained sources use ordinary Fortran 90 declarations and statements.
+Normal regeneration needs only the recorded manifest and Python's standard
+library. The [review manifest](../tools/arithmetic-if.json) records expressions,
+destinations, inferred types, temporary declarations and input/output hashes.
+Its physical source-record indices are zero-based and refer to the input of
+this pass, after the second DO conversion.
+
+The converter verifies unchanged existing compiler symbol records and comment
+order. Regression probes compare all destination patterns, both signs of zero,
+tiny and large values, infinities, and function calls with observable effects.
+They verify single evaluation at both unoptimized and optimized settings.
+No portable NaN branch behavior is claimed for the old arithmetic IF construct.
+The [Fortran standards committee's deletion rationale](https://wg5-fortran.org/N2101-N2150/N2127.pdf)
+describes why it was removed.
+
+```sh
+python tools/validate_arithmetic_if.py
+python tools/validate_sources.py
+python tools/validate_module.py
+```
+
+For another fixed-form source, review its expression types and verify the
+result before creating new output and manifest files:
+
+```sh
+python tools/modernize_arithmetic_if.py source.f --review --manifest review.json --output updated.f
+```
+
+The fixed-form reconstruction applies arithmetic IF conversion after the
+second DO pass. Existing DATA values, purity selections, call graphs, intents
+and intrinsic selections are unchanged; only their source review hashes are
+refreshed. Source partitions, source links, module bindings and Intel-generated
+interfaces are regenerated together.
+
+Next passes should review the remaining legacy DO loops and replace assigned
 labels after checking their possible use as FORMAT identifiers. COMMON,
 EQUIVALENCE, statement functions and computed GO TO are obsolescent features and
 can be addressed separately after the deleted features.

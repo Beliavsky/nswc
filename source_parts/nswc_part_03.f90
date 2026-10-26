@@ -1,3 +1,147 @@
+subroutine ckps(z, r, zr, nu, w1, w2)
+implicit none
+real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex :: nu
+complex, intent(inout) :: w1, w2
+integer :: k
+real :: ak, eps, eps0, phi, s, u, x, y
+real :: anorm
+complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
+   & t2
+real, parameter :: tol = 1.e-10
+real, parameter :: pi = 3.14159265358979
+real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+   & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
+interface
+   pure elemental function cdiv(a,b)
+      implicit none
+      complex, intent(in) :: a
+      complex, intent(in) :: b
+      complex :: cdiv
+   end function cdiv
+   pure elemental function cgam0(z)
+      implicit none
+      complex, intent(in) :: z
+      complex :: cgam0
+   end function cgam0
+   pure elemental subroutine cgamma(mo,z,w)
+      implicit none
+      integer, intent(in) :: mo
+      complex, intent(in) :: z
+      complex, intent(inout) :: w
+   end subroutine cgamma
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!
+!        Calculation of the modified Bessel functions
+!
+!                  w1 = k  (z)  AND  w2 = k    (z)
+!                        nu                nu+1
+!
+!     For a complex argument z where abs(z) .LE. 2 and a complex
+!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
+!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
+!     series expansions are used.
+!
+!-----------------------------------------------------------------------
+!-----------------------
+!-----------------------
+!-----------------------
+anorm(t) = max(abs(real(t)), abs(aimag(t)))
+!-----------------------------------------------------------------------
+!
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
+!
+eps = spmpar(1)
+!
+!-----------------------------------------------------------------------
+eps0 = max(eps, 5.e-15)
+!
+!                     cl = - ln(z/2)
+!
+phi = atan2(aimag(z),real(z))
+cl = cmplx(-log(r), -phi)
+mu = nu*cl
+c = exp(mu)
+!
+!                   g1 = gamma(1 + nu)
+!                   g2 = gamma(1 - nu)
+!
+t = pi*nu
+if (anorm(nu) > tol) go to 10
+a = 1.0 + (t*t)/6.0
+go to 20
+10 a = t/sin(t)
+!
+20 s = real(nu)**2 + aimag(nu)**2
+if (s >= 1.0) go to 21
+t = cgam0(nu)
+g1 = 1.0/t
+g2 = a*t
+go to 30
+21 t = 0.5 + (0.5 + nu)
+call cgamma(0, t, g1)
+g2 = cdiv(a,g1)
+!
+30 gm2 = 0.5*(g1 + g2)
+if (s > 0.04) go to 31
+!
+!         The following is the Taylor series for
+!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
+!
+t = nu*nu
+w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
+   & d(3))*t + d(2))*t + d(1))
+gm1 = a*w1
+go to 40
+31 gm1 = 0.5*(g1 - g2)/nu
+!
+!            Initialization of the summation
+!
+40 p = 0.5*c*g1
+q = 0.5*cdiv(g2,c)
+x = real(mu)
+y = aimag(mu)
+if (anorm(mu) > tol) go to 50
+u = x*y
+sh = cmplx(1.0, u/3.0)
+ch = cmplx(1.0, u)
+go to 60
+50 t = cmplx (-y, x)
+sh = sin(t)/t
+ch = cos(t)
+!
+60 f = gm1*ch + gm2*cl*sh
+c = (1.0, 0.0)
+w1 = f
+w2 = p
+!
+!                 Summation of series
+!
+t = 0.25*(z*z)
+do k = 1, 50
+   ak = k
+   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
+   p = p/(ak - nu)
+   q = q/(ak + nu)
+   c = c*t/ak
+   t1 = c*f
+   w1 = w1 + t1
+   t2 = c*(p - ak*f)
+   w2 = w2 + t2
+   if (anorm(t1) <= eps0*anorm(w1)) go to 80
+end do
+!
+80 w2 = w2 * zr
+end subroutine ckps
+
 pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
 implicit none
 integer, intent(in) :: n
@@ -662,9 +806,12 @@ tm(2) = 0.0
 if (mo /= 0) go to 002
 tm(1) = az(1)
 tm(2) = az(2)
-002 if (zs - 1.0) 020,020,003
-003 if (zs - 289.0) 004,010,010
-004 if (az(1) + 0.096*az(2)*az(2)) 020,020,015
+002 if ( ( zs - 1.0 ) <= 0 ) go to 020
+go to 003
+003 if ( ( zs - 289.0 ) < 0 ) go to 004
+go to 010
+004 if ( ( az ( 1 ) + 0.096 * az ( 2 ) * az ( 2 ) ) <= 0 ) go to 020
+go to 015
 010 qm = 1.25331413731550*exp(-0.5*zl(1) - tm(1))
 qf(1) = qm*cos(-0.5*zl(2) - tm(2))
 qf(2) = qm*sin(-0.5*zl(2) - tm(2))
@@ -3105,8 +3252,12 @@ implicit none
 !     .LT. 0.0 or if z is on the negative imaginary axis.
 !---------------------------------------------------------
 complex, intent(in) :: z
+real :: nswc_ai_r4
 !     ----------
-if (real(z)) 10,20,30
+nswc_ai_r4 = real ( z )
+if ( nswc_ai_r4 < 0 ) go to 10
+if ( nswc_ai_r4 == 0 ) go to 20
+go to 30
 10 cflect = -z
 return
 20 cflect = cmplx(0.0, abs(aimag(z)))
@@ -5906,7 +6057,7 @@ integer, intent(in) :: iop
 integer, intent(inout) :: ko
 integer, intent(in) :: n0
 real, intent(inout) :: a, p, x(*), y(*)
-integer :: k, m, n
+integer :: k, m, n, nswc_ai_i4
 real :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, tausq, u, &
    & v, w, xk, yk, ykm1, z, kom, l
 real, parameter :: pi = 3.1415926535898
@@ -6096,7 +6247,10 @@ m = 1
 f = 0.0
 aj1 = h(2) - h(1)
 circm = aj1
-if (iop - 2) 140,150,160
+nswc_ai_i4 = iop - 2
+if ( nswc_ai_i4 < 0 ) go to 140
+if ( nswc_ai_i4 == 0 ) go to 150
+go to 160
 !
 140 sum = e(m)*aj1
 141 m = m + 1
@@ -6594,7 +6748,7 @@ real, intent(in) :: r0, sx, sy
 real, intent(in) :: k
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, sa, seps1, &
-   & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9, k8
+   & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9, k8, nswc_ai_r4
 real, parameter :: v(16) = [.4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
    & .4213512761306353e+00, .5068999089322294e+00, .5877157572407623e+00, .6630442669302152e+00, .7321821187402897e+00, &
    & .7944837959679424e+00, .8493676137325700e+00, .8963211557660521e+00, .9349060759377397e+00, .9647622555875064e+00, &
@@ -6960,7 +7114,10 @@ go to 110
 !-----------------------------------------------------------------------
 170 if (s2 > 2.e-2 .and. h8 + k8 < 2.e2) go to 172
 if (abs(e3 - f) > 0.4*f) go to 172
-if (d1 - t) 200,180,195
+nswc_ai_r4 = d1 - t
+if ( nswc_ai_r4 < 0 ) go to 200
+if ( nswc_ai_r4 == 0 ) go to 180
+go to 195
 172 if (e3 < 2.e4*eps) go to 195
 if (f < 2.e4*eps) go to 200
 if (max(h8/s1,k8/s2) < 2.0) go to 175
@@ -6968,8 +7125,14 @@ if (s2 < 1.e-5) go to 175
 if (s2 >= 5.e-4) go to 180
 if (s1 /= s2) go to 195
 175 if (min(e3,f) < 2.5e-2*sqeps) goto 185
-180 if (e3 - f) 200,190,195
-185 if (e3 - f) 195,190,200
+180 nswc_ai_r4 = e3 - f
+if ( nswc_ai_r4 < 0 ) go to 200
+if ( nswc_ai_r4 == 0 ) go to 190
+go to 195
+185 nswc_ai_r4 = e3 - f
+if ( nswc_ai_r4 < 0 ) go to 195
+if ( nswc_ai_r4 == 0 ) go to 190
+go to 200
 190 if (s0 >= s9) go to 200
 195 e3 = f
 d1 = t
@@ -9583,7 +9746,7 @@ pure subroutine qtcrt(a, z)
 implicit none
 real, intent(in) :: a(5)
 complex, intent(inout) :: z(4)
-real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4)
+real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4), nswc_ai_r4
 complex :: w
 interface
    pure subroutine aord(a,n)
@@ -9702,7 +9865,10 @@ return
 !
 60 t = real(z(1))
 x = 0.0
-if (t) 61,70,62
+nswc_ai_r4 = t
+if ( nswc_ai_r4 < 0 ) go to 61
+if ( nswc_ai_r4 == 0 ) go to 70
+go to 62
 61 h = abs(real(z(2))) + abs(aimag(z(2)))
 if (abs(t) <= h) go to 70
 go to 80
@@ -9757,8 +9923,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(5)
 double precision, intent(inout) :: zr(4), zi(4)
-double precision :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, &
-   & v1, v2, w(2), x, x1, x2, x3
+double precision :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, v1, v2, w(2), x, x1, x2, x3, nswc_ai_r8
 interface
    pure subroutine daord(a,n)
       implicit none
@@ -9870,7 +10035,10 @@ return
 !
 60 t = zr(1)
 x = 0.d0
-if (t) 61,70,62
+nswc_ai_r8 = t
+if ( nswc_ai_r8 < 0 ) go to 61
+if ( nswc_ai_r8 == 0 ) go to 70
+go to 62
 61 h = abs(zr(2)) + abs(zi(2))
 if (abs(t) <= h) go to 70
 go to 80
@@ -10425,121 +10593,4 @@ do j = 1,l2
    ots = ts
 end do
 end subroutine fxshfr
-
-subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
-implicit none
-integer :: nn
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
-integer :: nz
-integer :: n, type, i, j
-double precision :: ui, vi
-real :: mp, omp, ee, relstp, t, zm
-logical :: tried
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-interface
-   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
-      implicit none
-      double precision, intent(in) :: a
-      double precision, intent(in) :: b1
-      double precision, intent(in) :: c
-      double precision, intent(inout) :: sr
-      double precision, intent(inout) :: si
-      double precision, intent(inout) :: lr
-      double precision, intent(inout) :: li
-   end subroutine quadpl
-end interface
-!
-!     Variable-shift k-polynomial iteration for A
-!     quadratic factor converges only if the zeros are
-!     equimodular or nearly so.
-!
-!     uu,vv - Coefficients of starting quadratic
-!     nz - Number of zero found
-!
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-n = nn - 1
-nz = 0
-tried = .false.
-u = uu
-v = vv
-j = 0
-! Main loop
-10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
-!
-!     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
-!     to multiple or nearly equal and of opposite sign
-!
-if (abs(abs(szr) - abs(lzr)) > 1.d-2*abs(lzr)) &
-   & return
-!
-!     Evaluate polynomial by quadratic synthetic division
-!
-call quadsd(nn, u, v, p, qp, a, b)
-mp = abs(a - szr*b) + abs(szi*b)
-!
-!     Compute a rigorous bound on the rounding error in
-!     EVALUTING p
-!
-zm = sqrt(abs(sngl(v)))
-ee = 2.0*abs(sngl(qp(1)))
-t = -szr*b
-do 20 i = 2,n
-   ee = ee*zm + abs(sngl(qp(i)))
-20 continue
-ee = ee*zm + abs(sngl(a) + t)
-ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
-   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
-   & 2.0*are*abs(t)
-!
-!     Iteration has converged sufficiently if the
-!     polynomial value is less than 20 times this bound
-!
-if (mp > 20.0*ee) go to 30
-nz = 2
-return
-30 j = j + 1
-!
-!     STOP ITERATION AFTER 20 STEPS
-!
-if (j > 20) return
-if (j < 2) go to 50
-if (relstp > 0.01 .or. mp < omp .or. tried) go to 50
-!
-!     A cluster appears to be stalling the convergence.
-!     Five fixed shift steps are taken with A u,v close
-!     to the cluster
-!
-if (relstp < eta) relstp = eta
-relstp = sqrt(relstp)
-u = u - u*relstp
-v = v + v*relstp
-call quadsd(nn, u, v, p, qp, a, b)
-do i = 1,5
-   call calcsc(type, n, k, qk)
-   call nextk(type, n, qp, k, qk)
-end do
-tried = .true.
-j = 0
-50 omp = mp
-!
-!     Calculate next k polynomial and new u and v
-!
-call calcsc(type, n, k, qk)
-call nextk(type, n, qp, k, qk)
-call calcsc(type, n, k, qk)
-call newest(type, ui, vi, nn, p, k)
-!
-!     If vi is zero the iteration is not converging
-!
-if (vi == 0.d0) return
-relstp = abs((vi - v)/vi)
-u = ui
-v = vi
-go to 10
-end subroutine quadit
 

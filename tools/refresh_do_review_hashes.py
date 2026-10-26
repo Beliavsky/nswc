@@ -50,6 +50,11 @@ def migrate(before, after):
     if transform(before).data != after:
         raise ValueError('Source change is not exactly the reviewed DO transformation')
     verify(before, after)
+    return migrate_reviewed_pipeline(before, after)
+
+
+def migrate_reviewed_pipeline(before, after, expected_free=None):
+    """Refresh hashes after the calling migration has verified its exact edit."""
     read = lambda name: json.loads((ROOT / 'tools' / name).read_text())
     data_old, pure_old, generic_old = [read(n) for n in
                                       ('data-constants.json', 'procedure-purity.json', 'generic-intrinsics.json')]
@@ -63,7 +68,9 @@ def migrate(before, after):
     generic_new, gc = refresh(old, new, generic_old)
     old = returns(coalesce(generics(old, generic_old)))
     new = returns(coalesce(generics(new, generic_new)))
-    if old != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if expected_free is None:
+        expected_free = (ROOT / 'nswc.f90').read_text(encoding='ascii')
+    if old != expected_free:
         raise ValueError('Old reviewed pipeline does not reproduce maintained free form')
     return {'data-constants.json': data_new, 'procedure-purity.json': pure_new,
             'generic-intrinsics.json': generic_new}, {'data': dc, 'purity': pc, 'generics': gc}

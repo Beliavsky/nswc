@@ -1,3 +1,119 @@
+pure elemental complex function cli(z)
+implicit none
+complex, intent(in) :: z
+integer :: n
+real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
+real, parameter :: c = 1.64493406684823
+real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
+   & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
+   & 2.29178211549926e-2, -2.31276449354844e-2, -2.33038680700203e-2, -2.34539766464373e-2, -2.35833786876607e-2, - &
+   & 2.36960832049849e-2, -2.37951264448373e-2, -2.38828504258091e-2, -2.39610907251825e-2, -2.40313063764460e-2, - &
+   & 2.40946717197585e-2, -2.41521426124012e-2, -2.42045049812210e-2, -2.42524109782181e-2, -2.42964062815807e-2, - &
+   & 2.43369509729144e-2]
+interface
+   pure elemental function cpabs(x,y)
+      implicit none
+      real, intent(in) :: x
+      real, intent(in) :: y
+      real :: cpabs
+   end function cpabs
+end interface
+!     ******************************************************************
+!     Computation of the complex logarithmic integral
+!     ******************************************************************
+!     ---------------------
+!     c = pi**2/6
+!     ---------------------
+!     ---------------------
+!     ---------------------
+az(1) = real(z)
+az(2) = aimag(z)
+r = cpabs(az(1),az(2))
+if (r > 0.5) go to 10
+sr(1) = 0.0
+sr(2) = 0.0
+qf(1) = -az(1)
+qf(2) = -az(2)
+tm(1) = az(1)
+tm(2) = az(2)
+go to 30
+!
+10 if (r < 3.0) go to 20
+zl(1) = log(r)
+zl(2) = atan2(az(2),az(1))
+sr(1) = c + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
+sr(2) = zl(1)*zl(2)
+qf(1) = (-az(1)/r)/r
+qf(2) = (az(2)/r)/r
+tm(1) = qf(1)
+tm(2) = qf(2)
+go to 30
+!
+20 zd(1) = 1.0 + az(1)
+zd(2) = az(2)
+ds = zd(1)*zd(1) + zd(2)*zd(2)
+if (ds == 0.0) go to 100
+dl(1) = 0.5*log(ds)
+dl(2) = atan2(zd(2),zd(1))
+if (ds > 0.25) go to 50
+zl(1) = log(r)
+zl(2) = atan2(-az(2),-az(1))
+sr(1) = -c + (dl(1)*zl(1) - dl(2)*zl(2))
+sr(2) = dl(1)*zl(2) + dl(2)*zl(1)
+qf(1) = zd(1)
+qf(2) = zd(2)
+tm(1) = qf(1)
+tm(2) = qf(2)
+!
+!             Evaluation of the Taylor series
+!
+30 sr(1) = sr(1) + tm(1)
+sr(2) = sr(2) + tm(2)
+sm(1) = 0.0
+sm(2) = 0.0
+pm = 1.0
+40 pm = pm + 1.0
+ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+tm(1) = ts(1)
+tm(2) = ts(2)
+ts(1) = tm(1)/(pm*pm)
+ts(2) = tm(2)/(pm*pm)
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 41
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 80
+41 sm(1) = sm(1) + ts(1)
+sm(2) = sm(2) + ts(2)
+go to 40
+!
+!        Evaluation of the series in  U = -LN(1 + z)
+!
+50 qf(1) = dl(1)*dl(1) - dl(2)*dl(2)
+qf(2) = 2.0*dl(1)*dl(2)
+sr(1) = dl(1) + 0.25*qf(1)
+sr(2) = dl(2) + 0.25*qf(2)
+sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = dl(1)
+tm(2) = dl(2)
+do n = 1,25
+   ts(1) = qb(n)*(tm(1)*qf(1) - tm(2)*qf(2))
+   ts(2) = qb(n)*(tm(1)*qf(2) + tm(2)*qf(1))
+   tm(1) = ts(1)
+   tm(2) = ts(2)
+   if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 60
+   if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
+60 sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+!
+80 cli = cmplx(sr(1) + sm(1), sr(2) + sm(2))
+return
+!
+!                  Evaluation at z = -1
+!
+100 cli = cmplx(-c, 0.0)
+end function cli
+
 pure elemental real function ali(x)
 implicit none
 real, intent(in) :: x
@@ -422,7 +538,7 @@ end function cgam0
 pure elemental real function gamma(a)
 implicit none
 real, intent(in) :: a
-integer :: i, j, m, n
+integer :: i, j, m, n, nswc_ai_i4
 real :: bot, s, t, top, w, x
 double precision :: g, z, lnx
 real, parameter :: pi = 3.1415926535898
@@ -484,7 +600,10 @@ m = int(a) - 1
 !
 !     Let t be the product of a-j when a .GE. 2
 !
-if (m) 20,12,10
+nswc_ai_i4 = m
+if ( nswc_ai_i4 < 0 ) go to 20
+if ( nswc_ai_i4 == 0 ) go to 12
+go to 10
 10 do j = 1,m
    x = x - 1.0
 11 t = x*t
@@ -632,7 +751,7 @@ end function glog
 pure elemental real function gam1(a)
 implicit none
 real, intent(in) :: a
-real :: bot, d, t, top, w
+real :: bot, d, t, top, w, nswc_ai_r4
 real, parameter :: p(7) = [.577215664901533e+00, -.409078193005776e+00, -.230975380857675e+00, .597275330452234e-01, &
    & .766968181649490e-02, -.514889771323592e-02, .589597428611429e-03]
 real, parameter :: q(5) = [.100000000000000e+01, .427569613095214e+00, .158451672430138e+00, .261132021441447e-01, &
@@ -652,7 +771,10 @@ real, parameter :: s2 = .559398236957378e-01
 t = a
 d = a - 0.5
 if (d > 0.0) t = d - 0.5
-if (t) 30,10,20
+nswc_ai_r4 = t
+if ( nswc_ai_r4 < 0 ) go to 30
+if ( nswc_ai_r4 == 0 ) go to 10
+go to 20
 !
 10 gam1 = 0.0
 return
@@ -1053,7 +1175,7 @@ end subroutine dcgama
 pure elemental double precision function dgamma(a)
 implicit none
 double precision, intent(in) :: a
-integer :: j, n
+integer :: j, n, nswc_ai_i4
 double precision :: s, t, x, w
 double precision, parameter :: pi = 3.14159265358979323846264338327950d0
 double precision, parameter :: d = 0.41893853320467274178032973640562d0
@@ -1115,7 +1237,10 @@ n = n - 1
 !
 !     Let t be the product of a-j when a .GE. 2
 !
-if (n) 20,12,10
+nswc_ai_i4 = n
+if ( nswc_ai_i4 < 0 ) go to 20
+if ( nswc_ai_i4 == 0 ) go to 12
+go to 10
 10 do j = 1,n
    x = x - 1.d0
 11 t = x*t
@@ -1286,7 +1411,7 @@ implicit none
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: d, t, w, z
+double precision :: d, t, w, z, nswc_ai_r8
 double precision, parameter :: a0 = .611609510448141581788d-08
 double precision, parameter :: a1 = .624730830116465516210d-08
 double precision, parameter :: b1 = .203610414066806987300d+00
@@ -1333,7 +1458,10 @@ double precision, parameter :: c13 = -.205633841697760710345015413002057d-06
 t = x
 d = x - 0.5d0
 if (d > 0.d0) t = d - 0.5d0
-if (t) 40,10,20
+nswc_ai_r8 = t
+if ( nswc_ai_r8 < 0 ) go to 40
+if ( nswc_ai_r8 == 0 ) go to 10
+go to 20
 !
 10 dgam1 = 0.d0
 return
@@ -1960,7 +2088,7 @@ end subroutine dcpsi
 pure elemental double precision function dpsi(a)
 implicit none
 double precision, intent(in) :: a
-integer :: j, k, l, max, n
+integer :: j, k, l, max, n, nswc_ai_i4
 double precision :: eps, s, t, x, xmax, w
 double precision, parameter :: pi = 3.1415926535897932384626433832795d0
 double precision, parameter :: x0 = .46163214496836234126265954232572d0
@@ -2066,7 +2194,10 @@ n = n - 1
 !
 !     Let t be the sum of 1/(a-j) when a .GE. 2
 !
-if (n) 20,12,10
+nswc_ai_i4 = n
+if ( nswc_ai_i4 < 0 ) go to 20
+if ( nswc_ai_i4 == 0 ) go to 12
+go to 10
 10 do 11 j = 1,n
    x = x - 1.d0
    t = 1.d0/x + t
@@ -3064,7 +3195,7 @@ integer, intent(in) :: ind
 real, intent(in) :: a
 real, intent(inout) :: ans, qans
 real, intent(in) :: x
-integer :: i, iop, m, max, n
+integer :: i, iop, m, max, n, nswc_ai_i4
 real :: a2n, a2nm1, acc, amn, apn, b2n, b2nm1, c, c0, c1, c2, c3, c4, c5, c6, c7, c8, e, g, h, r, rta, rtx, s, sum, t, tol, twoa, &
    & u, w, y, z, j, l, wk(20)
 real, parameter :: acc0(3) = [5.e-15, 5.e-7, 5.e-4]
@@ -3406,7 +3537,10 @@ w = 0.5*erfc1(1,sqrt(y))
 u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
-if (iop - 2) 210,220,230
+nswc_ai_i4 = iop - 2
+if ( nswc_ai_i4 < 0 ) go to 210
+if ( nswc_ai_i4 == 0 ) go to 220
+go to 230
 !
 210 if (abs(s) <= 1.e-3) go to 260
 !
@@ -3458,7 +3592,10 @@ w = (0.5 - sqrt(y)*(0.5 + (0.5 - y/3.0))/rtpi)/c
 u = 1.0/a
 z = sqrt(z + z)
 if (l < 1.0) z = -z
-if (iop - 2) 260,270,280
+nswc_ai_i4 = iop - 2
+if ( nswc_ai_i4 < 0 ) go to 260
+if ( nswc_ai_i4 == 0 ) go to 270
+go to 280
 !
 260 c0 = ((d0(3) * z + d0(2)) * z + d0(1)) * z + d00
 c1 = ((d1(3) * z + d1(2)) * z + d1(1)) * z + d10
@@ -7322,10 +7459,12 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if (in) 002,003,003
+if ( ( in ) < 0 ) go to 002
+go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if (az(1)) 004,005,005
+003 if ( ( az ( 1 ) ) < 0 ) go to 004
+go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
 if (in == in/2*2) go to 006
@@ -7345,8 +7484,11 @@ go to 031
 008 if (zm <= 17.5) go to 009
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 013
-009 if (zs - 1.0) 011,010,010
-010 if (-abs(az(2)) + 0.096*az(1)*az(1)) 011,012,012
+009 if ( ( zs - 1.0 ) < 0 ) go to 011
+go to 010
+010 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) < 0 ) &
+   & go to 011
+go to 012
 011 qn = aint(0.0625*zs)
 if (pn <= qn) go to 031
 qn = pn
@@ -7642,9 +7784,10 @@ real, intent(in) :: alpha
 real :: x
 real, intent(inout) :: y(n)
 external jairy
-integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt, nn, ns
+integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
 real :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, relb, &
-   & rtx, rzden, s, sa, sb, sxo2, s1, s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, wk(7), xo2, xo2l
+   & rtx, rzden, s, sa, sb, sxo2, s1, s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, wk(7), xo2, xo2l, &
+   & nswc_ai_r4
 real, parameter :: rtwo = 1.34839972492648e+00
 real, parameter :: pdf = 7.85398163397448e-01
 real, parameter :: rttp = 7.97884560802865e-01
@@ -7701,11 +7844,20 @@ tolln = min(tolln,34.5388e0)
 !
 nz = 0
 kt = 1
-if (n - 1) 720, 10, 20
+nswc_ai_i4 = n - 1
+if ( nswc_ai_i4 < 0 ) go to 720
+if ( nswc_ai_i4 == 0 ) go to 10
+go to 20
 10 kt = 2
 20 nn = n
-if (x) 730, 30, 80
-30 if (alpha) 710, 40, 50
+nswc_ai_r4 = x
+if ( nswc_ai_r4 < 0 ) go to 730
+if ( nswc_ai_r4 == 0 ) go to 30
+go to 80
+30 nswc_ai_r4 = alpha
+if ( nswc_ai_r4 < 0 ) go to 710
+if ( nswc_ai_r4 == 0 ) go to 40
+go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
 i1 = 2
@@ -7824,7 +7976,10 @@ nn = nn - 1
 fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
-if (nn - 1) 440, 390, 130
+nswc_ai_i4 = nn - 1
+if ( nswc_ai_i4 < 0 ) go to 440
+if ( nswc_ai_i4 == 0 ) go to 390
+go to 130
 390 kt = 2
 is = 2
 go to 130
@@ -7834,7 +7989,10 @@ fnp1 = fn
 fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
-if (nn - 1) 440, 410, 420
+nswc_ai_i4 = nn - 1
+if ( nswc_ai_i4 < 0 ) go to 440
+if ( nswc_ai_i4 == 0 ) go to 410
+go to 420
 410 kt = 2
 is = 2
 420 if (sxo2 <= fnp1) go to 430
@@ -8821,18 +8979,24 @@ zl(1) = 0.5*log(zs)
 zl(2) = atan2(az(2),az(1))
 an = abs(in)
 sn = 1.0
-if (in) 002,003,003
+if ( ( in ) < 0 ) go to 002
+go to 003
 002 if (in == in/2*2) go to 003
 sn = -1.0
-003 if (az(1)) 004,005,005
+003 if ( ( az ( 1 ) ) < 0 ) go to 004
+go to 005
 004 qz(1) = -az(1)
 qz(2) = -az(2)
 go to 006
 005 qz(1) = az(1)
 qz(2) = az(2)
-006 if (zs - 1.0) 020,020,007
-007 if (zs - 289.0) 008,010,010
-008 if (-abs(az(2)) + 0.096*az(1)*az(1)) 020,020,015
+006 if ( ( zs - 1.0 ) <= 0 ) go to 020
+go to 007
+007 if ( ( zs - 289.0 ) < 0 ) go to 008
+go to 010
+008 if ( ( - abs ( az ( 2 ) ) + 0.096 * az ( 1 ) * az ( 1 ) ) <= 0 ) &
+   & go to 020
+go to 015
 010 qm = sn*0.797884560802865*exp(-0.5*zl(1))
 qf(1) = qm*cos(-0.5*zl(2))
 qf(2) = qm*sin(-0.5*zl(2))
@@ -8958,8 +9122,10 @@ tm(1) = tm(1) - sm(3)*ts(1) + sm(4)*ts(2)
 tm(2) = tm(2) - sm(3)*ts(2) - sm(4)*ts(1)
 tm(3) = tm(3) + sm(1)*ts(1) - sm(2)*ts(2)
 tm(4) = tm(4) + sm(1)*ts(2) + sm(2)*ts(1)
-105 if (az(1)) 106,110,110
-106 if (az(2)) 107,108,108
+105 if ( ( az ( 1 ) ) < 0 ) go to 106
+go to 110
+106 if ( ( az ( 2 ) ) < 0 ) go to 107
+go to 108
 107 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
 go to 109
@@ -9008,8 +9174,10 @@ tm(1) = tm(1) - ts(1)*sm(2) - ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
 tm(2) = tm(2) + ts(1)*sm(1) - ts(2)*sm(2) - ts(1)*sm(3) + ts(2)*sm(4)
 tm(3) = tm(3) + ts(1)*sm(1) - ts(2)*sm(2) + ts(1)*sm(3) - ts(2)*sm(4)
 tm(4) = tm(4) + ts(1)*sm(2) + ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
-115 if (az(1)) 116,120,120
-116 if (az(2)) 117,118,118
+115 if ( ( az ( 1 ) ) < 0 ) go to 116
+go to 120
+116 if ( ( az ( 2 ) ) < 0 ) go to 117
+go to 118
 117 sm(1) = -2.0*tm(1) + tm(4)
 sm(2) = -2.0*tm(2) - tm(3)
 go to 119
@@ -9165,7 +9333,8 @@ zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
 pn = abs(in)
 sn = 1.0
-if (az(1)) 002,003,003
+if ( ( az ( 1 ) ) < 0 ) go to 002
+go to 003
 002 qz(1) = -az(1)
 qz(2) = -az(2)
 if (in == in/2*2) go to 004
@@ -9185,8 +9354,11 @@ go to 039
 006 if (zm <= 17.5) go to 007
 qn = aint(sqrt(2.0*(zm - 17.5)))
 go to 011
-007 if (zs - 1.0) 009,008,008
-008 if (-abs(az(1)) + 0.096*az(2)*az(2)) 009,010,010
+007 if ( ( zs - 1.0 ) < 0 ) go to 009
+go to 008
+008 if ( ( - abs ( az ( 1 ) ) + 0.096 * az ( 2 ) * az ( 2 ) ) < 0 ) &
+   & go to 009
+go to 010
 009 qn = aint(0.0625*zs)
 if (pn <= qn) go to 039
 qn = pn
@@ -9265,7 +9437,8 @@ do 018 i = m,n
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 023
 aq(1) = -2.0*qz(1)
-if (qz(2)) 020,021,021
+if ( ( qz ( 2 ) ) < 0 ) go to 020
+go to 021
 020 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 022
 021 aq(2) = -2.0*qz(2) + 3.14159265358979*(qn + 0.5)
@@ -9340,7 +9513,8 @@ do 030 i = m,n
 rm(2) = sm(2)
 if (qz(1) >= 17.5) go to 036
 aq(1) = -2.0*qz(1)
-if (qz(2)) 032,033,033
+if ( ( qz ( 2 ) ) < 0 ) go to 032
+go to 033
 032 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
 go to 034
 033 aq(2) = -2.0*qz(2) + 3.14159265358979*(qn + 0.5)
@@ -9516,9 +9690,9 @@ integer, intent(inout) :: nz
 real, intent(in) :: alpha
 real, intent(in) :: x
 real, intent(inout) :: y(n)
-integer :: i, ialp, in, is, i1, i2, k, kk, km, kt, nn, ns
+integer :: i, ialp, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
 real :: ain, ak, akm, ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, s, sx, &
-   & sxo2, s1, s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2, xo2, xo2l, z
+   & sxo2, s1, s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2, xo2, xo2l, z, nswc_ai_r4
 real, parameter :: rttpi = 3.98942280401433e-01
 integer, parameter :: inlim = 80
 interface
@@ -9582,12 +9756,21 @@ tolln = min(tolln,34.5388e0)
 !
 nz = 0
 kt = 1
-if (n - 1) 590, 10, 20
+nswc_ai_i4 = n - 1
+if ( nswc_ai_i4 < 0 ) go to 590
+if ( nswc_ai_i4 == 0 ) go to 10
+go to 20
 10 kt = 2
 20 nn = n
 if (kode < 1 .or. kode > 2) go to 570
-if (x) 600, 30, 80
-30 if (alpha) 580, 40, 50
+nswc_ai_r4 = x
+if ( nswc_ai_r4 < 0 ) go to 600
+if ( nswc_ai_r4 == 0 ) go to 30
+go to 80
+30 nswc_ai_r4 = alpha
+if ( nswc_ai_r4 < 0 ) go to 580
+if ( nswc_ai_r4 == 0 ) go to 40
+go to 50
 40 y(1) = 1.0e0
 if (n == 1) return
 i1 = 2
@@ -9739,7 +9922,10 @@ nn = nn - 1
 fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
-if (nn - 1) 340, 290, 130
+nswc_ai_i4 = nn - 1
+if ( nswc_ai_i4 < 0 ) go to 340
+if ( nswc_ai_i4 == 0 ) go to 290
+go to 130
 290 kt = 2
 is = 2
 go to 130
@@ -9749,7 +9935,10 @@ fnp1 = fn
 fni = fni - 1.0e0
 dfn = fni + fnf
 fn = dfn
-if (nn - 1) 340, 310, 320
+nswc_ai_i4 = nn - 1
+if ( nswc_ai_i4 < 0 ) go to 340
+if ( nswc_ai_i4 == 0 ) go to 310
+go to 320
 310 kt = 2
 is = 2
 320 if (sxo2 <= fnp1) go to 330
@@ -10402,148 +10591,4 @@ call cbsslj(w1, r, w2)
 w2 = cmplx (-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbkm
-
-subroutine ckps(z, r, zr, nu, w1, w2)
-implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex :: nu
-complex, intent(inout) :: w1, w2
-integer :: k
-real :: ak, eps, eps0, phi, s, u, x, y
-real :: anorm
-complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
-   & t2
-real, parameter :: tol = 1.e-10
-real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
-   & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
-interface
-   pure elemental function cdiv(a,b)
-      implicit none
-      complex, intent(in) :: a
-      complex, intent(in) :: b
-      complex :: cdiv
-   end function cdiv
-   pure elemental function cgam0(z)
-      implicit none
-      complex, intent(in) :: z
-      complex :: cgam0
-   end function cgam0
-   pure elemental subroutine cgamma(mo,z,w)
-      implicit none
-      integer, intent(in) :: mo
-      complex, intent(in) :: z
-      complex, intent(inout) :: w
-   end subroutine cgamma
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!
-!        Calculation of the modified Bessel functions
-!
-!                  w1 = k  (z)  AND  w2 = k    (z)
-!                        nu                nu+1
-!
-!     For a complex argument z where abs(z) .LE. 2 and a complex
-!     order nu where abs(real(nu)) .LE. 0.5.  It is assumed that
-!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z.  power
-!     series expansions are used.
-!
-!-----------------------------------------------------------------------
-!-----------------------
-!-----------------------
-!-----------------------
-anorm(t) = max(abs(real(t)), abs(aimag(t)))
-!-----------------------------------------------------------------------
-!
-!     ****** eps is a machine dependent constant.  Eps is the
-!            smallest number such that 1 + eps .GT. 1.
-!
-eps = spmpar(1)
-!
-!-----------------------------------------------------------------------
-eps0 = max(eps, 5.e-15)
-!
-!                     cl = - ln(z/2)
-!
-phi = atan2(aimag(z),real(z))
-cl = cmplx(-log(r), -phi)
-mu = nu*cl
-c = exp(mu)
-!
-!                   g1 = gamma(1 + nu)
-!                   g2 = gamma(1 - nu)
-!
-t = pi*nu
-if (anorm(nu) > tol) go to 10
-a = 1.0 + (t*t)/6.0
-go to 20
-10 a = t/sin(t)
-!
-20 s = real(nu)**2 + aimag(nu)**2
-if (s >= 1.0) go to 21
-t = cgam0(nu)
-g1 = 1.0/t
-g2 = a*t
-go to 30
-21 t = 0.5 + (0.5 + nu)
-call cgamma(0, t, g1)
-g2 = cdiv(a,g1)
-!
-30 gm2 = 0.5*(g1 + g2)
-if (s > 0.04) go to 31
-!
-!         The following is the Taylor series for
-!     w1 = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
-!
-t = nu*nu
-w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
-   & d(3))*t + d(2))*t + d(1))
-gm1 = a*w1
-go to 40
-31 gm1 = 0.5*(g1 - g2)/nu
-!
-!            Initialization of the summation
-!
-40 p = 0.5*c*g1
-q = 0.5*cdiv(g2,c)
-x = real(mu)
-y = aimag(mu)
-if (anorm(mu) > tol) go to 50
-u = x*y
-sh = cmplx(1.0, u/3.0)
-ch = cmplx(1.0, u)
-go to 60
-50 t = cmplx (-y, x)
-sh = sin(t)/t
-ch = cos(t)
-!
-60 f = gm1*ch + gm2*cl*sh
-c = (1.0, 0.0)
-w1 = f
-w2 = p
-!
-!                 Summation of series
-!
-t = 0.25*(z*z)
-do k = 1, 50
-   ak = k
-   f = (ak*f + p + q)/((ak - nu)*(ak + nu))
-   p = p/(ak - nu)
-   q = q/(ak + nu)
-   c = c*t/ak
-   t1 = c*f
-   w1 = w1 + t1
-   t2 = c*(p - ak*f)
-   w2 = w2 + t2
-   if (anorm(t1) <= eps0*anorm(w1)) go to 80
-end do
-!
-80 w2 = w2 * zr
-end subroutine ckps
 

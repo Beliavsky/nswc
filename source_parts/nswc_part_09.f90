@@ -7,7 +7,7 @@ real, intent(inout) :: a(*), temp(n)
 integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
    & kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
    & nm1, nmj, nmk, nn
-real :: c, pmin, s
+real :: c, pmin, s, nswc_ai_r4
 double precision :: dsum
 !     ******************************************************************
 !     crout procedure for inverting matrices
@@ -42,7 +42,10 @@ do k = 1,iend
    kk = kcol + k
    nk = kcol + n
    do lk = kk,nk
-      if (a(lk)) 20,10,30
+      nswc_ai_r4 = a ( lk )
+      if ( nswc_ai_r4 < 0 ) go to 20
+      if ( nswc_ai_r4 == 0 ) go to 10
+      go to 30
 10    continue
    end do
    jp = k
@@ -295,7 +298,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
    & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
 integer, intent(inout) :: t
-integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s
+integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s, nswc_ai_i4
 interface
    pure elemental function ipmpar(i)
       implicit none
@@ -363,7 +366,10 @@ do j = 1,n
    do l = 2,n
       if ( a(l,j) < s ) s = a(l,j)
    end do
-   if (s) 20,40,30
+   nswc_ai_i4 = s
+   if ( nswc_ai_i4 < 0 ) go to 20
+   if ( nswc_ai_i4 == 0 ) go to 40
+   go to 30
 20 mm = maxnum + s
    if (t < -mm) go to 400
    t = t + s
@@ -1363,7 +1369,7 @@ integer, intent(inout) :: qs
 integer, intent(out) :: vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n)
 integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
-integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t
+integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t, nswc_ai_i4
 real :: a, b, c
 !
 ! Subroutine to solve the 0-1 single knapsack problem
@@ -1481,7 +1487,10 @@ end do
 lold = ll
 qs = ms
 pr = pr + ip
-if ( ll - (ns - 2) ) 240, 220, 210
+nswc_ai_i4 = ll - ( ns - 2 )
+if ( nswc_ai_i4 < 0 ) go to 240
+if ( nswc_ai_i4 == 0 ) go to 220
+go to 210
 210 ii = ns
 go to 250
 220 if ( qs < ws(ns) ) go to 230
@@ -1522,7 +1531,10 @@ go to 80
 ii = kk
 330 if ( vs >= pr + (qs*ps(nn))/ws(nn) ) go to 280
 diff = ws(nn) - ws(kk)
-if ( diff ) 390, 340, 350
+nswc_ai_i4 = diff
+if ( nswc_ai_i4 < 0 ) go to 390
+if ( nswc_ai_i4 == 0 ) go to 340
+go to 350
 340 nn = nn + 1
 go to 330
 350 if ( diff > r ) go to 340
@@ -3743,6 +3755,7 @@ integer :: i, ii, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, &
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
    & bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
    & s120, s2, s3, s72, sd, sk(23), u, v
+integer :: nswc_ai_i4
 !  Multivariate complex Fourier transform, computed in place
 !    using mixed-radix fast Fourier transform algorithm.
 !  By R. C. Singleton, Stanford Research Institute, oct. 1968
@@ -3810,7 +3823,10 @@ c72 = .309016994374947
 s120 = .86602540378444
 !
 ierr = 0
-if (n - 1) 1000,960,5
+nswc_ai_i4 = n - 1
+if ( nswc_ai_i4 < 0 ) go to 1000
+if ( nswc_ai_i4 == 0 ) go to 960
+go to 5
 5 inc = isn
 if (isn >= 0) go to 10
 s72 = -s72
@@ -4424,8 +4440,12 @@ implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
 real :: tsqx
+integer :: nswc_ai_i4
 real, parameter :: sqrt2 = 1.4142135623731
-if (n - 2) 102,101,103
+nswc_ai_i4 = n - 2
+if ( nswc_ai_i4 < 0 ) go to 102
+if ( nswc_ai_i4 == 0 ) go to 101
+go to 103
 101 tsqx = sqrt2*x(2)
 x(2) = x(1) - tsqx
 x(1) = x(1) + tsqx
@@ -4518,8 +4538,12 @@ implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
 real :: x1
+integer :: nswc_ai_i4
 real, parameter :: tsqrt2 = 2.82842712474619
-if (n - 2) 101,102,103
+nswc_ai_i4 = n - 2
+if ( nswc_ai_i4 < 0 ) go to 101
+if ( nswc_ai_i4 == 0 ) go to 102
+go to 103
 101 x(1) = 4.*x(1)
 return
 102 x1 = 4.*(x(1) + x(2))
@@ -4748,13 +4772,15 @@ nl = n
 nf = 0
 j = 0
 101 j = j + 1
-if (j - 4) 102,102,103
+if ( ( j - 4 ) <= 0 ) go to 102
+go to 103
 102 ntry = ntryh(j)
 go to 104
 103 ntry = ntry + 2
 104 nq = nl/ntry
 nr = nl - ntry*nq
-if (nr) 101,105,101
+if ( ( nr ) == 0 ) go to 105
+go to 101
 105 nf = nf + 1
 ifac(nf + 2) = ntry
 nl = nq
@@ -4934,13 +4960,16 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,2,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*)
-integer :: i, ic, idp2, k
+integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
    ch(1,k,1) = cc(1,1,k) + cc(ido,2,k)
    ch(1,k,2) = cc(1,1,k) - cc(ido,2,k)
 end do
-if (ido - 2) 107,105,102
+nswc_ai_i4 = ido - 2
+if ( nswc_ai_i4 < 0 ) go to 107
+if ( nswc_ai_i4 == 0 ) go to 105
+go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
 do k = 1,l1
@@ -5046,7 +5075,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,4,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*), wa3(*)
-integer :: i, ic, idp2, k
+integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: sqrt2 = 1.414213562373095
 do k = 1,l1
@@ -5059,7 +5088,10 @@ do k = 1,l1
    ch(1,k,3) = tr2 - tr3
    ch(1,k,4) = tr1 + tr4
 end do
-if (ido - 2) 107,105,102
+nswc_ai_i4 = ido - 2
+if ( nswc_ai_i4 < 0 ) go to 107
+if ( nswc_ai_i4 == 0 ) go to 105
+go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
 do k = 1,l1
@@ -5548,13 +5580,16 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,2,l1)
 real :: wa1(*)
-integer :: i, ic, idp2, k
+integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
    ch(1,1,k) = cc(1,k,1) + cc(1,k,2)
    ch(ido,2,k) = cc(1,k,1) - cc(1,k,2)
 end do
-if (ido - 2) 107,105,102
+nswc_ai_i4 = ido - 2
+if ( nswc_ai_i4 < 0 ) go to 107
+if ( nswc_ai_i4 == 0 ) go to 105
+go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 108
 do k = 1,l1
@@ -5658,7 +5693,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,4,l1)
 real :: wa1(*), wa2(*), wa3(*)
-integer :: i, ic, idp2, k
+integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: hsqt2 = .7071067811865475
 do k = 1,l1
@@ -5669,7 +5704,10 @@ do k = 1,l1
    ch(ido,2,k) = cc(1,k,1) - cc(1,k,3)
    ch(1,3,k) = cc(1,k,4) - cc(1,k,2)
 end do
-if (ido - 2) 107,105,102
+nswc_ai_i4 = ido - 2
+if ( nswc_ai_i4 < 0 ) go to 107
+if ( nswc_ai_i4 == 0 ) go to 105
+go to 102
 102 idp2 = ido + 2
 if ((ido - 1)/2 < l1) go to 111
 do k = 1,l1
@@ -7346,6 +7384,7 @@ integer :: both, break, dbreak(20), degree, edist, right, rightx, &
    & smooth
 logical :: discrd
 double precision :: aknots, dtest, dx
+integer :: nswc_ai_i4
 !
 !        ===============================================================
 !
@@ -7372,7 +7411,10 @@ if (dx > charf) return
 !         Compute dtest for the local error criterion
 !
 if (norm == three) go to 30
-if (edist - 1) 10,20,30
+nswc_ai_i4 = edist - 1
+if ( nswc_ai_i4 < 0 ) go to 10
+if ( nswc_ai_i4 == 0 ) go to 20
+go to 30
 10 dtest = dx*dsctol
 go to 40
 !         For the approximate fixed error distribution type we estimate
@@ -7810,7 +7852,8 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if (np - 15) 190,190,260
+if ( ( np - 15 ) <= 0 ) go to 190
+go to 260
 170 fact = 1.0/fact
 180 fact = 1.0/sqrt(fact)
 nr = nr + 1
@@ -8100,7 +8143,8 @@ nr = 0
 160 if (l1 /= l2) go to 180
 if (nr > 0) go to 170
 np = np + 1
-if (np - 15) 190,190,260
+if ( ( np - 15 ) <= 0 ) go to 190
+go to 260
 170 fact = 1.d0/fact
 180 fact = 1.d0/sqrt(fact)
 nr = nr + 1
@@ -8177,6 +8221,7 @@ real :: x(n), y(n)
 integer :: i, il, ir, nm1
 real :: r
 real :: trp
+real :: nswc_ai_r4
 !
 nm1 = n - 1
 if (a < x(2)) go to 50
@@ -8188,7 +8233,10 @@ ir = nm1
 !
 10 i = (il + ir)/2
 if (i == il) go to 60
-if (a - x(i)) 20,60,30
+nswc_ai_r4 = a - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 60
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -8215,7 +8263,7 @@ real :: x(n), xi(ni), y(n)
 real, intent(inout) :: yi(ni)
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
    & mm1, num
-real :: dl, dr, xx
+real :: dl, dr, xx, nswc_ai_r4
 !     ******************************************************************
 !     Lagrange interpolation
 !     ******************************************************************
@@ -8237,7 +8285,10 @@ ilold = 0
 !     Find the subinterval which contains xx. i = 1 If xx.LT.x(2)
 !     AND i = n IF xx.GE.x(n). OTHERWISE x(i).LE.xx.LT.x(i+1).
 !
-if (xx - x(1)) 10,11,20
+nswc_ai_r4 = xx - x ( 1 )
+if ( nswc_ai_r4 < 0 ) go to 10
+if ( nswc_ai_r4 == 0 ) go to 11
+go to 20
 10 i = 1
 il = 1
 ir = m
@@ -8246,7 +8297,10 @@ go to 80
 yi(k) = y(1)
 go to 110
 !
-20 if (x(n) - xx) 21,22,23
+20 nswc_ai_r4 = x ( n ) - xx
+if ( nswc_ai_r4 < 0 ) go to 21
+if ( nswc_ai_r4 == 0 ) go to 22
+go to 23
 21 i = n
 il = n - m + 1
 ir = n
@@ -8261,7 +8315,10 @@ ir = n
 !
 30 i = (il + ir)/2
 if (i == il) go to 50
-if (xx - x(i)) 31,32,33
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 31
+if ( nswc_ai_r4 == 0 ) go to 32
+go to 33
 31 ir = i
 go to 30
 32 yi(k) = y(i)
@@ -8271,7 +8328,10 @@ go to 30
 !
 !     Linear forward search
 !
-40 if (xx - x(i + 1)) 50,41,42
+40 nswc_ai_r4 = xx - x ( i + 1 )
+if ( nswc_ai_r4 < 0 ) go to 50
+if ( nswc_ai_r4 == 0 ) go to 41
+go to 42
 41 i = i + 1
 yi(k) = y(i)
 go to 110
@@ -8343,10 +8403,19 @@ end do
 110 if (k >= ni) return
 k = k + 1
 xx = xi(k)
-if (xx - x(1)) 10,11,111
-111 if (x(n) - xx) 21,22,120
+nswc_ai_r4 = xx - x ( 1 )
+if ( nswc_ai_r4 < 0 ) go to 10
+if ( nswc_ai_r4 == 0 ) go to 11
+go to 111
+111 nswc_ai_r4 = x ( n ) - xx
+if ( nswc_ai_r4 < 0 ) go to 21
+if ( nswc_ai_r4 == 0 ) go to 22
+go to 120
 !
-120 if (xx - xi(k - 1)) 121,122,40
+120 nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 121
+if ( nswc_ai_r4 == 0 ) go to 122
+go to 40
 121 il = 1
 ir = min(i + 1,n)
 go to 30
@@ -8383,7 +8452,8 @@ iend = 0
 ibeg = 1
 !
 do k = 2,n
-   if (x(k) - x(k - 1)) 10,20,10
+   if ( ( x ( k ) - x ( k - 1 ) ) == 0 ) go to 20
+   go to 10
 !
 10 f = 1.0
    r = 0.0
@@ -8392,7 +8462,8 @@ do k = 2,n
    t(1) = y(k)
    do i = 1,iend
       diff = x(i) - x(k)
-      if (diff) 11,31,11
+      if ( ( diff ) == 0 ) go to 31
+      go to 11
 11    t(i + 1) = (a(i) - t(i))/diff
    end do
    go to 22
@@ -8616,7 +8687,7 @@ real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np), w(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1, nw
-real :: alpha, c, temp, xmax, xmin, za, zb, lambda
+real :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
 double precision :: dalpha, dsum
 !     ******************************************************************
 !     Weighted least squares polynomial fit
@@ -8629,7 +8700,10 @@ if (nd < 1.or.np < 2) go to 200
 nw = 0
 dsum = 0.d0
 do k = 1,np
-   if (w(k)) 202,13,10
+   nswc_ai_r4 = w ( k )
+   if ( nswc_ai_r4 < 0 ) go to 202
+   if ( nswc_ai_r4 == 0 ) go to 13
+   go to 10
 10 nw = nw + 1
    dsum = dsum + dble(w(k))
    if (nw > 1) go to 11
@@ -8793,7 +8867,7 @@ integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: a(n), b(n), c(n)
-integer :: i, j, m, nm1
+integer :: i, j, m, nm1, nswc_ai_i4
 real :: del, h, r, t
 !-----------------------------------------------------------------------
 !                   Cubic spline interpolation
@@ -8818,7 +8892,10 @@ ierr = 0
 !
 !             c(1)*S(1) + b(1)*S(2) = a(1)
 !
-if (ibeg - 1) 20,30,40
+nswc_ai_i4 = ibeg - 1
+if ( nswc_ai_i4 < 0 ) go to 20
+if ( nswc_ai_i4 == 0 ) go to 30
+go to 40
 !
 !     No condition at left end.
 !
@@ -8857,7 +8934,10 @@ end do
 !
 !                r*S(n-1) + c(n)*S(n) = a(n)
 !
-if (iend - 1) 60,80,90
+nswc_ai_i4 = iend - 1
+if ( nswc_ai_i4 < 0 ) go to 60
+if ( nswc_ai_i4 == 0 ) go to 80
+go to 90
 60 if (n == 3 .and. ibeg == 0) go to 70
 !
 !     No condition at the right end. Either  n .GE. 4  or
@@ -9264,7 +9344,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k
-real :: dx, xx
+real :: dx, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9323,7 +9403,10 @@ ir = n
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9353,7 +9436,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,n)
 go to 10
@@ -9366,7 +9452,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx
+real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9422,7 +9508,10 @@ ir = nm1
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9457,7 +9546,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,nm1)
 go to 10
@@ -9470,7 +9562,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9526,7 +9618,10 @@ ir = nm1
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9564,7 +9659,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,nm1)
 go to 10
@@ -9577,7 +9675,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k
-real :: bi, ci, dx, xx
+real :: bi, ci, dx, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9639,7 +9737,10 @@ ir = n
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9673,7 +9774,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,n)
 go to 10
@@ -9686,7 +9790,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx
+real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9744,7 +9848,10 @@ ir = nm1
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9783,7 +9890,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,nm1)
 go to 10
@@ -9796,7 +9906,7 @@ integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !
 !     Abstract
 !
@@ -9854,7 +9964,10 @@ ir = nm1
 !
 10 i = (il + ir)/2
 if (i == il) go to 100
-if (xx - x(i)) 20,100,30
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
 20 ir = i
 go to 10
 30 il = i
@@ -9895,7 +10008,10 @@ k = k + 1
 xx = xi(k)
 if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
-if (xx - xi(k - 1)) 110,100,50
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
 110 il = 1
 ir = min(i + 1,nm1)
 go to 10
@@ -10454,84 +10570,4 @@ return
 return
 140 ierr = 6
 end subroutine pdfit
-
-pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m, n
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m)
-integer :: i, il, ir, j, k
-real :: dx, h, t, t0, x1, xold, xx
-!-----------------------------------------------------------------------
-!              Evaluation of a periodic cubic spline
-!-----------------------------------------------------------------------
-!----------------------
-!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m)
-!----------------------
-if (n >= 3 .and. m >= 1) go to 1
-ierr = 1
-return
-1 ierr = 0
-x1 = x(1)
-h = x(n) - x1
-!
-!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
-!
-k = 1
-t = (xi(1) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-il = 1
-ir = n
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 90
-if (xx - x(i)) 20,90,30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-40 if (xx < x(i + 1)) go to 90
-i = i + 1
-go to 40
-!
-!     Computation when x(i) .LE. xx .LT. x(i+1)
-!
-90 dx = xx - x(i)
-yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
-!
-!     Next point
-!
-100 if (k >= m) return
-xold = xx
-k = k + 1
-t = (xi(k) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-if (xx - xold) 110,90,40
-!
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-!
-!     Case when roundoff produces a value for xx where
-!     xx .GE. x(n). This case may never occur.
-!
-120 i = 1
-xx = x1
-yi(k) = y(1)
-go to 100
-end subroutine pscmp
 

@@ -1,3 +1,120 @@
+subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
+implicit none
+integer :: nn
+double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
+integer :: nz
+integer :: n, type, i, j
+double precision :: ui, vi
+real :: mp, omp, ee, relstp, t, zm
+logical :: tried
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+interface
+   pure elemental subroutine quadpl(a,b1,c,sr,si,lr,li)
+      implicit none
+      double precision, intent(in) :: a
+      double precision, intent(in) :: b1
+      double precision, intent(in) :: c
+      double precision, intent(inout) :: sr
+      double precision, intent(inout) :: si
+      double precision, intent(inout) :: lr
+      double precision, intent(inout) :: li
+   end subroutine quadpl
+end interface
+!
+!     Variable-shift k-polynomial iteration for A
+!     quadratic factor converges only if the zeros are
+!     equimodular or nearly so.
+!
+!     uu,vv - Coefficients of starting quadratic
+!     nz - Number of zero found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+tried = .false.
+u = uu
+v = vv
+j = 0
+! Main loop
+10 call quadpl(1.d0, u, v, szr, szi, lzr, lzi)
+!
+!     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
+!     to multiple or nearly equal and of opposite sign
+!
+if (abs(abs(szr) - abs(lzr)) > 1.d-2*abs(lzr)) &
+   & return
+!
+!     Evaluate polynomial by quadratic synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+mp = abs(a - szr*b) + abs(szi*b)
+!
+!     Compute a rigorous bound on the rounding error in
+!     EVALUTING p
+!
+zm = sqrt(abs(sngl(v)))
+ee = 2.0*abs(sngl(qp(1)))
+t = -szr*b
+do 20 i = 2,n
+   ee = ee*zm + abs(sngl(qp(i)))
+20 continue
+ee = ee*zm + abs(sngl(a) + t)
+ee = (5.0*mre + 4.0*are)*ee - (5.0*mre + 2.0*are)* &
+   & (abs(sngl(a) + t) + abs(sngl(b))*zm) + &
+   & 2.0*are*abs(t)
+!
+!     Iteration has converged sufficiently if the
+!     polynomial value is less than 20 times this bound
+!
+if (mp > 20.0*ee) go to 30
+nz = 2
+return
+30 j = j + 1
+!
+!     STOP ITERATION AFTER 20 STEPS
+!
+if (j > 20) return
+if (j < 2) go to 50
+if (relstp > 0.01 .or. mp < omp .or. tried) go to 50
+!
+!     A cluster appears to be stalling the convergence.
+!     Five fixed shift steps are taken with A u,v close
+!     to the cluster
+!
+if (relstp < eta) relstp = eta
+relstp = sqrt(relstp)
+u = u - u*relstp
+v = v + v*relstp
+call quadsd(nn, u, v, p, qp, a, b)
+do i = 1,5
+   call calcsc(type, n, k, qk)
+   call nextk(type, n, qp, k, qk)
+end do
+tried = .true.
+j = 0
+50 omp = mp
+!
+!     Calculate next k polynomial and new u and v
+!
+call calcsc(type, n, k, qk)
+call nextk(type, n, qp, k, qk)
+call calcsc(type, n, k, qk)
+call newest(type, ui, vi, nn, p, k)
+!
+!     If vi is zero the iteration is not converging
+!
+if (vi == 0.d0) return
+relstp = abs((vi - v)/vi)
+u = ui
+v = vi
+go to 10
+end subroutine quadit
+
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
 integer :: iflag, nn, nz
@@ -1722,7 +1839,7 @@ pure subroutine iswap(n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
 integer, intent(inout) :: ix(*), iy(*)
-integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3
+integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3, nswc_ai_i4
 !
 !                Extended B L A S  subprogram
 !
@@ -1749,7 +1866,10 @@ integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3
 !
 if (n <= 0) return
 if (incx /= incy) go to 5
-if (incx - 1) 5,20,60
+nswc_ai_i4 = incx - 1
+if ( nswc_ai_i4 < 0 ) go to 5
+if ( nswc_ai_i4 == 0 ) go to 20
+go to 60
 5 continue
 !
 !       Code for unequal or nonpositive increments.
@@ -2090,7 +2210,7 @@ pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
 implicit none
 real, intent(inout) :: sd1, sd2, sparam(5), sx1
 real, intent(in) :: sy1
-real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su
+real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
 real, parameter :: zero = 0.e0
 real, parameter :: one = 1.e0
 real, parameter :: two = 2.e0
@@ -2221,7 +2341,10 @@ sh22 = sh22*gam
 go to 200
 !
 220 continue
-if (sflag) 250,230,240
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 250
+if ( nswc_ai_r4 == 0 ) go to 230
+go to 240
 230 continue
 sparam(3) = sh21
 sparam(4) = sh12
@@ -2245,7 +2368,7 @@ integer, intent(in) :: incx, incy, n
 real :: sparam(5)
 real, intent(inout) :: sx(*), sy(*)
 integer :: i, kx, ky, nsteps
-real :: sflag, sh11, sh12, sh21, sh22, w, z
+real :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
 real, parameter :: zero = 0.e0
 real, parameter :: two = 2.e0
 !
@@ -2272,7 +2395,10 @@ if (n <= 0 .or.(sflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 !
 nsteps = n*incx
-if (sflag) 50,10,30
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 50
+if ( nswc_ai_r4 == 0 ) go to 10
+go to 30
 10 continue
 sh21 = sparam(3)
 sh12 = sparam(4)
@@ -2311,7 +2437,10 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 !
-if (sflag) 120,80,100
+nswc_ai_r4 = sflag
+if ( nswc_ai_r4 < 0 ) go to 120
+if ( nswc_ai_r4 == 0 ) go to 80
+go to 100
 80 continue
 sh21 = sparam(3)
 sh12 = sparam(4)
@@ -2380,7 +2509,7 @@ double precision, intent(inout) :: dparam(5)
 double precision, intent(in) :: dy1
 double precision, intent(inout) :: dd1
 double precision, intent(inout) :: dx1
-double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp
+double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: one = 1.d0
 double precision, parameter :: two = 2.d0
@@ -2490,7 +2619,10 @@ dh22 = dh22*gam
 go to 200
 !
 220 continue
-if (dflag) 250,230,240
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 250
+if ( nswc_ai_r8 == 0 ) go to 230
+go to 240
 230 continue
 dparam(3) = dh21
 dparam(4) = dh12
@@ -2515,7 +2647,7 @@ double precision, intent(inout) :: dx(*)
 double precision :: dparam(5)
 double precision, intent(inout) :: dy(*)
 integer :: i, kx, ky, nsteps
-double precision :: dflag, dh12, dh22, z, dh11, dh21, w
+double precision :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: two = 2.d0
 !
@@ -2542,7 +2674,10 @@ if (n <= 0 .or.(dflag + two == zero)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 !
 nsteps = n*incx
-if (dflag) 50,10,30
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 50
+if ( nswc_ai_r8 == 0 ) go to 10
+go to 30
 10 continue
 dh21 = dparam(3)
 dh12 = dparam(4)
@@ -2581,7 +2716,10 @@ ky = 1
 if (incx < 0) kx = 1 + (1 - n)*incx
 if (incy < 0) ky = 1 + (1 - n)*incy
 !
-if (dflag) 120,80,100
+nswc_ai_r8 = dflag
+if ( nswc_ai_r8 < 0 ) go to 120
+if ( nswc_ai_r8 == 0 ) go to 80
+go to 100
 80 continue
 dh21 = dparam(3)
 dh12 = dparam(4)
@@ -4402,8 +4540,10 @@ ifcur = 0
 npart = n
 idiv = 2
 10 iquot = npart/idiv
-if (npart - idiv*iquot) 60, 20, 60
-20 if (idiv - ifcur) 40, 40, 30
+if ( ( npart - idiv * iquot ) == 0 ) go to 20
+go to 60
+20 if ( ( idiv - ifcur ) <= 0 ) go to 40
+go to 30
 30 ip = ip + 1
 ifact(ip) = idiv
 ipower(ip) = idiv
@@ -4414,14 +4554,18 @@ go to 50
 nexp(ip) = nexp(ip) + 1
 50 npart = iquot
 go to 10
-60 if (iquot - idiv) 100, 100, 70
-70 if (idiv - 2) 80, 80, 90
+60 if ( ( iquot - idiv ) <= 0 ) go to 100
+go to 70
+70 if ( ( idiv - 2 ) <= 0 ) go to 80
+go to 90
 80 idiv = 3
 go to 10
 90 idiv = idiv + 2
 go to 10
-100 if (npart - 1) 140, 140, 110
-110 if (npart - ifcur) 130, 130, 120
+100 if ( ( npart - 1 ) <= 0 ) go to 140
+go to 110
+110 if ( ( npart - ifcur ) <= 0 ) go to 130
+go to 120
 120 ip = ip + 1
 ifact(ip) = npart
 ipower(ip) = npart
@@ -10480,295 +10624,4 @@ ynorm = s*ynorm
 if (anorm /= 0.0d0) rcond = ynorm/anorm
 if (anorm == 0.0d0) rcond = 0.0d0
 end subroutine dspco
-
-pure subroutine dspfa(ap,n,kpvt,info)
-implicit none
-integer, intent(in) :: n
-integer, intent(inout) :: kpvt(*)
-integer, intent(out) :: info
-double precision, intent(inout) :: ap(*)
-double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
-integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
-logical :: swap
-interface
-   pure subroutine daxpy(n,da,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: da
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine daxpy
-   pure subroutine dswap(n,dx,incx,dy,incy)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(inout) :: dx(*)
-      integer, intent(in) :: incx
-      double precision, intent(inout) :: dy(*)
-      integer, intent(in) :: incy
-   end subroutine dswap
-   pure function idamax(n,dx,incx)
-      implicit none
-      integer, intent(in) :: n
-      double precision, intent(in) :: dx(*)
-      integer, intent(in) :: incx
-      integer :: idamax
-   end function idamax
-end interface
-!
-!     dspfa factors a double precision symmetric matrix stored in
-!     packed form by elimination with symmetric pivoting.
-!
-!     To solve  A*X = B , follow dspfa by dspsl.
-!     To compute  inverse(A)*C , follow dspfa by dspsl.
-!     To compute  determinant(A) , follow dspfa by dspdi.
-!     To compute  inertia(A) , follow dspfa by dspdi.
-!     To compute  inverse(A) , follow dspfa by dspdi.
-!
-!     On entry
-!
-!        ap      DOUBLE PRECISION (n*(n+1)/2)
-!                the packed form of A symmetric matrix  A .  The
-!                columns of the upper triangle are stored sequentially
-!                in a one-dimensional array of length  n*(n+1)/2 .
-!                See comments below for details.
-!
-!        n       INTEGER
-!                the order of the matrix  A .
-!
-!     Output
-!
-!        ap      A BLOCK DIAGONAL MATRIX AND THE MULTIPLIERS WHICH
-!                were used to obtain it stored in packed form.
-!                The factorization can be written  A = U*D*trans(U)
-!                where  U  is a product of permutation and unit
-!                upper triangular matrices , trans(U) is the
-!                transpose of  U , and  D  is block diagonal
-!                with 1 by 1 and 2 by 2 blocks.
-!
-!        kpvt    INTEGER(n)
-!                an integer vector of pivot indices.
-!
-!        INFO    INTEGER
-!                = 0  Normal value.
-!                = k  if the k-TH pivot block is singular. This is
-!                     not an error condition for this subroutine,
-!                     but it does indicate that dspsl or dspdi may
-!                     divide by zero if called.
-!
-!     Packed storage
-!
-!          The following program segment will pack the upper
-!          triangle of a symmetric matrix.
-!
-!                k = 0
-!                do 20 j = 1, n
-!                   do 10 i = 1, j
-!                      k = k + 1
-!                      ap(k)  = a(i,j)
-!             10    continue
-!             20 continue
-!
-!     LINPACK. This version dated 08/14/78 .
-!     James bunch, univ. Calif. San diego, argonne nat. Lab.
-!
-!     Subroutines and functions
-!
-!     BLAS daxpy,dswap,idamax
-!     Fortran dabs,DMAX1,DSQRT
-!
-!     Internal variables
-!
-!
-!
-!     Initialize
-!
-!     alpha is used in choosing pivot block SIZE.
-alpha = (1.0d0 + sqrt(17.0d0))/8.0d0
-!
-info = 0
-!
-!     Main loop on k, which goes from n to 1.
-!
-k = n
-ik = (n*(n - 1))/2
-10 continue
-!
-!        Leave the loop if k=0 Or k=1.
-!
-!     ...Exit
-if (k == 0) go to 200
-if (k > 1) go to 20
-kpvt(1) = 1
-if (ap(1) == 0.0d0) info = 1
-!     ......Exit
-go to 200
-20 continue
-!
-!        This section of code determines the kind of
-!        elimination to be performed.  When it is completed,
-!        KSTEP will be set to the size of the pivot block, and
-!        swap will be set to .TRUE. if an interchange is
-!        required.
-!
-km1 = k - 1
-kk = ik + k
-absakk = abs(ap(kk))
-!
-!        Determine the largest off-diagonal element in
-!        column k.
-!
-imax = idamax(k - 1,ap(ik + 1),1)
-imk = ik + imax
-colmax = abs(ap(imk))
-if (absakk < alpha*colmax) go to 30
-kstep = 1
-swap = .false.
-go to 90
-30 continue
-!
-!           Determine the largest off-diagonal element in
-!           row imax.
-!
-rowmax = 0.0d0
-imaxp1 = imax + 1
-im = imax*(imax - 1)/2
-imj = im + 2*imax
-do j = imaxp1, k
-   rowmax = max(rowmax,abs(ap(imj)))
-   imj = imj + j
-end do
-if (imax == 1) go to 50
-jmax = idamax(imax - 1,ap(im + 1),1)
-jmim = jmax + im
-rowmax = max(rowmax,abs(ap(jmim)))
-50 continue
-imim = imax + im
-if (abs(ap(imim)) < alpha*rowmax) go to 60
-kstep = 1
-swap = .true.
-go to 80
-60 continue
-if (absakk < alpha*colmax*(colmax/rowmax)) go to 70
-kstep = 1
-swap = .false.
-go to 80
-70 continue
-kstep = 2
-swap = imax /= km1
-80 continue
-90 continue
-if (max(absakk,colmax) /= 0.0d0) go to 100
-!
-!           Column k is zero.  Set info and iterate the loop.
-!
-kpvt(k) = k
-info = k
-go to 190
-100 continue
-if (kstep == 2) go to 140
-!
-!           1 X 1 pivot block.
-!
-if (.not.swap) go to 120
-!
-!              Perform an interchange.
-!
-call dswap(imax,ap(im + 1),1,ap(ik + 1),1)
-imj = ik + imax
-do jj = imax, k
-   j = k + imax - jj
-   jk = ik + j
-   t = ap(jk)
-   ap(jk) = ap(imj)
-   ap(imj) = t
-   imj = imj - (j - 1)
-end do
-120 continue
-!
-!           Perform the elimination.
-!
-ij = ik - (k - 1)
-do jj = 1, km1
-   j = k - jj
-   jk = ik + j
-   mulk = -ap(jk)/ap(kk)
-   t = mulk
-   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
-   ijj = ij + j
-   ap(jk) = mulk
-   ij = ij - (j - 1)
-end do
-!
-!           Set the pivot array.
-!
-kpvt(k) = k
-if (swap) kpvt(k) = imax
-go to 190
-140 continue
-!
-!           2 X 2 pivot block.
-!
-km1k = ik + k - 1
-ikm1 = ik - (k - 1)
-if (.not.swap) go to 160
-!
-!              Perform an interchange.
-!
-call dswap(imax,ap(im + 1),1,ap(ikm1 + 1),1)
-imj = ikm1 + imax
-do jj = imax, km1
-   j = km1 + imax - jj
-   jkm1 = ikm1 + j
-   t = ap(jkm1)
-   ap(jkm1) = ap(imj)
-   ap(imj) = t
-   imj = imj - (j - 1)
-end do
-t = ap(km1k)
-ap(km1k) = ap(imk)
-ap(imk) = t
-160 continue
-!
-!           Perform the elimination.
-!
-km2 = k - 2
-if (km2 == 0) go to 180
-ak = ap(kk)/ap(km1k)
-km1km1 = ikm1 + k - 1
-akm1 = ap(km1km1)/ap(km1k)
-denom = 1.0d0 - ak*akm1
-ij = ik - (k - 1) - (k - 2)
-do jj = 1, km2
-   j = km1 - jj
-   jk = ik + j
-   bk = ap(jk)/ap(km1k)
-   jkm1 = ikm1 + j
-   bkm1 = ap(jkm1)/ap(km1k)
-   mulk = (akm1*bk - bkm1)/denom
-   mulkm1 = (ak*bkm1 - bk)/denom
-   t = mulk
-   call daxpy(j,t,ap(ik + 1),1,ap(ij + 1),1)
-   t = mulkm1
-   call daxpy(j,t,ap(ikm1 + 1),1,ap(ij + 1),1)
-   ap(jk) = mulk
-   ap(jkm1) = mulkm1
-   ijj = ij + j
-   ij = ij - (j - 1)
-end do
-180 continue
-!
-!           Set the pivot array.
-!
-kpvt(k) = 1 - k
-if (swap) kpvt(k) = -imax
-kpvt(k - 1) = kpvt(k)
-190 continue
-ik = ik - (k - 1)
-if (kstep == 2) ik = ik - (k - 2)
-k = k - kstep
-go to 10
-200 continue
-end subroutine dspfa
 
