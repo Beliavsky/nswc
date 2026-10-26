@@ -1,4 +1,4 @@
-pure subroutine bprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine bprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -153,7 +153,7 @@ return
 return
 end subroutine bprod
 
-pure subroutine dbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine dbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -308,7 +308,7 @@ return
 return
 end subroutine dbprod
 
-pure subroutine cbprod (m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+pure subroutine cbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -463,7 +463,7 @@ return
 return
 end subroutine cbprod
 
-pure subroutine bvprd (m,n,a,ka,ml,mu,x,y)
+pure subroutine bvprd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
@@ -516,7 +516,7 @@ end do
 return
 end subroutine bvprd
 
-pure subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine bvprd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
@@ -562,7 +562,7 @@ end do
 return
 end subroutine bvprd1
 
-pure subroutine dbvpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbvpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
@@ -616,7 +616,7 @@ end do
 return
 end subroutine dbvpd
 
-pure subroutine dbvpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbvpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
@@ -662,7 +662,7 @@ end do
 return
 end subroutine dbvpd1
 
-pure subroutine cbvpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbvpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
@@ -715,7 +715,7 @@ end do
 return
 end subroutine cbvpd
 
-pure subroutine cbvpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbvpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
@@ -761,7 +761,7 @@ end do
 return
 end subroutine cbvpd1
 
-pure subroutine btprd (m,n,a,ka,ml,mu,x,y)
+pure subroutine btprd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
@@ -813,7 +813,7 @@ end do
 return
 end subroutine btprd
 
-pure subroutine btprd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine btprd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
@@ -858,7 +858,7 @@ end do
 return
 end subroutine btprd1
 
-pure subroutine dbtpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbtpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
@@ -911,7 +911,7 @@ end do
 return
 end subroutine dbtpd
 
-pure subroutine dbtpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine dbtpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
@@ -956,7 +956,7 @@ end do
 return
 end subroutine dbtpd1
 
-pure subroutine cbtpd (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbtpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
@@ -1008,7 +1008,7 @@ end do
 return
 end subroutine cbtpd
 
-pure subroutine cbtpd1 (m,n,a,ka,ml,mu,x,y)
+pure subroutine cbtpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
@@ -1053,7 +1053,7 @@ end do
 return
 end subroutine cbtpd1
 
-pure real function bnrm (a, ka, m, n, ml, mu)
+pure real function bnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*)
@@ -1076,7 +1076,7 @@ end do
 return
 end function bnrm
 
-pure real function b1nrm (a, ka, m, n, ml, mu)
+pure real function b1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(*)
@@ -1138,7 +1138,7 @@ b1nrm = amax1(b1nrm, sasum(num,a(i),incr))
 go to 50
 end function b1nrm
 
-pure double precision function dbnrm (a, ka, m, n, ml, mu)
+pure double precision function dbnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
@@ -1161,7 +1161,7 @@ end do
 return
 end function dbnrm
 
-pure double precision function db1nrm (a, ka, m, n, ml, mu)
+pure double precision function db1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(*)
@@ -1434,7 +1434,7 @@ return
 return
 end subroutine bslv1
 
-pure subroutine snbfa (a, lda, n, ml, mu, ipvt, info)
+pure subroutine snbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -1641,7 +1641,7 @@ end do
 return
 end subroutine snbfa
 
-pure subroutine snbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine snbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 real, intent(in) :: a(lda,*)
@@ -1799,7 +1799,7 @@ return
 return
 end subroutine snbsl
 
-pure subroutine dbslv (m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine dbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
@@ -1904,7 +1904,7 @@ return
 return
 end subroutine dbslv
 
-pure subroutine dbslv1 (m0,a,ka,n,ml,mu,b,iwk,ierr)
+pure subroutine dbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
@@ -2009,7 +2009,7 @@ return
 return
 end subroutine dbslv1
 
-pure subroutine dbfa (a, lda, n, ml, mu, ipvt, info)
+pure subroutine dbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -2216,7 +2216,7 @@ end do
 return
 end subroutine dbfa
 
-pure subroutine dbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine dbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 double precision, intent(in) :: a(lda,*)
@@ -2374,7 +2374,7 @@ return
 return
 end subroutine dbsl
 
-pure subroutine b1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
+pure subroutine b1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
@@ -2453,9 +2453,9 @@ isgn = n + 1
 !
 kase = 0
 ainorm = 0.0
-call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
-call bslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+call bslv(0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 !     Check if A is singular
 !
@@ -2464,13 +2464,13 @@ if (ierr .gt. 0) go to 40
 !     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
-10 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+10 call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
 if (kase .eq. 0) go to 30
 if (kase .ne. 1) go to 20
-call bslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+call bslv(1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
-20 call bslv1 (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+20 call bslv1(1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
 !
 !     Compute the value of cond
@@ -2493,7 +2493,7 @@ return
 return
 end subroutine b1cnd
 
-pure subroutine db1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
+pure subroutine db1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
@@ -2573,9 +2573,9 @@ isgn = n + 1
 !
 kase = 0
 ainorm = 0.d0
-call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
-call dbslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+call dbslv(0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 !     Check if A is singular
 !
@@ -2584,13 +2584,13 @@ if (ierr .gt. 0) go to 40
 !     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
-10 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+10 call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
 if (kase .eq. 0) go to 30
 if (kase .ne. 1) go to 20
-call dbslv (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+call dbslv(1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
-20 call dbslv1 (1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
+20 call dbslv1(1, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 go to 10
 !
 !     Compute the value of cond
@@ -2779,7 +2779,7 @@ return
 return
 end subroutine cbslv1
 
-subroutine cbfa (a, lda, n, ml, mu, ipvt, info)
+subroutine cbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -2954,7 +2954,7 @@ end do
 return
 end subroutine cbfa
 
-pure subroutine cbsl (a,lda,n,ml,mu,ipvt,b,job)
+pure subroutine cbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
 complex, intent(in) :: a(lda,*)
@@ -3112,7 +3112,7 @@ return
 return
 end subroutine cbsl
 
-pure subroutine cvrs (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvrs(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -3147,7 +3147,7 @@ return
 return
 end subroutine cvrs
 
-pure subroutine cvds (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvds(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -3182,7 +3182,7 @@ return
 return
 end subroutine cvds
 
-pure subroutine cvcs (a, ka, m, n, b, ib, jb, num, ierr)
+pure subroutine cvcs(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
@@ -3218,7 +3218,7 @@ return
 return
 end subroutine cvcs
 
-subroutine cvsr (a, ia, ja, b, kb, m, n)
+subroutine cvsr(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
 real, intent(in) :: a(*)
@@ -3248,7 +3248,7 @@ do 30 i = 1,m
 return
 end subroutine cvsr
 
-subroutine cvsd (a, ia, ja, b, kb, m, n)
+subroutine cvsd(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
 double precision, intent(in) :: a(*)
@@ -3278,7 +3278,7 @@ do 30 i = 1,m
 return
 end subroutine cvsd
 
-subroutine cvsc (a, ia, ja, b, kb, m, n)
+subroutine cvsc(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
 complex, intent(in) :: a(*)
@@ -3308,7 +3308,7 @@ do 30 i = 1,m
 return
 end subroutine cvsc
 
-subroutine scvrd (a, ia, ja, b, ib, jb, m)
+subroutine scvrd(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 real, intent(in) :: a(*)
@@ -3334,7 +3334,7 @@ ib(m + 1) = l
 return
 end subroutine scvrd
 
-subroutine scvdr (a, ia, ja, b, ib, jb, m)
+subroutine scvdr(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 double precision, intent(in) :: a(*)
@@ -3360,7 +3360,7 @@ ib(m + 1) = l
 return
 end subroutine scvdr
 
-subroutine csreal (a, ia, ja, b, ib, jb, m)
+subroutine csreal(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 complex, intent(in) :: a(*)
@@ -3391,7 +3391,7 @@ ib(m + 1) = l
 return
 end subroutine csreal
 
-subroutine csimag (a, ia, ja, b, ib, jb, m)
+subroutine csimag(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 complex, intent(in) :: a(*)
@@ -3422,7 +3422,7 @@ ib(m + 1) = l
 return
 end subroutine csimag
 
-subroutine scvrc (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine scvrc(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -3489,7 +3489,7 @@ return
 return
 end subroutine scvrc
 
-subroutine rscopy (a, ia, ja, b, ib, jb, m)
+subroutine rscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 real, intent(in) :: a(*)
@@ -3518,7 +3518,7 @@ ib(m + 1) = l
 return
 end subroutine rscopy
 
-subroutine dscopy (a, ia, ja, b, ib, jb, m)
+subroutine dscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 double precision, intent(in) :: a(*)
@@ -3547,7 +3547,7 @@ ib(m + 1) = l
 return
 end subroutine dscopy
 
-subroutine cscopy (a, ia, ja, b, ib, jb, m)
+subroutine cscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 complex, intent(in) :: a(*)
@@ -3577,7 +3577,7 @@ ib(m + 1) = l
 return
 end subroutine cscopy
 
-subroutine sconj (a, ia, ja, b, ib, jb, m)
+subroutine sconj(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
 complex, intent(in) :: a(*)
@@ -3607,7 +3607,7 @@ end do
 return
 end subroutine sconj
 
-subroutine rpose (a, ia, ja, b, ib, jb, m, n)
+subroutine rpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*)
@@ -3671,7 +3671,7 @@ end do
 return
 end subroutine rpose
 
-subroutine rpose1 (p, a, ia, ja, b, ib, jb, m, n)
+subroutine rpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
@@ -3738,7 +3738,7 @@ end do
 return
 end subroutine rpose1
 
-subroutine dpose (a, ia, ja, b, ib, jb, m, n)
+subroutine dpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*)
@@ -3802,7 +3802,7 @@ end do
 return
 end subroutine dpose
 
-subroutine dpose1 (p, a, ia, ja, b, ib, jb, m, n)
+subroutine dpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
@@ -3869,7 +3869,7 @@ end do
 return
 end subroutine dpose1
 
-subroutine cpose (a, ia, ja, b, ib, jb, m, n)
+subroutine cpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 complex, intent(in) :: a(*)
@@ -3933,7 +3933,7 @@ end do
 return
 end subroutine cpose
 
-subroutine cpose1 (p, a, ia, ja, b, ib, jb, m, n)
+subroutine cpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
@@ -4000,7 +4000,7 @@ end do
 return
 end subroutine cpose1
 
-subroutine sadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine sadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4066,7 +4066,7 @@ return
 return
 end subroutine sadd
 
-subroutine dsadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine dsadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4132,7 +4132,7 @@ return
 return
 end subroutine dsadd
 
-subroutine csadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine csadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4198,7 +4198,7 @@ return
 return
 end subroutine csadd
 
-subroutine ssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine ssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4264,7 +4264,7 @@ return
 return
 end subroutine ssubt
 
-subroutine dssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine dssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4330,7 +4330,7 @@ return
 return
 end subroutine dssubt
 
-subroutine cssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
+subroutine cssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
@@ -4396,7 +4396,7 @@ return
 return
 end subroutine cssubt
 
-subroutine sprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
+subroutine sprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
@@ -4455,7 +4455,7 @@ return
 return
 end subroutine sprod
 
-subroutine dsprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
+subroutine dsprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
@@ -4514,7 +4514,7 @@ return
 return
 end subroutine dsprod
 
-subroutine csprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
+subroutine csprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
@@ -4573,7 +4573,7 @@ return
 return
 end subroutine csprod
 
-subroutine mvprd (m, n, a, ia, ja, x, y)
+subroutine mvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
@@ -4598,7 +4598,7 @@ do 11 i = 1,m
 return
 end subroutine mvprd
 
-subroutine mvprd1 (m, n, a, ia, ja, x, y)
+subroutine mvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
@@ -4623,7 +4623,7 @@ do 11 i = 1,m
 return
 end subroutine mvprd1
 
-subroutine mtprd (m, n, a, ia, ja, x, y)
+subroutine mtprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
@@ -4652,7 +4652,7 @@ do 21 i = 1,m
 return
 end subroutine mtprd
 
-subroutine mtprd1 (m, n, a, ia, ja, x, y)
+subroutine mtprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
@@ -4677,7 +4677,7 @@ do 11 i = 1,m
 return
 end subroutine mtprd1
 
-subroutine dvprd (m, n, a, ia, ja, x, y)
+subroutine dvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
@@ -4702,7 +4702,7 @@ do 11 i = 1,m
 return
 end subroutine dvprd
 
-subroutine dvprd1 (m, n, a, ia, ja, x, y)
+subroutine dvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
@@ -4727,7 +4727,7 @@ do 11 i = 1,m
 return
 end subroutine dvprd1
 
-subroutine dtprd (m, n, a, ia, ja, x, y)
+subroutine dtprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
@@ -4756,7 +4756,7 @@ do 21 i = 1,m
 return
 end subroutine dtprd
 
-subroutine dtprd1 (m, n, a, ia, ja, x, y)
+subroutine dtprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
@@ -4781,7 +4781,7 @@ do 11 i = 1,m
 return
 end subroutine dtprd1
 
-subroutine cvprd (m, n, a, ia, ja, x, y)
+subroutine cvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
@@ -4806,7 +4806,7 @@ do 11 i = 1,m
 return
 end subroutine cvprd
 
-subroutine cvprd1 (m, n, a, ia, ja, x, y)
+subroutine cvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
@@ -4831,7 +4831,7 @@ do 11 i = 1,m
 return
 end subroutine cvprd1
 
-subroutine ctprd (m, n, a, ia, ja, x, y)
+subroutine ctprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
@@ -4860,7 +4860,7 @@ do 21 i = 1,m
 return
 end subroutine ctprd
 
-subroutine ctprd1 (m, n, a, ia, ja, x, y)
+subroutine ctprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
@@ -4885,7 +4885,7 @@ do 11 i = 1,m
 return
 end subroutine ctprd1
 
-real function snrm (a, ia, ja, m, n)
+real function snrm(a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*)
@@ -4911,7 +4911,7 @@ do 20 i = 1,m
 return
 end function snrm
 
-subroutine s1nrm (a, ia, ja, m, n, anorm, wk)
+subroutine s1nrm(a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
 real, intent(out) :: anorm
@@ -4945,7 +4945,7 @@ end do
 return
 end subroutine s1nrm
 
-double precision function dsnrm (a, ia, ja, m, n)
+double precision function dsnrm(a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*)
@@ -4971,7 +4971,7 @@ do 20 i = 1,m
 return
 end function dsnrm
 
-subroutine ds1nrm (a, ia, ja, m, n, anorm, wk)
+subroutine ds1nrm(a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*)
@@ -5006,7 +5006,7 @@ end do
 return
 end subroutine ds1nrm
 
-subroutine spord (m, n, ia, r, iwk)
+subroutine spord(m, n, ia, r, iwk)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: ia(*)
@@ -5047,7 +5047,7 @@ end do
 return
 end subroutine spord
 
-subroutine blkord (n, ia, ja, r, c, ib, num, iwk, ierr)
+subroutine blkord(n, ia, ja, r, c, ib, num, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: n
@@ -5088,7 +5088,7 @@ end do
 return
 end subroutine blkord
 
-pure subroutine mc21a (n,icn,licn,ip,lenr,iperm,numnz,iw)
+pure subroutine mc21a(n,icn,licn,ip,lenr,iperm,numnz,iw)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
@@ -5135,12 +5135,12 @@ end interface
 ! iw  work array  ..  see later comments.
 !-----------------------------------------------------------------------
 !
-call mc21b (n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
+call mc21b(n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
    & iw(1,3),iw(1,4))
 return
 end subroutine mc21a
 
-pure subroutine mc21b (n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
+pure subroutine mc21b(n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
@@ -5458,7 +5458,7 @@ end do
 return
 end subroutine mc13e
 
-subroutine spslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
+subroutine spslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
@@ -5573,13 +5573,13 @@ end do
 !
 !  CALL nspiv1 TO PERFORM COMPUTATIONS
 !
-call nspiv1 (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
+call nspiv1(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine spslv
 
-subroutine nspiv1 (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
+subroutine nspiv1(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -5859,7 +5859,7 @@ return
 return
 end subroutine nspiv1
 
-subroutine rslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine rslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -5953,19 +5953,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call splu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call splu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call rslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call rslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine rslv
 
-pure subroutine rslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine rslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -6012,7 +6012,7 @@ end do
 return
 end subroutine rslv1
 
-subroutine tslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine tslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -6106,19 +6106,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call splu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call splu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call tslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call tslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine tslv
 
-pure subroutine tslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine tslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -6173,7 +6173,7 @@ end do
 return
 end subroutine tslv1
 
-subroutine splu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
+subroutine splu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -6395,7 +6395,7 @@ return
 return
 end subroutine splu
 
-subroutine dspslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
+subroutine dspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
@@ -6513,13 +6513,13 @@ end do
 !
 !  CALL dnspiv TO PERFORM COMPUTATIONS
 !
-call dnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
+call dnspiv(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine dspslv
 
-subroutine dnspiv (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
+subroutine dnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -6799,7 +6799,7 @@ return
 return
 end subroutine dnspiv
 
-subroutine dslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine dslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -6894,19 +6894,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call dsplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call dsplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call dslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call dslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine dslv
 
-pure subroutine dslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine dslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -6953,7 +6953,7 @@ end do
 return
 end subroutine dslv1
 
-subroutine dtslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine dtslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -7048,19 +7048,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call dsplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call dsplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call dtslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call dtslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine dtslv
 
-pure subroutine dtslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine dtslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -7115,7 +7115,7 @@ end do
 return
 end subroutine dtslv1
 
-subroutine dsplu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
+subroutine dsplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -7338,7 +7338,7 @@ return
 return
 end subroutine dsplu
 
-subroutine s1cnd (n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
+subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -7358,7 +7358,7 @@ real :: ainorm, anorm
 !     integer iwk(5*n + max + 2)
 !-----------------------
 cond = 0.0
-call s1nrm (a, ia, ja, n, n, anorm, wk)
+call s1nrm(a, ia, ja, n, n, anorm, wk)
 if (anorm .eq. 0.0) go to 50
 !
 ix = 2*n + max + 1
@@ -7367,9 +7367,9 @@ isgn = 4*n + max + 3
 !
 kase = 0
 ainorm = 0.0
-call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
-call rslv (0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+call rslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 !
 !     Check if A is singular or if there are errors
@@ -7385,14 +7385,14 @@ return
 !     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
-20 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+20 call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
 if (kase .eq. 0) go to 40
 if (kase .ne. 1) go to 30
-call rslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+call rslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 go to 20
-30 call tslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+30 call tslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 go to 20
 !
@@ -7407,7 +7407,7 @@ return
 return
 end subroutine s1cnd
 
-subroutine ds1cnd (n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
+subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -7427,7 +7427,7 @@ double precision :: anorm, ainorm
 !     integer iwk(5*n + max + 2)
 !-----------------------
 cond = 0.d0
-call ds1nrm (a, ia, ja, n, n, anorm, wk)
+call ds1nrm(a, ia, ja, n, n, anorm, wk)
 if (anorm .eq. 0.d0) go to 50
 !
 ix = 2*n + max + 1
@@ -7436,9 +7436,9 @@ isgn = 4*n + max + 3
 !
 kase = 0
 ainorm = 0.d0
-call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
-call dslv (0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+call dslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 !
 !     Check if A is singular or if there are errors
@@ -7454,14 +7454,14 @@ return
 !     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
-20 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
+20 call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
    & iter, j, jump)
 if (kase .eq. 0) go to 40
 if (kase .ne. 1) go to 30
-call dslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+call dslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 go to 20
-30 call dtslv (1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
+30 call dtslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
    & iwk(1), wk(1), ierr)
 go to 20
 !
@@ -7476,7 +7476,7 @@ return
 return
 end subroutine ds1cnd
 
-pure subroutine sonest (n, v, x, isgn, anorm, kase, iter, j, jump)
+pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
@@ -7607,7 +7607,7 @@ return
 !     ................ ENTRY   (jump = 3)
 !     x has been overwritten by A*x.
 !
-300 call scopy (n,x,1,v,1)
+300 call scopy(n,x,1,v,1)
 anrm = anorm
 anorm = sasum(n,v,1)
 do i = 1,n
@@ -7657,13 +7657,13 @@ return
 !
 500 anrm = 2.0*sasum(n,x,1)/float(3*n)
 if (anrm .le. anorm) go to 510
-call scopy (n,x,1,v,1)
+call scopy(n,x,1,v,1)
 anorm = anrm
 510 kase = 0
 return
 end subroutine sonest
 
-pure subroutine donest (n, v, x, isgn, anorm, kase, iter, j, jump)
+pure subroutine donest(n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
@@ -7795,7 +7795,7 @@ return
 !     ................ ENTRY   (jump = 3)
 !     x has been overwritten by A*x.
 !
-300 call dcopy (n,x,1,v,1)
+300 call dcopy(n,x,1,v,1)
 anrm = anorm
 anorm = dasum(n,v,1)
 do i = 1,n
@@ -7846,13 +7846,13 @@ return
 !
 500 anrm = 2.d0*dasum(n,x,1)/(3.d0*an)
 if (anrm .le. anorm) go to 510
-call dcopy (n,x,1,v,1)
+call dcopy(n,x,1,v,1)
 anorm = anrm
 510 kase = 0
 return
 end subroutine donest
 
-subroutine cspslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
+subroutine cspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
@@ -7967,13 +7967,13 @@ end do
 !
 !  CALL cnspiv TO PERFORM COMPUTATIONS
 !
-call cnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
+call cnspiv(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr .eq. 0) ierr = 1
 return
 end subroutine cspslv
 
-subroutine cnspiv (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
+subroutine cnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -8257,7 +8257,7 @@ return
 return
 end subroutine cnspiv
 
-subroutine cslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine cslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -8352,19 +8352,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call csplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call csplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call cslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call cslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine cslv
 
-pure subroutine cslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine cslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -8411,7 +8411,7 @@ end do
 return
 end subroutine cslv1
 
-subroutine ctslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
+subroutine ctslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
@@ -8506,19 +8506,19 @@ end do
 !
 !     Obtain the LU decomposition of A
 !
-call csplu (a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
+call csplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
    & iwk(iu),wk(y),iwk(p),ierr)
 if (ierr .lt. 0) return
 ierr = max0(1,ierr)
 !
 !     Solve the system of equations
 !
-20 call ctslv1 (n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
+20 call ctslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
    & b,x,wk(y))
 return
 end subroutine ctslv
 
-pure subroutine ctslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
+pure subroutine ctslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
@@ -8573,7 +8573,7 @@ end do
 return
 end subroutine ctslv1
 
-subroutine csplu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
+subroutine csplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
@@ -8798,7 +8798,7 @@ return
 return
 end subroutine csplu
 
-pure subroutine eig (ibal,a,ka,n,wr,wi,ierr)
+pure subroutine eig(ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -8842,13 +8842,13 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call balanc (ka,n,a,low,igh,wr)
-call elmhs0 (ka,n,low,igh,a,wr)
-call hqr (ka,n,low,igh,a,wr,wi,ierr)
+if (ibal .ne. 0) call balanc(ka,n,a,low,igh,wr)
+call elmhs0(ka,n,low,igh,a,wr)
+call hqr(ka,n,low,igh,a,wr,wi,ierr)
 return
 end subroutine eig
 
-pure subroutine eig1 (ibal,a,ka,n,wr,wi,ierr)
+pure subroutine eig1(ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -8892,13 +8892,13 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call balanc (ka,n,a,low,igh,wr)
-call orthes (ka,n,low,igh,a,wr)
-call hqr (ka,n,low,igh,a,wr,wi,ierr)
+if (ibal .ne. 0) call balanc(ka,n,a,low,igh,wr)
+call orthes(ka,n,low,igh,a,wr)
+call hqr(ka,n,low,igh,a,wr,wi,ierr)
 return
 end subroutine eig1
 
-pure subroutine eigv (ibal,a,ka,n,wr,wi,zr,zi,ierr)
+pure subroutine eigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -8963,12 +8963,12 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call balanc (ka,n,a,low,igh,zi)
-call elmhs0 (ka,n,low,igh,a,wr)
-call eltrn0 (ka,n,low,igh,a,wr,zr)
-call hqr2 (ka,n,low,igh,a,wr,wi,zr,ierr)
+if (ibal .ne. 0) call balanc(ka,n,a,low,igh,zi)
+call elmhs0(ka,n,low,igh,a,wr)
+call eltrn0(ka,n,low,igh,a,wr,zr)
+call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr .ne. 0) return
-if (ibal .ne. 0) call balbak (ka,n,low,igh,zi,n,zr)
+if (ibal .ne. 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
 do 30 k = 1,n
    if (wi(k)) 30,10,20
@@ -8984,7 +8984,7 @@ do 30 k = 1,n
 return
 end subroutine eigv
 
-pure subroutine eigv1 (ibal,a,ka,n,wr,wi,zr,zi,ierr)
+pure subroutine eigv1(ibal,a,ka,n,wr,wi,zr,zi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -9049,12 +9049,12 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call balanc (ka,n,a,low,igh,zi)
-call orthes (ka,n,low,igh,a,wr)
-call ortran (ka,n,low,igh,a,wr,zr)
-call hqr2 (ka,n,low,igh,a,wr,wi,zr,ierr)
+if (ibal .ne. 0) call balanc(ka,n,a,low,igh,zi)
+call orthes(ka,n,low,igh,a,wr)
+call ortran(ka,n,low,igh,a,wr,zr)
+call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr .ne. 0) return
-if (ibal .ne. 0) call balbak (ka,n,low,igh,zi,n,zr)
+if (ibal .ne. 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
 do 30 k = 1,n
    if (wi(k)) 30,10,20
@@ -9252,7 +9252,7 @@ igh = l
 return
 end subroutine balanc
 
-pure subroutine balinv (nz,n,z,low,igh,scale)
+pure subroutine balinv(nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low

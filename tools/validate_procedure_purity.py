@@ -18,6 +18,7 @@ from validate_explicit_typing import symbols
 from generate_interfaces import compiler_environment
 from data_constants import transform as apply_constants
 from portable_intrinsics import transform as portable_intrinsics
+from simplify_free_style import transform as simplify_style
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -86,7 +87,7 @@ def main():
     baseline = portable_intrinsics(apply_constants(sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text))
     manifest = json.loads(MANIFEST.read_text())
     annotated = transform(baseline, manifest)
-    if apply_free_fixes(annotated) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if simplify_style(apply_free_fixes(annotated)) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Purity regeneration differs from maintained source')
     inventories, code, warnings = [], [], []
     with tempfile.TemporaryDirectory(prefix='nswc-purity-validation-') as work:

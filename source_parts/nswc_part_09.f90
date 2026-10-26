@@ -1,4 +1,4 @@
-pure subroutine assgn (n,a,c,t,iwk,ierr)
+pure subroutine assgn(n,a,c,t,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -299,7 +299,7 @@ go to 150
 return
 end subroutine assgn1
 
-pure subroutine mkp (n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
+pure subroutine mkp(n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
 implicit none
 integer, intent(in) :: m, n, num
 integer, intent(inout) :: p(n), w(n)
@@ -452,7 +452,7 @@ do j = 1,n
    jj = n5 + j
    iwk(jj) = j
 end do
-call risort (wk, iwk(n5 + 1), n)
+call risort(wk, iwk(n5 + 1), n)
 !
 do j = 1,n
    iwk(j) = p(j)
@@ -494,7 +494,7 @@ bl = xl + mn
 !
 !                     Solve the problem
 !
-call mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+call mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
    & iwk(bb), iwk(bl), iwk(x), iwk(xl), &
    & iwk(b), iwk(ubb), iwk(lx), iwk(lxi), &
    & iwk(f), iwk(pbl), iwk(q), iwk(v), &
@@ -540,7 +540,7 @@ return
 return
 end subroutine mkp
 
-pure subroutine mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+pure subroutine mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
    & bb, bl, x, xl, b, ubb, lx, lxi, &
    & f, pbl, q, v, bs, ps, ws, xs, iwk)
 implicit none
@@ -694,7 +694,7 @@ q(m) = k(m)
 vstar = 0
 vb = 0
 i = 1
-call sigma1 (n,m,p,w,k,1,b,kub,ub,np1,n5,lx,lr, &
+call sigma1(n,m,p,w,k,1,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 do j = 1,n
    lxi(j) = lx(j)
@@ -706,7 +706,7 @@ iflag = 0
 ! Step 2 (heuristic)
 !
 70 kub = vstar - vb
-call pi1 (n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
+call pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
    & np1,n5,bs,ps,ws,xs,iwk)
 if ( lb + vb .le. vstar ) go to 140
 vstar = lb + vb
@@ -757,11 +757,11 @@ do 170 s = 1,u
 150 f(i) = j
    ibv = ibv + p(j)
    if ( ibv .eq. v(i) ) go to 180
-   call parc (i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+   call parc(i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
       & lx,lxi,lr,lri,lubi)
    if ( iflag .eq. 1 ) go to 160
    kub = vstar - vb
-   call sigma1 (n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
+   call sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
       & bs,ps,ws,xs,iwk)
    lj = n1
 160 iuv = ub + vb
@@ -769,11 +769,11 @@ do 170 s = 1,u
 170 continue
 180 if ( i .eq. m - 1 ) go to 200
 ip1 = i + 1
-call parc (ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+call parc(ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
    & lx,lxi,lr,lri,lubi)
 if ( iflag .eq. 1 ) go to 190
 kub = vstar - vb
-call sigma1 (n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
+call sigma1(n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 lj = n1
 190 if ( ub + vb .le. vstar ) go to 200
@@ -814,7 +814,7 @@ do j = 1,n
    ps(j) = p(j)
    ws(j) = w(j)
 end do
-call sknp (n,k1,0,vstar,n,np1,n5,ps,ws,xs,iwk)
+call sknp(n,k1,0,vstar,n,np1,n5,ps,ws,xs,iwk)
 do j = 1,n
    xstar(j) = xs(j)
 end do
@@ -822,7 +822,7 @@ bck = 0
 return
 end subroutine mkp1
 
-pure subroutine sigma1 (n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
+pure subroutine sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
    & bs,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: i, kub
@@ -879,7 +879,7 @@ do j = 1,ns
    xs(j) = 1
 end do
 go to 50
-40 call sknp (ns,qs,kub,ub,n,np1,n5,ps,ws,xs,iwk)
+40 call sknp(ns,qs,kub,ub,n,np1,n5,ps,ws,xs,iwk)
 lr = qs
 50 do j = 1,ns
    jj = bs(j)
@@ -888,7 +888,7 @@ end do
 return
 end subroutine sigma1
 
-pure subroutine pi1 (n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
+pure subroutine pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
    & np1,n5,bs,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: i
@@ -966,7 +966,7 @@ go to 80
 60 qs = q(ii)
 kub = 0
 if ( ii .eq. m ) kub = ikub
-call sknp (ns,qs,kub,pb,n,np1,n5,ps,ws,xs,iwk)
+call sknp(ns,qs,kub,pb,n,np1,n5,ps,ws,xs,iwk)
 do j = 1,ns
    xl(ii,j) = xs(j)
 end do
@@ -1004,7 +1004,7 @@ do 110 j = 1,u
 go to 40
 end subroutine pi1
 
-pure subroutine parc (i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
+pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
    & lx,lxi,lr,lri,lubi)
 implicit none
 integer, intent(in) :: i
@@ -1058,7 +1058,7 @@ iflag = 1
 return
 end subroutine parc
 
-pure subroutine sknp (ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
+pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
 integer, intent(inout) :: qs, vs
@@ -1101,12 +1101,12 @@ i2 = i1 + n
 i3 = i2 + n
 i4 = i3 + n
 i5 = i4 + n
-call sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,iwk(i1),iwk(i2), &
+call sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,iwk(i1),iwk(i2), &
    & iwk(i3),iwk(i4),iwk(i5))
 return
 end subroutine sknp
 
-pure subroutine sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
+pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
    & pbar,wbar,zbar)
 implicit none
 integer, intent(in) :: kub, n, np1, ns
@@ -1317,7 +1317,7 @@ lold = nn
 go to 80
 end subroutine sknp1
 
-subroutine lainv (mo,fun,t,aerr,rerr,y,c,error,num,ierr)
+subroutine lainv(mo,fun,t,aerr,rerr,y,c,error,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: mo
@@ -1418,9 +1418,9 @@ if (ierr .ge. 0) go to 10
 !     Calculation of the abscissa of convergence.
 !
 if (mo .eq. 0) go to 5
-call abcon1 (fun,c,num,ierc)
+call abcon1(fun,c,num,ierc)
 go to 10
-5 call abcon (fun,c,num,ierc)
+5 call abcon(fun,c,num,ierc)
 10 if (ierc .eq. 2) go to 100
 !
 !     Check if t is too large
@@ -1430,7 +1430,7 @@ if (a*t .gt. exparg(0)) go to 110
 !
 !     Calculation of the inverse Laplace transform.
 !
-call lainv1 (fun,t,c,rerr,aerr,y,error,num1,ier)
+call lainv1(fun,t,c,rerr,aerr,y,error,num1,ier)
 num = num + num1
 !
 !     Report the status of the results.
@@ -1466,7 +1466,7 @@ ierr = 6
 return
 end subroutine lainv
 
-subroutine abcon (fun, c, num, ierr)
+subroutine abcon(fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
@@ -1539,7 +1539,7 @@ if (ierr .eq. 3) c = 0.0
 return
 end subroutine abcon
 
-subroutine srch (fun,cond,xl,eta,x,num,ierr)
+subroutine srch(fun,cond,xl,eta,x,num,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: num
@@ -1662,7 +1662,7 @@ ierr = 3
 return
 end subroutine srch
 
-subroutine abcon1 (fun, c, num, ierr)
+subroutine abcon1(fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
@@ -1708,9 +1708,9 @@ eta = 0.01
 cmplex = .false.
 !
 x1 = .01269
-call xcond (fun,x1,right,num,ierr)
+call xcond(fun,x1,right,num,ierr)
 if (.not. right) go to 10
-call acond (fun,x1,right,num1,ierr)
+call acond(fun,x1,right,num1,ierr)
 num = num + num1
 if (right) go to 30
 cmplex = .true.
@@ -1721,10 +1721,10 @@ cmplex = .true.
 10 x2 = 10.1269
 do i = 1,4
    if (cmplex) go to 20
-   call xcond (fun,x2,right,num1,ierr)
+   call xcond(fun,x2,right,num1,ierr)
    num = num + num1
    if (.not. right) go to 21
-20 call acond (fun,x2,right,num1,ierr)
+20 call acond(fun,x2,right,num1,ierr)
    num = num + num1
    if (right) go to 50
    cmplex = .true.
@@ -1739,10 +1739,10 @@ go to 100
 30 x2 = x1
 x1 = -.100358
 do i = 1,6
-   call xcond (fun,x1,right,num1,ierr)
+   call xcond(fun,x1,right,num1,ierr)
    num = num + num1
    if (.not. right) go to 50
-   call acond (fun,x1,right,num1,ierr)
+   call acond(fun,x1,right,num1,ierr)
    num = num + num1
    if (.not. right) go to 45
    x2 = x1
@@ -1762,14 +1762,14 @@ if (xm .gt. 1.0) tol = eta*xm
 iend = dx .le. tol
 !
 if (cmplex) go to 60
-call xcond (fun,xbar,right,num1,ierr)
+call xcond(fun,xbar,right,num1,ierr)
 num = num + num1
 if (right) go to 60
 if (iend) go to 80
 x1 = xbar
 go to 50
 !
-60 call acond (fun,xbar,right,num1,ierr)
+60 call acond(fun,xbar,right,num1,ierr)
 num = num + num1
 if (right) go to 70
 if (iend) go to 80
@@ -1791,7 +1791,7 @@ ierr = 2
 return
 end subroutine abcon1
 
-subroutine acond (fun, x, cond, num, ierr)
+subroutine acond(fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(in) :: x
@@ -1842,13 +1842,13 @@ c = x
 !
 !     Calculation of the integral of acondf from x to infinity.
 !
-call qagi1 (acondf,fun,y,c,x,1,aerr,rerr,z1,error1,num1,ier1, &
+call qagi1(acondf,fun,y,c,x,1,aerr,rerr,z1,error1,num1,ier1, &
    & l,m,n,iwk,wk)
 !
 !     Calculation of the integral of acondg from 0 to infinity.
 !
 a = 0.0
-call qagi1 (acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
+call qagi1(acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
    & l,m,n,iwk,wk)
 num = num1 + num2
 ier = max0(ier1, ier2)
@@ -1865,7 +1865,7 @@ if (ier .gt. 4) ierr = 1
 return
 end subroutine acond
 
-function acondf (x, y, c, fun)
+function acondf(x, y, c, fun)
 implicit none
 real, intent(in) :: c
 real :: x
@@ -1878,13 +1878,13 @@ real :: acondf
 !        acond. y is a dummy variable.
 !-----------------------------------------------------------------------
 !
-call fun (x, 0.0, a, b)
+call fun(x, 0.0, a, b)
 t = 1.0/((x - c) + 1.0)
 acondf = a*t*t
 return
 end function acondf
 
-function acondg (x, y, c, fun)
+function acondg(x, y, c, fun)
 implicit none
 real :: c, x
 real, intent(in) :: y
@@ -1905,15 +1905,15 @@ end interface
 !        in acond. y is a dummy variable.
 !-----------------------------------------------------------------------
 !
-call fun (c, x, a, b)
-call crec (1.0, x, s, t)
+call fun(c, x, a, b)
+call crec(1.0, x, s, t)
 u = s*s - t*t
 v = 2.0*s*t
 acondg = -(a*v + b*u)
 return
 end function acondg
 
-subroutine xcond (fun, x, cond, num, ierr)
+subroutine xcond(fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real :: x
@@ -1968,7 +1968,7 @@ cond = .false.
 !     Numerical integration of the imaginary part of the integrand
 !     along the line y = epsr.
 !
-call qagi1 (xcondy,fun,y,c,x,1,aerr,rerr,z,error,num,ierr, &
+call qagi1(xcondy,fun,y,c,x,1,aerr,rerr,z,error,num,ierr, &
    & l,m,n,iwk,wk)
 if (ierr .ne. 0) go to 100
 !
@@ -1989,7 +1989,7 @@ return
 return
 end subroutine xcond
 
-function xcondx (x,y,c,fun)
+function xcondx(x,y,c,fun)
 implicit none
 real, intent(in) :: c
 real :: x, y
@@ -2009,15 +2009,15 @@ end interface
 !     Real part of the integrand in xcond
 !
 !
-call fun (x, y, a, b)
-call crec (x + c, y, s, t)
+call fun(x, y, a, b)
+call crec(x + c, y, s, t)
 u = s*s - t*t
 v = 2.0*s*t
 xcondx = a*u - b*v
 return
 end function xcondx
 
-function xcondy (x,y,c,fun)
+function xcondy(x,y,c,fun)
 implicit none
 real, intent(in) :: c
 real :: x, y
@@ -2037,8 +2037,8 @@ end interface
 !     Imaginary part of integrand in xcond
 !
 !
-call fun (x, y, a, b)
-call crec (x + c, y, s, t)
+call fun(x, y, a, b)
+call crec(x + c, y, s, t)
 u = s*s - t*t
 v = 2.0*s*t
 xcondy = a*v + b*u
@@ -2213,7 +2213,7 @@ arg = pid16/t
 are = c + 2.0e+00/t
 aim = 0.0e+00
 bb = exp(are*t)/(1.6e+01*t)
-call fun (are,aim,fre,fim)
+call fun(are,aim,fre,fim)
 num = 5
 r = 5.0e-01*fre
 s = 0.0
@@ -3001,7 +3001,7 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 boun = bound
 if (inf .eq. 2) boun = 0.0
-call qk15i1 (f, phi, y, c, boun, inf, 0.0, 1.0, result, abserr, &
+call qk15i1(f, phi, y, c, boun, inf, 0.0, 1.0, result, abserr, &
    & defabs, resabs, epmach, uflow)
 !
 !           Test on accuracy
@@ -3055,9 +3055,9 @@ do 90 last = 2,limit
    a2 = b1
    b2 = blist(maxerr)
    erlast = errmax
-   call qk15i1 (f, phi, y, c, boun, inf, a1, b1, area1, error1, &
+   call qk15i1(f, phi, y, c, boun, inf, a1, b1, area1, error1, &
       & resabs, defab1, epmach, uflow)
-   call qk15i1 (f, phi, y, c, boun, inf, a2, b2, area2, error2, &
+   call qk15i1(f, phi, y, c, boun, inf, a2, b2, area2, error2, &
       & resabs, defab2, epmach, uflow)
 !
 !           Improve previous approximations to integral
@@ -3116,7 +3116,7 @@ do 90 last = 2,limit
 !           subinterval with NRMAX-TH largest error estimate (to be
 !           bisected next).
 !
-30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum.le.errbnd) go to 115
    if (ier.ne.0) go to 100
    if (last.eq.2) go to 80
@@ -3152,7 +3152,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+   call qelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
       & epmach, oflow)
    ktmin = ktmin + 1
    if (ktmin.gt.5.and.abserr.lt.0.1e-02*errsum) ier = 5
@@ -3215,7 +3215,7 @@ if (ier .gt. 2) ier = ier - 1
 999 return
 end subroutine qagie1
 
-subroutine qk15i1 (f, phi, y, c, boun, inf, a, b, result, abserr, &
+subroutine qk15i1(f, phi, y, c, boun, inf, a, b, result, abserr, &
    & resabs, resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
@@ -3233,11 +3233,11 @@ integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
    & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
 real :: fv1(7), fv2(7)
-real, parameter :: xgk(8) = [real :: 0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [real :: 0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
    & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [real :: 0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
    & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
 !-----------------------------------------------------------------------
 !
@@ -3404,7 +3404,7 @@ if (resabs .gt. uflow/tol) abserr = amax1(abserr, tol*resabs)
 return
 end subroutine qk15i1
 
-subroutine fft (c,n,isn,ierr)
+subroutine fft(c,n,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: isn, n
@@ -3416,26 +3416,26 @@ real, intent(inout) :: c(*)
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
 if (iabs(isn) .ne. 1) go to 10
-call sfft (c(1),c(2),n,n,n,isn + isn,ierr)
+call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
 return
 10 ierr = 4
 return
 end subroutine fft
 
-subroutine fft1 (a,b,n,isn,ierr)
+subroutine fft1(a,b,n,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: isn, n
 real, intent(inout) :: a(n), b(n)
 !     ------------
 if (iabs(isn) .ne. 1) go to 10
-call sfft (a,b,n,n,n,isn,ierr)
+call sfft(a,b,n,n,n,isn,ierr)
 return
 10 ierr = 4
 return
 end subroutine fft1
 
-subroutine mfft (c,n,ndim,isn,ierr)
+subroutine mfft(c,n,ndim,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isn, ndim
@@ -3461,7 +3461,7 @@ isign = isn + isn
 nspan = 1
 do i = 1,ndim
    nspan = n(i)*nspan
-   call sfft (c(1),c(2),ntot,n(i),nspan,isign,ierr)
+   call sfft(c(1),c(2),ntot,n(i),nspan,isign,ierr)
    if (ierr .ne. 0) return
 end do
 return
@@ -3474,7 +3474,7 @@ return
 return
 end subroutine mfft
 
-subroutine mfft1 (a,b,n,ndim,isn,ierr)
+subroutine mfft1(a,b,n,ndim,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: isn
@@ -3494,7 +3494,7 @@ if (ntot .lt. 1) go to 30
 nspan = 1
 do i = 1,ndim
    nspan = n(i)*nspan
-   call sfft (a,b,ntot,n(i),nspan,isn,ierr)
+   call sfft(a,b,ntot,n(i),nspan,isn,ierr)
    if (ierr .ne. 0) return
 end do
 return
@@ -4128,7 +4128,7 @@ end subroutine sfft
 !             are required for different values of n. the contents of
 !             WSAVE must not be changed between calls of cosqf or cosqb.
 !
-subroutine cosqi (n,wsave)
+subroutine cosqi(n,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*)
@@ -4141,7 +4141,7 @@ do k = 1,n
    fk = fk + 1.
    wsave(k) = cos(fk*dt)
 end do
-call rffti (n,wsave(n + 1))
+call rffti(n,wsave(n + 1))
 return
 end subroutine cosqi
 
@@ -4195,7 +4195,7 @@ end subroutine cosqi
 !     wsave   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             be destroyed between calls of cosqf or cosqb.
 !
-subroutine cosqf (n,x,wsave)
+subroutine cosqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
@@ -4206,11 +4206,11 @@ if (n - 2) 102,101,103
 x(2) = x(1) - tsqx
 x(1) = x(1) + tsqx
 102 return
-103 call cosqf1 (n,x,wsave,wsave(n + 1))
+103 call cosqf1(n,x,wsave,wsave(n + 1))
 return
 end subroutine cosqf
 
-subroutine cosqf1 (n,x,w,xh)
+subroutine cosqf1(n,x,w,xh)
 implicit none
 integer :: n
 real :: w(*)
@@ -4232,7 +4232,7 @@ do k = 2,ns2
    x(kc) = w(k - 1)*xh(k) - w(kc - 1)*xh(kc)
 end do
 if (modn .eq. 0) x(ns2 + 1) = w(ns2)*xh(ns2 + 1)
-call rfftf (n,x,xh)
+call rfftf(n,x,xh)
 do i = 3,n,2
    xim1 = x(i - 1) - x(i)
    x(i) = x(i - 1) + x(i)
@@ -4291,7 +4291,7 @@ end subroutine cosqf1
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             be destroyed between calls of cosqb or cosqf.
 !
-subroutine cosqb (n,x,wsave)
+subroutine cosqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
@@ -4304,11 +4304,11 @@ return
 x(2) = tsqrt2*(x(1) - x(2))
 x(1) = x1
 return
-103 call cosqb1 (n,x,wsave,wsave(n + 1))
+103 call cosqb1(n,x,wsave,wsave(n + 1))
 return
 end subroutine cosqb
 
-subroutine cosqb1 (n,x,w,xh)
+subroutine cosqb1(n,x,w,xh)
 implicit none
 integer :: n
 real :: w(*)
@@ -4325,7 +4325,7 @@ end do
 x(1) = x(1) + x(1)
 modn = mod(n,2)
 if (modn .eq. 0) x(n) = x(n) + x(n)
-call rfftb (n,x,xh)
+call rfftb(n,x,xh)
 do k = 2,ns2
    kc = np2 - k
    xh(k) = w(k - 1)*x(kc) + w(kc - 1)*x(k)
@@ -4393,7 +4393,7 @@ end subroutine cosqb1
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             be destroyed between calls of sinqf or sinqb.
 !
-subroutine sinqf (n,x,wsave)
+subroutine sinqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
@@ -4407,7 +4407,7 @@ do k = 1,ns2
    x(k) = x(kc + 1)
    x(kc + 1) = xhold
 end do
-call cosqf (n,x,wsave)
+call cosqf(n,x,wsave)
 do k = 2,n,2
    x(k) = -x(k)
 end do
@@ -4464,7 +4464,7 @@ end subroutine sinqf
 !     wsave   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             be destroyed between calls of sinqb or sinqf.
 !
-subroutine sinqb (n,x,wsave)
+subroutine sinqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
@@ -4477,7 +4477,7 @@ return
 do k = 2,n,2
    x(k) = -x(k)
 end do
-call cosqb (n,x,wsave)
+call cosqb(n,x,wsave)
 do k = 1,ns2
    kc = n - k
    xhold = x(k)
@@ -4510,23 +4510,23 @@ end subroutine sinqb
 !             are required for different values of n. the contents of
 !             wsave must not be changed between calls of rfftf or rfftb.
 !
-subroutine rffti (n,wsave)
+subroutine rffti(n,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*)
 if (n .eq. 1) return
-call rffti1 (n,wsave(n + 1),wsave(2*n + 1))
+call rffti1(n,wsave(n + 1),wsave(2*n + 1))
 return
 end subroutine rffti
 
-pure subroutine rffti1 (n,wa,ifac)
+pure subroutine rffti1(n,wa,ifac)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: wa(*), ifac(*)
 integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
    & nfm1, nl, nq, nr, ntry
 real :: arg, argh, argld, fi, tpi
-integer, parameter :: ntryh(4) = [integer :: 4, 2, 3, 5]
+integer, parameter :: ntryh(4) = [4, 2, 3, 5]
 nl = n
 nf = 0
 j = 0
@@ -4640,16 +4640,16 @@ end subroutine rffti1
 !             calls of rfftb or rfftf.
 !
 !
-subroutine rfftb (n,r,wsave)
+subroutine rfftb(n,r,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: r(*), wsave(*)
 if (n .eq. 1) return
-call rfftb1 (n,r,wsave,wsave(n + 1),wsave(2*n + 1))
+call rfftb1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
 return
 end subroutine rfftb
 
-subroutine rfftb1 (n,c,ch,wa,ifac)
+subroutine rfftb1(n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
@@ -4669,24 +4669,24 @@ do k1 = 1,nf
    ix2 = iw + ido
    ix3 = ix2 + ido
    if (na .ne. 0) go to 101
-   call radb4 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
+   call radb4(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
    go to 102
-101 call radb4 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
+101 call radb4(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
 102 na = 1 - na
    go to 115
 103 if (ip .ne. 2) go to 106
    if (na .ne. 0) go to 104
-   call radb2 (ido,l1,c,ch,wa(iw))
+   call radb2(ido,l1,c,ch,wa(iw))
    go to 105
-104 call radb2 (ido,l1,ch,c,wa(iw))
+104 call radb2(ido,l1,ch,c,wa(iw))
 105 na = 1 - na
    go to 115
 106 if (ip .ne. 3) go to 109
    ix2 = iw + ido
    if (na .ne. 0) go to 107
-   call radb3 (ido,l1,c,ch,wa(iw),wa(ix2))
+   call radb3(ido,l1,c,ch,wa(iw),wa(ix2))
    go to 108
-107 call radb3 (ido,l1,ch,c,wa(iw),wa(ix2))
+107 call radb3(ido,l1,ch,c,wa(iw),wa(ix2))
 108 na = 1 - na
    go to 115
 109 if (ip .ne. 5) go to 112
@@ -4694,15 +4694,15 @@ do k1 = 1,nf
    ix3 = ix2 + ido
    ix4 = ix3 + ido
    if (na .ne. 0) go to 110
-   call radb5 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+   call radb5(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
    go to 111
-110 call radb5 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+110 call radb5(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
 111 na = 1 - na
    go to 115
 112 if (na .ne. 0) go to 113
-   call radbg (ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
+   call radbg(ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
    go to 114
-113 call radbg (ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
+113 call radbg(ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
 114 if (ido .eq. 1) na = 1 - na
 115 l1 = l2
    iw = iw + (ip - 1)*ido
@@ -4714,7 +4714,7 @@ end do
 return
 end subroutine rfftb1
 
-subroutine radb2 (ido,l1,cc,ch,wa1)
+subroutine radb2(ido,l1,cc,ch,wa1)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,2,l1)
@@ -4760,7 +4760,7 @@ end do
 107 return
 end subroutine radb2
 
-subroutine radb3 (ido,l1,cc,ch,wa1,wa2)
+subroutine radb3(ido,l1,cc,ch,wa1,wa2)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,3,l1)
@@ -4827,7 +4827,7 @@ end do
 return
 end subroutine radb3
 
-subroutine radb4 (ido,l1,cc,ch,wa1,wa2,wa3)
+subroutine radb4(ido,l1,cc,ch,wa1,wa2,wa3)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,4,l1)
@@ -4918,7 +4918,7 @@ end do
 107 return
 end subroutine radb4
 
-subroutine radb5 (ido,l1,cc,ch,wa1,wa2,wa3,wa4)
+subroutine radb5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,5,l1)
@@ -5030,7 +5030,7 @@ end do
 return
 end subroutine radb5
 
-subroutine radbg (ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
+subroutine radbg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
 implicit none
 integer, intent(in) :: idl1, ido, ip, l1
 real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
@@ -5257,16 +5257,16 @@ end subroutine radbg
 !             calls of rfftf or rfftb.
 !
 !
-subroutine rfftf (n,r,wsave)
+subroutine rfftf(n,r,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: r(*), wsave(*)
 if (n .eq. 1) return
-call rfftf1 (n,r,wsave,wsave(n + 1),wsave(2*n + 1))
+call rfftf1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
 return
 end subroutine rfftf
 
-subroutine rfftf1 (n,c,ch,wa,ifac)
+subroutine rfftf1(n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
@@ -5290,38 +5290,38 @@ do k1 = 1,nf
    ix2 = iw + ido
    ix3 = ix2 + ido
    if (na .ne. 0) go to 101
-   call radf4 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
+   call radf4(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
    go to 110
-101 call radf4 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
+101 call radf4(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
    go to 110
 102 if (ip .ne. 2) go to 104
    if (na .ne. 0) go to 103
-   call radf2 (ido,l1,c,ch,wa(iw))
+   call radf2(ido,l1,c,ch,wa(iw))
    go to 110
-103 call radf2 (ido,l1,ch,c,wa(iw))
+103 call radf2(ido,l1,ch,c,wa(iw))
    go to 110
 104 if (ip .ne. 3) go to 106
    ix2 = iw + ido
    if (na .ne. 0) go to 105
-   call radf3 (ido,l1,c,ch,wa(iw),wa(ix2))
+   call radf3(ido,l1,c,ch,wa(iw),wa(ix2))
    go to 110
-105 call radf3 (ido,l1,ch,c,wa(iw),wa(ix2))
+105 call radf3(ido,l1,ch,c,wa(iw),wa(ix2))
    go to 110
 106 if (ip .ne. 5) go to 108
    ix2 = iw + ido
    ix3 = ix2 + ido
    ix4 = ix3 + ido
    if (na .ne. 0) go to 107
-   call radf5 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+   call radf5(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
    go to 110
-107 call radf5 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+107 call radf5(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
    go to 110
 108 if (ido .eq. 1) na = 1 - na
    if (na .ne. 0) go to 109
-   call radfg (ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
+   call radfg(ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
    na = 1
    go to 110
-109 call radfg (ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
+109 call radfg(ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
    na = 0
 110 l2 = l1
 end do
@@ -5332,7 +5332,7 @@ end do
 return
 end subroutine rfftf1
 
-subroutine radf2 (ido,l1,cc,ch,wa1)
+subroutine radf2(ido,l1,cc,ch,wa1)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
@@ -5378,7 +5378,7 @@ end do
 107 return
 end subroutine radf2
 
-subroutine radf3 (ido,l1,cc,ch,wa1,wa2)
+subroutine radf3(ido,l1,cc,ch,wa1,wa2)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
@@ -5443,7 +5443,7 @@ end do
 return
 end subroutine radf3
 
-subroutine radf4 (ido,l1,cc,ch,wa1,wa2,wa3)
+subroutine radf4(ido,l1,cc,ch,wa1,wa2,wa3)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
@@ -5530,7 +5530,7 @@ end do
 107 return
 end subroutine radf4
 
-subroutine radf5 (ido,l1,cc,ch,wa1,wa2,wa3,wa4)
+subroutine radf5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
 implicit none
 integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
@@ -5638,7 +5638,7 @@ end do
 return
 end subroutine radf5
 
-subroutine radfg (ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
+subroutine radfg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
 implicit none
 integer, intent(in) :: idl1, ido, ip, l1
 real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
@@ -5810,7 +5810,7 @@ end do
 return
 end subroutine radfg
 
-subroutine cheby (a, b, f, g, phi, eps, itno, mxiter, l, m, &
+subroutine cheby(a, b, f, g, phi, eps, itno, mxiter, l, m, &
    & p, q, error, ierr, w)
 implicit none
 integer, intent(inout) :: ierr, itno
@@ -5838,7 +5838,7 @@ i2 = i1 + np1
 i3 = i2 + np1*np1
 i4 = i3 + np1
 i5 = i4 + np1
-call cheby1 (a, b, f, g, phi, eps, itno, mxiter, l, m, p, q, &
+call cheby1(a, b, f, g, phi, eps, itno, mxiter, l, m, p, q, &
    & error, ierr, lp1, mp1, lpm, n, np1, w(1), &
    & w(i1), w(i2), w(i3), w(i4), w(i5))
 return
@@ -5849,7 +5849,7 @@ return
 return
 end subroutine cheby
 
-subroutine cheby1 (a, b, f, g, phi, eps, itno, mxiter, l, m, &
+subroutine cheby1(a, b, f, g, phi, eps, itno, mxiter, l, m, &
    & p, q, error, ierr, lp1, mp1, lpm, n, np1, &
    & x, xval, c, d, err, h)
 implicit none
@@ -5933,7 +5933,7 @@ end do
 !
 !     Solve the equations CX = D and store the results in D
 !
-call dpslv (np1, 1, c, np1, d, np1, ierr)
+call dpslv(np1, 1, c, np1, d, np1, ierr)
 if (ierr .ne. 0) go to 220
 if (kount .gt. 1) go to 50
 !
@@ -6140,7 +6140,7 @@ return
 return
 end subroutine cheby1
 
-pure subroutine cerr (t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
+pure subroutine cerr(t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, lp1, m, np1
@@ -6187,7 +6187,7 @@ return
 return
 end subroutine cerr
 
-subroutine adapt (f, xlft, xrgt, epsln, npiece, errest, xknots, &
+subroutine adapt(f, xlft, xrgt, epsln, npiece, errest, xknots, &
    & coefs, ierr, kmax, ndeg, nsmth, anorm, dx, mo, kbreak, brakpt, &
    & kdiff, vallft, valrgt)
 implicit none
@@ -7404,7 +7404,7 @@ end do
 return
 end subroutine adtran
 
-subroutine cpsc (f, z, n, ic, tol, r, rs, err)
+subroutine cpsc(f, z, n, ic, tol, r, rs, err)
 implicit none
 integer, intent(in) :: ic, n
 real, intent(inout) :: err(n), r
@@ -7417,8 +7417,8 @@ real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
 complex :: a(64), v
 complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, mult, co
-integer, parameter :: iw(7) = [integer :: 1, 2, 4, 8, 16, 32, 64]
-integer, parameter :: ip(32) = [integer :: 64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
+integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
+integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
 interface
    pure elemental function spmpar(i)
@@ -7654,7 +7654,7 @@ return
 return
 end subroutine cpsc
 
-subroutine dcpsc (fun, x, y, n, ic, tol, r, rs1, rs2, err)
+subroutine dcpsc(fun, x, y, n, ic, tol, r, rs1, rs2, err)
 implicit none
 integer, intent(in) :: ic, n
 double precision :: x, y
@@ -7666,11 +7666,11 @@ double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
    & fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w
 double precision :: c(4), fc(3), sc(4)
 double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), rt2(51,3)
-integer, parameter :: iw(7) = [integer :: 1, 2, 4, 8, 16, 32, 64]
-integer, parameter :: ip(32) = [integer :: 64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
+integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
+integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
-double precision, parameter :: rv1(3) = [double precision :: -.4d0, .7d0, .02d0]
-double precision, parameter :: rv2(3) = [double precision :: .3d0, .2d0, -.06d0]
+double precision, parameter :: rv1(3) = [-.4d0, .7d0, .02d0]
+double precision, parameter :: rv2(3) = [.3d0, .2d0, -.06d0]
 interface
    pure elemental function dcpabs(x,y)
       implicit none
@@ -7983,7 +7983,7 @@ trp = y(i) + r*(y(i + 1) - y(i))
 return
 end function trp
 
-subroutine ltrp (m,x,y,n,xi,yi,ni,t,ierr)
+subroutine ltrp(m,x,y,n,xi,yi,ni,t,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, ni
@@ -8136,7 +8136,7 @@ return
 return
 end subroutine ltrp
 
-subroutine htrp (n,x,y,a,t,ierr)
+subroutine htrp(n,x,y,a,t,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -8521,7 +8521,7 @@ return
 return
 end subroutine wpfit
 
-pure subroutine cbspl (x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
+pure subroutine cbspl(x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
 implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr
@@ -8656,7 +8656,7 @@ return
 return
 end subroutine cbspl
 
-pure subroutine splift (x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
+pure subroutine splift(x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isx, n
@@ -8819,7 +8819,7 @@ return
 return
 end subroutine splift
 
-pure subroutine spfit (x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
+pure subroutine spfit(x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
@@ -8883,14 +8883,14 @@ wk(l + 6) = break(l)
 la = n + 5
 lw = la + n
 lq = lw + n
-call bslsq (x, y, wgt, m, wk(1), n, 4, wk(la), &
+call bslsq(x, y, wgt, m, wk(1), n, 4, wk(la), &
    & wk(lw), wk(lq), ierr)
 if (ierr .lt. 0) go to 120
 ierr = 0
 !
 !     Obtain the coefficients of the fit in Taylor series form
 !
-call bspp (wk(1), wk(la), n, 4, break, &
+call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lq), lm1, temp)
 k = lq
 do 20 j = 1,lm1
@@ -8912,7 +8912,7 @@ return
 return
 end subroutine spfit
 
-subroutine cspfit (x, y, m, break, l, xcon, con, nder, nc, &
+subroutine cspfit(x, y, m, break, l, xcon, con, nder, nc, &
    & z, a, b, c, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -8966,14 +8966,14 @@ ierr = 0
 !
 k = lw - 1
 iwk(1) = iwk(1) - k
-call bfit (wk(1), n, 4, x, y, m, xcon, con, nder, nc, ierr, &
+call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, nc, ierr, &
    & wk(la), r, wk(lw), iwk)
 iwk(1) = iwk(1) + k
 if (ierr .lt. 0 .or. ierr .eq. 2) return
 !
 !     Obtain the coefficients of the fit in Taylor series form
 !
-call bspp (wk(1), wk(la), n, 4, break, &
+call bspp(wk(1), wk(la), n, 4, break, &
    & wk(lw), lm1, temp)
 k = lw
 do 20 j = 1,lm1
@@ -8998,7 +8998,7 @@ iwk(1) = k
 return
 end subroutine cspfit
 
-pure subroutine scomp (x,y,a,b,c,n,xi,yi,ni,ierr)
+pure subroutine scomp(x,y,a,b,c,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9100,7 +9100,7 @@ ir = min0(i + 1,n)
 go to 10
 end subroutine scomp
 
-pure subroutine scomp1 (x,y,yp,n,xi,yi,ni,ierr)
+pure subroutine scomp1(x,y,yp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9204,7 +9204,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine scomp1
 
-pure subroutine scomp2 (x,y,ypp,n,xi,yi,ni,ierr)
+pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9311,7 +9311,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine scomp2
 
-pure subroutine seval (x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9420,7 +9420,7 @@ ir = min0(i + 1,n)
 go to 10
 end subroutine seval
 
-pure subroutine seval1 (x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval1(x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9530,7 +9530,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine seval1
 
-pure subroutine seval2 (x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
+pure subroutine seval2(x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
@@ -9642,7 +9642,7 @@ ir = min0(i + 1,nm1)
 go to 10
 end subroutine seval2
 
-pure real function csint (x, y, a, b, c, n, alpha, beta)
+pure real function csint(x, y, a, b, c, n, alpha, beta)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
@@ -9700,8 +9700,8 @@ b0 = beta
 !
 20 if (n .eq. 1) go to 50
 if (a0 .ge. x(n)) go to 50
-k = intrvl (a0, x, n)
-l = intrvl (b0, x, n)
+k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
 if (b0 .ge. x(n)) l = n
 if (k .eq. l) go to 51
 !
@@ -9751,7 +9751,7 @@ csint = (beta - alpha)*sum
 return
 end function csint
 
-pure real function csint1 (x, y, yp, n, a, b)
+pure real function csint1(x, y, yp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
@@ -9802,8 +9802,8 @@ b0 = b
 !
 !     Locate the intervals containing a0 and b0
 !
-20 k = intrvl (a0, x, n)
-l = intrvl (b0, x, n)
+20 k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
 if (k .eq. l) go to 50
 !
 !     Integrate from a0 to x(k + 1)
@@ -9874,7 +9874,7 @@ csint1 = (b - a)*sum
 return
 end function csint1
 
-pure real function csint2 (x, y, ypp, n, a, b)
+pure real function csint2(x, y, ypp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
@@ -9925,8 +9925,8 @@ b0 = b
 !
 !     Locate the intervals containing a0 and b0
 !
-20 k = intrvl (a0, x, n)
-l = intrvl (b0, x, n)
+20 k = intrvl(a0, x, n)
+l = intrvl(b0, x, n)
 if (k .eq. l) go to 50
 !
 !     Integrate from a0 to x(k + 1)
@@ -9977,7 +9977,7 @@ csint2 = (b - a)*(0.5*r - h*h*s/24.0)
 return
 end function csint2
 
-pure subroutine pdspl (x, y, a, b, c, n, t, ierr)
+pure subroutine pdspl(x, y, a, b, c, n, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -10108,7 +10108,7 @@ return
 return
 end subroutine pdspl
 
-subroutine pdfit (x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
+subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
@@ -10120,7 +10120,7 @@ integer :: j, k, la, lm1, lw, n
 real :: r
 real :: temp(20)
 real :: con(3), xcon(3)
-integer, parameter :: nder(3) = [integer :: 3, 7, 11]
+integer, parameter :: nder(3) = [3, 7, 11]
 !-----------------------------------------------------------------------
 !            Least squares periodic cubic spline fitting
 !-----------------------------------------------------------------------
@@ -10163,14 +10163,14 @@ ierr = 0
 la = n + 5
 lw = la + n
 iwk(1) = iwk(1) - (l + l + 8)
-call bfit (wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
+call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
    & wk(la), r, wk(lw), iwk)
 iwk(1) = iwk(1) + (l + l + 8)
 if (ierr .ne. 0) go to 30
 !
 !     Obtain the coefficients of the spline in Taylor series form
 !
-call bspp (wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
+call bspp(wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
 k = lw
 do 20 j = 1,lm1
    z(j) = wk(k)
@@ -10203,7 +10203,7 @@ return
 return
 end subroutine pdfit
 
-pure subroutine pscmp (x, y, a, b, c, n, xi, yi, m, ierr)
+pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -10283,7 +10283,7 @@ yi(k) = y(1)
 go to 100
 end subroutine pscmp
 
-pure subroutine psevl (x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
+pure subroutine psevl(x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -10370,7 +10370,7 @@ yppi(k) = b(1) + b(1)
 go to 100
 end subroutine psevl
 
-pure subroutine csloop (m, n, x, kx, t, dx, kdx, wk, ierr)
+pure subroutine csloop(m, n, x, kx, t, dx, kdx, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
@@ -10414,7 +10414,7 @@ ie = 1
 ia = mm1
 ib = ia + mm1
 ic = ib + m
-call cslop1 (m, n, x, kx, t, dx, kdx, wk(ia), wk(ib), &
+call cslop1(m, n, x, kx, t, dx, kdx, wk(ia), wk(ib), &
    & wk(ic), wk(ie), ierr)
 return
 !
@@ -10424,7 +10424,7 @@ return
 return
 end subroutine csloop
 
-pure subroutine cslop1 (m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
+pure subroutine cslop1(m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n

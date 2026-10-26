@@ -14,6 +14,7 @@ from fixed_to_free import convert_text
 from lowercase_fortran import lowercase
 from format_free_form import format_source, groups, semantic_statements
 from review_data_constants import compile_dump, review, verify_values
+from simplify_free_style import transform as simplify_style
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,7 +50,7 @@ def initializer_probe(source, manifest):
         output.extend(checks)
         output.append('end subroutine check_' + name.lower() + '\n')
     output.append('end program initializer_bits\n')
-    return ''.join(output)
+    return simplify_style(''.join(output))
 
 
 def verify_bits(probe, folder, compiler, intel=False, env=None):
@@ -73,7 +74,7 @@ def main():
     args = parser.parse_args()
     source = format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))
     manifest = json.loads(MANIFEST.read_text())
-    converted = transform(source, manifest)
+    converted = simplify_style(transform(source, manifest))
     if executable_statements(source) != executable_statements(converted):
         raise ValueError('DATA conversion changed executable statements')
     with tempfile.TemporaryDirectory(prefix='nswc-constant-check-') as work:

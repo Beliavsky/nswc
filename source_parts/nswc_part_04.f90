@@ -491,7 +491,7 @@ end do
 return
 end subroutine nextk
 
-subroutine newest (type, uu, vv, nn, p, k)
+subroutine newest(type, uu, vv, nn, p, k)
 implicit none
 integer :: nn
 integer :: type
@@ -541,7 +541,7 @@ vv = 0.d0
 return
 end subroutine newest
 
-pure subroutine quadsd (nn, u, v, p, q, a, b)
+pure subroutine quadsd(nn, u, v, p, q, a, b)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: p(nn)
@@ -625,7 +625,7 @@ li = -si
 return
 end subroutine quadpl
 
-subroutine dcpoly (opr,opi,ideg,zeror,zeroi,num,wk)
+subroutine dcpoly(opr,opi,ideg,zeror,zeroi,num,wk)
 implicit none
 integer, intent(inout) :: num
 integer :: ideg
@@ -682,7 +682,7 @@ qhi = qhr + idp1
 shr = qhi + idp1
 shi = shr + idp1
 !
-call dcply1 (opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
+call dcply1(opr,opi,ideg,idp1,zeror,zeroi,wk(pr),wk(pi), &
    & wk(qpr),wk(qpi),wk(hr),wk(hi),wk(qhr),wk(qhi), &
    & wk(shr),wk(shi),num)
 return
@@ -693,7 +693,7 @@ return
 return
 end subroutine dcpoly
 
-subroutine dcply1 (opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
+subroutine dcply1(opr,opi,ideg,idp1,zeror,zeroi,pr,pi,qpr,qpi, &
    & hr,hi,qhr,qhi,shr,shi,num)
 implicit none
 integer :: ideg
@@ -790,7 +790,7 @@ end do
 !
 !     Scale the polynomial.
 !
-bnd = scalcp (nn,shr,eta,infin,smalno,base)
+bnd = scalcp(nn,shr,eta,infin,smalno,base)
 if (bnd .eq. 1.d0) go to 40
 do i = 1,nn
    pr(i) = bnd*pr(i)
@@ -1411,7 +1411,7 @@ end interface
 !
 !     Evaluate H(S)
 !
-call polyev (n,sr,si,hr,hi,qhr,qhi,hvr,hvi)
+call polyev(n,sr,si,hr,hi,qhr,qhi,hvr,hvi)
 bool = dcpabs(hvr,hvi) .le. 10.d0*are*dcpabs(hr(n),hi(n))
 if (bool) go to 10
 call cdivid(-pvr,-pvi,hvr,hvi,tr,ti)
@@ -1518,7 +1518,7 @@ errev = e*(are + mre) - mp*mre
 return
 end function errev
 
-pure subroutine rbnd (n, c, w, abserr, relerr, klust, ker)
+pure subroutine rbnd(n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
@@ -1686,7 +1686,7 @@ return
 return
 end subroutine rbnd
 
-pure subroutine cbnd (n, c, w, abserr, relerr, klust, ker)
+pure subroutine cbnd(n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
@@ -2001,7 +2001,7 @@ end do
 return
 end subroutine ccopy
 
-pure subroutine iswap (n,ix,incx,iy,incy)
+pure subroutine iswap(n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
 integer, intent(inout) :: ix(*), iy(*)
@@ -2090,7 +2090,7 @@ end do
 return
 end subroutine iswap
 
-pure subroutine  sswap (n,sx,incx,sy,incy)
+pure subroutine  sswap(n,sx,incx,sy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -2151,7 +2151,7 @@ end do
 return
 end subroutine sswap
 
-pure subroutine  dswap (n,dx,incx,dy,incy)
+pure subroutine  dswap(n,dx,incx,dy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -2212,7 +2212,7 @@ end do
 return
 end subroutine dswap
 
-pure subroutine  cswap (n,cx,incx,cy,incy)
+pure subroutine  cswap(n,cx,incx,cy,incy)
 implicit none
 !
 !     Interchanges two vectors.
@@ -2253,7 +2253,7 @@ end do
 return
 end subroutine cswap
 
-pure subroutine  srot (n,sx,incx,sy,incy,c,s)
+pure subroutine  srot(n,sx,incx,sy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation.
@@ -2296,7 +2296,7 @@ end do
 return
 end subroutine srot
 
-pure subroutine  drot (n,dx,incx,dy,incy,c,s)
+pure subroutine  drot(n,dx,incx,dy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation.
@@ -2339,7 +2339,7 @@ end do
 return
 end subroutine drot
 
-pure subroutine  csrot (n,cx,incx,cy,incy,c,s)
+pure subroutine  csrot(n,cx,incx,cy,incy,c,s)
 implicit none
 !
 !     Applies a plane rotation, where the cos and sin (c and s) are real
@@ -2383,7 +2383,7 @@ end do
 return
 end subroutine csrot
 
-pure subroutine srotmg (sd1,sd2,sx1,sy1,sparam)
+pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
 implicit none
 real, intent(inout) :: sd1, sd2, sparam(5), sx1
 real, intent(in) :: sy1
@@ -2537,7 +2537,7 @@ sparam(1) = sflag
 return
 end subroutine srotmg
 
-subroutine srotm (n,sx,incx,sy,incy,sparam)
+subroutine srotm(n,sx,incx,sy,incy,sparam)
 implicit none
 integer, intent(in) :: incx, incy, n
 real :: sparam(5)
@@ -2651,7 +2651,7 @@ end do
 return
 end subroutine srotm
 
-pure subroutine drotmg (dd1,dd2,dx1,dy1,dparam)
+pure subroutine drotmg(dd1,dd2,dx1,dy1,dparam)
 implicit none
 !
 !     Construct the modified Givens transformation matrix H which zeros
@@ -2810,7 +2810,7 @@ dparam(1) = dflag
 return
 end subroutine drotmg
 
-subroutine drotm (n,dx,incx,dy,incy,dparam)
+subroutine drotm(n,dx,incx,dy,incy,dparam)
 implicit none
 integer, intent(in) :: incx, incy, n
 double precision, intent(inout) :: dx(*)
@@ -3559,7 +3559,7 @@ scasum = stemp
 return
 end function scasum
 
-pure real function snrm2 ( n, sx, incx)
+pure real function snrm2( n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
@@ -3688,7 +3688,7 @@ snrm2 = xmax * sqrt(sum)
 return
 end function snrm2
 
-pure double precision function dnrm2 ( n, dx, incx)
+pure double precision function dnrm2( n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
@@ -4355,7 +4355,7 @@ end do
 return
 end subroutine ctpose
 
-pure subroutine tip (a, n1, n2, moved, nwork, ndim)
+pure subroutine tip(a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -4481,7 +4481,7 @@ return
 return
 end subroutine tip
 
-pure subroutine dtip (a, n1, n2, moved, nwork, ndim)
+pure subroutine dtip(a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -4607,7 +4607,7 @@ return
 return
 end subroutine dtip
 
-pure subroutine ctip (a, n1, n2, moved, nwork, ndim)
+pure subroutine ctip(a, n1, n2, moved, nwork, ndim)
 implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
@@ -4792,7 +4792,7 @@ end do
 return
 end subroutine cmadj
 
-pure subroutine ctrans (nm, n, a)
+pure subroutine ctrans(nm, n, a)
 implicit none
 !
 !
@@ -4829,7 +4829,7 @@ end do
 return
 end subroutine ctrans
 
-pure subroutine madd (m, n, a, ka, b, kb, c, kc)
+pure subroutine madd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
@@ -4847,7 +4847,7 @@ end do
 return
 end subroutine madd
 
-pure subroutine dmadd (m, n, a, ka, b, kb, c, kc)
+pure subroutine dmadd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
@@ -4865,7 +4865,7 @@ end do
 return
 end subroutine dmadd
 
-pure subroutine cmadd (m, n, a, ka, b, kb, c, kc)
+pure subroutine cmadd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
@@ -4895,7 +4895,7 @@ do 10 k = 1,m
 return
 end subroutine smadd
 
-pure subroutine msubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine msubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
@@ -4913,7 +4913,7 @@ end do
 return
 end subroutine msubt
 
-pure subroutine dmsubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine dmsubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
@@ -4931,7 +4931,7 @@ end do
 return
 end subroutine dmsubt
 
-pure subroutine cmsubt (m, n, a, ka, b, kb, c, kc)
+pure subroutine cmsubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
@@ -4961,7 +4961,7 @@ do 10 k = 1,m
 return
 end subroutine smsubt
 
-pure subroutine mtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine mtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
@@ -4984,7 +4984,7 @@ end do
 return
 end subroutine mtms
 
-pure subroutine dmtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine dmtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
@@ -5007,7 +5007,7 @@ end do
 return
 end subroutine dmtms
 
-pure subroutine cmtms (m, n, l, a, ka, b, kb, c, kc)
+pure subroutine cmtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
@@ -5030,7 +5030,7 @@ end do
 return
 end subroutine cmtms
 
-subroutine mprod (m, n, l, a, ka, b, kb, c, kc, row)
+subroutine mprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
@@ -5087,7 +5087,7 @@ end do
 return
 end subroutine mprod
 
-logical function rloc (x, y)
+logical function rloc(x, y)
 implicit none
 real, intent(in) :: x(*)
 real, intent(inout) :: y(*)
@@ -5121,7 +5121,7 @@ rloc = .false.
 return
 end function rloc
 
-pure subroutine ychg (x, y, yold)
+pure subroutine ychg(x, y, yold)
 implicit none
 real, intent(in) :: yold
 real, intent(in) :: x(*)
@@ -5132,7 +5132,7 @@ if (yold .eq. 0.0) y(1) = 1.0
 return
 end subroutine ychg
 
-subroutine dmprod (m, n, l, a, ka, b, kb, c, kc, row)
+subroutine dmprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
@@ -5189,7 +5189,7 @@ end do
 return
 end subroutine dmprod
 
-logical function dloc (x, y)
+logical function dloc(x, y)
 implicit none
 !-----------------------------------------------------------------------
 !     x and y are arrays. It is assumed that x(1) and y(1) contain data.
@@ -5223,7 +5223,7 @@ dloc = .false.
 return
 end function dloc
 
-pure subroutine dychg (x, y, yold)
+pure subroutine dychg(x, y, yold)
 implicit none
 double precision, intent(in) :: x(*)
 double precision, intent(inout) :: y(*)
@@ -5234,7 +5234,7 @@ if (yold .eq. 0.d0) y(1) = 1.d0
 return
 end subroutine dychg
 
-subroutine cmprod (m, n, l, a, ka, b, kb, c, kc, row)
+subroutine cmprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
@@ -5290,7 +5290,7 @@ end do
 return
 end subroutine cmprod
 
-logical function cloc (x, y)
+logical function cloc(x, y)
 implicit none
 !-----------------------------------------------------------------------
 !     x and y are arrays. It is assumed that x(1) and y(1) contain data.
@@ -5324,7 +5324,7 @@ cloc = .false.
 return
 end function cloc
 
-pure subroutine cychg (x, y, yold)
+pure subroutine cychg(x, y, yold)
 implicit none
 complex, intent(in) :: x(*)
 complex, intent(inout) :: y(*)
@@ -5515,7 +5515,7 @@ end do
 return
 end subroutine ckprod
 
-pure subroutine rnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+pure subroutine rnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
@@ -5604,16 +5604,16 @@ end do
 !
 if (m .lt. n) go to 40
 !
-call u11ls (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+call u11ls(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 return
 !
-40 call u11us (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+40 call u11us(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 return
 end subroutine rnk
 
-pure subroutine drnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+pure subroutine drnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
@@ -5704,11 +5704,11 @@ end do
 !
 if (m .lt. n) go to 40
 !
-call du11ls (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+call du11ls(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 return
 !
-40 call du11us (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+40 call du11us(a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 return
 end subroutine drnk
@@ -6129,7 +6129,7 @@ return
 return
 end subroutine krout
 
-pure subroutine dec (n, ndim, a, ip, ier)
+pure subroutine dec(n, ndim, a, ip, ier)
 implicit none
 !-----------------------------------------------------------------------
 ! Matrix triangularization by Gaussian elimination.
@@ -6201,7 +6201,7 @@ ip(n) = 0
 return
 end subroutine dec
 
-subroutine sol (n, ndim, a, b, ip)
+subroutine sol(n, ndim, a, b, ip)
 implicit none
 !-----------------------------------------------------------------------
 ! Solution of linear system, a*X = b .
@@ -6248,7 +6248,7 @@ end do
 return
 end subroutine sol
 
-pure subroutine npivot (n, m, a, ka, b, kb, d, ierr)
+pure subroutine npivot(n, m, a, ka, b, kb, d, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -6306,7 +6306,7 @@ end do
 return
 end subroutine npivot
 
-pure subroutine slv (n, m, a, ka, b, kb, ierr)
+pure subroutine slv(n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -6399,7 +6399,7 @@ return
 return
 end subroutine slv
 
-pure subroutine dpslv (n, m, a, ka, b, kb, ierr)
+pure subroutine dpslv(n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
@@ -6491,7 +6491,7 @@ return
 return
 end subroutine dpslv
 
-subroutine mslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
+subroutine mslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
@@ -6510,7 +6510,7 @@ integer :: onej
 !          Matrix factorization and computation of rcond
 !
 ierr = 0
-call sgeco (a, ka, n, ipvt, rcond, wk)
+call sgeco(a, ka, n, ipvt, rcond, wk)
 t = 1.0 + rcond
 if (t .eq. 1.0) go to 30
 !
@@ -6519,7 +6519,7 @@ if (t .eq. 1.0) go to 30
 if (m .lt. 1) go to 20
 onej = 1
 do 10 j = 1,m
-   call sgesl (a, ka, n, ipvt, b(onej), 0)
+   call sgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
 !
@@ -6527,7 +6527,7 @@ do 10 j = 1,m
 !
 20 job = 10
 if (mo .eq. 0) job = 11
-call sgedi (a, ka, n, ipvt, det, wk, job)
+call sgedi(a, ka, n, ipvt, det, wk, job)
 return
 !
 !                  The problem cannot be solved
@@ -6536,7 +6536,7 @@ return
 return
 end subroutine mslv
 
-subroutine mslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
+subroutine mslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
@@ -6556,7 +6556,7 @@ if (kb .lt. n) go to 40
 !
 !                      Matrix factorization
 !
-10 call sgefa (a, ka, n, ipvt, ierr)
+10 call sgefa(a, ka, n, ipvt, ierr)
 if (ierr .ne. 0) return
 !
 !                  Solution of the equation AX=b
@@ -6564,13 +6564,13 @@ if (ierr .ne. 0) return
 if (m .le. 0) go to 30
 onej = 1
 do j = 1,m
-   call sgesl (a, ka, n, ipvt, b(onej), 0)
+   call sgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 end do
 !
 !                 Calculation of the inverse of A
 !
-30 if (mo .eq. 0) call sgedi (a, ka, n, ipvt, det, wk, 1)
+30 if (mo .eq. 0) call sgedi(a, ka, n, ipvt, det, wk, 1)
 return
 !
 !                          Error return
@@ -7352,7 +7352,7 @@ end do
 return
 end subroutine sgedi
 
-subroutine dmslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
+subroutine dmslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
@@ -7371,7 +7371,7 @@ integer :: onej
 !          Matrix factorization and computation of rcond
 !
 ierr = 0
-call dgeco (a, ka, n, ipvt, rcond, wk)
+call dgeco(a, ka, n, ipvt, rcond, wk)
 t = 1.d0 + rcond
 if (t .eq. 1.d0) go to 30
 !
@@ -7380,7 +7380,7 @@ if (t .eq. 1.d0) go to 30
 if (m .lt. 1) go to 20
 onej = 1
 do 10 j = 1,m
-   call dgesl (a, ka, n, ipvt, b(onej), 0)
+   call dgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 10 continue
 !
@@ -7388,7 +7388,7 @@ do 10 j = 1,m
 !
 20 job = 10
 if (mo .eq. 0) job = 11
-call dgedi (a, ka, n, ipvt, det, wk, job)
+call dgedi(a, ka, n, ipvt, det, wk, job)
 return
 !
 !                  The problem cannot be solved
@@ -7397,7 +7397,7 @@ return
 return
 end subroutine dmslv
 
-subroutine dmslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
+subroutine dmslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
@@ -7417,7 +7417,7 @@ if (kb .lt. n) go to 40
 !
 !                      Matrix factorization
 !
-10 call dgefa (a, ka, n, ipvt, ierr)
+10 call dgefa(a, ka, n, ipvt, ierr)
 if (ierr .ne. 0) return
 !
 !                  Solution of the equation AX=b
@@ -7425,13 +7425,13 @@ if (ierr .ne. 0) return
 if (m .le. 0) go to 30
 onej = 1
 do j = 1,m
-   call dgesl (a, ka, n, ipvt, b(onej), 0)
+   call dgesl(a, ka, n, ipvt, b(onej), 0)
    onej = onej + kb
 end do
 !
 !                 Calculation of the inverse of A
 !
-30 if (mo .eq. 0) call dgedi (a, ka, n, ipvt, det, wk, 1)
+30 if (mo .eq. 0) call dgedi(a, ka, n, ipvt, det, wk, 1)
 return
 !
 !                          Error return
@@ -9156,7 +9156,7 @@ if (ierr .ne. 0) return
 return
 end subroutine btslv
 
-subroutine decbt (m, n, a, b, c, ip, ier)
+subroutine decbt(m, n, a, b, c, ip, ier)
 implicit none
 integer, intent(in) :: m
 integer :: n
@@ -9208,12 +9208,12 @@ if (m .lt. 1 .or. n .lt. 4) go to 210
 nm1 = n - 1
 nm2 = n - 2
 ! Process the first block-row. -----------------------------------------
-call dec (m, m, a, ip, ier)
+call dec(m, m, a, ip, ier)
 k = 1
 if (ier .ne. 0) go to 200
 do j = 1,m
-   call sol (m, m, a, b(1,j,1), ip)
-   call sol (m, m, a, c(1,j,1), ip)
+   call sol(m, m, a, b(1,j,1), ip)
+   call sol(m, m, a, c(1,j,1), ip)
 end do
 ! Adjust b(*,*,2). -----------------------------------------------------
 do j = 1,m
@@ -9235,10 +9235,10 @@ do k = 2,nm1
          a(i,j,k) = a(i,j,k) - dp
       end do
    end do
-   call dec (m, m, a(1,1,k), ip(1,k), ier)
+   call dec(m, m, a(1,1,k), ip(1,k), ier)
    if (ier .ne. 0) go to 200
    do 80 j = 1,m
-80    call sol (m, m, a(1,1,k), b(1,j,k), ip(1,k))
+80    call sol(m, m, a(1,1,k), b(1,j,k), ip(1,k))
 end do
 ! Process last block-row and return. -----------------------------------
 do j = 1,m
@@ -9257,7 +9257,7 @@ do j = 1,m
       a(i,j,n) = a(i,j,n) - dp
    end do
 end do
-call dec (m, m, a(1,1,n), ip(1,n), ier)
+call dec(m, m, a(1,1,n), ip(1,n), ier)
 k = n
 if (ier .ne. 0) go to 200
 return
@@ -9269,7 +9269,7 @@ return
 !-----------------------  End of subroutine decbt  ---------------------
 end subroutine decbt
 
-subroutine solbt (m, n, a, b, c, y, ip)
+subroutine solbt(m, n, a, b, c, y, ip)
 implicit none
 integer, intent(in) :: m
 integer :: n, ip(m,n)
@@ -9301,7 +9301,7 @@ real :: dp
 nm1 = n - 1
 nm2 = n - 2
 ! Forward solution sweep. ----------------------------------------------
-call sol (m, m, a, y, ip)
+call sol(m, m, a, y, ip)
 do k = 2,nm1
    km1 = k - 1
    do i = 1,m
@@ -9310,7 +9310,7 @@ do k = 2,nm1
 10       dp = dp + c(i,j,k)*y(j,km1)
       y(i,k) = y(i,k) - dp
    end do
-   call sol (m, m, a(1,1,k), y(1,k), ip(1,k))
+   call sol(m, m, a(1,1,k), y(1,k), ip(1,k))
 end do
 do i = 1,m
    dp = 0.
@@ -9318,7 +9318,7 @@ do i = 1,m
 40    dp = dp + c(i,j,n)*y(j,nm1) + b(i,j,n)*y(j,nm2)
    y(i,n) = y(i,n) - dp
 end do
-call sol (m, m, a(1,1,n), y(1,n), ip(1,n))
+call sol(m, m, a(1,1,n), y(1,n), ip(1,n))
 ! Backward solution sweep. ---------------------------------------------
 do kb = 1,nm1
    k = n - kb

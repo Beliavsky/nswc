@@ -1,4 +1,4 @@
-pure subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 double precision, intent(inout) :: u(iue,m), up, c(*)
@@ -3829,7 +3829,7 @@ end do
 call normlz(m,u,beta)
 call mtprd1(m,n,a,ia,ja,u,w)
 call normlz(n,w,alfa)
-call scopy (n,w,1,w(n + 1),1)
+call scopy(n,w,1,w(n + 1),1)
 !
 rhobar = alfa
 phibar = beta
@@ -3848,11 +3848,11 @@ if (arnorm .le. zero) go to 800
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
-call sscal (m,(-alfa),u,1)
+call sscal(m,(-alfa),u,1)
 call mvprd1(m,n,a,ia,ja,w,u)
 call normlz(m,u,beta)
 bbnorm = bbnorm + alfa**2 + beta**2 + dampsq
-call sscal (n,(-beta),w,1)
+call sscal(n,(-beta),w,1)
 call mtprd1(m,n,a,ia,ja,u,w)
 call normlz(n,w,alfa)
 !
@@ -4289,7 +4289,7 @@ end do
 call normlz(m,u,beta)
 call mvprd1(n,m,ta,ita,jta,u,w)
 call normlz(n,w,alfa)
-call scopy (n,w,1,w(n + 1),1)
+call scopy(n,w,1,w(n + 1),1)
 !
 rhobar = alfa
 phibar = beta
@@ -4308,11 +4308,11 @@ if (arnorm .le. zero) go to 800
 !                beta*u  =  A*w  -  alfa*u,
 !                alfa*w  =  A(TRANSPOSE)*u  -  beta*w.
 !
-call sscal (m,(-alfa),u,1)
+call sscal(m,(-alfa),u,1)
 call mtprd1(n,m,ta,ita,jta,w,u)
 call normlz(m,u,beta)
 bbnorm = bbnorm + alfa**2 + beta**2 + dampsq
-call sscal (n,(-beta),w,1)
+call sscal(n,(-beta),w,1)
 call mvprd1(n,m,ta,ita,jta,u,w)
 call normlz(n,w,alfa)
 !
@@ -4713,7 +4713,7 @@ end do
 call normlz(m,u,beta)
 call btprd1(m,n,a,ka,ml,mu,u,w)
 call normlz(n,w,alfa)
-call scopy (n,w,1,w(n + 1),1)
+call scopy(n,w,1,w(n + 1),1)
 !
 rhobar = alfa
 phibar = beta
@@ -4732,11 +4732,11 @@ if (arnorm .le. zero) go to 800
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
-call sscal (m,(-alfa),u,1)
+call sscal(m,(-alfa),u,1)
 call bvprd1(m,n,a,ka,ml,mu,w,u)
 call normlz(m,u,beta)
 bbnorm = bbnorm + alfa**2 + beta**2 + dampsq
-call sscal (n,(-beta),w,1)
+call sscal(n,(-beta),w,1)
 call btprd1(m,n,a,ka,ml,mu,u,w)
 call normlz(n,w,alfa)
 !
@@ -5034,7 +5034,7 @@ error = c1*e
 return
 end subroutine fmin
 
-subroutine optf (fcn,n,rerr,iter,xpls,fpls,ierr,wrk)
+subroutine optf(fcn,n,rerr,iter,xpls,fpls,ierr,wrk)
 implicit none
 integer, intent(inout) :: ierr, iter
 integer :: n
@@ -5123,7 +5123,7 @@ itnlim = itnlim - itncnt
 go to 20
 end subroutine optf
 
-subroutine optdrv (mo,nr,n,x,fcn,typsiz,fscale,rerr, &
+subroutine optdrv(mo,nr,n,x,fcn,typsiz,fscale,rerr, &
    & itnlim,itncnt,gradtl,stepmx,steptl,xpls,fpls,gpls, &
    & ierr,a,g,p,wrk0,wrk1,wrk2)
 implicit none
@@ -5217,7 +5217,7 @@ end interface
 ns = 30
 stmx = stepmx
 stepmx = 0.0
-call opchk1 (n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
+call opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
 if (ierr .lt. 0) return
 if (mo .ne. 0) stepmx = amax1(stmx,stepmx)
 !
@@ -5235,9 +5235,9 @@ call fcn(n,x,f)
 !
 !     Evaluate finite difference gradient
 !
-call fstofd (n, x, fcn, f, g, typsiz, sqrnf)
+call fstofd(n, x, fcn, f, g, typsiz, sqrnf)
 !
-call opstp (n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
+call opstp(n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
 if (ierr .eq. 0) go to 10
 if (mo .ne. 0) go to 210
@@ -5245,12 +5245,12 @@ if (mo .ne. 0) go to 210
 !        Apply the fixed step coordinate descent procedure
 !        for one step and check if the gradient is nonzero
 !
-call fxdec (fcn, n, x, f, 10.0)
+call fxdec(fcn, n, x, f, 10.0)
 !
 stepmx = 0.0
-call opchk1 (n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
-call fstofd (n, x, fcn, f, g, typsiz, sqrnf)
-call opstp (n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
+call opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
+call fstofd(n, x, fcn, f, g, typsiz, sqrnf)
+call opstp(n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
 if (ierr .ne. 0) go to 210
 !
@@ -5274,7 +5274,7 @@ go to 101
 100 if (mo .gt. 1) go to 101
 if (mod(itncnt,10) .ne. 0) go to 101
 if (itncnt + 10 .ge. itnlim) go to 101
-call scalex (mo, x, typsiz, n, ierr)
+call scalex(mo, x, typsiz, n, ierr)
 if (ierr .eq. 0) go to 101
 mo = mo + 1
 return
@@ -5301,19 +5301,19 @@ if (iretcd .ne. 1 .or. iagflg .ne. 0) go to 120
 !
 iagflg = -1
 cbrnf = rnf**(1.0/3.0)
-call fstocd (n, x, fcn, typsiz, cbrnf, g)
+call fstocd(n, x, fcn, typsiz, cbrnf, g)
 go to 105
 !
 !     Calculate gradient at XPLS
 !
 120 if (iagflg .eq. 0) go to 130
-call fstocd (n, xpls, fcn, typsiz, cbrnf, gpls)
+call fstocd(n, xpls, fcn, typsiz, cbrnf, gpls)
 go to 140
-130 call fstofd (n, xpls, fcn, fpls, gpls, typsiz, sqrnf)
+130 call fstofd(n, xpls, fcn, fpls, gpls, typsiz, sqrnf)
 !
 !     Check whether the stopping criteria satisfied
 !
-140 call opstp (n,xpls,fpls,gpls,x,itncnt,icscmx,ierr,gradtl,steptl, &
+140 call opstp(n,xpls,fpls,gpls,x,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
 if (ierr .ne. 0) go to 200
 !
@@ -5345,7 +5345,7 @@ end do
 return
 end subroutine optdrv
 
-pure subroutine opchk1 (n,x,typsiz,fscale,gradtl,itnlim,rerr, &
+pure subroutine opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr, &
    & stepmx,ierr)
 implicit none
 integer, intent(out) :: ierr
@@ -5565,7 +5565,7 @@ return
 return
 end subroutine opstp
 
-subroutine fxdec (fcn, n, x, fx, r)
+subroutine fxdec(fcn, n, x, fx, r)
 implicit none
 integer :: n
 real, intent(inout) :: fx
@@ -5583,10 +5583,10 @@ do 20 i = 1,n
    xi = x(i)
    xplus = xi + h
    x(i) = xplus
-   call fcn (n, x, fplus)
+   call fcn(n, x, fplus)
    xminus = xi - 1.1*h
    x(i) = xminus
-   call fcn (n, x, fminus)
+   call fcn(n, x, fminus)
    x(i) = xi
 !
    if (fx .le. fplus) go to 10
@@ -5599,7 +5599,7 @@ do 20 i = 1,n
 return
 end subroutine fxdec
 
-pure subroutine scalex (mo, x, typsiz, n, ierr)
+pure subroutine scalex(mo, x, typsiz, n, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: mo, n
@@ -5640,7 +5640,7 @@ ierr = -10
 return
 end subroutine scalex
 
-pure subroutine lltslv (nr,n,a,x,b)
+pure subroutine lltslv(nr,n,a,x,b)
 implicit none
 integer, intent(in) :: n, nr
 real, intent(in) :: a(nr,n)
@@ -5699,7 +5699,7 @@ end do
 return
 end subroutine lltslv
 
-subroutine fstofd (n, x, fcn, fx, g, typsiz, r)
+subroutine fstofd(n, x, fcn, fx, g, typsiz, r)
 implicit none
 integer :: n
 real, intent(in) :: fx
@@ -5734,14 +5734,14 @@ do j = 1,n
    stepsz = r * amax1(abs(x(j)),typsiz(j))
    xtmpj = x(j)
    x(j) = xtmpj + stepsz
-   call fcn (n, x, fplus)
+   call fcn(n, x, fplus)
    x(j) = xtmpj
    g(j) = (fplus - fx)/stepsz
 end do
 return
 end subroutine fstofd
 
-subroutine fstocd (n, x, fcn, typsiz, r, g)
+subroutine fstocd(n, x, fcn, typsiz, r, g)
 implicit none
 integer :: n
 real, intent(in) :: r
@@ -5777,9 +5777,9 @@ do i = 1, n
    stepi = r * amax1(abs(x(i)),typsiz(i))
    xtempi = x(i)
    x(i) = xtempi + stepi
-   call fcn (n, x, fplus)
+   call fcn(n, x, fplus)
    x(i) = xtempi - stepi
-   call fcn (n, x, fminus)
+   call fcn(n, x, fminus)
    x(i) = xtempi
    g(i) = (fplus - fminus)/(2.0*stepi)
 end do
@@ -5937,7 +5937,7 @@ return
 return
 end subroutine lnsrch
 
-pure subroutine secfac (nr,n,x,g,a,xpls,gpls,itncnt,tol, &
+pure subroutine secfac(nr,n,x,g,a,xpls,gpls,itncnt,tol, &
    & noupdt,s,y,w)
 implicit none
 integer, intent(in) :: itncnt, n, nr
@@ -6084,7 +6084,7 @@ end do
 !
 !     Find Q and R such that  Q*R = (L+) + s*(w+)
 !
-call qrupdt (nr, n, a, s, w)
+call qrupdt(nr, n, a, s, w)
 !
 !     Upper triangular part and diagonal of a now contain updated
 !     Cholesky decomposition of hessian.  Copy back to lower
@@ -6099,7 +6099,7 @@ end do
 return
 end subroutine secfac
 
-pure subroutine qrupdt (nr,n,a,u,v)
+pure subroutine qrupdt(nr,n,a,u,v)
 implicit none
 integer, intent(in) :: n, nr
 real, intent(inout) :: a(nr,n), u(n)
@@ -6149,7 +6149,7 @@ go to 10
 if (k .le. 1) go to 40
 do ii = 1,km1
    i = k - ii
-   call jrot (nr,n,a,i,u(i),-u(i + 1),r)
+   call jrot(nr,n,a,i,u(i),-u(i + 1),r)
    u(i) = r
 end do
 !
@@ -6164,12 +6164,12 @@ if (k .le. 1) return
 !                   to upper triangular r*
 !
 do i = 1,km1
-   call jrot (nr,n,a,i,a(i,i),-a(i + 1,i),r)
+   call jrot(nr,n,a,i,a(i,i),-a(i + 1,i),r)
 end do
 return
 end subroutine qrupdt
 
-pure subroutine jrot (nr,n,h,i,a,b,r)
+pure subroutine jrot(nr,n,h,i,a,b,r)
 implicit none
 integer, intent(in) :: i, n, nr
 real, intent(in) :: a, b
@@ -6235,7 +6235,7 @@ end do
 return
 end subroutine jrot
 
-subroutine lmdiff (fcn,m,n,x,fvec,epsfcn,tol,info,iwa,wa,lwa)
+subroutine lmdiff(fcn,m,n,x,fvec,epsfcn,tol,info,iwa,wa,lwa)
 implicit none
 integer :: m, n
 integer, intent(out) :: info
@@ -8508,7 +8508,7 @@ return
 !
 end subroutine r1updt
 
-subroutine smplx (a,b0,c,ka,m,n0,ind,ibasis,x,z,iter,mxiter, &
+subroutine smplx(a,b0,c,ka,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & numle,numge,bi,wk,iwk)
 implicit none
 integer, intent(inout) :: ibasis, ind, iter, iwk(*)
@@ -8562,7 +8562,7 @@ call smplx1(a,b0,c,ka,m,n0,ind,ibasis,x,z,iter,mxiter, &
 return
 end subroutine smplx
 
-pure subroutine smplx1 (a,b0,c,ka,m,n0,ind,ibasis,r,z,iter,mxiter, &
+pure subroutine smplx1(a,b0,c,ka,m,n0,ind,ibasis,r,z,iter,mxiter, &
    & eps0,rerrmn,rerrmx,rerr,numle,numge,bi,xb,y,basis,index)
 implicit none
 integer, intent(inout) :: ind
@@ -8776,7 +8776,7 @@ do 132 j = 1,m
 132 continue
 !
 icount = 0
-call crout1 (bi, m, m, iend, index, y, jcol, ierr)
+call crout1(bi, m, m, iend, index, y, jcol, ierr)
 if (ierr .ne. 0) go to 580
 !
 !         Check the accuracy of bi and reset rerr
@@ -9378,7 +9378,7 @@ z = dsum
 go to 220
 end subroutine smplx1
 
-subroutine ssplx (ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
+subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & numle,numge,bi,wk,iwk)
 implicit none
 integer, intent(inout) :: ibasis, ind
@@ -9433,7 +9433,7 @@ call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
 return
 end subroutine ssplx
 
-pure subroutine ssplx1 (ta,ita,jta,b0,c,m,n0,ind,ibasis,r,z, &
+pure subroutine ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,r,z, &
    & iter,mxiter,eps0,rerrmn,rerrmx,rerr,numle,numge, &
    & bi,xb,y,basis,index)
 implicit none
@@ -9655,7 +9655,7 @@ do 132 j = 1,m
 132 continue
 !
 icount = 0
-call crout1 (bi, m, m, iend, index, y, jcol, ierr)
+call crout1(bi, m, m, iend, index, y, jcol, ierr)
 if (ierr .ne. 0) go to 580
 !
 !         Check the accuracy of bi and reset rerr

@@ -1,7 +1,7 @@
-pure elemental integer function ipmpar (i)
+pure elemental integer function ipmpar(i)
 implicit none
 integer, intent(in) :: i
-integer, parameter :: imach(10) = [integer :: 2, 31, 2147483647, 2, 24, -125, 128, 53, -1021, 1024]
+integer, parameter :: imach(10) = [2, 31, 2147483647, 2, 24, -125, 128, 53, -1021, 1024]
 !-----------------------------------------------------------------------
 !
 !     ipmpar provides the integer machine constants for the computer
@@ -424,7 +424,7 @@ return
 end function ipmpar
 
 !-----------------------------------------------------------------------
-subroutine mach (mo, n, ibeta, imax, idmax, imach, rmach, dmach)
+subroutine mach(mo, n, ibeta, imax, idmax, imach, rmach, dmach)
 implicit none
 integer :: ibeta
 integer, intent(in) :: idmax, imax, mo, n
@@ -673,7 +673,7 @@ if (mo .ge. 2) go to 10
 !     Obtain the single precision information
 !-----------------------------------------------------------------------
 maxexp = imax
-call mach1 (n0, ibeta, m, minexp, maxexp, eps, xint, xmin, xmax)
+call mach1(n0, ibeta, m, minexp, maxexp, eps, xint, xmin, xmax)
 if (mo .eq. 1) stop
 rmach(1) = eps
 rmach(2) = xmin
@@ -686,7 +686,7 @@ imach(7) = maxexp
 !     Obtain the double precision information
 !-----------------------------------------------------------------------
 10 maxexp = idmax
-call mach2 (n0, ibeta, m, minexp, maxexp, deps, dint, dmin, dmax)
+call mach2(n0, ibeta, m, minexp, maxexp, deps, dint, dmin, dmax)
 if (mo .ge. 2) stop
 dmach(1) = deps
 dmach(2) = dmin
@@ -697,7 +697,7 @@ imach(10) = maxexp
 return
 end subroutine mach
 
-subroutine radix (ibeta)
+subroutine radix(ibeta)
 implicit none
 integer :: ibeta
 real :: a, b, one, y
@@ -711,20 +711,20 @@ one = float(1)
 !
 a = one
 10 a = a + a
-call store2 (a + one, a)
+call store2(a + one, a)
 y = d1 - d2
 if (y .eq. one) go to 10
 !
 b = one
 20 b = b + b
-call store2 (a + b, a)
+call store2(a + b, a)
 if (d1 .eq.d2) go to 20
 !
 ibeta = int(d1 - d2)
 return
 end subroutine radix
 
-subroutine mach1 (n, ibeta, m, minexp, maxexp, eps, xint, &
+subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
@@ -840,7 +840,7 @@ t = b
 10 m = m + 1
 z = t
 t = b*t
-call store2 (t + one, t)
+call store2(t + one, t)
 x = d1*binv - z
 if (x .eq. binv) go to 10
 !
@@ -866,10 +866,10 @@ k = 1
 z = binv
 30 x = z
 z = (x*x)*one
-call store2 (z*xint, z*t)
+call store2(z*xint, z*t)
 if (d1 .eq.d2) go to 40
 if (z + z .eq. zero .or. abs(z) .ge. x) go to 40
-call store2 (z, p*z)
+call store2(z, p*z)
 if (t*d2 .eq. t*z) go to 40
 k = k + k
 go to 30
@@ -881,10 +881,10 @@ j = 0
 !
 50 xmin = x
 x = (x*binv)*one
-call store2 (x*xint, x*t)
+call store2(x*xint, x*t)
 if (d1 .eq.d2) go to 90
 if (x + x .eq. zero .or. abs(x) .ge. xmin) go to 90
-call store2 (x, p*x)
+call store2(x, p*x)
 if (t*d2 .eq. t*x) go to 80
 k = k + 1
 go to 50
@@ -893,12 +893,12 @@ go to 50
 !     then set j = Number of digits possibly lost due to
 !     this loss of accuracy.
 !
-80 call store2 (x, q*x)
+80 call store2(x, q*x)
 if (t*d2 .ne. t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
-call store2 (x*xint, x*t)
+call store2(x*xint, x*t)
 if (d1 .eq.d2) go to 90
 if (x + x .ne. zero .and. abs(x) .lt. z) go to 81
 !
@@ -926,7 +926,7 @@ xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
-110 call store2 (t, t*p)
+110 call store2(t, t*p)
 if (d1 .eq.d2) go to 150
 if (n .le. 0) return
 !-----------------------------------------------------------------------
@@ -937,7 +937,7 @@ do l = 1,500
    t = t*b
    xmax = xmax*b
    maxexp = maxexp + 1
-   call store2 (t, t*p)
+   call store2(t, t*p)
    if (d1 .eq.d2) go to 150
    write (n,220) maxexp
 end do
@@ -968,7 +968,7 @@ stop
 !-----------------------------------------------------------------------
 end subroutine mach1
 
-subroutine store2 (a, b)
+subroutine store2(a, b)
 implicit none
 real :: a, b
 real :: d1, d2
@@ -981,7 +981,7 @@ d2 = b
 return
 end subroutine store2
 
-subroutine mach2 (n, ibeta, m, minexp, maxexp, eps, xint, &
+subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
@@ -1098,7 +1098,7 @@ t = b
 10 m = m + 1
 z = t
 t = b*t
-call dstor2 (t + one, t)
+call dstor2(t + one, t)
 x = d1*binv - z
 if (x .eq. binv) go to 10
 !
@@ -1124,10 +1124,10 @@ k = 1
 z = binv
 30 x = z
 z = (x*x)*one
-call dstor2 (z*xint, z*t)
+call dstor2(z*xint, z*t)
 if (d1 .eq.d2) go to 40
 if (z + z .eq. zero .or. dabs(z) .ge. x) go to 40
-call dstor2 (z, p*z)
+call dstor2(z, p*z)
 if (t*d2 .eq. t*z) go to 40
 k = k + k
 go to 30
@@ -1139,10 +1139,10 @@ j = 0
 !
 50 xmin = x
 x = (x*binv)*one
-call dstor2 (x*xint, x*t)
+call dstor2(x*xint, x*t)
 if (d1 .eq.d2) go to 90
 if (x + x .eq. zero .or. dabs(x) .ge. xmin) go to 90
-call dstor2 (x, p*x)
+call dstor2(x, p*x)
 if (t*d2 .eq. t*x) go to 80
 k = k + 1
 go to 50
@@ -1151,12 +1151,12 @@ go to 50
 !     then set j = Number of digits possibly lost due to
 !     this loss of accuracy.
 !
-80 call dstor2 (x, q*x)
+80 call dstor2(x, q*x)
 if (t*d2 .ne. t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
-call dstor2 (x*xint, x*t)
+call dstor2(x*xint, x*t)
 if (d1 .eq.d2) go to 90
 if (x + x .ne. zero .and. dabs(x) .lt. z) go to 81
 !
@@ -1184,7 +1184,7 @@ xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
-110 call dstor2 (t, t*p)
+110 call dstor2(t, t*p)
 if (d1 .eq.d2) go to 150
 if (n .le. 0) return
 !-----------------------------------------------------------------------
@@ -1195,7 +1195,7 @@ do l = 1,500
    t = t*b
    xmax = xmax*b
    maxexp = maxexp + 1
-   call dstor2 (t, t*p)
+   call dstor2(t, t*p)
    if (d1 .eq.d2) go to 150
    write (n,220) maxexp
 end do
@@ -1226,7 +1226,7 @@ stop
 !-----------------------------------------------------------------------
 end subroutine mach2
 
-subroutine dstor2 (a, b)
+subroutine dstor2(a, b)
 implicit none
 !-----------------------------------------------------------------------
 !     Storage of double precision information into memory
@@ -1239,7 +1239,7 @@ d2 = b
 return
 end subroutine dstor2
 
-pure elemental real function spmpar (i)
+pure elemental real function spmpar(i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m
@@ -1303,7 +1303,7 @@ spmpar = ((w * z) * b) * b
 return
 end function spmpar
 
-pure elemental double precision function dpmpar (i)
+pure elemental double precision function dpmpar(i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m
@@ -1367,7 +1367,7 @@ dpmpar = ((w * z) * b) * b
 return
 end function dpmpar
 
-pure real function epsln (l)
+pure real function epsln(l)
 implicit none
 integer, intent(in) :: l
 integer :: m
@@ -1402,7 +1402,7 @@ epsln = m * lnb
 return
 end function epsln
 
-pure elemental double precision function depsln (l)
+pure elemental double precision function depsln(l)
 implicit none
 integer, intent(in) :: l
 integer :: b
@@ -1437,7 +1437,7 @@ depsln = m * lnb
 return
 end function depsln
 
-pure elemental real function exparg (l)
+pure elemental real function exparg(l)
 implicit none
 integer, intent(in) :: l
 integer :: m
@@ -1481,7 +1481,7 @@ exparg = 0.99999 * (m * lnb)
 return
 end function exparg
 
-pure elemental double precision function dxparg (l)
+pure elemental double precision function dxparg(l)
 implicit none
 integer, intent(in) :: l
 integer :: m
@@ -1526,13 +1526,13 @@ dxparg = 0.999999999999d+00 * (m * lnb)
 return
 end function dxparg
 
-pure subroutine ishell (a, n)
+pure subroutine ishell(a, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 integer :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
@@ -1574,13 +1574,13 @@ do 40 ii = 1,imax
 return
 end subroutine ishell
 
-pure subroutine shell (a, n)
+pure subroutine shell(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
@@ -1622,13 +1622,13 @@ do 40 ii = 1,imax
 return
 end subroutine shell
 
-pure subroutine shell2 (a, b, n)
+pure subroutine shell2(a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
@@ -1675,13 +1675,13 @@ do 40 ii = 1,imax
 return
 end subroutine shell2
 
-pure subroutine rsort (a, n)
+pure subroutine rsort(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
@@ -1723,7 +1723,7 @@ do 40 ii = 1,imax
 return
 end subroutine rsort
 
-pure subroutine risort (a, m, n)
+pure subroutine risort(a, m, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
@@ -1731,7 +1731,7 @@ integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 integer :: t
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
@@ -1778,13 +1778,13 @@ do 40 ii = 1,imax
 return
 end subroutine risort
 
-pure subroutine rrsort (a, b, n)
+pure subroutine rrsort(a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
@@ -1831,13 +1831,13 @@ do 40 ii = 1,imax
 return
 end subroutine rrsort
 
-pure subroutine dsort (a, n)
+pure subroutine dsort(a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
@@ -1879,7 +1879,7 @@ do 40 ii = 1,imax
 return
 end subroutine dsort
 
-pure subroutine disort (a, m, n)
+pure subroutine disort(a, m, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
@@ -1887,7 +1887,7 @@ integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
 integer :: t
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
@@ -1934,13 +1934,13 @@ do 40 ii = 1,imax
 return
 end subroutine disort
 
-pure subroutine ddsort (a, b, n)
+pure subroutine ddsort(a, b, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s, t
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
@@ -1987,13 +1987,13 @@ do 40 ii = 1,imax
 return
 end subroutine ddsort
 
-pure subroutine aord (a, n)
+pure subroutine aord(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The aord sorting procedure is used to reorder the elements of
 !     a so that abs(a(i)) .LE. abs(a(i+1)) for i = 1,...,n-1. It is
@@ -2036,13 +2036,13 @@ do 40 ii = 1,imax
 return
 end subroutine aord
 
-pure subroutine daord (a, n)
+pure subroutine daord(a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
-integer, parameter :: k(10) = [integer :: 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     daord is used to reorder the elements of the double precision
 !     array a so that dabs(a(i)) .LE. dabs(a(i+1)) for i = 1,...,n-1.
@@ -2085,7 +2085,7 @@ do 40 ii = 1,imax
 return
 end subroutine daord
 
-pure subroutine qsorti (x, ind, n)
+pure subroutine qsorti(x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
@@ -2286,7 +2286,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsorti
 
-pure subroutine qsortr (x, ind, n)
+pure subroutine qsortr(x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2488,7 +2488,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortr
 
-pure subroutine qsortd (x, ind, n)
+pure subroutine qsortd(x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
@@ -2691,7 +2691,7 @@ ind(k + 1) = it
 go to 12
 end subroutine qsortd
 
-pure subroutine iorder (a, ip, n)
+pure subroutine iorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n), ip(n)
@@ -2764,7 +2764,7 @@ go to 4
 return
 end subroutine iorder
 
-pure subroutine rorder (a, ip, n)
+pure subroutine rorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2839,7 +2839,7 @@ go to 4
 return
 end subroutine rorder
 
-pure subroutine dorder (a, ip, n)
+pure subroutine dorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
@@ -2914,7 +2914,7 @@ go to 4
 return
 end subroutine dorder
 
-pure elemental real function cbrt (x)
+pure elemental real function cbrt(x)
 implicit none
 real, intent(in) :: x
 real :: r
@@ -2932,7 +2932,7 @@ cbrt = -exp(r)
 return
 end function cbrt
 
-pure elemental double precision function dcbrt (x)
+pure elemental double precision function dcbrt(x)
 implicit none
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
@@ -3031,7 +3031,7 @@ return
 return
 end function dcpabs
 
-pure elemental subroutine crec (x, y, u, v)
+pure elemental subroutine crec(x, y, u, v)
 implicit none
 real, intent(inout) :: u, v
 real, intent(in) :: x, y
@@ -3052,7 +3052,7 @@ v = -t/d
 return
 end subroutine crec
 
-pure elemental subroutine dcrec (x, y, u, v)
+pure elemental subroutine dcrec(x, y, u, v)
 implicit none
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
@@ -3074,7 +3074,7 @@ v = -t/d
 return
 end subroutine dcrec
 
-pure elemental complex function cdiv (a, b)
+pure elemental complex function cdiv(a, b)
 implicit none
 complex, intent(in) :: a, b
 real :: ai, ar, bi, br, d, t, u, v
@@ -3102,7 +3102,7 @@ cdiv = cmplx(u,v)
 return
 end function cdiv
 
-pure elemental subroutine cdivid (ar,ai,br,bi,cr,ci)
+pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
 implicit none
 !-----------------------------------------------------------------------
 !     Double precision complex division C = A/B avoiding overflow
@@ -3143,7 +3143,7 @@ ci = cr
 return
 end subroutine cdivid
 
-pure subroutine dcsqrt (z, w)
+pure subroutine dcsqrt(z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
@@ -3394,7 +3394,7 @@ return
 !
 end subroutine drotg
 
-subroutine rot3 (a, theta)
+subroutine rot3(a, theta)
 implicit none
 real :: a(3,3)
 real, intent(inout) :: theta(3)
@@ -3437,7 +3437,7 @@ v = -v/sin(theta(2))
 return
 end subroutine rot3
 
-pure elemental subroutine constr (xk,yk,zk, cx,sx,cy,sy)
+pure elemental subroutine constr(xk,yk,zk, cx,sx,cy,sy)
 implicit none
 real, intent(in) :: xk, yk, zk
 real, intent(inout) :: cx, sx
@@ -3485,7 +3485,7 @@ sx = 0.
 return
 end subroutine constr
 
-pure real function ang (n, x, y)
+pure real function ang(n, x, y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x(n), y(n)
@@ -3531,7 +3531,7 @@ return
 return
 end function ang
 
-pure elemental real function sin0 (x)
+pure elemental real function sin0(x)
 implicit none
 real, intent(in) :: x
 real :: t
@@ -3552,7 +3552,7 @@ sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 return
 end function sin0
 
-pure elemental real function cos0 (x)
+pure elemental real function cos0(x)
 implicit none
 real, intent(in) :: x
 real :: t
@@ -3571,7 +3571,7 @@ cos0 = (((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t + a1)*t + 1.0
 return
 end function cos0
 
-pure elemental real function sin1 (x)
+pure elemental real function sin1(x)
 implicit none
 real, intent(in) :: x
 integer :: max, n
@@ -3639,7 +3639,7 @@ if (mod(n,2) .ne. 0) sin1 = - sin1
 return
 end function sin1
 
-pure elemental real function cos1 (x)
+pure elemental real function cos1(x)
 implicit none
 real, intent(in) :: x
 integer :: max, n
@@ -3707,7 +3707,7 @@ cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 return
 end function cos1
 
-pure elemental double precision function dsin1 (x)
+pure elemental double precision function dsin1(x)
 implicit none
 double precision, intent(in) :: x
 integer :: max, n
@@ -3806,7 +3806,7 @@ if (mod(n,2) .ne. 0) dsin1 = - dsin1
 return
 end function dsin1
 
-pure elemental double precision function dcos1 (x)
+pure elemental double precision function dcos1(x)
 implicit none
 double precision, intent(in) :: x
 integer :: max, n
@@ -3905,7 +3905,7 @@ dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
 return
 end function dcos1
 
-pure elemental subroutine snhcsh (sinhm,coshm,x,isw)
+pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
 implicit none
 integer, intent(in) :: isw
 real, intent(inout) :: sinhm, coshm
@@ -3930,7 +3930,7 @@ real, parameter :: zq4 = 1.33412535492375e-09
 real, parameter :: zq3 = -5.80858944138663e-07
 real, parameter :: zq2 = 1.27814964403863e-04
 real, parameter :: zq1 = -1.63532871439181e-02
-real, parameter :: cut(5) = [real :: 1.65, 1.2, 1.2, 2.7, 1.65]
+real, parameter :: cut(5) = [1.65, 1.2, 1.2, 2.7, 1.65]
 !
 !
 !                      From the spline under tension package
@@ -4008,7 +4008,7 @@ return
 return
 end subroutine snhcsh
 
-pure elemental real function esum (mu, x)
+pure elemental real function esum(mu, x)
 implicit none
 integer, intent(in) :: mu
 real, intent(in) :: x
@@ -4035,7 +4035,7 @@ esum = exp(w)*exp(x)
 return
 end function esum
 
-pure elemental double precision function desum (mu, x)
+pure elemental double precision function desum(mu, x)
 implicit none
 integer, intent(in) :: mu
 double precision, intent(in) :: x
@@ -4063,7 +4063,7 @@ desum = dexp(w)*dexp(x)
 return
 end function desum
 
-pure elemental real function rexp (x)
+pure elemental real function rexp(x)
 implicit none
 real, intent(in) :: x
 real :: e
@@ -4093,7 +4093,7 @@ return
 return
 end function rexp
 
-pure elemental double precision function drexp (x)
+pure elemental double precision function drexp(x)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function exp(x) - 1
@@ -4149,7 +4149,7 @@ return
 return
 end function drexp
 
-pure elemental subroutine rexp1 (x, e, w)
+pure elemental subroutine rexp1(x, e, w)
 implicit none
 real, intent(inout) :: e, w
 real, intent(in) :: x
@@ -4186,7 +4186,7 @@ return
 return
 end subroutine rexp1
 
-pure elemental subroutine drexp1 (x, e, w)
+pure elemental subroutine drexp1(x, e, w)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4280,7 +4280,7 @@ alnrel = alog(x)
 return
 end function alnrel
 
-pure elemental double precision function dlnrel (a)
+pure elemental double precision function dlnrel(a)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function ln(1 + a)
@@ -4439,7 +4439,7 @@ rlog1 = x - alog(w)
 return
 end function rlog1
 
-pure elemental double precision function drlog (x)
+pure elemental double precision function drlog(x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - 1 - LN(x)
@@ -4517,7 +4517,7 @@ drlog = r - dlog(x)
 return
 end function drlog
 
-pure elemental double precision function drlog1 (x)
+pure elemental double precision function drlog1(x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - LN(1 + x)
@@ -4595,7 +4595,7 @@ drlog1 = x - dlog(w)
 return
 end function drlog1
 
-pure subroutine locpt (x0, y0, x, y, n, l, m)
+pure subroutine locpt(x0, y0, x, y, n, l, m)
 implicit none
 integer, intent(inout) :: l, m
 integer, intent(in) :: n
@@ -4685,7 +4685,7 @@ return
 return
 end subroutine locpt
 
-pure subroutine pfind (a, b, x, y, n, u, v, m, num, ierr)
+pure subroutine pfind(a, b, x, y, n, u, v, m, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
@@ -4859,7 +4859,7 @@ return
 return
 end subroutine pfind
 
-pure subroutine hull (x, y, m, bx, by, k, vx, vy, n)
+pure subroutine hull(x, y, m, bx, by, k, vx, vy, n)
 implicit none
 integer, intent(inout) :: k
 integer, intent(in) :: m
@@ -4900,7 +4900,7 @@ onep = 1.0 + 4.0*eps
 !
 !                       Reorder x and y
 !
-call rrsort (y, x, m)
+call rrsort(y, x, m)
 ymin = y(1)
 ymax = y(m)
 if (ymin .eq. ymax) go to 500
@@ -4910,7 +4910,7 @@ l = 1
 if (y(l) .eq. ymin) go to 10
 lmin = l
 l = l - 1
-call rrsort (x, y, l)
+call rrsort(x, y, l)
 x1 = x(1)
 !
 i = m
@@ -4918,7 +4918,7 @@ i = m
 if (y(i) .eq. ymax) go to 20
 lmax = i
 i = i + 1
-call rrsort (x(i), y(i), m - lmax)
+call rrsort(x(i), y(i), m - lmax)
 xm = x(m)
 !
 !                      Find xmin and xmax
@@ -5243,7 +5243,7 @@ return
 !
 !                     Case when ymin = Ymax
 !
-500 call rrsort (x, y, m)
+500 call rrsort(x, y, m)
 do i = 1,m
    bx(i) = x(i)
    by(i) = y(i)
@@ -5299,7 +5299,7 @@ parea = 0.5*a
 return
 end function parea
 
-pure subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
+pure subroutine hc(ind, m, n, pr, ar, nb, s, iwk, num)
 implicit none
 integer, intent(inout) :: ind
 integer, intent(in) :: m, n
@@ -5412,7 +5412,7 @@ subr = p + n
 rbus = subr + n
 tor = rbus + n
 !
-call hc1 (ind, m, n, pr, ar, nb, iwk(s0), np1, iwk(pc), &
+call hc1(ind, m, n, pr, ar, nb, iwk(s0), np1, iwk(pc), &
    & iwk(ac), iwk(vr), iwk(vc), iwk(p), iwk(subr), &
    & iwk(rbus), iwk(tor), iwk(1), iwk(2), iwk(3))
 if (ind .ne. 1) return
@@ -5434,7 +5434,7 @@ return
 return
 end subroutine hc
 
-pure subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
+pure subroutine hc1(ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
    & vc, p, subr, rbus, tor, jr, k, ind0)
 implicit none
 integer, intent(inout) :: ind, ind0, jr, k
@@ -5857,7 +5857,7 @@ return
 return
 end subroutine hc1
 
-pure subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
+pure subroutine ipath(i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
    & jr, m, np1)
 implicit none
 integer, intent(in) :: i
@@ -5929,7 +5929,7 @@ rbus(j) = 0
 return
 end subroutine ipath
 
-pure subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
+pure subroutine fupd(a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
 implicit none
 integer, intent(in) :: i1, k1, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -5958,7 +5958,7 @@ v1(i1) = 0
 return
 end subroutine fupd
 
-pure subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
+pure subroutine bupd(a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
 implicit none
 integer, intent(in) :: ii, k1, k2, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
@@ -6076,7 +6076,7 @@ return
 return
 end subroutine rarc
 
-pure elemental subroutine cerf (mo, z, w)
+pure elemental subroutine cerf(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
@@ -6085,11 +6085,11 @@ integer :: i
 real :: c2, dm, pm, qm, r, sn, ss, x, y
 real :: ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
-real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -6223,7 +6223,7 @@ w = cmplx(ef(1),ef(2))
 return
 end subroutine cerf
 
-pure elemental subroutine cerfc (mo, z, w)
+pure elemental subroutine cerfc(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
@@ -6232,11 +6232,11 @@ integer :: i
 real :: c2, dm, pm, qm, r, sn, ss, x, y
 real :: qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
-real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -6347,7 +6347,7 @@ go to 100
 !
 !                   Asymptotic expansion
 !
-60 call crec (x, y, tm(1), tm(2))
+60 call crec(x, y, tm(1), tm(2))
 sm(1) = tm(1)
 sm(2) = tm(2)
 qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
@@ -6406,21 +6406,21 @@ w = cmplx(sm(1),sm(2))
 return
 end subroutine cerfc
 
-pure elemental real function erf (x)
+pure elemental real function erf(x)
 implicit none
 real, intent(in) :: x
 real :: ax, bot, t, top, x2
 real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !             Evaluation of the real error function
 !-----------------------------------------------------------------------
@@ -6460,22 +6460,22 @@ return
 return
 end function erf
 
-pure elemental real function erfc (x)
+pure elemental real function erfc(x)
 implicit none
 real, intent(in) :: x
 real :: ax, bot, e, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 interface
    pure elemental function exparg(l)
       implicit none
@@ -6544,23 +6544,23 @@ return
 return
 end function erfc
 
-pure elemental real function erfc1 (ind, x)
+pure elemental real function erfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
 real, intent(in) :: x
 real :: ax, bot, e, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [real :: .771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [real :: .301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [real :: -1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [real :: 1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 interface
    pure elemental function exparg(l)
       implicit none
@@ -6638,7 +6638,7 @@ return
 return
 end function erfc1
 
-pure subroutine dcerf (mo, z, w)
+pure subroutine dcerf(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
@@ -6768,7 +6768,7 @@ return
 !
 40 tm(1) = x
 tm(2) = y
-call erfcm2 (0, tm, w)
+call erfcm2(0, tm, w)
 if (mo .ne. 0) go to 41
 w(1) = sn*(0.5d0 + (0.5d0 - w(1)))
 w(2) = - sn*w(2)
@@ -6785,7 +6785,7 @@ return
 if (r .gt. 16.d0) d = 16.d0
 if (r .gt. 64.d0) d = 64.d0
 d2 = d*d
-call dcrec (sz(1), sz(2), w(1), w(2))
+call dcrec(sz(1), sz(2), w(1), w(2))
 a0(1) = 1.d0
 a0(2) = 0.d0
 an(1) = (w(1) + 4.d0/15.d0)*d
@@ -6794,7 +6794,7 @@ b0(1) = 1.d0
 b0(2) = 0.d0
 bn(1) = (w(1) - 0.4d0)*d
 bn(2) = w(2)*d
-call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
 tol = 10.d0*eps
 n4 = 0.d0
 !
@@ -6819,7 +6819,7 @@ bn(2) = qf(2)
 !
 w0(1) = wn(1)
 w0(2) = wn(2)
-call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
 if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
    & tol*anorm(wn(1), wn(2))) go to 60
 !
@@ -6856,7 +6856,7 @@ h0(2) = 0.d0
 tm(1) = 3.d0 + tm(1)
 hn(1) = tm(1)/d
 hn(2) = tm(2)/d
-call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
 np1 = 1.d0
 tol = 10.d0*eps
 !
@@ -6880,18 +6880,18 @@ hn(2) = qf(2)
 !
 w0(1) = wn(1)
 w0(2) = wn(2)
-call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
 if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
    & tol*anorm(wn(1), wn(2))) go to 90
 !
 tm(1) = x*hn(1) - y*hn(2)
 tm(2) = x*hn(2) + y*hn(1)
-call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
+call cdivid(c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
 go to 130
 !
 !                      Asymptotic expansion
 !
-100 call dcrec (x, y, tm(1), tm(2))
+100 call dcrec(x, y, tm(1), tm(2))
 sm(1) = tm(1)
 sm(2) = tm(2)
 qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
@@ -6949,7 +6949,7 @@ w(2) = - w(2)
 return
 end subroutine dcerf
 
-pure subroutine dcerfc (mo, z, w)
+pure subroutine dcerfc(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
@@ -7088,11 +7088,11 @@ return
 !                  Taylor series around Z0 = 2
 !
 40 if (sn .lt. 0.d0) go to 41
-call erfcm2 (mo, z, w)
+call erfcm2(mo, z, w)
 return
 41 tm(1) = x
 tm(2) = y
-call erfcm2 (0, tm, w)
+call erfcm2(0, tm, w)
 w(1) = 2.d0 - w(1)
 w(2) = - w(2)
 return
@@ -7104,7 +7104,7 @@ return
 if (r .gt. 16.d0) d = 16.d0
 if (r .gt. 64.d0) d = 64.d0
 d2 = d*d
-call dcrec (sz(1), sz(2), w(1), w(2))
+call dcrec(sz(1), sz(2), w(1), w(2))
 a0(1) = 1.d0
 a0(2) = 0.d0
 an(1) = (w(1) + 4.d0/15.d0)*d
@@ -7113,7 +7113,7 @@ b0(1) = 1.d0
 b0(2) = 0.d0
 bn(1) = (w(1) - 0.4d0)*d
 bn(2) = w(2)*d
-call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
 tol = 10.d0*eps
 n4 = 0.d0
 !
@@ -7138,7 +7138,7 @@ bn(2) = qf(2)
 !
 w0(1) = wn(1)
 w0(2) = wn(2)
-call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
 if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
    & tol*anorm(wn(1), wn(2))) go to 60
 !
@@ -7177,7 +7177,7 @@ h0(2) = 0.d0
 tm(1) = 3.d0 + tm(1)
 hn(1) = tm(1)/d
 hn(2) = tm(2)/d
-call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
 np1 = 1.d0
 tol = 10.d0*eps
 !
@@ -7201,18 +7201,18 @@ hn(2) = qf(2)
 !
 w0(1) = wn(1)
 w0(2) = wn(2)
-call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
 if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
    & tol*anorm(wn(1), wn(2))) go to 90
 !
 tm(1) = x*hn(1) - y*hn(2)
 tm(2) = x*hn(2) + y*hn(1)
-call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
+call cdivid(c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
 go to 130
 !
 !                      Asymptotic expansion
 !
-100 call dcrec (x, y, tm(1), tm(2))
+100 call dcrec(x, y, tm(1), tm(2))
 sm(1) = tm(1)
 sm(2) = tm(2)
 qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
@@ -7270,7 +7270,7 @@ w(2) = e*dsin(sz(2)) + sm(2)
 return
 end subroutine dcerfc
 
-pure subroutine erfcm2 (mo, z, w)
+pure subroutine erfcm2(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
@@ -7280,7 +7280,7 @@ double precision :: eps, h(2), t(2), tol, x, y
 double precision :: anorm
 double precision, parameter :: c = .20666985354092053857068941306585476d-01
 double precision, parameter :: e = .46777349810472658379307436327470714d-02
-double precision, parameter :: a(63) = [double precision :: .20000000000000000000000000000000000d+01, &
+double precision, parameter :: a(63) = [.20000000000000000000000000000000000d+01, &
    & .23333333333333333333333333333333333d+01, .16666666666666666666666666666666667d+01, .63333333333333333333333333333333333d+00, &
    & -.22222222222222222222222222222222222d-01, -.16349206349206349206349206349206349d+00, - &
    & .76984126984126984126984126984126984d-01, -.24250440917107583774250440917107584d-02, .12716049382716049382716049382716049d-01 &
@@ -7381,13 +7381,13 @@ w(2) = y
 return
 end subroutine erfcm2
 
-pure elemental double precision function derf (x)
+pure elemental double precision function derf(x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t
 double precision :: w
-double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7434,12 +7434,12 @@ return
 return
 end function derf
 
-pure elemental double precision function derfc (x)
+pure elemental double precision function derfc(x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t, w
-double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7497,13 +7497,13 @@ derfc = dexp(-t) * derfc0(x)
 return
 end function derfc
 
-pure elemental double precision function derfc1 (ind, x)
+pure elemental double precision function derfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t, w
-double precision, parameter :: a(21) = [double precision :: .1283791670955125738961589031215d+00, - &
+double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7577,7 +7577,7 @@ if (ind .ne. 0) derfc1 = 2.d0*dexp(x*x)
 return
 end function derfc1
 
-pure elemental double precision function derfc0 (x)
+pure elemental double precision function derfc0(x)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -7731,28 +7731,28 @@ derfc0 = rpinv*(z/x)
 return
 end function derfc0
 
-pure elemental real function erfi (p, q)
+pure elemental real function erfi(p, q)
 implicit none
 real, intent(in) :: p, q
 real :: eps, s, t, v, v1
 real, parameter :: c = .5625
 real, parameter :: c1 = .87890625
 real, parameter :: c2 = -.2302585092994046e+03
-real, parameter :: a(6) = [real :: .1400216916161353e+03, -.7204275515686407e+03, .1296708621660511e+04, -.9697932901514031e+03, &
+real, parameter :: a(6) = [.1400216916161353e+03, -.7204275515686407e+03, .1296708621660511e+04, -.9697932901514031e+03, &
    & .2762427049269425e+03, -.2012940180552054e+02]
-real, parameter :: b(6) = [real :: .1291046303114685e+03, -.7312308064260973e+03, .1494970492915789e+04, -.1337793793683419e+04, &
+real, parameter :: b(6) = [.1291046303114685e+03, -.7312308064260973e+03, .1494970492915789e+04, -.1337793793683419e+04, &
    & .5033747142783567e+03, -.6220205554529216e+02]
-real, parameter :: a1(7) = [real :: -.1690478046781745e+00, .3524374318100228e+01, -.2698143370550352e+02, .9340783041018743e+02, &
+real, parameter :: a1(7) = [-.1690478046781745e+00, .3524374318100228e+01, -.2698143370550352e+02, .9340783041018743e+02, &
    & -.1455364428646732e+03, .8805852004723659e+02, -.1349018591231947e+02]
-real, parameter :: b1(7) = [real :: -.1203221171313429e+00, .2684812231556632e+01, -.2242485268704865e+02, .8723495028643494e+02, &
+real, parameter :: b1(7) = [-.1203221171313429e+00, .2684812231556632e+01, -.2242485268704865e+02, .8723495028643494e+02, &
    & -.1604352408444319e+03, .1259117982101525e+03, -.3184861786248824e+02]
-real, parameter :: a2(9) = [real :: .3100808562552958e-04, .4097487603011940e-02, .1214902662897276e+00, .1109167694639028e+01, &
+real, parameter :: a2(9) = [.3100808562552958e-04, .4097487603011940e-02, .1214902662897276e+00, .1109167694639028e+01, &
    & .3228379855663924e+01, .2881691815651599e+01, .2047972087262996e+01, .8545922081972148e+00, .3551095884622383e-02]
-real, parameter :: b2(8) = [real :: .3100809298564522e-04, .4097528678663915e-02, .1215907800748757e+00, .1118627167631696e+01, &
+real, parameter :: b2(8) = [.3100809298564522e-04, .4097528678663915e-02, .1215907800748757e+00, .1118627167631696e+01, &
    & .3432363984305290e+01, .4140284677116202e+01, .4119797271272204e+01, .2162961962641435e+01]
-real, parameter :: a3(9) = [real :: .3205405422062050e-08, .1899479322632128e-05, .2814223189858532e-03, .1370504879067817e-01, &
+real, parameter :: a3(9) = [.3205405422062050e-08, .1899479322632128e-05, .2814223189858532e-03, .1370504879067817e-01, &
    & .2268143542005976e+00, .1098421959892340e+01, .6791143397056208e+00, -.834334189167721e+00, .3421951267240343e+00]
-real, parameter :: b3(6) = [real :: .3205405053282398e-08, .1899480592260143e-05, .2814349691098940e-03, .1371092249602266e-01, &
+real, parameter :: b3(6) = [.3205405053282398e-08, .1899480592260143e-05, .2814349691098940e-03, .1371092249602266e-01, &
    & .2275172815174473e+00, .1125348514036959e+01]
 interface
    pure elemental function spmpar(i)
@@ -7844,7 +7844,7 @@ return
 return
 end function erfi
 
-pure elemental double precision function derfi (p, q)
+pure elemental double precision function derfi(p, q)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -7868,28 +7868,28 @@ double precision, parameter :: c = .5625d0
 double precision, parameter :: c1 = .87890625d0
 double precision, parameter :: c2 = -.2302585092994045684017991454684364d+03
 double precision, parameter :: r = .8862269254527580136490837416705726d+00
-double precision, parameter :: a(7) = [double precision :: .841467547194693616d-01, .160499904248262200d+01, &
+double precision, parameter :: a(7) = [.841467547194693616d-01, .160499904248262200d+01, &
    & .809451641478547505d+01, .164273396973002581d+02, .154297507839223692d+02, .669584134660994039d+01, .108455979679682472d+01]
-double precision, parameter :: b(7) = [double precision :: .352281538790042405d-02, .293409069065309557d+00, &
+double precision, parameter :: b(7) = [.352281538790042405d-02, .293409069065309557d+00, &
    & .326709873508963100d+01, .123611641257633210d+02, .207984023857547070d+02, .170791197367677668d+02, .669253523595376683d+01]
-double precision, parameter :: a1(7) = [double precision :: .552755110179178015d+2, .657347545992519152d+3, .124276851197202733d+4 &
+double precision, parameter :: a1(7) = [.552755110179178015d+2, .657347545992519152d+3, .124276851197202733d+4 &
    & , .818859792456464820d+3, .234425632359410093d+3, .299942187305427917d+2, .140496035731853946d+1]
-double precision, parameter :: b1(6) = [double precision :: .179209835890172156d+3, .991315839349539886d+3, .138271033653003487d+4 &
+double precision, parameter :: b1(6) = [.179209835890172156d+3, .991315839349539886d+3, .138271033653003487d+4 &
    & , .764020340925985926d+3, .194354053300991923d+3, .228139510050586581d+2]
-double precision, parameter :: a2(7) = [double precision :: .500926197430588206d+1, .111349802614499199d+3, .353872732756132161d+3 &
+double precision, parameter :: a2(7) = [.500926197430588206d+1, .111349802614499199d+3, .353872732756132161d+3 &
    & , .356000407341490731d+3, .143264457509959760d+3, .240823237485307567d+2, .140496035273226366d+1]
-double precision, parameter :: b2(6) = [double precision :: .209004294324106981d+2, .198607335199741185d+3, .439311287748524270d+3 &
+double precision, parameter :: b2(6) = [.209004294324106981d+2, .198607335199741185d+3, .439311287748524270d+3 &
    & , .355415991280861051d+3, .123303672628828521d+3, .186060775181898848d+2]
-double precision, parameter :: a3(11) = [double precision :: .237121026548776092d4, .732899958728969905d6, .182063754893444775d7, &
+double precision, parameter :: a3(11) = [.237121026548776092d4, .732899958728969905d6, .182063754893444775d7, &
    & .269191299062422172d7, .304817224671614253d7, .130643103351072345d7, .296799076241952125d6, .457006532030955554d5, &
    & .373449801680687213d4, .118062255483596543d3, .100000329157954960d1]
-double precision, parameter :: b3(10) = [double precision :: .851911109952055378d6, .194746720192729966d7, .373640079258593694d7, &
+double precision, parameter :: b3(10) = [.851911109952055378d6, .194746720192729966d7, .373640079258593694d7, &
    & .397271370110424145d7, .339457682064283712d7, .136888294898155938d7, .303357770911491406d6, .459721480357533823d5, &
    & .373762573565814355d4, .118064334590001264d3]
-double precision, parameter :: a4(9) = [double precision :: .154269429680540807d12, .430207405012067454d12, .182623446525965017d12 &
+double precision, parameter :: a4(9) = [.154269429680540807d12, .430207405012067454d12, .182623446525965017d12 &
    & , .248740194409838713d11, .133506080294978121d10, .302446226073105850d08, .285909602878724425d06, .101789226017835707d04, &
    & .100000004821118676d01]
-double precision, parameter :: b4(9) = [double precision :: .220533001293836387d12, .347822938010402687d12, .468373326975152250d12 &
+double precision, parameter :: b4(9) = [.220533001293836387d12, .347822938010402687d12, .468373326975152250d12 &
    & , .185251723580351631d12, .249464490520921771d11, .133587491840784926d10, .302480682561295591d08, .285913799407861384d06, &
    & .101789250893050230d04]
 interface
@@ -8001,7 +8001,7 @@ return
 return
 end function derfi
 
-pure elemental real function aerf (x, h)
+pure elemental real function aerf(x, h)
 implicit none
 real, intent(in) :: h, x
 integer :: j, n, n1
@@ -8145,7 +8145,7 @@ return
 return
 end function aerf
 
-pure elemental double precision function daerf (x, h)
+pure elemental double precision function daerf(x, h)
 implicit none
 double precision, intent(in) :: x, h
 integer :: j
@@ -8326,7 +8326,7 @@ return
 return
 end function pndf
 
-pure elemental subroutine pni (p, q, d, w, ierr)
+pure elemental subroutine pni(p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: d, p, q
@@ -8394,7 +8394,7 @@ return
 return
 end subroutine pni
 
-pure elemental subroutine dpni (p, q, d, w, ierr)
+pure elemental subroutine dpni(p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: p, q, d
@@ -8471,21 +8471,21 @@ real :: frac, sump, sumq, w2
 real :: y
 real, parameter :: xlarge = 16777216.0
 real, parameter :: xsmall = .59604644775391e-07
-real, parameter :: p1(9) = [real :: .100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
+real, parameter :: p1(9) = [.100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
    & .360079463580992e-03, -.944375029163387e-05, .634674256878843e-06, -.711645839183817e-08, .977985913592343e-10]
-real, parameter :: q1(9) = [real :: .100000000000000e+01, .531067616851310e+00, .133052308640737e+00, .206907491644210e-01, &
+real, parameter :: q1(9) = [.100000000000000e+01, .531067616851310e+00, .133052308640737e+00, .206907491644210e-01, &
    & .220437428972266e-02, .166706801664365e-03, .887964712053131e-05, .311750854173480e-06, .574807177698046e-08]
-real, parameter :: p2(8) = [real :: -.150695651187161e+01, .293365747395449e+02, -.400000893643550e+02, -.757931918089369e-01, - &
+real, parameter :: p2(8) = [-.150695651187161e+01, .293365747395449e+02, -.400000893643550e+02, -.757931918089369e-01, - &
    & .889106479747812e+01, .152644099623699e+02, -.597678086823489e+01, .500236896088668e+00]
-real, parameter :: q2(7) = [real :: -.673106069744813e+00, .124486788262252e+04, .721193217600229e+01, .112461662024575e+03, &
+real, parameter :: q2(7) = [-.673106069744813e+00, .124486788262252e+04, .721193217600229e+01, .112461662024575e+03, &
    & .729177556415532e+02, .115840292551888e+03, .226064666074309e+00]
-real, parameter :: p3(8) = [real :: .476405645273229e+01, -.266167674896399e+02, -.916804879813552e+01, -.150507703496692e+02, &
+real, parameter :: p3(8) = [.476405645273229e+01, -.266167674896399e+02, -.916804879813552e+01, -.150507703496692e+02, &
    & .506460153742231e+01, -.498544802986608e+01, -.149838042036691e+01, .499999902705054e+00]
-real, parameter :: q3(7) = [real :: .287776122973187e+03, .256105722342226e+02, .751701277744067e+02, .146515167783109e+03, &
+real, parameter :: q3(7) = [.287776122973187e+03, .256105722342226e+02, .751701277744067e+02, .146515167783109e+03, &
    & .330707724676114e+02, -.148715811787195e+01, .250011459611839e+00]
-real, parameter :: p4(7) = [real :: -.315576735766984e+02, -.100791496592972e+02, -.710713709224200e+01, -.596879853243925e+01, - &
+real, parameter :: p4(7) = [-.315576735766984e+02, -.100791496592972e+02, -.710713709224200e+01, -.596879853243925e+01, - &
    & .449773645376092e+01, -.249999965398199e+01, .499999999999330e+00]
-real, parameter :: q4(6) = [real :: .168874162155616e+03, .698280748271071e+01, -.213029621139181e+02, -.712157348463305e+01, - &
+real, parameter :: q4(6) = [.168874162155616e+03, .698280748271071e+01, -.213029621139181e+02, -.712157348463305e+01, - &
    & .250005973192356e+01, .750000000715687e+00]
 !-----------------------------------------------------------------------
 !
@@ -8592,13 +8592,13 @@ go to 1000
 1000 return
 end function daw
 
-pure elemental double precision function dpdaw (x)
+pure elemental double precision function dpdaw(x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
 double precision :: ax, t, w
 double precision, parameter :: eps = 1.d-31
-double precision, parameter :: a(20) = [double precision :: -.6666666666666666666666666666657d+00, &
+double precision, parameter :: a(20) = [-.6666666666666666666666666666657d+00, &
    & .2666666666666666666666666665302d+00, -.7619047619047619047619046823290d-01, .1693121693121693121693097101950d-01, - &
    & .3078403078403078403073750370528d-02, .4736004736004736004148385001356d-03, -.6314672981339647953899064401849d-04, &
    & .7429027036870170692270376716931d-05, -.7820028459863171536925638117632d-06, .7447646152244351276445219666744d-07, - &
@@ -8606,7 +8606,7 @@ double precision, parameter :: a(20) = [double precision :: -.666666666666666666
    & .2646727414301012080897585412600d-11, -.1707553348198261876085879075486d-12, .1034770025122653524451023758330d-13, - &
    & .5905667147861158816695814259561d-15, .3157018166820009192834256496230d-16, -.1501742103181747984387915732309d-17, &
    & .4921379778280206677674574916266d-19]
-double precision, parameter :: b(45) = [double precision :: -.56886544105215527114160533733674d-01, - &
+double precision, parameter :: b(45) = [-.56886544105215527114160533733674d-01, - &
    & .31811346996168131279322878048822d+00, .20873845413642236789741580198858d+00, -.12475409913779131214073498314784d+00, &
    & .67869305186676777092847516423676d-01, -.33659144895270939503068230966587d-01, .15260781271987971743682460381640d-01, - &
    & .63483709625962148230586094788535d-02, .24326740920748520596865966109343d-02, -.86219541491065032038526983549637d-03, &
@@ -8672,7 +8672,7 @@ return
 return
 end function dpdaw
 
-pure elemental double precision function dpdaw0 (x)
+pure elemental double precision function dpdaw0(x)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -8861,7 +8861,7 @@ dpdaw0 = 0.5d0*w
 return
 end function dpdaw0
 
-pure elemental subroutine cfrnli (mo, z, w)
+pure elemental subroutine cfrnli(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
@@ -8871,11 +8871,11 @@ real :: dm, pm, qm, r, ss, x, y
 real :: qf(2), sm(2), tm(2), ts(2), zr(2)
 real, parameter :: c = .564189583547756
 real, parameter :: c0 = -.707106781186548
-real, parameter :: cd(18) = [real :: 0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [real :: 8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -9041,7 +9041,7 @@ w = cmplx(sm(1),sm(2))
 return
 end subroutine cfrnli
 
-pure elemental subroutine frnl (t, c, s)
+pure elemental subroutine frnl(t, c, s)
 implicit none
 real, intent(inout) :: c, s
 real, intent(in) :: t
@@ -9049,46 +9049,46 @@ integer :: i, l, m, max
 real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y
 real :: n
 real, parameter :: pi = 3.1415926535898
-real, parameter :: a(6) = [real :: -.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
+real, parameter :: a(6) = [-.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
    & .246740110027210e+00, .100000000000000e+01]
-real, parameter :: b(6) = [real :: -.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
+real, parameter :: b(6) = [-.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
    & .922805853580325e-01, .523598775598300e+00]
-real, parameter :: cp(13) = [real :: .114739945188034e-20, -.384444827287950e-18, .832125729394275e-16, -.142979507360076e-13, &
+real, parameter :: cp(13) = [.114739945188034e-20, -.384444827287950e-18, .832125729394275e-16, -.142979507360076e-13, &
    & .198954961821465e-11, -.220226545457144e-09, .188434924092257e-07, -.120009722914157e-05, .540741337442140e-04, - &
    & .160488313553028e-02, .281855008777956e-01, -.246740110027196e+00, .999999999999996e+00]
-real, parameter :: sp(13) = [real :: .705700784853927e-22, -.252757991492418e-19, .594117488940008e-17, -.112161631555448e-14, &
+real, parameter :: sp(13) = [.705700784853927e-22, -.252757991492418e-19, .594117488940008e-17, -.112161631555448e-14, &
    & .173332189994074e-12, -.215742302078015e-10, .210821173208116e-08, -.156471443116560e-06, .844427287845253e-05, - &
    & .312116942346186e-03, .724478420418951e-02, -.922805853580323e-01, .523598775598300e+00]
-real, parameter :: pn(6) = [real :: .318309816100920e+00, .134919391391516e+02, .158258097490377e+03, .598796451682535e+03, &
+real, parameter :: pn(6) = [.318309816100920e+00, .134919391391516e+02, .158258097490377e+03, .598796451682535e+03, &
    & .632369782194966e+03, .967985390141920e+02]
-real, parameter :: pd(6) = [real :: .100000000000000e+01, .426900960480796e+02, .509085485682426e+03, .200034664144742e+04, &
+real, parameter :: pd(6) = [.100000000000000e+01, .426900960480796e+02, .509085485682426e+03, .200034664144742e+04, &
    & .231910140792937e+04, .486678558201084e+03]
-real, parameter :: qn(6) = [real :: .101320876178478e+00, .490534697099052e+01, .652095157811808e+02, .274183825747887e+03, &
+real, parameter :: qn(6) = [.101320876178478e+00, .490534697099052e+01, .652095157811808e+02, .274183825747887e+03, &
    & .305040725009211e+03, .364566615872326e+02]
-real, parameter :: qd(6) = [real :: .100000000000000e+01, .499330024470621e+02, .709854097670206e+03, .343470762861172e+04, &
+real, parameter :: qd(6) = [.100000000000000e+01, .499330024470621e+02, .709854097670206e+03, .343470762861172e+04, &
    & .522213879312684e+04, .168801831831851e+04]
-real, parameter :: an(6) = [real :: .318309885869756e+00, .254179177393500e+02, .575003792540838e+03, .426673405867140e+04, &
+real, parameter :: an(6) = [.318309885869756e+00, .254179177393500e+02, .575003792540838e+03, .426673405867140e+04, &
    & .891831887923938e+04, .267955736537967e+04]
-real, parameter :: ad(6) = [real :: .100000000000000e+01, .801567066285184e+02, .182971463354850e+04, .138848884373420e+05, &
+real, parameter :: ad(6) = [.100000000000000e+01, .801567066285184e+02, .182971463354850e+04, .138848884373420e+05, &
    & .309228411873207e+05, .120421274105856e+05]
-real, parameter :: bn(6) = [real :: .101321181932417e+00, .925021984290547e+01, .240932023056602e+03, .206079616836437e+04, &
+real, parameter :: bn(6) = [.101321181932417e+00, .925021984290547e+01, .240932023056602e+03, .206079616836437e+04, &
    & .484901973010149e+04, .130680669688315e+04]
-real, parameter :: bd(6) = [real :: .100000000000000e+01, .928158182389149e+02, .250926840439955e+04, .233924458152954e+05, &
+real, parameter :: bd(6) = [.100000000000000e+01, .928158182389149e+02, .250926840439955e+04, .233924458152954e+05, &
    & .685638896406835e+05, .418593101455019e+05]
-real, parameter :: cn(5) = [real :: .318309886182000e+00, .299191968327887e+02, .691428839605668e+03, .394539800974744e+04, &
+real, parameter :: cn(5) = [.318309886182000e+00, .299191968327887e+02, .691428839605668e+03, .394539800974744e+04, &
    & .290314254767015e+04]
-real, parameter :: cd(5) = [real :: .100000000000000e+01, .942978925136851e+02, .219977296283666e+04, .129726479671006e+05, &
+real, parameter :: cd(5) = [.100000000000000e+01, .942978925136851e+02, .219977296283666e+04, .129726479671006e+05, &
    & .114991427758165e+05]
-real, parameter :: dn(5) = [real :: .101321183630876e+00, .110988033615242e+02, .306282306497228e+03, .213130259794164e+04, &
+real, parameter :: dn(5) = [.101321183630876e+00, .110988033615242e+02, .306282306497228e+03, .213130259794164e+04, &
    & .171270676541694e+04]
-real, parameter :: dd(5) = [real :: .100000000000000e+01, .111060616085627e+03, .318197586347414e+04, .249342095714049e+05, &
+real, parameter :: dd(5) = [.100000000000000e+01, .111060616085627e+03, .318197586347414e+04, .249342095714049e+05, &
    & .359241903823488e+05]
-real, parameter :: fp(7) = [real :: .449763389301234e+05, -.188763642051836e+04, .669261097103246e+02, -.343966606879114e+01, &
+real, parameter :: fp(7) = [.449763389301234e+05, -.188763642051836e+04, .669261097103246e+02, -.343966606879114e+01, &
    & .343112896133346e+00, -.967546019461500e-01, .318309886183465e+00]
-real, parameter :: gp(7) = [real :: .316642183365360e+06, -.120618995106638e+05, .359164749179351e+03, -.142252603258172e+02, &
+real, parameter :: gp(7) = [.316642183365360e+06, -.120618995106638e+05, .359164749179351e+03, -.142252603258172e+02, &
    & .982934118445454e+00, -.153989722912325e+00, .101321183639714e+00]
-real, parameter :: p(6) = [real :: -654729075.0, 2027025.0, -10395.0, 105.0, -3.0, 1.0]
-real, parameter :: q(6) = [real :: -13749310575.0, 34459425.0, -135135.0, 945.0, -15.0, 1.0]
+real, parameter :: p(6) = [-654729075.0, 2027025.0, -10395.0, 105.0, -3.0, 1.0]
+real, parameter :: q(6) = [-13749310575.0, 34459425.0, -135135.0, 945.0, -15.0, 1.0]
 interface
    pure elemental function cos1(x)
       implicit none
@@ -9245,7 +9245,7 @@ s = -0.5
 return
 end subroutine frnl
 
-pure elemental subroutine cexpli (mo, z, w)
+pure elemental subroutine cexpli(mo, z, w)
 implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
@@ -9259,11 +9259,11 @@ real :: g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
 real, parameter :: pi = 3.14159265358979
 real, parameter :: euler = .577215664901533
-real, parameter :: cd(18) = [real :: 0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+real, parameter :: cd(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
    & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
    & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
    & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
-real, parameter :: ce(18) = [real :: .850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+real, parameter :: ce(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
    & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
    & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
    & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
@@ -9447,38 +9447,38 @@ integer :: i
 real, parameter :: dexp40 = .235385266837020e+18
 real, parameter :: x0 = .372507410781366
 double precision, parameter :: dx0 = .37250741078136663446199186658d0
-real, parameter :: a(6) = [real :: -.577215664901531e+00, .758833087029943e+00, .125660818982053e+00, .204158408934305e-01, &
+real, parameter :: a(6) = [-.577215664901531e+00, .758833087029943e+00, .125660818982053e+00, .204158408934305e-01, &
    & .825035122466538e-03, .962949813453924e-05]
-real, parameter :: b(5) = [real :: .100000000000000e+01, .417810755380398e+00, .730228560396799e-01, .642720224671078e-02, &
+real, parameter :: b(5) = [.100000000000000e+01, .417810755380398e+00, .730228560396799e-01, .642720224671078e-02, &
    & .245134203588369e-03]
-real, parameter :: c(7) = [real :: .465627107975096e-06, .999979577051595e+00, .904161556946328e+01, .243784088791317e+02, &
+real, parameter :: c(7) = [.465627107975096e-06, .999979577051595e+00, .904161556946328e+01, .243784088791317e+02, &
    & .230192559391334e+02, .690522522784443e+01, .430967839469389e+00]
-real, parameter :: d(7) = [real :: .100000000000000e+01, .100411643829054e+02, .324264210695138e+02, .412807841891424e+02, &
+real, parameter :: d(7) = [.100000000000000e+01, .100411643829054e+02, .324264210695138e+02, .412807841891424e+02, &
    & .204494785013794e+02, .331909213593302e+01, .103400130404874e+00]
-real, parameter :: e(7) = [real :: -.999999999998447e+00, -.266271060431811e+02, -.241055827097015e+03, -.895927957772937e+03, - &
+real, parameter :: e(7) = [-.999999999998447e+00, -.266271060431811e+02, -.241055827097015e+03, -.895927957772937e+03, - &
    & .129885688746484e+04, -.545374158883133e+03, -.566575206533869e+01]
-real, parameter :: f(7) = [real :: .100000000000000e+01, .286271060422192e+02, .292310039388533e+03, .133278537748257e+04, &
+real, parameter :: f(7) = [.100000000000000e+01, .286271060422192e+02, .292310039388533e+03, .133278537748257e+04, &
    & .277761949509163e+04, .240401713225909e+04, .631657483280800e+03]
-real, parameter :: p1(8) = [real :: -.866937339951070e+01, -.549142265521085e+03, -.421001615357070e+04, -.249301393458648e+06, - &
+real, parameter :: p1(8) = [-.866937339951070e+01, -.549142265521085e+03, -.421001615357070e+04, -.249301393458648e+06, - &
    & .119623669349247e+06, -.221744627758845e+08, .389280421311201e+07, -.195773036904548e+09]
-real, parameter :: q1(8) = [real :: .341718750000000e+02, -.160708926587221e+04, .357300298058508e+05, -.483547436162164e+06, &
+real, parameter :: q1(8) = [.341718750000000e+02, -.160708926587221e+04, .357300298058508e+05, -.483547436162164e+06, &
    & .428559624611749e+07, -.249033375740540e+08, .891925767575612e+08, -.826271498626055e+08]
-real, parameter :: r(20) = [real :: .636295897967470e+00, -.130811686750676e+00, -.843674102130539e-02, .265684915310067e-02, &
+real, parameter :: r(20) = [.636295897967470e+00, -.130811686750676e+00, -.843674102130539e-02, .265684915310067e-02, &
    & .328227217816581e-03, -.237834477714302e-04, -.114398043081001e-04, -.144059434332383e-05, .524159566511488e-08, &
    & .384073064078443e-07, .858802448602672e-08, .102192266258550e-08, .217491323232897e-10, -.220902381426231e-10, - &
    & .634575335449288e-11, -.108377465668577e-11, -.119098228722226e-12, -.284386823892656e-14, .250803270266868e-14, &
    & .787296415285598e-15]
-real, parameter :: p2(8) = [real :: -.218086381520723e+01, -.219010233854881e+02, .930816385662165e+01, .250762811293560e+02, - &
+real, parameter :: p2(8) = [-.218086381520723e+01, -.219010233854881e+02, .930816385662165e+01, .250762811293560e+02, - &
    & .331842531997221e+02, .601217990830080e+02, -.432531132878135e+02, .100443109228078e+01]
-real, parameter :: q2(7) = [real :: .393707701852715e+01, .300892648372915e+03, -.625041161671876e+01, .100367439516726e+04, &
+real, parameter :: q2(7) = [.393707701852715e+01, .300892648372915e+03, -.625041161671876e+01, .100367439516726e+04, &
    & .143256738121938e+02, .273624119889328e+04, .527468851962908e+00]
-real, parameter :: p3(8) = [real :: -.348334653602852e+01, -.186545454883399e+02, -.828561994140641e+01, -.323467330305403e+02, &
+real, parameter :: p3(8) = [-.348334653602852e+01, -.186545454883399e+02, -.828561994140641e+01, -.323467330305403e+02, &
    & .179601688769252e+02, .175656315469614e+01, -.195022321289660e+01, .999994296074708e+00]
-real, parameter :: q3(7) = [real :: .695000655887434e+02, .572837193837324e+02, .257776384238440e+02, .760761148007735e+03, &
+real, parameter :: q3(7) = [.695000655887434e+02, .572837193837324e+02, .257776384238440e+02, .760761148007735e+03, &
    & .289516727925135e+02, -.343942266899870e+01, .100083867402639e+01]
-real, parameter :: p4(8) = [real :: -.531686623494482e+02, .891263822573708e+01, -.139381360364405e+01, -.308336269051763e+02, - &
+real, parameter :: p4(8) = [-.531686623494482e+02, .891263822573708e+01, -.139381360364405e+01, -.308336269051763e+02, - &
    & .749289167792884e+01, -.500140345515924e+01, -.300000016782086e+01, .100000000000058e+01]
-real, parameter :: q4(7) = [real :: .104745362652468e+04, -.674704580465832e+01, .295999399486831e+03, -.431325836146628e+01, - &
+real, parameter :: q4(7) = [.104745362652468e+04, -.674704580465832e+01, .295999399486831e+03, -.431325836146628e+01, - &
    & .790404992298926e+01, -.299996432944446e+01, .199999999924131e+01]
 interface
    pure elemental function alnrel(a)
@@ -9658,7 +9658,7 @@ if (int .eq. 3) ei = exp(-x) * ei
 go to 410
 !     ---------- 4.0 .LE. X .LE. 8.0 ----------
 150 m = 20
-ei = (1.0 + csevl (3.0 - 16.0/x, r, m)) / x
+ei = (1.0 + csevl(3.0 - 16.0/x, r, m)) / x
 if (int .eq. 3) go to 410
 ei = ei * exp(x)
 go to 410
@@ -9759,7 +9759,7 @@ return
 return
 end subroutine expli
 
-pure elemental double precision function dei (x)
+pure elemental double precision function dei(x)
 implicit none
 !-----------------------------------------------------------------------
 !        Double precision evaluation of the exponential integral
@@ -9778,7 +9778,7 @@ if (x .gt. 4.d0 .or. x .lt. -1.d0) dei = dexp(x) * dei
 return
 end function dei
 
-pure elemental double precision function dei1 (x)
+pure elemental double precision function dei1(x)
 implicit none
 !-----------------------------------------------------------------------
 !          Double precision evaluation of exp(-x)*EI(x)
@@ -9803,7 +9803,7 @@ implicit none
 double precision, intent(in) :: x
 integer :: m
 double precision :: c, eps, t, w
-double precision, parameter :: a(50) = [double precision :: .3284394579616699087873844201881d-01, - &
+double precision, parameter :: a(50) = [.3284394579616699087873844201881d-01, - &
    & .1669920452031362851476184343387d-01, .2845284724361346807424899853252d-03, -.7563944358516206489487866938533d-05, &
    & .2798971289450859157504843180879d-06, -.1357901828534531069525563926255d-07, .8343596202040469255856102904906d-09, - &
    & .6370971727640248438275242988532d-10, .6007247608811861235760831561584d-11, -.7022876174679773590750626150088d-12, &
@@ -9821,7 +9821,7 @@ double precision, parameter :: a(50) = [double precision :: .3284394579616699087
    & .8453813992712336233411457493674d-29, .3565758433431291562816111116287d-29, .1383653872125634705539949098871d-29, - &
    & .6062167864451372436584533764778d-30, -.2447198043989313267437655119189d-30, .1006850640933998348011548180480d-30, &
    & .4623685555014869015664341461674d-31]
-double precision, parameter :: b(60) = [double precision :: .20263150647078889499401236517381d+00, - &
+double precision, parameter :: b(60) = [.20263150647078889499401236517381d+00, - &
    & .73655140991203130439536898728034d-01, .63909349118361915862753283840020d-02, -.60797252705247911780653153363999d-03, - &
    & .73706498620176629330681411493484d-04, .48732857449450183453464992488076d-04, -.23837064840448290766588489460235d-05, - &
    & .30518612628561521027027332246121d-05, .17050331572564559009688032992907d-06, .23834204527487747258601598136403d-06, &
@@ -9842,7 +9842,7 @@ double precision, parameter :: b(60) = [double precision :: .2026315064707888949
    & .10479325703300941711526430332245d-27, -.21654550252170342240854880201386d-28, -.75297125745288269994689298432000d-30, &
    & .19103179392798935768638084000426d-29, .11492104966530338547790728833706d-29, .43896970582661751514410359193600d-30, &
    & .12320883239205686471647157725866d-30, .22220174457553175317538581162666d-31]
-double precision, parameter :: d(41) = [double precision :: .63629589796747038767129887806803d+00, - &
+double precision, parameter :: d(41) = [.63629589796747038767129887806803d+00, - &
    & .13081168675067634385812671121135d+00, -.84367410213053930014487662129752d-02, .26568491531006685413029428068906d-02, &
    & .32822721781658133778792170142517d-03, -.23783447771430248269579807851050d-04, -.11439804308100055514447076797047d-04, - &
    & .14405943433238338455239717699323d-05, .52415956651148829963772818061664d-08, .38407306407844323480979203059716d-07, &
@@ -9857,7 +9857,7 @@ double precision, parameter :: d(41) = [double precision :: .6362958979674703876
    & .25105524765386733555198634666666d-26, .35886666387790890886583637333333d-27, .39886035156771301763317759999999d-28, &
    & .21763676947356220478805333333333d-29, -.46146998487618942367607466666666d-30, -.20713517877481987707153066666666d-30, - &
    & .51890378563534371596970666666666d-31]
-double precision, parameter :: e(29) = [double precision :: -.16113461655571494025720663927566180d+02, &
+double precision, parameter :: e(29) = [-.16113461655571494025720663927566180d+02, &
    & .77940727787426802769272245891741497d+01, -.19554058188631419507127283812814491d+01, .37337293866277945611517190865690209d+00 &
    & , -.56925031910929019385263892220051166d-01, .72110777696600918537847724812635813d-02, - &
    & .78104901449841593997715184089064148d-03, .73880933562621681878974881366177858d-04, -.62028618758082045134358133607909712d-05 &
@@ -9869,7 +9869,7 @@ double precision, parameter :: e(29) = [double precision :: -.161134616555714940
    & .49632746181648636830198442666666666d-22, -.16208612696636044604866560000000000d-23, .50721448038607422226431999999999999d-25 &
    & , -.15235811133372207813973333333333333d-26, .44001511256103618696533333333333333d-28, - &
    & .12236141945416231594666666666666666d-29, .32809216661066001066666666666666666d-31, -.84933452268306432000000000000000000d-33]
-double precision, parameter :: r(25) = [double precision :: -.3739021479220279511668698204827d-01, &
+double precision, parameter :: r(25) = [-.3739021479220279511668698204827d-01, &
    & .4272398606220957726049179176528d-01, -.130318207984970054415392055219726d+00, .144191240246988907341095893982137d-01, - &
    & .134617078051068022116121527983553d-02, .107310292530637799976115850970073d-03, -.742999951611943649610283062223163d-05, &
    & .453773256907537139386383211511827d-06, -.247641721139060131846547423802912d-07, .122076581374590953700228167846102d-08, - &
@@ -9878,7 +9878,7 @@ double precision, parameter :: r(25) = [double precision :: -.373902147922027951
    & .923604240769240954484015923200000d-19, .255504267970814002440435029333333d-20, -.669912805684566847217882453333333d-22, &
    & .166925405435387319431987199999999d-23, -.396254925184379641856000000000000d-25, .898135896598511332010666666666666d-27, - &
    & .194763366993016433322666666666666d-28, .404836019024630033066666666666666d-30, -.807981567699845120000000000000000d-32]
-double precision, parameter :: p(50) = [double precision :: -.60577324664060345999319382737747d+00, - &
+double precision, parameter :: p(50) = [-.60577324664060345999319382737747d+00, - &
    & .11253524348366090030649768852718d+00, .13432266247902779492487859329414d-01, -.19268451873811457249246838991303d-02, &
    & .30911833772060318335586737475368d-03, -.53564132129618418776393559795147d-04, .98278128802474923952491882717237d-05, - &
    & .18853689849165182826902891938910d-05, .37494319356894735406964042190531d-06, -.76823455870552639273733465680556d-07, &
@@ -9896,7 +9896,7 @@ double precision, parameter :: p(50) = [double precision :: -.605773246640603459
    & .17269132735340541122315987626666d-27, .46308611659151500715194231466666d-28, -.12448703637214131241755170133333d-28, &
    & .33544574090520678532907007999999d-29, -.90598868521070774437543935999999d-30, .24524147051474238587273216000000d-30, - &
    & .66528178733552062817107967999999d-31]
-double precision, parameter :: q(64) = [double precision :: -.1892918000753016825495679942820d+00, - &
+double precision, parameter :: q(64) = [-.1892918000753016825495679942820d+00, - &
    & .8648117855259871489968817056824d-01, .7224101543746594747021514839184d-02, -.8097559457557386197159655610181d-03, &
    & .1099913443266138867179251157002d-03, -.1717332998937767371495358814487d-04, .2985627514479283322825342495003d-05, - &
    & .5659649145771930056560167267155d-06, .1152680839714140019226583501663d-06, -.2495030440269338228842128765065d-07, &
@@ -10028,26 +10028,26 @@ if (x .gt. -1.d0) go to 40
 if (x .gt. -32.d0) go to 10
 m = 50
 if (eps .ge. 1.d-20) m = 25
-de1e = (1.d0 + dcsevl (64.d0/x + 1.d0, a, m))/x
+de1e = (1.d0 + dcsevl(64.d0/x + 1.d0, a, m))/x
 return
 !
 10 if (x .gt. -8.d0) go to 20
 m = 60
 if (eps .ge. 1.d-20) m = 37
-de1e = (1.d0 + dcsevl ((64.d0/x + 5.d0)/3.d0, b, m))/x
+de1e = (1.d0 + dcsevl((64.d0/x + 5.d0)/3.d0, b, m))/x
 return
 !
 20 if (x .ge. -4.d0) go to 30
 m = 41
 if (eps .ge. 1.d-20) m = 27
-de1e = (1.d0 + dcsevl (16.d0/x + 3.d0, d, m))/x
+de1e = (1.d0 + dcsevl(16.d0/x + 3.d0, d, m))/x
 return
 !
 !                     -4 .LE. x .LE. 1
 !
 30 m = 29
 if (eps .ge. 1.d-20) m = 20
-de1e = -dlog(-x) + dcsevl ((2.d0*x + 5.d0)/3.d0, e, m)
+de1e = -dlog(-x) + dcsevl((2.d0*x + 5.d0)/3.d0, e, m)
 return
 !
 40 if (x .gt. 1.0d0) go to 60
@@ -10056,7 +10056,7 @@ de1e = - dei0(-x, eps)
 return
 50 m = 25
 if (eps .ge. 1.d-20) m = 18
-de1e = (-dlog(dabs(x)) - 0.6875d0 + x) + dcsevl (x, r, m)
+de1e = (-dlog(dabs(x)) - 0.6875d0 + x) + dcsevl(x, r, m)
 return
 !
 !                     1 .LT. x .LT. 90
@@ -10064,12 +10064,12 @@ return
 60 if (x .gt. 4.0d0) go to 70
 m = 50
 if (eps .ge. 1.d-20) m = 31
-de1e = (1.d0 + dcsevl ((8.d0/x - 5.d0)/3.d0, p, m))/x
+de1e = (1.d0 + dcsevl((8.d0/x - 5.d0)/3.d0, p, m))/x
 return
 !
 70 m = 64
 if (eps .ge. 1.d-20) m = 35
-de1e = (1.d0 + dcsevl (8.d0/x - 1.d0, q, m))/x
+de1e = (1.d0 + dcsevl(8.d0/x - 1.d0, q, m))/x
 return
 !
 !                   Asymptotic expansion
@@ -10086,7 +10086,7 @@ de1e = (1.d0 + w)/x
 return
 end function de1e
 
-pure elemental double precision function dei0 (x, eps)
+pure elemental double precision function dei0(x, eps)
 implicit none
 double precision, intent(in) :: eps
 double precision, intent(in) :: x
@@ -10100,7 +10100,7 @@ double precision, parameter :: dk2 = 12212826724.d0
 double precision, parameter :: dk3 = 52346020729.d0
 double precision, parameter :: db = 68719476736.d0
 double precision, parameter :: dx = .64725688445954142292644880487403537155379408215561d-33
-double precision, parameter :: a(40) = [double precision :: .3896215733907167310156502703593482682018d+01, - &
+double precision, parameter :: a(40) = [.3896215733907167310156502703593482682018d+01, - &
    & .3281607866398561670879044070702055058438d+01, .6522376145438925697728352767902339522245d+01, - &
    & .1296969738353651703636356975116693457132d+02, .2788629796294204997855360701398702087604d+02, - &
    & .6237880152891541873078526672920295283143d+02, .1435349488096750987841265647073135861344d+03, - &
@@ -10177,11 +10177,11 @@ integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
 integer, parameter :: m2 = 21
 real, parameter :: pio2 = 1.5707963267949
-real, parameter :: bb(16) = [real :: 6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
+real, parameter :: bb(16) = [6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
    & 8.99242948380352e-04, -1.09884251456048e-03, 5.81151604367358e-05, 2.28802638122969e-05, -1.35078982929539e-06, - &
    & 3.13213946132892e-07, 1.86619586786257e-08, 3.03991719607226e-09, -1.76437788946489e-10, -2.20236421792690e-11, &
    & 1.22710107703240e-12, 1.23680681116783e-13]
-real, parameter :: cc(46) = [real :: 9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+real, parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
    & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
    & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
    & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
@@ -10289,11 +10289,11 @@ integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
 integer, parameter :: m2 = 21
 real, parameter :: econ = 5.77215664901533e-01
-real, parameter :: bb(16) = [real :: 1.82820351064538e-01, -8.23768704567135e-02, -1.03468764544958e-02, 5.05085201960312e-03, &
+real, parameter :: bb(16) = [1.82820351064538e-01, -8.23768704567135e-02, -1.03468764544958e-02, 5.05085201960312e-03, &
    & 5.73772812356328e-05, -1.42717916181096e-04, 2.89263664732599e-06, 2.43068098304909e-06, -7.90337487433443e-08, - &
    & 2.80205535437371e-08, 1.05488738052065e-09, 2.34186901801115e-10, -9.27762554764014e-12, -1.48682586858284e-12, &
    & 5.95210263082868e-14, 7.42057835287916e-15]
-real, parameter :: cc(46) = [real :: 9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+real, parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
    & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
    & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
    & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
@@ -10390,7 +10390,7 @@ return
 return
 end function cin
 
-pure elemental subroutine cexexi (z, w)
+pure elemental subroutine cexexi(z, w)
 implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
@@ -10400,27 +10400,27 @@ real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
 real, parameter :: const = 2.46740110027234
 real, parameter :: euler = .577215664901533
 real, parameter :: zeta2 = 1.64493406684823
-real, parameter :: ed(18) = [real :: 0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+real, parameter :: ed(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
    & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
    & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
    & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
-real, parameter :: ee(18) = [real :: .850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+real, parameter :: ee(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
    & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
    & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
    & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
-real, parameter :: dd(19) = [real :: 0.00000000000000e+00, .419556678374293e-01, .117533661648665e+00, .228560237455987e+00, &
+real, parameter :: dd(19) = [0.00000000000000e+00, .419556678374293e-01, .117533661648665e+00, .228560237455987e+00, &
    & .375667350161240e+00, .791594846276672e+00, .107546889623058e+01, .142659208030841e+01, .186290554952377e+01, &
    & .240730009509856e+01, .308854035607524e+01, .394277605155259e+01, .501593196543981e+01, .636759180748651e+01, &
    & .807776193096055e+01, .102598961138887e+02, .130896768422610e+02, .168832169085916e+02, .224083240941713e+02]
-real, parameter :: de(19) = [real :: -.346911733535892e-03, -.603787732461745e-02, -.152461305949249e-01, -.210582169827291e-01, - &
+real, parameter :: de(19) = [-.346911733535892e-03, -.603787732461745e-02, -.152461305949249e-01, -.210582169827291e-01, - &
    & .171894208720754e-01, .314323467033032e-01, .750898531566972e-01, .124689787807260e+00, .168579075090035e+00, &
    & .191715080699511e+00, .182600794550836e+00, .142345674307147e+00, .874862222419327e-01, .402175083288425e-01, &
    & .128575005680180e-01, .257673782598441e-02, .275955003784349e-03, .119139315517122e-04, .107292980199386e-06]
-real, parameter :: cd(18) = [real :: 0.00000000000000e+00, .237286128313683e-01, .854113210668760e-01, .185276627282059e+00, &
+real, parameter :: cd(18) = [0.00000000000000e+00, .237286128313683e-01, .854113210668760e-01, .185276627282059e+00, &
    & .323741526616688e+00, .503045460381267e+00, .728806607587188e+00, .101122770102872e+01, .136598448171249e+01, &
    & .181510139038929e+01, .238824701955419e+01, .312490532008812e+01, .407802489894445e+01, .532033545554865e+01, &
    & .695624307290579e+01, .914759902547031e+01, .121829074388544e+02, .167511311969873e+02]
-real, parameter :: ce(18) = [real :: .349517258926827e-01, .135849105925897e+00, .158850581552296e+00, .153001434535435e+00, &
+real, parameter :: ce(18) = [.349517258926827e-01, .135849105925897e+00, .158850581552296e+00, .153001434535435e+00, &
    & .134520752856461e+00, .111913051619671e+00, .892008386656190e-01, .679227205472067e-01, .486723197887211e-01, &
    & .320170976532266e-01, .187008965021111e-01, .929708414427865e-02, .372604763161087e-02, .111989537559823e-02, &
    & .228057496872353e-03, .269596227781453e-04, .141255430224301e-05, .176352326808806e-07]

@@ -5,11 +5,14 @@ with typed PARAMETER declarations. They contain 6,689 initialized elements.
 The fixed-form sources are unchanged. The conversion expands purity from 346
 annotated procedures to 680: 175 PURE ELEMENTAL and 505 PURE procedures.
 
-Scalars retain their literal spelling. Complete arrays use typed array
-constructors, preserving their bounds and Fortran element order. A typed
-constructor converts each original literal to the declared type; it does not
-append kind suffixes or change decimal precision. Multidimensional arrays use
-RESHAPE with the original shape and lower bounds in their declarations.
+Scalars retain their literal spelling. Complete arrays preserve their bounds
+and Fortran element order. A typed constructor converts each original literal
+to the declared type; it does not append kind suffixes or change decimal
+precision. The final style pass omits the constructor type when every element
+is a literal with that same default type and kind. It removes 358 redundant
+type specifiers in each free-form version, retaining types for mixed values,
+precision conversions, explicit kinds, and expressions. Multidimensional arrays
+use RESHAPE with the original shape and lower bounds in their declarations.
 
 The converter removes obsolete type and named SAVE declarations for converted
 objects. All executable statements and full-line comments remain unchanged.

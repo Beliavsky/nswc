@@ -1,4 +1,4 @@
-pure subroutine deig (ibal,a,ka,n,wr,wi,ierr)
+pure subroutine deig(ibal,a,ka,n,wr,wi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -42,13 +42,13 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call dbal (ka,n,a,low,igh,wr)
-call dorth (ka,n,low,igh,a,wr)
-call dhqr (ka,n,low,igh,a,wr,wi,ierr)
+if (ibal .ne. 0) call dbal(ka,n,a,low,igh,wr)
+call dorth(ka,n,low,igh,a,wr)
+call dhqr(ka,n,low,igh,a,wr,wi,ierr)
 return
 end subroutine deig
 
-pure subroutine deigv (ibal,a,ka,n,wr,wi,zr,zi,ierr)
+pure subroutine deigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -114,12 +114,12 @@ end interface
 !
 low = 1
 igh = n
-if (ibal .ne. 0) call dbal (ka,n,a,low,igh,zi)
-call dorth (ka,n,low,igh,a,wr)
-call dortrn (ka,n,low,igh,a,wr,zr)
-call dhqr2 (ka,n,low,igh,a,wr,wi,zr,ierr)
+if (ibal .ne. 0) call dbal(ka,n,a,low,igh,zi)
+call dorth(ka,n,low,igh,a,wr)
+call dortrn(ka,n,low,igh,a,wr,zr)
+call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr .ne. 0) return
-if (ibal .ne. 0) call dbabk (ka,n,low,igh,zi,n,zr)
+if (ibal .ne. 0) call dbabk(ka,n,low,igh,zi,n,zr)
 !
 do 30 k = 1,n
    if (wi(k)) 30,10,20
@@ -317,7 +317,7 @@ igh = l
 return
 end subroutine dbal
 
-pure subroutine dbalnv (nz,n,z,low,igh,scale)
+pure subroutine dbalnv(nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
@@ -1435,7 +1435,7 @@ go to 1001
 1001 return
 end subroutine dhqr2
 
-subroutine seig (a, ka, n, w, t, ierr)
+subroutine seig(a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
@@ -1447,17 +1447,17 @@ integer :: l
 !-----------------------------------------------------------------------
 !
 if (ka .eq. 0) go to 10
-call tred1 (ka, n, a, w, t(n + 1), t(1))
-call tqlrat (n, w, t, ierr)
+call tred1(ka, n, a, w, t(n + 1), t(1))
+call tqlrat(n, w, t, ierr)
 return
 10 l = n*(n + 1)
 l = l/2
-call tred3 (n, l, a, w, t(n + 1), t(1))
-call tqlrat (n, w, t, ierr)
+call tred3(n, l, a, w, t(n + 1), t(1))
+call tqlrat(n, w, t, ierr)
 return
 end subroutine seig
 
-pure subroutine seig1 (a, ka, n, w, t, ierr)
+pure subroutine seig1(a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
@@ -1495,17 +1495,17 @@ end interface
 !-----------------------------------------------------------------------
 !
 if (ka .eq. 0) go to 10
-call tred1 (ka, n, a, w, t, t)
-call imtql1 (n, w, t, ierr)
+call tred1(ka, n, a, w, t, t)
+call imtql1(n, w, t, ierr)
 return
 10 l = n*(n + 1)
 l = l/2
-call tred3 (n, l, a, w, t, t)
-call imtql1 (n, w, t, ierr)
+call tred3(n, l, a, w, t, t)
+call imtql1(n, w, t, ierr)
 return
 end subroutine seig1
 
-pure subroutine seigv (a, ka, n, w, z, t, ierr)
+pure subroutine seigv(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
@@ -1535,12 +1535,12 @@ end interface
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
 !
-call tred2 (ka, n, a, w, t, z)
-call tql2 (ka, n, w, t, z, ierr)
+call tred2(ka, n, a, w, t, z)
+call tql2(ka, n, w, t, z, ierr)
 return
 end subroutine seigv
 
-pure subroutine seigv1 (a, ka, n, w, z, t, ierr)
+pure subroutine seigv1(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
@@ -1570,8 +1570,8 @@ end interface
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
 !
-call tred2 (ka, n, a, w, t, z)
-call imtql2 (ka, n, w, t, z, ierr)
+call tred2(ka, n, a, w, t, z)
+call imtql2(ka, n, w, t, z, ierr)
 return
 end subroutine seigv1
 
@@ -2603,7 +2603,7 @@ go to 1001
 !     ********** Last card of imtql2 **********
 end subroutine imtql2
 
-subroutine dseig (a, ka, n, w, t, ierr)
+subroutine dseig(a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
@@ -2616,17 +2616,17 @@ integer :: l
 !-----------------------------------------------------------------------
 !
 if (ka .eq. 0) go to 10
-call dtred1 (ka, n, a, w, t(n + 1), t(1))
-call dtql (n, w, t, ierr)
+call dtred1(ka, n, a, w, t(n + 1), t(1))
+call dtql(n, w, t, ierr)
 return
 10 l = n*(n + 1)
 l = l/2
-call dtred3 (n, l, a, w, t(n + 1), t(1))
-call dtql (n, w, t, ierr)
+call dtred3(n, l, a, w, t(n + 1), t(1))
+call dtql(n, w, t, ierr)
 return
 end subroutine dseig
 
-pure subroutine dseigv (a, ka, n, w, z, t, ierr)
+pure subroutine dseigv(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
@@ -2658,12 +2658,12 @@ end interface
 !                     symmetric real matrices
 !-----------------------------------------------------------------------
 !
-call dtred2 (ka, n, a, w, t, z)
-call dtql2 (ka, n, w, t, z, ierr)
+call dtred2(ka, n, a, w, t, z)
+call dtql2(ka, n, w, t, z, ierr)
 return
 end subroutine dseigv
 
-pure subroutine dtred1 (nm,n,a,d,e,e2)
+pure subroutine dtred1(nm,n,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -2783,7 +2783,7 @@ return
 !     ********** Last card of dtred1 **********
 end subroutine dtred1
 
-pure subroutine dtred3 (n,nv,a,d,e,e2)
+pure subroutine dtred3(n,nv,a,d,e,e2)
 implicit none
 !
 integer, intent(in) :: n
@@ -2900,7 +2900,7 @@ return
 !     ********** Last card of dtred3 **********
 end subroutine dtred3
 
-pure subroutine dtql (n,d,e2,ierr)
+pure subroutine dtql(n,d,e2,ierr)
 implicit none
 !
 integer, intent(in) :: n
@@ -3045,7 +3045,7 @@ go to 1001
 !     ********** Last card of dtql **********
 end subroutine dtql
 
-pure subroutine dtred2 (nm,n,a,d,e,z)
+pure subroutine dtred2(nm,n,a,d,e,z)
 implicit none
 !
 integer, intent(in) :: n
@@ -3190,7 +3190,7 @@ return
 !     ********** Last card of dtred2 **********
 end subroutine dtred2
 
-pure subroutine dtql2 (nm,n,d,e,z,ierr)
+pure subroutine dtql2(nm,n,d,e,z,ierr)
 implicit none
 !
 integer, intent(in) :: n
@@ -4641,7 +4641,7 @@ call dcomqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
 return
 end subroutine dceig
 
-pure subroutine dceigv (ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+pure subroutine dceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
 implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
@@ -5316,7 +5316,7 @@ go to 220
 1001 return
 end subroutine dcomqr
 
-pure subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
+pure subroutine dcbabk(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
 integer, intent(in) :: m, n
@@ -5402,7 +5402,7 @@ end do
 !     ********** Last card of dcbabk **********
 end subroutine dcbabk
 
-pure subroutine dcmqr2 (nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
+pure subroutine dcmqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
 implicit none
 !
 integer, intent(in) :: n
@@ -6965,7 +6965,7 @@ end do
 return
 end subroutine dorsol
 
-subroutine lsqr (ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+subroutine lsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
    & ksure, rnorm, work, lw, iwork, liw, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -7155,11 +7155,11 @@ end do
 !     num = np
 if (m .lt. n) go to 40
 !
-call u11ls (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+call u11ls(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 go to 100
 !
-40 call u11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+40 call u11us(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
 !     Solution phase
@@ -7183,11 +7183,11 @@ if (info .eq. 2) go to 130
 if (lw .lt. m0) go to 250
 if (m .lt. n) go to 120
 !
-call u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+call u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
-120 call u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+120 call u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
@@ -7196,11 +7196,11 @@ return
 130 if (lw .lt. 2*m0) go to 250
 if (m .lt. n) go to 140
 !
-call u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+call u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
-140 call u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+140 call u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
@@ -7232,7 +7232,7 @@ return
 !     return
 end subroutine lsqr
 
-pure subroutine u11ls (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+pure subroutine u11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
    & ic,ir)
 implicit none
 integer, intent(out) :: krank
@@ -7352,12 +7352,12 @@ krank = krank - 1
 if (mode .eq. 0) return
 if (i .le. np) go to 400
 if (i .gt. krank) go to 70
-call sswap (1,eb(i),1,eb(kk),1)
-call sswap (1,ub(i),1,ub(kk),1)
-call sswap (1,w(i),1,w(kk),1)
-call sswap (1,h(i),1,h(kk),1)
-call iswap (1,ic(i),1,ic(kk),1)
-call sswap (m,a(1,i),1,a(1,kk),1)
+call sswap(1,eb(i),1,eb(kk),1)
+call sswap(1,ub(i),1,ub(kk),1)
+call sswap(1,w(i),1,w(kk),1)
+call sswap(1,h(i),1,h(kk),1)
+call iswap(1,ic(i),1,ic(kk),1)
+call sswap(m,a(1,i),1,a(1,kk),1)
 go to 50
 !
 !           Test for zero rank
@@ -7428,46 +7428,46 @@ kz = krank
 if (mode .eq. 0) return
 if (j .le. np) go to 410
 if (imin .gt. krank) go to 180
-call iswap (1,ic(imin),1,ic(kk),1)
-call sswap (m,a(1,imin),1,a(1,kk),1)
-call sswap (1,eb(imin),1,eb(kk),1)
-call sswap (1,ub(imin),1,ub(kk),1)
-call sswap (1,db(imin),1,db(kk),1)
-call sswap (1,w(imin),1,w(kk),1)
-call sswap (1,h(imin),1,h(kk),1)
+call iswap(1,ic(imin),1,ic(kk),1)
+call sswap(m,a(1,imin),1,a(1,kk),1)
+call sswap(1,eb(imin),1,eb(kk),1)
+call sswap(1,ub(imin),1,ub(kk),1)
+call sswap(1,db(imin),1,db(kk),1)
+call sswap(1,w(imin),1,w(kk),1)
+call sswap(1,h(imin),1,h(kk),1)
 180 if (j .gt. krank) go to 300
 go to 110
 !
 !        Column pivot
 !
 200 if (imin .eq. j) go to 210
-call sswap (1,h(j),1,h(imin),1)
-call sswap (m,a(1,j),1,a(1,imin),1)
-call sswap (1,eb(j),1,eb(imin),1)
-call sswap (1,ub(j),1,ub(imin),1)
-call sswap (1,db(j),1,db(imin),1)
-call sswap (1,w(j),1,w(imin),1)
-call iswap (1,ic(j),1,ic(imin),1)
+call sswap(1,h(j),1,h(imin),1)
+call sswap(m,a(1,j),1,a(1,imin),1)
+call sswap(1,eb(j),1,eb(imin),1)
+call sswap(1,ub(j),1,ub(imin),1)
+call sswap(1,db(j),1,db(imin),1)
+call sswap(1,w(j),1,w(imin),1)
+call iswap(1,ic(j),1,ic(imin),1)
 !
 !        Row pivot
 !
 210 jmax = isamax(mm,a(j,j),1)
 jmax = jmax + j - 1
 if (jmax .eq. j) go to 220
-call sswap (n,a(j,1),mda,a(jmax,1),mda)
-call iswap (1,ir(j),1,ir(jmax),1)
+call sswap(n,a(j,1),mda,a(jmax,1),mda)
+call iswap(1,ir(j),1,ir(jmax),1)
 !
 !     Apply Householder transformation
 !
 220 tn = snrm2(mm,a(j,j),1)
 if (tn .eq. 0.0) go to 170
 if (a(j,j) .ne. 0.0) tn = sign(tn,a(j,j))
-call sscal (mm,1.0/tn,a(j,j),1)
+call sscal(mm,1.0/tn,a(j,j),1)
 a(j,j) = a(j,j) + 1.0
 if (j .eq. n) go to 250
 do 240 i = jp1,n
    bb = -sdot(mm,a(j,j),1,a(j,i),1)/a(j,j)
-   call saxpy (mm,bb,a(j,j),1,a(j,i),1)
+   call saxpy(mm,bb,a(j,j),1,a(j,i),1)
    if (i .le. np) go to 240
    if (h(i) .eq. 0.0) go to 240
    tt = 1.0 - (a(j,i)/h(i))**2
@@ -7533,7 +7533,7 @@ kp1 = krank + 1
 i = krank
 340 tn = snrm2(nmk,a(i,kp1),mda)/a(i,i)
 tn = a(i,i)*sqrt(1.0 + tn*tn)
-call sscal (nmk,1.0/tn,a(i,kp1),mda)
+call sscal(nmk,1.0/tn,a(i,kp1),mda)
 w(i) = a(i,i)/tn + 1.0
 a(i,i) = -tn
 if (i .eq. 1) go to 350
@@ -7541,7 +7541,7 @@ im1 = i - 1
 do ii = 1,im1
    tt = -sdot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
    tt = tt - a(ii,i)
-   call saxpy (nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+   call saxpy(nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
    a(ii,i) = a(ii,i) + tt*w(i)
 end do
 i = i - 1
@@ -7558,7 +7558,7 @@ return
 return
 end subroutine u11ls
 
-subroutine u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+subroutine u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 real, intent(inout) :: a(mda,n), b(mdb,nb)
@@ -7634,8 +7634,8 @@ do j = 1,k
    tt = a(j,j)
    a(j,j) = h(j)
    do i = 1,nb
-      bb = -sdot (m - j + 1,a(j,j),1,b(j,i),1)/h(j)
-      call saxpy (m - j + 1,bb,a(j,j),1,b(j,i),1)
+      bb = -sdot(m - j + 1,a(j,j),1,b(j,i),1)/h(j)
+      call saxpy(m - j + 1,bb,a(j,j),1,b(j,i),1)
    end do
    a(j,j) = tt
 end do
@@ -7655,7 +7655,7 @@ end do
 if (i .eq. 1) go to 200
 im1 = i - 1
 do jb = 1,nb
-   call saxpy (im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+   call saxpy(im1,-b(i,jb),a(1,i),1,b(1,jb),1)
 end do
 i = im1
 go to 150
@@ -7679,7 +7679,7 @@ do jb = 1,nb
    do i = 1,k
       tt = -sdot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
       tt = tt - b(i,jb)
-      call saxpy (nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      call saxpy(nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
       b(i,jb) = b(i,jb) + tt*w(i)
    end do
 end do
@@ -7695,7 +7695,7 @@ if (j .eq. i) go to 240
 if (j .lt. 0) go to 240
 !
 ic(i) = -ic(i)
-250 call sswap (nb,b(j,1),mdb,b(i,1),mdb)
+250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
 ij = ic(j)
 ic(j) = -ic(j)
 j = ij
@@ -7708,7 +7708,7 @@ end do
 return
 end subroutine u12ls
 
-pure subroutine u11us (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+pure subroutine u11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
    & ir,ic)
 implicit none
 integer, intent(out) :: krank
@@ -7828,12 +7828,12 @@ krank = krank - 1
 if (mode .eq. 0) return
 if (i .le. np) go to 400
 if (i .gt. krank) go to 70
-call sswap (1,eb(i),1,eb(kk),1)
-call sswap (1,ub(i),1,ub(kk),1)
-call sswap (1,w(i),1,w(kk),1)
-call sswap (1,h(i),1,h(kk),1)
-call iswap (1,ir(i),1,ir(kk),1)
-call sswap (n,a(i,1),mda,a(kk,1),mda)
+call sswap(1,eb(i),1,eb(kk),1)
+call sswap(1,ub(i),1,ub(kk),1)
+call sswap(1,w(i),1,w(kk),1)
+call sswap(1,h(i),1,h(kk),1)
+call iswap(1,ir(i),1,ir(kk),1)
+call sswap(n,a(i,1),mda,a(kk,1),mda)
 go to 50
 !
 !           Test for zero rank
@@ -7904,46 +7904,46 @@ kz = krank
 if (mode .eq. 0) return
 if (j .le. np) go to 410
 if (imin .gt. krank) go to 180
-call iswap (1,ir(imin),1,ir(kk),1)
-call sswap (n,a(imin,1),mda,a(kk,1),mda)
-call sswap (1,eb(imin),1,eb(kk),1)
-call sswap (1,ub(imin),1,ub(kk),1)
-call sswap (1,db(imin),1,db(kk),1)
-call sswap (1,w(imin),1,w(kk),1)
-call sswap (1,h(imin),1,h(kk),1)
+call iswap(1,ir(imin),1,ir(kk),1)
+call sswap(n,a(imin,1),mda,a(kk,1),mda)
+call sswap(1,eb(imin),1,eb(kk),1)
+call sswap(1,ub(imin),1,ub(kk),1)
+call sswap(1,db(imin),1,db(kk),1)
+call sswap(1,w(imin),1,w(kk),1)
+call sswap(1,h(imin),1,h(kk),1)
 180 if (j .gt. krank) go to 300
 go to 110
 !
 !        Row pivot
 !
 200 if (imin .eq. j) go to 210
-call sswap (1,h(j),1,h(imin),1)
-call sswap (n,a(j,1),mda,a(imin,1),mda)
-call sswap (1,eb(j),1,eb(imin),1)
-call sswap (1,ub(j),1,ub(imin),1)
-call sswap (1,db(j),1,db(imin),1)
-call sswap (1,w(j),1,w(imin),1)
-call iswap (1,ir(j),1,ir(imin),1)
+call sswap(1,h(j),1,h(imin),1)
+call sswap(n,a(j,1),mda,a(imin,1),mda)
+call sswap(1,eb(j),1,eb(imin),1)
+call sswap(1,ub(j),1,ub(imin),1)
+call sswap(1,db(j),1,db(imin),1)
+call sswap(1,w(j),1,w(imin),1)
+call iswap(1,ir(j),1,ir(imin),1)
 !
 !        Column pivot
 !
 210 jmax = isamax(nn,a(j,j),mda)
 jmax = jmax + j - 1
 if (jmax .eq. j) go to 220
-call sswap (m,a(1,j),1,a(1,jmax),1)
-call iswap (1,ic(j),1,ic(jmax),1)
+call sswap(m,a(1,j),1,a(1,jmax),1)
+call iswap(1,ic(j),1,ic(jmax),1)
 !
 !     Apply Householder transformation
 !
 220 tn = snrm2(nn,a(j,j),mda)
 if (tn .eq. 0.0) go to 170
 if (a(j,j) .ne. 0.0) tn = sign(tn,a(j,j))
-call sscal (nn,1.0/tn,a(j,j),mda)
+call sscal(nn,1.0/tn,a(j,j),mda)
 a(j,j) = a(j,j) + 1.0
 if (j .eq. m) go to 250
 do 240 i = jp1,m
    bb = -sdot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
-   call saxpy (nn,bb,a(j,j),mda,a(i,j),mda)
+   call saxpy(nn,bb,a(j,j),mda,a(i,j),mda)
    if (i .le. np) go to 240
    if (h(i) .eq. 0.0) go to 240
    tt = 1.0 - (a(i,j)/h(i))**2
@@ -8009,7 +8009,7 @@ kp1 = krank + 1
 i = krank
 340 tn = snrm2(mmk,a(kp1,i),1)/a(i,i)
 tn = a(i,i)*sqrt(1.0 + tn*tn)
-call sscal (mmk,1.0/tn,a(kp1,i),1)
+call sscal(mmk,1.0/tn,a(kp1,i),1)
 w(i) = a(i,i)/tn + 1.0
 a(i,i) = -tn
 if (i .eq. 1) go to 350
@@ -8017,7 +8017,7 @@ im1 = i - 1
 do ii = 1,im1
    tt = -sdot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
    tt = tt - a(i,ii)
-   call saxpy (mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+   call saxpy(mmk,tt,a(kp1,i),1,a(kp1,ii),1)
    a(i,ii) = a(i,ii) + tt*w(i)
 end do
 i = i - 1
@@ -8034,7 +8034,7 @@ return
 return
 end subroutine u11us
 
-subroutine u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 real, intent(inout) :: a(mda,n), b(mdb,nb)
@@ -8114,7 +8114,7 @@ do jb = 1,nb
       i = kp1 - j
       tt = -sdot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
       tt = tt - b(i,jb)
-      call saxpy (mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      call saxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
       b(i,jb) = b(i,jb) + tt*w(i)
    end do
 end do
@@ -8169,7 +8169,7 @@ if (j .eq. i) go to 240
 if (j .lt. 0) go to 240
 !
 ic(i) = -ic(i)
-250 call sswap (nb,b(j,1),mdb,b(i,1),mdb)
+250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
 ij = ic(j)
 ic(j) = -ic(j)
 j = ij
@@ -8182,7 +8182,7 @@ end do
 return
 end subroutine u12us
 
-pure subroutine dlsqr (ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+pure subroutine dlsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
    & ksure, rnorm, work, lw, iwork, liw, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -8447,11 +8447,11 @@ end do
 !     num = np
 if (m .lt. n) go to 40
 !
-call du11ls (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+call du11ls(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 go to 100
 !
-40 call du11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+40 call du11us(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
    & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
 !     Solution phase
@@ -8475,11 +8475,11 @@ if (info .eq. 2) go to 130
 if (lw .lt. m0) go to 250
 if (m .lt. n) go to 120
 !
-call du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+call du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
-120 call du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+120 call du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m1),iwork(m1),iwork(m2))
 return
 !
@@ -8488,11 +8488,11 @@ return
 130 if (lw .lt. 2*m0) go to 250
 if (m .lt. n) go to 140
 !
-call du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+call du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
-140 call du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+140 call du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
    & work(m1),work(m2),iwork(m1),iwork(m2))
 return
 !
@@ -8524,7 +8524,7 @@ return
 !     return
 end subroutine dlsqr
 
-pure subroutine du11ls (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+pure subroutine du11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
    & ic,ir)
 implicit none
 integer, intent(out) :: krank
@@ -8645,12 +8645,12 @@ krank = krank - 1
 if (mode .eq. 0) return
 if (i .le. np) go to 400
 if (i .gt. krank) go to 70
-call dswap (1,eb(i),1,eb(kk),1)
-call dswap (1,ub(i),1,ub(kk),1)
-call dswap (1,w(i),1,w(kk),1)
-call dswap (1,h(i),1,h(kk),1)
-call iswap (1,ic(i),1,ic(kk),1)
-call dswap (m,a(1,i),1,a(1,kk),1)
+call dswap(1,eb(i),1,eb(kk),1)
+call dswap(1,ub(i),1,ub(kk),1)
+call dswap(1,w(i),1,w(kk),1)
+call dswap(1,h(i),1,h(kk),1)
+call iswap(1,ic(i),1,ic(kk),1)
+call dswap(m,a(1,i),1,a(1,kk),1)
 go to 50
 !
 !           Test for zero rank
@@ -8721,46 +8721,46 @@ kz = krank
 if (mode .eq. 0) return
 if (j .le. np) go to 410
 if (imin .gt. krank) go to 180
-call iswap (1,ic(imin),1,ic(kk),1)
-call dswap (m,a(1,imin),1,a(1,kk),1)
-call dswap (1,eb(imin),1,eb(kk),1)
-call dswap (1,ub(imin),1,ub(kk),1)
-call dswap (1,db(imin),1,db(kk),1)
-call dswap (1,w(imin),1,w(kk),1)
-call dswap (1,h(imin),1,h(kk),1)
+call iswap(1,ic(imin),1,ic(kk),1)
+call dswap(m,a(1,imin),1,a(1,kk),1)
+call dswap(1,eb(imin),1,eb(kk),1)
+call dswap(1,ub(imin),1,ub(kk),1)
+call dswap(1,db(imin),1,db(kk),1)
+call dswap(1,w(imin),1,w(kk),1)
+call dswap(1,h(imin),1,h(kk),1)
 180 if (j .gt. krank) go to 300
 go to 110
 !
 !        Column pivot
 !
 200 if (imin .eq. j) go to 210
-call dswap (1,h(j),1,h(imin),1)
-call dswap (m,a(1,j),1,a(1,imin),1)
-call dswap (1,eb(j),1,eb(imin),1)
-call dswap (1,ub(j),1,ub(imin),1)
-call dswap (1,db(j),1,db(imin),1)
-call dswap (1,w(j),1,w(imin),1)
-call iswap (1,ic(j),1,ic(imin),1)
+call dswap(1,h(j),1,h(imin),1)
+call dswap(m,a(1,j),1,a(1,imin),1)
+call dswap(1,eb(j),1,eb(imin),1)
+call dswap(1,ub(j),1,ub(imin),1)
+call dswap(1,db(j),1,db(imin),1)
+call dswap(1,w(j),1,w(imin),1)
+call iswap(1,ic(j),1,ic(imin),1)
 !
 !        Row pivot
 !
 210 jmax = idamax(mm,a(j,j),1)
 jmax = jmax + j - 1
 if (jmax .eq. j) go to 220
-call dswap (n,a(j,1),mda,a(jmax,1),mda)
-call iswap (1,ir(j),1,ir(jmax),1)
+call dswap(n,a(j,1),mda,a(jmax,1),mda)
+call iswap(1,ir(j),1,ir(jmax),1)
 !
 !     Apply Householder transformation
 !
 220 tn = dnrm2(mm,a(j,j),1)
 if (tn .eq. 0.d0) go to 170
 if (a(j,j) .ne. 0.d0) tn = dsign(tn,a(j,j))
-call dscal (mm,1.d0/tn,a(j,j),1)
+call dscal(mm,1.d0/tn,a(j,j),1)
 a(j,j) = a(j,j) + 1.d0
 if (j .eq. n) go to 250
 do 240 i = jp1,n
    bb = -ddot(mm,a(j,j),1,a(j,i),1)/a(j,j)
-   call daxpy (mm,bb,a(j,j),1,a(j,i),1)
+   call daxpy(mm,bb,a(j,j),1,a(j,i),1)
    if (i .le. np) go to 240
    if (h(i) .eq. 0.d0) go to 240
    tt = 1.d0 - (a(j,i)/h(i))**2
@@ -8826,7 +8826,7 @@ kp1 = krank + 1
 i = krank
 340 tn = dnrm2(nmk,a(i,kp1),mda)/a(i,i)
 tn = a(i,i)*dsqrt(1.d0 + tn*tn)
-call dscal (nmk,1.d0/tn,a(i,kp1),mda)
+call dscal(nmk,1.d0/tn,a(i,kp1),mda)
 w(i) = a(i,i)/tn + 1.d0
 a(i,i) = -tn
 if (i .eq. 1) go to 350
@@ -8834,7 +8834,7 @@ im1 = i - 1
 do ii = 1,im1
    tt = -ddot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
    tt = tt - a(ii,i)
-   call daxpy (nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+   call daxpy(nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
    a(ii,i) = a(ii,i) + tt*w(i)
 end do
 i = i - 1
@@ -8851,7 +8851,7 @@ return
 return
 end subroutine du11ls
 
-pure subroutine du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
@@ -8958,8 +8958,8 @@ do j = 1,k
    tt = a(j,j)
    a(j,j) = h(j)
    do i = 1,nb
-      bb = -ddot (m - j + 1,a(j,j),1,b(j,i),1)/h(j)
-      call daxpy (m - j + 1,bb,a(j,j),1,b(j,i),1)
+      bb = -ddot(m - j + 1,a(j,j),1,b(j,i),1)/h(j)
+      call daxpy(m - j + 1,bb,a(j,j),1,b(j,i),1)
    end do
    a(j,j) = tt
 end do
@@ -8979,7 +8979,7 @@ end do
 if (i .eq. 1) go to 200
 im1 = i - 1
 do jb = 1,nb
-   call daxpy (im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+   call daxpy(im1,-b(i,jb),a(1,i),1,b(1,jb),1)
 end do
 i = im1
 go to 150
@@ -9003,7 +9003,7 @@ do jb = 1,nb
    do i = 1,k
       tt = -ddot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
       tt = tt - b(i,jb)
-      call daxpy (nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      call daxpy(nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
       b(i,jb) = b(i,jb) + tt*w(i)
    end do
 end do
@@ -9019,7 +9019,7 @@ if (j .eq. i) go to 240
 if (j .lt. 0) go to 240
 !
 ic(i) = -ic(i)
-250 call dswap (nb,b(j,1),mdb,b(i,1),mdb)
+250 call dswap(nb,b(j,1),mdb,b(i,1),mdb)
 ij = ic(j)
 ic(j) = -ic(j)
 j = ij
@@ -9032,7 +9032,7 @@ end do
 return
 end subroutine du12ls
 
-pure subroutine du11us (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
    & ir,ic)
 implicit none
 integer, intent(out) :: krank
@@ -9153,12 +9153,12 @@ krank = krank - 1
 if (mode .eq. 0) return
 if (i .le. np) go to 400
 if (i .gt. krank) go to 70
-call dswap (1,eb(i),1,eb(kk),1)
-call dswap (1,ub(i),1,ub(kk),1)
-call dswap (1,w(i),1,w(kk),1)
-call dswap (1,h(i),1,h(kk),1)
-call iswap (1,ir(i),1,ir(kk),1)
-call dswap (n,a(i,1),mda,a(kk,1),mda)
+call dswap(1,eb(i),1,eb(kk),1)
+call dswap(1,ub(i),1,ub(kk),1)
+call dswap(1,w(i),1,w(kk),1)
+call dswap(1,h(i),1,h(kk),1)
+call iswap(1,ir(i),1,ir(kk),1)
+call dswap(n,a(i,1),mda,a(kk,1),mda)
 go to 50
 !
 !           Test for zero rank
@@ -9229,46 +9229,46 @@ kz = krank
 if (mode .eq. 0) return
 if (j .le. np) go to 410
 if (imin .gt. krank) go to 180
-call iswap (1,ir(imin),1,ir(kk),1)
-call dswap (n,a(imin,1),mda,a(kk,1),mda)
-call dswap (1,eb(imin),1,eb(kk),1)
-call dswap (1,ub(imin),1,ub(kk),1)
-call dswap (1,db(imin),1,db(kk),1)
-call dswap (1,w(imin),1,w(kk),1)
-call dswap (1,h(imin),1,h(kk),1)
+call iswap(1,ir(imin),1,ir(kk),1)
+call dswap(n,a(imin,1),mda,a(kk,1),mda)
+call dswap(1,eb(imin),1,eb(kk),1)
+call dswap(1,ub(imin),1,ub(kk),1)
+call dswap(1,db(imin),1,db(kk),1)
+call dswap(1,w(imin),1,w(kk),1)
+call dswap(1,h(imin),1,h(kk),1)
 180 if (j .gt. krank) go to 300
 go to 110
 !
 !        Row pivot
 !
 200 if (imin .eq. j) go to 210
-call dswap (1,h(j),1,h(imin),1)
-call dswap (n,a(j,1),mda,a(imin,1),mda)
-call dswap (1,eb(j),1,eb(imin),1)
-call dswap (1,ub(j),1,ub(imin),1)
-call dswap (1,db(j),1,db(imin),1)
-call dswap (1,w(j),1,w(imin),1)
-call iswap (1,ir(j),1,ir(imin),1)
+call dswap(1,h(j),1,h(imin),1)
+call dswap(n,a(j,1),mda,a(imin,1),mda)
+call dswap(1,eb(j),1,eb(imin),1)
+call dswap(1,ub(j),1,ub(imin),1)
+call dswap(1,db(j),1,db(imin),1)
+call dswap(1,w(j),1,w(imin),1)
+call iswap(1,ir(j),1,ir(imin),1)
 !
 !        Column pivot
 !
 210 jmax = idamax(nn,a(j,j),mda)
 jmax = jmax + j - 1
 if (jmax .eq. j) go to 220
-call dswap (m,a(1,j),1,a(1,jmax),1)
-call iswap (1,ic(j),1,ic(jmax),1)
+call dswap(m,a(1,j),1,a(1,jmax),1)
+call iswap(1,ic(j),1,ic(jmax),1)
 !
 !     Apply Householder transformation
 !
 220 tn = dnrm2(nn,a(j,j),mda)
 if (tn .eq. 0.d0) go to 170
 if (a(j,j) .ne. 0.d0) tn = dsign(tn,a(j,j))
-call dscal (nn,1.d0/tn,a(j,j),mda)
+call dscal(nn,1.d0/tn,a(j,j),mda)
 a(j,j) = a(j,j) + 1.d0
 if (j .eq. m) go to 250
 do 240 i = jp1,m
    bb = -ddot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
-   call daxpy (nn,bb,a(j,j),mda,a(i,j),mda)
+   call daxpy(nn,bb,a(j,j),mda,a(i,j),mda)
    if (i .le. np) go to 240
    if (h(i) .eq. 0.d0) go to 240
    tt = 1.0 - (a(i,j)/h(i))**2
@@ -9334,7 +9334,7 @@ kp1 = krank + 1
 i = krank
 340 tn = dnrm2(mmk,a(kp1,i),1)/a(i,i)
 tn = a(i,i)*dsqrt(1.d0 + tn*tn)
-call dscal (mmk,1.d0/tn,a(kp1,i),1)
+call dscal(mmk,1.d0/tn,a(kp1,i),1)
 w(i) = a(i,i)/tn + 1.d0
 a(i,i) = -tn
 if (i .eq. 1) go to 350
@@ -9342,7 +9342,7 @@ im1 = i - 1
 do ii = 1,im1
    tt = -ddot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
    tt = tt - a(i,ii)
-   call daxpy (mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+   call daxpy(mmk,tt,a(kp1,i),1,a(kp1,ii),1)
    a(i,ii) = a(i,ii) + tt*w(i)
 end do
 i = i - 1
@@ -9359,7 +9359,7 @@ return
 return
 end subroutine du11us
 
-pure subroutine du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+pure subroutine du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
@@ -9470,7 +9470,7 @@ do jb = 1,nb
       i = kp1 - j
       tt = -ddot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
       tt = tt - b(i,jb)
-      call daxpy (mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      call daxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
       b(i,jb) = b(i,jb) + tt*w(i)
    end do
 end do
@@ -9525,7 +9525,7 @@ if (j .eq. i) go to 240
 if (j .lt. 0) go to 240
 !
 ic(i) = -ic(i)
-250 call dswap (nb,b(j,1),mdb,b(i,1),mdb)
+250 call dswap(nb,b(j,1),mdb,b(i,1),mdb)
 ij = ic(j)
 ic(j) = -ic(j)
 j = ij
@@ -9538,7 +9538,7 @@ end do
 return
 end subroutine du12us
 
-pure subroutine hfti (a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 implicit none
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
@@ -9718,8 +9718,8 @@ do 80 j = 1,ldiag
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
-70 call h12 (1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12 (2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
 !    ..
@@ -9756,7 +9756,7 @@ go to 270
 160 if (k .eq. n) go to 180
 do 170 ii = 1,k
    i = kp1 - ii
-170 call h12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 180 continue
 !
 !
@@ -9781,7 +9781,7 @@ do jb = 1,nb
    do 220 j = kp1,n
 220   b(j,jb) = 0.0
    do 230 i = 1,k
-230   call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-order the solution vector to compensate for the
 !      column interchanges.
@@ -9999,8 +9999,8 @@ do 80 j = 1,ldiag
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
-70 call h12 (1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12 (2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
 !     Also store the diagonal elements in the array d.
@@ -10042,7 +10042,7 @@ go to 270
 160 if (k .eq. n) go to 180
 do 170 ii = 1,k
    i = kp1 - ii
-170 call h12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 180 continue
 !
 !
@@ -10067,7 +10067,7 @@ do jb = 1,nb
    do 220 j = kp1,n
 220   b(j,jb) = 0.0
    do 230 i = 1,k
-230   call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-order the solution vector to compensate for the
 !      column interchanges.
@@ -10096,7 +10096,7 @@ return
 return
 end subroutine hfti2
 
-pure subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 real, intent(inout) :: c(*), u(iue,m), up
@@ -10184,7 +10184,7 @@ do 120 j = 1,ncv
 130 return
 end subroutine h12
 
-pure subroutine dhfti (a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 implicit none
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
@@ -10367,8 +10367,8 @@ do 80 j = 1,ldiag
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
-70 call dh12 (1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call dh12 (2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
 !    ..
@@ -10405,7 +10405,7 @@ go to 270
 160 if (k .eq. n) go to 180
 do 170 ii = 1,k
    i = kp1 - ii
-170 call dh12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 180 continue
 !
 !
@@ -10430,7 +10430,7 @@ do jb = 1,nb
    do 220 j = kp1,n
 220   b(j,jb) = 0.d0
    do 230 i = 1,k
-230   call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-order the solution vector to compensate for the
 !      column interchanges.
@@ -10649,8 +10649,8 @@ do 80 j = 1,ldiag
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
-70 call dh12 (1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call dh12 (2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
 !     Also store the diagonal elements in the array d.
@@ -10692,7 +10692,7 @@ go to 270
 160 if (k .eq. n) go to 180
 do 170 ii = 1,k
    i = kp1 - ii
-170 call dh12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 180 continue
 !
 !
@@ -10717,7 +10717,7 @@ do jb = 1,nb
    do 220 j = kp1,n
 220   b(j,jb) = 0.d0
    do 230 i = 1,k
-230   call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-order the solution vector to compensate for the
 !      column interchanges.

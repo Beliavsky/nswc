@@ -1,4 +1,4 @@
-subroutine ckps (z, r, zr, nu, w1, w2)
+subroutine ckps(z, r, zr, nu, w1, w2)
 implicit none
 real, intent(in) :: r
 complex, intent(in) :: z, zr
@@ -11,7 +11,7 @@ complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
 real, parameter :: tol = 1.e-10
 real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [real :: .577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 interface
    pure elemental function cdiv(a,b)
@@ -87,7 +87,7 @@ g1 = 1.0/t
 g2 = a*t
 go to 30
 21 t = 0.5 + (0.5 + nu)
-call cgamma (0, t, g1)
+call cgamma(0, t, g1)
 g2 = cdiv(a,g1)
 !
 30 gm2 = 0.5*(g1 + g2)
@@ -143,7 +143,7 @@ end do
 return
 end subroutine ckps
 
-pure elemental subroutine cbkml (z, r, zr, nu, n, w, w0)
+pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: r
@@ -270,7 +270,7 @@ w0 = 1.0 + 0.5*(nu + 0.5 - u2/u1)*zr
 return
 end subroutine cbkml
 
-subroutine cbsslk (z, r, w)
+subroutine cbsslk(z, r, w)
 implicit none
 real, intent(in) :: r
 complex :: z
@@ -342,7 +342,7 @@ rz = cpabs(real(z), aimag(z))
 !     Asymptotic expansion
 !
 if (rz .lt. 17.5 + 0.5*r*r) go to 5
-call cka (z, r, w)
+call cka(z, r, w)
 return
 !
 !          Reduction of r to the range -0.5 .LT. nu .LE. 0.5
@@ -361,7 +361,7 @@ ind = 1
 cz = z
 x = 0.5*real(z)
 y = 0.5*aimag(z)
-call crec (x, y, zr1, zr2)
+call crec(x, y, zr1, zr2)
 zr = cmplx (zr1, zr2)
 if (t .ne. 0.0) go to 20
 !
@@ -384,15 +384,15 @@ go to 70
 20 znorm = 0.5*rz
 if (znorm .gt. 1.0) go to 30
 ind = 0
-call ckm (z, znorm, zr, nu, u1, u2)
+call ckm(z, znorm, zr, nu, u1, u2)
 go to 50
 30 if (x .lt. 0.0) go to 40
-call ckml (z, znorm, zr, nu, u1, u2)
+call ckml(z, znorm, zr, nu, u1, u2)
 go to 50
 40 ind = -1
 cz = - z
 zr = - zr
-call ckml (cz, znorm, zr, nu, u1, u2)
+call ckml(cz, znorm, zr, nu, u1, u2)
 !
 50 if (n .gt. 1) go to 70
 w = u1
@@ -420,19 +420,19 @@ ex = cxp(m, nu1)
 cn = cmplx (a, 0.0)
 if (y .lt. 0.0) go to 100
 w1 = cmplx (aimag(z), -real(z))
-call cbsslj (w1, cn, w2)
+call cbsslj(w1, cn, w2)
 w2 = cmplx (pi*aimag(w2), -pi*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)
 w1 = cmplx (-aimag(z), real(z))
-call cbsslj (w1, cn, w2)
+call cbsslj(w1, cn, w2)
 w2 = cmplx (-pi*aimag(w2), pi*real(w2))
 w = ex*(ex*w + w2)
 return
 end subroutine cbsslk
 
-subroutine cka (z, nu, w)
+subroutine cka(z, nu, w)
 implicit none
 complex :: z
 complex, intent(inout) :: w
@@ -474,7 +474,7 @@ anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 eps = spmpar(1)
 !
 !--------------------------
-call crec (real(z), aimag(z), u, v)
+call crec(real(z), aimag(z), u, v)
 zr = cmplx(0.5*u, 0.5*v)
 a = nu*nu - 0.25
 m = 1.0
@@ -496,7 +496,7 @@ w = c*t*p*cexp(-z)
 return
 end subroutine cka
 
-pure elemental subroutine ckm (z, r, zr, nu, w1, w2)
+pure elemental subroutine ckm(z, r, zr, nu, w1, w2)
 implicit none
 real, intent(in) :: r
 complex, intent(in) :: z, zr
@@ -508,7 +508,7 @@ real :: anorm
 complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 real, parameter :: tol = 1.e-10
 real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [real :: .577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 interface
    pure elemental function gam1(a)
@@ -621,7 +621,7 @@ end do
 return
 end subroutine ckm
 
-pure elemental subroutine ckml (z, r, zr, nu, k1, k2)
+pure elemental subroutine ckml(z, r, zr, nu, k1, k2)
 implicit none
 real, intent(in) :: r
 complex, intent(in) :: z, zr
@@ -731,7 +731,7 @@ k2 = k1*(1.0 + 0.5*(nu + 0.5 - u2/u1)*zr)
 return
 end subroutine ckml
 
-pure elemental complex function cxp (n, nu)
+pure elemental complex function cxp(n, nu)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: nu
@@ -775,21 +775,21 @@ return
 return
 end function cxp
 
-pure elemental subroutine bsslk (mo, a, in, w)
+pure elemental subroutine bsslk(mo, a, in, w)
 implicit none
 integer, intent(in) :: in, mo
 complex, intent(in) :: a
 complex, intent(inout) :: w
 integer :: i, la, lk, lr, m, n
 real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), ts(2), zl(2), zs
-real, parameter :: cd(30) = [real :: 0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
+real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
    & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
    & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
    & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
    & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
    & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
    & 7.87863959810677e00]
-real, parameter :: ce(30) = [real :: 0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
+real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
    & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
    & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
    & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
@@ -1061,7 +1061,7 @@ return
 return
 end subroutine cai
 
-pure elemental subroutine airm (ind,z,ai,aip,bi,bip)
+pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
 implicit none
 integer, intent(in) :: ind
 complex, intent(inout) :: ai, aip, bi, bip
@@ -1072,13 +1072,13 @@ complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
 real, parameter :: c1 = 3.55028053887817e-01
 real, parameter :: c2 = 2.58819403792807e-01
 real, parameter :: sqt3 = 1.73205080756888e+00
-real, parameter :: a(8) = [real :: .166666666666667e+00, .555555555555556e-02, .771604938271605e-04, .584549195660307e-06, &
+real, parameter :: a(8) = [.166666666666667e+00, .555555555555556e-02, .771604938271605e-04, .584549195660307e-06, &
    & .278356759838241e-08, .909662613850462e-11, .216586336631062e-13, .392366551867867e-16]
-real, parameter :: b(8) = [real :: .833333333333333e-01, .198412698412698e-02, .220458553791887e-04, .141319585764030e-06, &
+real, parameter :: b(8) = [.833333333333333e-01, .198412698412698e-02, .220458553791887e-04, .141319585764030e-06, &
    & .588831607350126e-09, .172172984605300e-11, .372668797846970e-14, .621114663078283e-17]
-real, parameter :: c(8) = [real :: .333333333333333e-01, .694444444444444e-03, .701459034792368e-05, .417535139757362e-07, &
+real, parameter :: c(8) = [.333333333333333e-01, .694444444444444e-03, .701459034792368e-05, .417535139757362e-07, &
    & .163739270493083e-09, .454831306925231e-12, .941679724482880e-15, .150910212256872e-17]
-real, parameter :: d(8) = [real :: .333333333333333e+00, .138888888888889e-01, .220458553791887e-03, .183715461493239e-05, &
+real, parameter :: d(8) = [.333333333333333e+00, .138888888888889e-01, .220458553791887e-03, .183715461493239e-05, &
    & .942130571760201e-08, .327128670750070e-10, .819871355263333e-13, .155278665769571e-15]
 !--------------------------------------------------------------
 !     Calculates the Airy functions ai and bi and their
@@ -1206,11 +1206,11 @@ ai = ai*e
 aip = aip*e
 return
 30 if (r .lt. 7.4) go to 20
-40 call aia (ind,z,ai,aip,ierr)
+40 call aia(ind,z,ai,aip,ierr)
 return
 end subroutine aii
 
-pure elemental subroutine aia (ind, z, ai, aip, ierr)
+pure elemental subroutine aia(ind, z, ai, aip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
@@ -1220,14 +1220,14 @@ integer :: i, k, m, m2
 real :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
 complex :: alpha, beta, j
-real, parameter :: c(30) = [real :: .100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
+real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
    & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
    & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
    & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
    & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
    & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
    & .899520742705838e+20]
-real, parameter :: d(30) = [real :: .100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
+real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
    & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
    & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
    & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
@@ -1286,7 +1286,7 @@ if (real(z) .lt. 0.0) go to 30
 z1 = csqrt(z)
 z2 = csqrt(z1)
 z2r = 1.0/z2
-call crec (real(z), aimag(z), u, v)
+call crec(real(z), aimag(z), u, v)
 w = -1.5*cmplx(u,v)/z1
 u = abs(real(w))
 v = abs(aimag(w))
@@ -1327,7 +1327,7 @@ return
 z1 = csqrt(zz)
 z2 = csqrt(z1)
 z2r = 1.0/z2
-call crec (real(zz), aimag(zz), u, v)
+call crec(real(zz), aimag(zz), u, v)
 w = 1.5*cmplx(u,v)/z1
 u = abs(real(w))
 v = abs(aimag(w))
@@ -1542,14 +1542,14 @@ complex, intent(inout) :: bi, bip
 integer :: i, k, m, m2
 real :: ce, cf, eps, r, s, t, u, u1, v, v1, x, xneg, xpos, y
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, cf1, cf2, alpha, beta, j, cz
-real, parameter :: c(30) = [real :: .100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
+real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
    & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
    & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
    & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
    & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
    & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
    & .899520742705838e+20]
-real, parameter :: d(30) = [real :: .100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
+real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
    & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
    & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
    & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
@@ -2347,7 +2347,7 @@ end interface
 !-----------------------
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
-call aimp (-x, r, phi)
+call aimp(-x, r, phi)
 ai = r*sin(phi)
 return
 !
@@ -2487,7 +2487,7 @@ end interface
 !-----------------------
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
-call aimp (-x, r, phi)
+call aimp(-x, r, phi)
 aie = r*sin(phi)
 return
 !
@@ -2663,7 +2663,7 @@ end interface
 !-----------------------
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
-call aimp (-x, r, phi)
+call aimp(-x, r, phi)
 bi = r*cos(phi)
 return
 !
@@ -2852,7 +2852,7 @@ end interface
 !-----------------------
 !-----------------------------------------------------------------------
 if (x .ge. -1.0) go to 10
-call aimp (-x, r, phi)
+call aimp(-x, r, phi)
 bie = r*cos(phi)
 return
 !
@@ -2912,7 +2912,7 @@ return
 return
 end function bie
 
-pure elemental subroutine aimp (x, r, phi)
+pure elemental subroutine aimp(x, r, phi)
 implicit none
 real, intent(inout) :: phi, r
 real, intent(in) :: x
@@ -3050,25 +3050,25 @@ real :: eps, phi, r, t, tol, u, v, x, xx, y
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1
 complex :: z
 logical :: branch
-real, parameter :: x1(12) = [real :: 6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
+real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
    & 9.2674968322391e-01, 9.7775612969000e-01]
-real, parameter :: w1(12) = [real :: 9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
+real, parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
    & 1.3842483186484e-01, 1.1001657063572e-01, 7.9961821770829e-02, 5.2406954824642e-02, 3.0071088873761e-02, 1.4249245587998e-02, &
    & 4.8999245823217e-03, 8.3402903805690e-04]
-real, parameter :: fl(12) = [real :: 1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
+real, parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
    & 1.5787613653341e+00, 1.5867393901613e+00, 1.5983969635617e+00, 1.6135762587884e+00, 1.6313677113831e+00, 1.6500349733510e+00, &
    & 1.6671202200919e+00, 1.6798403417359e+00]
-real, parameter :: x2(12) = [real :: -9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
+real, parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
    & 3.6783149899818e-01, -1.2523340851147e-01, 1.2523340851147e-01, 3.6783149899818e-01, 5.8731795428662e-01, 7.6990267419431e-01 &
    & , 9.0411725637048e-01, 9.8156063424672e-01]
-real, parameter :: w2(12) = [real :: 4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
+real, parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
    & 2.3349253653836e-01, 2.4914704581340e-01, 2.4914704581340e-01, 2.3349253653836e-01, 2.0316742672307e-01, 1.6007832854335e-01, &
    & 1.0693932599532e-01, 4.7175336386512e-02]
-real, parameter :: fa(12) = [real :: 2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
+real, parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
    & 2.0862633195105e+00, 2.0926508621232e+00, 2.1016440761258e+00, 2.1128974786197e+00, 2.1254857173540e+00, 2.1379218133017e+00, &
    & 2.1483404506064e+00, 2.1548934173960e+00]
-real, parameter :: fb(12) = [real :: 1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
+real, parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
    & 1.7087245795822e+00, 1.7703459462057e+00, 1.8403280188791e+00, 1.9154060277115e+00, 1.9907093877047e+00, 2.0596975322636e+00, &
    & 2.1146977530430e+00, 2.1482986855683e+00]
 complex, parameter :: j = (0.0, 1.0)
@@ -3334,7 +3334,7 @@ end do
 return
 end function km
 
-pure subroutine kl (l, fk, fl)
+pure subroutine kl(l, fk, fl)
 implicit none
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl
@@ -3427,25 +3427,25 @@ complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1
 complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk
 complex :: k1, l1, ak2, al2, z, g, g1, gg, gp
 logical :: branch
-real, parameter :: x1(12) = [real :: 6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
+real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
    & 9.2674968322391e-01, 9.7775612969000e-01]
-real, parameter :: w1(12) = [real :: 9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
+real, parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
    & 1.3842483186484e-01, 1.1001657063572e-01, 7.9961821770829e-02, 5.2406954824642e-02, 3.0071088873761e-02, 1.4249245587998e-02, &
    & 4.8999245823217e-03, 8.3402903805690e-04]
-real, parameter :: fl(12) = [real :: 1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
+real, parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
    & 1.5787613653341e+00, 1.5867393901613e+00, 1.5983969635617e+00, 1.6135762587884e+00, 1.6313677113831e+00, 1.6500349733510e+00, &
    & 1.6671202200919e+00, 1.6798403417359e+00]
-real, parameter :: x2(12) = [real :: -9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
+real, parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
    & 3.6783149899818e-01, -1.2523340851147e-01, 1.2523340851147e-01, 3.6783149899818e-01, 5.8731795428662e-01, 7.6990267419431e-01 &
    & , 9.0411725637048e-01, 9.8156063424672e-01]
-real, parameter :: w2(12) = [real :: 4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
+real, parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
    & 2.3349253653836e-01, 2.4914704581340e-01, 2.4914704581340e-01, 2.3349253653836e-01, 2.0316742672307e-01, 1.6007832854335e-01, &
    & 1.0693932599532e-01, 4.7175336386512e-02]
-real, parameter :: fa(12) = [real :: 2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
+real, parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
    & 2.0862633195105e+00, 2.0926508621232e+00, 2.1016440761258e+00, 2.1128974786197e+00, 2.1254857173540e+00, 2.1379218133017e+00, &
    & 2.1483404506064e+00, 2.1548934173960e+00]
-real, parameter :: fb(12) = [real :: 1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
+real, parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
    & 1.7087245795822e+00, 1.7703459462057e+00, 1.8403280188791e+00, 1.9154060277115e+00, 1.9907093877047e+00, 2.0596975322636e+00, &
    & 2.1146977530430e+00, 2.1482986855683e+00]
 complex, parameter :: j = (0.0, 1.0)
@@ -3736,7 +3736,7 @@ atn = cmplx(atn1, atn2)
 return
 end function atn
 
-pure elemental subroutine ekm (k2, fk, ek)
+pure elemental subroutine ekm(k2, fk, ek)
 implicit none
 complex, intent(in) :: k2
 complex, intent(inout) :: fk, ek
@@ -3783,7 +3783,7 @@ ek = hpi*s2
 return
 end subroutine ekm
 
-pure elemental subroutine ekl (l,fk,fl,ek,el,gk,gl)
+pure elemental subroutine ekl(l,fk,fl,ek,el,gk,gl)
 implicit none
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl, ek, el, gk, gl
@@ -3890,7 +3890,7 @@ gl = hpi*s7*l2
 return
 end subroutine ekl
 
-pure elemental subroutine ellpi (phi, cphi, k, l, f, e, ierr)
+pure elemental subroutine ellpi(phi, cphi, k, l, f, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: cphi
@@ -4045,7 +4045,7 @@ return
 return
 end subroutine ellpi
 
-pure elemental subroutine dellpi (phi, cphi, k, l, f, e, ierr)
+pure elemental subroutine dellpi(phi, cphi, k, l, f, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: phi, cphi, k, l
@@ -4198,7 +4198,7 @@ return
 return
 end subroutine dellpi
 
-pure elemental subroutine epi (phi, cphi, k2, l2, n, m, p, ierr)
+pure elemental subroutine epi(phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: phi, cphi, k2, l2, n, m
@@ -4265,10 +4265,10 @@ go to 30
 if (abs((m + n) - 1.0) .gt. tol) go to 110
 r = m + n*a
 !
-30 call rjval (a, b, 1.0, r, p, ierr)
+30 call rjval(a, b, 1.0, r, p, ierr)
 if (ierr .ne. 0) go to 130
 p = p * (s * s2) * n/3.0
-call rfval (a, b, 1.0, rf, ierr)
+call rfval(a, b, 1.0, rf, ierr)
 p = p + s * rf
 return
 !
@@ -4284,7 +4284,7 @@ return
 return
 end subroutine epi
 
-pure elemental subroutine depi (phi, cphi, k2, l2, n, m, p, ierr)
+pure elemental subroutine depi(phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: phi, cphi, k2, l2, n, m
@@ -4352,10 +4352,10 @@ go to 30
 if (dabs((m + n) - 1.d0) .gt. tol) go to 110
 r = m + n*a
 !
-30 call drjval (a, b, 1.d0, r, p, ierr)
+30 call drjval(a, b, 1.d0, r, p, ierr)
 if (ierr .ne. 0) go to 130
 p = p * (s * s2) * n/3.d0
-call drfval (a, b, 1.d0, rf, ierr)
+call drfval(a, b, 1.d0, rf, ierr)
 p = p + s * rf
 return
 !
@@ -4371,7 +4371,7 @@ return
 return
 end subroutine depi
 
-pure elemental subroutine rfval (x, y, z, rf, ierr)
+pure elemental subroutine rfval(x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4495,7 +4495,7 @@ ierr = 3
 return
 end subroutine rfval
 
-pure elemental subroutine drfval (x, y, z, rf, ierr)
+pure elemental subroutine drfval(x, y, z, rf, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4619,7 +4619,7 @@ ierr = 3
 return
 end subroutine drfval
 
-pure elemental subroutine rdval (x, y, z, rd, ierr)
+pure elemental subroutine rdval(x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4755,7 +4755,7 @@ ierr = 3
 return
 end subroutine rdval
 
-pure elemental subroutine drdval (x, y, z, rd, ierr)
+pure elemental subroutine drdval(x, y, z, rd, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -4892,7 +4892,7 @@ ierr = 3
 return
 end subroutine drdval
 
-pure elemental subroutine rjval (x, y, z, p, rj, ierr)
+pure elemental subroutine rjval(x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -5016,7 +5016,7 @@ lamda = xnroot * (ynroot + znroot) + ynroot * znroot
 alfa = pn * (xnroot + ynroot + znroot) + xnroot * ynroot * znroot
 alfa = alfa * alfa
 beta = pn * (pn + lamda) * (pn + lamda)
-call rcval1 (alfa, beta, etolrc, rc, ierr)
+call rcval1(alfa, beta, etolrc, rc, ierr)
 if (ierr .ne. 0) return
 sigma = sigma + power4 * rc
 power4 = power4 * 0.25
@@ -5054,7 +5054,7 @@ ierr = 3
 return
 end subroutine rjval
 
-pure elemental subroutine drjval (x, y, z, p, rj, ierr)
+pure elemental subroutine drjval(x, y, z, p, rj, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -5179,7 +5179,7 @@ lamda = xnroot * (ynroot + znroot) + ynroot * znroot
 alfa = pn * (xnroot + ynroot + znroot) + xnroot * ynroot * znroot
 alfa = alfa * alfa
 beta = pn * (pn + lamda) * (pn + lamda)
-call drcvl1 (alfa, beta, etolrc, rc, ierr)
+call drcvl1(alfa, beta, etolrc, rc, ierr)
 if (ierr .ne. 0) return
 sigma = sigma + power4 * rc
 power4 = power4 * 0.25d0
@@ -5217,7 +5217,7 @@ ierr = 3
 return
 end subroutine drjval
 
-pure elemental subroutine rcval1 (x, y, errtol, rc, ierr)
+pure elemental subroutine rcval1(x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -5332,7 +5332,7 @@ ierr = 3
 return
 end subroutine rcval1
 
-pure elemental subroutine drcvl1 (x, y, errtol, rc, ierr)
+pure elemental subroutine drcvl1(x, y, errtol, rc, ierr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -5534,7 +5534,7 @@ if (u1 .ge. 0.0) go to 30
 !     Calculation of elliptic functions for 0.0 .LE. u2 .LE. f(k)
 !
 20 u2 = abs(u1)
-call scd (u2,abs(k),abs(l),f,s,c,d)
+call scd(u2,abs(k),abs(l),f,s,c,d)
 ierr = 0
 if (u1 .lt. 0.0) s = -s
 !
@@ -5628,10 +5628,10 @@ v = f - u
 !     Uses Maclaurin expansion when u or v .LE. 0.01
 !
 if (u .gt. 0.01) go to 10
-call scdm (u,k,s,c,d)
+call scdm(u,k,s,c,d)
 return
 10 if (v .gt. 0.01) go to 20
-call scdm (v,k,s1,c1,d1)
+call scdm(v,k,s1,c1,d1)
 s = c1/d1
 c = l*s1/d1
 d = l/d1
@@ -5642,13 +5642,13 @@ return
 20 call ellpi(pihalf,0.0,l,k,f1,e1,ierr)
 !
 if (k .gt. l) go to 30
-call scdf (u,k,l,f,f1,s,c,d)
+call scdf(u,k,l,f,f1,s,c,d)
 return
 !
 !     Uses imaginary transformation of Jacobi and Fourier
 !     expansion when k .GT. l
 !
-30 call scdj (u,k,l,f,f1,s,c,d)
+30 call scdj(u,k,l,f,f1,s,c,d)
 return
 !
 !     Computation for k = 0.0
@@ -5853,7 +5853,7 @@ d = l/d
 return
 end subroutine scdj
 
-pure elemental subroutine elpfc1 (u,k,l,s,c,d,ierr)
+pure elemental subroutine elpfc1(u,k,l,s,c,d,ierr)
 implicit none
 integer, intent(inout) :: ierr
 complex, intent(in) :: u
@@ -5888,7 +5888,7 @@ if (u2 .ne. 0.0) go to 20
 !
 !     Calculation for U2 = 0.
 !
-call ellpf (u1,k,l,s1,c1,d1,ierr)
+call ellpf(u1,k,l,s1,c1,d1,ierr)
 if (ierr .ne. 0) return
 s2 = 0.0
 c2 = 0.0
@@ -5897,7 +5897,7 @@ go to 40
 !
 !     Calculation for U1 = 0.
 !
-10 call ellpf (u2,l,k,s2,c2,d2,ierr)
+10 call ellpf(u2,l,k,s2,c2,d2,ierr)
 if (ierr .ne. 0) return
 if (c2 .eq. 0.0) go to 50
 s1 = 0.0
@@ -5910,9 +5910,9 @@ go to 40
 !
 !     Calculation for U1 and U2 .NE. 0.
 !
-20 call ellpf (u1,k,l,sk,ck,dk,ierr)
+20 call ellpf(u1,k,l,sk,ck,dk,ierr)
 if (ierr .ne. 0) return
-call ellpf (u2,l,k,sl,cl,dl,ierr)
+call ellpf(u2,l,k,sl,cl,dl,ierr)
 if (ierr .ne. 0) return
 coef = abs(k)*sl
 t1 = cl
@@ -6164,21 +6164,21 @@ real, parameter :: twopi = 6.28318530717958
 real, parameter :: alnpi = 1.14472988584940
 real, parameter :: rtpi = 1.77245385090552
 real, parameter :: rtpii = .56418958354776
-real, parameter :: e(5) = [real :: .885777518572895e+00, -.981151952778050e+00, .759305502082485e+00, -.353644980686977e+00, &
+real, parameter :: e(5) = [.885777518572895e+00, -.981151952778050e+00, .759305502082485e+00, -.353644980686977e+00, &
    & .695232092435207e-01]
-real, parameter :: e2(10) = [real :: .886226470016632e+00, -.999950714561036e+00, .885348820003892e+00, -.660611239043357e+00, &
+real, parameter :: e2(10) = [.886226470016632e+00, -.999950714561036e+00, .885348820003892e+00, -.660611239043357e+00, &
    & .421821197160099e+00, -.222898055667208e+00, .905057384150449e-01, -.254906111884287e-01, .430895168984138e-02, - &
    & .323377239693247e-03]
-real, parameter :: e3(15) = [real :: .886226924931465e+00, -.999999899776252e+00, .886223733186722e+00, -.666626670510907e+00, &
+real, parameter :: e3(15) = [.886226924931465e+00, -.999999899776252e+00, .886223733186722e+00, -.666626670510907e+00, &
    & .442851899328569e+00, -.265638206366025e+00, .145060043403014e+00, -.714909837799889e-01, .309199295521210e-01, - &
    & .112323532148441e-01, .324944543171185e-02, -.704260243309096e-03, .105787574480633e-03, -.971864864160461e-05, &
    & .408335517232165e-06]
-real, parameter :: aph1(3) = [real :: 2.02e-7, 2.08e-13, 2.71e-19]
-real, parameter :: aph2(3) = [real :: 1.22e-2, 1.23e-4, 1.34e-6]
-real, parameter :: aph4(3) = [real :: .6962e-1, .6990e-2, .7311e-3]
-real, parameter :: rsq(3) = [real :: 6.0516, 12.60605, 19.201924]
-real, parameter :: a3d8(3) = [real :: 0.28125e-4, 0.285e-7, 0.32625e-10]
-real, parameter :: cst(3) = [real :: .5625e-4, .57e-7, .6512e-10]
+real, parameter :: aph1(3) = [2.02e-7, 2.08e-13, 2.71e-19]
+real, parameter :: aph2(3) = [1.22e-2, 1.23e-4, 1.34e-6]
+real, parameter :: aph4(3) = [.6962e-1, .6990e-2, .7311e-3]
+real, parameter :: rsq(3) = [6.0516, 12.60605, 19.201924]
+real, parameter :: a3d8(3) = [0.28125e-4, 0.285e-7, 0.32625e-10]
+real, parameter :: cst(3) = [.5625e-4, .57e-7, .6512e-10]
 interface
    pure elemental function erfc1(ind,x)
       implicit none
@@ -6435,7 +6435,7 @@ return
 return
 end subroutine valr2
 
-pure elemental subroutine circv (r, d, j, p, ierr)
+pure elemental subroutine circv(r, d, j, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: j
@@ -6596,7 +6596,7 @@ const = d2/zm
 delta = sqrt(zm)
 x = 2.0*(c1*c2)/(r*delta)
 expt = exp(-0.5*r*r)
-call erfc0 (1, c1*r, expt, m)
+call erfc0(1, c1*r, expt, m)
 m = m/delta
 !
 p = 1.0
@@ -6662,7 +6662,7 @@ if (tn .gt. eps) go to 65
 !       Compute the series
 !
 m = n
-call gratio (m + 1.0, tr, s, w, 0)
+call gratio(m + 1.0, tr, s, w, 0)
 w = rcomp(m,tr)/m
 p = s
 do 70 i = 1,n
@@ -6677,7 +6677,7 @@ go to 110
 !------------------------------------------------------------------
 75 z = c1*abs(a1)
 w = exp(-a)
-call erfc0 (1, z, w, s1)
+call erfc0(1, z, w, s1)
 !
 a = 0.5*z/t
 t = 0.25/t
@@ -6726,7 +6726,7 @@ p = -1.0
 return
 end subroutine circv
 
-pure elemental subroutine erfc0 (ind, x, e, y)
+pure elemental subroutine erfc0(ind, x, e, y)
 implicit none
 integer, intent(in) :: ind
 real, intent(inout) :: e
@@ -6735,15 +6735,15 @@ real, intent(inout) :: y
 real :: ax, bot, eps, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
-real, parameter :: a(4) = [real :: -1.65581836870402e-4, 3.25324098357738e-2, 1.02201136918406e-1, 1.12837916709552e00]
-real, parameter :: b(4) = [real :: 4.64988945913179e-3, 7.01333417158511e-2, 4.23906732683201e-1, 1.00000000000000e00]
-real, parameter :: p(8) = [real :: -1.36864857382717e-7, 5.64195517478974e-1, 7.21175825088309e00, 4.31622272220567e01, &
+real, parameter :: a(4) = [-1.65581836870402e-4, 3.25324098357738e-2, 1.02201136918406e-1, 1.12837916709552e00]
+real, parameter :: b(4) = [4.64988945913179e-3, 7.01333417158511e-2, 4.23906732683201e-1, 1.00000000000000e00]
+real, parameter :: p(8) = [-1.36864857382717e-7, 5.64195517478974e-1, 7.21175825088309e00, 4.31622272220567e01, &
    & 1.52989285046940e02, 3.39320816734344e02, 4.51918953711873e02, 3.00459261020162e02]
-real, parameter :: q(8) = [real :: 1.00000000000000e00, 1.27827273196294e01, 7.70001529352295e01, 2.77585444743988e02, &
+real, parameter :: q(8) = [1.00000000000000e00, 1.27827273196294e01, 7.70001529352295e01, 2.77585444743988e02, &
    & 6.38980264465631e02, 9.31354094850610e02, 7.90950925327898e02, 3.00459260956983e02]
-real, parameter :: r(5) = [real :: 2.10144126479064e00, 2.62370141675169e01, 2.13688200555087e01, 4.65807828718470e00, &
+real, parameter :: r(5) = [2.10144126479064e00, 2.62370141675169e01, 2.13688200555087e01, 4.65807828718470e00, &
    & 2.82094791773523e-1]
-real, parameter :: s(5) = [real :: 9.41537750555460e01, 1.87114811799590e02, 9.90191814623914e01, 1.80124575948747e01, &
+real, parameter :: s(5) = [9.41537750555460e01, 1.87114811799590e02, 9.90191814623914e01, 1.80124575948747e01, &
    & 1.00000000000000e00]
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
@@ -6821,13 +6821,13 @@ return
 return
 end subroutine erfc0
 
-pure elemental real function erfcr (x)
+pure elemental real function erfcr(x)
 implicit none
 real, intent(in) :: x
 real :: bot, t, top
-real, parameter :: r(5) = [real :: 2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [real :: 9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !     Computation of  1/sqrt(PI) - x*exp(x*x)*erfc(x)  for x .GE. 4
 !-----------------------------------------------------------------------
@@ -6840,7 +6840,7 @@ erfcr = t*top/bot
 return
 end function erfcr
 
-pure elemental subroutine pkill (r0, sx, sy, h, k, p)
+pure elemental subroutine pkill(r0, sx, sy, h, k, p)
 implicit none
 real, intent(in) :: h
 real, intent(out) :: p
@@ -6850,11 +6850,11 @@ integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, sa, seps1, &
    & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9
 real :: k8
-real, parameter :: v(16) = [real :: .4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
+real, parameter :: v(16) = [.4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
    & .4213512761306353e+00, .5068999089322294e+00, .5877157572407623e+00, .6630442669302152e+00, .7321821187402897e+00, &
    & .7944837959679424e+00, .8493676137325700e+00, .8963211557660521e+00, .9349060759377397e+00, .9647622555875064e+00, &
    & .9856115115452683e+00, .9972638618494816e+00]
-real, parameter :: w(16) = [real :: .9654008851472780e-01, .9563872007927486e-01, .9384439908080457e-01, .9117387869576388e-01, &
+real, parameter :: w(16) = [.9654008851472780e-01, .9563872007927486e-01, .9384439908080457e-01, .9117387869576388e-01, &
    & .8765209300440381e-01, .8331192422694676e-01, .7819389578707031e-01, .7234579410884851e-01, .6582222277636185e-01, &
    & .5868409347853555e-01, .5099805926237618e-01, .4283589802222668e-01, .3427386291302143e-01, .2539206530926206e-01, &
    & .1627439473090567e-01, .7018610009470097e-02]
@@ -7076,7 +7076,7 @@ h3 = g3*s0 + g2*s9
 t1 = 2.0*(z + 2*h3)
 yy = r*r*(h2 + z8)/t1
 t1 = (h2 + z8)*(h2 + z8)/t1
-call gratio (t1,yy,z,z8,0)
+call gratio(t1,yy,z,z8,0)
 z2 = r/(rt2*s2)
 r8 = r/(rt2*s1)
 h2 = h8/(rt2*s1)
@@ -7305,7 +7305,7 @@ if (p .lt. 0.0) p = 0.0
 return
 end subroutine pkill
 
-pure subroutine plcopy (a,ka,m,b,kb,n)
+pure subroutine plcopy(a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(*)
@@ -7333,7 +7333,7 @@ end do
 return
 end subroutine plcopy
 
-pure subroutine dpcopy (a,ka,m,b,kb,n)
+pure subroutine dpcopy(a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(*)
@@ -7361,7 +7361,7 @@ end do
 return
 end subroutine dpcopy
 
-pure subroutine padd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine padd(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -7385,7 +7385,7 @@ end do
 return
 end subroutine padd
 
-pure subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpadd(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -7409,7 +7409,7 @@ end do
 return
 end subroutine dpadd
 
-pure subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine psubt(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -7433,7 +7433,7 @@ end do
 return
 end subroutine psubt
 
-pure subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpsubt(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -7457,7 +7457,7 @@ end do
 return
 end subroutine dpsubt
 
-pure subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine pmult(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
@@ -7498,7 +7498,7 @@ do 60 j = jmin,n
 return
 end subroutine pmult
 
-pure subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
+pure subroutine dpmult(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
@@ -7539,7 +7539,7 @@ do 60 j = jmin,n
 return
 end subroutine dpmult
 
-pure subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine pdiv(a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -7598,7 +7598,7 @@ return
 return
 end subroutine pdiv
 
-pure subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
+pure subroutine dpdiv(a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
@@ -7772,7 +7772,7 @@ return
 return
 end subroutine dplpwr
 
-pure subroutine pinv (a, d, n, q)
+pure subroutine pinv(a, d, n, q)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(n)
@@ -7833,7 +7833,7 @@ end do
 return
 end subroutine pinv
 
-pure subroutine dpinv (a, d, n, q)
+pure subroutine dpinv(a, d, n, q)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n)
@@ -7894,7 +7894,7 @@ end do
 return
 end subroutine dpinv
 
-subroutine mplnmv (mo, au, nc, ac, fv)
+subroutine mplnmv(mo, au, nc, ac, fv)
 implicit none
 integer, intent(in) :: mo, nc
 real :: ac(*)
@@ -7953,7 +7953,7 @@ end do
 return
 end subroutine mplnmv
 
-pure real function csevl (x, a, n)
+pure real function csevl(x, a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x
@@ -7982,7 +7982,7 @@ csevl = 0.5 * (s0 - s2)
 return
 end function csevl
 
-pure double precision function dcsevl (x, a, n)
+pure double precision function dcsevl(x, a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n), x
@@ -8010,7 +8010,7 @@ dcsevl = 0.5d0 * (s0 - s2)
 return
 end function dcsevl
 
-subroutine lgrngn (au, na, an)
+subroutine lgrngn(au, na, an)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: an(*)
@@ -8036,7 +8036,7 @@ end do
 return
 end subroutine lgrngn
 
-subroutine lgrngv (mo, na, qu, au, an, ff, df, sf)
+subroutine lgrngv(mo, na, qu, au, an, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na
 real :: an(*), au(*)
@@ -8150,7 +8150,7 @@ do 052 k = 1,na
 053 return
 end subroutine lgrngv
 
-subroutine lgrngx (au, na, ac)
+subroutine lgrngx(au, na, ac)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: ac(*)
@@ -8203,7 +8203,7 @@ end do
 return
 end subroutine lgrngx
 
-subroutine orthos (au, ma, aa, na, ar)
+subroutine orthos(au, ma, aa, na, ar)
 implicit none
 integer, intent(in) :: ma, na
 real, intent(inout) :: aa(*), ar(*)
@@ -8286,7 +8286,7 @@ end do
 return
 end subroutine orthos
 
-subroutine orthov (mo, na, au, ar, nf, ff, df, sf)
+subroutine orthov(mo, na, au, ar, nf, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na, nf
 real :: ar(*)
@@ -8344,7 +8344,7 @@ end do
 007 return
 end subroutine orthov
 
-subroutine orthox (na, ar, nc, ac)
+subroutine orthox(na, ar, nc, ac)
 implicit none
 integer, intent(in) :: na, nc
 real, intent(inout) :: ac(*)
@@ -8388,7 +8388,7 @@ end do
 return
 end subroutine orthox
 
-real function zeroin (f, ax, bx, aerr, rerr)
+real function zeroin(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -8520,7 +8520,7 @@ go to 20
 return
 end function zeroin
 
-double precision function dzero (f, ax, bx, aerr, rerr)
+double precision function dzero(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -9263,7 +9263,7 @@ return
 !
 end subroutine hybrd
 
-pure subroutine qdcrt (a, z)
+pure subroutine qdcrt(a, z)
 implicit none
 real, intent(in) :: a(3)
 complex, intent(inout) :: z(2)
@@ -9330,7 +9330,7 @@ z(2) = cmplx(-a(2)/a(3), 0.0)
 return
 end subroutine qdcrt
 
-pure subroutine dqdcrt (a, zr, zi)
+pure subroutine dqdcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -9402,7 +9402,7 @@ zi(2) = 0.d0
 return
 end subroutine dqdcrt
 
-pure subroutine cbcrt (a, z)
+pure subroutine cbcrt(a, z)
 implicit none
 real, intent(in) :: a(4)
 complex, intent(inout) :: z(3)
@@ -9617,7 +9617,7 @@ z(1) = cmplx(t, 0.0)
 return
 end subroutine cbcrt
 
-pure subroutine dcbcrt (a, zr, zi)
+pure subroutine dcbcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -9801,7 +9801,7 @@ return
 70 aq(1) = a(1)
 aq(2) = a(2) + a(1)/w
 aq(3) = -a(4)*w
-call dqdcrt (aq, zr, zi)
+call dqdcrt(aq, zr, zi)
 zr(3) = w
 zi(3) = 0.d0
 !
@@ -9854,7 +9854,7 @@ zr(1) = t
 return
 end subroutine dcbcrt
 
-pure subroutine qtcrt (a, z)
+pure subroutine qtcrt(a, z)
 implicit none
 real, intent(in) :: a(5)
 complex, intent(inout) :: z(4)
@@ -9948,7 +9948,7 @@ temp(1) = (( x1 + x2) + u) - b
 temp(2) = ((-x1 - x2) + u) - b
 temp(3) = (( x1 - x2) - u) - b
 temp(4) = ((-x1 + x2) - u) - b
-call aord (temp,4)
+call aord(temp,4)
 if (abs(temp(1)) .ge. 0.1*abs(temp(4))) go to 31
 t = temp(2)*temp(3)*temp(4)
 if (t .ne. 0.0) temp(1) = e/t
@@ -10019,7 +10019,7 @@ call cbcrt(a(2), z(2))
 return
 end subroutine qtcrt
 
-pure subroutine dqtcrt (a, zr, zi)
+pure subroutine dqtcrt(a, zr, zi)
 implicit none
 !-----------------------------------------------------------------------
 !
@@ -10081,7 +10081,7 @@ temp(1) = -q*q/64.d0
 temp(2) = 0.25d0*(p*p - r)
 temp(3) = p
 temp(4) = 1.d0
-call dcbcrt (temp, zr, zi)
+call dcbcrt(temp, zr, zi)
 if (zi(2) .ne. 0.d0) go to 60
 !
 !               The resolvent cubic has only real roots
@@ -10117,7 +10117,7 @@ zr(1) = (( x1 + x2) + u) - b
 zr(2) = ((-x1 - x2) + u) - b
 zr(3) = (( x1 - x2) - u) - b
 zr(4) = ((-x1 + x2) - u) - b
-call daord (zr, 4)
+call daord(zr, 4)
 if (dabs(zr(1)) .ge. 0.1d0*dabs(zr(4))) go to 31
 t = zr(2)*zr(3)*zr(4)
 if (t .ne. 0.d0) zr(1) = e/t
@@ -10157,7 +10157,7 @@ if (q .gt. 0.d0) x = -x
 !
 70 w(1) = zr(2)
 w(2) = zi(2)
-call dcsqrt (w, w)
+call dcsqrt(w, w)
 u = 2.d0*w(1)
 v = 2.d0*dabs(w(2))
 t = x - b
@@ -10199,7 +10199,7 @@ call dcbcrt(a(2), zr(2), zi(2))
 return
 end subroutine dqtcrt
 
-subroutine drpoly (op, ideg, zeror, zeroi, num, wk, dwk)
+subroutine drpoly(op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
 integer :: ideg
 integer, intent(inout) :: num
@@ -10255,7 +10255,7 @@ qk = k + idp1
 svk = qk + idp1
 tmp = svk + idp1
 !
-call drply1 (op,ideg,idp1,zeror,zeroi,dwk(p),dwk(qp),dwk(k), &
+call drply1(op,ideg,idp1,zeror,zeroi,dwk(p),dwk(qp),dwk(k), &
    & dwk(qk),dwk(svk),dwk(tmp),wk,num)
 return
 !
@@ -10265,7 +10265,7 @@ return
 return
 end subroutine drpoly
 
-subroutine drply1 (op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
+subroutine drply1(op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
    & temp,pt,num)
 implicit none
 integer :: ideg, idp1, num

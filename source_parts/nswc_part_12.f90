@@ -1,4 +1,4 @@
-subroutine extra (neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
+subroutine extra(neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
 implicit none
 integer, intent(in) :: neqn
 real :: f(neqn), f1(neqn), f2(neqn)
@@ -48,7 +48,7 @@ end do
 return
 end subroutine extra
 
-subroutine rkf45 (f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
+subroutine rkf45(f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
 implicit none
 !
 !     Fehlberg fourth-fifth order Runge-Kutta method
@@ -517,7 +517,7 @@ return
 !
 !     Advance an approximate solution over one step of length h
 !
-220 call fehl (f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
+220 call fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
 nfe = nfe + 5
 !
 !     Compute and test allowable tolerances versus local error estimates
@@ -1293,7 +1293,7 @@ iflag = 2
 return
 end subroutine gerks
 
-subroutine sfode (f,neq,y,t,tout,info,rerr,aerr,idid, &
+subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
@@ -1321,7 +1321,7 @@ info1(6) = info(4)
 !
 rtol(1) = rerr
 atol(1) = aerr
-call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+call stfode(f,neq,y,t,tout,info1,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
 info(1) = info1(1)
 rerr = rtol(1)
@@ -1329,7 +1329,7 @@ aerr = atol(1)
 return
 end subroutine sfode
 
-subroutine sfode1 (f,neq,y,t,tout,info,rtol,atol,idid, &
+subroutine sfode1(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
@@ -1353,7 +1353,7 @@ info1(4) = info(3)
 info1(5) = 0
 info1(6) = info(4)
 !
-call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+call stfode(f,neq,y,t,tout,info1,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
 info(1) = info1(1)
 return
@@ -1374,7 +1374,7 @@ t = 0.0
 return
 end subroutine zzzjac
 
-subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
+subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
 integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
@@ -2173,7 +2173,7 @@ info(1) = ibegin
 return
 end subroutine stfode
 
-subroutine rsco (rsav, isav)
+subroutine rsco(rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
 ! This routine restores from rsav and isav the contents of common
@@ -2195,7 +2195,7 @@ return
 !----------------------- End of subroutine rsco -----------------------
 end subroutine rsco
 
-subroutine svco (rsav, isav)
+subroutine svco(rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
 ! This routine stores in rsav and isav the contents of common block
@@ -2220,7 +2220,7 @@ return
 !----------------------- End of subroutine svco -----------------------
 end subroutine svco
 
-subroutine lsod1 (f,neq,t,y,tout,rtol,atol,idid,ypout, &
+subroutine lsod1(f,neq,t,y,tout,rtol,atol,idid,ypout, &
    & yh,yh1,ewt,savf,acor,wm,iwm,jac,intout, &
    & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
@@ -2409,7 +2409,7 @@ do 225 l = 1,neq
 225 ewt(l) = tol
 !
 big = sqrt(spmpar(3))
-call hstart (f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
+call hstart(f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
    & yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,h)
 !
 delsgn = sign(1.0,tout - t)
@@ -2852,7 +2852,7 @@ h = sign(h,dx)
 return
 end subroutine hstart
 
-subroutine intyd (t, k, yh, nyh, dky, iflag)
+subroutine intyd(t, k, yh, nyh, dky, iflag)
 implicit none
 !
 !   intyd approximates the solution and derivatives at t by polynomial
@@ -2930,7 +2930,7 @@ return
 !----------------------- End of subroutine intyd -----------------------
 end subroutine intyd
 
-subroutine stod  (neq, y, yh, nyh, yh1, ewt, savf, acor, &
+subroutine stod(neq, y, yh, nyh, yh1, ewt, savf, acor, &
    & wm, iwm, f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
@@ -3065,7 +3065,7 @@ go to 140
 lmax = maxord + 1
 if (ialth .eq. 1) ialth = 2
 if (meth .eq. meo) go to 110
-call cfod  (meth, elco, tesco)
+call cfod(meth, elco, tesco)
 meo = meth
 if (nq .gt. maxord) go to 120
 ialth = l
@@ -3080,7 +3080,7 @@ nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
 conit = 0.5e0/float(nq + 2)
-ddn = vnwrms (n, savf, ewt)/tesco(1,l)
+ddn = vnwrms(n, savf, ewt)/tesco(1,l)
 exdn = 1.0e0/float(l)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
 rh = amin1(rhdn,1.0e0)
@@ -3094,7 +3094,7 @@ go to 175
 ! current meth.  Then the el vector and related constants are reset
 ! whenever the order NQ is changed, or at the start of the problem.
 !-----------------------------------------------------------------------
-140 call cfod  (meth, elco, tesco)
+140 call cfod(meth, elco, tesco)
 150 do 155 i = 1,l
 155 el(i) = elco(i,nq)
 nqnyh = nq*nyh
@@ -3153,7 +3153,7 @@ ksteps = ksteps + 1
 220 m = 0
 do 230 i = 1,n
 230 y(i) = yh(i,1)
-call f (tn, y, savf, rpar, ipar)
+call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 if (ipup .le. 0) go to 250
 !-----------------------------------------------------------------------
@@ -3165,7 +3165,7 @@ ipup = 0
 rc = 1.0e0
 nstepj = nst
 crate = 0.7e0
-call pjac (neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
+call pjac(neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
    & rpar, ipar)
 if (ier .ne. 0) go to 430
 250 do 260 i = 1,n
@@ -3178,7 +3178,7 @@ if (ier .ne. 0) go to 430
 do 290 i = 1,n
    savf(i) = h*savf(i) - yh(i,2)
 290 y(i) = savf(i) - acor(i)
-del = vnwrms (n, y, ewt)
+del = vnwrms(n, y, ewt)
 do 300 i = 1,n
    y(i) = yh(i,1) + el(1)*savf(i)
 300 acor(i) = savf(i)
@@ -3190,9 +3190,9 @@ go to 400
 !-----------------------------------------------------------------------
 350 do 360 i = 1,n
 360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
-call slvs (wm, iwm, y, savf)
+call slvs(wm, iwm, y, savf)
 if (ier .ne. 0) go to 410
-del = vnwrms (n, y, ewt)
+del = vnwrms(n, y, ewt)
 do 380 i = 1,n
    acor(i) = acor(i) + y(i)
 380 y(i) = yh(i,1) + el(1)*acor(i)
@@ -3207,7 +3207,7 @@ m = m + 1
 if (m .eq. 3) go to 410
 if (m .ge. 2 .and. del .gt. 2.0e0*delp) go to 410
 delp = del
-call f (tn, y, savf, rpar, ipar)
+call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 go to 270
 !-----------------------------------------------------------------------
@@ -3244,7 +3244,7 @@ go to 170
 !-----------------------------------------------------------------------
 450 if (miter .ne. 0) ipup = -1
 if (m .eq. 0) dsm = del/tesco(2,nq)
-if (m .gt. 0) dsm = vnwrms (n, acor, ewt)/tesco(2,nq)
+if (m .gt. 0) dsm = vnwrms(n, acor, ewt)/tesco(2,nq)
 if (dsm .gt. 1.0e0) go to 500
 !-----------------------------------------------------------------------
 ! After a successful step, update the yh array.
@@ -3306,14 +3306,14 @@ go to 540
 if (l .eq. lmax) go to 540
 do 530 i = 1,n
 530 savf(i) = acor(i) - yh(i,lmax)
-dup = vnwrms (n, savf, ewt)/tesco(3,nq)
+dup = vnwrms(n, savf, ewt)/tesco(3,nq)
 exup = 1.0e0/float(l + 1)
 rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
 540 exsm = 1.0e0/float(l)
 rhsm = 1.0e0/(1.2e0*dsm**exsm + 0.0000012e0)
 rhdn = 0.0e0
 if (nq .eq. 1) go to 560
-ddn = vnwrms (n, yh(1,l), ewt)/tesco(1,nq)
+ddn = vnwrms(n, yh(1,l), ewt)/tesco(1,nq)
 exdn = 1.0e0/float(nq)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
 560 if (rhsm .ge. rhup) go to 570
@@ -3363,7 +3363,7 @@ rh = amax1(hmin/abs(h),rh)
 h = h*rh
 do 645 i = 1,n
 645 y(i) = yh(i,1)
-call f (tn, y, savf, rpar, ipar)
+call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 do 650 i = 1,n
 650 yh(i,2) = h*savf(i)
@@ -3392,7 +3392,7 @@ return
 !----------------------- End of subroutine stod  -----------------------
 end subroutine stod
 
-pure subroutine cfod  (meth, elco, tesco)
+pure subroutine cfod(meth, elco, tesco)
 implicit none
 !
 !   cfod defines coefficients needed in the integrator package sfode
@@ -3506,7 +3506,7 @@ return
 !----------------------- End of subroutine cfod  -----------------------
 end subroutine cfod
 
-subroutine pjac (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
+subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
    & f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
@@ -3568,13 +3568,13 @@ go to (100, 200, 300, 400, 500), miter
 100 lenp = n*n
 do 110 i = 1,lenp
 110 wm(i + 2) = 0.0e0
-call jac (tn, y, wm(3), n, rpar, ipar)
+call jac(tn, y, wm(3), n, rpar, ipar)
 con = -hl0
 do 120 i = 1,lenp
 120 wm(i + 2) = wm(i + 2)*con
 go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
-200 fac = vnwrms (n, savf, ewt)
+200 fac = vnwrms(n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
 if (r0 .eq. 0.0e0) r0 = 1.0e0
 srur = wm(1)
@@ -3584,7 +3584,7 @@ do j = 1,n
    r = amax1(srur*abs(yj),r0*ewt(j))
    y(j) = y(j) + r
    fac = -hl0/r
-   call f (tn, y, ftem, rpar, ipar)
+   call f(tn, y, ftem, rpar, ipar)
    do 220 i = 1,n
 220   wm(i + j1) = (ftem(i) - savf(i))*fac
    y(j) = yj
@@ -3597,7 +3597,7 @@ do 250 i = 1,n
    wm(j) = wm(j) + 1.0e0
 250 j = j + (n + 1)
 ! Do LU decomposition on P. --------------------------------------------
-call sgefa (wm(3), n, n, iwm(21), ier)
+call sgefa(wm(3), n, n, iwm(21), ier)
 return
 ! If miter = 3, construct a diagonal approximation to j and P. ---------
 300 wm(2) = hl0
@@ -3605,7 +3605,7 @@ ier = 0
 r = el0*0.1e0
 do 310 i = 1,n
 310 y(i) = y(i) + r*(h*savf(i) - yh(i,2))
-call f (tn, y, wm(3), rpar, ipar)
+call f(tn, y, wm(3), rpar, ipar)
 nfe = nfe + 1
 do 320 i = 1,n
    r0 = h*savf(i) - yh(i,2)
@@ -3627,7 +3627,7 @@ meband = mband + ml
 lenp = meband*n
 do 410 i = 1,lenp
 410 wm(i + 2) = 0.0e0
-call jac (tn, y, wm(ml3), meband, rpar, ipar)
+call jac(tn, y, wm(ml3), meband, rpar, ipar)
 con = -hl0
 do 420 i = 1,lenp
 420 wm(i + 2) = wm(i + 2)*con
@@ -3640,7 +3640,7 @@ mba = min0(mband,n)
 meband = mband + ml
 meb1 = meband - 1
 srur = wm(1)
-fac = vnwrms (n, savf, ewt)
+fac = vnwrms(n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
 if (r0 .eq. 0.0e0) r0 = 1.0e0
 do j = 1,mba
@@ -3648,7 +3648,7 @@ do j = 1,mba
       yi = y(i)
       r = amax1(srur*abs(yi),r0*ewt(i))
 530   y(i) = y(i) + r
-   call f (tn, y, ftem, rpar, ipar)
+   call f(tn, y, ftem, rpar, ipar)
    do jj = j,n,mband
       y(jj) = yh(jj,1)
       yjj = y(jj)
@@ -3668,12 +3668,12 @@ do 580 i = 1,n
    wm(ii) = wm(ii) + 1.0e0
 580 ii = ii + meband
 ! Do LU decomposition of P. --------------------------------------------
-call sgbfa (wm(3), meband, n, ml, mu, iwm(21), ier)
+call sgbfa(wm(3), meband, n, ml, mu, iwm(21), ier)
 return
 !----------------------- End of subroutine pjac -----------------------
 end subroutine pjac
 
-subroutine slvs (wm, iwm, x, tem)
+subroutine slvs(wm, iwm, x, tem)
 implicit none
 !
 !   slvs solves the linear system in the iteration scheme for the
@@ -3717,7 +3717,7 @@ common /debdf1/ rownd, rowns(210), &
 !-----------------------------------------------------------------------
 ier = 0
 go to (100, 100, 300, 400, 400), miter
-100 call sgesl (wm(3), n, n, iwm(21), x, 0)
+100 call sgesl(wm(3), n, n, iwm(21), x, 0)
 return
 !
 300 phl0 = wm(2)
@@ -3738,7 +3738,7 @@ return
 400 ml = iwm(1)
 mu = iwm(2)
 meband = 2*ml + mu + 1
-call sgbsl (wm(3), meband, n, ml, mu, iwm(21), x, 0)
+call sgbsl(wm(3), meband, n, ml, mu, iwm(21), x, 0)
 return
 !----------------------- End of subroutine slvs -----------------------
 end subroutine slvs
@@ -4116,7 +4116,7 @@ do 10 k = 1,ncomp
 return
 end function vnorm
 
-real function vnwrms (n, v, w)
+real function vnwrms(n, v, w)
 implicit none
 !-----------------------------------------------------------------------
 ! This function routine computes the weighted root-mean-square norm
@@ -4205,9 +4205,9 @@ external f
 integer :: i, j, k, l, m, m1
 real :: ha, sum
 real :: b(8,7)
-real, parameter :: a(7) = [real :: .3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
-real, parameter :: c(7) = [real :: 12., 8., 54., 4320., 20., 288., 820.]
-real, parameter :: d(9) = [real :: 41., 0., 27., 272., 27., 216., 0., 216., 41.]
+real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
+real, parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
+real, parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
 !     ******************************************************************
 !     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
 !     ******************************************************************
@@ -4265,7 +4265,7 @@ call f(t,dy)
 return
 end subroutine rk8
 
-subroutine sepde (cofx, cofy, g, edge, bval, iord, a, b, mp1, &
+subroutine sepde(cofx, cofy, g, edge, bval, iord, a, b, mp1, &
    & c, d, np1, u, ku, w, nw, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -4289,7 +4289,7 @@ real :: dum(1)
 !     --------------
 data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
 !     --------------
-call pdedge (edge, indx, indy, ierr)
+call pdedge(edge, indx, indy, ierr)
 if (ierr .ne. 0) return
 !
 if (a .ge. b .or. c .ge. d) go to 300
@@ -4438,12 +4438,12 @@ iw = mn + 1
 w(iw) = nw - mn
 if (iord .eq. 4) go to 210
 !
-call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
    & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
    & u, ku, u, ku, w(iw), p, ierr)
 go to 220
 !
-210 call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+210 call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
    & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
    & w(1),mp1, u, ku, w(iw), p, ierr)
 !
@@ -4472,14 +4472,14 @@ return
 return
 !
 350 dum(1) = 1.0
-call sepell (0, iord, a, b, m, indx, dum, alpha, dum, beta, &
+call sepell(0, iord, a, b, m, indx, dum, alpha, dum, beta, &
    & c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
    & u, ku, u, ku, dum, p, ierr)
 nw = dum(1) + mn
 return
 end subroutine sepde
 
-pure subroutine pdedge (edge, indx, indy, ierr)
+pure subroutine pdedge(edge, indx, indy, ierr)
 implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)
@@ -4531,7 +4531,7 @@ return
 return
 end subroutine pdedge
 
-subroutine sepell (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+subroutine sepell(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
    & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
    & usol,idmn,w,pertrb,ierror)
 implicit none
@@ -4988,7 +4988,7 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !
 !     Check input parameters
 !
-call chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
+call chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
    & idmn,mn,ierror)
 if (ierror .ne. 0) return
 !
@@ -5024,14 +5024,14 @@ i10 = i9 + k
 i11 = i10 + k
 i12 = i11 + k
 i13 = 2
-call sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
+call sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
    & nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
    & w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
    & w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
 return
 end subroutine sepell
 
-subroutine sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
    & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
    & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
    & idmn,w,pertrb,ierror)
@@ -5146,7 +5146,7 @@ ms = mit + is - 1
 !
 do i = 1,mit
    xi = ait + float(is + i - 2)*dlx
-   call cofx (xi,ai,bi,ci)
+   call cofx(xi,ai,bi,ci)
    axi = (ai/dlx - 0.5*bi)/dlx
    bxi = -2.*ai/dlx**2 + ci
    cxi = (ai/dlx + 0.5*bi)/dlx
@@ -5159,7 +5159,7 @@ end do
 !
 do j = 1,nit
    yj = cit + float(js + j - 2)*dly
-   call cofy (yj,dj,ej,fj)
+   call cofy(yj,dj,ej,fj)
    dyj = (dj/dly - 0.5*ej)/dly
    eyj = (-2.*dj/dly**2 + fj)
    fyj = (dj/dly + 0.5*ej)/dly
@@ -5293,29 +5293,29 @@ pertrb = 0.0
 !
 !     Check if operator is singular
 !
-call chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
+call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
 !
 !     Compute non-zero eigenvector in null space of transpose
 !     if singular
 !
-if (singlr) call trisp (mit,am,bm,cm,dm,um,zm)
-if (singlr) call trisp (nit,an,bn,cn,dn,un,zn)
+if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
+if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
 !
 !     Make initialization call to blktri
 !
 if (intl .eq. 0) &
-   & call blktri (intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
+   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
    & usol(is,js),ierror,w)
 if (ierror .ne. 0) return
 !
 !     Adjust right hand side if necessary
 !
 360 continue
-if (singlr) call orthg (usol,idmn,zn,zm,pertrb)
+if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
 !
 !     Compute solution
 !
-call blktri (i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
+call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
    & ierror,w)
 if (ierror .ne. 0) return
 !
@@ -5334,7 +5334,7 @@ end do
 !     Minimize solution with respect to weighted least squares
 !     norm if operator is singular
 !
-if (singlr) call minsol (usol,idmn,zn,zm,prtrb)
+if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
 !
 !     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
 !     not flagged
@@ -5344,11 +5344,11 @@ iord = 2
 !
 !     Compute new right hand side for fourth order solution
 !
-call defer (cofx,cofy,usol,idmn,grhs,mn)
+call defer(cofx,cofy,usol,idmn,grhs,mn)
 go to 360
 end subroutine sepel1
 
-subroutine chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
+subroutine chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
    & cofy,idmn,mn,ierror)
 implicit none
 integer, intent(in) :: idmn
@@ -5405,10 +5405,10 @@ dlx = (b - a)/float(m)
 dly = (d - c)/float(n)
 do i = 2,m
    xi = a + float(i - 1)*dlx
-   call cofx (xi,ai,bi,ci)
+   call cofx(xi,ai,bi,ci)
    do j = 2,n
       yj = c + float(j - 1)*dly
-      call cofy (yj,dj,ej,fj)
+      call cofy(yj,dj,ej,fj)
       if (ai*dj .gt. 0.0) go to  10
       ierror = 10
       return
@@ -5422,7 +5422,7 @@ ierror = 0
 return
 end subroutine chkprm
 
-subroutine chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
+subroutine chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
    & singlr)
 implicit none
 integer :: mbdcnd, nbdcnd
@@ -5464,12 +5464,12 @@ if (gama.ne.0.0 .or. xnu.ne.0.0) return
 !
 do i = is,ms
    xi = ait + float(i - 1)*dlx
-   call cofx (xi,ai,bi,ci)
+   call cofx(xi,ai,bi,ci)
    if (ci .ne. 0.0) return
 end do
 do j = js,ns
    yj = cit + float(j - 1)*dly
-   call cofy (yj,dj,ej,fj)
+   call cofy(yj,dj,ej,fj)
    if (fj .ne. 0.0) return
 end do
 !
@@ -5479,7 +5479,7 @@ singlr = .true.
 return
 end subroutine chksng
 
-subroutine orthg (usol,idmn,zn,zm,pertrb)
+subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
 real :: pertrb, usol(idmn,*), zm(*), zn(*)
@@ -5529,7 +5529,7 @@ end do
 return
 end subroutine orthg
 
-subroutine minsol (usol,idmn,zn,zm,pertb)
+subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
 real :: pertb, usol(idmn,*), zm(*), zn(*)
@@ -5583,7 +5583,7 @@ end do
 return
 end subroutine minsol
 
-subroutine trisp (n,a,b,c,d,u,z)
+subroutine trisp(n,a,b,c,d,u,z)
 implicit none
 integer, intent(in) :: n
 real :: a(n), b(n), c(n)
@@ -5628,7 +5628,7 @@ end do
 return
 end subroutine trisp
 
-subroutine defer (cofx,cofy,usol,idmn,grhs,mn)
+subroutine defer(cofx,cofy,usol,idmn,grhs,mn)
 implicit none
 integer :: idmn, mn
 real :: grhs(mn,*), usol(idmn,*)
@@ -5664,15 +5664,15 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
 !
 do j = js,ns
    yj = cit + float(j - 1)*dly
-   call cofy (yj,dj,ej,fj)
+   call cofy(yj,dj,ej,fj)
    do i = is,ms
       xi = ait + float(i - 1)*dlx
-      call cofx (xi,ai,bi,ci)
+      call cofx(xi,ai,bi,ci)
 !
 !     Compute partial derivative approximations at (XI,YJ)
 !
-      call dxfn (usol,idmn,i,j,uxxx,uxxxx)
-      call dyfn (usol,idmn,i,j,uyyy,uyyyy)
+      call dxfn(usol,idmn,i,j,uxxx,uxxxx)
+      call dyfn(usol,idmn,i,j,uyyy,uyyyy)
       tx = ai*uxxxx/12.0 + bi*uxxx/6.0
       ty = dj*uyyyy/12.0 + ej*uyyy/6.0
 !
@@ -5696,7 +5696,7 @@ end do
 return
 end subroutine defer
 
-subroutine dxfn (u,idmn,i,j,uxxx,uxxxx)
+subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uxxx, uxxxx
@@ -5782,7 +5782,7 @@ uxxxx = (-2.0*u(k - 5,j) + 11.0*u(k - 4,j) - 24.0*u(k - 3,j) + 26.0*u(k - 2,j) -
 return
 end subroutine dxfn
 
-subroutine dyfn (u,idmn,i,j,uyyy,uyyyy)
+subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uyyy, uyyyy
@@ -5869,7 +5869,7 @@ uyyyy = (-2.0*u(i,l - 5) + 11.0*u(i,l - 4) - 24.0*u(i,l - 3) + 26.0*u(i,l - 2) -
 return
 end subroutine dyfn
 
-subroutine blktri (iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
+subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
    & ierror,w)
 implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
@@ -6066,22 +6066,22 @@ iwd = iw3 + m
 iww = iwd + m
 iwu = iww + m
 if (iflg) 160,150,160
-150 call compb (nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
+150 call compb(nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
 go to 190
 160 if (mp) 170,180,170
 !
 ! Subroutine blktr1 solves the linear system
 !
-170 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
+170 call blktr1(nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
    & w(iw3),w(iwd),w(iww),w(iwu),prod0,cprod0)
 go to 190
-180 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
+180 call blktr1(nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
    & w(iw3),w(iwd),w(iww),w(iwu),prodp,cprodp)
 190 continue
 return
 end subroutine blktri
 
-subroutine blktr1 (n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
+subroutine blktr1(n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
    & ww,wu,prdct,cprdct)
 implicit none
 integer :: idimy, m, n
@@ -6118,10 +6118,10 @@ do l = 1,kdo
    i3 = i2 + i1
    i4 = i2 + i2
    irm1 = ir - 1
-   call indxb (i2,ir,im2,nm2)
-   call indxb (i1,irm1,im3,nm3)
-   call indxb (i3,irm1,im1,nm1)
-   call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
+   call indxb(i2,ir,im2,nm2)
+   call indxb(i1,irm1,im3,nm3)
+   call indxb(i3,irm1,im1,nm1)
+   call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
       & m,am,bm,cm,wd,ww,wu)
    if = 2**k
    do 80 i = i4,if,i4
@@ -6129,14 +6129,14 @@ do l = 1,kdo
 10    ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
-      call indxc (i,ir,idxc,nc)
+      call indxc(i,ir,idxc,nc)
       if (i - if) 20, 80, 80
-20    call indxa (i,ir,idxa,na)
-      call indxb (i - i1,irm1,im1,nm1)
-      call indxb (ipi2,ir,ip2,np2)
-      call indxb (ipi1,irm1,ip1,np1)
-      call indxb (ipi3,irm1,ip3,np3)
-      call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
+20    call indxa(i,ir,idxa,na)
+      call indxb(i - i1,irm1,im1,nm1)
+      call indxb(ipi2,ir,ip2,np2)
+      call indxb(ipi1,irm1,ip1,np1)
+      call indxb(ipi3,irm1,ip3,np3)
+      call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
       if (ipi2 - nm) 50, 50, 30
 30    do j = 1,m
@@ -6144,9 +6144,9 @@ do l = 1,kdo
          w2(j) = 0.
       end do
       go to  60
-50    call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum, &
+50    call prdct(np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum, &
          & y(1,ipi2),w3,m,am,bm,cm,wd,ww,wu)
-      call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w3,w2,m,am, &
+      call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w3,w2,m,am, &
          & bm,cm,wd,ww,wu)
 60    do j = 1,m
          y(j,i) = w1(j) + w2(j) + y(j,i)
@@ -6160,10 +6160,10 @@ if (npp) 320,100,320
 100 if = 2**k
 i = if/2
 i1 = i/2
-call indxb (i - i1,k - 2,im1,nm1)
-call indxb (i + i1,k - 2,ip1,np1)
-call indxb (i,k - 1,iz,nz)
-call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
+call indxb(i - i1,k - 2,im1,nm1)
+call indxb(i + i1,k - 2,ip1,np1)
+call indxb(i,k - 1,iz,nz)
+call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
    & bm,cm,wd,ww,wu)
 izr = i
 do j = 1,m
@@ -6175,16 +6175,16 @@ do ll = 2,k
    i2 = 2**ir
    i1 = i2/2
    i = i2
-   call indxc (i,ir,idxc,nc)
-   call indxb (i,ir,iz,nz)
-   call indxb (i - i1,ir - 1,im1,nm1)
-   call indxb (i + i1,ir - 1,ip1,np1)
-   call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w1,w1,m,am,bm, &
+   call indxc(i,ir,idxc,nc)
+   call indxb(i,ir,iz,nz)
+   call indxb(i - i1,ir - 1,im1,nm1)
+   call indxb(i + i1,ir - 1,ip1,np1)
+   call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w1,w1,m,am,bm, &
       & cm,wd,ww,wu)
    do j = 1,m
       w1(j) = y(j,i) + w1(j)
    end do
-   call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
+   call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
 end do
 do 180 ll = 2,k
@@ -6197,16 +6197,16 @@ do 180 ll = 2,k
    do 170 i = i2,ifd,i4
       if (i - i2 - izr) 170,140,170
 140   if (i - nm) 150,150,180
-150   call indxa (i,ir,idxa,na)
-      call indxb (i,ir,iz,nz)
-      call indxb (i - i1,ir - 1,im1,nm1)
-      call indxb (i + i1,ir - 1,ip1,np1)
-      call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w2,w2,m,am, &
+150   call indxa(i,ir,idxa,na)
+      call indxb(i,ir,iz,nz)
+      call indxb(i - i1,ir - 1,im1,nm1)
+      call indxb(i + i1,ir - 1,ip1,np1)
+      call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w2,w2,m,am, &
          & bm,cm,wd,ww,wu)
       do j = 1,m
          w2(j) = y(j,i) + w2(j)
       end do
-      call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
+      call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       izr = i
       if (i - nm) 170,190,170
@@ -6215,13 +6215,13 @@ do 180 ll = 2,k
 190 do j = 1,m
    y(j,nm + 1) = y(j,nm + 1) - cn(nm + 1)*w1(j) - an(nm + 1)*w2(j)
 end do
-call indxb (if/2,k - 1,im1,nm1)
-call indxb (if,k - 1,ip,np)
+call indxb(if/2,k - 1,im1,nm1)
+call indxb(if,k - 1,ip,np)
 if (ncmplx) 210,220,210
-210 call cprdct (nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
+210 call cprdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
    & y(1,nm + 1),m,am,bm,cm,w1,w3,ww)
 go to 230
-220 call prdct (nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
+220 call prdct(nm + 1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm + 1), &
    & y(1,nm + 1),m,am,bm,cm,wd,ww,wu)
 230 do j = 1,m
    w1(j) = an(1)*y(j,nm + 1)
@@ -6235,13 +6235,13 @@ do l = 1,kdo
    i4 = i2 + i2
    i1 = i2/2
    i = i4
-   call indxa (i,ir,idxa,na)
-   call indxb (i - i2,ir,im2,nm2)
-   call indxb (i - i2 - i1,ir - 1,im3,nm3)
-   call indxb (i - i1,ir - 1,im1,nm1)
-   call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,w1,w1,m,am, &
+   call indxa(i,ir,idxa,na)
+   call indxb(i - i2,ir,im2,nm2)
+   call indxb(i - i2 - i1,ir - 1,im3,nm3)
+   call indxb(i - i1,ir - 1,im1,nm1)
+   call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
-   call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w1,w1,m,am,bm, &
+   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w1,w1,m,am,bm, &
       & cm,wd,ww,wu)
    do j = 1,m
       y(j,i) = y(j,i) - w1(j)
@@ -6262,13 +6262,13 @@ do 310 l = 1,kdo
       ipi3 = i + i3
       if (ipi2 - izr) 270,280,270
 270   if (i - izr) 300,310,300
-280   call indxc (i,ir,idxc,nc)
-      call indxb (ipi2,ir,ip2,np2)
-      call indxb (ipi1,irm1,ip1,np1)
-      call indxb (ipi3,irm1,ip3,np3)
-      call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum,w2,w2,m, &
+280   call indxc(i,ir,idxc,nc)
+      call indxb(ipi2,ir,ip2,np2)
+      call indxb(ipi1,irm1,ip1,np1)
+      call indxb(ipi3,irm1,ip3,np3)
+      call prdct(np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
-      call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w2,w2,m,am, &
+      call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w2,w2,m,am, &
          & bm,cm,wd,ww,wu)
       do j = 1,m
          y(j,i) = y(j,i) - w2(j)
@@ -6294,36 +6294,36 @@ do 310 l = 1,kdo
       imi2 = i - i2
       ipi1 = i + i1
       ipi2 = i + i2
-      call indxa (i,ir,idxa,na)
-      call indxc (i,ir,idxc,nc)
-      call indxb (i,ir,iz,nz)
-      call indxb (imi1,irm1,im1,nm1)
-      call indxb (ipi1,irm1,ip1,np1)
+      call indxa(i,ir,idxa,na)
+      call indxc(i,ir,idxc,nc)
+      call indxb(i,ir,iz,nz)
+      call indxb(imi1,irm1,im1,nm1)
+      call indxb(ipi1,irm1,ip1,np1)
       if (i - i2) 340,340,360
 340   do j = 1,m
          w1(j) = 0.
       end do
       go to 370
-360   call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
+360   call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
          & w1,m,am,bm,cm,wd,ww,wu)
 370   if (ipi2 - nm) 400,400,380
 380   do j = 1,m
          w2(j) = 0.
       end do
       go to 410
-400   call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),y(1,ipi2), &
+400   call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),y(1,ipi2), &
          & w2,m,am,bm,cm,wd,ww,wu)
 410   do j = 1,m
          w1(j) = y(j,i) + w1(j) + w2(j)
       end do
-      call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,y(1,i), &
+      call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,y(1,i), &
          & m,am,bm,cm,wd,ww,wu)
 430   continue
 end do
 return
 end subroutine blktr1
 
-subroutine indxa (i,ir,idxa,na)
+subroutine indxa(i,ir,idxa,na)
 implicit none
 integer :: i, idxa, ir, na
 integer :: ik, k, ncmplx, nm, npp
@@ -6338,7 +6338,7 @@ if (i - nm) 20, 20, 10
 20 return
 end subroutine indxa
 
-subroutine indxc (i,ir,idxc,nc)
+subroutine indxc(i,ir,idxc,nc)
 implicit none
 integer :: i, idxc, ir, nc
 integer :: ik, k, ncmplx, nm, npp
@@ -6353,7 +6353,7 @@ if (idxc + nc - 1 - nm) 20, 20, 10
 20 return
 end subroutine indxc
 
-subroutine indxb (i,ir,idx,idp)
+subroutine indxb(i,ir,idx,idp)
 implicit none
 integer :: i, idp, idx, ir
 integer :: id, ipl, izh
@@ -6384,7 +6384,7 @@ return
 70 return
 end subroutine indxb
 
-subroutine prod0 (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,w,u)
+subroutine prod0(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,w,u)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
 real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
@@ -6478,7 +6478,7 @@ go to  20
 250 return
 end subroutine prod0
 
-subroutine prodp (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,u,w)
+subroutine prodp(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,u,w)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
 real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
@@ -6688,7 +6688,7 @@ end do
 return
 end subroutine cprod0
 
-subroutine cprodp (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,u,y)
+subroutine cprodp(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,u,y)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
 real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
@@ -6811,7 +6811,7 @@ end do
 return
 end subroutine cprodp
 
-subroutine compb (n,ierror,an,bn,cn,b,ah,bh)
+subroutine compb(n,ierror,an,bn,cn,b,ah,bh)
 implicit none
 integer :: ierror, n
 real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
@@ -6856,7 +6856,7 @@ do 100 l = 1,kdo
    ipl = i4 - 1
    ifd = if - i4
    do i = i4,ifd,i4
-      call indxb (i,l,ib,nb)
+      call indxb(i,l,ib,nb)
       if (nb) 100,100, 50
 50    js = i - ipl
       jf = js + nb - 1
@@ -6866,7 +6866,7 @@ do 100 l = 1,kdo
          bh(ls) = bn(j)
          ah(ls) = b(j)
       end do
-      call tqlrt0 (nb,bh,ah,ierror)
+      call tqlrt0(nb,bh,ah,ierror)
       if (ierror) 210, 70,210
 70    lh = ib - 1
       do j = 1,nb
@@ -6890,11 +6890,11 @@ do j = 1,nb
    bh(j) = sign(sqrt(arg),-an(l1))
    ah(j) = -bn(l1)
 end do
-call tqlrt0 (nb,ah,bh,ierror)
+call tqlrt0(nb,ah,bh,ierror)
 if (ierror .ne. 0) go to 210
 !
-call indxb (if,k - 1,j2,lh)
-call indxb (if/2,k - 1,j1,lh)
+call indxb(if,k - 1,j2,lh)
+call indxb(if/2,k - 1,j1,lh)
 j2 = j2 + 1
 lh = j2
 n2m2 = j2 + nm + nm - 2
@@ -6910,11 +6910,11 @@ if (j2 - n2m2) 170,170,190
 j1 = j1 + 1
 if (j2 - n2m2) 170,170,190
 190 b(lh) = b(n2m2 + 1)
-call indxb (if,k - 1,j1,j2)
+call indxb(if,k - 1,j1,j2)
 j2 = j1 + nmp + nmp
 allocate(root_complex(nmp),root_real(nmp))
 root_real = b(j1:j1 + nm)
-call ppadd (nmp,ierror,an,cn,root_complex,root_real,b(j2))
+call ppadd(nmp,ierror,an,cn,root_complex,root_real,b(j2))
 if (ierror /= 0) return
 b(j1:j1 + 2*nmp - 1) = transfer(root_complex,b(j1),2*nmp)
 if (ncmplx == 0) then
@@ -6931,7 +6931,7 @@ return
 return
 end subroutine compb
 
-subroutine tqlrt0 (n,d,e2,ierr)
+subroutine tqlrt0(n,d,e2,ierr)
 implicit none
 integer :: n, ierr
 real :: d(n), e2(n)
@@ -7094,7 +7094,7 @@ go to 150
 150 return
 end subroutine tqlrt0
 
-subroutine ppadd (n,ierror,a,c,cbp,bp,bh)
+subroutine ppadd(n,ierror,a,c,cbp,bp,bh)
 implicit none
 integer :: ierror, n
 real :: a(*), bh(*), bp(*), c(*)
@@ -7253,7 +7253,7 @@ go to 430
 return
 end subroutine ppadd
 
-function psgf (x,iz,c,a,bh)
+function psgf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
@@ -7275,7 +7275,7 @@ return
 return
 end function psgf
 
-function bsrh (xll,xrr,iz,c,a,bh,f,sgn)
+function bsrh(xll,xrr,iz,c,a,bh,f,sgn)
 implicit none
 integer :: iz
 real :: a(*), bh(*), c(*), sgn, xll, xrr
@@ -7300,7 +7300,7 @@ if (dx - cnv) 50, 50, 10
 return
 end function bsrh
 
-function ppsgf (x,iz,c,a,bh)
+function ppsgf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
@@ -7316,7 +7316,7 @@ ppsgf = sum
 return
 end function ppsgf
 
-function ppspf (x,iz,c,a,bh)
+function ppspf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
@@ -7332,7 +7332,7 @@ ppspf = sum
 return
 end function ppspf
 
-pure subroutine urget (n, ibeg, iend, ix, l, ierr)
+pure subroutine urget(n, ibeg, iend, ix, l, ierr)
 implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
@@ -7439,7 +7439,7 @@ return
 return
 end subroutine urget
 
-pure subroutine urng (ix, x, n, ierr)
+pure subroutine urng(ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -7523,7 +7523,7 @@ return
 return
 end subroutine urng
 
-pure subroutine durng (ix, x, n, ierr)
+pure subroutine durng(ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -7606,7 +7606,7 @@ return
 return
 end subroutine durng
 
-pure elemental subroutine urng0 (ix, u, v)
+pure elemental subroutine urng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: u, v
@@ -7680,7 +7680,7 @@ u = 0.5 + (0.5 - v)
 return
 end subroutine urng0
 
-pure elemental subroutine durng0 (ix, u, v)
+pure elemental subroutine durng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v
@@ -7754,7 +7754,7 @@ u = 0.5d0 + (0.5d0 - v)
 return
 end subroutine durng0
 
-pure elemental subroutine urng1 (ix, u, v, d)
+pure elemental subroutine urng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
@@ -7832,7 +7832,7 @@ u = 0.5 + (0.5 - v)
 return
 end subroutine urng1
 
-pure elemental subroutine durng1 (ix, u, v, d)
+pure elemental subroutine durng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v, d
@@ -7910,7 +7910,7 @@ u = 0.5d0 + (0.5d0 - v)
 return
 end subroutine durng1
 
-pure subroutine urng2 (ix, x, y, n, ierr)
+pure subroutine urng2(ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -7980,7 +7980,7 @@ return
 return
 end subroutine urng2
 
-pure subroutine durng2 (ix, x, y, n, ierr)
+pure subroutine durng2(ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8050,7 +8050,7 @@ return
 return
 end subroutine durng2
 
-pure subroutine rcir (n, ix, x, y, ierr)
+pure subroutine rcir(n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8074,11 +8074,11 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------
-call rcir1 (n, ix, x, 1, y, 1, ierr)
+call rcir1(n, ix, x, 1, y, 1, ierr)
 return
 end subroutine rcir
 
-pure subroutine rcir1 (n, ix, x, kx, y, ky, ierr)
+pure subroutine rcir1(n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
@@ -8169,7 +8169,7 @@ return
 return
 end subroutine rcir1
 
-pure subroutine drcir (n, ix, x, y, ierr)
+pure subroutine drcir(n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8193,11 +8193,11 @@ end interface
 !
 !-----------------------------------------------------------------------
 !------------------
-call drcir1 (n, ix, x, 1, y, 1, ierr)
+call drcir1(n, ix, x, 1, y, 1, ierr)
 return
 end subroutine drcir
 
-pure subroutine drcir1 (n, ix, x, kx, y, ky, ierr)
+pure subroutine drcir1(n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
@@ -8288,7 +8288,7 @@ return
 return
 end subroutine drcir1
 
-pure subroutine rnor (ix, a, n, ierr)
+pure subroutine rnor(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8320,7 +8320,7 @@ ierr = 0
 !
 if (n .eq. 1) go to 20
 m = n/2
-call rcir1 (m, ix, a(1), 2, a(2), 2, ierr)
+call rcir1(m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
 !
 !                  Obtain the first m variates
@@ -8337,7 +8337,7 @@ if (m .eq. n) return
 !
 !            Obtain the last variate (when n is odd)
 !
-20 call rcir1 (1, ix, t(1), 1, t(2), 1, ierr)
+20 call rcir1(1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
 s = sqrt(-2.0*alog(r)/r)
 a(n) = s*t(1)
@@ -8351,7 +8351,7 @@ return
 return
 end subroutine rnor
 
-pure subroutine drnor (ix, a, n, ierr)
+pure subroutine drnor(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8382,7 +8382,7 @@ ierr = 0
 !
 if (n .eq. 1) go to 20
 m = n/2
-call drcir1 (m, ix, a(1), 2, a(2), 2, ierr)
+call drcir1(m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
 !
 !                  Obtain the first m variates
@@ -8399,7 +8399,7 @@ if (m .eq. n) return
 !
 !            Obtain the last variate (when n is odd)
 !
-20 call drcir1 (1, ix, t(1), 1, t(2), 1, ierr)
+20 call drcir1(1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
 s = dsqrt(-2.d0*dlog(r)/r)
 a(n) = s*t(1)
@@ -8413,7 +8413,7 @@ return
 return
 end subroutine drnor
 
-pure subroutine nrng (ix, a, n, ierr)
+pure subroutine nrng(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8435,7 +8435,7 @@ end interface
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
 !
-call urng (ix,a,n,ierr)
+call urng(ix,a,n,ierr)
 if (ierr .ne. 0) return
 if (n .eq. 1) go to 20
 !
@@ -8448,13 +8448,13 @@ do 10 i = 1,m,2
 10 a(i + 1) = r*sin(phi)
 if (m .eq. n) return
 !
-20 call urng (ix,temp,1,ierr)
+20 call urng(ix,temp,1,ierr)
 r = sqrt(-2.0*alog(a(n)))
 a(n) = r*cos(pi2*temp(1))
 return
 end subroutine nrng
 
-pure subroutine dnrng (ix, a, n, ierr)
+pure subroutine dnrng(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -8476,7 +8476,7 @@ end interface
 !-----------------------------------------------------------------------
 !
 !
-call durng (ix, a, n, ierr)
+call durng(ix, a, n, ierr)
 if (ierr .ne. 0) return
 if (n .eq. 1) go to 20
 !
@@ -8489,13 +8489,13 @@ do 10 i = 1,m,2
 10 a(i + 1) = r*dsin(phi)
 if (m .eq. n) return
 !
-20 call durng (ix, temp, 1, ierr)
+20 call durng(ix, temp, 1, ierr)
 r = dsqrt(-2.d0*dlog(a(n)))
 a(n) = r*dcos(pi2*temp(1))
 return
 end subroutine dnrng
 
-pure subroutine nrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine nrvg(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
@@ -8610,14 +8610,14 @@ if (ix .le. 0 .or. ix .ge. max) go to 130
 !           and satisfying a = l*transpose(l).
 !
 if (mo .ne. 0) go to 10
-call sppfa (a, m, ierr)
+call sppfa(a, m, ierr)
 if (ierr .ne. 0) go to 120
 !
 !           Generate the n random normal vectors
 !
 10 ldim = (m*(m + 1))/2
 do j = 1,n
-   call rnor (ix, x(1,j), m, ierr)
+   call rnor(ix, x(1,j), m, ierr)
 !
 !         Obtain the components of the j-TH vector
 !                    in reverse order
@@ -8649,7 +8649,7 @@ return
 return
 end subroutine nrvg
 
-pure subroutine nrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine nrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
@@ -8749,7 +8749,7 @@ end do
 !           Generate the n random normal vectors
 !
 20 do j = 1,n
-   call rnor (ix, x(1,j), m, ierr)
+   call rnor(ix, x(1,j), m, ierr)
    do i = 1,m
       x(i,j) = a(i)*x(i,j) + fmu(i)
    end do
@@ -8768,7 +8768,7 @@ return
 return
 end subroutine nrvg1
 
-pure subroutine dnrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine dnrvg(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
@@ -8883,14 +8883,14 @@ if (ix .le. 0 .or. ix .ge. max) go to 130
 !           and satisfying a = l*transpose(l).
 !
 if (mo .ne. 0) go to 10
-call dppfa (a, m, ierr)
+call dppfa(a, m, ierr)
 if (ierr .ne. 0) go to 120
 !
 !           Generate the n random normal vectors
 !
 10 ldim = (m*(m + 1))/2
 do j = 1,n
-   call drnor (ix, x(1,j), m, ierr)
+   call drnor(ix, x(1,j), m, ierr)
 !
 !         Obtain the components of the j-TH vector
 !                    in reverse order
@@ -8922,7 +8922,7 @@ return
 return
 end subroutine dnrvg
 
-pure subroutine dnrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+pure subroutine dnrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
@@ -9022,7 +9022,7 @@ end do
 !           Generate the n random normal vectors
 !
 20 do j = 1,n
-   call drnor (ix, x(1,j), m, ierr)
+   call drnor(ix, x(1,j), m, ierr)
    do i = 1,m
       x(i,j) = a(i)*x(i,j) + fmu(i)
    end do
@@ -9041,7 +9041,7 @@ return
 return
 end subroutine dnrvg1
 
-pure subroutine ranexp (n,a,iseed,x,ierror)
+pure subroutine ranexp(n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -9117,7 +9117,7 @@ if (a .le. 0.0) go to 110
 !
 !        Generation of uniform random variates
 !
-call urng (iseed, x, n, ierror)
+call urng(iseed, x, n, ierror)
 if (ierror .ne. 0) go to 120
 !
 !        Loop which generates the n desired variates
@@ -9137,7 +9137,7 @@ return
 return
 end subroutine ranexp
 
-pure subroutine drnexp (n,a,iseed,x,ierror)
+pure subroutine drnexp(n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -9213,7 +9213,7 @@ if (a .le. 0.d0) go to 110
 !
 !        Generation of uniform random variates
 !
-call durng (iseed, x, n, ierror)
+call durng(iseed, x, n, ierror)
 if (ierror .ne. 0) go to 120
 !
 !        Loop which generates the n desired variates
@@ -9233,7 +9233,7 @@ return
 return
 end subroutine drnexp
 
-pure subroutine rgam (ix, a, n, x, ierr)
+pure subroutine rgam(ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9296,8 +9296,8 @@ ierr = 0
 !                   the setting ind = -8 Is avoided
 !
 do i = 1,n
-   call urng0 (ix, u, v)
-   call gaminv (a, w, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(a, w, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) w = 0.0
    x(i) = w
 end do
@@ -9313,7 +9313,7 @@ return
 return
 end subroutine rgam
 
-pure subroutine drgam (ix, a, n, x, ierr)
+pure subroutine drgam(ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9375,8 +9375,8 @@ ierr = 0
 !                   the setting ind = -8 Is avoided
 !
 do i = 1,n
-   call durng0 (ix, u, v)
-   call dginv (a, w, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(a, w, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) w = 0.d0
    x(i) = w
 end do
@@ -9392,7 +9392,7 @@ return
 return
 end subroutine drgam
 
-pure subroutine rbeta (n, a, b, ix, x, ierr)
+pure subroutine rbeta(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9478,12 +9478,12 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call urng0 (ix, u, v)
-   call gaminv (a, x1, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(a, x1, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
 !
-   call urng0 (ix, u, v)
-   call gaminv (b, x2, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(b, x2, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.0
 !
 !        It is required that A and b not be less
@@ -9504,7 +9504,7 @@ return
 return
 end subroutine rbeta
 
-pure subroutine drbeta (n, a, b, ix, x, ierr)
+pure subroutine drbeta(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9590,12 +9590,12 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call durng0 (ix, u, v)
-   call dginv (a, x1, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(a, x1, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
 !
-   call durng0 (ix, u, v)
-   call dginv (b, x2, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(b, x2, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.d0
 !
 !        It is required that A and b not be less
@@ -9616,7 +9616,7 @@ return
 return
 end subroutine drbeta
 
-pure subroutine fran (n, a, b, ix, x, ierr)
+pure subroutine fran(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9711,12 +9711,12 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call urng0 (ix, u, v)
-   call gaminv (ahalf, x1, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(ahalf, x1, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
 !
-   call urng0 (ix, u, v)
-   call gaminv (bhalf, x2, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(bhalf, x2, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
 !        Protect against overflow in computing the
@@ -9742,7 +9742,7 @@ return
 return
 end subroutine fran
 
-pure subroutine dfran (n, a, b, ix, x, ierr)
+pure subroutine dfran(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9838,12 +9838,12 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call durng0 (ix, u, v)
-   call dginv (ahalf, x1, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(ahalf, x1, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
 !
-   call durng0 (ix, u, v)
-   call dginv (bhalf, x2, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(bhalf, x2, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
 !        Protect against overflow in computing the
@@ -9869,7 +9869,7 @@ return
 return
 end subroutine dfran
 
-pure subroutine tran (n, a, ix, x, ierr)
+pure subroutine tran(n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -9959,8 +9959,8 @@ do i = 1,n
 !
 !                    Get a normal variate
 !
-   call urng1 (ix, u, v, d)
-   call pni (u, v, d, z, ind)
+   call urng1(ix, u, v, d)
+   call pni(u, v, d, z, ind)
 !
 !                    Get a gamma variate
 !
@@ -9968,8 +9968,8 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call urng0 (ix, u, v)
-   call gaminv (ahalf, w, 0.0, u, v, ind)
+   call urng0(ix, u, v)
+   call gaminv(ahalf, w, 0.0, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
    s = sqrt(w/ahalf)
@@ -9989,7 +9989,7 @@ return
 return
 end subroutine tran
 
-pure subroutine dtran (n, a, ix, x, ierr)
+pure subroutine dtran(n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
@@ -10079,8 +10079,8 @@ do i = 1,n
 !
 !                    Get a normal variate
 !
-   call durng1 (ix, u, v, d)
-   call dpni (u, v, d, z, ind)
+   call durng1(ix, u, v, d)
+   call dpni(u, v, d, z, ind)
 !
 !                    Get a gamma variate
 !
@@ -10088,8 +10088,8 @@ do i = 1,n
 !        variates are far enough from 0 and 1 so that
 !        the setting ind = -8 In gaminv is avoided.
 !
-   call durng0 (ix, u, v)
-   call dginv (ahalf, w, u, v, ind)
+   call durng0(ix, u, v)
+   call dginv(ahalf, w, u, v, ind)
    if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
    s = dsqrt(w/ahalf)
@@ -10109,7 +10109,7 @@ return
 return
 end subroutine dtran
 
-pure subroutine rmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+pure subroutine rmk1(n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -10202,7 +10202,7 @@ if (abs(alpha) .ge. 1.0) go to 120
 !
 !        Generation of standard normal random variates
 !
-call rnor (iseed,x,n,ierror)
+call rnor(iseed,x,n,ierror)
 if (ierror .ne. 0) go to 130
 !
 !        Computes the standard deviation of the initial term of the
@@ -10238,7 +10238,7 @@ return
 return
 end subroutine rmk1
 
-pure subroutine drmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+pure subroutine drmk1(n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
@@ -10331,7 +10331,7 @@ if (dabs(alpha) .ge. 1.d0) go to 120
 !
 !        Generation of standard normal random variates
 !
-call drnor (iseed,x,n,ierror)
+call drnor(iseed,x,n,ierror)
 if (ierror .ne. 0) go to 130
 !
 !        Computes the standard deviation of the initial term of the

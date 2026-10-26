@@ -20,6 +20,7 @@ from procedure_purity import transform as apply_purity
 from generate_module import module_source
 from data_constants import transform as apply_constants
 from portable_intrinsics import transform as portable_intrinsics
+from simplify_free_style import transform as simplify_style
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,7 +31,7 @@ LINK = re.compile(
 def generate(root=ROOT):
     original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
-    free = apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text))))
+    free = simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))))
     lines = free.splitlines(keepends=True)
     declarations = {}
     for name, start, end in procedure_spans(free):

@@ -200,7 +200,17 @@ The validator compares complete GNU compiler dumps before and after formatting,
 allowing only removal of redundant unary-plus expression wrappers. Regeneration
 also checks tokens and literal values, and updates source-link line numbers.
 
-The generator then applies `tools/sentence_case_comments.py` to selected
+The final `tools/simplify_free_style.py` pass removes spaces before argument
+lists in procedure declarations and calls to known procedures. It also removes
+redundant array constructor types for matching default-kind literals, preserving
+types needed for mixed values or precision conversion. To apply it separately
+and verify unchanged GNU compiler dumps and diagnostics:
+
+```sh
+python tools/simplify_free_style.py input.f90 --output simplified.f90 --compiler gfortran
+```
+
+Comment capitalization uses `tools/sentence_case_comments.py` for selected
 uppercase explanatory comments. Sentences continue across physical line breaks.
 The prose vocabulary and proper-name rules are maintained in
 `tools/comment-case-words.txt` and `tools/comment-case-rules.json`.

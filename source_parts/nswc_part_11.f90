@@ -1,4 +1,4 @@
-pure subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
    & indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
@@ -794,7 +794,7 @@ psistt = cstt + fitiwk(2)
 !     The actual evaluation is done inside  dmevl1.
 !     ***************
 !
-call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
+call dmevl1(evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
    & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
    & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
 return
@@ -809,7 +809,7 @@ return
 return
 end subroutine dmeval
 
-pure subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
    & indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
@@ -896,7 +896,7 @@ do 60 p = 1,nepts
 return
 end subroutine dmevl1
 
-real function qsuba (f, a, b, epsil, mcount, relerr, ind)
+real function qsuba(f, a, b, epsil, mcount, relerr, ind)
 implicit none
 integer, intent(inout) :: ind
 integer, intent(in) :: mcount
@@ -971,7 +971,7 @@ if (a .eq. b) return
 sub1 = amin1(a,b)
 sub3 = amax1(a,b)
 tol = amax1(epsil, 10.0*eps)
-call quad (sub1, sub3, result, k, tol, npts, icheck, f)
+call quad(sub1, sub3, result, k, tol, npts, icheck, f)
 if (icheck .eq. 0) go to 100
 is = 1
 !
@@ -980,7 +980,7 @@ is = 1
 !
 10 if (npts .ge. mcount) go to 110
 sub2 = 0.5*(sub1 + sub3)
-call quad (sub1, sub2, result, k, tol, nf, icheck, f)
+call quad(sub1, sub2, result, k, tol, nf, icheck, f)
 npts = npts + nf
 err = abs(result(k) - result(k - 1))
 sum = qsuba + result(k)
@@ -1009,7 +1009,7 @@ if (abs(qsuba) .le. x) ind = 1
 !     CALL QUAD FOR THE INTERVAL (sub2,sub3)
 !
 40 if (npts .ge. mcount) go to 110
-call quad (sub2, sub3, result, k, tol, nf, icheck, f)
+call quad(sub2, sub3, result, k, tol, nf, icheck, f)
 npts = npts + nf
 err = abs(result(k) - result(k - 1))
 sum = qsuba + result(k)
@@ -1064,7 +1064,7 @@ real :: f
 external f
 integer :: i, inew, iold, j
 real :: acum, diff, funct(127), fzero, sum, x
-real, parameter :: p(381) = [real :: 0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
+real, parameter :: p(381) = [0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
    & 0.26848808986833344073e00, 0.96049126870802028342e00, 0.10465622602646726519e00, 0.43424374934680255800e00, &
    & 0.40139741477596222291e00, 0.45091653865847414235e00, 0.13441525524378422036e00, 0.51603282997079739697e-01, &
    & 0.20062852937698902103e00, 0.99383196321275502221e00, 0.17001719629940260339e-01, 0.88845923287225699889e00, &
@@ -1245,7 +1245,7 @@ npts = 0
 return
 end subroutine quad
 
-subroutine qags (f, a, b, epsabs, epsrel, result, abserr, &
+subroutine qags(f, a, b, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 real :: f
@@ -1422,12 +1422,12 @@ l1 = limit + 1
 l2 = limit + l1
 l3 = limit + l2
 !
-call qagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
+call qagse(f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
    & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine qags
 
-subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
+subroutine qagse(f,a,b,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
@@ -1689,7 +1689,7 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !           -----------------------------------
 !
 ierro = 0
-call qk21f (f, a, b, result, abserr, defabs, resabs, &
+call qk21f(f, a, b, result, abserr, defabs, resabs, &
    & epmach, uflow, id)
 if (id .ne. 0) go to 999
 neval = 21
@@ -1743,10 +1743,10 @@ do 90 last = 2,limit
    a2 = b1
    b2 = blist(maxerr)
    erlast = errmax
-   call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
+   call qk21f(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
    if (ier .ne. 0) go to 100
-   call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
+   call qk21f(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
 !
@@ -1806,7 +1806,7 @@ do 90 last = 2,limit
 !           subinterval with nrmax-TH largest error estimate (to be
 !           bisected next).
 !
-30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
    if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
@@ -1845,7 +1845,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+   call qelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
       & epmach, oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
@@ -1907,7 +1907,7 @@ abserr = errsum
 999 return
 end subroutine qagse
 
-subroutine qk21f (f, a, b, result, abserr, resabs, resasc, &
+subroutine qk21f(f, a, b, result, abserr, resabs, resasc, &
    & epmach, uflow, isig)
 implicit none
 integer, intent(out) :: isig
@@ -1922,13 +1922,13 @@ integer :: j, jtw, jtwm1
 real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
    & resk, reskh, tol
 real :: fv1(10), fv2(10)
-real, parameter :: xgk(11) = [real :: 0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
+real, parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
    & 0.8650633666889845e+00, 0.7808177265864169e+00, 0.6794095682990244e+00, 0.5627571346686047e+00, 0.4333953941292472e+00, &
    & 0.2943928627014602e+00, 0.1488743389816312e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(11) = [real :: 0.1169463886737187e-01, 0.3255816230796473e-01, 0.5475589657435200e-01, &
+real, parameter :: wgk(11) = [0.1169463886737187e-01, 0.3255816230796473e-01, 0.5475589657435200e-01, &
    & 0.7503967481091995e-01, 0.9312545458369761e-01, 0.1093871588022976e+00, 0.1234919762620659e+00, 0.1347092173114733e+00, &
    & 0.1427759385770601e+00, 0.1477391049013385e+00, 0.1494455540029169e+00]
-real, parameter :: wg(5) = [real :: 0.6667134430868814e-01, 0.1494513491505806e+00, 0.2190863625159820e+00, 0.2692667193099964e+00 &
+real, parameter :: wg(5) = [0.6667134430868814e-01, 0.1494513491505806e+00, 0.2190863625159820e+00, 0.2692667193099964e+00 &
    & , 0.2955242247147529e+00]
 !-----------------------------------------------------------------------
 !
@@ -2076,7 +2076,7 @@ if (resabs .gt. uflow/tol) abserr = amax1(abserr,tol*resabs)
 return
 end subroutine qk21f
 
-subroutine qagi (f, bound, inf, epsabs, epsrel, result, abserr, &
+subroutine qagi(f, bound, inf, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: ier
@@ -2261,12 +2261,12 @@ l1 = limit + 1
 l2 = limit + l1
 l3 = limit + l2
 !
-call qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+call qagie(f,bound,inf,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine qagi
 
-subroutine qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+subroutine qagie(f,bound,inf,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
@@ -2545,7 +2545,7 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 boun = bound
 if (inf .eq. 2) boun = 0.0
-call qk15i (f, boun, inf, 0.0, 1.0, result, abserr, &
+call qk15i(f, boun, inf, 0.0, 1.0, result, abserr, &
    & defabs, resabs, epmach, uflow)
 !
 !           Test on accuracy
@@ -2599,9 +2599,9 @@ do 90 last = 2,limit
    a2 = b1
    b2 = blist(maxerr)
    erlast = errmax
-   call qk15i (f, boun, inf, a1, b1, area1, error1, &
+   call qk15i(f, boun, inf, a1, b1, area1, error1, &
       & resabs, defab1, epmach, uflow)
-   call qk15i (f, boun, inf, a2, b2, area2, error2, &
+   call qk15i(f, boun, inf, a2, b2, area2, error2, &
       & resabs, defab2, epmach, uflow)
 !
 !           Improve previous approximations to integral
@@ -2661,7 +2661,7 @@ do 90 last = 2,limit
 !           subinterval with nrmax-TH largest error estimate (to be
 !           bisected next).
 !
-30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum .le. errbnd) go to 115
    if (ier .ne. 0) go to 100
    if (last .eq. 2) go to 80
@@ -2697,7 +2697,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+   call qelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
       & epmach, oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
@@ -2760,7 +2760,7 @@ if (ier .gt. 2) ier = ier - 1
 999 return
 end subroutine qagie
 
-subroutine qk15i (f, boun, inf, a, b, result, abserr, resabs, &
+subroutine qk15i(f, boun, inf, a, b, result, abserr, resabs, &
    & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
@@ -2775,11 +2775,11 @@ integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
    & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
 real :: fv1(7), fv2(7)
-real, parameter :: xgk(8) = [real :: 0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [real :: 0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
    & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [real :: 0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
    & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
 !-----------------------------------------------------------------------
 !
@@ -3078,7 +3078,7 @@ ermax = elist(maxerr)
 return
 end subroutine qpsrt
 
-pure subroutine qelg (n, epstab, result, abserr, res3la, nres, &
+pure subroutine qelg(n, epstab, result, abserr, res3la, nres, &
    & epmach, oflow)
 implicit none
 integer, intent(inout) :: n, nres
@@ -3260,7 +3260,7 @@ res3la(3) = result
 return
 end subroutine qelg
 
-subroutine qxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
+subroutine qxgs(f,a,b,epsabs,epsrel,result,abserr,ier, &
    & limit,leniw,lenw,last,iwork,work)
 implicit none
 !
@@ -3654,7 +3654,7 @@ lp(1) = 1
 ln(1) = 1
 valp(1,1) = f((a + b)*0.5)
 valn(1,1) = valp(1,1)
-call qxlqm (f,a,b,result,abserr,defabs,resabs, &
+call qxlqm(f,a,b,result,abserr,defabs,resabs, &
    & valp(1,1),valn(1,1),lp(1),ln(1),2, &
    & epmach,uflow,oflow)
 !
@@ -3828,7 +3828,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call qelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+   call qelg(numrl2,rlist2,reseps,abseps,res3la,nres, &
       & epmach,oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
@@ -3890,7 +3890,7 @@ abserr = errsum
 999 return
 end subroutine qxgse
 
-pure subroutine qxcpy (a, b, l)
+pure subroutine qxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
 real, intent(inout) :: a(l)
@@ -3906,7 +3906,7 @@ do 10 i = 1,l
 return
 end subroutine qxcpy
 
-subroutine qxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
+subroutine qxlqm(f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
    & key,epmach,uflow,oflow)
 implicit none
 !
@@ -4009,11 +4009,11 @@ k0 = max0(key1 - 2,0)
 k1 = k0 + 1
 k2 = min0(key1 + 1,3)
 !
-call qxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
+call qxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.0*epmach
 do 10 k = k1,k2
-   call qxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+   call qxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = abs(resk - resg)
    if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
@@ -4028,7 +4028,7 @@ do 10 k = k1,k2
 return
 end subroutine qxlqm
 
-subroutine qxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
+subroutine qxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
 real :: f
 real, intent(in) :: xl, xu
@@ -4043,9 +4043,9 @@ real :: ldl
 real :: y2, xx(41)
 real :: aa, bb, c
 integer :: j
-integer, parameter :: istart(4) = [integer :: 0, 7, 17, 31]
-integer, parameter :: len(4) = [integer :: 7, 10, 14, 21]
-real, parameter :: ww(52) = [real :: 1.303262173284849021810473057638590518409112513421e-1, &
+integer, parameter :: istart(4) = [0, 7, 17, 31]
+integer, parameter :: len(4) = [7, 10, 14, 21]
+real, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e-1, &
    & 2.390632866847646220320329836544615917290026806242e-1, 2.630626354774670227333506083741355715758124943143e-1, &
    & 2.186819313830574175167853094864355208948886875898e-1, 2.757897646642836865859601197607471574336674206700e-2, &
    & 1.055750100538458443365034879086669791305550493830e-1, 1.571194260595182254168429283636656908546309467968e-2, &
@@ -4208,7 +4208,7 @@ ym = ym*abs(bb)
 return
 end subroutine qxrul
 
-subroutine qxrrd (f,z,lz,xl,xu,r,s,lr,ls)
+subroutine qxrrd(f,z,lz,xl,xu,r,s,lr,ls)
 implicit none
 !
 !            To reorder the computed functional values before
@@ -4308,7 +4308,7 @@ ls = 11
 return
 end subroutine qxrrd
 
-subroutine dqags (f, a, b, epsabs, epsrel, result, abserr, &
+subroutine dqags(f, a, b, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: last
@@ -4488,12 +4488,12 @@ l1 = limit + 1
 l2 = limit + l1
 l3 = limit + l2
 !
-call dqagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
+call dqagse(f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
    & ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine dqags
 
-subroutine dqagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
+subroutine dqagse(f,a,b,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
@@ -4755,7 +4755,7 @@ rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !           -----------------------------------
 !
 ierro = 0
-call dqk21 (f, a, b, result, abserr, defabs, resabs, &
+call dqk21(f, a, b, result, abserr, defabs, resabs, &
    & epmach, uflow, id)
 if (id .ne. 0) go to 999
 neval = 21
@@ -4809,10 +4809,10 @@ do 90 last = 2,limit
    a2 = b1
    b2 = blist(maxerr)
    erlast = errmax
-   call dqk21 (f, a1, b1, area1, error1, resabs, defab1, &
+   call dqk21(f, a1, b1, area1, error1, resabs, defab1, &
       & epmach, uflow, ier)
    if (ier .ne. 0) go to 100
-   call dqk21 (f, a2, b2, area2, error2, resabs, defab2, &
+   call dqk21(f, a2, b2, area2, error2, resabs, defab2, &
       & epmach, uflow, ier)
    neval = neval + 42
 !
@@ -4872,7 +4872,7 @@ do 90 last = 2,limit
 !           subinterval with nrmax-TH largest error estimate (to be
 !           bisected next).
 !
-30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***Jump out of do-loop
    if (errsum .le. errbnd) go to 115
 ! ***Jump out of do-loop
@@ -4911,7 +4911,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+   call dqelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
       & epmach, oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
@@ -4973,7 +4973,7 @@ abserr = errsum
 999 return
 end subroutine dqagse
 
-subroutine dqk21 (f, a, b, result, abserr, resabs, resasc, &
+subroutine dqk21(f, a, b, result, abserr, resabs, resasc, &
    & epmach, uflow, isig)
 implicit none
 !-----------------------------------------------------------------------
@@ -5050,17 +5050,17 @@ double precision :: fc, fsum, fval1, fval2, fv1(10), fv2(10), &
 double precision :: resg, resk, reskh
 double precision :: tol
 integer :: j, jtw, jtwm1
-double precision, parameter :: xgk(11) = [double precision :: 0.995657163025808080735527280689d+00, &
+double precision, parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
    & 0.973906528517171720077964012084d+00, 0.930157491355708226001207180060d+00, 0.865063366688984510732096688423d+00, &
    & 0.780817726586416897063717578345d+00, 0.679409568299024406234327365115d+00, 0.562757134668604683339000099273d+00, &
    & 0.433395394129247190799265943166d+00, 0.294392862701460198131126603104d+00, 0.148874338981631210884826001130d+00, &
    & 0.000000000000000000000000000000d+00]
-double precision, parameter :: wgk(11) = [double precision :: 0.116946388673718742780643960622d-01, &
+double precision, parameter :: wgk(11) = [0.116946388673718742780643960622d-01, &
    & 0.325581623079647274788189724594d-01, 0.547558965743519960313813002446d-01, 0.750396748109199527670431409162d-01, &
    & 0.931254545836976055350654650834d-01, 0.109387158802297641899210590326d+00, 0.123491976262065851077958109831d+00, &
    & 0.134709217311473325928054001772d+00, 0.142775938577060080797094273139d+00, 0.147739104901338491374841515972d+00, &
    & 0.149445554002916905664936468390d+00]
-double precision, parameter :: wg(5) = [double precision :: 0.666713443086881375935688098933d-01, &
+double precision, parameter :: wg(5) = [0.666713443086881375935688098933d-01, &
    & 0.149451349150580593145776339658d+00, 0.219086362515982043995534934228d+00, 0.269266719309996355091226921569d+00, &
    & 0.295524224714752870173892994651d+00]
 !
@@ -5155,7 +5155,7 @@ if (resabs .gt. uflow/tol) abserr = dmax1(abserr,tol*resabs)
 return
 end subroutine dqk21
 
-subroutine dqagi (f, bound, inf, epsabs, epsrel, result, abserr, &
+subroutine dqagi(f, bound, inf, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(in) :: inf
@@ -5343,12 +5343,12 @@ l1 = limit + 1
 l2 = limit + l1
 l3 = limit + l2
 !
-call dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+call dqagie(f,bound,inf,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
 return
 end subroutine dqagi
 
-subroutine dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+subroutine dqagie(f,bound,inf,epsabs,epsrel,limit,result,abserr, &
    & neval,ier,alist,blist,rlist,elist,iord,last)
 implicit none
 !-----------------------------------------------------------------------
@@ -5627,7 +5627,7 @@ rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
 boun = bound
 if (inf .eq. 2) boun = 0.d0
-call dqk15i (f, boun, inf, 0.d0, 1.d0, result, abserr, &
+call dqk15i(f, boun, inf, 0.d0, 1.d0, result, abserr, &
    & defabs, resabs, epmach, uflow)
 !
 !           Test on accuracy
@@ -5681,9 +5681,9 @@ do 90 last = 2,limit
    a2 = b1
    b2 = blist(maxerr)
    erlast = errmax
-   call dqk15i (f, boun, inf, a1, b1, area1, error1, &
+   call dqk15i(f, boun, inf, a1, b1, area1, error1, &
       & resabs, defab1, epmach, uflow)
-   call dqk15i (f, boun, inf, a2, b2, area2, error2, &
+   call dqk15i(f, boun, inf, a2, b2, area2, error2, &
       & resabs, defab2, epmach, uflow)
 !
 !           Improve previous approximations to integral
@@ -5743,7 +5743,7 @@ do 90 last = 2,limit
 !           subinterval with nrmax-TH largest error estimate (to be
 !           bisected next).
 !
-30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
    if (errsum .le. errbnd) go to 115
    if (ier .ne. 0) go to 100
    if (last .eq. 2) go to 80
@@ -5779,7 +5779,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+   call dqelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
       & epmach, oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
@@ -5842,7 +5842,7 @@ if (ier .gt. 2) ier = ier - 1
 999 return
 end subroutine dqagie
 
-subroutine dqk15i (f, boun, inf, a, b, result, abserr, resabs, &
+subroutine dqk15i(f, boun, inf, a, b, result, abserr, resabs, &
    & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
@@ -5862,15 +5862,15 @@ double precision :: fc, fsum, fval1, fval2, hlgth
 double precision :: resg, resk, reskh
 double precision :: tabsc1, tabsc2, tol
 double precision :: fv1(7), fv2(7)
-double precision, parameter :: xgk(8) = [double precision :: 0.991455371120812639206854697526d+00, &
+double precision, parameter :: xgk(8) = [0.991455371120812639206854697526d+00, &
    & 0.949107912342758524526189684048d+00, 0.864864423359769072789712788641d+00, 0.741531185599394439863864773281d+00, &
    & 0.586087235467691130294144838259d+00, 0.405845151377397166906606412077d+00, 0.207784955007898467600689403773d+00, &
    & 0.000000000000000000000000000000d+00]
-double precision, parameter :: wgk(8) = [double precision :: 0.229353220105292249637320080590d-01, &
+double precision, parameter :: wgk(8) = [0.229353220105292249637320080590d-01, &
    & 0.630920926299785532907006631892d-01, 0.104790010322250183839876322542d+00, 0.140653259715525918745189590510d+00, &
    & 0.169004726639267902826583426599d+00, 0.190350578064785409913256402421d+00, 0.204432940075298892414161999235d+00, &
    & 0.209482141084727828012999174892d+00]
-double precision, parameter :: wg(8) = [double precision :: 0.0d+00, 0.129484966168869693270611432679d+00, 0.0d+00, &
+double precision, parameter :: wg(8) = [0.0d+00, 0.129484966168869693270611432679d+00, 0.0d+00, &
    & 0.279705391489276667901467771424d+00, 0.0d+00, 0.381830050505118944950369775489d+00, 0.0d+00, &
    & 0.417959183673469387755102040816d+00]
 !-----------------------------------------------------------------------
@@ -6170,7 +6170,7 @@ ermax = elist(maxerr)
 return
 end subroutine dqpsrt
 
-pure subroutine dqelg (n, epstab, result, abserr, res3la, nres, &
+pure subroutine dqelg(n, epstab, result, abserr, res3la, nres, &
    & epmach, oflow)
 implicit none
 !-----------------------------------------------------------------------
@@ -6360,7 +6360,7 @@ res3la(3) = result
 return
 end subroutine dqelg
 
-subroutine dqxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
+subroutine dqxgs(f,a,b,epsabs,epsrel,result,abserr,ier, &
    & limit,leniw,lenw,last,iwork,work)
 implicit none
 !
@@ -6754,7 +6754,7 @@ lp(1) = 1
 ln(1) = 1
 valp(1,1) = f((a + b)*0.5d0)
 valn(1,1) = valp(1,1)
-call dqxlqm (f,a,b,result,abserr,defabs,resabs, &
+call dqxlqm(f,a,b,result,abserr,defabs,resabs, &
    & valp(1,1),valn(1,1),lp(1),ln(1),2, &
    & epmach,uflow,oflow)
 !
@@ -6928,7 +6928,7 @@ do 90 last = 2,limit
 !
 60 numrl2 = numrl2 + 1
    rlist2(numrl2) = area
-   call dqelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+   call dqelg(numrl2,rlist2,reseps,abseps,res3la,nres, &
       & epmach,oflow)
    ktmin = ktmin + 1
    if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
@@ -6990,7 +6990,7 @@ abserr = errsum
 999 return
 end subroutine dqxgse
 
-pure subroutine dqxcpy (a, b, l)
+pure subroutine dqxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
 double precision, intent(inout) :: a(l)
@@ -7006,7 +7006,7 @@ do 10 i = 1,l
 return
 end subroutine dqxcpy
 
-subroutine dqxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
+subroutine dqxlqm(f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
    & key,epmach,uflow,oflow)
 implicit none
 !
@@ -7109,11 +7109,11 @@ k0 = max0(key1 - 2,0)
 k1 = k0 + 1
 k2 = min0(key1 + 1,3)
 !
-call dqxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
+call dqxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
 t = 10.d0*epmach
 do 10 k = k1,k2
-   call dqxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+   call dqxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
    abserr = dabs(resk - resg)
    if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
@@ -7128,7 +7128,7 @@ do 10 k = k1,k2
 return
 end subroutine dqxlqm
 
-subroutine dqxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
+subroutine dqxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
 double precision :: f
 double precision, intent(in) :: xl, xu
@@ -7143,9 +7143,9 @@ double precision :: ldl
 double precision :: y2, xx(41)
 double precision :: aa, bb, c
 integer :: j
-integer, parameter :: istart(4) = [integer :: 0, 7, 17, 31]
-integer, parameter :: len(4) = [integer :: 7, 10, 14, 21]
-double precision, parameter :: ww(52) = [double precision :: 1.303262173284849021810473057638590518409112513421d-1, &
+integer, parameter :: istart(4) = [0, 7, 17, 31]
+integer, parameter :: len(4) = [7, 10, 14, 21]
+double precision, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421d-1, &
    & 2.390632866847646220320329836544615917290026806242d-1, 2.630626354774670227333506083741355715758124943143d-1, &
    & 2.186819313830574175167853094864355208948886875898d-1, 2.757897646642836865859601197607471574336674206700d-2, &
    & 1.055750100538458443365034879086669791305550493830d-1, 1.571194260595182254168429283636656908546309467968d-2, &
@@ -7308,7 +7308,7 @@ ym = ym*dabs(bb)
 return
 end subroutine dqxrul
 
-subroutine dqxrrd (f,z,lz,xl,xu,r,s,lr,ls)
+subroutine dqxrrd(f,z,lz,xl,xu,r,s,lr,ls)
 implicit none
 !
 !            To reorder the computed functional values before
@@ -7486,8 +7486,8 @@ double precision :: tans, terr
 !
 common /cubsta/ tans, terr
 integer, parameter :: nfe = 19
-real, parameter :: s(4) = [real :: 1e0, 1e0, 1e0, -1e0]
-real, parameter :: d(2,4) = reshape([real :: 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
+real, parameter :: s(4) = [1e0, 1e0, 1e0, -1e0]
+real, parameter :: d(2,4) = reshape([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
 real, parameter :: zero = 0.e0
 real, parameter :: one = 1.e0
 double precision, parameter :: dzero = 0.d0
@@ -7640,7 +7640,7 @@ double precision :: a1, a2, s, sn
 real :: area, origin(2)
 real :: tvec(2,3)
 integer, parameter :: nquad = 6
-real, parameter :: w(5,6) = reshape([real :: .3333333333333333333333333e0, .3333333333333333333333333e0, &
+real, parameter :: w(5,6) = reshape([.3333333333333333333333333e0, .3333333333333333333333333e0, &
    & .3333333333333333333333333e0, .225e0, .3786109120031468330830822e-1, .7974269853530873223980253e0, &
    & .1012865073234563388009874e0, .1012865073234563388009874e0, .3778175416344814577870518e0, .1128612762395489164329420e0, &
    & .5971587178976982045911758e-1, .4701420641051150897704412e0, .4701420641051150897704412e0, .3971824583655185422129482e0, &
@@ -7762,7 +7762,7 @@ p(6) = abs(p(5) - p(4))
 return
 end subroutine cubrul
 
-subroutine ieslv (kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
+subroutine ieslv(kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
    & mupper,nf,mf,norm,w,ier)
 implicit none
 integer :: ier, iflag, mf, mupper, nf, nt, nupper
@@ -8369,7 +8369,7 @@ real, intent(in) :: a, b
 real, intent(inout) :: tv(n), wv(n)
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
 real :: al, bl, fl, floop, h, r, s, scale
-real, parameter :: t(255) = [real :: .577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
+real, parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
    & .796666477413627e0, .525532409916329e0, .183434642495650e0, .989400934991650e0, .944575023073233e0, .865631202387832e0, &
    & .755404408355003e0, .617876244402644e0, .458016777657227e0, .281603550779259e0, .950125098376374e-1, .997263861849482e0, &
    & .985611511545268e0, .964762255587506e0, .934906075937740e0, .896321155766052e0, .849367613732570e0, .794483795967942e0, &
@@ -8412,7 +8412,7 @@ real, parameter :: t(255) = [real :: .577350269189626e0, .861136311594053e0, .33
    & .200717593323127e0, .188704193421389e0, .176662486044902e0, .164594277567554e0, .152501378338656e0, .140385602411376e0, &
    & .128248767270607e0, .116092693560333e0, .103919204810509e0, .917301271635196e-1, .795272891002330e-1, .673125211657164e-1, &
    & .550876556946340e-1, .428545265363791e-1, .306149687799790e-1, .183708184788137e-1, .612391237518953e-2]
-real, parameter :: w(255) = [real :: 1.0e0, .347854845137454e0, .652145154862546e0, .101228536290376e0, .222381034453374e0, &
+real, parameter :: w(255) = [1.0e0, .347854845137454e0, .652145154862546e0, .101228536290376e0, .222381034453374e0, &
    & .313706645877887e0, .362683783378362e0, .271524594117541e-1, .622535239386479e-1, .951585116824928e-1, .124628971255534e0, &
    & .149595988816577e0, .169156519395003e0, .182603415044924e0, .189450610455068e0, .701861000947010e-2, .162743947309057e-1, &
    & .253920653092621e-1, .342738629130214e-1, .428358980222267e-1, .509980592623762e-1, .586840934785355e-1, .658222227763618e-1, &
@@ -9237,8 +9237,8 @@ integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
    & limit1, limit2, nsm2, nsp1, nsp2
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
    & temp4, temp5, temp6, twou, u, xold
-real, parameter :: two(13) = [real :: 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
-real, parameter :: gstr(13) = [real :: 0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
+real, parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
+real, parameter :: gstr(13) = [0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
    & 0.00524, 0.00468]
 interface
    pure elemental function spmpar(i)
@@ -9815,7 +9815,7 @@ do 35 l = 1,neqn
 return
 end subroutine intrp
 
-subroutine brkf45 (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+subroutine brkf45(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
    & work,iwork)
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
@@ -10091,7 +10091,7 @@ blkout = (iwork(5) .eq. -1)
 !     he must use rkfc directly.
 !***********************************************************************
 !
-10 call rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
+10 call rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
    & work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
    & work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
    & work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
@@ -10104,7 +10104,7 @@ if (blkout) iwork(5) = -1
 return
 end subroutine brkf45
 
-subroutine rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+subroutine rkfc(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
    & w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
    & told,nfe,jflag,kflag,endpnt,blkout)
 implicit none
@@ -10414,7 +10414,7 @@ endpnt = .false.
 blkout = .false.
 !
 a = t
-call fcn (a, y, yp)
+call fcn(a, y, yp)
 nfe = 1
 do n = 1, neqn
    w(n) = y(n)
@@ -10497,7 +10497,7 @@ x = tend
 170 do k = 1, neqn
    y(k) = w(k) + dt*wp(k)
 end do
-call fcn (t, y, yp)
+call fcn(t, y, yp)
 nfe = nfe + 1
 iflag = 2
 if (.not.endpnt) return
@@ -10544,24 +10544,24 @@ h = hstop
 do n = 1, neqn
    y1(n) = w(n) + a21*h*wp(n)
 end do
-call fcn (t + c2*h, y1, f2)
+call fcn(t + c2*h, y1, f2)
 do n = 1, neqn
    y1(n) = w(n) + h*(a31*wp(n) + a32*f2(n))
 end do
-call fcn (t + c3*h, y1, f3)
+call fcn(t + c3*h, y1, f3)
 do n = 1, neqn
    y1(n) = w(n) + h*(a41*wp(n) + a42*f2(n) + a43*f3(n))
 end do
-call fcn (t + c4*h, y1, f4)
+call fcn(t + c4*h, y1, f4)
 do n = 1, neqn
    y1(n) = w(n) + h*(a51*wp(n) + a52*f2(n) + a53*f3(n) + a54*f4(n))
 end do
-call fcn (t + h, y1, y)
+call fcn(t + h, y1, y)
 do n = 1, neqn
    y1(n) = w(n) + h*(a61*wp(n) + a62*f2(n) + a63*f3(n) + a64*f4(n) + &
       & a65*y(n))
 end do
-call fcn (t + c6*h, y1, yp)
+call fcn(t + c6*h, y1, yp)
 nfe = nfe + 5
 eeoet = 0.0
 do n = 1, neqn
@@ -10583,17 +10583,17 @@ if (esttol .gt. 1.0) go to 320
 !     Integration successful for first step.  Now integrate over
 !     the second step in the block
 !
-call fcn (t + h, y1, f1)
+call fcn(t + h, y1, f1)
 do n = 1, neqn
    y2(n) = w(n) + h*(a81*wp(n) + a82*f2(n) + a83*f3(n) + a84*f4(n) + &
       & a85*y(n) + a86*yp(n) + a87*f1(n))
 end do
-call fcn (t + c8*h, y2, f7)
+call fcn(t + c8*h, y2, f7)
 do n = 1, neqn
    y2(n) = w(n) + h*(a91*wp(n) + a92*f2(n) + a93*f3(n) + a94*f4(n) + &
       & a95*y(n) + a96*yp(n) + a97*f1(n) + a98*f7(n))
 end do
-call fcn (t + c9*h, y2, f2)
+call fcn(t + c9*h, y2, f2)
 nfe = nfe + 3
 eeoet = 0.0
 do n = 1, neqn
@@ -10658,7 +10658,7 @@ go to 360
 end do
 !
 360 a = t
-call fcn (a, w, wp)
+call fcn(a, w, wp)
 nfe = nfe + 1
 !
 !     Choose next stepsize
@@ -10688,7 +10688,7 @@ go to 400
 !     The second of the three changes needed to make the interpolant
 !     derivative more stable is the new statement 390 given below.
 !
-390 call extra (neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
+390 call extra(neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
 t = tout
 if (iflag .lt. 0 .and. tout .ne. x) blkout = .true.
 iflag = 2

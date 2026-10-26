@@ -1,4 +1,4 @@
-pure subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
+pure subroutine lopcmp(m, n, t, x, kx, dx, kdx, l, ti, z, kz)
 implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
@@ -80,7 +80,7 @@ ir = min0(i + 1,m)
 go to 10
 end subroutine lopcmp
 
-pure subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
+pure subroutine lopdf(m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
 implicit none
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: ti
@@ -149,7 +149,7 @@ end do
 return
 end subroutine lopdf
 
-pure subroutine curv1 (n,x,y,slp1,slpn,islpsw,yp,temp, &
+pure subroutine curv1(n,x,y,slp1,slpn,islpsw,yp,temp, &
    & sigma,ierr)
 implicit none
 integer, intent(in) :: n, islpsw
@@ -270,7 +270,7 @@ go to 2
 delx2 = delx1 + delx1
 if (n .gt. 2) delx2 = x(3) - x(1)
 if (delx1 .le. 0. .or. delx2 .le. delx1) go to 9
-call ceez (delx1,delx2,sigmap,c1,c2,c3,n)
+call ceez(delx1,delx2,sigmap,c1,c2,c3,n)
 slpp1 = c1*y(1) + c2*y(2)
 if (n .gt. 2) slpp1 = slpp1 + c3*y(3)
 2 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 3
@@ -280,7 +280,7 @@ go to 4
 delxnm = delxn + delxn
 if (n .gt. 2) delxnm = x(n) - x(n - 2)
 if (delxn .le. 0. .or. delxnm .le. delxn) go to 9
-call ceez (-delxn,-delxnm,sigmap,c1,c2,c3,n)
+call ceez(-delxn,-delxnm,sigmap,c1,c2,c3,n)
 slppn = c1*y(n) + c2*y(nm1)
 if (n .gt. 2) slppn = slppn + c3*y(n - 2)
 !
@@ -290,7 +290,7 @@ if (n .gt. 2) slppn = slppn + c3*y(n - 2)
 4 delx1 = x(2) - x(1)
 if (delx1 .le. 0.) go to 9
 dx1 = (y(2) - y(1))/delx1
-call terms (diag1,sdiag1,sigmap,delx1)
+call terms(diag1,sdiag1,sigmap,delx1)
 yp(1) = (dx1 - slpp1)/diag1
 temp(1) = sdiag1/diag1
 if (n .eq. 2) go to 6
@@ -298,7 +298,7 @@ do 5 i = 2,nm1
    delx2 = x(i + 1) - x(i)
    if (delx2 .le. 0.) go to 9
    dx2 = (y(i + 1) - y(i))/delx2
-   call terms (diag2,sdiag2,sigmap,delx2)
+   call terms(diag2,sdiag2,sigmap,delx2)
    diag = diag1 + diag2 - sdiag1*temp(i - 1)
    yp(i) = (dx2 - dx1 - sdiag1*yp(i - 1))/diag
    temp(i) = sdiag2/diag
@@ -326,7 +326,7 @@ return
 return
 end subroutine curv1
 
-pure function curv2 (t,n,x,y,yp,sigma)
+pure function curv2(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
@@ -415,13 +415,13 @@ curv2 = sum - del1*del2*(yp(i)*(del1 + dels) + yp(im1)* &
 return
 1 delp1 = sigmap*(del1 + dels)/2.
 delp2 = sigmap*(del2 + dels)/2.
-call snhcsh (sinhm1,dummy,sigmap*del1,-1)
-call snhcsh (sinhm2,dummy,sigmap*del2,-1)
-call snhcsh (sinhms,dummy,sigmap*dels,-1)
-call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh (dummy,coshp1,delp1,1)
-call snhcsh (dummy,coshp2,delp2,1)
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
 curv2 = sum + (yp(i)*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
    & sinhp2 + sigmap*coshp1*del2)) + yp(im1)*(sinhm2* &
    & del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
@@ -430,7 +430,7 @@ curv2 = sum + (yp(i)*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
 return
 end function curv2
 
-pure function curvd (t,n,x,y,yp,sigma)
+pure function curvd(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
@@ -518,16 +518,16 @@ curvd = sum + (yp(i)*(2.*del1*del1 - del2*(del1 + dels)) - &
    & yp(im1)*(2.*del2*del2 - del1*(del2 + dels))) &
    & /(6.*dels)
 return
-1 call snhcsh (dummy,coshm1,sigmap*del1,1)
-call snhcsh (dummy,coshm2,sigmap*del2,1)
-call snhcsh (sinhms,dummy,sigmap*dels,-1)
+1 call snhcsh(dummy,coshm1,sigmap*del1,1)
+call snhcsh(dummy,coshm2,sigmap*del2,1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
 curvd = sum + (yp(i)*(dels*sigmap*coshm1 - sinhms) - &
    & yp(im1)*(dels*sigmap*coshm2 - sinhms))/ &
    & (sigmap*sigmap*dels*(sinhms + sigmap*dels))
 return
 end function curvd
 
-pure function curvi (xl,xu,n,x,y,yp,sigma)
+pure function curvi(xl,xu,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
@@ -626,9 +626,9 @@ return
 !
 ! Search for proper intervals
 !
-1 ilm1 = intrvl (xxl,x,n)
+1 ilm1 = intrvl(xxl,x,n)
 il = ilm1 + 1
-ium1 = intrvl (xxu,x,n)
+ium1 = intrvl(xxu,x,n)
 iu = ium1 + 1
 if (il .eq. iu) go to 8
 !
@@ -643,9 +643,9 @@ t1 = (del1 + dels)*del2/(2.*dels)
 t2 = del2*del2/(2.*dels)
 sum = t1*y(il) + t2*y(ilm1)
 if (sigma .eq. 0.) go to 2
-call snhcsh (dummy,c1,sigmap*del1,2)
-call snhcsh (dummy,c2,sigmap*del2,2)
-call snhcsh (ss,cs,sigmap*dels,3)
+call snhcsh(dummy,c1,sigmap*del1,2)
+call snhcsh(dummy,c2,sigmap*del2,2)
+call snhcsh(ss,cs,sigmap*dels,3)
 sum = sum + term(cs,c1,t1)*yp(il) &
    & + term(c2,0.,t2)*yp(ilm1)
 go to 3
@@ -660,7 +660,7 @@ do 5 i = ilp1,ium1
    dels = x(i) - x(i - 1)
    sum = sum + (y(i) + y(i - 1))*dels/2.
    if (sigma .eq. 0.) go to 4
-   call snhcsh (ss,cs,sigmap*dels,3)
+   call snhcsh(ss,cs,sigmap*dels,3)
    sum = sum + (yp(i) + yp(i - 1))*(cs - ss*sigmap*dels/2.)/ &
       & (sigmap*sigmap*sigmap*(ss + sigmap*dels))
    go to 5
@@ -677,9 +677,9 @@ t1 = del1*del1/(2.*dels)
 t2 = (del2 + dels)*del1/(2.*dels)
 sum = sum + t1*y(iu) + t2*y(ium1)
 if (sigma .eq. 0.) go to 7
-call snhcsh (dummy,c1,sigmap*del1,2)
-call snhcsh (dummy,c2,sigmap*del2,2)
-call snhcsh (ss,cs,sigmap*dels,3)
+call snhcsh(dummy,c1,sigmap*del1,2)
+call snhcsh(dummy,c2,sigmap*del2,2)
+call snhcsh(ss,cs,sigmap*dels,3)
 sum = sum + term(c1,0.,t1)*yp(iu) &
    & + term(cs,c2,t2)*yp(ium1)
 go to 10
@@ -699,11 +699,11 @@ t1 = (delu1 + dell1)*deli/(2.*dels)
 t2 = (delu2 + dell2)*deli/(2.*dels)
 sum = t1*y(iu) + t2*y(ium1)
 if (sigma .eq. 0.) go to 9
-call snhcsh (dummy,cu1,sigmap*delu1,2)
-call snhcsh (dummy,cu2,sigmap*delu2,2)
-call snhcsh (dummy,cl1,sigmap*dell1,2)
-call snhcsh (dummy,cl2,sigmap*dell2,2)
-call snhcsh (ss,dummy,sigmap*dels,-1)
+call snhcsh(dummy,cu1,sigmap*delu1,2)
+call snhcsh(dummy,cu2,sigmap*delu2,2)
+call snhcsh(dummy,cl1,sigmap*dell1,2)
+call snhcsh(dummy,cl2,sigmap*dell2,2)
+call snhcsh(ss,dummy,sigmap*dels,-1)
 sum = sum + term(cu1,cl1,t1)*yp(iu) &
    & + term(cl2,cu2,t2)*yp(ium1)
 go to 10
@@ -718,7 +718,7 @@ go to 10
 return
 end function curvi
 
-pure subroutine kurv1 (n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
+pure subroutine kurv1(n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
    & sigma,ierr)
 implicit none
 integer, intent(in) :: n, islpsw
@@ -856,7 +856,7 @@ go to 4
 dels2 = dels1 + dels1
 if (n .gt. 2) dels2 = s(3) - s(1)
 if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 12
-call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
 sx = c1*x(1) + c2*x(2)
 sy = c1*y(1) + c2*y(2)
 if (n .eq. 2) go to 3
@@ -873,7 +873,7 @@ go to 7
 delsnm = delsn + delsn
 if (n .gt. 2) delsnm = s(n) - s(n - 2)
 if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 12
-call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
 sx = c1*x(n) + c2*x(nm1)
 sy = c1*y(n) + c2*y(nm1)
 if (n .eq. 2) go to 6
@@ -888,7 +888,7 @@ slppny = sy/delt
 !
 7 dx1 = (x(2) - x(1))/s(2)
 dy1 = (y(2) - y(1))/s(2)
-call terms (diag1,sdiag1,sigmap,s(2))
+call terms(diag1,sdiag1,sigmap,s(2))
 xp(1) = (dx1 - slpp1x)/diag1
 yp(1) = (dy1 - slpp1y)/diag1
 temp(1) = sdiag1/diag1
@@ -898,7 +898,7 @@ do 8 i = 2,nm1
    if (dels2 .eq. 0.) go to 12
    dx2 = (x(i + 1) - x(i))/dels2
    dy2 = (y(i + 1) - y(i))/dels2
-   call terms (diag2,sdiag2,sigmap,dels2)
+   call terms(diag2,sdiag2,sigmap,dels2)
    diag = diag1 + diag2 - sdiag1*temp(i - 1)
    diagin = 1./diag
    xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
@@ -931,7 +931,7 @@ return
 return
 end subroutine kurv1
 
-pure subroutine kurv2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+pure subroutine kurv2(t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t
@@ -1040,10 +1040,10 @@ delp2 = sigmap*(del2 + dels)/2.
 call snhcsh(sinhm1,dummy,sigmap*del1,-1)
 call snhcsh(sinhm2,dummy,sigmap*del2,-1)
 call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh (dummy,coshp1,delp1,1)
-call snhcsh (dummy,coshp2,delp2,1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
 d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
 c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
    & coshp1*del2))/d
@@ -1054,7 +1054,7 @@ ys = sumy + yp(i)*c1 + yp(im1)*c2
 return
 end subroutine kurv2
 
-pure subroutine kurvp1 (n,x,y,xp,yp,temp,s,sigma,ierr)
+pure subroutine kurvp1(n,x,y,xp,yp,temp,s,sigma,ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
@@ -1237,7 +1237,7 @@ return
 return
 end subroutine kurvp1
 
-pure subroutine kurvp2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+pure subroutine kurvp2(t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t
@@ -1352,10 +1352,10 @@ delp2 = sigmap*(del2 + dels)/2.
 call snhcsh(sinhm1,dummy,sigmap*del1,-1)
 call snhcsh(sinhm2,dummy,sigmap*del2,-1)
 call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh (dummy,coshp1,delp1,1)
-call snhcsh (dummy,coshp2,delp2,1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
 d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
 ci = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
    & coshp1*del2))/d
@@ -1366,7 +1366,7 @@ ys = sumy + ci*yp(i) + cim1*yp(im1)
 return
 end subroutine kurvp2
 
-pure subroutine qurv1 (n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
+pure subroutine qurv1(n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
    & slpny,slpnz,islpsw,xp,yp,zp,temp, &
    & s,sigma,ierr)
 implicit none
@@ -1515,7 +1515,7 @@ go to 3
 dels2 = dels1 + dels1
 if (n .gt. 2) dels2 = s(3) - s(1)
 if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 9
-call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
 slpp1x = c1*x(1) + c2*x(2)
 slpp1y = c1*y(1) + c2*y(2)
 slpp1z = c1*z(1) + c2*z(2)
@@ -1536,7 +1536,7 @@ go to 5
 delsnm = delsn + delsn
 if (n .gt. 2) delsnm = s(n) - s(n - 2)
 if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 10
-call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
 slppnx = c1*x(n) + c2*x(nm1)
 slppny = c1*y(n) + c2*y(nm1)
 slppnz = c1*z(n) + c2*z(nm1)
@@ -1555,7 +1555,7 @@ slppnz = slppnz/delt
 dx1 = (x(2) - x(1))/s(2)
 dy1 = (y(2) - y(1))/s(2)
 dz1 = (z(2) - z(1))/s(2)
-call terms (diag1,sdiag1,sigmap,s(2))
+call terms(diag1,sdiag1,sigmap,s(2))
 xp(1) = (dx1 - slpp1x)/diag1
 yp(1) = (dy1 - slpp1y)/diag1
 zp(1) = (dz1 - slpp1z)/diag1
@@ -1567,7 +1567,7 @@ do 6 i = 2,nm1
    dx2 = (x(i + 1) - x(i))/dels2
    dy2 = (y(i + 1) - y(i))/dels2
    dz2 = (z(i + 1) - z(i))/dels2
-   call terms (diag2,sdiag2,sigmap,dels2)
+   call terms(diag2,sdiag2,sigmap,dels2)
    diag = diag1 + diag2 - sdiag1*temp(i - 1)
    diagin = 1./diag
    xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
@@ -1605,7 +1605,7 @@ return
 return
 end subroutine qurv1
 
-pure subroutine qurv2 (t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
+pure subroutine qurv2(t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t
@@ -1717,10 +1717,10 @@ delp2 = sigmap*(del2 + dels)/2.
 call snhcsh(sinhm1,dummy,sigmap*del1,-1)
 call snhcsh(sinhm2,dummy,sigmap*del2,-1)
 call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh (dummy,coshp1,delp1,1)
-call snhcsh (dummy,coshp2,delp2,1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
 d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
 c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
    & coshp1*del2))/d
@@ -1732,7 +1732,7 @@ zs = sumz + zp(i)*c1 + zp(im1)*c2
 return
 end subroutine qurv2
 
-pure elemental subroutine ceez (del1,del2,sigma,c1,c2,c3,n)
+pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: del1, del2, sigma
@@ -1802,12 +1802,12 @@ return
 !
 ! TENSION .NE. 0.
 !
-1 call snhcsh (dummy,coshm1,sigma*del1,1)
-call snhcsh (dummy,coshm2,sigma*del2,1)
+1 call snhcsh(dummy,coshm1,sigma*del1,1)
+call snhcsh(dummy,coshm2,sigma*del2,1)
 delp = sigma*(del2 + del1)/2.
 delm = sigma*(del2 - del1)/2.
-call snhcsh (sinhmp,dummy,delp,-1)
-call snhcsh (sinhmm,dummy,delm,-1)
+call snhcsh(sinhmp,dummy,delp,-1)
+call snhcsh(sinhmm,dummy,delm,-1)
 denom = coshm1*(del2 - del1) - 2.*del1*(sinhmp + delp)* &
    & (sinhmm + delm)
 c1 = 2.*(sinhmp + delp)*(sinhmm + delm)/denom
@@ -1822,7 +1822,7 @@ c2 = -c1
 return
 end subroutine ceez
 
-pure elemental subroutine terms (diag,sdiag,sigma,del)
+pure elemental subroutine terms(diag,sdiag,sigma,del)
 implicit none
 real, intent(inout) :: diag, sdiag
 real, intent(in) :: sigma, del
@@ -1878,14 +1878,14 @@ diag = del/3.
 sdiag = del/6.
 return
 1 sigdel = sigma*del
-call snhcsh (sinhm,coshm,sigdel,0)
+call snhcsh(sinhm,coshm,sigdel,0)
 denom = del/((sinhm + sigdel)*sigdel*sigdel)
 diag = denom*(sigdel*coshm - sinhm)
 sdiag = denom*sinhm
 return
 end subroutine terms
 
-pure integer function intrvl (x, t, m)
+pure integer function intrvl(x, t, m)
 implicit none
 integer, intent(in) :: m
 real, intent(in) :: x, t(m)
@@ -1953,7 +1953,7 @@ return
 return
 end function intrvl
 
-pure subroutine bval (t, bcoef, n, k, x, jderiv, w, wk)
+pure subroutine bval(t, bcoef, n, k, x, jderiv, w, wk)
 implicit none
 integer, intent(in) :: jderiv, k, n
 real, intent(inout) :: w
@@ -2137,7 +2137,7 @@ end do
 return
 end subroutine bval
 
-pure subroutine bvali (t, bcoeff, n, k, x, w, wk)
+pure subroutine bvali(t, bcoeff, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
 real, intent(out) :: w
@@ -2192,11 +2192,11 @@ end do
 !
 kp1 = k + 1
 np1 = n + 1
-call bvali0 (t, tnew, wk(1), n, kp1, xval, w, wk(np1))
+call bvali0(t, tnew, wk(1), n, kp1, xval, w, wk(np1))
 return
 end subroutine bvali
 
-pure subroutine bvali0 (t, tnew, bcoef, n, k, x, w, wk)
+pure subroutine bvali0(t, tnew, bcoef, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
 real, intent(in) :: tnew
@@ -2307,7 +2307,7 @@ w = wk(1,1)
 return
 end subroutine bvali0
 
-pure subroutine bspp (t, a, n, k, break, c, l, wk)
+pure subroutine bspp(t, a, n, k, break, c, l, wk)
 implicit none
 integer, intent(in) :: k
 integer, intent(out) :: l
@@ -2410,7 +2410,7 @@ return
 return
 end subroutine bspp
 
-subroutine ppval (x, a, l, n, xi, yi, ni)
+subroutine ppval(x, a, l, n, xi, yi, ni)
 implicit none
 integer, intent(in) :: l, n, ni
 real :: a(l,n), x(n), xi(ni)
@@ -2503,7 +2503,7 @@ ir = min0(i + 1, n)
 go to 10
 end subroutine ppval
 
-pure subroutine bspvb (t, k, jhigh, j, x, left, blist)
+pure subroutine bspvb(t, k, jhigh, j, x, left, blist)
 implicit none
 integer, intent(inout) :: j
 integer, intent(in) :: jhigh, k, left
@@ -2567,7 +2567,7 @@ if (j .lt. jhigh) go to 10
 return
 end subroutine bspvb
 
-pure subroutine bspvd (t, k, x, left, dbiatx, idim, nderiv, a)
+pure subroutine bspvd(t, k, x, left, dbiatx, idim, nderiv, a)
 implicit none
 integer, intent(in) :: idim, k, left, nderiv
 real, intent(in) :: x
@@ -2642,7 +2642,7 @@ mhigh = max0(min0(nderiv,k),1)
 !     MHIGH is usually equal to nderiv.
 kp1 = k + 1
 jj = 0
-call bspvb (t, k, kp1 - mhigh, jj, x, left, dbiatx)
+call bspvb(t, k, kp1 - mhigh, jj, x, left, dbiatx)
 if (mhigh .eq. 1) return
 !
 !     The first column of dbiatx always contains the B-spline values
@@ -2657,7 +2657,7 @@ do m = 2,mhigh
       dbiatx(j,ideriv) = dbiatx(jp1mid,1)
 10    jp1mid = jp1mid + 1
    ideriv = ideriv - 1
-   call bspvb (t, k, kp1 - ideriv, jj, x, left, dbiatx)
+   call bspvb(t, k, kp1 - ideriv, jj, x, left, dbiatx)
 end do
 !
 !     At this point, B(left-k+i, k+1-j)(x) is in dbiatx(i,j) for
@@ -2719,7 +2719,7 @@ end do
 return
 end subroutine bspvd
 
-pure subroutine bstrp (tau, gtau, t, n, k, bcoef, q, iflag)
+pure subroutine bstrp(tau, gtau, t, n, k, bcoef, q, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: k, n
@@ -2852,7 +2852,7 @@ do i = 1,n
 !        following
 !
 40 jj = 0
-   call bspvb (t, k, k, jj, taui, left, bcoef)
+   call bspvb(t, k, k, jj, taui, left, bcoef)
 !
 !        Let q denote a two-dimensional array of dimension (2*k-1,n).
 !        We therefore want  bcoef(j) = B(left-k+j)(taui) to go into
@@ -2873,7 +2873,7 @@ end do
 !
 !     ***Obtain factorization of  A  , stored again in  q.
 !
-call banfac (q, k + km1, n, km1, km1, iflag)
+call banfac(q, k + km1, n, km1, km1, iflag)
 iflag = iflag - 1
 if (iflag .ne. 0) return
 !
@@ -2882,7 +2882,7 @@ if (iflag .ne. 0) return
 60 do i = 1,n
    bcoef(i) = gtau(i)
 end do
-call banslv (q, k + km1, n, km1, km1, bcoef)
+call banslv(q, k + km1, n, km1, km1, bcoef)
 return
 !
 !     *** Error return
@@ -2891,7 +2891,7 @@ return
 return
 end subroutine bstrp
 
-pure subroutine banfac ( w, nroww, nrow, nbandl, nbandu, iflag )
+pure subroutine banfac( w, nroww, nrow, nbandl, nbandu, iflag )
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
@@ -3012,7 +3012,7 @@ end do
 return
 end subroutine banfac
 
-pure subroutine banslv ( w, nroww, nrow, nbandl, nbandu, b )
+pure subroutine banslv( w, nroww, nrow, nbandl, nbandu, b )
 implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(in) :: w(nroww,nrow)
@@ -3073,7 +3073,7 @@ if (i .gt. 1) go to 41
 return
 end subroutine banslv
 
-pure subroutine bslsq (tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
+pure subroutine bslsq(tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, n, ntau
@@ -3168,7 +3168,7 @@ do l = 1,ntau
    go to 30
 !
 40 jj = 0
-   call bspvb (t, k, k, jj, tau(l), left, wk)
+   call bspvb(t, k, k, jj, tau(l), left, wk)
 !
    leftmk = left - k
    do mm = 1,k
@@ -3185,8 +3185,8 @@ end do
 !
 !        Solve the normal equations
 !
-call bchfac (q, k, n, wk, ierr)
-call bchslv (q, k, n, a)
+call bchfac(q, k, n, wk, ierr)
+call bchslv(q, k, n, a)
 return
 !
 !             Error return
@@ -3195,7 +3195,7 @@ return
 return
 end subroutine bslsq
 
-pure subroutine bchfac (w, nb, n, diag, iflag)
+pure subroutine bchfac(w, nb, n, diag, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
@@ -3313,7 +3313,7 @@ do 60 k = 1,n
 return
 end subroutine bchfac
 
-pure subroutine bchslv (w, nb, n, b)
+pure subroutine bchslv(w, nb, n, b)
 implicit none
 integer, intent(in) :: n, nb
 real, intent(in) :: w(nb,n)
@@ -3373,7 +3373,7 @@ if (k .gt. 0) go to 40
 return
 end subroutine bchslv
 
-subroutine bfit (bkpt, n, nord, xdata, ydata, ndata, &
+subroutine bfit(bkpt, n, nord, xdata, ydata, ndata, &
    & xconst, yconst, nderiv, nconst, &
    & mode, coeff, rnorm, w, iw)
 implicit none
@@ -3610,13 +3610,13 @@ i2 = i1 + mdg*(nord + 1)
 i3 = i2 + nord*nord
 i7 = i3 + mdw*(n + 1)
 !
-call bfit0 (ndata, xdata, ydata, nord, nbkpt, bkpt, nconst, &
+call bfit0(ndata, xdata, ydata, nord, nbkpt, bkpt, nconst, &
    & xconst, yconst, nderiv, mode, coeff, rnorm, w(i2), &
    & w(i1), mdg, w(i3), mdw, w(i7), iw)
 return
 end subroutine bfit
 
-subroutine bfit0 (ndata, xdata, ydata, nord, nbkpt, bkpt, &
+subroutine bfit0(ndata, xdata, ydata, nord, nbkpt, bkpt, &
    & nconst, xconst, yconst, nderiv, mode, coeff, rnorm, &
    & bf, g, mdg, w, mdw, work, iwork)
 implicit none
@@ -3642,7 +3642,7 @@ logical :: band, new
 go to 100
 !
 10 if (.not. band) go to 20
-call bndsl (1, g, mdg, nord, ip, ir, coeff, n, rnorm, ierr)
+call bndsl(1, g, mdg, nord, ip, ir, coeff, n, rnorm, ierr)
 if (ierr .eq. 0) return
 !
 !     Check further for sufficient storage in working arrays.
@@ -3766,7 +3766,7 @@ if (ileft .eq. n) go to 230
 ip1 = ileft + 1
 if (xval .lt. bkpt(ip1)) go to 230
 intrvl = ileft - nordm1
-call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
+call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
 !
 !     Move pointer up so that xval .GE. bkpt(ileft).
@@ -3778,20 +3778,20 @@ do 220 i = ip1,n
 !     Obtain B-spline function VALUE
 !
 230 j = 0
-call bspvb (bkpt, nord, nord, j, xval, ileft, bf)
+call bspvb(bkpt, nord, nord, j, xval, ileft, bf)
 !
 !     Move row into place
 !
 irow = ir + mt
 mt = mt + 1
-call scopy (nord, bf, 1, g(irow,1), mdg)
+call scopy(nord, bf, 1, g(irow,1), mdg)
 g(irow,nordp1) = ydata(idata)
 !
 !     When staging work area is exhausted, process rows
 !
 if (irow .ne. mdg - 1) go to 240
 intrvl = ileft - nordm1
-call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
+call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
 240 idata = idata + 1
 go to 210
@@ -3799,13 +3799,13 @@ go to 210
 !     Process  block of equations
 !
 250 intrvl = ileft - nordm1
-call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
+call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 !
 !     Last call to adjust block positioning
 !
 g(ir,1) = 0.0
-call scopy (nordp1, g(ir,1), 0, g(ir,1), mdg)
-call bndacc (g, mdg, nord, ip, ir, 1, np1)
+call scopy(nordp1, g(ir,1), 0, g(ir,1), mdg)
+call bndacc(g, mdg, nord, ip, ir, 1, np1)
 !
 260 do i = 1,n
    band = band .and. g(i,1) .ne. 0.0
@@ -3832,11 +3832,11 @@ if (nord .eq. n) go to 330
 do 320 i = nordp1,n
    if (xval .lt. bkpt(i)) go to 330
 320 ileft = i
-330 call bspvd (bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
+330 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 w(neqcon,1) = 0.0
-call scopy (n, w(neqcon,1), 0, w(neqcon,1), mdw)
+call scopy(n, w(neqcon,1), 0, w(neqcon,1), mdw)
 intrvl = ileft - nordm1
-call scopy (nord, bf(1,ideriv + 1), 1, w(neqcon,intrvl), mdw)
+call scopy(nord, bf(1,ideriv + 1), 1, w(neqcon,intrvl), mdw)
 if (itype .ne. 2) go to 340
 w(neqcon,np1) = yconst(idata)
 go to 310
@@ -3850,9 +3850,9 @@ if (nord .eq. n) go to 360
 do 350 i = nordp1,n
    if (yval .lt. bkpt(i)) go to 360
 350 ileft = i
-360 call bspvd (bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
+360 call bspvd(bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
 intrvl = ileft - nordm1
-call saxpy (nord, -1.0, bf(1,ideriv + 1), 1, w(neqcon,intrvl), mdw)
+call saxpy(nord, -1.0, bf(1,ideriv + 1), 1, w(neqcon,intrvl), mdw)
 go to 310
 !-----------------------------------------------------------------------
 !                    Transfer-least-squares data
@@ -3860,8 +3860,8 @@ go to 310
 400 do i = 1,np1
    irow = i + neqcon
    w(irow,1) = 0.0
-   call scopy (n, w(irow,1), 0, w(irow,1), mdw)
-   call scopy (min0(np1 - i,nord), g(i,1), mdg, w(irow,i), mdw)
+   call scopy(n, w(irow,1), 0, w(irow,1), mdw)
+   call scopy(min0(np1 - i,nord), g(i,1), mdg, w(irow,i), mdw)
    w(irow,np1) = g(i,nordp1)
 end do
 !-----------------------------------------------------------------------
@@ -3885,12 +3885,12 @@ if (nord .eq. n) go to 520
 do 510 i = nordp1,n
    if (xval .lt. bkpt(i)) go to 520
 510 ileft = i
-520 call bspvd (bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
+520 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 irow = neqcon + np1 + nincon
 w(irow,1) = 0.0
-call scopy (n, w(irow,1), 0, w(irow,1), mdw)
+call scopy(n, w(irow,1), 0, w(irow,1), mdw)
 intrvl = ileft - nordm1
-call scopy (nord, bf(1,ideriv + 1), 1, w(irow,intrvl), mdw)
+call scopy(nord, bf(1,ideriv + 1), 1, w(irow,intrvl), mdw)
 w(irow,np1) = yconst(idata)
 if (itype .ne. 0) go to 500
 w(irow,np1) = -w(irow,np1)
@@ -3929,7 +3929,7 @@ mode = -7
 return
 end subroutine bfit0
 
-pure subroutine bndacc (g,mdg,nb,ip,ir,mt,jt)
+pure subroutine bndacc(g,mdg,nb,ip,ir,mt,jt)
 implicit none
 integer, intent(inout) :: ip, ir
 integer, intent(in) :: jt, mdg, mt, nb
@@ -4147,7 +4147,7 @@ end do
 kh = min0(nbp1, mh)
 !                                             Alg. Step 20
 do i = 1,kh
-   call h12 (1,i,max0(i + 1,ir - ip + 1),mh,g(ip,i),1,rho, &
+   call h12(1,i,max0(i + 1,ir - ip + 1),mh,g(ip,i),1,rho, &
       & g(ip,i + 1),1,mdg,nbp1 - i)
 end do
 !                                             Alg. Step 21
@@ -4164,7 +4164,7 @@ end do
 return
 end subroutine bndacc
 
-subroutine bndsl (mode,g,mdg,nb,ip,ir,x,n,rnorm,ierr)
+subroutine bndsl(mode,g,mdg,nb,ip,ir,x,n,rnorm,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ip, ir, mdg, mode, n, nb
@@ -4353,7 +4353,7 @@ return
 return
 end subroutine bndsl
 
-pure subroutine spfit2 (x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
+pure subroutine spfit2(x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
    & ybreak, ny, f, s, t, wk, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -4474,7 +4474,7 @@ t(ny + 6) = ybreak(ny)
 !     Obtain the B-spline coefficients of the bivariate
 !     least squares fit and store them in wk.
 !
-call bslsq2 (x, wx, mx, y, wy, my, z, kz, s, m, 4, &
+call bslsq2(x, wx, mx, y, wy, my, z, kz, s, m, 4, &
    & t, n, 4, f, m, wk, num, ierr)
 if (ierr .lt. 0) go to 110
 ierr = 0
@@ -4492,7 +4492,7 @@ end do
 !
 nu = nx*ny
 l = 2*nu + 1
-call cspp (s, wk, m, m, n, f(l), n, f(1), n)
+call cspp(s, wk, m, m, n, f(l), n, f(1), n)
 !
 imax = n*nx
 do i = 1,imax
@@ -4504,13 +4504,13 @@ end do
 !     in the first half of f.
 !
 ld = nu + 1
-call cspp (t, f(l), n, n, nx, f(1), nx, f(ld), nx)
+call cspp(t, f(l), n, n, nx, f(1), nx, f(ld), nx)
 !
 !     Compute the remaining partial derivatives and store
 !     the results in the latter half of f.
 !
 ld = l + nu
-call cspp (t, wk, n, n, nx, f(l), nx, f(ld), nx)
+call cspp(t, wk, n, n, nx, f(l), nx, f(ld), nx)
 return
 !
 !     Error return
@@ -4527,7 +4527,7 @@ wk(1) = l
 return
 end subroutine spfit2
 
-pure subroutine cspp (t, a, ka, m, n, z, kz, dz, kdz)
+pure subroutine cspp(t, a, ka, m, n, z, kz, dz, kdz)
 implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
 real, intent(in) :: t(*), a(ka,n)
@@ -4641,7 +4641,7 @@ end do
 return
 end subroutine cspp
 
-pure subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csurf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
@@ -4686,7 +4686,7 @@ do l = 1,my
    go to 50
 20 j = nm1
    go to 50
-30 j = intrvl (yy, t, n)
+30 j = intrvl(yy, t, n)
    go to 50
 !
 !        Linear forward search
@@ -4711,7 +4711,7 @@ do l = 1,my
 110   i = mm1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-120   i = intrvl (xx, s, m)
+120   i = intrvl(xx, s, m)
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
 130   z(k,l) = z(k - 1,l)
@@ -4813,7 +4813,7 @@ end do
 return
 end subroutine csurf
 
-pure subroutine csurf1 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
+pure subroutine csurf1(ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
 implicit none
 integer, intent(in) :: ider, jder, kz, m, mx, my, n
 real, intent(in) :: x(mx), y(my)
@@ -4852,12 +4852,12 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-call csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
+call csurf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
    & f(1,1,3), m, f(1,1,2), m, f(1,1,4), m)
 return
 end subroutine csurf1
 
-pure subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csrf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, f1, kf1, f2, kf2, f12, kf12)
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
@@ -4902,7 +4902,7 @@ do l = 1,my
    go to 50
 20 j = nm1
    go to 50
-30 j = intrvl (yy, t, n)
+30 j = intrvl(yy, t, n)
    go to 50
 !
 !        Linear forward search
@@ -4927,7 +4927,7 @@ do l = 1,my
 110   i = mm1
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
-120   i = intrvl (xx, s, m)
+120   i = intrvl(xx, s, m)
       if (i .eq. iold .and. j .eq. jold) go to 210
       go to 200
 130   z(k,l) = z(k - 1,l)
@@ -5024,7 +5024,7 @@ end do
 return
 end subroutine csrf
 
-pure subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+pure subroutine csrf2(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, ddf)
 implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
@@ -5064,12 +5064,12 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-call csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, kf, &
+call csrf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, kf, &
    & ddf(1,1,2), m, ddf, m, ddf(1,1,3), m)
 return
 end subroutine csrf2
 
-subroutine surf (m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
+subroutine surf(m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
 implicit none
 integer, intent(in) :: m, n, iz
 integer, intent(out) :: ierr
@@ -5231,7 +5231,7 @@ go to 5
 dely2 = dely1 + dely1
 if (n .gt. 2) dely2 = y(3) - y(1)
 if (dely1 .le. 0. .or. dely2 .le. dely1) go to 47
-call ceez (dely1,dely2,sigmay,c1,c2,c3,n)
+call ceez(dely1,dely2,sigmay,c1,c2,c3,n)
 do 3 i = 1,m
 3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
 if (n .eq. 2) go to 5
@@ -5251,7 +5251,7 @@ go to 10
 delynm = delyn + delyn
 if (n .gt. 2) delynm = y(n) - y(n - 2)
 if (delyn .le. 0. .or. delynm .le. delyn) go to 47
-call ceez (-delyn,-delynm,sigmay,c1,c2,c3,n)
+call ceez(-delyn,-delynm,sigmay,c1,c2,c3,n)
 do 8 i = 1,m
    npi = n + i
 8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
@@ -5277,7 +5277,7 @@ if (ind(5) + ind(7) .eq. 2) go to 15
 delx2 = delx1 + delx1
 if (m .gt. 2) delx2 = x(3) - x(1)
 if (delx1 .le. 0. .or. delx2 .le. delx1) go to 47
-call ceez (delx1,delx2,sigmax,c1,c2,c3,m)
+call ceez(delx1,delx2,sigmax,c1,c2,c3,m)
 if (ind(1) .eq. 1) go to 15
 do 13 j = 1,n
 13 zp(1,j,2) = c1*z(1,j) + c2*z(2,j)
@@ -5316,7 +5316,7 @@ delxm = x(m) - x(mm1)
 delxmm = delxm + delxm
 if (m .gt. 2) delxmm = x(m) - x(m - 2)
 if (delxm .le. 0. .or. delxmm .le. delxm) go to 47
-call ceez (-delxm,-delxmm,sigmax,c1,c2,c3,m)
+call ceez(-delxm,-delxmm,sigmax,c1,c2,c3,m)
 if (ind(2) .eq. 1) go to 24
 do 22 j = 1,n
    npmpj = npm + j
@@ -5354,7 +5354,7 @@ do 29 i = 1,m
 29 zp(i,2,1) = deli*(z(i,2) - z(i,1))
 zp(1,2,3) = deli*(zp(1,2,2) - zp(1,1,2))
 zp(m,2,3) = deli*(temp(npm + 2) - temp(npm + 1))
-call terms (diag1,sdiag1,sigmay,del1)
+call terms(diag1,sdiag1,sigmay,del1)
 diagi = 1./diag1
 do 30 i = 1,m
 30 zp(i,1,1) = diagi*(zp(i,2,1) - zp(i,1,1))
@@ -5373,7 +5373,7 @@ do 33 j = 2,nm1
 31    zp(i,jp1,1) = deli*(z(i,jp1) - z(i,j))
    zp(1,jp1,3) = deli*(zp(1,jp1,2) - zp(1,j,2))
    zp(m,jp1,3) = deli*(temp(npmpj + 1) - temp(npmpj))
-   call terms (diag2,sdiag2,sigmay,del2)
+   call terms(diag2,sdiag2,sigmay,del2)
    diagin = 1./(diag1 + diag2 - sdiag1*temp(jm1))
    do 32 i = 1,m
 32    zp(i,j,1) = diagin*(zp(i,jp1,1) - zp(i,j,1) - &
@@ -5415,7 +5415,7 @@ deli = 1./del1
 do 38 j = 1,n
    zp(2,j,2) = deli*(z(2,j) - z(1,j))
 38 zp(2,j,3) = deli*(zp(2,j,1) - zp(1,j,1))
-call terms (diag1,sdiag1,sigmax,del1)
+call terms(diag1,sdiag1,sigmax,del1)
 diagi = 1./diag1
 do 39 j = 1,n
    zp(1,j,2) = diagi*(zp(2,j,2) - zp(1,j,2))
@@ -5432,7 +5432,7 @@ do 42 i = 2,mm1
    do 40 j = 1,n
       zp(ip1,j,2) = deli*(z(ip1,j) - z(i,j))
 40    zp(ip1,j,3) = deli*(zp(ip1,j,1) - zp(i,j,1))
-   call terms (diag2,sdiag2,sigmax,del2)
+   call terms(diag2,sdiag2,sigmax,del2)
    diagin = 1./(diag1 + diag2 - sdiag1*temp(npi - 1))
    do 41 j = 1,n
       zp(i,j,2) = diagin*(zp(ip1,j,2) - zp(i,j,2) - &
@@ -5478,7 +5478,7 @@ return
 return
 end subroutine surf
 
-function surf2 (xx,yy,m,n,x,y,z,iz,zp,sigma)
+function surf2(xx,yy,m,n,x,y,z,iz,zp,sigma)
 implicit none
 integer, intent(in) :: m, n, iz
 real, intent(in) :: xx, yy, x(m), y(n)
@@ -5578,12 +5578,12 @@ sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 !
 ! Determine y interval
 !
-jm1 = intrvl (yy,y,n)
+jm1 = intrvl(yy,y,n)
 j = jm1 + 1
 !
 ! Determine x interval
 !
-im1 = intrvl (xx,x,m)
+im1 = intrvl(xx,x,m)
 i = im1 + 1
 del1 = yy - y(jm1)
 del2 = y(j) - yy
@@ -5602,13 +5602,13 @@ zxxi = hermz(zp(i,j - 1,2),zp(i,j,2), &
 go to 2
 1 delp1 = (del1 + dels)/2.
 delp2 = (del2 + dels)/2.
-call snhcsh (sinhm1,dummy,sigmay*del1,-1)
-call snhcsh (sinhm2,dummy,sigmay*del2,-1)
-call snhcsh (sinhms,dummy,sigmay*dels,-1)
-call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
-call snhcsh (dummy,coshp1,sigmay*delp1,1)
-call snhcsh (dummy,coshp2,sigmay*delp2,1)
+call snhcsh(sinhm1,dummy,sigmay*del1,-1)
+call snhcsh(sinhm2,dummy,sigmay*del2,-1)
+call snhcsh(sinhms,dummy,sigmay*dels,-1)
+call snhcsh(sinhp1,dummy,sigmay*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmay*del2/2.,-1)
+call snhcsh(dummy,coshp1,sigmay*delp1,1)
+call snhcsh(dummy,coshp2,sigmay*delp2,1)
 zim1 = hermnz(z(i - 1,j - 1),z(i - 1,j),zp(i - 1,j - 1,1), &
    & zp(i - 1,j,1),sigmay)
 zi = hermnz(z(i,j - 1),z(i,j),zp(i,j - 1,1),zp(i,j,1), &
@@ -5628,18 +5628,18 @@ surf2 = hermz(zim1,zi,zxxim1,zxxi)
 return
 3 delp1 = (del1 + dels)/2.
 delp2 = (del2 + dels)/2.
-call snhcsh (sinhm1,dummy,sigmax*del1,-1)
-call snhcsh (sinhm2,dummy,sigmax*del2,-1)
-call snhcsh (sinhms,dummy,sigmax*dels,-1)
-call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
-call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
-call snhcsh (dummy,coshp1,sigmax*delp1,1)
-call snhcsh (dummy,coshp2,sigmax*delp2,1)
+call snhcsh(sinhm1,dummy,sigmax*del1,-1)
+call snhcsh(sinhm2,dummy,sigmax*del2,-1)
+call snhcsh(sinhms,dummy,sigmax*dels,-1)
+call snhcsh(sinhp1,dummy,sigmax*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmax*del2/2.,-1)
+call snhcsh(dummy,coshp1,sigmax*delp1,1)
+call snhcsh(dummy,coshp2,sigmax*delp2,1)
 surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
 return
 end function surf2
 
-pure subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
+pure subroutine nsurf2(dxmin,dxmax,md,dymin,dymax,nd,dz, &
    & idz,m,n,x,y,z,iz,zp,work,sigma)
 implicit none
 integer, intent(in) :: md, nd, idz, m, n, iz
@@ -5761,13 +5761,13 @@ do 3 ii = 1,md
    go to 3
 2  delp1 = (del1 + dels)/2.
    delp2 = (del2 + dels)/2.
-   call snhcsh (sinhm1,dummy,sigmax*del1,-1)
-   call snhcsh (sinhm2,dummy,sigmax*del2,-1)
-   call snhcsh (sinhms,dummy,sigmax*dels,-1)
-   call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
-   call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
-   call snhcsh (dummy,coshp1,sigmax*delp1,1)
-   call snhcsh (dummy,coshp2,sigmax*delp2,1)
+   call snhcsh(sinhm1,dummy,sigmax*del1,-1)
+   call snhcsh(sinhm2,dummy,sigmax*del2,-1)
+   call snhcsh(sinhms,dummy,sigmax*dels,-1)
+   call snhcsh(sinhp1,dummy,sigmax*del1/2.,-1)
+   call snhcsh(sinhp2,dummy,sigmax*del2/2.,-1)
+   call snhcsh(dummy,coshp1,sigmax*delp1,1)
+   call snhcsh(dummy,coshp2,sigmax*delp2,1)
    temp = sigmax*sigmax*dels*(sinhms + sigmax*dels)
    work(3,ii) = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
       & sinhp1 + sigmax*coshp2*del1))/temp
@@ -5800,13 +5800,13 @@ do 8 jj = 1,nd
    go to 6
 5  delp1 = (del1 + dels)/2.
    delp2 = (del2 + dels)/2.
-   call snhcsh (sinhm1,dummy,sigmay*del1,-1)
-   call snhcsh (sinhm2,dummy,sigmay*del2,-1)
-   call snhcsh (sinhms,dummy,sigmay*dels,-1)
-   call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
-   call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
-   call snhcsh (dummy,coshp1,sigmay*delp1,1)
-   call snhcsh (dummy,coshp2,sigmay*delp2,1)
+   call snhcsh(sinhm1,dummy,sigmay*del1,-1)
+   call snhcsh(sinhm2,dummy,sigmay*del2,-1)
+   call snhcsh(sinhms,dummy,sigmay*dels,-1)
+   call snhcsh(sinhp1,dummy,sigmay*del1/2.,-1)
+   call snhcsh(sinhp2,dummy,sigmay*del2/2.,-1)
+   call snhcsh(dummy,coshp1,sigmay*delp1,1)
+   call snhcsh(dummy,coshp2,sigmay*delp2,1)
    temp = sigmay*sigmay*dels*(sinhms + sigmay*dels)
    c3 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)* &
       & sinhp1 + sigmay*coshp2*del1))/temp
@@ -5834,7 +5834,7 @@ do 8 jj = 1,nd
 return
 end subroutine nsurf2
 
-pure subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
+pure subroutine bstrp2(x, y, z, kz, tx, nx, kx, ty, ny, ky, &
    & a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -5886,9 +5886,9 @@ if (l .lt. m) go to 120
 !     Compute the coefficients
 !
 iw = nx*ny + 1
-call bstrp1 (x, z, kz, nx, ny, tx, kx, wk, ny, wk(iw), iflag)
+call bstrp1(x, z, kz, nx, ny, tx, kx, wk, ny, wk(iw), iflag)
 if (iflag .ne. 0) go to 100
-call bstrp1 (y, wk, ny, ny, nx, ty, ky, a, ka, wk(iw), iflag)
+call bstrp1(y, wk, ny, ny, nx, ty, ky, a, ka, wk(iw), iflag)
 if (iflag .ne. 0) go to 110
 return
 !
@@ -5902,7 +5902,7 @@ return
 return
 end subroutine bstrp2
 
-pure subroutine bstrp1 (x, z, kz, m, n, t, k, a, ka, work, iflag)
+pure subroutine bstrp1(x, z, kz, m, n, t, k, a, ka, work, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
@@ -5936,7 +5936,7 @@ end interface
 !
 iflag = 1
 mp1 = m + 1
-call bstrp (x, z, t, m, k, work(1), work(mp1), iflag)
+call bstrp(x, z, t, m, k, work(1), work(mp1), iflag)
 if (iflag .ne. 0) return
 !
 do i = 1,m
@@ -5947,7 +5947,7 @@ if (n .eq. 1) return
 !     Remaining data sets
 !
 do j = 2,n
-   call bstrp (x, z(1,j), t, m, k, work(1), work(mp1), iflag)
+   call bstrp(x, z(1,j), t, m, k, work(1), work(mp1), iflag)
    do i = 1,m
       a(j,i) = work(i)
    end do
@@ -5955,7 +5955,7 @@ end do
 return
 end subroutine bstrp1
 
-pure subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
+pure subroutine bslsq2(x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
    & ty, ny, ky, a, ka, wk, l, iflag)
 implicit none
 integer, intent(inout) :: iflag
@@ -6013,12 +6013,12 @@ if (l .lt. m) go to 120
 !
 iw = nx*my + 1
 iq = iw + nx
-call bslsq1 (x, wx, mx, z, kz, my, tx, nx, kx, &
+call bslsq1(x, wx, mx, z, kz, my, tx, nx, kx, &
    & wk, my, wk(iw), wk(iq), ierr)
 if (ierr .lt. 0) go to 100
 !
 iq = iw + ny
-call bslsq1 (y, wy, my, wk, my, nx, ty, ny, ky, &
+call bslsq1(y, wy, my, wk, my, nx, ty, ny, ky, &
    & a, ka, wk(iw), wk(iq), iflag)
 if (iflag .lt. 0) go to 110
 iflag = max0(ierr,iflag)
@@ -6035,7 +6035,7 @@ wk(1) = m
 return
 end subroutine bslsq2
 
-pure subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
+pure subroutine bslsq1(tau, wgt, ntau, z, kz, m, t, n, k, &
    & a, ka, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -6148,7 +6148,7 @@ do l = 1,ntau
    go to 40
 !
 50 jj = 0
-   call bspvb (t, k, k, jj, tau(l), left, wk)
+   call bspvb(t, k, k, jj, tau(l), left, wk)
 !
    leftmk = left - k
    do mm = 1,k
@@ -6167,8 +6167,8 @@ end do
 !
 !        Solve the normal equations
 !
-call bchfac (q, k, n, wk, ierr)
-call bchsv1 (q, k, n, a, ka, m)
+call bchfac(q, k, n, wk, ierr)
+call bchsv1(q, k, n, a, ka, m)
 return
 !
 !             Error return
@@ -6177,7 +6177,7 @@ return
 return
 end subroutine bslsq1
 
-pure subroutine bchsv1 (w, nb, n, b, kb, m)
+pure subroutine bchsv1(w, nb, n, b, kb, m)
 implicit none
 integer, intent(in) :: kb, m, n, nb
 real, intent(in) :: w(nb,n)
@@ -6258,7 +6258,7 @@ if (k .gt. 0) go to 50
 return
 end subroutine bchsv1
 
-pure subroutine bval2 (a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
+pure subroutine bval2(a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
    & idx, idy, f, wk)
 implicit none
 integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
@@ -6315,9 +6315,9 @@ if (j .gt. ky) go to 20
 !     Case when  j .LE. ky
 !
 do l = 1,j
-   call bval (tx, a(1,l), nx, kx, x0, idx, wk(l), wk(iw))
+   call bval(tx, a(1,l), nx, kx, x0, idx, wk(l), wk(iw))
 end do
-call bval (ty, wk(1), j, ky, y0, idy, f, wk(iw))
+call bval(ty, wk(1), j, ky, y0, idy, f, wk(iw))
 return
 !
 !     Case when  j .GT. ky
@@ -6325,14 +6325,14 @@ return
 20 l = j - ky
 do i = 1,ky
    l = l + 1
-   call bval (tx, a(1,l), nx, kx, x0, idx, wk(i), wk(iw))
+   call bval(tx, a(1,l), nx, kx, x0, idx, wk(i), wk(iw))
 end do
 l = j - ky + 1
-call bval (ty(l), wk(1), ky, ky, y0, idy, f, wk(iw))
+call bval(ty(l), wk(1), ky, ky, y0, idy, f, wk(iw))
 return
 end subroutine bval2
 
-subroutine trmesh (n,x,y, iadj,iend,ier)
+subroutine trmesh(n,x,y, iadj,iend,ier)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: iadj(*), iend(n)
@@ -6586,7 +6586,7 @@ return
 return
 end subroutine trmesh
 
-subroutine adnode (kk,x,y, iadj,iend, ier)
+subroutine adnode(kk,x,y, iadj,iend, ier)
 implicit none
 integer, intent(in) :: kk
 integer, intent(inout) :: iadj(*), iend(kk)
@@ -6711,7 +6711,7 @@ if (in1 .eq. 0) go to 4
 !              decremented.
 !
 3 if ( .not. swptst(in1,k,io1,io2,x,y) ) go to 4
-call swapd (in1,k,io1,io2, iadj,iend)
+call swapd(in1,k,io1,io2, iadj,iend)
 io1 = in1
 indk1 = indk1 - 1
 indkf = indkf - 1
@@ -6734,7 +6734,7 @@ return
 return
 end subroutine adnode
 
-pure subroutine bdyadd (kk,i1,i2, iadj,iend )
+pure subroutine bdyadd(kk,i1,i2, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
@@ -6881,7 +6881,7 @@ iend(k) = kend
 return
 end subroutine bdyadd
 
-pure subroutine intadd (kk,i1,i2,i3, iadj,iend )
+pure subroutine intadd(kk,i1,i2,i3, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
@@ -7049,7 +7049,7 @@ end do
 return
 end subroutine intadd
 
-pure subroutine shiftd (nfrst,nlast,kk, iarr )
+pure subroutine shiftd(nfrst,nlast,kk, iarr )
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
@@ -7162,7 +7162,7 @@ i = i + 1
 go to 7
 end subroutine shiftd
 
-pure subroutine swapd (nin1,nin2,nout1,nout2, iadj,iend)
+pure subroutine swapd(nin1,nin2,nout1,nout2, iadj,iend)
 implicit none
 integer, intent(in) :: nin1, nin2, nout1, nout2
 integer, intent(inout) :: iadj(*), iend(*)
@@ -7365,7 +7365,7 @@ do 15 i = imin,imax
 return
 end subroutine swapd
 
-pure logical function swptst (in1,in2,io1,io2,x,y)
+pure logical function swptst(in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
@@ -7466,7 +7466,7 @@ if (sin12 .ge. 0.) return
 return
 end function swptst
 
-pure integer function tindx (nvertx,nabor,iadj,iend)
+pure integer function tindx(nvertx,nabor,iadj,iend)
 implicit none
 integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 integer :: nb, indx
@@ -7521,7 +7521,7 @@ tindx = indx
 return
 end function tindx
 
-subroutine trfind (nst,px,py,x,y,iadj,iend, i1,i2,i3)
+subroutine trfind(nst,px,py,x,y,iadj,iend, i1,i2,i3)
 implicit none
 integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
@@ -7820,7 +7820,7 @@ i3 = 0
 return
 end subroutine trfind
 
-pure subroutine gradg (n, x, y, z, iadj, iend, zxzy, ierr)
+pure subroutine gradg(n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -7856,7 +7856,7 @@ do j = 1,n
    zxzy(1,j) = 0.0
    zxzy(2,j) = 0.0
 end do
-call gradg1 (n, x, y, z, iadj, iend, eps, miter, zxzy, ierr)
+call gradg1(n, x, y, z, iadj, iend, eps, miter, zxzy, ierr)
 ierr = 0
 return
 !
@@ -7866,7 +7866,7 @@ return
 return
 end subroutine gradg
 
-pure subroutine gradg1 (n,x,y,z,iadj,iend,eps, nit, &
+pure subroutine gradg1(n,x,y,z,iadj,iend,eps, nit, &
    & zxzy, ier)
 implicit none
 integer, intent(in) :: n, iadj(*), iend(n)
@@ -8087,7 +8087,7 @@ ier = 2
 return
 end subroutine gradg1
 
-pure subroutine gradl (n, x, y, z, iadj, iend, zxzy, ierr)
+pure subroutine gradl(n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
@@ -8118,7 +8118,7 @@ end interface
 if (n .lt. 3) go to 20
 !
 do j = 1,n
-   call gradl1 (n, j, x, y, z, iadj, iend, zxzy(1,j), &
+   call gradl1(n, j, x, y, z, iadj, iend, zxzy(1,j), &
       & zxzy(2,j), ierr)
    if (ierr .lt. 0) go to 30
 end do
@@ -8134,7 +8134,7 @@ return
 return
 end subroutine gradl
 
-pure subroutine gradl1 (n,k,x,y,z,iadj,iend, dx,dy,ier)
+pure subroutine gradl1(n,k,x,y,z,iadj,iend, dx,dy,ier)
 implicit none
 integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
@@ -8333,14 +8333,14 @@ sum = 0.
 npts(1) = kk
 lm1 = lmin - 1
 do 1 lnp = 2,lm1
-   call getnp (x,y,iadj,iend,lnp, npts, ds,ierr)
+   call getnp(x,y,iadj,iend,lnp, npts, ds,ierr)
 1  sum = sum + ds
 !
 ! Add additional nodes to npts until the relative increase
 !   in ds is at least rtol.
 !
 do 2 lnp = lmin,lmax
-   call getnp (x,y,iadj,iend,lnp, npts, rs,ierr)
+   call getnp(x,y,iadj,iend,lnp, npts, rs,ierr)
    if ((rs - ds)/ds .le. rtol) go to 2
    if (lnp .gt. 6) go to 3
 2  sum = sum + rs
@@ -8369,15 +8369,15 @@ if (lnp .lt. 7) go to 12
 !
 do 5 i = 1,5
    np = npts(i + 1)
-   call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+   call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
       & r, a(1,i))
    if (i .eq. 1) go to 5
    im1 = i - 1
    do 4 j = 1,im1
       jp1 = j + 1
       l = 6 - j
-      call srotg (a(j,j),a(j,i),c,s)
-4     call srot (l,a(jp1,j),1,a(jp1,i),1,c,s)
+      call srotg(a(j,j),a(j,i),c,s)
+4     call srot(l,a(jp1,j),1,a(jp1,i),1,c,s)
 5  continue
 !
 ! Add the additional equations to the system using
@@ -8386,13 +8386,13 @@ do 5 i = 1,5
 i = 7
 6 if (i .eq. lnp) go to 8
 np = npts(i)
-call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,6))
 do 7 j = 1,5
    jp1 = j + 1
    l = 6 - j
-   call srotg (a(j,j),a(j,6),c,s)
-7  call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+   call srotg(a(j,j),a(j,6),c,s)
+7  call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
 i = i + 1
 go to 6
 !
@@ -8407,7 +8407,7 @@ if (lnp .gt. lmax) go to 9
 !   I .EQ. lnp
 !
 lnp = lnp + 1
-if (lnp .le. lmax) call getnp (x,y,iadj,iend,lnp, &
+if (lnp .le. lmax) call getnp(x,y,iadj,iend,lnp, &
    & npts, rs,ierr)
 r = sqrt(1.1*rs)
 go to 6
@@ -8424,32 +8424,32 @@ go to 6
    do 11 j = i,5
       jp1 = j + 1
       l = 6 - j
-      call srotg (a(j,j),a(j,6),c,s)
-11    call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+      call srotg(a(j,j),a(j,6),c,s)
+11    call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
 go to 14
 !
 ! 4 .LE. lnp .LE. 6 (2, 3, OR 4 EQUATIONS) -- fit a plane to
 !   the data using the last 3 columns of A.
 !
 12 np = npts(2)
-call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,4))
 np = npts(3)
-call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,5))
-call srotg (a(4,4),a(4,5),c,s)
-call srot (2,a(5,4),1,a(5,5),1,c,s)
+call srotg(a(4,4),a(4,5),c,s)
+call srot(2,a(5,4),1,a(5,5),1,c,s)
 if (lnp .eq. 4) go to 14
 !
 lm1 = lnp - 1
 do 13 i = 4,lm1
    np = npts(i)
-   call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+   call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
       & r, a(1,6))
-   call srotg (a(4,4),a(4,6),c,s)
-   call srot (2,a(5,4),1,a(5,6),1,c,s)
-   call srotg (a(5,5),a(5,6),c,s)
-13 call srot (1,a(6,5),1,a(6,6),1,c,s)
+   call srotg(a(4,4),a(4,6),c,s)
+   call srot(2,a(5,4),1,a(5,6),1,c,s)
+   call srotg(a(5,5),a(5,6),c,s)
+13 call srot(1,a(6,5),1,a(6,6),1,c,s)
 !
 ! Test the linear fit for ill-conditioning
 !
@@ -8475,7 +8475,7 @@ return
 return
 end subroutine gradl1
 
-pure subroutine setrm (xk,yk,zk,xi,yi,zi,s1,s2,r, row)
+pure subroutine setrm(xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
 real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
 real, intent(inout) :: row(6)
@@ -8560,7 +8560,7 @@ return
 return
 end subroutine setrm
 
-pure subroutine getnp (x,y,iadj,iend,l, npts, ds,ier)
+pure subroutine getnp(x,y,iadj,iend,l, npts, ds,ier)
 implicit none
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(*)
@@ -8709,7 +8709,7 @@ return
 return
 end subroutine getnp
 
-subroutine sfval (n, x, y, z, m, xi, yi, zi, iadj, iend, &
+subroutine sfval(n, x, y, z, m, xi, yi, zi, iadj, iend, &
    & zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -8729,7 +8729,7 @@ if (n .lt. 3 .or. m .lt. 1) go to 20
 !
 ist = 1
 do j = 1,m
-   call intrc1 (n, xi(j), yi(j), x, y, z, iadj, iend, &
+   call intrc1(n, xi(j), yi(j), x, y, z, iadj, iend, &
       & 1, zxzy, ist, zi(j), ierr)
    if (ierr .lt. 0) go to 30
 end do
@@ -8744,7 +8744,7 @@ return
 return
 end subroutine sfval
 
-subroutine sfval2 (n, x, y, z, l, m, nrows, xi, yi, zi, &
+subroutine sfval2(n, x, y, z, l, m, nrows, xi, yi, zi, &
    & iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -8766,7 +8766,7 @@ if (n .lt. 3 .or. l .lt. 1 .or. m .lt. 1 .or. nrows .lt. l) &
 ist = 1
 do j = 1,m
    do i = 1,l
-      call intrc1 (n, xi(i), yi(j), x, y, z, iadj, iend, &
+      call intrc1(n, xi(i), yi(j), x, y, z, iadj, iend, &
          & 1, zxzy, ist, zi(i,j), ierr)
       if (ierr .lt. 0) go to 40
    end do
@@ -8782,7 +8782,7 @@ return
 return
 end subroutine sfval2
 
-subroutine intrc1 (n,px,py,x,y,z,iadj,iend,iflag, &
+subroutine intrc1(n,px,py,x,y,z,iadj,iend,iflag, &
    & zxzy, ist, pz,ier)
 implicit none
 integer, intent(in) :: n, iadj(*)
@@ -9093,7 +9093,7 @@ return
 return
 end subroutine intrc1
 
-pure elemental subroutine tval (x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
+pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
    & zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
    & ier)
 implicit none
@@ -10555,7 +10555,7 @@ psistt = cstt + fitiwk(2)
 !     The actual evaluation is done inside  meval1.
 !     ***************
 !
-call meval1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
+call meval1(evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
    & fitdwk(alfstt),fitiwk,fitdwk(psistt), &
    & evlvls,alfl,fitdwk(maxstt),temp,dimp1)
 return
