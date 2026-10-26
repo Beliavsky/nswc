@@ -279,8 +279,8 @@ do 270 i = k, l
 !
    do 200 j = k, l
       if (j == i) go to 200
-      c = c + dabs(a(j,i))
-      r = r + dabs(a(i,j))
+      c = c + abs(a(j,i))
+      r = r + abs(a(i,j))
 200   continue
 !     ********** Guard against zero c or r due to underflow **********
    if (c == 0.d0 .or. r == 0.d0) go to 270
@@ -453,7 +453,7 @@ do 180 m = kp1, la
    scale = 0.d0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
-90    scale = scale + dabs(a(i,m - 1))
+90    scale = scale + abs(a(i,m - 1))
 !
    if (scale == 0.d0) go to 180
    mp = m + igh
@@ -464,7 +464,7 @@ do 180 m = kp1, la
       h = h + ort(i) * ort(i)
    end do
 !
-   g = dsqrt(h)
+   g = sqrt(h)
    if (ort(m) >= 0.d0) g = -g
    h = h - ort(m) * g
    ort(m) = ort(m) - g
@@ -593,7 +593,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40    norm = norm + dabs(h(i,j))
+40    norm = norm + abs(h(i,j))
 !
    k = i
    if (i >= low .and. i <= igh) go to 50
@@ -613,9 +613,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l == low) go to 100
-   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if (dabs(h(l,l - 1)) <= machep * s) go to 100
+   if (abs(h(l,l - 1)) <= machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -631,7 +631,7 @@ t = t + x
 do 120 i = low, en
 120 h(i,i) = h(i,i) - x
 !
-s = dabs(h(en,na)) + dabs(h(na,enm2))
+s = abs(h(en,na)) + abs(h(na,enm2))
 x = .75d0 * s
 y = x
 w = -.4375d0 * s * s
@@ -647,13 +647,13 @@ do mm = l, enm2
    p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
    q = h(m + 1,m + 1) - zz - r - s
    r = h(m + 2,m + 1)
-   s = dabs(p) + dabs(q) + dabs(r)
+   s = abs(p) + abs(q) + abs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m == l) go to 150
-   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) <= machep * dabs(p) &
-      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
+   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
+      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
@@ -672,12 +672,12 @@ do 260 k = m, na
    q = h(k + 1,k - 1)
    r = 0.d0
    if (notlas) r = h(k + 2,k - 1)
-   x = dabs(p) + dabs(q) + dabs(r)
+   x = abs(p) + abs(q) + abs(r)
    if (x == 0.d0) go to 260
    p = p / x
    q = q / x
    r = r / x
-170 s = dsqrt(p*p + q*q + r*r)
+170 s = sqrt(p*p + q*q + r*r)
    if (p < 0.d0) s = -s
    if (k == m) go to 180
    h(k,k - 1) = -s * x
@@ -699,7 +699,7 @@ do 260 k = m, na
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k + 3)
+   j = min(en,k + 3)
 !     ********** Column modification **********
    do i = l, j
       p = x * h(i,k) + y * h(i,k + 1)
@@ -721,7 +721,7 @@ go to 60
 !     ********** Two roots found **********
 280 p = (y - x) / 2.d0
 q = p * p + w
-zz = dsqrt(dabs(q))
+zz = sqrt(abs(q))
 x = x + t
 if (q < 0.d0) go to 320
 !     ********** Real pair **********
@@ -1108,7 +1108,7 @@ k = 1
 do 50 i = 1, n
 !
    do 40 j = k, n
-40    norm = norm + dabs(h(i,j))
+40    norm = norm + abs(h(i,j))
 !
    k = i
    if (i >= low .and. i <= igh) go to 50
@@ -1128,9 +1128,9 @@ enm2 = na - 1
 70 do ll = low, en
    l = en + low - ll
    if (l == low) go to 100
-   s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
    if (s == 0.d0) s = norm
-   if (dabs(h(l,l - 1)) <= machep * s) go to 100
+   if (abs(h(l,l - 1)) <= machep * s) go to 100
 end do
 !     ********** Form shift **********
 100 x = h(en,en)
@@ -1146,7 +1146,7 @@ t = t + x
 do 120 i = low, en
 120 h(i,i) = h(i,i) - x
 !
-s = dabs(h(en,na)) + dabs(h(na,enm2))
+s = abs(h(en,na)) + abs(h(na,enm2))
 x = .75d0 * s
 y = x
 w = -.4375d0 * s * s
@@ -1162,13 +1162,13 @@ do mm = l, enm2
    p = (r * s - w) / h(m + 1,m) + h(m,m + 1)
    q = h(m + 1,m + 1) - zz - r - s
    r = h(m + 2,m + 1)
-   s = dabs(p) + dabs(q) + dabs(r)
+   s = abs(p) + abs(q) + abs(r)
    p = p / s
    q = q / s
    r = r / s
    if (m == l) go to 150
-   if (dabs(h(m,m - 1)) * (dabs(q) + dabs(r)) <= machep * dabs(p) &
-      & * (dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))) go to 150
+   if (abs(h(m,m - 1)) * (abs(q) + abs(r)) <= machep * abs(p) &
+      & * (abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))) go to 150
 end do
 !
 150 mp2 = m + 2
@@ -1187,12 +1187,12 @@ do 260 k = m, na
    q = h(k + 1,k - 1)
    r = 0.d0
    if (notlas) r = h(k + 2,k - 1)
-   x = dabs(p) + dabs(q) + dabs(r)
+   x = abs(p) + abs(q) + abs(r)
    if (x == 0.d0) go to 260
    p = p / x
    q = q / x
    r = r / x
-170 s = dsqrt(p*p + q*q + r*r)
+170 s = sqrt(p*p + q*q + r*r)
    if (p < 0.d0) s = -s
    if (k == m) go to 180
    h(k,k - 1) = -s * x
@@ -1214,7 +1214,7 @@ do 260 k = m, na
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k + 3)
+   j = min(en,k + 3)
 !     ********** Column modification **********
    do i = 1, j
       p = x * h(i,k) + y * h(i,k + 1)
@@ -1246,7 +1246,7 @@ go to 60
 !     ********** Two roots found **********
 280 p = (y - x) / 2.d0
 q = p * p + w
-zz = dsqrt(dabs(q))
+zz = sqrt(abs(q))
 h(en,en) = x + t
 x = h(en,en)
 h(na,na) = y + t
@@ -1260,10 +1260,10 @@ if (zz /= 0.d0) wr(en) = x - w / zz
 wi(na) = 0.d0
 wi(en) = 0.d0
 x = h(en,na)
-s = dabs(x) + dabs(zz)
+s = abs(x) + abs(zz)
 p = x / s
 q = zz / s
-r = dsqrt(p*p + q*q)
+r = sqrt(p*p + q*q)
 p = p / r
 q = q / r
 !     ********** Row modification **********
@@ -1333,7 +1333,7 @@ do 800 nn = 1, n
       q = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i)
       t = (x * s - zz * r) / q
       h(i,en) = t
-      if (dabs(x) <= dabs(zz)) go to 650
+      if (abs(x) <= abs(zz)) go to 650
       h(i + 1,en) = (-r - w * t) / x
       go to 700
 650   h(i + 1,en) = (-s - y * t) / zz
@@ -1344,7 +1344,7 @@ do 800 nn = 1, n
 710 m = na
 !     ********** Last vector component chosen imaginary so that
 !                eigenvector matrix is triangular **********
-   if (dabs(h(en,na)) <= dabs(h(na,en))) go to 720
+   if (abs(h(en,na)) <= abs(h(na,en))) go to 720
    h(na,na) = q / h(en,na)
    h(na,en) = -(h(en,en) - p) / h(en,na)
    go to 730
@@ -1385,13 +1385,13 @@ do 800 nn = 1, n
       vr = (wr(i) - p) * (wr(i) - p) + wi(i) * wi(i) - q * q
       vi = (wr(i) - p) * 2.d0 * q
       if (vr == 0.d0 .and. vi == 0.d0) vr = machep * norm &
-         & * (dabs(w) + dabs(q) + dabs(x) + dabs(y) + dabs(zz))
+         & * (abs(w) + abs(q) + abs(x) + abs(y) + abs(zz))
       a = x * r - zz * ra + q * sa
       b = x * s - zz * sa - q * ra
       d = vr * vr + vi * vi
       h(i,na) = (a * vr + b * vi) / d
       h(i,en) = (b * vr - a * vi) / d
-      if (dabs(x) <= dabs(zz) + dabs(q)) go to 785
+      if (abs(x) <= abs(zz) + abs(q)) go to 785
       h(i + 1,na) = (-ra - w * h(i,na) + q * h(i,en)) / x
       h(i + 1,en) = (-sa - w * h(i,en) - q * h(i,na)) / x
       go to 790
@@ -1417,7 +1417,7 @@ do 840 i = 1, n
 !                For j=n step -1 Until low do -- **********
 do 880 jj = low, n
    j = n + low - jj
-   m = min0(j,igh)
+   m = min(j,igh)
 !
    do 880 i = low, igh
       zz = 0.d0
@@ -2722,7 +2722,7 @@ do ii = 1, n
    if (l < 1) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
-120   scale = scale + dabs(a(i,k))
+120   scale = scale + abs(a(i,k))
 !
    if (scale /= 0.d0) go to 140
 130 e(i) = 0.d0
@@ -2736,7 +2736,7 @@ do ii = 1, n
 !
    e2(i) = scale * scale * h
    f = a(i,l)
-   g = dsqrt(h)
+   g = sqrt(h)
    if (f >= 0.d0) g = -g
    e(i) = scale * g
    h = h - f * g
@@ -2841,7 +2841,7 @@ do ii = 1, n
    do k = 1, l
       iz = iz + 1
       d(k) = a(iz)
-      scale = scale + dabs(d(k))
+      scale = scale + abs(d(k))
    end do
 !
    if (scale /= 0.d0) go to 140
@@ -2856,7 +2856,7 @@ do ii = 1, n
 !
    e2(i) = scale * scale * h
    f = d(l)
-   g = dsqrt(h)
+   g = sqrt(h)
    if (f >= 0.d0) g = -g
    e(i) = scale * g
    h = h - f * g
@@ -2893,7 +2893,7 @@ do ii = 1, n
 260      continue
 !
 290 d(i) = a(iz + 1)
-   a(iz + 1) = scale * dsqrt(h)
+   a(iz + 1) = scale * sqrt(h)
 end do
 !
 return
@@ -2969,7 +2969,7 @@ e2(n) = 0.d0
 !
 do l = 1, n
    j = 0
-   h = machep * (dabs(d(l)) + dsqrt(e2(l)))
+   h = machep * (abs(d(l)) + sqrt(e2(l)))
    if (b > h) go to 105
    b = h
    c = b * b
@@ -2985,10 +2985,10 @@ do l = 1, n
    j = j + 1
 !     ********** Form shift **********
    l1 = l + 1
-   s = dsqrt(e2(l))
+   s = sqrt(e2(l))
    g = d(l)
    p = (d(l1) - g) / (2.d0 * s)
-   r = dsqrt(p*p + 1.d0)
+   r = sqrt(p*p + 1.d0)
    if (p < 0.d0) r = -r
    d(l) = s / (p + r)
    h = g - d(l)
@@ -3020,7 +3020,7 @@ do l = 1, n
    d(l) = h
 !     ********** Guard against underflow in convergence test **********
    if (h == 0.d0) go to 210
-   if (dabs(e2(l)) <= dabs(c/h)) go to 210
+   if (abs(e2(l)) <= abs(c/h)) go to 210
    e2(l) = h * e2(l)
    if (e2(l) /= 0.d0) go to 130
 210 p = d(l) + f
@@ -3108,7 +3108,7 @@ do ii = 2, n
    if (l < 2) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
-120   scale = scale + dabs(z(i,k))
+120   scale = scale + abs(z(i,k))
 !
    if (scale /= 0.d0) go to 140
 130 e(i) = z(i,l)
@@ -3120,7 +3120,7 @@ do ii = 2, n
    end do
 !
    f = z(i,l)
-   g = dsqrt(h)
+   g = sqrt(h)
    if (f >= 0.d0) g = -g
    e(i) = scale * g
    h = h - f * g
@@ -3279,11 +3279,11 @@ e(n) = 0.d0
 !
 do l = 1, n
    j = 0
-   h = machep * (dabs(d(l)) + dabs(e(l)))
+   h = machep * (abs(d(l)) + abs(e(l)))
    if (b < h) b = h
 !     ********** Look for small sub-diagonal element **********
    do m = l, n
-      if (dabs(e(m)) <= b) go to 120
+      if (abs(e(m)) <= b) go to 120
 !     ********** e(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
    end do
@@ -3295,7 +3295,7 @@ do l = 1, n
    l1 = l + 1
    g = d(l)
    p = (d(l1) - g) / (2.d0 * e(l))
-   r = dsqrt(p*p + 1.d0)
+   r = sqrt(p*p + 1.d0)
    if (p < 0.d0) r = -r
    d(l) = e(l) / (p + r)
    h = g - d(l)
@@ -3314,15 +3314,15 @@ do l = 1, n
       i = m - ii
       g = c * e(i)
       h = c * p
-      if (dabs(p) < dabs(e(i))) go to 150
+      if (abs(p) < abs(e(i))) go to 150
       c = e(i) / p
-      r = dsqrt(c*c + 1.d0)
+      r = sqrt(c*c + 1.d0)
       e(i + 1) = s * p * r
       s = c / r
       c = 1.d0 / r
       go to 160
 150   c = p / e(i)
-      r = dsqrt(c*c + 1.d0)
+      r = sqrt(c*c + 1.d0)
       e(i + 1) = s * e(i) * r
       s = 1.d0 / r
       c = c * s
@@ -3339,7 +3339,7 @@ do l = 1, n
 !
    e(l) = s * p
    d(l) = c * p
-   if (dabs(e(l)) > b) go to 130
+   if (abs(e(l)) > b) go to 130
 220 d(l) = d(l) + f
 end do
 !     ********** Order eigenvalues and eigenvectors **********
@@ -3780,7 +3780,7 @@ do 180 m = kp1, la
    end do
 !
    g = sqrt(h)
-   f = cabs(cmplx(ortr(m),orti(m)))
+   f = abs(cmplx(ortr(m),orti(m)))
    if (f == 0.0) go to 103
    h = h + f * g
    g = g / f
@@ -3931,9 +3931,9 @@ if (low == igh) go to 180
 l = low + 1
 !
 do 170 i = l, igh
-   ll = min0(i + 1,igh)
+   ll = min(i + 1,igh)
    if (hi(i,i - 1) == 0.0) go to 170
-   norm = cabs(cmplx(hr(i,i - 1),hi(i,i - 1)))
+   norm = abs(cmplx(hr(i,i - 1),hi(i,i - 1)))
    yr = hr(i,i - 1) / norm
    yi = hi(i,i - 1) / norm
    hr(i,i - 1) = norm
@@ -3986,7 +3986,7 @@ xi = hi(enm1,en) * hr(en,enm1)
 if (xr == 0.0 .and. xi == 0.0) go to 340
 yr = (hr(enm1,enm1) - sr) / 2.0
 yi = (hi(enm1,enm1) - si) / 2.0
-z3 = csqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
+z3 = sqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
 zzr = real(z3)
 zzi = aimag(z3)
 if (yr * zzr + yi * zzi >= 0.0) go to 310
@@ -4039,7 +4039,7 @@ end do
 !
 si = hi(en,en)
 if (si == 0.0) go to 540
-norm = cabs(cmplx(hr(en,en),si))
+norm = abs(cmplx(hr(en,en),si))
 sr = hr(en,en) / norm
 si = si / norm
 hr(en,en) = norm
@@ -4323,9 +4323,9 @@ if (iend) 180, 150, 105
 150 l = low + 1
 !
 do 170 i = l, igh
-   ll = min0(i + 1,igh)
+   ll = min(i + 1,igh)
    if (hi(i,i - 1) == 0.0) go to 170
-   norm = cabs(cmplx(hr(i,i - 1),hi(i,i - 1)))
+   norm = abs(cmplx(hr(i,i - 1),hi(i,i - 1)))
    yr = hr(i,i - 1) / norm
    yi = hi(i,i - 1) / norm
    hr(i,i - 1) = norm
@@ -4384,7 +4384,7 @@ xi = hi(enm1,en) * hr(en,enm1)
 if (xr == 0.0 .and. xi == 0.0) go to 340
 yr = (hr(enm1,enm1) - sr) / 2.0
 yi = (hi(enm1,enm1) - si) / 2.0
-z3 = csqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
+z3 = sqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
 zzr = real(z3)
 zzi = aimag(z3)
 if (yr * zzr + yi * zzi >= 0.0) go to 310
@@ -4437,7 +4437,7 @@ end do
 !
 si = hi(en,en)
 if (si == 0.0) go to 540
-norm = cabs(cmplx(hr(en,en),si))
+norm = abs(cmplx(hr(en,en),si))
 sr = hr(en,en) / norm
 si = si / norm
 hr(en,en) = norm
@@ -4563,7 +4563,7 @@ do 840 i = 1, enm1
 !                For j=n step -1 Until low+1 do -- **********
 do 880 jj = low, enm1
    j = n + low - jj
-   m = min0(j - 1,igh)
+   m = min(j - 1,igh)
 !
    do 880 i = low, igh
       zzr = zr(i,j)
@@ -4875,8 +4875,8 @@ do 270 i = k, l
 !
    do 200 j = k, l
       if (j == i) go to 200
-      c = c + dabs(ar(j,i)) + dabs(ai(j,i))
-      r = r + dabs(ar(i,j)) + dabs(ai(i,j))
+      c = c + abs(ar(j,i)) + abs(ai(j,i))
+      r = r + abs(ar(i,j)) + abs(ai(i,j))
 200   continue
 !     ********** Guard against zero c or r due to underflow **********
    if (c == 0.d0 .or. r == 0.d0) go to 270
@@ -4988,7 +4988,7 @@ do 180 m = kp1, la
    scale = 0.d0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
-90    scale = scale + dabs(ar(i,m - 1)) + dabs(ai(i,m - 1))
+90    scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
 !
    if (scale == 0.d0) go to 180
    mp = m + igh
@@ -5000,7 +5000,7 @@ do 180 m = kp1, la
       h = h + ortr(i) * ortr(i) + orti(i) * orti(i)
    end do
 !
-   g = dsqrt(h)
+   g = sqrt(h)
    f = dcpabs(ortr(m),orti(m))
    if (f == 0.d0) go to 103
    h = h + f * g
@@ -5158,7 +5158,7 @@ if (low == igh) go to 180
 l = low + 1
 !
 do 170 i = l, igh
-   ll = min0(i + 1,igh)
+   ll = min(i + 1,igh)
    if (hi(i,i - 1) == 0.d0) go to 170
    norm = dcpabs(hr(i,i - 1),hi(i,i - 1))
    yr = hr(i,i - 1) / norm
@@ -5198,9 +5198,9 @@ enm1 = en - 1
 240 do ll = low, en
    l = en + low - ll
    if (l == low) go to 300
-   if (dabs(hr(l,l - 1)) <= &
-      & machep * (dabs(hr(l - 1,l - 1)) + dabs(hi(l - 1,l - 1)) &
-      & + dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
 end do
 !     ********** Form shift **********
 300 if (l == en) go to 660
@@ -5228,7 +5228,7 @@ sr = sr - (xr*z(1) + xi*z(2))/r2
 si = si - (xi*z(1) - xr*z(2))/r2
 go to 340
 !     ********** Form exceptional shift **********
-320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en - 2))
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
 si = 0.d0
 !
 340 do i = low, en
@@ -5245,7 +5245,7 @@ lp1 = l + 1
 do i = lp1, en
    sr = hr(i,i - 1)
    hr(i,i - 1) = 0.d0
-   norm = dsqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
       & + sr*sr)
    xr = hr(i - 1,i - 1) / norm
    wr(i - 1) = xr
@@ -5559,7 +5559,7 @@ if (iend) 180, 150, 105
 150 l = low + 1
 !
 do 170 i = l, igh
-   ll = min0(i + 1,igh)
+   ll = min(i + 1,igh)
    if (hi(i,i - 1) == 0.d0) go to 170
    norm = dcpabs(hr(i,i - 1),hi(i,i - 1))
    yr = hr(i,i - 1) / norm
@@ -5605,9 +5605,9 @@ enm1 = en - 1
 240 do ll = low, en
    l = en + low - ll
    if (l == low) go to 300
-   if (dabs(hr(l,l - 1)) <= &
-      & machep * (dabs(hr(l - 1,l - 1)) + dabs(hi(l - 1,l - 1)) &
-      & + dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
 end do
 !     ********** Form shift **********
 300 if (l == en) go to 660
@@ -5635,7 +5635,7 @@ sr = sr - (xr*z(1) + xi*z(2))/r2
 si = si - (xi*z(1) - xr*z(2))/r2
 go to 340
 !     ********** Form exceptional shift **********
-320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en - 2))
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
 si = 0.d0
 !
 340 do i = low, en
@@ -5652,7 +5652,7 @@ lp1 = l + 1
 do i = lp1, en
    sr = hr(i,i - 1)
    hr(i,i - 1) = 0.d0
-   norm = dsqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
       & + sr*sr)
    xr = hr(i - 1,i - 1) / norm
    wr(i - 1) = xr
@@ -5753,7 +5753,7 @@ go to 220
 do 720 i = 1, n
 !
    do 720 j = i, n
-      norm = norm + dabs(hr(i,j)) + dabs(hi(i,j))
+      norm = norm + abs(hr(i,j)) + abs(hi(i,j))
 720   continue
 !
 if (n == 1 .or. norm == 0.d0) go to 1001
@@ -5803,7 +5803,7 @@ do 840 i = 1, enm1
 !                For j=n step -1 Until low+1 do -- **********
 do 880 jj = low, enm1
    j = n + low - jj
-   m = min0(j - 1,igh)
+   m = min(j - 1,igh)
 !
    do 880 i = low, igh
       zzr = zr(i,j)
@@ -6184,7 +6184,7 @@ if (iu(2,ii) == 1) go to 420
 go to 400
 390 iineg = -ii
 if (iu(1,iineg) == 1) go to 420
-400 ii = iabs(ii)
+400 ii = abs(ii)
 cuv = cu(1,ii) + cu(2,ii)
 if (q(klm1,in) - pivot*cuv <= toler) go to 420
 ! Bypass intermediate vertices.
@@ -6706,7 +6706,7 @@ rat = ratio
 ratio = rnrm2/xnrm2
 if (ratio <= fourth*rat) go to 20
 !
-if (ratio <= amin1(rat,four*eps2)) return
+if (ratio <= min(rat,four*eps2)) return
 exit = .false.
 return
 end subroutine orimp
@@ -6760,7 +6760,7 @@ return
    rnorm = 0.d0
    do 21 i = np1,m
 21    rnorm = rnorm + b(i,j)*b(i,j)
-   b(np1,j) = dsqrt(rnorm)
+   b(np1,j) = sqrt(rnorm)
 22 continue
 return
 end subroutine dllsq
@@ -6833,7 +6833,7 @@ do 80 j = 1, nn
 !                                       Search for pivot in the j-TH
 !                                       column and interchange rows.
    do k = jp, m
-      if (dabs(qr(k,j)) > dabs(qr(kj,j))) kj = k
+      if (abs(qr(k,j)) > abs(qr(kj,j))) kj = k
    end do
    if (qr(kj,j) == 0.d0) go to 90
    if (kj == j) go to 30
@@ -6850,7 +6850,7 @@ do 80 j = 1, nn
    sav = 1.d0
    do 40 i = jp, m
 40    sav = sav + qr(i,j)*qr(i,j)
-   s(j) = -dsqrt(sav)
+   s(j) = -sqrt(sav)
    qr(j,j) = s(j)*ajj
    if (jp > n) go to 80
 !                                       Premultiply QR with the j-TH
@@ -7119,8 +7119,8 @@ if (m < 1 .or. n < 1) go to 210
 if (mda < m) go to 220
 if (liw < m + n) go to 240
 !
-m0 = min0(m,n)
-n0 = max0(m,n)
+m0 = min(m,n)
+n0 = max(m,n)
 !     num = 0
 !
 if (nb <= 0) go to 10
@@ -7139,7 +7139,7 @@ m4 = m3 + m0
 m5 = m4 + m0
 !
 eps = 10.0*spmpar(1)
-rerr = amax1(eps,re)
+rerr = max(eps,re)
 !
 imax = m5 - 1
 do i = m4,imax
@@ -7332,7 +7332,7 @@ end do
 !         Initialize error bounds
 !
 do i = 1,n
-   eb(i) = amax1(db(i),ub(i)*h(i))
+   eb(i) = max(db(i),ub(i)*h(i))
    ub(i) = eb(i)
    db(i) = 0.0
 end do
@@ -7471,7 +7471,7 @@ do 240 i = jp1,n
    if (i <= np) go to 240
    if (h(i) == 0.0) go to 240
    tt = 1.0 - (a(j,i)/h(i))**2
-   tt = amax1(tt,0.0)
+   tt = max(tt,0.0)
    t = tt
    tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
    if (tt == 1.0) go to 230
@@ -7625,7 +7625,7 @@ end do
 go to 40
 !
 100 do i = 1,m
-   ir(i) = iabs(ir(i))
+   ir(i) = abs(ir(i))
 end do
 !
 !     Apply Householder transformations to b
@@ -7703,7 +7703,7 @@ if (j /= i) go to 250
 go to 240
 !
 260 do i = 1,n
-   ic(i) = iabs(ic(i))
+   ic(i) = abs(ic(i))
 end do
 return
 end subroutine u12ls
@@ -7808,7 +7808,7 @@ end do
 !         Initialize error bounds
 !
 do i = 1,m
-   eb(i) = amax1(db(i),ub(i)*h(i))
+   eb(i) = max(db(i),ub(i)*h(i))
    ub(i) = eb(i)
    db(i) = 0.0
 end do
@@ -7947,7 +7947,7 @@ do 240 i = jp1,m
    if (i <= np) go to 240
    if (h(i) == 0.0) go to 240
    tt = 1.0 - (a(i,j)/h(i))**2
-   tt = amax1(tt,0.0)
+   tt = max(tt,0.0)
    t = tt
    tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
    if (tt == 1.0) go to 230
@@ -8101,7 +8101,7 @@ end do
 go to 40
 !
 100 do i = 1,m
-   ir(i) = iabs(ir(i))
+   ir(i) = abs(ir(i))
 end do
 !
 !     If A is of reduced rank and mode=2,
@@ -8177,7 +8177,7 @@ if (j /= i) go to 250
 go to 240
 !
 260 do i = 1,n
-   ic(i) = iabs(ic(i))
+   ic(i) = abs(ic(i))
 end do
 return
 end subroutine u12us
@@ -8411,8 +8411,8 @@ if (m < 1 .or. n < 1) go to 210
 if (mda < m) go to 220
 if (liw < m + n) go to 240
 !
-m0 = min0(m,n)
-n0 = max0(m,n)
+m0 = min(m,n)
+n0 = max(m,n)
 !     num = 0
 !
 if (nb <= 0) go to 10
@@ -8431,7 +8431,7 @@ m4 = m3 + m0
 m5 = m4 + m0
 !
 eps = 10.d0*dpmpar(1)
-rerr = dmax1(eps,re)
+rerr = max(eps,re)
 !
 imax = m5 - 1
 do i = m4,imax
@@ -8625,7 +8625,7 @@ end do
 !         Initialize error bounds
 !
 do i = 1,n
-   eb(i) = dmax1(db(i),ub(i)*h(i))
+   eb(i) = max(db(i),ub(i)*h(i))
    ub(i) = eb(i)
    db(i) = 0.d0
 end do
@@ -8686,7 +8686,7 @@ do 120 i = j,kz
 !     Test for rank deficiency
 !
 if (rmin < 1.d0) go to 200
-tt = (eb(imin) + dabs(db(imin)))/h(imin)
+tt = (eb(imin) + abs(db(imin)))/h(imin)
 if (tt >= 1.d0) go to 170
 !
 !     Compute exact ub
@@ -8707,7 +8707,7 @@ go to 130
 !
 150 tt = eb(imin)
 do i = 1,jm1
-   tt = tt + dabs(w(i))*eb(i)
+   tt = tt + abs(w(i))*eb(i)
 end do
 ub(imin) = tt
 if (ub(imin)/h(imin) >= 1.d0) go to 170
@@ -8754,7 +8754,7 @@ call iswap(1,ir(j),1,ir(jmax),1)
 !
 220 tn = dnrm2(mm,a(j,j),1)
 if (tn == 0.d0) go to 170
-if (a(j,j) /= 0.d0) tn = dsign(tn,a(j,j))
+if (a(j,j) /= 0.d0) tn = sign(tn,a(j,j))
 call dscal(mm,1.d0/tn,a(j,j),1)
 a(j,j) = a(j,j) + 1.d0
 if (j == n) go to 250
@@ -8764,11 +8764,11 @@ do 240 i = jp1,n
    if (i <= np) go to 240
    if (h(i) == 0.d0) go to 240
    tt = 1.d0 - (a(j,i)/h(i))**2
-   tt = dmax1(tt,0.d0)
+   tt = max(tt,0.d0)
    t = tt
    tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
    if (tt == 1.d0) go to 230
-   h(i) = h(i)*dsqrt(t)
+   h(i) = h(i)*sqrt(t)
    go to 240
 230 h(i) = dnrm2(m - j,a(j + 1,i),1)
    w(i) = h(i)
@@ -8779,11 +8779,11 @@ a(j,j) = -tn
 !
 !          Update ub, db
 !
-ub(j) = ub(j)/dabs(a(j,j))
-db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
 if (j == krank) go to 300
 do i = jp1,krank
-   ub(i) = ub(i) + dabs(a(j,i))*ub(j)
+   ub(i) = ub(i) + abs(a(j,i))*ub(j)
    db(i) = db(i) - a(j,i)*db(j)
 end do
 go to 100
@@ -8825,7 +8825,7 @@ nmk = n - krank
 kp1 = krank + 1
 i = krank
 340 tn = dnrm2(nmk,a(i,kp1),mda)/a(i,i)
-tn = a(i,i)*dsqrt(1.d0 + tn*tn)
+tn = a(i,i)*sqrt(1.d0 + tn*tn)
 call dscal(nmk,1.d0/tn,a(i,kp1),mda)
 w(i) = a(i,i)/tn + 1.d0
 a(i,i) = -tn
@@ -8949,7 +8949,7 @@ end do
 go to 40
 !
 100 do i = 1,m
-   ir(i) = iabs(ir(i))
+   ir(i) = abs(ir(i))
 end do
 !
 !     Apply Householder transformations to b
@@ -9027,7 +9027,7 @@ if (j /= i) go to 250
 go to 240
 !
 260 do i = 1,n
-   ic(i) = iabs(ic(i))
+   ic(i) = abs(ic(i))
 end do
 return
 end subroutine du12ls
@@ -9133,7 +9133,7 @@ end do
 !         Initialize error bounds
 !
 do i = 1,m
-   eb(i) = dmax1(db(i),ub(i)*h(i))
+   eb(i) = max(db(i),ub(i)*h(i))
    ub(i) = eb(i)
    db(i) = 0.d0
 end do
@@ -9194,7 +9194,7 @@ do 120 i = j,kz
 !     Test for rank deficiency
 !
 if (rmin < 1.d0) go to 200
-tt = (eb(imin) + dabs(db(imin)))/h(imin)
+tt = (eb(imin) + abs(db(imin)))/h(imin)
 if (tt >= 1.d0) go to 170
 !
 !     Compute exact ub
@@ -9215,7 +9215,7 @@ go to 130
 !
 150 tt = eb(imin)
 do i = 1,jm1
-   tt = tt + dabs(w(i))*eb(i)
+   tt = tt + abs(w(i))*eb(i)
 end do
 ub(imin) = tt
 if (ub(imin)/h(imin) >= 1.d0) go to 170
@@ -9262,7 +9262,7 @@ call iswap(1,ic(j),1,ic(jmax),1)
 !
 220 tn = dnrm2(nn,a(j,j),mda)
 if (tn == 0.d0) go to 170
-if (a(j,j) /= 0.d0) tn = dsign(tn,a(j,j))
+if (a(j,j) /= 0.d0) tn = sign(tn,a(j,j))
 call dscal(nn,1.d0/tn,a(j,j),mda)
 a(j,j) = a(j,j) + 1.d0
 if (j == m) go to 250
@@ -9272,11 +9272,11 @@ do 240 i = jp1,m
    if (i <= np) go to 240
    if (h(i) == 0.d0) go to 240
    tt = 1.0 - (a(i,j)/h(i))**2
-   tt = dmax1(tt,0.d0)
+   tt = max(tt,0.d0)
    t = tt
    tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
    if (tt == 1.d0) go to 230
-   h(i) = h(i)*dsqrt(t)
+   h(i) = h(i)*sqrt(t)
    go to 240
 230 h(i) = dnrm2(n - j,a(i,j + 1),mda)
    w(i) = h(i)
@@ -9287,11 +9287,11 @@ a(j,j) = -tn
 !
 !          Update ub, db
 !
-ub(j) = ub(j)/dabs(a(j,j))
-db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
 if (j == krank) go to 300
 do i = jp1,krank
-   ub(i) = ub(i) + dabs(a(i,j))*ub(j)
+   ub(i) = ub(i) + abs(a(i,j))*ub(j)
    db(i) = db(i) - a(i,j)*db(j)
 end do
 go to 100
@@ -9333,7 +9333,7 @@ mmk = m - krank
 kp1 = krank + 1
 i = krank
 340 tn = dnrm2(mmk,a(kp1,i),1)/a(i,i)
-tn = a(i,i)*dsqrt(1.d0 + tn*tn)
+tn = a(i,i)*sqrt(1.d0 + tn*tn)
 call dscal(mmk,1.d0/tn,a(kp1,i),1)
 w(i) = a(i,i)/tn + 1.d0
 a(i,i) = -tn
@@ -9457,7 +9457,7 @@ end do
 go to 40
 !
 100 do i = 1,m
-   ir(i) = iabs(ir(i))
+   ir(i) = abs(ir(i))
 end do
 !
 !     If A is of reduced rank and mode=2,
@@ -9533,7 +9533,7 @@ if (j /= i) go to 250
 go to 240
 !
 260 do i = 1,n
-   ic(i) = iabs(ic(i))
+   ic(i) = abs(ic(i))
 end do
 return
 end subroutine du12us
@@ -9678,7 +9678,7 @@ end interface
 !---------------------
 !
 k = 0
-ldiag = min0(m,n)
+ldiag = min(m,n)
 if (ldiag <= 0) go to 270
 do 80 j = 1,ldiag
    if (j == 1) go to 20
@@ -9956,10 +9956,10 @@ end interface
 !---------------------
 !
 k = 0
-ldiag = min0(m,n)
+ldiag = min(m,n)
 if (ldiag <= 0) go to 270
 if (m > mda) go to 300
-if (nb > 1 .and. max0(m,n) > mdb) go to 310
+if (nb > 1 .and. max(m,n) > mdb) go to 310
 !
 do 80 j = 1,ldiag
    if (j == 1) go to 20
@@ -10139,7 +10139,7 @@ if (mode == 2) go to 60
 !                            ****** Construct the transformation. ******
 !
 do 10 j = l1,m
-10 cl = amax1(abs(u(1,j)),cl)
+10 cl = max(abs(u(1,j)),cl)
 if (cl <= 0.0) go to 130
 d = u(1,lpivot)/cl
 sm = d*d
@@ -10327,7 +10327,7 @@ end interface
 !---------------------
 !
 k = 0
-ldiag = min0(m,n)
+ldiag = min(m,n)
 if (ldiag <= 0) go to 270
 do 80 j = 1,ldiag
    if (j == 1) go to 20
@@ -10373,7 +10373,7 @@ do 80 j = 1,ldiag
 !     Determine the pseudorank, k, using the tolerance, tau.
 !    ..
 do j = 1,ldiag
-   if (dabs(a(j,j)) <= tau) go to 100
+   if (abs(a(j,j)) <= tau) go to 100
 end do
 k = ldiag
 go to 110
@@ -10388,7 +10388,7 @@ do 130 jb = 1,nb
    if (kp1 > m) go to 130
    do 120 i = kp1,m
 120   tmp = tmp + b(i,jb)**2
-130 rnorm(jb) = dsqrt(tmp)
+130 rnorm(jb) = sqrt(tmp)
 140 continue
 !                                           Special for pseudorank = 0
 if (k > 0) go to 160
@@ -10606,10 +10606,10 @@ end interface
 !---------------------
 !
 k = 0
-ldiag = min0(m,n)
+ldiag = min(m,n)
 if (ldiag <= 0) go to 270
 if (m > mda) go to 300
-if (nb > 1 .and. max0(m,n) > mdb) go to 310
+if (nb > 1 .and. max(m,n) > mdb) go to 310
 !
 do 80 j = 1,ldiag
    if (j == 1) go to 20
@@ -10656,7 +10656,7 @@ do 80 j = 1,ldiag
 !     Also store the diagonal elements in the array d.
 !    ..
 do 90 j = 1,ldiag
-   if (dabs(a(j,j)) <= tau) go to 100
+   if (abs(a(j,j)) <= tau) go to 100
 90 d(j) = a(j,j)
 k = ldiag
 kp1 = k + 1
@@ -10675,7 +10675,7 @@ do 130 jb = 1,nb
    if (kp1 > m) go to 130
    do 120 i = kp1,m
 120   tmp = tmp + b(i,jb)**2
-130 rnorm(jb) = dsqrt(tmp)
+130 rnorm(jb) = sqrt(tmp)
 140 continue
 !                                           Special for pseudorank = 0
 if (k > 0) go to 160

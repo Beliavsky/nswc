@@ -76,7 +76,7 @@ if (t0 >= t(m)) go to 60
 if (t0 - told) 110,50,40
 !
 110 il = 1
-ir = min0(i + 1,m)
+ir = min(i + 1,m)
 go to 10
 end subroutine lopcmp
 
@@ -2170,7 +2170,7 @@ w = 0.0
 if (x <= t(1)) return
 npk = n + k
 tlast = t(npk)
-xval = amin1(x, tlast)
+xval = min(x, tlast)
 !
 !     Define the first new knot. The remaining new knots
 !         are assumed to be the same as this knot.
@@ -2286,7 +2286,7 @@ end do
 end do
 !
 do jc = jcmin,k
-   l = min0(imk + jc, n)
+   l = min(imk + jc, n)
    wk(jc,1) = bcoef(l)
 end do
 !
@@ -2499,7 +2499,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
 if (xx - xi(k - 1)) 130,120,40
 130 il = 1
-ir = min0(i + 1, n)
+ir = min(i + 1, n)
 go to 10
 end subroutine ppval
 
@@ -2638,7 +2638,7 @@ end interface
 !     by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 !
-mhigh = max0(min0(nderiv,k),1)
+mhigh = max(min(nderiv,k),1)
 !     MHIGH is usually equal to nderiv.
 kp1 = k + 1
 jj = 0
@@ -2710,7 +2710,7 @@ do m = 2,mhigh
 !
    do i = 1,k
       sum = 0.0
-      jlow = max0(i,m)
+      jlow = max(i,m)
       do 35 j = jlow,k
 35       sum = a(j,i)*dbiatx(j,m) + sum
       dbiatx(i,m) = sum
@@ -2831,13 +2831,13 @@ end do
 left = k
 do i = 1,n
    taui = tau(i)
-   ilp1mx = min0(i + k,np1)
+   ilp1mx = min(i + k,np1)
 !
 !        *** Find  left  in the closed interval (i,i+k-1) such that
 !                t(left) .LE. tau(i) .LT. t(left+1)
 !        matrix is singular if this is not possible
 !
-   left = max0(left,i)
+   left = max(left,i)
    if (taui < t(left)) go to 100
 30 if (taui < t(left + 1)) go to 40
    left = left + 1
@@ -2972,7 +2972,7 @@ go to 900
 do 15 i = 1,nrowm1
    pivot = w(middle,i)
    if (pivot == 0.) go to 999
-   jmax = min0(nbandl, nrow - i)
+   jmax = min(nbandl, nrow - i)
    jbeg = middle + 1
    jend = middle + jmax
    do 15 j = jbeg,jend
@@ -2986,7 +2986,7 @@ go to 900
    if (pivot == 0.) go to 999
 !                 jmax  is the number of (nonzero) entries in column  i
 !                     below the diagonal .
-   jmax = min0(nbandl,nrow - i)
+   jmax = min(nbandl,nrow - i)
 !              Divide each entry in column  i  below diagonal by pivot .
    jbeg = middle + 1
    jend = middle + jmax
@@ -2994,7 +2994,7 @@ go to 900
 32    w(j,i) = w(j,i)/pivot
 !                 kmax  is the number of (nonzero) entries in row  i  to
 !                     the right of the diagonal .
-   kmax = min0(nbandu,nrow - i)
+   kmax = min(nbandu,nrow - i)
 !                  Subtract  A(i,i+k)*(i-TH column) from (i+k)-TH column
 !                  (below row  i ) .
    do 40 k = 1,kmax
@@ -3046,7 +3046,7 @@ if (nbandl == 0) go to 30
 !            for i=1,2,...,nrow-1, subtract  right side(i)*(i-TH column
 !            of  L )  from right side  (below i-TH row) .
 do 21 i = 1,nrowm1
-   jmax = min0(nbandl, nrow - i)
+   jmax = min(nbandl, nrow - i)
    do 21 j = 1,jmax
       ipj = i + j
       mpj = middle + j
@@ -3062,7 +3062,7 @@ do 31 i = 1,nrow
 return
 40 i = nrow
 41 b(i) = b(i)/w(middle,i)
-jmax = min0(nbandu,i - 1)
+jmax = min(nbandu,i - 1)
 do 45 j = 1,jmax
    imj = i - j
    mmj = middle - j
@@ -3142,7 +3142,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ntau < max0(2,k)) go to 100
+if (ntau < max(2,k)) go to 100
 if (tau(1) < t(k) .or. tau(ntau) > t(n + 1)) go to 100
 !
 do i = 2,ntau
@@ -3296,7 +3296,7 @@ do 60 k = 1,n
 !
 30 t = 1.0/w(1,k)
    w(1,k) = t
-   imax = min0(nb - 1,n - k)
+   imax = min(nb - 1,n - k)
    if (imax < 1) go to 60
    jmax = imax
    do i = 1,imax
@@ -3350,7 +3350,7 @@ return
 !
 10 nbm1 = nb - 1
 do 30 k = 1,n
-   jmax = min0(nbm1,n - k)
+   jmax = min(nbm1,n - k)
    if (jmax < 1) go to 30
    do j = 1,jmax
       jpk = j + k
@@ -3362,7 +3362,7 @@ do 30 k = 1,n
 !
 k = n
 40 b(k) = b(k)*w(1,k)
-jmax = min0(nbm1,n - k)
+jmax = min(nbm1,n - k)
 if (jmax < 1) go to 60
 do j = 1,jmax
    jpk = j + k
@@ -3861,7 +3861,7 @@ go to 310
    irow = i + neqcon
    w(irow,1) = 0.0
    call scopy(n, w(irow,1), 0, w(irow,1), mdw)
-   call scopy(min0(np1 - i,nord), g(i,1), mdg, w(irow,i), mdw)
+   call scopy(min(np1 - i,nord), g(i,1), mdg, w(irow,i), mdw)
    w(irow,np1) = g(i,nordp1)
 end do
 !-----------------------------------------------------------------------
@@ -4121,12 +4121,12 @@ end do
 !                                             Alg. Step 11
 ir = jt
 !                                             Alg. Step 12
-30 mu = min0(nb - 1, ir - ip - 1)
+30 mu = min(nb - 1, ir - ip - 1)
 if (mu == 0) go to 60
 !                                             Alg. Step 13
 do l = 1,mu
 !                                             Alg. Step 14
-   k = min0(l, jt - ip)
+   k = min(l, jt - ip)
 !                                             Alg. Step 15
    lp1 = l + 1
    ig = ip + l
@@ -4144,10 +4144,10 @@ end do
 60 ip = jt
 !                                             Alg. Steps 18-19
 70 mh = ir + mt - ip
-kh = min0(nbp1, mh)
+kh = min(nbp1, mh)
 !                                             Alg. Step 20
 do i = 1,kh
-   call h12(1,i,max0(i + 1,ir - ip + 1),mh,g(ip,i),1,rho, &
+   call h12(1,i,max(i + 1,ir - ip + 1),mh,g(ip,i),1,rho, &
       & g(ip,i + 1),1,mdg,nbp1 - i)
 end do
 !                                             Alg. Step 21
@@ -4315,11 +4315,11 @@ rnorm = sqrt(rsq)
    i = n + 1 - ii
 !                                   Alg. Step 28
    s = 0.0
-   l = max0(0, i - ip)
+   l = max(0, i - ip)
 !                                   Alg. Step 29
    if (i == n) go to 70
 !                                   Alg. Step 30
-   ie = min0(n + 1 - i, nb)
+   ie = min(n + 1 - i, nb)
    do j = 2,ie
       jg = j + l
       ix = i - 1 + j
@@ -4335,13 +4335,13 @@ return
 90 do j = 1,n
    s = 0.0
    if (j == 1) go to 110
-   i1 = max0(1, j - nb + 1)
+   i1 = max(1, j - nb + 1)
    i2 = j - 1
    do i = i1,i2
-      l = j - i + 1 + max0(0, i - ip)
+      l = j - i + 1 + max(0, i - ip)
       s = s + x(i)*g(i,l)
    end do
-110 l = max0(0, j - ip)
+110 l = max(0, j - ip)
    if (g(j,l + 1) == 0.0) go to 130
    x(j) = (x(j) - s)/g(j,l + 1)
 end do
@@ -4442,7 +4442,7 @@ if (nx < 2) go to 100
 if (ny < 2) go to 120
 m = nx + 2
 n = ny + 2
-l = max0(m*n, m*my + 5*max0(m,n))
+l = max(m*n, m*my + 5*max(m,n))
 if (num < l) go to 130
 !
 !     Define the knot squences
@@ -5815,7 +5815,7 @@ do 8 jj = 1,nd
 6  lasti = 0
    do 8 ii = 1,md
       xii = dxmin + float(ii - 1)*deltdx
-      i = max0 (1, lasti)
+      i = max (1, lasti)
 7     i = i + 1
       if (xii > x(i) .and. i < m) go to 7
       im1 = i - 1
@@ -5880,7 +5880,7 @@ end interface
 !     real wk(l)  where l = nx*ny + max(2*kx*nx, 2*ky*ny)
 !-------------------------
 !
-m = nx*ny + 2*max0(kx*nx, ky*ny)
+m = nx*ny + 2*max(kx*nx, ky*ny)
 if (l < m) go to 120
 !
 !     Compute the coefficients
@@ -6006,7 +6006,7 @@ end interface
 !     real wk(l)  where l = nx*my + max((kx+1)*nx,(ky+1)*ny)
 !-------------------------
 !
-m = nx*my + max0((kx + 1)*nx,(ky + 1)*ny)
+m = nx*my + max((kx + 1)*nx,(ky + 1)*ny)
 if (l < m) go to 120
 !
 !     Compute the coefficients
@@ -6021,7 +6021,7 @@ iq = iw + ny
 call bslsq1(y, wy, my, wk, my, nx, ty, ny, ky, &
    & a, ka, wk(iw), wk(iq), iflag)
 if (iflag < 0) go to 110
-iflag = max0(ierr,iflag)
+iflag = max(ierr,iflag)
 return
 !
 !     Error return
@@ -6117,7 +6117,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ntau < max0(2,k)) go to 100
+if (ntau < max(2,k)) go to 100
 if (tau(1) < t(k) .or. tau(ntau) > t(n + 1)) go to 100
 !
 do i = 2,ntau
@@ -6226,7 +6226,7 @@ return
 !
 20 nbm1 = nb - 1
 do 40 k = 1,n
-   jmax = min0(nbm1,n - k)
+   jmax = min(nbm1,n - k)
    if (jmax < 1) go to 40
    do j = 1,jmax
       jpk = j + k
@@ -6244,7 +6244,7 @@ k = n
 do i = 1,m
    b(i,k) = t*b(i,k)
 end do
-jmax = min0(nbm1,n - k)
+jmax = min(nbm1,n - k)
 if (jmax < 1) go to 80
 do j = 1,jmax
    jpk = j + k
@@ -6827,13 +6827,13 @@ nl = iend(km1)
 n1 = 1
 if (nleft /= 1) n1 = iend(nleft - 1) + 1
 n2 = iend(nright)
-nf = max0(n1,n2)
+nf = max(n1,n2)
 !
 ! Insert k as a neighbor of max(nright,nleft)
 !
 call shiftd(nf,nl,2, iadj )
 iadj(nf + 1) = k
-imin = max0(nright,nleft)
+imin = max(nright,nleft)
 do 1 i = imin,km1
    iend(i) = iend(i) + 2
 1  continue
@@ -6843,11 +6843,11 @@ do 1 i = imin,km1
 !
 kend = nl + 3
 nl = nf - 1
-nf = min0(n1,n2)
+nf = min(n1,n2)
 call shiftd(nf,nl,1, iadj )
 iadj(nf) = k
 imax = imin - 1
-imin = min0(nright,nleft)
+imin = min(nright,nleft)
 do 2 i = imin,imax
    iend(i) = iend(i) + 1
 2  continue
@@ -7613,7 +7613,7 @@ yp = py
 !
 ! Initialize variables and find a cone containing P
 !
-n0 = max0(nst,1)
+n0 = max(nst,1)
 1 indx = iend(n0)
 nl = iadj(indx)
 indx = 1
@@ -8057,7 +8057,7 @@ do 3 k = 1,nn
 !
    dzy = (a11*r2 - a12*r1)/(a11*a22 - a12*a12)
    dzx = (r1 - a12*dzy)/a11
-   dgmax = amax1(dgmax,abs(dzx),abs(dzy))
+   dgmax = max(dgmax,abs(dzx),abs(dzy))
 !
 !   Update the partials at node k
 !
@@ -8323,8 +8323,8 @@ kk = k
 !
 if (nn < 3  .or.  kk < 1  .or.  kk > nn) &
    & go to 16
-lmin = min0(lmn,nn)
-lmax = min0(lmx,nn)
+lmin = min(lmn,nn)
+lmax = min(lmx,nn)
 !
 ! Compute npts, lnp, avsq, av, and r.
 !   Set npts to the closest lmin-1 nodes to k.
@@ -8398,7 +8398,7 @@ go to 6
 !
 ! Test the system for ill-conditioning
 !
-8 dmin = amin1( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
+8 dmin = min( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
    & abs(a(4,4)),abs(a(5,5)) )
 if (dmin >= dtol) go to 15
 if (lnp > lmax) go to 9
@@ -8453,7 +8453,7 @@ do 13 i = 4,lm1
 !
 ! Test the linear fit for ill-conditioning
 !
-14 dmin = amin1( abs(a(4,4)),abs(a(5,5)) )
+14 dmin = min( abs(a(4,4)),abs(a(5,5)) )
 if (dmin < dtol) go to 17
 !
 ! Solve the 2 by 2 triangular system for the derivatives
@@ -8675,7 +8675,7 @@ dnp = 0.
 do 2 i = 1,lm1
    ni = npts(i)
    indf = 1
-   if (ni > 1) indf = iabs(iend(ni - 1)) + 1
+   if (ni > 1) indf = abs(iend(ni - 1)) + 1
    indl = -iend(ni)
 !
 ! Loop on neighbors nb of ni
@@ -9248,7 +9248,7 @@ phi(1) = r(2)*r(3)
 phi(2) = r(3)*r(1)
 phi(3) = r(1)*r(2)
 !
-rmin = amin1(r(1),r(2),r(3))
+rmin = min(r(1),r(2),r(3))
 if (rmin /= r(1)) go to 3
 ip1 = 1
 ip2 = 2

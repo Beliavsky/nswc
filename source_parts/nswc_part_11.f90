@@ -595,7 +595,7 @@ double precision :: a
 !
 maxabs = 0.d0
 do 10 p = 1,npts
-   a = dabs(coord(p))
+   a = abs(coord(p))
 10 if ( a > maxabs ) maxabs = a
 return
 end subroutine dscalp
@@ -968,9 +968,9 @@ if (a == b) return
 !
 !     Apply quad to the entire interval
 !
-sub1 = amin1(a,b)
-sub3 = amax1(a,b)
-tol = amax1(epsil, 10.0*eps)
+sub1 = min(a,b)
+sub3 = max(a,b)
+tol = max(epsil, 10.0*eps)
 call quad(sub1, sub3, result, k, tol, npts, icheck, f)
 if (icheck == 0) go to 100
 is = 1
@@ -1003,7 +1003,7 @@ go to 40
 qsuba = sum
 relerr = relerr + err
 if (ind /= 0 .or. x*result(k) >= 0.0) go to 40
-x = 0.1*amin1(abs(x),abs(result(k)))
+x = 0.1*min(abs(x),abs(result(k)))
 if (abs(qsuba) <= x) ind = 1
 !
 !     CALL QUAD FOR THE INTERVAL (sub2,sub3)
@@ -1026,7 +1026,7 @@ go to 10
 qsuba = sum
 relerr = relerr + err
 if (ind /= 0 .or. x*result(k) >= 0.0) go to 60
-x = 0.1*amin1(abs(x),abs(result(k)))
+x = 0.1*min(abs(x),abs(result(k)))
 if (abs(qsuba) <= x) ind = 1
 !
 !     Subdivide the interval last stacked
@@ -1683,7 +1683,7 @@ elist(1) = 0.0
 ier = 6
 if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
 ier = 0
-rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
+rerr = max(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -1697,7 +1697,7 @@ neval = 21
 !           Test on accuracy.
 !
 dres = abs(result)
-errbnd = amax1(epsabs,rerr*dres)
+errbnd = max(epsabs,rerr*dres)
 last = 1
 rlist(1) = result
 elist(1) = abserr
@@ -1765,7 +1765,7 @@ do 90 last = 2,limit
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = amax1(epsabs,rerr*abs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
@@ -1781,7 +1781,7 @@ do 90 last = 2,limit
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-   if (amax1(abs(a1),abs(b2)) <= &
+   if (max(abs(a1),abs(b2)) <= &
       & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
@@ -1854,7 +1854,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = amax1(epsabs,rerr*abs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
    if (abserr <= ertest) go to 100
 !
@@ -1890,7 +1890,7 @@ go to 110
 !
 !           Test on divergence.
 !
-110 if (ksgn == -1 .and. amax1(abs(result),abs(area)) <= &
+110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
    & defabs*0.1e-01) go to 130
 if (0.1e-01 > (result/area) .or. (result/area) > 0.1e+03 &
    & .or. errsum > abs(area)) ier = 6
@@ -2069,10 +2069,10 @@ resabs = resabs*dhlgth
 resasc = resasc*dhlgth
 abserr = abs((resk - resg)*hlgth)
 if (resasc /= 0.0 .and. abserr /= 0.0) &
-   & abserr = resasc*amin1(1.0, &
+   & abserr = resasc*min(1.0, &
    & (0.2e+03*abserr/resasc)**1.5)
 tol = epmach*0.5e+02
-if (resabs > uflow/tol) abserr = amax1(abserr,tol*resabs)
+if (resabs > uflow/tol) abserr = max(abserr,tol*resabs)
 return
 end subroutine qk21f
 
@@ -2533,7 +2533,7 @@ iord(1) = 0
 ier = 6
 if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
 ier = 0
-rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
+rerr = max(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -2555,7 +2555,7 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 dres = abs(result)
-errbnd = amax1(epsabs,rerr*dres)
+errbnd = max(epsabs,rerr*dres)
 if (abserr <= 100.0*epmach*defabs .and. abserr > errbnd) &
    & ier = 2
 if (limit == 1) ier = 1
@@ -2619,7 +2619,7 @@ do 90 last = 2,limit
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = amax1(epsabs,rerr*abs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
@@ -2636,7 +2636,7 @@ do 90 last = 2,limit
 !           at some points of the integration range.
 !
 
-   if (amax1(abs(a1),abs(b2)) <= &
+   if (max(abs(a1),abs(b2)) <= &
       & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
@@ -2706,7 +2706,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = amax1(epsabs,rerr*abs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
    if (abserr <= ertest) go to 100
 !
 !            Prepare bisection of the smallest interval.
@@ -2741,7 +2741,7 @@ go to 110
 !
 !           Test on divergence
 !
-110 if (ksgn == -1 .and. amax1(abs(result),abs(area)) <= &
+110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
    & defabs*0.1e-01) go to 130
 if (0.1e-01 > (result/area) .or. (result/area) > 0.1e+03 &
    & .or. errsum > abs(area)) ier = 6
@@ -2887,7 +2887,7 @@ real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.00
 !                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
-dinf = min0(1,inf)
+dinf = min(1,inf)
 !
 centr = 0.5*(a + b)
 hlgth = 0.5*(b - a)
@@ -2932,9 +2932,9 @@ resasc = resasc*hlgth
 resabs = resabs*hlgth
 abserr = abs((resk - resg)*hlgth)
 if (resasc /= 0.0 .and. abserr /= 0.0) abserr = resasc* &
-   & amin1(1.0, (0.2e+03*abserr/resasc)**1.5)
+   & min(1.0, (0.2e+03*abserr/resasc)**1.5)
 tol = 50.0*epmach
-if (resabs > uflow/tol) abserr = amax1(abserr, tol*resabs)
+if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
 return
 end subroutine qk15i
 
@@ -3178,10 +3178,10 @@ do 40 i = 1,newelm
    e1abs = abs(e1)
    delta2 = e2 - e1
    err2 = abs(delta2)
-   tol2 = amax1(abs(e2),e1abs)*epmach
+   tol2 = max(abs(e2),e1abs)*epmach
    delta3 = e1 - e0
    err3 = abs(delta3)
-   tol3 = amax1(e1abs,abs(e0))*epmach
+   tol3 = max(e1abs,abs(e0))*epmach
    if (err2 > tol2 .or. err3 > tol3) go to 10
 !
 !           If e0, e1 and e2 are equal to within machine
@@ -3197,7 +3197,7 @@ do 40 i = 1,newelm
    epstab(k1) = e1
    delta1 = e1 - e3
    err1 = abs(delta1)
-   tol1 = amax1(e1abs,abs(e3))*epmach
+   tol1 = max(e1abs,abs(e3))*epmach
 !
 !           If two elements are very close to each other, omit
 !           a part of the table by adjusting the value of n
@@ -3256,7 +3256,7 @@ go to 100
 res3la(1) = res3la(2)
 res3la(2) = res3la(3)
 res3la(3) = result
-100 abserr = amax1(abserr,5.0*epmach*abs(result))
+100 abserr = max(abserr,5.0*epmach*abs(result))
 return
 end subroutine qelg
 
@@ -3644,7 +3644,7 @@ elist(1) = 0.0
 ier = 6
 if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
 ier = 0
-rerr = amax1(epsrel, 50.0*epmach)
+rerr = max(epsrel, 50.0*epmach)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -3661,7 +3661,7 @@ call qxlqm(f,a,b,result,abserr,defabs,resabs, &
 !           Test on accuracy.
 !
 dres = abs(result)
-errbnd = amax1(epsabs,rerr*dres)
+errbnd = max(epsabs,rerr*dres)
 last = 1
 rlist(1) = result
 elist(1) = abserr
@@ -3729,7 +3729,7 @@ do 90 last = 2,limit
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = amax1(epsabs,rerr*abs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually set error flag.
 !
@@ -3744,7 +3744,7 @@ do 90 last = 2,limit
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-   if (amax1(abs(a1),abs(b2)) <= &
+   if (max(abs(a1),abs(b2)) <= &
       & t*(abs(a2) + 1.e+03*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
@@ -3837,7 +3837,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = amax1(epsabs,rerr*abs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
    if (abserr <= ertest) go to 100
 !
@@ -3873,7 +3873,7 @@ go to 110
 !
 !           Test on divergence.
 !
-110 if (ksgn == (-1).and.amax1(abs(result),abs(area)) <= &
+110 if (ksgn == (-1).and.max(abs(result),abs(area)) <= &
    & defabs*0.1e-01) go to 130
 if (0.1e-01 > (result/area).or.(result/area) > 0.1e+03 &
    & .or.errsum > abs(area)) ier = 6
@@ -4003,11 +4003,11 @@ real :: resg, resk, errold
 integer :: k, k0, k1, k2
 integer :: key1
 !
-key1 = max0(key ,  0)
-key1 = min0(key1,  4)
-k0 = max0(key1 - 2,0)
+key1 = max(key ,  0)
+key1 = min(key1,  4)
+k0 = max(key1 - 2,0)
 k1 = k0 + 1
-k2 = min0(key1 + 1,3)
+k2 = min(key1 + 1,3)
 !
 call qxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
@@ -4017,8 +4017,8 @@ do 10 k = k1,k2
    result = resk
    abserr = abs(resk - resg)
    if (resasc /= 0.0 .and. abserr /= 0.0) &
-      & abserr = resasc*amin1(1.0,(200.0*abserr/resasc)**1.5)
-   if (resabs > uflow/t) abserr = amax1(t*resabs,abserr)
+      & abserr = resasc*min(1.0,(200.0*abserr/resasc)**1.5)
+   if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
    if (abserr > errold*0.16) go to 3000
    if (abserr < 1000.0*epmach*resabs) go to 3000
@@ -4749,7 +4749,7 @@ elist(1) = 0.d0
 ier = 6
 if (epsabs < 0.d0 .or. epsrel < 0.d0) go to 999
 ier = 0
-rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
+rerr = max(epsrel, 50.d0*epmach, 0.5d-28)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -4762,8 +4762,8 @@ neval = 21
 !
 !           Test on accuracy.
 !
-dres = dabs(result)
-errbnd = dmax1(epsabs,rerr*dres)
+dres = abs(result)
+errbnd = max(epsabs,rerr*dres)
 last = 1
 rlist(1) = result
 elist(1) = abserr
@@ -4824,14 +4824,14 @@ do 90 last = 2,limit
    errsum = errsum + erro12 - errmax
    area = area + area12 - rlist(maxerr)
    if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (dabs(rlist(maxerr) - area12) > 0.1d-04*dabs(area12) &
+   if (abs(rlist(maxerr) - area12) > 0.1d-04*abs(area12) &
       & .or. erro12 < 0.99d0*errmax) go to 10
    if (extrap) iroff2 = iroff2 + 1
    if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = dmax1(epsabs,rerr*dabs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
@@ -4847,8 +4847,8 @@ do 90 last = 2,limit
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-   if (dmax1(dabs(a1),dabs(b2)) <= &
-      & t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
+   if (max(abs(a1),abs(b2)) <= &
+      & t*(abs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
@@ -4880,13 +4880,13 @@ do 90 last = 2,limit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
-   if (dabs(b1 - a1) > small) erlarg = erlarg + erro12
+   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
    if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-   if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
    extrap = .true.
    nrmax = 2
 40 if (ierro == 3 .or. erlarg <= ertest) go to 60
@@ -4903,7 +4903,7 @@ do 90 last = 2,limit
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
-      if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
 !
@@ -4920,7 +4920,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = dmax1(epsabs,rerr*dabs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
    if (abserr <= ertest) go to 100
 !
@@ -4935,7 +4935,7 @@ do 90 last = 2,limit
    small = small*0.5d0
    erlarg = errsum
    go to 90
-80 small = dabs(b - a)*0.375d0
+80 small = abs(b - a)*0.375d0
    erlarg = errsum
    ertest = errbnd
    rlist2(2) = area
@@ -4952,14 +4952,14 @@ if (result /= 0.d0 .and. area /= 0.d0) go to 105
 if (abserr > errsum) go to 115
 if (area == 0.d0) go to 130
 go to 110
-105 if (abserr/dabs(result) > errsum/dabs(area)) go to 115
+105 if (abserr/abs(result) > errsum/abs(area)) go to 115
 !
 !           Test on divergence.
 !
-110 if (ksgn == -1 .and. dmax1(dabs(result),dabs(area)) <= &
+110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
    & defabs*0.1d-01) go to 130
 if (0.1d-01 > (result/area) .or. (result/area) > 0.1d+03 &
-   & .or. errsum > dabs(area)) ier = 6
+   & .or. errsum > abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -5098,13 +5098,13 @@ double precision, parameter :: wg(5) = [0.666713443086881375935688098933d-01, &
 !
 centr = 0.5d0*(a + b)
 hlgth = 0.5d0*(b - a)
-dhlgth = dabs(hlgth)
+dhlgth = abs(hlgth)
 !
 !             Check if the interval (a,b) is too short
 !
 isig = 5
-absc = dabs(centr) + dhlgth*0.14d0
-if (absc == dabs(centr)) return
+absc = abs(centr) + dhlgth*0.14d0
+if (absc == abs(centr)) return
 !
 !           Compute the 21-point Kronrod approximation to
 !           the integral, and estimate the absolute error.
@@ -5113,7 +5113,7 @@ isig = 0
 resg = 0.d0
 fc = f(centr)
 resk = wgk(11)*fc
-resabs = dabs(resk)
+resabs = abs(resk)
 do 10 j = 1,5
    jtw = 2*j
    absc = hlgth*xgk(jtw)
@@ -5124,7 +5124,7 @@ do 10 j = 1,5
    fsum = fval1 + fval2
    resg = resg + wg(j)*fsum
    resk = resk + wgk(jtw)*fsum
-   resabs = resabs + wgk(jtw)*(dabs(fval1) + dabs(fval2))
+   resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
 10 continue
 do j = 1,5
    jtwm1 = 2*j - 1
@@ -5135,23 +5135,23 @@ do j = 1,5
    fv2(jtwm1) = fval2
    fsum = fval1 + fval2
    resk = resk + wgk(jtwm1)*fsum
-   resabs = resabs + wgk(jtwm1)*(dabs(fval1) + dabs(fval2))
+   resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
 end do
 reskh = resk*0.5d0
-resasc = wgk(11)*dabs(fc - reskh)
+resasc = wgk(11)*abs(fc - reskh)
 do j = 1,10
-   resasc = resasc + wgk(j)*(dabs(fv1(j) - reskh) &
-      & + dabs(fv2(j) - reskh))
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) &
+      & + abs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resabs = resabs*dhlgth
 resasc = resasc*dhlgth
-abserr = dabs((resk - resg)*hlgth)
+abserr = abs((resk - resg)*hlgth)
 if (resasc /= 0.d0 .and. abserr /= 0.d0) &
-   & abserr = resasc*dmin1(1.d0, &
+   & abserr = resasc*min(1.d0, &
    & (0.2d+03*abserr/resasc)**1.5d0)
 tol = epmach*0.5d+02
-if (resabs > uflow/tol) abserr = dmax1(abserr,tol*resabs)
+if (resabs > uflow/tol) abserr = max(abserr,tol*resabs)
 return
 end subroutine dqk21
 
@@ -5615,7 +5615,7 @@ iord(1) = 0
 ier = 6
 if (epsabs < 0.d0 .or. epsrel < 0.d0) go to 999
 ier = 0
-rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
+rerr = max(epsrel, 50.d0*epmach, 0.5d-28)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -5636,8 +5636,8 @@ last = 1
 rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
-dres = dabs(result)
-errbnd = dmax1(epsabs,rerr*dres)
+dres = abs(result)
+errbnd = max(epsabs,rerr*dres)
 if (abserr <= 100.d0*epmach*defabs .and. abserr > errbnd) &
    & ier = 2
 if (limit == 1) ier = 1
@@ -5694,14 +5694,14 @@ do 90 last = 2,limit
    errsum = errsum + erro12 - errmax
    area = area + area12 - rlist(maxerr)
    if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (dabs(rlist(maxerr) - area12) > 0.1d-04*dabs(area12) &
+   if (abs(rlist(maxerr) - area12) > 0.1d-04*abs(area12) &
       & .or. erro12 < 0.99d0*errmax) go to 10
    if (extrap) iroff2 = iroff2 + 1
    if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = dmax1(epsabs,rerr*dabs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
@@ -5718,8 +5718,8 @@ do 90 last = 2,limit
 !           at some points of the integration range.
 !
 
-   if (dmax1(dabs(a1),dabs(b2)) <= &
-      & t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
+   if (max(abs(a1),abs(b2)) <= &
+      & t*(abs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
@@ -5749,13 +5749,13 @@ do 90 last = 2,limit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
-   if (dabs(b1 - a1) > small) erlarg = erlarg + erro12
+   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
    if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-   if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
    extrap = .true.
    nrmax = 2
 40 if (ierro == 3 .or. erlarg <= ertest) go to 60
@@ -5771,7 +5771,7 @@ do 90 last = 2,limit
    do 50 k = id,jupbnd
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
-      if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
 !
@@ -5788,7 +5788,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = dmax1(epsabs,rerr*dabs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
    if (abserr <= ertest) go to 100
 !
 !            Prepare bisection of the smallest interval.
@@ -5819,14 +5819,14 @@ if (result /= 0.d0 .and. area /= 0.d0) go to 105
 if (abserr > errsum) go to 115
 if (area == 0.d0) go to 130
 go to 110
-105 if (abserr/dabs(result) > errsum/dabs(area)) go to 115
+105 if (abserr/abs(result) > errsum/abs(area)) go to 115
 !
 !           Test on divergence
 !
-110 if (ksgn == -1 .and. dmax1(dabs(result),dabs(area)) <= &
+110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
    & defabs*0.1d-01) go to 130
 if (0.1d-01 > (result/area) .or. (result/area) > 0.1d+03 &
-   & .or. errsum > dabs(area)) ier = 6
+   & .or. errsum > abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -5979,7 +5979,7 @@ double precision, parameter :: wg(8) = [0.0d+00, 0.12948496616886969327061143267
 !                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
-dinf = min0(1,inf)
+dinf = min(1,inf)
 !
 centr = 0.5d0*(a + b)
 hlgth = 0.5d0*(b - a)
@@ -5993,7 +5993,7 @@ fc = (fval1/centr)/centr
 !
 resg = wg(8)*fc
 resk = wgk(8)*fc
-resabs = dabs(resk)
+resabs = abs(resk)
 do j = 1,7
    absc = hlgth*xgk(j)
    absc1 = centr - absc
@@ -6011,22 +6011,22 @@ do j = 1,7
    fsum = fval1 + fval2
    resg = resg + wg(j)*fsum
    resk = resk + wgk(j)*fsum
-   resabs = resabs + wgk(j)*(dabs(fval1) + dabs(fval2))
+   resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
 end do
 reskh = resk*0.5d0
-resasc = wgk(8)*dabs(fc - reskh)
+resasc = wgk(8)*abs(fc - reskh)
 do j = 1,7
-   resasc = resasc + wgk(j)*(dabs(fv1(j) - reskh) + &
-      & dabs(fv2(j) - reskh))
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + &
+      & abs(fv2(j) - reskh))
 end do
 result = resk*hlgth
 resasc = resasc*hlgth
 resabs = resabs*hlgth
-abserr = dabs((resk - resg)*hlgth)
+abserr = abs((resk - resg)*hlgth)
 if (resasc /= 0.d0 .and. abserr /= 0.d0) abserr = resasc* &
-   & dmin1(1.d0, (0.2d+03*abserr/resasc)**1.5d0)
+   & min(1.d0, (0.2d+03*abserr/resasc)**1.5d0)
 tol = 50.d0*epmach
-if (resabs > uflow/tol) abserr = dmax1(abserr, tol*resabs)
+if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
 return
 end subroutine dqk15i
 
@@ -6275,13 +6275,13 @@ do 40 i = 1,newelm
    e0 = epstab(k3)
    e1 = epstab(k2)
    e2 = res
-   e1abs = dabs(e1)
+   e1abs = abs(e1)
    delta2 = e2 - e1
-   err2 = dabs(delta2)
-   tol2 = dmax1(dabs(e2),e1abs)*epmach
+   err2 = abs(delta2)
+   tol2 = max(abs(e2),e1abs)*epmach
    delta3 = e1 - e0
-   err3 = dabs(delta3)
-   tol3 = dmax1(e1abs,dabs(e0))*epmach
+   err3 = abs(delta3)
+   tol3 = max(e1abs,abs(e0))*epmach
    if (err2 > tol2 .or. err3 > tol3) go to 10
 !
 !           If e0, e1 and e2 are equal to within machine
@@ -6296,15 +6296,15 @@ do 40 i = 1,newelm
 10 e3 = epstab(k1)
    epstab(k1) = e1
    delta1 = e1 - e3
-   err1 = dabs(delta1)
-   tol1 = dmax1(e1abs,dabs(e3))*epmach
+   err1 = abs(delta1)
+   tol1 = max(e1abs,abs(e3))*epmach
 !
 !           If two elements are very close to each other, omit
 !           a part of the table by adjusting the value of n
 !
    if (err1 <= tol1 .or. err2 <= tol2 .or. err3 <= tol3) go to 20
    ss = 1.d0/delta1 + 1.d0/delta2 - 1.d0/delta3
-   epsinf = dabs(ss*e1)
+   epsinf = abs(ss*e1)
 !
 !           Test to detect irregular behaviour in the table, and
 !           eventually omit a part of the table adjusting the value
@@ -6321,7 +6321,7 @@ do 40 i = 1,newelm
 30 res = e1 + 1.d0/ss
    epstab(k1) = res
    k1 = k1 - 2
-   error = err2 + dabs(res - e2) + err3
+   error = err2 + abs(res - e2) + err3
    if (error > abserr) go to 40
    abserr = error
    result = res
@@ -6351,12 +6351,12 @@ go to 100
 !
 !           Compute error estimate
 !
-90 abserr = dabs(result - res3la(3)) + dabs(result - res3la(2)) + &
-   & dabs(result - res3la(1))
+90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
+   & abs(result - res3la(1))
 res3la(1) = res3la(2)
 res3la(2) = res3la(3)
 res3la(3) = result
-100 abserr = dmax1(abserr,5.d0*epmach*dabs(result))
+100 abserr = max(abserr,5.d0*epmach*abs(result))
 return
 end subroutine dqelg
 
@@ -6744,7 +6744,7 @@ elist(1) = 0.d0
 ier = 6
 if (epsabs < 0.d0 .or. epsrel < 0.d0) go to 999
 ier = 0
-rerr = dmax1(epsrel, 50.d0*epmach)
+rerr = max(epsrel, 50.d0*epmach)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -6760,8 +6760,8 @@ call dqxlqm(f,a,b,result,abserr,defabs,resabs, &
 !
 !           Test on accuracy.
 !
-dres = dabs(result)
-errbnd = dmax1(epsabs,rerr*dres)
+dres = abs(result)
+errbnd = max(epsabs,rerr*dres)
 last = 1
 rlist(1) = result
 elist(1) = abserr
@@ -6822,14 +6822,14 @@ do 90 last = 2,limit
    errsum = errsum + erro12 - errmax
    area = area + area12 - rlist(maxerr)
    if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (dabs(rlist(maxerr) - area12) > 0.1d-04*dabs(area12) &
+   if (abs(rlist(maxerr) - area12) > 0.1d-04*abs(area12) &
       & .or. erro12 < 0.99d0*errmax) go to 10
    if (extrap) iroff2 = iroff2 + 1
    if (.not.extrap) iroff1 = iroff1 + 1
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = dmax1(epsabs,rerr*dabs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually set error flag.
 !
@@ -6844,8 +6844,8 @@ do 90 last = 2,limit
 !           Set error flag in the case of bad integrand behaviour
 !           at a point of the integration range.
 !
-   if (dmax1(dabs(a1),dabs(b2)) <= &
-      & t*(dabs(a2) + 1.d+03*uflow)) ier = 4
+   if (max(abs(a1),abs(b2)) <= &
+      & t*(abs(a2) + 1.d+03*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
 !
@@ -6893,13 +6893,13 @@ do 90 last = 2,limit
    if (last == 2) go to 80
    if (noext) go to 90
    erlarg = erlarg - erlast
-   if (dabs(b1 - a1) > small) erlarg = erlarg + erro12
+   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
    if (extrap) go to 40
 !
 !           Test whether the interval to be bisected next is the
 !           smallest interval.
 !
-   if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
    extrap = .true.
    nrmax = 2
 !
@@ -6920,7 +6920,7 @@ do 90 last = 2,limit
       maxerr = iord(nrmax)
       errmax = elist(maxerr)
 ! ***Jump out of do-loop
-      if (dabs(blist(maxerr) - alist(maxerr)) > small) go to 90
+      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
 50    continue
 !
@@ -6937,7 +6937,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = dmax1(epsabs,rerr*dabs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
 ! ***Jump out of do-loop
    if (abserr <= ertest) go to 100
 !
@@ -6952,7 +6952,7 @@ do 90 last = 2,limit
    small = small*0.5d0
    erlarg = errsum
    go to 90
-80 small = dabs(b - a)*0.375d0
+80 small = abs(b - a)*0.375d0
    erlarg = errsum
    ertest = errbnd
    rlist2(2) = area
@@ -6969,14 +6969,14 @@ if (result /= 0.d0 .and. area /= 0.d0) go to 105
 if (abserr > errsum) go to 115
 if (area == 0.d0) go to 130
 go to 110
-105 if (abserr/dabs(result) > errsum/dabs(area)) go to 115
+105 if (abserr/abs(result) > errsum/abs(area)) go to 115
 !
 !           Test on divergence.
 !
-110 if (ksgn == (-1).and.dmax1(dabs(result),dabs(area)) <= &
+110 if (ksgn == (-1).and.max(abs(result),abs(area)) <= &
    & defabs*0.1d-01) go to 130
 if (0.1d-01 > (result/area).or.(result/area) > 0.1d+03 &
-   & .or.errsum > dabs(area)) ier = 6
+   & .or.errsum > abs(area)) ier = 6
 go to 130
 !
 !           Compute global integral sum.
@@ -7103,11 +7103,11 @@ double precision :: resg, resk, errold
 integer :: k, k0, k1, k2
 integer :: key1
 !
-key1 = max0(key ,  0)
-key1 = min0(key1,  4)
-k0 = max0(key1 - 2,0)
+key1 = max(key ,  0)
+key1 = min(key1,  4)
+k0 = max(key1 - 2,0)
 k1 = k0 + 1
-k2 = min0(key1 + 1,3)
+k2 = min(key1 + 1,3)
 !
 call dqxrul(f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
 errold = oflow
@@ -7115,10 +7115,10 @@ t = 10.d0*epmach
 do 10 k = k1,k2
    call dqxrul(f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
    result = resk
-   abserr = dabs(resk - resg)
+   abserr = abs(resk - resg)
    if (resasc /= 0.d0 .and. abserr /= 0.d0) &
-      & abserr = resasc*dmin1(1.d0,(200.d0*abserr/resasc)**1.5d0)
-   if (resabs > uflow/t) abserr = dmax1(t*resabs,abserr)
+      & abserr = resasc*min(1.d0,(200.d0*abserr/resasc)**1.5d0)
+   if (resabs > uflow/t) abserr = max(t*resabs,abserr)
    resg = resk
    if (abserr > errold*0.16d0) go to 3000
    if (abserr < 1000.d0*epmach*resabs) go to 3000
@@ -7294,17 +7294,17 @@ if (ke /= k1) return
 ya = 0.d0
 do 20 i = 1,ks
    j = is + i
-   ya = ya + (dabs(fv1(i)) + dabs(fv2(i)))*ww(j)
+   ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
 20 continue
-ya = ya*dabs(bb)
+ya = ya*abs(bb)
 !
 y2 = y2*0.5d0
 ym = 0.d0
 do 30 i = 1,ks
    j = is + i
-   ym = ym + (dabs(fv1(i) - y2) + dabs(fv2(i) - y2))*ww(j)
+   ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
 30 continue
-ym = ym*dabs(bb)
+ym = ym*abs(bb)
 return
 end subroutine dqxrul
 
@@ -7506,7 +7506,7 @@ do i = 1,2
 end do
 maxc = (mcalls/nfe + 3)/4
 ier = 1
-maxk = min0(maxc,(nw/6 + 2)/3)
+maxk = min(maxc,(nw/6 + 2)/3)
 if (maxc > maxk) ier = 2
 area = abs(vec(1,1)*vec(2,2) - vec(1,2)*vec(2,1))*point5
 k = (ncalls/nfe + 3)/4
@@ -7534,7 +7534,7 @@ ncalls = nfe
 !       Test termination criteria
 30 ans = tans
 err = terr
-if (err < amax1(one,abs(ans))*eps) go to 90
+if (err < max(one,abs(ans))*eps) go to 90
 if (k == maxk) go to 120
 !
 !       Find triangle with largest error
@@ -7902,7 +7902,7 @@ unitrd = spmpar(1)
 !
 cutoff = 0.5
 rootrt = 0.1
-nup = min0(nupper,nmax)
+nup = min(nupper,nmax)
 !
 !   Set up the relative base addresses for the various arrays into
 !   which w is to be split.
@@ -8042,8 +8042,8 @@ if (loop == 2) go to 9
 !   Set up approximate rate of convergence of solutions XN to true
 !   solution X. also set up desired ratio for iterative method.
 numr2 = rnrm(xn,oldx,n,1)
-r2 = amin1(0.5,amax1(numr2/denr2,1.0e-4))
-r1rat = amin1(rootrt,sqrt(r2))
+r2 = min(0.5,max(numr2/denr2,1.0e-4))
+r1rat = min(rootrt,sqrt(r2))
 !   Check for error in XN using test involving r2 and OLDX,according
 !   to theory for asymptotic error bounds. Modify error if it is
 !   outside precision range of computer, possibly due to
@@ -8051,9 +8051,9 @@ r1rat = amin1(rootrt,sqrt(r2))
 8 error = (r2/(1.0 - r2))*numr2
 xnorm = rnrm(xn,xn,n,0)
 relerr = error/xnorm
-if (iflag == 0) eps = amax1(ep,xnorm*relmin)
-if (iflag == 1) eps = amax1(ep,relmin)
-if (iflag == 1) error = amax1(relerr,relmin)
+if (iflag == 0) eps = max(ep,xnorm*relmin)
+if (iflag == 1) eps = max(ep,relmin)
+if (iflag == 1) error = max(relerr,relmin)
 if ((iflag == 0) .and. (relerr < relmin)) &
    & error = relmin*xnorm
 if (error <= eps) go to 10
@@ -8096,7 +8096,7 @@ cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
 !   Check on the speed of convergence of iterative method. If it is
 !   sufficiently rapid, then fix n and go to stage b.
-r1 = amax1(numr1/denr1,.0001)
+r1 = max(numr1/denr1,.0001)
 rate = r1
 if (m > nup) go to 19
 if (r1 <= r1rat) go to 15
@@ -8145,7 +8145,7 @@ return
 temp = rnrm(xm,oldx,m,1)
 if (loop == 1) temp2 = 0.5
 if (loop > 1) temp2 = temp/denr2
-rt = amin1(0.01,amax1(temp2,0.0001))/2.0
+rt = min(0.01,max(temp2,0.0001))/2.0
 xnorm = rnrm(xm,xm,m,0)
 esterr = (rt/(1.0 - rt))*temp/xnorm
 if (esterr < relmin) esterr = relmin
@@ -8161,7 +8161,7 @@ call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
 cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
-r1 = amax1(numr1/denr1,.0001)
+r1 = max(numr1/denr1,.0001)
 if (r1 <= cutoff) go to 22
 !   This is entrance for case where iteration fails in stage b.
 !   Parameters must be reset for a return to stage A or for an
@@ -8196,15 +8196,15 @@ return
 !   with the true solution X.
 33 if (loop == 1) go to 37
 numr2 = temp
-r2 = amax1(1.0e-4,rate,amin1(numr2/denr2,0.5))
+r2 = max(1.0e-4,rate,min(numr2/denr2,0.5))
 denr2 = numr2
 34 error = (r2/(1.0 - r2))*temp
 xnorm = rnrm(xm,xm,m,0)
 relerr = error/xnorm
 relmin = rmin(n,m,cond,unitrd,averr)
-if (iflag == 0) eps = amax1(ep,xnorm*relmin)
-if (iflag == 1) eps = amax1(ep,relmin)
-if (iflag == 1) error = amax1(relerr,relmin)
+if (iflag == 0) eps = max(ep,xnorm*relmin)
+if (iflag == 1) eps = max(ep,relmin)
+if (iflag == 1) error = max(relerr,relmin)
 if ((iflag == 0) .and. (relerr < relmin)) &
    & error = relmin*xnorm
 if (error > eps) go to 35
@@ -8248,7 +8248,7 @@ call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
 cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 numr1 = rnrm(xm,xmz,m,1)
-r1 = amax1(numr1/denr1,.0001)
+r1 = max(numr1/denr1,.0001)
 rate = r1
 if (r1 <= cutoff) go to 22
 go to 27
@@ -8312,7 +8312,7 @@ real :: rmin
 !
 float1 = m
 float2 = float(m)/float(n)
-rmin = amax1((float1**1.5)*cond*unitrd, &
+rmin = max((float1**1.5)*cond*unitrd, &
    & (float2**1.5)*averr)
 return
 end function rmin
@@ -8330,12 +8330,12 @@ if (iflag == 1) go to 2
 !   Find the norm of x.
 rnrm = 0.0
 do 1 i = 1,n
-1  rnrm = amax1(rnrm,abs(x(i)))
+1  rnrm = max(rnrm,abs(x(i)))
 return
 !   Find the norm of x-y.
 2 rnrm = 0.0
 do 3 i = 1,n
-3  rnrm = amax1(rnrm,abs(x(i) - y(i)))
+3  rnrm = max(rnrm,abs(x(i) - y(i)))
 return
 end function rnrm
 
@@ -8354,7 +8354,7 @@ real :: conew
 averr = sqrt(elinsy*pastre)
 pastre = elinsy
 if (relrsd == 0.0) go to 1
-c = amax1(1.0,elinsy/relrsd)
+c = max(1.0,elinsy/relrsd)
 conew = sqrt(c*pastc)
 pastc = c
 return
@@ -8462,11 +8462,11 @@ real, parameter :: w(255) = [1.0e0, .347854845137454e0, .652145154862546e0, .101
 !   256, Then the interval (a,b) is divided n/256 times and the 256
 !   point formula is applied to each subinterval.
 !
-loop = max0(1,n/256)
+loop = max(1,n/256)
 floop = loop
 h = (b - a)/floop
 scale = h/2.0
-m = min0(128,n/2)
+m = min(128,n/2)
 mt = 2*m
 nplace = m - 1
 do 1 l = 1,loop
@@ -8548,7 +8548,7 @@ do 33 i = 1,nf
    sum = 0.0
    do 32 j = 1,nf
 32    sum = sum + abs(imknn(i,j))
-33 normk = amax1(normk,sum)
+33 normk = max(normk,sum)
 do 34 i = 1,nf
 34 imknn(i,i) = imknn(i,i) + 1.0
 if (nf == mf) go to 50
@@ -8575,7 +8575,7 @@ do 44 i = 1,mf
 !
 temp = normk*(r1/(1.0 - r1))*numr1
 if (iflag == 1) temp = temp/xnorm
-ep = amax1(ep,temp)
+ep = max(ep,temp)
 go to 60
 !
 !   No iteration used in computing X. just compute error estimate
@@ -8583,7 +8583,7 @@ go to 60
 !
 50 temp = normk*elinsy
 if (iflag == 0) temp = temp*xnorm
-if (ier /= 2) ep = amax1(ep,temp)
+if (ier /= 2) ep = max(ep,temp)
 !
 !   Compute Nystrom interpolates at the nodes in T.
 !
@@ -8819,8 +8819,8 @@ go to 200
 normb = 0.0
 normr = 0.0
 do 140 i = 1,n
-   normb = amax1(normb,abs(b(i)))
-140 normr = amax1(normr,abs(r(i)))
+   normb = max(normb,abs(b(i)))
+140 normr = max(normr,abs(r(i)))
 relrsd = 0.0
 if (normb /= 0.0) relrsd = normr/normb
 iswit = 2
@@ -8859,8 +8859,8 @@ go to (300,230,300,230),option
 normx = 0.0
 norme = 0.0
 do 250 i = 1,n
-   normx = amax1(normx,abs(x(i)))
-250 norme = amax1(norme,abs(r(i)))
+   normx = max(normx,abs(x(i)))
+250 norme = max(norme,abs(r(i)))
 error = 0.0
 if (normx /= 0.0) error = norme/normx
 300 return
@@ -9026,7 +9026,7 @@ ip = iwt + neqn
 iyp = ip + neqn
 iypout = iyp + neqn
 iphi = iypout + neqn
-if (iabs(iflag) < 2  .or.  iabs(iflag) > 6) go to 1
+if (abs(iflag) < 2  .or.  abs(iflag) > 6) go to 1
 start = work(istart) > 0.0
 phase1 = work(iphase) > 0.0
 nornd = iwork(2) /= -1
@@ -9099,11 +9099,11 @@ fouru = 4.0*u
 if (neqn < 1) go to 10
 if (t == tout) go to 10
 if (relerr < 0.0  .or.  abserr < 0.0) go to 10
-eps = amax1(relerr,abserr)
+eps = max(relerr,abserr)
 if (eps <= 0.0) go to 10
 if (iflag == 0) go to 10
-isn = isign(1,iflag)
-iflag = iabs(iflag)
+isn = sign(1,iflag)
+iflag = abs(iflag)
 if (iflag == 1) go to 20
 if (t /= told) go to 10
 if (iflag >= 2  .and.  iflag <= 5) go to 20
@@ -9136,7 +9136,7 @@ x = t
 do 40 l = 1,neqn
 40 yy(l) = y(l)
 delsgn = sign(1.0,del)
-h = sign(amax1(fouru*abs(x),abs(tout - x)),tout - x)
+h = sign(max(fouru*abs(x),abs(tout - x)),tout - x)
 !
 !   If already past output point, interpolate and return
 !
@@ -9176,7 +9176,7 @@ return
 !
 !   Limit step size, set weight vector and take a step
 !
-100 h = sign(amin1(abs(h),abs(tend - x)),h)
+100 h = sign(min(abs(h),abs(tend - x)),h)
 do l = 1,neqn
    wt(l) = releps*abs(yy(l)) + abseps
    if (wt(l) <= 0.0) go to 140
@@ -9422,7 +9422,7 @@ do 20 l = 1,neqn
 sum = sqrt(sum)
 absh = abs(h)
 if (eps < 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
-h = sign(amax1(absh,fouru*abs(x)),h)
+h = sign(max(absh,fouru*abs(x)),h)
 hold = 0.0
 k = 1
 kold = 0
@@ -9589,7 +9589,7 @@ knew = k
 !   Test if order should be lowered
 !
 if (km2) 299,290,285
-285 if (amax1(erkm1,erkm2) <= erk) knew = km1
+285 if (max(erkm1,erkm2) <= erk) knew = km1
 go to 299
 290 if (erkm1 <= 0.5*erk) knew = km1
 !
@@ -9694,7 +9694,7 @@ erkp1 = absh*gstr(kp1)*sqrt(erkp1)
 if (k > 1) go to 445
 if (erkp1 >= 0.5*erk) go to 460
 go to 450
-445 if (erkm1 <= amin1(erk,erkp1)) go to 455
+445 if (erkm1 <= min(erk,erkp1)) go to 455
 if (erkp1 >= erk  .or.  k == 12) go to 460
 !
 !   Here erkp1 .LT. erk .LT. AMAX1(erkm1,erkm2) else order would have
@@ -9720,8 +9720,8 @@ hnew = h
 if (p5eps >= erk) go to 465
 temp2 = k + 1
 r = (p5eps/erk)**(1.0/temp2)
-hnew = absh*amax1(0.5,amin1(0.9,r))
-hnew = sign(amax1(hnew,fouru*abs(x)),h)
+hnew = absh*max(0.5,min(0.9,r))
+hnew = sign(max(hnew,fouru*abs(x)),h)
 465 h = hnew
 return
 !
@@ -10080,7 +10080,7 @@ kt = ksa + 1
 !
 !     The work space totals  6 + 9*neqn .
 !
-if (iabs(iflag) == 1) go to 10
+if (abs(iflag) == 1) go to 10
 endpnt = (iwork(4) == -1)
 blkout = (iwork(5) == -1)
 !
@@ -10331,7 +10331,7 @@ u = spmpar(1)
 if (neqn < 1) go to 500
 if (relerr < 0.0 .or. abserr < 0.0) go to 500
 if (t == tend) go to 500
-mflag = iabs(iflag)
+mflag = abs(iflag)
 if (mflag /= 1) go to 10
 told = t
 if (tout == t) go to 70
@@ -10376,7 +10376,7 @@ if (mflag == 2) go to 70
 !     Reset flag VALUE from previous call
 !
 60 iflag = jflag
-if (kflag == 3) mflag = iabs(iflag)
+if (kflag == 3) mflag = abs(iflag)
 !
 !     Save input iflag and set continuation flag VALUE for subsequent
 !     input checking
@@ -10435,8 +10435,8 @@ do 90 k = 1, neqn
    if (ypk*h**5 > tol) h = (tol/ypk)**0.2
 90 continue
 if (toln <= 0.0) h = 0.0
-h = amax1(h, u26*amax1(abs(t),abs(dt)))
-jflag = isign(2,iflag)
+h = max(h, u26*max(abs(t),abs(dt)))
+jflag = sign(2,iflag)
 h = sign(h,dt)
 !
 !     Initial steplength now computed. Compute first solution.
@@ -10451,7 +10451,7 @@ ae = scale*abserr
 !
 !     Set safety factor for stepsize adjustment, based on tolerances.
 !
-toler = amax1(abserr,relerr)
+toler = max(abserr,relerr)
 sf = 0.85
 if (toler >= 1.e-5) sf = 0.8
 if (toler <= 1.e-9) sf = 0.9
@@ -10571,7 +10571,7 @@ do n = 1, neqn
    if (errtol <= 0.0) go to 540
    ez = abs(h*(erc11*wp(n) + erc13*f3(n) + erc14*f4(n) + erc15*y(n) + &
       & b6b*yp(n)))
-   eeoet = amax1(eeoet,ez/errtol)
+   eeoet = max(eeoet,ez/errtol)
 end do
 esttol = eeoet*scale
 !
@@ -10603,7 +10603,7 @@ do n = 1, neqn
       & b7*f1(n) + b8*f7(n) + b9*f2(n))
    errtol = abs(y2(n)) + abs(y1(n)) + ae
    if (errtol <= 0.0) go to 540
-   eeoet = amax1(eeoet,ee/errtol)
+   eeoet = max(eeoet,ee/errtol)
 end do
 esttol = eeoet*scale
 !
@@ -10668,8 +10668,8 @@ nfe = nfe + 1
 !
 s = 10.0
 if (esttol > 1.e-5) s = sf/esttol**0.2
-if (hfaild) s = amin1(s,1.0)
-h = sign(amax1(s*abs(h),hmin), h)
+if (hfaild) s = min(s,1.0)
+h = sign(max(s*abs(h),hmin), h)
 !
 !     Have we integrated past an output point?
 !     If so, call the interpolation routine at t=tout.

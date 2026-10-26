@@ -24,7 +24,7 @@ mlp1 = ml + 1
 nlp1 = nl + 1
 npml = n + ml
 npnu = n + nu
-mcl = min0(m - 1,ml + nl)
+mcl = min(m - 1,ml + nl)
 jc = 0
 if (mcl == 0) go to 100
 !
@@ -33,12 +33,12 @@ if (mcl == 0) go to 100
 maxd = mcl
 do ndiag = 1,maxd
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -67,12 +67,12 @@ mind = ndiag + 1
 do ndiag = mind,maxd
    jc = jc + 1
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -87,18 +87,18 @@ end do
 !     Find the last nonzero upper diagonal
 !
 100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
+mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 !
 maxd = mcu
 do ndiag = 1,maxd
    jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -125,15 +125,15 @@ end do
 !
 !     Compute the main diagonal and the remaining upper diagonals
 !
-140 maxd = max0(1,mcu)
+140 maxd = max(1,mcu)
 do ndiag = 1,maxd
    jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = 0.0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -179,7 +179,7 @@ mlp1 = ml + 1
 nlp1 = nl + 1
 npml = n + ml
 npnu = n + nu
-mcl = min0(m - 1,ml + nl)
+mcl = min(m - 1,ml + nl)
 jc = 0
 if (mcl == 0) go to 100
 !
@@ -188,12 +188,12 @@ if (mcl == 0) go to 100
 maxd = mcl
 do ndiag = 1,maxd
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -222,12 +222,12 @@ mind = ndiag + 1
 do ndiag = mind,maxd
    jc = jc + 1
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -242,18 +242,18 @@ end do
 !     Find the last nonzero upper diagonal
 !
 100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
+mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 !
 maxd = mcu
 do ndiag = 1,maxd
    jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -280,15 +280,15 @@ end do
 !
 !     Compute the main diagonal and the remaining upper diagonals
 !
-140 maxd = max0(1,mcu)
+140 maxd = max(1,mcu)
 do ndiag = 1,maxd
    jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = 0.d0
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -334,7 +334,7 @@ mlp1 = ml + 1
 nlp1 = nl + 1
 npml = n + ml
 npnu = n + nu
-mcl = min0(m - 1,ml + nl)
+mcl = min(m - 1,ml + nl)
 jc = 0
 if (mcl == 0) go to 100
 !
@@ -343,12 +343,12 @@ if (mcl == 0) go to 100
 maxd = mcl
 do ndiag = 1,maxd
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -377,12 +377,12 @@ mind = ndiag + 1
 do ndiag = mind,maxd
    jc = jc + 1
    imj = maxd + 1 - ndiag
-   jmax = min0(l,m - imj,npml - imj,npnu)
+   jmax = min(l,m - imj,npml - imj,npnu)
    do j = 1,jmax
       i = j + imj
       sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -397,18 +397,18 @@ end do
 !     Find the last nonzero upper diagonal
 !
 100 jc = jc + 1
-mcu = min0(l - 1,mu + nu)
+mcu = min(l - 1,mu + nu)
 if (mcu == 0) go to 130
 !
 maxd = mcu
 do ndiag = 1,maxd
    jmi = maxd + 1 - ndiag
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -435,15 +435,15 @@ end do
 !
 !     Compute the main diagonal and the remaining upper diagonals
 !
-140 maxd = max0(1,mcu)
+140 maxd = max(1,mcu)
 do ndiag = 1,maxd
    jmi = ndiag - 1
-   imax = min0(m,l - jmi,npml,npnu - jmi)
+   imax = min(m,l - jmi,npml,npnu - jmi)
    do i = 1,imax
       j = i + jmi
       sum = (0.0,0.0)
-      kmin = max0(1,i - ml,j - nu)
-      kmax = min0(n,i + mu,j + nl)
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
       kk = mlp1 - i + kmin
       jj = nlp1 + j - kmin
       do k = kmin,kmax
@@ -480,7 +480,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = 0.0
    do k = 1,kmax
@@ -493,10 +493,10 @@ end do
 !
 !     Compute the remaining nonzero components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = 0.0
    do k = kmin,kmax
@@ -534,7 +534,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = y(i)
    do k = 1,kmax
@@ -547,10 +547,10 @@ end do
 !
 !     Compute the remaining components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = y(i)
    do k = kmin,kmax
@@ -580,7 +580,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = 0.d0
    do k = 1,kmax
@@ -593,10 +593,10 @@ end do
 !
 !     Compute the remaining nonzero components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = 0.d0
    do k = kmin,kmax
@@ -634,7 +634,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = y(i)
    do k = 1,kmax
@@ -647,10 +647,10 @@ end do
 !
 !     Compute the remaining components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = y(i)
    do k = kmin,kmax
@@ -679,7 +679,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = (0.0,0.0)
    do k = 1,kmax
@@ -692,10 +692,10 @@ end do
 !
 !     Compute the remaining nonzero components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = (0.0,0.0)
    do k = kmin,kmax
@@ -733,7 +733,7 @@ mlp1 = ml + 1
 if (ml == 0) go to 20
 jmin = mlp1
 do i = 1,ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = jmin
    sum = y(i)
    do k = 1,kmax
@@ -746,10 +746,10 @@ end do
 !
 !     Compute the remaining components
 !
-20 imax = min0(m,n + ml)
+20 imax = min(m,n + ml)
 do i = mlp1,imax
    kmin = i - ml
-   kmax = min0(n,i + mu)
+   kmax = min(n,i + mu)
    kk = 1
    sum = y(i)
    do k = kmin,kmax
@@ -777,7 +777,7 @@ real :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = 0.0
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -790,10 +790,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = 0.0
    do k = kmin,kmax
@@ -830,7 +830,7 @@ real :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = y(j)
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -843,10 +843,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = y(j)
    do k = kmin,kmax
@@ -875,7 +875,7 @@ double precision :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = 0.d0
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -888,10 +888,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = 0.d0
    do k = kmin,kmax
@@ -928,7 +928,7 @@ double precision :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = y(j)
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -941,10 +941,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = y(j)
    do k = kmin,kmax
@@ -972,7 +972,7 @@ complex :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = (0.0,0.0)
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -985,10 +985,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = (0.0,0.0)
    do k = kmin,kmax
@@ -1025,7 +1025,7 @@ complex :: sum
 if (mu == 0) go to 20
 do j = 1,mu
    jj = ml + j
-   kmax = min0(m,jj)
+   kmax = min(m,jj)
    sum = y(j)
    do k = 1,kmax
       sum = sum + a(k,jj)*x(k)
@@ -1038,10 +1038,10 @@ end do
 !
 20 num = ml + mu + 1
 jmin = mu + 1
-jmax = min0(n,m + mu)
+jmax = min(n,m + mu)
 do j = jmin,jmax
    kmin = j - mu
-   kmax = min0(m,j + ml)
+   kmax = min(m,j + ml)
    jj = num
    sum = y(j)
    do k = kmin,kmax
@@ -1071,7 +1071,7 @@ do i = 1,m
    do j = 1,num
       sum = sum + abs(a(i,j))
    end do
-   bnrm = amax1(bnrm, sum)
+   bnrm = max(bnrm, sum)
 end do
 return
 end function bnrm
@@ -1100,9 +1100,9 @@ b1nrm = 0.0
 !     Go down the first column of A
 !
 imin = ml + 1
-imax = min0(m, imin + mu)
+imax = min(m, imin + mu)
 do i = imin,imax
-   b1nrm = amax1(b1nrm, sasum(i,a(i),incr))
+   b1nrm = max(b1nrm, sasum(i,a(i),incr))
 end do
 i = imax
 j = i - ml
@@ -1111,9 +1111,9 @@ if (j == n) return
 if (i == m) go to 30
 !
 imin = i + 1
-imax = min0(m, ml + n)
+imax = min(m, ml + n)
 do i = imin,imax
-   b1nrm = amax1(b1nrm, sasum(num,a(i),incr))
+   b1nrm = max(b1nrm, sasum(num,a(i),incr))
 end do
 i = imax
 j = i - ml
@@ -1126,7 +1126,7 @@ if (j == jmax) go to 50
 jmin = j + 1
 do j = jmin,jmax
    i = i + ka
-   b1nrm = amax1(b1nrm, sasum(num,a(i),incr))
+   b1nrm = max(b1nrm, sasum(num,a(i),incr))
 end do
 j = jmax
 !
@@ -1134,7 +1134,7 @@ j = jmax
 i = i + ka
 j = j + 1
 num = num - 1
-b1nrm = amax1(b1nrm, sasum(num,a(i),incr))
+b1nrm = max(b1nrm, sasum(num,a(i),incr))
 go to 50
 end function b1nrm
 
@@ -1154,9 +1154,9 @@ dbnrm = 0.d0
 do i = 1,m
    sum = 0.d0
    do j = 1,num
-      sum = sum + dabs(a(i,j))
+      sum = sum + abs(a(i,j))
    end do
-   dbnrm = dmax1(dbnrm, sum)
+   dbnrm = max(dbnrm, sum)
 end do
 return
 end function dbnrm
@@ -1186,9 +1186,9 @@ db1nrm = 0.d0
 !     Go down the first column of A
 !
 imin = ml + 1
-imax = min0(m, imin + mu)
+imax = min(m, imin + mu)
 do i = imin,imax
-   db1nrm = dmax1(db1nrm, dasum(i,a(i),incr))
+   db1nrm = max(db1nrm, dasum(i,a(i),incr))
 end do
 i = imax
 j = i - ml
@@ -1197,9 +1197,9 @@ if (j == n) return
 if (i == m) go to 30
 !
 imin = i + 1
-imax = min0(m, ml + n)
+imax = min(m, ml + n)
 do i = imin,imax
-   db1nrm = dmax1(db1nrm, dasum(num,a(i),incr))
+   db1nrm = max(db1nrm, dasum(num,a(i),incr))
 end do
 i = imax
 j = i - ml
@@ -1212,7 +1212,7 @@ if (j == jmax) go to 50
 jmin = j + 1
 do j = jmin,jmax
    i = i + ka
-   db1nrm = dmax1(db1nrm, dasum(num,a(i),incr))
+   db1nrm = max(db1nrm, dasum(num,a(i),incr))
 end do
 j = jmax
 !
@@ -1220,7 +1220,7 @@ j = jmax
 i = i + ka
 j = j + 1
 num = num - 1
-db1nrm = dmax1(db1nrm, dasum(num,a(i),incr))
+db1nrm = max(db1nrm, dasum(num,a(i),incr))
 go to 50
 end function db1nrm
 
@@ -1592,7 +1592,7 @@ mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
 do 40 k = 1,n1
-   lm = min0(n - k,ml)
+   lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
    lm2 = ml1 - lm
@@ -1601,7 +1601,7 @@ do 40 k = 1,n1
 !
    l = -isamax(lm1, a(lmk,lm2), ldb) + lm1 + k
    ipvt(k) = l
-   mp = min0(mb,n - k)
+   mp = min(mb,n - k)
 !
 !     Swap rows if necessary
 !
@@ -1739,7 +1739,7 @@ if (job /= 0) go to 50
 !
 if (ml == 0) go to 30
 do k = 1,nm1
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l == k) go to 10
@@ -1755,7 +1755,7 @@ end do
 30 k = n
 do kb = 2,n
    b(k) = b(k)/a(k,ml1)
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = -b(k)
    call saxpy(lm, t, a(k - 1,ml2), ldb, b(lb), 1)
@@ -1769,7 +1769,7 @@ return
 !
 50 b(1) = b(1)/a(1,ml1)
 do k = 2,n
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = sdot(lm, a(k - 1,ml2), ldb, b(lb), 1)
    b(k) = (b(k) - t)/a(k,ml1)
@@ -1780,7 +1780,7 @@ if (ml == 0) return
 !
 do 70 kb = 1,nm1
    k = n - kb
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    klm = k + lm
    mlm = ml1 - lm
    b(k) = b(k) + sdot(lm, a(klm,mlm), ldb, b(k + 1), 1)
@@ -2167,7 +2167,7 @@ mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
 do 40 k = 1,n1
-   lm = min0(n - k,ml)
+   lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
    lm2 = ml1 - lm
@@ -2176,7 +2176,7 @@ do 40 k = 1,n1
 !
    l = -idamax(lm1, a(lmk,lm2), ldb) + lm1 + k
    ipvt(k) = l
-   mp = min0(mb,n - k)
+   mp = min(mb,n - k)
 !
 !     Swap rows if necessary
 !
@@ -2314,7 +2314,7 @@ if (job /= 0) go to 50
 !
 if (ml == 0) go to 30
 do k = 1,nm1
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l == k) go to 10
@@ -2330,7 +2330,7 @@ end do
 30 k = n
 do kb = 2,n
    b(k) = b(k)/a(k,ml1)
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = -b(k)
    call daxpy(lm, t, a(k - 1,ml2), ldb, b(lb), 1)
@@ -2344,7 +2344,7 @@ return
 !
 50 b(1) = b(1)/a(1,ml1)
 do k = 2,n
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = ddot(lm, a(k - 1,ml2), ldb, b(lb), 1)
    b(k) = (b(k) - t)/a(k,ml1)
@@ -2355,7 +2355,7 @@ if (ml == 0) return
 !
 do 70 kb = 1,nm1
    k = n - kb
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    klm = k + lm
    mlm = ml1 - lm
    b(k) = b(k) + ddot(lm, a(klm,mlm), ldb, b(k + 1), 1)
@@ -2905,7 +2905,7 @@ mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
 do 40 k = 1,n1
-   lm = min0(n - k,ml)
+   lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
    lm2 = ml1 - lm
@@ -2914,7 +2914,7 @@ do 40 k = 1,n1
 !
    l = -icamax(lm1, a(lmk,lm2), ldb) + lm1 + k
    ipvt(k) = l
-   mp = min0(mb,n - k)
+   mp = min(mb,n - k)
 !
 !     Swap rows if necessary
 !
@@ -3052,7 +3052,7 @@ if (job /= 0) go to 50
 !
 if (ml == 0) go to 30
 do k = 1,nm1
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l == k) go to 10
@@ -3068,7 +3068,7 @@ end do
 30 k = n
 do kb = 2,n
    b(k) = b(k)/a(k,ml1)
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = -b(k)
    call caxpy(lm, t, a(k - 1,ml2), ldb, b(lb), 1)
@@ -3082,7 +3082,7 @@ return
 !
 50 b(1) = b(1)/a(1,ml1)
 do k = 2,n
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    lb = k - lm
    t = cdotu(lm, a(k - 1,ml2), ldb, b(lb), 1)
    b(k) = (b(k) - t)/a(k,ml1)
@@ -3093,7 +3093,7 @@ if (ml == 0) return
 !
 do 70 kb = 1, nm1
    k = n - kb
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    klm = k + lm
    mlm = ml1 - lm
    b(k) = b(k) + cdotu(lm, a(klm,mlm), ldb, b(k + 1), 1)
@@ -4906,7 +4906,7 @@ do 20 i = 1,m
    do ip = ipmin,ipmax
       sum = sum + abs(a(ip))
    end do
-   snrm = amax1(snrm, sum)
+   snrm = max(snrm, sum)
 20 continue
 return
 end function snrm
@@ -4940,7 +4940,7 @@ do ip = ipmin,ipmax
 end do
 !
 do j = 1,n
-   anorm = amax1(anorm,wk(j))
+   anorm = max(anorm,wk(j))
 end do
 return
 end subroutine s1nrm
@@ -4964,9 +4964,9 @@ do 20 i = 1,m
    if (ipmin > ipmax) go to 20
    sum = 0.d0
    do ip = ipmin,ipmax
-      sum = sum + dabs(a(ip))
+      sum = sum + abs(a(ip))
    end do
-   dsnrm = dmax1(dsnrm, sum)
+   dsnrm = max(dsnrm, sum)
 20 continue
 return
 end function dsnrm
@@ -4997,11 +4997,11 @@ end do
 !
 do ip = ipmin,ipmax
    j = ja(ip)
-   wk(j) = wk(j) + dabs(a(ip))
+   wk(j) = wk(j) + abs(a(ip))
 end do
 !
 do j = 1,n
-   anorm = dmax1(anorm,wk(j))
+   anorm = max(anorm,wk(j))
 end do
 return
 end subroutine ds1nrm
@@ -6691,7 +6691,7 @@ do 170 k = 1,n
 !  Find largest entry, counting off-diagonal nonzeros
 !
 110 if (vi > n) go to 1004
-   xpvmax = dabs(x(vi))
+   xpvmax = abs(x(vi))
    maxc = vi
    nzcnt = 0
    pv = vi
@@ -6699,7 +6699,7 @@ do 170 k = 1,n
    pv = p(pv)
    if (pv > n) go to 130
    nzcnt = nzcnt + 1
-   xpv = dabs(x(pv))
+   xpv = abs(x(pv))
    if (xpv <= xpvmax) go to 120
    xpvmax = xpv
    maxc = pv
@@ -7260,13 +7260,13 @@ do 100 k = 1,n
 !     Search for the k-TH pivot element
 !
 50 if (i > n) go to 220
-   wmax = dabs(w(i))
+   wmax = abs(w(i))
    maxi = i
    pm = i
 51 m = pm
    pm = p(m)
    if (pm > n) go to 60
-   wi = dabs(w(pm))
+   wi = abs(w(pm))
    if (wi <= wmax) go to 51
    wmax = wi
    maxi = pm
@@ -7375,11 +7375,11 @@ call rslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
 !     Check if A is singular or if there are errors
 !
 if (ierr > 0) go to 20
-if (iabs(ierr) <= n) go to 50
+if (abs(ierr) <= n) go to 50
 ierr = ierr + n
-if (iabs(ierr) <= n) return
+if (abs(ierr) <= n) return
 ierr = ierr + n
-if (iabs(ierr) <= n) go to 50
+if (abs(ierr) <= n) go to 50
 return
 !
 !     General loop to estimate the norm  ainorm
@@ -7444,11 +7444,11 @@ call dslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
 !     Check if A is singular or if there are errors
 !
 if (ierr > 0) go to 20
-if (iabs(ierr) <= n) go to 50
+if (abs(ierr) <= n) go to 50
 ierr = ierr + n
-if (iabs(ierr) <= n) return
+if (abs(ierr) <= n) return
 ierr = ierr + n
-if (iabs(ierr) <= n) go to 50
+if (abs(ierr) <= n) go to 50
 return
 !
 !     General loop to estimate the norm  ainorm
@@ -7763,7 +7763,7 @@ return
 100 iter = 1
 if (n > 1) go to 110
 v(1) = x(1)
-anorm = dabs(v(1))
+anorm = abs(v(1))
 go to 510
 !
 110 anorm = dasum(n,x,1)
@@ -7824,7 +7824,7 @@ return
 !
 400 jlast = j
 j = idamax(n,x,1)
-if (x(jlast) == dabs(x(j)) .or. &
+if (x(jlast) == abs(x(j)) .or. &
    & iter >= itmax) go to 410
 iter = iter + 1
 go to 210
@@ -9839,7 +9839,7 @@ do 260 k = m, na
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k + 3)
+   j = min(en,k + 3)
 !     ********** Column modification **********
    do i = l, j
       p = x * h(i,k) + y * h(i,k + 1)
@@ -10521,7 +10521,7 @@ do 260 k = m, na
       h(k,j) = h(k,j) - p * x
    end do
 !
-   j = min0(en,k + 3)
+   j = min(en,k + 3)
 !     ********** Column modification **********
    do i = 1, j
       p = x * h(i,k) + y * h(i,k + 1)
@@ -10719,7 +10719,7 @@ do 840 i = 1, n
 !                For j=n step -1 Until low do -- **********
 do 880 jj = low, n
    j = n + low - jj
-   m = min0(j,igh)
+   m = min(j,igh)
 !
    do 880 i = low, igh
       zz = 0.0

@@ -40,7 +40,7 @@ tm(2) = az(2)
 go to 30
 !
 10 if (r < 3.0) go to 20
-zl(1) = alog(r)
+zl(1) = log(r)
 zl(2) = atan2(az(2),az(1))
 sr(1) = c + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
 sr(2) = zl(1)*zl(2)
@@ -54,10 +54,10 @@ go to 30
 zd(2) = az(2)
 ds = zd(1)*zd(1) + zd(2)*zd(2)
 if (ds == 0.0) go to 100
-dl(1) = 0.5*alog(ds)
+dl(1) = 0.5*log(ds)
 dl(2) = atan2(zd(2),zd(1))
 if (ds > 0.25) go to 50
-zl(1) = alog(r)
+zl(1) = log(r)
 zl(2) = atan2(-az(2),-az(1))
 sr(1) = -c + (dl(1)*zl(1) - dl(2)*zl(2))
 sr(2) = dl(1)*zl(2) + dl(2)*zl(1)
@@ -174,7 +174,7 @@ t = -1.0/x
 w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
    & c(5))*t + c(4))*t + c(3))*t + c(2))*t + c(1))*t + &
    & 0.5) + 0.5) / ((d(2)*t + d(1))*t + 1.0)
-ali = 0.5*alog(-x)**2 - (2.0*const + w/x)
+ali = 0.5*log(-x)**2 - (2.0*const + w/x)
 return
 !
 !                        -2 .LE. x .LT. -1
@@ -183,7 +183,7 @@ return
 w = (((((a(5)*t + a(4))*t + a(3))*t + a(2))*t + a(1))*t + 1.0)/ &
    & ((((((b(6)*t + b(5))*t + b(4))*t + b(3))*t + b(2))*t + &
    & b(1))*t + 1.0)
-ali = -(const + t*w) + alog(-x)*alog(t)
+ali = -(const + t*w) + log(-x)*log(t)
 return
 !
 !                       -1 .LE. x .LT. -1/2
@@ -194,7 +194,7 @@ if (t == 0.0) return
 w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
    & c(5))*t + c(4))*t + c(3))*t + c(2))*t + c(1))*t + &
    & 0.5) + 0.5) / ((d(2)*t + d(1))*t + 1.0)
-ali = (-const + t*w) + alog(-x)*alog(t)
+ali = (-const + t*w) + log(-x)*log(t)
 return
 !
 !                       -1/2 .LE. x .LT. 0
@@ -220,7 +220,7 @@ return
 w = (((((a(5)*t + a(4))*t + a(3))*t + a(2))*t + a(1))*t + 1.0)/ &
    & ((((((b(6)*t + b(5))*t + b(4))*t + b(3))*t + b(2))*t + &
    & b(1))*t + 1.0)
-ali = (const - w/x) + 0.5*alog(x)**2
+ali = (const - w/x) + 0.5*log(x)**2
 return
 !
 !-----------------------------------------------------------------------
@@ -340,7 +340,7 @@ go to 20
 !
 !     Compute sin(PI*X) and cos(PI*X)
 !
-20 if (abs(x) >= amin1(float(max), 1.0/eps)) go to 200
+20 if (abs(x) >= min(float(max), 1.0/eps)) go to 200
 k = abs(x)
 u = x + k
 k = mod(k,2)
@@ -369,7 +369,7 @@ h1 = c*h1
 h2 = c*h2
 go to 41
 !
-40 h1 = (alpi + t) - 0.5*alog(a)
+40 h1 = (alpi + t) - 0.5*log(a)
 h2 = -atan2(a2,a1)
 41 if (aimag(z) < 0.0) go to 42
 x = 1.0 - x
@@ -417,12 +417,12 @@ end do
 !
 70 s = s1*s1 + s2*s2
 if (mo == 0) go to 80
-w1 = 0.5 * alog(s)
+w1 = 0.5 * log(s)
 w2 = atan2(s2,s1)
 !
 !     SET  V1 + V2*I = (z - 0.5) * log(z + n) - z
 !
-80 t1 = 0.5 * alog(a) - 1.0
+80 t1 = 0.5 * log(a) - 1.0
 t2 = atan2(y,t)
 u = x - 0.5
 v1 = (u*t1 - 0.5) - y*t2
@@ -744,7 +744,7 @@ z = (((c1*t2 + c2)*t2 + c3)*t2 + 2.0)*t
 glog = w(n - 14) + z
 return
 !
-10 glog = alog(x)
+10 glog = log(x)
 return
 end function glog
 
@@ -828,7 +828,7 @@ end interface
 !--------------------------
 !-----------------------------------------------------------------------
 if (a > 0.8) go to 10
-gamln = gamln1(a) - alog(a)
+gamln = gamln1(a) - log(a)
 return
 10 if (a > 2.25) go to 20
 t = (a - 0.5) - 0.5
@@ -842,12 +842,12 @@ w = 1.0
 do 21 i = 1,n
    t = t - 1.0
 21 w = t*w
-gamln = gamln1(t - 1.0) + alog(w)
+gamln = gamln1(t - 1.0) + log(w)
 return
 !
 30 t = (1.0/a)**2
 w = (((((c5*t + c4)*t + c3)*t + c2)*t + c1)*t + c0)/a
-gamln = (d + w) + (a - 0.5)*(alog(a) - 1.0)
+gamln = (d + w) + (a - 0.5)*(log(a) - 1.0)
 end function gamln
 
 pure elemental real function gamln1(a)
@@ -979,9 +979,9 @@ if (x >= 0.d0) go to 50
 !-----------------------------------------------------------------------
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
-y = dabs(y)
+y = abs(y)
 t = -pi*y
-et = dexp(t)
+et = exp(t)
 e2t = et*et
 !
 !     SET  a1 = (1 + e2t)/2  AND  a2 = (1 - e2t)/2
@@ -996,16 +996,16 @@ go to 20
 !     Compute sin(pi*X) and cos(pi*X)
 !
 20 u = max
-if (dabs(x) >= dmin1(u, 1.d0/eps)) go to 200
-k = dabs(x)
+if (abs(x) >= min(u, 1.d0/eps)) go to 200
+k = abs(x)
 u = x + k
 k = mod(k,2)
 if (u > -0.5d0) go to 21
 u = 0.5d0 + (0.5d0 + u)
 k = k + 1
 21 u = pi*u
-sn = dsin(u)
-cn = dcos(u)
+sn = sin(u)
+cn = cos(u)
 if (k /= 1) go to 30
 sn = -sn
 cn = -cn
@@ -1025,8 +1025,8 @@ h1 = c*h1
 h2 = c*h2
 go to 41
 !
-40 h1 = (dlpi + t) - 0.5d0*dlog(a)
-h2 = -datan2(a2,a1)
+40 h1 = (dlpi + t) - 0.5d0*log(a)
+h2 = -atan2(a2,a1)
 41 if (z(2) < 0.d0) go to 42
 x = 1.0 - x
 y = -y
@@ -1074,13 +1074,13 @@ end do
 !
 70 s = s1*s1 + s2*s2
 if (mo == 0) go to 80
-w1 = 0.5d0 * dlog(s)
-w2 = datan2(s2,s1)
+w1 = 0.5d0 * log(s)
+w2 = atan2(s2,s1)
 !
 !     SET  V1 + V2*I = (z - 0.5) * log(z + n) - z
 !
-80 t1 = 0.5d0 * dlog(a) - 1.d0
-t2 = datan2(y,t)
+80 t1 = 0.5d0 * log(a) - 1.d0
+t2 = atan2(y,t)
 u = x - 0.5d0
 v1 = (u*t1 - 0.5d0) - y*t2
 v2 = u*t2 + y*t1
@@ -1115,9 +1115,9 @@ if (mo /= 0) go to 110
 !
 !     Case when the real part of z is nonnegative and mo = 0
 !
-a = dexp(w1)
-w1 = a * dcos(w2)
-w2 = a * dsin(w2)
+a = exp(w1)
+w1 = a * cos(w2)
+w2 = a * sin(w2)
 if (n == 0) go to 140
 c = (s1*w1 + s2*w2)/s
 d = (s1*w2 - s2*w1)/s
@@ -1147,9 +1147,9 @@ go to 110
 !
 !     Case when the real part of z is negative and mo = 0
 !
-130 a = dexp(-w1)
-t1 = a * dcos(-w2)
-t2 = a * dsin(-w2)
+130 a = exp(-w1)
+t1 = a * cos(-w2)
+t2 = a * sin(-w2)
 w1 = h1*t1 - h2*t2
 w2 = h1*t2 + h2*t1
 if (n == 0) go to 140
@@ -1226,7 +1226,7 @@ end interface
 !-----------------------------------------------------------------------
 dgamma = 0.d0
 x = a
-if (dabs(a) > 20.d0) go to 60
+if (abs(a) > 20.d0) go to 60
 !-----------------------------------------------------------------------
 !             Evaluation of dgamma(a) for dabs(a) .LE. 20
 !-----------------------------------------------------------------------
@@ -1261,8 +1261,8 @@ if (t == 0.d0) return
 !     The following code checks if 1/t can overflow. This
 !     code may be omitted if desired.
 !
-if (dabs(t) >= 1.d-33) go to 40
-if (dabs(t)*dpmpar(3) <= 1.000000001d0) return
+if (abs(t) >= 1.d-33) go to 40
+if (abs(t)*dpmpar(3) <= 1.000000001d0) return
 dgamma = 1.d0/t
 return
 !
@@ -1280,7 +1280,7 @@ return
 !-----------------------------------------------------------------------
 !           Evaluation of dgamma(a) for dabs(a) .GT. 20
 !-----------------------------------------------------------------------
-60 if (dabs(a) >= 1.d3) return
+60 if (abs(a) >= 1.d3) return
 if (a > 0.d0) go to 70
 s = dsin1(a)/pi
 if (s == 0.d0) return
@@ -1292,9 +1292,9 @@ x = -a
 !
 !     Final assembly
 !
-w = (d + w) + (x - 0.5d0)*(dlog(x) - 1.d0)
+w = (d + w) + (x - 0.5d0)*(log(x) - 1.d0)
 if (w > dxparg(0)) return
-dgamma = dexp(w)
+dgamma = exp(w)
 if (a < 0.d0) dgamma = (1.d0/(dgamma*s))/x
 return
 end function dgamma
@@ -1530,7 +1530,7 @@ end interface
 !--------------------------
 !--------------------------
 if (a >= 0.5d0) go to 10
-dgamln = dgmln1(a) - dlog(a)
+dgamln = dgmln1(a) - log(a)
 return
 10 if (a > 2.5d0) go to 20
 x = a - 1.d0
@@ -1545,11 +1545,11 @@ w = 1.d0
 do 21 i = 1,n
    x = x - 1.d0
 21 w = x*w
-dgamln = dgmln1(x - 1.d0) + dlog(w)
+dgamln = dgmln1(x - 1.d0) + log(w)
 return
 !
 30 w = dpdel(a)
-dgamln = (d + w) + (a - 0.5d0)*(dlog(a) - 1.d0)
+dgamln = (d + w) + (a - 0.5d0)*(log(a) - 1.d0)
 end function dgamln
 
 pure elemental double precision function dgmln1(x)
@@ -1645,7 +1645,7 @@ go to 20
 !
 !     Compute sin(pi*X) and cos(pi*X), or -sin(pi*X) and -cos(pi*X)
 !
-20 if (abs(x) >= amin1(float(max), 1.0/eps)) go to 100
+20 if (abs(x) >= min(float(max), 1.0/eps)) go to 100
 k = abs(x)
 u = x + k
 if (u <= -0.5) u = 0.5 + (0.5 + u)
@@ -1692,7 +1692,7 @@ s2 = ds2
 !
 !     SET W1 + W2*I = log(z+N)
 !
-w1 = 0.5*alog(a)
+w1 = 0.5*log(a)
 w2 = atan2(y,t)
 !
 !     Let a1 + a2*I be the asymptotic sum
@@ -1801,7 +1801,7 @@ end interface
 !
 !---------------------------------------------------------------------
 xmax1 = ipmpar(3)
-xmax1 = amin1(xmax1, 1.0/spmpar(1))
+xmax1 = min(xmax1, 1.0/spmpar(1))
 xsmall = 1.e-9
 !---------------------------------------------------------------------
 x = xx
@@ -1897,7 +1897,7 @@ do i = 1, 3
 end do
 !
 aug = upper / (den + q2(4)) - 0.5e0 / x + aug
-350 psi = aug + alog(x)
+350 psi = aug + log(x)
 return
 !---------------------------------------------------------------------
 !     Error return
@@ -1973,9 +1973,9 @@ if (x >= 0.d0) go to 40
 !-----------------------------------------------------------------------
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
-y = dabs(y)
+y = abs(y)
 t = -pi2*y
-et = dexp(t)
+et = exp(t)
 !
 !     SET  a1 = (1 + et)/2  AND  a2 = (1 - et)/2
 !
@@ -1988,13 +1988,13 @@ go to 20
 !     Compute sin(pi*X) and cos(pi*X), or -sin(pi*X) and -cos(pi*X)
 !
 20 u = max
-if (dabs(x) >= dmin1(u, 1.d0/eps)) go to 100
-k = dabs(x)
+if (abs(x) >= min(u, 1.d0/eps)) go to 100
+k = abs(x)
 u = x + k
 if (u <= -0.5d0) u = 0.5d0 + (0.5d0 + u)
 u = pi*u
-sn = dsin(u)
-cn = dcos(u)
+sn = sin(u)
+cn = cos(u)
 !
 !     SET h1 + h2*I = pi*COT(pi*z)
 !
@@ -2036,8 +2036,8 @@ go to 50
 !
 !     SET W1 + W2*I = log(z+N)
 !
-w1 = 0.5d0*dlog(a)
-w2 = datan2(y,t)
+w1 = 0.5d0*log(a)
+w2 = atan2(y,t)
 !
 !     Let a1 + a2*I be the asymptotic sum
 !
@@ -2180,7 +2180,7 @@ xmax = dpmpar(3)
 !----------------------------
 dpsi = 0.d0
 x = a
-if (dabs(a) >= 10.d0) go to 60
+if (abs(a) >= 10.d0) go to 60
 !-----------------------------------------------------------------------
 !             Evaluation of dpsi(a) for dabs(a) .LT. 10
 !-----------------------------------------------------------------------
@@ -2200,8 +2200,8 @@ go to 40
 !
 !     Check if 1/a can overflow
 !
-20 if (dabs(a) >= 1.d-35) go to 30
-if (dabs(a)*xmax <= 1.000000001d0) return
+20 if (abs(a) >= 1.d-35) go to 30
+if (abs(a)*xmax <= 1.000000001d0) return
 !
 !     Let t be the sum of -1/(a+j) when a .LT. 1
 !
@@ -2220,7 +2220,7 @@ t = t - 1.d0/x
 !
 !     COMPUTE  t + dpsi(1 + x)  FOR 0 .LE. x .LT. 1
 !
-40 if (dabs(x - x0) > 2.d-2) go to 50
+40 if (abs(x - x0) > 2.d-2) go to 50
 dpsi = t + dpsi0(1.d0 + x)
 return
 50 k = 42
@@ -2232,16 +2232,16 @@ return
 !-----------------------------------------------------------------------
 60 if (a > 0.d0) go to 70
 t = max
-if (dabs(a) >= dmin1(t, 1.d0/eps)) return
+if (abs(a) >= min(t, 1.d0/eps)) return
 !
 !     Set w = pi*cot(pi*a) when A is negative
 !
-k = dabs(a)
+k = abs(a)
 t = a + k
 if (t == 0.d0) return
 if (t <= -0.5d0) t = 1.d0 + t
 t = pi*t
-w = pi*(dcos(t)/dsin(t))
+w = pi*(cos(t)/sin(t))
 x = 1.d0 - x
 !
 !     Compute the modified asymptotic sum
@@ -2256,7 +2256,7 @@ s = 0.5d0/x + t*s
 !
 !     Final assembly
 !
-dpsi = dlog(x) - s
+dpsi = log(x) - s
 if (a < 0.d0) dpsi = dpsi - w
 return
 end function dpsi
@@ -2440,12 +2440,12 @@ nn = n + m - 1
 fn = float(nn)
 fnp = fn + 1.0
 eps = spmpar(1)
-wdtol = amax1(0.5*eps, 0.5e-18)
+wdtol = max(0.5*eps, 0.5e-18)
 !-----------------------------------------------------------------------
 !     elim = Approximate exponential over and underflow limit
 !-----------------------------------------------------------------------
-elim = amin1(exparg(0), abs(exparg(1))) - 6.906
-xln = alog(x)
+elim = min(exparg(0), abs(exparg(1))) - 6.906
+xln = log(x)
 t = fnp*xln
 !-----------------------------------------------------------------------
 !     Overflow and underflow test for small and large x
@@ -2456,7 +2456,7 @@ if (x < wdtol) go to 260
 !     Compute xmin and the number of terms of the series, fln+1
 !-----------------------------------------------------------------------
 nd = -c*epsln(0)
-nd = amin1(nd,18.0)
+nd = min(nd,18.0)
 fln = nd - 3.0
 alpha = 3.5 + 0.4*fln
 beta = 0.21 + fln*(0.0006038*fln + 0.008677)
@@ -2465,10 +2465,10 @@ mx = int(xm) + 1
 xmin = float(mx)
 !
 if (n == 0) go to 50
-xm = -2.302*nd - amin1(0.0,xln)
+xm = -2.302*nd - min(0.0,xln)
 fns = float(n)
 arg = xm/fns
-arg = amin1(0.0,arg)
+arg = min(0.0,arg)
 eps = exp(arg)
 xm = 1.0 - eps
 if (abs(arg) < 1.0e-3) xm = -arg
@@ -2483,7 +2483,7 @@ if (x >= xmin) go to 60
 nx = int(x)
 xinc = xmin - float(nx)
 xdmy = x + xinc
-xdmln = alog(xdmy)
+xdmln = log(xdmy)
 60 continue
 !-----------------------------------------------------------------------
 !     Generate W(n+m-1,x) by the asymptotic expansion
@@ -2491,7 +2491,7 @@ xdmln = alog(xdmy)
 t = fn*xdmln
 t1 = xdmln + xdmln
 t2 = t + xdmln
-tk = amax1(abs(t),abs(t1),abs(t2))
+tk = max(abs(t),abs(t1),abs(t2))
 if (tk > elim) go to 320
 !
 tss = exp(-t)
@@ -2689,8 +2689,8 @@ end interface
 !     e = 0.5*ln(2*pi)
 !--------------------------
 !--------------------------
-a = amin1(a0,b0)
-b = amax1(a0,b0)
+a = min(a0,b0)
+b = max(a0,b0)
 if (a >= 8.0) go to 60
 if (a >= 1.0) go to 20
 !-----------------------------------------------------------------------
@@ -2723,7 +2723,7 @@ do i = 1,n
    h = a/b
    w = w * (h/(1.0 + h))
 end do
-w = alog(w)
+w = log(w)
 if (b < 8.0) go to 40
 betaln = w + gamln(a) + algdiv(a,b)
 return
@@ -2736,7 +2736,7 @@ do i = 1,n
    b = b - 1.0
    z = z * (b/(a + b))
 end do
-betaln = w + alog(z) + (gamln(a) + (gamln(b) - gsumln(a,b)))
+betaln = w + log(z) + (gamln(a) + (gamln(b) - gsumln(a,b)))
 return
 !
 !                Reduction of a when b .GT. 1000
@@ -2747,7 +2747,7 @@ do i = 1,n
    a = a - 1.0
    w = w * (a/(1.0 + a/b))
 end do
-betaln = (alog(w) - n*alog(b)) + (gamln(a) + algdiv(a,b))
+betaln = (log(w) - n*log(b)) + (gamln(a) + algdiv(a,b))
 return
 !-----------------------------------------------------------------------
 !                   Procedure when a .GE. 8
@@ -2755,12 +2755,12 @@ return
 60 w = bcorr(a,b)
 h = a/b
 c = h/(1.0 + h)
-u = -(a - 0.5)*alog(c)
+u = -(a - 0.5)*log(c)
 v = b*alnrel(h)
 if (u <= v) go to 61
-betaln = (((-0.5*alog(b) + e) + w) - v) - u
+betaln = (((-0.5*log(b) + e) + w) - v) - u
 return
-61 betaln = (((-0.5*alog(b) + e) + w) - u) - v
+61 betaln = (((-0.5*log(b) + e) + w) - u) - v
 return
 end function betaln
 
@@ -2791,7 +2791,7 @@ return
 10 if (x > 1.25) go to 20
 gsumln = gamln1(x) + alnrel(x)
 return
-20 gsumln = gamln1(x - 1.0) + alog(x*(1.0 + x))
+20 gsumln = gamln1(x - 1.0) + log(x*(1.0 + x))
 return
 end function gsumln
 
@@ -2813,8 +2813,8 @@ real, parameter :: c5 = -.165322962780713e-02
 !
 !-----------------------------------------------------------------------
 !------------------------
-a = amin1(a0, b0)
-b = amax1(a0, b0)
+a = min(a0, b0)
+b = max(a0, b0)
 !
 h = a/b
 c = h/(1.0 + h)
@@ -2899,7 +2899,7 @@ w = w*(c/b)
 !                    Combine the results
 !
 u = d*alnrel(a/b)
-v = a*(alog(b) - 1.0)
+v = a*(log(b) - 1.0)
 if (u <= v) go to 30
 algdiv = (w - v) - u
 return
@@ -2950,8 +2950,8 @@ end interface
 !     e = 0.5*ln(2*pi)
 !--------------------------
 !--------------------------
-a = dmin1(a0,b0)
-b = dmax1(a0,b0)
+a = min(a0,b0)
+b = max(a0,b0)
 if (a >= 10.d0) go to 60
 if (a >= 1.d0) go to 20
 !-----------------------------------------------------------------------
@@ -2984,7 +2984,7 @@ do i = 1,n
    h = a/b
    w = w * (h/(1.d0 + h))
 end do
-w = dlog(w)
+w = log(w)
 if (b < 10.d0) go to 40
 dbetln = w + dgamln(a) + dlgdiv(a,b)
 return
@@ -2997,7 +2997,7 @@ do i = 1,n
    b = b - 1.d0
    z = z * (b/(a + b))
 end do
-dbetln = w + dlog(z) + (dgamln(a) + (dgamln(b) - dgsmln(a,b)))
+dbetln = w + log(z) + (dgamln(a) + (dgamln(b) - dgsmln(a,b)))
 return
 !
 !               Reduction of a when b .GT. 1000
@@ -3009,7 +3009,7 @@ do i = 1,n
    w = w*(a/(1.d0 + a/b))
 end do
 sn = n
-dbetln = (dlog(w) - sn*dlog(b)) + (dgamln(a) + dlgdiv(a,b))
+dbetln = (log(w) - sn*log(b)) + (dgamln(a) + dlgdiv(a,b))
 return
 !-----------------------------------------------------------------------
 !                  Procedure when a .GE. 10
@@ -3017,12 +3017,12 @@ return
 60 w = dbcorr(a,b)
 h = a/b
 c = h/(1.d0 + h)
-u = -(a - 0.5d0)*dlog(c)
+u = -(a - 0.5d0)*log(c)
 v = b*dlnrel(h)
 if (u <= v) go to 61
-dbetln = (((-0.5d0*dlog(b) + e) + w) - v) - u
+dbetln = (((-0.5d0*log(b) + e) + w) - v) - u
 return
-61 dbetln = (((-0.5d0*dlog(b) + e) + w) - u) - v
+61 dbetln = (((-0.5d0*log(b) + e) + w) - u) - v
 return
 end function dbetln
 
@@ -3054,7 +3054,7 @@ return
 10 if (x > 1.5d0) go to 20
 dgsmln = dgmln1(x) + dlnrel(x)
 return
-20 dgsmln = dgmln1(x - 1.d0) + dlog(x*(1.d0 + x))
+20 dgsmln = dgmln1(x - 1.d0) + log(x*(1.d0 + x))
 return
 end function dgsmln
 
@@ -3084,8 +3084,8 @@ double precision, parameter :: e(15) = [.833333333333333333333333333333d-01, - &
 !-----------------------------------------------------------------------
 !--------------------------
 !--------------------------
-a = dmin1(a0, b0)
-b = dmax1(a0, b0)
+a = min(a0, b0)
+b = max(a0, b0)
 !
 h = a/b
 c = h/(1.d0 + h)
@@ -3188,7 +3188,7 @@ w = w*(c/b)
 !                    Combine the results
 !
 u = d*dlnrel(a/b)
-v = a*(dlog(b) - 1.d0)
+v = a*(log(b) - 1.d0)
 if (u <= v) go to 40
 dlgdiv = (w - v) - u
 return
@@ -3469,7 +3469,7 @@ sum = sum + t
 if (abs(t) > tol) go to 111
 j = a*x*((sum/6.0 - 0.5/(a + 2.0))*x + 1.0/(a + 1.0))
 !
-z = a*alog(x)
+z = a*log(x)
 h = gam1(a)
 g = 1.0 + h
 if (x < 0.25) go to 120
@@ -3678,7 +3678,7 @@ rcomp = 0.0
 if (x == 0.0) return
 if (a >= 20.0) go to 20
 !
-t = a*alog(x) - x
+t = a*log(x) - x
 if (t < exparg(1)) return
 if (a >= 1.0) go to 10
 rcomp = (a*exp(t))*(1.0 + gam1(a))
@@ -3734,18 +3734,18 @@ drcomp = 0.d0
 if (x == 0.d0) return
 if (a > 20.d0) go to 20
 !
-t = a*dlog(x) - x
+t = a*log(x) - x
 if (t < dxparg(1)) return
 if (a >= 1.d0) go to 10
-drcomp = (a*dexp(t))*(1.d0 + dgam1(a))
+drcomp = (a*exp(t))*(1.d0 + dgam1(a))
 return
-10 drcomp = dexp(t)/gamma(a)
+10 drcomp = exp(t)/gamma(a)
 return
 !
 20 t = x/a
 if (t == 0.d0) return
 w = -(dpdel(a) + a*drlog(t))
-if (w >= dxparg(1)) drcomp = c * dsqrt(a) * dexp(w)
+if (w >= dxparg(1)) drcomp = c * sqrt(a) * exp(w)
 return
 end function drcomp
 
@@ -3882,7 +3882,7 @@ x = 0.0
 if (a <= 0.0) go to 500
 if (p < 0.0 .or. q < 0.0) go to 520
 t = ((p + q) - 0.5) - 0.5
-if (abs(t) > 5.0*amax1(e,1.e-15)) go to 520
+if (abs(t) > 5.0*max(e,1.e-15)) go to 520
 !
 ierr = 0
 xmin = xmin/e
@@ -3892,7 +3892,7 @@ if (a == 1.0) go to 410
 !
 e2 = e + e
 amax = 0.4e-10/(e*e)
-eps = amax1(100.0*e,1.e-10)
+eps = max(100.0*e,1.e-10)
 iop = 1
 if (e > 1.e-10) iop = 2
 xn = x0
@@ -3915,17 +3915,17 @@ go to 100
 !
 10 if (b >= 0.45) go to 20
 if (b == 0.0) go to 560
-y = -alog(b)
+y = -log(b)
 s = 0.5 + (0.5 - a)
-z = alog(y)
+z = log(y)
 t = y - s*z
 if (b < 0.15) go to 11
-xn = y - s*alog(t) - alog(1.0 + s/(t + 1.0))
+xn = y - s*log(t) - log(1.0 + s/(t + 1.0))
 go to 200
 11 if (b <= 1.e-2) go to 12
 u = ((t + 2.0*(3.0 - a))*t + (2.0 - a)*(3.0 - a))/ &
    & ((t + (5.0 - a))*t + 2.0)
-xn = y - s*alog(t) - alog(u)
+xn = y - s*log(t) - log(u)
 go to 200
 12 c1 = -s*z
 c2 = -s*(1.0 + c1)
@@ -3948,7 +3948,7 @@ go to 30
 21 if (p <= 0.9) go to 22
 xn = exp((alnrel(-q) + gamln1(a))/a)
 go to 30
-22 xn = exp(alog(p*g)/a)
+22 xn = exp(log(p*g)/a)
 !
 30 if (xn == 0.0) go to 510
 t = 0.5 + (0.5 - xn/(a + 1.0))
@@ -3969,7 +3969,7 @@ xn = (xn/a + s*((9.0*s2 + 256.0)*s2 - 433.0)/(38880.0*rta)) &
    & - ((3.0*s2 + 7.0)*s2 - 16.0)/810.0
 xn = a + s*rta + (s2 - 1.0)/3.0 + s*(s2 - 7.0)/(36.0*rta) &
    & + xn/a
-xn = amax1(xn, 0.0)
+xn = max(xn, 0.0)
 !
 amin = 20.0
 if (e < 1.e-8) amin = 250.0
@@ -3980,28 +3980,28 @@ if (abs(d) <= 1.e-1) return
 !
 60 if (p <= 0.5) go to 70
 if (xn < 3.0*a) go to 200
-w = alog(q)
+w = log(q)
 y = -(w + gamln(a))
-d = amax1(2.0, a*(a - 1.0))
+d = max(2.0, a*(a - 1.0))
 if (y < ln10*d) go to 61
 s = 1.0 - a
-z = alog(y)
+z = log(y)
 go to 12
 61 t = a - 1.0
-xn = y + t*alog(xn) - alnrel(-t/(xn + 1.0))
-xn = y + t*alog(xn) - alnrel(-t/(xn + 1.0))
+xn = y + t*log(xn) - alnrel(-t/(xn + 1.0))
+xn = y + t*log(xn) - alnrel(-t/(xn + 1.0))
 go to 200
 !
 70 ap1 = a + 1.0
 if (xn > 0.70*ap1) go to 101
-w = alog(p) + gamln(ap1)
+w = log(p) + gamln(ap1)
 if (xn > 0.15*ap1) go to 80
 ap2 = a + 2.0
 ap3 = a + 3.0
 x = exp((w + x)/a)
-x = exp((w + x - alog(1.0 + (x/ap1)*(1.0 + x/ap2)))/a)
-x = exp((w + x - alog(1.0 + (x/ap1)*(1.0 + x/ap2)))/a)
-x = exp((w + x - alog(1.0 + (x/ap1)*(1.0 + (x/ap2)*(1.0 &
+x = exp((w + x - log(1.0 + (x/ap1)*(1.0 + x/ap2)))/a)
+x = exp((w + x - log(1.0 + (x/ap1)*(1.0 + x/ap2)))/a)
+x = exp((w + x - log(1.0 + (x/ap1)*(1.0 + (x/ap2)*(1.0 &
    & + x/ap3))))/a)
 xn = x
 if (xn > 1.e-2*ap1) go to 80
@@ -4015,9 +4015,9 @@ sum = 1.0 + t
 t = t*(xn/apn)
 sum = sum + t
 if (t > 1.e-4) go to 81
-t = w - alog(sum)
+t = w - log(sum)
 xn = exp((xn + t)/a)
-xn = xn*(1.0 - (a*alog(xn) - xn - t)/(a - xn))
+xn = xn*(1.0 - (a*log(xn) - xn - t)/(a - xn))
 go to 101
 !
 !                 Schroder iteration using p
@@ -4095,7 +4095,7 @@ return
 410 if (q < 0.9) go to 411
 x = -alnrel(-p)
 return
-411 x = -alog(q)
+411 x = -log(q)
 return
 !
 !                       Error return
@@ -4248,8 +4248,8 @@ s = 0.5d0 + (0.5d0 - l)
 z = drlog(l)
 if (z >= 700.d0/a) go to 330
 y = a*z
-rta = dsqrt(a)
-if (dabs(s) <= 0.4d0) go to 200
+rta = sqrt(a)
+if (abs(s) <= 0.4d0) go to 200
 !
 30 r = drcomp(a,x)
 if (r == 0.d0) go to 331
@@ -4294,13 +4294,13 @@ wk(1) = t
 do n = 2,20
    amn = amn - 1.d0
    t = t*(amn/x)
-   if (dabs(t) <= 1.d-3) go to 90
+   if (abs(t) <= 1.d-3) go to 90
    wk(n) = t
 end do
 n = 20
 !
 90 sum = t
-91 if (dabs(t) < e) go to 100
+91 if (abs(t) < e) go to 100
 amn = amn - 1.d0
 t = t*(amn/x)
 sum = sum + t
@@ -4325,11 +4325,11 @@ tol = 3.d0*e/(a + 1.d0)
 c = -c*(x/l)
 t = c/(a + l)
 sum = sum + t
-if (dabs(t) > tol) go to 120
+if (abs(t) > tol) go to 120
 j = a*x*((sum/6.d0 - 0.5d0/(a + 2.d0))*x + 1.d0/(a + 1.d0))
 !
-z = a*dlog(x)
-u = dexp(z)
+z = a*log(x)
+u = exp(z)
 h = dgam1(a)
 g = 1.d0 + h
 ans = u*g*(0.5d0 + (0.5d0 - j))
@@ -4345,15 +4345,15 @@ return
 !             Finite sums for Q when a .GE. 1
 !                 and 2*a is an integer
 !
-140 sum = dexp(-x)
+140 sum = exp(-x)
 t = sum
 n = 1
 c = 0.d0
 go to 160
 !
-150 rtx = dsqrt(x)
+150 rtx = sqrt(x)
 sum = derfc1(0,rtx)
-t = dexp(-x)/(rtpi*rtx)
+t = exp(-x)/(rtpi*rtx)
 n = 0
 c = -0.5d0
 !
@@ -4386,7 +4386,7 @@ a2nm1 = a2nm1/b2n
 b2nm1 = b2nm1/b2n
 a2n = a2n/b2n
 b2n = 1.d0
-if (dabs(a2n - a2nm1/b2nm1) >= tol*a2n) go to 180
+if (abs(a2n - a2nm1/b2nm1) >= tol*a2n) go to 180
 !
 qans = r*a2n
 ans = 0.5d0 + (0.5d0 - qans)
@@ -4394,7 +4394,7 @@ return
 !
 !                 Minimax approximations
 !
-200 if (dabs(s) <= 2.d0*e .and. a*e*e > 3.28d-3) go to 420
+200 if (abs(s) <= 2.d0*e .and. a*e*e > 3.28d-3) go to 420
 if (e < 1.d-17) go to 210
 call dgr17(a, y, l, z, rta, ans, qans)
 return
@@ -4412,14 +4412,14 @@ qans = 0.d0
 return
 !
 320 if (x >= 0.25d0) go to 321
-ans = derf(dsqrt(x))
+ans = derf(sqrt(x))
 qans = 0.5d0 + (0.5d0 - ans)
 return
-321 qans = derfc1(0,dsqrt(x))
+321 qans = derfc1(0,sqrt(x))
 ans = 0.5d0 + (0.5d0 - qans)
 return
 !
-330 if (dabs(s) <= 2.d0*e) go to 420
+330 if (abs(s) <= 2.d0*e) go to 420
 331 if (x <= a) go to 300
 go to 310
 !
@@ -4573,10 +4573,10 @@ end interface
 !---------------------------
 !---------------------------
 !---------------------------
-e = dexp(-y)
-w = 0.5d0*derfc1(1,dsqrt(y))
+e = exp(-y)
+w = 0.5d0*derfc1(1,sqrt(y))
 u = 1.d0/a
-z = dsqrt(z + z)
+z = sqrt(z + z)
 if (l < 1.d0) z = -z
 !
 t = ((((((a0(1)*z + a0(2))*z + a0(3))*z + a0(4))*z + a0(5))*z + &
@@ -4716,10 +4716,10 @@ end interface
 !------------------------
 !------------------------
 !------------------------
-e = dexp(-y)
-w = 0.5d0*derfc1(1,dsqrt(y))
+e = exp(-y)
+w = 0.5d0*derfc1(1,sqrt(y))
 u = 1.d0/a
-z = dsqrt(z + z)
+z = sqrt(z + z)
 if (l < 1.d0) z = -z
 !
 c0 = ((((a0(1)*z + a0(2))*z + a0(3))*z + a0(4))*z + a0(5)) / &
@@ -4887,7 +4887,7 @@ x = 0.d0
 if (a <= 0.d0) go to 500
 if (p < 0.d0 .or. q < 0.d0) go to 520
 t = ((p + q) - 0.5d0) - 0.5d0
-if (dabs(t) > 5.d0*dmax1(e,1.d-30)) go to 520
+if (abs(t) > 5.d0*max(e,1.d-30)) go to 520
 !
 ierr = 0
 xmin = xmin/e
@@ -4895,7 +4895,7 @@ if ((p/e) <= xmin) go to 400
 if ((q/e) <= xmin) go to 560
 if (a == 1.d0) go to 410
 !
-e = dmax1(e,1.d-30)
+e = max(e,1.d-30)
 eps = 1.d3*e
 amin = 5.d3
 if (e < 1.d-17) amin = 2.d6
@@ -4909,7 +4909,7 @@ q0 = q
 if (p0 == 0.0 .or.q0 == 0.0) go to 10
 call gaminv(sngl(a), x0, 0.0, p0, q0, ier)
 if (ier < 0.0 .and. ier /= -8) go to 10
-ierr = max0(ier,0)
+ierr = max(ier,0)
 if (x0 > 1.e34) go to 10
 xn = x0
 go to 100
@@ -4926,24 +4926,24 @@ if (qg == 0.d0) go to 560
 b = qg/a
 if (qg > 0.6d0*a) go to 30
 if (a >= 0.30d0 .or. b < 0.35d0) go to 20
-t = dexp(-(b + c))
-u = t*dexp(t)
-xn = t*dexp(u)
+t = exp(-(b + c))
+u = t*exp(t)
+xn = t*exp(u)
 go to 100
 !
 20 if (b >= 0.45d0) go to 30
 if (b == 0.d0) go to 560
-y = -dlog(b)
+y = -log(b)
 s = 0.5d0 + (0.5d0 - a)
-z = dlog(y)
+z = log(y)
 t = y - s*z
 if (b < 0.15d0) go to 21
-xn = y - s*dlog(t) - dlog(1.d0 + s/(t + 1.d0))
+xn = y - s*log(t) - log(1.d0 + s/(t + 1.d0))
 go to 200
 21 if (b <= 1.d-2) go to 22
 u = ((t + 2.d0*(3.d0 - a))*t + (2.d0 - a)*(3.d0 - a))/ &
    & ((t + (5.d0 - a))*t + 2.d0)
-xn = y - s*dlog(t) - dlog(u)
+xn = y - s*log(t) - log(u)
 go to 200
 22 c1 = -s*z
 c2 = -s*(1.d0 + c1)
@@ -4958,12 +4958,12 @@ xn = ((((c5/y + c4)/y + c3)/y + c2)/y + c1) + y
 go to 200
 !
 30 if (b*q > 1.d-8) go to 31
-xn = dexp(-(q/a + c))
+xn = exp(-(q/a + c))
 go to 40
 31 if (p <= 0.9d0) go to 32
-xn = dexp((dlnrel(-q) + dgmln1(a))/a)
+xn = exp((dlnrel(-q) + dgmln1(a))/a)
 go to 40
-32 xn = dexp(dlog(p*g)/a)
+32 xn = exp(log(p*g)/a)
 !
 40 if (xn == 0.d0) go to 510
 t = 0.5d0 + (0.5d0 - xn/(a + 1.d0))
@@ -4977,7 +4977,7 @@ go to 100
 if (q < 0.5d0) t = 0.5d0 - q
 call dpni(p, q, t, s, ier)
 !
-rta = dsqrt(a)
+rta = sqrt(a)
 s2 = s*s
 xn = (((12.d0*s2 - 243.d0)*s2 - 923.d0)*s2 + 1472.d0)/204120.d0 &
    & - s*(((3753.d0*s2 + 4353.d0)*s2 - 289517.d0)*s2 - 289717.d0) &
@@ -4986,39 +4986,39 @@ xn = (xn/a + s*((9.d0*s2 + 256.d0)*s2 - 433.d0)/(38880.d0*rta)) &
    & - ((3.d0*s2 + 7.d0)*s2 - 16.d0)/810.d0
 xn = a + s*rta + (s2 - 1.d0)/3.d0 + s*(s2 - 7.d0)/(36.d0*rta) &
    & + xn/a
-xn = dmax1(xn, 0.d0)
+xn = max(xn, 0.d0)
 !
 if (a < amin) go to 60
 x = xn
 d = 0.5d0 + (0.5d0 - x/a)
-if (dabs(d) > 1.d-1) go to 60
-if (dabs(d) > 1.d-3) go to 100
+if (abs(d) > 1.d-1) go to 60
+if (abs(d) > 1.d-3) go to 100
 return
 !
 60 if (p <= 0.5d0) go to 70
 if (xn < 3.d0*a) go to 200
-w = dlog(q)
+w = log(q)
 y = -(w + dgamln(a))
-d = dmax1(2.d0, a*(a - 1.d0))
+d = max(2.d0, a*(a - 1.d0))
 if (y < ln10*d) go to 61
 s = 1.d0 - a
-z = dlog(y)
+z = log(y)
 go to 22
 61 t = a - 1.d0
-xn = y + t*dlog(xn) - dlnrel(-t/(xn + 1.d0))
-xn = y + t*dlog(xn) - dlnrel(-t/(xn + 1.d0))
+xn = y + t*log(xn) - dlnrel(-t/(xn + 1.d0))
+xn = y + t*log(xn) - dlnrel(-t/(xn + 1.d0))
 go to 200
 !
 70 ap1 = a + 1.d0
 if (xn > 0.7d0*ap1) go to 101
-w = dlog(p) + dgamln(ap1)
+w = log(p) + dgamln(ap1)
 if (xn > 0.15d0*ap1) go to 80
 ap2 = a + 2.d0
 ap3 = a + 3.d0
-x = dexp((w + x)/a)
-x = dexp((w + x - dlog(1.0 + (x/ap1)*(1.d0 + x/ap2)))/a)
-x = dexp((w + x - dlog(1.0 + (x/ap1)*(1.d0 + x/ap2)))/a)
-x = dexp((w + x - dlog(1.0 + (x/ap1)*(1.d0 + (x/ap2)*(1.d0 &
+x = exp((w + x)/a)
+x = exp((w + x - log(1.0 + (x/ap1)*(1.d0 + x/ap2)))/a)
+x = exp((w + x - log(1.0 + (x/ap1)*(1.d0 + x/ap2)))/a)
+x = exp((w + x - log(1.0 + (x/ap1)*(1.d0 + (x/ap2)*(1.d0 &
    & + x/ap3))))/a)
 xn = x
 if (xn <= 1.d-2*ap1) go to 101
@@ -5030,9 +5030,9 @@ sum = 1.d0 + t
 t = t*(xn/apn)
 sum = sum + t
 if (t > 1.d-4) go to 81
-t = w - dlog(sum)
-xn = dexp((xn + t)/a)
-xn = xn*(1.d0 - (a*dlog(xn) - xn - t)/(a - xn))
+t = w - log(sum)
+xn = exp((xn + t)/a)
+xn = xn*(1.d0 - (a*log(xn) - xn - t)/(a - xn))
 go to 101
 !
 !                 Schroder iteration using p
@@ -5049,21 +5049,21 @@ r = drcomp(a,xn)
 if (r < xmin) go to 550
 t = (pn - p)/r
 w = 0.5d0*(am1 - xn)
-if (dabs(t) <= 0.1d0 .and. dabs(w*t) <= 0.1d0) go to 120
+if (abs(t) <= 0.1d0 .and. abs(w*t) <= 0.1d0) go to 120
 x = xn*(1.d0 - t)
 if (x <= 0.d0) go to 540
-d = dabs(t)
+d = abs(t)
 go to 121
 !
 120 h = t*(1.d0 + w*t)
 x = xn*(1.d0 - h)
 if (x <= 0.d0) go to 540
-if (dabs(w) >= 1.d0 .and. dabs(w)*t*t <= eps) return
-d = dabs(h)
+if (abs(w) >= 1.d0 .and. abs(w)*t*t <= eps) return
+d = abs(h)
 121 xn = x
 if (d > tol) go to 110
 if (d <= eps) return
-if (dabs(p - pn) <= tol*p) return
+if (abs(p - pn) <= tol*p) return
 go to 110
 !
 !                 Schroder iteration using q
@@ -5079,21 +5079,21 @@ r = drcomp(a,xn)
 if (r < xmin) go to 550
 t = (q - qn)/r
 w = 0.5d0*(am1 - xn)
-if (dabs(t) <= 0.1d0 .and. dabs(w*t) <= 0.1d0) go to 220
+if (abs(t) <= 0.1d0 .and. abs(w*t) <= 0.1d0) go to 220
 x = xn*(1.d0 - t)
 if (x <= 0.d0) go to 540
-d = dabs(t)
+d = abs(t)
 go to 221
 !
 220 h = t*(1.d0 + w*t)
 x = xn*(1.d0 - h)
 if (x <= 0.d0) go to 540
-if (dabs(w) >= 1.d0 .and. dabs(w)*t*t <= eps) return
-d = dabs(h)
+if (abs(w) >= 1.d0 .and. abs(w)*t*t <= eps) return
+d = abs(h)
 221 xn = x
 if (d > tol) go to 210
 if (d <= eps) return
-if (dabs(q - qn) <= tol*q) return
+if (abs(q - qn) <= tol*q) return
 go to 210
 !
 !                       Special cases
@@ -5104,7 +5104,7 @@ return
 410 if (q < 0.9d0) go to 411
 x = -dlnrel(-p)
 return
-411 x = -dlog(q)
+411 x = -log(q)
 return
 !
 !                       Error return
@@ -5266,15 +5266,15 @@ if (y == 0.0) go to 210
 if (a == 0.0) go to 211
 if (b == 0.0) go to 201
 !
-eps = amax1(eps, 1.e-15)
-if (amax1(a,b) < 1.e-3*eps) go to 230
+eps = max(eps, 1.e-15)
+if (max(a,b) < 1.e-3*eps) go to 230
 !
 ind = 0
 a0 = a
 b0 = b
 x0 = x
 y0 = y
-if (amin1(a0, b0) > 1.0) go to 30
+if (min(a0, b0) > 1.0) go to 30
 !
 !             Procedure for a0 .LE. 1 or b0 .LE. 1
 !
@@ -5285,10 +5285,10 @@ b0 = a
 x0 = y
 y0 = x
 !
-10 if (b0 < amin1(eps,eps*a0)) go to 80
-if (a0 < amin1(eps,eps*b0) .and. b0*x0 <= 1.0) go to 90
-if (amax1(a0, b0) > 1.0) go to 20
-if (a0 >= amin1(0.2, b0)) go to 100
+10 if (b0 < min(eps,eps*a0)) go to 80
+if (a0 < min(eps,eps*b0) .and. b0*x0 <= 1.0) go to 90
+if (max(a0, b0) > 1.0) go to 20
+if (a0 >= min(0.2, b0)) go to 100
 if (x0**a0 <= 0.9) go to 100
 if (x0 >= 0.3) go to 110
 n = 20
@@ -5444,7 +5444,7 @@ end interface
 fpser = 1.0
 if (a <= 1.e-3*eps) go to 10
 fpser = 0.0
-t = a*alog(x)
+t = a*log(x)
 if (t < exparg(1)) return
 fpser = exp(t)
 !
@@ -5488,9 +5488,9 @@ end interface
 bx = b*x
 t = x - bx
 if (b*eps > 2.e-2) go to 10
-c = alog(x) + psi(b) + g + t
+c = log(x) + psi(b) + g + t
 go to 20
-10 c = alog(bx) + g + t
+10 c = log(bx) + g + t
 !
 20 tol = 5.0*eps*abs(c)
 j = 1.0
@@ -5545,12 +5545,12 @@ if (x == 0.0) return
 !-----------------------------------------------------------------------
 !            Compute the factor x**a/(a*beta(a,b))
 !-----------------------------------------------------------------------
-a0 = amin1(a,b)
+a0 = min(a,b)
 if (a0 < 1.0) go to 10
-z = a*alog(x) - betaln(a,b)
+z = a*log(x) - betaln(a,b)
 bpser = exp(z)/a
 go to 70
-10 b0 = amax1(a,b)
+10 b0 = max(a,b)
 if (b0 >= 8.0) go to 60
 if (b0 > 1.0) go to 40
 !
@@ -5579,9 +5579,9 @@ c = 1.0
 do 41 i = 1,m
    b0 = b0 - 1.0
 41 c = c*(b0/(a0 + b0))
-u = alog(c) + u
+u = log(c) + u
 !
-50 z = a*alog(x) - u
+50 z = a*log(x) - u
 b0 = b0 - 1.0
 apb = a0 + b0
 if (apb > 1.0) go to 51
@@ -5595,7 +5595,7 @@ go to 70
 !            Procedure for a0 .LT. 1 and b0 .GE. 8
 !
 60 u = gamln1(a0) + algdiv(a0,b0)
-z = a*alog(x) - u
+z = a*log(x) - u
 bpser = (a0/a)*exp(z)
 70 if (bpser == 0.0 .or. a <= 0.1*eps) return
 !-----------------------------------------------------------------------
@@ -5834,19 +5834,19 @@ end interface
 !
 brcomp = 0.0
 if (x == 0.0 .or. y == 0.0) return
-a0 = amin1(a,b)
+a0 = min(a,b)
 if (a0 >= 8.0) go to 100
 !
 if (x > 0.375) go to 10
-lnx = alog(x)
+lnx = log(x)
 lny = alnrel(-x)
 go to 20
 10 if (y > 0.375) go to 11
 lnx = alnrel(-y)
-lny = alog(y)
+lny = log(y)
 go to 20
-11 lnx = alog(x)
-lny = alog(y)
+11 lnx = log(x)
+lny = log(y)
 !
 20 z = a*lnx + b*lny
 if (a0 < 1.0) go to 30
@@ -5856,7 +5856,7 @@ return
 !-----------------------------------------------------------------------
 !              Procedure for a .LT. 1 or b .LT. 1
 !-----------------------------------------------------------------------
-30 b0 = amax1(a,b)
+30 b0 = max(a,b)
 if (b0 >= 8.0) go to 80
 if (b0 > 1.0) go to 60
 !
@@ -5886,7 +5886,7 @@ do i = 1,n
    b0 = b0 - 1.0
    c = c*(b0/(a0 + b0))
 end do
-u = alog(c) + u
+u = log(c) + u
 !
 70 z = z - u
 b0 = b0 - 1.0
@@ -5922,13 +5922,13 @@ lambda = (a + b)*y - b
 if (abs(e) > 0.6) go to 111
 u = rlog1(e)
 go to 120
-111 u = e - alog(x/x0)
+111 u = e - log(x/x0)
 !
 120 e = lambda/b
 if (abs(e) > 0.6) go to 121
 v = rlog1(e)
 go to 130
-121 v = e - alog(y/y0)
+121 v = e - log(y/y0)
 !
 130 z = exp(-(a*u + b*v))
 brcomp = const*sqrt(b*x0)*z*exp(-bcorr(a,b))
@@ -5996,19 +5996,19 @@ end interface
 !     const = 1/sqrt(2*pi)
 !-----------------
 !
-a0 = amin1(a,b)
+a0 = min(a,b)
 if (a0 >= 8.0) go to 100
 !
 if (x > 0.375) go to 10
-lnx = alog(x)
+lnx = log(x)
 lny = alnrel(-x)
 go to 20
 10 if (y > 0.375) go to 11
 lnx = alnrel(-y)
-lny = alog(y)
+lny = log(y)
 go to 20
-11 lnx = alog(x)
-lny = alog(y)
+11 lnx = log(x)
+lny = log(y)
 !
 20 z = a*lnx + b*lny
 if (a0 < 1.0) go to 30
@@ -6018,7 +6018,7 @@ return
 !-----------------------------------------------------------------------
 !              Procedure for a .LT. 1 or b .LT. 1
 !-----------------------------------------------------------------------
-30 b0 = amax1(a,b)
+30 b0 = max(a,b)
 if (b0 >= 8.0) go to 80
 if (b0 > 1.0) go to 60
 !
@@ -6048,7 +6048,7 @@ do i = 1,n
    b0 = b0 - 1.0
    c = c*(b0/(a0 + b0))
 end do
-u = alog(c) + u
+u = log(c) + u
 !
 70 z = z - u
 b0 = b0 - 1.0
@@ -6084,13 +6084,13 @@ lambda = (a + b)*y - b
 if (abs(e) > 0.6) go to 111
 u = rlog1(e)
 go to 120
-111 u = e - alog(x/x0)
+111 u = e - log(x/x0)
 !
 120 e = lambda/b
 if (abs(e) > 0.6) go to 121
 v = rlog1(e)
 go to 130
-121 v = e - alog(y/y0)
+121 v = e - log(y/y0)
 !
 130 z = esum(mu,-(a*u + b*v))
 brcmp1 = const*sqrt(b*x0)*z*exp(-bcorr(a,b))
@@ -6146,16 +6146,16 @@ nu = a + 0.5*bm1
 if (y > 0.375) go to 10
 lnx = alnrel(-y)
 go to 11
-10 lnx = alog(x)
+10 lnx = log(x)
 11 z = -nu*lnx
 if (b*z == 0.0) go to 100
 !
 !                 Computation of the expansion
 !                 SET r = exp(-z)*z**b/gamma(b)
 !
-r = b*(1.0 + gam1(b))*exp(b*alog(z))
+r = b*(1.0 + gam1(b))*exp(b*log(z))
 r = r*exp(a*lnx)*exp(0.5*bm1*lnx)
-u = algdiv(b,a) + b*alog(nu)
+u = algdiv(b,a) + b*log(nu)
 u = r*exp(-u)
 if (u == 0.0) go to 100
 call grat1(b,z,r,p,q,eps)
@@ -6252,7 +6252,7 @@ sum = sum + t
 if (abs(t) > tol) go to 11
 j = a*x*((sum/6.0 - 0.5/(a + 2.0))*x + 1.0/(a + 1.0))
 !
-z = a*alog(x)
+z = a*log(x)
 h = gam1(a)
 g = 1.0 + h
 if (x < 0.25) go to 20
@@ -6539,7 +6539,7 @@ t = am1*y/x + 1.0
 if (t < j) n = int(t)
 !
 30 i = n - 1.0
-c = (a*alog(x) + i*alnrel(-x)) - blnd(a,i)
+c = (a*log(x) + i*alnrel(-x)) - blnd(a,i)
 if (c <= -30) go to 60
 tol = tol/j
 an = exp(c)
@@ -6646,7 +6646,7 @@ go to 210
 201 if (t < j) n = int(t)
 !
 210 t = n - 0.5
-c = (a*alog(x) + t*alnrel(-x)) - blnd(a,t)
+c = (a*log(x) + t*alnrel(-x)) - blnd(a,t)
 if (c <= -30.0) go to 251
 c = exp(c)
 if (c <= tol/j) go to 251
@@ -6779,7 +6779,7 @@ logam = w(n)
 return
 10 t = (1.0/x)**2
 z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
-logam = (d + z) + (x - 0.5)*(alog(x) - 1.0)
+logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
 return
 end function logam
 
@@ -6877,14 +6877,14 @@ go to 50
 20 if (cn1 >= 0.0) go to 30
 qn = -1.25*(r + 0.5*abs(cn2) - abs(y - 0.5*cn2))
 if (cn1 >= qn) go to 30
-qn = 1.25*(r - amax1(1.2*r,abs(y - cn2)))
+qn = 1.25*(r - max(1.2*r,abs(y - cn2)))
 if (cn1 >= qn) go to 30
-qn = amin1(pn, -aint(1.25*(r - abs(cn2))))
+qn = min(pn, -aint(1.25*(r - abs(cn2))))
 go to 130
 !
 30 r2 = r*r
 qm = 0.0625*r2*r2 - cn2*cn2
-qn = amax1(pn, aint(sqrt(0.5*(qm + abs(qm)))))
+qn = max(pn, aint(sqrt(0.5*(qm + abs(qm)))))
 go to 130
 !
 !          Use asymptotic expansion
@@ -6898,7 +6898,7 @@ return
 if (abs(cn2) >= 0.8*abs(y)) go to 60
 qm = -1.25*(r + 0.5*abs(cn2) - abs(y - 0.5*cn2))
 if (cn1 >= qm) go to 60
-qm = 1.25*(r - amax1(1.2*r,abs(y - cn2)))
+qm = 1.25*(r - max(1.2*r,abs(y - cn2)))
 if (cn1 < qm) n = 1
 !
 60 qn = pn
@@ -6926,7 +6926,7 @@ if (n == 0) go to 70
 !
 !          Use Maclaurin expansion with forward recurrence
 !
-qn = amin1(pn, -aint(1.25*(r - abs(cn2))))
+qn = min(pn, -aint(1.25*(r - abs(cn2))))
 go to 130
 !
 !          Use backward recurrence starting from the
@@ -6964,13 +6964,13 @@ if (x >= 0.0) return
 !
 nu = pi*cmplx(-cn2, cn1)
 if (y < 0.0) nu = -nu
-w = cexp(nu)*w
+w = exp(nu)*w
 return
 !
 !          Use Maclaurin expansion with forward or backward recurrence.
 !
 130 m = qn - pn
-if (iabs(m) > 1) go to 140
+if (abs(m) > 1) go to 140
 nu = cmplx(cn1, cn2)
 call cbjm(z, nu, w)
 go to 180
@@ -6981,7 +6981,7 @@ if (m > 0) go to 160
 !
 !          Forward recurrence
 !
-m = iabs(m)
+m = abs(m)
 nu = nu + 1.0
 call cbjm(z, nu, w)
 do i = 2,m
@@ -7014,8 +7014,8 @@ e = sn/gamma(pn + 1.0)
 w = e*w*(0.5*z)**k
 return
 !
-190 s = cnu*clog(0.5*z)
-w = cexp(s)*w
+190 s = cnu*log(0.5*z)
+w = exp(s)*w
 if (rn2 > 0.81) go to 200
 w = w*cgam0(cnu)
 return
@@ -7058,7 +7058,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
+anorm(z) = max(abs(real(z)),abs(aimag(z)))
 !--------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -7107,7 +7107,7 @@ t = s/(nu + m)
 a0 = anorm(t)/m
 t = t * (s/(nu + (m + 1.0)))
 a = anorm(t)/(m*(m + 1.0))
-a = amax1(a, a0)
+a = max(a, a0)
 !
 t = (1.0, 0.0)
 km2 = k - 2
@@ -7233,23 +7233,23 @@ if (abs(izn) > 0.1*abs(real(zn))) go to 20
 !
 s = (1.0 - zn)*(1.0 + zn)
 eta = 1.0/s
-q = csqrt(s)
+q = sqrt(s)
 s = 1.0/(nu*q)
 t = zn/(1.0 + q)
-t = cexp(nu*(q + clog(t)))
+t = exp(nu*(q + log(t)))
 go to 30
 
 20 s = (nu - z)*(nu + z)
 eta = (nu*nu)/s
-w = csqrt(s)
+w = sqrt(s)
 q = w/nu
 if (real(q) < 0.0) w = -w
 s = 1.0/w
 t = z/(nu + w)
-t = cexp(w + nu*clog(t))
+t = exp(w + nu*log(t))
 !
 30 is = aimag(s)
-r = csqrt(s)
+r = sqrt(s)
 c1 = r*t
 ar = real(r)*real(r) + aimag(r)*aimag(r)
 aq = -1.0/(real(q)*real(q) + aimag(q)*aimag(q))
@@ -7382,7 +7382,7 @@ end interface
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
+anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     pihalf = pi/2
 !     c = 2*pi**(-1/2)
@@ -7438,14 +7438,14 @@ q = (q + a1)*zr
 w = z - pihalf*nu
 if (abs(aimag(w)) > 1.0) go to 40
 arg = w - 0.5*pihalf
-w = c*csqrt(zr)*(p*ccos(arg) - q*csin(arg))
+w = c*sqrt(zr)*(p*cos(arg) - q*sin(arg))
 go to 50
-40 e = cexp(-j*w)
+40 e = exp(-j*w)
 t = q - j*p
 if (aimag(z) > 0.0 .and. real(z) <= 1.e-2*aimag(z) .and. &
    & abs(real(nu)) < 1.e-2*aimag(nu)) t = 0.5*t
 call crec(real(e), aimag(e), u, v)
-w = 0.5*c*csqrt(j*zr)*((p - j*q)*e + t*cmplx(u, v))
+w = 0.5*c*sqrt(j*zr)*((p - j*q)*e + t*cmplx(u, v))
 !
 50 if (x >= -1.e-2*y) go to 60
 if (y < 0.0) nu = -nu
@@ -7495,7 +7495,7 @@ az(1) = real(a)
 az(2) = aimag(a)
 zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
-pn = iabs(in)
+pn = abs(in)
 sn = 1.0
 if (in) 002,003,003
 002 if (in == in/2*2) go to 003
@@ -7858,7 +7858,7 @@ ta = spmpar(1)/tb
 if (tb == 2.0e0) go to 1
 if (tb == 8.0e0) go to 2
 if (tb == 16.0e0) go to 3
-tb = alog(tb)
+tb = log(tb)
 go to 5
 1 tb = .69315e0
 go to 5
@@ -7866,14 +7866,14 @@ go to 5
 go to 5
 3 tb = 2.77259e0
 !
-5 tol = amax1(ta,1.e-15)
+5 tol = max(ta,1.e-15)
 i1 = ipmpar(5)
 i2 = ipmpar(6)
 !     ln(10**3) = 6.90776
 elim = float(-i2)*tb - 6.90776e0
 !     tolln = -ln(tol)
 tolln = float(i1)*tb
-tolln = amin1(tolln,34.5388e0)
+tolln = min(tolln,34.5388e0)
 !
 !
 !
@@ -7909,15 +7909,15 @@ sxo2 = xo2*xo2
 !     applied.
 !
 if (sxo2 <= (fnu + 1.0e0)) go to 90
-ta = amax1(20.0e0,fnu)
+ta = max(20.0e0,fnu)
 if (x > ta) go to 120
 if (x > 12.0e0) go to 110
-xo2l = alog(xo2)
+xo2l = log(xo2)
 ns = int(sxo2 - fnu) + 1
 go to 100
 90 fn = fnu
 fnp1 = fn + 1.0e0
-xo2l = alog(xo2)
+xo2l = log(xo2)
 is = kt
 if (x <= 0.50e0) go to 330
 ns = 0
@@ -7928,7 +7928,7 @@ fnp1 = fn + 1.0e0
 is = kt
 if (n - 1 + ns > 0) is = 3
 go to 330
-110 ans = amax1(36.0e0 - fnu,0.0e0)
+110 ans = max(36.0e0 - fnu,0.0e0)
 ns = int(ans)
 fni = fni + float(ns)
 dfn = fni + fnf
@@ -7947,8 +7947,8 @@ is = kt
 !     Uniform asymptotic expansion for nu to infinity
 !
 130 continue
-i1 = iabs(3 - is)
-i1 = max0(i1,1)
+i1 = abs(3 - is)
+i1 = max(i1,1)
 flgjy = 1.0e0
 call asjy(jairy,x,fn,flgjy,i1,tol,elim,temp(is),wk,iflw)
 if (iflw /= 0) go to 380
@@ -8017,7 +8017,7 @@ if (nn - 1) 440, 410, 420
 is = 2
 420 if (sxo2 <= fnp1) go to 430
 go to 130
-430 arg = arg - xo2l + alog(fnp1)
+430 arg = arg - xo2l + log(fnp1)
 if (arg < (-elim)) go to 400
 go to 330
 440 nz = n - nn
@@ -8151,7 +8151,7 @@ return
 !
 610 continue
 !     Computation of last order for series normalization
-akm = amax1(3.0e0 - fn,0.0e0)
+akm = max(3.0e0 - fn,0.0e0)
 km = int(akm)
 tfn = fn + float(km)
 ta = (gln + tfn - 0.9189385332e0 - 0.0833333333e0/tfn)/(tfn + 0.5e0)
@@ -8518,10 +8518,10 @@ do 170 jn = 1,in
 !
    sa = 0.0e0
    if (abw2 == 0.0e0) go to 10
-   sa = tols/alog(abw2)
+   sa = tols/log(abw2)
 10 sb = sa
    do 20 i = 1,5
-      akm = amax1(sa,2.0e0)
+      akm = max(sa,2.0e0)
       kmax(i) = int(akm)
       sa = sa + sb
 20    continue
@@ -8611,7 +8611,7 @@ do 170 jn = 1,in
 !
 !     CASES FOR (x/FN).LT.sqrt(0.7225)
 !
-   wk(3) = abs(alog((1.0e0 + wk(2))/xx) - wk(2))
+   wk(3) = abs(log((1.0e0 + wk(2))/xx) - wk(2))
    wk(4) = wk(3)*fn
    rcz = con1/wk(4)
    if (wk(4) > elim) go to 75
@@ -8998,9 +8998,9 @@ real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366
 az(1) = real(a)
 az(2) = aimag(a)
 zs = az(1)*az(1) + az(2)*az(2)
-zl(1) = 0.5*alog(zs)
+zl(1) = 0.5*log(zs)
 zl(2) = atan2(az(2),az(1))
-an = iabs(in)
+an = abs(in)
 sn = 1.0
 if (in) 002,003,003
 002 if (in == in/2*2) go to 003
@@ -9345,7 +9345,7 @@ az(1) = real(a)
 az(2) = aimag(a)
 zs = az(1)*az(1) + az(2)*az(2)
 zm = sqrt(zs)
-pn = iabs(in)
+pn = abs(in)
 sn = 1.0
 if (az(1)) 002,003,003
 002 qz(1) = -az(1)
@@ -9749,7 +9749,7 @@ ta = spmpar(1)/tb
 if (tb == 2.0e0) go to 1
 if (tb == 8.0e0) go to 2
 if (tb == 16.0e0) go to 3
-tb = alog(tb)
+tb = log(tb)
 go to 5
 1 tb = .69315e0
 go to 5
@@ -9757,14 +9757,14 @@ go to 5
 go to 5
 3 tb = 2.77259e0
 !
-5 tol = amax1(ta,1.e-15)
+5 tol = max(ta,1.e-15)
 i1 = ipmpar(5)
 i2 = ipmpar(6)
 !     ln(10**3) = 6.90776
 elim = float(-i2)*tb - 6.90776e0
 !     tolln = -ln(tol)
 tolln = float(i1)*tb
-tolln = amin1(tolln,34.5388e0)
+tolln = min(tolln,34.5388e0)
 !
 !
 !
@@ -9806,9 +9806,9 @@ sx = etx*x
 if (sxo2 <= (fnu + 1.0e0)) go to 90
 if (x <= 12.0e0) go to 110
 fn = 0.55e0*fnu*fnu
-fn = amax1(17.0e0,fn)
+fn = max(17.0e0,fn)
 if (x >= fn) go to 430
-ans = amax1(36.0e0 - fnu,0.0e0)
+ans = max(36.0e0 - fnu,0.0e0)
 ns = int(ans)
 fni = fni + float(ns)
 dfn = fni + fnf
@@ -9819,7 +9819,7 @@ if (km > 0) is = 3
 go to 120
 90 fn = fnu
 fnp1 = fn + 1.0e0
-xo2l = alog(xo2)
+xo2l = log(xo2)
 is = kt
 if (x <= 0.5e0) go to 230
 ns = 0
@@ -9830,7 +9830,7 @@ fnp1 = fn + 1.0e0
 is = kt
 if (n - 1 + ns > 0) is = 3
 go to 230
-110 xo2l = alog(xo2)
+110 xo2l = log(xo2)
 ns = int(sxo2 - fnu)
 go to 100
 120 continue
@@ -9841,7 +9841,7 @@ if (kode == 2) go to 130
 if (alpha < 1.0e0) go to 150
 z = x/alpha
 ra = sqrt(1.0e0 + z*z)
-gln = alog((1.0e0 + ra)/z)
+gln = log((1.0e0 + ra)/z)
 t = ra*(1.0e0 - etx) + etx/(z + ra)
 arg = alpha*(t - gln)
 if (arg > elim) go to 610
@@ -9852,7 +9852,7 @@ if (km == 0) go to 140
 !
 z = x/fn
 ra = sqrt(1.0e0 + z*z)
-gln = alog((1.0e0 + ra)/z)
+gln = log((1.0e0 + ra)/z)
 t = ra*(1.0e0 - etx) + etx/(z + ra)
 arg = fn*(t - gln)
 140 if (arg < (-elim)) go to 280
@@ -9877,12 +9877,12 @@ fn = dfn
 if (i1 == 2) go to 350
 z = x/fn
 ra = sqrt(1.0e0 + z*z)
-gln = alog((1.0e0 + ra)/z)
+gln = log((1.0e0 + ra)/z)
 t = ra*(1.0e0 - etx) + etx/(z + ra)
 arg = fn*(t - gln)
 190 continue
-i1 = iabs(3 - is)
-i1 = max0(i1,1)
+i1 = abs(3 - is)
+i1 = max(i1,1)
 flgik = 1.0e0
 call asik(x,fn,kode,flgik,ra,arg,i1,tol,temp(is))
 go to (180, 350, 510), is
@@ -9942,7 +9942,7 @@ if (nn - 1) 340, 310, 320
 is = 2
 320 if (sxo2 <= fnp1) go to 330
 go to 130
-330 arg = arg - xo2l + alog(fnp1)
+330 arg = arg - xo2l + log(fnp1)
 if (arg < (-elim)) go to 300
 go to 230
 340 nz = n - nn
@@ -10037,7 +10037,7 @@ go to 450
 !
 500 continue
 !     Computation of last order for series normalization
-akm = amax1(3.0e0 - fn,0.0e0)
+akm = max(3.0e0 - fn,0.0e0)
 km = int(akm)
 tfn = fn + float(km)
 ta = (gln + tfn - 0.9189385332e0 - 0.0833333333e0/tfn)/(tfn + 0.5e0)
@@ -10200,7 +10200,7 @@ do 50 jn = 1,in
    fn = fn - flgik
    z = x/fn
    ra = sqrt(1.0e0 + z*z)
-   gln = alog((1.0e0 + ra)/z)
+   gln = log((1.0e0 + ra)/z)
    etx = float(kode - 1)
    t = ra*(1.0e0 - etx) + etx/(z + ra)
    arg = fn*(t - gln)*flgik
@@ -10222,7 +10222,7 @@ do 50 jn = 1,in
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
-      if (amax1(abs(ak),abs(ap)) < tol) go to 40
+      if (max(abs(ak),abs(ap)) < tol) go to 40
 30    continue
 40 continue
    t = abs(t)
@@ -10429,7 +10429,7 @@ end interface
 !        cnu and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 !--------------------------
-anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
+anorm(z) = max(abs(real(z)), abs(aimag(z)))
 !--------------------------
 !     c = pi**(1/2)
 !--------------------------
@@ -10457,9 +10457,9 @@ do i = 1, 16
 end do
 !
 20 p = p + 1.0
-t = csqrt(zr)
+t = sqrt(zr)
 if (aimag(z) == 0.0) t = conjg(t)
-w = c*t*p*cexp(-z)
+w = c*t*p*exp(-z)
 return
 end subroutine cbka
 
@@ -10583,7 +10583,7 @@ end do
 w = u3
 !
 90 if (ind == 0) return
-w = w*w1*cexp(-cz)/csqrt(cz)
+w = w*w1*exp(-cz)/sqrt(cz)
 if (ind > 0) return
 !
 !            Analytic continuation

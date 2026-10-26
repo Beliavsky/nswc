@@ -1,0 +1,3099 @@
+{
+  "mapping": {
+    "alog": "log",
+    "alog10": "log10",
+    "amax1": "max",
+    "amin1": "min",
+    "cabs": "abs",
+    "ccos": "cos",
+    "cexp": "exp",
+    "clog": "log",
+    "csin": "sin",
+    "csqrt": "sqrt",
+    "dabs": "abs",
+    "datan": "atan",
+    "datan2": "atan2",
+    "dcos": "cos",
+    "dexp": "exp",
+    "dlog": "log",
+    "dmax1": "max",
+    "dmin1": "min",
+    "dsign": "sign",
+    "dsin": "sin",
+    "dsqrt": "sqrt",
+    "iabs": "abs",
+    "isign": "sign",
+    "max0": "max",
+    "min0": "min"
+  },
+  "procedures": {
+    "MACH2": {
+      "source_hash": "ab0c8bd00057af660a1ee58f7ad507418460de09637fa92588ba52f17979d78b",
+      "calls": {
+        "dabs": 3
+      }
+    },
+    "EPSLN": {
+      "source_hash": "b474054199ba131efe9447706a3a5ae668dc05bc9752d7de4c64a414a6d1a8b6",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DEPSLN": {
+      "source_hash": "7fee81c04ef89610b482cdf93d113419d1df239ce4f0918c483c63049e263662",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "EXPARG": {
+      "source_hash": "fd401d6d923843a82a5bcc7a015b3bfcb08f7d8eb29ac96dcefde3e3db0244de",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DXPARG": {
+      "source_hash": "f7f8e30d283f062ebb2bd1d10728b199b8cdc973733f3660d2a482053c6f5051",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "DAORD": {
+      "source_hash": "c3c97817c7dc842b5acf76a9b0b937c43f51b8fb5e4c2beac810f159429483c9",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "CBRT": {
+      "source_hash": "1ab792d49aadb08d1ff8bcb5b8938bbdb050a5d5934aae666951316cf1c00e18",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "DCBRT": {
+      "source_hash": "0f094f0de21acc6d2ebe8d9e9a676eee9408dab0f8774276babcd7c4ee5633a5",
+      "calls": {
+        "dlog": 2,
+        "dexp": 2
+      }
+    },
+    "DARTNQ": {
+      "source_hash": "40a6e2bc277e43bcd9970111b780f5f26ca9fe9638089593feebb1a83b5da277",
+      "calls": {
+        "datan": 3
+      }
+    },
+    "DCPABS": {
+      "source_hash": "5f94af262c653b4bdf292e621c2cdc4feaaaadd1d6e3dabed7837ddb6bc1f0b7",
+      "calls": {
+        "dabs": 4,
+        "dsqrt": 2
+      }
+    },
+    "DCREC": {
+      "source_hash": "862f152ad264d5fd51dfff21f960f453e75e682a216b33d52831d61c87c4591d",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "CDIVID": {
+      "source_hash": "9b46424ec478576bfde0e5681a750903f6f2984fa045d9a35cecc043d403bb80",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "DCSQRT": {
+      "source_hash": "b61dd08a4d5091d500f0f4cc4aba6c91112bbe83e3ae24a5b07c4be16a393cbd",
+      "calls": {
+        "dsqrt": 5,
+        "dabs": 2,
+        "dsign": 2
+      }
+    },
+    "DROTG": {
+      "source_hash": "09d75451436c725f6917d7dae6f14e5f05fea59085ef00797dd347259069736d",
+      "calls": {
+        "dabs": 2,
+        "dsqrt": 2
+      }
+    },
+    "DSIN1": {
+      "source_hash": "e89357760690439c270dcdd1d2f39a77bb01503e0c81173371bd3f64d8712efd",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "DCOS1": {
+      "source_hash": "6f7d355d8b9b46a9026b1815eaebb086feb68838939f810424ccf3350ee7a32b",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "DESUM": {
+      "source_hash": "cc3a039b2bd6771fbcb94e815003798a2e75095f455c1fd04a3d6db967b2568a",
+      "calls": {
+        "dexp": 4
+      }
+    },
+    "DREXP": {
+      "source_hash": "8ddd60e5c6f2c709f354ac03df8aacc4edd34b554e764c371b81ff30bb0e7044",
+      "calls": {
+        "dabs": 1,
+        "dexp": 2
+      }
+    },
+    "DREXP1": {
+      "source_hash": "e62c76d3aedbac38eace90929f09861e19685d1ebae4d6b4d301fd43585d9104",
+      "calls": {
+        "dabs": 2,
+        "dexp": 2
+      }
+    },
+    "ALNREL": {
+      "source_hash": "dbaed76dd3f9e865234a4906f0c771b0a9dc5b65b6b19c058662f1080bb4f071",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DLNREL": {
+      "source_hash": "a22e8299885bf03e30374393e6373d73a323be88a2e45b8dc001e17edab63d30",
+      "calls": {
+        "dabs": 1,
+        "dlog": 1
+      }
+    },
+    "RLOG": {
+      "source_hash": "9418d908dfddff8992f2f7d6a69ede296562c9a2dd0d688b3febe15c1300ce17",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "RLOG1": {
+      "source_hash": "6f67f2e84332cb9ff96e8703bed31e555ab7559195341622aa78ccb7d0cb8b03",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DRLOG": {
+      "source_hash": "e5bc534b1ef0455b56a5f7e3bb88e8844cdcacf87feef0c861bfd2cf0ec061c5",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "DRLOG1": {
+      "source_hash": "51a40cd250689122d90a85bb0788d40006fe9961e879befb67ffe787360cc731",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "PFIND": {
+      "source_hash": "0cb26f67b99f3ff1e3e1b8468528ba9aa71dc0bc54538ada778bc4115bf9a19c",
+      "calls": {
+        "amax1": 10,
+        "amin1": 1
+      }
+    },
+    "CERFC": {
+      "source_hash": "e98391b35f92d2a1fe9fef4894398085b11a126ec12b9b14f61fa9cf134fd066",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DCERF": {
+      "source_hash": "26fa59336eb3de0a6674b5851d397ae1ec77f7b82d8c74aaea26d6a354823b99",
+      "calls": {
+        "dmax1": 1,
+        "dabs": 9,
+        "dexp": 3,
+        "dcos": 3,
+        "dsin": 3
+      }
+    },
+    "DCERFC": {
+      "source_hash": "b20276e780c6c84e30d0d66d0cf31e1c4ae55d9f61a638d2da32a98b6bf9dbb8",
+      "calls": {
+        "dmax1": 2,
+        "dabs": 11,
+        "dexp": 6,
+        "dcos": 6,
+        "dsin": 6
+      }
+    },
+    "ERFCM2": {
+      "source_hash": "0f3ffbc4bd827a670db3f67c3ea015e60643fec8b5561f3d314481e90b7b9717",
+      "calls": {
+        "dmax1": 1,
+        "dabs": 2,
+        "dexp": 1,
+        "dcos": 1,
+        "dsin": 1
+      }
+    },
+    "DERF": {
+      "source_hash": "b408eb312591c7e78f914feeeaa135c856a6b3c3bb0711d23272daf9bb2faae9",
+      "calls": {
+        "dabs": 1,
+        "dexp": 1,
+        "dsign": 1
+      }
+    },
+    "DERFC": {
+      "source_hash": "f36d742b2fa49488370a4665be06850c1f8616be670e74160700d0db618680d0",
+      "calls": {
+        "dabs": 1,
+        "dexp": 2
+      }
+    },
+    "DERFC1": {
+      "source_hash": "ca7385616ab4c30a30c95005d004f6242c6baaf5769db6d9da303212c3e6ef29",
+      "calls": {
+        "dabs": 1,
+        "dexp": 5
+      }
+    },
+    "ERFI": {
+      "source_hash": "2d5ea90605a733b2faa065116e4c1b602eabdf5b2ad614fd336677e083d4d0bf",
+      "calls": {
+        "amax1": 1,
+        "alog": 1
+      }
+    },
+    "DERFI": {
+      "source_hash": "12888abab401e0c92a124a3685fcd9b6e0f9f9a4f48b1417720193025259ec39",
+      "calls": {
+        "dabs": 1,
+        "dexp": 2,
+        "dlog": 2,
+        "dsqrt": 1
+      }
+    },
+    "AERF": {
+      "source_hash": "f2734ab7207160f19f3782131ecc7504ba8d1aeb667793fc39e30d8108f029cc",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "DAERF": {
+      "source_hash": "454b26c5e9717f5e8343fdbf35824f770105dcd95d1ffe84331a10d561b1f8e5",
+      "calls": {
+        "dabs": 6,
+        "dmax1": 2,
+        "dexp": 2,
+        "dsign": 1
+      }
+    },
+    "PNI": {
+      "source_hash": "fac3957618b79b9fbdf6de0c2b6bf1c416f779fda38099976d11af5509b7dac2",
+      "calls": {
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "DPNI": {
+      "source_hash": "69dd779661303d6ae368c980ac839a8bf553c0bb853ff0c23ffcb7d0b178f0da",
+      "calls": {
+        "dmin1": 1,
+        "dabs": 2
+      }
+    },
+    "DPDAW": {
+      "source_hash": "93540156a364423531882aeaef7197ef1da0c13a54600e120abb18c6e831d047",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "CEXPLI": {
+      "source_hash": "e5e011c1a10e28b4a1a3599de8a4c49d196b60adcf28dfe3e43060541633da96",
+      "calls": {
+        "amax1": 2,
+        "alog": 1
+      }
+    },
+    "EXPLI": {
+      "source_hash": "c75561f9210240810f0c87c67a8c09d3a655c3562eeaaacc9a7e02e6e0ed182c",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "DEI": {
+      "source_hash": "d242efe34680db6c5d5ecb62598311d29f714260a3e7acb2daf49bb79dab1fa9",
+      "calls": {
+        "dexp": 1
+      }
+    },
+    "DEI1": {
+      "source_hash": "2635dd506b3143f0759a3f7655ca63b2bf697a907d0565408e964bb980cb91ca",
+      "calls": {
+        "dexp": 1
+      }
+    },
+    "DE1E": {
+      "source_hash": "c8513baf285906f0e7a0ca1b3ed41abd0b57df213f1c99586e14b37b083e64f9",
+      "calls": {
+        "dabs": 3,
+        "dlog": 2
+      }
+    },
+    "DEI0": {
+      "source_hash": "0d701bb103c57c69ca71323847a433aa977a025ee56f2fd0230c7fa92ea34adb",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "CIN": {
+      "source_hash": "9b4429ae96232322a94326bd5310b20b509f8783bfb8f7aecb225892399a71db",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "CEXEXI": {
+      "source_hash": "4cf8d46c62f5eea8ca0dfc03215ea8fe5c9250ba0c259a1e66b35816f8db36f7",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "CLI": {
+      "source_hash": "824315587802644c8f274f1b26770ea8ef23315f4b1f9ef80bb60e871ae67841",
+      "calls": {
+        "alog": 3
+      }
+    },
+    "ALI": {
+      "source_hash": "e7d1a63b9c31927d8d28a57a80419fd47ebbe6e9592e351a795bc21086090f02",
+      "calls": {
+        "alog": 6
+      }
+    },
+    "CGAMMA": {
+      "source_hash": "24382b8184bca43f1dc24e7dd5586452be44057e24ebe247311c60c462889bab",
+      "calls": {
+        "amin1": 1,
+        "alog": 3
+      }
+    },
+    "GLOG": {
+      "source_hash": "3111e117bf7b2d413b074ecd0290d5673df3459be77299d36ec6a9fcfdf18ef5",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "GAMLN": {
+      "source_hash": "47c5dddb73838d82a3335035b97b8a3b1c5e2afba9e9f25ee2282ceea96b01af",
+      "calls": {
+        "alog": 3
+      }
+    },
+    "DCGAMA": {
+      "source_hash": "a2ee46c08d82cad4ff092cd555a9670cf6fbb8392aa4b4ae153e758d1ca9dcc3",
+      "calls": {
+        "dabs": 3,
+        "dexp": 3,
+        "dmin1": 1,
+        "dsin": 3,
+        "dcos": 3,
+        "dlog": 3,
+        "datan2": 3
+      }
+    },
+    "DGAMMA": {
+      "source_hash": "fc9e5695074039d65c25e9b8ff4a5e03b293e8741423d42e55cc2a025566aee0",
+      "calls": {
+        "dabs": 4,
+        "dlog": 1,
+        "dexp": 1
+      }
+    },
+    "DGAMLN": {
+      "source_hash": "f53d019ca3227052d29b21d93dbfd6161ac2bb8d0a677eb753a9780891dfe525",
+      "calls": {
+        "dlog": 3
+      }
+    },
+    "CPSI": {
+      "source_hash": "6f4a1457d5c77b23c95e47e15e17f97fbed0ae46370bf803e084622137b6738d",
+      "calls": {
+        "amin1": 1,
+        "alog": 1
+      }
+    },
+    "PSI": {
+      "source_hash": "9b2d26de7adefe5b02339211413e37d4956f4c27f5389656c32c530688f33a29",
+      "calls": {
+        "amin1": 1,
+        "alog": 1
+      }
+    },
+    "DCPSI": {
+      "source_hash": "dabd7f9ba043989ffb7e85a66d01a20bc91b38e5600228c4eb8b207f78556e52",
+      "calls": {
+        "dabs": 3,
+        "dexp": 1,
+        "dmin1": 1,
+        "dsin": 1,
+        "dcos": 1,
+        "dlog": 1,
+        "datan2": 1
+      }
+    },
+    "DPSI": {
+      "source_hash": "af0ba52cc84bc44593bea740bd1b01986f1ebb259fc7f7196f072f4d7e47cb1a",
+      "calls": {
+        "dabs": 6,
+        "dmin1": 1,
+        "dcos": 1,
+        "dsin": 1,
+        "dlog": 1
+      }
+    },
+    "PSIDF": {
+      "source_hash": "68ac3fd881ffc6ce6726cc97826ed3a7c069ccd23f53b6967a1cbb63f54c94a0",
+      "calls": {
+        "amax1": 2,
+        "amin1": 4,
+        "alog": 2
+      }
+    },
+    "BETALN": {
+      "source_hash": "09ba1fe513998495c3e0691a0df119f415df9de4372e897283c1139fedff6ccc",
+      "calls": {
+        "amin1": 1,
+        "amax1": 1,
+        "alog": 7
+      }
+    },
+    "GSUMLN": {
+      "source_hash": "7194f3ab99e78fbc95d3eb287f6cda4215a26ee9751df51fd8dcd399272ff13c",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "BCORR": {
+      "source_hash": "ec860483ce15bb03b1a7c8d60bb153da408fbdd0af5b2d80a321820856c218a1",
+      "calls": {
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "ALGDIV": {
+      "source_hash": "4a170888203aa9ba4f313bbb174754ec1877022d5d30b37c632a3aa4ceffc026",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DBETLN": {
+      "source_hash": "44e3b909682e362889ac6c2e6db08a52f29797e45b0fd4fe28595106d7569ce3",
+      "calls": {
+        "dmin1": 1,
+        "dmax1": 1,
+        "dlog": 7
+      }
+    },
+    "DGSMLN": {
+      "source_hash": "01da2dbad9fd7d981b9a726531b5750b810a7044475c22ccb11e2717cf438df1",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "DBCORR": {
+      "source_hash": "e95eeb836d6b82dd2a3b871f6ebbf10431387b62bb9619b424f0283de21cadc8",
+      "calls": {
+        "dmin1": 1,
+        "dmax1": 1
+      }
+    },
+    "DLGDIV": {
+      "source_hash": "84e798fe1b3f159bc76d3d39717f3ca1544a79ebe82f7afdfe1853972c77aca5",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "GRATIO": {
+      "source_hash": "da726fecadd21593b2cef76a2bd73c65fc917bdbed5dba9fca3b92fdcaebf727",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "RCOMP": {
+      "source_hash": "214a8fd5bcafc46af817b2ead86e1c50c41d9606aaa428d7af99083ecf6b23e1",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DRCOMP": {
+      "source_hash": "bfa895a24ff988067db31e2ba5f7ee7d97940715ed3d21482271f0d21745bd00",
+      "calls": {
+        "dlog": 1,
+        "dexp": 3,
+        "dsqrt": 1
+      }
+    },
+    "GAMINV": {
+      "source_hash": "d62c0c3889a3c8fd4b5c18fcde91e87ec9b402b667b35fe71bb578ff21cc11dd",
+      "calls": {
+        "amax1": 4,
+        "alog": 18
+      }
+    },
+    "DGRAT": {
+      "source_hash": "ae36a52b422d3e05f23724d48cdcf4baddbc1ef996ae20250d8d4b9768b20979",
+      "calls": {
+        "dsqrt": 4,
+        "dabs": 7,
+        "dlog": 1,
+        "dexp": 3
+      }
+    },
+    "DGR29": {
+      "source_hash": "63354b119c3d9e78ecb6776e9e3dc282f03f0ac6551dc56fdc6703c0c334bd1a",
+      "calls": {
+        "dexp": 1,
+        "dsqrt": 2
+      }
+    },
+    "DGR17": {
+      "source_hash": "f4e0a7be09c665bbbb85ae0771a1c72a9be73d42a8059d0c524da7a1b4d651ab",
+      "calls": {
+        "dexp": 1,
+        "dsqrt": 2
+      }
+    },
+    "DGINV": {
+      "source_hash": "801cd22852c8f61d122ed0f580a8dd6db7349cea8ca2998260d13737c7b9b7b1",
+      "calls": {
+        "dabs": 17,
+        "dmax1": 4,
+        "max0": 1,
+        "dexp": 11,
+        "dlog": 18,
+        "dsqrt": 1
+      }
+    },
+    "BRATIO": {
+      "source_hash": "2e3315397a0729a1b266ab584dd09fbc6bd782b0596b16964d49bc04c24e4289",
+      "calls": {
+        "amax1": 3,
+        "amin1": 4
+      }
+    },
+    "FPSER": {
+      "source_hash": "ea21c079643ad24095847824c6a8d43ef772f6cd5936a6cdfb1dd35320afee52",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "APSER": {
+      "source_hash": "34543a58cdddb6f493df7cfbdac283499b8f84962c22a10f90b7ae856e07d612",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "BPSER": {
+      "source_hash": "19a108f810a90884c80b062b6bd2afee7593e2ea85edc89e50d8704291b5a26b",
+      "calls": {
+        "amin1": 1,
+        "alog": 4,
+        "amax1": 1
+      }
+    },
+    "BRCOMP": {
+      "source_hash": "dc468402f8ccb7597889d4b7c95177318cfe391ba3d9f3f6770d51474ad01457",
+      "calls": {
+        "amin1": 1,
+        "alog": 7,
+        "amax1": 1
+      }
+    },
+    "BRCMP1": {
+      "source_hash": "7b6b5f18bff2ea0fb33f07e92ee8cb5710f7246b1cb6b40eba93b176307e4ab8",
+      "calls": {
+        "amin1": 1,
+        "alog": 7,
+        "amax1": 1
+      }
+    },
+    "BGRAT": {
+      "source_hash": "aa05ce212e3bfe4cf2f277121f6c2e2be8737f040624faee0c915103bfce8878",
+      "calls": {
+        "alog": 3
+      }
+    },
+    "GRAT1": {
+      "source_hash": "72d6946d410551e905b5d14bddb080b0b5d5bf6e5582f4ee5414605b7c7ebcab",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "ISUBX": {
+      "source_hash": "48fe9b3f437891c6da9c882571e9565a174445541e855253b486d1450aab471c",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "LOGAM": {
+      "source_hash": "496168f0fab1f90a247410981557e4c7720dff38fb43c6ea652e24d3c993804f",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "CBSSLJ": {
+      "source_hash": "2ede881bd364714cb571005525f70e08bd5bc3463849da8eb2c33534420bda89",
+      "calls": {
+        "amax1": 3,
+        "amin1": 2,
+        "cexp": 2,
+        "iabs": 2,
+        "clog": 1
+      }
+    },
+    "CBJM": {
+      "source_hash": "0e96bad9a93f90b6809a07363cf97922722e16883bc345ad5cb90298eda99b79",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "CBDB": {
+      "source_hash": "f87c89a411158a9b48dec97ee1727576376d587601f80f07cd4e0cc585d471aa",
+      "calls": {
+        "csqrt": 3,
+        "cexp": 2,
+        "clog": 2
+      }
+    },
+    "CBJA": {
+      "source_hash": "6c9d33f12e80a398b2494f5b0cb08494b924c55826ec84b67cbed81188c65330",
+      "calls": {
+        "amax1": 1,
+        "csqrt": 2,
+        "ccos": 1,
+        "csin": 1,
+        "cexp": 1
+      }
+    },
+    "BSSLJ": {
+      "source_hash": "45ac0367f0c60a0ca905bfed0f2e68f05987d16b3c9eaf3106b76ae3157ea398",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "BESJ": {
+      "source_hash": "f73a1b20146f946621a4ee84b13c2e8f6ebded4a99c5406f1b84e446cbe1734a",
+      "calls": {
+        "alog": 4,
+        "amax1": 4,
+        "amin1": 1,
+        "iabs": 1,
+        "max0": 1
+      }
+    },
+    "ASJY": {
+      "source_hash": "982cd497969d1e35d5205b5d0d59f02dea6b0a61cddc25def311a10066f75291",
+      "calls": {
+        "alog": 2,
+        "amax1": 1
+      }
+    },
+    "BSSLY": {
+      "source_hash": "91f3b804e91695895aaf9c33444e578c2585b478a9412b8ecdca9d51d72c87ff",
+      "calls": {
+        "alog": 1,
+        "iabs": 1
+      }
+    },
+    "BSSLI": {
+      "source_hash": "6019971be9e43035dca7c76cc0f66d5381f8498a2c8413a8097d54a5e5539e83",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "BESI": {
+      "source_hash": "26074ca9a7dafa136601cf35474ff5312b7dc64ade17110e089ddc335b8cfe98",
+      "calls": {
+        "alog": 7,
+        "amax1": 4,
+        "amin1": 1,
+        "iabs": 1,
+        "max0": 1
+      }
+    },
+    "ASIK": {
+      "source_hash": "9c58ce6032a6ec60ab2649de43ac9779c6b1bd21b77a6bbba4402113622de5da",
+      "calls": {
+        "alog": 1,
+        "amax1": 1
+      }
+    },
+    "CBKA": {
+      "source_hash": "09036e7da850dc615521105393f3fb920e8565a8f03279c69ee55965769bb4e0",
+      "calls": {
+        "amax1": 1,
+        "csqrt": 1,
+        "cexp": 1
+      }
+    },
+    "CBKM": {
+      "source_hash": "5f9b014ba63dc737df43adc847b3f2eb812d1157230f484b7345ca418ecb1dd2",
+      "calls": {
+        "cexp": 1,
+        "csqrt": 1
+      }
+    },
+    "CKPS": {
+      "source_hash": "9cafa10abef52d0847eb0b8698edef3ba77a7ba9cdb757ea1bb6df3ae4f09676",
+      "calls": {
+        "amax1": 2,
+        "alog": 1,
+        "cexp": 1,
+        "csin": 2,
+        "ccos": 1
+      }
+    },
+    "CBKML": {
+      "source_hash": "18196f89b7007f0150d5a48007f8f93e21e13d1818ac7c840da323fda729c3f4",
+      "calls": {
+        "amax1": 1,
+        "alog": 1
+      }
+    },
+    "CBSSLK": {
+      "source_hash": "d8ba349dfb47e23e1161bdcf01a7a562c12a7cf0c4d85bba628b8c11df0db0bc",
+      "calls": {
+        "cexp": 1,
+        "csqrt": 1
+      }
+    },
+    "CKA": {
+      "source_hash": "4044f7d146fe6863a8427218a34acfe93cc1533328e995dfb4ac15ac21ec05b5",
+      "calls": {
+        "amax1": 1,
+        "csqrt": 1,
+        "cexp": 1
+      }
+    },
+    "CKM": {
+      "source_hash": "1746b9a3964ac2fa07a725f1924010098e146575cdd32ca6c102846fc3bff798",
+      "calls": {
+        "amax1": 2,
+        "alog": 1,
+        "cexp": 1,
+        "csin": 1,
+        "ccos": 1
+      }
+    },
+    "CKML": {
+      "source_hash": "41bca7a7b85cce1e7669e6f02e9227d6b38d91f48fd60aa15386270b242e3723",
+      "calls": {
+        "amax1": 1,
+        "alog": 1
+      }
+    },
+    "BSSLK": {
+      "source_hash": "64b805b9676784d14c2a7ab0bb4207b1218ea2b16802d86733316b1ae6c40d2d",
+      "calls": {
+        "alog": 1,
+        "iabs": 1
+      }
+    },
+    "AIRM": {
+      "source_hash": "60d795ade99d387436bd70b3dc6342a485d23e2fa786a9bacafd69500c9677ad",
+      "calls": {
+        "csqrt": 1,
+        "cexp": 1
+      }
+    },
+    "AII": {
+      "source_hash": "56a51b9db18bd277cc29637fbb96ae5fdd5f2b95500208559ff480d28cc4a7b5",
+      "calls": {
+        "csqrt": 2,
+        "cexp": 1
+      }
+    },
+    "AIA": {
+      "source_hash": "8237b1ca5b02bf1687d22cce92102e7668ea4cf7cbdb4560c1966456d6092b0c",
+      "calls": {
+        "csqrt": 4,
+        "amax1": 2,
+        "cexp": 2,
+        "ccos": 1,
+        "csin": 1
+      }
+    },
+    "BII": {
+      "source_hash": "ba0ef59fa66c9fbae835c27cab9a9257f91dbc1739c36d464878cb61d17be5cf",
+      "calls": {
+        "csqrt": 2,
+        "cexp": 1
+      }
+    },
+    "BIA": {
+      "source_hash": "d3b43b284c71469dc68220ce87884ea11b8148bbff1f9bb6df9fbd94c45f5e5e",
+      "calls": {
+        "csqrt": 6,
+        "amax1": 5,
+        "cexp": 3,
+        "ccos": 2,
+        "csin": 2
+      }
+    },
+    "IMC": {
+      "source_hash": "628f6d596827895b754dccb6e7a10d8087c182bc3551a9fc35366869a2049268",
+      "calls": {
+        "cexp": 1,
+        "clog": 1
+      }
+    },
+    "BIM": {
+      "source_hash": "a923cf507e6bbef7f0ef5f69c7d3fcff3ca93ff74d6c71f3718e9cbbf5ac56da",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "JMC": {
+      "source_hash": "04442345729545073028d8b928131b81623e115ff7740917eb5d6574c3c0ab21",
+      "calls": {
+        "cexp": 1,
+        "clog": 1
+      }
+    },
+    "BJM": {
+      "source_hash": "1da4472c8adff267f693fbcecfbdaeab5a858277005f9555c7794e80b53da644",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "KA": {
+      "source_hash": "81e9007ceab36f332e720cfa29b90a7c31084f9b2363d5f8cf8fa5ef588833cb",
+      "calls": {
+        "cexp": 1
+      }
+    },
+    "KML": {
+      "source_hash": "5377b697596096836299daa0fe36c88f58604ef271caa9db7774e92a8a2bca9a",
+      "calls": {
+        "alog": 1,
+        "csqrt": 1,
+        "cexp": 1
+      }
+    },
+    "CK": {
+      "source_hash": "9df7f32d2986dd250756034b25b00eff51efd26fca1ac88144c6ed137b7616a3",
+      "calls": {
+        "amax1": 5,
+        "cabs": 2,
+        "alog": 2
+      }
+    },
+    "KM": {
+      "source_hash": "ac081e0d94f02c07dc6be600aa89d9c053e3a9065cd16fcc25ccd89e16c5772f",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "KL": {
+      "source_hash": "de44b56489abe576949c86798942f458026777260482f5da1e7ab42fcaf6d19b",
+      "calls": {
+        "amax1": 1,
+        "alog": 3
+      }
+    },
+    "CKE": {
+      "source_hash": "4fdca21fc6ef1afb511252838bd3ba201793342f3b98025d8cb95d6d7fa6e85e",
+      "calls": {
+        "amax1": 5,
+        "cabs": 2,
+        "alog": 2
+      }
+    },
+    "EKM": {
+      "source_hash": "c9c45b30ad36a624591ce3014de4d2c6aa570ffb01d49de74812630f86e86055",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "EKL": {
+      "source_hash": "ce556f42a183a00b2d7bf3797b4ca3a66e55e5a5ab73629a924747bb8484aae6",
+      "calls": {
+        "amax1": 1,
+        "alog": 3
+      }
+    },
+    "ELLPI": {
+      "source_hash": "5b782cbaa91460ef08effee5d6e9c998978761864860568c7da8d47498673a33",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DELLPI": {
+      "source_hash": "f64a7cc969542466a1016ea2923af1f9e6678e3f05a9ffbf5d315d94a136f48c",
+      "calls": {
+        "dabs": 8,
+        "dcos": 2,
+        "dsin": 2,
+        "dlog": 1
+      }
+    },
+    "EPI": {
+      "source_hash": "841df9fc5e67ceb44449e05ff4abb4c6cc760f8b83854f5bbdc5158ab1d52208",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "DEPI": {
+      "source_hash": "597559921c36f23649c3f697f09b04138f45e046c4a993beea4ea8d6db011c32",
+      "calls": {
+        "dmin1": 1,
+        "dabs": 4,
+        "dcos": 2,
+        "dsin": 2
+      }
+    },
+    "RFVAL": {
+      "source_hash": "1340dba890c0abfd938c19dd62c7181468fa296f84d9adcfd75815ee70c8c3dc",
+      "calls": {
+        "amin1": 2,
+        "amax1": 2
+      }
+    },
+    "DRFVAL": {
+      "source_hash": "3a2c0de9c3e8cc51288922d494bc64cb66a21bbaa387d5c3622cec97a977b237",
+      "calls": {
+        "dmin1": 2,
+        "dmax1": 2,
+        "dabs": 3,
+        "dsqrt": 4
+      }
+    },
+    "RDVAL": {
+      "source_hash": "3f06ac27f24585d66abfb09223d939007fd60b1512151e1534db585299f1834d",
+      "calls": {
+        "amin1": 2,
+        "amax1": 2
+      }
+    },
+    "DRDVAL": {
+      "source_hash": "09eb0b33b43836e8e612eb8ea31ea0ad6d6ef2654bbbacd755c4163f7da86d81",
+      "calls": {
+        "dmin1": 2,
+        "dmax1": 2,
+        "dabs": 3,
+        "dsqrt": 4
+      }
+    },
+    "RJVAL": {
+      "source_hash": "0fc2399ef099ea7317ac4dcfb354615fb117278b299af47f6b3c4aa4883439f6",
+      "calls": {
+        "amin1": 2,
+        "amax1": 2
+      }
+    },
+    "DRJVAL": {
+      "source_hash": "84ec0ceb6ef3d05adc7a86ef94cc1d28c0b92e517e8694f25915ad742462e5c1",
+      "calls": {
+        "dmin1": 2,
+        "dmax1": 2,
+        "dabs": 4,
+        "dsqrt": 4
+      }
+    },
+    "RCVAL1": {
+      "source_hash": "ef74b1ec8a4460014580e2ab605661378185fd67c703edc03329a2859ea43a35",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DRCVL1": {
+      "source_hash": "095ea9d50ddb0846dfe5d84afdbd4f14d798b38c12a0b55e213ecf0b88dea34c",
+      "calls": {
+        "dmax1": 1,
+        "dabs": 1,
+        "dsqrt": 3
+      }
+    },
+    "ELLPF": {
+      "source_hash": "a7c25786e7e2b4e33abed388b70f8f38ba26c21f73b42c99200bbe32f600fa81",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "SCDF": {
+      "source_hash": "7ecd0261b9400db6d92955ef793bdca2b9818c16b355cdc50da4ee3d2a8e5fdc",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "SCDJ": {
+      "source_hash": "78647e2de667d5cfb614ae7aa48235aa4b90d4712834d8e7e6977e1069373a7c",
+      "calls": {
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "VALR2": {
+      "source_hash": "7794c5ea9bce66f7ebf2bf24b626e20c1d55b4125ba7678d5a3a5b9a49cf7dd7",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "CIRCV": {
+      "source_hash": "76cab547a9842827fa0ced1b152953d3a3102121e3965ebfc2093180c71a4b05",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "PKILL": {
+      "source_hash": "7d6ab654cb38c79c0ed67b517e763dcb7cb119703a1ba29daf3fa012fec9a1a3",
+      "calls": {
+        "amin1": 5,
+        "amax1": 7,
+        "iabs": 1,
+        "isign": 1
+      }
+    },
+    "PLCOPY": {
+      "source_hash": "e69cdac9f32e9dbfbc30b9bebc78ad0a8b0e0820803f4360b040993e84af5248",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "DPCOPY": {
+      "source_hash": "e7232b594ef1edb8c0e519ac03cb28cee61ae6c08c005d9c82ed6c2d756142f2",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "PMULT": {
+      "source_hash": "004620c7844519376b04fac0b4c6bf48ab678c99ce936370f85a0f514dfec1e5",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "DPMULT": {
+      "source_hash": "29ef347fc64b7af55949fd609cb01d3a411f361636c089159dbab86e98aa91a3",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "PDIV": {
+      "source_hash": "881c69b1ee429972bccc0130d7ff8b431d23421ee70e4c0f385908d18f3f7e7f",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "DPDIV": {
+      "source_hash": "928e14ce983a2e4156c5d097cf274eb429fa03a2e59ca767bd5c0c6b8f33d70f",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "PLPWR": {
+      "source_hash": "a139ebc34d9e3996f49602ab9abafaa87adbd059f0e7506ebe5d1c641d35610c",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "DPLPWR": {
+      "source_hash": "62823b17e50158bd1cb91721102e6a7d7ed7b61f058cd48ce19998f4814f8a11",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "ZEROIN": {
+      "source_hash": "2d8b9e69e3185830216421690b74e0bc0ec42cbcb38800caa190465819fc4e07",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "DZERO": {
+      "source_hash": "c2dfecbac64108b936284f176d239fea75151f889c0ee483295a673fd31b5569",
+      "calls": {
+        "dmax1": 2,
+        "dabs": 14,
+        "dsign": 1
+      }
+    },
+    "HYBRD": {
+      "source_hash": "3bb748a14d29174e6033c69bedc2c7fc6090202e299094774e4bbee9e71f1487",
+      "calls": {
+        "min0": 1,
+        "amax1": 3,
+        "amin1": 1
+      }
+    },
+    "DQDCRT": {
+      "source_hash": "ad70bec58679349ee7dedb3fe0a49919a4cb75298c12271ba93446e1638dfa7b",
+      "calls": {
+        "dabs": 4,
+        "dsqrt": 1,
+        "dsign": 1
+      }
+    },
+    "CBCRT": {
+      "source_hash": "f0fd0d1d877f6637b95ab1e7f81217d5d3d4e3170e72c4fc6d3097be700c4fd3",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DCBCRT": {
+      "source_hash": "5ec407c300e844282bf4039510adc73ab3c0c31a6f0f30f42dd9f38bacda4a08",
+      "calls": {
+        "dabs": 44,
+        "dmax1": 1,
+        "dsqrt": 3,
+        "datan2": 1,
+        "dcos": 1,
+        "dsin": 1,
+        "dsign": 2
+      }
+    },
+    "QTCRT": {
+      "source_hash": "52472cc134feb463adac7c71434011bc1c0e046a86cda29800bdc5b8d1b89339",
+      "calls": {
+        "csqrt": 1,
+        "amin1": 1
+      }
+    },
+    "DQTCRT": {
+      "source_hash": "f289b8e7a6b2d1e07e4941ac07851aafd9ba352648a9f7c961de061d786507ee",
+      "calls": {
+        "dsqrt": 8,
+        "dabs": 13,
+        "dmin1": 1
+      }
+    },
+    "DRPLY1": {
+      "source_hash": "18807e52cc3d328f9312cfcd2020797b3a555f9aaeb1baba57c3ae078fe7e74a",
+      "calls": {
+        "alog": 4,
+        "dabs": 2
+      }
+    },
+    "QUADIT": {
+      "source_hash": "d3122faa24e283b7330c867d53819241fc1843d1f9cc5b08a92ea5b96244394a",
+      "calls": {
+        "dabs": 7
+      }
+    },
+    "REALIT": {
+      "source_hash": "999a68638b5cd1429b959342c87fed50776ef64ea4a1c069d9e49f61b0f67929",
+      "calls": {
+        "dabs": 8
+      }
+    },
+    "CALCSC": {
+      "source_hash": "e445b0daa773cc08a463cf15b315cb26b5daeeaf42a502e4f444df8d0724af7f",
+      "calls": {
+        "dabs": 6
+      }
+    },
+    "NEXTK": {
+      "source_hash": "019cdd49c9a2b66a756141b17ba44194f9a3eca71259f051a5e081af8d105bc5",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "QUADPL": {
+      "source_hash": "940aae9944640662a5230a41b16df5dd67d141da1198b303d8ca8c1e95c58a29",
+      "calls": {
+        "dabs": 8,
+        "dsqrt": 3
+      }
+    },
+    "DCPLY1": {
+      "source_hash": "1d94cb62ef89a394468c9a903d76413ba83c979ff8bde84646f5e23b6677ec76",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "SCALCP": {
+      "source_hash": "bf122f18b786f896a65e5b17278ac2c952033e2119357926a2f7adc6b4d83884",
+      "calls": {
+        "dsqrt": 3,
+        "dlog": 2
+      }
+    },
+    "CAUCHY": {
+      "source_hash": "db2f28acec67c127b82b89e66c95f9deb27def9a041e73e24cdaf941d570af61",
+      "calls": {
+        "dexp": 1,
+        "dlog": 2,
+        "dabs": 1
+      }
+    },
+    "VRSHFT": {
+      "source_hash": "38484e220984faf34ff29184525c5dd36da16b0190ff02fa00932521dabc4e6d",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "RBND": {
+      "source_hash": "bac3703966a7ff4b7560d76ac48c31a7ebbbf8f6da6c2c218d35e50af6a9beed",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "CBND": {
+      "source_hash": "6b28141aa1bea7aafc4dbe7816418acd8f16f86c31ffbe6afd0ee0662bc89498",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DROTMG": {
+      "source_hash": "adaefa04907baa9d81f44132c4c972591a46a9e510a1da2610fbbe3b0ae8b9c7",
+      "calls": {
+        "dabs": 4
+      }
+    },
+    "DASUM": {
+      "source_hash": "0e25932881f701b4896463acd52c5a18c237b8cebbfc43e5d332d902a4202e99",
+      "calls": {
+        "dabs": 8
+      }
+    },
+    "DNRM2": {
+      "source_hash": "0f8b6c30c1932a0c41b005bc44a88921dad4150b7b4e4f2c713be48507af13d2",
+      "calls": {
+        "dabs": 7,
+        "dsqrt": 2
+      }
+    },
+    "IDAMAX": {
+      "source_hash": "b1d06e67fe57d272fe51def85ffe68e652f2b161e85c67a2fb1e14e39fb9686b",
+      "calls": {
+        "dabs": 6
+      }
+    },
+    "TIP": {
+      "source_hash": "eeeedad52b8178eae286b5b4eef1222a926f555ea44e3dff5883d2d372092577",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "DTIP": {
+      "source_hash": "9904922f702b738bdec098300e2b55da3152e76e6c622f8227dcf805b1ad0ecc",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "CTIP": {
+      "source_hash": "6e47ac10f8070c283a13810b7b828d4ccc1ffddbb56f92808c8921e2c2e9cf10",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "RNK": {
+      "source_hash": "679b2ff9efa7c43030346d4154aeea76cfa7949c4b119dd03c4f465e0c4a0424",
+      "calls": {
+        "min0": 1,
+        "amax1": 1
+      }
+    },
+    "DRNK": {
+      "source_hash": "f4f511c04d977377bd85cf28813a14b02026c5a6f4b6238f22a7bf3aa6273635",
+      "calls": {
+        "min0": 1,
+        "dmax1": 1
+      }
+    },
+    "DPSLV": {
+      "source_hash": "ade6cde49430410ff6ec805e4c4f1f0594e35299c233a480357c2e444462a085",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "LUIMP": {
+      "source_hash": "792748ac9296d5f9244061268a4b682ed40c896f4104e2e55c38c3c69c06da1a",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "SGECO": {
+      "source_hash": "31f24ef451359ec3f98be0abb3bbef3d4f0e9f1cf8c08ff8614039144d69f3e8",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DGECO": {
+      "source_hash": "3526d9016fffa7e081d6a41a5b29eb3f6e2600fe2fd603ada4b8f2d75062ecea",
+      "calls": {
+        "dmax1": 1,
+        "dsign": 1,
+        "dabs": 16
+      }
+    },
+    "DGEDI": {
+      "source_hash": "2de0350627d6ec6bda3bca3a491fcd1e8392f38951f9e68c933df66958a04813",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "SSPCO": {
+      "source_hash": "8036f337a8d25d7349730837574eeb4a05ff824e7c01822b8e7c160ef5531871",
+      "calls": {
+        "amax1": 1,
+        "iabs": 4
+      }
+    },
+    "SSPFA": {
+      "source_hash": "ec4fa14405dee6ad8e26e7c97c26fc815ac4ef141f20b7b121d3bd6c514caba5",
+      "calls": {
+        "amax1": 3
+      }
+    },
+    "SSPSL": {
+      "source_hash": "cc5f4d7465d2cc22f82a8075623c8523c112b0e5491ee5e944031b6e3bdf3f4a",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "SSPDI": {
+      "source_hash": "8bb899bdabb3c3dea2d7dda81441aebee464b88c8a3cdc477f671c0b8426e7cf",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "DSPCO": {
+      "source_hash": "f0c4ae12cfd821ee8bedea0e896bd208433c3eb13c1a07f1e1d9645108ce3687",
+      "calls": {
+        "dabs": 9,
+        "dmax1": 1,
+        "iabs": 4,
+        "dsign": 2
+      }
+    },
+    "DSPFA": {
+      "source_hash": "85800a1af8fc5718686fe2c810ca96ce1d89e58ba1fdbc006a1e32e4bc86855d",
+      "calls": {
+        "dsqrt": 1,
+        "dabs": 5,
+        "dmax1": 3
+      }
+    },
+    "DSPSL": {
+      "source_hash": "f896be3bedfbcdbbdbfa8e8e0dbf65e57d95a7b0a717f9cc25271a3deb522379",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "DSPDI": {
+      "source_hash": "e0527b9fc30e0505acfc3cb0ba30ca2b01f2ac540716d5d8a37788437a99abf5",
+      "calls": {
+        "dabs": 4,
+        "iabs": 1
+      }
+    },
+    "DPPFA": {
+      "source_hash": "710598a1bcba95bbe5cf74c460fdb5075b523a6d670bbc774c9db338fc4a6549",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "CLUIMP": {
+      "source_hash": "cfdc85eaf9cee2a3e3a21922b5019efb587cdc6c3d327040767ba0f57e3f0fc6",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "CGECO": {
+      "source_hash": "5c50690ebbbaaa7f4324bcf4153352a8f36aeff459b0ba4fbc45af63fea98a19",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DCFACT": {
+      "source_hash": "80d7fc0ab1efbdbc61d8289e8416ed8d5b477b5d4cf04d468b02e714e153e633",
+      "calls": {
+        "dabs": 8
+      }
+    },
+    "DCSOL": {
+      "source_hash": "bfee6f07bf132ca519a63fe068faffcbba0db35b849b77ee6181e718d4adc8de",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "SSVDC": {
+      "source_hash": "68634e60a4acb7aab90f052bffd0150fb4aa6f8f08c36200ac049c19f3629fa9",
+      "calls": {
+        "min0": 4,
+        "max0": 2,
+        "amax1": 1
+      }
+    },
+    "DSVDC": {
+      "source_hash": "65d5238945d856b8ccd814a8e227f15f1883526b2bf0e47725d0a4441d865256",
+      "calls": {
+        "min0": 4,
+        "max0": 2,
+        "dsign": 2,
+        "dabs": 11,
+        "dmax1": 1,
+        "dsqrt": 1
+      }
+    },
+    "CSVDC": {
+      "source_hash": "29353d2ef30cfd52a01fb387c1d31d12a431d1bca829c4299452bb435488ea37",
+      "calls": {
+        "cabs": 15,
+        "min0": 4,
+        "max0": 2,
+        "amax1": 1
+      }
+    },
+    "DPDET": {
+      "source_hash": "ae31a08c514485dd3467adfcacc576e18546b71c9865692cc488a8451b50f9ab",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "SCHUR": {
+      "source_hash": "0b1ffa2a1e3a4ef1c82831234cd7c18292242a0dd4a07e5e021180a8ff5d8f94",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "DSCHUR": {
+      "source_hash": "6be99f1225948c03f8c67c3f9f66daad28fdc51d5b26933850c1b467ebef363b",
+      "calls": {
+        "dabs": 23,
+        "dsqrt": 3,
+        "min0": 1
+      }
+    },
+    "SQUIN2": {
+      "source_hash": "4d74e258f9aab41e8a806746474a4dd695b62555caa1e6e3f87619b316755bee",
+      "calls": {
+        "cabs": 5
+      }
+    },
+    "CQZHES": {
+      "source_hash": "27e37a2aa1428fb14c9c31b5cc2e1a56ed3fd1c1c2669d76abd178a9fd70f712",
+      "calls": {
+        "cabs": 17
+      }
+    },
+    "CQZIT": {
+      "source_hash": "e160bd93cd5d7d4e967a03d482ef495b26793de19c3cdcebdcb2ad42a33bead1",
+      "calls": {
+        "cabs": 28,
+        "csqrt": 1,
+        "max0": 1,
+        "min0": 1
+      }
+    },
+    "TRISLV": {
+      "source_hash": "a63e71de74cd10fa81e20ec2d1b4dd6a99c394647ece531cd5bc18d021ff8ae4",
+      "calls": {
+        "cabs": 6
+      }
+    },
+    "MEXP": {
+      "source_hash": "d0b0e4732ceabec2a511d541c44eb3eea1f019d7fc3a3a2cc99b01ceab4897b5",
+      "calls": {
+        "amax1": 2,
+        "amin1": 1
+      }
+    },
+    "DMEXP": {
+      "source_hash": "a68b3aa024c47fa5073f0548027ec0762b446ba0be9045a3a941d6f7d0ffc8d5",
+      "calls": {
+        "dexp": 1,
+        "dabs": 2,
+        "dmax1": 2,
+        "dmin1": 1
+      }
+    },
+    "DPLE": {
+      "source_hash": "bca2ec8b54ad917e60c3ab2dd424d69f85f07eacc624cc7064793b9fbc1616a0",
+      "calls": {
+        "dabs": 4
+      }
+    },
+    "CVBR": {
+      "source_hash": "12d5655822c27d97c945f3e0121b3b651f8e57de07c4579ab32ab6a1da42242f",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "CVRB": {
+      "source_hash": "4b3e435edb4cfc90bf5ab76325d99fcdb903c1c3b604b3851c386bb7021856b5",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CVRB1": {
+      "source_hash": "5405966e03248cd1e2cd5645742c70764647574462ed7127b1f4ecba225ea6b2",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "CVBD": {
+      "source_hash": "e0f2b7b6a64ff149b8977b0d6d870f2bc1480a8a5d80f5c10bcea95600ccd77a",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "CVDB": {
+      "source_hash": "c9ef49cf990daae744bad34d2ea638a025b179d74b3c392ffd485f2e4ec33afb",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CVDB1": {
+      "source_hash": "028822a870829ac8a0b4098a594429c0f2d45f9d1e0f7101bcd4d5043f1057c0",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "CVBC": {
+      "source_hash": "7b2dcf1e48ebf25fabd843c67ec5880d07841dad7ab714140c6a0f9a108ab429",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "CVCB": {
+      "source_hash": "d7aff9417ac16c5270b206cdcbe1bd817b5a9f65958b03a0fbaa3a094d4f123d",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CVCB1": {
+      "source_hash": "ad95aca67da6850dd1108fd3130999ad0b0b870151609cbbd4dbe4382d461d27",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "MCVBS": {
+      "source_hash": "d93eed0a3778c33c1eada923136ec435f844dcfa17fa99688d4de693f4acc0c4",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "DMCVBS": {
+      "source_hash": "b86c5342d3755f67e2f17a595fb67b228cf6e2101d74dd17d3a0e14d14739d41",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "CMCVBS": {
+      "source_hash": "428b9a051033fcd340e8d565cea3a1bfdca52d8981ad6b37cdfcbeff3be63fc8",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "MCVSB": {
+      "source_hash": "ec2f4b49da505fb6292ddb84ca13a2b385f406689adda425c5c502116616a1d5",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "DMCVSB": {
+      "source_hash": "cb1e136c60d442ec4e078016938f6228ade4e32815989591115382e600de84cf",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "CMCVSB": {
+      "source_hash": "a82a46610b70144f19f3a247c48169adef680b1e17ba5d48b0ce22c7eb43bddd",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "BCVRC": {
+      "source_hash": "42b728ffbb6f6135c6103fba6597f68dad999e481f82927dfadcda9b536a3db5",
+      "calls": {
+        "max0": 2,
+        "min0": 1
+      }
+    },
+    "BPOSE": {
+      "source_hash": "c47d8093eafba7a72cecacda2f76b8f2687b14e1df5d550289df47a6c0c096d7",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "DBPOSE": {
+      "source_hash": "3c555bd660c125f92f102b853f24cce4a4f623a54ea4289e320c0407dd388d5c",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "CBPOSE": {
+      "source_hash": "4bf7539e52caffe902331e1ad876d8c78e28b686e4a9a4b8f5e405d50b7b4aa9",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "BPROD": {
+      "source_hash": "a2eb8a460ad3b9a0331ccfa71643eff8042513a97b22819165bb0036784f5c66",
+      "calls": {
+        "min0": 10,
+        "max0": 5
+      }
+    },
+    "DBPROD": {
+      "source_hash": "219c5ff81720258d750b9bced5b9d9a45b2d6b54ee36763960d148208562c970",
+      "calls": {
+        "min0": 10,
+        "max0": 5
+      }
+    },
+    "CBPROD": {
+      "source_hash": "9fe7c75137362f63b2b9461268483df7cd15b71a2d072a33d354ff47dac7f6d7",
+      "calls": {
+        "min0": 10,
+        "max0": 5
+      }
+    },
+    "BVPRD": {
+      "source_hash": "bdf5273b7f5294e9cd8bbc39cbd879b29571da73e601f1f13cd90473d1ef71b4",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "BVPRD1": {
+      "source_hash": "4cc1ee671bbfff8bb47b0400239cfd82139d970a961d8fe07fa5d005b96e3351",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "DBVPD": {
+      "source_hash": "7d9e78dad8540521a660785309452683da1a0c319b7c0532751b05227d602e12",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "DBVPD1": {
+      "source_hash": "1c7d19f2419b27b235f54ba3bffa8fd5dd5fe62a1205718e312aa067a4f96493",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CBVPD": {
+      "source_hash": "84fefb5b6c0d1c94f62b53896cb9dbb8a960183b200f0eee34186fe8180b2dbe",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CBVPD1": {
+      "source_hash": "c6a8dea65109dbf6879466c050f166c4dd70ac316ddad61da613fa70388b57f8",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "BTPRD": {
+      "source_hash": "7771dcd8e891fbef6cafa08671c7070bd85bd2d6f6cf135a71b0dbd4c5733587",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "BTPRD1": {
+      "source_hash": "cb4050d785705f913cb731f923010f6794b51d0dee4bff473eceb90df6759659",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "DBTPD": {
+      "source_hash": "56fe9e2a7efb693597346e4908a21389196fb41905be01dd56e4cefa88a45732",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "DBTPD1": {
+      "source_hash": "65f16f4a0a58e67f340d45b631e852d8ad3c42d9a787dee709017e1e4bc74294",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CBTPD": {
+      "source_hash": "6642ab4c9dcb70a3ecd3a4139732c6c5f06583acd39ca68c4d0b1b38194c3a1e",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "CBTPD1": {
+      "source_hash": "2cc281690cd3e5ad0f5b32d8686e23f34f9330b50521f4049dc6514ded88bea5",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "BNRM": {
+      "source_hash": "904637bc416fd81884bcd828fd54f63df43576231407132f8591f5d5ef7390ef",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "B1NRM": {
+      "source_hash": "e8e6875463aed1179ce5c7ee4b875ed66c99b444b0142af52a66cff965b0945f",
+      "calls": {
+        "min0": 2,
+        "amax1": 4
+      }
+    },
+    "DBNRM": {
+      "source_hash": "e96a1a4581e521aa9667661efe92a2d2f89034fe5bb8b13b1e3857a8c739eae8",
+      "calls": {
+        "dabs": 1,
+        "dmax1": 1
+      }
+    },
+    "DB1NRM": {
+      "source_hash": "33786b0931b5f2085cbb55427fd9bf9dfec886f300df5f9a8c22d6689e5600ca",
+      "calls": {
+        "min0": 2,
+        "dmax1": 4
+      }
+    },
+    "SNBFA": {
+      "source_hash": "6dda4f6941ae62472c2126f1d86e4aa016cdee8715a59f5223be9810e224294f",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "SNBSL": {
+      "source_hash": "4e2bd63eb7aea3c552aac5628ac245276fccf47feff5a87047ac97e595ea4d5f",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "DBFA": {
+      "source_hash": "b1ed4ded56772f202db3b0339b62bf7624d5be58951cb0dd43a9e9813be54318",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "DBSL": {
+      "source_hash": "2f4a9a34f09791f7542d15852f4c8ac938a30390006eb6c9b5518b313e99db0e",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "CBFA": {
+      "source_hash": "c313405391f605b94dbd9a774f8592dc30b9c63eb29b81b8df7666c3c917f783",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "CBSL": {
+      "source_hash": "013f2aa8dc654556dd24f948ca7b80d3bee7bcd694aa82425593a8cba98340e5",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "SNRM": {
+      "source_hash": "f902ad11d64a49c0930482097a71220d4f0ab7d5d04554b4a5c5e3690546404b",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "S1NRM": {
+      "source_hash": "7e9c2e76b9107bea86e693da2e977064cdcc5c889d6b27ac31b1e001dc18daab",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DSNRM": {
+      "source_hash": "ff4af8f3d2f7ccda6c0c48d529d644a8983ed742e34620355c6a677c2951d146",
+      "calls": {
+        "dabs": 1,
+        "dmax1": 1
+      }
+    },
+    "DS1NRM": {
+      "source_hash": "30a6bd418a43ffedcb91ec4e0dbed443ef857f01290057658b4f069c693730a5",
+      "calls": {
+        "dabs": 1,
+        "dmax1": 1
+      }
+    },
+    "DNSPIV": {
+      "source_hash": "3d4d2c393904610c049d3ce70bc93b8649ea7bd93a45e1fc8121cba62ed2d957",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "DSPLU": {
+      "source_hash": "37c9d7382d7c6d4be1f1860d5a63cc2183fccdc2a2ce95a8b226e763d7ec82d0",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "S1CND": {
+      "source_hash": "47fdfe3fbe117864cb031cd926e9c1c2531bb79248cdd5d0ba59b68de3a08c92",
+      "calls": {
+        "iabs": 3
+      }
+    },
+    "DS1CND": {
+      "source_hash": "8cd60b0c9fe55fee7447557ae2bae6c3a0cf72f289c5a8767437b8b0422ead57",
+      "calls": {
+        "iabs": 3
+      }
+    },
+    "DONEST": {
+      "source_hash": "b80f76621850a6a9cd162c6069c0bddeefcec06569c23f5301939d5a7e5b5b5c",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "HQR": {
+      "source_hash": "78d15a29bee5e2361c9b0557f52b3efe514e75fffa168f7c7e4e39f03824a71f",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "HQR2": {
+      "source_hash": "479cf21cd82d2f43397f7b981555c80d6195dc48107cc422db0eeecd5c542d23",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "DBAL": {
+      "source_hash": "9ac5d443f5909f8cf5956490d4a037b5b65b422c2c8e0b7a856dd3de5b592eb5",
+      "calls": {
+        "dabs": 2
+      }
+    },
+    "DORTH": {
+      "source_hash": "24a6e11f58789755f2d2549b8d823a03e580f6cb2ce5798363e66eb9b9ffb6c7",
+      "calls": {
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    },
+    "DHQR": {
+      "source_hash": "bb75a04a3e586fa7de84b484215a707611c63a44edd320c636a36813342740d3",
+      "calls": {
+        "dabs": 20,
+        "dsqrt": 2,
+        "min0": 1
+      }
+    },
+    "DHQR2": {
+      "source_hash": "647e1881049a0bdb13d3a25afa90ea506cbbc9b0ffecf57599e3f7f5a86ed972",
+      "calls": {
+        "dabs": 34,
+        "dsqrt": 3,
+        "min0": 2
+      }
+    },
+    "DTRED1": {
+      "source_hash": "a425cd6f231579e6e98af7854e6488b7e884464d14fd1dafd60e11bec19441d4",
+      "calls": {
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    },
+    "DTRED3": {
+      "source_hash": "8db1f52321d2924e3bb71fb952f7c0e8af0fe0b6527c3b4cf3ca9db161c8d6de",
+      "calls": {
+        "dabs": 1,
+        "dsqrt": 2
+      }
+    },
+    "DTQL": {
+      "source_hash": "f26016ac1589b3f60998ed3a79860878ed8379468ef86360d612f7bf7e0b80cc",
+      "calls": {
+        "dabs": 3,
+        "dsqrt": 3
+      }
+    },
+    "DTRED2": {
+      "source_hash": "a63c5c3a93752f4279f2accbeef7883e60c7b52b51be0715cb59fed43b02897e",
+      "calls": {
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    },
+    "DTQL2": {
+      "source_hash": "7e54b940c7da8aeed7483c751c76e71eab2558773375317abd023ced299d1881",
+      "calls": {
+        "dabs": 6,
+        "dsqrt": 3
+      }
+    },
+    "CORTH": {
+      "source_hash": "6118319c0c7273d558b891de7d76bcc6a4893cc2cd51531e72b771eb12700bbf",
+      "calls": {
+        "cabs": 1
+      }
+    },
+    "COMQR": {
+      "source_hash": "a4a1b2618a7d82e44fff0f609f2f4cc55b1f957c93734880c5348afc2c34707e",
+      "calls": {
+        "min0": 1,
+        "cabs": 2,
+        "csqrt": 1
+      }
+    },
+    "COMQR2": {
+      "source_hash": "f984acb4b16891acb8db07f91536bd881eab084fce9070969ba1a92152341907",
+      "calls": {
+        "min0": 2,
+        "cabs": 2,
+        "csqrt": 1
+      }
+    },
+    "DCBAL": {
+      "source_hash": "9ae6599fce89a9328f160717048ff79095881cb27fd56bdd14048c014de11241",
+      "calls": {
+        "dabs": 4
+      }
+    },
+    "DCORTH": {
+      "source_hash": "b98760d2f36ba043d206874ec979362dfe91c3369fafbdbc1458e876d5348e06",
+      "calls": {
+        "dabs": 2,
+        "dsqrt": 1
+      }
+    },
+    "DCOMQR": {
+      "source_hash": "0a002fa067c0b4ee358918be5f9b160f49ed5348b8d96ba3cbd82d7a0a72d813",
+      "calls": {
+        "min0": 1,
+        "dabs": 7,
+        "dsqrt": 1
+      }
+    },
+    "DCMQR2": {
+      "source_hash": "fdba98645288ee0c61447627c70d22da2196a559ffb357ede7e6011fcbf93c48",
+      "calls": {
+        "min0": 2,
+        "dabs": 9,
+        "dsqrt": 1
+      }
+    },
+    "XL1": {
+      "source_hash": "9248a7e2954a797508a9222c89eb92cf824d65bf428591597048b1dd3cd48afa",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "ORIMP": {
+      "source_hash": "9778a2b067ce98334281f4b3aedcc913dcd25f9562cabcbcd25f7651aed2d2fc",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "DLLSQ": {
+      "source_hash": "f6fe33b4740bac5326ae11dcfe20d157525ed53ede8054f1b793fb2219034f0e",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "DORTHO": {
+      "source_hash": "19afa3e235aa707172b69eb73caf213e55bf1d28682afc0b1746085213d98bfb",
+      "calls": {
+        "dabs": 2,
+        "dsqrt": 1
+      }
+    },
+    "LSQR": {
+      "source_hash": "c51e7a1c6c4c3e7603d573a118b78304479feb829e59a099e89a7efff27f8a72",
+      "calls": {
+        "min0": 1,
+        "max0": 1,
+        "amax1": 1
+      }
+    },
+    "U11LS": {
+      "source_hash": "981d1ac661500dc74fa54fd39a521ad81fe91ac4ffebaa4f8c5559be79e89004",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "U12LS": {
+      "source_hash": "cdbdc0508c351b8e8e2e91e2c4f26aab0944076062972801cc5abc335f12ef50",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "U11US": {
+      "source_hash": "65dfe3bc0032bb0d37d2346c3d55455a8bdfcf5230455aaad3079e5164b79cef",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "U12US": {
+      "source_hash": "07ae8a50b42077a446eca63af24ee8076aba9c41e2e8ba39e049e8708501509b",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "DLSQR": {
+      "source_hash": "8370ef3b89bbbbe621ffcc9e08c6b04c9ae805ae743effb5596cddf791ac9892",
+      "calls": {
+        "min0": 1,
+        "max0": 1,
+        "dmax1": 1
+      }
+    },
+    "DU11LS": {
+      "source_hash": "97e2ab9098c5fc0c7398a999739aaa4174e1896d51c3f0ade30d858c381288b4",
+      "calls": {
+        "dmax1": 2,
+        "dabs": 4,
+        "dsign": 2,
+        "dsqrt": 2
+      }
+    },
+    "DU12LS": {
+      "source_hash": "8ce2c6e2c2301f859dd864fbe0f7374073feb9195891d1ba25fafaad4a38b260",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "DU11US": {
+      "source_hash": "91dd5be6c664e173b296e04f600ef81fd3a52babdb275e38bcbf25b8ce6c4ffa",
+      "calls": {
+        "dmax1": 2,
+        "dabs": 4,
+        "dsign": 2,
+        "dsqrt": 2
+      }
+    },
+    "DU12US": {
+      "source_hash": "e88870b401087033491fc0ea02777f683029cfa22f8bab70ceaa25350d06ea92",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "HFTI": {
+      "source_hash": "2d8f9a5de7c3e5d08a75ea32d8a6db61a8760776ba7190dc892dc4e1d7e295b3",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "HFTI2": {
+      "source_hash": "6dd08d995cbfa1dbe636f7019b9865c85d70b5b39569452693a5278f6efa1126",
+      "calls": {
+        "min0": 1,
+        "max0": 1
+      }
+    },
+    "H12": {
+      "source_hash": "e63802f51a8fe3fd2561637ca6c2978f62be41730198e683ed463392a19135da",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "DHFTI": {
+      "source_hash": "4c9f91378ccdc1c25f83359a3ccdd1d88fc1e77c5e8cc4080e40755617390b5f",
+      "calls": {
+        "min0": 1,
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    },
+    "DHFTI2": {
+      "source_hash": "21b12d57daedcd21545cd236747ba954eb37a7ea4c8d41a1b8325c9e0d360480",
+      "calls": {
+        "min0": 1,
+        "max0": 1,
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    },
+    "DH12": {
+      "source_hash": "a3bf3b7b8e2389476f0fa4f3fc7edc1c4a90a34bceb250ca08e5a8c82cfe4ca5",
+      "calls": {
+        "dabs": 2,
+        "dmax1": 1,
+        "dsqrt": 1
+      }
+    },
+    "LSEI": {
+      "source_hash": "3828fa8dc86793ec17d8076e9f9f64c3ebbea2925fcfddfbb4fb51135df05a90",
+      "calls": {
+        "min0": 1,
+        "amax1": 2
+      }
+    },
+    "LSI": {
+      "source_hash": "f44a4491e29e243e2bb2d633351769bcb839894560d149abb7c3f4faeee3eaaf",
+      "calls": {
+        "amax1": 2,
+        "max0": 2,
+        "min0": 1
+      }
+    },
+    "WNLSM": {
+      "source_hash": "8bc05b8be166f23a9090e073c9cb3e3948684d28870c47f49c076095a9958020",
+      "calls": {
+        "amax1": 2,
+        "min0": 1
+      }
+    },
+    "WNLIT": {
+      "source_hash": "ec3241cf8869ba85879279e7aaf9d8559698b3951c62c2f12beb1414fa4a5703",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "L2SLV": {
+      "source_hash": "9fc905109421f420cd48f28ba04c180ac9528f58a1dcda986465c1af4dda8a15",
+      "calls": {
+        "alog10": 1
+      }
+    },
+    "SOLVE2": {
+      "source_hash": "9e039d9906963cb61b88b7d67c63175919870f14538f219b0da0c5913497ab85",
+      "calls": {
+        "alog10": 2,
+        "amax1": 1
+      }
+    },
+    "FMIN": {
+      "source_hash": "ffbd9905cedffea06d9a53ab6383d3b99590881518adf4830ddd3ec30a9e741c",
+      "calls": {
+        "amax1": 8,
+        "amin1": 3
+      }
+    },
+    "OPTF": {
+      "source_hash": "965ed7774504e8682537bc115c9ab45b30442aa1c87a1723350b11a4d8617af7",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "OPTDRV": {
+      "source_hash": "644fff3c711879608e831e7aa79b802b51a443fa8967649a6aa7b67a8a5e2dfb",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "OPCHK1": {
+      "source_hash": "08d276a70c6a4440a15ca788a4a0cd5137d1df89a8d06dab35b8c88563fc9e23",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "OPSTP": {
+      "source_hash": "57f51b268766d97a3b5bd55c8a1355b9bb12430e7e1bf1df4ba17f56a13e06ab",
+      "calls": {
+        "amax1": 5
+      }
+    },
+    "FXDEC": {
+      "source_hash": "14b905a553b954d23c09d3032e97bb9fad4474931004f003d4ea84ddb0d75861",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "SCALEX": {
+      "source_hash": "3af0def24c893a9768838a8a507e98e17a11a0e5d391b4f8eccb4804ba189cbb",
+      "calls": {
+        "amax1": 2,
+        "amin1": 1
+      }
+    },
+    "FSTOFD": {
+      "source_hash": "b03ad021c4f27a8ef395b98962e82d3386473dc4277cd7ff193a8510bee67979",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "FSTOCD": {
+      "source_hash": "75772c71dd1f83650ea1809860cb177030ff53b95137a7358db2db0021663fc4",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "LNSRCH": {
+      "source_hash": "8e356717b778d23d2c0f5dd647579a34c2c9c333854c1578f117f2a67af36d83",
+      "calls": {
+        "amax1": 2,
+        "amin1": 1
+      }
+    },
+    "SECFAC": {
+      "source_hash": "a86ef080788d4025f2bc51b98a3e0e4a00f0e4d52edc5e03330aa7012e08d011",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "LMDIF": {
+      "source_hash": "53f659642d02995d7bb59a4071ef267d3bffdd276afdd8f21eb9aad21d74411c",
+      "calls": {
+        "amax1": 2,
+        "amin1": 2
+      }
+    },
+    "DOGLEG": {
+      "source_hash": "83f8f91b0b67346a4a4e7a2a87defb35efa462d3769552fcbf3130ce2896b62a",
+      "calls": {
+        "amax1": 1,
+        "amin1": 1
+      }
+    },
+    "FDJAC1": {
+      "source_hash": "a56444b265616c356aec3540143779d5e5e200107caa3c381bb8c2257bcebd74",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "FDJAC2": {
+      "source_hash": "f0bc945fed8a45e3aa417f0f343a5c6a43859d69ebce7041297ca06d0323bef7",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "LMPAR": {
+      "source_hash": "f05990b491350657eab592b040cca7b67a03ddd43b6406c6a37750a5d46f19bc",
+      "calls": {
+        "amin1": 3,
+        "amax1": 4
+      }
+    },
+    "QFORM": {
+      "source_hash": "4a0ea9e4b4b489c672ca515bc89b417177003c0f5f78481044d18f2b81064537",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "QRFAC": {
+      "source_hash": "7aca0d3ae5aed8dba034bf0eaece267bb1384a7eeb86ae05b1ea852c0bbf2564",
+      "calls": {
+        "min0": 1,
+        "amax1": 1
+      }
+    },
+    "SMPLX1": {
+      "source_hash": "cd40aa867da635ce6a7c352a885e7dffd1b43901e1bb826a85a4772edaba9972",
+      "calls": {
+        "min0": 1,
+        "amin1": 4,
+        "amax1": 10
+      }
+    },
+    "SSPLX1": {
+      "source_hash": "7ca2240bd13e4ba789f10400188fe04cd76bf15e2040378533b58fc4c267fbf6",
+      "calls": {
+        "min0": 1,
+        "amin1": 4,
+        "amax1": 10
+      }
+    },
+    "ABCON": {
+      "source_hash": "d02e67d058a727660b9a8ec56b17800978625a9fbf394cd102b52436ce03f42b",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SRCH": {
+      "source_hash": "b1269078241c60290c497494d9b6a637ae992a6772e56cf8f58523e3fe3bed9e",
+      "calls": {
+        "amax1": 3
+      }
+    },
+    "ABCON1": {
+      "source_hash": "35700478c78d6a118c8d2a23988392dc21244fc69941ff3ee2999b2b07ab070a",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "ACOND": {
+      "source_hash": "9272646dc071585f907fb31b646ad0a421905e5386906464eb0d9d3e389df5b2",
+      "calls": {
+        "max0": 1,
+        "amax1": 1
+      }
+    },
+    "XCOND": {
+      "source_hash": "6d5bf89e46d37aea0cadd85a6bcc469d6391f6139d6680da7f45d19a2feb655b",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "CQEXT": {
+      "source_hash": "020d42d5a10991610b231a808fab5e806ea179d8af2b448394ee852a1c76d467",
+      "calls": {
+        "cabs": 8,
+        "amax1": 8
+      }
+    },
+    "QAGIE1": {
+      "source_hash": "cbc37da03a954a0eb0d73b84e7e34fdb0fe22dc8062197bc4746d60d6e4e6ab0",
+      "calls": {
+        "amax1": 6
+      }
+    },
+    "QK15I1": {
+      "source_hash": "de63527da8736bad3b89339e8c608a0e51afca52ed7d6984b38bb96ae303a37c",
+      "calls": {
+        "min0": 1,
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "FFT": {
+      "source_hash": "474b1e22d641dea33bfe557b06d157191c2024bb0987ecc0f363577e24618d46",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "FFT1": {
+      "source_hash": "b0dff34b596657319d9ef149114b500ff8b44d854233d653a3f18baf26ecafc3",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "MFFT": {
+      "source_hash": "c47299b2c11869b8c8e2b091ae9219e634d22bbc6383ef5c86915d2622efe886",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "MFFT1": {
+      "source_hash": "4b2b82ce1af6d2781221a8626b52aa538e28caccfe84dfdb7480114d1121afa7",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "CHEBY1": {
+      "source_hash": "428d8b78065f6c14f0df4ea7a80fdd91b47de69d1f1c9633cb19adb832b8475c",
+      "calls": {
+        "dcos": 1,
+        "dabs": 8,
+        "dmax1": 3
+      }
+    },
+    "ADSET": {
+      "source_hash": "b1f5876be8e48d3cbaf1e186c2c930dea0eccdb35df19a64519acf5cc03889dc",
+      "calls": {
+        "dmax1": 1,
+        "min0": 1,
+        "dabs": 3
+      }
+    },
+    "ADTAKE": {
+      "source_hash": "7a524a84d6b56ede00f777be98bee711a378ba6c3c8707d962a20e061f68fc7e",
+      "calls": {
+        "dabs": 4
+      }
+    },
+    "ERRINT": {
+      "source_hash": "3029cb7a29f2597c133b1f4afa419caf5b2eb33d826bcaae96ee8e23373f35c6",
+      "calls": {
+        "dabs": 6,
+        "dmax1": 1
+      }
+    },
+    "ADCHK": {
+      "source_hash": "d414ed5357eeceb2bb41af992a56de82ae62aa0eca56bb4555d6924067068597",
+      "calls": {
+        "dmin1": 1
+      }
+    },
+    "ADPUT": {
+      "source_hash": "f93c3d8674d523b663f114ae8fb5197465e45eb1cd6a90b20361b81d3dbc0708",
+      "calls": {
+        "dabs": 3,
+        "dmax1": 1
+      }
+    },
+    "CPSC": {
+      "source_hash": "dc5965e9c52e2557593dbe5893185ddd7cda05ae9b1ae74a8a86159ea97d4cc1",
+      "calls": {
+        "amax1": 1,
+        "cabs": 4
+      }
+    },
+    "DCPSC": {
+      "source_hash": "a52d61d4aef9a9e3a27f8f67ff5110482179aa8bb4e59e80633bf92d4b31c822",
+      "calls": {
+        "dmax1": 1,
+        "datan": 1,
+        "dsqrt": 3,
+        "dcos": 1,
+        "dsin": 1,
+        "dsign": 1
+      }
+    },
+    "LTRP": {
+      "source_hash": "4e42f6e3d91be5f79a40c1153275f7e49181ab6b48e848623f4929d893381ff5",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SCOMP": {
+      "source_hash": "ecd175caace3eaf44989019154d7a2caebe53820e06b971f26cc524041f427ca",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SCOMP1": {
+      "source_hash": "d7b83aa91cab6915abb63d7d2434b05f548f96af5bbf4ac8ac1d5db8281d4e95",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SCOMP2": {
+      "source_hash": "73dbf6ec3b0f09ddcb0c9a27a124eb82effe2926efe44a4d9543812320b49611",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SEVAL": {
+      "source_hash": "53078377c8942782520245a04ac7e327756fadf48a93a2431b3ed8048b7d50b8",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SEVAL1": {
+      "source_hash": "dad20f184b7d63508df24109dcce5a0785cd869c01d2cd777bbeb03a2e7b76a6",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "SEVAL2": {
+      "source_hash": "5cca6fa5891115e069784276d0d64551b7ebf8665db485b2e5551f4aa917b5a4",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "PSCMP": {
+      "source_hash": "3ddb08f4832d56686ca7fb7e23a3ff596d84d475145a000c6a649cd441ce35fc",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "PSEVL": {
+      "source_hash": "1fa0292c139032bf387deded439df2cac2f77edf41705d3a0400a3f36e982e95",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "CSLOOP": {
+      "source_hash": "b2c0b97e279df93a226c1df023968f3d5058b6d885ce2e4feb72081fed68a201",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "LOPCMP": {
+      "source_hash": "b726a8b440ae422b78cce3f8a86bc5c25645042d2b0e1906f674953cd33ca00e",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "BVALI": {
+      "source_hash": "7a2474fa20d17995d6efabc6ed94f41c7a5fb2fe631374ba90a0bf31338456d1",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "BVALI0": {
+      "source_hash": "90ce4899f5ef95f42f754f20f8d34ec87f134fb19b77cbb343b3d5cd33d86ce2",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "PPVAL": {
+      "source_hash": "d0568696ca66af146e63d6f29adef765ec86dd4cb33690c36244cc50e2a38f19",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "BSPVD": {
+      "source_hash": "580154dd528d2e1e4276d277b2db68c46c23b841c5b3c927710bab79574b1842",
+      "calls": {
+        "max0": 2,
+        "min0": 1
+      }
+    },
+    "BSTRP": {
+      "source_hash": "ceb984fdcb4daf38fb4b455124fcc5cd0be40a2aac0184e87966a1712c741d45",
+      "calls": {
+        "min0": 1,
+        "max0": 1
+      }
+    },
+    "BANFAC": {
+      "source_hash": "60d34b30b22aec2dc58f6f5d3a3c90978b6d064d1387c992fa5bdd1f83934196",
+      "calls": {
+        "min0": 3
+      }
+    },
+    "BANSLV": {
+      "source_hash": "5c79d65f493dc1bb735ae1f68f431ca4d5882216c2946efc0936cad9aedd1567",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "BSLSQ": {
+      "source_hash": "9299aa7f88fa7306bf6e555aef7c96bd54b8e2d4592193ea063f900b39c0744d",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "BCHFAC": {
+      "source_hash": "2042cca1d4dc0cdfaa6d632c03eb6fa1128d3218dc18d70031018dee9d0b58aa",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "BCHSLV": {
+      "source_hash": "58e48450ea780b0b072053d9ef96fcfaa211ebe24849a8954eb4da8c63f59b6e",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "BFIT0": {
+      "source_hash": "e8b906e2a2c3384ca028c545f244cd792c8072fd9906964b4112b8f10fca4453",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "BNDACC": {
+      "source_hash": "69843760a0cc5199df6858c84c3099775d6f3630115b6b31888c73e0f25737c1",
+      "calls": {
+        "min0": 3,
+        "max0": 1
+      }
+    },
+    "BNDSL": {
+      "source_hash": "18a178cdf681ac776e174f525760e0b4678bfbe109e3462307ee51140ec05b87",
+      "calls": {
+        "max0": 4,
+        "min0": 1
+      }
+    },
+    "SPFIT2": {
+      "source_hash": "5e25e7adf585947ff8fbda512f413872151a0528c78dcfe9d1d86057094ade9a",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "NSURF2": {
+      "source_hash": "52d2e8dc8e7bb2a91687e8d07208eeb814016d017022379bac8c86f76d152d4a",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "BSTRP2": {
+      "source_hash": "b7ab6bc83ec64080ce40e1d5d63ffcce5673f4001ccf45140415977db7873106",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "BSLSQ2": {
+      "source_hash": "409de94be9dc1ac280e254e08d41481d922f21a4b461d0e377ff70f57caa8cda",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "BSLSQ1": {
+      "source_hash": "239ed73d58153930857b681cf324e8776414bd769e391adc23a3f03492bcc998",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "BCHSV1": {
+      "source_hash": "4eddafe1c503246384821df0f45ef05ad2390c03c10c68f3b18ea729dffeb65f",
+      "calls": {
+        "min0": 2
+      }
+    },
+    "BDYADD": {
+      "source_hash": "5fb58480d02f90d20f31eea5a2cee4dc9e670e2b07a2a90f7c9853d3e6fa2f12",
+      "calls": {
+        "max0": 2,
+        "min0": 2
+      }
+    },
+    "TRFIND": {
+      "source_hash": "324576603ff5162881f22c564b18ef6214a09488a3375bf7f33ad97ca18b13f4",
+      "calls": {
+        "max0": 1
+      }
+    },
+    "GRADG1": {
+      "source_hash": "4771c0d19e25bc21773d5567791b3cc85eb6a792af2721797c5852250da13c32",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "GRADL1": {
+      "source_hash": "9162d4953d30dd52d5b0a6dde93627886d96fd4b40fc8e7528a54ab9b241f0fa",
+      "calls": {
+        "min0": 2,
+        "amin1": 2
+      }
+    },
+    "GETNP": {
+      "source_hash": "c195f8d199b472d176832d9629e8fe58345a76636524c19f754adaf015e25c2e",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "TVAL": {
+      "source_hash": "1b2c84fdf27cd872df2c67693e691159bd1ad4993e648679c9b250b8e88f5d7a",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "DSCALP": {
+      "source_hash": "01537ec1d1831247e51c4fc04743f5d134315970e1490abcf9e576dd1e389883",
+      "calls": {
+        "dabs": 1
+      }
+    },
+    "QSUBA": {
+      "source_hash": "c0effd251a47787f2921a885212cd747112670d93274ce1621d987112651fc79",
+      "calls": {
+        "amin1": 3,
+        "amax1": 2
+      }
+    },
+    "QAGSE": {
+      "source_hash": "8a5f7171f18c4aa5021ff8e0713e0bc8b123ed91d32634e4891dcded0ae90340",
+      "calls": {
+        "amax1": 6
+      }
+    },
+    "QK21F": {
+      "source_hash": "007d4c5a653ee7b65849665f66efedbe72ee7218118966b7b601b4c3bb187f2e",
+      "calls": {
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "QAGIE": {
+      "source_hash": "5616efd43b1cad8bd73bf918ed41b93e477193e5df4d4701af500eada470992f",
+      "calls": {
+        "amax1": 6
+      }
+    },
+    "QK15I": {
+      "source_hash": "c7811000bc771d8cece80f2340d6199496e5ed74b1e1ecf24684457a489c358e",
+      "calls": {
+        "min0": 1,
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "QELG": {
+      "source_hash": "45533ef93a8e6a8d178a117064a4ff4e09e7602d39740bbbed7e1c4ca8608176",
+      "calls": {
+        "amax1": 4
+      }
+    },
+    "QXGSE": {
+      "source_hash": "bba0d131b9ab631da1c5d46f3ef4e70872398705200fdaaa42f1dc1d5262dc27",
+      "calls": {
+        "amax1": 6
+      }
+    },
+    "QXLQM": {
+      "source_hash": "9181b946f3413449a58a974e1a4b5c0afa66ca05b86933eb0c3b5d6443222cdf",
+      "calls": {
+        "max0": 2,
+        "min0": 2,
+        "amin1": 1,
+        "amax1": 1
+      }
+    },
+    "DQAGSE": {
+      "source_hash": "d8ffdef5d5f7958933bcfa6f30dba8c0f666f1bbc77686edc72a78607a663964",
+      "calls": {
+        "dmax1": 6,
+        "dabs": 17
+      }
+    },
+    "DQK21": {
+      "source_hash": "4e4047de508248db752276cdc0e9ea7460e8dc6970f01775a00a33f18f204ee1",
+      "calls": {
+        "dabs": 12,
+        "dmin1": 1,
+        "dmax1": 1
+      }
+    },
+    "DQAGIE": {
+      "source_hash": "fcd436516adc1c2c6287e6e28db2532720028228a5c754fa7f50a41f2d23ec43",
+      "calls": {
+        "dmax1": 6,
+        "dabs": 16
+      }
+    },
+    "DQK15I": {
+      "source_hash": "e06359d65cd0c233473ddc4f70cde6a927258fd4005ad5b9938be47b5a4eb6a7",
+      "calls": {
+        "min0": 1,
+        "dabs": 7,
+        "dmin1": 1,
+        "dmax1": 1
+      }
+    },
+    "DQELG": {
+      "source_hash": "71f57580884f0ca6d8ff210dd37337f2e0af2984ccf46457e0efcf776a2944fd",
+      "calls": {
+        "dabs": 13,
+        "dmax1": 4
+      }
+    },
+    "DQXGSE": {
+      "source_hash": "bc9b9fff983704cfca6a2284ae1489a6b6c7b03ff853a87ecb470ab3b5bc0022",
+      "calls": {
+        "dmax1": 6,
+        "dabs": 17
+      }
+    },
+    "DQXLQM": {
+      "source_hash": "c6114541b7609edb998651d565f8778309342ae7f4a9214e192cdd9dd9972fbd",
+      "calls": {
+        "max0": 2,
+        "min0": 2,
+        "dabs": 1,
+        "dmin1": 1,
+        "dmax1": 1
+      }
+    },
+    "DQXRUL": {
+      "source_hash": "ac8baa0248ac534c70061207bcc344497fb30dad114c71688ec54acdce1c2ff8",
+      "calls": {
+        "dabs": 6
+      }
+    },
+    "CUBTRI": {
+      "source_hash": "aa2ab08c3ecce175db60e02a8c6538522f5f3cb95bb70139cfd461b38010298a",
+      "calls": {
+        "min0": 1,
+        "amax1": 1
+      }
+    },
+    "IESLV": {
+      "source_hash": "62207b4d0213c8863bbbc13a4fead45c5ac66ddcc60d6621443221bd3eaee8af",
+      "calls": {
+        "min0": 1
+      }
+    },
+    "IEGS": {
+      "source_hash": "fea5767a873a625cdbb4b61a0f9d7e014a9e8e405e0ea39dd5ff20a5ddf9c2c3",
+      "calls": {
+        "amin1": 4,
+        "amax1": 12
+      }
+    },
+    "RMIN": {
+      "source_hash": "cf041c765f148079dcc0fc1f5d1fc33a00191bfc8026bdaa1b9615a629776035",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "RNRM": {
+      "source_hash": "17480ba93584ff574f60972fc13f85b318b6f04bb2536ca9a348a40b674853ff",
+      "calls": {
+        "amax1": 2
+      }
+    },
+    "CONEW": {
+      "source_hash": "50777fbcb3736dd5139b19ec432a9a9d555de99868dbec85f4895e721f4d2160",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "WANDT": {
+      "source_hash": "a1de811ae01e2b42c97de0a631530ddfc141158846b05a9b1a3f8e0d56772e18",
+      "calls": {
+        "max0": 1,
+        "min0": 1
+      }
+    },
+    "LEAVE": {
+      "source_hash": "80f9e258c74e8426edf91cd95e1a74a6587dfd450e9f9cea7e7b45da5df2b6d2",
+      "calls": {
+        "amax1": 3
+      }
+    },
+    "LNSYS": {
+      "source_hash": "fe2edbb4dc249d6a3988fbaf08f10e3f3d4921de5e81e0c64788f52c9adeb31f",
+      "calls": {
+        "amax1": 4
+      }
+    },
+    "ODE": {
+      "source_hash": "fe46456ddeb8470c32cb089a407eec714e81bae4054d157b2cbb8421a88fba0f",
+      "calls": {
+        "iabs": 2
+      }
+    },
+    "DE1": {
+      "source_hash": "a5598b83daa41e16b63dd711751a6616d685c99188464574146b53d81f2f252d",
+      "calls": {
+        "amax1": 2,
+        "isign": 1,
+        "iabs": 1,
+        "amin1": 1
+      }
+    },
+    "STEP1": {
+      "source_hash": "89e4f6410b320f9bd8b87127264c4b1893327a27be10da09a64ffe764a47bdff",
+      "calls": {
+        "amax1": 4,
+        "amin1": 2
+      }
+    },
+    "BRKF45": {
+      "source_hash": "1cdbd3a303144fbffcb56f258cb89bb159dbabb333bfde43ba6fe17a1ebdc80f",
+      "calls": {
+        "iabs": 1
+      }
+    },
+    "RKFC": {
+      "source_hash": "e34b0e9e4f2b3f880c9ff67da36e70f9244973b3add6dd89efa5522fe9bd038f",
+      "calls": {
+        "iabs": 2,
+        "amax1": 6,
+        "isign": 1,
+        "amin1": 1
+      }
+    },
+    "RKFS": {
+      "source_hash": "5981414b5c019016c794437e29fc132087408a1df11063d33ee4eb7b8ca07a6c",
+      "calls": {
+        "iabs": 2,
+        "amax1": 4,
+        "isign": 1,
+        "amin1": 1
+      }
+    },
+    "GERKS": {
+      "source_hash": "5270cd294ccd39f68eaa61c0d8ab4977fcd9d4bf87a9ec56b92e3273be3dec8f",
+      "calls": {
+        "iabs": 1,
+        "amax1": 5,
+        "amin1": 1
+      }
+    },
+    "LSOD1": {
+      "source_hash": "075f5e8e111fdaf857274f0df88d8c11f3478170525a39ccebaf7d994c066241",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "HSTART": {
+      "source_hash": "76c5dd7e026513ef7705e5889aeea7332957440cce309124b903a5123f942ebf",
+      "calls": {
+        "amax1": 5,
+        "amin1": 2,
+        "min0": 1,
+        "alog10": 1
+      }
+    },
+    "STOD": {
+      "source_hash": "c6848e6a1aa1d803e1ee720ef8566c88aac8b473b819d9942164a4630b2e66f4",
+      "calls": {
+        "amin1": 5,
+        "amax1": 4
+      }
+    },
+    "PJAC": {
+      "source_hash": "754bbb16d01112a60305ec9ffe7ab9c3e5e98389e746b5e33b147cbe24e8b2ac",
+      "calls": {
+        "amax1": 3,
+        "min0": 2,
+        "max0": 1
+      }
+    },
+    "SGBFA": {
+      "source_hash": "93d0a3b7e3c6ccdd099b3d64a399e4092406ae0e7230de8102380e95f2433f6d",
+      "calls": {
+        "min0": 3,
+        "max0": 1
+      }
+    },
+    "SGBSL": {
+      "source_hash": "2ea1876ac4c38f89e097e621f4de58eb6f460d71cff35fa7ed38a55f5f562f4c",
+      "calls": {
+        "min0": 4
+      }
+    },
+    "VNORM": {
+      "source_hash": "fc4b9778b18c518963fe27d16ec0ef811c68458aa4e5490c8831de5648050d0c",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "PDEDGE": {
+      "source_hash": "d99735ed18d73eb03d25375cf861ea180b5cbb2fe89853b22cb13f3fe7377f47",
+      "calls": {
+        "iabs": 4
+      }
+    },
+    "SEPELL": {
+      "source_hash": "b41d341141e6eb2541923f83ac1d3f69d12dcf3d44dd176c0272c25e8cffa3f3",
+      "calls": {
+        "alog": 2,
+        "max0": 1
+      }
+    },
+    "BLKTRI": {
+      "source_hash": "9a0ee945bcf49505b27a72ef8c53e9d0667ef2b65ddff273c8366eac3ba3c8db",
+      "calls": {
+        "max0": 2
+      }
+    },
+    "CPROD0": {
+      "source_hash": "320743a5e32188f8f99bc5ac970ba045adc86b0bc94ac64a5dc01d7470d293f6",
+      "calls": {
+        "cabs": 1
+      }
+    },
+    "CPRODP": {
+      "source_hash": "1095116c3de374b14d220131d98d2f94d49c49f837ee7d04ff6e40cca4307f7a",
+      "calls": {
+        "cabs": 1
+      }
+    },
+    "COMPB": {
+      "source_hash": "c30982a730e944613aa1a38abbcd2c0071d623957926bf9fa9066ffdb028406f",
+      "calls": {
+        "amax1": 1
+      }
+    },
+    "PPADD": {
+      "source_hash": "3f1262011ffd0fcbbd36aa3c601398611a016c7be53a2289135a747d6632ef63",
+      "calls": {
+        "cabs": 11,
+        "csqrt": 1
+      }
+    },
+    "RNOR": {
+      "source_hash": "9d1cfb85516971107647982b90847c77dfe91debe250ca8dff60c0e7355d9dc8",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "DRNOR": {
+      "source_hash": "0c76445e00ea61bfb3bc5a25ec18abf790bd29e1e27bb195b8bb1807c3e36cc8",
+      "calls": {
+        "dsqrt": 2,
+        "dlog": 2
+      }
+    },
+    "NRNG": {
+      "source_hash": "4fc8fff032abe06f46d946c8f6a8d0a15436e708a974545a004c63fda01b3b6a",
+      "calls": {
+        "alog": 2
+      }
+    },
+    "DNRNG": {
+      "source_hash": "c7ed0f5ca105eaba56e6ca179808f85ffe677098d6960d1d311a0214fe9b5367",
+      "calls": {
+        "dsqrt": 2,
+        "dlog": 2,
+        "dcos": 2,
+        "dsin": 1
+      }
+    },
+    "DNRVG1": {
+      "source_hash": "3c27a1d71648d65b2927e1f6d66e44cb9bdb62b0fe914766fcfd4c12332dba92",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "RANEXP": {
+      "source_hash": "1794e9229b30a2d501c8e63477ef831cf44c4e4fd295926e6b3dfd41544d7b7b",
+      "calls": {
+        "alog": 1
+      }
+    },
+    "DRNEXP": {
+      "source_hash": "83a24f9d47b2deedfa1f0bdd1284f6419948b8b4ebfe780dce8e74c0a03d0213",
+      "calls": {
+        "dlog": 1
+      }
+    },
+    "RBETA": {
+      "source_hash": "fb3330fb4b1d4016a6c8952498d817017b88fdea5bbef70d60bcac9426acb8ac",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "DRBETA": {
+      "source_hash": "5449b03c2d979c86eea6aa048ea139d5c276adda3cc08cb443c316239c292843",
+      "calls": {
+        "dmin1": 1
+      }
+    },
+    "FRAN": {
+      "source_hash": "c9f3939daa2fcd22005153a2e7a719cb4754fbb9672ed8aafcc7f4fc0175f20d",
+      "calls": {
+        "amin1": 1
+      }
+    },
+    "DFRAN": {
+      "source_hash": "57b9d12f0a01b940c81a6298d64ebc28bbcb6ce88ac7ed93fca2ae12b8137fa4",
+      "calls": {
+        "dmin1": 1
+      }
+    },
+    "DTRAN": {
+      "source_hash": "f1ec80e0c6e7327efdb9a838213e8bfba8f7a9fdadd7d7f00cc68c29cc1882f0",
+      "calls": {
+        "dsqrt": 1
+      }
+    },
+    "DRMK1": {
+      "source_hash": "e6ce169dde13f0a1dd63af6f47564fceec92d67bb61d20e45543443f9bddbd83",
+      "calls": {
+        "dabs": 1,
+        "dsqrt": 1
+      }
+    }
+  },
+  "retained": {
+    "GRATIO": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "DGRAT": {
+      "dmax1": "generic name conflicts with a data object or procedure"
+    },
+    "ISUBX": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "ARCEPR": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "ARCEPC": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "RSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "TSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "DSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "DTSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "CSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "CTSLV": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "WNLIT": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "CROUT1": {
+      "max0": "generic name conflicts with a data object or procedure"
+    },
+    "LAINV1": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "LSOD1": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "FRAN": {
+      "amax1": "generic name conflicts with a data object or procedure"
+    },
+    "DFRAN": {
+      "dmax1": "generic name conflicts with a data object or procedure"
+    }
+  },
+  "summary": {
+    "procedures": 443,
+    "calls": 2041
+  }
+}

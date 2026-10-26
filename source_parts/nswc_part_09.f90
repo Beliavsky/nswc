@@ -1535,7 +1535,7 @@ if (ierr == 3) c = 0.0
 !
 !     Termination
 !
-20 ierr = min0(ierr,2)
+20 ierr = min(ierr,2)
 return
 end subroutine abcon
 
@@ -1597,7 +1597,7 @@ ierr = 0
 !     Search for an interval (x1, x2) containing x where
 !     x1 .GE. 0.01269
 !
-x1 = amax1(.01269, xl)
+x1 = max(.01269, xl)
 call cond(fun,x1,cnd,num,ier)
 if (cnd) go to 20
 !
@@ -1619,7 +1619,7 @@ go to 300
 x2 = x1
 x1 = -.100358
 do 30 i = 1,6
-   x1 = amax1(x1, xl)
+   x1 = max(x1, xl)
    call cond(fun,x1,cnd,num1,ier)
    num = num + num1
    if (.not. cnd) go to 200
@@ -1633,7 +1633,7 @@ do 30 i = 1,6
 xbar = x1 + dx/2.0
 call cond(fun,xbar,cnd,num1,ierr)
 num = num + num1
-xm = amax1(abs(x1), abs(x2))
+xm = max(abs(x1), abs(x2))
 tol = eta
 if (xm > 1.0) tol = eta*xm
 if (dx <= tol) go to 250
@@ -1756,7 +1756,7 @@ go to 100
 !
 50 dx = x2 - x1
 xbar = x1 + dx/2.0
-xm = amax1(abs(x1), abs(x2))
+xm = max(abs(x1), abs(x2))
 tol = eta
 if (xm > 1.0) tol = eta*xm
 iend = dx <= tol
@@ -1851,12 +1851,12 @@ a = 0.0
 call qagi1(acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
    & l,m,n,iwk,wk)
 num = num1 + num2
-ier = max0(ier1, ier2)
+ier = max(ier1, ier2)
 !
 !     Determination of cond.
 !
 cond = .false.
-if (abs(z1 - z2) <= tol*amax1(abs(z1),abs(z2))) cond = .true.
+if (abs(z1 - z2) <= tol*max(abs(z1),abs(z2))) cond = .true.
 !
 !     Set ierr and return
 !
@@ -1979,7 +1979,7 @@ t = (xcondx(x,y,c,fun) + 4.0*xcondx(x,y1,c,fun) + &
    & xcondx(x,0.0,c,fun))*epsr/6.0
 num = num + 3
 if (t*z > 0.0) return
-if (abs(t + z) > tol*amax1(abs(t), abs(z))) return
+if (abs(t + z) > tol*max(abs(t), abs(z))) return
 cond = .true.
 return
 !
@@ -2397,7 +2397,7 @@ do 40 i = 1,newelm
    e0 = epstab(k3)
    e1 = epstab(k2)
    e2 = res
-   e1abs = cabs(e1)
+   e1abs = abs(e1)
    a1 = real(e0)
    a2 = aimag(e0)
    b1 = real(e1)
@@ -2406,10 +2406,10 @@ do 40 i = 1,newelm
    c2 = aimag(e2)
    err2 = abs(c1 - b1)
    err3 = abs(b1 - a1)
-   if (abs(a1 - b1) > epmach*amax1(abs(a1),abs(b1)) .or. &
-      & abs(a2 - b2) > epmach*amax1(abs(a2),abs(b2))) go to 10
-   if (abs(b1 - c1) > epmach*amax1(abs(b1),abs(c1)) .or. &
-      & abs(b2 - c2) > epmach*amax1(abs(b2),abs(c2))) go to 10
+   if (abs(a1 - b1) > epmach*max(abs(a1),abs(b1)) .or. &
+      & abs(a2 - b2) > epmach*max(abs(a2),abs(b2))) go to 10
+   if (abs(b1 - c1) > epmach*max(abs(b1),abs(c1)) .or. &
+      & abs(b2 - c2) > epmach*max(abs(b2),abs(c2))) go to 10
 !
 !           If e0, e1 and e2 are equal to within machine
 !           accuracy, convergence is assumed.
@@ -2432,9 +2432,9 @@ do 40 i = 1,newelm
    delta1 = e1 - e3
    delta2 = e2 - e1
    delta3 = e1 - e0
-   if (cabs(delta1) <= epmach*amax1(e1abs,cabs(e3))) go to 20
-   if (cabs(delta2) <= epmach*amax1(e1abs,cabs(e2))) go to 20
-   if (cabs(delta3) <= epmach*amax1(cabs(e0),e1abs)) go to 20
+   if (abs(delta1) <= epmach*max(e1abs,abs(e3))) go to 20
+   if (abs(delta2) <= epmach*max(e1abs,abs(e2))) go to 20
+   if (abs(delta3) <= epmach*max(abs(e0),e1abs)) go to 20
    r = real(delta1)
    s = aimag(delta1)
    call cdivid(1.d0,0.d0,r,s,u1,v1)
@@ -2447,7 +2447,7 @@ do 40 i = 1,newelm
    ss1 = u1 + u2 - u3
    ss2 = v1 + v2 - v3
    ss = cmplx(sngl(ss1), sngl(ss2))
-   epsinf = cabs(ss*e1)
+   epsinf = abs(ss*e1)
 !
 !           Test to detect irregular behaviour in the table, and
 !           eventually omit a part of the table adjusting the value
@@ -2502,7 +2502,7 @@ go to 100
 res3la(1) = res3la(2)
 res3la(2) = res3la(3)
 res3la(3) = result
-100 abserr = amax1(abserr,5.0e+00*epmach*abs(real(result)))
+100 abserr = max(abserr,5.0e+00*epmach*abs(real(result)))
 return
 end subroutine cqext
 
@@ -2989,7 +2989,7 @@ iord(1) = 0
 ier = 6
 if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
 ier = 0
-rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
+rerr = max(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           First approximation to the integral
 !           -----------------------------------
@@ -3011,7 +3011,7 @@ rlist(1) = result
 elist(1) = abserr
 iord(1) = 1
 dres = abs(result)
-errbnd = amax1(epsabs,rerr*dres)
+errbnd = max(epsabs,rerr*dres)
 if (abserr <= 100.0*epmach*defabs .and. abserr > errbnd) &
    & ier = 2
 if (limit == 1) ier = 1
@@ -3075,7 +3075,7 @@ do 90 last = 2,limit
 10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
 15 rlist(maxerr) = area1
    rlist(last) = area2
-   errbnd = amax1(epsabs,rerr*abs(area))
+   errbnd = max(epsabs,rerr*abs(area))
 !
 !           Test for roundoff error and eventually
 !           set error flag.
@@ -3091,7 +3091,7 @@ do 90 last = 2,limit
 !           Set error flag in the case of bad integrand behaviour
 !           at some points of the integration range.
 !
-   if (amax1(abs(a1),abs(b2)) <= &
+   if (max(abs(a1),abs(b2)) <= &
       & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           Append the newly-created intervals to the list.
@@ -3161,7 +3161,7 @@ do 90 last = 2,limit
    abserr = abseps
    result = reseps
    correc = erlarg
-   ertest = amax1(epsabs,rerr*abs(reseps))
+   ertest = max(epsabs,rerr*abs(reseps))
    if (abserr <= ertest) go to 100
 !
 !            Prepare bisection of the smallest interval.
@@ -3196,7 +3196,7 @@ go to 110
 !
 !           Test on divergence
 !
-110 if (ksgn == -1 .and. amax1(abs(result),abs(area)) <= &
+110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
    & defabs*0.1e-01) go to 130
 if (0.1e-01 > (result/area) .or. (result/area) > 0.1e+03 &
    & .or. errsum > abs(area)) ier = 6
@@ -3353,7 +3353,7 @@ real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.00
 !                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
-dinf = min0(1,inf)
+dinf = min(1,inf)
 !
 centr = 0.5*(a + b)
 hlgth = 0.5*(b - a)
@@ -3398,9 +3398,9 @@ resasc = resasc*hlgth
 resabs = resabs*hlgth
 abserr = abs((resk - resg)*hlgth)
 if (resasc /= 0.0 .and. abserr /= 0.0) abserr = resasc* &
-   & amin1(1.0, (0.2e+03*abserr/resasc)**1.5)
+   & min(1.0, (0.2e+03*abserr/resasc)**1.5)
 tol = 50.0*epmach
-if (resabs > uflow/tol) abserr = amax1(abserr, tol*resabs)
+if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
 return
 end subroutine qk15i1
 
@@ -3415,7 +3415,7 @@ real, intent(inout) :: c(*)
 !     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
-if (iabs(isn) /= 1) go to 10
+if (abs(isn) /= 1) go to 10
 call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
 return
 10 ierr = 4
@@ -3428,7 +3428,7 @@ integer, intent(inout) :: ierr
 integer :: isn, n
 real, intent(inout) :: a(n), b(n)
 !     ------------
-if (iabs(isn) /= 1) go to 10
+if (abs(isn) /= 1) go to 10
 call sfft(a,b,n,n,n,isn,ierr)
 return
 10 ierr = 4
@@ -3449,7 +3449,7 @@ integer :: i, isign, nspan, ntot
 !     permitted by the Fortran being used, then the user may use
 !     the subroutine mfft1.
 !-----------------------------------------------------------------------
-if (iabs(isn) /= 1) go to 40
+if (abs(isn) /= 1) go to 40
 if (ndim <= 0) go to 50
 ntot = 1
 do i = 1,ndim
@@ -3483,7 +3483,7 @@ real, intent(inout) :: a(*), b(*)
 integer :: n(ndim)
 integer :: i, nspan, ntot
 !     ------------
-if (iabs(isn) /= 1) go to 40
+if (abs(isn) /= 1) go to 40
 if (ndim <= 0) go to 50
 ntot = 1
 do i = 1,ndim
@@ -5900,7 +5900,7 @@ b1 = half*(b - a)
 xm1 = half*(a + b)
 do 20 i = 1,k
    xi = i
-   z = -b1*dcos(pi*(xi/dn))
+   z = -b1*cos(pi*(xi/dn))
    x(i + 1) = z + xm1
    ii = np1 - i
 20 x(ii) = xm1 - z
@@ -5944,10 +5944,10 @@ if (m <= 0) go to 61
 kount = 2
 go to 40
 !
-50 test = dabs(xlb - d(np1))
+50 test = abs(xlb - d(np1))
 xlb = (d(np1) + xlb*dn)/dnp1
 kount = kount + 1
-if (kount <= 4 .and. test > eps0*dabs(xlb)) go to 40
+if (kount <= 4 .and. test > eps0*abs(xlb)) go to 40
 !
 !     Store the results in p and q
 !
@@ -6023,12 +6023,12 @@ do i = 1,np1
    u = -u
    if (i == 1) go to 91
    if (x(i) <= x(i - 1)) go to 230
-91 z = dabs(err(i))
-   error = dmax1(error, z)
+91 z = abs(err(i))
+   error = max(error, z)
    if (z >= ten) go to 240
-   y = dabs(xlb)
+   y = abs(xlb)
    zz = one
-   if (y /= zero) zz = dabs(z - y)/y
+   if (y /= zero) zz = abs(z - y)/y
    if (z1 < zz) z1 = zz
 end do
 !
@@ -6049,8 +6049,8 @@ do 100 i = 1,16
    z3 = z
    z2 = y
 100 y = y + h1
-error = dmax1(error, z3)
-z = dabs(xlb)
+error = max(error, z3)
+z = abs(xlb)
 if (z3 <= z) go to 110
 i = np1
 do 101 ii = 2,np1
@@ -6075,8 +6075,8 @@ do 111 i = 1,16
    z3 = z
    z2 = y
 111 y = y - h1
-error = dmax1(error, z3)
-z = dabs(xlb)
+error = max(error, z3)
+z = abs(xlb)
 if (z3 <= z) go to 120
 do 112 i = 1,n
    err(i) = err(i + 1)
@@ -6085,7 +6085,7 @@ x(np1) = z2
 err(np1) = u*z3
 113 xlb = -xlb
 zz = one
-if (z /= zero) zz = dabs(z3 - z)/z
+if (z /= zero) zz = abs(z3 - z)/z
 if (z1 < zz) z1 = zz
 !
 !     Check for convergence
@@ -6552,7 +6552,7 @@ end interface
 !
 !
 eps = dpmpar(1)
-buffer = c100*dmax1(eps,eps0)
+buffer = c100*max(eps,eps0)
 !
 !         Put data statement items into common variables
 !
@@ -6566,7 +6566,7 @@ kntdim = kdimen
 npardm = ndimen
 maxknt = kntdim
 maxstk = 50
-maxpar = min0(20,npardm)
+maxpar = min(20,npardm)
 maxaux = 20
 !
 ! -------- Check input data --------------------------------------------
@@ -6575,7 +6575,7 @@ ierr = 0
 if (a >= b .or. accur <= zero) go to 200
 if (degree >= maxpar .or. 2*smooth >= degree) go to 200
 akmax = kmax
-ratio = (b - a)/(dabs(a) + dabs(b))
+ratio = (b - a)/(abs(a) + abs(b))
 if (ratio <= two*buffer*akmax) go to 210
 if (charf < (b - a)/akmax) go to 220
 if (norm >= zero .and. (norm - one)*(norm - two)*(norm - three) /= zero) &
@@ -6608,7 +6608,7 @@ xright(1) = b
 !             Termination and error values
 !
 error = zero
-dsctol = accur**dabs(norm)
+dsctol = accur**abs(norm)
 if (edist == 0) dsctol = dsctol/(b - a)
 if (norm == three) dsctol = accur
 !
@@ -6706,7 +6706,7 @@ break = both
 if (nstack == maxstk) go to 30
 !                     Dont split very small intervals, stop instead
 dx = xbreak(ibreak + 1) - xleft(nstack)
-ratio = dx/(dabs(a) + dabs(b))
+ratio = dx/(abs(a) + abs(b))
 if (ratio <= buffer) go to 30
 nstack = nstack + 1
 xleft(nstack) = xleft(nstack - 1)
@@ -6722,7 +6722,7 @@ if (xbreak(ibreak) >= xright(nstack)) go to 20
 if (nstack == maxstk) go to 30
 !                     Dont split very small intervals, stop instead
 dx = xbreak(ibreak) - xleft(nstack)
-ratio = dx/(dabs(a) + dabs(b))
+ratio = dx/(abs(a) + abs(b))
 if (ratio <= buffer) go to 30
 nstack = nstack + 1
 xleft(nstack) = xleft(nstack - 1)
@@ -6907,16 +6907,16 @@ pj = abmid + ba*points(1)
 if (norm == three) go to 20
 !
 !         Have general LP norm or least squares or least deviations
-p = dabs(norm)
+p = abs(norm)
 !              Initialize the quadrature rule
-errint = dabs(f(pj,fdumb) - fit(pj))**p*weight(1)
+errint = abs(f(pj,fdumb) - fit(pj))**p*weight(1)
 !              Loop through remaining points
 do 10 j = 2,4
    pj = abmid + ba*points(j)
    f1 = f(pj,fdumb)
    f2 = fit(pj)
-   er = dabs(f1 - f2)**p
-   errint = errint + dabs(f(pj,fdumb) - fit(pj))**p*weight(j)
+   er = abs(f1 - f2)**p
+   errint = errint + abs(f(pj,fdumb) - fit(pj))**p*weight(j)
 10 continue
 errint = errint*ba
 go to 40
@@ -6925,11 +6925,11 @@ go to 40
 20 continue
 !             Find max error on points
 !               initialize
-errint = dabs(f(pj,fdumb) - fit(pj))
+errint = abs(f(pj,fdumb) - fit(pj))
 !              Loop through the remaining points
 do j = 2,4
    pj = abmid + ba*points(j)
-   errint = dmax1(errint,dabs(f(pj,fdumb) - fit(pj)))
+   errint = max(errint,abs(f(pj,fdumb) - fit(pj)))
 end do
 40 continue
 return
@@ -7168,7 +7168,7 @@ go to 40
 !         the final number of knots by( limiting it a little )
 !             (NSTACK+knots+2)((b-a)/(XRIGHT-a))
 20 aknots = nstack + knots + 2
-dtest = dsctol/(aknots*dmin1((b - a)/(xright(nstack) - a),five))
+dtest = dsctol/(aknots*min((b - a)/(xright(nstack) - a),five))
 go to 40
 30 dtest = dsctol
 !
@@ -7231,7 +7231,7 @@ return
 !
 10 dx = (xright(nstack) - xleft(nstack))*half
 !              Check for small intervals
-ratio = dx/(dabs(a) + dabs(b))
+ratio = dx/(abs(a) + abs(b))
 if (ratio > buffer) go to 20
 ierr = 4
 return
@@ -7243,8 +7243,8 @@ xright(nstack) = xleft(nstack - 1)
 return
 !
 !            Discard interval, update global error, xknots and coefs
-30 p = dabs(norm)
-if (norm == three) error = dmax1(error,errori)
+30 p = abs(norm)
+if (norm == three) error = max(error,errori)
 if (norm /= three) error = (error**p + errori)**(one/p)
 !
 !              Check for passing break points
@@ -7481,7 +7481,7 @@ eps0 = spmpar(1)
 !
 !  Initialization.
 !
-eps = amax1(eps0,tol)
+eps = max(eps0,tol)
 sc(1) = .125
 c(1) = eps**(1./28.)
 ep6 = c(1)**6
@@ -7548,7 +7548,7 @@ b = 1.0
 !  Test on how fast the coefficients obtained decrease.
 !
 do 80 i = 1,ix
-   ct = cabs(a(i))/b
+   ct = abs(a(i))/b
    if (ct < cx) go to 80
    cx = ct
    inr = i
@@ -7579,9 +7579,9 @@ do 130 j = 1,3
    do 120 i = 2,ix
       ia = ix + 1 - i
 120   s = s*rq + a(ia)
-   cp = cabs(s)
+   cp = abs(s)
    if (cp > sp) sp = cp
-   cm = cabs(s - f(z + rq))
+   cm = abs(s - f(z + rq))
 130 if (cm > sr) sr = cm
 if (sr > 1.e-3*sp) go to 150
 lf = 1
@@ -7630,7 +7630,7 @@ go to 30
 !
 do 240 i = 1,n
    xk = rt(i,1) - rt(i,2)
-   err(i) = err(i) + ep6*cabs(xk)
+   err(i) = err(i) + ep6*abs(xk)
 240 rs(i) = rt(i,2) - mult(fc(3),xk)
 !
 !  Multiply power series coefficients and error estimate by factorials
@@ -7744,25 +7744,25 @@ eps0 = dpmpar(1)
 !
 !  Initialization.
 !
-eps = dmax1(eps0,tol)
+eps = max(eps0,tol)
 sc(1) = .125d0
 c(1) = eps**(1.d0/28.d0)
 ep6 = c(1)**6
-pi = 4.d0*datan(1.d0)
+pi = 4.d0*atan(1.d0)
 fv1(1) = -1.d0
 fv2(1) = 0.d0
 fv1(2) = 0.d0
 fv2(2) = -1.d0
-r1 = dsqrt(0.5d0)
+r1 = sqrt(0.5d0)
 ra = 1.d0/r1
 fv1(3) = r1
 fv2(3) = -r1
 do 10 i = 2,4
    sc(i) = 0.5d0*sc(i - 1)
-   c(i) = dsqrt(c(i - 1))
+   c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
-   fv1(i + 2) = dcos(ang)
-10 fv2(i + 2) = -dsin(ang)
+   fv1(i + 2) = cos(ang)
+10 fv2(i + 2) = -sin(ang)
 !
 !  Start execution.
 !
@@ -7882,7 +7882,7 @@ if (nr > 0) go to 170
 np = np + 1
 if (np - 15) 190,190,260
 170 fact = 1.d0/fact
-180 fact = 1.d0/dsqrt(fact)
+180 fact = 1.d0/sqrt(fact)
 nr = nr + 1
 190 r = r*fact
 m = nr - kl - 1
@@ -7907,7 +7907,7 @@ if (m == 3) go to 230
 !
 !  Calculation of the extrapolation constants.
 !
-220 fc(m) = 1.5d0 + dsign(0.5d0,fact - 1.d0)
+220 fc(m) = 1.5d0 + sign(0.5d0,fact - 1.d0)
 if (m == 2) fc(m) = fc(m) + ra
 if (fact > 1.d0) fc(m) = -fc(m)
 go to 30
@@ -8121,7 +8121,7 @@ if (xx - x(1)) 10,11,111
 !
 120 if (xx - xi(k - 1)) 121,122,40
 121 il = 1
-ir = min0(i + 1,n)
+ir = min(i + 1,n)
 go to 30
 122 yi(k) = yi(k - 1)
 go to 110
@@ -9096,7 +9096,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,n)
+ir = min(i + 1,n)
 go to 10
 end subroutine scomp
 
@@ -9200,7 +9200,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,nm1)
+ir = min(i + 1,nm1)
 go to 10
 end subroutine scomp1
 
@@ -9307,7 +9307,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,nm1)
+ir = min(i + 1,nm1)
 go to 10
 end subroutine scomp2
 
@@ -9416,7 +9416,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(n)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,n)
+ir = min(i + 1,n)
 go to 10
 end subroutine seval
 
@@ -9526,7 +9526,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,nm1)
+ir = min(i + 1,nm1)
 go to 10
 end subroutine seval1
 
@@ -9638,7 +9638,7 @@ if (xx < x(1)) go to 90
 if (xx >= x(nm1)) go to 80
 if (xx - xi(k - 1)) 110,100,50
 110 il = 1
-ir = min0(i + 1,nm1)
+ir = min(i + 1,nm1)
 go to 10
 end subroutine seval2
 
@@ -10271,7 +10271,7 @@ if (xx >= x(n)) go to 120
 if (xx - xold) 110,90,40
 !
 110 il = 1
-ir = min0(i + 1,n)
+ir = min(i + 1,n)
 go to 10
 !
 !     Case when roundoff produces a value for xx where
@@ -10356,7 +10356,7 @@ if (xx >= x(n)) go to 120
 if (xx - xold) 110,90,40
 !
 110 il = 1
-ir = min0(i + 1,n)
+ir = min(i + 1,n)
 go to 10
 !
 !     Case when roundoff produces a value for xx where
@@ -10407,7 +10407,7 @@ end interface
 !     m = The number of n-dimensional points given in x
 !     wk is an array of dimension 4*(m-1)
 !----------------------
-if (min0(m, n) < 2) go to 10
+if (min(m, n) < 2) go to 10
 !
 mm1 = m - 1
 ie = 1

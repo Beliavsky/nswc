@@ -306,7 +306,7 @@ end interface
 !
 if (neqn < 1) go to 10
 if (relerr < 0.0 .or. abserr < 0.0) go to 10
-mflag = iabs(iflag)
+mflag = abs(iflag)
 if (mflag == 0 .or. mflag > 8) go to 10
 !
 !     Compute the relative machine precision
@@ -355,7 +355,7 @@ if (mflag == 2) go to 50
 !     Reset flag VALUE from previous call
 !
 45 iflag = jflag
-if (kflag == 3) mflag = iabs(iflag)
+if (kflag == 3) mflag = abs(iflag)
 !
 !     Save input iflag and set continuation flag VALUE for subsequent
 !     input checking
@@ -416,8 +416,8 @@ do 70 k = 1,neqn
    if (ypk*h**5 > tol) h = (tol/ypk)**0.2
 70 continue
 if (toln <= 0.0) h = 0.0
-h = amax1(h,u26*amax1(abs(t),abs(dt)))
-jflag = isign(2,iflag)
+h = max(h,u26*max(abs(t),abs(dt)))
+jflag = sign(2,iflag)
 !
 !     Set stepsize for integration in the direction from t to tout
 !
@@ -537,7 +537,7 @@ do 250 k = 1,neqn
 !
 240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
       & (22528.0*f2(k) - 27360.0*f5(k)))
-250 eeoet = amax1(eeoet,ee/et)
+250 eeoet = max(eeoet,ee/et)
 !
 esttol = abs(h)*eeoet*scale/752400.0
 if (esttol <= 1.0) go to 260
@@ -577,8 +577,8 @@ nfe = nfe + 1
 !
 s = 5.0
 if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
-if (hfaild) s = amin1(s,1.0)
-h = sign(amax1(s*abs(h),hmin),h)
+if (hfaild) s = min(s,1.0)
+h = sign(max(s*abs(h),hmin),h)
 !
 !     END OF CORE INTEGRATOR
 !
@@ -975,7 +975,7 @@ maxnfe = 9000
 !
 if (neqn < 1) go to 10
 if ((relerr < 0.)  .or.  (abserr < 0.)) go to 10
-mflag = iabs(iflag)
+mflag = abs(iflag)
 if ((mflag >= 1)  .and.  (mflag <= 7)) go to 20
 !
 !     Invalid input
@@ -1028,7 +1028,7 @@ savae = abserr
 !     32U+remin to avoid limiting precision difficulties arising from
 !     impossible accuracy requests
 !
-rer = amax1(relerr,32.*u + remin)
+rer = max(relerr,32.*u + remin)
 !
 u26 = 26.*u
 !
@@ -1074,7 +1074,7 @@ do 70 k = 1,neqn
    if (ypk*h**5 > tol) h = (tol/ypk)**0.2
 70 continue
 if (toln <= 0.) h = 0.
-h = amax1(h,u26*amax1(abs(t),abs(dt)))
+h = max(h,u26*max(abs(t),abs(dt)))
 !
 !
 !***********************************************************************
@@ -1202,7 +1202,7 @@ do 250 k = 1,neqn
 !
 240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
       & (22528.*f2(k) - 27360.*f5(k)))
-250 eeoet = amax1(eeoet,ee/et)
+250 eeoet = max(eeoet,ee/et)
 !
 esttol = abs(h)*eeoet*scale/752400.
 !
@@ -1259,8 +1259,8 @@ nfe = nfe + 12
 !
 s = 5.
 if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
-if (hfaild) s = amin1(s,1.)
-h = sign(amax1(s*abs(h),hmin),h)
+if (hfaild) s = min(s,1.)
+h = sign(max(s*abs(h),hmin),h)
 !
 !***********************************************************************
 !     END OF CORE INTEGRATOR
@@ -2482,7 +2482,7 @@ go to 500
 330 hmin = 100.*u*abs(x)
 ha = amax1(abs(h),hmin)
 if (itstop /= 1) go to 340
-ha = amin1(ha,abs(tstop - x))
+ha = min(ha,abs(tstop - x))
 340 h = sign(ha,h)
 ltol = 1
 do l = 1,neq
@@ -2698,7 +2698,7 @@ relper = small**0.375
 !     independent variable. Protect against an overflow.
 !     Also compute a bound (fbnd) on the first derivative locally.
 !
-da = sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
+da = sign(max(min(relper*abs(a),absdx),100.*small*abs(a)),dx)
 if (da == 0.) da = relper*dx
 call f(a + da,y,sf,rpar,ipar)
 do 10 j = 1,neq
@@ -2733,7 +2733,7 @@ dely = relper*vnorm(y,neq)
 if (dely == 0.) dely = relper
 dely = sign(dely,dx)
 delf = vnorm(yprime,neq)
-fbnd = amax1(fbnd,delf)
+fbnd = max(fbnd,delf)
 if (delf == 0.) go to 30
 !                       Use initial derivatives for first perturbation
 do 20 j = 1,neq
@@ -2747,7 +2747,7 @@ go to 50
 delf = vnorm(yp,neq)
 !
 50 dfdub = 0.
-lk = min0(neq + 1,3)
+lk = min(neq + 1,3)
 do 140 k = 1,lk
 !                       Define perturbed vector of initial values
    do 60 j = 1,neq
@@ -2766,10 +2766,10 @@ do 140 k = 1,lk
 90    pv(j) = yp(j) - sf(j)
 !                       Choose largest bounds on the first derivative
 !                                      and a local Lipschitz constant
-100 fbnd = amax1(fbnd,vnorm(yp,neq))
+100 fbnd = max(fbnd,vnorm(yp,neq))
    delf = vnorm(pv,neq)
    if (delf >= big*abs(dely)) go to 150
-   dfdub = amax1(dfdub,delf/abs(dely))
+   dfdub = max(dfdub,delf/abs(dely))
    if (k == lk) go to 160
 !                       Choose next perturbation vector
    if (delf == 0.) delf = 1.
@@ -2803,8 +2803,8 @@ do 140 k = 1,lk
 tolmin = big
 tolsum = 0.
 do 170 k = 1,neq
-   tolexp = alog10(etol(k))
-   tolmin = amin1(tolmin,tolexp)
+   tolexp = log10(etol(k))
+   tolmin = min(tolmin,tolexp)
 170 tolsum = tolsum + tolexp
 tolp = 10.**(0.5*(tolsum/float(neq) + tolmin)/float(morder + 1))
 !
@@ -2843,7 +2843,7 @@ if (tolp < srydpb*absdx) h = tolp/srydpb
 !                       a=0. And the computed h UNDERFLOWED to zero,
 !                       the algorithm returns  small*abs(b)  for the
 !                                                       step length.
-h = amax1(h,100.*small*abs(a))
+h = max(h,100.*small*abs(a))
 if (h == 0.) h = small*abs(b)
 !
 !                       Now set direction of integration
@@ -3083,10 +3083,10 @@ conit = 0.5e0/float(nq + 2)
 ddn = vnwrms(n, savf, ewt)/tesco(1,l)
 exdn = 1.0e0/float(l)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
-rh = amin1(rhdn,1.0e0)
+rh = min(rhdn,1.0e0)
 iredo = 3
 if (h == hold) go to 170
-rh = amin1(rh,abs(h/hold))
+rh = min(rh,abs(h/hold))
 h = hold
 go to 175
 !-----------------------------------------------------------------------
@@ -3113,9 +3113,9 @@ rh = h/hold
 h = hold
 iredo = 3
 go to 175
-170 rh = amax1(rh,hmin/abs(h))
-175 rh = amin1(rh,rmax)
-rh = rh/amax1(1.0e0,abs(h)*hmxi*rh)
+170 rh = max(rh,hmin/abs(h))
+175 rh = min(rh,rmax)
+rh = rh/max(1.0e0,abs(h)*hmxi*rh)
 r = 1.0e0
 do 180 j = 2,l
    r = r*rh
@@ -3200,8 +3200,8 @@ do 380 i = 1,n
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
 ! rate constant is stored in crate, and this is used in the test.
 !-----------------------------------------------------------------------
-400 if (m /= 0) crate = amax1(0.2e0*crate,del/delp)
-dcon = del*amin1(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
+400 if (m /= 0) crate = max(0.2e0*crate,del/delp)
+dcon = del*min(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
 if (dcon <= 1.0e0) go to 450
 m = m + 1
 if (m == 3) go to 410
@@ -3337,7 +3337,7 @@ go to 630
 610 ialth = 3
 go to 690
 620 if ((kflag == 0) .and. (rh < 1.1e0)) go to 610
-if (kflag <= -2) rh = amin1(rh,0.2e0)
+if (kflag <= -2) rh = min(rh,0.2e0)
 !-----------------------------------------------------------------------
 ! If there is a change of order, reset NQ, L, and the coefficients.
 ! In any case H is reset according to RH and the yh array is rescaled.
@@ -3359,7 +3359,7 @@ go to 150
 !-----------------------------------------------------------------------
 640 if (kflag == -10) go to 660
 rh = 0.1e0
-rh = amax1(hmin/abs(h),rh)
+rh = max(hmin/abs(h),rh)
 h = h*rh
 do 645 i = 1,n
 645 y(i) = yh(i,1)
@@ -3581,7 +3581,7 @@ srur = wm(1)
 j1 = 2
 do j = 1,n
    yj = y(j)
-   r = amax1(srur*abs(yj),r0*ewt(j))
+   r = max(srur*abs(yj),r0*ewt(j))
    y(j) = y(j) + r
    fac = -hl0/r
    call f(tn, y, ftem, rpar, ipar)
@@ -3636,7 +3636,7 @@ go to 570
 500 ml = iwm(1)
 mu = iwm(2)
 mband = ml + mu + 1
-mba = min0(mband,n)
+mba = min(mband,n)
 meband = mband + ml
 meb1 = meband - 1
 srur = wm(1)
@@ -3646,16 +3646,16 @@ if (r0 == 0.0e0) r0 = 1.0e0
 do j = 1,mba
    do 530 i = j,n,mband
       yi = y(i)
-      r = amax1(srur*abs(yi),r0*ewt(i))
+      r = max(srur*abs(yi),r0*ewt(i))
 530   y(i) = y(i) + r
    call f(tn, y, ftem, rpar, ipar)
    do jj = j,n,mband
       y(jj) = yh(jj,1)
       yjj = y(jj)
-      r = amax1(srur*abs(yjj),r0*ewt(jj))
+      r = max(srur*abs(yjj),r0*ewt(jj))
       fac = -hl0/r
-      i1 = max0(jj - mu,1)
-      i2 = min0(jj + ml,n)
+      i1 = max(jj - mu,1)
+      i2 = min(jj + ml,n)
       ii = jj*meb1 - ml + 2
       do 540 i = i1,i2
 540      wm(ii + i) = (ftem(i) - savf(i))*fac
@@ -3864,7 +3864,7 @@ info = 0
 !     Zero initial fill-in columns
 !
 j0 = mu + 2
-j1 = min0(n,m) - 1
+j1 = min(n,m) - 1
 if (j1 < j0) go to 30
 do jz = j0, j1
    i0 = m + 1 - jz
@@ -3895,7 +3895,7 @@ do k = 1, nm1
 !
 !        Find l = Pivot index
 !
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    l = isamax(lm + 1,abd(m,k),1) + m - 1
    ipvt(k) = l + k - m
 !
@@ -3918,7 +3918,7 @@ do k = 1, nm1
 !
 !           Row elimination with column indexing
 !
-   ju = min0(max0(ju,mu + ipvt(k)),n)
+   ju = min(max(ju,mu + ipvt(k)),n)
    mm = m
    if (ju < kp1) go to 90
    do j = kp1, ju
@@ -4043,7 +4043,7 @@ if (job /= 0) go to 50
 if (ml == 0) go to 30
 if (nm1 < 1) go to 30
 do k = 1, nm1
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    l = ipvt(k)
    t = b(l)
    if (l == k) go to 10
@@ -4059,7 +4059,7 @@ end do
 do kb = 1, n
    k = n + 1 - kb
    b(k) = b(k)/abd(m,k)
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    la = m - lm
    lb = k - lm
    t = -b(k)
@@ -4072,7 +4072,7 @@ go to 100
 !        first solve  trans(U)*Y = b
 !
 do k = 1, n
-   lm = min0(k,m) - 1
+   lm = min(k,m) - 1
    la = m - lm
    lb = k - lm
    t = sdot(lm,abd(la,k),1,b(lb),1)
@@ -4085,7 +4085,7 @@ if (ml == 0) go to 90
 if (nm1 < 1) go to 90
 do kb = 1, nm1
    k = n - kb
-   lm = min0(ml,n - k)
+   lm = min(ml,n - k)
    b(k) = b(k) + sdot(lm,abd(m + 1,k),1,b(k + 1),1)
    l = ipvt(k)
    if (l == k) go to 70
@@ -4112,7 +4112,7 @@ real :: vnorm
 !
 vnorm = 0.
 do 10 k = 1,ncomp
-10 vnorm = amax1(vnorm,abs(v(k)))
+10 vnorm = max(vnorm,abs(v(k)))
 return
 end function vnorm
 
@@ -4484,10 +4484,10 @@ implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)
 !
-if (iabs(edge(1)) > 1) go to 200
-if (iabs(edge(2)) > 1) go to 200
-if (iabs(edge(3)) > 1) go to 200
-if (iabs(edge(4)) > 1) go to 200
+if (abs(edge(1)) > 1) go to 200
+if (abs(edge(2)) > 1) go to 200
+if (abs(edge(3)) > 1) go to 200
+if (abs(edge(4)) > 1) go to 200
 ierr = 0
 !
 !               Process edges 1 and 3
@@ -4996,11 +4996,11 @@ if (ierror /= 0) return
 !
 l = n + 1
 if (nbdcnd == 0) l = n
-logb2n = int(alog(float(l) + 0.5)/alog(2.0)) + 1
+logb2n = int(log(float(l) + 0.5)/log(2.0)) + 1
 ll = 2**(logb2n + 1)
 k = m + 1
 l = n + 1
-length = (logb2n - 2)*ll + logb2n + max0(2*l,6*k) + 5
+length = (logb2n - 2)*ll + logb2n + max(2*l,6*k) + 5
 if (nbdcnd == 0) length = length + 2*l
 ierror = 11
 linput = int(w(1) + 0.5)
@@ -6050,11 +6050,11 @@ if (npp) 110,120,110
 !
 110 iw1 = iwah
 iwbh = iw1 + nm
-w(1) = float(iw1 - 1 + max0(2*nm,6*m))
+w(1) = float(iw1 - 1 + max(2*nm,6*m))
 go to 130
 120 iwbh = iwah + nm + nm
 iw1 = iwbh
-w(1) = float(iw1 - 1 + max0(2*nm,6*m))
+w(1) = float(iw1 - 1 + max(2*nm,6*m))
 nm = nm - 1
 !
 ! Subroutine compb computes the roots of the B polynomials
@@ -6635,7 +6635,7 @@ do j = 2,mm
    w(k + 1) = (y(k + 1) - c(k + 1)*w(k + 2))/den
 end do
 den = b(1) - crt - c(1)*d(2)
-if (cabs(den)) 50, 60, 50
+if (abs(den)) 50, 60, 50
 50 y(1) = (y(1) - c(1)*w(2))/den
 go to  70
 60 y(1) = (1.,0.)
@@ -6755,7 +6755,7 @@ am = a(m) - v*d(m - 2)
 bh = bh - v*u(m - 2)
 ym = ym - v*y(m - 2)
 den = bh - am*d(m - 1)
-if (cabs(den)) 70, 80, 70
+if (abs(den)) 70, 80, 70
 70 y(m) = (ym - am*y(m - 1))/den
 go to  90
 80 y(m) = (1.,0.)
@@ -6841,7 +6841,7 @@ common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 eps = spmpar(1)
 bnorm = abs(bn(1))
 do j = 2,nm
-   bnorm = amax1(bnorm,abs(bn(j)))
+   bnorm = max(bnorm,abs(bn(j)))
    arg = an(j)*cn(j - 1)
    if (arg) 220, 30, 30
 30 b(j) = sign(sqrt(arg),an(j))
@@ -7202,36 +7202,36 @@ if = iz - 2
    go to 240
 230 f = (1.,0.) + fsg + hsg
 240 i3 = 0
-   if (cabs(fp)) 260,260,250
+   if (abs(fp)) 260,260,250
 250 i3 = 1
    r3 = -f/fp
 260 i2 = 0
-   if (cabs(fpp)) 320,320,270
+   if (abs(fpp)) 320,320,270
 270 i2 = 1
-   cdis = csqrt(fp**2 - 2.*f*fpp)
+   cdis = sqrt(fp**2 - 2.*f*fpp)
    r1 = cdis - fp
    r2 = -fp - cdis
-   if (cabs(r1) - cabs(r2)) 290,290,280
+   if (abs(r1) - abs(r2)) 290,290,280
 280 r1 = r1/fpp
    go to 300
 290 r1 = r2/fpp
 300 r2 = 2.*f/fpp/r1
-   if (cabs(r2) < cabs(r1)) r1 = r2
+   if (abs(r2) < abs(r1)) r1 = r2
    if (i3) 330,330,310
-310 if (cabs(r3) < cabs(r1)) r1 = r3
+310 if (abs(r3) < abs(r1)) r1 = r3
    go to 330
 320 r1 = r3
 330 cx = cx + r1
    it = it + 1
    if (it > 50) go to 420
-   if (cabs(r1) > scnv) go to 200
+   if (abs(r1) > scnv) go to 200
    if (icv) 340,340,350
 340 icv = 1
    go to 200
 350 cbp(ig) = cx
    cbp(ig + 1) = conjg(cx)
 360 continue
-if (cabs(cbp(n)) - cabs(cbp(1))) 370,420,390
+if (abs(cbp(n)) - abs(cbp(1))) 370,420,390
 370 nhalf = n/2
 do j = 1,nhalf
    nt = n - j
@@ -8329,7 +8329,7 @@ do i = 1,m,2
    u = a(i)
    v = a(i + 1)
    r = u*u + v*v
-   s = sqrt(-2.0*alog(r)/r)
+   s = sqrt(-2.0*log(r)/r)
    a(i) = s*u
    a(i + 1) = s*v
 end do
@@ -8339,7 +8339,7 @@ if (m == n) return
 !
 20 call rcir1(1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
-s = sqrt(-2.0*alog(r)/r)
+s = sqrt(-2.0*log(r)/r)
 a(n) = s*t(1)
 return
 !
@@ -8391,7 +8391,7 @@ do i = 1,m,2
    u = a(i)
    v = a(i + 1)
    r = u*u + v*v
-   s = dsqrt(-2.d0*dlog(r)/r)
+   s = sqrt(-2.d0*log(r)/r)
    a(i) = s*u
    a(i + 1) = s*v
 end do
@@ -8401,7 +8401,7 @@ if (m == n) return
 !
 20 call drcir1(1, ix, t(1), 1, t(2), 1, ierr)
 r = t(1)*t(1) + t(2)*t(2)
-s = dsqrt(-2.d0*dlog(r)/r)
+s = sqrt(-2.d0*log(r)/r)
 a(n) = s*t(1)
 return
 !
@@ -8442,14 +8442,14 @@ if (n == 1) go to 20
 m = n/2
 m = m + m
 do 10 i = 1,m,2
-   r = sqrt(-2.0*alog(a(i)))
+   r = sqrt(-2.0*log(a(i)))
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
 10 a(i + 1) = r*sin(phi)
 if (m == n) return
 !
 20 call urng(ix,temp,1,ierr)
-r = sqrt(-2.0*alog(a(n)))
+r = sqrt(-2.0*log(a(n)))
 a(n) = r*cos(pi2*temp(1))
 return
 end subroutine nrng
@@ -8483,15 +8483,15 @@ if (n == 1) go to 20
 m = n/2
 m = m + m
 do 10 i = 1,m,2
-   r = dsqrt(-2.d0*dlog(a(i)))
+   r = sqrt(-2.d0*log(a(i)))
    phi = pi2*a(i + 1)
-   a(i) = r*dcos(phi)
-10 a(i + 1) = r*dsin(phi)
+   a(i) = r*cos(phi)
+10 a(i + 1) = r*sin(phi)
 if (m == n) return
 !
 20 call durng(ix, temp, 1, ierr)
-r = dsqrt(-2.d0*dlog(a(n)))
-a(n) = r*dcos(pi2*temp(1))
+r = sqrt(-2.d0*log(a(n)))
+a(n) = r*cos(pi2*temp(1))
 return
 end subroutine dnrng
 
@@ -9016,7 +9016,7 @@ if (ix <= 0 .or. ix >= max) go to 130
 if (mo /= 0) go to 20
 do i = 1,m
    if (a(i) <= 0.d0) go to 120
-   a(i) = dsqrt(a(i))
+   a(i) = sqrt(a(i))
 end do
 !
 !           Generate the n random normal vectors
@@ -9123,7 +9123,7 @@ if (ierror /= 0) go to 120
 !        Loop which generates the n desired variates
 !
 do i = 1,n
-   x(i) = - a*alog(x(i))
+   x(i) = - a*log(x(i))
 end do
 return
 !
@@ -9219,7 +9219,7 @@ if (ierror /= 0) go to 120
 !        Loop which generates the n desired variates
 !
 do i = 1,n
-   x(i) = - a*dlog(x(i))
+   x(i) = - a*log(x(i))
 end do
 return
 !
@@ -9468,7 +9468,7 @@ end interface
 !--------------------
 !--------------------
 if (n <= 0) go to 100
-if (amin1(a,b) < 0.25) go to 110
+if (min(a,b) < 0.25) go to 110
 if (ix <= 0 .or. ix >= max) go to 120
 ierr = 0
 !
@@ -9580,7 +9580,7 @@ end interface
 !--------------------
 !--------------------
 if (n <= 0) go to 100
-if (dmin1(a,b) < 0.25d0) go to 110
+if (min(a,b) < 0.25d0) go to 110
 if (ix <= 0 .or. ix >= max) go to 120
 ierr = 0
 !
@@ -9695,7 +9695,7 @@ xmax = spmpar(3)
 !
 !--------------------
 if (n <= 0) go to 100
-if (amin1(a,b) < 0.5) go to 110
+if (min(a,b) < 0.5) go to 110
 if (ix <= 0 .or. ix >= max) go to 130
 ierr = 0
 !
@@ -9822,7 +9822,7 @@ xmax = dpmpar(3)
 !
 !--------------------
 if (n <= 0) go to 100
-if (dmin1(a,b) < 0.5d0) go to 110
+if (min(a,b) < 0.5d0) go to 110
 if (ix <= 0 .or. ix >= max) go to 130
 ierr = 0
 !
@@ -10092,7 +10092,7 @@ do i = 1,n
    call dginv(ahalf, w, u, v, ind)
    if (ind == -3 .or. ind == -7) go to 120
 !
-   s = dsqrt(w/ahalf)
+   s = sqrt(w/ahalf)
    x(i) = z/s
 end do
 return
@@ -10327,7 +10327,7 @@ if (sig <= 0.d0) go to 110
 !        parameter is within the range required to guarantee
 !        PROCESS STATIONARITY
 !
-if (dabs(alpha) >= 1.d0) go to 120
+if (abs(alpha) >= 1.d0) go to 120
 !
 !        Generation of standard normal random variates
 !
@@ -10339,7 +10339,7 @@ if (ierror /= 0) go to 130
 !
 c = 0.5d0 + (0.5d0 - alpha)
 t = 0.5d0 + (0.5d0 + alpha)
-sigi = sig/dsqrt(c*t)
+sigi = sig/sqrt(c*t)
 !
 !        Computes the initial term of the required autocorrelated
 !        sequence

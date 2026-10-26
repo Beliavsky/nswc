@@ -212,6 +212,12 @@ and verify unchanged GNU compiler dumps and diagnostics:
 python tools/simplify_free_style.py input.f90 --output simplified.f90 --compiler gfortran
 ```
 
+The subsequent `tools/generic_intrinsics.py` pass replaces 2,041 confirmed
+specific intrinsic calls with generic names, such as `dabs` to `abs` and
+`dsqrt` to `sqrt`. Conflicting names and conversion intrinsics are retained.
+The [generic-intrinsic guide](docs/generic-intrinsics.md) describes the binding
+review and checks for identical compiled code.
+
 Comment capitalization uses `tools/sentence_case_comments.py` for selected
 uppercase explanatory comments. Sentences continue across physical line breaks.
 The prose vocabulary and proper-name rules are maintained in
