@@ -20,6 +20,7 @@ from data_constants import transform as apply_constants
 from portable_intrinsics import transform as portable_intrinsics
 from simplify_free_style import transform as simplify_style
 from generic_intrinsics import transform as apply_generics
+from coalesce_local_declarations import transform as coalesce_locals
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -88,7 +89,7 @@ def main():
     baseline = portable_intrinsics(apply_constants(sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text))
     manifest = json.loads(MANIFEST.read_text())
     annotated = transform(baseline, manifest)
-    if apply_generics(simplify_style(apply_free_fixes(annotated))) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if coalesce_locals(apply_generics(simplify_style(apply_free_fixes(annotated)))) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Purity regeneration differs from maintained source')
     inventories, code, warnings = [], [], []
     with tempfile.TemporaryDirectory(prefix='nswc-purity-validation-') as work:

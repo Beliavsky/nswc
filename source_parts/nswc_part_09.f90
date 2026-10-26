@@ -1,43 +1,3 @@
-pure subroutine assgn(n,a,c,t,iwk,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n
-integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
-integer :: i1, i2, i3, i4, i5, i6
-interface
-   pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr,u,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(inout) :: a(n,*)
-      integer, intent(inout) :: c(n)
-      integer, intent(inout) :: t
-      integer, intent(inout) :: ch(n)
-      integer, intent(inout) :: lc(n)
-      integer, intent(inout) :: lr(n)
-      integer, intent(inout) :: lz(n)
-      integer, intent(inout) :: nz(n)
-      integer, intent(inout) :: rh(*)
-      integer, intent(inout) :: slc(n)
-      integer, intent(inout) :: slr(n)
-      integer, intent(inout) :: u(*)
-      integer, intent(out) :: ierr
-   end subroutine assgn1
-end interface
-!     -------------------
-!     Solution of the assignment problem
-!     -------------------
-!
-i1 = n + 1
-i2 = i1 + n
-i3 = i2 + n
-i4 = i3 + n + 1
-i5 = i4 + n
-i6 = i5 + n
-call assgn1(n,a,c,t,iwk(1),iwk(i1),iwk(i2),iwk(i3),iwk(1), &
-   & iwk(i3),iwk(i4),iwk(i5),iwk(i6),ierr)
-return
-end subroutine assgn
-
 pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr, &
    & u,ierr)
 implicit none
@@ -46,9 +6,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
    & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
 integer, intent(inout) :: t
-integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, &
-   & np1
-integer :: h, q, r, s
+integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s
 interface
    pure elemental function ipmpar(i)
       implicit none
@@ -306,13 +264,8 @@ integer, intent(inout) :: p(n), w(n)
 integer, intent(in) :: k(m)
 integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
 real, intent(inout) :: wk(n)
-integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, &
-   & n5, np1, npl
+integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
 real :: ap, aw
-integer :: bb, bl, x, xl
-integer :: b, ubb
-integer :: f, pbl, q, v
-integer :: bs, ps, ws, xs
 interface
    pure subroutine mkp1(n,m,p,w,k,bck,xstar,vstar,np1,n5,bb,bl, &
       & x,xl,b,ubb,lx,lxi,f,pbl,q,v,bs,ps,ws,xs,iwk)
@@ -551,9 +504,7 @@ integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
 integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
 integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
-integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, &
-   & kub, lb, li, lj, lr, lri, lub, lubi, m1, n1
-integer :: s, u, ub, vb
+integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, kub, lb, li, lj, lr, lri, lub, lubi, m1, n1, s, u, ub, vb
 interface
    pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m &
       & ,np1,lx,lxi,lr,lri,lubi)
@@ -831,8 +782,7 @@ integer, intent(in) :: m, n, n5, np1
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: ub, iwk(n5)
 integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
-integer :: j, jj, ns
-integer :: qs, sb
+integer :: j, jj, ns, qs, sb
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
       implicit none
@@ -899,8 +849,7 @@ integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
-integer :: ii, ikub, j, jb, jbs, jj, ns
-integer :: pb, qs, sb, u
+integer :: ii, ikub, j, jb, jbs, jj, ns, pb, qs, sb, u
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
       implicit none
@@ -1014,8 +963,7 @@ integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
 integer, intent(inout) :: ub
 integer, intent(in) :: vb
 integer, intent(in) :: lx(n), lxi(n)
-integer :: i1, iq, j
-integer :: r, s
+integer :: i1, iq, j, r, s
 !
 ! Subroutine for parametric computation of the upper bounds.
 !
@@ -1114,10 +1062,8 @@ integer, intent(inout) :: qs
 integer, intent(out) :: vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n)
 integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
-integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, &
-   & mfirst, mink, ms, n1, nn
+integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t
 real :: a, b, c
-integer :: diff, pr, r, t
 !
 ! Subroutine to solve the 0-1 single knapsack problem
 !
@@ -2056,8 +2002,7 @@ integer, intent(out) :: num
 real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
    & pid16, r, s, si(32), tol
 complex :: rex(52), cres, res3la(3)
-integer :: i
-integer :: k, kc, kk, ks, m, nex, nres
+integer :: i, k, kc, kk, ks, m, nex, nres
 integer, parameter :: max = 500
 interface
    pure elemental function spmpar(i)
@@ -2276,13 +2221,9 @@ integer, intent(inout) :: n
 integer, intent(inout) :: nres
 real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
    & err1, err2, err3, error, oflow, res1, res2
-complex :: delta1, delta2, delta3
-complex :: e0, e1, e2, e3, res
-complex :: ss
+complex :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
 double precision :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
-integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
-integer :: newelm
-integer :: num
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
       implicit none
@@ -3230,9 +3171,7 @@ real :: y
 real :: f
 external f, phi
 integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
-   & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
-real :: fv1(7), fv2(7)
+real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
 real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
 real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
@@ -7662,10 +7601,8 @@ double precision, intent(in) :: tol
 double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
    & l2, lf, ln, m, mm1, np, nr
-double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
-   & fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w
-double precision :: c(4), fc(3), sc(4)
-double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), rt2(51,3)
+double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
+   & a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), rt2(51,3)
 integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
 integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
@@ -8225,8 +8162,7 @@ real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1
-real :: alpha, c, temp, xmax, xmin, za, zb
-real :: lambda
+real :: alpha, c, temp, xmax, xmin, za, zb, lambda
 double precision :: dalpha, dsum
 !     ******************************************************************
 !     Unweighted least squares polynomial fit
@@ -8369,8 +8305,7 @@ real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np), w(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1, nw
-real :: alpha, c, temp, xmax, xmin, za, zb
-real :: lambda
+real :: alpha, c, temp, xmax, xmin, za, zb, lambda
 double precision :: dalpha, dsum
 !     ******************************************************************
 !     Weighted least squares polynomial fit
@@ -8924,8 +8859,7 @@ real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(in) :: nder(*)
 integer, intent(inout) :: iwk(*)
 integer :: j, k, la, lm1, lw, n
-real :: r
-real :: temp(20)
+real :: r, temp(20)
 !-----------------------------------------------------------------------
 !                Least squares cubic spline fitting with
 !                  equality and inequality constraints
@@ -10117,9 +10051,7 @@ real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: j, k, la, lm1, lw, n
-real :: r
-real :: temp(20)
-real :: con(3), xcon(3)
+real :: r, temp(20), con(3), xcon(3)
 integer, parameter :: nder(3) = [3, 7, 11]
 !-----------------------------------------------------------------------
 !            Least squares periodic cubic spline fitting

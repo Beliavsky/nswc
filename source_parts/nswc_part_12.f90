@@ -4203,8 +4203,7 @@ real, intent(inout) :: t
 real, intent(inout) :: y(n), dy(n), w(*)
 external f
 integer :: i, j, k, l, m, m1
-real :: ha, sum
-real :: b(8,7)
+real :: ha, sum, b(8,7)
 real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
 real, parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
 real, parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
@@ -4280,8 +4279,7 @@ integer, intent(in) :: edge(4)
 external cofx, cofy
 integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
    & jcol, jmax, jmin, l, m, mn, n
-real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin
-real :: dum(1)
+real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
 ! ----------------------------------------------------------------------
 !     Solution of separable elliptic partial differential equations
 !                     on rectangular domains
@@ -7338,8 +7336,7 @@ integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer, intent(inout) :: l(n)
-integer :: i, k, leftlo
-integer :: fhi, xalo, xhi
+integer :: i, k, leftlo, fhi, xalo, xhi
 double precision :: c, m, t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
@@ -7444,9 +7441,8 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
-integer :: k, l, leftlo
+integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7528,8 +7524,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n)
-integer :: k, l, leftlo
-integer :: fhi, xalo, xhi
+integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
@@ -7610,9 +7605,8 @@ pure elemental subroutine urng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: u, v
-integer :: k, leftlo
+integer :: k, leftlo, fhi, xalo, xhi
 real :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7684,9 +7678,8 @@ pure elemental subroutine durng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v
-integer :: k, leftlo
+integer :: k, leftlo, fhi, xalo, xhi
 double precision :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7758,9 +7751,8 @@ pure elemental subroutine urng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
-integer :: j, k, leftlo
+integer :: j, k, leftlo, fhi, xalo, xhi
 real :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7836,9 +7828,8 @@ pure elemental subroutine durng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v, d
-integer :: j, k, leftlo
+integer :: j, k, leftlo, fhi, xalo, xhi
 double precision :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7915,9 +7906,8 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n), y(n)
-integer :: k, l, leftlo
+integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -7985,9 +7975,8 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n), y(n)
-integer :: k, l, leftlo
+integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -8083,9 +8072,8 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 real, intent(inout) :: x(*), y(*)
-integer :: i, i1, i2, j, k, leftlo
+integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 real :: r, u, v
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -8202,9 +8190,8 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 double precision, intent(inout) :: x(*), y(*)
-integer :: i, i1, i2, j, k, leftlo
+integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 double precision :: r, u, v
-integer :: fhi, xalo, xhi
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -8294,8 +8281,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, m
-real :: r, s, u, v
-real :: t(2)
+real :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
 interface
    pure subroutine rcir1(n,ix,x,kx,y,ky,ierr)
@@ -8419,8 +8405,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer :: i, m
-real :: phi, r
-real :: temp(1)
+real :: phi, r, temp(1)
 real, parameter :: pi2 = 6.2831853071796
 interface
    pure subroutine urng(ix,x,n,ierr)

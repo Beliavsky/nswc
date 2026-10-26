@@ -1,0 +1,28 @@
+"""Verify coalescing for the complete external and module implementations."""
+from pathlib import Path
+
+from coalesce_local_declarations import transform, verify
+from generic_intrinsics import transform as apply_generics
+from generate_module import module_source
+from validate_generic_intrinsics import baseline_source
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def main():
+    original = apply_generics(baseline_source())
+    combined = transform(original)
+    if combined != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+        raise ValueError('External declaration coalescing differs from maintained source')
+    for name, before, after in [('nswc.f90', original, combined),
+                              ('nswc_mod.f90', module_source(original, coalesce=False), module_source(combined))]:
+        if after != (ROOT / name).read_text(encoding='ascii'):
+            raise ValueError(f'{name}: generated source differs')
+        if transform(after) != after:
+            raise ValueError(f'{name}: declaration coalescing is not idempotent')
+        verify(before, after)
+        print(f'{name}: compiler records, executable trees and assembly agree; only diagnostic source lines may differ.', flush=True)
+
+
+if __name__ == '__main__':
+    main()

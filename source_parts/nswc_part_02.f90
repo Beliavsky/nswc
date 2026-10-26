@@ -2,8 +2,7 @@ pure elemental complex function cli(z)
 implicit none
 complex, intent(in) :: z
 integer :: n
-real :: qf(2), dl(2), ds, zd(2), zl(2)
-real :: az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
+real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
 real, parameter :: c = 1.64493406684823
 real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
    & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
@@ -2265,9 +2264,7 @@ pure elemental double precision function dpsi0(x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, l, n, nm1
-double precision :: h
-double precision :: w
-double precision :: db2
+double precision :: h, w, db2
 double precision, parameter :: dk1 = 100442596182.d0
 double precision, parameter :: dk2 = 51069247913.d0
 double precision, parameter :: dk3 = 53827985572.d0
@@ -2331,9 +2328,8 @@ integer, intent(in) :: m, n
 real, intent(in) :: x
 real, intent(inout) :: ans(m)
 integer :: i, j, k, mx, nn, np, nx
-real :: alpha, arg, beta, den, elim, eps, fln, fn, fnp, fns, fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol
-real :: xdmln, xdmy, xinc, xln, xm, xmin
-real :: trm(22), trmr(100)
+real :: alpha, arg, beta, den, elim, eps, fln, fn, fnp, fns, fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol, &
+   & xdmln, xdmy, xinc, xln, xm, xmin, trm(22), trmr(100)
 real, parameter :: c = .43429
 integer, parameter :: nmax = 100
 real, parameter :: b(22) = [1.0, -5.00000000000000000e-01, 1.66666666666666667e-01, -3.33333333333333333e-02, &
@@ -3204,8 +3200,7 @@ real, intent(inout) :: ans, qans
 real, intent(in) :: x
 integer :: i, iop, m, max, n
 real :: a2n, a2nm1, acc, amn, apn, b2n, b2nm1, c, c0, c1, c2, c3, c4, c5, c6, c7, c8, e, g, h, r, rta, rtx, s, sum, t, tol, twoa, &
-   & u, w, y, z
-real :: j, l, wk(20)
+   & u, w, y, z, j, l, wk(20)
 real, parameter :: acc0(3) = [5.e-15, 5.e-7, 5.e-4]
 real, parameter :: big(3) = [25.0, 14.0, 10.0]
 real, parameter :: e0(3) = [.25e-3, .25e-1, .14]
@@ -4449,9 +4444,7 @@ double precision, intent(in) :: a, y, l
 double precision, intent(inout) :: z
 double precision, intent(in) :: rta
 double precision, intent(inout) :: ans, qans
-double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, &
-   & c11, c12, c13, c14, c15, c16
-double precision :: e, t, u, w
+double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, e, t, u, w
 double precision, parameter :: rt2pin = .398942280401432677939946059934d0
 double precision, parameter :: d0(7) = [-.333333333333333333333333333333d+00, &
    & .833333333333333333333333333333d-01, -.148148148148148148148148148148d-01, .115740740740740740740740740741d-02, &
@@ -4658,8 +4651,7 @@ double precision, intent(in) :: a, y, l
 double precision, intent(inout) :: z
 double precision, intent(in) :: rta
 double precision, intent(inout) :: ans, qans
-double precision :: e, t, u, w
-double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10
+double precision :: e, t, u, w, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10
 double precision, parameter :: rt2pin = .398942280401432678d0
 double precision, parameter :: a0(5) = [-.73324404807556026d-03, -.11758531313175796d-01, - &
    & .76816029947195974d-01, -.24232172943558393d+00, -.33333333333333333d+00]
@@ -5140,8 +5132,7 @@ real, intent(in) :: a, b
 real, intent(out) :: w, w1
 real, intent(in) :: x, y
 integer :: ierr1, ind, n
-real :: a0, b0, eps, t, x0, y0, z
-real :: lambda
+real :: a0, b0, eps, t, x0, y0, z, lambda
 interface
    pure elemental function apser(a,b,x,eps)
       implicit none
@@ -5468,8 +5459,7 @@ end function fpser
 pure elemental real function apser(a, b, x, eps)
 implicit none
 real, intent(in) :: a, b, eps, x
-real :: aj, bx, c, s, t, tol
-real :: j
+real :: aj, bx, c, s, t, tol, j
 real, parameter :: g = .577215664901533
 interface
    pure function psi(xx)
@@ -5509,8 +5499,7 @@ pure elemental real function bpser(a, b, x, eps)
 implicit none
 real, intent(in) :: a, b, eps, x
 integer :: i, m
-real :: a0, apb, b0, c, sum, t, tol, u, w, z
-real :: n
+real :: a0, apb, b0, c, sum, t, tol, u, w, z, n
 interface
    pure elemental function algdiv(a,b)
       implicit none
@@ -5619,8 +5608,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b, eps, x, y
 integer :: i, k, kp1, mu, nm1
-real :: ap1, apb, d, r, t, w
-real :: l
+real :: ap1, apb, d, r, t, w, l
 interface
    pure elemental function brcmp1(mu,a,b,x,y)
       implicit none
@@ -5704,9 +5692,7 @@ pure elemental real function bfrac(a, b, x, y, lambda, eps)
 implicit none
 real, intent(in) :: a, b, eps, x, y
 real, intent(in) :: lambda
-real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, &
-   & s, t, w, yp1
-real :: n
+real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, s, t, w, yp1, n
 interface
    pure elemental function brcomp(a,b,x,y)
       implicit none
@@ -5782,8 +5768,7 @@ pure elemental real function brcomp(a, b, x, y)
 implicit none
 real, intent(in) :: a, b, x, y
 integer :: i, n
-real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z
-real :: lambda, lnx, lny
+real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
 real, parameter :: const = .398942280401433
 interface
    pure elemental function algdiv(a,b)
@@ -5940,8 +5925,7 @@ implicit none
 integer, intent(in) :: mu
 real, intent(in) :: a, b, x, y
 integer :: i, n
-real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z
-real :: lambda, lnx, lny
+real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
 real, parameter :: const = .398942280401433
 interface
    pure elemental function algdiv(a,b)
@@ -6104,9 +6088,7 @@ real, intent(in) :: a, b, eps
 real, intent(inout) :: w
 real, intent(in) :: x, y
 integer :: i, n, nm1
-real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z
-real :: j, l, lnx, nu, n2
-real :: c(30), d(30)
+real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z, j, l, lnx, nu, n2, c(30), d(30)
 interface
    pure elemental function algdiv(a,b)
       implicit none
@@ -6206,9 +6188,7 @@ implicit none
 real, intent(in) :: a, eps
 real, intent(inout) :: p, q
 real, intent(in) :: r, x
-real :: a2n, a2nm1, am0, an, an0, b2n, b2nm1, c, cma, g, h, sum, &
-   & t, tol, w, z
-real :: j, l
+real :: a2n, a2nm1, am0, an, an0, b2n, b2nm1, c, cma, g, h, sum, t, tol, w, z, j, l
 interface
    pure elemental function erfc1(ind,x)
       implicit none
@@ -6319,9 +6299,7 @@ implicit none
 real, intent(in) :: a, b, eps
 real, intent(in) :: lambda
 integer :: i, im1, imj, j, m, mm1, mmj, n, np1
-real :: bsum, dsum, f, h, h2, hn, r, r0, r1, s, sum, t, t0, t1, u, w, w0, z, z0, z2, zn, znm1
-real :: j0, j1
-real :: a0(21), b0(21), c(21), d(21)
+real :: bsum, dsum, f, h, h2, hn, r, r0, r1, s, sum, t, t0, t1, u, w, w0, z, z0, z2, zn, znm1, j0, j1, a0(21), b0(21), c(21), d(21)
 integer, parameter :: num = 20
 real, parameter :: e0 = 1.12837916709551
 real, parameter :: e1 = .353553390593274
@@ -6442,8 +6420,7 @@ real, intent(in) :: a0, b0, eps
 real, intent(out) :: p
 real, intent(in) :: x0
 integer :: ind, l, max
-real :: a, afrac, am1, an, b, bfrac, c, gamrat, p0, rty, sum, t, temp, tol, x, y
-real :: i, j, k, lambda, m, n
+real :: a, afrac, am1, an, b, bfrac, c, gamrat, p0, rty, sum, t, temp, tol, x, y, i, j, k, lambda, m, n
 real, parameter :: w(10) = [6.6671344308688e-2, 1.4945134915058e-1, 2.1908636251598e-1, 2.6926671931000e-1, &
    & 2.9552422471475e-1, 2.9552422471475e-1, 2.6926671931000e-1, 2.1908636251598e-1, 1.4945134915058e-1, 6.6671344308688e-2]
 real, parameter :: z(10) = [1.3046735791414e-2, 6.7468316655507e-2, 1.6029521585049e-1, 2.8330230293538e-1, &
@@ -7149,8 +7126,7 @@ real, intent(in) :: fn
 complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
 integer :: ind, k, l, m
-real :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y
-real :: is, inu, izn
+real :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y, is, inu, izn
 complex :: c1, c2, eta, nu, p, p1, q, r, s, s1, s2, sm, t, z, zn
 complex, parameter :: j = (0.0, 1.0)
 real, parameter :: c = .398942280401433
@@ -7818,11 +7794,9 @@ real, intent(in) :: alpha
 real :: x
 real, intent(inout) :: y(n)
 external jairy
-integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt
-integer :: nn, ns
-real :: ak, akm
-real :: ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, relb, rtx, rzden, &
-   & s, sa, sb, sxo2, s1, s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, wk(7), xo2, xo2l
+integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt, nn, ns
+real :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, relb, &
+   & rtx, rzden, s, sa, sb, sxo2, s1, s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, wk(7), xo2, xo2l
 real, parameter :: rtwo = 1.34839972492648e+00
 real, parameter :: pdf = 7.85398163397448e-01
 real, parameter :: rttp = 7.97884560802865e-01
@@ -9699,14 +9673,9 @@ integer, intent(inout) :: nz
 real, intent(in) :: alpha
 real, intent(in) :: x
 real, intent(inout) :: y(n)
-integer :: i, ialp, in, is, i1, i2, k, kk, km
-integer :: kt
-integer :: nn, ns
-real :: ain, ak, akm
-real :: ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, s, sx, sxo2, s1, s2, t, &
-   & ta, tb, temp(3), tfn, tm, tol, trx, t2
-real :: xo2, xo2l
-real :: z
+integer :: i, ialp, in, is, i1, i2, k, kk, km, kt, nn, ns
+real :: ain, ak, akm, ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, s, sx, &
+   & sxo2, s1, s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2, xo2, xo2l, z
 real, parameter :: rttpi = 3.98942280401433e-01
 integer, parameter :: inlim = 80
 interface
@@ -10167,15 +10136,8 @@ real, intent(inout) :: ra
 real, intent(in) :: tol
 real, intent(in) :: x
 real, intent(inout) :: y(*)
-integer :: j, jn, k, kk
-integer :: l
-real :: ak, ap
-real :: coef, etx
-real :: fn
-real :: gln
-real :: s1, s2, t
-real :: t2
-real :: z
+integer :: j, jn, k, kk, l
+real :: ak, ap, coef, etx, fn, gln, s1, s2, t, t2, z
 real, parameter :: con(2) = [3.98942280401432678e-01, 1.25331413731550025e+00]
 real, parameter :: c(65) = [-2.08333333333333e-01, 1.25000000000000e-01, 3.34201388888889e-01, -4.01041666666667e-01, &
    & 7.03125000000000e-02, -1.02581259645062e+00, 1.84646267361111e+00, -8.91210937500000e-01, 7.32421875000000e-02, &
@@ -10469,8 +10431,7 @@ real, intent(in) :: rz
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
 integer :: i, ind, m, n, n1
-real :: a, ai, b, c, t, x, y, znorm, zr1, zr2
-real :: nu
+real :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
 complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
 real, parameter :: pi = 3.14159265358979
 real, parameter :: cpi = 1.25331413731550

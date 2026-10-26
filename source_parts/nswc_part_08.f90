@@ -1528,8 +1528,7 @@ real :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, sm, srelpr, t, ta
 real :: snrm2
 real :: sasum
 integer :: isamax
-real :: dope(4)
-real :: sparam(5)
+real :: dope(4), sparam(5)
 integer :: idope(8)
 logical :: hitcon, feasbl, done, pos
 real, parameter :: zero = 0.e0
@@ -2165,11 +2164,9 @@ logical, intent(inout) :: done
 integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
    & itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
    & max, me, mend, mep1, niv, niv1, np1, nsoln
-real :: alsq, eanorm, fac, factor, hbar, rn, sn, t, tau
-real :: sparam(5)
+real :: alsq, eanorm, fac, factor, hbar, rn, sn, t, tau, sparam(5)
 integer :: isamax
-logical :: indep
-logical :: recalc
+logical :: indep, recalc
 real, parameter :: tenm3 = 1.e-3
 real, parameter :: zero = 0.e0
 real, parameter :: one = 1.e0
@@ -2560,10 +2557,8 @@ real, intent(inout) :: c(*)
 real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
 integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
    & k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
-real :: eta
-real :: digitx
-logical :: fail
-logical :: sing
+real :: eta, digitx
+logical :: fail, sing
 interface
    pure subroutine covar(n,m1,n1,ipivot,c,d,z,nn)
       implicit none
@@ -3040,10 +3035,7 @@ real, intent(in) :: tol
 logical, intent(out) :: sing
 integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
    & ns, nsp1
-real :: c
-real :: dm, ds
-real :: rsj
-real :: tol2
+real :: c, dm, ds, rsj, tol2
 double precision :: sum
 logical :: finis, fsum
 n1 = 0
@@ -3246,9 +3238,7 @@ real, intent(inout) :: digitx
 real, intent(in) :: eta
 logical, intent(inout) :: fail
 integer :: i, j, k, kz, l, mp1, mpn, n1p1, np, ns
-real :: c
-real :: dxnorm
-real :: eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
+real :: c, dxnorm, eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
 double precision :: sum
 interface
    pure subroutine solve3(f,m1,m,n1,qr,d,y,mmpnn)
@@ -3566,9 +3556,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
-integer :: npi
-integer :: i
-integer :: nconv, nstop
+integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
@@ -4024,9 +4012,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
-integer :: npi
-integer :: i
-integer :: nconv, nstop
+integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
@@ -4443,9 +4429,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
-integer :: npi
-integer :: i
-integer :: nconv, nstop
+integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
@@ -4864,8 +4848,7 @@ real, intent(inout) :: x, w
 real, intent(in) :: aerr, rerr
 real, intent(inout) :: error
 external f
-real :: eps, atol, ftol, rtol, tol
-real :: a, b, e, fu, fv, u, v
+real :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v
 real, parameter :: eps0 = 5.e-3
 real, parameter :: c1 = .3819660112501052
 real, parameter :: c2 = .6180339887498948
@@ -5141,9 +5124,8 @@ real, intent(in) :: steptl
 real, intent(inout) :: typsiz(n), wrk0(n), wrk1(n), wrk2(n), x(n), &
    & xpls(n)
 external fcn
-integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns
+integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns, sptr
 real :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
-integer :: sptr
 logical :: mxtake, noupdt
 interface
    pure elemental function spmpar(i)
@@ -8576,12 +8558,10 @@ real, intent(in) :: a(ka,n0), b0(m), c(n0)
 real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
-integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, &
-   & jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
-   & npos, nrow, ns, nstep, num
+integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
+   & npos, nrow, ns, nstep, num, bflag
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
    & ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
-integer :: bflag
 double precision :: dsum, dsump, dsumn, dt
 interface
    pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
@@ -9449,12 +9429,10 @@ real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(in) :: ita(*), jta(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
-integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, &
-   & jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
-   & mcheck, ms, n, npos, ns, nstep, num
+integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
+   & mcheck, ms, n, npos, ns, nstep, num, bflag
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
    & ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
-integer :: bflag
 double precision :: dsum, dsump, dsumn, dt
 interface
    pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
@@ -10506,4 +10484,44 @@ return
 300 ierr = 1
 return
 end subroutine crout1
+
+pure subroutine assgn(n,a,c,t,iwk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
+integer :: i1, i2, i3, i4, i5, i6
+interface
+   pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr,u,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: a(n,*)
+      integer, intent(inout) :: c(n)
+      integer, intent(inout) :: t
+      integer, intent(inout) :: ch(n)
+      integer, intent(inout) :: lc(n)
+      integer, intent(inout) :: lr(n)
+      integer, intent(inout) :: lz(n)
+      integer, intent(inout) :: nz(n)
+      integer, intent(inout) :: rh(*)
+      integer, intent(inout) :: slc(n)
+      integer, intent(inout) :: slr(n)
+      integer, intent(inout) :: u(*)
+      integer, intent(out) :: ierr
+   end subroutine assgn1
+end interface
+!     -------------------
+!     Solution of the assignment problem
+!     -------------------
+!
+i1 = n + 1
+i2 = i1 + n
+i3 = i2 + n
+i4 = i3 + n + 1
+i5 = i4 + n
+i6 = i5 + n
+call assgn1(n,a,c,t,iwk(1),iwk(i1),iwk(i2),iwk(i3),iwk(1), &
+   & iwk(i3),iwk(i4),iwk(i5),iwk(i6),ierr)
+return
+end subroutine assgn
 

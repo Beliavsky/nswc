@@ -1242,9 +1242,8 @@ end subroutine dstor2
 pure elemental real function spmpar(i)
 implicit none
 integer, intent(in) :: i
-integer :: ibeta, m
+integer :: ibeta, m, emin, emax
 real :: b, binv, bm1, one, w, z
-integer :: emin, emax
 interface
    pure elemental function ipmpar(i)
       implicit none
@@ -1306,8 +1305,7 @@ end function spmpar
 pure elemental double precision function dpmpar(i)
 implicit none
 integer, intent(in) :: i
-integer :: ibeta, m
-integer :: emin, emax
+integer :: ibeta, m, emin, emax
 double precision :: b, binv, bm1, one, w, z
 interface
    pure elemental function ipmpar(i)
@@ -1370,8 +1368,7 @@ end function dpmpar
 pure real function epsln(l)
 implicit none
 integer, intent(in) :: l
-integer :: m
-integer :: b
+integer :: m, b
 real :: lnb
 interface
    pure elemental function ipmpar(i)
@@ -1440,8 +1437,7 @@ end function depsln
 pure elemental real function exparg(l)
 implicit none
 integer, intent(in) :: l
-integer :: m
-integer :: b
+integer :: m, b
 real :: lnb
 interface
    pure elemental function ipmpar(i)
@@ -1484,8 +1480,7 @@ end function exparg
 pure elemental double precision function dxparg(l)
 implicit none
 integer, intent(in) :: l
-integer :: m
-integer :: b
+integer :: m, b
 double precision :: db, lnb
 interface
    pure elemental function ipmpar(i)
@@ -1530,8 +1525,7 @@ pure subroutine ishell(a, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n)
-integer :: i, ii, imax, j, jmax, ki, l, ll
-integer :: s
+integer :: i, ii, imax, j, jmax, ki, l, ll, s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -1728,9 +1722,8 @@ implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
-integer :: i, ii, imax, j, jmax, ki, l, ll
+integer :: i, ii, imax, j, jmax, ki, l, ll, t
 real :: s
-integer :: t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -1884,9 +1877,8 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
-integer :: i, ii, imax, j, jmax, ki, l, ll
+integer :: i, ii, imax, j, jmax, ki, l, ll, t
 double precision :: s
-integer :: t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2089,8 +2081,7 @@ pure subroutine qsorti(x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx, t
+integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx, t
 real :: r
 !
 !***********************************************************
@@ -2291,8 +2282,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 real, intent(in) :: x(n)
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx
+integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
 real :: r, t
 !
 !***********************************************************
@@ -2493,8 +2483,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 double precision, intent(in) :: x(n)
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx
+integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
 real :: r
 double precision :: t
 !
@@ -4693,9 +4682,7 @@ integer, intent(out) :: num
 real, intent(in) :: a(2), b(2), x(n), y(n)
 real, intent(inout) :: u(m), v(m)
 integer :: i, ind, nm1
-real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, &
-   & tmin, tol, tol0
-real :: k, ki
+real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, tmin, tol, tol0, k, ki
 interface
    pure elemental function spmpar(i)
       implicit none
@@ -5307,8 +5294,7 @@ integer, intent(inout) :: nb
 integer, intent(in) :: num
 integer, intent(in) :: pr(*)
 integer, intent(inout) :: ar(m), s(n), iwk(num)
-integer :: i, ii, np1
-integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
+integer :: i, ii, np1, s0, pc, ac, vr, vc, p, subr, rbus, tor
 interface
    pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p, &
       & subr,rbus,tor,jr,k,ind0)
@@ -6082,8 +6068,7 @@ integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c2, dm, pm, qm, r, sn, ss, x, y
-real :: ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
+real :: c2, dm, pm, qm, r, sn, ss, x, y, ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
 real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
@@ -6229,8 +6214,7 @@ integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: c2, dm, pm, qm, r, sn, ss, x, y
-real :: qf(2), sm(2), sz(2), tm(2), ts(2)
+real :: c2, dm, pm, qm, r, sn, ss, x, y, qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
 real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
@@ -6643,12 +6627,8 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1
-double precision :: c2, d, d2, e, eps, r, sn, tol, x, y
-double precision :: a0(2), an(2), b0(2), bn(2)
-double precision :: g0(2), gn(2), h0(2), hn(2)
-double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
-   & wn(2)
+double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
+   & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
 double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
@@ -6954,12 +6934,8 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1
-double precision :: c2, d, d2, e, eps, r, sn, tol, x, y
-double precision :: a0(2), an(2), b0(2), bn(2)
-double precision :: g0(2), gn(2), h0(2), hn(2)
-double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
-   & wn(2)
+double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
+   & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
 double precision :: anorm
 double precision, parameter :: c = .56418958354775628694807945156077d0
 interface
@@ -7385,8 +7361,7 @@ pure elemental double precision function derf(x)
 implicit none
 double precision, intent(in) :: x
 integer :: i, k
-double precision :: ax, t
-double precision :: w
+double precision :: ax, t, w
 double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
@@ -8467,8 +8442,7 @@ pure elemental real function daw(x)
 implicit none
 real, intent(in) :: x
 integer :: i
-real :: frac, sump, sumq, w2
-real :: y
+real :: frac, sump, sumq, w2, y
 real, parameter :: xlarge = 16777216.0
 real, parameter :: xsmall = .59604644775391e-07
 real, parameter :: p1(9) = [.100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
@@ -8867,8 +8841,7 @@ integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: dm, pm, qm, r, ss, x, y
-real :: qf(2), sm(2), tm(2), ts(2), zr(2)
+real :: dm, pm, qm, r, ss, x, y, qf(2), sm(2), tm(2), ts(2), zr(2)
 real, parameter :: c = .564189583547756
 real, parameter :: c0 = -.707106781186548
 real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
@@ -9046,8 +9019,7 @@ implicit none
 real, intent(inout) :: c, s
 real, intent(in) :: t
 integer :: i, l, m, max
-real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y
-real :: n
+real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y, n
 real, parameter :: pi = 3.1415926535898
 real, parameter :: a(6) = [-.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
    & .246740110027210e+00, .100000000000000e+01]
@@ -9253,9 +9225,7 @@ complex, intent(inout) :: w
 integer :: i
 real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y
 real :: anorm
-real :: n, np1
-real :: qf(2), sm(2), tm(2), ts(2)
-real :: g0(2), gn(2), h0(2), hn(2), wn(2)
+real :: n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
 real, parameter :: pi = 3.14159265358979
 real, parameter :: euler = .577215664901533
@@ -9441,9 +9411,8 @@ real, intent(in) :: arg
 real, intent(inout) :: result
 integer, intent(in) :: int
 integer, intent(out) :: ierr
-integer :: m
+integer :: m, i
 real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei
-integer :: i
 real, parameter :: dexp40 = .235385266837020e+18
 real, parameter :: x0 = .372507410781366
 double precision, parameter :: dx0 = .37250741078136663446199186658d0
@@ -10091,10 +10060,7 @@ implicit none
 double precision, intent(in) :: eps
 double precision, intent(in) :: x
 integer :: n
-double precision :: c
-double precision :: h, t
-double precision :: w
-double precision :: db2
+double precision :: c, h, t, w, db2
 double precision, parameter :: dk1 = 25598514349.d0
 double precision, parameter :: dk2 = 12212826724.d0
 double precision, parameter :: dk3 = 52346020729.d0
@@ -10395,8 +10361,7 @@ implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer :: i
-real :: pm, qm, r, ss, x, y
-real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real :: pm, qm, r, ss, x, y, ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
 real, parameter :: const = 2.46740110027234
 real, parameter :: euler = .577215664901533
 real, parameter :: zeta2 = 1.64493406684823

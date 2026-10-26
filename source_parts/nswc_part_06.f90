@@ -1647,9 +1647,8 @@ integer, intent(in) :: lda, n, ml, mu, job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
-integer :: ml1, ml2
+integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 real :: t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 interface
    pure subroutine saxpy(n,sa,sx,incx,sy,incy)
       implicit none
@@ -2222,9 +2221,8 @@ integer, intent(in) :: lda, n, ml, mu, job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
-integer :: ml1, ml2
+integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 double precision :: t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 interface
    pure subroutine daxpy(n,da,dx,incx,dy,incy)
       implicit none
@@ -2960,9 +2958,8 @@ integer, intent(in) :: lda, n, ml, mu, job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
-integer :: ml1, ml2
+integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 complex :: t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 interface
    pure subroutine caxpy(n,ca,cx,incx,cy,incy)
       implicit none
@@ -5329,9 +5326,7 @@ integer, intent(out) :: num
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
-integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, &
-   & lcnt, nnm1
-integer :: stp, dummy
+integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, lcnt, nnm1, stp, dummy
 !
 ! arp(i) is one less than the number of unsearched edges leaving
 !     node i.  at the end of the algorithm it is set to A
@@ -5466,8 +5461,7 @@ real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
-integer :: k, l
-integer :: iu, ju, u, y, p
+integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -5591,10 +5585,8 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-   & nzcnt
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
 real :: dk, lki, xpv, xpvmax, yk
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  nspiv1 uses sparse Gaussian elimination with
@@ -5869,8 +5861,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -6022,8 +6013,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -6184,9 +6174,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-   & maxil
-integer :: pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
 real :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     splu employs Gaussian elimination with column interchanges
@@ -6403,8 +6391,7 @@ double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
-integer :: k, l
-integer :: iu, ju, u, y, p
+integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -6531,10 +6518,8 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-   & nzcnt
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
 double precision :: dk, lki, xpv, xpvmax, yk
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  dnspiv uses sparse Gaussian elimination with
@@ -6809,8 +6794,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -6963,8 +6947,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -7126,9 +7109,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-   & maxil
-integer :: pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
 double precision :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     dsplu employs Gaussian elimination with column interchanges
@@ -7860,8 +7841,7 @@ complex, intent(in) :: a(*), b(n)
 complex, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
-integer :: k, l
-integer :: iu, ju, u, y, p
+integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -7985,11 +7965,9 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
-   & nzcnt
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk
 complex :: dk, lki, one, yk, zero
 real :: xpv, xpvmax
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  cnspiv uses sparse Gaussian elimination with
@@ -8267,8 +8245,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -8421,8 +8398,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l
-integer :: y, t, p
+integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -8584,9 +8560,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
-   & maxil
-integer :: pm
+integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm
 complex :: const
 real :: wi, wmax
 complex, parameter :: zero = (0.0, 0.0)
@@ -9077,9 +9051,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 real, intent(inout) :: a(nm,n), scale(n)
-integer :: i, j, k, l, m
-integer :: jj
-integer :: iexc
+integer :: i, j, k, l, m, jj, iexc
 real :: c, f, g, r, s, b2, radix
 logical :: noconv
 interface
@@ -9258,8 +9230,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
 real, intent(inout) :: z(nz,n)
 real, intent(in) :: scale(n)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. balanc transforms A into
@@ -9337,10 +9308,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n)
 integer, intent(inout) :: int(igh)
-integer :: i, j, m
-integer :: la
-integer :: kp1
-integer :: mm1, mp1
+integer :: i, j, m, la, kp1, mm1, mp1
 real :: x, y
 !     real abs
 !-----------------------------------------------------------------------
@@ -9440,10 +9408,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n)
 real, intent(inout) :: int(igh)
-integer :: i, j, m
-integer :: la
-integer :: kp1
-integer :: mm1, mp1
+integer :: i, j, m, la, kp1, mm1, mp1
 real :: x, y
 !     real abs
 !-----------------------------------------------------------------------
@@ -9542,9 +9507,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n), ort(igh)
-integer :: i, j, m
-integer :: ii, jj, la, mp
-integer :: kp1
+integer :: i, j, m, ii, jj, la, mp, kp1
 real :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -9655,10 +9618,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n)
-integer :: i, j, k, l, m
-integer :: en, ll, mm, na
-integer :: its
-integer :: mp2, enm2
+integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
 interface
@@ -9893,8 +9853,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: z(nm,m)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
 !
@@ -9971,9 +9930,7 @@ integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 integer, intent(in) :: int(igh)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -10052,9 +10009,7 @@ integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 real, intent(in) :: int(igh)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -10132,9 +10087,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: ort(igh), z(nm,n)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 real :: g
 !-----------------------------------------------------------------------
 !
@@ -10222,9 +10175,7 @@ integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
 real, intent(in) :: a(na,igh)
 real, intent(inout) :: ort(igh), z(nz,n)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 real :: g
 !-----------------------------------------------------------------------
 !
@@ -10317,11 +10268,7 @@ integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
-integer :: i, j, k, l, m
-integer :: en, ii, jj, ll, mm, na
-integer :: nn
-integer :: its
-integer :: mp2, enm2
+integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep
 logical :: notlas
 complex :: z3

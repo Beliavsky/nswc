@@ -1,163 +1,11 @@
-subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
-implicit none
-integer :: nn
-double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
-integer :: l2, nz
-integer :: n
-double precision :: svu, svv, ui, vi, s
-real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
-integer :: type, i, j, iflag
-logical :: vpass, spass, vtry, stry
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi
-!
-!     Computes up to  l2  fixed shift k-polynomials,
-!     testing for convergence in the linear or quadratic
-!     case. Initiates one of the variable SHIFT
-!     iterations and returns with the number of zeros
-!     found.
-!
-!     l2 - Limit of fixed shift steps
-!     nz - Number of zeros found
-!
-!
-common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
-!
-n = nn - 1
-nz = 0
-betav = .25
-betas = .25
-oss = sr
-ovv = v
-!
-!     Evaluate polynomial by synthetic division
-!
-call quadsd(nn, u, v, p, qp, a, b)
-call calcsc(type, n, k, qk)
-do j = 1,l2
-!
-!     Calculate next k polynomial and estimate v
-!
-   call nextk(type, n, qp, k, qk)
-   call calcsc(type, n, k, qk)
-   call newest(type, ui, vi, nn, p, k)
-   vv = vi
-!
-!     Estimate s
-!
-   ss = 0.0
-   if (k(n) /= 0.d0) ss = -p(nn)/k(n)
-   tv = 1.0
-   ts = 1.0
-   if (j == 1 .or. type == 3) go to 70
-!
-!     Compute relative measures of convergence of s and v
-!     sequences
-!
-   if (vv /= 0.0) tv = abs((vv - ovv)/vv)
-   if (ss /= 0.0) ts = abs((ss - oss)/ss)
-!
-!     If decreasing, multiply two most recent
-!     convergence measures
-!
-   tvv = 1.0
-   if (tv < otv) tvv = tv*otv
-   tss = 1.0
-   if (ts < ots) tss = ts*ots
-!
-!     Compare with convergence criteria
-!
-   vpass = tvv < betav
-   spass = tss < betas
-   if (.not.(spass .or. vpass)) go to 70
-!
-!     At least one sequence has passed the convergence
-!     test. Store variables before iterating
-!
-   svu = u
-   svv = v
-   do i = 1,n
-      svk(i) = k(i)
-   end do
-   s = ss
-!
-!     Choose iteration according to the fastest
-!     converging sequence
-!
-   vtry = .false.
-   stry = .false.
-   if (spass .and. ((.not.vpass) .or. &
-      & tss < tvv)) go to 40
-20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
-   if (nz > 0) return
-!
-!     Quadratic iteration has failed. Flag that it has
-!     been tried and decrease the convergence criterion.
-!
-   vtry = .true.
-   betav = betav*0.25
-!
-!     Try linear iteration if it has not been tried and
-!     the s sequence is converging
-!
-   if (stry .or. (.not.spass)) go to 50
-   do i = 1,n
-      k(i) = svk(i)
-   end do
-40 call realit(s, nz, iflag, nn, p, qp, k, qk)
-   if (nz > 0) return
-!
-!     Linear iteration has failed. Flag that it has been
-!     tried and decrease the convergence criterion
-!
-   stry = .true.
-   betas = betas*0.25
-   if (iflag == 0) go to 50
-!
-!     If linear iteration signals an almost double real
-!     zero attempt quadratic interation
-!
-   ui = -(s + s)
-   vi = s*s
-   go to 20
-!
-!     Restore variables
-!
-50 u = svu
-   v = svv
-   do i = 1,n
-      k(i) = svk(i)
-   end do
-!
-!     Try quadratic iteration if it has not been tried
-!     and the v sequence is converging
-!
-   if (vpass .and. (.not.vtry)) go to 20
-!
-!     Recompute qp and scalar values to continue the
-!     second stage
-!
-   call quadsd(nn, u, v, p, qp, a, b)
-   call calcsc(type, n, k, qk)
-70 ovv = vv
-   oss = ss
-   otv = tv
-   ots = ts
-end do
-return
-end subroutine fxshfr
-
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
 integer :: nn
 double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
 integer :: nz
-integer :: n
+integer :: n, type, i, j
 double precision :: ui, vi
 real :: mp, omp, ee, relstp, t, zm
-integer :: type, i, j
 logical :: tried
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
@@ -631,8 +479,7 @@ integer, intent(inout) :: num
 integer :: ideg
 double precision, intent(in) :: opr(*), opi(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
-integer :: idp1
-integer :: pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
+integer :: idp1, pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !
 !     This subroutine finds the zeros of a complex polynomial.
 !
@@ -1864,8 +1711,7 @@ real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -1919,8 +1765,7 @@ double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -1973,8 +1818,7 @@ complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2005,8 +1849,7 @@ pure subroutine iswap(n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
 integer, intent(inout) :: ix(*), iy(*)
-integer :: i, iix, iiy, m, mp1, ns
-integer :: itemp1, itemp2, itemp3
+integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3
 !
 !                Extended B L A S  subprogram
 !
@@ -2101,8 +1944,7 @@ real, intent(inout) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 real :: stemp
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2162,8 +2004,7 @@ double precision, intent(inout) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 double precision :: dtemp
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2222,8 +2063,7 @@ complex, intent(inout) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 complex :: ctemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2264,8 +2104,7 @@ real, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 real :: stemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2307,8 +2146,7 @@ double precision, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 double precision :: dtemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2351,8 +2189,7 @@ real, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 complex :: ctemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -2679,9 +2516,7 @@ double precision, intent(inout) :: dparam(5)
 double precision, intent(in) :: dy1
 double precision, intent(inout) :: dd1
 double precision, intent(inout) :: dx1
-double precision :: dh11, dh21
-double precision :: dp2, dq2, du
-double precision :: dflag, dh12, dh22, dp1, dq1, dtemp
+double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: one = 1.d0
 double precision, parameter :: two = 2.d0
@@ -2817,9 +2652,7 @@ double precision, intent(inout) :: dx(*)
 double precision :: dparam(5)
 double precision, intent(inout) :: dy(*)
 integer :: i, kx, ky, nsteps
-double precision :: dflag, dh12, dh22
-double precision :: z, dh11, dh21
-double precision :: w
+double precision :: dflag, dh12, dh22, z, dh11, dh21, w
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: two = 2.d0
 !
@@ -2938,8 +2771,7 @@ real, intent(in) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 real :: stemp
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 stemp = 0.0e0
 sdot = 0.0e0
@@ -2992,8 +2824,7 @@ double precision, intent(in) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 double precision :: dtemp
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 ddot = 0.0d0
 dtemp = 0.0d0
@@ -3046,8 +2877,7 @@ complex, intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 complex :: ctemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 ctemp = (0.0,0.0)
 cdotc = (0.0,0.0)
@@ -3088,8 +2918,7 @@ complex, intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 complex :: ctemp
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 ctemp = (0.0,0.0)
 cdotu = (0.0,0.0)
@@ -3131,9 +2960,7 @@ real, intent(in) :: sa
 real, intent(inout) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-integer :: i
-integer :: m, mp1
-integer :: nincx
+integer :: i, m, mp1, nincx
 !
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -3179,9 +3006,7 @@ double precision, intent(in) :: da
 double precision, intent(inout) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-integer :: i
-integer :: m, mp1
-integer :: nincx
+integer :: i, m, mp1, nincx
 !
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -3225,8 +3050,7 @@ implicit none
 complex, intent(in) :: ca
 complex, intent(inout) :: cx(*)
 integer, intent(in) :: incx, n
-integer :: i
-integer :: nincx
+integer :: i, nincx
 !
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -3256,8 +3080,7 @@ implicit none
 complex, intent(inout) :: cx(*)
 real, intent(in) :: sa
 integer, intent(in) :: incx, n
-integer :: i
-integer :: nincx
+integer :: i, nincx
 !
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -3290,8 +3113,7 @@ real, intent(inout) :: sy(*)
 real, intent(in) :: sa
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (sa == 0.0) return
@@ -3344,8 +3166,7 @@ double precision, intent(inout) :: dy(*)
 double precision, intent(in) :: da
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy, m, mp1
+integer :: i, ix, iy, m, mp1
 !
 if (n <= 0) return
 if (da == 0.0d0) return
@@ -3397,8 +3218,7 @@ complex, intent(inout) :: cy(*)
 complex, intent(in) :: ca
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-integer :: i
-integer :: ix, iy
+integer :: i, ix, iy
 !
 if (n <= 0) return
 if (abs(real(ca)) + abs(aimag(ca)) == 0.0 ) return
@@ -3437,9 +3257,7 @@ real, intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 real :: stemp
-integer :: i
-integer :: m, mp1
-integer :: nincx
+integer :: i, m, mp1, nincx
 !
 sasum = 0.0e0
 stemp = 0.0e0
@@ -3485,9 +3303,7 @@ double precision, intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 double precision :: dtemp
-integer :: i
-integer :: m, mp1
-integer :: nincx
+integer :: i, m, mp1, nincx
 !
 dasum = 0.0d0
 dtemp = 0.0d0
@@ -3533,8 +3349,7 @@ implicit none
 complex, intent(in) :: cx(*)
 integer, intent(in) :: incx, n
 real :: stemp
-integer :: i
-integer :: nincx
+integer :: i, nincx
 !
 scasum = 0.0e0
 stemp = 0.0e0
@@ -3563,8 +3378,7 @@ pure real function snrm2( n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
-integer :: i, j, nn
-integer :: next
+integer :: i, j, nn, next
 real :: hitest, sum, xmax
 real, parameter :: zero = 0.0e0
 real, parameter :: one = 1.0e0
@@ -3692,8 +3506,7 @@ pure double precision function dnrm2( n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
-integer :: i, j, nn
-integer :: next
+integer :: i, j, nn, next
 double precision :: hitest, sum, xmax
 double precision, parameter :: zero = 0.0d0
 double precision, parameter :: one = 1.0d0
@@ -3821,9 +3634,8 @@ pure real function scnrm2( n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
 complex, intent(in) :: cx(*)
-integer :: i, nn
+integer :: i, nn, next
 logical :: imag, scale
-integer :: next
 real :: hitest, sum, xmax, absx
 real, parameter :: zero = 0.0e0
 real, parameter :: one = 1.0e0
@@ -3964,8 +3776,7 @@ real, intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 real :: smax
-integer :: i
-integer :: ix
+integer :: i, ix
 !
 isamax = 0
 if ( n < 1 ) return
@@ -4007,8 +3818,7 @@ double precision, intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 double precision :: dmax
-integer :: i
-integer :: ix
+integer :: i, ix
 !
 idamax = 0
 if ( n < 1 ) return
@@ -4050,8 +3860,7 @@ complex :: cx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 real :: smax
-integer :: i
-integer :: ix
+integer :: i, ix
 complex :: zdum
 real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
@@ -4362,11 +4171,9 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 real, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
-integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
-   & istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
-   & npower
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+   & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 real :: atemp, btemp
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 interface
    pure subroutine infctr(n,ifact,ipower,nexp,npower)
       implicit none
@@ -4488,11 +4295,9 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 double precision, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
-integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
-   & istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
-   & npower
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+   & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 double precision :: atemp, btemp
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 interface
    pure subroutine infctr(n,ifact,ipower,nexp,npower)
       implicit none
@@ -4614,11 +4419,9 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 complex, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
-integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
-   & istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
-   & npower
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+   & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 complex :: atemp, btemp
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 interface
    pure subroutine infctr(n,ifact,ipower,nexp,npower)
       implicit none
@@ -5430,8 +5233,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,*)
-integer :: i, ii, j, jj
-integer :: r, s
+integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of real matrices A and b
 !     ******************************************************************
@@ -5460,8 +5262,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
 double precision, intent(inout) :: c(kc,*)
-integer :: i, ii, j, jj
-integer :: r, s
+integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of double precision matrices A and b
 !     ******************************************************************
@@ -5490,8 +5291,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
 complex, intent(inout) :: c(kc,*)
-integer :: i, ii, j, jj
-integer :: r, s
+integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of complex matrices A and b
 !     ******************************************************************
@@ -5718,10 +5518,8 @@ implicit none
 integer, intent(inout) :: index(*)
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), d, temp(*)
-integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
-   & nmj, nmk
+integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
 real :: p, t
-integer :: onej
 double precision :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
@@ -5918,10 +5716,8 @@ implicit none
 integer, intent(inout) :: ierr, index(*)
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), temp(*)
-integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
-   & nmj, nmk
+integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
 real :: d, p, t
-integer :: onej
 double precision :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
@@ -6499,9 +6295,8 @@ real, intent(inout) :: a(ka,n), b(*)
 real, intent(inout) :: det(2), rcond
 real, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
-integer :: j, job
+integer :: j, job, onej
 real :: t
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
@@ -6542,9 +6337,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
-integer :: j
+integer :: j, onej
 real :: det(2)
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
@@ -6718,8 +6512,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 real, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
-real :: ek, t, wk, wkm
-real :: anorm, s, sm, ynorm
+real :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 interface
    pure function sasum(n,sx,incx)
@@ -7226,8 +7019,7 @@ subroutine sgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(inout) :: a(lda,*), det(2), work(*)
-real :: t
-real :: ten
+real :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !
 !     sgedi computes the determinant and inverse of a matrix
@@ -7360,9 +7152,8 @@ double precision, intent(inout) :: a(ka,n), b(*)
 double precision, intent(inout) :: det(2), rcond
 double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
-integer :: j, job
+integer :: j, job, onej
 double precision :: t
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
@@ -7403,9 +7194,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 double precision, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
-integer :: j
+integer :: j, onej
 double precision :: det(2)
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
@@ -7446,8 +7236,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 double precision, intent(inout) :: a(lda,*), z(*)
 double precision, intent(inout) :: rcond
-double precision :: ek, t, wk, wkm
-double precision :: anorm, s, sm, ynorm
+double precision :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 interface
    pure function dasum(n,dx,incx)
@@ -7954,8 +7743,7 @@ subroutine dgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(inout) :: a(lda,*), det(2), work(*)
-double precision :: t
-double precision :: ten
+double precision :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !
 !     dgedi computes the determinant and inverse of a matrix
@@ -8510,8 +8298,7 @@ integer, intent(inout) :: pivot(nrwblk)
 real, intent(inout) :: block(nrwblk,nclblk)
 real, intent(inout) :: pivmax
 integer :: i1, j, j1, jplus1, l1, max
-real :: rowmax
-real :: tempiv, rowpiv, swap
+real :: rowmax, tempiv, rowpiv, swap
 !
 !***************************************************************
 !
@@ -8623,9 +8410,7 @@ real, intent(inout) :: topblk(nrwtop,novrlp), &
 real, intent(inout) :: pivmax
 integer, intent(inout) :: pivot(nrwtop)
 integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
-real :: colmax
-real :: colmlt
-real :: tempiv, swap
+real :: colmax, colmlt, tempiv, swap
 !
 !***************************************************************
 !
@@ -9016,9 +8801,8 @@ integer, intent(in) :: nrwblk, nrwpiv
 real :: block(nrwblk,nrwpiv)
 real, intent(inout) :: b(*)
 integer, intent(in) :: pivot(nrwpiv)
-integer :: i, iplus1, l
+integer :: i, iplus1, l, pivoti
 real :: bi, swap
-integer :: pivoti
 !
 !***************************************************************
 !
@@ -9104,9 +8888,8 @@ integer, intent(in) :: nclpiv, novrlp, nrwblk
 real :: block(nrwblk,novrlp)
 real, intent(inout) :: x(*)
 integer, intent(in) :: pivot(nrwblk)
-integer :: i, j, j1, jplus1, nj
+integer :: i, j, j1, jplus1, nj, pivotj
 real :: dotprd, swap
-integer :: pivotj
 !
 !***************************************************************
 !
@@ -9276,8 +9059,7 @@ integer :: n, ip(m,n)
 real :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
-integer :: kb, kp1
-integer :: nm1, nm2, km1, i, j, k
+integer :: kb, kp1, nm1, nm2, km1, i, j, k
 real :: dp
 !-----------------------------------------------------------------------
 ! Solution of block-tridiagonal linear system.
@@ -9348,9 +9130,8 @@ real, intent(inout) :: a(*), b(*)
 real, intent(inout) :: det(2), rcond
 real, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
-integer :: j, job
+integer :: j, job, onej
 real :: t
-integer :: onej
 !     ------------------
 !     ------------------
 !
@@ -9388,10 +9169,8 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 real, intent(inout) :: ap(*), z(*)
 real, intent(inout) :: rcond
-real :: ak, akm1, bk, bkm1, denom, ek, t
-real :: anorm, s, ynorm
-integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
-integer :: k, kk, km1k, km1km1, kp, kps, ks
+real :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 interface
    pure function sasum(n,sx,incx)
       implicit none
@@ -9717,11 +9496,8 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: ap(*)
-real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
-real :: absakk, alpha, colmax, rowmax
-integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
-integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
-   & km2, kstep
+real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
 interface
    pure function isamax(n,sx,incx)
@@ -10218,8 +9994,7 @@ integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
 real :: akkp1, sdot, temp
 real :: ten, d, t, ak, akp1
-integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
-integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
 logical :: noinv, nodet, noert
 !
 !     sspdi computes the determinant, inertia and inverse
@@ -10459,9 +10234,8 @@ double precision, intent(inout) :: a(*), b(*)
 double precision, intent(inout) :: det(2), rcond
 double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
-integer :: j, job
+integer :: j, job, onej
 double precision :: t
-integer :: onej
 !     ------------------
 !     ------------------
 !
@@ -10499,10 +10273,8 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 double precision, intent(inout) :: ap(*), z(*)
 double precision, intent(inout) :: rcond
-double precision :: ak, akm1, bk, bkm1, denom, ek, t
-double precision :: anorm, s, ynorm
-integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
-integer :: k, kk, km1k, km1km1, kp, kps, ks
+double precision :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 interface
    pure function dasum(n,dx,incx)
       implicit none

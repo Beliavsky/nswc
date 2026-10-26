@@ -150,9 +150,8 @@ real, intent(in) :: r
 complex, intent(in) :: z, zr, nu
 complex, intent(inout) :: w, w0
 integer :: i, m, num
-real :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y
+real :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y, inu, l
 complex :: al, bl, s, u1, u2, u3
-real :: inu, l
 real, parameter :: c1 = 1.25331413731559e+00
 real, parameter :: c2 = 1.77245385090552e+00
 interface
@@ -276,9 +275,8 @@ real, intent(in) :: r
 complex :: z
 complex, intent(inout) :: w
 integer :: i, ind, m, n, n1
-real :: a, ai, rz, t, x, y, znorm, zr1, zr2
+real :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
 complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real :: nu, nu1
 real, parameter :: pi = 3.14159265358979
 real, parameter :: cpi = 1.25331413731550
 interface
@@ -628,10 +626,8 @@ complex, intent(in) :: z, zr
 complex, intent(inout) :: k1, k2
 real, intent(in) :: nu
 integer :: i, m
-real :: a, al, b, c, e, eps, eps0, th, x, y
+real :: a, al, b, c, e, eps, eps0, th, x, y, l, nu2
 complex :: bl, s, u1, u2, u3
-real :: l
-real :: nu2
 real, parameter :: c1 = 1.25331413731559
 interface
    pure elemental function cos1(x)
@@ -1007,8 +1003,7 @@ complex, intent(in) :: z
 complex, intent(inout) :: ai
 complex, intent(inout) :: aip
 real :: a, b, r
-complex :: bi
-complex :: bip
+complex :: bi, bip
 interface
    pure elemental subroutine aia(ind,z,ai,aip,ierr)
       implicit none
@@ -1218,8 +1213,7 @@ complex, intent(inout) :: ai, aip
 complex, intent(in) :: z
 integer :: i, k, m, m2
 real :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
-complex :: alpha, beta, j
+complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, alpha, beta, j
 real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
    & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
    & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
@@ -1400,8 +1394,7 @@ complex, intent(in) :: z
 complex, intent(inout) :: bi
 complex, intent(inout) :: bip
 real :: a, b, r
-complex :: ai
-complex :: aip
+complex :: ai, aip
 interface
    pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
       implicit none
@@ -1836,10 +1829,8 @@ implicit none
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2
-complex :: ia1, ia2, ia3, ib1, ib2, ib3
-complex :: sz, zh, e, cf1, cf2, cf3, cf4
-real :: m
+real :: a, an, b, cfa, cfb, cn1, cn2, m
+complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
 real, parameter :: c1 = .333333333333333e+00
 real, parameter :: c2 = .666666666666667e+00
 real, parameter :: gm1 = .892979511569248e+00
@@ -2003,10 +1994,8 @@ implicit none
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2
-complex :: ia1, ia2, ia3, ib1, ib2, ib3
-complex :: sz, zh, e, cf1, cf2, cf3, cf4
-real :: m
+real :: a, an, b, cfa, cfb, cn1, cn2, m
+complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
 real, parameter :: c1 = .333333333333333e+00
 real, parameter :: c2 = .666666666666667e+00
 real, parameter :: gm1 = .892979511569248e+00
@@ -3047,8 +3036,7 @@ implicit none
 complex, intent(in) :: k, l
 integer :: i, ind
 real :: eps, phi, r, t, tol, u, v, x, xx, y
-complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1
-complex :: z
+complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1, z
 logical :: branch
 real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
@@ -3423,9 +3411,8 @@ complex, intent(in) :: k, l
 complex, intent(inout) :: ce, ck
 integer :: i, ind
 real :: c, eps, phi, r, t, tol, u, v, x, xx, y
-complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1
-complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk
-complex :: k1, l1, ak2, al2, z, g, g1, gg, gp
+complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, cee, cep, ce1, e1, e2, e3, at, fx, fxk, k1, l1, ak2, al2, z, g, &
+   & g1, gg, gp
 logical :: branch
 real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
@@ -3789,8 +3776,7 @@ complex, intent(in) :: l
 complex, intent(inout) :: fk, fl, ek, el, gk, gl
 integer :: i
 real :: bn, c, dn, eps, fn, gn, ri, tol, u, x, y
-complex :: l2
-complex :: an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
+complex :: l2, an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
 real, parameter :: hpi = 1.5707963267949
 real, parameter :: ln4 = 1.3862943611199
 interface
@@ -3898,8 +3884,7 @@ real, intent(inout) :: e, f
 real, intent(in) :: phi
 real, intent(in) :: k, l
 real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
-   & t1, t2, td, tr, ts, w
-real :: k2, l2
+   & t1, t2, td, tr, ts, w, k2, l2
 real, parameter :: ln4 = 1.3862943611199
 real, parameter :: th1 = .76159415595576
 interface
@@ -4399,11 +4384,7 @@ real, intent(inout) :: rf
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
-real :: c1, c2, c3, e2, e3, epslon, errtol, lamda
-real :: lolim, mu, s, uplim
-real :: xn, xndev, xnroot
-real :: yn, yndev, ynroot
-real :: zn, zndev, znroot
+real :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental function spmpar(i)
       implicit none
@@ -4523,11 +4504,8 @@ double precision, intent(inout) :: rf
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
-double precision :: c1, c2, c3, e2, e3, epslon, errtol, lamda
-double precision :: lolim, mu, s, uplim
-double precision :: xn, xndev, xnroot
-double precision :: yn, yndev, ynroot
-double precision :: zn, zndev, znroot
+double precision :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, &
+   & zndev, znroot
 interface
    pure elemental function dpmpar(i)
       implicit none
@@ -4647,12 +4625,8 @@ real, intent(inout) :: rd
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
-real :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda
-real :: lolim, mu, power4, sigma, s1, s2, uplim
-real :: xn, xndev
-real :: xnroot
-real :: yn, yndev, ynroot
-real :: zn, zndev, znroot
+real :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, xnroot, yn, &
+   & yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental function spmpar(i)
       implicit none
@@ -4783,13 +4757,8 @@ double precision, intent(inout) :: rd
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
-double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, &
-   & errtol, lamda
-double precision :: lolim, mu, power4, sigma, s1, s2, uplim
-double precision :: xn, xndev
-double precision :: xnroot
-double precision :: yn, yndev, ynroot
-double precision :: zn, zndev, znroot
+double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, &
+   & xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental function dpmpar(i)
       implicit none
@@ -4922,14 +4891,8 @@ real, intent(in) :: p
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
-real :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3
-real :: epslon, errtol, etolrc, lamda, lolim, mu
-real :: pn, pndev
-real :: power4, sigma, s1, s2, s3, uplim
-real :: xn, xndev
-real :: xnroot
-real :: yn, yndev, ynroot
-real :: zn, zndev, znroot
+real :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, power4, sigma, &
+   & s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental subroutine rcval1(x,y,errtol,rc,ierr)
       implicit none
@@ -5084,15 +5047,8 @@ double precision, intent(in) :: p
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
-double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, &
-   & e2, e3
-double precision :: epslon, errtol, etolrc, lamda, lolim, mu
-double precision :: pn, pndev
-double precision :: power4, sigma, s1, s2, s3, uplim
-double precision :: xn, xndev
-double precision :: xnroot
-double precision :: yn, yndev, ynroot
-double precision :: zn, zndev, znroot
+double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, &
+   & power4, sigma, s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental function dpmpar(i)
       implicit none
@@ -5245,11 +5201,7 @@ real, intent(inout) :: rc
 real, intent(in) :: errtol
 real, intent(in) :: x
 real, intent(in) :: y
-real :: c1, c2
-real :: lamda, lolim
-real :: mu, s, sn, uplim
-real :: xn
-real :: yn
+real :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 interface
    pure elemental function spmpar(i)
       implicit none
@@ -5360,11 +5312,7 @@ double precision, intent(inout) :: rc
 double precision, intent(in) :: errtol
 double precision, intent(in) :: x
 double precision, intent(in) :: y
-double precision :: c1, c2
-double precision :: lamda, lolim
-double precision :: mu, s, sn, uplim
-double precision :: xn
-double precision :: yn
+double precision :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 interface
    pure elemental function dpmpar(i)
       implicit none
@@ -5664,8 +5612,7 @@ implicit none
 real, intent(out) :: c, d, s
 real, intent(in) :: u
 real, intent(in) :: k
-real :: c1, c2, c3, c4, u2
-real :: k2
+real :: c1, c2, c3, c4, u2, k2
 !     -------------------------------------------------
 !     Calculates SN(u,k), CN(u,k), and DN(u,k) for
 !     0.0 .LE. u .LE. 0.01 and for 0.0 .LE. k .LE. 1.0
@@ -5692,8 +5639,7 @@ real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
-real :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x
-real :: i
+real :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x, i
 real, parameter :: pihalf = 1.5707963267949
 interface
    pure elemental function spmpar(i)
@@ -5764,8 +5710,7 @@ real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
-real :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn
-real :: n
+real :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn, n
 real, parameter :: pihalf = 1.5707963267949
 real, parameter :: pi = 3.1415926535898
 interface
@@ -5859,9 +5804,7 @@ integer, intent(inout) :: ierr
 complex, intent(in) :: u
 complex, intent(inout) :: s, c, d
 real, intent(in) :: k, l
-real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
-   & t, t1, t2, td1, td2, u1, u2
-real :: k2
+real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, t, t1, t2, td1, td2, u1, u2, k2
 interface
    pure elemental subroutine ellpf(u,k,l,s,c,d,ierr)
       implicit none
@@ -6157,8 +6100,7 @@ integer, intent(in) :: n0
 real, intent(inout) :: a, p, x(*), y(*)
 integer :: k, m, n
 real :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, tausq, u, &
-   & v, w, xk, yk, ykm1, z
-real :: kom, l
+   & v, w, xk, yk, ykm1, z, kom, l
 real, parameter :: pi = 3.1415926535898
 real, parameter :: twopi = 6.28318530717958
 real, parameter :: alnpi = 1.14472988584940
@@ -6443,9 +6385,8 @@ real, intent(in) :: d
 real, intent(out) :: p
 real, intent(in) :: r
 integer :: i, n
-real :: a, a1, an, anm1, bk2, c0, const, d2, delta, eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, x, x0, y1, z &
-   & , zm, zp, zr, zrs
-real :: m, m0
+real :: a, a1, an, anm1, bk2, c0, const, d2, delta, eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, x, x0, y1, &
+   & z, zm, zp, zr, zrs, m, m0
 real, parameter :: e = 2.71828182845905
 real, parameter :: c1 = .707106781186548
 real, parameter :: c2 = .564189583547756
@@ -6848,8 +6789,7 @@ real, intent(in) :: r0, sx, sy
 real, intent(in) :: k
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, sa, seps1, &
-   & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9
-real :: k8
+   & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9, k8
 real, parameter :: v(16) = [.4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
    & .4213512761306353e+00, .5068999089322294e+00, .5877157572407623e+00, .6630442669302152e+00, .7321821187402897e+00, &
    & .7944837959679424e+00, .8493676137325700e+00, .8963211557660521e+00, .9349060759377397e+00, .9647622555875064e+00, &
@@ -7664,8 +7604,7 @@ real, intent(in) :: r
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer :: i, ia, ib, imax, j, lb
-real :: a0
-real :: jm1
+real :: a0, jm1
 double precision :: coeff, dsum, rp1
 !     ------------------------------------------------------------------
 !     SET b = a**r WHERE A IS A REAL POLYNOMIAL
@@ -8801,9 +8740,7 @@ real, intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
    & r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
 real :: wa4(n)
 external fcn
-integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
-   & nslow2
-integer :: iwa(1)
+integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, nslow2, iwa(1)
 logical :: jeval, sing
 real :: actred, delta, epsmch, fnorm, fnorm1, pnorm, prered, ratio, sum, temp, xnorm
 real :: enorm
@@ -9406,8 +9343,8 @@ pure subroutine cbcrt(a, z)
 implicit none
 real, intent(in) :: a(4)
 complex, intent(inout) :: z(3)
-real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, y2, y3
-real :: aq(3)
+real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, y2, &
+   & y3, aq(3)
 real, parameter :: rt3 = 1.7320508075689
 interface
    pure elemental function cbrt(x)
@@ -9858,9 +9795,7 @@ pure subroutine qtcrt(a, z)
 implicit none
 real, intent(in) :: a(5)
 complex, intent(inout) :: z(4)
-real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
-   & x3, y
-real :: temp(4)
+real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4)
 complex :: w
 interface
    pure subroutine aord(a,n)
@@ -10207,8 +10142,7 @@ double precision :: op(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
 real, intent(inout) :: wk(*)
-integer :: idp1
-integer :: p, qp, k, qk, svk, tmp
+integer :: idp1, p, qp, k, qk, svk, tmp
 !
 !     This subroutine finds the zeros of a real polynomial.
 !
@@ -10272,11 +10206,10 @@ integer :: ideg, idp1, num
 double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
    & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
 real :: pt(idp1)
-integer :: i, j, jj, l, n, nm1, nn, nz
+integer :: i, j, jj, l, n, nm1, nn, nz, cnt
 double precision :: aa, bb, cc, factor, t
 real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
    & df, dx, base, smalno, infin
-integer :: cnt
 logical :: zerok
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
@@ -10557,4 +10490,154 @@ zeror(num) = lzr
 zeroi(num) = lzi
 go to 40
 end subroutine drply1
+
+subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
+implicit none
+integer :: nn
+double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+integer :: l2, nz
+integer :: n, type, i, j, iflag
+double precision :: svu, svv, ui, vi, s
+real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+logical :: vpass, spass, vtry, stry
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     Computes up to  l2  fixed shift k-polynomials,
+!     testing for convergence in the linear or quadratic
+!     case. Initiates one of the variable SHIFT
+!     iterations and returns with the number of zeros
+!     found.
+!
+!     l2 - Limit of fixed shift steps
+!     nz - Number of zeros found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+betav = .25
+betas = .25
+oss = sr
+ovv = v
+!
+!     Evaluate polynomial by synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+call calcsc(type, n, k, qk)
+do j = 1,l2
+!
+!     Calculate next k polynomial and estimate v
+!
+   call nextk(type, n, qp, k, qk)
+   call calcsc(type, n, k, qk)
+   call newest(type, ui, vi, nn, p, k)
+   vv = vi
+!
+!     Estimate s
+!
+   ss = 0.0
+   if (k(n) /= 0.d0) ss = -p(nn)/k(n)
+   tv = 1.0
+   ts = 1.0
+   if (j == 1 .or. type == 3) go to 70
+!
+!     Compute relative measures of convergence of s and v
+!     sequences
+!
+   if (vv /= 0.0) tv = abs((vv - ovv)/vv)
+   if (ss /= 0.0) ts = abs((ss - oss)/ss)
+!
+!     If decreasing, multiply two most recent
+!     convergence measures
+!
+   tvv = 1.0
+   if (tv < otv) tvv = tv*otv
+   tss = 1.0
+   if (ts < ots) tss = ts*ots
+!
+!     Compare with convergence criteria
+!
+   vpass = tvv < betav
+   spass = tss < betas
+   if (.not.(spass .or. vpass)) go to 70
+!
+!     At least one sequence has passed the convergence
+!     test. Store variables before iterating
+!
+   svu = u
+   svv = v
+   do i = 1,n
+      svk(i) = k(i)
+   end do
+   s = ss
+!
+!     Choose iteration according to the fastest
+!     converging sequence
+!
+   vtry = .false.
+   stry = .false.
+   if (spass .and. ((.not.vpass) .or. &
+      & tss < tvv)) go to 40
+20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Quadratic iteration has failed. Flag that it has
+!     been tried and decrease the convergence criterion.
+!
+   vtry = .true.
+   betav = betav*0.25
+!
+!     Try linear iteration if it has not been tried and
+!     the s sequence is converging
+!
+   if (stry .or. (.not.spass)) go to 50
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+40 call realit(s, nz, iflag, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Linear iteration has failed. Flag that it has been
+!     tried and decrease the convergence criterion
+!
+   stry = .true.
+   betas = betas*0.25
+   if (iflag == 0) go to 50
+!
+!     If linear iteration signals an almost double real
+!     zero attempt quadratic interation
+!
+   ui = -(s + s)
+   vi = s*s
+   go to 20
+!
+!     Restore variables
+!
+50 u = svu
+   v = svv
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+!
+!     Try quadratic iteration if it has not been tried
+!     and the v sequence is converging
+!
+   if (vpass .and. (.not.vtry)) go to 20
+!
+!     Recompute qp and scalar values to continue the
+!     second stage
+!
+   call quadsd(nn, u, v, p, qp, a, b)
+   call calcsc(type, n, k, qk)
+70 ovv = vv
+   oss = ss
+   otv = tv
+   ots = ts
+end do
+return
+end subroutine fxshfr
 

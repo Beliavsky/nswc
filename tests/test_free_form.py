@@ -18,6 +18,7 @@ from data_constants import transform as apply_constants
 from portable_intrinsics import transform as portable_intrinsics
 from simplify_free_style import transform as simplify_style
 from generic_intrinsics import transform as apply_generics
+from coalesce_local_declarations import transform as coalesce_locals
 
 
 def canonical(statement):
@@ -125,7 +126,7 @@ class FreeFormTests(unittest.TestCase):
                          [s for s in comments.text.splitlines(True) if not s.lstrip().startswith('!')])
         self.assertEqual(statements(formatted, False), statements(comments.text, False))
         self.assertEqual(sentence_case(comments.text).text, comments.text)
-        self.assertEqual(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))))), (ROOT / "nswc.f90").read_text())
+        self.assertEqual(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text))))))), (ROOT / "nswc.f90").read_text())
 
     def test_generated_partitions_and_links(self):
         outputs, count = generate()

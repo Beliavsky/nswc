@@ -200,7 +200,7 @@ The validator compares complete GNU compiler dumps before and after formatting,
 allowing only removal of redundant unary-plus expression wrappers. Regeneration
 also checks tokens and literal values, and updates source-link line numbers.
 
-The final `tools/simplify_free_style.py` pass removes spaces before argument
+The `tools/simplify_free_style.py` pass removes spaces before argument
 lists in procedure declarations and calls to known procedures. It also removes
 redundant array constructor types for matching default-kind literals, preserving
 types needed for mixed values or precision conversion. Comparisons use `==`,
@@ -217,6 +217,11 @@ specific intrinsic calls with generic names, such as `dabs` to `abs` and
 `dsqrt` to `sqrt`. Conflicting names and conversion intrinsics are retained.
 The [generic-intrinsic guide](docs/generic-intrinsics.md) describes the binding
 review and checks for identical compiled code.
+
+The final `tools/coalesce_local_declarations.py` pass combines matching local
+declarations within contiguous blocks. Argument declarations, comments,
+initializers, and type/bound dependencies retain their boundaries. See the
+[local-declaration guide](docs/local-declarations.md) for usage and validation.
 
 Comment capitalization uses `tools/sentence_case_comments.py` for selected
 uppercase explanatory comments. Sentences continue across physical line breaks.

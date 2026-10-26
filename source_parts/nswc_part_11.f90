@@ -100,9 +100,7 @@ double precision, intent(inout) :: fitdwk(fdwkln), &
    & fitcds(ncrows,dimen)
 double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
 double precision, intent(in) :: wts(nfpts)
-integer :: indstt, p, dimp1
-integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-   & alfl
+integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 double precision :: scale
 !
 !     ***************
@@ -285,8 +283,7 @@ double precision, intent(inout) :: coord(ncrows,dimen), &
 double precision, intent(in) :: weight(npts)
 double precision, intent(inout) :: z(npts), sumsqs(npolys), &
    & c(npolys)
-integer :: k
-integer :: p, sttdeg, onplys
+integer :: k, p, sttdeg, onplys
 double precision :: runtot, rntot1
 !
 !
@@ -370,11 +367,8 @@ double precision, intent(inout) :: psi(npts,psiwid)
 double precision, intent(inout) :: sumsqs(npolys), c(npolys)
 double precision, intent(in) :: f(npts), weight(npts)
 double precision, intent(inout) :: z(npts)
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
-integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
-integer :: j0mj1, j1m1, starta
-integer :: onpp1
-integer :: index1, index2
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
+   & index1, index2
 double precision :: arc, runtot, rntot1, rntot2
 !
 !
@@ -642,9 +636,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt
-integer :: gbasiz, alfl, dimp1
-integer :: top, bot, curdeg, psistt
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)
@@ -1586,19 +1578,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-real :: abseps
-real :: area, area1, area12, area2, a1, a2
-real :: b1, b2, correc, defabs, defab1, defab2, dres
-real :: epmach
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-   & errsum, ertest, oflow, rerr, resabs, reseps
-real :: res3la(3)
-real :: rlist2(52), small, t, uflow
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr
-integer :: nres, nrmax, numrl2
+real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
+   & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
 interface
    pure elemental function spmpar(i)
@@ -1919,9 +1901,7 @@ real, intent(in) :: uflow
 real :: f
 external f
 integer :: j, jtw, jtwm1
-real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
-   & resk, reskh, tol
-real :: fv1(10), fv2(10)
+real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tol, fv1(10), fv2(10)
 real, parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
    & 0.8650633666889845e+00, 0.7808177265864169e+00, 0.6794095682990244e+00, 0.5627571346686047e+00, 0.4333953941292472e+00, &
    & 0.2943928627014602e+00, 0.1488743389816312e+00, 0.0000000000000000e+00]
@@ -2434,20 +2414,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-real :: abseps
-real :: area, area1, area12, area2, a1, a2
-real :: boun
-real :: b1, b2, correc, defabs, defab1, defab2, dres
-real :: epmach
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-   & errsum, ertest, oflow, rerr, resabs, reseps
-real :: res3la(3)
-real :: rlist2(52), small, t, uflow
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr
-integer :: nres, nrmax, numrl2
+real :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
+   & errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
 interface
    pure elemental function spmpar(i)
@@ -2772,9 +2741,7 @@ real, intent(in) :: uflow
 real :: f
 external f
 integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
-   & hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
-real :: fv1(7), fv2(7)
+real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
 real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
 real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
@@ -3001,8 +2968,7 @@ integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
 real :: errmax, errmin
-integer :: i, ibeg, ido
-integer :: isucc, j, jbnd, jupbn, k
+integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !
 !           Check whether the list contains more than
@@ -3594,20 +3560,10 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
-real :: abseps
-real :: area, area1, area12, area2, a1, a2
-real :: b1, b2, correc, defabs, defab1, defab2, dres
-real :: epmach
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-   & errsum, ertest, oflow, rerr, resabs, reseps
-real :: res3la(3)
-real :: rlist2(52), small, t, uflow
-real :: vp1(21), vp2(21), vn1(21), vn2(21)
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr, nres, nrmax, numrl2
-integer :: lp1, lp2, ln1, ln2
+real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
+   & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
+   & vp2(21), vn1(21), vn2(21)
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
 logical :: extrap, noext
 interface
    pure elemental function spmpar(i)
@@ -3998,10 +3954,8 @@ real, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
-real :: t
-real :: resg, resk, errold
-integer :: k, k0, k1, k2
-integer :: key1
+real :: t, resg, resk, errold
+integer :: k, k0, k1, k2, key1
 !
 key1 = max(key ,  0)
 key1 = min(key1,  4)
@@ -4038,11 +3992,8 @@ real, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
-integer :: i, is, k, ks
-real :: ldl
-real :: y2, xx(41)
-real :: aa, bb, c
-integer :: j
+integer :: i, is, k, ks, j
+real :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
 integer, parameter :: len(4) = [7, 10, 14, 21]
 real, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e-1, &
@@ -4652,19 +4603,10 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-double precision :: abseps
-double precision :: area, area1, area12, area2, a1, a2
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres
-double precision :: epmach
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
-double precision :: res3la(3)
-double precision :: rlist2(52), small, t, uflow
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr
-integer :: nres, nrmax, numrl2
+double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
+   & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
+   & uflow
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
 interface
    pure elemental function dpmpar(i)
@@ -5043,12 +4985,7 @@ double precision, intent(in) :: uflow
 double precision, intent(inout) :: resasc
 integer, intent(out) :: isig
 external f
-double precision :: absc
-double precision :: centr, dhlgth
-double precision :: fc, fsum, fval1, fval2, fv1(10), fv2(10), &
-   & hlgth
-double precision :: resg, resk, reskh
-double precision :: tol
+double precision :: absc, centr, dhlgth, fc, fsum, fval1, fval2, fv1(10), fv2(10), hlgth, resg, resk, reskh, tol
 integer :: j, jtw, jtwm1
 double precision, parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
    & 0.973906528517171720077964012084d+00, 0.930157491355708226001207180060d+00, 0.865063366688984510732096688423d+00, &
@@ -5516,20 +5453,10 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-double precision :: abseps
-double precision :: area, area1, area12, area2, a1, a2
-double precision :: boun
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres
-double precision :: epmach
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
-double precision :: res3la(3)
-double precision :: rlist2(52), small, t, uflow
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr
-integer :: nres, nrmax, numrl2
+double precision :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, &
+   & erlarg, erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), &
+   & small, t, uflow
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
 interface
    pure elemental function dpmpar(i)
@@ -5856,12 +5783,8 @@ double precision, intent(inout) :: result
 double precision, intent(in) :: uflow
 external f
 integer :: j
-double precision :: absc, absc1, absc2
-double precision :: centr, dinf
-double precision :: fc, fsum, fval1, fval2, hlgth
-double precision :: resg, resk, reskh
-double precision :: tabsc1, tabsc2, tol
-double precision :: fv1(7), fv2(7)
+double precision :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, &
+   & fv1(7), fv2(7)
 double precision, parameter :: xgk(8) = [0.991455371120812639206854697526d+00, &
    & 0.949107912342758524526189684048d+00, 0.864864423359769072789712788641d+00, 0.741531185599394439863864773281d+00, &
    & 0.586087235467691130294144838259d+00, 0.405845151377397166906606412077d+00, 0.207784955007898467600689403773d+00, &
@@ -6093,8 +6016,7 @@ integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
 double precision :: errmax, errmin
-integer :: i, ibeg, ido
-integer :: isucc, j, jbnd, jupbn, k
+integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !
 !           Check whether the list contains more than
@@ -6229,14 +6151,8 @@ double precision, intent(out) :: result
 double precision, intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
-double precision :: delta1, delta2, delta3
-double precision :: epsinf
-double precision :: error, err1, err2, err3, e0, e1, e1abs, e2, e3
-double precision :: res
-double precision :: ss, tol1, tol2, tol3
-integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
-integer :: newelm
-integer :: num
+double precision :: delta1, delta2, delta3, epsinf, error, err1, err2, err3, e0, e1, e1abs, e2, e3, res, ss, tol1, tol2, tol3
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 !---------------------
 !
 !           List of major variables
@@ -6694,20 +6610,10 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
-double precision :: abseps
-double precision :: area, area1, area12, area2, a1, a2
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres
-double precision :: epmach
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-   & error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
-double precision :: res3la(3)
-double precision :: rlist2(52), small, t, uflow
-double precision :: vp1(21), vp2(21), vn1(21), vn2(21)
-integer :: id
-integer :: ierro
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
-integer :: maxerr, nres, nrmax, numrl2
-integer :: lp1, lp2, ln1, ln2
+double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
+   & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
+   & uflow, vp1(21), vp2(21), vn1(21), vn2(21)
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
 logical :: extrap, noext
 interface
    pure elemental function dpmpar(i)
@@ -7098,10 +7004,8 @@ double precision, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
-double precision :: t
-double precision :: resg, resk, errold
-integer :: k, k0, k1, k2
-integer :: key1
+double precision :: t, resg, resk, errold
+integer :: k, k0, k1, k2, key1
 !
 key1 = max(key ,  0)
 key1 = min(key1,  4)
@@ -7138,11 +7042,8 @@ double precision, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
-integer :: i, is, k, ks
-double precision :: ldl
-double precision :: y2, xx(41)
-double precision :: aa, bb, c
-integer :: j
+integer :: i, is, k, ks, j
+double precision :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
 integer, parameter :: len(4) = [7, 10, 14, 21]
 double precision, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421d-1, &
@@ -7635,10 +7536,8 @@ real, intent(in) :: vec(2,*)
 integer :: idata(*)
 external f
 integer :: i, j, k
-real :: x, y
+real :: x, y, area, origin(2), tvec(2,3)
 double precision :: a1, a2, s, sn
-real :: area, origin(2)
-real :: tvec(2,3)
 integer, parameter :: nquad = 6
 real, parameter :: w(5,6) = reshape([.3333333333333333333333333e0, .3333333333333333333333333e0, &
    & .3333333333333333333333333e0, .225e0, .3786109120031468330830822e-1, .7974269853530873223980253e0, &
@@ -10126,8 +10025,7 @@ logical, intent(inout) :: blkout
 external fcn
 integer :: k, mflag, n
 real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
-logical :: hfaild
-logical :: interp
+logical :: hfaild, interp
 real, parameter :: c2 = .250000000000000e+00
 real, parameter :: c3 = .375000000000000e+00
 real, parameter :: c4 = .923076923076923e+00

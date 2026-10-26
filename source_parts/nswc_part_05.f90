@@ -4,11 +4,8 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: ap(*)
-double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
-double precision :: absakk, alpha, colmax, rowmax
-integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk
-integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
-   & km2, kstep
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
 interface
    pure subroutine daxpy(n,da,dx,incx,dy,incy)
@@ -505,8 +502,7 @@ integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
 double precision :: akkp1, ddot, temp
 double precision :: ten, d, t, ak, akp1
-integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
-integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
 logical :: noinv, nodet, noert
 !
 !     dspdi computes the determinant, inertia and inverse
@@ -743,9 +739,8 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
 real, intent(inout) :: a(*), b(*)
-integer :: j
+integer :: j, onej
 real :: d(2)
-integer :: onej
 !     -----------------
 !     -----------------
 !
@@ -773,8 +768,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 real, intent(inout) :: ap(*)
-real :: t
-real :: s
+real :: t, s
 integer :: j, jj, jm1, k, kj, kk
 interface
    pure function sdot(n,sx,incx,sy,incy)
@@ -965,8 +959,7 @@ implicit none
 integer, intent(in) :: n, job
 real, intent(inout) :: ap(*)
 real, intent(inout) :: det(2)
-real :: t
-real :: s
+real :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     sppdi computes the determinant and inverse
@@ -1094,9 +1087,8 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
 double precision, intent(inout) :: a(*), b(*)
-integer :: j
+integer :: j, onej
 double precision :: d(2)
-integer :: onej
 !     -----------------
 !     -----------------
 !
@@ -1124,8 +1116,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 double precision, intent(inout) :: ap(*)
-double precision :: t
-double precision :: s
+double precision :: t, s
 integer :: j, jj, jm1, k, kj, kk
 interface
    pure function ddot(n,dx,incx,dy,incy)
@@ -1316,8 +1307,7 @@ implicit none
 integer, intent(in) :: n, job
 double precision, intent(inout) :: ap(*)
 double precision, intent(inout) :: det(2)
-double precision :: t
-double precision :: s
+double precision :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     dppdi computes the determinant and inverse
@@ -1628,9 +1618,8 @@ integer :: n
 complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
 real, intent(inout) :: rcond
 integer, intent(inout) :: ipvt(n)
-integer :: j, job
+integer :: j, job, onej
 real :: t
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
@@ -1672,9 +1661,8 @@ integer, intent(in) :: ka, kb, m, mo
 integer :: n
 complex, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
-integer :: j
+integer :: j, onej
 complex :: d(2)
-integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
@@ -2306,10 +2294,9 @@ subroutine cgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(inout) :: a(lda,*), det(2), work(*)
-complex :: t
+complex :: t, zdum
 real :: ten
 integer :: i, j, k, kb, kp1, l, nm1
-complex :: zdum
 real :: cabs1
 !
 !     cgedi computes the determinant and inverse of a matrix
@@ -2806,8 +2793,7 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
    & work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-real :: t
-real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
+real :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 interface
    pure subroutine saxpy(n,sa,sx,incx,sy,incy)
@@ -3348,8 +3334,7 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-double precision :: t
-double precision :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
+double precision :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 interface
    pure subroutine daxpy(n,da,dx,incx,dy,incy)
@@ -4882,11 +4867,7 @@ integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
-integer :: ip1
-integer :: i, j, k, l, m
-integer :: en, ll, mm, na
-integer :: its
-integer :: mp2, enm2
+integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
 ! ----------------------------------------------------------------------
@@ -5499,11 +5480,7 @@ integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
-integer :: ip1
-integer :: i, j, k, l, m
-integer :: en, ll, mm, na
-integer :: its
-integer :: mp2, enm2
+integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
 ! ----------------------------------------------------------------------
@@ -6726,8 +6703,7 @@ complex, intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
    & eye(nm,n), temp(n)
 real, intent(in) :: tol
 integer :: its, mats, i, j, k
-real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni
-real :: fxnorm, fxni, gnorm, tnorm, t
+real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni, fxnorm, fxni, gnorm, tnorm, t
 !     real sqrt, cabs, float
 !     complex cmplx, conjg
 k = 7*n*n + n
@@ -6971,13 +6947,8 @@ complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: g(nm,n)
 complex, intent(inout) :: h(nm,n)
 integer, intent(in) :: mats
-integer :: i, j, k, l
-integer :: lb, l1
-integer :: nk1, nm1, nm2
-complex :: rr, t, u1, u2, v1, v2, rho
-complex :: tf
-complex :: tg
-complex :: th
+integer :: i, j, k, l, lb, l1, nk1, nm1, nm2
+complex :: rr, t, u1, u2, v1, v2, rho, tf, tg, th
 real :: r, s
 !     real sqrt, cabs
 !     complex cmplx, conjg
@@ -7186,14 +7157,8 @@ complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
 complex, intent(inout) :: f(nm,n)
 real, intent(in) :: eps1
 integer, intent(in) :: mats
-integer :: i, j, k, l
-integer :: en, jj, k1, k2, ld, ll, l1, na
-integer :: ish, its, km1, lm1
-integer :: enm2
-integer :: lor1, enorn
-complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44
-complex :: a1, a2, u1, u2, v1, v2, t, rr, sh, ss
-complex :: tf
+integer :: i, j, k, l, en, jj, k1, k2, ld, ll, l1, na, ish, its, km1, lm1, enm2, lor1, enorn
+complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44, a1, a2, u1, u2, v1, v2, t, rr, sh, ss, tf
 real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
 interface
    pure elemental function spmpar(i)
@@ -7436,9 +7401,7 @@ integer, intent(in) :: n, nm
 complex, intent(in) :: u(nm,n), v(nm,n), l(nm,n)
 complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: temp(n)
-integer :: i
-integer :: j, jp1, k, kk, km1, m
-integer :: nm1
+integer :: i, j, jp1, k, kk, km1, m, nm1
 complex :: denom, sum
 real :: s, t
 !     real cabs

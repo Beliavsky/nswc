@@ -3633,8 +3633,7 @@ integer, intent(inout) :: iwork(*)
 integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
    & ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
    & nordm1, nordp1, np1
-real :: rnorme, xmax, xmin, xval, yval
-real :: prgopt(7)
+real :: rnorme, xmax, xmin, xval, yval, prgopt(7)
 logical :: band, new
 !---------------------
 !
@@ -4533,8 +4532,7 @@ integer, intent(in) :: ka, kdz, kz, m, n
 real, intent(in) :: t(*), a(ka,n)
 real, intent(inout) :: z(kz,*), dz(kdz,*)
 integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
-real :: del, diff, r, s, term, x
-real :: c(4), wk(4,5)
+real :: del, diff, r, s, term, x, c(4), wk(4,5)
 !-----------------------------------------------------------------------
 !
 !            Computation of n cubic splines and their first
@@ -5076,12 +5074,11 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
-integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, &
-   & key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
+integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj, ind(8), &
+   & loc(8), num(8)
 real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
    & dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
    & sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
-integer :: ind(8), loc(8), num(8)
 interface
    pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
       implicit none
@@ -7527,9 +7524,8 @@ integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
 real, intent(in) :: px, py
 real :: x(*), y(*)
-real :: x0, x1, x2, y0, y1, y2
+real :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
-real :: xp, yp
 logical :: left
 !
 !***********************************************************
@@ -9398,9 +9394,7 @@ integer, intent(inout) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
 real, intent(inout) :: fitvls(nfpts), resids(nfpts)
 real, intent(in) :: wts(nfpts)
-integer :: indstt, p, dimp1
-integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-   & alfl
+integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 real :: scale
 !
 !     ***************
@@ -9570,9 +9564,7 @@ integer, intent(inout) :: error, npolys, degree
 integer, intent(in) :: dimen, npts
 integer, intent(in) :: iwklen
 integer, intent(inout) :: iwork(iwklen)
-integer :: alfl
-integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
-integer :: nplyt4
+integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
 interface
    pure elemental subroutine basiz(degree,npts,dimen,npolys, &
       & error)
@@ -9797,8 +9789,7 @@ integer, intent(inout) :: degree
 integer, intent(in) :: npts, dimen
 integer, intent(inout) :: npolys
 integer, intent(out) :: error
-integer :: top, bot
-integer :: i, rowlen
+integer :: top, bot, i, rowlen
 !
 !     ***************
 !     Purpose
@@ -9887,9 +9878,7 @@ implicit none
 integer, intent(in) :: npolys, dimen, degree
 integer, intent(out) :: alflp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
-integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, &
-   & dimm2
-integer :: dimp1
+integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, dimm2, dimp1
 !
 !     ***************
 !     Purpose
@@ -10047,8 +10036,7 @@ real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
 real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
 real, intent(in) :: weight(npts)
 real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
-integer :: k
-integer :: p, sttdeg, onplys
+integer :: k, p, sttdeg, onplys
 real :: runtot, rntot1
 !
 !
@@ -10132,11 +10120,8 @@ real, intent(inout) :: psi(npts,psiwid)
 real, intent(inout) :: sumsqs(npolys), c(npolys)
 real, intent(in) :: f(npts), weight(npts)
 real, intent(inout) :: z(npts)
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
-integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
-integer :: j0mj1, j1m1, starta
-integer :: onpp1
-integer :: index1, index2
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
+   & index1, index2
 real :: arc, runtot, rntot1, rntot2
 !
 !
@@ -10404,9 +10389,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt
-integer :: gbasiz, alfl, dimp1
-integer :: top, bot, curdeg, psistt
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)

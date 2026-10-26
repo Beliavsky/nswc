@@ -142,9 +142,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 double precision, intent(inout) :: a(nm,n), scale(n)
-integer :: i, j, k, l, m
-integer :: jj
-integer :: iexc
+integer :: i, j, k, l, m, jj, iexc
 double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
 interface
@@ -323,8 +321,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
 double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. dbal transforms A into
@@ -401,9 +398,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 double precision, intent(inout) :: a(nm,n), ort(igh)
-integer :: i, j, m
-integer :: ii, jj, la, mp
-integer :: kp1
+integer :: i, j, m, ii, jj, la, mp, kp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -514,10 +509,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
-integer :: i, j, k, l, m
-integer :: en, ll, mm, na
-integer :: its
-integer :: mp2, enm2
+integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
 interface
@@ -753,8 +745,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: z(nm,m)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
 !
@@ -830,9 +821,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: a(nm,igh)
 double precision, intent(inout) :: ort(igh), z(nm,n)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 double precision :: g
 !-----------------------------------------------------------------------
 !
@@ -920,9 +909,7 @@ integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
 double precision, intent(in) :: a(na,igh)
 double precision, intent(inout) :: ort(igh), z(nz,n)
-integer :: i, j
-integer :: kl, mm, mp
-integer :: mp1
+integer :: i, j, kl, mm, mp, mp1
 double precision :: g
 !-----------------------------------------------------------------------
 !
@@ -1015,13 +1002,8 @@ integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
-integer :: i, j, k, l, m
-integer :: en, ii, jj, ll, mm, na
-integer :: nn
-integer :: its
-integer :: mp2, enm2
-double precision :: a, b, d, p, q, r, s, t, u, w, x, y
-double precision :: ra, sa, vi, vr, zz, norm, machep
+integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
+double precision :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep
 logical :: notlas
 interface
    pure elemental function dpmpar(i)
@@ -1581,9 +1563,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
-integer :: i, j, k, l
-integer :: ii
-integer :: jp1
+integer :: i, j, k, l, ii, jp1
 real :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -1701,8 +1681,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
 real, intent(inout) :: a(nv), d(n), e(n), e2(n)
-integer :: i, j, k, l
-integer :: ii, iz, jk
+integer :: i, j, k, l, ii, iz, jk
 real :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -1817,8 +1796,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e2(n)
-integer :: i, j, l, m
-integer :: ii, l1, mml
+integer :: i, j, l, m, ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
 interface
    pure elemental function spmpar(i)
@@ -1963,8 +1941,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n)
-integer :: i, j, l, m
-integer :: ii, mml
+integer :: i, j, l, m, ii, mml
 real :: b, c, f, g, p, r, s, machep
 interface
    pure elemental function spmpar(i)
@@ -2104,9 +2081,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 real, intent(in) :: a(nm,n)
 real, intent(inout) :: d(n), e(n), z(nm,n)
-integer :: i, j, k, l
-integer :: ii
-integer :: jp1
+integer :: i, j, k, l, ii, jp1
 real :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -2248,9 +2223,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
-integer :: i, j, k, l, m
-integer :: ii, l1
-integer :: mml
+integer :: i, j, k, l, m, ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
 interface
    pure elemental function spmpar(i)
@@ -2433,9 +2406,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
-integer :: i, j, k, l, m
-integer :: ii
-integer :: mml
+integer :: i, j, k, l, m, ii, mml
 real :: b, c, f, g, p, r, s, machep
 interface
    pure elemental function spmpar(i)
@@ -2669,9 +2640,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
-integer :: i, j, k, l
-integer :: ii
-integer :: jp1
+integer :: i, j, k, l, ii, jp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -2789,8 +2758,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
 double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
-integer :: i, j, k, l
-integer :: ii, iz, jk
+integer :: i, j, k, l, ii, iz, jk
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -2906,8 +2874,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e2(n)
-integer :: i, j, l, m
-integer :: ii, l1, mml
+integer :: i, j, l, m, ii, l1, mml
 double precision :: b, c, f, g, h, p, r, s, machep
 interface
    pure elemental function dpmpar(i)
@@ -3052,9 +3019,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 double precision, intent(in) :: a(nm,n)
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
-integer :: i, j, k, l
-integer :: ii
-integer :: jp1
+integer :: i, j, k, l, ii, jp1
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -3197,9 +3162,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
-integer :: i, j, k, l, m
-integer :: ii, l1
-integer :: mml
+integer :: i, j, k, l, m, ii, l1, mml
 double precision :: b, c, f, g, h, p, r, s, machep
 interface
    pure elemental function dpmpar(i)
@@ -3514,9 +3477,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
-integer :: i, j, k, l, m
-integer :: jj
-integer :: iexc
+integer :: i, j, k, l, m, jj, iexc
 real :: c, f, g, r, s, b2, radix
 logical :: noconv
 interface
@@ -3711,9 +3672,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
-integer :: i, j, m
-integer :: ii, jj, la, mp
-integer :: kp1
+integer :: i, j, m, ii, jj, la, mp, kp1
 real :: f, g, h, fi, fr, scale
 !     real sqrt,cabs,abs
 !     complex cmplx
@@ -3849,10 +3808,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
-integer :: i, j, l
-integer :: en, ll
-integer :: its
-integer :: lp1, enm1
+integer :: i, j, l, en, ll, its, lp1, enm1
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
 interface
@@ -4093,8 +4049,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: zr(nm,m), zi(nm,m)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
 !
@@ -4181,11 +4136,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
    & zi(nm,n), ortr(igh), orti(igh)
-integer :: i, j, k, l, m
-integer :: en, ii, jj, ll
-integer :: nn
-integer :: ip1, its
-integer :: lp1, enm1, iend
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
 interface
@@ -4729,9 +4680,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
-integer :: i, j, k, l, m
-integer :: jj
-integer :: iexc
+integer :: i, j, k, l, m, jj, iexc
 double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
 interface
@@ -4926,9 +4875,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
    & orti(igh)
-integer :: i, j, m
-integer :: ii, jj, la, mp
-integer :: kp1
+integer :: i, j, m, ii, jj, la, mp, kp1
 double precision :: f, g, h, fi, fr, scale
 interface
    pure elemental function dcpabs(x,y)
@@ -5071,13 +5018,8 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n)
-integer :: i, j, l
-integer :: en, ll
-integer :: its
-integer :: lp1, enm1
-double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
-   & norm, machep
-double precision :: r2, w(2), z(2)
+integer :: i, j, l, en, ll, its, lp1, enm1
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 interface
    pure elemental function dcpabs(x,y)
       implicit none
@@ -5323,8 +5265,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: zr(nm,m), zi(nm,m)
-integer :: i, j, k
-integer :: ii
+integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
 !
@@ -5412,14 +5353,8 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
-integer :: i, j, k, l, m
-integer :: en, ii, jj, ll
-integer :: nn
-integer :: ip1, its
-integer :: lp1, enm1, iend
-double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
-   & norm, machep
-double precision :: r2, w(2), z(2)
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 interface
    pure elemental function dcpabs(x,y)
       implicit none
@@ -5994,19 +5929,9 @@ integer, intent(inout) :: kode
 integer, intent(in) :: klm2d
 integer, intent(in) :: nklmd
 double precision :: sum
-real :: z
-real :: sn, zu, zv, cuv
-real :: xmax, xmin
-real :: pivot
-real :: tpivot
-integer :: i, j
-integer :: ia, ii, in
-integer :: js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1
-integer :: iimn, iout
-integer :: klm1, klm2
-integer :: nklm, nkl1
-integer :: maxit
-integer :: iphase, kforce, iineg
+real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot
+integer :: i, j, ia, ii, in, js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1, iimn, iout, klm1, klm2, nklm, nkl1, maxit, iphase, &
+   & kforce, iineg
 dimension q(klm2d,n2d), x(n2d), res(klmd), &
    & cu(2,nklmd), iu(2,nklmd), s(klmd)
 !

@@ -13,16 +13,22 @@ from portable_intrinsics import transform as portable_intrinsics
 from procedure_purity import transform as apply_purity
 from sentence_case_comments import sentence_case
 from simplify_free_style import transform as simplify_style
+from coalesce_local_declarations import transform as coalesce_locals
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main():
+def baseline_source():
     baseline = format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))
     baseline = simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(sentence_case(baseline).text)))))
+    return baseline
+
+
+def main():
+    baseline = baseline_source()
     manifest = json.loads(MANIFEST.read_text())
     converted = transform(baseline, manifest)
-    if converted != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if coalesce_locals(converted) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Generic intrinsic regeneration differs from maintained source')
     with tempfile.TemporaryDirectory(prefix='nswc-generic-validation-') as work:
         before = compile_dump(baseline, work)
