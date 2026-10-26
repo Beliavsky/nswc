@@ -1542,7 +1542,7 @@ do 40 ii = 1,imax
 !               so that a(j).LE.a(j+ki) for j=1,...,n-ki
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -1552,6 +1552,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine ishell
@@ -1589,7 +1590,7 @@ do 40 ii = 1,imax
 !               so that a(j).LE.a(j+ki) for j=1,...,n-ki
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -1599,6 +1600,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine shell
@@ -1688,7 +1690,7 @@ do 40 ii = 1,imax
 !               so that a(j).LE.a(j+ki) for j=1,...,n-ki
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -1698,6 +1700,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine rsort
@@ -1840,7 +1843,7 @@ do 40 ii = 1,imax
 !               so that a(j).LE.a(j+ki) for j=1,...,n-ki
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -1850,6 +1853,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine dsort
@@ -1993,7 +1997,7 @@ do 40 ii = 1,imax
 !                 so that abs(a(j)) .LE. abs(a(j+ki))
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -2003,6 +2007,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine aord
@@ -2041,7 +2046,7 @@ do 40 ii = 1,imax
 !               so that dabs(a(j)) .LE. dabs(a(j+ki))
 !
    jmax = n - ki
-   do 31 j = 1,jmax
+   do j = 1,jmax
       l = j
       ll = j + ki
       s = a(ll)
@@ -2051,6 +2056,7 @@ do 40 ii = 1,imax
       l = l - ki
       if (l > 0) go to 30
 31    a(ll) = s
+   end do
 !
 40 i = i - 1
 end subroutine daord
@@ -2726,8 +2732,9 @@ go to 4
 !
 ! All permutations have been applied.  Unmark ip.
 !
-5 do 6 k = 1,nn
+5 do k = 1,nn
 6  ip(k) = -ip(k)
+end do
 end subroutine iorder
 
 pure subroutine rorder(a, ip, n)
@@ -2800,8 +2807,9 @@ go to 4
 !
 ! All permutations have been applied.  Unmark ip.
 !
-5 do 6 k = 1,nn
+5 do k = 1,nn
 6  ip(k) = -ip(k)
+end do
 end subroutine rorder
 
 pure subroutine dorder(a, ip, n)
@@ -2874,8 +2882,9 @@ go to 4
 !
 ! All permutations have been applied.  Unmark ip.
 !
-5 do 6 k = 1,nn
+5 do k = 1,nn
 6  ip(k) = -ip(k)
+end do
 end subroutine dorder
 
 pure elemental real function cbrt(x)
@@ -4654,7 +4663,7 @@ onep = 1.0 + tol
 onem = 0.5 + (0.5 - tol0)
 !
 ind = 0
-do 100 i = 1, nm1
+do i = 1, nm1
    hi = x(i + 1) - x(i)
    ki = y(i + 1) - y(i)
    if (hi == 0.0 .and. ki == 0.0) go to 100
@@ -4764,6 +4773,7 @@ do 100 i = 1, nm1
    go to 21
 !
 100 continue
+end do
 if (ind == 0) go to 200
 !
 if (num < 2) return
@@ -4847,12 +4857,13 @@ xm = x(m)
 !
 xmin = x1
 xmax = x(l)
-do 31 i = lmin,m
+do i = lmin,m
    if (x(i) > xmin) go to 30
    xmin = x(i)
    go to 31
 30 if (x(i) > xmax) xmax = x(i)
 31 continue
+end do
 !
 !                   Going along the ymin axis
 !
@@ -5214,8 +5225,9 @@ return
 !
 30 nm1 = n - 1
 a = x(1)*(y(2) - y(n)) + x(n)*(y(1) - y(nm1))
-do 31 i = 2, nm1
+do i = 2, nm1
 31 a = a + x(i)*(y(i + 1) - y(i - 1))
+end do
 parea = 0.5*a
 end function parea
 
@@ -5532,7 +5544,7 @@ end do
 maxe = vc(1)
 minu = vr(1)
 jr = 1
-do 100 i = 2,n
+do i = 2,n
    if (vc(i) - maxe) 100, 70, 80
 70 if (vr(i) >= minu) go to 100
    go to 90
@@ -5540,6 +5552,7 @@ do 100 i = 2,n
 90 minu = vr(i)
    jr = i
 100 continue
+end do
 k1 = -np1
 k = 1
 s(1) = jr
@@ -5622,7 +5635,7 @@ if (l1 > l2) go to 340
 dens = n**3
 j1 = 0
 j2 = 0
-do 310 j = l1,l2
+do j = l1,l2
    jl = ar(j)
    if (jl < 0) go to 310
    if (vr(jl) > 0) go to 260
@@ -5648,6 +5661,7 @@ do 310 j = l1,l2
    go to 310
 300 j1 = j
 310 continue
+end do
 if (j1 == 0) go to 340
 jl = ar(ipi)
 ar(ipi) = ar(j1)
@@ -5693,7 +5707,7 @@ k2 = -(k + 1)*np1
 i = s(k - 1)
 ! Backtracking for the arcs implied at level  k .
 iff = 0
-do 360 j = 1,n
+do j = 1,n
    if (subr(j) > k1) go to 360
    if (subr(j) < k2) go to 360
    ja = k1 - subr(j)
@@ -5701,6 +5715,7 @@ do 360 j = 1,n
    subr(j) = 0
    iff = 1
 360 continue
+end do
 if (iff == 1) go to 370
 ! No arc was implied at level  k .
 call bupd(ar, ac, pr, pc, vr, vc, i, k1, k2, n, m, np1)
@@ -5718,7 +5733,7 @@ go to 420
 370 do j = 1,n
    l1 = pr(j) + 1
    l2 = pr(j + 1)
-   do 400 l = l1,l2
+   do l = l1,l2
       jl = ar(l)
       if (jl > k1) go to 400
       if (jl < k2) go to 400
@@ -5733,16 +5748,18 @@ go to 420
 390   ac(ll) = j
       vc(jl) = vc(jl) + 1
 400   continue
+   end do
 end do
 420 k = k - 1
 go to 230
 !
 ! Restore the original vector  ar
 !
-430 do 431 j = 1,m
+430 do j = 1,m
    if (ar(j) > 0) go to 431
    ar(j) = -ar(j) + (ar(j)/np1)*np1
 431 continue
+end do
 !
 ! The algorithm is finished
 !
@@ -5821,12 +5838,13 @@ if (l < n) return
 k1 = -k*np1
 l1 = pr(i2) + 1
 l2 = pr(i2 + 1)
-do 60 l = l1,l2
+do l = l1,l2
    if (ar(l) < 0) go to 50
    if (ar(l) == i1) go to 70
    go to 60
 50 if (k1 - ar(l) == i1) go to 70
 60 continue
+end do
 ! No hamiltonian circuit can be determined.
 np = -1
 return
@@ -5858,7 +5876,7 @@ integer :: ia, j, j1, j2, l, l1, l2
 !
 j1 = p1(i1) + 1
 j2 = p1(i1 + 1)
-do 30 j = j1,j2
+do j = j1,j2
    if (a1(j) < 0) go to 30
    ia = a1(j)
    l1 = p2(ia) + 1
@@ -5870,6 +5888,7 @@ do 30 j = j1,j2
    a2(l) = k1 - a2(l)
    a1(j) = k1 - ia
 30 continue
+end do
 v1(i1) = 0
 end subroutine fupd
 
@@ -5886,7 +5905,7 @@ integer :: ia, l, l1, l2, ll, ll1, ll2
 !
 l1 = p1(ii) + 1
 l2 = p1(ii + 1)
-do 30 l = l1,l2
+do l = l1,l2
    if (a1(l) > k1) go to 30
    if (a1(l) < k2) go to 30
    ia = k1 - a1(l)
@@ -5900,6 +5919,7 @@ do 30 l = l1,l2
 20 a2(ll) = ii
    v2(ia) = v2(ia) + 1
 30 continue
+end do
 end subroutine bupd
 
 pure subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
@@ -5916,7 +5936,7 @@ integer :: iarc, j1, j2, jj, m1, m2, mm
 !
 m1 = p1(ib) + 1
 m2 = p1(ib + 1)
-do 40 mm = m1,m2
+do mm = m1,m2
    iarc = a1(mm)
    if (iarc < 0) go to 40
    if (v2(iarc) /= 1) go to 10
@@ -5933,6 +5953,7 @@ do 40 mm = m1,m2
    a1(mm) = k1 - iarc
    v1(ib) = v1(ib) - 1
 40 continue
+end do
 return
 50 ia = 0
 end subroutine iupd
@@ -5965,7 +5986,7 @@ integer :: j1, j2, l1, l2
 !
 j1 = pr(ia) + 1
 j2 = pr(ia + 1)
-do 20 jj = j1,j2
+do jj = j1,j2
    if (ar(jj) < 0) go to 20
    if (ar(jj) /= ib) go to 20
    l1 = pc(ib) + 1
@@ -5974,6 +5995,7 @@ do 20 jj = j1,j2
       if (ac(ll) == ia) go to 30
    end do
 20 continue
+end do
 ! Arc  (ia,ib)  is not in the graph.
 jj = 0
 return
@@ -8432,8 +8454,9 @@ go to 1000
 200 if (y >= 12.25e0) go to 300
 frac = 0.0e0
 !
-do 220 i = 1, 7
+do i = 1, 7
 220 frac = q2(i) / (p2(i) + y + frac)
+end do
 !
 daw = (p2(8) + frac) / x
 go to 1000
@@ -8443,8 +8466,9 @@ go to 1000
 300 if (y >= 25.0e0) go to 400
 frac = 0.0e0
 !
-do 320 i = 1, 7
+do i = 1, 7
 320 frac = q3(i) / (p3(i) + y + frac)
+end do
 !
 daw = (p3(8) + frac) / x
 go to 1000
@@ -8454,8 +8478,9 @@ go to 1000
 400 w2 = 1.0e0 / x / x
 frac = 0.0e0
 !
-do 420 i = 1, 6
+do i = 1, 6
 420 frac = q4(i) / (p4(i) + y + frac)
+end do
 !
 frac = p4(7) + frac
 daw = (0.5e0 + 0.5e0 * w2 * frac) / x
@@ -9536,8 +9561,9 @@ go to 410
 !     ---------- 8.0 .LT. X .LT. 12.0 ----------
 160 frac = 0.0e0
 !
-do 180 i = 1, 7
+do i = 1, 7
 180 frac = q2(i) / (p2(i) + x + frac)
+end do
 !
 ei = (p2(8) + frac) / x
 if (int == 3) go to 410
@@ -9547,8 +9573,9 @@ go to 410
 200 if (x >= 24.e0) go to 240
 frac = 0.0e0
 !
-do 220 i = 1, 7
+do i = 1, 7
 220 frac = q3(i) / (p3(i) + x + frac)
+end do
 !
 ei = (p3(8) + frac) / x
 if (int == 3) go to 410
@@ -9560,8 +9587,9 @@ if ((x > xmax) .and. (int < 3)) go to 620
 y = 1.0e0 / x
 frac = 0.0e0
 !
-do 260 i = 1, 7
+do i = 1, 7
 260 frac = q4(i) / (p4(i) + x + frac)
+end do
 !
 frac = p4(8) + frac
 ei = y + y * y * frac

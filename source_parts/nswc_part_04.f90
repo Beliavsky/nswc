@@ -728,7 +728,7 @@ do 10 i = 1,n
    hi(i) = xni*pi(i)/dn
 10 continue
 !
-do 50 jj = 1,l1
+do jj = 1,l1
    if (dcpabs(hr(n),hi(n)) <= 10.d0*eta*dcpabs(pr(n),pi(n))) &
       & go to 30
    call cdivid(-pr(nn),-pi(nn),hr(n),hi(n),tr,ti)
@@ -753,6 +753,7 @@ do 50 jj = 1,l1
    hr(1) = 0.d0
    hi(1) = 0.d0
 50 continue
+end do
 end subroutine noshft
 
 pure subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
@@ -1025,7 +1026,7 @@ n = nn - 1
 !
 !     Main loop for stage 3.
 !
-do 60 i = 1,l3
+do i = 1,l3
 !
 !     Evaluate P at S and test for convergence.
 !
@@ -1081,6 +1082,7 @@ do 60 i = 1,l3
    sr = sr + tr
    si = si + ti
 60 continue
+end do
 end subroutine vrshft
 
 pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
@@ -1346,11 +1348,11 @@ do l = 1,n
 end do
 !
 30 shrunk = .false.
-do 50 j = 1,n
+do j = 1,n
    if (abserr(j) == 0.0) go to 50
    p = 1.0
    m = n
-   do 40 k = 1,n
+   do k = 1,n
       if (k == j) go to 40
       z = w(j) - w(k)
       dist = cpabs(real(z),aimag(z))
@@ -1359,14 +1361,16 @@ do 50 j = 1,n
       p = p*cert
       m = m - 1
 40    continue
+   end do
    olderr = abserr(j)
    abserr(j) = relerr(j)/p
    if (m > 1) abserr(j) = abserr(j)**(1.0/float(m))
    if (abserr(j) < olderr*0.99) shrunk = .true.
 50 continue
+end do
 if (shrunk) go to 30
 !
-do 80 j = 1,n
+do j = 1,n
    klust(j) = 1
    wrad = abserr(j)
    wnrm = cpabs(real(w(j)),aimag(w(j)))
@@ -1378,17 +1382,19 @@ do 80 j = 1,n
    go to 80
 70 r = wrad/wnrm
 80 relerr(j) = r
+end do
 !
 nm1 = n - 1
 do j = 1,nm1
    jp1 = j + 1
-   do 90 k = jp1,n
+   do k = jp1,n
       z = w(j) - w(k)
       dist = cpabs(real(z),aimag(z))
       if (dist > (abserr(j) + abserr(k))) go to 90
       klust(j) = klust(j) + 1
       klust(k) = klust(k) + 1
 90    continue
+   end do
 end do
 ker = 0
 return
@@ -1512,11 +1518,11 @@ do l = 1,n
 end do
 !
 30 shrunk = .false.
-do 50 j = 1,n
+do j = 1,n
    if (abserr(j) == 0.0) go to 50
    p = 1.0
    m = n
-   do 40 k = 1,n
+   do k = 1,n
       if (k == j) go to 40
       z = w(j) - w(k)
       dist = cpabs(real(z),aimag(z))
@@ -1525,14 +1531,16 @@ do 50 j = 1,n
       p = p*cert
       m = m - 1
 40    continue
+   end do
    olderr = abserr(j)
    abserr(j) = relerr(j)/p
    if (m > 1) abserr(j) = abserr(j)**(1.0/float(m))
    if (abserr(j) < olderr*0.99) shrunk = .true.
 50 continue
+end do
 if (shrunk) go to 30
 !
-do 80 j = 1,n
+do j = 1,n
    klust(j) = 1
    wrad = abserr(j)
    wnrm = cpabs(real(w(j)),aimag(w(j)))
@@ -1544,17 +1552,19 @@ do 80 j = 1,n
    go to 80
 70 r = wrad/wnrm
 80 relerr(j) = r
+end do
 !
 nm1 = n - 1
 do j = 1,nm1
    jp1 = j + 1
-   do 90 k = jp1,n
+   do k = jp1,n
       z = w(j) - w(k)
       dist = cpabs(real(z),aimag(z))
       if (dist > (abserr(j) + abserr(k))) go to 90
       klust(j) = klust(j) + 1
       klust(k) = klust(k) + 1
 90    continue
+   end do
 end do
 ker = 0
 return
@@ -3635,11 +3645,12 @@ return
 !        Code for increment equal to 1
 !
 20 smax = abs(sx(1))
-do 30 i = 2,n
+do i = 2,n
    if (abs(sx(i)) <= smax) go to 30
    isamax = i
    smax = abs(sx(i))
 30 continue
+end do
 end function isamax
 
 pure integer function idamax(n,dx,incx)
@@ -3676,11 +3687,12 @@ return
 !        Code for increment equal to 1
 !
 20 dmax = abs(dx(1))
-do 30 i = 2,n
+do i = 2,n
    if (abs(dx(i)) <= dmax) go to 30
    idamax = i
    dmax = abs(dx(i))
 30 continue
+end do
 end function idamax
 
 integer function icamax(n,cx,incx)
@@ -3720,11 +3732,12 @@ return
 !        Code for increment equal to 1
 !
 20 smax = cabs1(cx(1))
-do 30 i = 2,n
+do i = 2,n
    if (cabs1(cx(i)) <= smax) go to 30
    icamax = i
    smax = cabs1(cx(i))
 30 continue
+end do
 end function icamax
 
 pure subroutine mcvfs(a,ka,n,b)
@@ -3736,9 +3749,10 @@ integer :: i, j, l
 !
 l = 0
 do j = 1,n
-   do 10 i = 1,j
+   do i = 1,j
       l = l + 1
 10    b(l) = a(i,j)
+   end do
 end do
 end subroutine mcvfs
 
@@ -3751,9 +3765,10 @@ integer :: i, j, l
 !
 l = 0
 do j = 1,n
-   do 10 i = 1,j
+   do i = 1,j
       l = l + 1
 10    b(l) = a(i,j)
+   end do
 end do
 end subroutine dmcvfs
 
@@ -3769,18 +3784,21 @@ if (n < 2) return
 l = (n*(n + 1))/2
 !
 j = n
-do 11 jj = 2,n
+do jj = 2,n
    i = j
-   do 10 ii = 1,j
+   do ii = 1,j
       a(i,j) = b(l)
       i = i - 1
 10    l = l - 1
+   end do
 11 j = j - 1
+end do
 !
 do i = 2,n
    im1 = i - 1
-   do 20 j = 1,im1
+   do j = 1,im1
 20    a(i,j) = a(j,i)
+   end do
 end do
 end subroutine mcvsf
 
@@ -3796,18 +3814,21 @@ if (n < 2) return
 l = (n*(n + 1))/2
 !
 j = n
-do 11 jj = 2,n
+do jj = 2,n
    i = j
-   do 10 ii = 1,j
+   do ii = 1,j
       a(i,j) = b(l)
       i = i - 1
 10    l = l - 1
+   end do
 11 j = j - 1
+end do
 !
 do i = 2,n
    im1 = i - 1
-   do 20 j = 1,im1
+   do j = 1,im1
 20    a(i,j) = a(j,i)
+   end do
 end do
 end subroutine dmcvsf
 
@@ -3819,8 +3840,9 @@ double precision, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = a(i,j)
+   end do
 end do
 end subroutine mcvrd
 
@@ -3832,8 +3854,9 @@ real, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = a(i,j)
+   end do
 end do
 end subroutine mcvdr
 
@@ -3845,8 +3868,9 @@ complex, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = cmplx(a(i,j),0.0)
+   end do
 end do
 end subroutine mcvrc
 
@@ -3858,8 +3882,9 @@ real, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = real(a(i,j))
+   end do
 end do
 end subroutine cmreal
 
@@ -3871,8 +3896,9 @@ real, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = aimag(a(i,j))
+   end do
 end do
 end subroutine cmimag
 
@@ -3884,8 +3910,9 @@ real, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = a(i,j)
+   end do
 end do
 end subroutine mcopy
 
@@ -3897,8 +3924,9 @@ real, intent(inout) :: b(*)
 integer :: k, l
 !
 l = (n*(n + 1))/2
-do 10 k = 1,l
+do k = 1,l
 10 b(k) = a(k)
+end do
 end subroutine smcopy
 
 pure subroutine dmcopy(m,n,a,ka,b,kb)
@@ -3909,8 +3937,9 @@ double precision, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = a(i,j)
+   end do
 end do
 end subroutine dmcopy
 
@@ -3922,8 +3951,9 @@ complex, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = a(i,j)
+   end do
 end do
 end subroutine cmcopy
 
@@ -3935,8 +3965,9 @@ complex, intent(inout) :: b(kb,n)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(i,j) = conjg(a(i,j))
+   end do
 end do
 end subroutine cmconj
 
@@ -3948,8 +3979,9 @@ real, intent(inout) :: b(kb,m)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(j,i) = a(i,j)
+   end do
 end do
 end subroutine tpose
 
@@ -3961,8 +3993,9 @@ double precision, intent(inout) :: b(kb,m)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(j,i) = a(i,j)
+   end do
 end do
 end subroutine dtpose
 
@@ -3974,8 +4007,9 @@ complex, intent(inout) :: b(kb,m)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(j,i) = a(i,j)
+   end do
 end do
 end subroutine ctpose
 
@@ -4040,10 +4074,11 @@ mhalf = m/2
 ! and by no other divisor of M is the Euler totient
 ! function, phi(M/idiv).
 ncount = m/idiv
-do 60 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 60
    ncount = (ncount/ifact(ip))*(ifact(ip) - 1)
 60 continue
+end do
 if (nwork <= 0) go to 75
 do i = 1,nwork
    moved(i) = 0
@@ -4057,10 +4092,11 @@ ndim = max(ndim,istart)
 if (istart > nwork) go to 90
 if (moved(istart) /= 0) go to 160
 90 isoid = istart/idiv
-do 100 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 100
    if (mod(isoid,ifact(ip)) == 0) go to 160
 100 continue
+end do
 if (istart <= nwork) go to 120
 itest = istart
 110 itest = mod(n*itest,m)
@@ -4163,10 +4199,11 @@ mhalf = m/2
 ! and by no other divisor of M is the Euler totient
 ! function, phi(M/idiv).
 ncount = m/idiv
-do 60 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 60
    ncount = (ncount/ifact(ip))*(ifact(ip) - 1)
 60 continue
+end do
 if (nwork <= 0) go to 75
 do i = 1,nwork
    moved(i) = 0
@@ -4180,10 +4217,11 @@ ndim = max(ndim,istart)
 if (istart > nwork) go to 90
 if (moved(istart) /= 0) go to 160
 90 isoid = istart/idiv
-do 100 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 100
    if (mod(isoid,ifact(ip)) == 0) go to 160
 100 continue
+end do
 if (istart <= nwork) go to 120
 itest = istart
 110 itest = mod(n*itest,m)
@@ -4286,10 +4324,11 @@ mhalf = m/2
 ! and by no other divisor of M is the Euler totient
 ! function, phi(M/idiv).
 ncount = m/idiv
-do 60 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 60
    ncount = (ncount/ifact(ip))*(ifact(ip) - 1)
 60 continue
+end do
 if (nwork <= 0) go to 75
 do i = 1,nwork
    moved(i) = 0
@@ -4303,10 +4342,11 @@ ndim = max(ndim,istart)
 if (istart > nwork) go to 90
 if (moved(istart) /= 0) go to 160
 90 isoid = istart/idiv
-do 100 ip = 1,npower
+do ip = 1,npower
    if (iexp(ip) == nexp(ip)) go to 100
    if (mod(isoid,ifact(ip)) == 0) go to 160
 100 continue
+end do
 if (istart <= nwork) go to 120
 itest = istart
 110 itest = mod(n*itest,m)
@@ -4400,8 +4440,9 @@ complex, intent(inout) :: b(kb,m)
 integer :: i, j
 !
 do j = 1,n
-   do 10 i = 1,m
+   do i = 1,m
 10    b(j,i) = conjg(a(i,j))
+   end do
 end do
 end subroutine cmadj
 
@@ -4499,8 +4540,9 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
 integer :: k, m
 m = (n*(n + 1))/2
-do 10 k = 1,m
+do k = 1,m
 10 c(k) = a(k) + b(k)
+end do
 end subroutine smadd
 
 pure subroutine msubt(m, n, a, ka, b, kb, c, kc)
@@ -4561,8 +4603,9 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
 integer :: k, m
 m = (n*(n + 1))/2
-do 10 k = 1,m
+do k = 1,m
 10 c(k) = a(k) - b(k)
+end do
 end subroutine smsubt
 
 pure subroutine mtms(m, n, l, a, ka, b, kb, c, kc)
@@ -4649,11 +4692,13 @@ if (rloc(c,a)) go to 20
 if (rloc(c,b)) go to 30
 !
 do j = 1,l
-   do 11 i = 1,m
+   do i = 1,m
       w = 0.d0
-      do 10 k = 1,n
+      do k = 1,n
 10       w = w + dble(a(i,k))*dble(b(k,j))
+      end do
 11    c(i,j) = w
+   end do
 end do
 return
 !
@@ -4662,13 +4707,16 @@ return
 !
 20 a(1,1) = save
 do i = 1,m
-   do 22 j = 1,l
+   do j = 1,l
       w = 0.d0
-      do 21 k = 1,n
+      do k = 1,n
 21       w = w + dble(a(i,k))*dble(b(k,j))
+      end do
 22    row(j) = w
-   do 23 j = 1,l
+   end do
+   do j = 1,l
 23    a(i,j) = row(j)
+   end do
 end do
 return
 !
@@ -4677,13 +4725,16 @@ return
 !
 30 b(1,1) = save
 do j = 1,l
-   do 32 i = 1,m
+   do i = 1,m
       w = 0.d0
-      do 31 k = 1,n
+      do k = 1,n
 31       w = w + dble(a(i,k))*dble(b(k,j))
+      end do
 32    row(i) = w
-   do 33 i = 1,m
+   end do
+   do i = 1,m
 33    b(i,j) = row(i)
+   end do
 end do
 end subroutine mprod
 
@@ -4748,11 +4799,13 @@ if (dloc(c,a)) go to 20
 if (dloc(c,b)) go to 30
 !
 do j = 1,l
-   do 11 i = 1,m
+   do i = 1,m
       w = 0.d0
-      do 10 k = 1,n
+      do k = 1,n
 10       w = w + a(i,k)*b(k,j)
+      end do
 11    c(i,j) = w
+   end do
 end do
 return
 !
@@ -4761,13 +4814,16 @@ return
 !
 20 a(1,1) = w
 do i = 1,m
-   do 22 j = 1,l
+   do j = 1,l
       w = 0.d0
-      do 21 k = 1,n
+      do k = 1,n
 21       w = w + a(i,k)*b(k,j)
+      end do
 22    row(j) = w
-   do 23 j = 1,l
+   end do
+   do j = 1,l
 23    a(i,j) = row(j)
+   end do
 end do
 return
 !
@@ -4776,13 +4832,16 @@ return
 !
 30 b(1,1) = w
 do j = 1,l
-   do 32 i = 1,m
+   do i = 1,m
       w = 0.d0
-      do 31 k = 1,n
+      do k = 1,n
 31       w = w + a(i,k)*b(k,j)
+      end do
 32    row(i) = w
-   do 33 i = 1,m
+   end do
+   do i = 1,m
 33    b(i,j) = row(i)
+   end do
 end do
 end subroutine dmprod
 
@@ -4846,11 +4905,13 @@ if (cloc(c,a)) go to 20
 if (cloc(c,b)) go to 30
 !
 do j = 1,l
-   do 11 i = 1,m
+   do i = 1,m
       w = (0.0,0.0)
-      do 10 k = 1,n
+      do k = 1,n
 10       w = w + a(i,k)*b(k,j)
+      end do
 11    c(i,j) = w
+   end do
 end do
 return
 !
@@ -4859,13 +4920,16 @@ return
 !
 20 a(1,1) = w
 do i = 1,m
-   do 22 j = 1,l
+   do j = 1,l
       w = (0.0,0.0)
-      do 21 k = 1,n
+      do k = 1,n
 21       w = w + a(i,k)*b(k,j)
+      end do
 22    row(j) = w
-   do 23 j = 1,l
+   end do
+   do j = 1,l
 23    a(i,j) = row(j)
+   end do
 end do
 return
 !
@@ -4874,13 +4938,16 @@ return
 !
 30 b(1,1) = w
 do j = 1,l
-   do 32 i = 1,m
+   do i = 1,m
       w = (0.0,0.0)
-      do 31 k = 1,n
+      do k = 1,n
 31       w = w + a(i,k)*b(k,j)
+      end do
 32    row(i) = w
-   do 33 i = 1,m
+   end do
+   do i = 1,m
 33    b(i,j) = row(i)
+   end do
 end do
 end subroutine cmprod
 
@@ -4940,18 +5007,20 @@ y(1) = a(1)*x(1)
 if (n == 1) return
 !
 l = 1
-do 20 k = 2,n
+do k = 2,n
    km1 = k - 1
    xk = x(k)
    yk = 0.0
 !
-   do 10 i = 1,km1
+   do i = 1,km1
       l = l + 1
       y(i) = y(i) + a(l)*xk
 10    yk = yk + a(l)*x(i)
+   end do
 !
    l = l + 1
 20 y(k) = yk + a(l)*xk
+end do
 end subroutine svprd
 
 pure subroutine dsvprd(a,n,x,y)
@@ -4965,18 +5034,20 @@ y(1) = a(1)*x(1)
 if (n == 1) return
 !
 l = 1
-do 20 k = 2,n
+do k = 2,n
    km1 = k - 1
    xk = x(k)
    yk = 0.d0
 !
-   do 10 i = 1,km1
+   do i = 1,km1
       l = l + 1
       y(i) = y(i) + a(l)*xk
 10    yk = yk + a(l)*x(i)
+   end do
 !
    l = l + 1
 20 y(k) = yk + a(l)*xk
+end do
 end subroutine dsvprd
 
 pure subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
@@ -4987,11 +5058,13 @@ real, intent(inout) :: c(kc,l)
 integer :: i, j, k
 double precision :: s
 do j = 1,l
-   do 11 i = 1,n
+   do i = 1,n
       s = 0.d0
-      do 10 k = 1,m
+      do k = 1,m
 10       s = s + dble(a(k,i))*dble(b(k,j))
+      end do
 11    c(i,j) = s
+   end do
 end do
 end subroutine tmprod
 
@@ -5004,12 +5077,14 @@ integer :: i, ii, j, k
 double precision :: s
 ii = 1
 do i = 1,n
-   do 11 j = 1,i
+   do j = 1,i
       s = 0.d0
-      do 10 k = 1,m
+      do k = 1,m
 10       s = s + dble(a(k,i))*dble(a(k,j))
+      end do
       b(ii) = s
 11    ii = ii + 1
+   end do
 end do
 end subroutine smprod
 
@@ -5032,9 +5107,10 @@ do s = 1,n
 !
       i = 0
       do r = 1,m
-         do 10 ii = 1,k
+         do ii = 1,k
             i = i + 1
 10          c(i,j) = a(r,s)*b(ii,jj)
+         end do
       end do
 !
    end do
@@ -5060,9 +5136,10 @@ do s = 1,n
 !
       i = 0
       do r = 1,m
-         do 10 ii = 1,k
+         do ii = 1,k
             i = i + 1
 10          c(i,j) = a(r,s)*b(ii,jj)
+         end do
       end do
 !
    end do
@@ -5088,9 +5165,10 @@ do s = 1,n
 !
       i = 0
       do r = 1,m
-         do 10 ii = 1,k
+         do ii = 1,k
             i = i + 1
 10          c(i,j) = a(r,s)*b(ii,jj)
+         end do
       end do
 !
    end do
@@ -5336,12 +5414,13 @@ do k = 1,nm1
 !
    p = abs(a(k,k))
    l = k
-   do 10 i = kp1,n
+   do i = kp1,n
       t = abs(a(i,k))
       if (p >= t) go to 10
       p = t
       l = i
 10    continue
+   end do
 !
    p = a(l,k)
    d = p*d
@@ -5352,32 +5431,36 @@ do k = 1,nm1
 !
 !                  Interchanging rows k and l
 !
-   do 20 j = 1,n
+   do j = 1,n
       t = a(k,j)
       a(k,j) = a(l,j)
 20    a(l,j) = t
+   end do
 !
    if (m <= 0) go to 40
    kj = k
    lj = l
-   do 30 j = 1,m
+   do j = 1,m
       t = b(kj)
       b(kj) = b(lj)
       b(lj) = t
       kj = kj + kb
 30    lj = lj + kb
+   end do
 !
 !                  Compute the k-TH row of U
 !
 40 if (k > 1) go to 50
-   do 41 j = kp1,n
+   do j = kp1,n
 41    a(k,j) = a(k,j)/p
+   end do
    go to 60
 !
 50 do j = kp1,n
       dsum = a(k,j)
-      do 51 l = 1,km1
+      do l = 1,km1
 51       dsum = dsum - dble(a(k,l))*dble(a(l,j))
+      end do
       a(k,j) = sngl(dsum)/p
    end do
 !
@@ -5385,8 +5468,9 @@ do k = 1,nm1
 !
 60 do i = kp1,n
       dsum = a(i,kp1)
-      do 61 l = 1,k
+      do l = 1,k
 61       dsum = dsum - dble(a(i,l))*dble(a(l,kp1))
+      end do
       a(i,kp1) = dsum
    end do
 !
@@ -5405,15 +5489,17 @@ maxb = kb*m
 do onej = 1,maxb,kb
    kj = onej
    b(kj) = b(kj)/a(1,1)
-   do 101 k = 2,n
+   do k = 2,n
       kj = kj + 1
       dsum = b(kj)
       km1 = k - 1
       lj = onej
-      do 100 l = 1,km1
+      do l = 1,km1
          dsum = dsum - dble(a(k,l))*dble(b(lj))
 100      lj = lj + 1
+      end do
 101   b(kj) = sngl(dsum)/a(k,k)
+   end do
 end do
 !
 !                 Solving the equation UX = Y
@@ -5426,9 +5512,10 @@ do nj = n,maxb,kb
       kj = kj - 1
       dsum = b(kj)
       kp1 = k + 1
-      do 110 l = kp1,n
+      do l = kp1,n
          dsum = dsum - dble(a(k,l))*dble(b(lj))
 110      lj = lj + 1
+      end do
       b(kj) = dsum
    end do
 end do
@@ -5439,12 +5526,14 @@ end do
 do j = 1,nm1
    a(j,j) = 1.0/a(j,j)
    jp1 = j + 1
-   do 131 i = jp1,n
+   do i = jp1,n
       dsum = 0.d0
       im1 = i - 1
-      do 130 l = j,im1
+      do l = j,im1
 130      dsum = dsum + dble(a(i,l))*dble(a(l,j))
+      end do
 131   a(i,j) = -sngl(dsum)/a(i,i)
+   end do
 end do
 a(n,n) = 1.0/a(n,n)
 !
@@ -5453,29 +5542,33 @@ a(n,n) = 1.0/a(n,n)
 do nmk = 1,nm1
    k = n - nmk
    kp1 = k + 1
-   do 140 j = kp1,n
+   do j = kp1,n
       temp(j) = a(k,j)
 140   a(k,j) = 0.0
+   end do
 !
    do j = 1,n
       dsum = a(k,j)
-      do 150 l = kp1,n
+      do l = kp1,n
 150      dsum = dsum - dble(temp(l))*dble(a(l,j))
+      end do
       a(k,j) = dsum
    end do
 end do
 !
 !                    Column interchanges
 !
-do 161 nmj = 1,nm1
+do nmj = 1,nm1
    j = n - nmj
    k = index(j)
    if (j == k) go to 161
-   do 160 i = 1,n
+   do i = 1,n
       t = a(i,j)
       a(i,j) = a(i,k)
 160   a(i,k) = t
+   end do
 161 continue
+end do
 return
 !
 !                      Case when n = 1
@@ -5486,8 +5579,9 @@ if (mo == 0) a(1,1) = 1.0/d
 !
 if (m <= 0) return
 maxb = kb*m
-do 210 kj = 1,maxb,kb
+do kj = 1,maxb,kb
 210 b(kj) = b(kj)/d
+end do
 end subroutine crout
 
 pure subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
@@ -5540,12 +5634,13 @@ do k = 1,nm1
 !
    p = abs(a(k,k))
    l = k
-   do 10 i = kp1,n
+   do i = kp1,n
       t = abs(a(i,k))
       if (p >= t) go to 10
       p = t
       l = i
 10    continue
+   end do
    if (p == 0.0) go to 300
 !
    p = a(l,k)
@@ -5554,32 +5649,36 @@ do k = 1,nm1
 !
 !                  Interchanging rows k and l
 !
-   do 20 j = 1,n
+   do j = 1,n
       t = a(k,j)
       a(k,j) = a(l,j)
 20    a(l,j) = t
+   end do
 !
    if (m <= 0) go to 40
    kj = k
    lj = l
-   do 30 j = 1,m
+   do j = 1,m
       t = b(kj)
       b(kj) = b(lj)
       b(lj) = t
       kj = kj + kb
 30    lj = lj + kb
+   end do
 !
 !                  Compute the k-TH row of U
 !
 40 if (k > 1) go to 50
-   do 41 j = kp1,n
+   do j = kp1,n
 41    a(k,j) = a(k,j)/p
+   end do
    go to 60
 !
 50 do j = kp1,n
       dsum = a(k,j)
-      do 51 l = 1,km1
+      do l = 1,km1
 51       dsum = dsum - dble(a(k,l))*dble(a(l,j))
+      end do
       a(k,j) = sngl(dsum)/p
    end do
 !
@@ -5587,8 +5686,9 @@ do k = 1,nm1
 !
 60 do i = kp1,n
       dsum = a(i,kp1)
-      do 61 l = 1,k
+      do l = 1,k
 61       dsum = dsum - dble(a(i,l))*dble(a(l,kp1))
+      end do
       a(i,kp1) = dsum
    end do
 !
@@ -5606,15 +5706,17 @@ maxb = kb*m
 do onej = 1,maxb,kb
    kj = onej
    b(kj) = b(kj)/a(1,1)
-   do 101 k = 2,n
+   do k = 2,n
       kj = kj + 1
       dsum = b(kj)
       km1 = k - 1
       lj = onej
-      do 100 l = 1,km1
+      do l = 1,km1
          dsum = dsum - dble(a(k,l))*dble(b(lj))
 100      lj = lj + 1
+      end do
 101   b(kj) = sngl(dsum)/a(k,k)
+   end do
 end do
 !
 !                 Solving the equation UX = Y
@@ -5627,9 +5729,10 @@ do nj = n,maxb,kb
       kj = kj - 1
       dsum = b(kj)
       kp1 = k + 1
-      do 110 l = kp1,n
+      do l = kp1,n
          dsum = dsum - dble(a(k,l))*dble(b(lj))
 110      lj = lj + 1
+      end do
       b(kj) = dsum
    end do
 end do
@@ -5640,12 +5743,14 @@ end do
 do j = 1,nm1
    a(j,j) = 1.0/a(j,j)
    jp1 = j + 1
-   do 131 i = jp1,n
+   do i = jp1,n
       dsum = 0.d0
       im1 = i - 1
-      do 130 l = j,im1
+      do l = j,im1
 130      dsum = dsum + dble(a(i,l))*dble(a(l,j))
+      end do
 131   a(i,j) = -sngl(dsum)/a(i,i)
+   end do
 end do
 a(n,n) = 1.0/a(n,n)
 !
@@ -5654,29 +5759,33 @@ a(n,n) = 1.0/a(n,n)
 do nmk = 1,nm1
    k = n - nmk
    kp1 = k + 1
-   do 140 j = kp1,n
+   do j = kp1,n
       temp(j) = a(k,j)
 140   a(k,j) = 0.0
+   end do
 !
    do j = 1,n
       dsum = a(k,j)
-      do 150 l = kp1,n
+      do l = kp1,n
 150      dsum = dsum - dble(temp(l))*dble(a(l,j))
+      end do
       a(k,j) = dsum
    end do
 end do
 !
 !                    Column interchanges
 !
-do 161 nmj = 1,nm1
+do nmj = 1,nm1
    j = n - nmj
    k = index(j)
    if (j == k) go to 161
-   do 160 i = 1,n
+   do i = 1,n
       t = a(i,j)
       a(i,j) = a(i,k)
 160   a(i,k) = t
+   end do
 161 continue
+end do
 return
 !
 !                      Case when n = 1
@@ -5687,8 +5796,9 @@ if (mo == 0) a(1,1) = 1.0/d
 !
 if (m <= 0) return
 maxb = kb*m
-do 210 kj = 1,maxb,kb
+do kj = 1,maxb,kb
 210 b(kj) = b(kj)/d
+end do
 return
 !
 !                  k-TH pivot element is 0
@@ -5743,8 +5853,9 @@ do k = 1,nm1
    kp1 = k + 1
 !  Find the pivot in column k.  search rows k to n. --------------------
    m = k
-   do 10 i = kp1,n
+   do i = kp1,n
 10    if (abs(a(i,k)) > abs(a(m,k))) m = i
+   end do
    ip(k) = m
 !  Interchange elements in rows k and m. -------------------------------
    t = a(m,k)
@@ -5755,17 +5866,20 @@ do k = 1,nm1
 20 if (t == 0.0) go to 80
 !  Store multipliers in a(i,k), i = k+1,...,n. -------------------------
    t = 1.0/t
-   do 30 i = kp1,n
+   do i = kp1,n
 30    a(i,k) = -a(i,k)*t
+   end do
 !  Apply multipliers to other columns of A. ----------------------------
-   do 50 j = kp1,n
+   do j = kp1,n
       t = a(m,j)
       a(m,j) = a(k,j)
       a(k,j) = t
       if (t == 0.0) go to 50
-      do 40 i = kp1,n
+      do i = kp1,n
 40       a(i,j) = a(i,j) + a(i,k)*t
+      end do
 50    continue
+   end do
 end do
 70 k = n
 if (a(n,n) == 0.0) go to 80
@@ -5805,8 +5919,9 @@ do k = 1,nm1
    t = b(m)
    b(m) = b(k)
    b(k) = t
-   do 10 i = kp1,n
+   do i = kp1,n
 10    b(i) = b(i) + a(i,k)*t
+   end do
 end do
 !  Back solve. ---------------------------------------------------------
 do kb = 1,nm1
@@ -5814,8 +5929,9 @@ do kb = 1,nm1
    k = km1 + 1
    b(k) = b(k)/a(k,k)
    t = -b(k)
-   do 30 i = 1,km1
+   do i = 1,km1
 30    b(i) = b(i) + a(i,k)*t
+   end do
 end do
 50 b(1) = b(1)/a(1,1)
 end subroutine sol
@@ -5858,7 +5974,7 @@ do k = 1,n
 !
 !     Reduce the non-pivot rows
 !
-40 do 70 j = 1,n
+40 do j = 1,n
       if (j == k) go to 70
       t = a(j,k)
       a(j,k) = 0.0
@@ -5873,6 +5989,7 @@ do k = 1,n
          kl = kl + kb
       end do
 70    continue
+   end do
 !
 end do
 end subroutine npivot
@@ -5901,12 +6018,13 @@ do j = 1,nm1
 !     Search for the j-TH pivot element
 !
    p = 0.0
-   do 10 i = j,n
+   do i = j,n
       t = abs(a(i,j))
       if (t <= p) go to 10
       p = t
       l = i
 10    continue
+   end do
    if (p == 0.0) go to 210
    if (j == l) go to 40
 !
@@ -5929,35 +6047,41 @@ do j = 1,nm1
    jp1 = j + 1
    do i = jp1,n
       t = a(i,j)/p
-      do 50 k = jp1,n
+      do k = jp1,n
 50       a(i,k) = a(i,k) - t*a(j,k)
-      do 60 k = 1,m
+      end do
+      do k = 1,m
 60       b(i,k) = b(i,k) - t*b(j,k)
+      end do
    end do
 end do
 if (a(n,n) == 0.0) go to 220
 !
 !     Backsolve the triangular set of equations
 !
-do 100 j = 1,m
+do j = 1,m
 100 b(n,j) = b(n,j)/a(n,n)
+end do
 !
 do l = 1,nm1
    i = n - l
    ip1 = i + 1
-   do 120 j = 1,m
+   do j = 1,m
       sum = b(i,j)
-      do 110 k = ip1,n
+      do k = ip1,n
 110      sum = sum - a(i,k)*b(k,j)
+      end do
 120   b(i,j) = sum/a(i,i)
+   end do
 end do
 return
 !
 !     Case when n = 1
 !
 140 if (a(1,1) == 0.0) go to 200
-do 150 j = 1,m
+do j = 1,m
 150 b(1,j) = b(1,j)/a(1,1)
+end do
 return
 !
 !     Error return
@@ -5993,12 +6117,13 @@ do k = 1,nm1
 !     Search for the k-TH pivot element
 !
    p = 0.d0
-   do 10 i = k,n
+   do i = k,n
       t = abs(a(i,k))
       if (p >= t) go to 10
       p = t
       l = i
 10    continue
+   end do
    if (p == 0.d0) go to 210
    if (k == l) go to 40
 !
@@ -6021,34 +6146,40 @@ do k = 1,nm1
    kp1 = k + 1
    do i = kp1,n
       t = a(i,k)/p
-      do 50 j = kp1,n
+      do j = kp1,n
 50       a(i,j) = a(i,j) - t*a(k,j)
-      do 60 j = 1,m
+      end do
+      do j = 1,m
 60       b(i,j) = b(i,j) - t*b(k,j)
+      end do
    end do
 end do
 if (a(n,n) == 0.d0) go to 220
 !
 !     Backsolve the triangular set of equations
 !
-do 120 j = 1,m
+do j = 1,m
    k = n
    km1 = nm1
-   do 110 l = 2,n
+   do l = 2,n
       b(k,j) = b(k,j)/a(k,k)
       t = b(k,j)
-      do 100 i = 1,km1
+      do i = 1,km1
 100      b(i,j) = b(i,j) - t*a(i,k)
+      end do
       k = km1
 110   km1 = k - 1
+   end do
 120 b(1,j) = b(1,j)/a(1,1)
+end do
 return
 !
 !     Case when n = 1
 !
 140 if (a(1,1) == 0.d0) go to 200
-do 150 j = 1,m
+do j = 1,m
 150 b(1,j) = b(1,j)/a(1,1)
+end do
 return
 !
 !     Error return
@@ -6170,8 +6301,9 @@ return
 !
 !            Solve the system of equations AX = b
 !
-10 do 11 i = 1,n
+10 do i = 1,n
 11 x(i) = b(i)
+end do
 !
 ir = n*n + 1
 call sgesl(wk, n, n, iwk, x, 0)
@@ -6237,35 +6369,41 @@ eps = spmpar(1)
 !
 ind = 0
 xnrm = 0.0
-do 10 i = 1,n
+do i = 1,n
 10 xnrm = xnrm + x(i)*x(i)
+end do
 if (xnrm == 0.0) return
 eps2 = eps*eps
 ratio = 1.0
 !
 !                  Compute the residual vector
 !
-20 do 22 i = 1,n
+20 do i = 1,n
    dsum = b(i)
-   do 21 j = 1,n
+   do j = 1,n
 21    dsum = dsum - dble(a(i,j))*dble(x(j))
+   end do
 22 r(i) = dsum
+end do
 !
 !                  Find the correction vector
 !
 call sgesl(q, kq, n, ipvt, r, 0)
 rnrm = 0.0
-do 30 i = 1,n
+do i = 1,n
 30 rnrm = rnrm + r(i)*r(i)
+end do
 if (rnrm <= eps2*xnrm) return
 !
 !                Form a new approximate solution
 !
-do 40 i = 1,n
+do i = 1,n
 40 x(i) = x(i) + r(i)
+end do
 xnrm = 0.0
-do 41 i = 1,n
+do i = 1,n
 41 xnrm = xnrm + x(i)*x(i)
+end do
 !
 if (xnrm == 0.0) return
 rat = ratio
@@ -8749,8 +8887,9 @@ end do
 do j = 1,m
    do i = 1,m
       dp = 0.
-      do 20 l = 1,m
+      do l = 1,m
 20       dp = dp + c(i,l,2)*c(l,j,1)
+      end do
       b(i,j,2) = b(i,j,2) - dp
    end do
 end do
@@ -8760,30 +8899,34 @@ do k = 2,nm1
    do j = 1,m
       do i = 1,m
          dp = 0.
-         do 50 l = 1,m
+         do l = 1,m
 50          dp = dp + c(i,l,k)*b(l,j,km1)
+         end do
          a(i,j,k) = a(i,j,k) - dp
       end do
    end do
    call dec(m, m, a(1,1,k), ip(1,k), ier)
    if (ier /= 0) go to 200
-   do 80 j = 1,m
+   do j = 1,m
 80    call sol(m, m, a(1,1,k), b(1,j,k), ip(1,k))
+   end do
 end do
 ! Process last block-row and return. -----------------------------------
 do j = 1,m
    do i = 1,m
       dp = 0.
-      do 110 l = 1,m
+      do l = 1,m
 110      dp = dp + b(i,l,n)*b(l,j,nm2)
+      end do
       c(i,j,n) = c(i,j,n) - dp
    end do
 end do
 do j = 1,m
    do i = 1,m
       dp = 0.
-      do 140 l = 1,m
+      do l = 1,m
 140      dp = dp + c(i,l,n)*b(l,j,nm1)
+      end do
       a(i,j,n) = a(i,j,n) - dp
    end do
 end do
@@ -8834,16 +8977,18 @@ do k = 2,nm1
    km1 = k - 1
    do i = 1,m
       dp = 0.
-      do 10 j = 1,m
+      do j = 1,m
 10       dp = dp + c(i,j,k)*y(j,km1)
+      end do
       y(i,k) = y(i,k) - dp
    end do
    call sol(m, m, a(1,1,k), y(1,k), ip(1,k))
 end do
 do i = 1,m
    dp = 0.
-   do 40 j = 1,m
+   do j = 1,m
 40    dp = dp + c(i,j,n)*y(j,nm1) + b(i,j,n)*y(j,nm2)
+   end do
    y(i,n) = y(i,n) - dp
 end do
 call sol(m, m, a(1,1,n), y(1,n), ip(1,n))
@@ -8853,15 +8998,17 @@ do kb = 1,nm1
    kp1 = k + 1
    do i = 1,m
       dp = 0.
-      do 60 j = 1,m
+      do j = 1,m
 60       dp = dp + b(i,j,k)*y(j,kp1)
+      end do
       y(i,k) = y(i,k) - dp
    end do
 end do
 do i = 1,m
    dp = 0.
-   do 90 j = 1,m
+   do j = 1,m
 90    dp = dp + c(i,j,1)*y(j,3)
+   end do
    y(i,1) = y(i,1) - dp
 end do
 !-----------------------  End of subroutine solbt  ---------------------
@@ -8891,9 +9038,10 @@ if (t == 1.0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call sspsl(a,n,ipvt,b(onej))
 10 onej = onej + kb
+end do
 !
 !             Calculation of det and the inverse of A
 !
@@ -9990,9 +10138,10 @@ if (t == 1.d0) go to 30
 !
 if (m < 1) go to 20
 onej = 1
-do 10 j = 1,m
+do j = 1,m
    call dspsl(a,n,ipvt,b(onej))
 10 onej = onej + kb
+end do
 !
 !             Calculation of det and the inverse of A
 !

@@ -1,3 +1,158 @@
+pure subroutine dbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
+   & c, kc, nc, mcl, mcu, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, kc, l, m
+integer, intent(inout) :: mcl, mcu
+integer, intent(in) :: ml, mu, n, nc, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,nc)
+integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
+   & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+double precision :: sum
+!-----------------------------------------------------------------------
+!          Multiplication of double precision banded matrices
+!-----------------------------------------------------------------------
+!
+ierr = 0
+do j = 1,nc
+   do i = 1,m
+10    c(i,j) = 0.d0
+   end do
+end do
+!
+mlp1 = ml + 1
+nlp1 = nl + 1
+npml = n + ml
+npnu = n + nu
+mcl = min(m - 1,ml + nl)
+jc = 0
+if (mcl == 0) go to 100
+!
+!     Find the first nonzero lower diagonal
+!
+maxd = mcl
+do ndiag = 1,maxd
+   imj = maxd + 1 - ndiag
+   jmax = min(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.d0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,1) = sum
+   end do
+!
+   do j = 1,jmax
+      i = j + imj
+      if (c(i,1) /= 0.d0) go to 40
+   end do
+   mcl = mcl - 1
+end do
+go to 100
+!
+40 if (mcl >= nc) go to 100
+jc = 1
+if (mcl == 1) go to 100
+!
+!     Compute the remaining lower diagonals
+!
+mind = ndiag + 1
+do ndiag = mind,maxd
+   jc = jc + 1
+   imj = maxd + 1 - ndiag
+   jmax = min(l,m - imj,npml - imj,npnu)
+   do j = 1,jmax
+      i = j + imj
+      sum = 0.d0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+end do
+!
+!     Find the last nonzero upper diagonal
+!
+100 jc = jc + 1
+mcu = min(l - 1,mu + nu)
+if (mcu == 0) go to 130
+!
+maxd = mcu
+do ndiag = 1,maxd
+   jmi = maxd + 1 - ndiag
+   imax = min(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.d0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+!
+   do i = 1,imax
+      if (c(i,jc) /= 0.d0) go to 130
+   end do
+   mcu = mcu - 1
+end do
+!
+130 last = mcl + mcu + 1
+if (last > nc) go to 200
+if (mcu == 0) go to 140
+do i = 1,imax
+   c(i,last) = c(i,jc)
+   c(i,jc) = 0.d0
+end do
+!
+!     Compute the main diagonal and the remaining upper diagonals
+!
+140 maxd = max(1,mcu)
+do ndiag = 1,maxd
+   jmi = ndiag - 1
+   imax = min(m,l - jmi,npml,npnu - jmi)
+   do i = 1,imax
+      j = i + jmi
+      sum = 0.d0
+      kmin = max(1,i - ml,j - nu)
+      kmax = min(n,i + mu,j + nl)
+      kk = mlp1 - i + kmin
+      jj = nlp1 + j - kmin
+      do k = kmin,kmax
+         sum = sum + a(i,kk)*b(k,jj)
+         kk = kk + 1
+         jj = jj - 1
+      end do
+      c(i,jc) = sum
+   end do
+   jc = jc + 1
+end do
+return
+!
+!     Error return
+!
+200 ierr = last
+end subroutine dbprod
+
 pure subroutine cbprod(m, n, l, a, ka, ml, mu, b, kb, nl, nu, &
    & c, kc, nc, mcl, mcu, ierr)
 implicit none
@@ -16,8 +171,9 @@ complex :: sum
 !
 ierr = 0
 do j = 1,nc
-   do 10 i = 1,m
+   do i = 1,m
 10    c(i,j) = (0.0,0.0)
+   end do
 end do
 !
 mlp1 = ml + 1
@@ -1264,7 +1420,7 @@ ml1 = ml + 1
 mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
-do 40 k = 1,n1
+do k = 1,n1
    lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
@@ -1300,6 +1456,7 @@ do 40 k = 1,n1
       call saxpy(lm, a(k,jj), a(lmk,lm2), ldb, a(lmk,j1), ldb)
    end do
 40 continue
+end do
 !
 ipvt(n) = n
 if (a(n,ml1) == 0.0) info = n
@@ -1449,7 +1606,7 @@ if (ml == 0) return
 !
 !       Now solve trans(l)*X = Y
 !
-do 70 kb = 1,nm1
+do kb = 1,nm1
    k = n - kb
    lm = min(ml,n - k)
    klm = k + lm
@@ -1461,12 +1618,14 @@ do 70 kb = 1,nm1
    b(l) = b(k)
    b(k) = t
 70 continue
+end do
 return
 !
 !     Case when ml = 0 And mu = 0
 !
-100 do 110 k = 1,n
+100 do k = 1,n
 110 b(k) = b(k)/a(k,1)
+end do
 end subroutine snbsl
 
 pure subroutine dbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
@@ -1834,7 +1993,7 @@ ml1 = ml + 1
 mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
-do 40 k = 1,n1
+do k = 1,n1
    lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
@@ -1870,6 +2029,7 @@ do 40 k = 1,n1
       call daxpy(lm, a(k,jj), a(lmk,lm2), ldb, a(lmk,j1), ldb)
    end do
 40 continue
+end do
 !
 ipvt(n) = n
 if (a(n,ml1) == 0.d0) info = n
@@ -2019,7 +2179,7 @@ if (ml == 0) return
 !
 !       Now solve trans(l)*X = Y
 !
-do 70 kb = 1,nm1
+do kb = 1,nm1
    k = n - kb
    lm = min(ml,n - k)
    klm = k + lm
@@ -2031,12 +2191,14 @@ do 70 kb = 1,nm1
    b(l) = b(k)
    b(k) = t
 70 continue
+end do
 return
 !
 !     Case when ml = 0 And mu = 0
 !
-100 do 110 k = 1,n
+100 do k = 1,n
 110 b(k) = b(k)/a(k,1)
+end do
 end subroutine dbsl
 
 pure subroutine b1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
@@ -2565,7 +2727,7 @@ ml1 = ml + 1
 mb = ml + mu
 n1 = n - 1
 ldb = lda - 1
-do 40 k = 1,n1
+do k = 1,n1
    lm = min(n - k,ml)
    lmk = lm + k
    lm1 = lm + 1
@@ -2601,6 +2763,7 @@ do 40 k = 1,n1
       call caxpy(lm, a(k,jj), a(lmk,lm2), ldb, a(lmk,j1), ldb)
    end do
 40 continue
+end do
 !
 ipvt(n) = n
 if (a(n,ml1) == (0.0,0.0)) info = n
@@ -2750,7 +2913,7 @@ if (ml == 0) return
 !
 !       Now solve trans(l)*X = Y
 !
-do 70 kb = 1, nm1
+do kb = 1, nm1
    k = n - kb
    lm = min(ml,n - k)
    klm = k + lm
@@ -2762,12 +2925,14 @@ do 70 kb = 1, nm1
    b(l) = b(k)
    b(k) = t
 70 continue
+end do
 return
 !
 !     Case when ml = 0 And mu = 0
 !
-100 do 110 k = 1,n
+100 do k = 1,n
 110 b(k) = b(k)/a(k,1)
+end do
 end subroutine cbsl
 
 pure subroutine cvrs(a, ka, m, n, b, ib, jb, num, ierr)
@@ -2784,13 +2949,14 @@ integer :: i, ip, j
 ip = 1
 do i = 1,m
    ib(i) = ip
-   do 10 j = 1,n
+   do j = 1,n
       if (a(i,j) == 0.0) go to 10
       if (ip > num) go to 20
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
 10    continue
+   end do
 end do
 !
 !                 Complete the setup
@@ -2818,13 +2984,14 @@ integer :: i, ip, j
 ip = 1
 do i = 1,m
    ib(i) = ip
-   do 10 j = 1,n
+   do j = 1,n
       if (a(i,j) == 0.d0) go to 10
       if (ip > num) go to 20
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
 10    continue
+   end do
 end do
 !
 !                 Complete the setup
@@ -2853,13 +3020,14 @@ complex, parameter :: zero = (0.0,0.0)
 ip = 1
 do i = 1,m
    ib(i) = ip
-   do 10 j = 1,n
+   do j = 1,n
       if (a(i,j) == zero) go to 10
       if (ip > num) go to 20
       b(ip) = a(i,j)
       jb(ip) = j
       ip = ip + 1
 10    continue
+   end do
 end do
 !
 !                 Complete the setup
@@ -2881,7 +3049,7 @@ real, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 !
-do 30 i = 1,m
+do i = 1,m
 !
 !                 Clear the i-TH row
 !
@@ -2900,6 +3068,7 @@ do 30 i = 1,m
    end do
 !
 30 continue
+end do
 end subroutine cvsr
 
 subroutine cvsd(a, ia, ja, b, kb, m, n)
@@ -2910,7 +3079,7 @@ double precision, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 !
-do 30 i = 1,m
+do i = 1,m
 !
 !                 Clear the i-TH row
 !
@@ -2929,6 +3098,7 @@ do 30 i = 1,m
    end do
 !
 30 continue
+end do
 end subroutine cvsd
 
 subroutine cvsc(a, ia, ja, b, kb, m, n)
@@ -2939,7 +3109,7 @@ complex, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 !
-do 30 i = 1,m
+do i = 1,m
 !
 !                 Clear the i-TH row
 !
@@ -2958,6 +3128,7 @@ do 30 i = 1,m
    end do
 !
 30 continue
+end do
 end subroutine cvsc
 
 subroutine scvrd(a, ia, ja, b, ib, jb, m)
@@ -2970,18 +3141,20 @@ integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       if (a(ip) == 0.0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine scvrd
 
@@ -2995,18 +3168,20 @@ integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       if (a(ip) == 0.d0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine scvdr
 
@@ -3024,19 +3199,21 @@ real :: t
 !-----------------------------------------------------------------------
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       t = real(a(ip))
       if (t == 0.0) go to 10
       b(l) = t
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine csreal
 
@@ -3054,19 +3231,21 @@ real :: t
 !-----------------------------------------------------------------------
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       t = aimag(a(ip))
       if (t == 0.0) go to 10
       b(l) = t
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine csimag
 
@@ -3092,7 +3271,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3105,7 +3284,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       if (b(l) == 0.0) go to 31
       j = jb(l)
       t = cmplx (wk(j), b(l))
@@ -3115,9 +3294,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == 0.0) go to 41
       if (ip > num) go to 50
@@ -3126,7 +3306,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3149,18 +3331,20 @@ integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       if (a(ip) == 0.0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine rscopy
 
@@ -3177,18 +3361,20 @@ integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       if (a(ip) == 0.d0) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine dscopy
 
@@ -3206,18 +3392,20 @@ complex, parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
 !
 l = 1
-do 20 i = 1,m
+do i = 1,m
    ib(i) = l
    ibeg = ia(i)
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
-   do 10 ip = ibeg,iend
+   do ip = ibeg,iend
       if (a(ip) == zero) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
 10    continue
+   end do
 20 continue
+end do
 ib(m + 1) = l
 end subroutine cscopy
 
@@ -3290,7 +3478,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ipmin = ia(i)
    ipmax = ia(i + 1) - 1
    if (ipmin > ipmax) go to 31
@@ -3302,6 +3490,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3355,7 +3544,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ii = p(i)
    ipmin = ia(ii)
    ipmax = ia(ii + 1) - 1
@@ -3368,6 +3557,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3419,7 +3609,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ipmin = ia(i)
    ipmax = ia(i + 1) - 1
    if (ipmin > ipmax) go to 31
@@ -3431,6 +3621,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3484,7 +3675,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ii = p(i)
    ipmin = ia(ii)
    ipmax = ia(ii + 1) - 1
@@ -3497,6 +3688,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3548,7 +3740,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ipmin = ia(i)
    ipmax = ia(i + 1) - 1
    if (ipmin > ipmax) go to 31
@@ -3560,6 +3752,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3613,7 +3806,7 @@ end do
 !                Store the i-TH row of A in b and jb
 !                  and update the pointers in ib
 !
-do 31 i = 1,m
+do i = 1,m
    ii = p(i)
    ipmin = ia(ii)
    ipmax = ia(ii + 1) - 1
@@ -3626,6 +3819,7 @@ do 31 i = 1,m
       ib(j + 1) = jp + 1
    end do
 31 continue
+end do
 ib(1) = 1
 return
 !
@@ -3658,7 +3852,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3671,7 +3865,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) + b(l)
       wk(j) = 0.0
@@ -3681,9 +3875,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == 0.0) go to 41
       if (ip > num) go to 50
@@ -3692,7 +3887,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3723,7 +3920,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3736,7 +3933,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) + b(l)
       wk(j) = 0.d0
@@ -3746,9 +3943,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == 0.d0) go to 41
       if (ip > num) go to 50
@@ -3757,7 +3955,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3788,7 +3988,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3801,7 +4001,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) + b(l)
       wk(j) = (0.0, 0.0)
@@ -3811,9 +4011,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == (0.0, 0.0)) go to 41
       if (ip > num) go to 50
@@ -3822,7 +4023,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3853,7 +4056,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3866,7 +4069,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) - b(l)
       wk(j) = 0.0
@@ -3876,9 +4079,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == 0.0) go to 41
       if (ip > num) go to 50
@@ -3887,7 +4091,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3918,7 +4124,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3931,7 +4137,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) - b(l)
       wk(j) = 0.d0
@@ -3941,9 +4147,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == 0.d0) go to 41
       if (ip > num) go to 50
@@ -3952,7 +4159,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -3983,7 +4192,7 @@ end do
 !                  Compute the i-TH row of c
 !
 ip = 1
-do 42 i = 1,m
+do i = 1,m
    ic(i) = ip
    mina = ia(i)
    maxa = ia(i + 1) - 1
@@ -3996,7 +4205,7 @@ do 42 i = 1,m
 30 minb = ib(i)
    maxb = ib(i + 1) - 1
    if (minb > maxb) go to 40
-   do 31 l = minb,maxb
+   do l = minb,maxb
       j = jb(l)
       t = wk(j) - b(l)
       wk(j) = (0.0, 0.0)
@@ -4006,9 +4215,10 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 31    continue
+   end do
 !
 40 if (mina > maxa) go to 42
-   do 41 l = mina,maxa
+   do l = mina,maxa
       j = ja(l)
       if (wk(j) == (0.0, 0.0)) go to 41
       if (ip > num) go to 50
@@ -4017,7 +4227,9 @@ do 42 i = 1,m
       jc(ip) = j
       ip = ip + 1
 41    continue
+   end do
 42 continue
+end do
 ic(m + 1) = ip
 ierr = 0
 return
@@ -4048,13 +4260,13 @@ end do
 !                     Compute the i-TH row of c
 !
 ip = 1
-do 31 i = 1,l
+do i = 1,l
    ic(i) = ip
    jpmin = ia(i)
    jpmax = ia(i + 1) - 1
    if (jpmin > jpmax) go to 31
 !
-   do 21 jp = jpmin,jpmax
+   do jp = jpmin,jpmax
       t = a(jp)
       if (t == 0.0) go to 21
       j = ja(jp)
@@ -4066,8 +4278,9 @@ do 31 i = 1,l
          wk(k) = wk(k) + t*b(kp)
       end do
 21    continue
+   end do
 !
-   do 30 k = 1,n
+   do k = 1,n
       if (wk(k) == 0.0) go to 30
       if (ip > num) go to 40
       c(ip) = wk(k)
@@ -4075,7 +4288,9 @@ do 31 i = 1,l
       jc(ip) = k
       ip = ip + 1
 30    continue
+   end do
 31 continue
+end do
 ic(l + 1) = ip
 ierr = 0
 return
@@ -4106,13 +4321,13 @@ end do
 !                     Compute the i-TH row of c
 !
 ip = 1
-do 31 i = 1,l
+do i = 1,l
    ic(i) = ip
    jpmin = ia(i)
    jpmax = ia(i + 1) - 1
    if (jpmin > jpmax) go to 31
 !
-   do 21 jp = jpmin,jpmax
+   do jp = jpmin,jpmax
       t = a(jp)
       if (t == 0.d0) go to 21
       j = ja(jp)
@@ -4124,8 +4339,9 @@ do 31 i = 1,l
          wk(k) = wk(k) + t*b(kp)
       end do
 21    continue
+   end do
 !
-   do 30 k = 1,n
+   do k = 1,n
       if (wk(k) == 0.d0) go to 30
       if (ip > num) go to 40
       c(ip) = wk(k)
@@ -4133,7 +4349,9 @@ do 31 i = 1,l
       jc(ip) = k
       ip = ip + 1
 30    continue
+   end do
 31 continue
+end do
 ic(l + 1) = ip
 ierr = 0
 return
@@ -4164,13 +4382,13 @@ end do
 !                     Compute the i-TH row of c
 !
 ip = 1
-do 31 i = 1,l
+do i = 1,l
    ic(i) = ip
    jpmin = ia(i)
    jpmax = ia(i + 1) - 1
    if (jpmin > jpmax) go to 31
 !
-   do 21 jp = jpmin,jpmax
+   do jp = jpmin,jpmax
       t = a(jp)
       if (t == (0.0, 0.0)) go to 21
       j = ja(jp)
@@ -4182,8 +4400,9 @@ do 31 i = 1,l
          wk(k) = wk(k) + t*b(kp)
       end do
 21    continue
+   end do
 !
-   do 30 k = 1,n
+   do k = 1,n
       if (wk(k) == (0.0, 0.0)) go to 30
       if (ip > num) go to 40
       c(ip) = wk(k)
@@ -4191,7 +4410,9 @@ do 31 i = 1,l
       jc(ip) = k
       ip = ip + 1
 30    continue
+   end do
 31 continue
+end do
 ic(l + 1) = ip
 ierr = 0
 return
@@ -4213,7 +4434,7 @@ real :: sum
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = 0.0
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4223,6 +4444,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine mvprd
 
 subroutine mvprd1(m, n, a, ia, ja, x, y)
@@ -4237,7 +4459,7 @@ real :: sum
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = y(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4247,6 +4469,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine mvprd1
 
 subroutine mtprd(m, n, a, ia, ja, x, y)
@@ -4265,7 +4488,7 @@ do j = 1,n
    y(j) = 0.0
 end do
 !
-do 21 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4275,6 +4498,7 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
+end do
 end subroutine mtprd
 
 subroutine mtprd1(m, n, a, ia, ja, x, y)
@@ -4289,7 +4513,7 @@ real :: t
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4299,6 +4523,7 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
+end do
 end subroutine mtprd1
 
 subroutine dvprd(m, n, a, ia, ja, x, y)
@@ -4313,7 +4538,7 @@ double precision :: sum
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = 0.d0
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4323,6 +4548,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine dvprd
 
 subroutine dvprd1(m, n, a, ia, ja, x, y)
@@ -4337,7 +4563,7 @@ double precision :: sum
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = y(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4347,6 +4573,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine dvprd1
 
 subroutine dtprd(m, n, a, ia, ja, x, y)
@@ -4365,7 +4592,7 @@ do j = 1,n
    y(j) = 0.d0
 end do
 !
-do 21 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4375,6 +4602,7 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
+end do
 end subroutine dtprd
 
 subroutine dtprd1(m, n, a, ia, ja, x, y)
@@ -4389,7 +4617,7 @@ double precision :: t
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4399,6 +4627,7 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
+end do
 end subroutine dtprd1
 
 subroutine cvprd(m, n, a, ia, ja, x, y)
@@ -4413,7 +4642,7 @@ complex :: sum
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = (0.0, 0.0)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4423,6 +4652,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine cvprd
 
 subroutine cvprd1(m, n, a, ia, ja, x, y)
@@ -4437,7 +4667,7 @@ complex :: sum
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    sum = y(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4447,6 +4677,7 @@ do 11 i = 1,m
       sum = sum + a(l)*x(j)
    end do
 11 y(i) = sum
+end do
 end subroutine cvprd1
 
 subroutine ctprd(m, n, a, ia, ja, x, y)
@@ -4465,7 +4696,7 @@ do j = 1,n
    y(j) = (0.0, 0.0)
 end do
 !
-do 21 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4475,6 +4706,7 @@ do 21 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 21 continue
+end do
 end subroutine ctprd
 
 subroutine ctprd1(m, n, a, ia, ja, x, y)
@@ -4489,7 +4721,7 @@ complex :: t
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
 !
-do 11 i = 1,m
+do i = 1,m
    t = x(i)
    lmin = ia(i)
    lmax = ia(i + 1) - 1
@@ -4499,6 +4731,7 @@ do 11 i = 1,m
       y(j) = y(j) + t*a(l)
    end do
 11 continue
+end do
 end subroutine ctprd1
 
 real function snrm(a, ia, ja, m, n)
@@ -4514,7 +4747,7 @@ real :: sum
 !-----------------------------------------------------------------------
 !
 snrm = 0.0
-do 20 i = 1,m
+do i = 1,m
    ipmin = ia(i)
    ipmax = ia(i + 1) - 1
    if (ipmin > ipmax) go to 20
@@ -4524,6 +4757,7 @@ do 20 i = 1,m
    end do
    snrm = max(snrm, sum)
 20 continue
+end do
 end function snrm
 
 subroutine s1nrm(a, ia, ja, m, n, anorm, wk)
@@ -4572,7 +4806,7 @@ double precision :: sum
 !-----------------------------------------------------------------------
 !
 dsnrm = 0.d0
-do 20 i = 1,m
+do i = 1,m
    ipmin = ia(i)
    ipmax = ia(i + 1) - 1
    if (ipmin > ipmax) go to 20
@@ -4582,6 +4816,7 @@ do 20 i = 1,m
    end do
    dsnrm = max(dsnrm, sum)
 20 continue
+end do
 end function dsnrm
 
 subroutine ds1nrm(a, ia, ja, m, n, anorm, wk)
@@ -4782,10 +5017,10 @@ numnz = 0
 !     Each pass round this loop either results in a new assignment
 !     or gives a row with no assignment.
 !
-do 130 jord = 1,n
+do jord = 1,n
    j = jord
    pr(j) = -1
-   do 100 k = 1,jord
+   do k = 1,jord
 !
 !     Look for a cheap assignment
 !
@@ -4816,7 +5051,7 @@ do 130 jord = 1,n
 !
 !        Forward scan
 !
-         do 70 ii = in1,in2
+         do ii = in1,in2
             i = icn(ii)
             if (cv(i) == jord) go to 70
 !
@@ -4829,6 +5064,7 @@ do 130 jord = 1,n
             out(j1) = in2 - ii - 1
             go to 100
 70          continue
+         end do
 !
 !        Backtracking step
 !
@@ -4837,6 +5073,7 @@ do 130 jord = 1,n
       end do
 !
 100   continue
+   end do
 !
 !     New assignment is made
 !
@@ -4852,6 +5089,7 @@ do 130 jord = 1,n
    end do
 !
 130 continue
+end do
 !
 !     If matrix is structurally singular, we now complete the
 !     permutation iperm.
@@ -4861,7 +5099,7 @@ do i = 1,n
    arp(i) = 0
 end do
 k = 0
-do 160 i = 1,n
+do i = 1,n
    if (iperm(i) /= 0) go to 150
    k = k + 1
    out(k) = i
@@ -4869,13 +5107,15 @@ do 160 i = 1,n
 150 j = iperm(i)
    arp(j) = i
 160 continue
+end do
 k = 0
-do 170 i = 1,n
+do i = 1,n
    if (arp(i) /= 0) go to 170
    k = k + 1
    ioutk = out(k)
    iperm(ioutk) = i
 170 continue
+end do
 500 return
 end subroutine mc21b
 
@@ -4972,7 +5212,7 @@ do j = 1,n
 end do
 !
 !
-do 90 isn = 1,n
+do isn = 1,n
 ! Look for a starting node
    if (numb(isn) /= 0) go to 90
    iv = isn
@@ -4985,7 +5225,7 @@ do 90 isn = 1,n
 !
 ! The body of this loop puts a new node on the stack or backtracks.
 !
-   do 80 dummy = 1,nnm1
+   do dummy = 1,nnm1
       i1 = arp(iv)
 ! Have all edges leaving node iv been searched.
       if (i1 < 0) go to 30
@@ -5052,8 +5292,10 @@ do 90 isn = 1,n
       k = n + 1 - ist
       ib(k) = iv
 80    continue
+   end do
 !
 90 continue
+end do
 !
 ! Put permutation in the required form.
 !
@@ -5262,7 +5504,7 @@ juptr = 0
 !  Perform symbolic and numeric factorization row by row
 !  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
-do 170 k = 1,n
+do k = 1,n
 !
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
@@ -5412,6 +5654,7 @@ do 170 k = 1,n
    j = p(j)
    if (j <= n) go to 160
 170 continue
+end do
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
@@ -5575,7 +5818,7 @@ real :: sum
 !
 !            Solve LY = b by forward substitution
 !
-do 11 k = 1,n
+do k = 1,n
    lk = r(k)
    sum = b(lk)
    jmin = it(k)
@@ -5587,6 +5830,7 @@ do 11 k = 1,n
       sum = sum - t(jj)*y(j)
    end do
 11 y(k) = sum/d(k)
+end do
 !
 !            Solve UX = b by backward substitution
 !             and reorder x to correspond with A
@@ -5729,7 +5973,7 @@ do k = 1,n
    y(k) = b(lk)
 end do
 !
-do 21 k = 1,n
+do k = 1,n
    if (y(k) == 0.0) go to 21
    jmin = iu(k)
    jmax = it(k + 1) - 1
@@ -5740,6 +5984,7 @@ do 21 k = 1,n
       y(j) = y(j) - t(jj)*y(k)
    end do
 21 continue
+end do
 !
 !            Solve XL = y by backward substitution
 !
@@ -5847,7 +6092,7 @@ end do
 !
 !     Perform the LU factorization of the r(k)-TH row of A
 !
-do 100 k = 1,n
+do k = 1,n
    lk = r(k)
    jmin = ia(lk)
    jmax = ia(lk + 1) - 1
@@ -5891,7 +6136,7 @@ do 100 k = 1,n
    jmax = it(i + 1) - 1
    if (jmin > jmax) go to 30
    pm = i
-   do 43 jj = jmin,jmax
+   do jj = jmin,jmax
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= 0.0) go to 43
@@ -5904,6 +6149,7 @@ do 100 k = 1,n
       p(j) = pm
       pm = j
 43    w(j) = w(j) - const*t(jj)
+   end do
    go to 30
 !
 !     Search for the k-TH pivot element
@@ -5960,6 +6206,7 @@ do 100 k = 1,n
 !     Prepare for the next row
 !
 100 it(k + 1) = jptr + 1
+end do
 !
 ierr = jptr
 return
@@ -6188,7 +6435,7 @@ juptr = 0
 !  Perform symbolic and numeric factorization row by row
 !  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
-do 170 k = 1,n
+do k = 1,n
 !
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
@@ -6338,6 +6585,7 @@ do 170 k = 1,n
    j = p(j)
    if (j <= n) go to 160
 170 continue
+end do
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
@@ -6502,7 +6750,7 @@ double precision :: sum
 !
 !            Solve LY = b by forward substitution
 !
-do 11 k = 1,n
+do k = 1,n
    lk = r(k)
    sum = b(lk)
    jmin = it(k)
@@ -6514,6 +6762,7 @@ do 11 k = 1,n
       sum = sum - t(jj)*y(j)
    end do
 11 y(k) = sum/d(k)
+end do
 !
 !            Solve UX = b by backward substitution
 !             and reorder x to correspond with A
@@ -6657,7 +6906,7 @@ do k = 1,n
    y(k) = b(lk)
 end do
 !
-do 21 k = 1,n
+do k = 1,n
    if (y(k) == 0.d0) go to 21
    jmin = iu(k)
    jmax = it(k + 1) - 1
@@ -6668,6 +6917,7 @@ do 21 k = 1,n
       y(j) = y(j) - t(jj)*y(k)
    end do
 21 continue
+end do
 !
 !            Solve XL = y by backward substitution
 !
@@ -6776,7 +7026,7 @@ end do
 !
 !     Perform the LU factorization of the r(k)-TH row of A
 !
-do 100 k = 1,n
+do k = 1,n
    lk = r(k)
    jmin = ia(lk)
    jmax = ia(lk + 1) - 1
@@ -6820,7 +7070,7 @@ do 100 k = 1,n
    jmax = it(i + 1) - 1
    if (jmin > jmax) go to 30
    pm = i
-   do 43 jj = jmin,jmax
+   do jj = jmin,jmax
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= 0.d0) go to 43
@@ -6833,6 +7083,7 @@ do 100 k = 1,n
       p(j) = pm
       pm = j
 43    w(j) = w(j) - const*t(jj)
+   end do
    go to 30
 !
 !     Search for the k-TH pivot element
@@ -6889,6 +7140,7 @@ do 100 k = 1,n
 !     Prepare for the next row
 !
 100 it(k + 1) = jptr + 1
+end do
 !
 ierr = jptr
 return
@@ -7628,7 +7880,7 @@ juptr = 0
 !  Perform symbolic and numeric factorization row by row
 !  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
-do 170 k = 1,n
+do k = 1,n
 !
 !  Initialize linked list and free storage for this row
 !  the r(k)-TH row of a becomes the k-TH row of u.
@@ -7778,6 +8030,7 @@ do 170 k = 1,n
    j = p(j)
    if (j <= n) go to 160
 170 continue
+end do
 !
 !  Backsolve u x = y, and reorder x to correspond with A
 !
@@ -7942,7 +8195,7 @@ complex :: sum
 !
 !            Solve LY = b by forward substitution
 !
-do 11 k = 1,n
+do k = 1,n
    lk = r(k)
    sum = b(lk)
    jmin = it(k)
@@ -7954,6 +8207,7 @@ do 11 k = 1,n
       sum = sum - t(jj)*y(j)
    end do
 11 y(k) = sum/d(k)
+end do
 !
 !            Solve UX = b by backward substitution
 !             and reorder x to correspond with A
@@ -8097,7 +8351,7 @@ do k = 1,n
    y(k) = b(lk)
 end do
 !
-do 21 k = 1,n
+do k = 1,n
    if (y(k) == (0.0, 0.0)) go to 21
    jmin = iu(k)
    jmax = it(k + 1) - 1
@@ -8108,6 +8362,7 @@ do 21 k = 1,n
       y(j) = y(j) - t(jj)*y(k)
    end do
 21 continue
+end do
 !
 !            Solve XL = y by backward substitution
 !
@@ -8218,7 +8473,7 @@ end do
 !
 !     Perform the LU factorization of the r(k)-TH row of A
 !
-do 100 k = 1,n
+do k = 1,n
    lk = r(k)
    jmin = ia(lk)
    jmax = ia(lk + 1) - 1
@@ -8262,7 +8517,7 @@ do 100 k = 1,n
    jmax = it(i + 1) - 1
    if (jmin > jmax) go to 30
    pm = i
-   do 43 jj = jmin,jmax
+   do jj = jmin,jmax
       lj = jt(jj)
       j = ic(lj)
       if (w(j) /= zero) go to 43
@@ -8275,6 +8530,7 @@ do 100 k = 1,n
       p(j) = pm
       pm = j
 43    w(j) = w(j) - const*t(jj)
+   end do
    go to 30
 !
 !     Search for the k-TH pivot element
@@ -8331,6 +8587,7 @@ do 100 k = 1,n
 !     Prepare for the next row
 !
 100 it(k + 1) = jptr + 1
+end do
 !
 ierr = jptr
 return
@@ -8527,17 +8784,20 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
-do 30 k = 1,n
+do k = 1,n
    if (wi(k)) 30,10,20
-10 do 11 j = 1,n
+10 do j = 1,n
 11    zi(j,k) = 0.0
+   end do
    go to 30
 20 kp1 = k + 1
-   do 21 j = 1,n
+   do j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
 21    zi(j,kp1) = -zi(j,k)
+   end do
 30 continue
+end do
 end subroutine eigv
 
 pure subroutine eigv1(ibal,a,ka,n,wr,wi,zr,zi,ierr)
@@ -8612,17 +8872,20 @@ call hqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
 if (ierr /= 0) return
 if (ibal /= 0) call balbak(ka,n,low,igh,zi,n,zr)
 !
-do 30 k = 1,n
+do k = 1,n
    if (wi(k)) 30,10,20
-10 do 11 j = 1,n
+10 do j = 1,n
 11    zi(j,k) = 0.0
+   end do
    go to 30
 20 kp1 = k + 1
-   do 21 j = 1,n
+   do j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
 21    zi(j,kp1) = -zi(j,k)
+   end do
 30 continue
+end do
 end subroutine eigv1
 
 pure subroutine balanc(nm,n,a,low,igh,scale)
@@ -8726,50 +8989,56 @@ end do
 80 if (l == 1) go to 280
 l = l - 1
 !     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
-100 do 120 jj = 1, l
+100 do jj = 1, l
    j = l + 1 - jj
 !
-   do 110 i = 1, l
+   do i = 1, l
       if (i == j) go to 110
       if (a(j,i) /= 0.0) go to 120
 110   continue
+   end do
 !
    m = l
    iexc = 1
    go to 20
 120 continue
+end do
 !
 go to 140
 !     ********** Search for columns isolating an eigenvalue
 !                and push them left **********
 130 k = k + 1
 !
-140 do 170 j = k, l
+140 do j = k, l
 !
-   do 150 i = k, l
+   do i = k, l
       if (i == j) go to 150
       if (a(i,j) /= 0.0) go to 170
 150   continue
+   end do
 !
    m = k
    iexc = 2
    go to 20
 170 continue
+end do
 !     ********** Now balance the submatrix in rows k to l **********
-do 180 i = k, l
+do i = k, l
 180 scale(i) = 1.0
+end do
 !     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
 !
-do 270 i = k, l
+do i = k, l
    c = 0.0
    r = 0.0
 !
-   do 200 j = k, l
+   do j = k, l
       if (j == i) go to 200
       c = c + abs(a(j,i))
       r = r + abs(a(i,j))
 200   continue
+   end do
 !     ********** Guard against zero c or r due to underflow **********
    if (c == 0.0 .or. r == 0.0) go to 270
    g = r / radix
@@ -8790,13 +9059,16 @@ do 270 i = k, l
    scale(i) = scale(i) * f
    noconv = .true.
 !
-   do 250 j = k, n
+   do j = k, n
 250   a(i,j) = a(i,j) * g
+   end do
 !
-   do 260 j = 1, l
+   do j = 1, l
 260   a(j,i) = a(j,i) * f
+   end do
 !
 270 continue
+end do
 !
 if (noconv) go to 190
 !
@@ -8847,36 +9119,41 @@ if (igh == low) go to 30
 !
 do i = low, igh
    s = scale(i)
-   do 10 j = 1, n
+   do j = 1, n
 10    z(i,j) = z(i,j) * s
+   end do
 end do
 !
 do j = low, igh
    s = 1.0/scale(j)
-   do 20 i = 1, n
+   do i = 1, n
 20    z(i,j) = z(i,j) * s
+   end do
 end do
 !
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
 !               igh+1 STEP 1 UNTIL n DO -- **********
 !
-30 do 60 ii = 1, n
+30 do ii = 1, n
    i = ii
    if (i >= low .and. i <= igh) go to 60
    if (i < low) i = low - ii
    k = scale(i)
    if (k == i) go to 60
 !
-   do 40 j = 1, n
+   do j = 1, n
       s = z(i,j)
       z(i,j) = z(k,j)
 40    z(k,j) = s
+   end do
 !
-   do 50 j = 1, n
+   do j = 1, n
       s = z(j,i)
       z(j,i) = z(j,k)
 50    z(j,k) = s
+   end do
 60 continue
+end do
 end subroutine balinv
 
 pure subroutine elmhes(nm,n,low,igh,a,int)
@@ -8931,16 +9208,17 @@ la = igh - 1
 kp1 = low + 1
 if (la < kp1) go to 200
 !
-do 180 m = kp1, la
+do m = kp1, la
    mm1 = m - 1
    x = 0.0
    i = m
 !
-   do 100 j = m, igh
+   do j = m, igh
       if (abs(a(j,mm1)) <= abs(x)) go to 100
       x = a(j,mm1)
       i = j
 100   continue
+   end do
 !
    int(m) = i
    if (i == m) go to 130
@@ -8960,21 +9238,25 @@ do 180 m = kp1, la
 130 if (x == 0.0) go to 180
    mp1 = m + 1
 !
-   do 160 i = mp1, igh
+   do i = mp1, igh
       y = a(i,mm1)
       if (y == 0.0) go to 160
       y = y / x
       a(i,mm1) = y
 !
-      do 140 j = m, n
+      do j = m, n
 140      a(i,j) = a(i,j) - y * a(m,j)
+      end do
 !
-      do 150 j = 1, igh
+      do j = 1, igh
 150      a(j,m) = a(j,m) + y * a(j,i)
+      end do
 !
 160   continue
+   end do
 !
 180 continue
+end do
 !
 200 return
 end subroutine elmhes
@@ -9031,16 +9313,17 @@ la = igh - 1
 kp1 = low + 1
 if (la < kp1) go to 200
 !
-do 180 m = kp1, la
+do m = kp1, la
    mm1 = m - 1
    x = 0.0
    i = m
 !
-   do 100 j = m, igh
+   do j = m, igh
       if (abs(a(j,mm1)) <= abs(x)) go to 100
       x = a(j,mm1)
       i = j
 100   continue
+   end do
 !
    int(m) = i
    if (i == m) go to 130
@@ -9060,21 +9343,25 @@ do 180 m = kp1, la
 130 if (x == 0.0) go to 180
    mp1 = m + 1
 !
-   do 160 i = mp1, igh
+   do i = mp1, igh
       y = a(i,mm1)
       if (y == 0.0) go to 160
       y = y / x
       a(i,mm1) = y
 !
-      do 140 j = m, n
+      do j = m, n
 140      a(i,j) = a(i,j) - y * a(m,j)
+      end do
 !
-      do 150 j = 1, igh
+      do j = 1, igh
 150      a(j,m) = a(j,m) + y * a(j,i)
+      end do
 !
 160   continue
+   end do
 !
 180 continue
+end do
 !
 200 return
 end subroutine elmhs0
@@ -9130,13 +9417,14 @@ la = igh - 1
 kp1 = low + 1
 if (la < kp1) go to 200
 !
-do 180 m = kp1, la
+do m = kp1, la
    h = 0.0
    ort(m) = 0.0
    scale = 0.0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
-   do 90 i = m, igh
+   do i = m, igh
 90    scale = scale + abs(a(i,m - 1))
+   end do
 !
    if (scale == 0.0) go to 180
    mp = m + igh
@@ -9162,8 +9450,9 @@ do 180 m = kp1, la
 !
       f = f / h
 !
-      do 120 i = m, igh
+      do i = m, igh
 120      a(i,j) = a(i,j) - f * ort(i)
+      end do
 !
    end do
 !     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
@@ -9177,14 +9466,16 @@ do 180 m = kp1, la
 !
       f = f / h
 !
-      do 150 j = m, igh
+      do j = m, igh
 150      a(i,j) = a(i,j) - f * ort(j)
+      end do
 !
    end do
 !
    ort(m) = scale * ort(m)
    a(m,m - 1) = scale * g
 180 continue
+end do
 !
 200 return
 end subroutine orthes
@@ -9269,16 +9560,18 @@ norm = 0.0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
-   do 40 j = k, n
+   do j = k, n
 40    norm = norm + abs(h(i,j))
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 50
    wr(i) = h(i,i)
    wi(i) = 0.0
 50 continue
+end do
 !
 en = igh
 t = 0.0
@@ -9307,8 +9600,9 @@ if (its /= 10 .and. its /= 20) go to 130
 !     ********** Form exceptional shift **********
 t = t + x
 !
-do 120 i = low, en
+do i = low, en
 120 h(i,i) = h(i,i) - x
+end do
 !
 s = abs(h(en,na)) + abs(h(na,enm2))
 x = 0.75 * s
@@ -9337,14 +9631,15 @@ end do
 !
 150 mp2 = m + 2
 !
-do 160 i = mp2, en
+do i = mp2, en
    h(i,i - 2) = 0.0
    if (i == mp2) go to 160
    h(i,i - 3) = 0.0
 160 continue
+end do
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
-do 260 k = m, na
+do k = m, na
    notlas = k /= na
    if (k == m) go to 170
    p = h(k,k - 1)
@@ -9390,6 +9685,7 @@ do 260 k = m, na
    end do
 !
 260 continue
+end do
 !
 go to 70
 !     ********** One root found **********
@@ -9477,13 +9773,14 @@ do i = low, igh
 !     ********** Left hand eigenvectors are back transformed
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
-   do 100 j = 1, m
+   do j = 1, m
 100   z(i,j) = z(i,j) * s
+   end do
 !
 end do
 !     ********- FOR i=low-1 STEP -1 UNTIL 1,
 !               igh+1 STEP 1 UNTIL n DO -- **********
-120 do 140 ii = 1, n
+120 do ii = 1, n
    i = ii
    if (i >= low .and. i <= igh) go to 140
    if (i < low) i = low - ii
@@ -9497,6 +9794,7 @@ end do
    end do
 !
 140 continue
+end do
 !
 200 return
 end subroutine balbak
@@ -9550,8 +9848,9 @@ integer :: i, j, kl, mm, mp, mp1
 !     ********** Initialize z to identity matrix **********
 do i = 1, n
 !
-   do 60 j = 1, n
+   do j = 1, n
 60    z(i,j) = 0.0
+   end do
 !
    z(i,i) = 1.0
 end do
@@ -9559,12 +9858,13 @@ end do
 kl = igh - low - 1
 if (kl < 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do 140 mm = 1, kl
+do mm = 1, kl
    mp = igh - mm
    mp1 = mp + 1
 !
-   do 100 i = mp1, igh
+   do i = mp1, igh
 100   z(i,mp) = a(i,mp - 1)
+   end do
 !
    i = int(mp)
    if (i == mp) go to 140
@@ -9576,6 +9876,7 @@ do 140 mm = 1, kl
 !
    z(i,mp) = 1.0
 140 continue
+end do
 !
 200 return
 end subroutine eltran
@@ -9629,8 +9930,9 @@ integer :: i, j, kl, mm, mp, mp1
 !     ********** Initialize z to identity matrix **********
 do i = 1, n
 !
-   do 60 j = 1, n
+   do j = 1, n
 60    z(i,j) = 0.0
+   end do
 !
    z(i,i) = 1.0
 end do
@@ -9638,12 +9940,13 @@ end do
 kl = igh - low - 1
 if (kl < 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do 140 mm = 1, kl
+do mm = 1, kl
    mp = igh - mm
    mp1 = mp + 1
 !
-   do 100 i = mp1, igh
+   do i = mp1, igh
 100   z(i,mp) = a(i,mp - 1)
+   end do
 !
    i = int(mp)
    if (i == mp) go to 140
@@ -9655,6 +9958,7 @@ do 140 mm = 1, kl
 !
    z(i,mp) = 1.0
 140 continue
+end do
 !
 200 return
 end subroutine eltrn0
@@ -9710,8 +10014,9 @@ real :: g
 !     ********** Initialize z to identity matrix **********
 do i = 1, n
 !
-   do 60 j = 1, n
+   do j = 1, n
 60    z(i,j) = 0.0
+   end do
 !
    z(i,i) = 1.0
 end do
@@ -9719,29 +10024,33 @@ end do
 kl = igh - low - 1
 if (kl < 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do 140 mm = 1, kl
+do mm = 1, kl
    mp = igh - mm
    if (a(mp,mp - 1) == 0.0) go to 140
    mp1 = mp + 1
 !
-   do 100 i = mp1, igh
+   do i = mp1, igh
 100   ort(i) = a(i,mp - 1)
+   end do
 !
    do j = mp, igh
       g = 0.0
 !
-      do 110 i = mp, igh
+      do i = mp, igh
 110      g = g + ort(i) * z(i,j)
+      end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
-      do 120 i = mp, igh
+      do i = mp, igh
 120      z(i,j) = z(i,j) + g * ort(i)
+      end do
 !
    end do
 !
 140 continue
+end do
 !
 200 return
 end subroutine ortran
@@ -9802,8 +10111,9 @@ real :: g
 !     ********** Initialize z to identity matrix **********
 do i = 1, n
 !
-   do 60 j = 1, n
+   do j = 1, n
 60    z(i,j) = 0.0
+   end do
 !
    z(i,i) = 1.0
 end do
@@ -9811,29 +10121,33 @@ end do
 kl = igh - low - 1
 if (kl < 1) go to 200
 !     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do 140 mm = 1, kl
+do mm = 1, kl
    mp = igh - mm
    if (a(mp,mp - 1) == 0.0) go to 140
    mp1 = mp + 1
 !
-   do 100 i = mp1, igh
+   do i = mp1, igh
 100   ort(i) = a(i,mp - 1)
+   end do
 !
    do j = mp, igh
       g = 0.0
 !
-      do 110 i = mp, igh
+      do i = mp, igh
 110      g = g + ort(i) * z(i,j)
+      end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
-      do 120 i = mp, igh
+      do i = mp, igh
 120      z(i,j) = z(i,j) + g * ort(i)
+      end do
 !
    end do
 !
 140 continue
+end do
 !
 200 return
 end subroutine ortrn1
@@ -9938,16 +10252,18 @@ norm = 0.0
 k = 1
 !     ********** Store roots isolated by balanc
 !                and compute matrix norm **********
-do 50 i = 1, n
+do i = 1, n
 !
-   do 40 j = k, n
+   do j = k, n
 40    norm = norm + abs(h(i,j))
+   end do
 !
    k = i
    if (i >= low .and. i <= igh) go to 50
    wr(i) = h(i,i)
    wi(i) = 0.0
 50 continue
+end do
 !
 en = igh
 t = 0.0
@@ -9976,8 +10292,9 @@ if (its /= 10 .and. its /= 20) go to 130
 !     ********** Form exceptional shift **********
 t = t + x
 !
-do 120 i = low, en
+do i = low, en
 120 h(i,i) = h(i,i) - x
+end do
 !
 s = abs(h(en,na)) + abs(h(na,enm2))
 x = 0.75 * s
@@ -10006,14 +10323,15 @@ end do
 !
 150 mp2 = m + 2
 !
-do 160 i = mp2, en
+do i = mp2, en
    h(i,i - 2) = 0.0
    if (i == mp2) go to 160
    h(i,i - 3) = 0.0
 160 continue
+end do
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
-do 260 k = m, na
+do k = m, na
    notlas = k /= na
    if (k == m) go to 170
    p = h(k,k - 1)
@@ -10068,6 +10386,7 @@ do 260 k = m, na
    end do
 !
 260 continue
+end do
 !
 go to 70
 !     ********** One root found **********
@@ -10130,7 +10449,7 @@ go to 60
 !                vectors of upper triangular form **********
 340 if (norm == 0.0) go to 1001
 !     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
-do 800 nn = 1, n
+do nn = 1, n
    en = n + 1 - nn
    p = wr(en)
    q = wi(en)
@@ -10141,14 +10460,15 @@ do 800 nn = 1, n
    h(en,en) = 1.0
    if (na == 0) go to 800
 !     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
-   do 700 ii = 1, na
+   do ii = 1, na
       i = en - ii
       w = h(i,i) - p
       r = h(i,en)
       if (m > na) go to 620
 !
-      do 610 j = m, na
+      do j = m, na
 610      r = r + h(i,j) * h(j,en)
+      end do
 !
 620   if (wi(i) >= 0.0) go to 630
       zz = w
@@ -10171,6 +10491,7 @@ do 800 nn = 1, n
       go to 700
 650   h(i + 1,en) = (-s - y * t) / zz
 700   continue
+   end do
 !     ********** End real vector **********
    go to 800
 !     ********** Complex vector **********
@@ -10189,7 +10510,7 @@ do 800 nn = 1, n
    enm2 = na - 1
    if (enm2 == 0) go to 800
 !     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
-   do 790 ii = 1, enm2
+   do ii = 1, enm2
       i = na - ii
       w = h(i,i) - p
       ra = 0.0
@@ -10229,32 +10550,39 @@ do 800 nn = 1, n
       h(i + 1,na) = real(z3)
       h(i + 1,en) = aimag(z3)
 790   continue
+   end do
 !     ********** End complex vector **********
 800 continue
+end do
 !     ********** End back substitution.
 !                Vectors of isolated roots **********
-do 840 i = 1, n
+do i = 1, n
    if (i >= low .and. i <= igh) go to 840
 !
-   do 820 j = i, n
+   do j = i, n
 820   z(i,j) = h(i,j)
+   end do
 !
 840 continue
+end do
 !     ********** Multiply by transformation matrix to give
 !                vectors of original full matrix.
 !                For j=n step -1 Until low do -- **********
-do 880 jj = low, n
+do jj = low, n
    j = n + low - jj
    m = min(j,igh)
 !
-   do 880 i = low, igh
+   do i = low, igh
       zz = 0.0
 !
-      do 860 k = low, m
+      do k = low, m
 860      zz = zz + z(i,k) * h(k,j)
+      end do
 !
       z(i,j) = zz
 880   continue
+   end do
+end do
 !
 go to 1001
 !     ********** Set error -- no convergence to an
@@ -10262,318 +10590,4 @@ go to 1001
 1000 ierr = en
 1001 return
 end subroutine hqr2
-
-pure subroutine deig(ibal,a,ka,n,wr,wi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
-integer :: igh, low
-interface
-   pure subroutine dbal(nm,n,a,low,igh,scale)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      double precision, intent(inout) :: a(nm,n)
-      integer, intent(inout) :: low
-      integer, intent(inout) :: igh
-      double precision, intent(inout) :: scale(n)
-   end subroutine dbal
-   pure subroutine dhqr(nm,n,low,igh,h,wr,wi,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(inout) :: h(nm,n)
-      double precision, intent(inout) :: wr(n)
-      double precision, intent(inout) :: wi(n)
-      integer, intent(out) :: ierr
-   end subroutine dhqr
-   pure subroutine dorth(nm,n,low,igh,a,ort)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(inout) :: a(nm,n)
-      double precision, intent(inout) :: ort(igh)
-   end subroutine dorth
-end interface
-!-----------------------------------------------------------------------
-!                Eigenvalues of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal /= 0) call dbal(ka,n,a,low,igh,wr)
-call dorth(ka,n,low,igh,a,wr)
-call dhqr(ka,n,low,igh,a,wr,wi,ierr)
-end subroutine deig
-
-pure subroutine deigv(ibal,a,ka,n,wr,wi,zr,zi,ierr)
-implicit none
-integer, intent(in) :: ibal
-integer, intent(inout) :: ierr
-integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
-   & zr(ka,n), zi(ka,n)
-integer :: igh, j, k, kp1, low
-interface
-   pure subroutine dbabk(nm,n,low,igh,scale,m,z)
-      implicit none
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(in) :: scale(n)
-      double precision, intent(inout) :: z(nm,m)
-   end subroutine dbabk
-   pure subroutine dbal(nm,n,a,low,igh,scale)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      double precision, intent(inout) :: a(nm,n)
-      integer, intent(inout) :: low
-      integer, intent(inout) :: igh
-      double precision, intent(inout) :: scale(n)
-   end subroutine dbal
-   pure subroutine dhqr2(nm,n,low,igh,h,wr,wi,z,ierr)
-      implicit none
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      integer, intent(in) :: igh
-      double precision, intent(inout) :: h(nm,n)
-      double precision, intent(inout) :: wr(n)
-      double precision, intent(inout) :: wi(n)
-      double precision, intent(inout) :: z(nm,n)
-      integer, intent(out) :: ierr
-   end subroutine dhqr2
-   pure subroutine dorth(nm,n,low,igh,a,ort)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(inout) :: a(nm,n)
-      double precision, intent(inout) :: ort(igh)
-   end subroutine dorth
-   pure subroutine dortrn(nm,n,low,igh,a,ort,z)
-      implicit none
-      integer, intent(in) :: igh
-      integer, intent(in) :: n
-      integer, intent(in) :: nm
-      integer, intent(in) :: low
-      double precision, intent(in) :: a(nm,igh)
-      double precision, intent(inout) :: ort(igh)
-      double precision, intent(inout) :: z(nm,n)
-   end subroutine dortrn
-end interface
-!-----------------------------------------------------------------------
-!     Eigenvalues and eigenvectors of double precision matrices
-!-----------------------------------------------------------------------
-!
-low = 1
-igh = n
-if (ibal /= 0) call dbal(ka,n,a,low,igh,zi)
-call dorth(ka,n,low,igh,a,wr)
-call dortrn(ka,n,low,igh,a,wr,zr)
-call dhqr2(ka,n,low,igh,a,wr,wi,zr,ierr)
-if (ierr /= 0) return
-if (ibal /= 0) call dbabk(ka,n,low,igh,zi,n,zr)
-!
-do 30 k = 1,n
-   if (wi(k)) 30,10,20
-10 do 11 j = 1,n
-11    zi(j,k) = 0.d0
-   go to 30
-20 kp1 = k + 1
-   do 21 j = 1,n
-      zi(j,k) = zr(j,kp1)
-      zr(j,kp1) = zr(j,k)
-21    zi(j,kp1) = -zi(j,k)
-30 continue
-end subroutine deigv
-
-pure subroutine dbal(nm,n,a,low,igh,scale)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm
-integer, intent(inout) :: igh, low
-double precision, intent(inout) :: a(nm,n), scale(n)
-integer :: i, j, k, l, m, jj, iexc
-double precision :: c, f, g, r, s, b2, radix
-logical :: noconv
-interface
-   pure elemental function ipmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      integer :: ipmpar
-   end function ipmpar
-end interface
-!     double precision dabs
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure balance,
-!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
-!
-!     Dbal balances a double precision real matrix and isolates
-!     eigenvalues whenever possible.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        A contains the input matrix to be balanced.
-!
-!     On output-
-!
-!        A contains the balanced matrix,
-!
-!        Low and igh are two integers such that a(i,j)
-!          is equal to zero if
-!           (1) i is greater than j and
-!           (2) j=1,...,low-1 OR i=igh+1,...,n,
-!
-!        Scale contains information determining the
-!           permutations and scaling factors used.
-!
-!     Suppose that the principal submatrix in rows low through igh
-!     has been balanced, that P(j) denotes the index interchanged
-!     with j during the permutation step, and that the elements
-!     of the diagonal matrix used are denoted by D(i,j).  Then
-!        scale(j) = P(j),    FOR j = 1,...,low-1
-!                 = D(j,j),      j = low,...,igh
-!                 = P(j)         j = igh+1,...,n.
-!     The order in which the interchanges are made is n to igh+1,
-!     then 1 to low-1.
-!
-!     Note that 1 is returned for igh if igh is zero formally.
-!
-!     The Algol procedure exc contained in balance appears in
-!     dbal in line.  (Note that the Algol roles of identifiers
-!     k,l have been reversed.)
-!
-!-----------------------------------------------------------------------
-!
-!     ********** radix is a machine dependent parameter specifying
-!                the base of the machine floating point representation.
-!
-radix = ipmpar(4)
-!
-!                **********
-!
-b2 = radix * radix
-k = 1
-l = n
-go to 100
-!     ********** In-line procedure for row and
-!                column exchange **********
-20 scale(m) = j
-if (j == m) go to 50
-!
-do i = 1, l
-   f = a(i,j)
-   a(i,j) = a(i,m)
-   a(i,m) = f
-end do
-!
-do i = k, n
-   f = a(j,i)
-   a(j,i) = a(m,i)
-   a(m,i) = f
-end do
-!
-50 go to (80,130), iexc
-!     ********** Search for rows isolating an eigenvalue
-!                and push them down **********
-80 if (l == 1) go to 280
-l = l - 1
-!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
-100 do 120 jj = 1, l
-   j = l + 1 - jj
-!
-   do 110 i = 1, l
-      if (i == j) go to 110
-      if (a(j,i) /= 0.d0) go to 120
-110   continue
-!
-   m = l
-   iexc = 1
-   go to 20
-120 continue
-!
-go to 140
-!     ********** Search for columns isolating an eigenvalue
-!                and push them left **********
-130 k = k + 1
-!
-140 do 170 j = k, l
-!
-   do 150 i = k, l
-      if (i == j) go to 150
-      if (a(i,j) /= 0.d0) go to 170
-150   continue
-!
-   m = k
-   iexc = 2
-   go to 20
-170 continue
-!     ********** Now balance the submatrix in rows k to l **********
-do 180 i = k, l
-180 scale(i) = 1.d0
-!     ********** Iterative loop for norm reduction **********
-190 noconv = .false.
-!
-do 270 i = k, l
-   c = 0.d0
-   r = 0.d0
-!
-   do 200 j = k, l
-      if (j == i) go to 200
-      c = c + abs(a(j,i))
-      r = r + abs(a(i,j))
-200   continue
-!     ********** Guard against zero c or r due to underflow **********
-   if (c == 0.d0 .or. r == 0.d0) go to 270
-   g = r / radix
-   f = 1.d0
-   s = c + r
-210 if (c >= g) go to 220
-   f = f * radix
-   c = c * b2
-   go to 210
-220 g = r * radix
-230 if (c < g) go to 240
-   f = f / radix
-   c = c / b2
-   go to 230
-!     ********** Now balance **********
-240 if ((c + r) / f >= 0.95d0 * s) go to 270
-   g = 1.d0 / f
-   scale(i) = scale(i) * f
-   noconv = .true.
-!
-   do 250 j = k, n
-250   a(i,j) = a(i,j) * g
-!
-   do 260 j = 1, l
-260   a(j,i) = a(j,i) * f
-!
-270 continue
-!
-if (noconv) go to 190
-!
-280 low = k
-igh = l
-end subroutine dbal
 

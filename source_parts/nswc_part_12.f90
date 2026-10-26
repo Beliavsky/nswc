@@ -1,3 +1,1307 @@
+subroutine extra(neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
+implicit none
+integer, intent(in) :: neqn
+real :: f(neqn), f1(neqn), f2(neqn)
+real, intent(in) :: h, t, tex
+real :: y(neqn)
+real, intent(inout) :: yex(neqn)
+real :: yinc1(neqn), yinc2(neqn)
+real, intent(inout) :: ypex(neqn)
+integer :: n
+real :: a1, a2, a3, a4, hf, hf1, hf2, sig
+!
+!     This version of extra is the third of the three changes
+!     needed to make the interpolant derivative more stable.
+!
+!     t is the independent variable.
+!     y is the value at t-2H. the values at t-h and t are
+!     y + h*yinc1 and y + h*yinc2 respectively.
+!     f,f1 and f2 are the derivatives at t-2H, t-h and t.
+!     Tex is the point where the output is required.
+!     yex will hold the approximate solution at tex and ypex will
+!     hold the derivative approximation at this point.
+!
+!
+!     Perform quintic interpolation based on the values
+!     y(n),y(n)+h*yinc1(n),y(n)+h*yinc2(n),f(n),f1(n),f2(n) at the
+!     points t-2H, t-h, t.  this polynomial is evaluated at the point
+!     tex to obtain the approximate value of y(tex) and this is stored
+!     in the array yex.  The derivative of the interpolating polynomial
+!     is also evaluated at tex to obtain an approximation to DY/DT
+!     at this point and this approximation is stored in ypex.
+!
+sig = (tex - t)/h + 2.0
+do n = 1, neqn
+   hf = h*f(n)
+   hf1 = h*f1(n)
+   hf2 = h*f2(n)
+   a1 = 2.0*(hf2 + hf) - 6.0*h*yinc2(n) + 8.0*hf1
+   a2 = h*yinc2(n) + 4.0*h*yinc1(n) - 4.0*hf1 - 2.0*hf
+   a3 = hf1 + hf - 2.0*h*yinc1(n)
+   a4 = h*yinc1(n) - hf
+   yex(n) = ((((a1*0.125*(sig - 2.0) + 0.25*a2)*(sig - 1.0) + &
+      & a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
+   ypex(n) = ((((0.625*a1*sig + (a2 - 2.0*a1))*sig + (1.875*a1 - &
+      & 1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
+      & 2.0*(a3 - a4)))*sig + hf)/h
+end do
+end subroutine extra
+
+subroutine rkf45(f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
+implicit none
+!
+!     Fehlberg fourth-fifth order Runge-Kutta method
+!
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!                  albuquerque,new mexico
+!
+!    rkf45 is primarily designed to solve non-stiff and mildly stiff
+!    differential equations when derivative evaluations are inexpensive.
+!    rkf45 should generally not be used when the user is demanding
+!    high accuracy.
+!
+! Abstract
+!
+!    Subroutine  rkf45  integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
+!              where the y(I) are given at t .
+!    Typically the subroutine is used to integrate from t to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout.  On return the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call rkf45 again (and perhaps define a new value for tout).
+!    Actually, rkf45 is an interfacing routine which calls subroutine
+!    rkfs for the solution.  rkfs in turn calls subroutine  fehl which
+!    computes an approximate solution over one step.
+!
+!    rkf45  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
+!
+!    The parameters represent-
+!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
+!      neqn -- number of equations to be integrated
+!      y(*) -- solution vector at t
+!      t -- independent variable
+!      tout -- output point at which solution is desired
+!      relerr,abserr -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
+!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
+!            for each component of the local error and solution vectors
+!      iflag -- indicator for status of integration
+!      work(*) -- array to hold information internal to rkf45 which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+6*neqn
+!      iwork(*) -- integer array used to hold information internal to
+!            rkf45 which is necessary for subsequent calls. Must be
+!            dimensioned at least  5
+!
+!  First call to rkf45
+!
+!    The user must provide storage in his calling program for the arrays
+!    IN THE CALL LIST  -      y(neqn) , work(3+6*neqn) , iwork(5)  ,
+!    declare F in an external statement, supply subroutine F(t,y,YP) and
+!    initialize the following parameters-
+!
+!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
+!      y(*) -- vector of initial conditions
+!      t -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
+!            t=tout is allowed on the first call only, in which case
+!            rkf45 returns with iflag=2 If continuation is possible.
+!      relerr,abserr -- relative and absolute local error tolerances
+!            which must be non-negative. relerr must be a variable while
+!            abserr may be a constant. The code should normally not be
+!            used with relative error control smaller than about 1.E-8 .
+!            To avoid limiting precision difficulties the code requires
+!            relerr to be larger than an internally computed relative
+!            error parameter which is machine dependent. In particular,
+!            pure absolute error is not permitted. If a smaller than
+!            allowable value of relerr is attempted, rkf45 increases
+!            relerr appropriately and returns control to the user before
+!            continuing the integration.
+!      iflag -- +1,-1  indicator to initialize the code for each new
+!            problem. Normal input is +1. The user should set iflag=-1
+!            only when one-step integrator control is essential. In this
+!            case, rkf45 attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
+!
+!  Output from rkf45
+!
+!      y(*) -- solution at t
+!      t -- last point reached in integration.
+!      iflag = 2 -- integration reached tout.
+!            =-2 -- A single successful step in the direction of tout
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
+!            = 3 -- Integration was not completed because relative error
+!                   tolerance was too small. relerr has been increased
+!                   appropriately for continuing.
+!            = 4 -- Integration was not completed because more than
+!                   3000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
+!            = 5 -- Integration was not completed because solution
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero abserr to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
+!            = 6 -- Integration was not completed because requested
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
+!            = 7 -- It is likely that rkf45 is inefficient for solving
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step integrator
+!                   mode.
+!            = 8 -- Invalid input parameters
+!                   this indicator occurs if any of the following is
+!                   SATISFIED -   neqn .LE. 0
+!                                 t=tout  and  iflag .NE. +1 or -1
+!                                 relerr OR abserr .LT. 0.
+!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 8
+!      work(*),iwork(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   work(1),...,work(neqn) contain the first derivatives
+!                   of the solution vector y at t. work(neqn+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   iwork(1) contains the derivative evaluation counter.
+!
+!  Subsequent calls to rkf45
+!
+!    Subroutine rkf45 returns with all information needed to continue
+!    integration. If the integration reached tout, the user need only
+!    define a new tout and call rkf45 again. In the one-step integrator
+!    mode (iflag=-2) the user must keep in mind that each step taken is
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing iflag to 2),the user must then define a new tout and
+!    reset iflag to -2 To continue in the one-step integrator mode.
+!
+!    If the integration was not completed but the user still wants to
+!    CONTINUE (iflag=3,4 CASES), HE JUST CALLS rkf45 AGAIN. WITH iflag=3
+!    the relerr parameter HAS been adjusted appropriately for continuing
+!    the integration. In the case of iflag=4 The function counter will
+!    be reset to 0 and another 3000 function evaluations are allowed.
+!
+!    However,in the case iflag=5, the user must first alter the error
+!    criterion to use a positive value of abserr before integration can
+!    proceed. If he does not,execution is terminated.
+!
+!    Also,in the case iflag=6, it is necessary for the user to reset
+!    iflag to 2 (or -2 When the one-step integration mode is being used)
+!    as well as increasing either abserr,relerr or both before the
+!    integration can be continued. If this is not done, execution will
+!    be terminated. The occurrence of iflag=6 Indicates a trouble spot
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
+!
+!    If iflag=7 Is encountered, the user should use the one-step mode
+!    or switch to another routine. If the user insists upon continuing
+!    the integration with rkf45, then he must reset iflag to 2 or -2
+!    before recalling rkf45. Otherwise, execution will be terminated.
+!
+!    If iflag=8 Is obtained, integration cannot be continued unless
+!    the invalid input parameters are corrected.
+!
+!    It should be noted that the arrays work,iwork contain information
+!    required for subsequent integration. Accordingly, work and iwork
+!    should not be altered.
+!
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, iwork(5)
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: work(*)
+external f
+integer :: k1, k2, k3, k4, k5, k6, k1m
+!
+!
+!
+!     Compute indices for the splitting of the work array
+!
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
+!
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use rkfs directly.
+!
+call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
+   & work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
+   & work(k6 + 1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+!
+end subroutine rkf45
+
+subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
+   & f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
+implicit none
+!
+!
+!     rkfs integrates a system of first order ordinary differential
+!     equations as described in the comments for rkf45 .
+!     The arrays yp,f1,f2,f3,f4,and f5 (of dimension at least neqn) and
+!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         yp - Derivative of solution vector at t
+!         h  - An appropriate stepsize to be used for the next step
+!         nfe- counter on the number of derivative function evaluations
+!
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: h
+real :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), savre, savae
+external f
+logical :: hfaild, output
+real :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
+integer :: k, mflag
+real, parameter :: remin = 1.e-12
+integer, parameter :: maxnfe = 3000
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!
+!
+!
+!
+!     remin is the minimum acceptable value of relerr.  Attempts
+!     to obtain higher accuracy with this subroutine are usually
+!     very expensive and often unsuccessful.
+!
+!
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately maxnfe.
+!     As set, this corresponds to about 500 steps.
+!
+!
+!     Check input parameters
+!
+if (neqn < 1) go to 10
+if (relerr < 0.0 .or. abserr < 0.0) go to 10
+mflag = abs(iflag)
+if (mflag == 0 .or. mflag > 8) go to 10
+!
+!     Compute the relative machine precision
+!
+eps = spmpar(1)
+u26 = 26.0*eps
+if (mflag /= 1) go to 20
+go to 50
+!
+!     Invalid input
+!
+10 iflag = 8
+return
+!
+!     Check continuation possibilities
+!
+20 if (t == tout .and. kflag /= 3) go to 10
+if (mflag /= 2) go to 25
+!
+!     iflag = +2 or -2
+!
+if (kflag == 3) go to 45
+if (init == 0) go to 45
+if (kflag == 4) go to 40
+if ((kflag == 5)  .and.  (abserr == 0.0)) go to 30
+if ((kflag == 6)  .and.  (relerr <= savre)  .and. &
+   & (abserr <= savae)) go to 30
+go to 50
+!
+!     iflag = 3,4,5,6,7 or 8
+!
+25 if (iflag == 3) go to 45
+if (iflag == 4) go to 40
+if (iflag == 5 .and. abserr > 0.0) go to 45
+!
+!     Integration cannot be continued since user did not respond to
+!     the instructions pertaining to iflag=5,6,7 or 8
+!
+30 stop
+!
+!     Reset function evaluation counter
+!
+40 nfe = 0
+if (mflag == 2) go to 50
+!
+!     Reset flag VALUE from previous call
+!
+45 iflag = jflag
+if (kflag == 3) mflag = abs(iflag)
+!
+!     Save input iflag and set continuation flag VALUE for subsequent
+!     input checking
+!
+50 jflag = iflag
+kflag = 0
+!
+!     Save relerr and abserr for checking input on subsequent calls
+!
+savre = relerr
+savae = abserr
+!
+!     Restrict relative error tolerance to be at least as large as
+!     2*eps+remin to avoid limiting precision difficulties arising
+!     from impossible accuracy requests
+!
+rer = 2.0*eps + remin
+if (relerr >= rer) go to 55
+!
+!     Relative error tolerance too small
+!
+relerr = rer
+iflag = 3
+kflag = 3
+return
+!
+55 dt = tout - t
+!
+if (mflag == 1) go to 60
+if (init == 0) go to 65
+go to 80
+!
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       set counter for function evaluations,nfe
+!                       estimate starting stepsize
+!
+60 init = 0
+kop = 0
+!
+a = t
+call f(a,y,yp)
+nfe = 1
+if (t /= tout) go to 65
+iflag = 2
+return
+!
+65 init = 1
+h = abs(dt)
+toln = 0.0
+do k = 1,neqn
+   tol = relerr*abs(y(k)) + abserr
+   if (tol <= 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
+70 continue
+end do
+if (toln <= 0.0) h = 0.0
+h = max(h,u26*max(abs(t),abs(dt)))
+jflag = sign(2,iflag)
+!
+!     Set stepsize for integration in the direction from t to tout
+!
+80 h = sign(h,dt)
+!
+!     Test to see if rkf45 is being severely impacted by too many
+!     output points
+!
+if (abs(h) >= 2.0*abs(dt)) kop = kop + 1
+if (kop /= 100) go to 85
+!
+!     Unnecessary frequency of output
+kop = 0
+iflag = 7
+return
+!
+85 if (abs(dt) > u26*abs(t)) go to 95
+!
+!     If too close to output point,extrapolate and return
+!
+do k = 1,neqn
+90 y(k) = y(k) + dt*yp(k)
+end do
+a = tout
+call f(a,y,yp)
+nfe = nfe + 1
+go to 300
+!
+!
+!     Initialize output point indicator
+!
+95 output = .false.
+!
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
+!
+scale = 2.0/relerr
+ae = scale*abserr
+!
+!     Step by step integration
+!
+100 hfaild = .false.
+!
+!     Set smallest allowable stepsize
+!
+hmin = u26*abs(t)
+!
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize and
+!     thus lessen the impact of output points on the code.
+!
+dt = tout - t
+if (abs(dt) >= 2.0*abs(h)) go to 200
+if (abs(dt) > abs(h)) go to 150
+!
+!     The next successful step will complete the integration to the
+!     output point
+!
+output = .true.
+h = dt
+go to 200
+!
+150 h = 0.5*dt
+!
+!
+!     Core integrator for taking a single step
+!
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function et.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, h is not permitted
+!     to become smaller than 26 units of roundoff in t.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and extra caution seems
+!     warranted.
+!
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from t to t+h
+!
+200 if (nfe <= maxnfe) go to 220
+!
+!     Too much work
+!
+iflag = 4
+kflag = 4
+return
+!
+!     Advance an approximate solution over one step of length h
+!
+220 call fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
+nfe = nfe + 5
+!
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
+!
+eeoet = 0.0
+do k = 1,neqn
+   et = abs(y(k)) + abs(f1(k)) + ae
+   if (et > 0.0) go to 240
+!
+!        Inappropriate error tolerance
+!
+   iflag = 5
+   return
+!
+240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
+      & (22528.0*f2(k) - 27360.0*f5(k)))
+250 eeoet = max(eeoet,ee/et)
+end do
+!
+esttol = abs(h)*eeoet*scale/752400.0
+if (esttol <= 1.0) go to 260
+!
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
+!
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol < 59049.0) s = 0.9/esttol**0.2
+h = s*h
+if (abs(h) > hmin) go to 200
+!
+!     Requested error unattainable at smallest allowable stepsize
+!
+iflag = 6
+kflag = 6
+return
+!
+!     Successful step
+!                        store solution at t+h
+!                        and evaluate derivatives there
+!
+260 t = t + h
+do k = 1,neqn
+270 y(k) = f1(k)
+end do
+a = t
+call f(a,y,yp)
+nfe = nfe + 1
+!
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
+!
+s = 5.0
+if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = min(s,1.0)
+h = sign(max(s*abs(h),hmin),h)
+!
+!     END OF CORE INTEGRATOR
+!
+!
+!     Should we take another step
+!
+if (output) go to 300
+if (iflag > 0) go to 100
+!
+!     Integration successfully completed
+!
+!     One-step mode
+!
+iflag = -2
+return
+!
+!     Interval mode
+!
+300 t = tout
+iflag = 2
+end subroutine rkfs
+
+subroutine fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,s)
+implicit none
+!
+!     Fehlberg fourth-fifth order Runge-Kutta method
+!
+!    fehl integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT=F(t,y(1),---,y(neqn))
+!    where the initial values y(I) and the initial derivatives
+!    yp(I) are specified at the starting point t. fehl advances
+!    the solution over the fixed step h and returns
+!    the fifth order (sixth order accurate locally) solution
+!    approximation at t+h in array s(I).
+!    f1,---,f5 are arrays of dimension neqn which are needed
+!    for internal storage.
+!    The formulas have been grouped to control loss of significance.
+!    fehl should be called with an h not smaller than 13 units of
+!    roundoff in t so that the various independent arguments can be
+!    distinguished.
+!
+!
+integer, intent(in) :: neqn
+real, intent(in) :: y(neqn)
+real :: t, h
+real, intent(in) :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), s(neqn)
+external f
+real :: ch
+integer :: k
+!
+!
+ch = h/4.0
+do k = 1,neqn
+221 f5(k) = y(k) + ch*yp(k)
+end do
+call f(t + ch,f5,f1)
+!
+ch = 3.0*h/32.0
+do k = 1,neqn
+222 f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
+end do
+call f(t + 3.0*h/8.0,f5,f2)
+!
+ch = h/2197.0
+do k = 1,neqn
+223 f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
+end do
+call f(t + 12.0*h/13.0,f5,f3)
+!
+ch = h/4104.0
+do k = 1,neqn
+224 f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
+      & (29440.0*f2(k) - 32832.0*f1(k)))
+end do
+call f(t + h,f5,f4)
+!
+ch = h/20520.0
+do k = 1,neqn
+225 f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
+      & 5643.0*f4(k))) + (41040.0*f1(k) - 28352.0*f2(k)))
+end do
+call f(t + h/2.0,f1,f5)
+!
+!     Compute approximate solution at t+h
+!
+ch = h/7618050.0
+do k = 1,neqn
+230 s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
+      & 1371249.0*f4(k))) + (3953664.0*f2(k) + &
+      & 277020.0*f5(k)))
+end do
+!
+end subroutine fehl
+
+subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(in) :: abserr
+real, intent(inout) :: gerror(neqn)
+real, intent(in) :: relerr
+real, intent(inout) :: t
+real, intent(in) :: tout
+real, intent(inout) :: work(*), y(neqn)
+external f
+integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
+!
+!     Fehlberg fourth(fifth) order Runge-Kutta method with
+!     global error assessment
+!
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!
+!    gerk is designed to solve systems of differential equations when
+!    it is important to have a readily available global error estimate.
+!    Parallel integration is performed to yield two solutions on
+!    different mesh spacings and global extrapolation is applied to
+!    provide an estimate of the global error in the more accurate
+!    solution.
+!
+!***********************************************************************
+! Abstract
+!***********************************************************************
+!
+!    Subroutine  gerk  integrates a system of neqn first order
+!    ordinary differential equations of the form
+!             DY(I)/DT = F(t,y(1),y(2),...,y(neqn))
+!              where the y(I) are given at t .
+!    Typically the subroutine is used to integrate from t to tout but it
+!    can be used as a one-step integrator to advance the solution A
+!    single step in the direction of tout. On return,an estimate of the
+!    global error in the solution at t is provided and the parameters in
+!    the call list are set for continuing the integration. The user has
+!    only to call gerk again (and perhaps define a new value for tout).
+!    Actually, gerk  is merely an interfacing routine which allocates
+!    virtual storage in the arrays work,iwork and calls subroutine gerks
+!    for the solution.  gerks  in turn calls subroutine  fehl  which
+!    computes an approximate solution over one step.
+!
+!    gerk  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
+!
+!
+!    The parameters represent-
+!      F -- subroutine F(t,y,YP) to evaluate derivatives YP(I)=DY(I)/DT
+!      neqn -- number of equations to be integrated
+!      y(*) -- solution vector at t
+!      t -- independent variable
+!      tout -- output point at which solution is desired
+!      relerr,abserr -- relative and absolute error tolerances for local
+!            error test. At each step the code requires that
+!                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
+!            for each component of the local error and solution vectors
+!      iflag -- indicator for status of integration
+!      gerror(*) -- vector which estimates the global error at t. that
+!                   is, gerror(I) approximates  y(I)-true solution(I).
+!      work(*) -- array to hold information internal to gerk which is
+!            necessary for subsequent calls. Must be dimensioned
+!            at least  3+8*neqn.
+!      iwork(*) -- integer array used to hold information internal to
+!            gerk which is necessary for subsequent calls. Must be
+!            dimensioned at least  5.
+!
+!
+!***********************************************************************
+!  First call to gerk
+!***********************************************************************
+!
+!    The user must provide storage in his calling program for the arrays
+!    IN THE CALL LIST  -      y(neqn) , work(3+8*neqn) , iwork(5)  ,
+!    declare F in an external statement, supply subroutine F(t,y,YP) and
+!    initialize the following parameters-
+!
+!      neqn -- number of equations to be integrated.  (neqn .GE. 1)
+!      y(*) -- vector of initial conditions
+!      t -- starting point of integration , must be a variable
+!      tout -- output point at which solution is desired.
+!            t=tout is allowed on the first call only,in which case gerk
+!            returns with iflag=2 If continuation is possible.
+!      relerr,abserr -- relative and absolute local error tolerances
+!            which must be non-negative but may be constants. We can
+!            usually expect the global errors to be somewhat smaller
+!            than the requested local error tolerances. To avoid
+!            limiting precision difficulties the code always uses the
+!            larger of relerr and an internal relative error parameter
+!            which is machine dependent.
+!      iflag -- +1,-1  indicator to initialize the code for each new
+!            problem. Normal input is +1. The user should set iflag=-1
+!            only when one-step integrator control is essential. In this
+!            case, gerk attempts to advance the solution a single step
+!            in the direction of tout each time it is called. Since this
+!            mode of operation results in extra computing overhead, it
+!            should be avoided unless needed.
+!
+!
+!***********************************************************************
+!  Output from gerk
+!***********************************************************************
+!
+!      y(*) -- solution at t
+!      t -- last point reached in integration.
+!      iflag = 2 -- integration reached tout.Indicates successful return
+!                   and is the normal mode for continuing integration.
+!            =-2 -- A single successful step in the direction of tout
+!                   has been taken. Normal mode for continuing
+!                   integration one step at a time.
+!            = 3 -- Integration was not completed because more than
+!                   9000 derivative evaluations were needed. This
+!                   is approximately 500 steps.
+!            = 4 -- Integration was not completed because solution
+!                   vanished making a pure relative error test
+!                   impossible. Must use non-zero abserr to continue.
+!                   Using the one-step integration mode for one step
+!                   is a good way to proceed.
+!            = 5 -- Integration was not completed because requested
+!                   accuracy could not be achieved using smallest
+!                   allowable stepsize. User must increase the error
+!                   tolerance before continued integration can be
+!                   attempted.
+!            = 6 -- gerk is being used inefficiently in solving
+!                   this problem. Too much output is restricting the
+!                   natural stepsize choice. Use the one-step
+!                   integrator mode.
+!            = 7 -- Invalid input parameters
+!                   this indicator occurs if any of the following is
+!                   SATISFIED -   neqn .LE. 0
+!                                 t=tout  and  iflag .NE. +1 or -1
+!                                 relerr OR abserr .LT. 0.
+!                                 iflag .EQ. 0  OR  .LT. -2  OR  .GT. 7
+!      gerror(*) -- estimate of the global error in the solution at t
+!      work(*),iwork(*) -- information which is usually of no interest
+!                   to the user but necessary for subsequent calls.
+!                   work(1),...,work(neqn) contain the first derivatives
+!                   of the solution vector y at t. work(neqn+1) contains
+!                   the stepsize H to be attempted on the next step.
+!                   iwork(1) contains the derivative evaluation counter.
+!
+!
+!***********************************************************************
+!  Subsequent calls to gerk
+!***********************************************************************
+!
+!    Subroutine gerk returns with all information needed to continue the
+!    integration. If the integration reached tout,the user need only
+!    define a new tout and call gerk again. In the one-step integrator
+!    mode (iflag=-2) the user must keep in mind that each step taken is
+!    in the direction of the current tout. Upon reaching tout (indicated
+!    by changing iflag to 2),the user must then define a new tout and
+!    reset iflag to -2 To continue in the one-step integrator mode.
+!
+!    If the integration was not completed but the user still wants to
+!    CONTINUE (iflag=3 CASE), HE JUST CALLS gerk AGAIN. THE FUNCTION
+!    counter is then reset to 0 and another 9000 function evaluations
+!    are allowed.
+!
+!    However,in the case iflag=4, the user must first alter the error
+!    criterion to use a positive value of abserr before integration can
+!    proceed. If he does not,execution is terminated.
+!
+!    Also,in the case iflag=5, it is necessary for the user to reset
+!    iflag to 2 (or -2 When the one-step integration mode is being used)
+!    as well as increasing either abserr,relerr or both before the
+!    integration can be continued. If this is not done, execution will
+!    be terminated. The occurrence of iflag=5 Indicates a trouble spot
+!    (solution is changing rapidly,singularity may be present) and it
+!    often is inadvisable to continue.
+!
+!    If iflag=6 Is encountered, the user should use the one-step
+!    integration mode with the stepsize determined by the code. If the
+!    user insists upon continuing the integration with gerk in the
+!    interval mode, he must reset iflag to 2 before calling gerk again.
+!    Otherwise,execution will be terminated.
+!
+!    If iflag=7 Is obtained, integration can not be continued unless
+!    the invalid input parameters are corrected.
+!
+!    It should be noted that the arrays work,iwork contain information
+!    required for subsequent integration. Accordingly, work and iwork
+!    should not be altered.
+!
+!***********************************************************************
+!
+!
+!
+!
+!     Compute indices for the splitting of the work array
+!
+k1m = neqn + 1
+k1 = k1m + 1
+k2 = k1 + neqn
+k3 = k2 + neqn
+k4 = k3 + neqn
+k5 = k4 + neqn
+k6 = k5 + neqn
+k7 = k6 + neqn
+k8 = k7 + neqn
+!
+!***********************************************************************
+!     This interfacing routine merely relieves the user of a long
+!     calling list via the splitting apart of two working storage
+!     arrays. If this is not compatible with the users compiler,
+!     he must use gerks directly.
+!***********************************************************************
+!
+call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
+   & work(k5),work(k6),work(k7),work(k8),work(k8 + 1), &
+   & iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
+!
+end subroutine gerk
+
+subroutine gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+   & yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
+   & nfe,kop,init,jflag,kflag)
+implicit none
+integer, intent(inout) :: iflag, init, jflag, kflag, kop
+integer, intent(in) :: neqn
+integer, intent(inout) :: nfe
+real, intent(in) :: abserr
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), gerror(neqn), h
+real, intent(in) :: relerr
+real, intent(inout) :: savae, savre, t
+real, intent(in) :: tout
+real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
+real :: yp(neqn)
+external f
+integer :: k, maxnfe, mflag
+real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
+   & scale, tol, toln, ts, u, u26, ypk
+logical :: hfaild, output
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!     Fehlberg fourth(fifth) order Runge-Kutta method with
+!     global error assessment
+!
+!***********************************************************************
+!
+!     gerks integrates a system of first order ordinary differential
+!     equations as described in the comments for gerk.  The arrays
+!     yp,f1,f2,f3,f4,f5,yg and ygp (of dimension at least neqn) and
+!     the variables h,savre,savae,nfe,kop,init,jflag,and kflag are used
+!     internally by the code and appear in the call list to eliminate
+!     local retention of variables between calls. Accordingly, they
+!     should not be altered. Items of possible interest are
+!         yp - Derivative of solution vector at t
+!         h  - An appropriate stepsize to be used for the next step
+!         nfe- counter on the number of derivative function evaluations
+!
+!***********************************************************************
+!
+!
+!
+!
+!***********************************************************************
+!  The computer unit roundoff error U is the smallest positive value
+!  representable in the machine such that  1.+ U .GT. 1.
+!
+u = spmpar(1)
+!
+!***********************************************************************
+!
+!  remin is a tolerance threshold which is also determined by the
+!  integration method. In particular, a fifth order method will
+!  generally not be capable of delivering accuracies near limiting
+!  precision on computers with long wordlengths.
+!
+remin = 3.e-11
+!
+!***********************************************************************
+!
+!     The expense is controlled by restricting the number
+!     of function evaluations to be approximately maxnfe.
+!     As set,this corresponds to about 500 steps.
+!
+maxnfe = 9000
+!
+!***********************************************************************
+!
+!
+!     Check input parameters
+!
+!
+if (neqn < 1) go to 10
+if ((relerr < 0.)  .or.  (abserr < 0.)) go to 10
+mflag = abs(iflag)
+if ((mflag >= 1)  .and.  (mflag <= 7)) go to 20
+!
+!     Invalid input
+10 iflag = 7
+return
+!
+!     Is this the first call
+20 if (mflag == 1) go to 50
+!
+!     Check continuation possibilities
+!
+if (t == tout) go to 10
+if (mflag /= 2) go to 25
+!
+!     iflag = +2 or -2
+if (init == 0) go to 45
+if (kflag == 3) go to 40
+if ((kflag == 4)  .and.  (abserr == 0.)) go to 30
+if ((kflag == 5)  .and.  (relerr <= savre)  .and. &
+   & (abserr <= savae)) go to 30
+go to 50
+!
+!     iflag = 3,4,5,6, or 7
+25 if (iflag == 3) go to 40
+if ((iflag == 4) .and. (abserr > 0.)) go to 45
+!
+!     Integration cannot be continued since user did not respond to
+!     the instructions pertaining to iflag=4,5,6 or 7
+30 stop
+!
+!***********************************************************************
+!
+!     Reset function evaluation counter
+40 nfe = 0
+if (mflag == 2) go to 50
+!
+!     Reset flag VALUE from previous call
+45 iflag = jflag
+!
+!     Save input iflag and set continuation flag VALUE for subsequent
+!     input checking
+50 jflag = iflag
+kflag = 0
+!
+!     Save relerr and abserr for checking input on subsequent calls
+savre = relerr
+savae = abserr
+!
+!     Restrict relative error tolerance to be at least as large as
+!     32U+remin to avoid limiting precision difficulties arising from
+!     impossible accuracy requests
+!
+rer = max(relerr,32.*u + remin)
+!
+u26 = 26.*u
+!
+dt = tout - t
+!
+if (mflag == 1) go to 60
+if (init == 0) go to 65
+go to 80
+!
+!
+!***********************************************************************
+!
+!     Initialization --
+!                       set initialization completion indicator,init
+!                       set indicator for too many output points,kop
+!                       evaluate initial derivatives
+!                       copy initial values and derivatives for the
+!                             parallel solution
+!                       set counter for function evaluations,nfe
+!                       estimate starting stepsize
+!
+60 init = 0
+kop = 0
+!
+a = t
+call f(a,y,yp)
+nfe = 1
+if (t /= tout) go to 65
+iflag = 2
+return
+!
+!
+65 init = 1
+h = abs(dt)
+toln = 0.
+do k = 1,neqn
+   yg(k) = y(k)
+   ygp(k) = yp(k)
+   tol = rer*abs(y(k)) + abserr
+   if (tol <= 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
+70 continue
+end do
+if (toln <= 0.) h = 0.
+h = max(h,u26*max(abs(t),abs(dt)))
+!
+!
+!***********************************************************************
+!
+!     Set stepsize for integration in the direction from t to tout
+!
+80 h = sign(h,dt)
+!
+!     Test to see if gerk is being severely impacted by too many
+!     output points
+!
+if (abs(h) > 2.*abs(dt)) kop = kop + 1
+if (kop /= 100) go to 85
+kop = 0
+iflag = 6
+return
+!
+85 if (abs(dt) > u26*abs(t)) go to 95
+!
+!     If too close to output point,extrapolate and return
+!
+do k = 1,neqn
+   yg(k) = yg(k) + dt*ygp(k)
+90 y(k) = y(k) + dt*yp(k)
+end do
+a = tout
+call f(a,yg,ygp)
+call f(a,y,yp)
+nfe = nfe + 2
+go to 300
+!
+!     Initialize output point indicator
+!
+95 output = .false.
+!
+!     To avoid premature underflow in the error tolerance function,
+!     scale the error tolerances
+!
+scale = 2./rer
+ae = scale*abserr
+!
+!
+!***********************************************************************
+!***********************************************************************
+!     Step by step integration
+!
+100 hfaild = .false.
+!
+!     Set smallest allowable stepsize
+!
+hmin = u26*abs(t)
+!
+!     Adjust stepsize if necessary to hit the output point.
+!     Look ahead two steps to avoid drastic changes in the stepsize
+!     and thus lessen the impact of output points on the code.
+!
+dt = tout - t
+if (abs(dt) >= 2.*abs(h)) go to 200
+if (abs(dt) > abs(h)) go to 150
+!
+!     The next successful step will complete the integration to the
+!     output point
+!
+output = .true.
+h = dt
+go to 200
+!
+150 h = 0.5*dt
+!
+!
+!
+!***********************************************************************
+!     Core integrator for taking a single step
+!***********************************************************************
+!     The tolerances have been scaled to avoid premature underflow in
+!     computing the error tolerance function et.
+!     To avoid problems with zero crossings,relative error is measured
+!     using the average of the magnitudes of the solution at the
+!     beginning and end of a step.
+!     The error estimate formula has been grouped to control loss of
+!     significance.
+!     To distinguish the various arguments, h is not permitted
+!     to become smaller than 26 units of roundoff in t.
+!     Practical limits on the change in the stepsize are enforced to
+!     smooth the stepsize selection process and to avoid excessive
+!     chattering on problems having discontinuities.
+!     To prevent unnecessary failures, the code uses 9/10 the stepsize
+!     it estimates will succeed.
+!     After a step failure, the stepsize is not allowed to increase for
+!     the next attempted step. This makes the code more efficient on
+!     problems having discontinuities and more effective in general
+!     since local extrapolation is being used and the error estimate
+!     may be unreliable or unacceptable when a step fails.
+!***********************************************************************
+!
+!
+!     Test number of derivative function evaluations.
+!     If okay,try to advance the integration from t to t+h
+!
+200 if (nfe <= maxnfe) go to 220
+!
+!     Too much work
+iflag = 3
+kflag = 3
+return
+!
+!     Advance an approximate solution over one step of length h
+!
+220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
+nfe = nfe + 5
+!
+!     Compute and test allowable tolerances versus local error estimates
+!     and remove scaling of tolerances. Note that relative error is
+!     measured with respect to the average of the magnitudes of the
+!     solution at the beginning and end of the step.
+!
+eeoet = 0.
+do k = 1,neqn
+   et = abs(yg(k)) + abs(f1(k)) + ae
+   if (et > 0.) go to 240
+!
+!       Inappropriate error tolerance
+   iflag = 4
+   kflag = 4
+   return
+!
+240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
+      & (22528.*f2(k) - 27360.*f5(k)))
+250 eeoet = max(eeoet,ee/et)
+end do
+!
+esttol = abs(h)*eeoet*scale/752400.
+!
+if (esttol <= 1.) go to 260
+!
+!
+!     Unsuccessful step
+!                       reduce the stepsize , try again
+!                       the decrease is limited to a factor of 1/10
+!
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol < 59049.) s = 0.9/esttol**0.2
+h = s*h
+if (abs(h) > hmin) go to 200
+!
+!     Requested error unattainable at smallest allowable stepsize
+iflag = 5
+kflag = 5
+return
+!
+!
+!     Successful step
+!                        store one-step solution yg at t+h
+!                        and evaluate derivatives there
+!
+260 ts = t
+t = t + h
+do k = 1,neqn
+270 yg(k) = f1(k)
+end do
+a = t
+call f(a,yg,ygp)
+nfe = nfe + 1
+!
+!                        Now advance the y solution over two steps of
+!                        length h/2 and evaluate derivatives there
+!
+hh = 0.5*h
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+ts = ts + hh
+a = ts
+call f(a,y,yp)
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+a = t
+call f(a,y,yp)
+nfe = nfe + 12
+!
+!
+!                       Choose next stepsize
+!                       the increase is limited to a factor of 5
+!                       if step failure has just occurred, next
+!                          stepsize is not allowed to increase
+!
+s = 5.
+if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
+if (hfaild) s = min(s,1.)
+h = sign(max(s*abs(h),hmin),h)
+!
+!***********************************************************************
+!     END OF CORE INTEGRATOR
+!***********************************************************************
+!
+!
+!
+!     Should we take another step
+!
+if (output) go to 300
+if (iflag > 0) go to 100
+!
+!***********************************************************************
+!***********************************************************************
+!
+!
+!     Integration successfully completed
+!
+!     One-step mode
+iflag = -2
+go to 400
+!
+!     Interval mode
+300 t = tout
+iflag = 2
+!
+400 do k = 1,neqn
+450 gerror(k) = (yg(k) - y(k))/31.
+end do
+!
+end subroutine gerks
+
 subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
@@ -888,10 +2192,12 @@ common /debdf1/ rls(218), ils(33)
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
-do 10 i = 1,lenrls
+do i = 1,lenrls
 10 rls(i) = rsav(i)
-do 20 i = 1,lenils
+end do
+do i = 1,lenils
 20 ils(i) = isav(i)
+end do
 !----------------------- End of subroutine rsco -----------------------
 end subroutine rsco
 
@@ -912,10 +2218,12 @@ common /debdf1/ rls(218), ils(33)
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
-do 10 i = 1,lenrls
+do i = 1,lenrls
 10 rsav(i) = rls(i)
-do 20 i = 1,lenils
+end do
+do i = 1,lenils
 20 isav(i) = ils(i)
+end do
 !----------------------- End of subroutine svco -----------------------
 end subroutine svco
 
@@ -1022,7 +2330,7 @@ go to 110
 !
 20 max = 1
 if (itol /= 0) max = neq
-do 60 k = 1,max
+do k = 1,max
    if (rtol(k) >= 0.) go to 30
    idid = -34
    go to 110
@@ -1030,6 +2338,7 @@ do 60 k = 1,max
    idid = -35
    go to 110
 60 continue
+end do
 !
 if (itstop /= 1) go to 80
 if ((tout - t)*(tstop - t) >= 0.0 &
@@ -1063,11 +2372,12 @@ return
 !     the relative error tolerance rtol is reset to the smallest value
 !     100*u which is likely to be reasonable for this method and machine
 !
-150 do 170 k = 1,max
+150 do k = 1,max
    if (rtol(k) + atol(k) > 0.) go to 170
    rtol(k) = 100.*u
    idid = -2
 170 continue
+end do
 if (idid == -2) return
 !
 !     Branch on status of initialization indicator
@@ -1101,11 +2411,12 @@ return
 !                                              x and YH(*) for stod
 !
 220 ltol = 1
-do 225 l = 1,neq
+do l = 1,neq
    if (itol == 1) ltol = l
    tol = rtol(ltol)*abs(y(l)) + atol(ltol)
    if (tol == 0.) go to 380
 225 ewt(l) = tol
+end do
 !
 big = sqrt(spmpar(3))
 call hstart(f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
@@ -1113,9 +2424,10 @@ call hstart(f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
 !
 delsgn = sign(1.0,tout - t)
 x = t
-do 230 l = 1,neq
+do l = 1,neq
    yh(l,1) = y(l)
 230 yh(l,2) = h*yh(l,2)
+end do
 init = 2
 !
 !.......................................................................
@@ -1147,8 +2459,9 @@ return
 270 if (itstop /= 1) go to 290
 if (abs(tstop - x) >= 100.*u*abs(x)) go to 290
 dt = tout - x
-do 280 l = 1,neq
+do l = 1,neq
 280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
+end do
 call f(tout,y,ypout,rpar,ipar)
 nfe = nfe + 1
 idid = 3
@@ -1195,9 +2508,10 @@ if (tolfac <= 1.) go to 400
 !                       Tolerances too small
 idid = -2
 tolfac = 2.*tolfac
-do 360 l = 1,max
+do l = 1,max
    rtol(l) = tolfac*rtol(l)
 360 atol(l) = tolfac*atol(l)
+end do
 go to 500
 !
 !                       Relative error criterion inappropriate
@@ -1233,9 +2547,10 @@ ibegin = -1
 !.......................................................................
 !
 !                       Store values before returning to stfode
-500 do 555 l = 1,neq
+500 do l = 1,neq
    y(l) = yh(l,1)
 555 ypout(l) = yh(l,2)/h
+end do
 t = x
 told = t
 intout = .false.
@@ -1434,34 +2749,39 @@ delf = vnorm(yprime,neq)
 fbnd = max(fbnd,delf)
 if (delf == 0.) go to 30
 !                       Use initial derivatives for first perturbation
-do 20 j = 1,neq
+do j = 1,neq
    spy(j) = yprime(j)
 20 yp(j) = yprime(j)
+end do
 go to 50
 !                       Cannot have a null perturbation vector
-30 do 40 j = 1,neq
+30 do j = 1,neq
    spy(j) = 0.
 40 yp(j) = 1.
+end do
 delf = vnorm(yp,neq)
 !
 50 dfdub = 0.
 lk = min(neq + 1,3)
 do 140 k = 1,lk
 !                       Define perturbed vector of initial values
-   do 60 j = 1,neq
+   do j = 1,neq
 60    pv(j) = y(j) + dely*(yp(j)/delf)
+   end do
    if (k == 2) go to 80
 !                       Evaluate derivatives associated with perturbed
 !                       vector  and  compute corresponding differences
    call f(a,pv,yp,rpar,ipar)
-   do 70 j = 1,neq
+   do j = 1,neq
 70    pv(j) = yp(j) - yprime(j)
+   end do
    go to 100
 !                       Use a shifted value of the independent variable
 !                                             in computing one estimate
 80 call f(a + da,pv,yp,rpar,ipar)
-   do 90 j = 1,neq
+   do j = 1,neq
 90    pv(j) = yp(j) - sf(j)
+   end do
 !                       Choose largest bounds on the first derivative
 !                                      and a local Lipschitz constant
 100 fbnd = max(fbnd,vnorm(yp,neq))
@@ -1471,7 +2791,7 @@ do 140 k = 1,lk
    if (k == lk) go to 160
 !                       Choose next perturbation vector
    if (delf == 0.) delf = 1.
-   do 130 j = 1,neq
+   do j = 1,neq
       if (k == 2) go to 110
       dy = abs(pv(j))
       if (dy == 0.) dy = delf
@@ -1481,6 +2801,7 @@ do 140 k = 1,lk
 120   if (spy(j) == 0.) spy(j) = yp(j)
       if (spy(j) /= 0.) dy = sign(dy,spy(j))
 130   yp(j) = dy
+   end do
 140 delf = vnorm(yp,neq)
 !
 !                       Protect against an overflow
@@ -1500,10 +2821,11 @@ do 140 k = 1,lk
 !
 tolmin = big
 tolsum = 0.
-do 170 k = 1,neq
+do k = 1,neq
    tolexp = log10(etol(k))
    tolmin = min(tolmin,tolexp)
 170 tolsum = tolsum + tolexp
+end do
 tolp = 10.**(0.5*(tolsum/float(neq) + tolmin)/float(morder + 1))
 !
 !.......................................................................
@@ -1595,11 +2917,13 @@ s = (t - tn)/h
 ic = 1
 if (k == 0) go to 15
 jj1 = l - k
-do 10 jj = jj1,nq
+do jj = jj1,nq
 10 ic = ic*jj
+end do
 15 c = float(ic)
-do 20 i = 1,n
+do i = 1,n
 20 dky(i) = c*yh(i,l)
+end do
 if (k == nq) go to 55
 jb2 = nq - k
 do jb = 1,jb2
@@ -1608,16 +2932,19 @@ do jb = 1,jb2
    ic = 1
    if (k == 0) go to 35
    jj1 = jp1 - k
-   do 30 jj = jj1,j
+   do jj = jj1,j
 30    ic = ic*jj
+   end do
 35 c = float(ic)
-   do 40 i = 1,n
+   do i = 1,n
 40    dky(i) = c*yh(i,jp1) + s*dky(i)
+   end do
 end do
 if (k == 0) return
 55 r = h**(-k)
-do 60 i = 1,n
+do i = 1,n
 60 dky(i) = r*dky(i)
+end do
 return
 !
 80 iflag = -1
@@ -1770,8 +3097,9 @@ go to 150
 110 if (nq <= maxord) go to 160
 120 nq = maxord
 l = lmax
-do 125 i = 1,l
+do i = 1,l
 125 el(i) = elco(i,nq)
+end do
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
@@ -1791,8 +3119,9 @@ go to 175
 ! whenever the order NQ is changed, or at the start of the problem.
 !-----------------------------------------------------------------------
 140 call cfod(meth, elco, tesco)
-150 do 155 i = 1,l
+150 do i = 1,l
 155 el(i) = elco(i,nq)
+end do
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
 el0 = el(1)
@@ -1813,10 +3142,12 @@ go to 175
 175 rh = min(rh,rmax)
 rh = rh/max(1.0e0,abs(h)*hmxi*rh)
 r = 1.0e0
-do 180 j = 2,l
+do j = 2,l
    r = r*rh
-   do 180 i = 1,n
+   do i = 1,n
 180   yh(i,j) = yh(i,j)*r
+   end do
+end do
 h = h*rh
 rc = rc*rh
 ialth = l
@@ -1835,9 +3166,10 @@ tn = tn + h
 i1 = nqnyh + 1
 do jb = 1,nq
    i1 = i1 - nyh
-   do 210 i = i1,nqnyh
+   do i = i1,nqnyh
       ipnyh = i + nyh
 210   yh1(i) = yh1(i) + yh1(ipnyh)
+   end do
 end do
 ksteps = ksteps + 1
 !-----------------------------------------------------------------------
@@ -1847,8 +3179,9 @@ ksteps = ksteps + 1
 ! vector acor(i).  The yh array is not altered in the corrector loop.
 !-----------------------------------------------------------------------
 220 m = 0
-do 230 i = 1,n
+do i = 1,n
 230 y(i) = yh(i,1)
+end do
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 if (ipup <= 0) go to 250
@@ -1864,34 +3197,39 @@ crate = 0.7e0
 call pjac(neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
    & rpar, ipar)
 if (ier /= 0) go to 430
-250 do 260 i = 1,n
+250 do i = 1,n
 260 acor(i) = 0.0e0
+end do
 270 if (miter /= 0) go to 350
 !-----------------------------------------------------------------------
 ! In the case of functional iteration, update y directly from
 ! the result of the last function evaluation.
 !-----------------------------------------------------------------------
-do 290 i = 1,n
+do i = 1,n
    savf(i) = h*savf(i) - yh(i,2)
 290 y(i) = savf(i) - acor(i)
+end do
 del = vnwrms(n, y, ewt)
-do 300 i = 1,n
+do i = 1,n
    y(i) = yh(i,1) + el(1)*savf(i)
 300 acor(i) = savf(i)
+end do
 go to 400
 !-----------------------------------------------------------------------
 ! In the case of the chord method, compute the corrector error,
 ! and solve the linear system with that as right-hand side and
 ! P as coefficient matrix.
 !-----------------------------------------------------------------------
-350 do 360 i = 1,n
+350 do i = 1,n
 360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
+end do
 call slvs(wm, iwm, y, savf)
 if (ier /= 0) go to 410
 del = vnwrms(n, y, ewt)
-do 380 i = 1,n
+do i = 1,n
    acor(i) = acor(i) + y(i)
 380 y(i) = yh(i,1) + el(1)*acor(i)
+end do
 !-----------------------------------------------------------------------
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
 ! rate constant is stored in crate, and this is used in the test.
@@ -1922,9 +3260,10 @@ rmax = 2.0e0
 i1 = nqnyh + 1
 do jb = 1,nq
    i1 = i1 - nyh
-   do 440 i = i1,nqnyh
+   do i = i1,nqnyh
       ipnyh = i + nyh
 440   yh1(i) = yh1(i) - yh1(ipnyh)
+   end do
 end do
 if (abs(h) <= hmin*1.00001e0) go to 670
 if (ncf == 10) go to 670
@@ -1957,15 +3296,18 @@ iredo = 0
 nst = nst + 1
 hu = h
 nqu = nq
-do 470 j = 1,l
-   do 470 i = 1,n
+do j = 1,l
+   do i = 1,n
 470   yh(i,j) = yh(i,j) + el(j)*acor(i)
+   end do
+end do
 ialth = ialth - 1
 if (ialth == 0) go to 520
 if (ialth > 1) go to 690
 if (l == lmax) go to 690
-do 490 i = 1,n
+do i = 1,n
 490 yh(i,lmax) = acor(i)
+end do
 go to 690
 !-----------------------------------------------------------------------
 ! The error test failed.  KFLAG keeps track of multiple failures.
@@ -1979,9 +3321,10 @@ tn = told
 i1 = nqnyh + 1
 do jb = 1,nq
    i1 = i1 - nyh
-   do 510 i = i1,nqnyh
+   do i = i1,nqnyh
       ipnyh = i + nyh
 510   yh1(i) = yh1(i) - yh1(ipnyh)
+   end do
 end do
 rmax = 2.0e0
 if (abs(h) <= hmin*1.00001e0) go to 660
@@ -2000,8 +3343,9 @@ go to 540
 !-----------------------------------------------------------------------
 520 rhup = 0.0e0
 if (l == lmax) go to 540
-do 530 i = 1,n
+do i = 1,n
 530 savf(i) = acor(i) - yh(i,lmax)
+end do
 dup = vnwrms(n, savf, ewt)/tesco(3,nq)
 exup = 1.0e0/float(l + 1)
 rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
@@ -2027,8 +3371,9 @@ go to 620
 rh = rhup
 if (rh < 1.1e0) go to 610
 r = el(l)/float(l)
-do 600 i = 1,n
+do i = 1,n
 600 yh(i,newq + 1) = acor(i)*r
+end do
 go to 630
 610 ialth = 3
 go to 690
@@ -2057,12 +3402,14 @@ go to 150
 rh = 0.1e0
 rh = max(hmin/abs(h),rh)
 h = h*rh
-do 645 i = 1,n
+do i = 1,n
 645 y(i) = yh(i,1)
+end do
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
-do 650 i = 1,n
+do i = 1,n
 650 yh(i,2) = h*savf(i)
+end do
 ipup = miter
 ialth = 5
 if (nq == 1) go to 200
@@ -2080,8 +3427,9 @@ go to 700
 go to 700
 680 rmax = 10.0e0
 690 r = 1.0e0/tesco(2,nqu)
-do 695 i = 1,n
+do i = 1,n
 695 acor(i) = acor(i)*r
+end do
 700 hold = h
 jstart = 1
 !----------------------- End of subroutine stod  -----------------------
@@ -2147,23 +3495,26 @@ do nq = 2,12
    nqp1 = nq + 1
 ! Form coefficients of P(X)*(X+nq-1). ----------------------------------
    pc(nq) = 0.0e0
-   do 110 ib = 1,nqm1
+   do ib = 1,nqm1
       i = nqp1 - ib
 110   pc(i) = pc(i - 1) + fnqm1*pc(i)
+   end do
    pc(1) = fnqm1*pc(1)
 ! Compute integral, -1 To 0, of P(X) and X*P(X). -----------------------
    pint = pc(1)
    xpin = pc(1)/2.0e0
    tsign = 1.0e0
-   do 120 i = 2,nq
+   do i = 2,nq
       tsign = -tsign
       pint = pint + tsign*pc(i)/float(i)
 120   xpin = xpin + tsign*pc(i)/float(i + 1)
+   end do
 ! Store coefficients in elco and tesco. --------------------------------
    elco(1,nq) = pint*rq1fac
    elco(2,nq) = 1.0e0
-   do 130 i = 2,nq
+   do i = 2,nq
 130   elco(i + 1,nq) = rq1fac*pc(i)/float(i)
+   end do
    agamq = rqfac*xpin
    ragq = 1.0e0/agamq
    tesco(2,nq) = ragq
@@ -2184,13 +3535,15 @@ do nq = 1,5
    nqp1 = nq + 1
 ! Form coefficients of P(X)*(X+nq). ------------------------------------
    pc(nqp1) = 0.0e0
-   do 210 ib = 1,nq
+   do ib = 1,nq
       i = nq + 2 - ib
 210   pc(i) = pc(i - 1) + fnq*pc(i)
+   end do
    pc(1) = fnq*pc(1)
 ! Store coefficients in elco and tesco. --------------------------------
-   do 220 i = 1,nqp1
+   do i = 1,nqp1
 220   elco(i,nq) = pc(i)/pc(2)
+   end do
    elco(2,nq) = 1.0e0
    tesco(1,nq) = rq1fac
    tesco(2,nq) = float(nqp1)/elco(1,nq)
@@ -2260,12 +3613,14 @@ hl0 = h*el0
 go to (100, 200, 300, 400, 500), miter
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
 100 lenp = n*n
-do 110 i = 1,lenp
+do i = 1,lenp
 110 wm(i + 2) = 0.0e0
+end do
 call jac(tn, y, wm(3), n, rpar, ipar)
 con = -hl0
-do 120 i = 1,lenp
+do i = 1,lenp
 120 wm(i + 2) = wm(i + 2)*con
+end do
 go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
 200 fac = vnwrms(n, savf, ewt)
@@ -2279,17 +3634,19 @@ do j = 1,n
    y(j) = y(j) + r
    fac = -hl0/r
    call f(tn, y, ftem, rpar, ipar)
-   do 220 i = 1,n
+   do i = 1,n
 220   wm(i + j1) = (ftem(i) - savf(i))*fac
+   end do
    y(j) = yj
    j1 = j1 + n
 end do
 nfe = nfe + n
 ! Add identity matrix. -------------------------------------------------
 240 j = 3
-do 250 i = 1,n
+do i = 1,n
    wm(j) = wm(j) + 1.0e0
 250 j = j + (n + 1)
+end do
 ! Do LU decomposition on P. --------------------------------------------
 call sgefa(wm(3), n, n, iwm(21), ier)
 return
@@ -2297,11 +3654,12 @@ return
 300 wm(2) = hl0
 ier = 0
 r = el0*0.1e0
-do 310 i = 1,n
+do i = 1,n
 310 y(i) = y(i) + r*(h*savf(i) - yh(i,2))
+end do
 call f(tn, y, wm(3), rpar, ipar)
 nfe = nfe + 1
-do 320 i = 1,n
+do i = 1,n
    r0 = h*savf(i) - yh(i,2)
    di = 0.1e0*r0 - h*(wm(i + 2) - savf(i))
    wm(i + 2) = 1.0e0
@@ -2309,6 +3667,7 @@ do 320 i = 1,n
    if (abs(di) == 0.0e0) go to 330
    wm(i + 2) = 0.1e0*r0/di
 320 continue
+end do
 return
 330 ier = -1
 return
@@ -2319,12 +3678,14 @@ ml3 = 3
 mband = ml + mu + 1
 meband = mband + ml
 lenp = meband*n
-do 410 i = 1,lenp
+do i = 1,lenp
 410 wm(i + 2) = 0.0e0
+end do
 call jac(tn, y, wm(ml3), meband, rpar, ipar)
 con = -hl0
-do 420 i = 1,lenp
+do i = 1,lenp
 420 wm(i + 2) = wm(i + 2)*con
+end do
 go to 570
 ! If miter = 5, make MBAND calls to F to approximate j. ----------------
 500 ml = iwm(1)
@@ -2338,10 +3699,11 @@ fac = vnwrms(n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
 if (r0 == 0.0e0) r0 = 1.0e0
 do j = 1,mba
-   do 530 i = j,n,mband
+   do i = j,n,mband
       yi = y(i)
       r = max(srur*abs(yi),r0*ewt(i))
 530   y(i) = y(i) + r
+   end do
    call f(tn, y, ftem, rpar, ipar)
    do jj = j,n,mband
       y(jj) = yh(jj,1)
@@ -2351,16 +3713,18 @@ do j = 1,mba
       i1 = max(jj - mu,1)
       i2 = min(jj + ml,n)
       ii = jj*meb1 - ml + 2
-      do 540 i = i1,i2
+      do i = i1,i2
 540      wm(ii + i) = (ftem(i) - savf(i))*fac
+      end do
    end do
 end do
 nfe = nfe + mba
 ! Add identity matrix. -------------------------------------------------
 570 ii = mband + 2
-do 580 i = 1,n
+do i = 1,n
    wm(ii) = wm(ii) + 1.0e0
 580 ii = ii + meband
+end do
 ! Do LU decomposition of P. --------------------------------------------
 call sgbfa(wm(3), meband, n, ml, mu, iwm(21), ier)
 !----------------------- End of subroutine pjac -----------------------
@@ -2418,12 +3782,14 @@ hl0 = h*el0
 wm(2) = hl0
 if (hl0 == phl0) go to 330
 r = hl0/phl0
-do 320 i = 1,n
+do i = 1,n
    di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i + 2))
    if (abs(di) == 0.0e0) go to 390
 320 wm(i + 2) = 1.0e0/di
-330 do 340 i = 1,n
+end do
+330 do i = 1,n
 340 x(i) = wm(i + 2)*x(i)
+end do
 return
 390 ier = -1
 return
@@ -2801,8 +4167,9 @@ real :: vnorm
 !
 !
 vnorm = 0.
-do 10 k = 1,ncomp
+do k = 1,ncomp
 10 vnorm = max(vnorm,abs(v(k)))
+end do
 end function vnorm
 
 real function vnwrms(n, v, w)
@@ -2819,8 +4186,9 @@ integer :: i
 real :: sum
 !
 sum = 0.0e0
-do 10 i = 1,n
+do i = 1,n
 10 sum = sum + (v(i)/w(i))**2
+end do
 vnwrms = sqrt(sum/float(n))
 !----------------------- End of function vnwrms ------------------------
 end function vnwrms
@@ -2845,40 +4213,45 @@ ta = t + ha
 m = n + n
 m1 = m + 1
 !
-do 10 k = 1,n
+do k = 1,n
    nk = n + k
    mk = m + k
    a(nk) = ha*a(nk)
 10 a(mk) = a(k) + a(nk)
+end do
 call f(ta,a(m1))
 !
-do 20 k = 1,n
+do k = 1,n
    nk = n + k
    mk = m + k
    a(nk) = a(nk) + h*a(mk)
 20 a(mk) = a(k) + ha*a(mk)
+end do
 call f(ta,a(m1))
 !
 t = t + h
-do 30 k = 1,n
+do k = 1,n
    nk = n + k
    mk = m + k
    a(mk) = h*a(mk)
    a(nk) = a(nk) + a(mk)
 30 a(mk) = a(k) + a(mk)
+end do
 call f(t,a(m1))
 !
-do 40 k = 1,n
+do k = 1,n
    nk = n + k
    mk = m + k
    a(k) = a(k) + (a(nk) + ha*a(mk))/3.0
 40 a(nk) = a(k)
+end do
 call f(t,a(np1))
 return
 !
-50 do 51 k = 1,n
+50 do k = 1,n
    nk = n + k
 51 a(nk) = a(k)
+end do
 call f(t,a(np1))
 end subroutine rk
 
@@ -2913,11 +4286,13 @@ data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
 !     -------------------
 if (h == 0.) go to 40
 ha = h*4./27.
-do 10 k = 1,n
+do k = 1,n
 10 w(k) = y(k) + ha*dy(k)
+end do
 call f(t + ha,w(1))
-do 11 k = 1,n
+do k = 1,n
 11 w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
+end do
 call f(t + h*2./9.,w(1))
 !
 i = 1
@@ -2933,14 +4308,16 @@ do 22 m = 2,8
 21    w(l) = y(k) + sum*h/c(m1)
 22 call f(t + a(m1)*h,w(i))
 !
-do 31 k = 1,n
+do k = 1,n
    sum = d(1)*dy(k)
    l = k
-   do 30 m = 2,9
+   do m = 2,9
       sum = sum + d(m)*w(l)
 30    l = l + n
+   end do
    y(k) = y(k) + h*sum/840.
 31 dy(k) = y(k)
+end do
 t = t + h
 call f(t,dy)
 return
@@ -3011,12 +4388,14 @@ if (iord /= 2) go to 40
 mn = 0
 !
 yj = ymin
-do 31 j = jmin,jmax
+do j = jmin,jmax
    xi = xmin
-   do 30 i = imin,imax
+   do i = imin,imax
       u(i,j) = g(xi, yj)
 30    xi = xi + hx
+   end do
 31 yj = yj + hy
+end do
 go to 60
 !
 !     Define the right-hand side matrix for iord = 4
@@ -3026,40 +4405,46 @@ mn = mp1*np1
 if (mn >= nw) go to 100
 !
 yj = ymin
-do 51 j = jmin,jmax
+do j = jmin,jmax
    xi = xmin
-   do 50 i = imin,imax
+   do i = imin,imax
       ij = i + jcol
       w(ij) = g(xi, yj)
 50    xi = xi + hx
+   end do
    yj = yj + hy
 51 jcol = jcol + mp1
+end do
 !
 !     Store the boundary values of u
 !
 60 if (edge(1) /= 0) go to 70
 xi = a
-do 61 i = 1,mp1
+do i = 1,mp1
    u(i,1) = bval(1,xi,c)
 61 xi = xi + hx
+end do
 !
 70 if (edge(2) /= 0) go to 80
 yj = c
-do 71 j = 1,np1
+do j = 1,np1
    u(1,j) = bval(2,a,yj)
 71 yj = yj + hy
+end do
 !
 80 if (edge(3) /= 0) go to 90
 xi = a
-do 81 i = 1,mp1
+do i = 1,mp1
    u(i,np1) = bval(3,xi,d)
 81 xi = xi + hx
+end do
 !
 90 if (edge(4) /= 0) go to 100
 yj = c
-do 91 j = 1,np1
+do j = 1,np1
    u(mp1,j) = bval(4,b,yj)
 91 yj = yj + hy
+end do
 !
 !     Store the mixed boundary conditions
 !
@@ -3931,7 +5316,7 @@ cn(nit) = 0.0
 !
 !     Adjust USOL along X edge
 !
-do 260 j = js,ns
+do j = js,ns
    if (kswx /= 2 .and. kswx /= 3) go to 230
    usol(is,j) = usol(is,j) - ax1*usol(1,j)
    go to 240
@@ -3941,11 +5326,12 @@ do 260 j = js,ns
    go to 260
 250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
 260 continue
+end do
 270 if (kswy == 1) go to 320
 !
 !     Adjust USOL along Y edge
 !
-do 310 i = is,ms
+do i = is,ms
    if (kswy /= 2 .and. kswy /= 3) go to 280
    usol(i,js) = usol(i,js) - dy1*usol(i,1)
    go to 290
@@ -3955,6 +5341,7 @@ do 310 i = is,ms
    go to 310
 300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
 310 continue
+end do
 320 continue
 !
 !     Save adjusted edges in GRHS if iorder=4
@@ -4796,7 +6183,7 @@ do l = 1,kdo
    call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
       & m,am,bm,cm,wd,ww,wu)
    if = 2**k
-   do 80 i = i4,if,i4
+   do i = i4,if,i4
       if (i - nm) 10, 10, 80
 10    ipi1 = i + i1
       ipi2 = i + i2
@@ -4824,6 +6211,7 @@ do l = 1,kdo
          y(j,i) = w1(j) + w2(j) + y(j,i)
       end do
 80    continue
+   end do
 end do
 if (npp) 320,100,320
 !
@@ -4859,14 +6247,14 @@ do ll = 2,k
    call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
 end do
-do 180 ll = 2,k
+do ll = 2,k
    l = k - ll + 1
    ir = l - 1
    i2 = 2**ir
    i1 = i2/2
    i4 = i2 + i2
    ifd = if - i2
-   do 170 i = i2,ifd,i4
+   do i = i2,ifd,i4
       if (i - i2 - izr) 170,140,170
 140   if (i - nm) 150,150,180
 150   call indxa(i,ir,idxa,na)
@@ -4883,7 +6271,9 @@ do 180 ll = 2,k
       izr = i
       if (i - nm) 170,190,170
 170   continue
+   end do
 180 continue
+end do
 190 do j = 1,m
    y(j,nm + 1) = y(j,nm + 1) - cn(nm + 1)*w1(j) - an(nm + 1)*w2(j)
 end do
@@ -4921,14 +6311,14 @@ do l = 1,kdo
 end do
 !
 izr = nm
-do 310 l = 1,kdo
+do l = 1,kdo
    ir = l - 1
    i2 = 2**ir
    i1 = i2/2
    i3 = i2 + i1
    i4 = i2 + i2
    irm1 = ir - 1
-   do 300 i = i4,if,i4
+   do i = i4,if,i4
       ipi1 = i + i1
       ipi2 = i + i2
       ipi3 = i + i3
@@ -4948,7 +6338,9 @@ do 310 l = 1,kdo
       izr = i
       go to 310
 300   continue
+   end do
 310 continue
+end do
 !
 ! Begin back substitution phase
 !
@@ -4960,7 +6352,7 @@ do 310 l = 1,kdo
    i1 = i2/2
    i4 = i2 + i2
    ifd = if - i2
-   do 430 i = i2,ifd,i4
+   do i = i2,ifd,i4
       if (i - nm) 330,330,430
 330   imi1 = i - i1
       imi2 = i - i2
@@ -4991,6 +6383,7 @@ do 310 l = 1,kdo
       call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,y(1,i), &
          & m,am,bm,cm,wd,ww,wu)
 430   continue
+   end do
 end do
 end subroutine blktr1
 
@@ -5518,7 +6911,7 @@ end do
 cnv = eps*bnorm
 if = 2**k
 kdo = k - 1
-do 100 l = 1,kdo
+do l = 1,kdo
    ir = l - 1
    i2 = 2**ir
    i4 = i2 + i2
@@ -5544,6 +6937,7 @@ do 100 l = 1,kdo
       end do
    end do
 100 continue
+end do
 do j = 1,nm
    b(j) = -bn(j)
 end do
@@ -5826,7 +7220,7 @@ if (psgf(xr,iz,c,a,bh)) 130,140,140
 140 sgn = 1.
 cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
 if = iz - 2
-150 do 360 ig = is,if,2
+150 do ig = is,if,2
    xl = bh(ig)
    xr = bh(ig + 1)
    sgn = -1.
@@ -5899,6 +7293,7 @@ if = iz - 2
 350 cbp(ig) = cx
    cbp(ig + 1) = conjg(cx)
 360 continue
+end do
 if (abs(cbp(n)) - abs(cbp(1))) 370,420,390
 370 nhalf = n/2
 do j = 1,nhalf
@@ -5908,9 +7303,10 @@ do j = 1,nhalf
    cbp(nt + 1) = cx
 end do
 390 ncmplx = 1
-do 400 j = 2,iz
+do j = 2,iz
    if (aimag(cbp(j))) 430,400,430
 400 continue
+end do
 ncmplx = 0
 do j = 2,iz
    bp(j) = real(cbp(j))
@@ -7076,11 +8472,12 @@ if (n == 1) go to 20
 !
 m = n/2
 m = m + m
-do 10 i = 1,m,2
+do i = 1,m,2
    r = sqrt(-2.0*log(a(i)))
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
 10 a(i + 1) = r*sin(phi)
+end do
 if (m == n) return
 !
 20 call urng(ix,temp,1,ierr)
@@ -7116,11 +8513,12 @@ if (n == 1) go to 20
 !
 m = n/2
 m = m + m
-do 10 i = 1,m,2
+do i = 1,m,2
    r = sqrt(-2.d0*log(a(i)))
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
 10 a(i + 1) = r*sin(phi)
+end do
 if (m == n) return
 !
 20 call durng(ix, temp, 1, ierr)
@@ -7261,9 +8659,10 @@ do j = 1,n
       l0 = l0 - i
       l = l0
       sum = 0.0
-      do 20 k = 1,i
+      do k = 1,i
          l = l + 1
 20       sum = sum + a(l)*x(k,j)
+      end do
       x(i,j) = sum + fmu(i)
       i = i - 1
    end do
@@ -7532,9 +8931,10 @@ do j = 1,n
       l0 = l0 - i
       l = l0
       sum = 0.d0
-      do 20 k = 1,i
+      do k = 1,i
          l = l + 1
 20       sum = sum + a(l)*x(k,j)
+      end do
       x(i,j) = sum + fmu(i)
       i = i - 1
    end do

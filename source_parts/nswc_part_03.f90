@@ -85,7 +85,7 @@ u2 = (0.0, 0.0)
 u1 = (1.0, 0.0)
 s = u1
 l = m
-do 30 i = 2, m
+do i = 2, m
    u3 = u2
    u2 = u1
    c = a/l + (l - 1.0)
@@ -103,6 +103,7 @@ do 30 i = 2, m
    s = s/c
 !
 30 l = l - 1.0
+end do
 !
 !     Last step in the Miller algorithm.
 !
@@ -539,7 +540,7 @@ u2 = (0.0, 0.0)
 u1 = (1.0, 0.0)
 s = u1
 l = m
-do 10 i = 2, m
+do i = 2, m
    u3 = u2
    u2 = u1
    e = l - 0.5
@@ -557,6 +558,7 @@ do 10 i = 2, m
    s = s/c
 !
 10 l = l - 1.0
+end do
 !
 !     Last step in the Miller algorithm.
 !
@@ -1710,7 +1712,7 @@ call bim(z, cn2 + 1.0, ib2)
 n = an
 m = an
 n1 = n + 1
-do 10 i = 1, n1
+do i = 1, n1
    ia3 = ia2
    ia2 = ia1
    ib3 = ib2
@@ -1720,6 +1722,7 @@ do 10 i = 1, n1
    m = m - 1.0
    ia1 = ia2 + (sz/cfa)*ia3
 10 ib1 = ib2 + (sz/cfb)*ib3
+end do
 e = exp(c1*log(zh))
 cf1 = e/gm1
 cf2 = e*e/gm2
@@ -1872,7 +1875,7 @@ call bjm(z, cn2 + 1.0, ib2)
 n = an
 n1 = n + 1
 m = an
-do 10 i = 1, n1
+do i = 1, n1
    ia3 = ia2
    ia2 = ia1
    ib3 = ib2
@@ -1882,6 +1885,7 @@ do 10 i = 1, n1
    m = m - 1.0
    ia1 = ia2 - (sz/cfa)*ia3
 10 ib1 = ib2 - (sz/cfb)*ib3
+end do
 e = exp(c1*log(zh))
 cf1 = e/gm1
 cf2 = e*e/gm2
@@ -2055,7 +2059,7 @@ s = 0.0
 u2 = 0.0
 u1 = eps
 l = m
-do 10 i = 1, m
+do i = 1, m
    al = l
    u3 = u2
    u2 = u1
@@ -2064,6 +2068,7 @@ do 10 i = 1, m
    u1 = (bi*u2 - u3)/ai
    s = s + u1
 10 l = l - 1
+end do
 !
 !     Final assembly
 !
@@ -3001,15 +3006,17 @@ go to 70
 31 al2 = al*al
 !
 f1 = (0.0, 0.0)
-do 40 i = 1,12
+do i = 1,12
    xx = x1(i)/2.
    fxk = ak*xx
 40 f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
+end do
 f2 = (0.0, 0.0)
-do 41 i = 1,12
+do i = 1,12
    xx = .25*(1. + x2(i))
    fxk = ak*xx
 41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
+end do
 f3 = (0.0, 0.0)
 do 42 i = 1,12
    xx = .25*(3. - x2(i))
@@ -3397,22 +3404,24 @@ ak2 = ak*ak
 !
 f1 = (0.0, 0.0)
 e1 = (0.0, 0.0)
-do 40 i = 1,12
+do i = 1,12
    xx = x1(i)/2.
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
    e1 = e1 + w1(i)*fl(i)*(1.0 + at)
 40 f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
+end do
 f2 = (0.0, 0.0)
 e2 = (0.0, 0.0)
-do 41 i = 1,12
+do i = 1,12
    xx = .25*(1. + x2(i))
    fx = ak*xx/al
    fxk = ak*xx
    at = atn(fx)
    e2 = e2 + w2(i)*fa(i)*(1.0 + at)
 41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
+end do
 f3 = (0.0, 0.0)
 e3 = (0.0, 0.0)
 do 42 i = 1,12
@@ -6404,11 +6413,12 @@ m = n
 call gratio(m + 1.0, tr, s, w, 0)
 w = rcomp(m,tr)/m
 p = s
-do 70 i = 1,n
+do i = 1,n
    s = s + w
    w = (m/tr)*w
    p = s + (td/m)*p
 70 m = m - 1.0
+end do
 p = exp(-td)*p
 go to 110
 !------------------------------------------------------------------
@@ -6986,7 +6996,7 @@ q1 = rpi*e3*r8
 g3 = 0.0
 nt = 2*n1 + 1
 z = (.5 + d1) + .5
-do 260 ii = 1, nt
+do ii = 1, nt
    i = ii - (n1 + 1)
    if (i == 0) go to 260
    j = abs(i)
@@ -7033,6 +7043,7 @@ do 260 ii = 1, nt
 250 x5 = erfc(x1)
 255 g3 = g3 + x5*t4*t*w(j)
 260 continue
+end do
 p = q1*g3
 if (p > yy) p = yy
 if (p > (1.0 - min(1.e6*eps,1.e-5))) p = 1.0
@@ -7198,7 +7209,7 @@ double precision :: dsum
 !
 lc = 1
 jmax = min(l + m - 1, n)
-do 40 j = 1,jmax
+do j = 1,jmax
    if (j <= l) go to 10
    imin = 1 + (j - l)
    la = 1 + (l - 1)*ka
@@ -7217,12 +7228,14 @@ do 40 j = 1,jmax
    end do
    c(lc) = dsum
 40 lc = lc + kc
+end do
 if (jmax == n) return
 !
 jmin = jmax + 1
-do 60 j = jmin,n
+do j = jmin,n
    c(lc) = 0.0
 60 lc = lc + kc
+end do
 end subroutine pmult
 
 pure subroutine dpmult(a,ka,l,b,kb,m,c,kc,n)
@@ -7238,7 +7251,7 @@ double precision :: sum
 !
 lc = 1
 jmax = min(l + m - 1, n)
-do 40 j = 1,jmax
+do j = 1,jmax
    if (j <= l) go to 10
    imin = 1 + (j - l)
    la = 1 + (l - 1)*ka
@@ -7257,12 +7270,14 @@ do 40 j = 1,jmax
    end do
    c(lc) = sum
 40 lc = lc + kc
+end do
 if (jmax == n) return
 !
 jmin = jmax + 1
-do 60 j = jmin,n
+do j = jmin,n
    c(lc) = 0.d0
 60 lc = lc + kc
+end do
 end subroutine dpmult
 
 pure subroutine pdiv(a,ka,l,b,kb,m,c,kc,n,ierr)
@@ -7513,9 +7528,10 @@ real :: s, sum, t, u
 !
 q(1) = 1.0
 k = 2
-do 10 i = 2,n
+do i = 2,n
    q(k) = 0.0
 10 k = k + i
+end do
 !
 jj = 1
 do j = 2,n
@@ -7573,9 +7589,10 @@ double precision :: s, sum, t, u
 !
 q(1) = 1.d0
 k = 2
-do 10 i = 2,n
+do i = 2,n
    q(k) = 0.d0
 10 k = k + i
+end do
 !
 jj = 1
 do j = 2,n
@@ -7742,11 +7759,12 @@ real :: dm, tm
 !
 001 do k = 1,na
    tm = 1.0
-   do 002 m = 1,na
+   do m = 1,na
       if (m == k) go to 002
       dm = au(k) - au(m)
       tm = dm*tm
 002   continue
+   end do
    an(k) = tm
 end do
 end subroutine lgrngn
@@ -7797,23 +7815,25 @@ do k = 1,na
 end do
 if (mo <= 0) go to 050
 sm = 0.0
-do 013 k = 1,na
+do k = 1,na
    df(k) = sm
    if (ln) go to 012
    if (qu == au(k)) go to 013
 012 dm = qu - au(k)
    sm = sm + 1.0/dm
 013 continue
+end do
 rm = sm
 if (mo == 1) go to 040
 sm = 0.0
-do 023 k = 1,na
+do k = 1,na
    sf(k) = sm
    if (ln) go to 022
    if (qu == au(k)) go to 023
 022 dm = qu - au(k)
    sm = sm + 2.0*df(k)/dm
 023 continue
+end do
 sm = 0.0
 tm = 0.0
 l = na
@@ -7839,7 +7859,7 @@ end do
    sf(k) = ff(k)*sf(k)
 end do
 040 if (ln) go to 043
-do 042 k = 1,na
+do k = 1,na
    if (qu /= au(k)) go to 041
    df(k) = rm
    ff(k) = 1.0
@@ -7847,6 +7867,7 @@ do 042 k = 1,na
 041 df(k) = ff(k)
    ff(k) = 0.0
 042 continue
+end do
 return
 043 sm = 0.0
 l = na
@@ -7857,11 +7878,12 @@ do k = 1,na
 end do
 return
 050 if (ln) go to 053
-do 052 k = 1,na
+do k = 1,na
    ff(k) = 0.0
    if (qu /= au(k)) go to 052
    ff(k) = 1.0
 052 continue
+end do
 053 return
 end subroutine lgrngv
 
@@ -7904,11 +7926,12 @@ do i = 1,na
 end do
 do i = 1,na
    tm = 1.0
-   do 006 j = 1,na
+   do j = 1,na
       if (j == i) go to 006
       td = au(i) - au(j)
       tm = tm*td
 006   continue
+   end do
    k = (i - 1)*na
    do j = 1,na
       k = k + 1
@@ -10169,7 +10192,7 @@ k(1) = p(1)
 aa = p(nn)
 bb = p(n)
 zerok = k(n) == 0.d0
-do 230 jj = 1,5
+do jj = 1,5
    cc = k(n)
    if (zerok) go to 210
 !
@@ -10193,6 +10216,7 @@ do 230 jj = 1,5
    k(1) = 0.d0
    zerok = k(n) == 0.d0
 230 continue
+end do
 !
 !     Save K for restarts with new shifts
 !

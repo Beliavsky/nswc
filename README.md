@@ -307,6 +307,12 @@ labels mentioned elsewhere in the procedure, conservatively treating numeric
 mentions as possible references. This can leave safe conversions for later
 review. It also skips loops with possible branches into their bodies.
 
+A second reviewed pass now converts **1,425 additional loops**, including
+executable terminal statements and shared termination labels. Existing terminal
+operations and branch-target labels are preserved. The remaining 274 loops have
+recorded review reasons. See [deleted-feature modernization](docs/deleted-features.md)
+for the tool, compiler checks and strict-standard diagnostic progress.
+
 ## Explicit typing
 
 All 1,062 procedures in `nswc.f` and the generated `nswc.f90` now have

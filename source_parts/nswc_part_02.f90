@@ -125,9 +125,10 @@ return
 !
 110 t = dble(x) - x0
 w = e(14)
-do 111 l = 1,13
+do l = 1,13
    i = 14 - l
 111 w = w*t + e(i)
+end do
 ali = t*w
 return
 !
@@ -484,9 +485,10 @@ m = int(a) - 1
 !     Let t be the product of a-j when a .GE. 2
 !
 if (m) 20,12,10
-10 do 11 j = 1,m
+10 do j = 1,m
    x = x - 1.0
 11 t = x*t
+end do
 12 x = x - 1.0
 go to 40
 !
@@ -496,9 +498,10 @@ go to 40
 if (a > 0.0) go to 30
 m = - m - 1
 if (m == 0) go to 22
-do 21 j = 1,m
+do j = 1,m
    x = x + 1.0
 21 t = x*t
+end do
 22 x = (x + 0.5) + 0.5
 t = x*t
 if (t == 0.0) return
@@ -517,9 +520,10 @@ return
 !
 40 top = p(1)
 bot = q(1)
-do 41 i = 2,7
+do i = 2,7
    top = p(i) + x*top
 41 bot = q(i) + x*bot
+end do
 gamma = top/bot
 !
 !     Termination
@@ -715,9 +719,10 @@ return
 n = a - 1.25
 t = a
 w = 1.0
-do 21 i = 1,n
+do i = 1,n
    t = t - 1.0
 21 w = t*w
+end do
 gamln = gamln1(t - 1.0) + log(w)
 return
 !
@@ -1111,9 +1116,10 @@ n = n - 1
 !     Let t be the product of a-j when a .GE. 2
 !
 if (n) 20,12,10
-10 do 11 j = 1,n
+10 do j = 1,n
    x = x - 1.d0
 11 t = x*t
+end do
 12 x = x - 1.d0
 go to 40
 !
@@ -1123,9 +1129,10 @@ go to 40
 if (a > 0.d0) go to 30
 n = - n - 1
 if (n == 0) go to 22
-do 21 j = 1,n
+do j = 1,n
    x = x + 1.d0
 21 t = x*t
+end do
 22 x = (x + 0.5d0) + 0.5d0
 t = x*t
 if (t == 0.d0) return
@@ -1413,9 +1420,10 @@ return
 n = a - 1.5d0
 x = a
 w = 1.d0
-do 21 i = 1,n
+do i = 1,n
    x = x - 1.d0
 21 w = x*w
+end do
 dgamln = dgmln1(x - 1.d0) + log(w)
 return
 !
@@ -1919,7 +1927,7 @@ a1 = 0.d0
 a2 = 0.d0
 m = 30
 if (eps > 1.d-30) m = 25
-do 61 j = 1,m
+do j = 1,m
    t1 = a1
    t2 = a2
    a1 = a1 + c0(j)*v1
@@ -1930,6 +1938,7 @@ do 61 j = 1,m
    t2 = v1*q2 + v2*q1
    v1 = t1
 61 v2 = t2
+end do
 !-----------------------------------------------------------------------
 !                 Gathering together the results
 !-----------------------------------------------------------------------
@@ -5411,9 +5420,10 @@ go to 70
 m = b0 - 1.0
 if (m < 1) go to 50
 c = 1.0
-do 41 i = 1,m
+do i = 1,m
    b0 = b0 - 1.0
 41 c = c*(b0/(a0 + b0))
+end do
 u = log(c) + u
 !
 50 z = a*log(x) - u
@@ -6002,9 +6012,10 @@ do n = 1,30
    if (n == 1) go to 21
    nm1 = n - 1
    coef = b - n
-   do 20 i = 1,nm1
+   do i = 1,nm1
       s = s + coef*c(i)*d(n - i)
 20    coef = coef + b
+   end do
 21 d(n) = bm1*cn + s/n
    dj = d(n)*j
    sum = sum + dj
@@ -6217,24 +6228,28 @@ do n = 2, num, 2
    s = s + hn
    a0(np1) = 2.0*r1*s/(n + 3.0)
 !
-   do 41 i = n, np1
+   do i = n, np1
       r = -0.5*(i + 1.0)
       b0(1) = r*a0(1)
-      do 31 m = 2, i
+      do m = 2, i
          bsum = 0.0
          mm1 = m - 1
-         do 30 j = 1, mm1
+         do j = 1, mm1
             mmj = m - j
 30          bsum = bsum + (j*r - mmj)*a0(j)*b0(mmj)
+         end do
 31       b0(m) = r*a0(m) + bsum/m
+      end do
       c(i) = b0(i)/(i + 1.0)
 !
       dsum = 0.0
       im1 = i - 1
-      do 40 j = 1, im1
+      do j = 1, im1
          imj = i - j
 40       dsum = dsum + d(imj)*c(j)
+      end do
 41    d(i) = -(dsum + c(i))
+   end do
 !
    j0 = e1*znm1 + (n - 1.0)*j0
    j1 = e1*zn + n*j1
@@ -6438,16 +6453,18 @@ if (t >= 4.0*y) go to 170
 c = lambda - rty
 temp = 2.0*rty
 sum = 0.0
-do 160 l = 1,10
+do l = 1,10
    t = c*z(l)
 160 sum = sum + w(l)*(x - t*(t + temp))**am1
+end do
 p0 = c*gamrat*sum + 0.5*tol
 go to 200
 !
 170 sum = 0.0
-do 171 l = 1,10
+do l = 1,10
    t = 1.0 - y*z(l)*z(l)
 171 sum = sum + w(l)*t**am1
+end do
 p0 = 1.0 - rty*gamrat*sum
 !
 !                     Compute p using expansion 21
