@@ -12,6 +12,7 @@ from fixed_to_free import convert_text
 from lowercase_fortran import lowercase
 from sentence_case_comments import sentence_case
 from format_free_form import format_source
+from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform, MANIFEST
 from validate_explicit_typing import symbols
 from generate_interfaces import compiler_environment
@@ -49,7 +50,7 @@ def numerical_probe(compiler, folder, env=None, intel=False):
         command = [compiler, '/nologo', '/fpe:0', str(ROOT / 'tests/purity/test_pure_elemental.f90'), 'library.obj', '/exe:probe.exe']
     else:
         run([compiler, '-std=f2008', '-pedantic-errors', '-c', str(ROOT / 'nswc_interfaces.f90'), '-o', 'interfaces.o'], folder)
-        run([compiler, '-std=legacy', '-fallow-argument-mismatch', '-c', str(ROOT / 'nswc.f90'), '-o', 'library.o'], folder)
+        run([compiler, '-std=legacy', '-fno-allow-argument-mismatch', '-c', str(ROOT / 'nswc.f90'), '-o', 'library.o'], folder)
         command = [compiler, '-std=f2008', '-pedantic-errors', '-ffpe-trap=invalid,zero,overflow',
                    str(ROOT / 'tests/purity/test_pure_elemental.f90'), 'library.o', '-o', 'probe.exe']
     run(command, folder, env)
@@ -82,7 +83,7 @@ def main():
     baseline = sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text
     manifest = json.loads(MANIFEST.read_text())
     annotated = transform(baseline, manifest)
-    if annotated != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if apply_free_fixes(annotated) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('Purity regeneration differs from maintained source')
     inventories, code, warnings = [], [], []
     with tempfile.TemporaryDirectory(prefix='nswc-purity-validation-') as work:

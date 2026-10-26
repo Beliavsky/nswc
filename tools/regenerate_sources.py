@@ -15,6 +15,7 @@ from lowercase_fortran import lowercase
 from sentence_case_comments import sentence_case
 from format_free_form import format_source
 from fortran_procedures import HEADER, procedure_spans
+from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform as apply_purity
 
 
@@ -26,7 +27,7 @@ LINK = re.compile(
 def generate(root=ROOT):
     original_free = format_source(lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii"))))
     comments = sentence_case(original_free)
-    free = apply_purity(comments.text)
+    free = apply_free_fixes(apply_purity(comments.text))
     lines = free.splitlines(keepends=True)
     declarations = {}
     for name, start, end in procedure_spans(free):

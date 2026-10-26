@@ -3,12 +3,12 @@
 The suite contains the original `tests/source_smoke.f90`, 41 standalone main
 programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`, and two new
 programs checking quadratic/cubic roots and integral iteration, plus four callback
-test programs listed below. Each adapted
+test programs and a periodic block-system test listed below. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 48 programs against each of the three source versions:
+Run all 49 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -22,7 +22,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 144 numerical
+working directories are temporary. The default therefore performs 147 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -40,6 +40,7 @@ directly with any one of those library files.
 
 | Main program in `tests/fortran/` | Principal checks |
 |---|---|
+| `test_blktri_periodic.f90` | Periodic block systems with real and complex roots, odd/even dimensions, both boundary conditions in the other dimension, and reused initialization |
 | `test_callback_roots.f90` | Single and double precision scalar roots, an endpoint root, and a known scalar minimum |
 | `test_callback_minpack.f90` | Nonlinear roots, least squares with a nonzero residual, callback cancellation, and vector minimization |
 | `test_callback_rows.f90` | Real, double precision, and complex row callbacks, pivoting, and a singular-system status |

@@ -557,7 +557,7 @@ comparison with the original source and checks the warning inventory. The
 archived `nswc_orig.f` is unchanged. Regeneration updates `nswc.f90`, the source
 partitions, and documentation links; Intel regeneration refreshes interface
 provenance, while compiler checks verify the interface characteristics.
-All 48 numerical test programs must still pass against each source version,
+All 49 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so future source changes need
 compiler comparison and appropriate numerical checks rather than relying on

@@ -85,7 +85,7 @@ def verify_signatures(compiler, folder):
             raise ValueError('Callback interface differs from review: ' + name)
     stub.write_text(''.join(stripped.values()), encoding='ascii', newline='\n')
     inventories = []
-    for path, flags in [(ROOT / 'nswc.f90', ['-std=legacy', '-fallow-argument-mismatch']),
+    for path, flags in [(ROOT / 'nswc.f90', ['-std=legacy', '-fno-allow-argument-mismatch']),
                         (stub, ['-std=f2008', '-pedantic-errors'])]:
         result = command_run([compiler, '-fsyntax-only', '-fdump-fortran-original', *flags, str(path)], folder)
         inventories.append(symbols(result.stdout))
@@ -243,10 +243,12 @@ def verify_calls(compiler, folder, library_names, intel=False, env=None, sources
         command_run(command, folder, env)
         library = folder / ('library.obj' if intel else 'library.o')
         if intel:
-            # The documented COMPB/PPADD mismatch remains in the implementation.
+            # Fixed-form versions retain the legacy workspace association.
             command = [compiler, '/nologo', '/Od', '/fp:strict', '/warn:nointerfaces', '/c', str(ROOT / source), obj(library)]
         else:
-            command = [compiler, '-c', '-std=legacy', '-fallow-argument-mismatch', str(ROOT / source), '-o', str(library)]
+            command = [compiler, '-c', '-std=legacy',
+                       '-fno-allow-argument-mismatch' if source == 'nswc.f90' else '-fallow-argument-mismatch',
+                       str(ROOT / source), '-o', str(library)]
         command_run(command, folder, env, timeout=300)
         for path in test_programs():
             baseline = {}

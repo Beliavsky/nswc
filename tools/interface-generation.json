@@ -1,6 +1,6 @@
 {
   "source": "nswc.f90",
-  "source_sha256": "ee3d247797dc24576fd8c99029ad939fd37122c50635ab9ffda0f4a062dac180",
+  "source_sha256": "0b3d5c95a1ea2dcb90fadc3f516c489fb7aad80f73a632d4e40d4dc2af5afc17",
   "module_sha256": "957ee8d0befaf1cc8fc9c86780011d767a34bb46f7aea28404cd98bb6038a6ed",
   "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
   "procedures": 1062,
@@ -25,7 +25,5 @@
     "BLKTR1:PRDCT": "PROD0 and PRODP have incompatible workspace intents.",
     "BLKTR1:CPRDCT": "Legacy real/complex workspace association needs a separate review."
   },
-  "isolated_procedures": {
-    "COMPB": "Known real/complex PPADD workspace alias; see docs/compiler-warnings.md"
-  }
+  "isolated_procedures": {}
 }

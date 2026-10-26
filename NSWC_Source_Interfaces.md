@@ -116,7 +116,7 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `BSPP` | `SUBROUTINE` | `T, A, N, K, BREAK, C, L, WK` | [95156](source_parts/nswc_part_10.f90#L171) | [Documented](docs/18-curve-fitting.md#topic-371-01) |
 | `BSPVB` | `SUBROUTINE` | `T, K, JHIGH, J, X, LEFT, BLIST` | [95352](source_parts/nswc_part_10.f90#L367) | Not indexed |
 | `BSPVD` | `SUBROUTINE` | `T, K, X, LEFT, DBIATX, IDIM, NDERIV, A` | [95416](source_parts/nswc_part_10.f90#L431) | Not indexed |
-| `BSRH` | `FUNCTION` | `XLL, XRR, IZ, C, A, BH, F, SGN` | [121558](source_parts/nswc_part_12.f90#L5083) | Not indexed |
+| `BSRH` | `FUNCTION` | `XLL, XRR, IZ, C, A, BH, F, SGN` | [121568](source_parts/nswc_part_12.f90#L5093) | Not indexed |
 | `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [19904](source_parts/nswc_part_02.f90#L9399) | [Documented](docs/04-special-functions.md#topic-082-01) |
 | `BSSLJ` | `SUBROUTINE` | `A, IN, W` | [17976](source_parts/nswc_part_02.f90#L7471) | [Documented](docs/04-special-functions.md#topic-079-01) |
 | `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [21896](source_parts/nswc_part_03.f90#L890) | [Documented](docs/04-special-functions.md#topic-084-01) |
@@ -391,7 +391,7 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `DERFI` | `DOUBLE PRECISION FUNCTION` | `P, Q` | [7819](source_parts/nswc_part_01.f90#L7819) | [Documented](docs/04-special-functions.md#topic-051-01) |
 | `DESUM` | `DOUBLE PRECISION FUNCTION` | `MU, X` | [3988](source_parts/nswc_part_01.f90#L3988) | Not indexed |
 | `DET` | `FUNCTION` | `A, KA, N, X` | [45848](source_parts/nswc_part_05.f90#L3762) | [Documented](docs/08-matrices.md#topic-185-01) |
-| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123773](source_parts/nswc_part_12.f90#L7298) | [Documented](docs/27-continuous-random-number-generation.md#topic-452-01) |
+| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123783](source_parts/nswc_part_12.f90#L7308) | [Documented](docs/27-continuous-random-number-generation.md#topic-452-01) |
 | `DGAM1` | `DOUBLE PRECISION FUNCTION` | `X` | [12232](source_parts/nswc_part_02.f90#L1727) | Not indexed |
 | `DGAMLN` | `DOUBLE PRECISION FUNCTION` | `A` | [12400](source_parts/nswc_part_02.f90#L1895) | [Documented](docs/04-special-functions.md#topic-065-01) |
 | `DGAMMA` | `DOUBLE PRECISION FUNCTION` | `A` | [12086](source_parts/nswc_part_02.f90#L1581) | [Documented](docs/04-special-functions.md#topic-065-01) |
@@ -435,9 +435,9 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `DMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [35800](source_parts/nswc_part_04.f90#L4286) | [Documented](docs/08-matrices.md#topic-153-01) |
 | `DMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [35871](source_parts/nswc_part_04.f90#L4357) | [Documented](docs/08-matrices.md#topic-155-01) |
 | `DNRM2` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [34579](source_parts/nswc_part_04.f90#L3065) | [Documented](docs/07-vectors.md#topic-140-01) |
-| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [122647](source_parts/nswc_part_12.f90#L6172) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
-| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122928](source_parts/nswc_part_12.f90#L6453) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
-| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [123067](source_parts/nswc_part_12.f90#L6592) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
+| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [122657](source_parts/nswc_part_12.f90#L6182) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
+| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122938](source_parts/nswc_part_12.f90#L6463) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
+| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [123077](source_parts/nswc_part_12.f90#L6602) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
 | `DNSPIV` | `SUBROUTINE` | `N, IA, JA, A, B, MAX, R, C, IC, X, Y, P, IU, JU, U, IERR` | [58463](source_parts/nswc_part_06.f90#L5866) | Not indexed |
 | `DOGLEG` | `SUBROUTINE` | `N, R, LR, DIAG, QTB, DELTA, X, WA1, WA2` | [79112](source_parts/nswc_part_08.f90#L5303) | Not indexed |
 | `DONEST` | `SUBROUTINE` | `N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP` | [59585](source_parts/nswc_part_06.f90#L6988) | Not indexed |
@@ -485,23 +485,23 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `DQXLQM` | `SUBROUTINE` | `F, A, B, RESULT, ABSERR, RESABS, RESASC, VR, VS, LR, LS, KEY, EPMACH, UFLOW, OFLOW` | [110449](source_parts/nswc_part_11.f90#L4778) | Not indexed |
 | `DQXRRD` | `SUBROUTINE` | `F, Z, LZ, XL, XU, R, S, LR, LS` | [110776](source_parts/nswc_part_11.f90#L5105) | Not indexed |
 | `DQXRUL` | `SUBROUTINE` | `F, XL, XU, Y, YA, YM, KE, K1, FV1, FV2, L1, L2` | [110571](source_parts/nswc_part_11.f90#L4900) | Not indexed |
-| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123572](source_parts/nswc_part_12.f90#L7097) | [Documented](docs/27-continuous-random-number-generation.md#topic-451-01) |
-| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [122410](source_parts/nswc_part_12.f90#L5935) | [Documented](docs/27-continuous-random-number-generation.md#topic-441-01) |
-| `DRCIR1` | `SUBROUTINE` | `N, IX, X, KX, Y, KY, IERR` | [122426](source_parts/nswc_part_12.f90#L5951) | Not indexed |
+| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123582](source_parts/nswc_part_12.f90#L7107) | [Documented](docs/27-continuous-random-number-generation.md#topic-451-01) |
+| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [122420](source_parts/nswc_part_12.f90#L5945) | [Documented](docs/27-continuous-random-number-generation.md#topic-441-01) |
+| `DRCIR1` | `SUBROUTINE` | `N, IX, X, KX, Y, KY, IERR` | [122436](source_parts/nswc_part_12.f90#L5961) | Not indexed |
 | `DRCOMP` | `DOUBLE PRECISION FUNCTION` | `A, X` | [14475](source_parts/nswc_part_02.f90#L3970) | [Documented](docs/04-special-functions.md#topic-072-01) |
 | `DRCVL1` | `SUBROUTINE` | `X, Y, ERRTOL, RC, IERR` | [26084](source_parts/nswc_part_03.f90#L5078) | Not indexed |
 | `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [25547](source_parts/nswc_part_03.f90#L4541) | [Documented](docs/04-special-functions.md#topic-092-01) |
 | `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [4043](source_parts/nswc_part_01.f90#L4043) | [Documented](docs/02-elementary-operations.md#topic-036-01) |
 | `DREXP1` | `SUBROUTINE` | `X, E, W` | [4136](source_parts/nswc_part_01.f90#L4136) | Not indexed |
 | `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [25299](source_parts/nswc_part_03.f90#L4293) | [Documented](docs/04-special-functions.md#topic-092-01) |
-| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [123414](source_parts/nswc_part_12.f90#L6939) | [Documented](docs/27-continuous-random-number-generation.md#topic-449-01) |
+| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [123424](source_parts/nswc_part_12.f90#L6949) | [Documented](docs/27-continuous-random-number-generation.md#topic-449-01) |
 | `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [25826](source_parts/nswc_part_03.f90#L4820) | [Documented](docs/04-special-functions.md#topic-096-01) |
 | `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [4387](source_parts/nswc_part_01.f90#L4387) | [Documented](docs/02-elementary-operations.md#topic-037-01) |
 | `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [4467](source_parts/nswc_part_01.f90#L4467) | [Documented](docs/02-elementary-operations.md#topic-037-01) |
-| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [124177](source_parts/nswc_part_12.f90#L7702) | [Documented](docs/27-continuous-random-number-generation.md#topic-456-01) |
-| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [123264](source_parts/nswc_part_12.f90#L6789) | [Documented](docs/27-continuous-random-number-generation.md#topic-447-01) |
+| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [124187](source_parts/nswc_part_12.f90#L7712) | [Documented](docs/27-continuous-random-number-generation.md#topic-456-01) |
+| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [123274](source_parts/nswc_part_12.f90#L6799) | [Documented](docs/27-continuous-random-number-generation.md#topic-447-01) |
 | `DRNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [36456](source_parts/nswc_part_04.f90#L4942) | [Documented](docs/08-matrices.md#topic-161-01) |
-| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [122565](source_parts/nswc_part_12.f90#L6090) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
+| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [122575](source_parts/nswc_part_12.f90#L6100) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
 | `DROT` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, C, S` | [33195](source_parts/nswc_part_04.f90#L1681) | [Documented](docs/07-vectors.md#topic-132-01) |
 | `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [3310](source_parts/nswc_part_01.f90#L3310) | [Documented](docs/02-elementary-operations.md#topic-029-01) |
 | `DROTM` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, DPARAM` | [33704](source_parts/nswc_part_04.f90#L2190) | [Documented](docs/07-vectors.md#topic-133-01) |
@@ -548,7 +548,7 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `DTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [56700](source_parts/nswc_part_06.f90#L4103) | [Documented](docs/11-sparse-matrices.md#topic-240-01) |
 | `DTQL` | `SUBROUTINE` | `N, D, E2, IERR` | [65142](source_parts/nswc_part_07.f90#L2038) | Not indexed |
 | `DTQL2` | `SUBROUTINE` | `NM, N, D, E, Z, IERR` | [65426](source_parts/nswc_part_07.f90#L2322) | Not indexed |
-| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [123968](source_parts/nswc_part_12.f90#L7493) | [Documented](docs/27-continuous-random-number-generation.md#topic-454-01) |
+| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [123978](source_parts/nswc_part_12.f90#L7503) | [Documented](docs/27-continuous-random-number-generation.md#topic-454-01) |
 | `DTRED1` | `SUBROUTINE` | `NM, N, A, D, E, E2` | [64905](source_parts/nswc_part_07.f90#L1801) | Not indexed |
 | `DTRED2` | `SUBROUTINE` | `NM, N, A, D, E, Z` | [65281](source_parts/nswc_part_07.f90#L2177) | Not indexed |
 | `DTRED3` | `SUBROUTINE` | `N, NV, A, D, E, E2` | [65025](source_parts/nswc_part_07.f90#L1921) | Not indexed |
@@ -558,10 +558,10 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `DU11US` | `SUBROUTINE` | `A, MDA, M, N, UB, DB, MODE, NP, KRANK, KSURE, H, W, EB, IR, IC` | [70757](source_parts/nswc_part_07.f90#L7653) | Not indexed |
 | `DU12LS` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, MODE, KRANK, RNORM, H, W, IC, IR` | [70610](source_parts/nswc_part_07.f90#L7506) | Not indexed |
 | `DU12US` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, MODE, KRANK, RNORM, H, W, IR, IC` | [71029](source_parts/nswc_part_07.f90#L7925) | Not indexed |
-| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [121800](source_parts/nswc_part_12.f90#L5325) | [Documented](docs/27-continuous-random-number-generation.md#topic-439-01) |
-| `DURNG0` | `SUBROUTINE` | `IX, U, V` | [121951](source_parts/nswc_part_12.f90#L5476) | Not indexed |
-| `DURNG1` | `SUBROUTINE` | `IX, U, V, D` | [122097](source_parts/nswc_part_12.f90#L5622) | Not indexed |
-| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [122239](source_parts/nswc_part_12.f90#L5764) | [Documented](docs/27-continuous-random-number-generation.md#topic-440-01) |
+| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [121810](source_parts/nswc_part_12.f90#L5335) | [Documented](docs/27-continuous-random-number-generation.md#topic-439-01) |
+| `DURNG0` | `SUBROUTINE` | `IX, U, V` | [121961](source_parts/nswc_part_12.f90#L5486) | Not indexed |
+| `DURNG1` | `SUBROUTINE` | `IX, U, V, D` | [122107](source_parts/nswc_part_12.f90#L5632) | Not indexed |
+| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [122249](source_parts/nswc_part_12.f90#L5774) | [Documented](docs/27-continuous-random-number-generation.md#topic-440-01) |
 | `DVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [56621](source_parts/nswc_part_06.f90#L4024) | [Documented](docs/11-sparse-matrices.md#topic-240-01) |
 | `DVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [56646](source_parts/nswc_part_06.f90#L4049) | [Documented](docs/11-sparse-matrices.md#topic-240-01) |
 | `DXFN` | `SUBROUTINE` | `U, IDMN, I, J, UXXX, UXXXX` | [119995](source_parts/nswc_part_12.f90#L3520) | Not indexed |
@@ -605,7 +605,7 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `FFT1` | `SUBROUTINE` | `A, B, N, ISN, IERR` | [85881](source_parts/nswc_part_09.f90#L1540) | [Documented](docs/16-transforms.md#topic-320-01) |
 | `FMIN` | `SUBROUTINE` | `F, A0, B0, X, W, AERR, RERR, ERROR, IND` | [77073](source_parts/nswc_part_08.f90#L3264) | [Documented](docs/15-optimization.md#topic-306-01) |
 | `FPSER` | `REAL FUNCTION` | `A, B, X, EPS` | [16077](source_parts/nswc_part_02.f90#L5572) | Not indexed |
-| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123668](source_parts/nswc_part_12.f90#L7193) | [Documented](docs/27-continuous-random-number-generation.md#topic-452-01) |
+| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123678](source_parts/nswc_part_12.f90#L7203) | [Documented](docs/27-continuous-random-number-generation.md#topic-452-01) |
 | `FRNL` | `SUBROUTINE` | `T, C, S` | [9024](source_parts/nswc_part_01.f90#L9024) | [Documented](docs/04-special-functions.md#topic-057-01) |
 | `FSTOCD` | `SUBROUTINE` | `N, X, FCN, TYPSIZ, R, G` | [77935](source_parts/nswc_part_08.f90#L4126) | Not indexed |
 | `FSTOFD` | `SUBROUTINE` | `N, X, FCN, FX, G, TYPSIZ, R` | [77893](source_parts/nswc_part_08.f90#L4084) | Not indexed |
@@ -753,9 +753,9 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `NORMLZ` | `SUBROUTINE` | `N, X, BETA` | [76205](source_parts/nswc_part_08.f90#L2396) | Not indexed |
 | `NOSHFT` | `SUBROUTINE` | `L1, NN, TR, TI, ETA, PR, PI, HR, HI` | [32026](source_parts/nswc_part_04.f90#L512) | Not indexed |
 | `NPIVOT` | `SUBROUTINE` | `N, M, A, KA, B, KB, D, IERR` | [37047](source_parts/nswc_part_04.f90#L5533) | [Documented](docs/08-matrices.md#topic-163-01) |
-| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [122615](source_parts/nswc_part_12.f90#L6140) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
-| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122679](source_parts/nswc_part_12.f90#L6204) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
-| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122818](source_parts/nswc_part_12.f90#L6343) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
+| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [122625](source_parts/nswc_part_12.f90#L6150) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
+| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122689](source_parts/nswc_part_12.f90#L6214) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
+| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [122828](source_parts/nswc_part_12.f90#L6353) | [Documented](docs/27-continuous-random-number-generation.md#topic-444-01) |
 | `NSPIV1` | `SUBROUTINE` | `N, IA, JA, A, B, MAX, R, C, IC, X, Y, P, IU, JU, U, IERR` | [57523](source_parts/nswc_part_06.f90#L4926) | Not indexed |
 | `NSTERP` | `SUBROUTINE` | `TM, WM, XM, M, TN, WN, XN, N, KERNEL, RHFCN, RHS, KMN, NHALF, NUP` | [111723](source_parts/nswc_part_11.f90#L6052) | Not indexed |
 | `NSURF2` | `SUBROUTINE` | `DXMIN, DXMAX, MD, DYMIN, DYMAX, ND, DZ, IDZ, M, N, X, Y, Z, IZ, ZP, WORK, SIGMA` | [98460](source_parts/nswc_part_10.f90#L3475) | [Documented](docs/19-surface-fitting-over-rectangular-grids.md#topic-386-01) |
@@ -801,15 +801,15 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `POCA` | `SUBROUTINE` | `R, A, X, Y` | [3191](source_parts/nswc_part_01.f90#L3191) | [Documented](docs/02-elementary-operations.md#topic-028-01) |
 | `POLYDD` | `DOUBLE PRECISION FUNCTION` | `X` | [89529](source_parts/nswc_part_09.f90#L5188) | Not indexed |
 | `POLYEV` | `SUBROUTINE` | `N, SR, SI, PR, PI, QR, QI, PVR, PVI` | [32365](source_parts/nswc_part_04.f90#L851) | Not indexed |
-| `PPADD` | `SUBROUTINE` | `N, IERROR, A, C, CBP, BP, BH` | [121377](source_parts/nswc_part_12.f90#L4902) | Not indexed |
-| `PPSGF` | `FUNCTION` | `X, IZ, C, A, BH` | [121583](source_parts/nswc_part_12.f90#L5108) | Not indexed |
-| `PPSPF` | `FUNCTION` | `X, IZ, C, A, BH` | [121599](source_parts/nswc_part_12.f90#L5124) | Not indexed |
+| `PPADD` | `SUBROUTINE` | `N, IERROR, A, C, CBP, BP, BH` | [121387](source_parts/nswc_part_12.f90#L4912) | Not indexed |
+| `PPSGF` | `FUNCTION` | `X, IZ, C, A, BH` | [121593](source_parts/nswc_part_12.f90#L5118) | Not indexed |
+| `PPSPF` | `FUNCTION` | `X, IZ, C, A, BH` | [121609](source_parts/nswc_part_12.f90#L5134) | Not indexed |
 | `PPVAL` | `SUBROUTINE` | `X, A, L, N, XI, YI, NI` | [95259](source_parts/nswc_part_10.f90#L274) | [Documented](docs/18-curve-fitting.md#topic-372-01) |
 | `PROD0` | `SUBROUTINE` | `ND, BD, NM1, BM1, NM2, BM2, NA, AA, X, Y, M, A, B, C, D, W, U` | [120683](source_parts/nswc_part_12.f90#L4208) | Not indexed |
 | `PRODP` | `SUBROUTINE` | `ND, BD, NM1, BM1, NM2, BM2, NA, AA, X, Y, M, A, B, C, D, U, W` | [120777](source_parts/nswc_part_12.f90#L4302) | Not indexed |
 | `PSCMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, M, IERR` | [92652](source_parts/nswc_part_09.f90#L8311) | [Documented](docs/18-curve-fitting.md#topic-354-01) |
 | `PSEVL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR` | [92732](source_parts/nswc_part_09.f90#L8391) | [Documented](docs/18-curve-fitting.md#topic-354-01) |
-| `PSGF` | `FUNCTION` | `X, IZ, C, A, BH` | [121536](source_parts/nswc_part_12.f90#L5061) | Not indexed |
+| `PSGF` | `FUNCTION` | `X, IZ, C, A, BH` | [121546](source_parts/nswc_part_12.f90#L5071) | Not indexed |
 | `PSI` | `REAL FUNCTION` | `XX` | [12596](source_parts/nswc_part_02.f90#L2091) | [Documented](docs/04-special-functions.md#topic-069-01) |
 | `PSIDF` | `SUBROUTINE` | `X, N, M, ANS, IFLAG` | [13217](source_parts/nswc_part_02.f90#L2712) | [Documented](docs/04-special-functions.md#topic-071-01) |
 | `PSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [28020](source_parts/nswc_part_03.f90#L7014) | [Documented](docs/05-polynomials.md#topic-112-01) |
@@ -859,12 +859,12 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `RADF5` | `SUBROUTINE` | `IDO, L1, CC, CH, WA1, WA2, WA3, WA4` | [87993](source_parts/nswc_part_09.f90#L3652) | Not indexed |
 | `RADFG` | `SUBROUTINE` | `IDO, IP, L1, IDL1, CC, C1, C2, CH, CH2, WA` | [88101](source_parts/nswc_part_09.f90#L3760) | Not indexed |
 | `RADIX` | `SUBROUTINE` | `IBETA` | [710](source_parts/nswc_part_01.f90#L710) | Not indexed |
-| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [123177](source_parts/nswc_part_12.f90#L6702) | [Documented](docs/27-continuous-random-number-generation.md#topic-447-01) |
+| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [123187](source_parts/nswc_part_12.f90#L6712) | [Documented](docs/27-continuous-random-number-generation.md#topic-447-01) |
 | `RARC` | `SUBROUTINE` | `IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, NP1` | [5951](source_parts/nswc_part_01.f90#L5951) | Not indexed |
-| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123477](source_parts/nswc_part_12.f90#L7002) | [Documented](docs/27-continuous-random-number-generation.md#topic-451-01) |
+| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [123487](source_parts/nswc_part_12.f90#L7012) | [Documented](docs/27-continuous-random-number-generation.md#topic-451-01) |
 | `RBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [32425](source_parts/nswc_part_04.f90#L911) | [Documented](docs/06-solutions-of-nonlinear-equations.md#topic-129-01) |
-| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [122306](source_parts/nswc_part_12.f90#L5831) | [Documented](docs/27-continuous-random-number-generation.md#topic-441-01) |
-| `RCIR1` | `SUBROUTINE` | `N, IX, X, KX, Y, KY, IERR` | [122322](source_parts/nswc_part_12.f90#L5847) | Not indexed |
+| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [122316](source_parts/nswc_part_12.f90#L5841) | [Documented](docs/27-continuous-random-number-generation.md#topic-441-01) |
+| `RCIR1` | `SUBROUTINE` | `N, IX, X, KX, Y, KY, IERR` | [122332](source_parts/nswc_part_12.f90#L5857) | Not indexed |
 | `RCOMP` | `REAL FUNCTION` | `A, X` | [14440](source_parts/nswc_part_02.f90#L3935) | [Documented](docs/04-special-functions.md#topic-072-01) |
 | `RCVAL1` | `SUBROUTINE` | `X, Y, ERRTOL, RC, IERR` | [25975](source_parts/nswc_part_03.f90#L4969) | Not indexed |
 | `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [25417](source_parts/nswc_part_03.f90#L4411) | [Documented](docs/04-special-functions.md#topic-092-01) |
@@ -878,7 +878,7 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `RFFTI` | `SUBROUTINE` | `N, WSAVE` | [86969](source_parts/nswc_part_09.f90#L2628) | Not indexed |
 | `RFFTI1` | `SUBROUTINE` | `N, WA, IFAC` | [86978](source_parts/nswc_part_09.f90#L2637) | Not indexed |
 | `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [25181](source_parts/nswc_part_03.f90#L4175) | [Documented](docs/04-special-functions.md#topic-092-01) |
-| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [123351](source_parts/nswc_part_12.f90#L6876) | [Documented](docs/27-continuous-random-number-generation.md#topic-449-01) |
+| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [123361](source_parts/nswc_part_12.f90#L6886) | [Documented](docs/27-continuous-random-number-generation.md#topic-449-01) |
 | `RISORT` | `SUBROUTINE` | `A, M, N` | [1707](source_parts/nswc_part_01.f90#L1707) | [Documented](docs/02-elementary-operations.md#topic-021-01) |
 | `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [25678](source_parts/nswc_part_03.f90#L4672) | [Documented](docs/04-special-functions.md#topic-096-01) |
 | `RK` | `SUBROUTINE` | `N, T, H, A, F` | [118432](source_parts/nswc_part_12.f90#L1957) | [Documented](docs/24-ordinary-differential-equations-initial-value-problems.md#topic-431-01) |
@@ -890,10 +890,10 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `RLOG` | `REAL FUNCTION` | `X` | [4283](source_parts/nswc_part_01.f90#L4283) | [Documented](docs/02-elementary-operations.md#topic-037-01) |
 | `RLOG1` | `REAL FUNCTION` | `X` | [4335](source_parts/nswc_part_01.f90#L4335) | [Documented](docs/02-elementary-operations.md#topic-037-01) |
 | `RMIN` | `FUNCTION` | `N, M, COND, UNITRD, AVERR` | [111765](source_parts/nswc_part_11.f90#L6094) | Not indexed |
-| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [124057](source_parts/nswc_part_12.f90#L7582) | [Documented](docs/27-continuous-random-number-generation.md#topic-456-01) |
+| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [124067](source_parts/nswc_part_12.f90#L7592) | [Documented](docs/27-continuous-random-number-generation.md#topic-456-01) |
 | `RNDERR` | `FUNCTION` | `X, A, Y, B` | [111074](source_parts/nswc_part_11.f90#L5403) | Not indexed |
 | `RNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [36402](source_parts/nswc_part_04.f90#L4888) | [Documented](docs/08-matrices.md#topic-161-01) |
-| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [122514](source_parts/nswc_part_12.f90#L6039) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
+| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [122524](source_parts/nswc_part_12.f90#L6049) | [Documented](docs/27-continuous-random-number-generation.md#topic-442-01) |
 | `RNRM` | `REAL FUNCTION` | `X, Y, N, IFLAG` | [111786](source_parts/nswc_part_11.f90#L6115) | Not indexed |
 | `RORDER` | `SUBROUTINE` | `A, IP, N` | [2762](source_parts/nswc_part_01.f90#L2762) | [Documented](docs/02-elementary-operations.md#topic-021-01) |
 | `ROT3` | `SUBROUTINE` | `A, THETA` | [3386](source_parts/nswc_part_01.f90#L3386) | [Documented](docs/02-elementary-operations.md#topic-030-01) |
@@ -1037,8 +1037,8 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `TPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [35200](source_parts/nswc_part_04.f90#L3686) | [Documented](docs/08-matrices.md#topic-148-01) |
 | `TQL2` | `SUBROUTINE` | `NM, N, D, E, Z, IERR` | [64516](source_parts/nswc_part_07.f90#L1412) | Not indexed |
 | `TQLRAT` | `SUBROUTINE` | `N, D, E2, IERR` | [64098](source_parts/nswc_part_07.f90#L994) | Not indexed |
-| `TQLRT0` | `SUBROUTINE` | `N, D, E2, IERR` | [121214](source_parts/nswc_part_12.f90#L4739) | Not indexed |
-| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [123880](source_parts/nswc_part_12.f90#L7405) | [Documented](docs/27-continuous-random-number-generation.md#topic-454-01) |
+| `TQLRT0` | `SUBROUTINE` | `N, D, E2, IERR` | [121224](source_parts/nswc_part_12.f90#L4749) | Not indexed |
+| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [123890](source_parts/nswc_part_12.f90#L7415) | [Documented](docs/27-continuous-random-number-generation.md#topic-454-01) |
 | `TRED1` | `SUBROUTINE` | `NM, N, A, D, E, E2` | [63861](source_parts/nswc_part_07.f90#L757) | Not indexed |
 | `TRED2` | `SUBROUTINE` | `NM, N, A, D, E, Z` | [64371](source_parts/nswc_part_07.f90#L1267) | Not indexed |
 | `TRED3` | `SUBROUTINE` | `N, NV, A, D, E, E2` | [63981](source_parts/nswc_part_07.f90#L877) | Not indexed |
@@ -1054,11 +1054,11 @@ For source-verified interfaces grouped by mathematical topic, see [README.md](RE
 | `U11US` | `SUBROUTINE` | `A, MDA, M, N, UB, DB, MODE, NP, KRANK, KSURE, H, W, EB, IR, IC` | [69656](source_parts/nswc_part_07.f90#L6552) | Not indexed |
 | `U12LS` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, MODE, KRANK, RNORM, H, W, IC, IR` | [69506](source_parts/nswc_part_07.f90#L6402) | Not indexed |
 | `U12US` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, MODE, KRANK, RNORM, H, W, IR, IC` | [69928](source_parts/nswc_part_07.f90#L6824) | Not indexed |
-| `URGET` | `SUBROUTINE` | `N, IBEG, IEND, IX, L, IERR` | [121615](source_parts/nswc_part_12.f90#L5140) | [Documented](docs/26-discrete-random-number-generation.md#topic-438-01) |
-| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [121719](source_parts/nswc_part_12.f90#L5244) | [Documented](docs/27-continuous-random-number-generation.md#topic-439-01) |
-| `URNG0` | `SUBROUTINE` | `IX, U, V` | [121880](source_parts/nswc_part_12.f90#L5405) | Not indexed |
-| `URNG1` | `SUBROUTINE` | `IX, U, V, D` | [122022](source_parts/nswc_part_12.f90#L5547) | Not indexed |
-| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [122172](source_parts/nswc_part_12.f90#L5697) | [Documented](docs/27-continuous-random-number-generation.md#topic-440-01) |
+| `URGET` | `SUBROUTINE` | `N, IBEG, IEND, IX, L, IERR` | [121625](source_parts/nswc_part_12.f90#L5150) | [Documented](docs/26-discrete-random-number-generation.md#topic-438-01) |
+| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [121729](source_parts/nswc_part_12.f90#L5254) | [Documented](docs/27-continuous-random-number-generation.md#topic-439-01) |
+| `URNG0` | `SUBROUTINE` | `IX, U, V` | [121890](source_parts/nswc_part_12.f90#L5415) | Not indexed |
+| `URNG1` | `SUBROUTINE` | `IX, U, V, D` | [122032](source_parts/nswc_part_12.f90#L5557) | Not indexed |
+| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [122182](source_parts/nswc_part_12.f90#L5707) | [Documented](docs/27-continuous-random-number-generation.md#topic-440-01) |
 | `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [26803](source_parts/nswc_part_03.f90#L5797) | [Documented](docs/04-special-functions.md#topic-105-01) |
 | `VNORM` | `FUNCTION` | `V, NCOMP` | [118394](source_parts/nswc_part_12.f90#L1919) | Not indexed |
 | `VNWRMS` | `REAL FUNCTION` | `N, V, W` | [118411](source_parts/nswc_part_12.f90#L1936) | Not indexed |

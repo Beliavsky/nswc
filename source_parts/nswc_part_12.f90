@@ -4642,6 +4642,8 @@ real :: arg, bnorm, d1, d2, d3
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 real :: spmpar
+complex, allocatable :: root_complex(:)
+real, allocatable :: root_real(:)
 !
 !     compb computes the roots of the b polynomials using tqlrt0,
 !     which is a modification of the EISPACK subroutine tqlrat.
@@ -4725,7 +4727,15 @@ if (j2 - n2m2) 170,170,190
 190 b(lh) = b(n2m2 + 1)
 call indxb (if,k - 1,j1,j2)
 j2 = j1 + nmp + nmp
-call ppadd (nm + 1,ierror,an,cn,b(j1),b(j1),b(j2))
+allocate(root_complex(nmp),root_real(nmp))
+root_real = b(j1:j1 + nm)
+call ppadd (nmp,ierror,an,cn,root_complex,root_real,b(j2))
+if (ierror /= 0) return
+b(j1:j1 + 2*nmp - 1) = transfer(root_complex,b(j1),2*nmp)
+if (ncmplx == 0) then
+   root_real(1) = real(root_complex(1))
+   b(j1:j1 + nm) = root_real
+end if
 return
 !
 !     Error return

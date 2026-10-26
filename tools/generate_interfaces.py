@@ -1,8 +1,6 @@
 """Generate the optional external-interface module with Intel ifx.
 
 Run in an initialized Intel compiler environment, or pass --ifx explicitly.
-COMPB is checked separately because its legacy PPADD workspace association is
-not type conforming. This does not change or repair that library call.
 """
 import argparse
 import hashlib
@@ -87,23 +85,22 @@ def generate(compiler, source, env=None):
         raise ValueError('Expected the complete maintained NSWC source')
     raw, diagnostics = {}, []
     with tempfile.TemporaryDirectory(prefix='nswc-ifx-interfaces-') as folder:
-        for label, names in [('library', [n for n in definitions if n != 'COMPB']), ('compb', ['COMPB'])]:
-            work = Path(folder) / label
-            work.mkdir()
-            (work / 'input.f90').write_text(''.join(definitions[n] for n in names), encoding='ascii', newline='\n')
-            command = [compiler, '/nologo', '/syntax-only', '/gen-interfaces:source', '/warn:interfaces', 'input.f90']
-            result = subprocess.run(command, cwd=work, env=env, capture_output=True, text=True, timeout=300)
-            diagnostics.append(result.stdout + result.stderr)
-            if result.returncode:
-                raise RuntimeError(f'ifx generation failed ({label}):\n{diagnostics[-1]}')
-            generated = list(work.glob('*__genmod.f90'))
-            if len(generated) != len(names):
-                raise ValueError(f'Missing generated interfaces in {label}')
-            for path in generated:
-                name = path.name[:-len('__genmod.f90')].upper()
-                if name in raw:
-                    raise ValueError(f'Duplicate generated file: {name}')
-                raw[name] = path.read_text()
+        work = Path(folder) / 'library'
+        work.mkdir()
+        (work / 'input.f90').write_text(''.join(definitions.values()), encoding='ascii', newline='\n')
+        command = [compiler, '/nologo', '/syntax-only', '/gen-interfaces:source', '/warn:interfaces', 'input.f90']
+        result = subprocess.run(command, cwd=work, env=env, capture_output=True, text=True, timeout=300)
+        diagnostics.append(result.stdout + result.stderr)
+        if result.returncode:
+            raise RuntimeError(f'ifx generation failed:\n{diagnostics[-1]}')
+        generated = list(work.glob('*__genmod.f90'))
+        if len(generated) != len(definitions):
+            raise ValueError('Missing generated interfaces')
+        for path in generated:
+            name = path.name[:-len('__genmod.f90')].upper()
+            if name in raw:
+                raise ValueError(f'Duplicate generated file: {name}')
+            raw[name] = path.read_text()
         version = subprocess.run([compiler, '/QV'], env=env, capture_output=True, text=True, timeout=30)
         if version.returncode:
             raise RuntimeError(version.stdout + version.stderr)
@@ -113,7 +110,7 @@ def generate(compiler, source, env=None):
                 'procedures': len(raw), 'kind_mappings': KINDS,
                 'callback_review_sha256': sha(Path(__file__).with_name('callback_interfaces.py').read_bytes()),
                 'explicit_callbacks': len(BINDINGS), 'callback_exceptions': EXCEPTIONS,
-                'isolated_procedures': {'COMPB': 'Known real/complex PPADD workspace alias; see docs/compiler-warnings.md'}}
+                'isolated_procedures': {}}
     return module, metadata, '\n'.join(diagnostics)
 
 

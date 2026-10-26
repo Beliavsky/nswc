@@ -40,7 +40,7 @@ GNU Fortran:
 
 ```sh
 gfortran -c nswc_interfaces.f90
-gfortran -c -std=legacy -fallow-argument-mismatch nswc.f90
+gfortran -c -std=legacy nswc.f90
 gfortran myprogram.f90 nswc.o -o myprogram
 ```
 
@@ -80,11 +80,10 @@ The generator expects `ifx` on the command search path. Alternatively, use
 initialize the Intel and Visual Studio environment in a child process. A local
 setup batch file is also supported. No system environment settings are changed.
 
-Generation uses two isolated temporary directories. One contains the library
-without `COMPB`; the other contains `COMPB` alone. This avoids the known
-nonconforming `COMPB`/`PPADD` workspace association stopping interface extraction.
-It does not change that call or establish its correctness. Every procedure must
-produce exactly one generated interface.
+Generation checks the complete free-form library together in a temporary
+directory. `COMPB` now supplies separate real and complex work arrays to `PPADD`,
+so interface extraction no longer needs to isolate that call. Every procedure
+must produce exactly one generated interface.
 
 The assembler removes timestamps and compiler module wrappers, adds
 `IMPLICIT NONE` to each interface body, and combines the bodies into one module.
@@ -117,7 +116,7 @@ inference is distinguished from the callback's declared interface.
 The combined module must also compile as standard Fortran 2008 with GNU Fortran.
 Source and module hashes detect stale artifacts.
 
-The validator makes temporary copies of all 48 numerical main programs. It
+The validator makes temporary copies of all 49 numerical main programs. It
 replaces their library interface blocks and external declarations with selected
 module imports, preserving their own callback interfaces and executable tests.
 Each original and modified caller is built, run, and checked for identical

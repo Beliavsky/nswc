@@ -77,11 +77,14 @@ displayed line numbers refer to the complete `nswc.f90`.
 The library retains legacy Fortran features. For GNU Fortran, for example:
 
 ```sh
-gfortran -c -std=legacy -fallow-argument-mismatch nswc.f90
+gfortran -c -std=legacy nswc.f90
 ```
 
-These options accommodate existing legacy constructs and argument mismatches;
-they do not establish correctness for every routine. Machine constants retain
+`-std=legacy` accommodates existing legacy constructs. The fixed-form sources
+still require legacy argument-mismatch handling. The free-form source uses
+separate real and complex root work arrays in `COMPB`, with explicit packing
+back into the solver workspace. See the [warning review](docs/compiler-warnings.md).
+Machine constants retain
 the original configuration; see the installation appendix before numerical use.
 Named procedure endings require Fortran 90 or newer, including in `nswc.f`.
 
@@ -132,7 +135,8 @@ and executable compiler trees, pure callers, and elemental array calls.
 
 ## Regenerating the source
 
-Maintain `nswc.f` and generate `nswc.f90`, its browsable partitions, and the
+Maintain `nswc.f` and the reviewed free-form corrections in
+`tools/free_source_fixes.py`, then generate `nswc.f90`, its browsable partitions, and the
 Markdown source links together:
 
 ```sh
@@ -215,7 +219,7 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 48 numerical test programs
+Run `python tools/validate_sources.py` to build and run 49 numerical test programs
 against all three versions with GNU Fortran (144 test runs). Use `--compiler PATH`
 when the compiler is not on your command search path. The suite includes 47 main
 programs in `tests/fortran/`, covering linear algebra, special

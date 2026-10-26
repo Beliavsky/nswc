@@ -138,8 +138,9 @@ of 25,873 symbol records; types, shapes, storage attributes, and argument lists
 must still match, subject to the reviewed forwarded procedure cases and the
 separately confirmed warning corrections.
 
-The local compilation now has 12 reviewed warnings, compared with the original
-28. All 48 numerical main programs run against each source version, giving 144 runs with
+The maintained fixed-form source has 12 reviewed warnings and the free-form source
+has 11, compared with the original 28. All 49 numerical main programs run against
+each source version, giving 147 runs with
 matching diagnostics. Regression tests cover dependency propagation, unresolved
 calls and cycles, array elements passed to procedures, keyword arguments, stale
 manifests, compiler attribute confirmation, scalar initialization, specification
