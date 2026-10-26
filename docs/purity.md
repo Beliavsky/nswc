@@ -12,6 +12,10 @@ TVAL, BASIZ, and RMIN.
 
 ## Calling the procedures
 
+New programs can import procedures directly from the standalone
+[module implementation](module.md), using `use nswc_mod, only: ...`.
+The following instructions apply to external calls into `nswc.f90`.
+
 Elemental procedures require an explicit interface, even for scalar calls.
 Use `nswc_interfaces` or an equivalent local interface block. Pure callers also
 need interfaces that expose the purity of the procedures they call.

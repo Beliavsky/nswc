@@ -17,6 +17,7 @@ from format_free_form import format_source
 from fortran_procedures import HEADER, procedure_spans
 from free_source_fixes import transform as apply_free_fixes
 from procedure_purity import transform as apply_purity
+from generate_module import module_source
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +54,7 @@ def generate(root=ROOT):
         entry['line'] = comment_lines[entry['line']]
     report['generated_source_sha256'] = hashlib.sha256(free.encode('ascii')).hexdigest()
     outputs = {root / "nswc.f90": free,
+               root / 'nswc_mod.f90': module_source(free),
                root / 'tools/comment-case-review.json': json.dumps(report, indent=2) + '\n'}
     locations = {}
     for index, start in enumerate(starts):

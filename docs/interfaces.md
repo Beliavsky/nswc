@@ -1,5 +1,9 @@
 # Optional external procedure interfaces
 
+New programs can use the [module implementation](module.md), which already
+provides explicit interfaces through `use nswc_mod`. The interface-only module
+described below supports callers of the external implementation `nswc.f90`.
+
 `nswc_interfaces.f90` describes all 1,062 external procedures in the maintained
 `nswc.f90`. It contains interface blocks, without implementations, including the
 reviewed PURE and ELEMENTAL attributes. Elemental calls require an explicit

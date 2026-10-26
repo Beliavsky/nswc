@@ -1,0 +1,51 @@
+{
+  "code_sha256": "edd1fdcd44a6c5425c7825ba8215709792c7458ff2616ef3cc78c92af7e23ed1",
+  "compiler": "GNU Fortran (GCC) 17.0.0 20260510 (experimental)",
+  "intrinsic_overrides": {
+    "DGINV": [
+      "dgamma"
+    ],
+    "GAMINV": [
+      "gamma"
+    ],
+    "AERF": [
+      "erf",
+      "erfc"
+    ],
+    "GRATIO": [
+      "erf"
+    ],
+    "RCOMP": [
+      "gamma"
+    ],
+    "CBSSLJ": [
+      "gamma"
+    ],
+    "GRAT1": [
+      "erf"
+    ],
+    "DRCOMP": [
+      "dgamma"
+    ],
+    "DGRAT": [
+      "derf"
+    ],
+    "DERFI": [
+      "derf"
+    ],
+    "DAERF": [
+      "derf",
+      "derfc"
+    ],
+    "VALR2": [
+      "erf"
+    ],
+    "CIRCV": [
+      "erf"
+    ],
+    "PKILL": [
+      "erf",
+      "erfc"
+    ]
+  }
+}

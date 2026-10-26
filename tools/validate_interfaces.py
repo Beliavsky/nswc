@@ -16,6 +16,7 @@ from validate_explicit_typing import symbols
 from validate_sources import check_result, test_programs
 from callback_interfaces import abstract_interfaces, enrich, strip_contracts, BINDINGS
 from interface_variants import legacy_interfaces
+from format_free_form import TOKEN
 
 
 def command_run(command, folder, env=None, timeout=180, expect_success=True):
@@ -99,6 +100,10 @@ def module_caller(text, library_names):
     names, kept, depth, preserve = set(), [], 0, False
     for line in text.splitlines(keepends=True):
         code = line.split('!', 1)[0].strip()
+        tokens = [m[0] for m in TOKEN.finditer(code)]
+        for token, following in zip(tokens, tokens[1:]):
+            if token.lower() == 'call' and following.upper() in library_names:
+                names.add(following.upper())
         if re.match(r'^(?:abstract\s+)?interface\b', code, re.I):
             if depth == 0:
                 preserve = bool(re.match(r'^abstract\b', code, re.I))

@@ -26,7 +26,8 @@ viewable code partitions.
 - [Compiler warning review](docs/compiler-warnings.md)
 - [Optional procedure interfaces](docs/interfaces.md)
 - [Original report cover](scans/page_0001.png)
-- [Recommended free-form Fortran source](nswc.f90)
+- [Recommended module source for new programs](nswc_mod.f90)
+- [Free-form source for external callers](nswc.f90)
 - [Readable fixed-form alternative](nswc.f)
 - [Unchanged original Fortran source](nswc_orig.f)
 
@@ -67,18 +68,32 @@ viewable code partitions.
 
 Run the commands below from the root of your downloaded or cloned repository.
 
-Use `nswc.f90`, the recommended free-form version. It has named procedure
-endings and blank lines between procedures. `nswc.f` provides the same library
-in readable fixed form; `nswc_orig.f` preserves the supplied source unchanged.
-Compile only one version of the library to avoid duplicate procedure definitions.
+For new programs, use `nswc_mod.f90`, which supplies module `nswc_mod` with all
+1,062 library procedures and explicit interfaces. For existing programs that
+call external procedures, retain `nswc.f90`. Both free-form versions provide the
+same routines, data declarations, and pure/elemental attributes. `nswc.f`
+provides readable fixed form; `nswc_orig.f` preserves the supplied source.
+Choose one implementation for each executable.
 Documentation source links point into free-form files in `source_parts/`;
 displayed line numbers refer to the complete `nswc.f90`.
 
 The library retains legacy Fortran features. For GNU Fortran, for example:
 
 ```sh
-gfortran -c -std=legacy nswc.f90
+gfortran -c -std=legacy nswc_mod.f90
+gfortran myprogram.f90 nswc_mod.o -o myprogram
 ```
+
+In `myprogram.f90`, import the procedures you use:
+
+```fortran
+use nswc_mod, only: sgefa, sgesl
+```
+
+The module object links independently. It needs neither `nswc.o` nor
+`nswc_interfaces.f90`. Compile it before compiling callers, with the same
+compiler. See the [module guide](docs/module.md) for generation and verification.
+For external callers, compile `nswc.f90` instead and link `nswc.o`.
 
 `-std=legacy` accommodates existing legacy constructs. The fixed-form sources
 still require legacy argument-mismatch handling. The free-form source uses
@@ -88,7 +103,7 @@ Machine constants retain
 the original configuration; see the installation appendix before numerical use.
 Named procedure endings require Fortran 90 or newer, including in `nswc.f`.
 
-## Optional interfaces
+## Optional interfaces for external callers
 
 [`nswc_interfaces.f90`](nswc_interfaces.f90) provides explicit interfaces for all
 1,062 external procedures in `nswc.f90`. Its interfaces were
@@ -101,9 +116,10 @@ with the same compiler as the library, then import selected procedures:
 use nswc_interfaces, only: sgefa, sgesl
 ```
 
-For GNU Fortran, after compiling the library as above:
+For GNU Fortran with the external implementation:
 
 ```sh
+gfortran -c -std=legacy nswc.f90
 gfortran -c nswc_interfaces.f90
 gfortran myprogram.f90 nswc.o -o myprogram
 ```
@@ -115,15 +131,15 @@ to compare all signatures and test callers using the module.
 
 ## Pure and elemental procedures
 
-The free-form version declares **27 procedures `pure elemental`** and another
-**319 `pure`**. Implementations remain external procedures. Internal calls have
+Both free-form versions declare **27 procedures `pure elemental`** and another
+**319 `pure`**. In `nswc.f90`, implementations remain external. Internal calls have
 local interfaces wherever pure or elemental calls require them, so compiling
 `nswc.f90` still needs no additional source file or module dependency.
 
 Import elemental routines before calling them, including scalar calls:
 
 ```fortran
-use nswc_interfaces, only: cbrt
+use nswc_mod, only: cbrt
 ! cbrt([-8.0, 0.0, 27.0]) returns approximately [-2.0, 0.0, 3.0].
 ```
 
@@ -136,8 +152,8 @@ and executable compiler trees, pure callers, and elemental array calls.
 ## Regenerating the source
 
 Maintain `nswc.f` and the reviewed free-form corrections in
-`tools/free_source_fixes.py`, then generate `nswc.f90`, its browsable partitions, and the
-Markdown source links together:
+`tools/free_source_fixes.py`, then generate `nswc.f90`, `nswc_mod.f90`, the browsable
+partitions, and the Markdown source links together:
 
 ```sh
 python tools/regenerate_sources.py
@@ -145,7 +161,7 @@ python tools/regenerate_sources.py --check
 ```
 
 The generator overwrites generated source files and updates source-link line
-numbers. Do not edit `nswc.f90` or `source_parts/` independently. It uses the
+numbers. Do not edit `nswc.f90`, `nswc_mod.f90`, or `source_parts/` independently. It uses the
 repository copy of `tools/fixed_to_free.py`, so regeneration needs only Python's
 standard library. The converter handles compact DATA array declarations and wraps
 long FORMAT statements without splitting their Hollerith text.

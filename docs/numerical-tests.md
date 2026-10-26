@@ -25,6 +25,12 @@ program against that object file separately. All build products and program
 working directories are temporary. The default therefore performs 147 numerical
 test runs. The same command runs in GitHub Actions.
 
+To compare all 49 mains using external procedures with callers importing the
+standalone module, run `python tools/validate_module.py`. This performs 100 numerical
+runs, including a focused double-precision gamma test, and checks module signatures,
+elemental arrays and invalid data arguments.
+See the [module guide](module.md).
+
 For a selected program or library version:
 
 ```sh

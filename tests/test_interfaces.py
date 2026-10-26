@@ -129,6 +129,12 @@ end program
         with self.assertRaisesRegex(ValueError, 'not a library'):
             module_caller(text, {'OTHER'})
 
+    def test_implicit_subroutine_calls_are_imported(self):
+        text = "program p\nimplicit none\ncall s(1)\nprint *, 'call other'\nend program p\n"
+        rewritten = module_caller(text, {'S', 'OTHER'})
+        self.assertIn('    S\n', rewritten)
+        self.assertNotIn('    OTHER', rewritten)
+
 
 if __name__ == '__main__':
     unittest.main()
