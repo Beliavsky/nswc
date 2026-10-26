@@ -25,6 +25,17 @@ program against that object file separately. All build products and program
 working directories are temporary. The default therefore performs 156 numerical
 test runs. The same command runs in GitHub Actions.
 
+For bounds-checked block-tridiagonal solver regressions at both unoptimized and
+optimized settings, run:
+
+```sh
+python tools/validate_blktri_bounds.py
+```
+
+This checks both free-form implementations and both boundary conditions in
+each dimension. It also reproduces the original empty-factor bounds failure;
+see the [correction notes](compiler-warnings.md#empty-polynomial-factors).
+
 To compare all 52 mains using external procedures with callers importing the
 standalone module, run `python tools/validate_module.py`. This performs 106 numerical
 runs, including a focused double-precision gamma test, and checks module signatures,

@@ -118379,8 +118379,11 @@ do l = 1,kdo
    i4 = i2 + i2
    irm1 = ir - 1
    call indxb(i2,ir,im2,nm2)
+   if (nm2 == 0) im2 = 1
    call indxb(i1,irm1,im3,nm3)
+   if (nm3 == 0) im3 = 1
    call indxb(i3,irm1,im1,nm1)
+   if (nm1 == 0) im1 = 1
    call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
       & m,am,bm,cm,wd,ww,wu)
    if = 2**nswc_state_cblkt_k
@@ -118395,9 +118398,13 @@ do l = 1,kdo
       go to 80
 20    call indxa(i,ir,idxa,na)
       call indxb(i - i1,irm1,im1,nm1)
+      if (nm1 == 0) im1 = 1
       call indxb(ipi2,ir,ip2,np2)
+      if (np2 == 0) ip2 = 1
       call indxb(ipi1,irm1,ip1,np1)
+      if (np1 == 0) ip1 = 1
       call indxb(ipi3,irm1,ip3,np3)
+      if (np3 == 0) ip3 = 1
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
          & bm,cm,wd,ww,wu)
       if ( ( ipi2 - nswc_state_cblkt_nm ) <= 0 ) go to 50
@@ -118426,8 +118433,11 @@ go to 320
 i = if/2
 i1 = i/2
 call indxb(i - i1,nswc_state_cblkt_k - 2,im1,nm1)
+if (nm1 == 0) im1 = 1
 call indxb(i + i1,nswc_state_cblkt_k - 2,ip1,np1)
+if (np1 == 0) ip1 = 1
 call indxb(i,nswc_state_cblkt_k - 1,iz,nz)
+if (nz == 0) iz = 1
 call prdct(nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
    & bm,cm,wd,ww,wu)
 izr = i
@@ -118442,8 +118452,11 @@ do ll = 2,nswc_state_cblkt_k
    i = i2
    call indxc(i,ir,idxc,nc)
    call indxb(i,ir,iz,nz)
+   if (nz == 0) iz = 1
    call indxb(i - i1,ir - 1,im1,nm1)
+   if (nm1 == 0) im1 = 1
    call indxb(i + i1,ir - 1,ip1,np1)
+   if (np1 == 0) ip1 = 1
    call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w1,w1,m,am,bm, &
       & cm,wd,ww,wu)
    do j = 1,m
@@ -118466,8 +118479,11 @@ do ll = 2,nswc_state_cblkt_k
       go to 180
 150   call indxa(i,ir,idxa,na)
       call indxb(i,ir,iz,nz)
+      if (nz == 0) iz = 1
       call indxb(i - i1,ir - 1,im1,nm1)
+      if (nm1 == 0) im1 = 1
       call indxb(i + i1,ir - 1,ip1,np1)
+      if (np1 == 0) ip1 = 1
       call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w2,w2,m,am, &
          & bm,cm,wd,ww,wu)
       do j = 1,m
@@ -118487,6 +118503,7 @@ end do
       & w2(j)
 end do
 call indxb(if/2,nswc_state_cblkt_k - 1,im1,nm1)
+if (nm1 == 0) im1 = 1
 call indxb(if,nswc_state_cblkt_k - 1,ip,np)
 if ( ( nswc_state_cblkt_ncmplx ) == 0 ) go to 220
 go to 210
@@ -118509,8 +118526,11 @@ do l = 1,kdo
    i = i4
    call indxa(i,ir,idxa,na)
    call indxb(i - i2,ir,im2,nm2)
+   if (nm2 == 0) im2 = 1
    call indxb(i - i2 - i1,ir - 1,im3,nm3)
+   if (nm3 == 0) im3 = 1
    call indxb(i - i1,ir - 1,im1,nm1)
+   if (nm1 == 0) im1 = 1
    call prdct(nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,w1,w1,m,am, &
       & bm,cm,wd,ww,wu)
    call prdct(nm1,b(im1),0,dum,0,dum,na,an(idxa),w1,w1,m,am,bm, &
@@ -118538,8 +118558,11 @@ do l = 1,kdo
       go to 300
 280   call indxc(i,ir,idxc,nc)
       call indxb(ipi2,ir,ip2,np2)
+      if (np2 == 0) ip2 = 1
       call indxb(ipi1,irm1,ip1,np1)
+      if (np1 == 0) ip1 = 1
       call indxb(ipi3,irm1,ip3,np3)
+      if (np3 == 0) ip3 = 1
       call prdct(np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum,w2,w2,m, &
          & am,bm,cm,wd,ww,wu)
       call prdct(np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w2,w2,m,am, &
@@ -118574,8 +118597,11 @@ end do
       call indxa(i,ir,idxa,na)
       call indxc(i,ir,idxc,nc)
       call indxb(i,ir,iz,nz)
+      if (nz == 0) iz = 1
       call indxb(imi1,irm1,im1,nm1)
+      if (nm1 == 0) im1 = 1
       call indxb(ipi1,irm1,ip1,np1)
+      if (np1 == 0) ip1 = 1
       if ( ( i - i2 ) <= 0 ) go to 340
       go to 360
 340   do j = 1,m

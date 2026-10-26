@@ -1,15 +1,18 @@
-"""Normalize the reviewed COMPB correction after purity annotation.
+"""Apply reviewed COMPB and BLKTR1 corrections after purity annotation.
 
 COMPB supplies disjoint complex-root and real-root work arrays to PPADD. On
 success, TRANSFER restores the packed representation expected by BLKTR1.
 For all-real roots, PPADD compacts entries 2:n; entry 1 historically came from
 the overlapping first complex root, so it must now be copied explicitly.
 On an error return, partial root workspace is not used by BLKTRI.
+BLKTR1 substitutes index 1 for empty factors before forming product arguments.
+INDXB's workspace anchors remain unchanged for COMPB.
 """
+import re
 from fortran_procedures import procedure_spans
 
 
-def transform(text):
+def correct_root_workspace(text):
     lines = text.splitlines(True)
     start, end = next((s, e) for n, s, e in procedure_spans(text) if n == 'COMPB')
     body = ''.join(lines[start:end])
@@ -45,3 +48,34 @@ if (ncmplx == 0) then
 end if
 ''')
     return ''.join(lines[:start]) + body + ''.join(lines[end:])
+
+
+def correct_empty_factor_index(text):
+    """Use a valid actual argument in BLKTR1 for every zero-length factor."""
+    lines = text.splitlines(True)
+    start, end = next((s, e) for n, s, e in procedure_spans(text) if n == 'BLKTR1')
+    body = ''.join(lines[start:end])
+    calls = list(re.finditer(r'^( *)call indxb\s*\([^\n]*?,(\w+),(\w+)\)\n', body, re.M))
+    if len(calls) != 27:
+        raise ValueError('BLKTR1 empty-factor call inventory needs review')
+    # This lookup locates the periodic root workspace: its subsequent product
+    # uses NM+1 roots, not the returned NP length. Preserve that anchor.
+    anchors = [m for m in calls if re.sub(r'\s+', '', m[0]) == 'callindxb(if,k-1,ip,np)']
+    if len(anchors) != 1:
+        raise ValueError('BLKTR1 periodic-root anchor needs review')
+    if body[anchors[0].end():].startswith(f'{anchors[0][1]}if (np .eq. 0) ip = 1\n'):
+        raise ValueError('BLKTR1 periodic-root anchor correction needs review')
+    calls = [m for m in calls if m not in anchors]
+    expected = [(m, f'{m[1]}if ({m[3]} .eq. 0) {m[2]} = 1\n') for m in calls]
+    present = [body[m.end():].startswith(guard) for m, guard in expected]
+    if all(present):
+        return text
+    if any(present):
+        raise ValueError('BLKTR1 partial factor-index correction needs review')
+    for match, guard in reversed(expected):
+        body = body[:match.end()] + guard + body[match.end():]
+    return ''.join(lines[:start]) + body + ''.join(lines[end:])
+
+
+def transform(text):
+    return correct_empty_factor_index(correct_root_workspace(text))
