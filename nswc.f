@@ -1585,7 +1585,6 @@ C
                IF (L .GT. 0) GO TO 30
    31    A(LL) = S
          END DO
-C
       I = I - 1
       END DO
       END SUBROUTINE SHELL

@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRP` | `FUNCTION` | `A, N, X, Y` | [`L93737`](../source_parts/nswc_part_09.f90#L9154) |
+| `TRP` | `FUNCTION` | `A, N, X, Y` | [`L93736`](../source_parts/nswc_part_09.f90#L9154) |
 
 
 Let a be a real number and (21,41), ...,(%n, Yn) @ sequence of points. The following function performs a linear interpolation at point a.
@@ -35,7 +35,7 @@ It ia assumed that n > 2 and 2] < +++ < a. X and ¥ are arrays containing the ab
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LTRP` | `SUBROUTINE` | `M, X, Y, N, XI, YI, NI, T, IERR` | [`L93778`](../source_parts/nswc_part_09.f90#L9195) |
+| `LTRP` | `SUBROUTINE` | `M, X, Y, N, XI, YI, NI, T, IERR` | [`L93777`](../source_parts/nswc_part_09.f90#L9195) |
 
 
 Let {(z:,yi:): $ = 1,...,n} be a set of n > 2 points where 21 < +++ < 2,,m be an integer where 2 < m < n, and £1,...,%,% be k > 1 points at which m point Lagrange interpolation is to be performed. The subroutine LTRP is available for performing this interpolation.
@@ -74,7 +74,7 @@ Linear Interpolation. For m = 2, if the abscissae x; are not equally spaced then
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HTRP` | `SUBROUTINE` | `N, X, Y, A, T, IERR` | [`L93955`](../source_parts/nswc_part_09.f90#L9372) |
+| `HTRP` | `SUBROUTINE` | `N, X, Y, A, T, IERR` | [`L93954`](../source_parts/nswc_part_09.f90#L9372) |
 
 
 Let r1,...,%% be k > 1 distinct points. For each x; assume that we are given nj > 1 values y;, yi, we yl ) ifn = nm, +--+: + n,, then there exists a unique polynomial of degree n -— 1 which satisfies
@@ -140,7 +140,7 @@ PCOEFF
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PCOEFF` | `SUBROUTINE` | `ALPHA, N, X, A, C, T` | [`L94010`](../source_parts/nswc_part_09.f90#L9427) |
+| `PCOEFF` | `SUBROUTINE` | `ALPHA, N, X, A, C, T` | [`L94009`](../source_parts/nswc_part_09.f90#L9427) |
 
 
 n—-1 For n > 1 let p(z) = ag + SD a;(x - 21)--- (a — z;). Then for any real number a, y=l the subroutine PCOEFF is available for converting the polynomial p(z) to the Taylor series
@@ -169,7 +169,7 @@ T is a double precision array of dimension n or larger. The array is a work spac
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PFIT` | `SUBROUTINE` | `ND, NP, X, Y, A, RNORM, PHI, PHIX, IERR` | [`L94042`](../source_parts/nswc_part_09.f90#L9459) |
+| `PFIT` | `SUBROUTINE` | `ND, NP, X, Y, A, RNORM, PHI, PHIX, IERR` | [`L94041`](../source_parts/nswc_part_09.f90#L9459) |
 
 
 Let {(2;,4;):# = 1,...,m} be a set of m > 2 points where 2; 4 xz; for i #7. Then for any positive integer n where n<m, the subroutine PFIT is available for obtaining the
@@ -203,7 +203,7 @@ PHI is an array of dimension 2(n + 1) or larger, and WK is an array of dimension
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `WPFIT` | `SUBROUTINE` | `ND, NP, X, Y, W, A, RNORM, PHI, PHIX, IERR` | [`L94203`](../source_parts/nswc_part_09.f90#L9620) |
+| `WPFIT` | `SUBROUTINE` | `ND, NP, X, Y, W, A, RNORM, PHI, PHIX, IERR` | [`L94202`](../source_parts/nswc_part_09.f90#L9620) |
 
 
 Let {(2,,y:) : # = 1,...,m} be a set of m > 2 points where 2, 4 x; fort #7, and let w, > O(1 = 1, ...,m) be weights. It is assumed that m,, > 2 where m, is the number of nonzero weights. For any positive integer n where n < m,, the subroutine WPFIT is
@@ -240,8 +240,8 @@ PHI is an array of dimension 2(n + 1) or larger, and WK is an array of dimension
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR` | [`L94383`](../source_parts/nswc_part_09.f90#L9800) |
-| `SPLIFT` | `SUBROUTINE` | `X, Y, YP, YPP, N, W, IERR, ISX, A1, B1, AN, BN` | [`L94523`](../source_parts/nswc_part_09.f90#L9940) |
+| `CBSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR` | [`L94382`](../source_parts/nswc_part_09.f90#L9800) |
+| `SPLIFT` | `SUBROUTINE` | `X, Y, YP, YPP, N, W, IERR, ISX, A1, B1, AN, BN` | [`L94522`](../source_parts/nswc_part_09.f90#L9940) |
 
 
 Given z; < +--+ < ay. A function f(z) is a cubic spline having the nodes(knots) Z1,...,;%y if f is a polynomial of degree < 3 on the interval [z,,2;41] fori =1,...,n—-1, and the first and second derivatives f’(2) and f(x) exist and are continuous for all z. If f{; denotes the polynomial for the interval [z;, 2,41] then f; has the form:
@@ -311,7 +311,7 @@ fe
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPFIT` | `SUBROUTINE` | `X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR` | [`L94685`](../source_parts/nswc_part_09.f90#L10102) |
+| `SPFIT` | `SUBROUTINE` | `X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR` | [`L94684`](../source_parts/nswc_part_09.f90#L10102) |
 
 
 Let ty < +++ < tg be a sequence where @ > 2, {(aj,y:):¢ =1,...,m} be a set of m > 4 points where ty <2) <-+- < 2, < te, and wy, ..., Wm be positive weights. Then the subroutine SPFIT is available for obtaining a cubic spline f(z) with the nodes ty, ...,te
@@ -357,7 +357,7 @@ If an error is detected, the routine immediately terminates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSPFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, XCON, CON, NDER, NC, Z, A, B, C, WK, IWK, IERR` | [`L94777`](../source_parts/nswc_part_09.f90#L10194) |
+| `CSPFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, XCON, CON, NDER, NC, Z, A, B, C, WK, IWK, IERR` | [`L94776`](../source_parts/nswc_part_09.f90#L10194) |
 
 
 Let ty <++* < tg be a sequence where @ > 2, and {(t4,y:) : i = 1,...,m} be a set of pointe where t) < 2) < +++ < 2m, < tg. Then the subroutine CSPFIT is available for obtaining a cubic spline f(x) with the nodes t; ...,t, which minimizes DS (2s) — ys)? subject to a set of constraints. This spline is represented by
@@ -452,9 +452,9 @@ appropriate value for the NDER array.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCOMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, NI, IERR` | [`L94861`](../source_parts/nswc_part_09.f90#L10278) |
-| `SCOMP1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, NI, IERR` | [`L94969`](../source_parts/nswc_part_09.f90#L10386) |
-| `SCOMP2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, NI, IERR` | [`L95079`](../source_parts/nswc_part_09.f90#L10496) |
+| `SCOMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, NI, IERR` | [`L94860`](../source_parts/nswc_part_09.f90#L10278) |
+| `SCOMP1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, NI, IERR` | [`L94968`](../source_parts/nswc_part_09.f90#L10386) |
+| `SCOMP2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, NI, IERR` | [`L95078`](../source_parts/nswc_part_09.f90#L10496) |
 
 
 Given a1 <i: <t,. A function f(r) is a cubic spline having the nodes (knots) €1,...,% If f is a polynomial of degree < 3 on the interval [2,,2,44.;] forts 1, ...,n— 1, and the first and second derivatives f’(«) and f‘(a) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 244.1] then f; has the form:
@@ -522,9 +522,9 @@ Let %1,...,Z,, be the points at which the spline f is to be evaluated. XI is an 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEVAL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95192`](../source_parts/nswc_part_10.f90#L1) |
-| `SEVAL1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95307`](../source_parts/nswc_part_10.f90#L116) |
-| `SEVAL2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95423`](../source_parts/nswc_part_10.f90#L232) |
+| `SEVAL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95191`](../source_parts/nswc_part_10.f90#L1) |
+| `SEVAL1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95306`](../source_parts/nswc_part_10.f90#L116) |
+| `SEVAL2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L95422`](../source_parts/nswc_part_10.f90#L232) |
 
 
 Given 21 < +++ < rq. A function f(x) is a cubic spline having the nodes (knots) 1,...,2, if f is a polynomial of degree < 3 on the interval [2.,%s41] forf == 1,...,n—1, and the first and second derivatives f’(r) and f(x) exist and are continuous for all z. If f; denotes the polynomial for the interval {2,;,2,;41] then f; has the form:
@@ -599,9 +599,9 @@ Let %1,...,Zm be the points at which the spline f and its first two derivatives 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSINT` | `REAL FUNCTION` | `X, Y, A, B, C, N, ALPHA, BETA` | [`L95541`](../source_parts/nswc_part_10.f90#L350) |
-| `CSINT1` | `REAL FUNCTION` | `X, Y, YP, N, A, B` | [`L95649`](../source_parts/nswc_part_10.f90#L458) |
-| `CSINT2` | `REAL FUNCTION` | `X, Y, YPP, N, A, B` | [`L95771`](../source_parts/nswc_part_10.f90#L580) |
+| `CSINT` | `REAL FUNCTION` | `X, Y, A, B, C, N, ALPHA, BETA` | [`L95540`](../source_parts/nswc_part_10.f90#L350) |
+| `CSINT1` | `REAL FUNCTION` | `X, Y, YP, N, A, B` | [`L95648`](../source_parts/nswc_part_10.f90#L458) |
+| `CSINT2` | `REAL FUNCTION` | `X, Y, YPP, N, A, B` | [`L95770`](../source_parts/nswc_part_10.f90#L580) |
 
 
 Given x, <--> < 2,. A function f(x) is a cubic epline having the nodes (knots) Ty,...,%, 1f f is a polynomial of degree < 3 on the interval [z;, 241] fort =1,...,n — 1, and the first and second derivatives f’(2) and f(r) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 2,41] then f; has the form:
@@ -656,7 +656,7 @@ Then CSINT2(X,¥,DDY,n,a, A) f" f(t) dt.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, T, IERR` | [`L95873`](../source_parts/nswc_part_10.f90#L682) |
+| `PDSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, T, IERR` | [`L95872`](../source_parts/nswc_part_10.f90#L682) |
 
 
 Given w; < +++ < a,. A function f(x) is a cubic spline having the nodes (knots) %1,...,2, if f is a polynomial of degree < 3 on the interval [z,, 2,41] for ¢ = 1,...,n - 1, and the first and second derivatives /'(z) and f(x) exist and are continuous for all z. If f, denotes the polynomial for the interval [z,;,2;:,] then f; has the form:
@@ -702,7 +702,7 @@ AGT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR` | [`L96003`](../source_parts/nswc_part_10.f90#L812) |
+| `PDFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR` | [`L96002`](../source_parts/nswc_part_10.f90#L812) |
 
 
 Let t) <+-+ < t, be a sequence where é > 2 and { (2;,4;) :¢ =1, ...,m} a set of points where t) < 21 < +++ < am < te. Then the following subroutine is available for obtaining a periodic cubic spline f(x) with the nodes ¢;, ...,t¢ which minimizes >°>,(f(z;) — y:)?. This spline is represented by
@@ -747,8 +747,8 @@ BSPVB, BSPVD, LSEI, and the subroutines and functions used by LSEL PDEIP was wri
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSCMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, M, IERR` | [`L96095`](../source_parts/nswc_part_10.f90#L904) |
-| `PSEVL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR` | [`L96181`](../source_parts/nswc_part_10.f90#L990) |
+| `PSCMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, M, IERR` | [`L96094`](../source_parts/nswc_part_10.f90#L904) |
+| `PSEVL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR` | [`L96180`](../source_parts/nswc_part_10.f90#L990) |
 
 
 Let z1 <+++ < zy be a sequence where n > 2, and f a periodic cubic spline where f(z) = yy + a(x — 2) + (2 — x;)? + (x _ z;)°
@@ -791,9 +791,9 @@ A71}
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSLOOP` | `SUBROUTINE` | `M, N, X, KX, T, DX, KDX, WK, IERR` | [`L96274`](../source_parts/nswc_part_10.f90#L1083) |
-| `LOPCMP` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, L, TI, Z, KZ` | [`L96499`](../source_parts/nswc_part_10.f90#L1308) |
-| `LOPDF` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ` | [`L96587`](../source_parts/nswc_part_10.f90#L1396) |
+| `CSLOOP` | `SUBROUTINE` | `M, N, X, KX, T, DX, KDX, WK, IERR` | [`L96273`](../source_parts/nswc_part_10.f90#L1083) |
+| `LOPCMP` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, L, TI, Z, KZ` | [`L96498`](../source_parts/nswc_part_10.f90#L1308) |
+| `LOPDF` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ` | [`L96586`](../source_parts/nswc_part_10.f90#L1396) |
 
 
 Given m > 2 points x = (x41, ..+)%in) Where n > 2. One procedure for fitting a closed curve to the points is to first let s; = 0,8; = 9;-,+ [25 —2y~1|| for ¢ = 2, ...,m, and 8m+1 = 9m + ||t1 — Zm||,1 next let t; = 8:/8m+1 fori =1,.. ,m-+1, and then to find for each j <n the periodic cubic spline +,(t) having the knots ty, ... rtmii where 7;(t,) = 2, for i < m. The mapping 7(t} = (y1(t), ...,7(t)) then defines on the interval (0, 1] a closed curve which traverses the points (¢1,21), ...,(tm,2m), (1,21) and satisfies ¥'(0) = ¥'(1) and ¥"(0) = 7"(1). For t < 0 and t > 1, ¥(t) is defined by periodicity (having period 1). The subroutine CSLOOP is available for obtaining the derivatives ¥;(ts) which characterize this curve, the subroutine LOPCMP is available for computing the curve, and the subroutine LOPDF is available for differentiating the curve.
@@ -876,7 +876,7 @@ Aid
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR` | [`L96658`](../source_parts/nswc_part_10.f90#L1467) |
+| `CURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR` | [`L96657`](../source_parts/nswc_part_10.f90#L1467) |
 
 
 Given real og anda, <---<z,. A function f(z) isa spline having the tension factor o and the nodes (knots) x1, ...,2, if f(x) and its first two derivatives are continuous on [t1,2n], and f(x) — 6? f(z) = ayz + 6, on the interval [z,, 2541] for # = 1,...,n- 1, Here @ = jo|(n -- 1)/{a_ ~ v1) and a,, 6; are constants. For zy < 2 < 2,41 f(z) can be represented by
@@ -938,7 +938,7 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURV2` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L96836`](../source_parts/nswc_part_10.f90#L1645) |
+| `CURV2` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L96835`](../source_parts/nswc_part_10.f90#L1645) |
 
 
 Given o and 2 < +++ < ty. A function f(x) is 4 spline having the tension factor o and the nodes (knots) «,, ...,2, if /(x) and its first two derivatives are continuous on [1,2], and f(r) — #? f(z) = age + b, on the interval la;,2ia1] ford = 1,...,n—- 1%. Here @ = |o|(n—1)/(2, ~ #1) and aj, d, are constants. If f(z) = f(x) for aysarcoyy, then f(x) can be represented by
@@ -972,8 +972,8 @@ CURV2(t,n, X,Y, DDY,o}
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURVD` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L96939`](../source_parts/nswc_part_10.f90#L1748) |
-| `CURVI` | `FUNCTION` | `XL, XU, N, X, Y, YP, SIGMA` | [`L97035`](../source_parts/nswc_part_10.f90#L1844) |
+| `CURVD` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L96938`](../source_parts/nswc_part_10.f90#L1748) |
+| `CURVI` | `FUNCTION` | `XL, XU, N, X, Y, YP, SIGMA` | [`L97034`](../source_parts/nswc_part_10.f90#L1844) |
 
 
 Let f(x) be a spline having the tension factor o and the nodes 21, ...,%n. Assume that f(ts) = ye ford = 1,..., 2. If the second derivatives f'(r;), ..., f" (zp) are known then the following functions may be used for differentiating and integrating the spline.
@@ -1008,8 +1008,8 @@ AT9
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR` | [`L97232`](../source_parts/nswc_part_10.f90#L2041) |
-| `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L97447`](../source_parts/nswc_part_10.f90#L2256) |
+| `KURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR` | [`L97231`](../source_parts/nswc_part_10.f90#L2041) |
+| `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L97446`](../source_parts/nswc_part_10.f90#L2256) |
 
 
 Given a sequence of points (21,41), ...,(@n, Yn). One procedure for fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satisfy a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining the second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
@@ -1071,8 +1071,8 @@ was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTR
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KURVP1` | `SUBROUTINE` | `N, X, Y, XP, YP, TEMP, S, SIGMA, IERR` | [`L97569`](../source_parts/nswc_part_10.f90#L2378) |
-| `KURVP2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L97755`](../source_parts/nswc_part_10.f90#L2564) |
+| `KURVP1` | `SUBROUTINE` | `N, X, Y, XP, YP, TEMP, S, SIGMA, IERR` | [`L97568`](../source_parts/nswc_part_10.f90#L2378) |
+| `KURVP2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L97754`](../source_parts/nswc_part_10.f90#L2564) |
 
 
 Given n > 2 points (21,41), ..., (2a, Yn)- One procedure for fitting a closed curve to the points is to let ¢; = JV (21 ~ tn)? + (yi — yn)? and 3, = sg.4 + V(x ~ 2-1)? + (yi — yyy)? for t= 2,...,n,and then to find periodic splines x(¢) and y(s) with tension o that pass through the points (91,7.), ...,(91,2n),(81 + 8,21) and (81,y)), . -+5(8n; Yn), (81 + 8n, 41). The mapping 8 +-+ (2:(s), y(s)) then defines a closed curve that passes through the points (25, ys). The subroutine KURVP1 is available for obtaining the second derivatives x"(s,), y"(8,)(t = 1,...,n) which characterize this curve, and the subroutine KURVP2 is available for com-
@@ -1135,8 +1135,8 @@ ABA
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QURV1` | `SUBROUTINE` | `N, X, Y, Z, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY, SLPNZ, ISLPSW, XP, YP, ZP, TEMP, S, SIGMA, IERR` | [`L97883`](../source_parts/nswc_part_10.f90#L2692) |
-| `QURV2` | `SUBROUTINE` | `T, XS, YS, ZS, N, X, Y, Z, XP, YP, ZP, S, SIGMA` | [`L98124`](../source_parts/nswc_part_10.f90#L2933) |
+| `QURV1` | `SUBROUTINE` | `N, X, Y, Z, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY, SLPNZ, ISLPSW, XP, YP, ZP, TEMP, S, SIGMA, IERR` | [`L97882`](../source_parts/nswc_part_10.f90#L2692) |
+| `QURV2` | `SUBROUTINE` | `T, XS, YS, ZS, N, X, Y, Z, XP, YP, ZP, S, SIGMA` | [`L98123`](../source_parts/nswc_part_10.f90#L2933) |
 
 
 Given n > 2 points (x1, y1, 21), -++) (Zn; Yn, 2n). One procedure for fitting a curve to
@@ -1250,7 +1250,7 @@ AS7
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `INTRVL` | `INTEGER FUNCTION` | `X, T, M` | [`L98401`](../source_parts/nswc_part_10.f90#L3210) |
+| `INTRVL` | `INTEGER FUNCTION` | `X, T, M` | [`L98400`](../source_parts/nswc_part_10.f90#L3210) |
 
 
 Let ty < +++ < ty, be a sequence where ty <t,,. Then for any ¢; < 2 < tm, the function INTRVL finds the interval [1,,t;41) that contains 2.
@@ -1281,7 +1281,7 @@ where @ is the integer such that t, < tei, and tay, = ++ =ty.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVAL` | `SUBROUTINE` | `T, BCOEF, N, K, X, JDERIV, W, WK` | [`L98471`](../source_parts/nswc_part_10.f90#L3280) |
+| `BVAL` | `SUBROUTINE` | `T, BCOEF, N, K, X, JDERIV, W, WK` | [`L98470`](../source_parts/nswc_part_10.f90#L3280) |
 
 
 For n > k > 1 let ty < +++ < tay, be a sequence where t, < tyy, and ty < ti4, fort =1,...,n. If f(z) = S02, a: Bix(z) then the following subroutine is available for evaluating f(z) and computing its derivatives.
@@ -1310,7 +1310,7 @@ WK is an array of dimension 3k or larger that is a work space for the routine.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVALI` | `SUBROUTINE` | `T, BCOEFF, N, K, X, W, WK` | [`L98656`](../source_parts/nswc_part_10.f90#L3465) |
+| `BVALI` | `SUBROUTINE` | `T, BCOEFF, N, K, X, W, WK` | [`L98655`](../source_parts/nswc_part_10.f90#L3465) |
 
 
 Forn > k> 1 let ty < «+: < tay, be a sequence where t, < ty4; and t; < tj; for t=1,...,n. If f = 0%, a:Bs, then the following subroutine is available for computing
@@ -1339,7 +1339,7 @@ fori =1,...,n and 6; = 6, forts =n+1,...,m-—1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSPP` | `SUBROUTINE` | `T, A, N, K, BREAK, C, L, WK` | [`L98825`](../source_parts/nswc_part_10.f90#L3634) |
+| `BSPP` | `SUBROUTINE` | `T, A, N, K, BREAK, C, L, WK` | [`L98824`](../source_parts/nswc_part_10.f90#L3634) |
 
 
 For n > k > 1 let ty < --- < tay, be a sequence where t; < ty4,% for: = 1,...,n. Further assume that t, <t,4; and let f(z) = > a; By. (xz) forth <2 < thar. If: <--- < €¢41 are the distinct points in the sequence {te .»tn41} then the piecewise polynomial f can be represented in the form f(r) = > cij(z — €;)'"} for €&; S 2 < 641 (7 = 1,...,2). The following subroutine is available for obtaining the coefficients c,,; of this representation.
@@ -1372,7 +1372,7 @@ WK is an array of dimension k(k + 1) or larger that is a work space for the rout
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PPVAL` | `SUBROUTINE` | `X, A, L, N, XI, YI, NI` | [`L98929`](../source_parts/nswc_part_10.f90#L3738) |
+| `PPVAL` | `SUBROUTINE` | `X, A, L, N, XI, YI, NI` | [`L98928`](../source_parts/nswc_part_10.f90#L3738) |
 
 
 ```text
@@ -1412,7 +1412,7 @@ or larger. When PPVAL is called, f(Z,) is computed and stored in YI(j) for 7 = 1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSTRP` | `SUBROUTINE` | `TAU, GTAU, T, N, K, BCOEF, Q, IFLAG` | [`L99247`](../source_parts/nswc_part_10.f90#L4056) |
+| `BSTRP` | `SUBROUTINE` | `TAU, GTAU, T, N, K, BCOEF, Q, IFLAG` | [`L99246`](../source_parts/nswc_part_10.f90#L4056) |
 
 
 Forn > k > 1 fet ty < +--+ < thy, be a sequence wnere t; < tyy, fort = 1,...,n. Consider a set of points {(z,,y;) :f = 1,...,n} where t, < zy < +++ < gy < tnya. Then we wish to find a piecewise polynomial f = )°>?., a;B,~ which satisfies f(z,) = y for t= 1,...,n.! This problem has a unique :..lution when t; < z,; < ti44% for 1 <1 <n. The following subroutine is available for obtaining the coefficients a;, ...,a, of the interpolating piecewise polynomial,
@@ -1464,7 +1464,7 @@ Dae)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLSQ` | `SUBROUTINE` | `TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR` | [`L99609`](../source_parts/nswc_part_10.f90#L4418) |
+| `BSLSQ` | `SUBROUTINE` | `TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR` | [`L99608`](../source_parts/nswc_part_10.f90#L4418) |
 
 
 Forn > k > 1 let ty < +++ < tyy«% be a sequence where t; < t,,, for s = 1,...,n. Consider a set of points { (2,;,y;):1 = 1,...,m} where ty < ay <+-+- < am < tay, and m > max{2,k}. Let wy > 0(¢ = 1,...,m) be weights. Then the following subroutine is available
@@ -1502,7 +1502,7 @@ Selection cf t, < +--+ < tay, given the data (z,;,y;). It is recommended that th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BFIT` | `SUBROUTINE` | `BKPT, N, NORD, XDATA, YDATA, NDATA, XCONST, YCONST, NDERIV, NCONST, MODE, COEFF, RNORM, W, IW` | [`L99908`](../source_parts/nswc_part_10.f90#L4717) |
+| `BFIT` | `SUBROUTINE` | `BKPT, N, NORD, XDATA, YDATA, NDATA, XCONST, YCONST, NDERIV, NCONST, MODE, COEFF, RNORM, W, IW` | [`L99907`](../source_parts/nswc_part_10.f90#L4717) |
 
 
 ```text

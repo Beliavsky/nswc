@@ -144,7 +144,8 @@ class ModernizeDoTests(unittest.TestCase):
         from modernize_remaining_features import transform as finish_remaining
         from blktri_empty_factors import transform_fixed as correct_empty_factors
         from remove_unused_labels import transform as clean_unused_labels
-        self.assertEqual(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data)))),
+        from source_comment_fixes import transform_fixed as fix_comments
+        self.assertEqual(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data))))),
                          (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 

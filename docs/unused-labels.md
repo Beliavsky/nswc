@@ -50,7 +50,10 @@ performs reference analysis without claiming compiler equivalence.
 The [review report](../tools/unused-labels.json) records every action, its
 procedure, original statement and input line number, along with source hashes.
 The input is the maintained fixed-form source after the empty-factor correction,
-before this cleanup. The fixed-form reconstruction applies label cleanup last.
+before this cleanup. The fixed-form reconstruction applies label cleanup after
+the control-flow and workspace fixes. Reviewed comment-only corrections follow
+it; `tools/source_comment_fixes.py` removes SHELL's empty separator before the
+final index update.
 
 ```sh
 python tools/validate_unused_labels.py

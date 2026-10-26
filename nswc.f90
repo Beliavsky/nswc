@@ -1602,7 +1602,6 @@ do ii = 1,imax
       if (l > 0) go to 30
 31    a(ll) = s
    end do
-!
    i = i - 1
 end do
 end subroutine shell

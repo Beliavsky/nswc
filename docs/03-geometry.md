@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LOCPT` | `SUBROUTINE` | `X0, Y0, X, Y, N, L, M` | [`L4576`](../source_parts/nswc_part_01.f90#L4576) |
+| `LOCPT` | `SUBROUTINE` | `X0, Y0, X, Y, N, L, M` | [`L4575`](../source_parts/nswc_part_01.f90#L4575) |
 
 
 Given a sequence cf points »; = (v4, ys) (§ = 1,...,n). Let 7 denote the polygonal line which begins at point 1, traverses the points »; in the order that they are indexed, and is the straight line segment connecting 4, to u%41 for each ¢ = 1,...,n ~ 1. It is assumed that v, = v,, or that there is also a straight line segment from v, to vy when vy, F V4. Consequently, the polygonal path 7 is a loop beginning and ending at 11.
@@ -47,7 +47,7 @@ It is assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn-
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PFIND` | `SUBROUTINE` | `A, B, X, Y, N, U, V, M, NUM, IERR` | [`L4665`](../source_parts/nswc_part_01.f90#L4665) |
+| `PFIND` | `SUBROUTINE` | `A, B, X, Y, N, U, V, M, NUM, IERR` | [`L4664`](../source_parts/nswc_part_01.f90#L4664) |
 
 
 Given a sequence of points vy; = (2,,y;) (¢ = 1, ...,n). Let r denote the polygonal path which begins at point v,, traverses the points v,; in the order that they are indexed, and is the straight line segment from 4% to ¥;41 for each t = 1,...,2—1. Also consider a straight line 2 connecting two points (a1, a2) and (b;,62). If @ and r intersect at a finite number of points, then the following subroutine is available for obtaining the intersecting points.
@@ -82,7 +82,7 @@ path 7 intersect, and U and V contain the abscissas and ordinates of these point
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HULL` | `SUBROUTINE` | `X, Y, M, BX, BY, K, VX, VY, N` | [`L4837`](../source_parts/nswc_part_01.f90#L4837) |
+| `HULL` | `SUBROUTINE` | `X, Y, M, BX, BY, K, VX, VY, N` | [`L4836`](../source_parts/nswc_part_01.f90#L4836) |
 
 
 If (z1, 41), ..., (2m, ym) are m distinct points in the plane, then the following subroutine is available for finding the smallest convex polygon which with its interior contains the
@@ -111,7 +111,7 @@ counterclockwise manner. Also (2!, yl!) == (ci, yy’).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PAREA` | `REAL FUNCTION` | `X, Y, NB` | [`L5240`](../source_parts/nswc_part_01.f90#L5240) |
+| `PAREA` | `REAL FUNCTION` | `X, Y, NB` | [`L5239`](../source_parts/nswc_part_01.f90#L5239) |
 
 
 Given a sequence of points v; = (2, y;) (§ = 1,...,2+ 1) where n > 1 and ung) = 01. Let + denote the polygon whose boundary Or is a polygonal line which begins at point v1, traverses the points vy, in the order that they are indexed, and is the straight line segment connecting v; to u,41 fort = 1, ...,n. Then the function PAREA is available for computing A(r) = ff, dxdy. If the boundary @r is a positively (negatively) oriented simple closed curve, then A(r) is positive (negative) and |A(r)| = the ares. of r. However, Or need not be simple. It may be self-intersecting or have overlapping line segments.
@@ -136,7 +136,7 @@ variate Normal Distribution over Arbitrary Polygons, report TR 80-166, Naval Sur
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HC` | `SUBROUTINE` | `IND, M, N, PR, AR, NB, S, IWK, NUM` | [`L5280`](../source_parts/nswc_part_01.f90#L5280) |
+| `HC` | `SUBROUTINE` | `IND, M, N, PR, AR, NB, S, IWK, NUM` | [`L5279`](../source_parts/nswc_part_01.f90#L5279) |
 
 
 Given a directed graph G containing n vertices, denoted by the integers 1, ...,n. Then any circuit of n arcs which traverses the n vertices, say in the order 1), ...,%,, is called a Hamiltonian circuit. For convenience, it is assumed that for any two vertices ¢ and 7, no more than one arc exists which begins ai ¢ and ends at 7. Then the following subroutine is available for finding the Hamiltonian circuits of G, if any exist.
