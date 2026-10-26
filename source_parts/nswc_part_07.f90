@@ -1,245 +1,3 @@
-pure subroutine balbak(nm,n,low,igh,scale,m,z)
-implicit none
-!
-integer, intent(in) :: m, n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: scale(n)
-real, intent(inout) :: z(nm,m)
-integer :: i, j, k, ii
-real :: s
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure balbak,
-!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
-!
-!     This subroutine forms the eigenvectors of a real general
-!     matrix BY back transforming those of the corresponding
-!     balanced matrix determined by  balanc.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by  balanc,
-!
-!        Scale contains information determining the permutations
-!          and scaling factors used by  balanc,
-!
-!        m is the number of columns of z to be back transformed,
-!
-!        z contains the real and imaginary parts of the eigen-
-!          vectors to be back transformed in its first m columns.
-!
-!     On output-
-!
-!        z contains the real and imaginary parts of the
-!          transformed eigenvectors in its first m columns.
-!
-!-----------------------------------------------------------------------
-!
-if (m == 0) go to 200
-if (igh == low) go to 120
-!
-do i = low, igh
-   s = scale(i)
-!     ********** Left hand eigenvectors are back transformed
-!                if the foregoing statement is replaced by
-!                s=1.0/scale(i). **********
-   do j = 1, m
-100   z(i,j) = z(i,j) * s
-   end do
-!
-end do
-!     ********- FOR i=low-1 STEP -1 UNTIL 1,
-!               igh+1 STEP 1 UNTIL n DO -- **********
-120 do ii = 1, n
-   i = ii
-   if (i >= low .and. i <= igh) go to 140
-   if (i < low) i = low - ii
-   k = scale(i)
-   if (k == i) go to 140
-!
-   do j = 1, m
-      s = z(i,j)
-      z(i,j) = z(k,j)
-      z(k,j) = s
-   end do
-!
-140 continue
-end do
-!
-200 return
-end subroutine balbak
-
-pure subroutine eltran(nm,n,low,igh,a,int,z)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
-integer, intent(in) :: int(igh)
-integer :: i, j, kl, mm, mp, mp1
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ELMTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the stabilized elementary
-!     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  elmhes.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains the multipliers which were used in the
-!          reduction by  elmhes  in its lower triangle
-!          below the subdiagonal,
-!
-!        Int contains information on the rows and columns
-!          interchanged in the reduction by  elmhes.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  elmhes.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   z(i,mp) = a(i,mp - 1)
-   end do
-!
-   i = int(mp)
-   if (i == mp) go to 140
-!
-   do j = mp, igh
-      z(mp,j) = z(i,j)
-      z(i,j) = 0.0
-   end do
-!
-   z(i,mp) = 1.0
-140 continue
-end do
-!
-200 return
-end subroutine eltran
-
-pure subroutine eltrn0(nm,n,low,igh,a,int,z)
-implicit none
-!
-integer, intent(in) :: n
-integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
-real, intent(in) :: int(igh)
-integer :: i, j, kl, mm, mp, mp1
-!-----------------------------------------------------------------------
-!
-!     This subroutine is a translation of the Algol procedure ELMTRANS,
-!     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
-!
-!     This subroutine accumulates the stabilized elementary
-!     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  elmhs0.
-!
-!     On input-
-!
-!        nm must be set to the row dimension of two-dimensional
-!          array parameters as declared in the calling program
-!          dimension statement,
-!
-!        n is the order of the matrix,
-!
-!        Low and igh are integers determined by the balancing
-!          subroutine  balanc.  If  balanc  has not been used,
-!          set low=1, igh=n,
-!
-!        A contains the multipliers which were used in the
-!          reduction by  elmhs0  in its lower triangle
-!          below the subdiagonal,
-!
-!        Int contains information on the rows and columns
-!          interchanged in the reduction by  elmhs0.
-!          Only elements low through igh are used.
-!
-!     On output-
-!
-!        z contains the transformation matrix produced in the
-!          reduction by  elmhs0.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** Initialize z to identity matrix **********
-do i = 1, n
-!
-   do j = 1, n
-60    z(i,j) = 0.0
-   end do
-!
-   z(i,i) = 1.0
-end do
-!
-kl = igh - low - 1
-if (kl < 1) go to 200
-!     ********** For mp=igh-1 step -1 Until low+1 do -- **********
-do mm = 1, kl
-   mp = igh - mm
-   mp1 = mp + 1
-!
-   do i = mp1, igh
-100   z(i,mp) = a(i,mp - 1)
-   end do
-!
-   i = int(mp)
-   if (i == mp) go to 140
-!
-   do j = mp, igh
-      z(mp,j) = z(i,j)
-      z(i,j) = 0.0
-   end do
-!
-   z(i,mp) = 1.0
-140 continue
-end do
-!
-200 return
-end subroutine eltrn0
-
 pure subroutine ortran(nm,n,low,igh,a,ort,z)
 implicit none
 !
@@ -292,7 +50,7 @@ real :: g
 do i = 1, n
 !
    do j = 1, n
-60    z(i,j) = 0.0
+      z(i,j) = 0.0
    end do
 !
    z(i,i) = 1.0
@@ -307,21 +65,21 @@ do mm = 1, kl
    mp1 = mp + 1
 !
    do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
+      ort(i) = a(i,mp - 1)
    end do
 !
    do j = mp, igh
       g = 0.0
 !
       do i = mp, igh
-110      g = g + ort(i) * z(i,j)
+         g = g + ort(i) * z(i,j)
       end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
+         z(i,j) = z(i,j) + g * ort(i)
       end do
 !
    end do
@@ -389,7 +147,7 @@ real :: g
 do i = 1, n
 !
    do j = 1, n
-60    z(i,j) = 0.0
+      z(i,j) = 0.0
    end do
 !
    z(i,i) = 1.0
@@ -404,21 +162,21 @@ do mm = 1, kl
    mp1 = mp + 1
 !
    do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
+      ort(i) = a(i,mp - 1)
    end do
 !
    do j = mp, igh
       g = 0.0
 !
       do i = mp, igh
-110      g = g + ort(i) * z(i,j)
+         g = g + ort(i) * z(i,j)
       end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
+         z(i,j) = z(i,j) + g * ort(i)
       end do
 !
    end do
@@ -532,7 +290,7 @@ k = 1
 do i = 1, n
 !
    do j = k, n
-40    norm = norm + abs(h(i,j))
+      norm = norm + abs(h(i,j))
    end do
 !
    k = i
@@ -570,7 +328,7 @@ if (its /= 10 .and. its /= 20) go to 130
 t = t + x
 !
 do i = low, en
-120 h(i,i) = h(i,i) - x
+   h(i,i) = h(i,i) - x
 end do
 !
 s = abs(h(en,na)) + abs(h(na,enm2))
@@ -747,7 +505,7 @@ do nn = 1, n
       if (m > na) go to 620
 !
       do j = m, na
-610      r = r + h(i,j) * h(j,en)
+         r = r + h(i,j) * h(j,en)
       end do
 !
 620   if (wi(i) >= 0.0) go to 630
@@ -840,7 +598,7 @@ do i = 1, n
    if (i >= low .and. i <= igh) go to 840
 !
    do j = i, n
-820   z(i,j) = h(i,j)
+      z(i,j) = h(i,j)
    end do
 !
 840 continue
@@ -856,11 +614,10 @@ do jj = low, n
       zz = 0.0
 !
       do k = low, m
-860      zz = zz + z(i,k) * h(k,j)
+         zz = zz + z(i,k) * h(k,j)
       end do
 !
       z(i,j) = zz
-880   continue
    end do
 end do
 !
@@ -1000,14 +757,14 @@ do k = 1,n
    if ( nswc_ai_r8 == 0 ) go to 10
    go to 20
 10 do j = 1,n
-11    zi(j,k) = 0.d0
+      zi(j,k) = 0.d0
    end do
    go to 30
 20 kp1 = k + 1
    do j = 1,n
       zi(j,k) = zr(j,kp1)
       zr(j,kp1) = zr(j,k)
-21    zi(j,kp1) = -zi(j,k)
+      zi(j,kp1) = -zi(j,k)
    end do
 30 continue
 end do
@@ -1154,7 +911,7 @@ go to 140
 end do
 !     ********** Now balance the submatrix in rows k to l **********
 do i = k, l
-180 scale(i) = 1.d0
+   scale(i) = 1.d0
 end do
 !     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
@@ -1190,11 +947,11 @@ do i = k, l
    noconv = .true.
 !
    do j = k, n
-250   a(i,j) = a(i,j) * g
+      a(i,j) = a(i,j) * g
    end do
 !
    do j = 1, l
-260   a(j,i) = a(j,i) * f
+      a(j,i) = a(j,i) * f
    end do
 !
 270 continue
@@ -1250,14 +1007,14 @@ if (igh == low) go to 30
 do i = low, igh
    s = scale(i)
    do j = 1, n
-10    z(i,j) = z(i,j) * s
+      z(i,j) = z(i,j) * s
    end do
 end do
 !
 do j = low, igh
    s = 1.d0/scale(j)
    do i = 1, n
-20    z(i,j) = z(i,j) * s
+      z(i,j) = z(i,j) * s
    end do
 end do
 !
@@ -1274,13 +1031,13 @@ end do
    do j = 1, n
       s = z(i,j)
       z(i,j) = z(k,j)
-40    z(k,j) = s
+      z(k,j) = s
    end do
 !
    do j = 1, n
       s = z(j,i)
       z(j,i) = z(j,k)
-50    z(j,k) = s
+      z(j,k) = s
    end do
 60 continue
 end do
@@ -1343,7 +1100,7 @@ do m = kp1, la
    scale = 0.d0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do i = m, igh
-90    scale = scale + abs(a(i,m - 1))
+      scale = scale + abs(a(i,m - 1))
    end do
 !
    if (scale == 0.d0) go to 180
@@ -1371,7 +1128,7 @@ do m = kp1, la
       f = f / h
 !
       do i = m, igh
-120      a(i,j) = a(i,j) - f * ort(i)
+         a(i,j) = a(i,j) - f * ort(i)
       end do
 !
    end do
@@ -1387,7 +1144,7 @@ do m = kp1, la
       f = f / h
 !
       do j = m, igh
-150      a(i,j) = a(i,j) - f * ort(j)
+         a(i,j) = a(i,j) - f * ort(j)
       end do
 !
    end do
@@ -1484,7 +1241,7 @@ k = 1
 do i = 1, n
 !
    do j = k, n
-40    norm = norm + abs(h(i,j))
+      norm = norm + abs(h(i,j))
    end do
 !
    k = i
@@ -1522,7 +1279,7 @@ if (its /= 10 .and. its /= 20 .and. its /= 30) go to 130
 t = t + x
 !
 do i = low, en
-120 h(i,i) = h(i,i) - x
+   h(i,i) = h(i,i) - x
 end do
 !
 s = abs(h(en,na)) + abs(h(na,enm2))
@@ -1695,7 +1452,7 @@ do i = low, igh
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
    do j = 1, m
-100   z(i,j) = z(i,j) * s
+      z(i,j) = z(i,j) * s
    end do
 !
 end do
@@ -1772,7 +1529,7 @@ double precision :: g
 do i = 1, n
 !
    do j = 1, n
-60    z(i,j) = 0.d0
+      z(i,j) = 0.d0
    end do
 !
    z(i,i) = 1.d0
@@ -1787,21 +1544,21 @@ do mm = 1, kl
    mp1 = mp + 1
 !
    do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
+      ort(i) = a(i,mp - 1)
    end do
 !
    do j = mp, igh
       g = 0.d0
 !
       do i = mp, igh
-110      g = g + ort(i) * z(i,j)
+         g = g + ort(i) * z(i,j)
       end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
+         z(i,j) = z(i,j) + g * ort(i)
       end do
 !
    end do
@@ -1869,7 +1626,7 @@ double precision :: g
 do i = 1, n
 !
    do j = 1, n
-60    z(i,j) = 0.d0
+      z(i,j) = 0.d0
    end do
 !
    z(i,i) = 1.d0
@@ -1884,21 +1641,21 @@ do mm = 1, kl
    mp1 = mp + 1
 !
    do i = mp1, igh
-100   ort(i) = a(i,mp - 1)
+      ort(i) = a(i,mp - 1)
    end do
 !
    do j = mp, igh
       g = 0.d0
 !
       do i = mp, igh
-110      g = g + ort(i) * z(i,j)
+         g = g + ort(i) * z(i,j)
       end do
 !     ********** Divisor below is negative of H formed in orthes.
 !                Double division avoids possible underflow **********
       g = (g / ort(mp)) / a(mp,mp - 1)
 !
       do i = mp, igh
-120      z(i,j) = z(i,j) + g * ort(i)
+         z(i,j) = z(i,j) + g * ort(i)
       end do
 !
    end do
@@ -2006,7 +1763,7 @@ k = 1
 do i = 1, n
 !
    do j = k, n
-40    norm = norm + abs(h(i,j))
+      norm = norm + abs(h(i,j))
    end do
 !
    k = i
@@ -2044,7 +1801,7 @@ if (its /= 10 .and. its /= 20 .and. its /= 30) go to 130
 t = t + x
 !
 do i = low, en
-120 h(i,i) = h(i,i) - x
+   h(i,i) = h(i,i) - x
 end do
 !
 s = abs(h(en,na)) + abs(h(na,enm2))
@@ -2221,7 +1978,7 @@ do nn = 1, n
       if (m > na) go to 620
 !
       do j = m, na
-610      r = r + h(i,j) * h(j,en)
+         r = r + h(i,j) * h(j,en)
       end do
 !
 620   if (wi(i) >= 0.d0) go to 630
@@ -2319,7 +2076,7 @@ do i = 1, n
    if (i >= low .and. i <= igh) go to 840
 !
    do j = i, n
-820   z(i,j) = h(i,j)
+      z(i,j) = h(i,j)
    end do
 !
 840 continue
@@ -2335,11 +2092,10 @@ do jj = low, n
       zz = 0.d0
 !
       do k = low, m
-860      zz = zz + z(i,k) * h(k,j)
+         zz = zz + z(i,k) * h(k,j)
       end do
 !
       z(i,j) = zz
-880   continue
    end do
 end do
 !
@@ -2533,7 +2289,7 @@ real :: f, g, h, scale
 !-----------------------------------------------------------------------
 !
 do i = 1, n
-100 d(i) = a(i,i)
+   d(i) = a(i,i)
 end do
 !     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
 do ii = 1, n
@@ -2544,7 +2300,7 @@ do ii = 1, n
    if (l < 1) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do k = 1, l
-120   scale = scale + abs(a(i,k))
+      scale = scale + abs(a(i,k))
    end do
 !
    if (scale /= 0.0) go to 140
@@ -2571,14 +2327,14 @@ do ii = 1, n
       g = 0.0
 !     ********** Form element of a*U **********
       do k = 1, j
-180      g = g + a(j,k) * a(i,k)
+         g = g + a(j,k) * a(i,k)
       end do
 !
       jp1 = j + 1
       if (l < jp1) go to 220
 !
       do k = jp1, l
-200      g = g + a(k,j) * a(i,k)
+         g = g + a(k,j) * a(i,k)
       end do
 !     ********** Form element of P **********
 220   e(j) = g / h
@@ -2594,12 +2350,11 @@ do ii = 1, n
 !
       do k = 1, j
          a(j,k) = a(j,k) - f * e(k) - g * a(i,k)
-260      continue
       end do
    end do
 !
 270 do k = 1, l
-280   a(i,k) = scale * a(i,k)
+      a(i,k) = scale * a(i,k)
    end do
 !
 290 h = d(i)
@@ -2716,7 +2471,6 @@ do ii = 1, n
       do k = 1, j
          jk = jk + 1
          a(jk) = a(jk) - f * e(k) - g * d(k)
-260      continue
       end do
    end do
 !
@@ -2788,7 +2542,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e2(i - 1) = e2(i)
+   e2(i - 1) = e2(i)
 end do
 !
 f = 0.0
@@ -2822,7 +2576,7 @@ do l = 1, n
    h = g - d(l)
 !
    do i = l1, n
-140   d(i) = d(i) - h
+      d(i) = d(i) - h
    end do
 !
    f = f + h
@@ -2937,7 +2691,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e(i - 1) = e(i)
+   e(i - 1) = e(i)
 end do
 !
 e(n) = 0.0
@@ -3062,7 +2816,6 @@ do i = 1, n
 !
    do j = 1, i
       z(i,j) = a(i,j)
-100   continue
    end do
 end do
 !
@@ -3076,7 +2829,7 @@ do ii = 2, n
    if (l < 2) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do k = 1, l
-120   scale = scale + abs(z(i,k))
+      scale = scale + abs(z(i,k))
    end do
 !
    if (scale /= 0.0) go to 140
@@ -3101,14 +2854,14 @@ do ii = 2, n
       g = 0.0
 !     ********** Form element of a*U **********
       do k = 1, j
-180      g = g + z(j,k) * z(i,k)
+         g = g + z(j,k) * z(i,k)
       end do
 !
       jp1 = j + 1
       if (l < jp1) go to 220
 !
       do k = jp1, l
-200      g = g + z(k,j) * z(i,k)
+         g = g + z(k,j) * z(i,k)
       end do
 !     ********** Form element of P **********
 220   e(j) = g / h
@@ -3124,7 +2877,6 @@ do ii = 2, n
 !
       do k = 1, j
          z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
-260      continue
       end do
    end do
 !
@@ -3142,12 +2894,11 @@ do i = 1, n
       g = 0.0
 !
       do k = 1, l
-340      g = g + z(i,k) * z(k,j)
+         g = g + z(i,k) * z(k,j)
       end do
 !
       do k = 1, l
          z(k,j) = z(k,j) - g * z(k,i)
-360      continue
       end do
    end do
 !
@@ -3246,7 +2997,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e(i - 1) = e(i)
+   e(i - 1) = e(i)
 end do
 !
 f = 0.0
@@ -3277,7 +3028,7 @@ do l = 1, n
    h = g - d(l)
 !
    do i = l1, n
-140   d(i) = d(i) - h
+      d(i) = d(i) - h
    end do
 !
    f = f + h
@@ -3433,7 +3184,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e(i - 1) = e(i)
+   e(i - 1) = e(i)
 end do
 !
 e(n) = 0.0
@@ -3636,7 +3387,7 @@ double precision :: f, g, h, scale
 !-----------------------------------------------------------------------
 !
 do i = 1, n
-100 d(i) = a(i,i)
+   d(i) = a(i,i)
 end do
 !     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
 do ii = 1, n
@@ -3647,7 +3398,7 @@ do ii = 1, n
    if (l < 1) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do k = 1, l
-120   scale = scale + abs(a(i,k))
+      scale = scale + abs(a(i,k))
    end do
 !
    if (scale /= 0.d0) go to 140
@@ -3674,14 +3425,14 @@ do ii = 1, n
       g = 0.d0
 !     ********** Form element of a*U **********
       do k = 1, j
-180      g = g + a(j,k) * a(i,k)
+         g = g + a(j,k) * a(i,k)
       end do
 !
       jp1 = j + 1
       if (l < jp1) go to 220
 !
       do k = jp1, l
-200      g = g + a(k,j) * a(i,k)
+         g = g + a(k,j) * a(i,k)
       end do
 !     ********** Form element of P **********
 220   e(j) = g / h
@@ -3697,12 +3448,11 @@ do ii = 1, n
 !
       do k = 1, j
          a(j,k) = a(j,k) - f * e(k) - g * a(i,k)
-260      continue
       end do
    end do
 !
 270 do k = 1, l
-280   a(i,k) = scale * a(i,k)
+      a(i,k) = scale * a(i,k)
    end do
 !
 290 h = d(i)
@@ -3819,7 +3569,6 @@ do ii = 1, n
       do k = 1, j
          jk = jk + 1
          a(jk) = a(jk) - f * e(k) - g * d(k)
-260      continue
       end do
    end do
 !
@@ -3890,7 +3639,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e2(i - 1) = e2(i)
+   e2(i - 1) = e2(i)
 end do
 !
 f = 0.d0
@@ -3924,7 +3673,7 @@ do l = 1, n
    h = g - d(l)
 !
    do i = l1, n
-140   d(i) = d(i) - h
+      d(i) = d(i) - h
    end do
 !
    f = f + h
@@ -4025,7 +3774,6 @@ do i = 1, n
 !
    do j = 1, i
       z(i,j) = a(i,j)
-100   continue
    end do
 end do
 !
@@ -4039,7 +3787,7 @@ do ii = 2, n
    if (l < 2) go to 130
 !     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do k = 1, l
-120   scale = scale + abs(z(i,k))
+      scale = scale + abs(z(i,k))
    end do
 !
    if (scale /= 0.d0) go to 140
@@ -4064,14 +3812,14 @@ do ii = 2, n
       g = 0.d0
 !     ********** Form element of a*U **********
       do k = 1, j
-180      g = g + z(j,k) * z(i,k)
+         g = g + z(j,k) * z(i,k)
       end do
 !
       jp1 = j + 1
       if (l < jp1) go to 220
 !
       do k = jp1, l
-200      g = g + z(k,j) * z(i,k)
+         g = g + z(k,j) * z(i,k)
       end do
 !     ********** Form element of P **********
 220   e(j) = g / h
@@ -4087,7 +3835,6 @@ do ii = 2, n
 !
       do k = 1, j
          z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
-260      continue
       end do
    end do
 !
@@ -4105,12 +3852,11 @@ do i = 1, n
       g = 0.d0
 !
       do k = 1, l
-340      g = g + z(i,k) * z(k,j)
+         g = g + z(i,k) * z(k,j)
       end do
 !
       do k = 1, l
          z(k,j) = z(k,j) - g * z(k,i)
-360      continue
       end do
    end do
 !
@@ -4208,7 +3954,7 @@ ierr = 0
 if (n == 1) go to 1001
 !
 do i = 2, n
-100 e(i - 1) = e(i)
+   e(i - 1) = e(i)
 end do
 !
 f = 0.d0
@@ -4239,7 +3985,7 @@ do l = 1, n
    h = g - d(l)
 !
    do i = l1, n
-140   d(i) = d(i) - h
+      d(i) = d(i) - h
    end do
 !
    f = f + h
@@ -4597,7 +4343,7 @@ go to 140
 end do
 !     ********** Now balance the submatrix in rows k to l **********
 do i = k, l
-180 scale(i) = 1.0
+   scale(i) = 1.0
 end do
 !     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
@@ -4713,7 +4459,7 @@ do m = kp1, la
    scale = 0.0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do i = m, igh
-90    scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
+      scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
    end do
 !
    if (scale == 0.0) go to 180
@@ -5223,7 +4969,6 @@ do i = 1, n
       zr(i,j) = 0.0
       zi(i,j) = 0.0
       if (i == j) zr(i,j) = 1.0
-100   continue
    end do
 end do
 !     ********** Form the matrix of accumulated transformations
@@ -5465,7 +5210,6 @@ do i = 1, n
 !
    do j = i, n
       norm = norm + abs(hr(i,j)) + abs(hi(i,j))
-720   continue
    end do
 end do
 !
@@ -5530,7 +5274,6 @@ do jj = low, enm1
 !
       zr(i,j) = zzr
       zi(i,j) = zzi
-880   continue
    end do
 end do
 !
@@ -5826,7 +5569,7 @@ go to 140
 end do
 !     ********** Now balance the submatrix in rows k to l **********
 do i = k, l
-180 scale(i) = 1.d0
+   scale(i) = 1.d0
 end do
 !     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
@@ -5949,7 +5692,7 @@ do m = kp1, la
    scale = 0.d0
 !     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do i = m, igh
-90    scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
+      scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
    end do
 !
    if (scale == 0.d0) go to 180
@@ -6470,7 +6213,6 @@ do i = 1, n
       zr(i,j) = 0.d0
       zi(i,j) = 0.d0
       if (i == j) zr(i,j) = 1.d0
-100   continue
    end do
 end do
 !     ********** Form the matrix of accumulated transformations
@@ -6716,7 +6458,6 @@ do i = 1, n
 !
    do j = i, n
       norm = norm + abs(hr(i,j)) + abs(hi(i,j))
-720   continue
    end do
 end do
 !
@@ -6781,7 +6522,6 @@ do jj = low, enm1
 !
       zr(i,j) = zzr
       zi(i,j) = zzi
-880   continue
    end do
 end do
 !
@@ -7296,7 +7036,7 @@ return
    if (m == n) go to 22
    rnorm = 0.0
    do i = np1,m
-21    rnorm = rnorm + b(i,j)*b(i,j)
+      rnorm = rnorm + b(i,j)*b(i,j)
    end do
    b(np1,j) = sqrt(rnorm)
 22 continue
@@ -7335,20 +7075,20 @@ return
 !
 20 do j = 1,nb
    do i = 1,m
-21    wk(i) = b(i,j)
+      wk(i) = b(i,j)
    end do
    call orsol(m, n, wk(lq), m, wk(ls), iwk, wk(1))
    call orimp(m, n, a, ka, wk(lq), m, wk(ls), iwk, b(1,j), &
       & wk(1), wk(lr), exit)
    do i = 1,n
-22    b(i,j) = wk(i)
+      b(i,j) = wk(i)
    end do
    if (.not.exit) ierr = 1
    if (m == n) go to 31
 !
    rnorm = 0.0
    do i = np1,m
-30    rnorm = rnorm + wk(i)*wk(i)
+      rnorm = rnorm + wk(i)*wk(i)
    end do
    b(np1,j) = sqrt(rnorm)
 31 continue
@@ -7432,17 +7172,17 @@ do j = 1, nn
    do i = j, n
       sav = qr(j,i)
       qr(j,i) = qr(kj,i)
-20    qr(kj,i) = sav
+      qr(kj,i) = sav
    end do
 !                                       Normalize the pivoting column
 !                                       and find its norm.
 30 ajj = qr(j,j)
    do i = jp, m
-31    qr(i,j) = qr(i,j)/ajj
+      qr(i,j) = qr(i,j)/ajj
    end do
    sav = 1.0
    do i = jp, m
-40    sav = sav + qr(i,j)*qr(i,j)
+      sav = sav + qr(i,j)*qr(i,j)
    end do
    s(j) = -sqrt(sav)
    qr(j,j) = s(j)*ajj
@@ -7453,13 +7193,13 @@ do j = 1, nn
    do k = jp, n
       sav = qr(j,k)
       do i = jp, m
-50       sav = sav + qr(i,j)*qr(i,k)
+         sav = sav + qr(i,j)*qr(i,k)
       end do
       ss = qr(j,k)
       qr(j,k) = sav/s(j)
       ss = (ss - qr(j,k))/y
       do i = jp, m
-60       qr(i,k) = qr(i,k) - qr(i,j)*ss
+         qr(i,k) = qr(i,k) - qr(i,j)*ss
       end do
    end do
 80 continue
@@ -7540,13 +7280,13 @@ do j = 1, nn
 !                                       orthogonal matrix.
    sav = x(j)
    do k = jp, m
-10    sav = sav + qr(k,j)*x(k)
+      sav = sav + qr(k,j)*x(k)
    end do
    ss = x(j)
    x(j) = sav/s(j)
    ss = (ss - x(j))/y
    do k = jp, m
-20    x(k) = x(k) - qr(k,j)*ss
+      x(k) = x(k) - qr(k,j)*ss
    end do
 end do
 !                                       Back substitute to find the
@@ -7558,7 +7298,7 @@ do i = 1, nm
    nn = n
    do j = 1, i
       x(ni) = x(ni) - qr(ni,nn)*x(nn)
-40    nn = nn - 1
+      nn = nn - 1
    end do
    x(ni) = x(ni)/qr(ni,ni)
 end do
@@ -7652,7 +7392,7 @@ eps2 = eps*eps
 !
 xnrm2 = zero
 do i = 1,n
-10 xnrm2 = xnrm2 + x(i)*x(i)
+   xnrm2 = xnrm2 + x(i)*x(i)
 end do
 if (xnrm2 == zero) return
 ratio = one
@@ -7662,9 +7402,9 @@ ratio = one
 20 do k = 1,m
    dsum = b(k)
    do j = 1,n
-21    dsum = dsum - dble(a(k,j))*dble(x(j))
+      dsum = dsum - dble(a(k,j))*dble(x(j))
    end do
-22 r(k) = dsum
+   r(k) = dsum
 end do
 !
 !                                       Find the correction vector.
@@ -7672,22 +7412,22 @@ end do
 call orsol(m, n, qr, ms, s, ip, r)
 rnrm2 = zero
 do k = 1,n
-30 rnrm2 = rnrm2 + r(k)*r(k)
+   rnrm2 = rnrm2 + r(k)*r(k)
 end do
 if (rnrm2 <= eps2*xnrm2) return
 !
 !                                       Form new approximate solution.
 !
 do k = 1,n
-40 x(k) = x(k) + r(k)
+   x(k) = x(k) + r(k)
 end do
 xnrm2 = zero
 do k = 1,n
-41 xnrm2 = xnrm2 + x(k)*x(k)
+   xnrm2 = xnrm2 + x(k)*x(k)
 end do
 if (m == n) go to 50
 do k = np1,m
-42 x(k) = r(k)
+   x(k) = r(k)
 end do
 !
 50 if (xnrm2 == zero) return
@@ -7747,7 +7487,7 @@ return
    if (m == n) go to 22
    rnorm = 0.d0
    do i = np1,m
-21    rnorm = rnorm + b(i,j)*b(i,j)
+      rnorm = rnorm + b(i,j)*b(i,j)
    end do
    b(np1,j) = sqrt(rnorm)
 22 continue
@@ -7830,17 +7570,17 @@ do j = 1, nn
    do i = j, n
       sav = qr(j,i)
       qr(j,i) = qr(kj,i)
-20    qr(kj,i) = sav
+      qr(kj,i) = sav
    end do
 !                                       Normalize the pivoting column
 !                                       and find its norm.
 30 ajj = qr(j,j)
    do i = jp, m
-31    qr(i,j) = qr(i,j)/ajj
+      qr(i,j) = qr(i,j)/ajj
    end do
    sav = 1.d0
    do i = jp, m
-40    sav = sav + qr(i,j)*qr(i,j)
+      sav = sav + qr(i,j)*qr(i,j)
    end do
    s(j) = -sqrt(sav)
    qr(j,j) = s(j)*ajj
@@ -7851,13 +7591,13 @@ do j = 1, nn
    do k = jp, n
       sav = qr(j,k)
       do i = jp, m
-50       sav = sav + qr(i,j)*qr(i,k)
+         sav = sav + qr(i,j)*qr(i,k)
       end do
       ss = qr(j,k)
       qr(j,k) = sav/s(j)
       ss = (ss - qr(j,k))/y
       do i = jp, m
-60       qr(i,k) = qr(i,k) - qr(i,j)*ss
+         qr(i,k) = qr(i,k) - qr(i,j)*ss
       end do
    end do
 80 continue
@@ -7937,13 +7677,13 @@ do j = 1, nn
 !                                       orthogonal matrix.
    sav = x(j)
    do k = jp, m
-10    sav = sav + qr(k,j)*x(k)
+      sav = sav + qr(k,j)*x(k)
    end do
    ss = x(j)
    x(j) = sav/s(j)
    ss = (ss - x(j))/y
    do k = jp, m
-20    x(k) = x(k) - qr(k,j)*ss
+      x(k) = x(k) - qr(k,j)*ss
    end do
 end do
 !                                       Back substitute to find the
@@ -7955,7 +7695,7 @@ do i = 1, nm
    nn = n
    do j = 1, i
       x(ni) = x(ni) - qr(ni,nn)*x(nn)
-40    nn = nn - 1
+      nn = nn - 1
    end do
    x(ni) = x(ni)/qr(ni,ni)
 end do
@@ -10537,4 +10277,280 @@ go to 240
    ic(i) = abs(ic(i))
 end do
 end subroutine du12us
+
+pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
+real, intent(in) :: tau
+integer, intent(inout) :: ip(n)
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+real :: hmax, sm1, tmp, z
+double precision :: sm
+real, parameter :: factor = 1.e-3
+interface
+   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      real, intent(inout) :: u(iue,m)
+      real, intent(inout) :: up
+      real, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine h12
+end interface
+!-----------------------------------------------------------------------
+!     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
+!
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!
+!     Abstract
+!
+!     This subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!
+!                       ax = b,
+!
+!     Where X is the n by nb solution matrix.
+!
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!
+!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
+!
+!                       i = 1,...,l-1, where
+!
+!                       l = min(m,n).
+!
+!     The subroutine sets k to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first k rows of (R C).
+!
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!
+!     The entire set of parameters for hfti are
+!
+!     Input..
+!
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti.
+!
+!     Output..
+!
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!
+!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!-----------------------------------------------------------------------
+!---------------------
+!
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+do j = 1,ldiag
+   if (j == 1) go to 20
+!
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.0
+      do i = j,m
+         h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!
+!     Do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+      a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+   call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!
+!     Determine the pseudorank, k, using the tolerance, tau.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
+!
+!     Compute the norms of the residual vectors.
+!
+if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+      tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+go to 270
+!
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+   call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+!
+!
+if (nb <= 0) go to 270
+do jb = 1,nb
+!
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+         sm = sm + dble(a(i,j))*dble(b(j,jb))
+      end do
+200   sm1 = dble(b(i,jb)) - sm
+      b(i,jb) = sm1/a(i,i)
+   end do
+!
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+      b(j,jb) = 0.0
+   end do
+   do i = 1,k
+      call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+!
+270 return
+end subroutine hfti
 

@@ -11,6 +11,7 @@ from periodic_root_workspace import transform_fixed as workspace
 from remove_final_returns import transform_fixed as returns
 from validate_explicit_typing import fixed_stages
 from blktri_empty_factors import transform_fixed as correct_empty_factors
+from remove_unused_labels import transform as clean_unused_labels
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,7 +20,7 @@ def main():
     before = arithmetic(loops(workspace(returns(fixed_stages()[3].data))).data)
     report = {}
     after = transform(before, report)
-    if correct_empty_factors(after) != (ROOT / 'nswc.f').read_bytes():
+    if clean_unused_labels(correct_empty_factors(after)) != (ROOT / 'nswc.f').read_bytes():
         raise ValueError('Final control-flow source does not reproduce')
     if report != json.loads(MANIFEST.read_text()):
         raise ValueError('Final control-flow review report is stale')

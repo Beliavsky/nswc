@@ -952,7 +952,6 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(1) = sm(1) + tm(1)
    sm(2) = sm(2) + tm(2)
-105 continue
 end do
 select case ( lr )
 case ( 16 )
@@ -1131,7 +1130,6 @@ do n = 1, 7
    i = 8 - n
    f = a(i) + z3*f
    g = b(i) + z3*g
-10 continue
 end do
 f = 1.0 + z3*f
 g = z + z2*z2*g
@@ -1339,7 +1337,6 @@ do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
-20 continue
 end do
 !
 ai = 0.5*c1*z2r*s1
@@ -1670,7 +1667,6 @@ do k = 2,m
    i = i - 1
    s1 = c(i) + w*s1
    s2 = d(i) + w*s2
-20 continue
 end do
 !
 bi = c1*z2r*s1
@@ -1908,7 +1904,7 @@ do i = 1, n1
    cfb = (m + c2)*(m + c2 + 1.0)
    m = m - 1.0
    ia1 = ia2 + (sz/cfa)*ia3
-10 ib1 = ib2 + (sz/cfb)*ib3
+   ib1 = ib2 + (sz/cfb)*ib3
 end do
 e = exp(c1*log(zh))
 cf1 = e/gm1
@@ -2076,7 +2072,7 @@ do i = 1, n1
    cfb = (m + c2)*(m + c2 + 1.0)
    m = m - 1.0
    ia1 = ia2 - (sz/cfa)*ia3
-10 ib1 = ib2 - (sz/cfb)*ib3
+   ib1 = ib2 - (sz/cfb)*ib3
 end do
 e = exp(c1*log(zh))
 cf1 = e/gm1
@@ -2264,7 +2260,7 @@ do i = 1, m
    bi = 2.0*(al + z)/(al + 1.0)
    u1 = (bi*u2 - u3)/ai
    s = s + u1
-10 l = l - 1
+   l = l - 1
 end do
 !
 !     Final assembly
@@ -3206,19 +3202,19 @@ f1 = (0.0, 0.0)
 do i = 1,12
    xx = x1(i)/2.
    fxk = ak*xx
-40 f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
+   f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
 end do
 f2 = (0.0, 0.0)
 do i = 1,12
    xx = .25*(1. + x2(i))
    fxk = ak*xx
-41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
+   f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
 end do
 f3 = (0.0, 0.0)
 do i = 1,12
    xx = .25*(3. - x2(i))
    fxk = ak*xx
-42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+   f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
 end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
@@ -3612,7 +3608,7 @@ do i = 1,12
    fxk = ak*xx
    at = atn(fx)
    e1 = e1 + w1(i)*fl(i)*(1.0 + at)
-40 f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
+   f1 = f1 + w1(i)*fl(i)/(al2 + fxk*fxk)
 end do
 f2 = (0.0, 0.0)
 e2 = (0.0, 0.0)
@@ -3622,7 +3618,7 @@ do i = 1,12
    fxk = ak*xx
    at = atn(fx)
    e2 = e2 + w2(i)*fa(i)*(1.0 + at)
-41 f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
+   f2 = f2 + w2(i)*fa(i)/(al2 + fxk*fxk)
 end do
 f3 = (0.0, 0.0)
 e3 = (0.0, 0.0)
@@ -3632,7 +3628,7 @@ do i = 1,12
    fxk = ak*xx
    at = atn(fx)
    e3 = e3 + w2(i)*fb(i)*(1.0 + at)
-42 f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
+   f3 = f3 + w2(i)*fb(i)/(al2 + fxk*fxk)
 end do
 !
 ck = al*(c1*f1 + c2*(f2 + f3))
@@ -6623,7 +6619,7 @@ do i = 1,n
    s = s + w
    w = (m/tr)*w
    p = s + (td/m)*p
-70 m = m - 1.0
+   m = m - 1.0
 end do
 p = exp(-td)*p
 go to 110
@@ -7442,14 +7438,14 @@ do j = 1,jmax
       lb = lb + kb
    end do
    c(lc) = dsum
-40 lc = lc + kc
+   lc = lc + kc
 end do
 if (jmax == n) return
 !
 jmin = jmax + 1
 do j = jmin,n
    c(lc) = 0.0
-60 lc = lc + kc
+   lc = lc + kc
 end do
 end subroutine pmult
 
@@ -7484,14 +7480,14 @@ do j = 1,jmax
       lb = lb + kb
    end do
    c(lc) = sum
-40 lc = lc + kc
+   lc = lc + kc
 end do
 if (jmax == n) return
 !
 jmin = jmax + 1
 do j = jmin,n
    c(lc) = 0.d0
-60 lc = lc + kc
+   lc = lc + kc
 end do
 end subroutine dpmult
 
@@ -7745,7 +7741,7 @@ q(1) = 1.0
 k = 2
 do i = 2,n
    q(k) = 0.0
-10 k = k + i
+   k = k + i
 end do
 !
 jj = 1
@@ -7806,7 +7802,7 @@ q(1) = 1.d0
 k = 2
 do i = 2,n
    q(k) = 0.d0
-10 k = k + i
+   k = k + i
 end do
 !
 jj = 1
@@ -7867,7 +7863,7 @@ real :: ql
 !     mo = +1 For first derivative
 !     mo = +2 For second derivative
 !
-001 fv = 0.0
+fv = 0.0
 l = nc
 if (mo < 0) go to 002
 if (mo == 0) go to 004
@@ -7878,7 +7874,6 @@ do k = 1,nc
    fv = ac(l)/ql + au*fv
    l = l - 1
    ql = ql - 1.0
-003 continue
 end do
 fv = au*fv
 return
@@ -7973,7 +7968,7 @@ real :: dm, tm
 !     na = Number of arguments   (N)
 !     an = NORMALIZATION FACTORS (N-ARRAY)
 !
-001 do k = 1,na
+do k = 1,na
    tm = 1.0
    do m = 1,na
       if (m == k) go to 002
@@ -8011,7 +8006,7 @@ logical :: ln
 !     call lgrngv (1, na, qu, au, an, ff, df)     for first derivatives
 !     call lgrngv (2, na, qu, au, an, ff, df, sf) for second derivatives
 !
-001 ln = .true.
+ln = .true.
 tm = 1.0
 do k = 1,na
    if (qu /= au(k)) go to 002
@@ -8118,7 +8113,7 @@ real :: sm, td, tm
 !     na = Number of arguments     (N)
 !     ac = Polynomial coefficients (NX(N+1) array)
 !
-001 do i = 1,na
+do i = 1,na
    k = (i - 1)*na
    l = k + i
    ac(l) = 1.0
@@ -8128,9 +8123,7 @@ real :: sm, td, tm
       l = k + na
       ac(l) = sm - au(i)*ac(k)
       sm = ac(k)
-002   continue
    end do
-003 continue
 end do
 do i = 1,na
    k = na + na*na
@@ -8175,14 +8168,13 @@ real :: rm, rn, sm, sn
 !     na = Number of rows          (N)
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
 !
-001 sn = na
+sn = na
 rn = sqrt(sn)
 do i = 1,na
    aa(i) = 1.0/rn
-002 continue
 end do
 if (ma == 1) return
-003 sm = 0.0
+sm = 0.0
 do i = 1,na
    sm = sm + au(i)
 end do
@@ -8193,7 +8185,6 @@ do i = 1,na
    l = l + 1
    aa(l) = au(i) - ar(2)
    sm = sm + aa(l)*aa(l)
-005 continue
 end do
 rm = sqrt(sm)
 l = na
@@ -8209,7 +8200,7 @@ do i = 1,na
 end do
 ar(1) = sm/rn
 if (ma == 2) return
-008 do m = 3,ma
+do m = 3,ma
    sm = 0.0
    k = (m - 2)*na
    do i = 1,na
@@ -8267,7 +8258,7 @@ real :: rn, sn
 !     call orthov (1, na, au, ar, nf, ff, df)     for first derivatives
 !     call orthov (2, na, au, ar, nf, ff, df, sf) for second derivatives
 !
-001 sn = na
+sn = na
 rn = sqrt(sn)
 ff(1) = 1.0/rn
 if (nf <= 1) go to 003
@@ -8277,7 +8268,6 @@ l = 2
 do k = 3,nf
    l = l + 2
    ff(k) = ((au - ar(l))*ff(k - 1) - ar(l - 3)*ff(k - 2))/ar(l - 1)
-002 continue
 end do
 003 if (mo <= 0) return
 df(1) = 0.0
@@ -8317,15 +8307,14 @@ real :: rn, sn, tm
 !     nc = Number of coefficients  (m)
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
 !
-001 do n = 1,nc
+do n = 1,nc
    ac(n) = 0.0
-002 continue
 end do
 sn = na
 rn = sqrt(sn)
 ac(1) = 1.0/rn
 if (nc == 1) return
-003 tm = 0.0
+tm = 0.0
 l = nc
 do n = 1,nc
    l = l + 1
@@ -8333,7 +8322,7 @@ do n = 1,nc
    tm = ac(n)
 end do
 if (nc == 2) return
-005 do m = 3,nc
+do m = 3,nc
    tm = 0.0
    j = (m - 3)*nc
    do n = 1,nc
@@ -8946,7 +8935,6 @@ if (n <= 0 .or. xtol < zero .or. maxfev <= 0 &
 if (mode /= 2) go to 20
 do j = 1, n
    if (diag(j) <= zero) go to 300
-10 continue
 end do
 20 continue
 !
@@ -10505,4 +10493,153 @@ zeror(num) = lzr
 zeroi(num) = lzi
 go to 40
 end subroutine drply1
+
+subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
+implicit none
+integer :: nn
+double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+integer :: l2, nz
+integer :: n, type, i, j, iflag
+double precision :: svu, svv, ui, vi, s
+real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+logical :: vpass, spass, vtry, stry
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi
+!
+!     Computes up to  l2  fixed shift k-polynomials,
+!     testing for convergence in the linear or quadratic
+!     case. Initiates one of the variable SHIFT
+!     iterations and returns with the number of zeros
+!     found.
+!
+!     l2 - Limit of fixed shift steps
+!     nz - Number of zeros found
+!
+!
+common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+   & e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
+!
+n = nn - 1
+nz = 0
+betav = .25
+betas = .25
+oss = sr
+ovv = v
+!
+!     Evaluate polynomial by synthetic division
+!
+call quadsd(nn, u, v, p, qp, a, b)
+call calcsc(type, n, k, qk)
+do j = 1,l2
+!
+!     Calculate next k polynomial and estimate v
+!
+   call nextk(type, n, qp, k, qk)
+   call calcsc(type, n, k, qk)
+   call newest(type, ui, vi, nn, p, k)
+   vv = vi
+!
+!     Estimate s
+!
+   ss = 0.0
+   if (k(n) /= 0.d0) ss = -p(nn)/k(n)
+   tv = 1.0
+   ts = 1.0
+   if (j == 1 .or. type == 3) go to 70
+!
+!     Compute relative measures of convergence of s and v
+!     sequences
+!
+   if (vv /= 0.0) tv = abs((vv - ovv)/vv)
+   if (ss /= 0.0) ts = abs((ss - oss)/ss)
+!
+!     If decreasing, multiply two most recent
+!     convergence measures
+!
+   tvv = 1.0
+   if (tv < otv) tvv = tv*otv
+   tss = 1.0
+   if (ts < ots) tss = ts*ots
+!
+!     Compare with convergence criteria
+!
+   vpass = tvv < betav
+   spass = tss < betas
+   if (.not.(spass .or. vpass)) go to 70
+!
+!     At least one sequence has passed the convergence
+!     test. Store variables before iterating
+!
+   svu = u
+   svv = v
+   do i = 1,n
+      svk(i) = k(i)
+   end do
+   s = ss
+!
+!     Choose iteration according to the fastest
+!     converging sequence
+!
+   vtry = .false.
+   stry = .false.
+   if (spass .and. ((.not.vpass) .or. &
+      & tss < tvv)) go to 40
+20 call quadit(ui, vi, nz, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Quadratic iteration has failed. Flag that it has
+!     been tried and decrease the convergence criterion.
+!
+   vtry = .true.
+   betav = betav*0.25
+!
+!     Try linear iteration if it has not been tried and
+!     the s sequence is converging
+!
+   if (stry .or. (.not.spass)) go to 50
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+40 call realit(s, nz, iflag, nn, p, qp, k, qk)
+   if (nz > 0) return
+!
+!     Linear iteration has failed. Flag that it has been
+!     tried and decrease the convergence criterion
+!
+   stry = .true.
+   betas = betas*0.25
+   if (iflag == 0) go to 50
+!
+!     If linear iteration signals an almost double real
+!     zero attempt quadratic interation
+!
+   ui = -(s + s)
+   vi = s*s
+   go to 20
+!
+!     Restore variables
+!
+50 u = svu
+   v = svv
+   do i = 1,n
+      k(i) = svk(i)
+   end do
+!
+!     Try quadratic iteration if it has not been tried
+!     and the v sequence is converging
+!
+   if (vpass .and. (.not.vtry)) go to 20
+!
+!     Recompute qp and scalar values to continue the
+!     second stage
+!
+   call quadsd(nn, u, v, p, qp, a, b)
+   call calcsc(type, n, k, qk)
+70 ovv = vv
+   oss = ss
+   otv = tv
+   ots = ts
+end do
+end subroutine fxshfr
 

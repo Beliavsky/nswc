@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LAINV` | `SUBROUTINE` | `MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR` | [`L87231`](../source_parts/nswc_part_09.f90#L2556) |
+| `LAINV` | `SUBROUTINE` | `MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR` | [`L87085`](../source_parts/nswc_part_09.f90#L2502) |
 
 
 Let f(t) be a complex-valued function that is continuous for t > 0 except possibly at a countable set of values t, having no finite limit points. Then for complex z the Laplace transform F(z) of f(t) is defined by
@@ -143,8 +143,8 @@ Preference. Piessens, R. and Huysmans, R., “Algorithm 619. Automatic Numerical
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FFT` | `SUBROUTINE` | `C, N, ISN, IERR` | [`L89305`](../source_parts/nswc_part_09.f90#L4630) |
-| `FFT1` | `SUBROUTINE` | `A, B, N, ISN, IERR` | [`L89322`](../source_parts/nswc_part_09.f90#L4647) |
+| `FFT` | `SUBROUTINE` | `C, N, ISN, IERR` | [`L89157`](../source_parts/nswc_part_09.f90#L4574) |
+| `FFT1` | `SUBROUTINE` | `A, B, N, ISN, IERR` | [`L89174`](../source_parts/nswc_part_09.f90#L4591) |
 
 
 Let n be a positive integer and 6; = 2xj/n for 7 = 0,1,...,n — 1. For any complex valued functions f and g defined on the points 6; let (f,g) = >I f(8;) 9(0;). Then (f,g) is an inner product when f and g are regarded as functions defined only on 6,;. Also e29(7 = 0, i, ...,2—1) form an orthogonal set of functions where each e*?* has norm \/n.' Thus, if f is 2 function that is approximated by f(#) = DI c,e'7® then each cy = 4{f (6), e7%). The
@@ -211,8 +211,8 @@ The setting IERR = 2 can occur only when n > 4251528.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MFFT` | `SUBROUTINE` | `C, N, NDIM, ISN, IERR` | [`L89334`](../source_parts/nswc_part_09.f90#L4659) |
-| `MFFT1` | `SUBROUTINE` | `A, B, N, NDIM, ISN, IERR` | [`L89372`](../source_parts/nswc_part_09.f90#L4697) |
+| `MFFT` | `SUBROUTINE` | `C, N, NDIM, ISN, IERR` | [`L89186`](../source_parts/nswc_part_09.f90#L4603) |
+| `MFFT1` | `SUBROUTINE` | `A, B, N, NDIM, ISN, IERR` | [`L89224`](../source_parts/nswc_part_09.f90#L4641) |
 
 
 ```text
@@ -285,11 +285,11 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `COSQI` | `SUBROUTINE` | `N, WSAVE` | [`L90026`](../source_parts/nswc_part_09.f90#L5351) |
-| `COSQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L90092`](../source_parts/nswc_part_09.f90#L5417) |
-| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L90190`](../source_parts/nswc_part_09.f90#L5515) |
-| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L90294`](../source_parts/nswc_part_09.f90#L5619) |
-| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L90364`](../source_parts/nswc_part_09.f90#L5689) |
+| `COSQI` | `SUBROUTINE` | `N, WSAVE` | [`L89878`](../source_parts/nswc_part_09.f90#L5295) |
+| `COSQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L89944`](../source_parts/nswc_part_09.f90#L5361) |
+| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L90042`](../source_parts/nswc_part_09.f90#L5459) |
+| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L90146`](../source_parts/nswc_part_09.f90#L5563) |
+| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L90216`](../source_parts/nswc_part_09.f90#L5633) |
 
 
 Let n be a positive integer and 0, = (v +1/2)x/n for vy = 0,i,...,2-—1. For any “a real valued functions f and g defined on the points 6, let (f,g) = p> f(8.) 9(6.). Then (f,g) is an inner product when f{ and g are regarded as functions defined only on 6,.

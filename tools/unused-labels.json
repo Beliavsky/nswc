@@ -1,0 +1,8346 @@
+{
+  "input_sha256": "854c9cff0a9232235bff728249d99243e27da24d4dac6526af1cecfe122ba1a4",
+  "output_sha256": "cce40c5e48b16da196bca3ca9624c47235e21a2871f0b3fb84696d0ceb5b746f",
+  "changes": [
+    {
+      "procedure": "ISHELL",
+      "line": 1514,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ISHELL",
+      "line": 1539,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "SHELL",
+      "line": 1566,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SHELL",
+      "line": 1591,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "SHELL2",
+      "line": 1619,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SHELL2",
+      "line": 1647,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "RSORT",
+      "line": 1674,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "RSORT",
+      "line": 1699,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "RISORT",
+      "line": 1729,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "RISORT",
+      "line": 1757,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "RRSORT",
+      "line": 1785,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "RRSORT",
+      "line": 1813,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "DSORT",
+      "line": 1840,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSORT",
+      "line": 1865,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "DISORT",
+      "line": 1895,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DISORT",
+      "line": 1923,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "DDSORT",
+      "line": 1951,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DDSORT",
+      "line": 1979,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "AORD",
+      "line": 2007,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "AORD",
+      "line": 2032,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "DAORD",
+      "line": 2060,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DAORD",
+      "line": 2085,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "QSORTI",
+      "line": 2160,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "IND(I) = I"
+    },
+    {
+      "procedure": "QSORTR",
+      "line": 2363,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "IND(I) = I"
+    },
+    {
+      "procedure": "QSORTD",
+      "line": 2567,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "IND(I) = I"
+    },
+    {
+      "procedure": "IORDER",
+      "line": 2767,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "IP(K) = -IP(K)"
+    },
+    {
+      "procedure": "RORDER",
+      "line": 2842,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "IP(K) = -IP(K)"
+    },
+    {
+      "procedure": "DORDER",
+      "line": 2917,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "IP(K) = -IP(K)"
+    },
+    {
+      "procedure": "PAREA",
+      "line": 5221,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "A = A + X(I)*(Y(I+1) - Y(I-1))"
+    },
+    {
+      "procedure": "ERFCM2",
+      "line": 7157,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ERFCM2",
+      "line": 7165,
+      "label": 21,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DERF",
+      "line": 7233,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DERFC",
+      "line": 7293,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DERFC1",
+      "line": 7365,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DAW",
+      "line": 8348,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "FRAC = Q2(I) / (P2(I) + Y + FRAC)"
+    },
+    {
+      "procedure": "DAW",
+      "line": 8360,
+      "label": 320,
+      "action": "remove_label",
+      "statement": "FRAC = Q3(I) / (P3(I) + Y + FRAC)"
+    },
+    {
+      "procedure": "DAW",
+      "line": 8372,
+      "label": 420,
+      "action": "remove_label",
+      "statement": "FRAC = Q4(I) / (P4(I) + Y + FRAC)"
+    },
+    {
+      "procedure": "DPDAW",
+      "line": 8484,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "FRNL",
+      "line": 8998,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "S = SP(I) + S*Y"
+    },
+    {
+      "procedure": "FRNL",
+      "line": 9083,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "C = 0.5 + (F*SY - G*CY)"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 9539,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "FRAC = Q2(I) / (P2(I) + X + FRAC)"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 9551,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "FRAC = Q3(I) / (P3(I) + X + FRAC)"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 9565,
+      "label": 260,
+      "action": "remove_label",
+      "statement": "FRAC = Q4(I) / (P4(I) + X + FRAC)"
+    },
+    {
+      "procedure": "DEI0",
+      "line": 10228,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SI",
+      "line": 10319,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "SI",
+      "line": 10334,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "SI",
+      "line": 10345,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "CIN",
+      "line": 10443,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "CIN",
+      "line": 10458,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "CIN",
+      "line": 10469,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "B2=TEMP"
+    },
+    {
+      "procedure": "ALI",
+      "line": 10977,
+      "label": 111,
+      "action": "remove_label",
+      "statement": "W = W*T + E(I)"
+    },
+    {
+      "procedure": "CGAM0",
+      "line": 11265,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "GAMMA",
+      "line": 11330,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "T = X*T"
+    },
+    {
+      "procedure": "GAMMA",
+      "line": 11343,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "T = X*T"
+    },
+    {
+      "procedure": "GAMMA",
+      "line": 11365,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "BOT = Q(I) + X*BOT"
+    },
+    {
+      "procedure": "GAMLN",
+      "line": 11617,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W = T*W"
+    },
+    {
+      "procedure": "DGAMMA",
+      "line": 11982,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "T = X*T"
+    },
+    {
+      "procedure": "DGAMMA",
+      "line": 11995,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "T = X*T"
+    },
+    {
+      "procedure": "DPDEL",
+      "line": 12082,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DGAMLN",
+      "line": 12293,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W = X*W"
+    },
+    {
+      "procedure": "DCPSI",
+      "line": 12785,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "V2 = T2"
+    },
+    {
+      "procedure": "DPSI",
+      "line": 12936,
+      "label": 11,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DPSI",
+      "line": 12956,
+      "label": 31,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DPSI0",
+      "line": 13073,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DBCORR",
+      "line": 13758,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DBCORR",
+      "line": 13768,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DLGDIV",
+      "line": 13837,
+      "label": 21,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "GRATIO",
+      "line": 14072,
+      "label": 70,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BPSER",
+      "line": 16073,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "C = C*(B0/(A0 + B0))"
+    },
+    {
+      "procedure": "BGRAT",
+      "line": 16538,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "COEF = COEF + B"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 16729,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "BSUM = BSUM + (J*R - MMJ)*A0(J)*B0(MMJ)"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 16731,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "B0(M) = R*A0(M) + BSUM/M"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 16739,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM + D(IMJ)*C(J)"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 16741,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "D(I) = -(DSUM + C(I))"
+    },
+    {
+      "procedure": "ISUBX",
+      "line": 16936,
+      "label": 160,
+      "action": "remove_label",
+      "statement": "SUM = SUM + W(L)*(X - T*(T + TEMP))**AM1"
+    },
+    {
+      "procedure": "ISUBX",
+      "line": 16944,
+      "label": 171,
+      "action": "remove_label",
+      "statement": "SUM = SUM + W(L)*T**AM1"
+    },
+    {
+      "procedure": "CBDB",
+      "line": 17645,
+      "label": 70,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLJ",
+      "line": 17897,
+      "label": 14,
+      "action": "remove_label",
+      "statement": "RZ(1)=+0.5*QZ(1)/ZS"
+    },
+    {
+      "procedure": "BSSLJ",
+      "line": 17949,
+      "label": 19,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLJ",
+      "line": 17972,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "AN=QN*QN-0.25"
+    },
+    {
+      "procedure": "BSSLJ",
+      "line": 18022,
+      "label": 26,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 18467,
+      "label": 550,
+      "action": "remove_label",
+      "statement": "FIDAL = FIDAL + 1.0E0"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 18889,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 18897,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 18920,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 18944,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 18951,
+      "label": 60,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 19046,
+      "label": 170,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 19521,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "IF(AN.GT.1.0)GO TO 023"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 19598,
+      "label": 105,
+      "action": "remove_label",
+      "statement": "IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 106"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 19642,
+      "label": 113,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 19644,
+      "label": 114,
+      "action": "remove_label",
+      "statement": "AQ(1)=QZ(1)-1.57079632679490*(PN+0.5)"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 19658,
+      "label": 115,
+      "action": "remove_label",
+      "statement": "IF ( ( AZ ( 1 ) ) .LT. 0 ) GO TO 116"
+    },
+    {
+      "procedure": "BSSLI",
+      "line": 19879,
+      "label": 12,
+      "action": "remove_label",
+      "statement": "RZ(1)=+0.5*QZ(1)/ZS"
+    },
+    {
+      "procedure": "BSSLI",
+      "line": 19937,
+      "label": 18,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLI",
+      "line": 19958,
+      "label": 24,
+      "action": "remove_label",
+      "statement": "AN=QN*QN-0.25"
+    },
+    {
+      "procedure": "BSSLI",
+      "line": 20014,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASIK",
+      "line": 20735,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASIK",
+      "line": 20741,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ASIK",
+      "line": 20746,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BSSLK",
+      "line": 21919,
+      "label": 105,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "AIRM",
+      "line": 22083,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "AIA",
+      "line": 22277,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BIA",
+      "line": 22571,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "IMC",
+      "line": 22811,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IB1 = IB2 + (SZ/CFB)*IB3"
+    },
+    {
+      "procedure": "JMC",
+      "line": 22970,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IB1 = IB2 - (SZ/CFB)*IB3"
+    },
+    {
+      "procedure": "KML",
+      "line": 23125,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "CK",
+      "line": 23872,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "F1 = F1 + W1(I)*FL(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CK",
+      "line": 23878,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "F2 = F2 + W2(I)*FA(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CK",
+      "line": 23884,
+      "label": 42,
+      "action": "remove_label",
+      "statement": "F3 = F3 + W2(I)*FB(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CKE",
+      "line": 24250,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "F1 = F1 + W1(I)*FL(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CKE",
+      "line": 24260,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "F2 = F2 + W2(I)*FA(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CKE",
+      "line": 24270,
+      "label": 42,
+      "action": "remove_label",
+      "statement": "F3 = F3 + W2(I)*FB(I)/(AL2 + FXK*FXK)"
+    },
+    {
+      "procedure": "CIRCV",
+      "line": 27016,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "M = M - 1.0"
+    },
+    {
+      "procedure": "PMULT",
+      "line": 27832,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "LC = LC + KC"
+    },
+    {
+      "procedure": "PMULT",
+      "line": 27839,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "LC = LC + KC"
+    },
+    {
+      "procedure": "DPMULT",
+      "line": 27874,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "LC = LC + KC"
+    },
+    {
+      "procedure": "DPMULT",
+      "line": 27881,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "LC = LC + KC"
+    },
+    {
+      "procedure": "PINV",
+      "line": 28136,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "K = K + I"
+    },
+    {
+      "procedure": "DPINV",
+      "line": 28197,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "K = K + I"
+    },
+    {
+      "procedure": "MPLNMV",
+      "line": 28258,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "FV=0.0"
+    },
+    {
+      "procedure": "MPLNMV",
+      "line": 28269,
+      "label": 3,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LGRNGN",
+      "line": 28364,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "DO K=1,NA"
+    },
+    {
+      "procedure": "LGRNGV",
+      "line": 28402,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "LN=.TRUE."
+    },
+    {
+      "procedure": "LGRNGX",
+      "line": 28509,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "DO I=1,NA"
+    },
+    {
+      "procedure": "LGRNGX",
+      "line": 28519,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LGRNGX",
+      "line": 28521,
+      "label": 3,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ORTHOS",
+      "line": 28566,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "SN=NA"
+    },
+    {
+      "procedure": "ORTHOS",
+      "line": 28570,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ORTHOS",
+      "line": 28573,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "SM=0.0"
+    },
+    {
+      "procedure": "ORTHOS",
+      "line": 28584,
+      "label": 5,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ORTHOS",
+      "line": 28600,
+      "label": 8,
+      "action": "remove_label",
+      "statement": "DO M=3,MA"
+    },
+    {
+      "procedure": "ORTHOV",
+      "line": 28658,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "SN=NA"
+    },
+    {
+      "procedure": "ORTHOV",
+      "line": 28668,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ORTHOX",
+      "line": 28708,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "DO N=1,NC"
+    },
+    {
+      "procedure": "ORTHOX",
+      "line": 28710,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ORTHOX",
+      "line": 28716,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "TM=0.0"
+    },
+    {
+      "procedure": "ORTHOX",
+      "line": 28724,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "DO M=3,NC"
+    },
+    {
+      "procedure": "HYBRD",
+      "line": 29315,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QUADIT",
+      "line": 30990,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "REALIT",
+      "line": 31079,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NEXTK",
+      "line": 31244,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NOSHFT",
+      "line": 31733,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "FXSHFT",
+      "line": 31830,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "VRSHFT",
+      "line": 31934,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SNRM2",
+      "line": 34207,
+      "label": 95,
+      "action": "remove_label",
+      "statement": "SUM = SUM + SX(J)**2"
+    },
+    {
+      "procedure": "DNRM2",
+      "line": 34343,
+      "label": 95,
+      "action": "remove_label",
+      "statement": "SUM = SUM + DX(J)**2"
+    },
+    {
+      "procedure": "MCVFS",
+      "line": 34658,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(L) = A(I,J)"
+    },
+    {
+      "procedure": "DMCVFS",
+      "line": 34674,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(L) = A(I,J)"
+    },
+    {
+      "procedure": "MCVSF",
+      "line": 34696,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "MCVSF",
+      "line": 34698,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "MCVSF",
+      "line": 34704,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(J,I)"
+    },
+    {
+      "procedure": "DMCVSF",
+      "line": 34726,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "DMCVSF",
+      "line": 34728,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "DMCVSF",
+      "line": 34734,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(J,I)"
+    },
+    {
+      "procedure": "MCVRD",
+      "line": 34748,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "MCVDR",
+      "line": 34762,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "MCVRC",
+      "line": 34776,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = CMPLX(A(I,J),0.0)"
+    },
+    {
+      "procedure": "CMREAL",
+      "line": 34790,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = REAL(A(I,J))"
+    },
+    {
+      "procedure": "CMIMAG",
+      "line": 34804,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = AIMAG(A(I,J))"
+    },
+    {
+      "procedure": "MCOPY",
+      "line": 34818,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "SMCOPY",
+      "line": 34832,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(K) = A(K)"
+    },
+    {
+      "procedure": "DMCOPY",
+      "line": 34845,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "CMCOPY",
+      "line": 34859,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "CMCONJ",
+      "line": 34873,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I,J) = CONJG(A(I,J))"
+    },
+    {
+      "procedure": "TPOSE",
+      "line": 34887,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(J,I) = A(I,J)"
+    },
+    {
+      "procedure": "DTPOSE",
+      "line": 34901,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(J,I) = A(I,J)"
+    },
+    {
+      "procedure": "CTPOSE",
+      "line": 34915,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(J,I) = A(I,J)"
+    },
+    {
+      "procedure": "CMADJ",
+      "line": 35330,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(J,I) = CONJG(A(I,J))"
+    },
+    {
+      "procedure": "SMADD",
+      "line": 35430,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(K)=A(K)+B(K)"
+    },
+    {
+      "procedure": "SMSUBT",
+      "line": 35493,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(K)=A(K)-B(K)"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35584,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "W = W + DBLE(A(I,K))*DBLE(B(K,J))"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35586,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = W"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35599,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W = W + DBLE(A(I,K))*DBLE(B(K,J))"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35601,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "ROW(J) = W"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35604,
+      "label": 23,
+      "action": "remove_label",
+      "statement": "A(I,J) = ROW(J)"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35617,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "W = W + DBLE(A(I,K))*DBLE(B(K,J))"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35619,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "ROW(I) = W"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 35622,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "B(I,J) = ROW(I)"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35691,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35693,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = W"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35706,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35708,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "ROW(J) = W"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35711,
+      "label": 23,
+      "action": "remove_label",
+      "statement": "A(I,J) = ROW(J)"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35724,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35726,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "ROW(I) = W"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 35729,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "B(I,J) = ROW(I)"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35797,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35799,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = W"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35812,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35814,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "ROW(J) = W"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35817,
+      "label": 23,
+      "action": "remove_label",
+      "statement": "A(I,J) = ROW(J)"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35830,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "W = W + A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35832,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "ROW(I) = W"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 35835,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "B(I,J) = ROW(I)"
+    },
+    {
+      "procedure": "SVPRD",
+      "line": 35904,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "YK = YK + A(L)*X(I)"
+    },
+    {
+      "procedure": "SVPRD",
+      "line": 35908,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "Y(K) = YK + A(L)*XK"
+    },
+    {
+      "procedure": "DSVPRD",
+      "line": 35931,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "YK = YK + A(L)*X(I)"
+    },
+    {
+      "procedure": "DSVPRD",
+      "line": 35935,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "Y(K) = YK + A(L)*XK"
+    },
+    {
+      "procedure": "TMPROD",
+      "line": 35950,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "S = S + DBLE(A(K,I))*DBLE(B(K,J))"
+    },
+    {
+      "procedure": "TMPROD",
+      "line": 35952,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = S"
+    },
+    {
+      "procedure": "SMPROD",
+      "line": 35969,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "S = S + DBLE(A(K,I))*DBLE(A(K,J))"
+    },
+    {
+      "procedure": "SMPROD",
+      "line": 35972,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "II = II + 1"
+    },
+    {
+      "procedure": "KPROD",
+      "line": 35999,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(R,S)*B(II,JJ)"
+    },
+    {
+      "procedure": "DKPROD",
+      "line": 36029,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(R,S)*B(II,JJ)"
+    },
+    {
+      "procedure": "CKPROD",
+      "line": 36059,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(R,S)*B(II,JJ)"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36240,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(L,J) = T"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36251,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "LJ = LJ + KB"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36258,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "A(K,J) = A(K,J)/P"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36265,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36275,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36302,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "LJ = LJ + 1"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36304,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "B(KJ) = SNGL(DSUM)/A(K,K)"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36320,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "LJ = LJ + 1"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36336,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36338,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "A(I,J) = -SNGL(DSUM)/A(I,I)"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36350,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "A(K,J) = 0.0"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36356,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36371,
+      "label": 160,
+      "action": "remove_label",
+      "statement": "A(I,K) = T"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 36386,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(KJ) = B(KJ)/D"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36460,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(L,J) = T"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36471,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "LJ = LJ + KB"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36478,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "A(K,J) = A(K,J)/P"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36485,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36495,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36521,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "LJ = LJ + 1"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36523,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "B(KJ) = SNGL(DSUM)/A(K,K)"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36539,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "LJ = LJ + 1"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36555,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36557,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "A(I,J) = -SNGL(DSUM)/A(I,I)"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36569,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "A(K,J) = 0.0"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36575,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36590,
+      "label": 160,
+      "action": "remove_label",
+      "statement": "A(I,K) = T"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 36605,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(KJ) = B(KJ)/D"
+    },
+    {
+      "procedure": "DEC",
+      "line": 36662,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IF (ABS(A(I,K)) .GT. ABS(A(M,K))) M = I"
+    },
+    {
+      "procedure": "DEC",
+      "line": 36675,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,K) = -A(I,K)*T"
+    },
+    {
+      "procedure": "DEC",
+      "line": 36684,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) + A(I,K)*T"
+    },
+    {
+      "procedure": "SOL",
+      "line": 36728,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "B(I) = B(I) + A(I,K)*T"
+    },
+    {
+      "procedure": "SOL",
+      "line": 36738,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "B(I) = B(I) + A(I,K)*T"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36856,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "A(I,K) = A(I,K) - T*A(J,K)"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36859,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "B(I,K) = B(I,K) - T*B(J,K)"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36868,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "B(N,J) = B(N,J)/A(N,N)"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36877,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "SUM = SUM - A(I,K)*B(K,J)"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36879,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "B(I,J) = SUM/A(I,I)"
+    },
+    {
+      "procedure": "SLV",
+      "line": 36888,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(1,J) = B(1,J)/A(1,1)"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36955,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - T*A(K,J)"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36958,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "B(I,J) = B(I,J) - T*B(K,J)"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36973,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "B(I,J) = B(I,J) - T*A(I,K)"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36976,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "KM1 = K - 1"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36978,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "B(1,J) = B(1,J)/A(1,1)"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 36986,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(1,J) = B(1,J)/A(1,1)"
+    },
+    {
+      "procedure": "MSLV",
+      "line": 37029,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SLVMP",
+      "line": 37113,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "X(I) = B(I)"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37175,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "XNRM = XNRM + X(I)*X(I)"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37186,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(I,J))*DBLE(X(J))"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37188,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "R(I) = DSUM"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37196,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNRM = RNRM + R(I)*R(I)"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37203,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "X(I) = X(I) + R(I)"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37207,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "XNRM = XNRM + X(I)*X(I)"
+    },
+    {
+      "procedure": "SGEDI",
+      "line": 37724,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DMSLV",
+      "line": 37798,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DGEDI",
+      "line": 38361,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ARCEBE",
+      "line": 39412,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ARCEBE",
+      "line": 39422,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 39509,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,L,2)*C(L,J,1)"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 39521,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,L,K)*B(L,J,KM1)"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 39529,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "CALL SOL (M, M, A(1,1,K), B(1,J,K), IP(1,K))"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 39537,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "DP = DP + B(I,L,N)*B(L,J,NM2)"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 39546,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,L,N)*B(L,J,NM1)"
+    },
+    {
+      "procedure": "SOLBT",
+      "line": 39600,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,J,K)*Y(J,KM1)"
+    },
+    {
+      "procedure": "SOLBT",
+      "line": 39609,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,J,N)*Y(J,NM1) + B(I,J,N)*Y(J,NM2)"
+    },
+    {
+      "procedure": "SOLBT",
+      "line": 39621,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "DP = DP + B(I,J,K)*Y(J,KP1)"
+    },
+    {
+      "procedure": "SOLBT",
+      "line": 39629,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "DP = DP + C(I,J,1)*Y(J,3)"
+    },
+    {
+      "procedure": "SMSLV",
+      "line": 39663,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "ONEJ = ONEJ + KB"
+    },
+    {
+      "procedure": "SSPDI",
+      "line": 40558,
+      "label": 130,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSMSLV",
+      "line": 40685,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "ONEJ = ONEJ + KB"
+    },
+    {
+      "procedure": "DSPDI",
+      "line": 41580,
+      "label": 130,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "PCHOL",
+      "line": 41702,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "ONEJ = ONEJ + KB"
+    },
+    {
+      "procedure": "SPPDI",
+      "line": 41946,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DPCHOL",
+      "line": 42020,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "ONEJ = ONEJ + KB"
+    },
+    {
+      "procedure": "DPPDI",
+      "line": 42264,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TOPLX",
+      "line": 42352,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "XD = XD + A(NPL)*G(L)"
+    },
+    {
+      "procedure": "TOPLX",
+      "line": 42362,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "X(J) = X(J) - C*G(L)"
+    },
+    {
+      "procedure": "TOPLX",
+      "line": 42379,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "HN = HN + A(NPL)*H(J)"
+    },
+    {
+      "procedure": "TOPLX",
+      "line": 42400,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "K = K - 1"
+    },
+    {
+      "procedure": "DTOPLX",
+      "line": 42445,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "XD = XD + A(NPL)*G(L)"
+    },
+    {
+      "procedure": "DTOPLX",
+      "line": 42455,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "X(J) = X(J) - C*G(L)"
+    },
+    {
+      "procedure": "DTOPLX",
+      "line": 42472,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "HN = HN + A(NPL)*H(J)"
+    },
+    {
+      "procedure": "DTOPLX",
+      "line": 42493,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "K = K - 1"
+    },
+    {
+      "procedure": "CMSLV",
+      "line": 42532,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CSLVMP",
+      "line": 42618,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "X(I) = B(I)"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42671,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "XNRM = XNRM + (REAL(X(I))**2 + AIMAG(X(I))**2)"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42688,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "ISUM = ISUM - RA*IX - IA*RX"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42690,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "R(I) = CMPLX(SNGL(RSUM),SNGL(ISUM))"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42698,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNRM = RNRM + (REAL(R(I))**2 + AIMAG(R(I))**2)"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42705,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "X(I) = X(I) + R(I)"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 42709,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "XNRM = XNRM + (REAL(X(I))**2 + AIMAG(X(I))**2)"
+    },
+    {
+      "procedure": "CGEDI",
+      "line": 43239,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DCMINV",
+      "line": 43608,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "AI(I,L) = TI"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 43779,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 43812,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 43828,
+      "label": 160,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 44265,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 44298,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 44314,
+      "label": 160,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 44756,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 44789,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 44806,
+      "label": 160,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DET",
+      "line": 45123,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "A(K,K) = A(K,K)-X"
+    },
+    {
+      "procedure": "DET",
+      "line": 45158,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(L,J) = C"
+    },
+    {
+      "procedure": "DET",
+      "line": 45166,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J)-C*A(K,J)"
+    },
+    {
+      "procedure": "DPDET",
+      "line": 45198,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "A(K,K) = A(K,K) - X"
+    },
+    {
+      "procedure": "DPDET",
+      "line": 45233,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(L,J) = C"
+    },
+    {
+      "procedure": "DPDET",
+      "line": 45241,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - C*A(K,J)"
+    },
+    {
+      "procedure": "CDET",
+      "line": 45276,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "A(K,K) = A(K,K)-X"
+    },
+    {
+      "procedure": "CDET",
+      "line": 45311,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(L,J) = T"
+    },
+    {
+      "procedure": "CDET",
+      "line": 45319,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J)-T*A(K,J)"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 45610,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SHRSLV",
+      "line": 45843,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM = SUM - C(I,IB)*B(IB,J)"
+    },
+    {
+      "procedure": "SHRSLV",
+      "line": 45845,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "SHRSLV",
+      "line": 45861,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "SUM = SUM - A(I,JA)*C(JA,J)"
+    },
+    {
+      "procedure": "SHRSLV",
+      "line": 45863,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 46220,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 46247,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DSHSLV",
+      "line": 46454,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM = SUM - C(I,IB)*B(IB,J)"
+    },
+    {
+      "procedure": "DSHSLV",
+      "line": 46456,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "DSHSLV",
+      "line": 46472,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "SUM = SUM - A(I,JA)*C(JA,J)"
+    },
+    {
+      "procedure": "DSHSLV",
+      "line": 46474,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "SYMSLV",
+      "line": 46752,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "SUM = SUM - A(IA,I)*C(IA,J)"
+    },
+    {
+      "procedure": "SYMSLV",
+      "line": 46754,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "SYMSLV",
+      "line": 46850,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "C(I,J) = C(I,J) - C(I,K)*A(K,J) - A(K,I)*C(K,J)"
+    },
+    {
+      "procedure": "SYMSLV",
+      "line": 46852,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(J,I) = C(I,J)"
+    },
+    {
+      "procedure": "DSYMSV",
+      "line": 47067,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "SUM = SUM - A(IA,I)*C(IA,J)"
+    },
+    {
+      "procedure": "DSYMSV",
+      "line": 47069,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "C(I,J) = SUM"
+    },
+    {
+      "procedure": "DSYMSV",
+      "line": 47165,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "C(I,J) = C(I,J) - C(I,K)*A(K,J) - A(K,I)*C(K,J)"
+    },
+    {
+      "procedure": "DSYMSV",
+      "line": 47167,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(J,I) = C(I,J)"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 47368,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 47371,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 47385,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 47390,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CQZIT",
+      "line": 47841,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CQZIT",
+      "line": 47845,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48174,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "S1 = S1 + ABS(A(I,J))"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48177,
+      "label": 12,
+      "action": "remove_label",
+      "statement": "ANORM1 = AMAX1(S1,ANORM1)"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48197,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J)/FACTOR"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48210,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "S = S + A(I,L)*A(L,J)"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48212,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "WK(I,NP1) = S"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48220,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "S = S + A(I,L)*WK(L,K)"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48222,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "WK(I,KP1) = S"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48239,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48265,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "S = S + Z(I,L)*Z(L,J)"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48267,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "WK(I,J) = S"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 48273,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "Z(I,J) = WK(I,J)"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48347,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "S1 = S1 + DABS(A(I,J))"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48350,
+      "label": 12,
+      "action": "remove_label",
+      "statement": "ANORM1 = DMAX1(S1,ANORM1)"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48370,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J)/FACTOR"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48383,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "S = S + A(I,L)*A(L,J)"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48385,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "WK(I,NP1) = S"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48393,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "S = S + A(I,L)*WK(L,K)"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48395,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "WK(I,KP1) = S"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48412,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48438,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "S = S + Z(I,L)*Z(L,J)"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48440,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "WK(I,J) = S"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 48446,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "Z(I,J) = WK(I,J)"
+    },
+    {
+      "procedure": "LE",
+      "line": 48514,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "D(I-1) = -C(I)/C(1)"
+    },
+    {
+      "procedure": "LE",
+      "line": 48531,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "C(M) = CJ"
+    },
+    {
+      "procedure": "LE",
+      "line": 48557,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "C(I) = C(I) + D(IJ)*CJ"
+    },
+    {
+      "procedure": "LE",
+      "line": 48559,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "BK = BK - D(IJ+1)*CJ"
+    },
+    {
+      "procedure": "LE",
+      "line": 48587,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "IK = IK + 1"
+    },
+    {
+      "procedure": "LE",
+      "line": 48612,
+      "label": 110,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LE",
+      "line": 48624,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "C(I) = D(I)"
+    },
+    {
+      "procedure": "LE",
+      "line": 48633,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "C(M) = CK"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48692,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "D(I-1) = -C(I)/C(1)"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48709,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "C(M) = CJ"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48735,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "C(I) = C(I) + D(IJ)*CJ"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48737,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "BK = BK - D(IJ+1)*CJ"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48765,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "IK = IK + 1"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48790,
+      "label": 110,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48802,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "C(I) = D(I)"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 48811,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "C(M) = CK"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48876,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "D(I-1) = -C(I)/C(1)"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48893,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "C(M) = CJ"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48919,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "C(I) = C(I) + D(IJ)*CJ"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48921,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "BK = BK - D(IJ+1)*CJ"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48954,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "IK = IK + 1"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48979,
+      "label": 110,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CLE",
+      "line": 48991,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "C(I) = D(I)"
+    },
+    {
+      "procedure": "CLE",
+      "line": 49000,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "C(M) = CK"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 49028,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I,J) = B(I,K)"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 49044,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 49056,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 49068,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 49078,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 49104,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 49114,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 49129,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "B(I,K) = A(I,J)"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 49141,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 49152,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.0"
+    },
+    {
+      "procedure": "CVRB1",
+      "line": 49181,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "CVRB1",
+      "line": 49194,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "I = I + 1"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 49234,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I,J) = B(I,K)"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 49250,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 49262,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 49274,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 49284,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 49310,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 49320,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 49335,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "B(I,K) = A(I,J)"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 49347,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 49358,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "B(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CVDB1",
+      "line": 49387,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "CVDB1",
+      "line": 49400,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "I = I + 1"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 49440,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I,J) = B(I,K)"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 49456,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 49468,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 49480,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "A(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 49490,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 49516,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J - 1"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 49526,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 49541,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "B(I,K) = A(I,J)"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 49553,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "B(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 49564,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "B(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "CVCB1",
+      "line": 49593,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "CVCB1",
+      "line": 49606,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "I = I + 1"
+    },
+    {
+      "procedure": "MCVSB",
+      "line": 49866,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,K) = 0.0"
+    },
+    {
+      "procedure": "DMCVSB",
+      "line": 49934,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,K) = 0.D0"
+    },
+    {
+      "procedure": "CMCVSB",
+      "line": 50002,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "B(I,K) = (0.0,0.0)"
+    },
+    {
+      "procedure": "BADD",
+      "line": 50469,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "BADD",
+      "line": 50482,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = B(I,J)"
+    },
+    {
+      "procedure": "BADD",
+      "line": 50531,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "BADD",
+      "line": 50555,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = B(I,JB)"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 50626,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 50639,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = B(I,J)"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 50688,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 50712,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = B(I,JB)"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 50783,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 50796,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = B(I,J)"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 50845,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 50869,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = B(I,JB)"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 50940,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 50953,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = -B(I,J)"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 51002,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 51026,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = -B(I,JB)"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 51097,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 51110,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = -B(I,J)"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 51159,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 51183,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = -B(I,JB)"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 51254,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "C(I,J) = A(I,J)"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 51267,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "C(I,J) = -B(I,J)"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 51316,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "C(I,JC) = A(I,JA)"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 51340,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "C(I,JC) = -B(I,JB)"
+    },
+    {
+      "procedure": "BPROD",
+      "line": 51400,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = 0.0"
+    },
+    {
+      "procedure": "DBPROD",
+      "line": 51555,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = 0.D0"
+    },
+    {
+      "procedure": "CBPROD",
+      "line": 51710,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "C(I,J) = (0.0,0.0)"
+    },
+    {
+      "procedure": "SNBSL",
+      "line": 53049,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "B(K) = B(K)/A(K,1)"
+    },
+    {
+      "procedure": "DBSL",
+      "line": 53525,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "B(K) = B(K)/A(K,1)"
+    },
+    {
+      "procedure": "CBSL",
+      "line": 54146,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "B(K) = B(K)/A(K,1)"
+    },
+    {
+      "procedure": "EIGV",
+      "line": 59899,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "ZI(J,K) = 0.0"
+    },
+    {
+      "procedure": "EIGV",
+      "line": 59906,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "ZI(J,KP1) = -ZI(J,K)"
+    },
+    {
+      "procedure": "EIGV1",
+      "line": 59939,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "ZI(J,K) = 0.0"
+    },
+    {
+      "procedure": "EIGV1",
+      "line": 59946,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "ZI(J,KP1) = -ZI(J,K)"
+    },
+    {
+      "procedure": "BALANC",
+      "line": 60084,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "SCALE(I) = 1.0"
+    },
+    {
+      "procedure": "BALANC",
+      "line": 60120,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) * G"
+    },
+    {
+      "procedure": "BALANC",
+      "line": 60124,
+      "label": 260,
+      "action": "remove_label",
+      "statement": "A(J,I) = A(J,I) * F"
+    },
+    {
+      "procedure": "BALINV",
+      "line": 60181,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "BALINV",
+      "line": 60188,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "BALINV",
+      "line": 60205,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "Z(K,J) = S"
+    },
+    {
+      "procedure": "BALINV",
+      "line": 60211,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "Z(J,K) = S"
+    },
+    {
+      "procedure": "ELMHES",
+      "line": 60309,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - Y * A(M,J)"
+    },
+    {
+      "procedure": "ELMHES",
+      "line": 60313,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "A(J,M) = A(J,M) + Y * A(J,I)"
+    },
+    {
+      "procedure": "ELMHS0",
+      "line": 60417,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - Y * A(M,J)"
+    },
+    {
+      "procedure": "ELMHS0",
+      "line": 60421,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "A(J,M) = A(J,M) + Y * A(J,I)"
+    },
+    {
+      "procedure": "ORTHES",
+      "line": 60492,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + ABS(A(I,M-1))"
+    },
+    {
+      "procedure": "ORTHES",
+      "line": 60520,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - F * ORT(I)"
+    },
+    {
+      "procedure": "ORTHES",
+      "line": 60536,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - F * ORT(J)"
+    },
+    {
+      "procedure": "HQR",
+      "line": 60628,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NORM = NORM + ABS(H(I,J))"
+    },
+    {
+      "procedure": "HQR",
+      "line": 60666,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "H(I,I) = H(I,I) - X"
+    },
+    {
+      "procedure": "BALBAK",
+      "line": 60840,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "ELTRAN",
+      "line": 60917,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.0"
+    },
+    {
+      "procedure": "ELTRAN",
+      "line": 60931,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "Z(I,MP) = A(I,MP-1)"
+    },
+    {
+      "procedure": "ELTRN0",
+      "line": 61001,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.0"
+    },
+    {
+      "procedure": "ELTRN0",
+      "line": 61015,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "Z(I,MP) = A(I,MP-1)"
+    },
+    {
+      "procedure": "ORTRAN",
+      "line": 61087,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.0"
+    },
+    {
+      "procedure": "ORTRAN",
+      "line": 61102,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "ORT(I) = A(I,MP-1)"
+    },
+    {
+      "procedure": "ORTRAN",
+      "line": 61109,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "G = G + ORT(I) * Z(I,J)"
+    },
+    {
+      "procedure": "ORTRAN",
+      "line": 61116,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) + G * ORT(I)"
+    },
+    {
+      "procedure": "ORTRN1",
+      "line": 61186,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.0"
+    },
+    {
+      "procedure": "ORTRN1",
+      "line": 61201,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "ORT(I) = A(I,MP-1)"
+    },
+    {
+      "procedure": "ORTRN1",
+      "line": 61208,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "G = G + ORT(I) * Z(I,J)"
+    },
+    {
+      "procedure": "ORTRN1",
+      "line": 61215,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) + G * ORT(I)"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61328,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NORM = NORM + ABS(H(I,J))"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61366,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "H(I,I) = H(I,I) - X"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61543,
+      "label": 610,
+      "action": "remove_label",
+      "statement": "R = R + H(I,J) * H(J,EN)"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61636,
+      "label": 820,
+      "action": "remove_label",
+      "statement": "Z(I,J) = H(I,J)"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61652,
+      "label": 860,
+      "action": "remove_label",
+      "statement": "ZZ = ZZ + Z(I,K) * H(K,J)"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 61656,
+      "label": 880,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DEIGV",
+      "line": 61713,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "ZI(J,K) = 0.D0"
+    },
+    {
+      "procedure": "DEIGV",
+      "line": 61720,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "ZI(J,KP1) = -ZI(J,K)"
+    },
+    {
+      "procedure": "DBAL",
+      "line": 61858,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "SCALE(I) = 1.D0"
+    },
+    {
+      "procedure": "DBAL",
+      "line": 61894,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) * G"
+    },
+    {
+      "procedure": "DBAL",
+      "line": 61898,
+      "label": 260,
+      "action": "remove_label",
+      "statement": "A(J,I) = A(J,I) * F"
+    },
+    {
+      "procedure": "DBALNV",
+      "line": 61955,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "DBALNV",
+      "line": 61962,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "DBALNV",
+      "line": 61979,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "Z(K,J) = S"
+    },
+    {
+      "procedure": "DBALNV",
+      "line": 61985,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "Z(J,K) = S"
+    },
+    {
+      "procedure": "DORTH",
+      "line": 62050,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + DABS(A(I,M-1))"
+    },
+    {
+      "procedure": "DORTH",
+      "line": 62078,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - F * ORT(I)"
+    },
+    {
+      "procedure": "DORTH",
+      "line": 62094,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "A(I,J) = A(I,J) - F * ORT(J)"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 62188,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NORM = NORM + DABS(H(I,J))"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 62226,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "H(I,I) = H(I,I) - X"
+    },
+    {
+      "procedure": "DBABK",
+      "line": 62400,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) * S"
+    },
+    {
+      "procedure": "DORTRN",
+      "line": 62479,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.D0"
+    },
+    {
+      "procedure": "DORTRN",
+      "line": 62494,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "ORT(I) = A(I,MP-1)"
+    },
+    {
+      "procedure": "DORTRN",
+      "line": 62501,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "G = G + ORT(I) * Z(I,J)"
+    },
+    {
+      "procedure": "DORTRN",
+      "line": 62508,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) + G * ORT(I)"
+    },
+    {
+      "procedure": "DRTRN1",
+      "line": 62578,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Z(I,J) = 0.D0"
+    },
+    {
+      "procedure": "DRTRN1",
+      "line": 62593,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "ORT(I) = A(I,MP-1)"
+    },
+    {
+      "procedure": "DRTRN1",
+      "line": 62600,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "G = G + ORT(I) * Z(I,J)"
+    },
+    {
+      "procedure": "DRTRN1",
+      "line": 62607,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "Z(I,J) = Z(I,J) + G * ORT(I)"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 62715,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NORM = NORM + DABS(H(I,J))"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 62753,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "H(I,I) = H(I,I) - X"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 62930,
+      "label": 610,
+      "action": "remove_label",
+      "statement": "R = R + H(I,J) * H(J,EN)"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 63028,
+      "label": 820,
+      "action": "remove_label",
+      "statement": "Z(I,J) = H(I,J)"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 63044,
+      "label": 860,
+      "action": "remove_label",
+      "statement": "ZZ = ZZ + Z(I,K) * H(K,J)"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 63048,
+      "label": 880,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63177,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "D(I) = A(I,I)"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63188,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + ABS(A(I,K))"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63215,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "G = G + A(J,K) * A(I,K)"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63222,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "G = G + A(K,J) * A(I,K)"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63238,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 63243,
+      "label": 280,
+      "action": "remove_label",
+      "statement": "A(I,K) = SCALE * A(I,K)"
+    },
+    {
+      "procedure": "TRED3",
+      "line": 63361,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TQLRAT",
+      "line": 63428,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E2(I-1) = E2(I)"
+    },
+    {
+      "procedure": "TQLRAT",
+      "line": 63462,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "D(I) = D(I) - H"
+    },
+    {
+      "procedure": "IMTQL1",
+      "line": 63572,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E(I-1) = E(I)"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63699,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63713,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + ABS(Z(I,K))"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63738,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "G = G + Z(J,K) * Z(I,K)"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63745,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "G = G + Z(K,J) * Z(I,K)"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63761,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63779,
+      "label": 340,
+      "action": "remove_label",
+      "statement": "G = G + Z(I,K) * Z(K,J)"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 63784,
+      "label": 360,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TQL2",
+      "line": 63879,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E(I-1) = E(I)"
+    },
+    {
+      "procedure": "TQL2",
+      "line": 63910,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "D(I) = D(I) - H"
+    },
+    {
+      "procedure": "IMTQL2",
+      "line": 64062,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E(I-1) = E(I)"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64247,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "D(I) = A(I,I)"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64258,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + DABS(A(I,K))"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64285,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "G = G + A(J,K) * A(I,K)"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64292,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "G = G + A(K,J) * A(I,K)"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64308,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 64313,
+      "label": 280,
+      "action": "remove_label",
+      "statement": "A(I,K) = SCALE * A(I,K)"
+    },
+    {
+      "procedure": "DTRED3",
+      "line": 64431,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DTQL",
+      "line": 64497,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E2(I-1) = E2(I)"
+    },
+    {
+      "procedure": "DTQL",
+      "line": 64531,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "D(I) = D(I) - H"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64634,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64648,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + DABS(Z(I,K))"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64673,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "G = G + Z(J,K) * Z(I,K)"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64680,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "G = G + Z(K,J) * Z(I,K)"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64696,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64714,
+      "label": 340,
+      "action": "remove_label",
+      "statement": "G = G + Z(I,K) * Z(K,J)"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 64719,
+      "label": 360,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DTQL2",
+      "line": 64813,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "E(I-1) = E(I)"
+    },
+    {
+      "procedure": "DTQL2",
+      "line": 64844,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "D(I) = D(I) - H"
+    },
+    {
+      "procedure": "CBAL",
+      "line": 65107,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "SCALE(I) = 1.0"
+    },
+    {
+      "procedure": "CORTH",
+      "line": 65225,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + ABS(AR(I,M-1)) + ABS(AI(I,M-1))"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 65732,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 65974,
+      "label": 720,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 66039,
+      "label": 880,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DCBAL",
+      "line": 66240,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "SCALE(I) = 1.D0"
+    },
+    {
+      "procedure": "DCORTH",
+      "line": 66358,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "SCALE = SCALE + DABS(AR(I,M-1)) + DABS(AI(I,M-1))"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 66858,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 67104,
+      "label": 720,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 67169,
+      "label": 880,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LLSQ",
+      "line": 67671,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "RNORM = RNORM + B(I,J)*B(I,J)"
+    },
+    {
+      "procedure": "LLSQMP",
+      "line": 67710,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "WK(I) = B(I,J)"
+    },
+    {
+      "procedure": "LLSQMP",
+      "line": 67716,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "B(I,J) = WK(I)"
+    },
+    {
+      "procedure": "LLSQMP",
+      "line": 67723,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNORM = RNORM + WK(I)*WK(I)"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67807,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "QR(KJ,I) = SAV"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67813,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "QR(I,J) = QR(I,J)/AJJ"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67817,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(I,J)*QR(I,J)"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67828,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(I,J)*QR(I,K)"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67834,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "QR(I,K) = QR(I,K) - QR(I,J)*SS"
+    },
+    {
+      "procedure": "ORSOL",
+      "line": 67915,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(K,J)*X(K)"
+    },
+    {
+      "procedure": "ORSOL",
+      "line": 67921,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "X(K) = X(K) - QR(K,J)*SS"
+    },
+    {
+      "procedure": "ORSOL",
+      "line": 67933,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NN = NN - 1"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68019,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "XNRM2 = XNRM2 + X(I)*X(I)"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68029,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM - DBLE(A(K,J))*DBLE(X(J))"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68031,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "R(K) = DSUM"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68039,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNRM2 = RNRM2 + R(K)*R(K)"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68046,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "X(K) = X(K) + R(K)"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68050,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "XNRM2 = XNRM2 + X(K)*X(K)"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 68054,
+      "label": 42,
+      "action": "remove_label",
+      "statement": "X(K) = R(K)"
+    },
+    {
+      "procedure": "DLLSQ",
+      "line": 68092,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "RNORM = RNORM + B(I,J)*B(I,J)"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 68175,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "QR(KJ,I) = SAV"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 68181,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "QR(I,J) = QR(I,J)/AJJ"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 68185,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(I,J)*QR(I,J)"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 68196,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(I,J)*QR(I,K)"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 68202,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "QR(I,K) = QR(I,K) - QR(I,J)*SS"
+    },
+    {
+      "procedure": "DORSOL",
+      "line": 68282,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "SAV = SAV + QR(K,J)*X(K)"
+    },
+    {
+      "procedure": "DORSOL",
+      "line": 68288,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "X(K) = X(K) - QR(K,J)*SS"
+    },
+    {
+      "procedure": "DORSOL",
+      "line": 68300,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "NN = NN - 1"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70656,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "H(L) = H(L) + A(I,L)**2"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70671,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "A(I,LMAX) = TMP"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70678,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70698,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "TMP = TMP + B(I,JB)**2"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70708,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(I,JB) = 0.0"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70719,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70735,
+      "label": 190,
+      "action": "remove_label",
+      "statement": "SM = SM + DBLE(A(I,J))*DBLE(B(J,JB))"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70738,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(I,JB) = SM1/A(I,I)"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70745,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "B(J,JB) = 0.0"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 70748,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70933,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "H(L) = H(L) + A(I,L)**2"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70948,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "A(I,LMAX) = TMP"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70955,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70963,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "D(J) = A(J,J)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70972,
+      "label": 105,
+      "action": "remove_label",
+      "statement": "D(J) = A(J,J)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70982,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "TMP = TMP + B(I,JB)**2"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 70992,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(I,JB) = 0.0"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 71003,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 71019,
+      "label": 190,
+      "action": "remove_label",
+      "statement": "SM = SM + DBLE(A(I,J))*DBLE(B(J,JB))"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 71022,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(I,JB)=SM1/A(I,I)"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 71029,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "B(J,JB) = 0.0"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 71032,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)"
+    },
+    {
+      "procedure": "H12",
+      "line": 71105,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "CL = AMAX1(ABS(U(1,J)),CL)"
+    },
+    {
+      "procedure": "H12",
+      "line": 71112,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SM = SM + DBLE(D*D)"
+    },
+    {
+      "procedure": "H12",
+      "line": 71142,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "I3 = I3 + ICE"
+    },
+    {
+      "procedure": "H12",
+      "line": 71149,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "I4 = I4 + ICE"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71303,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "H(L) = H(L) + A(I,L)**2"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71318,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "A(I,LMAX) = TMP"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71325,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71345,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "TMP = TMP + B(I,JB)**2"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71355,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(I,JB) = 0.D0"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71366,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71382,
+      "label": 190,
+      "action": "remove_label",
+      "statement": "SM = SM + A(I,J)*B(J,JB)"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71385,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(I,JB) = SM1/A(I,I)"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71392,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "B(J,JB) = 0.D0"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 71395,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71580,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "H(L) = H(L) + A(I,L)**2"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71595,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "A(I,LMAX) = TMP"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71602,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71610,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "D(J) = A(J,J)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71619,
+      "label": 105,
+      "action": "remove_label",
+      "statement": "D(J) = A(J,J)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71629,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "TMP = TMP + B(I,JB)**2"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71639,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "B(I,JB) = 0.D0"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71650,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71666,
+      "label": 190,
+      "action": "remove_label",
+      "statement": "SM = SM + A(I,J)*B(J,JB)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71669,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "B(I,JB)=SM1/A(I,I)"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71676,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "B(J,JB) = 0.D0"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 71679,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)"
+    },
+    {
+      "procedure": "DH12",
+      "line": 71751,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "CL = DMAX1(DABS(U(1,J)),CL)"
+    },
+    {
+      "procedure": "DH12",
+      "line": 71758,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SM = SM + D*D"
+    },
+    {
+      "procedure": "DH12",
+      "line": 71787,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "I3 = I3 + ICE"
+    },
+    {
+      "procedure": "DH12",
+      "line": 71794,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "I4 = I4 + ICE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73372,
+      "label": 130,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73386,
+      "label": 170,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73416,
+      "label": 230,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73437,
+      "label": 260,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73446,
+      "label": 270,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73531,
+      "label": 380,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73545,
+      "label": 420,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73553,
+      "label": 430,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73620,
+      "label": 580,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73664,
+      "label": 700,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73667,
+      "label": 720,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73683,
+      "label": 770,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73804,
+      "label": 1020,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73821,
+      "label": 1070,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73827,
+      "label": 1080,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73835,
+      "label": 1090,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 73863,
+      "label": 1180,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 73992,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74025,
+      "label": 170,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74137,
+      "label": 350,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74153,
+      "label": 360,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74155,
+      "label": 370,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74190,
+      "label": 440,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74217,
+      "label": 470,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74230,
+      "label": 490,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74232,
+      "label": 500,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 74270,
+      "label": 550,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "L2SLV",
+      "line": 74684,
+      "label": 240,
+      "action": "remove_label",
+      "statement": "QR(I,J) = QR(J,I)"
+    },
+    {
+      "procedure": "SOLVE2",
+      "line": 74973,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "OPTF",
+      "line": 76782,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "OPSTP",
+      "line": 77180,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SCALEX",
+      "line": 77283,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SCALEX",
+      "line": 77291,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LNSRCH",
+      "line": 77500,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ENORM",
+      "line": 78540,
+      "label": 90,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "LMPAR",
+      "line": 79130,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80187,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "XB(I) = 0.0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80215,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "IBASIS(I) = N0 + I"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80219,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "BASIS(I) = 0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80223,
+      "label": 34,
+      "action": "remove_label",
+      "statement": "BASIS(KI) = 1"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80233,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80260,
+      "label": 103,
+      "action": "remove_label",
+      "statement": "IBASIS(I) = INDEX(I)"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80273,
+      "label": 111,
+      "action": "remove_label",
+      "statement": "BI(I,J) = A(I,KJ)"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80279,
+      "label": 121,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80286,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80306,
+      "label": 141,
+      "action": "remove_label",
+      "statement": "SUM = SUM + ABS(A(I,KJ))"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80315,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "SUM = SUM + ABS(BI(I,J))"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80325,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "DO I = 1,M"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80377,
+      "label": 221,
+      "action": "remove_label",
+      "statement": "R(J) = 0.0"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80630,
+      "label": 511,
+      "action": "remove_label",
+      "statement": "BI(I,J) = BI(I,J) - CONST*Y(I)"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80797,
+      "label": 682,
+      "action": "remove_label",
+      "statement": "Y(J) = DSUM"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80833,
+      "label": 710,
+      "action": "remove_label",
+      "statement": "IF (N0 .EQ. NS) GO TO 720"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 80885,
+      "label": 840,
+      "action": "remove_label",
+      "statement": "R(I) = B0(I) - Y(I)"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81121,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "XB(I) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81149,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "IBASIS(I) = N0 + I"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81153,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "BASIS(I) = 0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81157,
+      "label": 34,
+      "action": "remove_label",
+      "statement": "BASIS(KI) = 1"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81167,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81194,
+      "label": 103,
+      "action": "remove_label",
+      "statement": "IBASIS(I) = INDEX(I)"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81207,
+      "label": 111,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81214,
+      "label": 112,
+      "action": "remove_label",
+      "statement": "BI(L,J) = TA(LL)"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81220,
+      "label": 121,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81227,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "BI(I,J) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81249,
+      "label": 141,
+      "action": "remove_label",
+      "statement": "SUM = SUM + ABS(TA(LL))"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81258,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "SUM = SUM + ABS(BI(I,J))"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81268,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "DO I = 1,M"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81320,
+      "label": 221,
+      "action": "remove_label",
+      "statement": "R(J) = 0.0"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81372,
+      "label": 310,
+      "action": "remove_label",
+      "statement": "RERR1 = RERRMX*AMAX"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81570,
+      "label": 511,
+      "action": "remove_label",
+      "statement": "BI(I,J) = BI(I,J) - CONST*Y(I)"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81744,
+      "label": 682,
+      "action": "remove_label",
+      "statement": "Y(J) = DSUM"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81789,
+      "label": 710,
+      "action": "remove_label",
+      "statement": "IF (N0 .EQ. NS) GO TO 720"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 81857,
+      "label": 850,
+      "action": "remove_label",
+      "statement": "RERR1 = AMIN1(RERRMX,RERR)"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 81983,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "A(LJ) = -A(LJ)"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 81994,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "LJ = LJ + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82043,
+      "label": 121,
+      "action": "remove_label",
+      "statement": "LJ = LJ + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82052,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "A(KJ) = A(KJ)/C"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82059,
+      "label": 141,
+      "action": "remove_label",
+      "statement": "KL = KL + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82068,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "DSUM = DSUM + DBLE(TEMP(L))*DBLE(A(LJ))"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82070,
+      "label": 151,
+      "action": "remove_label",
+      "statement": "A(KJ) = SNGL(-DSUM)/C"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82082,
+      "label": 161,
+      "action": "remove_label",
+      "statement": "TEMP(L) = A(LK)"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82090,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "IL = IL + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82092,
+      "label": 171,
+      "action": "remove_label",
+      "statement": "A(IL) = DBLE(A(IL)) - DSUM"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82121,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "KL = KL + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82124,
+      "label": 211,
+      "action": "remove_label",
+      "statement": "TEMP(K) = A(KJ)"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82126,
+      "label": 212,
+      "action": "remove_label",
+      "statement": "JJ = JJ + I"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82140,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "KL = KL + KA"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82149,
+      "label": 240,
+      "action": "remove_label",
+      "statement": "LJ = LJ + 1"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82151,
+      "label": 241,
+      "action": "remove_label",
+      "statement": "A(KJ) = -DSUM"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 82169,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "A(IK) = C"
+    },
+    {
+      "procedure": "SRCH",
+      "line": 83619,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "X1 = 10.0*X1"
+    },
+    {
+      "procedure": "LAINV1",
+      "line": 84149,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 85075,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87834,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "P(I) = ZERO"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87837,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "Q(I) = ZERO"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87854,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "X(II) = XM1 - Z"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87860,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "XVAL(I) = PHI(X(I))"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87873,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "C(I,J) = C(I,J-1)*XVAL(I)"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87881,
+      "label": 43,
+      "action": "remove_label",
+      "statement": "C(I,J+1) = C(I,J)*XVAL(I)"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87908,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "Q(I) = D(LPI)"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87911,
+      "label": 62,
+      "action": "remove_label",
+      "statement": "P(I) = D(I)"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 87927,
+      "label": 71,
+      "action": "remove_label",
+      "statement": "H(I) = TAU*(X(I+1) - X(I-1))"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 88015,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "I = I - 1"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 88041,
+      "label": 112,
+      "action": "remove_label",
+      "statement": "X(I) = X(I+1)"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 88061,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "SIGN = -SIGN"
+    },
+    {
+      "procedure": "CERR",
+      "line": 88120,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "P = P*PHIT + D(II)"
+    },
+    {
+      "procedure": "CERR",
+      "line": 88127,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "Q = (Q + D(II))*PHIT"
+    },
+    {
+      "procedure": "ADAPT",
+      "line": 88212,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A = XLFT"
+    },
+    {
+      "procedure": "ADAPT",
+      "line": 88227,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ADSET",
+      "line": 88541,
+      "label": 100,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ADCOMP",
+      "line": 88766,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ERRINT",
+      "line": 88866,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NEWTON",
+      "line": 88951,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NEWTON",
+      "line": 88957,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NEWTON",
+      "line": 88971,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "POLYDD",
+      "line": 89067,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ADTRAN",
+      "line": 89312,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "ADTRAN",
+      "line": 89320,
+      "label": 70,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89445,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "FV(I+2) = CMPLX(COS(ANG),-SIN(ANG))"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89475,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(IQ - 1) = F(Z - V)"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89490,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "A(I) = A(I) + T"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89492,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "U = U*W"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89495,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "JN = JN + JN"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89515,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "ERR(I) = ERR(I-1)/R"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89520,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "SF = SF/R"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89536,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "S = S*RQ + A(IA)"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89541,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "IF (CM .GT. SR) SR = CM"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89569,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "RT(I,M) = A(I)"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89577,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "RT(I,M-1) = RT(I,M) - MULT(FC(M-1),XK)"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89594,
+      "label": 240,
+      "action": "remove_label",
+      "statement": "RS(I) = RT(I,2) - MULT(FC(3),XK)"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89607,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "FACT = FACT*FAC"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 89615,
+      "label": 270,
+      "action": "remove_label",
+      "statement": "ERR(I) = 1.E10"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89722,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "FV2(I + 2) = -DSIN(ANG)"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89756,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89774,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "A2(I) = A2(I) + T"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89778,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "U = T"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89781,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "JN = JN + JN"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89801,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "ERR(I) = ERR(I-1)/R"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89808,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "SF = SF/R"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89828,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "S = W"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89834,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "IF (CM .GT. SR) SR = CM"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89863,
+      "label": 200,
+      "action": "remove_label",
+      "statement": "RT2(I,M) = A2(I)"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89874,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "RT2(I,MM1) = RT2(I,M) - FC(MM1)*V"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89893,
+      "label": 240,
+      "action": "remove_label",
+      "statement": "RS2(I) = RT2(I,2) - FC(3)*V"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89907,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "FACT = FACT*FAC"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 89916,
+      "label": 270,
+      "action": "remove_label",
+      "statement": "ERR(I) = 1.D10"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 90086,
+      "label": 81,
+      "action": "remove_label",
+      "statement": "T(J) = Y(L)"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 90094,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "T(J) = (T(J)-T(J+1))/(X(II)-X(L))"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 90103,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "YI(K) = T(J)+YI(K)*(XX-X(L))"
+    },
+    {
+      "procedure": "HTRP",
+      "line": 90181,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "T(I+1) = (T(I+1)-T(I))/(X(I)-X(K))"
+    },
+    {
+      "procedure": "PCOEFF",
+      "line": 90210,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "T(I) = A(I)"
+    },
+    {
+      "procedure": "PCOEFF",
+      "line": 90217,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "T(K) = T(K)+R*T(K+1)"
+    },
+    {
+      "procedure": "PCOEFF",
+      "line": 90222,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "C(I) = T(I)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90252,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "PHI(2,K)=0.0"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90269,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "PHIX(3,K)=ZA+ZB*X(K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90281,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(Y(K))"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90286,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "PHIX(4,K)=A(1)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90300,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "PHIX(2,K)=(PHIX(3,K)-ALPHA)*PHI(1,1)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90307,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "C=PHI(LB,K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90311,
+      "label": 52,
+      "action": "remove_label",
+      "statement": "PHIX(LA,K)=(PHIX(3,K)-ALPHA)*PHIX(LB,K)-LAMBDA*PHIX(LA,K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90321,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(C)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90330,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "PHI(LA,K)=PHI(LA,K)/LAMBDA"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90333,
+      "label": 71,
+      "action": "remove_label",
+      "statement": "PHIX(LA,K)=PHIX(LA,K)/LAMBDA"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90341,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE((Y(K)-PHIX(4,K))*PHIX(LA,K))"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90345,
+      "label": 81,
+      "action": "remove_label",
+      "statement": "A(K)=A(K)+C*PHI(LA,K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90348,
+      "label": 82,
+      "action": "remove_label",
+      "statement": "PHIX(4,K)=PHIX(4,K)+C*PHIX(LA,K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90353,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "LB=LS"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90360,
+      "label": 95,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE((Y(K)-PHIX(4,K))**2)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90378,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "C=TEMP"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90382,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "A(K)=A(K)+A(MP1)*PHI(1,K)"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 90384,
+      "label": 102,
+      "action": "remove_label",
+      "statement": "A(MP1)=A(MP1)*PHI(1,MP1)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90436,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "PHI(2,K)=0.0"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90444,
+      "label": 25,
+      "action": "remove_label",
+      "statement": "PHIX(3,K)=ZA+ZB*X(K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90456,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(W(K)*Y(K))"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90461,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "PHIX(4,K)=A(1)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90475,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "PHIX(2,K)=(PHIX(3,K)-ALPHA)*PHI(1,1)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90482,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "C=PHI(LB,K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90486,
+      "label": 52,
+      "action": "remove_label",
+      "statement": "PHIX(LA,K)=(PHIX(3,K)-ALPHA)*PHIX(LB,K)-LAMBDA*PHIX(LA,K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90496,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(C)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90505,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "PHI(LA,K)=PHI(LA,K)/LAMBDA"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90508,
+      "label": 71,
+      "action": "remove_label",
+      "statement": "PHIX(LA,K)=PHIX(LA,K)/LAMBDA"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90516,
+      "label": 80,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(W(K)*(Y(K)-PHIX(4,K))*PHIX(LA,K))"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90520,
+      "label": 81,
+      "action": "remove_label",
+      "statement": "A(K)=A(K)+C*PHI(LA,K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90523,
+      "label": 82,
+      "action": "remove_label",
+      "statement": "PHIX(4,K)=PHIX(4,K)+C*PHIX(LA,K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90528,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "LB=LS"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90535,
+      "label": 95,
+      "action": "remove_label",
+      "statement": "DSUM=DSUM+DBLE(W(K)*(Y(K)-PHIX(4,K))**2)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90553,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "C=TEMP"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90557,
+      "label": 101,
+      "action": "remove_label",
+      "statement": "A(K)=A(K)+A(MP1)*PHI(1,K)"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 90559,
+      "label": 102,
+      "action": "remove_label",
+      "statement": "A(MP1)=A(MP1)*PHI(1,MP1)"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90803,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90813,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90825,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90837,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90850,
+      "label": 60,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90858,
+      "label": 70,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 90867,
+      "label": 80,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SPFIT",
+      "line": 90933,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CSPFIT",
+      "line": 91016,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "PDFIT",
+      "line": 92227,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "CURV1",
+      "line": 92930,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "CURV1",
+      "line": 92939,
+      "label": 7,
+      "action": "remove_label",
+      "statement": "YP(IBAK) = YP(IBAK)-TEMP(IBAK)*YP(IBAK+1)"
+    },
+    {
+      "procedure": "KURV1",
+      "line": 93400,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+         (Y(I)-Y(IM1))**2)"
+    },
+    {
+      "procedure": "KURV1",
+      "line": 93469,
+      "label": 8,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "KURV1",
+      "line": 93480,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "YP(IBAK) = YP(IBAK)-TEMP(IBAK)*YP(IBAK+1)"
+    },
+    {
+      "procedure": "KURVP1",
+      "line": 93685,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+         (Y(I)-Y(IM1))**2)"
+    },
+    {
+      "procedure": "KURVP1",
+      "line": 93733,
+      "label": 2,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "KURVP1",
+      "line": 93751,
+      "label": 4,
+      "action": "remove_label",
+      "statement": "TEMP(IBAK) = TEMP(NPIBAK)-TEMP(IBAK)*TEMP(IBAK+1)"
+    },
+    {
+      "procedure": "KURVP1",
+      "line": 93764,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "YP(I) = YP(I)+TEMP(I)*YPN"
+    },
+    {
+      "procedure": "QURV1",
+      "line": 94003,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+(Y(I)-Y(IM1))**2       +(Z(I)-Z(IM1))**2)"
+    },
+    {
+      "procedure": "QURV1",
+      "line": 94085,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "QURV1",
+      "line": 94099,
+      "label": 8,
+      "action": "remove_label",
+      "statement": "ZP(IBAK) = ZP(IBAK)-T*ZP(IBAK+1)"
+    },
+    {
+      "procedure": "BVAL",
+      "line": 94582,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "BVAL",
+      "line": 94598,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "BVALI0",
+      "line": 94746,
+      "label": 100,
+      "action": "remove_label",
+      "statement": "L = L - 1"
+    },
+    {
+      "procedure": "BSPVD",
+      "line": 95096,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "JP1MID = JP1MID + 1"
+    },
+    {
+      "procedure": "BSPVD",
+      "line": 95111,
+      "label": 19,
+      "action": "remove_label",
+      "statement": "A(J,I) = 0.0"
+    },
+    {
+      "procedure": "BSPVD",
+      "line": 95114,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(I,I) = 1.0"
+    },
+    {
+      "procedure": "BSPVD",
+      "line": 95139,
+      "label": 25,
+      "action": "remove_label",
+      "statement": "A(I,J) = (A(I,J) - A(I-1,J))*FACTOR"
+    },
+    {
+      "procedure": "BSPVD",
+      "line": 95157,
+      "label": 35,
+      "action": "remove_label",
+      "statement": "SUM = A(J,I)*DBIATX(J,M) + SUM"
+    },
+    {
+      "procedure": "BANFAC",
+      "line": 95394,
+      "label": 15,
+      "action": "remove_label",
+      "statement": "W(J,I) = W(J,I)/PIVOT"
+    },
+    {
+      "procedure": "BANFAC",
+      "line": 95411,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "W(J,I) = W(J,I)/PIVOT"
+    },
+    {
+      "procedure": "BANFAC",
+      "line": 95425,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "W(MDJ,IPK) = W(MDJ,IPK) - W(MJ,I)*FACTOR"
+    },
+    {
+      "procedure": "BANSLV",
+      "line": 95472,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "B(IPJ) = B(IPJ) - B(I)*W(MPJ,I)"
+    },
+    {
+      "procedure": "BANSLV",
+      "line": 95482,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "B(I) = B(I)/W(1,I)"
+    },
+    {
+      "procedure": "BANSLV",
+      "line": 95491,
+      "label": 45,
+      "action": "remove_label",
+      "statement": "B(IMJ) = B(IMJ) - B(I)*W(MMJ,I)"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 96170,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "ILEFT = I"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 96229,
+      "label": 320,
+      "action": "remove_label",
+      "statement": "ILEFT = I"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 96248,
+      "label": 350,
+      "action": "remove_label",
+      "statement": "ILEFT = I"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 96284,
+      "label": 510,
+      "action": "remove_label",
+      "statement": "ILEFT = I"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97511,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "L = L+1"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97520,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "ZP(I,1,1) = C1*Z(I,1)+C2*Z(I,2)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97524,
+      "label": 4,
+      "action": "remove_label",
+      "statement": "ZP(I,1,1) = ZP(I,1,1)+C3*Z(I,3)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97534,
+      "label": 6,
+      "action": "remove_label",
+      "statement": "L = L+1"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97544,
+      "label": 8,
+      "action": "remove_label",
+      "statement": "TEMP(NPI) = C1*Z(I,N)+C2*Z(I,NM1)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97549,
+      "label": 9,
+      "action": "remove_label",
+      "statement": "TEMP(NPI) = TEMP(NPI)+C3*Z(I,N-2)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97563,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "L = L+1"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97573,
+      "label": 13,
+      "action": "remove_label",
+      "statement": "ZP(1,J,2) = C1*Z(1,J)+C2*Z(2,J)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97577,
+      "label": 14,
+      "action": "remove_label",
+      "statement": "ZP(1,J,2) = ZP(1,J,2)+C3*Z(3,J)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97605,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "L = L+1"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97616,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "TEMP(NPMPJ) = C1*Z(M,J)+C2*Z(MM1,J)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97621,
+      "label": 23,
+      "action": "remove_label",
+      "statement": "TEMP(NPMPJ) = TEMP(NPMPJ)+C3*Z(M-2,J)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97649,
+      "label": 29,
+      "action": "remove_label",
+      "statement": "ZP(I,2,1) = DELI*(Z(I,2)-Z(I,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97656,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "ZP(I,1,1) = DIAGI*(ZP(I,2,1)-ZP(I,1,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97670,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "ZP(I,JP1,1) = DELI*(Z(I,JP1)-Z(I,J))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97677,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "ZP(I,J,1) = DIAGIN*(ZP(I,JP1,1)-ZP(I,J,1)-                        SDIAG1*ZP(I,JM1,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97686,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97691,
+      "label": 35,
+      "action": "remove_label",
+      "statement": "ZP(I,N,1) = DIAGIN*(TEMP(NPI)-ZP(I,N,1)-                      SDIAG1*ZP(I,NM1,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97706,
+      "label": 36,
+      "action": "remove_label",
+      "statement": "ZP(I,JBAK,1) = ZP(I,JBAK,1)-T*ZP(I,JBAKP1,1)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97709,
+      "label": 37,
+      "action": "remove_label",
+      "statement": "TEMP(JBAK) = ZP(M,JBAK,3)-T*TEMP(JBAKP1)"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97720,
+      "label": 38,
+      "action": "remove_label",
+      "statement": "ZP(2,J,3) = DELI*(ZP(2,J,1)-ZP(1,J,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97726,
+      "label": 39,
+      "action": "remove_label",
+      "statement": "ZP(1,J,3) = DIAGI*(ZP(2,J,3)-ZP(1,J,3))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97739,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "ZP(IP1,J,3) = DELI*(ZP(IP1,J,1)-ZP(I,J,1))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97746,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "ZP(I,J,3) = DIAGIN*(ZP(IP1,J,3)-ZP(I,J,3)-                        SDIAG1*ZP(IM1,J,3))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97751,
+      "label": 42,
+      "action": "remove_label",
+      "statement": "SDIAG1 = SDIAG2"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97758,
+      "label": 44,
+      "action": "remove_label",
+      "statement": "ZP(M,J,3) = DIAGIN*(TEMP(J)-ZP(M,J,3)-                      SDIAG1*ZP(MM1,J,3))"
+    },
+    {
+      "procedure": "SURF",
+      "line": 97771,
+      "label": 45,
+      "action": "remove_label",
+      "statement": "ZP(IBAK,J,3) = ZP(IBAK,J,3)-T*ZP(IBAKP1,J,3)"
+    },
+    {
+      "procedure": "TRMESH",
+      "line": 98693,
+      "label": 4,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BDYADD",
+      "line": 99021,
+      "label": 1,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "BDYADD",
+      "line": 99036,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "INTADD",
+      "line": 99159,
+      "label": 2,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SHIFTD",
+      "line": 99305,
+      "label": 1,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SHIFTD",
+      "line": 99328,
+      "label": 5,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99437,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) + 1"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99451,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) - 1"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99458,
+      "label": 7,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99471,
+      "label": 9,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) - 1"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99483,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) - 2"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99495,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) - 1"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99508,
+      "label": 13,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) + 1"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99520,
+      "label": 14,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) + 2"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 99532,
+      "label": 15,
+      "action": "remove_label",
+      "statement": "IEND(I) = IEND(I) + 1"
+    },
+    {
+      "procedure": "GRADG1",
+      "line": 100215,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "ZXZY(2,K) = ZYK + DZY"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100427,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "SUM = SUM + DS"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100472,
+      "label": 4,
+      "action": "remove_label",
+      "statement": "CALL SROT (L,A(JP1,J),1,A(JP1,I),1,C,S)"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100489,
+      "label": 7,
+      "action": "remove_label",
+      "statement": "CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100518,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(J,6) = 0."
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100524,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 100550,
+      "label": 13,
+      "action": "remove_label",
+      "statement": "CALL SROT (1,A(6,5),1,A(6,6),1,C,S)"
+    },
+    {
+      "procedure": "SETRM",
+      "line": 100657,
+      "label": 2,
+      "action": "remove_label",
+      "statement": "ROW(I) = 0."
+    },
+    {
+      "procedure": "GETNP",
+      "line": 100762,
+      "label": 1,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "TVAL",
+      "line": 101299,
+      "label": 1,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "MTABLE",
+      "line": 102032,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "MTABLE",
+      "line": 102064,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "MTABLE",
+      "line": 102075,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "J = J + 1"
+    },
+    {
+      "procedure": "GNRTP",
+      "line": 102127,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "CALL SCALDN(COORD(1,K),NPTS,MAXABS(K))"
+    },
+    {
+      "procedure": "GNRTP",
+      "line": 102143,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + F(P) * WEIGHT(P)"
+    },
+    {
+      "procedure": "GNRTP",
+      "line": 102154,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "Z(P) = F(P) - C(1)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102257,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) /         SUMSQS(L)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102278,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) *            PSI(P,INDEX1) * WEIGHT(P)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102282,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = RUNTOT / SUMSQS(L)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102297,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) /         SUMSQS(L)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102315,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) *         PSI(P,INDEX1) * WEIGHT(P)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102319,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = RUNTOT / SUMSQS(L)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102336,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "JM1 = J - 1"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102345,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT - ALPHA(INDEX1) * PSI(P,INDEX2)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102352,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "RNTOT2 = RNTOT2 + Z(P) * PSI(P,JINDEX) * WEIGHT(P)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102367,
+      "label": 160,
+      "action": "remove_label",
+      "statement": "Z(P) = Z(P) - C(J) * PSI(P,JINDEX)"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 102370,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1"
+    },
+    {
+      "procedure": "SCALPM",
+      "line": 102419,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IF ( A .GT. MAXABS ) MAXABS = A"
+    },
+    {
+      "procedure": "SCALDN",
+      "line": 102448,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "COORD(P) = COORD(P) / MAXABS"
+    },
+    {
+      "procedure": "MEVAL",
+      "line": 102582,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "BOT = BOT * CURDEG"
+    },
+    {
+      "procedure": "MEVAL1",
+      "line": 102686,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT - PSI(M) * ALPHA(INDEX)"
+    },
+    {
+      "procedure": "MEVAL1",
+      "line": 102689,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNTOT1 = RNTOT1 + C(J) * PSI(J)"
+    },
+    {
+      "procedure": "MEVAL1",
+      "line": 102691,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "F(P) = RNTOT1 * MAXABS(DIMP1)"
+    },
+    {
+      "procedure": "MEVAL1",
+      "line": 102701,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "F(P) = RUNTOT"
+    },
+    {
+      "procedure": "DGNRTP",
+      "line": 102934,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "CALL DSCALD(COORD(1,K),NPTS,MAXABS(K))"
+    },
+    {
+      "procedure": "DGNRTP",
+      "line": 102950,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + F(P) * WEIGHT(P)"
+    },
+    {
+      "procedure": "DGNRTP",
+      "line": 102961,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "Z(P) = F(P) - C(1)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103064,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) /         SUMSQS(L)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103085,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) *            PSI(P,INDEX1) * WEIGHT(P)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103089,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = RUNTOT / SUMSQS(L)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103104,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) /         SUMSQS(L)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103122,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) *         PSI(P,INDEX1) * WEIGHT(P)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103126,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "ALPHA(INDEX1) = RUNTOT / SUMSQS(L)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103143,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "JM1 = J - 1"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103152,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT - ALPHA(INDEX1) * PSI(P,INDEX2)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103159,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "RNTOT2 = RNTOT2 + Z(P) * PSI(P,JINDEX) * WEIGHT(P)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103174,
+      "label": 160,
+      "action": "remove_label",
+      "statement": "Z(P) = Z(P) - C(J) * PSI(P,JINDEX)"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 103177,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1"
+    },
+    {
+      "procedure": "DSCALP",
+      "line": 103226,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IF ( A .GT. MAXABS ) MAXABS = A"
+    },
+    {
+      "procedure": "DSCALD",
+      "line": 103255,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "COORD(P) = COORD(P) / MAXABS"
+    },
+    {
+      "procedure": "DMEVAL",
+      "line": 103390,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "BOT = BOT * CURDEG"
+    },
+    {
+      "procedure": "DMEVL1",
+      "line": 103494,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "RUNTOT = RUNTOT - PSI(M) * ALPHA(INDEX)"
+    },
+    {
+      "procedure": "DMEVL1",
+      "line": 103497,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "RNTOT1 = RNTOT1 + C(J) * PSI(J)"
+    },
+    {
+      "procedure": "DMEVL1",
+      "line": 103499,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "F(P) = RNTOT1 * MAXABS(DIMP1)"
+    },
+    {
+      "procedure": "DMEVL1",
+      "line": 103509,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "F(P) = RUNTOT"
+    },
+    {
+      "procedure": "QUAD",
+      "line": 103990,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QUAD",
+      "line": 104000,
+      "label": 40,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 104607,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QK21F",
+      "line": 104829,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 105465,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 106599,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QXCPY",
+      "line": 106681,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I) = B(I)"
+    },
+    {
+      "procedure": "QXLQM",
+      "line": 106802,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QXRUL",
+      "line": 106987,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QXRUL",
+      "line": 107000,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "QXRUL",
+      "line": 107009,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 107703,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQK21",
+      "line": 107945,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 108586,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 109741,
+      "label": 50,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQXCPY",
+      "line": 109823,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I) = B(I)"
+    },
+    {
+      "procedure": "DQXLQM",
+      "line": 109944,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQXRUL",
+      "line": 110129,
+      "label": 10,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQXRUL",
+      "line": 110142,
+      "label": 20,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "DQXRUL",
+      "line": 110151,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110840,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "IMKNN(I,J)=-WN(J)*KERNEL(TN(I),TN(J))"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110843,
+      "label": 2,
+      "action": "remove_label",
+      "statement": "IMKNN(J,J)=IMKNN(J,J)+1.0"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110851,
+      "label": 4,
+      "action": "remove_label",
+      "statement": "IMKNN(I,J)=-KMM(I,J)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110856,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "IMKNN(J,J)=IMKNN(J,J)+1.0"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110920,
+      "label": 12,
+      "action": "remove_label",
+      "statement": "OLDX(I)=XMZ(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110929,
+      "label": 13,
+      "action": "remove_label",
+      "statement": "XMZ(I)=XM(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110945,
+      "label": 14,
+      "action": "remove_label",
+      "statement": "N=M"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110956,
+      "label": 16,
+      "action": "remove_label",
+      "statement": "ASIDE(I,4)=RHS(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110964,
+      "label": 17,
+      "action": "remove_label",
+      "statement": "ASIDE3(I,J)=KMM(I,J)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 110999,
+      "label": 25,
+      "action": "remove_label",
+      "statement": "DENR1=NUMR1"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111001,
+      "label": 26,
+      "action": "remove_label",
+      "statement": "XMZ(I)=XM(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111017,
+      "label": 28,
+      "action": "remove_label",
+      "statement": "IMKNN(I,J)=-ASIDE3(I,J)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111023,
+      "label": 29,
+      "action": "remove_label",
+      "statement": "IMKNN(J,J)=IMKNN(J,J)+1.0"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111076,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "SAVE(I)=TM(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111083,
+      "label": 43,
+      "action": "remove_label",
+      "statement": "SAVE(I)=XM(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111086,
+      "label": 45,
+      "action": "remove_label",
+      "statement": "OLDX(I)=XMZ(I)"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 111094,
+      "label": 47,
+      "action": "remove_label",
+      "statement": "XMZ(I)=XM(I)"
+    },
+    {
+      "procedure": "NSTERP",
+      "line": 111129,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "KMN(I,J)=WN(J)*KERNEL(TM(I),TN(J))"
+    },
+    {
+      "procedure": "NSTERP",
+      "line": 111134,
+      "label": 2,
+      "action": "remove_label",
+      "statement": "XM(I)=RHS(I)"
+    },
+    {
+      "procedure": "NSTERP",
+      "line": 111139,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "XM(I)=XM(I)+KMN(I,J)*XN(J)"
+    },
+    {
+      "procedure": "NSTERP",
+      "line": 111149,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "XM(I)=XM(I)+WN(J)*KERNEL(TM(I),TN(J))*XN(J)"
+    },
+    {
+      "procedure": "RNRM",
+      "line": 111187,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "RNRM=AMAX1(RNRM,ABS(X(I)))"
+    },
+    {
+      "procedure": "RNRM",
+      "line": 111193,
+      "label": 3,
+      "action": "remove_label",
+      "statement": "RNRM=AMAX1(RNRM,ABS(X(I)-Y(I)))"
+    },
+    {
+      "procedure": "WANDT",
+      "line": 111489,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "WV(I2)=R"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111543,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "T(I)=TV(I)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111550,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "IMKNN(I,I)=IMKNN(I,I)-1.0"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111556,
+      "label": 32,
+      "action": "remove_label",
+      "statement": "SUM=SUM+ABS(IMKNN(I,J))"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111558,
+      "label": 33,
+      "action": "remove_label",
+      "statement": "NORMK=AMAX1(NORMK,SUM)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111561,
+      "label": 34,
+      "action": "remove_label",
+      "statement": "IMKNN(I,I)=IMKNN(I,I)+1.0"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111572,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "XM(I)=XV(I)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111575,
+      "label": 43,
+      "action": "remove_label",
+      "statement": "XMZ(I)=XM(I)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111583,
+      "label": 44,
+      "action": "remove_label",
+      "statement": "XV(I)=XM(I)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111605,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "SUM=SUM+WV(J)*KERNEL(T(I),TV(J))*XV(J)"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 111607,
+      "label": 62,
+      "action": "remove_label",
+      "statement": "X(I)=RHFCN(T(I))+SUM"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111649,
+      "label": 1,
+      "action": "remove_label",
+      "statement": "KMM(I,J)=WM(J)*KERNEL(TM(I),TM(J))"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111652,
+      "label": 2,
+      "action": "remove_label",
+      "statement": "KNM(I,J)=WM(J)*KERNEL(TN(I),TM(J))"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111659,
+      "label": 4,
+      "action": "remove_label",
+      "statement": "SUM=SUM+KMM(I,J)*XMZ(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111661,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "R(I)=RHS(I)-(XMZ(I)-SUM)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111668,
+      "label": 7,
+      "action": "remove_label",
+      "statement": "RH(I)=RH(I)+KNM(I,J)*R(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111684,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "SUM=SUM+KMM(I,J)*R(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111687,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "SUM=SUM+KMN(I,J)*DELN(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111689,
+      "label": 12,
+      "action": "remove_label",
+      "statement": "XM(I)=SUM+R(I)+XMZ(I)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111697,
+      "label": 14,
+      "action": "remove_label",
+      "statement": "SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*XMZ(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111699,
+      "label": 15,
+      "action": "remove_label",
+      "statement": "R(I)=RHS(I)-(XMZ(I)-SUM)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111705,
+      "label": 17,
+      "action": "remove_label",
+      "statement": "RH(I)=RH(I)+WM(J)*KERNEL(TN(I),TM(J))*R(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111720,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*R(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111723,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "SUM=SUM+WN(J)*KERNEL(TM(I),TN(J))*DELN(J)"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 111725,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "XM(I)=SUM+R(I)+XMZ(I)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111783,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "SCALE(I) = SCALE(I) + ABS(D(I,J))"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111817,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "D(L,J) = T"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111829,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "D(I,J) = D(I,J) - T*D(K,J)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111842,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "X(I) = 0.0"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111851,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "SUM = SUM + A(I,J)*X(J)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111853,
+      "label": 131,
+      "action": "remove_label",
+      "statement": "R(I) = B(I) - SUM"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111860,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "NORMR = AMAX1(NORMR,ABS(R(I)))"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111876,
+      "label": 211,
+      "action": "remove_label",
+      "statement": "R(I) = R(I) - D(I,K)*R(K)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111889,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "SUM = SUM + D(I,J)*R(J)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111892,
+      "label": 221,
+      "action": "remove_label",
+      "statement": "X(I) = X(I) + R(I)"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 111904,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "NORME = AMAX1(NORME,ABS(R(I)))"
+    },
+    {
+      "procedure": "DE1",
+      "line": 112161,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "YY(L) = Y(L)"
+    },
+    {
+      "procedure": "DE1",
+      "line": 112183,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "Y(L) = YY(L) + H*YP(L)"
+    },
+    {
+      "procedure": "DE1",
+      "line": 112197,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "Y(L) = YY(L)"
+    },
+    {
+      "procedure": "DE1",
+      "line": 112222,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "Y(L) = YY(L)"
+    },
+    {
+      "procedure": "DE1",
+      "line": 112241,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "Y(L) = YY(L)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112433,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "ROUND = ROUND + (Y(L)/WT(L))**2"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112452,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM = SUM + (YP(L)/WT(L))**2"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112467,
+      "label": 25,
+      "action": "remove_label",
+      "statement": "PHI(L,15) = 0.0"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112510,
+      "label": 105,
+      "action": "remove_label",
+      "statement": "SIG(I+1) = REALI*ALPHA(I)*SIG(I)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112522,
+      "label": 115,
+      "action": "remove_label",
+      "statement": "W(IQ) = V(IQ)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112535,
+      "label": 125,
+      "action": "remove_label",
+      "statement": "V(I) = V(I) - ALPHA(J+1)*V(I+1)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112544,
+      "label": 135,
+      "action": "remove_label",
+      "statement": "W(IQ) = V(IQ)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112556,
+      "label": 145,
+      "action": "remove_label",
+      "statement": "W(IQ) = W(IQ) - TEMP6*W(IQ+1)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112558,
+      "label": 150,
+      "action": "remove_label",
+      "statement": "G(I) = W(1)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112578,
+      "label": 205,
+      "action": "remove_label",
+      "statement": "PHI(L,I) = TEMP1*PHI(L,I)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112587,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "P(L) = 0.0"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112595,
+      "label": 225,
+      "action": "remove_label",
+      "statement": "PHI(L,I) = PHI(L,I) + PHI(L,IP1)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112602,
+      "label": 235,
+      "action": "remove_label",
+      "statement": "PHI(L,16) = (P(L) - Y(L)) - TAU"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112606,
+      "label": 245,
+      "action": "remove_label",
+      "statement": "P(L) = Y(L) + H*P(L)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112673,
+      "label": 305,
+      "action": "remove_label",
+      "statement": "PHI(L,I) = TEMP1*(PHI(L,I) - PHI(L,IP1))"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112678,
+      "label": 315,
+      "action": "remove_label",
+      "statement": "PSI(I-1) = PSI(I) - H"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112720,
+      "label": 405,
+      "action": "remove_label",
+      "statement": "PHI(L,15) = (Y(L) - P(L)) - RHO"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112724,
+      "label": 415,
+      "action": "remove_label",
+      "statement": "Y(L) = P(L) + TEMP1*(YP(L) - PHI(L,1))"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112732,
+      "label": 425,
+      "action": "remove_label",
+      "statement": "PHI(L,KP2) = PHI(L,KP1) - PHI(L,KP2)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112736,
+      "label": 430,
+      "action": "remove_label",
+      "statement": "PHI(L,I) = PHI(L,I) + PHI(L,KP1)"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 112751,
+      "label": 440,
+      "action": "remove_label",
+      "statement": "ERKP1 = ERKP1 + (PHI(L,KP2)/WT(L))**2"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112846,
+      "label": 5,
+      "action": "remove_label",
+      "statement": "W(I) = 1.0/TEMP1"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112859,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "W(I) = GAMMA*W(I) - ETA*W(I+1)"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112863,
+      "label": 15,
+      "action": "remove_label",
+      "statement": "TERM = PSIJM1"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112870,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "YOUT(L) = 0.0"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112878,
+      "label": 25,
+      "action": "remove_label",
+      "statement": "YPOUT(L) = YPOUT(L) + TEMP3*PHI(L,I)"
+    },
+    {
+      "procedure": "INTRP",
+      "line": 112882,
+      "label": 35,
+      "action": "remove_label",
+      "statement": "YOUT(L) = Y(L) + HI*YOUT(L)"
+    },
+    {
+      "procedure": "RKFS",
+      "line": 114216,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "Y(K) = Y(K) + DT*YP(K)"
+    },
+    {
+      "procedure": "RKFS",
+      "line": 114315,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "EEOET = AMAX1(EEOET,EE/ET)"
+    },
+    {
+      "procedure": "RKFS",
+      "line": 114344,
+      "label": 270,
+      "action": "remove_label",
+      "statement": "Y(K) = F1(K)"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114416,
+      "label": 221,
+      "action": "remove_label",
+      "statement": "F5(K)=Y(K)+CH*YP(K)"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114422,
+      "label": 222,
+      "action": "remove_label",
+      "statement": "F5(K)=Y(K)+CH*(YP(K)+3.0*F1(K))"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114428,
+      "label": 223,
+      "action": "remove_label",
+      "statement": "F5(K)=Y(K)+CH*(1932.0*YP(K)+(7296.0*F2(K)-7200.0*F1(K)))"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114434,
+      "label": 224,
+      "action": "remove_label",
+      "statement": "F5(K)=Y(K)+CH*((8341.0*YP(K)-845.0*F3(K))+                            (29440.0*F2(K)-32832.0*F1(K)))"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114441,
+      "label": 225,
+      "action": "remove_label",
+      "statement": "F1(K)=Y(K)+CH*((-6080.0*YP(K)+(9295.0*F3(K)-         5643.0*F4(K)))+(41040.0*F1(K)-28352.0*F2(K)))"
+    },
+    {
+      "procedure": "FEHL",
+      "line": 114450,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "S(K)=Y(K)+CH*((902880.0*YP(K)+(3855735.0*F3(K)-        1371249.0*F4(K)))+(3953664.0*F2(K)+        277020.0*F5(K)))"
+    },
+    {
+      "procedure": "GERKS",
+      "line": 114876,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "Y(K)=Y(K)+DT*YP(K)"
+    },
+    {
+      "procedure": "GERKS",
+      "line": 114981,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "EEOET=AMAX1(EEOET,EE/ET)"
+    },
+    {
+      "procedure": "GERKS",
+      "line": 115013,
+      "label": 270,
+      "action": "remove_label",
+      "statement": "YG(K)=F1(K)"
+    },
+    {
+      "procedure": "GERKS",
+      "line": 115069,
+      "label": 450,
+      "action": "remove_label",
+      "statement": "GERROR(K)=(YG(K)-Y(K))/31."
+    },
+    {
+      "procedure": "RSCO",
+      "line": 115964,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "RLS(I) = RSAV(I)"
+    },
+    {
+      "procedure": "RSCO",
+      "line": 115967,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "ILS(I) = ISAV(I)"
+    },
+    {
+      "procedure": "SVCO",
+      "line": 115989,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "RSAV(I) = RLS(I)"
+    },
+    {
+      "procedure": "SVCO",
+      "line": 115992,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "ISAV(I) = ILS(I)"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116165,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "YPOUT(L) = YH(L,2)"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116180,
+      "label": 225,
+      "action": "remove_label",
+      "statement": "EWT(L) = TOL"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116191,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "YH(L,2) = H*YH(L,2)"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116225,
+      "label": 280,
+      "action": "remove_label",
+      "statement": "Y(L) = YH(L,1) + (DT/H)*YH(L,2)"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116275,
+      "label": 360,
+      "action": "remove_label",
+      "statement": "ATOL(L) = TOLFAC*ATOL(L)"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 116314,
+      "label": 555,
+      "action": "remove_label",
+      "statement": "YPOUT(L) = YH(L,2)/H"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116480,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "YP(J)=SF(J)-YPRIME(J)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116517,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "YP(J)=YPRIME(J)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116523,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "YP(J)=1."
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116532,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "PV(J)=Y(J)+DELY*(YP(J)/DELF)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116539,
+      "label": 70,
+      "action": "remove_label",
+      "statement": "PV(J)=YP(J)-YPRIME(J)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116546,
+      "label": 90,
+      "action": "remove_label",
+      "statement": "PV(J)=YP(J)-SF(J)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116566,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "YP(J)=DY"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116568,
+      "label": 140,
+      "action": "remove_label",
+      "statement": "DELF=VNORM(YP,NEQ)"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 116591,
+      "label": 170,
+      "action": "remove_label",
+      "statement": "TOLSUM=TOLSUM+TOLEXP"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 116685,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "IC = IC*JJ"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 116689,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "DKY(I) = C*YH(I,L)"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 116700,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "IC = IC*JJ"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 116704,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "DKY(I) = C*YH(I,JP1) + S*DKY(I)"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 116710,
+      "label": 60,
+      "action": "remove_label",
+      "statement": "DKY(I) = R*DKY(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116865,
+      "label": 125,
+      "action": "remove_label",
+      "statement": "EL(I) = ELCO(I,NQ)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116887,
+      "label": 155,
+      "action": "remove_label",
+      "statement": "EL(I) = ELCO(I,NQ)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116912,
+      "label": 180,
+      "action": "remove_label",
+      "statement": "YH(I,J) = YH(I,J)*R"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116935,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "YH1(I) = YH1(I) + YH1(IPNYH)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116947,
+      "label": 230,
+      "action": "remove_label",
+      "statement": "Y(I) = YH(I,1)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116965,
+      "label": 260,
+      "action": "remove_label",
+      "statement": "ACOR(I) = 0.0E0"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116974,
+      "label": 290,
+      "action": "remove_label",
+      "statement": "Y(I) = SAVF(I) - ACOR(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116979,
+      "label": 300,
+      "action": "remove_label",
+      "statement": "ACOR(I) = SAVF(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116988,
+      "label": 360,
+      "action": "remove_label",
+      "statement": "Y(I) = H*SAVF(I) - (YH(I,2) + ACOR(I))"
+    },
+    {
+      "procedure": "STOD",
+      "line": 116995,
+      "label": 380,
+      "action": "remove_label",
+      "statement": "Y(I) = YH(I,1) + EL(1)*ACOR(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117029,
+      "label": 440,
+      "action": "remove_label",
+      "statement": "YH1(I) = YH1(I) - YH1(IPNYH)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117065,
+      "label": 470,
+      "action": "remove_label",
+      "statement": "YH(I,J) = YH(I,J) + EL(J)*ACOR(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117073,
+      "label": 490,
+      "action": "remove_label",
+      "statement": "YH(I,LMAX) = ACOR(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117090,
+      "label": 510,
+      "action": "remove_label",
+      "statement": "YH1(I) = YH1(I) - YH1(IPNYH)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117111,
+      "label": 530,
+      "action": "remove_label",
+      "statement": "SAVF(I) = ACOR(I) - YH(I,LMAX)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117139,
+      "label": 600,
+      "action": "remove_label",
+      "statement": "YH(I,NEWQ+1) = ACOR(I)*R"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117170,
+      "label": 645,
+      "action": "remove_label",
+      "statement": "Y(I) = YH(I,1)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117175,
+      "label": 650,
+      "action": "remove_label",
+      "statement": "YH(I,2) = H*SAVF(I)"
+    },
+    {
+      "procedure": "STOD",
+      "line": 117195,
+      "label": 695,
+      "action": "remove_label",
+      "statement": "ACOR(I) = ACOR(I)*R"
+    },
+    {
+      "procedure": "CFOD",
+      "line": 117264,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "PC(I) = PC(I-1) + FNQM1*PC(I)"
+    },
+    {
+      "procedure": "CFOD",
+      "line": 117274,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "XPIN = XPIN + TSIGN*PC(I)/FLOAT(I+1)"
+    },
+    {
+      "procedure": "CFOD",
+      "line": 117280,
+      "label": 130,
+      "action": "remove_label",
+      "statement": "ELCO(I+1,NQ) = RQ1FAC*PC(I)/FLOAT(I)"
+    },
+    {
+      "procedure": "CFOD",
+      "line": 117304,
+      "label": 210,
+      "action": "remove_label",
+      "statement": "PC(I) = PC(I-1) + FNQ*PC(I)"
+    },
+    {
+      "procedure": "CFOD",
+      "line": 117309,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "ELCO(I,NQ) = PC(I)/PC(2)"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117381,
+      "label": 110,
+      "action": "remove_label",
+      "statement": "WM(I+2) = 0.0E0"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117386,
+      "label": 120,
+      "action": "remove_label",
+      "statement": "WM(I+2) = WM(I+2)*CON"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117402,
+      "label": 220,
+      "action": "remove_label",
+      "statement": "WM(I+J1) = (FTEM(I) - SAVF(I))*FAC"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117412,
+      "label": 250,
+      "action": "remove_label",
+      "statement": "J = J + (N + 1)"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117422,
+      "label": 310,
+      "action": "remove_label",
+      "statement": "Y(I) = Y(I) + R*(H*SAVF(I) - YH(I,2))"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117446,
+      "label": 410,
+      "action": "remove_label",
+      "statement": "WM(I+2) = 0.0E0"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117451,
+      "label": 420,
+      "action": "remove_label",
+      "statement": "WM(I+2) = WM(I+2)*CON"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117469,
+      "label": 530,
+      "action": "remove_label",
+      "statement": "Y(I) = Y(I) + R"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117481,
+      "label": 540,
+      "action": "remove_label",
+      "statement": "WM(II+I) = (FTEM(I) - SAVF(I))*FAC"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 117490,
+      "label": 580,
+      "action": "remove_label",
+      "statement": "II = II + MEBAND"
+    },
+    {
+      "procedure": "SLVS",
+      "line": 117552,
+      "label": 320,
+      "action": "remove_label",
+      "statement": "WM(I+2) = 1.0E0/DI"
+    },
+    {
+      "procedure": "SLVS",
+      "line": 117555,
+      "label": 340,
+      "action": "remove_label",
+      "statement": "X(I) = WM(I+2)*X(I)"
+    },
+    {
+      "procedure": "VNORM",
+      "line": 117891,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "VNORM=AMAX1(VNORM,ABS(V(K)))"
+    },
+    {
+      "procedure": "VNWRMS",
+      "line": 117910,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "SUM = SUM + (V(I)/W(I))**2"
+    },
+    {
+      "procedure": "RK",
+      "line": 117940,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(MK)=A(K)+A(NK)"
+    },
+    {
+      "procedure": "RK",
+      "line": 117948,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "A(MK)=A(K)+HA*A(MK)"
+    },
+    {
+      "procedure": "RK",
+      "line": 117958,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "A(MK)=A(K)+A(MK)"
+    },
+    {
+      "procedure": "RK",
+      "line": 117966,
+      "label": 40,
+      "action": "remove_label",
+      "statement": "A(NK)=A(K)"
+    },
+    {
+      "procedure": "RK",
+      "line": 117973,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "A(NK)=A(K)"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118015,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "W(K)=Y(K)+HA*DY(K)"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118019,
+      "label": 11,
+      "action": "remove_label",
+      "statement": "W(K)=Y(K)+H*(DY(K)/18.+W(K)/6.)"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118032,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "L=L+N"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118034,
+      "label": 21,
+      "action": "remove_label",
+      "statement": "W(L)=Y(K)+SUM*H/C(M1)"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118036,
+      "label": 22,
+      "action": "remove_label",
+      "statement": "CALL F(T+A(M1)*H,W(I))"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118044,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "L=L+N"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118047,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "DY(K)=Y(K)"
+    },
+    {
+      "procedure": "RK8",
+      "line": 118054,
+      "label": 41,
+      "action": "remove_label",
+      "statement": "DY(K)=Y(K)"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118125,
+      "label": 30,
+      "action": "remove_label",
+      "statement": "XI = XI + HX"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118127,
+      "label": 31,
+      "action": "remove_label",
+      "statement": "YJ = YJ + HY"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118143,
+      "label": 50,
+      "action": "remove_label",
+      "statement": "XI = XI + HX"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118146,
+      "label": 51,
+      "action": "remove_label",
+      "statement": "JCOL = JCOL + MP1"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118155,
+      "label": 61,
+      "action": "remove_label",
+      "statement": "XI = XI + HX"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118162,
+      "label": 71,
+      "action": "remove_label",
+      "statement": "YJ = YJ + HY"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118169,
+      "label": 81,
+      "action": "remove_label",
+      "statement": "XI = XI + HX"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 118176,
+      "label": 91,
+      "action": "remove_label",
+      "statement": "YJ = YJ + HY"
+    },
+    {
+      "procedure": "TQLRT0",
+      "line": 120916,
+      "label": 30,
+      "action": "remove_continue",
+      "statement": "CONTINUE"
+    },
+    {
+      "procedure": "NRNG",
+      "line": 122282,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I+1) = R*SIN(PHI)"
+    },
+    {
+      "procedure": "DNRNG",
+      "line": 122314,
+      "label": 10,
+      "action": "remove_label",
+      "statement": "A(I+1) = R*DSIN(PHI)"
+    },
+    {
+      "procedure": "NRVG",
+      "line": 122443,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM = SUM + A(L)*X(K,J)"
+    },
+    {
+      "procedure": "DNRVG",
+      "line": 122691,
+      "label": 20,
+      "action": "remove_label",
+      "statement": "SUM = SUM + A(L)*X(K,J)"
+    }
+  ],
+  "counts": {
+    "remove_continue": 197,
+    "remove_label": 993
+  },
+  "retained_labels": {
+    "specification or ambiguous initial assignment": 0,
+    "referenced": 6475,
+    "FORMAT": 10
+  },
+  "skipped_procedures": []
+}

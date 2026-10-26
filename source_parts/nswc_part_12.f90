@@ -1,179 +1,3 @@
-subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
-   & yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
-   & start,told,delsgn,ns,nornd,k,kold,isnold)
-implicit none
-integer, intent(inout) :: iflag, isnold, k, kold
-integer, intent(in) :: neqn
-integer, intent(inout) :: ns
-real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
-   & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
-real, intent(in) :: tout
-real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
-real :: yp(neqn)
-real, intent(inout) :: ypout(neqn), yy(neqn)
-logical, intent(inout) :: start, phase1, nornd
-external f
-integer :: isn, kle4, l, nostep
-real :: absdel, abseps, del, eps, fouru, releps, tend, u
-logical :: stiff, crash
-integer, parameter :: maxnum = 500
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!
-!   ODE  merely allocates storage for  de1 to relieve the user of the
-!   inconvenience of a long call list.  Consequently  de1 is used as
-!   described in the comments for  ODE .
-!
-!   This code is completely explained and documented in the text,
-!   computer solution of ordinary differential equations,  the initial
-!   value problem  by L. F. Shampine and M. K. Gordon.
-!
-!
-!   The constant  maxnum  is the maximum number of steps allowed in one
-!   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
-!   following statement
-!
-!
-!   ****** u is a machine dependent parameter. u is the smallest
-!          positive number for which 1.0 + u .GT. 1.0.
-!
-u = spmpar(1)
-fouru = 4.0*u
-!
-!            ***            ***            ***
-!
-!   Test for improper parameters
-!
-if (neqn < 1) go to 10
-if (t == tout) go to 10
-if (relerr < 0.0  .or.  abserr < 0.0) go to 10
-eps = max(relerr,abserr)
-if (eps <= 0.0) go to 10
-if (iflag == 0) go to 10
-isn = sign(1,iflag)
-iflag = abs(iflag)
-if (iflag == 1) go to 20
-if (t /= told) go to 10
-if (iflag >= 2  .and.  iflag <= 5) go to 20
-if (iflag == 6  .and.  abserr > 0.0) go to 20
-10 iflag = 7
-return
-!
-!   On each call set interval of integration and counter for number of
-!   steps.  Adjust input error tolerances to define weight vector for
-!   SUBROUTINE  step1
-!
-20 del = tout - t
-absdel = abs(del)
-tend = t + 10.0*del
-if (isn < 0) tend = tout
-nostep = 0
-kle4 = 0
-stiff = .false.
-releps = relerr/eps
-abseps = abserr/eps
-if (iflag == 1) go to 30
-if (isnold < 0) go to 30
-if (delsgn*del > 0.0) go to 50
-!
-!   On start and restart also set work variables x and yy(*), store the
-!   direction of integration and initialize the step size
-!
-30 start = .true.
-x = t
-do l = 1,neqn
-40 yy(l) = y(l)
-end do
-delsgn = sign(1.0,del)
-h = sign(max(fouru*abs(x),abs(tout - x)),tout - x)
-!
-!   If already past output point, interpolate and return
-!
-50 if (abs(x - t) < absdel) go to 60
-call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
-iflag = 2
-t = tout
-told = t
-isnold = isn
-return
-!
-!   If cannot go past output point and sufficiently close,
-!   extrapolate and return
-!
-60 if (isn > 0  .or.  abs(tout - x) >= fouru*abs(x)) go to 80
-h = tout - x
-call f(x,yy,yp)
-do l = 1,neqn
-70 y(l) = yy(l) + h*yp(l)
-end do
-iflag = 2
-t = tout
-told = t
-isnold = isn
-return
-!
-!   Test for too many steps
-!
-80 if (nostep < maxnum) go to 100
-iflag = isn*4
-if (stiff) iflag = isn*5
-do l = 1,neqn
-90 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-return
-!
-!   Limit step size, set weight vector and take a step
-!
-100 h = sign(min(abs(h),abs(tend - x)),h)
-do l = 1,neqn
-   wt(l) = releps*abs(yy(l)) + abseps
-   if (wt(l) <= 0.0) go to 140
-end do
-call step1(f,neqn,yy,x,h,eps,wt,start, &
-   & hold,k,kold,crash,phi,p,yp,psi, &
-   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
-!
-!   Test for tolerances too small
-!
-if (.not.crash) go to 130
-iflag = isn*3
-relerr = eps*releps
-abserr = eps*abseps
-do l = 1,neqn
-120 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-return
-!
-!   Augment counter on number of steps and test for stiffness
-!
-130 nostep = nostep + 1
-kle4 = kle4 + 1
-if (kold > 4) kle4 = 0
-if (kle4 >= 50) stiff = .true.
-go to 50
-!
-!   Relative error criterion inappropriate
-!
-140 iflag = isn*6
-do l = 1,neqn
-150 y(l) = yy(l)
-end do
-t = x
-told = t
-isnold = 1
-end subroutine de1
-
 subroutine step1(f,neqn,y,x,h,eps,wt,start, &
    & hold,k,kold,crash,phi,p,yp,psi, &
    & alpha,beta,sig,v,w,g,phase1,ns,nornd)
@@ -356,7 +180,7 @@ return
 !
 round = 0.0
 do l = 1,neqn
-10 round = round + (y(l)/wt(l))**2
+   round = round + (y(l)/wt(l))**2
 end do
 round = twou*sqrt(round)
 if (p5eps >= round) go to 15
@@ -375,7 +199,7 @@ sum = 0.0
 do l = 1,neqn
    phi(l,1) = yp(l)
    phi(l,2) = 0.0
-20 sum = sum + (yp(l)/wt(l))**2
+   sum = sum + (yp(l)/wt(l))**2
 end do
 sum = sqrt(sum)
 absh = abs(h)
@@ -390,7 +214,7 @@ nornd = .true.
 if (p5eps > 100.0*round) go to 99
 nornd = .false.
 do l = 1,neqn
-25 phi(l,15) = 0.0
+   phi(l,15) = 0.0
 end do
 99 ifail = 0
 !
@@ -433,7 +257,7 @@ do i = nsp1,k
    temp1 = temp2 + h
    alpha(i) = h/temp1
    reali = i
-105 sig(i + 1) = reali*alpha(i)*sig(i)
+   sig(i + 1) = reali*alpha(i)*sig(i)
 end do
 110 psi(k) = temp1
 !
@@ -445,7 +269,7 @@ if (ns > 1) go to 120
 do iq = 1,k
    temp3 = iq*(iq + 1)
    v(iq) = 1.0/temp3
-115 w(iq) = v(iq)
+   w(iq) = v(iq)
 end do
 go to 140
 !
@@ -458,7 +282,7 @@ nsm2 = ns - 2
 if (nsm2 < 1) go to 130
 do j = 1,nsm2
    i = k - j
-125 v(i) = v(i) - alpha(j + 1)*v(i + 1)
+   v(i) = v(i) - alpha(j + 1)*v(i + 1)
 end do
 !
 !   Update V(*) and set W(*)
@@ -467,7 +291,7 @@ end do
 temp5 = alpha(ns)
 do iq = 1,limit1
    v(iq) = v(iq) - temp5*v(iq + 1)
-135 w(iq) = v(iq)
+   w(iq) = v(iq)
 end do
 g(nsp1) = w(1)
 !
@@ -479,9 +303,9 @@ do i = nsp2,kp1
    limit2 = kp2 - i
    temp6 = alpha(i - 1)
    do iq = 1,limit2
-145   w(iq) = w(iq) - temp6*w(iq + 1)
+      w(iq) = w(iq) - temp6*w(iq + 1)
    end do
-150 g(i) = w(1)
+   g(i) = w(1)
 end do
 199 continue
 !
@@ -501,7 +325,7 @@ if (k < nsp1) go to 215
 do i = nsp1,k
    temp1 = beta(i)
    do l = 1,neqn
-205   phi(l,i) = temp1*phi(l,i)
+      phi(l,i) = temp1*phi(l,i)
    end do
 end do
 !
@@ -510,7 +334,7 @@ end do
 215 do l = 1,neqn
    phi(l,kp2) = phi(l,kp1)
    phi(l,kp1) = 0.0
-220 p(l) = 0.0
+   p(l) = 0.0
 end do
 do j = 1,k
    i = kp1 - j
@@ -518,18 +342,18 @@ do j = 1,k
    temp2 = g(i)
    do l = 1,neqn
       p(l) = p(l) + temp2*phi(l,i)
-225   phi(l,i) = phi(l,i) + phi(l,ip1)
+      phi(l,i) = phi(l,i) + phi(l,ip1)
    end do
 end do
 if (nornd) go to 240
 do l = 1,neqn
    tau = h*p(l) - phi(l,15)
    p(l) = y(l) + tau
-235 phi(l,16) = (p(l) - y(l)) - tau
+   phi(l,16) = (p(l) - y(l)) - tau
 end do
 go to 250
 240 do l = 1,neqn
-245 p(l) = y(l) + h*p(l)
+   p(l) = y(l) + h*p(l)
 end do
 250 xold = x
 x = x + h
@@ -596,12 +420,12 @@ do i = 1,k
    temp1 = 1.0/beta(i)
    ip1 = i + 1
    do l = 1,neqn
-305   phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
+      phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
    end do
 end do
 if (k < 2) go to 320
 do i = 2,k
-315 psi(i - 1) = psi(i) - h
+   psi(i - 1) = psi(i) - h
 end do
 !
 !   On third failure, set order to one.  Thereafter, use optimal step
@@ -643,11 +467,11 @@ if (nornd) go to 410
 do l = 1,neqn
    rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
    y(l) = p(l) + rho
-405 phi(l,15) = (y(l) - p(l)) - rho
+   phi(l,15) = (y(l) - p(l)) - rho
 end do
 go to 420
 410 do l = 1,neqn
-415 y(l) = p(l) + temp1*(yp(l) - phi(l,1))
+   y(l) = p(l) + temp1*(yp(l) - phi(l,1))
 end do
 420 call f(x,y,yp)
 !
@@ -655,11 +479,11 @@ end do
 !
 do l = 1,neqn
    phi(l,kp1) = yp(l) - phi(l,1)
-425 phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
+   phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
 end do
 do i = 1,k
    do l = 1,neqn
-430   phi(l,i) = phi(l,i) + phi(l,kp1)
+      phi(l,i) = phi(l,i) + phi(l,kp1)
    end do
 end do
 !
@@ -674,7 +498,7 @@ if (phase1) go to 450
 if (knew == km1) go to 455
 if (kp1 > ns) go to 460
 do l = 1,neqn
-440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
+   erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
 end do
 erkp1 = absh*gstr(kp1)*sqrt(erkp1)
 !
@@ -769,7 +593,7 @@ kip1 = ki + 1
 !
 do i = 1,ki
    temp1 = i
-5  w(i) = 1.0/temp1
+   w(i) = 1.0/temp1
 end do
 term = 0.0
 !
@@ -782,18 +606,18 @@ do j = 2,ki
    eta = hi/psijm1
    limit1 = kip1 - j
    do i = 1,limit1
-10    w(i) = gamma*w(i) - eta*w(i + 1)
+      w(i) = gamma*w(i) - eta*w(i + 1)
    end do
    g(j) = w(1)
    rho(j) = gamma*rho(jm1)
-15 term = psijm1
+   term = psijm1
 end do
 !
 !   Interpolate
 !
 do l = 1,neqn
    ypout(l) = 0.0
-20 yout(l) = 0.0
+   yout(l) = 0.0
 end do
 do j = 1,ki
    i = kip1 - j
@@ -801,11 +625,11 @@ do j = 1,ki
    temp3 = rho(i)
    do l = 1,neqn
       yout(l) = yout(l) + temp2*phi(l,i)
-25    ypout(l) = ypout(l) + temp3*phi(l,i)
+      ypout(l) = ypout(l) + temp3*phi(l,i)
    end do
 end do
 do l = 1,neqn
-35 yout(l) = y(l) + hi*yout(l)
+   yout(l) = y(l) + hi*yout(l)
 end do
 end subroutine intrp
 
@@ -2173,7 +1997,7 @@ return
 !     If too close to output point,extrapolate and return
 !
 do k = 1,neqn
-90 y(k) = y(k) + dt*yp(k)
+   y(k) = y(k) + dt*yp(k)
 end do
 a = tout
 call f(a,y,yp)
@@ -2272,7 +2096,7 @@ do k = 1,neqn
 !
 240 ee = abs((-2090.0*yp(k) + (21970.0*f3(k) - 15048.0*f4(k))) + &
       & (22528.0*f2(k) - 27360.0*f5(k)))
-250 eeoet = max(eeoet,ee/et)
+   eeoet = max(eeoet,ee/et)
 end do
 !
 esttol = abs(h)*eeoet*scale/752400.0
@@ -2301,7 +2125,7 @@ return
 !
 260 t = t + h
 do k = 1,neqn
-270 y(k) = f1(k)
+   y(k) = f1(k)
 end do
 a = t
 call f(a,y,yp)
@@ -2373,32 +2197,32 @@ integer :: k
 !
 ch = h/4.0
 do k = 1,neqn
-221 f5(k) = y(k) + ch*yp(k)
+   f5(k) = y(k) + ch*yp(k)
 end do
 call f(t + ch,f5,f1)
 !
 ch = 3.0*h/32.0
 do k = 1,neqn
-222 f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
+   f5(k) = y(k) + ch*(yp(k) + 3.0*f1(k))
 end do
 call f(t + 3.0*h/8.0,f5,f2)
 !
 ch = h/2197.0
 do k = 1,neqn
-223 f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
+   f5(k) = y(k) + ch*(1932.0*yp(k) + (7296.0*f2(k) - 7200.0*f1(k)))
 end do
 call f(t + 12.0*h/13.0,f5,f3)
 !
 ch = h/4104.0
 do k = 1,neqn
-224 f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
+   f5(k) = y(k) + ch*((8341.0*yp(k) - 845.0*f3(k)) + &
       & (29440.0*f2(k) - 32832.0*f1(k)))
 end do
 call f(t + h,f5,f4)
 !
 ch = h/20520.0
 do k = 1,neqn
-225 f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
+   f1(k) = y(k) + ch*((-6080.0*yp(k) + (9295.0*f3(k) - &
       & 5643.0*f4(k))) + (41040.0*f1(k) - 28352.0*f2(k)))
 end do
 call f(t + h/2.0,f1,f5)
@@ -2407,7 +2231,7 @@ call f(t + h/2.0,f1,f5)
 !
 ch = h/7618050.0
 do k = 1,neqn
-230 s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
+   s(k) = y(k) + ch*((902880.0*yp(k) + (3855735.0*f3(k) - &
       & 1371249.0*f4(k))) + (3953664.0*f2(k) + &
       & 277020.0*f5(k)))
 end do
@@ -2839,7 +2663,7 @@ return
 !
 do k = 1,neqn
    yg(k) = yg(k) + dt*ygp(k)
-90 y(k) = y(k) + dt*yp(k)
+   y(k) = y(k) + dt*yp(k)
 end do
 a = tout
 call f(a,yg,ygp)
@@ -2944,7 +2768,7 @@ do k = 1,neqn
 !
 240 ee = abs((-2090.*ygp(k) + (21970.*f3(k) - 15048.*f4(k))) + &
       & (22528.*f2(k) - 27360.*f5(k)))
-250 eeoet = max(eeoet,ee/et)
+   eeoet = max(eeoet,ee/et)
 end do
 !
 esttol = abs(h)*eeoet*scale/752400.
@@ -2976,7 +2800,7 @@ return
 260 ts = t
 t = t + h
 do k = 1,neqn
-270 yg(k) = f1(k)
+   yg(k) = f1(k)
 end do
 a = t
 call f(a,yg,ygp)
@@ -3032,7 +2856,7 @@ go to 400
 iflag = 2
 !
 400 do k = 1,neqn
-450 gerror(k) = (yg(k) - y(k))/31.
+   gerror(k) = (yg(k) - y(k))/31.
 end do
 !
 end subroutine gerks
@@ -3928,10 +3752,10 @@ integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
 do i = 1,lenrls
-10 rls(i) = rsav(i)
+   rls(i) = rsav(i)
 end do
 do i = 1,lenils
-20 ils(i) = isav(i)
+   ils(i) = isav(i)
 end do
 !----------------------- End of subroutine rsco -----------------------
 end subroutine rsco
@@ -3954,10 +3778,10 @@ integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
 !
 do i = 1,lenrls
-10 rsav(i) = rls(i)
+   rsav(i) = rls(i)
 end do
 do i = 1,lenils
-20 isav(i) = ils(i)
+   isav(i) = ils(i)
 end do
 !----------------------- End of subroutine svco -----------------------
 end subroutine svco
@@ -4136,7 +3960,7 @@ nfe = 1
 if (t /= tout) go to 220
 idid = 2
 do l = 1,neq
-210 ypout(l) = yh(l,2)
+   ypout(l) = yh(l,2)
 end do
 told = t
 return
@@ -4151,7 +3975,7 @@ do l = 1,neq
    if (itol == 1) ltol = l
    tol = rtol(ltol)*abs(y(l)) + atol(ltol)
    if (tol == 0.) go to 380
-225 ewt(l) = tol
+   ewt(l) = tol
 end do
 !
 big = sqrt(spmpar(3))
@@ -4162,7 +3986,7 @@ delsgn = sign(1.0,tout - t)
 x = t
 do l = 1,neq
    yh(l,1) = y(l)
-230 yh(l,2) = h*yh(l,2)
+   yh(l,2) = h*yh(l,2)
 end do
 init = 2
 !
@@ -4196,7 +4020,7 @@ return
 if (abs(tstop - x) >= 100.*u*abs(x)) go to 290
 dt = tout - x
 do l = 1,neq
-280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
+   y(l) = yh(l,1) + (dt/h)*yh(l,2)
 end do
 call f(tout,y,ypout,rpar,ipar)
 nfe = nfe + 1
@@ -4246,7 +4070,7 @@ idid = -2
 tolfac = 2.*tolfac
 do l = 1,max
    rtol(l) = tolfac*rtol(l)
-360 atol(l) = tolfac*atol(l)
+   atol(l) = tolfac*atol(l)
 end do
 go to 500
 !
@@ -4285,7 +4109,7 @@ ibegin = -1
 !                       Store values before returning to stfode
 500 do l = 1,neq
    y(l) = yh(l,1)
-555 ypout(l) = yh(l,2)/h
+   ypout(l) = yh(l,2)/h
 end do
 t = x
 told = t
@@ -4451,7 +4275,7 @@ da = sign(max(min(relper*abs(a),absdx),100.*small*abs(a)),dx)
 if (da == 0.) da = relper*dx
 call f(a + da,y,sf,rpar,ipar)
 do j = 1,neq
-10 yp(j) = sf(j) - yprime(j)
+   yp(j) = sf(j) - yprime(j)
 end do
 delf = vnorm(yp,neq)
 dfdxb = big
@@ -4488,13 +4312,13 @@ if (delf == 0.) go to 30
 !                       Use initial derivatives for first perturbation
 do j = 1,neq
    spy(j) = yprime(j)
-20 yp(j) = yprime(j)
+   yp(j) = yprime(j)
 end do
 go to 50
 !                       Cannot have a null perturbation vector
 30 do j = 1,neq
    spy(j) = 0.
-40 yp(j) = 1.
+   yp(j) = 1.
 end do
 delf = vnorm(yp,neq)
 !
@@ -4503,21 +4327,21 @@ lk = min(neq + 1,3)
 do k = 1,lk
 !                       Define perturbed vector of initial values
    do j = 1,neq
-60    pv(j) = y(j) + dely*(yp(j)/delf)
+      pv(j) = y(j) + dely*(yp(j)/delf)
    end do
    if (k == 2) go to 80
 !                       Evaluate derivatives associated with perturbed
 !                       vector  and  compute corresponding differences
    call f(a,pv,yp,rpar,ipar)
    do j = 1,neq
-70    pv(j) = yp(j) - yprime(j)
+      pv(j) = yp(j) - yprime(j)
    end do
    go to 100
 !                       Use a shifted value of the independent variable
 !                                             in computing one estimate
 80 call f(a + da,pv,yp,rpar,ipar)
    do j = 1,neq
-90    pv(j) = yp(j) - sf(j)
+      pv(j) = yp(j) - sf(j)
    end do
 !                       Choose largest bounds on the first derivative
 !                                      and a local Lipschitz constant
@@ -4537,9 +4361,9 @@ do k = 1,lk
       if (dy == 0.) dy = dely/relper
 120   if (spy(j) == 0.) spy(j) = yp(j)
       if (spy(j) /= 0.) dy = sign(dy,spy(j))
-130   yp(j) = dy
+      yp(j) = dy
    end do
-140 delf = vnorm(yp,neq)
+   delf = vnorm(yp,neq)
 end do
 !
 !                       Protect against an overflow
@@ -4562,7 +4386,7 @@ tolsum = 0.
 do k = 1,neq
    tolexp = log10(etol(k))
    tolmin = min(tolmin,tolexp)
-170 tolsum = tolsum + tolexp
+   tolsum = tolsum + tolexp
 end do
 tolp = 10.**(0.5*(tolsum/float(neq) + tolmin)/float(morder + 1))
 !
@@ -4656,11 +4480,11 @@ ic = 1
 if (k == 0) go to 15
 jj1 = l - k
 do jj = jj1,nq
-10 ic = ic*jj
+   ic = ic*jj
 end do
 15 c = float(ic)
 do i = 1,n
-20 dky(i) = c*yh(i,l)
+   dky(i) = c*yh(i,l)
 end do
 if (k == nq) go to 55
 jb2 = nq - k
@@ -4671,17 +4495,17 @@ do jb = 1,jb2
    if (k == 0) go to 35
    jj1 = jp1 - k
    do jj = jj1,j
-30    ic = ic*jj
+      ic = ic*jj
    end do
 35 c = float(ic)
    do i = 1,n
-40    dky(i) = c*yh(i,jp1) + s*dky(i)
+      dky(i) = c*yh(i,jp1) + s*dky(i)
    end do
 end do
 if (k == 0) return
 55 r = h**(-k)
 do i = 1,n
-60 dky(i) = r*dky(i)
+   dky(i) = r*dky(i)
 end do
 return
 !
@@ -4836,7 +4660,7 @@ go to 150
 120 nq = maxord
 l = lmax
 do i = 1,l
-125 el(i) = elco(i,nq)
+   el(i) = elco(i,nq)
 end do
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
@@ -4858,7 +4682,7 @@ go to 175
 !-----------------------------------------------------------------------
 140 call cfod(meth, elco, tesco)
 150 do i = 1,l
-155 el(i) = elco(i,nq)
+   el(i) = elco(i,nq)
 end do
 nqnyh = nq*nyh
 rc = rc*el(1)/el0
@@ -4890,7 +4714,7 @@ r = 1.0e0
 do j = 2,l
    r = r*rh
    do i = 1,n
-180   yh(i,j) = yh(i,j)*r
+      yh(i,j) = yh(i,j)*r
    end do
 end do
 h = h*rh
@@ -4913,7 +4737,7 @@ do jb = 1,nq
    i1 = i1 - nyh
    do i = i1,nqnyh
       ipnyh = i + nyh
-210   yh1(i) = yh1(i) + yh1(ipnyh)
+      yh1(i) = yh1(i) + yh1(ipnyh)
    end do
 end do
 ksteps = ksteps + 1
@@ -4925,7 +4749,7 @@ ksteps = ksteps + 1
 !-----------------------------------------------------------------------
 220 m = 0
 do i = 1,n
-230 y(i) = yh(i,1)
+   y(i) = yh(i,1)
 end do
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
@@ -4943,7 +4767,7 @@ call pjac(neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
    & rpar, ipar)
 if (ier /= 0) go to 430
 250 do i = 1,n
-260 acor(i) = 0.0e0
+   acor(i) = 0.0e0
 end do
 270 if (miter /= 0) go to 350
 !-----------------------------------------------------------------------
@@ -4952,12 +4776,12 @@ end do
 !-----------------------------------------------------------------------
 do i = 1,n
    savf(i) = h*savf(i) - yh(i,2)
-290 y(i) = savf(i) - acor(i)
+   y(i) = savf(i) - acor(i)
 end do
 del = vnwrms(n, y, ewt)
 do i = 1,n
    y(i) = yh(i,1) + el(1)*savf(i)
-300 acor(i) = savf(i)
+   acor(i) = savf(i)
 end do
 go to 400
 !-----------------------------------------------------------------------
@@ -4966,14 +4790,14 @@ go to 400
 ! P as coefficient matrix.
 !-----------------------------------------------------------------------
 350 do i = 1,n
-360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
+   y(i) = h*savf(i) - (yh(i,2) + acor(i))
 end do
 call slvs(wm, iwm, y, savf)
 if (ier /= 0) go to 410
 del = vnwrms(n, y, ewt)
 do i = 1,n
    acor(i) = acor(i) + y(i)
-380 y(i) = yh(i,1) + el(1)*acor(i)
+   y(i) = yh(i,1) + el(1)*acor(i)
 end do
 !-----------------------------------------------------------------------
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
@@ -5007,7 +4831,7 @@ do jb = 1,nq
    i1 = i1 - nyh
    do i = i1,nqnyh
       ipnyh = i + nyh
-440   yh1(i) = yh1(i) - yh1(ipnyh)
+      yh1(i) = yh1(i) - yh1(ipnyh)
    end do
 end do
 if (abs(h) <= hmin*1.00001e0) go to 670
@@ -5043,7 +4867,7 @@ hu = h
 nqu = nq
 do j = 1,l
    do i = 1,n
-470   yh(i,j) = yh(i,j) + el(j)*acor(i)
+      yh(i,j) = yh(i,j) + el(j)*acor(i)
    end do
 end do
 ialth = ialth - 1
@@ -5051,7 +4875,7 @@ if (ialth == 0) go to 520
 if (ialth > 1) go to 690
 if (l == lmax) go to 690
 do i = 1,n
-490 yh(i,lmax) = acor(i)
+   yh(i,lmax) = acor(i)
 end do
 go to 690
 !-----------------------------------------------------------------------
@@ -5068,7 +4892,7 @@ do jb = 1,nq
    i1 = i1 - nyh
    do i = i1,nqnyh
       ipnyh = i + nyh
-510   yh1(i) = yh1(i) - yh1(ipnyh)
+      yh1(i) = yh1(i) - yh1(ipnyh)
    end do
 end do
 rmax = 2.0e0
@@ -5089,7 +4913,7 @@ go to 540
 520 rhup = 0.0e0
 if (l == lmax) go to 540
 do i = 1,n
-530 savf(i) = acor(i) - yh(i,lmax)
+   savf(i) = acor(i) - yh(i,lmax)
 end do
 dup = vnwrms(n, savf, ewt)/tesco(3,nq)
 exup = 1.0e0/float(l + 1)
@@ -5117,7 +4941,7 @@ rh = rhup
 if (rh < 1.1e0) go to 610
 r = el(l)/float(l)
 do i = 1,n
-600 yh(i,newq + 1) = acor(i)*r
+   yh(i,newq + 1) = acor(i)*r
 end do
 go to 630
 610 ialth = 3
@@ -5148,12 +4972,12 @@ rh = 0.1e0
 rh = max(hmin/abs(h),rh)
 h = h*rh
 do i = 1,n
-645 y(i) = yh(i,1)
+   y(i) = yh(i,1)
 end do
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 do i = 1,n
-650 yh(i,2) = h*savf(i)
+   yh(i,2) = h*savf(i)
 end do
 ipup = miter
 ialth = 5
@@ -5173,7 +4997,7 @@ go to 700
 680 rmax = 10.0e0
 690 r = 1.0e0/tesco(2,nqu)
 do i = 1,n
-695 acor(i) = acor(i)*r
+   acor(i) = acor(i)*r
 end do
 700 hold = h
 jstart = 1
@@ -5247,7 +5071,7 @@ do nq = 2,12
    pc(nq) = 0.0e0
    do ib = 1,nqm1
       i = nqp1 - ib
-110   pc(i) = pc(i - 1) + fnqm1*pc(i)
+      pc(i) = pc(i - 1) + fnqm1*pc(i)
    end do
    pc(1) = fnqm1*pc(1)
 ! Compute integral, -1 To 0, of P(X) and X*P(X). -----------------------
@@ -5257,13 +5081,13 @@ do nq = 2,12
    do i = 2,nq
       tsign = -tsign
       pint = pint + tsign*pc(i)/float(i)
-120   xpin = xpin + tsign*pc(i)/float(i + 1)
+      xpin = xpin + tsign*pc(i)/float(i + 1)
    end do
 ! Store coefficients in elco and tesco. --------------------------------
    elco(1,nq) = pint*rq1fac
    elco(2,nq) = 1.0e0
    do i = 2,nq
-130   elco(i + 1,nq) = rq1fac*pc(i)/float(i)
+      elco(i + 1,nq) = rq1fac*pc(i)/float(i)
    end do
    agamq = rqfac*xpin
    ragq = 1.0e0/agamq
@@ -5287,12 +5111,12 @@ do nq = 1,5
    pc(nqp1) = 0.0e0
    do ib = 1,nq
       i = nq + 2 - ib
-210   pc(i) = pc(i - 1) + fnq*pc(i)
+      pc(i) = pc(i - 1) + fnq*pc(i)
    end do
    pc(1) = fnq*pc(1)
 ! Store coefficients in elco and tesco. --------------------------------
    do i = 1,nqp1
-220   elco(i,nq) = pc(i)/pc(2)
+      elco(i,nq) = pc(i)/pc(2)
    end do
    elco(2,nq) = 1.0e0
    tesco(1,nq) = rq1fac
@@ -5375,12 +5199,12 @@ end select
 ! If miter = 1, call JAC and multiply by scalar. -----------------------
 100 lenp = n*n
 do i = 1,lenp
-110 wm(i + 2) = 0.0e0
+   wm(i + 2) = 0.0e0
 end do
 call jac(tn, y, wm(3), n, rpar, ipar)
 con = -hl0
 do i = 1,lenp
-120 wm(i + 2) = wm(i + 2)*con
+   wm(i + 2) = wm(i + 2)*con
 end do
 go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
@@ -5396,7 +5220,7 @@ do j = 1,n
    fac = -hl0/r
    call f(tn, y, ftem, rpar, ipar)
    do i = 1,n
-220   wm(i + j1) = (ftem(i) - savf(i))*fac
+      wm(i + j1) = (ftem(i) - savf(i))*fac
    end do
    y(j) = yj
    j1 = j1 + n
@@ -5406,7 +5230,7 @@ nfe = nfe + n
 240 j = 3
 do i = 1,n
    wm(j) = wm(j) + 1.0e0
-250 j = j + (n + 1)
+   j = j + (n + 1)
 end do
 ! Do LU decomposition on P. --------------------------------------------
 call sgefa(wm(3), n, n, iwm(21), ier)
@@ -5416,7 +5240,7 @@ return
 ier = 0
 r = el0*0.1e0
 do i = 1,n
-310 y(i) = y(i) + r*(h*savf(i) - yh(i,2))
+   y(i) = y(i) + r*(h*savf(i) - yh(i,2))
 end do
 call f(tn, y, wm(3), rpar, ipar)
 nfe = nfe + 1
@@ -5440,12 +5264,12 @@ mband = ml + mu + 1
 meband = mband + ml
 lenp = meband*n
 do i = 1,lenp
-410 wm(i + 2) = 0.0e0
+   wm(i + 2) = 0.0e0
 end do
 call jac(tn, y, wm(ml3), meband, rpar, ipar)
 con = -hl0
 do i = 1,lenp
-420 wm(i + 2) = wm(i + 2)*con
+   wm(i + 2) = wm(i + 2)*con
 end do
 go to 570
 ! If miter = 5, make MBAND calls to F to approximate j. ----------------
@@ -5463,7 +5287,7 @@ do j = 1,mba
    do i = j,n,mband
       yi = y(i)
       r = max(srur*abs(yi),r0*ewt(i))
-530   y(i) = y(i) + r
+      y(i) = y(i) + r
    end do
    call f(tn, y, ftem, rpar, ipar)
    do jj = j,n,mband
@@ -5475,7 +5299,7 @@ do j = 1,mba
       i2 = min(jj + ml,n)
       ii = jj*meb1 - ml + 2
       do i = i1,i2
-540      wm(ii + i) = (ftem(i) - savf(i))*fac
+         wm(ii + i) = (ftem(i) - savf(i))*fac
       end do
    end do
 end do
@@ -5484,7 +5308,7 @@ nfe = nfe + mba
 570 ii = mband + 2
 do i = 1,n
    wm(ii) = wm(ii) + 1.0e0
-580 ii = ii + meband
+   ii = ii + meband
 end do
 ! Do LU decomposition of P. --------------------------------------------
 call sgbfa(wm(3), meband, n, ml, mu, iwm(21), ier)
@@ -5557,10 +5381,10 @@ r = hl0/phl0
 do i = 1,n
    di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i + 2))
    if (abs(di) == 0.0e0) go to 390
-320 wm(i + 2) = 1.0e0/di
+   wm(i + 2) = 1.0e0/di
 end do
 330 do i = 1,n
-340 x(i) = wm(i + 2)*x(i)
+   x(i) = wm(i + 2)*x(i)
 end do
 return
 390 ier = -1
@@ -5940,7 +5764,7 @@ real :: vnorm
 !
 vnorm = 0.
 do k = 1,ncomp
-10 vnorm = max(vnorm,abs(v(k)))
+   vnorm = max(vnorm,abs(v(k)))
 end do
 end function vnorm
 
@@ -5959,7 +5783,7 @@ real :: sum
 !
 sum = 0.0e0
 do i = 1,n
-10 sum = sum + (v(i)/w(i))**2
+   sum = sum + (v(i)/w(i))**2
 end do
 vnwrms = sqrt(sum/float(n))
 !----------------------- End of function vnwrms ------------------------
@@ -5989,7 +5813,7 @@ do k = 1,n
    nk = n + k
    mk = m + k
    a(nk) = ha*a(nk)
-10 a(mk) = a(k) + a(nk)
+   a(mk) = a(k) + a(nk)
 end do
 call f(ta,a(m1))
 !
@@ -5997,7 +5821,7 @@ do k = 1,n
    nk = n + k
    mk = m + k
    a(nk) = a(nk) + h*a(mk)
-20 a(mk) = a(k) + ha*a(mk)
+   a(mk) = a(k) + ha*a(mk)
 end do
 call f(ta,a(m1))
 !
@@ -6007,7 +5831,7 @@ do k = 1,n
    mk = m + k
    a(mk) = h*a(mk)
    a(nk) = a(nk) + a(mk)
-30 a(mk) = a(k) + a(mk)
+   a(mk) = a(k) + a(mk)
 end do
 call f(t,a(m1))
 !
@@ -6015,14 +5839,14 @@ do k = 1,n
    nk = n + k
    mk = m + k
    a(k) = a(k) + (a(nk) + ha*a(mk))/3.0
-40 a(nk) = a(k)
+   a(nk) = a(k)
 end do
 call f(t,a(np1))
 return
 !
 50 do k = 1,n
    nk = n + k
-51 a(nk) = a(k)
+   a(nk) = a(k)
 end do
 call f(t,a(np1))
 end subroutine rk
@@ -6059,11 +5883,11 @@ data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
 if (h == 0.) go to 40
 ha = h*4./27.
 do k = 1,n
-10 w(k) = y(k) + ha*dy(k)
+   w(k) = y(k) + ha*dy(k)
 end do
 call f(t + ha,w(1))
 do k = 1,n
-11 w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
+   w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
 end do
 call f(t + h*2./9.,w(1))
 !
@@ -6076,11 +5900,11 @@ do m = 2,8
       l = k
       do j = 2,m
          sum = sum + b(j,m1)*w(l)
-20       l = l + n
+         l = l + n
       end do
-21    w(l) = y(k) + sum*h/c(m1)
+      w(l) = y(k) + sum*h/c(m1)
    end do
-22 call f(t + a(m1)*h,w(i))
+   call f(t + a(m1)*h,w(i))
 end do
 !
 do k = 1,n
@@ -6088,17 +5912,17 @@ do k = 1,n
    l = k
    do m = 2,9
       sum = sum + d(m)*w(l)
-30    l = l + n
+      l = l + n
    end do
    y(k) = y(k) + h*sum/840.
-31 dy(k) = y(k)
+   dy(k) = y(k)
 end do
 t = t + h
 call f(t,dy)
 return
 !
 40 do k = 1,n
-41 dy(k) = y(k)
+   dy(k) = y(k)
 end do
 call f(t,dy)
 end subroutine rk8
@@ -6168,9 +5992,9 @@ do j = jmin,jmax
    xi = xmin
    do i = imin,imax
       u(i,j) = g(xi, yj)
-30    xi = xi + hx
+      xi = xi + hx
    end do
-31 yj = yj + hy
+   yj = yj + hy
 end do
 go to 60
 !
@@ -6186,10 +6010,10 @@ do j = jmin,jmax
    do i = imin,imax
       ij = i + jcol
       w(ij) = g(xi, yj)
-50    xi = xi + hx
+      xi = xi + hx
    end do
    yj = yj + hy
-51 jcol = jcol + mp1
+   jcol = jcol + mp1
 end do
 !
 !     Store the boundary values of u
@@ -6198,28 +6022,28 @@ end do
 xi = a
 do i = 1,mp1
    u(i,1) = bval(1,xi,c)
-61 xi = xi + hx
+   xi = xi + hx
 end do
 !
 70 if (edge(2) /= 0) go to 80
 yj = c
 do j = 1,np1
    u(1,j) = bval(2,a,yj)
-71 yj = yj + hy
+   yj = yj + hy
 end do
 !
 80 if (edge(3) /= 0) go to 90
 xi = a
 do i = 1,mp1
    u(i,np1) = bval(3,xi,d)
-81 xi = xi + hx
+   xi = xi + hx
 end do
 !
 90 if (edge(4) /= 0) go to 100
 yj = c
 do j = 1,np1
    u(mp1,j) = bval(4,b,yj)
-91 yj = yj + hy
+   yj = yj + hy
 end do
 !
 !     Store the mixed boundary conditions
@@ -8987,7 +8811,6 @@ do l = 1,n
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
 !
-30    continue
    end do
 !
 40 if (m == l) go to  80
@@ -10430,7 +10253,7 @@ do i = 1,m,2
    r = sqrt(-2.0*log(a(i)))
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
-10 a(i + 1) = r*sin(phi)
+   a(i + 1) = r*sin(phi)
 end do
 if (m == n) return
 !
@@ -10471,7 +10294,7 @@ do i = 1,m,2
    r = sqrt(-2.d0*log(a(i)))
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
-10 a(i + 1) = r*sin(phi)
+   a(i + 1) = r*sin(phi)
 end do
 if (m == n) return
 !
@@ -10615,7 +10438,7 @@ do j = 1,n
       sum = 0.0
       do k = 1,i
          l = l + 1
-20       sum = sum + a(l)*x(k,j)
+         sum = sum + a(l)*x(k,j)
       end do
       x(i,j) = sum + fmu(i)
       i = i - 1
@@ -10633,4 +10456,122 @@ return
 return
 130 ierr = 4
 end subroutine nrvg
+
+pure subroutine nrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, m, mo, n
+real, intent(inout) :: a(m)
+real, intent(in) :: fmu(m)
+real, intent(inout) :: x(kx,n)
+integer :: i, j
+integer, parameter :: max = 2147483647
+interface
+   pure subroutine rnor(ix,a,n,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: ierr
+   end subroutine rnor
+end interface
+!-----------------------------------------------------------------------
+!
+!           Generation of n random normal vectors of length m
+!           from a multivariate normal distribution with mean
+!           vector fmu and variance-covariance matrix a. it is
+!           assumed that A is a diagonal matrix.
+!
+!                          ---------------
+!
+!     Input...
+!
+!        mo      - Integer specifying if the routine is
+!                  being called for the first time to
+!                  generate normal vectors from a matrix
+!                  A. set mo = 0 On an initial call to
+!                  the routine, and mo .NE. 0 on a later
+!                  CALL TO GENERATE MORE VECTORS FROM
+!                  the same matrix a.
+!
+!        ix      - Integer seed used to initialize the
+!                  sequence of variates.
+!
+!        n       - Number of random vectors to be generated.
+!
+!        m       - Length of the desired random vectors.
+!                  It is assumed that m .GE. 2. m should
+!                  not be modified by the user on a later
+!                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
+!
+!        a       - Variance-covariance matrix of order m.
+!                  A is a diagonal matrix with positive
+!                  diagonal elements. The diagonal elements
+!                  are stored in the array a. a is an array
+!                  of length m or larger.
+!
+!                  On an initial call to the routine, the
+!                  square roots of the elements of a replace
+!                  the original data in A. A should not be
+!                  modified by the user on a later call to
+!                  THE ROUTINE (WHEN mo .NE. 0).
+!
+!        fmu     - Mean vector of dimension m of the
+!                  multivariate normal distribution
+!
+!        kx      - Row dimension of the matrix x (see the
+!                  description of x below). It is assumed
+!                  THAT kx .GE. m.
+!
+!     Output...
+!
+!        ix      - Seed to be used for obtaining more variates.
+!
+!        x       - Output array of dimension kx by n containing
+!                  the n generated random normal vectors. The
+!                  j-TH vector is stored in the j-TH column of
+!                  x FOR j = 1,...,n.
+!
+!        ierr    - Input error flag
+!                  (0 - No input errors
+!                   1 - n .LE. 0
+!                   2 - m .LE. 1  OR  m .GT. kx
+!                   3 - a(i) .LE. 0 for some i
+!                   4 - Seed out of range      )
+!
+!-----------------------------------------------------------------------
+!--------------------
+!--------------------
+if (n <= 0) go to 100
+if (m <= 1 .or. m > kx) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
+!
+!        Compute the roots of the diagonal elements
+!
+if (mo /= 0) go to 20
+do i = 1,m
+   if (a(i) <= 0.0) go to 120
+   a(i) = sqrt(a(i))
+end do
+!
+!           Generate the n random normal vectors
+!
+20 do j = 1,n
+   call rnor(ix, x(1,j), m, ierr)
+   do i = 1,m
+      x(i,j) = a(i)*x(i,j) + fmu(i)
+   end do
+end do
+return
+!
+!                       Error return
+!
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+end subroutine nrvg1
 

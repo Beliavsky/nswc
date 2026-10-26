@@ -41,15 +41,15 @@ el ion 7
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVBR` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L50987`](../source_parts/nswc_part_05.f90#L8764) |
-| `CVRB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51061`](../source_parts/nswc_part_05.f90#L8838) |
-| `CVRB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51135`](../source_parts/nswc_part_05.f90#L8912) |
-| `CVBD` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L51206`](../source_parts/nswc_part_05.f90#L8983) |
-| `CVDB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51280`](../source_parts/nswc_part_05.f90#L9057) |
-| `CVDB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51354`](../source_parts/nswc_part_05.f90#L9131) |
-| `CVBC` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L51425`](../source_parts/nswc_part_05.f90#L9202) |
-| `CVCB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51499`](../source_parts/nswc_part_05.f90#L9276) |
-| `CVCB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51573`](../source_parts/nswc_part_05.f90#L9350) |
+| `CVBR` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L50894`](../source_parts/nswc_part_05.f90#L8412) |
+| `CVRB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L50968`](../source_parts/nswc_part_05.f90#L8486) |
+| `CVRB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51042`](../source_parts/nswc_part_05.f90#L8560) |
+| `CVBD` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L51113`](../source_parts/nswc_part_05.f90#L8631) |
+| `CVDB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51187`](../source_parts/nswc_part_05.f90#L8705) |
+| `CVDB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51261`](../source_parts/nswc_part_05.f90#L8779) |
+| `CVBC` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L51332`](../source_parts/nswc_part_05.f90#L8850) |
+| `CVCB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51406`](../source_parts/nswc_part_05.f90#L8924) |
+| `CVCB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L51480`](../source_parts/nswc_part_05.f90#L8998) |
 
 
 The following subroutines permit one to convert matrices to and from the standard format.
@@ -117,12 +117,12 @@ CVRB1 is used if A and B are real arrays, CVDB1 is used if A and B are double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51644`](../source_parts/nswc_part_05.f90#L9421) |
-| `DMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51710`](../source_parts/nswc_part_05.f90#L9487) |
-| `CMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51776`](../source_parts/nswc_part_05.f90#L9553) |
-| `MCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51842`](../source_parts/nswc_part_05.f90#L9619) |
-| `DMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51910`](../source_parts/nswc_part_05.f90#L9687) |
-| `CMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51978`](../source_parts/nswc_part_05.f90#L9755) |
+| `MCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51551`](../source_parts/nswc_part_05.f90#L9069) |
+| `DMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51617`](../source_parts/nswc_part_05.f90#L9135) |
+| `CMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L51683`](../source_parts/nswc_part_05.f90#L9201) |
+| `MCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51749`](../source_parts/nswc_part_05.f90#L9267) |
+| `DMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51817`](../source_parts/nswc_part_05.f90#L9335) |
+| `CMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L51885`](../source_parts/nswc_part_05.f90#L9403) |
 
 
 The following subroutines permit one to convert matrices to and from sparse form.
@@ -170,8 +170,8 @@ MCVSB is used if A and B are real arrays, DMCVSB is used if A and & are double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BCVRD` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52046`](../source_parts/nswc_part_05.f90#L9823) |
-| `BCVDR` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52065`](../source_parts/nswc_part_05.f90#L9842) |
+| `BCVRD` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51953`](../source_parts/nswc_part_05.f90#L9471) |
+| `BCVDR` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L51972`](../source_parts/nswc_part_05.f90#L9490) |
 
 
 The following subroutines are available for converting banded real matrices to and from double precision form.
@@ -202,8 +202,8 @@ B is a 2-dimensional real array of dimension kb x @ where kb > m and € > mz-+r
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BREAL` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L52084`](../source_parts/nswc_part_05.f90#L9861) |
-| `BIMAG` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L52140`](../source_parts/nswc_part_05.f90#L9917) |
+| `BREAL` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L51991`](../source_parts/nswc_part_05.f90#L9509) |
+| `BIMAG` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L52047`](../source_parts/nswc_part_05.f90#L9565) |
 
 
 If A = (a,;) is a complex matrix then let Re(A) = (Re(a,;)) and Im(A) = {Im(c,;)}) denote the real and imaginary parts of A. If the matrix A is stored in band form, then the following subroutines are available for obtaining Re(A} and Im(A) in band form.
@@ -238,7 +238,7 @@ B is a 2-dimensional real array of dimension kb x € where kb > m. The input ar
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BCVRC` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52196`](../source_parts/nswc_part_05.f90#L9973) |
+| `BCVRC` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52103`](../source_parts/nswc_part_05.f90#L9621) |
 
 
 Given the real m x n matrices A and B stored in band form. Then the subroutine BCVRC is available for obtaining the complex matrix A+ Bt where ¢ = /—1.
@@ -265,9 +265,9 @@ It is assumed that A+ At is to be stored in band form in C. C is a 2~—dimensio
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52282`](../source_parts/nswc_part_05.f90#L10059) |
-| `DBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52340`](../source_parts/nswc_part_05.f90#L10117) |
-| `CBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52398`](../source_parts/nswc_part_05.f90#L10175) |
+| `BPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52189`](../source_parts/nswc_part_05.f90#L9707) |
+| `DBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52247`](../source_parts/nswc_part_05.f90#L9765) |
+| `CBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L52305`](../source_parts/nswc_part_05.f90#L9823) |
 
 
 The following subroutines are available for transposing banded matrices.
@@ -296,9 +296,9 @@ B is a 2-dimensional array of dimension kb x @ where kb > n and £ > m+ my, + 1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52456`](../source_parts/nswc_part_05.f90#L10233) |
-| `DBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52612`](../source_parts/nswc_part_05.f90#L10389) |
-| `CBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52768`](../source_parts/nswc_part_06.f90#L1) |
+| `BADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52363`](../source_parts/nswc_part_05.f90#L9881) |
+| `DBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52519`](../source_parts/nswc_part_05.f90#L10037) |
+| `CBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52675`](../source_parts/nswc_part_05.f90#L10193) |
 
 
 Let A and B be m x n matrices stored in band form. The following subroutines are available for computing the sum C = A+ B.
@@ -339,9 +339,9 @@ Programmer A EE Nforeis
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52924`](../source_parts/nswc_part_06.f90#L157) |
-| `DBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L53080`](../source_parts/nswc_part_06.f90#L313) |
-| `CBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L53236`](../source_parts/nswc_part_06.f90#L469) |
+| `BSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52831`](../source_parts/nswc_part_05.f90#L10349) |
+| `DBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L52987`](../source_parts/nswc_part_06.f90#L1) |
+| `CBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L53143`](../source_parts/nswc_part_06.f90#L157) |
 
 
 Let A and B be m xn matrices stored in band form. The following subroutines are available for computing the difference C = A —- B,
@@ -376,9 +376,9 @@ te cant _
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53392`](../source_parts/nswc_part_06.f90#L625) |
-| `DBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53547`](../source_parts/nswc_part_06.f90#L780) |
-| `CBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53702`](../source_parts/nswc_part_06.f90#L935) |
+| `BPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53299`](../source_parts/nswc_part_06.f90#L313) |
+| `DBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53454`](../source_parts/nswc_part_06.f90#L468) |
+| `CBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L53609`](../source_parts/nswc_part_06.f90#L623) |
 
 
 Let A and B be matrices stored in band form. The following subroutines are available for computing the product C = AB.
@@ -409,10 +409,10 @@ It is assumed that, AB is to be stored in band form in C. C ia a 2-dimensional a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53857`](../source_parts/nswc_part_06.f90#L1090) |
-| `BVPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53909`](../source_parts/nswc_part_06.f90#L1142) |
-| `BTPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54149`](../source_parts/nswc_part_06.f90#L1382) |
-| `BTPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54200`](../source_parts/nswc_part_06.f90#L1433) |
+| `BVPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53764`](../source_parts/nswc_part_06.f90#L778) |
+| `BVPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53816`](../source_parts/nswc_part_06.f90#L830) |
+| `BTPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54056`](../source_parts/nswc_part_06.f90#L1070) |
+| `BTPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54107`](../source_parts/nswc_part_06.f90#L1121) |
 
 
 Let A be a real mi & m matrix stored in band form. Then the following subroutines are available for multiplying A with a real vector.
@@ -480,10 +480,10 @@ The arguments 7 2: y are row vectors of dimension m and n respectively. When BTP
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53954`](../source_parts/nswc_part_06.f90#L1187) |
-| `DBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54007`](../source_parts/nswc_part_06.f90#L1240) |
-| `DBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54244`](../source_parts/nswc_part_06.f90#L1477) |
-| `DBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54296`](../source_parts/nswc_part_06.f90#L1529) |
+| `DBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53861`](../source_parts/nswc_part_06.f90#L875) |
+| `DBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53914`](../source_parts/nswc_part_06.f90#L928) |
+| `DBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54151`](../source_parts/nswc_part_06.f90#L1165) |
+| `DBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54203`](../source_parts/nswc_part_06.f90#L1217) |
 
 
 Let A +e a double precision m x nm matrix stored in band form. Then the following subroutines are available for multiplying A with a double precision vector.
@@ -549,10 +549,10 @@ The arguments x and y are row vectors of dimension rn and n respectively. A,2z,y
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54052`](../source_parts/nswc_part_06.f90#L1285) |
-| `CBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54104`](../source_parts/nswc_part_06.f90#L1337) |
-| `CBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54340`](../source_parts/nswc_part_06.f90#L1573) |
-| `CBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54391`](../source_parts/nswc_part_06.f90#L1624) |
+| `CBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L53959`](../source_parts/nswc_part_06.f90#L973) |
+| `CBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54011`](../source_parts/nswc_part_06.f90#L1025) |
+| `CBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54247`](../source_parts/nswc_part_06.f90#L1261) |
+| `CBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L54298`](../source_parts/nswc_part_06.f90#L1312) |
 
 
 Let A be a complex m x n matrix stored in band form. Then the following subroutines are available for multiplying A with a complex vector.
@@ -616,8 +616,8 @@ The arguments x and y are row vectors of dimension m and n respectively. A,z,y a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `B1NRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L54457`](../source_parts/nswc_part_06.f90#L1690) |
-| `DB1NRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L54541`](../source_parts/nswc_part_06.f90#L1774) |
+| `B1NRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L54364`](../source_parts/nswc_part_06.f90#L1378) |
+| `DB1NRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L54448`](../source_parts/nswc_part_06.f90#L1462) |
 
 
 ```text
@@ -645,8 +645,8 @@ The function has the value ||A||; for any m x n matrix A stored in band form. Th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BNRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L54435`](../source_parts/nswc_part_06.f90#L1668) |
-| `DBNRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L54519`](../source_parts/nswc_part_06.f90#L1752) |
+| `BNRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L54342`](../source_parts/nswc_part_06.f90#L1356) |
+| `DBNRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L54426`](../source_parts/nswc_part_06.f90#L1440) |
 
 
 ```text
@@ -674,8 +674,8 @@ The function has the value ||Aj|.. for any m x n matrix A stored in band form. T
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L54604`](../source_parts/nswc_part_06.f90#L1837) |
-| `BSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L54708`](../source_parts/nswc_part_06.f90#L1941) |
+| `BSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L54511`](../source_parts/nswc_part_06.f90#L1525) |
+| `BSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L54615`](../source_parts/nswc_part_06.f90#L1629) |
 
 
 Let A be a nonsingular nx n real matrix stored in band form and 6a real column vector of dimension n. The subroutine BSLV is available for solving the system of equations Ax = 6, and the subroutine BSLV1 is available for solving the transposed system of equations Atz = b. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. BSLV and BSLV1 always generate the same LU decomposition of A. After the decomposition is obtained on an initial call to BSLV or BSLV, either routine may be called to solve a new system of equations Az = r or A’r = r without having to redecompose the matrix A.
@@ -728,7 +728,7 @@ the new vector 6. On output, X will contain the solution to the new set of equat
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `B1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L55750`](../source_parts/nswc_part_06.f90#L2983) |
+| `B1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L55657`](../source_parts/nswc_part_06.f90#L2671) |
 
 
 If A is a real mn x n banded matrix then the following subroutine is available for estimating the £, condition number cond,(A) of A.
@@ -788,8 +788,8 @@ and modified by A. TE Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55177`](../source_parts/nswc_part_06.f90#L2410) |
-| `DBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55281`](../source_parts/nswc_part_06.f90#L2514) |
+| `DBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55084`](../source_parts/nswc_part_06.f90#L2098) |
+| `DBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55188`](../source_parts/nswc_part_06.f90#L2202) |
 
 
 Let A be a nonsingular n x n double precision matrix stored in band form and 6 a double precision column vector of dimension n. The subroutine DBSLV is available for solving the system of equations Ax == b, and the subroutine DBSLV1 is available for solving the transposed system of equations A‘z == 6. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. DBSLV and DBSLV1 always generate the same LU decomposition of A. After the decomposition is obtained on an initial call to DBSLV or DBSLV1, either routine may be called to solve a new system of equations Az = r or A'z = r without having to redecompose the matrix A.
@@ -845,7 +845,7 @@ Programming DBSLV and DBSLV1 employ the subroutines DBFA, DBSL, DAXPY, DSCAL, DS
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DB1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L55868`](../source_parts/nswc_part_06.f90#L3101) |
+| `DB1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L55775`](../source_parts/nswc_part_06.f90#L2789) |
 
 
 If A is a double precision n x n banded matrix then the following subroutine is available for estimating the @; condition number cond,(A) of A.
@@ -905,8 +905,8 @@ Software 15 (1989), p. 168.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55987`](../source_parts/nswc_part_06.f90#L3220) |
-| `CBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L56069`](../source_parts/nswc_part_06.f90#L3302) |
+| `CBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55894`](../source_parts/nswc_part_06.f90#L2908) |
+| `CBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L55976`](../source_parts/nswc_part_06.f90#L2990) |
 
 
 Let A be a nonsingular n x n complex matrix stored in band form and 6a complex column vector of dimension n. The subroutine CBSLV is available for solving the system of equations Az = 6, and the subroutine CBSLV1 is available for solving the transposed system of equations A’z = b. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. CBSLV and CBSLV1 always generate the same LU decomposition of A. After the decomposition is obtained oa an initial call to CBSLV or CBSLVI, either routine may be called to solve a new system of equations Az = r or A‘z = r without having to redecompose the matrix A.

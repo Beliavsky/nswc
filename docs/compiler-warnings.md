@@ -101,7 +101,7 @@ integers initialized to zero reproduces the `B(0)` bounds failure deterministica
 It also builds production solver bodies and their dependencies with bounds
 checking at `-O0` and `-O2`,
 initializing local integers to zero under GNU. Manufactured-solution tests cover
-periodic and nonperiodic boundaries in both dimensions, real and complex periodic
+both available boundary conditions in each dimension, real and complex periodic
 roots, sizes 3 through 8, and repeated solves, for all three maintained implementations.
 Use `--ifx PATH --intel-env ENVIRONMENT_BATCH` to repeat the checks with Intel.
 The GNU checks run in GitHub Actions. `nswc_orig.f` remains unchanged.

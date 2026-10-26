@@ -12,10 +12,10 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L70630`](../source_parts/nswc_part_07.f90#L7272) |
-| `LSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L71322`](../source_parts/nswc_part_07.f90#L7964) |
-| `HFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L73899`](../source_parts/nswc_part_08.f90#L1) |
-| `HFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L74175`](../source_parts/nswc_part_08.f90#L277) |
+| `LLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L70519`](../source_parts/nswc_part_07.f90#L7012) |
+| `LSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L71211`](../source_parts/nswc_part_07.f90#L7704) |
+| `HFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L73788`](../source_parts/nswc_part_07.f90#L10281) |
+| `HFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L74064`](../source_parts/nswc_part_08.f90#L1) |
 
 
 Given an m X n matrix A and an mx @ matrix B. The column vectors b;,..., 6, of B specify @ distinct linear least squares problems
@@ -175,7 +175,7 @@ When an error ais detected, the routine immediately terminates
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LLSQMP` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L70664`](../source_parts/nswc_part_07.f90#L7306) |
+| `LLSQMP` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L70553`](../source_parts/nswc_part_07.f90#L7046) |
 
 
 Given an m Xn matrix A and an mx £ matrix B. The column vectors b;,...,6, of B specify @ distinct linear least. squares problems
@@ -224,10 +224,10 @@ Mere hey Vlaet for any vector: tea, ean)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DLLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L71060`](../source_parts/nswc_part_07.f90#L7702) |
-| `DLSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L72541`](../source_parts/nswc_part_07.f90#L9183) |
-| `DHFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L74576`](../source_parts/nswc_part_08.f90#L678) |
-| `DHFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L74855`](../source_parts/nswc_part_08.f90#L957) |
+| `DLLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L70949`](../source_parts/nswc_part_07.f90#L7442) |
+| `DLSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L72430`](../source_parts/nswc_part_07.f90#L8923) |
+| `DHFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L74465`](../source_parts/nswc_part_08.f90#L402) |
+| `DHFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L74744`](../source_parts/nswc_part_08.f90#L681) |
 
 
 Given an mx n matrix A and an mx 2 matrix B. The column vectors b;, ...,6, of B specify @ distinct linear least squares problems
@@ -401,7 +401,7 @@ When an error is detected, the routine immediately terminates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LSEI` | `SUBROUTINE` | `W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, MODE, WS, IP` | [`L75255`](../source_parts/nswc_part_08.f90#L1357) |
+| `LSEI` | `SUBROUTINE` | `W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, MODE, WS, IP` | [`L75144`](../source_parts/nswc_part_08.f90#L1081) |
 
 
 Let A be an m, Xn matrix, H anim, Xn matrix, G an m, xn matrix, 6 a column vector of dimension m,, f a column vector of dimension m,, and A a column vector of dimension m,. The subroutine LSEi is available for finding a column vector z of dimension n that minimizes || Ax -- 6|| subject to the constraints?
@@ -559,7 +559,7 @@ there are inequality constraints Ga > h. This matrix assumes that any inequaliti
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `WNNLS` | `SUBROUTINE` | `W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, IWORK, WORK` | [`L76418`](../source_parts/nswc_part_08.f90#L2520) |
+| `WNNLS` | `SUBROUTINE` | `W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, IWORK, WORK` | [`L76307`](../source_parts/nswc_part_08.f90#L2244) |
 
 
 Let A be an m, Xn matrix, FE an m, x n matrix, b a column vector of dimension m,, and f a column vector of dimension m, The subroutine WNNLS is available for finding a column vector z = (zy, ...,2,)* that minimizes || Az — || subject to the constraints!
@@ -687,7 +687,7 @@ Constrained Least Squares Problem,” ACM Trans. Math Software 8 (1982), pp. 323
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `L2SLV` | `SUBROUTINE` | `M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, X, NN, RES, MR, QR, MMPNN, C, IFAULT` | [`L77789`](../source_parts/nswc_part_08.f90#L3891) |
+| `L2SLV` | `SUBROUTINE` | `M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, X, NN, RES, MR, QR, MMPNN, C, IFAULT` | [`L77651`](../source_parts/nswc_part_08.f90#L3588) |
 
 
 Let A be an m, x n matrix, E an m, Xn matrix, 3 an m, x & matrix, and F an m, x &€ matrix. It is assumed that 0 < m, < n and that the rank of Eis m,. Let by, ...,5¢ denote the column vectors of B and fi, ...,f¢ the column vectors of F. The subroutine L2SLV is available for finding the unique minimum length column vector z, of dimension n that minimizes ||/Az, — 6,;|| subject to the equality constraints Ez, = f, (if there are any) for 7 = 1,...,@ Iterative improvement is performed to compute the vectors Z1,.-.4,2¢ to machine accuracy. It is assumed that ma > 0. If mg = 0 then L2SLV finds the unique minimum length solution z,; to fz; = f; forj=1,...,€.
@@ -794,7 +794,7 @@ p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 670
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BLSQ` | `SUBROUTINE` | `M, N, A, KA, ML, MU, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L79664`](../source_parts/nswc_part_08.f90#L5766) |
+| `BLSQ` | `SUBROUTINE` | `M, N, A, KA, ML, MU, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L79525`](../source_parts/nswc_part_08.f90#L5462) |
 
 
 EQUATIONS
@@ -905,8 +905,8 @@ __. “Algorithm 583. LSQR: Sparse Linear Equations and Least Squares ACM Trans.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPLSQ` | `SUBROUTINE` | `M, N, A, IA, JA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L78791`](../source_parts/nswc_part_08.f90#L4893) |
-| `STLSQ` | `SUBROUTINE` | `M, N, TA, ITA, JTA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L79246`](../source_parts/nswc_part_08.f90#L5348) |
+| `SPLSQ` | `SUBROUTINE` | `M, N, A, IA, JA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L78652`](../source_parts/nswc_part_08.f90#L4589) |
+| `STLSQ` | `SUBROUTINE` | `M, N, TA, ITA, JTA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L79107`](../source_parts/nswc_part_08.f90#L5044) |
 
 
 EQUATIONS Given ai n matrix A, a column vector 6 of dimension m, and a real number 4. Let A= 4 vi: +0 is the n x n identity matrix, and let 6 = (3). The problem is to find a column vec tor: of dimension n which is a least squares solution of Az =: b. If A is sparse

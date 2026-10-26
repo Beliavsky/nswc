@@ -1530,7 +1530,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1555,7 +1554,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine ishell
 
@@ -1580,7 +1579,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1605,7 +1603,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine shell
 
@@ -1631,7 +1629,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1659,7 +1656,7 @@ do ii = 1,imax
       b(ll) = t
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine shell2
 
@@ -1684,7 +1681,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1709,7 +1705,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine rsort
 
@@ -1736,7 +1732,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1764,7 +1759,7 @@ do ii = 1,imax
       m(ll) = t
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine risort
 
@@ -1790,7 +1785,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1818,7 +1812,7 @@ do ii = 1,imax
       b(ll) = t
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine rrsort
 
@@ -1843,7 +1837,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1868,7 +1861,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine dsort
 
@@ -1895,7 +1888,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1923,7 +1915,7 @@ do ii = 1,imax
       m(ll) = t
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine disort
 
@@ -1949,7 +1941,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -1977,7 +1968,7 @@ do ii = 1,imax
       b(ll) = t
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine ddsort
 
@@ -2003,7 +1994,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -2028,7 +2018,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine aord
 
@@ -2054,7 +2044,6 @@ imax = 1
 do i = 3,10
    if (n <= k(i)) go to 20
    imax = imax + 1
-10 continue
 end do
 !
 !            Stepping through the increments k(imax),...,k(1)
@@ -2079,7 +2068,7 @@ do ii = 1,imax
 31    a(ll) = s
    end do
 !
-40 i = i - 1
+   i = i - 1
 end do
 end subroutine daord
 
@@ -2153,7 +2142,7 @@ if (n <= 0) return
 ! Initialize ind, m, i, j, and r
 !
 do i = 1,n
-1  ind(i) = i
+   ind(i) = i
 end do
 m = 1
 i = 1
@@ -2355,7 +2344,7 @@ if (n <= 0) return
 ! Initialize ind, m, i, j, and r
 !
 do i = 1,n
-1  ind(i) = i
+   ind(i) = i
 end do
 m = 1
 i = 1
@@ -2558,7 +2547,7 @@ if (n <= 0) return
 ! Initialize ind, m, i, j, and r
 !
 do i = 1,n
-1  ind(i) = i
+   ind(i) = i
 end do
 m = 1
 i = 1
@@ -2758,7 +2747,7 @@ go to 4
 ! All permutations have been applied.  Unmark ip.
 !
 5 do k = 1,nn
-6  ip(k) = -ip(k)
+   ip(k) = -ip(k)
 end do
 end subroutine iorder
 
@@ -2833,7 +2822,7 @@ go to 4
 ! All permutations have been applied.  Unmark ip.
 !
 5 do k = 1,nn
-6  ip(k) = -ip(k)
+   ip(k) = -ip(k)
 end do
 end subroutine rorder
 
@@ -2908,7 +2897,7 @@ go to 4
 ! All permutations have been applied.  Unmark ip.
 !
 5 do k = 1,nn
-6  ip(k) = -ip(k)
+   ip(k) = -ip(k)
 end do
 end subroutine dorder
 
@@ -5283,7 +5272,7 @@ return
 30 nm1 = n - 1
 a = x(1)*(y(2) - y(n)) + x(n)*(y(1) - y(nm1))
 do i = 2, nm1
-31 a = a + x(i)*(y(i + 1) - y(i - 1))
+   a = a + x(i)*(y(i + 1) - y(i - 1))
 end do
 parea = 0.5*a
 end function parea
@@ -7337,7 +7326,6 @@ do n = 31,63
    w(1) = w(1) + t(1)
    w(2) = w(2) + t(2)
    if (anorm(t(1),t(2)) <= tol*anorm(w(1),w(2))) go to 20
-10 continue
 end do
 !
 20 do j = 1,29
@@ -7345,7 +7333,6 @@ end do
    x = h(1)*w(1) - h(2)*w(2)
    w(2) = h(1)*w(2) + h(2)*w(1)
    w(1) = a(n) + x
-21 continue
 end do
 x = h(1)*w(1) - h(2)*w(2)
 w(2) = h(1)*w(2) + h(2)*w(1)
@@ -7412,7 +7399,6 @@ w = a(21)
 do i = 1,20
    k = 21 - i
    w = t*w + a(k)
-10 continue
 end do
 derf = x*(1.d0 + w)
 return
@@ -7469,7 +7455,6 @@ w = a(21)
 do i = 1,20
    k = 21 - i
    w = t*w + a(k)
-10 continue
 end do
 derfc = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 return
@@ -7538,7 +7523,6 @@ w = a(21)
 do i = 1,20
    k = 21 - i
    w = t*w + a(k)
-10 continue
 end do
 derfc1 = 0.5d0 + (0.5d0 - x*(1.d0 + w))
 if (ind /= 0) derfc1 = exp(t) * derfc1
@@ -8538,7 +8522,7 @@ go to 1000
 frac = 0.0e0
 !
 do i = 1, 7
-220 frac = q2(i) / (p2(i) + y + frac)
+   frac = q2(i) / (p2(i) + y + frac)
 end do
 !
 daw = (p2(8) + frac) / x
@@ -8550,7 +8534,7 @@ go to 1000
 frac = 0.0e0
 !
 do i = 1, 7
-320 frac = q3(i) / (p3(i) + y + frac)
+   frac = q3(i) / (p3(i) + y + frac)
 end do
 !
 daw = (p3(8) + frac) / x
@@ -8562,7 +8546,7 @@ go to 1000
 frac = 0.0e0
 !
 do i = 1, 6
-420 frac = q4(i) / (p4(i) + y + frac)
+   frac = q4(i) / (p4(i) + y + frac)
 end do
 !
 frac = p4(7) + frac
@@ -8646,7 +8630,6 @@ w = a(20)
 do i = 1,19
    k = 20 - i
    w = t*w + a(k)
-10 continue
 end do
 dpdaw = x * (0.75d0 + (0.25d0 + t*w))
 return
@@ -9130,7 +9113,7 @@ c = cp(1)
 s = sp(1)
 do i = 2,13
    c = cp(i) + c*y
-11 s = sp(i) + s*y
+   s = sp(i) + s*y
 end do
 c = t*c
 s = t*xx*s
@@ -9215,7 +9198,7 @@ cy = cos1(y)
 !-----------------------------------------------------------------------
 !                             Termination
 !-----------------------------------------------------------------------
-90 c = 0.5 + (f*sy - g*cy)
+c = 0.5 + (f*sy - g*cy)
 s = 0.5 - (f*cy + g*sy)
 if (t >= 0.0) return
 c = - c
@@ -9656,7 +9639,7 @@ go to 410
 160 frac = 0.0e0
 !
 do i = 1, 7
-180 frac = q2(i) / (p2(i) + x + frac)
+   frac = q2(i) / (p2(i) + x + frac)
 end do
 !
 ei = (p2(8) + frac) / x
@@ -9668,7 +9651,7 @@ go to 410
 frac = 0.0e0
 !
 do i = 1, 7
-220 frac = q3(i) / (p3(i) + x + frac)
+   frac = q3(i) / (p3(i) + x + frac)
 end do
 !
 ei = (p3(8) + frac) / x
@@ -9682,7 +9665,7 @@ y = 1.0e0 / x
 frac = 0.0e0
 !
 do i = 1, 7
-260 frac = q4(i) / (p4(i) + x + frac)
+   frac = q4(i) / (p4(i) + x + frac)
 end do
 !
 frac = p4(8) + frac
@@ -10149,7 +10132,6 @@ do n = 2,40
    w = w + c
    if (abs(c) < eps) go to 20
    t = h*t
-10 continue
 end do
 !
 20 dei0 = h * (a(1) + w)
@@ -10231,7 +10213,7 @@ do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
-10 b2 = temp
+   b2 = temp
 end do
 si = (bx*b1 - b2 + bb(1))*x
 return
@@ -10246,7 +10228,7 @@ do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
-30 b2 = temp
+   b2 = temp
 end do
 aic = bx*b1 - b2 + cc(2)
 !
@@ -10257,7 +10239,7 @@ do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
-40 b2 = temp
+   b2 = temp
 end do
 rc = bx*b1 - b2 + cc(1)
 !
@@ -10346,7 +10328,7 @@ do i = 1,m1
    j = j - 1
    temp = b1
    b1 = tx*b1 - b2 + bb(j)
-10 b2 = temp
+   b2 = temp
 end do
 cin = x*x*(bx*b1 - b2 + bb(1))
 return
@@ -10361,7 +10343,7 @@ do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
-30 b2 = temp
+   b2 = temp
 end do
 aic = bx*b1 - b2 + cc(2)
 !
@@ -10372,7 +10354,7 @@ do i = 1,m2
    j = j - 2
    temp = b1
    b1 = tx*b1 - b2 + cc(j)
-40 b2 = temp
+   b2 = temp
 end do
 rc = bx*b1 - b2 + cc(1)
 !

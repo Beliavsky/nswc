@@ -243,7 +243,7 @@ return
 w = e(14)
 do l = 1,13
    i = 14 - l
-111 w = w*t + e(i)
+   w = w*t + e(i)
 end do
 ali = t*w
 return
@@ -531,7 +531,6 @@ w = a(n)
 do i = 2,n
    k = k - 1
    w = a(k) + z*w
-10 continue
 end do
 cgam0 = 1.0 + z*w
 end function cgam0
@@ -607,7 +606,7 @@ if ( nswc_ai_i4 == 0 ) go to 12
 go to 10
 10 do j = 1,m
    x = x - 1.0
-11 t = x*t
+   t = x*t
 end do
 12 x = x - 1.0
 go to 40
@@ -620,7 +619,7 @@ m = - m - 1
 if (m == 0) go to 22
 do j = 1,m
    x = x + 1.0
-21 t = x*t
+   t = x*t
 end do
 22 x = (x + 0.5) + 0.5
 t = x*t
@@ -642,7 +641,7 @@ return
 bot = q(1)
 do i = 2,7
    top = p(i) + x*top
-41 bot = q(i) + x*bot
+   bot = q(i) + x*bot
 end do
 gamma = top/bot
 !
@@ -844,7 +843,7 @@ t = a
 w = 1.0
 do i = 1,n
    t = t - 1.0
-21 w = t*w
+   w = t*w
 end do
 gamln = gamln1(t - 1.0) + log(w)
 return
@@ -1244,7 +1243,7 @@ if ( nswc_ai_i4 == 0 ) go to 12
 go to 10
 10 do j = 1,n
    x = x - 1.d0
-11 t = x*t
+   t = x*t
 end do
 12 x = x - 1.d0
 go to 40
@@ -1257,7 +1256,7 @@ n = - n - 1
 if (n == 0) go to 22
 do j = 1,n
    x = x + 1.d0
-21 t = x*t
+   t = x*t
 end do
 22 x = (x + 0.5d0) + 0.5d0
 t = x*t
@@ -1335,7 +1334,6 @@ w = a(15)
 do i = 1,14
    k = 15 - i
    w = t*w + a(k)
-10 continue
 end do
 dpdel = w/x
 end function dpdel
@@ -1552,7 +1550,7 @@ x = a
 w = 1.d0
 do i = 1,n
    x = x - 1.d0
-21 w = x*w
+   w = x*w
 end do
 dgamln = dgmln1(x - 1.d0) + log(w)
 return
@@ -2067,7 +2065,7 @@ do j = 1,m
 60 t1 = v1*q1 - v2*q2
    t2 = v1*q2 + v2*q1
    v1 = t1
-61 v2 = t2
+   v2 = t2
 end do
 !-----------------------------------------------------------------------
 !                 Gathering together the results
@@ -2203,7 +2201,6 @@ go to 10
 10 do j = 1,n
    x = x - 1.d0
    t = 1.d0/x + t
-11 continue
 end do
 12 x = x - 1.d0
 go to 40
@@ -2223,7 +2220,6 @@ do j = 1,n
    x = x + 1.d0
    if (x == 0.d0) return
    t = t - 1.d0/x
-31 continue
 end do
 32 x = (x + 0.5d0) + 0.5d0
 if (x == 0.d0) return
@@ -2327,7 +2323,6 @@ w = a(n)
 do i = 1,nm1
    l = n - i
    w = a(l) + h*w
-10 continue
 end do
 dpsi0 = h*w
 end function dpsi0
@@ -3098,7 +3093,6 @@ x2 = x*x
 s(1) = 1.d0
 do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
-10 continue
 end do
 !
 !                SET w = DEL(b) - DEL(a + b)
@@ -3108,7 +3102,6 @@ w = e(15)*s(15)
 do j = 1,14
    k = 15 - j
    w = t*w + e(k)*s(k)
-20 continue
 end do
 w = w*(c/b)
 !
@@ -3174,7 +3167,6 @@ d = b + (a - 0.5d0)
 s(1) = 1.d0
 do j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
-21 continue
 end do
 !
 !                SET w = DEL(b) - DEL(a + b)
@@ -3422,7 +3414,6 @@ max = n - 1
 do m = 1,max
    n = n - 1
    sum = sum + wk(n)
-70 continue
 end do
 ans = (r/a)*(1.0 + sum)
 qans = 0.5 + (0.5 - ans)
@@ -5568,7 +5559,7 @@ if (m < 1) go to 50
 c = 1.0
 do i = 1,m
    b0 = b0 - 1.0
-41 c = c*(b0/(a0 + b0))
+   c = c*(b0/(a0 + b0))
 end do
 u = log(c) + u
 !
@@ -6160,7 +6151,7 @@ do n = 1,30
    coef = b - n
    do i = 1,nm1
       s = s + coef*c(i)*d(n - i)
-20    coef = coef + b
+      coef = coef + b
    end do
 21 d(n) = bm1*cn + s/n
    dj = d(n)*j
@@ -6382,9 +6373,9 @@ do n = 2, num, 2
          mm1 = m - 1
          do j = 1, mm1
             mmj = m - j
-30          bsum = bsum + (j*r - mmj)*a0(j)*b0(mmj)
+            bsum = bsum + (j*r - mmj)*a0(j)*b0(mmj)
          end do
-31       b0(m) = r*a0(m) + bsum/m
+         b0(m) = r*a0(m) + bsum/m
       end do
       c(i) = b0(i)/(i + 1.0)
 !
@@ -6392,9 +6383,9 @@ do n = 2, num, 2
       im1 = i - 1
       do j = 1, im1
          imj = i - j
-40       dsum = dsum + d(imj)*c(j)
+         dsum = dsum + d(imj)*c(j)
       end do
-41    d(i) = -(dsum + c(i))
+      d(i) = -(dsum + c(i))
    end do
 !
    j0 = e1*znm1 + (n - 1.0)*j0
@@ -6601,7 +6592,7 @@ temp = 2.0*rty
 sum = 0.0
 do l = 1,10
    t = c*z(l)
-160 sum = sum + w(l)*(x - t*(t + temp))**am1
+   sum = sum + w(l)*(x - t*(t + temp))**am1
 end do
 p0 = c*gamrat*sum + 0.5*tol
 go to 200
@@ -6609,7 +6600,7 @@ go to 200
 170 sum = 0.0
 do l = 1,10
    t = 1.0 - y*z(l)*z(l)
-171 sum = sum + w(l)*t**am1
+   sum = sum + w(l)*t**am1
 end do
 p0 = 1.0 - rty*gamrat*sum
 !
@@ -7267,7 +7258,6 @@ do k = 2,m
    l = l + 1
    alpha = a(l) + aq*alpha
    p = a(l) + eta*p
-70 continue
 end do
 !
 !          Only the s1 sum is formed when ind = 0
@@ -7524,7 +7514,7 @@ zr(2) = 0.707106781186548*zr(2)
 qf(1) = qm*zr(1)/zm
 qf(2) = -qm*zr(2)/zm
 if (zm <= 17.5) go to 018
-014 rz(1) = 0.5*qz(1)/zs
+rz(1) = 0.5*qz(1)/zs
 rz(2) = -0.5*qz(2)/zs
 an = qn*qn - 0.25
 sm(1) = 0.0
@@ -7576,7 +7566,6 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
-019 continue
 end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
@@ -7599,7 +7588,7 @@ rm(3) = rm(1)
 rm(4) = rm(2)
 qn = qn + 1.0
 if (zm <= 17.5) go to 025
-021 an = qn*qn - 0.25
+an = qn*qn - 0.25
 sm(1) = 0.0
 sm(2) = 0.0
 sm(3) = 0.0
@@ -7649,7 +7638,6 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
-026 continue
 end do
 ts(1) = 0.5*(sm(2) - sm(4))
 ts(2) = -0.5*(sm(1) - sm(3))
@@ -8117,7 +8105,7 @@ do k = 1,13
 end do
 540 temp(is) = coef*(s1*sb - s2*sa)
 if (is == 2) go to 560
-550 fidal = fidal + 1.0e0
+fidal = fidal + 1.0e0
 dalpha = fidal + fnf
 is = 2
 tb = sa
@@ -8477,7 +8465,6 @@ do jn = 1,in
       akm = max(sa,2.0e0)
       kmax(i) = int(akm)
       sa = sa + sb
-20    continue
    end do
    kb = kmax(5)
    klast = kb - 1
@@ -8485,7 +8472,6 @@ do jn = 1,in
    do k = 1,klast
       kb = kb - 1
       sa = sa*wk(1) + gama(kb)
-30    continue
    end do
    z = wk(1)*sa
    az = abs(z)
@@ -8508,7 +8494,6 @@ do jn = 1,in
    do k = 1,klast
       kb = kb - 1
       sb = sb*wk(1) + beta(kb,1)
-40    continue
    end do
    ksp1 = 1
    fn2 = fn*fn
@@ -8532,14 +8517,12 @@ do jn = 1,in
          kb = kb - 1
          sa = sa*wk(1) + alfa(kb,ks)
          sb = sb*wk(1) + beta(kb,ksp1)
-50       continue
       end do
       ta = sa*rden
       tb = sb*rden
       asum = asum + ta
       bsum = bsum + tb
       if (abs(ta) <= tol .and. abs(tb) <= relb) go to 70
-60    continue
    end do
 70 continue
    bsum = bsum/(fn*wk(7))
@@ -8634,7 +8617,6 @@ do jn = 1,in
    call funjy(wk(6), wk(5), wk(4), fi, dfi)
    y(jn) = flgjy*phi*(fi*asum + dfi*bsum)/wk(7)
    fn = fn - flgjy
-170 continue
 end do
 end subroutine asjy
 
@@ -9025,7 +9007,7 @@ sr(2) = qf(1)*sm(2) + qf(2)*sm(1)
 go to 026
 020 qf(1) = sn*0.6366197723675813
 qf(2) = 0.0
-021 if (an > 1.0) go to 023
+if (an > 1.0) go to 023
 pn = an
 ly = 22
 go to 122
@@ -9102,7 +9084,7 @@ tm(1) = tm(1) - sm(3)*ts(1) + sm(4)*ts(2)
 tm(2) = tm(2) - sm(3)*ts(2) - sm(4)*ts(1)
 tm(3) = tm(3) + sm(1)*ts(1) - sm(2)*ts(2)
 tm(4) = tm(4) + sm(1)*ts(2) + sm(2)*ts(1)
-105 if ( ( az ( 1 ) ) < 0 ) go to 106
+if ( ( az ( 1 ) ) < 0 ) go to 106
 go to 110
 106 if ( ( az ( 2 ) ) < 0 ) go to 107
 go to 108
@@ -9146,9 +9128,8 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
-113 continue
 end do
-114 aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
+aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
 ts(2) = -sin(aq(1))*0.5*(exp(+aq(2)) - exp(-aq(2)))
@@ -9162,7 +9143,7 @@ tm(1) = tm(1) - ts(1)*sm(2) - ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
 tm(2) = tm(2) + ts(1)*sm(1) - ts(2)*sm(2) - ts(1)*sm(3) + ts(2)*sm(4)
 tm(3) = tm(3) + ts(1)*sm(1) - ts(2)*sm(2) + ts(1)*sm(3) - ts(2)*sm(4)
 tm(4) = tm(4) + ts(1)*sm(2) + ts(2)*sm(1) + ts(1)*sm(4) + ts(2)*sm(3)
-115 if ( ( az ( 1 ) ) < 0 ) go to 116
+if ( ( az ( 1 ) ) < 0 ) go to 116
 go to 120
 116 if ( ( az ( 2 ) ) < 0 ) go to 117
 go to 118
@@ -9376,7 +9357,7 @@ zr(2) = 0.707106781186548*zr(2)
 qf(1) = qm*zr(1)/zm
 qf(2) = -qm*zr(2)/zm
 if (zm <= 17.5) go to 017
-012 rz(1) = 0.5*qz(1)/zs
+rz(1) = 0.5*qz(1)/zs
 rz(2) = -0.5*qz(2)/zs
 an = qn*qn - 0.25
 sm(1) = 0.0
@@ -9434,7 +9415,6 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
-018 continue
 end do
 019 rm(1) = sm(1)
 rm(2) = sm(2)
@@ -9455,7 +9435,7 @@ rm(3) = rm(1)
 rm(4) = rm(2)
 qn = qn + 1.0
 if (zm <= 17.5) go to 029
-024 an = qn*qn - 0.25
+an = qn*qn - 0.25
 sm(1) = 0.0
 sm(2) = 0.0
 sm(3) = 0.0
@@ -9511,7 +9491,6 @@ do i = m,n
    tm(2) = -ce(i)*ts(2)/ss
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
-030 continue
 end do
 031 rm(1) = sm(1)
 rm(2) = sm(2)
@@ -10229,18 +10208,15 @@ do jn = 1,in
       do j = 2,k
          l = l + 1
          s1 = s1*t2 + c(l)
-20       continue
       end do
       ap = ap*t
       ak = ap*s1
       s2 = s2 + ak
       if (max(abs(ak),abs(ap)) < tol) go to 40
-30    continue
    end do
 40 continue
    t = abs(t)
    y(jn) = s2*coef*sqrt(t)*con(kk)
-50 continue
 end do
 end subroutine asik
 

@@ -1,279 +1,3 @@
-pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
-implicit none
-integer, intent(out) :: k
-integer, intent(in) :: m, mda, mdb, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
-real, intent(in) :: tau
-integer, intent(inout) :: ip(n)
-integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-real :: hmax, sm1, tmp, z
-double precision :: sm
-real, parameter :: factor = 1.e-3
-interface
-   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
-      implicit none
-      integer, intent(in) :: iue
-      integer, intent(in) :: m
-      integer, intent(in) :: mode
-      integer, intent(in) :: lpivot
-      integer, intent(in) :: l1
-      real, intent(inout) :: u(iue,m)
-      real, intent(inout) :: up
-      real, intent(inout) :: c(*)
-      integer, intent(in) :: ice
-      integer, intent(in) :: icv
-      integer, intent(in) :: ncv
-   end subroutine h12
-end interface
-!-----------------------------------------------------------------------
-!     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
-!
-!     Written by C.L. Lawson and R.J. Hanson.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
-!     For algorithmic details see algorithm hfti in chapter 14.
-!
-!     Abstract
-!
-!     This subroutine solves a linear least squares problem or a set of
-!     linear least squares problems having the same matrix but different
-!     right-side vectors.  The problem data consists of an m by n matrix
-!     A, an m by nb matrix b, and an absolute tolerance parameter tau
-!     whose usage is described below.  The nb column vectors of b
-!     represent right-side vectors for nb distinct linear least squares
-!     problems.
-!
-!     This set of problems can also be written as the matrix least
-!     squares problem
-!
-!                       ax = b,
-!
-!     Where X is the n by nb solution matrix.
-!
-!     Note that if b is the m by m identity matrix, then X will be the
-!     pseudo-inverse of A.
-!
-!     This subroutine first transforms the augmented matrix (A b) to A
-!     matrix (R C) using premultiplying Householder transformations with
-!     column interchanges.  All subdiagonal elements in the matrix R are
-!     zero and its diagonal elements satisfy
-!
-!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
-!
-!                       i = 1,...,l-1, where
-!
-!                       l = min(m,n).
-!
-!     The subroutine sets k to be the number of diagonal elements
-!     of R that exceed tau in magnitude. Then the solution of minimum
-!     Euclidean length is computed using the first k rows of (R C).
-!
-!     To be specific we suggest that the user consider an easily
-!     computable matrix NORM, such as, the maximum of all column sums of
-!     magnitudes.
-!
-!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
-!     norm of b), it is suggested that tau be set approximately equal to
-!     eps*(norm of A).
-!
-!     The entire set of parameters for hfti are
-!
-!     Input..
-!
-!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       matrix a of the least squares problem AX = b.
-!                       The first dimensioning parameter of the array
-!                       a(*,*) is mda, which must satisfy mda.GE.m
-!                       either m.GE.n or m.LT.n is permitted.  There
-!                       is no restriction on the rank of A.  the
-!                       condition mda.LT.m is considered an error.
-!
-!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
-!                       orthogonal decomposition but will make no
-!                       references to the array b(*).  If nb.GT.0
-!                       the array b(*) must initially contain the m by
-!                       nb matrix b of the least squares problem AX =
-!                       b.  if nb.GE.2 the array b(*) must be doubly
-!                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
-!                       be either doubly or singly subscripted.  In
-!                       the latter case the value of mdb is arbitrary
-!                       but it should be set to some valid integer
-!                       value such as mdb = m.
-!
-!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
-!                       is considered an error.
-!
-!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
-!                       for pseudorank determination.
-!
-!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti.
-!
-!     Output..
-!
-!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       modified by the subroutine.  These contents
-!                       are not generally required by the user.
-!
-!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
-!                       nb solution matrix X.
-!
-!     k                 SET BY THE SUBROUTINE TO INDICATE THE
-!                       pseudorank of A.
-!
-!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
-!                       norm of the residual vector for the problem
-!                       defined by the j-TH column vector of the array
-!                       b(*,*) FOR j = 1,...,nb.
-!
-!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
-!                       elements of the pre- and post-multiplying
-!                       Householder transformations used to compute
-!                       the minimum Euclidean length solution.
-!
-!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
-!                       describing the permutation of column vectors.
-!                       The contents of arrays h(*),g(*) and ip(*)
-!                       are not generally required by the user.
-!-----------------------------------------------------------------------
-!---------------------
-!
-k = 0
-ldiag = min(m,n)
-if (ldiag <= 0) go to 270
-do j = 1,ldiag
-   if (j == 1) go to 20
-!
-!     Update squared column lengths and find lmax
-!    ..
-   lmax = j
-   do l = j,n
-      h(l) = h(l) - a(j - 1,l)**2
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   z = hmax + factor*h(lmax)
-   if (z > hmax) go to 50
-!
-!     Compute squared column lengths and find lmax
-!    ..
-20 lmax = j
-   do l = j,n
-      h(l) = 0.0
-      do i = j,m
-30       h(l) = h(l) + a(i,l)**2
-      end do
-      if (h(l) > h(lmax)) lmax = l
-   end do
-   hmax = h(lmax)
-!    ..
-!     lmax has been determined
-!
-!     Do column interchanges if needed.
-!    ..
-50 ip(j) = lmax
-   if (ip(j) == j) go to 70
-   do i = 1,m
-      tmp = a(i,j)
-      a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
-   end do
-   h(lmax) = h(j)
-!
-!     Compute the j-TH transformation and apply it to A and b.
-!    ..
-70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
-end do
-!
-!     Determine the pseudorank, k, using the tolerance, tau.
-!    ..
-do j = 1,ldiag
-   if (abs(a(j,j)) <= tau) go to 100
-end do
-k = ldiag
-go to 110
-100 k = j - 1
-110 kp1 = k + 1
-!
-!     Compute the norms of the residual vectors.
-!
-if (nb <= 0) go to 140
-do jb = 1,nb
-   tmp = 0.0
-   if (kp1 > m) go to 130
-   do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
-   end do
-130 rnorm(jb) = sqrt(tmp)
-end do
-140 continue
-!                                           Special for pseudorank = 0
-if (k > 0) go to 160
-if (nb <= 0) go to 270
-do jb = 1,nb
-   do i = 1,n
-150   b(i,jb) = 0.0
-   end do
-end do
-go to 270
-!
-!     If the pseudorank is less than n compute Householder
-!     decomposition of first k rows.
-!    ..
-160 if (k == n) go to 180
-do ii = 1,k
-   i = kp1 - ii
-170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
-end do
-180 continue
-!
-!
-if (nb <= 0) go to 270
-do jb = 1,nb
-!
-!     Solve the k by k triangular system.
-!    ..
-   do l = 1,k
-      sm = 0.d0
-      i = kp1 - l
-      if (i == k) go to 200
-      ip1 = i + 1
-      do j = ip1,k
-190      sm = sm + dble(a(i,j))*dble(b(j,jb))
-      end do
-200   sm1 = dble(b(i,jb)) - sm
-210   b(i,jb) = sm1/a(i,i)
-   end do
-!
-!     Complete computation of solution vector.
-!    ..
-   if (k == n) go to 240
-   do j = kp1,n
-220   b(j,jb) = 0.0
-   end do
-   do i = 1,k
-230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
-   end do
-!
-!      RE-order the solution vector to compensate for the
-!      column interchanges.
-!    ..
-240 do jj = 1,ldiag
-      j = ldiag + 1 - jj
-      if (ip(j) == j) go to 250
-      l = ip(j)
-      tmp = b(l,jb)
-      b(l,jb) = b(j,jb)
-      b(j,jb) = tmp
-250   continue
-   end do
-end do
-!    ..
-!     The solution vectors, X, are now
-!     in the first  n  rows of the array b(,).
-!
-270 return
-end subroutine hfti
-
 pure subroutine hfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -452,7 +176,7 @@ do j = 1,ldiag
    do l = j,n
       h(l) = 0.0
       do i = j,m
-30       h(l) = h(l) + a(i,l)**2
+         h(l) = h(l) + a(i,l)**2
       end do
       if (h(l) > h(lmax)) lmax = l
    end do
@@ -467,14 +191,14 @@ do j = 1,ldiag
    do i = 1,m
       tmp = a(i,j)
       a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
+      a(i,lmax) = tmp
    end do
    h(lmax) = h(j)
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
 70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+   call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 end do
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
@@ -482,7 +206,7 @@ end do
 !    ..
 do j = 1,ldiag
    if (abs(a(j,j)) <= tau) go to 100
-90 d(j) = a(j,j)
+   d(j) = a(j,j)
 end do
 k = ldiag
 kp1 = k + 1
@@ -491,7 +215,7 @@ go to 110
 100 k = j - 1
 kp1 = j
 do j = kp1,ldiag
-105 d(j) = a(j,j)
+   d(j) = a(j,j)
 end do
 !
 !     Compute the norms of the residual vectors.
@@ -501,7 +225,7 @@ do jb = 1,nb
    tmp = 0.0
    if (kp1 > m) go to 130
    do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
+      tmp = tmp + b(i,jb)**2
    end do
 130 rnorm(jb) = sqrt(tmp)
 end do
@@ -511,7 +235,7 @@ if (k > 0) go to 160
 if (nb <= 0) go to 270
 do jb = 1,nb
    do i = 1,n
-150   b(i,jb) = 0.0
+      b(i,jb) = 0.0
    end do
 end do
 go to 270
@@ -522,7 +246,7 @@ go to 270
 160 if (k == n) go to 180
 do ii = 1,k
    i = kp1 - ii
-170 call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+   call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 end do
 180 continue
 !
@@ -538,20 +262,20 @@ do jb = 1,nb
       if (i == k) go to 200
       ip1 = i + 1
       do j = ip1,k
-190      sm = sm + dble(a(i,j))*dble(b(j,jb))
+         sm = sm + dble(a(i,j))*dble(b(j,jb))
       end do
 200   sm1 = dble(b(i,jb)) - sm
-210   b(i,jb) = sm1/a(i,i)
+      b(i,jb) = sm1/a(i,i)
    end do
 !
 !     Complete computation of solution vector.
 !    ..
    if (k == n) go to 240
    do j = kp1,n
-220   b(j,jb) = 0.0
+      b(j,jb) = 0.0
    end do
    do i = 1,k
-230   call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+      call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
    end do
 !
 !      RE-order the solution vector to compensate for the
@@ -624,14 +348,14 @@ if (mode == 2) go to 60
 !                            ****** Construct the transformation. ******
 !
 do j = l1,m
-10 cl = max(abs(u(1,j)),cl)
+   cl = max(abs(u(1,j)),cl)
 end do
 if (cl <= 0.0) go to 130
 d = u(1,lpivot)/cl
 sm = d*d
 do j = l1,m
    d = u(1,j)/cl
-20 sm = sm + dble(d*d)
+   sm = sm + dble(d*d)
 end do
 !
 sm1 = sm
@@ -661,14 +385,14 @@ do j = 1,ncv
    sm = dble(c(i2))*dble(up)
    do i = l1,m
       sm = sm + dble(c(i3))*dble(u(1,i))
-90    i3 = i3 + ice
+      i3 = i3 + ice
    end do
    if (sm == 0.d0) go to 120
    sm = sm*b
    c(i2) = c(i2) + sm*dble(up)
    do i = l1,m
       c(i4) = c(i4) + sm*dble(u(1,i))
-110   i4 = i4 + ice
+      i4 = i4 + ice
    end do
 120 continue
 end do
@@ -839,7 +563,7 @@ do j = 1,ldiag
    do l = j,n
       h(l) = 0.d0
       do i = j,m
-30       h(l) = h(l) + a(i,l)**2
+         h(l) = h(l) + a(i,l)**2
       end do
       if (h(l) > h(lmax)) lmax = l
    end do
@@ -854,14 +578,14 @@ do j = 1,ldiag
    do i = 1,m
       tmp = a(i,j)
       a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
+      a(i,lmax) = tmp
    end do
    h(lmax) = h(j)
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
 70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+   call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 end do
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
@@ -881,7 +605,7 @@ do jb = 1,nb
    tmp = 0.d0
    if (kp1 > m) go to 130
    do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
+      tmp = tmp + b(i,jb)**2
    end do
 130 rnorm(jb) = sqrt(tmp)
 end do
@@ -891,7 +615,7 @@ if (k > 0) go to 160
 if (nb <= 0) go to 270
 do jb = 1,nb
    do i = 1,n
-150   b(i,jb) = 0.d0
+      b(i,jb) = 0.d0
    end do
 end do
 go to 270
@@ -902,7 +626,7 @@ go to 270
 160 if (k == n) go to 180
 do ii = 1,k
    i = kp1 - ii
-170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+   call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 end do
 180 continue
 !
@@ -918,20 +642,20 @@ do jb = 1,nb
       if (i == k) go to 200
       ip1 = i + 1
       do j = ip1,k
-190      sm = sm + a(i,j)*b(j,jb)
+         sm = sm + a(i,j)*b(j,jb)
       end do
 200   sm1 = b(i,jb) - sm
-210   b(i,jb) = sm1/a(i,i)
+      b(i,jb) = sm1/a(i,i)
    end do
 !
 !     Complete computation of solution vector.
 !    ..
    if (k == n) go to 240
    do j = kp1,n
-220   b(j,jb) = 0.d0
+      b(j,jb) = 0.d0
    end do
    do i = 1,k
-230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+      call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
    end do
 !
 !      RE-order the solution vector to compensate for the
@@ -1133,7 +857,7 @@ do j = 1,ldiag
    do l = j,n
       h(l) = 0.d0
       do i = j,m
-30       h(l) = h(l) + a(i,l)**2
+         h(l) = h(l) + a(i,l)**2
       end do
       if (h(l) > h(lmax)) lmax = l
    end do
@@ -1148,14 +872,14 @@ do j = 1,ldiag
    do i = 1,m
       tmp = a(i,j)
       a(i,j) = a(i,lmax)
-60    a(i,lmax) = tmp
+      a(i,lmax) = tmp
    end do
    h(lmax) = h(j)
 !
 !     Compute the j-TH transformation and apply it to A and b.
 !    ..
 70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
-80 call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+   call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
 end do
 !
 !     Determine the pseudorank, k, using the tolerance, tau.
@@ -1163,7 +887,7 @@ end do
 !    ..
 do j = 1,ldiag
    if (abs(a(j,j)) <= tau) go to 100
-90 d(j) = a(j,j)
+   d(j) = a(j,j)
 end do
 k = ldiag
 kp1 = k + 1
@@ -1172,7 +896,7 @@ go to 110
 100 k = j - 1
 kp1 = j
 do j = kp1,ldiag
-105 d(j) = a(j,j)
+   d(j) = a(j,j)
 end do
 !
 !     Compute the norms of the residual vectors.
@@ -1182,7 +906,7 @@ do jb = 1,nb
    tmp = 0.d0
    if (kp1 > m) go to 130
    do i = kp1,m
-120   tmp = tmp + b(i,jb)**2
+      tmp = tmp + b(i,jb)**2
    end do
 130 rnorm(jb) = sqrt(tmp)
 end do
@@ -1192,7 +916,7 @@ if (k > 0) go to 160
 if (nb <= 0) go to 270
 do jb = 1,nb
    do i = 1,n
-150   b(i,jb) = 0.d0
+      b(i,jb) = 0.d0
    end do
 end do
 go to 270
@@ -1203,7 +927,7 @@ go to 270
 160 if (k == n) go to 180
 do ii = 1,k
    i = kp1 - ii
-170 call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+   call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
 end do
 180 continue
 !
@@ -1219,20 +943,20 @@ do jb = 1,nb
       if (i == k) go to 200
       ip1 = i + 1
       do j = ip1,k
-190      sm = sm + a(i,j)*b(j,jb)
+         sm = sm + a(i,j)*b(j,jb)
       end do
 200   sm1 = b(i,jb) - sm
-210   b(i,jb) = sm1/a(i,i)
+      b(i,jb) = sm1/a(i,i)
    end do
 !
 !     Complete computation of solution vector.
 !    ..
    if (k == n) go to 240
    do j = kp1,n
-220   b(j,jb) = 0.d0
+      b(j,jb) = 0.d0
    end do
    do i = 1,k
-230   call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+      call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
    end do
 !
 !      RE-order the solution vector to compensate for the
@@ -1304,14 +1028,14 @@ if (mode == 2) go to 60
 !                            ****** Construct the transformation. ******
 !
 do j = l1,m
-10 cl = max(abs(u(1,j)),cl)
+   cl = max(abs(u(1,j)),cl)
 end do
 if (cl <= 0.d0) go to 130
 d = u(1,lpivot)/cl
 sm = d*d
 do j = l1,m
    d = u(1,j)/cl
-20 sm = sm + d*d
+   sm = sm + d*d
 end do
 !
 cl = cl*sqrt(sm)
@@ -1340,14 +1064,14 @@ do j = 1,ncv
    sm = c(i2)*up
    do i = l1,m
       sm = sm + c(i3)*u(1,i)
-90    i3 = i3 + ice
+      i3 = i3 + ice
    end do
    if (sm == 0.d0) go to 120
    sm = sm*b
    c(i2) = c(i2) + sm*up
    do i = l1,m
       c(i4) = c(i4) + sm*u(1,i)
-110   i4 = i4 + ice
+      i4 = i4 + ice
    end do
 120 continue
 end do
@@ -2947,7 +2671,6 @@ do j = 1,n
    t = snrm2(m,w(1,j),1)
    if (t /= zero) t = one/t
    d(j) = t
-130 continue
 end do
 140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
 if (key == 8) tau = max(srelpr,prgopt(last + 2))
@@ -2961,7 +2684,6 @@ link = next
 go to 110
 160 do j = 1,n
    call sscal(m, d(j), w(1,j), 1)
-170 continue
 end do
 go to 220
 !
@@ -2991,7 +2713,6 @@ l1 = min(m,l)
 !     Compute scale factor to apply to equal. Constraint equas.
 do j = 1,n
    wd(j) = sasum(m,w(1,j),1)
-230 continue
 end do
 imax = isamax(n,wd,1)
 eanorm = wd(imax)
@@ -3012,7 +2733,6 @@ do i = 1,m
    itemp = 1
 250 scale(i) = t
    itype(i) = itemp
-260 continue
 end do
 !
 !     Set the soln vector x(*) to zero and the col interchange
@@ -3021,7 +2741,6 @@ x(1) = zero
 call scopy(n, x, 0, x, 1)
 do i = 1,n
    ipivot(i) = i
-270 continue
 end do
 go to 10
 280 continue
@@ -3106,7 +2825,6 @@ end do
 if (.not.(lp1 <= nsoln)) go to 390
 do j = lp1,nsoln
    x(j) = x(j) + alpha*(z(j) - x(j))
-380 continue
 end do
 390 feasbl = .false.
 go to 410
@@ -3120,7 +2838,6 @@ go to 410
    t = w(i,jcon)
    call scopy(n - jcon, w(i,jcon + 1), mdw, w(i,jcon), mdw)
    w(i,n) = t
-420 continue
 end do
 !
 !     Update permuted index vector to reflect this shift and swap.
@@ -3128,7 +2845,6 @@ itemp = ipivot(jcon)
 if (.not.(jcon < n)) go to 440
 do i = jcon,nm1
    ipivot(i) = ipivot(i + 1)
-430 continue
 end do
 440 ipivot(n) = itemp
 !
@@ -3195,7 +2911,6 @@ go to 450
 570 if (.not.(lp1 <= nsoln)) go to 590
 do jcon = lp1,nsoln
    if (x(jcon) <= zero) go to 600
-580 continue
 end do
 590 feasbl = .true.
 600 continue
@@ -3239,10 +2954,8 @@ do j = nsp1,n
    if (.not.(nsoln < m)) go to 710
    do i = nsp1,m
       sm = sm + scale(i)*w(i,j)*w(i,np1)
-700   continue
    end do
 710 wd(j) = sm
-720 continue
 end do
 730 go to 750
 740 if (pos .or. done) go to 970
@@ -3258,7 +2971,6 @@ do j = nsp1,n
    wmax = wd(j)
    iwmax = j
 760 continue
-770 continue
 end do
 780 if (.not.(wmax <= zero)) go to 790
 done = .true.
@@ -3379,7 +3091,6 @@ go to 1110
 if (.not.(0 < krank .and. krank < l)) go to 1030
 do i = 1,krank
    call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
-1020 continue
 end do
 !
 !     Fill in trailing zeroes for constrained variables not in soln.
@@ -3396,13 +3107,11 @@ call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 1060 ipivot(j) = ipivot(i)
    ipivot(i) = j
    call sswap(1, x(j), 1, x(i), 1)
-1070 continue
 end do
 !
 !     Rescale the soln using the col scaling.
 do j = 1,n
    x(j) = x(j)*d(j)
-1080 continue
 end do
 if (.not.(niv < m)) go to 1100
 do i = niv1,m
@@ -3410,7 +3119,6 @@ do i = niv1,m
    if (i <= me) t = t/alamda
    t = (scale(i)*t)*t
    rnorm = rnorm + t
-1090 continue
 end do
 1100 rnorm = sqrt(rnorm)
 return
@@ -3438,7 +3146,6 @@ do jj = isol,nsoln
 1160 z(j) = temp(i)/w(i,j)
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
 1170 continue
-1180 continue
 end do
 !
 1270 select case ( igo958 )
@@ -3566,7 +3273,6 @@ do jj = ip1,m
    w(j,i) = zero
    call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
 90 j = jm1
-100 continue
 end do
 go to 140
 110 continue
@@ -3599,7 +3305,6 @@ factor = alsq
 do i = krp1,me
    if (l > 0) w(i,1) = zero
    call scopy(l, w(i,1), 0, w(i,1), mdw)
-170 continue
 end do
 !
 !     Determine the rank of the remaining equality constraint
@@ -3711,7 +3416,6 @@ do jj = irp1,m
    w(j,i) = zero
    call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 340 j = jm1
-350 continue
 end do
 355 continue
 !
@@ -3727,9 +3431,7 @@ rn = zero
 do i1 = ir,m
    do j1 = ip1,n
       rn = amax1(rn,scale(i1)*w(i1,j1)**2)
-360   continue
    end do
-370 continue
 end do
 indep = t > tau**2*rn
 !
@@ -3764,7 +3466,6 @@ if (.not.(krank < l)) go to 450
 do i = 1,krank
    j = krp1 - i
    call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j - 1)
-440 continue
 end do
 450 niv = krank + nsoln - l
 niv1 = niv + 1
@@ -3791,7 +3492,6 @@ if (.not.(ir /= 1 .and. (.not.recalc))) go to 480
 !     Update col SS =Sum of squares.
 do j = i,lend
    h(j) = h(j) - scale(ir - 1)*w(ir - 1,j)**2
-470 continue
 end do
 !
 !     Test for numerical accuracy.
@@ -3804,9 +3504,7 @@ do j = i,lend
    h(j) = zero
    do k = ir,mend
       h(j) = h(j) + scale(k)*w(k,j)**2
-490   continue
    end do
-500 continue
 end do
 !
 !     Find col with largest SS.
@@ -3844,7 +3542,6 @@ do j = 1,mend
    go to 540
 530 rn = rn + t
 540 continue
-550 continue
 end do
 indep = rn > tau**2*sn
 go to 590
@@ -4316,7 +4013,7 @@ if (n == 1) go to 260
 do j = 2,n
    jm1 = j - 1
    do i = 1,jm1
-240   qr(i,j) = qr(j,i)
+      qr(i,j) = qr(j,i)
    end do
 end do
 !
@@ -4613,7 +4310,6 @@ do i = 1,m
    res(i) = 0.0
    y1(i) = 0.0
    if (w(i) == 0.0) kz = kz + 1
-10 continue
 end do
 do ns = 1,n
    j = m + ns
@@ -6442,7 +6138,6 @@ iter = 0
 do i = 1,n
    wrk(i,1) = xpls(i)
    wrk(i,2) = 1.0
-10 continue
 end do
 fscale = 1.0
 !
@@ -6845,7 +6540,6 @@ rgx = 0.0
 do i = 1,n
    grd = abs(gpls(i))*max(abs(xpls(i)),typsiz(i))
    rgx = max(rgx, grd)
-20 continue
 end do
 jerr = 1
 if (rgx > gradtl*d) go to 30
@@ -6954,7 +6648,6 @@ xmin = 1.e-5*spmpar(3)
 do i = 1,n
    t = max(abs(x(i)), 1.e-20)
    xmin = min(t, xmin)
-10 continue
 end do
 !
 c = 1.e3
@@ -6962,7 +6655,6 @@ if (mo /= 0) c = 1.e2
 big = c*xmin
 do i = 1,n
    if (abs(x(i)) >= big) go to 30
-20 continue
 end do
 ierr = 0
 return
@@ -7171,7 +6863,6 @@ iretcd = 2
 tmp = 0.0
 do i = 1,n
    tmp = tmp + (p(i)/typsiz(i))**2
-10 continue
 end do
 sln = sqrt(tmp)
 !
@@ -8255,7 +7946,6 @@ do i = 1, n
 !
    s2 = s2 + xabs**2
 80 continue
-90 continue
 end do
 !
 !     Calculation of norm.
@@ -8894,7 +8584,6 @@ do j = 1, n
    wa1(j) = qtb(j)
    if (r(j,j) == zero .and. nsing == n) nsing = j - 1
    if (nsing < n) wa1(j) = zero
-10 continue
 end do
 if (nsing < 1) go to 50
 do k = 1, nsing
@@ -9995,7 +9684,7 @@ if (m < 2 .or. n0 < 2 .or. ms > m .or. ka < m) &
    & go to 12
 do i = 1,m
    if (b0(i) < 0.0) go to 12
-10 xb(i) = 0.0
+   xb(i) = 0.0
 end do
 rtol = xmax
 do i = 1,n0
@@ -10023,15 +9712,15 @@ ind = 0
 !
 30 num = n0 + m
 do i = 1,m
-31 ibasis(i) = n0 + i
+   ibasis(i) = n0 + i
 end do
 32 bflag = 0
 do i = 1,n
-33 basis(i) = 0
+   basis(i) = 0
 end do
 do i = 1,m
    ki = ibasis(i)
-34 basis(ki) = 1
+   basis(ki) = 1
 end do
 if (ind == 1) go to 100
 !
@@ -10041,7 +9730,7 @@ rerr = rerrmn
 do j = 1,m
    xb(j) = b0(j)
    do i = 1,m
-40    bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(j,j) = 1.0
 end do
@@ -10068,7 +9757,7 @@ do i = 1,m
 end do
 if (iend == m) go to 22
 do i = 1,m
-103 ibasis(i) = index(i)
+   ibasis(i) = index(i)
 end do
 !
 !            REINVERSION of the basis matrix
@@ -10081,20 +9770,20 @@ do j = 1,m
    go to 120
 !
 110 do i = 1,m
-111   bi(i,j) = a(i,kj)
+      bi(i,j) = a(i,kj)
    end do
    go to 132
 !
 120 l = kj - n0
    do i = 1,m
-121   bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(l,j) = 1.0
    go to 132
 !
 130 l = kj - n0
    do i = 1,m
-131   bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(l,j) = -1.0
 132 continue
@@ -10114,7 +9803,7 @@ do j = 1,m
    go to 142
 140 sum = 0.0
    do i = 1,m
-141   sum = sum + abs(a(i,kj))
+      sum = sum + abs(a(i,kj))
    end do
 142 bnorm = max(bnorm,sum)
 end do
@@ -10123,7 +9812,7 @@ binorm = 0.0
 do j = 1,m
    sum = 0.0
    do i = 1,m
-150   sum = sum + abs(bi(i,j))
+      sum = sum + abs(bi(i,j))
    end do
    binorm = max(binorm,sum)
 end do
@@ -10133,7 +9822,7 @@ bflag = 0
 !
 !                 Recalculation of xb
 !
-180 do i = 1,m
+do i = 1,m
    dsump = 0.d0
    dsumn = 0.d0
    do l = 1,m
@@ -10185,7 +9874,7 @@ go to 250
 !             variables into r. then terminate.
 !
 220 do j = 1,n
-221 r(j) = 0.0
+   r(j) = 0.0
 end do
 do i = 1,m
    ki = ibasis(i)
@@ -10438,7 +10127,7 @@ xb(ip) = const
    if (bi(ip,j) == 0.0) go to 512
    const = bi(ip,j)/y(ip)
    do i = 1,m
-511   bi(i,j) = bi(i,j) - const*y(i)
+      bi(i,j) = bi(i,j) - const*y(i)
    end do
    bi(ip,j) = const
 512 continue
@@ -10605,7 +10294,7 @@ do j = 1,m
       il = ibasis(l)
       if (il <= n0) dsum = dsum + dble(c(il)*bi(l,j))
    end do
-682 y(j) = dsum
+   y(j) = dsum
 end do
 !
 do j = 1,n0
@@ -10641,7 +10330,7 @@ do j = 1,n0
 703 continue
 end do
 !
-710 if (n0 == ns) go to 720
+if (n0 == ns) go to 720
 jmin = n0 + 1
 do j = jmin,ns
    if (basis(j) == 0) go to 711
@@ -10693,7 +10382,7 @@ end do
 !
 if (m0 /= 0) go to 841
 do i = 1,m
-840 r(i) = b0(i) - y(i)
+   r(i) = b0(i) - y(i)
 end do
 go to 850
 841 do i = 1,m
@@ -10774,4 +10463,58 @@ end do
 z = dsum
 go to 220
 end subroutine smplx1
+
+subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
+   & numle,numge,bi,wk,iwk)
+implicit none
+integer, intent(inout) :: ibasis, ind
+integer :: ita(*)
+integer, intent(inout) :: iter, iwk(*)
+integer :: jta(*), m
+integer, intent(in) :: mxiter, n0, numge, numle
+real :: b0(m)
+real, intent(inout) :: bi(m,m)
+real :: c(n0), ta(*)
+real, intent(inout) :: wk(*), x(*), z
+integer :: ip
+real :: eps0, rerr, rerrmn, rerrmx
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!     Simplex procedure for solving linear programming problems
+!-----------------------------------------------------------------------
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!------------------------
+!     Initial version  DEC  1977
+!     LAST UPDATE      OCT  1990
+!------------------------
+dimension ibasis(m)
+!------------------------
+!     dimension x(n0+numle+numge)
+!     dimension wk(2*m),iwk(2*m+n0)
+!------------------------
+!
+!     ********** eps0 is a machine dependent parameter. Assign eps0
+!                the value U where U is the smallest positive floating
+!                point number such that 1.0 + U .GT. 1.0.
+!
+eps0 = spmpar(1)
+!
+!------------------------
+rerrmn = 10.0*eps0
+rerrmx = 1.e-4
+if (eps0 < 1.e-13) rerrmx = 1.e-5
+!
+ip = m + n0 + 1
+call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
+   & eps0,rerrmn,rerrmx,rerr,numle,numge,bi, &
+   & wk(1),wk(m + 1),iwk(1),iwk(ip))
+end subroutine ssplx
 

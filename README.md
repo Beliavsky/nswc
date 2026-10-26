@@ -24,6 +24,7 @@ viewable code partitions.
 - [Numerical test programs](docs/numerical-tests.md)
 - [Explicit typing progress](docs/explicit-typing.md)
 - [Compiler warning review](docs/compiler-warnings.md)
+- [Unused-label cleanup](docs/unused-labels.md)
 - [Optional procedure interfaces](docs/interfaces.md)
 - [Original report cover](scans/page_0001.png)
 - [Recommended module source for new programs](nswc_mod.f90)

@@ -19,6 +19,7 @@ from modernize_deleted_do import transform as modernize_deleted_loops
 from modernize_arithmetic_if import transform as modernize_arithmetic_if
 from modernize_remaining_features import transform as finish_remaining
 from blktri_empty_factors import transform_fixed as correct_empty_factors
+from remove_unused_labels import transform as clean_unused_labels
 from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,7 +171,7 @@ def main():
     after = remove_final_returns(after, cleanup_report)
     if cleanup_report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise RuntimeError('Terminal RETURN cleanup report is stale')
-    if correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data))) != (ROOT / "nswc.f").read_bytes():
+    if clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data)))) != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
         raise RuntimeError('Declaration ordering report is stale')
@@ -199,7 +200,7 @@ def main():
                 inventory = normalize_reviewed_symbols(inventories[0], inventory)
             inventories.append(inventory)
         maintained = Path(folder) / 'maintained.f'
-        maintained.write_bytes(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data))))
+        maintained.write_bytes(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(after)).data)))))
         result = subprocess.run([compiler, '-fsyntax-only', '-std=legacy',
                                  '-fno-allow-argument-mismatch', str(maintained)],
                                 cwd=folder, capture_output=True, text=True, timeout=180,

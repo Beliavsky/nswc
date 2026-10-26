@@ -1,57 +1,3 @@
-subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
-   & numle,numge,bi,wk,iwk)
-implicit none
-integer, intent(inout) :: ibasis, ind
-integer :: ita(*)
-integer, intent(inout) :: iter, iwk(*)
-integer :: jta(*), m
-integer, intent(in) :: mxiter, n0, numge, numle
-real :: b0(m)
-real, intent(inout) :: bi(m,m)
-real :: c(n0), ta(*)
-real, intent(inout) :: wk(*), x(*), z
-integer :: ip
-real :: eps0, rerr, rerrmn, rerrmx
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!     Simplex procedure for solving linear programming problems
-!-----------------------------------------------------------------------
-!     Written by Alfred H. Morris Jr.
-!        naval surface weapons center
-!        Dahlgren, Virginia
-!------------------------
-!     Initial version  DEC  1977
-!     LAST UPDATE      OCT  1990
-!------------------------
-dimension ibasis(m)
-!------------------------
-!     dimension x(n0+numle+numge)
-!     dimension wk(2*m),iwk(2*m+n0)
-!------------------------
-!
-!     ********** eps0 is a machine dependent parameter. Assign eps0
-!                the value U where U is the smallest positive floating
-!                point number such that 1.0 + U .GT. 1.0.
-!
-eps0 = spmpar(1)
-!
-!------------------------
-rerrmn = 10.0*eps0
-rerrmx = 1.e-4
-if (eps0 < 1.e-13) rerrmx = 1.e-5
-!
-ip = m + n0 + 1
-call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
-   & eps0,rerrmn,rerrmx,rerr,numle,numge,bi, &
-   & wk(1),wk(m + 1),iwk(1),iwk(ip))
-end subroutine ssplx
-
 pure subroutine ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,r,z, &
    & iter,mxiter,eps0,rerrmn,rerrmx,rerr,numle,numge, &
    & bi,xb,y,basis,index)
@@ -170,7 +116,7 @@ ms = numle + numge
 if (m < 2 .or. n0 < 2 .or. ms > m) go to 12
 do i = 1,m
    if (b0(i) < 0.0) go to 12
-10 xb(i) = 0.0
+   xb(i) = 0.0
 end do
 rtol = xmax
 do i = 1,n0
@@ -198,15 +144,15 @@ ind = 0
 !
 30 num = n0 + m
 do i = 1,m
-31 ibasis(i) = n0 + i
+   ibasis(i) = n0 + i
 end do
 32 bflag = 0
 do i = 1,n
-33 basis(i) = 0
+   basis(i) = 0
 end do
 do i = 1,m
    ki = ibasis(i)
-34 basis(ki) = 1
+   basis(ki) = 1
 end do
 if (ind == 1) go to 100
 !
@@ -216,7 +162,7 @@ rerr = rerrmn
 do j = 1,m
    xb(j) = b0(j)
    do i = 1,m
-40    bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(j,j) = 1.0
 end do
@@ -243,7 +189,7 @@ do i = 1,m
 end do
 if (iend == m) go to 22
 do i = 1,m
-103 ibasis(i) = index(i)
+   ibasis(i) = index(i)
 end do
 !
 !            REINVERSION of the basis matrix
@@ -256,27 +202,27 @@ do j = 1,m
    go to 120
 !
 110 do i = 1,m
-111   bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    lmin = ita(kj)
    lmax = ita(kj + 1) - 1
    if (lmin > lmax) go to 132
    do ll = lmin,lmax
       l = jta(ll)
-112   bi(l,j) = ta(ll)
+      bi(l,j) = ta(ll)
    end do
    go to 132
 !
 120 l = kj - n0
    do i = 1,m
-121   bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(l,j) = 1.0
    go to 132
 !
 130 l = kj - n0
    do i = 1,m
-131   bi(i,j) = 0.0
+      bi(i,j) = 0.0
    end do
    bi(l,j) = -1.0
 132 continue
@@ -298,7 +244,7 @@ do j = 1,m
    lmin = ita(kj)
    lmax = ita(kj + 1) - 1
    do ll = lmin,lmax
-141   sum = sum + abs(ta(ll))
+      sum = sum + abs(ta(ll))
    end do
 142 bnorm = max(bnorm,sum)
 end do
@@ -307,7 +253,7 @@ binorm = 0.0
 do j = 1,m
    sum = 0.0
    do i = 1,m
-150   sum = sum + abs(bi(i,j))
+      sum = sum + abs(bi(i,j))
    end do
    binorm = max(binorm,sum)
 end do
@@ -317,7 +263,7 @@ bflag = 0
 !
 !                 Recalculation of xb
 !
-180 do i = 1,m
+do i = 1,m
    dsump = 0.d0
    dsumn = 0.d0
    do l = 1,m
@@ -369,7 +315,7 @@ go to 250
 !             variables into r. then terminate.
 !
 220 do j = 1,n
-221 r(j) = 0.0
+   r(j) = 0.0
 end do
 do i = 1,m
    ki = ibasis(i)
@@ -421,7 +367,7 @@ do ll = lmin,lmax
    amax = max(abs(ta(ll)),amax)
 end do
 !
-310 rerr1 = rerrmx*amax
+rerr1 = rerrmx*amax
 do i = 1,m
    dsum = 0.d0
    do ll = lmin,lmax
@@ -619,7 +565,7 @@ xb(ip) = const
    if (bi(ip,j) == 0.0) go to 512
    const = bi(ip,j)/y(ip)
    do i = 1,m
-511   bi(i,j) = bi(i,j) - const*y(i)
+      bi(i,j) = bi(i,j) - const*y(i)
    end do
    bi(ip,j) = const
 512 continue
@@ -793,7 +739,7 @@ do j = 1,m
       il = ibasis(l)
       if (il <= n0) dsum = dsum + dble(c(il)*bi(l,j))
    end do
-682 y(j) = dsum
+   y(j) = dsum
 end do
 !
 do j = 1,n0
@@ -838,7 +784,7 @@ do j = 1,n0
 703 continue
 end do
 !
-710 if (n0 == ns) go to 720
+if (n0 == ns) go to 720
 jmin = n0 + 1
 do j = jmin,ns
    if (basis(j) == 0) go to 711
@@ -906,7 +852,7 @@ do i = 1,m
    r(i) = dble(b0(i)) - dt
 end do
 !
-850 rerr1 = min(rerrmx,rerr)
+rerr1 = min(rerrmx,rerr)
 do i = 1,m
    y(i) = 0.0
    nswc_ai_r4 = xb ( i )
@@ -1031,7 +977,7 @@ do k = 1,iend
 20 l = lk - kcol
    lj0 = mcol + l
    do lj = lj0,max,ka
-21    a(lj) = -a(lj)
+      a(lj) = -a(lj)
    end do
 !
 30 l = lk - kcol
@@ -1042,7 +988,7 @@ do k = 1,iend
       c = a(kj)
       a(kj) = a(lj)
       a(lj) = c
-31    lj = lj + ka
+      lj = lj + ka
    end do
 32 kcol = kcol + ka
 end do
@@ -1091,7 +1037,7 @@ do kcount = ibeg,nm1
       c = a(kj)
       a(kj) = a(lj)
       a(lj) = c
-121   lj = lj + ka
+      lj = lj + ka
    end do
 !
 !       Compute the k-TH row of U (k=ibeg,...,n-1)
@@ -1100,14 +1046,14 @@ do kcount = ibeg,nm1
    if (k > ibeg) go to 140
    kj0 = kk + ka
    do kj = kj0,max,ka
-131   a(kj) = a(kj)/c
+      a(kj) = a(kj)/c
    end do
    go to 160
 !
 140 kl = mcol + k
    do l = ibeg,km1
       temp(l) = a(kl)
-141   kl = kl + ka
+      kl = kl + ka
    end do
 !
    kj0 = kk + ka
@@ -1116,9 +1062,9 @@ do kcount = ibeg,nm1
       dsum = -a(kj)
       do l = ibeg,km1
          lj = jcol + l
-150      dsum = dsum + dble(temp(l))*dble(a(lj))
+         dsum = dsum + dble(temp(l))*dble(a(lj))
       end do
-151   a(kj) = sngl(-dsum)/c
+      a(kj) = sngl(-dsum)/c
    end do
 !
 !      Compute the k-TH column of L (k=ibeg+1,...,n)
@@ -1130,7 +1076,7 @@ do kcount = ibeg,nm1
    kk = kcol + k
    do l = ibeg,km1
       lk = kcol + l
-161   temp(l) = a(lk)
+      temp(l) = a(lk)
    end do
 !
    do i = k,n
@@ -1138,9 +1084,9 @@ do kcount = ibeg,nm1
       dsum = 0.d0
       do l = ibeg,km1
          dsum = dsum + dble(a(il))*dble(temp(l))
-170      il = il + ka
+         il = il + ka
       end do
-171   a(il) = dble(a(il)) - dsum
+      a(il) = dble(a(il)) - dsum
    end do
 end do
 !
@@ -1169,12 +1115,12 @@ do j = ibeg,nm1
       kl = kj
       do l = j,km1
          dsum = dsum + dble(a(kl)*temp(l))
-210      kl = kl + ka
+         kl = kl + ka
       end do
       a(kj) = sngl(-dsum)/a(kl)
-211   temp(k) = a(kj)
+      temp(k) = a(kj)
    end do
-212 jj = jj + i
+   jj = jj + i
 end do
 213 a(nn) = 1.0/a(nn)
 if (n == 1) return
@@ -1188,7 +1134,7 @@ do nmk = 1,nm1
    do l = lmin,n
       temp(l) = a(kl)
       a(kl) = 0.0
-230   kl = kl + ka
+      kl = kl + ka
    end do
 !
    kj0 = mcol + k
@@ -1197,9 +1143,9 @@ do nmk = 1,nm1
       lj = (kj - k) + lmin
       do l = lmin,n
          dsum = dsum + dble(temp(l)*a(lj))
-240      lj = lj + 1
+         lj = lj + 1
       end do
-241   a(kj) = -dsum
+      a(kj) = -dsum
    end do
 end do
 !
@@ -1217,7 +1163,7 @@ do nmj = 1,nm1
       ik = ik + 1
       c = a(ij)
       a(ij) = a(ik)
-250   a(ik) = c
+      a(ik) = c
    end do
 251 jcol = jcol - ka
 end do
@@ -2860,7 +2806,7 @@ do i = 1,6
    if (.not. cnd) go to 200
    x2 = x1
    if (x1 == xl) go to 400
-30 x1 = 10.0*x1
+   x1 = 10.0*x1
 end do
 !
 !     Search for x in the interval (x1, x2) by bisection
@@ -3427,7 +3373,6 @@ do k = 1,7
    ak = ak + 1.0e+00
    kk = 16 - k
    si(kk) = si(k)
-10 continue
 end do
 ier = 0
 nres = 0
@@ -4370,7 +4315,6 @@ do last = 2,limit
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -7108,10 +7052,10 @@ dn = n
 dnp1 = np1
 !
 do i = 1,lp1
-10 p(i) = zero
+   p(i) = zero
 end do
 do i = 1,mp1
-11 q(i) = zero
+   q(i) = zero
 end do
 q(1) = one
 !
@@ -7128,13 +7072,13 @@ do i = 1,k
    z = -b1*cos(pi*(xi/dn))
    x(i + 1) = z + xm1
    ii = np1 - i
-20 x(ii) = xm1 - z
+   x(ii) = xm1 - z
 end do
 !
 !     Evaluate phi at the critical points
 !
 30 do i = 1,np1
-31 xval(i) = phi(x(i))
+   xval(i) = phi(x(i))
 end do
 kount = 1
 !
@@ -7147,7 +7091,7 @@ do i = 1,np1
    c(i,1) = one
    if (l <= 0) go to 42
    do j = 2,lp1
-41    c(i,j) = c(i,j - 1)*xval(i)
+      c(i,j) = c(i,j - 1)*xval(i)
    end do
 42 d(i) = f(x(i))
    if (m <= 0) go to 44
@@ -7155,7 +7099,7 @@ do i = 1,np1
    c(i,k) = xval(i)*templ
    if (k > lpm) go to 44
    do j = k,lpm
-43    c(i,j + 1) = c(i,j)*xval(i)
+      c(i,j + 1) = c(i,j)*xval(i)
    end do
 44 c(i,np1) = sign*g(x(i))
 end do
@@ -7182,10 +7126,10 @@ if (kount <= 4 .and. test > eps0*abs(xlb)) go to 40
 !
 do i = 2,mp1
    lpi = l + i
-60 q(i) = d(lpi)
+   q(i) = d(lpi)
 end do
 61 do i = 1,lp1
-62 p(i) = d(i)
+   p(i) = d(i)
 end do
 !
 !     Search for new critical points
@@ -7201,7 +7145,7 @@ h(1) = tau*(x(2) - x(1))
 h(2) = -h(1)
 go to 72
 70 do i = 2,n
-71 h(i) = tau*(x(i + 1) - x(i - 1))
+   h(i) = tau*(x(i + 1) - x(i - 1))
 end do
 h(1) = half*h(2)
 h(np1) = -half*h(n)
@@ -7289,7 +7233,7 @@ i = np1
 do ii = 2,np1
    err(i) = err(i - 1)
    x(i) = x(i - 1)
-101 i = i - 1
+   i = i - 1
 end do
 x(1) = z2
 err(1) = u*z3
@@ -7315,7 +7259,7 @@ z = abs(xlb)
 if (z3 <= z) go to 120
 do i = 1,n
    err(i) = err(i + 1)
-112 x(i) = x(i + 1)
+   x(i) = x(i + 1)
 end do
 x(np1) = z2
 err(np1) = u*z3
@@ -7335,7 +7279,7 @@ sum = zero
 sign = one
 do i = 1,np1
    sum = sum + sign*err(i)
-130 sign = -sign
+   sign = -sign
 end do
 xlb = sum/dnp1
 itno = itno + 1
@@ -7395,14 +7339,14 @@ p = d(lp1)
 if (l <= 0) go to 20
 do i = 1,l
    ii = lp1 - i
-10 p = p*phit + d(ii)
+   p = p*phit + d(ii)
 end do
 !
 20 q = zero
 if (m <= 0) go to 22
 do i = 1,m
    ii = np1 - i
-21 q = (q + d(ii))*phit
+   q = (q + d(ii))*phit
 end do
 22 q = q + one
 !
@@ -7487,7 +7431,7 @@ common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
    & leftx, nintrp, rightx
 !
 !
-10 a = xlft
+a = xlft
 b = xrgt
 accur = epsln
 degree = ndeg
@@ -7502,7 +7446,6 @@ do k = 1,nbreak
    dbreak(k) = kdiff(k)
    bleft(k) = vallft(k)
    bright(k) = valrgt(k)
-20 continue
 end do
 30 continue
 !
@@ -7827,7 +7770,6 @@ if (xbreak(1) < a .or. xbreak(nbreak) > b) go to 230
 if (nbreak == 1) go to 110
 do j = 2,nbreak
    if (xbreak(j - 1) >= xbreak(j)) go to 230
-100 continue
 end do
 110 limsm = (degree - 1)/2
 do j = 1,nbreak
@@ -8050,7 +7992,6 @@ dx = (xright(nstack) - xleft(nstack))/aj
 do j = 1,nintrp
    aj = j
    xintrp(j) = xleft(nstack) + aj*dx
-10 continue
 end do
 !
 !             Get left and right f-values, put f-value in first element
@@ -8150,7 +8091,6 @@ do j = 2,4
    f2 = fit(pj)
    er = abs(f1 - f2)**p
    errint = errint + abs(f(pj,fdumb) - fit(pj))**p*weight(j)
-10 continue
 end do
 errint = errint*ba
 go to 40
@@ -8235,13 +8175,11 @@ nrl = nr + nl
 !         Put X-values in a single array with nddx = nl+nr+ni points
 do nddx = 1,nl
    xdd(nddx) = xleft(nstack)
-10 continue
 end do
 nddx = nl
 do k = 1,nr
    nddx = nddx + 1
    xdd(nddx) = xright(nstack)
-20 continue
 end do
 !            Check if there are any interpolation points to add to XDD
 if (ni == 0) go to 40
@@ -8255,7 +8193,6 @@ end do
 !         Top border
 do idif = 1,nl
    ddtemp(idif,1) = fleft(idif)/factor(idif)
-50 continue
 end do
 if (nl1 == 0) go to 70
 !                   Bottom border
@@ -8351,7 +8288,6 @@ polydd = ddtemp(degree + 1,1)
 do k = 1,degree
    j = degree + 1 - k
    polydd = ddtemp(j,1) + (x - xdd(j))*polydd
-10 continue
 end do
 end function polydd
 
@@ -8599,7 +8535,6 @@ do k = 1,ni1
    do ii = 1,ni1
       i = ni - ii
       powers(i) = powers(i) + (xr - xtemp(i))*powers(i + 1)
-50    continue
    end do
 !              Shift the Newton expansion pts. Up, put in one more xr
    do ii = 1,ni1
@@ -8607,7 +8542,6 @@ do k = 1,ni1
       xtemp(i + 1) = xtemp(i)
    end do
    xtemp(1) = xr
-70 continue
 end do
 80 continue
 !             Shift the coefficients to the top of the powers array
@@ -8732,7 +8666,7 @@ do i = 2,4
    sc(i) = .5*sc(i - 1)
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
-10 fv(i + 2) = cmplx(cos(ang),-sin(ang))
+   fv(i + 2) = cmplx(cos(ang),-sin(ang))
 end do
 !
 !  Start execution.
@@ -8762,7 +8696,7 @@ do i = is,32,is
    iq = ip(i)
    v = v*fv(km)
    a(iq) = f(z + v)
-40 a(iq - 1) = f(z - v)
+   a(iq - 1) = f(z - v)
 end do
 ln = 2
 jn = 1
@@ -8777,12 +8711,12 @@ do l = 1,km
          it = i + jn
          t = a(it)*u
          a(it) = a(i) - t
-50       a(i) = a(i) + t
+         a(i) = a(i) + t
       end do
-60    u = u*w
+      u = u*w
    end do
    ln = ln + ln
-70 jn = jn + jn
+   jn = jn + jn
 end do
 cx = 0.0
 b = 1.0
@@ -8802,12 +8736,12 @@ if (m <= 1) go to 100
 !
 err(1) = cx*eps
 do i = 2,n
-90 err(i) = err(i - 1)/r
+   err(i) = err(i - 1)/r
 end do
 100 sf = sc(kl)
 do i = 1,ix
    a(i) = mult(sf,a(i))
-110 sf = sf/r
+   sf = sf/r
 end do
 l1 = l2
 l2 = 1
@@ -8823,12 +8757,12 @@ do j = 1,3
    s = a(ix)
    do i = 2,ix
       ia = ix + 1 - i
-120   s = s*rq + a(ia)
+      s = s*rq + a(ia)
    end do
    cp = abs(s)
    if (cp > sp) sp = cp
    cm = abs(s - f(z + rq))
-130 if (cm > sr) sr = cm
+   if (cm > sr) sr = cm
 end do
 if (sr > 1.e-3*sp) go to 150
 lf = 1
@@ -8856,7 +8790,7 @@ if (m <= 0) go to 30
 !  The results for the last three radii are stored.
 !
 do i = 1,n
-200 rt(i,m) = a(i)
+   rt(i,m) = a(i)
 end do
 if (m == 1) go to 220
 !
@@ -8864,7 +8798,7 @@ if (m == 1) go to 220
 !
 do i = 1,n
    xk = rt(i,m - 1) - rt(i,m)
-210 rt(i,m - 1) = rt(i,m) - mult(fc(m - 1),xk)
+   rt(i,m - 1) = rt(i,m) - mult(fc(m - 1),xk)
 end do
 if (m == 3) go to 230
 !
@@ -8881,7 +8815,7 @@ go to 30
 do i = 1,n
    xk = rt(i,1) - rt(i,2)
    err(i) = err(i) + ep6*abs(xk)
-240 rs(i) = rt(i,2) - mult(fc(3),xk)
+   rs(i) = rt(i,2) - mult(fc(3),xk)
 end do
 !
 !  Multiply power series coefficients and error estimate by factorials
@@ -8894,7 +8828,7 @@ do i = 1,n
    rs(i) = mult(fact,rs(i))
    err(i) = fact*err(i)
    fac = fac + 1.0
-250 fact = fact*fac
+   fact = fact*fac
 end do
 return
 !
@@ -8902,7 +8836,7 @@ return
 !
 260 do i = 1,n
    rs(i) = (0.,0.)
-270 err(i) = 1.e10
+   err(i) = 1.e10
 end do
 contains
    pure function mult(re, co) result(nswc_sf_result)
@@ -9020,7 +8954,7 @@ do i = 2,4
    c(i) = sqrt(c(i - 1))
    ang = pi*sc(i - 1)
    fv1(i + 2) = cos(ang)
-10 fv2(i + 2) = -sin(ang)
+   fv2(i + 2) = -sin(ang)
 end do
 !
 !  Start execution.
@@ -9054,7 +8988,6 @@ do i = is,32,is
    u = t
    call fun(x + u, y + v, a1(iq), a2(iq))
    call fun(x - u, y - v, a1(iq - 1), a2(iq - 1))
-40 continue
 end do
 ln = 2
 jn = 1
@@ -9072,14 +9005,14 @@ do l = 1,km
          a1(it) = a1(i) - s
          a2(it) = a2(i) - t
          a1(i) = a1(i) + s
-50       a2(i) = a2(i) + t
+         a2(i) = a2(i) + t
       end do
       t = u*fv1(l) - v*fv2(l)
       v = u*fv2(l) + v*fv1(l)
-60    u = t
+      u = t
    end do
    ln = ln + ln
-70 jn = jn + jn
+   jn = jn + jn
 end do
 cx = 0.d0
 b = 1.d0
@@ -9099,14 +9032,14 @@ if (m <= 1) go to 100
 !
 err(1) = cx*eps
 do i = 2,n
-90 err(i) = err(i - 1)/r
+   err(i) = err(i - 1)/r
 end do
 !
 100 sf = sc(kl)
 do i = 1,ix
    a1(i) = sf*a1(i)
    a2(i) = sf*a2(i)
-110 sf = sf/r
+   sf = sf/r
 end do
 l1 = l2
 l2 = 1
@@ -9126,13 +9059,13 @@ do j = 1,3
       ia = ix + 1 - i
       w = (s*u - t*v) + a1(ia)
       t = (s*v + t*u) + a2(ia)
-120   s = w
+      s = w
    end do
    cp = dcpabs(s,t)
    if (cp > sp) sp = cp
    call fun(x + u, y + v, u, v)
    cm = dcpabs(s - u, t - v)
-130 if (cm > sr) sr = cm
+   if (cm > sr) sr = cm
 end do
 if (sr > 1.d-3*sp) go to 150
 lf = 1
@@ -9161,7 +9094,7 @@ if (m <= 0) go to 30
 !
 do i = 1,n
    rt1(i,m) = a1(i)
-200 rt2(i,m) = a2(i)
+   rt2(i,m) = a2(i)
 end do
 if (m == 1) go to 220
 !
@@ -9172,7 +9105,7 @@ do i = 1,n
    u = rt1(i,mm1) - rt1(i,m)
    v = rt2(i,mm1) - rt2(i,m)
    rt1(i,mm1) = rt1(i,m) - fc(mm1)*u
-210 rt2(i,mm1) = rt2(i,m) - fc(mm1)*v
+   rt2(i,mm1) = rt2(i,m) - fc(mm1)*v
 end do
 if (m == 3) go to 230
 !
@@ -9191,7 +9124,7 @@ do i = 1,n
    v = rt2(i,1) - rt2(i,2)
    err(i) = err(i) + ep6*dcpabs(u,v)
    rs1(i) = rt1(i,2) - fc(3)*u
-240 rs2(i) = rt2(i,2) - fc(3)*v
+   rs2(i) = rt2(i,2) - fc(3)*v
 end do
 !
 !  Multiply power series coefficients and error estimate by factorials
@@ -9205,7 +9138,7 @@ do i = 1,n
    rs2(i) = fact*rs2(i)
    err(i) = fact*err(i)
    fac = fac + 1.d0
-250 fact = fact*fac
+   fact = fact*fac
 end do
 return
 !
@@ -9214,7 +9147,7 @@ return
 260 do i = 1,n
    rs1(i) = 0.d0
    rs2(i) = 0.d0
-270 err(i) = 1.d10
+   err(i) = 1.d10
 end do
 end subroutine dcpsc
 
@@ -9383,7 +9316,7 @@ ilold = il
 ilm1 = il - 1
 do j = 1,m
    l = ilm1 + j
-81 t(j) = y(l)
+   t(j) = y(l)
 end do
 !
 do istep = 1,mm1
@@ -9391,7 +9324,7 @@ do istep = 1,mm1
    do j = 1,jmax
       ii = ilm1 + j
       l = ii + istep
-90    t(j) = (t(j) - t(j + 1))/(x(ii) - x(l))
+      t(j) = (t(j) - t(j + 1))/(x(ii) - x(l))
    end do
 end do
 !
@@ -9400,7 +9333,7 @@ end do
 100 yi(k) = t(1)
 do j = 2,m
    l = ilm1 + j
-101 yi(k) = t(j) + yi(k)*(xx - x(l))
+   yi(k) = t(j) + yi(k)*(xx - x(l))
 end do
 !
 !     Next point
@@ -9478,7 +9411,7 @@ do k = 2,n
    t(1) = y(k)/f
    if (iend == 0) go to 22
    do i = 1,iend
-21    t(i + 1) = (t(i + 1) - t(i))/(x(i) - x(k))
+      t(i + 1) = (t(i + 1) - t(i))/(x(i) - x(k))
    end do
 22 a(k) = t(ibeg)
 end do
@@ -9507,19 +9440,19 @@ return
 10 xx = alpha
 nm1 = n - 1
 do i = 1,n
-11 t(i) = a(i)
+   t(i) = a(i)
 end do
 !
 do i = 1,nm1
    j = n - i
    r = xx - dble(x(j))
    do k = j,nm1
-20    t(k) = t(k) + r*t(k + 1)
+      t(k) = t(k) + r*t(k + 1)
    end do
 end do
 !
 do i = 1,n
-30 c(i) = t(i)
+   c(i) = t(i)
 end do
 end subroutine pcoeff
 
@@ -9548,7 +9481,7 @@ return
 do k = 1,nd1
    a(k) = 0.0
    phi(1,k) = 0.0
-11 phi(2,k) = 0.0
+   phi(2,k) = 0.0
 end do
 !
 !                SET Z=a+B*x WHERE abs(Z).LE.1
@@ -9565,7 +9498,7 @@ end do
 zb = 2.0/(xmax - xmin)
 za = -xmin*zb - 1.0
 do k = 1,np
-22 phix(3,k) = za + zb*x(k)
+   phix(3,k) = za + zb*x(k)
 end do
 !
 !           Compute the closest polynomial of degree 0
@@ -9577,12 +9510,12 @@ dsum = 0.d0
 do k = 1,np
    phix(1,k) = phi(1,1)
    dalpha = dalpha + dble(phix(3,k))
-30 dsum = dsum + dble(y(k))
+   dsum = dsum + dble(y(k))
 end do
 alpha = sngl(dalpha)/lambda
 a(1) = sngl(dsum)/lambda
 do k = 1,np
-31 phix(4,k) = a(1)
+   phix(4,k) = a(1)
 end do
 !
 la = 2
@@ -9596,18 +9529,18 @@ do m = 1,nd
    phi(2,1) = -alpha*phi(1,1)
    phi(2,2) = phi(1,1)
    do k = 1,np
-40    phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
+      phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
    end do
    go to 60
 !
 50 c = 0.0
    do k = 1,m
       phi(la,k) = dble(c) - dble(alpha*phi(lb,k)) - dble(lambda*phi(la,k))
-51    c = phi(lb,k)
+      c = phi(lb,k)
    end do
    phi(la,mp1) = c
    do k = 1,np
-52    phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
+      phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
    end do
 !
 !                Compute alpha(m) and lambda(m)
@@ -9617,7 +9550,7 @@ do m = 1,nd
    do k = 1,np
       c = phix(la,k)*phix(la,k)
       dalpha = dalpha + dble(c*phix(3,k))
-61    dsum = dsum + dble(c)
+      dsum = dsum + dble(c)
    end do
    lambda = dsum
    alpha = sngl(dalpha)/lambda
@@ -9626,10 +9559,10 @@ do m = 1,nd
 !              Generate phi(m) and evaluate it at Z
 !
    do k = 1,mp1
-70    phi(la,k) = phi(la,k)/lambda
+      phi(la,k) = phi(la,k)/lambda
    end do
    do k = 1,np
-71    phix(la,k) = phix(la,k)/lambda
+      phix(la,k) = phix(la,k)/lambda
    end do
 !
 !        Compute the closest polynomial of degree m or less
@@ -9637,26 +9570,26 @@ do m = 1,nd
 !
    dsum = 0.d0
    do k = 1,np
-80    dsum = dsum + dble((y(k) - phix(4,k))*phix(la,k))
+      dsum = dsum + dble((y(k) - phix(4,k))*phix(la,k))
    end do
    c = dsum
    do k = 1,mp1
-81    a(k) = a(k) + c*phi(la,k)
+      a(k) = a(k) + c*phi(la,k)
    end do
    do k = 1,np
-82    phix(4,k) = phix(4,k) + c*phix(la,k)
+      phix(4,k) = phix(4,k) + c*phix(la,k)
    end do
 !
    ls = la
    la = lb
-90 lb = ls
+   lb = ls
 end do
 !
 !                        Compute rnorm
 !
 dsum = 0.d0
 do k = 1,np
-95 dsum = dsum + dble((y(k) - phix(4,k))**2)
+   dsum = dsum + dble((y(k) - phix(4,k))**2)
 end do
 rnorm = sqrt(sngl(dsum))
 !
@@ -9674,13 +9607,13 @@ do m = 2,nd
    do k = 1,m
       temp = phi(1,k)*zb
       phi(1,k) = phi(1,k)*za + c
-100   c = temp
+      c = temp
    end do
    phi(1,mp1) = c
    do k = 1,m
-101   a(k) = a(k) + a(mp1)*phi(1,k)
+      a(k) = a(k) + a(mp1)*phi(1,k)
    end do
-102 a(mp1) = a(mp1)*phi(1,mp1)
+   a(mp1) = a(mp1)*phi(1,mp1)
 end do
 end subroutine pfit
 
@@ -9730,7 +9663,7 @@ nd1 = nd + 1
 do k = 1,nd1
    a(k) = 0.0
    phi(1,k) = 0.0
-20 phi(2,k) = 0.0
+   phi(2,k) = 0.0
 end do
 !
 !                SET Z=a+B*x WHERE abs(Z).LE.1
@@ -9738,7 +9671,7 @@ end do
 zb = 2.0/(xmax - xmin)
 za = -xmin*zb - 1.0
 do k = 1,np
-25 phix(3,k) = za + zb*x(k)
+   phix(3,k) = za + zb*x(k)
 end do
 !
 !           Compute the closest polynomial of degree 0
@@ -9750,12 +9683,12 @@ dsum = 0.d0
 do k = 1,np
    phix(1,k) = phi(1,1)
    dalpha = dalpha + dble(w(k)*phix(3,k))
-30 dsum = dsum + dble(w(k)*y(k))
+   dsum = dsum + dble(w(k)*y(k))
 end do
 alpha = sngl(dalpha)/lambda
 a(1) = sngl(dsum)/lambda
 do k = 1,np
-31 phix(4,k) = a(1)
+   phix(4,k) = a(1)
 end do
 !
 la = 2
@@ -9769,18 +9702,18 @@ do m = 1,nd
    phi(2,1) = -alpha*phi(1,1)
    phi(2,2) = phi(1,1)
    do k = 1,np
-40    phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
+      phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
    end do
    go to 60
 !
 50 c = 0.0
    do k = 1,m
       phi(la,k) = dble(c) - dble(alpha*phi(lb,k)) - dble(lambda*phi(la,k))
-51    c = phi(lb,k)
+      c = phi(lb,k)
    end do
    phi(la,mp1) = c
    do k = 1,np
-52    phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
+      phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
    end do
 !
 !                Compute alpha(m) and lambda(m)
@@ -9790,7 +9723,7 @@ do m = 1,nd
    do k = 1,np
       c = w(k)*phix(la,k)*phix(la,k)
       dalpha = dalpha + dble(c*phix(3,k))
-61    dsum = dsum + dble(c)
+      dsum = dsum + dble(c)
    end do
    lambda = dsum
    alpha = sngl(dalpha)/lambda
@@ -9799,10 +9732,10 @@ do m = 1,nd
 !              Generate phi(m) and evaluate it at Z
 !
    do k = 1,mp1
-70    phi(la,k) = phi(la,k)/lambda
+      phi(la,k) = phi(la,k)/lambda
    end do
    do k = 1,np
-71    phix(la,k) = phix(la,k)/lambda
+      phix(la,k) = phix(la,k)/lambda
    end do
 !
 !        Compute the closest polynomial of degree m or less
@@ -9810,26 +9743,26 @@ do m = 1,nd
 !
    dsum = 0.d0
    do k = 1,np
-80    dsum = dsum + dble(w(k)*(y(k) - phix(4,k))*phix(la,k))
+      dsum = dsum + dble(w(k)*(y(k) - phix(4,k))*phix(la,k))
    end do
    c = dsum
    do k = 1,mp1
-81    a(k) = a(k) + c*phi(la,k)
+      a(k) = a(k) + c*phi(la,k)
    end do
    do k = 1,np
-82    phix(4,k) = phix(4,k) + c*phix(la,k)
+      phix(4,k) = phix(4,k) + c*phix(la,k)
    end do
 !
    ls = la
    la = lb
-90 lb = ls
+   lb = ls
 end do
 !
 !                        Compute rnorm
 !
 dsum = 0.d0
 do k = 1,np
-95 dsum = dsum + dble(w(k)*(y(k) - phix(4,k))**2)
+   dsum = dsum + dble(w(k)*(y(k) - phix(4,k))**2)
 end do
 rnorm = sqrt(sngl(dsum))
 !
@@ -9847,13 +9780,13 @@ do m = 2,nd
    do k = 1,m
       temp = phi(1,k)*zb
       phi(1,k) = phi(1,k)*za + c
-100   c = temp
+      c = temp
    end do
    phi(1,mp1) = c
    do k = 1,m
-101   a(k) = a(k) + a(mp1)*phi(1,k)
+      a(k) = a(k) + a(mp1)*phi(1,k)
    end do
-102 a(mp1) = a(mp1)*phi(1,mp1)
+   a(mp1) = a(mp1)*phi(1,mp1)
 end do
 return
 !
@@ -10096,7 +10029,6 @@ nm2 = n - 2
 if (isx > 0) go to 40
 do i = 2,n
    if (x(i) <= x(i - 1)) go to 300
-10 continue
 end do
 !
 !     Define the tridiagonal matrix
@@ -10106,7 +10038,6 @@ do i = 2,nm1
    w(i,2) = w(i - 1,3)
    w(i,3) = x(i + 1) - x(i)
    w(i,1) = 2.0*(w(i,2) + w(i,3))
-20 continue
 end do
 w(1,1) = 4.0
 w(1,3) = -4.0*a1
@@ -10118,7 +10049,6 @@ w(n,2) = -4.0*an
 do i = 2,n
    w(i - 1,3) = w(i - 1,3)/w(i - 1,1)
    w(i,1) = w(i,1) - w(i,2)*w(i - 1,3)
-30 continue
 end do
 !
 !     Define *constant* vector
@@ -10130,7 +10060,6 @@ do i = 2,nm2
    ypp(i) = 6.0*(dnew - dold)
    yp(i) = dold
    dold = dnew
-50 continue
 end do
 dnew = (y(n) - y(nm1))/(x(n) - x(nm1))
 ypp(nm1) = 6.0*(dnew - dold)
@@ -10143,7 +10072,6 @@ yp(n) = dnew
 ypp(1) = ypp(1)/w(1,1)
 do i = 2,n
    ypp(i) = (ypp(i) - w(i,2)*ypp(i - 1))/w(i,1)
-60 continue
 end do
 !
 !     Backward substitution
@@ -10151,7 +10079,6 @@ end do
 do j = 1,nm1
    i = n - j
    ypp(i) = ypp(i) - w(i,3)*ypp(i + 1)
-70 continue
 end do
 !
 !     Compute first derivatives
@@ -10160,7 +10087,6 @@ h = x(2) - x(1)
 yp(1) = (y(2) - y(1))/h - h*(2.0*ypp(1) + ypp(2))/6.0
 do i = 2,nm1
    yp(i) = yp(i) + w(i,2)*(ypp(i - 1) + 2.0*ypp(i))/6.0
-80 continue
 end do
 yp(n) = yp(n) + (x(n) - x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0
 ierr = 0
@@ -10253,7 +10179,6 @@ do j = 1,lm1
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
-20 continue
 end do
 return
 !
@@ -10335,7 +10260,6 @@ do j = 1,lm1
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
-20 continue
 end do
 return
 !
@@ -10568,4 +10492,117 @@ go to 50
 ir = min(i + 1,nm1)
 go to 10
 end subroutine scomp1
+
+pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni)
+integer :: i, il, ir, k, nm1
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
+!
+!     Abstract
+!
+!         scomp2 evaluates a cubic spline at the abscissas in xi.
+!         It is assumed that the second derivatives at the nodes
+!         have been provided.
+!
+!     Description of arguments
+!
+!       --Input--
+!
+!         x   - Array of abscissas (in increasing order) that define the
+!               spline.
+!         y   - Array of ordinates that define the spline.
+!         ypp - Array of second derivatives that define the spline.
+!         n   - The number of data points that define the spline.
+!               The arrays x, y, and ypp must be dimensioned at least n.
+!               n must be greater than or equal to 2.
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
+!               at which the spline is to be evaluated.
+!         ni  - The number of abscissas at which the spline is to be
+!               evaluated.  If ni is greater than 1 then xi and yi
+!               must be arrays of dimension ni or larger.
+!               It is assumed that ni is greater than or equal to 1.
+!
+!       --Output--
+!
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ierr- status code
+!               0  the spline was evaluated at each abscissa in xi.
+!               1  Input error - ni is not positive.
+!
+!
+!     Check input
+!
+if (ni > 0) go to 1
+ierr = 1
+return
+1 ierr = 0
+nm1 = n - 1
+!
+!     k is index on value of xi being worked on.  xx is that value.
+!     i is current index into x array.
+!
+k = 1
+xx = xi(1)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+il = 1
+ir = nm1
+!
+!     Bisection search
+!
+10 i = (il + ir)/2
+if (i == il) go to 100
+nswc_ai_r4 = xx - x ( i )
+if ( nswc_ai_r4 < 0 ) go to 20
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 30
+20 ir = i
+go to 10
+30 il = i
+go to 10
+!
+!     Linear forward search
+!
+50 if (xx < x(i + 1)) go to 100
+i = i + 1
+go to 50
+!
+!     xx is greater than x(n) or less than x(1)
+!
+80 i = nm1
+go to 100
+90 i = 1
+!
+!     Evaluation
+!
+100 h = x(i + 1) - x(i)
+h2 = h*h
+xr = (x(i + 1) - xx)/h
+xr2 = xr*xr
+xr3 = xr*xr2
+xl = (xx - x(i))/h
+xl2 = xl*xl
+xl3 = xl*xl2
+yi(k) = y(i)*xr + y(i + 1)*xl &
+   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
+!
+!     Next point
+!
+if (k >= ni) return
+k = k + 1
+xx = xi(k)
+if (xx < x(1)) go to 90
+if (xx >= x(nm1)) go to 80
+nswc_ai_r4 = xx - xi ( k - 1 )
+if ( nswc_ai_r4 < 0 ) go to 110
+if ( nswc_ai_r4 == 0 ) go to 100
+go to 50
+110 il = 1
+ir = min(i + 1,nm1)
+go to 10
+end subroutine scomp2
 

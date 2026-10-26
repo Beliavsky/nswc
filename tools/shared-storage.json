@@ -1,7 +1,7 @@
 {
   "equivalences": {
     "ASJY": {
-      "source_hash": "2b3efe3f2631aabd0d05a0a06603f133af7e87692dd187fbee34fbe348e7d04a",
+      "source_hash": "e10da08200bb1c4a7193cc4490982b5ba354df0ad8d10924ae70a522ccc7a9fb",
       "statements": [
         "equivalence (alfa(1,1),alfa1(1,1))",
         "equivalence (alfa(1,3),alfa2(1,1))",
@@ -9,7 +9,7 @@
         "equivalence (beta(1,3),beta2(1,1))",
         "equivalence (beta(1,5),beta3(1,1))"
       ],
-      "output_hash": "28a6609fe7e91dca44cb86573b177842e25fe66796e5935b33b030061eab3e6a"
+      "output_hash": "f5dd375e889b89db70bed37bd68b3f19690141095fb5885022f51a8c5d2ab29c"
     },
     "SFFT": {
       "source_hash": "c3b495e4624acbae62924a52e047bf03978f931e51e502a81116727a67dac10c",
@@ -19,11 +19,11 @@
       "output_hash": "cb0e89eddf9ea1eda174082d72a0cf17ee8a7cb32115cdc35538004cc7c43664"
     },
     "ADCOMP": {
-      "source_hash": "c2d6a39799bf8593c2d37ac0fdf726bf3b0747c2d1a0f38bdd1d54463690ab47",
+      "source_hash": "2cb6d3c3d48086add786fb7108791ff1ab96e6da2ac62c8cf09ffbdfdb8dd753",
       "statements": [
         "equivalence (fleft(2),fdervl(1)), (fright(2),fdervr(1))"
       ],
-      "output_hash": "321d675c91f77b21ff0f5b706a0372f89bee8a732fbf71387c5a637bf6f77374"
+      "output_hash": "a2dcd0ba8a74df919f8f59c6a188a3ed0319e046fc64d54d03714bf7924afb95"
     }
   },
   "module_state": {

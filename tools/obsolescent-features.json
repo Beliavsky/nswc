@@ -31,7 +31,7 @@
       "output_hash": "fac2aa7f1b1b6e0d0d1cb3cfac6d4dcff216abccf0fbb4eba6b2bf3cf92d9abf"
     },
     "ERFCM2": {
-      "source_hash": "56c5080a1e62d5c66b777eead7229ad64dcc33bda36bee6153162574e2d47b06",
+      "source_hash": "05bfa91caf1ffda62ff445da940e61b679fb4139f33499b68c254f8863d49127",
       "functions": {
         "anorm": {
           "type": "double precision",
@@ -43,7 +43,7 @@
           "captures": []
         }
       },
-      "output_hash": "989bfd16c9214927cf6c6b26c3696f4f54cf2829e41b64ee7ac8f1799e0afb8d"
+      "output_hash": "9caaf43f131d9d722865e6969cd15a447ef2d5cec141eb17c65253ff78f33858"
     },
     "CEXPLI": {
       "source_hash": "4daa886f6b53a4bb8d4ef518848ace6068f1e8095715f93c6a7b86a11e77339b",
@@ -224,7 +224,7 @@
       "output_hash": "9aee91e16e136e70b8cc0f4860fe03547d28980adf52e7e39972c962cd3d7fed"
     },
     "CGEDI": {
-      "source_hash": "f1d2139f38a4e0934c1bb0ea49ae0b3cf43738b1d532b27e790c6ce0d66ea270",
+      "source_hash": "9b556084ef10390bc005a8cc664e51bebc0e0dc993399cf8ec267ece24deebf8",
       "functions": {
         "cabs1": {
           "type": "real",
@@ -235,10 +235,10 @@
           "captures": []
         }
       },
-      "output_hash": "2493e1bf752f3118b0db102a0ded265237ab4cb09cc6c219bd6cbd3c67d8e767"
+      "output_hash": "d4674084beac8d28f13b2b8e349472f6b8b2a17540d81df3bb420e222e3e9f2e"
     },
     "CSVDC": {
-      "source_hash": "f504677518d712956a70b66cfdbe6f6d70a60f9e02af238948700adc6b0ab736",
+      "source_hash": "c9a0229c0ed4ea21603bb1e36ed2b7e10f97b8024012f8fbe2963a8c92211eae",
       "functions": {
         "cabs1": {
           "type": "real",
@@ -258,10 +258,10 @@
           "captures": []
         }
       },
-      "output_hash": "8745efa51f60bf274b1dfac07adae7b8bafa012e3750077b2b4be6f682830ddf"
+      "output_hash": "161207d4fc180fe099f298406a57c774711e56f39783813f435890ffad1627e2"
     },
     "CPSC": {
-      "source_hash": "132b4cad7a58dbf79ecd65db1923cdba21cd42e21695ed1fab9a1eede9b646e7",
+      "source_hash": "cebeea89479b1c8e7f74ee747cd917dfc4a707581005a92b73e34c874842c2de",
       "functions": {
         "mult": {
           "type": "complex",
@@ -273,7 +273,7 @@
           "captures": []
         }
       },
-      "output_hash": "f7f1c6db4b8cf877c62408c1ed2a0e9f282bb4948581dff23a6557adffdb10a8"
+      "output_hash": "446db21a6a2a9882d328480f885c4871856ea1258f1a8199e05ff3abae1be67e"
     },
     "CURVI": {
       "source_hash": "b3b65d20f42f59cbe3548650a2bd61d4a28e31e47fa2e548ced333071562177d",
@@ -362,7 +362,7 @@
   "computed_gotos": [
     {
       "procedure": "BESJ",
-      "line": 18502,
+      "line": 18472,
       "selector": "is",
       "targets": [
         320,
@@ -372,7 +372,7 @@
     },
     {
       "procedure": "BESJ",
-      "line": 18537,
+      "line": 18507,
       "selector": "is",
       "targets": [
         370,
@@ -382,7 +382,7 @@
     },
     {
       "procedure": "BESI",
-      "line": 20486,
+      "line": 20447,
       "selector": "is",
       "targets": [
         180,
@@ -392,7 +392,7 @@
     },
     {
       "procedure": "BESI",
-      "line": 20513,
+      "line": 20474,
       "selector": "is",
       "targets": [
         270,
@@ -402,7 +402,7 @@
     },
     {
       "procedure": "SSVDC",
-      "line": 45730,
+      "line": 45655,
       "selector": "kase",
       "targets": [
         490,
@@ -413,7 +413,7 @@
     },
     {
       "procedure": "DSVDC",
-      "line": 46273,
+      "line": 46195,
       "selector": "kase",
       "targets": [
         490,
@@ -424,7 +424,7 @@
     },
     {
       "procedure": "CSVDC",
-      "line": 46845,
+      "line": 46764,
       "selector": "kase",
       "targets": [
         530,
@@ -435,7 +435,7 @@
     },
     {
       "procedure": "SONEST",
-      "line": 60885,
+      "line": 60792,
       "selector": "jump",
       "targets": [
         100,
@@ -447,7 +447,7 @@
     },
     {
       "procedure": "DONEST",
-      "line": 61072,
+      "line": 60979,
       "selector": "jump",
       "targets": [
         100,
@@ -459,7 +459,7 @@
     },
     {
       "procedure": "BALANC",
-      "line": 62500,
+      "line": 62407,
       "selector": "iexc",
       "targets": [
         80,
@@ -468,7 +468,7 @@
     },
     {
       "procedure": "DBAL",
-      "line": 64348,
+      "line": 64254,
       "selector": "iexc",
       "targets": [
         80,
@@ -477,7 +477,7 @@
     },
     {
       "procedure": "CBAL",
-      "line": 67786,
+      "line": 67681,
       "selector": "iexc",
       "targets": [
         80,
@@ -486,7 +486,7 @@
     },
     {
       "procedure": "DCBAL",
-      "line": 69010,
+      "line": 68902,
       "selector": "iexc",
       "targets": [
         80,
@@ -495,7 +495,7 @@
     },
     {
       "procedure": "BNDSL",
-      "line": 100854,
+      "line": 100685,
       "selector": "mode",
       "targets": [
         10,
@@ -505,7 +505,7 @@
     },
     {
       "procedure": "LNSYS",
-      "line": 116017,
+      "line": 115821,
       "selector": "option",
       "targets": [
         300,
@@ -516,7 +516,7 @@
     },
     {
       "procedure": "STOD",
-      "line": 121077,
+      "line": 120881,
       "selector": "iret",
       "targets": [
         160,
@@ -526,7 +526,7 @@
     },
     {
       "procedure": "CFOD",
-      "line": 121423,
+      "line": 121227,
       "selector": "meth",
       "targets": [
         100,
@@ -535,7 +535,7 @@
     },
     {
       "procedure": "PJAC",
-      "line": 121561,
+      "line": 121365,
       "selector": "miter",
       "targets": [
         100,
@@ -547,7 +547,7 @@
     },
     {
       "procedure": "SLVS",
-      "line": 121724,
+      "line": 121528,
       "selector": "miter",
       "targets": [
         100,
@@ -559,7 +559,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 123200,
+      "line": 123004,
       "selector": "kswx",
       "targets": [
         170,
@@ -571,7 +571,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 123239,
+      "line": 123043,
       "selector": "kswy",
       "targets": [
         220,

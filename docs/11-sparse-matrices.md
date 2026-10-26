@@ -35,12 +35,12 @@ The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissible.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVRS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56484`](../source_parts/nswc_part_06.f90#L3717) |
-| `CVDS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56519`](../source_parts/nswc_part_06.f90#L3752) |
-| `CVCS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56554`](../source_parts/nswc_part_06.f90#L3787) |
-| `CVSR` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56590`](../source_parts/nswc_part_06.f90#L3823) |
-| `CVSD` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56620`](../source_parts/nswc_part_06.f90#L3853) |
-| `CVSC` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56650`](../source_parts/nswc_part_06.f90#L3883) |
+| `CVRS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56391`](../source_parts/nswc_part_06.f90#L3405) |
+| `CVDS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56426`](../source_parts/nswc_part_06.f90#L3440) |
+| `CVCS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L56461`](../source_parts/nswc_part_06.f90#L3475) |
+| `CVSR` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56497`](../source_parts/nswc_part_06.f90#L3511) |
+| `CVSD` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56527`](../source_parts/nswc_part_06.f90#L3541) |
+| `CVSC` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L56557`](../source_parts/nswc_part_06.f90#L3571) |
 
 
 The following subroutines permit one to convert sparse matrices to and from the standard format.
@@ -90,8 +90,8 @@ Programmer, A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCVRD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56680`](../source_parts/nswc_part_06.f90#L3913) |
-| `SCVDR` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56707`](../source_parts/nswc_part_06.f90#L3940) |
+| `SCVRD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56587`](../source_parts/nswc_part_06.f90#L3601) |
+| `SCVDR` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56614`](../source_parts/nswc_part_06.f90#L3628) |
 
 
 The following subroutines are available for converting sparse real matrices to and from double precision form.
@@ -137,8 +137,8 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSREAL` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56734`](../source_parts/nswc_part_06.f90#L3967) |
-| `CSIMAG` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56766`](../source_parts/nswc_part_06.f90#L3999) |
+| `CSREAL` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56641`](../source_parts/nswc_part_06.f90#L3655) |
+| `CSIMAG` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56673`](../source_parts/nswc_part_06.f90#L3687) |
 
 
 If A = (a,;) is a complex matrix then let Re(A) = (Re({a,,;)) and Im(A) = (Im(a;;)) denote the real and imaginary parts of A. If the matrix A is stored in sparse form, then the following subroutines are available for obtaining Re(A) and Im(A) in sparse form.
@@ -182,7 +182,7 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCVRC` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L56798`](../source_parts/nswc_part_06.f90#L4031) |
+| `SCVRC` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L56705`](../source_parts/nswc_part_06.f90#L3719) |
 
 
 Given the real m x n matrices A and B stored in sparse form. Then the subroutine SCVRC is available for obtaining the complex matrix A+ Bit where t = /—1.
@@ -213,9 +213,9 @@ TERR is an integer variable. When SCVRC is called, if NUM specifies sufficient s
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56867`](../source_parts/nswc_part_06.f90#L4100) |
-| `DSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56897`](../source_parts/nswc_part_06.f90#L4130) |
-| `CSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56927`](../source_parts/nswc_part_06.f90#L4160) |
+| `RSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56774`](../source_parts/nswc_part_06.f90#L3788) |
+| `DSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56804`](../source_parts/nswc_part_06.f90#L3818) |
+| `CSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56834`](../source_parts/nswc_part_06.f90#L3848) |
 
 
 The following su routines are available for copying sparse matrices.
@@ -252,7 +252,7 @@ OOS
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCONJ` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56958`](../source_parts/nswc_part_06.f90#L4191) |
+| `SCONJ` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L56865`](../source_parts/nswc_part_06.f90#L3879) |
 
 
 ```text
@@ -280,8 +280,8 @@ It is assumed that the sparse complex matrix A is stored in the arrays A, JA, JA
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L56987`](../source_parts/nswc_part_06.f90#L4220) |
-| `RPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L57051`](../source_parts/nswc_part_06.f90#L4284) |
+| `RPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L56894`](../source_parts/nswc_part_06.f90#L3908) |
+| `RPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L56958`](../source_parts/nswc_part_06.f90#L3972) |
 
 
 The subroutines RPOSE and RPOSE! are available for transposing a sparse m x n real matrix A. RPOSE1 is more general than RPOSE. For any permutation 7 = {11, ...,1m} of {1,...,m} let P denote the corresponding ™ x m permutation matrix. Then RPOSE1 computes the matrix (P.A)’.
@@ -328,8 +328,8 @@ Restriction. It is assumed that the storage areas 2, 1B, JB do not overlap with 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L57118`](../source_parts/nswc_part_06.f90#L4351) |
-| `DPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L57182`](../source_parts/nswc_part_06.f90#L4415) |
+| `DPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L57025`](../source_parts/nswc_part_06.f90#L4039) |
+| `DPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L57089`](../source_parts/nswc_part_06.f90#L4103) |
 
 
 The subroutines DPOSE and DPOSE1 are available for transposing a sparse m x n double precision matrix A. DPOSE1 is more general than DPOSE. For any permutation mw = {81,...,tm} of {1, ...,m} let P denote the corresponding m x m permutation matrix. Then DPOSE1 computes the matrix (PA)‘.
@@ -374,8 +374,8 @@ Restriction. It is assumed that the storage areas B, 7B, JB ao not overlap with 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L57249`](../source_parts/nswc_part_06.f90#L4482) |
-| `CPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L57313`](../source_parts/nswc_part_06.f90#L4546) |
+| `CPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L57156`](../source_parts/nswc_part_06.f90#L4170) |
+| `CPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L57220`](../source_parts/nswc_part_06.f90#L4234) |
 
 
 The subroutines CPOSE and CPOSE] are available for transposing a sparse m x n complex matrix A. CPOSE1 is more general than CPOSE. For any permutation m = {$1,...,tm} of {1,...,m} let P denote the corresponding m x m permutation matrix. Then CPOSE1 computes the matrix (P.A)'.
@@ -420,9 +420,9 @@ Restriction. It is assumed that the storage areas B, 1, J 28 do not overlap: wit
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57380`](../source_parts/nswc_part_06.f90#L4613) |
-| `DSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57448`](../source_parts/nswc_part_06.f90#L4681) |
-| `CSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57516`](../source_parts/nswc_part_06.f90#L4749) |
+| `SADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57287`](../source_parts/nswc_part_06.f90#L4301) |
+| `DSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57355`](../source_parts/nswc_part_06.f90#L4369) |
+| `CSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57423`](../source_parts/nswc_part_06.f90#L4437) |
 
 
 The following subroutines are available for adding sparse matrices.
@@ -465,9 +465,9 @@ B,IB,JB.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57584`](../source_parts/nswc_part_06.f90#L4817) |
-| `DSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57652`](../source_parts/nswc_part_06.f90#L4885) |
-| `CSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57720`](../source_parts/nswc_part_06.f90#L4953) |
+| `SSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57491`](../source_parts/nswc_part_06.f90#L4505) |
+| `DSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57559`](../source_parts/nswc_part_06.f90#L4573) |
+| `CSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L57627`](../source_parts/nswc_part_06.f90#L4641) |
 
 
 The following subroutines are available for subtracting sparse matrices,
@@ -508,9 +508,9 @@ BIB, JE.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57788`](../source_parts/nswc_part_06.f90#L5021) |
-| `DSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57849`](../source_parts/nswc_part_06.f90#L5082) |
-| `CSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57910`](../source_parts/nswc_part_06.f90#L5143) |
+| `SPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57695`](../source_parts/nswc_part_06.f90#L4709) |
+| `DSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57756`](../source_parts/nswc_part_06.f90#L4770) |
+| `CSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L57817`](../source_parts/nswc_part_06.f90#L4831) |
 
 
 The following subroutines are available for multiplying sparse matrices.
@@ -551,10 +551,10 @@ B,1B,JB.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57971`](../source_parts/nswc_part_06.f90#L5204) |
-| `MVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57996`](../source_parts/nswc_part_06.f90#L5229) |
-| `MTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58021`](../source_parts/nswc_part_06.f90#L5254) |
-| `MTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58050`](../source_parts/nswc_part_06.f90#L5283) |
+| `MVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57878`](../source_parts/nswc_part_06.f90#L4892) |
+| `MVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57903`](../source_parts/nswc_part_06.f90#L4917) |
+| `MTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57928`](../source_parts/nswc_part_06.f90#L4942) |
+| `MTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57957`](../source_parts/nswc_part_06.f90#L4971) |
 
 
 Let A be a real mx n sparse matrix stored in the arrays A,/A,JA. Then the following subroutines are available for multiplying A with a real vector.
@@ -603,10 +603,10 @@ The arguments z and y are row vectors of dimension m and n respectively. When MT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58075`](../source_parts/nswc_part_06.f90#L5308) |
-| `DVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58100`](../source_parts/nswc_part_06.f90#L5333) |
-| `DTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58125`](../source_parts/nswc_part_06.f90#L5358) |
-| `DTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58154`](../source_parts/nswc_part_06.f90#L5387) |
+| `DVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L57982`](../source_parts/nswc_part_06.f90#L4996) |
+| `DVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58007`](../source_parts/nswc_part_06.f90#L5021) |
+| `DTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58032`](../source_parts/nswc_part_06.f90#L5046) |
+| `DTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58061`](../source_parts/nswc_part_06.f90#L5075) |
 
 
 Let A be a double precision m x n sparse matrix stored in the arrays A, /A,JA. Then the following subroutines are available for multiplying A with a double precision vector.
@@ -653,10 +653,10 @@ The arguments z and y are row vectors of dimension m and n respectively. A, x, y
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58179`](../source_parts/nswc_part_06.f90#L5412) |
-| `CVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58204`](../source_parts/nswc_part_06.f90#L5437) |
-| `CTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58229`](../source_parts/nswc_part_06.f90#L5462) |
-| `CTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58258`](../source_parts/nswc_part_06.f90#L5491) |
+| `CVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58086`](../source_parts/nswc_part_06.f90#L5100) |
+| `CVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58111`](../source_parts/nswc_part_06.f90#L5125) |
+| `CTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58136`](../source_parts/nswc_part_06.f90#L5150) |
+| `CTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L58165`](../source_parts/nswc_part_06.f90#L5179) |
 
 
 Let A be a complex m x n sparse matrix stored in the arrays A,IA,JA. Then the following subroutines are available for multiplying A with a complex vector.
@@ -705,8 +705,8 @@ The arguments x and y are row vectors of dimension m and n respectively. A,z,y a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `S1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L58309`](../source_parts/nswc_part_06.f90#L5542) |
-| `DS1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L58368`](../source_parts/nswc_part_06.f90#L5601) |
+| `S1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L58216`](../source_parts/nswc_part_06.f90#L5230) |
+| `DS1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L58275`](../source_parts/nswc_part_06.f90#L5289) |
 
 
 ```text
@@ -737,8 +737,8 @@ WK is an array of dimension n or larger that is a work space for the routine.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNRM` | `REAL FUNCTION` | `A, IA, JA, M, N` | [`L58283`](../source_parts/nswc_part_06.f90#L5516) |
-| `DSNRM` | `DOUBLE PRECISION FUNCTION` | `A, IA, JA, M, N` | [`L58342`](../source_parts/nswc_part_06.f90#L5575) |
+| `SNRM` | `REAL FUNCTION` | `A, IA, JA, M, N` | [`L58190`](../source_parts/nswc_part_06.f90#L5204) |
+| `DSNRM` | `DOUBLE PRECISION FUNCTION` | `A, IA, JA, M, N` | [`L58249`](../source_parts/nswc_part_06.f90#L5263) |
 
 
 ```text
@@ -766,7 +766,7 @@ A is a sparse m X n matrix stored in the arrays A, IA, JA. When either of these 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPORD` | `SUBROUTINE` | `M, N, IA, R, IWK` | [`L58402`](../source_parts/nswc_part_06.f90#L5635) |
+| `SPORD` | `SUBROUTINE` | `M, N, IA, R, IWK` | [`L58309`](../source_parts/nswc_part_06.f90#L5323) |
 
 
 Let A be a sparse mxn matrix stored in the arrays A, JA, JA. The following subroutine is available for ordering the rows of the matrix by increasing length.
@@ -793,7 +793,7 @@ IWK is an integer array of dimension m+n-+1 or larger that is used for a work sp
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BLKORD` | `SUBROUTINE` | `N, IA, JA, R, C, IB, NUM, IWK, IERR` | [`L58442`](../source_parts/nswc_part_06.f90#L5675) |
+| `BLKORD` | `SUBROUTINE` | `N, IA, JA, R, C, IB, NUM, IWK, IERR` | [`L58349`](../source_parts/nswc_part_06.f90#L5363) |
 
 
 Let A be a sparse n x n matrix stored in the arrays A,/A,JA. Then the subroutine SLKORD is available for reordering the rows and columns of A so that one has a lower block triangular matrix
@@ -836,9 +836,9 @@ IWK is an integer array of dimension 5n or larger that is used for a work space 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L58854`](../source_parts/nswc_part_06.f90#L6087) |
-| `RSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L59260`](../source_parts/nswc_part_06.f90#L6493) |
-| `TSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L59411`](../source_parts/nswc_part_06.f90#L6644) |
+| `SPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L58761`](../source_parts/nswc_part_06.f90#L5775) |
+| `RSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L59167`](../source_parts/nswc_part_06.f90#L6181) |
+| `TSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L59318`](../source_parts/nswc_part_06.f90#L6332) |
 
 
 Let A be a nonsingular ». x n sparse real matrix stored in the arrays A,JA,JA and let 6 be areal column vector c dimension n. The subroutines SPSLV and RSLV are available for solving the system cf equations Ar = b, and the subroutine TSLV is available for solving the transposed system cf equations A’z = $. These routines employ partial pivot gauss elimination with column interchanges to first obtain an LU decomposition of A. If SPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if RSLV or TSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus RSLV and TSLV will frequently require at least double the amount of storage needed by SPSLV, but they can be recalled to solve other systems of equations Az = r and A'z = r without having to redecompose the matrix A. Moreover, since RSLV and TSLV will always generate the same LU decomposition of A, RSLV can be called to decompose A and solve a system of equations Ax = 5, and then TSLV can be called so solve a transposed system of equations Atz = r using the decomposition obtained by RSLV.
@@ -953,7 +953,7 @@ used hold also fur RSLV and TSLV.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `S1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L60752`](../source_parts/nswc_part_06.f90#L7985) |
+| `S1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L60659`](../source_parts/nswc_part_06.f90#L7673) |
 
 
 If A is a real nXm sparse matrix then the following subroutine is available for estimating the €; condition number cond,(A) of A.
@@ -1003,9 +1003,9 @@ ee “Algorithm 674: FORTRAN Codes for Estimating the One-Norm of a Real or Comp
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L59800`](../source_parts/nswc_part_06.f90#L7033) |
-| `DSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L60209`](../source_parts/nswc_part_06.f90#L7442) |
-| `DTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L60361`](../source_parts/nswc_part_06.f90#L7594) |
+| `DSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L59707`](../source_parts/nswc_part_06.f90#L6721) |
+| `DSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L60116`](../source_parts/nswc_part_06.f90#L7130) |
+| `DTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L60268`](../source_parts/nswc_part_06.f90#L7282) |
 
 
 Let A be a nonsingular n x n sparse double precision matrix stored in the arrays A, IA,JA and let 6 be a double precision column vector of dimension n. The subroutines DSPSLV and DSLV are available for solving the system of equations Az = 6, and the subroutine DTSLV is available for solving the transposed system of equations A’z = b. These routines employ partial pivot Gauss elimination with column interchanges to first obtain an LU decomposition of A. If DSPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if DSLV or DTSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus DSLV and DTSLV will frequently require at least double the amount of storage needed by DSPSLV, but they can be recalled to solve other systems of equations Ar = r and A‘z = r without having to redecompose the matrix A. Moreover, since DSLV and DTSLV will always generate the same LU decomposition of A, DSLV can be called to decompose A and solve a system of equations Az = 6, and then DTSLV can be called to solve a transposed system of equations Atz =r using the decomposition obtained by DSLV.
@@ -1112,7 +1112,7 @@ is used hold also for DSLV and DTSLV.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DS1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L60820`](../source_parts/nswc_part_06.f90#L8053) |
+| `DS1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L60727`](../source_parts/nswc_part_06.f90#L7741) |
 
 
 If A is a double precision n x n sparse matrix then the following subroutine is available for estimating the £; condition number cond,(A) of A.
@@ -1162,9 +1162,9 @@ ee »“Algorithm 674: FORTRAN Codes for Estimating the One--Norm of a Real or C
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L61284`](../source_parts/nswc_part_06.f90#L8517) |
-| `CSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L61694`](../source_parts/nswc_part_06.f90#L8927) |
-| `CTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L61846`](../source_parts/nswc_part_06.f90#L9079) |
+| `CSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L61191`](../source_parts/nswc_part_06.f90#L8205) |
+| `CSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L61601`](../source_parts/nswc_part_06.f90#L8615) |
+| `CTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L61753`](../source_parts/nswc_part_06.f90#L8767) |
 
 
 Let A be a nonsingular n x n sparse complex matrix stored in the arrays A, J A,JA and let b be a complex column vector of dimension n. The subroutines CSPSLV and CSLV are available for solving the system of equations Az = 8, and the subroutine CTSLV is available for solving the transposed system of equations A‘tz = b. These routines employ partial pivot Gauss elimination with column interchanges to first obtain an LU decomposition of A. If CSPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if CSLV or CTSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus CSLV and CTSLV will frequently require at least double the amount of storage needed by CSPSLV, but they can be recalled to solve other systems of equations Az = r and A‘z = r without having to redecompose the matrix A. Moreover, since CSLV and CTSLV will always generate the same LU decomposition of A, CSLV can be called to decompose A and solve a system cf equations Ar = b, and then CTSLV can be called to solve a transposed system of equations A’z = r using the decomposition obtained by CSLV.

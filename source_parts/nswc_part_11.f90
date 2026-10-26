@@ -132,7 +132,6 @@ v(3) = y2 - y1
 !
 do i = 1,3
    sl(i) = u(i)*u(i) + v(i)*v(i)
-1  continue
 end do
 !
 ! area = 3-1 x 3-2
@@ -879,7 +878,7 @@ do kj = 1,dimen
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - 1
    if ( j == npolys ) return
-10 j = j + 1
+   j = j + 1
 end do
 if ( degree == 1 ) return
 ralen = 1
@@ -911,7 +910,7 @@ do curdeg = 2,degree
       if ( j == npolys ) return
 !
       jprime = jprime + 1
-50    j = j + 1
+      j = j + 1
    end do
    kj = kj + 1
    nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
@@ -922,7 +921,7 @@ do curdeg = 2,degree
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - indexs(3,j)
    if ( j == npolys ) return
-70 j = j + 1
+   j = j + 1
 end do
 end subroutine mtable
 
@@ -973,7 +972,7 @@ real :: runtot, rntot1
 !
 do k = 1,dimen
    call scalpm(coord(1,k),npts,maxabs(k))
-10 call scaldn(coord(1,k),npts,maxabs(k))
+   call scaldn(coord(1,k),npts,maxabs(k))
 end do
 call scalpm(f,npts,maxabs(dimp1))
 call scaldn(f,npts,maxabs(dimp1))
@@ -989,7 +988,7 @@ rntot1 = 0.0
 do p = 1,npts
    psi(p,1) = 1.0
    rntot1 = rntot1 + weight(p)
-20 runtot = runtot + f(p) * weight(p)
+   runtot = runtot + f(p) * weight(p)
 end do
 sumsqs(1) = rntot1
 c(1) = runtot / rntot1
@@ -1000,7 +999,7 @@ c(1) = runtot / rntot1
 !     ***************
 !
 do p = 1,npts
-30 z(p) = f(p) - c(1)
+   z(p) = f(p) - c(1)
 end do
 !
 if ( npolys == 1 ) return
@@ -1100,7 +1099,7 @@ do j = onpp1,npolys
       q = j1mj2 + l
       index1 = starta + l
       index2 = indexs(4,q) - indexs(3,q) + jprime
-40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+      alpha(index1) = alpha(index2) * sumsqs(jprime) / &
          & sumsqs(l)
    end do
 !
@@ -1121,11 +1120,11 @@ do j = onpp1,npolys
       runtot = 0.0
       do p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+         runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
             & psi(p,index1) * weight(p)
       end do
       index1 = starta + l
-70    alpha(index1) = runtot / sumsqs(l)
+      alpha(index1) = runtot / sumsqs(l)
    end do
 !
 !     ***************
@@ -1140,7 +1139,7 @@ do j = onpp1,npolys
       q = j0mj1 + l
       index1 = starta + l
       index2 = indexs(4,q) - indexs(3,q) + jprime
-90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+      alpha(index1) = alpha(index2) * sumsqs(jprime) / &
          & sumsqs(l)
    end do
    m = jprime
@@ -1158,11 +1157,11 @@ do j = onpp1,npolys
       runtot = 0.0
       do p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+         runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
             & psi(p,index1) * weight(p)
       end do
       index1 = starta + l
-120   alpha(index1) = runtot / sumsqs(l)
+      alpha(index1) = runtot / sumsqs(l)
    end do
 !
 !     ***************
@@ -1179,7 +1178,7 @@ do j = onpp1,npolys
 !      j         j
 !     ***************
 !
-130 jm1 = j - 1
+   jm1 = j - 1
    arc = 0.0
    rntot1 = 0.0
    rntot2 = 0.0
@@ -1188,14 +1187,14 @@ do j = onpp1,npolys
       do l = start,jm1
          index1 = starta + l
          index2 = l - ((l - 1) / psiwid) * psiwid
-140      runtot = runtot - alpha(index1) * psi(p,index2)
+         runtot = runtot - alpha(index1) * psi(p,index2)
       end do
       psi(p,jindex) = runtot
       arc = arc + psi(p,index2) * psi(p,jindex) * &
          & weight(p)
       rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
          & weight(p)
-150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+      rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
    end do
    if (arc * arc >= sumsqs(jm1) * rntot1 * 1.e-03) &
       & go to 200
@@ -1210,10 +1209,10 @@ do j = onpp1,npolys
 !     ***************
 !
    do p = 1,npts
-160   z(p) = z(p) - c(j) * psi(p,jindex)
+      z(p) = z(p) - c(j) * psi(p,jindex)
    end do
    sttdeg = curdeg
-170 if ( kj == dimen ) curdeg = curdeg + 1
+   if ( kj == dimen ) curdeg = curdeg + 1
 end do
 return
 !
@@ -1262,7 +1261,7 @@ real :: a
 maxabs = 0.0
 do p = 1,npts
    a = abs(coord(p))
-10 if ( a > maxabs ) maxabs = a
+   if ( a > maxabs ) maxabs = a
 end do
 end subroutine scalpm
 
@@ -1291,7 +1290,7 @@ integer :: p
 !
 if ( maxabs == 0.0e+00 ) return
 do p = 1,npts
-10 coord(p) = coord(p) / maxabs
+   coord(p) = coord(p) / maxabs
 end do
 end subroutine scaldn
 
@@ -1442,7 +1441,7 @@ go to 50
 bot = 1
 do curdeg = 1,evldeg
    top = top * (dimen + curdeg)
-30 bot = bot * curdeg
+   bot = bot * curdeg
 end do
 nepols = top / bot
 !
@@ -1546,12 +1545,12 @@ do p = 1,nepts
       jm1 = j - 1
       do m = i,jm1
          index = indexs(4,j) + m - i
-20       runtot = runtot - psi(m) * alpha(index)
+         runtot = runtot - psi(m) * alpha(index)
       end do
       psi(j) = runtot
-30    rntot1 = rntot1 + c(j) * psi(j)
+      rntot1 = rntot1 + c(j) * psi(j)
    end do
-40 f(p) = rntot1 * maxabs(dimp1)
+   f(p) = rntot1 * maxabs(dimp1)
 end do
 return
 !
@@ -1561,7 +1560,7 @@ return
 !
 50 runtot = c(1) * maxabs(dimp1)
 do p = 1,nepts
-60 f(p) = runtot
+   f(p) = runtot
 end do
 end subroutine meval1
 
@@ -1791,7 +1790,7 @@ double precision :: runtot, rntot1
 !
 do k = 1,dimen
    call dscalp(coord(1,k),npts,maxabs(k))
-10 call dscald(coord(1,k),npts,maxabs(k))
+   call dscald(coord(1,k),npts,maxabs(k))
 end do
 call dscalp(f,npts,maxabs(dimp1))
 call dscald(f,npts,maxabs(dimp1))
@@ -1807,7 +1806,7 @@ rntot1 = 0.d0
 do p = 1,npts
    psi(p,1) = 1.d0
    rntot1 = rntot1 + weight(p)
-20 runtot = runtot + f(p) * weight(p)
+   runtot = runtot + f(p) * weight(p)
 end do
 sumsqs(1) = rntot1
 c(1) = runtot / rntot1
@@ -1818,7 +1817,7 @@ c(1) = runtot / rntot1
 !     ***************
 !
 do p = 1,npts
-30 z(p) = f(p) - c(1)
+   z(p) = f(p) - c(1)
 end do
 !
 if ( npolys == 1 ) return
@@ -1918,7 +1917,7 @@ do j = onpp1,npolys
       q = j1mj2 + l
       index1 = starta + l
       index2 = indexs(4,q) - indexs(3,q) + jprime
-40    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+      alpha(index1) = alpha(index2) * sumsqs(jprime) / &
          & sumsqs(l)
    end do
 !
@@ -1939,11 +1938,11 @@ do j = onpp1,npolys
       runtot = 0.d0
       do p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-60       runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+         runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
             & psi(p,index1) * weight(p)
       end do
       index1 = starta + l
-70    alpha(index1) = runtot / sumsqs(l)
+      alpha(index1) = runtot / sumsqs(l)
    end do
 !
 !     ***************
@@ -1958,7 +1957,7 @@ do j = onpp1,npolys
       q = j0mj1 + l
       index1 = starta + l
       index2 = indexs(4,q) - indexs(3,q) + jprime
-90    alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+      alpha(index1) = alpha(index2) * sumsqs(jprime) / &
          & sumsqs(l)
    end do
    m = jprime
@@ -1976,11 +1975,11 @@ do j = onpp1,npolys
       runtot = 0.d0
       do p = 1,npts
          index1 = l - ((l - 1) / psiwid) * psiwid
-110      runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+         runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
             & psi(p,index1) * weight(p)
       end do
       index1 = starta + l
-120   alpha(index1) = runtot / sumsqs(l)
+      alpha(index1) = runtot / sumsqs(l)
    end do
 !
 !     ***************
@@ -1997,7 +1996,7 @@ do j = onpp1,npolys
 !      j         j
 !     ***************
 !
-130 jm1 = j - 1
+   jm1 = j - 1
    arc = 0.d0
    rntot1 = 0.d0
    rntot2 = 0.d0
@@ -2006,14 +2005,14 @@ do j = onpp1,npolys
       do l = start,jm1
          index1 = starta + l
          index2 = l - ((l - 1) / psiwid) * psiwid
-140      runtot = runtot - alpha(index1) * psi(p,index2)
+         runtot = runtot - alpha(index1) * psi(p,index2)
       end do
       psi(p,jindex) = runtot
       arc = arc + psi(p,index2) * psi(p,jindex) * &
          & weight(p)
       rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
          & weight(p)
-150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+      rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
    end do
    if (arc * arc >= sumsqs(jm1) * rntot1 * 1.d-06) &
       & go to 200
@@ -2028,10 +2027,10 @@ do j = onpp1,npolys
 !     ***************
 !
    do p = 1,npts
-160   z(p) = z(p) - c(j) * psi(p,jindex)
+      z(p) = z(p) - c(j) * psi(p,jindex)
    end do
    sttdeg = curdeg
-170 if ( kj == dimen ) curdeg = curdeg + 1
+   if ( kj == dimen ) curdeg = curdeg + 1
 end do
 return
 !
@@ -2080,7 +2079,7 @@ double precision :: a
 maxabs = 0.d0
 do p = 1,npts
    a = abs(coord(p))
-10 if ( a > maxabs ) maxabs = a
+   if ( a > maxabs ) maxabs = a
 end do
 end subroutine dscalp
 
@@ -2109,7 +2108,7 @@ integer :: p
 !
 if ( maxabs == 0.0d+00 ) return
 do p = 1,npts
-10 coord(p) = coord(p) / maxabs
+   coord(p) = coord(p) / maxabs
 end do
 end subroutine dscald
 
@@ -2261,7 +2260,7 @@ go to 50
 bot = 1
 do curdeg = 1,evldeg
    top = top * (dimen + curdeg)
-30 bot = bot * curdeg
+   bot = bot * curdeg
 end do
 nepols = top / bot
 !
@@ -2365,12 +2364,12 @@ do p = 1,nepts
       jm1 = j - 1
       do m = i,jm1
          index = indexs(4,j) + m - i
-20       runtot = runtot - psi(m) * alpha(index)
+         runtot = runtot - psi(m) * alpha(index)
       end do
       psi(j) = runtot
-30    rntot1 = rntot1 + c(j) * psi(j)
+      rntot1 = rntot1 + c(j) * psi(j)
    end do
-40 f(p) = rntot1 * maxabs(dimp1)
+   f(p) = rntot1 * maxabs(dimp1)
 end do
 return
 !
@@ -2380,7 +2379,7 @@ return
 !
 50 runtot = c(1) * maxabs(dimp1)
 do p = 1,nepts
-60 f(p) = runtot
+   f(p) = runtot
 end do
 end subroutine dmevl1
 
@@ -2703,7 +2702,6 @@ acum = 0.0
 do j = 1,iold
    i = i + 1
    acum = acum + p(i)*funct(j)
-20 continue
 end do
 ! Contribution from new function values.
 30 iold = iold + inew
@@ -2713,7 +2711,6 @@ do j = inew,iold
    funct(j) = f(sum + x) + f(sum - x)
    i = i + 1
    acum = acum + p(i)*funct(j)
-40 continue
 end do
 inew = iold + 1
 i = i + 1
@@ -3317,7 +3314,6 @@ do last = 2,limit
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -3525,7 +3521,6 @@ do j = 1,5
    resg = resg + wg(j)*fsum
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
-10 continue
 end do
 do j = 1,5
    jtwm1 = 2*j - 1
@@ -4157,7 +4152,6 @@ do last = 2,limit
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -5274,7 +5268,6 @@ do last = 2,limit
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -5356,7 +5349,7 @@ integer :: i
 !
 !
 do i = 1,l
-10 a(i) = b(i)
+   a(i) = b(i)
 end do
 end subroutine qxcpy
 
@@ -5475,7 +5468,6 @@ do k = k1,k2
    if (abserr > errold*0.16) go to 3000
    if (abserr < 1000.0*epmach*resabs) go to 3000
    errold = abserr
-10 continue
 end do
 3000 continue
 end subroutine qxlqm
@@ -5632,7 +5624,6 @@ do i = 1,ks
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
-10 continue
 end do
 !
 y2 = y
@@ -5645,7 +5636,6 @@ ya = 0.0
 do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
-20 continue
 end do
 ya = ya*abs(bb)
 !
@@ -5654,7 +5644,6 @@ ym = 0.0
 do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
-30 continue
 end do
 ym = ym*abs(bb)
 end subroutine qxrul
@@ -6345,7 +6334,6 @@ do last = 2,limit
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -6562,7 +6550,6 @@ do j = 1,5
    resg = resg + wg(j)*fsum
    resk = resk + wgk(jtw)*fsum
    resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
-10 continue
 end do
 do j = 1,5
    jtwm1 = 2*j - 1
@@ -7199,7 +7186,6 @@ do last = 2,limit
       errmax = elist(maxerr)
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -8326,7 +8312,6 @@ do last = 2,limit
 ! ***Jump out of do-loop
       if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
       nrmax = nrmax + 1
-50    continue
    end do
 !
 !           Perform extrapolation.
@@ -8408,7 +8393,7 @@ integer :: i
 !
 !
 do i = 1,l
-10 a(i) = b(i)
+   a(i) = b(i)
 end do
 end subroutine dqxcpy
 
@@ -8527,7 +8512,6 @@ do k = k1,k2
    if (abserr > errold*0.16d0) go to 3000
    if (abserr < 1000.d0*epmach*resabs) go to 3000
    errold = abserr
-10 continue
 end do
 3000 continue
 end subroutine dqxlqm
@@ -8684,7 +8668,6 @@ do i = 1,ks
    if (i > l2) fv2(i) = f(aa - c)
    j = is + i
    y = y + (fv1(i) + fv2(i))*ww(j)
-10 continue
 end do
 !
 y2 = y
@@ -8697,7 +8680,6 @@ ya = 0.d0
 do i = 1,ks
    j = is + i
    ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
-20 continue
 end do
 ya = ya*abs(bb)
 !
@@ -8706,7 +8688,6 @@ ym = 0.d0
 do i = 1,ks
    j = is + i
    ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
-30 continue
 end do
 ym = ym*abs(bb)
 end subroutine dqxrul
@@ -9402,10 +9383,10 @@ call wandt(wn,tn,n,a,b)
 !   Set up matrix for (i-KN)*XN=rhfcn
 do j = 1,n
    do i = 1,n
-1     imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
+      imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
    end do
    xmz(j) = rhfcn(tn(j))
-2  imknn(j,j) = imknn(j,j) + 1.0
+   imknn(j,j) = imknn(j,j) + 1.0
 end do
 go to 6
 !   This is entrance for an increased value of n, using previously
@@ -9413,12 +9394,12 @@ go to 6
 !   new value of n.
 3 do j = 1,n
    do i = 1,n
-4     imknn(i,j) = -kmm(i,j)
+      imknn(i,j) = -kmm(i,j)
    end do
    wn(j) = wm(j)
    tn(j) = tm(j)
    xmz(j) = rhs(j)
-5  imknn(j,j) = imknn(j,j) + 1.0
+   imknn(j,j) = imknn(j,j) + 1.0
 end do
 !   This is the entrance when iteration in stage b fails and we need
 !   to increase n to obtain a better iterative rate.
@@ -9482,7 +9463,7 @@ flag = 0
 call nsterp(tm,wm,xmz,m,tn,wn,xn,n, &
    & kernel,rhfcn,rhs,kmn,nhalf,nup)
 do i = 1,m
-12 oldx(i) = xmz(i)
+   oldx(i) = xmz(i)
 end do
 !   Calculate first iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
@@ -9491,7 +9472,7 @@ cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 denr1 = rnrm(xm,xmz,m,1)
 flag = 1
 do i = 1,m
-13 xmz(i) = xm(i)
+   xmz(i) = xm(i)
 end do
 !   Calculate second iterate.
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
@@ -9507,7 +9488,7 @@ if (r1 <= r1rat) go to 15
 !   The iteration did not work well enough, and stage A is to be
 !   repeated. RE-initialize for solving (i-KN)*XN=rhfcn again
 !   with a larger n.
-14 n = m
+n = m
 loop = loop + 1
 m = 2*n
 go to 3
@@ -9518,7 +9499,7 @@ go to 3
    aside(i,1) = oldx(i)
    aside(i,2) = wm(i)
    aside(i,3) = tm(i)
-16 aside(i,4) = rhs(i)
+   aside(i,4) = rhs(i)
 end do
 aside2(1) = loop
 aside2(3) = r2
@@ -9526,7 +9507,7 @@ aside2(4) = denr2
 aside2(5) = r1rat
 do j = 1,m
    do i = 1,m
-17    aside3(i,j) = kmm(i,j)
+      aside3(i,j) = kmm(i,j)
    end do
 end do
 !
@@ -9561,9 +9542,9 @@ test = ((1.0 - r1)/r1)*esterr
 if (numr1 <= test) go to 33
 !   Iterate not sufficiently accurate. Initialize for computation
 !   of another iterate.
-25 denr1 = numr1
+denr1 = numr1
 do i = 1,m
-26 xmz(i) = xm(i)
+   xmz(i) = xm(i)
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
@@ -9579,13 +9560,13 @@ if (mnew > nup) go to 30
 n = mnew
 do j = 1,n
    do i = 1,n
-28    imknn(i,j) = -aside3(i,j)
+      imknn(i,j) = -aside3(i,j)
    end do
    oldx(j) = aside(j,1)
    wn(j) = aside(j,2)
    tn(j) = aside(j,3)
    xmz(j) = aside(j,4)
-29 imknn(j,j) = imknn(j,j) + 1.0
+   imknn(j,j) = imknn(j,j) + 1.0
 end do
 m = 2*n
 loop = aside2(1) + 1.0
@@ -9638,17 +9619,17 @@ go to 34
 m = mnew
 do i = 1,oldm
    save2(i) = wm(i)
-41 save(i) = tm(i)
+   save(i) = tm(i)
 end do
 call wandt(wm,tm,m,a,b)
 flag = 0
 call nsterp(tm,wm,xmz,m,save,save2,xm,oldm, &
    & kernel,rhfcn,rhs,kmn,nhalf,nup)
 do i = 1,oldm
-43 save(i) = xm(i)
+   save(i) = xm(i)
 end do
 do i = 1,m
-45 oldx(i) = xmz(i)
+   oldx(i) = xmz(i)
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
@@ -9656,7 +9637,7 @@ cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 denr1 = rnrm(xm,xmz,m,1)
 flag = 1
 do i = 1,m
-47 xmz(i) = xm(i)
+   xmz(i) = xm(i)
 end do
 call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
@@ -9691,17 +9672,17 @@ if (m > nup) go to 4
 !   rhs(i)=rhfcn(tm(i)) for later use in itert.
 do i = 1,m
    do j = 1,n
-1     kmn(i,j) = wn(j)*kernel(tm(i),tn(j))
+      kmn(i,j) = wn(j)*kernel(tm(i),tn(j))
    end do
 end do
 do i = 1,m
    rhs(i) = rhfcn(tm(i))
-2  xm(i) = rhs(i)
+   xm(i) = rhs(i)
 end do
 !   Calculate Nystrom interpolating formula.
 do i = 1,m
    do j = 1,n
-3     xm(i) = xm(i) + kmn(i,j)*xn(j)
+      xm(i) = xm(i) + kmn(i,j)*xn(j)
    end do
 end do
 return
@@ -9711,7 +9692,7 @@ return
    rhs(i) = rhfcn(tm(i))
    xm(i) = rhs(i)
    do j = 1,n
-5     xm(i) = xm(i) + wn(j)*kernel(tm(i),tn(j))*xn(j)
+      xm(i) = xm(i) + wn(j)*kernel(tm(i),tn(j))*xn(j)
    end do
 end do
 end subroutine nsterp
@@ -9749,13 +9730,13 @@ if (iflag == 1) go to 2
 !   Find the norm of x.
 rnrm = 0.0
 do i = 1,n
-1  rnrm = max(rnrm,abs(x(i)))
+   rnrm = max(rnrm,abs(x(i)))
 end do
 return
 !   Find the norm of x-y.
 2 rnrm = 0.0
 do i = 1,n
-3  rnrm = max(rnrm,abs(x(i) - y(i)))
+   rnrm = max(rnrm,abs(x(i) - y(i)))
 end do
 end function rnrm
 
@@ -9902,7 +9883,7 @@ do l = 1,loop
       tv(i1) = (al*(1.0 + s) + (1.0 - s)*bl)/2.0
       tv(i2) = (al*(1.0 - s) + (1.0 + s)*bl)/2.0
       wv(i1) = r
-1     wv(i2) = r
+      wv(i2) = r
    end do
 end do
 end subroutine wandt
@@ -9956,25 +9937,25 @@ if (nt > 0) go to 30
 !
 20 do i = 1,mf
    x(i) = xv(i)
-21 t(i) = tv(i)
+   t(i) = tv(i)
 end do
 nt = mf
 return
 !   Calculate norm(K).
 30 savep = ep
 do i = 1,nf
-31 imknn(i,i) = imknn(i,i) - 1.0
+   imknn(i,i) = imknn(i,i) - 1.0
 end do
 normk = 0.0
 do i = 1,nf
    sum = 0.0
    do j = 1,nf
-32    sum = sum + abs(imknn(i,j))
+      sum = sum + abs(imknn(i,j))
    end do
-33 normk = max(normk,sum)
+   normk = max(normk,sum)
 end do
 do i = 1,nf
-34 imknn(i,i) = imknn(i,i) + 1.0
+   imknn(i,i) = imknn(i,i) + 1.0
 end do
 if (nf == mf) go to 50
 !
@@ -9985,10 +9966,10 @@ derror = ((1.0 - r1)/r1)*eps/normk
 if (iflag == 1) derror = derror*xnorm
 itloop = 0
 do i = 1,mf
-41 xm(i) = xv(i)
+   xm(i) = xv(i)
 end do
 42 do i = 1,mf
-43 xmz(i) = xm(i)
+   xmz(i) = xm(i)
 end do
 call itert(kernel,rhfcn,nf,tn,wn,mf,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,1)
@@ -9996,7 +9977,7 @@ numr1 = rnrm(xm,xmz,mf,1)
 itloop = itloop + 1
 if ((numr1 > derror) .and. (itloop < 5)) go to 42
 do i = 1,mf
-44 xv(i) = xm(i)
+   xv(i) = xm(i)
 end do
 !
 !   Estimate new error bound for Nystrom interpolates.
@@ -10018,9 +9999,9 @@ if (ier /= 2) ep = max(ep,temp)
 60 do i = 1,nt
    sum = 0.0
    do j = 1,mf
-61    sum = sum + wv(j)*kernel(t(i),tv(j))*xv(j)
+      sum = sum + wv(j)*kernel(t(i),tv(j))*xv(j)
    end do
-62 x(i) = rhfcn(t(i)) + sum
+   x(i) = rhfcn(t(i)) + sum
 end do
 if ((ier == 0) .and. (ep > eps)) ier = 4
 if ((ier == 1) .and. (ep > error)) ier = 5
@@ -10062,26 +10043,26 @@ if (iflg == 1) go to 3
 !   and stored.
 do j = 1,m
    do i = 1,m
-1     kmm(i,j) = wm(j)*kernel(tm(i),tm(j))
+      kmm(i,j) = wm(j)*kernel(tm(i),tm(j))
    end do
    do i = 1,n
-2     knm(i,j) = wm(j)*kernel(tn(i),tm(j))
+      knm(i,j) = wm(j)*kernel(tn(i),tm(j))
    end do
 end do
 !   Compute  residuals r(i)=rhfcn(tm(i))-xmz(i)+km(tm(i))*xmz(i)
 3 do i = 1,m
    sum = 0.0
    do j = 1,m
-4     sum = sum + kmm(i,j)*xmz(j)
+      sum = sum + kmm(i,j)*xmz(j)
    end do
-5  r(i) = rhs(i) - (xmz(i) - sum)
+   r(i) = rhs(i) - (xmz(i) - sum)
 end do
 !
 !   COMPUTE rh=km*r AT ALL tn(i).
 do i = 1,n
    rh(i) = 0.0
    do j = 1,m
-7     rh(i) = rh(i) + knm(i,j)*r(j)
+      rh(i) = rh(i) + knm(i,j)*r(j)
    end do
 end do
 !   CALCULATE deln=((i-KN)**(-1))*km*r AT ALL tn(i).
@@ -10097,12 +10078,12 @@ call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 do i = 1,m
    sum = 0.0
    do j = 1,m
-10    sum = sum + kmm(i,j)*r(j)
+      sum = sum + kmm(i,j)*r(j)
    end do
    do j = 1,n
-11    sum = sum + kmn(i,j)*deln(j)
+      sum = sum + kmn(i,j)*deln(j)
    end do
-12 xm(i) = sum + r(i) + xmz(i)
+   xm(i) = sum + r(i) + xmz(i)
 end do
 return
 !   Entrance when m .GT. nup.
@@ -10110,15 +10091,15 @@ return
 13 do i = 1,m
    sum = 0.0
    do j = 1,m
-14    sum = sum + wm(j)*kernel(tm(i),tm(j))*xmz(j)
+      sum = sum + wm(j)*kernel(tm(i),tm(j))*xmz(j)
    end do
-15 r(i) = rhs(i) - (xmz(i) - sum)
+   r(i) = rhs(i) - (xmz(i) - sum)
 end do
 !   CALCULATE rh=km*r.
 do i = 1,n
    rh(i) = 0.0
    do j = 1,m
-17    rh(i) = rh(i) + wm(j)*kernel(tn(i),tm(j))*r(j)
+      rh(i) = rh(i) + wm(j)*kernel(tn(i),tm(j))*r(j)
    end do
 end do
 !
@@ -10133,12 +10114,12 @@ call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 do i = 1,m
    sum = 0.0
    do j = 1,m
-20    sum = sum + wm(j)*kernel(tm(i),tm(j))*r(j)
+      sum = sum + wm(j)*kernel(tm(i),tm(j))*r(j)
    end do
    do j = 1,n
-21    sum = sum + wn(j)*kernel(tm(i),tn(j))*deln(j)
+      sum = sum + wn(j)*kernel(tm(i),tn(j))*deln(j)
    end do
-22 xm(i) = sum + r(i) + xmz(i)
+   xm(i) = sum + r(i) + xmz(i)
 end do
 end subroutine itert
 
@@ -10196,7 +10177,7 @@ do i = 1,n
    scale(i) = 0.0
    do j = 1,n
       d(i,j) = a(i,j)
-10    scale(i) = scale(i) + abs(d(i,j))
+      scale(i) = scale(i) + abs(d(i,j))
    end do
    if (scale(i) /= 0.0) go to 11
    ierr = -i
@@ -10230,7 +10211,7 @@ do k = 1,nm1
    do j = k,n
       t = d(k,j)
       d(k,j) = d(l,j)
-31    d(l,j) = t
+      d(l,j) = t
    end do
    t = scale(k)
    scale(k) = scale(l)
@@ -10242,7 +10223,7 @@ do k = 1,nm1
       d(i,k) = d(i,k)/d(k,k)
       t = d(i,k)
       do j = kp1,n
-41       d(i,j) = d(i,j) - t*d(k,j)
+         d(i,j) = d(i,j) - t*d(k,j)
       end do
    end do
 end do
@@ -10255,7 +10236,7 @@ return
 !
 100 do i = 1,n
    r(i) = b(i)
-110 x(i) = 0.0
+   x(i) = 0.0
 end do
 go to 200
 !
@@ -10264,16 +10245,16 @@ go to 200
 120 do i = 1,n
    sum = 0.0
    do j = 1,n
-130   sum = sum + a(i,j)*x(j)
+      sum = sum + a(i,j)*x(j)
    end do
-131 r(i) = b(i) - sum
+   r(i) = b(i) - sum
 end do
 !
 normb = 0.0
 normr = 0.0
 do i = 1,n
    normb = max(normb,abs(b(i)))
-140 normr = max(normr,abs(r(i)))
+   normr = max(normr,abs(r(i)))
 end do
 relrsd = 0.0
 if (normb /= 0.0) relrsd = normr/normb
@@ -10289,7 +10270,7 @@ iswit = 2
    r(l) = t
 210 kp1 = k + 1
    do i = kp1,n
-211   r(i) = r(i) - d(i,k)*r(k)
+      r(i) = r(i) - d(i,k)*r(k)
    end do
 end do
 !
@@ -10302,10 +10283,10 @@ do nmi = 1,nm1
    ip1 = i + 1
    sum = 0.0
    do j = ip1,n
-220   sum = sum + d(i,j)*r(j)
+      sum = sum + d(i,j)*r(j)
    end do
    r(i) = (r(i) - sum)/d(i,i)
-221 x(i) = x(i) + r(i)
+   x(i) = x(i) + r(i)
 end do
 !
 select case (option)
@@ -10326,7 +10307,7 @@ normx = 0.0
 norme = 0.0
 do i = 1,n
    normx = max(normx,abs(x(i)))
-250 norme = max(norme,abs(r(i)))
+   norme = max(norme,abs(r(i)))
 end do
 error = 0.0
 if (normx /= 0.0) error = norme/normx
@@ -10510,4 +10491,180 @@ if (phase1) work(iphase) = 1.0
 iwork(2) = -1
 if (nornd) iwork(2) = 1
 end subroutine ode
+
+subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
+   & yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
+   & start,told,delsgn,ns,nornd,k,kold,isnold)
+implicit none
+integer, intent(inout) :: iflag, isnold, k, kold
+integer, intent(in) :: neqn
+integer, intent(inout) :: ns
+real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
+   & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
+real, intent(in) :: tout
+real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
+real :: yp(neqn)
+real, intent(inout) :: ypout(neqn), yy(neqn)
+logical, intent(inout) :: start, phase1, nornd
+external f
+integer :: isn, kle4, l, nostep
+real :: absdel, abseps, del, eps, fouru, releps, tend, u
+logical :: stiff, crash
+integer, parameter :: maxnum = 500
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!
+!   ODE  merely allocates storage for  de1 to relieve the user of the
+!   inconvenience of a long call list.  Consequently  de1 is used as
+!   described in the comments for  ODE .
+!
+!   This code is completely explained and documented in the text,
+!   computer solution of ordinary differential equations,  the initial
+!   value problem  by L. F. Shampine and M. K. Gordon.
+!
+!
+!   The constant  maxnum  is the maximum number of steps allowed in one
+!   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
+!   following statement
+!
+!
+!   ****** u is a machine dependent parameter. u is the smallest
+!          positive number for which 1.0 + u .GT. 1.0.
+!
+u = spmpar(1)
+fouru = 4.0*u
+!
+!            ***            ***            ***
+!
+!   Test for improper parameters
+!
+if (neqn < 1) go to 10
+if (t == tout) go to 10
+if (relerr < 0.0  .or.  abserr < 0.0) go to 10
+eps = max(relerr,abserr)
+if (eps <= 0.0) go to 10
+if (iflag == 0) go to 10
+isn = sign(1,iflag)
+iflag = abs(iflag)
+if (iflag == 1) go to 20
+if (t /= told) go to 10
+if (iflag >= 2  .and.  iflag <= 5) go to 20
+if (iflag == 6  .and.  abserr > 0.0) go to 20
+10 iflag = 7
+return
+!
+!   On each call set interval of integration and counter for number of
+!   steps.  Adjust input error tolerances to define weight vector for
+!   SUBROUTINE  step1
+!
+20 del = tout - t
+absdel = abs(del)
+tend = t + 10.0*del
+if (isn < 0) tend = tout
+nostep = 0
+kle4 = 0
+stiff = .false.
+releps = relerr/eps
+abseps = abserr/eps
+if (iflag == 1) go to 30
+if (isnold < 0) go to 30
+if (delsgn*del > 0.0) go to 50
+!
+!   On start and restart also set work variables x and yy(*), store the
+!   direction of integration and initialize the step size
+!
+30 start = .true.
+x = t
+do l = 1,neqn
+   yy(l) = y(l)
+end do
+delsgn = sign(1.0,del)
+h = sign(max(fouru*abs(x),abs(tout - x)),tout - x)
+!
+!   If already past output point, interpolate and return
+!
+50 if (abs(x - t) < absdel) go to 60
+call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
+!
+!   If cannot go past output point and sufficiently close,
+!   extrapolate and return
+!
+60 if (isn > 0  .or.  abs(tout - x) >= fouru*abs(x)) go to 80
+h = tout - x
+call f(x,yy,yp)
+do l = 1,neqn
+   y(l) = yy(l) + h*yp(l)
+end do
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
+!
+!   Test for too many steps
+!
+80 if (nostep < maxnum) go to 100
+iflag = isn*4
+if (stiff) iflag = isn*5
+do l = 1,neqn
+   y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+return
+!
+!   Limit step size, set weight vector and take a step
+!
+100 h = sign(min(abs(h),abs(tend - x)),h)
+do l = 1,neqn
+   wt(l) = releps*abs(yy(l)) + abseps
+   if (wt(l) <= 0.0) go to 140
+end do
+call step1(f,neqn,yy,x,h,eps,wt,start, &
+   & hold,k,kold,crash,phi,p,yp,psi, &
+   & alpha,beta,sig,v,w,g,phase1,ns,nornd)
+!
+!   Test for tolerances too small
+!
+if (.not.crash) go to 130
+iflag = isn*3
+relerr = eps*releps
+abserr = eps*abseps
+do l = 1,neqn
+   y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+return
+!
+!   Augment counter on number of steps and test for stiffness
+!
+130 nostep = nostep + 1
+kle4 = kle4 + 1
+if (kold > 4) kle4 = 0
+if (kle4 >= 50) stiff = .true.
+go to 50
+!
+!   Relative error criterion inappropriate
+!
+140 iflag = isn*6
+do l = 1,neqn
+   y(l) = yy(l)
+end do
+t = x
+told = t
+isnold = 1
+end subroutine de1
 

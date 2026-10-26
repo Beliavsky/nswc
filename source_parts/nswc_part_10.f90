@@ -1,116 +1,3 @@
-pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni)
-integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
-!
-!     Abstract
-!
-!         scomp2 evaluates a cubic spline at the abscissas in xi.
-!         It is assumed that the second derivatives at the nodes
-!         have been provided.
-!
-!     Description of arguments
-!
-!       --Input--
-!
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         ypp - Array of second derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and ypp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1 then xi and yi
-!               must be arrays of dimension ni or larger.
-!               It is assumed that ni is greater than or equal to 1.
-!
-!       --Output--
-!
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!
-!
-!     Check input
-!
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-!
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!
-!     Bisection search
-!
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x ( i )
-if ( nswc_ai_r4 < 0 ) go to 20
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!
-!     Linear forward search
-!
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!
-!     xx is greater than x(n) or less than x(1)
-!
-80 i = nm1
-go to 100
-90 i = 1
-!
-!     Evaluation
-!
-100 h = x(i + 1) - x(i)
-h2 = h*h
-xr = (x(i + 1) - xx)/h
-xr2 = xr*xr
-xr3 = xr*xr2
-xl = (xx - x(i))/h
-xl2 = xl*xl
-xl3 = xl*xl2
-yi(k) = y(i)*xr + y(i + 1)*xl &
-   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
-!
-!     Next point
-!
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi ( k - 1 )
-if ( nswc_ai_r4 < 0 ) go to 110
-if ( nswc_ai_r4 == 0 ) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine scomp2
-
 pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -990,7 +877,6 @@ do j = 1,lm1
    b(j) = wk(k + 2)
    c(j) = wk(k + 3)
    k = k + 4
-20 continue
 end do
 return
 !
@@ -1733,7 +1619,7 @@ do i = 2,nm1
    temp(i) = sdiag2/diag
    dx1 = dx2
    diag1 = diag2
-5  sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 6 diag = diag1 - sdiag1*temp(nm1)
 yp(n) = (slppn - dx1 - sdiag1*yp(nm1))/diag
@@ -1742,7 +1628,7 @@ yp(n) = (slppn - dx1 - sdiag1*yp(nm1))/diag
 !
 do i = 2,n
    ibak = np1 - i
-7  yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
 end do
 return
 !
@@ -2273,7 +2159,7 @@ if (n <= 1) go to 11
 s(1) = 0.
 do i = 2,n
    im1 = i - 1
-1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
+   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
 end do
 !
@@ -2342,7 +2228,7 @@ do i = 2,nm1
    dx1 = dx2
    dy1 = dy2
    diag1 = diag2
-8  sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 9 diag = diag1 - sdiag1*temp(nm1)
 xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
@@ -2353,7 +2239,7 @@ yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
 do i = 2,n
    ibak = np1 - i
    xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
-10 yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
 end do
 return
 !
@@ -2582,7 +2468,7 @@ if (n <= 1) go to 7
 s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
 do i = 2,n
    im1 = i - 1
-1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
+   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
       & (y(i) - y(im1))**2)
 end do
 !
@@ -2630,7 +2516,7 @@ do i = 2,nm1
    dx1 = dx2
    dy1 = dy2
    diag1 = diag2
-2  sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 3 dels2 = s(1)
 dx2 = (x(1) - x(n))/dels2
@@ -2648,7 +2534,7 @@ do i = 3,n
    npibak = n + ibak
    xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
    yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
-4  temp(ibak) = temp(npibak) - temp(ibak)*temp(ibak + 1)
+   temp(ibak) = temp(npibak) - temp(ibak)*temp(ibak + 1)
 end do
 5 xp(n) = (xp(n) - sdiag2*xp(1) - sdiag1*xp(nm1))/ &
    & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
@@ -2661,7 +2547,7 @@ xpn = xp(n)
 ypn = yp(n)
 do i = 1,nm1
    xp(i) = xp(i) + temp(i)*xpn
-6  yp(i) = yp(i) + temp(i)*ypn
+   yp(i) = yp(i) + temp(i)*ypn
 end do
 return
 !
@@ -2934,7 +2820,7 @@ if (n <= 1) go to 9
 s(1) = 0.
 do i = 2,n
    im1 = i - 1
-1  s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
+   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
       & + (z(i) - z(im1))**2)
 end do
 !
@@ -3016,7 +2902,7 @@ do i = 2,nm1
    dy1 = dy2
    dz1 = dz2
    diag1 = diag2
-6  sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 7 diag = diag1 - sdiag1*temp(nm1)
 xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
@@ -3030,7 +2916,7 @@ do i = 2,n
    t = temp(ibak)
    xp(ibak) = xp(ibak) - t*xp(ibak + 1)
    yp(ibak) = yp(ibak) - t*yp(ibak + 1)
-8  zp(ibak) = zp(ibak) - t*zp(ibak + 1)
+   zp(ibak) = zp(ibak) - t*zp(ibak + 1)
 end do
 return
 !
@@ -3553,7 +3439,7 @@ do j = 1,jderiv
       dl = wk(l,2)
       dr = wk(jj,3)
       wk(jj,1) = ((wk(jj + 1,1) - wk(jj,1))/(dl + dr))*fkmj
-150   l = l - 1
+      l = l - 1
    end do
 end do
 !
@@ -3569,7 +3455,7 @@ do j = jdrvp1,km1
       dl = wk(l,2)
       dr = wk(jj,3)
       wk(jj,1) = (wk(jj + 1,1)*dl + wk(jj,1)*dr)/(dl + dr)
-180   l = l - 1
+      l = l - 1
    end do
 end do
 !
@@ -3738,7 +3624,7 @@ do j = 1,km1
       dl = wk(l,2)
       dr = wk(jj,3)
       wk(jj,1) = (wk(jj + 1,1)*dl + wk(jj,1)*dr)/(dl + dr)
-100   l = l - 1
+      l = l - 1
    end do
 end do
 !
@@ -4099,7 +3985,7 @@ do m = 2,mhigh
    jp1mid = 1
    do j = ideriv,k
       dbiatx(j,ideriv) = dbiatx(jp1mid,1)
-10    jp1mid = jp1mid + 1
+      jp1mid = jp1mid + 1
    end do
    ideriv = ideriv - 1
    call bspvb(t, k, kp1 - ideriv, jj, x, left, dbiatx)
@@ -4114,10 +4000,10 @@ end do
 jlow = 1
 do i = 1,k
    do j = jlow,k
-19    a(j,i) = 0.0
+      a(j,i) = 0.0
    end do
    jlow = i
-20 a(i,i) = 1.0
+   a(i,i) = 1.0
 end do
 !
 !     At this point, a(.,j) contains the B-coeffs for the j-TH of the
@@ -4142,7 +4028,7 @@ do m = 2,mhigh
 !           in the factor nonzero.
 !
       do j = 1,i
-25       a(i,j) = (a(i,j) - a(i - 1,j))*factor
+         a(i,j) = (a(i,j) - a(i - 1,j))*factor
       end do
       il = il - 1
       i = i - 1
@@ -4160,7 +4046,7 @@ do m = 2,mhigh
       sum = 0.0
       jlow = max(i,m)
       do j = jlow,k
-35       sum = a(j,i)*dbiatx(j,m) + sum
+         sum = a(j,i)*dbiatx(j,m) + sum
       end do
       dbiatx(i,m) = sum
    end do
@@ -4425,7 +4311,7 @@ do i = 1,nrowm1
    jbeg = middle + 1
    jend = middle + jmax
    do j = jbeg,jend
-15    w(j,i) = w(j,i)/pivot
+      w(j,i) = w(j,i)/pivot
    end do
 end do
 go to 900
@@ -4442,7 +4328,7 @@ go to 900
    jbeg = middle + 1
    jend = middle + jmax
    do j = jbeg,jend
-32    w(j,i) = w(j,i)/pivot
+      w(j,i) = w(j,i)/pivot
    end do
 !                 kmax  is the number of (nonzero) entries in row  i  to
 !                     the right of the diagonal .
@@ -4456,7 +4342,7 @@ go to 900
       do j = 1,jmax
          mj = middle + j
          mdj = midmk + j
-40       w(mdj,ipk) = w(mdj,ipk) - w(mj,i)*factor
+         w(mdj,ipk) = w(mdj,ipk) - w(mj,i)*factor
       end do
    end do
 end do
@@ -4503,7 +4389,7 @@ do i = 1,nrowm1
    do j = 1,jmax
       ipj = i + j
       mpj = middle + j
-21    b(ipj) = b(ipj) - b(i)*w(mpj,i)
+      b(ipj) = b(ipj) - b(i)*w(mpj,i)
    end do
 end do
 !                                 Backward pass
@@ -4513,7 +4399,7 @@ end do
 30 if (nbandu > 0) go to 40
 !                                A  is lower triangular .
 do i = 1,nrow
-31 b(i) = b(i)/w(1,i)
+   b(i) = b(i)/w(1,i)
 end do
 return
 40 i = nrow
@@ -4522,7 +4408,7 @@ jmax = min(nbandu,i - 1)
 do j = 1,jmax
    imj = i - j
    mmj = middle - j
-45 b(imj) = b(imj) - b(i)*w(mmj,i)
+   b(imj) = b(imj) - b(i)*w(mmj,i)
 end do
 i = i - 1
 if (i > 1) go to 41
@@ -5227,7 +5113,7 @@ mt = 0
 !
 do i = ip1,n
    if (xval < bkpt(i)) go to 230
-220 ileft = i
+   ileft = i
 end do
 !
 !     Obtain B-spline function VALUE
@@ -5286,7 +5172,7 @@ ileft = nord
 if (nord == n) go to 330
 do i = nordp1,n
    if (xval < bkpt(i)) go to 330
-320 ileft = i
+   ileft = i
 end do
 330 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 w(neqcon,1) = 0.0
@@ -5305,7 +5191,7 @@ ileft = nord
 if (nord == n) go to 360
 do i = nordp1,n
    if (yval < bkpt(i)) go to 360
-350 ileft = i
+   ileft = i
 end do
 360 call bspvd(bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
 intrvl = ileft - nordm1
@@ -5341,7 +5227,7 @@ ileft = nord
 if (nord == n) go to 520
 do i = nordp1,n
    if (xval < bkpt(i)) go to 520
-510 ileft = i
+   ileft = i
 end do
 520 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 irow = neqcon + np1 + nincon
@@ -6706,7 +6592,7 @@ if (ind(3) == 0) go to 2
 l = loc(3)
 do i = 1,m
    zp(i,1,1) = opt(l)
-1  l = l + 1
+   l = l + 1
 end do
 go to 5
 2 dely1 = y(2) - y(1)
@@ -6715,11 +6601,11 @@ if (n > 2) dely2 = y(3) - y(1)
 if (dely1 <= 0. .or. dely2 <= dely1) go to 47
 call ceez(dely1,dely2,sigmay,c1,c2,c3,n)
 do i = 1,m
-3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
+   zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
 end do
 if (n == 2) go to 5
 do i = 1,m
-4  zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
+   zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
 end do
 !
 ! Obtain y-partial derivatives along y = y(n)
@@ -6729,7 +6615,7 @@ l = loc(4)
 do i = 1,m
    npi = n + i
    temp(npi) = opt(l)
-6  l = l + 1
+   l = l + 1
 end do
 go to 10
 7 delyn = y(n) - y(nm1)
@@ -6739,12 +6625,12 @@ if (delyn <= 0. .or. delynm <= delyn) go to 47
 call ceez(-delyn,-delynm,sigmay,c1,c2,c3,n)
 do i = 1,m
    npi = n + i
-8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
+   temp(npi) = c1*z(i,n) + c2*z(i,nm1)
 end do
 if (n == 2) go to 10
 do i = 1,m
    npi = n + i
-9  temp(npi) = temp(npi) + c3*z(i,n - 2)
+   temp(npi) = temp(npi) + c3*z(i,n - 2)
 end do
 10 if (x(m) <= x(1)) go to 47
 !
@@ -6758,7 +6644,7 @@ if (ind(1) == 0) go to 12
 l = loc(1)
 do j = 1,n
    zp(1,j,2) = opt(l)
-11 l = l + 1
+   l = l + 1
 end do
 if (ind(5) + ind(7) == 2) go to 15
 12 delx1 = x(2) - x(1)
@@ -6768,11 +6654,11 @@ if (delx1 <= 0. .or. delx2 <= delx1) go to 47
 call ceez(delx1,delx2,sigmax,c1,c2,c3,m)
 if (ind(1) == 1) go to 15
 do j = 1,n
-13 zp(1,j,2) = c1*z(1,j) + c2*z(2,j)
+   zp(1,j,2) = c1*z(1,j) + c2*z(2,j)
 end do
 if (m == 2) go to 15
 do j = 1,n
-14 zp(1,j,2) = zp(1,j,2) + c3*z(3,j)
+   zp(1,j,2) = zp(1,j,2) + c3*z(3,j)
 end do
 !
 ! Obtain x-y-partial derivative at (x(1),y(1))
@@ -6800,7 +6686,7 @@ l = loc(2)
 do j = 1,n
    npmpj = npm + j
    temp(npmpj) = opt(l)
-20 l = l + 1
+   l = l + 1
 end do
 21 if (ind(6) + ind(8) == 2) go to 24
 delxm = x(m) - x(mm1)
@@ -6811,12 +6697,12 @@ call ceez(-delxm,-delxmm,sigmax,c1,c2,c3,m)
 if (ind(2) == 1) go to 24
 do j = 1,n
    npmpj = npm + j
-22 temp(npmpj) = c1*z(m,j) + c2*z(mm1,j)
+   temp(npmpj) = c1*z(m,j) + c2*z(mm1,j)
 end do
 if (m == 2) go to 24
 do j = 1,n
    npmpj = npm + j
-23 temp(npmpj) = temp(npmpj) + c3*z(m - 2,j)
+   temp(npmpj) = temp(npmpj) + c3*z(m - 2,j)
 end do
 !
 ! Obtain x-y-partial derivative at (x(m),y(1))
@@ -6844,14 +6730,14 @@ if (m > 2) zxymns = zxymns + c3*temp(npm - 2)
 if (del1 <= 0.) go to 47
 deli = 1./del1
 do i = 1,m
-29 zp(i,2,1) = deli*(z(i,2) - z(i,1))
+   zp(i,2,1) = deli*(z(i,2) - z(i,1))
 end do
 zp(1,2,3) = deli*(zp(1,2,2) - zp(1,1,2))
 zp(m,2,3) = deli*(temp(npm + 2) - temp(npm + 1))
 call terms(diag1,sdiag1,sigmay,del1)
 diagi = 1./diag1
 do i = 1,m
-30 zp(i,1,1) = diagi*(zp(i,2,1) - zp(i,1,1))
+   zp(i,1,1) = diagi*(zp(i,2,1) - zp(i,1,1))
 end do
 zp(1,1,3) = diagi*(zp(1,2,3) - zp(1,1,3))
 zp(m,1,3) = diagi*(zp(m,2,3) - zp(m,1,3))
@@ -6865,14 +6751,14 @@ do j = 2,nm1
    if (del2 <= 0.) go to 47
    deli = 1./del2
    do i = 1,m
-31    zp(i,jp1,1) = deli*(z(i,jp1) - z(i,j))
+      zp(i,jp1,1) = deli*(z(i,jp1) - z(i,j))
    end do
    zp(1,jp1,3) = deli*(zp(1,jp1,2) - zp(1,j,2))
    zp(m,jp1,3) = deli*(temp(npmpj + 1) - temp(npmpj))
    call terms(diag2,sdiag2,sigmay,del2)
    diagin = 1./(diag1 + diag2 - sdiag1*temp(jm1))
    do i = 1,m
-32    zp(i,j,1) = diagin*(zp(i,jp1,1) - zp(i,j,1) - &
+      zp(i,j,1) = diagin*(zp(i,jp1,1) - zp(i,j,1) - &
          & sdiag1*zp(i,jm1,1))
    end do
    zp(1,j,3) = diagin*(zp(1,jp1,3) - zp(1,j,3) - &
@@ -6881,12 +6767,12 @@ do j = 2,nm1
       & sdiag1*zp(m,jm1,3))
    temp(j) = diagin*sdiag2
    diag1 = diag2
-33 sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 34 diagin = 1./(diag1 - sdiag1*temp(nm1))
 do i = 1,m
    npi = n + i
-35 zp(i,n,1) = diagin*(temp(npi) - zp(i,n,1) - &
+   zp(i,n,1) = diagin*(temp(npi) - zp(i,n,1) - &
       & sdiag1*zp(i,nm1,1))
 end do
 zp(1,n,3) = diagin*(zxy1ns - zp(1,n,3) - &
@@ -6901,10 +6787,10 @@ do j = 2,n
    jbakp1 = jbak + 1
    t = temp(jbak)
    do i = 1,m
-36    zp(i,jbak,1) = zp(i,jbak,1) - t*zp(i,jbakp1,1)
+      zp(i,jbak,1) = zp(i,jbak,1) - t*zp(i,jbakp1,1)
    end do
    zp(1,jbak,3) = zp(1,jbak,3) - t*zp(1,jbakp1,3)
-37 temp(jbak) = zp(m,jbak,3) - t*temp(jbakp1)
+   temp(jbak) = zp(m,jbak,3) - t*temp(jbakp1)
 end do
 !
 ! Set up right hand sides and tridiagonal system for x-grid
@@ -6915,13 +6801,13 @@ if (del1 <= 0.) go to 47
 deli = 1./del1
 do j = 1,n
    zp(2,j,2) = deli*(z(2,j) - z(1,j))
-38 zp(2,j,3) = deli*(zp(2,j,1) - zp(1,j,1))
+   zp(2,j,3) = deli*(zp(2,j,1) - zp(1,j,1))
 end do
 call terms(diag1,sdiag1,sigmax,del1)
 diagi = 1./diag1
 do j = 1,n
    zp(1,j,2) = diagi*(zp(2,j,2) - zp(1,j,2))
-39 zp(1,j,3) = diagi*(zp(2,j,3) - zp(1,j,3))
+   zp(1,j,3) = diagi*(zp(2,j,3) - zp(1,j,3))
 end do
 temp(n + 1) = diagi*sdiag1
 if (m == 2) go to 43
@@ -6934,26 +6820,26 @@ do i = 2,mm1
    deli = 1./del2
    do j = 1,n
       zp(ip1,j,2) = deli*(z(ip1,j) - z(i,j))
-40    zp(ip1,j,3) = deli*(zp(ip1,j,1) - zp(i,j,1))
+      zp(ip1,j,3) = deli*(zp(ip1,j,1) - zp(i,j,1))
    end do
    call terms(diag2,sdiag2,sigmax,del2)
    diagin = 1./(diag1 + diag2 - sdiag1*temp(npi - 1))
    do j = 1,n
       zp(i,j,2) = diagin*(zp(ip1,j,2) - zp(i,j,2) - &
          & sdiag1*zp(im1,j,2))
-41    zp(i,j,3) = diagin*(zp(ip1,j,3) - zp(i,j,3) - &
+      zp(i,j,3) = diagin*(zp(ip1,j,3) - zp(i,j,3) - &
          & sdiag1*zp(im1,j,3))
    end do
    temp(npi) = diagin*sdiag2
    diag1 = diag2
-42 sdiag1 = sdiag2
+   sdiag1 = sdiag2
 end do
 43 diagin = 1./(diag1 - sdiag1*temp(npm - 1))
 do j = 1,n
    npmpj = npm + j
    zp(m,j,2) = diagin*(temp(npmpj) - zp(m,j,2) - &
       & sdiag1*zp(mm1,j,2))
-44 zp(m,j,3) = diagin*(temp(j) - zp(m,j,3) - &
+   zp(m,j,3) = diagin*(temp(j) - zp(m,j,3) - &
       & sdiag1*zp(mm1,j,3))
 end do
 !
@@ -6966,7 +6852,7 @@ do i = 2,m
    t = temp(npibak)
    do j = 1,n
       zp(ibak,j,2) = zp(ibak,j,2) - t*zp(ibakp1,j,2)
-45    zp(ibak,j,3) = zp(ibak,j,3) - t*zp(ibakp1,j,3)
+      zp(ibak,j,3) = zp(ibak,j,3) - t*zp(ibakp1,j,3)
    end do
 end do
 return
@@ -8012,7 +7898,6 @@ go to 1
    sprod = (xl - x(n0))*(xk - x(n0)) + &
       & (yl - y(n0))*(yk - y(n0))
    if (sprod >= 0.) go to 5
-4  continue
 end do
 !
 ! Node k is to the right of nr.  Insert k as the last
@@ -8349,7 +8234,6 @@ iadj(nf + 1) = k
 imin = max(nright,nleft)
 do i = imin,km1
    iend(i) = iend(i) + 2
-1  continue
 end do
 !
 ! Initialize KEND and insert k as a neighbor of
@@ -8364,7 +8248,6 @@ imax = imin - 1
 imin = min(nright,nleft)
 do i = imin,imax
    iend(i) = iend(i) + 1
-2  continue
 end do
 !
 ! Insert nright as the first neighbor of k
@@ -8496,7 +8379,6 @@ do i = 1,3
 1  indx = indx - 1
    if (iadj(indx) /= n2) go to 1
    nft(i) = indx + 1
-2  continue
 end do
 !
 ! Order the vertices by decreasing magnitude.
@@ -8642,7 +8524,6 @@ do i = 1,nsl,inc
    iarr(indx - 2) = iarr(ibak - 2)
    iarr(indx - 3) = iarr(ibak - 3)
    iarr(indx - 4) = iarr(ibak - 4)
-1  continue
 end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
@@ -8665,7 +8546,6 @@ do i = nf,imax,inc
    iarr(indx + 2) = iarr(i + 2)
    iarr(indx + 3) = iarr(i + 3)
    iarr(indx + 4) = iarr(i + 4)
-5  continue
 end do
 !
 ! Perform the remaining ns-nsl shifts one at a time
@@ -8790,7 +8670,7 @@ do j = 1,2
    imin = in(j)
    imax = io(j) - 1
    do i = imin,imax
-3     iend(i) = iend(i) + 1
+      iend(i) = iend(i) + 1
    end do
    go to 6
 !
@@ -8804,14 +8684,13 @@ do j = 1,2
    imin = io(j)
    imax = in(j) - 1
    do i = imin,imax
-5     iend(i) = iend(i) - 1
+      iend(i) = iend(i) - 1
    end do
 !
 !   REVERSE (ip1,ip2) FOR (j,k) = (2,1)
 !
 6  ip1 = ip2
    ip2 = 3 - ip1
-7  continue
 end do
 return
 !
@@ -8824,7 +8703,7 @@ if (nf <= nl) call shiftd(nf,nl,-1, iadj )
 imin = io(1)
 imax = io(2) - 1
 do i = imin,imax
-9  iend(i) = iend(i) - 1
+   iend(i) = iend(i) - 1
 end do
 !
 !   Delete io(1) by shifting up by 2 and insert in(2)
@@ -8836,7 +8715,7 @@ iadj(nl - 1) = in(2)
 imin = io(2)
 imax = in(1) - 1
 do i = imin,imax
-10 iend(i) = iend(i) - 2
+   iend(i) = iend(i) - 2
 end do
 !
 !   Shift up by 1 and insert in(1)
@@ -8848,7 +8727,7 @@ iadj(nl) = in(1)
 imin = in(1)
 imax = in(2) - 1
 do i = imin,imax
-11 iend(i) = iend(i) - 1
+   iend(i) = iend(i) - 1
 end do
 return
 !
@@ -8861,7 +8740,7 @@ if (nf <= nl) call shiftd(nf,nl,1, iadj )
 imin = io(1)
 imax = io(2) - 1
 do i = imin,imax
-13 iend(i) = iend(i) + 1
+   iend(i) = iend(i) + 1
 end do
 !
 !   Delete io(2) by shifting down by 2 and insert in(1)
@@ -8873,7 +8752,7 @@ iadj(nf + 1) = in(1)
 imin = in(2)
 imax = io(1) - 1
 do i = imin,imax
-14 iend(i) = iend(i) + 2
+   iend(i) = iend(i) + 2
 end do
 !
 !   Shift down by 1 and insert in(2)
@@ -8885,7 +8764,7 @@ iadj(nf) = in(2)
 imin = in(1)
 imax = in(2) - 1
 do i = imin,imax
-15 iend(i) = iend(i) + 1
+   iend(i) = iend(i) + 1
 end do
 end subroutine swapd
 
@@ -9591,7 +9470,7 @@ do k = 1,nn
 !   Update the partials at node k
 !
    zxzy(1,k) = zxk + dzx
-3  zxzy(2,k) = zyk + dzy
+   zxzy(2,k) = zyk + dzy
 end do
 !
 !   Increment iter and test for convergence
@@ -9862,7 +9741,7 @@ npts(1) = kk
 lm1 = lmin - 1
 do lnp = 2,lm1
    call getnp(x,y,iadj,iend,lnp, npts, ds,ierr)
-1  sum = sum + ds
+   sum = sum + ds
 end do
 !
 ! Add additional nodes to npts until the relative increase
@@ -9907,7 +9786,7 @@ do i = 1,5
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,i),c,s)
-4     call srot(l,a(jp1,j),1,a(jp1,i),1,c,s)
+      call srot(l,a(jp1,j),1,a(jp1,i),1,c,s)
    end do
 5  continue
 end do
@@ -9924,7 +9803,7 @@ do j = 1,5
    jp1 = j + 1
    l = 6 - j
    call srotg(a(j,j),a(j,6),c,s)
-7  call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+   call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
 end do
 i = i + 1
 go to 6
@@ -9953,13 +9832,13 @@ go to 6
    a(i,6) = sf
    ip1 = i + 1
    do j = ip1,6
-10    a(j,6) = 0.
+      a(j,6) = 0.
    end do
    do j = i,5
       jp1 = j + 1
       l = 6 - j
       call srotg(a(j,j),a(j,6),c,s)
-11    call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
+      call srot(l,a(jp1,j),1,a(jp1,6),1,c,s)
    end do
 end do
 go to 14
@@ -9985,7 +9864,7 @@ do i = 4,lm1
    call srotg(a(4,4),a(4,6),c,s)
    call srot(2,a(5,4),1,a(5,6),1,c,s)
    call srotg(a(5,5),a(5,6),c,s)
-13 call srot(1,a(6,5),1,a(6,6),1,c,s)
+   call srot(1,a(6,5),1,a(6,6),1,c,s)
 end do
 !
 ! Test the linear fit for ill-conditioning
@@ -10092,7 +9971,7 @@ return
 !   of influence.  Set row to the zero vector.
 !
 1 do i = 1,6
-2  row(i) = 0.
+   row(i) = 0.
 end do
 end subroutine setrm
 
@@ -10197,7 +10076,6 @@ y1 = y(n1)
 do i = 1,lm1
    ni = npts(i)
    iend(ni) = -iend(ni)
-1  continue
 end do
 !
 ! Candidates for np = npts(l) are the unmarked neighbors
