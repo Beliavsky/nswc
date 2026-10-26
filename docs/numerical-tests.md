@@ -32,7 +32,7 @@ optimized settings, run:
 python tools/validate_blktri_bounds.py
 ```
 
-This checks both free-form implementations and both boundary conditions in
+This checks all three maintained implementations and both boundary conditions in
 each dimension. It also reproduces the original empty-factor bounds failure;
 see the [correction notes](compiler-warnings.md#empty-polynomial-factors).
 

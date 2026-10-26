@@ -119924,8 +119924,11 @@ C
          I4 = I2+I2
          IRM1 = IR-1
          CALL INDXB (I2,IR,IM2,NM2)
+         IF (NM2 .EQ. 0) IM2 = 1
          CALL INDXB (I1,IRM1,IM3,NM3)
+         IF (NM3 .EQ. 0) IM3 = 1
          CALL INDXB (I3,IRM1,IM1,NM1)
+         IF (NM1 .EQ. 0) IM1 = 1
          CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,Y(1,I2),W3,
      1               M,AM,BM,CM,WD,WW,WU)
          IF = 2**K
@@ -119940,9 +119943,13 @@ C
             GO TO 80
    20       CALL INDXA (I,IR,IDXA,NA)
             CALL INDXB (I-I1,IRM1,IM1,NM1)
+            IF (NM1 .EQ. 0) IM1 = 1
             CALL INDXB (IPI2,IR,IP2,NP2)
+            IF (NP2 .EQ. 0) IP2 = 1
             CALL INDXB (IPI1,IRM1,IP1,NP1)
+            IF (NP1 .EQ. 0) IP1 = 1
             CALL INDXB (IPI3,IRM1,IP3,NP3)
+            IF (NP3 .EQ. 0) IP3 = 1
             CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W3,W1,M,AM,
      1                  BM,CM,WD,WW,WU)
             IF ( ( IPI2 - NM ) .LE. 0 ) GO TO 50
@@ -119971,8 +119978,11 @@ C
       I = IF/2
       I1 = I/2
       CALL INDXB (I-I1,K-2,IM1,NM1)
+      IF (NM1 .EQ. 0) IM1 = 1
       CALL INDXB (I+I1,K-2,IP1,NP1)
+      IF (NP1 .EQ. 0) IP1 = 1
       CALL INDXB (I,K-1,IZ,NZ)
+      IF (NZ .EQ. 0) IZ = 1
       CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,Y(1,I),W1,M,AM,
      1            BM,CM,WD,WW,WU)
       IZR = I
@@ -119987,8 +119997,11 @@ C
          I = I2
          CALL INDXC (I,IR,IDXC,NC)
          CALL INDXB (I,IR,IZ,NZ)
+         IF (NZ .EQ. 0) IZ = 1
          CALL INDXB (I-I1,IR-1,IM1,NM1)
+         IF (NM1 .EQ. 0) IM1 = 1
          CALL INDXB (I+I1,IR-1,IP1,NP1)
+         IF (NP1 .EQ. 0) IP1 = 1
          CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W1,W1,M,AM,BM,
      1               CM,WD,WW,WU)
          DO J=1,M
@@ -120011,8 +120024,11 @@ C
             GO TO 180
   150       CALL INDXA (I,IR,IDXA,NA)
             CALL INDXB (I,IR,IZ,NZ)
+            IF (NZ .EQ. 0) IZ = 1
             CALL INDXB (I-I1,IR-1,IM1,NM1)
+            IF (NM1 .EQ. 0) IM1 = 1
             CALL INDXB (I+I1,IR-1,IP1,NP1)
+            IF (NP1 .EQ. 0) IP1 = 1
             CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W2,W2,M,AM,
      1                  BM,CM,WD,WW,WU)
             DO J=1,M
@@ -120031,6 +120047,7 @@ C
          Y(J,NM+1) = Y(J,NM+1)-CN(NM+1)*W1(J)-AN(NM+1)*W2(J)
       END DO
       CALL INDXB (IF/2,K-1,IM1,NM1)
+      IF (NM1 .EQ. 0) IM1 = 1
       CALL INDXB (IF,K-1,IP,NP)
       IF ( ( NCMPLX ) .EQ. 0 ) GO TO 220
       GO TO 210
@@ -120053,8 +120070,11 @@ C
          I = I4
          CALL INDXA (I,IR,IDXA,NA)
          CALL INDXB (I-I2,IR,IM2,NM2)
+         IF (NM2 .EQ. 0) IM2 = 1
          CALL INDXB (I-I2-I1,IR-1,IM3,NM3)
+         IF (NM3 .EQ. 0) IM3 = 1
          CALL INDXB (I-I1,IR-1,IM1,NM1)
+         IF (NM1 .EQ. 0) IM1 = 1
          CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,W1,W1,M,AM,
      1               BM,CM,WD,WW,WU)
          CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W1,W1,M,AM,BM,
@@ -120082,8 +120102,11 @@ C
             GO TO 300
   280       CALL INDXC (I,IR,IDXC,NC)
             CALL INDXB (IPI2,IR,IP2,NP2)
+            IF (NP2 .EQ. 0) IP2 = 1
             CALL INDXB (IPI1,IRM1,IP1,NP1)
+            IF (NP1 .EQ. 0) IP1 = 1
             CALL INDXB (IPI3,IRM1,IP3,NP3)
+            IF (NP3 .EQ. 0) IP3 = 1
             CALL PRDCT (NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,W2,W2,M,
      1                  AM,BM,CM,WD,WW,WU)
             CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W2,W2,M,AM,
@@ -120118,8 +120141,11 @@ C
             CALL INDXA (I,IR,IDXA,NA)
             CALL INDXC (I,IR,IDXC,NC)
             CALL INDXB (I,IR,IZ,NZ)
+            IF (NZ .EQ. 0) IZ = 1
             CALL INDXB (IMI1,IRM1,IM1,NM1)
+            IF (NM1 .EQ. 0) IM1 = 1
             CALL INDXB (IPI1,IRM1,IP1,NP1)
+            IF (NP1 .EQ. 0) IP1 = 1
             IF ( ( I - I2 ) .LE. 0 ) GO TO 340
             GO TO 360
   340       DO J=1,M

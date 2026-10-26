@@ -73,6 +73,8 @@ For new programs, use `nswc_mod.f90`, which supplies module `nswc_mod` with all
 call external procedures, retain `nswc.f90`. Both free-form versions provide the
 same routines, data declarations, and pure/elemental attributes. `nswc.f`
 provides readable fixed form; `nswc_orig.f` preserves the supplied source.
+Correctness fixes apply to all three maintained versions. Only `nswc_orig.f`
+is preserved unchanged as the archive.
 Choose one implementation for each executable.
 Documentation source links point into free-form files in `source_parts/`;
 displayed line numbers refer to the complete `nswc.f90`.

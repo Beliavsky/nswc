@@ -19,7 +19,8 @@ reason for retaining each of the remaining 274. Line numbers refer to the input
 of this pass, after declaration ordering, terminal RETURN cleanup and the
 periodic-root workspace correction.
 
-The fixed-form reconstruction applies this pass last. The normal reviewed
+The fixed-form reconstruction applies this pass before the later reviewed
+source corrections. The normal reviewed
 pipeline then generates both free-form variants and the source partitions.
 Constant values, argument declarations, intents, purity selections and intrinsic
 selection records are unchanged. Their procedure hashes were refreshed only

@@ -69,8 +69,8 @@ argument-mismatch tolerance so this error cannot silently return.
 
 Local optimized tests also pass for the maintained fixed-form and free-form
 solvers with bounds checking in `COMPB` and floating-point traps enabled.
-The free-form implementations also correct empty-factor indices as described
-below. The fixed-form reference and archive retain the original index handling.
+All maintained implementations also correct empty-factor indices as described
+below. Only the archive retains the original index handling.
 
 ## Empty polynomial factors
 
@@ -79,29 +79,32 @@ some paths. `BLKTR1` would then form the actual argument `B(IDX)` even though
 the product routine never reads that zero-length factor. With an index of zero,
 forming the argument fails bounds checking before the product routine starts.
 
-In `nswc.f90` and `nswc_mod.f90`, `BLKTR1` substitutes index 1 after 26 of
+In `nswc.f`, `nswc.f90` and `nswc_mod.f90`, `BLKTR1` substitutes index 1 after 26 of
 its 27 `INDXB` calls when the returned factor length is zero. The zero length
 is preserved, and all nonempty indices and lengths are unchanged. `INDXB`
 itself is unchanged: `COMPB` also uses its computed indices as workspace anchors
 when the factor length is zero. The remaining `BLKTR1` lookup also locates the
 periodic root workspace; its product uses `NM+1` roots, so that anchor is preserved.
 The interface, workspace layout and numerical operations are unchanged.
-The reviewed free-source fix is reproduced by `tools/free_source_fixes.py`.
+The fixed-form fix is reproduced by `tools/blktri_empty_factors.py` after the
+historical control-flow passes. The free-source pipeline recognizes the same
+guards. Only the `BLKTR1` input hash in the purity review changes; its attributes,
+calls and purity selections are unchanged. The existing free-form outputs remain unchanged.
 
 ```sh
 python tools/validate_blktri_bounds.py
 ```
 
 This regression verifies the exact guarded calls and unchanged `INDXB` code
-against the fixed-form reference. Restoring the original `BLKTR1` with local
+against the reviewed fixed-form correction. Restoring the original `BLKTR1` with local
 integers initialized to zero reproduces the `B(0)` bounds failure deterministically.
 It also builds production solver bodies and their dependencies with bounds
 checking at `-O0` and `-O2`,
 initializing local integers to zero under GNU. Manufactured-solution tests cover
 periodic and nonperiodic boundaries in both dimensions, real and complex periodic
-roots, sizes 3 through 8, and repeated solves, for both free-form implementations.
+roots, sizes 3 through 8, and repeated solves, for all three maintained implementations.
 Use `--ifx PATH --intel-env ENVIRONMENT_BATCH` to repeat the checks with Intel.
-The GNU checks run in GitHub Actions. Fixed-form sources remain unchanged.
+The GNU checks run in GitHub Actions. `nswc_orig.f` remains unchanged.
 
 ## Reproduction and verification
 

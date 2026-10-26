@@ -11,6 +11,7 @@ from remove_final_returns import transform_fixed as returns
 from validate_explicit_typing import fixed_stages
 from modernize_arithmetic_if import transform as modernize_arithmetic_if
 from modernize_remaining_features import transform as finish_remaining
+from blktri_empty_factors import transform_fixed as correct_empty_factors
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     before = workspace(returns(fixed_stages()[3].data))
     result = transform(before)
-    if finish_remaining(modernize_arithmetic_if(result.data)) != (ROOT / 'nswc.f').read_bytes():
+    if correct_empty_factors(finish_remaining(modernize_arithmetic_if(result.data))) != (ROOT / 'nswc.f').read_bytes():
         raise ValueError('Maintained fixed form does not reproduce DO modernization')
     output = StringIO(newline='')
     writer = csv.writer(output, lineterminator='\n')

@@ -142,7 +142,8 @@ class ModernizeDoTests(unittest.TestCase):
         from modernize_deleted_do import transform as modernize_deleted_loops
         from modernize_arithmetic_if import transform as modernize_arithmetic_if
         from modernize_remaining_features import transform as finish_remaining
-        self.assertEqual(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data)),
+        from blktri_empty_factors import transform_fixed as correct_empty_factors
+        self.assertEqual(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(remove_final_returns(order_declarations(combine_declarations(reviewed).data).data))).data))),
                          (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 

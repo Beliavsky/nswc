@@ -13,6 +13,8 @@ from free_source_fixes import correct_empty_factor_index
 from generate_interfaces import compiler_environment
 from validate_module import standalone_caller, state_test_module
 from validate_storage import run
+from blktri_empty_factors import transform_fixed as correct_fixed
+from explicit_typing import units
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,8 +43,11 @@ def verify(compiler, work, intel=False, env=None):
     work = Path(work)
     external = (ROOT / 'nswc.f90').read_text()
     fixed = (ROOT / 'nswc.f').read_text()
+    old_fixed = correct_fixed(fixed.encode('ascii'), undo=True)
+    if correct_fixed(old_fixed) != fixed.encode('ascii') or correct_fixed(fixed.encode('ascii')) != fixed.encode('ascii'):
+        raise ValueError('Fixed-form correction does not reproduce or is not idempotent')
     old_body = re.search(r'^      SUBROUTINE BLKTR1\b.*?^      END SUBROUTINE BLKTR1\n',
-                         fixed, re.M | re.S)[0]
+                         old_fixed.decode('ascii'), re.M | re.S)[0]
     old_body = format_source(lowercase(convert_text(old_body)))
     new_body = procedure_blocks(external)['BLKTR1']
     from simplify_free_style import transform as style
@@ -55,7 +60,11 @@ def verify(compiler, work, intel=False, env=None):
     if semantic_statements(original_index) != semantic_statements(procedure_blocks(external)['INDXB']):
         raise ValueError('INDXB workspace-anchor behavior changed')
     label = 'Intel' if intel else 'GNU'
-    sources = solver_sources(external, (ROOT / 'nswc_mod.f90').read_text())
+    free_sources = solver_sources(external, (ROOT / 'nswc_mod.f90').read_text())
+    selected = set(procedure_blocks(free_sources[0]))
+    fixed_lines, scopes = units(fixed.encode('ascii'))
+    fixed_source = ''.join(''.join(fixed_lines[start:end]) for name, (start, _, end) in scopes.items() if name in selected)
+    sources = [('fixed', fixed_source), ('external', free_sources[0]), ('module', free_sources[1])]
     names = set(procedure_blocks(external))
     driver = (ROOT / 'tests/fortran/test_blktri_periodic.f90').read_text()
     for opt in (0, 2):
@@ -67,15 +76,16 @@ def verify(compiler, work, intel=False, env=None):
         source = work / 'probe.f90'
         if not intel and opt == 0:
             # Restore only BLKTR1 to reproduce B(0) deterministically.
-            before = sources[0].replace(new_body, style(old_body))
+            before = free_sources[0].replace(new_body, style(old_body))
             source.write_text(before + driver, newline='\n')
             run([compiler, *flags, str(source), *output], work, env)
             failed = subprocess.run([str(exe)], cwd=work, capture_output=True, text=True, timeout=30)
             if failed.returncode == 0 or "below lower bound of 1" not in failed.stderr:
                 raise ValueError('Regression did not detect the original B(0):\n' + failed.stderr)
             print('GNU: reproduced original B(0) bounds failure.', flush=True)
-        for module, text in enumerate(sources):
-            library = work / 'library.f90'
+        for variant, text in sources:
+            module = variant == 'module'
+            library = work / ('library.f' if variant == 'fixed' else 'library.f90')
             obj = work / ('library.obj' if intel else 'library.o')
             library.write_text(text, newline='\n')
             objout = ['/object:' + str(obj)] if intel else ['-o', str(obj)]
@@ -93,10 +103,10 @@ def verify(compiler, work, intel=False, env=None):
                 try:
                     result = run([str(exe)], work, env)
                 except RuntimeError as error:
-                    raise RuntimeError(f'{label} O{opt}, module={bool(module)}, periodic={periodic}: {error}') from error
+                    raise RuntimeError(f'{label} O{opt}, {variant}, periodic={periodic}: {error}') from error
                 if 'test_blktri_periodic: PASS' not in result.stdout:
                     raise ValueError('Bounds-checked solver did not complete')
-        print(f'{label} O{opt}: external/module periodic/nonperiodic solves passed with bounds checking.', flush=True)
+        print(f'{label} O{opt}: fixed/external/module periodic/nonperiodic solves passed with bounds checking.', flush=True)
 
 
 def main():
