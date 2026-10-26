@@ -20,11 +20,42 @@ double precision, parameter :: mixed(2) = [double precision :: .1, 2d0]
 double precision, parameter :: rounded(2) = [double precision :: .1, 2.]
 logical, parameter :: flags(2) = [logical :: .true., .false.]
 foo = a(i) + int(b(i) + c(i) + mixed(i) + rounded(i))
+if (i.eq.1) foo = foo + 1
+if (i .ne. 2 .and. i.lt.3) foo = foo + 2
+if (i.le.4 .or. i.gt.5 .or. i.ge.6) foo = foo + 3
 end function foo
 '''
 
 
 class SimplifyStyleTests(unittest.TestCase):
+    def test_comparisons_preserve_logical_operators_and_quoted_text(self):
+        source = """subroutine s(x,y)
+real :: x,y
+if (x .eq.y) go to 90 ! x.eq.y
+if (x/=y .and. .not.(x.lt.y)) x = y
+if (.true. .eqv. .false. .or. .true. .neqv. .false.) x = y
+if (x &
+   & .GE.y) x = y
+print *, 'x.eq.y', "x<=y"
+90 format('x.eq.y')
+end subroutine s
+"""
+        result = transform(source)
+        self.assertIn('if (x == y) go to 90 ! x.eq.y', result)
+        self.assertIn('if (x /= y .and. .not.(x < y))', result)
+        self.assertIn('.true. .eqv. .false. .or. .true. .neqv. .false.', result)
+        self.assertIn('& >= y)', result)
+        self.assertIn("'x.eq.y', \"x<=y\"", result)
+        self.assertIn("90 format('x.eq.y')", result)
+        self.assertEqual(transform(result), result)
+
+    def test_comparison_spacing_wraps_long_lines(self):
+        source = 'if (' + 'a'*61 + '==' + 'b'*61 + ') x=1\n'
+        result = transform(source)
+        self.assertTrue(all(len(line) <= 132 for line in result.splitlines()))
+        self.assertIn(' &\n', result)
+        self.assertEqual(transform(result), result)
+
     def test_only_matching_default_literal_types_are_removed(self):
         result = transform(SOURCE)
         self.assertIn('function foo(i)', result)

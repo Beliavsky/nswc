@@ -1,4 +1,4 @@
-"""Tighten procedure parentheses and omit provably redundant constructor types.
+"""Modernize comparisons, tighten parentheses and simplify constructor types.
 
 Only homogeneous default-kind numeric/logical literal constructors qualify.
 Expressions, explicit kinds, complex/character values and mixed types retain
@@ -10,8 +10,42 @@ import re
 import subprocess
 import tempfile
 
-from format_free_form import TOKEN, groups
+from format_free_form import TOKEN, groups, wrap_line
 from fortran_procedures import HEADER
+
+COMPARISONS = {'.eq.': '==', '.ne.': '/=', '.lt.': '<',
+               '.le.': '<=', '.gt.': '>', '.ge.': '>='}
+
+
+def comparison_style(text):
+    lines = text.splitlines(True)
+    for records, logical in groups(lines):
+        if any(r.continued_string for r in records) or re.match(r'^\s*format\b', logical, re.I):
+            continue
+        for record in records:
+            matches = list(TOKEN.finditer(record.code))
+            if not matches:
+                continue
+            gaps = [record.code[:matches[0].start()]]
+            gaps.extend(record.code[a.end():b.start()] for a, b in zip(matches, matches[1:]))
+            gaps.append(record.code[matches[-1].end():])
+            values = [m[0] for m in matches]
+            for i, value in enumerate(values):
+                operator = COMPARISONS.get(value.lower(), value)
+                if operator in COMPARISONS.values():
+                    values[i] = operator
+                    if i:
+                        gaps[i] = ' '
+                    if i + 1 < len(values):
+                        gaps[i + 1] = ' '
+            code = ''.join(gap + value for gap, value in zip(gaps, values)) + gaps[-1]
+            if len(code.rstrip()) > 132:
+                prefix = re.match(r'^\s*', code)[0]
+                suffix = (' ' + record.comment) if record.comment else ''
+                lines[record.index] = wrap_line(prefix, code[len(prefix):].rstrip(), suffix, '', record.newline, 3)
+            else:
+                lines[record.index] = code + record.comment + record.newline
+    return ''.join(lines)
 
 
 def literal_type(tokens):
@@ -79,7 +113,7 @@ def transform(text):
         for start, end in sorted(spans, reverse=True):
             line = line[:start] + line[end:]
         lines[index] = line
-    return ''.join(lines)
+    return comparison_style(''.join(lines))
 
 
 def main():

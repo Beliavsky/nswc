@@ -304,16 +304,16 @@ end interface
 !
 !     Check input parameters
 !
-if (neqn .lt. 1) go to 10
-if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 10
+if (neqn < 1) go to 10
+if (relerr < 0.0 .or. abserr < 0.0) go to 10
 mflag = iabs(iflag)
-if (mflag .eq. 0 .or. mflag .gt. 8) go to 10
+if (mflag == 0 .or. mflag > 8) go to 10
 !
 !     Compute the relative machine precision
 !
 eps = spmpar(1)
 u26 = 26.0*eps
-if (mflag .ne. 1) go to 20
+if (mflag /= 1) go to 20
 go to 50
 !
 !     Invalid input
@@ -323,24 +323,24 @@ return
 !
 !     Check continuation possibilities
 !
-20 if (t .eq. tout .and. kflag .ne. 3) go to 10
-if (mflag .ne. 2) go to 25
+20 if (t == tout .and. kflag /= 3) go to 10
+if (mflag /= 2) go to 25
 !
 !     iflag = +2 or -2
 !
-if (kflag .eq. 3) go to 45
-if (init .eq. 0) go to 45
-if (kflag .eq. 4) go to 40
-if ((kflag .eq. 5)  .and.  (abserr .eq. 0.0)) go to 30
-if ((kflag .eq. 6)  .and.  (relerr .le. savre)  .and. &
-   & (abserr .le. savae)) go to 30
+if (kflag == 3) go to 45
+if (init == 0) go to 45
+if (kflag == 4) go to 40
+if ((kflag == 5)  .and.  (abserr == 0.0)) go to 30
+if ((kflag == 6)  .and.  (relerr <= savre)  .and. &
+   & (abserr <= savae)) go to 30
 go to 50
 !
 !     iflag = 3,4,5,6,7 or 8
 !
-25 if (iflag .eq. 3) go to 45
-if (iflag .eq. 4) go to 40
-if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
+25 if (iflag == 3) go to 45
+if (iflag == 4) go to 40
+if (iflag == 5 .and. abserr > 0.0) go to 45
 !
 !     Integration cannot be continued since user did not respond to
 !     the instructions pertaining to iflag=5,6,7 or 8
@@ -350,12 +350,12 @@ if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
 !     Reset function evaluation counter
 !
 40 nfe = 0
-if (mflag .eq. 2) go to 50
+if (mflag == 2) go to 50
 !
 !     Reset flag VALUE from previous call
 !
 45 iflag = jflag
-if (kflag .eq. 3) mflag = iabs(iflag)
+if (kflag == 3) mflag = iabs(iflag)
 !
 !     Save input iflag and set continuation flag VALUE for subsequent
 !     input checking
@@ -373,7 +373,7 @@ savae = abserr
 !     from impossible accuracy requests
 !
 rer = 2.0*eps + remin
-if (relerr .ge. rer) go to 55
+if (relerr >= rer) go to 55
 !
 !     Relative error tolerance too small
 !
@@ -384,8 +384,8 @@ return
 !
 55 dt = tout - t
 !
-if (mflag .eq. 1) go to 60
-if (init .eq. 0) go to 65
+if (mflag == 1) go to 60
+if (init == 0) go to 65
 go to 80
 !
 !     Initialization --
@@ -401,7 +401,7 @@ kop = 0
 a = t
 call f(a,y,yp)
 nfe = 1
-if (t .ne. tout) go to 65
+if (t /= tout) go to 65
 iflag = 2
 return
 !
@@ -410,12 +410,12 @@ h = abs(dt)
 toln = 0.0
 do 70 k = 1,neqn
    tol = relerr*abs(y(k)) + abserr
-   if (tol .le. 0.) go to 70
+   if (tol <= 0.) go to 70
    toln = tol
    ypk = abs(yp(k))
-   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
+   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
 70 continue
-if (toln .le. 0.0) h = 0.0
+if (toln <= 0.0) h = 0.0
 h = amax1(h,u26*amax1(abs(t),abs(dt)))
 jflag = isign(2,iflag)
 !
@@ -426,15 +426,15 @@ jflag = isign(2,iflag)
 !     Test to see if rkf45 is being severely impacted by too many
 !     output points
 !
-if (abs(h) .ge. 2.0*abs(dt)) kop = kop + 1
-if (kop .ne. 100) go to 85
+if (abs(h) >= 2.0*abs(dt)) kop = kop + 1
+if (kop /= 100) go to 85
 !
 !     Unnecessary frequency of output
 kop = 0
 iflag = 7
 return
 !
-85 if (abs(dt) .gt. u26*abs(t)) go to 95
+85 if (abs(dt) > u26*abs(t)) go to 95
 !
 !     If too close to output point,extrapolate and return
 !
@@ -469,8 +469,8 @@ hmin = u26*abs(t)
 !     thus lessen the impact of output points on the code.
 !
 dt = tout - t
-if (abs(dt) .ge. 2.0*abs(h)) go to 200
-if (abs(dt) .gt. abs(h)) go to 150
+if (abs(dt) >= 2.0*abs(h)) go to 200
+if (abs(dt) > abs(h)) go to 150
 !
 !     The next successful step will complete the integration to the
 !     output point
@@ -507,7 +507,7 @@ go to 200
 !     Test number of derivative function evaluations.
 !     If okay,try to advance the integration from t to t+h
 !
-200 if (nfe .le. maxnfe) go to 220
+200 if (nfe <= maxnfe) go to 220
 !
 !     Too much work
 !
@@ -528,7 +528,7 @@ nfe = nfe + 5
 eeoet = 0.0
 do 250 k = 1,neqn
    et = abs(y(k)) + abs(f1(k)) + ae
-   if (et .gt. 0.0) go to 240
+   if (et > 0.0) go to 240
 !
 !        Inappropriate error tolerance
 !
@@ -540,7 +540,7 @@ do 250 k = 1,neqn
 250 eeoet = amax1(eeoet,ee/et)
 !
 esttol = abs(h)*eeoet*scale/752400.0
-if (esttol .le. 1.0) go to 260
+if (esttol <= 1.0) go to 260
 !
 !     Unsuccessful step
 !                       reduce the stepsize , try again
@@ -549,9 +549,9 @@ if (esttol .le. 1.0) go to 260
 hfaild = .true.
 output = .false.
 s = 0.1
-if (esttol .lt. 59049.0) s = 0.9/esttol**0.2
+if (esttol < 59049.0) s = 0.9/esttol**0.2
 h = s*h
-if (abs(h) .gt. hmin) go to 200
+if (abs(h) > hmin) go to 200
 !
 !     Requested error unattainable at smallest allowable stepsize
 !
@@ -576,7 +576,7 @@ nfe = nfe + 1
 !                          stepsize is not allowed to increase
 !
 s = 5.0
-if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
 if (hfaild) s = amin1(s,1.0)
 h = sign(amax1(s*abs(h),hmin),h)
 !
@@ -586,7 +586,7 @@ h = sign(amax1(s*abs(h),hmin),h)
 !     Should we take another step
 !
 if (output) go to 300
-if (iflag .gt. 0) go to 100
+if (iflag > 0) go to 100
 !
 !     Integration successfully completed
 !
@@ -973,34 +973,34 @@ maxnfe = 9000
 !     Check input parameters
 !
 !
-if (neqn .lt. 1) go to 10
-if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
+if (neqn < 1) go to 10
+if ((relerr < 0.)  .or.  (abserr < 0.)) go to 10
 mflag = iabs(iflag)
-if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
+if ((mflag >= 1)  .and.  (mflag <= 7)) go to 20
 !
 !     Invalid input
 10 iflag = 7
 return
 !
 !     Is this the first call
-20 if (mflag .eq. 1) go to 50
+20 if (mflag == 1) go to 50
 !
 !     Check continuation possibilities
 !
-if (t .eq. tout) go to 10
-if (mflag .ne. 2) go to 25
+if (t == tout) go to 10
+if (mflag /= 2) go to 25
 !
 !     iflag = +2 or -2
-if (init .eq. 0) go to 45
-if (kflag .eq. 3) go to 40
-if ((kflag .eq. 4)  .and.  (abserr .eq. 0.)) go to 30
-if ((kflag .eq. 5)  .and.  (relerr .le. savre)  .and. &
-   & (abserr .le. savae)) go to 30
+if (init == 0) go to 45
+if (kflag == 3) go to 40
+if ((kflag == 4)  .and.  (abserr == 0.)) go to 30
+if ((kflag == 5)  .and.  (relerr <= savre)  .and. &
+   & (abserr <= savae)) go to 30
 go to 50
 !
 !     iflag = 3,4,5,6, or 7
-25 if (iflag .eq. 3) go to 40
-if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
+25 if (iflag == 3) go to 40
+if ((iflag == 4) .and. (abserr > 0.)) go to 45
 !
 !     Integration cannot be continued since user did not respond to
 !     the instructions pertaining to iflag=4,5,6 or 7
@@ -1010,7 +1010,7 @@ if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
 !
 !     Reset function evaluation counter
 40 nfe = 0
-if (mflag .eq. 2) go to 50
+if (mflag == 2) go to 50
 !
 !     Reset flag VALUE from previous call
 45 iflag = jflag
@@ -1034,8 +1034,8 @@ u26 = 26.*u
 !
 dt = tout - t
 !
-if (mflag .eq. 1) go to 60
-if (init .eq. 0) go to 65
+if (mflag == 1) go to 60
+if (init == 0) go to 65
 go to 80
 !
 !
@@ -1056,7 +1056,7 @@ kop = 0
 a = t
 call f(a,y,yp)
 nfe = 1
-if (t .ne. tout) go to 65
+if (t /= tout) go to 65
 iflag = 2
 return
 !
@@ -1068,12 +1068,12 @@ do 70 k = 1,neqn
    yg(k) = y(k)
    ygp(k) = yp(k)
    tol = rer*abs(y(k)) + abserr
-   if (tol .le. 0.) go to 70
+   if (tol <= 0.) go to 70
    toln = tol
    ypk = abs(yp(k))
-   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
+   if (ypk*h**5 > tol) h = (tol/ypk)**0.2
 70 continue
-if (toln .le. 0.) h = 0.
+if (toln <= 0.) h = 0.
 h = amax1(h,u26*amax1(abs(t),abs(dt)))
 !
 !
@@ -1086,13 +1086,13 @@ h = amax1(h,u26*amax1(abs(t),abs(dt)))
 !     Test to see if gerk is being severely impacted by too many
 !     output points
 !
-if (abs(h) .gt. 2.*abs(dt)) kop = kop + 1
-if (kop .ne. 100) go to 85
+if (abs(h) > 2.*abs(dt)) kop = kop + 1
+if (kop /= 100) go to 85
 kop = 0
 iflag = 6
 return
 !
-85 if (abs(dt) .gt. u26*abs(t)) go to 95
+85 if (abs(dt) > u26*abs(t)) go to 95
 !
 !     If too close to output point,extrapolate and return
 !
@@ -1131,8 +1131,8 @@ hmin = u26*abs(t)
 !     and thus lessen the impact of output points on the code.
 !
 dt = tout - t
-if (abs(dt) .ge. 2.*abs(h)) go to 200
-if (abs(dt) .gt. abs(h)) go to 150
+if (abs(dt) >= 2.*abs(h)) go to 200
+if (abs(dt) > abs(h)) go to 150
 !
 !     The next successful step will complete the integration to the
 !     output point
@@ -1173,7 +1173,7 @@ go to 200
 !     Test number of derivative function evaluations.
 !     If okay,try to advance the integration from t to t+h
 !
-200 if (nfe .le. maxnfe) go to 220
+200 if (nfe <= maxnfe) go to 220
 !
 !     Too much work
 iflag = 3
@@ -1193,7 +1193,7 @@ nfe = nfe + 5
 eeoet = 0.
 do 250 k = 1,neqn
    et = abs(yg(k)) + abs(f1(k)) + ae
-   if (et .gt. 0.) go to 240
+   if (et > 0.) go to 240
 !
 !       Inappropriate error tolerance
    iflag = 4
@@ -1206,7 +1206,7 @@ do 250 k = 1,neqn
 !
 esttol = abs(h)*eeoet*scale/752400.
 !
-if (esttol .le. 1.) go to 260
+if (esttol <= 1.) go to 260
 !
 !
 !     Unsuccessful step
@@ -1216,9 +1216,9 @@ if (esttol .le. 1.) go to 260
 hfaild = .true.
 output = .false.
 s = 0.1
-if (esttol .lt. 59049.) s = 0.9/esttol**0.2
+if (esttol < 59049.) s = 0.9/esttol**0.2
 h = s*h
-if (abs(h) .gt. hmin) go to 200
+if (abs(h) > hmin) go to 200
 !
 !     Requested error unattainable at smallest allowable stepsize
 iflag = 5
@@ -1258,7 +1258,7 @@ nfe = nfe + 12
 !                          stepsize is not allowed to increase
 !
 s = 5.
-if (esttol .gt. 1.889568e-4) s = 0.9/esttol**0.2
+if (esttol > 1.889568e-4) s = 0.9/esttol**0.2
 if (hfaild) s = amin1(s,1.)
 h = sign(amax1(s*abs(h),hmin),h)
 !
@@ -1271,7 +1271,7 @@ h = sign(amax1(s*abs(h),hmin),h)
 !     Should we take another step
 !
 if (output) go to 300
-if (iflag .gt. 0) go to 100
+if (iflag > 0) go to 100
 !
 !***********************************************************************
 !***********************************************************************
@@ -2088,43 +2088,43 @@ common /debdf1/ told, rowns(210), &
 !
 idid = 0
 !
-if (info(1) .eq. 0) go to 20
-if (info(1) .ne. 1) go to 10
-if (iquit .eq. 0) go to 20
+if (info(1) == 0) go to 20
+if (info(1) /= 1) go to 10
+if (iquit == 0) go to 20
 10 idid = -44
 return
 !
-20 if (info(2) .ne. 0) info(2) = 1
-if (info(3) .ne. 0) info(3) = 1
-if (info(4) .ne. 0) info(4) = 1
-if (info(5) .ne. 0) info(5) = 1
-if (info(6) .ne. 0) info(6) = 1
+20 if (info(2) /= 0) info(2) = 1
+if (info(3) /= 0) info(3) = 1
+if (info(4) /= 0) info(4) = 1
+if (info(5) /= 0) info(5) = 1
+if (info(6) /= 0) info(6) = 1
 !
 ilrw = neq
-if (info(6) .eq. 0) go to 80
+if (info(6) == 0) go to 80
 !
 !     Check bandwidth parameters
 !
 ml = iwork(1)
 mu = iwork(2)
 ilrw = 2*ml + mu + 1
-if (ml .ge. 0  .and.  ml .lt. neq      .and. &
-   & mu .ge. 0  .and.  mu .lt. neq) go to 80
+if (ml >= 0  .and.  ml < neq      .and. &
+   & mu >= 0  .and.  mu < neq) go to 80
 idid = -40
 return
 !
 !     Check lrw and liw for sufficient storage allocation
 !
-80 if (lrw .ge. 250 + (10 + ilrw)*neq) go to 100
+80 if (lrw >= 250 + (10 + ilrw)*neq) go to 100
 !
-if (info(6) .eq. 1) go to 90
+if (info(6) == 1) go to 90
 idid = -41
 return
 !
 90 idid = -42
 return
 !
-100 if (liw .ge. 55 + neq) go to 200
+100 if (liw >= 55 + neq) go to 200
 idid = -43
 return
 !
@@ -2138,8 +2138,8 @@ iypout = 21
 itstar = 21 + neq
 icomr = 22 + neq
 !
-if (info(1) .eq. 0) go to 250
-intout = iwork(iinout) .ne. (-1)
+if (info(1) == 0) go to 250
+intout = iwork(iinout) /= (-1)
 !     call rsco(rwork(icomr),iwork(icomi))
 !
 250 iyh = icomr + 218
@@ -2272,7 +2272,7 @@ end interface
 !
 !.......................................................................
 !
-if (ibegin .ne. 0) go to 10
+if (ibegin /= 0) go to 10
 !
 ! On the first call , perform initialization --
 !        define the machine unit roundoff quantity  u  by calling the
@@ -2298,10 +2298,10 @@ meth = 2
 maxord = 5
 !                       -- Set iteration matrix indicator
 !
-if (ijac .eq. 0  .and.  iband .eq. 0) miter = 2
-if (ijac .eq. 1  .and.  iband .eq. 0) miter = 1
-if (ijac .eq. 0  .and.  iband .eq. 1) miter = 5
-if (ijac .eq. 1  .and.  iband .eq. 1) miter = 4
+if (ijac == 0  .and.  iband == 0) miter = 2
+if (ijac == 1  .and.  iband == 0) miter = 1
+if (ijac == 0  .and.  iband == 1) miter = 5
+if (ijac == 1  .and.  iband == 1) miter = 4
 !
 !                       -- Set other necessary items in common block
 n = neq
@@ -2317,39 +2317,39 @@ ibegin = 1
 !
 !      Check validity of input paramaters on each entry
 !
-10 if (neq .ge. 1) go to 20
+10 if (neq >= 1) go to 20
 idid = -33
 go to 110
 !
 20 max = 1
-if (itol .ne. 0) max = neq
+if (itol /= 0) max = neq
 do 60 k = 1,max
-   if (rtol(k) .ge. 0.) go to 30
+   if (rtol(k) >= 0.) go to 30
    idid = -34
    go to 110
-30 if (atol(k) .ge. 0.) go to 60
+30 if (atol(k) >= 0.) go to 60
    idid = -35
    go to 110
 60 continue
 !
-if (itstop .ne. 1) go to 80
-if ((tout - t)*(tstop - t) .ge. 0.0 &
-   & .and. abs(tout - t) .le. abs(tstop - t)) go to 80
+if (itstop /= 1) go to 80
+if ((tout - t)*(tstop - t) >= 0.0 &
+   & .and. abs(tout - t) <= abs(tstop - t)) go to 80
 idid = -36
 go to 110
 !
-80 if (init .eq. 0) go to 150
+80 if (init == 0) go to 150
 !                       Check some continuation possibilities
-if (t .ne. tout) go to 90
+if (t /= tout) go to 90
 idid = -37
 go to 110
 !
-90 if (t .eq. told) go to 100
+90 if (t == told) go to 100
 idid = -38
 go to 110
 !
-100 if (init .eq. 1) go to 150
-if (delsgn*(tout - t) .ge. 0.) go to 150
+100 if (init == 1) go to 150
+if (delsgn*(tout - t) >= 0.) go to 150
 idid = -39
 !
 !                       Invalid input detected
@@ -2365,11 +2365,11 @@ return
 !     100*u which is likely to be reasonable for this method and machine
 !
 150 do 170 k = 1,max
-   if (rtol(k) + atol(k) .gt. 0.) go to 170
+   if (rtol(k) + atol(k) > 0.) go to 170
    rtol(k) = 100.*u
    idid = -2
 170 continue
-if (idid .eq. -2) return
+if (idid == -2) return
 !
 !     Branch on status of initialization indicator
 !            init=0 Means initial derivatives and nominal step size
@@ -2377,8 +2377,8 @@ if (idid .eq. -2) return
 !            init=1 Means nominal step size and direction not yet set
 !            init=2 Means no FUTHER initialization required
 !
-if (init .eq. 0) go to 200
-if (init .eq. 1) go to 220
+if (init == 0) go to 200
+if (init == 1) go to 220
 go to 240
 !
 !.......................................................................
@@ -2389,7 +2389,7 @@ go to 240
 200 init = 1
 call f(t,y,yh(1,2),rpar,ipar)
 nfe = 1
-if (t .ne. tout) go to 220
+if (t /= tout) go to 220
 idid = 2
 do 210 l = 1,neq
 210 ypout(l) = yh(l,2)
@@ -2403,9 +2403,9 @@ return
 !
 220 ltol = 1
 do 225 l = 1,neq
-   if (itol .eq. 1) ltol = l
+   if (itol == 1) ltol = l
    tol = rtol(ltol)*abs(y(l)) + atol(ltol)
-   if (tol .eq. 0.) go to 380
+   if (tol == 0.) go to 380
 225 ewt(l) = tol
 !
 big = sqrt(spmpar(3))
@@ -2431,11 +2431,11 @@ absdel = abs(del)
 !
 !   If already past output point, interpolate and return
 !
-250 if (abs(x - t) .lt. absdel) go to 270
+250 if (abs(x - t) < absdel) go to 270
 call intyd(tout,0,yh,neq,y,intflg)
 call intyd(tout,1,yh,neq,ypout,intflg)
 idid = 3
-if (x .ne. tout) go to 260
+if (x /= tout) go to 260
 idid = 2
 intout = .false.
 260 t = tout
@@ -2445,8 +2445,8 @@ return
 !   If cannot go past TSTOP and sufficiently close,
 !   extrapolate and return
 !
-270 if (itstop .ne. 1) go to 290
-if (abs(tstop - x) .ge. 100.*u*abs(x)) go to 290
+270 if (itstop /= 1) go to 290
+if (abs(tstop - x) >= 100.*u*abs(x)) go to 290
 dt = tout - x
 do 280 l = 1,neq
 280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
@@ -2457,7 +2457,7 @@ t = tout
 told = t
 return
 !
-290 if (iinteg .eq. 0  .or.  .not.intout) go to 300
+290 if (iinteg == 0  .or.  .not.intout) go to 300
 !
 !   Intermediate-output mode
 !
@@ -2468,7 +2468,7 @@ go to 500
 !
 !     Monitor number of steps attempted
 !
-300 if (ksteps .le. maxnum) go to 330
+300 if (ksteps <= maxnum) go to 330
 !
 !                       A significant amount of work has been expended
 idid = -1
@@ -2481,17 +2481,17 @@ go to 500
 !
 330 hmin = 100.*u*abs(x)
 ha = amax1(abs(h),hmin)
-if (itstop .ne. 1) go to 340
+if (itstop /= 1) go to 340
 ha = amin1(ha,abs(tstop - x))
 340 h = sign(ha,h)
 ltol = 1
 do l = 1,neq
-   if (itol .eq. 1) ltol = l
+   if (itol == 1) ltol = l
    ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)
-   if (ewt(l) .le. 0.0) go to 380
+   if (ewt(l) <= 0.0) go to 380
 end do
 tolfac = u*vnwrms(neq,yh,ewt)
-if (tolfac .le. 1.) go to 400
+if (tolfac <= 1.) go to 400
 !
 !                       Tolerances too small
 idid = -2
@@ -2514,11 +2514,11 @@ go to 500
 !
 jstart = -2
 intout = .true.
-if (kflag .eq. 0) go to 250
+if (kflag == 0) go to 250
 !
 !.......................................................................
 !
-if (kflag .eq. -1) go to 450
+if (kflag == -1) go to 450
 !
 !                       Repeated corrector convergence failures
 idid = -6
@@ -2699,13 +2699,13 @@ relper = small**0.375
 !     Also compute a bound (fbnd) on the first derivative locally.
 !
 da = sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
-if (da .eq. 0.) da = relper*dx
+if (da == 0.) da = relper*dx
 call f(a + da,y,sf,rpar,ipar)
 do 10 j = 1,neq
 10 yp(j) = sf(j) - yprime(j)
 delf = vnorm(yp,neq)
 dfdxb = big
-if (delf .lt. big*abs(da)) dfdxb = delf/abs(da)
+if (delf < big*abs(da)) dfdxb = delf/abs(da)
 fbnd = vnorm(sf,neq)
 !
 !.......................................................................
@@ -2730,11 +2730,11 @@ fbnd = vnorm(sf,neq)
 !                       all iterations. Compute this change from the
 !                               size of the vector of initial values.
 dely = relper*vnorm(y,neq)
-if (dely .eq. 0.) dely = relper
+if (dely == 0.) dely = relper
 dely = sign(dely,dx)
 delf = vnorm(yprime,neq)
 fbnd = amax1(fbnd,delf)
-if (delf .eq. 0.) go to 30
+if (delf == 0.) go to 30
 !                       Use initial derivatives for first perturbation
 do 20 j = 1,neq
    spy(j) = yprime(j)
@@ -2752,7 +2752,7 @@ do 140 k = 1,lk
 !                       Define perturbed vector of initial values
    do 60 j = 1,neq
 60    pv(j) = y(j) + dely*(yp(j)/delf)
-   if (k .eq. 2) go to 80
+   if (k == 2) go to 80
 !                       Evaluate derivatives associated with perturbed
 !                       vector  and  compute corresponding differences
    call f(a,pv,yp,rpar,ipar)
@@ -2768,20 +2768,20 @@ do 140 k = 1,lk
 !                                      and a local Lipschitz constant
 100 fbnd = amax1(fbnd,vnorm(yp,neq))
    delf = vnorm(pv,neq)
-   if (delf .ge. big*abs(dely)) go to 150
+   if (delf >= big*abs(dely)) go to 150
    dfdub = amax1(dfdub,delf/abs(dely))
-   if (k .eq. lk) go to 160
+   if (k == lk) go to 160
 !                       Choose next perturbation vector
-   if (delf .eq. 0.) delf = 1.
+   if (delf == 0.) delf = 1.
    do 130 j = 1,neq
-      if (k .eq. 2) go to 110
+      if (k == 2) go to 110
       dy = abs(pv(j))
-      if (dy .eq. 0.) dy = delf
+      if (dy == 0.) dy = delf
       go to 120
 110   dy = y(j)
-      if (dy .eq. 0.) dy = dely/relper
-120   if (spy(j) .eq. 0.) spy(j) = yp(j)
-      if (spy(j) .ne. 0.) dy = sign(dy,spy(j))
+      if (dy == 0.) dy = dely/relper
+120   if (spy(j) == 0.) spy(j) = yp(j)
+      if (spy(j) /= 0.) dy = sign(dy,spy(j))
 130   yp(j) = dy
 140 delf = vnorm(yp,neq)
 !
@@ -2817,26 +2817,26 @@ tolp = 10.**(0.5*(tolsum/float(neq) + tolmin)/float(morder + 1))
 !                       abs(b-a).   (UNLESS  b  IS TOO CLOSE TO  A)
 h = absdx
 !
-if (ydpb .ne. 0.  .or.  fbnd .ne. 0.) go to 180
+if (ydpb /= 0.  .or.  fbnd /= 0.) go to 180
 !
 !                       Both first derivative term (fbnd) and second
 !                                    derivative term (YDPB) are zero
-if (tolp .lt. 1.) h = absdx*tolp
+if (tolp < 1.) h = absdx*tolp
 go to 200
 !
-180 if (ydpb .ne. 0.) go to 190
+180 if (ydpb /= 0.) go to 190
 !
 !                       Only second derivative term (YDPB) is zero
-if (tolp .lt. fbnd*absdx) h = tolp/fbnd
+if (tolp < fbnd*absdx) h = tolp/fbnd
 go to 200
 !
 !                       Second derivative term (YDPB) is non-zero
 190 srydpb = sqrt(0.5*ydpb)
-if (tolp .lt. srydpb*absdx) h = tolp/srydpb
+if (tolp < srydpb*absdx) h = tolp/srydpb
 !
 !                       Further restrict the step length to be not
 !                                                 bigger than  1/dfdub
-200 if (h*dfdub .gt. 1.) h = 1./dfdub
+200 if (h*dfdub > 1.) h = 1./dfdub
 !
 !                       Finally, restrict the step length to be not
 !                       smaller than  100*small*abs(a).  However, if
@@ -2844,7 +2844,7 @@ if (tolp .lt. srydpb*absdx) h = tolp/srydpb
 !                       the algorithm returns  small*abs(b)  for the
 !                                                       step length.
 h = amax1(h,100.*small*abs(a))
-if (h .eq. 0.) h = small*abs(b)
+if (h == 0.) h = small*abs(b)
 !
 !                       Now set direction of integration
 h = sign(h,dx)
@@ -2890,26 +2890,26 @@ common /debdf1/ rownd, rowns(210), &
    & nje, nqu
 !
 iflag = 0
-if (k .lt. 0 .or. k .gt. nq) go to 80
+if (k < 0 .or. k > nq) go to 80
 tp = tn - hu*(1.0e0 + 100.0e0*uround)
-if ((t - tp)*(t - tn) .gt. 0.0e0) go to 90
+if ((t - tp)*(t - tn) > 0.0e0) go to 90
 !
 s = (t - tn)/h
 ic = 1
-if (k .eq. 0) go to 15
+if (k == 0) go to 15
 jj1 = l - k
 do 10 jj = jj1,nq
 10 ic = ic*jj
 15 c = float(ic)
 do 20 i = 1,n
 20 dky(i) = c*yh(i,l)
-if (k .eq. nq) go to 55
+if (k == nq) go to 55
 jb2 = nq - k
 do jb = 1,jb2
    j = nq - jb
    jp1 = j + 1
    ic = 1
-   if (k .eq. 0) go to 35
+   if (k == 0) go to 35
    jj1 = jp1 - k
    do 30 jj = jj1,j
 30    ic = ic*jj
@@ -2917,7 +2917,7 @@ do jb = 1,jb2
    do 40 i = 1,n
 40    dky(i) = c*yh(i,jp1) + s*dky(i)
 end do
-if (k .eq. 0) return
+if (k == 0) return
 55 r = h**(-k)
 do 60 i = 1,n
 60 dky(i) = r*dky(i)
@@ -3023,9 +3023,9 @@ common /debdf1/ rownd, conit, crate, el(13), elco(13,12), &
 kflag = 0
 told = tn
 ncf = 0
-if (jstart .gt. 0) go to 200
-if (jstart .eq. -1) go to 100
-if (jstart .eq. -2) go to 160
+if (jstart > 0) go to 200
+if (jstart == -1) go to 100
+if (jstart == -2) go to 160
 !-----------------------------------------------------------------------
 ! On the first call, the order is set to 1, and other variables are
 ! initialized.  rmax is the maximum ratio by which H can be increased
@@ -3063,15 +3063,15 @@ go to 140
 !-----------------------------------------------------------------------
 100 ipup = miter
 lmax = maxord + 1
-if (ialth .eq. 1) ialth = 2
-if (meth .eq. meo) go to 110
+if (ialth == 1) ialth = 2
+if (meth == meo) go to 110
 call cfod(meth, elco, tesco)
 meo = meth
-if (nq .gt. maxord) go to 120
+if (nq > maxord) go to 120
 ialth = l
 iret = 1
 go to 150
-110 if (nq .le. maxord) go to 160
+110 if (nq <= maxord) go to 160
 120 nq = maxord
 l = lmax
 do 125 i = 1,l
@@ -3085,7 +3085,7 @@ exdn = 1.0e0/float(l)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
 rh = amin1(rhdn,1.0e0)
 iredo = 3
-if (h .eq. hold) go to 170
+if (h == hold) go to 170
 rh = amin1(rh,abs(h/hold))
 h = hold
 go to 175
@@ -3108,7 +3108,7 @@ go to (160, 170, 200), iret
 ! L = NQ + 1 to prevent a change of H for that many steps, unless
 ! forced by a convergence or error test failure.
 !-----------------------------------------------------------------------
-160 if (h .eq. hold) go to 200
+160 if (h == hold) go to 200
 rh = h/hold
 h = hold
 iredo = 3
@@ -3124,7 +3124,7 @@ do 180 j = 2,l
 h = h*rh
 rc = rc*rh
 ialth = l
-if (iredo .eq. 0) go to 680
+if (iredo == 0) go to 680
 !-----------------------------------------------------------------------
 ! This section computes the predicted values by effectively
 ! multiplying the yh array BY the Pascal triangle matrix.
@@ -3133,8 +3133,8 @@ if (iredo .eq. 0) go to 680
 ! to force pjac to be called, if a Jacobian is involved.
 ! In any case, pjac is called at least every 20-TH step.
 !-----------------------------------------------------------------------
-200 if (abs(rc - 1.0e0) .gt. 0.3e0) ipup = miter
-if (nst .ge. nstepj + 20) ipup = miter
+200 if (abs(rc - 1.0e0) > 0.3e0) ipup = miter
+if (nst >= nstepj + 20) ipup = miter
 tn = tn + h
 i1 = nqnyh + 1
 do jb = 1,nq
@@ -3155,7 +3155,7 @@ do 230 i = 1,n
 230 y(i) = yh(i,1)
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
-if (ipup .le. 0) go to 250
+if (ipup <= 0) go to 250
 !-----------------------------------------------------------------------
 ! If indicated, the matrix P = i - H*el(1)*j is reevaluated and
 ! preprocessed before starting the corrector iteration.  ipup is set
@@ -3167,10 +3167,10 @@ nstepj = nst
 crate = 0.7e0
 call pjac(neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
    & rpar, ipar)
-if (ier .ne. 0) go to 430
+if (ier /= 0) go to 430
 250 do 260 i = 1,n
 260 acor(i) = 0.0e0
-270 if (miter .ne. 0) go to 350
+270 if (miter /= 0) go to 350
 !-----------------------------------------------------------------------
 ! In the case of functional iteration, update y directly from
 ! the result of the last function evaluation.
@@ -3191,7 +3191,7 @@ go to 400
 350 do 360 i = 1,n
 360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
 call slvs(wm, iwm, y, savf)
-if (ier .ne. 0) go to 410
+if (ier /= 0) go to 410
 del = vnwrms(n, y, ewt)
 do 380 i = 1,n
    acor(i) = acor(i) + y(i)
@@ -3200,12 +3200,12 @@ do 380 i = 1,n
 ! Test for convergence.  If M.GT.0, an estimate of the convergence
 ! rate constant is stored in crate, and this is used in the test.
 !-----------------------------------------------------------------------
-400 if (m .ne. 0) crate = amax1(0.2e0*crate,del/delp)
+400 if (m /= 0) crate = amax1(0.2e0*crate,del/delp)
 dcon = del*amin1(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
-if (dcon .le. 1.0e0) go to 450
+if (dcon <= 1.0e0) go to 450
 m = m + 1
-if (m .eq. 3) go to 410
-if (m .ge. 2 .and. del .gt. 2.0e0*delp) go to 410
+if (m == 3) go to 410
+if (m >= 2 .and. del > 2.0e0*delp) go to 410
 delp = del
 call f(tn, y, savf, rpar, ipar)
 nfe = nfe + 1
@@ -3217,7 +3217,7 @@ go to 270
 ! before prediction, and H is reduced, if possible.  If H cannot be
 ! reduced or 10 failures have occurred, exit with KFLAG = -2.
 !-----------------------------------------------------------------------
-410 if (ipup .eq. 0) go to 430
+410 if (ipup == 0) go to 430
 ipup = miter
 go to 220
 430 tn = told
@@ -3230,8 +3230,8 @@ do jb = 1,nq
       ipnyh = i + nyh
 440   yh1(i) = yh1(i) - yh1(ipnyh)
 end do
-if (abs(h) .le. hmin*1.00001e0) go to 670
-if (ncf .eq. 10) go to 670
+if (abs(h) <= hmin*1.00001e0) go to 670
+if (ncf == 10) go to 670
 rh = 0.25e0
 ipup = miter
 iredo = 1
@@ -3242,10 +3242,10 @@ go to 170
 ! The local error test is made and control passes to statement 500
 ! if it fails.
 !-----------------------------------------------------------------------
-450 if (miter .ne. 0) ipup = -1
-if (m .eq. 0) dsm = del/tesco(2,nq)
-if (m .gt. 0) dsm = vnwrms(n, acor, ewt)/tesco(2,nq)
-if (dsm .gt. 1.0e0) go to 500
+450 if (miter /= 0) ipup = -1
+if (m == 0) dsm = del/tesco(2,nq)
+if (m > 0) dsm = vnwrms(n, acor, ewt)/tesco(2,nq)
+if (dsm > 1.0e0) go to 500
 !-----------------------------------------------------------------------
 ! After a successful step, update the yh array.
 ! Consider changing H if ialth = 1.  Otherwise decrease ialth by 1.
@@ -3265,9 +3265,9 @@ do 470 j = 1,l
    do 470 i = 1,n
 470   yh(i,j) = yh(i,j) + el(j)*acor(i)
 ialth = ialth - 1
-if (ialth .eq. 0) go to 520
-if (ialth .gt. 1) go to 690
-if (l .eq. lmax) go to 690
+if (ialth == 0) go to 520
+if (ialth > 1) go to 690
+if (l == lmax) go to 690
 do 490 i = 1,n
 490 yh(i,lmax) = acor(i)
 go to 690
@@ -3288,8 +3288,8 @@ do jb = 1,nq
 510   yh1(i) = yh1(i) - yh1(ipnyh)
 end do
 rmax = 2.0e0
-if (abs(h) .le. hmin*1.00001e0) go to 660
-if (kflag .le. -3) go to 640
+if (abs(h) <= hmin*1.00001e0) go to 660
+if (kflag <= -3) go to 640
 iredo = 2
 rhup = 0.0e0
 go to 540
@@ -3303,7 +3303,7 @@ go to 540
 ! additional scaled derivative.
 !-----------------------------------------------------------------------
 520 rhup = 0.0e0
-if (l .eq. lmax) go to 540
+if (l == lmax) go to 540
 do 530 i = 1,n
 530 savf(i) = acor(i) - yh(i,lmax)
 dup = vnwrms(n, savf, ewt)/tesco(3,nq)
@@ -3312,38 +3312,38 @@ rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
 540 exsm = 1.0e0/float(l)
 rhsm = 1.0e0/(1.2e0*dsm**exsm + 0.0000012e0)
 rhdn = 0.0e0
-if (nq .eq. 1) go to 560
+if (nq == 1) go to 560
 ddn = vnwrms(n, yh(1,l), ewt)/tesco(1,nq)
 exdn = 1.0e0/float(nq)
 rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
-560 if (rhsm .ge. rhup) go to 570
-if (rhup .gt. rhdn) go to 590
+560 if (rhsm >= rhup) go to 570
+if (rhup > rhdn) go to 590
 go to 580
-570 if (rhsm .lt. rhdn) go to 580
+570 if (rhsm < rhdn) go to 580
 newq = nq
 rh = rhsm
 go to 620
 580 newq = nq - 1
 rh = rhdn
-if (kflag .lt. 0 .and. rh .gt. 1.0e0) rh = 1.0e0
+if (kflag < 0 .and. rh > 1.0e0) rh = 1.0e0
 go to 620
 590 newq = l
 rh = rhup
-if (rh .lt. 1.1e0) go to 610
+if (rh < 1.1e0) go to 610
 r = el(l)/float(l)
 do 600 i = 1,n
 600 yh(i,newq + 1) = acor(i)*r
 go to 630
 610 ialth = 3
 go to 690
-620 if ((kflag .eq. 0) .and. (rh .lt. 1.1e0)) go to 610
-if (kflag .le. -2) rh = amin1(rh,0.2e0)
+620 if ((kflag == 0) .and. (rh < 1.1e0)) go to 610
+if (kflag <= -2) rh = amin1(rh,0.2e0)
 !-----------------------------------------------------------------------
 ! If there is a change of order, reset NQ, L, and the coefficients.
 ! In any case H is reset according to RH and the yh array is rescaled.
 ! Then exit from 680 if the step was OK, or redo the step otherwise.
 !-----------------------------------------------------------------------
-if (newq .eq. nq) go to 170
+if (newq == nq) go to 170
 630 nq = newq
 l = nq + 1
 iret = 2
@@ -3357,7 +3357,7 @@ go to 150
 ! H is reduced by a factor of 10, and the step is retried,
 ! until it succeeds or H reaches HMIN.
 !-----------------------------------------------------------------------
-640 if (kflag .eq. -10) go to 660
+640 if (kflag == -10) go to 660
 rh = 0.1e0
 rh = amax1(hmin/abs(h),rh)
 h = h*rh
@@ -3369,7 +3369,7 @@ do 650 i = 1,n
 650 yh(i,2) = h*savf(i)
 ipup = miter
 ialth = 5
-if (nq .eq. 1) go to 200
+if (nq == 1) go to 200
 nq = 1
 l = 2
 iret = 3
@@ -3472,7 +3472,7 @@ do nq = 2,12
    agamq = rqfac*xpin
    ragq = 1.0e0/agamq
    tesco(2,nq) = ragq
-   if (nq.lt.12) tesco(1,nqp1) = ragq*rqfac/float(nqp1)
+   if (nq < 12) tesco(1,nqp1) = ragq*rqfac/float(nqp1)
    tesco(3,nqm1) = ragq
 end do
 return
@@ -3576,7 +3576,7 @@ go to 240
 ! If miter = 2, make N calls to F to approximate j. --------------------
 200 fac = vnwrms(n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
-if (r0 .eq. 0.0e0) r0 = 1.0e0
+if (r0 == 0.0e0) r0 = 1.0e0
 srur = wm(1)
 j1 = 2
 do j = 1,n
@@ -3611,8 +3611,8 @@ do 320 i = 1,n
    r0 = h*savf(i) - yh(i,2)
    di = 0.1e0*r0 - h*(wm(i + 2) - savf(i))
    wm(i + 2) = 1.0e0
-   if (abs(r0) .lt. uround*ewt(i)) go to 320
-   if (abs(di) .eq. 0.0e0) go to 330
+   if (abs(r0) < uround*ewt(i)) go to 320
+   if (abs(di) == 0.0e0) go to 330
    wm(i + 2) = 0.1e0*r0/di
 320 continue
 return
@@ -3642,7 +3642,7 @@ meb1 = meband - 1
 srur = wm(1)
 fac = vnwrms(n, savf, ewt)
 r0 = 1000.0e0*abs(h)*uround*float(n)*fac
-if (r0 .eq. 0.0e0) r0 = 1.0e0
+if (r0 == 0.0e0) r0 = 1.0e0
 do j = 1,mba
    do 530 i = j,n,mband
       yi = y(i)
@@ -3723,11 +3723,11 @@ return
 300 phl0 = wm(2)
 hl0 = h*el0
 wm(2) = hl0
-if (hl0 .eq. phl0) go to 330
+if (hl0 == phl0) go to 330
 r = hl0/phl0
 do 320 i = 1,n
    di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i + 2))
-   if (abs(di) .eq. 0.0e0) go to 390
+   if (abs(di) == 0.0e0) go to 390
 320 wm(i + 2) = 1.0e0/di
 330 do 340 i = 1,n
 340 x(i) = wm(i + 2)*x(i)
@@ -3865,7 +3865,7 @@ info = 0
 !
 j0 = mu + 2
 j1 = min0(n,m) - 1
-if (j1 .lt. j0) go to 30
+if (j1 < j0) go to 30
 do jz = j0, j1
    i0 = m + 1 - jz
    do i = i0, ml
@@ -3879,15 +3879,15 @@ ju = 0
 !     Gaussian elimination with partial pivoting
 !
 nm1 = n - 1
-if (nm1 .lt. 1) go to 130
+if (nm1 < 1) go to 130
 do k = 1, nm1
    kp1 = k + 1
 !
 !        Zero next fill-in column
 !
    jz = jz + 1
-   if (jz .gt. n) go to 50
-   if (ml .lt. 1) go to 50
+   if (jz > n) go to 50
+   if (ml < 1) go to 50
    do i = 1, ml
       abd(i,jz) = 0.0e0
    end do
@@ -3901,11 +3901,11 @@ do k = 1, nm1
 !
 !        Zero pivot implies this column already triangularized
 !
-   if (abd(l,k) .eq. 0.0e0) go to 100
+   if (abd(l,k) == 0.0e0) go to 100
 !
 !           Interchange if necessary
 !
-   if (l .eq. m) go to 60
+   if (l == m) go to 60
    t = abd(l,k)
    abd(l,k) = abd(m,k)
    abd(m,k) = t
@@ -3920,12 +3920,12 @@ do k = 1, nm1
 !
    ju = min0(max0(ju,mu + ipvt(k)),n)
    mm = m
-   if (ju .lt. kp1) go to 90
+   if (ju < kp1) go to 90
    do j = kp1, ju
       l = l - 1
       mm = mm - 1
       t = abd(l,j)
-      if (l .eq. mm) go to 70
+      if (l == mm) go to 70
       abd(l,j) = abd(mm,j)
       abd(mm,j) = t
 70    continue
@@ -3939,7 +3939,7 @@ do k = 1, nm1
 end do
 130 continue
 ipvt(n) = n
-if (abd(m,n) .eq. 0.0e0) info = n
+if (abd(m,n) == 0.0e0) info = n
 return
 end subroutine sgbfa
 
@@ -4035,18 +4035,18 @@ end interface
 !
 m = mu + ml + 1
 nm1 = n - 1
-if (job .ne. 0) go to 50
+if (job /= 0) go to 50
 !
 !        job = 0 , SOLVE  A * X = b
 !        first solve l*Y = b
 !
-if (ml .eq. 0) go to 30
-if (nm1 .lt. 1) go to 30
+if (ml == 0) go to 30
+if (nm1 < 1) go to 30
 do k = 1, nm1
    lm = min0(ml,n - k)
    l = ipvt(k)
    t = b(l)
-   if (l .eq. k) go to 10
+   if (l == k) go to 10
    b(l) = b(k)
    b(k) = t
 10 continue
@@ -4081,14 +4081,14 @@ end do
 !
 !        Now solve trans(l)*X = Y
 !
-if (ml .eq. 0) go to 90
-if (nm1 .lt. 1) go to 90
+if (ml == 0) go to 90
+if (nm1 < 1) go to 90
 do kb = 1, nm1
    k = n - kb
    lm = min0(ml,n - k)
    b(k) = b(k) + sdot(lm,abd(m + 1,k),1,b(k + 1),1)
    l = ipvt(k)
-   if (l .eq. k) go to 70
+   if (l == k) go to 70
    t = b(l)
    b(l) = b(k)
    b(k) = t
@@ -4150,7 +4150,7 @@ real :: ha, ta
 !     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
 !     ******************************************************************
 np1 = n + 1
-if (h.eq.0.0) go to 50
+if (h == 0.0) go to 50
 !
 ha = .5*h
 ta = t + ha
@@ -4225,7 +4225,7 @@ data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
    & b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
    & b(7,7)/-60./,  b(8,7)/720./
 !     -------------------
-if (h.eq.0.) go to 40
+if (h == 0.) go to 40
 ha = h*4./27.
 do 10 k = 1,n
 10 w(k) = y(k) + ha*dy(k)
@@ -4290,11 +4290,11 @@ real :: dum(1)
 data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
 !     --------------
 call pdedge(edge, indx, indy, ierr)
-if (ierr .ne. 0) return
+if (ierr /= 0) return
 !
-if (a .ge. b .or. c .ge. d) go to 300
-if (mp1 .lt. 7) go to 320
-if (np1 .lt. 6) go to 330
+if (a >= b .or. c >= d) go to 300
+if (mp1 < 7) go to 320
+if (np1 < 6) go to 330
 m = mp1 - 1
 n = np1 - 1
 hx = (b - a)/float(m)
@@ -4310,20 +4310,20 @@ imax = mp1
 jmin = 1
 jmax = np1
 jcol = 0
-if (edge(1) .ne. 0) go to 10
+if (edge(1) /= 0) go to 10
 jmin = 2
 ymin = c + hy
 jcol = mp1
-10 if (edge(2) .ne. 0) go to 20
+10 if (edge(2) /= 0) go to 20
 imin = 2
 xmin = a + hx
-20 if (edge(3) .eq. 0) jmax = n
-if (edge(4) .eq. 0) imax = m
+20 if (edge(3) == 0) jmax = n
+if (edge(4) == 0) imax = m
 !
 !     Define the right-hand side matrix for iord = 2
 !
-if (ku .lt. mp1) go to 310
-if (iord .ne. 2) go to 40
+if (ku < mp1) go to 310
+if (iord /= 2) go to 40
 mn = 0
 !
 yj = ymin
@@ -4337,9 +4337,9 @@ go to 60
 !
 !     Define the right-hand side matrix for iord = 4
 !
-40 if (iord .ne. 4) go to 340
+40 if (iord /= 4) go to 340
 mn = mp1*np1
-if (mn .ge. nw) go to 100
+if (mn >= nw) go to 100
 !
 yj = ymin
 do 51 j = jmin,jmax
@@ -4353,25 +4353,25 @@ do 51 j = jmin,jmax
 !
 !     Store the boundary values of u
 !
-60 if (edge(1) .ne. 0) go to 70
+60 if (edge(1) /= 0) go to 70
 xi = a
 do 61 i = 1,mp1
    u(i,1) = bval(1,xi,c)
 61 xi = xi + hx
 !
-70 if (edge(2) .ne. 0) go to 80
+70 if (edge(2) /= 0) go to 80
 yj = c
 do 71 j = 1,np1
    u(1,j) = bval(2,a,yj)
 71 yj = yj + hy
 !
-80 if (edge(3) .ne. 0) go to 90
+80 if (edge(3) /= 0) go to 90
 xi = a
 do 81 i = 1,mp1
    u(i,np1) = bval(3,xi,d)
 81 xi = xi + hx
 !
-90 if (edge(4) .ne. 0) go to 100
+90 if (edge(4) /= 0) go to 100
 yj = c
 do 91 j = 1,np1
    u(mp1,j) = bval(4,b,yj)
@@ -4380,9 +4380,9 @@ do 91 j = 1,np1
 !     Store the mixed boundary conditions
 !
 100 ic = mn + 1
-if (edge(1) .ne. 1) go to 120
+if (edge(1) /= 1) go to 120
 mn = mn + mp1
-if (mn .ge. nw) go to 120
+if (mn >= nw) go to 120
 !
 xi = a
 l = ic
@@ -4393,9 +4393,9 @@ do i = 1,mp1
 end do
 !
 120 ia = mn + 1
-if (edge(2) .ne. 1) go to 140
+if (edge(2) /= 1) go to 140
 mn = mn + np1
-if (mn .ge. nw) go to 140
+if (mn >= nw) go to 140
 !
 yj = c
 l = ia
@@ -4406,9 +4406,9 @@ do j = 1,np1
 end do
 !
 140 id = mn + 1
-if (edge(3) .ne. 1) go to 160
+if (edge(3) /= 1) go to 160
 mn = mn + mp1
-if (mn .ge. nw) go to 160
+if (mn >= nw) go to 160
 !
 xi = a
 l = id
@@ -4419,9 +4419,9 @@ do i = 1,mp1
 end do
 !
 160 ib = mn + 1
-if (edge(4) .ne. 1) go to 200
+if (edge(4) /= 1) go to 200
 mn = mn + np1
-if (mn .ge. nw) go to 200
+if (mn >= nw) go to 200
 !
 yj = c
 l = ib
@@ -4433,10 +4433,10 @@ end do
 !
 !     CALL THE DIFFERENTIAL EQUATION SOLVER
 !
-200 if (mn .ge. nw) go to 350
+200 if (mn >= nw) go to 350
 iw = mn + 1
 w(iw) = nw - mn
-if (iord .eq. 4) go to 210
+if (iord == 4) go to 210
 !
 call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
    & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
@@ -4448,8 +4448,8 @@ go to 220
    & w(1),mp1, u, ku, w(iw), p, ierr)
 !
 220 nw = w(iw) + mn
-if (ierr .ne. 0) return
-if (p .eq. 0.0) return
+if (ierr /= 0) return
+if (p == 0.0) return
 ierr = -1
 w(1) = p
 return
@@ -4484,40 +4484,40 @@ implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)
 !
-if (iabs(edge(1)) .gt. 1) go to 200
-if (iabs(edge(2)) .gt. 1) go to 200
-if (iabs(edge(3)) .gt. 1) go to 200
-if (iabs(edge(4)) .gt. 1) go to 200
+if (iabs(edge(1)) > 1) go to 200
+if (iabs(edge(2)) > 1) go to 200
+if (iabs(edge(3)) > 1) go to 200
+if (iabs(edge(4)) > 1) go to 200
 ierr = 0
 !
 !               Process edges 1 and 3
 !
 if (edge(1)) 10,20,30
 !
-10 if (edge(3) .ne. -1) go to 210
+10 if (edge(3) /= -1) go to 210
 indy = 0
 go to 100
 !
-20 if (edge(3) .eq. -1) go to 210
+20 if (edge(3) == -1) go to 210
 indy = 1 + edge(3)
 go to 100
 !
-30 if (edge(3) .eq. -1) go to 210
+30 if (edge(3) == -1) go to 210
 indy = 4 - edge(3)
 !
 !               Process edges 2 and 4
 !
 100 if (edge(2)) 110,120,130
 !
-110 if (edge(4) .ne. -1) go to 220
+110 if (edge(4) /= -1) go to 220
 indx = 0
 return
 !
-120 if (edge(4) .eq. -1) go to 220
+120 if (edge(4) == -1) go to 220
 indx = 1 + edge(4)
 return
 !
-130 if (edge(4) .eq. -1) go to 220
+130 if (edge(4) == -1) go to 220
 indx = 4 - edge(4)
 return
 !
@@ -4990,23 +4990,23 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !
 call chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
    & idmn,mn,ierror)
-if (ierror .ne. 0) return
+if (ierror /= 0) return
 !
 !     Compute minimum work space and check work space length input
 !
 l = n + 1
-if (nbdcnd .eq. 0) l = n
+if (nbdcnd == 0) l = n
 logb2n = int(alog(float(l) + 0.5)/alog(2.0)) + 1
 ll = 2**(logb2n + 1)
 k = m + 1
 l = n + 1
 length = (logb2n - 2)*ll + logb2n + max0(2*l,6*k) + 5
-if (nbdcnd .eq. 0) length = length + 2*l
+if (nbdcnd == 0) length = length + 2*l
 ierror = 11
 linput = int(w(1) + 0.5)
 loutpt = length + 6*(k + l) + 1
 w(1) = float(loutpt)
-if (loutpt .gt. linput) return
+if (loutpt > linput) return
 ierror = 0
 !
 !     Set work space indices
@@ -5080,33 +5080,33 @@ do i = 2,m
       usol(i,j) = grhs(i,j)
    end do
 end do
-if (kswx.eq.2 .or. kswx.eq.3) go to  40
+if (kswx == 2 .or. kswx == 3) go to  40
 do j = 2,n
    usol(1,j) = grhs(1,j)
 end do
 40 continue
-if (kswx.eq.2 .or. kswx.eq.5) go to  60
+if (kswx == 2 .or. kswx == 5) go to  60
 do j = 2,n
    usol(k,j) = grhs(k,j)
 end do
 60 continue
-if (kswy.eq.2 .or. kswy.eq.3) go to  80
+if (kswy == 2 .or. kswy == 3) go to  80
 do i = 2,m
    usol(i,1) = grhs(i,1)
 end do
 80 continue
-if (kswy.eq.2 .or. kswy.eq.5) go to 100
+if (kswy == 2 .or. kswy == 5) go to 100
 do i = 2,m
    usol(i,l) = grhs(i,l)
 end do
 100 continue
-if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.3) &
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
    & usol(1,1) = grhs(1,1)
-if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.3) &
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
    & usol(k,1) = grhs(k,1)
-if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.5) &
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
    & usol(1,l) = grhs(1,l)
-if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.5) &
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
    & usol(k,l) = grhs(k,l)
 i1 = 1
 !
@@ -5114,20 +5114,20 @@ i1 = 1
 !
 mp = 1
 np = 1
-if (kswx .eq. 1) mp = 0
-if (kswy .eq. 1) np = 0
+if (kswx == 1) mp = 0
+if (kswy == 1) np = 0
 !
 !     Set dlx,dly and size of block tri-diagonal system generated
 !     in NINT,mint
 !
 dlx = (bit - ait)/float(m)
 mit = k - 1
-if (kswx .eq. 2) mit = k - 2
-if (kswx .eq. 4) mit = k
+if (kswx == 2) mit = k - 2
+if (kswx == 4) mit = k
 dly = (dit - cit)/float(n)
 nit = l - 1
-if (kswy .eq. 2) nit = l - 2
-if (kswy .eq. 4) nit = l
+if (kswy == 2) nit = l - 2
+if (kswy == 4) nit = l
 tdlx3 = 2.0*dlx**3
 dlx4 = dlx**4
 tdly3 = 2.0*dly**3
@@ -5137,8 +5137,8 @@ dly4 = dly**4
 !
 is = 1
 js = 1
-if (kswx.eq.2 .or. kswx.eq.3) is = 2
-if (kswy.eq.2 .or. kswy.eq.3) js = 2
+if (kswx == 2 .or. kswx == 3) is = 2
+if (kswy == 2 .or. kswy == 3) js = 2
 ns = nit + js - 1
 ms = mit + is - 1
 !
@@ -5246,30 +5246,30 @@ cn(1) = cn(1) + dy1
 an(nit) = an(nit) + fyn
 bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
 cn(nit) = 0.0
-220 if (kswx .eq. 1) go to 270
+220 if (kswx == 1) go to 270
 !
 !     Adjust USOL along X edge
 !
 do 260 j = js,ns
-   if (kswx.ne.2 .and. kswx.ne.3) go to 230
+   if (kswx /= 2 .and. kswx /= 3) go to 230
    usol(is,j) = usol(is,j) - ax1*usol(1,j)
    go to 240
 230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
-240 if (kswx.ne.2 .and. kswx.ne.5) go to 250
+240 if (kswx /= 2 .and. kswx /= 5) go to 250
    usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
    go to 260
 250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
 260 continue
-270 if (kswy .eq. 1) go to 320
+270 if (kswy == 1) go to 320
 !
 !     Adjust USOL along Y edge
 !
 do 310 i = is,ms
-   if (kswy.ne.2 .and. kswy.ne.3) go to 280
+   if (kswy /= 2 .and. kswy /= 3) go to 280
    usol(i,js) = usol(i,js) - dy1*usol(i,1)
    go to 290
 280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
-290 if (kswy.ne.2 .and. kswy.ne.5) go to 300
+290 if (kswy /= 2 .and. kswy /= 5) go to 300
    usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
    go to 310
 300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
@@ -5278,7 +5278,7 @@ do 310 i = is,ms
 !
 !     Save adjusted edges in GRHS if iorder=4
 !
-if (iorder .ne. 4) go to 350
+if (iorder /= 4) go to 350
 do j = js,ns
    grhs(is,j) = usol(is,j)
    grhs(ms,j) = usol(ms,j)
@@ -5303,10 +5303,10 @@ if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
 !
 !     Make initialization call to blktri
 !
-if (intl .eq. 0) &
+if (intl == 0) &
    & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
    & usol(is,js),ierror,w)
-if (ierror .ne. 0) return
+if (ierror /= 0) return
 !
 !     Adjust right hand side if necessary
 !
@@ -5317,15 +5317,15 @@ if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
 !
 call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
    & ierror,w)
-if (ierror .ne. 0) return
+if (ierror /= 0) return
 !
 !     Set periodic boundaries if necessary
 !
-if (kswx .ne. 1) go to 380
+if (kswx /= 1) go to 380
 do j = 1,l
    usol(k,j) = usol(1,j)
 end do
-380 if (kswy .ne. 1) go to 400
+380 if (kswy /= 1) go to 400
 do i = 1,k
    usol(i,l) = usol(i,1)
 end do
@@ -5339,7 +5339,7 @@ if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
 !     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
 !     not flagged
 !
-if (iord .eq. 2) return
+if (iord == 2) return
 iord = 2
 !
 !     Compute new right hand side for fourth order solution
@@ -5364,40 +5364,40 @@ real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !     Check definition of solution region
 !
 ierror = 1
-if (a.ge.b .or. c.ge.d) return
+if (a >= b .or. c >= d) return
 !
 !     Check boundary switches
 !
 ierror = 2
-if (mbdcnd.lt.0 .or. mbdcnd.gt.4) return
+if (mbdcnd < 0 .or. mbdcnd > 4) return
 ierror = 3
-if (nbdcnd.lt.0 .or. nbdcnd.gt.4) return
+if (nbdcnd < 0 .or. nbdcnd > 4) return
 !
 !     Check first dimension in calling routine
 !
 ierror = 5
-if (mn .lt. 7 .or. idmn .lt. 7) return
+if (mn < 7 .or. idmn < 7) return
 !
 !     Check m
 !
 ierror = 6
-if (m .gt. (idmn - 1) .or. m.lt.6) return
-if (m .gt. mn - 1) return
+if (m > (idmn - 1) .or. m < 6) return
+if (m > mn - 1) return
 !
 !     Check n
 !
 ierror = 7
-if (n .lt. 5) return
+if (n < 5) return
 !
 !     Check iorder
 !
 ierror = 8
-if (iorder.ne.2 .and. iorder.ne.4) return
+if (iorder /= 2 .and. iorder /= 4) return
 !
 !     Check intl
 !
 ierror = 9
-if (intl.ne.0 .and. intl.ne.1) return
+if (intl /= 0 .and. intl /= 1) return
 !
 !     Check that equation is elliptic
 !
@@ -5409,7 +5409,7 @@ do i = 2,m
    do j = 2,n
       yj = c + float(j - 1)*dly
       call cofy(yj,dj,ej,fj)
-      if (ai*dj .gt. 0.0) go to  10
+      if (ai*dj > 0.0) go to  10
       ierror = 10
       return
 10    continue
@@ -5448,15 +5448,15 @@ singlr = .false.
 !     Check if the boundary conditions are
 !     entirely periodic and/or mixed
 !
-if ((mbdcnd.ne.0 .and. mbdcnd.ne.3) .or. &
-   & (nbdcnd.ne.0 .and. nbdcnd.ne.3)) return
+if ((mbdcnd /= 0 .and. mbdcnd /= 3) .or. &
+   & (nbdcnd /= 0 .and. nbdcnd /= 3)) return
 !
 !     Check that mixed conditions are pure neuman
 !
-if (mbdcnd .ne. 3) go to  10
-if (alpha.ne.0.0 .or. beta.ne.0.0) return
-10 if (nbdcnd .ne. 3) go to  20
-if (gama.ne.0.0 .or. xnu.ne.0.0) return
+if (mbdcnd /= 3) go to  10
+if (alpha /= 0.0 .or. beta /= 0.0) return
+10 if (nbdcnd /= 3) go to  20
+if (gama /= 0.0 .or. xnu /= 0.0) return
 20 continue
 !
 !     Check that non-derivative coefficient functions
@@ -5465,12 +5465,12 @@ if (gama.ne.0.0 .or. xnu.ne.0.0) return
 do i = is,ms
    xi = ait + float(i - 1)*dlx
    call cofx(xi,ai,bi,ci)
-   if (ci .ne. 0.0) return
+   if (ci /= 0.0) return
 end do
 do j = js,ns
    yj = cit + float(j - 1)*dly
    call cofy(yj,dj,ej,fj)
-   if (fj .ne. 0.0) return
+   if (fj /= 0.0) return
 end do
 !
 !     The operator must be singular if this point is reached
@@ -5678,9 +5678,9 @@ do j = js,ns
 !
 !     Reset form of truncation if at boundary which is non-periodic
 !
-      if (kswx.eq.1 .or. (i.gt.1 .and. i.lt.k)) go to  10
+      if (kswx == 1 .or. (i > 1 .and. i < k)) go to  10
       tx = ai/3.0*(uxxxx/4.0 + uxxx/dlx)
-10    if (kswy.eq.1 .or. (j.gt.1 .and. j.lt.l)) go to  20
+10    if (kswy == 1 .or. (j > 1 .and. j < l)) go to  20
       ty = dj/3.0*(uyyyy/4.0 + uyyy/dly)
 20    grhs(i,j) = grhs(i,j) + dlx**2*tx + dly**2*ty
    end do
@@ -5713,15 +5713,15 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
    & js         ,ns         ,dlx        ,dly        , &
    & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (i.gt.2 .and. i.lt.(k - 1)) go to  50
-if (i .eq. 1) go to  10
-if (i .eq. 2) go to  30
-if (i .eq. k - 1) go to  60
-if (i .eq. k) go to  80
+if (i > 2 .and. i < (k - 1)) go to  50
+if (i == 1) go to  10
+if (i == 2) go to  30
+if (i == k - 1) go to  60
+if (i == k) go to  80
 !
 !     Compute partial derivative approximations at X=A
 !
-10 if (kswx .eq. 1) go to  20
+10 if (kswx == 1) go to  20
 uxxx = (-5.0*u(1,j) + 18.0*u(2,j) - 24.0*u(3,j) + 14.0*u(4,j) - &
    & 3.0*u(5,j))/(tdlx3)
 uxxxx = (3.0*u(1,j) - 14.0*u(2,j) + 26.0*u(3,j) - 24.0*u(4,j) + &
@@ -5736,7 +5736,7 @@ return
 !
 !     Compute partial derivative approximations at X=A+dlx
 !
-30 if (kswx .eq. 1) go to  40
+30 if (kswx == 1) go to  40
 uxxx = (-3.0*u(1,j) + 10.0*u(2,j) - 12.0*u(3,j) + 6.0*u(4,j) - u(5,j))/ &
    & tdlx3
 uxxxx = (2.0*u(1,j) - 9.0*u(2,j) + 16.0*u(3,j) - 14.0*u(4,j) + 6.0*u(5,j) - &
@@ -5759,7 +5759,7 @@ return
 !
 !     Compute partial derivative approximations at X=B-dlx
 !
-60 if (kswx .eq. 1) go to  70
+60 if (kswx == 1) go to  70
 uxxx = (u(k - 4,j) - 6.0*u(k - 3,j) + 12.0*u(k - 2,j) - 10.0*u(k - 1,j) + &
    & 3.0*u(k,j))/tdlx3
 uxxxx = (-u(k - 5,j) + 6.0*u(k - 4,j) - 14.0*u(k - 3,j) + 16.0*u(k - 2,j) - &
@@ -5799,15 +5799,15 @@ common /splp/   kswx       ,kswy       ,k          ,l          , &
    & js         ,ns         ,dlx        ,dly        , &
    & tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-if (j.gt.2 .and. j.lt.(l - 1)) go to  50
-if (j .eq. 1) go to  10
-if (j .eq. 2) go to  30
-if (j .eq. l - 1) go to  60
-if (j .eq. l) go to  80
+if (j > 2 .and. j < (l - 1)) go to  50
+if (j == 1) go to  10
+if (j == 2) go to  30
+if (j == l - 1) go to  60
+if (j == l) go to  80
 !
 !     Compute partial derivative approximations at Y=C
 !
-10 if (kswy .eq. 1) go to  20
+10 if (kswy == 1) go to  20
 uyyy = (-5.0*u(i,1) + 18.0*u(i,2) - 24.0*u(i,3) + 14.0*u(i,4) - &
    & 3.0*u(i,5))/tdly3
 uyyyy = (3.0*u(i,1) - 14.0*u(i,2) + 26.0*u(i,3) - 24.0*u(i,4) + &
@@ -5822,7 +5822,7 @@ return
 !
 !     Compute partial derivative approximations at Y=C+dly
 !
-30 if (kswy .eq. 1) go to  40
+30 if (kswy == 1) go to  40
 uyyy = (-3.0*u(i,1) + 10.0*u(i,2) - 12.0*u(i,3) + 6.0*u(i,4) - u(i,5))/ &
    & tdly3
 uyyyy = (2.0*u(i,1) - 9.0*u(i,2) + 16.0*u(i,3) - 14.0*u(i,4) + 6.0*u(i,5) - &
@@ -5845,7 +5845,7 @@ return
 !
 !     Compute partial derivative approximations at Y=D-dly
 !
-60 if (kswy .eq. 1) go to  70
+60 if (kswy == 1) go to  70
 uyyy = (u(i,l - 4) - 6.0*u(i,l - 3) + 12.0*u(i,l - 2) - 10.0*u(i,l - 1) + &
    & 3.0*u(i,l))/tdly3
 uyyyy = (-u(i,l - 5) + 6.0*u(i,l - 4) - 14.0*u(i,l - 3) + 16.0*u(i,l - 2) - &
@@ -6422,7 +6422,7 @@ m2 = nm2
 ia = na
 20 if (ia) 50, 50, 30
 30 rt = aa(ia)
-if (nd .eq. 0) rt = -rt
+if (nd == 0) rt = -rt
 ia = ia - 1
 !
 ! Scalar multiplication
@@ -6433,7 +6433,7 @@ end do
 50 if (id) 250,250, 60
 60 rt = bd(id)
 id = id - 1
-if (id .eq. 0) ibr = 1
+if (id == 0) ibr = 1
 !
 ! Begin solution to system
 !
@@ -6515,7 +6515,7 @@ m2 = nm2
 ia = na
 20 if (ia) 50, 50, 30
 30 rt = aa(ia)
-if (nd .eq. 0) rt = -rt
+if (nd == 0) rt = -rt
 ia = ia - 1
 do j = 1,m
    y(j) = rt*w(j)
@@ -6523,7 +6523,7 @@ end do
 50 if (id) 280,280, 60
 60 rt = bd(id)
 id = id - 1
-if (id .eq. 0) ibr = 1
+if (id == 0) ibr = 1
 !
 ! Begin solution to system
 !
@@ -6878,7 +6878,7 @@ do 100 l = 1,kdo
 do j = 1,nm
    b(j) = -bn(j)
 end do
-if (npp .ne. 0) return
+if (npp /= 0) return
 !
 nmp = nm + 1
 nb = nm + nmp
@@ -6886,12 +6886,12 @@ do j = 1,nb
    l1 = mod(j - 1,nmp) + 1
    l2 = mod(j + nm - 1,nmp) + 1
    arg = an(l1)*cn(l2)
-   if (arg .lt. 0.0) go to 220
+   if (arg < 0.0) go to 220
    bh(j) = sign(sqrt(arg),-an(l1))
    ah(j) = -bn(l1)
 end do
 call tqlrt0(nb,ah,bh,ierror)
-if (ierror .ne. 0) go to 210
+if (ierror /= 0) go to 210
 !
 call indxb(if,k - 1,j2,lh)
 call indxb(if/2,k - 1,j1,lh)
@@ -6901,7 +6901,7 @@ n2m2 = j2 + nm + nm - 2
 170 d1 = abs(b(j1) - b(j2 - 1))
 d2 = abs(b(j1) - b(j2))
 d3 = abs(b(j1) - b(j2 + 1))
-if ((d2 .lt.d1) .and. (d2 .lt.d3)) go to 180
+if ((d2 < d1) .and. (d2 < d3)) go to 180
 b(lh) = b(j2)
 j2 = j2 + 1
 lh = lh + 1
@@ -6981,7 +6981,7 @@ common /cblkt/  npp        ,k          ,machep     ,cnv        , &
 !                **********
 !
 ierr = 0
-if (n .eq. 1) go to 150
+if (n == 1) go to 150
 !
 do i = 2,n
    e2(i - 1) = e2(i)*e2(i)
@@ -6994,22 +6994,22 @@ e2(n) = 0.0
 do l = 1,n
    j = 0
    h = machep*(abs(d(l)) + sqrt(e2(l)))
-   if (b .gt. h) go to  20
+   if (b > h) go to  20
    b = h
    c = b*b
 !
 !     ********** Look for small squared sub-diagonal element **********
 !
 20 do 30 m = l,n
-      if (e2(m) .le. c) go to  40
+      if (e2(m) <= c) go to  40
 !
 !     ********** e2(n) is always zero, so there is no exit
 !                through the bottom of the loop **********
 !
 30    continue
 !
-40 if (m .eq. l) go to  80
-50 if (j .eq. 30) go to 140
+40 if (m == l) go to  80
+50 if (j == 30) go to 140
    j = j + 1
 !
 !     ********** Form shift **********
@@ -7031,7 +7031,7 @@ do l = 1,n
 !     ********** RATIONAL QL TRANSFORMATION **********
 !
    g = d(m)
-   if (g .eq. 0.0) g = b
+   if (g == 0.0) g = b
    h = g
    s = 0.0
    mml = m - l
@@ -7046,7 +7046,7 @@ do l = 1,n
       s = e2(i)/r
       d(i + 1) = h + s*(h + d(i))
       g = d(i) - e2(i)/g
-      if (g .eq. 0.0) g = b
+      if (g == 0.0) g = b
       h = g*p/r
    end do
 !
@@ -7055,21 +7055,21 @@ do l = 1,n
 !
 !     ********** Guard against UNDERFLOWED h **********
 !
-   if (h .eq. 0.0) go to  80
-   if (abs(e2(l)) .le. abs(c/h)) go to  80
+   if (h == 0.0) go to  80
+   if (abs(e2(l)) <= abs(c/h)) go to  80
    e2(l) = h*e2(l)
-   if (e2(l) .ne. 0.0) go to  50
+   if (e2(l) /= 0.0) go to  50
 80 p = d(l) + f
 !
 !     ********** Order eigenvalues **********
 !
-   if (l .eq. 1) go to 100
+   if (l == 1) go to 100
 !
 !     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
 !
    do ii = 2,l
       i = l + 2 - ii
-      if (p .ge. d(i - 1)) go to 110
+      if (p >= d(i - 1)) go to 110
       d(i) = d(i - 1)
    end do
 !
@@ -7077,7 +7077,7 @@ do l = 1,n
 110 d(i) = p
 end do
 !
-if (abs(d(n)) .ge. abs(d(1))) go to 150
+if (abs(d(n)) >= abs(d(1))) go to 150
 nhalf = n/2
 do i = 1,nhalf
    ntop = n - i
@@ -7216,15 +7216,15 @@ if = iz - 2
    go to 300
 290 r1 = r2/fpp
 300 r2 = 2.*f/fpp/r1
-   if (cabs(r2) .lt. cabs(r1)) r1 = r2
+   if (cabs(r2) < cabs(r1)) r1 = r2
    if (i3) 330,330,310
-310 if (cabs(r3) .lt. cabs(r1)) r1 = r3
+310 if (cabs(r3) < cabs(r1)) r1 = r3
    go to 330
 320 r1 = r3
 330 cx = cx + r1
    it = it + 1
-   if (it .gt. 50) go to 420
-   if (cabs(r1) .gt. scnv) go to 200
+   if (it > 50) go to 420
+   if (cabs(r1) > scnv) go to 200
    if (icv) 340,340,350
 340 icv = 1
    go to 200
@@ -7394,12 +7394,12 @@ double precision, parameter :: s = .4656612877413d-09
 !                    EXCEED iend.)
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ibeg .ge. iend) go to 110
-if (ix .le. 0 .or. ix .ge. p) go to 120
+if (n <= 0) go to 100
+if (ibeg >= iend) go to 110
+if (ix <= 0 .or. ix >= p) go to 120
 m = iend - ibeg + 1
 t = p
-if (m .ge. t) go to 110
+if (m >= t) go to 110
 !
 ierr = 0
 c = m*s
@@ -7417,7 +7417,7 @@ do i = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
 !
 !        Map ix to an integer in the closed interval (ibeg,iend).
 !        This mapping is 1-1 only when m = p - 1, in which case
@@ -7468,8 +7468,8 @@ real, parameter :: s = .465661e-09
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 do l = 1,n
 !
@@ -7500,7 +7500,7 @@ do l = 1,n
 !
 !                      Add p if necessary
 !
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
 !
 !     Rescale ix, to interpret it as a value between 0 and 1.
 !     The scale factor s is selected to be as near 1/p as is
@@ -7552,8 +7552,8 @@ double precision, parameter :: s = .465661d-09
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 do l = 1,n
 !
@@ -7584,7 +7584,7 @@ do l = 1,n
 !
 !                      Add p if necessary
 !
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
 !
 !     Rescale ix, to interpret it as a value between 0 and 1.
 !     The scale factor s is selected to be as near 1/p as is
@@ -7664,12 +7664,12 @@ ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      Add p if necessary
 !
-if (ix .lt. 0) ix = ix + p
+if (ix < 0) ix = ix + p
 !
 !         Rescale ix, to interpret it as a value between 0 and 1
 !
 t = p
-if (ix .gt. p0) go to 10
+if (ix > p0) go to 10
 u = ix
 u = u/t
 v = 0.5 + (0.5 - u)
@@ -7738,12 +7738,12 @@ ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      Add p if necessary
 !
-if (ix .lt. 0) ix = ix + p
+if (ix < 0) ix = ix + p
 !
 !         Rescale ix, to interpret it as a value between 0 and 1
 !
 t = p
-if (ix .gt. p0) go to 10
+if (ix > p0) go to 10
 u = ix
 u = u/t
 v = 0.5d0 + (0.5d0 - u)
@@ -7813,7 +7813,7 @@ ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      Add p if necessary
 !
-if (ix .lt. 0) ix = ix + p
+if (ix < 0) ix = ix + p
 !
 !         Rescale ix, to interpret it as a value between 0 and 1
 !
@@ -7821,7 +7821,7 @@ j = p - ix
 t = p
 d = ix - j
 d = 0.5*(d/t)
-if (ix .gt. p0) go to 10
+if (ix > p0) go to 10
 u = ix
 u = u/t
 v = 0.5 + (0.5 - u)
@@ -7891,7 +7891,7 @@ ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      Add p if necessary
 !
-if (ix .lt. 0) ix = ix + p
+if (ix < 0) ix = ix + p
 !
 !         Rescale ix, to interpret it as a value between 0 and 1
 !
@@ -7899,7 +7899,7 @@ j = p - ix
 t = p
 d = ix - j
 d = 0.5d0*(d/t)
-if (ix .gt. p0) go to 10
+if (ix > p0) go to 10
 u = ix
 u = u/t
 v = 0.5d0 + (0.5d0 - u)
@@ -7942,8 +7942,8 @@ real, parameter :: s = .465661e-09
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 !
 !         See the comments in the subroutine urng for the
@@ -7956,7 +7956,7 @@ do l = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    t = ix
    x(l) = s*t
 !
@@ -7966,7 +7966,7 @@ do l = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    t = ix
    y(l) = s*t
 end do
@@ -8012,8 +8012,8 @@ double precision, parameter :: s = .465661d-09
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 !
 !         See the comments in the subroutine durng for the
@@ -8026,7 +8026,7 @@ do l = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    t = ix
    x(l) = s*t
 !
@@ -8036,7 +8036,7 @@ do l = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    t = ix
    y(l) = s*t
 end do
@@ -8108,8 +8108,8 @@ real, parameter :: s = .931322e-09
 !     s  = 2/p
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 !
 i1 = 1
@@ -8128,7 +8128,7 @@ do i = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    j = ix
 !
    xhi = ix/b16
@@ -8137,7 +8137,7 @@ do i = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
 !
 !        Subtract the midpoint p0 and rescale so that the
 !          uniform variates are in the interval (-1,1).
@@ -8150,7 +8150,7 @@ do i = 1,n
 !         Check if the point (u,v) is in the unit circle
 !
    r = (u*u + v*v) - 1.0
-   if (r .ge. 0.0) go to 10
+   if (r >= 0.0) go to 10
 !
 !            Store the point when it is in the circle
 !
@@ -8227,8 +8227,8 @@ double precision, parameter :: s = .931322d-09
 !     s  = 2/p
 !-------------------
 !-------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. p) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= p) go to 110
 ierr = 0
 !
 i1 = 1
@@ -8247,7 +8247,7 @@ do i = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
    j = ix
 !
    xhi = ix/b16
@@ -8256,7 +8256,7 @@ do i = 1,n
    fhi = xhi*a + leftlo
    k = fhi/b15
    ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
-   if (ix .lt. 0) ix = ix + p
+   if (ix < 0) ix = ix + p
 !
 !        Subtract the midpoint p0 and rescale so that the
 !          uniform variates are in the interval (-1,1).
@@ -8269,7 +8269,7 @@ do i = 1,n
 !         Check if the point (u,v) is in the unit circle
 !
    r = (u*u + v*v) - 1.d0
-   if (r .ge. 0.d0) go to 10
+   if (r >= 0.d0) go to 10
 !
 !            Store the point when it is in the circle
 !
@@ -8314,11 +8314,11 @@ end interface
 !-----------------------------------------------------------------------
 !---------------------
 !---------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. max) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= max) go to 110
 ierr = 0
 !
-if (n .eq. 1) go to 20
+if (n == 1) go to 20
 m = n/2
 call rcir1(m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
@@ -8333,7 +8333,7 @@ do i = 1,m,2
    a(i) = s*u
    a(i + 1) = s*v
 end do
-if (m .eq. n) return
+if (m == n) return
 !
 !            Obtain the last variate (when n is odd)
 !
@@ -8376,11 +8376,11 @@ end interface
 !-----------------------------------------------------------------------
 !---------------------
 !---------------------
-if (n .le. 0) go to 100
-if (ix .le. 0 .or. ix .ge. max) go to 110
+if (n <= 0) go to 100
+if (ix <= 0 .or. ix >= max) go to 110
 ierr = 0
 !
-if (n .eq. 1) go to 20
+if (n == 1) go to 20
 m = n/2
 call drcir1(m, ix, a(1), 2, a(2), 2, ierr)
 m = m + m
@@ -8395,7 +8395,7 @@ do i = 1,m,2
    a(i) = s*u
    a(i + 1) = s*v
 end do
-if (m .eq. n) return
+if (m == n) return
 !
 !            Obtain the last variate (when n is odd)
 !
@@ -8436,8 +8436,8 @@ end interface
 !-----------------------------------------------------------------------
 !
 call urng(ix,a,n,ierr)
-if (ierr .ne. 0) return
-if (n .eq. 1) go to 20
+if (ierr /= 0) return
+if (n == 1) go to 20
 !
 m = n/2
 m = m + m
@@ -8446,7 +8446,7 @@ do 10 i = 1,m,2
    phi = pi2*a(i + 1)
    a(i) = r*cos(phi)
 10 a(i + 1) = r*sin(phi)
-if (m .eq. n) return
+if (m == n) return
 !
 20 call urng(ix,temp,1,ierr)
 r = sqrt(-2.0*alog(a(n)))
@@ -8477,8 +8477,8 @@ end interface
 !
 !
 call durng(ix, a, n, ierr)
-if (ierr .ne. 0) return
-if (n .eq. 1) go to 20
+if (ierr /= 0) return
+if (n == 1) go to 20
 !
 m = n/2
 m = m + m
@@ -8487,7 +8487,7 @@ do 10 i = 1,m,2
    phi = pi2*a(i + 1)
    a(i) = r*dcos(phi)
 10 a(i + 1) = r*dsin(phi)
-if (m .eq. n) return
+if (m == n) return
 !
 20 call durng(ix, temp, 1, ierr)
 r = dsqrt(-2.d0*dlog(a(n)))
@@ -8601,17 +8601,17 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (m .le. 1 .or. m .gt. kx) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (m <= 1 .or. m > kx) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 !           Compute the lower triangular matrix
 !           l having positive diagonal elements
 !           and satisfying a = l*transpose(l).
 !
-if (mo .ne. 0) go to 10
+if (mo /= 0) go to 10
 call sppfa(a, m, ierr)
-if (ierr .ne. 0) go to 120
+if (ierr /= 0) go to 120
 !
 !           Generate the n random normal vectors
 !
@@ -8734,15 +8734,15 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (m .le. 1 .or. m .gt. kx) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (m <= 1 .or. m > kx) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 !        Compute the roots of the diagonal elements
 !
-if (mo .ne. 0) go to 20
+if (mo /= 0) go to 20
 do i = 1,m
-   if (a(i) .le. 0.0) go to 120
+   if (a(i) <= 0.0) go to 120
    a(i) = sqrt(a(i))
 end do
 !
@@ -8874,17 +8874,17 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (m .le. 1 .or. m .gt. kx) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (m <= 1 .or. m > kx) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 !           Compute the lower triangular matrix
 !           l having positive diagonal elements
 !           and satisfying a = l*transpose(l).
 !
-if (mo .ne. 0) go to 10
+if (mo /= 0) go to 10
 call dppfa(a, m, ierr)
-if (ierr .ne. 0) go to 120
+if (ierr /= 0) go to 120
 !
 !           Generate the n random normal vectors
 !
@@ -9007,15 +9007,15 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (m .le. 1 .or. m .gt. kx) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (m <= 1 .or. m > kx) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 !        Compute the roots of the diagonal elements
 !
-if (mo .ne. 0) go to 20
+if (mo /= 0) go to 20
 do i = 1,m
-   if (a(i) .le. 0.d0) go to 120
+   if (a(i) <= 0.d0) go to 120
    a(i) = dsqrt(a(i))
 end do
 !
@@ -9108,17 +9108,17 @@ end interface
 !        Check to ensure that the desired number of variates is within
 !        acceptable range
 !
-if (n .le. 0) go to 100
+if (n <= 0) go to 100
 !
 !        Check to ensure that the exponential parameter HAS been
 !        properly specified
 !
-if (a .le. 0.0) go to 110
+if (a <= 0.0) go to 110
 !
 !        Generation of uniform random variates
 !
 call urng(iseed, x, n, ierror)
-if (ierror .ne. 0) go to 120
+if (ierror /= 0) go to 120
 !
 !        Loop which generates the n desired variates
 !
@@ -9204,17 +9204,17 @@ end interface
 !        Check to ensure that the desired number of variates is within
 !        acceptable range
 !
-if (n .le. 0) go to 100
+if (n <= 0) go to 100
 !
 !        Check to ensure that the exponential parameter HAS been
 !        properly specified
 !
-if (a .le. 0.d0) go to 110
+if (a <= 0.d0) go to 110
 !
 !        Generation of uniform random variates
 !
 call durng(iseed, x, n, ierror)
-if (ierror .ne. 0) go to 120
+if (ierror /= 0) go to 120
 !
 !        Loop which generates the n desired variates
 !
@@ -9286,9 +9286,9 @@ end interface
 !-----------------------------------------------------------------------
 !
 !
-if (n .le. 0) go to 100
-if (a .lt. 0.1) go to 110
-if (ix .lt. 1 .or. ix .ge. max) go to 120
+if (n <= 0) go to 100
+if (a < 0.1) go to 110
+if (ix < 1 .or. ix >= max) go to 120
 ierr = 0
 !
 !             The following code assumes that the uniform
@@ -9298,7 +9298,7 @@ ierr = 0
 do i = 1,n
    call urng0(ix, u, v)
    call gaminv(a, w, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) w = 0.0
+   if (ind == -3 .or. ind == -7) w = 0.0
    x(i) = w
 end do
 return
@@ -9365,9 +9365,9 @@ end interface
 !-----------------------------------------------------------------------
 !
 !
-if (n .le. 0) go to 100
-if (a .lt. 0.1d0) go to 110
-if (ix .lt. 1 .or. ix .ge. max) go to 120
+if (n <= 0) go to 100
+if (a < 0.1d0) go to 110
+if (ix < 1 .or. ix >= max) go to 120
 ierr = 0
 !
 !             The following code assumes that the uniform
@@ -9377,7 +9377,7 @@ ierr = 0
 do i = 1,n
    call durng0(ix, u, v)
    call dginv(a, w, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) w = 0.d0
+   if (ind == -3 .or. ind == -7) w = 0.d0
    x(i) = w
 end do
 return
@@ -9467,9 +9467,9 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (amin1(a,b) .lt. 0.25) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 120
+if (n <= 0) go to 100
+if (amin1(a,b) < 0.25) go to 110
+if (ix <= 0 .or. ix >= max) go to 120
 ierr = 0
 !
 do i = 1,n
@@ -9480,11 +9480,11 @@ do i = 1,n
 !
    call urng0(ix, u, v)
    call gaminv(a, x1, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
+   if (ind == -3 .or. ind == -7) x1 = 0.0
 !
    call urng0(ix, u, v)
    call gaminv(b, x2, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.0
+   if (ind == -3 .or. ind == -7) x2 = 0.0
 !
 !        It is required that A and b not be less
 !        than 0.25 so that x1 + x2 is nonzero.
@@ -9579,9 +9579,9 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (dmin1(a,b) .lt. 0.25d0) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 120
+if (n <= 0) go to 100
+if (dmin1(a,b) < 0.25d0) go to 110
+if (ix <= 0 .or. ix >= max) go to 120
 ierr = 0
 !
 do i = 1,n
@@ -9592,11 +9592,11 @@ do i = 1,n
 !
    call durng0(ix, u, v)
    call dginv(a, x1, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
+   if (ind == -3 .or. ind == -7) x1 = 0.d0
 !
    call durng0(ix, u, v)
    call dginv(b, x2, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.d0
+   if (ind == -3 .or. ind == -7) x2 = 0.d0
 !
 !        It is required that A and b not be less
 !        than 0.25 so that x1 + x2 is nonzero.
@@ -9694,9 +9694,9 @@ end interface
 xmax = spmpar(3)
 !
 !--------------------
-if (n .le. 0) go to 100
-if (amin1(a,b) .lt. 0.5) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (amin1(a,b) < 0.5) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 ierr = 0
 !
 ahalf = 0.5*a
@@ -9713,11 +9713,11 @@ do i = 1,n
 !
    call urng0(ix, u, v)
    call gaminv(ahalf, x1, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
+   if (ind == -3 .or. ind == -7) x1 = 0.0
 !
    call urng0(ix, u, v)
    call gaminv(bhalf, x2, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) go to 120
+   if (ind == -3 .or. ind == -7) go to 120
 !
 !        Protect against overflow in computing the
 !        VARIATE c*(x1/x2).
@@ -9725,7 +9725,7 @@ do i = 1,n
    t = x1 + x2
    x1 = x1/t
    x2 = x2/t
-   if (x2*big .le. bound) go to 120
+   if (x2*big <= bound) go to 120
    x(i) = c * (x1/x2)
 end do
 return
@@ -9821,9 +9821,9 @@ end interface
 xmax = dpmpar(3)
 !
 !--------------------
-if (n .le. 0) go to 100
-if (dmin1(a,b) .lt. 0.5d0) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (dmin1(a,b) < 0.5d0) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 ierr = 0
 !
 ahalf = 0.5d0*a
@@ -9840,11 +9840,11 @@ do i = 1,n
 !
    call durng0(ix, u, v)
    call dginv(ahalf, x1, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
+   if (ind == -3 .or. ind == -7) x1 = 0.d0
 !
    call durng0(ix, u, v)
    call dginv(bhalf, x2, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) go to 120
+   if (ind == -3 .or. ind == -7) go to 120
 !
 !        Protect against overflow in computing the
 !        VARIATE c*(X1/X2).
@@ -9852,7 +9852,7 @@ do i = 1,n
    t = x1 + x2
    x1 = x1/t
    x2 = x2/t
-   if (x2*big .le. bound) go to 120
+   if (x2*big <= bound) go to 120
    x(i) = c * (x1/x2)
 end do
 return
@@ -9948,9 +9948,9 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (a .lt. 0.5) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (a < 0.5) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 ierr = 0
 ahalf = 0.5*a
@@ -9970,7 +9970,7 @@ do i = 1,n
 !
    call urng0(ix, u, v)
    call gaminv(ahalf, w, 0.0, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) go to 120
+   if (ind == -3 .or. ind == -7) go to 120
 !
    s = sqrt(w/ahalf)
    x(i) = z/s
@@ -10068,9 +10068,9 @@ end interface
 !-----------------------------------------------------------------------
 !--------------------
 !--------------------
-if (n .le. 0) go to 100
-if (a .lt. 0.5d0) go to 110
-if (ix .le. 0 .or. ix .ge. max) go to 130
+if (n <= 0) go to 100
+if (a < 0.5d0) go to 110
+if (ix <= 0 .or. ix >= max) go to 130
 !
 ierr = 0
 ahalf = 0.5d0*a
@@ -10090,7 +10090,7 @@ do i = 1,n
 !
    call durng0(ix, u, v)
    call dginv(ahalf, w, u, v, ind)
-   if (ind .eq. -3 .or. ind .eq. -7) go to 120
+   if (ind == -3 .or. ind == -7) go to 120
 !
    s = dsqrt(w/ahalf)
    x(i) = z/s
@@ -10187,23 +10187,23 @@ end interface
 !        Check to ensure that the desired sequence length is within
 !        acceptable range
 !
-if (n .le. 1) go to 100
+if (n <= 1) go to 100
 !
 !        Check to ensure that the standard deviation of the error term
 !        is within acceptable range
 !
-if (sig .le. 0.0) go to 110
+if (sig <= 0.0) go to 110
 !
 !        Check to ensure that the first-order markov model
 !        parameter is within the range required to guarantee
 !        PROCESS STATIONARITY
 !
-if (abs(alpha) .ge. 1.0) go to 120
+if (abs(alpha) >= 1.0) go to 120
 !
 !        Generation of standard normal random variates
 !
 call rnor(iseed,x,n,ierror)
-if (ierror .ne. 0) go to 130
+if (ierror /= 0) go to 130
 !
 !        Computes the standard deviation of the initial term of the
 !        autocorrelated sequence
@@ -10316,23 +10316,23 @@ end interface
 !        Check to ensure that the desired sequence length is within
 !        acceptable range
 !
-if (n .le. 1) go to 100
+if (n <= 1) go to 100
 !
 !        Check to ensure that the standard deviation of the error term
 !        is within acceptable range
 !
-if (sig .le. 0.d0) go to 110
+if (sig <= 0.d0) go to 110
 !
 !        Check to ensure that the first-order markov model
 !        parameter is within the range required to guarantee
 !        PROCESS STATIONARITY
 !
-if (dabs(alpha) .ge. 1.d0) go to 120
+if (dabs(alpha) >= 1.d0) go to 120
 !
 !        Generation of standard normal random variates
 !
 call drnor(iseed,x,n,ierror)
-if (ierror .ne. 0) go to 130
+if (ierror /= 0) go to 130
 !
 !        Computes the standard deviation of the initial term of the
 !        autocorrelated sequence

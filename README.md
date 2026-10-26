@@ -203,7 +203,9 @@ also checks tokens and literal values, and updates source-link line numbers.
 The final `tools/simplify_free_style.py` pass removes spaces before argument
 lists in procedure declarations and calls to known procedures. It also removes
 redundant array constructor types for matching default-kind literals, preserving
-types needed for mixed values or precision conversion. To apply it separately
+types needed for mixed values or precision conversion. Comparisons use `==`,
+`/=`, `<`, `<=`, `>`, and `>=` with spaces on both sides; logical operators,
+comments, and quoted text retain their spelling. To apply it separately
 and verify unchanged GNU compiler dumps and diagnostics:
 
 ```sh

@@ -75,7 +75,7 @@ def main():
     source = format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))
     manifest = json.loads(MANIFEST.read_text())
     converted = simplify_style(transform(source, manifest))
-    if executable_statements(source) != executable_statements(converted):
+    if executable_statements(simplify_style(source)) != executable_statements(converted):
         raise ValueError('DATA conversion changed executable statements')
     with tempfile.TemporaryDirectory(prefix='nswc-constant-check-') as work:
         folder = Path(work)

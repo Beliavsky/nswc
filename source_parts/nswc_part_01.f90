@@ -667,14 +667,14 @@ imach(2) = 0
 imach(3) = 0
 !
 n0 = n
-if (mo .le. 0) n0 = 0
-if (mo .ge. 2) go to 10
+if (mo <= 0) n0 = 0
+if (mo >= 2) go to 10
 !-----------------------------------------------------------------------
 !     Obtain the single precision information
 !-----------------------------------------------------------------------
 maxexp = imax
 call mach1(n0, ibeta, m, minexp, maxexp, eps, xint, xmin, xmax)
-if (mo .eq. 1) stop
+if (mo == 1) stop
 rmach(1) = eps
 rmach(2) = xmin
 rmach(3) = xmax
@@ -687,7 +687,7 @@ imach(7) = maxexp
 !-----------------------------------------------------------------------
 10 maxexp = idmax
 call mach2(n0, ibeta, m, minexp, maxexp, deps, dint, dmin, dmax)
-if (mo .ge. 2) stop
+if (mo >= 2) stop
 dmach(1) = deps
 dmach(2) = dmin
 dmach(3) = dmax
@@ -713,12 +713,12 @@ a = one
 10 a = a + a
 call store2(a + one, a)
 y = d1 - d2
-if (y .eq. one) go to 10
+if (y == one) go to 10
 !
 b = one
 20 b = b + b
 call store2(a + b, a)
-if (d1 .eq.d2) go to 20
+if (d1 == d2) go to 20
 !
 ibeta = int(d1 - d2)
 return
@@ -842,11 +842,11 @@ z = t
 t = b*t
 call store2(t + one, t)
 x = d1*binv - z
-if (x .eq. binv) go to 10
+if (x == binv) go to 10
 !
 xint = (z - one)*b + bm1
 xmax = xint/t
-if (xmax .lt. one) go to 20
+if (xmax < one) go to 20
 m = m - 1
 t = z
 z = z*binv
@@ -867,10 +867,10 @@ z = binv
 30 x = z
 z = (x*x)*one
 call store2(z*xint, z*t)
-if (d1 .eq.d2) go to 40
-if (z + z .eq. zero .or. abs(z) .ge. x) go to 40
+if (d1 == d2) go to 40
+if (z + z == zero .or. abs(z) >= x) go to 40
 call store2(z, p*z)
-if (t*d2 .eq. t*z) go to 40
+if (t*d2 == t*z) go to 40
 k = k + k
 go to 30
 !
@@ -882,10 +882,10 @@ j = 0
 50 xmin = x
 x = (x*binv)*one
 call store2(x*xint, x*t)
-if (d1 .eq.d2) go to 90
-if (x + x .eq. zero .or. abs(x) .ge. xmin) go to 90
+if (d1 == d2) go to 90
+if (x + x == zero .or. abs(x) >= xmin) go to 90
 call store2(x, p*x)
-if (t*d2 .eq. t*x) go to 80
+if (t*d2 == t*x) go to 80
 k = k + 1
 go to 50
 !
@@ -894,41 +894,41 @@ go to 50
 !     this loss of accuracy.
 !
 80 call store2(x, q*x)
-if (t*d2 .ne. t*x) go to 90
+if (t*d2 /= t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
 call store2(x*xint, x*t)
-if (d1 .eq.d2) go to 90
-if (x + x .ne. zero .and. abs(x) .lt. z) go to 81
+if (d1 == d2) go to 90
+if (x + x /= zero .and. abs(x) < z) go to 81
 !
 90 minexp = 1 - k
 !-----------------------------------------------------------------------
 !     Define an initial approximation for maxexp and xmax
 !     when maxexp .LE. 0 on input
 !-----------------------------------------------------------------------
-if (maxexp .gt. 0) go to 101
-if (ibeta .eq. 2 .or. ibeta .eq. 8 .or. &
-   & ibeta .eq. 16) go to 100
+if (maxexp > 0) go to 101
+if (ibeta == 2 .or. ibeta == 8 .or. &
+   & ibeta == 16) go to 100
 !
 maxexp = k - 3
-if (n .gt. 0) write (n,200) maxexp
+if (n > 0) write (n,200) maxexp
 t = one/(b2*b2*xmin)
 xmax = (xmax*t)*b
 go to 110
 !
 100 k = k + j
-if (k + k .gt. km + 2) km = km + km
+if (k + k > km + 2) km = km + km
 maxexp = km - k - 3
-101 if (n .gt. 0) write (n,200) maxexp
+101 if (n > 0) write (n,200) maxexp
 t = b**(maxexp - 2)
 xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
 110 call store2(t, t*p)
-if (d1 .eq.d2) go to 150
-if (n .le. 0) return
+if (d1 == d2) go to 150
+if (n <= 0) return
 !-----------------------------------------------------------------------
 !     Loop to find the exact largest value for maxexp
 !-----------------------------------------------------------------------
@@ -938,7 +938,7 @@ do l = 1,500
    xmax = xmax*b
    maxexp = maxexp + 1
    call store2(t, t*p)
-   if (d1 .eq.d2) go to 150
+   if (d1 == d2) go to 150
    write (n,220) maxexp
 end do
 write (n,240)
@@ -946,7 +946,7 @@ stop
 !-----------------------------------------------------------------------
 !     Reporting overflow on unit n
 !-----------------------------------------------------------------------
-150 if (n .gt. 0) write (n,230)
+150 if (n > 0) write (n,230)
 stop
 !-----------------------------------------------------------------------
 !     Format statements
@@ -1100,11 +1100,11 @@ z = t
 t = b*t
 call dstor2(t + one, t)
 x = d1*binv - z
-if (x .eq. binv) go to 10
+if (x == binv) go to 10
 !
 xint = (z - one)*b + bm1
 xmax = xint/t
-if (xmax .lt. one) go to 20
+if (xmax < one) go to 20
 m = m - 1
 t = z
 z = z*binv
@@ -1125,10 +1125,10 @@ z = binv
 30 x = z
 z = (x*x)*one
 call dstor2(z*xint, z*t)
-if (d1 .eq.d2) go to 40
-if (z + z .eq. zero .or. dabs(z) .ge. x) go to 40
+if (d1 == d2) go to 40
+if (z + z == zero .or. dabs(z) >= x) go to 40
 call dstor2(z, p*z)
-if (t*d2 .eq. t*z) go to 40
+if (t*d2 == t*z) go to 40
 k = k + k
 go to 30
 !
@@ -1140,10 +1140,10 @@ j = 0
 50 xmin = x
 x = (x*binv)*one
 call dstor2(x*xint, x*t)
-if (d1 .eq.d2) go to 90
-if (x + x .eq. zero .or. dabs(x) .ge. xmin) go to 90
+if (d1 == d2) go to 90
+if (x + x == zero .or. dabs(x) >= xmin) go to 90
 call dstor2(x, p*x)
-if (t*d2 .eq. t*x) go to 80
+if (t*d2 == t*x) go to 80
 k = k + 1
 go to 50
 !
@@ -1152,41 +1152,41 @@ go to 50
 !     this loss of accuracy.
 !
 80 call dstor2(x, q*x)
-if (t*d2 .ne. t*x) go to 90
+if (t*d2 /= t*x) go to 90
 81 z = x
 j = j + 1
 x = (x*binv)*one
 call dstor2(x*xint, x*t)
-if (d1 .eq.d2) go to 90
-if (x + x .ne. zero .and. dabs(x) .lt. z) go to 81
+if (d1 == d2) go to 90
+if (x + x /= zero .and. dabs(x) < z) go to 81
 !
 90 minexp = 1 - k
 !-----------------------------------------------------------------------
 !     Define an initial approximation for maxexp and xmin
 !     when maxexp .LE. 0 on input
 !-----------------------------------------------------------------------
-if (maxexp .gt. 0) go to 101
-if (ibeta .eq. 2 .or. ibeta .eq. 8 .or. &
-   & ibeta .eq. 16) go to 100
+if (maxexp > 0) go to 101
+if (ibeta == 2 .or. ibeta == 8 .or. &
+   & ibeta == 16) go to 100
 !
 maxexp = k - 3
-if (n .gt. 0) write (n,200) maxexp
+if (n > 0) write (n,200) maxexp
 t = one/(b2*b2*xmin)
 xmax = (xmax*t)*b
 go to 110
 !
 100 k = k + j
-if (k + k .gt. km + 2) km = km + km
+if (k + k > km + 2) km = km + km
 maxexp = km - k - 3
-101 if (n .gt. 0) write (n,200) maxexp
+101 if (n > 0) write (n,200) maxexp
 t = b**(maxexp - 2)
 xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     Check the approximation for maxexp
 !-----------------------------------------------------------------------
 110 call dstor2(t, t*p)
-if (d1 .eq.d2) go to 150
-if (n .le. 0) return
+if (d1 == d2) go to 150
+if (n <= 0) return
 !-----------------------------------------------------------------------
 !     Loop to find the exact largest value for maxexp
 !-----------------------------------------------------------------------
@@ -1196,7 +1196,7 @@ do l = 1,500
    xmax = xmax*b
    maxexp = maxexp + 1
    call dstor2(t, t*p)
-   if (d1 .eq.d2) go to 150
+   if (d1 == d2) go to 150
    write (n,220) maxexp
 end do
 write (n,240)
@@ -1204,7 +1204,7 @@ stop
 !-----------------------------------------------------------------------
 !     Reporting overflow on unit n
 !-----------------------------------------------------------------------
-150 if (n .gt. 0) write (n,230)
+150 if (n > 0) write (n,230)
 stop
 !-----------------------------------------------------------------------
 !     Format statements
@@ -1273,13 +1273,13 @@ end interface
 !        Dahlgren Virginia
 !-----------------------------------------------------------------------
 !
-if (i .gt. 1) go to 10
+if (i > 1) go to 10
 b = ipmpar(4)
 m = ipmpar(5)
 spmpar = b**(1 - m)
 return
 !
-10 if (i .gt. 2) go to 20
+10 if (i > 2) go to 20
 b = ipmpar(4)
 emin = ipmpar(6)
 one = float(1)
@@ -1337,13 +1337,13 @@ end interface
 !        Dahlgren Virginia
 !-----------------------------------------------------------------------
 !
-if (i .gt. 1) go to 10
+if (i > 1) go to 10
 b = ipmpar(4)
 m = ipmpar(8)
 dpmpar = b**(1 - m)
 return
 !
-10 if (i .gt. 2) go to 20
+10 if (i > 2) go to 20
 b = ipmpar(4)
 emin = ipmpar(9)
 one = float(1)
@@ -1386,13 +1386,13 @@ end interface
 !--------------------------------------------------------------------
 !
 b = ipmpar(4)
-if (b .ne. 2) go to 10
+if (b /= 2) go to 10
 lnb = .69314718055995
 go to 50
-10 if (b .ne. 8) go to 20
+10 if (b /= 8) go to 20
 lnb = 2.0794415416798
 go to 50
-20 if (b .ne. 16) go to 30
+20 if (b /= 16) go to 30
 lnb = 2.7725887222398
 go to 50
 30 lnb = alog(float(b))
@@ -1420,13 +1420,13 @@ end interface
 !--------------------------------------------------------------------
 !
 b = ipmpar(4)
-if (b .ne. 2) go to 10
+if (b /= 2) go to 10
 lnb = .693147180559945309417232121458d+00
 go to 50
-10 if (b .ne. 8) go to 20
+10 if (b /= 8) go to 20
 lnb = 2.07944154167983592825169636437d+00
 go to 50
-20 if (b .ne. 16) go to 30
+20 if (b /= 16) go to 30
 lnb = 2.77258872223978123766892848583d+00
 go to 50
 30 db = b
@@ -1461,18 +1461,18 @@ end interface
 !--------------------------------------------------------------------
 !
 b = ipmpar(4)
-if (b .ne. 2) go to 10
+if (b /= 2) go to 10
 lnb = .69314718055995
 go to 50
-10 if (b .ne. 8) go to 20
+10 if (b /= 8) go to 20
 lnb = 2.0794415416798
 go to 50
-20 if (b .ne. 16) go to 30
+20 if (b /= 16) go to 30
 lnb = 2.7725887222398
 go to 50
 30 lnb = alog(float(b))
 !
-50 if (l .eq. 0) go to 60
+50 if (l == 0) go to 60
 m = ipmpar(6) - 1
 exparg = 0.99999 * (m * lnb)
 return
@@ -1505,19 +1505,19 @@ end interface
 !--------------------------------------------------------------------
 !
 b = ipmpar(4)
-if (b .ne. 2) go to 10
+if (b /= 2) go to 10
 lnb = .693147180559945309417232121458d+00
 go to 50
-10 if (b .ne. 8) go to 20
+10 if (b /= 8) go to 20
 lnb = 2.07944154167983592825169636437d+00
 go to 50
-20 if (b .ne. 16) go to 30
+20 if (b /= 16) go to 30
 lnb = 2.77258872223978123766892848583d+00
 go to 50
 30 db = b
 lnb = dlog(db)
 !
-50 if (l .eq. 0) go to 60
+50 if (l == 0) go to 60
 m = ipmpar(9) - 1
 dxparg = 0.999999999999d+00 * (m * lnb)
 return
@@ -1542,10 +1542,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1563,11 +1563,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -1590,10 +1590,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1611,11 +1611,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -1639,10 +1639,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1661,12 +1661,12 @@ do 40 ii = 1,imax
       ll = j + ki
       s = a(ll)
       t = b(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       b(ll) = b(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
       b(ll) = t
    end do
@@ -1691,10 +1691,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1712,11 +1712,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -1742,10 +1742,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1764,12 +1764,12 @@ do 40 ii = 1,imax
       ll = j + ki
       s = a(ll)
       t = m(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       m(ll) = m(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
       m(ll) = t
    end do
@@ -1795,10 +1795,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1817,12 +1817,12 @@ do 40 ii = 1,imax
       ll = j + ki
       s = a(ll)
       t = b(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       b(ll) = b(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
       b(ll) = t
    end do
@@ -1847,10 +1847,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1868,11 +1868,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -1898,10 +1898,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1920,12 +1920,12 @@ do 40 ii = 1,imax
       ll = j + ki
       s = a(ll)
       t = m(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       m(ll) = m(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
       m(ll) = t
    end do
@@ -1951,10 +1951,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -1973,12 +1973,12 @@ do 40 ii = 1,imax
       ll = j + ki
       s = a(ll)
       t = b(ll)
-30    if (s .ge. a(l)) go to 31
+30    if (s >= a(l)) go to 31
       a(ll) = a(l)
       b(ll) = b(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
       b(ll) = t
    end do
@@ -2004,10 +2004,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -2025,11 +2025,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (abs(s) .ge. abs(a(l))) go to 31
+30    if (abs(s) >= abs(a(l))) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -2053,10 +2053,10 @@ integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !
 !             Selection of the increments k(i) = (3**i-1)/2
 !
-if (n .lt. 2) return
+if (n < 2) return
 imax = 1
 do 10 i = 3,10
-   if (n .le. k(i)) go to 20
+   if (n <= k(i)) go to 20
    imax = imax + 1
 10 continue
 !
@@ -2074,11 +2074,11 @@ do 40 ii = 1,imax
       l = j
       ll = j + ki
       s = a(ll)
-30    if (dabs(s) .ge. dabs(a(l))) go to 31
+30    if (dabs(s) >= dabs(a(l))) go to 31
       a(ll) = a(l)
       ll = l
       l = l - ki
-      if (l .gt. 0) go to 30
+      if (l > 0) go to 30
 31    a(ll) = s
 !
 40 i = i - 1
@@ -2151,7 +2151,7 @@ real :: r
 ! r =      Pseudo random number for generating ij
 ! t =      Central element of x
 !
-if (n .le. 0) return
+if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
@@ -2164,8 +2164,8 @@ r = .375
 !
 ! Top of loop
 !
-2 if (i .ge. j) go to 10
-if (r .gt. .5898437) go to 3
+2 if (i >= j) go to 10
+if (r > .5898437) go to 3
 r = r + .0390625
 go to 4
 3 r = r - .21875
@@ -2184,7 +2184,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 5
+if (x(indx) <= t) go to 5
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2198,7 +2198,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(j)
-if (x(indx) .ge. t) go to 7
+if (x(indx) >= t) go to 7
 ind(ij) = indx
 ind(j) = it
 it = indx
@@ -2208,7 +2208,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 7
+if (x(indx) <= t) go to 7
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2226,23 +2226,23 @@ ind(k) = itt
 !
 7 l = l - 1
 indx = ind(l)
-if (x(indx) .gt. t) go to 7
+if (x(indx) > t) go to 7
 !
 ! Find an element in the lower part of the array whcih is
 !   not smaller than t
 !
 8 k = k + 1
 indx = ind(k)
-if (x(indx) .lt. t) go to 8
+if (x(indx) < t) go to 8
 !
 ! If k .LE. l, interchange elements k and l
 !
-if (k .le. l) go to 6
+if (k <= l) go to 6
 !
 ! Save the upper and lower subscripts of the portion of the
 !   array yet to be sorted
 !
-if (l - i .le. j - k) go to 9
+if (l - i <= j - k) go to 9
 il(m) = i
 iu(m) = l
 i = k
@@ -2258,30 +2258,30 @@ go to 11
 ! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
-if (m .eq. 0) return
+if (m == 0) return
 i = il(m)
 j = iu(m)
 !
-11 if (j - i .ge. 11) go to 4
-if (i .eq. 1) go to 2
+11 if (j - i >= 11) go to 4
+if (i == 1) go to 2
 i = i - 1
 !
 ! Sort elements i+1,...,j.  note that 1 .LE. i .LT. j and
 !   j-i .LT. 11.
 !
 12 i = i + 1
-if (i .eq. j) go to 10
+if (i == j) go to 10
 indx = ind(i + 1)
 t = x(indx)
 it = indx
 indx = ind(i)
-if (x(indx) .le. t) go to 12
+if (x(indx) <= t) go to 12
 k = i
 !
 13 ind(k + 1) = ind(k)
 k = k - 1
 indx = ind(k)
-if (t .lt. x(indx)) go to 13
+if (t < x(indx)) go to 13
 ind(k + 1) = it
 go to 12
 end subroutine qsorti
@@ -2353,7 +2353,7 @@ real :: r, t
 ! r =      Pseudo random number for generating ij
 ! t =      Central element of x
 !
-if (n .le. 0) return
+if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
@@ -2366,8 +2366,8 @@ r = .375
 !
 ! Top of loop
 !
-2 if (i .ge. j) go to 10
-if (r .gt. .5898437) go to 3
+2 if (i >= j) go to 10
+if (r > .5898437) go to 3
 r = r + .0390625
 go to 4
 3 r = r - .21875
@@ -2386,7 +2386,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 5
+if (x(indx) <= t) go to 5
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2400,7 +2400,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(j)
-if (x(indx) .ge. t) go to 7
+if (x(indx) >= t) go to 7
 ind(ij) = indx
 ind(j) = it
 it = indx
@@ -2410,7 +2410,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 7
+if (x(indx) <= t) go to 7
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2428,23 +2428,23 @@ ind(k) = itt
 !
 7 l = l - 1
 indx = ind(l)
-if (x(indx) .gt. t) go to 7
+if (x(indx) > t) go to 7
 !
 ! Find an element in the lower part of the array whcih is
 !   not smaller than t
 !
 8 k = k + 1
 indx = ind(k)
-if (x(indx) .lt. t) go to 8
+if (x(indx) < t) go to 8
 !
 ! If k .LE. l, interchange elements k and l
 !
-if (k .le. l) go to 6
+if (k <= l) go to 6
 !
 ! Save the upper and lower subscripts of the portion of the
 !   array yet to be sorted
 !
-if (l - i .le. j - k) go to 9
+if (l - i <= j - k) go to 9
 il(m) = i
 iu(m) = l
 i = k
@@ -2460,30 +2460,30 @@ go to 11
 ! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
-if (m .eq. 0) return
+if (m == 0) return
 i = il(m)
 j = iu(m)
 !
-11 if (j - i .ge. 11) go to 4
-if (i .eq. 1) go to 2
+11 if (j - i >= 11) go to 4
+if (i == 1) go to 2
 i = i - 1
 !
 ! Sort elements i+1,...,j.  note that 1 .LE. i .LT. j and
 !   j-i .LT. 11.
 !
 12 i = i + 1
-if (i .eq. j) go to 10
+if (i == j) go to 10
 indx = ind(i + 1)
 t = x(indx)
 it = indx
 indx = ind(i)
-if (x(indx) .le. t) go to 12
+if (x(indx) <= t) go to 12
 k = i
 !
 13 ind(k + 1) = ind(k)
 k = k - 1
 indx = ind(k)
-if (t .lt. x(indx)) go to 13
+if (t < x(indx)) go to 13
 ind(k + 1) = it
 go to 12
 end subroutine qsortr
@@ -2556,7 +2556,7 @@ double precision :: t
 ! r =      Pseudo random number for generating ij
 ! t =      Central element of x
 !
-if (n .le. 0) return
+if (n <= 0) return
 !
 ! Initialize ind, m, i, j, and r
 !
@@ -2569,8 +2569,8 @@ r = .375
 !
 ! Top of loop
 !
-2 if (i .ge. j) go to 10
-if (r .gt. .5898437) go to 3
+2 if (i >= j) go to 10
+if (r > .5898437) go to 3
 r = r + .0390625
 go to 4
 3 r = r - .21875
@@ -2589,7 +2589,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 5
+if (x(indx) <= t) go to 5
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2603,7 +2603,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(j)
-if (x(indx) .ge. t) go to 7
+if (x(indx) >= t) go to 7
 ind(ij) = indx
 ind(j) = it
 it = indx
@@ -2613,7 +2613,7 @@ t = x(it)
 !   interchange it with t
 !
 indx = ind(i)
-if (x(indx) .le. t) go to 7
+if (x(indx) <= t) go to 7
 ind(ij) = indx
 ind(i) = it
 it = indx
@@ -2631,23 +2631,23 @@ ind(k) = itt
 !
 7 l = l - 1
 indx = ind(l)
-if (x(indx) .gt. t) go to 7
+if (x(indx) > t) go to 7
 !
 ! Find an element in the lower part of the array whcih is
 !   not smaller than t
 !
 8 k = k + 1
 indx = ind(k)
-if (x(indx) .lt. t) go to 8
+if (x(indx) < t) go to 8
 !
 ! If k .LE. l, interchange elements k and l
 !
-if (k .le. l) go to 6
+if (k <= l) go to 6
 !
 ! Save the upper and lower subscripts of the portion of the
 !   array yet to be sorted
 !
-if (l - i .le. j - k) go to 9
+if (l - i <= j - k) go to 9
 il(m) = i
 iu(m) = l
 i = k
@@ -2663,30 +2663,30 @@ go to 11
 ! Begin again on another unsorted portion of the array
 !
 10 m = m - 1
-if (m .eq. 0) return
+if (m == 0) return
 i = il(m)
 j = iu(m)
 !
-11 if (j - i .ge. 11) go to 4
-if (i .eq. 1) go to 2
+11 if (j - i >= 11) go to 4
+if (i == 1) go to 2
 i = i - 1
 !
 ! Sort elements i+1,...,j.  note that 1 .LE. i .LT. j and
 !   j-i .LT. 11.
 !
 12 i = i + 1
-if (i .eq. j) go to 10
+if (i == j) go to 10
 indx = ind(i + 1)
 t = x(indx)
 it = indx
 indx = ind(i)
-if (x(indx) .le. t) go to 12
+if (x(indx) <= t) go to 12
 k = i
 !
 13 ind(k + 1) = ind(k)
 k = k - 1
 indx = ind(k)
-if (t .lt. x(indx)) go to 13
+if (t < x(indx)) go to 13
 ind(k + 1) = it
 go to 12
 end subroutine qsortd
@@ -2731,7 +2731,7 @@ integer :: nn, k, j, ipj, temp
 ! temp = Temporary storage for a(k)
 !
 nn = n
-if (nn .lt. 2) return
+if (nn < 2) return
 k = 1
 !
 ! Loop on permutations
@@ -2744,7 +2744,7 @@ temp = a(k)
 !
 2 ipj = ip(j)
 ip(j) = -ipj
-if (ipj .eq. k) go to 3
+if (ipj == k) go to 3
 a(j) = a(ipj)
 j = ipj
 go to 2
@@ -2753,8 +2753,8 @@ go to 2
 ! Search for an unmarked element of ip
 !
 4 k = k + 1
-if (k .gt. nn) go to 5
-if (ip(k) .gt. 0) go to 1
+if (k > nn) go to 5
+if (ip(k) > 0) go to 1
 go to 4
 !
 ! All permutations have been applied.  Unmark ip.
@@ -2806,7 +2806,7 @@ real :: temp
 ! temp = Temporary storage for a(k)
 !
 nn = n
-if (nn .lt. 2) return
+if (nn < 2) return
 k = 1
 !
 ! Loop on permutations
@@ -2819,7 +2819,7 @@ temp = a(k)
 !
 2 ipj = ip(j)
 ip(j) = -ipj
-if (ipj .eq. k) go to 3
+if (ipj == k) go to 3
 a(j) = a(ipj)
 j = ipj
 go to 2
@@ -2828,8 +2828,8 @@ go to 2
 ! Search for an unmarked element of ip
 !
 4 k = k + 1
-if (k .gt. nn) go to 5
-if (ip(k) .gt. 0) go to 1
+if (k > nn) go to 5
+if (ip(k) > 0) go to 1
 go to 4
 !
 ! All permutations have been applied.  Unmark ip.
@@ -2881,7 +2881,7 @@ double precision :: temp
 ! temp = Temporary storage for a(k)
 !
 nn = n
-if (nn .lt. 2) return
+if (nn < 2) return
 k = 1
 !
 ! Loop on permutations
@@ -2894,7 +2894,7 @@ temp = a(k)
 !
 2 ipj = ip(j)
 ip(j) = -ipj
-if (ipj .eq. k) go to 3
+if (ipj == k) go to 3
 a(j) = a(ipj)
 j = ipj
 go to 2
@@ -2903,8 +2903,8 @@ go to 2
 ! Search for an unmarked element of ip
 !
 4 k = k + 1
-if (k .gt. nn) go to 5
-if (ip(k) .gt. 0) go to 1
+if (k > nn) go to 5
+if (ip(k) > 0) go to 1
 go to 4
 !
 ! All permutations have been applied.  Unmark ip.
@@ -2999,11 +2999,11 @@ real :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
 !     --------------------------------------
-if (abs(x) .le. abs(y)) go to 10
+if (abs(x) <= abs(y)) go to 10
 a = y/x
 cpabs = abs(x)*sqrt(1.0 + a*a)
 return
-10 if (y .eq. 0.0) go to 20
+10 if (y == 0.0) go to 20
 a = x/y
 cpabs = abs(y)*sqrt(1.0 + a*a)
 return
@@ -3019,11 +3019,11 @@ double precision :: a
 !     Evaluation of sqrt(x*x + y*y)
 !     --------------------------------------
 !
-if (dabs(x) .le. dabs(y)) go to 10
+if (dabs(x) <= dabs(y)) go to 10
 a = y/x
 dcpabs = dabs(x)*dsqrt(1.d0 + a*a)
 return
-10 if (y .eq. 0.d0) go to 20
+10 if (y == 0.d0) go to 20
 a = x/y
 dcpabs = dabs(y)*dsqrt(1.d0 + a*a)
 return
@@ -3039,7 +3039,7 @@ real :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
 !-----------------------------------------------------------------------
-if (abs(x) .gt. abs(y)) go to 10
+if (abs(x) > abs(y)) go to 10
 t = x/y
 d = y + t*x
 u = t/d
@@ -3061,7 +3061,7 @@ double precision, intent(in) :: x, y
 double precision, intent(inout) :: u, v
 double precision :: d, t
 !
-if (dabs(x) .gt. dabs(y)) go to 10
+if (dabs(x) > dabs(y)) go to 10
 t = x/y
 d = y + t*x
 u = t/d
@@ -3087,7 +3087,7 @@ ai = aimag(a)
 br = real(b)
 bi = aimag(b)
 !
-if (abs(br) .lt. abs(bi)) go to 10
+if (abs(br) < abs(bi)) go to 10
 t = bi/br
 d = br + t*bi
 u = (ar + ai*t)/d
@@ -3118,7 +3118,7 @@ interface
    end function dpmpar
 end interface
 !
-if (dabs(br) .le. dabs(bi)) go to 10
+if (dabs(br) <= dabs(bi)) go to 10
 t = bi/br
 d = br + t*bi
 u = (ar + ai*t)/d
@@ -3127,7 +3127,7 @@ cr = u
 ci = v
 return
 !
-10 if (bi .eq. 0.d0) go to 20
+10 if (bi == 0.d0) go to 20
 t = br/bi
 d = bi + t*br
 u = (ar*t + ai)/d
@@ -3171,7 +3171,7 @@ x = z(1)
 y = z(2)
 if (x) 30,10,20
 !
-10 if (y .ne. 0.d0) go to 11
+10 if (y /= 0.d0) go to 11
 w(1) = 0.d0
 w(2) = 0.d0
 return
@@ -3179,7 +3179,7 @@ return
 w(2) = dsign(w(1),y)
 return
 !
-20 if (y .ne. 0.d0) go to 21
+20 if (y /= 0.d0) go to 21
 w(1) = dsqrt(x)
 w(2) = 0.d0
 return
@@ -3188,7 +3188,7 @@ w(1) = dsqrt(0.5d0*(r + x))
 w(2) = 0.5d0*y/w(1)
 return
 !
-30 if (y .ne. 0.d0) go to 31
+30 if (y /= 0.d0) go to 31
 w(1) = 0.d0
 w(2) = dsqrt(dabs(x))
 return
@@ -3213,12 +3213,12 @@ implicit none
 real, intent(inout) :: r, theta
 real, intent(in) :: x, y
 real :: a
-if (abs(x).le.abs(y)) go to 10
+if (abs(x) <= abs(y)) go to 10
 a = y/x
 r = abs(x)*sqrt(1.0 + a*a)
 theta = atan2(y,x)
 return
-10 if (y.eq.0.) go to 20
+10 if (y == 0.) go to 20
 a = x/y
 r = abs(y)*sqrt(1.0 + a*a)
 theta = atan2(y,x)
@@ -3270,7 +3270,7 @@ real :: r, u, v
 !
 ! ------------------------------------------------------------------
 !
-if (abs(sa) .le. abs(sb)) go to 10
+if (abs(sa) <= abs(sb)) go to 10
 !
 ! *** HERE abs(sa) .GT. abs(sb) ***
 !
@@ -3291,7 +3291,7 @@ return
 !
 ! *** HERE abs(sa) .LE. abs(sb) ***
 !
-10 if (sb .eq. 0.) go to 20
+10 if (sb == 0.) go to 20
 u = sb + sb
 v = sa / u
 !
@@ -3304,7 +3304,7 @@ sa = sqrt(.25 + v**2) * u
 !
 ss = sb / sa
 sc = v * (ss + ss)
-if (sc .eq. 0.) go to 15
+if (sc == 0.) go to 15
 sb = 1. / sc
 return
 15 sb = 1.
@@ -3346,7 +3346,7 @@ implicit none
 !
 double precision, intent(inout) :: da, db, dc, ds
 double precision :: u, v, r
-if (dabs(da) .le. dabs(db)) go to 10
+if (dabs(da) <= dabs(db)) go to 10
 !
 ! *** HERE dabs(da) .GT. dabs(db) ***
 !
@@ -3367,7 +3367,7 @@ return
 !
 ! *** HERE dabs(da) .LE. dabs(db) ***
 !
-10 if (db .eq. 0.d0) go to 20
+10 if (db == 0.d0) go to 20
 u = db + db
 v = da / u
 !
@@ -3380,7 +3380,7 @@ da = dsqrt(.25d0 + v**2) * u
 !
 ds = db / da
 dc = v * (ds + ds)
-if (dc .eq. 0.d0) go to 15
+if (dc == 0.d0) go to 15
 db = 1.d0 / dc
 return
 15 db = 1.d0
@@ -3401,8 +3401,8 @@ real, intent(inout) :: theta(3)
 real :: r, t, u, v
 real, parameter :: pihalf = 1.5707963267949
 !     --------------------
-if (abs(a(1,1)) .gt. abs(a(2,1))) go to 10
-if (a(2,1) .ne. 0.0) go to 11
+if (abs(a(1,1)) > abs(a(2,1))) go to 10
+if (a(2,1) /= 0.0) go to 11
 !
 !     Case when a(1,1) = a(2,1) = 0
 !
@@ -3410,7 +3410,7 @@ theta(3) = 0.0
 theta(2) = sign(pihalf,a(3,1))
 u = a(2,2)
 v = a(1,2)
-if (a(3,1) .gt. 0.0) v = -v
+if (a(3,1) > 0.0) v = -v
 theta(1) = atan2(v,u)
 return
 !
@@ -3427,7 +3427,7 @@ r = abs(a(2,1))*sqrt(1.0 + t*t)
 20 theta(3) = atan2(a(2,1),a(1,1))
 theta(2) = atan2(a(3,1),r)
 u = dble(a(1,1))*dble(a(2,2)) - dble(a(1,2))*dble(a(2,1))
-if (abs(theta(2)) .gt. 0.8) go to 21
+if (abs(theta(2)) > 0.8) go to 21
 u = u/r
 v = a(3,2)/cos(theta(2))
 go to 22
@@ -3473,7 +3473,7 @@ real, intent(out) :: cy, sy
 !
 cy = sqrt(yk*yk + zk*zk)
 sy = xk
-if (cy .eq. 0.) go to 1
+if (cy == 0.) go to 1
 cx = zk/cy
 sx = yk/cy
 return
@@ -3504,17 +3504,17 @@ end interface
 !           Computation of the angle between two vectors
 !-----------------------------------------------------------------------
 !
-if (n .lt. 2) go to 30
+if (n < 2) go to 30
 rx = snrm2(n, x, 1)
-if (rx .eq. 0.0) go to 30
+if (rx == 0.0) go to 30
 ry = snrm2(n, y, 1)
-if (ry .eq. 0.0) go to 30
+if (ry == 0.0) go to 30
 !
 d = 0.0
 do i = 1,n
    d = d + (x(i)/rx - y(i)/ry)**2
 end do
-if (d .gt. 3.0) go to 20
+if (d > 3.0) go to 20
 ang = acos(0.5 + (0.5 - 0.5*d))
 return
 !
@@ -3608,14 +3608,14 @@ max = ipmpar(3)
 !
 !------------------------
 a = abs(x)
-if (a .lt. float(max)) go to 10
+if (a < float(max)) go to 10
 sin1 = 0.0
 return
 !
 10 n = a
 a = a - float(n)
-if (a .gt. 0.75) go to 20
-if (a .lt. 0.25) go to 21
+if (a > 0.75) go to 20
+if (a < 0.25) go to 21
 !
 !                    0.25 .LE. a .LE. 0.75
 !
@@ -3634,8 +3634,8 @@ sin1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 !
 !                        Termination
 !
-30 if (x .lt. 0.0) sin1 = - sin1
-if (mod(n,2) .ne. 0) sin1 = - sin1
+30 if (x < 0.0) sin1 = - sin1
+if (mod(n,2) /= 0) sin1 = - sin1
 return
 end function sin1
 
@@ -3676,14 +3676,14 @@ max = ipmpar(3)
 !
 !------------------------
 a = abs(x)
-if (a .lt. float(max)) go to 10
+if (a < float(max)) go to 10
 cos1 = 1.0
 return
 !
 10 n = a
 a = a - float(n)
-if (a .gt. 0.75) go to 20
-if (a .lt. 0.25) go to 21
+if (a > 0.75) go to 20
+if (a < 0.25) go to 21
 !
 !                    0.25 .LE. a .LE. 0.75
 !
@@ -3703,7 +3703,7 @@ cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 !
 !                        Termination
 !
-30 if (mod(n,2) .ne. 0) cos1 = - cos1
+30 if (mod(n,2) /= 0) cos1 = - cos1
 return
 end function cos1
 
@@ -3771,15 +3771,15 @@ max = ipmpar(3)
 !------------------------
 a = dabs(x)
 t = max
-if (a .lt. t) go to 10
+if (a < t) go to 10
 dsin1 = 0.d0
 return
 !
 10 n = a
 t = n
 a = a - t
-if (a .gt. 0.75d0) go to 20
-if (a .lt. 0.25d0) go to 21
+if (a > 0.75d0) go to 20
+if (a < 0.25d0) go to 21
 !
 !                    0.25 .LE. a .LE. 0.75
 !
@@ -3801,8 +3801,8 @@ dsin1 = pi*a*w
 !
 !                        Termination
 !
-30 if (x .lt. 0.0) dsin1 = - dsin1
-if (mod(n,2) .ne. 0) dsin1 = - dsin1
+30 if (x < 0.0) dsin1 = - dsin1
+if (mod(n,2) /= 0) dsin1 = - dsin1
 return
 end function dsin1
 
@@ -3870,15 +3870,15 @@ max = ipmpar(3)
 !------------------------
 a = dabs(x)
 t = max
-if (a .lt. t) go to 10
+if (a < t) go to 10
 dcos1 = 1.d0
 return
 !
 10 n = a
 t = n
 a = a - t
-if (a .gt. 0.75d0) go to 20
-if (a .lt. 0.25d0) go to 21
+if (a > 0.75d0) go to 20
+if (a < 0.25d0) go to 21
 !
 !                    0.25 .LE. a .LE. 0.75
 !
@@ -3901,7 +3901,7 @@ dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
 !
 !                        Termination
 !
-30 if (mod(n,2) .ne. 0) dcos1 = - dcos1
+30 if (mod(n,2) /= 0) dcos1 = - dcos1
 return
 end function dcos1
 
@@ -3976,22 +3976,22 @@ real, parameter :: cut(5) = [1.65, 1.2, 1.2, 2.7, 1.65]
 xx = x
 ax = abs(xx)
 xs = xx*xx
-if (ax .ge. cut(isw + 2)) expx = exp(ax)
+if (ax >= cut(isw + 2)) expx = exp(ax)
 !
 ! sinhm APPROXIMATION
 !
-if (isw .eq. 1 .or. isw .eq. 2) go to 2
-if (ax .ge. 1.65) go to 1
+if (isw == 1 .or. isw == 2) go to 2
+if (ax >= 1.65) go to 1
 sinhm = ((((((sp5*xs + sp4)*xs + sp3)*xs + sp2)*xs + sp1)*xs + 1.) &
    & *xs*xx)/((sq1*xs + 1.)*6.)
 go to 2
 1 sinhm = -(((ax + ax) + 1./expx) - expx)/2.
-if (xx .lt. 0.) sinhm = -sinhm
+if (xx < 0.) sinhm = -sinhm
 !
 ! coshm APPROXIMATION
 !
-2 if (isw .ne. 0 .and. isw .ne. 1) go to 4
-if (ax .ge. 1.2) go to 3
+2 if (isw /= 0 .and. isw /= 1) go to 4
+if (ax >= 1.2) go to 3
 coshm = ((((((cp5*xs + cp4)*xs + cp3)*xs + cp2)*xs + cp1)*xs + 1.) &
    & *xs)/((cq1*xs + 1.)*2.)
 go to 4
@@ -3999,8 +3999,8 @@ go to 4
 !
 ! COSHMM APPROXIMATION
 !
-4 if (isw .le. 1) return
-if (ax .ge. 2.70) go to 5
+4 if (isw <= 1) return
+if (ax >= 2.70) go to 5
 coshm = ((((zp3*xs + zp2)*xs + zp1)*xs + 1.)*xs*xs)/(((((zq4 &
    & *xs + zq3)*xs + zq2)*xs + zq1)*xs + 1.)*24.)
 return
@@ -4016,17 +4016,17 @@ real :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
 !-----------------------------------------------------------------------
-if (x .gt. 0.0) go to 10
+if (x > 0.0) go to 10
 !
-if (mu .lt. 0) go to 20
+if (mu < 0) go to 20
 w = mu + x
-if (w .gt. 0.0) go to 20
+if (w > 0.0) go to 20
 esum = exp(w)
 return
 !
-10 if (mu .gt. 0) go to 20
+10 if (mu > 0) go to 20
 w = mu + x
-if (w .lt. 0.0) go to 20
+if (w < 0.0) go to 20
 esum = exp(w)
 return
 !
@@ -4044,17 +4044,17 @@ double precision :: w
 !                    Evaluation of exp(mu + x)
 !-----------------------------------------------------------------------
 !
-if (x .gt. 0.d0) go to 10
+if (x > 0.d0) go to 10
 !
-if (mu .lt. 0) go to 20
+if (mu < 0) go to 20
 w = mu + x
-if (w .gt. 0.d0) go to 20
+if (w > 0.d0) go to 20
 desum = dexp(w)
 return
 !
-10 if (mu .gt. 0) go to 20
+10 if (mu > 0) go to 20
 w = mu + x
-if (w .lt. 0.d0) go to 20
+if (w < 0.d0) go to 20
 desum = dexp(w)
 return
 !
@@ -4077,16 +4077,16 @@ real, parameter :: q4 = .595130811860248e-03
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
 !-----------------------
-if (abs(x) .gt. 0.15) go to 10
+if (abs(x) > 0.15) go to 10
 rexp = x*(((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
    & + q1)*x + 1.0))
 return
 !
-10 if (x .lt. 0.0) go to 20
+10 if (x < 0.0) go to 20
 e = exp(x)
 rexp = e*(0.5 + (0.5 - 1.0/e))
 return
-20 if (x .lt. -37.0) go to 30
+20 if (x < -37.0) go to 30
 rexp = (exp(x) - 0.5) - 0.5
 return
 30 rexp = -1.0
@@ -4119,7 +4119,7 @@ double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
 !     ci = 1/factorial(i + 2)
 !---------------------------
 !---------------------------
-if (dabs(x) .gt. 0.15d0) go to 10
+if (dabs(x) > 0.15d0) go to 10
 !
 !        z is a minimax approximation of the series
 !
@@ -4138,11 +4138,11 @@ w = ((((((z*x + c5)*x + c4)*x + c3)*x + c2)*x + &
 drexp = x*w
 return
 !
-10 if (x .lt. 0.d0) go to 20
+10 if (x < 0.d0) go to 20
 e = dexp(x)
 drexp = e*(0.5d0 + (0.5d0 - 1.d0/e))
 return
-20 if (x .lt. -77.d0) go to 30
+20 if (x < -77.d0) go to 30
 drexp = (dexp(x) - 0.5d0) - 0.5d0
 return
 30 drexp = -1.d0
@@ -4169,17 +4169,17 @@ real, parameter :: q4 = .595130811860248e-03
 !
 !-----------------------------------------------------------------------
 !-----------------------
-if (abs(x) .gt. 0.15) go to 10
+if (abs(x) > 0.15) go to 10
 w = ((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
    & + q1)*x + 1.0)
 return
 !
-10 if (x .lt. 0.0) go to 20
-if (e .lt. 0.0) e = exp(x)
+10 if (x < 0.0) go to 20
+if (e < 0.0) e = exp(x)
 w = (e*(0.5 + (0.5 - 1.0/e)))/x
 return
-20 if (x .lt. -37.0) go to 30
-if (e .lt. 0.0) e = exp(x)
+20 if (x < -37.0) go to 30
+if (e < 0.0) e = exp(x)
 w = ((e - 0.5) - 0.5)/x
 return
 30 w = -1.0/x
@@ -4221,8 +4221,8 @@ double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
 !---------------------------
 !---------------------------
 w = 1.d0
-if (dabs(x) .lt. 1.d-33) return
-if (dabs(x) .gt. 0.15d0) go to 10
+if (dabs(x) < 1.d-33) return
+if (dabs(x) > 0.15d0) go to 10
 !
 !        z is a minimax approximation of the series
 !
@@ -4240,12 +4240,12 @@ w = ((((((z*x + c5)*x + c4)*x + c3)*x + c2)*x + &
    & c1)*x + 0.5d0)*x + 1.d0
 return
 !
-10 if (x .lt. 0.d0) go to 20
-if (e .lt. 0.d0) e = dexp(x)
+10 if (x < 0.d0) go to 20
+if (e < 0.d0) e = dexp(x)
 w = (e*(0.5d0 + (0.5d0 - 1.d0/e)))/x
 return
-20 if (x .lt. -77.d0) go to 30
-if (e .lt. 0.d0) e = dexp(x)
+20 if (x < -77.d0) go to 30
+if (e < 0.d0) e = dexp(x)
 w = ((e - 0.5d0) - 0.5d0)/x
 return
 30 w = -1.d0/x
@@ -4266,7 +4266,7 @@ real, parameter :: q3 = -.845104217945565e-01
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 !--------------------------
-if (abs(a) .gt. 0.375) go to 10
+if (abs(a) > 0.375) go to 10
 t = a/(a + 2.0)
 t2 = t*t
 w = (((p3*t2 + p2)*t2 + p1)*t2 + 1.0)/ &
@@ -4275,7 +4275,7 @@ alnrel = 2.0*t*w
 return
 !
 10 x = 1.0 + a
-if (a .lt. 0.0) x = (a + 0.5) + 0.5
+if (a < 0.0) x = (a + 0.5) + 0.5
 alnrel = alog(x)
 return
 end function alnrel
@@ -4305,9 +4305,9 @@ double precision, parameter :: c5 = .9090909090909090909090909090909d-01
 !     ci = 1/(2i + 1)
 !-------------------------
 !-------------------------
-if (dabs(a) .lt. 0.375d0) go to 10
+if (dabs(a) < 0.375d0) go to 10
 t = 1.d0 + a
-if (a .lt. 0.d0) t = 0.5d0 + (0.5d0 + a)
+if (a < 0.d0) t = 0.5d0 + (0.5d0 + a)
 dlnrel = dlog(t)
 return
 !
@@ -4350,9 +4350,9 @@ real, parameter :: q2 = .354508718369557e+00
 !------------------------
 !------------------------
 !------------------------
-if (x .lt. 0.61 .or. x .gt. 1.57) go to 100
-if (x .lt. 0.82) go to 10
-if (x .gt. 1.18) go to 20
+if (x < 0.61 .or. x > 1.57) go to 100
+if (x < 0.82) go to 10
+if (x > 1.18) go to 20
 !
 !                 Argument reduction
 !
@@ -4404,9 +4404,9 @@ real, parameter :: q2 = .354508718369557e+00
 !------------------------
 !------------------------
 !------------------------
-if (x .lt. -0.39 .or. x .gt. 0.57) go to 100
-if (x .lt. -0.18) go to 10
-if (x .gt.  0.18) go to 20
+if (x < -0.39 .or. x > 0.57) go to 100
+if (x < -0.18) go to 10
+if (x > 0.18) go to 20
 !
 !                 Argument reduction
 !
@@ -4470,9 +4470,9 @@ double precision, parameter :: c5 = .909090909090909090909090909090909d-01
 !     ci = 1/(2i + 1)
 !-------------------------
 !-------------------------
-if (x .lt. 0.61d0 .or. x .gt. 1.57d0) go to 100
-if (x .lt. 0.82d0) go to 10
-if (x .gt. 1.18d0) go to 20
+if (x < 0.61d0 .or. x > 1.57d0) go to 100
+if (x < 0.82d0) go to 10
+if (x > 1.18d0) go to 20
 !
 !                 Argument reduction
 !
@@ -4548,9 +4548,9 @@ double precision, parameter :: c5 = .909090909090909090909090909090909d-01
 !     ci = 1/(2i + 1)
 !-------------------------
 !-------------------------
-if (x .lt. -0.39d0 .or. x .gt. 0.57d0) go to 100
-if (x .lt. -0.18d0) go to 10
-if (x .gt.  0.18d0) go to 20
+if (x < -0.39d0 .or. x > 0.57d0) go to 100
+if (x < -0.18d0) go to 10
+if (x > 0.18d0) go to 20
 !
 !                 Argument reduction
 !
@@ -4636,7 +4636,7 @@ eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 n0 = n
-if (x(1) .eq. x(n) .and. y(1) .eq. y(n)) n0 = n - 1
+if (x(1) == x(n) .and. y(1) == y(n)) n0 = n - 1
 pi = atan2(0.0, -1.0)
 pi2 = 2.0*pi
 tol = 4.0*eps*pi
@@ -4645,8 +4645,8 @@ m = 0
 !
 u = x(1) - x0
 v = y(1) - y0
-if (u .eq. 0.0 .and. v .eq. 0.0) go to 20
-if (n0 .lt. 2) return
+if (u == 0.0 .and. v == 0.0) go to 20
+if (n0 < 2) return
 theta1 = atan2(v, u)
 !
 sum = 0.0
@@ -4654,29 +4654,29 @@ theta = theta1
 do i = 2,n0
    u = x(i) - x0
    v = y(i) - y0
-   if (u .eq. 0.0 .and. v .eq. 0.0) go to 20
+   if (u == 0.0 .and. v == 0.0) go to 20
    thetai = atan2(v, u)
 !
    angle = abs(thetai - theta)
-   if (abs(angle - pi) .lt. tol) go to 20
-   if (angle .gt. pi) angle = angle - pi2
-   if (theta .gt. thetai) angle = -angle
+   if (abs(angle - pi) < tol) go to 20
+   if (angle > pi) angle = angle - pi2
+   if (theta > thetai) angle = -angle
    sum = sum + angle
    theta = thetai
 end do
 !
 angle = abs(theta1 - theta)
-if (abs(angle - pi) .lt. tol) go to 20
-if (angle .gt. pi) angle = angle - pi2
-if (theta .gt. theta1) angle = -angle
+if (abs(angle - pi) < tol) go to 20
+if (angle > pi) angle = angle - pi2
+if (theta > theta1) angle = -angle
 sum = sum + angle
 !
 !     sum = 2*pi*m where m is the winding number
 !
 m = abs(sum)/pi2 + 0.2
-if (m .eq. 0) return
+if (m == 0) return
 l = 1
-if (sum .lt. 0.0) m = -m
+if (sum < 0.0) m = -m
 return
 !
 !     (x0, y0) is on the boundary of the path
@@ -4718,10 +4718,10 @@ eps = spmpar(1)
 !
 !----------------------
 num = 0
-if (n .lt. 2) go to 200
+if (n < 2) go to 200
 h = b(1) - a(1)
 k = b(2) - a(2)
-if (h .eq. 0.0 .and. k .eq. 0.0) go to 200
+if (h == 0.0 .and. k == 0.0) go to 200
 !
 ierr = 0
 nm1 = n - 1
@@ -4734,7 +4734,7 @@ ind = 0
 do 100 i = 1, nm1
    hi = x(i + 1) - x(i)
    ki = y(i + 1) - y(i)
-   if (hi .eq. 0.0 .and. ki .eq. 0.0) go to 100
+   if (hi == 0.0 .and. ki == 0.0) go to 100
    ind = 1
 !
 !           Check if the line from A to b and the i-TH
@@ -4743,7 +4743,7 @@ do 100 i = 1, nm1
    s = hi*k
    t = h*ki
    d = s - t
-   if (abs(d) .le. tol*amax1(abs(s),abs(t))) go to 40
+   if (abs(d) <= tol*amax1(abs(s),abs(t))) go to 40
 !-----------------------------------------------------------------------
 !                   The lines are not parallel
 !-----------------------------------------------------------------------
@@ -4752,32 +4752,32 @@ do 100 i = 1, nm1
    s = hi*q
    t = ki*p
    diff = s - t
-   if (abs(diff) .le. tol*amax1(abs(s),abs(t))) diff = 0.0
+   if (abs(diff) <= tol*amax1(abs(s),abs(t))) diff = 0.0
    s = h*q
    t = k*p
    diff1 = s - t
-   if (abs(diff1) .le. tol*amax1(abs(s),abs(t))) diff1 = 0.0
+   if (abs(diff1) <= tol*amax1(abs(s),abs(t))) diff1 = 0.0
 !
    s = diff/d
    t = diff1/d
-   if (s .lt. 0.0 .or. s .gt. onep) go to 100
-   if (t .lt. 0.0 .or. t .gt. onep) go to 100
-   if (num .gt. 0 .and. t .eq. 0.0) go to 100
-   if (s .gt. 0.0) go to 20
+   if (s < 0.0 .or. s > onep) go to 100
+   if (t < 0.0 .or. t > onep) go to 100
+   if (num > 0 .and. t == 0.0) go to 100
+   if (s > 0.0) go to 20
 !
 !                   Point A is on the i-TH line
 !
 10 num = num + 1
-   if (num .gt. m) go to 210
+   if (num > m) go to 210
    u(num) = a(1)
    v(num) = a(2)
    go to 100
 !
 !                   Point b is on the i-TH line
 !
-20 if (s .lt. onem) go to 30
+20 if (s < onem) go to 30
 21 num = num + 1
-   if (num .gt. m) go to 210
+   if (num > m) go to 210
    u(num) = b(1)
    v(num) = b(2)
    go to 100
@@ -4786,65 +4786,65 @@ do 100 i = 1, nm1
 !                 intersects with the i-TH line
 !
 30 num = num + 1
-   if (num .gt. m) go to 210
+   if (num > m) go to 210
    u(num) = a(1) + s*h
    v(num) = a(2) + s*k
    go to 100
 !-----------------------------------------------------------------------
 !                     The lines are parallel
 !-----------------------------------------------------------------------
-40 if (abs(hi) .gt. abs(ki)) go to 50
+40 if (abs(hi) > abs(ki)) go to 50
 !
    d = a(2) - y(i)
-   if (abs(d) .le. tol0*amax1(abs(a(2)),abs(y(i)))) d = 0.0
+   if (abs(d) <= tol0*amax1(abs(a(2)),abs(y(i)))) d = 0.0
    s = d/ki
 !
    p = x(i) + s*hi
-   if (abs(a(1) - p) .gt. tol*amax1(abs(a(1)),abs(p))) &
+   if (abs(a(1) - p) > tol*amax1(abs(a(1)),abs(p))) &
       & go to 100
 !
    d = b(2) - y(i)
-   if (abs(d) .le. tol0*amax1(abs(b(2)),abs(y(i)))) d = 0.0
+   if (abs(d) <= tol0*amax1(abs(b(2)),abs(y(i)))) d = 0.0
    t = d/ki
    go to 60
 !
 50 d = a(1) - x(i)
-   if (abs(d) .le. tol0*amax1(abs(a(1)),abs(x(i)))) d = 0.0
+   if (abs(d) <= tol0*amax1(abs(a(1)),abs(x(i)))) d = 0.0
    s = d/hi
 !
    p = y(i) + s*ki
-   if (abs(p - a(2)) .gt. tol*amax1(abs(p),abs(a(2)))) &
+   if (abs(p - a(2)) > tol*amax1(abs(p),abs(a(2)))) &
       & go to 100
 !
    d = b(1) - x(i)
-   if (abs(d) .le. tol0*amax1(abs(b(1)),abs(x(i)))) d = 0.0
+   if (abs(d) <= tol0*amax1(abs(b(1)),abs(x(i)))) d = 0.0
    t = d/hi
 !
 !              The 2 lines are portions of the same
 !                     straight infinite line
 !
-60 if (s .gt. 0.0 .and. s .lt. onem) go to 220
-   if (t .gt. 0.0 .and. t .lt. onem) go to 220
+60 if (s > 0.0 .and. s < onem) go to 220
+   if (t > 0.0 .and. t < onem) go to 220
    tmin = amin1(s,t)
    tmax = amax1(s,t)
-   if (tmax .le. 0.0) go to 70
-   if (tmin .ge. onem) go to 80
+   if (tmax <= 0.0) go to 70
+   if (tmin >= onem) go to 80
    go to 220
 !
-70 if (tmax .lt. 0.0) go to 100
-   if (num .gt. 0) go to 100
-   if (tmax .eq. s) go to 10
+70 if (tmax < 0.0) go to 100
+   if (num > 0) go to 100
+   if (tmax == s) go to 10
    go to 21
 !
-80 if (tmin .gt. 1.0) go to 100
-   if (tmin .eq. s) go to 10
+80 if (tmin > 1.0) go to 100
+   if (tmin == s) go to 10
    go to 21
 !
 100 continue
-if (ind .eq. 0) go to 200
+if (ind == 0) go to 200
 !
-if (num .lt. 2) return
-if (u(num) .eq. x(1) .and. v(num) .eq. y(1)) &
+if (num < 2) return
+if (u(num) == x(1) .and. v(num) == y(1)) &
    & num = num - 1
 return
 !
@@ -4903,11 +4903,11 @@ onep = 1.0 + 4.0*eps
 call rrsort(y, x, m)
 ymin = y(1)
 ymax = y(m)
-if (ymin .eq. ymax) go to 500
+if (ymin == ymax) go to 500
 !
 l = 1
 10 l = l + 1
-if (y(l) .eq. ymin) go to 10
+if (y(l) == ymin) go to 10
 lmin = l
 l = l - 1
 call rrsort(x, y, l)
@@ -4915,7 +4915,7 @@ x1 = x(1)
 !
 i = m
 20 i = i - 1
-if (y(i) .eq. ymax) go to 20
+if (y(i) == ymax) go to 20
 lmax = i
 i = i + 1
 call rrsort(x(i), y(i), m - lmax)
@@ -4926,10 +4926,10 @@ xm = x(m)
 xmin = x1
 xmax = x(l)
 do 31 i = lmin,m
-   if (x(i) .gt. xmin) go to 30
+   if (x(i) > xmin) go to 30
    xmin = x(i)
    go to 31
-30 if (x(i) .gt. xmax) xmax = x(i)
+30 if (x(i) > xmax) xmax = x(i)
 31 continue
 !
 !                   Going along the ymin axis
@@ -4943,7 +4943,7 @@ end do
 n = 1
 vx(1) = x(1)
 vy(1) = y(1)
-if (l .eq. 1) go to 100
+if (l == 1) go to 100
 n = 2
 vx(2) = x(l)
 vy(2) = y(l)
@@ -4951,22 +4951,22 @@ vy(2) = y(l)
 !           Going from the ymin axis to the xmax axis
 !
 100 h = xmax - bx(k)
-if (h .eq. 0.0) go to 150
+if (h == 0.0) go to 150
 k0 = k
 ibeg = .true.
 !
 110 continue
 l = l + 1
-if (l .gt. lmax) l = m
+if (l > lmax) l = m
 h = x(l) - bx(k)
-if (h .le. 0.0) go to 110
+if (h <= 0.0) go to 110
 dx = x(l) - bx(k0)
 dy = y(l) - by(k0)
 if (ibeg) go to 120
 r = (dx0/dx)*dy
-if (r .gt. onep*dy0) go to 130
-if (dy0 .gt. onep*r) go to 120
-if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 140
+if (r > onep*dy0) go to 130
+if (dy0 > onep*r) go to 120
+if (dy0 == 0.0 .and. dy > 0.0) go to 140
 k = k + 1
 go to 121
 120 ibeg = .false.
@@ -4977,7 +4977,7 @@ k = k0 + 1
 by(k) = y(l)
 lsav = l
 130 h = xmax - x(l)
-if (h .gt. 0.0) go to 110
+if (h > 0.0) go to 110
 !
 140 l = lsav
 n = n + 1
@@ -4987,12 +4987,12 @@ go to 100
 !
 !                   Going along the xmax axis
 !
-150 if (l .eq. m) go to 250
+150 if (l == m) go to 250
 ksav = k
 i = l
-151 if (i .eq. lmax) go to 160
+151 if (i == lmax) go to 160
 i = i + 1
-if (x(i) .ne. xmax) go to 151
+if (x(i) /= xmax) go to 151
 l = i
 k = k + 1
 bx(k) = x(i)
@@ -5001,9 +5001,9 @@ go to 151
 !
 160 xmax = x(l)
 h = xmax - xm
-if (h .le. 0.0) go to 170
-if (l .ne. lmax) go to 200
-if (k .eq. ksav) go to 170
+if (h <= 0.0) go to 170
+if (l /= lmax) go to 200
+if (k == ksav) go to 170
 n = n + 1
 vx(n) = bx(k)
 vy(n) = by(k)
@@ -5033,14 +5033,14 @@ ibeg = .true.
 210 continue
 i = i - 1
 h = x(i) - bx(j)
-if (h .le. 0.0) go to 210
+if (h <= 0.0) go to 210
 dx = x(i) - bx(j0)
 dy = abs(y(i) - by(j0))
 if (ibeg) go to 220
 r = (dx0/dx)*dy
-if (r .gt. onep*dy0) go to 230
-if (dy0 .gt. onep*r) go to 220
-if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 235
+if (r > onep*dy0) go to 230
+if (dy0 > onep*r) go to 220
+if (dy0 == 0.0 .and. dy > 0.0) go to 235
 j = j - 1
 go to 221
 220 ibeg = .false.
@@ -5051,26 +5051,26 @@ j = j0 - 1
 by(j) = y(i)
 isav = i
 230 h = xmax - x(i)
-if (h .gt. 0.0) go to 210
+if (h > 0.0) go to 210
 !
 235 i = isav
 nn = nn - 1
 vx(nn) = bx(j)
 vy(nn) = by(j)
 h = xmax - bx(j)
-if (h .gt. 0.0) go to 201
+if (h > 0.0) go to 201
 !
 !          Update bx,by and vx,vy so that the boundary
 !           is again being traversed counterclockwise
 !
-if (i .eq. l .and. k .eq. ksav) nn = nn + 1
+if (i == l .and. k == ksav) nn = nn + 1
 do ii = nn,mp1
    n = n + 1
    vx(n) = vx(ii)
    vy(n) = vy(ii)
 end do
 !
-if (i .eq. l) j = j + 1
+if (i == l) j = j + 1
 do ii = j,mp1
    k = k + 1
    bx(k) = bx(ii)
@@ -5081,7 +5081,7 @@ l = m
 !                   Going along the ymax axis
 !
 250 lbeg = lmax + 1
-if (lbeg .eq. m) go to 260
+if (lbeg == m) go to 260
 mm1 = m - 1
 do i = lbeg,mm1
    l = l - 1
@@ -5093,33 +5093,33 @@ n = n + 1
 vx(n) = bx(k)
 vy(n) = by(k)
 !
-260 if (k .eq. m) go to 370
+260 if (k == m) go to 370
 h = xmax - bx(k)
-if (h .gt. 0.0) go to 300
+if (h > 0.0) go to 300
 h = bx(k) - xmin
-if (h .gt. 0.0) go to 301
+if (h > 0.0) go to 301
 go to 370
 !
 !           Going from the ymax axis to the xmin axis
 !
 300 h = bx(k) - xmin
-if (h .eq. 0.0) go to 350
+if (h == 0.0) go to 350
 301 k0 = k
 ibeg = .true.
 !
 310 continue
 l = l - 1
-if (l .lt. lmin) l = 1
+if (l < lmin) l = 1
 h = x(l) - bx(k)
-if (h .ge. 0.0) go to 310
+if (h >= 0.0) go to 310
 dx = abs(x(l) - bx(k0))
 dy = abs(y(l) - by(k0))
 if (ibeg) go to 320
 r = (dx0/dx)*dy
-if (r .gt. onep*dy0) go to 330
-if (dy0 .gt. onep*r) go to 320
-if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 340
-if (k .eq. mp1) go to 330
+if (r > onep*dy0) go to 330
+if (dy0 > onep*r) go to 320
+if (dy0 == 0.0 .and. dy > 0.0) go to 340
+if (k == mp1) go to 330
 k = k + 1
 go to 321
 320 ibeg = .false.
@@ -5130,23 +5130,23 @@ k = k0 + 1
 by(k) = y(l)
 lsav = l
 330 h = x(l) - xmin
-if (h .gt. 0.0) go to 310
+if (h > 0.0) go to 310
 !
 340 l = lsav
 n = n + 1
 vx(n) = bx(k)
 vy(n) = by(k)
-if (l .eq. 1) return
-if (k .eq. m) go to 370
+if (l == 1) return
+if (k == m) go to 370
 go to 300
 !
 !                   Going along the xmin axis
 !
 350 ksav = k
 i = l
-351 if (i .eq. lmin) go to 360
+351 if (i == lmin) go to 360
 i = i - 1
-if (x(i) .ne. xmin) go to 351
+if (x(i) /= xmin) go to 351
 l = i
 k = k + 1
 bx(k) = x(i)
@@ -5155,12 +5155,12 @@ go to 351
 !
 360 xmin = x(l)
 h = x1 - xmin
-if (h .le. 0.0) go to 370
-if (k .eq. ksav) go to 365
+if (h <= 0.0) go to 370
+if (k == ksav) go to 365
 n = n + 1
 vx(n) = bx(k)
 vy(n) = by(k)
-365 if (l .ne. lmin) go to 400
+365 if (l /= lmin) go to 400
 !
 370 k = k + 1
 bx(k) = x1
@@ -5173,7 +5173,7 @@ return
 !           Going from the ymin axis to the xmin axis
 !        (here we are traversing the boundary clockwise)
 !
-400 if (k .eq. m) go to 370
+400 if (k == m) go to 370
 kp1 = k + 1
 j = mp1
 nn = mp1
@@ -5188,15 +5188,15 @@ ibeg = .true.
 410 continue
 i = i + 1
 h = x(i) - bx(j)
-if (h .ge. 0.0) go to 410
+if (h >= 0.0) go to 410
 dx = abs(x(i) - bx(j0))
 dy = y(i) - by(j0)
 if (ibeg) go to 420
 r = (dx0/dx)*dy
-if (r .gt. onep*dy0) go to 430
-if (dy0 .gt. onep*r) go to 420
-if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 440
-if (j .eq. kp1) go to 430
+if (r > onep*dy0) go to 430
+if (dy0 > onep*r) go to 420
+if (dy0 == 0.0 .and. dy > 0.0) go to 440
+if (j == kp1) go to 430
 j = j - 1
 go to 421
 420 ibeg = .false.
@@ -5207,29 +5207,29 @@ j = j0 - 1
 by(j) = y(i)
 isav = i
 430 h = x(i) - xmin
-if (h .gt. 0.0) go to 410
+if (h > 0.0) go to 410
 !
 440 i = isav
 nn = nn - 1
 vx(nn) = bx(j)
 vy(nn) = by(j)
-if (j .eq. kp1) go to 450
+if (j == kp1) go to 450
 h = bx(j) - xmin
-if (h .gt. 0.0) go to 401
+if (h > 0.0) go to 401
 !
 !          Update bx,by and vx,vy so that the boundary
 !           is again being traversed counterclockwise
 !
-450 if (nn .eq. n) go to 470
-if (i .eq. l) nn = nn + 1
+450 if (nn == n) go to 470
+if (i == l) nn = nn + 1
 do ii = nn,mp1
    n = n + 1
    vx(n) = vx(ii)
    vy(n) = vy(ii)
 end do
 !
-if (j .eq. k) go to 471
-if (i .eq. l) j = j + 1
+if (j == k) go to 471
+if (i == l) j = j + 1
 do ii = j,mp1
    k = k + 1
    bx(k) = bx(ii)
@@ -5281,7 +5281,7 @@ real :: a
 !*****************************************************************
 !
 n = nb
-if (x(1) .eq. x(n) .and. y(1) .eq. y(n)) n = n - 1
+if (x(1) == x(n) .and. y(1) == y(n)) n = n - 1
 if (n - 3) 10, 20, 30
 !
 10 parea = 0.0
@@ -5398,9 +5398,9 @@ end interface
 !
 !
 np1 = n + 1
-if (ind .lt. 0 .or. ind .gt. 3) go to 20
-if (num .lt. m + 8*n + 20) go to 30
-if (pr(1) .ne. 0 .or. pr(np1) .ne. m) go to 40
+if (ind < 0 .or. ind > 3) go to 20
+if (num < m + 8*n + 20) go to 30
+if (pr(1) /= 0 .or. pr(np1) /= m) go to 40
 !
 s0 = 20
 pc = s0 + n
@@ -5415,7 +5415,7 @@ tor = rbus + n
 call hc1(ind, m, n, pr, ar, nb, iwk(s0), np1, iwk(pc), &
    & iwk(ac), iwk(vr), iwk(vc), iwk(p), iwk(subr), &
    & iwk(rbus), iwk(tor), iwk(1), iwk(2), iwk(3))
-if (ind .ne. 1) return
+if (ind /= 1) return
 !
 ii = s0
 do i = 1,n
@@ -5572,7 +5572,7 @@ end interface
 nbo = nb
 nb = 0
 mp1 = m + 1
-if (ind .ne. 0) go to 500
+if (ind /= 0) go to 500
 !
 ! s T E P   0   (INITIALIZE).
 !
@@ -5586,8 +5586,8 @@ do i = 1,n
    j1 = pr(i) + 1
    j2 = pr(i + 1)
    vr(i) = j2 - j1 + 1
-   if (vr(i) .eq. 0) go to 440
-   if (vr(i) .lt. 0) go to 620
+   if (vr(i) == 0) go to 440
+   if (vr(i) < 0) go to 620
    do j = j1,j2
       ja = ar(j)
       vc(ja) = vc(ja) + 1
@@ -5595,7 +5595,7 @@ do i = 1,n
 end do
 pc(1) = 0
 do i = 1,n
-   if (vc(i) .eq. 0) go to 440
+   if (vc(i) == 0) go to 440
    pc(i + 1) = pc(i) + vc(i)
    vc(i) = 0
 end do
@@ -5616,7 +5616,7 @@ minu = vr(1)
 jr = 1
 do 100 i = 2,n
    if (vc(i) - maxe) 100, 70, 80
-70 if (vr(i).ge.minu) go to 100
+70 if (vr(i) >= minu) go to 100
    go to 90
 80 maxe = vc(i)
 90 minu = vr(i)
@@ -5629,8 +5629,8 @@ s(1) = jr
 ! s T E P   1   (SEARCH FOR IMPLIED ARCS).
 !
 110 do j = 1,n
-   if (vr(j).eq.1) go to 130
-   if (vc(j).eq.1) go to 170
+   if (vr(j) == 1) go to 130
+   if (vc(j) == 1) go to 170
 end do
 ! No further arc can be implied.
 go to 220
@@ -5638,15 +5638,15 @@ go to 220
 130 l1 = pr(j) + 1
 l2 = pr(j + 1)
 do l = l1,l2
-   if (ar(l).gt.0) go to 150
+   if (ar(l) > 0) go to 150
 end do
 150 jl = ar(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
 ! of the largest path of implied arcs containing  (j,jl) .
 call ipath(j, jl, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
    & m, np1)
-if (np.eq.0) go to 160
-if (np.eq.(-1)) go to 340
+if (np == 0) go to 160
+if (np == (-1)) go to 340
 ! Subroutine ipath found a hamiltonian circuit.
 k = k + 1
 go to 320
@@ -5654,21 +5654,21 @@ go to 320
 rbus(jl) = j
 ! Remove from the graph all arcs terminating at  jl .
 call iupd(j, jl, l, ac, ar, pc, pr, vc, vr, k1, n, m, np1)
-if (j.eq.0) go to 340
+if (j == 0) go to 340
 go to 210
 ! Arc  (jl,j)  is implied because  VC(j) = 1 .
 170 l1 = pc(j) + 1
 l2 = pc(j + 1)
 do l = l1,l2
-   if (ac(l).gt.0) go to 190
+   if (ac(l) > 0) go to 190
 end do
 190 jl = ac(l)
 ! Find the starting vertex  it1  and the ending vertex  it2
 ! of the largest path of implied arcs containing  (jl,j) .
 call ipath(jl, j, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
    & m, np1)
-if (np.eq.0) go to 200
-if (np.eq.(-1)) go to 340
+if (np == 0) go to 200
+if (np == (-1)) go to 340
 ! Subroutine ipath found a hamiltonian circuit.
 i = s(k)
 k = k + 1
@@ -5677,64 +5677,64 @@ go to 320
 rbus(j) = jl
 ! Remove from the graph all arcs emanating from  jl .
 call iupd(j, jl, l, ar, ac, pr, pc, vr, vc, k1, n, m, np1)
-if (j.eq.0) go to 340
+if (j == 0) go to 340
 ! If arc  (it2,it1)  is in the graph, remove it.
 210 call rarc(it2, it1, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
-if (jj.eq.(-1)) go to 340
+if (jj == (-1)) go to 340
 go to 110
 !
 ! s T E P   2   (ADD IMPLIED ARCS TO s).
 !
 220 i = s(k)
-if (subr(i).eq.0) go to 230
+if (subr(i) == 0) go to 230
 jsubr = -subr(i) + (subr(i)/np1)*np1
-if (jsubr.eq.jr) go to 340
+if (jsubr == jr) go to 340
 k = k + 1
 s(k) = jsubr
-if (k.ne.n) go to 220
-if (subr(jsubr).lt.0) go to 320
+if (k /= n) go to 220
+if (subr(jsubr) < 0) go to 320
 go to 340
 !
 ! s T E P   3   (BRANCH).
 !
 230 l1 = pr(i) + p(i)
 l2 = pr(i + 1)
-if (l1.gt.l2) go to 340
+if (l1 > l2) go to 340
 ! Find the next arc  (i,jl)  to be added to  s .
 dens = n**3
 j1 = 0
 j2 = 0
 do 310 j = l1,l2
    jl = ar(j)
-   if (jl.lt.0) go to 310
-   if (vr(jl).gt.0) go to 260
-   if (subr(jl).eq.0) go to 310
-   if (jl.eq.jr) go to 310
+   if (jl < 0) go to 310
+   if (vr(jl) > 0) go to 260
+   if (subr(jl) == 0) go to 310
+   if (jl == jr) go to 310
    iend = jl
 240 iend = -subr(iend) + (subr(iend)/np1)*np1
-   if (subr(iend).ne.0) go to 240
-   if (vc(jl).lt.vr(iend)) go to 250
+   if (subr(iend) /= 0) go to 240
+   if (vc(jl) < vr(iend)) go to 250
    score = vr(iend)*n + vc(jl)
    go to 280
 250 score = vc(jl)*n + vr(iend)
    go to 280
-260 if (vc(jl).lt.vr(jl)) go to 270
+260 if (vc(jl) < vr(jl)) go to 270
    score = vr(jl)*n + vc(jl)
    go to 280
 270 score = vc(jl)*n + vr(jl)
-280 if (dens.le.score) go to 290
+280 if (dens <= score) go to 290
    dens = score
    ipi = j
-290 if (j1.eq.0) go to 300
-   if (j2.eq.0) j2 = j
+290 if (j1 == 0) go to 300
+   if (j2 == 0) j2 = j
    go to 310
 300 j1 = j
 310 continue
-if (j1.eq.0) go to 340
+if (j1 == 0) go to 340
 jl = ar(ipi)
 ar(ipi) = ar(j1)
 ar(j1) = jl
-if (j2.eq.0) j2 = pr(i + 1) + 1
+if (j2 == 0) j2 = pr(i + 1) + 1
 p(i) = j2 - pr(i)
 k = k + 1
 s(k) = jl
@@ -5746,8 +5746,8 @@ call fupd(ac, ar, pc, pr, vc, vr, jl, k1, n, m, np1)
 tor(k) = 0
 ! If arc  (jl,jr)  is in the graph, remove it.
 call rarc(jl, jr, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
-if (jj.eq.0) go to 110
-if (jj.eq.(-1)) go to 340
+if (jj == 0) go to 110
+if (jj == (-1)) go to 340
 tor(k) = jj*mp1 + ll
 go to 110
 !
@@ -5760,15 +5760,15 @@ return
 !
 ! s T E P   5   (BACKTRACK).
 !
-340 if (k .le. 1) go to 430
+340 if (k <= 1) go to 430
 ja = s(k)
 p(ja) = 1
 ja = s(k - 1)
-if (subr(ja) .eq. 0) go to 350
+if (subr(ja) == 0) go to 350
 ! Backtracking for an implied arc.
 k = k - 1
 go to 340
-350 if (nb .eq. nbo) go to 450
+350 if (nb == nbo) go to 450
 nb = nb + 1
 k1 = -k*np1
 k2 = -(k + 1)*np1
@@ -5776,18 +5776,18 @@ i = s(k - 1)
 ! Backtracking for the arcs implied at level  k .
 iff = 0
 do 360 j = 1,n
-   if (subr(j).gt.k1) go to 360
-   if (subr(j).lt.k2) go to 360
+   if (subr(j) > k1) go to 360
+   if (subr(j) < k2) go to 360
    ja = k1 - subr(j)
    rbus(ja) = 0
    subr(j) = 0
    iff = 1
 360 continue
-if (iff.eq.1) go to 370
+if (iff == 1) go to 370
 ! No arc was implied at level  k .
 call bupd(ar, ac, pr, pc, vr, vc, i, k1, k2, n, m, np1)
 call bupd(ac, ar, pc, pr, vc, vr, s(k), k1, k2, n, m, np1)
-if (tor(k).eq.0) go to 420
+if (tor(k) == 0) go to 420
 j1 = tor(k)/mp1
 j2 = tor(k) - j1*mp1
 ar(j1) = jr
@@ -5802,15 +5802,15 @@ go to 420
    l2 = pr(j + 1)
    do 400 l = l1,l2
       jl = ar(l)
-      if (jl.gt.k1) go to 400
-      if (jl.lt.k2) go to 400
+      if (jl > k1) go to 400
+      if (jl < k2) go to 400
       jl = k1 - jl
       ar(l) = jl
       vr(j) = vr(j) + 1
       ll1 = pc(jl) + 1
       ll2 = pc(jl + 1)
       do ll = ll1,ll2
-         if (k1 - ac(ll).eq.j) go to 390
+         if (k1 - ac(ll) == j) go to 390
       end do
 390   ac(ll) = j
       vc(jl) = vc(jl) + 1
@@ -5822,7 +5822,7 @@ go to 230
 ! Restore the original vector  ar
 !
 430 do 431 j = 1,m
-   if (ar(j) .gt. 0) go to 431
+   if (ar(j) > 0) go to 431
    ar(j) = -ar(j) + (ar(j)/np1)*np1
 431 continue
 !
@@ -5840,11 +5840,11 @@ return
 !
 ! Check ind when ind = 1, 2, or 3
 !
-500 if (ind .ne. 3) go to 510
-if (ind0 .eq. 1 .or. ind0 .eq. 2) go to 430
+500 if (ind /= 3) go to 510
+if (ind0 == 1 .or. ind0 == 2) go to 430
 go to 610
-510 if (ind .ne. ind0) go to 600
-if (ind .eq. 1) go to 340
+510 if (ind /= ind0) go to 600
+if (ind == 1) go to 340
 go to 350
 !
 ! Error return
@@ -5888,27 +5888,27 @@ integer :: ja, k1, l, l1, l2
 np = 0
 l = 1
 i1 = i
-10 if (rbus(i1).eq.0) go to 20
+10 if (rbus(i1) == 0) go to 20
 i1 = rbus(i1)
 l = l + 1
 go to 10
 20 i2 = j
 l = l + 1
-30 if (subr(i2).eq.0) go to 40
+30 if (subr(i2) == 0) go to 40
 i2 = -subr(i2) + (subr(i2)/np1)*np1
 l = l + 1
 go to 30
 40 continue
-if (l.lt.n) return
+if (l < n) return
 ! The path contains  n  vertices.
 k1 = -k*np1
 l1 = pr(i2) + 1
 l2 = pr(i2 + 1)
 do 60 l = l1,l2
-   if (ar(l).lt.0) go to 50
-   if (ar(l).eq.i1) go to 70
+   if (ar(l) < 0) go to 50
+   if (ar(l) == i1) go to 70
    go to 60
-50 if (k1 - ar(l).eq.i1) go to 70
+50 if (k1 - ar(l) == i1) go to 70
 60 continue
 ! No hamiltonian circuit can be determined.
 np = -1
@@ -5919,7 +5919,7 @@ rbus(j) = i
 rbus(i1) = i2
 s(n) = rbus(jr)
 l = n - 1
-80 if (l.eq.k) go to 90
+80 if (l == k) go to 90
 ja = s(l + 1)
 s(l) = rbus(ja)
 l = l - 1
@@ -5943,12 +5943,12 @@ integer :: ia, j, j1, j2, l, l1, l2
 j1 = p1(i1) + 1
 j2 = p1(i1 + 1)
 do 30 j = j1,j2
-   if (a1(j).lt.0) go to 30
+   if (a1(j) < 0) go to 30
    ia = a1(j)
    l1 = p2(ia) + 1
    l2 = p2(ia + 1)
    do l = l1,l2
-      if (a2(l).eq.i1) go to 20
+      if (a2(l) == i1) go to 20
    end do
 20 v2(ia) = v2(ia) - 1
    a2(l) = k1 - a2(l)
@@ -5972,15 +5972,15 @@ integer :: ia, l, l1, l2, ll, ll1, ll2
 l1 = p1(ii) + 1
 l2 = p1(ii + 1)
 do 30 l = l1,l2
-   if (a1(l).gt.k1) go to 30
-   if (a1(l).lt.k2) go to 30
+   if (a1(l) > k1) go to 30
+   if (a1(l) < k2) go to 30
    ia = k1 - a1(l)
    a1(l) = ia
    v1(ii) = v1(ii) + 1
    ll1 = p2(ia) + 1
    ll2 = p2(ia + 1)
    do ll = ll1,ll2
-      if (k1 - a2(ll).eq.ii) go to 20
+      if (k1 - a2(ll) == ii) go to 20
    end do
 20 a2(ll) = ii
    v2(ia) = v2(ia) + 1
@@ -6004,15 +6004,15 @@ m1 = p1(ib) + 1
 m2 = p1(ib + 1)
 do 40 mm = m1,m2
    iarc = a1(mm)
-   if (iarc.lt.0) go to 40
-   if (v2(iarc).ne.1) go to 10
-   if (iarc.ne.ia) go to 50
+   if (iarc < 0) go to 40
+   if (v2(iarc) /= 1) go to 10
+   if (iarc /= ia) go to 50
    jj = l
    go to 30
 10 j1 = p2(iarc) + 1
    j2 = p2(iarc + 1)
    do jj = j1,j2
-      if (a2(jj).eq.ib) go to 30
+      if (a2(jj) == ib) go to 30
    end do
 30 a2(jj) = k1 - a2(jj)
    v2(iarc) = v2(iarc) - 1
@@ -6053,19 +6053,19 @@ integer :: j1, j2, l1, l2
 j1 = pr(ia) + 1
 j2 = pr(ia + 1)
 do 20 jj = j1,j2
-   if (ar(jj).lt.0) go to 20
-   if (ar(jj).ne.ib) go to 20
+   if (ar(jj) < 0) go to 20
+   if (ar(jj) /= ib) go to 20
    l1 = pc(ib) + 1
    l2 = pc(ib + 1)
    do ll = l1,l2
-      if (ac(ll).eq.ia) go to 30
+      if (ac(ll) == ia) go to 30
    end do
 20 continue
 ! Arc  (ia,ib)  is not in the graph.
 jj = 0
 return
-30 if (vr(ia).eq.1) go to 40
-if (vc(ib).eq.1) go to 40
+30 if (vr(ia) == 1) go to 40
+if (vc(ib) == 1) go to 40
 ar(jj) = k1 - ib
 vr(ia) = vr(ia) - 1
 ac(ll) = k1 - ia
@@ -6111,7 +6111,7 @@ real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.4858162
 x = real(z)
 y = aimag(z)
 sn = 1.0
-if (x .ge. 0.0) go to 10
+if (x >= 0.0) go to 10
 x = -x
 y = -y
 sn = -1.0
@@ -6120,9 +6120,9 @@ sn = -1.0
 sz(1) = x*x - y*y
 sz(2) = 2.0*x*y
 !
-if (r .le. 1.0) go to 20
-if (r .ge. 38.0) go to 60
-if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
+if (r <= 1.0) go to 20
+if (r >= 38.0) go to 60
+if (sz(1) + 0.064*sz(2)*sz(2) > 0.0) go to 50
 !
 !                       Taylor series
 !
@@ -6140,18 +6140,18 @@ tm(1) = -ts(1)/pm
 tm(2) = -ts(2)/pm
 ts(1) = tm(1)/dm
 ts(2) = tm(2)/dm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 31
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 40
 31 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
 go to 30
 !
 !                       Termination
 !
-40 if (mo .ne. 0) go to 41
+40 if (mo /= 0) go to 41
 w = cmplx(sn*sm(1), sn*sm(2))
 return
-41 if (sn .lt. 0.0) go to 42
+41 if (sn < 0.0) go to 42
 sm(1) = 0.5 + (0.5 - sm(1))
 sm(2) = -sm(2)
 w = cmplx(sm(1), sm(2))
@@ -6198,13 +6198,13 @@ ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
 ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
 tm(1) = -pm*ts(1)
 tm(2) = -pm*ts(2)
-if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
-if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
 71 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
-if (pm .lt. 25.5) go to 70
+if (pm < 25.5) go to 70
 !
-80 if (x .ge. 0.01) go to 81
+80 if (x >= 0.01) go to 81
 sn = -sn
 go to 40
 81 ef(1) = sm(1)
@@ -6212,9 +6212,9 @@ ef(2) = sm(2)
 !
 !                       Termination
 !
-100 if (mo .eq. 0) go to 101
+100 if (mo == 0) go to 101
 w = cmplx(ef(1), ef(2))
-if (sn .eq. 1.0) return
+if (sn == 1.0) return
 w = cmplx(2.0 - ef(1), -ef(2))
 return
 101 ef(1) = sn*(1.0 - ef(1))
@@ -6272,20 +6272,20 @@ end interface
 x = real(z)
 y = aimag(z)
 sn = 1.0
-if (x .ge. 0.0) go to 10
+if (x >= 0.0) go to 10
 x = -x
 y = -y
 sn = -1.0
 !
-10 if (mo .ne. 0  .and.  sn .eq. 1.0  .and. &
-   & amax1(x, abs(y)) .ge. 100.0) go to 60
+10 if (mo /= 0  .and.  sn == 1.0  .and. &
+   & amax1(x, abs(y)) >= 100.0) go to 60
 r = x*x + y*y
 sz(1) = x*x - y*y
 sz(2) = 2.0*x*y
 !
-if (r .le. 1.0) go to 20
-if (r .ge. 38.0) go to 60
-if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
+if (r <= 1.0) go to 20
+if (r >= 38.0) go to 60
+if (sz(1) + 0.064*sz(2)*sz(2) > 0.0) go to 50
 !
 !                       Taylor series
 !
@@ -6303,20 +6303,20 @@ tm(1) = -ts(1)/pm
 tm(2) = -ts(2)/pm
 ts(1) = tm(1)/dm
 ts(2) = tm(2)/dm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 31
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 40
 31 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
 go to 30
 !
 !                       Termination
 !
-40 if (sn .eq. 1.0) go to 41
+40 if (sn == 1.0) go to 41
 w = cmplx(1.0 + sm(1), sm(2))
 return
 41 sm(1) = 0.5 + (0.5 - sm(1))
 sm(2) = -sm(2)
-if (mo .eq. 0) go to 110
+if (mo == 0) go to 110
 !
 qm = exp(sz(1))
 qf(1) = qm*cos(sz(2))
@@ -6358,18 +6358,18 @@ ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
 ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
 tm(1) = -pm*ts(1)
 tm(2) = -pm*ts(2)
-if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
-if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
 71 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
-if (pm .lt. 25.5) go to 70
+if (pm < 25.5) go to 70
 80 sm(1) = c*sm(1)
 sm(2) = c*sm(2)
-if (x .lt. 0.01) go to 200
+if (x < 0.01) go to 200
 !
 !                       Termination
 !
-100 if (mo .ne. 0 .and. sn .eq. 1.0) go to 110
+100 if (mo /= 0 .and. sn == 1.0) go to 110
 qm = exp(-sz(1))
 qf(1) = qm*cos(-sz(2))
 qf(2) = qm*sin(-sz(2))
@@ -6378,7 +6378,7 @@ ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
 sm(1) = ts(1)
 sm(2) = ts(2)
 !
-if (sn .eq. 1.0) go to 110
+if (sn == 1.0) go to 110
 w = cmplx(2.0 - sm(1), -sm(2))
 return
 110 w = cmplx(sm(1), sm(2))
@@ -6386,7 +6386,7 @@ return
 !
 !               Modified asymptotic expansion
 !
-200 if (mo .ne. 0 .and. sn .eq. 1.0) go to 210
+200 if (mo /= 0 .and. sn == 1.0) go to 210
 qm = exp(-sz(1))
 qf(1) = qm*cos(-sz(2))
 qf(2) = qm*sin(-sz(2))
@@ -6397,8 +6397,8 @@ sm(2) = sn*ts(2)
 w = cmplx(sm(1),sm(2))
 return
 !
-210 if (abs(y) .ge. 100.0) go to 110
-if (sz(1) .le. exparg(1)) go to 110
+210 if (abs(y) >= 100.0) go to 110
+if (sz(1) <= exparg(1)) go to 110
 qm = exp(sz(1))
 sm(1) = qm*cos(sz(2)) + sm(1)
 sm(2) = qm*sin(sz(2)) + sm(2)
@@ -6430,30 +6430,30 @@ real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.9019181
 !-------------------------
 !-------------------------
 ax = abs(x)
-if (ax .gt. 0.5) go to 10
+if (ax > 0.5) go to 10
 t = x*x
 top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
 bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
 erf = x*(top/bot)
 return
 !
-10 if (ax .gt. 4.0) go to 20
+10 if (ax > 4.0) go to 20
 top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
    & + p(6))*ax + p(7))*ax + p(8)
 bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
    & + q(6))*ax + q(7))*ax + q(8)
 erf = 0.5 + (0.5 - exp(-x*x)*top/bot)
-if (x .lt. 0.0) erf = -erf
+if (x < 0.0) erf = -erf
 return
 !
-20 if (ax .ge. 5.8) go to 30
+20 if (ax >= 5.8) go to 30
 x2 = x*x
 t = 1.0/x2
 top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
 bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
 erf = (c - top/(x2*bot)) / ax
 erf = 0.5 + (0.5 - exp(-x2)*erf)
-if (x .lt. 0.0) erf = -erf
+if (x < 0.0) erf = -erf
 return
 !
 30 erf = sign(1.0,x)
@@ -6495,7 +6495,7 @@ end interface
 !                     abs(x) .LE. 0.5
 !
 ax = abs(x)
-if (ax .gt. 0.5) go to 10
+if (ax > 0.5) go to 10
 t = x*x
 top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
 bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
@@ -6504,7 +6504,7 @@ return
 !
 !                  0.5 .LT. abs(x) .LE. 4
 !
-10 if (ax .gt. 4.0) go to 20
+10 if (ax > 4.0) go to 20
 top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
    & + p(6))*ax + p(7))*ax + p(8)
 bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
@@ -6514,10 +6514,10 @@ go to 30
 !
 !                       abs(x) .GT. 4
 !
-20 if (x .le. -5.6) go to 40
-if (x .gt. 100.0) go to 50
+20 if (x <= -5.6) go to 40
+if (x > 100.0) go to 50
 t = x*x
-if (t .gt. -exparg(1)) go to 50
+if (t > -exparg(1)) go to 50
 !
 t = 1.0/t
 top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
@@ -6530,7 +6530,7 @@ erfc = (c - t*top/bot)/ax
 t = w
 e = w - dble(t)
 erfc = ((0.5 + (0.5 - e)) * exp(-t)) * erfc
-if (x .lt. 0.0) erfc = 2.0 - erfc
+if (x < 0.0) erfc = 2.0 - erfc
 return
 !
 !             Limit value for large negative x
@@ -6583,17 +6583,17 @@ end interface
 !                     abs(x) .LE. 0.5
 !
 ax = abs(x)
-if (ax .gt. 0.5) go to 10
+if (ax > 0.5) go to 10
 t = x*x
 top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
 bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
 erfc1 = 0.5 + (0.5 - x*(top/bot))
-if (ind .ne. 0) erfc1 = exp(t) * erfc1
+if (ind /= 0) erfc1 = exp(t) * erfc1
 return
 !
 !                  0.5 .LT. abs(x) .LE. 4
 !
-10 if (ax .gt. 4.0) go to 20
+10 if (ax > 4.0) go to 20
 top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
    & + p(6))*ax + p(7))*ax + p(8)
 bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
@@ -6603,10 +6603,10 @@ go to 40
 !
 !                      abs(x) .GT. 4
 !
-20 if (x .le. -5.6) go to 50
-if (ind .ne. 0) go to 30
-if (x .gt. 100.0) go to 60
-if (x*x .gt. -exparg(1)) go to 60
+20 if (x <= -5.6) go to 50
+if (ind /= 0) go to 30
+if (x > 100.0) go to 60
+if (x*x > -exparg(1)) go to 60
 !
 30 t = (1.0/x)**2
 top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
@@ -6615,20 +6615,20 @@ erfc1 = (c - t*top/bot)/ax
 !
 !                      Final assembly
 !
-40 if (ind .eq. 0) go to 41
-if (x .lt. 0.0) erfc1 = 2.0*exp(x*x) - erfc1
+40 if (ind == 0) go to 41
+if (x < 0.0) erfc1 = 2.0*exp(x*x) - erfc1
 return
 41 w = dble(x)*dble(x)
 t = w
 e = w - dble(t)
 erfc1 = ((0.5 + (0.5 - e)) * exp(-t)) * erfc1
-if (x .lt. 0.0) erfc1 = 2.0 - erfc1
+if (x < 0.0) erfc1 = 2.0 - erfc1
 return
 !
 !             Limit value for large negative x
 !
 50 erfc1 = 2.0
-if (ind .ne. 0) erfc1 = 2.0*exp(x*x)
+if (ind /= 0) erfc1 = 2.0*exp(x*x)
 return
 !
 !             Limit value for large positive x
@@ -6706,7 +6706,7 @@ eps = dpmpar(1)
 x = z(1)
 y = z(2)
 sn = 1.d0
-if (x .ge. 0.d0) go to 10
+if (x >= 0.d0) go to 10
 x = -x
 y = -y
 sn = -1.d0
@@ -6715,20 +6715,20 @@ sn = -1.d0
 sz(1) = x*x - y*y
 sz(2) = 2.d0*x*y
 !
-if (r .le. 1.d0) go to 20
-if (r .ge. 144.d0) go to 100
-if (dabs(y) .gt. 31.8d0*x) go to 50
-if (dabs(y) .gt. 7.0d0*x .and. r .lt. 64.d0) go to 50
-if (dabs(y) .gt. 3.2d0*x .and. r .lt. 49.d0) go to 50
-if (dabs(y) .gt. 2.0d0*x .and. r .lt. 36.d0) go to 50
-if (dabs(y) .gt. 1.2d0*x .and. r .lt. 25.d0) go to 50
-if (dabs(y) .gt. 0.9d0*x .and. r .lt. 16.d0) go to 50
-if (r .ge. 6.25d0) go to 80
-if (dabs(y) .gt. 0.6d0*x) go to 50
-if (r .ge. 4.0d0) go to 40
+if (r <= 1.d0) go to 20
+if (r >= 144.d0) go to 100
+if (dabs(y) > 31.8d0*x) go to 50
+if (dabs(y) > 7.0d0*x .and. r < 64.d0) go to 50
+if (dabs(y) > 3.2d0*x .and. r < 49.d0) go to 50
+if (dabs(y) > 2.0d0*x .and. r < 36.d0) go to 50
+if (dabs(y) > 1.2d0*x .and. r < 25.d0) go to 50
+if (dabs(y) > 0.9d0*x .and. r < 16.d0) go to 50
+if (r >= 6.25d0) go to 80
+if (dabs(y) > 0.6d0*x) go to 50
+if (r >= 4.0d0) go to 40
 !
 d = x - 2.d0
-if (d*d + y*y .lt. 1.d0) go to 40
+if (d*d + y*y < 1.d0) go to 40
 go to 50
 !
 !                          Taylor series
@@ -6750,13 +6750,13 @@ ts(1) = tm(1)/d
 ts(2) = tm(2)/d
 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
-if (anorm(ts(1),ts(2)) .gt. tol*anorm(sm(1),sm(2))) go to 21
+if (anorm(ts(1),ts(2)) > tol*anorm(sm(1),sm(2))) go to 21
 !
-if (mo .ne. 0) go to 30
+if (mo /= 0) go to 30
 w(1) = sn*sm(1)
 w(2) = sn*sm(2)
 return
-30 if (sn .eq. 1.d0) go to 31
+30 if (sn == 1.d0) go to 31
 w(1) = 1.d0 + sm(1)
 w(2) = sm(2)
 return
@@ -6769,11 +6769,11 @@ return
 40 tm(1) = x
 tm(2) = y
 call erfcm2(0, tm, w)
-if (mo .ne. 0) go to 41
+if (mo /= 0) go to 41
 w(1) = sn*(0.5d0 + (0.5d0 - w(1)))
 w(2) = - sn*w(2)
 return
-41 if (sn .gt. 0.d0) return
+41 if (sn > 0.d0) return
 w(1) = 2.d0 - w(1)
 w(2) = - w(2)
 return
@@ -6782,8 +6782,8 @@ return
 !                    for  (exp(z*z)/z)*erf(z)
 !
 50 d = 4.d0
-if (r .gt. 16.d0) d = 16.d0
-if (r .gt. 64.d0) d = 64.d0
+if (r > 16.d0) d = 16.d0
+if (r > 64.d0) d = 64.d0
 d2 = d*d
 call dcrec(sz(1), sz(2), w(1), w(2))
 a0(1) = 1.d0
@@ -6820,7 +6820,7 @@ bn(2) = qf(2)
 w0(1) = wn(1)
 w0(2) = wn(2)
 call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
-if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+if (anorm(wn(1) - w0(1), wn(2) - w0(2)) > &
    & tol*anorm(wn(1), wn(2))) go to 60
 !
 c2 = c + c
@@ -6834,7 +6834,7 @@ tm(2) = qf(1)*sm(2) + qf(2)*sm(1)
 !
 w(1) = sn*tm(1)
 w(2) = sn*tm(2)
-if (mo .eq. 0) return
+if (mo == 0) return
 w(1) = 1.d0 - w(1)
 w(2) = - w(2)
 return
@@ -6843,7 +6843,7 @@ return
 !                    for  z*exp(z*z)*erfc(z)
 !
 80 d = 4.d0*r
-if (r .lt. 16.d0) d = 16.d0*r
+if (r < 16.d0) d = 16.d0*r
 d2 = d*d
 tm(1) = sz(1) + sz(1)
 tm(2) = sz(2) + sz(2)
@@ -6881,7 +6881,7 @@ hn(2) = qf(2)
 w0(1) = wn(1)
 w0(2) = wn(2)
 call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
-if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+if (anorm(wn(1) - w0(1), wn(2) - w0(2)) > &
    & tol*anorm(wn(1), wn(2))) go to 90
 !
 tm(1) = x*hn(1) - y*hn(2)
@@ -6905,10 +6905,10 @@ tm(1) = -d*ts(1)
 tm(2) = -d*ts(2)
 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
-if (anorm(tm(1),tm(2)) .gt. tol*anorm(sm(1),sm(2))) go to 110
+if (anorm(tm(1),tm(2)) > tol*anorm(sm(1),sm(2))) go to 110
 sm(1) = c*sm(1)
 sm(2) = c*sm(2)
-if (x .lt. 1.d-2) go to 200
+if (x < 1.d-2) go to 200
 !
 !                       Termination
 !
@@ -6920,11 +6920,11 @@ ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
 sm(1) = ts(1)
 sm(2) = ts(2)
 !
-if (mo .ne. 0) go to 140
+if (mo /= 0) go to 140
 w(1) = sn*(0.5d0 + (0.5d0 - sm(1)))
 w(2) = - sn*sm(2)
 return
-140 if (sn .eq. 1.d0) go to 141
+140 if (sn == 1.d0) go to 141
 w(1) = 2.d0 - sm(1)
 w(2) = -sm(2)
 return
@@ -6939,11 +6939,11 @@ qf(1) = e*dcos(-sz(2))
 qf(2) = e*dsin(-sz(2))
 w(1) = qf(1)*sm(1) - qf(2)*sm(2)
 w(2) = qf(1)*sm(2) + qf(2)*sm(1)
-if (mo .eq. 0) go to 210
+if (mo == 0) go to 210
 w(1) = 1.d0 + sn*w(1)
 w(2) = sn*w(2)
 return
-210 if (sn .lt. 0.0) return
+210 if (sn < 0.0) return
 w(1) = - w(1)
 w(2) = - w(2)
 return
@@ -7022,31 +7022,31 @@ eps = dpmpar(1)
 x = z(1)
 y = z(2)
 sn = 1.d0
-if (x .ge. 0.d0) go to 10
+if (x >= 0.d0) go to 10
 x = -x
 y = -y
 sn = -1.d0
 !
-10 if (mo .ne. 0  .and.  sn .eq. 1.d0  .and. &
-   & dmax1(x, dabs(y)) .ge. 144.d0) go to 100
+10 if (mo /= 0  .and.  sn == 1.d0  .and. &
+   & dmax1(x, dabs(y)) >= 144.d0) go to 100
 r = x*x + y*y
 sz(1) = x*x - y*y
 sz(2) = 2.d0*x*y
 !
-if (r .le. 1.d0) go to 20
-if (r .ge. 144.d0) go to 100
-if (dabs(y) .gt. 31.8d0*x) go to 50
-if (dabs(y) .gt. 7.0d0*x .and. r .lt. 64.d0) go to 50
-if (dabs(y) .gt. 3.2d0*x .and. r .lt. 49.d0) go to 50
-if (dabs(y) .gt. 2.0d0*x .and. r .lt. 36.d0) go to 50
-if (dabs(y) .gt. 1.2d0*x .and. r .lt. 25.d0) go to 50
-if (dabs(y) .gt. 0.9d0*x .and. r .lt. 16.d0) go to 50
-if (r .ge. 6.25d0) go to 80
-if (dabs(y) .gt. 0.6d0*x) go to 50
-if (r .ge. 4.0d0) go to 40
+if (r <= 1.d0) go to 20
+if (r >= 144.d0) go to 100
+if (dabs(y) > 31.8d0*x) go to 50
+if (dabs(y) > 7.0d0*x .and. r < 64.d0) go to 50
+if (dabs(y) > 3.2d0*x .and. r < 49.d0) go to 50
+if (dabs(y) > 2.0d0*x .and. r < 36.d0) go to 50
+if (dabs(y) > 1.2d0*x .and. r < 25.d0) go to 50
+if (dabs(y) > 0.9d0*x .and. r < 16.d0) go to 50
+if (r >= 6.25d0) go to 80
+if (dabs(y) > 0.6d0*x) go to 50
+if (r >= 4.0d0) go to 40
 !
 d = x - 2.d0
-if (d*d + y*y .lt. 1.d0) go to 40
+if (d*d + y*y < 1.d0) go to 40
 go to 50
 !
 !                          Taylor series
@@ -7068,15 +7068,15 @@ ts(1) = tm(1)/d
 ts(2) = tm(2)/d
 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
-if (anorm(ts(1),ts(2)) .gt. tol*anorm(sm(1),sm(2))) go to 21
+if (anorm(ts(1),ts(2)) > tol*anorm(sm(1),sm(2))) go to 21
 !
-if (sn .eq. 1.d0) go to 30
+if (sn == 1.d0) go to 30
 w(1) = 1.d0 + sm(1)
 w(2) = sm(2)
 return
 30 sm(1) = 0.5d0 + (0.5d0 - sm(1))
 sm(2) = -sm(2)
-if (mo .eq. 0) go to 140
+if (mo == 0) go to 140
 !
 e = dexp(sz(1))
 qf(1) = e*dcos(sz(2))
@@ -7087,7 +7087,7 @@ return
 !
 !                  Taylor series around Z0 = 2
 !
-40 if (sn .lt. 0.d0) go to 41
+40 if (sn < 0.d0) go to 41
 call erfcm2(mo, z, w)
 return
 41 tm(1) = x
@@ -7101,8 +7101,8 @@ return
 !                    for  (exp(z*z)/z)*erf(z)
 !
 50 d = 4.d0
-if (r .gt. 16.d0) d = 16.d0
-if (r .gt. 64.d0) d = 64.d0
+if (r > 16.d0) d = 16.d0
+if (r > 64.d0) d = 64.d0
 d2 = d*d
 call dcrec(sz(1), sz(2), w(1), w(2))
 a0(1) = 1.d0
@@ -7139,14 +7139,14 @@ bn(2) = qf(2)
 w0(1) = wn(1)
 w0(2) = wn(2)
 call cdivid(an(1), an(2), bn(1), bn(2), wn(1), wn(2))
-if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+if (anorm(wn(1) - w0(1), wn(2) - w0(2)) > &
    & tol*anorm(wn(1), wn(2))) go to 60
 !
 c2 = c + c
 sm(1) = c2*(x*wn(1) - y*wn(2))
 sm(2) = c2*(x*wn(2) + y*wn(1))
 !
-if (mo .eq. 0 .or. sn .ne. 1.d0) go to 70
+if (mo == 0 .or. sn /= 1.d0) go to 70
 e = dexp(sz(1))
 w(1) = e*dcos(sz(2)) - sm(1)
 w(2) = e*dsin(sz(2)) - sm(2)
@@ -7164,7 +7164,7 @@ return
 !                    for  z*exp(z*z)*erfc(z)
 !
 80 d = 4.d0*r
-if (r .lt. 16.d0) d = 16.d0*r
+if (r < 16.d0) d = 16.d0*r
 d2 = d*d
 tm(1) = sz(1) + sz(1)
 tm(2) = sz(2) + sz(2)
@@ -7202,7 +7202,7 @@ hn(2) = qf(2)
 w0(1) = wn(1)
 w0(2) = wn(2)
 call cdivid(gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
-if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+if (anorm(wn(1) - w0(1), wn(2) - w0(2)) > &
    & tol*anorm(wn(1), wn(2))) go to 90
 !
 tm(1) = x*hn(1) - y*hn(2)
@@ -7226,14 +7226,14 @@ tm(1) = -d*ts(1)
 tm(2) = -d*ts(2)
 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
-if (anorm(tm(1),tm(2)) .gt. tol*anorm(sm(1),sm(2))) go to 110
+if (anorm(tm(1),tm(2)) > tol*anorm(sm(1),sm(2))) go to 110
 sm(1) = c*sm(1)
 sm(2) = c*sm(2)
-if (x .lt. 1.d-2) go to 200
+if (x < 1.d-2) go to 200
 !
 !                       Termination
 !
-130 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 140
+130 if (mo /= 0 .and. sn == 1.d0) go to 140
 e = dexp(-sz(1))
 qf(1) = e*dcos(-sz(2))
 qf(2) = e*dsin(-sz(2))
@@ -7242,7 +7242,7 @@ ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
 sm(1) = ts(1)
 sm(2) = ts(2)
 !
-if (sn .eq. 1.d0) go to 140
+if (sn == 1.d0) go to 140
 w(1) = 2.d0 - sm(1)
 w(2) = -sm(2)
 return
@@ -7252,7 +7252,7 @@ return
 !
 !               Modified asymptotic expansion
 !
-200 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 210
+200 if (mo /= 0 .and. sn == 1.d0) go to 210
 e = dexp(-sz(1))
 qf(1) = e*dcos(-sz(2))
 qf(2) = e*dsin(-sz(2))
@@ -7262,8 +7262,8 @@ w(1) = 1.d0 + sn*ts(1)
 w(2) = sn*ts(2)
 return
 !
-210 if (dabs(y) .ge. 100.d0) go to 140
-if (sz(1) .le. dxparg(1)) go to 140
+210 if (dabs(y) >= 100.d0) go to 140
+if (sz(1) <= dxparg(1)) go to 140
 e = dexp(sz(1))
 w(1) = e*dcos(sz(2)) + sm(1)
 w(2) = e*dsin(sz(2)) + sm(2)
@@ -7349,7 +7349,7 @@ do 10 n = 31,63
    t(2) = a(n)*y
    w(1) = w(1) + t(1)
    w(2) = w(2) + t(2)
-   if (anorm(t(1),t(2)) .le. tol*anorm(w(1),w(2))) go to 20
+   if (anorm(t(1),t(2)) <= tol*anorm(w(1),w(2))) go to 20
 10 continue
 !
 20 do 21 j = 1,29
@@ -7365,7 +7365,7 @@ w(1) = 1.d0 + x
 x = c*(h(1)*w(1) - h(2)*w(2))
 w(2) = c*(h(1)*w(2) + h(2)*w(1))
 w(1) = e + x
-if (mo .eq. 0) return
+if (mo == 0) return
 !
 !                     Compute exp(z*z)*erfc(z)
 !
@@ -7411,7 +7411,7 @@ end interface
 !                     dabs(x) .LE. 1
 !
 ax = dabs(x)
-if (ax .gt. 1.d0) go to 20
+if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
 do 10 i = 1,20
@@ -7423,9 +7423,9 @@ return
 !
 !                     dabs(x) .GT. 1
 !
-20 if (ax .ge. 8.5d0) go to 30
+20 if (ax >= 8.5d0) go to 30
 derf = 0.5d0 + (0.5d0 - dexp(-x*x)*derfc0(ax))
-if (x .lt. 0.d0) derf = -derf
+if (x < 0.d0) derf = -derf
 return
 !
 !                 Limit value for large x
@@ -7468,7 +7468,7 @@ end interface
 !                     dabs(x) .LE. 1
 !
 ax = dabs(x)
-if (ax .gt. 1.d0) go to 20
+if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
 do 10 i = 1,20
@@ -7480,9 +7480,9 @@ return
 !
 !                       x .LT. -1
 !
-20 if (x .gt. 0.d0) go to 30
+20 if (x > 0.d0) go to 30
 derfc = 2.d0
-if (x .lt. -8.3d0) return
+if (x < -8.3d0) return
 t = x*x
 derfc = 2.d0 - dexp(-t) * derfc0(ax)
 return
@@ -7490,9 +7490,9 @@ return
 !                       x .GT. 1
 !
 30 derfc = 0.d0
-if (x .gt. 100.d0) return
+if (x > 100.d0) return
 t = x*x
-if (t .gt. -dxparg(1)) return
+if (t > -dxparg(1)) return
 derfc = dexp(-t) * derfc0(x)
 return
 end function derfc
@@ -7537,7 +7537,7 @@ end interface
 !                     dabs(x) .LE. 1
 !
 ax = dabs(x)
-if (ax .gt. 1.d0) go to 20
+if (ax > 1.d0) go to 20
 t = x*x
 w = a(21)
 do 10 i = 1,20
@@ -7545,14 +7545,14 @@ do 10 i = 1,20
    w = t*w + a(k)
 10 continue
 derfc1 = 0.5d0 + (0.5d0 - x*(1.d0 + w))
-if (ind .ne. 0) derfc1 = dexp(t) * derfc1
+if (ind /= 0) derfc1 = dexp(t) * derfc1
 return
 !
 !                       x .LT. -1
 !
-20 if (x .gt. 0.d0) go to 50
-if (x .lt. -8.3d0) go to 80
-if (ind .eq. 0) go to 30
+20 if (x > 0.d0) go to 50
+if (x < -8.3d0) go to 80
+if (ind == 0) go to 30
 derfc1 = 2.d0*dexp(x*x) - derfc0(ax)
 return
 30 derfc1 = 2.d0 - dexp(-x*x)*derfc0(ax)
@@ -7560,20 +7560,20 @@ return
 !
 !                       x .GT. 1
 !
-50 if (ind .eq. 0) go to 60
+50 if (ind == 0) go to 60
 derfc1 = derfc0(x)
 return
 60 derfc1 = 0.d0
-if (x .gt. 100.d0) return
+if (x > 100.d0) return
 t = x*x
-if (t .gt. -dxparg(1)) return
+if (t > -dxparg(1)) return
 derfc1 = dexp(-t) * derfc0(x)
 return
 !
 !             Limit value for large negative x
 !
 80 derfc1 = 2.d0
-if (ind .ne. 0) derfc1 = 2.d0*dexp(x*x)
+if (ind /= 0) derfc1 = 2.d0*dexp(x*x)
 return
 end function derfc1
 
@@ -7684,7 +7684,7 @@ double precision, parameter :: s11 = .77205601373291015625d+08
 !
 !                     1 .LE. x .LE. 2
 !
-if (x .gt. 2.d0) go to 10
+if (x > 2.d0) go to 10
 u = ((((((p7*x + p6)*x + p5)*x + p4)*x + p3)*x + &
    & p2)*x + p1)*x + p0
 v = ((((((q7*x + q6)*x + q5)*x + q4)*x + q3)*x + &
@@ -7697,7 +7697,7 @@ return
 !
 !                     2 .LT. x .LE. 4
 !
-10 if (x .gt. 4.d0) go to 20
+10 if (x > 4.d0) go to 20
 z = 1.d0/(2.5d0 + x*x)
 u = (((((((a8*z + a7)*z + a6)*z + a5)*z + a4)*z + a3)*z + &
    & a2)*z + a1)*z + a0
@@ -7710,7 +7710,7 @@ return
 !
 !                     4 .LT. x .LT. 50
 !
-20 if (x .ge. 50.d0) go to 30
+20 if (x >= 50.d0) go to 30
 z = 1.d0/(2.5d0 + x*x)
 u = (((((((c8*z + c7)*z + c6)*z + c5)*z + c4)*z + c3)*z + &
    & c2)*z + c1)*z + c0
@@ -7791,14 +7791,14 @@ end interface
 !                            Table no.79
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
-if (p .lt. 0.0 .or. q .le. 0.0) go to 100
+if (p < 0.0 .or. q <= 0.0) go to 100
 eps = amax1(spmpar(1),1.e-15)
 t = 0.5 + (0.5 - (p + q))
-if (abs(t) .gt. 3.0*eps) go to 110
+if (abs(t) > 3.0*eps) go to 110
 !
 !                      0 .LE. p .LE. 0.75
 !
-if (p .gt. 0.75) go to 10
+if (p > 0.75) go to 10
 v = p*p - c
 t = p *  (((((a(6)*v + a(5))*v + a(4))*v + a(3))*v &
    & + a(2))*v + a(1))
@@ -7808,7 +7808,7 @@ go to 40
 !
 !                    0.75 .LT. p .LE. 0.9375
 !
-10 if (p .gt. 0.9375) go to 20
+10 if (p > 0.9375) go to 20
 v = p*p - c1
 t = p *  ((((((a1(7)*v + a1(6))*v + a1(5))*v + a1(4))*v &
    & + a1(3))*v + a1(2))*v + a1(1))
@@ -7820,7 +7820,7 @@ go to 40
 !
 20 v1 = alog(q)
 v = 1.0/sqrt(-v1)
-if (v1 .lt. c2) go to 30
+if (v1 < c2) go to 30
 t = (((((((a2(9)*v + a2(8))*v + a2(7))*v + a2(6))*v + a2(5))*v &
    & + a2(4))*v + a2(3))*v + a2(2))*v + a2(1)
 s = v *  ((((((((v + b2(8))*v + b2(7))*v + b2(6))*v + b2(5))*v &
@@ -7919,21 +7919,21 @@ end interface
 !                       Modified table no.82
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
-if (p .lt. 0.d0 .or. q .le. 0.d0) go to 100
+if (p < 0.d0 .or. q <= 0.d0) go to 100
 eps = dpmpar(1)
 t = 0.5d0 + (0.5d0 - (p + q))
-if (dabs(t) .gt. 3.d0*eps) go to 110
+if (dabs(t) > 3.d0*eps) go to 110
 !
 !                      0 .LE. p .LE. 0.75
 !
-if (p .gt. 0.75d0) go to 10
+if (p > 0.75d0) go to 10
 x = c - p*p
 s = (((((a(1)*x + a(2))*x + a(3))*x + a(4))*x + a(5))*x &
    & + a(6))*x + a(7)
 t = ((((((b(1)*x + b(2))*x + b(3))*x + b(4))*x + b(5))*x &
    & + b(6))*x + b(7))*x + 1.d0
 derfi = p*(s/t)
-if (eps .gt. 1.d-19) return
+if (eps > 1.d-19) return
 !
 x = derfi
 f = derf(x) - p
@@ -7942,9 +7942,9 @@ return
 !
 !                    0.75 .LT. p .LE. 0.9375
 !
-10 if (p .gt. 0.9375d0) go to 40
+10 if (p > 0.9375d0) go to 40
 x = c1 - p*p
-if (x .gt. 0.1d0) go to 20
+if (x > 0.1d0) go to 20
 s = ((((((a1(1)*x + a1(2))*x + a1(3))*x + a1(4))*x &
    & + a1(5))*x + a1(6))*x + a1(7))
 t = ((((((b1(1)*x + b1(2))*x + b1(3))*x + b1(4))*x &
@@ -7957,7 +7957,7 @@ t = ((((((b2(1)*x + b2(2))*x + b2(3))*x + b2(4))*x &
    & + b2(5))*x + b2(6))*x + 1.d0)
 !
 30 derfi = p*(s/t)
-if (eps .gt. 1.d-19) return
+if (eps > 1.d-19) return
 !
 x = derfi
 t = derfc1(1,x) - dexp(x*x)*q
@@ -7968,7 +7968,7 @@ return
 !
 40 lnq = dlog(q)
 x = 1.d0/dsqrt(- lnq)
-if (lnq .lt. c2) go to 50
+if (lnq < c2) go to 50
 s = (((((((((a3(1)*x + a3(2))*x + a3(3))*x + a3(4))*x + a3(5))*x &
    & + a3(6))*x + a3(7))*x + a3(8))*x + a3(9))*x &
    & + a3(10))*x + a3(11)
@@ -7985,7 +7985,7 @@ t = ((((((((b4(1)*x + b4(2))*x + b4(3))*x + b4(4))*x + b4(5))*x &
    & + b4(6))*x + b4(7))*x + b4(8))*x + b4(9))*x + 1.d0
 !
 60 derfi = s/(x*t)
-if (eps .gt. 5.d-20) return
+if (eps > 5.d-20) return
 !
 x = derfi
 t = derfc1(1,x)
@@ -8040,7 +8040,7 @@ eps = spmpar(1)
 !
 !---------------------
 aerf = 0.0
-if (h .eq. 0.0) return
+if (h == 0.0) return
 !
 ah = abs(h)
 ax = abs(x)
@@ -8049,22 +8049,22 @@ xmh = ax - ah
 !
 t = amax1(ah,ax)
 t = t*t
-if (1.6*t*t .lt. eps) go to 140
-if ((ax*ah)**2 .lt. 0.5*eps) go to 150
-if (ax .le. ah) go to 100
+if (1.6*t*t < eps) go to 140
+if ((ax*ah)**2 < 0.5*eps) go to 150
+if (ax <= ah) go to 100
 !
-if (xmh .lt. 9.0) go to 5
-if (xmh*xmh + p .gt. -exparg(1)) return
-5 if (4.0*ah*ax .gt. -epsln(0)) go to 120
+if (xmh < 9.0) go to 5
+if (xmh*xmh + p > -exparg(1)) return
+5 if (4.0*ah*ax > -epsln(0)) go to 120
 !
-if (ax .gt. 3.0*ah) go to 10
-if (xph .lt. 1.0) go to 110
+if (ax > 3.0*ah) go to 10
+if (xph < 1.0) go to 110
 go to 130
 !-------------------------------------------------
 !        For (ax less than or equal to .40)
 !-------------------------------------------------
 10 e = amax1(1.e-15,eps)
-if (ax .gt. 0.40) go to 30
+if (ax > 0.40) go to 30
 h2 = xph*xph
 a2 = xmh*xmh
 x2 = ax + ax
@@ -8081,7 +8081,7 @@ st = h2*st + x2*hf
 hf = a2*hf
 t = st*dn2/n1
 s = s + t
-if (abs(t) .gt. e*abs(s)) go to 20
+if (abs(t) > e*abs(s)) go to 20
 s = 0.5 + (s + 0.5)
 aerf = 2.0*c*ah*s
 go to 45
@@ -8103,31 +8103,31 @@ h3 = (hf*h2 - v*h3)/n
 n = n + 1
 hg = h3/n
 s = s + hg
-if (abs(hg) .gt. e*abs(s)) go to 35
-if (j .ne. 0) go to 40
+if (abs(hg) > e*abs(s)) go to 35
+if (j /= 0) go to 40
 j = 1
 go to 35
 40 aerf = u*(s + z)
-45 if (h .lt. 0.0) aerf = -aerf
+45 if (h < 0.0) aerf = -aerf
 return
 !-------------------------------------------------
 !        Special cases
 !-------------------------------------------------
-100 if (xph .lt. 5.8) go to 110
-if (xmh .gt. -5.6) go to 120
+100 if (xph < 5.8) go to 110
+if (xmh > -5.6) go to 120
 aerf = sign(2.0,h)
 return
 !
 110 aerf = erf(xph) - erf(xmh)
-if (h .lt. 0.0) aerf = -aerf
+if (h < 0.0) aerf = -aerf
 return
 !
 120 aerf = erfc(xmh)
-if (h .lt. 0.0) aerf = -aerf
+if (h < 0.0) aerf = -aerf
 return
 !
 130 aerf = erfc(xmh) - erfc(xph)
-if (h .lt. 0.0) aerf = -aerf
+if (h < 0.0) aerf = -aerf
 return
 !
 140 aerf = 2.0*c*h*(0.5 + (0.5 - (x*x + h*h/3.0)))
@@ -8137,8 +8137,8 @@ return
 !
 150 t = 2.0
 x2 = x*x
-if (x2 .ge. eps) t = 2.0*exp(-x2)
-if (h*h .ge. 3.0*eps) go to 160
+if (x2 >= eps) t = 2.0*exp(-x2)
+if (h*h >= 3.0*eps) go to 160
 aerf = c*h*t
 return
 160 aerf = t*erf(h)
@@ -8186,7 +8186,7 @@ eps = dpmpar(1)
 !
 !---------------------
 daerf = 0.d0
-if (h .eq. 0.d0) return
+if (h == 0.d0) return
 !
 ah = dabs(h)
 ax = dabs(x)
@@ -8195,22 +8195,22 @@ xmh = ax - ah
 !
 t = dmax1(ah,ax)
 t = t*t
-if (1.6d0*t*t .lt. eps) go to 140
-if ((ax*ah)**2 .lt. 0.5d0*eps) go to 150
-if (ax .le. ah) go to 100
+if (1.6d0*t*t < eps) go to 140
+if ((ax*ah)**2 < 0.5d0*eps) go to 150
+if (ax <= ah) go to 100
 !
-if (xmh .lt. 9.d0) go to 5
-if (xmh*xmh + p .gt. -dxparg(1)) return
-5 if (4.d0*ah*ax .gt. -depsln(0)) go to 120
+if (xmh < 9.d0) go to 5
+if (xmh*xmh + p > -dxparg(1)) return
+5 if (4.d0*ah*ax > -depsln(0)) go to 120
 !
-if (ax .gt. 3.d0*ah) go to 10
-if (xph .lt. 1.d0) go to 110
+if (ax > 3.d0*ah) go to 10
+if (xph < 1.d0) go to 110
 go to 130
 !-------------------------------------------------
 !        For (ax less than or equal to .40)
 !-------------------------------------------------
 10 e = dmax1(1.d-30,eps)
-if (ax .gt. 0.4d0) go to 30
+if (ax > 0.4d0) go to 30
 h2 = xph*xph
 a2 = xmh*xmh
 x2 = ax + ax
@@ -8227,7 +8227,7 @@ st = h2*st + x2*hf
 hf = a2*hf
 t = st*dn2/n1
 s = s + t
-if (dabs(t) .gt. e*dabs(s)) go to 20
+if (dabs(t) > e*dabs(s)) go to 20
 s = 0.5d0 + (0.5d0 + s)
 daerf = 2.d0*c*ah*s
 go to 45
@@ -8249,31 +8249,31 @@ h3 = (hf*h2 - v*h3)/n
 n = n + 1.d0
 hg = h3/n
 s = s + hg
-if (dabs(hg) .gt. e*dabs(s)) go to 35
-if (j .ne. 0) go to 40
+if (dabs(hg) > e*dabs(s)) go to 35
+if (j /= 0) go to 40
 j = 1
 go to 35
 40 daerf = u*(s + z)
-45 if (h .lt. 0.d0) daerf = -daerf
+45 if (h < 0.d0) daerf = -daerf
 return
 !-------------------------------------------------
 !        Special cases
 !-------------------------------------------------
-100 if (xph .lt. 8.5d0) go to 110
-if (xmh .gt. -8.3d0) go to 120
+100 if (xph < 8.5d0) go to 110
+if (xmh > -8.3d0) go to 120
 daerf = dsign(2.d0,h)
 return
 !
 110 daerf = derf(xph) - derf(xmh)
-if (h .lt. 0.d0) daerf = -daerf
+if (h < 0.d0) daerf = -daerf
 return
 !
 120 daerf = derfc(xmh)
-if (h .lt. 0.d0) daerf = -daerf
+if (h < 0.d0) daerf = -daerf
 return
 !
 130 daerf = derfc(xmh) - derfc(xph)
-if (h .lt. 0.d0) daerf = -daerf
+if (h < 0.d0) daerf = -daerf
 return
 !
 140 daerf = 2.d0*c*h*(0.5d0 + (0.5d0 - (x*x + h*h/3.d0)))
@@ -8283,8 +8283,8 @@ return
 !
 150 t = 2.d0
 x2 = x*x
-if (x2 .ge. eps) t = 2.d0*dexp(-x2)
-if (h*h .ge. 3.d0*eps) go to 160
+if (x2 >= eps) t = 2.d0*dexp(-x2)
+if (h*h >= 3.d0*eps) go to 160
 daerf = c*h*t
 return
 160 daerf = t*derf(h)
@@ -8313,13 +8313,13 @@ end interface
 !     ---------------
 !     ---------------
 t = a*x
-if (ind .ne. 0) go to 20
-if (x .lt. -8.0) go to 10
+if (ind /= 0) go to 20
+if (x < -8.0) go to 10
 pndf = 0.5*erfc1(0,-t)
 return
 10 pndf = c/erfc1(1,-t)
 return
-20 if (x .gt. 8.0) go to 30
+20 if (x > 8.0) go to 30
 pndf = 0.5*erfc1(0,t)
 return
 30 pndf = c/erfc1(1,t)
@@ -8371,19 +8371,19 @@ end interface
 !------------------------
 !------------------------
 t = amin1(p,q)
-if (t .le. 0.0) go to 10
+if (t <= 0.0) go to 10
 eps = amax1(spmpar(1),1.e-15)
 w = 0.5 + (0.5 - (p + q))
-if (abs(w) .gt. 2.0*eps) go to 10
+if (abs(w) > 2.0*eps) go to 10
 !
 u = abs(d + d)
 v = t + t
 w = erfi(u, v)
-if (w .lt. 0.0) go to 20
+if (w < 0.0) go to 20
 !
 ierr = 0
 w = rt2*w
-if (d .lt. 0.0) w = - w
+if (d < 0.0) w = - w
 return
 !
 !                         Error return
@@ -8440,19 +8440,19 @@ end interface
 !------------------------
 !------------------------
 t = dmin1(p,q)
-if (t .le. 0.d0) go to 10
+if (t <= 0.d0) go to 10
 eps = dpmpar(1)
 w = 0.5d0 + (0.5d0 - (p + q))
-if (dabs(w) .gt. 2.d0*eps) go to 10
+if (dabs(w) > 2.d0*eps) go to 10
 !
 u = dabs(d + d)
 v = t + t
 w = derfi(u, v)
-if (w .lt. 0.d0) go to 20
+if (w < 0.d0) go to 20
 !
 ierr = 0
 w = rt2*w
-if (d .lt. 0.d0) w = - w
+if (d < 0.d0) w = - w
 return
 !
 !                         Error return
@@ -8530,10 +8530,10 @@ real, parameter :: q4(6) = [.168874162155616e+03, .698280748271071e+01, -.213029
 !---------------
 !-----------------------------------------------------------------------
 !
-if (abs(x) .gt. xlarge) go to 500
-if (abs(x) .lt. xsmall) go to 600
+if (abs(x) > xlarge) go to 500
+if (abs(x) < xsmall) go to 600
 y = x * x
-if (y .ge. 6.25e0) go to 200
+if (y >= 6.25e0) go to 200
 !
 !     ---------- abs(x) .LT. 2.5 ----------
 !
@@ -8548,7 +8548,7 @@ go to 1000
 !
 !     ---------- 2.5 .LE. abs(x) .LT. 3.5 ----------
 !
-200 if (y .ge. 12.25e0) go to 300
+200 if (y >= 12.25e0) go to 300
 frac = 0.0e0
 !
 do 220 i = 1, 7
@@ -8559,7 +8559,7 @@ go to 1000
 !
 !     ---------- 3.5 .LE. abs(x) .LT. 5.0 ----------
 !
-300 if (y .ge. 25.0e0) go to 400
+300 if (y >= 25.0e0) go to 400
 frac = 0.0e0
 !
 do 320 i = 1, 7
@@ -8644,14 +8644,14 @@ end interface
 !----------------------------
 !----------------------------
 ax = dabs(x)
-if (ax .ge. 4.d0) go to 30
+if (ax >= 4.d0) go to 30
 t = x*x
-if (ax .gt. 1.d0) go to 20
+if (ax > 1.d0) go to 20
 !
 !                       abs(x) .LE. 1
 !
 dpdaw = x
-if (t .lt. eps) return
+if (t < eps) return
 !
 w = a(20)
 do 10 i = 1,19
@@ -8799,13 +8799,13 @@ double precision, parameter :: q5 = -.51283783372259864777146d+05
 !----------------------------
 !----------------------------
 !----------------------------
-if (x .ge. 12.d0) go to 50
+if (x >= 12.d0) go to 50
 t = (32.d0/(x*x) - 0.5d0) - 0.5d0
-if (t .ge. 0.d0) go to 20
+if (t >= 0.d0) go to 20
 !
 !                    -7/9 .LE. t .LE. -0.4
 !
-if (t .gt. -0.4d0) go to 10
+if (t > -0.4d0) go to 10
 u = ((((((((a18*t + a17)*t + a16)*t + a15)*t + a14)*t + &
    & a13)*t + a12)*t + a11)*t + a10)*t + a9
 u = ((((((((u*t + a8)*t + a7)*t + a6)*t + a5)*t + &
@@ -8824,7 +8824,7 @@ go to 40
 !
 !                      0 .LE. t .LE. 0.4
 !
-20 if (t .gt. 0.4d0) go to 30
+20 if (t > 0.4d0) go to 30
 u = (((((((((e10*t + e9)*t + e8)*t + e7)*t + e6)*t + &
    & e5)*t + e4)*t + e3)*t + e2)*t + e1)*t + e0
 v = (((((((((f10*t + f9)*t + f8)*t + f7)*t + f6)*t + &
@@ -8911,23 +8911,23 @@ end interface
 x = real(z)
 y = aimag(z)
 r = cpabs(x, y)
-if (r .eq. 0.0) go to 200
+if (r == 0.0) go to 200
 !
 !              Evaluation of zr = sqrt(2*z/PI)
 !
-if (x .ge. 0.0) go to 10
+if (x >= 0.0) go to 10
 zr(2) = sqrt(r - x)
 zr(1) = y/zr(2)
 go to 11
 10 zr(1) = sqrt(r + x)
-if (y .lt. 0.0) zr(1) = -zr(1)
+if (y < 0.0) zr(1) = -zr(1)
 zr(2) = y/zr(1)
 11 zr(1) = c*zr(1)
 zr(2) = c*zr(2)
 !
-if (r .le. 1.0) go to 20
-if (r .ge. 38.0) go to 60
-if (x .lt. 0.016*y*y) go to 50
+if (r <= 1.0) go to 20
+if (r >= 38.0) go to 60
+if (x < 0.016*y*y) go to 50
 !
 !                       Taylor series
 !
@@ -8944,15 +8944,15 @@ tm(1) = ts(1)/pm
 tm(2) = ts(2)/pm
 ts(1) = tm(1)/dm
 ts(2) = tm(2)/dm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 31
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 40
 31 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
 go to 30
 40 sm(1) = zr(1) + sm(1)
 sm(2) = (c0 + zr(2)) + sm(2)
 !
-if (mo .eq. 0) go to 120
+if (mo == 0) go to 120
 qm = exp(-x)
 qf(1) = qm*cos(-y)
 qf(2) = qm*sin(-y)
@@ -8991,20 +8991,20 @@ ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
 ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
 tm(1) = pm*ts(1)
 tm(2) = pm*ts(2)
-if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
-if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+if (abs(sm(1)) + abs(tm(1)) /= abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(tm(2)) == abs(sm(2))) go to 80
 71 sm(1) = sm(1) + tm(1)
 sm(2) = sm(2) + tm(2)
-if (pm .lt. 25.5) go to 70
+if (pm < 25.5) go to 70
 80 ts(1) = zr(1)*sm(1) - zr(2)*sm(2)
 ts(2) = zr(1)*sm(2) + zr(2)*sm(1)
 sm(1) = 0.5*ts(1)
 sm(2) = 0.5*ts(2)
-if (zr(2) .lt. 8.e-3) go to 210
+if (zr(2) < 8.e-3) go to 210
 !
 !                       Termination
 !
-100 if (mo .ne. 0) go to 120
+100 if (mo /= 0) go to 120
 qm = exp(x)
 qf(1) = qm*cos(y)
 qf(2) = qm*sin(y)
@@ -9024,7 +9024,7 @@ return
 !
 !               Modified asymptotic expansion
 !
-210 if (mo .ne. 0) go to 220
+210 if (mo /= 0) go to 220
 qm = exp(x)
 qf(1) = qm*cos(y)
 qf(2) = qm*sin(y)
@@ -9033,7 +9033,7 @@ ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
 w = cmplx(ts(1), c0 + ts(2))
 return
 !
-220 if (-x .le. exparg(1)) go to 120
+220 if (-x <= exparg(1)) go to 120
 qm = c0*exp(-x)
 sm(1) = sm(1) + qm*sin(y)
 sm(2) = sm(2) + qm*cos(y)
@@ -9126,21 +9126,21 @@ max = ipmpar(3)
 !
 !-----------------------------------------------------------------------
 x = abs(t)
-if (x .gt. 4.0) go to 50
+if (x > 4.0) go to 50
 xx = x*x
 y = xx*xx
 !-----------------------------------------------------------------------
 !             Evaluation of c(x) and s(x) for x .LT. 1.65
 !                          WHERE x = abs(t)
 !-----------------------------------------------------------------------
-if (x .gt. 0.6) go to 10
+if (x > 0.6) go to 10
 c = ((((a(1)*y + a(2))*y + a(3))*y + a(4))*y + a(5))*y + a(6)
 s = ((((b(1)*y + b(2))*y + b(3))*y + b(4))*y + b(5))*y + b(6)
 c = t*c
 s = t*xx*s
 return
 !
-10 if (x .ge. 1.65) go to 20
+10 if (x >= 1.65) go to 20
 c = cp(1)
 s = sp(1)
 do 11 i = 2,13
@@ -9153,7 +9153,7 @@ return
 !          Evaluation of the auxiliary functions f(x) and g(x)
 !                        FOR x .GE. 1.65
 !-----------------------------------------------------------------------
-20 if (x .ge. 2.0) go to 30
+20 if (x >= 2.0) go to 30
 fn = ((((pn(1)*y + pn(2))*y + pn(3))*y + pn(4))*y + pn(5))*y &
    & + pn(6)
 fd = ((((pd(1)*y + pd(2))*y + pd(3))*y + pd(4))*y + pd(5))*y &
@@ -9167,7 +9167,7 @@ g = gn/(x*xx*gd)
 y = 0.5*xx
 go to 80
 !
-30 if (x .ge. 3.0) go to 40
+30 if (x >= 3.0) go to 40
 fn = ((((an(1)*y + an(2))*y + an(3))*y + an(4))*y + an(5))*y &
    & + an(6)
 fd = ((((ad(1)*y + ad(2))*y + ad(3))*y + ad(4))*y + ad(5))*y &
@@ -9188,7 +9188,7 @@ f = fn/(x*fd)
 g = gn/(x*xx*gd)
 go to 70
 !
-50 if (x .ge. 6.0) go to 60
+50 if (x >= 6.0) go to 60
 xx = x*x
 y = 1.0/(xx*xx)
 f = (((((fp(1)*y + fp(2))*y + fp(3))*y + fp(4))*y + fp(5))*y &
@@ -9199,7 +9199,7 @@ f = f/x
 g = g/(x*xx)
 go to 70
 !
-60 if (x .ge. float(max)) go to 100
+60 if (x >= float(max)) go to 100
 pix = pi*x
 pixx = pix*x
 y = 1.0/pixx
@@ -9221,7 +9221,7 @@ r = x - n
 y = y*n
 m = y
 y = y - m
-if (mod(m,2) .ne. 0) y = (y - 0.5) - 0.5
+if (mod(m,2) /= 0) y = (y - 0.5) - 0.5
 y = y + 0.5*r*r
 !
 80 sy = sin1(y)
@@ -9231,12 +9231,12 @@ cy = cos1(y)
 !-----------------------------------------------------------------------
 90 c = 0.5 + (f*sy - g*cy)
 s = 0.5 - (f*cy + g*sy)
-if (t .ge. 0.0) return
+if (t >= 0.0) return
 c = - c
 s = - s
 return
 !
-100 if (t .lt. 0.0) go to 110
+100 if (t < 0.0) go to 110
 c = 0.5
 s = 0.5
 return
@@ -9301,14 +9301,14 @@ y = aimag(z)
 r = cpabs(x,y)
 eps = amax1(eps,1.e-15)
 !
-if (r .le. 1.0) go to 20
-if (r .ge. 40.0) go to 60
-if (r .lt. 4.0) go to 10
-if (x .le. 0.0 .or. abs(y) .gt. 8.0) go to 60
-if (r .lt. 10.0 .and. abs(y) .gt. 1.8*x) go to 60
+if (r <= 1.0) go to 20
+if (r >= 40.0) go to 60
+if (r < 4.0) go to 10
+if (x <= 0.0 .or. abs(y) > 8.0) go to 60
+if (r < 10.0 .and. abs(y) > 1.8*x) go to 60
 go to 20
-10 if (x .lt. 0.09*y*y) go to 50
-if (r .gt. 3.6 .and. abs(y) .gt. 1.8*x) go to 60
+10 if (x < 0.09*y*y) go to 50
+if (r > 3.6 .and. abs(y) > 1.8*x) go to 60
 !
 !                        Taylor series
 !
@@ -9326,7 +9326,7 @@ ts(1) = tm(1)/n
 ts(2) = tm(2)/n
 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
-if (anorm(ts(1),ts(2)) .gt. eps*anorm(sm(1),sm(2))) &
+if (anorm(ts(1),ts(2)) > eps*anorm(sm(1),sm(2))) &
    & go to 30
 sm(1) = x + sm(1)
 sm(2) = y + sm(2)
@@ -9354,7 +9354,7 @@ go to 100
 60 x = - x
 y = - y
 d = 4.0*r
-if (r .lt. 10.0) d = 32.0
+if (r < 10.0) d = 32.0
 g0(1) = 1.0
 g0(2) = 0.0
 gn(1) = (1.0 + x)/d
@@ -9392,7 +9392,7 @@ tm(2) = wn(2)
 w = cmplx(gn(1),gn(2))/cmplx(hn(1),hn(2))
 wn(1) = real(w)
 wn(2) = aimag(w)
-if (anorm(tm(1) - wn(1), tm(2) - wn(2)) .gt. &
+if (anorm(tm(1) - wn(1), tm(2) - wn(2)) > &
    & tol*anorm(wn(1), wn(2))) go to 70
 !
 x = real(z)
@@ -9403,23 +9403,23 @@ sm(2) = aimag(w)
 !
 !                         Termination
 !
-100 ind = x .le. 0.0 .or. abs(y) .gt. 1.e-2
-if (ind .and. mo .ne. 0) go to 130
+100 ind = x <= 0.0 .or. abs(y) > 1.e-2
+if (ind .and. mo /= 0) go to 130
 c = pi
-if (y .gt. 0.0) c = -pi
+if (y > 0.0) c = -pi
 qm = exp(x)
 cy = cos(y)
 sy = sin(y)
 qf(1) = qm*cy
 qf(2) = qm*sy
-if (mo .eq. 0) go to 120
+if (mo == 0) go to 120
 !
 r = c/qm
 sm(1) = sm(1) + r*sy
 sm(2) = sm(2) + r*cy
 go to 130
 !
-110 if (mo .eq. 0) go to 130
+110 if (mo == 0) go to 130
 ind = .true.
 qm = exp(-x)
 qf(1) = qm*cos(-y)
@@ -9620,11 +9620,11 @@ end interface
 !
 x = arg
 ierr = 0
-if (int .eq. 2) go to 450
+if (int == 2) go to 450
 if (x) 280, 640, 110
-110 if (x .ge. 12.e0) go to 200
-if (x .gt. 8.e0) go to 160
-if (x .ge. 4.e0) go to 150
+110 if (x >= 12.e0) go to 200
+if (x > 8.e0) go to 160
+if (x >= 4.e0) go to 150
 !     ---------- 0.0 .LT. X .LT. 4.0.
 !                Rational approximation used is expressed
 !                in terms of Chebyshev polynomials to
@@ -9645,21 +9645,21 @@ sump = .5e0 * t * px(8) - px(7) + p1(8)
 sumq = .5e0 * t * qx(8) - qx(7) + q1(8)
 frac = sump / sumq
 xmx0 = dble(x) - dx0
-if (abs(xmx0) .lt. 0.07e0) go to 140
+if (abs(xmx0) < 0.07e0) go to 140
 xx0 = x / x0
 ei = alog(xx0) + xmx0 * frac
-if (int .eq. 3) ei = exp(-x) * ei
+if (int == 3) ei = exp(-x) * ei
 go to 410
 !     ---------- Evaluate approximation for LN(X/X0)
 !                for X close to X0 ----------
 140 y = xmx0 / x0
 ei = alnrel(y) + xmx0 * frac
-if (int .eq. 3) ei = exp(-x) * ei
+if (int == 3) ei = exp(-x) * ei
 go to 410
 !     ---------- 4.0 .LE. X .LE. 8.0 ----------
 150 m = 20
 ei = (1.0 + csevl(3.0 - 16.0/x, r, m)) / x
-if (int .eq. 3) go to 410
+if (int == 3) go to 410
 ei = ei * exp(x)
 go to 410
 !     ---------- 8.0 .LT. X .LT. 12.0 ----------
@@ -9669,23 +9669,23 @@ do 180 i = 1, 7
 180 frac = q2(i) / (p2(i) + x + frac)
 !
 ei = (p2(8) + frac) / x
-if (int .eq. 3) go to 410
+if (int == 3) go to 410
 ei = ei * exp(x)
 go to 410
 !     ---------- 12.0 .LE. X .LT. 24.0 ----------
-200 if (x .ge. 24.e0) go to 240
+200 if (x >= 24.e0) go to 240
 frac = 0.0e0
 !
 do 220 i = 1, 7
 220 frac = q3(i) / (p3(i) + x + frac)
 !
 ei = (p3(8) + frac) / x
-if (int .eq. 3) go to 410
+if (int == 3) go to 410
 ei = ei * exp(x)
 go to 410
 !     ---------- 24.0 .LE. X ----------
 240 xmax = exparg(0)
-if ((x .gt. xmax) .and. (int .lt. 3)) go to 620
+if ((x > xmax) .and. (int < 3)) go to 620
 y = 1.0e0 / x
 frac = 0.0e0
 !
@@ -9694,8 +9694,8 @@ do 260 i = 1, 7
 !
 frac = p4(8) + frac
 ei = y + y * y * frac
-if (int .eq. 3) go to 410
-if (x .gt. 150.0e0) go to 270
+if (int == 3) go to 410
+if (x > 150.0e0) go to 270
 ei = ei * exp(x)
 go to 410
 !     ---------- Calculation reformulated to avoid
@@ -9706,36 +9706,36 @@ go to 410
 !                e-sub-1 joins at label 300 ----------
 280 y = -x
 300 w = 1.0e0 / y
-if (y .gt. 4.0e0) go to 340
-if (y .gt. 1.0e0) go to 320
+if (y > 4.0e0) go to 340
+if (y > 1.0e0) go to 320
 !     ---------- 0.0 .LT. -X .LE. 1.0 ----------
 ei = alog(y) - (((((a(6) * y + a(5)) * y + a(4)) &
    & * y + a(3)) * y + a(2)) * y + a(1)) / &
    & ((((b(5) * y + b(4)) * y + b(3)) &
    & * y + b(2)) * y + b(1))
-if (int .eq. 3) ei = ei * exp(y)
+if (int == 3) ei = ei * exp(y)
 go to 400
 !     ---------- 1.0 .LT. -X .LE. 4.0 ----------
 320 ei = -((((((c(7) * w + c(6)) * w + c(5)) * w + c(4)) &
    & * w + c(3)) * w + c(2)) * w + c(1))  / &
    & ((((((d(7) * w + d(6)) * w + d(5)) * w + d(4)) &
    & * w + d(3)) * w + d(2)) * w + d(1))
-if (int .eq. 3) go to 410
+if (int == 3) go to 410
 ei = ei * exp(-y)
 go to 400
 !     ---------- 4.0 .LT. -X ----------
 340 xmin = exparg(1)
-if ((-abs(x) .lt. xmin) .and. (int .lt. 3)) go to 600
+if ((-abs(x) < xmin) .and. (int < 3)) go to 600
 ei = -w * (1.0e0 + w * ((((((e(7) &
    & * w + e(6)) * w + e(5)) * w + e(4)) &
    & * w + e(3)) * w + e(2)) * w + e(1)) / &
    & ((((((f(7) * w + f(6)) * w + f(5)) &
    & * w + f(4)) * w + f(3)) * w + f(2)) * w + f(1)))
-if (int .eq. 3) go to 410
+if (int == 3) go to 410
 ei = ei * exp(-y)
 t = 0.5e0 * ei
-if (t .eq. 0.0e0) go to 600
-400 if (int .eq. 2) ei = -ei
+if (t == 0.0e0) go to 600
+400 if (int == 2) ei = -ei
 410 result = ei
 return
 450 y = x
@@ -9774,7 +9774,7 @@ interface
 end interface
 !
 dei = -de1e(-x)
-if (x .gt. 4.d0 .or. x .lt. -1.d0) dei = dexp(x) * dei
+if (x > 4.d0 .or. x < -1.d0) dei = dexp(x) * dei
 return
 end function dei
 
@@ -9793,7 +9793,7 @@ interface
 end interface
 !
 dei1 = -de1e(-x)
-if (x .gt. 4.d0 .or. x .lt. -1.d0) return
+if (x > 4.d0 .or. x < -1.d0) return
 dei1 = dexp(-x) * dei1
 return
 end function dei1
@@ -10020,55 +10020,55 @@ end interface
 eps = dpmpar(1)
 !
 !------------------------------
-if (dabs(x) .ge. 90.d0) go to 80
-if (x .gt. -1.d0) go to 40
+if (dabs(x) >= 90.d0) go to 80
+if (x > -1.d0) go to 40
 !
 !                    -90 .LT. x .LT. -4
 !
-if (x .gt. -32.d0) go to 10
+if (x > -32.d0) go to 10
 m = 50
-if (eps .ge. 1.d-20) m = 25
+if (eps >= 1.d-20) m = 25
 de1e = (1.d0 + dcsevl(64.d0/x + 1.d0, a, m))/x
 return
 !
-10 if (x .gt. -8.d0) go to 20
+10 if (x > -8.d0) go to 20
 m = 60
-if (eps .ge. 1.d-20) m = 37
+if (eps >= 1.d-20) m = 37
 de1e = (1.d0 + dcsevl((64.d0/x + 5.d0)/3.d0, b, m))/x
 return
 !
-20 if (x .ge. -4.d0) go to 30
+20 if (x >= -4.d0) go to 30
 m = 41
-if (eps .ge. 1.d-20) m = 27
+if (eps >= 1.d-20) m = 27
 de1e = (1.d0 + dcsevl(16.d0/x + 3.d0, d, m))/x
 return
 !
 !                     -4 .LE. x .LE. 1
 !
 30 m = 29
-if (eps .ge. 1.d-20) m = 20
+if (eps >= 1.d-20) m = 20
 de1e = -dlog(-x) + dcsevl((2.d0*x + 5.d0)/3.d0, e, m)
 return
 !
-40 if (x .gt. 1.0d0) go to 60
-if (x .lt. -0.4d0 .or. x .gt. -0.35d0) go to 50
+40 if (x > 1.0d0) go to 60
+if (x < -0.4d0 .or. x > -0.35d0) go to 50
 de1e = - dei0(-x, eps)
 return
 50 m = 25
-if (eps .ge. 1.d-20) m = 18
+if (eps >= 1.d-20) m = 18
 de1e = (-dlog(dabs(x)) - 0.6875d0 + x) + dcsevl(x, r, m)
 return
 !
 !                     1 .LT. x .LT. 90
 !
-60 if (x .gt. 4.0d0) go to 70
+60 if (x > 4.0d0) go to 70
 m = 50
-if (eps .ge. 1.d-20) m = 31
+if (eps >= 1.d-20) m = 31
 de1e = (1.d0 + dcsevl((8.d0/x - 5.d0)/3.d0, p, m))/x
 return
 !
 70 m = 64
-if (eps .ge. 1.d-20) m = 35
+if (eps >= 1.d-20) m = 35
 de1e = (1.d0 + dcsevl(8.d0/x - 1.d0, q, m))/x
 return
 !
@@ -10081,7 +10081,7 @@ m = 1
 81 m = m + 1
 c = (m*t)*c
 w = c + w
-if (dabs(c) .gt. eps) go to 81
+if (dabs(c) > eps) go to 81
 de1e = (1.d0 + w)/x
 return
 end function de1e
@@ -10158,7 +10158,7 @@ w = 0.d0
 do 10 n = 2,40
    c = a(n)*t
    w = w + c
-   if (dabs(c) .lt. eps) go to 20
+   if (dabs(c) < eps) go to 20
    t = h*t
 10 continue
 !
@@ -10232,7 +10232,7 @@ amax = 1.0/spmpar(1)
 !
 !
 ax = abs(x)
-if (ax.gt.5.0) go to 20
+if (ax > 5.0) go to 20
 j = n1
 bx = 0.40*ax - 1.0
 tx = bx + bx
@@ -10246,7 +10246,7 @@ do 10 i = 1,m1
 si = (bx*b1 - b2 + bb(1))*x
 return
 !
-20 if (ax.gt.amax) go to 50
+20 if (ax > amax) go to 50
 bx = 10./ax - 1.
 tx = bx + bx
 j = n2
@@ -10271,7 +10271,7 @@ rc = bx*b1 - b2 + cc(1)
 !
 si = (rc*cos(ax) + aic*sin(ax))/ax
 si = pio2 - si
-if (x.lt.0.0) si = -si
+if (x < 0.0) si = -si
 return
 !
 50 si = sign(pio2,x)
@@ -10345,7 +10345,7 @@ amax = 0.1/spmpar(1)
 !
 !
 ax = abs(x)
-if (ax.gt.5.0) go to 20
+if (ax > 5.0) go to 20
 j = n1
 bx = 0.40*ax - 1.0
 tx = bx + bx
@@ -10359,7 +10359,7 @@ do 10 i = 1,m1
 cin = x*x*(bx*b1 - b2 + bb(1))
 return
 !
-20 if (ax.gt.amax) go to 50
+20 if (ax > amax) go to 50
 bx = 10./ax - 1.0
 tx = bx + bx
 j = n2
@@ -10440,9 +10440,9 @@ x = real(z)
 y = aimag(z)
 r = x*x + y*y
 !
-if (r .le. 1.0) go to 100
-if (r .ge. 1296.0) go to 10
-if (x .lt. 0.07*y*y) go to 30
+if (r <= 1.0) go to 100
+if (r >= 1296.0) go to 10
+if (x < 0.07*y*y) go to 30
 go to 40
 !-----------------------------------------------------------------------
 !                     Asymptotic expansion
@@ -10461,11 +10461,11 @@ tm(2) = pm*ts(2)
 pm = pm + 1.0
 ts(1) = tm(1)/pm
 ts(2) = tm(2)/pm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 21
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 130
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 21
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 130
 21 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
-if (pm .lt. 36.0) go to 20
+if (pm < 36.0) go to 20
 go to 130
 !-----------------------------------------------------------------------
 !                      Rational expansion
@@ -10538,8 +10538,8 @@ tm(1) = ts(1)/pm
 tm(2) = ts(2)/pm
 ts(1) = qm*tm(1)
 ts(2) = qm*tm(2)
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 71
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 80
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 71
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 80
 71 sm(1) = sm(1) - ts(1)
 sm(2) = sm(2) - ts(2)
 go to 70
@@ -10578,8 +10578,8 @@ tm(2) = ts(2)/pm
 r = (zl(1) - 1.0/pm) - qm
 ts(1) = (r*tm(1) - zl(2)*tm(2))/pm
 ts(2) = (r*tm(2) + zl(2)*tm(1))/pm
-if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 111
-if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 120
+if (abs(sm(1)) + abs(ts(1)) /= abs(sm(1))) go to 111
+if (abs(sm(2)) + abs(ts(2)) == abs(sm(2))) go to 120
 111 sm(1) = sm(1) + ts(1)
 sm(2) = sm(2) + ts(2)
 go to 110

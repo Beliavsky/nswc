@@ -118,10 +118,10 @@ ik = (n*(n - 1))/2
 !        Leave the loop if k=0 Or k=1.
 !
 !     ...Exit
-if (k .eq. 0) go to 200
-if (k .gt. 1) go to 20
+if (k == 0) go to 200
+if (k > 1) go to 20
 kpvt(1) = 1
-if (ap(1) .eq. 0.0d0) info = 1
+if (ap(1) == 0.0d0) info = 1
 !     ......Exit
 go to 200
 20 continue
@@ -142,7 +142,7 @@ absakk = dabs(ap(kk))
 imax = idamax(k - 1,ap(ik + 1),1)
 imk = ik + imax
 colmax = dabs(ap(imk))
-if (absakk .lt. alpha*colmax) go to 30
+if (absakk < alpha*colmax) go to 30
 kstep = 1
 swap = .false.
 go to 90
@@ -159,27 +159,27 @@ do j = imaxp1, k
    rowmax = dmax1(rowmax,dabs(ap(imj)))
    imj = imj + j
 end do
-if (imax .eq. 1) go to 50
+if (imax == 1) go to 50
 jmax = idamax(imax - 1,ap(im + 1),1)
 jmim = jmax + im
 rowmax = dmax1(rowmax,dabs(ap(jmim)))
 50 continue
 imim = imax + im
-if (dabs(ap(imim)) .lt. alpha*rowmax) go to 60
+if (dabs(ap(imim)) < alpha*rowmax) go to 60
 kstep = 1
 swap = .true.
 go to 80
 60 continue
-if (absakk .lt. alpha*colmax*(colmax/rowmax)) go to 70
+if (absakk < alpha*colmax*(colmax/rowmax)) go to 70
 kstep = 1
 swap = .false.
 go to 80
 70 continue
 kstep = 2
-swap = imax .ne. km1
+swap = imax /= km1
 80 continue
 90 continue
-if (dmax1(absakk,colmax) .ne. 0.0d0) go to 100
+if (dmax1(absakk,colmax) /= 0.0d0) go to 100
 !
 !           Column k is zero.  Set info and iterate the loop.
 !
@@ -187,7 +187,7 @@ kpvt(k) = k
 info = k
 go to 190
 100 continue
-if (kstep .eq. 2) go to 140
+if (kstep == 2) go to 140
 !
 !           1 X 1 pivot block.
 !
@@ -254,7 +254,7 @@ ap(imk) = t
 !           Perform the elimination.
 !
 km2 = k - 2
-if (km2 .eq. 0) go to 180
+if (km2 == 0) go to 180
 ak = ap(kk)/ap(km1k)
 km1km1 = ikm1 + k - 1
 akm1 = ap(km1km1)/ap(km1k)
@@ -286,7 +286,7 @@ if (swap) kpvt(k) = -imax
 kpvt(k - 1) = kpvt(k)
 190 continue
 ik = ik - (k - 1)
-if (kstep .eq. 2) ik = ik - (k - 2)
+if (kstep == 2) ik = ik - (k - 2)
 k = k - kstep
 go to 10
 200 continue
@@ -372,15 +372,15 @@ end interface
 !
 k = n
 ik = (n*(n - 1))/2
-10 if (k .eq. 0) go to 80
+10 if (k == 0) go to 80
 kk = ik + k
-if (kpvt(k) .lt. 0) go to 40
+if (kpvt(k) < 0) go to 40
 !
 !           1 X 1 pivot block.
 !
-if (k .eq. 1) go to 30
+if (k == 1) go to 30
 kp = kpvt(k)
-if (kp .eq. k) go to 20
+if (kp == k) go to 20
 !
 !                 Interchange.
 !
@@ -405,9 +405,9 @@ go to 70
 !           2 X 2 pivot block.
 !
 ikm1 = ik - (k - 1)
-if (k .eq. 2) go to 60
+if (k == 2) go to 60
 kp = iabs(kpvt(k))
-if (kp .eq. k - 1) go to 50
+if (kp == k - 1) go to 50
 !
 !                 Interchange.
 !
@@ -444,18 +444,18 @@ go to 10
 !
 k = 1
 ik = 0
-90 if (k .gt. n) go to 160
-if (kpvt(k) .lt. 0) go to 120
+90 if (k > n) go to 160
+if (kpvt(k) < 0) go to 120
 !
 !           1 X 1 pivot block.
 !
-if (k .eq. 1) go to 110
+if (k == 1) go to 110
 !
 !              Apply the transformation.
 !
 b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
 kp = kpvt(k)
-if (kp .eq. k) go to 100
+if (kp == k) go to 100
 !
 !                 Interchange.
 !
@@ -471,7 +471,7 @@ go to 150
 !
 !           2 X 2 pivot block.
 !
-if (k .eq. 1) go to 140
+if (k == 1) go to 140
 !
 !              Apply the transformation.
 !
@@ -479,7 +479,7 @@ b(k) = b(k) + ddot(k - 1,ap(ik + 1),1,b(1),1)
 ikp1 = ik + k
 b(k + 1) = b(k + 1) + ddot(k - 1,ap(ikp1 + 1),1,b(1),1)
 kp = iabs(kpvt(k))
-if (kp .eq. k) go to 130
+if (kp == k) go to 130
 !
 !                 Interchange.
 !
@@ -573,9 +573,9 @@ logical :: noinv, nodet, noert
 !     Internal variables.
 !
 !
-noinv = mod(job,10) .eq. 0
-nodet = mod(job,100)/10 .eq. 0
-noert = mod(job,1000)/100 .eq. 0
+noinv = mod(job,10) == 0
+nodet = mod(job,100)/10 == 0
+noert = mod(job,1000)/100 == 0
 !
 if (nodet .and. noert) go to 140
 if (noert) go to 10
@@ -596,7 +596,7 @@ do 130 k = 1, n
 !
 !           Check if 1 by 1
 !
-   if (kpvt(k) .gt. 0) go to 50
+   if (kpvt(k) > 0) go to 50
 !
 !              2 By 2 block
 !              USE det (d  S)  =  (d/t * C - t) * t  ,  t = dabs(S)
@@ -604,7 +604,7 @@ do 130 k = 1, n
 !              to avoid underflow/overflow troubles.
 !              Take two passes through scaling.  Use  t  for flag.
 !
-   if (t .ne. 0.0d0) go to 30
+   if (t /= 0.0d0) go to 30
    ikp1 = ik + k
    kkp1 = ikp1 + k
    t = dabs(ap(kkp1))
@@ -617,20 +617,20 @@ do 130 k = 1, n
 50 continue
 !
    if (noert) go to 60
-   if (d .gt. 0.0d0) inert(1) = inert(1) + 1
-   if (d .lt. 0.0d0) inert(2) = inert(2) + 1
-   if (d .eq. 0.0d0) inert(3) = inert(3) + 1
+   if (d > 0.0d0) inert(1) = inert(1) + 1
+   if (d < 0.0d0) inert(2) = inert(2) + 1
+   if (d == 0.0d0) inert(3) = inert(3) + 1
 60 continue
 !
    if (nodet) go to 120
    det(1) = d*det(1)
-   if (det(1) .eq. 0.0d0) go to 110
-70 if (dabs(det(1)) .ge. 1.0d0) go to 80
+   if (det(1) == 0.0d0) go to 110
+70 if (dabs(det(1)) >= 1.0d0) go to 80
    det(1) = ten*det(1)
    det(2) = det(2) - 1.0d0
    go to 70
 80 continue
-90 if (dabs(det(1)) .lt. ten) go to 100
+90 if (dabs(det(1)) < ten) go to 100
    det(1) = det(1)/ten
    det(2) = det(2) + 1.0d0
    go to 90
@@ -646,17 +646,17 @@ do 130 k = 1, n
 if (noinv) go to 270
 k = 1
 ik = 0
-150 if (k .gt. n) go to 260
+150 if (k > n) go to 260
 km1 = k - 1
 kk = ik + k
 ikp1 = ik + k
 kkp1 = ikp1 + k
-if (kpvt(k) .lt. 0) go to 180
+if (kpvt(k) < 0) go to 180
 !
 !              1 By 1
 !
 ap(kk) = 1.0d0/ap(kk)
-if (km1 .lt. 1) go to 170
+if (km1 < 1) go to 170
 call dcopy(km1,ap(ik + 1),1,work,1)
 ij = 0
 do j = 1, km1
@@ -681,7 +681,7 @@ d = t*(ak*akp1 - 1.0d0)
 ap(kk) = akp1/d
 ap(kkp1 + 1) = ak/d
 ap(kkp1) = -akkp1/d
-if (km1 .lt. 1) go to 210
+if (km1 < 1) go to 210
 call dcopy(km1,ap(ikp1 + 1),1,work,1)
 ij = 0
 do j = 1, km1
@@ -710,7 +710,7 @@ kstep = 2
 !           Swap
 !
 ks = iabs(kpvt(k))
-if (ks .eq. k) go to 250
+if (ks == k) go to 250
 iks = (ks*(ks - 1))/2
 call dswap(ks,ap(iks + 1),1,ap(ik + 1),1)
 ksj = ik + ks
@@ -722,7 +722,7 @@ do jb = ks, k
    ap(ksj) = temp
    ksj = ksj - (j - 1)
 end do
-if (kstep .eq. 1) go to 240
+if (kstep == 1) go to 240
 kskp1 = ikp1 + ks
 temp = ap(kskp1)
 ap(kskp1) = ap(kkp1)
@@ -730,7 +730,7 @@ ap(kkp1) = temp
 240 continue
 250 continue
 ik = ik + k
-if (kstep .eq. 2) ik = ik + k + 1
+if (kstep == 2) ik = ik + k + 1
 k = k + kstep
 go to 150
 260 continue
@@ -752,11 +752,11 @@ integer :: onej
 !              Matrix factorization
 !
 call sppfa(a,n,ierr)
-if (ierr .ne. 0) return
+if (ierr /= 0) return
 !
 !          Solution of the equation AX=b
 !
-if (m .lt. 1) go to 20
+if (m < 1) go to 20
 onej = 1
 do 10 j = 1,m
    call sppsl(a,n,b(onej))
@@ -764,7 +764,7 @@ do 10 j = 1,m
 !
 !         Computation of the inverse of A
 !
-20 if (mo .eq. 0) call sppdi(a,n,d,1)
+20 if (mo == 0) call sppdi(a,n,d,1)
 return
 end subroutine pchol
 
@@ -850,7 +850,7 @@ do j = 1, n
    jm1 = j - 1
    kj = jj
    kk = 0
-   if (jm1 .lt. 1) go to 20
+   if (jm1 < 1) go to 20
    do k = 1, jm1
       kj = kj + 1
       t = ap(kj) - sdot(k - 1,ap(kk + 1),1,ap(jj + 1),1)
@@ -863,7 +863,7 @@ do j = 1, n
    jj = jj + j
    s = ap(jj) - s
 !     ......Exit
-   if (s .le. 0.0e0) go to 40
+   if (s <= 0.0e0) go to 40
    ap(jj) = sqrt(s)
 end do
 info = 0
@@ -1017,7 +1017,7 @@ integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     Compute determinant
 !
-if (job/10 .eq. 0) go to 70
+if (job/10 == 0) go to 70
 det(1) = 1.0e0
 det(2) = 0.0e0
 s = 10.0e0
@@ -1026,13 +1026,13 @@ do 50 i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if (det(1) .eq. 0.0e0) go to 60
-10 if (det(1) .ge. 1.0e0) go to 20
+   if (det(1) == 0.0e0) go to 60
+10 if (det(1) >= 1.0e0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0e0
    go to 10
 20 continue
-30 if (det(1) .lt. s) go to 40
+30 if (det(1) < s) go to 40
    det(1) = det(1)/s
    det(2) = det(2) + 1.0e0
    go to 30
@@ -1043,7 +1043,7 @@ do 50 i = 1, n
 !
 !     Compute inverse(R)
 !
-if (mod(job,10) .eq. 0) go to 140
+if (mod(job,10) == 0) go to 140
 kk = 0
 do k = 1, n
    k1 = kk + 1
@@ -1054,7 +1054,7 @@ do k = 1, n
    kp1 = k + 1
    j1 = kk + 1
    kj = kk + k
-   if (n .lt. kp1) go to 90
+   if (n < kp1) go to 90
    do j = kp1, n
       t = ap(kj)
       ap(kj) = 0.0e0
@@ -1074,7 +1074,7 @@ do j = 1, n
    jm1 = j - 1
    k1 = 1
    kj = j1
-   if (jm1 .lt. 1) go to 120
+   if (jm1 < 1) go to 120
    do k = 1, jm1
       t = ap(kj)
       call saxpy(k,t,ap(j1),1,ap(k1),1)
@@ -1103,11 +1103,11 @@ integer :: onej
 !              Matrix factorization
 !
 call dppfa(a,n,ierr)
-if (ierr .ne. 0) return
+if (ierr /= 0) return
 !
 !          Solution of the equation AX=b
 !
-if (m .lt. 1) go to 20
+if (m < 1) go to 20
 onej = 1
 do 10 j = 1,m
    call dppsl(a,n,b(onej))
@@ -1115,7 +1115,7 @@ do 10 j = 1,m
 !
 !         Computation of the inverse of A
 !
-20 if (mo .eq. 0) call dppdi(a,n,d,1)
+20 if (mo == 0) call dppdi(a,n,d,1)
 return
 end subroutine dpchol
 
@@ -1201,7 +1201,7 @@ do j = 1, n
    jm1 = j - 1
    kj = jj
    kk = 0
-   if (jm1 .lt. 1) go to 20
+   if (jm1 < 1) go to 20
    do k = 1, jm1
       kj = kj + 1
       t = ap(kj) - ddot(k - 1,ap(kk + 1),1,ap(jj + 1),1)
@@ -1214,7 +1214,7 @@ do j = 1, n
    jj = jj + j
    s = ap(jj) - s
 !     ......Exit
-   if (s .le. 0.0d0) go to 40
+   if (s <= 0.0d0) go to 40
    ap(jj) = dsqrt(s)
 end do
 info = 0
@@ -1368,7 +1368,7 @@ integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     Compute determinant
 !
-if (job/10 .eq. 0) go to 70
+if (job/10 == 0) go to 70
 det(1) = 1.0d0
 det(2) = 0.0d0
 s = 10.0d0
@@ -1377,13 +1377,13 @@ do 50 i = 1, n
    ii = ii + i
    det(1) = ap(ii)**2*det(1)
 !        ...Exit
-   if (det(1) .eq. 0.0d0) go to 60
-10 if (det(1) .ge. 1.0d0) go to 20
+   if (det(1) == 0.0d0) go to 60
+10 if (det(1) >= 1.0d0) go to 20
    det(1) = s*det(1)
    det(2) = det(2) - 1.0d0
    go to 10
 20 continue
-30 if (det(1) .lt. s) go to 40
+30 if (det(1) < s) go to 40
    det(1) = det(1)/s
    det(2) = det(2) + 1.0d0
    go to 30
@@ -1394,7 +1394,7 @@ do 50 i = 1, n
 !
 !     Compute inverse(R)
 !
-if (mod(job,10) .eq. 0) go to 140
+if (mod(job,10) == 0) go to 140
 kk = 0
 do k = 1, n
    k1 = kk + 1
@@ -1405,7 +1405,7 @@ do k = 1, n
    kp1 = k + 1
    j1 = kk + 1
    kj = kk + k
-   if (n .lt. kp1) go to 90
+   if (n < kp1) go to 90
    do j = kp1, n
       t = ap(kj)
       ap(kj) = 0.0d0
@@ -1425,7 +1425,7 @@ do j = 1, n
    jm1 = j - 1
    k1 = 1
    kj = j1
-   if (jm1 .lt. 1) go to 120
+   if (jm1 < 1) go to 120
    do k = 1, jm1
       t = ap(kj)
       call daxpy(k,t,ap(j1),1,ap(k1),1)
@@ -1458,10 +1458,10 @@ real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !     real a(2*n - 1)
 !----------------------
 !
-if (a(n) .eq. 0.0) go to 100
+if (a(n) == 0.0) go to 100
 ierr = 0
 x(1) = b(1)/a(n)
-if (n .eq. 1) return
+if (n == 1) return
 g(1) = a(n - 1)/a(n)
 h(1) = a(n + 1)/a(n)
 mp1 = 1
@@ -1477,7 +1477,7 @@ do 20 j = 1,m
    npl = n + l
    xn = xn + a(npl)*x(j)
 20 xd = xd + a(npl)*g(l)
-if (xd .eq. 0.0) go to 100
+if (xd == 0.0) go to 100
 x(mp1) = xn/xd
 !
 !        Compute x
@@ -1486,7 +1486,7 @@ c = x(mp1)
 do 30 j = 1,m
    l = mp1 - j
 30 x(j) = x(j) - c*g(l)
-if (mp1 .eq. n) return
+if (mp1 == n) return
 !
 !     Compute numerator and denominator of g(m+1) and h(m+1)
 !
@@ -1502,7 +1502,7 @@ do 40 j = 1,m
    gn = gn + a(nml)*g(j)
    gd = gd + a(nml)*h(l)
 40 hn = hn + a(npl)*h(j)
-if (gd .eq. 0.0) go to 100
+if (gd == 0.0) go to 100
 g(mp1) = gn/gd
 h(mp1) = hn/xd
 !
@@ -1548,10 +1548,10 @@ double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !     double precision a(2*n - 1)
 !----------------------
 !
-if (a(n) .eq. 0.d0) go to 100
+if (a(n) == 0.d0) go to 100
 ierr = 0
 x(1) = b(1)/a(n)
-if (n .eq. 1) return
+if (n == 1) return
 g(1) = a(n - 1)/a(n)
 h(1) = a(n + 1)/a(n)
 mp1 = 1
@@ -1567,7 +1567,7 @@ do 20 j = 1,m
    npl = n + l
    xn = xn + a(npl)*x(j)
 20 xd = xd + a(npl)*g(l)
-if (xd .eq. 0.d0) go to 100
+if (xd == 0.d0) go to 100
 x(mp1) = xn/xd
 !
 !        Compute x
@@ -1576,7 +1576,7 @@ c = x(mp1)
 do 30 j = 1,m
    l = mp1 - j
 30 x(j) = x(j) - c*g(l)
-if (mp1 .eq. n) return
+if (mp1 == n) return
 !
 !     Compute numerator and denominator of g(m+1) and h(m+1)
 !
@@ -1592,7 +1592,7 @@ do 40 j = 1,m
    gn = gn + a(nml)*g(j)
    gd = gd + a(nml)*h(l)
 40 hn = hn + a(npl)*h(j)
-if (gd .eq. 0.d0) go to 100
+if (gd == 0.d0) go to 100
 g(mp1) = gn/gd
 h(mp1) = hn/xd
 !
@@ -1641,11 +1641,11 @@ integer :: onej
 ierr = 0
 call cgeco(a, ka, n, ipvt, rcond, wk)
 t = 1.0 + rcond
-if (t .eq. 1.0) go to 30
+if (t == 1.0) go to 30
 !
 !                  Solution of the equation AX=b
 !
-if (m .lt. 1) go to 20
+if (m < 1) go to 20
 onej = 1
 do 10 j = 1,m
    call cgesl(a, ka, n, ipvt, b(onej), 0)
@@ -1655,7 +1655,7 @@ do 10 j = 1,m
 !             Calculation of det and the inverse of A
 !
 20 job = 10
-if (mo .eq. 0) job = 11
+if (mo == 0) job = 11
 call cgedi(a, ka, n, ipvt, det, wk, job)
 return
 !
@@ -1680,18 +1680,18 @@ integer :: onej
 !     and solving complex equations
 !-----------------------------------------------------------------------
 !
-if (n .lt. 1 .or. ka .lt. n) go to 40
-if (m .le. 0) go to 10
-if (kb .lt. n) go to 40
+if (n < 1 .or. ka < n) go to 40
+if (m <= 0) go to 10
+if (kb < n) go to 40
 !
 !                      Matrix factorization
 !
 10 call cgefa(a, ka, n, ipvt, ierr)
-if (ierr .ne. 0) return
+if (ierr /= 0) return
 !
 !                 Solution of the equation AX = b
 !
-if (m .le. 0) go to 30
+if (m <= 0) go to 30
 onej = 1
 do j = 1,m
    call cgesl(a, ka, n, ipvt, b(onej), 0)
@@ -1700,7 +1700,7 @@ end do
 !
 !                 Calculation of the inverse of A
 !
-30 if (mo .eq. 0) call cgedi(a, ka, n, ipvt, d, wk, 1)
+30 if (mo == 0) call cgedi(a, ka, n, ipvt, d, wk, 1)
 return
 !
 !                          Error return
@@ -1724,13 +1724,13 @@ integer :: i, ir
 !     -----------------
 !     complex wk(n*n + n)
 !     -----------------
-if (mo .ne. 0) go to 10
+if (mo /= 0) go to 10
 !
 !             Compute the LU decomposition of A
 !
 call cmcopy(n, n, a, ka, wk, n)
 call cgefa(wk, n, n, iwk, ierr)
-if (ierr .eq. 0) go to 10
+if (ierr == 0) go to 10
 ierr = -ierr
 return
 !
@@ -1806,7 +1806,7 @@ ind = 0
 xnrm = 0.0
 do 10 i = 1,n
 10 xnrm = xnrm + (real(x(i))**2 + aimag(x(i))**2)
-if (xnrm .eq. 0.0) return
+if (xnrm == 0.0) return
 eps2 = eps*eps
 ratio = 1.0
 !
@@ -1830,7 +1830,7 @@ call cgesl(q, kq, n, ipvt, r, 0)
 rnrm = 0.0
 do 30 i = 1,n
 30 rnrm = rnrm + (real(r(i))**2 + aimag(r(i))**2)
-if (rnrm .le. eps2*xnrm) return
+if (rnrm <= eps2*xnrm) return
 !
 !                Form a new approximate solution
 !
@@ -1840,12 +1840,12 @@ xnrm = 0.0
 do 41 i = 1,n
 41 xnrm = xnrm + (real(x(i))**2 + aimag(x(i))**2)
 !
-if (xnrm .eq. 0.0) return
+if (xnrm == 0.0) return
 rat = ratio
 ratio = rnrm/xnrm
-if (ratio .le. 0.25*rat) go to 20
+if (ratio <= 0.25*rat) go to 20
 !
-if (ratio .gt. amin1(rat,4.0*eps2)) ind = 1
+if (ratio > amin1(rat,4.0*eps2)) ind = 1
 return
 end subroutine cluimp
 
@@ -1951,8 +1951,8 @@ do j = 1, n
    z(j) = (0.0e0,0.0e0)
 end do
 do k = 1, n
-   if (cabs1(z(k)) .ne. 0.0e0) ek = csign1(ek,-z(k))
-   if (cabs1(ek - z(k)) .le. cabs1(a(k,k))) go to 30
+   if (cabs1(z(k)) /= 0.0e0) ek = csign1(ek,-z(k))
+   if (cabs1(ek - z(k)) <= cabs1(a(k,k))) go to 30
    s = cabs1(a(k,k))/cabs1(ek - z(k))
    call csscal(n,s,z,1)
    ek = cmplx(s,0.0e0)*ek
@@ -1961,7 +1961,7 @@ do k = 1, n
    wkm = -ek - z(k)
    s = cabs1(wk)
    sm = cabs1(wkm)
-   if (cabs1(a(k,k)) .eq. 0.0e0) go to 40
+   if (cabs1(a(k,k)) == 0.0e0) go to 40
    wk = wk/conjg(a(k,k))
    wkm = wkm/conjg(a(k,k))
    go to 50
@@ -1970,13 +1970,13 @@ do k = 1, n
    wkm = (1.0e0,0.0e0)
 50 continue
    kp1 = k + 1
-   if (kp1 .gt. n) go to 90
+   if (kp1 > n) go to 90
    do j = kp1, n
       sm = sm + cabs1(z(j) + wkm*conjg(a(k,j)))
       z(j) = z(j) + wk*conjg(a(k,j))
       s = s + cabs1(z(j))
    end do
-   if (s .ge. sm) go to 80
+   if (s >= sm) go to 80
    t = wkm - wk
    wk = wkm
    do j = kp1, n
@@ -1993,8 +1993,8 @@ call csscal(n,s,z,1)
 !
 do kb = 1, n
    k = n + 1 - kb
-   if (k .lt. n) z(k) = z(k) + cdotc(n - k,a(k + 1,k),1,z(k + 1),1)
-   if (cabs1(z(k)) .le. 1.0e0) go to 110
+   if (k < n) z(k) = z(k) + cdotc(n - k,a(k + 1,k),1,z(k + 1),1)
+   if (cabs1(z(k)) <= 1.0e0) go to 110
    s = 1.0e0/cabs1(z(k))
    call csscal(n,s,z,1)
 110 continue
@@ -2015,8 +2015,8 @@ do k = 1, n
    t = z(l)
    z(l) = z(k)
    z(k) = t
-   if (k .lt. n) call caxpy(n - k,t,a(k + 1,k),1,z(k + 1),1)
-   if (cabs1(z(k)) .le. 1.0e0) go to 130
+   if (k < n) call caxpy(n - k,t,a(k + 1,k),1,z(k + 1),1)
+   if (cabs1(z(k)) <= 1.0e0) go to 130
    s = 1.0e0/cabs1(z(k))
    call csscal(n,s,z,1)
    ynorm = s*ynorm
@@ -2030,13 +2030,13 @@ ynorm = s*ynorm
 !
 do kb = 1, n
    k = n + 1 - kb
-   if (cabs1(z(k)) .le. cabs1(a(k,k))) go to 150
+   if (cabs1(z(k)) <= cabs1(a(k,k))) go to 150
    s = cabs1(a(k,k))/cabs1(z(k))
    call csscal(n,s,z,1)
    ynorm = s*ynorm
 150 continue
-   if (cabs1(a(k,k)) .ne. 0.0e0) z(k) = z(k)/a(k,k)
-   if (cabs1(a(k,k)) .eq. 0.0e0) z(k) = (1.0e0,0.0e0)
+   if (cabs1(a(k,k)) /= 0.0e0) z(k) = z(k)/a(k,k)
+   if (cabs1(a(k,k)) == 0.0e0) z(k) = (1.0e0,0.0e0)
    t = -z(k)
    call caxpy(k - 1,t,a(1,k),1,z(1),1)
 end do
@@ -2045,8 +2045,8 @@ s = 1.0e0/scasum(n,z,1)
 call csscal(n,s,z,1)
 ynorm = s*ynorm
 !
-if (anorm .ne. 0.0e0) rcond = ynorm/anorm
-if (anorm .eq. 0.0e0) rcond = 0.0e0
+if (anorm /= 0.0e0) rcond = ynorm/anorm
+if (anorm == 0.0e0) rcond = 0.0e0
 return
 end subroutine cgeco
 
@@ -2114,7 +2114,7 @@ cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 info = 0
 nm1 = n - 1
-if (nm1 .lt. 1) go to 70
+if (nm1 < 1) go to 70
 do k = 1, nm1
    kp1 = k + 1
 !
@@ -2125,11 +2125,11 @@ do k = 1, nm1
 !
 !        Zero pivot implies this column already triangularized
 !
-   if (cabs1(a(l,k)) .eq. 0.0e0) go to 40
+   if (cabs1(a(l,k)) == 0.0e0) go to 40
 !
 !           Interchange if necessary
 !
-   if (l .eq. k) go to 10
+   if (l == k) go to 10
    t = a(l,k)
    a(l,k) = a(k,k)
    a(k,k) = t
@@ -2144,7 +2144,7 @@ do k = 1, nm1
 !
    do j = kp1, n
       t = a(l,j)
-      if (l .eq. k) go to 20
+      if (l == k) go to 20
       a(l,j) = a(k,j)
       a(k,j) = t
 20    continue
@@ -2157,7 +2157,7 @@ do k = 1, nm1
 end do
 70 continue
 ipvt(n) = n
-if (cabs1(a(n,n)) .eq. 0.0e0) info = n
+if (cabs1(a(n,n)) == 0.0e0) info = n
 return
 end subroutine cgefa
 
@@ -2248,16 +2248,16 @@ end interface
 !
 !
 nm1 = n - 1
-if (job .ne. 0) go to 50
+if (job /= 0) go to 50
 !
 !        job = 0 , SOLVE  a * X = b
 !        first solve  l*Y = b
 !
-if (nm1 .lt. 1) go to 30
+if (nm1 < 1) go to 30
 do k = 1, nm1
    l = ipvt(k)
    t = b(l)
-   if (l .eq. k) go to 10
+   if (l == k) go to 10
    b(l) = b(k)
    b(k) = t
 10 continue
@@ -2286,12 +2286,12 @@ end do
 !
 !        Now solve ctrans(l)*X = Y
 !
-if (nm1 .lt. 1) go to 90
+if (nm1 < 1) go to 90
 do kb = 1, nm1
    k = n - kb
    b(k) = b(k) + cdotc(n - k,a(k + 1,k),1,b(k + 1),1)
    l = ipvt(k)
-   if (l .eq. k) go to 70
+   if (l == k) go to 70
    t = b(l)
    b(l) = b(k)
    b(k) = t
@@ -2372,21 +2372,21 @@ cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Compute determinant
 !
-if (job/10 .eq. 0) go to 70
+if (job/10 == 0) go to 70
 det(1) = (1.0e0,0.0e0)
 det(2) = (0.0e0,0.0e0)
 ten = 10.0e0
 do 50 i = 1, n
-   if (ipvt(i) .ne. i) det(1) = -det(1)
+   if (ipvt(i) /= i) det(1) = -det(1)
    det(1) = a(i,i)*det(1)
 !        ...Exit
-   if (cabs1(det(1)) .eq. 0.0e0) go to 60
-10 if (cabs1(det(1)) .ge. 1.0e0) go to 20
+   if (cabs1(det(1)) == 0.0e0) go to 60
+10 if (cabs1(det(1)) >= 1.0e0) go to 20
    det(1) = cmplx(ten,0.0e0)*det(1)
    det(2) = det(2) - (1.0e0,0.0e0)
    go to 10
 20 continue
-30 if (cabs1(det(1)) .lt. ten) go to 40
+30 if (cabs1(det(1)) < ten) go to 40
    det(1) = det(1)/cmplx(ten,0.0e0)
    det(2) = det(2) + (1.0e0,0.0e0)
    go to 30
@@ -2397,13 +2397,13 @@ do 50 i = 1, n
 !
 !     Compute inverse(U)
 !
-if (mod(job,10) .eq. 0) go to 150
+if (mod(job,10) == 0) go to 150
 do k = 1, n
    a(k,k) = (1.0e0,0.0e0)/a(k,k)
    t = -a(k,k)
    call cscal(k - 1,t,a(1,k),1)
    kp1 = k + 1
-   if (n .lt. kp1) go to 90
+   if (n < kp1) go to 90
    do j = kp1, n
       t = a(k,j)
       a(k,j) = (0.0e0,0.0e0)
@@ -2415,7 +2415,7 @@ end do
 !        Form inverse(U)*inverse(l)
 !
 nm1 = n - 1
-if (nm1 .lt. 1) go to 140
+if (nm1 < 1) go to 140
 do kb = 1, nm1
    k = n - kb
    kp1 = k + 1
@@ -2428,7 +2428,7 @@ do kb = 1, nm1
       call caxpy(n,t,a(1,j),1,a(1,k),1)
    end do
    l = ipvt(k)
-   if (l .ne. k) call cswap(n,a(1,k),1,a(1,l),1)
+   if (l /= k) call cswap(n,a(1,k),1,a(1,l),1)
 end do
 140 continue
 150 continue
@@ -2448,23 +2448,23 @@ integer, intent(inout) :: ipvt(n)
 !     complex matrices and solving double precision complex equations
 !-----------------------------------------------------------------------
 !
-if (n .lt. 1 .or. ka .lt. n) go to 30
-if (m .le. 0) go to 10
-if (kb .lt. n) go to 30
+if (n < 1 .or. ka < n) go to 30
+if (m <= 0) go to 10
+if (kb < n) go to 30
 !
 !                      Matrix factorization
 !
 10 call dcfact(ar, ai, ka, n, ipvt, ierr)
-if (ierr .ne. 0) return
+if (ierr /= 0) return
 !
 !                 Solution of the equation AX = B
 !
-if (m .le. 0) go to 20
+if (m <= 0) go to 20
 call dcsol(n, m, ar, ai, ka, br, bi, kb, ipvt)
 !
 !                 Calculation of the inverse of A
 !
-20 if (mo .eq. 0) call dcminv(ar, ai, ka, n, ipvt, wk)
+20 if (mo == 0) call dcminv(ar, ai, ka, n, ipvt, wk)
 return
 !
 !                          Error return
@@ -2525,7 +2525,7 @@ end interface
 !
 ierr = 0
 ipvt(n) = 1
-if (n .eq. 1) go to 50
+if (n == 1) go to 50
 nm1 = n - 1
 !
 do k = 1,nm1
@@ -2537,16 +2537,16 @@ do k = 1,nm1
    l = k
    do 10 i = kp1,n
       t = dabs(ar(i,k)) + dabs(ai(i,k))
-      if (p .ge. t) go to 10
+      if (p >= t) go to 10
       p = t
       l = i
 10    continue
-   if (p .eq. 0.d0) go to 100
+   if (p == 0.d0) go to 100
 !
    pr = ar(l,k)
    pi = ai(l,k)
    ipvt(k) = l
-   if (l .eq. k) go to 20
+   if (l == k) go to 20
    ipvt(n) = -ipvt(n)
    ar(l,k) = ar(k,k)
    ar(k,k) = pr
@@ -2572,7 +2572,7 @@ do k = 1,nm1
       ti = ai(l,j)
       ai(l,j) = ai(k,j)
       ai(k,j) = ti
-      if (dabs(tr) + dabs(ti) .eq. 0.d0) go to 31
+      if (dabs(tr) + dabs(ti) == 0.d0) go to 31
       do i = kp1,n
          ar(i,j) = ar(i,j) - ar(i,k)*tr + ai(i,k)*ti
          ai(i,j) = ai(i,j) - ar(i,k)*ti - ai(i,k)*tr
@@ -2582,7 +2582,7 @@ end do
 !
 !                  Check the n-TH pivot element
 !
-50 if (dabs(ar(n,n)) + dabs(ai(n,n)) .eq. 0.d0) ierr = n
+50 if (dabs(ar(n,n)) + dabs(ai(n,n)) == 0.d0) ierr = n
 return
 !
 !                    k-TH pivot element is 0
@@ -2643,7 +2643,7 @@ end interface
 !
 !                    Forward elimination
 !
-if (n .eq. 1) go to 50
+if (n == 1) go to 50
 nm1 = n - 1
 do k = 1, nm1
    kp1 = k + 1
@@ -2655,7 +2655,7 @@ do k = 1, nm1
       ti = bi(l,j)
       bi(l,j) = bi(k,j)
       bi(k,j) = ti
-      if (dabs(tr) + dabs(ti) .eq. 0.d0) go to 11
+      if (dabs(tr) + dabs(ti) == 0.d0) go to 11
       do i = kp1, n
          br(i,j) = br(i,j) - ar(i,k)*tr + ai(i,k)*ti
          bi(i,j) = bi(i,j) - ar(i,k)*ti - ai(i,k)*tr
@@ -2739,7 +2739,7 @@ end interface
 !-----------------------------------------------------------------------
 !
 call cdivid(1.d0, 0.d0, ar(n,n), ai(n,n), ar(n,n), ai(n,n))
-if (n .eq. 1) return
+if (n == 1) return
 np1 = n + 1
 nm1 = n - 1
 !
@@ -2786,7 +2786,7 @@ do 60 nmk = 1,nm1
    end do
 !
    l = ipvt(k)
-   if (k .eq. l) go to 60
+   if (k == l) go to 60
    do 50 i = 1,n
       tr = ar(i,k)
       ar(i,k) = ar(i,l)
@@ -2979,9 +2979,9 @@ wantu = .false.
 wantv = .false.
 jobu = mod(job,100)/10
 ncu = n
-if (jobu .gt. 1) ncu = min0(n,p)
-if (jobu .ne. 0) wantu = .true.
-if (mod(job,10) .ne. 0) wantv = .true.
+if (jobu > 1) ncu = min0(n,p)
+if (jobu /= 0) wantu = .true.
+if (mod(job,10) /= 0) wantv = .true.
 !
 !     Reduce x to bidiagonal form, storing the diagonal elements
 !     in s and the super-diagonal elements in e.
@@ -2990,26 +2990,26 @@ info = 0
 nct = min0(n - 1,p)
 nrt = max0(0,min0(p - 2,n))
 lu = max0(nct,nrt)
-if (lu .lt. 1) go to 170
+if (lu < 1) go to 170
 do 160 l = 1, lu
    lp1 = l + 1
-   if (l .gt. nct) go to 20
+   if (l > nct) go to 20
 !
 !           Compute the transformation for the l-TH column and
 !           place the l-TH diagonal in s(l).
 !
    s(l) = snrm2(n - l + 1,x(l,l),1)
-   if (s(l) .eq. 0.0e0) go to 10
-   if (x(l,l) .ne. 0.0e0) s(l) = sign(s(l),x(l,l))
+   if (s(l) == 0.0e0) go to 10
+   if (x(l,l) /= 0.0e0) s(l) = sign(s(l),x(l,l))
    call sscal(n - l + 1,1.0e0/s(l),x(l,l),1)
    x(l,l) = 1.0e0 + x(l,l)
 10 continue
    s(l) = -s(l)
 20 continue
-   if (p .lt. lp1) go to 50
+   if (p < lp1) go to 50
    do 40 j = lp1, p
-      if (l .gt. nct) go to 30
-      if (s(l) .eq. 0.0e0) go to 30
+      if (l > nct) go to 30
+      if (s(l) == 0.0e0) go to 30
 !
 !              Apply the transformation.
 !
@@ -3023,7 +3023,7 @@ do 160 l = 1, lu
       e(j) = x(l,j)
 40    continue
 50 continue
-   if (.not.wantu .or. l .gt. nct) go to 70
+   if (.not.wantu .or. l > nct) go to 70
 !
 !           Place the transformation in u for subsequent back
 !           multiplication.
@@ -3032,19 +3032,19 @@ do 160 l = 1, lu
       u(i,l) = x(i,l)
    end do
 70 continue
-   if (l .gt. nrt) go to 150
+   if (l > nrt) go to 150
 !
 !           Compute the l-TH row transformation and place the
 !           l-TH super-diagonal in e(l).
 !
    e(l) = snrm2(p - l,e(lp1),1)
-   if (e(l) .eq. 0.0e0) go to 80
-   if (e(lp1) .ne. 0.0e0) e(l) = sign(e(l),e(lp1))
+   if (e(l) == 0.0e0) go to 80
+   if (e(lp1) /= 0.0e0) e(l) = sign(e(l),e(lp1))
    call sscal(p - l,1.0e0/e(l),e(lp1),1)
    e(lp1) = 1.0e0 + e(lp1)
 80 continue
    e(l) = -e(l)
-   if (lp1 .gt. n .or. e(l) .eq. 0.0e0) go to 120
+   if (lp1 > n .or. e(l) == 0.0e0) go to 120
 !
 !              Apply the transformation.
 !
@@ -3076,15 +3076,15 @@ do 160 l = 1, lu
 m = min0(p,n + 1)
 nctp1 = nct + 1
 nrtp1 = nrt + 1
-if (nct .lt. p) s(nctp1) = x(nctp1,nctp1)
-if (n .lt. m) s(m) = 0.0e0
-if (nrtp1 .lt. m) e(nrtp1) = x(nrtp1,m)
+if (nct < p) s(nctp1) = x(nctp1,nctp1)
+if (n < m) s(m) = 0.0e0
+if (nrtp1 < m) e(nrtp1) = x(nrtp1,m)
 e(m) = 0.0e0
 !
 !     If required, generate u.
 !
 if (.not.wantu) go to 300
-if (ncu .lt. nctp1) go to 200
+if (ncu < nctp1) go to 200
 do j = nctp1, ncu
    do i = 1, n
       u(i,j) = 0.0e0
@@ -3092,12 +3092,12 @@ do j = nctp1, ncu
    u(j,j) = 1.0e0
 end do
 200 continue
-if (nct .lt. 1) go to 290
+if (nct < 1) go to 290
 do ll = 1, nct
    l = nct - ll + 1
-   if (s(l) .eq. 0.0e0) go to 250
+   if (s(l) == 0.0e0) go to 250
    lp1 = l + 1
-   if (ncu .lt. lp1) go to 220
+   if (ncu < lp1) go to 220
    do j = lp1, ncu
       t = -sdot(n - l + 1,u(l,l),1,u(l,j),1)/u(l,l)
       call saxpy(n - l + 1,t,u(l,l),1,u(l,j),1)
@@ -3106,7 +3106,7 @@ do ll = 1, nct
    call sscal(n - l + 1,-1.0e0,u(l,l),1)
    u(l,l) = 1.0e0 + u(l,l)
    lm1 = l - 1
-   if (lm1 .lt. 1) go to 240
+   if (lm1 < 1) go to 240
    do i = 1, lm1
       u(i,l) = 0.0e0
    end do
@@ -3128,8 +3128,8 @@ if (.not.wantv) go to 350
 do ll = 1, p
    l = p - ll + 1
    lp1 = l + 1
-   if (l .gt. nrt) go to 320
-   if (e(l) .eq. 0.0e0) go to 320
+   if (l > nrt) go to 320
+   if (e(l) == 0.0e0) go to 320
    do j = lp1, p
       t = -sdot(p - l,v(lp1,l),1,v(lp1,j),1)/v(lp1,l)
       call saxpy(p - l,t,v(lp1,l),1,v(lp1,j),1)
@@ -3151,12 +3151,12 @@ iter = 0
 !        Quit if all the singular values have been found.
 !
 !     ...Exit
-if (m .eq. 0) go to 620
+if (m == 0) go to 620
 !
 !        If too many iterations have been performed, set
 !        flag and return.
 !
-if (iter .lt. maxit) go to 370
+if (iter < maxit) go to 370
 info = m
 !     ......Exit
 go to 620
@@ -3175,17 +3175,17 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l .eq. 0) go to 400
+   if (l == 0) go to 400
    test = abs(s(l)) + abs(s(l + 1))
    ztest = test + abs(e(l))
-   if (ztest .ne. test) go to 380
+   if (ztest /= test) go to 380
    e(l) = 0.0e0
 !        ......Exit
    go to 400
 380 continue
 end do
 400 continue
-if (l .ne. m - 1) go to 410
+if (l /= m - 1) go to 410
 kase = 4
 go to 480
 410 continue
@@ -3194,23 +3194,23 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls .eq. l) go to 440
+   if (ls == l) go to 440
    test = 0.0e0
-   if (ls .ne. m) test = test + abs(e(ls))
-   if (ls .ne. l + 1) test = test + abs(e(ls - 1))
+   if (ls /= m) test = test + abs(e(ls))
+   if (ls /= l + 1) test = test + abs(e(ls - 1))
    ztest = test + abs(s(ls))
-   if (ztest .ne. test) go to 420
+   if (ztest /= test) go to 420
    s(ls) = 0.0e0
 !           ......Exit
    go to 440
 420 continue
 end do
 440 continue
-if (ls .ne. l) go to 450
+if (ls /= l) go to 450
 kase = 3
 go to 470
 450 continue
-if (ls .ne. m) go to 460
+if (ls /= m) go to 460
 kase = 1
 go to 470
 460 continue
@@ -3235,7 +3235,7 @@ do kk = l, mm1
    t1 = s(k)
    call srotg(t1,f,cs,sn)
    s(k) = t1
-   if (k .eq. l) go to 500
+   if (k == l) go to 500
    f = -sn*e(k - 1)
    e(k - 1) = cs*e(k - 1)
 500 continue
@@ -3274,9 +3274,9 @@ el = e(l)/scale
 b = ((smm1 + sm)*(smm1 - sm) + emm1**2)/2.0e0
 c = (sm*emm1)**2
 shift = 0.0e0
-if (b .eq. 0.0e0 .and. c .eq. 0.0e0) go to 550
+if (b == 0.0e0 .and. c == 0.0e0) go to 550
 shift = sqrt(b**2 + c)
-if (b .lt. 0.0e0) shift = -shift
+if (b < 0.0e0) shift = -shift
 shift = c/(b + shift)
 550 continue
 f = (sl + sm)*(sl - sm) - shift
@@ -3287,7 +3287,7 @@ g = sl*el
 mm1 = m - 1
 do k = l, mm1
    call srotg(f,g,cs,sn)
-   if (k .ne. l) e(k - 1) = f
+   if (k /= l) e(k - 1) = f
    f = cs*s(k) + sn*e(k)
    e(k) = cs*e(k) - sn*s(k)
    g = sn*s(k + 1)
@@ -3299,7 +3299,7 @@ do k = l, mm1
    s(k + 1) = -sn*e(k) + cs*s(k + 1)
    g = sn*e(k + 1)
    e(k + 1) = cs*e(k + 1)
-   if (wantu .and. k .lt. n) &
+   if (wantu .and. k < n) &
       & call srot(n,u(1,k),1,u(1,k + 1),1,cs,sn)
 end do
 e(m - 1) = f
@@ -3312,22 +3312,22 @@ go to 610
 !
 !           Make the singular value  positive.
 !
-if (s(l) .ge. 0.0e0) go to 580
+if (s(l) >= 0.0e0) go to 580
 s(l) = -s(l)
 if (wantv) call sscal(p,-1.0e0,v(1,l),1)
 580 continue
 !
 !           Order the singular value.
 !
-590 if (l .eq. mm) go to 600
+590 if (l == mm) go to 600
 !           ...Exit
-if (s(l) .ge. s(l + 1)) go to 600
+if (s(l) >= s(l + 1)) go to 600
 t = s(l)
 s(l) = s(l + 1)
 s(l + 1) = t
-if (wantv .and. l .lt. p) &
+if (wantv .and. l < p) &
    & call sswap(p,v(1,l),1,v(1,l + 1),1)
-if (wantu .and. l .lt. n) &
+if (wantu .and. l < n) &
    & call sswap(n,u(1,l),1,u(1,l + 1),1)
 l = l + 1
 go to 590
@@ -3521,9 +3521,9 @@ wantu = .false.
 wantv = .false.
 jobu = mod(job,100)/10
 ncu = n
-if (jobu .gt. 1) ncu = min0(n,p)
-if (jobu .ne. 0) wantu = .true.
-if (mod(job,10) .ne. 0) wantv = .true.
+if (jobu > 1) ncu = min0(n,p)
+if (jobu /= 0) wantu = .true.
+if (mod(job,10) /= 0) wantv = .true.
 !
 !     Reduce x to bidiagonal form, storing the diagonal elements
 !     in s and the super-diagonal elements in e.
@@ -3532,26 +3532,26 @@ info = 0
 nct = min0(n - 1,p)
 nrt = max0(0,min0(p - 2,n))
 lu = max0(nct,nrt)
-if (lu .lt. 1) go to 170
+if (lu < 1) go to 170
 do 160 l = 1, lu
    lp1 = l + 1
-   if (l .gt. nct) go to 20
+   if (l > nct) go to 20
 !
 !           Compute the transformation for the l-TH column and
 !           place the l-TH diagonal in s(l).
 !
    s(l) = dnrm2(n - l + 1,x(l,l),1)
-   if (s(l) .eq. 0.0d0) go to 10
-   if (x(l,l) .ne. 0.0d0) s(l) = dsign(s(l),x(l,l))
+   if (s(l) == 0.0d0) go to 10
+   if (x(l,l) /= 0.0d0) s(l) = dsign(s(l),x(l,l))
    call dscal(n - l + 1,1.0d0/s(l),x(l,l),1)
    x(l,l) = 1.0d0 + x(l,l)
 10 continue
    s(l) = -s(l)
 20 continue
-   if (p .lt. lp1) go to 50
+   if (p < lp1) go to 50
    do 40 j = lp1, p
-      if (l .gt. nct) go to 30
-      if (s(l) .eq. 0.0d0) go to 30
+      if (l > nct) go to 30
+      if (s(l) == 0.0d0) go to 30
 !
 !              Apply the transformation.
 !
@@ -3565,7 +3565,7 @@ do 160 l = 1, lu
       e(j) = x(l,j)
 40    continue
 50 continue
-   if (.not.wantu .or. l .gt. nct) go to 70
+   if (.not.wantu .or. l > nct) go to 70
 !
 !           Place the transformation in u for subsequent back
 !           multiplication.
@@ -3574,19 +3574,19 @@ do 160 l = 1, lu
       u(i,l) = x(i,l)
    end do
 70 continue
-   if (l .gt. nrt) go to 150
+   if (l > nrt) go to 150
 !
 !           Compute the l-TH row transformation and place the
 !           l-TH super-diagonal in e(l).
 !
    e(l) = dnrm2(p - l,e(lp1),1)
-   if (e(l) .eq. 0.0d0) go to 80
-   if (e(lp1) .ne. 0.0d0) e(l) = dsign(e(l),e(lp1))
+   if (e(l) == 0.0d0) go to 80
+   if (e(lp1) /= 0.0d0) e(l) = dsign(e(l),e(lp1))
    call dscal(p - l,1.0d0/e(l),e(lp1),1)
    e(lp1) = 1.0d0 + e(lp1)
 80 continue
    e(l) = -e(l)
-   if (lp1 .gt. n .or. e(l) .eq. 0.0d0) go to 120
+   if (lp1 > n .or. e(l) == 0.0d0) go to 120
 !
 !              Apply the transformation.
 !
@@ -3618,15 +3618,15 @@ do 160 l = 1, lu
 m = min0(p,n + 1)
 nctp1 = nct + 1
 nrtp1 = nrt + 1
-if (nct .lt. p) s(nctp1) = x(nctp1,nctp1)
-if (n .lt. m) s(m) = 0.0d0
-if (nrtp1 .lt. m) e(nrtp1) = x(nrtp1,m)
+if (nct < p) s(nctp1) = x(nctp1,nctp1)
+if (n < m) s(m) = 0.0d0
+if (nrtp1 < m) e(nrtp1) = x(nrtp1,m)
 e(m) = 0.0d0
 !
 !     If required, generate u.
 !
 if (.not.wantu) go to 300
-if (ncu .lt. nctp1) go to 200
+if (ncu < nctp1) go to 200
 do j = nctp1, ncu
    do i = 1, n
       u(i,j) = 0.0d0
@@ -3634,12 +3634,12 @@ do j = nctp1, ncu
    u(j,j) = 1.0d0
 end do
 200 continue
-if (nct .lt. 1) go to 290
+if (nct < 1) go to 290
 do ll = 1, nct
    l = nct - ll + 1
-   if (s(l) .eq. 0.0d0) go to 250
+   if (s(l) == 0.0d0) go to 250
    lp1 = l + 1
-   if (ncu .lt. lp1) go to 220
+   if (ncu < lp1) go to 220
    do j = lp1, ncu
       t = -ddot(n - l + 1,u(l,l),1,u(l,j),1)/u(l,l)
       call daxpy(n - l + 1,t,u(l,l),1,u(l,j),1)
@@ -3648,7 +3648,7 @@ do ll = 1, nct
    call dscal(n - l + 1,-1.0d0,u(l,l),1)
    u(l,l) = 1.0d0 + u(l,l)
    lm1 = l - 1
-   if (lm1 .lt. 1) go to 240
+   if (lm1 < 1) go to 240
    do i = 1, lm1
       u(i,l) = 0.0d0
    end do
@@ -3670,8 +3670,8 @@ if (.not.wantv) go to 350
 do ll = 1, p
    l = p - ll + 1
    lp1 = l + 1
-   if (l .gt. nrt) go to 320
-   if (e(l) .eq. 0.0d0) go to 320
+   if (l > nrt) go to 320
+   if (e(l) == 0.0d0) go to 320
    do j = lp1, p
       t = -ddot(p - l,v(lp1,l),1,v(lp1,j),1)/v(lp1,l)
       call daxpy(p - l,t,v(lp1,l),1,v(lp1,j),1)
@@ -3693,12 +3693,12 @@ iter = 0
 !        Quit if all the singular values have been found.
 !
 !     ...Exit
-if (m .eq. 0) go to 620
+if (m == 0) go to 620
 !
 !        If too many iterations have been performed, set
 !        flag and return.
 !
-if (iter .lt. maxit) go to 370
+if (iter < maxit) go to 370
 info = m
 !     ......Exit
 go to 620
@@ -3717,17 +3717,17 @@ go to 620
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l .eq. 0) go to 400
+   if (l == 0) go to 400
    test = dabs(s(l)) + dabs(s(l + 1))
    ztest = test + dabs(e(l))
-   if (ztest .ne. test) go to 380
+   if (ztest /= test) go to 380
    e(l) = 0.0d0
 !        ......Exit
    go to 400
 380 continue
 end do
 400 continue
-if (l .ne. m - 1) go to 410
+if (l /= m - 1) go to 410
 kase = 4
 go to 480
 410 continue
@@ -3736,23 +3736,23 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls .eq. l) go to 440
+   if (ls == l) go to 440
    test = 0.0d0
-   if (ls .ne. m) test = test + dabs(e(ls))
-   if (ls .ne. l + 1) test = test + dabs(e(ls - 1))
+   if (ls /= m) test = test + dabs(e(ls))
+   if (ls /= l + 1) test = test + dabs(e(ls - 1))
    ztest = test + dabs(s(ls))
-   if (ztest .ne. test) go to 420
+   if (ztest /= test) go to 420
    s(ls) = 0.0d0
 !           ......Exit
    go to 440
 420 continue
 end do
 440 continue
-if (ls .ne. l) go to 450
+if (ls /= l) go to 450
 kase = 3
 go to 470
 450 continue
-if (ls .ne. m) go to 460
+if (ls /= m) go to 460
 kase = 1
 go to 470
 460 continue
@@ -3777,7 +3777,7 @@ do kk = l, mm1
    t1 = s(k)
    call drotg(t1,f,cs,sn)
    s(k) = t1
-   if (k .eq. l) go to 500
+   if (k == l) go to 500
    f = -sn*e(k - 1)
    e(k - 1) = cs*e(k - 1)
 500 continue
@@ -3816,9 +3816,9 @@ el = e(l)/scale
 b = ((smm1 + sm)*(smm1 - sm) + emm1**2)/2.0d0
 c = (sm*emm1)**2
 shift = 0.0d0
-if (b .eq. 0.0d0 .and. c .eq. 0.0d0) go to 550
+if (b == 0.0d0 .and. c == 0.0d0) go to 550
 shift = dsqrt(b**2 + c)
-if (b .lt. 0.0d0) shift = -shift
+if (b < 0.0d0) shift = -shift
 shift = c/(b + shift)
 550 continue
 f = (sl + sm)*(sl - sm) - shift
@@ -3829,7 +3829,7 @@ g = sl*el
 mm1 = m - 1
 do k = l, mm1
    call drotg(f,g,cs,sn)
-   if (k .ne. l) e(k - 1) = f
+   if (k /= l) e(k - 1) = f
    f = cs*s(k) + sn*e(k)
    e(k) = cs*e(k) - sn*s(k)
    g = sn*s(k + 1)
@@ -3841,7 +3841,7 @@ do k = l, mm1
    s(k + 1) = -sn*e(k) + cs*s(k + 1)
    g = sn*e(k + 1)
    e(k + 1) = cs*e(k + 1)
-   if (wantu .and. k .lt. n) &
+   if (wantu .and. k < n) &
       & call drot(n,u(1,k),1,u(1,k + 1),1,cs,sn)
 end do
 e(m - 1) = f
@@ -3854,22 +3854,22 @@ go to 610
 !
 !           Make the singular value  positive.
 !
-if (s(l) .ge. 0.0d0) go to 580
+if (s(l) >= 0.0d0) go to 580
 s(l) = -s(l)
 if (wantv) call dscal(p,-1.0d0,v(1,l),1)
 580 continue
 !
 !           Order the singular value.
 !
-590 if (l .eq. mm) go to 600
+590 if (l == mm) go to 600
 !           ...Exit
-if (s(l) .ge. s(l + 1)) go to 600
+if (s(l) >= s(l + 1)) go to 600
 t = s(l)
 s(l) = s(l + 1)
 s(l + 1) = t
-if (wantv .and. l .lt. p) &
+if (wantv .and. l < p) &
    & call dswap(p,v(1,l),1,v(1,l + 1),1)
-if (wantu .and. l .lt. n) &
+if (wantu .and. l < n) &
    & call dswap(n,u(1,l),1,u(1,l + 1),1)
 l = l + 1
 go to 590
@@ -4068,9 +4068,9 @@ wantu = .false.
 wantv = .false.
 jobu = mod(job,100)/10
 ncu = n
-if (jobu .gt. 1) ncu = min0(n,p)
-if (jobu .ne. 0) wantu = .true.
-if (mod(job,10) .ne. 0) wantv = .true.
+if (jobu > 1) ncu = min0(n,p)
+if (jobu /= 0) wantu = .true.
+if (mod(job,10) /= 0) wantv = .true.
 !
 !     Reduce x to bidiagonal form, storing the diagonal elements
 !     in s and the super-diagonal elements in e.
@@ -4079,26 +4079,26 @@ info = 0
 nct = min0(n - 1,p)
 nrt = max0(0,min0(p - 2,n))
 lu = max0(nct,nrt)
-if (lu .lt. 1) go to 170
+if (lu < 1) go to 170
 do 160 l = 1, lu
    lp1 = l + 1
-   if (l .gt. nct) go to 20
+   if (l > nct) go to 20
 !
 !           Compute the transformation for the l-TH column and
 !           place the l-TH diagonal in s(l).
 !
    s(l) = cmplx(scnrm2(n - l + 1,x(l,l),1),0.0e0)
-   if (cabs1(s(l)) .eq. 0.0e0) go to 10
-   if (cabs1(x(l,l)) .ne. 0.0e0) s(l) = csign(s(l),x(l,l))
+   if (cabs1(s(l)) == 0.0e0) go to 10
+   if (cabs1(x(l,l)) /= 0.0e0) s(l) = csign(s(l),x(l,l))
    call cscal(n - l + 1,1.0e0/s(l),x(l,l),1)
    x(l,l) = (1.0e0,0.0e0) + x(l,l)
 10 continue
    s(l) = -s(l)
 20 continue
-   if (p .lt. lp1) go to 50
+   if (p < lp1) go to 50
    do 40 j = lp1, p
-      if (l .gt. nct) go to 30
-      if (cabs1(s(l)) .eq. 0.0e0) go to 30
+      if (l > nct) go to 30
+      if (cabs1(s(l)) == 0.0e0) go to 30
 !
 !              Apply the transformation.
 !
@@ -4112,7 +4112,7 @@ do 160 l = 1, lu
       e(j) = conjg(x(l,j))
 40    continue
 50 continue
-   if (.not.wantu .or. l .gt. nct) go to 70
+   if (.not.wantu .or. l > nct) go to 70
 !
 !           Place the transformation in u for subsequent back
 !           multiplication.
@@ -4121,19 +4121,19 @@ do 160 l = 1, lu
       u(i,l) = x(i,l)
    end do
 70 continue
-   if (l .gt. nrt) go to 150
+   if (l > nrt) go to 150
 !
 !           Compute the l-TH row transformation and place the
 !           l-TH super-diagonal in e(l).
 !
    e(l) = cmplx(scnrm2(p - l,e(lp1),1),0.0e0)
-   if (cabs1(e(l)) .eq. 0.0e0) go to 80
-   if (cabs1(e(lp1)) .ne. 0.0e0) e(l) = csign(e(l),e(lp1))
+   if (cabs1(e(l)) == 0.0e0) go to 80
+   if (cabs1(e(lp1)) /= 0.0e0) e(l) = csign(e(l),e(lp1))
    call cscal(p - l,1.0e0/e(l),e(lp1),1)
    e(lp1) = (1.0e0,0.0e0) + e(lp1)
 80 continue
    e(l) = -conjg(e(l))
-   if (lp1 .gt. n .or. cabs1(e(l)) .eq. 0.0e0) go to 120
+   if (lp1 > n .or. cabs1(e(l)) == 0.0e0) go to 120
 !
 !              Apply the transformation.
 !
@@ -4166,15 +4166,15 @@ do 160 l = 1, lu
 m = min0(p,n + 1)
 nctp1 = nct + 1
 nrtp1 = nrt + 1
-if (nct .lt. p) s(nctp1) = x(nctp1,nctp1)
-if (n .lt. m) s(m) = (0.0e0,0.0e0)
-if (nrtp1 .lt. m) e(nrtp1) = x(nrtp1,m)
+if (nct < p) s(nctp1) = x(nctp1,nctp1)
+if (n < m) s(m) = (0.0e0,0.0e0)
+if (nrtp1 < m) e(nrtp1) = x(nrtp1,m)
 e(m) = (0.0e0,0.0e0)
 !
 !     If required, generate u.
 !
 if (.not.wantu) go to 300
-if (ncu .lt. nctp1) go to 200
+if (ncu < nctp1) go to 200
 do j = nctp1, ncu
    do i = 1, n
       u(i,j) = (0.0e0,0.0e0)
@@ -4182,12 +4182,12 @@ do j = nctp1, ncu
    u(j,j) = (1.0e0,0.0e0)
 end do
 200 continue
-if (nct .lt. 1) go to 290
+if (nct < 1) go to 290
 do ll = 1, nct
    l = nct - ll + 1
-   if (cabs1(s(l)) .eq. 0.0e0) go to 250
+   if (cabs1(s(l)) == 0.0e0) go to 250
    lp1 = l + 1
-   if (ncu .lt. lp1) go to 220
+   if (ncu < lp1) go to 220
    do j = lp1, ncu
       t = -cdotc(n - l + 1,u(l,l),1,u(l,j),1)/u(l,l)
       call caxpy(n - l + 1,t,u(l,l),1,u(l,j),1)
@@ -4196,7 +4196,7 @@ do ll = 1, nct
    call cscal(n - l + 1,(-1.0e0,0.0e0),u(l,l),1)
    u(l,l) = (1.0e0,0.0e0) + u(l,l)
    lm1 = l - 1
-   if (lm1 .lt. 1) go to 240
+   if (lm1 < 1) go to 240
    do i = 1, lm1
       u(i,l) = (0.0e0,0.0e0)
    end do
@@ -4218,8 +4218,8 @@ if (.not.wantv) go to 350
 do ll = 1, p
    l = p - ll + 1
    lp1 = l + 1
-   if (l .gt. nrt) go to 320
-   if (cabs1(e(l)) .eq. 0.0e0) go to 320
+   if (l > nrt) go to 320
+   if (cabs1(e(l)) == 0.0e0) go to 320
    do j = lp1, p
       t = -cdotc(p - l,v(lp1,l),1,v(lp1,j),1)/v(lp1,l)
       call caxpy(p - l,t,v(lp1,l),1,v(lp1,j),1)
@@ -4235,16 +4235,16 @@ end do
 !     Transform s and e so that they are real.
 !
 do i = 1, m
-   if (cabs1(s(i)) .eq. 0.0e0) go to 360
+   if (cabs1(s(i)) == 0.0e0) go to 360
    t = cmplx(cabs(s(i)),0.0e0)
    r = s(i)/t
    s(i) = t
-   if (i .lt. m) e(i) = e(i)/r
+   if (i < m) e(i) = e(i)/r
    if (wantu) call cscal(n,r,u(1,i),1)
 360 continue
 !     ...Exit
-   if (i .eq. m) go to 390
-   if (cabs1(e(i)) .eq. 0.0e0) go to 370
+   if (i == m) go to 390
+   if (cabs1(e(i)) == 0.0e0) go to 370
    t = cmplx(cabs(e(i)),0.0e0)
    r = t/e(i)
    e(i) = t
@@ -4263,12 +4263,12 @@ iter = 0
 !        Quit if all the singular values have been found.
 !
 !     ...Exit
-if (m .eq. 0) go to 660
+if (m == 0) go to 660
 !
 !        If too many iterations have been performed, set
 !        flag and return.
 !
-if (iter .lt. maxit) go to 410
+if (iter < maxit) go to 410
 info = m
 !     ......Exit
 go to 660
@@ -4287,17 +4287,17 @@ go to 660
 do ll = 1, m
    l = m - ll
 !        ...Exit
-   if (l .eq. 0) go to 440
+   if (l == 0) go to 440
    test = cabs(s(l)) + cabs(s(l + 1))
    ztest = test + cabs(e(l))
-   if (ztest .ne. test) go to 420
+   if (ztest /= test) go to 420
    e(l) = (0.0e0,0.0e0)
 !        ......Exit
    go to 440
 420 continue
 end do
 440 continue
-if (l .ne. m - 1) go to 450
+if (l /= m - 1) go to 450
 kase = 4
 go to 520
 450 continue
@@ -4306,23 +4306,23 @@ mp1 = m + 1
 do lls = lp1, mp1
    ls = m - lls + lp1
 !           ...Exit
-   if (ls .eq. l) go to 480
+   if (ls == l) go to 480
    test = 0.0e0
-   if (ls .ne. m) test = test + cabs(e(ls))
-   if (ls .ne. l + 1) test = test + cabs(e(ls - 1))
+   if (ls /= m) test = test + cabs(e(ls))
+   if (ls /= l + 1) test = test + cabs(e(ls - 1))
    ztest = test + cabs(s(ls))
-   if (ztest .ne. test) go to 460
+   if (ztest /= test) go to 460
    s(ls) = (0.0e0,0.0e0)
 !           ......Exit
    go to 480
 460 continue
 end do
 480 continue
-if (ls .ne. l) go to 490
+if (ls /= l) go to 490
 kase = 3
 go to 510
 490 continue
-if (ls .ne. m) go to 500
+if (ls /= m) go to 500
 kase = 1
 go to 510
 500 continue
@@ -4347,7 +4347,7 @@ do kk = l, mm1
    t1 = real(s(k))
    call srotg(t1,f,cs,sn)
    s(k) = cmplx(t1,0.0e0)
-   if (k .eq. l) go to 540
+   if (k == l) go to 540
    f = -sn*real(e(k - 1))
    e(k - 1) = cs*e(k - 1)
 540 continue
@@ -4386,9 +4386,9 @@ el = real(e(l))/scale
 b = ((smm1 + sm)*(smm1 - sm) + emm1**2)/2.0e0
 c = (sm*emm1)**2
 shift = 0.0e0
-if (b .eq. 0.0e0 .and. c .eq. 0.0e0) go to 590
+if (b == 0.0e0 .and. c == 0.0e0) go to 590
 shift = sqrt(b**2 + c)
-if (b .lt. 0.0e0) shift = -shift
+if (b < 0.0e0) shift = -shift
 shift = c/(b + shift)
 590 continue
 f = (sl + sm)*(sl - sm) - shift
@@ -4399,7 +4399,7 @@ g = sl*el
 mm1 = m - 1
 do k = l, mm1
    call srotg(f,g,cs,sn)
-   if (k .ne. l) e(k - 1) = cmplx(f,0.0e0)
+   if (k /= l) e(k - 1) = cmplx(f,0.0e0)
    f = cs*real(s(k)) + sn*real(e(k))
    e(k) = cs*e(k) - sn*s(k)
    g = sn*real(s(k + 1))
@@ -4411,7 +4411,7 @@ do k = l, mm1
    s(k + 1) = -sn*e(k) + cs*s(k + 1)
    g = sn*real(e(k + 1))
    e(k + 1) = cs*e(k + 1)
-   if (wantu .and. k .lt. n) &
+   if (wantu .and. k < n) &
       & call csrot(n,u(1,k),1,u(1,k + 1),1,cs,sn)
 end do
 e(m - 1) = cmplx(f,0.0e0)
@@ -4424,22 +4424,22 @@ go to 650
 !
 !           Make the singular value  positive
 !
-if (real(s(l)) .ge. 0.0e0) go to 620
+if (real(s(l)) >= 0.0e0) go to 620
 s(l) = -s(l)
 if (wantv) call cscal(p,(-1.0e0,0.0e0),v(1,l),1)
 620 continue
 !
 !           Order the singular value.
 !
-630 if (l .eq. mm) go to 640
+630 if (l == mm) go to 640
 !           ...Exit
-if (real(s(l)) .ge. real(s(l + 1))) go to 640
+if (real(s(l)) >= real(s(l + 1))) go to 640
 t = s(l)
 s(l) = s(l + 1)
 s(l + 1) = t
-if (wantv .and. l .lt. p) &
+if (wantv .and. l < p) &
    & call cswap(p,v(1,l),1,v(1,l + 1),1)
-if (wantu .and. l .lt. n) &
+if (wantu .and. l < n) &
    & call cswap(n,u(1,l),1,u(1,l + 1),1)
 l = l + 1
 go to 630
@@ -4467,13 +4467,13 @@ real :: det
 !     ka is the row dimension of A in the calling program. It is
 !     assumed that ka is greater than or equal to n.
 !     -------------------
-if (n .ge. 2) go to 10
+if (n >= 2) go to 10
 det = a(1,1) - x
 return
 !
 !              Replace A with a-xi
 !
-10 if (x .eq. 0.0) go to 20
+10 if (x == 0.0) go to 20
 do 11 k = 1,n
 11 a(k,k) = a(k,k) - x
 !
@@ -4490,7 +4490,7 @@ do k = 1,nm1
    l = k
    do 30 i = kp1,n
       c = abs(a(i,k))
-      if (s .ge. c) go to 30
+      if (s >= c) go to 30
       s = c
       l = i
 30    continue
@@ -4499,8 +4499,8 @@ do k = 1,nm1
 !         Update the calculation of det
 !
    det = det*pivot
-   if (det .eq. 0.0) return
-   if (k .eq. l) go to 50
+   if (det == 0.0) return
+   if (k == l) go to 50
    det = -det
 !
 !          Interchanging rows k and l
@@ -4538,13 +4538,13 @@ double precision :: pivot, s, c
 !     ka is the row dimension of A in the calling program. It is
 !     assumed that ka is greater than or equal to n.
 !     -------------------
-if (n .ge. 2) go to 10
+if (n >= 2) go to 10
 dpdet = a(1,1) - x
 return
 !
 !              Replace A with a-xi
 !
-10 if (x .eq. 0.d0) go to 20
+10 if (x == 0.d0) go to 20
 do 11 k = 1,n
 11 a(k,k) = a(k,k) - x
 !
@@ -4561,7 +4561,7 @@ do k = 1,nm1
    l = k
    do 30 i = kp1,n
       c = dabs(a(i,k))
-      if (s .ge. c) go to 30
+      if (s >= c) go to 30
       s = c
       l = i
 30    continue
@@ -4570,8 +4570,8 @@ do k = 1,nm1
 !         Update the calculation of det
 !
    dpdet = dpdet*pivot
-   if (dpdet .eq. 0.d0) return
-   if (k .eq. l) go to 50
+   if (dpdet == 0.d0) return
+   if (k == l) go to 50
    dpdet = -dpdet
 !
 !          Interchanging rows k and l
@@ -4612,13 +4612,13 @@ complex, parameter :: zero = (0.0,0.0)
 !     assumed that ka is greater than or equal to n.
 !     -------------------
 !
-if (n .ge. 2) go to 10
+if (n >= 2) go to 10
 cdet = a(1,1) - x
 return
 !
 !              Replace A with a-xi
 !
-10 if (x .eq. zero) go to 20
+10 if (x == zero) go to 20
 do 11 k = 1,n
 11 a(k,k) = a(k,k) - x
 !
@@ -4635,7 +4635,7 @@ do k = 1,nm1
    l = k
    do 30 i = kp1,n
       c = abs(real(a(i,k))) + abs(aimag(a(i,k)))
-      if (s .ge. c) go to 30
+      if (s >= c) go to 30
       s = c
       l = i
 30    continue
@@ -4644,8 +4644,8 @@ do k = 1,nm1
 !         Update the calculation of cdet
 !
    cdet = cdet*pivot
-   if (cdet .eq. zero) return
-   if (k .eq. l) go to 50
+   if (cdet == zero) return
+   if (k == l) go to 50
    cdet = -cdet
 !
 !          Interchanging rows k and l
@@ -4774,7 +4774,7 @@ real :: temp
 !
 !     If required, reduce A to lower real Schur form
 !
-if (mo .ne. 0 .and. mo .ne. 1) go to 35
+if (mo /= 0 .and. mo /= 1) go to 35
 do i = 1,m
    do j = i,m
       temp = a(i,j)
@@ -4785,9 +4785,9 @@ end do
 call orthes(na,m,1,m,a,wk)
 call ortrn1(m,1,m,a,na,u,nu,wk)
 !
-if (m .eq. 1) go to 20
+if (m == 1) go to 20
 call schur(m,1,m,a,na,u,nu,wk(1),wk(m + 1),ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 !
 20 do i = 1,m
    do j = i,m
@@ -4799,13 +4799,13 @@ end do
 !
 !     If required, reduce b to upper real Schur form
 !
-35 if (mo .ne. 0 .and. mo .ne. 2) go to 45
+35 if (mo /= 0 .and. mo /= 2) go to 45
 call orthes(nb,n,1,n,b,wk)
 call ortrn1(n,1,n,b,nb,v,nv,wk)
 !
-if (n .eq. 1) go to 45
+if (n == 1) go to 45
 call schur(n,1,n,b,nb,v,nv,wk(1),wk(n + 1),ierr)
-if (ierr .ne. 0) go to 210
+if (ierr /= 0) go to 210
 !
 !     Transform c
 !
@@ -4836,7 +4836,7 @@ end do
 !     Solve the transformed system
 !
 call shrslv(a,b,c,m,n,na,nb,nc,ierr)
-if (ierr .ne. 0) go to 220
+if (ierr /= 0) go to 220
 !
 !     Transform c back to the solution
 !
@@ -4955,7 +4955,7 @@ do 20 i = 1,n
 10    continue
 !
    k = i
-   if (i .ge. low .and. i .le. igh) go to 20
+   if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.0
 20 continue
@@ -4963,7 +4963,7 @@ do 20 i = 1,n
 en = igh
 t = 0.0
 !     ********** Search for next eigenvalues **********
-30 if (en .lt. low) go to 300
+30 if (en < low) go to 300
 its = 0
 na = en - 1
 enm2 = na - 1
@@ -4971,21 +4971,21 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do ll = low,en
    l = en + low - ll
-   if (l .eq. low) go to 60
+   if (l == low) go to 60
    s = abs(h(l - 1,l - 1)) + abs(h(l,l))
-   if (s .eq. 0.0) s = norm
+   if (s == 0.0) s = norm
    s1 = s
    s2 = s1 + abs(h(l,l - 1))
-   if (s1 .eq. s2) go to 60
+   if (s1 == s2) go to 60
 end do
 !     ********** Form shift **********
 60 x = h(en,en)
-if (l .eq. en) go to 220
+if (l == en) go to 220
 y = h(na,na)
 w = h(en,na)*h(na,en)
-if (l .eq.na) go to 230
-if (its .eq. 30) go to 290
-if (its .ne. 10 .and. its .ne. 20) go to 80
+if (l == na) go to 230
+if (its == 30) go to 290
+if (its /= 10 .and. its /= 20) go to 80
 !     ********** Form exceptional shift **********
 t = t + x
 !
@@ -5013,39 +5013,39 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if (m .eq. l) go to 100
+   if (m == l) go to 100
    s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
    s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
-   if (s1 .eq. s2) go to 100
+   if (s1 == s2) go to 100
 end do
 !
 100 mp2 = m + 2
 !
 do 110 i = mp2,en
    h(i,i - 2) = 0.0
-   if (i .eq. mp2) go to 110
+   if (i == mp2) go to 110
    h(i,i - 3) = 0.0
 110 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 210 k = m,na
-   notlas = k.ne.na
-   if (k .eq. m) go to 120
+   notlas = k /= na
+   if (k == m) go to 120
    p = h(k,k - 1)
    q = h(k + 1,k - 1)
    r = 0.0
    if (notlas) r = h(k + 2,k - 1)
    x = abs(p) + abs(q) + abs(r)
-   if (x .eq. 0.0) go to 210
+   if (x == 0.0) go to 210
    p = p/x
    q = q/x
    r = r/x
 120 s = sqrt(p*p + q*q + r*r)
-   if (p .lt. 0.0) s = -s
-   if (k .eq. m) go to 130
+   if (p < 0.0) s = -s
+   if (k == m) go to 130
    h(k,k - 1) = -s*x
    go to 140
-130 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
+130 if (l /= m) h(k,k - 1) = -h(k,k - 1)
 140 p = p + s
    x = p/s
    y = q/s
@@ -5098,13 +5098,13 @@ zz = sqrt(abs(q))
 h(en,en) = x + t
 x = h(en,en)
 h(na,na) = y + t
-if (q .lt. 0.0) go to 270
+if (q < 0.0) go to 270
 !     ********** Real pair **********
-if (p .lt. 0.0) zz = -zz
+if (p < 0.0) zz = -zz
 zz = p + zz
 wr(na) = x + zz
 wr(en) = wr(na)
-if (zz .ne. 0.0) wr(en) = x - w/zz
+if (zz /= 0.0) wr(en) = x - w/zz
 wi(na) = 0.0
 wi(en) = 0.0
 x = h(en,na)
@@ -5147,8 +5147,8 @@ go to 30
 return
 300 do 320 i = 1,n
    ip1 = i + 1
-   if (abs(wi(i)) .ne. 0.0) ip1 = ip1 + 1
-   if (ip1 .gt. n) go to 320
+   if (abs(wi(i)) /= 0.0) ip1 = ip1 + 1
+   if (ip1 > n) go to 320
    do j = ip1,n
       h(j,i) = 0.0
    end do
@@ -5184,10 +5184,10 @@ end interface
 l = 1
 10 lm1 = l - 1
 dl = 1
-if (l .eq. n) go to 15
-if (b(l + 1,l) .ne. 0.0) dl = 2
+if (l == n) go to 15
+if (b(l + 1,l) /= 0.0) dl = 2
 15 ll = l + dl - 1
-if (l .eq. 1) go to 30
+if (l == 1) go to 30
 !
 do j = l,ll
    do 21 i = 1,m
@@ -5200,10 +5200,10 @@ end do
 30 k = 1
 40 km1 = k - 1
 dk = 1
-if (k .eq. m) go to 45
-if (a(k,k + 1) .ne. 0.0) dk = 2
+if (k == m) go to 45
+if (a(k,k + 1) /= 0.0) dk = 2
 45 kk = k + dk - 1
-if (k .eq. 1) go to 60
+if (k == 1) go to 60
 !
 do i = k,kk
    do 51 j = l,ll
@@ -5213,10 +5213,10 @@ do i = k,kk
 51    c(i,j) = sum
 end do
 !
-60 if (dl .eq. 2) go to 80
-if (dk .eq. 2) go to 70
+60 if (dl == 2) go to 80
+if (dk == 2) go to 70
 t(1,1) = a(k,k) + b(l,l)
-if (t(1,1) .eq. 0.0) go to 200
+if (t(1,1) == 0.0) go to 200
 c(k,l) = c(k,l)/t(1,1)
 ierr = 0
 go to 100
@@ -5228,12 +5228,12 @@ t(2,2) = a(kk,kk) + b(l,l)
 p(1) = c(k,l)
 p(2) = c(kk,l)
 call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 go to 100
 !
-80 if (dk .eq. 2) go to 90
+80 if (dk == 2) go to 90
 t(1,1) = a(k,k) + b(l,l)
 t(1,2) = b(ll,l)
 t(2,1) = b(l,ll)
@@ -5241,7 +5241,7 @@ t(2,2) = a(k,k) + b(ll,ll)
 p(1) = c(k,l)
 p(2) = c(k,ll)
 call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(k,ll) = p(2)
 go to 100
@@ -5267,16 +5267,16 @@ p(2) = c(kk,l)
 p(3) = c(k,ll)
 p(4) = c(kk,ll)
 call slv(4, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 c(k,ll) = p(3)
 c(kk,ll) = p(4)
 !
 100 k = k + dk
-if (k .le. m) go to 40
+if (k <= m) go to 40
 l = l + dl
-if (l .le. n) go to 10
+if (l <= n) go to 10
 return
 !
 !     Error return
@@ -5391,7 +5391,7 @@ double precision :: temp
 !
 !     If required, reduce A to lower real Schur form
 !
-if (mo .ne. 0 .and. mo .ne. 1) go to 35
+if (mo /= 0 .and. mo /= 1) go to 35
 do i = 1,m
    do j = i,m
       temp = a(i,j)
@@ -5402,9 +5402,9 @@ end do
 call dorth(na,m,1,m,a,wk)
 call drtrn1(m,1,m,a,na,u,nu,wk)
 !
-if (m .eq. 1) go to 20
+if (m == 1) go to 20
 call dschur(m,1,m,a,na,u,nu,wk(1),wk(m + 1),ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 !
 20 do i = 1,m
    do j = i,m
@@ -5416,13 +5416,13 @@ end do
 !
 !     If required, reduce b to upper real Schur form
 !
-35 if (mo .ne. 0 .and. mo .ne. 2) go to 45
+35 if (mo /= 0 .and. mo /= 2) go to 45
 call dorth(nb,n,1,n,b,wk)
 call drtrn1(n,1,n,b,nb,v,nv,wk)
 !
-if (n .eq. 1) go to 45
+if (n == 1) go to 45
 call dschur(n,1,n,b,nb,v,nv,wk(1),wk(n + 1),ierr)
-if (ierr .ne. 0) go to 210
+if (ierr /= 0) go to 210
 !
 !     Transform c
 !
@@ -5453,7 +5453,7 @@ end do
 !     Solve the transformed system
 !
 call dshslv(a,b,c,m,n,na,nb,nc,ierr)
-if (ierr .ne. 0) go to 220
+if (ierr /= 0) go to 220
 !
 !     Transform c back to the solution
 !
@@ -5572,7 +5572,7 @@ do 20 i = 1,n
 10    continue
 !
    k = i
-   if (i .ge. low .and. i .le. igh) go to 20
+   if (i >= low .and. i <= igh) go to 20
    wr(i) = h(i,i)
    wi(i) = 0.d0
 20 continue
@@ -5580,7 +5580,7 @@ do 20 i = 1,n
 en = igh
 t = 0.d0
 !     ********** Search for next eigenvalues **********
-30 if (en .lt. low) go to 300
+30 if (en < low) go to 300
 its = 0
 na = en - 1
 enm2 = na - 1
@@ -5588,21 +5588,21 @@ enm2 = na - 1
 !                for l=en step -1 Until low do -- **********
 40 do 50 ll = low,en
    l = en + low - ll
-   if (l .eq. low) go to 60
+   if (l == low) go to 60
    s = dabs(h(l - 1,l - 1)) + dabs(h(l,l))
-   if (s .eq. 0.d0) s = norm
+   if (s == 0.d0) s = norm
    s1 = s
    s2 = s1 + dabs(h(l,l - 1))
-   if (s1 .eq. s2) go to 60
+   if (s1 == s2) go to 60
 50 continue
 !     ********** Form shift **********
 60 x = h(en,en)
-if (l .eq. en) go to 220
+if (l == en) go to 220
 y = h(na,na)
 w = h(en,na)*h(na,en)
-if (l .eq.na) go to 230
-if (its .eq. 50) go to 290
-if (its .ne. 10 .and. its .ne. 20 .and. its .ne. 30) go to 80
+if (l == na) go to 230
+if (its == 50) go to 290
+if (its /= 10 .and. its /= 20 .and. its /= 30) go to 80
 !     ********** Form exceptional shift **********
 t = t + x
 !
@@ -5630,39 +5630,39 @@ do mm = l,enm2
    p = p/s
    q = q/s
    r = r/s
-   if (m .eq. l) go to 100
+   if (m == l) go to 100
    s1 = dabs(p)*(dabs(h(m - 1,m - 1)) + dabs(zz) + dabs(h(m + 1,m + 1)))
    s2 = s1 + dabs(h(m,m - 1))*(dabs(q) + dabs(r))
-   if (s1 .eq. s2) go to 100
+   if (s1 == s2) go to 100
 end do
 !
 100 mp2 = m + 2
 !
 do 110 i = mp2,en
    h(i,i - 2) = 0.d0
-   if (i .eq. mp2) go to 110
+   if (i == mp2) go to 110
    h(i,i - 3) = 0.d0
 110 continue
 !     ********** Double QR step involving rows l to en and
 !                COLUMNS m TO en **********
 do 210 k = m,na
-   notlas = k.ne.na
-   if (k .eq. m) go to 120
+   notlas = k /= na
+   if (k == m) go to 120
    p = h(k,k - 1)
    q = h(k + 1,k - 1)
    r = 0.d0
    if (notlas) r = h(k + 2,k - 1)
    x = dabs(p) + dabs(q) + dabs(r)
-   if (x .eq. 0.d0) go to 210
+   if (x == 0.d0) go to 210
    p = p/x
    q = q/x
    r = r/x
 120 s = dsqrt(p*p + q*q + r*r)
-   if (p .lt. 0.d0) s = -s
-   if (k .eq. m) go to 130
+   if (p < 0.d0) s = -s
+   if (k == m) go to 130
    h(k,k - 1) = -s*x
    go to 140
-130 if (l .ne. m) h(k,k - 1) = -h(k,k - 1)
+130 if (l /= m) h(k,k - 1) = -h(k,k - 1)
 140 p = p + s
    x = p/s
    y = q/s
@@ -5715,13 +5715,13 @@ zz = dsqrt(dabs(q))
 h(en,en) = x + t
 x = h(en,en)
 h(na,na) = y + t
-if (q .lt. 0.d0) go to 270
+if (q < 0.d0) go to 270
 !     ********** Real pair **********
-if (p .lt. 0.d0) zz = -zz
+if (p < 0.d0) zz = -zz
 zz = p + zz
 wr(na) = x + zz
 wr(en) = wr(na)
-if (zz .ne. 0.d0) wr(en) = x - w/zz
+if (zz /= 0.d0) wr(en) = x - w/zz
 wi(na) = 0.d0
 wi(en) = 0.d0
 x = h(en,na)
@@ -5764,8 +5764,8 @@ go to 30
 return
 300 do 320 i = 1,n
    ip1 = i + 1
-   if (dabs(wi(i)) .ne. 0.d0) ip1 = ip1 + 1
-   if (ip1 .gt. n) go to 320
+   if (dabs(wi(i)) /= 0.d0) ip1 = ip1 + 1
+   if (ip1 > n) go to 320
    do j = ip1,n
       h(j,i) = 0.d0
    end do
@@ -5801,10 +5801,10 @@ end interface
 l = 1
 10 lm1 = l - 1
 dl = 1
-if (l .eq. n) go to 15
-if (b(l + 1,l) .ne. 0.d0) dl = 2
+if (l == n) go to 15
+if (b(l + 1,l) /= 0.d0) dl = 2
 15 ll = l + dl - 1
-if (l .eq. 1) go to 30
+if (l == 1) go to 30
 !
 do j = l,ll
    do 21 i = 1,m
@@ -5817,10 +5817,10 @@ end do
 30 k = 1
 40 km1 = k - 1
 dk = 1
-if (k .eq. m) go to 45
-if (a(k,k + 1) .ne. 0.d0) dk = 2
+if (k == m) go to 45
+if (a(k,k + 1) /= 0.d0) dk = 2
 45 kk = k + dk - 1
-if (k .eq. 1) go to 60
+if (k == 1) go to 60
 !
 do i = k,kk
    do 51 j = l,ll
@@ -5830,10 +5830,10 @@ do i = k,kk
 51    c(i,j) = sum
 end do
 !
-60 if (dl .eq. 2) go to 80
-if (dk .eq. 2) go to 70
+60 if (dl == 2) go to 80
+if (dk == 2) go to 70
 t(1,1) = a(k,k) + b(l,l)
-if (t(1,1) .eq. 0.d0) go to 200
+if (t(1,1) == 0.d0) go to 200
 c(k,l) = c(k,l)/t(1,1)
 ierr = 0
 go to 100
@@ -5845,12 +5845,12 @@ t(2,2) = a(kk,kk) + b(l,l)
 p(1) = c(k,l)
 p(2) = c(kk,l)
 call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 go to 100
 !
-80 if (dk .eq. 2) go to 90
+80 if (dk == 2) go to 90
 t(1,1) = a(k,k) + b(l,l)
 t(1,2) = b(ll,l)
 t(2,1) = b(l,ll)
@@ -5858,7 +5858,7 @@ t(2,2) = a(k,k) + b(ll,ll)
 p(1) = c(k,l)
 p(2) = c(k,ll)
 call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(k,ll) = p(2)
 go to 100
@@ -5884,16 +5884,16 @@ p(2) = c(kk,l)
 p(3) = c(k,ll)
 p(4) = c(kk,ll)
 call dpslv(4, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 c(k,ll) = p(3)
 c(kk,ll) = p(4)
 !
 100 k = k + dk
-if (k .le. m) go to 40
+if (k <= m) go to 40
 l = l + dl
-if (l .le. n) go to 10
+if (l <= n) go to 10
 return
 !
 !     Error return
@@ -5982,11 +5982,11 @@ integer :: i, j, k
 !
 !    If required, reduce A to upper real Schur form
 !
-if (mo .ne. 0) go to 10
+if (mo /= 0) go to 10
 call orthes(na,n,1,n,a,wk)
 call ortrn1(n,1,n,a,na,u,nu,wk)
 call schur(n,1,n,a,na,u,nu,wk(1),wk(n + 1),ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 !
 !     Transform c
 !
@@ -6028,7 +6028,7 @@ end do
 !     Solve the transformed system
 !
 call symslv(a,c,n,na,nc,ierr)
-if (ierr .ne. 0) go to 210
+if (ierr /= 0) go to 210
 !
 !     Transform c back to the solution
 !
@@ -6103,17 +6103,17 @@ end interface
 !
 l = 1
 10 dl = 1
-if (l .eq. n) go to 20
-if (a(l + 1,l) .ne. 0.0) dl = 2
+if (l == n) go to 20
+if (a(l + 1,l) /= 0.0) dl = 2
 20 ll = l + dl - 1
 !
 k = l
 30 km1 = k - 1
 dk = 1
-if (k .eq. n) go to 35
-if (a(k + 1,k) .ne. 0.0) dk = 2
+if (k == n) go to 35
+if (a(k + 1,k) /= 0.0) dk = 2
 35 kk = k + dk - 1
-if (k .eq. l) go to 45
+if (k == l) go to 45
 !
 do i = k,kk
    do 41 j = l,ll
@@ -6123,10 +6123,10 @@ do i = k,kk
 41    c(i,j) = sum
 end do
 !
-45 if (dl .eq. 2) go to 60
-if (dk .eq. 2 ) go to 50
+45 if (dl == 2) go to 60
+if (dk == 2 ) go to 50
 t(1,1) = a(k,k) + a(l,l)
-if (t(1,1) .eq. 0.0) go to 200
+if (t(1,1) == 0.0) go to 200
 c(k,l) = c(k,l)/t(1,1)
 ierr = 0
 go to 90
@@ -6138,12 +6138,12 @@ t(2,2) = a(kk,kk) + a(l,l)
 p(1) = c(k,l)
 p(2) = c(kk,l)
 call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 go to 90
 !
-60 if (dk .eq. 2) go to 70
+60 if (dk == 2) go to 70
 t(1,1) = a(k,k) + a(l,l)
 t(1,2) = a(ll,l)
 t(2,1) = a(l,ll)
@@ -6151,12 +6151,12 @@ t(2,2) = a(k,k) + a(ll,ll)
 p(1) = c(k,l)
 p(2) = c(k,ll)
 call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(k,ll) = p(2)
 go to 90
 !
-70 if (k .ne. l) go to 80
+70 if (k /= l) go to 80
 t(1,1) = a(l,l)
 t(1,2) = a(ll,l)
 t(1,3) = 0.0
@@ -6170,7 +6170,7 @@ p(1) = c(l,l)/2.0
 p(2) = c(ll,l)
 p(3) = c(ll,ll)/2.0
 call slv(3, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(l,l) = p(1)
 c(ll,l) = p(2)
 c(l,ll) = p(2)
@@ -6198,16 +6198,16 @@ p(2) = c(kk,l)
 p(3) = c(k,ll)
 p(4) = c(kk,ll)
 call slv(4, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 c(k,ll) = p(3)
 c(kk,ll) = p(4)
 !
 90 k = k + dk
-if (k .le. n) go to 30
+if (k <= n) go to 30
 ldl = l + dl
-if (ldl .gt. n) return
+if (ldl > n) return
 !
 do j = ldl,n
    do i = l,ll
@@ -6308,11 +6308,11 @@ integer :: i, j, k
 !
 !    If required, reduce A to upper real Schur form
 !
-if (mo .ne. 0) go to 10
+if (mo /= 0) go to 10
 call dorth(na,n,1,n,a,wk)
 call drtrn1(n,1,n,a,na,u,nu,wk)
 call dschur(n,1,n,a,na,u,nu,wk(1),wk(n + 1),ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 !
 !     Transform c
 !
@@ -6354,7 +6354,7 @@ end do
 !     Solve the transformed system
 !
 call dsymsv(a,c,n,na,nc,ierr)
-if (ierr .ne. 0) go to 210
+if (ierr /= 0) go to 210
 !
 !     Transform c back to the solution
 !
@@ -6429,17 +6429,17 @@ end interface
 !
 l = 1
 10 dl = 1
-if (l .eq. n) go to 20
-if (a(l + 1,l) .ne. 0.d0) dl = 2
+if (l == n) go to 20
+if (a(l + 1,l) /= 0.d0) dl = 2
 20 ll = l + dl - 1
 !
 k = l
 30 km1 = k - 1
 dk = 1
-if (k .eq. n) go to 35
-if (a(k + 1,k) .ne. 0.d0) dk = 2
+if (k == n) go to 35
+if (a(k + 1,k) /= 0.d0) dk = 2
 35 kk = k + dk - 1
-if (k .eq. l) go to 45
+if (k == l) go to 45
 !
 do i = k,kk
    do 41 j = l,ll
@@ -6449,10 +6449,10 @@ do i = k,kk
 41    c(i,j) = sum
 end do
 !
-45 if (dl .eq. 2) go to 60
-if (dk .eq. 2 ) go to 50
+45 if (dl == 2) go to 60
+if (dk == 2 ) go to 50
 t(1,1) = a(k,k) + a(l,l)
-if (t(1,1) .eq. 0.d0) go to 200
+if (t(1,1) == 0.d0) go to 200
 c(k,l) = c(k,l)/t(1,1)
 ierr = 0
 go to 90
@@ -6464,12 +6464,12 @@ t(2,2) = a(kk,kk) + a(l,l)
 p(1) = c(k,l)
 p(2) = c(kk,l)
 call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 go to 90
 !
-60 if (dk .eq. 2) go to 70
+60 if (dk == 2) go to 70
 t(1,1) = a(k,k) + a(l,l)
 t(1,2) = a(ll,l)
 t(2,1) = a(l,ll)
@@ -6477,12 +6477,12 @@ t(2,2) = a(k,k) + a(ll,ll)
 p(1) = c(k,l)
 p(2) = c(k,ll)
 call dpslv(2, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(k,ll) = p(2)
 go to 90
 !
-70 if (k .ne. l) go to 80
+70 if (k /= l) go to 80
 t(1,1) = a(l,l)
 t(1,2) = a(ll,l)
 t(1,3) = 0.d0
@@ -6496,7 +6496,7 @@ p(1) = c(l,l)/2.d0
 p(2) = c(ll,l)
 p(3) = c(ll,ll)/2.d0
 call dpslv(3, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(l,l) = p(1)
 c(ll,l) = p(2)
 c(l,ll) = p(2)
@@ -6524,16 +6524,16 @@ p(2) = c(kk,l)
 p(3) = c(k,ll)
 p(4) = c(kk,ll)
 call dpslv(4, 1, t, 4, p, 4, ierr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 c(k,l) = p(1)
 c(kk,l) = p(2)
 c(k,ll) = p(3)
 c(kk,ll) = p(4)
 !
 90 k = k + dk
-if (k .le. n) go to 30
+if (k <= n) go to 30
 ldl = l + dl
-if (ldl .gt. n) return
+if (ldl > n) return
 !
 do j = ldl,n
    do i = l,ll
@@ -6731,10 +6731,10 @@ real :: fxnorm, fxni, gnorm, tnorm, t
 !     real sqrt, cabs, float
 !     complex cmplx, conjg
 k = 7*n*n + n
-if (nw.lt.k) go to 460
-if (nm.lt.n) go to 460
-if (n.le.0) go to 460
-if (maxits.le.0) maxits = 30
+if (nw < k) go to 460
+if (nm < n) go to 460
+if (n <= 0) go to 460
+if (maxits <= 0) maxits = 30
 !     ********** Initialize arrays **********
 do 20 i = 1,n
    do 10 j = 1,n
@@ -6760,12 +6760,12 @@ do 40 i = 1,n
       bni = bni + cabs(b(i,j))
       cni = cni + cabs(c(i,j))
 30    continue
-   if (ani.gt.anorm) anorm = ani
-   if (bni.gt.bnorm) bnorm = bni
-   if (cni.gt.cnorm) cnorm = cni
+   if (ani > anorm) anorm = ani
+   if (bni > bnorm) bnorm = bni
+   if (cni > cnorm) cnorm = cni
 40 continue
 gnorm = (bnorm + sqrt(bnorm**2 + 4.0*anorm*cnorm))/(2.0*anorm)
-if (iguess.eq.0) go to 70
+if (iguess == 0) go to 70
 do i = 1,n
    do j = 1,n
       xold(i,j) = s(i,j)
@@ -6781,7 +6781,7 @@ go to 100
 end do
 !
 100 do its = 1,maxits
-   if (its.ne.31) go to 130
+   if (its /= 31) go to 130
    do i = 1,n
       do j = 1,n
          xold(i,j) = cmplx(0.0,0.0)
@@ -6789,7 +6789,7 @@ end do
       xold(i,i) = cmplx(0.0,gnorm)
    end do
 !
-130 if (its.ne.61) go to 160
+130 if (its /= 61) go to 160
    do i = 1,n
       do j = 1,n
          xold(i,j) = c(i,j)
@@ -6818,18 +6818,18 @@ end do
          xni = xni + cabs(xold(i,j))
          fxni = fxni + cabs(s(i,j))
       end do
-      if (xni.gt.xnorm) xnorm = xni
-      if (fxni.gt.fxnorm) fxnorm = fxni
+      if (xni > xnorm) xnorm = xni
+      if (fxni > fxnorm) fxnorm = fxni
    end do
-   if (tol.le.0.0) go to 230
-   if (fxnorm.lt.tol) go to 370
+   if (tol <= 0.0) go to 230
+   if (fxnorm < tol) go to 370
 230 tnorm = 8.0*float(n)*anorm*xnorm**2 + 5.0*float(n)*bnorm*xnorm &
       & + cnorm
    t = 1.0 + fxnorm/tnorm
-   if (t.eq.1.0) go to 370
-   if (its.ge.maxits) go to 400
+   if (t == 1.0) go to 370
+   if (its >= maxits) go to 400
 !        ********** Upper triangularization **********
-   if (its.ne.1) go to 240
+   if (its /= 1) go to 240
    mats = 1
    call cqzhes(nm, n, u, a, mats, z, s, b, c)
 240 do i = 1,n
@@ -6840,16 +6840,16 @@ end do
       end do
       eye(i,i) = cmplx(1.0,0.0)
    end do
-   if (its.eq.1) go to 270
+   if (its == 1) go to 270
    mats = 2
    call cqzhes(nm, n, u, v, mats, z, s, b, c)
 270 call cqzit(nm, n, u, v, 0.0, mats, z, s, ierr)
-   if (ierr.ne.0) go to 430
+   if (ierr /= 0) go to 430
 !        ********** Lower triangularization **********
    mats = 3
    call cqzhes(nm, n, l, eye, mats, r, s, b, c)
    call cqzit(nm, n, l, eye, 0.0, mats, r, s, ierr)
-   if (ierr.ne.0) go to 440
+   if (ierr /= 0) go to 440
    call ctrans(nm, n, l)
 !        ********** UPDATE s WITH r **********
    do i = 1,n
@@ -6871,7 +6871,7 @@ end do
    end do
 !        ********** Backsolve the transformed system **********
    call trislv(nm, n, u, v, l, s, temp, ierr)
-   if (ierr.ne.0) go to 450
+   if (ierr /= 0) go to 450
 !        ********** Translate back to the solution **********
    call cmprod(n, n, n, z, nm, s, nm, l, nm, l)
    call ctrans(nm, n, r)
@@ -6981,7 +6981,7 @@ complex :: th
 real :: r, s
 !     real sqrt, cabs
 !     complex cmplx, conjg
-if (mats.eq.0) go to 30
+if (mats == 0) go to 30
 do i = 1,n
    do j = 1,n
       z(i,j) = cmplx(0.0,0.0)
@@ -6989,16 +6989,16 @@ do i = 1,n
    z(i,i) = cmplx(1.0,0.0)
 end do
 !     ********** Reduce b to upper triangular form **********
-30 if (n.le.1) go to 260
+30 if (n <= 1) go to 260
 nm1 = n - 1
-if (mats.eq.2) go to 140
+if (mats == 2) go to 140
 do 130 l = 1,nm1
    l1 = l + 1
    s = 0.0
    do i = l1,n
       s = s + cabs(b(i,l))
    end do
-   if (s.eq.0.0) go to 130
+   if (s == 0.0) go to 130
    s = s + cabs(b(l,l))
    r = 0.0
    do i = l,n
@@ -7007,7 +7007,7 @@ do 130 l = 1,nm1
    end do
    r = sqrt(r)
    rr = cmplx(r,0.0)
-   if (cabs(b(l,l)).ne.0.0) rr = (b(l,l)/cabs(b(l,l)))*rr
+   if (cabs(b(l,l)) /= 0.0) rr = (b(l,l)/cabs(b(l,l)))*rr
    b(l,l) = b(l,l) + rr
    rho = conjg(rr)*b(l,l)
    do j = l1,n
@@ -7027,9 +7027,9 @@ do 130 l = 1,nm1
       th = cmplx(0.0,0.0)
       do 90 i = l,n
          t = t + conjg(b(i,l))*a(i,j)
-         if (mats.eq.3) go to 90
+         if (mats == 3) go to 90
          tf = tf + conjg(b(i,l))*f(i,j)
-         if (mats.ne.1) go to 90
+         if (mats /= 1) go to 90
          tg = tg + conjg(b(i,l))*g(i,j)
          th = th + conjg(b(i,l))*h(i,j)
 90       continue
@@ -7039,9 +7039,9 @@ do 130 l = 1,nm1
       th = -th/rho
       do 100 i = l,n
          a(i,j) = a(i,j) + t*b(i,l)
-         if (mats.eq.3) go to 100
+         if (mats == 3) go to 100
          f(i,j) = f(i,j) + tf*b(i,l)
-         if (mats.ne.1) go to 100
+         if (mats /= 1) go to 100
          g(i,j) = g(i,j) + tg*b(i,l)
          h(i,j) = h(i,j) + th*b(i,l)
 100      continue
@@ -7053,7 +7053,7 @@ do 130 l = 1,nm1
 130 continue
 !     ********** Reduce A to upper Hessenberg form, while
 !                KEEPING b TRIANGULAR **********
-140 if (n.eq.2) go to 260
+140 if (n == 2) go to 260
 nm2 = n - 2
 do k = 1,nm2
    nk1 = nm1 - k
@@ -7062,12 +7062,12 @@ do k = 1,nm2
       l1 = l + 1
 !     ********** ZERO a(l+1,k) **********
       s = cabs(a(l,k)) + cabs(a(l1,k))
-      if (s.eq.0.0) go to 240
+      if (s == 0.0) go to 240
       u1 = a(l,k)/cmplx(s,0.0)
       u2 = a(l1,k)/cmplx(s,0.0)
       r = sqrt(cabs(u1)**2 + cabs(u2)**2)
       rr = cmplx(r,0.0)
-      if (cabs(u1).ne.0.0) rr = (u1/cabs(u1))*rr
+      if (cabs(u1) /= 0.0) rr = (u1/cabs(u1))*rr
       v1 = -(u1 + rr)/rr
       v2 = -u2/rr
       u2 = v2/v1
@@ -7082,13 +7082,13 @@ do k = 1,nm2
          b(l,j) = b(l,j) + t*v1
          b(l1,j) = b(l1,j) + t*v2
       end do
-      if (mats.eq.3) go to 180
+      if (mats == 3) go to 180
       do j = 1,n
          tf = f(l,j) + conjg(u2)*f(l1,j)
          f(l,j) = f(l,j) + tf*v1
          f(l1,j) = f(l1,j) + tf*v2
       end do
-180   if (mats.ne.1) go to 200
+180   if (mats /= 1) go to 200
       do j = 1,n
          tg = g(l,j) + conjg(u2) + g(l1,j)
          th = h(l,j) + conjg(u2) + h(l1,j)
@@ -7099,12 +7099,12 @@ do k = 1,nm2
       end do
 !     ********** ZERO b(l+1,l) **********
 200   s = cabs(b(l1,l1)) + cabs(b(l1,l))
-      if (s.eq.0.0) go to 240
+      if (s == 0.0) go to 240
       u1 = b(l1,l1)/cmplx(s,0.0)
       u2 = b(l1,l)/cmplx(s,0.0)
       r = sqrt(cabs(u1)**2 + cabs(u2)**2)
       rr = cmplx(r,0.0)
-      if (cabs(u1).ne.0.0) rr = (u1/cabs(u1))*rr
+      if (cabs(u1) /= 0.0) rr = (u1/cabs(u1))*rr
       v1 = -(u1 + rr)/rr
       v2 = -u2/rr
       u2 = v2/v1
@@ -7119,7 +7119,7 @@ do k = 1,nm2
          a(i,l1) = a(i,l1) + t*v1
          a(i,l) = a(i,l) + t*v2
       end do
-      if (mats.eq.0) go to 240
+      if (mats == 0) go to 240
       do i = 1,n
          t = z(i,l1) + conjg(u2)*z(i,l)
          z(i,l1) = z(i,l1) + t*v1
@@ -7211,19 +7211,19 @@ anorm = 0.0
 bnorm = 0.0
 do 20 i = 1,n
    ani = 0.0
-   if (i.ne.1) ani = cabs(a(i,i - 1))
+   if (i /= 1) ani = cabs(a(i,i - 1))
    bni = 0.0
    do 10 j = i,n
       ani = ani + cabs(a(i,j))
       bni = bni + cabs(b(i,j))
 10    continue
-   if (ani.gt.anorm) anorm = ani
-   if (bni.gt.bnorm) bnorm = bni
+   if (ani > anorm) anorm = ani
+   if (bni > bnorm) bnorm = bni
 20 continue
-if (anorm.eq.0.0) anorm = 1.0
-if (bnorm.eq.0.0) bnorm = 1.0
+if (anorm == 0.0) anorm = 1.0
+if (bnorm == 0.0) bnorm = 1.0
 srelpr = eps1
-if (srelpr.gt.0.0) go to 40
+if (srelpr > 0.0) go to 40
 !
 !     ***** When eps1 = 0 Then set srelpr to be the smallest
 !           number for which 1 + srelpr .GT. 1 *****
@@ -7238,8 +7238,8 @@ lor1 = 1
 enorn = n
 en = n
 !     ********** BEGIN QZ STEP **********
-50 if (en.le.1) go to 220
-if (mats.eq.0) enorn = en
+50 if (en <= 1) go to 220
+if (mats == 0) enorn = en
 its = 0
 na = en - 1
 enm2 = na - 1
@@ -7248,11 +7248,11 @@ enm2 = na - 1
 do ll = 1,en
    lm1 = en - ll
    l = lm1 + 1
-   if (l.eq.1) go to 90
-   if (cabs(a(l,lm1)).le.epsa) go to 80
+   if (l == 1) go to 90
+   if (cabs(a(l,lm1)) <= epsa) go to 80
 end do
 80 a(l,lm1) = cmplx(0.0,0.0)
-if (l.lt.na) go to 90
+if (l < na) go to 90
 !     ********** 1-By-1 block isolated **********
 en = lm1
 go to 50
@@ -7260,14 +7260,14 @@ go to 50
 90 ld = l
 l1 = l + 1
 b11 = b(l,l)
-if (cabs(b11).gt.epsb) go to 120
+if (cabs(b11) > epsb) go to 120
 b(l,l) = cmplx(0.0,0.0)
 s = cabs(a(l,l)) + cabs(a(l1,l))
 u1 = a(l,l)/cmplx(s,0.0)
 u2 = a(l1,l)/cmplx(s,0.0)
 r = sqrt(cabs(u1)**2 + cabs(u2)**2)
 rr = cmplx(r,0.0)
-if (cabs(u1).ne.0.0) rr = (u1/cabs(u1))*rr
+if (cabs(u1) /= 0.0) rr = (u1/cabs(u1))*rr
 v1 = -(u1 + rr)/rr
 v2 = -u2/rr
 u2 = v2/v1
@@ -7278,28 +7278,28 @@ do 110 j = l,enorn
    t = b(l,j) + conjg(u2)*b(l1,j)
    b(l,j) = b(l,j) + t*v1
    b(l1,j) = b(l1,j) + t*v2
-   if (mats.eq.3) go to 110
+   if (mats == 3) go to 110
    do jj = 1,n
       tf = f(l,jj) + conjg(u2)*f(l1,jj)
       f(l,jj) = f(l,jj) + tf*v1
       f(l1,jj) = f(l1,jj) + tf*v2
    end do
 110 continue
-if (l.ne.1) a(l,lm1) = -a(l,lm1)
+if (l /= 1) a(l,lm1) = -a(l,lm1)
 lm1 = l
 l = l1
 go to 80
 120 a11 = a(l,l)/b11
 a21 = a(l1,l)/b11
 !     ********** Iteration strategy **********
-if (its.eq.50) go to 210
+if (its == 50) go to 210
 !     ********** Determine shift **********
 b22 = b(l1,l1)
-if (cabs(b22).lt.epsb) b22 = cmplx(epsb,0.0)
+if (cabs(b22) < epsb) b22 = cmplx(epsb,0.0)
 b33 = b(na,na)
-if (cabs(b33).lt.epsb) b33 = cmplx(epsb,0.0)
+if (cabs(b33) < epsb) b33 = cmplx(epsb,0.0)
 b44 = b(en,en)
-if (cabs(b44).lt.epsb) b44 = cmplx(epsb,0.0)
+if (cabs(b44) < epsb) b44 = cmplx(epsb,0.0)
 a33 = a(na,na)/b33
 a34 = a(na,en)/b44
 a43 = a(en,na)/b33
@@ -7311,15 +7311,15 @@ rr = t*t + a34*a43 - a33*a44
 rr = csqrt(rr)
 sh = -t + rr
 ss = -t - rr
-if (cabs(ss - a44).lt.cabs(sh - a44)) sh = ss
+if (cabs(ss - a44) < cabs(sh - a44)) sh = ss
 a1 = a11 - sh
 a2 = a21
-if (l.ne.ld) a(l,lm1) = -a(l,lm1)
-if (its.ne.10) go to 130
+if (l /= ld) a(l,lm1) = -a(l,lm1)
+if (its /= 10) go to 130
 a1 = cmplx(1.0,0.0)
 a2 = cmplx(1.1605,0.0)
 130 its = its + 1
-if (mats.eq.0) lor1 = ld
+if (mats == 0) lor1 = ld
 !     ********** Main loop **********
 do 200 k = l,na
    k1 = k + 1
@@ -7327,16 +7327,16 @@ do 200 k = l,na
    km1 = max0(k - 1,l)
    ll = min0(en,k1 + ish)
 !     ********** ZERO a(k+1,k-1) **********
-   if (k.eq.l) go to 140
+   if (k == l) go to 140
    a1 = a(k,km1)
    a2 = a(k1,km1)
 140 s = cabs(a1) + cabs(a2)
-   if (s.eq.0.0) go to 60
+   if (s == 0.0) go to 60
    u1 = a1/cmplx(s,0.0)
    u2 = a2/cmplx(s,0.0)
    r = sqrt(cabs(u1)**2 + cabs(u2)**2)
    rr = cmplx(r,0.0)
-   if (cabs(u1).ne.0.0) rr = (u1/cabs(u1))*rr
+   if (cabs(u1) /= 0.0) rr = (u1/cabs(u1))*rr
    v1 = -(u1 + rr)/rr
    v2 = -u2/rr
    u2 = v2/v1
@@ -7348,8 +7348,8 @@ do 200 k = l,na
       b(k,j) = b(k,j) + t*v1
       b(k1,j) = b(k1,j) + t*v2
    end do
-   if (k.ne.l) a(k1,km1) = cmplx(0.0,0.0)
-   if (mats.eq.3) go to 170
+   if (k /= l) a(k1,km1) = cmplx(0.0,0.0)
+   if (mats == 3) go to 170
    do j = 1,n
       tf = f(k,j) + conjg(u2)*f(k1,j)
       f(k,j) = f(k,j) + tf*v1
@@ -7357,12 +7357,12 @@ do 200 k = l,na
    end do
 !     ********** ZERO b(k+1,k) **********
 170 s = cabs(b(k1,k1)) + cabs(b(k1,k))
-   if (s.eq.0.0) go to 200
+   if (s == 0.0) go to 200
    u1 = b(k1,k1)/cmplx(s,0.0)
    u2 = b(k1,k)/cmplx(s,0.0)
    r = sqrt(cabs(u1)**2 + cabs(u2)**2)
    rr = cmplx(r,0.0)
-   if (cabs(u1).ne.0.0) rr = (u1/cabs(u1))*rr
+   if (cabs(u1) /= 0.0) rr = (u1/cabs(u1))*rr
    v1 = -(u1 + rr)/rr
    v2 = -u2/rr
    u2 = v2/v1
@@ -7375,7 +7375,7 @@ do 200 k = l,na
       b(i,k) = b(i,k) + t*v2
    end do
    b(k1,k) = cmplx(0.0,0.0)
-   if (mats.eq.0) go to 200
+   if (mats == 0) go to 200
    do i = 1,n
       t = z(i,k1) + conjg(u2)*z(i,k)
       z(i,k1) = z(i,k1) + t*v1
@@ -7388,7 +7388,7 @@ go to 60
 !                has become negligible after 50 iterations **********
 210 ierr = en
 !     ********** Save epsb for use by CQZVEC **********
-220 if (n.gt.1) b(n,1) = cmplx(epsb,0.0)
+220 if (n > 1) b(n,1) = cmplx(epsb,0.0)
 return
 end subroutine cqzit
 
@@ -7448,17 +7448,17 @@ nm1 = n - 1
 do kk = 1,n
 !        ********** Backsubstitute for row k. **********
    k = n - kk + 1
-   if (cabs(f(k,n)).ne.0.0) go to 10
+   if (cabs(f(k,n)) /= 0.0) go to 10
    f(k,n) = cmplx(0.0,0.0)
    go to 30
 10 denom = u(k,k) + v(k,k)*l(n,n)
    s = cabs(denom)
    t = 1.0 + s/cabs(f(k,n))
-   if (t.gt.1.0) go to 20
+   if (t > 1.0) go to 20
    ierr = 1
    return
 20 f(k,n) = f(k,n)/denom
-   if (n.eq.1) return
+   if (n == 1) return
 30 do 70 i = 1,nm1
       j = n - i
       jp1 = j + 1
@@ -7467,19 +7467,19 @@ do kk = 1,n
          sum = sum + f(k,m)*l(m,j)
       end do
       sum = f(k,j) - v(k,k)*sum
-      if (cabs(sum).ne.0.0) go to 50
+      if (cabs(sum) /= 0.0) go to 50
       f(k,j) = cmplx(0.0,0.0)
       go to 70
 50    denom = u(k,k) + v(k,k)*l(j,j)
       s = cabs(denom)
       t = 1.0 + s/cabs(sum)
-      if (t.gt.1.0) go to 60
+      if (t > 1.0) go to 60
       ierr = 1
       return
 60    f(k,j) = sum/denom
 70    continue
 !        ********** Form temp = YK-trans*l. **********
-   if (k.eq.1) return
+   if (k == 1) return
    km1 = k - 1
    do i = 1,n
       temp(i) = cmplx(0.0,0.0)
@@ -7528,7 +7528,7 @@ real, parameter :: c(8) = [.500000000000000e+00, .116666666666667e+00, .16666666
 !     ---------------
 ! ----------------------------------------------------------------------
 ierr = 0
-if (n .gt. 1) go to 10
+if (n > 1) go to 10
 z(1,1) = exp(a(1,1))
 return
 !
@@ -7549,16 +7549,16 @@ do 12 j = 1,n
 !
 anorm = amin1(anorm,anorm1)
 s = anorm + 0.1
-if (s .eq. anorm) go to 200
+if (s == anorm) go to 200
 !
 !              Select the normalization factor
 !
 m = 0
-if (anorm .le. 1.0) go to 40
+if (anorm <= 1.0) go to 40
 factor = 1.0
 20 m = m + 1
 factor = 2.0*factor
-if (anorm .gt. factor) go to 20
+if (anorm > factor) go to 20
 !
 !                Normalize the matrix a
 !
@@ -7605,7 +7605,7 @@ do j = 1,n
       s = c(1)*a(i,j)
       z(i,j) = p + s
       wk(i,j) = q - s
-      if (i .ne. j) go to 90
+      if (i /= j) go to 90
       z(i,j) = z(i,j) + 1.0
       wk(i,j) = wk(i,j) + 1.0
 90    continue
@@ -7614,8 +7614,8 @@ end do
 !        Calculate exp(a) by solving  wk * exp(a) = z
 !
 call slv(n, n, wk, n, z, kz, ierr)
-if (ierr .ne. 0) go to 210
-if (m .eq. 0) go to 150
+if (ierr /= 0) go to 210
+if (m == 0) go to 150
 !
 !          Take out the effect of the normalization
 !                   operation on exp(a)
@@ -7683,7 +7683,7 @@ double precision, parameter :: c(12) = [.500000000000000000000000000000d+00, &
 !     ---------------
 ! ----------------------------------------------------------------------
 ierr = 0
-if (n .gt. 1) go to 10
+if (n > 1) go to 10
 z(1,1) = dexp(a(1,1))
 return
 !
@@ -7704,16 +7704,16 @@ do 12 j = 1,n
 !
 anorm = dmin1(anorm,anorm1)
 s = anorm + 0.1d0
-if (s .eq. anorm) go to 200
+if (s == anorm) go to 200
 !
 !              Select the normalization factor
 !
 m = 0
-if (anorm .le. 1.d0) go to 40
+if (anorm <= 1.d0) go to 40
 factor = 1.d0
 20 m = m + 1
 factor = 2.d0*factor
-if (anorm .gt. factor) go to 20
+if (anorm > factor) go to 20
 !
 !                Normalize the matrix a
 !
@@ -7760,7 +7760,7 @@ do j = 1,n
       s = c(1)*a(i,j)
       z(i,j) = p + s
       wk(i,j) = q - s
-      if (i .ne. j) go to 90
+      if (i /= j) go to 90
       z(i,j) = z(i,j) + 1.d0
       wk(i,j) = wk(i,j) + 1.d0
 90    continue
@@ -7769,8 +7769,8 @@ end do
 !        Calculate exp(a) by solving  wk * exp(a) = z
 !
 call dpslv(n, n, wk, n, z, kz, ierr)
-if (ierr .ne. 0) go to 210
-if (m .eq. 0) go to 150
+if (ierr /= 0) go to 210
+if (m == 0) go to 150
 !
 !          Take out the effect of the normalization
 !                   operation on exp(a)
@@ -7833,8 +7833,8 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 !
-if (n .gt. 1) go to 10
-if (c(1) .eq. zero) go to 200
+if (n > 1) go to 10
+if (c(1) == zero) go to 200
 c(1) = bk/c(1)
 return
 !
@@ -7842,14 +7842,14 @@ return
 !
 10 m = 1
 do i = 2,n
-   if (abs(c(m)) .lt. abs(c(i))) m = i
+   if (abs(c(m)) < abs(c(i))) m = i
 end do
 !
 ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) .eq. zero) go to 200
+if (c(1) == zero) go to 200
 !
 !     Find the first elementary matrix and store it in d
 !
@@ -7878,18 +7878,18 @@ do k = 2,n
    lcolp1 = lcol + 1
    lastm1 = 1
    last = max - n + k
-   if (k .eq. 2) go to 50
+   if (k == 2) go to 50
 !
    lastm1 = max - n + km1
-   if (iflag .lt. 0) last = last - n + k - 2
-   if (iflag .gt. 0) lastm1 = lastm1 - n + k - 3
+   if (iflag < 0) last = last - n + k - 2
+   if (iflag > 0) lastm1 = lastm1 - n + k - 3
 !
 !     j loop - Effect of columns 1 to k-1 of L-inverse
 !
 50 do 61 j = 1,km1
       cj = c(j)
       ij = (j - 1)*lcolp1
-      if (j .eq. km1) ij = lastm1 - 1
+      if (j == km1) ij = lastm1 - 1
 !
 !     i loop - Effect of L-inverse on rows k to n+1
 !
@@ -7901,22 +7901,22 @@ do k = 2,n
 !       k=n CASE
 !
    m = k
-   if (k .lt. n) go to 70
-   if (c(k) .eq. zero) go to 200
+   if (k < n) go to 70
+   if (c(k) == zero) go to 200
    d(last) = bk/c(k)
    go to 90
 !
 !     Find the pivot
 !
 70 do i = kp1,n
-      if (abs(c(m)) .lt. abs(c(i))) m = i
+      if (abs(c(m)) < abs(c(i))) m = i
    end do
 !
    ip(k) = m
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) .eq. zero) go to 200
+   if (c(k) == zero) go to 200
 !
 !     Find the k-TH elementary matrix
 !
@@ -7933,7 +7933,7 @@ do k = 2,n
       mjold = kjold + m - k
       ij = (j - 1)*lcol
       ijold = ij + j
-      if (j .ne. km1) go to 100
+      if (j /= km1) go to 100
 !
       kjold = lastm1
       mjold = lastm1 + m - k
@@ -7951,7 +7951,7 @@ do k = 2,n
 end do
 !
 last = max
-if (iflag .lt. 0) last = max - 2
+if (iflag < 0) last = max - 2
 d(n) = d(last)
 !
 !     Insert the solution in c
@@ -8003,8 +8003,8 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 !
-if (n .gt. 1) go to 10
-if (c(1) .eq. zero) go to 200
+if (n > 1) go to 10
+if (c(1) == zero) go to 200
 c(1) = bk/c(1)
 return
 !
@@ -8012,14 +8012,14 @@ return
 !
 10 m = 1
 do i = 2,n
-   if (dabs(c(m)) .lt. dabs(c(i))) m = i
+   if (dabs(c(m)) < dabs(c(i))) m = i
 end do
 !
 ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) .eq. zero) go to 200
+if (c(1) == zero) go to 200
 !
 !     Find the first elementary matrix and store it in d
 !
@@ -8048,18 +8048,18 @@ do k = 2,n
    lcolp1 = lcol + 1
    lastm1 = 1
    last = max - n + k
-   if (k .eq. 2) go to 50
+   if (k == 2) go to 50
 !
    lastm1 = max - n + km1
-   if (iflag .lt. 0) last = last - n + k - 2
-   if (iflag .gt. 0) lastm1 = lastm1 - n + k - 3
+   if (iflag < 0) last = last - n + k - 2
+   if (iflag > 0) lastm1 = lastm1 - n + k - 3
 !
 !     j loop - Effect of columns 1 to k-1 of L-inverse
 !
 50 do 61 j = 1,km1
       cj = c(j)
       ij = (j - 1)*lcolp1
-      if (j .eq. km1) ij = lastm1 - 1
+      if (j == km1) ij = lastm1 - 1
 !
 !     i loop - Effect of L-inverse on rows k to n+1
 !
@@ -8071,22 +8071,22 @@ do k = 2,n
 !       k=n CASE
 !
    m = k
-   if (k .lt. n) go to 70
-   if (c(k) .eq. zero) go to 200
+   if (k < n) go to 70
+   if (c(k) == zero) go to 200
    d(last) = bk/c(k)
    go to 90
 !
 !     Find the pivot
 !
 70 do i = kp1,n
-      if (dabs(c(m)) .lt. dabs(c(i))) m = i
+      if (dabs(c(m)) < dabs(c(i))) m = i
    end do
 !
    ip(k) = m
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) .eq. zero) go to 200
+   if (c(k) == zero) go to 200
 !
 !     Find the k-TH elementary matrix
 !
@@ -8103,7 +8103,7 @@ do k = 2,n
       mjold = kjold + m - k
       ij = (j - 1)*lcol
       ijold = ij + j
-      if (j .ne. km1) go to 100
+      if (j /= km1) go to 100
 !
       kjold = lastm1
       mjold = lastm1 + m - k
@@ -8121,7 +8121,7 @@ do k = 2,n
 end do
 !
 last = max
-if (iflag .lt. 0) last = max - 2
+if (iflag < 0) last = max - 2
 d(n) = d(last)
 !
 !     Insert the solution in c
@@ -8174,8 +8174,8 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 !
-if (n .gt. 1) go to 10
-if (c(1) .eq. zero) go to 200
+if (n > 1) go to 10
+if (c(1) == zero) go to 200
 c(1) = bk/c(1)
 return
 !
@@ -8185,7 +8185,7 @@ return
 s = abs(real(c(1))) + abs(aimag(c(1)))
 do 20 i = 2,n
    si = abs(real(c(i))) + abs(aimag(c(i)))
-   if (si .le. s) go to 20
+   if (si <= s) go to 20
    m = i
    s = si
 20 continue
@@ -8194,7 +8194,7 @@ ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) .eq. zero) go to 200
+if (c(1) == zero) go to 200
 !
 !     Find the first elementary matrix and store it in d
 !
@@ -8223,18 +8223,18 @@ do k = 2,n
    lcolp1 = lcol + 1
    lastm1 = 1
    last = max - n + k
-   if (k .eq. 2) go to 50
+   if (k == 2) go to 50
 !
    lastm1 = max - n + km1
-   if (iflag .lt. 0) last = last - n + k - 2
-   if (iflag .gt. 0) lastm1 = lastm1 - n + k - 3
+   if (iflag < 0) last = last - n + k - 2
+   if (iflag > 0) lastm1 = lastm1 - n + k - 3
 !
 !     j loop - Effect of columns 1 to k-1 of L-inverse
 !
 50 do 61 j = 1,km1
       cj = c(j)
       ij = (j - 1)*lcolp1
-      if (j .eq. km1) ij = lastm1 - 1
+      if (j == km1) ij = lastm1 - 1
 !
 !     i loop - Effect of L-inverse on rows k to n+1
 !
@@ -8246,8 +8246,8 @@ do k = 2,n
 !       k=n CASE
 !
    m = k
-   if (k .lt. n) go to 70
-   if (c(k) .eq. zero) go to 200
+   if (k < n) go to 70
+   if (c(k) == zero) go to 200
    d(last) = bk/c(k)
    go to 90
 !
@@ -8256,7 +8256,7 @@ do k = 2,n
 70 s = abs(real(c(k))) + abs(aimag(c(k)))
    do 71 i = kp1,n
       si = abs(real(c(i))) + abs(aimag(c(i)))
-      if (si .le. s) go to 71
+      if (si <= s) go to 71
       m = i
       s = si
 71    continue
@@ -8265,7 +8265,7 @@ do k = 2,n
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) .eq. zero) go to 200
+   if (c(k) == zero) go to 200
 !
 !     Find the k-TH elementary matrix
 !
@@ -8282,7 +8282,7 @@ do k = 2,n
       mjold = kjold + m - k
       ij = (j - 1)*lcol
       ijold = ij + j
-      if (j .ne. km1) go to 100
+      if (j /= km1) go to 100
 !
       kjold = lastm1
       mjold = lastm1 + m - k
@@ -8300,7 +8300,7 @@ do k = 2,n
 end do
 !
 last = max
-if (iflag .lt. 0) last = max - 2
+if (iflag < 0) last = max - 2
 d(n) = d(last)
 !
 !     Insert the solution in c
@@ -8336,7 +8336,7 @@ integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    jmax = min0(n,i + mu)
    k = ml + 1 - i
@@ -8364,7 +8364,7 @@ end do
 !     Insert zeros in the upper right corner
 !
 jmin = mu + 2
-if (jmin .gt. n) go to 40
+if (jmin > n) go to 40
 imax0 = 1
 do j = jmin,n
    do 30 i = 1,imax0
@@ -8374,7 +8374,7 @@ end do
 !
 !     Insert zeros in the lower left corner
 !
-40 if (imin .eq. imax) go to 50
+40 if (imin == imax) go to 50
 jmax = imax - imin
 do j = 1,jmax
    imin = imin + 1
@@ -8384,7 +8384,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,n
    do 51 i = imin,m
@@ -8406,7 +8406,7 @@ integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 30
+if (ml == 0) go to 30
 l = ml
 do i = 1,ml
    jmax = min0(n,i + mu)
@@ -8443,7 +8443,7 @@ end do
 !     Insert zeros in the lower right corner
 !
 jmax = ml + mu + 1
-if (k .eq. jmax) go to 50
+if (k == jmax) go to 50
 jmin = k + 1
 imin = imax
 do j = jmin,jmax
@@ -8454,7 +8454,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,jmax
    do 51 i = imin,m
@@ -8494,24 +8494,24 @@ end interface
 !
 nm1 = n - 1
 imin = m
-if (m .eq. 1) go to 20
+if (m == 1) go to 20
 do l = 2,m
    j = 1
    imax = min0(m,imin + nm1)
    do 10 i = imin,imax
-      if (a(i,j) .ne. 0.0) go to 20
+      if (a(i,j) /= 0.0) go to 20
 10    j = j + 1
    imin = imin - 1
 end do
 !
 20 mm1 = m - 1
 jmin = n
-if (n .eq. 1) go to 30
+if (n == 1) go to 30
 do l = 2,n
    i = 1
    jmax = min0(n,jmin + mm1)
    do 21 j = jmin,jmax
-      if (a(i,j) .ne. 0.0) go to 30
+      if (a(i,j) /= 0.0) go to 30
 21    i = i + 1
    jmin = jmin - 1
 end do
@@ -8519,7 +8519,7 @@ end do
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 !     Store the matrix in b
 !
@@ -8546,7 +8546,7 @@ integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    jmax = min0(n,i + mu)
    k = ml + 1 - i
@@ -8574,7 +8574,7 @@ end do
 !     Insert zeros in the upper right corner
 !
 jmin = mu + 2
-if (jmin .gt. n) go to 40
+if (jmin > n) go to 40
 imax0 = 1
 do j = jmin,n
    do 30 i = 1,imax0
@@ -8584,7 +8584,7 @@ end do
 !
 !     Insert zeros in the lower left corner
 !
-40 if (imin .eq. imax) go to 50
+40 if (imin == imax) go to 50
 jmax = imax - imin
 do j = 1,jmax
    imin = imin + 1
@@ -8594,7 +8594,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,n
    do 51 i = imin,m
@@ -8616,7 +8616,7 @@ integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 30
+if (ml == 0) go to 30
 l = ml
 do i = 1,ml
    jmax = min0(n,i + mu)
@@ -8653,7 +8653,7 @@ end do
 !     Insert zeros in the lower right corner
 !
 jmax = ml + mu + 1
-if (k .eq. jmax) go to 50
+if (k == jmax) go to 50
 jmin = k + 1
 imin = imax
 do j = jmin,jmax
@@ -8664,7 +8664,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,jmax
    do 51 i = imin,m
@@ -8704,24 +8704,24 @@ end interface
 !
 nm1 = n - 1
 imin = m
-if (m .eq. 1) go to 20
+if (m == 1) go to 20
 do l = 2,m
    j = 1
    imax = min0(m,imin + nm1)
    do 10 i = imin,imax
-      if (a(i,j) .ne. 0.d0) go to 20
+      if (a(i,j) /= 0.d0) go to 20
 10    j = j + 1
    imin = imin - 1
 end do
 !
 20 mm1 = m - 1
 jmin = n
-if (n .eq. 1) go to 30
+if (n == 1) go to 30
 do l = 2,n
    i = 1
    jmax = min0(n,jmin + mm1)
    do 21 j = jmin,jmax
-      if (a(i,j) .ne. 0.d0) go to 30
+      if (a(i,j) /= 0.d0) go to 30
 21    i = i + 1
    jmin = jmin - 1
 end do
@@ -8729,7 +8729,7 @@ end do
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 !     Store the matrix in b
 !
@@ -8756,7 +8756,7 @@ integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    jmax = min0(n,i + mu)
    k = ml + 1 - i
@@ -8784,7 +8784,7 @@ end do
 !     Insert zeros in the upper right corner
 !
 jmin = mu + 2
-if (jmin .gt. n) go to 40
+if (jmin > n) go to 40
 imax0 = 1
 do j = jmin,n
    do 30 i = 1,imax0
@@ -8794,7 +8794,7 @@ end do
 !
 !     Insert zeros in the lower left corner
 !
-40 if (imin .eq. imax) go to 50
+40 if (imin == imax) go to 50
 jmax = imax - imin
 do j = 1,jmax
    imin = imin + 1
@@ -8804,7 +8804,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,n
    do 51 i = imin,m
@@ -8826,7 +8826,7 @@ integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !
 !     Store the nonzero data of the first ml rows
 !
-if (ml .eq. 0) go to 30
+if (ml == 0) go to 30
 l = ml
 do i = 1,ml
    jmax = min0(n,i + mu)
@@ -8863,7 +8863,7 @@ end do
 !     Insert zeros in the lower right corner
 !
 jmax = ml + mu + 1
-if (k .eq. jmax) go to 50
+if (k == jmax) go to 50
 jmin = k + 1
 imin = imax
 do j = jmin,jmax
@@ -8874,7 +8874,7 @@ end do
 !
 !     Store zeros in the final m-imax rows
 !
-50 if (imax .eq. m) return
+50 if (imax == m) return
 imin = imax + 1
 do j = 1,jmax
    do 51 i = imin,m
@@ -8914,24 +8914,24 @@ end interface
 !
 nm1 = n - 1
 imin = m
-if (m .eq. 1) go to 20
+if (m == 1) go to 20
 do l = 2,m
    j = 1
    imax = min0(m,imin + nm1)
    do 10 i = imin,imax
-      if (a(i,j) .ne. (0.0,0.0)) go to 20
+      if (a(i,j) /= (0.0,0.0)) go to 20
 10    j = j + 1
    imin = imin - 1
 end do
 !
 20 mm1 = m - 1
 jmin = n
-if (n .eq. 1) go to 30
+if (n == 1) go to 30
 do l = 2,n
    i = 1
    jmax = min0(n,jmin + mm1)
    do 21 j = jmin,jmax
-      if (a(i,j) .ne. (0.0,0.0)) go to 30
+      if (a(i,j) /= (0.0,0.0)) go to 30
 21    i = i + 1
    jmin = jmin - 1
 end do
@@ -8939,7 +8939,7 @@ end do
 30 ml = imin - 1
 mu = jmin - 1
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 !     Store the matrix in b
 !
@@ -8972,13 +8972,13 @@ kmax = ml + mu + 1
 !     Store the nonzero data of the first ml rows
 !
 j0 = ml
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    ib(i) = l
    kmin = 1 + j0
    do 10 k = kmin,kmax
-      if (a(i,k) .eq. 0.0) go to 10
-      if (l .gt. num) go to 40
+      if (a(i,k) == 0.0) go to 10
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -8993,8 +8993,8 @@ imax = min0(m,ml + n)
 do i = imin,imax
    ib(i) = l
    do 21 k = 1,kmax
-      if (a(i,k) .eq. 0.0) go to 21
-      if (l .gt. num) go to 40
+      if (a(i,k) == 0.0) go to 21
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -9037,13 +9037,13 @@ kmax = ml + mu + 1
 !     Store the nonzero data of the first ml rows
 !
 j0 = ml
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    ib(i) = l
    kmin = 1 + j0
    do 10 k = kmin,kmax
-      if (a(i,k) .eq. 0.d0) go to 10
-      if (l .gt. num) go to 40
+      if (a(i,k) == 0.d0) go to 10
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -9058,8 +9058,8 @@ imax = min0(m,ml + n)
 do i = imin,imax
    ib(i) = l
    do 21 k = 1,kmax
-      if (a(i,k) .eq. 0.d0) go to 21
-      if (l .gt. num) go to 40
+      if (a(i,k) == 0.d0) go to 21
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -9102,13 +9102,13 @@ kmax = ml + mu + 1
 !     Store the nonzero data of the first ml rows
 !
 j0 = ml
-if (ml .eq. 0) go to 20
+if (ml == 0) go to 20
 do i = 1,ml
    ib(i) = l
    kmin = 1 + j0
    do 10 k = kmin,kmax
-      if (a(i,k) .eq. (0.0,0.0)) go to 10
-      if (l .gt. num) go to 40
+      if (a(i,k) == (0.0,0.0)) go to 10
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -9123,8 +9123,8 @@ imax = min0(m,ml + n)
 do i = imin,imax
    ib(i) = l
    do 21 k = 1,kmax
-      if (a(i,k) .eq. (0.0,0.0)) go to 21
-      if (l .gt. num) go to 40
+      if (a(i,k) == (0.0,0.0)) go to 21
+      if (l > num) go to 40
       b(l) = a(i,k)
       jb(l) = k - j0
       l = l + 1
@@ -9170,9 +9170,9 @@ mu = 0
 do 11 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 11
+   if (lmin > lmax) go to 11
    do 10 l = lmin,lmax
-      if (a(l) .eq. 0.0) go to 10
+      if (a(l) == 0.0) go to 10
       k = ja(l) - i
       mu = max0(mu,k)
       ml = max0(ml,-k)
@@ -9182,7 +9182,7 @@ do 11 i = 1,m
 !     Set b = 0 If b provides sufficient storage
 !
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 ierr = 0
 do k = 1,kmax
@@ -9196,9 +9196,9 @@ j0 = ml
 do 31 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 31
+   if (lmin > lmax) go to 31
    do 30 l = lmin,lmax
-      if (a(l) .eq. 0.0) go to 30
+      if (a(l) == 0.0) go to 30
       k = ja(l) + j0
       b(i,k) = a(l)
 30    continue
@@ -9234,9 +9234,9 @@ mu = 0
 do 11 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 11
+   if (lmin > lmax) go to 11
    do 10 l = lmin,lmax
-      if (a(l) .eq. 0.d0) go to 10
+      if (a(l) == 0.d0) go to 10
       k = ja(l) - i
       mu = max0(mu,k)
       ml = max0(ml,-k)
@@ -9246,7 +9246,7 @@ do 11 i = 1,m
 !     Set b = 0 If b provides sufficient storage
 !
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 ierr = 0
 do k = 1,kmax
@@ -9260,9 +9260,9 @@ j0 = ml
 do 31 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 31
+   if (lmin > lmax) go to 31
    do 30 l = lmin,lmax
-      if (a(l) .eq. 0.d0) go to 30
+      if (a(l) == 0.d0) go to 30
       k = ja(l) + j0
       b(i,k) = a(l)
 30    continue
@@ -9298,9 +9298,9 @@ mu = 0
 do 11 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 11
+   if (lmin > lmax) go to 11
    do 10 l = lmin,lmax
-      if (a(l) .eq. (0.0,0.0)) go to 10
+      if (a(l) == (0.0,0.0)) go to 10
       k = ja(l) - i
       mu = max0(mu,k)
       ml = max0(ml,-k)
@@ -9310,7 +9310,7 @@ do 11 i = 1,m
 !     Set b = 0 If b provides sufficient storage
 !
 kmax = ml + mu + 1
-if (kmax .gt. nb) go to 40
+if (kmax > nb) go to 40
 !
 ierr = 0
 do k = 1,kmax
@@ -9324,9 +9324,9 @@ j0 = ml
 do 31 i = 1,m
    lmin = ia(i)
    lmax = ia(i + 1) - 1
-   if (lmin .gt. lmax) go to 31
+   if (lmin > lmax) go to 31
    do 30 l = lmin,lmax
-      if (a(l) .eq. (0.0,0.0)) go to 30
+      if (a(l) == (0.0,0.0)) go to 30
       k = ja(l) + j0
       b(i,k) = a(l)
 30    continue
@@ -9396,22 +9396,22 @@ integer :: i, imin, j, k, num
 !     Computation of nl and nu
 !
 nl = ml
-if (ml .eq. 0) go to 30
+if (ml == 0) go to 30
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if (real(a(i,j)) .ne. 0.0) go to 30
+      if (real(a(i,j)) /= 0.0) go to 30
    end do
    nl = nl - 1
    imin = imin - 1
 end do
 !
 30 nu = mu
-if (mu .eq. 0) go to 60
+if (mu == 0) go to 60
 j = ml + mu + 1
 do k = 1,mu
    do i = 1,m
-      if (real(a(i,j)) .ne. 0.0) go to 60
+      if (real(a(i,j)) /= 0.0) go to 60
    end do
    nu = nu - 1
    j = j - 1
@@ -9420,7 +9420,7 @@ end do
 !     Store the real part of A in b
 !
 60 num = nl + nu + 1
-if (num .gt. l) go to 100
+if (num > l) go to 100
 ierr = 0
 k = ml - nl
 do j = 1,num
@@ -9453,22 +9453,22 @@ integer :: i, imin, j, k, num
 !     Computation of nl and nu
 !
 nl = ml
-if (ml .eq. 0) go to 30
+if (ml == 0) go to 30
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if (aimag(a(i,j)) .ne. 0.0) go to 30
+      if (aimag(a(i,j)) /= 0.0) go to 30
    end do
    nl = nl - 1
    imin = imin - 1
 end do
 !
 30 nu = mu
-if (mu .eq. 0) go to 60
+if (mu == 0) go to 60
 j = ml + mu + 1
 do k = 1,mu
    do i = 1,m
-      if (aimag(a(i,j)) .ne. 0.0) go to 60
+      if (aimag(a(i,j)) /= 0.0) go to 60
    end do
    nu = nu - 1
    j = j - 1
@@ -9477,7 +9477,7 @@ end do
 !     Store the imaginary part of A in b
 !
 60 num = nl + nu + 1
-if (num .gt. l) go to 100
+if (num > l) go to 100
 ierr = 0
 k = ml - nl
 do j = 1,num
@@ -9510,14 +9510,14 @@ integer :: i, j, ja, jb, jc, jmax, k, num
 mcl = max0(ml,nl)
 mcu = max0(mu,nu)
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 ierr = 0
 k = min0(mu,nu) + 1
 !
 !     Insert the first abs(ml - nl) diagonals
 !
-if (nl .ge. ml) go to 30
+if (nl >= ml) go to 30
 ja = ml - nl
 jb = 0
 jc = ja
@@ -9533,7 +9533,7 @@ go to 60
 jb = nl - ml
 jc = jb
 jmax = ml + k
-if (jc .eq. 0) go to 60
+if (jc == 0) go to 60
 do j = 1,jc
    do i = 1,m
       c(i,j) = cmplx(0.0,b(i,j))
@@ -9553,7 +9553,7 @@ end do
 !
 !     Insertion of the remaining diagonals
 !
-if (nu .ge. mu) go to 120
+if (nu >= mu) go to 120
 jmax = mu - nu
 do j = 1,jmax
    ja = ja + 1
@@ -9565,7 +9565,7 @@ end do
 return
 !
 120 jmax = nu - mu
-if (jmax .eq. 0) return
+if (jmax == 0) return
 do j = 1,jmax
    jb = jb + 1
    jc = jc + 1
@@ -9593,7 +9593,7 @@ integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !
 l = ml + mu + 1
 lp1 = l + 1
-if (mu .eq. 0) go to 40
+if (mu == 0) go to 40
 !
 !     Define the first mu columns of b
 !
@@ -9610,7 +9610,7 @@ do 31 j = 1,mu
       b(k,j) = a(i,lj)
    end do
 !
-   if (k .eq. n) go to 31
+   if (k == n) go to 31
    imin = k + 1
    do i = imin,n
       b(i,j) = 0.0
@@ -9629,7 +9629,7 @@ do 61 j = jmin,l
       b(i,j) = a(k,lj)
    end do
 !
-   if (imax .eq. n) go to 61
+   if (imax == n) go to 61
    imin = imax + 1
    do i = imin,n
       b(i,j) = 0.0
@@ -9650,7 +9650,7 @@ integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !
 l = ml + mu + 1
 lp1 = l + 1
-if (mu .eq. 0) go to 40
+if (mu == 0) go to 40
 !
 !     Define the first mu columns of b
 !
@@ -9667,7 +9667,7 @@ do 31 j = 1,mu
       b(k,j) = a(i,lj)
    end do
 !
-   if (k .eq. n) go to 31
+   if (k == n) go to 31
    imin = k + 1
    do i = imin,n
       b(i,j) = 0.d0
@@ -9686,7 +9686,7 @@ do 61 j = jmin,l
       b(i,j) = a(k,lj)
    end do
 !
-   if (imax .eq. n) go to 61
+   if (imax == n) go to 61
    imin = imax + 1
    do i = imin,n
       b(i,j) = 0.d0
@@ -9707,7 +9707,7 @@ integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !
 l = ml + mu + 1
 lp1 = l + 1
-if (mu .eq. 0) go to 40
+if (mu == 0) go to 40
 !
 !     Define the first mu columns of b
 !
@@ -9724,7 +9724,7 @@ do 31 j = 1,mu
       b(k,j) = a(i,lj)
    end do
 !
-   if (k .eq. n) go to 31
+   if (k == n) go to 31
    imin = k + 1
    do i = imin,n
       b(i,j) = (0.0,0.0)
@@ -9743,7 +9743,7 @@ do 61 j = jmin,l
       b(i,j) = a(k,lj)
    end do
 !
-   if (imax .eq. n) go to 61
+   if (imax == n) go to 61
    imin = imax + 1
    do i = imin,n
       b(i,j) = (0.0,0.0)
@@ -9771,7 +9771,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -9783,7 +9783,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -9797,11 +9797,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) .ne. 0.0) go to 40
+      if ((a(i,j) + b(i,j)) /= 0.0) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -9818,7 +9818,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -9841,7 +9841,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -9865,12 +9865,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) .ne. 0.0) go to 170
+      if ((a(i,la) + b(i,lb)) /= 0.0) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -9880,7 +9880,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax
@@ -9918,7 +9918,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -9930,7 +9930,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -9944,11 +9944,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) .ne. 0.d0) go to 40
+      if ((a(i,j) + b(i,j)) /= 0.d0) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -9965,7 +9965,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -9988,7 +9988,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -10012,12 +10012,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) .ne. 0.d0) go to 170
+      if ((a(i,la) + b(i,lb)) /= 0.d0) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -10027,7 +10027,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax
@@ -10065,7 +10065,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -10077,7 +10077,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -10091,11 +10091,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) + b(i,j)) .ne. (0.0,0.0)) go to 40
+      if ((a(i,j) + b(i,j)) /= (0.0,0.0)) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -10112,7 +10112,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -10135,7 +10135,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -10159,12 +10159,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) + b(i,lb)) .ne. (0.0,0.0)) go to 170
+      if ((a(i,la) + b(i,lb)) /= (0.0,0.0)) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -10174,7 +10174,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax
@@ -10212,7 +10212,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -10224,7 +10224,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -10238,11 +10238,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) .ne. 0.0) go to 40
+      if ((a(i,j) - b(i,j)) /= 0.0) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -10259,7 +10259,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -10282,7 +10282,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -10306,12 +10306,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) .ne. 0.0) go to 170
+      if ((a(i,la) - b(i,lb)) /= 0.0) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -10321,7 +10321,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax
@@ -10359,7 +10359,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -10371,7 +10371,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -10385,11 +10385,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) .ne. 0.d0) go to 40
+      if ((a(i,j) - b(i,j)) /= 0.d0) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -10406,7 +10406,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -10429,7 +10429,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -10453,12 +10453,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) .ne. 0.d0) go to 170
+      if ((a(i,la) - b(i,lb)) /= 0.d0) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -10468,7 +10468,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax
@@ -10506,7 +10506,7 @@ if (nl - ml) 10,30,20
 !     Insert the first abs(ml - nl) diagonals
 !
 10 mcl = ml
-if (ml .ge. l) go to 50
+if (ml >= l) go to 50
 ja = ml - nl
 jb = 0
 jc = ja
@@ -10518,7 +10518,7 @@ end do
 go to 50
 !
 20 mcl = nl
-if (nl .ge. l) go to 50
+if (nl >= l) go to 50
 ja = 0
 jb = nl - ml
 jc = jb
@@ -10532,11 +10532,11 @@ go to 50
 !     COMPUTE mcl WHEN ml = nl
 !
 30 mcl = ml
-if (ml .eq. 0) go to 40
+if (ml == 0) go to 40
 imin = ml + 1
 do j = 1,ml
    do i = imin,m
-      if ((a(i,j) - b(i,j)) .ne. (0.0,0.0)) go to 40
+      if ((a(i,j) - b(i,j)) /= (0.0,0.0)) go to 40
    end do
    mcl = mcl - 1
    imin = imin - 1
@@ -10553,7 +10553,7 @@ jmax = mcl + 1
 !
 100 mcu = mu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + nu
 do j = 1,jmax
@@ -10576,7 +10576,7 @@ return
 !
 130 mcu = nu
 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mu
 do j = 1,jmax
@@ -10600,12 +10600,12 @@ return
 !     Compute mcu when mu = nu
 !
 160 mcu = mu
-if (mu .eq. 0) go to 170
+if (mu == 0) go to 170
 la = ml + mu + 1
 lb = nl + nu + 1
 do j = 1,mu
    do i = 1,m
-      if ((a(i,la) - b(i,lb)) .ne. (0.0,0.0)) go to 170
+      if ((a(i,la) - b(i,lb)) /= (0.0,0.0)) go to 170
    end do
    mcu = mcu - 1
    la = la - 1
@@ -10615,7 +10615,7 @@ end do
 !     Addition of the remaining columns when mu = nu
 !
 170 num = mcl + mcu + 1
-if (num .gt. l) go to 200
+if (num > l) go to 200
 !
 jmax = jmax + mcu
 do j = 1,jmax

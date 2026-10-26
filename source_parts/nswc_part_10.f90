@@ -15,15 +15,15 @@ real :: a, b, c, d, dt, h, t0, told, w
 k = 1
 j = ti(1)
 t0 = ti(1) - j
-if (t0 .lt. 0.0) t0 = 1.0 + t0
-if (t0 .ge. t(m)) go to 60
+if (t0 < 0.0) t0 = 1.0 + t0
+if (t0 >= t(m)) go to 60
 il = 1
 ir = m
 !
 !     Bisection search
 !
 10 i = (il + ir)/2
-if (i .eq. il) go to 50
+if (i == il) go to 50
 if (t0 - t(i)) 20,50,30
 20 ir = i
 go to 10
@@ -32,7 +32,7 @@ go to 10
 !
 !     Linear forward search
 !
-40 if (t0 .lt. t(i + 1)) go to 50
+40 if (t0 < t(i + 1)) go to 50
 i = i + 1
 go to 40
 !
@@ -66,13 +66,13 @@ end do
 !
 !     Next point
 !
-100 if (k .ge. l) return
+100 if (k >= l) return
 told = t0
 k = k + 1
 j = ti(k)
 t0 = ti(k) - j
-if (t0 .lt. 0.0) t0 = 1.0 + t0
-if (t0 .ge. t(m)) go to 60
+if (t0 < 0.0) t0 = 1.0 + t0
+if (t0 >= t(m)) go to 60
 if (t0 - told) 110,50,40
 !
 110 il = 1
@@ -97,15 +97,15 @@ real :: a, b, c, d, dt, h, t0, w
 !
 j = ti
 t0 = ti - j
-if (t0 .lt. 0.0) t0 = 1.0 + t0
-if (t0 .ge. t(m)) go to 50
+if (t0 < 0.0) t0 = 1.0 + t0
+if (t0 >= t(m)) go to 50
 il = 1
 ir = m
 !
 !     Bisection search
 !
 10 i = (il + ir)/2
-if (i .eq. il) go to 40
+if (i == il) go to 40
 if (t0 - t(i)) 20,40,30
 20 ir = i
 go to 10
@@ -254,8 +254,8 @@ end interface
 nm1 = n - 1
 np1 = n + 1
 ierr = 0
-if (n .le. 1) go to 8
-if (x(n) .le. x(1)) go to 9
+if (n <= 1) go to 8
+if (x(n) <= x(1)) go to 9
 !
 ! Denormalize tension factor
 !
@@ -263,40 +263,40 @@ sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
 !
 ! Approximate end slopes
 !
-if (islpsw .ge. 2) go to 1
+if (islpsw >= 2) go to 1
 slpp1 = slp1
 go to 2
 1 delx1 = x(2) - x(1)
 delx2 = delx1 + delx1
-if (n .gt. 2) delx2 = x(3) - x(1)
-if (delx1 .le. 0. .or. delx2 .le. delx1) go to 9
+if (n > 2) delx2 = x(3) - x(1)
+if (delx1 <= 0. .or. delx2 <= delx1) go to 9
 call ceez(delx1,delx2,sigmap,c1,c2,c3,n)
 slpp1 = c1*y(1) + c2*y(2)
-if (n .gt. 2) slpp1 = slpp1 + c3*y(3)
-2 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 3
+if (n > 2) slpp1 = slpp1 + c3*y(3)
+2 if (islpsw == 1 .or. islpsw == 3) go to 3
 slppn = slpn
 go to 4
 3 delxn = x(n) - x(nm1)
 delxnm = delxn + delxn
-if (n .gt. 2) delxnm = x(n) - x(n - 2)
-if (delxn .le. 0. .or. delxnm .le. delxn) go to 9
+if (n > 2) delxnm = x(n) - x(n - 2)
+if (delxn <= 0. .or. delxnm <= delxn) go to 9
 call ceez(-delxn,-delxnm,sigmap,c1,c2,c3,n)
 slppn = c1*y(n) + c2*y(nm1)
-if (n .gt. 2) slppn = slppn + c3*y(n - 2)
+if (n > 2) slppn = slppn + c3*y(n - 2)
 !
 ! Set up right hand side and tridiagonal system for yp and
 ! perform forward elimination
 !
 4 delx1 = x(2) - x(1)
-if (delx1 .le. 0.) go to 9
+if (delx1 <= 0.) go to 9
 dx1 = (y(2) - y(1))/delx1
 call terms(diag1,sdiag1,sigmap,delx1)
 yp(1) = (dx1 - slpp1)/diag1
 temp(1) = sdiag1/diag1
-if (n .eq. 2) go to 6
+if (n == 2) go to 6
 do 5 i = 2,nm1
    delx2 = x(i + 1) - x(i)
-   if (delx2 .le. 0.) go to 9
+   if (delx2 <= 0.) go to 9
    dx2 = (y(i + 1) - y(i))/delx2
    call terms(diag2,sdiag2,sigmap,delx2)
    diag = diag1 + diag2 - sdiag1*temp(i - 1)
@@ -409,7 +409,7 @@ del1 = t - x(im1)
 del2 = x(i) - t
 dels = x(i) - x(im1)
 sum = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap .ne. 0.) go to 1
+if (sigmap /= 0.) go to 1
 curv2 = sum - del1*del2*(yp(i)*(del1 + dels) + yp(im1)* &
    & (del2 + dels))/(6.*dels)
 return
@@ -513,7 +513,7 @@ del1 = t - x(im1)
 del2 = x(i) - t
 dels = x(i) - x(im1)
 sum = (y(i) - y(im1))/dels
-if (sigmap .ne. 0.) go to 1
+if (sigmap /= 0.) go to 1
 curvd = sum + (yp(i)*(2.*del1*del1 - del2*(del1 + dels)) - &
    & yp(im1)*(2.*del2*del2 - del1*(del2 + dels))) &
    & /(6.*dels)
@@ -613,11 +613,11 @@ sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
 xxl = xl
 xxu = xu
 ssign = 1.
-if (xl .lt. xu) go to 1
+if (xl < xu) go to 1
 xxl = xu
 xxu = xl
 ssign = -1.
-if (xl .gt. xu) go to 1
+if (xl > xu) go to 1
 !
 ! RETURN ZERO IF xl .EQ. xu
 !
@@ -630,19 +630,19 @@ return
 il = ilm1 + 1
 ium1 = intrvl(xxu,x,n)
 iu = ium1 + 1
-if (il .eq. iu) go to 8
+if (il == iu) go to 8
 !
 ! Integrate from xxl to x(il)
 !
 sum = 0.
-if (xxl .eq. x(il)) go to 3
+if (xxl == x(il)) go to 3
 del1 = xxl - x(ilm1)
 del2 = x(il) - xxl
 dels = x(il) - x(ilm1)
 t1 = (del1 + dels)*del2/(2.*dels)
 t2 = del2*del2/(2.*dels)
 sum = t1*y(il) + t2*y(ilm1)
-if (sigma .eq. 0.) go to 2
+if (sigma == 0.) go to 2
 call snhcsh(dummy,c1,sigmap*del1,2)
 call snhcsh(dummy,c2,sigmap*del2,2)
 call snhcsh(ss,cs,sigmap*dels,3)
@@ -654,12 +654,12 @@ go to 3
 !
 ! Integrate over interior intervals
 !
-3 if (iu - il .eq. 1) go to 6
+3 if (iu - il == 1) go to 6
 ilp1 = il + 1
 do 5 i = ilp1,ium1
    dels = x(i) - x(i - 1)
    sum = sum + (y(i) + y(i - 1))*dels/2.
-   if (sigma .eq. 0.) go to 4
+   if (sigma == 0.) go to 4
    call snhcsh(ss,cs,sigmap*dels,3)
    sum = sum + (yp(i) + yp(i - 1))*(cs - ss*sigmap*dels/2.)/ &
       & (sigmap*sigmap*sigmap*(ss + sigmap*dels))
@@ -669,14 +669,14 @@ do 5 i = ilp1,ium1
 !
 ! Integrate from x(iu-1) to XXU
 !
-6 if (xxu .eq. x(ium1)) go to 10
+6 if (xxu == x(ium1)) go to 10
 del1 = xxu - x(ium1)
 del2 = x(iu) - xxu
 dels = x(iu) - x(ium1)
 t1 = del1*del1/(2.*dels)
 t2 = (del2 + dels)*del1/(2.*dels)
 sum = sum + t1*y(iu) + t2*y(ium1)
-if (sigma .eq. 0.) go to 7
+if (sigma == 0.) go to 7
 call snhcsh(dummy,c1,sigmap*del1,2)
 call snhcsh(dummy,c2,sigmap*del2,2)
 call snhcsh(ss,cs,sigmap*dels,3)
@@ -698,7 +698,7 @@ deli = xxu - xxl
 t1 = (delu1 + dell1)*deli/(2.*dels)
 t2 = (delu2 + dell2)*deli/(2.*dels)
 sum = t1*y(iu) + t2*y(ium1)
-if (sigma .eq. 0.) go to 9
+if (sigma == 0.) go to 9
 call snhcsh(dummy,cu1,sigmap*delu1,2)
 call snhcsh(dummy,cu2,sigmap*delu2,2)
 call snhcsh(dummy,cl1,sigmap*dell1,2)
@@ -832,7 +832,7 @@ end interface
 nm1 = n - 1
 np1 = n + 1
 ierr = 0
-if (n .le. 1) go to 11
+if (n <= 1) go to 11
 !
 ! Determine polygonal arclengths
 !
@@ -848,35 +848,35 @@ sigmap = abs(sigma)*float(n - 1)/s(n)
 !
 ! Approximate end slopes
 !
-if (islpsw .ge. 2) go to 2
+if (islpsw >= 2) go to 2
 slpp1x = cos(slp1)
 slpp1y = sin(slp1)
 go to 4
 2 dels1 = s(2) - s(1)
 dels2 = dels1 + dels1
-if (n .gt. 2) dels2 = s(3) - s(1)
-if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 12
+if (n > 2) dels2 = s(3) - s(1)
+if (dels1 == 0. .or. dels2 == 0.) go to 12
 call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
 sx = c1*x(1) + c2*x(2)
 sy = c1*y(1) + c2*y(2)
-if (n .eq. 2) go to 3
+if (n == 2) go to 3
 sx = sx + c3*x(3)
 sy = sy + c3*y(3)
 3 delt = sqrt(sx*sx + sy*sy)
 slpp1x = sx/delt
 slpp1y = sy/delt
-4 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 5
+4 if (islpsw == 1 .or. islpsw == 3) go to 5
 slppnx = cos(slpn)
 slppny = sin(slpn)
 go to 7
 5 delsn = s(n) - s(nm1)
 delsnm = delsn + delsn
-if (n .gt. 2) delsnm = s(n) - s(n - 2)
-if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 12
+if (n > 2) delsnm = s(n) - s(n - 2)
+if (delsn == 0. .or. delsnm == 0.) go to 12
 call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
 sx = c1*x(n) + c2*x(nm1)
 sy = c1*y(n) + c2*y(nm1)
-if (n .eq. 2) go to 6
+if (n == 2) go to 6
 sx = sx + c3*x(n - 2)
 sy = sy + c3*y(n - 2)
 6 delt = sqrt(sx*sx + sy*sy)
@@ -892,10 +892,10 @@ call terms(diag1,sdiag1,sigmap,s(2))
 xp(1) = (dx1 - slpp1x)/diag1
 yp(1) = (dy1 - slpp1y)/diag1
 temp(1) = sdiag1/diag1
-if (n .eq. 2) go to 9
+if (n == 2) go to 9
 do 8 i = 2,nm1
    dels2 = s(i + 1) - s(i)
-   if (dels2 .eq. 0.) go to 12
+   if (dels2 == 0.) go to 12
    dx2 = (x(i + 1) - x(i))/dels2
    dy2 = (y(i + 1) - y(i))/dels2
    call terms(diag2,sdiag2,sigmap,dels2)
@@ -1028,7 +1028,7 @@ del2 = s(i) - tn
 dels = s(i) - s(im1)
 sumx = (x(i)*del1 + x(im1)*del2)/dels
 sumy = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap .ne. 0.) go to 1
+if (sigmap /= 0.) go to 1
 d = del1*del2/(6.*dels)
 c1 = (del1 + dels)*d
 c2 = (del2 + dels)*d
@@ -1140,7 +1140,7 @@ end interface
 nm1 = n - 1
 np1 = n + 1
 ierr = 0
-if (n .le. 1) go to 7
+if (n <= 1) go to 7
 !
 ! Determine polygonal arclengths
 !
@@ -1158,12 +1158,12 @@ sigmap = abs(sigma)*float(n)/s(n)
 ! elements) linear system for xp and yp
 !
 dels1 = s(1)
-if (dels1 .eq. 0.) go to 8
+if (dels1 == 0.) go to 8
 dx1 = (x(1) - x(n))/dels1
 dy1 = (y(1) - y(n))/dels1
 call terms(diag1,sdiag1,sigmap,dels1)
 dels2 = s(2) - s(1)
-if (dels2 .eq. 0.) go to 8
+if (dels2 == 0.) go to 8
 dx2 = (x(2) - x(1))/dels2
 dy2 = (y(2) - y(1))/dels2
 call terms(diag2,sdiag2,sigmap,dels2)
@@ -1177,11 +1177,11 @@ dx1 = dx2
 dy1 = dy2
 diag1 = diag2
 sdiag1 = sdiag2
-if (n .eq. 2) go to 3
+if (n == 2) go to 3
 do 2 i = 2,nm1
    npi = n + i
    dels2 = s(i + 1) - s(i)
-   if (dels2 .eq. 0.) go to 8
+   if (dels2 == 0.) go to 8
    dx2 = (x(i + 1) - x(i))/dels2
    dy2 = (y(i + 1) - y(i))/dels2
    call terms(diag2,sdiag2,sigmap,dels2)
@@ -1202,7 +1202,7 @@ call terms(diag2,sdiag2,sigmap,dels2)
 xp(n) = dx2 - dx1
 yp(n) = dy2 - dy1
 temp(nm1) = temp(2*n - 1) - temp(nm1)
-if (n.eq.2) go to 5
+if (n == 2) go to 5
 !
 ! Perform first step of back substitution
 !
@@ -1320,12 +1320,12 @@ end interface
 ! Determine interval
 !
 tn = t - float(ifix(t))
-if (tn .lt. 0.) tn = tn + 1.
+if (tn < 0.) tn = tn + 1.
 tn = s(n)*tn + s(1)
 im1 = n
-if (tn .lt. s(n)) im1 = intrvl(tn,s,n)
+if (tn < s(n)) im1 = intrvl(tn,s,n)
 i = im1 + 1
-if (i .gt. n) i = 1
+if (i > n) i = 1
 !
 ! Denormalize tension factor
 !
@@ -1334,13 +1334,13 @@ sigmap = abs(sigma)*float(n)/s(n)
 ! Set up and perform interpolation
 !
 si = s(i)
-if (im1 .eq. n) si = s(n) + s(1)
+if (im1 == n) si = s(n) + s(1)
 del1 = tn - s(im1)
 del2 = si - tn
 dels = si - s(im1)
 sumx = (x(i)*del1 + x(im1)*del2)/dels
 sumy = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap .ne. 0.) go to 1
+if (sigmap /= 0.) go to 1
 d = del1*del2/(6.*dels)
 c1 = (del1 + dels)*d
 c2 = (del2 + dels)*d
@@ -1490,7 +1490,7 @@ end interface
 nm1 = n - 1
 np1 = n + 1
 ierr = 0
-if (n .le. 1) go to 9
+if (n <= 1) go to 9
 !
 ! Determine polygonal arclengths
 !
@@ -1506,20 +1506,20 @@ sigmap = abs(sigma)*float(n - 1)/s(n)
 !
 ! Approximate end slopes
 !
-if (islpsw .ge. 2) go to 2
+if (islpsw >= 2) go to 2
 slpp1x = slp1x
 slpp1y = slp1y
 slpp1z = slp1z
 go to 3
 2 dels1 = s(2) - s(1)
 dels2 = dels1 + dels1
-if (n .gt. 2) dels2 = s(3) - s(1)
-if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 9
+if (n > 2) dels2 = s(3) - s(1)
+if (dels1 == 0. .or. dels2 == 0.) go to 9
 call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
 slpp1x = c1*x(1) + c2*x(2)
 slpp1y = c1*y(1) + c2*y(2)
 slpp1z = c1*z(1) + c2*z(2)
-if (n .eq. 2) go to 3
+if (n == 2) go to 3
 slpp1x = slpp1x + c3*x(3)
 slpp1y = slpp1y + c3*y(3)
 slpp1z = slpp1z + c3*z(3)
@@ -1527,20 +1527,20 @@ slpp1z = slpp1z + c3*z(3)
 slpp1x = slpp1x/delt
 slpp1y = slpp1y/delt
 slpp1z = slpp1z/delt
-if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 4
+if (islpsw == 1 .or. islpsw == 3) go to 4
 slppnx = slpnx
 slppny = slpny
 slppnz = slpnz
 go to 5
 4 delsn = s(n) - s(nm1)
 delsnm = delsn + delsn
-if (n .gt. 2) delsnm = s(n) - s(n - 2)
-if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 10
+if (n > 2) delsnm = s(n) - s(n - 2)
+if (delsn == 0. .or. delsnm == 0.) go to 10
 call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
 slppnx = c1*x(n) + c2*x(nm1)
 slppny = c1*y(n) + c2*y(nm1)
 slppnz = c1*z(n) + c2*z(nm1)
-if (n .eq. 2) go to 5
+if (n == 2) go to 5
 slppnx = slppnx + c3*x(n - 2)
 slppny = slppny + c3*y(n - 2)
 slppnz = slppnz + c3*z(n - 2)
@@ -1560,10 +1560,10 @@ xp(1) = (dx1 - slpp1x)/diag1
 yp(1) = (dy1 - slpp1y)/diag1
 zp(1) = (dz1 - slpp1z)/diag1
 temp(1) = sdiag1/diag1
-if (n .eq. 2) go to 7
+if (n == 2) go to 7
 do 6 i = 2,nm1
    dels2 = s(i + 1) - s(i)
-   if (dels2 .eq. 0.) go to 10
+   if (dels2 == 0.) go to 10
    dx2 = (x(i + 1) - x(i))/dels2
    dy2 = (y(i + 1) - y(i))/dels2
    dz2 = (z(i + 1) - z(i))/dels2
@@ -1704,7 +1704,7 @@ dels = s(i) - s(im1)
 sumx = (x(i)*del1 + x(im1)*del2)/dels
 sumy = (y(i)*del1 + y(im1)*del2)/dels
 sumz = (z(i)*del1 + z(im1)*del2)/dels
-if (sigmap .ne. 0.) go to 1
+if (sigmap /= 0.) go to 1
 d = del1*del2/(6.*dels)
 c1 = (del1 + dels)*d
 c2 = (del2 + dels)*d
@@ -1789,8 +1789,8 @@ end interface
 !
 !-----------------------------------------------------------
 !
-if (n .eq. 2) go to 2
-if (sigma .ne. 0.) go to 1
+if (n == 2) go to 2
+if (sigma /= 0.) go to 1
 del = del2 - del1
 !
 ! TENSION .EQ. 0.
@@ -1873,7 +1873,7 @@ end interface
 !
 !-----------------------------------------------------------
 !
-if (sigma .ne. 0.) go to 1
+if (sigma /= 0.) go to 1
 diag = del/3.
 sdiag = del/6.
 return
@@ -1916,20 +1916,20 @@ real :: tm
 !                  i = L   IF x .GE. t(L)
 !
 !-----------------------------------------------------------------------
-if (x .lt. t(2)) go to 100
+if (x < t(2)) go to 100
 tm = t(m)
 i = m - 1
-10 if (t(i) .lt. tm) go to 20
+10 if (t(i) < tm) go to 20
 i = i - 1
 go to 10
-20 if (x .ge. t(i)) go to 110
+20 if (x >= t(i)) go to 110
 il = 2
 ir = i
 !
 !     Bisection search
 !
 30 i = (il + ir)/2
-if (i .eq. il) go to 110
+if (i == il) go to 110
 if (x - t(i)) 40,60,50
 40 ir = i
 go to 30
@@ -1938,7 +1938,7 @@ go to 30
 !
 !     Case when x = t(i) for some i
 !
-60 if (x .lt. t(i + 1)) go to 110
+60 if (x < t(i + 1)) go to 110
 i = i + 1
 go to 60
 !
@@ -2033,20 +2033,20 @@ end interface
 !-----------------------------------------------------------------------
 !
 w = 0.0
-if (jderiv .ge. k) return
+if (jderiv >= k) return
 !
 ! *** FIND i WHERE 1 .LE. i .LT. n+k  AND  t(i) .LE. x .LT. t(i+1).
 !     If no such i exists, then x lies outside the support of the
 !     SPLINE F AND w = 0.
 !
 npk = n + k
-if (x .lt. t(1) .or. x .gt. t(npk)) return
+if (x < t(1) .or. x > t(npk)) return
 i = intrvl(x, t, npk)
 !
 !  *** IF k = 1 (AND jderiv = 0), w = bcoef(i).
 !
 km1 = k - 1
-if (km1 .gt. 0) go to 10
+if (km1 > 0) go to 10
 w = bcoef(i)
 return
 !
@@ -2058,7 +2058,7 @@ return
 !
 10 jcmin = 1
 imk = i - k
-if (imk .ge. 0) go to 40
+if (imk >= 0) go to 40
 !
 jcmin = 1 - imk
 l = i
@@ -2081,7 +2081,7 @@ end do
 !
 60 jcmax = k
 nmi = n - i
-if (nmi .ge. 0) go to 100
+if (nmi >= 0) go to 100
 !
 jcmax = k + nmi
 do j = 1,jcmax
@@ -2106,7 +2106,7 @@ end do
 !
 !               *** Difference the coefficients  jderiv  times.
 !
-if (jderiv .eq. 0) go to 170
+if (jderiv == 0) go to 170
 do j = 1,jderiv
    kmj = k - j
    fkmj = kmj
@@ -2121,7 +2121,7 @@ end do
 !  *** Compute value at x in (t(i),t(i+1)) of jderiv-TH derivative,
 !     given its relevant B-spline coeffs in wk(1,1),...,wk(k-jderiv,1).
 !
-170 if (jderiv .eq. km1) go to 200
+170 if (jderiv == km1) go to 200
 jdrvp1 = jderiv + 1
 do j = jdrvp1,km1
    kmj = k - j
@@ -2167,7 +2167,7 @@ end interface
 !---------------------------
 !
 w = 0.0
-if (x .le. t(1)) return
+if (x <= t(1)) return
 npk = n + k
 tlast = t(npk)
 xval = amin1(x, tlast)
@@ -2176,8 +2176,8 @@ xval = amin1(x, tlast)
 !         are assumed to be the same as this knot.
 !
 tnew = 0.1
-if (tlast .lt. -0.1) tnew = 0.9*tlast
-if (tlast .gt.  0.0) tnew = 1.1*tlast
+if (tlast < -0.1) tnew = 0.9*tlast
+if (tlast > 0.0) tnew = 1.1*tlast
 !
 !     Compute the first n coefficients of the antiderivative
 !
@@ -2257,7 +2257,7 @@ i = intrvl(x, t, m)
 !
 jcmin = 1
 imk = i - k
-if (imk .ge. 0) go to 30
+if (imk >= 0) go to 30
 !
 jcmin = 1 - imk
 l = i
@@ -2281,7 +2281,7 @@ end do
 50 do j = 1,km1
    tipj = tnew
    ipj = i + j
-   if (ipj .le. m) tipj = t(ipj)
+   if (ipj <= m) tipj = t(ipj)
    wk(j,3) = tipj - x
 end do
 !
@@ -2346,14 +2346,14 @@ real :: diff, r, s, term, x
 !
 l = 0
 break(1) = t(k)
-if (k .eq. 1) go to 100
+if (k == 1) go to 100
 km1 = k - 1
 kp1 = k + 1
 !
 !          General k-TH order case
 !
 do 60 left = k,n
-   if (t(left) .eq. t(left + 1)) go to 60
+   if (t(left) == t(left + 1)) go to 60
    l = l + 1
    break(l + 1) = t(left + 1)
    do j = 1,k
@@ -2402,7 +2402,7 @@ return
 !          Piecewise constant case
 !
 100 do 110 left = k,n
-   if (t(left) .eq. t(left + 1)) go to 110
+   if (t(left) == t(left + 1)) go to 110
    l = l + 1
    break(l + 1) = t(left + 1)
    c(1,l) = a(left)
@@ -2452,15 +2452,15 @@ real :: dx, s, xx
 k = 1
 xx = xi(1)
 lm1 = l - 1
-if (xx .lt. x(1)) go to 90
-if (xx .ge. x(n)) go to 80
+if (xx < x(1)) go to 90
+if (xx >= x(n)) go to 80
 il = 1
 ir = n
 !
 !     Bisection search
 !
 10 i = (il + ir)/2
-if (i .eq. il) go to 100
+if (i == il) go to 100
 if (xx - x(i)) 20,100,30
 20 ir = i
 go to 10
@@ -2469,7 +2469,7 @@ go to 10
 !
 !     Linear forward search
 !
-40 if (xx .lt. x(i + 1)) go to 100
+40 if (xx < x(i + 1)) go to 100
 i = i + 1
 go to 40
 !
@@ -2483,7 +2483,7 @@ go to 100
 !
 100 dx = xx - x(i)
 s = a(l,i)
-if (l .eq. 1) go to 120
+if (l == 1) go to 120
 do j = 1,lm1
    lmj = l - j
    s = a(lmj,i) + dx*s
@@ -2492,11 +2492,11 @@ end do
 !
 !     Next point
 !
-if (k .ge. ni) return
+if (k >= ni) return
 k = k + 1
 xx = xi(k)
-if (xx .lt. x(1)) go to 90
-if (xx .ge. x(n)) go to 80
+if (xx < x(1)) go to 90
+if (xx >= x(n)) go to 80
 if (xx - xi(k - 1)) 130,120,40
 130 il = 1
 ir = min0(i + 1, n)
@@ -2545,10 +2545,10 @@ real :: s, term, ti, timj
 !         by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 !
-if (j .gt. 0) go to 10
+if (j > 0) go to 10
 j = 1
 blist(1) = 1.0
-if (j .ge. jhigh) return
+if (j >= jhigh) return
 !
 10 s = 0.0
 do l = 1,j
@@ -2562,7 +2562,7 @@ do l = 1,j
 end do
 j = j + 1
 blist(j) = s
-if (j .lt. jhigh) go to 10
+if (j < jhigh) go to 10
 !
 return
 end subroutine bspvb
@@ -2643,7 +2643,7 @@ mhigh = max0(min0(nderiv,k),1)
 kp1 = k + 1
 jj = 0
 call bspvb(t, k, kp1 - mhigh, jj, x, left, dbiatx)
-if (mhigh .eq. 1) return
+if (mhigh == 1) return
 !
 !     The first column of dbiatx always contains the B-spline values
 !     for the current order. These are stored in column k+1-current
@@ -2807,20 +2807,20 @@ end interface
 !-----------------------------------------------------------------------
 !
 km1 = k - 1
-if (iflag .eq. 0) go to 60
+if (iflag == 0) go to 60
 np1 = n + 1
 kpkm2 = 2*km1
-if (n .eq. 1) go to 20
+if (n == 1) go to 20
 !
 !        Check if tau(i) is an increasing sequence
 !
 do i = 2,n
-   if (tau(i) .le. tau(i - 1)) go to 100
+   if (tau(i) <= tau(i - 1)) go to 100
 end do
 !
 !                Zero out all entries of q
 !
-20 if (tau(n) .gt. t(np1)) go to 100
+20 if (tau(n) > t(np1)) go to 100
 lenq = n*(k + km1)
 do i = 1,lenq
    q(i) = 0.0
@@ -2838,11 +2838,11 @@ do i = 1,n
 !        matrix is singular if this is not possible
 !
    left = max0(left,i)
-   if (taui .lt. t(left)) go to 100
-30 if (taui .lt. t(left + 1)) go to 40
+   if (taui < t(left)) go to 100
+30 if (taui < t(left + 1)) go to 40
    left = left + 1
-   if (left .lt. ilp1mx) go to 30
-   if (left .eq. i + k) go to 100
+   if (left < ilp1mx) go to 30
+   if (left == i + k) go to 100
    left = n
 !
 !        *** The i-TH equation enforces interpolation at taui, hence
@@ -2875,7 +2875,7 @@ end do
 !
 call banfac(q, k + km1, n, km1, km1, iflag)
 iflag = iflag - 1
-if (iflag .ne. 0) return
+if (iflag /= 0) return
 !
 !     *** SOLVE  A*bcoef = gtau  BY BACKSUBSTITUTION
 !
@@ -2960,18 +2960,18 @@ middle = nbandu + 1
 !                         w(middle,.) Contains the main diagonal of  A .
 nrowm1 = nrow - 1
 if (nrowm1) 999,900,1
-1 if (nbandl .gt. 0) go to 10
+1 if (nbandl > 0) go to 10
 !                A is upper triangular. Check that diagonal is nonzero .
 do i = 1,nrowm1
-   if (w(middle,i) .eq. 0.) go to 999
+   if (w(middle,i) == 0.) go to 999
 end do
 go to 900
-10 if (nbandu .gt. 0) go to 20
+10 if (nbandu > 0) go to 20
 !              A is lower triangular. Check that diagonal is nonzero and
 !                 divide each column by its diagonal .
 do 15 i = 1,nrowm1
    pivot = w(middle,i)
-   if (pivot .eq. 0.) go to 999
+   if (pivot == 0.) go to 999
    jmax = min0(nbandl, nrow - i)
    jbeg = middle + 1
    jend = middle + jmax
@@ -2983,7 +2983,7 @@ go to 900
 20 do i = 1,nrowm1
 !                                  w(middle,i)  is pivot for i-TH step .
    pivot = w(middle,i)
-   if (pivot .eq. 0.) go to 999
+   if (pivot == 0.) go to 999
 !                 jmax  is the number of (nonzero) entries in column  i
 !                     below the diagonal .
    jmax = min0(nbandl,nrow - i)
@@ -3007,7 +3007,7 @@ go to 900
 40       w(mdj,ipk) = w(mdj,ipk) - w(mj,i)*factor
 end do
 !                                       Check the last diagonal entry .
-900 if (w(middle,nrow) .ne. 0.) return
+900 if (w(middle,nrow) /= 0.) return
 999 iflag = 2
 return
 end subroutine banfac
@@ -3039,9 +3039,9 @@ integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  ations are so arranged that the innermost loops stay within columns.
 !
 middle = nbandu + 1
-if (nrow .eq. 1) go to 49
+if (nrow == 1) go to 49
 nrowm1 = nrow - 1
-if (nbandl .eq. 0) go to 30
+if (nbandl == 0) go to 30
 !                                 Forward pass
 !            for i=1,2,...,nrow-1, subtract  right side(i)*(i-TH column
 !            of  L )  from right side  (below i-TH row) .
@@ -3055,7 +3055,7 @@ do 21 i = 1,nrowm1
 !            for i=nrow,nrow-1,...,1, divide right side(i) by i-TH diag-
 !            onal entry of  U, then subtract  right side(i)*(i-TH column
 !            of  U)  from right side  (above i-TH row).
-30 if (nbandu .gt. 0) go to 40
+30 if (nbandu > 0) go to 40
 !                                A  is lower triangular .
 do 31 i = 1,nrow
 31 b(i) = b(i)/w(1,i)
@@ -3068,7 +3068,7 @@ do 45 j = 1,jmax
    mmj = middle - j
 45 b(imj) = b(imj) - b(i)*w(mmj,i)
 i = i - 1
-if (i .gt. 1) go to 41
+if (i > 1) go to 41
 49 b(1) = b(1)/w(middle,1)
 return
 end subroutine banslv
@@ -3142,11 +3142,11 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ntau .lt. max0(2,k)) go to 100
-if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
+if (ntau < max0(2,k)) go to 100
+if (tau(1) < t(k) .or. tau(ntau) > t(n + 1)) go to 100
 !
 do i = 2,ntau
-   if (tau(i - 1) .gt. tau(i)) go to 100
+   if (tau(i - 1) > tau(i)) go to 100
 end do
 !
 do j = 1,n
@@ -3162,8 +3162,8 @@ do l = 1,ntau
 !        *** Find the index left such that
 !            t(left) .LE. tau(l) .LT. t(left+1)
 !
-30 if (left .eq. n) go to 40
-   if (tau(l) .lt. t(left + 1)) go to 40
+30 if (left == n) go to 40
+   if (tau(l) < t(left + 1)) go to 40
    left = left + 1
    go to 30
 !
@@ -3269,9 +3269,9 @@ real :: ratio, t
 !     call bchslv (w, nb, n, b, x )            , to solve for x.
 !-----------------------------------------------------------------------
 !
-if (n .gt. 1) go to 10
+if (n > 1) go to 10
 iflag = 1
-if (w(1,1) .eq. 0.0) return
+if (w(1,1) == 0.0) return
 iflag = 0
 w(1,1) = 1.0/w(1,1)
 return
@@ -3287,7 +3287,7 @@ end do
 iflag = 0
 do 60 k = 1,n
    t = w(1,k) + diag(k)
-   if (t .ne. diag(k)) go to 30
+   if (t /= diag(k)) go to 30
    iflag = 1
    do j = 1,nb
       w(j,k) = 0.0
@@ -3297,7 +3297,7 @@ do 60 k = 1,n
 30 t = 1.0/w(1,k)
    w(1,k) = t
    imax = min0(nb - 1,n - k)
-   if (imax .lt. 1) go to 60
+   if (imax < 1) go to 60
    jmax = imax
    do i = 1,imax
       ratio = t*w(i + 1,k)
@@ -3342,7 +3342,7 @@ integer :: j, jmax, jpk, k, nbm1
 !
 !-----------------------------------------------------------------------
 !
-if (n .gt. 1) go to 10
+if (n > 1) go to 10
 b(1) = b(1)*w(1,1)
 return
 !
@@ -3351,7 +3351,7 @@ return
 10 nbm1 = nb - 1
 do 30 k = 1,n
    jmax = min0(nbm1,n - k)
-   if (jmax .lt. 1) go to 30
+   if (jmax < 1) go to 30
    do j = 1,jmax
       jpk = j + k
       b(jpk) = b(jpk) - w(j + 1,k)*b(k)
@@ -3363,13 +3363,13 @@ do 30 k = 1,n
 k = n
 40 b(k) = b(k)*w(1,k)
 jmax = min0(nbm1,n - k)
-if (jmax .lt. 1) go to 60
+if (jmax < 1) go to 60
 do j = 1,jmax
    jpk = j + k
    b(k) = b(k) - w(j + 1,k)*b(jpk)
 end do
 60 k = k - 1
-if (k .gt. 0) go to 40
+if (k > 0) go to 40
 return
 end subroutine bchslv
 
@@ -3643,12 +3643,12 @@ go to 100
 !
 10 if (.not. band) go to 20
 call bndsl(1, g, mdg, nord, ip, ir, coeff, n, rnorm, ierr)
-if (ierr .eq. 0) return
+if (ierr == 0) return
 !
 !     Check further for sufficient storage in working arrays.
 !
-20 if (iw1 .lt. lw) go to 850
-if (iw2 .lt. intw1) go to 860
+20 if (iw1 < lw) go to 850
+if (iw2 < intw1) go to 860
 go to 300
 !
 !     Solve the equations
@@ -3662,15 +3662,15 @@ return
 !               Initialize-variables-and-analyze-input
 !-----------------------------------------------------------------------
 100 n = nbkpt - nord
-if (nord .lt. 1 .or. nord .gt. n) go to 800
-if (ndata .lt. 1 .or. nconst .lt. 0) go to 810
+if (nord < 1 .or. nord > n) go to 800
+if (ndata < 1 .or. nconst < 0) go to 810
 !
 !     Check the break points
 !
-if (mode .ne. 0) go to 120
+if (mode /= 0) go to 120
 m = nbkpt - 1
 do i = 1,m
-   if (bkpt(i) .gt. bkpt(i + 1)) go to 820
+   if (bkpt(i) > bkpt(i + 1)) go to 820
 end do
 !
 !     Amount of storage allocated for w(*),IW(*)
@@ -3679,18 +3679,18 @@ end do
 iw2 = iwork(2)
 nb = (n + 3)*(nord + 1) + nord*nord
 lw = nb
-if (iw1 .lt. nb) go to 850
+if (iw1 < nb) go to 850
 !
 !     Compute the amount of storage needed for lsei
 !
 neqcon = 0
 nincon = 0
-if (nconst .eq. 0) go to 150
+if (nconst == 0) go to 150
 do 140 i = 1,nconst
    l = nderiv(i)
-   if (l .lt. 0) go to 140
+   if (l < 0) go to 140
    itype = l - 4*(l/4)
-   if (itype .gt. 1) go to 130
+   if (itype > 1) go to 130
    nincon = nincon + 1
    go to 140
 130 neqcon = neqcon + 1
@@ -3706,16 +3706,16 @@ intw1 = nincon + 2*l
 !
 xmin = bkpt(nord)
 xmax = bkpt(np1)
-if (nconst .eq. 0) go to 170
+if (nconst == 0) go to 170
 do i = 1,nconst
-   if (xconst(i) .lt. xmin .or. xconst(i) .gt. xmax) &
+   if (xconst(i) < xmin .or. xconst(i) > xmax) &
       & go to 840
 end do
 !
 !     Initialize parameters
 !
-170 new = mode .eq. 0
-band = nconst .eq. 0
+170 new = mode == 0
+band = nconst == 0
 mode = 0
 nordm1 = nord - 1
 nordp1 = nord + 1
@@ -3740,13 +3740,13 @@ if (.not. new) go to 260
 !
 !     Check the xdata(*) array
 !
-if (xdata(1) .lt. xmin .or. xdata(ndata) .gt. xmax) &
+if (xdata(1) < xmin .or. xdata(ndata) > xmax) &
    & go to 830
-if (ndata .eq. 1) go to 200
+if (ndata == 1) go to 200
 !
 m = ndata - 1
 do i = 1,m
-   if (xdata(i) .ge. xdata(i + 1)) go to 830
+   if (xdata(i) >= xdata(i + 1)) go to 830
 end do
 !
 !     Initialize parameters of banded matrix processor, bndacc( )
@@ -3757,14 +3757,14 @@ ir = 1
 idata = 1
 ileft = nord
 !
-210 if (idata .gt. ndata) go to 250
+210 if (idata > ndata) go to 250
 xval = xdata(idata)
-if (ileft .eq. n) go to 230
+if (ileft == n) go to 230
 !
 !     When interval changes, process equations in the last block.
 !
 ip1 = ileft + 1
-if (xval .lt. bkpt(ip1)) go to 230
+if (xval < bkpt(ip1)) go to 230
 intrvl = ileft - nordm1
 call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
@@ -3772,7 +3772,7 @@ mt = 0
 !     Move pointer up so that xval .GE. bkpt(ileft).
 !
 do 220 i = ip1,n
-   if (xval .lt. bkpt(i)) go to 230
+   if (xval < bkpt(i)) go to 230
 220 ileft = i
 !
 !     Obtain B-spline function VALUE
@@ -3789,7 +3789,7 @@ g(irow,nordp1) = ydata(idata)
 !
 !     When staging work area is exhausted, process rows
 !
-if (irow .ne. mdg - 1) go to 240
+if (irow /= mdg - 1) go to 240
 intrvl = ileft - nordm1
 call bndacc(g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
@@ -3808,7 +3808,7 @@ call scopy(nordp1, g(ir,1), 0, g(ir,1), mdg)
 call bndacc(g, mdg, nord, ip, ir, 1, np1)
 !
 260 do i = 1,n
-   band = band .and. g(i,1) .ne. 0.0
+   band = band .and. g(i,1) /= 0.0
 end do
 go to 10
 !-----------------------------------------------------------------------
@@ -3818,37 +3818,37 @@ go to 10
 neqcon = 0
 !
 310 idata = idata + 1
-if (idata .gt. nconst) go to 400
+if (idata > nconst) go to 400
 l = nderiv(idata)
-if (l .lt. 0) go to 310
+if (l < 0) go to 310
 ideriv = l/4
 itype = l - 4*ideriv
 !
-if (itype .lt. 2) go to 310
+if (itype < 2) go to 310
 neqcon = neqcon + 1
 xval = xconst(idata)
 ileft = nord
-if (nord .eq. n) go to 330
+if (nord == n) go to 330
 do 320 i = nordp1,n
-   if (xval .lt. bkpt(i)) go to 330
+   if (xval < bkpt(i)) go to 330
 320 ileft = i
 330 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 w(neqcon,1) = 0.0
 call scopy(n, w(neqcon,1), 0, w(neqcon,1), mdw)
 intrvl = ileft - nordm1
 call scopy(nord, bf(1,ideriv + 1), 1, w(neqcon,intrvl), mdw)
-if (itype .ne. 2) go to 340
+if (itype /= 2) go to 340
 w(neqcon,np1) = yconst(idata)
 go to 310
 !
 340 w(neqcon,np1) = 0.0
 yval = yconst(idata)
 i = idata
-if (yval .lt. xmin .or. yval .gt. xmax) go to 840
+if (yval < xmin .or. yval > xmax) go to 840
 ileft = nord
-if (nord .eq. n) go to 360
+if (nord == n) go to 360
 do 350 i = nordp1,n
-   if (yval .lt. bkpt(i)) go to 360
+   if (yval < bkpt(i)) go to 360
 350 ileft = i
 360 call bspvd(bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
 intrvl = ileft - nordm1
@@ -3871,19 +3871,19 @@ idata = 0
 nincon = 0
 !
 500 idata = idata + 1
-if (idata .gt. nconst) go to 30
+if (idata > nconst) go to 30
 l = nderiv(idata)
-if (l .lt. 0) go to 500
+if (l < 0) go to 500
 ideriv = l/4
 itype = l - 4*ideriv
 !
-if (itype .gt. 1) go to 500
+if (itype > 1) go to 500
 nincon = nincon + 1
 xval = xconst(idata)
 ileft = nord
-if (nord .eq. n) go to 520
+if (nord == n) go to 520
 do 510 i = nordp1,n
-   if (xval .lt. bkpt(i)) go to 520
+   if (xval < bkpt(i)) go to 520
 510 ileft = i
 520 call bspvd(bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
 irow = neqcon + np1 + nincon
@@ -3892,7 +3892,7 @@ call scopy(n, w(irow,1), 0, w(irow,1), mdw)
 intrvl = ileft - nordm1
 call scopy(nord, bf(1,ideriv + 1), 1, w(irow,intrvl), mdw)
 w(irow,np1) = yconst(idata)
-if (itype .ne. 0) go to 500
+if (itype /= 0) go to 500
 w(irow,np1) = -w(irow,np1)
 call sscal(nord, -1.0, w(irow,intrvl), mdw)
 go to 500
@@ -4097,11 +4097,11 @@ end interface
 !              Alg. Steps 1-4 are performed external to this subroutine.
 !
 nbp1 = nb + 1
-if (mt .le. 0 .or. nb .le. 0) return
+if (mt <= 0 .or. nb <= 0) return
 !                                             Alg. Step 5
-if (jt .eq. ip) go to 70
+if (jt == ip) go to 70
 !                                             Alg. Steps 6-7
-if (jt .le. ir) go to 30
+if (jt <= ir) go to 30
 !                                             Alg. Steps 8-9
 do i = 1,mt
    ig1 = jt + mt - i
@@ -4122,7 +4122,7 @@ end do
 ir = jt
 !                                             Alg. Step 12
 30 mu = min0(nb - 1, ir - ip - 1)
-if (mu .eq. 0) go to 60
+if (mu == 0) go to 60
 !                                             Alg. Step 13
 do l = 1,mu
 !                                             Alg. Step 14
@@ -4153,7 +4153,7 @@ end do
 !                                             Alg. Step 21
 ir = ip + kh
 !                                             Alg. Step 22
-if (kh .lt. nbp1) go to 100
+if (kh < nbp1) go to 100
 !                                             Alg. Step 23
 do i = 1,nb
    g(ir - 1,i) = 0.0
@@ -4303,7 +4303,7 @@ end do
 rsq = 0.0
 np1 = n + 1
 irm1 = ir - 1
-if (np1 .gt. irm1) go to 40
+if (np1 > irm1) go to 40
 do j = np1,irm1
    rsq = rsq + g(j, nb + 1)**2
 end do
@@ -4317,7 +4317,7 @@ rnorm = sqrt(rsq)
    s = 0.0
    l = max0(0, i - ip)
 !                                   Alg. Step 29
-   if (i .eq. n) go to 70
+   if (i == n) go to 70
 !                                   Alg. Step 30
    ie = min0(n + 1 - i, nb)
    do j = 2,ie
@@ -4326,7 +4326,7 @@ rnorm = sqrt(rsq)
       s = s + g(i,jg)*x(ix)
    end do
 !                                   Alg. Step 31
-70 if (g(i,l + 1) .eq. 0.0) go to 130
+70 if (g(i,l + 1) == 0.0) go to 130
    x(i) = (x(i) - s)/g(i,l + 1)
 end do
 !                                   Alg. Step 32
@@ -4334,7 +4334,7 @@ return
 !                                   ********************* mode = 2
 90 do j = 1,n
    s = 0.0
-   if (j .eq. 1) go to 110
+   if (j == 1) go to 110
    i1 = max0(1, j - nb + 1)
    i2 = j - 1
    do i = i1,i2
@@ -4342,7 +4342,7 @@ return
       s = s + x(i)*g(i,l)
    end do
 110 l = max0(0, j - ip)
-   if (g(j,l + 1) .eq. 0.0) go to 130
+   if (g(j,l + 1) == 0.0) go to 130
    x(j) = (x(j) - s)/g(j,l + 1)
 end do
 return
@@ -4438,12 +4438,12 @@ end interface
 !---------------------
 !     real f(4*nx*ny), s(nx + 6), t(ny + 6)
 !---------------------
-if (nx .lt. 2) go to 100
-if (ny .lt. 2) go to 120
+if (nx < 2) go to 100
+if (ny < 2) go to 120
 m = nx + 2
 n = ny + 2
 l = max0(m*n, m*my + 5*max0(m,n))
-if (num .lt. l) go to 130
+if (num < l) go to 130
 !
 !     Define the knot squences
 !
@@ -4452,7 +4452,7 @@ s(2) = xbreak(1)
 s(3) = xbreak(1)
 s(4) = xbreak(1)
 do i = 2,nx
-   if (xbreak(i - 1) .ge. xbreak(i)) go to 100
+   if (xbreak(i - 1) >= xbreak(i)) go to 100
    s(i + 3) = xbreak(i)
 end do
 s(nx + 4) = xbreak(nx)
@@ -4464,7 +4464,7 @@ t(2) = ybreak(1)
 t(3) = ybreak(1)
 t(4) = ybreak(1)
 do j = 2,ny
-   if (ybreak(j - 1) .ge. ybreak(j)) go to 120
+   if (ybreak(j - 1) >= ybreak(j)) go to 120
    t(j + 3) = ybreak(j)
 end do
 t(ny + 4) = ybreak(ny)
@@ -4476,7 +4476,7 @@ t(ny + 6) = ybreak(ny)
 !
 call bslsq2(x, wx, mx, y, wy, my, z, kz, s, m, 4, &
    & t, n, 4, f, m, wk, num, ierr)
-if (ierr .lt. 0) go to 110
+if (ierr < 0) go to 110
 ierr = 0
 !
 l = m*n
@@ -4518,7 +4518,7 @@ return
 100 ierr = 1
 return
 110 ierr = 2
-if (ierr .eq. -2) ierr = 4
+if (ierr == -2) ierr = 4
 return
 120 ierr = 3
 return
@@ -4669,7 +4669,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ider .gt. 3 .or. jder .gt. 3) go to 400
+if (ider > 3 .or. jder > 3) go to 400
 mm1 = m - 1
 nm1 = n - 1
 !
@@ -4677,9 +4677,9 @@ iold = 0
 jold = 0
 do l = 1,my
    yy = y(l)
-   if (yy .lt. t(2)) go to 10
-   if (yy .ge. t(nm1)) go to 20
-   if (l .eq. 1) go to 30
+   if (yy < t(2)) go to 10
+   if (yy >= t(nm1)) go to 20
+   if (l == 1) go to 30
    if (yy - y(l - 1)) 30,50,40
 !
 10 j = 1
@@ -4691,7 +4691,7 @@ do l = 1,my
 !
 !        Linear forward search
 !
-40 if (yy .lt. t(j + 1)) go to 50
+40 if (yy < t(j + 1)) go to 50
    j = j + 1
    go to 40
 !
@@ -4700,28 +4700,28 @@ do l = 1,my
 !
    do 350 k = 1,mx
       xx = x(k)
-      if (xx .lt. s(2)) go to 100
-      if (xx .ge. s(mm1)) go to 110
-      if (k .eq. 1) go to 120
+      if (xx < s(2)) go to 100
+      if (xx >= s(mm1)) go to 110
+      if (k == 1) go to 120
       if (xx - x(k - 1)) 120,130,140
 !
 100   i = 1
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 110   i = mm1
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 120   i = intrvl(xx, s, m)
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 130   z(k,l) = z(k - 1,l)
       go to 350
 !
 !           Linear forward search
 !
-140   if (xx .lt. s(i + 1)) go to 210
+140   if (xx < s(i + 1)) go to 210
 150   i = i + 1
-      if (xx .ge. s(i + 1)) go to 150
+      if (xx >= s(i + 1)) go to 150
 !
 !           Computation of the jder-TH derivative of
 !           f(s(i),y), D1F(s(i),y), f(s(i+1),y), AND
@@ -4752,7 +4752,7 @@ do l = 1,my
       c3 = (a - d - d)/(dt*dt)
 !
 210   dy = yy - t(j)
-      if (jder .eq. 0) go to 220
+      if (jder == 0) go to 220
       if (jder - 2) 230,240,250
 !
 220   fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
@@ -4787,7 +4787,7 @@ do l = 1,my
       cx = (a - d - d)/(ds*ds)
 !
       dx = xx - s(i)
-      if (ider .eq. 0) go to 310
+      if (ider == 0) go to 310
       if (ider - 2) 320,330,340
 !
 310   z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
@@ -4885,7 +4885,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ider .gt. 3 .or. jder .gt. 3) go to 400
+if (ider > 3 .or. jder > 3) go to 400
 mm1 = m - 1
 nm1 = n - 1
 !
@@ -4893,9 +4893,9 @@ iold = 0
 jold = 0
 do l = 1,my
    yy = y(l)
-   if (yy .lt. t(2)) go to 10
-   if (yy .ge. t(nm1)) go to 20
-   if (l .eq. 1) go to 30
+   if (yy < t(2)) go to 10
+   if (yy >= t(nm1)) go to 20
+   if (l == 1) go to 30
    if (yy - y(l - 1)) 30,50,40
 !
 10 j = 1
@@ -4907,7 +4907,7 @@ do l = 1,my
 !
 !        Linear forward search
 !
-40 if (yy .lt. t(j + 1)) go to 50
+40 if (yy < t(j + 1)) go to 50
    j = j + 1
    go to 40
 !
@@ -4916,28 +4916,28 @@ do l = 1,my
 !
    do 350 k = 1,mx
       xx = x(k)
-      if (xx .lt. s(2)) go to 100
-      if (xx .ge. s(mm1)) go to 110
-      if (k .eq. 1) go to 120
+      if (xx < s(2)) go to 100
+      if (xx >= s(mm1)) go to 110
+      if (k == 1) go to 120
       if (xx - x(k - 1)) 120,130,140
 !
 100   i = 1
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 110   i = mm1
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 120   i = intrvl(xx, s, m)
-      if (i .eq. iold .and. j .eq. jold) go to 210
+      if (i == iold .and. j == jold) go to 210
       go to 200
 130   z(k,l) = z(k - 1,l)
       go to 350
 !
 !           Linear forward search
 !
-140   if (xx .lt. s(i + 1)) go to 210
+140   if (xx < s(i + 1)) go to 210
 150   i = i + 1
-      if (xx .ge. s(i + 1)) go to 150
+      if (xx >= s(i + 1)) go to 150
 !
 !           Computation of the jder-TH derivative of
 !           f(s(i),y), D1F(s(i),y), f(s(i+1),y), AND
@@ -4964,7 +4964,7 @@ do l = 1,my
       c3 = (f12(ip1,jp1) - f12(ip1,j))/(6.0*dt)
 !
 210   dy = yy - t(j)
-      if (jder .eq. 0) go to 220
+      if (jder == 0) go to 220
       if (jder - 2) 230,240,250
 !
 220   fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
@@ -4998,7 +4998,7 @@ do l = 1,my
       cx = (dfip1 - dfi)/(6.0*ds)
 !
       dx = xx - s(i)
-      if (ider .eq. 0) go to 310
+      if (ider == 0) go to 310
       if (ider - 2) 320,330,340
 !
 310   z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
@@ -5187,8 +5187,8 @@ nm1 = n - 1
 np1 = n + 1
 npm = n + m
 ierr = 0
-if (n .le. 1 .or. m .le. 1) go to 46
-if (y(n) .le. y(1)) go to 47
+if (n <= 1 .or. m <= 1) go to 46
+if (y(n) <= y(1)) go to 47
 !
 ! Process the option vector
 !
@@ -5208,7 +5208,7 @@ ind(8) = 0
 l = 1
 100 key = opt(l)
 if (key) 48,110,101
-101 if (key .gt. 8) go to 48
+101 if (key > 8) go to 48
 ind(key) = 1
 l = l + 1
 loc(key) = l
@@ -5221,7 +5221,7 @@ go to 100
 !
 ! Obtain y-partial derivatives along y = y(1)
 !
-if (ind(3) .eq. 0) go to 2
+if (ind(3) == 0) go to 2
 l = loc(3)
 do 1 i = 1,m
    zp(i,1,1) = opt(l)
@@ -5229,18 +5229,18 @@ do 1 i = 1,m
 go to 5
 2 dely1 = y(2) - y(1)
 dely2 = dely1 + dely1
-if (n .gt. 2) dely2 = y(3) - y(1)
-if (dely1 .le. 0. .or. dely2 .le. dely1) go to 47
+if (n > 2) dely2 = y(3) - y(1)
+if (dely1 <= 0. .or. dely2 <= dely1) go to 47
 call ceez(dely1,dely2,sigmay,c1,c2,c3,n)
 do 3 i = 1,m
 3  zp(i,1,1) = c1*z(i,1) + c2*z(i,2)
-if (n .eq. 2) go to 5
+if (n == 2) go to 5
 do 4 i = 1,m
 4  zp(i,1,1) = zp(i,1,1) + c3*z(i,3)
 !
 ! Obtain y-partial derivatives along y = y(n)
 !
-5 if (ind(4) .eq. 0) go to 7
+5 if (ind(4) == 0) go to 7
 l = loc(4)
 do 6 i = 1,m
    npi = n + i
@@ -5249,17 +5249,17 @@ do 6 i = 1,m
 go to 10
 7 delyn = y(n) - y(nm1)
 delynm = delyn + delyn
-if (n .gt. 2) delynm = y(n) - y(n - 2)
-if (delyn .le. 0. .or. delynm .le. delyn) go to 47
+if (n > 2) delynm = y(n) - y(n - 2)
+if (delyn <= 0. .or. delynm <= delyn) go to 47
 call ceez(-delyn,-delynm,sigmay,c1,c2,c3,n)
 do 8 i = 1,m
    npi = n + i
 8  temp(npi) = c1*z(i,n) + c2*z(i,nm1)
-if (n .eq. 2) go to 10
+if (n == 2) go to 10
 do 9 i = 1,m
    npi = n + i
 9  temp(npi) = temp(npi) + c3*z(i,n - 2)
-10 if (x(m) .le. x(1)) go to 47
+10 if (x(m) <= x(1)) go to 47
 !
 ! Denormalize tension factor in x-direction
 !
@@ -5267,88 +5267,88 @@ sigmax = abs(sigma)*float(m - 1)/(x(m) - x(1))
 !
 ! Obtain x-partial derivatives along x = x(1)
 !
-if (ind(1) .eq. 0) go to 12
+if (ind(1) == 0) go to 12
 l = loc(1)
 do 11 j = 1,n
    zp(1,j,2) = opt(l)
 11 l = l + 1
-if (ind(5) + ind(7) .eq. 2) go to 15
+if (ind(5) + ind(7) == 2) go to 15
 12 delx1 = x(2) - x(1)
 delx2 = delx1 + delx1
-if (m .gt. 2) delx2 = x(3) - x(1)
-if (delx1 .le. 0. .or. delx2 .le. delx1) go to 47
+if (m > 2) delx2 = x(3) - x(1)
+if (delx1 <= 0. .or. delx2 <= delx1) go to 47
 call ceez(delx1,delx2,sigmax,c1,c2,c3,m)
-if (ind(1) .eq. 1) go to 15
+if (ind(1) == 1) go to 15
 do 13 j = 1,n
 13 zp(1,j,2) = c1*z(1,j) + c2*z(2,j)
-if (m .eq. 2) go to 15
+if (m == 2) go to 15
 do 14 j = 1,n
 14 zp(1,j,2) = zp(1,j,2) + c3*z(3,j)
 !
 ! Obtain x-y-partial derivative at (x(1),y(1))
 !
-15 if (ind(5) .eq. 0) go to 16
+15 if (ind(5) == 0) go to 16
 l = loc(5)
 zp(1,1,3) = opt(l)
 go to 17
 16 zp(1,1,3) = c1*zp(1,1,1) + c2*zp(2,1,1)
-if (m .gt. 2) zp(1,1,3) = zp(1,1,3) + c3*zp(3,1,1)
+if (m > 2) zp(1,1,3) = zp(1,1,3) + c3*zp(3,1,1)
 !
 ! Obtain x-y-partial derivative at (x(1),y(n))
 !
-17 if (ind(7) .eq. 0) go to 18
+17 if (ind(7) == 0) go to 18
 l = loc(7)
 zxy1ns = opt(l)
 go to 19
 18 zxy1ns = c1*temp(n + 1) + c2*temp(n + 2)
-if (m .gt. 2) zxy1ns = zxy1ns + c3*temp(n + 3)
+if (m > 2) zxy1ns = zxy1ns + c3*temp(n + 3)
 !
 ! Obtain x-partial derivative along x = x(m)
 !
-19 if (ind(2) .eq. 0) go to 21
+19 if (ind(2) == 0) go to 21
 l = loc(2)
 do 20 j = 1,n
    npmpj = npm + j
    temp(npmpj) = opt(l)
 20 l = l + 1
-21 if (ind(6) + ind(8) .eq. 2) go to 24
+21 if (ind(6) + ind(8) == 2) go to 24
 delxm = x(m) - x(mm1)
 delxmm = delxm + delxm
-if (m .gt. 2) delxmm = x(m) - x(m - 2)
-if (delxm .le. 0. .or. delxmm .le. delxm) go to 47
+if (m > 2) delxmm = x(m) - x(m - 2)
+if (delxm <= 0. .or. delxmm <= delxm) go to 47
 call ceez(-delxm,-delxmm,sigmax,c1,c2,c3,m)
-if (ind(2) .eq. 1) go to 24
+if (ind(2) == 1) go to 24
 do 22 j = 1,n
    npmpj = npm + j
 22 temp(npmpj) = c1*z(m,j) + c2*z(mm1,j)
-if (m .eq. 2) go to 24
+if (m == 2) go to 24
 do 23 j = 1,n
    npmpj = npm + j
 23 temp(npmpj) = temp(npmpj) + c3*z(m - 2,j)
 !
 ! Obtain x-y-partial derivative at (x(m),y(1))
 !
-24 if (ind(6) .eq. 0) go to 25
+24 if (ind(6) == 0) go to 25
 l = loc(6)
 zp(m,1,3) = opt(l)
 go to 26
 25 zp(m,1,3) = c1*zp(m,1,1) + c2*zp(mm1,1,1)
-if (m .gt. 2) zp(m,1,3) = zp(m,1,3) + c3*zp(m - 2,1,1)
+if (m > 2) zp(m,1,3) = zp(m,1,3) + c3*zp(m - 2,1,1)
 !
 ! Obtain x-y-partial derivative at (x(m),y(n))
 !
-26 if (ind(8) .eq. 0) go to 27
+26 if (ind(8) == 0) go to 27
 l = loc(8)
 zxymns = opt(l)
 go to 28
 27 zxymns = c1*temp(npm) + c2*temp(npm - 1)
-if (m .gt. 2) zxymns = zxymns + c3*temp(npm - 2)
+if (m > 2) zxymns = zxymns + c3*temp(npm - 2)
 !
 ! Set up right hand sides and tridiagonal system for y-grid
 ! perform forward elimination
 !
 28 del1 = y(2) - y(1)
-if (del1 .le. 0.) go to 47
+if (del1 <= 0.) go to 47
 deli = 1./del1
 do 29 i = 1,m
 29 zp(i,2,1) = deli*(z(i,2) - z(i,1))
@@ -5361,13 +5361,13 @@ do 30 i = 1,m
 zp(1,1,3) = diagi*(zp(1,2,3) - zp(1,1,3))
 zp(m,1,3) = diagi*(zp(m,2,3) - zp(m,1,3))
 temp(1) = diagi*sdiag1
-if (n .eq. 2) go to 34
+if (n == 2) go to 34
 do 33 j = 2,nm1
    jm1 = j - 1
    jp1 = j + 1
    npmpj = npm + j
    del2 = y(jp1) - y(j)
-   if (del2 .le. 0.) go to 47
+   if (del2 <= 0.) go to 47
    deli = 1./del2
    do 31 i = 1,m
 31    zp(i,jp1,1) = deli*(z(i,jp1) - z(i,j))
@@ -5410,7 +5410,7 @@ do 37 j = 2,n
 ! perform forward elimination
 !
 del1 = x(2) - x(1)
-if (del1 .le. 0.) go to 47
+if (del1 <= 0.) go to 47
 deli = 1./del1
 do 38 j = 1,n
    zp(2,j,2) = deli*(z(2,j) - z(1,j))
@@ -5421,13 +5421,13 @@ do 39 j = 1,n
    zp(1,j,2) = diagi*(zp(2,j,2) - zp(1,j,2))
 39 zp(1,j,3) = diagi*(zp(2,j,3) - zp(1,j,3))
 temp(n + 1) = diagi*sdiag1
-if (m  .eq. 2) go to 43
+if (m == 2) go to 43
 do 42 i = 2,mm1
    im1 = i - 1
    ip1 = i + 1
    npi = n + i
    del2 = x(ip1) - x(i)
-   if (del2 .le. 0.) go to 47
+   if (del2 <= 0.) go to 47
    deli = 1./del2
    do 40 j = 1,n
       zp(ip1,j,2) = deli*(z(ip1,j) - z(i,j))
@@ -5588,7 +5588,7 @@ i = im1 + 1
 del1 = yy - y(jm1)
 del2 = y(j) - yy
 dels = y(j) - y(jm1)
-if (sigmay .ne. 0.) go to 1
+if (sigmay /= 0.) go to 1
 !
 ! Perform four interpolations in y-direction
 !
@@ -5623,7 +5623,7 @@ zxxi = hermnz(zp(i,j - 1,2),zp(i,j,2), &
 2 del1 = xx - x(im1)
 del2 = x(i) - xx
 dels = x(i) - x(im1)
-if (sigmax .ne. 0.) go to 3
+if (sigmax /= 0.) go to 3
 surf2 = hermz(zim1,zi,zxxim1,zxxi)
 return
 3 delp1 = (del1 + dels)/2.
@@ -5740,13 +5740,13 @@ sigmay = abs(sigma)*float(n - 1)/(y(n) - y(1))
 ! grid
 !
 deltdx = 0.
-if (md .ge. 2) deltdx = (dxmax - dxmin)/float(md - 1)
+if (md >= 2) deltdx = (dxmax - dxmin)/float(md - 1)
 lasti = 1
 do 3 ii = 1,md
    xii = dxmin + float(ii - 1)*deltdx
    i = lasti
 1  i = i + 1
-   if (xii .gt. x(i) .and. i .lt. m) go to 1
+   if (xii > x(i) .and. i < m) go to 1
    im1 = i - 1
    lasti = im1
    del1 = xii - x(im1)
@@ -5754,7 +5754,7 @@ do 3 ii = 1,md
    dels = x(i) - x(im1)
    work(1,ii) = del2/dels
    work(2,ii) = del1/dels
-   if (sigmax .ne. 0.) go to 2
+   if (sigmax /= 0.) go to 2
    temp = -del1*del2/(6.*dels)
    work(3,ii) = temp*(del2 + dels)
    work(4,ii) = temp*(del1 + dels)
@@ -5779,13 +5779,13 @@ do 3 ii = 1,md
 ! grid and perform intrpolation
 !
 deltdy = 0.
-if (nd .ge. 2) deltdy = (dymax - dymin)/float(nd - 1)
+if (nd >= 2) deltdy = (dymax - dymin)/float(nd - 1)
 lastj = 1
 do 8 jj = 1,nd
    yjj = dymin + float(jj - 1)*deltdy
    j = lastj
 4  j = j + 1
-   if (yjj .gt. y(j) .and. j .lt. n) go to 4
+   if (yjj > y(j) .and. j < n) go to 4
    jm1 = j - 1
    lastj = jm1
    del1 = yjj - y(jm1)
@@ -5793,7 +5793,7 @@ do 8 jj = 1,nd
    dels = y(j) - y(jm1)
    c1 = del2/dels
    c2 = del1/dels
-   if (sigmay .ne. 0.) go to 5
+   if (sigmay /= 0.) go to 5
    temp = -del1*del2/(6.*dels)
    c3 = temp*(del2 + dels)
    c4 = temp*(del1 + dels)
@@ -5817,9 +5817,9 @@ do 8 jj = 1,nd
       xii = dxmin + float(ii - 1)*deltdx
       i = max0 (1, lasti)
 7     i = i + 1
-      if (xii .gt. x(i) .and. i .lt. m) go to 7
+      if (xii > x(i) .and. i < m) go to 7
       im1 = i - 1
-      if (im1 .eq. lasti) go to 8
+      if (im1 == lasti) go to 8
       lasti = im1
       zim1 = c1*z(im1,jm1) + c2*z(im1,j) &
          & + c3*zp(im1,jm1,1) + c4*zp(im1,j,1)
@@ -5881,15 +5881,15 @@ end interface
 !-------------------------
 !
 m = nx*ny + 2*max0(kx*nx, ky*ny)
-if (l .lt. m) go to 120
+if (l < m) go to 120
 !
 !     Compute the coefficients
 !
 iw = nx*ny + 1
 call bstrp1(x, z, kz, nx, ny, tx, kx, wk, ny, wk(iw), iflag)
-if (iflag .ne. 0) go to 100
+if (iflag /= 0) go to 100
 call bstrp1(y, wk, ny, ny, nx, ty, ky, a, ka, wk(iw), iflag)
-if (iflag .ne. 0) go to 110
+if (iflag /= 0) go to 110
 return
 !
 !     Error return
@@ -5937,12 +5937,12 @@ end interface
 iflag = 1
 mp1 = m + 1
 call bstrp(x, z, t, m, k, work(1), work(mp1), iflag)
-if (iflag .ne. 0) return
+if (iflag /= 0) return
 !
 do i = 1,m
    a(1,i) = work(i)
 end do
-if (n .eq. 1) return
+if (n == 1) return
 !
 !     Remaining data sets
 !
@@ -6007,7 +6007,7 @@ end interface
 !-------------------------
 !
 m = nx*my + max0((kx + 1)*nx,(ky + 1)*ny)
-if (l .lt. m) go to 120
+if (l < m) go to 120
 !
 !     Compute the coefficients
 !
@@ -6015,12 +6015,12 @@ iw = nx*my + 1
 iq = iw + nx
 call bslsq1(x, wx, mx, z, kz, my, tx, nx, kx, &
    & wk, my, wk(iw), wk(iq), ierr)
-if (ierr .lt. 0) go to 100
+if (ierr < 0) go to 100
 !
 iq = iw + ny
 call bslsq1(y, wy, my, wk, my, nx, ty, ny, ky, &
    & a, ka, wk(iw), wk(iq), iflag)
-if (iflag .lt. 0) go to 110
+if (iflag < 0) go to 110
 iflag = max0(ierr,iflag)
 return
 !
@@ -6117,11 +6117,11 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (ntau .lt. max0(2,k)) go to 100
-if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
+if (ntau < max0(2,k)) go to 100
+if (tau(1) < t(k) .or. tau(ntau) > t(n + 1)) go to 100
 !
 do i = 2,ntau
-   if (tau(i - 1) .gt. tau(i)) go to 100
+   if (tau(i - 1) > tau(i)) go to 100
 end do
 !
 do j = 1,n
@@ -6142,8 +6142,8 @@ do l = 1,ntau
 !        *** Find the index left such that
 !            t(left) .LE. tau(l) .LT. t(left+1)
 !
-40 if (left .eq. n) go to 50
-   if (tau(l) .lt. t(left + 1)) go to 50
+40 if (left == n) go to 50
+   if (tau(l) < t(left + 1)) go to 50
    left = left + 1
    go to 40
 !
@@ -6216,7 +6216,7 @@ real :: t
 !
 !-----------------------------------------------------------------------
 !
-if (n .gt. 1) go to 20
+if (n > 1) go to 20
 do i = 1,m
    b(i,1) = b(i,1)*w(1,1)
 end do
@@ -6227,7 +6227,7 @@ return
 20 nbm1 = nb - 1
 do 40 k = 1,n
    jmax = min0(nbm1,n - k)
-   if (jmax .lt. 1) go to 40
+   if (jmax < 1) go to 40
    do j = 1,jmax
       jpk = j + k
       t = w(j + 1,k)
@@ -6245,7 +6245,7 @@ do i = 1,m
    b(i,k) = t*b(i,k)
 end do
 jmax = min0(nbm1,n - k)
-if (jmax .lt. 1) go to 80
+if (jmax < 1) go to 80
 do j = 1,jmax
    jpk = j + k
    t = w(j + 1,k)
@@ -6254,7 +6254,7 @@ do j = 1,jmax
    end do
 end do
 80 k = k - 1
-if (k .gt. 0) go to 50
+if (k > 0) go to 50
 return
 end subroutine bchsv1
 
@@ -6304,13 +6304,13 @@ end interface
 !
 f = 0.0
 m = nx + kx
-if (x0 .lt. tx(1) .or. x0 .gt. tx(m)) return
+if (x0 < tx(1) .or. x0 > tx(m)) return
 m = ny + ky
-if (y0 .lt. ty(1) .or. y0 .gt. ty(m)) return
+if (y0 < ty(1) .or. y0 > ty(m)) return
 !
 iw = ky + 1
 j = intrvl(y0, ty, m)
-if (j .gt. ky) go to 20
+if (j > ky) go to 20
 !
 !     Case when  j .LE. ky
 !
@@ -6444,7 +6444,7 @@ real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
 nn = n
 ier = 1
-if (nn .lt. 3) return
+if (nn < 3) return
 ier = 0
 !
 ! Initialize iend, nl, nr, and k
@@ -6464,7 +6464,7 @@ dyr = yr - yl
 !
 ! Next loop begins here if nl and nr are unchanged
 !
-2 if (k .eq. nn) go to 13
+2 if (k == nn) go to 13
 km1 = k
 k = km1 + 1
 xk = x(k)
@@ -6472,14 +6472,14 @@ yk = y(k)
 dxk = xk - xl
 dyk = yk - yl
 cprod = dxr*dyk - dxk*dyr
-if (cprod .gt. 0.) go to 6
-if (cprod .lt. 0.) go to 8
+if (cprod > 0.) go to 6
+if (cprod < 0.) go to 8
 !
 ! Node k lies on the line containing nodes 1,2,...,k-1.
 !   Set sprod to (nl-nr,nl-k).
 !
 sprod = dxr*dxk + dyr*dyk
-if (sprod .gt. 0.) go to 3
+if (sprod > 0.) go to 3
 !
 ! Node k is to the left of nl.  Insert k as the first
 !   (leftmost) node in iend and set nl to k.
@@ -6498,7 +6498,7 @@ go to 1
    n0 = iend(ind)
    sprod = (xl - x(n0))*(xk - x(n0)) + &
       & (yl - y(n0))*(yk - y(n0))
-   if (sprod .ge. 0.) go to 5
+   if (sprod >= 0.) go to 5
 4  continue
 !
 ! Node k is to the right of nr.  Insert k as the last
@@ -6540,14 +6540,14 @@ nr = iend(km1)
 do 9 ind = 1,km1
    n0 = iend(ind)
    indx = 4*n0
-   if (n0 .ge. nl) indx = indx - 1
-   if (n0 .ge. nr) indx = indx - 1
+   if (n0 >= nl) indx = indx - 1
+   if (n0 >= nr) indx = indx - 1
    iadj(indx) = 0
    indx = indx - 1
-   if (ind .lt. km1) iadj(indx) = iend(ind + 1)
-   if (ind .lt. km1) indx = indx - 1
+   if (ind < km1) iadj(indx) = iend(ind + 1)
+   if (ind < km1) indx = indx - 1
    iadj(indx) = k
-   if (ind .eq. 1) go to 9
+   if (ind == 1) go to 9
    iadj(indx - 1) = iend(ind - 1)
 9  continue
 !
@@ -6565,7 +6565,7 @@ end do
 indx = 0
 do ind = 1,km1
    indx = indx + 4
-   if (ind .eq. nl  .or.  ind .eq. nr) indx = indx - 1
+   if (ind == nl  .or.  ind == nr) indx = indx - 1
    iend(ind) = indx
 end do
 indx = indx + k
@@ -6573,7 +6573,7 @@ iend(k) = indx
 !
 ! Add the remaining nodes to the triangulation
 !
-if (k .eq. nn) return
+if (k == nn) return
 kmin = k + 1
 do k = kmin,nn
    call adnode(k,x,y, iadj,iend, ierr)
@@ -6678,9 +6678,9 @@ yk = y(k)
 ! Add node k to the mesh
 !
 call trfind(km1,xk,yk,x,y,iadj,iend, i1,i2,i3)
-if (i1 .eq. 0) go to 5
-if (i3 .eq. 0) call bdyadd(k,i1,i2, iadj,iend )
-if (i3 .ne. 0) call intadd(k,i1,i2,i3, iadj,iend )
+if (i1 == 0) go to 5
+if (i3 == 0) call bdyadd(k,i1,i2, iadj,iend )
+if (i3 /= 0) call intadd(k,i1,i2,i3, iadj,iend )
 !
 ! Initialize variables for optimization of the mesh
 !
@@ -6694,9 +6694,9 @@ io1 = iadj(indk1)
 ! Begin loop -- find the vertex opposite k
 !
 1 ind2f = 1
-if (io2 .ne. 1) ind2f = iend(io2 - 1) + 1
+if (io2 /= 1) ind2f = iend(io2 - 1) + 1
 ind21 = tindx(io2,io1,iadj,iend)
-if (ind2f .eq. ind21) go to 2
+if (ind2f == ind21) go to 2
 in1 = iadj(ind21 - 1)
 go to 3
 !
@@ -6704,7 +6704,7 @@ go to 3
 !
 2 ind21 = iend(io2)
 in1 = iadj(ind21)
-if (in1 .eq. 0) go to 4
+if (in1 == 0) go to 4
 !
 ! Swap test -- if a swap occurs, two new arcs are opposite k
 !              and must be tested.  INDK1 and indkf must be
@@ -6720,12 +6720,12 @@ go to 1
 ! No swap occurred.  Reset io2 and io1, and test for
 !   termination.
 !
-4 if (io1 .eq. nabor1) return
+4 if (io1 == nabor1) return
 io2 = io1
 indk1 = indk1 + 1
-if (indk1 .gt. indkl) indk1 = indkf
+if (indk1 > indkl) indk1 = indkf
 io1 = iadj(indk1)
-if (io1 .ne. 0) go to 1
+if (io1 /= 0) go to 1
 return
 !
 ! All nodes are collinear
@@ -6825,7 +6825,7 @@ nleft = i2
 !
 nl = iend(km1)
 n1 = 1
-if (nleft .ne. 1) n1 = iend(nleft - 1) + 1
+if (nleft /= 1) n1 = iend(nleft - 1) + 1
 n2 = iend(nright)
 nf = max0(n1,n2)
 !
@@ -6861,7 +6861,7 @@ iadj(kend) = nright
 !
 indx = iend(nright) - 2
 3 next = iadj(indx)
-if (next .eq. nleft) go to 4
+if (next == nleft) go to 4
 !
 ! Connect next and k
 !
@@ -6980,7 +6980,7 @@ do 2 i = 1,3
 ! Find the index of N2 as a neighbor of n1
 !
 1  indx = indx - 1
-   if (iadj(indx) .ne. n2) go to 1
+   if (iadj(indx) /= n2) go to 1
    nft(i) = indx + 1
 2  continue
 !
@@ -6991,13 +6991,13 @@ do 2 i = 1,3
 ip1 = 1
 ip2 = 2
 ip3 = 3
-if ( n(2) .le. n(1) ) go to 3
+if ( n(2) <= n(1) ) go to 3
 ip1 = 2
 ip2 = 1
-3 if ( n(3) .le. n(ip1) ) go to 4
+3 if ( n(3) <= n(ip1) ) go to 4
 ip3 = ip1
 ip1 = 3
-4 if ( n(ip3) .le. n(ip2) ) go to 5
+4 if ( n(ip3) <= n(ip2) ) go to 5
 itemp = ip2
 ip2 = ip3
 ip3 = itemp
@@ -7010,7 +7010,7 @@ ip3 = itemp
 5 km1 = k - 1
 nl = iend(km1)
 nf = nft(ip1)
-if (nf .le. nl) call shiftd(nf,nl,3, iadj )
+if (nf <= nl) call shiftd(nf,nl,3, iadj )
 iadj(nf + 2) = k
 imin = n(ip1)
 imax = km1
@@ -7111,15 +7111,15 @@ integer, parameter :: inc = 5
 k = kk
 nf = nfrst
 nl = nlast
-if (nf .gt. nl  .or.  k .eq. 0) return
+if (nf > nl  .or.  k == 0) return
 nlp1 = nl + 1
 ns = nlp1 - nf
 nsl = inc*(ns/inc)
-if ( k .lt. 0) go to 4
+if ( k < 0) go to 4
 !
 ! Shift downward starting from the bottom
 !
-if (nsl .le. 0) go to 2
+if (nsl <= 0) go to 2
 do 1 i = 1,nsl,inc
    ibak = nlp1 - i
    indx = ibak + k
@@ -7133,7 +7133,7 @@ do 1 i = 1,nsl,inc
 ! Perform the remaining ns-nsl shifts one at a time
 !
 2 ibak = nlp1 - nsl
-3 if (ibak .le. nf) return
+3 if (ibak <= nf) return
 ibak = ibak - 1
 indx = ibak + k
 iarr(indx) = iarr(ibak)
@@ -7141,7 +7141,7 @@ go to 3
 !
 ! Shift upward starting from the top
 !
-4 if (nsl .le. 0) go to 6
+4 if (nsl <= 0) go to 6
 imax = nlp1 - inc
 do 5 i = nf,imax,inc
    indx = i + k
@@ -7155,7 +7155,7 @@ do 5 i = nf,imax,inc
 ! Perform the remaining ns-nsl shifts one at a time
 !
 6 i = nsl + nf
-7 if (i .gt. nl) return
+7 if (i > nl) return
 indx = i + k
 iarr(indx) = iarr(i)
 i = i + 1
@@ -7243,17 +7243,17 @@ ip1 = 1
 !   io(2), and choose ip1 and ip2 such that (in(1),io(ip1),
 !   io(ip2)) forms a triangle.
 !
-if (in(1) .lt. in(2)) go to 1
+if (in(1) < in(2)) go to 1
 in(1) = in(2)
 in(2) = nin1
 ip1 = 2
-1 if (io(1) .lt. io(2)) go to 2
+1 if (io(1) < io(2)) go to 2
 io(1) = io(2)
 io(2) = nout1
 ip1 = 3 - ip1
 2 ip2 = 3 - ip1
-if (io(2) .lt. in(1)) go to 8
-if (in(2) .lt. io(1)) go to 12
+if (io(2) < in(1)) go to 8
+if (in(2) < io(1)) go to 12
 !
 ! in(1) and io(1) precede in(2) and io(2).  For (j,k) =
 !   (1,2) and (2,1), delete io(k) as a neighbor of io(j)
@@ -7262,14 +7262,14 @@ if (in(2) .lt. io(1)) go to 12
 !
 do 7 j = 1,2
    k = 3 - j
-   if (in(j) .gt. io(j)) go to 4
+   if (in(j) > io(j)) go to 4
 !
 !   The neighbors of in(j) precede those of io(j) -- shift
 !     down by 1
 !
    nf = 1 + tindx(in(j),io(ip1),iadj,iend)
    nl = -1 + tindx(io(j),io(k),iadj,iend)
-   if (nf .le. nl) call shiftd(nf,nl,1, iadj )
+   if (nf <= nl) call shiftd(nf,nl,1, iadj )
    iadj(nf) = in(k)
    imin = in(j)
    imax = io(j) - 1
@@ -7282,7 +7282,7 @@ do 7 j = 1,2
 !
 4  nf = 1 + tindx(io(j),io(k),iadj,iend)
    nl = -1 + tindx(in(j),io(ip2),iadj,iend)
-   if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
+   if (nf <= nl) call shiftd(nf,nl,-1, iadj )
    iadj(nl) = in(k)
    imin = io(j)
    imax = in(j) - 1
@@ -7301,7 +7301,7 @@ return
 !
 8 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
-if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
+if (nf <= nl) call shiftd(nf,nl,-1, iadj )
 imin = io(1)
 imax = io(2) - 1
 do 9 i = imin,imax
@@ -7311,7 +7311,7 @@ do 9 i = imin,imax
 !
 nf = nl + 2
 nl = -1 + tindx(in(1),io(ip2),iadj,iend)
-if (nf .le. nl) call shiftd(nf,nl,-2, iadj )
+if (nf <= nl) call shiftd(nf,nl,-2, iadj )
 iadj(nl - 1) = in(2)
 imin = io(2)
 imax = in(1) - 1
@@ -7335,7 +7335,7 @@ return
 !
 12 nf = 1 + tindx(io(1),io(2),iadj,iend)
 nl = -1 + tindx(io(2),io(1),iadj,iend)
-if (nf .le. nl) call shiftd(nf,nl,1, iadj )
+if (nf <= nl) call shiftd(nf,nl,1, iadj )
 imin = io(1)
 imax = io(2) - 1
 do 13 i = imin,imax
@@ -7345,7 +7345,7 @@ do 13 i = imin,imax
 !
 nl = nf - 2
 nf = 1 + tindx(in(2),io(ip2),iadj,iend)
-if (nf .le. nl) call shiftd(nf,nl,2, iadj )
+if (nf <= nl) call shiftd(nf,nl,2, iadj )
 iadj(nf + 1) = in(1)
 imin = in(2)
 imax = io(1) - 1
@@ -7453,15 +7453,15 @@ cos2 = dx22*dx21 + dy22*dy21
 !   degrees.  The following two tests insure numerical
 !   stability.
 !
-if (cos1 .ge. 0.  .and.  cos2 .ge. 0.) return
-if (cos1 .lt. 0.  .and.  cos2 .lt. 0.) go to 1
+if (cos1 >= 0.  .and.  cos2 >= 0.) return
+if (cos1 < 0.  .and.  cos2 < 0.) go to 1
 !
 ! Compute vector cross products
 !
 sin1 = dx11*dy12 - dx12*dy11
 sin2 = dx22*dy21 - dx21*dy22
 sin12 = sin1*cos2 + cos1*sin2
-if (sin12 .ge. 0.) return
+if (sin12 >= 0.) return
 1 swptst = .true.
 return
 end function swptst
@@ -7515,7 +7515,7 @@ indx = iend(nvertx) + 1
 ! Search the list of nvertx neighbors for nb
 !
 1 indx = indx - 1
-if (iadj(indx) .ne. nb) go to 1
+if (iadj(indx) /= nb) go to 1
 !
 tindx = indx
 return
@@ -7606,7 +7606,7 @@ logical :: left
 !               y0) = .TRUE. IFF (x0,y0) is on or to the
 !               left of the vector from (x1,y1) to (x2,y2).
 !
-left(x1,y1,x2,y2,x0,y0) = (x2 - x1)*(y0 - y1) .ge. &
+left(x1,y1,x2,y2,x0,y0) = (x2 - x1)*(y0 - y1) >= &
    & (x0 - x1)*(y2 - y1)
 xp = px
 yp = py
@@ -7617,10 +7617,10 @@ n0 = max0(nst,1)
 1 indx = iend(n0)
 nl = iadj(indx)
 indx = 1
-if (n0 .ne. 1) indx = iend(n0 - 1) + 1
+if (n0 /= 1) indx = iend(n0 - 1) + 1
 nf = iadj(indx)
 n1 = nf
-if (nl .ne. 0) go to 3
+if (nl /= 0) go to 3
 !
 ! n0 is a boundary node.  Set nl to the last nonzero
 !   neighbor of n0.
@@ -7646,7 +7646,7 @@ go to 18
 3 if ( left(x(n0),y(n0),x(n1),y(n1),xp,yp) ) go to 4
 indx = indx + 1
 n1 = iadj(indx)
-if (n1 .eq. nl) go to 7
+if (n1 == nl) go to 7
 go to 3
 !
 ! P is to the left of arc n0-n1.  Initialize n2 to the next
@@ -7657,10 +7657,10 @@ n2 = iadj(indx)
 if ( .not. left(x(n0),y(n0),x(n2),y(n2),xp,yp) ) &
    & go to 8
 n1 = n2
-if (n1 .ne. nl) go to 4
+if (n1 /= nl) go to 4
 if ( .not. left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) &
    & go to 7
-if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
+if (xp == x(n0) .and. yp == y(n0)) go to 6
 !
 ! P is left of or on arcs n0-NB for all neighbors NB
 !   OF n0.
@@ -7671,7 +7671,7 @@ if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
 !
 5 if ( .not. left(x(n1),y(n1),x(n0),y(n0),xp,yp) ) &
    & go to 6
-if (n1 .eq. nf) go to 20
+if (n1 == nf) go to 20
 indx = indx - 1
 n1 = iadj(indx)
 go to 5
@@ -7695,22 +7695,22 @@ go to 1
 ! Set n4 to the first neighbor of n2 following n1
 !
 indx = iend(n2)
-if (iadj(indx) .ne. n1) go to 10
+if (iadj(indx) /= n1) go to 10
 !
 ! n1 is the last neighbor of n2.
 ! Set n4 to the first neighbor.
 !
 indx = 1
-if (n2 .ne. 1) indx = iend(n2 - 1) + 1
+if (n2 /= 1) indx = iend(n2 - 1) + 1
 n4 = iadj(indx)
 go to 11
 !
 ! n1 is not the last neighbor of n2
 !
 10 indx = indx - 1
-if (iadj(indx) .ne. n1) go to 10
+if (iadj(indx) /= n1) go to 10
 n4 = iadj(indx + 1)
-if (n4 .ne. 0) go to 11
+if (n4 /= 0) go to 11
 !
 ! P is outside the boundary
 !
@@ -7734,12 +7734,12 @@ go to 9
 !   as exterior.
 !
 13 indx = iend(n1)
-if (iadj(indx) .ne. 0) go to 15
+if (iadj(indx) /= 0) go to 15
 !
 ! n1 is a boundary node.  n3-n1 is a boundary arc IFF n3
 !   is the last nonzero neighbor of n1.
 !
-if (n3 .ne. iadj(indx - 1)) go to 14
+if (n3 /= iadj(indx - 1)) go to 14
 !
 ! n3-n1 is a boundary arc
 !
@@ -7757,8 +7757,8 @@ return
 !   boundary arc IFF n2 is the first neighbor of n1.
 !
 14 indx = 1
-if (n1 .ne. 1) indx = iend(n1 - 1) + 1
-if (n2 .ne. iadj(indx)) go to 15
+if (n1 /= 1) indx = iend(n1 - 1) + 1
+if (n2 /= iadj(indx)) go to 15
 !
 ! n1-n2 is a boundary arc
 !
@@ -7784,7 +7784,7 @@ return
 ! Set next to the first neighbor of nf.
 !
 16 indx = 1
-if (nf .ne. 1) indx = iend(nf - 1) + 1
+if (nf /= 1) indx = iend(nf - 1) + 1
 next = iadj(indx)
 if ( left(x(nf),y(nf),x(next),y(next),xp,yp) ) &
    & go to 17
@@ -7848,7 +7848,7 @@ end interface
 !                      Derivative estimation
 !-----------------------------------------------------------------------
 !
-if (n .lt. 3) go to 20
+if (n < 3) go to 20
 !
 eps = 0.0
 miter = 5
@@ -8001,13 +8001,13 @@ maxit = nit
 !
 ! Error checks and initialization
 !
-if (nn .lt. 3  .or.  tol .lt. 0.  .or.  maxit .lt. 0) &
+if (nn < 3  .or.  tol < 0.  .or.  maxit < 0) &
    & go to 5
 iter = 0
 !
 ! Top of iteration loop
 !
-1 if (iter .eq. maxit) go to 4
+1 if (iter == maxit) go to 4
 dgmax = 0.
 indl = 0
 do 3 k = 1,nn
@@ -8031,7 +8031,7 @@ do 3 k = 1,nn
    indl = iend(k)
    do 2 indx = indf,indl
       nb = iadj(indx)
-      if (nb .eq. 0) go to 2
+      if (nb == 0) go to 2
 !
 !   Compute the components of arc nb-k
 !
@@ -8067,7 +8067,7 @@ do 3 k = 1,nn
 !   Increment iter and test for convergence
 !
 iter = iter + 1
-if (dgmax .gt. tol) go to 1
+if (dgmax > tol) go to 1
 !
 ! Method converged
 !
@@ -8115,12 +8115,12 @@ end interface
 !                      Derivative estimation
 !-----------------------------------------------------------------------
 !
-if (n .lt. 3) go to 20
+if (n < 3) go to 20
 !
 do j = 1,n
    call gradl1(n, j, x, y, z, iadj, iend, zxzy(1,j), &
       & zxzy(2,j), ierr)
-   if (ierr .lt. 0) go to 30
+   if (ierr < 0) go to 30
 end do
 ierr = 0
 return
@@ -8321,7 +8321,7 @@ kk = k
 !
 ! Check for errors and initialize lmin, lmax
 !
-if (nn .lt. 3  .or.  kk .lt. 1  .or.  kk .gt. nn) &
+if (nn < 3  .or.  kk < 1  .or.  kk > nn) &
    & go to 16
 lmin = min0(lmn,nn)
 lmax = min0(lmx,nn)
@@ -8341,8 +8341,8 @@ do 1 lnp = 2,lm1
 !
 do 2 lnp = lmin,lmax
    call getnp(x,y,iadj,iend,lnp, npts, rs,ierr)
-   if ((rs - ds)/ds .le. rtol) go to 2
-   if (lnp .gt. 6) go to 3
+   if ((rs - ds)/ds <= rtol) go to 2
+   if (lnp > 6) go to 3
 2  sum = sum + rs
 !
 ! Use all lmax nodes in the least squares fit.  rs is
@@ -8360,7 +8360,7 @@ r = sqrt(rs)
 xk = x(kk)
 yk = y(kk)
 zk = z(kk)
-if (lnp .lt. 7) go to 12
+if (lnp < 7) go to 12
 !
 ! Set up the first 5 equations of the augmented regression
 !   matrix (transposed) as the columns of A, and zero out
@@ -8371,7 +8371,7 @@ do 5 i = 1,5
    np = npts(i + 1)
    call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
       & r, a(1,i))
-   if (i .eq. 1) go to 5
+   if (i == 1) go to 5
    im1 = i - 1
    do 4 j = 1,im1
       jp1 = j + 1
@@ -8384,7 +8384,7 @@ do 5 i = 1,5
 !   the last column of a -- I .LE. lnp.
 !
 i = 7
-6 if (i .eq. lnp) go to 8
+6 if (i == lnp) go to 8
 np = npts(i)
 call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,6))
@@ -8400,14 +8400,14 @@ go to 6
 !
 8 dmin = amin1( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
    & abs(a(4,4)),abs(a(5,5)) )
-if (dmin .ge. dtol) go to 15
-if (lnp .gt. lmax) go to 9
+if (dmin >= dtol) go to 15
+if (lnp > lmax) go to 9
 !
 ! Add another node to the system and increase r --
 !   I .EQ. lnp
 !
 lnp = lnp + 1
-if (lnp .le. lmax) call getnp(x,y,iadj,iend,lnp, &
+if (lnp <= lmax) call getnp(x,y,iadj,iend,lnp, &
    & npts, rs,ierr)
 r = sqrt(1.1*rs)
 go to 6
@@ -8439,7 +8439,7 @@ call setrm(xk,yk,zk,x(np),y(np),z(np),av,avsq, &
    & r, a(1,5))
 call srotg(a(4,4),a(4,5),c,s)
 call srot(2,a(5,4),1,a(5,5),1,c,s)
-if (lnp .eq. 4) go to 14
+if (lnp == 4) go to 14
 !
 lm1 = lnp - 1
 do 13 i = 4,lm1
@@ -8454,7 +8454,7 @@ do 13 i = 4,lm1
 ! Test the linear fit for ill-conditioning
 !
 14 dmin = amin1( abs(a(4,4)),abs(a(5,5)) )
-if (dmin .lt. dtol) go to 17
+if (dmin < dtol) go to 17
 !
 ! Solve the 2 by 2 triangular system for the derivatives
 !
@@ -8540,7 +8540,7 @@ dy = yi - yk
 dxsq = dx*dx
 dysq = dy*dy
 d = sqrt(dxsq + dysq)
-if (d .le. 0.  .or.  d .ge. r) go to 1
+if (d <= 0.  .or.  d >= r) go to 1
 w = (r - d)/r/d
 w1 = w/s1
 w2 = w/s2
@@ -8650,7 +8650,7 @@ real :: x1, y1, dnp, dnb
 !             respectively
 !
 lm1 = l - 1
-if (lm1 .lt. 1) go to 4
+if (lm1 < 1) go to 4
 ier = 0
 n1 = npts(1)
 x1 = x(n1)
@@ -8675,20 +8675,20 @@ dnp = 0.
 do 2 i = 1,lm1
    ni = npts(i)
    indf = 1
-   if (ni .gt. 1) indf = iabs(iend(ni - 1)) + 1
+   if (ni > 1) indf = iabs(iend(ni - 1)) + 1
    indl = -iend(ni)
 !
 ! Loop on neighbors nb of ni
 !
    do 2 indx = indf,indl
       nb = iadj(indx)
-      if (nb .eq. 0  .or.  iend(nb) .lt. 0) go to 2
+      if (nb == 0  .or.  iend(nb) < 0) go to 2
 !
 ! nb is an unmarked neighbor of ni.  Replace np if nb is
 !   closer to n1 or is the first candidate encountered.
 !
       dnb = (x(nb) - x1)**2 + (y(nb) - y1)**2
-      if (np .ne. 0  .and.  dnb .ge. dnp) go to 2
+      if (np /= 0  .and.  dnb >= dnp) go to 2
       np = nb
       dnp = dnb
 2     continue
@@ -8725,13 +8725,13 @@ integer :: ist, j
 !                    Evaluation of the surface
 !-----------------------------------------------------------------------
 !
-if (n .lt. 3 .or. m .lt. 1) go to 20
+if (n < 3 .or. m < 1) go to 20
 !
 ist = 1
 do j = 1,m
    call intrc1(n, xi(j), yi(j), x, y, z, iadj, iend, &
       & 1, zxzy, ist, zi(j), ierr)
-   if (ierr .lt. 0) go to 30
+   if (ierr < 0) go to 30
 end do
 ierr = 0
 return
@@ -8760,7 +8760,7 @@ integer :: i, ist, j
 !                Evaluation of the surface over a grid
 !-----------------------------------------------------------------------
 !
-if (n .lt. 3 .or. l .lt. 1 .or. m .lt. 1 .or. nrows .lt. l) &
+if (n < 3 .or. l < 1 .or. m < 1 .or. nrows < l) &
    & go to 30
 !
 ist = 1
@@ -8768,7 +8768,7 @@ do j = 1,m
    do i = 1,l
       call intrc1(n, xi(i), yi(j), x, y, z, iadj, iend, &
          & 1, zxzy, ist, zi(i,j), ierr)
-      if (ierr .lt. 0) go to 40
+      if (ierr < 0) go to 40
    end do
 end do
 ierr = 0
@@ -8952,8 +8952,8 @@ end interface
 !
 nn = n
 pz = 0.
-if (nn .lt. 3  .or.  iflag .lt. 0  .or.  iflag .gt. 1 &
-   & .or.  ist .lt. 1  .or.  ist .gt. nn) go to 11
+if (nn < 3  .or.  iflag < 0  .or.  iflag > 1 &
+   & .or.  ist < 1  .or.  ist > nn) go to 11
 xp = px
 yp = py
 !
@@ -8961,10 +8961,10 @@ yp = py
 !   boundary
 !
 call trfind(ist,xp,yp,x,y,iadj,iend, i1,i2,i3)
-if (i1 .eq. 0) go to 12
+if (i1 == 0) go to 12
 ist = i1
-if (i3 .eq. 0) go to 3
-if (iflag .ne. 1) go to 1
+if (i3 == 0) go to 3
+if (iflag /= 1) go to 1
 !
 ! Derivatives are user provided
 !
@@ -8995,7 +8995,7 @@ z2 = z(i2)
 z3 = z(i3)
 call tval(xp,yp,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1,zx2, &
    & zx3,zy1,zy2,zy3,0, pz,dum,dum,ierr)
-if (ierr .ne. 0) go to 12
+if (ierr /= 0) go to 12
 ier = 0
 return
 !
@@ -9019,15 +9019,15 @@ y1 = y(n1)
 x2 = x(n2)
 y2 = y(n2)
 dp = (x1 - x2)*(xp - x2) + (y1 - y2)*(yp - y2)
-if (dp .le. 0.) go to 5
-if ((xp - x1)*(x2 - x1) + (yp - y1)*(y2 - y1) .gt. 0.) go to 8
+if (dp <= 0.) go to 5
+if ((xp - x1)*(x2 - x1) + (yp - y1)*(y2 - y1) > 0.) go to 8
 n2 = n1
 go to 4
 !
 ! n2 is the closest boundary point to P.  compute partial
 !   derivatives at n2.
 !
-5 if (iflag .ne. 1) go to 6
+5 if (iflag /= 1) go to 6
 zx2 = zxzy(1,n2)
 zy2 = zxzy(2,n2)
 go to 7
@@ -9042,7 +9042,7 @@ return
 ! The closest boundary point Q lies on n2-n1.  Compute
 !   partials at n1 and n2.
 !
-8 if (iflag .ne. 1) go to 9
+8 if (iflag /= 1) go to 9
 zx1 = zxzy(1,n1)
 zy1 = zxzy(2,n1)
 zx2 = zxzy(1,n2)
@@ -9232,7 +9232,7 @@ do 1 i = 1,3
 ! area = 3-1 x 3-2
 !
 area = u(1)*v(2) - u(2)*v(1)
-if (area .eq. 0.) go to 9
+if (area == 0.) go to 9
 !
 ! r(1) = (2-3 x 2-(x,y))/area, r(2) = (1-(x,y) x 1-3)/area,
 !   r(3) = (1-2 x 1-(x,y))/area
@@ -9249,12 +9249,12 @@ phi(2) = r(3)*r(1)
 phi(3) = r(1)*r(2)
 !
 rmin = amin1(r(1),r(2),r(3))
-if (rmin .ne. r(1)) go to 3
+if (rmin /= r(1)) go to 3
 ip1 = 1
 ip2 = 2
 ip3 = 3
 go to 5
-3 if (rmin .ne. r(2)) go to 4
+3 if (rmin /= r(2)) go to 4
 ip1 = 2
 ip2 = 3
 ip3 = 1
@@ -9298,7 +9298,7 @@ c(3) = v(2)*p(2) + v(1)*q(1)
 !
 w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
    & + b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
-if (iflag .ne. 1) return
+if (iflag /= 1) return
 !
 ! Compute wx and wy
 !
@@ -9378,7 +9378,7 @@ return
 !
 9 ier = 1
 w = 0.
-if (iflag .ne. 1) return
+if (iflag /= 1) return
 wx = 0.
 wy = 0.
 return
@@ -9517,9 +9517,9 @@ dimp1 = dimen + 1
 !
 call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
    & error)
-if ( error .ge. 2 ) return
+if ( error >= 2 ) return
 !
-if ( fdwkln .ge. dreqd ) go to 10
+if ( fdwkln >= dreqd ) go to 10
 error = 4
 return
 10 continue
@@ -9671,9 +9671,9 @@ end interface
 !     ***************
 !
 call basiz(degree,npts,dimen,npolys,error)
-if ( error .ge. 2 ) return
+if ( error >= 2 ) return
 ireqd = 4 * npolys + degree * dimen
-if ( iwklen .ge. ireqd ) go to 5
+if ( iwklen >= ireqd ) go to 5
 error = 4
 return
 5 newstt = 4 * npolys + 1
@@ -9694,7 +9694,7 @@ iwork(2) = npolys
 !     using  alfl  do not bomb.
 !     ***************
 !
-if ( alfl .gt. 1 ) alfl = alfl - 1
+if ( alfl > 1 ) alfl = alfl - 1
 iwork(4) = alfl
 !
 !     ***************
@@ -9732,7 +9732,7 @@ iwork(4) = alfl
 !                           INDEXS(3,npolys)               (CASE 4)
 !                        )
 !
-if ( degree .gt. 2 ) go to 10
+if ( degree > 2 ) go to 10
 !
 !     ***************
 !     Case 1
@@ -9749,7 +9749,7 @@ go to 40
 !
 kmxbas = iwork(nplyt4 - 2)
 !
-if ( kmxbas .ne. dimen ) go to 20
+if ( kmxbas /= dimen ) go to 20
 !
 !     ***************
 !     Case 2
@@ -9771,7 +9771,7 @@ kjp1d2 = iwork(index)
 !     ***************
 !
 startj = iwork(nplyt4 - 1)
-if ( startj .gt. kjp1d2 ) go to 30
+if ( startj > kjp1d2 ) go to 30
 !
 !     ***************
 !     Case 4
@@ -9836,18 +9836,18 @@ integer :: i, rowlen
 !     ****************
 !
 error = 0
-if ( npts .ge. 1 .and. dimen .ge. 1 ) go to 10
+if ( npts >= 1 .and. dimen >= 1 ) go to 10
 error = 3
 return
 !
 10 continue
-if ( degree .lt. 0 ) go to 30
+if ( degree < 0 ) go to 30
 !
 rowlen = 1
 npolys = 1
 top = dimen - 1
 bot = 0
-if ( degree .lt. 1 ) go to 30
+if ( degree < 1 ) go to 30
 do i = 1,degree
    top = top + 1
    bot = bot + 1
@@ -9856,11 +9856,11 @@ do i = 1,degree
 end do
 !
 30 continue
-if ( npolys .ge. 1 ) go to 40
+if ( npolys >= 1 ) go to 40
 error = 2
 return
 40 continue
-if ( npolys .lt. npts ) go to 50
+if ( npolys < npts ) go to 50
 npolys = npts
 error = 1
 50 continue
@@ -9870,13 +9870,13 @@ degree = 0
 top = dimen - 1
 bot = 0
 60 continue
-if ( i .ge. npolys ) go to 70
+if ( i >= npolys ) go to 70
 top = top + 1
 bot = bot + 1
 rowlen = (rowlen*top)/bot
 i = i + rowlen
 degree = degree + 1
-if ( i .lt. npolys ) go to 60
+if ( i < npolys ) go to 60
 70 continue
 return
 end subroutine basiz
@@ -9974,7 +9974,7 @@ alflp1 = 1
 !
 indexs(4,1) = 1
 !
-if ( npolys .eq. 1 ) return
+if ( npolys == 1 ) return
 j = 2
 do 10 kj = 1,dimen
    newkj(kj,1) = kj + 1
@@ -9983,9 +9983,9 @@ do 10 kj = 1,dimen
    indexs(3,j) = 1
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - 1
-   if ( j .eq. npolys ) return
+   if ( j == npolys ) return
 10 j = j + 1
-if ( degree .eq. 1 ) return
+if ( degree == 1 ) return
 ralen = 1
 dimm1 = dimen - 1
 dimm2 = dimen - 2
@@ -9997,7 +9997,7 @@ do 70 curdeg = 2,degree
    kj = 1
 20 jprime = newkj(kj,curm1)
    newkj(kj,curdeg) = j
-   if ( kj .eq. dimen ) go to 60
+   if ( kj == dimen ) go to 60
    do 50 i = 1,nwithk
       indexs(1,j) = jprime
       indexs(2,j) = kj
@@ -10006,13 +10006,13 @@ do 70 curdeg = 2,degree
 !     CALCULATE  indexs (3, j ),  indexs (4, j )
 !     ***************
 !
-      if ( kj .lt. indexs(2,jprime) ) go to 30
+      if ( kj < indexs(2,jprime) ) go to 30
       indexs(3,j) = indexs(1,jprime)
       go to 40
 30    indexs(3,j) = newkj(1,curdeg - 1)
 40    indexs(4,j) = alflp1
       alflp1 = alflp1 + j - indexs(3,j)
-      if ( j .eq. npolys ) return
+      if ( j == npolys ) return
 !
       jprime = jprime + 1
 50    j = j + 1
@@ -10024,7 +10024,7 @@ do 70 curdeg = 2,degree
    indexs(3,j) = indexs(1,jprime)
    indexs(4,j) = alflp1
    alflp1 = alflp1 + j - indexs(3,j)
-   if ( j .eq. npolys ) return
+   if ( j == npolys ) return
 70 j = j + 1
 return
 end subroutine mtable
@@ -10104,7 +10104,7 @@ c(1) = runtot / rntot1
 do 30 p = 1,npts
 30 z(p) = f(p) - c(1)
 !
-if ( npolys .eq. 1 ) return
+if ( npolys == 1 ) return
 sttdeg = 1
 onplys = 1
 !
@@ -10155,10 +10155,10 @@ real :: arc, runtot, rntot1, rntot2
 !
 !     ****************
 !
-if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
+if ( onplys >= 1 .and. sttdeg >= 1 ) go to 10
 error = 6
 return
-10 if ( indexs(2,onplys) .eq. dimen ) go to 20
+10 if ( indexs(2,onplys) == dimen ) go to 20
 curdeg = sttdeg
 go to 30
 20 curdeg = sttdeg + 1
@@ -10171,7 +10171,7 @@ do 170 j = onpp1,npolys
    start = indexs(3,j)
    m = start
    starta = indexs(4,j) - start
-   if ( curdeg .eq. 1 ) go to 100
+   if ( curdeg == 1 ) go to 100
    kjp = indexs(2,jprime)
    j1 = newkj(kj,curdeg - 1)
 !
@@ -10180,7 +10180,7 @@ do 170 j = onpp1,npolys
 !     previously calculated alphas.
 !     ***************
 !
-   if ( kj .lt. kjp ) go to 50
+   if ( kj < kjp ) go to 50
 !
 !     ***************
 !     First calculate those between  JPP  and the end of 2 rows back.
@@ -10192,7 +10192,7 @@ do 170 j = onpp1,npolys
 !
    m = start + 1
    j3 = newkj(1,curdeg - 1) - 1
-   if ( m .gt. j3 ) go to 50
+   if ( m > j3 ) go to 50
 !
 !     ***************
 !     curdeg .GT. 2 if control has passed the branches in the 3-RD
@@ -10218,8 +10218,8 @@ do 170 j = onpp1,npolys
 !     ***************
 !
    m = j3 + 1
-50 if ( jprime .eq. j1 ) go to 100
-   if ( kj .eq. 1 ) go to 80
+50 if ( jprime == j1 ) go to 100
+   if ( kj == 1 ) go to 80
    j1m1 = j1 - 1
    do 70 l = m,j1m1
       runtot = 0.0
@@ -10294,7 +10294,7 @@ do 170 j = onpp1,npolys
       rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
          & weight(p)
 150   rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
-   if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.e-03) &
+   if (arc * arc >= sumsqs(jm1) * rntot1 * 1.e-03) &
       & go to 200
    sumsqs(j) = rntot1
    c(j) = rntot2 / rntot1
@@ -10309,7 +10309,7 @@ do 170 j = onpp1,npolys
    do 160 p = 1,npts
 160   z(p) = z(p) - c(j) * psi(p,jindex)
    sttdeg = curdeg
-170 if ( kj .eq. dimen ) curdeg = curdeg + 1
+170 if ( kj == dimen ) curdeg = curdeg + 1
 return
 !
 !     ***************
@@ -10358,7 +10358,7 @@ real :: a
 maxabs = 0.0
 do 10 p = 1,npts
    a = abs(coord(p))
-10 if ( a .gt. maxabs ) maxabs = a
+10 if ( a > maxabs ) maxabs = a
 return
 end subroutine scalpm
 
@@ -10385,7 +10385,7 @@ integer :: p
 !
 !     ****************
 !
-if ( maxabs .eq. 0.0e+00 ) return
+if ( maxabs == 0.0e+00 ) return
 do 10 p = 1,npts
 10 coord(p) = coord(p) / maxabs
 return
@@ -10527,7 +10527,7 @@ end interface
 !     full multinomial degree.
 !     ***************
 !
-if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
+if (nepts < 1 .or. dimen < 1) go to 110
 if (evldeg) 40,10,20
 !
 10 nepols = 1
@@ -10541,7 +10541,7 @@ do 30 curdeg = 1,evldeg
 nepols = top / bot
 !
 40 gbasiz = fitiwk(1)
-if (nepols .gt. gbasiz .or. nepols .lt. 1) go to 100
+if (nepols > gbasiz .or. nepols < 1) go to 100
 !
 50 error = 0
 dimp1 = dimen + 1

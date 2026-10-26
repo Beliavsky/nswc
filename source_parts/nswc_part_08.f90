@@ -33,15 +33,15 @@ double precision :: b, cl, d, sm
 !            no operations will be done on c().
 !-----------------------------------------------------------------------
 !
-if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
+if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
 cl = dabs(u(1,lpivot))
-if (mode .eq. 2) go to 60
+if (mode == 2) go to 60
 !
 !                            ****** Construct the transformation. ******
 !
 do 10 j = l1,m
 10 cl = dmax1(dabs(u(1,j)),cl)
-if (cl .le. 0.d0) go to 130
+if (cl <= 0.d0) go to 130
 d = u(1,lpivot)/cl
 sm = d*d
 do 20 j = l1,m
@@ -49,7 +49,7 @@ do 20 j = l1,m
 20 sm = sm + d*d
 !
 cl = cl*dsqrt(sm)
-if (u(1,lpivot) .gt. 0.d0) cl = -cl
+if (u(1,lpivot) > 0.d0) cl = -cl
 up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
@@ -57,12 +57,12 @@ go to 70
 !            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
 !
 60 if (cl) 130,130,70
-70 if (ncv .le. 0) return
+70 if (ncv <= 0) return
 b = up*u(1,lpivot)
 !
 !                       b  must be nonpositive here.  If b = 0., Return.
 !
-if (b .ge. 0.d0) go to 130
+if (b >= 0.d0) go to 130
 b = 1.d0/b
 i2 = 1 - icv + ice*(lpivot - 1)
 incr = ice*(l1 - lpivot)
@@ -74,7 +74,7 @@ do 120 j = 1,ncv
    do 90 i = l1,m
       sm = sm + c(i3)*u(1,i)
 90    i3 = i3 + ice
-   if (sm .eq. 0.d0) go to 120
+   if (sm == 0.d0) go to 120
    sm = sm*b
    c(i2) = c(i2) + sm*up
    do 110 i = l1,m
@@ -435,8 +435,8 @@ srelpr = spmpar(1)
 !
 m = me + ma + mg
 mode = 0
-if (n .le. 0 .or. me + ma .le. 0) return
-if (.not.(mdw.lt.m)) go to 80
+if (n <= 0 .or. me + ma <= 0) return
+if (.not.(mdw < m)) go to 80
 mode = 4
 return
 80 np1 = n + 1
@@ -447,7 +447,7 @@ n2 = n1 + n
 !     Process-option-vector
 !
 go to 480
-90 if (.not.(cov .and. mdw.lt.n)) go to 100
+90 if (.not.(cov .and. mdw < n)) go to 100
 mode = 4
 return
 100 l = kranke
@@ -459,7 +459,7 @@ do j = 1,n
    enorm = amax1(enorm,sasum(me,w(1,j),1))
 end do
 fnorm = sasum(me,w(1,np1),1)
-if (.not.(l.gt.0)) go to 200
+if (.not.(l > 0)) go to 200
 snmax = zero
 rnmax = zero
 do 180 i = 1,l
@@ -469,19 +469,19 @@ do 180 i = 1,l
    do 150 k = i,me
       sn = sdot(n - i + 1,w(k,i),mdw,w(k,i),mdw)
       rn = sdot(i - 1,w(k,1),mdw,w(k,1),mdw)
-      if (.not.(rn.eq.zero .and. sn.gt.snmax)) go to 120
+      if (.not.(rn == zero .and. sn > snmax)) go to 120
       snmax = sn
       imax = k
       go to 150
-120   if (.not.(k.eq.i .or. (sn*rnmax.gt.rn*snmax))) go to 150
+120   if (.not.(k == i .or. (sn*rnmax > rn*snmax))) go to 150
       snmax = sn
       rnmax = rn
       imax = k
 150   continue
 !
 !     Interchange rows if necessary.
-   if (i.ne.imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
-   if (.not.(snmax.gt.tau**2*rnmax)) go to 160
+   if (i /= imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
+   if (.not.(snmax > tau**2*rnmax)) go to 160
 !
 !     Eliminate elems i+1,...,n in row i.
    call h12(1, i, i + 1, n, w(i,1), mdw, ws(i), w(i + 1,1), mdw, 1, &
@@ -498,7 +498,7 @@ do 180 i = 1,l
 !     Use Householder trans from left to achieve kranke by kranke upper
 !     triangular form.
 !
-if (.not.(kranke.gt.0 .and. kranke.lt.me)) go to 220
+if (.not.(kranke > 0 .and. kranke < me)) go to 220
 do kk = 1,kranke
    k = kranke + 1 - kk
 !
@@ -508,7 +508,7 @@ do kk = 1,kranke
 !     Apply to RT side vector.
    call h12(2, k, kranke + 1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
 end do
-220 if (.not.(kranke.gt.0)) go to 240
+220 if (.not.(kranke > 0)) go to 240
 !
 !     Solve for variables 1,...,kranke in new coordinates.
 call scopy(kranke, w(1,np1), 1, x, 1)
@@ -520,12 +520,12 @@ end do
 !
 240 mep1 = me + 1
 rnorml = zero
-if (.not.(me.lt.m)) go to 270
+if (.not.(me < m)) go to 270
 do 260 i = mep1,m
    w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
    sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
    rn = sdot(n - kranke,w(i,kranke + 1),mdw,w(i,kranke + 1),mdw)
-   if (.not.(rn.le.tau**2*sn .and. kranke.lt.n)) go to 260
+   if (.not.(rn <= tau**2*sn .and. kranke < n)) go to 260
    w(i,kranke + 1) = zero
    call scopy(n - kranke, w(i,kranke + 1), 0, w(i,kranke + 1), mdw)
 260 continue
@@ -535,7 +535,7 @@ do 260 i = mep1,m
 !
 !     Move reduced problem data upward if kranke.LT.me.
 !
-if (.not.(kranke.lt.me)) go to 290
+if (.not.(kranke < me)) go to 290
 do j = 1,np1
    call scopy(m - me, w(me + 1,j), 1, w(kranke + 1,j), 1)
 end do
@@ -544,30 +544,30 @@ end do
 !
 290 call lsi(w(kranke + 1,kranke + 1), mdw, ma, mg, n - kranke, prgopt, &
    & x(kranke + 1), rnorml, mode, ws(n2), ip(2))
-if (mode .gt. 1) go to 470
-if (.not.(me.gt.0)) go to 330
+if (mode > 1) go to 470
+if (.not.(me > 0)) go to 330
 !
 !     Test for consistency of equality constraints.
 !
 mdeqc = 0
 xnrme = sasum(kranke,w(1,np1),1)
-if (rnorme.gt.tau*(enorm*xnrme + fnorm)) mdeqc = 1
+if (rnorme > tau*(enorm*xnrme + fnorm)) mdeqc = 1
 mode = mode + mdeqc
 !
 !     Check if soln to equal. Constraints satisfies inequal.
 !     Constraints when there are no degrees of freedom left.
 !
-if (.not.(kranke.eq.n .and. mg.gt.0)) go to 330
+if (.not.(kranke == n .and. mg > 0)) go to 330
 xnorm = sasum(n,x,1)
 mapke1 = ma + kranke + 1
 mend = ma + kranke + mg
 do 310 i = mapke1,mend
    size = sasum(n,w(i,1),mdw)*xnorm + abs(w(i,np1))
-   if (.not.(w(i,np1).gt.tau*size)) go to 310
+   if (.not.(w(i,np1) > tau*size)) go to 310
    mode = 2
    go to 470
 310 continue
-330 if (.not.(kranke.gt.0)) go to 420
+330 if (.not.(kranke > 0)) go to 420
 !
 !     Replace diag. Terms of lower trap. Matrix.
 call scopy(kranke, ws(kranke + 1), 1, w, mdw + 1)
@@ -584,9 +584,9 @@ end do
 if (.not.(cov)) go to 450
 do 400 jj = 1,kranke
    j = kranke + 1 - jj
-   if (.not.(j.lt.n)) go to 400
+   if (.not.(j < n)) go to 400
    rb = ws(j)*w(j,j)
-   if (rb.ne.zero) rb = one/rb
+   if (rb /= zero) rb = one/rb
    jp1 = j + 1
    do i = jp1,n
       w(i,j) = sdot(n - j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
@@ -620,7 +620,7 @@ end do
 !
 !     Rescale soln. Vector.
 !
-450 if (mode .gt. 1) go to 470
+450 if (mode > 1) go to 470
 do j = 1,n
    l = n1 + j
    x(j) = x(j)*ws(l - 1)
@@ -651,27 +651,27 @@ ntimes = 0
 nlink = 100000
 last = 1
 link = prgopt(1)
-if (.not.(link.le.0 .or. link.gt.nlink)) go to 490
+if (.not.(link <= 0 .or. link > nlink)) go to 490
 mode = 4
 return
-490 if (.not.(link.gt.1)) go to 540
+490 if (.not.(link > 1)) go to 540
 ntimes = ntimes + 1
-if (.not.(ntimes.gt.nopt)) go to 500
+if (.not.(ntimes > nopt)) go to 500
 mode = 4
 return
 500 key = prgopt(last + 1)
-if (key.eq.1) cov = prgopt(last + 2).ne.zero
-if (.not.(key.eq.2 .and. prgopt(last + 2).ne.zero)) go to 520
+if (key == 1) cov = prgopt(last + 2) /= zero
+if (.not.(key == 2 .and. prgopt(last + 2) /= zero)) go to 520
 do j = 1,n
    t = snrm2(m,w(1,j),1)
-   if (t.ne.zero) t = one/t
+   if (t /= zero) t = one/t
    l = n1 + j
    ws(l - 1) = t
 end do
-520 if (key.eq.3) call scopy(n, prgopt(last + 2), 1, ws(n1), 1)
-if (key.eq.4) tau = amax1(srelpr,prgopt(last + 2))
+520 if (key == 3) call scopy(n, prgopt(last + 2), 1, ws(n1), 1)
+if (key == 4) tau = amax1(srelpr,prgopt(last + 2))
 next = prgopt(link)
-if (.not.(next.le.0 .or. next.gt.nlink)) go to 530
+if (.not.(next <= 0 .or. next > nlink)) go to 530
 mode = 4
 return
 530 last = link
@@ -779,7 +779,7 @@ rnorm = zero
 m = ma + mg
 np1 = n + 1
 krank = 0
-if (n.le.0 .or. m.le.0) go to 70
+if (n <= 0 .or. m <= 0) go to 70
 !
 !     Process-option-vector
 !
@@ -797,7 +797,7 @@ tau = tol*anorm
 !
 !     Compute Householder orthogonal decomp of matrix.
 !
-if (n.gt.0) ws(1) = zero
+if (n > 0) ws(1) = zero
 call scopy(n, ws, 0, ws, 1)
 call scopy(ma, w(1,np1), 1, ws, 1)
 k = max0(m,n)
@@ -809,7 +809,7 @@ call hfti(w, mdw, ma, n, ws, 1, 1, tau, krank, rnrm, ws(n2), &
 rnorm = rnrm(1)
 fac = one
 gam = ma - krank
-if (krank .lt. ma) fac = rnorm**2/gam
+if (krank < ma) fac = rnorm**2/gam
 go to 80
 !
 !     Reduce-to-lpdp-and-solve
@@ -824,8 +824,8 @@ return
 !
 !     Compute ineq. RT-hand side for lpdp.
 !
-if (.not.(ma.lt.m)) go to 260
-if (.not.(minman.gt.0)) go to 160
+if (.not.(ma < m)) go to 260
+if (.not.(minman > 0)) go to 160
 do i = map1,m
    w(i,np1) = w(i,np1) - sdot(n,w(i,1),mdw,ws,1)
 end do
@@ -838,7 +838,7 @@ end do
 !
 !     Apply Householder transformations to constraint matrix.
 !
-if (.not.(0.lt.krank .and. krank.lt.n)) go to 120
+if (.not.(0 < krank .and. krank < n)) go to 120
 do ii = 1,krank
    i = krank + 1 - ii
    l = n1 + i
@@ -849,7 +849,7 @@ end do
 !     Compute permuted ineq. Constr. Matrix times R-inverse.
 !
 120 do 150 i = map1,m
-   if (.not.(0.lt.krank)) go to 150
+   if (.not.(0 < krank)) go to 150
    do j = 1,krank
       w(i,j) = (w(i,j) - sdot(j - 1,w(1,j),1,w(i,1),mdw))/w(j,j)
    end do
@@ -860,8 +860,8 @@ end do
 !
 160 call lpdp(w(map1,1), mdw, mg, krank, n - krank, opt, x, xnorm, &
    & mdlpdp, ws(n2), ip(n + 1))
-if (mdlpdp .ne. 1) go to 240
-if (.not.(krank.gt.0)) go to 180
+if (mdlpdp /= 1) go to 240
+if (.not.(krank > 0)) go to 180
 !
 !     Compute soln in original coordinates.
 !
@@ -872,12 +872,12 @@ end do
 !
 !     Apply Householder trans. To soln vector.
 !
-180 if (.not.(0.lt.krank .and. krank.lt.n)) go to 200
+180 if (.not.(0 < krank .and. krank < n)) go to 200
 do i = 1,krank
    l = n1 + i
    call h12(2, i, krank + 1, n, w(i,1), mdw, ws(l - 1), x, 1, 1, 1)
 end do
-200 if (.not.(minman.gt.0)) go to 270
+200 if (.not.(minman > 0)) go to 270
 !
 !     Repermute variables to their input order.
 do ii = 1,minman
@@ -898,7 +898,7 @@ go to 270
 240 mode = 2
 go to 270
 260 call scopy(n, ws, 1, x, 1)
-270 if (.not.(cov .and. krank.gt.0)) go to 70
+270 if (.not.(cov .and. krank > 0)) go to 70
 !
 !     Compute covariance matrix based on the orthogonal decomp.
 !     FROM hfti( ).
@@ -913,7 +913,7 @@ call scopy(krank, w, mdw + 1, ws(n2), 1)
 do j = 1,krank
    w(j,j) = one/w(j,j)
 end do
-if (.not.(krank.gt.1)) go to 310
+if (.not.(krank > 1)) go to 310
 !
 !     Invert the upper triangular QR factor on itself.
 do i = 1,krm1
@@ -929,7 +929,7 @@ end do
       w(i,j) = sdot(krank + 1 - j,w(i,j),mdw,w(j,j),mdw)
    end do
 end do
-if (.not.(krank.lt.n)) go to 450
+if (.not.(krank < n)) go to 450
 !
 !     Zero out lower trapezoidal part.
 !     Copy upper TRI. To lower TRI. Part.
@@ -947,7 +947,7 @@ do i = 1,krank
    l = n1 + i
    k = n2 + i
    rb = ws(l - 1)*ws(k - 1)
-   if (.not.(rb.lt.zero)) go to 420
+   if (.not.(rb < zero)) go to 420
 !
 !     If rb.GE.zero, transformation can be regarded as zero.
    rb = one/rb
@@ -974,7 +974,7 @@ do i = 1,krank
    gam = gam*half
    call saxpy(n - i + 1, gam, ws(l - 1), 1, ws(i), 1)
    do j = i,n
-      if (.not.(i.gt.1)) go to 390
+      if (.not.(i > 1)) go to 390
       im1 = i - 1
       k = n3 + j
       do l = 1,im1
@@ -1000,7 +1000,7 @@ end do
 450 do 470 ii = 1,minman
    i = minman + 1 - ii
    k = ip(i)
-   if (.not.(i.ne.k)) go to 470
+   if (.not.(i /= k)) go to 470
    call sswap(1, w(i,i), 1, w(k,k), 1)
    call sswap(i - 1, w(1,i), 1, w(1,k), 1)
    call sswap(k - i - 1, w(i,i + 1), mdw, w(i + 1,k), 1)
@@ -1025,15 +1025,15 @@ last = 1
 link = prgopt(1)
 key8 = 0
 key9 = 0
-510 if (.not.(link.gt.1)) go to 540
+510 if (.not.(link > 1)) go to 540
 key = prgopt(last + 1)
-if (key .eq. 1) cov = prgopt(last + 2).ne.zero
-if (key .eq. 5) tol = amax1(srelpr,prgopt(last + 2))
-if (key .ne. 8) go to 520
+if (key == 1) cov = prgopt(last + 2) /= zero
+if (key == 5) tol = amax1(srelpr,prgopt(last + 2))
+if (key /= 8) go to 520
 key8 = 1
 eps = prgopt(last + 2)
 go to 530
-520 if (key .ne. 9) go to 530
+520 if (key /= 9) go to 530
 key9 = 1
 blowup = prgopt(last + 2)
 530 next = prgopt(link)
@@ -1044,12 +1044,12 @@ go to 510
 !     Prepare the option vector for wnnls
 !
 540 j = 1
-if (key8 .eq. 0) go to 550
+if (key8 == 0) go to 550
 opt(1) = 4.0
 opt(2) = 8.0
 opt(3) = eps
 j = 4
-550 if (key9 .eq. 0) go to 560
+550 if (key9 == 0) go to 560
 opt(j) = j + 3
 opt(j + 1) = 9.0
 opt(j + 2) = blowup
@@ -1117,8 +1117,8 @@ real, parameter :: fac = 0.1e0
 !
 n = n1 + n2
 mode = 1
-if (.not.(m.le.0)) go to 20
-if (.not.(n.gt.0)) go to 10
+if (.not.(m <= 0)) go to 20
+if (.not.(n > 0)) go to 10
 x(1) = zero
 call scopy(n, x, 0, x, 1)
 10 wnorm = zero
@@ -1129,27 +1129,27 @@ return
 !
 do 40 i = 1,m
    sc = snrm2(n,a(i,1),mda)
-   if (sc .eq. zero) go to 40
+   if (sc == zero) go to 40
    sc = one/sc
    call sscal(np1, sc, a(i,1), mda)
 40 continue
 !
 !     Scale RT.-Side vector to have length one (or zero).
 ynorm = snrm2(m,a(1,np1),1)
-if (ynorm .eq. zero) go to 50
+if (ynorm == zero) go to 50
 sc = one/ynorm
 call sscal(m, sc, a(1,np1), 1)
 !
 !     Scale cols of matrix H.
 50 j = n1 + 1
-60 if (j .gt. n) go to 70
+60 if (j > n) go to 70
 sc = snrm2(m,a(1,j),1)
-if (sc .ne. zero) sc = one/sc
+if (sc /= zero) sc = one/sc
 call sscal(m, sc, a(1,j), 1)
 x(j) = sc
 j = j + 1
 go to 60
-70 if (.not.(n1.gt.0)) go to 130
+70 if (.not.(n1 > 0)) go to 130
 !
 !     Copy transpose of (H G Y) to work array ws(*).
 iw = 0
@@ -1183,7 +1183,7 @@ call wnnls(ws, np1, n2, np1 - n2, m, 0, prgopt, ws(ix), rnorm, &
 !
 !     Compute the components of the soln denoted above by W.
 sc = one - sdot(m,a(1,np1),1,ws(ix),1)
-if (.not.(one + fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 110
+if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 110
 sc = one/sc
 do j = 1,n1
    x(j) = sc*sdot(m,a(1,j),1,ws(ix),1)
@@ -1196,7 +1196,7 @@ end do
 go to 130
 110 mode = 2
 return
-130 if (.not.(n2.gt.0)) go to 180
+130 if (.not.(n2 > 0)) go to 180
 !
 !     Copy transpose of (H Q) to work array ws(*).
 iw = 0
@@ -1224,7 +1224,7 @@ call wnnls(ws, n2 + 1, 0, n2 + 1, m, 0, prgopt, ws(ix), rnorm, modew, &
 !     Compute the components of the soln denoted above by Z.
 !
 sc = one - sdot(m,a(1,np1),1,ws(ix),1)
-if (.not.(one + fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 160
+if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 160
 sc = one/sc
 do j = 1,n2
    l = n1 + j
@@ -1484,11 +1484,11 @@ integer :: l1, l2, l3, l4, l5
 !
 !
 mode = 0
-if (ma + me .le. 0 .or. n .le. 0) return
-if (.not.(mdw.lt.me + ma)) go to 10
+if (ma + me <= 0 .or. n <= 0) return
+if (.not.(mdw < me + ma)) go to 10
 mode = 2
 return
-10 if (0.le.l .and. l.le.n) go to 20
+10 if (0 <= l .and. l <= n) go to 20
 mode = 2
 return
 !
@@ -1658,26 +1658,26 @@ nlink = 100000
 ntimes = 0
 last = 1
 link = prgopt(1)
-if (.not.(link.le.0 .or. link.gt.nlink)) go to 110
+if (.not.(link <= 0 .or. link > nlink)) go to 110
 mode = 2
 return
-110 if (.not.(link.gt.1)) go to 160
+110 if (.not.(link > 1)) go to 160
 ntimes = ntimes + 1
-if (.not.(ntimes.gt.nopt)) go to 120
+if (.not.(ntimes > nopt)) go to 120
 mode = 2
 return
 120 key = prgopt(last + 1)
-if (.not.(key.eq.6 .and. prgopt(last + 2).ne.zero)) go to 140
+if (.not.(key == 6 .and. prgopt(last + 2) /= zero)) go to 140
 do 130 j = 1,n
    t = snrm2(m,w(1,j),1)
-   if (t.ne.zero) t = one/t
+   if (t /= zero) t = one/t
    d(j) = t
 130 continue
-140 if (key.eq.7) call scopy(n, prgopt(last + 2), 1, d, 1)
-if (key.eq.8) tau = amax1(srelpr,prgopt(last + 2))
-if (key.eq.9) blowup = amax1(srelpr,prgopt(last + 2))
+140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
+if (key == 8) tau = amax1(srelpr,prgopt(last + 2))
+if (key == 9) blowup = amax1(srelpr,prgopt(last + 2))
 next = prgopt(link)
-if (.not.(next.le.0 .or. next.gt.nlink)) go to 150
+if (.not.(next <= 0 .or. next > nlink)) go to 150
 mode = 2
 return
 150 last = link
@@ -1726,7 +1726,7 @@ alsq = alamda**2
 do 260 i = 1,m
 !
 !     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
-   if (.not.(i.le.me)) go to 240
+   if (.not.(i <= me)) go to 240
    t = alsq
    itemp = 0
    go to 250
@@ -1750,7 +1750,7 @@ go to 10
 !
 !     Set first l comps. Of dual vector to zero because
 !     these correspond to the unconstrained variables.
-if (.not.(l.gt.0)) go to 290
+if (.not.(l > 0)) go to 290
 wd(1) = zero
 call scopy(l, wd, 0, wd, 1)
 !
@@ -1795,7 +1795,7 @@ go to 1110
 !     Increment iteration counter and check against max. Number
 !     of iterations.
 310 iter = iter + 1
-if (.not.(iter.gt.itmax)) go to 320
+if (.not.(iter > itmax)) go to 320
 mode = 1
 done = .true.
 !
@@ -1804,12 +1804,12 @@ done = .true.
 !     active constraints are removed from the basis.
 320 alpha = two
 hitcon = .false.
-if (.not.(l.lt.nsoln)) go to 360
+if (.not.(l < nsoln)) go to 360
 do 350 j = lp1,nsoln
    zz = z(j)
-   if (.not.(zz.le.zero)) go to 350
+   if (.not.(zz <= zero)) go to 350
    t = x(j)/(x(j) - zz)
-   if (.not.(t.lt.alpha)) go to 330
+   if (.not.(t < alpha)) go to 330
    alpha = t
    jcon = j
 330 hitcon = .true.
@@ -1822,7 +1822,7 @@ do 350 j = lp1,nsoln
 !     Use computed alpha to interpolate between last
 !     feasible solution x(*) and current unconstrained
 !     (and infeasible) solution z(*).
-if (.not.(lp1.le.nsoln)) go to 390
+if (.not.(lp1 <= nsoln)) go to 390
 do 380 j = lp1,nsoln
    x(j) = x(j) + alpha*(z(j) - x(j))
 380 continue
@@ -1842,7 +1842,7 @@ go to 410
 !
 !     Update permuted index vector to reflect this shift and swap.
 itemp = ipivot(jcon)
-if (.not.(jcon.lt.n)) go to 440
+if (.not.(jcon < n)) go to 440
 do 430 i = jcon,nm1
    ipivot(i) = ipivot(i + 1)
 430 continue
@@ -1859,20 +1859,20 @@ niv = niv - 1
 !     Retriangularize upper Hessenberg matrix after adding constraints.
 j = jcon
 i = krank + jcon - l
-450 if (.not.(j.le.nsoln)) go to 570
-if (.not.(itype(i).eq.0 .and. itype(i + 1).eq.0)) go to 470
+450 if (.not.(j <= nsoln)) go to 570
+if (.not.(itype(i) == 0 .and. itype(i + 1) == 0)) go to 470
 assign 460 to igo938
 go to 620
 !
 !     (itype(i).EQ.0 .AND. itype(i+1).EQ.0) ZERO-IP1-TO-i-IN-COL-J
 460 go to 560
-470 if (.not.(itype(i).eq.1 .and. itype(i + 1).eq.1)) go to 490
+470 if (.not.(itype(i) == 1 .and. itype(i + 1) == 1)) go to 490
 assign 480 to igo938
 go to 620
 !
 !     (itype(i).EQ.1 .AND. itype(i+1).EQ.1) ZERO-IP1-TO-i-IN-COL-J
 480 go to 560
-490 if (.not.(itype(i).eq.1 .and. itype(i + 1).eq.0)) go to 510
+490 if (.not.(itype(i) == 1 .and. itype(i + 1) == 0)) go to 510
 call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
 call sswap(1, scale(i), 1, scale(i + 1), 1)
 itemp = itype(i + 1)
@@ -1886,9 +1886,9 @@ go to 620
 !
 !     Zero-IP1-to-i-in-col-J
 500 go to 560
-510 if (.not.(itype(i).eq.0 .and. itype(i + 1).eq.1)) go to 550
+510 if (.not.(itype(i) == 0 .and. itype(i + 1) == 1)) go to 550
 t = scale(i)*w(i,j)**2/alsq
-if (.not.(t.gt.tau**2*eanorm**2)) go to 530
+if (.not.(t > tau**2*eanorm**2)) go to 530
 assign 520 to igo938
 go to 620
 520 go to 540
@@ -1908,9 +1908,9 @@ go to 450
 !     should be because of the way alpha was determined.  If any are
 !     infeasible it is due to roundoff error.  Any that are non-
 !     positive will be set to zero and removed from the soln set.
-570 if (.not.(lp1.le.nsoln)) go to 590
+570 if (.not.(lp1 <= nsoln)) go to 590
 do 580 jcon = lp1,nsoln
-   if (x(jcon).le.zero) go to 600
+   if (x(jcon) <= zero) go to 600
 580 continue
 590 feasbl = .true.
 600 continue
@@ -1918,7 +1918,7 @@ go to 400
 620 continue
 !
 !     To zero-IP1-to-i-in-col-J
-if (.not.(w(i + 1,j).ne.zero)) go to 630
+if (.not.(w(i + 1,j) /= zero)) go to 630
 call srotmg(scale(i), scale(i + 1), w(i,j), w(i + 1,j), sparam)
 w(i + 1,j) = zero
 call srotm(np1 - j, w(i,j + 1), mdw, w(i + 1,j + 1), mdw, sparam)
@@ -1927,15 +1927,15 @@ call srotm(np1 - j, w(i,j + 1), mdw, w(i + 1,j + 1), mdw, sparam)
 !     To perform-multiplier-test-and-drop-A-constraint
 !
 640 call scopy(nsoln, z, 1, x, 1)
-if (.not.(nsoln.lt.n)) go to 650
+if (.not.(nsoln < n)) go to 650
 x(nsp1) = zero
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 650 i = niv1
-660 if (.not.(i.le.me)) go to 690
+660 if (.not.(i <= me)) go to 690
 !
 !     Reclassify least squares eqations as equalities as
 !     necessary.
-if (.not.(itype(i).eq.0)) go to 670
+if (.not.(itype(i) == 0)) go to 670
 i = i + 1
 go to 680
 670 call sswap(np1, w(i,1), mdw, w(me,1), mdw)
@@ -1948,10 +1948,10 @@ me = me - 1
 680 go to 660
 !
 !     Form inner product vector wd(*) of dual coeffs.
-690 if (.not.(nsp1.le.n)) go to 730
+690 if (.not.(nsp1 <= n)) go to 730
 do 720 j = nsp1,n
    sm = zero
-   if (.not.(nsoln.lt.m)) go to 710
+   if (.not.(nsoln < m)) go to 710
    do 700 i = nsp1,m
       sm = sm + scale(i)*w(i,j)*w(i,np1)
 700   continue
@@ -1965,14 +1965,14 @@ do 720 j = nsp1,n
 !     and be positive.
 750 wmax = zero
 iwmax = nsp1
-if (.not.(nsp1.le.n)) go to 780
+if (.not.(nsp1 <= n)) go to 780
 do 770 j = nsp1,n
-   if (.not.(wd(j).gt.wmax)) go to 760
+   if (.not.(wd(j) > wmax)) go to 760
    wmax = wd(j)
    iwmax = j
 760 continue
 770 continue
-780 if (.not.(wmax.le.zero)) go to 790
+780 if (.not.(wmax <= zero)) go to 790
 done = .true.
 go to 960
 !
@@ -1989,7 +1989,7 @@ nsoln = nsp1
 nsp1 = nsoln + 1
 niv = niv1
 niv1 = niv + 1
-if (.not.(nsoln.ne.iwmax)) go to 800
+if (.not.(nsoln /= iwmax)) go to 800
 call sswap(m, w(1,nsoln), 1, w(1,iwmax), 1)
 wd(iwmax) = wd(nsoln)
 wd(nsoln) = zero
@@ -2000,7 +2000,7 @@ ipivot(iwmax) = itemp
 !     Reduce col NSOLN so that the matrix of nonactive
 !     constraints variables is triangular.
 800 j = m
-810 if (.not.(j.gt.niv)) go to 870
+810 if (.not.(j > niv)) go to 870
 jm1 = j - 1
 jp = jm1
 !
@@ -2008,18 +2008,18 @@ jp = jm1
 !     Is near zero.  If so, use the largest elt. Above it as the pivot.
 !     This is to maintain the sharp interface between weighted and
 !     non-weighted rows in all cases.
-if (.not.(j.eq.mep1)) go to 850
+if (.not.(j == mep1)) go to 850
 imax = me
 amax = scale(me)*w(me,nsoln)**2
-820 if (.not.(jp.ge.niv)) go to 840
+820 if (.not.(jp >= niv)) go to 840
 t = scale(jp)*w(jp,nsoln)**2
-if (.not.(t.gt.amax)) go to 830
+if (.not.(t > amax)) go to 830
 imax = jp
 amax = t
 830 jp = jp - 1
 go to 820
 840 jp = imax
-850 if (.not.(w(j,nsoln).ne.zero)) go to 860
+850 if (.not.(w(j,nsoln) /= zero)) go to 860
 call srotmg(scale(jp), scale(j), w(jp,nsoln), w(j,nsoln), sparam)
 w(j,nsoln) = zero
 call srotm(np1 - nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
@@ -2030,14 +2030,14 @@ go to 810
 !     Test if this is nonpositive or too large.
 !     If this was true or if the pivot term was zero reject
 !     the col as dependent.
-870 if (.not.(w(niv,nsoln).ne.zero)) go to 890
+870 if (.not.(w(niv,nsoln) /= zero)) go to 890
 isol = niv
 assign 880 to igo897
 go to 980
 !
 !     Test-proposed-new-component
 880 go to 940
-890 if (.not.(niv.le.me .and. w(mep1,nsoln).ne.zero)) go to 920
+890 if (.not.(niv <= me .and. w(mep1,nsoln) /= zero)) go to 920
 !
 !     Try to add row MEP1 as an additional equality constraint.
 !     Check size of proposed new soln component.
@@ -2073,9 +2073,9 @@ niv = niv - 1
 !     To test-proposed-new-component
 z2 = w(isol,np1)/w(isol,nsoln)
 z(nsoln) = z2
-pos = z2.gt.zero
-if (.not.(z2*eanorm.ge.bnorm .and. pos)) go to 990
-pos = .not.(blowup*z2*eanorm.ge.bnorm)
+pos = z2 > zero
+if (.not.(z2*eanorm >= bnorm .and. pos)) go to 990
+pos = .not.(blowup*z2*eanorm >= bnorm)
 990 go to 1280
 1000 continue
 !     To compute-final-solution
@@ -2088,20 +2088,20 @@ go to 1110
 1010 call scopy(nsoln, z, 1, x, 1)
 !
 !     Apply Householder transformations to x(*) if KRANK.LT.l
-if (.not.(0.lt.krank .and. krank.lt.l)) go to 1030
+if (.not.(0 < krank .and. krank < l)) go to 1030
 do 1020 i = 1,krank
    call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
 1020 continue
 !
 !     Fill in trailing zeroes for constrained variables not in soln.
-1030 if (.not.(nsoln.lt.n)) go to 1040
+1030 if (.not.(nsoln < n)) go to 1040
 x(nsp1) = zero
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 !
 !     Repermute soln vector to natural order.
 1040 do 1070 i = 1,n
    j = i
-1050 if (ipivot(j).eq.i) go to 1060
+1050 if (ipivot(j) == i) go to 1060
    j = j + 1
    go to 1050
 1060 ipivot(j) = ipivot(i)
@@ -2113,10 +2113,10 @@ call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 do 1080 j = 1,n
    x(j) = x(j)*d(j)
 1080 continue
-if (.not.(niv.lt.m)) go to 1100
+if (.not.(niv < m)) go to 1100
 do 1090 i = niv1,m
    t = w(i,np1)
-   if (i.le.me) t = t/alamda
+   if (i <= me) t = t/alamda
    t = (scale(i)*t)*t
    rnorm = rnorm + t
 1090 continue
@@ -2130,17 +2130,17 @@ if (.not.(done)) go to 1120
 isol = 1
 go to 1130
 1120 isol = lp1
-1130 if (.not.(nsoln.ge.isol)) go to 1270
+1130 if (.not.(nsoln >= isol)) go to 1270
 !
 !     Copy RT. Hand side into temp vector to use overwriting method.
 call scopy(niv, w(1,np1), 1, temp, 1)
 do 1180 jj = isol,nsoln
    j = nsoln - jj + isol
-   if (.not.(j.gt.krank)) go to 1140
+   if (.not.(j > krank)) go to 1140
    i = niv - jj + isol
    go to 1150
 1140 i = j
-1150 if (.not.(j.gt.krank .and. j.le.l)) go to 1160
+1150 if (.not.(j > krank .and. j <= l)) go to 1160
    z(j) = zero
    go to 1170
 1160 z(j) = temp(i)/w(i,j)
@@ -2211,8 +2211,8 @@ factor = 1.e0
 i = 1
 ip1 = 2
 lend = l
-10 if (.not.(i.le.lb)) go to 150
-if (.not.(i.le.me)) go to 130
+10 if (.not.(i <= lb)) go to 150
+if (.not.(i <= me)) go to 130
 !
 !     Set ir to point to the i-TH row.
 ir = i
@@ -2240,18 +2240,18 @@ j = m
 do 100 jj = ip1,m
    jm1 = j - 1
    jp = jm1
-   if (.not.(jj.eq.m)) go to 70
-   if (.not.(i.lt.mep1)) go to 80
+   if (.not.(jj == m)) go to 70
+   if (.not.(i < mep1)) go to 80
    j = mep1
    jp = i
    t = scale(jp)*w(jp,i)**2*tau**2
-   if (.not.(t.gt.scale(j)*w(j,i)**2)) go to 130
+   if (.not.(t > scale(j)*w(j,i)**2)) go to 130
    go to 80
-70 if (.not.(j.eq.mep1)) go to 80
+70 if (.not.(j == mep1)) go to 80
    j = jm1
    jm1 = j - 1
    jp = jm1
-80 if (.not.(w(j,i).ne.zero)) go to 90
+80 if (.not.(w(j,i) /= zero)) go to 90
    call srotmg(scale(jp), scale(j), w(jp,i), w(j,i), sparam)
    w(j,i) = zero
    call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
@@ -2259,7 +2259,7 @@ do 100 jj = ip1,m
 100 continue
 go to 140
 110 continue
-if (.not.(lend.gt.i)) go to 130
+if (.not.(lend > i)) go to 130
 !
 !     Col i is dependent. Swap with col lend.
 max = lend
@@ -2283,10 +2283,10 @@ go to 10
 150 krank = l1
 160 continue
 krp1 = krank + 1
-if (.not.(krank.lt.me)) go to 290
+if (.not.(krank < me)) go to 290
 factor = alsq
 do 170 i = krp1,me
-   if (l.gt.0) w(i,1) = zero
+   if (l > 0) w(i,1) = zero
    call scopy(l, w(i,1), 0, w(i,1), mdw)
 170 continue
 !
@@ -2295,13 +2295,13 @@ do 170 i = krp1,me
 !     variables.  Remove any redundant constraints.
 !
 ir = krp1
-if (.not.(l.lt.n)) go to 245
+if (.not.(l < n)) go to 245
 lp1 = l + 1
 recalc = .true.
 lb = min0(l + me - krank,n)
 i = lp1
 ip1 = i + 1
-180 if (.not.(i.le.lb)) go to 280
+180 if (.not.(i <= lb)) go to 280
 ir = krank + i - l
 lend = n
 mend = me
@@ -2316,9 +2316,9 @@ go to 560
 !
 !     Eliminate elements in the i-TH col.
 200 j = me
-210 if (.not.(j.gt.ir)) go to 230
+210 if (.not.(j > ir)) go to 230
 jm1 = j - 1
-if (.not.(w(j,i).ne.zero)) go to 220
+if (.not.(w(j,i) /= zero)) go to 220
 call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
 w(j,i) = zero
 call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
@@ -2336,7 +2336,7 @@ go to 520
 !     Remove any redundant or dependent equality constraints.
 245 continue
 jj = ir
-250 if (.not.(ir.le.me)) go to 260
+250 if (.not.(ir <= me)) go to 260
 w(ir,1) = zero
 call scopy(n, w(ir,1), 0, w(ir,1), mdw)
 rnorm = rnorm + (scale(ir)*w(ir,np1)/alsq)*w(ir,np1)
@@ -2359,7 +2359,7 @@ go to 180
 280 continue
 290 continue
 300 continue
-if (.not.(krank.lt.l1)) go to 420
+if (.not.(krank < l1)) go to 420
 !
 !     Try to determine the variables KRANK+1 through L1 from the
 !     least squares equations.  Continue the triangularization with
@@ -2373,7 +2373,7 @@ factor = alsq
 kk = krp1
 i = kk
 ip1 = i + 1
-310 if (.not.(i.le.l1)) go to 410
+310 if (.not.(i <= l1)) go to 410
 !
 !     Set ir to point to the MEP1-ST row.
 ir = mep1
@@ -2390,11 +2390,11 @@ go to 560
 !
 !     Eliminate i-TH col below the ir-TH element.
 330 irp1 = ir + 1
-if (.not.(irp1.le.m)) go to 355
+if (.not.(irp1 <= m)) go to 355
 j = m
 do 350 jj = irp1,m
    jm1 = j - 1
-   if (.not.(w(j,i).ne.zero)) go to 340
+   if (.not.(w(j,i) /= zero)) go to 340
    call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
    w(j,i) = zero
    call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
@@ -2405,7 +2405,7 @@ do 350 jj = irp1,m
 !     Test if new pivot element is near zero. If so, the col is
 !     dependent.
 t = scale(ir)*w(ir,i)**2
-indep = t.gt.tau**2*eanorm**2
+indep = t > tau**2*eanorm**2
 if (.not.indep) go to 380
 !
 !     Col test passed. Now must pass row norm test to be classified
@@ -2416,7 +2416,7 @@ do 370 i1 = ir,m
       rn = amax1(rn,scale(i1)*w(i1,j1)**2)
 360   continue
 370 continue
-indep = t.gt.tau**2*rn
+indep = t > tau**2*rn
 !
 !     If independent, swap the ir-TH and KRP1-ST rows to maintain the
 !     triangular form.  Update the rank indicator KRANK and the
@@ -2445,14 +2445,14 @@ go to 310
 !
 !     If pseudorank is less than l, apply Householder trans.
 !     From right.
-if (.not.(krank.lt.l)) go to 450
+if (.not.(krank < l)) go to 450
 do 440 i = 1,krank
    j = krp1 - i
    call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j - 1)
 440 continue
 450 niv = krank + nsoln - l
 niv1 = niv + 1
-if (l.eq.n) done = .true.
+if (l == n) done = .true.
 !
 !  END OF INITIAL TRIANGULARIZATION.
 idope(1) = me
@@ -2471,7 +2471,7 @@ return
 !     The col SS vector will be updated at each step. When
 !     numerically necessary, these values will be recomputed.
 !
-if (.not.(ir.ne.1 .and. (.not.recalc))) go to 480
+if (.not.(ir /= 1 .and. (.not.recalc))) go to 480
 !     Update col SS =Sum of squares.
 do 470 j = i,lend
    h(j) = h(j) - scale(ir - 1)*w(ir - 1,j)**2
@@ -2479,7 +2479,7 @@ do 470 j = i,lend
 !
 !     Test for numerical accuracy.
 max = isamax(lend - i + 1,h(i),1) + i - 1
-recalc = hbar + tenm3*h(max).eq.hbar
+recalc = hbar + tenm3*h(max) == hbar
 !
 !     If required, recalculate col SS, using rows ir through mend.
 480 if (.not.(recalc)) go to 510
@@ -2518,21 +2518,21 @@ sn = zero
 rn = zero
 do 550 j = 1,mend
    t = scale(j)
-   if (j.le.me) t = t/factor
+   if (j <= me) t = t/factor
    t = t*w(j,ic)**2
-   if (.not.(j.lt.ir)) go to 530
+   if (.not.(j < ir)) go to 530
    sn = sn + t
    go to 540
 530 rn = rn + t
 540 continue
 550 continue
-indep = rn.gt.tau**2*sn
+indep = rn > tau**2*sn
 go to 590
 560 continue
 !
 !     To perform-col-interchange
 !
-if (.not.(max.ne.i)) go to 570
+if (.not.(max /= i)) go to 570
 !     Exchange elements of permuted index vector and perform col
 !     interchanges.
 itemp = ipivot(i)
@@ -2813,26 +2813,26 @@ eta = spmpar(1)
 !
 ! Default value for tol is zero.
 !
-if (tol.lt.0.0) tol = 0.0
+if (tol < 0.0) tol = 0.0
 ifault = 0
 ksum = 0
 !
 ! Perform initial checking of input parameters, dimensions and
 ! weights for possible errors.
 !
-if (m.gt.0 .and. n.gt.0 .and. l.gt.0) go to 10
+if (m > 0 .and. n > 0 .and. l > 0) go to 10
 ifault = 1
 return
-10 if (m1.le.m .and. m1.le.n .and. m1.ge.0) go to 20
+10 if (m1 <= m .and. m1 <= n .and. m1 >= 0) go to 20
 ifault = 2
 return
-20 if (m.le.mm .and. m.le.mb .and. m.le.mr .and. n.le.nn &
-   & .and. m + n.le.mmpnn) go to 30
+20 if (m <= mm .and. m <= mb .and. m <= mr .and. n <= nn &
+   & .and. m + n <= mmpnn) go to 30
 ifault = 3
 return
 30 do 40 i = 1,m
-   if (m1.gt.0 .and. i.le.m1) w(i) = 1.0
-   if (w(i).ge.0.0) go to 40
+   if (m1 > 0 .and. i <= m1) w(i) = 1.0
+   if (w(i) >= 0.0) go to 40
    ifault = 4
    return
 40 continue
@@ -2892,7 +2892,7 @@ call decom2(m, n, m1, eta, tol, qr, c(k3), n1, ipivot, sing, &
    & mmpnn)
 !
 if (.not.sing) go to 110
-if (n1.gt.0) go to 100
+if (n1 > 0) go to 100
 ifault = 5
 return
 100 ifault = 6
@@ -2920,12 +2920,12 @@ do 200 k = 1,l
       k0 = k0 + 1
       x(j,k) = c(k0)
    end do
-   if (m1.eq.0) go to 150
+   if (m1 == 0) go to 150
    do i = 1,m1
       res(i,k) = 0.0
    end do
 150 m1p1 = m1 + 1
-   if (m1p1.gt.m) go to 170
+   if (m1p1 > m) go to 170
    k0 = k6 + m1 - 1
    do i = m1p1,m
       k0 = k0 + 1
@@ -2951,15 +2951,15 @@ do 200 k = 1,l
    ksum = ksum + 1
    ifault = 8
    go to 200
-180 if (numit.le.iter) go to 190
+180 if (numit <= iter) go to 190
    ifault = 9
-190 if (digitx.ge.0.5) go to 200
+190 if (digitx >= 0.5) go to 200
    ifault = 10
 200 continue
-if (ksum.lt.l) go to 210
+if (ksum < l) go to 210
 ifault = 7
 return
-210 if (n1.lt.n) return
+210 if (n1 < n) return
 do i = 1,n
    mpi = m + i
    do j = 1,n
@@ -2971,7 +2971,7 @@ end do
 ! Compute the unscaled covariance matrix of the coefficients.
 !
 call covar(n, m1, n1, ipivot, qr, c(k3), c(k9), mmpnn)
-if (n.eq.1) go to 260
+if (n == 1) go to 260
 do j = 2,n
    jm1 = j - 1
    do 240 i = 1,jm1
@@ -2984,10 +2984,10 @@ end do
 ! negative numbers.  ifault is set to 11 if this occurs.
 !
 260 do j = 1,n
-   if (qr(j,j).lt.0.0) go to 280
+   if (qr(j,j) < 0.0) go to 280
 end do
 return
-280 if (ifault.ne.0) go to 290
+280 if (ifault /= 0) go to 290
 ifault = 11
 return
 290 ifault = 12
@@ -3054,7 +3054,7 @@ mh = m1
 ms = m
 mp1 = m + 1
 finis = .false.
-if (tol.gt.0.0) tol2 = tol
+if (tol > 0.0) tol2 = tol
 do j = 1,n
    d(j) = 0.0
    ipivot(j) = j
@@ -3062,9 +3062,9 @@ end do
 ! Step number NS of the decomposition.
 do ns = 1,n
    k = m + ns
-   if (ns.eq.m1 + 1) go to 20
+   if (ns == m1 + 1) go to 20
    go to 30
-20 if (m1.eq.m) go to 200
+20 if (m1 == m) go to 200
    mv = m1 + 1
    mh = m
    fsum = .true.
@@ -3081,18 +3081,18 @@ do ns = 1,n
          sum = sum + dble(qr(l,j))*dble(qr(l,j))
       end do
       d(j) = sum
-70    if (ds.lt.d(j)) go to 80
+70    if (ds < d(j)) go to 80
       go to 90
 80    ds = d(j)
       np = j
 90    continue
    if (fsum) dm = ds
-   if (ds.lt.eta*dm) go to 100
+   if (ds < eta*dm) go to 100
    fsum = .false.
    go to 110
 100 fsum = .true.
 110 if (fsum) go to 40
-   if (np.ne.ns) go to 120
+   if (np /= ns) go to 120
    go to 140
 ! Column interchange.
 120 ik = ipivot(np)
@@ -3109,7 +3109,7 @@ do ns = 1,n
 ! END PIVOT SEARCH.
 ! RETURN HERE IF n1 = 0.  EITHER INPUT MATRIX qr EQUALS ZERO OR
 ! matrix of constraints equals zero.
-140 if (ns.eq.1 .and. ds.eq.0.0) return
+140 if (ns == 1 .and. ds == 0.0) return
    go to 160
 150 ms = k - 1
    mh = k - 1
@@ -3123,13 +3123,13 @@ do ns = 1,n
    end do
    d(ns) = sum
    ds = d(ns)
-   if (tol.eq.0.0) tol2 = (float(n)*eta)**2*d(m1 + 1)
-   if (.not.finis .and. ns.gt.m1 .and. ds.le.tol2) go to 200
+   if (tol == 0.0) tol2 = (float(n)*eta)**2*d(m1 + 1)
+   if (.not.finis .and. ns > m1 .and. ds <= tol2) go to 200
    go to 290
 200 finis = .true.
    mv = m + 1
    do np = ns,n
-      if (1.gt.m1) go to 250
+      if (1 > m1) go to 250
       do l = 1,m1
          qr(l,np) = 0.0
       end do
@@ -3157,10 +3157,10 @@ do ns = 1,n
    end do
    go to 150
 ! RETURN HERE IF MATRIX OF CONSTRAINTS IS FOUND TO BE SINGULAR.
-290 if (ds.eq.0.0) return
+290 if (ds == 0.0) return
    qr(k,ns) = -1.0
    nsp1 = ns + 1
-   if (nsp1.gt.n) go to 340
+   if (nsp1 > n) go to 340
 ! Begin orthogonalization.
    do 330 j = nsp1,n
       sum = 0.0
@@ -3275,7 +3275,7 @@ do 10 i = 1,m
    wres(i) = 0.0
    res(i) = 0.0
    y1(i) = 0.0
-   if (w(i).eq.0.0) kz = kz + 1
+   if (w(i) == 0.0) kz = kz + 1
 10 continue
 do ns = 1,n
    j = m + ns
@@ -3288,19 +3288,19 @@ k = 0
 rdx2 = 0.0
 rdr2 = 0.0
 ! Begin k-TH iteration step.
-30 if (k.lt.2) go to 40
-if (((64.*rdx2.lt.rdx1) .and. (rdx2.gt.eta2*rnx)) .or. &
-   & ((64.*rdr2.lt.rdr1) .and. (rdr2.gt.eta2*rnr))) go to 40
+30 if (k < 2) go to 40
+if (((64.*rdx2 < rdx1) .and. (rdx2 > eta2*rnx)) .or. &
+   & ((64.*rdr2 < rdr1) .and. (rdr2 > eta2*rnr))) go to 40
 go to 270
 40 rdx1 = rdx2
 rdr1 = rdr2
 rdx2 = 0.0
 rdr2 = 0.0
-if (k.eq.0) go to 160
+if (k == 0) go to 160
 ! New residuals.
 do 50 i = 1,m
    wres(i) = wres(i) + f(i)*w(i)
-   if (w(i).eq.0.0) go to 50
+   if (w(i) == 0.0) go to 50
    res(i) = res(i) + f(i)/w(i)
    y1(i) = y1(i) + g(i)
 50 continue
@@ -3314,7 +3314,7 @@ do 100 ns = 1,n
       sum = sum + dble(a(l,np))*dble(y1(l))
    end do
    g(j) = -sum
-   if (ns.gt.n1) go to 70
+   if (ns > n1) go to 70
    go to 80
 70 f(j) = 0.0
    go to 100
@@ -3326,22 +3326,22 @@ do 100 ns = 1,n
 100 continue
 do i = 1,m
    sum = 0.0
-   if (i.gt.m1) sum = dble(res(i))
+   if (i > m1) sum = dble(res(i))
    do l = 1,n
       sum = sum + dble(a(i,l))*dble(x(l))
    end do
    sum = sum - dble(b(i))
    f(i) = -sum
    f(i) = f(i)*w(i)
-   if (w(i).eq.0.0) res(i) = dble(res(i)) - sum
+   if (w(i) == 0.0) res(i) = dble(res(i)) - sum
    sum = 0.0
-   if (i.gt.m1) sum = dble(y1(i))
+   if (i > m1) sum = dble(y1(i))
    do l = 1,n
       sum = sum + dble(a(i,l))*dble(y2(l))
    end do
    g(i) = -sum
 end do
-if (n1p1.gt.n) go to 160
+if (n1p1 > n) go to 160
 do i = n1p1,n
    ns = n + n1p1 - i
    j = m + ns
@@ -3355,7 +3355,7 @@ end do
 !
 160 call solve3(f, m1, m, n1, qr, d, y, mmpnn)
 !
-if (n1p1.gt.n) go to 200
+if (n1p1 > n) go to 200
 do ns = n1p1,n
    j = m + ns
    sum = dble(g(j))
@@ -3370,7 +3370,7 @@ do ns = n1p1,n
 end do
 200 do j = mp1,mpn
    g(j) = 0.0
-   if (j.le.m + n1) g(j) = g(j) + f(j)
+   if (j <= m + n1) g(j) = g(j) + f(j)
 end do
 !
 call solve3(g, m1, m, n1, qr, d, y, mmpnn)
@@ -3381,13 +3381,13 @@ end do
 do i = mp1,mpn
    rdx2 = rdx2 + f(i)*f(i)
 end do
-if (k.ne.0) go to 240
+if (k /= 0) go to 240
 rnr = rdr2
 rnx = rdx2
-240 if (k.ne.1) go to 260
+240 if (k /= 1) go to 260
 xnorm = sqrt(rnx)
 dxnorm = sqrt(rdx2)
-if (xnorm.ne.0.0) go to 250
+if (xnorm /= 0.0) go to 250
 digitx = -alog10(eta)
 go to 260
 250 digitx = -alog10(amax1(dxnorm/xnorm,eta))
@@ -3395,9 +3395,9 @@ go to 260
 260 numit = k
 k = k + 1
 go to 30
-270 if ((m1 + kz.eq.m) .and. (rdx2.gt.4.*eta2*rnx)) go to 280
-if ((rdr2.gt.4.*eta2*rnr) .and. &
-   & (rdx2.gt.4.*eta2*rnx)) go to 280
+270 if ((m1 + kz == m) .and. (rdx2 > 4.*eta2*rnx)) go to 280
+if ((rdr2 > 4.*eta2*rnr) .and. &
+   & (rdx2 > 4.*eta2*rnx)) go to 280
 fail = .false.
 return
 280 fail = .true.
@@ -3420,19 +3420,19 @@ mv = 1
 mh = m1
 do ns = 1,n1
    j = m + ns
-   if (ns.eq.m1 + 1) go to 10
+   if (ns == m1 + 1) go to 10
    go to 20
 10 mv = m1 + 1
    mh = m
 20 nsm1 = ns - 1
    sum = -dble(f(j))
-   if (ns.eq.1) go to 40
+   if (ns == 1) go to 40
    do l = 1,nsm1
       mpl = m + l
       sum = sum + dble(qr(mpl,ns))*dble(y(l))
    end do
 40 y(ns) = -sum
-   if (ns.gt.m1) go to 50
+   if (ns > m1) go to 50
    go to 60
 50 c = -y(ns)
    go to 70
@@ -3448,7 +3448,7 @@ do ns = 1,n1
       f(l) = f(l) - c*qr(l,ns)
    end do
 end do
-if (1.gt.m1) go to 150
+if (1 > m1) go to 150
 do l = 1,m1
    f(l) = 0.0
 end do
@@ -3502,17 +3502,17 @@ double precision :: sum
 ! the k-TH column of H was so rejected, c(i,j) is set equal to zero,
 ! FOR i = k OR j = k, i.GE.J.
 l = n1
-if (l.gt.m1) c(l,l) = 1.0/d(l)
-if (l.eq.1) go to 60
+if (l > m1) c(l,l) = 1.0/d(l)
+if (l == 1) go to 60
 10 j = l - 1
-if (j.gt.m1) c(j,j) = 1.0/d(j)
+if (j > m1) c(j,j) = 1.0/d(j)
 do k = l,n1
    z(k) = c(j,k)
 end do
 i = n1
 do ka = j,n1
    sum = 0.0
-   if (i.eq.j) sum = dble(c(i,j))
+   if (i == j) sum = dble(c(i,j))
    do k = l,n1
       sum = sum - dble(z(k))*dble(c(k,i))
    end do
@@ -3523,8 +3523,8 @@ do k = l,n1
    c(j,k) = c(k,j)
 end do
 l = l - 1
-if (l.gt.1) go to 10
-60 if (n1.eq.n) go to 90
+if (l > 1) go to 10
+60 if (n1 == n) go to 90
 n1p1 = n1 + 1
 do i = 1,n
    do j = n1p1,n
@@ -3802,7 +3802,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 zero = 0.0
 one = 1.0
 ctol = zero
-if (conlim .gt. zero) ctol = one/conlim
+if (conlim > zero) ctol = one/conlim
 dampsq = damp**2
 anorm = zero
 acond = zero
@@ -3836,7 +3836,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm .le. zero) go to 800
+if (arnorm <= zero) go to 800
 !
 !     ------------------------------------------------------------------
 !     Main iteration loop.
@@ -3942,28 +3942,28 @@ rtol = btol + atol*anorm*xnorm/bnorm
 t3 = one + test3
 t2 = one + test2
 t1 = one + t1
-if (itn .ge. itnlim) istop = 7
-if (t3  .le. one   ) istop = 6
-if (t2  .le. one   ) istop = 5
-if (t1  .le. one   ) istop = 4
+if (itn >= itnlim) istop = 7
+if (t3 <= one   ) istop = 6
+if (t2 <= one   ) istop = 5
+if (t1 <= one   ) istop = 4
 !
 !     Allow for tolerances set by the user.
 !
-if (test3 .le. ctol) istop = 3
-if (test2 .le. atol) istop = 2
-if (test1 .le. rtol) istop = 1
+if (test3 <= ctol) istop = 3
+if (test2 <= atol) istop = 2
+if (test1 <= rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
 !     The convergence criteria are required to be met on  nconv
 !     consecutive iterations, where  nconv  is set below.
 !     Suggested value --   nconv = 1, 2  or  3.
 !
-if (istop .eq. 0) nstop = 0
-if (istop .eq. 0) go to 100
+if (istop == 0) nstop = 0
+if (istop == 0) go to 100
 nconv = 1
 nstop = nstop + 1
-if (nstop .lt. nconv  .and.  itn .lt. itnlim) istop = 0
-if (istop .eq. 0) go to 100
+if (nstop < nconv  .and.  itn < itnlim) istop = 0
+if (istop == 0) go to 100
 !     ------------------------------------------------------------------
 !     END OF ITERATION LOOP.
 !     ------------------------------------------------------------------
@@ -4007,7 +4007,7 @@ end interface
 !
 !
 beta = snrm2(n,x,1)
-if (beta .gt. zero) call sscal(n,(one/beta),x,1)
+if (beta > zero) call sscal(n,(one/beta),x,1)
 return
 end subroutine normlz
 
@@ -4262,7 +4262,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 zero = 0.0
 one = 1.0
 ctol = zero
-if (conlim .gt. zero) ctol = one/conlim
+if (conlim > zero) ctol = one/conlim
 dampsq = damp**2
 anorm = zero
 acond = zero
@@ -4296,7 +4296,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm .le. zero) go to 800
+if (arnorm <= zero) go to 800
 !
 !     ------------------------------------------------------------------
 !     Main iteration loop.
@@ -4402,28 +4402,28 @@ rtol = btol + atol*anorm*xnorm/bnorm
 t3 = one + test3
 t2 = one + test2
 t1 = one + t1
-if (itn .ge. itnlim) istop = 7
-if (t3  .le. one   ) istop = 6
-if (t2  .le. one   ) istop = 5
-if (t1  .le. one   ) istop = 4
+if (itn >= itnlim) istop = 7
+if (t3 <= one   ) istop = 6
+if (t2 <= one   ) istop = 5
+if (t1 <= one   ) istop = 4
 !
 !     Allow for tolerances set by the user.
 !
-if (test3 .le. ctol) istop = 3
-if (test2 .le. atol) istop = 2
-if (test1 .le. rtol) istop = 1
+if (test3 <= ctol) istop = 3
+if (test2 <= atol) istop = 2
+if (test1 <= rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
 !     The convergence criteria are required to be met on  nconv
 !     consecutive iterations, where  nconv  is set below.
 !     Suggested value --   nconv = 1, 2  or  3.
 !
-if (istop .eq. 0) nstop = 0
-if (istop .eq. 0) go to 100
+if (istop == 0) nstop = 0
+if (istop == 0) go to 100
 nconv = 1
 nstop = nstop + 1
-if (nstop .lt. nconv  .and.  itn .lt. itnlim) istop = 0
-if (istop .eq. 0) go to 100
+if (nstop < nconv  .and.  itn < itnlim) istop = 0
+if (istop == 0) go to 100
 !     ------------------------------------------------------------------
 !     END OF ITERATION LOOP.
 !     ------------------------------------------------------------------
@@ -4686,7 +4686,7 @@ real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 zero = 0.0
 one = 1.0
 ctol = zero
-if (conlim .gt. zero) ctol = one/conlim
+if (conlim > zero) ctol = one/conlim
 dampsq = damp**2
 anorm = zero
 acond = zero
@@ -4720,7 +4720,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm .le. zero) go to 800
+if (arnorm <= zero) go to 800
 !
 !     ------------------------------------------------------------------
 !     Main iteration loop.
@@ -4826,28 +4826,28 @@ rtol = btol + atol*anorm*xnorm/bnorm
 t3 = one + test3
 t2 = one + test2
 t1 = one + t1
-if (itn .ge. itnlim) istop = 7
-if (t3  .le. one   ) istop = 6
-if (t2  .le. one   ) istop = 5
-if (t1  .le. one   ) istop = 4
+if (itn >= itnlim) istop = 7
+if (t3 <= one   ) istop = 6
+if (t2 <= one   ) istop = 5
+if (t1 <= one   ) istop = 4
 !
 !     Allow for tolerances set by the user.
 !
-if (test3 .le. ctol) istop = 3
-if (test2 .le. atol) istop = 2
-if (test1 .le. rtol) istop = 1
+if (test3 <= ctol) istop = 3
+if (test2 <= atol) istop = 2
+if (test1 <= rtol) istop = 1
 !
 !     STOP IF APPROPRIATE.
 !     The convergence criteria are required to be met on  nconv
 !     consecutive iterations, where  nconv  is set below.
 !     Suggested value --   nconv = 1, 2  or  3.
 !
-if (istop .eq. 0) nstop = 0
-if (istop .eq. 0) go to 100
+if (istop == 0) nstop = 0
+if (istop == 0) go to 100
 nconv = 1
 nstop = nstop + 1
-if (nstop .lt. nconv  .and.  itn .lt. itnlim) istop = 0
-if (istop .eq. 0) go to 100
+if (nstop < nconv  .and.  itn < itnlim) istop = 0
+if (istop == 0) go to 100
 !     ------------------------------------------------------------------
 !     END OF ITERATION LOOP.
 !     ------------------------------------------------------------------
@@ -4904,9 +4904,9 @@ fv = f(v)
 !
 !        Location of the region of a local minimum
 !
-10 if (e .le. eps0*(1.0 + abs(a))) go to 40
+10 if (e <= eps0*(1.0 + abs(a))) go to 40
 if (fu - fv) 20,11,30
-11 if (fu .gt. f(b)) go to 30
+11 if (fu > f(b)) go to 30
 !
 20 b = v
 e = b - a
@@ -4924,31 +4924,31 @@ fu = fv
 fv = f(v)
 go to 10
 !
-40 if (a .gt. 0.0 .or. b .lt. 0.0) go to 41
+40 if (a > 0.0 .or. b < 0.0) go to 41
 w = f(0.0)
-if (w .le. amin1(fu,fv)) go to 100
-41 if (a .ne. a0) go to 42
-if (a .eq. 0.0) go to 201
+if (w <= amin1(fu,fv)) go to 100
+41 if (a /= a0) go to 42
+if (a == 0.0) go to 201
 w = f(a)
-if (w .le. amin1(fu,fv)) go to 130
+if (w <= amin1(fu,fv)) go to 130
 go to 201
-42 if (b .ne. b0) go to 201
-if (b .eq. 0.0) go to 201
+42 if (b /= b0) go to 201
+if (b == 0.0) go to 201
 w = f(b)
-if (w .le. amin1(fu,fv)) go to 150
+if (w <= amin1(fu,fv)) go to 150
 go to 201
 !
 !              Check if 0 is a local minimum
 !
-100 if (b .le. atol) go to 110
+100 if (b <= atol) go to 110
 x = 0.01*b
-if (w .gt. f(x)) go to 180
+if (w > f(x)) go to 180
 b = x
 go to 100
 !
-110 if (abs(a) .le. atol) go to 120
+110 if (abs(a) <= atol) go to 120
 x = 0.01*a
-if (w .gt. f(x)) go to 180
+if (w > f(x)) go to 180
 a = x
 go to 110
 !
@@ -4960,10 +4960,10 @@ return
 !
 130 tol = amax1(rtol*abs(a),atol)
 131 x = a + 0.01*e
-if (w .gt. f(x)) go to 180
+if (w > f(x)) go to 180
 b = x
 e = b - a
-if (e .gt. tol) go to 131
+if (e > tol) go to 131
 !
 x = a
 error = e
@@ -4973,10 +4973,10 @@ return
 !
 150 tol = amax1(rtol*abs(b),atol)
 151 x = b - 0.01*e
-if (w .gt. f(x)) go to 180
+if (w > f(x)) go to 180
 a = x
 e = b - a
-if (e .gt. tol) go to 151
+if (e > tol) go to 151
 !
 x = b
 error = e
@@ -4991,7 +4991,7 @@ fv = f(v)
 !             Refinement of the local minimum
 !
 200 ind = 0
-201 if (fu .gt. fv) go to 210
+201 if (fu > fv) go to 210
 !
 b = v
 e = b - a
@@ -5010,9 +5010,9 @@ fv = f(v)
 !
 !        Checking the accuracy of the local minimum
 !
-220 if (e .le. amax1(rtol*abs(a),atol)) go to 240
-if (abs(fv - fu) .gt. ftol*amax1(abs(fu),abs(fv))) go to 200
-if (ind .eq. 1) go to 241
+220 if (e <= amax1(rtol*abs(a),atol)) go to 240
+if (abs(fv - fu) > ftol*amax1(abs(fu),abs(fv))) go to 200
+if (ind == 1) go to 241
 ind = 1
 go to 201
 !
@@ -5097,8 +5097,8 @@ eps = amax1(spmpar(1),abs(rerr))
 gradtl = eps**0.4
 stepmx = 0.0
 steptl = eps
-if (eps .le. 1.e-10) steptl = 10.0*eps
-if (eps .lt. 1.e-13) steptl = 1.e2*eps
+if (eps <= 1.e-10) steptl = 10.0*eps
+if (eps < 1.e-13) steptl = 1.e2*eps
 !
 !     Initialization
 !
@@ -5118,7 +5118,7 @@ fscale = 1.0
    & ierr,wrk(1,9),wrk(1,4),wrk(1,5),wrk(1,6),wrk(1,7), &
    & wrk(1,8))
 iter = iter + itncnt
-if (ierr .ne. -10) return
+if (ierr /= -10) return
 itnlim = itnlim - itncnt
 go to 20
 end subroutine optf
@@ -5218,8 +5218,8 @@ ns = 30
 stmx = stepmx
 stepmx = 0.0
 call opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
-if (ierr .lt. 0) return
-if (mo .ne. 0) stepmx = amax1(stmx,stepmx)
+if (ierr < 0) return
+if (mo /= 0) stepmx = amax1(stmx,stepmx)
 !
 rnf = 2.0*amax1(rerr,spmpar(1))
 sqrnf = sqrt(rnf)
@@ -5239,8 +5239,8 @@ call fstofd(n, x, fcn, f, g, typsiz, sqrnf)
 !
 call opstp(n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
-if (ierr .eq. 0) go to 10
-if (mo .ne. 0) go to 210
+if (ierr == 0) go to 10
+if (mo /= 0) go to 210
 !
 !        Apply the fixed step coordinate descent procedure
 !        for one step and check if the gradient is nonzero
@@ -5252,7 +5252,7 @@ call opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr,stepmx,ierr)
 call fstofd(n, x, fcn, f, g, typsiz, sqrnf)
 call opstp(n,x,f,g,wrk1,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
-if (ierr .ne. 0) go to 210
+if (ierr /= 0) go to 210
 !
 !     The hessian will be obtained by secant updates.
 !     Set A to the initial hessian.
@@ -5271,11 +5271,11 @@ go to 101
 !
 !     Iteration
 !     ---------
-100 if (mo .gt. 1) go to 101
-if (mod(itncnt,10) .ne. 0) go to 101
-if (itncnt + 10 .ge. itnlim) go to 101
+100 if (mo > 1) go to 101
+if (mod(itncnt,10) /= 0) go to 101
+if (itncnt + 10 >= itnlim) go to 101
 call scalex(mo, x, typsiz, n, ierr)
-if (ierr .eq. 0) go to 101
+if (ierr == 0) go to 101
 mo = mo + 1
 return
 101 itncnt = itncnt + 1
@@ -5295,7 +5295,7 @@ call lnsrch(n,x,f,g,p,xpls,fpls,fcn,mxtake,iretcd, &
 !     If a satisfactory step could not be found and forward difference
 !     gradient was used, retry using a central difference gradient.
 !
-if (iretcd .ne. 1 .or. iagflg .ne. 0) go to 120
+if (iretcd /= 1 .or. iagflg /= 0) go to 120
 !
 !        Set iagflg for central differences
 !
@@ -5306,7 +5306,7 @@ go to 105
 !
 !     Calculate gradient at XPLS
 !
-120 if (iagflg .eq. 0) go to 130
+120 if (iagflg == 0) go to 130
 call fstocd(n, xpls, fcn, typsiz, cbrnf, gpls)
 go to 140
 130 call fstofd(n, xpls, fcn, fpls, gpls, typsiz, sqrnf)
@@ -5315,7 +5315,7 @@ go to 140
 !
 140 call opstp(n,xpls,fpls,gpls,x,itncnt,icscmx,ierr,gradtl,steptl, &
    & typsiz,fscale,itnlim,iretcd,mxtake,fstack,ns,sptr)
-if (ierr .ne. 0) go to 200
+if (ierr /= 0) go to 200
 !
 !     Evaluate hessian at XPLS
 !
@@ -5335,7 +5335,7 @@ go to 100
 !     -----------
 !     Reset XPLS,fpls,gpls  if previous iterate solution
 !
-200 if (ierr .ne. 3) return
+200 if (ierr /= 3) return
 !
 210 fpls = f
 do i = 1,n
@@ -5389,19 +5389,19 @@ ierr = 0
 !
 !     Check dimension of problem
 !
-if (n .le. 0) go to 805
-if (n .eq. 1) go to 810
+if (n <= 0) go to 805
+if (n == 1) go to 810
 !
 !     Compute scale matrix
 !
 do i = 1,n
    typsiz(i) = abs(typsiz(i))
-   if (typsiz(i) .eq. 0.0) typsiz(i) = 1.0
+   if (typsiz(i) == 0.0) typsiz(i) = 1.0
 end do
 !
 !     Check maximum step size
 !
-if (stepmx .gt. 0.0) go to 20
+if (stepmx > 0.0) go to 20
 stpsiz = 0.0
 do i = 1, n
    stpsiz = stpsiz + (x(i)/typsiz(i))**2
@@ -5413,19 +5413,19 @@ stepmx = amax1(1.0e3*stpsiz, 1.0e3)
 !     Check function SCALE
 !
 fscale = abs(fscale)
-if (fscale .eq. 0.0) fscale = 1.0
+if (fscale == 0.0) fscale = 1.0
 !
 !     Check gradient tolerance
 !
-if (gradtl .lt. 0.0) go to 815
+if (gradtl < 0.0) go to 815
 !
 !     Check iteration limit
 !
-if (itnlim .le. 0) go to 820
+if (itnlim <= 0) go to 820
 !
 !     Check the accuracy of FCN
 !
-if (rerr .lt. 0.0 .or. rerr .gt. 1.e-4) go to 825
+if (rerr < 0.0 .or. rerr > 1.e-4) go to 825
 return
 !
 !     Error exits
@@ -5499,7 +5499,7 @@ ierr = 0
 !
 !     Last global step failed to locate a point lower than x
 !
-if (iretcd .ne. 1) go to 10
+if (iretcd /= 1) go to 10
 ierr = 3
 return
 10 continue
@@ -5514,11 +5514,11 @@ do 20 i = 1,n
    rgx = amax1(rgx, grd)
 20 continue
 jerr = 1
-if (rgx .gt. gradtl*d) go to 30
-if (abs(fpls) .le. 1.e-9) go to 100
-if (abs(fpls) .gt. 0.5*fscale) go to 100
+if (rgx > gradtl*d) go to 30
+if (abs(fpls) <= 1.e-9) go to 100
+if (abs(fpls) > 0.5*fscale) go to 100
 fscale = abs(fpls)
-30 if (itncnt .eq. 0) return
+30 if (itncnt == 0) return
 !
 !     Find direction in which relative stepsize maximum
 !     check whether within tolerance.
@@ -5529,26 +5529,26 @@ do i = 1,n
    rsx = amax1(rsx,relstp)
 end do
 jerr = 2
-if (rsx .le. steptl) go to 100
+if (rsx <= steptl) go to 100
 !
 !     Check if fpls is sufficiently less than the ns-TH
 !     previous value of FCN.
 !
-if (itncnt .gt. ns) go to 50
+if (itncnt > ns) go to 50
 sptr = itncnt
 fstack(sptr) = fpls
 go to 60
 50 sptr = sptr + 1
-if (sptr .gt. ns) sptr = 1
+if (sptr > ns) sptr = 1
 jerr = 3
-if (fpls .ge. (fstack(sptr) - 1.e-3*abs(fstack(sptr)))) &
+if (fpls >= (fstack(sptr) - 1.e-3*abs(fstack(sptr)))) &
    & go to 100
 fstack(sptr) = fpls
 !
 !     Check iteration limit
 !
 60 jerr = 4
-if (itncnt .ge. itnlim) go to 100
+if (itncnt >= itnlim) go to 100
 !
 !     Check number of consecutive steps of size STEPMX
 !
@@ -5556,7 +5556,7 @@ if (mxtake) go to 70
 icscmx = 0
 return
 70 icscmx = icscmx + 1
-if (icscmx .ge. 20) ierr = 5
+if (icscmx >= 20) ierr = 5
 return
 !
 !     Terminate
@@ -5589,10 +5589,10 @@ do 20 i = 1,n
    call fcn(n, x, fminus)
    x(i) = xi
 !
-   if (fx .le. fplus) go to 10
+   if (fx <= fplus) go to 10
    fx = fplus
    x(i) = xplus
-10 if (fx .le. fminus) go to 20
+10 if (fx <= fminus) go to 20
    fx = fminus
    x(i) = xminus
 20 continue
@@ -5624,10 +5624,10 @@ do 10 i = 1,n
 10 continue
 !
 c = 1.e3
-if (mo .ne. 0) c = 1.e2
+if (mo /= 0) c = 1.e2
 big = c*xmin
 do 20 i = 1,n
-   if (abs(x(i)) .ge. big) go to 30
+   if (abs(x(i)) >= big) go to 30
 20 continue
 ierr = 0
 return
@@ -5672,7 +5672,7 @@ real :: sum
 !                  Forward solve, result in x
 !
 x(1) = b(1)/a(1,1)
-if (n .eq. 1) go to 30
+if (n == 1) go to 30
 do i = 2,n
    sum = 0.0
    im1 = i - 1
@@ -5685,7 +5685,7 @@ end do
 !                   Back solve, result in x
 !
 30 x(n) = x(n)/a(n,n)
-if (n .eq. 1) return
+if (n == 1) return
 i = n
 do ii = 2,n
    ip1 = i
@@ -5843,7 +5843,7 @@ do 10 i = 1,n
 10 continue
 sln = sqrt(tmp)
 !
-if (sln .le. stepmx) go to 30
+if (sln <= stepmx) go to 30
 !
 !     Newton step longer than maximum allowed
 !
@@ -5867,15 +5867,15 @@ lambda = 1.0
    xpls(i) = x(i) + lambda*p(i)
 end do
 call fcn(n,xpls,fpls)
-if (fpls .le. f + slp*1.e-4*lambda) go to 200
+if (fpls <= f + slp*1.e-4*lambda) go to 200
 !
 !     Solution not (yet) found
 !
-if (lambda .lt. rmnlmb) go to 210
+if (lambda < rmnlmb) go to 210
 !
 !     Calculate new lambda
 !
-if (lambda .ne. 1.0) go to 120
+if (lambda /= 1.0) go to 120
 !
 !     First backtrack. Quadratic fit
 !
@@ -5890,7 +5890,7 @@ t3 = 1.0/(lambda - plmbda)
 a = t3*(t1 - t2)
 b = t3*(t2*lambda - t1*plmbda)
 w = 10.0*abs(t1*t3)
-if ((abs(a) + w) .ne. w) go to 130
+if ((abs(a) + w) /= w) go to 130
 !
 !     The cubic fit degenerates to a quadratic fit
 !
@@ -5900,7 +5900,7 @@ go to 160
 !     The cubic is nondegenerate
 !
 130 disc = b*b - 3.0*a*slp
-if (disc .le. b*b) go to 140
+if (disc <= b*b) go to 140
 !
 !     Only one positive critical point, must be minimum
 !
@@ -5909,17 +5909,17 @@ go to 160
 !
 !     Both critical points positive, first is minimum
 !
-140 if (disc .gt. 0.0) go to 150
+140 if (disc > 0.0) go to 150
 tlmbda = -b/(3.0*a)
 go to 160
 150 tlmbda = (-b - sign(1.0,a)*sqrt(disc))/(3.0*a)
 !
-160 if (tlmbda .gt. 0.5*lambda) tlmbda = 0.5*lambda
+160 if (tlmbda > 0.5*lambda) tlmbda = 0.5*lambda
 !
 !
 170 plmbda = lambda
 pfpls = fpls
-if (tlmbda .ge. lambda*0.1) go to 180
+if (tlmbda >= lambda*0.1) go to 180
 lambda = lambda*0.1
 go to 100
 180 lambda = tlmbda
@@ -5928,7 +5928,7 @@ go to 100
 !     A suitable value for xpls has been obtained
 !
 200 iretcd = 0
-if (lambda .eq. 1.0 .and. sln .gt. 0.99*stepmx) mxtake = .true.
+if (lambda == 1.0 .and. sln > 0.99*stepmx) mxtake = .true.
 return
 !
 !     No satisfactory xpls found sufficiently distinct from x
@@ -6001,7 +6001,7 @@ end interface
 !
 !-----------------------------------------------------------------------
 !
-if (itncnt .eq. 1) noupdt = .true.
+if (itncnt == 1) noupdt = .true.
 do i = 1,n
    s(i) = xpls(i) - x(i)
    y(i) = gpls(i) - g(i)
@@ -6009,7 +6009,7 @@ end do
 den1 = sdot(n,s,1,y,1)
 snorm2 = snrm2(n,s,1)
 ynrm2 = snrm2(n,y,1)
-if (den1 .lt. tol*snorm2*ynrm2) return
+if (den1 < tol*snorm2*ynrm2) return
 !
 !     SET s = TRANSPOSE(L)*s
 !
@@ -6054,7 +6054,7 @@ end do
 !     for each i, then the update is skipped.
 !
 do i = 1,n
-   if (abs(y(i) - w(i)) .ge. tol*amax1(abs(g(i)),abs(gpls(i)))) &
+   if (abs(y(i) - w(i)) >= tol*amax1(abs(g(i)),abs(gpls(i)))) &
       & go to 70
 end do
 return
@@ -6137,7 +6137,7 @@ end interface
 !                Determine last non-zero in u
 !
 k = n
-10 if (u(k) .ne. 0.0 .or. k .eq. 1) go to 20
+10 if (u(k) /= 0.0 .or. k == 1) go to 20
 k = k - 1
 go to 10
 !
@@ -6146,7 +6146,7 @@ go to 10
 !                 which is upper Hessenberg
 !
 20 km1 = k - 1
-if (k .le. 1) go to 40
+if (k <= 1) go to 40
 do ii = 1,km1
    i = k - ii
    call jrot(nr,n,a,i,u(i),-u(i + 1),r)
@@ -6158,7 +6158,7 @@ end do
 40 do j = 1,n
    a(1,j) = a(1,j) + u(1)*v(j)
 end do
-if (k .le. 1) return
+if (k <= 1) return
 !
 !       k-1 Jacobi rotations transform upper Hessenberg r
 !                   to upper triangular r*
@@ -6199,14 +6199,14 @@ real :: c, s, t, z
 !
 !                COMPUTE c = a/r  AND s = b/r
 !
-if (abs(a) .le. abs(b)) go to 10
+if (abs(a) <= abs(b)) go to 10
 t = b/a
 z = sqrt(1.0 + t*t)
 c = sign(1.0/z, a)
 s = t*c
 r = z*abs(a)
 go to 20
-10 if (a .eq. 0.0) go to 40
+10 if (a == 0.0) go to 40
 t = a/b
 z = sqrt(1.0 + t*t)
 s = sign(1.0/z, b)
@@ -6358,8 +6358,8 @@ info = 0
 !
 !     Check the input parameters for errors.
 !
-if (n .le. 0 .or. m .lt. n .or. epsfcn .lt. 0.0 &
-   & .or. tol .lt. 0.0 .or. lwa .lt. m*n + 5*n + m) go to 10
+if (n <= 0 .or. m < n .or. epsfcn < 0.0 &
+   & .or. tol < 0.0 .or. lwa < m*n + 5*n + m) go to 10
 !
 !     CALL lmdif.
 !
@@ -6373,7 +6373,7 @@ mp5n = m + 5*n
 call lmdif(fcn,m,n,x,fvec,ftol,xtol,gtol,maxfev,epsfcn,wa(1), &
    & mode,factor,nprint,info,nfev,wa(mp5n + 1),m,iwa, &
    & wa(n + 1),wa(2*n + 1),wa(3*n + 1),wa(4*n + 1),wa(5*n + 1))
-if (info .eq. 8) info = 4
+if (info == 8) info = 4
 10 continue
 return
 end subroutine lmdiff
@@ -6597,12 +6597,12 @@ nfev = 0
 !
 !     Check the input parameters for errors.
 !
-if (n .le. 0 .or. m .lt. n .or. ldfjac .lt. m &
-   & .or. ftol .lt. 0.0 .or. xtol .lt. 0.0 .or. gtol .lt. 0.0 &
-   & .or. maxfev .le. 0 .or. factor .le. 0.0) go to 300
-if (mode .ne. 2) go to 20
+if (n <= 0 .or. m < n .or. ldfjac < m &
+   & .or. ftol < 0.0 .or. xtol < 0.0 .or. gtol < 0.0 &
+   & .or. maxfev <= 0 .or. factor <= 0.0) go to 300
+if (mode /= 2) go to 20
 do j = 1, n
-   if (diag(j) .le. 0.0) go to 300
+   if (diag(j) <= 0.0) go to 300
 end do
 20 continue
 !
@@ -6612,7 +6612,7 @@ end do
 iflag = 1
 call fcn(m,n,x,fvec,iflag)
 nfev = 1
-if (iflag .lt. 0) go to 300
+if (iflag < 0) go to 300
 fnorm = enorm(m,fvec)
 !
 !     Initialize Levenberg-Marquardt parameter and iteration counter.
@@ -6629,14 +6629,14 @@ iter = 1
 iflag = 2
 call fdjac2(fcn,m,n,x,fvec,fjac,ldfjac,iflag,epsfcn,wa4)
 nfev = nfev + n
-if (iflag .lt. 0) go to 300
+if (iflag < 0) go to 300
 !
 !        If requested, call FCN to enable printing of iterates.
 !
-if (nprint .le. 0) go to 40
+if (nprint <= 0) go to 40
 iflag = 0
-if (mod(iter - 1,nprint) .eq. 0) call fcn(m,n,x,fvec,iflag)
-if (iflag .lt. 0) go to 300
+if (mod(iter - 1,nprint) == 0) call fcn(m,n,x,fvec,iflag)
+if (iflag < 0) go to 300
 40 continue
 !
 !        Compute the QR factorization of the Jacobian.
@@ -6646,11 +6646,11 @@ call qrfac(m,n,fjac,ldfjac,.true.,ipvt,n,wa1,wa2,wa3)
 !        On the first iteration and if mode is 1, scale according
 !        to the norms of the columns of the initial Jacobian.
 !
-if (iter .ne. 1) go to 80
-if (mode .eq. 2) go to 60
+if (iter /= 1) go to 80
+if (mode == 2) go to 60
 do j = 1, n
    diag(j) = wa2(j)
-   if (wa2(j) .eq. 0.0) diag(j) = 1.0
+   if (wa2(j) == 0.0) diag(j) = 1.0
 end do
 60 continue
 !
@@ -6662,7 +6662,7 @@ do j = 1, n
 end do
 xnorm = enorm(n,wa3)
 delta = factor*xnorm
-if (delta .eq. 0.0) delta = factor
+if (delta == 0.0) delta = factor
 80 continue
 !
 !        Form (Q transpose)*fvec and store the first n components in
@@ -6672,7 +6672,7 @@ do i = 1, m
    wa4(i) = fvec(i)
 end do
 do j = 1, n
-   if (fjac(j,j) .eq. 0.0) go to 120
+   if (fjac(j,j) == 0.0) go to 120
    sum = 0.0
    do i = j, m
       sum = sum + fjac(i,j)*wa4(i)
@@ -6689,10 +6689,10 @@ end do
 !        Compute the norm of the scaled gradient.
 !
 gnorm = 0.0
-if (fnorm .eq. 0.0) go to 170
+if (fnorm == 0.0) go to 170
 do j = 1, n
    l = ipvt(j)
-   if (wa2(l) .eq. 0.0) go to 150
+   if (wa2(l) == 0.0) go to 150
    sum = 0.0
    do i = 1, j
       sum = sum + fjac(i,j)*(qtf(i)/fnorm)
@@ -6704,12 +6704,12 @@ end do
 !
 !        Test for convergence of the gradient norm.
 !
-if (gnorm .le. gtol) info = 4
-if (info .ne. 0) go to 300
+if (gnorm <= gtol) info = 4
+if (info /= 0) go to 300
 !
 !        Rescale if necessary.
 !
-if (mode .eq. 2) go to 190
+if (mode == 2) go to 190
 do j = 1, n
    diag(j) = amax1(diag(j),wa2(j))
 end do
@@ -6735,20 +6735,20 @@ pnorm = enorm(n,wa3)
 !
 !           On the first iteration, adjust the initial step bound.
 !
-if (iter .eq. 1) delta = amin1(delta,pnorm)
+if (iter == 1) delta = amin1(delta,pnorm)
 !
 !           Evaluate the function at x + P and calculate its norm.
 !
 iflag = 1
 call fcn(m,n,wa2,wa4,iflag)
 nfev = nfev + 1
-if (iflag .lt. 0) go to 300
+if (iflag < 0) go to 300
 fnorm1 = enorm(m,wa4)
 !
 !           Compute the scaled actual reduction.
 !
 actred = -1.0
-if (p1*fnorm1 .lt. fnorm) actred = 1.0 - (fnorm1/fnorm)**2
+if (p1*fnorm1 < fnorm) actred = 1.0 - (fnorm1/fnorm)**2
 !
 !           Compute the scaled predicted reduction and
 !           the scaled directional derivative.
@@ -6770,20 +6770,20 @@ dirder = -(temp1**2 + temp2**2)
 !           reduction.
 !
 ratio = 0.0
-if (prered .ne. 0.0) ratio = actred/prered
+if (prered /= 0.0) ratio = actred/prered
 !
 !           Update the step bound.
 !
-if (ratio .gt. p25) go to 240
-if (actred .ge. 0.0) temp = p5
-if (actred .lt. 0.0) &
+if (ratio > p25) go to 240
+if (actred >= 0.0) temp = p5
+if (actred < 0.0) &
    & temp = p5*dirder/(dirder + p5*actred)
-if (p1*fnorm1 .ge. fnorm .or. temp .lt. p1) temp = p1
+if (p1*fnorm1 >= fnorm .or. temp < p1) temp = p1
 delta = temp*amin1(delta,pnorm/p1)
 par = par/temp
 go to 260
 240 continue
-if (par .ne. 0.0 .and. ratio .lt. p75) go to 250
+if (par /= 0.0 .and. ratio < p75) go to 250
 delta = pnorm/p5
 par = p5*par
 250 continue
@@ -6791,7 +6791,7 @@ par = p5*par
 !
 !           Test for successful iteration.
 !
-if (ratio .lt. p0001) go to 290
+if (ratio < p0001) go to 290
 !
 !           Successful iteration. Update x, fvec, and their norms.
 !
@@ -6809,25 +6809,25 @@ iter = iter + 1
 !
 !           Tests for convergence.
 !
-if (abs(actred) .le. ftol .and. prered .le. ftol &
-   & .and. p5*ratio .le. 1.0) info = 1
-if (delta .le. xtol*xnorm) info = 2
-if (abs(actred) .le. ftol .and. prered .le. ftol &
-   & .and. p5*ratio .le. 1.0 .and. info .eq. 2) info = 3
-if (info .ne. 0) go to 300
+if (abs(actred) <= ftol .and. prered <= ftol &
+   & .and. p5*ratio <= 1.0) info = 1
+if (delta <= xtol*xnorm) info = 2
+if (abs(actred) <= ftol .and. prered <= ftol &
+   & .and. p5*ratio <= 1.0 .and. info == 2) info = 3
+if (info /= 0) go to 300
 !
 !           Tests for termination and stringent tolerances.
 !
-if (nfev .ge. maxfev) info = 5
-if (abs(actred) .le. eps .and. prered .le. eps &
-   & .and. p5*ratio .le. 1.0) info = 6
-if (delta .le. eps*xnorm) info = 7
-if (gnorm .le. eps) info = 8
-if (info .ne. 0) go to 300
+if (nfev >= maxfev) info = 5
+if (abs(actred) <= eps .and. prered <= eps &
+   & .and. p5*ratio <= 1.0) info = 6
+if (delta <= eps*xnorm) info = 7
+if (gnorm <= eps) info = 8
+if (info /= 0) go to 300
 !
 !           END OF THE INNER LOOP. REPEAT IF ITERATION UNSUCCESSFUL.
 !
-if (ratio .lt. p0001) go to 200
+if (ratio < p0001) go to 200
 !
 !        END OF THE OUTER LOOP.
 !
@@ -6836,9 +6836,9 @@ go to 30
 !
 !     Termination, either normal or user imposed.
 !
-if (iflag .lt. 0) info = iflag
+if (iflag < 0) info = iflag
 iflag = 0
-if (nprint .gt. 0) call fcn(m,n,x,fvec,iflag)
+if (nprint > 0) call fcn(m,n,x,fvec,iflag)
 return
 end subroutine lmdif
 
@@ -6897,12 +6897,12 @@ floatn = n
 agiant = rgiant/floatn
 do 90 i = 1, n
    xabs = abs(x(i))
-   if (xabs .gt. rdwarf .and. xabs .lt. agiant) go to 70
-   if (xabs .le. rdwarf) go to 30
+   if (xabs > rdwarf .and. xabs < agiant) go to 70
+   if (xabs <= rdwarf) go to 30
 !
 !              Sum for large components.
 !
-   if (xabs .le. x1max) go to 10
+   if (xabs <= x1max) go to 10
    s1 = 1.0 + s1*(x1max/xabs)**2
    x1max = xabs
    go to 20
@@ -6914,12 +6914,12 @@ do 90 i = 1, n
 !
 !              Sum for small components.
 !
-   if (xabs .le. x3max) go to 40
+   if (xabs <= x3max) go to 40
    s3 = 1.0 + s3*(x3max/xabs)**2
    x3max = xabs
    go to 50
 40 continue
-   if (xabs .ne. 0.0) s3 = s3 + (xabs/x3max)**2
+   if (xabs /= 0.0) s3 = s3 + (xabs/x3max)**2
 50 continue
 60 continue
    go to 80
@@ -6933,14 +6933,14 @@ do 90 i = 1, n
 !
 !     Calculation of norm.
 !
-if (s1 .eq. 0.0) go to 100
+if (s1 == 0.0) go to 100
 enorm = x1max*sqrt(s1 + (s2/x1max)/x1max)
 go to 130
 100 continue
-if (s2 .eq. 0.0) go to 110
-if (s2 .ge. x3max) &
+if (s2 == 0.0) go to 110
+if (s2 >= x3max) &
    & enorm = sqrt(s2*(1.0 + (x3max/s2)*(x3max*s3)))
-if (s2 .lt. x3max) &
+if (s2 < x3max) &
    & enorm = sqrt(x3max*((s2/x3max) + (x3max*s3)))
 go to 120
 110 continue
@@ -7042,21 +7042,21 @@ do k = 1, n
    jj = jj - k
    l = jj + 1
    sum = 0.0
-   if (n .lt. jp1) go to 20
+   if (n < jp1) go to 20
    do i = jp1, n
       sum = sum + r(l)*x(i)
       l = l + 1
    end do
 20 continue
    temp = r(jj)
-   if (temp .ne. 0.0) go to 40
+   if (temp /= 0.0) go to 40
    l = j
    do i = 1, j
       temp = amax1(temp,abs(r(l)))
       l = l + n - i
    end do
    temp = epsmch*temp
-   if (temp .eq. 0.0) temp = epsmch
+   if (temp == 0.0) temp = epsmch
 40 continue
    x(j) = (qtb(j) - sum)/temp
 end do
@@ -7068,7 +7068,7 @@ do j = 1, n
    wa2(j) = diag(j)*x(j)
 end do
 qnorm = enorm(n,wa2)
-if (qnorm .le. delta) go to 140
+if (qnorm <= delta) go to 140
 !
 !     The Gauss-Newton direction is not acceptable.
 !     Next, calculate the scaled gradient direction.
@@ -7089,7 +7089,7 @@ end do
 gnorm = enorm(n,wa1)
 sgnorm = 0.0
 alpha = delta/qnorm
-if (gnorm .eq. 0.0) go to 120
+if (gnorm == 0.0) go to 120
 !
 !     Calculate the point along the scaled gradient
 !     at which the quadratic is minimized.
@@ -7112,7 +7112,7 @@ sgnorm = (gnorm/temp)/temp
 !     Test whether the scaled gradient direction is acceptable.
 !
 alpha = 0.0
-if (sgnorm .ge. delta) go to 120
+if (sgnorm >= delta) go to 120
 !
 !     The scaled gradient direction is not acceptable.
 !     Finally, calculate the point along the dogleg
@@ -7253,17 +7253,17 @@ epsmch = spmpar(1)
 !
 eps = sqrt(amax1(epsfcn,epsmch))
 msum = ml + mu + 1
-if (msum .lt. n) go to 40
+if (msum < n) go to 40
 !
 !        Computation of dense approximate Jacobian.
 !
 do j = 1, n
    temp = x(j)
    h = eps*abs(temp)
-   if (h .eq. zero) h = eps
+   if (h == zero) h = eps
    x(j) = temp + h
    call fcn(n,x,wa1,iflag)
-   if (iflag .lt. 0) go to 30
+   if (iflag < 0) go to 30
    x(j) = temp
    do i = 1, n
       fjac(i,j) = (wa1(i) - fvec(i))/h
@@ -7279,18 +7279,18 @@ do k = 1, msum
    do j = k, n, msum
       wa2(j) = x(j)
       h = eps*abs(wa2(j))
-      if (h .eq. zero) h = eps
+      if (h == zero) h = eps
       x(j) = wa2(j) + h
    end do
    call fcn(n,x,wa1,iflag)
-   if (iflag .lt. 0) go to 100
+   if (iflag < 0) go to 100
    do j = k, n, msum
       x(j) = wa2(j)
       h = eps*abs(wa2(j))
-      if (h .eq. zero) h = eps
+      if (h == zero) h = eps
       do i = 1, n
          fjac(i,j) = zero
-         if (i .ge. j - mu .and. i .le. j + ml) &
+         if (i >= j - mu .and. i <= j + ml) &
             & fjac(i,j) = (wa1(i) - fvec(i))/h
       end do
    end do
@@ -7408,10 +7408,10 @@ eps = sqrt(amax1(epsfcn,epsmch))
 do j = 1, n
    temp = x(j)
    h = eps*abs(temp)
-   if (h .eq. zero) h = eps
+   if (h == zero) h = eps
    x(j) = temp + h
    call fcn(m,n,x,wa,iflag)
-   if (iflag .lt. 0) go to 30
+   if (iflag < 0) go to 30
    x(j) = temp
    do i = 1, m
       fjac(i,j) = (wa(i) - fvec(i))/h
@@ -7569,16 +7569,16 @@ dwarf = spmpar(2)
 nsing = n
 do 10 j = 1, n
    wa1(j) = qtb(j)
-   if (r(j,j) .eq. zero .and. nsing .eq. n) nsing = j - 1
-   if (nsing .lt. n) wa1(j) = zero
+   if (r(j,j) == zero .and. nsing == n) nsing = j - 1
+   if (nsing < n) wa1(j) = zero
 10 continue
-if (nsing .lt. 1) go to 50
+if (nsing < 1) go to 50
 do k = 1, nsing
    j = nsing - k + 1
    wa1(j) = wa1(j)/r(j,j)
    temp = wa1(j)
    jm1 = j - 1
-   if (jm1 .lt. 1) go to 30
+   if (jm1 < 1) go to 30
    do i = 1, jm1
       wa1(i) = wa1(i) - r(i,j)*temp
    end do
@@ -7600,14 +7600,14 @@ do j = 1, n
 end do
 dxnorm = enorm(n,wa2)
 fp = dxnorm - delta
-if (fp .le. p1*delta) go to 220
+if (fp <= p1*delta) go to 220
 !
 !     If the Jacobian is not rank deficient, the Newton
 !     step provides a lower bound, parl, for the zero of
 !     the function. Otherwise set this bound to zero.
 !
 parl = zero
-if (nsing .lt. n) go to 120
+if (nsing < n) go to 120
 do j = 1, n
    l = ipvt(j)
    wa1(j) = diag(l)*(wa2(l)/dxnorm)
@@ -7615,7 +7615,7 @@ end do
 do j = 1, n
    sum = zero
    jm1 = j - 1
-   if (jm1 .lt. 1) go to 100
+   if (jm1 < 1) go to 100
    do i = 1, jm1
       sum = sum + r(i,j)*wa1(i)
    end do
@@ -7638,14 +7638,14 @@ do j = 1, n
 end do
 gnorm = enorm(n,wa1)
 paru = gnorm/delta
-if (paru .eq. zero) paru = dwarf/amin1(delta,p1)
+if (paru == zero) paru = dwarf/amin1(delta,p1)
 !
 !     If the input par lies outside of the interval (parl,paru),
 !     set par to the closer endpoint.
 !
 par = amax1(par,parl)
 par = amin1(par,paru)
-if (par .eq. zero) par = gnorm/dxnorm
+if (par == zero) par = gnorm/dxnorm
 !
 !     Beginning of an iteration.
 !
@@ -7654,7 +7654,7 @@ iter = iter + 1
 !
 !        Evaluate the function at the current value of par.
 !
-if (par .eq. zero) par = amax1(dwarf,p001*paru)
+if (par == zero) par = amax1(dwarf,p001*paru)
 temp = sqrt(par)
 do j = 1, n
    wa1(j) = temp*diag(j)
@@ -7671,9 +7671,9 @@ fp = dxnorm - delta
 !        of par. Also test for the exceptional cases where parl
 !        is zero or the number of iterations has reached 10.
 !
-if (abs(fp) .le. p1*delta &
-   & .or. parl .eq. zero .and. fp .le. temp &
-   & .and. temp .lt. zero .or. iter .eq. 10) go to 220
+if (abs(fp) <= p1*delta &
+   & .or. parl == zero .and. fp <= temp &
+   & .and. temp < zero .or. iter == 10) go to 220
 !
 !        Compute the Newton correction.
 !
@@ -7685,7 +7685,7 @@ do j = 1, n
    wa1(j) = wa1(j)/sdiag(j)
    temp = wa1(j)
    jp1 = j + 1
-   if (n .lt. jp1) go to 200
+   if (n < jp1) go to 200
    do i = jp1, n
       wa1(i) = wa1(i) - r(i,j)*temp
    end do
@@ -7696,8 +7696,8 @@ parc = ((fp/delta)/temp)/temp
 !
 !        Depending on the sign of the function, update parl or paru.
 !
-if (fp .gt. zero) parl = amax1(parl,par)
-if (fp .lt. zero) paru = amin1(paru,par)
+if (fp > zero) parl = amax1(parl,par)
+if (fp < zero) paru = amin1(paru,par)
 !
 !        Compute an improved estimate for par.
 !
@@ -7710,7 +7710,7 @@ go to 150
 !
 !     Termination.
 !
-if (iter .eq. 0) par = zero
+if (iter == 0) par = zero
 return
 !
 !     Last card of subroutine lmpar.
@@ -7766,7 +7766,7 @@ real, parameter :: zero = 0.0e0
 !     Zero out upper triangle of q in the first min(m,n) columns.
 !
 minmn = min0(m,n)
-if (minmn .lt. 2) go to 30
+if (minmn < 2) go to 30
 do j = 2, minmn
    jm1 = j - 1
    do i = 1, jm1
@@ -7778,7 +7778,7 @@ end do
 !     Initialize remaining columns to those of the identity matrix.
 !
 np1 = n + 1
-if (m .lt. np1) go to 60
+if (m < np1) go to 60
 do j = np1, m
    do i = 1, m
       q(i,j) = zero
@@ -7796,7 +7796,7 @@ do l = 1, minmn
       q(i,k) = zero
    end do
    q(k,k) = one
-   if (wa(k) .eq. zero) go to 110
+   if (wa(k) == zero) go to 110
    do j = k, m
       sum = zero
       do i = k, m
@@ -7938,9 +7938,9 @@ do j = 1, minmn
 !
    kmax = j
    do k = j, n
-      if (rdiag(k) .gt. rdiag(kmax)) kmax = k
+      if (rdiag(k) > rdiag(kmax)) kmax = k
    end do
-   if (kmax .eq. j) go to 40
+   if (kmax == j) go to 40
    do i = 1, m
       temp = a(i,j)
       a(i,j) = a(i,kmax)
@@ -7957,8 +7957,8 @@ do j = 1, minmn
 !        j-TH column of A to a multiple of the j-TH unit vector.
 !
    ajnorm = enorm(m - j + 1,a(j,j))
-   if (ajnorm .eq. zero) go to 100
-   if (a(j,j) .lt. zero) ajnorm = -ajnorm
+   if (ajnorm == zero) go to 100
+   if (a(j,j) < zero) ajnorm = -ajnorm
    do i = j, m
       a(i,j) = a(i,j)/ajnorm
    end do
@@ -7968,7 +7968,7 @@ do j = 1, minmn
 !        and update the norms.
 !
    jp1 = j + 1
-   if (n .lt. jp1) go to 100
+   if (n < jp1) go to 100
    do k = jp1, n
       sum = zero
       do i = j, m
@@ -7978,10 +7978,10 @@ do j = 1, minmn
       do i = j, m
          a(i,k) = a(i,k) - temp*a(i,j)
       end do
-      if (.not.pivot .or. rdiag(k) .eq. zero) go to 80
+      if (.not.pivot .or. rdiag(k) == zero) go to 80
       temp = a(j,k)/rdiag(k)
       rdiag(k) = rdiag(k)*sqrt(amax1(zero,one - temp**2))
-      if (p05*(rdiag(k)/wa(k))**2 .gt. epsmch) go to 80
+      if (p05*(rdiag(k)/wa(k))**2 > epsmch) go to 80
       rdiag(k) = enorm(m - j,a(jp1,k))
       wa(k) = rdiag(k)
 80    continue
@@ -8104,7 +8104,7 @@ do j = 1, n
 !        diagonal element using P from the QR factorization.
 !
    l = ipvt(j)
-   if (diag(l) .eq. zero) go to 90
+   if (diag(l) == zero) go to 90
    do k = j, n
       sdiag(k) = zero
    end do
@@ -8120,8 +8120,8 @@ do j = 1, n
 !           Determine a Givens rotation which eliminates the
 !           appropriate element in the current row of D.
 !
-      if (sdiag(k) .eq. zero) go to 70
-      if (abs(r(k,k)) .ge. abs(sdiag(k))) go to 40
+      if (sdiag(k) == zero) go to 70
+      if (abs(r(k,k)) >= abs(sdiag(k))) go to 40
       cotan = r(k,k)/sdiag(k)
       sin = p5/sqrt(p25 + p25*cotan**2)
       cos = sin*cotan
@@ -8143,7 +8143,7 @@ do j = 1, n
 !           Accumulate the tranformation in the row of S.
 !
       kp1 = k + 1
-      if (n .lt. kp1) go to 70
+      if (n < kp1) go to 70
       do i = kp1, n
          temp = cos*r(i,k) + sin*sdiag(i)
          sdiag(i) = -sin*r(i,k) + cos*sdiag(i)
@@ -8165,15 +8165,15 @@ end do
 !
 nsing = n
 do j = 1, n
-   if (sdiag(j) .eq. zero .and. nsing .eq. n) nsing = j - 1
-   if (nsing .lt. n) wa(j) = zero
+   if (sdiag(j) == zero .and. nsing == n) nsing = j - 1
+   if (nsing < n) wa(j) = zero
 end do
-if (nsing .lt. 1) go to 150
+if (nsing < 1) go to 150
 do k = 1, nsing
    j = nsing - k + 1
    sum = zero
    jp1 = j + 1
-   if (nsing .lt. jp1) go to 130
+   if (nsing < jp1) go to 130
    do i = jp1, nsing
       sum = sum + r(i,j)*wa(i)
    end do
@@ -8255,13 +8255,13 @@ real, parameter :: one = 1.0e0
 !     Apply the first set of Givens rotations to A.
 !
 nm1 = n - 1
-if (nm1 .lt. 1) go to 50
+if (nm1 < 1) go to 50
 do nmj = 1, nm1
    j = n - nmj
-   if (abs(v(j)) .gt. one) cos = one/v(j)
-   if (abs(v(j)) .gt. one) sin = sqrt(one - cos**2)
-   if (abs(v(j)) .le. one) sin = v(j)
-   if (abs(v(j)) .le. one) cos = sqrt(one - sin**2)
+   if (abs(v(j)) > one) cos = one/v(j)
+   if (abs(v(j)) > one) sin = sqrt(one - cos**2)
+   if (abs(v(j)) <= one) sin = v(j)
+   if (abs(v(j)) <= one) cos = sqrt(one - sin**2)
    do i = 1, m
       temp = cos*a(i,j) - sin*a(i,n)
       a(i,n) = sin*a(i,j) + cos*a(i,n)
@@ -8272,10 +8272,10 @@ end do
 !     Apply the second set of Givens rotations to A.
 !
 do j = 1, nm1
-   if (abs(w(j)) .gt. one) cos = one/w(j)
-   if (abs(w(j)) .gt. one) sin = sqrt(one - cos**2)
-   if (abs(w(j)) .le. one) sin = w(j)
-   if (abs(w(j)) .le. one) cos = sqrt(one - sin**2)
+   if (abs(w(j)) > one) cos = one/w(j)
+   if (abs(w(j)) > one) sin = sqrt(one - cos**2)
+   if (abs(w(j)) <= one) sin = w(j)
+   if (abs(w(j)) <= one) cos = sqrt(one - sin**2)
    do i = 1, m
       temp = cos*a(i,j) + sin*a(i,n)
       a(i,n) = -sin*a(i,j) + cos*a(i,n)
@@ -8398,22 +8398,22 @@ end do
 !     in such a way that a spike is introduced into w.
 !
 nm1 = n - 1
-if (nm1 .lt. 1) go to 70
+if (nm1 < 1) go to 70
 do nmj = 1, nm1
    j = n - nmj
    jj = jj - (m - j + 1)
    w(j) = zero
-   if (v(j) .eq. zero) go to 50
+   if (v(j) == zero) go to 50
 !
 !        Determine a Givens rotation which eliminates the
 !        j-TH element of v.
 !
-   if (abs(v(n)) .ge. abs(v(j))) go to 20
+   if (abs(v(n)) >= abs(v(j))) go to 20
    cotan = v(n)/v(j)
    sin = p5/sqrt(p25 + p25*cotan**2)
    cos = sin*cotan
    tau = one
-   if (abs(cos)*giant .gt. one) tau = one/cos
+   if (abs(cos)*giant > one) tau = one/cos
    go to 30
 20 continue
    tan = v(j)/v(n)
@@ -8450,19 +8450,19 @@ end do
 !     Eliminate the spike.
 !
 sing = .false.
-if (nm1 .lt. 1) go to 140
+if (nm1 < 1) go to 140
 do j = 1, nm1
-   if (w(j) .eq. zero) go to 120
+   if (w(j) == zero) go to 120
 !
 !        Determine a Givens rotation which eliminates the
 !        j-TH element of the spike.
 !
-   if (abs(s(jj)) .ge. abs(w(j))) go to 90
+   if (abs(s(jj)) >= abs(w(j))) go to 90
    cotan = s(jj)/w(j)
    sin = p5/sqrt(p25 + p25*cotan**2)
    cos = sin*cotan
    tau = one
-   if (abs(cos)*giant .gt. one) tau = one/cos
+   if (abs(cos)*giant > one) tau = one/cos
    go to 100
 90 continue
    tan = w(j)/s(jj)
@@ -8489,7 +8489,7 @@ do j = 1, nm1
 !
 !        Test for zero diagonal elements in the output s.
 !
-   if (s(jj) .eq. zero) sing = .true.
+   if (s(jj) == zero) sing = .true.
    jj = jj + (m - j + 1)
 end do
 140 continue
@@ -8501,7 +8501,7 @@ do i = n, m
    s(l) = w(i)
    l = l + 1
 end do
-if (s(jj) .eq. zero) sing = .true.
+if (s(jj) == zero) sing = .true.
 return
 !
 !     Last card of subroutine r1updt.
@@ -8553,7 +8553,7 @@ eps0 = spmpar(1)
 !------------------------
 rerrmn = 10.0*eps0
 rerrmx = 1.e-4
-if (eps0 .lt. 1.e-13) rerrmx = 1.e-5
+if (eps0 < 1.e-13) rerrmx = 1.e-5
 !
 ip = m + n0 + 1
 call smplx1(a,b0,c,ka,m,n0,ind,ibasis,x,z,iter,mxiter, &
@@ -8677,14 +8677,14 @@ z = 0.0
 !                Check for input errors
 !
 ms = numle + numge
-if (m .lt. 2 .or. n0 .lt. 2 .or. ms .gt. m .or. ka .lt. m) &
+if (m < 2 .or. n0 < 2 .or. ms > m .or. ka < m) &
    & go to 12
 do 10 i = 1,m
-   if (b0(i) .lt. 0.0) go to 12
+   if (b0(i) < 0.0) go to 12
 10 xb(i) = 0.0
 rtol = xmax
 do i = 1,n0
-   if (c(i) .ne. 0.0) rtol = amin1(abs(c(i)),rtol)
+   if (c(i) /= 0.0) rtol = amin1(abs(c(i)),rtol)
 end do
 rtol = rerrmx*rtol
 go to 20
@@ -8697,13 +8697,13 @@ return
 !
 20 ns = n0 + numle
 n = ns + numge
-if (ind .eq. 0) go to 30
+if (ind == 0) go to 30
 num = n
 do i = 1,m
-   if (ibasis(i) .gt. n) num = num + 1
+   if (ibasis(i) > n) num = num + 1
 end do
 go to 32
-22 if (ind .eq. 0) go to 590
+22 if (ind == 0) go to 590
 ind = 0
 !
 30 num = n0 + m
@@ -8715,7 +8715,7 @@ do 33 i = 1,n
 do 34 i = 1,m
    ki = ibasis(i)
 34 basis(ki) = 1
-if (ind .eq. 1) go to 100
+if (ind == 1) go to 100
 !
 !          Calculation of xb and bi when ind = 0
 !
@@ -8726,7 +8726,7 @@ do j = 1,m
 40    bi(i,j) = 0.0
    bi(j,j) = 1.0
 end do
-if (numge .eq. 0) go to 630
+if (numge == 0) go to 630
 jmin = numle + 1
 do j = jmin,ms
    xb(j) = -xb(j)
@@ -8739,14 +8739,14 @@ go to 601
 100 ibeg = 1
 iend = m
 do 102 i = 1,m
-   if (ibasis(i) .le. n0) go to 101
+   if (ibasis(i) <= n0) go to 101
    index(ibeg) = ibasis(i)
    ibeg = ibeg + 1
    go to 102
 101 index(iend) = ibasis(i)
    iend = iend - 1
 102 continue
-if (iend .eq. m) go to 22
+if (iend == m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
@@ -8754,9 +8754,9 @@ do 103 i = 1,m
 !
 do 132 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 110
-   if (kj .le. ns) go to 120
-   if (kj .le. n) go to 130
+   if (kj <= n0) go to 110
+   if (kj <= ns) go to 120
+   if (kj <= n) go to 130
    go to 120
 !
 110 do 111 i = 1,m
@@ -8777,14 +8777,14 @@ do 132 j = 1,m
 !
 icount = 0
 call crout1(bi, m, m, iend, index, y, jcol, ierr)
-if (ierr .ne. 0) go to 580
+if (ierr /= 0) go to 580
 !
 !         Check the accuracy of bi and reset rerr
 !
 bnorm = 0.0
 do 142 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 140
+   if (kj <= n0) go to 140
    sum = 1.0
    go to 142
 140 sum = 0.0
@@ -8800,7 +8800,7 @@ do j = 1,m
    binorm = amax1(binorm,sum)
 end do
 rerr = amax1(rerrmn,eps0*bnorm*binorm)
-if (rerr .gt. 1.e-2) go to 580
+if (rerr > 1.e-2) go to 580
 bflag = 0
 !
 !                 Recalculation of xb
@@ -8810,7 +8810,7 @@ bflag = 0
    dsumn = 0.d0
    do 182 l = 1,m
       dt = bi(i,l)*b0(l)
-      if (dt .gt. 0.d0) go to 181
+      if (dt > 0.d0) go to 181
       dsumn = dsumn + dt
       go to 182
 181   dsump = dsump + dt
@@ -8819,7 +8819,7 @@ bflag = 0
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(xb(i)) .lt. tol) xb(i) = 0.0
+   if (abs(xb(i)) < tol) xb(i) = 0.0
 end do
 go to 601
 !
@@ -8828,23 +8828,23 @@ go to 601
 !
 200 jp = 0
 rmin = 0.0
-if (nstep .eq. 3) rmin = -rtol
+if (nstep == 3) rmin = -rtol
 do 201 j = 1,n0
-   if (basis(j) .ne. 0) go to 201
-   if (r(j) .ge. rmin) go to 201
+   if (basis(j) /= 0) go to 201
+   if (r(j) >= rmin) go to 201
    jp = j
    rmin = r(j)
 201 continue
-if (n0 .eq. n) go to 203
+if (n0 == n) go to 203
 jmin = n0 + 1
 rmin = rmin*1.1
 do 202 j = jmin,n
-   if (basis(j) .ne. 0) go to 202
-   if (r(j) .ge. rmin) go to 202
+   if (basis(j) /= 0) go to 202
+   if (r(j) >= rmin) go to 202
    jp = j
    rmin = r(j)
 202 continue
-203 if (jp .ne. 0) go to 300
+203 if (jp /= 0) go to 300
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
@@ -8854,28 +8854,28 @@ if (nstep - 2) 800,230,250
 221 r(j) = 0.0
 do i = 1,m
    ki = ibasis(i)
-   if (ki .le. n) r(ki) = xb(i)
+   if (ki <= n) r(ki) = xb(i)
 end do
 return
 !
 !             Completion of the NSTEP = 2 Case
 !
 230 do 231 i = 1,m
-   if (ibasis(i) .le. n) go to 231
-   if (xb(i) .gt. 0.0) go to 800
+   if (ibasis(i) <= n) go to 231
+   if (xb(i) > 0.0) go to 800
 231 continue
 go to 680
 !
-240 if (icount .ge. 5) go to 100
+240 if (icount >= 5) go to 100
 ind = 1
 go to 220
 !
 !             Completion of the NSTEP = 3 Case
 !
-250 if (rerr .gt. 1.e-2) go to 251
+250 if (rerr > 1.e-2) go to 251
 ind = 0
 go to 800
-251 if (icount .ge. 5) go to 100
+251 if (icount >= 5) go to 100
 ind = 6
 go to 800
 !
@@ -8883,23 +8883,23 @@ go to 800
 !     begin the next iteration. Compute the JP-TH column
 !               of bi*a and store it in y.
 !
-300 if (iter .lt. mxiter) go to 301
+300 if (iter < mxiter) go to 301
 ind = 2
 go to 220
 301 iter = iter + 1
 icount = icount + 1
-if (jp .gt. ns) go to 330
-if (jp .gt. n0) go to 320
+if (jp > ns) go to 330
+if (jp > n0) go to 320
 !
 nrow = 0
 amax = 0.0
 do 305 i = 1,m
-   if (a(i,jp) .eq. 0.0) go to 305
+   if (a(i,jp) == 0.0) go to 305
    nrow = nrow + 1
    index(nrow) = i
    amax = amax1(abs(a(i,jp)),amax)
 305 continue
-if (nrow .ne. 0) go to 310
+if (nrow /= 0) go to 310
 ind = 4
 go to 220
 !
@@ -8911,13 +8911,13 @@ do 313 i = 1,m
       dsum = dsum + dble(bi(i,l)*a(l,jp))
    end do
    y(i) = dsum
-   if (abs(y(i)) .ge. 5.e-3) go to 313
+   if (abs(y(i)) >= 5.e-3) go to 313
    bmax = 0.0
    do l = 1,m
       bmax = amax1(abs(bi(i,l)),bmax)
    end do
    tol = rerr1*bmax
-   if (abs(y(i)) .lt. tol) y(i) = 0.0
+   if (abs(y(i)) < tol) y(i) = 0.0
 313 continue
 go to 350
 !
@@ -8933,7 +8933,7 @@ do i = 1,m
 end do
 !
 350 do i = 1,m
-   if (y(i) .ne. 0.0) go to 360
+   if (y(i) /= 0.0) go to 360
 end do
 r(jp) = 0.0
 iter = iter - 1
@@ -8950,7 +8950,7 @@ ip = 0
 eps = 0.0
 epsi = xmax
 do 403 i = 1,m
-   if (xb(i) .lt. 0.0 .or. y(i) .le. 0.0) go to 403
+   if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    if (ratio - epsi) 401,402,403
 401 epsi = ratio
@@ -8960,24 +8960,24 @@ do 403 i = 1,m
 402 npos = npos + 1
    index(npos) = i
 403 continue
-if (npos .eq. 0) go to 420
-if (epsi .eq. 0.0) go to 460
+if (npos == 0) go to 420
+if (epsi == 0.0) go to 460
 !
 do 410 i = 1,m
-   if (xb(i) .ge. 0.0 .or. y(i) .ge. 0.0) go to 410
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 410
    ratio = xb(i)/y(i)
-   if (ratio .gt. epsi) go to 410
-   if (ratio .lt. eps) go to 410
+   if (ratio > epsi) go to 410
+   if (ratio < eps) go to 410
    eps = ratio
    ip = i
 410 continue
-if (ip .ne. 0) go to 500
+if (ip /= 0) go to 500
 go to 460
 !
 420 do 421 i = 1,m
-   if (xb(i) .ge. 0.0 .or. y(i) .ge. 0.0) go to 421
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 421
    ratio = xb(i)/y(i)
-   if (ratio .lt. eps) go to 421
+   if (ratio < eps) go to 421
    eps = ratio
    ip = i
 421 continue
@@ -8989,7 +8989,7 @@ go to 500
 430 npos = 0
 epsi = xmax
 do 433 i = 1,m
-   if (y(i) .le. 0.0) go to 433
+   if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    if (ratio - epsi) 431,432,433
 431 epsi = ratio
@@ -9008,7 +9008,7 @@ go to 450
 epsi = xmax
 do 445 i = 1,m
    if (y(i)) 441,445,442
-441 if (ibasis(i) .le. n) go to 445
+441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
@@ -9021,61 +9021,61 @@ do 445 i = 1,m
    index(npos) = i
 445 continue
 !
-450 if (npos .ne. 0) go to 460
-if (icount .ge. 5) go to 100
+450 if (npos /= 0) go to 460
+if (icount >= 5) go to 100
 ind = 4
 go to 220
 !
 !              Tie breaking procedure
 !
 460 ip = index(1)
-if (npos .eq. 1) go to 500
+if (npos == 1) go to 500
 ip = 0
 bmin = xmax
 cmin = xmax
 do 464 ii = 1,npos
    i = index(ii)
    l = ibasis(i)
-   if (l .gt. n0) go to 461
-   if (c(l) .le. 0.0) cmin = amin1(0.0,cmin)
-   if (c(l) .gt. cmin) go to 464
+   if (l > n0) go to 461
+   if (c(l) <= 0.0) cmin = amin1(0.0,cmin)
+   if (c(l) > cmin) go to 464
    imin = i
    cmin = c(l)
    go to 464
-461 if (l .le. n) go to 462
+461 if (l <= n) go to 462
    ip = i
    go to 500
 462 lrow = l - n0
    s = b0(lrow)
-   if (lrow .gt. numle) go to 463
-   if (s .gt. bmin) go to 464
+   if (lrow > numle) go to 463
+   if (s > bmin) go to 464
    ip = i
    bmin = s
    go to 464
 463 s = -s
    bmin = amin1(0.0,bmin)
-   if (s .gt. bmin) go to 464
+   if (s > bmin) go to 464
    ip = i
    bmin = s
 464 continue
-if (cmin .le. 0.0 .or. ip .eq. 0) ip = imin
+if (cmin <= 0.0 .or. ip == 0) ip = imin
 !
 !               Transformation of xb
 !
-500 if (xb(ip) .eq. 0.0) go to 510
+500 if (xb(ip) == 0.0) go to 510
 const = xb(ip)/y(ip)
 do 501 i = 1,m
    s = xb(i)
    xb(i) = xb(i) - const*y(i)
-   if (xb(i) .ge. 0.0) go to 501
-   if (s .ge. 0.0 .or. xb(i) .ge. rerrmx*s) xb(i) = 0.0
+   if (xb(i) >= 0.0) go to 501
+   if (s >= 0.0 .or. xb(i) >= rerrmx*s) xb(i) = 0.0
 501 continue
 xb(ip) = const
 !
 !               Transformation of bi
 !
 510 do 512 j = 1,m
-   if (bi(ip,j) .eq. 0.0) go to 512
+   if (bi(ip,j) == 0.0) go to 512
    const = bi(ip,j)/y(ip)
    do 511 i = 1,m
 511   bi(i,j) = bi(i,j) - const*y(i)
@@ -9088,41 +9088,41 @@ iout = ibasis(ip)
 ibasis(ip) = jp
 basis(iout) = 0
 basis(jp) = 1
-if (iout .gt. n) num = num - 1
+if (iout > n) num = num - 1
 !
 !        Check the accuracy of bi and reset rerr
 !
-if (rerr .gt. 1.e-2) go to 530
+if (rerr > 1.e-2) go to 530
 k = 0
 do 521 j = 1,m
    kj = ibasis(j)
-   if (kj .gt. n0) go to 521
+   if (kj > n0) go to 521
    sum = 0.0
    do l = 1,m
-      if (a(l,kj) .ne. 0.0) sum = sum + bi(j,l)*a(l,kj)
+      if (a(l,kj) /= 0.0) sum = sum + bi(j,l)*a(l,kj)
    end do
    rerr = amax1(rerr,abs(1.0 - sum))
    k = k + 1
-   if (k .ge. mcheck) go to 522
+   if (k >= mcheck) go to 522
 521 continue
-522 if (rerr .le. 1.e-2) go to 600
+522 if (rerr <= 1.e-2) go to 600
 !
 !        The accuracy criteria are not satisfied
 !
-530 if (icount .lt. 5) go to 600
+530 if (icount < 5) go to 600
 bflag = 1
 go to 100
 !
-580 if (iter .eq. 0) go to 12
-if (bflag .eq. 0) go to 590
+580 if (iter == 0) go to 12
+if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if (jp .eq. ibasis(ip)) go to 582
+   if (jp == ibasis(ip)) go to 582
 end do
 582 ibasis(ip) = iout
 basis(jp) = 0
 basis(iout) = 1
-if (iout .gt. n) num = num + 1
+if (iout > n) num = num + 1
 go to 100
 !
 590 ind = 3
@@ -9132,14 +9132,14 @@ go to 220
 !
 600 if (nstep - 2) 601,630,700
 601 do j = 1,m
-   if (xb(j) .lt. 0.0) go to 610
+   if (xb(j) < 0.0) go to 610
 end do
 go to 630
 !
 610 nstep = 1
 m0 = 0
 do 611 l = 1,m
-   if (xb(l) .ge. 0.0) go to 611
+   if (xb(l) >= 0.0) go to 611
    m0 = m0 + 1
    index(m0) = l
 611 continue
@@ -9158,17 +9158,17 @@ do j = 1,m
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(y(j)) .lt. tol) y(j) = 0.0
+   if (abs(y(j)) < tol) y(j) = 0.0
 end do
 go to 650
 !
 !       Set up the r array for the NSTEP = 2 Case
 !
-630 if (n .eq. num) go to 680
+630 if (n == num) go to 680
 nstep = 2
 m0 = 0
 do 631 l = 1,m
-   if (ibasis(l) .le. n) go to 631
+   if (ibasis(l) <= n) go to 631
    m0 = m0 + 1
    index(m0) = l
 631 continue
@@ -9187,31 +9187,31 @@ do j = 1,m
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(y(j)) .lt. tol) y(j) = 0.0
+   if (abs(y(j)) < tol) y(j) = 0.0
 end do
 !
 650 do 652 j = 1,n0
    sum = 0.0
-   if (basis(j) .ne. 0) go to 652
+   if (basis(j) /= 0) go to 652
    do l = 1,m
-      if (a(l,j) .ne. 0.0) sum = sum + y(l)*a(l,j)
+      if (a(l,j) /= 0.0) sum = sum + y(l)*a(l,j)
    end do
 652 r(j) = sum
 !
-660 if (n0 .eq. ns) go to 670
+660 if (n0 == ns) go to 670
 jmin = n0 + 1
 do 661 j = jmin,ns
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 661
+   if (basis(j) /= 0) go to 661
    jj = j - n0
    r(j) = y(jj)
 661 continue
 !
-670 if (ns .eq. n) go to 200
+670 if (ns == n) go to 200
 jmin = ns + 1
 do 671 j = jmin,n
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 671
+   if (basis(j) /= 0) go to 671
    jj = j - n0
    r(j) = -y(jj)
 671 continue
@@ -9224,21 +9224,21 @@ do 682 j = 1,m
    dsum = 0.d0
    do l = 1,m
       il = ibasis(l)
-      if (il .le. n0) dsum = dsum + dble(c(il)*bi(l,j))
+      if (il <= n0) dsum = dsum + dble(c(il)*bi(l,j))
    end do
 682 y(j) = dsum
 !
 do 691 j = 1,n0
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 691
+   if (basis(j) /= 0) go to 691
    dsum = -c(j)
    do l = 1,m
-      if (a(l,j) .ne. 0.0) dsum = dsum + dble(y(l)*a(l,j))
+      if (a(l,j) /= 0.0) dsum = dsum + dble(y(l)*a(l,j))
    end do
    r(j) = dsum
-   if (r(j) .ge. 0.0) go to 691
+   if (r(j) >= 0.0) go to 691
    tol = rerrmx*abs(c(j))
-   if (abs(r(j)) .lt. tol) r(j) = 0.0
+   if (abs(r(j)) < tol) r(j) = 0.0
 691 continue
 go to 660
 !
@@ -9246,33 +9246,33 @@ go to 660
 !
 700 const = r(jp)
 do 703 j = 1,n0
-   if (basis(j) .eq. 0) go to 701
+   if (basis(j) == 0) go to 701
    r(j) = 0.0
    go to 703
 701 sum = 0.0
    do l = 1,m
-      if (a(l,j) .ne. 0.0) sum = sum + bi(ip,l)*a(l,j)
+      if (a(l,j) /= 0.0) sum = sum + bi(ip,l)*a(l,j)
    end do
    r(j) = r(j) - const*sum
-   if (r(j) .ge. 0.0) go to 703
+   if (r(j) >= 0.0) go to 703
    tol = rerrmx*abs(c(j))
-   if (abs(r(j)) .lt. tol) r(j) = 0.0
+   if (abs(r(j)) < tol) r(j) = 0.0
 703 continue
 !
-710 if (n0 .eq. ns) go to 720
+710 if (n0 == ns) go to 720
 jmin = n0 + 1
 do 712 j = jmin,ns
-   if (basis(j) .eq. 0) go to 711
+   if (basis(j) == 0) go to 711
    r(j) = 0.0
    go to 712
 711 jj = j - n0
    r(j) = r(j) - const*bi(ip,jj)
 712 continue
 !
-720 if (ns .eq. n) go to 200
+720 if (ns == n) go to 200
 jmin = ns + 1
 do 722 j = jmin,n
-   if (basis(j) .eq. 0) go to 721
+   if (basis(j) == 0) go to 721
    r(j) = 0.0
    go to 722
 721 jj = j - n0
@@ -9289,9 +9289,9 @@ end do
 m0 = 0
 do 831 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 810
-   if (kj .le. ns) go to 820
-   if (kj .le. n) go to 830
+   if (kj <= n0) go to 810
+   if (kj <= ns) go to 820
+   if (kj <= n) go to 830
    go to 820
 !
 810 m0 = m0 + 1
@@ -9306,7 +9306,7 @@ do 831 j = 1,m
    y(l) = -xb(j)
 831 continue
 !
-if (m0 .ne. 0) go to 841
+if (m0 /= 0) go to 841
 do 840 i = 1,m
 840 r(i) = b0(i) - y(i)
 go to 850
@@ -9333,26 +9333,26 @@ do 856 i = 1,m
    dsumn = 0.d0
 853 do 855 l = 1,m
       dt = bi(i,l)*r(l)
-      if (dt .gt. 0.d0) go to 854
+      if (dt > 0.d0) go to 854
       dsumn = dsumn + dt
       go to 855
 854   dsump = dsump + dt
 855   continue
    w = dsump + dsumn
-   if (w .eq. 0.0) go to 856
-   if (sgn .ne. sign(1.0,w)) go to 856
+   if (w == 0.0) go to 856
+   if (sgn /= sign(1.0,w)) go to 856
    s = dsump
    t = dsumn
    tol = rerr1*amax1(s,-t)
-   if (abs(w) .gt. tol) y(i) = w
+   if (abs(w) > tol) y(i) = w
 856 continue
 if (nstep - 2) 860,870,880
 !
 !         Check the refinement (NSTEP = 1)
 !
 860 do 861 i = 1,m
-   if (y(i) .ge. 0.0) go to 861
-   if (y(i) .lt. -rerrmx) go to 240
+   if (y(i) >= 0.0) go to 861
+   if (y(i) < -rerrmx) go to 240
    y(i) = 0.0
 861 xb(i) = y(i)
 go to 630
@@ -9360,8 +9360,8 @@ go to 630
 !         Check the refinement (NSTEP = 2)
 !
 870 do 871 i = 1,m
-   if (ibasis(i) .le. n) go to 871
-   if (y(i) .gt. rerrmx) go to 240
+   if (ibasis(i) <= n) go to 871
+   if (y(i) > rerrmx) go to 240
    y(i) = 0.0
 871 xb(i) = y(i)
 go to 680
@@ -9371,7 +9371,7 @@ go to 680
 880 dsum = 0.d0
 do 881 i = 1,m
    ki = ibasis(i)
-   if (ki .gt. n0) go to 881
+   if (ki > n0) go to 881
    dsum = dsum + dble(c(ki)*y(i))
 881 xb(i) = y(i)
 z = dsum
@@ -9424,7 +9424,7 @@ eps0 = spmpar(1)
 !------------------------
 rerrmn = 10.0*eps0
 rerrmx = 1.e-4
-if (eps0 .lt. 1.e-13) rerrmx = 1.e-5
+if (eps0 < 1.e-13) rerrmx = 1.e-5
 !
 ip = m + n0 + 1
 call ssplx1(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
@@ -9551,13 +9551,13 @@ z = 0.0
 !                Check for input errors
 !
 ms = numle + numge
-if (m .lt. 2 .or. n0 .lt. 2 .or. ms .gt. m) go to 12
+if (m < 2 .or. n0 < 2 .or. ms > m) go to 12
 do 10 i = 1,m
-   if (b0(i) .lt. 0.0) go to 12
+   if (b0(i) < 0.0) go to 12
 10 xb(i) = 0.0
 rtol = xmax
 do i = 1,n0
-   if (c(i) .ne. 0.0) rtol = amin1(abs(c(i)),rtol)
+   if (c(i) /= 0.0) rtol = amin1(abs(c(i)),rtol)
 end do
 rtol = rerrmx*rtol
 go to 20
@@ -9570,13 +9570,13 @@ return
 !
 20 ns = n0 + numle
 n = ns + numge
-if (ind .eq. 0) go to 30
+if (ind == 0) go to 30
 num = n
 do i = 1,m
-   if (ibasis(i) .gt. n) num = num + 1
+   if (ibasis(i) > n) num = num + 1
 end do
 go to 32
-22 if (ind .eq. 0) go to 590
+22 if (ind == 0) go to 590
 ind = 0
 !
 30 num = n0 + m
@@ -9588,7 +9588,7 @@ do 33 i = 1,n
 do 34 i = 1,m
    ki = ibasis(i)
 34 basis(ki) = 1
-if (ind .eq. 1) go to 100
+if (ind == 1) go to 100
 !
 !          Calculation of xb and bi when ind = 0
 !
@@ -9599,7 +9599,7 @@ do j = 1,m
 40    bi(i,j) = 0.0
    bi(j,j) = 1.0
 end do
-if (numge .eq. 0) go to 630
+if (numge == 0) go to 630
 jmin = numle + 1
 do j = jmin,ms
    xb(j) = -xb(j)
@@ -9612,14 +9612,14 @@ go to 601
 100 ibeg = 1
 iend = m
 do 102 i = 1,m
-   if (ibasis(i) .le. n0) go to 101
+   if (ibasis(i) <= n0) go to 101
    index(ibeg) = ibasis(i)
    ibeg = ibeg + 1
    go to 102
 101 index(iend) = ibasis(i)
    iend = iend - 1
 102 continue
-if (iend .eq. m) go to 22
+if (iend == m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
@@ -9627,16 +9627,16 @@ do 103 i = 1,m
 !
 do 132 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 110
-   if (kj .le. ns) go to 120
-   if (kj .le. n) go to 130
+   if (kj <= n0) go to 110
+   if (kj <= ns) go to 120
+   if (kj <= n) go to 130
    go to 120
 !
 110 do 111 i = 1,m
 111   bi(i,j) = 0.0
    lmin = ita(kj)
    lmax = ita(kj + 1) - 1
-   if (lmin .gt. lmax) go to 132
+   if (lmin > lmax) go to 132
    do 112 ll = lmin,lmax
       l = jta(ll)
 112   bi(l,j) = ta(ll)
@@ -9656,14 +9656,14 @@ do 132 j = 1,m
 !
 icount = 0
 call crout1(bi, m, m, iend, index, y, jcol, ierr)
-if (ierr .ne. 0) go to 580
+if (ierr /= 0) go to 580
 !
 !         Check the accuracy of bi and reset rerr
 !
 bnorm = 0.0
 do 142 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 140
+   if (kj <= n0) go to 140
    sum = 1.0
    go to 142
 140 sum = 0.0
@@ -9681,7 +9681,7 @@ do j = 1,m
    binorm = amax1(binorm,sum)
 end do
 rerr = amax1(rerrmn,eps0*bnorm*binorm)
-if (rerr .gt. 1.e-2) go to 580
+if (rerr > 1.e-2) go to 580
 bflag = 0
 !
 !                 Recalculation of xb
@@ -9691,7 +9691,7 @@ bflag = 0
    dsumn = 0.d0
    do 182 l = 1,m
       dt = bi(i,l)*b0(l)
-      if (dt .gt. 0.d0) go to 181
+      if (dt > 0.d0) go to 181
       dsumn = dsumn + dt
       go to 182
 181   dsump = dsump + dt
@@ -9700,7 +9700,7 @@ bflag = 0
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(xb(i)) .lt. tol) xb(i) = 0.0
+   if (abs(xb(i)) < tol) xb(i) = 0.0
 end do
 go to 601
 !
@@ -9709,23 +9709,23 @@ go to 601
 !
 200 jp = 0
 rmin = 0.0
-if (nstep .eq. 3) rmin = -rtol
+if (nstep == 3) rmin = -rtol
 do 201 j = 1,n0
-   if (basis(j) .ne. 0) go to 201
-   if (r(j) .ge. rmin) go to 201
+   if (basis(j) /= 0) go to 201
+   if (r(j) >= rmin) go to 201
    jp = j
    rmin = r(j)
 201 continue
-if (n0 .eq. n) go to 203
+if (n0 == n) go to 203
 jmin = n0 + 1
 rmin = rmin*1.1
 do 202 j = jmin,n
-   if (basis(j) .ne. 0) go to 202
-   if (r(j) .ge. rmin) go to 202
+   if (basis(j) /= 0) go to 202
+   if (r(j) >= rmin) go to 202
    jp = j
    rmin = r(j)
 202 continue
-203 if (jp .ne. 0) go to 300
+203 if (jp /= 0) go to 300
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
@@ -9735,28 +9735,28 @@ if (nstep - 2) 800,230,250
 221 r(j) = 0.0
 do i = 1,m
    ki = ibasis(i)
-   if (ki .le. n) r(ki) = xb(i)
+   if (ki <= n) r(ki) = xb(i)
 end do
 return
 !
 !             Completion of the NSTEP = 2 Case
 !
 230 do 231 i = 1,m
-   if (ibasis(i) .le. n) go to 231
-   if (xb(i) .gt. 0.0) go to 800
+   if (ibasis(i) <= n) go to 231
+   if (xb(i) > 0.0) go to 800
 231 continue
 go to 680
 !
-240 if (icount .ge. 5) go to 100
+240 if (icount >= 5) go to 100
 ind = 1
 go to 220
 !
 !             Completion of the NSTEP = 3 Case
 !
-250 if (rerr .gt. 1.e-2) go to 251
+250 if (rerr > 1.e-2) go to 251
 ind = 0
 go to 800
-251 if (icount .ge. 5) go to 100
+251 if (icount >= 5) go to 100
 ind = 6
 go to 800
 !
@@ -9764,17 +9764,17 @@ go to 800
 !     begin the next iteration. Compute the JP-TH column
 !               of bi*A and store it in y.
 !
-300 if (iter .lt. mxiter) go to 301
+300 if (iter < mxiter) go to 301
 ind = 2
 go to 220
 301 iter = iter + 1
 icount = icount + 1
-if (jp .gt. ns) go to 330
-if (jp .gt. n0) go to 320
+if (jp > ns) go to 330
+if (jp > n0) go to 320
 !
 lmin = ita(jp)
 lmax = ita(jp + 1) - 1
-if (lmin .le. lmax) go to 305
+if (lmin <= lmax) go to 305
 ind = 4
 go to 220
 305 amax = 0.0
@@ -9790,13 +9790,13 @@ do 313 i = 1,m
       dsum = dsum + dble(bi(i,l)*ta(ll))
    end do
    y(i) = dsum
-   if (abs(y(i)) .ge. 5.e-3) go to 313
+   if (abs(y(i)) >= 5.e-3) go to 313
    bmax = 0.0
    do l = 1,m
       bmax = amax1(abs(bi(i,l)),bmax)
    end do
    tol = rerr1*bmax
-   if (abs(y(i)) .lt. tol) y(i) = 0.0
+   if (abs(y(i)) < tol) y(i) = 0.0
 313 continue
 go to 350
 !
@@ -9812,7 +9812,7 @@ do i = 1,m
 end do
 !
 350 do i = 1,m
-   if (y(i) .ne. 0.0) go to 360
+   if (y(i) /= 0.0) go to 360
 end do
 r(jp) = 0.0
 iter = iter - 1
@@ -9829,7 +9829,7 @@ ip = 0
 eps = 0.0
 epsi = xmax
 do 403 i = 1,m
-   if (xb(i) .lt. 0.0 .or. y(i) .le. 0.0) go to 403
+   if (xb(i) < 0.0 .or. y(i) <= 0.0) go to 403
    ratio = xb(i)/y(i)
    if (ratio - epsi) 401,402,403
 401 epsi = ratio
@@ -9839,24 +9839,24 @@ do 403 i = 1,m
 402 npos = npos + 1
    index(npos) = i
 403 continue
-if (npos .eq. 0) go to 420
-if (epsi .eq. 0.0) go to 460
+if (npos == 0) go to 420
+if (epsi == 0.0) go to 460
 !
 do 410 i = 1,m
-   if (xb(i) .ge. 0.0 .or. y(i) .ge. 0.0) go to 410
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 410
    ratio = xb(i)/y(i)
-   if (ratio .gt. epsi) go to 410
-   if (ratio .lt. eps) go to 410
+   if (ratio > epsi) go to 410
+   if (ratio < eps) go to 410
    eps = ratio
    ip = i
 410 continue
-if (ip .ne. 0) go to 500
+if (ip /= 0) go to 500
 go to 460
 !
 420 do 421 i = 1,m
-   if (xb(i) .ge. 0.0 .or. y(i) .ge. 0.0) go to 421
+   if (xb(i) >= 0.0 .or. y(i) >= 0.0) go to 421
    ratio = xb(i)/y(i)
-   if (ratio .lt. eps) go to 421
+   if (ratio < eps) go to 421
    eps = ratio
    ip = i
 421 continue
@@ -9868,7 +9868,7 @@ go to 500
 430 npos = 0
 epsi = xmax
 do 433 i = 1,m
-   if (y(i) .le. 0.0) go to 433
+   if (y(i) <= 0.0) go to 433
    ratio = xb(i)/y(i)
    if (ratio - epsi) 431,432,433
 431 epsi = ratio
@@ -9887,7 +9887,7 @@ go to 450
 epsi = xmax
 do 445 i = 1,m
    if (y(i)) 441,445,442
-441 if (ibasis(i) .le. n) go to 445
+441 if (ibasis(i) <= n) go to 445
    ip = i
    go to 500
 442 ratio = xb(i)/y(i)
@@ -9900,61 +9900,61 @@ do 445 i = 1,m
    index(npos) = i
 445 continue
 !
-450 if (npos .ne. 0) go to 460
-if (icount .ge. 5) go to 100
+450 if (npos /= 0) go to 460
+if (icount >= 5) go to 100
 ind = 4
 go to 220
 !
 !              Tie breaking procedure
 !
 460 ip = index(1)
-if (npos .eq. 1) go to 500
+if (npos == 1) go to 500
 ip = 0
 bmin = xmax
 cmin = xmax
 do 464 ii = 1,npos
    i = index(ii)
    l = ibasis(i)
-   if (l .gt. n0) go to 461
-   if (c(l) .le. 0.0) cmin = amin1(0.0,cmin)
-   if (c(l) .gt. cmin) go to 464
+   if (l > n0) go to 461
+   if (c(l) <= 0.0) cmin = amin1(0.0,cmin)
+   if (c(l) > cmin) go to 464
    imin = i
    cmin = c(l)
    go to 464
-461 if (l .le. n) go to 462
+461 if (l <= n) go to 462
    ip = i
    go to 500
 462 lrow = l - n0
    s = b0(lrow)
-   if (lrow .gt. numle) go to 463
-   if (s .gt. bmin) go to 464
+   if (lrow > numle) go to 463
+   if (s > bmin) go to 464
    ip = i
    bmin = s
    go to 464
 463 s = -s
    bmin = amin1(0.0,bmin)
-   if (s .gt. bmin) go to 464
+   if (s > bmin) go to 464
    ip = i
    bmin = s
 464 continue
-if (cmin .le. 0.0 .or. ip .eq. 0) ip = imin
+if (cmin <= 0.0 .or. ip == 0) ip = imin
 !
 !               Transformation of xb
 !
-500 if (xb(ip) .eq. 0.0) go to 510
+500 if (xb(ip) == 0.0) go to 510
 const = xb(ip)/y(ip)
 do 501 i = 1,m
    s = xb(i)
    xb(i) = xb(i) - const*y(i)
-   if (xb(i) .ge. 0.0) go to 501
-   if (s .ge. 0.0 .or. xb(i) .ge. rerrmx*s) xb(i) = 0.0
+   if (xb(i) >= 0.0) go to 501
+   if (s >= 0.0 .or. xb(i) >= rerrmx*s) xb(i) = 0.0
 501 continue
 xb(ip) = const
 !
 !               Transformation of bi
 !
 510 do 512 j = 1,m
-   if (bi(ip,j) .eq. 0.0) go to 512
+   if (bi(ip,j) == 0.0) go to 512
    const = bi(ip,j)/y(ip)
    do 511 i = 1,m
 511   bi(i,j) = bi(i,j) - const*y(i)
@@ -9967,15 +9967,15 @@ iout = ibasis(ip)
 ibasis(ip) = jp
 basis(iout) = 0
 basis(jp) = 1
-if (iout .gt. n) num = num - 1
+if (iout > n) num = num - 1
 !
 !        Check the accuracy of bi and reset rerr
 !
-if (rerr .gt. 1.e-2) go to 530
+if (rerr > 1.e-2) go to 530
 k = 0
 do 521 j = 1,m
    kj = ibasis(j)
-   if (kj .gt. n0) go to 521
+   if (kj > n0) go to 521
    sum = 0.0
    lmin = ita(kj)
    lmax = ita(kj + 1) - 1
@@ -9985,26 +9985,26 @@ do 521 j = 1,m
    end do
    rerr = amax1(rerr,abs(1.0 - sum))
    k = k + 1
-   if (k .ge. mcheck) go to 522
+   if (k >= mcheck) go to 522
 521 continue
-522 if (rerr .le. 1.e-2) go to 600
+522 if (rerr <= 1.e-2) go to 600
 !
 !        The accuracy criteria are not satisfied
 !
-530 if (icount .lt. 5) go to 600
+530 if (icount < 5) go to 600
 bflag = 1
 go to 100
 !
-580 if (iter .eq. 0) go to 12
-if (bflag .eq. 0) go to 590
+580 if (iter == 0) go to 12
+if (bflag == 0) go to 590
 bflag = 0
 do ip = 1,m
-   if (jp .eq. ibasis(ip)) go to 582
+   if (jp == ibasis(ip)) go to 582
 end do
 582 ibasis(ip) = iout
 basis(jp) = 0
 basis(iout) = 1
-if (iout .gt. n) num = num + 1
+if (iout > n) num = num + 1
 go to 100
 !
 590 ind = 3
@@ -10014,14 +10014,14 @@ go to 220
 !
 600 if (nstep - 2) 601,630,700
 601 do j = 1,m
-   if (xb(j) .lt. 0.0) go to 610
+   if (xb(j) < 0.0) go to 610
 end do
 go to 630
 !
 610 nstep = 1
 m0 = 0
 do 611 l = 1,m
-   if (xb(l) .ge. 0.0) go to 611
+   if (xb(l) >= 0.0) go to 611
    m0 = m0 + 1
    index(m0) = l
 611 continue
@@ -10040,17 +10040,17 @@ do j = 1,m
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(y(j)) .lt. tol) y(j) = 0.0
+   if (abs(y(j)) < tol) y(j) = 0.0
 end do
 go to 650
 !
 !       Set up the r array for the NSTEP = 2 Case
 !
-630 if (n .eq. num) go to 680
+630 if (n == num) go to 680
 nstep = 2
 m0 = 0
 do 631 l = 1,m
-   if (ibasis(l) .le. n) go to 631
+   if (ibasis(l) <= n) go to 631
    m0 = m0 + 1
    index(m0) = l
 631 continue
@@ -10069,35 +10069,35 @@ do j = 1,m
    s = dsump
    t = dsumn
    tol = rerrmx*amax1(s,-t)
-   if (abs(y(j)) .lt. tol) y(j) = 0.0
+   if (abs(y(j)) < tol) y(j) = 0.0
 end do
 !
 650 do 652 j = 1,n0
    sum = 0.0
-   if (basis(j) .ne. 0) go to 652
+   if (basis(j) /= 0) go to 652
    lmin = ita(j)
    lmax = ita(j + 1) - 1
-   if (lmin .gt. lmax) go to 652
+   if (lmin > lmax) go to 652
    do ll = lmin,lmax
       l = jta(ll)
       sum = sum + y(l)*ta(ll)
    end do
 652 r(j) = sum
 !
-660 if (n0 .eq. ns) go to 670
+660 if (n0 == ns) go to 670
 jmin = n0 + 1
 do 661 j = jmin,ns
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 661
+   if (basis(j) /= 0) go to 661
    jj = j - n0
    r(j) = y(jj)
 661 continue
 !
-670 if (ns .eq. n) go to 200
+670 if (ns == n) go to 200
 jmin = ns + 1
 do 671 j = jmin,n
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 671
+   if (basis(j) /= 0) go to 671
    jj = j - n0
    r(j) = -y(jj)
 671 continue
@@ -10110,26 +10110,26 @@ do 682 j = 1,m
    dsum = 0.d0
    do l = 1,m
       il = ibasis(l)
-      if (il .le. n0) dsum = dsum + dble(c(il)*bi(l,j))
+      if (il <= n0) dsum = dsum + dble(c(il)*bi(l,j))
    end do
 682 y(j) = dsum
 !
 do 691 j = 1,n0
    r(j) = 0.0
-   if (basis(j) .ne. 0) go to 691
+   if (basis(j) /= 0) go to 691
    dsum = -c(j)
    lmin = ita(j)
    lmax = ita(j + 1) - 1
    r(j) = -c(j)
-   if (lmin .gt. lmax) go to 691
+   if (lmin > lmax) go to 691
    do ll = lmin,lmax
       l = jta(ll)
       dsum = dsum + dble(y(l)*ta(ll))
    end do
    r(j) = dsum
-   if (r(j) .ge. 0.0) go to 691
+   if (r(j) >= 0.0) go to 691
    tol = rerrmx*abs(c(j))
-   if (abs(r(j)) .lt. tol) r(j) = 0.0
+   if (abs(r(j)) < tol) r(j) = 0.0
 691 continue
 go to 660
 !
@@ -10137,37 +10137,37 @@ go to 660
 !
 700 const = r(jp)
 do 703 j = 1,n0
-   if (basis(j) .eq. 0) go to 701
+   if (basis(j) == 0) go to 701
    r(j) = 0.0
    go to 703
 701 sum = 0.0
    lmin = ita(j)
    lmax = ita(j + 1) - 1
-   if (lmin .gt. lmax) go to 703
+   if (lmin > lmax) go to 703
    do ll = lmin,lmax
       l = jta(ll)
       sum = sum + bi(ip,l)*ta(ll)
    end do
    r(j) = r(j) - const*sum
-   if (r(j) .ge. 0.0) go to 703
+   if (r(j) >= 0.0) go to 703
    tol = rerrmx*abs(c(j))
-   if (abs(r(j)) .lt. tol) r(j) = 0.0
+   if (abs(r(j)) < tol) r(j) = 0.0
 703 continue
 !
-710 if (n0 .eq. ns) go to 720
+710 if (n0 == ns) go to 720
 jmin = n0 + 1
 do 712 j = jmin,ns
-   if (basis(j) .eq. 0) go to 711
+   if (basis(j) == 0) go to 711
    r(j) = 0.0
    go to 712
 711 jj = j - n0
    r(j) = r(j) - const*bi(ip,jj)
 712 continue
 !
-720 if (ns .eq. n) go to 200
+720 if (ns == n) go to 200
 jmin = ns + 1
 do 722 j = jmin,n
-   if (basis(j) .eq. 0) go to 721
+   if (basis(j) == 0) go to 721
    r(j) = 0.0
    go to 722
 721 jj = j - n0
@@ -10184,9 +10184,9 @@ end do
 !
 do 831 j = 1,m
    kj = ibasis(j)
-   if (kj .le. n0) go to 810
-   if (kj .le. ns) go to 820
-   if (kj .le. n) go to 830
+   if (kj <= n0) go to 810
+   if (kj <= ns) go to 820
+   if (kj <= n) go to 830
    go to 820
 !
 810 lmin = ita(kj)
@@ -10232,26 +10232,26 @@ do 856 i = 1,m
    dsumn = 0.d0
 853 do 855 l = 1,m
       dt = bi(i,l)*r(l)
-      if (dt .gt. 0.d0) go to 854
+      if (dt > 0.d0) go to 854
       dsumn = dsumn + dt
       go to 855
 854   dsump = dsump + dt
 855   continue
    w = dsump + dsumn
-   if (w .eq. 0.0) go to 856
-   if (sgn .ne. sign(1.0,w)) go to 856
+   if (w == 0.0) go to 856
+   if (sgn /= sign(1.0,w)) go to 856
    s = dsump
    t = dsumn
    tol = rerr1*amax1(s,-t)
-   if (abs(w) .gt. tol) y(i) = w
+   if (abs(w) > tol) y(i) = w
 856 continue
 if (nstep - 2) 860,870,880
 !
 !         Check the refinement (NSTEP = 1)
 !
 860 do 861 i = 1,m
-   if (y(i) .ge. 0.0) go to 861
-   if (y(i) .lt. -rerrmx) go to 240
+   if (y(i) >= 0.0) go to 861
+   if (y(i) < -rerrmx) go to 240
    y(i) = 0.0
 861 xb(i) = y(i)
 go to 630
@@ -10259,8 +10259,8 @@ go to 630
 !         Check the refinement (NSTEP = 2)
 !
 870 do 871 i = 1,m
-   if (ibasis(i) .le. n) go to 871
-   if (y(i) .gt. rerrmx) go to 240
+   if (ibasis(i) <= n) go to 871
+   if (y(i) > rerrmx) go to 240
    y(i) = 0.0
 871 xb(i) = y(i)
 go to 680
@@ -10270,7 +10270,7 @@ go to 680
 880 dsum = 0.d0
 do 881 i = 1,m
    ki = ibasis(i)
-   if (ki .gt. n0) go to 881
+   if (ki > n0) go to 881
    dsum = dsum + dble(c(ki)*y(i))
 881 xb(i) = y(i)
 z = dsum
@@ -10312,7 +10312,7 @@ double precision :: dsum
 !     --------------------
 max = ka*n
 mcol = iend*ka
-if (iend .eq. 0) go to 100
+if (iend == 0) go to 100
 !
 !           Process the first iend columns of A
 !
@@ -10333,7 +10333,7 @@ do 32 k = 1,iend
 !
 30 l = lk - kcol
    index(k) = l
-   if (k .eq. l) go to 32
+   if (k == l) go to 32
    lj = lk
    do 31 kj = kk,max,ka
       c = a(kj)
@@ -10349,7 +10349,7 @@ jp = 1
 ierr = 0
 pmin = 0.0
 ibeg = iend + 1
-if (ibeg .eq. n) go to 190
+if (ibeg == n) go to 190
 !
 k = ibeg
 km1 = iend
@@ -10365,20 +10365,20 @@ do kcount = ibeg,nm1
    do 110 i = kp1,n
       ik = kcol + i
       c = abs(a(ik))
-      if (s .ge. c) go to 110
+      if (s >= c) go to 110
       l = i
       s = c
 110   continue
 !
-   if (k.gt.ibeg .and. s.ge.pmin) go to 120
+   if (k > ibeg .and. s >= pmin) go to 120
    jp = k
    pmin = s
-   if (s .eq. 0.0) go to 300
+   if (s == 0.0) go to 300
 !
 !              Interchanging rows k and L
 !
 120 index(k) = l
-   if (k .eq. l) go to 130
+   if (k == l) go to 130
    kj0 = mcol + k
    lj = mcol + l
    do 121 kj = kj0,max,ka
@@ -10390,7 +10390,7 @@ do kcount = ibeg,nm1
 !       Compute the k-TH row of U (k=ibeg,...,n-1)
 !
 130 c = a(kk)
-   if (k .gt. ibeg) go to 140
+   if (k > ibeg) go to 140
    kj0 = kk + ka
    do 131 kj = kj0,max,ka
 131   a(kj) = a(kj)/c
@@ -10435,13 +10435,13 @@ end do
 190 ncol = max - ka
 nn = ncol + n
 c = abs(a(nn))
-if (c .gt. pmin) go to 200
+if (c > pmin) go to 200
 jp = n
-if (c .eq. 0.0) go to 300
+if (c == 0.0) go to 300
 !
 !          Replace L with the inverse of L
 !
-200 if (ibeg .eq. n) go to 213
+200 if (ibeg == n) go to 213
 jj = mcol + ibeg
 i = ka + 1
 do 212 j = ibeg,nm1
@@ -10460,7 +10460,7 @@ do 212 j = ibeg,nm1
 211   temp(k) = a(kj)
 212 jj = jj + i
 213 a(nn) = 1.0/a(nn)
-if (n .eq. 1) return
+if (n == 1) return
 !
 !       Solve UX = Y where Y is the inverse of L
 !
@@ -10489,7 +10489,7 @@ jcol = ncol - ka
 do 251 nmj = 1,nm1
    j = n - nmj
    k = index(j)
-   if (j .eq. k) go to 251
+   if (j == k) go to 251
    ij = jcol
    ik = (k - 1)*ka
    do 250 i = 1,n
